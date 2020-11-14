@@ -1,7 +1,7 @@
 import { SDK_API_PATH } from 'ui';
 import { useEffect } from 'react';
-import { getAuthToken } from 'util/saved-passwords';
-import { X_LBRY_AUTH_TOKEN } from 'constants/token';
+// import { getAuthToken } from 'util/saved-passwords';
+// import { X_LBRY_AUTH_TOKEN } from 'constants/token';
 
 import fetchWithTimeout from 'util/fetch';
 
@@ -13,10 +13,10 @@ export const STATUS_DOWN = 'down';
 
 const getParams = () => {
   const headers = {};
-  const token = getAuthToken();
-  if (token) {
-    headers[X_LBRY_AUTH_TOKEN] = token;
-  }
+  // const token = getAuthToken();
+  // if (token) {
+  //  headers[X_LBRY_AUTH_TOKEN] = token;
+  // }
   const params = { headers };
   return params;
 };
