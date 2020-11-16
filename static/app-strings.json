@@ -1484,5 +1484,7 @@
   "Short (< 4 minutes)": "Short (< 4 minutes)",
   "Long (> 20 min)": "Long (> 20 min)",
   "POWERED BY %lbry_link%": "POWERED BY %lbry_link%",
+  "Learn more about LBRY Credits on %DOMAIN%": "Learn more about LBRY Credits on %DOMAIN%",
+  "Results boosted by %lbc%": "Results boosted by %lbc%",
   "--end--": "--end--"
 }
