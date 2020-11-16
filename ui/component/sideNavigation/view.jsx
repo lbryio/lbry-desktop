@@ -230,11 +230,12 @@ function SideNavigation(props: Props) {
 
   SIDE_LINKS.push(HOME);
   SIDE_LINKS.push(RECENT_FROM_FOLLOWING);
-  SIDE_LINKS.push(...FULL_LINKS);
 
   if (EXTRA_SIDEBAR_LINKS) {
     SIDE_LINKS.push(...EXTRA_SIDEBAR_LINKS);
   }
+
+  SIDE_LINKS.push(...FULL_LINKS);
 
   const [pulseLibrary, setPulseLibrary] = React.useState(false);
   const isPersonalized = !IS_WEB || isAuthenticated;
