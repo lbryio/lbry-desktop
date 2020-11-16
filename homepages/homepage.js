@@ -171,14 +171,11 @@ export const PRIMARY_CONTENT = {
   title: (
     <span className="no-evil">
       <span className="no-evil--blue">D</span>
-      <span className="no-evil--red">o</span>
-      <span className="no-evil--yellow">n</span>
-      <span className="no-evil--blue">'</span>
-      <span className="no-evil--green">t</span> <span className="no-evil--red">b</span>
-      <span className="no-evil--blue">e</span> <span className="no-evil--red">e</span>
-      <span className="no-evil--yellow">v</span>
-      <span className="no-evil--blue">i</span>
-      <span className="no-evil--green">l</span>
+      <span className="no-evil--red">E</span>
+      <span className="no-evil--yellow">V</span> <span className="no-evil--green">S</span>
+      <span className="no-evil--red">I</span>
+      <span className="no-evil--yellow">T</span>
+      <span className="no-evil--blue">E</span>
     </span>
   ),
   link: `/$/${PAGES.DISCOVER}?${CS.CLAIM_TYPE}=${CS.CLAIM_STREAM}&${
@@ -189,7 +186,7 @@ export const PRIMARY_CONTENT = {
     orderBy: ['release_time'],
     pageSize: 20, // temporary, to facilitate screenshots until repitition parameter is added
     channelIds: PRIMARY_CONTENT_CHANNEL_IDS,
-    limitClaimsPerChannel: 1,
+    limitClaimsPerChannel: 3,
     releaseTime: `>${Math.floor(
       moment()
         .subtract(1, 'months')
@@ -209,7 +206,7 @@ export const PRIMARY_CONTENT_2 = {
     orderBy: ['release_time'],
     pageSize: 8,
     channelIds: PRIMARY_CONTENT_CHANNEL_IDS,
-    limitClaimsPerChannel: 1,
+    limitClaimsPerChannel: 3,
     releaseTime: `>${Math.floor(
       moment()
         .subtract(1, 'months')
@@ -403,7 +400,7 @@ export const RABBIT_HOLE = {
     orderBy: ['release_time'],
     pageSize: 8,
     channelIds: RABBIT_HOLE_CHANNEL_IDS,
-    limitClaimsPerChannel: 1,
+    limitClaimsPerChannel: 3,
     releaseTime: `>${Math.floor(
       moment()
         .subtract(1, 'months')
@@ -585,7 +582,7 @@ export const ENLIGHTENMENT = {
     orderBy: ['release_time'],
     pageSize: 12,
     channelIds: ENLIGHTENMENT_CHANNEL_IDS,
-    limitClaimsPerChannel: 1,
+    limitClaimsPerChannel: 3,
     releaseTime: `>${Math.floor(
       moment()
         .subtract(1, 'months')
@@ -745,7 +742,7 @@ export const GAMING = {
     orderBy: ['release_time'],
     pageSize: 12,
     channelIds: GAMING_CHANNEL_IDS,
-    limitClaimsPerChannel: 1,
+    limitClaimsPerChannel: 3,
     releaseTime: `>${Math.floor(
       moment()
         .subtract(1, 'months')
@@ -913,7 +910,7 @@ export const COMMUNITY = {
     orderBy: ['release_time'],
     pageSize: 16,
     channelIds: COMMUNITY_CHANNEL_IDS,
-    limitClaimsPerChannel: 1,
+    limitClaimsPerChannel: 3,
     releaseTime: `>${Math.floor(
       moment()
         .subtract(1, 'months')
@@ -1042,7 +1039,7 @@ export const TECHNOLOGY = {
     orderBy: ['release_time'],
     pageSize: 12,
     channelIds: TECHNOLOGY_CHANNEL_IDS,
-    limitClaimsPerChannel: 1,
+    limitClaimsPerChannel: 3,
     releaseTime: `>${Math.floor(
       moment()
         .subtract(1, 'months')
@@ -1117,7 +1114,7 @@ export const SCIENCE = {
     orderBy: ['release_time'],
     pageSize: 12,
     channelIds: SCIENCE_CHANNEL_IDS,
-    limitClaimsPerChannel: 1,
+    limitClaimsPerChannel: 3,
     releaseTime: `>${Math.floor(
       moment()
         .subtract(1, 'months')
@@ -1170,7 +1167,7 @@ export const NEWS = {
     orderBy: ['release_time'],
     pageSize: 8,
     channelIds: NEWS_CHANNEL_IDS,
-    limitClaimsPerChannel: 1,
+    limitClaimsPerChannel: 3,
     releaseTime: `>${Math.floor(
       moment()
         .subtract(1, 'months')
@@ -1284,7 +1281,7 @@ export const FINANCE = {
     orderBy: ['release_time'],
     pageSize: 8,
     channelIds: FINCANCE_CHANNEL_IDS,
-    limitClaimsPerChannel: 1,
+    limitClaimsPerChannel: 3,
     releaseTime: `>${Math.floor(
       moment()
         .subtract(1, 'months')
@@ -1336,17 +1333,17 @@ export default function GetHomePageRowData(
       releaseTime:
         subscribedChannels.length > 20
           ? `>${Math.floor(
-          moment()
-            .subtract(6, 'months')
-            .startOf('week')
-            .unix()
-          )}`
+              moment()
+                .subtract(6, 'months')
+                .startOf('week')
+                .unix()
+            )}`
           : `>${Math.floor(
-          moment()
-            .subtract(1, 'year')
-            .startOf('week')
-            .unix()
-          )}`,
+              moment()
+                .subtract(1, 'year')
+                .startOf('week')
+                .unix()
+            )}`,
       pageSize: getPageSize(subscribedChannels.length > 3 ? (subscribedChannels.length > 6 ? 16 : 8) : 4),
       channelIds: subscribedChannels.map((subscription: Subscription) => {
         const { channelClaimId } = parseURI(subscription.uri);

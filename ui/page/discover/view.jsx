@@ -96,7 +96,6 @@ function DiscoverPage(props: Props) {
   return (
     <Page noFooter fullWidthPage={tileLayout}>
       <ClaimListDiscover
-        limitClaimsPerChannel={3}
         header={repostedUri ? <span /> : undefined}
         tileLayout={repostedUri ? false : tileLayout}
         defaultOrderBy={CS.ORDER_BY_NEW}
@@ -108,6 +107,10 @@ function DiscoverPage(props: Props) {
         injectedItem={SHOW_ADS && !isAuthenticated && IS_WEB && <Ads type="video" />}
         channelIds={
           (dynamicRouteProps && dynamicRouteProps.options && dynamicRouteProps.options.channelIds) || undefined
+        }
+        limitClaimsPerChannel={
+          (dynamicRouteProps && dynamicRouteProps.options && dynamicRouteProps.options.limitClaimsPerChannel) ||
+          undefined
         }
         meta={
           !dynamicRouteProps ? (
