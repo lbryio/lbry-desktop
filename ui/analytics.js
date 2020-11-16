@@ -28,7 +28,7 @@ if (isProduction) {
 type Analytics = {
   error: string => Promise<any>,
   sentryError: ({} | string, {}) => Promise<any>,
-  pageView: string => void,
+  pageView: (string, ?string) => void,
   setUser: Object => void,
   toggleInternal: (boolean, ?boolean) => void,
   apiLogView: (string, string, string, ?number, ?() => void) => Promise<any>,
@@ -97,7 +97,7 @@ const analytics: Analytics = {
   },
   pageView: (path, search) => {
     if (internalAnalyticsEnabled) {
-      const params = { href: `${path}` };
+      const params: { href: string, customDimensions?: Array<{ id: number, value: ?string }> } = { href: `${path}` };
       const dimensions = [];
       const searchParams = search && new URLSearchParams(search);
 
