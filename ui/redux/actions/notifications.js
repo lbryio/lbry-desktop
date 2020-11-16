@@ -42,7 +42,7 @@ export function doDismissError() {
 }
 
 export function doNotificationList() {
-  return (dispatch: Dispatch<*>) => {
+  return (dispatch: Dispatch) => {
     dispatch({ type: ACTIONS.NOTIFICATION_LIST_STARTED });
     return Lbryio.call('notification', 'list', { is_app_readable: true })
       .then(response => {
@@ -77,7 +77,7 @@ export function doNotificationList() {
 }
 
 export function doReadNotifications() {
-  return (dispatch: Dispatch<*>, getState: GetState) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const notifications = selectNotifications(state);
     const unreadNotifications =
@@ -99,7 +99,7 @@ export function doReadNotifications() {
 }
 
 export function doSeeNotifications(notificationIds: Array<string>) {
-  return (dispatch: Dispatch<*>) => {
+  return (dispatch: Dispatch) => {
     dispatch({ type: ACTIONS.NOTIFICATION_SEEN_STARTED });
     return Lbryio.call('notification', 'edit', { notification_ids: notificationIds.join(','), is_seen: true })
       .then(() => {
@@ -117,7 +117,7 @@ export function doSeeNotifications(notificationIds: Array<string>) {
 }
 
 export function doSeeAllNotifications() {
-  return (dispatch: Dispatch<*>, getState: GetState) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const notifications = selectNotifications(state);
     const unSeenNotifications =
@@ -128,7 +128,7 @@ export function doSeeAllNotifications() {
 }
 
 export function doDeleteNotification(notificationId: number) {
-  return (dispatch: Dispatch<*>) => {
+  return (dispatch: Dispatch) => {
     Lbryio.call('notification', 'delete', { notification_ids: notificationId })
       .then(() => {
         dispatch({ type: ACTIONS.NOTIFICATION_DELETE_COMPLETED, data: { notificationId } });

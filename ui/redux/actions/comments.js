@@ -13,7 +13,7 @@ import {
 import { makeSelectNotificationForCommentId } from 'redux/selectors/notifications';
 
 export function doCommentList(uri: string, page: number = 1, pageSize: number = 99999) {
-  return (dispatch: Dispatch<*>, getState: GetState) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const claim = selectClaimsByUri(state)[uri];
     const claimId = claim ? claim.claim_id : null;
@@ -50,7 +50,7 @@ export function doCommentList(uri: string, page: number = 1, pageSize: number = 
 }
 
 export function doSetCommentChannel(channelName: string) {
-  return (dispatch: Dispatch<*>) => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.COMMENT_SET_CHANNEL,
       data: channelName,
@@ -59,7 +59,7 @@ export function doSetCommentChannel(channelName: string) {
 }
 
 export function doCommentReactList(uri: string | null, commentId?: string) {
-  return (dispatch: Dispatch<*>, getState: GetState) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const channel = selectCommentChannel(state);
     const commentIds = uri ? makeSelectCommentIdsForUri(uri)(state) : [commentId];
@@ -100,7 +100,7 @@ export function doCommentReactList(uri: string | null, commentId?: string) {
 }
 
 export function doCommentReact(commentId: string, type: string) {
-  return (dispatch: Dispatch<*>, getState: GetState) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const channel = selectCommentChannel(state);
     const pendingReacts = selectPendingCommentReacts(state);
@@ -204,7 +204,7 @@ export function doCommentCreate(
   parent_id?: string,
   uri: string
 ) {
-  return (dispatch: Dispatch<*>, getState: GetState) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     dispatch({
       type: ACTIONS.COMMENT_CREATE_STARTED,
@@ -268,7 +268,7 @@ export function doCommentCreate(
 }
 
 export function doCommentHide(comment_id: string) {
-  return (dispatch: Dispatch<*>) => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.COMMENT_HIDE_STARTED,
     });
@@ -297,7 +297,7 @@ export function doCommentHide(comment_id: string) {
 }
 
 export function doCommentPin(commentId: string, remove: boolean) {
-  return (dispatch: Dispatch<*>, getState: GetState) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     // const channel = localStorage.getItem('comment-channel');
     const channel = selectCommentChannel(state);
@@ -347,7 +347,7 @@ export function doCommentPin(commentId: string, remove: boolean) {
 }
 
 export function doCommentAbandon(comment_id: string) {
-  return (dispatch: Dispatch<*>) => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.COMMENT_ABANDON_STARTED,
     });
@@ -396,7 +396,7 @@ export function doCommentUpdate(comment_id: string, comment: string) {
   if (comment === '') {
     return doCommentAbandon(comment_id);
   } else {
-    return (dispatch: Dispatch<*>) => {
+    return (dispatch: Dispatch) => {
       dispatch({
         type: ACTIONS.COMMENT_UPDATE_STARTED,
       });
