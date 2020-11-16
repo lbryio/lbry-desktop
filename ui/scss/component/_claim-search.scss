@@ -29,10 +29,6 @@
   padding-right: var(--spacing-l);
   font-size: var(--font-body);
   background-color: var(--color-card-background);
-
-  @media (min-width: $breakpoint-small) {
-    max-width: var(--option-select-width);
-  }
 }
 
 .claim-search__dropdown--selected {
