@@ -16,6 +16,7 @@ export type RowDataItem = {
   extra?: any,
   options?: {
     channelIds?: Array<string>,
+    limitClaimsPerChannel?: number,
     pageSize: number,
   },
   route?: string,
