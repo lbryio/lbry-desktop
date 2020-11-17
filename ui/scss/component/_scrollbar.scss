@@ -1,0 +1,31 @@
+// ****************************************************************************
+// webkit
+// ****************************************************************************
+// Currently supported by Chrome/Edge/Safari.
+// Potentially deprecated in the future, but will most likely be
+// handled by 'scrollbar-xx' down below when that happens.
+
+*::-webkit-scrollbar {
+  width: 12px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--color-scrollbar-track-bg);
+}
+
+*::-webkit-scrollbar-thumb {
+  // Don't set 'border-radius' because Firefox's 'scrollbar-xx'
+  // standard currently doesn't support it. Stick with square
+  // scrollbar for all browsers.
+  background-color: var(--color-scrollbar-thumb-bg);
+}
+
+// ****************************************************************************
+// W3C::scrollbar
+// ****************************************************************************
+// The W3C future standard; currently supported by Firefox only.
+
+* {
+  scrollbar-width: auto;
+  scrollbar-color: var(--color-scrollbar-thumb-bg) var(--color-scrollbar-track-bg);
+}
