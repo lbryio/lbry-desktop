@@ -4,6 +4,7 @@ import React from 'react';
 import classnames from 'classnames';
 import Button from 'component/button';
 import { formatNumberWithCommas } from 'util/number';
+import NudgeFloating from 'component/nudgeFloating';
 
 type Props = {
   claim: StreamClaim,
@@ -19,6 +20,7 @@ type Props = {
 function FileReactions(props: Props) {
   const { claim, uri, doFetchReactions, doReactionLike, doReactionDislike, likeCount, dislikeCount } = props;
   const claimId = claim && claim.claim_id;
+  const channel = claim && claim.signing_channel && claim.signing_channel.name;
 
   React.useEffect(() => {
     if (claimId) {
@@ -28,9 +30,17 @@ function FileReactions(props: Props) {
 
   return (
     <>
+      {channel && (
+        <NudgeFloating
+          name="nudge:support-acknowledge"
+          text={__('Let %channel% know you enjoyed this!', { channel })}
+        />
+      )}
+
       <Button
         title={__('I like this')}
-        requiresAuth
+        requiresAuth={IS_WEB}
+        authSrc="filereaction_like"
         className={classnames('button--file-action')}
         label={formatNumberWithCommas(likeCount)}
         iconSize={18}
@@ -38,7 +48,8 @@ function FileReactions(props: Props) {
         onClick={() => doReactionLike(uri)}
       />
       <Button
-        requiresAuth
+        requiresAuth={IS_WEB}
+        authSrc={'filereaction_dislike'}
         title={__('I dislike this')}
         className={classnames('button--file-action')}
         label={formatNumberWithCommas(dislikeCount)}
