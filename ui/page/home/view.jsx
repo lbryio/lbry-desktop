@@ -2,7 +2,6 @@
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import { SITE_NAME, SIMPLE_SITE } from 'config';
-import classnames from 'classnames';
 import React from 'react';
 import Page from 'component/page';
 import Button from 'component/button';
@@ -52,17 +51,7 @@ function HomePage(props: Props) {
       )}
       {rowData.map(({ title, route, link, icon, help, options = {} }, index) => (
         <div key={title} className="claim-grid__wrapper">
-          {index === 0 ? (
-            <div className="section__header--actions">
-              <span
-                className={classnames('claim-grid__title', {
-                  'claim-grid__title--first': index === 0,
-                })}
-              >
-                {title}
-              </span>
-            </div>
-          ) : (
+          {title && (
             <h1 className="claim-grid__header">
               <Button navigate={route || link} button="link">
                 {icon && <Icon className="claim-grid__header-icon" sectionIcon icon={icon} size={20} />}
