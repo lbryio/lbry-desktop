@@ -1292,6 +1292,12 @@ export const FINANCE = {
   },
 };
 
+const WILD_WEST = {
+  title: 'Wild West',
+  link: `/$/${PAGES.WILD_WEST}`,
+  icon: ICONS.WILD_WEST,
+};
+
 export default function GetHomePageRowData(
   authenticated: boolean,
   showPersonalizedChannels: boolean,
@@ -1365,4 +1371,14 @@ export default function GetHomePageRowData(
   return rowData;
 }
 
-export const EXTRA_SIDEBAR_LINKS = [ENLIGHTENMENT, GAMING, SCIENCE, TECHNOLOGY, NEWS, FINANCE, COMMUNITY, RABBIT_HOLE];
+export const EXTRA_SIDEBAR_LINKS = [
+  ENLIGHTENMENT,
+  GAMING,
+  SCIENCE,
+  TECHNOLOGY,
+  NEWS,
+  FINANCE,
+  COMMUNITY,
+  WILD_WEST,
+  RABBIT_HOLE,
+];

@@ -1,6 +1,7 @@
 // @flow
 import { SHOW_ADS, DOMAIN } from 'config';
 import * as ICONS from 'constants/icons';
+import * as CS from 'constants/claim_search';
 import React, { useRef } from 'react';
 import Page from 'component/page';
 import ClaimListDiscover from 'component/claimListDiscover';
@@ -10,10 +11,10 @@ import { useIsMobile } from 'effects/use-screensize';
 import analytics from 'analytics';
 import HiddenNsfw from 'component/common/hidden-nsfw';
 import Icon from 'component/common/icon';
-import * as CS from 'constants/claim_search';
 import Ads from 'web/component/ads';
 import LbcSymbol from 'component/common/lbc-symbol';
 import I18nMessage from 'component/i18nMessage';
+import moment from 'moment';
 
 type Props = {
   location: { search: string },
@@ -87,8 +88,8 @@ function DiscoverPage(props: Props) {
   } else {
     headerLabel = (
       <span>
-        <Icon icon={(dynamicRouteProps && dynamicRouteProps.icon) || ICONS.DISCOVER} size={10} />
-        {(dynamicRouteProps && dynamicRouteProps.title) || __('All Content')}
+        <Icon icon={(dynamicRouteProps && dynamicRouteProps.icon) || ICONS.WILD_WEST} size={10} />
+        {(dynamicRouteProps && dynamicRouteProps.title) || __('Wild West')}
       </span>
     );
   }
@@ -96,15 +97,27 @@ function DiscoverPage(props: Props) {
   return (
     <Page noFooter fullWidthPage={tileLayout}>
       <ClaimListDiscover
+        hideAdvancedFilter
+        hideFilters={!dynamicRouteProps}
         header={repostedUri ? <span /> : undefined}
         tileLayout={repostedUri ? false : tileLayout}
-        defaultOrderBy={CS.ORDER_BY_NEW}
+        defaultOrderBy={CS.ORDER_BY_TOP}
         claimType={claimType ? [claimType] : undefined}
         headerLabel={headerLabel}
         tags={tags}
         hiddenNsfwMessage={<HiddenNsfw type="page" />}
         repostedClaimId={repostedClaim ? repostedClaim.claim_id : null}
         injectedItem={SHOW_ADS && !isAuthenticated && IS_WEB && <Ads type="video" />}
+        releaseTime={
+          !dynamicRouteProps &&
+          `>${Math.floor(
+            moment()
+              .subtract(1, 'day')
+              .startOf('week')
+              .unix()
+          )}`
+        }
+        feeAmount={!dynamicRouteProps && CS.FEE_AMOUNT_ANY}
         channelIds={
           (dynamicRouteProps && dynamicRouteProps.options && dynamicRouteProps.options.channelIds) || undefined
         }

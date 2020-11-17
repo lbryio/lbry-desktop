@@ -137,3 +137,4 @@ export const PIN = 'Pin';
 export const BEST = 'Best';
 export const CREATOR_LIKE = 'CreatorLike';
 export const CHEF = 'Chef';
+export const WILD_WEST = 'WildWest';
