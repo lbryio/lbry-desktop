@@ -27,6 +27,7 @@ type Props = {
   iconColor?: string,
   activeClass?: string,
   innerRef: ?any,
+  authSrc?: string,
   // Events
   onClick: ?(any) => any,
   onMouseEnter: ?(any) => any,
@@ -50,6 +51,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
     label,
     largestLabel,
     icon,
+
     // This should rarely be used. Regular buttons should just use `icon`
     // `iconRight` is used for the header (home) button with the LBRY icon and external links that are displayed inline
     iconRight,
@@ -67,6 +69,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
     myref,
     dispatch, // <button> doesn't know what to do with dispatch
     pathname,
+    authSrc,
     ...otherProps
   } = props;
 
@@ -172,13 +175,19 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
   }
 
   if (requiresAuth && !emailVerified) {
+    let redirectUrl = `/$/${PAGES.AUTH}?redirect=${pathname}`;
+
+    if (authSrc) {
+      redirectUrl += `&src=${authSrc}`;
+    }
+
     return (
       <NavLink
         exact
         onClick={e => {
           e.stopPropagation();
         }}
-        to={`/$/${PAGES.AUTH}?redirect=${pathname}`}
+        to={redirectUrl}
         title={title || defaultTooltip}
         disabled={disabled}
         className={combinedClassName}
