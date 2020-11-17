@@ -22,7 +22,7 @@ type Props = {
   personalView: boolean,
   doToggleTagFollowDesktop: string => void,
   meta?: Node,
-  showNsfw: boolean,
+  //   showNsfw: boolean,
   hideReposts: boolean,
   history: { action: string, push: string => void, replace: string => void },
   location: { search: string, pathname: string },
@@ -64,6 +64,7 @@ type Props = {
   languageSetting: string,
   searchInLanguage: boolean,
   limitClaimsPerChannel?: number,
+  releaseTime?: string,
 };
 
 function ClaimListDiscover(props: Props) {
@@ -76,7 +77,7 @@ function ClaimListDiscover(props: Props) {
     loading,
     meta,
     channelIds,
-    showNsfw,
+    // showNsfw,
     hideReposts,
     history,
     location,
@@ -112,6 +113,7 @@ function ClaimListDiscover(props: Props) {
     languageSetting,
     searchInLanguage,
     limitClaimsPerChannel,
+    releaseTime,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
   const { search } = location;
@@ -204,7 +206,7 @@ function ClaimListDiscover(props: Props) {
     not_channel_ids:
       // If channelIdsParam were passed in, we don't need not_channel_ids
       !channelIdsParam && hiddenUris && hiddenUris.length ? hiddenUris.map(hiddenUri => hiddenUri.split('#')[1]) : [],
-    not_tags: !showNsfw ? MATURE_TAGS : [],
+    not_tags: MATURE_TAGS,
     order_by:
       orderParam === CS.ORDER_BY_TRENDING
         ? CS.ORDER_BY_TRENDING_VALUE
@@ -246,7 +248,9 @@ function ClaimListDiscover(props: Props) {
     options.reposted_claim_id = repostedClaimId;
   }
 
-  if (claimType !== CS.CLAIM_CHANNEL) {
+  if (releaseTime) {
+    options.release_time = releaseTime;
+  } else if (claimType !== CS.CLAIM_CHANNEL) {
     if (orderParam === CS.ORDER_BY_TOP && freshnessParam !== CS.FRESH_ALL) {
       options.release_time = `>${Math.floor(
         moment()

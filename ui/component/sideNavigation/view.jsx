@@ -29,9 +29,9 @@ const RECENT_FROM_FOLLOWING = {
 };
 
 const DISCOVER = {
-  title: 'Discover',
-  link: `/$/${PAGES.DISCOVER}`,
-  icon: ICONS.DISCOVER,
+  title: 'Wild West',
+  link: `/$/${PAGES.WILD_WEST}`,
+  icon: ICONS.WILD_WEST,
 };
 
 type Props = {
