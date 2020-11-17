@@ -302,7 +302,6 @@
 }
 
 .claim-grid__header {
-  margin-top: var(--spacing-m);
   margin-bottom: var(--spacing-m);
   display: inline-block;
 
@@ -326,10 +325,6 @@
       height: 1.5rem;
       width: 1.5rem;
     }
-  }
-
-  @media (min-width: $breakpoint-small) {
-    margin-top: var(--spacing-m);
   }
 }
 
