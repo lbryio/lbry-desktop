@@ -49,9 +49,19 @@ function HomePage(props: Props) {
           </p>
         </div>
       )}
+
+      <div className="no-evil">
+        <span className="no-evil--blue">D</span>
+        <span className="no-evil--red">E</span>
+        <span className="no-evil--yellow">V</span> <span className="no-evil--green">S</span>
+        <span className="no-evil--red">I</span>
+        <span className="no-evil--yellow">T</span>
+        <span className="no-evil--blue">E</span>
+      </div>
+
       {rowData.map(({ title, route, link, icon, help, options = {} }, index) => (
         <div key={title} className="claim-grid__wrapper">
-          {title && (
+          {title && typeof title === 'string' && (
             <h1 className="claim-grid__header">
               <Button navigate={route || link} button="link">
                 {icon && <Icon className="claim-grid__header-icon" sectionIcon icon={icon} size={20} />}

@@ -169,16 +169,6 @@ export const PRIMARY_CONTENT_CHANNEL_IDS = [
 ];
 
 export const PRIMARY_CONTENT = {
-  title: (
-    <span className="no-evil">
-      <span className="no-evil--blue">D</span>
-      <span className="no-evil--red">E</span>
-      <span className="no-evil--yellow">V</span> <span className="no-evil--green">S</span>
-      <span className="no-evil--red">I</span>
-      <span className="no-evil--yellow">T</span>
-      <span className="no-evil--blue">E</span>
-    </span>
-  ),
   link: `/$/${PAGES.DISCOVER}?${CS.CLAIM_TYPE}=${CS.CLAIM_STREAM}&${
     CS.CHANNEL_IDS_KEY
   }=${PRIMARY_CONTENT_CHANNEL_IDS.join(',')}`,

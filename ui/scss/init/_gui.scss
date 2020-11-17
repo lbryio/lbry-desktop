@@ -378,10 +378,12 @@ textarea {
 }
 
 .no-evil {
+  text-align: center;
   font-size: var(--font-title);
   font-family: 'Times New Roman', Times, serif;
   font-weight: 700;
   line-height: 0.7;
+  font-size: 2rem;
 
   .no-evil--red {
     color: #db4437;
