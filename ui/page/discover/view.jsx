@@ -1,5 +1,5 @@
 // @flow
-import { SHOW_ADS } from 'config';
+import { SHOW_ADS, DOMAIN } from 'config';
 import * as ICONS from 'constants/icons';
 import React, { useRef } from 'react';
 import Page from 'component/page';
@@ -12,6 +12,8 @@ import HiddenNsfw from 'component/common/hidden-nsfw';
 import Icon from 'component/common/icon';
 import * as CS from 'constants/claim_search';
 import Ads from 'web/component/ads';
+import LbcSymbol from 'component/common/lbc-symbol';
+import I18nMessage from 'component/i18nMessage';
 
 type Props = {
   location: { search: string },
@@ -108,17 +110,33 @@ function DiscoverPage(props: Props) {
           (dynamicRouteProps && dynamicRouteProps.options && dynamicRouteProps.options.channelIds) || undefined
         }
         meta={
-          tag &&
-          !isMobile && (
-            <Button
-              ref={buttonRef}
-              button="alt"
-              icon={ICONS.SUBSCRIBE}
-              iconColor="red"
-              onClick={handleFollowClick}
-              requiresAuth={IS_WEB}
-              label={label}
-            />
+          !dynamicRouteProps ? (
+            <a
+              className="help"
+              href="https://lbry.com/faq/trending"
+              title={__('Learn more about LBRY Credits on %DOMAIN%', { DOMAIN })}
+            >
+              <I18nMessage
+                tokens={{
+                  lbc: <LbcSymbol />,
+                }}
+              >
+                Results boosted by %lbc%
+              </I18nMessage>
+            </a>
+          ) : (
+            tag &&
+            !isMobile && (
+              <Button
+                ref={buttonRef}
+                button="alt"
+                icon={ICONS.SUBSCRIBE}
+                iconColor="red"
+                onClick={handleFollowClick}
+                requiresAuth={IS_WEB}
+                label={label}
+              />
+            )
           )
         }
       />
