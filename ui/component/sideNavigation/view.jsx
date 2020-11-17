@@ -28,12 +28,6 @@ const RECENT_FROM_FOLLOWING = {
   icon: ICONS.SUBSCRIBE,
 };
 
-const DISCOVER = {
-  title: 'Discover',
-  link: `/$/${PAGES.DISCOVER}`,
-  icon: ICONS.DISCOVER,
-};
-
 type Props = {
   subscriptions: Array<Subscription>,
   followedTags: Array<Tag>,
@@ -79,23 +73,25 @@ function SideNavigation(props: Props) {
 
   const { EXTRA_SIDEBAR_LINKS } = homepageData;
 
-  const FULL_LINKS: Array<SideNavLink> = SIMPLE_SITE
-    ? [DISCOVER]
-    : [
-        {
-          title: 'Your Tags',
-          link: `/$/${PAGES.TAGS_FOLLOWING}`,
-          icon: ICONS.TAG,
-          hideForUnauth: true,
-        },
-        DISCOVER,
-        {
-          title: IS_WEB ? 'Purchased' : 'Library',
-          link: `/$/${PAGES.LIBRARY}`,
-          icon: ICONS.PURCHASED,
-          hideForUnauth: true,
-        },
-      ];
+  const FULL_LINKS: Array<SideNavLink> = [
+    {
+      title: 'Your Tags',
+      link: `/$/${PAGES.TAGS_FOLLOWING}`,
+      icon: ICONS.TAG,
+      hideForUnauth: true,
+    },
+    {
+      title: 'Discover',
+      link: `/$/${PAGES.DISCOVER}`,
+      icon: ICONS.DISCOVER,
+    },
+    {
+      title: IS_WEB ? 'Purchased' : 'Library',
+      link: `/$/${PAGES.LIBRARY}`,
+      icon: ICONS.PURCHASED,
+      hideForUnauth: true,
+    },
+  ];
 
   const MOBILE_LINKS: Array<SideNavLink> = [
     {
@@ -235,7 +231,9 @@ function SideNavigation(props: Props) {
     SIDE_LINKS.push(...EXTRA_SIDEBAR_LINKS);
   }
 
-  SIDE_LINKS.push(...FULL_LINKS);
+  if (!SIMPLE_SITE) {
+    SIDE_LINKS.push(...FULL_LINKS);
+  }
 
   const [pulseLibrary, setPulseLibrary] = React.useState(false);
   const isPersonalized = !IS_WEB || isAuthenticated;
