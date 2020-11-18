@@ -19,6 +19,7 @@ import usePersistedState from 'effects/use-persisted-state';
 import FileDrop from 'component/fileDrop';
 import NagContinueFirstRun from 'component/nagContinueFirstRun';
 import Spinner from 'component/spinner';
+import SyncFatalError from 'component/syncFatalError';
 // @if TARGET='app'
 import useZoom from 'effects/use-zoom';
 // @endif
@@ -34,7 +35,6 @@ import {
   STATUS_FAILING,
   STATUS_DOWN,
 } from 'web/effects/use-degraded-performance';
-import SyncFatalError from 'component/syncFatalError';
 // @endif
 export const MAIN_WRAPPER_CLASS = 'main-wrapper';
 // @if TARGET='app'
