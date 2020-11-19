@@ -7,10 +7,12 @@ import videojs from 'video.js/dist/alt/video.core.novtt.min.js';
 import 'video.js/dist/alt/video-js-cdn.min.css';
 import eventTracking from 'videojs-event-tracking';
 import isUserTyping from 'util/detect-typing';
-import './adstest.js';
+// import './adstest.js';
 // import './adstest2.js';
-import './adstest.css';
+// import './adstest.css';
+import { VASTClient } from 'vast-client';
 
+const vastClient = new VASTClient();
 const isDev = process.env.NODE_ENV !== 'production';
 
 export type Player = {
@@ -147,16 +149,16 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     plugins: { eventTracking: true },
   };
 
-  if (onAdsTestPage) {
-    // $FlowFixMe
-    videoJsOptions.plugins.vastClient = {
-      adTagUrl: `https://tag.targeting.unrulymedia.com/rmp/216276/0/vast2?vastfw=vpaid&url=${encodeURI(
-        window.location.href
-      )}&w=300&h=500`,
-      adsCancelTimeout: 5000,
-      adsEnabled: true,
-    };
-  }
+  //   if (onAdsTestPage) {
+  //     // $FlowFixMe
+  //     videoJsOptions.plugins.vastClient = {
+  //       adTagUrl: `https://tag.targeting.unrulymedia.com/rmp/216276/0/vast2?vastfw=vpaid&url=${encodeURI(
+  //         window.location.href
+  //       )}&w=300&h=500`,
+  //       adsCancelTimeout: 5000,
+  //       adsEnabled: true,
+  //     };
+  //   }
 
   videoJsOptions.muted = startMuted;
 
@@ -168,6 +170,25 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     UNMUTE: 'UNMUTE',
     RETRY: 'RETRY',
   };
+
+  React.useEffect(() => {
+    if (onAdsTestPage) {
+      vastClient
+        .get(
+          `https://tag.targeting.unrulymedia.com/rmp/216276/0/vast2?vastfw=vpaid&url=${encodeURI(
+            window.location.href
+          )}&w=300&h=500`
+        )
+        .then(res => {
+          // Do something with the parsed VAST response
+          console.log('ads response', res);
+        })
+        .catch(err => {
+          // Deal with the error
+          console.log('ads error', err);
+        });
+    }
+  }, [onAdsTestPage]);
 
   function showTapButton(tapButton) {
     const setButtonVisibility = (theRef, newState) => {
