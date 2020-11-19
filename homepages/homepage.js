@@ -207,7 +207,7 @@ export const PRIMARY_CONTENT_2 = {
   },
 };
 
-const RABBIT_HOLE_CHANNEL_IDS = [
+export const RABBIT_HOLE_CHANNEL_IDS = [
   'a5af5f42b57d31b982fd700f65b02ee589751b96',
   'ea86138fdfac9891a2e15cec9b2143ef64805435',
   'b541d03b30c3fea017280d8ae1758a9f2035f44f',
@@ -401,7 +401,7 @@ export const RABBIT_HOLE = {
   },
 };
 
-const ENLIGHTENMENT_CHANNEL_IDS = [
+export const ENLIGHTENMENT_CHANNEL_IDS = [
   '82f1d8c257d3e76b711a5cecd1e49bd3fa6a9de9',
   '3fec094c5937e9eb4e8f5e71e4ca430e8a993d03',
   '0871b29c7db6f1ec013694c8146f772539fcffa3',
@@ -583,7 +583,7 @@ export const ENLIGHTENMENT = {
   },
 };
 
-const GAMING_CHANNEL_IDS = [
+export const GAMING_CHANNEL_IDS = [
   'b7d204c8ac9b0b5df4ffc4350afa432bf579543e',
   '02c020b2fab7dd1fbd175c3b22947688c0a219e5',
   'e8c71ade66ffb2cd7be3fa08f1d0a19ac70bfc65',
@@ -743,7 +743,7 @@ export const GAMING = {
   },
 };
 
-const COMMUNITY_CHANNEL_IDS = [
+export const COMMUNITY_CHANNEL_IDS = [
   '90b566f5aca9c9a3b23b56cf6d75c07493737bc9',
   '1aa69a21a8d7e7bab3f9366aba52936e3ddc5330',
   '1cdb5d0bdcb484907d0a2fea4efdfe0153838642',
@@ -911,7 +911,7 @@ export const COMMUNITY = {
   },
 };
 
-const TECHNOLOGY_CHANNEL_IDS = [
+export const TECHNOLOGY_CHANNEL_IDS = [
   'fdc3b71d6e99fe305863ac72721637d2ce49d1ad',
   '8cbef9a7778b528a6183b4bb25bb748bf016b7ca',
   '70d6386888708ce5559ca225120b2801f6e052bd',
@@ -1040,7 +1040,7 @@ export const TECHNOLOGY = {
   },
 };
 
-const SCIENCE_CHANNEL_IDS = [
+export const SCIENCE_CHANNEL_IDS = [
   '47c6a778ea4836b0987ccc4ce27b26d5f886ec1d',
   '1bd0adfcf1c75bafc1ba3fc9b65a1a0470df6a91',
   '7e1a7afadc8734b33a3e219f5668470715fb063d',
@@ -1115,7 +1115,7 @@ export const SCIENCE = {
   },
 };
 
-const NEWS_CHANNEL_IDS = [
+export const NEWS_CHANNEL_IDS = [
   '9614a4fcf9d91e4588eb512165e9c0475f857555',
   '70e56234217f30317c0e67fd0eede6e82b74aea0',
   '760da3ba3dd85830a843beaaed543a89b7a367e7',
@@ -1168,7 +1168,7 @@ export const NEWS = {
   },
 };
 
-const FINCANCE_CHANNEL_IDS = [
+export const FINCANCE_CHANNEL_IDS = [
   '29dd91896150d5383a5daef66247b9eb2523673f',
   'ac471128a5ed05b80365170b29997d860afa33b7',
   '4284dc016523121128f4ffa45b983c24cc9136a3',

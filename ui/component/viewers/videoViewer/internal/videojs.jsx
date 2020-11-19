@@ -39,7 +39,7 @@ type Props = {
   onPlayerReady: Player => void,
   isAudio: boolean,
   startMuted: boolean,
-  onAdsTestPage?: boolean,
+  showAds?: boolean,
 };
 
 type VideoJSOptions = {
@@ -131,7 +131,7 @@ class LbryVolumeBarClass extends videojs.getComponent(VIDEOJS_VOLUME_BAR_CLASS) 
 properties for this component should be kept to ONLY those that if changed should REQUIRE an entirely new videojs element
  */
 export default React.memo<Props>(function VideoJs(props: Props) {
-  const { startMuted, source, sourceType, poster, isAudio, onPlayerReady, onAdsTestPage } = props;
+  const { startMuted, source, sourceType, poster, isAudio, onPlayerReady, showAds } = props;
   const [reload, setReload] = useState('initial');
 
   let player: ?Player;
@@ -149,17 +149,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     plugins: { eventTracking: true },
   };
 
-  //   if (onAdsTestPage) {
-  //     // $FlowFixMe
-  //     videoJsOptions.plugins.vastClient = {
-  //       adTagUrl: `https://tag.targeting.unrulymedia.com/rmp/216276/0/vast2?vastfw=vpaid&url=${encodeURI(
-  //         window.location.href
-  //       )}&w=300&h=500`,
-  //       adsCancelTimeout: 5000,
-  //       adsEnabled: true,
-  //     };
-  //   }
-
   videoJsOptions.muted = startMuted;
 
   const tapToUnmuteRef = useRef();
@@ -172,7 +161,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   };
 
   React.useEffect(() => {
-    if (onAdsTestPage) {
+    if (showAds) {
       const url = `https://tag.targeting.unrulymedia.com/rmp/216276/0/vast2?vastfw=vpaid&url=${encodeURI(
         window.location.href
       )}&w=300&h=500`;
@@ -188,7 +177,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
           console.log('ads error', err);
         });
     }
-  }, [onAdsTestPage]);
+  }, [showAds]);
 
   function showTapButton(tapButton) {
     const setButtonVisibility = (theRef, newState) => {

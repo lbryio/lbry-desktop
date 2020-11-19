@@ -35,7 +35,16 @@ type Props = {
   claimRewards: () => void,
   savePosition: (string, number) => void,
   clearPosition: string => void,
-  onAdsTestPage?: boolean,
+  authenticated: boolean,
+  homepageData: {
+    PRIMARY_CONTENT_CHANNEL_IDS?: Array<string>,
+    ENLIGHTENMENT_CHANNEL_IDS?: Array<string>,
+    GAMING_CHANNEL_IDS?: Array<string>,
+    SCIENCE_CHANNEL_IDS?: Array<string>,
+    TECHNOLOGY_CHANNEL_IDS?: Array<string>,
+    COMMUNITY_CHANNEL_IDS?: Array<string>,
+    FINCANCE_CHANNEL_IDS?: Array<string>,
+  },
 };
 
 /*
@@ -63,13 +72,35 @@ function VideoViewer(props: Props) {
     savePosition,
     clearPosition,
     desktopPlayStartTime,
+    homepageData,
+    authenticated,
   } = props;
   const claimId = claim && claim.claim_id;
+  const channelClaimId = claim && claim.signing_channel && claim.signing_channel.claim_id;
   const isAudio = contentType.includes('audio');
   const forcePlayer = FORCE_CONTENT_TYPE_PLAYER.includes(contentType);
   const [isPlaying, setIsPlaying] = useState(false);
   const [showAutoplayCountdown, setShowAutoplayCountdown] = useState(false);
   const [isEndededEmbed, setIsEndededEmbed] = useState(false);
+  const {
+    PRIMARY_CONTENT_CHANNEL_IDS = [],
+    ENLIGHTENMENT_CHANNEL_IDS = [],
+    GAMING_CHANNEL_IDS = [],
+    SCIENCE_CHANNEL_IDS = [],
+    TECHNOLOGY_CHANNEL_IDS = [],
+    COMMUNITY_CHANNEL_IDS = [],
+    FINCANCE_CHANNEL_IDS = [],
+  } = homepageData;
+  const adApprovedChannelIds = [
+    ...PRIMARY_CONTENT_CHANNEL_IDS,
+    ...ENLIGHTENMENT_CHANNEL_IDS,
+    ...GAMING_CHANNEL_IDS,
+    ...SCIENCE_CHANNEL_IDS,
+    ...TECHNOLOGY_CHANNEL_IDS,
+    ...COMMUNITY_CHANNEL_IDS,
+    ...FINCANCE_CHANNEL_IDS,
+  ];
+  const showAds = !authenticated && Boolean(channelClaimId) && adApprovedChannelIds.includes(channelClaimId);
 
   /* isLoading was designed to show loading screen on first play press, rather than completely black screen, but
   breaks because some browsers (e.g. Firefox) block autoplay but leave the player.play Promise pending */
@@ -77,7 +108,6 @@ function VideoViewer(props: Props) {
 
   const previousUri = usePrevious(uri);
   const embedded = useContext(EmbedContext);
-  const onAdsTestPage = claim && claim.claim_id === '389c4eb07a2417dd4b88c4bfdbc423d164c11aec';
 
   // force everything to recent when URI changes, can cause weird corner cases otherwise (e.g. navigate while autoplay is true)
   useEffect(() => {
@@ -208,7 +238,7 @@ function VideoViewer(props: Props) {
       {/* disable this loading behavior because it breaks when player.play() promise hangs */}
       {isLoading && <LoadingScreen status={__('Loading')} />}
       <VideoJs
-        onAdsTestPage={onAdsTestPage}
+        showAds={showAds}
         source={source}
         isAudio={isAudio}
         poster={isAudio || (embedded && !autoplayIfEmbedded) ? thumbnail : null}
