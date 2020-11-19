@@ -173,12 +173,12 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
   React.useEffect(() => {
     if (onAdsTestPage) {
+      const url = `https://tag.targeting.unrulymedia.com/rmp/216276/0/vast2?vastfw=vpaid&url=${encodeURI(
+        window.location.href
+      )}&w=300&h=500`;
+      console.log('fetching: ', url);
       vastClient
-        .get(
-          `https://tag.targeting.unrulymedia.com/rmp/216276/0/vast2?vastfw=vpaid&url=${encodeURI(
-            window.location.href
-          )}&w=300&h=500`
-        )
+        .get(url)
         .then(res => {
           // Do something with the parsed VAST response
           console.log('ads response', res);
