@@ -80,6 +80,7 @@ function ChannelForm(props: Props) {
   } = props;
   const [nameError, setNameError] = React.useState(undefined);
   const [bidError, setBidError] = React.useState('');
+  const [coverError, setCoverError] = React.useState(false);
   const { claim_id: claimId } = claim || {};
   const [params, setParams]: [any, (any) => void] = React.useState(getChannelParams());
   const { channelName } = parseURI(uri);
@@ -228,7 +229,12 @@ function ChannelForm(props: Props) {
               iconSize={18}
             />
           </div>
-          {params.coverUrl && <img className="channel-cover__custom" src={params.coverUrl} />}
+          {params.coverUrl &&
+            (coverError ? (
+              <div className="channel-cover__custom--waiting">{__('This will be visible in a few minutes.')}</div>
+            ) : (
+              <img className="channel-cover__custom" src={params.coverUrl} onError={() => setCoverError(true)} />
+            ))}
           <div className="channel__primary-info">
             <div className="channel__edit-thumb">
               <Button
@@ -252,6 +258,7 @@ function ChannelForm(props: Props) {
               uri={uri}
               thumbnailPreview={params.thumbnailUrl}
               allowGifs
+              showDelayedMessage
             />
             <h1 className="channel__title">
               {params.title || (channelName && '@' + channelName) || (params.name && '@' + params.name)}

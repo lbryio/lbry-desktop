@@ -20,7 +20,7 @@ class ModalConfirmThumbnailUpload extends React.PureComponent<Props> {
 
   render() {
     const { closeModal, file } = this.props;
-    console.log('file', file);
+
     return (
       <Modal
         isOpen
