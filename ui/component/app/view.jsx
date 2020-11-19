@@ -136,6 +136,11 @@ function App(props: Props) {
   const shouldHideNag = pathname.startsWith(`/$/${PAGES.EMBED}`) || pathname.startsWith(`/$/${PAGES.AUTH_VERIFY}`);
   const userId = user && user.id;
 
+  let useCustomScrollbar = true;
+  // @if TARGET='app'
+  useCustomScrollbar = !IS_MAC;
+  // @endif
+
   let uri;
   try {
     const newpath = buildURI(parseURI(pathname.slice(1).replace(/:/g, '#')));
@@ -316,6 +321,7 @@ function App(props: Props) {
         // @if TARGET='app'
         [`${MAIN_WRAPPER_CLASS}--mac`]: IS_MAC,
         // @endif
+        [`${MAIN_WRAPPER_CLASS}--scrollbar`]: useCustomScrollbar,
       })}
       ref={appRef}
       onContextMenu={IS_WEB ? undefined : e => openContextMenu(e)}
