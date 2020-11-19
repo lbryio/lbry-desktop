@@ -16,6 +16,7 @@ type Props = {
   claim: ?ChannelClaim,
   doResolveUri: string => void,
   isResolving: boolean,
+  showDelayedMessage?: boolean,
 };
 
 function ChannelThumbnail(props: Props) {
@@ -30,6 +31,7 @@ function ChannelThumbnail(props: Props) {
     claim,
     doResolveUri,
     isResolving,
+    showDelayedMessage = false,
   } = props;
   const [thumbError, setThumbError] = React.useState(false);
   const shouldResolve = claim === undefined;
@@ -74,12 +76,18 @@ function ChannelThumbnail(props: Props) {
         />
       )}
       {showThumb && (
-        <img
-          alt={__('Channel profile picture')}
-          className="channel-thumbnail__custom"
-          src={!thumbError ? thumbnailPreview || thumbnail : Gerbil}
-          onError={() => setThumbError(true)} // if thumb fails (including due to https replace, show gerbil.
-        />
+        <>
+          {showDelayedMessage && thumbError ? (
+            <div className="chanel-thumbnail--waiting">{__('This will be visible in a few minutes.')}</div>
+          ) : (
+            <img
+              alt={__('Channel profile picture')}
+              className="channel-thumbnail__custom"
+              src={!thumbError ? thumbnailPreview || thumbnail : Gerbil}
+              onError={() => setThumbError(true)} // if thumb fails (including due to https replace, show gerbil.
+            />
+          )}
+        </>
       )}
     </div>
   );
