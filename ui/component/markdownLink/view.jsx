@@ -18,9 +18,13 @@ type Props = {
 
 function MarkdownLink(props: Props) {
   const { children, href, title, embed = false, parentCommentId, isMarkdownPost, simpleLinks = false } = props;
-  const decodedUri = decodeURI(href);
 
-  if (!href) {
+  let decodedUri;
+  try {
+    decodedUri = decodeURI(href);
+  } catch (e) {}
+
+  if (!href || !decodedUri) {
     return children || null;
   }
 
