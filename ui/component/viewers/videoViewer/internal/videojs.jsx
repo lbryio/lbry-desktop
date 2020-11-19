@@ -37,7 +37,7 @@ type Props = {
   onPlayerReady: Player => void,
   isAudio: boolean,
   startMuted: boolean,
-  adsTest?: boolean,
+  onAdsTestPage?: boolean,
 };
 
 type VideoJSOptions = {
@@ -129,7 +129,7 @@ class LbryVolumeBarClass extends videojs.getComponent(VIDEOJS_VOLUME_BAR_CLASS) 
 properties for this component should be kept to ONLY those that if changed should REQUIRE an entirely new videojs element
  */
 export default React.memo<Props>(function VideoJs(props: Props) {
-  const { startMuted, source, sourceType, poster, isAudio, onPlayerReady, adsTest } = props;
+  const { startMuted, source, sourceType, poster, isAudio, onPlayerReady, onAdsTestPage } = props;
   const [reload, setReload] = useState('initial');
 
   let player: ?Player;
@@ -147,18 +147,12 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     plugins: { eventTracking: true },
   };
 
-  if (adsTest) {
-    videoJsOptions.sources = [
-      {
-        src:
-          'https://cdn.lbryplayer.xyz/api/v3/streams/free/ted-cruz-obliterates-jack-dorsey/9c1d2dec8fd668a79966da4218b2c4d850f7e3c6/bd9c0e',
-        type: 'video/mp4',
-      },
-    ];
-
+  if (onAdsTestPage) {
     // $FlowFixMe
     videoJsOptions.plugins.vastClient = {
-      adTagUrl: 'https://serve.adspruce.com/vpaid-8394-3.xml',
+      adTagUrl: `https://tag.targeting.unrulymedia.com/rmp/216276/0/vast2?vastfw=vpaid&url=${encodeURI(
+        window.location.href
+      )}&w=300&h=500`,
       adsCancelTimeout: 5000,
       adsEnabled: true,
     };

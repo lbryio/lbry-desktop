@@ -35,6 +35,7 @@ type Props = {
   claimRewards: () => void,
   savePosition: (string, number) => void,
   clearPosition: string => void,
+  onAdsTestPage?: boolean,
 };
 
 /*
@@ -76,6 +77,7 @@ function VideoViewer(props: Props) {
 
   const previousUri = usePrevious(uri);
   const embedded = useContext(EmbedContext);
+  const onAdsTestPage = claim && claim.claim_id === '389c4eb07a2417dd4b88c4bfdbc423d164c11aec';
 
   // force everything to recent when URI changes, can cause weird corner cases otherwise (e.g. navigate while autoplay is true)
   useEffect(() => {
@@ -206,6 +208,7 @@ function VideoViewer(props: Props) {
       {/* disable this loading behavior because it breaks when player.play() promise hangs */}
       {isLoading && <LoadingScreen status={__('Loading')} />}
       <VideoJs
+        onAdsTestPage={onAdsTestPage}
         source={source}
         isAudio={isAudio}
         poster={isAudio || (embedded && !autoplayIfEmbedded) ? thumbnail : null}
