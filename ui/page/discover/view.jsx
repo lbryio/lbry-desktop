@@ -99,7 +99,6 @@ function DiscoverPage(props: Props) {
         limitClaimsPerChannel={3}
         header={repostedUri ? <span /> : undefined}
         tileLayout={repostedUri ? false : tileLayout}
-        defaultOrderBy={CS.ORDER_BY_NEW}
         claimType={claimType ? [claimType] : undefined}
         headerLabel={headerLabel}
         tags={tags}

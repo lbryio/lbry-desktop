@@ -151,6 +151,7 @@ function ClaimListDiscover(props: Props) {
   const originalPageSize = pageSize || CS.PAGE_SIZE;
   const dynamicPageSize = isLargeScreen ? Math.ceil(originalPageSize * (3 / 2)) : originalPageSize;
   let orderParam = orderBy || urlParams.get(CS.ORDER_BY_KEY) || defaultOrderBy;
+
   if (!orderParam) {
     if (history.action === 'POP') {
       // Reaching here means user have popped back to the page's entry point (e.g. '/$/tags' without any '?order=').
