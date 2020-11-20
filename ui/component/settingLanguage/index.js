@@ -1,11 +1,11 @@
 import { connect } from 'react-redux';
 import { SETTINGS } from 'lbry-redux';
 import { doSetLanguage, doSetClientSetting } from 'redux/actions/settings';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { makeSelectClientSetting, selectLanguage } from 'redux/selectors/settings';
 import SettingLanguage from './view';
 
 const select = state => ({
-  language: makeSelectClientSetting(SETTINGS.LANGUAGE)(state),
+  language: selectLanguage(state),
   searchInLanguage: makeSelectClientSetting(SETTINGS.SEARCH_IN_LANGUAGE)(state),
 });
 

@@ -292,14 +292,35 @@ export function doFetchLanguage(language) {
   };
 }
 
+export function doSetHomepage(code) {
+  return (dispatch, getState) => {
+    let languageCode;
+    if (code === window.navigator.language.slice(0, 2)) {
+      languageCode = null;
+    } else {
+      languageCode = code;
+    }
+    dispatch(doSetClientSetting(SETTINGS.HOMEPAGE, languageCode));
+  };
+}
+
 export function doSetLanguage(language) {
   return (dispatch, getState) => {
     const { settings } = getState();
     const { daemonSettings } = settings;
     const { share_usage_data: shareSetting } = daemonSettings;
     const isSharingData = shareSetting || IS_WEB;
+    let languageSetting;
+    if (language === window.navigator.language.slice(0, 2)) {
+      languageSetting = null;
+    } else {
+      languageSetting = language;
+    }
 
-    if (settings.language !== language || (settings.loadedLanguages && !settings.loadedLanguages.includes(language))) {
+    if (
+      settings.language !== languageSetting ||
+      (settings.loadedLanguages && !settings.loadedLanguages.includes(language))
+    ) {
       // this should match the behavior/logic in index-web.html
       fetch('https://lbry.com/i18n/get/lbry-desktop/app-strings/' + language + '.json')
         .then(r => r.json())
@@ -315,7 +336,7 @@ export function doSetLanguage(language) {
         .then(() => {
           // set on localStorage so it can be read outside of redux
           window.localStorage.setItem(SETTINGS.LANGUAGE, language);
-          dispatch(doSetClientSetting(SETTINGS.LANGUAGE, language));
+          dispatch(doSetClientSetting(SETTINGS.LANGUAGE, languageSetting));
           if (isSharingData) {
             Lbryio.call('user', 'language', {
               language: language,

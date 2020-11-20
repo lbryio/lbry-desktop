@@ -1,13 +1,13 @@
 import { connect } from 'react-redux';
 import { SETTINGS } from 'lbry-redux';
 import { doSetAutoLaunch } from 'redux/actions/settings';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { makeSelectClientSetting, selectLanguage } from 'redux/selectors/settings';
 import { doToast } from 'redux/actions/notifications';
 import SettingAutoLaunch from './view';
 
 const select = state => ({
   autoLaunch: makeSelectClientSetting(SETTINGS.AUTO_LAUNCH)(state),
-  language: makeSelectClientSetting(SETTINGS.LANGUAGE)(state),
+  language: selectLanguage(state),
 });
 
 const perform = dispatch => ({

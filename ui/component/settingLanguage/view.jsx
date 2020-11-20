@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { FormField } from 'component/common/form';
 import Spinner from 'component/spinner';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
+import { getDefaultLanguage } from 'util/default-languages';
 
 type Props = {
   language: string,
@@ -24,7 +25,7 @@ function SettingLanguage(props: Props) {
 
   function onLanguageChange(e) {
     const { value } = e.target;
-    setPreviousLanguage(language);
+    setPreviousLanguage(language || getDefaultLanguage());
     setLanguage(value);
   }
 
@@ -35,7 +36,7 @@ function SettingLanguage(props: Props) {
         type="select"
         label={__('Language')}
         onChange={onLanguageChange}
-        value={language}
+        value={language || getDefaultLanguage()}
         helper={__(
           'Multi-language support is brand new and incomplete. Switching your language may have unintended consequences, like glossolalia.'
         )}
