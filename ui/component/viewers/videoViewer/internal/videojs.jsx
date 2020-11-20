@@ -28,6 +28,8 @@ export type Player = {
   error: () => any,
   loadingSpinner: any,
   getChild: string => any,
+  playbackRate: (?number) => number,
+  userActive: (?boolean) => boolean,
 };
 
 type Props = {
@@ -49,6 +51,8 @@ type VideoJSOptions = {
   muted?: boolean,
 };
 
+const videoPlaybackRates = [0.25, 0.5, 0.75, 1, 1.1, 1.25, 1.5, 1.75, 2];
+
 const IS_IOS =
   (/iPad|iPhone|iPod/.test(navigator.platform) ||
     (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) &&
@@ -56,7 +60,7 @@ const IS_IOS =
 
 const VIDEO_JS_OPTIONS: VideoJSOptions = {
   preload: 'auto',
-  playbackRates: [0.25, 0.5, 0.75, 1, 1.1, 1.25, 1.5, 1.75, 2],
+  playbackRates: videoPlaybackRates,
   responsive: true,
   controls: true,
   html5: { nativeControlsForTouch: IS_IOS },
@@ -68,6 +72,8 @@ const SMALL_F_KEYCODE = 70;
 const SMALL_M_KEYCODE = 77;
 const ARROW_LEFT_KEYCODE = 37;
 const ARROW_RIGHT_KEYCODE = 39;
+const COMMA_KEYCODE = 188;
+const PERIOD_KEYCODE = 190;
 
 const FULLSCREEN_KEYCODE = SMALL_F_KEYCODE;
 const MUTE_KEYCODE = SMALL_M_KEYCODE;
@@ -283,6 +289,21 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     if (e.keyCode === SEEK_BACKWARD_KEYCODE) {
       const newDuration = currentTime - SEEK_STEP;
       videoNode.currentTime = newDuration < 0 ? 0 : newDuration;
+    }
+
+    // Playback-Rate Shortcuts ('>' = speed up, '<' = speed down)
+    if (player && e.shiftKey && (e.keyCode === PERIOD_KEYCODE || e.keyCode === COMMA_KEYCODE)) {
+      const rate = player.playbackRate();
+      let rateIndex = videoPlaybackRates.findIndex(x => x === rate);
+      if (rateIndex >= 0) {
+        rateIndex =
+          e.keyCode === PERIOD_KEYCODE
+            ? Math.min(rateIndex + 1, videoPlaybackRates.length - 1)
+            : Math.max(rateIndex - 1, 0);
+
+        player.userActive(true); // Bring up the ControlBar as GUI feedback.
+        player.playbackRate(videoPlaybackRates[rateIndex]);
+      }
     }
   }
 
