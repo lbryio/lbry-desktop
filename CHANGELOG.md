@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Language search ([#4907](https://github.com/lbryio/lbry-desktop/pull/4907))
 - Content notifications ([#4981](https://github.com/lbryio/lbry-desktop/pull/4981))
 - Customize scrollbar to fit the dark theme _community pr!_ ([#5056](https://github.com/lbryio/lbry-desktop/pull/5056))
+- Keyboard shortcut: adjust video playback-rate using ">" and "<" _community pr!_ ([#5075](https://github.com/lbryio/lbry-desktop/pull/5075))
 
 ### Changed
 
