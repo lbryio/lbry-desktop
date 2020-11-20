@@ -400,21 +400,43 @@
   }
 }
 
-.video-js:not(.vjs-fullscreen).vjs-layout-small {
+.video-js.vjs-fullscreen,
+.video-js:not(.vjs-fullscreen) {
+  // --- Unhide desired components per layout ---
+  &.vjs-layout-x-small {
+    .vjs-playback-rate {
+      display: inherit;
+    }
+  }
+
+  &.vjs-layout-small {
+    .vjs-current-time,
+    .vjs-time-divider,
+    .vjs-duration,
+    .vjs-playback-rate {
+      display: inherit;
+    }
+  }
+
+  // --- Adjust spacing ---
   .vjs-current-time {
-    display: flex;
-    padding-left: 0.5em;
     padding-right: 0;
   }
 
-  .vjs-time-divider {
-    display: flex;
+  .vjs-duration {
+    padding-left: 0;
   }
 
-  .vjs-duration {
-    display: flex;
-    padding-left: 0;
-    padding-right: 0.5em;
+  .vjs-playback-rate .vjs-playback-rate-value {
+    // Reduce the gigantic font a bit. Default was 1.5em.
+    font-size: 1.25em;
+    line-height: 2.5;
+  }
+
+  .vjs-playback-rate .vjs-menu {
+    // Extend the width to prevent a potential scrollbar from blocking the text.
+    width: 8em;
+    left: -2em;
   }
 }
 
