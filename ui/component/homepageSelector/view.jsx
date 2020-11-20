@@ -4,6 +4,7 @@ import React from 'react';
 import homepages from 'homepages';
 import LANGUAGES from 'constants/languages';
 import { FormField } from 'component/common/form';
+import { getDefaultHomepage } from 'util/default-languages';
 
 type Props = {
   homepage: string,
@@ -27,7 +28,7 @@ function SelectHomepage(props: Props) {
         type="select"
         label={__('Homepage')}
         onChange={handleSetHomepage}
-        value={homepage}
+        value={homepage || getDefaultHomepage()}
         helper={__('Tailor your experience.')}
       >
         {Object.keys(homepages).map(hp => (

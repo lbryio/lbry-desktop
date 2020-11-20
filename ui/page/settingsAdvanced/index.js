@@ -11,6 +11,7 @@ import {
 } from 'redux/actions/settings';
 import {
   makeSelectClientSetting,
+  selectLanguage,
   selectDaemonSettings,
   selectFfmpegStatus,
   selectFindingFFmpeg,
@@ -29,7 +30,7 @@ const select = state => ({
   hideBalance: makeSelectClientSetting(SETTINGS.HIDE_BALANCE)(state),
   ffmpegStatus: selectFfmpegStatus(state),
   findingFFmpeg: selectFindingFFmpeg(state),
-  language: makeSelectClientSetting(SETTINGS.LANGUAGE)(state),
+  language: selectLanguage(state),
   syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
 });
 

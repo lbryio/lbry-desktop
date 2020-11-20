@@ -6,14 +6,14 @@ import { selectUserVerifiedEmail, selectUserEmail, selectEmailToVerify, selectUs
 import { doClearEmailEntry, doClearPasswordEntry } from 'redux/actions/user';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { doSignOut, doOpenModal } from 'redux/actions/app';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { makeSelectClientSetting, selectLanguage } from 'redux/selectors/settings';
 import { selectCommentChannel } from 'redux/selectors/comments';
 import Header from './view';
 import { selectHasNavigated } from 'redux/selectors/app';
 
 const select = state => ({
   balance: selectBalance(state),
-  language: makeSelectClientSetting(SETTINGS.LANGUAGE)(state), // trigger redraw on language change
+  language: selectLanguage(state),
   roundedBalance: formatCredits(selectBalance(state), 2, true),
   currentTheme: makeSelectClientSetting(SETTINGS.THEME)(state),
   automaticDarkModeEnabled: makeSelectClientSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED)(state),

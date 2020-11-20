@@ -6,7 +6,12 @@ import { doFetchAccessToken, doUserSetReferrer } from 'redux/actions/user';
 import { selectUser, selectAccessToken, selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectUnclaimedRewards } from 'redux/selectors/rewards';
 import { doFetchChannelListMine, SETTINGS } from 'lbry-redux';
-import { makeSelectClientSetting, selectLoadedLanguages, selectThemePath } from 'redux/selectors/settings';
+import {
+  makeSelectClientSetting,
+  selectLanguage,
+  selectLoadedLanguages,
+  selectThemePath,
+} from 'redux/selectors/settings';
 import { selectIsUpgradeAvailable, selectAutoUpdateDownloaded, selectModal } from 'redux/selectors/app';
 import { doGetWalletSyncPreference, doSetLanguage } from 'redux/actions/settings';
 import { doSyncSubscribe } from 'redux/actions/sync';
@@ -22,7 +27,7 @@ const select = state => ({
   user: selectUser(state),
   accessToken: selectAccessToken(state),
   theme: selectThemePath(state),
-  language: makeSelectClientSetting(SETTINGS.LANGUAGE)(state),
+  language: selectLanguage(state),
   syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
   languages: selectLoadedLanguages(state),
   autoUpdateDownloaded: selectAutoUpdateDownloaded(state),

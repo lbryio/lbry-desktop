@@ -9,7 +9,7 @@ import {
 import { selectFollowedTags } from 'redux/selectors/tags';
 import { selectBlockedChannels } from 'redux/selectors/blocked';
 import { doToggleTagFollowDesktop } from 'redux/actions/tags';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { makeSelectClientSetting, selectLanguage } from 'redux/selectors/settings';
 import ClaimListDiscover from './view';
 
 const select = state => ({
@@ -19,7 +19,7 @@ const select = state => ({
   loading: selectFetchingClaimSearch(state),
   showNsfw: makeSelectClientSetting(SETTINGS.SHOW_MATURE)(state),
   hideReposts: makeSelectClientSetting(SETTINGS.HIDE_REPOSTS)(state),
-  languageSetting: makeSelectClientSetting(SETTINGS.LANGUAGE)(state),
+  language: selectLanguage(state),
   hiddenUris: selectBlockedChannels(state),
   searchInLanguage: makeSelectClientSetting(SETTINGS.SEARCH_IN_LANGUAGE)(state),
 });

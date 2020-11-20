@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import SelectHomepage from './view';
-import { SETTINGS } from 'lbry-redux';
-import { doSetClientSetting } from 'redux/actions/settings';
+import { doSetHomepage } from 'redux/actions/settings';
 import { selectHomepageCode } from 'redux/selectors/settings';
 
 const select = state => ({
@@ -9,7 +8,7 @@ const select = state => ({
 });
 
 const perform = dispatch => ({
-  setHomepage: value => dispatch(doSetClientSetting(SETTINGS.HOMEPAGE, value)),
+  setHomepage: value => dispatch(doSetHomepage(value)),
 });
 
 export default connect(select, perform)(SelectHomepage);

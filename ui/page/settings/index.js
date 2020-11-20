@@ -10,7 +10,7 @@ import {
   doExitSettingsPage,
 } from 'redux/actions/settings';
 import { doSetPlayingUri } from 'redux/actions/content';
-import { makeSelectClientSetting, selectDaemonSettings } from 'redux/selectors/settings';
+import { makeSelectClientSetting, selectDaemonSettings, selectLanguage } from 'redux/selectors/settings';
 import { doWalletStatus, selectWalletIsEncrypted, SETTINGS } from 'lbry-redux';
 import { selectBlockedChannelsCount } from 'redux/selectors/blocked';
 import SettingsPage from './view';
@@ -32,7 +32,7 @@ const select = state => ({
   floatingPlayer: makeSelectClientSetting(SETTINGS.FLOATING_PLAYER)(state),
   hideReposts: makeSelectClientSetting(SETTINGS.HIDE_REPOSTS)(state),
   darkModeTimes: makeSelectClientSetting(SETTINGS.DARK_MODE_TIMES)(state),
-  language: makeSelectClientSetting(SETTINGS.LANGUAGE)(state),
+  language: selectLanguage(state),
 });
 
 const perform = dispatch => ({
