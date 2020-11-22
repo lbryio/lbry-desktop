@@ -8,6 +8,7 @@ import ImageViewer from 'component/viewers/imageViewer';
 import AppViewer from 'component/viewers/appViewer';
 import { withRouter } from 'react-router-dom';
 import fs from 'fs';
+import analytics from 'analytics';
 
 import DocumentViewer from 'component/viewers/documentViewer';
 import PdfViewer from 'component/viewers/pdfViewer';
@@ -44,7 +45,9 @@ class FileRender extends React.PureComponent<Props> {
   }
 
   componentDidMount() {
+    const { embedded } = this.props;
     window.addEventListener('keydown', this.escapeListener, true);
+    analytics.playerLoadedEvent(embedded);
   }
 
   componentWillUnmount() {
