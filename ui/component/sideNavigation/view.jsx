@@ -102,11 +102,6 @@ function SideNavigation(props: Props) {
       hideForUnauth: true,
     },
     {
-      title: 'Discover',
-      link: `/$/${PAGES.DISCOVER}`,
-      icon: ICONS.DISCOVER,
-    },
-    {
       title: IS_WEB ? 'Purchased' : 'Library',
       link: `/$/${PAGES.LIBRARY}`,
       icon: ICONS.PURCHASED,
