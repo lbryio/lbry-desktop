@@ -71,7 +71,7 @@ const downloadDaemon = targetPlatform =>
           })
         )
         .then(() => {
-          console.log('\x1b[32msuccess\x1b[0m Daemon downloaded!');
+          console.log(`\x1b[32msuccess\x1b[0m Daemon downloaded! - v${daemonVersion}`);
           if (hasDaemonVersion) {
             del(daemonVersionPath);
           }
