@@ -1,3 +1,4 @@
+
 .markdown-preview {
   > :first-child {
     margin-top: 0;
@@ -33,37 +34,19 @@
   h2 {
     font-size: 1.5em;
   }
-  h3 {
+  h3, h4, h5, h6 {
     font-size: 1.4em;
-  }
-  h4 {
-    font-size: 1.3em;
-  }
-  h5 {
-    font-size: 1.2em;
-  }
-  h6 {
-    font-size: 1em;
   }
 
   &.markdown-preview--description {
     h1 {
-      font-size: 1.2em;
+      font-size: 1.7em;
     }
     h2 {
-      font-size: 1.1em;
+      font-size: 1.5em;
     }
-    h3 {
-      font-size: 1em;
-    }
-    h4 {
-      font-size: 0.9em;
-    }
-    h5 {
-      font-size: 0.8em;
-    }
-    h6 {
-      font-size: 0.7em;
+    h3, h4, h5, h6 {
+      font-size: 1.4em;
     }
   }
 
@@ -77,12 +60,31 @@
 
   blockquote {
     white-space: normal;
+    margin-top:var(--spacing-l);
+    margin-bottom:var(--spacing-l);
 
     p:first-child {
       margin-top: 0;
     }
   }
+  // Body 
 
+  p, li, pre code  {
+    font-size: 1.35rem;
+    font-weight: 100;
+    word-spacing: 0.09rem;
+    letter-spacing: 0.0185rem;
+  
+  }
+  p, pre code  { 
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  }
+  pre code  {
+    font-size: 1.1rem;
+    font-weight: 100;
+    background: var(--color-editor-inline-code-bg-preview);
+  }
   // Tables
   table {
     margin-bottom: 1.2rem;
