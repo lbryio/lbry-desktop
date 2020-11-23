@@ -37,9 +37,7 @@ import {
 } from 'web/effects/use-degraded-performance';
 // @endif
 export const MAIN_WRAPPER_CLASS = 'main-wrapper';
-// @if TARGET='app'
-export const IS_MAC = process.platform === 'darwin';
-// @endif
+export const IS_MAC = navigator.userAgent.indexOf('Mac OS X') !== -1;
 
 // button numbers pulled from https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button
 const MOUSE_BACK_BTN = 3;
@@ -135,11 +133,7 @@ function App(props: Props) {
   const sanitizedReferrerParam = rawReferrerParam && rawReferrerParam.replace(':', '#');
   const shouldHideNag = pathname.startsWith(`/$/${PAGES.EMBED}`) || pathname.startsWith(`/$/${PAGES.AUTH_VERIFY}`);
   const userId = user && user.id;
-
-  let useCustomScrollbar = true;
-  // @if TARGET='app'
-  useCustomScrollbar = !IS_MAC;
-  // @endif
+  const useCustomScrollbar = !IS_MAC;
 
   let uri;
   try {
