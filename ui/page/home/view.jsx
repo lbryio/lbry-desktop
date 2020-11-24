@@ -55,7 +55,7 @@ function HomePage(props: Props) {
             <h1 className="claim-grid__header">
               <Button navigate={route || link} button="link">
                 {icon && <Icon className="claim-grid__header-icon" sectionIcon icon={icon} size={20} />}
-                <span className="claim-grid__title">{__(title)}</span>
+                <span className="claim-grid__title">{title}</span>
                 {help}
               </Button>
             </h1>
