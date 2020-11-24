@@ -39,7 +39,8 @@ export default function SearchPage(props: Props) {
     showNsfw,
     isAuthenticated,
   } = props;
-  const { push } = useHistory();
+  const { action, push } = useHistory();
+  const didNavigateForward = action === 'PUSH';
   const urlParams = new URLSearchParams(location.search);
   const urlQuery = urlParams.get('q') || '';
   const additionalOptions: AdditionalOptions = { isBackgroundSearch: false };
@@ -87,6 +88,10 @@ export default function SearchPage(props: Props) {
       search(urlQuery, jsonOptions);
     }
   }, [search, urlQuery, stringifiedOptions]);
+
+  if (didNavigateForward) {
+    window.scrollTo(0, 0);
+  }
 
   return (
     <Page>
