@@ -179,7 +179,7 @@ function AppRouter(props: Props) {
     if (!hasLinkedCommentInUrl) {
       window.scrollTo(0, currentScroll);
     }
-  }, [currentScroll, pathname, resetScroll, hasLinkedCommentInUrl]);
+  }, [currentScroll, pathname, search, resetScroll, hasLinkedCommentInUrl]);
 
   // react-router doesn't decode pathanmes before doing the route matching check
   // We have to redirect here because if we redirect on the server, it might get encoded again

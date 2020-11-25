@@ -347,8 +347,7 @@ function ClaimListDiscover(props: Props) {
     setPrevOptions(options);
 
     if (didNavigateForward) {
-      // --- Reset to top.
-      window.scrollTo(0, 0); // Prevents onScrollBottom() from re-hitting while waiting for doClaimQuery():
+      // --- Reset the page.
       options.page = 1;
       setPage(options.page);
     } else if (claimSearchResult) {
