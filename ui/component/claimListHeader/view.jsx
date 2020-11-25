@@ -33,6 +33,7 @@ type Props = {
   hideFilters: boolean,
   searchInLanguage: boolean,
   languageSetting: string,
+  scrollAnchor?: string,
 };
 
 function ClaimListHeader(props: Props) {
@@ -56,6 +57,7 @@ function ClaimListHeader(props: Props) {
     hideFilters,
     searchInLanguage,
     languageSetting,
+    scrollAnchor,
   } = props;
   const { action, push, location } = useHistory();
   const { search } = location;
@@ -202,7 +204,7 @@ function ClaimListHeader(props: Props) {
         }
         break;
     }
-    return `?${newUrlParams.toString()}`;
+    return `?${newUrlParams.toString()}` + (scrollAnchor ? '#' + scrollAnchor : '');
   }
 
   return (

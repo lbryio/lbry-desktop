@@ -63,6 +63,7 @@ type Props = {
   forceShowReposts?: boolean,
   languageSetting: string,
   searchInLanguage: boolean,
+  scrollAnchor?: string,
 };
 
 function ClaimListDiscover(props: Props) {
@@ -110,6 +111,7 @@ function ClaimListDiscover(props: Props) {
     forceShowReposts = false,
     languageSetting,
     searchInLanguage,
+    scrollAnchor,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
   const { search } = location;
@@ -468,6 +470,7 @@ function ClaimListDiscover(props: Props) {
       setPage={setPage}
       tileLayout={tileLayout}
       hideFilters={hideFilters}
+      scrollAnchor={scrollAnchor}
     />
   );
 

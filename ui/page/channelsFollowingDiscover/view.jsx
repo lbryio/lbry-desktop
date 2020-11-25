@@ -10,6 +10,8 @@ import * as CS from 'constants/claim_search';
 import { toCapitalCase } from 'util/string';
 import { SIMPLE_SITE } from 'config';
 
+const MORE_CHANNELS_ANCHOR = 'MoreChannels';
+
 type Props = {
   followedTags: Array<Tag>,
   subscribedChannels: Array<Subscription>,
@@ -119,13 +121,16 @@ function ChannelsFollowingDiscover(props: Props) {
           <ClaimTilesDiscover {...options} />
         </div>
       ))}
-      <h1 className="claim-grid__title">{__('More Channels')}</h1>
+      <h1 id={MORE_CHANNELS_ANCHOR} className="claim-grid__title">
+        {__('More Channels')}
+      </h1>
       {/* odysee: claimIds = PRIMARY_CONTENT_CHANNEL_IDS if simplesite CLD */}
       <ClaimListDiscover
         defaultOrderBy={CS.ORDER_BY_TRENDING}
         defaultFreshness={CS.FRESH_ALL}
         claimType={CS.CLAIM_CHANNEL}
         channelIds={SIMPLE_SITE ? PRIMARY_CONTENT_CHANNEL_IDS : undefined}
+        scrollAnchor={MORE_CHANNELS_ANCHOR}
       />
     </Page>
   );

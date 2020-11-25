@@ -61,8 +61,9 @@ if ('scrollRestoration' in history) {
 type Props = {
   currentScroll: number,
   isAuthenticated: boolean,
-  location: { pathname: string, search: string },
+  location: { pathname: string, search: string, hash: string },
   history: {
+    action: string,
     entries: { title: string }[],
     goBack: () => void,
     goForward: () => void,
@@ -108,7 +109,7 @@ function PrivateRoute(props: PrivateRouteProps) {
 function AppRouter(props: Props) {
   const {
     currentScroll,
-    location: { pathname, search },
+    location: { pathname, search, hash },
     isAuthenticated,
     history,
     uri,
@@ -177,9 +178,17 @@ function AppRouter(props: Props) {
 
   useEffect(() => {
     if (!hasLinkedCommentInUrl) {
-      window.scrollTo(0, currentScroll);
+      if (hash && history.action === 'PUSH') {
+        const id = hash.replace('#', '');
+        const element = document.getElementById(id);
+        if (element) {
+          window.scrollTo(0, element.offsetTop);
+        }
+      } else {
+        window.scrollTo(0, currentScroll);
+      }
     }
-  }, [currentScroll, pathname, search, resetScroll, hasLinkedCommentInUrl]);
+  }, [currentScroll, pathname, search, hash, resetScroll, hasLinkedCommentInUrl]);
 
   // react-router doesn't decode pathanmes before doing the route matching check
   // We have to redirect here because if we redirect on the server, it might get encoded again
