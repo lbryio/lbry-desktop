@@ -55,7 +55,7 @@ export const selectThemePath = createSelector(
 );
 
 export const selectHomepageCode = createSelector(makeSelectClientSetting(SETTINGS.HOMEPAGE), setting => {
-  return setting || getDefaultHomepage();
+  return homepages[setting] ? setting : getDefaultHomepage();
 });
 
 export const selectLanguage = createSelector(makeSelectClientSetting(SETTINGS.LANGUAGE), setting => {
@@ -67,11 +67,7 @@ export const selectHomepageData = createSelector(
   selectHomepageCode,
   homepageCode => {
     // homepages = { 'en': homepageFile, ... }
-    if (!homepageCode || !homepages[homepageCode]) {
-      return getDefaultHomepage();
-    } else {
-      return homepages[homepageCode];
-    }
+    return homepages[homepageCode];
   }
 );
 
