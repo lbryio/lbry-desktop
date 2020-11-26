@@ -36,6 +36,7 @@ type Analytics = {
   apiSyncTags: ({}) => void,
   tagFollowEvent: (string, boolean, ?string) => void,
   playerLoadedEvent: (?boolean) => void,
+  playerStartedEvent: (?boolean) => void,
   videoStartEvent: (string, number) => void,
   videoBufferEvent: (
     StreamClaim,
@@ -230,6 +231,9 @@ const analytics: Analytics = {
   },
   playerLoadedEvent: embedded => {
     sendMatomoEvent('Player', 'Loaded', embedded ? 'embedded' : 'onsite');
+  },
+  playerStartedEvent: embedded => {
+    sendMatomoEvent('Player', 'Started', embedded ? 'embedded' : 'onsite');
   },
   tagFollowEvent: (tag, following) => {
     sendMatomoEvent('Tag', following ? 'Tag-Follow' : 'Tag-Unfollow', tag);
