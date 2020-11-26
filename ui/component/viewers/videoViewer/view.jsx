@@ -100,7 +100,7 @@ function VideoViewer(props: Props) {
       const differenceToAdd = Date.now() - desktopPlayStartTime;
       timeToStartInMs += differenceToAdd;
     }
-
+    analytics.playerStartedEvent(embedded);
     analytics.videoStartEvent(claimId, timeToStartInMs);
     doAnalyticsView(uri, timeToStartInMs).then(() => {
       claimRewards();
