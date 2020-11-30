@@ -29,7 +29,7 @@ This repo contains the UI code that powers the official LBRY desktop app, as wel
   </a>
 </h2>
 
-![App GIF](https://spee.ch/@lbrynews:0/lbry-joule.gif)
+![App GIF](https://spee.ch/ba/lbry-joule.gif)
 
 ## Table of Contents
 
