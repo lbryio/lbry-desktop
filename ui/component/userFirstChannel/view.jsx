@@ -6,10 +6,12 @@ import { Form, FormField } from 'component/common/form';
 import { INVALID_NAME_ERROR } from 'constants/claim';
 import Card from 'component/common/card';
 import I18nMessage from 'component/i18nMessage';
+import analytics from 'analytics';
+
 export const DEFAULT_BID_FOR_FIRST_CHANNEL = 0.01;
 
 type Props = {
-  createChannel: (string, number) => void,
+  createChannel: (string, number) => Promise<ChannelClaim>,
   creatingChannel: boolean,
   createChannelError: string,
   claimingReward: boolean,
@@ -32,7 +34,11 @@ function UserFirstChannel(props: Props) {
   const [nameError, setNameError] = useState(undefined);
 
   function handleCreateChannel() {
-    createChannel(`@${channel}`, DEFAULT_BID_FOR_FIRST_CHANNEL);
+    createChannel(`@${channel}`, DEFAULT_BID_FOR_FIRST_CHANNEL).then(channelClaim => {
+      if (channelClaim) {
+        analytics.apiLogPublish(channelClaim);
+      }
+    });
   }
 
   function handleChannelChange(e) {
