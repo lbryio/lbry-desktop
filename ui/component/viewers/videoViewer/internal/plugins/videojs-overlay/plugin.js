@@ -1,6 +1,6 @@
-import videojs from 'video.js';
+import videojs from 'video.js/dist/alt/video.core.novtt.min.js';
 import window from 'global/window';
-import { version as VERSION } from '../package.json';
+const VERSION = '2.1.4';
 
 const defaults = {
   align: 'top-left',
