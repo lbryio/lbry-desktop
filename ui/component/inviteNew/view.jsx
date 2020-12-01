@@ -36,14 +36,17 @@ function InviteNew(props: Props) {
   // Referral link
   const [referralSource, setReferralSource] = useState(referralCode);
 
-  function handleReferralChange(code) {
-    setReferralSource(code);
-    // TODO: keep track of this in an array?
-    const matchingChannel = channels && channels.find(ch => ch.name === code);
-    if (matchingChannel) {
-      analytics.apiLogPublish(matchingChannel);
-    }
-  }
+  const handleReferralChange = React.useCallback(
+    code => {
+      setReferralSource(code);
+      // TODO: keep track of this in an array?
+      const matchingChannel = channels && channels.find(ch => ch.name === code);
+      if (matchingChannel) {
+        analytics.apiLogPublish(matchingChannel);
+      }
+    },
+    [setReferralSource]
+  );
 
   const topChannel =
     channels &&
@@ -64,7 +67,7 @@ function InviteNew(props: Props) {
     if (topChannel) {
       handleReferralChange(topChannel.name);
     }
-  }, [topChannel]);
+  }, [topChannel, handleReferralChange]);
 
   function lookupUrlByClaimName(name, channels) {
     const claim = channels.find(channel => channel.name === name);

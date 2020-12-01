@@ -63,19 +63,19 @@ function Invited(props: Props) {
         uri: fullUri,
       });
     }
-  }, [fullUri, isSubscribed]);
+  }, [fullUri, isSubscribed, channelSubscribe]);
 
   useEffect(() => {
     if (!referrerSetPending && hasVerifiedEmail) {
       claimReward();
     }
-  }, [referrerSetPending, hasVerifiedEmail]);
+  }, [referrerSetPending, hasVerifiedEmail, claimReward]);
 
   useEffect(() => {
     if (referrer) {
       setReferrer(referrer.replace(':', '#'));
     }
-  }, [referrer]);
+  }, [referrer, setReferrer]);
 
   function handleDone() {
     history.push(redirect);

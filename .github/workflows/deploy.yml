@@ -5,26 +5,31 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
-  build:
+  lint:
+    name: 'lint'
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: Borales/actions-yarn@v2.3.0
+      - run: yarn lint
 
+  build:
+    needs: ['lint']
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x]
+        node-version: [12.x]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: GitHub Action for Yarn
-      uses: Borales/actions-yarn@v2.3.0
-    - run: yarn
-    - run: NODE_ENV=production yarn compile:web
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: |
+          NODE_ENV=production yarn compile:web
