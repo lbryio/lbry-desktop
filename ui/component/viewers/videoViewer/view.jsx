@@ -117,8 +117,8 @@ function VideoViewer(props: Props) {
   const [isEndededEmbed, setIsEndededEmbed] = useState(false);
   const [adUrl, setAdUrl] = useState();
 
-  const adsEnabled =
-    !authenticated && !embedded && Boolean(channelClaimId) && adApprovedChannelIds.includes(channelClaimId);
+  const approvedVideo = Boolean(channelClaimId) && adApprovedChannelIds.includes(channelClaimId);
+  const adsEnabled = !authenticated && !embedded && approvedVideo;
   const [ready, setReady] = useState(!adsEnabled);
 
   /* isLoading was designed to show loading screen on first play press, rather than completely black screen, but
@@ -250,43 +250,45 @@ function VideoViewer(props: Props) {
   // Fetch ads for everyone because unruly needs more traffic
   // Only show ads with `setAdUrl` when they are enabled
   React.useEffect(() => {
-    analytics.adsFetchedEvent();
-    const url = `https://tag.targeting.unrulymedia.com/rmp/216276/0/vast2?vastfw=vpaid&url=${encodeURI(
-      window.location.href
-    )}&w=300&h=500`;
+    if (approvedVideo) {
+      analytics.adsFetchedEvent();
+      const url = `https://tag.targeting.unrulymedia.com/rmp/216276/0/vast2?vastfw=vpaid&url=${encodeURI(
+        window.location.href
+      )}&w=300&h=500`;
 
-    let adsReturned = false;
-    vastClient
-      .get(url)
-      .then(res => {
-        if (res.ads.length > 0) {
-          analytics.adsReceivedEvent(res);
-          adsReturned = true;
-        }
-
-        if (adsEnabled) {
-          // Let this line error if res.ads is empty
-          // I took this from an example response from Dailymotion
-          // It will be caught below and sent to matomo to figure out if there if this needs to be something changed to deal with unrulys data
-          const adUrl = res.ads[0].creatives[0].mediaFiles[0].fileURL;
-
-          if (adUrl) {
-            setAdUrl(adUrl);
+      let adsReturned = false;
+      vastClient
+        .get(url)
+        .then(res => {
+          if (res.ads.length > 0) {
+            analytics.adsReceivedEvent(res);
+            adsReturned = true;
           }
 
+          if (adsEnabled) {
+            // Let this line error if res.ads is empty
+            // I took this from an example response from Dailymotion
+            // It will be caught below and sent to matomo to figure out if there if this needs to be something changed to deal with unrulys data
+            const adUrl = res.ads[0].creatives[0].mediaFiles[0].fileURL;
+
+            if (adUrl) {
+              setAdUrl(adUrl);
+            }
+
+            setReady(true);
+          }
+        })
+        .catch(e => {
           setReady(true);
-        }
-      })
-      .catch(e => {
-        setReady(true);
 
-        if (adsEnabled) {
-          if (adsReturned) {
-            analytics.adsErrorEvent(e);
+          if (adsEnabled) {
+            if (adsReturned) {
+              analytics.adsErrorEvent(e);
+            }
           }
-        }
-      });
-  }, [uri, adsEnabled, setAdUrl]);
+        });
+    }
+  }, [uri, approvedVideo, adsEnabled, setAdUrl]);
 
   return (
     <div
