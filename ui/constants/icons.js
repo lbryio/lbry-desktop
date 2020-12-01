@@ -138,3 +138,6 @@ export const BEST = 'Best';
 export const CREATOR_LIKE = 'CreatorLike';
 export const CHEF = 'Chef';
 export const WILD_WEST = 'WildWest';
+export const UNIVERSE = 'Universe';
+export const CHEESE = 'Cheese';
+export const PEACE = 'Peace';
