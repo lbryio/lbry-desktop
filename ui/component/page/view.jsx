@@ -68,7 +68,7 @@ function Page(props: Props) {
     if (isOnFilePage || isMediumScreen) {
       setSidebarOpen(false);
     }
-  }, [isOnFilePage, isMediumScreen]);
+  }, [isOnFilePage, isMediumScreen, setSidebarOpen]);
 
   return (
     <Fragment>

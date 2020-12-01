@@ -59,7 +59,7 @@ function AutoplayCountdown(props: Props) {
         doPlayUri(nextRecommendedUri);
       }
     }
-  }, [navigateUrl, nextRecommendedUri, isFloating, doSetPlayingUri, doPlayUri]);
+  }, [navigateUrl, nextRecommendedUri, isFloating, doSetPlayingUri, doPlayUri, push]);
 
   React.useEffect(() => {
     const handleScroll = debounce(e => {

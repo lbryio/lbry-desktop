@@ -5,7 +5,7 @@ const protocol = 'lbry://';
 const uriRegex = /(lbry:\/\/)[^\s"]*[^)]/g;
 
 const mentionToken = '@';
-const mentionTokenCode = 64; // @
+// const mentionTokenCode = 64; // @
 const mentionRegex = /@[^\s()"]*/gm;
 
 const invalidRegex = /[-_.+=?!@#$%^&*:;,{}<>\w/\\]/;

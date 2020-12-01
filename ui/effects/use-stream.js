@@ -32,7 +32,6 @@ export default function useStream(url) {
             if (isMounted.current) {
               const buffer = Buffer.concat(chunks);
               const blob = new Blob([buffer]);
-              console.info(response);
               setState({ content: blob, loading: false });
             }
           });

@@ -26,18 +26,22 @@ export default function RecommendedContent(props: Props) {
   const isMobile = useIsMobile();
   const isMedium = useIsMediumScreen();
 
-  function getRecommendedContent() {
-    if (claim && claim.value && claim.claim_id) {
-      const options: Options = { size: 20, related_to: claim.claim_id, isBackgroundSearch: true };
-      if (claim && !mature) {
-        options['nsfw'] = false;
-      }
-      const { title } = claim.value;
-      if (title && options) {
-        search(title, options);
+  const stringifiedClaim = JSON.stringify(claim);
+  const getRecommendedContent = React.useCallback(() => {
+    if (stringifiedClaim) {
+      const jsonClaim = JSON.parse(stringifiedClaim);
+      if (jsonClaim && jsonClaim.value && jsonClaim.claim_id) {
+        const options: Options = { size: 20, related_to: jsonClaim.claim_id, isBackgroundSearch: true };
+        if (jsonClaim && !mature) {
+          options['nsfw'] = false;
+        }
+        const { title } = jsonClaim.value;
+        if (title && options) {
+          search(title, options);
+        }
       }
     }
-  }
+  }, [stringifiedClaim, mature]);
 
   React.useEffect(() => {
     getRecommendedContent();

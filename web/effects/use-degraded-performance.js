@@ -37,5 +37,5 @@ export function useDegradedPerformance(onDegradedPerformanceCallback) {
       .catch(() => {
         onDegradedPerformanceCallback(STATUS_FAILING);
       });
-  }, []);
+  }, [onDegradedPerformanceCallback]);
 }

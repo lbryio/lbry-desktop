@@ -58,7 +58,7 @@ function FileDownloadLink(props: Props) {
 
       setDidClickDownloadButton(false);
     }
-  }, [streamingUrl, didClickDownloadButton]);
+  }, [streamingUrl, didClickDownloadButton, fileName]);
   // @endif
 
   function handleDownload(e) {

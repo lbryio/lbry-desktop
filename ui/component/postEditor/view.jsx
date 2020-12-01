@@ -43,7 +43,7 @@ function PostEditor(props: Props) {
     if (editing && uri) {
       fetchStreamingUrl(uri);
     }
-  }, [uri, editing]);
+  }, [uri, editing, fetchStreamingUrl]);
 
   // Ready to edit content
   useEffect(() => {
@@ -75,7 +75,7 @@ function PostEditor(props: Props) {
           updatePublishForm({ fileText: text });
         }
       } catch (error) {
-        console.error(error);
+        console.error(error); // eslint-disable-line
       }
     }
 
