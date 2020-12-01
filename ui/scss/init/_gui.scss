@@ -59,7 +59,8 @@ ol {
   li {
     position: relative;
     list-style-position: outside;
-    margin: var(--spacing-xs) var(--spacing-m);
+    margin: var(--spacing-xs) 0;
+    margin-left: var(--spacing-xl);
     margin-bottom: 0;
   }
 }
