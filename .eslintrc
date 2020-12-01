@@ -14,6 +14,11 @@
     "IS_WEB": true,
     "WEBPACK_PORT": true
   },
+  "settings": {
+	"react": {
+		"version": "detect"
+	}
+  },
   "rules": {
     "brace-style": 0,
     "camelcase": 0,

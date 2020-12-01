@@ -44,8 +44,6 @@ const MOUSE_BACK_BTN = 3;
 const MOUSE_FORWARD_BTN = 4;
 
 type Props = {
-  alertError: (string | {}) => void,
-  pageTitle: ?string,
   language: string,
   languages: Array<string>,
   theme: string,

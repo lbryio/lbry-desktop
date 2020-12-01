@@ -1,6 +1,11 @@
+// @flow
 import React from 'react';
 
-const Theme = props => {
+type Props = {
+  themePath: ?string,
+};
+
+const Theme = (props: Props) => {
   const { themePath } = props;
 
   if (!themePath) {

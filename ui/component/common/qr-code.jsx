@@ -1,5 +1,5 @@
 // @flow
-import React, { Suspense } from 'react';
+import React from 'react';
 import classnames from 'classnames';
 import ReactQrCode from 'qrcode.react';
 

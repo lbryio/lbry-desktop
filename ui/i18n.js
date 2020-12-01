@@ -45,12 +45,15 @@ function saveMessage(message) {
  but this seems better than silently having this limitation and future devs not knowing.
  */
 // @if TARGET='web'
+// $FlowFixMe
+// eslint-disable
 function saveMessage(message) {
   if (!isProduction && knownMessages === null) {
     console.log('Note that i18n messages are not saved in web dev mode.');
     knownMessages = {};
   }
 }
+// eslint-enable
 // @endif
 
 function removeContextMetadata(message) {

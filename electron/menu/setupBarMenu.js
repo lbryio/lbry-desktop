@@ -1,5 +1,5 @@
 import { app, Menu, shell } from 'electron';
-import { changeZoomFactor, ZOOM } from 'util/zoomWindow';
+import { ZOOM } from 'util/zoomWindow';
 
 export default () => {
   const template = [

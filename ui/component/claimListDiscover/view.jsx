@@ -152,10 +152,12 @@ function ClaimListDiscover(props: Props) {
   const feeAmountParam = urlParams.get('fee_amount') || feeAmount;
   const originalPageSize = pageSize || CS.PAGE_SIZE;
   const dynamicPageSize = isLargeScreen ? Math.ceil(originalPageSize * (3 / 2)) : originalPageSize;
+  const historyAction = history.action;
+
   let orderParam = orderBy || urlParams.get(CS.ORDER_BY_KEY) || defaultOrderBy;
 
   if (!orderParam) {
-    if (history.action === 'POP') {
+    if (historyAction === 'POP') {
       // Reaching here means user have popped back to the page's entry point (e.g. '/$/tags' without any '?order=').
       orderParam = orderParamEntry;
     } else {
@@ -166,14 +168,15 @@ function ClaimListDiscover(props: Props) {
 
   React.useEffect(() => {
     setOrderParamUser(orderParam);
-  }, [orderParam]);
+  }, [orderParam, setOrderParamUser]);
 
   React.useEffect(() => {
     // One-time update to stash the finalized 'orderParam' at entry.
-    if (history.action !== 'POP') {
+    if (historyAction !== 'POP') {
       setOrderParamEntry(orderParam);
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [historyAction, setOrderParamEntry]);
 
   let options: {
     page_size: number,

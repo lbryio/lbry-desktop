@@ -104,15 +104,17 @@ export default function FileRenderFloating(props: Props) {
   }
 
   // Updated 'relativePos' based on persisted 'position':
+  const stringifiedPosition = JSON.stringify(position);
   useEffect(() => {
+    const jsonPosition = JSON.parse(stringifiedPosition);
+
     setRelativePos({
-      x: position.x / getScreenWidth(),
-      y: position.y / getScreenHeight(),
+      x: jsonPosition.x / getScreenWidth(),
+      y: jsonPosition.y / getScreenHeight(),
     });
-  }, []);
+  }, [stringifiedPosition]);
 
   // Ensure player is within screen when 'isFloating' changes.
-  const stringifiedPosition = JSON.stringify(position);
   useEffect(() => {
     const jsonPosition = JSON.parse(stringifiedPosition);
 
