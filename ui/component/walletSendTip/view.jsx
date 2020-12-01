@@ -297,7 +297,9 @@ function WalletSendTip(props: Props) {
                     disabled={fetchingChannels || isPending || tipError || !tipAmount}
                     label={
                       isSupport
-                        ? __('Send Revocable Support')
+                        ? claimIsMine
+                          ? __('Boost This Video')
+                          : __('Send Revocable Support')
                         : __('Send a %amount% Tip', { amount: tipAmount ? `${tipAmount} Credit` : '' })
                     }
                   />
