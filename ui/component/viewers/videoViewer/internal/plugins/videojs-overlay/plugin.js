@@ -1,6 +1,6 @@
 import videojs from 'video.js';
 import window from 'global/window';
-import {version as VERSION} from '../package.json';
+import { version as VERSION } from '../package.json';
 
 const defaults = {
   align: 'top-left',
@@ -9,10 +9,12 @@ const defaults = {
   debug: false,
   showBackground: true,
   attachToControlBar: false,
-  overlays: [{
-    start: 'playing',
-    end: 'paused'
-  }]
+  overlays: [
+    {
+      start: 'playing',
+      end: 'paused',
+    },
+  ],
 };
 
 const Component = videojs.getComponent('Component');
@@ -39,7 +41,7 @@ const isNumber = n => typeof n === 'number' && n === n;
  * @param  {String} s
  * @return {Boolean}
  */
-const hasNoWhitespace = s => typeof s === 'string' && (/^\S+$/).test(s);
+const hasNoWhitespace = s => typeof s === 'string' && /^\S+$/.test(s);
 
 /**
  * Overlay component.
@@ -48,7 +50,6 @@ const hasNoWhitespace = s => typeof s === 'string' && (/^\S+$/).test(s);
  * @extends {videojs.Component}
  */
 class Overlay extends Component {
-
   constructor(player, options) {
     super(player, options);
 
@@ -60,7 +61,7 @@ class Overlay extends Component {
       } else if (hasNoWhitespace(value)) {
         this[key + 'Event_'] = value;
 
-      // An overlay MUST have a start option. Otherwise, it's pointless.
+        // An overlay MUST have a start option. Otherwise, it's pointless.
       } else if (key === 'start') {
         throw new Error('invalid "start" option; expected number or string');
       }
@@ -74,7 +75,7 @@ class Overlay extends Component {
     // caused by crappy libraries clobbering Function.prototype.bind.
     // - https://github.com/videojs/video.js/issues/3097
     ['endListener_', 'rewindListener_', 'startListener_'].forEach(name => {
-      this[name] = (e) => Overlay.prototype[name].call(this, e);
+      this[name] = e => Overlay.prototype[name].call(this, e);
     });
 
     // If the start event is a timeupdate, we need to watch for rewinds (i.e.,
@@ -83,7 +84,9 @@ class Overlay extends Component {
       this.on(player, 'timeupdate', this.rewindListener_);
     }
 
-    this.debug(`created, listening to "${this.startEvent_}" for "start" and "${this.endEvent_ || 'nothing'}" for "end"`);
+    this.debug(
+      `created, listening to "${this.startEvent_}" for "start" and "${this.endEvent_ || 'nothing'}" for "end"`
+    );
 
     this.hide();
   }
@@ -100,7 +103,7 @@ class Overlay extends Component {
         ${options.class}
         ${background}
         vjs-hidden
-      `
+      `,
     });
 
     if (typeof content === 'string') {
@@ -169,7 +172,7 @@ class Overlay extends Component {
   shouldHide_(time, type) {
     const end = this.options_.end;
 
-    return isNumber(end) ? (time >= end) : end === type;
+    return isNumber(end) ? time >= end : end === type;
   }
 
   /**
@@ -206,12 +209,11 @@ class Overlay extends Component {
     const end = this.options_.end;
 
     if (isNumber(start)) {
-
       if (isNumber(end)) {
         return time >= start && time < end;
 
-      // In this case, the start is a number and the end is a string. We need
-      // to check whether or not the overlay has shown since the last seek.
+        // In this case, the start is a number and the end is a string. We need
+        // to check whether or not the overlay has shown since the last seek.
       } else if (!this.hasShownSinceSeek_) {
         this.hasShownSinceSeek_ = true;
         return time >= start;
@@ -277,10 +279,10 @@ class Overlay extends Component {
         this.hasShownSinceSeek_ = false;
         this.hide();
 
-      // If the end value is an event name, we cannot reliably decide if the
-      // overlay should still be displayed based solely on time; so, we can
-      // only queue it up for showing if the seek took us to a point before
-      // the start time.
+        // If the end value is an event name, we cannot reliably decide if the
+        // overlay should still be displayed based solely on time; so, we can
+        // only queue it up for showing if the seek took us to a point before
+        // the start time.
       } else if (hasNoWhitespace(end) && time < start) {
         this.debug(`hiding; show point (${start}) is before now (${time}) and end point (${end}) is an event`);
         this.hasShownSinceSeek_ = false;
@@ -322,7 +324,8 @@ const plugin = function(options) {
 
   this.overlays_ = overlays.map(o => {
     const mergeOptions = videojs.mergeOptions(settings, o);
-    const attachToControlBar = typeof mergeOptions.attachToControlBar === 'string' || mergeOptions.attachToControlBar === true;
+    const attachToControlBar =
+      typeof mergeOptions.attachToControlBar === 'string' || mergeOptions.attachToControlBar === true;
 
     if (!this.controls() || !this.controlBar) {
       return this.addChild('overlay', mergeOptions);
@@ -338,20 +341,14 @@ const plugin = function(options) {
       if (referenceChild) {
         const controlBarChild = this.controlBar.addChild('overlay', mergeOptions);
 
-        this.controlBar.el().insertBefore(
-          controlBarChild.el(),
-          referenceChild.el()
-        );
+        this.controlBar.el().insertBefore(controlBarChild.el(), referenceChild.el());
         return controlBarChild;
       }
     }
 
     const playerChild = this.addChild('overlay', mergeOptions);
 
-    this.el().insertBefore(
-      playerChild.el(),
-      this.controlBar.el()
-    );
+    this.el().insertBefore(playerChild.el(), this.controlBar.el());
     return playerChild;
   });
 };
