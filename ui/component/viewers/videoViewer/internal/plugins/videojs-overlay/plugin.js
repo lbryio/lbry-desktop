@@ -88,7 +88,11 @@ class Overlay extends Component {
       `created, listening to "${this.startEvent_}" for "start" and "${this.endEvent_ || 'nothing'}" for "end"`
     );
 
-    this.hide();
+    if (this.startEvent_ === 'immediate') {
+      this.show();
+    } else {
+      this.hide();
+    }
   }
 
   createEl() {
