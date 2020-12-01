@@ -1430,4 +1430,149 @@ export const icons = {
       <path d="M6 4.5L3.75 4.5" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" />
     </g>
   ),
+  [ICONS.PEACE]: (props: CustomProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width={props.size || '18'}
+      height={props.size || '16'}
+      fill="none"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <g transform="matrix(1,0,0,1,0,0)">
+        <path
+          d="M0.500 12.000 A11.500 11.500 0 1 0 23.500 12.000 A11.500 11.500 0 1 0 0.500 12.000 Z"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M13.5,3.642a8.5,8.5,0,0,1,6.24,11.877L13.5,9.354Z"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M13.5,13.6l4.471,4.455A8.529,8.529,0,0,1,13.5,20.365Z"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M4.33,15.549,10.5,9.354V3.635A8.517,8.517,0,0,0,3.5,12,7.583,7.583,0,0,0,4.33,15.549Z"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M10.5,20.364a8.543,8.543,0,0,1-4.463-2.306L10.5,13.6Z"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
+    </svg>
+  ),
+  [ICONS.UNIVERSE]: (props: CustomProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 25 24"
+      width={props.size || '18'}
+      height={props.size || '16'}
+      fill="none"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <g transform="matrix(1,0,0,1,0,0)">
+        <path
+          d="M5.33,17.848A9.545,9.545,0,0,1,16.466,2.488"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M1.982,17.78C.769,19.905.363,21.554,1.048,22.24c1.04,1.039,4.294-.43,8.062-3.418"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M13.423,18.067l-3.58-3.58L17.8,6.53A5.054,5.054,0,0,1,20.153,5.2L22.2,4.686a.844.844,0,0,1,1.023,1.023l-.512,2.048a5.059,5.059,0,0,1-1.332,2.352Z"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M9.843,14.487,6.911,13.51a.422.422,0,0,1-.165-.7l1.022-1.022a3.383,3.383,0,0,1,3.462-.817l1.6.532Z"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M13.423,18.067,14.4,21a.422.422,0,0,0,.7.165l1.022-1.022a3.383,3.383,0,0,0,.817-3.462l-.532-1.6Z"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
+    </svg>
+  ),
+  [ICONS.CHEESE]: (props: CustomProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 25 24"
+      width={props.size || '18'}
+      height={props.size || '16'}
+      fill="none"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <g transform="matrix(1,0,0,1,0,0)">
+        <path
+          d="M18.500 12.639 A1.500 1.500 0 1 0 21.500 12.639 A1.500 1.500 0 1 0 18.500 12.639 Z"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M5.000 14.139 A1.000 1.000 0 1 0 7.000 14.139 A1.000 1.000 0 1 0 5.000 14.139 Z"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M9.000 18.139 A2.000 2.000 0 1 0 13.000 18.139 A2.000 2.000 0 1 0 9.000 18.139 Z"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M23.5,8.493V19.761a1,1,0,0,1-.871.991l-21,2.74A1,1,0,0,1,.5,22.5a1.045,1.045,0,0,1,.686-.982A2,2,0,0,0,.5,17.639V11.945a1,1,0,0,1,.339-.751L12.709.749a1,1,0,0,1,.7-.248C17.854.674,23.5,3.642,23.5,8.493"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path d="M23.5 8.493L0.616 11.478" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+        <path
+          d="M18,17.389a.25.25,0,1,1-.25.25.25.25,0,0,1,.25-.25"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M13.5,12.889a.25.25,0,1,1-.25.25.25.25,0,0,1,.25-.25"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
+    </svg>
+  ),
 };
