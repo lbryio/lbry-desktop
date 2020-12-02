@@ -6,6 +6,8 @@ import { doToast } from 'redux/actions/notifications';
 import rewards from 'rewards';
 import { Lbryio } from 'lbryinc';
 import { DOMAIN } from 'config';
+const AUTH_IN_PROGRESS = 'authInProgress';
+export let sessionStorageAvailable = false;
 
 export function doFetchInviteStatus(shouldCallRewardList = true) {
   return dispatch => {
@@ -87,6 +89,32 @@ export function doInstallNewWithParams(
   };
 }
 
+function checkAuthBusy() {
+  return new Promise(function(resolve, reject) {
+    (function waitForAuth() {
+      try {
+        sessionStorage.setItem('test', 'available');
+        sessionStorage.removeItem('test');
+        sessionStorageAvailable = true;
+      } catch (e) {
+        if (e) {
+          // no session storage
+        }
+      }
+      if (!IS_WEB || !sessionStorageAvailable) {
+        return resolve();
+      }
+      const inProgress = window.sessionStorage.getItem(AUTH_IN_PROGRESS);
+      if (!inProgress) {
+        window.sessionStorage.setItem(AUTH_IN_PROGRESS, 'true');
+        return resolve();
+      } else {
+        setTimeout(waitForAuth, 200);
+      }
+    })();
+  });
+}
+
 // TODO: Call doInstallNew separately so we don't have to pass appVersion and os_system params?
 export function doAuthenticate(
   appVersion,
@@ -101,9 +129,12 @@ export function doAuthenticate(
     dispatch({
       type: ACTIONS.AUTHENTICATION_STARTED,
     });
-
-    Lbryio.authenticate(DOMAIN, window.navigator.language.slice(0, 2) || 'en')
+    checkAuthBusy()
+      .then(() => {
+        return Lbryio.authenticate(DOMAIN, window.navigator.language.slice(0, 2) || 'en');
+      })
       .then(user => {
+        if (sessionStorageAvailable) window.sessionStorage.removeItem(AUTH_IN_PROGRESS);
         Lbryio.getAuthToken().then(token => {
           dispatch({
             type: ACTIONS.AUTHENTICATION_SUCCESS,
