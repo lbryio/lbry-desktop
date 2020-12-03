@@ -163,7 +163,34 @@
   margin-top: var(--spacing-xs);
 }
 
+.wunderbar__placeholder-suggestion {
+  padding: var(--spacing-xs);
+}
+
+.wunderbar__placeholder-label {
+  width: 30%;
+  height: 1rem;
+  margin-left: var(--spacing-xs);
+  margin-bottom: var(--spacing-m);
+  margin-top: var(--spacing-xs);
+  @include placeholder;
+}
+
+.wunderbar__placeholder-thumbnail {
+  width: 3rem;
+  height: 3rem;
+
+  @include placeholder;
+}
+.wunderbar__placeholder-info {
+  width: 50%;
+  height: 3rem;
+  margin-left: var(--spacing-s);
+  @include placeholder;
+}
+
 [data-reach-combobox-option] {
+  padding: var(--spacing-xs);
   border-radius: var(--border-radius);
 
   &:hover {
@@ -179,8 +206,4 @@
   &:hover {
     background-color: var(--color-menu-background--active);
   }
-}
-
-[data-reach-combobox-option] {
-  padding: var(--spacing-xs);
 }
