@@ -26,6 +26,9 @@ export default function Footer() {
           <Button label={__('Support')} href="https://lbry.com/support" />
         </li>
         <li className="footer__link">
+          <Button label={__('Contact')} href="https://odysee.com/@OdyseeHelp:b?view=about" />
+        </li>
+        <li className="footer__link">
           <Button label={__('Terms')} href="https://lbry.com/termsofservice" />
         </li>
         <li className="footer__link">
