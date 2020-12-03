@@ -511,6 +511,7 @@ export function doAnalyticsBuffer(uri, bufferData) {
       userIdHash,
       duration: fileDurationInSeconds,
       playerPoweredBy: bufferData.playerPoweredBy,
+      readyState: bufferData.readyState,
     });
   };
 }

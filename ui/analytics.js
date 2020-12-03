@@ -47,6 +47,7 @@ type Analytics = {
       duration: number,
       userIdHash: string,
       playerPoweredBy: string,
+      readyState: number,
     }
   ) => void,
   emailProvidedEvent: () => void,
@@ -222,6 +223,7 @@ const analytics: Analytics = {
             position: data.timeAtBuffer,
             duration: data.bufferDuration,
             player: data.playerPoweredBy,
+            readyState: data.readyState,
             stream_duration: data.duration,
             stream_bitrate: data.bitRate,
           },
