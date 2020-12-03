@@ -1,7 +1,8 @@
-import videojs from 'video.js';
-import { version as VERSION } from '../package.json';
+import videojs from 'video.js/dist/alt/video.core.novtt.min.js';
 import './touchOverlay.js';
 import window from 'global/window';
+
+const VERSION = '0.4.1';
 
 // Default options for the plugin.
 const defaults = {
