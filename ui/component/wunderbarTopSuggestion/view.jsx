@@ -3,42 +3,42 @@ import React from 'react';
 import LbcSymbol from 'component/common/lbc-symbol';
 import WunderbarSuggestion from 'component/wunderbarSuggestion';
 import { ComboboxOption } from '@reach/combobox';
-import { parseURI } from 'lbry-redux';
 
 type Props = {
   query: string,
   winningUri: ?string,
   doResolveUris: (Array<string>) => void,
+  uris: Array<string>,
+  resolvingUris: boolean,
 };
 
-export default function WunderbarTopClaim(props: Props) {
-  const { query, winningUri, doResolveUris } = props;
+export default function WunderbarTopSuggestion(props: Props) {
+  const { query, uris, resolvingUris, winningUri, doResolveUris } = props;
 
-  const uriFromQuery = `lbry://${query}`;
-
-  let channelUriFromQuery;
-  try {
-    const { isChannel } = parseURI(uriFromQuery);
-
-    if (!isChannel) {
-      channelUriFromQuery = `lbry://@${query}`;
-    }
-  } catch (e) {}
-
+  const stringifiedUris = JSON.stringify(uris);
   React.useEffect(() => {
-    let urisToResolve = [];
-    if (uriFromQuery) {
-      urisToResolve.push(uriFromQuery);
-    }
+    if (stringifiedUris) {
+      const arrayUris = JSON.parse(stringifiedUris);
 
-    if (channelUriFromQuery) {
-      urisToResolve.push(channelUriFromQuery);
+      if (arrayUris.length > 0) {
+        doResolveUris(arrayUris);
+      }
     }
+  }, [doResolveUris, stringifiedUris]);
 
-    if (urisToResolve.length > 0) {
-      doResolveUris(urisToResolve);
-    }
-  }, [doResolveUris, uriFromQuery, channelUriFromQuery]);
+  if (resolvingUris) {
+    return (
+      <div className="wunderbar__winning-claim">
+        <div className="wunderbar__label wunderbar__placeholder-label" />
+
+        <div className="wunderbar__suggestion wunderbar__placeholder-suggestion">
+          <div className="wunderbar__placeholder-thumbnail" />
+          <div className="wunderbar__placeholder-info" />
+        </div>
+        <hr className="wunderbar__top-separator" />
+      </div>
+    );
+  }
 
   if (!winningUri) {
     return null;
