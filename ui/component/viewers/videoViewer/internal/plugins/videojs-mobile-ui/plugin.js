@@ -66,8 +66,8 @@ const onPlayerReady = (player, options) => {
   }
 
   // Insert before the control bar
-  const controlBarIdx = player.children_.indexOf(player.getChild('ControlBar')) - 1;
 
+  const controlBarIdx = player.children_.indexOf(player.getChild('ControlBar'));
   player.addChild('touchOverlay', options.touchControls, controlBarIdx);
 
   let locked = false;
