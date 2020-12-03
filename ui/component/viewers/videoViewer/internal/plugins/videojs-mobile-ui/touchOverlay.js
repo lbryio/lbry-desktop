@@ -15,16 +15,15 @@ const dom = videojs.dom || videojs;
  * @extends Component
  */
 class TouchOverlay extends Component {
-
   /**
-  * Creates an instance of the this class.
-  *
-  * @param  {Player} player
-  *         The `Player` that this class should be attached to.
-  *
-  * @param  {Object} [options]
-  *         The key/value store of player options.
-  */
+   * Creates an instance of the this class.
+   *
+   * @param  {Player} player
+   *         The `Player` that this class should be attached to.
+   *
+   * @param  {Object} [options]
+   *         The key/value store of player options.
+   */
   constructor(player, options) {
     super(player, options);
 
@@ -57,14 +56,14 @@ class TouchOverlay extends Component {
     const el = dom.createEl('div', {
       className: 'vjs-touch-overlay',
       // Touch overlay is not tabbable.
-      tabIndex: -1
+      tabIndex: -1,
     });
 
     return el;
   }
 
   /**
-  * Debounces to either handle a delayed single tap, or a double tap
+   * Debounces to either handle a delayed single tap, or a double tap
    *
    * @param {Event} event
    *        The touch event
@@ -118,12 +117,10 @@ class TouchOverlay extends Component {
 
     // Check if double tap is in left or right area
     if (x < rect.width * 0.4) {
-      this.player_.currentTime(Math.max(
-        0, this.player_.currentTime() - this.seekSeconds));
+      this.player_.currentTime(Math.max(0, this.player_.currentTime() - this.seekSeconds));
       this.addClass('reverse');
-    } else if (x > rect.width - (rect.width * 0.4)) {
-      this.player_.currentTime(Math.min(
-        this.player_.duration(), this.player_.currentTime() + this.seekSeconds));
+    } else if (x > rect.width - rect.width * 0.4) {
+      this.player_.currentTime(Math.min(this.player_.duration(), this.player_.currentTime() + this.seekSeconds));
       this.removeClass('reverse');
     } else {
       return;
@@ -153,7 +150,6 @@ class TouchOverlay extends Component {
   disable() {
     this.off('touchend', this.handleTap);
   }
-
 }
 
 Component.registerComponent('TouchOverlay', TouchOverlay);

@@ -1,5 +1,5 @@
 import videojs from 'video.js';
-import {version as VERSION} from '../package.json';
+import { version as VERSION } from '../package.json';
 import './touchOverlay.js';
 import window from 'global/window';
 
@@ -8,13 +8,13 @@ const defaults = {
   fullscreen: {
     enterOnRotate: true,
     lockOnRotate: true,
-    iOS: false
+    iOS: false,
   },
   touchControls: {
     seekSeconds: 10,
     tapTimeout: 300,
-    disableOnEnd: false
-  }
+    disableOnEnd: false,
+  },
 };
 
 const screen = window.screen;
@@ -52,9 +52,12 @@ const onPlayerReady = (player, options) => {
     player.addClass('vjs-mobile-ui-disable-end');
   }
 
-  if (options.fullscreen.iOS &&
-      videojs.browser.IS_IOS && videojs.browser.IOS_VERSION > 9 &&
-      !player.el_.ownerDocument.querySelector('.bc-iframe')) {
+  if (
+    options.fullscreen.iOS &&
+    videojs.browser.IS_IOS &&
+    videojs.browser.IOS_VERSION > 9 &&
+    !player.el_.ownerDocument.querySelector('.bc-iframe')
+  ) {
     player.tech_.el_.setAttribute('playsinline', 'playsinline');
     player.tech_.supportsFullScreen = function() {
       return false;
@@ -74,13 +77,15 @@ const onPlayerReady = (player, options) => {
     if (currentAngle === 90 || currentAngle === 270 || currentAngle === -90) {
       if (player.paused() === false) {
         player.requestFullscreen();
-        if (options.fullscreen.lockOnRotate &&
-            screen.orientation && screen.orientation.lock) {
-          screen.orientation.lock('landscape').then(() => {
-            locked = true;
-          }).catch(() => {
-            videojs.log('orientation lock not allowed');
-          });
+        if (options.fullscreen.lockOnRotate && screen.orientation && screen.orientation.lock) {
+          screen.orientation
+            .lock('landscape')
+            .then(() => {
+              locked = true;
+            })
+            .catch(() => {
+              videojs.log('orientation lock not allowed');
+            });
         }
       }
     }

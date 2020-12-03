@@ -2,7 +2,7 @@
 
 @keyframes fadeAndScale {
   0% {
-    opacity: 0
+    opacity: 0;
   }
   25% {
     opacity: 1;
@@ -13,7 +13,6 @@
 }
 
 .video-js {
-
   // This class is added to the video.js element by the plugin by default.
   &.vjs-has-started .vjs-touch-overlay {
     position: absolute;
@@ -75,11 +74,9 @@
       opacity: 1;
       pointer-events: auto;
     }
-
   }
 
   &.vjs-mobile-ui-disable-end.vjs-ended .vjs-touch-overlay {
     display: none;
   }
-
 }
