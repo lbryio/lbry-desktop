@@ -11,8 +11,7 @@ import Ads from 'web/component/ads';
 import Icon from 'component/common/icon';
 import { Form, FormField } from 'component/common/form';
 import { DEBOUNCE_WAIT_DURATION_MS } from 'constants/search';
-
-const LIGHTHOUSE_URL = 'https://lighthouse.lbry.com/search';
+import { lighthouse } from 'redux/actions/search';
 
 type Props = {
   uri: string,
@@ -60,31 +59,28 @@ function ChannelContent(props: Props) {
     setSearchQuery(value);
   }
 
-  function getResults(fetchUrl) {
-    fetch(fetchUrl)
-      .then(res => res.json())
-      .then(results => {
-        const urls = results.map(({ name, claimId }) => {
-          return `lbry://${name}#${claimId}`;
-        });
-        setSearchResults(urls);
-      })
-      .catch(() => {
-        setSearchResults(null);
-      });
-  }
-
   React.useEffect(() => {
     const timer = setTimeout(() => {
       if (searchQuery === '' || !claimId) {
         // In order to display original search results, search results must be set to null. A query of '' should display original results.
         return setSearchResults(null);
       } else {
-        getResults(
-          `${LIGHTHOUSE_URL}?s=${encodeURIComponent(searchQuery)}&channel_id=${encodeURIComponent(claimId)}${
-            !showMature ? '&nsfw=false&size=999&from=0' : ''
-          }`
-        );
+        lighthouse
+          .search(
+            `s=${encodeURIComponent(searchQuery)}&channel_id=${encodeURIComponent(claimId)}${
+              !showMature ? '&nsfw=false&size=25&from=0' : ''
+            }`
+          )
+          .then(results => {
+            const urls = results.map(({ name, claimId }) => {
+              return `lbry://${name}#${claimId}`;
+            });
+
+            setSearchResults(urls);
+          })
+          .catch(() => {
+            setSearchResults(null);
+          });
       }
     }, DEBOUNCE_WAIT_DURATION_MS);
     return () => clearTimeout(timer);
