@@ -19,6 +19,7 @@ type AdditionalOptions = {
 
 type Props = {
   search: (string, AdditionalOptions) => void,
+  searchOptions: {},
   isSearching: boolean,
   location: UrlLocation,
   uris: Array<string>,
@@ -38,6 +39,7 @@ export default function SearchPage(props: Props) {
     isSearching,
     showNsfw,
     isAuthenticated,
+    searchOptions,
   } = props;
   const { push } = useHistory();
   const urlParams = new URLSearchParams(location.search);
@@ -81,12 +83,13 @@ export default function SearchPage(props: Props) {
   }
 
   const stringifiedOptions = JSON.stringify(additionalOptions);
+  const stringifiedSearchOptions = JSON.stringify(searchOptions);
   useEffect(() => {
     if (urlQuery) {
       const jsonOptions = JSON.parse(stringifiedOptions);
       search(urlQuery, jsonOptions);
     }
-  }, [search, urlQuery, stringifiedOptions]);
+  }, [search, urlQuery, stringifiedOptions, stringifiedSearchOptions]);
 
   return (
     <Page>
