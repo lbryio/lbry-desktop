@@ -65,7 +65,11 @@
 }
 
 .navigation__secondary {
-  margin-top: var(--spacing-l);
+  margin-top: var(--spacing-m);
+
+  .button__content {
+    align-items: flex-start;
+  }
 }
 
 .navigation__secondary--tags {
