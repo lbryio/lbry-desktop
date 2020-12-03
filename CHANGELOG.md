@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- Better search suggestions ([#5124](https://github.com/lbryio/lbry-desktop/pull/5124))
 - Inline video player in comments/markdown posts ([#4894](https://github.com/lbryio/lbry-desktop/pull/4894))
 - Better handling of winning claim + top page improvements ([#4944](https://github.com/lbryio/lbry-desktop/pull/4944))
 - Comment pinning ([#4895](https://github.com/lbryio/lbry-desktop/pull/4895))
