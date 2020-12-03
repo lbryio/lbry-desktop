@@ -1,5 +1,11 @@
-.wunderbar {
+.wunderbar__wrapper {
   flex: 1;
+  max-width: 30rem;
+  margin-left: var(--spacing-s);
+  margin-right: var(--spacing-s);
+}
+
+.wunderbar {
   cursor: text;
   display: flex;
   align-items: center;
@@ -7,9 +13,6 @@
   z-index: 1;
   font-size: var(--font-small);
   height: var(--height-input);
-  max-width: 30rem;
-  margin-left: var(--spacing-s);
-  margin-right: var(--spacing-s);
 
   @media (max-width: $breakpoint-small) {
     max-width: none;
@@ -38,11 +41,6 @@
   @media (max-width: $breakpoint-small) {
     margin: var(--spacing-xxs) 0;
   }
-}
-
-.wunderbar__active-suggestion {
-  color: var(--color-search-suggestion);
-  background-color: var(--color-search-suggestion-background);
 }
 
 .wunderbar__input {
@@ -75,39 +73,114 @@
   }
 }
 
-.wunderbar__menu {
-  min-width: 100%;
-  overflow: hidden;
-  background-color: var(--color-input-bg);
-  margin-top: -4px;
+.wunderbar__results {
+  margin-left: var(--spacing-xs);
+}
+
+.wunderbar__suggestions {
+  z-index: 3;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(var(--header-height) - (var(--height-input)) + 3px);
+  @extend .card;
+  box-shadow: var(--card-box-shadow);
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+  border-top: none;
+  padding: var(--spacing-xs);
+  margin: 0 var(--spacing-s);
+}
+
+.wunderbar__top-claim {
+  margin-bottom: var(--spacing-m);
+}
+
+.wunderbar__label {
+  margin-bottom: var(--spacing-xs);
+}
+
+.wunderbar__label--results {
+  @extend .wunderbar__label;
+  margin-left: var(--spacing-xs);
+}
+
+.wunderbar__top-separator {
+  margin: var(--spacing-s) 0;
+  width: 120%;
+  transform: translateX(-10%);
 }
 
 .wunderbar__suggestion {
-  align-items: center;
-  cursor: pointer;
   display: flex;
-  flex-direction: row;
-  justify-items: flex-start;
-  padding: var(--spacing-s);
+  align-items: center;
+  height: 3rem;
 
-  &:not(:first-of-type) {
-    border-top: 1px solid transparent;
-  }
-
-  .icon {
+  .media__thumb {
     flex-shrink: 0;
+    $width: 3rem;
+    @include handleClaimListGifThumbnail($width);
+    width: $width;
+    height: calc(#{$width} * (9 / 16));
+    margin-right: var(--spacing-s);
+
+    @media (min-width: $breakpoint-small) {
+      $width: 5rem;
+      @include handleClaimListGifThumbnail($width);
+      width: $width;
+      height: calc(#{$width} * (9 / 16));
+      margin-right: var(--spacing-xs);
+    }
+  }
+}
+
+.wunderbar__suggestion--channel {
+  .channel-thumbnail {
+    @include handleChannelGif(calc(5rem * 9 / 16));
+    margin-right: var(--spacing-xs);
+
+    @media (min-width: $breakpoint-small) {
+      @include handleChannelGif(calc(5rem * 9 / 16));
+      margin-right: var(--spacing-s);
+    }
   }
 }
 
 .wunderbar__suggestion-label {
-  overflow: hidden;
-  padding-left: var(--spacing-s);
-  text-overflow: ellipsis;
+  font-size: var(--font-small);
+  min-width: 0;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.wunderbar__suggestion-label--action {
-  margin-left: var(--spacing-m);
-  opacity: 0.6;
-  white-space: nowrap;
+.wunderbar__suggestion-name {
+  @extend .help;
+  margin-top: 0;
+}
+
+.wunderbar__more-results {
+  margin-top: var(--spacing-xs);
+}
+
+[data-reach-combobox-option] {
+  border-radius: var(--border-radius);
+
+  &:hover {
+    background-color: var(--color-menu-background--active);
+  }
+}
+
+[data-reach-combobox-option][data-highlighted] {
+  background-color: var(--color-menu-background--active);
+}
+
+[data-reach-combobox-option][aria-selected='true'] {
+  &:hover {
+    background-color: var(--color-menu-background--active);
+  }
+}
+
+[data-reach-combobox-option] {
+  padding: var(--spacing-xs);
 }
