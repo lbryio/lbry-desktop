@@ -8,11 +8,10 @@ import ChannelThumbnail from 'component/channelThumbnail';
 type Props = {
   claim: ?Claim,
   uri: string,
-  noComboBox?: boolean,
 };
 
 export default function WunderbarSuggestion(props: Props) {
-  const { claim, uri, noComboBox = false } = props;
+  const { claim, uri } = props;
 
   if (!claim) {
     return null;
@@ -20,12 +19,8 @@ export default function WunderbarSuggestion(props: Props) {
 
   const isChannel = claim.value_type === 'channel';
 
-  const Wrapper = noComboBox
-    ? (props: any) => <div>{props.children}</div>
-    : (props: any) => <ComboboxOption value={uri}>{props.children}</ComboboxOption>;
-
   return (
-    <Wrapper>
+    <ComboboxOption value={uri}>
       <div
         className={classnames('wunderbar__suggestion', {
           'wunderbar__suggestion--channel': isChannel,
@@ -39,6 +34,6 @@ export default function WunderbarSuggestion(props: Props) {
           </div>
         </span>
       </div>
-    </Wrapper>
+    </ComboboxOption>
   );
 }

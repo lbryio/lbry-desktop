@@ -168,7 +168,7 @@ export default function WunderBar(props: Props) {
             <ComboboxList>
               {uriFromQueryIsValid ? <WunderbarTopSuggestion query={nameFromQuery} /> : null}
 
-              <div className="wunderbar__label--results">{__('Search Results')}</div>
+              <div className="wunderbar__label">{__('Search Results')}</div>
               {results.slice(0, 5).map(uri => (
                 <WunderbarSuggestion key={uri} uri={uri} />
               ))}

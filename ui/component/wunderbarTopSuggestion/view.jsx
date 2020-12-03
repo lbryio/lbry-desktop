@@ -2,10 +2,8 @@
 import React from 'react';
 import LbcSymbol from 'component/common/lbc-symbol';
 import WunderbarSuggestion from 'component/wunderbarSuggestion';
-import { ComboboxOption } from '@reach/combobox';
 
 type Props = {
-  query: string,
   winningUri: ?string,
   doResolveUris: (Array<string>) => void,
   uris: Array<string>,
@@ -13,7 +11,7 @@ type Props = {
 };
 
 export default function WunderbarTopSuggestion(props: Props) {
-  const { query, uris, resolvingUris, winningUri, doResolveUris } = props;
+  const { uris, resolvingUris, winningUri, doResolveUris } = props;
 
   const stringifiedUris = JSON.stringify(uris);
   React.useEffect(() => {
@@ -46,13 +44,11 @@ export default function WunderbarTopSuggestion(props: Props) {
 
   return (
     <>
-      <ComboboxOption value={winningUri} className="wunderbar__winning-claim">
-        <div className="wunderbar__label">
-          <LbcSymbol postfix={__('Winning for "%query%"', { query })} />
-        </div>
+      <div className="wunderbar__label">
+        <LbcSymbol prefix={__('Most Supported')} />
+      </div>
 
-        <WunderbarSuggestion uri={winningUri} noComboBox />
-      </ComboboxOption>
+      <WunderbarSuggestion uri={winningUri} />
       <hr className="wunderbar__top-separator" />
     </>
   );

@@ -7,12 +7,11 @@ const select = (state, props) => {
   const uriFromQuery = `lbry://${props.query}`;
 
   let uris = [uriFromQuery];
-  let channelUriFromQuery;
   try {
     const { isChannel } = parseURI(uriFromQuery);
 
     if (!isChannel) {
-      channelUriFromQuery = `lbry://@${props.query}`;
+      const channelUriFromQuery = `lbry://@${props.query}`;
       uris.push(channelUriFromQuery);
     }
   } catch (e) {}

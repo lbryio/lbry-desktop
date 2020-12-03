@@ -98,10 +98,6 @@
 
 .wunderbar__label {
   margin-bottom: var(--spacing-xs);
-}
-
-.wunderbar__label--results {
-  @extend .wunderbar__label;
   margin-left: var(--spacing-xs);
 }
 
