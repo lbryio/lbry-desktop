@@ -1,33 +1,26 @@
 import { connect } from 'react-redux';
-import { doFocusSearchInput, doBlurSearchInput, doUpdateSearchQuery } from 'redux/actions/search';
-import { selectSearchValue, selectSearchSuggestions, selectSearchBarFocused } from 'redux/selectors/search';
-import { selectLanguage } from 'redux/selectors/settings';
+import { selectLanguage, makeSelectClientSetting } from 'redux/selectors/settings';
 import { doToast } from 'redux/actions/notifications';
+import { doSearch } from 'redux/actions/search';
+import { withRouter } from 'react-router';
+import { doResolveUris, SETTINGS } from 'lbry-redux';
 import analytics from 'analytics';
 import Wunderbar from './view';
-import { withRouter } from 'react-router-dom';
 
-const select = state => ({
-  suggestions: selectSearchSuggestions(state),
-  searchQuery: selectSearchValue(state),
-  isFocused: selectSearchBarFocused(state),
+const select = (state, props) => ({
   language: selectLanguage(state),
+  showMature: makeSelectClientSetting(SETTINGS.SHOW_MATURE)(state),
 });
 
 const perform = (dispatch, ownProps) => ({
-  doSearch: query => {
+  doResolveUris: uris => dispatch(doResolveUris(uris)),
+  doSearch: (query, options) => dispatch(doSearch(query, options)),
+  navigateToSearchPage: query => {
     let encodedQuery = encodeURIComponent(query);
     ownProps.history.push({ pathname: `/$/search`, search: `?q=${encodedQuery}` });
-    dispatch(doUpdateSearchQuery(query));
     analytics.apiLogSearch();
   },
-  navigateToUri: uri => {
-    ownProps.history.push(uri);
-  },
-  updateSearchQuery: query => dispatch(doUpdateSearchQuery(query)),
   doShowSnackBar: message => dispatch(doToast({ isError: true, message })),
-  doFocus: () => dispatch(doFocusSearchInput()),
-  doBlur: () => dispatch(doBlurSearchInput()),
 });
 
 export default withRouter(connect(select, perform)(Wunderbar));

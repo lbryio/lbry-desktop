@@ -1,7 +1,7 @@
 // @flow
-import { SEARCH_TYPES } from 'constants/search';
 import { getSearchQueryString } from 'util/query-params';
-import { parseURI, makeSelectClaimForUri, makeSelectClaimIsNsfw, buildURI } from 'lbry-redux';
+import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { parseURI, makeSelectClaimForUri, makeSelectClaimIsNsfw, buildURI, SETTINGS, isClaimNsfw } from 'lbry-redux';
 import { createSelector } from 'reselect';
 
 type State = { search: SearchState };
@@ -11,11 +11,6 @@ export const selectState = (state: State): SearchState => state.search;
 export const selectSearchValue: (state: State) => string = createSelector(selectState, state => state.searchQuery);
 
 export const selectSearchOptions: (state: State) => SearchOptions = createSelector(selectState, state => state.options);
-
-export const selectSuggestions: (state: State) => { [string]: Array<SearchSuggestion> } = createSelector(
-  selectState,
-  state => state.suggestions
-);
 
 export const selectIsSearching: (state: State) => boolean = createSelector(selectState, state => state.searching);
 
@@ -30,92 +25,6 @@ export const makeSelectSearchUris = (query: string): ((state: State) => Array<st
     selectSearchUrisByQuery,
     byQuery => byQuery[query ? query.replace(/^lbry:\/\//i, '').replace(/\//, ' ') : query]
   );
-
-export const selectResolvedSearchResultsByQuery: (
-  state: State
-) => { [string]: Array<ResolvedSearchResult> } = createSelector(selectState, state => state.resolvedResultsByQuery);
-
-export const selectSearchBarFocused: boolean = createSelector(selectState, state => state.focused);
-
-export const selectSearchSuggestions: Array<SearchSuggestion> = createSelector(
-  selectSearchValue,
-  selectSuggestions,
-  (query: string, suggestions: { [string]: Array<string> }) => {
-    if (!query) {
-      return [];
-    }
-    const queryIsPrefix = query === 'lbry:' || query === 'lbry:/' || query === 'lbry://' || query === 'lbry://@';
-
-    if (queryIsPrefix) {
-      // If it is a prefix, wait until something else comes to figure out what to do
-      return [];
-    } else if (query.startsWith('lbry://')) {
-      // If it starts with a prefix, don't show any autocomplete results
-      // They are probably typing/pasting in a lbry uri
-      let type: string;
-      try {
-        let { isChannel } = parseURI(query);
-        type = isChannel ? SEARCH_TYPES.CHANNEL : SEARCH_TYPES.FILE;
-      } catch (e) {
-        type = SEARCH_TYPES.SEARCH;
-      }
-
-      return [
-        {
-          value: query,
-          type: type,
-        },
-      ];
-    }
-
-    let searchSuggestions = [];
-    searchSuggestions.push({
-      value: query,
-      type: SEARCH_TYPES.SEARCH,
-    });
-
-    try {
-      const uriObj = parseURI(query);
-      searchSuggestions.push({
-        value: buildURI(uriObj),
-        shorthand: uriObj.isChannel ? uriObj.channelName : uriObj.streamName,
-        type: uriObj.isChannel ? SEARCH_TYPES.CHANNEL : SEARCH_TYPES.FILE,
-      });
-    } catch (e) {}
-
-    searchSuggestions.push({
-      value: query,
-      type: SEARCH_TYPES.TAG,
-    });
-
-    const apiSuggestions = suggestions[query] || [];
-    if (apiSuggestions.length) {
-      searchSuggestions = searchSuggestions.concat(
-        apiSuggestions
-          .filter(suggestion => suggestion !== query)
-          .map(suggestion => {
-            // determine if it's a channel
-            try {
-              const uriObj = parseURI(suggestion);
-              return {
-                value: buildURI(uriObj),
-                shorthand: uriObj.isChannel ? uriObj.channelName : uriObj.streamName,
-                type: uriObj.isChannel ? SEARCH_TYPES.CHANNEL : SEARCH_TYPES.FILE,
-              };
-            } catch (e) {
-              // search result includes some character that isn't valid in claim names
-              return {
-                value: suggestion,
-                type: SEARCH_TYPES.SEARCH,
-              };
-            }
-          })
-      );
-    }
-
-    return searchSuggestions;
-  }
-);
 
 // Creates a query string based on the state in the search reducer
 // Can be overrided by passing in custom sizes/from values for other areas pagination
@@ -187,19 +96,33 @@ export const makeSelectWinningUriForQuery = (query: string) => {
   } catch (e) {}
 
   return createSelector(
+    makeSelectClientSetting(SETTINGS.SHOW_MATURE),
     makeSelectClaimForUri(uriFromQuery),
     makeSelectClaimForUri(channelUriFromQuery),
-    (claim1, claim2) => {
+    (matureEnabled, claim1, claim2) => {
+      const claim1Mature = claim1 && isClaimNsfw(claim1);
+      const claim2Mature = claim2 && isClaimNsfw(claim2);
+
       if (!claim1 && !claim2) {
         return undefined;
       } else if (!claim1 && claim2) {
-        return claim2.canonical_url;
+        return matureEnabled ? claim2.canonical_url : claim2Mature ? undefined : claim2.canonical_url;
       } else if (claim1 && !claim2) {
-        return claim1.canonical_url;
+        return matureEnabled ? claim1.canonical_url : claim1Mature ? undefined : claim1.canonical_url;
       }
 
       const effectiveAmount1 = claim1 && claim1.meta.effective_amount;
       const effectiveAmount2 = claim2 && claim2.meta.effective_amount;
+
+      if (!matureEnabled) {
+        if (claim1Mature && !claim2Mature) {
+          return claim2.canonical_url;
+        } else if (claim2Mature && !claim1Mature) {
+          return claim1.canonical_url;
+        } else if (claim1Mature && claim2Mature) {
+          return undefined;
+        }
+      }
 
       return Number(effectiveAmount1) > Number(effectiveAmount2) ? claim1.canonical_url : claim2.canonical_url;
     }
