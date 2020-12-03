@@ -2,7 +2,12 @@ import { connect } from 'react-redux';
 import { doToast, SETTINGS } from 'lbry-redux';
 import { withRouter } from 'react-router';
 import { doSearch } from 'redux/actions/search';
-import { selectIsSearching, makeSelectSearchUris, makeSelectQueryWithOptions } from 'redux/selectors/search';
+import {
+  selectIsSearching,
+  makeSelectSearchUris,
+  makeSelectQueryWithOptions,
+  selectSearchOptions,
+} from 'redux/selectors/search';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import analytics from 'analytics';
@@ -23,6 +28,7 @@ const select = (state, props) => {
     showNsfw: makeSelectClientSetting(SETTINGS.SHOW_MATURE)(state),
     uris: uris,
     isAuthenticated: selectUserVerifiedEmail(state),
+    searchOptions: selectSearchOptions(state),
   };
 };
 
