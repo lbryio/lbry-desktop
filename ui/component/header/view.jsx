@@ -205,7 +205,7 @@ const Header = (props: Props) => {
               icon={ICONS.ARROW_LEFT}
             />
             {backTitle && <h1 className="header__auth-title">{isMobile ? simpleBackTitle || backTitle : backTitle}</h1>}
-            {authenticated ? (
+            {authenticated || !IS_WEB ? (
               <Button
                 aria-label={__('Your wallet')}
                 navigate={`/$/${PAGES.WALLET}`}

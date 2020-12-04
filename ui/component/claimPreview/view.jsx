@@ -58,6 +58,7 @@ type Props = {
   getFile: string => void,
   customShouldHide?: Claim => boolean,
   showUnresolvedClaim?: boolean,
+  showNullPlaceholder?: boolean,
   includeSupportAction?: boolean,
   hideActions?: boolean,
   renderActions?: Claim => ?Node,
@@ -94,6 +95,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     streamingUrl,
     customShouldHide,
     showUnresolvedClaim,
+    showNullPlaceholder,
     includeSupportAction,
     hideActions = false,
     renderActions,
@@ -195,29 +197,77 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     }
   }, [isValid, isResolvingUri, uri, resolveUri, shouldFetch]);
 
-  if (shouldHide) {
+  if (shouldHide && !showNullPlaceholder) {
     return null;
   }
 
-  if (placeholder === 'loading' || claim === undefined || (isResolvingUri && !claim)) {
-    return (
-      <li
-        disabled
-        className={classnames('claim-preview__wrapper', {
-          'claim-preview__wrapper--channel': isChannel && type !== 'inline',
-          'claim-preview__wrapper--inline': type === 'inline',
-        })}
-      >
-        <div className={classnames('claim-preview', { 'claim-preview--large': type === 'large' })}>
-          <div className="placeholder media__thumb" />
-          <div className="placeholder__wrapper">
-            <div className="placeholder claim-preview__title" />
-            <div className="placeholder media__subtitle" />
-          </div>
+  const claimPreviewLoading = (
+    <li
+      disabled
+      className={classnames('claim-preview__wrapper', {
+        'claim-preview__wrapper--channel': isChannel && type !== 'inline',
+        'claim-preview__wrapper--inline': type === 'inline',
+      })}
+    >
+      <div className={classnames('claim-preview', { 'claim-preview--large': type === 'large' })}>
+        <div className="placeholder media__thumb" />
+        <div className="placeholder__wrapper">
+          <div className="placeholder claim-preview__title" />
+          <div className="placeholder media__subtitle" />
         </div>
-      </li>
-    );
+      </div>
+    </li>
+  );
+
+  const claimPreviewNoContent = (
+    <li
+      disabled
+      className={classnames('claim-preview__wrapper', {
+        'claim-preview__wrapper--channel': isChannel && type !== 'inline',
+        'claim-preview__wrapper--inline': type === 'inline',
+      })}
+    >
+      <div className={classnames('claim-preview', { 'claim-preview--large': type === 'large' })}>
+        <div className={'claim-preview__null-label'}>{__('There is nothing at this location')}</div>
+      </div>
+    </li>
+  );
+
+  const claimPreviewNoMature = (
+    <li
+      disabled
+      className={classnames('claim-preview__wrapper', {
+        'claim-preview__wrapper--channel': isChannel && type !== 'inline',
+        'claim-preview__wrapper--inline': type === 'inline',
+      })}
+    >
+      <div className={classnames('claim-preview', { 'claim-preview--large': type === 'large' })}>
+        <div className="media__thumb" />
+
+        <div className="blank claim-preview__null-label">{__('Mature content hidden by your preferences')}</div>
+      </div>
+    </li>
+  );
+
+  if (
+    placeholder === 'loading' &&
+    claim === undefined &&
+    shouldHide &&
+    showNullPlaceholder &&
+    isResolvingUri &&
+    !claim
+  ) {
+    return claimPreviewLoading;
   }
+
+  if (claim && showNullPlaceholder && shouldHide && nsfw) {
+    return claimPreviewNoMature;
+  }
+
+  if (!claim && showNullPlaceholder) {
+    return claimPreviewNoContent;
+  }
+
   if (!shouldFetch && showUnresolvedClaim && !isResolvingUri && claim === null) {
     return <AbandonedChannelPreview uri={uri} type />;
   }

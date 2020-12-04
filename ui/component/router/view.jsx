@@ -43,6 +43,7 @@ import CreatorDashboard from 'page/creatorDashboard';
 import RewardsVerifyPage from 'page/rewardsVerify';
 import CheckoutPage from 'page/checkoutPage';
 import ChannelNew from 'page/channelNew';
+import RepostNew from 'page/repost';
 import BuyPage from 'page/buy';
 import NotificationsPage from 'page/notifications';
 import SignInWalletPasswordPage from 'page/signInWalletPassword';
@@ -256,6 +257,7 @@ function AppRouter(props: Props) {
       />
       <PrivateRoute {...props} path={`/$/${PAGES.INVITE}`} component={InvitePage} />
       <PrivateRoute {...props} path={`/$/${PAGES.CHANNEL_NEW}`} component={ChannelNew} />
+      <PrivateRoute {...props} path={`/$/${PAGES.REPOST_NEW}`} component={RepostNew} />
       <PrivateRoute {...props} path={`/$/${PAGES.UPLOADS}`} component={FileListPublished} />
       <PrivateRoute {...props} path={`/$/${PAGES.CREATOR_DASHBOARD}`} component={CreatorDashboard} />
       <PrivateRoute {...props} path={`/$/${PAGES.UPLOAD}`} component={PublishPage} />

@@ -74,7 +74,7 @@ function FileActions(props: Props) {
       push(`/$/${PAGES.CHANNEL_NEW}?redirect=${pathname}`);
       doToast({ message: __('A channel is required to repost on %SITE_NAME%', { SITE_NAME }) });
     } else {
-      openModal(MODALS.REPOST, { uri });
+      push(`/$/${PAGES.REPOST_NEW}?rfrom=${encodeURIComponent(uri)}`);
     }
   }
 

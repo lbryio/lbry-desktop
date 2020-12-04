@@ -6,7 +6,6 @@ import YrblWalletEmpty from 'component/yrblWalletEmpty';
 
 type Props = {
   balance: number,
-  totalRewardValue: number,
 };
 
 function PublishPage(props: Props) {

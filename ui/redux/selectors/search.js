@@ -1,7 +1,15 @@
 // @flow
 import { getSearchQueryString } from 'util/query-params';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { parseURI, makeSelectClaimForUri, makeSelectClaimIsNsfw, buildURI, SETTINGS, isClaimNsfw } from 'lbry-redux';
+import {
+  parseURI,
+  makeSelectClaimForUri,
+  makeSelectClaimIsNsfw,
+  buildURI,
+  SETTINGS,
+  isClaimNsfw,
+  makeSelectPendingClaimUrlForName
+} from 'lbry-redux';
 import { createSelector } from 'reselect';
 
 type State = { search: SearchState };
@@ -97,12 +105,15 @@ export const makeSelectWinningUriForQuery = (query: string) => {
 
   return createSelector(
     makeSelectClientSetting(SETTINGS.SHOW_MATURE),
+    makeSelectPendingClaimUrlForName(query),
     makeSelectClaimForUri(uriFromQuery),
     makeSelectClaimForUri(channelUriFromQuery),
-    (matureEnabled, claim1, claim2) => {
+    (matureEnabled, pendingClaimUrl, claim1, claim2) => {
       const claim1Mature = claim1 && isClaimNsfw(claim1);
       const claim2Mature = claim2 && isClaimNsfw(claim2);
-
+      if (pendingClaimUrl) {
+        return pendingClaimUrl;
+      }
       if (!claim1 && !claim2) {
         return undefined;
       } else if (!claim1 && claim2) {

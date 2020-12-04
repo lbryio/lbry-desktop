@@ -61,6 +61,11 @@
   }
 }
 
+.claim-list__header-action-text {
+  @extend .help;
+  align-self: flex-end;
+}
+
 .claim-preview__wrapper {
   padding: var(--spacing-m);
   list-style: none;
@@ -98,6 +103,12 @@
     margin-right: var(--spacing-m);
   }
 
+  .media__thumb-placeholder-text {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-m);
+  }
+
   .channel-thumbnail {
     @include handleChannelGif(6rem);
   }
@@ -115,7 +126,7 @@
     font-size: 14px;
 
     .channel-thumbnail {
-      @include handleChannelGif(5rem);
+      @include handleChannelGif(4rem);
     }
   }
 }
@@ -123,6 +134,10 @@
 .claim-preview--large {
   border: none;
 
+  min-height: 8rem;
+  @media (max-width: $breakpoint-small) {
+    min-height: 4rem;
+  }
   &:hover {
     background-color: transparent;
   }
@@ -132,12 +147,19 @@
     @include handleClaimListGifThumbnail(14rem);
 
     @media (max-width: $breakpoint-small) {
-      width: 5rem;
+      min-height: 5rem;
+      width: 8rem;
     }
   }
 
   .channel-thumbnail {
+    width: 7.5rem;
     @include handleChannelGif(7.5rem);
+
+    @media (max-width: $breakpoint-small) {
+      width: 5rem;
+      @include handleChannelGif(5rem);
+    }
   }
 }
 
@@ -522,4 +544,8 @@
 
 .claim-link {
   position: relative;
+}
+
+.claim-preview__null-label {
+  margin: auto;
 }
