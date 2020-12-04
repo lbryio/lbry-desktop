@@ -1,7 +1,15 @@
 // @flow
 import { getSearchQueryString } from 'util/query-params';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { parseURI, makeSelectClaimForUri, makeSelectClaimIsNsfw, buildURI, SETTINGS, isClaimNsfw } from 'lbry-redux';
+import {
+  parseURI,
+  makeSelectClaimForUri,
+  makeSelectClaimIsNsfw,
+  buildURI,
+  SETTINGS,
+  isClaimNsfw,
+  makeSelectPendingClaimForUri,
+} from 'lbry-redux';
 import { createSelector } from 'reselect';
 
 type State = { search: SearchState };
@@ -79,7 +87,6 @@ export const makeSelectRecommendedContentForUri = (uri: string) =>
           recommendedContent = searchUris;
         }
       }
-
       return recommendedContent;
     }
   );
@@ -97,11 +104,13 @@ export const makeSelectWinningUriForQuery = (query: string) => {
 
   return createSelector(
     makeSelectClientSetting(SETTINGS.SHOW_MATURE),
+    makeSelectPendingClaimForUri(uriFromQuery),
     makeSelectClaimForUri(uriFromQuery),
     makeSelectClaimForUri(channelUriFromQuery),
-    (matureEnabled, claim1, claim2) => {
+    (matureEnabled, pendingClaim, claim1, claim2) => {
       const claim1Mature = claim1 && isClaimNsfw(claim1);
       const claim2Mature = claim2 && isClaimNsfw(claim2);
+      let pendingAmount = pendingClaim && pendingClaim.amount;
 
       if (!claim1 && !claim2) {
         return undefined;
@@ -124,7 +133,13 @@ export const makeSelectWinningUriForQuery = (query: string) => {
         }
       }
 
-      return Number(effectiveAmount1) > Number(effectiveAmount2) ? claim1.canonical_url : claim2.canonical_url;
+      const returnBeforePending =
+        Number(effectiveAmount1) > Number(effectiveAmount2) ? claim1.canonical_url : claim2.canonical_url;
+      if (pendingAmount && pendingAmount > effectiveAmount1 && pendingAmount > effectiveAmount2) {
+        return pendingAmount.permanent_url;
+      } else {
+        return returnBeforePending;
+      }
     }
   );
 };

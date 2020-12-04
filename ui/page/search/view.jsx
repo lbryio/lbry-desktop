@@ -11,6 +11,7 @@ import Ads from 'web/component/ads';
 import SearchTopClaim from 'component/searchTopClaim';
 import { formatLbryUrlForWeb } from 'util/url';
 import { useHistory } from 'react-router';
+import ClaimPreview from 'component/claimPreview';
 
 type AdditionalOptions = {
   isBackgroundSearch: boolean,
@@ -97,7 +98,6 @@ export default function SearchPage(props: Props) {
         {urlQuery && (
           <>
             {isValid && <SearchTopClaim query={modifiedUrlQuery} />}
-
             <ClaimList
               uris={uris}
               loading={isSearching}
@@ -121,6 +121,7 @@ export default function SearchPage(props: Props) {
                 </>
               }
             />
+            {isSearching && new Array(5).fill(1).map((x, i) => <ClaimPreview key={i} placeholder="loading" />)}
 
             <div className="main--empty help">{__('These search results are provided by LBRY, Inc.')}</div>
           </>

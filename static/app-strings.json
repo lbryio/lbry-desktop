@@ -1527,6 +1527,9 @@
   "Explore": "Explore",
   "There is a bug... somewhere": "There is a bug... somewhere",
   "Try refreshing to fix the issue. If that doesn't work, email help@lbry.com for support.": "Try refreshing to fix the issue. If that doesn't work, email help@lbry.com for support.",
+  "No Results": "No Results",
+  "Content preview": "Content preview",
+  "Repost url": "Repost url",
   "Close sidebar - hide channels you are following": "Close sidebar - hide channels you are following",
   "Expand sidebar - view channels you are following.": "Expand sidebar - view channels you are following.",
   "--end--": "--end--"

@@ -12,6 +12,7 @@ import CommentCreate from 'component/commentCreate';
 import usePersistedState from 'effects/use-persisted-state';
 import { ENABLE_COMMENT_REACTIONS } from 'config';
 import { sortComments } from 'util/comments';
+import Empty from 'component/common/empty';
 
 type Props = {
   comments: Array<Comment>,
@@ -58,7 +59,7 @@ function CommentList(props: Props) {
     Boolean(reactionsById) || !ENABLE_COMMENT_REACTIONS
   );
   const linkedCommentId = linkedComment && linkedComment.comment_id;
-  const hasNoComments = totalComments === 0;
+  const hasNoComments = !totalComments;
   const moreBelow = totalComments - end > 0;
   const isMyComment = (channelId: string): boolean => {
     if (myChannels != null && channelId != null) {
@@ -210,7 +211,7 @@ function CommentList(props: Props) {
         <>
           <CommentCreate uri={uri} />
 
-          {!isFetchingComments && hasNoComments && <div className="main--empty">{__('Be the first to comment!')}</div>}
+          {!isFetchingComments && hasNoComments && <Empty text={__('That was pretty deep. What do you think?')} />}
 
           <ul className="comments" ref={commentRef}>
             {comments &&

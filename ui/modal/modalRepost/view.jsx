@@ -12,7 +12,7 @@ import { parseURI, isNameValid, creditsToString } from 'lbry-redux';
 import usePersistedState from 'effects/use-persisted-state';
 import I18nMessage from 'component/i18nMessage';
 import analytics from 'analytics';
-import LbcSymbol from '../../component/common/lbc-symbol';
+import LbcSymbol from 'component/common/lbc-symbol';
 
 type Props = {
   doHideModal: () => void,

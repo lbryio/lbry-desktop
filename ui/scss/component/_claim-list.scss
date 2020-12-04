@@ -98,6 +98,12 @@
     margin-right: var(--spacing-m);
   }
 
+  .media__thumb-placeholder-text {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-m);
+  }
+
   .channel-thumbnail {
     @include handleChannelGif(6rem);
   }
@@ -115,16 +121,27 @@
     font-size: 14px;
 
     .channel-thumbnail {
-      @include handleChannelGif(5rem);
+      @include handleChannelGif(4rem);
     }
   }
 }
 
+.claim-preview__empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .claim-preview--large {
   border: none;
+  min-height: 8rem;
 
   &:hover {
     background-color: transparent;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    min-height: 4rem;
   }
 
   .media__thumb {
@@ -132,12 +149,19 @@
     @include handleClaimListGifThumbnail(14rem);
 
     @media (max-width: $breakpoint-small) {
-      width: 5rem;
+      min-height: 5rem;
+      width: 8rem;
     }
   }
 
   .channel-thumbnail {
+    width: 7.5rem;
     @include handleChannelGif(7.5rem);
+
+    @media (max-width: $breakpoint-small) {
+      width: 5rem;
+      @include handleChannelGif(5rem);
+    }
   }
 }
 
@@ -201,6 +225,9 @@
 
 .claim-preview__custom-properties {
   text-align: right;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
 .claim-preview-metadata {
@@ -522,4 +549,8 @@
 
 .claim-link {
   position: relative;
+}
+
+.claim-preview__null-label {
+  margin: auto;
 }
