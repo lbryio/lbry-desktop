@@ -280,15 +280,16 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     }
 
     // Seeking Shortcuts
-    const duration = videoNode.duration;
-    const currentTime = videoNode.currentTime;
-    if (e.keyCode === SEEK_FORWARD_KEYCODE) {
-      const newDuration = currentTime + SEEK_STEP;
-      videoNode.currentTime = newDuration > duration ? duration : newDuration;
-    }
-    if (e.keyCode === SEEK_BACKWARD_KEYCODE) {
-      const newDuration = currentTime - SEEK_STEP;
-      videoNode.currentTime = newDuration < 0 ? 0 : newDuration;
+    if (!e.altKey) {
+      const duration = videoNode.duration;
+      const currentTime = videoNode.currentTime;
+      if (e.keyCode === SEEK_FORWARD_KEYCODE) {
+        const newDuration = currentTime + SEEK_STEP;
+        videoNode.currentTime = newDuration > duration ? duration : newDuration;
+      } else if (e.keyCode === SEEK_BACKWARD_KEYCODE) {
+        const newDuration = currentTime - SEEK_STEP;
+        videoNode.currentTime = newDuration < 0 ? 0 : newDuration;
+      }
     }
 
     // Playback-Rate Shortcuts ('>' = speed up, '<' = speed down)
