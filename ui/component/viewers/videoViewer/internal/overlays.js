@@ -11,6 +11,7 @@ import './plugins/videojs-overlay/plugin.scss';
 
 const OVERLAY_NAME_ONE_OFF = 'one-off';
 const OVERLAY_CLASS_PLAYBACK_RATE = 'vjs-overlay-playrate';
+const OVERLAY_CLASS_SEEKED = 'vjs-overlay-seeked';
 
 // ****************************************************************************
 // ****************************************************************************
@@ -75,4 +76,24 @@ export function showPlaybackRateOverlay(player, newRate, isSpeedUp) {
   );
 
   showOneOffOverlay(player, OVERLAY_CLASS_PLAYBACK_RATE, overlayJsx, 'center');
+}
+
+/**
+ * Displays a transient "Seeked" overlay.
+ *
+ * @param player The videojs instance.
+ * @param duration The seek delta duration.
+ * @param isForward true if seeking forward, false otherwise.
+ */
+export function showSeekedOverlay(player, duration, isForward) {
+  const overlayJsx = (
+    <div>
+      <p>
+        {isForward ? '+' : '-'}
+        {duration}
+      </p>
+    </div>
+  );
+
+  showOneOffOverlay(player, OVERLAY_CLASS_SEEKED, overlayJsx, 'center');
 }

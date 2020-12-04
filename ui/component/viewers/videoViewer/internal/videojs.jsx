@@ -291,10 +291,12 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     if (e.keyCode === SEEK_FORWARD_KEYCODE) {
       const newDuration = currentTime + SEEK_STEP;
       videoNode.currentTime = newDuration > duration ? duration : newDuration;
+      OVERLAY.showSeekedOverlay(player, SEEK_STEP, true);
     }
     if (e.keyCode === SEEK_BACKWARD_KEYCODE) {
       const newDuration = currentTime - SEEK_STEP;
       videoNode.currentTime = newDuration < 0 ? 0 : newDuration;
+      OVERLAY.showSeekedOverlay(player, SEEK_STEP, false);
     }
 
     // Playback-Rate Shortcuts ('>' = speed up, '<' = speed down)

@@ -408,7 +408,8 @@
 // ****************************************************************************
 
 .video-js {
-  .vjs-overlay-playrate {
+  .vjs-overlay-playrate,
+  .vjs-overlay-seeked {
     background-color: rgba(0, 0, 0, 0.5);
     font-size: var(--font-large);
     width: auto;
