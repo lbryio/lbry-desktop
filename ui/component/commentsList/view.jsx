@@ -237,7 +237,7 @@ function CommentList(props: Props) {
               })}
           </ul>
 
-          {(!readyToDisplayComments || isFetchingComments || moreBelow) && (
+          {(isFetchingComments || moreBelow) && (
             <div className="main--empty" ref={spinnerRef}>
               <Spinner type="small" />
             </div>
