@@ -371,20 +371,7 @@ function SideNavigation(props: Props) {
               </ul>
             )}
 
-            {!isAuthenticated &&
-              (sidebarOpen ? (
-                unAuthNudge
-              ) : (
-                <div className="navigation-links--micro">
-                  <Button
-                    label={__('Sign Up')}
-                    navigate={`/$/${PAGES.AUTH}`}
-                    icon={ICONS.SIGN_IN}
-                    className={classnames('navigation-link')}
-                    activeClass="navigation-link--active"
-                  />
-                </div>
-              ))}
+            {!isAuthenticated && sidebarOpen && unAuthNudge}
           </div>
 
           {SIMPLE_SITE && sidebarOpen && helpLinks}
