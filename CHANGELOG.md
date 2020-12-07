@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- Mobile video player enhancements and the ability to tap on the left and right edges to seek _community pr!_ ([#5119](https://github.com/lbryio/lbry-desktop/pull/5119))
+
 ### Changed
 
 ### Fixed
