@@ -35,7 +35,7 @@ export default function Footer() {
           <Button label={__('About --[link title in Sidebar or Footer]--')} href="https://lbry.com/about" />
         </li>
         <li className="footer__link">
-          <Button label={__('Community Guidlines')} href="https://odysee.com/@OdyseeHelp:b/Community-Guidelines:c" />
+          <Button label={__('Community Guidelines')} href="https://odysee.com/@OdyseeHelp:b/Community-Guidelines:c" />
         </li>
         <li className="footer__link">
           <Button label={__('FAQ')} href="https://odysee.com/@OdyseeHelp:b" />
