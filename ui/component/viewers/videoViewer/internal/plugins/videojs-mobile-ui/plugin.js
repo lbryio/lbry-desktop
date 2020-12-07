@@ -1,6 +1,7 @@
 import videojs from 'video.js/dist/alt/video.core.novtt.min.js';
 import './touchOverlay.js';
 import window from 'global/window';
+import './plugin.scss';
 
 const VERSION = '0.4.1';
 

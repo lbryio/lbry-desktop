@@ -7,6 +7,7 @@ import videojs from 'video.js/dist/alt/video.core.novtt.min.js';
 import 'video.js/dist/alt/video-js-cdn.min.css';
 import eventTracking from 'videojs-event-tracking';
 import * as OVERLAY from './overlays';
+import './plugins/videojs-mobile-ui/plugin';
 import isUserTyping from 'util/detect-typing';
 import './adstest.js';
 // import './adstest2.js';
@@ -32,6 +33,7 @@ export type Player = {
   playbackRate: (?number) => number,
   userActive: (?boolean) => boolean,
   overlay: any => void,
+  mobileUi: any => void,
 };
 
 type Props = {
@@ -332,8 +334,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
           player.on('volumechange', onVolumeChange);
           player.on('error', onError);
           player.on('ended', onEnded);
-
           LbryVolumeBarClass.replaceExisting(player);
+          player.mobileUi(); // Inits mobile version. No-op if Desktop.
 
           onPlayerReady(player);
         }
