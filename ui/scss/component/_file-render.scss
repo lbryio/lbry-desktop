@@ -447,6 +447,13 @@
     background-color: transparent;
   }
 
+  .vjs-touch-overlay:not(.show-play-toggle) {
+    .vjs-control-bar {
+      // Sync the controlBar's visibility with the overlay's
+      display: none;
+    }
+  }
+
   .vjs-touch-overlay {
     &.show-play-toggle,
     &.skip {

@@ -72,6 +72,12 @@ const onPlayerReady = (player, options) => {
   const controlBarIdx = player.children_.indexOf(controlBar);
   player.addChild('touchOverlay', options.touchControls, controlBarIdx);
 
+  // Make the TouchOverlay the new parent of the ControlBar.
+  // This allows the ControlBar to listen to the same classes as TouchOverlay.
+  player.removeChild(controlBar);
+  const touchOverlay = player.getChild('touchOverlay');
+  touchOverlay.addChild(controlBar);
+
   // Tweak controlBar to Mobile style:
   controlBar.removeChild('PlayToggle'); // Use Overlay's instead.
 
