@@ -35,7 +35,9 @@ class TouchOverlay extends Component {
 
     // Clear overlay when playback starts or with control fade
     player.on(['playing', 'userinactive'], e => {
-      this.removeClass('show-play-toggle');
+      if (!this.player_.paused()) {
+        this.removeClass('show-play-toggle');
+      }
     });
 
     // A 0 inactivity timeout won't work here
