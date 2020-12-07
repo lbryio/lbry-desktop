@@ -353,6 +353,10 @@
   }
 }
 
+// ****************************************************************************
+// Video
+// ****************************************************************************
+
 .video-js-parent {
   height: 100%;
   width: 100%;
@@ -399,6 +403,10 @@
   }
 }
 
+// ****************************************************************************
+// Layout and control visibility
+// ****************************************************************************
+
 .video-js.vjs-fullscreen,
 .video-js:not(.vjs-fullscreen) {
   // --- Unhide desired components per layout ---
@@ -439,11 +447,9 @@
   }
 }
 
-.video-js:hover {
-  .vjs-big-play-button {
-    background-color: var(--color-primary);
-  }
-}
+// ****************************************************************************
+// Tap-to-unmute
+// ****************************************************************************
 
 .video-js--tap-to-unmute {
   visibility: hidden; // Start off as hidden.
@@ -460,6 +466,15 @@
   &:hover {
     opacity: 1;
     color: var(--color-white);
+  }
+}
+
+// ****************************************************************************
+// ****************************************************************************
+
+.video-js:hover {
+  .vjs-big-play-button {
+    background-color: var(--color-primary);
   }
 }
 
@@ -482,6 +497,9 @@
     }
   }
 }
+
+// ****************************************************************************
+// ****************************************************************************
 
 .file-render--embed {
   // on embeds, do not inject our colors until interaction
@@ -525,6 +543,10 @@
 .file-viewer--ended-embed .vjs-big-play-button {
   display: none !important; // yes this is dumb, but this was broken and the above CSS was overriding
 }
+
+// ****************************************************************************
+// Autoplay Countdown
+// ****************************************************************************
 
 .autoplay-countdown {
   display: flex;
@@ -578,6 +600,9 @@
 .autoplay-countdown__button--1 {
   border-color: #fff;
 }
+
+// ****************************************************************************
+// ****************************************************************************
 
 .file__viewdate {
   display: flex;
