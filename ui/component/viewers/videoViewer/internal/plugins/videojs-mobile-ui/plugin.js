@@ -66,10 +66,14 @@ const onPlayerReady = (player, options) => {
     };
   }
 
-  // Insert before the control bar
+  const controlBar = player.getChild('ControlBar');
 
-  const controlBarIdx = player.children_.indexOf(player.getChild('ControlBar'));
+  // Insert before the ControlBar:
+  const controlBarIdx = player.children_.indexOf(controlBar);
   player.addChild('touchOverlay', options.touchControls, controlBarIdx);
+
+  // Tweak controlBar to Mobile style:
+  controlBar.removeChild('PlayToggle'); // Use Overlay's instead.
 
   let locked = false;
 
