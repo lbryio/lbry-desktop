@@ -295,7 +295,7 @@ function SideNavigation(props: Props) {
       </li>
 
       <li className="navigation-link">
-        <Button label={__('Community Guidlines')} href="https://odysee.com/@OdyseeHelp:b/Community-Guidelines:c" />
+        <Button label={__('Community Guidelines')} href="https://odysee.com/@OdyseeHelp:b/Community-Guidelines:c" />
       </li>
 
       <li className="navigation-link">
