@@ -404,6 +404,40 @@
 }
 
 // ****************************************************************************
+// Video::Overlays
+// ****************************************************************************
+
+.video-js {
+  .vjs-overlay-playrate {
+    background-color: rgba(0, 0, 0, 0.5);
+    font-size: var(--font-large);
+    width: auto;
+    padding: 10px 30px;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+
+    animation: fadeOutAnimation ease-in 0.6s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes fadeOutAnimation {
+    0% {
+      opacity: 1;
+      visibility: visible;
+    }
+    100% {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+}
+
+// ****************************************************************************
 // Layout and control visibility
 // ****************************************************************************
 

@@ -6,6 +6,7 @@ import classnames from 'classnames';
 import videojs from 'video.js/dist/alt/video.core.novtt.min.js';
 import 'video.js/dist/alt/video-js-cdn.min.css';
 import eventTracking from 'videojs-event-tracking';
+import * as OVERLAY from './overlays';
 import isUserTyping from 'util/detect-typing';
 import './adstest.js';
 // import './adstest2.js';
@@ -30,6 +31,7 @@ export type Player = {
   getChild: string => any,
   playbackRate: (?number) => number,
   userActive: (?boolean) => boolean,
+  overlay: any => void,
 };
 
 type Props = {
@@ -87,9 +89,9 @@ if (!Object.keys(videojs.getPlugins()).includes('eventTracking')) {
   videojs.registerPlugin('eventTracking', eventTracking);
 }
 
-// ********************************************************************************************************************
+// ****************************************************************************
 // LbryVolumeBarClass
-// ********************************************************************************************************************
+// ****************************************************************************
 
 const VIDEOJS_CONTROL_BAR_CLASS = 'ControlBar';
 const VIDEOJS_VOLUME_PANEL_CLASS = 'VolumePanel';
@@ -128,8 +130,9 @@ class LbryVolumeBarClass extends videojs.getComponent(VIDEOJS_VOLUME_BAR_CLASS) 
   }
 }
 
-// ********************************************************************************************************************
-// ********************************************************************************************************************
+// ****************************************************************************
+// VideoJs
+// ****************************************************************************
 
 /*
 properties for this component should be kept to ONLY those that if changed should REQUIRE an entirely new videojs element
@@ -150,7 +153,10 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     ],
     autoplay: false,
     poster: poster, // thumb looks bad in app, and if autoplay, flashing poster is annoying
-    plugins: { eventTracking: true },
+    plugins: {
+      eventTracking: true,
+      overlay: OVERLAY.OVERLAY_DATA,
+    },
   };
 
   if (adsTest) {
@@ -293,16 +299,15 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
     // Playback-Rate Shortcuts ('>' = speed up, '<' = speed down)
     if (player && e.shiftKey && (e.keyCode === PERIOD_KEYCODE || e.keyCode === COMMA_KEYCODE)) {
+      const isSpeedUp = e.keyCode === PERIOD_KEYCODE;
       const rate = player.playbackRate();
       let rateIndex = videoPlaybackRates.findIndex(x => x === rate);
       if (rateIndex >= 0) {
-        rateIndex =
-          e.keyCode === PERIOD_KEYCODE
-            ? Math.min(rateIndex + 1, videoPlaybackRates.length - 1)
-            : Math.max(rateIndex - 1, 0);
+        rateIndex = isSpeedUp ? Math.min(rateIndex + 1, videoPlaybackRates.length - 1) : Math.max(rateIndex - 1, 0);
+        const nextRate = videoPlaybackRates[rateIndex];
 
-        player.userActive(true); // Bring up the ControlBar as GUI feedback.
-        player.playbackRate(videoPlaybackRates[rateIndex]);
+        OVERLAY.showPlaybackRateOverlay(player, nextRate, isSpeedUp);
+        player.playbackRate(nextRate);
       }
     }
   }
