@@ -15,6 +15,7 @@ type Props = {
   fee?: boolean,
   className?: string,
   noFormat?: boolean,
+  notWinning?: boolean,
 };
 
 class CreditAmount extends React.PureComponent<Props> {
@@ -25,6 +26,7 @@ class CreditAmount extends React.PureComponent<Props> {
     showPlus: false,
     showLBC: true,
     noFormat: false,
+    notWinning: false,
   };
 
   render() {
@@ -39,6 +41,7 @@ class CreditAmount extends React.PureComponent<Props> {
       showLBC,
       className,
       noFormat,
+      notWinning,
     } = this.props;
 
     const minimumRenderableAmount = 10 ** (-1 * precision);
@@ -66,7 +69,7 @@ class CreditAmount extends React.PureComponent<Props> {
       }
 
       if (showLBC) {
-        amountText = <LbcSymbol postfix={amountText} />;
+        amountText = <LbcSymbol notWinning={notWinning} postfix={amountText} />;
       }
 
       if (fee) {

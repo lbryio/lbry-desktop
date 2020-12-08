@@ -145,6 +145,104 @@ export const icons = {
       </svg>
     );
   },
+  [ICONS.LBC_GREY]: (props: IconProps) => {
+    const { size = 24, color = 'currentColor', ...rest } = props;
+    const randomId = uuid();
+
+    return (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width={size}
+        height={size}
+        fill="none"
+        stroke={color}
+        strokeWidth="0"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        {...rest}
+      >
+        <path d="M1.03125 14.1562V9.84375L12 0L22.9688 9.84375V14.1562L12 24L1.03125 14.1562Z" fill="black" />
+        <path d="M8.925 10.3688L3.99375 14.8125L7.70625 18.15L12.6375 13.7063L8.925 10.3688Z" fill="black" />
+        <path
+          d="M8.925 10.3688L15.1312 4.80005L12 1.98755L2.60625 10.425V13.575L3.99375 14.8125L8.925 10.3688Z"
+          fill="black"
+        />
+        <path
+          d="M8.925 10.3688L3.99375 14.8125L7.70625 18.15L12.6375 13.7063L8.925 10.3688Z"
+          fill={`url(#paint0_linear${randomId})`}
+        />
+        <path
+          d="M8.925 10.3688L15.1312 4.80005L12 1.98755L2.60625 10.425V13.575L3.99375 14.8125L8.925 10.3688Z"
+          fill={`url(#paint1_linear${randomId})`}
+        />
+        <path
+          d="M15.075 13.6313L20.0062 9.1876L16.2937 5.8501L11.3625 10.2938L15.075 13.6313Z"
+          fill={`url(#paint2_linear${randomId})`}
+        />
+        <path
+          d="M15.075 13.6312L8.86875 19.2L12 22.0125L21.3937 13.575V10.425L20.0062 9.1875L15.075 13.6312Z"
+          fill={`url(#paint3_linear${randomId})`}
+        />
+
+        <defs>
+          <linearGradient
+            id={`paint0_linear${randomId}`}
+            x1="3.7206"
+            y1="14.2649"
+            x2="15.1645"
+            y2="14.2649"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop offset="0.2464" stopColor="#888888" />
+            <stop offset="0.3166" stopColor="#999999" />
+            <stop offset="0.4108" stopColor="#888888" />
+            <stop offset="0.5188" stopColor="#AAAAAA" />
+            <stop offset="0.637" stopColor="#777777" />
+            <stop offset="0.7635" stopColor="#888888" />
+            <stop offset="0.8949" stopColor="#999999" />
+            <stop offset="1" stopColor="#AAAAAA" />
+          </linearGradient>
+          <linearGradient
+            id={`paint1_linear${randomId}`}
+            x1="2.60274"
+            y1="8.40089"
+            x2="15.14"
+            y2="8.40089"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop offset="0.4233" stopColor="#999999" />
+            <stop offset="0.8292" stopColor="#999999" />
+          </linearGradient>
+          <linearGradient
+            id={`paint2_linear${randomId}`}
+            x1="6.8682"
+            y1="14.1738"
+            x2="25.405"
+            y2="4.84055"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stopColor="#888888" />
+            <stop offset="0.6287" stopColor="#666666" />
+          </linearGradient>
+          <linearGradient
+            id={`paint3_linear${randomId}`}
+            x1="25.2522"
+            y1="6.08799"
+            x2="3.87697"
+            y2="27.836"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stopColor="#888888" />
+            <stop offset="0.6287" stopColor="#666666" />
+          </linearGradient>
+          <clipPath id="clip0">
+            <rect width="24" height="24" fill="white" />
+          </clipPath>
+        </defs>
+      </svg>
+    );
+  },
   [ICONS.REWARDS]: buildIcon(
     <g fill="none" fillRule="evenodd" strokeLinecap="round">
       <circle cx="12" cy="8" r="7" />

@@ -10,15 +10,16 @@ type Props = {
   size?: number,
   prefix?: string | number,
   postfix?: string | number,
+  notWinning?: boolean,
 };
 
 const LbcSymbol = (props: Props) => {
-  const { prefix, postfix, size, isTitle = false } = props;
+  const { prefix, postfix, size, isTitle = false, notWinning } = props;
   return (
     <>
       {prefix}
       <Icon
-        icon={ICONS.LBC}
+        icon={notWinning ? ICONS.LBC_GREY : ICONS.LBC}
         size={isTitle ? 22 : size}
         className={classnames('icon__lbc', {
           'icon__lbc--before-text': prefix,

@@ -9,12 +9,13 @@ type Props = {
 
 function ClaimEffectiveAmount(props: Props) {
   const { claim } = props;
+  const notWinning = Boolean(claim && claim.meta && !claim.meta.is_controlling);
 
   if (!claim) {
     return null;
   }
 
-  return <CreditAmount amount={Number(claim.meta.effective_amount)} />;
+  return <CreditAmount notWinning={notWinning} amount={Number(claim.meta.effective_amount)} />;
 }
 
 export default ClaimEffectiveAmount;

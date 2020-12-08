@@ -65,6 +65,7 @@ export const BACKUP = 'Database';
 export const TRANSACTIONS = 'FileText';
 export const LBRY = 'Lbry';
 export const LBC = 'LBC';
+export const LBC_GREY = 'LBC_GREY';
 export const DISCOVER = 'Compass';
 export const VISUALIZER_ON = 'Eye';
 export const VISUALIZER_OFF = 'EyeOff';

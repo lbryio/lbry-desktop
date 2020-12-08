@@ -11,6 +11,7 @@ import Yrbl from 'component/yrbl';
 import LbcSymbol from 'component/common/lbc-symbol';
 import * as PAGES from 'constants/pages';
 import HelpLink from 'component/common/help-link';
+import ClaimEffectiveAmount from 'component/claimEffectiveAmount';
 
 type Props = {
   channels: Array<ChannelClaim>,
@@ -86,7 +87,15 @@ export default function ChannelsPage(props: Props) {
                     <span className="help--inline">
                       {__('Earnings per view')} <HelpLink href="https://lbry.com/faq/view-rewards" />
                     </span>
-                    <LbcSymbol postfix={channelRewardData.view_rate.toFixed(2)} />
+                    <LbcSymbol
+                      notWinning={!claim.meta.is_controlling}
+                      postfix={channelRewardData.view_rate.toFixed(2)}
+                    />
+                    <span className="help--inline">
+                      {claim.meta.is_controlling ? __('Staked (Winning)') : __('Staked (Losing)')}
+                      <HelpLink href="https://lbry.com/faq/naming" />
+                    </span>
+                    <ClaimEffectiveAmount uri={claim.repost_url || claim.canonical_url} />
                   </span>
                 );
               } else {
