@@ -14,20 +14,27 @@ type Props = {
   winningUri: ?Claim,
   doResolveUris: (Array<string>) => void,
   hideLink?: boolean,
+  setChannelActive: boolean => void,
 };
 
 export default function SearchTopClaim(props: Props) {
-  const { doResolveUris, query = '', winningUri, hideLink = false } = props;
+  const { doResolveUris, query = '', winningUri, hideLink = false, setChannelActive } = props;
   const uriFromQuery = `lbry://${query}`;
 
   let channelUriFromQuery;
+  let winningUriIsChannel;
   try {
     const { isChannel } = parseURI(uriFromQuery);
-
+    const { isChannel: winnerIsChannel } = parseURI(winningUri);
+    winningUriIsChannel = winnerIsChannel;
     if (!isChannel) {
       channelUriFromQuery = `lbry://@${query}`;
     }
   } catch (e) {}
+
+  React.useEffect(() => {
+    setChannelActive && winningUriIsChannel && setChannelActive(true);
+  }, [setChannelActive, winningUriIsChannel]);
 
   React.useEffect(() => {
     let urisToResolve = [];
