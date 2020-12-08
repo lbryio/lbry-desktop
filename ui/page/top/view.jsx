@@ -18,7 +18,7 @@ function TopPage(props: Props) {
 
   return (
     <Page>
-      <SearchTopClaim query={name} hideLink />
+      <SearchTopClaim query={name} hideLink setChannelActive={setChannelActive} />
       <ClaimListDiscover
         name={channelActive ? `@${name}` : name}
         defaultFreshness={FRESH_ALL}
