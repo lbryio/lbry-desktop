@@ -70,6 +70,8 @@ export default function BuyPage(props: Props) {
         url += `&email=${encodeURIComponent(email)}`;
       }
 
+      url += `&enabledPaymentMethods=${encodeURIComponent('credit_debit_card,sepa_bank_transfer,gbp_bank_transfer')}`;
+
       const query = new URL(url).search;
       const signature = Base64.stringify(hmacSHA256(query, MOONPAY_KEY));
 
