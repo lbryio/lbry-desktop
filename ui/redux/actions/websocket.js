@@ -35,12 +35,12 @@ export const doSocketConnect = () => dispatch => {
       };
 
       socket.onerror = e => {
-        console.error('websocket onerror', e);
+        console.error('websocket onerror', e); // eslint-disable-line
         // onerror and onclose will both fire, so nothing is needed here
       };
 
       socket.onclose = e => {
-        console.error('websocket onclose', e);
+        console.error('websocket onclose', e); // eslint-disable-line
         retryCount += 1;
         connectToSocket();
       };

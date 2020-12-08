@@ -85,7 +85,7 @@ export default function YoutubeTransferStatus(props: Props) {
         clearInterval(interval);
       };
     }
-  }, [hasPendingTransfers, checkYoutubeTransfer, updateUser, updateUser]);
+  }, [hasPendingTransfers, checkYoutubeTransfer, updateUser]);
 
   return (
     (alwaysShow || (hasChannels && !isYoutubeTransferComplete)) && (
