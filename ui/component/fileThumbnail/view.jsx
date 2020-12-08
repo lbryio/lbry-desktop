@@ -41,7 +41,7 @@ function FileThumbnail(props: Props) {
   let url = thumbnail || (hasResolvedClaim ? Placeholder : '');
   // @if TARGET='web'
   // Pass image urls through a compression proxy
-  if (thumbnail && !thumbnail.includes('https://spee.ch')) {
+  if (thumbnail && THUMBNAIL_CDN_URL && !thumbnail.includes('https://spee.ch')) {
     url = `${THUMBNAIL_CDN_URL}${encodeURIComponent(thumbnail)}`;
   }
   // @endif
