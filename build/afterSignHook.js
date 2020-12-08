@@ -4,17 +4,14 @@ const fs = require('fs');
 const path = require('path');
 var electron_notarize = require('electron-notarize');
 
-module.exports = async function(params) {
-  // Only notarize the app on Mac OS only.
-  if (process.platform !== 'darwin') {
+module.exports = async function() {
+  if (process.env.RUNNER_OS !== 'macOS') {
     return;
   }
-  console.log('afterSign hook triggered', params);
 
-  // Same appId in electron-builder.
-  let appId = 'io.lbry.LBRY';
+  const appId = 'io.lbry.LBRY';
+  const appPath = path.resolve(__dirname, '../dist/electron/mac/LBRY.app');
 
-  let appPath = path.join(params.appOutDir, `${params.packager.appInfo.productFilename}.app`);
   if (!fs.existsSync(appPath)) {
     throw new Error(`Cannot find application at: ${appPath}`);
   }
@@ -25,8 +22,8 @@ module.exports = async function(params) {
     await electron_notarize.notarize({
       appBundleId: appId,
       appPath: appPath,
-      appleId: process.env.appleId,
-      appleIdPassword: process.env.appleIdPassword,
+      appleId: process.env.NOTARIZATION_USERNAME,
+      appleIdPassword: process.env.NOTARIZATION_PASSWORD,
     });
   } catch (error) {
     console.error(error);

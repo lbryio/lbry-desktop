@@ -14,7 +14,7 @@ try {
 window.i18n_messages = window.i18n_messages || {};
 
 // @if TARGET='app'
-function saveMessage(message) {
+function saveMessageDesktop(message) {
   const messagesFilePath = __static + '/app-strings.json';
 
   if (knownMessages === null) {
@@ -45,15 +45,12 @@ function saveMessage(message) {
  but this seems better than silently having this limitation and future devs not knowing.
  */
 // @if TARGET='web'
-// $FlowFixMe
-// eslint-disable
-function saveMessage(message) {
+function saveMessageWeb(message) {
   if (!isProduction && knownMessages === null) {
-    console.log('Note that i18n messages are not saved in web dev mode.');
+    console.log('Note that i18n messages are not saved in web dev mode.'); // eslint-disable-line
     knownMessages = {};
   }
 }
-// eslint-enable
 // @endif
 
 function removeContextMetadata(message) {
@@ -91,7 +88,7 @@ export function __(message, tokens) {
     : window.navigator.language.slice(0, 2) || 'en';
 
   if (!isProduction) {
-    saveMessage(message);
+    IS_WEB ? saveMessageWeb(message) : saveMessageDesktop(message);
   }
 
   let translatedMessage = window.i18n_messages[language] ? window.i18n_messages[language][message] || message : message;

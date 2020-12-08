@@ -70,7 +70,7 @@ function WalletSendTip(props: Props) {
       const { claimName } = parseURI(newChannelUrl);
       setSelectedChannel(claimName);
     }
-  }, [channelStrings]);
+  }, [channelStrings, selectedChannel, setSelectedChannel]);
 
   const tipAmount = useCustomTip ? customTipAmount : presetTipAmount;
   const isSupport = claimIsMine ? true : SIMPLE_SITE ? false : !sendAsTip;

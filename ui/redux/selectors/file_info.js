@@ -1,17 +1,11 @@
-import { selectClaimsByUri, selectIsFetchingClaimListMine, selectMyClaims, selectClaimsById } from 'lbry-redux';
+import { selectClaimsByUri, selectIsFetchingClaimListMine, selectMyClaims } from 'lbry-redux';
 import { createSelector } from 'reselect';
 
 export const selectState = state => state.fileInfo || {};
 
-export const selectFileInfosByOutpoint = createSelector(
-  selectState,
-  state => state.byOutpoint || {}
-);
+export const selectFileInfosByOutpoint = createSelector(selectState, state => state.byOutpoint || {});
 
-export const selectIsFetchingFileList = createSelector(
-  selectState,
-  state => state.isFetchingFileList
-);
+export const selectIsFetchingFileList = createSelector(selectState, state => state.isFetchingFileList);
 
 export const selectIsFetchingFileListDownloadedOrPublished = createSelector(
   selectIsFetchingFileList,
@@ -20,41 +14,23 @@ export const selectIsFetchingFileListDownloadedOrPublished = createSelector(
 );
 
 export const makeSelectFileInfoForUri = uri =>
-  createSelector(
-    selectClaimsByUri,
-    selectFileInfosByOutpoint,
-    (claims, byOutpoint) => {
-      const claim = claims[uri];
-      const outpoint = claim ? `${claim.txid}:${claim.nout}` : undefined;
-      return outpoint ? byOutpoint[outpoint] : undefined;
-    }
-  );
+  createSelector(selectClaimsByUri, selectFileInfosByOutpoint, (claims, byOutpoint) => {
+    const claim = claims[uri];
+    const outpoint = claim ? `${claim.txid}:${claim.nout}` : undefined;
+    return outpoint ? byOutpoint[outpoint] : undefined;
+  });
 
-export const selectDownloadingByOutpoint = createSelector(
-  selectState,
-  state => state.downloadingByOutpoint || {}
-);
+export const selectDownloadingByOutpoint = createSelector(selectState, state => state.downloadingByOutpoint || {});
 
 export const makeSelectDownloadingForUri = uri =>
-  createSelector(
-    selectDownloadingByOutpoint,
-    makeSelectFileInfoForUri(uri),
-    (byOutpoint, fileInfo) => {
-      if (!fileInfo) return false;
-      return byOutpoint[fileInfo.outpoint];
-    }
-  );
+  createSelector(selectDownloadingByOutpoint, makeSelectFileInfoForUri(uri), (byOutpoint, fileInfo) => {
+    if (!fileInfo) return false;
+    return byOutpoint[fileInfo.outpoint];
+  });
 
-export const selectUrisLoading = createSelector(
-  selectState,
-  state => state.urisLoading || {}
-);
+export const selectUrisLoading = createSelector(selectState, state => state.urisLoading || {});
 
-export const makeSelectLoadingForUri = uri =>
-  createSelector(
-    selectUrisLoading,
-    byUri => byUri && byUri[uri]
-  );
+export const makeSelectLoadingForUri = uri => createSelector(selectUrisLoading, byUri => byUri && byUri[uri]);
 
 export const selectFileInfosDownloaded = createSelector(
   selectFileInfosByOutpoint,
@@ -93,23 +69,17 @@ export const selectDownloadingFileInfos = createSelector(
   }
 );
 
-export const selectTotalDownloadProgress = createSelector(
-  selectDownloadingFileInfos,
-  fileInfos => {
-    const progress = [];
+export const selectTotalDownloadProgress = createSelector(selectDownloadingFileInfos, fileInfos => {
+  const progress = [];
 
-    fileInfos.forEach(fileInfo => {
-      progress.push((fileInfo.written_bytes / fileInfo.total_bytes) * 100);
-    });
+  fileInfos.forEach(fileInfo => {
+    progress.push((fileInfo.written_bytes / fileInfo.total_bytes) * 100);
+  });
 
-    const totalProgress = progress.reduce((a, b) => a + b, 0);
+  const totalProgress = progress.reduce((a, b) => a + b, 0);
 
-    if (fileInfos.length > 0) return totalProgress / fileInfos.length / 100.0;
-    return -1;
-  }
-);
+  if (fileInfos.length > 0) return totalProgress / fileInfos.length / 100.0;
+  return -1;
+});
 
-export const selectFileInfoErrors = createSelector(
-  selectState,
-  state => state.errors || {}
-);
+export const selectFileInfoErrors = createSelector(selectState, state => state.errors || {});

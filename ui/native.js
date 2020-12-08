@@ -1,8 +1,10 @@
+// @if TARGET='app'
+import { ipcRenderer } from 'electron';
+// @endif
+
 const Native = {};
 
 // @if TARGET='app'
-import { ipcRenderer } from 'electron';
-
 Native.getAppVersionInfo = () =>
   new Promise(resolve => {
     // @if TARGET='app'
@@ -12,13 +14,6 @@ Native.getAppVersionInfo = () =>
     ipcRenderer.send('version-info-requested');
     // @endif
   });
-// @endif
-
-// @if TARGET='app'
-Native.imagePath = file => `${staticResourcesPath}/img/${file}`;
-// @endif
-// @if TARGET='web'
-Native.imagePath = file => `staticResourcesPath/img/${file}`;
 // @endif
 
 export default Native;
