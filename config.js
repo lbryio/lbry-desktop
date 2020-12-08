@@ -16,6 +16,7 @@ const config = {
   DOMAIN: process.env.DOMAIN,
   SHARE_DOMAIN_URL: process.env.SHARE_DOMAIN_URL,
   URL: process.env.URL,
+  THUMBNAIL_CDN_URL: process.env.THUMBNAIL_CDN_URL,
   SITE_TITLE: process.env.SITE_TITLE,
   SITE_NAME: process.env.SITE_NAME,
   SITE_DESCRIPTION: process.env.SITE_DESCRIPTION,
