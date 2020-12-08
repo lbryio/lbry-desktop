@@ -20,6 +20,9 @@ const HOME = {
   title: 'Home',
   link: `/`,
   icon: ICONS.HOME,
+  onClick: () => {
+    if (window.location.pathname === '/') window.location.reload();
+  },
 };
 
 const RECENT_FROM_FOLLOWING = {
