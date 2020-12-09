@@ -23,7 +23,7 @@ export type RowDataItem = {
   hideForUnauth?: boolean,
 };
 
-export const PRIMARY_CHEESE_CHANNEL_IDS = [
+export const PRIMARY_CONTENT_CHANNEL_IDS = [
   '3fec094c5937e9eb4e8f5e71e4ca430e8a993d03',
   '6184648aab0431c4c95c649072d1f9ff08b9bb7c',
   'b5d31cde873073718c033076656a27471e392afc',
@@ -176,7 +176,7 @@ export const PRIMARY_CONTENT = {
     claimType: ['stream'],
     orderBy: ['release_time'],
     pageSize: 20, // temporary, to facilitate screenshots until repitition parameter is added
-    channelIds: PRIMARY_CHEESE_CHANNEL_IDS,
+    channelIds: PRIMARY_CONTENT_CHANNEL_IDS,
     limitClaimsPerChannel: 3,
     releaseTime: `>${Math.floor(
       moment()
@@ -191,12 +191,12 @@ export const PRIMARY_CONTENT_2 = {
   title: __("Don't Be Evil"),
   link: `/$/${PAGES.DISCOVER}?${CS.CLAIM_TYPE}=${CS.CLAIM_STREAM}&${
     CS.CHANNEL_IDS_KEY
-  }=${PRIMARY_CHEESE_CHANNEL_IDS.join(',')}`,
+  }=${PRIMARY_CONTENT_CHANNEL_IDS.join(',')}`,
   options: {
     claimType: ['stream'],
     orderBy: ['release_time'],
     pageSize: 8,
-    channelIds: PRIMARY_CHEESE_CHANNEL_IDS,
+    channelIds: PRIMARY_CONTENT_CHANNEL_IDS,
     limitClaimsPerChannel: 3,
     releaseTime: `>${Math.floor(
       moment()
