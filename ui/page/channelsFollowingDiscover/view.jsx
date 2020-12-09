@@ -23,7 +23,7 @@ function ChannelsFollowingDiscover(props: Props) {
     // blockedChannels,
     homepageData,
   } = props;
-  const { PRIMARY_CONTENT_CHANNEL_IDS } = homepageData;
+  const { PRIMARY_CHEESE_CHANNEL_IDS } = homepageData;
   //   let rowData: Array<ChannelsFollowingItem> = [];
   //   const notChannels = subscribedChannels
   //     .map(({ uri }) => uri)
@@ -120,7 +120,7 @@ function ChannelsFollowingDiscover(props: Props) {
       <ClaimListDiscover
         defaultOrderBy={CS.ORDER_BY_TRENDING}
         defaultFreshness={CS.FRESH_ALL}
-        claimIds={SIMPLE_SITE ? PRIMARY_CONTENT_CHANNEL_IDS : undefined}
+        claimIds={SIMPLE_SITE ? PRIMARY_CHEESE_CHANNEL_IDS : undefined}
         claimType={CS.CLAIM_CHANNEL}
         maxPages={3}
         hideFilters

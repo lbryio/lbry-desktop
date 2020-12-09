@@ -46,7 +46,7 @@ type Props = {
   clearPosition: string => void,
   authenticated: boolean,
   homepageData: {
-    PRIMARY_CONTENT_CHANNEL_IDS?: Array<string>,
+    PRIMARY_CHEESE_CHANNEL_IDS?: Array<string>,
     ENLIGHTENMENT_CHANNEL_IDS?: Array<string>,
     GAMING_CHANNEL_IDS?: Array<string>,
     SCIENCE_CHANNEL_IDS?: Array<string>,
@@ -85,7 +85,7 @@ function VideoViewer(props: Props) {
     authenticated,
   } = props;
   const {
-    PRIMARY_CONTENT_CHANNEL_IDS = [],
+    PRIMARY_CHEESE_CHANNEL_IDS = [],
     ENLIGHTENMENT_CHANNEL_IDS = [],
     GAMING_CHANNEL_IDS = [],
     SCIENCE_CHANNEL_IDS = [],
@@ -94,7 +94,7 @@ function VideoViewer(props: Props) {
     FINCANCE_CHANNEL_IDS = [],
   } = homepageData;
   const adApprovedChannelIds = [
-    ...PRIMARY_CONTENT_CHANNEL_IDS,
+    ...PRIMARY_CHEESE_CHANNEL_IDS,
     ...ENLIGHTENMENT_CHANNEL_IDS,
     ...GAMING_CHANNEL_IDS,
     ...SCIENCE_CHANNEL_IDS,

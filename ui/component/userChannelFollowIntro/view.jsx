@@ -21,7 +21,7 @@ const channelsToSubscribe = AUTO_FOLLOW_CHANNELS.trim()
 
 function UserChannelFollowIntro(props: Props) {
   const { subscribedChannels, channelSubscribe, onContinue, homepageData } = props;
-  const { PRIMARY_CONTENT_CHANNEL_IDS } = homepageData;
+  const { PRIMARY_CHEESE_CHANNEL_IDS } = homepageData;
   const followingCount = (subscribedChannels && subscribedChannels.length) || 0;
 
   // subscribe to lbry
@@ -56,7 +56,7 @@ function UserChannelFollowIntro(props: Props) {
               }
               defaultOrderBy={CS.ORDER_BY_TRENDING}
               defaultFreshness={CS.FRESH_ALL}
-              claimIds={SIMPLE_SITE ? PRIMARY_CONTENT_CHANNEL_IDS : undefined}
+              claimIds={SIMPLE_SITE ? PRIMARY_CHEESE_CHANNEL_IDS : undefined}
               claimType={CS.CLAIM_CHANNEL}
               maxPages={3}
             />
