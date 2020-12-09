@@ -265,7 +265,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   function handleKeyDown(e: KeyboardEvent) {
     const videoNode: ?HTMLVideoElement = containerRef.current && containerRef.current.querySelector('video, audio');
 
-    if (!videoNode || isUserTyping()) {
+    if (!videoNode || !player || isUserTyping()) {
       return;
     }
 
@@ -274,7 +274,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     }
 
     // Fullscreen toggle shortcuts
-    if (player && (e.keyCode === FULLSCREEN_KEYCODE || e.keyCode === F11_KEYCODE)) {
+    if (e.keyCode === FULLSCREEN_KEYCODE || e.keyCode === F11_KEYCODE) {
       if (!player.isFullscreen()) {
         player.requestFullscreen();
       } else {
@@ -294,15 +294,17 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       const newDuration = currentTime + SEEK_STEP;
       videoNode.currentTime = newDuration > duration ? duration : newDuration;
       OVERLAY.showSeekedOverlay(player, SEEK_STEP, true);
+      player.userActive(true);
     }
     if (e.keyCode === SEEK_BACKWARD_KEYCODE) {
       const newDuration = currentTime - SEEK_STEP;
       videoNode.currentTime = newDuration < 0 ? 0 : newDuration;
       OVERLAY.showSeekedOverlay(player, SEEK_STEP, false);
+      player.userActive(true);
     }
 
     // Playback-Rate Shortcuts ('>' = speed up, '<' = speed down)
-    if (player && e.shiftKey && (e.keyCode === PERIOD_KEYCODE || e.keyCode === COMMA_KEYCODE)) {
+    if (e.shiftKey && (e.keyCode === PERIOD_KEYCODE || e.keyCode === COMMA_KEYCODE)) {
       const isSpeedUp = e.keyCode === PERIOD_KEYCODE;
       const rate = player.playbackRate();
       let rateIndex = videoPlaybackRates.findIndex(x => x === rate);
@@ -311,6 +313,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         const nextRate = videoPlaybackRates[rateIndex];
 
         OVERLAY.showPlaybackRateOverlay(player, nextRate, isSpeedUp);
+        player.userActive(true);
         player.playbackRate(nextRate);
       }
     }
