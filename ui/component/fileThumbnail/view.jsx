@@ -42,7 +42,7 @@ function FileThumbnail(props: Props) {
   // @if TARGET='web'
   // Pass image urls through a compression proxy
   if (thumbnail && THUMBNAIL_CDN_URL && !thumbnail.includes('https://spee.ch')) {
-    // url = `${THUMBNAIL_CDN_URL}${encodeURIComponent(thumbnail)}`;
+    url = `${THUMBNAIL_CDN_URL}${thumbnail}`;
   }
   // @endif
 
