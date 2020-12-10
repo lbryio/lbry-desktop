@@ -129,7 +129,7 @@ function ChannelsFollowingDiscover(props: Props) {
         defaultOrderBy={CS.ORDER_BY_TRENDING}
         defaultFreshness={CS.FRESH_ALL}
         claimType={CS.CLAIM_CHANNEL}
-        channelIds={SIMPLE_SITE ? PRIMARY_CONTENT_CHANNEL_IDS : undefined}
+        claimIds={SIMPLE_SITE ? PRIMARY_CONTENT_CHANNEL_IDS : undefined}
         scrollAnchor={MORE_CHANNELS_ANCHOR}
       />
     </Page>
