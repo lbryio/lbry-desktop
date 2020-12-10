@@ -289,7 +289,7 @@ function App(props: Props) {
   }, [hasVerifiedEmail, signIn, hasSignedIn]);
 
   // @if TARGET='web'
-  useDegradedPerformance(setLbryTvApiStatus);
+  useDegradedPerformance(setLbryTvApiStatus, user);
   // @endif
 
   // @if TARGET='web'
