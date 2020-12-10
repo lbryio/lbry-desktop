@@ -288,19 +288,20 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     }
 
     // Seeking Shortcuts
-    const duration = videoNode.duration;
-    const currentTime = videoNode.currentTime;
-    if (e.keyCode === SEEK_FORWARD_KEYCODE) {
-      const newDuration = currentTime + SEEK_STEP;
-      videoNode.currentTime = newDuration > duration ? duration : newDuration;
-      OVERLAY.showSeekedOverlay(player, SEEK_STEP, true);
-      player.userActive(true);
-    }
-    if (e.keyCode === SEEK_BACKWARD_KEYCODE) {
-      const newDuration = currentTime - SEEK_STEP;
-      videoNode.currentTime = newDuration < 0 ? 0 : newDuration;
-      OVERLAY.showSeekedOverlay(player, SEEK_STEP, false);
-      player.userActive(true);
+    if (!e.altKey) {
+      const duration = videoNode.duration;
+      const currentTime = videoNode.currentTime;
+      if (e.keyCode === SEEK_FORWARD_KEYCODE) {
+        const newDuration = currentTime + SEEK_STEP;
+        videoNode.currentTime = newDuration > duration ? duration : newDuration;
+        OVERLAY.showSeekedOverlay(player, SEEK_STEP, true);
+        player.userActive(true);
+      } else if (e.keyCode === SEEK_BACKWARD_KEYCODE) {
+        const newDuration = currentTime - SEEK_STEP;
+        videoNode.currentTime = newDuration < 0 ? 0 : newDuration;
+        OVERLAY.showSeekedOverlay(player, SEEK_STEP, false);
+        player.userActive(true);
+      }
     }
 
     // Playback-Rate Shortcuts ('>' = speed up, '<' = speed down)
