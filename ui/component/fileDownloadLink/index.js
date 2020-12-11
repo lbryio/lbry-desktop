@@ -26,7 +26,7 @@ const select = (state, props) => ({
 
 const perform = dispatch => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
-  pause: () => dispatch(doSetPlayingUri(null)),
+  pause: () => dispatch(doSetPlayingUri({ uri: null })),
   download: uri => dispatch(doPlayUri(uri, false, true, () => dispatch(doAnalyticsView(uri)))),
 });
 
