@@ -41,7 +41,7 @@ export default function NotificationHeaderButton(props: Props) {
       onClick={handleMenuClick}
       aria-label={__('Notifications')}
       title={__('Notifications')}
-      className="header__navigation-item menu__title header__navigation-item--icon"
+      className="header__navigation-item menu__title header__navigation-item--icon mobile-hidden"
     >
       <Icon size={18} icon={ICONS.NOTIFICATION} aria-hidden />
       <NotificationBubble />

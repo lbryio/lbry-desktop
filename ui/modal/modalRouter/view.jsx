@@ -41,6 +41,7 @@ import ModalConfirmAge from 'modal/modalConfirmAge';
 import ModalFileSelection from 'modal/modalFileSelection';
 import ModalSyncEnable from 'modal/modalSyncEnable';
 import ModalImageUpload from 'modal/modalImageUpload';
+import ModalMobileSearch from 'modal/modalMobileSearch';
 
 type Props = {
   modal: { id: string, modalProps: {} },
@@ -52,6 +53,8 @@ type Props = {
 function ModalRouter(props: Props) {
   const { modal, error, location, hideModal } = props;
   const { pathname } = location;
+
+  //   return <ModalMobileSearch />;
 
   React.useEffect(() => {
     hideModal();
@@ -146,6 +149,8 @@ function ModalRouter(props: Props) {
       return <ModalImageUpload {...modalProps} />;
     case MODALS.SYNC_ENABLE:
       return <ModalSyncEnable {...modalProps} />;
+    case MODALS.MOBILE_SEARCH:
+      return <ModalMobileSearch {...modalProps} />;
     default:
       return null;
   }
