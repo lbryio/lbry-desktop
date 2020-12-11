@@ -90,13 +90,24 @@ export default function YoutubeTransferStatus(props: Props) {
   return (
     (alwaysShow || (hasChannels && !isYoutubeTransferComplete)) && (
       <Card
-        title={youtubeChannels.length > 1 ? __('Your YouTube channels') : __('Your YouTube channel')}
+        title={
+          isYoutubeTransferComplete
+            ? __('Transfer Complete')
+            : youtubeChannels.length > 1
+            ? __('Your YouTube channels')
+            : __('Your YouTube channel')
+        }
         subtitle={
           <span>
             {hasPendingTransfers &&
               __('Your videos are currently being transferred. There is nothing else for you to do.')}
             {transferEnabled && !hasPendingTransfers && __('Your videos are ready to be transferred.')}
-            {!transferEnabled && !hasPendingTransfers && __('Please check back later. This may take up to 1 week.')}
+            {!transferEnabled &&
+              !hasPendingTransfers &&
+              !isYoutubeTransferComplete &&
+              __('Please check back later. This may take up to 1 week.')}
+
+            {isYoutubeTransferComplete && __('View your channel or choose a new channel to sync.')}
           </span>
         }
         body={
@@ -173,13 +184,19 @@ export default function YoutubeTransferStatus(props: Props) {
         actions={
           <>
             <div className="section__actions">
+              {!isYoutubeTransferComplete && (
+                <Button
+                  button="primary"
+                  disabled={youtubeImportPending || !transferEnabled}
+                  onClick={claimChannels}
+                  label={youtubeChannels.length > 1 ? __('Claim Channels') : __('Claim Channel')}
+                />
+              )}
               <Button
-                button="primary"
-                disabled={youtubeImportPending || !transferEnabled}
-                onClick={claimChannels}
-                label={youtubeChannels.length > 1 ? __('Claim Channels') : __('Claim Channel')}
+                button={isYoutubeTransferComplete ? 'primary' : 'link'}
+                label={__('Explore %SITE_NAME%', { SITE_NAME })}
+                navigate="/"
               />
-              <Button button="link" label={__('Explore %SITE_NAME%', { SITE_NAME })} navigate="/" />
             </div>
 
             <p className="help">
