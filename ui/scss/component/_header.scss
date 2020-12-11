@@ -50,10 +50,6 @@
   > .button:only-child {
     margin-left: auto;
   }
-
-  @media (max-width: $breakpoint-small) {
-    display: none;
-  }
 }
 
 .header__buttons {
@@ -146,20 +142,6 @@
     height: var(--height-button);
     width: var(--height-button);
   }
-
-  @media (max-width: $breakpoint-small) {
-    .button__label {
-      display: none;
-    }
-  }
-}
-
-.header__navigation-item--button-mobile {
-  @media (max-width: $breakpoint-small) {
-    .button__label {
-      display: none;
-    }
-  }
 }
 
 .header__navigation-dropdown {
@@ -200,8 +182,12 @@
 
 .header__center {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   width: 100%;
+
+  @media (min-width: $breakpoint-small) {
+    justify-content: center;
+  }
 }
 
 .header__auth-title {

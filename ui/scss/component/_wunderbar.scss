@@ -5,6 +5,31 @@
   margin-right: var(--spacing-s);
 }
 
+.wunderbar__wrapper--mobile {
+  margin: 0;
+  border-bottom: 1px solid var(--color-border);
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  .wunderbar {
+    flex: 1;
+  }
+
+  .wunderbar__input {
+    font-size: 16px; // https://stackoverflow.com/questions/2989263/disable-auto-zoom-in-input-text-tag-safari-on-iphone
+    background-color: transparent;
+    color: var(--color-text);
+    border-radius: 0;
+    margin-right: var(--spacing-l);
+
+    &:focus {
+      box-shadow: none;
+    }
+  }
+}
+
 .wunderbar {
   cursor: text;
   display: flex;
@@ -13,19 +38,19 @@
   z-index: 1;
   font-size: var(--font-small);
   height: var(--height-input);
-
-  @media (max-width: $breakpoint-small) {
-    max-width: none;
-    margin: 0;
-  }
+  padding-left: var(--spacing-s);
 
   > .icon {
     top: 0;
-    left: var(--spacing-s);
+    left: var(--spacing-m);
     height: 100%;
     position: absolute;
     z-index: 1;
     stroke: var(--color-input-placeholder);
+  }
+
+  @media (min-width: $breakpoint-small) {
+    padding: 0;
   }
 }
 
@@ -73,10 +98,6 @@
   }
 }
 
-.wunderbar__results {
-  margin-left: var(--spacing-xs);
-}
-
 .wunderbar__suggestions {
   z-index: 3;
   position: absolute;
@@ -92,41 +113,48 @@
   margin: 0 var(--spacing-s);
 }
 
+.wunderbar__suggestions--mobile {
+  top: calc(var(--header-height) - var(--spacing-xs));
+  margin-top: var(--spacing-m);
+  padding: 0;
+  overflow: visible;
+}
+
 .wunderbar__top-claim {
   margin-bottom: var(--spacing-m);
 }
 
 .wunderbar__label {
   margin-bottom: var(--spacing-xs);
-  margin-left: var(--spacing-xs);
+  margin-left: var(--spacing-m);
+
+  @media (min-width: $breakpoint-small) {
+    margin-left: var(--spacing-xs);
+  }
 }
 
 .wunderbar__top-separator {
   margin: var(--spacing-s) 0;
-  width: 120%;
-  transform: translateX(-10%);
+  width: 100%;
 }
 
 .wunderbar__suggestion {
   display: flex;
   align-items: center;
-  height: 3rem;
+  padding: var(--spacing-s) 0;
+  margin-left: var(--spacing-m);
 
   .media__thumb {
     flex-shrink: 0;
-    $width: 3rem;
+    $width: 5rem;
     @include handleClaimListGifThumbnail($width);
     width: $width;
     height: calc(#{$width} * (9 / 16));
     margin-right: var(--spacing-s);
+  }
 
-    @media (min-width: $breakpoint-small) {
-      $width: 5rem;
-      @include handleClaimListGifThumbnail($width);
-      width: $width;
-      height: calc(#{$width} * (9 / 16));
-      margin-right: var(--spacing-xs);
-    }
+  @media (min-width: $breakpoint-small) {
+    margin-left: var(--spacing-s);
   }
 }
 
@@ -157,17 +185,25 @@
 
 .wunderbar__more-results {
   margin-top: var(--spacing-xs);
+  margin-left: var(--spacing-m);
+  margin-bottom: var(--spacing-l);
+
+  @media (min-width: $breakpoint-small) {
+    margin-left: var(--spacing-s);
+  }
 }
 
 .wunderbar__placeholder-suggestion {
-  padding: var(--spacing-xs);
+  margin-bottom: var(--spacing-s);
+
+  @media (min-width: $breakpoint-small) {
+    padding: var(--spacing-s);
+  }
 }
 
 .wunderbar__placeholder-label {
   width: 30%;
   height: 1rem;
-  margin-left: var(--spacing-xs);
-  margin-bottom: var(--spacing-m);
   margin-top: var(--spacing-xs);
   @include placeholder;
 }
@@ -185,8 +221,25 @@
   @include placeholder;
 }
 
-[data-reach-combobox-option] {
+.wunderbar__mobile-search {
+  @extend .button--alt;
+  @extend .header__navigation-item--icon;
   padding: var(--spacing-xs);
+
+  .button__label {
+    color: var(--color-input-placeholder);
+    opacity: 0.4;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    &:focus {
+      box-shadow: none;
+    }
+  }
+}
+
+[data-reach-combobox-option] {
+  padding: 0;
   border-radius: var(--border-radius);
 
   &:hover {

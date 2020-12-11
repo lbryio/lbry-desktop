@@ -7,7 +7,7 @@ import useThrottle from './use-throttle';
 export default function useLighthouse(query: string, showMature?: boolean, size?: number = 5) {
   const [results, setResults] = React.useState();
   const [loading, setLoading] = React.useState();
-  const queryString = getSearchQueryString(query, { nsfw: showMature, size });
+  const queryString = query ? getSearchQueryString(query, { nsfw: showMature, size }) : '';
   const throttledQuery = useThrottle(queryString, 500);
 
   React.useEffect(() => {
