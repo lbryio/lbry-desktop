@@ -197,7 +197,7 @@
   margin-bottom: var(--spacing-s);
 
   @media (min-width: $breakpoint-small) {
-    padding: var(--spacing-s);
+    padding-left: 0;
   }
 }
 

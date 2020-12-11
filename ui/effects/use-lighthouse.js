@@ -15,15 +15,22 @@ export default function useLighthouse(query: string, showMature?: boolean, size?
       setLoading(true);
       setResults(null);
 
+      let isSubscribed = true;
       lighthouse
         .search(throttledQuery)
         .then(results => {
-          setResults(results.map(result => `lbry://${result.name}#${result.claimId}`));
-          setLoading(false);
+          if (isSubscribed) {
+            setResults(results.map(result => `lbry://${result.name}#${result.claimId}`));
+            setLoading(false);
+          }
         })
         .catch(() => {
           setLoading(false);
         });
+
+      return () => {
+        isSubscribed = false;
+      };
     }
   }, [throttledQuery]);
 
