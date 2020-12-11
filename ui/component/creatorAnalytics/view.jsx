@@ -221,7 +221,7 @@ export default function CreatorAnalytics(props: Props) {
           {stats.VideoURITopCommentNew && stats.VideoCommentTopCommentNew > 0 && (
             <Card
               className="section"
-              title={__('Most Commented Recent Content')}
+              title={__('Most commented recent content')}
               body={
                 <React.Fragment>
                   <div className="card--inline">
