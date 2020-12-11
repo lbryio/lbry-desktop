@@ -92,7 +92,7 @@ export default function YoutubeTransferStatus(props: Props) {
       <Card
         title={
           isYoutubeTransferComplete
-            ? __('Transfer Complete')
+            ? __('Transfer complete')
             : youtubeChannels.length > 1
             ? __('Your YouTube channels')
             : __('Your YouTube channel')
