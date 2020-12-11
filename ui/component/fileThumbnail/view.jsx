@@ -8,7 +8,7 @@ import classnames from 'classnames';
 
 const THUMBNAIL_HEIGHT = 180;
 const THUMBNAIL_WIDTH = 320;
-const THUMBNAIL_QUALITY = 100;
+const THUMBNAIL_QUALITY = 80;
 
 type Props = {
   uri: string,
