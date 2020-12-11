@@ -1504,5 +1504,6 @@
   "Now following %channel%!": "Now following %channel%!",
   "Turn Back On": "Turn Back On",
   "Turn Off": "Turn Off",
+  "Syncing %total_videos% videos from your channel with %total_subs% subscriptions.": "Syncing %total_videos% videos from your channel with %total_subs% subscriptions.",
   "--end--": "--end--"
 }

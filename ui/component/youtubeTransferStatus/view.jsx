@@ -102,7 +102,13 @@ export default function YoutubeTransferStatus(props: Props) {
         body={
           <section>
             {youtubeChannels.map((channel, index) => {
-              const { lbry_channel_name: channelName, channel_claim_id: claimId, sync_status: syncStatus } = channel;
+              const {
+                lbry_channel_name: channelName,
+                channel_claim_id: claimId,
+                sync_status: syncStatus,
+                total_subs: totalSubs,
+                total_videos: totalVideos,
+              } = channel;
               const url = buildURI({ channelName, channelClaimId: claimId });
               const transferState = getMessage(channel);
               const isWaitingForSync =
@@ -141,6 +147,12 @@ export default function YoutubeTransferStatus(props: Props) {
                             ) : (
                               <Icon icon={ICONS.COMPLETED} className="progress__complete-icon--completed" />
                             )}
+                          </div>
+                          <div className="help--inline">
+                            {__('Syncing %total_videos% videos from your channel with %total_subs% subscriptions.', {
+                              total_videos: totalVideos,
+                              total_subs: totalSubs,
+                            })}
                           </div>
                           <div className="progress__item">
                             {__('Claim your channel')}
