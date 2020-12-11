@@ -223,6 +223,10 @@ textarea {
   &:not(:last-child) {
     margin-bottom: var(--spacing-s);
   }
+
+  .button--link ~ .button--link {
+    margin-left: var(--spacing-s);
+  }
 }
 
 .help--warning {
