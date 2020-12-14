@@ -111,6 +111,7 @@ exports.generateShareUrl = (
   }
 
   const urlParamsString = urlParams.toString();
-  const url = `${domain}/${lbryWebUrl}` + (urlParamsString === '' ? '' : `?${urlParamsString}`);
+
+  const url = `${domain}/${encodeURIComponent(lbryWebUrl)}` + (urlParamsString === '' ? '' : `?${urlParamsString}`);
   return url;
 };
