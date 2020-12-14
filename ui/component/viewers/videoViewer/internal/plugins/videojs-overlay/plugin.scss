@@ -1,0 +1,85 @@
+.video-js {
+  $bottom: 3.5em;
+  $nudge: 5px;
+  $middle: 50%;
+  $offset-h: -16.5%;
+  $offset-v: -15px;
+
+  .vjs-overlay {
+    color: #fff;
+    position: absolute;
+    text-align: center;
+  }
+
+  .vjs-overlay-no-background {
+    max-width: 33%;
+  }
+
+  .vjs-overlay-background {
+    // IE8
+    background-color: #646464;
+    background-color: rgba(255, 255, 255, 0.4);
+    border-radius: round($nudge / 2);
+    padding: $nudge * 2;
+    width: 33%;
+  }
+
+  .vjs-overlay-top-left {
+    top: $nudge;
+    left: $nudge;
+  }
+
+  .vjs-overlay-top {
+    left: $middle;
+    margin-left: $offset-h;
+    top: $nudge;
+  }
+
+  .vjs-overlay-top-right {
+    right: $nudge;
+    top: $nudge;
+  }
+
+  .vjs-overlay-right {
+    right: $nudge;
+    top: $middle;
+    transform: translateY(-50%);
+  }
+
+  .vjs-overlay-bottom-right {
+    bottom: $bottom;
+    right: $nudge;
+  }
+
+  .vjs-overlay-bottom {
+    bottom: $bottom;
+    left: $middle;
+    margin-left: $offset-h;
+  }
+
+  .vjs-overlay-bottom-left {
+    bottom: $bottom;
+    left: $nudge;
+  }
+
+  .vjs-overlay-left {
+    left: $nudge;
+    top: $middle;
+    transform: translateY(-50%);
+  }
+
+  .vjs-overlay-center {
+    left: $middle;
+    margin-left: $offset-h;
+    top: $middle;
+    transform: translateY(-50%);
+  }
+
+  // Fallback for IE8 and IE9
+  .vjs-no-flex .vjs-overlay-left,
+  .vjs-no-flex .vjs-overlay-center,
+  .vjs-no-flex .vjs-overlay-right {
+    margin-top: $offset-v;
+  }
+}
+
