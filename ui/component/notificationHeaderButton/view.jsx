@@ -8,25 +8,25 @@ import Button from 'component/button';
 import { useHistory } from 'react-router';
 
 type Props = {
-  unreadCount: number,
-  doReadNotifications: () => void,
+  unseenCount: number,
+  doSeeAllNotifications: () => void,
   user: ?User,
 };
 
 export default function NotificationHeaderButton(props: Props) {
   const {
-    unreadCount,
+    unseenCount,
     // notifications,
     // fetching,
-    doReadNotifications,
+    doSeeAllNotifications,
     user,
   } = props;
   const notificationsEnabled = user && user.experimental_ui;
   const { push } = useHistory();
 
   function handleMenuClick() {
-    if (unreadCount > 0) {
-      doReadNotifications();
+    if (unseenCount > 0) {
+      doSeeAllNotifications();
     }
 
     push(`/$/${PAGES.NOTIFICATIONS}`);

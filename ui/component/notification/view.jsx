@@ -21,14 +21,14 @@ type Props = {
   notification: WebNotification,
   menuButton: boolean,
   children: any,
-  doSeeNotifications: ([number]) => void,
+  doReadNotifications: ([number]) => void,
   doDeleteNotification: number => void,
 };
 
 export default function Notification(props: Props) {
-  const { notification, menuButton = false, doSeeNotifications, doDeleteNotification } = props;
+  const { notification, menuButton = false, doReadNotifications, doDeleteNotification } = props;
   const { push } = useHistory();
-  const { notification_rule, notification_parameters, is_seen, id } = notification;
+  const { notification_rule, notification_parameters, is_read, id } = notification;
   const isCommentNotification =
     notification_rule === NOTIFICATIONS.NOTIFICATION_COMMENT || notification_rule === NOTIFICATIONS.NOTIFICATION_REPLY;
   const commentText = isCommentNotification && notification_parameters.dynamic.comment;
@@ -83,8 +83,8 @@ export default function Notification(props: Props) {
   }
 
   function handleNotificationClick() {
-    if (!is_seen) {
-      doSeeNotifications([id]);
+    if (!is_read) {
+      doReadNotifications([id]);
     }
 
     if (notificationLink) {
@@ -92,9 +92,9 @@ export default function Notification(props: Props) {
     }
   }
 
-  function handleSeeNotification(e) {
+  function handleReadNotification(e) {
     e.stopPropagation();
-    doSeeNotifications([id]);
+    doReadNotifications([id]);
   }
 
   const Wrapper = menuButton
@@ -111,7 +111,7 @@ export default function Notification(props: Props) {
       )
     : (props: { children: any }) => (
         <span
-          className={is_seen ? 'menu__link--notification-nolink' : 'menu__link--notification'}
+          className={is_read ? 'menu__link--notification-nolink' : 'menu__link--notification'}
           onClick={handleNotificationClick}
         >
           {props.children}
@@ -122,7 +122,7 @@ export default function Notification(props: Props) {
     <Wrapper>
       <div
         className={classnames('notification__wrapper', {
-          'notification__wrapper--unseen': !is_seen,
+          'notification__wrapper--unread': !is_read,
         })}
       >
         <div className="notification__icon">{icon}</div>
@@ -157,7 +157,7 @@ export default function Notification(props: Props) {
           </div>
 
           <div className="notification__extra">
-            {!is_seen && <Button className="notification__mark-seen" onClick={handleSeeNotification} />}
+            {!is_read && <Button className="notification__mark-seen" onClick={handleReadNotification} />}
             <div className="notification__time">
               <DateTime timeAgo date={notification.active_at} />
             </div>

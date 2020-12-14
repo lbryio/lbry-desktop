@@ -22,10 +22,10 @@ export default function NotificationsPage(props: Props) {
   const hasNotifications = notifications.length > 0;
 
   React.useEffect(() => {
-    if (unreadCount > 0) {
-      doReadNotifications();
+    if (unseenCount > 0) {
+      doSeeAllNotifications();
     }
-  }, [unreadCount, doReadNotifications]);
+  }, [unseenCount, doSeeAllNotifications]);
 
   return (
     <Page>
@@ -46,10 +46,10 @@ export default function NotificationsPage(props: Props) {
                 </span>
               }
               titleActions={
-                unseenCount > 0 && (
+                unreadCount > 0 && (
                   <Button
                     icon={ICONS.EYE}
-                    onClick={doSeeAllNotifications}
+                    onClick={doReadNotifications}
                     button="secondary"
                     label={__('Mark all as read')}
                   />
