@@ -72,6 +72,10 @@ export default function WunderBarSuggestions(props: Props) {
   }
 
   function handleSelect(value) {
+    if (!value) {
+      return;
+    }
+
     const includesLbryTvProd = value.includes(WEB_PROD_PREFIX);
     const includesLbryTvLocal = value.includes(WEB_LOCAL_PREFIX);
     const includesLbryTvDev = value.includes(WEB_DEV_PREFIX);
