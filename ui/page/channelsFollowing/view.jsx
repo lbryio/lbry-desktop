@@ -23,6 +23,7 @@ function ChannelsFollowingPage(props: Props) {
   ) : (
     <Page noFooter fullWidthPage={tileLayout}>
       <ClaimListDiscover
+        hideAdvancedFilter
         tileLayout={tileLayout}
         headerLabel={
           <span>

@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 import {
   doResolveUri,
   makeSelectClaimIsPending,
@@ -6,8 +7,8 @@ import {
   makeSelectThumbnailForUri,
   makeSelectIsUriResolving,
   selectMyChannelClaims,
-  makeSelectMyChannelPermUrlForName,
-  makeSelectChannelPermUrlForClaimUri,
+  // makeSelectMyChannelPermUrlForName,
+  //   makeSelectChannelPermUrlForClaimUri,
 } from 'lbry-redux';
 import { doCommentAbandon, doCommentUpdate, doCommentPin, doCommentList } from 'redux/actions/comments';
 import { doToggleBlockChannel } from 'redux/actions/blocked';
@@ -21,6 +22,23 @@ import {
   selectCommentChannel,
 } from 'redux/selectors/comments';
 import Comment from './view';
+
+export const makeSelectMyChannelPermUrlForName = name =>
+  createSelector(selectMyChannelClaims, claims => {
+    const matchingClaim = claims && claims.find(claim => claim.name === name);
+    return matchingClaim ? matchingClaim.permanent_url : null;
+  });
+
+export const makeSelectChannelPermUrlForClaimUri = (uri, includePrefix = false) =>
+  createSelector(makeSelectClaimForUri(uri), claim => {
+    if (claim && claim.value_type === 'channel') {
+      return claim.permanent_url;
+    }
+    if (!claim || !claim.signing_channel || !claim.is_channel_signature_valid) {
+      return null;
+    }
+    return claim.signing_channel.permanent_url;
+  });
 
 const select = (state, props) => {
   const channel = selectCommentChannel(state);

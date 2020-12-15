@@ -38,7 +38,7 @@ export default function SearchPage(props: Props) {
     onFeedbackNegative,
     location,
     isSearching,
-    showNsfw,
+    //  showNsfw,
     isAuthenticated,
     searchOptions,
   } = props;
@@ -47,7 +47,7 @@ export default function SearchPage(props: Props) {
   const urlQuery = urlParams.get('q') || '';
   const additionalOptions: AdditionalOptions = { isBackgroundSearch: false };
 
-  additionalOptions['nsfw'] = showNsfw;
+  additionalOptions['nsfw'] = false;
 
   const modifiedUrlQuery = urlQuery
     .trim()
@@ -105,21 +105,23 @@ export default function SearchPage(props: Props) {
                 SHOW_ADS && IS_WEB ? (SIMPLE_SITE ? false : !isAuthenticated && <Ads small type={'video'} />) : false
               }
               headerAltControls={
-                <>
-                  <span>{__('Find what you were looking for?')}</span>
-                  <Button
-                    button="alt"
-                    description={__('Yes')}
-                    onClick={() => onFeedbackPositive(urlQuery)}
-                    icon={ICONS.YES}
-                  />
-                  <Button
-                    button="alt"
-                    description={__('No')}
-                    onClick={() => onFeedbackNegative(urlQuery)}
-                    icon={ICONS.NO}
-                  />
-                </>
+                !SIMPLE_SITE && (
+                  <>
+                    <span>{__('Find what you were looking for?')}</span>
+                    <Button
+                      button="alt"
+                      description={__('Yes')}
+                      onClick={() => onFeedbackPositive(urlQuery)}
+                      icon={ICONS.YES}
+                    />
+                    <Button
+                      button="alt"
+                      description={__('No')}
+                      onClick={() => onFeedbackNegative(urlQuery)}
+                      icon={ICONS.NO}
+                    />
+                  </>
+                )
               }
             />
             {isSearching && new Array(5).fill(1).map((x, i) => <ClaimPreview key={i} placeholder="loading" />)}

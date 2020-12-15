@@ -7,6 +7,8 @@ import {
   makeSelectMetadataForUri,
   makeSelectClaimIsNsfw,
   SETTINGS,
+  makeSelectClaimIsMine,
+  makeSelectClaimForUri,
 } from 'lbry-redux';
 import { makeSelectCostInfoForUri, doFetchCostInfoForUri } from 'lbryinc';
 import { selectShowMatureContent, makeSelectClientSetting } from 'redux/selectors/settings';
@@ -28,6 +30,8 @@ const select = (state, props) => {
     fileInfo: makeSelectFileInfoForUri(props.uri)(state),
     renderMode: makeSelectFileRenderModeForUri(props.uri)(state),
     videoTheaterMode: makeSelectClientSetting(SETTINGS.VIDEO_THEATER_MODE)(state),
+    claim: makeSelectClaimForUri(props.uri)(state),
+    claimIsMine: makeSelectClaimIsMine(props.uri)(state),
   };
 };
 

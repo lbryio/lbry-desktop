@@ -54,8 +54,9 @@ type VideoJSOptions = {
   preload: string,
   playbackRates: Array<number>,
   responsive: boolean,
-  poster?: string,
-  muted?: boolean,
+  poster: ?string,
+  muted: ?boolean,
+  sources: Array<{ src: string, type: string }>,
 };
 
 const videoPlaybackRates = [0.25, 0.5, 0.75, 1, 1.1, 1.25, 1.5, 1.75, 2];
@@ -65,7 +66,7 @@ const IS_IOS =
     (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) &&
   !window.MSStream;
 
-const VIDEO_JS_OPTIONS: VideoJSOptions = {
+const VIDEO_JS_OPTIONS = {
   preload: 'auto',
   playbackRates: videoPlaybackRates,
   responsive: true,
@@ -264,9 +265,11 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     }
   }
 
-  function onEnded() {
-    showTapButton(TAP.NONE);
-  }
+  const onEnded = React.useCallback(() => {
+    if (!adUrl) {
+      showTapButton(TAP.NONE);
+    }
+  }, [adUrl]);
 
   function handleKeyDown(e: KeyboardEvent) {
     const player = playerRef.current;
