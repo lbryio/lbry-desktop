@@ -62,6 +62,41 @@ function PublishName(props: Props) {
     setNameError(nameError);
   }, [name, blurred]);
 
+  const namePart = (
+    <>
+      <fieldset-group class="fieldset-group--smushed fieldset-group--disabled-prefix">
+        <fieldset-section>
+          <label>{__('Name')}</label>
+          <div className="form-field__prefix">{`odysee.com/${
+            !channel || channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW ? '' : `${channel}/`
+          }`}</div>
+        </fieldset-section>
+        <FormField
+          type="text"
+          name="content_name"
+          value={name}
+          disabled={disabled}
+          error={hasFocused && hasBlurred && nameError}
+          onChange={handleNameChange}
+          onFocus={() => setHasFocused(true)}
+          onBlur={() => setHasBlurred(true)}
+        />
+      </fieldset-group>
+      <div className="form-field__help">
+        <NameHelpText
+          uri={uri}
+          isStillEditing={isStillEditing}
+          myClaimForUri={myClaimForUri}
+          onEditMyClaim={editExistingClaim}
+        />
+      </div>
+    </>
+  );
+
+  if (nameOnly) {
+    return namePart;
+  }
+
   return (
     <>
       <fieldset-group class="fieldset-group--smushed fieldset-group--disabled-prefix">

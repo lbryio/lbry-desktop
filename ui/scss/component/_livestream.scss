@@ -1,0 +1,121 @@
+.livestream {
+  flex: 1;
+  width: 100%;
+  padding-top: var(--aspect-ratio-standard);
+  position: relative;
+  border-radius: var(--border-radius);
+
+  iframe {
+    overflow: hidden;
+    border-radius: var(--border-radius);
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+}
+
+.livestream__discussion {
+  height: 0%;
+  width: 100%;
+  margin-top: var(--spacing-m);
+
+  @media (min-width: $breakpoint-small) {
+    width: 35rem;
+    margin-left: var(--spacing-m);
+    margin-top: 0;
+  }
+}
+
+.livestream__comments-wrapper {
+  overflow-y: scroll;
+}
+
+.livestream__comments-wrapper--with-height {
+  height: 48vh;
+}
+
+.livestream__comments {
+  display: flex;
+  flex-direction: column-reverse;
+  font-size: var(--font-small);
+}
+
+.livestream__comment {
+  margin-top: var(--spacing-s);
+  display: flex;
+  flex-wrap: wrap;
+
+  > :first-child {
+    margin-right: var(--spacing-s);
+  }
+}
+
+.livestream__comment-author {
+  font-weight: var(--font-weight-bold);
+  color: #888;
+}
+
+.livestream__comment-author--streamer {
+  color: var(--color-primary);
+}
+
+.livestream__comment-create {
+  margin-top: var(--spacing-s);
+}
+
+.livestream__channel-link {
+  margin-bottom: var(--spacing-xl);
+  box-shadow: 0 0 0 rgba(246, 72, 83, 0.4);
+  animation: livePulse 2s infinite;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+@keyframes livePulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(246, 72, 83, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(246, 72, 83, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(246, 72, 83, 0);
+  }
+}
+
+.livestream__publish-checkbox {
+  margin: var(--spacing-l) 0;
+
+  .checkbox,
+  .radio {
+    margin-top: var(--spacing-m);
+
+    label {
+      color: #444;
+    }
+  }
+}
+
+.livestream__creator-message {
+  background-color: #fde68a;
+  padding: var(--spacing-m);
+  color: black;
+  border-radius: var(--border-radius);
+
+  h4 {
+    font-weight: bold;
+    font-size: var(--font-small);
+    margin-bottom: var(--spacing-s);
+  }
+}
+
+.livestream__emoji-actions {
+  > *:not(:last-child) {
+    margin-right: var(--spacing-s);
+  }
+}

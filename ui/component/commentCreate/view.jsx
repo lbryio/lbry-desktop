@@ -7,9 +7,18 @@ import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
 import SelectChannel from 'component/selectChannel';
 import usePersistedState from 'effects/use-persisted-state';
-import { FF_MAX_CHARS_IN_COMMENT } from 'constants/form-field';
+import { FF_MAX_CHARS_IN_COMMENT, FF_MAX_CHARS_IN_LIVESTREAM_COMMENT } from 'constants/form-field';
 import { useHistory } from 'react-router';
 import type { ElementRef } from 'react';
+import emoji from 'emoji-dictionary';
+
+const LIVESTREAM_EMOJIS = [
+  emoji.getUnicode('rocket'),
+  emoji.getUnicode('jeans'),
+  emoji.getUnicode('fire'),
+  emoji.getUnicode('heart'),
+  emoji.getUnicode('open_mouth'),
+];
 
 type Props = {
   uri: string,
@@ -23,8 +32,12 @@ type Props = {
   parentId: string,
   isReply: boolean,
   isPostingComment: boolean,
-  activeChannel: string,
   activeChannelClaim: ?ChannelClaim,
+  setCommentChannel: string => void,
+  bottom: boolean,
+  onSubmit: (string, string) => void,
+  livestream: boolean,
+  authenticated: boolean,
 };
 
 export function CommentCreate(props: Props) {
@@ -40,9 +53,17 @@ export function CommentCreate(props: Props) {
     parentId,
     isPostingComment,
     activeChannelClaim,
+    setCommentChannel,
+    onSubmit,
+    bottom,
+    livestream,
+    authenticated,
   } = props;
   const buttonref: ElementRef<any> = React.useRef();
-  const { push } = useHistory();
+  const {
+    push,
+    location: { pathname },
+  } = useHistory();
   const { claim_id: claimId } = claim;
   const [commentValue, setCommentValue] = React.useState('');
   const [charCount, setCharCount] = useState(commentValue.length);
@@ -63,7 +84,7 @@ export function CommentCreate(props: Props) {
 
   function altEnterListener(e: SyntheticKeyboardEvent<*>) {
     const KEYCODE_ENTER = 13;
-    if ((e.ctrlKey || e.metaKey) && e.keyCode === KEYCODE_ENTER) {
+    if ((livestream || e.ctrlKey || e.metaKey) && e.keyCode === KEYCODE_ENTER) {
       e.preventDefault();
       buttonref.current.click();
     }
@@ -97,9 +118,16 @@ export function CommentCreate(props: Props) {
 
   useEffect(() => setCharCount(commentValue.length), [commentValue]);
 
-  if (!hasChannels) {
+  if (!authenticated || !hasChannels) {
     return (
-      <div role="button" onClick={() => push(`/$/${PAGES.CHANNEL_NEW}`)}>
+      <div
+        role="button"
+        onClick={() =>
+          authenticated
+            ? push(`/$/${PAGES.CHANNEL_NEW}?redirect=${pathname}`)
+            : push(`/$/${PAGES.AUTH}?redirect=${pathname}`)
+        }
+      >
         <FormField
           type="textarea"
           name={'comment_signup_prompt'}
@@ -107,7 +135,7 @@ export function CommentCreate(props: Props) {
           label={isFetchingChannels ? __('Comment') : undefined}
         />
         <div className="section__actions">
-          <Button disabled button="primary" label={__('Post --[button to submit something]--')} requiresAuth={IS_WEB} />
+          <Button disabled button="primary" label={__('Post --[button to submit something]--')} />
         </div>
       </div>
     );
@@ -119,6 +147,7 @@ export function CommentCreate(props: Props) {
       className={classnames('comment__create', {
         'comment__create--reply': isReply,
         'comment__create--nested-reply': isNested,
+        'comment__create--bottom': bottom,
       })}
     >
       <FormField
@@ -142,9 +171,30 @@ export function CommentCreate(props: Props) {
         charCount={charCount}
         onChange={handleCommentChange}
         autoFocus={isReply}
-        textAreaMaxLength={FF_MAX_CHARS_IN_COMMENT}
+        textAreaMaxLength={livestream ? FF_MAX_CHARS_IN_LIVESTREAM_COMMENT : FF_MAX_CHARS_IN_COMMENT}
       />
-      <div className="section__actions section__actions--no-margin">
+      {livestream && hasChannels && (
+        <div className="livestream__emoji-actions">
+          {LIVESTREAM_EMOJIS.map(emoji => (
+            <Button
+              key={emoji}
+              disabled={isPostingComment}
+              type="button"
+              button="alt"
+              className="button--emoji"
+              label={emoji}
+              onClick={() => {
+                setCommentValue(commentValue ? `${commentValue} ${emoji}` : emoji);
+              }}
+            />
+          ))}
+        </div>
+      )}
+      <div
+        className={classnames('section__actions', {
+          'section__actions--no-margin': !livestream,
+        })}
+      >
         <Button
           ref={buttonref}
           button="primary"

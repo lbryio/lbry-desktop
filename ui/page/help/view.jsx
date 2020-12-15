@@ -1,4 +1,5 @@
 // @flow
+import { SITE_NAME } from 'config';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import * as React from 'react';
@@ -128,19 +129,13 @@ class HelpPage extends React.PureComponent<Props, State> {
     return (
       <Page className="card-stack">
         <Card
-          title={__('Read the FAQ')}
-          subtitle={__('Our FAQ answers many common questions.')}
+          title={__('Visit the %SITE_NAME% Help Hub', { SITE_NAME })}
+          subtitle={__('Our support posts answer many common questions.')}
           actions={
             <div className="section__actions">
               <Button
-                href="https://lbry.com/faq/lbry-basics"
-                label={__('Read the App Basics FAQ')}
-                icon={ICONS.HELP}
-                button="secondary"
-              />
-              <Button
-                href="https://lbry.com/faq"
-                label={__('View all LBRY FAQs')}
+                href="https://odysee.com/@OdyseeHelp:b"
+                label={__('View %SITE_NAME% Help Hub', { SITE_NAME })}
                 icon={ICONS.HELP}
                 button="secondary"
               />
@@ -153,13 +148,13 @@ class HelpPage extends React.PureComponent<Props, State> {
           subtitle={
             <I18nMessage tokens={{ channel: <strong>#help</strong> }}>
               Live help is available most hours in the %channel% channel of our Discord chat room. Or you can always
-              email us at help@lbry.com.
+              email us at help@odysee.com.
             </I18nMessage>
           }
           actions={
             <div className="section__actions">
               <Button button="secondary" label={__('Join Our Chat')} icon={ICONS.CHAT} href="https://chat.lbry.com" />
-              <Button button="secondary" label={__('Email Us')} icon={ICONS.WEB} href="mailto:help@lbry.com" />
+              <Button button="secondary" label={__('Email Us')} icon={ICONS.WEB} href="mailto:help@odysee.com" />
             </div>
           }
         />
@@ -209,7 +204,6 @@ class HelpPage extends React.PureComponent<Props, State> {
         />
 
         <WalletBackup />
-        {/* @endif */}
 
         <Card
           title={__('About --[About section in Help Page]--')}
@@ -294,6 +288,7 @@ class HelpPage extends React.PureComponent<Props, State> {
             </div>
           }
         />
+        {/* @endif */}
       </Page>
     );
   }

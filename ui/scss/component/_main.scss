@@ -105,6 +105,7 @@
 
     @media (max-width: $breakpoint-small) {
       margin-left: 0;
+      margin-top: var(--spacing-s);
     }
 
     @media (max-width: $breakpoint-medium) {
@@ -158,6 +159,10 @@
       flex-direction: row;
     }
   }
+}
+
+.main--livestream {
+  margin-top: var(--spacing-m);
 }
 
 .main--full-width {

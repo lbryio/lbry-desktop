@@ -73,9 +73,9 @@ function PublishFile(props: Props) {
   const [userOptimize, setUserOptimize] = usePersistedState('publish-file-user-optimize', false);
 
   const RECOMMENDED_BITRATE = 6000000;
-  const TV_PUBLISH_SIZE_LIMIT: number = 2147483648;
+  const TV_PUBLISH_SIZE_LIMIT: number = 4294967296;
   const UPLOAD_SIZE_MESSAGE = __(
-    '%SITE_NAME% uploads are limited to 2 GB. Download the app for unrestricted publishing.',
+    '%SITE_NAME% uploads are limited to 4 GB. Download the app for unrestricted publishing.',
     { SITE_NAME }
   );
   const PROCESSING_MB_PER_SECOND = 0.5;
@@ -196,7 +196,7 @@ function PublishFile(props: Props) {
       return (
         <p className="help">
           {__(
-            'For video content, use MP4s in H264/AAC format and a friendly bitrate (under 5 Mbps) and resolution (720p) for more reliable streaming. %SITE_NAME% uploads are restricted to 2 GB.',
+            'For video content, use MP4s in H264/AAC format and a friendly bitrate (under 5 Mbps) and resolution (720p) for more reliable streaming. %SITE_NAME% uploads are restricted to 4 GB.',
             { SITE_NAME }
           )}{' '}
           <Button button="link" label={__('Upload Guide')} href="https://lbry.com/faq/video-publishing-guide" />
@@ -333,7 +333,7 @@ function PublishFile(props: Props) {
       className={disabled || balance === 0 ? 'card--disabled' : ''}
       title={
         <div>
-          {header}
+          {__('Upload')}
           {publishing && <Spinner type={'small'} />}
           {inProgress && (
             <div>
@@ -346,6 +346,7 @@ function PublishFile(props: Props) {
       actions={
         <React.Fragment>
           <PublishName />
+
           <FormField
             type="text"
             name="content_title"
@@ -355,14 +356,17 @@ function PublishFile(props: Props) {
             value={title}
             onChange={handleTitleChange}
           />
-          {isPublishFile && (
-            <FileSelector
-              label={__('File')}
-              disabled={disabled}
-              currentPath={currentFile}
-              onFileChosen={handleFileChange}
-            />
-          )}
+
+          <FileSelector
+            disabled={disabled}
+            currentPath={currentFile}
+            onFileChosen={handleFileChange}
+            // https://stackoverflow.com/questions/19107685/safari-input-type-file-accept-video-ignores-mp4-files
+            accept="video/mp4,video/x-m4v,video/*"
+            placeholder={__('Select video file to upload')}
+          />
+          {getMessage()}
+
           {isPublishPost && (
             <PostEditor
               label={__('Post --[noun, markdown post tab button]--')}
@@ -373,7 +377,7 @@ function PublishFile(props: Props) {
               setCurrentFileType={setCurrentFileType}
             />
           )}
-          {isPublishFile && getMessage()}
+
           {/* @if TARGET='app' */}
           {isPublishFile && (
             <FormField
@@ -410,6 +414,8 @@ function PublishFile(props: Props) {
             </p>
           )}
           {/* @endif */}
+
+          <PublishName nameOnly autoPopulateName={autoPopulateName} setAutoPopulateName={setAutoPopulateName} />
         </React.Fragment>
       }
     />

@@ -33,6 +33,10 @@ $thumbnailWidthSmall: 0rem;
   position: relative;
 }
 
+.comment__create--bottom {
+  padding-bottom: 0;
+}
+
 .comment {
   display: flex;
   flex-direction: column;

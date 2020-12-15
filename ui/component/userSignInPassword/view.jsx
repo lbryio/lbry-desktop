@@ -1,4 +1,5 @@
 // @flow
+import { SITE_NAME } from 'config';
 import React, { useState } from 'react';
 import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
@@ -36,7 +37,7 @@ export default function UserSignInPassword(props: Props) {
         <UserPasswordReset />
       ) : (
         <Card
-          title={__('Enter Your lbry.tv Password')}
+          title={__('Enter your %SITE_NAME% password', { SITE_NAME })}
           subtitle={__('Logging in as %email%', { email: emailToVerify })}
           actions={
             <Form onSubmit={handleSubmit} className="section">

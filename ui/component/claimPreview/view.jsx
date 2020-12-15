@@ -71,6 +71,7 @@ type Props = {
   wrapperElement?: string,
   hideRepostLabel?: boolean,
   repostUrl?: string,
+  livestream?: boolean,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -120,6 +121,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     includeSupportAction,
     renderActions,
     // repostUrl,
+    livestream,
   } = props;
   const WrapperElement = wrapperElement || 'li';
   const shouldFetch =
@@ -211,6 +213,10 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
       onClick(e);
     }
 
+    if (livestream) {
+      return;
+    }
+
     if (claim && !pending) {
       history.push(navigateUrl);
     }
@@ -296,7 +302,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                     </div>
                   )}
                   {/* @endif */}
-                  {!isRepost && !isChannelUri && (
+                  {!isRepost && !isChannelUri && !livestream && (
                     <div className="claim-preview__file-property-overlay">
                       <FileProperties uri={contentUri} small />
                     </div>

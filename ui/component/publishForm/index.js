@@ -12,6 +12,7 @@ import {
   doPrepareEdit,
   doCheckPublishNameAvailability,
   SETTINGS,
+  selectMyChannelClaims,
 } from 'lbry-redux';
 import { doPublishDesktop } from 'redux/actions/publish';
 import { selectUnclaimedRewardValue } from 'redux/selectors/rewards';

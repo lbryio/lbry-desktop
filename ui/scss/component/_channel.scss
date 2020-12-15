@@ -102,6 +102,7 @@ $metadata-z-index: 1;
 .channel-thumbnail__custom {
   width: 100%;
   object-fit: cover;
+  font-size: 1px; // To hide the alt text on firefox;
 }
 
 .channel-thumbnail__default {
