@@ -11,7 +11,7 @@ import Icon from 'component/common/icon';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import Tooltip from 'component/common/tooltip';
 import NavigationButton from 'component/navigationButton';
-import { LOGO_TITLE } from 'config';
+// import { LOGO_TITLE } from 'config';
 import { useIsMobile } from 'effects/use-screensize';
 import NotificationBubble from 'component/notificationBubble';
 import NotificationHeaderButton from 'component/notificationHeaderButton';
@@ -20,6 +20,8 @@ import ChannelThumbnail from 'component/channelThumbnail';
 import { remote } from 'electron';
 import { IS_MAC } from 'component/app/view';
 // @endif
+import OdyseeLogoWithWhiteText from './odysee_white.png';
+import OdyseeLogoWithText from './odysee.png';
 
 type Props = {
   user: ?User,
@@ -85,7 +87,6 @@ const Header = (props: Props) => {
     sidebarOpen,
     setSidebarOpen,
     isAbsoluteSideNavHidden,
-    user,
     hideCancel,
     myChannels,
     commentChannel,
@@ -98,7 +99,6 @@ const Header = (props: Props) => {
   const isPwdResetPage = history.location.pathname.includes(PAGES.AUTH_PASSWORD_RESET);
   const hasBackout = Boolean(backout);
   const { backLabel, backNavDefault, title: backTitle, simpleTitle: simpleBackTitle } = backout || {};
-  const notificationsEnabled = (user && user.experimental_ui) || false;
   let channelUrl;
   let identityChannel;
   if (myChannels && myChannels.length >= 1) {
@@ -212,6 +212,7 @@ const Header = (props: Props) => {
                 className="header__navigation-item menu__title header__navigation-item--balance"
                 label={getWalletTitle()}
                 icon={ICONS.LBC}
+                iconSize={20}
                 // @if TARGET='app'
                 onDoubleClick={e => {
                   e.stopPropagation();
@@ -237,29 +238,22 @@ const Header = (props: Props) => {
                     icon={ICONS.MENU}
                     onClick={() => setSidebarOpen(!sidebarOpen)}
                   >
-                    {isAbsoluteSideNavHidden && isMobile && notificationsEnabled && <NotificationBubble />}
+                    {isAbsoluteSideNavHidden && isMobile && <NotificationBubble />}
                   </Button>
                 </span>
               )}
               <Button
-                className="header__navigation-item header__navigation-item--lbry"
-                // @if TARGET='app'
-                label={'LBRY'}
-                // @endif
-                // @if TARGET='web'
-                label={LOGO_TITLE} // eslint-disable-line
-                // @endif
-                icon={ICONS.LBRY}
+                className="header__navigation-item header__navigation-item--lbry header__navigation-item--button-mobile"
                 onClick={() => {
                   if (history.location.pathname === '/') window.location.reload();
                 }}
-                // @if TARGET='app'
-                onDoubleClick={e => {
-                  e.stopPropagation();
-                }}
-                // @endif
                 {...homeButtonNavigationProps}
-              />
+              >
+                <img
+                  src={currentTheme === 'light' ? OdyseeLogoWithText : OdyseeLogoWithWhiteText}
+                  className="header__odysee"
+                />
+              </Button>
 
               {!authHeader && (
                 <div className="header__center">
@@ -276,7 +270,7 @@ const Header = (props: Props) => {
 
                   <HeaderMenuButtons
                     authenticated={authenticated}
-                    notificationsEnabled={notificationsEnabled}
+                    notificationsEnabled
                     history={history}
                     handleThemeToggle={handleThemeToggle}
                     currentTheme={currentTheme}
@@ -390,6 +384,10 @@ function HeaderMenuButtons(props: HeaderMenuButtonProps) {
             <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.CHANNEL_NEW}`)}>
               <Icon aria-hidden icon={ICONS.CHANNEL} />
               {__('New Channel')}
+            </MenuItem>
+            <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.YOUTUBE_SYNC}`)}>
+              <Icon aria-hidden icon={ICONS.YOUTUBE} />
+              {__('Sync YouTube Channel')}
             </MenuItem>
           </MenuList>
         </Menu>

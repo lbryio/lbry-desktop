@@ -41,10 +41,22 @@ const buildIcon = (iconStrokes: React$Node, customSvgValues = {}) =>
 
 export const icons = {
   // The LBRY icon is different from the base icon set so don't use buildIcon()
+  //   [ICONS.LBRY]: (props) => (
+  //     <svg stroke="currentColor" fill="currentColor" x="0px" y="0px" viewBox="0 0 322 254" className="icon lbry-icon">
+  //       <path d="M296,85.9V100l-138.8,85.3L52.6,134l0.2-7.9l104,51.2L289,96.1v-5.8L164.2,30.1L25,116.2v38.5l131.8,65.2 l137.6-84.4l3.9,6l-141.1,86.4L18.1,159.1v-46.8l145.8-90.2C163.9,22.1,296,85.9,296,85.9z" />
+  //       <path d="M294.3,150.9l2-12.6l-12.2-2.1l0.8-4.9l17.1,2.9l-2.8,17.5L294.3,150.9L294.3,150.9z" />
+  //     </svg>
+  //   ),
   [ICONS.LBRY]: () => (
     <svg stroke="currentColor" fill="currentColor" x="0px" y="0px" viewBox="0 0 322 254" className="icon lbry-icon">
-      <path d="M296,85.9V100l-138.8,85.3L52.6,134l0.2-7.9l104,51.2L289,96.1v-5.8L164.2,30.1L25,116.2v38.5l131.8,65.2 l137.6-84.4l3.9,6l-141.1,86.4L18.1,159.1v-46.8l145.8-90.2C163.9,22.1,296,85.9,296,85.9z" />
-      <path d="M294.3,150.9l2-12.6l-12.2-2.1l0.8-4.9l17.1,2.9l-2.8,17.5L294.3,150.9L294.3,150.9z" />
+      <g transform="scale(5, 5) translate(5)">
+        <circle fill="#4785d2" cx="28" cy="28" r="28" />
+        <circle fill="white" cx="28" cy="28" r="13" />
+        <circle fill="#4785d2" cx="28" cy="28" r="9" />
+        <circle fill="white" cx="28" cy="28" r="5" />
+        <circle fill="#4785d2" cx="28" cy="28" r="3" />
+        <circle fill="white" cx="28" cy="28" r="1" />
+      </g>
     </svg>
   ),
   [ICONS.LBC]: (props: IconProps) => {
@@ -370,15 +382,52 @@ export const icons = {
       <line x1="7" y1="7" x2="7" y2="7" />
     </g>
   ),
-  [ICONS.SUPPORT]: buildIcon(
-    <g>
-      <polyline points="20 12 20 22 4 22 4 12" />
-      <rect x="2" y="7" width="20" height="5" />
-      <line x1="12" y1="22" x2="12" y2="7" />
-      <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
-      <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
-    </g>
+  [ICONS.SUPPORT]: (props: CustomProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 -1 24 26"
+      width={props.size || '22'}
+      height={props.size || '22'}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <g>
+        <path
+          d="M23.5,8 C23.5,12.142 20.143,15.5 16,15.5 C11.858,15.5 8.5,12.142 8.5,8 C8.5,3.858 11.858,0.5 16,0.5 C20.143,0.5 23.5,3.858 23.5,8 L23.5,8 Z"
+          id="Stroke-1155"
+        />
+        <line x1="15.5" y1="11" x2="15.5" y2="12" id="Stroke-1156" />
+        <line x1="15.5" y1="4" x2="15.5" y2="5" id="Stroke-1157" />
+        <path
+          d="M14,9.5 C14,10.328 14.672,11 15.5,11 C16.328,11 17,10.328 17,9.5 C17,8.671 16.328,8 15.5,8 C14.672,8 14,7.328 14,6.5 C14,5.671 14.672,5 15.5,5 C16.328,5 17,5.671 17,6.5"
+          id="Stroke-1158"
+        />
+        <line x1="7.5" y1="19" x2="7.5" y2="20" id="Stroke-1159" />
+        <line x1="7.5" y1="12" x2="7.5" y2="13" id="Stroke-1160" />
+        <path
+          d="M6,17.5 C6,18.328 6.672,19 7.5,19 C8.328,19 9,18.328 9,17.5 C9,16.671 8.328,16 7.5,16 C6.672,16 6,15.328 6,14.5 C6,13.671 6.672,13 7.5,13 C8.328,13 9,13.671 9,14.5"
+          id="Stroke-1161"
+        />
+        <path
+          d="M8.5264,8.5264 C4.0674,8.2254 0.5004,11.7464 0.5004,16.0004 C0.5004,20.1424 3.8584,23.5004 8.0004,23.5004 C12.2494,23.5004 15.7734,19.9404 15.4734,15.4734"
+          id="Stroke-1162"
+        />
+      </g>
+    </svg>
   ),
+  //   [ICONS.SUPPORT]: buildIcon(
+  //     <g>
+  //       <polyline points="20 12 20 22 4 22 4 12" />
+  //       <rect x="2" y="7" width="20" height="5" />
+  //       <line x1="12" y1="22" x2="12" y2="7" />
+  //       <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
+  //       <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
+  //     </g>
+  //   ),
   [ICONS.EYE]: buildIcon(
     <g>
       <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
@@ -828,6 +877,219 @@ export const icons = {
       <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" />
     </g>
   ),
+  [ICONS.SCIENCE]: (props: CustomProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="-3 0 24 24"
+      width={props.size || '16'}
+      height={props.size || '18'}
+      fill="none"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M0.767018182,20.022 C0.300109091,20.6874545 0.243381818,21.558 0.618654545,22.2801818 C0.995018182,23.0012727 1.7412,23.454 2.55501818,23.454 L14.8997455,23.454 C15.7135636,23.454 16.4597455,23.0012727 16.8350182,22.2801818 C17.2113818,21.558 17.1535636,20.6874545 16.6877455,20.022 L11.4546545,11.454 L11.4546545,2.72672727 L6.00010909,2.72672727 L6.00010909,11.454 L0.767018182,20.022 L0.767018182,20.022 Z" />
+      <path d="M13.6363636,1.63636364 C13.6363636,2.23963636 13.1487273,2.72727273 12.5454545,2.72727273 L4.90909091,2.72727273 C4.30581818,2.72727273 3.81818182,2.23963636 3.81818182,1.63636364 C3.81818182,1.03309091 4.30581818,0.545454545 4.90909091,0.545454545 L12.5454545,0.545454545 C13.1487273,0.545454545 13.6363636,1.03309091 13.6363636,1.63636364 L13.6363636,1.63636364 Z" />
+      <line x1="11.4545455" y1="4.90909091" x2="9.27272727" y2="4.90909091" id="Stroke-8219" strokeLinecap="round" />
+      <line x1="11.4545455" y1="9.27272727" x2="9.27272727" y2="9.27272727" id="Stroke-8220" strokeLinecap="round" />
+      <line x1="11.4545455" y1="7.09090909" x2="8.18181818" y2="7.09090909" id="Stroke-8221" strokeLinecap="round" />
+      <line x1="3.27272727" y1="15.8181818" x2="14.1818182" y2="15.8181818" id="Stroke-8222" />
+      <path
+        d="M13.0909091,21.2727273 C13.0909091,21.5738182 12.8465455,21.8181818 12.5454545,21.8181818 C12.2443636,21.8181818 12,21.5738182 12,21.2727273 C12,20.9716364 12.2443636,20.7272727 12.5454545,20.7272727 C12.8465455,20.7272727 13.0909091,20.9716364 13.0909091,21.2727273 L13.0909091,21.2727273 Z"
+        id="Stroke-8223"
+        strokeLinecap="round"
+      />
+      <path
+        d="M10.3636364,18.2727273 C10.3636364,18.4232727 10.2414545,18.5454545 10.0909091,18.5454545 C9.94036364,18.5454545 9.81818182,18.4232727 9.81818182,18.2727273 C9.81818182,18.1221818 9.94036364,18 10.0909091,18 C10.2414545,18 10.3636364,18.1221818 10.3636364,18.2727273 L10.3636364,18.2727273 Z"
+        id="Stroke-8224"
+        strokeLinecap="round"
+      />
+      <path
+        d="M7.63636364,19.6363636 C7.63636364,20.5396364 6.90327273,21.2727273 6,21.2727273 C5.09672727,21.2727273 4.36363636,20.5396364 4.36363636,19.6363636 C4.36363636,18.7330909 5.09672727,18 6,18 C6.90327273,18 7.63636364,18.7330909 7.63636364,19.6363636 L7.63636364,19.6363636 Z"
+        id="Stroke-8225"
+        strokeLinecap="round"
+      />
+    </svg>
+  ),
+  [ICONS.TECH]: (props: CustomProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="-5 0 24 24"
+      width={props.size || '16'}
+      height={props.size || '18'}
+      fill="none"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path
+        d="M13.5005,21.5 C13.5005,22.604 12.6055,23.5 11.5005,23.5 L2.5005,23.5 C1.3955,23.5 0.5005,22.604 0.5005,21.5 L0.5005,2.5 C0.5005,1.396 1.3955,0.5 2.5005,0.5 L11.5005,0.5 C12.6055,0.5 13.5005,1.396 13.5005,2.5 L13.5005,21.5 L13.5005,21.5 Z"
+        id="Stroke-5155"
+        strokeLinecap="round"
+      />
+      <line x1="13.5005" y1="19.5" x2="0.5005" y2="19.5" id="Stroke-5156" strokeLinecap="round" />
+      <line x1="13.5005" y1="4.5" x2="0.5005" y2="4.5" id="Stroke-5157" strokeLinecap="round" />
+      <line x1="4.5005" y1="2.5" x2="9.5005" y2="2.5" id="Stroke-5158" strokeLinecap="round" />
+      <path
+        d="M7.0005,22 C6.7245,22 6.5005,21.776 6.5005,21.5 C6.5005,21.224 6.7245,21 7.0005,21 C7.2765,21 7.5005,21.224 7.5005,21.5 C7.5005,21.776 7.2765,22 7.0005,22 L7.0005,22 Z"
+        id="Stroke-5159"
+      />
+    </svg>
+  ),
+  [ICONS.NEWS]: (props: CustomProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width={props.size || '16'}
+      height={props.size || '18'}
+      fill="none"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <line x1="3.5" y1="3.5" x2="14.5" y2="3.5" id="Stroke-6102" />
+      <polygon id="Stroke-6103" points="3.5 12.5 8.5 12.5 8.5 6.5 3.5 6.5" />
+      <line x1="11.5" y1="8.5" x2="14.5" y2="8.5" id="Stroke-6104" />
+      <line x1="10.5" y1="10.5" x2="14.5" y2="10.5" id="Stroke-6105" />
+      <line x1="10.5" y1="12.5" x2="14.5" y2="12.5" id="Stroke-6106" />
+      <line x1="3.5" y1="14.5" x2="14.5" y2="14.5" id="Stroke-6107" />
+      <line x1="3.5" y1="16.5" x2="14.5" y2="16.5" id="Stroke-6108" />
+      <line x1="3.5" y1="18.5" x2="14.5" y2="18.5" id="Stroke-6109" />
+      <path
+        d="M19.5,5.5 L21.5,5.5 L21.5,20.5 C21.5,21.052 21.053,21.5 20.5,21.5 C19.948,21.5 19.5,21.052 19.5,20.5 L19.5,2 L17.5,2 L17.5,4"
+        id="Stroke-6110"
+      />
+      <path
+        d="M20.5,23.5 L3.5,23.5 C1.844,23.5 0.5,22.157 0.5,20.5 L0.5,0.5 L17.5,0.5 L17.5,20.5 C17.5,22.157 18.844,23.5 20.5,23.5 C22.157,23.5 23.5,22.157 23.5,20.5 L23.5,3.5 L19.5,3.5"
+        id="Stroke-6111"
+      />
+    </svg>
+  ),
+  [ICONS.FINANCE]: buildIcon(
+    <g>
+      <line x1="12" y1="1" x2="12" y2="23" />
+      <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+    </g>
+  ),
+  [ICONS.RABBIT_HOLE]: (props: CustomProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width={props.size || '16'}
+      height={props.size || '18'}
+      fill="none"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <polygon id="Stroke-7926" points="0.5 22.5205 12 0.5205 23.5 22.5205" />
+      <path
+        d="M14,15.5205 C14,16.6245 13.104,17.5205 12,17.5205 C10.896,17.5205 10,16.6245 10,15.5205 C10,14.4155 10.896,13.5205 12,13.5205 C13.104,13.5205 14,14.4155 14,15.5205 L14,15.5205 Z"
+        id="Stroke-7927"
+      />
+      <path
+        d="M18.666,15.5205 C18.666,15.5205 16.666,19.5205 12,19.5205 C7.334,19.5205 5.334,15.5205 5.334,15.5205 C5.334,15.5205 7.334,11.5205 12,11.5205 C16.666,11.5205 18.666,15.5205 18.666,15.5205 L18.666,15.5205 Z"
+        id="Stroke-7928"
+      />
+    </svg>
+  ),
+  [ICONS.ENLIGHTENMENT]: (props: CustomProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="-1 0 24 24"
+      width={props.size || '16'}
+      height={props.size || '18'}
+      fill="none"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path
+        d="M8.9258,14.3311 C2.4228,14.3311 3.0138,8.4191 3.0138,8.4191 C10.1078,8.4191 8.9258,14.3311 8.9258,14.3311 L8.9258,14.3311 Z"
+        id="Stroke-5653"
+      />
+      <path
+        d="M13.0732,14.3311 C19.5762,14.3311 18.9852,8.4191 18.9852,8.4191 C11.8912,8.4191 13.0732,14.3311 13.0732,14.3311 L13.0732,14.3311 Z"
+        id="Stroke-5654"
+      />
+      <path
+        d="M21.4995,10 C21.4995,16.352 13.9995,23 10.9995,23 C7.9995,23 0.4995,16.352 0.4995,10 C0.4995,3.648 4.6475,0.5 10.9995,0.5 C17.3505,0.5 21.4995,3.648 21.4995,10 L21.4995,10 Z"
+        id="Stroke-5655"
+      />
+    </svg>
+  ),
+  [ICONS.GAMING]: (props: CustomProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="-2 -1 24 26"
+      width={props.size || '18'}
+      height={props.size || '16'}
+      fill="none"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <g>
+        <path
+          d="M17.5,9 C17.5,4.307 13.694,0.5 9,0.5 C4.306,0.5 0.5,4.307 0.5,9 L0.5,22.5 C0.5,23.051 0.95,23.5 1.5,23.5 L2,23.5 C2.551,23.5 3,23.051 3,22.5 C3,21.951 3.45,21.5 4,21.5 C4.551,21.5 5,21.951 5,22.5 C5,23.051 5.45,23.5 6,23.5 L7,23.5 C7.551,23.5 8,23.051 8,22.5 C8,21.951 8.45,21.5 9,21.5 C9.551,21.5 10,21.951 10,22.5 C10,23.051 10.45,23.5 11,23.5 L12,23.5 C12.551,23.5 13,23.051 13,22.5 C13,21.951 13.45,21.5 14,21.5 C14.551,21.5 15,21.951 15,22.5 C15,23.051 15.45,23.5 16,23.5 L16.5,23.5 C17.051,23.5 17.5,23.051 17.5,22.5 L17.5,9 L17.5,9 Z"
+          id="Stroke-939"
+        />
+        <path
+          d="M13.5,12 C13.5,12.826 12.825,13.5 12,13.5 C11.176,13.5 10.5,12.826 10.5,12 L10.5,9 C10.5,8.176 11.176,7.5 12,7.5 C12.825,7.5 13.5,8.176 13.5,9 L13.5,12 L13.5,12 Z"
+          id="Stroke-940"
+        />
+        <path
+          d="M11.5,11 C11.5,11.277 11.276,11.5 11,11.5 C10.724,11.5 10.5,11.277 10.5,11 C10.5,10.725 10.724,10.5 11,10.5 C11.276,10.5 11.5,10.725 11.5,11 L11.5,11 Z"
+          id="Stroke-941"
+        />
+        <path
+          d="M7.5,12 C7.5,12.826 6.825,13.5 6,13.5 C5.176,13.5 4.5,12.826 4.5,12 L4.5,9 C4.5,8.176 5.176,7.5 6,7.5 C6.825,7.5 7.5,8.176 7.5,9 L7.5,12 L7.5,12 Z"
+          id="Stroke-942"
+        />
+        <path
+          d="M5.5,11 C5.5,11.277 5.276,11.5 5,11.5 C4.724,11.5 4.5,11.277 4.5,11 C4.5,10.725 4.724,10.5 5,10.5 C5.276,10.5 5.5,10.725 5.5,11 L5.5,11 Z"
+          id="Stroke-943"
+        />
+      </g>
+    </svg>
+  ),
+  [ICONS.COMMUNITY]: (props: CustomProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="-2 -1 24 26"
+      width={props.size || '18'}
+      height={props.size || '18'}
+      fill="none"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <g>
+        <path
+          d="M0.5,5 L0.5,8 C0.5,12.694 3.806,16.5 8.5,16.5 C13.194,16.5 16.5,12.694 16.5,8 L16.5,5"
+          id="Stroke-8485"
+        />
+        <path
+          d="M12,0.5 C14.485,0.5 16.5,2.515 16.5,5 C16.5,7.485 14.485,9.5 12,9.5 L5,9.5 C2.515,9.5 0.5,7.485 0.5,5 C0.5,2.515 2.515,0.5 5,0.5 L12,0.5 L12,0.5 Z"
+          id="Stroke-8486"
+        />
+        <path d="M5.1758,15.7891 C6.0938,12.1251 8.6878,10.1561 11.9998,9.5001" id="Stroke-8487" />
+        <path d="M7.25,9.5 C5.316,9.5 3.75,7.934 3.75,6 C3.75,4.066 5.316,2.5 7.25,2.5 L10.5,2.5" id="Stroke-8488" />
+        <path d="M10,0.5 C11.934,0.5 13.5,2.066 13.5,4 C13.5,5.934 11.934,7.5 10,7.5 L7,7.5" id="Stroke-8489" />
+        <line x1="8.5" y1="16.5" x2="8.5" y2="23.5" id="Stroke-8490" />
+        <line x1="8.5" y1="19.5" x2="11" y2="19.5" id="Stroke-8491" />
+        <line x1="8.5" y1="22.5" x2="6" y2="22.5" id="Stroke-8492" />
+        <path d="M9.5,5 C8.119,5 7,6.119 7,7.5" id="Stroke-8493" />
+      </g>
+    </svg>
+  ),
   [ICONS.UPVOTE]: buildIcon(
     <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
   ),
@@ -1002,7 +1264,7 @@ export const icons = {
     <svg
       {...props}
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="-6 0 26 24"
+      viewBox="0 0 26 24"
       width={props.size || '18'}
       height={props.size || '18'}
       fill="none"
@@ -1013,6 +1275,331 @@ export const icons = {
     >
       <path d="m 5.8585986,19.685492 v 3.415632 c 0,0.269439 0.2185945,0.487951 0.4879486,0.487951 H 18.086586 c 0.270325,0 0.487946,-0.218539 0.45867,-0.487951 v -3.415632 z" />
       <path d="m 18.089706,2.6673324 c -0.458672,0 -0.914415,0.081053 -1.342833,0.2381801 -0.726068,-1.5175206 -2.625165,-2.67785413 -4.515474,-2.67785413 -1.902023,0 -3.8128297,1.16033353 -4.5408481,2.67785413 C 7.2621303,2.7483855 6.8063878,2.6673324 6.348691,2.6673324 c -2.1528256,0 -3.9045598,1.7507491 -3.9045598,3.9035835 0,2.0230385 1.4648199,3.6410591 3.4146614,3.8752841 v 8.262918 h 2.9276892 v -3.415632 c 0.00968,-0.26944 0.2273915,-0.487951 0.4977084,-0.487951 0.2693563,0 0.4879486,0.218539 0.4879486,0.487951 v 3.415632 h 1.9420352 v -4.391535 c 0,-0.269439 0.217626,-0.487951 0.487948,-0.487951 0.269357,0 0.487946,0.218539 0.487946,0.487951 v 4.391535 h 1.951795 v -3.415632 c 0.01964,-0.26944 0.238125,-0.487951 0.507465,-0.487951 0.270325,0 0.487949,0.218539 0.468432,0.487951 v 3.415632 h 2.927689 V 10.4462 c 1.980095,-0.234307 3.445891,-1.8522456 3.445891,-3.8752841 0,-2.1528344 -1.750758,-3.9035835 -3.901634,-3.9035835" />
+    </svg>
+  ),
+  [ICONS.WILD_WEST]: buildIcon(
+    <g transform="matrix(1,0,0,1,0,0)">
+      <path
+        d="M12.546,23.25H11.454A10.7,10.7,0,0,1,2.161,7.235L3.75,4.453V2.25A1.5,1.5,0,0,1,5.25.75h3a1.5,1.5,0,0,1,1.5,1.5v3a2.988,2.988,0,0,1-.4,1.488L7.37,10.211a4.7,4.7,0,0,0,4.084,7.039h1.092a4.7,4.7,0,0,0,4.084-7.039L14.646,6.738a2.988,2.988,0,0,1-.4-1.488v-3a1.5,1.5,0,0,1,1.5-1.5h3a1.5,1.5,0,0,1,1.5,1.5v2.2l1.589,2.782A10.7,10.7,0,0,1,12.546,23.25Z"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M12,19.875a.375.375,0,0,1,.375.375"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M11.625,20.25A.375.375,0,0,1,12,19.875"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M12,20.625a.375.375,0,0,1-.375-.375"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M12.375,20.25a.375.375,0,0,1-.375.375"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M17.813,17.313a.375.375,0,0,1,.529-.024"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M17.836,17.843a.376.376,0,0,1-.023-.53"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M18.366,17.819a.375.375,0,0,1-.53.024"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M18.342,17.289a.375.375,0,0,1,.024.53"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M19.843,11.294a.376.376,0,0,1,.34-.407"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M20.25,11.634a.375.375,0,0,1-.407-.34"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M20.59,11.227a.374.374,0,0,1-.34.407"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M20.183,10.887a.375.375,0,0,1,.407.34"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M6.187,17.313a.375.375,0,0,0-.529-.024"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M6.164,17.843a.376.376,0,0,0,.023-.53"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M5.634,17.819a.375.375,0,0,0,.53.024"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M5.658,17.289a.375.375,0,0,0-.024.53"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M4.157,11.294a.376.376,0,0,0-.34-.407"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M3.75,11.634a.375.375,0,0,0,.407-.34"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M3.41,11.227a.374.374,0,0,0,.34.407"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M3.817,10.887a.375.375,0,0,0-.407.34"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+      />
+      <path d="M20.25 4.5L18 4.5" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" />
+      <path d="M6 4.5L3.75 4.5" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" />
+    </g>
+  ),
+  [ICONS.PEACE]: (props: CustomProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width={props.size || '18'}
+      height={props.size || '16'}
+      fill="none"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <g transform="matrix(1,0,0,1,0,0)">
+        <path
+          d="M0.500 12.000 A11.500 11.500 0 1 0 23.500 12.000 A11.500 11.500 0 1 0 0.500 12.000 Z"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M13.5,3.642a8.5,8.5,0,0,1,6.24,11.877L13.5,9.354Z"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M13.5,13.6l4.471,4.455A8.529,8.529,0,0,1,13.5,20.365Z"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M4.33,15.549,10.5,9.354V3.635A8.517,8.517,0,0,0,3.5,12,7.583,7.583,0,0,0,4.33,15.549Z"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M10.5,20.364a8.543,8.543,0,0,1-4.463-2.306L10.5,13.6Z"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
+    </svg>
+  ),
+  [ICONS.UNIVERSE]: (props: CustomProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 25 24"
+      width={props.size || '18'}
+      height={props.size || '16'}
+      fill="none"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <g transform="matrix(1,0,0,1,0,0)">
+        <path
+          d="M5.33,17.848A9.545,9.545,0,0,1,16.466,2.488"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M1.982,17.78C.769,19.905.363,21.554,1.048,22.24c1.04,1.039,4.294-.43,8.062-3.418"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M13.423,18.067l-3.58-3.58L17.8,6.53A5.054,5.054,0,0,1,20.153,5.2L22.2,4.686a.844.844,0,0,1,1.023,1.023l-.512,2.048a5.059,5.059,0,0,1-1.332,2.352Z"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M9.843,14.487,6.911,13.51a.422.422,0,0,1-.165-.7l1.022-1.022a3.383,3.383,0,0,1,3.462-.817l1.6.532Z"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M13.423,18.067,14.4,21a.422.422,0,0,0,.7.165l1.022-1.022a3.383,3.383,0,0,0,.817-3.462l-.532-1.6Z"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
+    </svg>
+  ),
+  [ICONS.CHEESE]: (props: CustomProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 25 24"
+      width={props.size || '18'}
+      height={props.size || '16'}
+      fill="none"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <g transform="matrix(1,0,0,1,0,0)">
+        <path
+          d="M18.500 12.639 A1.500 1.500 0 1 0 21.500 12.639 A1.500 1.500 0 1 0 18.500 12.639 Z"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M5.000 14.139 A1.000 1.000 0 1 0 7.000 14.139 A1.000 1.000 0 1 0 5.000 14.139 Z"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M9.000 18.139 A2.000 2.000 0 1 0 13.000 18.139 A2.000 2.000 0 1 0 9.000 18.139 Z"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M23.5,8.493V19.761a1,1,0,0,1-.871.991l-21,2.74A1,1,0,0,1,.5,22.5a1.045,1.045,0,0,1,.686-.982A2,2,0,0,0,.5,17.639V11.945a1,1,0,0,1,.339-.751L12.709.749a1,1,0,0,1,.7-.248C17.854.674,23.5,3.642,23.5,8.493"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path d="M23.5 8.493L0.616 11.478" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+        <path
+          d="M18,17.389a.25.25,0,1,1-.25.25.25.25,0,0,1,.25-.25"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M13.5,12.889a.25.25,0,1,1-.25.25.25.25,0,0,1,.25-.25"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
+    </svg>
+  ),
+  [ICONS.PORK_BUN]: (props: CustomProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 25 24"
+      width={props.size || '18'}
+      height={props.size || '16'}
+      fill="none"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <g transform="matrix(1,0,0,1,0,0)">
+        <path
+          d="M11.247,5.3a1,1,0,0,1,1.507,0C15.378,8.3,23.5,11.518,23.5,16.5c0,5.706-5.794,7-11.5,7S.5,22.206.5,16.5C.5,11.518,8.623,8.3,11.247,5.3Z"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path d="M10,9.874a13.068,13.068,0,0,1-2.559,2.12" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M14,9.874a13.068,13.068,0,0,0,2.559,2.12" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M12 10.5L12 12.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M6,.5C4.5,2,7.5,3,6,4.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M18,.5c1.5,1.5-1.5,2.5,0,4" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      </g>
     </svg>
   ),
 };

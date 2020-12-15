@@ -221,10 +221,10 @@ textarea {
   margin-top: var(--spacing-s);
 
   &:not(:last-child) {
-    margin-bottom: var(--spacing-s);
+    margin-bottom: var(--spacing-l);
   }
 
-  .button--link ~ .button--link {
+  .button--link + .button--link {
     margin-left: var(--spacing-s);
   }
 
@@ -395,4 +395,39 @@ textarea {
 .adspruce-bannerspot {
   height: 5rem;
   width: 100%;
+}
+
+.no-evil {
+  text-align: center;
+  font-size: var(--font-title);
+  font-family: 'Times New Roman', Times, serif;
+  font-weight: 700;
+  line-height: 0.7;
+  font-size: 2rem;
+
+  .no-evil--red {
+    color: #db4437;
+  }
+  .no-evil--blue {
+    color: #4285f4;
+  }
+  .no-evil--yellow {
+    color: #f4b400;
+  }
+  .no-evil--green {
+    color: #0f9d58;
+  }
+}
+
+.home__meme {
+  text-align: center;
+  font-weight: bold;
+  line-height: 1;
+  font-size: 1rem;
+  margin-bottom: var(--spacing-m);
+
+  @media (min-width: $breakpoint-small) {
+    font-size: 1.2rem;
+    margin-bottom: var(--spacing-l);
+  }
 }

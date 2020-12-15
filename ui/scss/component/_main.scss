@@ -105,6 +105,7 @@
 
     @media (max-width: $breakpoint-small) {
       margin-left: 0;
+      margin-top: var(--spacing-s);
     }
 
     @media (max-width: $breakpoint-medium) {

@@ -5,7 +5,7 @@ import { isNameValid } from 'lbry-redux';
 import { FormField } from 'component/common/form';
 import NameHelpText from './name-help-text';
 import BidHelpText from './bid-help-text';
-import Card from 'component/common/card';
+// import Card from 'component/common/card';
 import LbcSymbol from 'component/common/lbc-symbol';
 
 type Props = {
@@ -23,6 +23,7 @@ type Props = {
   updatePublishForm: ({}) => void,
   autoPopulateName: boolean,
   setAutoPopulateName: boolean => void,
+  nameOnly: boolean,
 };
 
 function PublishName(props: Props) {
@@ -41,9 +42,12 @@ function PublishName(props: Props) {
     balance,
     autoPopulateName,
     setAutoPopulateName,
+    nameOnly,
   } = props;
   const [nameError, setNameError] = useState(undefined);
   const [bidError, setBidError] = useState(undefined);
+  const [hasFocused, setHasFocused] = useState(false);
+  const [hasBlurred, setHasBlurred] = useState(false);
   const previousBidAmount = myClaimForUri && Number(myClaimForUri.amount);
 
   function editExistingClaim() {
@@ -63,7 +67,7 @@ function PublishName(props: Props) {
   useEffect(() => {
     const hasName = name && name.trim() !== '';
     // Enable name autopopulation from title
-    if (!hasName && !autoPopulateName) {
+    if (!hasName && !autoPopulateName && setAutoPopulateName) {
       setAutoPopulateName(true);
     }
   }, [name, autoPopulateName, setAutoPopulateName]);
@@ -99,56 +103,61 @@ function PublishName(props: Props) {
     updatePublishForm({ bidError: bidError });
   }, [bid, previousBidAmount, balance, updatePublishForm]);
 
+  const namePart = (
+    <>
+      <fieldset-group class="fieldset-group--smushed fieldset-group--disabled-prefix">
+        <fieldset-section>
+          <label>{__('Name')}</label>
+          <div className="form-field__prefix">{`odysee.com/${
+            !channel || channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW ? '' : `${channel}/`
+          }`}</div>
+        </fieldset-section>
+        <FormField
+          type="text"
+          name="content_name"
+          value={name}
+          disabled={disabled}
+          error={hasFocused && hasBlurred && nameError}
+          onChange={handleNameChange}
+          onFocus={() => setHasFocused(true)}
+          onBlur={() => setHasBlurred(true)}
+        />
+      </fieldset-group>
+      <div className="form-field__help">
+        <NameHelpText
+          uri={uri}
+          isStillEditing={isStillEditing}
+          myClaimForUri={myClaimForUri}
+          onEditMyClaim={editExistingClaim}
+        />
+      </div>
+    </>
+  );
+
+  if (nameOnly) {
+    return namePart;
+  }
+
   return (
-    <Card
-      actions={
-        <React.Fragment>
-          <fieldset-group class="fieldset-group--smushed fieldset-group--disabled-prefix">
-            <fieldset-section>
-              <label>{__('Name')}</label>
-              <div className="form-field__prefix">{`lbry://${
-                !channel || channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW ? '' : `${channel}/`
-              }`}</div>
-            </fieldset-section>
-            <FormField
-              type="text"
-              name="content_name"
-              value={name}
-              disabled={disabled}
-              error={nameError}
-              onChange={handleNameChange}
-            />
-          </fieldset-group>
-          <div className="form-field__help">
-            <NameHelpText
-              uri={uri}
-              isStillEditing={isStillEditing}
-              myClaimForUri={myClaimForUri}
-              onEditMyClaim={editExistingClaim}
-            />
-          </div>
-          <FormField
-            type="number"
-            name="content_bid"
-            min="0"
-            step="any"
-            placeholder="0.123"
-            className="form-field--price-amount"
-            label={<LbcSymbol postfix={__('Deposit')} size={12} />}
-            value={bid}
-            error={bidError}
-            disabled={!name}
-            onChange={event => updatePublishForm({ bid: parseFloat(event.target.value) })}
-            onWheel={e => e.stopPropagation()}
-            helper={
-              <BidHelpText
-                uri={'lbry://' + name}
-                amountNeededForTakeover={amountNeededForTakeover}
-                isResolvingUri={isResolvingUri}
-              />
-            }
-          />
-        </React.Fragment>
+    <FormField
+      type="number"
+      name="content_bid"
+      min="0"
+      step="any"
+      placeholder="0.123"
+      className="form-field--price-amount"
+      label={<LbcSymbol postfix={__('Deposit')} size={12} />}
+      value={bid}
+      error={bidError}
+      disabled={!name}
+      onChange={event => updatePublishForm({ bid: parseFloat(event.target.value) })}
+      onWheel={e => e.stopPropagation()}
+      helper={
+        <BidHelpText
+          uri={'lbry://' + name}
+          amountNeededForTakeover={amountNeededForTakeover}
+          isResolvingUri={isResolvingUri}
+        />
       }
     />
   );
