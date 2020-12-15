@@ -4,7 +4,7 @@ import Button from 'component/button';
 import { formatLbryUrlForWeb } from 'util/url';
 import { withRouter } from 'react-router';
 import { URL, SITE_NAME } from 'config';
-import * as ICONS from 'constants/icons';
+import OdyseeLogoWithText from 'component/header/odysee_white.png';
 
 type Props = {
   uri: string,
@@ -37,7 +37,9 @@ function FileViewerEmbeddedEnded(props: Props) {
   return (
     <div className="file-viewer__overlay">
       <div className="file-viewer__overlay-secondary">
-        <Button className="file-viewer__overlay-logo" label="LBRY" icon={ICONS.LBRY} href={URL} />
+        <Button className="file-viewer__overlay-logo--videoend" href={URL}>
+          <img src={OdyseeLogoWithText} />
+        </Button>
       </div>
       <div className="file-viewer__overlay-title">{prompt}</div>
       <div className="file-viewer__overlay-actions">
