@@ -14,6 +14,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Fixed
 
+## [0.49.1] - [2020-12-15]
+
+### Fixed
+
+- Sidenav unable to open when on the file page
+- Fix "open external" button to open files on your OS
+
 ## [0.49.0] - [2020-12-10]
 
 ### Added
