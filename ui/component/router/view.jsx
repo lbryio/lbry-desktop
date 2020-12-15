@@ -215,6 +215,7 @@ function AppRouter(props: Props) {
 
       <Route path={`/`} exact component={HomePage} />
       <Route path={`/$/${PAGES.DISCOVER}`} exact component={DiscoverPage} />
+      <Route path={`/$/${PAGES.WILD_WEST}`} exact component={DiscoverPage} />
       {/* $FlowFixMe */}
       {dynamicRoutes.map((dynamicRouteProps: RowDataItem) => (
         <Route

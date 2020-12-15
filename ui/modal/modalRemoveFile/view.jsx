@@ -52,10 +52,8 @@ function ModalRemoveFile(props: Props) {
                 <FormField
                   name="claim_abandon"
                   label={
-                    <I18nMessage
-                      tokens={{ lbc: <LbcSymbol prefix={__('reclaim %amount%', { amount: claim.amount })} /> }}
-                    >
-                      Abandon on blockchain (%lbc%)
+                    <I18nMessage tokens={{ lbc: <LbcSymbol postfix={claim.amount} /> }}>
+                      Abandon on blockchain (reclaim %lbc%)
                     </I18nMessage>
                   }
                   type="checkbox"

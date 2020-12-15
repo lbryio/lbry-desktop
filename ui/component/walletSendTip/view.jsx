@@ -176,7 +176,13 @@ function WalletSendTip(props: Props) {
         />
       ) : (
         <Card
-          title={claimIsMine ? __('Boost your content') : isSupport ? __('Support this content') : __('Support')}
+          title={
+            claimIsMine
+              ? __('Boost your content')
+              : isSupport
+              ? __('Support this content')
+              : __('Support --[button to support a claim]--')
+          }
           subtitle={
             <React.Fragment>
               {isSupport
@@ -291,13 +297,15 @@ function WalletSendTip(props: Props) {
                 <div className="section__actions">
                   <Button
                     autoFocus
-                    icon={isSupport ? undefined : ICONS.SUPPORT}
+                    // icon={isSupport ? undefined : ICONS.SUPPORT}
                     button="primary"
                     type="submit"
                     disabled={fetchingChannels || isPending || tipError || !tipAmount}
                     label={
                       isSupport
-                        ? __('Send Revocable Support')
+                        ? claimIsMine
+                          ? __('Boost This Video')
+                          : __('Send Revocable Support')
                         : __('Send a %amount% Tip', { amount: tipAmount ? `${tipAmount} Credit` : '' })
                     }
                   />

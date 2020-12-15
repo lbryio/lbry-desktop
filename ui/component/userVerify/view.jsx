@@ -60,7 +60,7 @@ class UserVerify extends React.PureComponent<Props> {
                 SITE_NAME,
               }}
             >
-              Verified accounts are eligible to earn LBRY Credits for views, watching and reposting content, sharing
+              Verified accounts are eligible to earn LBRY Credits for views, watching and reposting videos, sharing
               invite links etc. Verifying also helps us keep the %SITE_NAME% community safe too! %Refresh% or %Skip%.
             </I18nMessage>
           </p>
@@ -73,9 +73,7 @@ class UserVerify extends React.PureComponent<Props> {
           <Card
             icon={ICONS.PHONE}
             title={__('Verify phone number')}
-            subtitle={__(
-              'You will receive an SMS text message confirming your phone number is valid. Does not work for Canada and possibly other regions.'
-            )}
+            subtitle={__('You will receive an SMS text message confirming your phone number is valid.')}
             actions={
               <Fragment>
                 <Button
