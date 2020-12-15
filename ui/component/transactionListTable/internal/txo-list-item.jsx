@@ -1,5 +1,6 @@
 // @flow
 import * as ICONS from 'constants/icons';
+import { SITE_NAME } from 'config';
 import React from 'react';
 import ButtonTransaction from 'component/common/transaction-link';
 import CreditAmount from 'component/common/credit-amount';
@@ -83,6 +84,8 @@ class TxoListItem extends React.PureComponent<Props, State> {
       is_my_output: isMyOutput,
     } = txo;
 
+    const isLbryViewReward =
+      txo.signing_channel && txo.signing_channel.channel_id === '74562a01e5836c04040b80bf1f4d685fec02cc90';
     const name = txoListName;
     const isMinus = (type === 'support' || type === 'payment' || type === 'other') && isMyInput && !isMyOutput;
     const isTip = type === 'support' && ((isMyInput && !isMyOutput) || (!isMyInput && isMyOutput));
@@ -111,7 +114,7 @@ class TxoListItem extends React.PureComponent<Props, State> {
 
     return (
       <tr>
-        <td>
+        <td className="table__date">
           {timestamp ? (
             <div>
               <DateTime date={date} show={DateTime.SHOW_DATE} formatOptions={dateFormat} />
@@ -135,6 +138,7 @@ class TxoListItem extends React.PureComponent<Props, State> {
         <td>
           {forClaim && <Button button="link" navigate={uri} label={claimName} disabled={!date} />}
           {!forClaim && reward && <span>{reward.reward_title}</span>}
+          {isLbryViewReward && <span className="help--inline">{__('%SITE_NAME% view reward', { SITE_NAME })}</span>}
         </td>
 
         <td>

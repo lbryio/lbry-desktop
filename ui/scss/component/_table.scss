@@ -115,6 +115,10 @@ th {
   }
 }
 
+.table__date {
+  font-size: var(--font-small);
+}
+
 .table--help {
   td:nth-of-type(1) {
     min-width: 130px;
