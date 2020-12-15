@@ -1,14 +1,10 @@
 // @flow
 import type { Node } from 'react';
-import { THUMBNAIL_CDN_URL } from 'config';
+import { getThumbnailCdnUrl } from 'util/thumbnail';
 import React from 'react';
 import FreezeframeWrapper from './FreezeframeWrapper';
 import Placeholder from './placeholder.png';
 import classnames from 'classnames';
-
-const THUMBNAIL_HEIGHT = 180;
-const THUMBNAIL_WIDTH = 320;
-const THUMBNAIL_QUALITY = 80;
 
 type Props = {
   uri: string,
@@ -45,10 +41,8 @@ function FileThumbnail(props: Props) {
   let url = thumbnail || (hasResolvedClaim ? Placeholder : '');
   // @if TARGET='web'
   // Pass image urls through a compression proxy
-  if (thumbnail && THUMBNAIL_CDN_URL && !thumbnail.includes('https://spee.ch')) {
-    url = `${THUMBNAIL_CDN_URL}${thumbnail}&quality=${THUMBNAIL_QUALITY}&height=${THUMBNAIL_HEIGHT}&width=${THUMBNAIL_WIDTH}`;
-  } else if (thumbnail && thumbnail.includes('https://spee.ch')) {
-    url = `${url}?quality=${THUMBNAIL_QUALITY}&height=${THUMBNAIL_HEIGHT}&width=${THUMBNAIL_WIDTH}`;
+  if (thumbnail) {
+    url = getThumbnailCdnUrl({ thumbnail });
   }
   // @endif
 
