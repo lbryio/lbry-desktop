@@ -16,7 +16,7 @@
 
 .header--minimal {
   box-shadow: none;
-  background-color: transparent;
+  background-color: var(--color-background);
   border-bottom: none;
 }
 
@@ -62,7 +62,6 @@
   justify-content: center;
   align-items: center;
   border-radius: var(--border-radius);
-  color: var(--color-text);
   position: relative;
   font-weight: var(--font-weight-bold);
 
@@ -123,6 +122,7 @@
 
 .header__navigation-item--balance {
   @extend .button--link;
+  color: var(--color-text);
 }
 
 .header__navigation-item--forward {
@@ -136,11 +136,31 @@
 }
 
 .header__navigation-item--lbry {
-  padding: var(--spacing-s);
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  margin-left: var(--spacing-m);
+  margin-right: var(--spacing-m);
 
-  .lbry-icon {
-    height: var(--height-button);
-    width: var(--height-button);
+  @media (max-width: $breakpoint-small) {
+    margin-right: var(--spacing-m);
+    height: 5rem;
+
+    .button__label {
+      display: none;
+    }
+  }
+}
+
+.header__odysee {
+  &:hover {
+    filter: drop-shadow(1px 2px 10px var(--color-gray-3));
+  }
+}
+
+.header--minimal {
+  .header__navigation-item--lbry {
+    height: 3rem;
   }
 }
 

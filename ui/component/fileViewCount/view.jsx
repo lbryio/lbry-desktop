@@ -12,7 +12,6 @@ type Props = {
 function FileViewCount(props: Props) {
   const { claim, uri, fetchViewCount, viewCount } = props;
   const claimId = claim && claim.claim_id;
-
   useEffect(() => {
     if (claimId) {
       fetchViewCount(claimId);
