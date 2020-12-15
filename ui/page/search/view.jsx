@@ -38,17 +38,19 @@ export default function SearchPage(props: Props) {
     onFeedbackNegative,
     location,
     isSearching,
-    showNsfw,
+    //  showNsfw,
     isAuthenticated,
     searchOptions,
   } = props;
   const { push } = useHistory();
   const urlParams = new URLSearchParams(location.search);
   const urlQuery = urlParams.get('q') || '';
-  const additionalOptions: AdditionalOptions = { isBackgroundSearch: false };
-  if (!showNsfw) {
-    additionalOptions['nsfw'] = false;
-  }
+  const additionalOptions: AdditionalOptions = {
+    isBackgroundSearch: false,
+  };
+  //   if (!showNsfw) {
+  additionalOptions['nsfw'] = false;
+  //  }
 
   const modifiedUrlQuery = urlQuery
     .trim()
@@ -104,21 +106,23 @@ export default function SearchPage(props: Props) {
               header={!SIMPLE_SITE && <SearchOptions additionalOptions={additionalOptions} />}
               injectedItem={SHOW_ADS && !isAuthenticated && IS_WEB && <Ads type="video" />}
               headerAltControls={
-                <>
-                  <span>{__('Find what you were looking for?')}</span>
-                  <Button
-                    button="alt"
-                    description={__('Yes')}
-                    onClick={() => onFeedbackPositive(urlQuery)}
-                    icon={ICONS.YES}
-                  />
-                  <Button
-                    button="alt"
-                    description={__('No')}
-                    onClick={() => onFeedbackNegative(urlQuery)}
-                    icon={ICONS.NO}
-                  />
-                </>
+                !SIMPLE_SITE && (
+                  <>
+                    <span>{__('Find what you were looking for?')}</span>
+                    <Button
+                      button="alt"
+                      description={__('Yes')}
+                      onClick={() => onFeedbackPositive(urlQuery)}
+                      icon={ICONS.YES}
+                    />
+                    <Button
+                      button="alt"
+                      description={__('No')}
+                      onClick={() => onFeedbackNegative(urlQuery)}
+                      icon={ICONS.NO}
+                    />
+                  </>
+                )
               }
             />
             {isSearching && new Array(5).fill(1).map((x, i) => <ClaimPreview key={i} placeholder="loading" />)}

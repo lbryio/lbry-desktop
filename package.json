@@ -199,6 +199,7 @@
     "tree-kill": "^1.1.0",
     "unist-util-visit": "^1.4.1",
     "uuid": "^8.3.0",
+    "vast-client": "^3.0.0",
     "video.js": "^7.10.1",
     "videojs-event-tracking": "^1.0.1",
     "villain-react": "^1.0.9",
