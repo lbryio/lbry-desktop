@@ -39,10 +39,12 @@
   align-self: flex-start;
   color: var(--color-text-subtitle);
   font-size: var(--font-small);
+}
 
-  svg {
-    stroke: var(--color-text-subtitle);
-  }
+.media__subtitle--centered {
+  @extend .media__subtitle;
+  align-items: center;
+  display: flex;
 }
 
 .media__subtitle--centered {
@@ -134,4 +136,9 @@
   font-size: var(--font-xxsmall);
   display: flex;
   flex-direction: column;
+  margin-bottom: var(--spacing-s);
+
+  &:not(:last-child) {
+    margin-bottom: var(--spacing-s);
+  }
 }
