@@ -8,6 +8,7 @@
   File upload is carried out in the background by that function.
  */
 
+import { LIVE_STREAM_CHANNEL, LIVE_STREAM_CHANNEL_CLAIM_ID } from 'constants/livestream';
 import { SITE_NAME } from 'config';
 import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
 import React, { useEffect, useState } from 'react';
@@ -19,13 +20,14 @@ import TagsSelect from 'component/tagsSelect';
 import PublishDescription from 'component/publishDescription';
 import PublishPrice from 'component/publishPrice';
 import PublishFile from 'component/publishFile';
-import PublishName from 'component/publishName';
+// import PublishName from 'component/publishName';
 import PublishAdditionalOptions from 'component/publishAdditionalOptions';
 import PublishFormErrors from 'component/publishFormErrors';
 import SelectThumbnail from 'component/selectThumbnail';
 import Card from 'component/common/card';
 import I18nMessage from 'component/i18nMessage';
 import * as PUBLISH_MODES from 'constants/publish_types';
+import { FormField } from 'component/common/form';
 
 // @if TARGET='app'
 import fs from 'fs';
@@ -85,6 +87,8 @@ type Props = {
   ytSignupPending: boolean,
   modal: { id: string, modalProps: {} },
   enablePublishPreview: boolean,
+  myChannels: ?Array<ChannelClaim>,
+  isLivestreamPublish: boolean,
 };
 
 function PublishForm(props: Props) {
@@ -123,7 +127,15 @@ function PublishForm(props: Props) {
     ytSignupPending,
     modal,
     enablePublishPreview,
+    myChannels,
+    isLivestreamPublish,
   } = props;
+
+  // livestream hardcoded bidnezz
+  const isLivestreamCreator =
+    myChannels &&
+    myChannels.find(channelClaim => channelClaim.claim_id === LIVE_STREAM_CHANNEL_CLAIM_ID) &&
+    channel === LIVE_STREAM_CHANNEL;
 
   // Used to check if name should be auto-populated from title
   const [autoPopulateNameFromTitle, setAutoPopulateNameFromTitle] = useState(!isStillEditing);
@@ -385,7 +397,6 @@ function PublishForm(props: Props) {
             help={__(
               "Add tags that are relevant to your content so those who're looking for it can find it more easily. If mature content, ensure it is tagged mature. Tag abuse and missing mature tags will not be tolerated."
             )}
-            placeholder={__('gaming, crypto')}
             onSelect={newTags => {
               const validatedTags = [];
               newTags.forEach(newTag => {
@@ -409,6 +420,37 @@ function PublishForm(props: Props) {
           />
           <PublishPrice disabled={formDisabled} />
           <PublishAdditionalOptions disabled={formDisabled} />
+        </div>
+      )}
+
+      {isLivestreamCreator && (
+        <div className="livestream__creator-message livestream__publish-checkbox">
+          <h4>{__('Hi %channel%!', { channel })}</h4>
+          <p>
+            Check this box if you have entered video information for your livestream. It doesn't matter what file you
+            choose for now, just make the sure the title, description, and tags are correct. Everything else is setup!
+          </p>
+          <p>
+            When you edit this file, there will be another checkbox to turn this back into a regular video so it can be
+            listed on your channel's page.
+          </p>
+
+          <FormField
+            type={isStillEditing ? 'radio' : 'checkbox'}
+            label={__('This is for my livestream')}
+            name="is_livestream_checkbox"
+            checked={isLivestreamPublish}
+            onChange={e => updatePublishForm({ isLivestreamPublish: e.target.checked })}
+          />
+          {isStillEditing && (
+            <FormField
+              type="radio"
+              label={'I am done livestreaming'}
+              name="is_livestream_checkbox_done"
+              checked={!isLivestreamPublish}
+              onChange={e => updatePublishForm({ isLivestreamPublish: !e.target.checked })}
+            />
+          )}
         </div>
       )}
       <section>
