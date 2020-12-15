@@ -62,27 +62,10 @@ function MarkdownLink(props: Props) {
     }
   }
 
-  if (href.startsWith('?t=')) {
-    // Video timestamp markers
-    element = (
-      <Button
-        button="link"
-        iconRight={undefined}
-        title={title || decodedUri}
-        label={children}
-        className="button--external-link"
-        onClick={() => {
-          if (window.player) {
-            window.player.currentTime(parseInt(href.substr(3)));
-            window.scrollTo(0, 0);
-          }
-        }}
-      />
-    );
-  } else if (!simpleLinks && ((protocol && protocol[0] === 'lbry:' && isURIValid(decodedUri)) || lbryUrlFromLink)) {
-    // Return plain text if no valid url
-    // Return external link if protocol is http or https
-    // Return local link if protocol is lbry uri
+  // Return plain text if no valid url
+  // Return external link if protocol is http or https
+  // Return local link if protocol is lbry uri
+  if (!simpleLinks && ((protocol && protocol[0] === 'lbry:' && isURIValid(decodedUri)) || lbryUrlFromLink)) {
     element = (
       <ClaimLink
         uri={lbryUrlFromLink || decodedUri}
