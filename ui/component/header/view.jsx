@@ -228,6 +228,11 @@ const Header = (props: Props) => {
               {!authHeader && (
                 <span style={{ position: 'relative' }}>
                   <Button
+                    aria-label={
+                      sidebarOpen
+                        ? __('Close sidebar - hide channels you are following.')
+                        : __('Expand sidebar - view channels you are following.')
+                    }
                     className="header__navigation-item menu__title header__navigation-item--icon"
                     icon={ICONS.MENU}
                     onClick={() => setSidebarOpen(!sidebarOpen)}
