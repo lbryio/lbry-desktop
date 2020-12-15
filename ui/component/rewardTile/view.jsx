@@ -33,7 +33,7 @@ const RewardTile = (props: Props) => {
 
   return (
     <Card
-      title={reward.reward_title}
+      title={__(reward.reward_title)}
       subtitle={<LbcMessage>{reward.reward_description}</LbcMessage>}
       actions={
         <div className="section__actions">

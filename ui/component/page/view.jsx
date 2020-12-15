@@ -21,7 +21,6 @@ type Props = {
   isUpgradeAvailable: boolean,
   authPage: boolean,
   filePage: boolean,
-  homePage: boolean,
   noHeader: boolean,
   noFooter: boolean,
   noSideNavigation: boolean,
@@ -52,7 +51,7 @@ function Page(props: Props) {
   const {
     location: { pathname },
   } = useHistory();
-  const [sidebarOpen, setSidebarOpen] = usePersistedState('sidebar', true);
+  const [sidebarOpen, setSidebarOpen] = usePersistedState('sidebar', false);
   const isMediumScreen = useIsMediumScreen();
   const isMobile = useIsMobile();
 

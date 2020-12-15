@@ -121,6 +121,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     claim === undefined || (claim !== null && claim.value_type === 'channel' && isEmpty(claim.meta) && !pending);
   const abandoned = !isResolvingUri && !claim;
   const shouldHideActions = hideActions || type === 'small' || type === 'tooltip';
+  const showPublishLink = abandoned && !showUnresolvedClaim && placeholder === 'publish';
   const canonicalUrl = claim && claim.canonical_url;
   let isValid = false;
   if (uri) {
