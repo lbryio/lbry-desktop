@@ -45,6 +45,8 @@ type Props = {
   onPlayerReady: Player => void,
   isAudio: boolean,
   startMuted: boolean,
+  showAds?: boolean,
+  adUrl: ?string,
 };
 
 type VideoJSOptions = {
@@ -52,8 +54,9 @@ type VideoJSOptions = {
   preload: string,
   playbackRates: Array<number>,
   responsive: boolean,
-  poster?: string,
-  muted?: boolean,
+  poster: ?string,
+  muted: ?boolean,
+  sources: Array<{ src: string, type: string }>,
 };
 
 const videoPlaybackRates = [0.25, 0.5, 0.75, 1, 1.1, 1.25, 1.5, 1.75, 2];
@@ -63,7 +66,7 @@ const IS_IOS =
     (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) &&
   !window.MSStream;
 
-const VIDEO_JS_OPTIONS: VideoJSOptions = {
+const VIDEO_JS_OPTIONS = {
   preload: 'auto',
   playbackRates: videoPlaybackRates,
   responsive: true,
@@ -154,7 +157,7 @@ class LbryVolumeBarClass extends videojs.getComponent(VIDEOJS_VOLUME_BAR_CLASS) 
 properties for this component should be kept to ONLY those that if changed should REQUIRE an entirely new videojs element
  */
 export default React.memo<Props>(function VideoJs(props: Props) {
-  const { startMuted, source, sourceType, poster, isAudio, onPlayerReady } = props;
+  const { startMuted, source, sourceType, poster, isAudio, onPlayerReady, adUrl } = props;
   const [reload, setReload] = useState('initial');
 
   let player: ?Player;
@@ -167,6 +170,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         type: sourceType,
       },
     ],
+    muted: adUrl ? true : startMuted,
     autoplay: false,
     poster: poster, // thumb looks bad in app, and if autoplay, flashing poster is annoying
     plugins: {
@@ -175,7 +179,11 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     },
   };
 
-  videoJsOptions.muted = startMuted;
+  if (adUrl) {
+    // Add the adUrl to the first entry in `sources`
+    // After the ad is finished, it will be removed as a prop to this component
+    videoJsOptions.sources.unshift({ src: adUrl, type: 'video/mp4' });
+  }
 
   const tapToUnmuteRef = useRef();
   const tapToRetryRef = useRef();
@@ -255,9 +263,11 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     }
   }
 
-  function onEnded() {
-    showTapButton(TAP.NONE);
-  }
+  const onEnded = React.useCallback(() => {
+    if (!adUrl) {
+      showTapButton(TAP.NONE);
+    }
+  }, [adUrl]);
 
   function handleKeyDown(e: KeyboardEvent) {
     const videoNode: ?HTMLVideoElement = containerRef.current && containerRef.current.querySelector('video, audio');

@@ -21,7 +21,6 @@ export default function NotificationHeaderButton(props: Props) {
     doSeeAllNotifications,
     user,
   } = props;
-  const notificationsEnabled = user && user.experimental_ui;
   const { push } = useHistory();
 
   function handleMenuClick() {
@@ -30,10 +29,6 @@ export default function NotificationHeaderButton(props: Props) {
     }
 
     push(`/$/${PAGES.NOTIFICATIONS}`);
-  }
-
-  if (!notificationsEnabled) {
-    return null;
   }
 
   return (

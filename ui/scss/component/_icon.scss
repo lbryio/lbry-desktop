@@ -17,22 +17,6 @@
   }
 }
 
-.icon__wrapper--Heart {
-  background-color: var(--color-follow-bg);
-
-  .icon {
-    stroke: var(--color-follow-icon);
-  }
-}
-
-.icon__wrapper--Eye {
-  background-color: var(--color-view-bg);
-
-  .icon {
-    stroke: var(--color-view-icon);
-  }
-}
-
 .icon--help {
   color: var(--color-subtitle);
   margin-left: var(--spacing-xs);
@@ -57,4 +41,18 @@
 
 .icon__lbc--title {
   margin-bottom: 4px;
+}
+
+.icon--Fire {
+  position: relative;
+
+  &:after {
+    content: '';
+    height: 20px;
+    width: 20px;
+    background-color: red;
+    top: 0;
+    right: 0;
+    position: absolute;
+  }
 }

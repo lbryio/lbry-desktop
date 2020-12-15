@@ -7,8 +7,9 @@ import { makeSelectContentPositionForUri } from 'redux/selectors/content';
 import VideoViewer from './view';
 import { withRouter } from 'react-router';
 import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { makeSelectClientSetting, selectHomepageData } from 'redux/selectors/settings';
 import { toggleVideoTheaterMode, doSetClientSetting } from 'redux/actions/settings';
+import { selectUserVerifiedEmail } from 'redux/selectors/user';
 
 const select = (state, props) => {
   const { search } = props.location;
@@ -26,6 +27,8 @@ const select = (state, props) => {
     hasFileInfo: Boolean(makeSelectFileInfoForUri(props.uri)(state)),
     thumbnail: makeSelectThumbnailForUri(props.uri)(state),
     claim: makeSelectClaimForUri(props.uri)(state),
+    homepageData: selectHomepageData(state),
+    authenticated: selectUserVerifiedEmail(state),
   };
 };
 
