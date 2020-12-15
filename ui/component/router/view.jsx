@@ -47,7 +47,6 @@ import BuyPage from 'page/buy';
 import NotificationsPage from 'page/notifications';
 import SignInWalletPasswordPage from 'page/signInWalletPassword';
 import YoutubeSyncPage from 'page/youtubeSync';
-import AdsTestPage from 'page/adsTest';
 
 import { LINKED_COMMENT_QUERY_PARAM } from 'constants/comment';
 import { parseURI, isURIValid } from 'lbry-redux';
@@ -245,8 +244,6 @@ function AppRouter(props: Props) {
       <Route path={`/$/${PAGES.SETTINGS_ADVANCED}`} exact component={SettingsAdvancedPage} />
       <Route path={`/$/${PAGES.INVITE}/:referrer`} exact component={InvitedPage} />
       <Route path={`/$/${PAGES.CHECKOUT}`} exact component={CheckoutPage} />
-
-      <Route path="/$/adstest" exact component={AdsTestPage} />
 
       <PrivateRoute {...props} exact path={`/$/${PAGES.YOUTUBE_SYNC}`} component={YoutubeSyncPage} />
       <PrivateRoute {...props} exact path={`/$/${PAGES.TAGS_FOLLOWING}`} component={TagsFollowingPage} />
