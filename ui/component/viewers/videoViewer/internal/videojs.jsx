@@ -324,6 +324,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         }
       });
 
+      window.player = player;
+
       // fixes #3498 (https://github.com/lbryio/lbry-desktop/issues/3498)
       // summary: on firefox the focus would stick to the fullscreen button which caused buggy behavior with spacebar
       // $FlowFixMe
@@ -336,6 +338,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
         if (player) {
           player.dispose();
+          window.player = undefined;
         }
       };
     }

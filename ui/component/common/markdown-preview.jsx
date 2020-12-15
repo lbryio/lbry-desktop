@@ -10,6 +10,7 @@ import reactRenderer from 'remark-react';
 import MarkdownLink from 'component/markdownLink';
 import defaultSchema from 'hast-util-sanitize/lib/github.json';
 import { formatedLinks, inlineLinks } from 'util/remark-lbry';
+import { formattedTimestamp, inlineTimestamp } from 'util/remark-timestamp';
 
 type SimpleTextProps = {
   children?: React.Node,
@@ -149,6 +150,8 @@ const MarkdownPreview = (props: MarkdownProps) => {
           // Note: The order is important
           .use(formatedLinks)
           .use(inlineLinks)
+          .use(isMarkdownPost ? null : inlineTimestamp)
+          .use(isMarkdownPost ? null : formattedTimestamp)
           // Emojis
           .use(remarkEmoji)
           // Render new lines without needing spaces.
