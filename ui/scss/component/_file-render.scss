@@ -251,6 +251,11 @@
   width: 12rem;
 }
 
+.file-viewer__overlay-logo--videoend {
+  height: 3.5rem;
+  width: 12rem;
+}
+
 .file-viewer--is-playing:not(:hover) .file-viewer__embedded-header {
   display: none;
 }
