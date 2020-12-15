@@ -318,7 +318,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
           player.on('error', onError);
           player.on('ended', onEnded);
           LbryVolumeBarClass.replaceExisting(player);
-          player.mobileUi(); // Inits mobile version. No-op if Desktop.
+          //   player.mobileUi(); // Inits mobile version. No-op if Desktop.
 
           onPlayerReady(player);
         }
