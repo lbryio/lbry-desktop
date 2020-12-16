@@ -35,3 +35,12 @@
   margin-top: var(--spacing-s);
   font-weight: var(--font-weight-body);
 }
+
+.search__top-links {
+  margin-bottom: 0;
+  margin-top: var(--spacing-xs);
+
+  @media (min-width: $breakpoint-small) {
+    margin-top: 0;
+  }
+}
