@@ -20,7 +20,7 @@ type Props = {
   doToast: ({ message: string }) => void,
   doClearRepostError: () => void,
   doRepost: StreamRepostOptions => Promise<*>,
-  title: string, //
+  title: string,
   claim?: StreamClaim,
   enteredContentClaim?: StreamClaim,
   balance: number,
@@ -72,7 +72,6 @@ function RepostCreate(props: Props) {
 
   const [repostBid, setRepostBid] = React.useState(0.01);
   const [repostBidError, setRepostBidError] = React.useState(undefined);
-  // const [bidChanged, setBidChanged] = React.useState(false);
   const [takeoverAmount, setTakeoverAmount] = React.useState(0);
   const [enteredRepostName, setEnteredRepostName] = React.useState(defaultName);
   const [available, setAvailable] = React.useState(true);
