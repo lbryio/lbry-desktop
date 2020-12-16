@@ -109,7 +109,7 @@
   border-top-right-radius: 0;
   border-top-left-radius: 0;
   border-top: none;
-  padding: var(--spacing-xs);
+  padding-top: var(--spacing-xs);
   margin: 0 var(--spacing-s);
 }
 
@@ -127,10 +127,6 @@
 .wunderbar__label {
   margin-bottom: var(--spacing-xs);
   margin-left: var(--spacing-m);
-
-  @media (min-width: $breakpoint-small) {
-    margin-left: var(--spacing-xs);
-  }
 }
 
 .wunderbar__top-separator {
@@ -188,8 +184,13 @@
   margin-left: var(--spacing-m);
   margin-bottom: var(--spacing-l);
 
+  .button {
+    padding: var(--spacing-s);
+  }
+
   @media (min-width: $breakpoint-small) {
     margin-left: var(--spacing-s);
+    margin-bottom: var(--spacing-m);
   }
 }
 
@@ -244,6 +245,11 @@
 
   &:hover {
     background-color: var(--color-menu-background--active);
+  }
+
+  @media (min-width: $breakpoint-small) {
+    margin-left: var(--spacing-xs);
+    margin-right: var(--spacing-xs);
   }
 }
 
