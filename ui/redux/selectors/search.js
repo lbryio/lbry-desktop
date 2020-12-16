@@ -9,6 +9,7 @@ import {
   SETTINGS,
   isClaimNsfw,
   makeSelectPendingClaimForUri,
+  makeSelectIsUriResolving,
 } from 'lbry-redux';
 import { createSelector } from 'reselect';
 
@@ -140,6 +141,25 @@ export const makeSelectWinningUriForQuery = (query: string) => {
       } else {
         return returnBeforePending;
       }
+    }
+  );
+};
+
+export const makeSelectIsResolvingWinningUri = (query: string = '') => {
+  const uriFromQuery = `lbry://${query}`;
+  let channelUriFromQuery;
+  try {
+    const { isChannel } = parseURI(uriFromQuery);
+    if (!isChannel) {
+      channelUriFromQuery = `lbry://@${query}`;
+    }
+  } catch (e) {}
+
+  return createSelector(
+    makeSelectIsUriResolving(uriFromQuery),
+    channelUriFromQuery ? makeSelectIsUriResolving(channelUriFromQuery) : () => {},
+    (claim1IsResolving, claim2IsResolving) => {
+      return claim1IsResolving || claim2IsResolving;
     }
   );
 };

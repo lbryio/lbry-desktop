@@ -10,20 +10,30 @@ import I18nMessage from 'component/i18nMessage';
 import { useHistory } from 'react-router';
 import LbcSymbol from 'component/common/lbc-symbol';
 import { DOMAIN } from 'config';
-import Yrbl from 'component/yrbl';
 
 type Props = {
   query: string,
-  winningUri: ?Claim,
+  winningUri: ?string,
   doResolveUris: (Array<string>) => void,
   hideLink?: boolean,
   setChannelActive: boolean => void,
   beginPublish: string => void,
   pendingIds: Array<string>,
+  isResolvingWinningUri: boolean,
+  winningClaim: ?Claim,
 };
 
 export default function SearchTopClaim(props: Props) {
-  const { doResolveUris, query = '', winningUri, hideLink = false, setChannelActive, beginPublish } = props;
+  const {
+    doResolveUris,
+    query = '',
+    winningUri,
+    winningClaim,
+    hideLink = false,
+    setChannelActive,
+    beginPublish,
+    isResolvingWinningUri,
+  } = props;
   const uriFromQuery = `lbry://${query}`;
   const { push } = useHistory();
   let name;
@@ -60,82 +70,69 @@ export default function SearchTopClaim(props: Props) {
     }
   }, [doResolveUris, uriFromQuery, channelUriFromQuery]);
 
+  if (winningUri && !winningClaim && isResolvingWinningUri) {
+    return null;
+  }
+
   return (
-    <section className="search">
-      <header className="search__header">
-        {winningUri && (
-          <div className="claim-preview__actions--header">
-            <a
-              className="media__uri"
-              href="https://lbry.com/faq/trending"
-              title={__('Learn more about LBRY Credits on %DOMAIN%', { DOMAIN })}
-            >
-              <I18nMessage
-                tokens={{
-                  lbc: <LbcSymbol />,
-                }}
-              >
-                Most supported %lbc%
-              </I18nMessage>
-            </a>
-          </div>
-        )}
-        {winningUri && (
-          <div className="card">
-            <ClaimPreview
-              hideRepostLabel
-              uri={winningUri}
-              type="large"
-              placeholder="publish"
-              properties={claim => (
-                <span className="claim-preview__custom-properties">
-                  <ClaimEffectiveAmount uri={winningUri} />
+    <div className="search__header">
+      {winningUri && (
+        <div className="claim-preview__actions--header">
+          <a
+            className="media__uri"
+            href="https://lbry.com/faq/trending"
+            title={__('Learn more about LBRY Credits on %DOMAIN%', { DOMAIN })}
+          >
+            <LbcSymbol prefix={__('Most supported')} />
+          </a>
+        </div>
+      )}
+      {winningUri && (
+        <div className="card">
+          <ClaimPreview
+            hideRepostLabel
+            uri={winningUri}
+            type="large"
+            properties={claim => (
+              <span className="claim-preview__custom-properties">
+                <ClaimEffectiveAmount uri={winningUri} />
+              </span>
+            )}
+          />
+        </div>
+      )}
+      {!winningUri && uriFromQuery && (
+        <div className="card card--section help--inline">
+          <I18nMessage
+            tokens={{
+              repost: (
+                <Button button="link" onClick={() => push(`/$/${PAGES.REPOST_NEW}?to=${name}`)} label={__('Repost')} />
+              ),
+              publish: (
+                <span>
+                  <Button button="link" onClick={() => beginPublish(name)} label={'publish'} />
                 </span>
-              )}
-            />
-          </div>
-        )}
-        {!winningUri && uriFromQuery && (
-          <div className="empty empty--centered">
-            <Yrbl
-              type="happy"
-              title={__('Whoa!')}
-              small
-              subtitle={
-                <I18nMessage
-                  tokens={{
-                    repost: (
-                      <Button
-                        button="link"
-                        onClick={() => push(`/$/${PAGES.REPOST_NEW}?to=${name}`)}
-                        label={__('Repost')}
-                      />
-                    ),
-                    publish: <Button button="link" onClick={() => beginPublish(name)} label={'publish'} />,
-                    name: <strong>name</strong>,
-                  }}
-                >
-                  You have found the edge of the internet. %repost% or %publish% your stuff here to claim this spot.
-                </I18nMessage>
-              }
-            />
-          </div>
-        )}
-        {!hideLink && winningUri && (
-          <div className="section__actions--between section__actions--no-margin">
-            <span />
-            <Button
-              button="link"
-              className="search__top-link"
-              label={
-                <I18nMessage tokens={{ name: <strong>{query}</strong> }}>View competing uploads for %name%</I18nMessage>
-              }
-              navigate={`/$/${PAGES.TOP}?name=${query}`}
-              iconRight={ICONS.ARROW_RIGHT}
-            />
-          </div>
-        )}
-      </header>
-    </section>
+              ),
+            }}
+          >
+            You have found the edge of the internet. %repost% or %publish% your stuff here to claim this spot.
+          </I18nMessage>
+        </div>
+      )}
+      {!hideLink && winningUri && (
+        <div className="section__actions--between section__actions--no-margin">
+          <span />
+          <Button
+            button="link"
+            className="search__top-link"
+            label={
+              <I18nMessage tokens={{ name: <strong>{query}</strong> }}>View competing uploads for %name%</I18nMessage>
+            }
+            navigate={`/$/${PAGES.TOP}?name=${query}`}
+            iconRight={ICONS.ARROW_RIGHT}
+          />
+        </div>
+      )}
+    </div>
   );
 }

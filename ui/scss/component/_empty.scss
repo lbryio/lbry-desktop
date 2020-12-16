@@ -11,6 +11,10 @@
   }
 }
 
+.empty__wrap--padded {
+  padding: var(--spacing-xl) 0;
+}
+
 .empty__text {
   color: var(--color-text-empty);
   font-style: italic;
