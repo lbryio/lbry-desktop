@@ -11,6 +11,7 @@ type Props = {
   className?: string,
   actions?: Node,
   alwaysShow?: boolean,
+  small: boolean,
 };
 
 const yrblTypes = {
@@ -24,7 +25,7 @@ export default class extends React.PureComponent<Props> {
   };
 
   render() {
-    const { title, subtitle, type, className, actions, alwaysShow = false } = this.props;
+    const { title, subtitle, type, className, actions, small, alwaysShow = false } = this.props;
 
     const image = yrblTypes[type];
 
@@ -32,7 +33,7 @@ export default class extends React.PureComponent<Props> {
       <div className="yrbl__wrap">
         <img
           alt="Friendly gerbil"
-          className={classnames('yrbl', className, {
+          className={classnames(small ? 'yrbl--small' : 'yrbl', className, {
             'yrbl--always-show': alwaysShow,
           })}
           src={`${image}`}

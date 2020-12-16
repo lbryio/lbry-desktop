@@ -14,7 +14,7 @@ function ClaimEffectiveAmount(props: Props) {
     return null;
   }
 
-  return <CreditAmount amount={Number(claim.meta.effective_amount)} />;
+  return <CreditAmount amount={Number(claim.meta.effective_amount || claim.amount)} />;
 }
 
 export default ClaimEffectiveAmount;

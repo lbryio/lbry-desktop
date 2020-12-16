@@ -64,7 +64,8 @@
   --color-text: #d8d8d8;
   --color-text-error: #f5748c;
   --color-text-help-warning: #f5ec74;
-  --color-text-empty: #bbbbbb;
+  --color-text-empty: var(--color-text-subtitle);
+
   --color-text-help: #bbbbbb;
   --color-text-subtitle: #9fafc0;
   --color-text-warning: #212529;
@@ -74,7 +75,7 @@
 
   // Input
   --color-input: #f4f4f5;
-  --color-input-label: #d4d4d4;
+  --color-input-label: #a7a7a7;
   --color-input-placeholder: #f4f4f5;
   --color-input-bg: #464d53;
   --color-input-bg-copyable: #4f5861;

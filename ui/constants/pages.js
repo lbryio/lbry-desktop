@@ -19,6 +19,7 @@ exports.GET_CREDITS = 'getcredits';
 exports.REPORT = 'report';
 exports.REWARDS = 'rewards';
 exports.REWARDS_VERIFY = 'rewards/verify';
+exports.REPOST_NEW = 'repost';
 exports.SEND = 'send';
 exports.SETTINGS = 'settings';
 exports.SETTINGS_NOTIFICATIONS = 'settings/notifications';
