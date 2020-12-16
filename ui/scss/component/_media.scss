@@ -30,32 +30,6 @@
     max-width: 100%;
     white-space: nowrap;
   }
-
-  // This is terrible and should not be removed
-  .icon {
-    margin-right: var(--spacing-xs) / 2;
-    margin-bottom: -0.08rem;
-  }
-}
-
-.media__uri--inline {
-  @extend .media__uri;
-  position: relative;
-  transform: none;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.media__uri--right {
-  @extend .media__uri;
-  right: 0;
-}
-
-.media__uri--right--yt-badge {
-  @extend .media__uri--right;
-  @media (max-width: $breakpoint-small) {
-    display: none;
-  }
 }
 
 //  M E D I A

@@ -211,7 +211,9 @@ function CommentList(props: Props) {
         <>
           <CommentCreate uri={uri} />
 
-          {!isFetchingComments && hasNoComments && <Empty text={__('That was pretty deep. What do you think?')} />}
+          {!isFetchingComments && hasNoComments && (
+            <Empty padded text={__('That was pretty deep. What do you think?')} />
+          )}
 
           <ul className="comments" ref={commentRef}>
             {comments &&
