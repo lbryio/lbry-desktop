@@ -28,20 +28,22 @@ function TopPage(props: Props) {
         defaultFreshness={FRESH_ALL}
         defaultOrderBy={ORDER_BY_TOP}
         meta={
-          <I18nMessage
-            tokens={{
-              repost: (
-                <Button
-                  button="secondary"
-                  navigate={`/$/${PAGES.REPOST_NEW}?to=${queryName}`}
-                  label={__('Repost Here')}
-                />
-              ),
-              publish: <Button button="secondary" onClick={() => beginPublish(queryName)} label={'Publish Here'} />,
-            }}
-          >
-            %repost% %publish%
-          </I18nMessage>
+          <div className="search__top-links">
+            <I18nMessage
+              tokens={{
+                repost: (
+                  <Button
+                    button="secondary"
+                    navigate={`/$/${PAGES.REPOST_NEW}?to=${queryName}`}
+                    label={__('Repost Here')}
+                  />
+                ),
+                publish: <Button button="secondary" onClick={() => beginPublish(queryName)} label={'Publish Here'} />,
+              }}
+            >
+              %repost% %publish%
+            </I18nMessage>
+          </div>
         }
         includeSupportAction
         renderProperties={claim => (

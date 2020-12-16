@@ -253,9 +253,14 @@
 .claim-preview__actions {
   align-self: flex-end;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   margin-top: auto;
   width: 100%;
+
+  @media (min-width: $breakpoint-small) {
+    flex-direction: row;
+  }
 }
 
 .claim-preview__primary-actions {
