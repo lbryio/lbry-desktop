@@ -296,7 +296,7 @@ function SideNavigation(props: Props) {
       </li>
 
       <li className="navigation-link">
-        <Button label={__('Support')} href="https://lbry.com/support" />
+        <Button label={__('Support --[used in footer; general help/support]--')} href="https://lbry.com/support" />
       </li>
       <li className="navigation-link">
         <Button label={__('Terms')} href="https://lbry.com/termsofservice" />

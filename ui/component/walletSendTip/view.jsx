@@ -176,7 +176,13 @@ function WalletSendTip(props: Props) {
         />
       ) : (
         <Card
-          title={claimIsMine ? __('Boost your content') : isSupport ? __('Support this content') : __('Support')}
+          title={
+            claimIsMine
+              ? __('Boost your content')
+              : isSupport
+              ? __('Support this content')
+              : __('Support --[button to support a claim]--')
+          }
           subtitle={
             <React.Fragment>
               {isSupport
