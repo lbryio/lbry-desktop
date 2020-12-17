@@ -6,6 +6,7 @@ import remarkAttr from 'remark-attr';
 import remarkStrip from 'strip-markdown';
 import remarkEmoji from 'remark-emoji';
 import remarkBreaks from 'remark-breaks';
+import remarkFrontMatter from 'remark-frontmatter';
 import reactRenderer from 'remark-react';
 import MarkdownLink from 'component/markdownLink';
 import defaultSchema from 'hast-util-sanitize/lib/github.json';
@@ -120,7 +121,7 @@ const MarkdownPreview = (props: MarkdownProps) => {
 
   const remarkAttrOpts = {
     scope: 'extended',
-    elements: ['link'],
+    elements: ['link', 'yaml'],
     extend: { link: ['embed'] },
     defaultValue: true,
   };
@@ -134,6 +135,7 @@ const MarkdownPreview = (props: MarkdownProps) => {
         {
           remark()
             .use(remarkStrip)
+            .use(remarkFrontMatter, ['yaml'])
             .use(reactRenderer, remarkOptions)
             .processSync(content).contents
         }
@@ -156,6 +158,7 @@ const MarkdownPreview = (props: MarkdownProps) => {
           .use(remarkEmoji)
           // Render new lines without needing spaces.
           .use(remarkBreaks)
+          .use(remarkFrontMatter, ['yaml'])
           .use(reactRenderer, remarkOptions)
           .processSync(strippedContent).contents
       }
