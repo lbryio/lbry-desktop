@@ -418,6 +418,7 @@
   "Unclaimable": "Unclaimable",
   "Claimed": "Claimed",
   "Enter reward code": "Enter reward code",
+  "Redeem a custom reward code for": "Redeem a custom reward code for",
   "Redeem": "Redeem",
   "Code": "Code",
   "Nothing here": "Nothing here",
@@ -900,6 +901,7 @@
   "Community Choice?": "Community Choice?",
   "Download to your Library": "Download to your Library",
   "Leave a Comment": "Leave a Comment",
+  "That was pretty deep. What do you think?": "That was pretty deep. What do you think?",
   "%repost_total% Reposts": "%repost_total% Reposts",
   "File Description": "File Description",
   "View %count% reposts": "View %count% reposts",
@@ -1532,5 +1534,6 @@
   "Repost url": "Repost url",
   "Close sidebar - hide channels you are following": "Close sidebar - hide channels you are following",
   "Expand sidebar - view channels you are following.": "Expand sidebar - view channels you are following.",
+  "You have found the edge of the internet. %repost% or %publish% your stuff here to claim this spot.": "You have found the edge of the internet. %repost% or %publish% your stuff here to claim this spot.",
   "--end--": "--end--"
 }

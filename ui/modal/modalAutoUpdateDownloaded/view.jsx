@@ -35,7 +35,7 @@ class ModalAutoUpdateDownloaded extends React.PureComponent<Props, State> {
         contentLabel={__('Upgrade Downloaded')}
         title={__('LBRY leveled up')}
         confirmButtonLabel={__('Upgrade Now')}
-        abortButtonLabel={__('Not now')}
+        abortButtonLabel={__('Not Now')}
         confirmButtonDisabled={this.state.disabled}
         onConfirmed={() => {
           this.setState({ disabled: true });
