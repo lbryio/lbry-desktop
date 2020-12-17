@@ -41,7 +41,7 @@ export default function Footer() {
           <Button label={__('FAQ')} href="https://odysee.com/@OdyseeHelp:b" />
         </li>
         <li className="footer__link">
-          <Button label={__('Support')} href="https://lbry.com/support" />
+          <Button label={__('Support --[used in footer; general help/support]--')} href="https://lbry.com/support" />
         </li>
         <li className="footer__link">
           <Button label={__('Terms')} href="https://lbry.com/termsofservice" />
