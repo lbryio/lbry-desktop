@@ -1,15 +1,86 @@
 import visit from 'unist-util-visit';
 
 const TIMESTAMP_NODE_TYPE = 'timestamp';
-const TIMESTAMP_REGEX = /(?<!\d|:)([01]?\d|2[0-3]):([0-5]\d)(?::([0-5]\d))?(?!\d|:)/g;
 
 // ***************************************************************************
 // Tokenize timestamp
 // ***************************************************************************
 
+function findNextTimestamp(value, fromIndex, strictlyFromIndex) {
+  let begin = 0;
+  while (begin < value.length) {
+    // Start with a rough match
+    const match = value.substring(begin).match(/[0-9:]+/);
+
+    if (!match) {
+      return null;
+    }
+
+    // Compensate 'substring' index. 'match.index' is relative to 'value' from now on.
+    match.index += begin;
+
+    if (strictlyFromIndex && match.index !== fromIndex) {
+      if (match.index > fromIndex) {
+        // Already gone past desired index. Skip the rest.
+        return null;
+      } else {
+        // Next match might fit 'fromIndex'.
+        begin = match.index + match[0].length;
+        continue;
+      }
+    }
+
+    if (fromIndex > 0 && fromIndex >= match.index && fromIndex < match.index + match[0].length) {
+      // Skip previously-rejected word, preventing "62:01" from being tokenized as "2:01", for example.
+      // This assumes that a non-zero 'fromIndex' means that a previous lookup has failed.
+      begin = match.index + match[0].length;
+      continue;
+    }
+
+    // Exclude trailing colons to allow "0:12: Start of section", for example.
+    const str = match[0].replace(/:+$/, '');
+
+    let isValidTimestamp;
+    switch (str.length) {
+      case 4: // "9:59"
+        isValidTimestamp = /^[0-9]:[0-5][0-9]$/.test(str);
+        break;
+      case 5: // "59:59"
+        isValidTimestamp = /^[0-5][0-9]:[0-5][0-9]$/.test(str);
+        break;
+      case 7: // "9:59:59"
+        isValidTimestamp = /^[0-9]:[0-5][0-9]:[0-5][0-9]$/.test(str);
+        break;
+      case 8: // "23:59:59"
+        isValidTimestamp = /^[0-2][0-3]:[0-5][0-9]:[0-5][0-9]$/.test(str);
+        break;
+      default:
+        // Reject
+        isValidTimestamp = false;
+        break;
+    }
+
+    if (isValidTimestamp) {
+      // Profit!
+      return {
+        text: str,
+        index: match.index,
+      };
+    }
+
+    if (strictlyFromIndex && match.index >= fromIndex) {
+      return null; // Since it failed and we've gone past the desired index, skip the rest.
+    }
+
+    begin = match.index + match[0].length;
+  }
+
+  return null;
+}
+
 function locateTimestamp(value, fromIndex) {
-  const timestamps = Array.from(value.matchAll(TIMESTAMP_REGEX));
-  return timestamps.length === 0 ? -1 : timestamps[0].index;
+  const ts = findNextTimestamp(value, fromIndex, false);
+  return ts ? ts.index : -1;
 }
 
 // Generate 'timestamp' markdown node
@@ -25,10 +96,10 @@ function tokenizeTimestamp(eat, value, silent) {
     return true;
   }
 
-  const match = value.match(TIMESTAMP_REGEX);
-  if (match) {
+  const ts = findNextTimestamp(value, 0, true);
+  if (ts) {
     try {
-      const text = match[0];
+      const text = ts.text;
       return eat(text)(createTimestampNode(text));
     } catch (err) {
       // Do nothing
@@ -37,7 +108,7 @@ function tokenizeTimestamp(eat, value, silent) {
 }
 
 tokenizeTimestamp.locator = locateTimestamp;
-tokenizeTimestamp.notInList = true;
+tokenizeTimestamp.notInList = true; // Flag doesn't work? It'll always tokenizes in List and never in Bullet.
 tokenizeTimestamp.notInLink = true;
 tokenizeTimestamp.notInBlock = true;
 
