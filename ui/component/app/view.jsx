@@ -22,6 +22,7 @@ import Spinner from 'component/spinner';
 import SyncFatalError from 'component/syncFatalError';
 // @if TARGET='app'
 import useZoom from 'effects/use-zoom';
+import useHistoryNav from 'effects/use-history-nav';
 // @endif
 // @if TARGET='web'
 import OpenInAppLink from 'web/component/openInAppLink';
@@ -190,6 +191,11 @@ function App(props: Props) {
   // Enable ctrl +/- zooming on Desktop.
   // @if TARGET='app'
   useZoom();
+  // @endif
+
+  // Enable 'Alt + Left/Right' for history navigation on Desktop.
+  // @if TARGET='app'
+  useHistoryNav(history);
   // @endif
 
   useEffect(() => {
