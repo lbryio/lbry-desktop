@@ -324,7 +324,7 @@ function SideNavigation(props: Props) {
                 //   $FlowFixMe
                 const { hideForUnauth, ...passedProps } = linkProps;
                 return !email && linkProps.hideForUnauth && IS_WEB ? null : (
-                  <li key={linkProps.icon}>
+                  <li key={linkProps.link}>
                     <Button
                       {...passedProps}
                       label={__(linkProps.title)}
@@ -390,7 +390,7 @@ function SideNavigation(props: Props) {
                   //   $FlowFixMe
                   const { hideForUnauth, link, route, ...passedProps } = linkProps;
                   return !email && linkProps.hideForUnauth && IS_WEB ? null : (
-                    <li key={linkProps.icon}>
+                    <li key={route || link}>
                       <Button
                         {...passedProps}
                         navigate={route || link}
@@ -413,7 +413,7 @@ function SideNavigation(props: Props) {
                   const { hideForUnauth, ...passedProps } = linkProps;
 
                   return !email && hideForUnauth && IS_WEB ? null : (
-                    <li key={linkProps.icon} className="mobile-only">
+                    <li key={linkProps.title} className="mobile-only">
                       <Button
                         {...passedProps}
                         navigate={linkProps.link}
