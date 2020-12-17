@@ -8,7 +8,13 @@ import Button from 'component/button';
 import Icon from 'component/common/icon';
 import * as CS from 'constants/claim_search';
 
-function TagsFollowingPage() {
+type Props = {
+  tileLayout: boolean,
+};
+
+function TagsFollowingPage(props: Props) {
+  const { tileLayout } = props;
+
   return (
     <Page noFooter fullWidthPage>
       <ClaimListDiscover
@@ -20,6 +26,7 @@ function TagsFollowingPage() {
         }
         personalView
         defaultTags={CS.TAGS_FOLLOWED}
+        tileLayout={tileLayout}
         meta={
           <Button
             button="secondary"
