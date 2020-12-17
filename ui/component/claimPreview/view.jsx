@@ -122,7 +122,8 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     }
   }
 
-  const isChannel = isValid ? parseURI(uri).isChannel : false;
+  const contentUri = hideRepostLabel && claim && claim.repost_url ? claim.canonical_url || claim.permanent_url : uri;
+  const isChannel = isValid ? parseURI(contentUri).isChannel : false;
   const signingChannel = claim && claim.signing_channel;
   const navigateUrl = formatLbryUrlForWeb((claim && claim.canonical_url) || uri || '/');
   const navLinkProps = {
@@ -171,7 +172,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
 
   // Weird placement warning
   // Make sure this happens after we figure out if this claim needs to be hidden
-  const thumbnailUrl = useGetThumbnail(uri, claim, streamingUrl, getFile, shouldHide);
+  const thumbnailUrl = useGetThumbnail(contentUri, claim, streamingUrl, getFile, shouldHide);
 
   function handleContextMenu(e) {
     // @if TARGET='app'
@@ -217,9 +218,9 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   }
 
   if (!shouldFetch && showUnresolvedClaim && !isResolvingUri && claim === null) {
-    return <AbandonedChannelPreview uri={uri} type />;
+    return <AbandonedChannelPreview uri={contentUri} type />;
   }
-  if (placeholder === 'publish' && !claim && uri.startsWith('lbry://@')) {
+  if (placeholder === 'publish' && !claim && contentUri.startsWith('lbry://@')) {
     return null;
   }
 
@@ -249,8 +250,8 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
         })}
       >
         {isChannel && claim ? (
-          <UriIndicator uri={uri} link>
-            <ChannelThumbnail uri={uri} obscure={channelIsBlocked} />
+          <UriIndicator uri={contentUri} link>
+            <ChannelThumbnail uri={contentUri} obscure={channelIsBlocked} />
           </UriIndicator>
         ) : (
           <>
@@ -265,7 +266,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                   )}
                   {/* @endif */}
                   <div className="claim-preview__file-property-overlay">
-                    <FileProperties uri={uri} small />
+                    <FileProperties uri={contentUri} small />
                   </div>
                 </FileThumbnail>
               </NavLink>
@@ -279,14 +280,14 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
           <div className="claim-preview-metadata">
             <div className="claim-preview-info">
               {pending ? (
-                <ClaimPreviewTitle uri={uri} />
+                <ClaimPreviewTitle uri={contentUri} />
               ) : (
                 <NavLink {...navLinkProps}>
-                  <ClaimPreviewTitle uri={uri} />
+                  <ClaimPreviewTitle uri={contentUri} />
                 </NavLink>
               )}
             </div>
-            <ClaimPreviewSubtitle uri={uri} type={type} />
+            <ClaimPreviewSubtitle uri={contentUri} type={type} />
             {(pending || !!reflectingInfo) && <PublishPending uri={uri} />}
           </div>
           {type !== 'small' && (
@@ -299,12 +300,12 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                   ) : (
                     <div className="claim-preview__primary-actions">
                       {isChannel && !channelIsBlocked && !claimIsMine && (
-                        <SubscribeButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
+                        <SubscribeButton uri={contentUri.startsWith('lbry://') ? contentUri : `lbry://${contentUri}`} />
                       )}
                       {!hideBlock && isChannel && !isSubscribed && (!claimIsMine || channelIsBlocked) && (
-                        <BlockButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
+                        <BlockButton uri={contentUri.startsWith('lbry://') ? contentUri : `lbry://${contentUri}`} />
                       )}
-                      {includeSupportAction && <ClaimSupportButton uri={uri} />}
+                      {includeSupportAction && <ClaimSupportButton uri={contentUri} />}
                     </div>
                   )}
                 </>

@@ -118,7 +118,11 @@ export const makeSelectWinningUriForQuery = (query: string) => {
       } else if (!claim1 && claim2) {
         return matureEnabled ? claim2.canonical_url : claim2Mature ? undefined : claim2.canonical_url;
       } else if (claim1 && !claim2) {
-        return matureEnabled ? claim1.canonical_url : claim1Mature ? undefined : claim1.canonical_url;
+        return matureEnabled
+          ? claim1.repost_url || claim1.canonical_url
+          : claim1Mature
+          ? undefined
+          : claim1.repost_url || claim1.canonical_url;
       }
 
       const effectiveAmount1 = claim1 && claim1.meta.effective_amount;
@@ -128,7 +132,7 @@ export const makeSelectWinningUriForQuery = (query: string) => {
         if (claim1Mature && !claim2Mature) {
           return claim2.canonical_url;
         } else if (claim2Mature && !claim1Mature) {
-          return claim1.canonical_url;
+          return claim1.repost_url || claim1.canonical_url;
         } else if (claim1Mature && claim2Mature) {
           return undefined;
         }
