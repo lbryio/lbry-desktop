@@ -23,7 +23,7 @@ import FileDownloadLink from 'component/fileDownloadLink';
 import AbandonedChannelPreview from 'component/abandonedChannelPreview';
 import PublishPending from 'component/publishPending';
 import ClaimPreviewLoading from './claim-preview-loading';
-import ClaimPreviewNoMature from './claim-preview-no-mature';
+import ClaimPreviewHidden from './claim-preview-no-mature';
 import ClaimPreviewNoContent from './claim-preview-no-content';
 
 type Props = {
@@ -33,7 +33,7 @@ type Props = {
   showUserBlocked: boolean,
   claimIsMine: boolean,
   pending?: boolean,
-  reflectingInfo?: any, // fxme
+  reflectingProgress?: any, // fxme
   resolveUri: string => void,
   isResolvingUri: boolean,
   history: { push: string => void },
@@ -55,6 +55,7 @@ type Props = {
   isSubscribed: boolean,
   actions: boolean | Node | string | number,
   properties: boolean | Node | string | number | (Claim => Node),
+  empty?: Node,
   onClick?: any => any,
   hideBlock?: boolean,
   streamingUrl: ?string,
@@ -71,45 +72,52 @@ type Props = {
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   const {
-    obscureNsfw,
-    claimIsMine,
-    pending,
-    reflectingInfo,
-    history,
+    // core
     uri,
-    isResolvingUri,
-    nsfw,
-    resolveUri,
     claim,
-    placeholder,
-    type,
-    blackListedOutpoints,
-    filteredOutpoints,
-    blockedChannelUris,
-    hasVisitedUri,
-    showUserBlocked,
-    channelIsBlocked,
+    isResolvingUri,
+    // core actions
+    getFile,
+    resolveUri,
+    // claim properties
+    nsfw,
+    claimIsMine,
     isSubscribed,
-    actions,
+    streamingUrl,
+    // user properties
+    channelIsBlocked,
+    hasVisitedUri,
+    // component
+    history,
+    wrapperElement,
+    type,
+    placeholder,
+    // pending
+    reflectingProgress,
+    pending,
+    empty,
+    // modifiers
+    customShouldHide,
+    showNullPlaceholder,
+    obscureNsfw,
+    showUserBlocked,
+    showUnresolvedClaim,
+    hideRepostLabel = false,
+    hideActions = false,
     properties,
     onClick,
     hideBlock,
-    getFile,
-    streamingUrl,
-    customShouldHide,
-    showUnresolvedClaim,
-    showNullPlaceholder,
+    actions,
+    blockedChannelUris,
+    blackListedOutpoints,
+    filteredOutpoints,
     includeSupportAction,
-    hideActions = false,
     renderActions,
-    wrapperElement,
-    hideRepostLabel = false,
   } = props;
   const WrapperElement = wrapperElement || 'li';
   const shouldFetch =
     claim === undefined || (claim !== null && claim.value_type === 'channel' && isEmpty(claim.meta) && !pending);
   const abandoned = !isResolvingUri && !claim;
-  const showPublishLink = abandoned && !showUnresolvedClaim && placeholder === 'publish';
   const shouldHideActions = hideActions || type === 'small' || type === 'tooltip';
   const canonicalUrl = claim && claim.canonical_url;
   let isValid = false;
@@ -132,10 +140,11 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   };
 
   // do not block abandoned and nsfw claims if showUserBlocked is passed
+
   let shouldHide =
     placeholder !== 'loading' &&
     !showUserBlocked &&
-    ((abandoned && !showUnresolvedClaim && !showPublishLink) || (!claimIsMine && obscureNsfw && nsfw));
+    ((abandoned && !showUnresolvedClaim) || (!claimIsMine && obscureNsfw && nsfw));
 
   // This will be replaced once blocking is done at the wallet server level
   if (claim && !claimIsMine && !shouldHide && blackListedOutpoints) {
@@ -205,16 +214,22 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     return null;
   }
 
-  if (placeholder === 'loading' || (isResolvingUri && !claim)) {
+  if (placeholder === 'loading' || isResolvingUri) {
     return <ClaimPreviewLoading isChannel={isChannel} type={type} />;
   }
 
   if (claim && showNullPlaceholder && shouldHide && nsfw) {
-    return <ClaimPreviewNoMature isChannel={isChannel} type={type} />;
+    return (
+      <ClaimPreviewHidden message={__('Mature content hidden by your preferences')} isChannel={isChannel} type={type} />
+    );
   }
 
-  if (!claim && showNullPlaceholder) {
-    return <ClaimPreviewNoContent isChannel={isChannel} type={type} />;
+  if (claim && showNullPlaceholder && shouldHide) {
+    return <ClaimPreviewHidden message={__('This content is hidden')} isChannel={isChannel} type={type} />;
+  }
+
+  if (!claim && (showNullPlaceholder || empty)) {
+    return empty || <ClaimPreviewNoContent isChannel={isChannel} type={type} />;
   }
 
   if (!shouldFetch && showUnresolvedClaim && !isResolvingUri && claim === null) {
@@ -255,7 +270,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
           </UriIndicator>
         ) : (
           <>
-            {showPublishLink ? null : !pending ? (
+            {!pending ? (
               <NavLink {...navLinkProps}>
                 <FileThumbnail thumbnail={thumbnailUrl}>
                   {/* @if TARGET='app' */}
@@ -288,7 +303,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
               )}
             </div>
             <ClaimPreviewSubtitle uri={contentUri} type={type} />
-            {(pending || !!reflectingInfo) && <PublishPending uri={uri} />}
+            {(pending || !!reflectingProgress) && <PublishPending uri={uri} />}
           </div>
           {type !== 'small' && (
             <div className="claim-preview__actions">

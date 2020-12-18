@@ -52,6 +52,25 @@ export default function SearchTopClaim(props: Props) {
     }
   } catch (e) {}
 
+  const empty2 = (
+    <div className="card card--section help--inline">
+      <I18nMessage
+        tokens={{
+          repost: (
+            <Button button="link" onClick={() => push(`/$/${PAGES.REPOST_NEW}?to=${name}`)} label={__('Repost')} />
+          ),
+          publish: (
+            <span>
+              <Button button="link" onClick={() => beginPublish(name)} label={'publish'} />
+            </span>
+          ),
+        }}
+      >
+        You have found the edge of the internet. %repost% or %publish% your stuff here to claim this spot.
+      </I18nMessage>
+    </div>
+  );
+
   React.useEffect(() => {
     setChannelActive && winningUriIsChannel && setChannelActive(true);
   }, [setChannelActive, winningUriIsChannel]);
@@ -88,41 +107,23 @@ export default function SearchTopClaim(props: Props) {
           </a>
         </div>
       )}
-      {winningUri && (
-        <div className="card">
-          <ClaimPreview
-            hideRepostLabel
-            uri={winningUri}
-            noRepost
-            showNullPlaceholder
-            type="large"
-            properties={claim => (
-              <span className="claim-preview__custom-properties">
-                <ClaimRepostAuthor short uri={winningUri} />
-                <ClaimEffectiveAmount uri={winningUri} />
-              </span>
-            )}
-          />
-        </div>
-      )}
-      {!winningUri && uriFromQuery && (
-        <div className="card card--section help--inline">
-          <I18nMessage
-            tokens={{
-              repost: (
-                <Button button="link" onClick={() => push(`/$/${PAGES.REPOST_NEW}?to=${name}`)} label={__('Repost')} />
-              ),
-              publish: (
-                <span>
-                  <Button button="link" onClick={() => beginPublish(name)} label={'publish'} />
-                </span>
-              ),
-            }}
-          >
-            You have found the edge of the internet. %repost% or %publish% your stuff here to claim this spot.
-          </I18nMessage>
-        </div>
-      )}
+
+      <div className="card">
+        <ClaimPreview
+          hideRepostLabel
+          showUserBlocked
+          showNullPlaceholder
+          uri={winningUri}
+          empty={uriFromQuery && empty2}
+          type="large"
+          properties={claim => (
+            <span className="claim-preview__custom-properties">
+              <ClaimRepostAuthor short uri={winningUri} />
+              <ClaimEffectiveAmount uri={winningUri} />
+            </span>
+          )}
+        />
+      </div>
       {!hideLink && winningUri && (
         <div className="section__actions--between section__actions--no-margin">
           <span />
