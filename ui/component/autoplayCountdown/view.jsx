@@ -61,18 +61,25 @@ function AutoplayCountdown(props: Props) {
     }
   }, [navigateUrl, nextRecommendedUri, isFloating, doSetPlayingUri, doPlayUri, push]);
 
+  function shouldPauseAutoplay() {
+    const elm = document.querySelector(`.${CLASSNAME_AUTOPLAY_COUNTDOWN}`);
+    return elm && elm.getBoundingClientRect().top < 0;
+  }
+
+  // Update 'setTimerPaused'.
   React.useEffect(() => {
+    // Ensure correct 'setTimerPaused' on initial render.
+    setTimerPaused(shouldPauseAutoplay());
+
     const handleScroll = debounce(e => {
-      const elm = document.querySelector(`.${CLASSNAME_AUTOPLAY_COUNTDOWN}`);
-      if (elm) {
-        setTimerPaused(elm.getBoundingClientRect().top < 0);
-      }
+      setTimerPaused(shouldPauseAutoplay());
     }, DEBOUNCE_SCROLL_HANDLER_MS);
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Update countdown timer.
   React.useEffect(() => {
     let interval;
     if (!timerCanceled && nextRecommendedUri) {
