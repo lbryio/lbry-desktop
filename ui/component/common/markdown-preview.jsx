@@ -120,7 +120,7 @@ const MarkdownPreview = (props: MarkdownProps) => {
 
   const remarkAttrOpts = {
     scope: 'extended',
-    elements: ['link', 'yaml'],
+    elements: ['link'],
     extend: { link: ['embed'] },
     defaultValue: true,
   };
