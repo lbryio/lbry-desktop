@@ -62,7 +62,7 @@ function HomePage(props: Props) {
         <span className="no-evil--green">l</span>
       </div> */}
 
-      <h1 className="home__meme">{__("Hi, we're an alternative to quibi.")}</h1>
+      <h1 className="home__meme">{__('Relax, this is still big tech.')}</h1>
 
       {rowData.map(({ title, route, link, icon, help, options = {} }, index) => (
         <div key={title} className="claim-grid__wrapper">
