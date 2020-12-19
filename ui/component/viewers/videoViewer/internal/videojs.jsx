@@ -7,7 +7,7 @@ import videojs from 'video.js/dist/alt/video.core.novtt.min.js';
 import 'video.js/dist/alt/video-js-cdn.min.css';
 import eventTracking from 'videojs-event-tracking';
 import * as OVERLAY from './overlays';
-// import './plugins/videojs-mobile-ui/plugin';
+import './plugins/videojs-mobile-ui/plugin';
 import isUserTyping from 'util/detect-typing';
 
 const isDev = process.env.NODE_ENV !== 'production';
@@ -318,7 +318,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
           player.on('error', onError);
           player.on('ended', onEnded);
           LbryVolumeBarClass.replaceExisting(player);
-          //   player.mobileUi(); // Inits mobile version. No-op if Desktop.
+          player.mobileUi(); // Inits mobile version. No-op if Desktop.
 
           onPlayerReady(player);
         }
