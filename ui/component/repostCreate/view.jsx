@@ -358,7 +358,7 @@ function RepostCreate(props: Props) {
                     name="repost_name"
                     value={enteredRepostName}
                     onChange={event => setEnteredRepostName(event.target.value)}
-                    placeholder={__('Do a thing')}
+                    placeholder={__('MyFunName')}
                   />
                 </fieldset-group>
               </fieldset-section>
