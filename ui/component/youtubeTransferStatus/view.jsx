@@ -10,6 +10,7 @@ import { YOUTUBE_STATUSES } from 'lbryinc';
 import { buildURI } from 'lbry-redux';
 import Spinner from 'component/spinner';
 import Icon from 'component/common/icon';
+import I18nMessage from 'component/i18nMessage';
 
 type Props = {
   youtubeChannels: Array<any>,
@@ -45,6 +46,9 @@ export default function YoutubeTransferStatus(props: Props) {
         channel.transfer_state === YOUTUBE_STATUSES.YOUTUBE_SYNC_COMPLETED_TRANSFER ||
         channel.sync_status === YOUTUBE_STATUSES.YOUTUBE_SYNC_ABANDONDED
     );
+
+  const isNotElligible =
+    hasChannels && youtubeChannels.every(channel => channel.sync_status === YOUTUBE_STATUSES.YOUTUBE_SYNC_ABANDONDED);
 
   let total;
   let complete;
@@ -91,7 +95,9 @@ export default function YoutubeTransferStatus(props: Props) {
     (alwaysShow || (hasChannels && !isYoutubeTransferComplete)) && (
       <Card
         title={
-          isYoutubeTransferComplete
+          isNotElligible
+            ? __('Process complete')
+            : isYoutubeTransferComplete
             ? __('Transfer complete')
             : youtubeChannels.length > 1
             ? __('Your YouTube channels')
@@ -105,9 +111,17 @@ export default function YoutubeTransferStatus(props: Props) {
             {!transferEnabled &&
               !hasPendingTransfers &&
               !isYoutubeTransferComplete &&
+              !isNotElligible &&
               __('Please check back later. This may take up to 1 week.')}
 
-            {isYoutubeTransferComplete && __('View your channel or choose a new channel to sync.')}
+            {isYoutubeTransferComplete && !isNotElligible && __('View your channel or choose a new channel to sync.')}
+            {isNotElligible && (
+              <I18nMessage
+                tokens={{ here: <Button button="link" href="https://lbry.com/faq/youtube" label={__('here')} /> }}
+              >
+                Email help@lbry.com if you think there has been a mistake. Make sure your channel qualifies %here%.
+              </I18nMessage>
+            )}
           </span>
         }
         body={
