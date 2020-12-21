@@ -321,7 +321,7 @@ function RepostCreate(props: Props) {
             {!uri && name && (
               <>
                 <FormField
-                  label={'Content to repost'}
+                  label={__('Content to repost')}
                   type="text"
                   name="content_url"
                   value={enteredContent}
@@ -376,7 +376,7 @@ function RepostCreate(props: Props) {
                 step="any"
                 placeholder="0.123"
                 className="form-field--price-amount"
-                label={<LbcSymbol postfix={__('Support')} size={14} />}
+                label={<LbcSymbol postfix={__('Support --[button to support a claim]--')} size={14} />}
                 value={repostBid}
                 error={repostBidError}
                 helper={__('Winning amount: %amount%', {
