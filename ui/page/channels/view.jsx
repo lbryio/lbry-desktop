@@ -86,7 +86,10 @@ export default function ChannelsPage(props: Props) {
                     <span className="help--inline">
                       {__('Earnings per view')} <HelpLink href="https://lbry.com/faq/view-rewards" />
                     </span>
-                    <LbcSymbol postfix={channelRewardData.view_rate.toFixed(2)} />
+
+                    <span>
+                      <LbcSymbol postfix={channelRewardData.view_rate.toFixed(2)} />
+                    </span>
                   </span>
                 );
               } else {
