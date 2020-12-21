@@ -83,7 +83,7 @@ export default function Footer() {
       {sections.map(({ name, links }) => {
         return (
           <div key={name} className="footer__section">
-            <div className="footer__section-title">{name}</div>
+            <div className="footer__section-title">{__(name)}</div>
             <ul className="ul--no-style">
               {/* $FlowFixMe */}
               {links.map(({ label, link, navigate }) => {
