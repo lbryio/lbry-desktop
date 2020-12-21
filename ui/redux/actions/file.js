@@ -78,7 +78,7 @@ export function doDeleteFileAndMaybeGoBack(uri, deleteFromComputer, abandonClaim
     );
 
     if (playingUri === uri) {
-      actions.push(doSetPlayingUri(null));
+      actions.push(doSetPlayingUri({ uri: null }));
     }
     // it would be nice to stay on the claim if you just want to delete it
     // we need to alter autoplay to not start downloading again after you delete it

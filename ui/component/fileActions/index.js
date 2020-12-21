@@ -26,7 +26,7 @@ const select = (state, props) => ({
 const perform = dispatch => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
   prepareEdit: (publishData, uri, fileInfo) => dispatch(doPrepareEdit(publishData, uri, fileInfo, fs)),
-  clearPlayingUri: () => dispatch(doSetPlayingUri(null)),
+  clearPlayingUri: () => dispatch(doSetPlayingUri({ uri: null })),
   doToast: options => dispatch(doToast(options)),
 });
 
