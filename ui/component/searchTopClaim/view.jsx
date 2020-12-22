@@ -6,6 +6,7 @@ import { parseURI } from 'lbry-redux';
 import ClaimPreview from 'component/claimPreview';
 import Button from 'component/button';
 import ClaimEffectiveAmount from 'component/claimEffectiveAmount';
+import ClaimRepostAuthor from 'component/claimRepostAuthor';
 import I18nMessage from 'component/i18nMessage';
 import { useHistory } from 'react-router';
 import LbcSymbol from 'component/common/lbc-symbol';
@@ -21,6 +22,7 @@ type Props = {
   pendingIds: Array<string>,
   isResolvingWinningUri: boolean,
   winningClaim: ?Claim,
+  isSearching: boolean,
 };
 
 export default function SearchTopClaim(props: Props) {
@@ -33,6 +35,7 @@ export default function SearchTopClaim(props: Props) {
     setChannelActive,
     beginPublish,
     isResolvingWinningUri,
+    isSearching,
   } = props;
   const uriFromQuery = `lbry://${query}`;
   const { push } = useHistory();
@@ -70,9 +73,9 @@ export default function SearchTopClaim(props: Props) {
     }
   }, [doResolveUris, uriFromQuery, channelUriFromQuery]);
 
-  if (winningUri && !winningClaim && isResolvingWinningUri) {
-    return null;
-  }
+  // if (winningUri && !winningClaim && isResolvingWinningUri) {
+  //   return null;
+  // }
 
   return (
     <div className="search__header">
@@ -87,21 +90,27 @@ export default function SearchTopClaim(props: Props) {
           </a>
         </div>
       )}
-      {winningUri && (
+      {winningUri && winningClaim && (
         <div className="card">
           <ClaimPreview
             hideRepostLabel
+            showNullPlaceholder
             uri={winningUri}
-            type="large"
             properties={claim => (
               <span className="claim-preview__custom-properties">
+                <ClaimRepostAuthor short uri={winningUri} />
                 <ClaimEffectiveAmount uri={winningUri} />
               </span>
             )}
           />
         </div>
       )}
-      {!winningUri && uriFromQuery && (
+      {!winningUri && (isSearching || isResolvingWinningUri) && (
+        <div className="card">
+          <ClaimPreview placeholder={'loading'} />
+        </div>
+      )}
+      {!winningUri && !isSearching && !isResolvingWinningUri && uriFromQuery && (
         <div className="card card--section help--inline">
           <I18nMessage
             tokens={{
