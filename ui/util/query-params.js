@@ -66,7 +66,7 @@ export const getSearchQueryString = (query: string, options: any = {}) => {
   const { related_to } = options;
   const { nsfw } = options;
   if (related_to) additionalOptions['related_to'] = related_to;
-  if (typeof nsfw !== 'undefined') additionalOptions['nsfw'] = nsfw;
+  if (nsfw !== true) additionalOptions['nsfw'] = false;
 
   if (additionalOptions) {
     Object.keys(additionalOptions).forEach(key => {
