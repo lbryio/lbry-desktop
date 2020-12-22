@@ -18,7 +18,7 @@ function ClaimPreviewNoContent(props: Props) {
       })}
     >
       <div
-        className={classnames('claim-preview', {
+        className={classnames('claim-preview claim-preview--inactive', {
           'claim-preview--large': type === 'large',
           'claim-preview__empty': true,
         })}

@@ -6,6 +6,8 @@ import RepostCreate from 'component/repostCreate';
 import YrblWalletEmpty from 'component/yrblWalletEmpty';
 import useThrottle from 'effects/use-throttle';
 import classnames from 'classnames';
+import Base64 from 'crypto-js/enc-base64';
+import sha256 from 'crypto-js/sha256';
 
 type Props = {
   balance: number,
@@ -29,6 +31,8 @@ function RepostPage(props: Props) {
   const [repostUri, setRepostUri] = React.useState('');
   const throttledContentValue = useThrottle(contentUri, 500);
   const throttledRepostValue = useThrottle(repostUri, 500);
+
+  console.log('hash', Base64.stringify(sha256(undefined)));
 
   React.useEffect(() => {
     if (throttledContentValue) {

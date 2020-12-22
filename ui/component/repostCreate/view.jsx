@@ -86,14 +86,14 @@ function RepostCreate(props: Props) {
 
   const contentFirstRender = React.useRef(true);
   const setAutoRepostBid = amount => {
-    if (balance > amount) {
-      if (amount > 5) {
+    if (balance && balance > 0.02) {
+      if (uri) {
+        setRepostBid(0.01);
+      } else if (balance > amount) {
         setRepostBid(Number(amount.toFixed(2)));
       } else {
-        setRepostBid(5);
+        setRepostBid(0.01);
       }
-    } else if (balance) {
-      setRepostBid(0.01);
     }
   };
 

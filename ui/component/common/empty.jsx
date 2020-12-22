@@ -3,7 +3,7 @@ import React from 'react';
 import classnames from 'classnames';
 
 type Props = {
-  text: ?string,
+  text: string,
   padded?: boolean,
 };
 

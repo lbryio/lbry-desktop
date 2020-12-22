@@ -6,6 +6,7 @@ import { parseURI } from 'lbry-redux';
 import ClaimPreview from 'component/claimPreview';
 import Button from 'component/button';
 import ClaimEffectiveAmount from 'component/claimEffectiveAmount';
+import ClaimRepostAuthor from 'component/claimRepostAuthor';
 import I18nMessage from 'component/i18nMessage';
 import { useHistory } from 'react-router';
 import LbcSymbol from 'component/common/lbc-symbol';
@@ -72,9 +73,9 @@ export default function SearchTopClaim(props: Props) {
     }
   }, [doResolveUris, uriFromQuery, channelUriFromQuery]);
 
-  if (winningUri && !winningClaim && isResolvingWinningUri) {
-    return null;
-  }
+  // if (winningUri && !winningClaim && isResolvingWinningUri) {
+  //   return null;
+  // }
 
   return (
     <div className="search__header">
@@ -89,25 +90,27 @@ export default function SearchTopClaim(props: Props) {
           </a>
         </div>
       )}
-      {winningUri && (
+      {winningUri && winningClaim && (
         <div className="card">
           <ClaimPreview
             hideRepostLabel
+            showNullPlaceholder
             uri={winningUri}
             properties={claim => (
               <span className="claim-preview__custom-properties">
+                <ClaimRepostAuthor short uri={winningUri} />
                 <ClaimEffectiveAmount uri={winningUri} />
               </span>
             )}
           />
         </div>
       )}
-      {!winningUri && isSearching && (
+      {!winningUri && (isSearching || isResolvingWinningUri) && (
         <div className="card">
           <ClaimPreview placeholder={'loading'} />
         </div>
       )}
-      {!winningUri && !isSearching && uriFromQuery && (
+      {!winningUri && !isSearching && !isResolvingWinningUri && uriFromQuery && (
         <div className="card card--section help--inline">
           <I18nMessage
             tokens={{
@@ -121,8 +124,7 @@ export default function SearchTopClaim(props: Props) {
               ),
             }}
           >
-            AHHHHHHHHHHHHHHHHHHHHH You have found the edge of the internet. %repost% or %publish% your stuff here to
-            claim this spot.
+            You have found the edge of the internet. %repost% or %publish% your stuff here to claim this spot.
           </I18nMessage>
         </div>
       )}
