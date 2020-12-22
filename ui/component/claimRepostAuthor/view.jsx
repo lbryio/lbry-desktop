@@ -8,16 +8,26 @@ import Icon from 'component/common/icon';
 type Props = {
   uri: string,
   claim: ?Claim,
+  short: boolean,
 };
 
 function ClaimRepostAuthor(props: Props) {
-  const { claim } = props;
+  const { claim, short } = props;
   const repostChannelUrl = claim && claim.repost_channel_url;
+  const repostUrl = claim && claim.repost_url;
 
   if (!repostChannelUrl) {
     return null;
   }
 
+  if (short) {
+    return (
+      <span className="claim-preview__repost-author">
+        <Icon icon={ICONS.REPOST} size={14} />
+        <span>{repostUrl}</span>
+      </span>
+    );
+  }
   return (
     <div className="claim-preview__repost-author">
       <Icon icon={ICONS.REPOST} size={10} />

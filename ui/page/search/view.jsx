@@ -97,7 +97,7 @@ export default function SearchPage(props: Props) {
       <section className="search">
         {urlQuery && (
           <>
-            {isValid && <SearchTopClaim query={modifiedUrlQuery} />}
+            {isValid && <SearchTopClaim query={modifiedUrlQuery} isSearching={isSearching} />}
             <ClaimList
               uris={uris}
               loading={isSearching}
