@@ -21,6 +21,7 @@ type Props = {
   pendingIds: Array<string>,
   isResolvingWinningUri: boolean,
   winningClaim: ?Claim,
+  isSearching: boolean,
 };
 
 export default function SearchTopClaim(props: Props) {
@@ -33,6 +34,7 @@ export default function SearchTopClaim(props: Props) {
     setChannelActive,
     beginPublish,
     isResolvingWinningUri,
+    isSearching,
   } = props;
   const uriFromQuery = `lbry://${query}`;
   const { push } = useHistory();
@@ -92,7 +94,6 @@ export default function SearchTopClaim(props: Props) {
           <ClaimPreview
             hideRepostLabel
             uri={winningUri}
-            type="large"
             properties={claim => (
               <span className="claim-preview__custom-properties">
                 <ClaimEffectiveAmount uri={winningUri} />
@@ -101,7 +102,12 @@ export default function SearchTopClaim(props: Props) {
           />
         </div>
       )}
-      {!winningUri && uriFromQuery && (
+      {!winningUri && isSearching && (
+        <div className="card">
+          <ClaimPreview placeholder={'loading'} />
+        </div>
+      )}
+      {!winningUri && !isSearching && uriFromQuery && (
         <div className="card card--section help--inline">
           <I18nMessage
             tokens={{
@@ -115,7 +121,8 @@ export default function SearchTopClaim(props: Props) {
               ),
             }}
           >
-            You have found the edge of the internet. %repost% or %publish% your stuff here to claim this spot.
+            AHHHHHHHHHHHHHHHHHHHHH You have found the edge of the internet. %repost% or %publish% your stuff here to
+            claim this spot.
           </I18nMessage>
         </div>
       )}
