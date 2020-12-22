@@ -15,11 +15,11 @@
   height: calc(var(--floating-viewer-height) + var(--floating-viewer-info-height));
   overflow: hidden;
   left: calc(var(--spacing-l) + var(--spacing-s));
-  z-index: 9999;
 
   &:hover {
     .content__floating-close {
       visibility: visible;
+      z-index: 9999;
     }
   }
 }
