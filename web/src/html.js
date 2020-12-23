@@ -155,7 +155,7 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
   return head;
 }
 
-async function getClaimFromChainqueryOrRedirect(ctx, url) {
+async function getClaimFromChainqueryOrRedirect(ctx, url, ignoreRedirect = false) {
   const { isChannel, streamName, channelName, channelClaimId, streamClaimId } = parseURI(url);
   const claimName = isChannel ? '@' + channelName : streamName;
   const claimId = isChannel ? channelClaimId : streamClaimId;
@@ -164,7 +164,7 @@ async function getClaimFromChainqueryOrRedirect(ctx, url) {
   if (rows && rows.length) {
     const claim = rows[0];
 
-    if (claim.reposted_name && claim.reposted_claim_id) {
+    if (claim.reposted_name && claim.reposted_claim_id && !ignoreRedirect) {
       ctx.redirect(`/${claim.reposted_name}:${claim.reposted_claim_id}`);
       return;
     }
@@ -216,7 +216,7 @@ async function getHtml(ctx) {
 
   if (requestPath.includes(embedPath)) {
     const claimUri = requestPath.replace(embedPath, '').replace(/:/g, '#');
-    const claim = await getClaimFromChainqueryOrRedirect(ctx, claimUri);
+    const claim = await getClaimFromChainqueryOrRedirect(ctx, claimUri, true);
 
     if (claim) {
       const ogMetadata = buildClaimOgMetadata(claimUri, claim);
