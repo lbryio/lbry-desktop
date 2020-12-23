@@ -1575,4 +1575,50 @@ export const icons = {
       </g>
     </svg>
   ),
+  [ICONS.PORK_BUN]: (props: CustomProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 25 24"
+      width={props.size || '18'}
+      height={props.size || '16'}
+      fill="none"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <g transform="matrix(1,0,0,1,0,0)">
+        <path
+          d="M11.247,5.3a1,1,0,0,1,1.507,0C15.378,8.3,23.5,11.518,23.5,16.5c0,5.706-5.794,7-11.5,7S.5,22.206.5,16.5C.5,11.518,8.623,8.3,11.247,5.3Z"
+          fill="none"
+          stroke="#000000"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M10,9.874a13.068,13.068,0,0,1-2.559,2.12"
+          fill="none"
+          stroke="#000000"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M14,9.874a13.068,13.068,0,0,0,2.559,2.12"
+          fill="none"
+          stroke="#000000"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path d="M12 10.5L12 12.5" fill="none" stroke="#000000" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M6,.5C4.5,2,7.5,3,6,4.5" fill="none" stroke="#000000" strokeLinecap="round" strokeLinejoin="round" />
+        <path
+          d="M18,.5c1.5,1.5-1.5,2.5,0,4"
+          fill="none"
+          stroke="#000000"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
+    </svg>
+  ),
 };
