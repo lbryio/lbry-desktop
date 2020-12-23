@@ -79,10 +79,13 @@ class UserEmailVerify extends React.PureComponent<Props, State> {
           title={isReturningUser ? __('Check Your email') : __('Confirm your account')}
           subtitle={
             <p>
-              {__('We just sent an email to %email% with a link for you to %verify_text%.', {
-                email,
-                verify_text: isReturningUser ? __('log in') : __('verify your account'),
-              })}
+              {__(
+                'We just sent an email to %email% with a link for you to %verify_text%. Remember to check other email folders like spam or promotions.',
+                {
+                  email,
+                  verify_text: isReturningUser ? __('log in') : __('verify your account'),
+                }
+              )}
             </p>
           }
           actions={
