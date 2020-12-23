@@ -141,3 +141,4 @@ export const WILD_WEST = 'WildWest';
 export const UNIVERSE = 'Universe';
 export const CHEESE = 'Cheese';
 export const PEACE = 'Peace';
+export const PORK_BUN = 'PorkBun';
