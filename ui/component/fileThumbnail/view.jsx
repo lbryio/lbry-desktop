@@ -25,7 +25,7 @@ function FileThumbnail(props: Props) {
   const hasResolvedClaim = claim !== undefined;
 
   React.useEffect(() => {
-    if (!hasResolvedClaim) {
+    if (!hasResolvedClaim && uri) {
       doResolveUri(uri);
     }
   }, [hasResolvedClaim, uri, doResolveUri]);
