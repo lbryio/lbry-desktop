@@ -73,10 +73,6 @@ export default function SearchTopClaim(props: Props) {
     }
   }, [doResolveUris, uriFromQuery, channelUriFromQuery]);
 
-  // if (winningUri && !winningClaim && isResolvingWinningUri) {
-  //   return null;
-  // }
-
   return (
     <div className="search__header">
       {winningUri && (
