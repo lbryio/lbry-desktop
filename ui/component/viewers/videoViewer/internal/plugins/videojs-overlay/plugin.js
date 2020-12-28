@@ -1,4 +1,4 @@
-import videojs from 'video.js/dist/alt/video.core.novtt.min.js';
+import videojs from 'video.js/dist/video.min.js';
 import window from 'global/window';
 const VERSION = '2.1.4';
 
