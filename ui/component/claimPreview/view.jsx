@@ -206,10 +206,10 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   }
 
   useEffect(() => {
-    if (isValid && shouldFetch && uri) {
+    if (isValid && !isResolvingUri && shouldFetch && uri) {
       resolveUri(uri);
     }
-  }, [isValid, uri, resolveUri, shouldFetch]);
+  }, [isValid, uri, isResolvingUri, shouldFetch]);
 
   if (shouldHide && !showNullPlaceholder) {
     return null;
