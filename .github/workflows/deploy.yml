@@ -72,16 +72,16 @@ jobs:
         if: startsWith(runner.os, 'linux')
         with:
           name: Linux
-          path: ./dist/electron/[LBRY]*.*
+          path: ./dist/electron/*.*
 
       - uses: actions/upload-artifact@v2
         if: startsWith(runner.os, 'mac')
         with:
           name: macOS
-          path: ./dist/electron/[LBRY]*.*
+          path: ./dist/electron/*.*
 
       - uses: actions/upload-artifact@v2
         if: startsWith(runner.os, 'windows')
         with:
           name: Windows
-          path: ./dist/electron/[LBRY]*.*
+          path: ./dist/electron/*.*
