@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Button from 'component/button';
 import * as ICONS from 'constants/icons';
 import classnames from 'classnames';
-import videojs from 'video.js/dist/alt/video.core.novtt.min.js';
+import videojs from 'video.js/dist/video.min.js';
 import 'video.js/dist/alt/video-js-cdn.min.css';
 import eventTracking from 'videojs-event-tracking';
 import * as OVERLAY from './overlays';
