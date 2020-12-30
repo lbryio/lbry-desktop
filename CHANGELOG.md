@@ -8,12 +8,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
-- Turn timestamps in a video's description and comments into links _community pr!_ ([#5156](https://github.com/lbryio/lbry-desktop/pull/5156))
-- Mobile video player enhancements and the ability to tap on the left and right edges to seek _community pr!_ ([#5119](https://github.com/lbryio/lbry-desktop/pull/5119))
-
 ### Changed
 
 ### Fixed
+
+## [0.49.3] - [2020-12-30]
+
+### Added
+
+- Turn timestamps in a video's description and comments into links _community pr!_ ([#5156](https://github.com/lbryio/lbry-desktop/pull/5156))
+- Mobile video player enhancements and the ability to tap on the left and right edges to seek _community pr!_ ([#5119](https://github.com/lbryio/lbry-desktop/pull/5119))
+- Added tile layout for tags page [a0ec5](https://github.com/lbryio/lbry-desktop/commit/a0ec5097d93496b92736e1682f9fb2d20dadf425).
+
+### Changed
+
+- Repost option now has a full page and can be triggered from search results (click "View competing uploads for ...").
+
+### Fixed
+
+- [Upgrade SDK to 0.87.0](https://github.com/lbryio/lbry-sdk/releases/tag/v0.87.0). Forces wallet resync which fixes balance issues for some users and improves memory usage.
 
 ## [0.49.1] - [2020-12-15]
 
