@@ -38,6 +38,11 @@ jobs:
         with:
           xcode-version: '10.3.0'
 
+      - name: Download blockchain headers
+        run: |
+          mkdir -p ./dist/electron/static/daemon
+          curl -o ./dist/electron/static/daemon/headers https://headers.lbry.io/blockchain_headers_latest
+
       - name: Build
         run: |
           yarn global add cross-env
