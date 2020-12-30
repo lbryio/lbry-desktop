@@ -181,7 +181,7 @@
 
 .wunderbar__more-results {
   margin-top: var(--spacing-xs);
-  margin-left: var(--spacing-m);
+  margin-left: var(--spacing-s);
   margin-bottom: var(--spacing-l);
 
   .button {
@@ -189,7 +189,6 @@
   }
 
   @media (min-width: $breakpoint-small) {
-    margin-left: var(--spacing-s);
     margin-bottom: var(--spacing-m);
   }
 }

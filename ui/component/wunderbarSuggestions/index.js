@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { selectLanguage, makeSelectClientSetting } from 'redux/selectors/settings';
 import { doToast } from 'redux/actions/notifications';
 import { doSearch } from 'redux/actions/search';
-import { doOpenModal } from 'redux/actions/app';
+import { doOpenModal, doHideModal } from 'redux/actions/app';
 import { withRouter } from 'react-router';
 import { doResolveUris, SETTINGS } from 'lbry-redux';
 import analytics from 'analytics';
@@ -24,6 +24,7 @@ const perform = (dispatch, ownProps) => ({
   },
   doShowSnackBar: message => dispatch(doToast({ isError: true, message })),
   doOpenMobileSearch: () => dispatch(doOpenModal(MODALS.MOBILE_SEARCH)),
+  doCloseMobileSearch: () => dispatch(doHideModal()),
 });
 
 export default withRouter(connect(select, perform)(Wunderbar));

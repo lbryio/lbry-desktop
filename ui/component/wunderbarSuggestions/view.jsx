@@ -35,11 +35,14 @@ type Props = {
   doShowSnackBar: string => void,
   showMature: boolean,
   isMobile: boolean,
+  doCloseMobileSearch: () => void,
 };
 
 export default function WunderBarSuggestions(props: Props) {
-  const { navigateToSearchPage, doShowSnackBar, doResolveUris, showMature, isMobile } = props;
+  const { navigateToSearchPage, doShowSnackBar, doResolveUris, showMature, isMobile, doCloseMobileSearch } = props;
   const inputRef = React.useRef();
+  const isFocused = inputRef && inputRef.current && inputRef.current === document.activeElement;
+
   const {
     push,
     location: { search },
@@ -75,6 +78,8 @@ export default function WunderBarSuggestions(props: Props) {
     if (!value) {
       return;
     }
+
+    doCloseMobileSearch();
 
     const includesLbryTvProd = value.includes(WEB_PROD_PREFIX);
     const includesLbryTvLocal = value.includes(WEB_LOCAL_PREFIX);
@@ -182,7 +187,7 @@ export default function WunderBarSuggestions(props: Props) {
             value={term}
           />
 
-          {results && results.length > 0 && (
+          {isFocused && results && results.length > 0 && (
             <ComboboxPopover
               portal={false}
               className={classnames('wunderbar__suggestions', { 'wunderbar__suggestions--mobile': isMobile })}
