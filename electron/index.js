@@ -177,7 +177,6 @@ if (!gotSingleInstanceLock) {
     if (isDev) {
       await installDevtools();
     }
-
     rendererWindow = createWindow(appState);
     tray = createTray(rendererWindow);
 
