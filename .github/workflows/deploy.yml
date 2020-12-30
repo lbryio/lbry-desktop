@@ -40,8 +40,9 @@ jobs:
 
       - name: Download blockchain headers
         run: |
-          mkdir -p ./dist/electron/static/daemon
-          curl -o ./dist/electron/static/daemon/headers https://headers.lbry.io/blockchain_headers_latest
+          mkdir -p ./static/daemon
+          curl -o ./static/daemon/headers https://headers.lbry.io/blockchain_headers_latest
+          ls ./static/daemon
 
       - name: Build
         run: |
