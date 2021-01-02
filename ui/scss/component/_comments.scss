@@ -180,6 +180,11 @@ $thumbnailWidthSmall: 0rem;
   word-break: break-word;
   max-width: 35rem;
 
+  ul li,
+  ol li {
+    list-style-position: inside;
+  }
+
   p {
     & + p {
       margin-top: var(--spacing-xxs);
