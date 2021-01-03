@@ -64,17 +64,17 @@ function Ads(props: Props) {
   const adsSignInDriver = (
     <I18nMessage
       tokens={{
-        sign_in_to_lbrytv: (
+        log_in_to_domain: (
           <Button
             button="link"
-            label={__('Log in to') + ' ' + DOMAIN}
+            label={__('Log in to %domain%', { domain: DOMAIN })}
             navigate={`/$/${PAGES.AUTH}?redirect=${pathname}`}
           />
         ),
         download_the_app: <Button button="link" label={__('download the app')} href="https://lbry.com/get" />,
       }}
     >
-      Hate these? %sign_in_to_lbrytv% or %download_the_app% for an ad free experience.
+      Hate these? %log_in_to_domain% or %download_the_app% for an ad free experience.
     </I18nMessage>
   );
 
