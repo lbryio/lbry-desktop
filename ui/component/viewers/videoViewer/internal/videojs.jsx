@@ -312,7 +312,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       containerRef.current.appendChild(wrapper);
 
       fetch(source).then(response => {
-        if (response.redirected && response.url && response.url.endsWith('m3u8')) {
+        if (response && response.redirected && response.url && response.url.endsWith('m3u8')) {
           videoJsOptions.sources[0].type = 'application/x-mpegURL';
         }
 
