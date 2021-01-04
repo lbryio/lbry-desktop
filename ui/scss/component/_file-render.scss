@@ -53,6 +53,8 @@
 }
 
 .file-render--video {
+  background-color: black;
+
   &:after {
     content: '';
     position: absolute;
