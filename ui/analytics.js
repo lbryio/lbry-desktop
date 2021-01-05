@@ -45,7 +45,7 @@ type Analytics = {
       bufferDuration: number,
       bitRate: number,
       duration: number,
-      userIdHash: string,
+      userId: string,
       playerPoweredBy: string,
       readyState: number,
     }
@@ -217,7 +217,7 @@ const analytics: Analytics = {
         body: JSON.stringify({
           device: 'web',
           type: 'buffering',
-          client: data.userIdHash,
+          client: data.userId,
           data: {
             url: claim.canonical_url,
             position: data.timeAtBuffer,
