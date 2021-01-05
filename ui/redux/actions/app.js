@@ -55,8 +55,6 @@ import analytics, { SHARE_INTERNAL } from 'analytics';
 import { doSignOutCleanup } from 'util/saved-passwords';
 import { doSocketConnect } from 'redux/actions/websocket';
 import { stringifyServerParam, shouldSetSetting } from 'util/sync-settings';
-import sha256 from 'crypto-js/sha256';
-import Base64 from 'crypto-js/enc-base64';
 
 // @if TARGET='app'
 const { autoUpdater } = remote.require('electron-updater');
@@ -502,13 +500,13 @@ export function doAnalyticsBuffer(uri, bufferData) {
     const fileSize = source.size; // size in bytes
     const fileSizeInBits = fileSize * 8;
     const bitRate = parseInt(fileSizeInBits / fileDurationInSeconds);
-    const userIdHash = Base64.stringify(sha256(user.id));
+    const userId = user.id;
 
     analytics.videoBufferEvent(claim, {
       timeAtBuffer,
       bufferDuration,
       bitRate,
-      userIdHash,
+      userId,
       duration: fileDurationInSeconds,
       playerPoweredBy: bufferData.playerPoweredBy,
       readyState: bufferData.readyState,
