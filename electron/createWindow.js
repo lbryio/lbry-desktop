@@ -178,10 +178,6 @@ export default appState => {
         window.webContents.send('language-set', language);
       }
     });
-
-    if (isDev) {
-      window.webContents.openDevTools();
-    }
   });
 
   window.webContents.on('crashed', () => {

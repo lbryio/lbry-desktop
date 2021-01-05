@@ -1549,5 +1549,9 @@
   "This content can be downloaded from lbry.tv, but not displayed. It will display in LBRY Desktop, an app for desktop computers.": "This content can be downloaded from lbry.tv, but not displayed. It will display in LBRY Desktop, an app for desktop computers.",
   "Repost Here": "Repost Here",
   "Publish Here": "Publish Here",
+  "Close sidebar - hide channels you are following.": "Close sidebar - hide channels you are following.",
+  "Consolidate Now": "Consolidate Now",
+  "Your wallet has a lot of change lying around. Consolidating will speed up your transactions. This could take some time. %now%%help%": "Your wallet has a lot of change lying around. Consolidating will speed up your transactions. This could take some time. %now%%help%",
+  "Consolidating": "Consolidating",
   "--end--": "--end--"
 }
