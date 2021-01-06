@@ -2,6 +2,7 @@ import * as ACTIONS from 'constants/action_types';
 import moment from 'moment';
 import { ACTIONS as LBRY_REDUX_ACTIONS, SETTINGS, SHARED_PREFERENCES } from 'lbry-redux';
 import { getSubsetFromKeysArray } from 'util/sync-settings';
+import { getDefaultLanguage } from 'util/default-languages';
 import { UNSYNCED_SETTINGS } from 'config';
 
 const { CLIENT_SYNC_KEYS } = SHARED_PREFERENCES;
@@ -16,7 +17,7 @@ try {
   let appLanguage = window.localStorage.getItem(SETTINGS.LANGUAGE);
   settingLanguage.push(appLanguage);
 } catch (e) {}
-settingLanguage.push(window.navigator.language.slice(0, 2));
+settingLanguage.push(getDefaultLanguage());
 settingLanguage.push('en');
 
 const defaultState = {
