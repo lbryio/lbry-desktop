@@ -500,7 +500,7 @@ export function doAnalyticsBuffer(uri, bufferData) {
     const fileSize = source.size; // size in bytes
     const fileSizeInBits = fileSize * 8;
     const bitRate = parseInt(fileSizeInBits / fileDurationInSeconds);
-    const userId = user.id;
+    const userId = user.id.toString();
 
     analytics.videoBufferEvent(claim, {
       timeAtBuffer,
