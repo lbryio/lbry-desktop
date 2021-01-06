@@ -9,6 +9,7 @@ import { doGetSyncDesktop, doSyncUnsubscribe, doSetSyncLock } from 'redux/action
 import { doAlertWaitingForSync, doGetAndPopulatePreferences } from 'redux/actions/app';
 import { selectPrefsReady } from 'redux/selectors/sync';
 import { Lbryio } from 'lbryinc';
+import { getDefaultLanguage } from 'util/default-languages';
 
 const { DEFAULT_LANGUAGE } = require('config');
 const { SDK_SYNC_KEYS } = SHARED_PREFERENCES;
@@ -295,7 +296,7 @@ export function doFetchLanguage(language) {
 export function doSetHomepage(code) {
   return (dispatch, getState) => {
     let languageCode;
-    if (code === window.navigator.language.slice(0, 2)) {
+    if (code === getDefaultLanguage()) {
       languageCode = null;
     } else {
       languageCode = code;
@@ -311,7 +312,7 @@ export function doSetLanguage(language) {
     const { share_usage_data: shareSetting } = daemonSettings;
     const isSharingData = shareSetting || IS_WEB;
     let languageSetting;
-    if (language === window.navigator.language.slice(0, 2)) {
+    if (language === getDefaultLanguage()) {
       languageSetting = null;
     } else {
       languageSetting = language;

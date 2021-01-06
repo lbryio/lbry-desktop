@@ -1,8 +1,10 @@
 import LANGUAGES from './languages';
-// supported_browser_languages
-const SUPPORTED_LANGUAGES = {
+
+const SUPPORTED_BROWSER_LANGUAGES = {
   en: LANGUAGES.en[1],
   da: LANGUAGES.da[1],
+  'zh-CN': LANGUAGES['zh-Hans'][1],
+  'zh-TW': LANGUAGES['zh-Hant'][1],
   'zh-Hans': LANGUAGES['zh-Hans'][1],
   'zh-Hant': LANGUAGES['zh-Hant'][1],
   hr: LANGUAGES.hr[1],
@@ -36,4 +38,4 @@ const SUPPORTED_LANGUAGES = {
 
 // Properties: language code (e.g. 'ja')
 // Values: name of the language in native form (e.g. '日本語')
-export default SUPPORTED_LANGUAGES;
+export default SUPPORTED_BROWSER_LANGUAGES;

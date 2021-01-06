@@ -6,6 +6,7 @@ import { doToast } from 'redux/actions/notifications';
 import rewards from 'rewards';
 import { Lbryio } from 'lbryinc';
 import { DOMAIN } from 'config';
+import { getDefaultLanguage } from 'util/default-languages';
 const AUTH_IN_PROGRESS = 'authInProgress';
 export let sessionStorageAvailable = false;
 
@@ -131,7 +132,7 @@ export function doAuthenticate(
     });
     checkAuthBusy()
       .then(() => {
-        return Lbryio.authenticate(DOMAIN, window.navigator.language.slice(0, 2) || 'en');
+        return Lbryio.authenticate(DOMAIN, getDefaultLanguage());
       })
       .then(user => {
         if (sessionStorageAvailable) window.sessionStorage.removeItem(AUTH_IN_PROGRESS);
