@@ -135,8 +135,10 @@ rewards.setCallback('claimFirstRewardSuccess', () => {
   app.store.dispatch(doOpenModal(MODALS.FIRST_REWARD));
 });
 
-rewards.setCallback('claimRewardSuccess', () => {
-  app.store.dispatch(doHideModal());
+rewards.setCallback('claimRewardSuccess', reward => {
+  if (reward && reward.type === rewards.TYPE_REWARD_CODE) {
+    app.store.dispatch(doHideModal());
+  }
 });
 
 // @if TARGET='app'
