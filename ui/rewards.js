@@ -38,7 +38,7 @@ rewards.claimReward = (type, rewardParams) => {
       window.store.dispatch(action);
 
       if (rewards.callbacks.claimRewardSuccess) {
-        rewards.callbacks.claimRewardSuccess();
+        rewards.callbacks.claimRewardSuccess(reward);
       }
 
       resolve(reward);
