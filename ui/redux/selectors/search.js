@@ -125,7 +125,8 @@ export const makeSelectWinningUriForQuery = (query: string) => {
           : claim1.repost_url || claim1.canonical_url;
       }
 
-      const effectiveAmount1 = claim1 && claim1.meta.effective_amount;
+      const effectiveAmount1 = claim1 && (claim1.repost_bid_amount || claim1.meta.effective_amount);
+      // claim2 will never have a repost_bid_amount because reposts never start with "@"
       const effectiveAmount2 = claim2 && claim2.meta.effective_amount;
 
       if (!matureEnabled) {
