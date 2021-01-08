@@ -77,9 +77,7 @@ export const makeSelectRecommendedContentForUri = (uri: string) =>
           isBackgroundSearch?: boolean,
         } = { related_to: claim.claim_id, isBackgroundSearch: true };
 
-        if (!isMature) {
-          options['nsfw'] = false;
-        }
+        options['nsfw'] = isMature;
         const searchQuery = getSearchQueryString(title.replace(/\//, ' '), options);
 
         let searchUris = searchUrisByQuery[searchQuery];
