@@ -31,6 +31,9 @@ export type Player = {
   userActive: (?boolean) => boolean,
   overlay: any => void,
   mobileUi: any => void,
+  controlBar: {
+    addChild: (string, any) => void,
+  },
 };
 
 type Props = {

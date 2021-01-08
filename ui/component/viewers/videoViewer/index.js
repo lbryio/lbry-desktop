@@ -8,6 +8,7 @@ import VideoViewer from './view';
 import { withRouter } from 'react-router';
 import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { toggleVideoTheaterMode } from 'redux/actions/settings';
 
 const select = (state, props) => {
   const { search } = props.location;
@@ -35,6 +36,7 @@ const perform = dispatch => ({
   doAnalyticsView: (uri, timeToStart) => dispatch(doAnalyticsView(uri, timeToStart)),
   doAnalyticsBuffer: (uri, bufferData) => dispatch(doAnalyticsBuffer(uri, bufferData)),
   claimRewards: () => dispatch(doClaimEligiblePurchaseRewards()),
+  toggleVideoTheaterMode: () => dispatch(toggleVideoTheaterMode()),
 });
 
 export default withRouter(connect(select, perform)(VideoViewer));

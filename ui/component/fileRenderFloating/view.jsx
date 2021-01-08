@@ -31,6 +31,7 @@ type Props = {
   renderMode: string,
   playingUri: ?PlayingUri,
   primaryUri: ?string,
+  videoTheaterMode: boolean,
 };
 
 export default function FileRenderFloating(props: Props) {
@@ -45,6 +46,7 @@ export default function FileRenderFloating(props: Props) {
     renderMode,
     playingUri,
     primaryUri,
+    videoTheaterMode,
   } = props;
   const {
     location: { pathname },
@@ -187,7 +189,7 @@ export default function FileRenderFloating(props: Props) {
       window.removeEventListener('resize', handleResize);
       onFullscreenChange(window, 'remove', handleResize);
     };
-  }, [setFileViewerRect, isFloating, playingUriSource, mainFilePlaying]);
+  }, [setFileViewerRect, isFloating, playingUriSource, mainFilePlaying, videoTheaterMode]);
 
   useEffect(() => {
     // @if TARGET='app'
@@ -248,6 +250,7 @@ export default function FileRenderFloating(props: Props) {
         className={classnames('content__viewer', {
           'content__viewer--floating': isFloating,
           'content__viewer--inline': !isFloating,
+          'content__viewer--theater-mode': !isFloating && videoTheaterMode,
         })}
         style={
           !isFloating && fileViewerRect

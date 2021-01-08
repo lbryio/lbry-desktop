@@ -414,3 +414,12 @@ export function doSetAppToTrayWhenClosed(value) {
     dispatch(doSetClientSetting(SETTINGS.TO_TRAY_WHEN_CLOSED, value));
   };
 }
+
+export function toggleVideoTheaterMode() {
+  return (dispatch, getState) => {
+    const state = getState();
+    const videoTheaterMode = makeSelectClientSetting(SETTINGS.VIDEO_THEATER_MODE)(state);
+
+    dispatch(doSetClientSetting(SETTINGS.VIDEO_THEATER_MODE, !videoTheaterMode));
+  };
+}

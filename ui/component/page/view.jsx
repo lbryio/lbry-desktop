@@ -26,6 +26,7 @@ type Props = {
   noFooter: boolean,
   noSideNavigation: boolean,
   fullWidthPage: boolean,
+  videoTheaterMode: boolean,
   backout: {
     backLabel?: string,
     backNavDefault?: string,
@@ -45,7 +46,9 @@ function Page(props: Props) {
     noFooter = false,
     noSideNavigation = false,
     backout,
+    videoTheaterMode,
   } = props;
+
   const {
     location: { pathname },
   } = useHistory();
@@ -82,7 +85,12 @@ function Page(props: Props) {
           setSidebarOpen={setSidebarOpen}
         />
       )}
-      <div className={classnames('main-wrapper__inner', { 'main-wrapper__inner--filepage': isOnFilePage })}>
+      <div
+        className={classnames('main-wrapper__inner', {
+          'main-wrapper__inner--filepage': isOnFilePage,
+          'main-wrapper__inner--theater-mode': isOnFilePage && videoTheaterMode,
+        })}
+      >
         {!authPage && !noSideNavigation && (
           <SideNavigation
             sidebarOpen={sidebarOpen}
@@ -96,6 +104,7 @@ function Page(props: Props) {
             'main--full-width': fullWidthPage,
             'main--auth-page': authPage,
             'main--file-page': filePage,
+            'main--theater-mode': isOnFilePage && videoTheaterMode,
           })}
         >
           {children}

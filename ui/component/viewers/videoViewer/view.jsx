@@ -3,7 +3,6 @@ import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { stopContextMenu } from 'util/context-menu';
 import type { Player } from './internal/videojs';
 import VideoJs from './internal/videojs';
-
 import analytics from 'analytics';
 import { EmbedContext } from 'page/embedWrapper/view';
 import classnames from 'classnames';
@@ -13,6 +12,7 @@ import usePrevious from 'effects/use-previous';
 import FileViewerEmbeddedEnded from 'web/component/fileViewerEmbeddedEnded';
 import FileViewerEmbeddedTitle from 'component/fileViewerEmbeddedTitle';
 import LoadingScreen from 'component/common/loading-screen';
+import { addTheaterModeButton } from './internal/theater-mode';
 
 const PLAY_TIMEOUT_ERROR = 'play_timeout_error';
 
@@ -35,6 +35,7 @@ type Props = {
   claimRewards: () => void,
   savePosition: (string, number) => void,
   clearPosition: string => void,
+  toggleVideoTheaterMode: () => void,
 };
 
 /*
@@ -62,6 +63,7 @@ function VideoViewer(props: Props) {
     savePosition,
     clearPosition,
     desktopPlayStartTime,
+    toggleVideoTheaterMode,
   } = props;
   const claimId = claim && claim.claim_id;
   const isAudio = contentType.includes('audio');
@@ -135,6 +137,8 @@ function VideoViewer(props: Props) {
       if (!embedded) {
         player.muted(muted);
         player.volume(volume);
+
+        addTheaterModeButton(player, toggleVideoTheaterMode);
       }
 
       const shouldPlay = !embedded || autoplayIfEmbedded;
