@@ -39,7 +39,7 @@ const config = {
   PINNED_LABEL_1: process.env.PINNED_LABEL_1,
   PINNED_URI_2: process.env.PINNED_URI_2,
   PINNED_LABEL_2: process.env.PINNED_LABEL_2,
-  KNOWN_APP_DOMAINS: process.env.KNOWN_APP_DOMAINS,
+  KNOWN_APP_DOMAINS: process.env.KNOWN_APP_DOMAINS ? process.env.KNOWN_APP_DOMAINS.split(',') : [],
 };
 
 config.URL_LOCAL = `http://localhost:${config.WEB_SERVER_PORT}`;
