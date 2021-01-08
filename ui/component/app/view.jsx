@@ -239,8 +239,7 @@ function App(props: Props) {
     if (shouldMigrateLanguage) {
       setLanguage(shouldMigrateLanguage);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [shouldMigrateLanguage]);
+  }, [shouldMigrateLanguage, setLanguage]);
 
   useEffect(() => {
     // Check that previousHasVerifiedEmail was not undefined instead of just not truthy
