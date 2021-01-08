@@ -46,9 +46,8 @@ export default function SearchPage(props: Props) {
   const urlParams = new URLSearchParams(location.search);
   const urlQuery = urlParams.get('q') || '';
   const additionalOptions: AdditionalOptions = { isBackgroundSearch: false };
-  if (!showNsfw) {
-    additionalOptions['nsfw'] = false;
-  }
+
+  additionalOptions['nsfw'] = showNsfw;
 
   const modifiedUrlQuery = urlQuery
     .trim()
