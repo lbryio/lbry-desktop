@@ -8,7 +8,7 @@ import SearchOptions from './view';
 const select = state => ({
   options: selectSearchOptions(state),
   expanded: selectSearchOptionsExpanded(state),
-  query: makeSelectQueryWithOptions()(state),
+  query: makeSelectQueryWithOptions(undefined, {})(state),
 });
 
 const perform = (dispatch, ownProps) => {
