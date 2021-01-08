@@ -65,7 +65,7 @@ export default function apiPublishCallViaWeb(
       };
       xhr.onerror = () => {
         window.store.dispatch(doUpdateUploadProgress(undefined, params));
-        reject(new Error(__('There was a problem with your upload')));
+        reject(new Error(__('There was a problem with your upload. Please try again.')));
       };
 
       xhr.onabort = () => {
