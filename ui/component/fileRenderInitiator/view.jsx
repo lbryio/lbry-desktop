@@ -32,6 +32,7 @@ type Props = {
   claim: StreamClaim,
   claimWasPurchased: boolean,
   authenticated: boolean,
+  videoTheaterMode: boolean,
 };
 
 export default function FileRenderInitiator(props: Props) {
@@ -51,6 +52,7 @@ export default function FileRenderInitiator(props: Props) {
     costInfo,
     claimWasPurchased,
     authenticated,
+    videoTheaterMode,
   } = props;
   const cost = costInfo && costInfo.cost;
   const isFree = hasCostInfo && cost === 0;
@@ -118,6 +120,7 @@ export default function FileRenderInitiator(props: Props) {
       style={thumbnail && !obscurePreview ? { backgroundImage: `url("${thumbnail}")` } : {}}
       className={classnames('content__cover', {
         'content__cover--disabled': disabled,
+        'content__cover--theater-mode': videoTheaterMode,
         'card__media--nsfw': obscurePreview,
       })}
     >

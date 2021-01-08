@@ -24,6 +24,7 @@ type Props = {
   isMature: boolean,
   linkedComment: any,
   setPrimaryUri: (?string) => void,
+  videoTheaterMode: boolean,
 };
 
 function FilePage(props: Props) {
@@ -39,6 +40,7 @@ function FilePage(props: Props) {
     costInfo,
     linkedComment,
     setPrimaryUri,
+    videoTheaterMode,
   } = props;
   const cost = costInfo ? costInfo.cost : null;
   const hasFileInfo = fileInfo !== undefined;
@@ -67,10 +69,9 @@ function FilePage(props: Props) {
       return (
         <React.Fragment>
           <div className={PRIMARY_PLAYER_WRAPPER_CLASS}>
-            <FileRenderInitiator uri={uri} />
+            <FileRenderInitiator uri={uri} videoTheaterMode={videoTheaterMode} />
           </div>
           {/* playables will be rendered and injected by <FileRenderFloating> */}
-          <FileTitle uri={uri} />
         </React.Fragment>
       );
     }
@@ -96,14 +97,14 @@ function FilePage(props: Props) {
 
     return (
       <React.Fragment>
-        <FileRenderInitiator uri={uri} />
+        <FileRenderInitiator uri={uri} videoTheaterMode={videoTheaterMode} />
         <FileRenderInline uri={uri} />
         <FileTitle uri={uri} />
       </React.Fragment>
     );
   }
 
-  function renderBlockedPage() {
+  if (obscureNsfw && isMature) {
     return (
       <Page>
         <FileTitle uri={uri} isNsfwBlocked />
@@ -111,19 +112,21 @@ function FilePage(props: Props) {
     );
   }
 
-  if (obscureNsfw && isMature) {
-    return renderBlockedPage();
-  }
-
   return (
     <Page className="file-page" filePage>
       <div className={classnames('section card-stack', `file-page__${renderMode}`)}>
         {renderFilePageLayout()}
 
-        <CommentsList uri={uri} linkedComment={linkedComment} />
+        <div className="file-page__secondary-content">
+          <div>
+            {RENDER_MODES.FLOATING_MODES.includes(renderMode) && <FileTitle uri={uri} />}
+            <CommentsList uri={uri} linkedComment={linkedComment} />
+          </div>
+          {videoTheaterMode && <RecommendedContent uri={uri} />}
+        </div>
       </div>
 
-      <RecommendedContent uri={uri} />
+      {!videoTheaterMode && <RecommendedContent uri={uri} />}
     </Page>
   );
 }

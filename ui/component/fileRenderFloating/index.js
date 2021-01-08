@@ -26,6 +26,7 @@ const select = (state, props) => {
     streamingUrl: makeSelectStreamingUrlForUri(uri)(state),
     floatingPlayerEnabled: makeSelectClientSetting(SETTINGS.FLOATING_PLAYER)(state),
     renderMode: makeSelectFileRenderModeForUri(uri)(state),
+    videoTheaterMode: makeSelectClientSetting(SETTINGS.VIDEO_THEATER_MODE)(state),
   };
 };
 

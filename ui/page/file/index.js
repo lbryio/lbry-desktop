@@ -1,9 +1,15 @@
 import { connect } from 'react-redux';
 import { doSetContentHistoryItem, doSetPrimaryUri } from 'redux/actions/content';
 import { withRouter } from 'react-router';
-import { doFetchFileInfo, makeSelectFileInfoForUri, makeSelectMetadataForUri, makeSelectClaimIsNsfw } from 'lbry-redux';
+import {
+  doFetchFileInfo,
+  makeSelectFileInfoForUri,
+  makeSelectMetadataForUri,
+  makeSelectClaimIsNsfw,
+  SETTINGS,
+} from 'lbry-redux';
 import { makeSelectCostInfoForUri, doFetchCostInfoForUri } from 'lbryinc';
-import { selectShowMatureContent } from 'redux/selectors/settings';
+import { selectShowMatureContent, makeSelectClientSetting } from 'redux/selectors/settings';
 import { makeSelectFileRenderModeForUri } from 'redux/selectors/content';
 import { makeSelectCommentForCommentId } from 'redux/selectors/comments';
 import FilePage from './view';
@@ -21,6 +27,7 @@ const select = (state, props) => {
     isMature: makeSelectClaimIsNsfw(props.uri)(state),
     fileInfo: makeSelectFileInfoForUri(props.uri)(state),
     renderMode: makeSelectFileRenderModeForUri(props.uri)(state),
+    videoTheaterMode: makeSelectClientSetting(SETTINGS.VIDEO_THEATER_MODE)(state),
   };
 };
 

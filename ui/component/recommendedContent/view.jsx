@@ -55,7 +55,6 @@ export default function RecommendedContent(props: Props) {
       title={__('Related')}
       body={
         <ClaimList
-          isCardBody
           type="small"
           loading={isSearching}
           uris={recommendedContent}

@@ -39,6 +39,10 @@
   padding-top: var(--spacing-s);
 }
 
+.main-wrapper__inner--theater-mode {
+  padding-top: 0;
+}
+
 .main {
   position: relative;
   width: calc(100% - var(--side-nav-width) - var(--spacing-l));
@@ -65,15 +69,43 @@
   align-items: flex-start;
   padding-left: var(--spacing-m);
   padding-right: var(--spacing-m);
+  position: relative;
 
   > :first-child {
-    flex: 1;
-    margin-right: var(--spacing-m);
+    flex-grow: 2;
+  }
+
+  .file-page__secondary-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    margin-top: var(--spacing-m);
+    max-width: var(--page-max-width--filepage);
+    margin-left: auto;
+    margin-right: auto;
+
+    > :first-child {
+      flex: 1;
+    }
+
+    @media (min-width: $breakpoint-medium) {
+      flex-direction: row;
+    }
+  }
+
+  .file-page__info {
+    margin-top: var(--spacing-m);
   }
 
   .file-page__recommended {
-    width: 25rem;
     height: 0%;
+    width: 35rem;
+    margin-left: var(--spacing-m);
+
+    @media (max-width: $breakpoint-small) {
+      margin-left: 0;
+    }
 
     @media (max-width: $breakpoint-medium) {
       width: 100%;
@@ -82,8 +114,6 @@
   }
 
   @media (max-width: $breakpoint-medium) {
-    flex-direction: column;
-
     > :first-child {
       margin-right: 0;
     }
@@ -95,13 +125,48 @@
   }
 }
 
+.main--theater-mode {
+  padding-left: 0;
+  padding-right: 0;
+  margin-left: 0;
+  margin-right: 0;
+  width: 100vw;
+  max-width: none;
+
+  > :first-child {
+    margin-right: 0;
+  }
+
+  .file-page__info {
+    padding: 0 var(--spacing-m);
+    margin-top: var(--spacing-m);
+    max-width: var(--page-max-width--filepage);
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .file-page__recommended {
+    width: 25rem;
+  }
+
+  .file-page__secondary-content {
+    padding: 0 var(--spacing-s);
+
+    @media (min-width: $breakpoint-medium) {
+      flex-direction: row;
+    }
+  }
+}
+
 .main--full-width {
   @extend .main;
 
   @media (min-width: $breakpoint-large) {
     max-width: none;
     width: 100%;
-    padding: 0 var(--spacing-l);
+    margin: 0 var(--spacing-l);
   }
 }
 
