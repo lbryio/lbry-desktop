@@ -12,14 +12,9 @@ type Props = {
 };
 
 function ClaimRepostAuthor(props: Props) {
-  const { claim, short } = props;
+  const { claim, short, uri } = props;
   const repostChannelUrl = claim && claim.repost_channel_url;
   const repostUrl = claim && claim.repost_url;
-
-  if (!repostChannelUrl) {
-    return null;
-  }
-
   if (short) {
     return (
       <span className="claim-preview__repost-author">
@@ -28,10 +23,14 @@ function ClaimRepostAuthor(props: Props) {
       </span>
     );
   }
+  if (!repostChannelUrl) {
+    return null;
+  }
+
   return (
     <div className="claim-preview__repost-author">
       <Icon icon={ICONS.REPOST} size={10} />
-      <I18nMessage tokens={{ repost_channel_link: <UriIndicator link uri={repostChannelUrl} /> }}>
+      <I18nMessage tokens={{ repost_channel_link: <UriIndicator link uri={uri} useRepost /> }}>
         %repost_channel_link% reposted
       </I18nMessage>
     </div>

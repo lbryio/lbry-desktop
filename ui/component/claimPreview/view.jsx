@@ -252,8 +252,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
         'claim-preview__wrapper--small': type === 'small',
       })}
     >
-      {!hideRepostLabel && <ClaimRepostAuthor uri={uri} />}
-
+      {!hideRepostLabel && claim && claim.repost_channel_url && <ClaimRepostAuthor uri={claim.repost_url} />}
       <div
         className={classnames('claim-preview', {
           'claim-preview--small': type === 'small' || type === 'tooltip',

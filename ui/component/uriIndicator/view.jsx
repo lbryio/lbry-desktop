@@ -20,6 +20,7 @@ type Props = {
   // to allow for other elements to be nested within the UriIndicator
   children: ?Node,
   inline: boolean,
+  useRepost: boolean,
 };
 
 class UriIndicator extends React.PureComponent<Props> {
@@ -44,20 +45,31 @@ class UriIndicator extends React.PureComponent<Props> {
   };
 
   render() {
-    const { link, isResolvingUri, claim, addTooltip, children, inline, hideAnonymous = false } = this.props;
+    const { link, isResolvingUri, claim, addTooltip, children, inline, hideAnonymous = false, useRepost } = this.props;
 
     if (!claim) {
       return <span className="empty">{isResolvingUri ? 'Validating...' : 'Unused'}</span>;
     }
-
+    const repostChannelUrl = claim.repost_channel_url;
     const isChannelClaim = claim.value_type === 'channel';
 
+    if (repostChannelUrl && useRepost) {
+      return (
+        <span dir="auto" className={classnames('channel-name', { 'channel-name--inline': inline })}>
+          {repostChannelUrl}
+        </span>
+      );
+    }
     if (!claim.signing_channel && !isChannelClaim) {
       if (hideAnonymous) {
         return null;
       }
 
-      return <span dir="auto" className={classnames('channel-name', { 'channel-name--inline': inline })}>Anonymous</span>;
+      return (
+        <span dir="auto" className={classnames('channel-name', { 'channel-name--inline': inline })}>
+          Anonymous
+        </span>
+      );
     }
 
     const channelClaim = isChannelClaim ? claim : claim.signing_channel;
@@ -66,7 +78,11 @@ class UriIndicator extends React.PureComponent<Props> {
       const { name } = channelClaim;
       const channelLink = link ? channelClaim.canonical_url || channelClaim.permanent_url : false;
 
-      const inner = <span dir="auto" className={classnames('channel-name', { 'channel-name--inline': inline })}>{name}</span>;
+      const inner = (
+        <span dir="auto" className={classnames('channel-name', { 'channel-name--inline': inline })}>
+          {name}
+        </span>
+      );
 
       if (!channelLink) {
         return inner;
