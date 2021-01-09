@@ -22,7 +22,7 @@ export default function NotificationHeaderButton(props: Props) {
         'notification__bubble--inline': inline,
       })}
     >
-      <span className="notification__count">{unreadCount}</span>
+      <span className="notification__count">{unreadCount > 20 ? '20+' : unreadCount}</span>
     </span>
   );
 }
