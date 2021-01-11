@@ -93,25 +93,26 @@ export function doInstallNewWithParams(
 function checkAuthBusy() {
   return new Promise(function(resolve, reject) {
     (function waitForAuth() {
-      try {
-        sessionStorage.setItem('test', 'available');
-        sessionStorage.removeItem('test');
-        sessionStorageAvailable = true;
-      } catch (e) {
-        if (e) {
-          // no session storage
-        }
-      }
-      if (!IS_WEB || !sessionStorageAvailable) {
-        return resolve();
-      }
-      const inProgress = window.sessionStorage.getItem(AUTH_IN_PROGRESS);
-      if (!inProgress) {
-        window.sessionStorage.setItem(AUTH_IN_PROGRESS, 'true');
-        return resolve();
-      } else {
-        setTimeout(waitForAuth, 200);
-      }
+      // try {
+      //   sessionStorage.setItem('test', 'available');
+      //   sessionStorage.removeItem('test');
+      //   sessionStorageAvailable = true;
+      // } catch (e) {
+      //   if (e) {
+      //     // no session storage
+      //   }
+      // }
+      // if (!IS_WEB || !sessionStorageAvailable) {
+      //   return resolve();
+      // }
+      // const inProgress = window.sessionStorage.getItem(AUTH_IN_PROGRESS);
+      // if (!inProgress) {
+      //   window.sessionStorage.setItem(AUTH_IN_PROGRESS, 'true');
+      //   return resolve();
+      // } else {
+      //   setTimeout(waitForAuth, 200);
+      // }
+      return resolve();
     })();
   });
 }
