@@ -22,6 +22,7 @@ import {
   DAEMON_SETTINGS,
   SETTINGS,
 } from 'lbry-redux';
+import { Lbryio } from 'lbryinc';
 import { selectFollowedTagsList } from 'redux/selectors/tags';
 import { doToast, doError, doNotificationList } from 'redux/actions/notifications';
 
@@ -554,8 +555,9 @@ export function doSignIn() {
 }
 
 export function doSignOut() {
-  return dispatch => {
-    doSignOutCleanup()
+  return () => {
+    Lbryio.call('user', 'signout')
+      .then(doSignOutCleanup)
       .then(() => {
         // @if TARGET='web'
         window.persistor.purge();
