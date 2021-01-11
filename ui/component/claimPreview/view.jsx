@@ -131,9 +131,10 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
       isValid = false;
     }
   }
+  const isRepost = claim && claim.repost_url;
 
-  const contentUri = hideRepostLabel && claim && claim.repost_url ? claim.canonical_url || claim.permanent_url : uri;
-  const isChannel = isValid ? parseURI(contentUri).isChannel : false;
+  const contentUri = claim && isRepost ? claim && (claim.canonical_url || claim.permanent_url) : uri;
+  const isChannelUri = isValid ? parseURI(contentUri).isChannel : false;
   const signingChannel = claim && claim.signing_channel;
   const navigateUrl = formatLbryUrlForWeb((claim && claim.canonical_url) || uri || '/');
   const navLinkProps = {
@@ -170,7 +171,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   }
   // block channel claims if we can't control for them in claim search
   // e.g. fetchRecommendedSubscriptions
-  if (claim && isChannel && !shouldHide && !showUserBlocked && blockedChannelUris.length) {
+  if (claim && isChannelUri && !shouldHide && !showUserBlocked && blockedChannelUris.length) {
     shouldHide = blockedChannelUris.some(blockedUri => blockedUri === claim.permanent_url);
   }
 
@@ -216,21 +217,25 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   }
 
   if (placeholder === 'loading' || (uri && !claim && isResolvingUri)) {
-    return <ClaimPreviewLoading isChannel={isChannel} type={type} />;
+    return <ClaimPreviewLoading isChannel={isChannelUri} type={type} />;
   }
 
   if (claim && showNullPlaceholder && shouldHide && nsfw) {
     return (
-      <ClaimPreviewHidden message={__('Mature content hidden by your preferences')} isChannel={isChannel} type={type} />
+      <ClaimPreviewHidden
+        message={__('Mature content hidden by your preferences')}
+        isChannel={isChannelUri}
+        type={type}
+      />
     );
   }
 
   if (claim && showNullPlaceholder && shouldHide) {
-    return <ClaimPreviewHidden message={__('This content is hidden')} isChannel={isChannel} type={type} />;
+    return <ClaimPreviewHidden message={__('This content is hidden')} isChannel={isChannelUri} type={type} />;
   }
 
   if (!claim && (showNullPlaceholder || empty)) {
-    return empty || <ClaimPreviewNoContent isChannel={isChannel} type={type} />;
+    return empty || <ClaimPreviewNoContent isChannel={isChannelUri} type={type} />;
   }
 
   if (!shouldFetch && showUnresolvedClaim && !isResolvingUri && claim === null) {
@@ -247,7 +252,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
       onClick={pending || type === 'inline' ? undefined : handleOnClick}
       onContextMenu={handleContextMenu}
       className={classnames('claim-preview__wrapper', {
-        'claim-preview__wrapper--channel': isChannel && type !== 'inline',
+        'claim-preview__wrapper--channel': isChannelUri && type !== 'inline',
         'claim-preview__wrapper--inline': type === 'inline',
         'claim-preview__wrapper--small': type === 'small',
       })}
@@ -260,12 +265,12 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
           'claim-preview--large': type === 'large',
           'claim-preview--inline': type === 'inline',
           'claim-preview--tooltip': type === 'tooltip',
-          'claim-preview--channel': isChannel,
-          'claim-preview--visited': !isChannel && !claimIsMine && hasVisitedUri,
+          'claim-preview--channel': isChannelUri,
+          'claim-preview--visited': !isChannelUri && !claimIsMine && hasVisitedUri,
           'claim-preview--pending': pending,
         })}
       >
-        {isChannel && claim ? (
+        {isChannelUri && claim ? (
           <UriIndicator uri={contentUri} link>
             <ChannelThumbnail uri={contentUri} obscure={channelIsBlocked} />
           </UriIndicator>
@@ -281,9 +286,11 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                     </div>
                   )}
                   {/* @endif */}
-                  <div className="claim-preview__file-property-overlay">
-                    <FileProperties uri={contentUri} small />
-                  </div>
+                  {!isRepost && !isChannelUri && (
+                    <div className="claim-preview__file-property-overlay">
+                      <FileProperties uri={contentUri} small />
+                    </div>
+                  )}
                 </FileThumbnail>
               </NavLink>
             ) : (
@@ -299,11 +306,11 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                 <ClaimPreviewTitle uri={contentUri} />
               ) : (
                 <NavLink {...navLinkProps}>
-                  <ClaimPreviewTitle uri={contentUri} />
+                  <ClaimPreviewTitle uri={uri} />
                 </NavLink>
               )}
             </div>
-            <ClaimPreviewSubtitle uri={contentUri} type={type} />
+            <ClaimPreviewSubtitle uri={uri} type={type} />
             {(pending || !!reflectingProgress) && <PublishPending uri={uri} />}
           </div>
           {type !== 'small' && (
@@ -315,10 +322,10 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                     actions
                   ) : (
                     <div className="claim-preview__primary-actions">
-                      {isChannel && !channelIsBlocked && !claimIsMine && (
+                      {isChannelUri && !channelIsBlocked && !claimIsMine && (
                         <SubscribeButton uri={contentUri.startsWith('lbry://') ? contentUri : `lbry://${contentUri}`} />
                       )}
-                      {!hideBlock && isChannel && !isSubscribed && (!claimIsMine || channelIsBlocked) && (
+                      {!hideBlock && isChannelUri && !isSubscribed && (!claimIsMine || channelIsBlocked) && (
                         <BlockButton uri={contentUri.startsWith('lbry://') ? contentUri : `lbry://${contentUri}`} />
                       )}
                       {includeSupportAction && <ClaimSupportButton uri={contentUri} />}

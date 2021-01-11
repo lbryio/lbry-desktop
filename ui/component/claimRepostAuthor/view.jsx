@@ -16,18 +16,29 @@ function ClaimRepostAuthor(props: Props) {
   const repostChannelUrl = claim && claim.repost_channel_url;
   const repostUrl = claim && claim.repost_url;
 
-  if (!repostChannelUrl) {
-    return null;
-  }
-
-  if (short) {
+  if (short && repostUrl) {
     return (
       <span className="claim-preview__repost-author">
-        <Icon icon={ICONS.REPOST} size={14} />
+        <Icon icon={ICONS.REPOST} size={12} />
         <span>{repostUrl}</span>
       </span>
     );
   }
+
+  if (repostUrl && !repostChannelUrl) {
+    return (
+      <div className="claim-preview__repost-author">
+        <Icon icon={ICONS.REPOST} size={10} />
+        <span>
+          <strong>Anonymous</strong> {__('Reposted')}
+        </span>
+      </div>
+    );
+  }
+  if (!repostChannelUrl) {
+    return null;
+  }
+
   return (
     <div className="claim-preview__repost-author">
       <Icon icon={ICONS.REPOST} size={10} />

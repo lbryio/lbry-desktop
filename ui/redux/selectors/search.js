@@ -140,7 +140,9 @@ export const makeSelectWinningUriForQuery = (query: string) => {
       }
 
       const returnBeforePending =
-        Number(effectiveAmount1) > Number(effectiveAmount2) ? claim1.canonical_url : claim2.canonical_url;
+        Number(effectiveAmount1) > Number(effectiveAmount2)
+          ? claim1.repost_url || claim1.canonical_url
+          : claim2.canonical_url;
       if (pendingAmount && pendingAmount > effectiveAmount1 && pendingAmount > effectiveAmount2) {
         return pendingAmount.permanent_url;
       } else {
