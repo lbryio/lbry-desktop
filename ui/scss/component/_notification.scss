@@ -175,6 +175,10 @@ $contentMaxWidth: 35rem;
   justify-content: center;
 }
 
+.notification__bubble--small {
+  font-size: var(--font-xsmall);
+}
+
 .notification__bubble--inline {
   @extend .notification__bubble;
   top: 0.75rem;
