@@ -64,7 +64,7 @@ class ChannelCreate extends React.PureComponent<Props, State> {
     } else if (newChannelBid === balance) {
       newChannelBidError = __('Please decrease your deposit to account for transaction fees');
     } else if (newChannelBid > balance) {
-      newChannelBidError = __('Deposit cannot be higher than your balance');
+      newChannelBidError = __('Deposit cannot be higher than your available balance');
     } else if (newChannelBid < MINIMUM_PUBLISH_BID) {
       newChannelBidError = __('Your deposit must be higher');
     }

@@ -1,5 +1,5 @@
 // @flow
 
-export function formatNumberWithCommas(num: number): string {
-  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+export function formatNumberWithCommas(num: number, numberOfDigits?: number): string {
+  return num.toLocaleString('en', { minimumFractionDigits: numberOfDigits !== undefined ? numberOfDigits : 8 });
 }

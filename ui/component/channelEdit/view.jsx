@@ -138,7 +138,7 @@ function ChannelForm(props: Props) {
     if (bid <= 0.0 || isNaN(bid)) {
       setBidError(__('Deposit cannot be 0'));
     } else if (totalAvailableBidAmount < bid) {
-      setBidError(__('Deposit cannot be higher than your balance'));
+      setBidError(__('Deposit cannot be higher than your available balance'));
     } else if (totalAvailableBidAmount - bid < ESTIMATED_FEE) {
       setBidError(__('Please decrease your deposit to account for transaction fees'));
     } else if (bid < MINIMUM_PUBLISH_BID) {

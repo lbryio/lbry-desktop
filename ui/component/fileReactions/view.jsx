@@ -42,7 +42,7 @@ function FileReactions(props: Props) {
         requiresAuth={IS_WEB}
         authSrc="filereaction_like"
         className={classnames('button--file-action')}
-        label={formatNumberWithCommas(likeCount)}
+        label={formatNumberWithCommas(likeCount, 0)}
         iconSize={18}
         icon={ICONS.UPVOTE}
         onClick={() => doReactionLike(uri)}
@@ -52,7 +52,7 @@ function FileReactions(props: Props) {
         authSrc={'filereaction_dislike'}
         title={__('I dislike this')}
         className={classnames('button--file-action')}
-        label={formatNumberWithCommas(dislikeCount)}
+        label={formatNumberWithCommas(dislikeCount, 0)}
         iconSize={18}
         icon={ICONS.DOWNVOTE}
         onClick={() => doReactionDislike(uri)}

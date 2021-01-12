@@ -56,7 +56,7 @@ function ModalRepost(props: Props) {
   } else if (balance === repostBid) {
     repostBidError = __('Please decrease your deposit to account for transaction fees');
   } else if (balance < repostBid) {
-    repostBidError = __('Deposit cannot be higher than your balance');
+    repostBidError = __('Deposit cannot be higher than your available balance');
   } else if (repostBid < MINIMUM_PUBLISH_BID) {
     repostBidError = __('Your deposit must be higher');
   }
