@@ -210,7 +210,7 @@ function RepostCreate(props: Props) {
     } else if (balance === repostBid) {
       rBidError = __('Please decrease your deposit to account for transaction fees');
     } else if (balance < repostBid) {
-      rBidError = __('Deposit cannot be higher than your balance');
+      rBidError = __('Deposit cannot be higher than your available balance');
     } else if (repostBid < MINIMUM_PUBLISH_BID) {
       rBidError = __('Your deposit must be higher');
     }

@@ -231,7 +231,11 @@ textarea {
 
 .help--warning {
   @extend .help;
-  color: var(--color-text-help-warning);
+  padding: var(--spacing-s);
+  color: var(--color-black);
+  border-radius: var(--border-radius);
+  background-color: var(--color-help-warning-bg);
+  color: var(--color-help-warning-text);
   margin-bottom: var(--spacing-s);
 }
 

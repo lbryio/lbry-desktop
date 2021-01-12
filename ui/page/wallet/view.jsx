@@ -31,10 +31,10 @@ const WalletPage = (props: Props) => {
           {showIntro ? (
             <YrblWalletEmpty includeWalletLink />
           ) : (
-            <>
+            <div className="card-stack">
               <WalletBalance />
               <TxoList search={search} />
-            </>
+            </div>
           )}
         </>
       )}
