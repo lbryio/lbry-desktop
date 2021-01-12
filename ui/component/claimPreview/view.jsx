@@ -133,7 +133,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   }
   const isRepost = claim && claim.repost_url;
 
-  const contentUri = claim && isRepost ? claim && (claim.canonical_url || claim.permanent_url) : uri;
+  const contentUri = claim && isRepost ? claim.canonical_url || claim.permanent_url : uri;
   const isChannelUri = isValid ? parseURI(contentUri).isChannel : false;
   const signingChannel = claim && claim.signing_channel;
   const navigateUrl = formatLbryUrlForWeb((claim && claim.canonical_url) || uri || '/');

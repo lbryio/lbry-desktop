@@ -35,7 +35,7 @@ function ClaimRepostAuthor(props: Props) {
       </div>
     );
   }
-  if (!repostChannelUrl) {
+  if (!repostUrl) {
     return null;
   }
 
