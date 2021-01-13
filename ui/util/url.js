@@ -1,5 +1,6 @@
 // Can't use aliases here because we're doing exports/require
 const PAGES = require('../constants/pages');
+const { parseURI, buildURI } = require('lbry-redux');
 
 exports.formatLbryUrlForWeb = uri => {
   let newUrl = uri.replace('lbry://', '/').replace(/#/g, ':');
@@ -91,16 +92,7 @@ exports.generateEncodedLbryURL = (domain, lbryWebUrl, includeStartTime, startTim
   return `${domain}/${encodedPart}`;
 };
 
-exports.generateShareUrl = (
-  domain,
-  lbryWebUrl,
-  canonicalUrl,
-  permanentUrl,
-  referralCode,
-  rewardsApproved,
-  includeStartTime,
-  startTime
-) => {
+exports.generateShareUrl = (domain, lbryUrl, referralCode, rewardsApproved, includeStartTime, startTime) => {
   let urlParams = new URLSearchParams();
   if (referralCode && rewardsApproved) {
     urlParams.append('r', referralCode);
@@ -111,6 +103,18 @@ exports.generateShareUrl = (
   }
 
   const urlParamsString = urlParams.toString();
+
+  const { streamName, streamClaimId, channelName, channelClaimId } = parseURI(lbryUrl);
+
+  let uriParts = {
+    ...(streamName ? { streamName: encodeURIComponent(streamName) } : {}),
+    ...(streamClaimId ? { streamClaimId } : {}),
+    ...(channelName ? { channelName: encodeURIComponent(channelName) } : {}),
+    ...(channelClaimId ? { channelClaimId } : {}),
+  };
+
+  const encodedUrl = buildURI(uriParts, false);
+  const lbryWebUrl = encodedUrl.replace(/#/g, ':');
 
   const url = `${domain}/${lbryWebUrl}` + (urlParamsString === '' ? '' : `?${urlParamsString}`);
   return url;
