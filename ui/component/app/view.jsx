@@ -36,8 +36,8 @@ import {
   STATUS_FAILING,
   STATUS_DOWN,
 } from 'web/effects/use-degraded-performance';
-import LANGUAGE_MIGRATIONS from 'constants/language-migrations';
 // @endif
+import LANGUAGE_MIGRATIONS from 'constants/language-migrations';
 export const MAIN_WRAPPER_CLASS = 'main-wrapper';
 export const IS_MAC = navigator.userAgent.indexOf('Mac OS X') !== -1;
 
