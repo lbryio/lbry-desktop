@@ -49,9 +49,7 @@ function SocialShare(props: Props) {
   const encodedLbryURL: string = generateEncodedLbryURL(SHARE_DOMAIN, lbryWebUrl, includeStartTime, startTimeSeconds);
   const shareUrl: string = generateShareUrl(
     SHARE_DOMAIN,
-    lbryWebUrl,
-    canonicalUrl,
-    permanentUrl,
+    lbryUrl,
     referralCode,
     rewardsApproved,
     includeStartTime,
