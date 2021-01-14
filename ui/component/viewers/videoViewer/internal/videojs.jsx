@@ -8,6 +8,8 @@ import 'video.js/dist/alt/video-js-cdn.min.css';
 import eventTracking from 'videojs-event-tracking';
 import * as OVERLAY from './overlays';
 import './plugins/videojs-mobile-ui/plugin';
+import qualitySelector from 'videojs-hls-quality-selector';
+import qualityLevels from 'videojs-contrib-quality-levels';
 import isUserTyping from 'util/detect-typing';
 
 const isDev = process.env.NODE_ENV !== 'production';
@@ -66,7 +68,12 @@ const VIDEO_JS_OPTIONS: VideoJSOptions = {
   playbackRates: videoPlaybackRates,
   responsive: true,
   controls: true,
-  html5: { nativeControlsForTouch: IS_IOS },
+  html5: {
+    nativeControlsForTouch: IS_IOS,
+    hls: {
+      overrideNative: true,
+    },
+  },
 };
 
 const F11_KEYCODE = 122;
@@ -88,6 +95,14 @@ const SEEK_STEP = 10; // time to seek in seconds
 
 if (!Object.keys(videojs.getPlugins()).includes('eventTracking')) {
   videojs.registerPlugin('eventTracking', eventTracking);
+}
+
+if (!Object.keys(videojs.getPlugins()).includes('hlsQualitySelector')) {
+  videojs.registerPlugin('hlsQualitySelector', qualitySelector);
+}
+
+if (!Object.keys(videojs.getPlugins()).includes('qualityLevels')) {
+  videojs.registerPlugin('qualityLevels', qualityLevels);
 }
 
 // ****************************************************************************
@@ -330,6 +345,10 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
             onPlayerReady(player);
           }
+        });
+
+        player.hlsQualitySelector({
+          displayCurrentQuality: true,
         });
 
         window.player = player;
