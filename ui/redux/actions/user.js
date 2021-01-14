@@ -9,6 +9,8 @@ import { DOMAIN } from 'config';
 import { getDefaultLanguage } from 'util/default-languages';
 const AUTH_IN_PROGRESS = 'authInProgress';
 export let sessionStorageAvailable = false;
+const POINT_TWO_SECONDS = 200;
+const THIRTY_SECONDS = 30000;
 
 export function doFetchInviteStatus(shouldCallRewardList = true) {
   return dispatch => {
@@ -91,28 +93,32 @@ export function doInstallNewWithParams(
 }
 
 function checkAuthBusy() {
+  let time = Date.now();
   return new Promise(function(resolve, reject) {
     (function waitForAuth() {
-      // try {
-      //   sessionStorage.setItem('test', 'available');
-      //   sessionStorage.removeItem('test');
-      //   sessionStorageAvailable = true;
-      // } catch (e) {
-      //   if (e) {
-      //     // no session storage
-      //   }
-      // }
-      // if (!IS_WEB || !sessionStorageAvailable) {
-      //   return resolve();
-      // }
-      // const inProgress = window.sessionStorage.getItem(AUTH_IN_PROGRESS);
-      // if (!inProgress) {
-      //   window.sessionStorage.setItem(AUTH_IN_PROGRESS, 'true');
-      //   return resolve();
-      // } else {
-      //   setTimeout(waitForAuth, 200);
-      // }
-      return resolve();
+      try {
+        sessionStorage.setItem('test', 'available');
+        sessionStorage.removeItem('test');
+        sessionStorageAvailable = true;
+      } catch (e) {
+        if (e) {
+          // no session storage
+        }
+      }
+      if (!IS_WEB || !sessionStorageAvailable) {
+        return resolve();
+      }
+      const inProgress = window.sessionStorage.getItem(AUTH_IN_PROGRESS);
+      if (!inProgress) {
+        window.sessionStorage.setItem(AUTH_IN_PROGRESS, 'true');
+        return resolve();
+      } else {
+        if (Date.now() - time < THIRTY_SECONDS) {
+          setTimeout(waitForAuth, POINT_TWO_SECONDS);
+        } else {
+          return resolve();
+        }
+      }
     })();
   });
 }
