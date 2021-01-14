@@ -48,6 +48,7 @@ const defaultState = {
     [SETTINGS.AUTOMATIC_DARK_MODE_ENABLED]: false,
     [SETTINGS.TILE_LAYOUT]: true,
     [SETTINGS.VIDEO_THEATER_MODE]: false,
+    [SETTINGS.VIDEO_PLAYBACK_RATE]: 1,
 
     [SETTINGS.DARK_MODE_TIMES]: {
       from: { hour: '21', min: '00', formattedTime: '21:00' },

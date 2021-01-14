@@ -25,6 +25,7 @@ type Props = {
   thumbnail: string,
   claim: StreamClaim,
   muted: boolean,
+  videoPlaybackRate: number,
   volume: number,
   uri: string,
   autoplaySetting: boolean,
@@ -36,6 +37,7 @@ type Props = {
   savePosition: (string, number) => void,
   clearPosition: string => void,
   toggleVideoTheaterMode: () => void,
+  setVideoPlaybackRate: number => void,
 };
 
 /*
@@ -49,6 +51,7 @@ function VideoViewer(props: Props) {
     source,
     changeVolume,
     changeMute,
+    videoPlaybackRate,
     thumbnail,
     position,
     claim,
@@ -64,6 +67,7 @@ function VideoViewer(props: Props) {
     clearPosition,
     desktopPlayStartTime,
     toggleVideoTheaterMode,
+    setVideoPlaybackRate,
   } = props;
   const claimId = claim && claim.claim_id;
   const isAudio = contentType.includes('audio');
@@ -137,7 +141,7 @@ function VideoViewer(props: Props) {
       if (!embedded) {
         player.muted(muted);
         player.volume(volume);
-
+        player.playbackRate(videoPlaybackRate);
         addTheaterModeButton(player, toggleVideoTheaterMode);
       }
 
@@ -183,6 +187,11 @@ function VideoViewer(props: Props) {
         if (player) {
           changeVolume(player.volume());
           changeMute(player.muted());
+        }
+      });
+      player.on('ratechange', () => {
+        if (player) {
+          setVideoPlaybackRate(player.playbackRate());
         }
       });
 
