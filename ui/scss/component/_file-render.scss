@@ -593,6 +593,11 @@ video::-internal-media-controls-overlay-cast-button {
       display: none;
     }
   }
+
+  .vjs-menu-item-text,
+  .vjs-icon-placeholder {
+    text-transform: capitalize;
+  }
 }
 
 // ****************************************************************************
