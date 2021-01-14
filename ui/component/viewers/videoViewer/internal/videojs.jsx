@@ -12,6 +12,11 @@ import qualitySelector from 'videojs-hls-quality-selector';
 import qualityLevels from 'videojs-contrib-quality-levels';
 import isUserTyping from 'util/detect-typing';
 
+// @if TARGET='web'
+import '@silvermine/videojs-chromecast/dist/silvermine-videojs-chromecast.css';
+require('@silvermine/videojs-chromecast')(videojs);
+// @endif
+
 const isDev = process.env.NODE_ENV !== 'production';
 
 export type Player = {
@@ -33,6 +38,7 @@ export type Player = {
   userActive: (?boolean) => boolean,
   overlay: any => void,
   mobileUi: any => void,
+  chromecast: any => void,
   controlBar: {
     addChild: (string, any) => void,
   },
@@ -147,6 +153,49 @@ class LbryVolumeBarClass extends videojs.getComponent(VIDEOJS_VOLUME_BAR_CLASS) 
 }
 
 // ****************************************************************************
+// Chromecast
+// ****************************************************************************
+
+class ChromecastWrapper {
+  /**
+   * Actions that need to happen before initializing 'videojs'.
+   */
+  static preInit(videojs, options, title) {
+    const additionalOptions = {
+      // @if TARGET='web'
+      techOrder: ['chromecast', 'html5'],
+      chromecast: {
+        requestTitleFn: function(src) {
+          return '';
+        },
+      },
+      // @endif
+    };
+
+    return videojs.mergeOptions(options, additionalOptions);
+  }
+
+  /**
+   * Actions that need to happen after initializing 'videojs'
+   */
+  static postInit(player) {
+    // @if TARGET='web'
+    // --- Start plugin ---
+    player.chromecast();
+    // --- Init cast framework ---
+    const existingChromecastScript = document.getElementById('chromecastApi');
+    if (!existingChromecastScript) {
+      const script = document.createElement('script');
+      script.src = 'https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1';
+      script.id = 'chromecastApi';
+      // $FlowFixMe
+      document.body.appendChild(script);
+    }
+    // @endif
+  }
+}
+
+// ****************************************************************************
 // VideoJs
 // ****************************************************************************
 
@@ -159,7 +208,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
   let player: ?Player;
   const containerRef = useRef();
-  const videoJsOptions = {
+  let videoJsOptions = {
     ...VIDEO_JS_OPTIONS,
     sources: [
       {
@@ -334,6 +383,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
           videoJsOptions.sources[0].type = 'application/x-mpegURL';
         }
 
+        videoJsOptions = ChromecastWrapper.preInit(videojs, videoJsOptions);
+
         player = videojs(el, videoJsOptions, () => {
           if (player) {
             player.one('play', onInitialPlay);
@@ -342,6 +393,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
             player.on('ended', onEnded);
             LbryVolumeBarClass.replaceExisting(player);
             player.mobileUi(); // Inits mobile version. No-op if Desktop.
+            ChromecastWrapper.postInit(player);
 
             onPlayerReady(player);
           }
