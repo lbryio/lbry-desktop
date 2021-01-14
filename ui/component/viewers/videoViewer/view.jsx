@@ -220,6 +220,7 @@ function VideoViewer(props: Props) {
       {isLoading && <LoadingScreen status={__('Loading')} />}
       <VideoJs
         source={source}
+        claim={claim}
         isAudio={isAudio}
         poster={isAudio || (embedded && !autoplayIfEmbedded) ? thumbnail : null}
         sourceType={forcePlayer ? 'video/mp4' : contentType}

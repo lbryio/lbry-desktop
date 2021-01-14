@@ -46,6 +46,7 @@ export type Player = {
 
 type Props = {
   source: string,
+  claim: StreamClaim,
   sourceType: string,
   poster: ?string,
   onPlayerReady: Player => void,
@@ -160,13 +161,16 @@ class ChromecastWrapper {
   /**
    * Actions that need to happen before initializing 'videojs'.
    */
-  static preInit(videojs, options, title) {
+  static preInit(videojs, options, claim) {
     const additionalOptions = {
       // @if TARGET='web'
       techOrder: ['chromecast', 'html5'],
       chromecast: {
         requestTitleFn: function(src) {
-          return '';
+          return claim && claim.value && claim.value.title ? claim.value.title : '';
+        },
+        requestSubtitleFn: function(src) {
+          return claim && claim.signing_channel && claim.signing_channel.name ? claim.signing_channel.name : '';
         },
       },
       // @endif
@@ -203,7 +207,7 @@ class ChromecastWrapper {
 properties for this component should be kept to ONLY those that if changed should REQUIRE an entirely new videojs element
  */
 export default React.memo<Props>(function VideoJs(props: Props) {
-  const { startMuted, source, sourceType, poster, isAudio, onPlayerReady } = props;
+  const { startMuted, source, claim, sourceType, poster, isAudio, onPlayerReady } = props;
   const [reload, setReload] = useState('initial');
 
   let player: ?Player;
@@ -383,7 +387,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
           videoJsOptions.sources[0].type = 'application/x-mpegURL';
         }
 
-        videoJsOptions = ChromecastWrapper.preInit(videojs, videoJsOptions);
+        videoJsOptions = ChromecastWrapper.preInit(videojs, videoJsOptions, claim);
 
         player = videojs(el, videoJsOptions, () => {
           if (player) {
