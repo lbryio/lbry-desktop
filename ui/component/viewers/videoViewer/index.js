@@ -8,7 +8,7 @@ import VideoViewer from './view';
 import { withRouter } from 'react-router';
 import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { toggleVideoTheaterMode } from 'redux/actions/settings';
+import { toggleVideoTheaterMode, doSetClientSetting } from 'redux/actions/settings';
 
 const select = (state, props) => {
   const { search } = props.location;
@@ -21,6 +21,7 @@ const select = (state, props) => {
     autoplaySetting: Boolean(makeSelectClientSetting(SETTINGS.AUTOPLAY)(state)),
     volume: selectVolume(state),
     muted: selectMute(state),
+    videoPlaybackRate: makeSelectClientSetting(SETTINGS.VIDEO_PLAYBACK_RATE)(state),
     position: position,
     hasFileInfo: Boolean(makeSelectFileInfoForUri(props.uri)(state)),
     thumbnail: makeSelectThumbnailForUri(props.uri)(state),
@@ -37,6 +38,7 @@ const perform = dispatch => ({
   doAnalyticsBuffer: (uri, bufferData) => dispatch(doAnalyticsBuffer(uri, bufferData)),
   claimRewards: () => dispatch(doClaimEligiblePurchaseRewards()),
   toggleVideoTheaterMode: () => dispatch(toggleVideoTheaterMode()),
+  setVideoPlaybackRate: rate => dispatch(doSetClientSetting(SETTINGS.VIDEO_PLAYBACK_RATE, rate)),
 });
 
 export default withRouter(connect(select, perform)(VideoViewer));

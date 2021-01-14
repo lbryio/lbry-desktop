@@ -1553,5 +1553,6 @@
   "Consolidate Now": "Consolidate Now",
   "Your wallet has a lot of change lying around. Consolidating will speed up your transactions. This could take some time. %now%%help%": "Your wallet has a lot of change lying around. Consolidating will speed up your transactions. This could take some time. %now%%help%",
   "Consolidating": "Consolidating",
+  "Theater mode": "Theater mode",
   "--end--": "--end--"
 }
