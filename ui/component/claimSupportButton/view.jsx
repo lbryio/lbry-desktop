@@ -10,10 +10,12 @@ type Props = {
   doOpenModal: (string, {}) => void,
   fileAction?: boolean,
   disableSupport: boolean,
+  claim: GenericClaim,
 };
 
 export default function ClaimSupportButton(props: Props) {
-  const { doOpenModal, uri, fileAction, disableSupport } = props;
+  const { doOpenModal, uri, fileAction, disableSupport, claim } = props;
+  const isRepost = claim && claim.repost_url;
 
   if (disableSupport) {
     return null;
@@ -25,7 +27,9 @@ export default function ClaimSupportButton(props: Props) {
       className={classnames({ 'button--file-action': fileAction })}
       icon={ICONS.LBC}
       iconSize={fileAction ? 22 : undefined}
-      label={__('Support --[button to support a claim]--')}
+      label={
+        isRepost ? __('Support Repost --[button to support a claim]--') : __('Support --[button to support a claim]--')
+      }
       requiresAuth={IS_WEB}
       title={__('Support this claim')}
       onClick={() => doOpenModal(MODALS.SEND_TIP, { uri, isSupport: true })}
