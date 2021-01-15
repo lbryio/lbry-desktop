@@ -23,6 +23,7 @@ function insertToHead(fullHtml, htmlToInsert) {
     `
       ${htmlToInsert || buildOgMetadata()}
       <script src="/public/ui-${jsBundleId}.js" async></script>
+      <script data-ad-client="ca-pub-7102138296475003" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     `
   );
 }
