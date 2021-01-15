@@ -4,7 +4,7 @@ import isDev from 'electron-is-dev';
 import windowStateKeeper from 'electron-window-state';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 import { SUPPORTED_SUB_LANGUAGE_CODES, SUB_LANG_CODE_LEN } from 'constants/supported_sub_languages';
-import { SUPPORTED_BROWSER_LANGUAGES } from 'constants/supported_browser_languages';
+import SUPPORTED_BROWSER_LANGUAGES from 'constants/supported_browser_languages';
 import { TO_TRAY_WHEN_CLOSED } from 'constants/settings';
 
 import setupBarMenu from './menu/setupBarMenu';
