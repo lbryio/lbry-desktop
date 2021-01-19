@@ -1,5 +1,6 @@
 // @flow
 import type { Node } from 'react';
+import * as PAGES from 'constants/pages';
 import React, { Fragment } from 'react';
 import classnames from 'classnames';
 import SideNavigation from 'component/sideNavigation';
@@ -57,10 +58,14 @@ function Page(props: Props) {
 
   let isOnFilePage = false;
   try {
-    const url = pathname.slice(1).replace(/:/g, '#');
-    const { isChannel } = parseURI(url);
-    if (!isChannel) {
+    if (pathname.includes(`/$/${PAGES.LIVESTREAM}`)) {
       isOnFilePage = true;
+    } else {
+      const url = pathname.slice(1).replace(/:/g, '#');
+      const { isChannel } = parseURI(url);
+      if (!isChannel) {
+        isOnFilePage = true;
+      }
     }
   } catch (e) {}
 

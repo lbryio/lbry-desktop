@@ -8,6 +8,7 @@
   File upload is carried out in the background by that function.
  */
 
+import { LIVE_STREAM_CHANNEL, LIVE_STREAM_CHANNEL_CLAIM_ID } from 'constants/livestream';
 import { SITE_NAME } from 'config';
 import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
 import React, { useEffect, useState } from 'react';
@@ -26,6 +27,7 @@ import SelectThumbnail from 'component/selectThumbnail';
 import Card from 'component/common/card';
 import I18nMessage from 'component/i18nMessage';
 import * as PUBLISH_MODES from 'constants/publish_types';
+import { FormField } from 'component/common/form';
 
 // @if TARGET='app'
 import fs from 'fs';
@@ -85,6 +87,8 @@ type Props = {
   ytSignupPending: boolean,
   modal: { id: string, modalProps: {} },
   enablePublishPreview: boolean,
+  myChannels: ?Array<ChannelClaim>,
+  isLivestreamPublish: boolean,
 };
 
 function PublishForm(props: Props) {
@@ -123,7 +127,15 @@ function PublishForm(props: Props) {
     ytSignupPending,
     modal,
     enablePublishPreview,
+    myChannels,
+    isLivestreamPublish,
   } = props;
+
+  // livestream hardcoded bidnezz
+  const isLivestreamCreator =
+    myChannels &&
+    myChannels.find(channelClaim => channelClaim.claim_id === LIVE_STREAM_CHANNEL_CLAIM_ID) &&
+    channel === LIVE_STREAM_CHANNEL;
 
   // Used to check if name should be auto-populated from title
   const [autoPopulateNameFromTitle, setAutoPopulateNameFromTitle] = useState(!isStillEditing);
@@ -402,6 +414,25 @@ function PublishForm(props: Props) {
 
           <PublishPrice disabled={formDisabled} />
           <PublishAdditionalOptions disabled={formDisabled} />
+        </div>
+      )}
+
+      {isLivestreamCreator && (
+        <div className="livestream__publish-checkbox">
+          Hi {channel}! <br /> <br /> Check this box if this going to be your livestream publish. It doesn't matter what
+          file you choose for now, just make the sure the title, description, and tags are correct. Everything else is
+          setup!
+          <br /> <br />
+          When you edit this file, there will be another checkbox to unhide this content and display it on your
+          channel's page.
+          <br /> <br />
+          <FormField
+            type="checkbox"
+            label="This is for my livestream"
+            name="is_livestream_checkbox"
+            checked={isLivestreamPublish}
+            onChange={e => updatePublishForm({ isLivestreamPublish: e.target.checked })}
+          />
         </div>
       )}
       <section>

@@ -1,5 +1,6 @@
 // @flow
 import { SHOW_ADS } from 'config';
+import { LIVE_STREAM_CHANNEL_CLAIM_ID } from 'constants/livestream';
 import * as CS from 'constants/claim_search';
 import * as ICONS from 'constants/icons';
 import React, { Fragment } from 'react';
@@ -12,6 +13,7 @@ import Icon from 'component/common/icon';
 import { Form, FormField } from 'component/common/form';
 import { DEBOUNCE_WAIT_DURATION_MS } from 'constants/search';
 import { lighthouse } from 'redux/actions/search';
+import LivestreamLink from 'component/livestreamLink';
 
 type Props = {
   uri: string,
@@ -93,6 +95,8 @@ function ChannelContent(props: Props) {
 
   return (
     <Fragment>
+      {claimId === LIVE_STREAM_CHANNEL_CLAIM_ID && <LivestreamLink />}
+
       {!fetching && Boolean(claimsInChannel) && !channelIsBlocked && !channelIsBlackListed && (
         <HiddenNsfwClaims uri={uri} />
       )}
