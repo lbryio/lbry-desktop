@@ -98,7 +98,11 @@
 }
 
 .card__title-section--small {
-  padding: var(--spacing-s) var(--spacing-m);
+  padding: 0;
+
+  @media (min-width: $breakpoint-small) {
+    padding: var(--spacing-s) var(--spacing-m);
+  }
 }
 
 .card__actions--inline {
@@ -337,4 +341,10 @@
   > *:not(:last-child) {
     margin-right: var(--spacing-m);
   }
+}
+
+.card__bottom-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }

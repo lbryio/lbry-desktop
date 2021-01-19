@@ -12,6 +12,7 @@ import {
   doPrepareEdit,
   doCheckPublishNameAvailability,
   SETTINGS,
+  selectMyChannelClaims,
 } from 'lbry-redux';
 import { doPublishDesktop } from 'redux/actions/publish';
 import { selectUnclaimedRewardValue } from 'redux/selectors/rewards';
@@ -32,6 +33,7 @@ const select = state => ({
   totalRewardValue: selectUnclaimedRewardValue(state),
   modal: selectModal(state),
   enablePublishPreview: makeSelectClientSetting(SETTINGS.ENABLE_PUBLISH_PREVIEW)(state),
+  myChannels: selectMyChannelClaims(state),
 });
 
 const perform = dispatch => ({

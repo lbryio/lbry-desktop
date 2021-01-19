@@ -69,6 +69,7 @@ type Props = {
   wrapperElement?: string,
   hideRepostLabel?: boolean,
   repostUrl?: string,
+  livestream?: boolean,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -115,13 +116,13 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     includeSupportAction,
     renderActions,
     // repostUrl,
+    livestream,
   } = props;
   const WrapperElement = wrapperElement || 'li';
   const shouldFetch =
     claim === undefined || (claim !== null && claim.value_type === 'channel' && isEmpty(claim.meta) && !pending);
   const abandoned = !isResolvingUri && !claim;
   const shouldHideActions = hideActions || type === 'small' || type === 'tooltip';
-  const showPublishLink = abandoned && !showUnresolvedClaim && placeholder === 'publish';
   const canonicalUrl = claim && claim.canonical_url;
   let isValid = false;
   if (uri) {
@@ -200,6 +201,10 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   function handleOnClick(e) {
     if (onClick) {
       onClick(e);
+    }
+
+    if (livestream) {
+      return;
     }
 
     if (claim && !pending) {
@@ -287,7 +292,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                     </div>
                   )}
                   {/* @endif */}
-                  {!isRepost && !isChannelUri && (
+                  {!isRepost && !isChannelUri && !livestream && (
                     <div className="claim-preview__file-property-overlay">
                       <FileProperties uri={contentUri} small />
                     </div>
@@ -311,7 +316,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                 </NavLink>
               )}
             </div>
-            <ClaimPreviewSubtitle uri={uri} type={type} />
+            <ClaimPreviewSubtitle uri={uri} type={type} livestream={livestream} />
             {(pending || !!reflectingProgress) && <PublishPending uri={uri} />}
           </div>
           {type !== 'small' && (

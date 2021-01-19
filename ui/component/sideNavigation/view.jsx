@@ -51,6 +51,7 @@ type Props = {
 type SideNavLink = {
   title: string,
   link?: string,
+  route?: string,
   onClick?: () => any,
   icon: string,
   extra?: Node,
@@ -329,7 +330,7 @@ function SideNavigation(props: Props) {
                 //   $FlowFixMe
                 const { hideForUnauth, ...passedProps } = linkProps;
                 return !email && linkProps.hideForUnauth && IS_WEB ? null : (
-                  <li key={linkProps.link}>
+                  <li key={linkProps.route || linkProps.link}>
                     <Button
                       {...passedProps}
                       label={__(linkProps.title)}

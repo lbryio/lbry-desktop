@@ -121,7 +121,7 @@
   }
 
   @media (max-width: $breakpoint-small) {
-    justify-content: flex-start;
+    justify-content: space-between;
     padding-top: var(--spacing-s);
 
     > * {
