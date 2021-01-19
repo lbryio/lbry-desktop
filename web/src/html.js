@@ -17,12 +17,17 @@ const path = require('path');
 const { getJsBundleId } = require('../bundle-id.js');
 const jsBundleId = getJsBundleId();
 
-function insertToHead(fullHtml, htmlToInsert) {
+function insertToHead(fullHtml, htmlToInsert, includeAdwords) {
   return fullHtml.replace(
     /<!-- VARIABLE_HEAD_BEGIN -->.*<!-- VARIABLE_HEAD_END -->/s,
     `
       ${htmlToInsert || buildOgMetadata()}
       <script src="/public/ui-${jsBundleId}.js" async></script>
+      ${
+        includeAdwords
+          ? `<script data-ad-client="ca-pub-7102138296475003" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>`
+          : ''
+      }
     `
   );
 }
@@ -184,7 +189,7 @@ async function getHtml(ctx) {
   const requestPath = decodeURIComponent(ctx.path);
   if (requestPath.length === 0) {
     const ogMetadata = buildBasicOgMetadata();
-    return insertToHead(html, ogMetadata);
+    return insertToHead(html, ogMetadata, true);
   }
 
   const invitePath = `/$/${PAGES.INVITE}/`;
@@ -232,12 +237,12 @@ async function getHtml(ctx) {
 
     if (claim) {
       const ogMetadata = buildClaimOgMetadata(claimUri, claim);
-      return insertToHead(html, ogMetadata);
+      return insertToHead(html, ogMetadata, true);
     }
   }
 
   const ogMetadata = buildBasicOgMetadata();
-  return insertToHead(html, ogMetadata);
+  return insertToHead(html, ogMetadata, true);
 }
 
 module.exports = { insertToHead, buildBasicOgMetadata, getHtml };
