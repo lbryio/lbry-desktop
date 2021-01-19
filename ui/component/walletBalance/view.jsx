@@ -82,7 +82,7 @@ const WalletBalance = (props: Props) => {
                 lbc_amount: <CreditAmount amount={totalLocked} precision={8} />,
               }}
             >
-              %lbc_amount% contributing to content
+              %lbc_amount% boosting content
             </I18nMessage>
             <Button
               button="link"
