@@ -9,8 +9,8 @@ import { DOMAIN } from 'config';
 import { getDefaultLanguage } from 'util/default-languages';
 const AUTH_IN_PROGRESS = 'authInProgress';
 export let sessionStorageAvailable = false;
-const POINT_TWO_SECONDS = 200;
-const THIRTY_SECONDS = 30000;
+const CHECK_INTERVAL = 200;
+const AUTH_WAIT_TIMEOUT = 10000;
 
 export function doFetchInviteStatus(shouldCallRewardList = true) {
   return dispatch => {
@@ -113,8 +113,8 @@ function checkAuthBusy() {
         window.sessionStorage.setItem(AUTH_IN_PROGRESS, 'true');
         return resolve();
       } else {
-        if (Date.now() - time < THIRTY_SECONDS) {
-          setTimeout(waitForAuth, POINT_TWO_SECONDS);
+        if (Date.now() - time < AUTH_WAIT_TIMEOUT) {
+          setTimeout(waitForAuth, CHECK_INTERVAL);
         } else {
           return resolve();
         }
