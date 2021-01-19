@@ -6,10 +6,11 @@ import FileActions from 'component/fileActions';
 
 type Props = {
   uri: string,
+  hideRepost?: boolean,
 };
 
 function FileSubtitle(props: Props) {
-  const { uri } = props;
+  const { uri, hideRepost } = props;
 
   return (
     <div className="media__subtitle--between">
@@ -18,7 +19,7 @@ function FileSubtitle(props: Props) {
         <FileViewCount uri={uri} />
       </div>
 
-      <FileActions uri={uri} />
+      <FileActions uri={uri} hideRepost={hideRepost} />
     </div>
   );
 }

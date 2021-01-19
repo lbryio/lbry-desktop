@@ -1,17 +1,22 @@
 // @flow
 import { SHOW_ADS } from 'config';
+import { LIVE_STREAM_CHANNEL_CLAIM_ID } from 'constants/livestream';
 import * as CS from 'constants/claim_search';
 import * as ICONS from 'constants/icons';
+import * as PAGES from 'constants/pages';
 import React, { Fragment } from 'react';
 import HiddenNsfwClaims from 'component/hiddenNsfwClaims';
 import { useHistory } from 'react-router-dom';
 import Button from 'component/button';
 import ClaimListDiscover from 'component/claimListDiscover';
+import ClaimPreview from 'component/claimPreview';
 import Ads from 'web/component/ads';
 import Icon from 'component/common/icon';
+import Card from 'component/common/card';
 import { Form, FormField } from 'component/common/form';
 import { DEBOUNCE_WAIT_DURATION_MS } from 'constants/search';
 import { lighthouse } from 'redux/actions/search';
+import LivestreamLink from 'component/livestreamLink';
 
 type Props = {
   uri: string,
@@ -49,6 +54,7 @@ function ChannelContent(props: Props) {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [searchResults, setSearchResults] = React.useState(undefined);
   const {
+    push,
     location: { pathname, search },
   } = useHistory();
   const url = `${pathname}${search}`;
@@ -93,6 +99,8 @@ function ChannelContent(props: Props) {
 
   return (
     <Fragment>
+      {claimId === LIVE_STREAM_CHANNEL_CLAIM_ID && <LivestreamLink />}
+
       {!fetching && Boolean(claimsInChannel) && !channelIsBlocked && !channelIsBlackListed && (
         <HiddenNsfwClaims uri={uri} />
       )}

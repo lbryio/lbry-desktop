@@ -115,6 +115,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     includeSupportAction,
     renderActions,
     // repostUrl,
+    livestream,
   } = props;
   const WrapperElement = wrapperElement || 'li';
   const shouldFetch =
@@ -200,6 +201,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   function handleOnClick(e) {
     if (onClick) {
       onClick(e);
+      return;
     }
 
     if (claim && !pending) {
@@ -287,7 +289,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                     </div>
                   )}
                   {/* @endif */}
-                  {!isRepost && !isChannelUri && (
+                  {!isRepost && !isChannelUri && !livestream && (
                     <div className="claim-preview__file-property-overlay">
                       <FileProperties uri={contentUri} small />
                     </div>
@@ -311,7 +313,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                 </NavLink>
               )}
             </div>
-            <ClaimPreviewSubtitle uri={uri} type={type} />
+            <ClaimPreviewSubtitle uri={uri} type={type} livestream={livestream} />
             {(pending || !!reflectingProgress) && <PublishPending uri={uri} />}
           </div>
           {type !== 'small' && (

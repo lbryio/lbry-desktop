@@ -50,14 +50,14 @@ function FileDescription(props: Props) {
         <FileDetails uri={uri} />
       </div>
 
-      <div className="section__actions--between">
+      <div className="card__bottom-actions">
         {expanded ? (
           <Button button="link" label={__('Less')} onClick={() => setExpanded(!expanded)} />
         ) : (
           <Button button="link" label={__('More')} onClick={() => setExpanded(!expanded)} />
         )}
 
-        <div className="section__actions--no-margin">
+        <div className="button-group">
           {claimIsMine && hasSupport && (
             <Button
               button="link"

@@ -18,10 +18,11 @@ type Props = {
   title: string,
   nsfw: boolean,
   isNsfwBlocked: boolean,
+  hideRepost?: boolean,
 };
 
 function FileTitle(props: Props) {
-  const { title, uri, nsfw, isNsfwBlocked } = props;
+  const { title, uri, nsfw, isNsfwBlocked, hideRepost } = props;
 
   return (
     <Card
@@ -41,7 +42,7 @@ function FileTitle(props: Props) {
       body={
         <React.Fragment>
           <ClaimInsufficientCredits uri={uri} />
-          <FileSubtitle uri={uri} />
+          <FileSubtitle uri={uri} hideRepost={hideRepost} />
         </React.Fragment>
       }
       actions={

@@ -197,7 +197,11 @@
 
 .claim-preview--inline {
   .channel-thumbnail {
-    @include handleChannelGif(var(--channel-thumbnail-width--small));
+    @include handleChannelGif(3rem);
+
+    @media (min-width: $breakpoint-small) {
+      @include handleChannelGif(var(--channel-thumbnail-width--small));
+    }
   }
 
   .claim-preview__actions {
@@ -283,6 +287,7 @@
 
 .claim-preview__primary-actions {
   @extend .section__actions;
+  margin-right: 0;
   margin-top: var(--spacing-s);
 
   &:first-child {
