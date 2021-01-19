@@ -11,10 +11,11 @@ type Props = {
   pending?: boolean,
   type: string,
   beginPublish: string => void,
+  livestream?: boolean,
 };
 
 function ClaimPreviewSubtitle(props: Props) {
-  const { pending, uri, claim, type, beginPublish } = props;
+  const { pending, uri, claim, type, beginPublish, livestream } = props;
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
 
   let isChannel;
@@ -32,7 +33,7 @@ function ClaimPreviewSubtitle(props: Props) {
             claim &&
             (isChannel ? (
               type !== 'inline' && `${claimsInChannel} ${claimsInChannel === 1 ? __('upload') : __('uploads')}`
-            ) : (
+            ) : livestream ? null : (
               <DateTime timeAgo uri={uri} />
             ))}
         </React.Fragment>

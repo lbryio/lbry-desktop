@@ -25,6 +25,7 @@ type Props = {
   myChannels: ?Array<ChannelClaim>,
   doToast: ({ message: string }) => void,
   clearPlayingUri: () => void,
+  hideRepost?: boolean,
 };
 
 function FileActions(props: Props) {
@@ -40,6 +41,7 @@ function FileActions(props: Props) {
     myChannels,
     clearPlayingUri,
     doToast,
+    hideRepost,
   } = props;
   const {
     push,
@@ -82,21 +84,23 @@ function FileActions(props: Props) {
     <>
       {ENABLE_FILE_REACTIONS && <FileReactions uri={uri} />}
       <ClaimSupportButton uri={uri} fileAction />
-      <Button
-        button="alt"
-        className="button--file-action"
-        icon={ICONS.REPOST}
-        label={
-          claim.meta.reposted > 1 ? __(`%repost_total% Reposts`, { repost_total: claim.meta.reposted }) : __('Repost')
-        }
-        description={__('Repost')}
-        requiresAuth={IS_WEB}
-        onClick={handleRepostClick}
-      />
+      {!hideRepost && (
+        <Button
+          button="alt"
+          className="button--file-action"
+          icon={ICONS.REPOST}
+          label={
+            claim.meta.reposted > 1 ? __(`%repost_total% Reposts`, { repost_total: claim.meta.reposted }) : __('Repost')
+          }
+          description={__('Repost')}
+          requiresAuth={IS_WEB}
+          onClick={handleRepostClick}
+        />
+      )}
       <Button
         className="button--file-action"
         icon={ICONS.SHARE}
-        label={__('Share')}
+        label={isMobile ? undefined : __('Share')}
         title={__('Share')}
         onClick={() => openModal(MODALS.SOCIAL_SHARE, { uri, webShareable })}
       />

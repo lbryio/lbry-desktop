@@ -6,19 +6,20 @@ import FileActions from 'component/fileActions';
 
 type Props = {
   uri: string,
+  livestream?: boolean,
 };
 
 function FileSubtitle(props: Props) {
-  const { uri } = props;
+  const { uri, livestream } = props;
 
   return (
     <div className="media__subtitle--between">
       <div className="file__viewdate">
-        <DateTime uri={uri} show={DateTime.SHOW_DATE} />
+        {livestream ? <span>{__('Currently live')}</span> : <DateTime uri={uri} show={DateTime.SHOW_DATE} />}
         <FileViewCount uri={uri} />
       </div>
 
-      <FileActions uri={uri} />
+      <FileActions uri={uri} hideRepost={livestream} />
     </div>
   );
 }
