@@ -159,6 +159,8 @@ export function doAuthenticate(
         });
       })
       .catch(error => {
+        if (sessionStorageAvailable) window.sessionStorage.removeItem(AUTH_IN_PROGRESS);
+
         dispatch({
           type: ACTIONS.AUTHENTICATION_FAILURE,
           data: { error },
