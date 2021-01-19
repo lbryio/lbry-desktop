@@ -104,7 +104,7 @@ You can run the web version (lbry.tv), the electron app, or both at the same tim
 
 #### Customize the web app
 
-- In root directory, copy .env.defaults to .env and make changes
+- In root directory, duplicate the .env.default file and rename it to .env then copy the code below and paste it anywhere in the .env file.
 
 ```
 cp .env.defaults .env
