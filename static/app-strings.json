@@ -1558,5 +1558,16 @@
   "Your wallet has a lot of change lying around. Consolidating will speed up your transactions. This could take some time. %now%%help%": "Your wallet has a lot of change lying around. Consolidating will speed up your transactions. This could take some time. %now%%help%",
   "Consolidating": "Consolidating",
   "Theater mode": "Theater mode",
+  "View more": "View more",
+  "Your total balance. Some of the %lbc% is in use on your channels and content right now.": "Your total balance. Some of the %lbc% is in use on your channels and content right now.",
+  "%lbc_amount% available balance": "%lbc_amount% available balance",
+  "%lbc_amount% currently in use": "%lbc_amount% currently in use",
+  "View less": "View less",
+  "Your total balance.": "Your total balance.",
+  "%lbc_amount% immediately spendable": "%lbc_amount% immediately spendable",
+  "%lbc_amount% contributing to content": "%lbc_amount% contributing to content",
+  "...earned from others (unlock to spend)": "...earned from others (unlock to spend)",
+  "...on initial publishes (delete or edit past content to spend)": "...on initial publishes (delete or edit past content to spend)",
+  "...supporting content (delete supports to spend)": "...supporting content (delete supports to spend)",
   "--end--": "--end--"
 }

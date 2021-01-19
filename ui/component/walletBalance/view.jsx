@@ -48,6 +48,7 @@ const WalletBalance = (props: Props) => {
   const { other: otherCount = 0 } = utxoCounts || {};
 
   const totalBalance = balance + tipsBalance + supportsBalance + claimsBalance;
+  const totalLocked = tipsBalance + claimsBalance + supportsBalance;
 
   React.useEffect(() => {
     if (balance > LARGE_WALLET_BALANCE) {
@@ -59,25 +60,29 @@ const WalletBalance = (props: Props) => {
     <Card
       title={<LbcSymbol postfix={formatNumberWithCommas(totalBalance)} isTitle />}
       subtitle={
-        <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>
-          This is your total balance. Some of the %lbc% is in use on your channels and content right now.
-        </I18nMessage>
+        totalLocked > 0 ? (
+          <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>
+            Your total balance. All of this is yours, but some %lbc% is in use on channels and content right now.
+          </I18nMessage>
+        ) : (
+          <span>{__('Your total balance.')}</span>
+        )
       }
       actions={
         <>
           <h2 className="section__title--small">
             <I18nMessage tokens={{ lbc_amount: <CreditAmount amount={balance} precision={8} /> }}>
-              %lbc_amount% available balance
+              %lbc_amount% immediately spendable
             </I18nMessage>
           </h2>
 
           <h2 className="section__title--small">
             <I18nMessage
               tokens={{
-                lbc_amount: <CreditAmount amount={tipsBalance + claimsBalance + supportsBalance} precision={8} />,
+                lbc_amount: <CreditAmount amount={totalLocked} precision={8} />,
               }}
             >
-              %lbc_amount% currently in use
+              %lbc_amount% contributing to content
             </I18nMessage>
             <Button
               button="link"
@@ -89,17 +94,17 @@ const WalletBalance = (props: Props) => {
           {detailsExpanded && (
             <div className="section__subtitle">
               <dl>
-                <dt>{__('... earned and bound in tips')}</dt>
+                <dt>{__('...earned from others (unlock to spend)')}</dt>
                 <dd>
                   <CreditAmount amount={tipsBalance} precision={8} />
                 </dd>
 
-                <dt>{__('... in your publishes')}</dt>
+                <dt>{__('...on initial publishes (delete or edit past content to spend)')}</dt>
                 <dd>
                   <CreditAmount amount={claimsBalance} precision={8} />
                 </dd>
 
-                <dt>{__('... in your supports')}</dt>
+                <dt>{__('...supporting content (delete supports to spend)')}</dt>
                 <dd>
                   <CreditAmount amount={supportsBalance} precision={8} />
                 </dd>
