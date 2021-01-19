@@ -1569,5 +1569,6 @@
   "...earned from others (unlock to spend)": "...earned from others (unlock to spend)",
   "...on initial publishes (delete or edit past content to spend)": "...on initial publishes (delete or edit past content to spend)",
   "...supporting content (delete supports to spend)": "...supporting content (delete supports to spend)",
+  "%lbc_amount% boosting content": "%lbc_amount% boosting content",
   "--end--": "--end--"
 }
