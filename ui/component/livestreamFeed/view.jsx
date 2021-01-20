@@ -139,6 +139,8 @@ export default function LivestreamFeed(props: Props) {
                     <div key={comment.comment_id} className="livestream__comment">
                       {comment.channel_url ? (
                         <Button
+                          target="_blank"
+                          rel="noopener noreferrer"
                           className="livestream__comment-author"
                           navigate={comment.channel_url}
                           label={comment.channel_name}
