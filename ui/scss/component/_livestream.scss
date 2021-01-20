@@ -85,24 +85,28 @@
 }
 
 .livestream__publish-checkbox {
-  background-color: #fde68a;
-  padding: var(--spacing-m);
-  color: black;
-  border-radius: var(--border-radius);
   margin: var(--spacing-xl) 0;
 
-  .checkbox {
+  .checkbox,
+  .radio {
     margin-top: var(--spacing-m);
 
     label {
-      color: #555;
+      color: #444;
     }
   }
 }
 
-.livestream__offline {
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.livestream__creator-message {
+  background-color: #fde68a;
+  padding: var(--spacing-m);
+  color: black;
+  border-radius: var(--border-radius);
+  margin-bottom: var(--spacing-m);
+
+  h4 {
+    font-weight: bold;
+    font-size: var(--font-small);
+    margin-bottom: var(--spacing-s);
+  }
 }

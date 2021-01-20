@@ -316,7 +316,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                 </NavLink>
               )}
             </div>
-            <ClaimPreviewSubtitle uri={uri} type={type} livestream={livestream} />
+            <ClaimPreviewSubtitle uri={uri} type={type} />
             {(pending || !!reflectingProgress) && <PublishPending uri={uri} />}
           </div>
           {type !== 'small' && (
