@@ -20,7 +20,6 @@ import ChannelThumbnail from 'component/channelThumbnail';
 import { remote } from 'electron';
 import { IS_MAC } from 'component/app/view';
 // @endif
-import OdyseeLogo from './odysee_logo.png';
 import OdyseeLogoWithWhiteText from './odysee_white.png';
 import OdyseeLogoWithText from './odysee.png';
 
@@ -271,7 +270,7 @@ const Header = (props: Props) => {
 
                   <HeaderMenuButtons
                     authenticated={authenticated}
-                    notificationsEnabled={true}
+                    notificationsEnabled
                     history={history}
                     handleThemeToggle={handleThemeToggle}
                     currentTheme={currentTheme}

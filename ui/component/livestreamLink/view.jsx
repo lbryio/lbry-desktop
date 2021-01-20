@@ -1,5 +1,5 @@
 // @flow
-import { LIVE_STREAM_CHANNEL_CLAIM_ID, BITWAVE_API, BITWAVE_USERNAME } from 'constants/livestream';
+import { LIVE_STREAM_CHANNEL_CLAIM_ID, LIVE_STREAM_TAG, BITWAVE_API, BITWAVE_USERNAME } from 'constants/livestream';
 import * as PAGES from 'constants/pages';
 import React from 'react';
 import Card from 'component/common/card';
@@ -18,7 +18,7 @@ export default function LivestreamLink(props: Props) {
   React.useEffect(() => {
     Lbry.claim_search({
       channel_ids: [LIVE_STREAM_CHANNEL_CLAIM_ID],
-      any_tags: ['odysee-livestream'],
+      any_tags: [LIVE_STREAM_TAG],
       claim_type: ['stream'],
     })
       .then(res => {

@@ -19,7 +19,7 @@ export default function NotificationHeaderButton(props: Props) {
     // notifications,
     // fetching,
     doSeeAllNotifications,
-    user,
+    // user,
   } = props;
   const { push } = useHistory();
 
