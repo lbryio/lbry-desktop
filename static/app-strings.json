@@ -1556,5 +1556,14 @@
   "Your wallet has a lot of change lying around. Consolidating will speed up your transactions. This could take some time. %now%%help%": "Your wallet has a lot of change lying around. Consolidating will speed up your transactions. This could take some time. %now%%help%",
   "Consolidating": "Consolidating",
   "Theater mode": "Theater mode",
+  "Only visible to you": "Only visible to you",
+  "People who view this link will be redirected to your livestream. Make sure to use this for sharing so your title and thumbnail are displayed properly.": "People who view this link will be redirected to your livestream. Make sure to use this for sharing so your title and thumbnail are displayed properly.",
+  "Hi %channel%!": "Hi %channel%!",
+  "Check this box if you have entered video information for your livestream. It doesn't matter what file you choose for now, just make the sure the title, description, and tags are correct. Everything else is setup!": "Check this box if you have entered video information for your livestream. It doesn't matter what file you choose for now, just make the sure the title, description, and tags are correct. Everything else is setup!",
+  "When you edit this file, there will be another checkbox to turn this back into a regular video so it can be listed on your channel's page.": "When you edit this file, there will be another checkbox to turn this back into a regular video so it can be listed on your channel's page.",
+  "This is for my livestream": "This is for my livestream",
+  "I am done livestreaming": "I am done livestreaming",
+  "Live discussion": "Live discussion",
+  "View livestream": "View livestream",
   "--end--": "--end--"
 }

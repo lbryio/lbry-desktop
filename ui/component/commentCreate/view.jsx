@@ -28,6 +28,7 @@ type Props = {
   setCommentChannel: string => void,
   bottom: boolean,
   onSubmit: (string, string) => void,
+  livestream: boolean,
 };
 
 export function CommentCreate(props: Props) {
@@ -46,6 +47,7 @@ export function CommentCreate(props: Props) {
     setCommentChannel,
     onSubmit,
     bottom,
+    livestream,
   } = props;
   const buttonref: ElementRef<any> = React.useRef();
   const { push } = useHistory();
@@ -83,7 +85,7 @@ export function CommentCreate(props: Props) {
 
   function altEnterListener(e: SyntheticKeyboardEvent<*>) {
     const KEYCODE_ENTER = 13;
-    if ((e.ctrlKey || e.metaKey) && e.keyCode === KEYCODE_ENTER) {
+    if ((livestream || e.ctrlKey || e.metaKey) && e.keyCode === KEYCODE_ENTER) {
       e.preventDefault();
       buttonref.current.click();
     }
@@ -99,11 +101,11 @@ export function CommentCreate(props: Props) {
 
   function handleSubmit() {
     if (activeChannel !== CHANNEL_NEW && commentValue.length) {
-      if (onSubmit) {
-        onSubmit(commentValue, activeChannel);
-      }
-
       createComment(commentValue, claimId, activeChannel, parentId).then(res => {
+        if (onSubmit) {
+          onSubmit(commentValue, activeChannel);
+        }
+
         if (res && res.signature) {
           setCommentValue('');
 
