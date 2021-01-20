@@ -16,7 +16,7 @@ function FileSubtitle(props: Props) {
     <div className="media__subtitle--between">
       <div className="file__viewdate">
         {livestream ? <span>{__('Currently live')}</span> : <DateTime uri={uri} show={DateTime.SHOW_DATE} />}
-        <FileViewCount uri={uri} />
+        <FileViewCount uri={uri} livestream={livestream} />
       </div>
 
       <FileActions uri={uri} hideRepost={livestream} />
