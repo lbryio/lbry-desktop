@@ -45,6 +45,7 @@ type Props = {
   onPlayerReady: Player => void,
   isAudio: boolean,
   startMuted: boolean,
+  toggleVideoTheaterMode: () => void,
 };
 
 type VideoJSOptions = {
@@ -80,6 +81,7 @@ const F11_KEYCODE = 122;
 const SPACE_BAR_KEYCODE = 32;
 const SMALL_F_KEYCODE = 70;
 const SMALL_M_KEYCODE = 77;
+const SMALL_T_KEYCODE = 84;
 const ARROW_LEFT_KEYCODE = 37;
 const ARROW_RIGHT_KEYCODE = 39;
 const COMMA_KEYCODE = 188;
@@ -87,6 +89,7 @@ const PERIOD_KEYCODE = 190;
 
 const FULLSCREEN_KEYCODE = SMALL_F_KEYCODE;
 const MUTE_KEYCODE = SMALL_M_KEYCODE;
+const THEATER_MODE_KEYCODE = SMALL_T_KEYCODE;
 
 const SEEK_FORWARD_KEYCODE = ARROW_RIGHT_KEYCODE;
 const SEEK_BACKWARD_KEYCODE = ARROW_LEFT_KEYCODE;
@@ -154,7 +157,7 @@ class LbryVolumeBarClass extends videojs.getComponent(VIDEOJS_VOLUME_BAR_CLASS) 
 properties for this component should be kept to ONLY those that if changed should REQUIRE an entirely new videojs element
  */
 export default React.memo<Props>(function VideoJs(props: Props) {
-  const { startMuted, source, sourceType, poster, isAudio, onPlayerReady } = props;
+  const { startMuted, source, sourceType, poster, isAudio, onPlayerReady, toggleVideoTheaterMode } = props;
   const [reload, setReload] = useState('initial');
 
   let player: ?Player;
@@ -314,6 +317,11 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         player.userActive(true);
         player.playbackRate(nextRate);
       }
+    }
+
+    // Theater Mode shortcut
+    if (e.keyCode === THEATER_MODE_KEYCODE) {
+      toggleVideoTheaterMode();
     }
   }
 
