@@ -30,7 +30,13 @@ function ClaimRepostAuthor(props: Props) {
       <div className="claim-preview__repost-author">
         <Icon icon={ICONS.REPOST} size={10} />
         <span>
-          <strong>Anonymous</strong> {__('Reposted')}
+          <I18nMessage
+            tokens={{
+              anonymous: <strong>{__('Anonymous --[used in <%anonymous% Reposted>]--')}</strong>,
+            }}
+          >
+            %anonymous% Reposted
+          </I18nMessage>
         </span>
       </div>
     );
