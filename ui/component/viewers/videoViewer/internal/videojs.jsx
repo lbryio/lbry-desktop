@@ -215,7 +215,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
   let player: ?Player;
   const containerRef = useRef();
-  let videoJsOptions = {
+  let videoJsOptions: VideoJSOptions = {
     ...VIDEO_JS_OPTIONS,
     sources: [
       {

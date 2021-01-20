@@ -418,21 +418,33 @@ function PublishForm(props: Props) {
       )}
 
       {isLivestreamCreator && (
-        <div className="livestream__publish-checkbox">
-          Hi {channel}! <br /> <br /> Check this box if this going to be your livestream publish. It doesn't matter what
-          file you choose for now, just make the sure the title, description, and tags are correct. Everything else is
-          setup!
-          <br /> <br />
-          When you edit this file, there will be another checkbox to unhide this content and display it on your
-          channel's page.
-          <br /> <br />
+        <div className="livestream__creator-message livestream__publish-checkbox">
+          <h4>{__('Hi %channel%!', { channel })}</h4>
+          <p>
+            Check this box if you have entered video information for your livestream. It doesn't matter what file you
+            choose for now, just make the sure the title, description, and tags are correct. Everything else is setup!
+          </p>
+          <p>
+            When you edit this file, there will be another checkbox to turn this back into a regular video so it can be
+            listed on your channel's page.
+          </p>
+
           <FormField
-            type="checkbox"
-            label="This is for my livestream"
+            type={isStillEditing ? 'radio' : 'checkbox'}
+            label={__('This is for my livestream')}
             name="is_livestream_checkbox"
             checked={isLivestreamPublish}
             onChange={e => updatePublishForm({ isLivestreamPublish: e.target.checked })}
           />
+          {isStillEditing && (
+            <FormField
+              type="radio"
+              label={'I am done livestreaming'}
+              name="is_livestream_checkbox_done"
+              checked={!isLivestreamPublish}
+              onChange={e => updatePublishForm({ isLivestreamPublish: !e.target.checked })}
+            />
+          )}
         </div>
       )}
       <section>
