@@ -71,7 +71,7 @@ const VIDEO_JS_OPTIONS: VideoJSOptions = {
   html5: {
     nativeControlsForTouch: IS_IOS,
     hls: {
-      overrideNative: true,
+      overrideNative: !videojs.browser.IS_ANY_SAFARI,
     },
   },
 };
