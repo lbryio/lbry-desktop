@@ -103,9 +103,9 @@ export const doGetSyncDesktop = (cb?, password) => (dispatch, getState) => {
   });
 };
 
-export function doSyncSubscribe() {
+export function doSyncLoop(noInterval) {
   return (dispatch, getState) => {
-    if (syncTimer) clearInterval(syncTimer);
+    if (!noInterval && syncTimer) clearInterval(syncTimer);
     const state = getState();
     const hasVerifiedEmail = selectUserVerifiedEmail(state);
     const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
@@ -113,14 +113,16 @@ export function doSyncSubscribe() {
     if (hasVerifiedEmail && syncEnabled && !syncLocked) {
       dispatch(doGetSyncDesktop((error, hasNewData) => dispatch(doHandleSyncComplete(error, hasNewData))));
       dispatch(doAnalyticsTagSync());
-      syncTimer = setInterval(() => {
-        const state = getState();
-        const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
-        if (syncEnabled) {
-          dispatch(doGetSyncDesktop((error, hasNewData) => dispatch(doHandleSyncComplete(error, hasNewData))));
-          dispatch(doAnalyticsTagSync());
-        }
-      }, SYNC_INTERVAL);
+      if (!noInterval) {
+        syncTimer = setInterval(() => {
+          const state = getState();
+          const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
+          if (syncEnabled) {
+            dispatch(doGetSyncDesktop((error, hasNewData) => dispatch(doHandleSyncComplete(error, hasNewData))));
+            dispatch(doAnalyticsTagSync());
+          }
+        }, SYNC_INTERVAL);
+      }
     }
   };
 }

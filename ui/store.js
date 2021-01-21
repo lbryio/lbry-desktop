@@ -10,7 +10,7 @@ import { createMemoryHistory, createBrowserHistory } from 'history';
 import { routerMiddleware } from 'connected-react-router';
 import createRootReducer from './reducers';
 import { Lbry, buildSharedStateMiddleware, ACTIONS as LBRY_REDUX_ACTIONS } from 'lbry-redux';
-import { doSyncSubscribe } from 'redux/actions/sync';
+import { doSyncLoop } from 'redux/actions/sync';
 import { getAuthToken } from 'util/saved-passwords';
 import { generateInitialUrl } from 'util/url';
 import { X_LBRY_AUTH_TOKEN } from 'constants/token';
@@ -159,7 +159,7 @@ const sharedStateFilters = {
 };
 
 const sharedStateCb = ({ dispatch, getState }) => {
-  dispatch(doSyncSubscribe());
+  dispatch(doSyncLoop());
 };
 
 const populateAuthTokenHeader = () => {

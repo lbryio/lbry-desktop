@@ -74,10 +74,9 @@ type Props = {
   syncEnabled: boolean,
   rewards: Array<Reward>,
   setReferrer: (string, boolean) => void,
-  analyticsTagSync: () => void,
   isAuthenticated: boolean,
   socketConnect: () => void,
-  syncSubscribe: () => void,
+  syncLoop: (?boolean) => void,
   syncEnabled: boolean,
   currentModal: any,
   syncFatalError: boolean,
@@ -104,7 +103,7 @@ function App(props: Props) {
     rewards,
     setReferrer,
     isAuthenticated,
-    syncSubscribe,
+    syncLoop,
     currentModal,
     syncFatalError,
   } = props;
@@ -147,6 +146,7 @@ function App(props: Props) {
   function handleAnalyticsDismiss() {
     setShowAnalyticsNag(false);
   }
+
   // @endif
   useEffect(() => {
     if (userId) {
@@ -270,11 +270,20 @@ function App(props: Props) {
   // ready for sync syncs, however after signin when hasVerifiedEmail, that syncs too.
   useEffect(() => {
     // signInSyncPref is cleared after sharedState loop.
+    const syncLoopWithoutInterval = () => syncLoop(true);
     if (readyForSync && hasVerifiedEmail) {
       // In case we are syncing.
-      syncSubscribe();
+      syncLoop();
+      // @if TARGET='web'
+      window.addEventListener('focus', syncLoopWithoutInterval);
+      // @endif
     }
-  }, [readyForSync, hasVerifiedEmail, syncSubscribe]);
+    // @if TARGET='web'
+    return () => {
+      window.removeEventListener('focus', syncLoopWithoutInterval);
+    };
+    // @endif
+  }, [readyForSync, hasVerifiedEmail, syncLoop]);
 
   // We know someone is logging in or not when we get their user object
   // We'll use this to determine when it's time to pull preferences

@@ -14,13 +14,8 @@ import {
 } from 'redux/selectors/settings';
 import { selectIsUpgradeAvailable, selectAutoUpdateDownloaded, selectModal } from 'redux/selectors/app';
 import { doGetWalletSyncPreference, doSetLanguage } from 'redux/actions/settings';
-import { doSyncSubscribe } from 'redux/actions/sync';
-import {
-  doDownloadUpgradeRequested,
-  doSignIn,
-  doGetAndPopulatePreferences,
-  doAnalyticsTagSync,
-} from 'redux/actions/app';
+import { doSyncLoop } from 'redux/actions/sync';
+import { doDownloadUpgradeRequested, doSignIn, doGetAndPopulatePreferences } from 'redux/actions/app';
 import App from './view';
 
 const select = state => ({
@@ -41,7 +36,6 @@ const select = state => ({
 });
 
 const perform = dispatch => ({
-  analyticsTagSync: () => dispatch(doAnalyticsTagSync()),
   fetchAccessToken: () => dispatch(doFetchAccessToken()),
   fetchChannelListMine: () => dispatch(doFetchChannelListMine()),
   setLanguage: language => dispatch(doSetLanguage(language)),
@@ -49,7 +43,7 @@ const perform = dispatch => ({
   requestDownloadUpgrade: () => dispatch(doDownloadUpgradeRequested()),
   updatePreferences: () => dispatch(doGetAndPopulatePreferences()),
   getWalletSyncPref: () => dispatch(doGetWalletSyncPreference()),
-  syncSubscribe: () => dispatch(doSyncSubscribe()),
+  syncLoop: noInterval => dispatch(doSyncLoop(noInterval)),
   setReferrer: (referrer, doClaim) => dispatch(doUserSetReferrer(referrer, doClaim)),
 });
 

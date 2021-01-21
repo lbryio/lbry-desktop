@@ -5,7 +5,7 @@ import analytics from 'analytics';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 import { launcher } from 'util/autoLaunch';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { doGetSyncDesktop, doSyncUnsubscribe, doSetSyncLock } from 'redux/actions/sync';
+import { doSyncLoop, doSyncUnsubscribe, doSetSyncLock } from 'redux/actions/sync';
 import { doAlertWaitingForSync, doGetAndPopulatePreferences } from 'redux/actions/app';
 import { selectPrefsReady } from 'redux/selectors/sync';
 import { Lbryio } from 'lbryinc';
@@ -246,7 +246,7 @@ export function doEnterSettingsPage() {
     }
     dispatch(doSyncUnsubscribe());
     if (syncEnabled && hasVerifiedEmail) {
-      await dispatch(doGetSyncDesktop());
+      await dispatch(doSyncLoop(true));
     } else {
       await dispatch(doGetAndPopulatePreferences());
     }
@@ -263,7 +263,7 @@ export function doExitSettingsPage() {
     }
     dispatch(doSetSyncLock(false));
     dispatch(doPushSettingsToPrefs());
-    // syncSubscribe is restarted in store.js sharedStateCB if necessary
+    // syncLoop is restarted in store.js sharedStateCB if necessary
   };
 }
 
