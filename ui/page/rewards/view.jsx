@@ -78,8 +78,8 @@ class RewardsPage extends PureComponent<Props> {
                     rewards_faq: <Button button="link" label={__('Rewards FAQ')} href="https://lbry.com/faq/support" />,
                   }}
                 >
-                  Please review the %rewards_faq% for eligibility, and send us an email to help@lbry.com if you continue
-                  to see this message. You can continue to use LBRY without this feature.
+                  Please review the %rewards_faq% for eligibility, and send us an email to help@odysee.com if you
+                  continue to see this message. You can continue to use LBRY without this feature.
                 </I18nMessage>
                 {`${__('Enjoy all the awesome free content in the meantime!')}`}
               </p>

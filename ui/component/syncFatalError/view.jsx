@@ -10,7 +10,7 @@ export default function SyncFatalError() {
       <Yrbl
         title={__('There is a bug... somewhere')}
         subtitle={
-          <p>{__("Try refreshing to fix the issue. If that doesn't work, email help@lbry.com for support.")}</p>
+          <p>{__("Try refreshing to fix the issue. If that doesn't work, email help@odysee.com for support.")}</p>
         }
         actions={
           <div className="section__actions">
