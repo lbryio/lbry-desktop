@@ -25,7 +25,8 @@
   flex-wrap: wrap;
   width: 100%;
 
-  > div {
+  > div,
+  ins {
     width: 100%;
     position: relative !important;
     max-width: 30rem;
@@ -34,6 +35,34 @@
 
   .avp-p-gui {
     z-index: 1 !important;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    flex-direction: column;
+
+    > div {
+      width: 100%;
+    }
+  }
+}
+
+// Related list ads
+.ads__related--google {
+  border-bottom: 1px solid var(--color-border);
+  //padding: var(--spacing-s);
+  background-color: var(--color-card-background);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+
+  > div,
+  ins {
+    width: 100%;
+    position: relative !important;
+    max-width: 30rem;
+    min-width: 15rem;
+    margin: var(--spacing-s);
   }
 
   @media (max-width: $breakpoint-small) {
