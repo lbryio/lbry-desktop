@@ -75,19 +75,25 @@ jobs:
           KNOWN_APP_DOMAINS: lbry.tv,lbry.lat,odysee.com
 
       - uses: actions/upload-artifact@v2
-        if: startsWith(runner.os, 'linux')
+        if: |
+          startsWith(runner.os, 'linux') &&
+          github.event.pull_request.head.repo.full_name == github.repository
         with:
           name: Linux
           path: ./dist/electron/*.*
 
       - uses: actions/upload-artifact@v2
-        if: startsWith(runner.os, 'mac')
+        if: |
+          startsWith(runner.os, 'mac') &&
+          github.event.pull_request.head.repo.full_name == github.repository
         with:
           name: macOS
           path: ./dist/electron/*.*
 
       - uses: actions/upload-artifact@v2
-        if: startsWith(runner.os, 'windows')
+        if: |
+          startsWith(runner.os, 'windows') &&
+          github.event.pull_request.head.repo.full_name == github.repository
         with:
           name: Windows
           path: ./dist/electron/*.*
