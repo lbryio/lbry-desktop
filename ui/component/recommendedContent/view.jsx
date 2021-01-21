@@ -1,5 +1,5 @@
 // @flow
-import { SHOW_ADS } from 'config';
+import { SHOW_ADS, SIMPLE_SITE } from 'config';
 import { SEARCH_OPTIONS } from 'constants/search';
 import React from 'react';
 import ClaimList from 'component/claimList';
@@ -65,7 +65,7 @@ export default function RecommendedContent(props: Props) {
           type="small"
           loading={isSearching}
           uris={recommendedContent}
-          injectedItem={SHOW_ADS && !isAuthenticated && IS_WEB && <Ads type="video" small />}
+          injectedItem={SHOW_ADS && !isAuthenticated && IS_WEB && <Ads small type={SIMPLE_SITE ? 'google' : 'video'} />}
           empty={__('No related content found')}
         />
       }

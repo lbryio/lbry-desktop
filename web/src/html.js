@@ -17,17 +17,12 @@ const path = require('path');
 const { getJsBundleId } = require('../bundle-id.js');
 const jsBundleId = getJsBundleId();
 
-function insertToHead(fullHtml, htmlToInsert, skipAdwords) {
+function insertToHead(fullHtml, htmlToInsert) {
   return fullHtml.replace(
     /<!-- VARIABLE_HEAD_BEGIN -->.*<!-- VARIABLE_HEAD_END -->/s,
     `
       ${htmlToInsert || buildOgMetadata()}
       <script src="/public/ui-${jsBundleId}.js" async></script>
-      ${
-        skipAdwords
-          ? ''
-          : `<script data-ad-client="ca-pub-7102138296475003" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>`
-      }
     `
   );
 }
@@ -225,10 +220,10 @@ async function getHtml(ctx) {
 
     if (claim) {
       const ogMetadata = buildClaimOgMetadata(claimUri, claim);
-      return insertToHead(html, ogMetadata, true);
+      return insertToHead(html, ogMetadata);
     }
 
-    return insertToHead(html, null, true);
+    return insertToHead(html, null);
   }
 
   if (!requestPath.includes('$')) {
