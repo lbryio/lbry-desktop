@@ -224,7 +224,7 @@ textarea {
     margin-bottom: var(--spacing-l);
   }
 
-  .button--link ~ .button--link {
+  .button--link + .button--link {
     margin-left: var(--spacing-s);
   }
 }

@@ -148,13 +148,13 @@ class HelpPage extends React.PureComponent<Props, State> {
           subtitle={
             <I18nMessage tokens={{ channel: <strong>#help</strong> }}>
               Live help is available most hours in the %channel% channel of our Discord chat room. Or you can always
-              email us at help@lbry.com.
+              email us at help@odysee.com.
             </I18nMessage>
           }
           actions={
             <div className="section__actions">
               <Button button="secondary" label={__('Join Our Chat')} icon={ICONS.CHAT} href="https://chat.lbry.com" />
-              <Button button="secondary" label={__('Email Us')} icon={ICONS.WEB} href="mailto:help@lbry.com" />
+              <Button button="secondary" label={__('Email Us')} icon={ICONS.WEB} href="mailto:help@odysee.com" />
             </div>
           }
         />
