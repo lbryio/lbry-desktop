@@ -1,4 +1,11 @@
-import { Lbry, doFetchChannelListMine, batchActions, makeSelectClaimForUri, isURIValid } from 'lbry-redux';
+import {
+  Lbry,
+  doFetchChannelListMine,
+  batchActions,
+  makeSelectClaimForUri,
+  isURIValid,
+  normalizeURI,
+} from 'lbry-redux';
 import * as ACTIONS from 'constants/action_types';
 import { doClaimRewardType, doRewardList } from 'redux/actions/rewards';
 import { selectEmailToVerify, selectPhoneToVerify, selectUserCountryCode, selectUser } from 'redux/selectors/user';
@@ -684,7 +691,7 @@ export function doUserSetReferrer(referrer, shouldClaim) {
     let referrerCode;
     const isValid = isURIValid(referrer);
     if (isValid) {
-      const uri = `lbry://${referrer}`;
+      const uri = normalizeURI(referrer);
       claim = makeSelectClaimForUri(uri)(getState());
       if (!claim) {
         try {
