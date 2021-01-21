@@ -9,7 +9,12 @@ import Yrbl from 'component/yrbl';
 import Button from 'component/button';
 import analytics from 'analytics';
 
-export default function LivestreamPage() {
+type Props = {
+  doSetPlayingUri: ({ uri: ?string }) => void,
+};
+
+export default function LivestreamPage(props: Props) {
+  const { doSetPlayingUri } = props;
   const [isFetching, setIsFetching] = React.useState(true);
   const [isReady, setIsReady] = React.useState(false);
   const [livestreamClaim, setLivestreamClaim] = React.useState(false);
@@ -60,6 +65,11 @@ export default function LivestreamPage() {
       }
     }
   }, [uriFromLivestreamClaim, stringifiedClaim]);
+
+  React.useEffect(() => {
+    // Set playing uri to null so the popout player doesnt start playing the dummy claim if a user navigates back
+    doSetPlayingUri({ uri: null });
+  }, [doSetPlayingUri]);
 
   return (
     <Page className="file-page" filePage>
