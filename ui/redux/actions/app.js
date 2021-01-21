@@ -49,7 +49,7 @@ import {
 import { selectDaemonSettings, makeSelectClientSetting } from 'redux/selectors/settings';
 import { selectUser, selectUserVerifiedEmail } from 'redux/selectors/user';
 // import { selectDaemonSettings } from 'redux/selectors/settings';
-import { doSyncSubscribe, doSetPrefsReady } from 'redux/actions/sync';
+import { doSyncLoop, doSetPrefsReady } from 'redux/actions/sync';
 import { doAuthenticate } from 'redux/actions/user';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import analytics, { SHARE_INTERNAL } from 'analytics';
@@ -679,7 +679,7 @@ export function doHandleSyncComplete(error, hasNewData) {
 }
 
 export function doSyncWithPreferences() {
-  return dispatch => dispatch(doSyncSubscribe());
+  return dispatch => dispatch(doSyncLoop());
 }
 
 export function doToggleInterestedInYoutubeSync() {
