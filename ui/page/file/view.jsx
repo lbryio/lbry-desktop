@@ -11,7 +11,7 @@ import FileRenderInline from 'component/fileRenderInline';
 import FileRenderDownload from 'component/fileRenderDownload';
 import RecommendedContent from 'component/recommendedContent';
 import CommentsList from 'component/commentsList';
-import { useHistory } from 'react-router';
+import { Redirect } from 'react-router';
 import Button from 'component/button';
 import I18nMessage from 'component/i18nMessage';
 
@@ -51,7 +51,6 @@ function FilePage(props: Props) {
     claim,
     claimIsMine,
   } = props;
-  const { replace } = useHistory();
   const cost = costInfo ? costInfo.cost : null;
   const hasFileInfo = fileInfo !== undefined;
   const isLivestream =
@@ -79,12 +78,6 @@ function FilePage(props: Props) {
       setPrimaryUri(null);
     };
   }, [uri, hasFileInfo, fetchFileInfo, fetchCostInfo, setViewed, setPrimaryUri]);
-
-  React.useEffect(() => {
-    if (!claimIsMine && isLivestream) {
-      replace(`/$/${PAGES.LIVESTREAM}`);
-    }
-  }, [claimIsMine, isLivestream]);
 
   function renderFilePageLayout() {
     if (RENDER_MODES.FLOATING_MODES.includes(renderMode)) {
@@ -124,6 +117,10 @@ function FilePage(props: Props) {
         <FileTitle uri={uri} />
       </React.Fragment>
     );
+  }
+
+  if (!claimIsMine && isLivestream) {
+    return <Redirect to={`/$/${PAGES.LIVESTREAM}`} />;
   }
 
   if (obscureNsfw && isMature) {
