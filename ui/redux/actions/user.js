@@ -707,7 +707,7 @@ export function doUserSetReferrer(referrer, shouldClaim) {
     }
 
     if (!referrerCode) {
-      referrerCode = referrer;
+      referrerCode = referrer.replace('lbry://', '');
     }
 
     try {
