@@ -16,7 +16,7 @@ function generateEmbedUrl(claimName, claimId, includeStartTime, startTime, refer
     urlParams.append('r', referralLink);
   }
 
-  return `${URL}/$/embed/${encodeURIComponent(claimName)}/${claimId}?${urlParams.toString()}`;
+  return `${URL}/$/embed/${encodeURIComponent(claimName).replace(/'/g, '%27')}/${claimId}?${urlParams.toString()}`;
 }
 
 function generateDownloadUrl(claimName, claimId) {
