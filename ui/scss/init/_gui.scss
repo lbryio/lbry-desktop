@@ -83,13 +83,13 @@ dl {
 }
 
 dt {
-  flex-basis: 45%;
+  flex-basis: 50%;
   text-align: left;
   font-weight: bold;
 }
 
 dd {
-  flex-basis: 50%;
+  flex-basis: 45%;
   flex-grow: 1;
   margin: 0;
   text-align: right;
@@ -216,7 +216,7 @@ textarea {
 
 .help {
   display: block;
-  font-size: var(--font-small);
+  font-size: var(--font-xsmall);
   color: var(--color-text-help);
   margin-top: var(--spacing-s);
 
@@ -226,6 +226,10 @@ textarea {
 
   .button--link ~ .button--link {
     margin-left: var(--spacing-s);
+  }
+
+  @media (min-width: $breakpoint-small) {
+    font-size: var(--font-small);
   }
 }
 
@@ -257,6 +261,13 @@ textarea {
 .help--card-actions {
   @extend .help;
   margin-top: var(--spacing-m);
+}
+
+.help--dt {
+  @extend .help;
+  display: inline-block;
+  margin-top: 0;
+  margin-left: var(--spacing-s);
 }
 
 .empty {

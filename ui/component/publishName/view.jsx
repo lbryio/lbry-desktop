@@ -88,7 +88,9 @@ function PublishName(props: Props) {
     } else if (bid < MINIMUM_PUBLISH_BID) {
       bidError = __('Your deposit must be higher');
     } else if (totalAvailableBidAmount < bid) {
-      bidError = __('Deposit cannot be higher than your available balance');
+      bidError = __('Deposit cannot be higher than your available balance: %balance%', {
+        balance: totalAvailableBidAmount,
+      });
     } else if (totalAvailableBidAmount <= bid + 0.05) {
       bidError = __('Please decrease your deposit to account for transaction fees or acquire more LBRY Credits.');
     }
