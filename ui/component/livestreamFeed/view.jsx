@@ -13,10 +13,11 @@ type Props = {
   uri: string,
   claim: ?StreamClaim,
   doResolveUri: string => void,
+  activeViewers: number,
 };
 
 export default function LivestreamFeed(props: Props) {
-  const { claim, uri, doResolveUri } = props;
+  const { claim, uri, doResolveUri, activeViewers } = props;
   const commentsRef = React.createRef();
   const hasScrolledComments = React.useRef();
   const [fetchingComments, setFetchingComments] = React.useState(true);
@@ -114,7 +115,7 @@ export default function LivestreamFeed(props: Props) {
           </div>
         </div>
 
-        <FileTitle uri={uri} livestream />
+        <FileTitle uri={uri} livestream activeViewers={activeViewers} />
       </div>
       <Card
         title={__('Live discussion')}

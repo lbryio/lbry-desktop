@@ -18,6 +18,7 @@ export default function LivestreamPage(props: Props) {
   const [isFetching, setIsFetching] = React.useState(true);
   const [isReady, setIsReady] = React.useState(false);
   const [livestreamClaim, setLivestreamClaim] = React.useState(false);
+  const [activeViewers, setActiveViewers] = React.useState(0);
   const uriFromLivestreamClaim = livestreamClaim && livestreamClaim.canonical_url;
 
   React.useEffect(() => {
@@ -30,19 +31,6 @@ export default function LivestreamPage(props: Props) {
         if (res && res.items && res.items.length > 0) {
           const claim = res.items[0];
           setLivestreamClaim(claim);
-
-          // Has livestream claim, check if they are live on bitwave
-          fetch(`${BITWAVE_API}/${BITWAVE_USERNAME}`)
-            .then(res => res.json())
-            .then(res => {
-              if (res && res.data && res.data.live) {
-                setIsReady(true);
-              } else {
-                setIsReady(false);
-              }
-
-              setIsFetching(false);
-            });
         } else {
           setIsFetching(false);
         }
@@ -51,6 +39,41 @@ export default function LivestreamPage(props: Props) {
         setIsFetching(false);
       });
   }, []);
+
+  React.useEffect(() => {
+    function checkBitwave() {
+      fetch(`${BITWAVE_API}/${BITWAVE_USERNAME}`)
+        .then(res => res.json())
+        .then(res => {
+          if (!res || !res.data) {
+            setIsReady(false);
+            return;
+          }
+
+          setActiveViewers(res.data.viewCount);
+
+          if (res.data.live) {
+            setIsReady(true);
+            setIsFetching(false);
+          } else {
+            setIsReady(false);
+            setActiveViewers(0);
+            setIsFetching(false);
+          }
+        });
+    }
+
+    let interval;
+    if (uriFromLivestreamClaim) {
+      interval = setInterval(checkBitwave, 10000);
+    }
+
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [uriFromLivestreamClaim]);
 
   const stringifiedClaim = JSON.stringify(livestreamClaim);
   React.useEffect(() => {
@@ -81,7 +104,7 @@ export default function LivestreamPage(props: Props) {
 
       {!isFetching &&
         (isReady ? (
-          <LivestreamFeed uri={uriFromLivestreamClaim} />
+          <LivestreamFeed uri={uriFromLivestreamClaim} activeViewers={activeViewers} />
         ) : (
           <section className="main--empty">
             <Yrbl

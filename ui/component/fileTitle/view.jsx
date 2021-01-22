@@ -19,10 +19,11 @@ type Props = {
   nsfw: boolean,
   isNsfwBlocked: boolean,
   livestream?: boolean,
+  activeViewers?: number,
 };
 
 function FileTitle(props: Props) {
-  const { title, uri, nsfw, isNsfwBlocked, livestream } = props;
+  const { title, uri, nsfw, isNsfwBlocked, livestream, activeViewers } = props;
 
   return (
     <Card
@@ -42,7 +43,7 @@ function FileTitle(props: Props) {
       body={
         <React.Fragment>
           <ClaimInsufficientCredits uri={uri} />
-          <FileSubtitle uri={uri} livestream={livestream} />
+          <FileSubtitle uri={uri} livestream={livestream} activeViewers={activeViewers} />
         </React.Fragment>
       }
       actions={
