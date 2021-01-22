@@ -94,17 +94,26 @@ const WalletBalance = (props: Props) => {
           {detailsExpanded && (
             <div className="section__subtitle">
               <dl>
-                <dt>{__('...earned from others (unlock to spend)')}</dt>
+                <dt>
+                  {__('...earned from others')}
+                  <span className="help--dt">({__('Unlock to spend')})</span>
+                </dt>
                 <dd>
                   <CreditAmount amount={tipsBalance} precision={8} />
                 </dd>
 
-                <dt>{__('...on initial publishes (delete or edit past content to spend)')}</dt>
+                <dt>
+                  {__('...on initial publishes')}
+                  <span className="help--dt">({__('Delete or edit past content to spend')})</span>
+                </dt>
                 <dd>
                   <CreditAmount amount={claimsBalance} precision={8} />
                 </dd>
 
-                <dt>{__('...supporting content (delete supports to spend)')}</dt>
+                <dt>
+                  {__('...supporting content')}
+                  <span className="help--dt">({__('Delete supports to spend')})</span>
+                </dt>
                 <dd>
                   <CreditAmount amount={supportsBalance} precision={8} />
                 </dd>
