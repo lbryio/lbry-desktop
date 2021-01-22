@@ -2,6 +2,12 @@
 const PAGES = require('../constants/pages');
 const { parseURI, buildURI } = require('lbry-redux');
 
+function encodeWithApostropheEncode(string) {
+  // encodeURIComponent doesn't encode `'`
+  // in most cases this is fine, but wordpress doesn't like it
+  return encodeURIComponent(string).replace(/'/g, '%27');
+}
+
 exports.formatLbryUrlForWeb = uri => {
   let newUrl = uri.replace('lbry://', '/').replace(/#/g, ':');
   if (newUrl.startsWith('/?')) {
@@ -88,7 +94,7 @@ exports.generateLbryWebUrl = lbryUrl => {
 
 exports.generateEncodedLbryURL = (domain, lbryWebUrl, includeStartTime, startTime) => {
   const queryParam = includeStartTime ? `?t=${startTime}` : '';
-  const encodedPart = encodeURIComponent(`${lbryWebUrl}${queryParam}`);
+  const encodedPart = encodeWithApostropheEncode(`${lbryWebUrl}${queryParam}`);
   return `${domain}/${encodedPart}`;
 };
 
@@ -107,9 +113,9 @@ exports.generateShareUrl = (domain, lbryUrl, referralCode, rewardsApproved, incl
   const { streamName, streamClaimId, channelName, channelClaimId } = parseURI(lbryUrl);
 
   let uriParts = {
-    ...(streamName ? { streamName: encodeURIComponent(streamName) } : {}),
+    ...(streamName ? { streamName: encodeWithApostropheEncode(streamName) } : {}),
     ...(streamClaimId ? { streamClaimId } : {}),
-    ...(channelName ? { channelName: encodeURIComponent(channelName) } : {}),
+    ...(channelName ? { channelName: encodeWithApostropheEncode(channelName) } : {}),
     ...(channelClaimId ? { channelClaimId } : {}),
   };
 
