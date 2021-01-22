@@ -16,7 +16,8 @@ type Props = {
 export default function LivestreamPage(props: Props) {
   const { doSetPlayingUri } = props;
   const [isFetching, setIsFetching] = React.useState(true);
-  const [isReady, setIsReady] = React.useState(false);
+  const [isLive, setIsLive] = React.useState(false);
+  const [displayCountdown, setDisplayCountdown] = React.useState(false);
   const [livestreamClaim, setLivestreamClaim] = React.useState(false);
   const [activeViewers, setActiveViewers] = React.useState(0);
   const uriFromLivestreamClaim = livestreamClaim && livestreamClaim.canonical_url;
@@ -46,17 +47,53 @@ export default function LivestreamPage(props: Props) {
         .then(res => res.json())
         .then(res => {
           if (!res || !res.data) {
-            setIsReady(false);
+            setIsLive(false);
             return;
           }
 
           setActiveViewers(res.data.viewCount);
 
           if (res.data.live) {
-            setIsReady(true);
+            setDisplayCountdown(false);
+            setIsLive(true);
+            setIsFetching(false);
+            return;
+          }
+
+          // Not live, but see if we can display the countdown;
+          const scheduledTime = res.data.scheduled;
+
+          if (scheduledTime) {
+            const scheduledDate = new Date(scheduledTime);
+            const lastLiveTimestamp = res.data.timestamp;
+
+            let isLivestreamOver = false;
+            if (lastLiveTimestamp) {
+              const timestampDate = new Date(lastLiveTimestamp);
+              isLivestreamOver = timestampDate.getTime() > scheduledDate.getTime();
+            }
+
+            if (isLivestreamOver) {
+              setDisplayCountdown(false);
+              setIsLive(false);
+            } else {
+              const datePlusTenMinuteBuffer = scheduledDate.setMinutes(10, 0, 0);
+              const isInFuture = Date.now() < datePlusTenMinuteBuffer;
+
+              if (isInFuture) {
+                setDisplayCountdown(true);
+                setIsLive(false);
+              } else {
+                setDisplayCountdown(false);
+                setIsLive(false);
+              }
+            }
+
             setIsFetching(false);
           } else {
-            setIsReady(false);
+            // Offline and no countdown happening
+            setIsLive(false);
+            setDisplayCountdown(false);
             setActiveViewers(0);
             setIsFetching(false);
           }
@@ -103,8 +140,12 @@ export default function LivestreamPage(props: Props) {
       )}
 
       {!isFetching &&
-        (isReady ? (
-          <LivestreamFeed uri={uriFromLivestreamClaim} activeViewers={activeViewers} />
+        (isLive || displayCountdown ? (
+          <>
+            {/* Use two components to ensure the iframe is reset entirely when the real livestream starts */}
+            {displayCountdown && <LivestreamFeed uri={uriFromLivestreamClaim} />}
+            {isLive && <LivestreamFeed uri={uriFromLivestreamClaim} activeViewers={activeViewers} />}
+          </>
         ) : (
           <section className="main--empty">
             <Yrbl
