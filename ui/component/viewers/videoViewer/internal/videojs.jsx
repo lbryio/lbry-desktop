@@ -404,11 +404,13 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       if (player) {
         player.dispose();
         window.player = undefined;
+
+        console.log(`Disposed of video.js instance (unmounted)`);
       }
     }
   }, []);
 
-  // Update video player settings and reload it when props change
+  // Update video player and reload when source URL changes
   useEffect(() => {
     // For some reason the video player is responsible for detecting content type this way
     fetch(source, { method: 'HEAD' }).then(response => {
@@ -443,9 +445,9 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     });
 
     return () => {
-      console.log('Guess we could clean up something here if needed');
-    };
-  });
+      console.log('Cleanup after source update.');
+    }
+  }, [source]);
 
   return (
     reload && (
