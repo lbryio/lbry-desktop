@@ -58,18 +58,12 @@ type VideoJSOptions = {
 
 const videoPlaybackRates = [0.25, 0.5, 0.75, 1, 1.1, 1.25, 1.5, 1.75, 2];
 
-const IS_IOS =
-  (/iPad|iPhone|iPod/.test(navigator.platform) ||
-    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) &&
-  !window.MSStream;
-
 const VIDEO_JS_OPTIONS: VideoJSOptions = {
   preload: 'auto',
   playbackRates: videoPlaybackRates,
   responsive: true,
   controls: true,
   html5: {
-    nativeControlsForTouch: IS_IOS,
     hls: {
       overrideNative: !videojs.browser.IS_ANY_SAFARI,
     },
@@ -168,14 +162,13 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       },
     ],
     autoplay: false,
+    muted: startMuted,
     poster: poster, // thumb looks bad in app, and if autoplay, flashing poster is annoying
     plugins: {
       eventTracking: true,
       overlay: OVERLAY.OVERLAY_DATA,
     },
   };
-
-  videoJsOptions.muted = startMuted;
 
   const tapToUnmuteRef = useRef();
   const tapToRetryRef = useRef();
@@ -375,7 +368,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   return (
     reload && (
       // $FlowFixMe
-      <div className={classnames('video-js-parent', { 'video-js-parent--ios': IS_IOS })} ref={containerRef}>
+      <div className={classnames('video-js-parent')} ref={containerRef}>
         <Button
           label={__('Tap to unmute')}
           button="link"
