@@ -1,5 +1,6 @@
 // @flow
 import { DOMAIN, SHOW_ADS } from 'config';
+import { LIGHT_THEME } from 'constants/themes';
 import * as PAGES from 'constants/pages';
 import React, { useEffect } from 'react';
 import { withRouter } from 'react-router';
@@ -13,12 +14,17 @@ const G_AD_ID = 'ca-pub-7102138296475003';
 // const G_AD_ONE_LAYOUT = '-gv+p-3a-8r+sd';
 // const G_AD_ONE_SLOT = '6052061397';
 
-const G_AD_TWO_LAYOUT = '-hl-o+3s-6c+33'; // dark mode, related
-const G_AD_TWO_SLOT = '1498002046';
+// const G_AD_LIGHT_LAYOUT = '-h9-o+3s-6c+33'; // old layout
+const G_AD_LIGHT_LAYOUT = '-gr-p+3s-5w+2d'; // light mode, related
+const G_AD_LIGHT_SLOT = '1498002046';
+const G_AD_DARK_LAYOUT = '-gr-p+3s-5w+2d'; // dark mode, related
+const G_AD_DARK_SLOT = '7266878639';
+
 type Props = {
   location: { pathname: string },
   type: string,
   small: boolean,
+  theme: string,
 };
 
 function Ads(props: Props) {
@@ -26,6 +32,7 @@ function Ads(props: Props) {
     location: { pathname },
     type = 'sidebar',
     small,
+    theme,
   } = props;
   let googleInit;
 
@@ -103,9 +110,9 @@ function Ads(props: Props) {
         className="adsbygoogle"
         style={{ display: 'block' }}
         data-ad-format="fluid"
-        data-ad-layout-key={G_AD_TWO_LAYOUT}
+        data-ad-layout-key={theme === LIGHT_THEME ? G_AD_LIGHT_LAYOUT : G_AD_DARK_LAYOUT}
         data-ad-client={G_AD_ID}
-        data-ad-slot={G_AD_TWO_SLOT}
+        data-ad-slot={theme === LIGHT_THEME ? G_AD_LIGHT_SLOT : G_AD_DARK_SLOT}
       />
     </div>
   );
