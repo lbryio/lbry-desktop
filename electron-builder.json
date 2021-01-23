@@ -68,7 +68,7 @@
   },
   "protocols": [
     {
-      "name": "LBRY URI",
+      "name": "LBRY",
       "schemes": ["lbry"],
       "role": "Viewer"
     }
@@ -93,10 +93,10 @@
     "target": [
       {
         "target": "nsis",
-        "arch": ["x64", "ia32"]
+        "arch": ["x64"]
       }
     ]
   },
-  "artifactName": "${productName}_${version}.${ext}",
+  "artifactName": "${productName}.${ext}",
   "afterSign": "./build/afterSignHook.js"
 }
