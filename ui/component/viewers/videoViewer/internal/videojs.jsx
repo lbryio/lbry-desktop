@@ -325,59 +325,126 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     }
   }
 
-  // Create the video element. Note that a new videojs instantiation will happen on *every* render, so do not add props to this component!
+  // Create the video DOM element and wrapper
+  function createVideoPlayerDOM(container) {
+    if (!container) {
+      console.error(`VideoPlayer Error: missing ref to container!`);
+      return;
+    }
+
+    // This seems like a poor way to generate the DOM for video.js
+    const wrapper = document.createElement('div');
+    wrapper.setAttribute('data-vjs-player', 'true');
+    const el = document.createElement(isAudio ? 'audio' : 'video');
+    el.className = 'video-js';
+    wrapper.appendChild(el);
+
+    container.appendChild(wrapper);
+
+    return el;
+  }
+
+  // Initialize video.js
+  function initializeVideoPlayer(el) {
+    if (!el) {
+      console.error(`Failed to initialize video player: Missing element to attach to`);
+      return;
+    }
+
+    player = videojs(el, videoJsOptions, () => {
+      // this seems like a weird thing to have to check for here
+      if (!player) {
+        console.error(`Failed to create videojs player!`);
+        return;
+      }
+      
+      // Add various event listeners to player
+      player.one('play', onInitialPlay);
+      player.on('volumechange', onVolumeChange);
+      player.on('error', onError);
+      player.on('ended', onEnded);
+
+      // Replace volume bar with custom LBRY volume bar
+      LbryVolumeBarClass.replaceExisting(player);
+      
+      // initialize mobile UI
+      player.mobileUi(); // Inits mobile version. No-op if Desktop.
+
+      // I think this is a callback function
+      onPlayerReady(player);
+    });
+
+    // Add quality selector to player
+    player.hlsQualitySelector({
+      displayCurrentQuality: true,
+    });
+
+    // Add reference to player to global scope
+    window.player = player;
+
+    // fixes #3498 (https://github.com/lbryio/lbry-desktop/issues/3498)
+    // summary: on firefox the focus would stick to the fullscreen button which caused buggy behavior with spacebar
+    player.on('fullscreenchange', () => document.activeElement && document.activeElement.blur());
+
+    return player;
+  }
+
+  // This lifecycle hook is only called once (on mount)
   useEffect(() => {
-    if (containerRef.current) {
-      const wrapper = document.createElement('div');
-      wrapper.setAttribute('data-vjs-player', 'true');
-      const el = document.createElement(isAudio ? 'audio' : 'video');
-      el.className = 'video-js';
-      wrapper.appendChild(el);
+    const vjsElement = createVideoPlayerDOM(containerRef.current);
+    const vjsPlayer = initializeVideoPlayer(vjsElement);
 
-      // $FlowFixMe
-      containerRef.current.appendChild(wrapper);
+    // Add event listener for keyboard shortcuts
+    window.addEventListener('keydown', handleKeyDown);
 
-      fetch(source, { method: 'HEAD' }).then(response => {
-        if (response && response.redirected && response.url && response.url.endsWith('m3u8')) {
-          videoJsOptions.sources[0].type = 'application/x-mpegURL';
-        }
+    // Cleanup
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
 
-        player = videojs(el, videoJsOptions, () => {
-          if (player) {
-            player.one('play', onInitialPlay);
-            player.on('volumechange', onVolumeChange);
-            player.on('error', onError);
-            player.on('ended', onEnded);
-            LbryVolumeBarClass.replaceExisting(player);
-            player.mobileUi(); // Inits mobile version. No-op if Desktop.
+      if (player) {
+        player.dispose();
+        window.player = undefined;
+      }
+    }
+  }, []);
 
-            onPlayerReady(player);
-          }
-        });
+  // Update video player settings and reload it when props change
+  useEffect(() => {
+    // For some reason the video player is responsible for detecting content type this way
+    fetch(source, { method: 'HEAD' }).then(response => {
+      if (!player) {
+        console.log(`Our player was disposed, we should disregard the fetch result.`);
+        return;
+      }
 
-        player.hlsQualitySelector({
-          displayCurrentQuality: true,
-        });
+      let type = sourceType;
 
-        window.player = player;
+      // override type if we receive an .m3u8 (transcoded mp4)
+      if (
+        response && 
+        response.redirected && 
+        response.url && 
+        response.url.endsWith('m3u8')
+      ) {
+        type = 'application/x-mpegURL';
+      }
 
-        // fixes #3498 (https://github.com/lbryio/lbry-desktop/issues/3498)
-        // summary: on firefox the focus would stick to the fullscreen button which caused buggy behavior with spacebar
-        // $FlowFixMe
-        player.on('fullscreenchange', () => document.activeElement && document.activeElement.blur());
+      // Update player poster
+      // note: the poster prop seems to return null usually.
+      if ( poster ) player.poster(poster);
 
-        window.addEventListener('keydown', handleKeyDown);
+      // Update player source
+      player.src({
+        src: source,
+        type: type,
       });
 
-      return () => {
-        window.removeEventListener('keydown', handleKeyDown);
+      console.log(`Updated Player: ${source} (${type}) Poster: ${poster}`);
+    });
 
-        if (player) {
-          player.dispose();
-          window.player = undefined;
-        }
-      };
-    }
+    return () => {
+      console.log('Guess we could clean up something here if needed');
+    };
   });
 
   return (
