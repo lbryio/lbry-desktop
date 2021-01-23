@@ -167,7 +167,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         type: sourceType,
       },
     ],
-    autoplay: false,
+    autoplay: true,
     poster: poster, // thumb looks bad in app, and if autoplay, flashing poster is annoying
     plugins: {
       eventTracking: true,
@@ -406,6 +406,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   useEffect(() => {
     // For some reason the video player is responsible for detecting content type this way
     fetch(source, { method: 'HEAD' }).then(response => {
+      const player = window.player;
+
       if (!player) {
         console.log(`Our player was disposed, we should disregard the fetch result.`);
         return;
