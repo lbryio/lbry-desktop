@@ -20,10 +20,19 @@ type Props = {
   setShareDataThirdParty: boolean => void,
   history: { replace: string => void },
   authenticated: boolean,
+  authenticateIfSharingData: () => void,
 };
 
 function PrivacyAgreement(props: Props) {
-  const { setWelcomeVersion, setShareDataInternal, setShareDataThirdParty, history, authenticated, signOut } = props;
+  const {
+    setWelcomeVersion,
+    setShareDataInternal,
+    setShareDataThirdParty,
+    history,
+    authenticated,
+    signOut,
+    authenticateIfSharingData,
+  } = props;
   const [share, setShare] = useState(undefined); // preload
   const [agree, setAgree] = useState(false); // preload
 
@@ -38,6 +47,11 @@ function PrivacyAgreement(props: Props) {
       setShareDataInternal(false);
       setShareDataThirdParty(false);
     }
+
+    if (share === FREE || share === LIMITED) {
+      authenticateIfSharingData();
+    }
+
     setWelcomeVersion(WELCOME_VERSION);
     history.replace(`/`);
   }
