@@ -77,23 +77,20 @@ jobs:
 
       - uses: actions/upload-artifact@v2
         if: |
-          startsWith(runner.os, 'linux') &&
-          github.event.pull_request.head.repo.full_name == github.repository
+          startsWith(runner.os, 'linux')
         with:
           name: Linux
           path: ./dist/electron/*.*
 
       - uses: actions/upload-artifact@v2
         if: |
-          startsWith(runner.os, 'mac') &&
-          github.event.pull_request.head.repo.full_name == github.repository
+          startsWith(runner.os, 'mac')
         with:
           name: macOS
           path: ./dist/electron/*.*
 
       - uses: actions/upload-artifact@v2
         if: |
-          startsWith(runner.os, 'windows') &&
           github.event.pull_request.head.repo.full_name == github.repository
         with:
           name: Windows
