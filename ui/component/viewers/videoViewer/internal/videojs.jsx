@@ -328,7 +328,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   // Create the video DOM element and wrapper
   function createVideoPlayerDOM(container) {
     if (!container) {
-      console.error(`VideoPlayer Error: missing ref to container!`);
       return;
     }
 
@@ -347,14 +346,12 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   // Initialize video.js
   function initializeVideoPlayer(el) {
     if (!el) {
-      console.error(`Failed to initialize video player: Missing element to attach to`);
       return;
     }
 
     player = videojs(el, videoJsOptions, () => {
       // this seems like a weird thing to have to check for here
       if (!player) {
-        console.error(`Failed to create videojs player!`);
         return;
       }
       
@@ -404,8 +401,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       if (player) {
         player.dispose();
         window.player = undefined;
-
-        console.log(`Disposed of video.js instance (unmounted)`);
       }
     }
   }, []);
@@ -417,7 +412,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       const player = window.player;
 
       if (!player) {
-        console.log(`Our player was disposed, we should disregard the fetch result.`);
         return;
       }
 
@@ -442,13 +436,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         src: source,
         type: type,
       });
-
-      console.log(`Updated Player: ${source} (${type}) Poster: ${poster}`);
     });
-
-    return () => {
-      console.log('Cleanup after source update.');
-    }
   }, [source]);
 
   return (
