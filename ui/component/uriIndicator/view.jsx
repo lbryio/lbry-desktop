@@ -3,15 +3,13 @@ import type { Node } from 'react';
 import React from 'react';
 import classnames from 'classnames';
 import Button from 'component/button';
-import Tooltip from 'component/common/tooltip';
-import ClaimPreview from 'component/claimPreview';
 
 type Props = {
   isResolvingUri: boolean,
   channelUri: ?string,
   link: ?boolean,
   claim: ?Claim,
-  addTooltip: boolean,
+
   hideAnonymous: boolean,
   // Lint thinks we aren't using these, even though we are.
   // Possibly because the resolve function is an arrow function that is passed in props?
@@ -23,10 +21,6 @@ type Props = {
 };
 
 class UriIndicator extends React.PureComponent<Props> {
-  static defaultProps = {
-    addTooltip: true,
-  };
-
   componentDidMount() {
     this.resolve(this.props);
   }
@@ -44,7 +38,7 @@ class UriIndicator extends React.PureComponent<Props> {
   };
 
   render() {
-    const { link, isResolvingUri, claim, addTooltip, children, inline, hideAnonymous = false } = this.props;
+    const { link, isResolvingUri, claim, children, inline, hideAnonymous = false } = this.props;
 
     if (!claim) {
       return <span className="empty">{isResolvingUri ? 'Validating...' : 'Unused'}</span>;
@@ -57,7 +51,11 @@ class UriIndicator extends React.PureComponent<Props> {
         return null;
       }
 
-      return <span dir="auto" className={classnames('channel-name', { 'channel-name--inline': inline })}>Anonymous</span>;
+      return (
+        <span dir="auto" className={classnames('channel-name', { 'channel-name--inline': inline })}>
+          Anonymous
+        </span>
+      );
     }
 
     const channelClaim = isChannelClaim ? claim : claim.signing_channel;
@@ -66,7 +64,11 @@ class UriIndicator extends React.PureComponent<Props> {
       const { name } = channelClaim;
       const channelLink = link ? channelClaim.canonical_url || channelClaim.permanent_url : false;
 
-      const inner = <span dir="auto" className={classnames('channel-name', { 'channel-name--inline': inline })}>{name}</span>;
+      const inner = (
+        <span dir="auto" className={classnames('channel-name', { 'channel-name--inline': inline })}>
+          {name}
+        </span>
+      );
 
       if (!channelLink) {
         return inner;
@@ -75,16 +77,9 @@ class UriIndicator extends React.PureComponent<Props> {
       if (children) {
         return <Button navigate={channelLink}>{children}</Button>;
       } else {
-        const Wrapper = addTooltip
-          ? ({ children }) => (
-              <Tooltip label={<ClaimPreview uri={channelLink} type="tooltip" placeholder={false} />}>
-                {children}
-              </Tooltip>
-            )
-          : 'span';
         return (
           <Button className="button--uri-indicator" navigate={channelLink}>
-            <Wrapper>{inner}</Wrapper>
+            {inner}
           </Button>
         );
       }

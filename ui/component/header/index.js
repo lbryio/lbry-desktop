@@ -1,6 +1,6 @@
 import * as MODALS from 'constants/modal_types';
 import { connect } from 'react-redux';
-import { selectTotalBalance, formatCredits, selectMyChannelClaims, SETTINGS } from 'lbry-redux';
+import { selectTotalBalance, selectBalance, formatCredits, selectMyChannelClaims, SETTINGS } from 'lbry-redux';
 import { selectGetSyncErrorMessage } from 'redux/selectors/sync';
 import { selectUserVerifiedEmail, selectUserEmail, selectEmailToVerify, selectUser } from 'redux/selectors/user';
 import { doClearEmailEntry, doClearPasswordEntry } from 'redux/actions/user';
@@ -13,6 +13,8 @@ import { selectHasNavigated } from 'redux/selectors/app';
 
 const select = state => ({
   language: selectLanguage(state),
+  balance: selectBalance(state),
+  roundedSpendableBalance: formatCredits(selectBalance(state), 2, true),
   roundedBalance: formatCredits(selectTotalBalance(state), 2, true),
   currentTheme: makeSelectClientSetting(SETTINGS.THEME)(state),
   automaticDarkModeEnabled: makeSelectClientSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED)(state),

@@ -10,7 +10,6 @@ import UriIndicator from 'component/uriIndicator';
 import usePersistedState from 'effects/use-persisted-state';
 import { PRIMARY_PLAYER_WRAPPER_CLASS } from 'page/file/view';
 import Draggable from 'react-draggable';
-import Tooltip from 'component/common/tooltip';
 import { onFullscreenChange } from 'util/full-screen';
 import { useIsMobile } from 'effects/use-screensize';
 import debounce from 'util/debounce';
@@ -270,14 +269,13 @@ export default function FileRenderFloating(props: Props) {
           })}
         >
           {isFloating && (
-            <Tooltip label={__('Close')}>
-              <Button
-                onClick={closeFloatingPlayer}
-                icon={ICONS.REMOVE}
-                button="primary"
-                className="content__floating-close"
-              />
-            </Tooltip>
+            <Button
+              title={__('Close')}
+              onClick={closeFloatingPlayer}
+              icon={ICONS.REMOVE}
+              button="primary"
+              className="content__floating-close"
+            />
           )}
 
           {isReadyToPlay ? (
@@ -296,7 +294,7 @@ export default function FileRenderFloating(props: Props) {
               <div className="claim-preview__title" title={title || uri}>
                 <Button label={title || uri} navigate={uri} button="link" className="content__floating-link" />
               </div>
-              <UriIndicator link addTooltip={false} uri={uri} />
+              <UriIndicator link uri={uri} />
             </div>
           )}
         </div>

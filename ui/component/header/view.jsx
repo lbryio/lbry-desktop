@@ -9,7 +9,6 @@ import Button from 'component/button';
 import WunderBar from 'component/wunderbar';
 import Icon from 'component/common/icon';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
-import Tooltip from 'component/common/tooltip';
 import NavigationButton from 'component/navigationButton';
 import { LOGO_TITLE } from 'config';
 import { useIsMobile } from 'effects/use-screensize';
@@ -24,7 +23,9 @@ import { IS_MAC } from 'component/app/view';
 type Props = {
   user: ?User,
   balance: string,
-  roundedBalance: number,
+  balance: number,
+  roundedBalance: string,
+  roundedSpendableBalance: string,
   history: {
     entities: {}[],
     goBack: () => void,
@@ -66,7 +67,9 @@ type Props = {
 
 const Header = (props: Props) => {
   const {
+    balance,
     roundedBalance,
+    roundedSpendableBalance,
     history,
     setClientSetting,
     currentTheme,
@@ -170,15 +173,31 @@ const Header = (props: Props) => {
     }
   }
 
-  function getWalletTitle() {
-    return hideBalance || Number(roundedBalance) === 0 ? __('Your Wallet') : roundedBalance;
-  }
-
   const loginButtons = (
     <div className="header__auth-buttons">
       <Button navigate={`/$/${PAGES.AUTH_SIGNIN}`} button="link" label={__('Log In')} className="mobile-hidden" />
       <Button navigate={`/$/${PAGES.AUTH}`} button="primary" label={__('Sign Up')} />
     </div>
+  );
+
+  type BalanceButtonProps = { className: string };
+  const BalanceButton = (balanceButtonProps: BalanceButtonProps) => (
+    <Button
+      title={
+        balance > 0
+          ? __('Immediately spendable: %spendable_balance%', { spendable_balance: roundedSpendableBalance })
+          : __('Your Wallet')
+      }
+      navigate={`/$/${PAGES.WALLET}`}
+      className={balanceButtonProps.className}
+      label={hideBalance || Number(roundedBalance) === 0 ? __('Your Wallet') : roundedBalance}
+      icon={ICONS.LBC}
+      // @if TARGET='app'
+      onDoubleClick={e => {
+        e.stopPropagation();
+      }}
+      // @endif
+    />
   );
 
   return (
@@ -206,18 +225,7 @@ const Header = (props: Props) => {
             />
             {backTitle && <h1 className="header__auth-title">{isMobile ? simpleBackTitle || backTitle : backTitle}</h1>}
             {authenticated || !IS_WEB ? (
-              <Button
-                aria-label={__('Your wallet')}
-                navigate={`/$/${PAGES.WALLET}`}
-                className="header__navigation-item menu__title header__navigation-item--balance"
-                label={getWalletTitle()}
-                icon={ICONS.LBC}
-                // @if TARGET='app'
-                onDoubleClick={e => {
-                  e.stopPropagation();
-                }}
-                // @endif
-              />
+              <BalanceButton className="header__navigation-item menu__title header__navigation-item--balance" />
             ) : (
               loginButtons
             )}
@@ -292,20 +300,7 @@ const Header = (props: Props) => {
             {!authHeader && !backout ? (
               <div className={classnames('header__menu', { 'header__menu--with-balance': !IS_WEB || authenticated })}>
                 {(!IS_WEB || authenticated) && (
-                  <Button
-                    button="link"
-                    aria-label={__('Your wallet')}
-                    navigate={`/$/${PAGES.WALLET}`}
-                    className="header__navigation-item menu__title header__navigation-item--balance mobile-hidden"
-                    label={getWalletTitle()}
-                    icon={ICONS.LBC}
-                    iconSize={20}
-                    // @if TARGET='app'
-                    onDoubleClick={e => {
-                      e.stopPropagation();
-                    }}
-                    // @endif
-                  />
+                  <BalanceButton className="header__navigation-item menu__title header__navigation-item--balance mobile-hidden" />
                 )}
 
                 {IS_WEB && !authenticated && loginButtons}
@@ -317,19 +312,19 @@ const Header = (props: Props) => {
                   {/* Add an empty span here so we can use the same style as above */}
                   {/* This pushes the close button to the right side */}
                   <span />
-                  <Tooltip label={__('Go Back')}>
-                    <Button
-                      button="alt"
-                      // className="button--header-close"
-                      icon={ICONS.REMOVE}
-                      {...closeButtonNavigationProps}
-                      // @if TARGET='app'
-                      onDoubleClick={e => {
-                        e.stopPropagation();
-                      }}
-                      // @endif
-                    />
-                  </Tooltip>
+
+                  <Button
+                    title={__('Go Back')}
+                    button="alt"
+                    // className="button--header-close"
+                    icon={ICONS.REMOVE}
+                    {...closeButtonNavigationProps}
+                    // @if TARGET='app'
+                    onDoubleClick={e => {
+                      e.stopPropagation();
+                    }}
+                    // @endif
+                  />
                 </div>
               )
             )}
