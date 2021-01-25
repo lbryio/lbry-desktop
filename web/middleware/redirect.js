@@ -1,5 +1,29 @@
+const PAGES = require('../../ui/constants/pages');
 const config = require('../../config');
-const { formatInAppUrl } = require('../../ui/util/url');
+
+function formatInAppUrl(path) {
+  // Determine if we need to add a leading "/$/" for app pages
+  const APP_PAGE_REGEX = /(\?)([a-z]*)(.*)/;
+  const appPageMatches = APP_PAGE_REGEX.exec(path);
+
+  if (appPageMatches && appPageMatches.length) {
+    // Definitely an app page (or it's formatted like one)
+    const [, , page, queryString] = appPageMatches;
+
+    if (Object.values(PAGES).includes(page)) {
+      let actualUrl = '/$/' + page;
+
+      if (queryString) {
+        actualUrl += `?${queryString.slice(1)}`;
+      }
+
+      return actualUrl;
+    }
+  }
+
+  // Regular claim url
+  return path;
+}
 
 async function redirectMiddleware(ctx, next) {
   const requestHost = ctx.host;
@@ -22,7 +46,7 @@ async function redirectMiddleware(ctx, next) {
 
   if (requestHost === 'open.lbry.com' || requestHost === 'open.lbry.io') {
     const openQuery = '?src=open';
-    let redirectUrl = config.URL + formatInAppUrl(url, openQuery);
+    let redirectUrl = config.URL + formatInAppUrl(url);
 
     if (redirectUrl.includes('?')) {
       redirectUrl = redirectUrl.replace('?', `${openQuery}&`);
