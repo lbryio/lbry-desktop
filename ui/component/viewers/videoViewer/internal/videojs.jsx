@@ -354,7 +354,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       if (!player) {
         return;
       }
-      
+
       // Add various event listeners to player
       player.one('play', onInitialPlay);
       player.on('volumechange', onVolumeChange);
@@ -363,7 +363,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
       // Replace volume bar with custom LBRY volume bar
       LbryVolumeBarClass.replaceExisting(player);
-      
+
       // initialize mobile UI
       player.mobileUi(); // Inits mobile version. No-op if Desktop.
 
@@ -375,9 +375,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     player.hlsQualitySelector({
       displayCurrentQuality: true,
     });
-
-    // Add reference to player to global scope
-    window.player = player;
 
     // fixes #3498 (https://github.com/lbryio/lbry-desktop/issues/3498)
     // summary: on firefox the focus would stick to the fullscreen button which caused buggy behavior with spacebar
@@ -391,6 +388,9 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     const vjsElement = createVideoPlayerDOM(containerRef.current);
     const vjsPlayer = initializeVideoPlayer(vjsElement);
 
+    // Add reference to player to global scope
+    window.player = vjsPlayer;
+
     // Add event listener for keyboard shortcuts
     window.addEventListener('keydown', handleKeyDown);
 
@@ -402,7 +402,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         player.dispose();
         window.player = undefined;
       }
-    }
+    };
   }, []);
 
   // Update video player and reload when source URL changes
@@ -419,9 +419,9 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
       // override type if we receive an .m3u8 (transcoded mp4)
       if (
-        response && 
-        response.redirected && 
-        response.url && 
+        response &&
+        response.redirected &&
+        response.url &&
         response.url.endsWith('m3u8')
       ) {
         type = 'application/x-mpegURL';
@@ -429,7 +429,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
       // Update player poster
       // note: the poster prop seems to return null usually.
-      if ( poster ) player.poster(poster);
+      if (poster) player.poster(poster);
 
       // Update player source
       player.src({
