@@ -8,11 +8,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- Theater mode ([#5255](https://github.com/lbryio/lbry-desktop/pull/5255))
+- Repost flow improvements ([#5293](https://github.com/lbryio/lbry-desktop/pull/5293))
 - Desktop: Enable 'Alt+Left/Right' for history navigation _community pr!_ ([#5203](https://github.com/lbryio/lbry-desktop/pull/5203))
+- Make playback rate setting persistent _community pr!_ ([#5310](https://github.com/lbryio/lbry-desktop/pull/5310))
 
 ### Changed
 
+- Improve how spendable balance is displayed ([#5276](https://github.com/lbryio/lbry-desktop/pull/5276))
+
 ### Fixed
+
+- Lots of bug fixes
+- Fix bug where subscriptions could be lost ([#5302](https://github.com/lbryio/lbry-desktop/pull/5302))
 
 ## [0.49.3] - [2020-12-30]
 
