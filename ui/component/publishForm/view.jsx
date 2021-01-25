@@ -331,6 +331,19 @@ function PublishForm(props: Props) {
   // Editing claim uri
   return (
     <div className="card-stack">
+      <Card
+        className={disabled ? 'card--disabled' : undefined}
+        actions={
+          <React.Fragment>
+            <SelectChannel channel={channel} onChannelChange={handleChannelNameChange} />
+            <p className="help">
+              {__('This is a username or handle that your content can be found under.')}{' '}
+              {__('Ex. @Marvel, @TheBeatles, @BooksByJoe')}
+            </p>
+          </React.Fragment>
+        }
+      />
+
       <PublishFile
         uri={uri}
         mode={mode}
@@ -389,17 +402,6 @@ function PublishForm(props: Props) {
             tagsChosen={tags}
           />
 
-          <Card
-            actions={
-              <React.Fragment>
-                <SelectChannel channel={channel} onChannelChange={handleChannelNameChange} />
-                <p className="help">
-                  {__('This is a username or handle that your content can be found under.')}{' '}
-                  {__('Ex. @Marvel, @TheBeatles, @BooksByJoe')}
-                </p>
-              </React.Fragment>
-            }
-          />
           <PublishName
             disabled={isStillEditing || formDisabled}
             autoPopulateName={autoPopulateNameFromTitle}

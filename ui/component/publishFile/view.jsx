@@ -367,7 +367,12 @@ function PublishFile(props: Props) {
             onChange={handleTitleChange}
           />
           {isPublishFile && (
-            <FileSelector disabled={disabled} currentPath={currentFile} onFileChosen={handleFileChange} />
+            <FileSelector
+              label={__('File')}
+              disabled={disabled}
+              currentPath={currentFile}
+              onFileChosen={handleFileChange}
+            />
           )}
           {isPublishPost && (
             <PostEditor
