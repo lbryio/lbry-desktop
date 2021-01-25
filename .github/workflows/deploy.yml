@@ -65,6 +65,7 @@ jobs:
           WELCOME_VERSION: 1.0
           DOMAIN: lbry.tv
           URL: https://lbry.tv
+          SHARE_DOMAIN_URL: https://open.lbry.com
           SITE_TITLE: lbry.tv
           SITE_NAME: lbry.tv
           SHOW_ADS: false
