@@ -1567,5 +1567,6 @@
   "Delete or edit past content to spend": "Delete or edit past content to spend",
   "Delete supports to spend": "Delete supports to spend",
   "%lbc_amount% boosting content": "%lbc_amount% boosting content",
+  "Deposit cannot be higher than your available balance: %balance%": "Deposit cannot be higher than your available balance: %balance%",
   "--end--": "--end--"
 }
