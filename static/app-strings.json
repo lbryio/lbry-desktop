@@ -1557,6 +1557,7 @@
   "%lbc_amount% currently in use": "%lbc_amount% currently in use",
   "View less": "View less",
   "Your total balance.": "Your total balance.",
+  "Immediately spendable": "Immediately spendable",
   "%lbc_amount% immediately spendable": "%lbc_amount% immediately spendable",
   "%lbc_amount% contributing to content": "%lbc_amount% contributing to content",
   "...earned from others": "...earned from others",

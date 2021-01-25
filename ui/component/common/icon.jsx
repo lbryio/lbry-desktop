@@ -1,7 +1,6 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import React from 'react';
-import Tooltip from 'component/common/tooltip';
 import classnames from 'classnames';
 import { icons } from './icon-custom';
 
@@ -70,6 +69,7 @@ class IconComponent extends React.PureComponent<Props> {
 
     const component = (
       <Icon
+        title={tooltipText}
         size={size || (sectionIcon ? 20 : 16)}
         className={classnames(`icon icon--${icon}`, className)}
         color={color}
@@ -77,9 +77,7 @@ class IconComponent extends React.PureComponent<Props> {
       />
     );
 
-    const inner = sectionIcon ? <span className={`icon__wrapper icon__wrapper--${icon}`}>{component}</span> : component;
-
-    return tooltipText ? <Tooltip label={tooltipText}>{inner}</Tooltip> : inner;
+    return sectionIcon ? <span className={`icon__wrapper icon__wrapper--${icon}`}>{component}</span> : component;
   }
 }
 
