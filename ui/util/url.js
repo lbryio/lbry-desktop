@@ -8,7 +8,7 @@ function encodeWithApostropheEncode(string) {
   return encodeURIComponent(string).replace(/'/g, '%27');
 }
 
-exports.formatLbryUrlForWeb = uri => {
+export const formatLbryUrlForWeb = uri => {
   let newUrl = uri.replace('lbry://', '/').replace(/#/g, ':');
   if (newUrl.startsWith('/?')) {
     // This is a lbry link to an internal page ex: lbry://?rewards
@@ -18,7 +18,7 @@ exports.formatLbryUrlForWeb = uri => {
   return newUrl;
 };
 
-exports.formatFileSystemPath = path => {
+export const formatFileSystemPath = path => {
   if (!path) {
     return;
   }
@@ -37,7 +37,7 @@ exports.formatFileSystemPath = path => {
   ex: lbry://?rewards
   ex: open.lbry.com/?rewards
 */
-exports.formatInAppUrl = path => {
+export const formatInAppUrl = path => {
   // Determine if we need to add a leading "/$/" for app pages
   const APP_PAGE_REGEX = /(\?)([a-z]*)(.*)/;
   const appPageMatches = APP_PAGE_REGEX.exec(path);
@@ -61,7 +61,7 @@ exports.formatInAppUrl = path => {
   return path;
 };
 
-exports.formatWebUrlIntoLbryUrl = (pathname, search) => {
+export const formatWebUrlIntoLbryUrl = (pathname, search) => {
   // If there is no uri, the user is on an internal page
   // pathname will either be "/" or "/$/{page}"
   const path = pathname.startsWith('/$/') ? pathname.slice(3) : pathname.slice(1);
@@ -75,7 +75,7 @@ exports.formatWebUrlIntoLbryUrl = (pathname, search) => {
   return appLink;
 };
 
-exports.generateInitialUrl = hash => {
+export const generateInitialUrl = hash => {
   let url = '/';
   if (hash) {
     hash = hash.replace('#', '');
@@ -84,21 +84,21 @@ exports.generateInitialUrl = hash => {
   return url;
 };
 
-exports.generateLbryContentUrl = (canonicalUrl, permanentUrl) => {
+export const generateLbryContentUrl = (canonicalUrl, permanentUrl) => {
   return canonicalUrl ? canonicalUrl.split('lbry://')[1] : permanentUrl.split('lbry://')[1];
 };
 
-exports.generateLbryWebUrl = lbryUrl => {
+export const generateLbryWebUrl = lbryUrl => {
   return lbryUrl.replace(/#/g, ':');
 };
 
-exports.generateEncodedLbryURL = (domain, lbryWebUrl, includeStartTime, startTime) => {
+export const generateEncodedLbryURL = (domain, lbryWebUrl, includeStartTime, startTime) => {
   const queryParam = includeStartTime ? `?t=${startTime}` : '';
   const encodedPart = encodeWithApostropheEncode(`${lbryWebUrl}${queryParam}`);
   return `${domain}/${encodedPart}`;
 };
 
-exports.generateShareUrl = (domain, lbryUrl, referralCode, rewardsApproved, includeStartTime, startTime) => {
+export const generateShareUrl = (domain, lbryUrl, referralCode, rewardsApproved, includeStartTime, startTime) => {
   let urlParams = new URLSearchParams();
   if (referralCode && rewardsApproved) {
     urlParams.append('r', referralCode);
