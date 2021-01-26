@@ -122,7 +122,7 @@ const WalletBalance = (props: Props) => {
           )}
 
           {/* @if TARGET='app' */}
-          {!hasSynced ? (
+          {hasSynced ? (
             <p className="section help">
               {__('A backup of your wallet is synced with lbry.tv.')}
               <HelpLink href="https://lbry.com/faq/account-sync" />
