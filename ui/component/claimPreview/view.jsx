@@ -81,6 +81,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     getFile,
     resolveUri,
     // claim properties
+    // is the claim consider nsfw?
     nsfw,
     claimIsMine,
     isSubscribed,
@@ -100,6 +101,8 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     // modifiers
     customShouldHide,
     showNullPlaceholder,
+    // value from show mature content user setting
+    // true if the user doesn't wanna see nsfw content
     obscureNsfw,
     showUserBlocked,
     showUnresolvedClaim,
@@ -220,7 +223,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     return <ClaimPreviewLoading isChannel={isChannelUri} type={type} />;
   }
 
-  if (claim && showNullPlaceholder && shouldHide && nsfw) {
+  if (claim && showNullPlaceholder && shouldHide && nsfw && obscureNsfw) {
     return (
       <ClaimPreviewHidden
         message={__('Mature content hidden by your preferences')}
