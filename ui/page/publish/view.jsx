@@ -14,7 +14,10 @@ function PublishPage(props: Props) {
   function scrollToTop() {
     const mainContent = document.querySelector('main');
     if (mainContent) {
-      mainContent.scrollTop = 0; // It would be nice to animate this
+      mainContent.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
     }
   }
 
