@@ -13,6 +13,7 @@ import { doCommentAbandon, doCommentUpdate, doCommentPin, doCommentList } from '
 import { doToggleBlockChannel } from 'redux/actions/blocked';
 import { selectChannelIsBlocked } from 'redux/selectors/blocked';
 import { doToast } from 'redux/actions/notifications';
+import { doSetPlayingUri } from 'redux/actions/content';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import {
   selectIsFetchingComments,
@@ -41,6 +42,7 @@ const select = (state, props) => {
 };
 
 const perform = dispatch => ({
+  closeInlinePlayer: () => dispatch(doSetPlayingUri({ uri: null })),
   resolveUri: uri => dispatch(doResolveUri(uri)),
   updateComment: (commentId, comment) => dispatch(doCommentUpdate(commentId, comment)),
   deleteComment: commentId => dispatch(doCommentAbandon(commentId)),

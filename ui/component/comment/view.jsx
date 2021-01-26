@@ -60,6 +60,7 @@ const ESCAPE_KEY = 27;
 
 function Comment(props: Props) {
   const {
+    closeInlinePlayer,
     uri,
     author,
     authorUri,
@@ -151,6 +152,16 @@ function Comment(props: Props) {
     pinComment(commentId, remove).then(() => fetchComments(uri));
   }
 
+  function handleEditComment() {
+    closeInlinePlayer();
+    setEditing(true);
+  }
+
+  function handleDeleteComment() {
+    closeInlinePlayer();
+    deleteComment(commentId);
+  }
+
   function handleSubmit() {
     updateComment(commentId, editedMessage);
     setEditing(false);
@@ -235,11 +246,11 @@ function Comment(props: Props) {
                 <MenuList className="menu__list--comments">
                   {commentIsMine ? (
                     <>
-                      <MenuItem className="comment__menu-option menu__link" onSelect={() => setEditing(true)}>
+                      <MenuItem className="comment__menu-option menu__link" onSelect={handleEditComment}>
                         <Icon aria-hidden icon={ICONS.EDIT} />
                         {__('Edit')}
                       </MenuItem>
-                      <MenuItem className="comment__menu-option menu__link" onSelect={() => deleteComment(commentId)}>
+                      <MenuItem className="comment__menu-option menu__link" onSelect={handleDeleteComment}>
                         <Icon aria-hidden icon={ICONS.DELETE} />
                         {__('Delete')}
                       </MenuItem>
