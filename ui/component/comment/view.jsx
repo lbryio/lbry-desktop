@@ -22,6 +22,7 @@ import { useHistory } from 'react-router';
 import CommentCreate from 'component/commentCreate';
 
 type Props = {
+  closeInlinePlayer: () => void,
   uri: string,
   author: ?string, // LBRY Channel Name, e.g. @channel
   authorUri: string, // full LBRY Channel URI: lbry://@channel#123...
