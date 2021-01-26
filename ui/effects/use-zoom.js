@@ -44,4 +44,8 @@ export default function useHover(ref) {
     window.addEventListener('wheel', handleWheel);
     return () => window.removeEventListener('wheel', handleWheel);
   }, []);
+
+  useEffect(() => {
+    changeZoomFactor(ZOOM.LOAD_FROM_LOCAL_STORAGE);
+  }, []);
 }

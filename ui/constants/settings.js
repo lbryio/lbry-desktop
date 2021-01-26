@@ -24,3 +24,4 @@ export const DARK_MODE_TIMES = 'dark_mode_times';
 export const ENABLE_SYNC = 'enable_sync';
 export const TO_TRAY_WHEN_CLOSED = 'to_tray_when_closed';
 export const ENABLE_PUBLISH_PREVIEW = 'enable-publish-preview';
+export const DESKTOP_WINDOW_ZOOM = 'desktop_window_zoom';
