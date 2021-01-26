@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Repost flow improvements ([#5293](https://github.com/lbryio/lbry-desktop/pull/5293))
 - Desktop: Enable 'Alt+Left/Right' for history navigation _community pr!_ ([#5203](https://github.com/lbryio/lbry-desktop/pull/5203))
 - Make playback rate setting persistent _community pr!_ ([#5310](https://github.com/lbryio/lbry-desktop/pull/5310))
+- Make UI zoom setting persistent _community pr!_ ([#5385](https://github.com/lbryio/lbry-desktop/pull/5385))
 
 ### Changed
 
