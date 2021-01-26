@@ -413,11 +413,11 @@ function PublishForm(props: Props) {
             tagsChosen={tags}
           />
 
-          <PublishName
+          {/* <PublishName
             disabled={isStillEditing || formDisabled}
             autoPopulateName={autoPopulateNameFromTitle}
             setAutoPopulateName={setAutoPopulateNameFromTitle}
-          />
+          /> */}
           <PublishPrice disabled={formDisabled} />
           <PublishAdditionalOptions disabled={formDisabled} />
         </div>
