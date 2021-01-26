@@ -8,6 +8,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+### Changed
+
+### Fixed
+
+- Player doesn't stop playing when editing a comment that includes a video url _community pr!_ ([#5384](https://github.com/lbryio/lbry-desktop/pull/5384))
+
+## [0.49.4] - [2021-01-26]
+
+### Added
+
 - Theater mode ([#5255](https://github.com/lbryio/lbry-desktop/pull/5255))
 - Repost flow improvements ([#5293](https://github.com/lbryio/lbry-desktop/pull/5293))
 - Desktop: Enable 'Alt+Left/Right' for history navigation _community pr!_ ([#5203](https://github.com/lbryio/lbry-desktop/pull/5203))
