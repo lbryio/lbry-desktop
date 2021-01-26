@@ -1,5 +1,5 @@
 // @flow
-import { SHOW_ADS, DOMAIN } from 'config';
+import { SHOW_ADS, DOMAIN, SIMPLE_SITE } from 'config';
 import * as ICONS from 'constants/icons';
 import React, { useRef } from 'react';
 import Page from 'component/page';
@@ -104,7 +104,9 @@ function DiscoverPage(props: Props) {
         tags={tags}
         hiddenNsfwMessage={<HiddenNsfw type="page" />}
         repostedClaimId={repostedClaim ? repostedClaim.claim_id : null}
-        injectedItem={SHOW_ADS && !isAuthenticated && IS_WEB && <Ads type="video" />}
+        injectedItem={
+          SHOW_ADS && IS_WEB ? (SIMPLE_SITE ? false : !isAuthenticated && <Ads small type={'video'} />) : false
+        }
         channelIds={
           (dynamicRouteProps && dynamicRouteProps.options && dynamicRouteProps.options.channelIds) || undefined
         }

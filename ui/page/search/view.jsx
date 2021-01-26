@@ -101,7 +101,9 @@ export default function SearchPage(props: Props) {
               uris={uris}
               loading={isSearching}
               header={!SIMPLE_SITE && <SearchOptions additionalOptions={additionalOptions} />}
-              injectedItem={SHOW_ADS && !isAuthenticated && IS_WEB && <Ads type="video" />}
+              injectedItem={
+                SHOW_ADS && IS_WEB ? (SIMPLE_SITE ? false : !isAuthenticated && <Ads small type={'video'} />) : false
+              }
               headerAltControls={
                 <>
                   <span>{__('Find what you were looking for?')}</span>
