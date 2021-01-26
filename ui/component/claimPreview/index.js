@@ -22,7 +22,7 @@ const select = (state, props) => ({
   pending: props.uri && makeSelectClaimIsPending(props.uri)(state),
   claim: props.uri && makeSelectClaimForUri(props.uri)(state),
   reflectingProgress: props.uri && makeSelectReflectingClaimForUri(props.uri)(state),
-  obscureNsfw: !selectShowMatureContent(state),
+  obscureNsfw: selectShowMatureContent(state) === false,
   claimIsMine: props.uri && makeSelectClaimIsMine(props.uri)(state),
   isResolvingUri: props.uri && makeSelectIsUriResolving(props.uri)(state),
   isResolvingRepost: props.uri && makeSelectIsUriResolving(props.repostUrl)(state),
