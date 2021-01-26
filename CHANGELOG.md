@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+- No longer supporting 32 bit windows
 - Updated lbry-sdk to [0.88.0](https://github.com/lbryio/lbry-sdk/releases/tag/v0.88.0)
 - Improve how spendable balance is displayed ([#5276](https://github.com/lbryio/lbry-desktop/pull/5276))
 
