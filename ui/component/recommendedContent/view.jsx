@@ -19,11 +19,10 @@ type Props = {
   search: (string, Options) => void,
   mature: boolean,
   isAuthenticated: boolean,
-  theme: string,
 };
 
 export default function RecommendedContent(props: Props) {
-  const { uri, claim, search, mature, recommendedContent, isSearching, isAuthenticated, theme } = props;
+  const { uri, claim, search, mature, recommendedContent, isSearching, isAuthenticated } = props;
   const isMobile = useIsMobile();
   const isMedium = useIsMediumScreen();
 
@@ -62,9 +61,9 @@ export default function RecommendedContent(props: Props) {
           injectedItem={
             SHOW_ADS && IS_WEB ? (
               SIMPLE_SITE ? (
-                <Ads small type={'google'} theme={theme} />
+                <Ads small type={'google'} />
               ) : (
-                !isAuthenticated && <Ads small type={'video'} theme={theme} />
+                !isAuthenticated && <Ads small type={'video'} />
               )
             ) : (
               false
