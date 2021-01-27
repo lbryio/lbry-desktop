@@ -2149,9 +2149,12 @@
   dependencies:
     "@types/estree" "*"
 
-"@types/three@^0.93.1":
-  version "0.93.31"
-  resolved "https://registry.yarnpkg.com/@types/three/-/three-0.93.31.tgz#9698891a463b5c1ef0fc65f46114fe4f70f87ba2"
+"@types/three@^0.103.2":
+  version "0.103.2"
+  resolved "https://registry.yarnpkg.com/@types/three/-/three-0.103.2.tgz#f7d49130001c551941a0ded757def810579aafc4"
+  integrity sha512-zhtf0Qs5wLJpIn1+VWCpzSgpKayj/GSWZ6woiuz09FW59KEDeLpnBkYz6lbblVpRmGdlnG8nd0unaASshOvcXw==
+  dependencies:
+    three "*"
 
 "@types/uglify-js@*":
   version "3.9.3"
@@ -11422,6 +11425,11 @@ thenify-all@^1.0.0, thenify-all@^1.6.0:
 three-full@^17.1.0:
   version "17.2.0"
   resolved "https://registry.yarnpkg.com/three-full/-/three-full-17.2.0.tgz#b6086360a9429e733e080093c25d02a3171ba1cc"
+
+three@*:
+  version "0.125.1"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.125.1.tgz#6eedbc5003b843fd5b6c48b3e61bfbd86bd3e0b2"
+  integrity sha512-7CbiSHZOc18ChhVZU8wQ2g9F2KHJqiG7+ND56/XMrJC2XZMmu+dZFeLFl380c5JwKZGHTOkBQzioZVkI7Jumhg==
 
 three@^0.93.0:
   version "0.93.0"
