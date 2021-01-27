@@ -49,15 +49,14 @@ type Props = {
   toggleVideoTheaterMode: () => void,
 };
 
-type VideoJSOptions = {
-  controls: boolean,
-  preload: string,
-  playbackRates: Array<number>,
-  responsive: boolean,
-  poster: ?string,
-  muted: ?boolean,
-  sources: Array<{ src: string, type: string }>,
-};
+// type VideoJSOptions = {
+//   controls: boolean,
+//   preload: string,
+//   playbackRates: Array<number>,
+//   responsive: boolean,
+//   poster: ?string,
+//   muted: ?boolean,
+// };
 
 const videoPlaybackRates = [0.25, 0.5, 0.75, 1, 1.1, 1.25, 1.5, 1.75, 2];
 
@@ -160,9 +159,7 @@ properties for this component should be kept to ONLY those that if changed shoul
  */
 export default React.memo<Props>(function VideoJs(props: Props) {
   const { autoplay, startMuted, source, sourceType, poster, isAudio, onPlayerReady, toggleVideoTheaterMode } = props;
-
   const [reload, setReload] = useState('initial');
-
   const playerRef = useRef();
   const containerRef = useRef();
   const videoJsOptions = {
@@ -265,11 +262,9 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     }
   }
 
-  const onEnded = React.useCallback(() => {
-    if (!adUrl) {
-      showTapButton(TAP.NONE);
-    }
-  }, [adUrl]);
+  function onEnded() {
+    showTapButton(TAP.NONE);
+  }
 
   function handleKeyDown(e: KeyboardEvent) {
     const player = playerRef.current;
