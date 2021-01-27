@@ -434,26 +434,24 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   }, [source, reload]);
 
   return (
-    reload && (
-      // $FlowFixMe
-      <div className={classnames('video-js-parent', { 'video-js-parent--ios': IS_IOS })} ref={containerRef}>
-        <Button
-          label={__('Tap to unmute')}
-          button="link"
-          icon={ICONS.VOLUME_MUTED}
-          className="video-js--tap-to-unmute"
-          onClick={unmuteAndHideHint}
-          ref={tapToUnmuteRef}
-        />
-        <Button
-          label={__('Retry')}
-          button="link"
-          icon={ICONS.REFRESH}
-          className="video-js--tap-to-unmute"
-          onClick={retryVideoAfterFailure}
-          ref={tapToRetryRef}
-        />
-      </div>
-    )
+    // $FlowFixMe
+    <div className={classnames('video-js-parent', { 'video-js-parent--ios': IS_IOS })} ref={containerRef}>
+      <Button
+        label={__('Tap to unmute')}
+        button="link"
+        icon={ICONS.VOLUME_MUTED}
+        className="video-js--tap-to-unmute"
+        onClick={unmuteAndHideHint}
+        ref={tapToUnmuteRef}
+      />
+      <Button
+        label={__('Retry')}
+        button="link"
+        icon={ICONS.REFRESH}
+        className="video-js--tap-to-unmute"
+        onClick={retryVideoAfterFailure}
+        ref={tapToRetryRef}
+      />
+    </div>
   );
 });
