@@ -70,6 +70,17 @@ function SelectAsset(props: Props) {
       });
   }
 
+  // Note for translators: e.g. "Thumbnail  (1:1)"
+  const label = __('%image_type%  %recommended_ratio%', { image_type: assetName, recommended_ratio: recommended });
+
+  let fileSelectorLabel;
+  if (uploadStatus === SPEECH_UPLOADING) {
+    fileSelectorLabel = __('Uploading...');
+  } else {
+    // Include the same label/recommendation for both 'URL' and 'UPLOAD'.
+    fileSelectorLabel = __('%label% • File to upload', { label: label });
+  }
+
   return (
     <Card
       title={title || __('Choose image')}
@@ -81,7 +92,7 @@ function SelectAsset(props: Props) {
               autoFocus
               type={'text'}
               name={'thumbnail'}
-              label={`${assetName}  ${recommended}`}
+              label={label}
               placeholder={'https://example.com/image.png'}
               value={url}
               onChange={e => {
@@ -93,7 +104,7 @@ function SelectAsset(props: Props) {
             <FileSelector
               autoFocus
               disabled={uploadStatus === SPEECH_UPLOADING}
-              label={uploadStatus === SPEECH_UPLOADING ? __('Uploading...') : __('File to upload')}
+              label={fileSelectorLabel}
               name="assetSelector"
               currentPath={pathSelected}
               onFileChosen={file => {
