@@ -14,6 +14,7 @@ const { getClaim } = require('./chainquery');
 const { parseURI } = require('lbry-redux');
 const fs = require('fs');
 const path = require('path');
+const removeMd = require('remove-markdown');
 const { getJsBundleId } = require('../bundle-id.js');
 const jsBundleId = getJsBundleId();
 
@@ -47,18 +48,19 @@ function escapeHtmlProperty(property) {
 //
 function buildOgMetadata(overrideOptions = {}) {
   const { title, description } = overrideOptions;
+  const cleanDescription = removeMd(description || SITE_DESCRIPTION);
   const head =
     `<title>${SITE_TITLE}</title>\n` +
     `<meta property="og:url" content="${URL}" />\n` +
     `<meta property="og:title" content="${title || OG_HOMEPAGE_TITLE || SITE_TITLE}" />\n` +
     `<meta property="og:site_name" content="${SITE_NAME || SITE_TITLE}"/>\n` +
-    `<meta property="og:description" content="${description || SITE_DESCRIPTION}" />\n` +
+    `<meta property="og:description" content="${cleanDescription}" />\n` +
     `<meta property="og:image" content="${OG_IMAGE_URL || `${URL}/public/v2-og.png`}" />\n` +
     '<meta name="twitter:card" content="summary_large_image"/>\n' +
     `<meta name="twitter:title" content="${(title && title + OG_TITLE_SUFFIX) ||
       OG_HOMEPAGE_TITLE ||
       SITE_TITLE}" />\n` +
-    `<meta name="twitter:description" content="${description || SITE_DESCRIPTION}" />\n` +
+    `<meta name="twitter:description" content="${cleanDescription}" />\n` +
     `<meta name="twitter:image" content="${OG_IMAGE_URL || `${URL}/public/v2-og.png`}"/>\n` +
     `<meta name="twitter:url" content="${URL}" />\n` +
     '<meta property="fb:app_id" content="1673146449633983" />\n' +
@@ -97,18 +99,19 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
   // Allow for ovverriding default claim based og metadata
   const title = overrideOptions.title || claimTitle;
   const description = overrideOptions.description || claimDescription;
+  const cleanDescription = removeMd(description);
 
   let head = '';
 
   head += '<meta charset="utf8"/>';
   head += `<title>${title}</title>`;
-  head += `<meta name="description" content="${description}"/>`;
+  head += `<meta name="description" content="${cleanDescription}"/>`;
   if (claim.tags) {
     head += `<meta name="keywords" content="${claim.tags.toString()}"/>`;
   }
 
   head += `<meta name="twitter:image" content="${claimThumbnail}"/>`;
-  head += `<meta property="og:description" content="${description}"/>`;
+  head += `<meta property="og:description" content="${cleanDescription}"/>`;
   head += `<meta property="og:image" content="${claimThumbnail}"/>`;
   head += `<meta property="og:locale" content="${claimLanguage}"/>`;
   head += `<meta property="og:site_name" content="${SITE_NAME}"/>`;
