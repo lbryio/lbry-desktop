@@ -33,9 +33,21 @@ function FileReactions(props: Props) {
   const channel = claim && claim.signing_channel && claim.signing_channel.name;
 
   React.useEffect(() => {
-    if (claimId) {
+    function fetchReactions() {
       doFetchReactions(claimId);
     }
+
+    let fetchInterval;
+    if (claimId) {
+      fetchReactions();
+      fetchInterval = setInterval(fetchReactions, 10000);
+    }
+
+    return () => {
+      if (fetchInterval) {
+        clearInterval(fetchInterval);
+      }
+    };
   }, [claimId, doFetchReactions]);
 
   return (
