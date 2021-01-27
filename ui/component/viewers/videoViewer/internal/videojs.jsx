@@ -45,6 +45,7 @@ type Props = {
   onPlayerReady: Player => void,
   isAudio: boolean,
   startMuted: boolean,
+  autoplay: boolean,
   toggleVideoTheaterMode: () => void,
 };
 
@@ -157,28 +158,37 @@ class LbryVolumeBarClass extends videojs.getComponent(VIDEOJS_VOLUME_BAR_CLASS) 
 properties for this component should be kept to ONLY those that if changed should REQUIRE an entirely new videojs element
  */
 export default React.memo<Props>(function VideoJs(props: Props) {
-  const { startMuted, source, sourceType, poster, isAudio, onPlayerReady, toggleVideoTheaterMode } = props;
+  const {
+    autoplay,
+    startMuted,
+    source,
+    sourceType,
+    poster,
+    isAudio,
+    onPlayerReady,
+    toggleVideoTheaterMode,
+  } = props;
+
   const [reload, setReload] = useState('initial');
 
   let player: ?Player;
   const containerRef = useRef();
   const videoJsOptions = {
     ...VIDEO_JS_OPTIONS,
+    autoplay: autoplay,
+    muted: startMuted,
     sources: [
       {
         src: source,
         type: sourceType,
       },
     ],
-    autoplay: true,
     poster: poster, // thumb looks bad in app, and if autoplay, flashing poster is annoying
     plugins: {
       eventTracking: true,
       overlay: OVERLAY.OVERLAY_DATA,
     },
   };
-
-  videoJsOptions.muted = startMuted;
 
   const tapToUnmuteRef = useRef();
   const tapToRetryRef = useRef();
