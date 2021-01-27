@@ -43,6 +43,7 @@ import ModalSyncEnable from 'modal/modalSyncEnable';
 import ModalImageUpload from 'modal/modalImageUpload';
 import ModalMobileSearch from 'modal/modalMobileSearch';
 import ModalViewImage from 'modal/modalViewImage';
+import ModalMassTipsUnlock from 'modal/modalMassTipUnlock';
 
 type Props = {
   modal: { id: string, modalProps: {} },
@@ -154,6 +155,8 @@ function ModalRouter(props: Props) {
       return <ModalMobileSearch {...modalProps} />;
     case MODALS.VIEW_IMAGE:
       return <ModalViewImage {...modalProps} />;
+    case MODALS.MASS_TIP_UNLOCK:
+      return <ModalMassTipsUnlock {...modalProps} />;
     default:
       return null;
   }
