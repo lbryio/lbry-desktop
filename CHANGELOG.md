@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- Zoomable image viewer in Markdown (posts and comments) _community pr!_ ([#5387](https://github.com/lbryio/lbry-desktop/pull/5387))
+
 ### Changed
 
 ### Fixed
