@@ -109,3 +109,9 @@
     margin-bottom: var(--spacing-s);
   }
 }
+
+.livestream__emoji-actions {
+  > *:not(:last-child) {
+    margin-right: var(--spacing-s);
+  }
+}

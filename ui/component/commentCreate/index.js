@@ -13,6 +13,7 @@ const select = (state, props) => ({
   isFetchingChannels: selectFetchingMyChannels(state),
   isPostingComment: selectIsPostingComment(state),
   activeChannel: selectCommentChannel(state),
+  authenticated: selectUserVerifiedEmail(state),
 });
 
 const perform = (dispatch, ownProps) => ({

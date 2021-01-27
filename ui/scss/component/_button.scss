@@ -480,6 +480,11 @@
   border: 1px solid var(--color-border);
 }
 
+.button--emoji {
+  font-size: 1.25rem;
+  border-radius: 3rem;
+}
+
 .button__content {
   display: flex;
   align-items: center;
