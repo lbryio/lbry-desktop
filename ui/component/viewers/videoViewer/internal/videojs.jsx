@@ -233,7 +233,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
   function retryVideoAfterFailure() {
     const player = playerRef.current;
-    console.log(player);
     if (player) {
       setReload(Date.now());
       showTapButton(TAP.NONE);
