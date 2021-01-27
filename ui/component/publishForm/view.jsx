@@ -356,6 +356,37 @@ function PublishForm(props: Props) {
         }
       />
 
+      {isLivestreamCreator && (
+        <div className="livestream__creator-message livestream__publish-checkbox">
+          <h4>{__('Hi %channel%!', { channel })}</h4>
+          <p>
+            Check this box if you have entered video information for your livestream. It doesn't matter what file you
+            choose for now, just make the sure the title, description, and tags are correct. Everything else is setup!
+          </p>
+          <p>
+            When you edit this file, there will be another checkbox to turn this back into a regular video so it can be
+            listed on your channel's page.
+          </p>
+
+          <FormField
+            type={isStillEditing ? 'radio' : 'checkbox'}
+            label={__('This is for my livestream')}
+            name="is_livestream_checkbox"
+            checked={isLivestreamPublish}
+            onChange={e => updatePublishForm({ isLivestreamPublish: e.target.checked })}
+          />
+          {isStillEditing && (
+            <FormField
+              type="radio"
+              label={'I am done livestreaming'}
+              name="is_livestream_checkbox_done"
+              checked={!isLivestreamPublish}
+              onChange={e => updatePublishForm({ isLivestreamPublish: !e.target.checked })}
+            />
+          )}
+        </div>
+      )}
+
       <PublishFile
         uri={uri}
         mode={mode}
@@ -423,36 +454,6 @@ function PublishForm(props: Props) {
         </div>
       )}
 
-      {isLivestreamCreator && (
-        <div className="livestream__creator-message livestream__publish-checkbox">
-          <h4>{__('Hi %channel%!', { channel })}</h4>
-          <p>
-            Check this box if you have entered video information for your livestream. It doesn't matter what file you
-            choose for now, just make the sure the title, description, and tags are correct. Everything else is setup!
-          </p>
-          <p>
-            When you edit this file, there will be another checkbox to turn this back into a regular video so it can be
-            listed on your channel's page.
-          </p>
-
-          <FormField
-            type={isStillEditing ? 'radio' : 'checkbox'}
-            label={__('This is for my livestream')}
-            name="is_livestream_checkbox"
-            checked={isLivestreamPublish}
-            onChange={e => updatePublishForm({ isLivestreamPublish: e.target.checked })}
-          />
-          {isStillEditing && (
-            <FormField
-              type="radio"
-              label={'I am done livestreaming'}
-              name="is_livestream_checkbox_done"
-              checked={!isLivestreamPublish}
-              onChange={e => updatePublishForm({ isLivestreamPublish: !e.target.checked })}
-            />
-          )}
-        </div>
-      )}
       <section>
         <div className="card__actions">
           <Button
