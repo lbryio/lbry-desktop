@@ -36,7 +36,7 @@
     "build": "cross-env NODE_ENV=production yarn compile:electron && electron-builder build",
     "build:dir": "yarn build -- --dir -c.compression=store -c.mac.identity=null",
     "crossenv": "./node_modules/cross-env/dist/bin/cross-env",
-    "lint": "eslint ui/**/*.{js,jsx} && eslint web/**/*.{js,jsx} && eslint electron/**/*.js && flow",
+    "lint": "eslint 'ui/**/*.{js,jsx}' && eslint 'web/**/*.{js,jsx}' && eslint 'electron/**/*.js' && flow",
     "format": "prettier 'src/**/*.{js,jsx,scss,json}' --write",
     "flow-defs": "flow-typed install",
     "precommit": "lint-staged",
