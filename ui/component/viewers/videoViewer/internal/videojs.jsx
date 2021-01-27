@@ -421,7 +421,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   // Update video player and reload when source URL changes
   useEffect(() => {
     // For some reason the video player is responsible for detecting content type this way
-    fetch(source, { method: 'HEAD' }).then(response => {
+    fetch(source, { method: 'HEAD', cache: 'no-store' }).then(response => {
       const player = playerRef.current;
 
       if (!player) {
