@@ -55,7 +55,7 @@
     "if-env": "^1.0.4",
     "remark-breaks": "^1.0.5",
     "tempy": "^0.6.0",
-    "videojs-logo": "^2.0.0"
+    "videojs-logo": "^2.1.4"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
