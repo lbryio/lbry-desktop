@@ -1,4 +1,4 @@
-export const LIVE_STREAM_CHANNEL = '@BalkanTechCrypto:c';
+export const LIVE_STREAM_CHANNEL = '@BalkanTechCrypto';
 export const LIVE_STREAM_CHANNEL_CLAIM_ID = 'c2c4897511dcabd65928cd1d6813bd3bc28e822d';
 export const BITWAVE_USERNAME = 'balkantechcrypto';
 
