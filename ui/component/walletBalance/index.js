@@ -8,8 +8,10 @@ import {
   selectUtxoCounts,
   doFetchUtxoCounts,
   doUtxoConsolidate,
-  selectPendingOtherTransactions,
   selectIsConsolidatingUtxos,
+  selectIsMassClaimingTips,
+  selectPendingConsolidateTxid,
+  selectPendingMassClaimTxid,
 } from 'lbry-redux';
 import { doOpenModal } from 'redux/actions/app';
 import { selectSyncHash } from 'redux/selectors/sync';
@@ -25,8 +27,10 @@ const select = state => ({
   hasSynced: Boolean(selectSyncHash(state)),
   fetchingUtxoCounts: selectIsFetchingUtxoCounts(state),
   consolidatingUtxos: selectIsConsolidatingUtxos(state),
+  massClaimingTips: selectIsMassClaimingTips(state),
   utxoCounts: selectUtxoCounts(state),
-  pendingUtxoConsolidating: selectPendingOtherTransactions(state),
+  consolidateIsPending: selectPendingConsolidateTxid(state),
+  massClaimIsPending: selectPendingMassClaimTxid(state),
 });
 
 export default connect(select, {

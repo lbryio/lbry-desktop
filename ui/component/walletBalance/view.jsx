@@ -23,11 +23,13 @@ type Props = {
   doUtxoConsolidate: () => void,
   fetchingUtxoCounts: boolean,
   consolidatingUtxos: boolean,
+  consolidateIsPending: boolean,
+  massClaimingTips: boolean,
+  massClaimIsPending: boolean,
   utxoCounts: { [string]: number },
-  pendingUtxoConsolidating: Array<string>,
 };
 
-const WALLET_CONSOLIDATE_UTXOS = 400;
+export const WALLET_CONSOLIDATE_UTXOS = 400;
 const LARGE_WALLET_BALANCE = 100;
 
 const WalletBalance = (props: Props) => {
@@ -38,23 +40,27 @@ const WalletBalance = (props: Props) => {
     tipsBalance,
     doOpenModal,
     hasSynced,
-    pendingUtxoConsolidating,
     doUtxoConsolidate,
     doFetchUtxoCounts,
     consolidatingUtxos,
+    consolidateIsPending,
+    massClaimingTips,
+    massClaimIsPending,
     utxoCounts,
   } = props;
   const [detailsExpanded, setDetailsExpanded] = React.useState(false);
+
   const { other: otherCount = 0 } = utxoCounts || {};
 
   const totalBalance = balance + tipsBalance + supportsBalance + claimsBalance;
   const totalLocked = tipsBalance + claimsBalance + supportsBalance;
+  const operationPending = massClaimIsPending || massClaimingTips || consolidateIsPending || consolidatingUtxos;
 
   React.useEffect(() => {
-    if (balance > LARGE_WALLET_BALANCE) {
+    if (balance > LARGE_WALLET_BALANCE && detailsExpanded) {
       doFetchUtxoCounts();
     }
-  }, [doFetchUtxoCounts, balance]);
+  }, [doFetchUtxoCounts, balance, detailsExpanded]);
 
   return (
     <Card
@@ -71,7 +77,7 @@ const WalletBalance = (props: Props) => {
       actions={
         <>
           <h2 className="section__title--small">
-            <I18nMessage tokens={{ lbc_amount: <CreditAmount amount={balance} precision={8} /> }}>
+            <I18nMessage tokens={{ lbc_amount: <CreditAmount amount={balance} precision={4} /> }}>
               %lbc_amount% immediately spendable
             </I18nMessage>
           </h2>
@@ -79,7 +85,7 @@ const WalletBalance = (props: Props) => {
           <h2 className="section__title--small">
             <I18nMessage
               tokens={{
-                lbc_amount: <CreditAmount amount={totalLocked} precision={8} />,
+                lbc_amount: <CreditAmount amount={totalLocked} precision={4} />,
               }}
             >
               %lbc_amount% boosting content
@@ -95,27 +101,38 @@ const WalletBalance = (props: Props) => {
             <div className="section__subtitle">
               <dl>
                 <dt>
-                  {__('...earned from others')}
+                  <span className="dt__text">{__('...earned from others')}</span>
                   <span className="help--dt">({__('Unlock to spend')})</span>
                 </dt>
                 <dd>
-                  <CreditAmount amount={tipsBalance} precision={8} />
+                  <span className="dd__text">
+                    {Boolean(tipsBalance) && (
+                      <Button
+                        button="link"
+                        className="dd__button"
+                        disabled={operationPending}
+                        icon={ICONS.UNLOCK}
+                        onClick={() => doOpenModal(MODALS.MASS_TIP_UNLOCK)}
+                      />
+                    )}
+                    <CreditAmount amount={tipsBalance} precision={4} />
+                  </span>
                 </dd>
 
                 <dt>
-                  {__('...on initial publishes')}
+                  <span className="dt__text">{__('...on initial publishes')}</span>
                   <span className="help--dt">({__('Delete or edit past content to spend')})</span>
                 </dt>
                 <dd>
-                  <CreditAmount amount={claimsBalance} precision={8} />
+                  <CreditAmount amount={claimsBalance} precision={4} />
                 </dd>
 
                 <dt>
-                  {__('...supporting content')}
+                  <span className="dt__text">{__('...supporting content')}</span>
                   <span className="help--dt">({__('Delete supports to spend')})</span>
                 </dt>
                 <dd>
-                  <CreditAmount amount={supportsBalance} precision={8} />
+                  <CreditAmount amount={supportsBalance} precision={4} />
                 </dd>
               </dl>
             </div>
@@ -149,7 +166,7 @@ const WalletBalance = (props: Props) => {
               onClick={() => doOpenModal(MODALS.WALLET_SEND)}
             />
           </div>
-          {(otherCount > WALLET_CONSOLIDATE_UTXOS || pendingUtxoConsolidating.length || consolidatingUtxos) && (
+          {(otherCount > WALLET_CONSOLIDATE_UTXOS || consolidateIsPending || consolidatingUtxos) && (
             <p className="help">
               <I18nMessage
                 tokens={{
@@ -157,11 +174,9 @@ const WalletBalance = (props: Props) => {
                     <Button
                       button="link"
                       onClick={() => doUtxoConsolidate()}
-                      disabled={pendingUtxoConsolidating.length || consolidatingUtxos}
+                      disabled={operationPending}
                       label={
-                        pendingUtxoConsolidating.length || consolidatingUtxos
-                          ? __('Consolidating')
-                          : __('Consolidate Now')
+                        consolidateIsPending || consolidatingUtxos ? __('Consolidating...') : __('Consolidate Now')
                       }
                     />
                   ),
