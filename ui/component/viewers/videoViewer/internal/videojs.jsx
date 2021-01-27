@@ -158,16 +158,7 @@ class LbryVolumeBarClass extends videojs.getComponent(VIDEOJS_VOLUME_BAR_CLASS) 
 properties for this component should be kept to ONLY those that if changed should REQUIRE an entirely new videojs element
  */
 export default React.memo<Props>(function VideoJs(props: Props) {
-  const {
-    autoplay,
-    startMuted,
-    source,
-    sourceType,
-    poster,
-    isAudio,
-    onPlayerReady,
-    toggleVideoTheaterMode,
-  } = props;
+  const { autoplay, startMuted, source, sourceType, poster, isAudio, onPlayerReady, toggleVideoTheaterMode } = props;
 
   const [reload, setReload] = useState('initial');
 
@@ -240,10 +231,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   }
 
   function retryVideoAfterFailure() {
-    if (player) {
-      setReload(Date.now());
-      showTapButton(TAP.NONE);
-    }
+    setReload(Date.now());
+    showTapButton(TAP.NONE);
   }
 
   function onInitialPlay() {
@@ -428,12 +417,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       let type = sourceType;
 
       // override type if we receive an .m3u8 (transcoded mp4)
-      if (
-        response &&
-        response.redirected &&
-        response.url &&
-        response.url.endsWith('m3u8')
-      ) {
+      if (response && response.redirected && response.url && response.url.endsWith('m3u8')) {
         type = 'application/x-mpegURL';
       }
 
@@ -447,7 +431,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         type: type,
       });
     });
-  }, [source]);
+  }, [source, reload]);
 
   return (
     reload && (
