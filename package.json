@@ -162,6 +162,7 @@
     "raw-loader": "^2.0.0",
     "rc-progress": "^2.0.6",
     "react": "^16.8.2",
+    "react-awesome-lightbox": "^1.7.3",
     "react-confetti": "^4.0.1",
     "react-dom": "^16.8.2",
     "react-draggable": "^3.3.0",

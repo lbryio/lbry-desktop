@@ -9748,6 +9748,11 @@ react-async-script@^1.1.1:
     hoist-non-react-statics "^3.3.0"
     prop-types "^15.5.0"
 
+react-awesome-lightbox@^1.7.3:
+  version "1.7.3"
+  resolved "https://registry.yarnpkg.com/react-awesome-lightbox/-/react-awesome-lightbox-1.7.3.tgz#ee1c00fd4197e0e65bf996aa219eac4d8b6db5a0"
+  integrity sha512-mSxdL3KGzuh2eR8I00nv9njiolmMoXITuCvfd71DBXK13JW3e+Z/sCMENS9+dngBJU8/m7dR1Ix0W6afS5cFsA==
+
 react-compound-slider@^2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/react-compound-slider/-/react-compound-slider-2.5.0.tgz#99771a3397f4ab00aa2a37f8410da87e6ca2449b"
