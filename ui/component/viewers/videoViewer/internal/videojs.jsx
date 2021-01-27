@@ -376,13 +376,13 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       // initialize mobile UI
       player.mobileUi(); // Inits mobile version. No-op if Desktop.
 
+      // Add quality selector to player
+      player.hlsQualitySelector({
+        displayCurrentQuality: true,
+      });
+
       // I think this is a callback function
       onPlayerReady(player);
-    });
-
-    // Add quality selector to player
-    vjs.hlsQualitySelector({
-      displayCurrentQuality: true,
     });
 
     // fixes #3498 (https://github.com/lbryio/lbry-desktop/issues/3498)
