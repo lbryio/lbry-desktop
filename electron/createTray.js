@@ -10,12 +10,12 @@ export default window => {
    * A maximized window can't be properly
    * restored when minimized to the taskbar
    * (it will be restored/showed as unmaximized).
-   * 
-   * window.isMaximized() will also return 
+   *
+   * window.isMaximized() will also return
    * false when minimizing a maximized window.
-   * 
-   * The safest way to keep track of the 
-   * maximized state using maximize and 
+   *
+   * The safest way to keep track of the
+   * maximized state using maximize and
    * unmaximize events.
    */
   let isWindowMaximized = false;

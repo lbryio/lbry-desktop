@@ -4,9 +4,9 @@
 import '@babel/polyfill';
 import SemVer from 'semver';
 import https from 'https';
-import { app, dialog, ipcMain, session, shell, ipcRenderer } from 'electron';
+import { app, dialog, ipcMain, session, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
-import { Lbry, LbryFirst } from 'lbry-redux';
+import { Lbry } from 'lbry-redux';
 import LbryFirstInstance from './LbryFirstInstance';
 import Daemon from './Daemon';
 import isDev from 'electron-is-dev';
