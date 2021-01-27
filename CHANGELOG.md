@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- Enable PDF Viewer in App _community pr!_ ([#2903](https://github.com/lbryio/lbry-desktop/issues/2903))
+
 ### Changed
 
 ### Fixed
