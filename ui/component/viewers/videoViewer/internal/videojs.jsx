@@ -162,7 +162,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
   const [reload, setReload] = useState('initial');
 
-  let player: ?Player;
+  const playerRef = useRef();
   const containerRef = useRef();
   const videoJsOptions = {
     ...VIDEO_JS_OPTIONS,
@@ -221,6 +221,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   }
 
   function unmuteAndHideHint() {
+    const player = playerRef.current;
     if (player) {
       player.muted(false);
       if (player.volume() === 0) {
@@ -231,11 +232,15 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   }
 
   function retryVideoAfterFailure() {
-    setReload(Date.now());
-    showTapButton(TAP.NONE);
+    const player = playerRef.current;
+    if (player) {
+      setReload(Date.now());
+      showTapButton(TAP.NONE);
+    }
   }
 
   function onInitialPlay() {
+    const player = playerRef.current;
     if (player && (player.muted() || player.volume() === 0)) {
       // The css starts as "hidden". We make it visible here without
       // re-rendering the whole thing.
@@ -244,12 +249,14 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   }
 
   function onVolumeChange() {
+    const player = playerRef.current;
     if (player && !player.muted()) {
       showTapButton(TAP.NONE);
     }
   }
 
   function onError() {
+    const player = playerRef.current;
     showTapButton(TAP.RETRY);
 
     if (player && player.loadingSpinner) {
@@ -262,6 +269,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   }
 
   function handleKeyDown(e: KeyboardEvent) {
+    const player = playerRef.current;
     const videoNode: ?HTMLVideoElement = containerRef.current && containerRef.current.querySelector('video, audio');
 
     if (!videoNode || !player || isUserTyping()) {
@@ -348,7 +356,9 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       return;
     }
 
-    player = videojs(el, videoJsOptions, () => {
+    const vjs = videojs(el, videoJsOptions, () => {
+      const player = playerRef.current;
+
       // this seems like a weird thing to have to check for here
       if (!player) {
         return;
@@ -371,15 +381,15 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     });
 
     // Add quality selector to player
-    player.hlsQualitySelector({
+    vjs.hlsQualitySelector({
       displayCurrentQuality: true,
     });
 
     // fixes #3498 (https://github.com/lbryio/lbry-desktop/issues/3498)
     // summary: on firefox the focus would stick to the fullscreen button which caused buggy behavior with spacebar
-    player.on('fullscreenchange', () => document.activeElement && document.activeElement.blur());
+    vjs.on('fullscreenchange', () => document.activeElement && document.activeElement.blur());
 
-    return player;
+    return vjs;
   }
 
   // This lifecycle hook is only called once (on mount)
@@ -390,6 +400,9 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     // Add reference to player to global scope
     window.player = vjsPlayer;
 
+    // Set reference in component state
+    playerRef.current = vjsPlayer;
+
     // Add event listener for keyboard shortcuts
     window.addEventListener('keydown', handleKeyDown);
 
@@ -397,18 +410,21 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
 
+      const player = playerRef.current;
       if (player) {
-        player.dispose();
         window.player = undefined;
+        player.dispose();
       }
     };
   }, []);
 
   // Update video player and reload when source URL changes
   useEffect(() => {
+    const player = playerRef.current;
+
     // For some reason the video player is responsible for detecting content type this way
     fetch(source, { method: 'HEAD' }).then(response => {
-      const player = window.player;
+      const player = playerRef.current;
 
       if (!player) {
         return;
