@@ -42,6 +42,7 @@ import ModalFileSelection from 'modal/modalFileSelection';
 import ModalSyncEnable from 'modal/modalSyncEnable';
 import ModalImageUpload from 'modal/modalImageUpload';
 import ModalMobileSearch from 'modal/modalMobileSearch';
+import ModalViewImage from 'modal/modalViewImage';
 
 type Props = {
   modal: { id: string, modalProps: {} },
@@ -151,6 +152,8 @@ function ModalRouter(props: Props) {
       return <ModalSyncEnable {...modalProps} />;
     case MODALS.MOBILE_SEARCH:
       return <ModalMobileSearch {...modalProps} />;
+    case MODALS.VIEW_IMAGE:
+      return <ModalViewImage {...modalProps} />;
     default:
       return null;
   }

@@ -12,6 +12,7 @@ import MarkdownLink from 'component/markdownLink';
 import defaultSchema from 'hast-util-sanitize/lib/github.json';
 import { formatedLinks, inlineLinks } from 'util/remark-lbry';
 import { formattedTimestamp, inlineTimestamp } from 'util/remark-timestamp';
+import ZoomableImage from 'component/zoomableImage';
 
 type SimpleTextProps = {
   children?: React.Node,
@@ -33,9 +34,15 @@ type MarkdownProps = {
   isMarkdownPost?: boolean,
 };
 
+// ****************************************************************************
+// ****************************************************************************
+
 const SimpleText = (props: SimpleTextProps) => {
   return <span>{props.children}</span>;
 };
+
+// ****************************************************************************
+// ****************************************************************************
 
 const SimpleLink = (props: SimpleLinkProps) => {
   const { title, children, href } = props;
@@ -70,6 +77,9 @@ const SimpleLink = (props: SimpleLinkProps) => {
   return <a title={title}>{children}</a>;
 };
 
+// ****************************************************************************
+// ****************************************************************************
+
 // Use github sanitation schema
 const schema = { ...defaultSchema };
 
@@ -78,6 +88,9 @@ schema.protocols.href.push('lbry');
 schema.attributes.a.push('embed');
 
 const REPLACE_REGEX = /(<iframe\s+src=["'])(.*?(?=))(["']\s*><\/iframe>)/g;
+
+// ****************************************************************************
+// ****************************************************************************
 
 const MarkdownPreview = (props: MarkdownProps) => {
   const { content, strip, simpleLinks, noDataStore, className, parentCommentId, isMarkdownPost } = props;
@@ -116,6 +129,7 @@ const MarkdownPreview = (props: MarkdownProps) => {
           ),
       // Workaraund of remarkOptions.Fragment
       div: React.Fragment,
+      img: ZoomableImage,
     },
   };
 

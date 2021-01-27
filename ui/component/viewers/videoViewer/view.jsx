@@ -15,6 +15,7 @@ import LoadingScreen from 'component/common/loading-screen';
 import { addTheaterModeButton } from './internal/theater-mode';
 
 const PLAY_TIMEOUT_ERROR = 'play_timeout_error';
+const PLAY_TIMEOUT_LIMIT = 2000;
 
 type Props = {
   position: number,
@@ -149,9 +150,7 @@ function VideoViewer(props: Props) {
       // https://blog.videojs.com/autoplay-best-practices-with-video-js/#Programmatic-Autoplay-and-Success-Failure-Detection
       if (shouldPlay) {
         const playPromise = player.play();
-        const timeoutPromise = new Promise((resolve, reject) => {
-          setTimeout(() => reject(PLAY_TIMEOUT_ERROR), 2000);
-        });
+        const timeoutPromise = new Promise((resolve, reject) => setTimeout(() => reject(PLAY_TIMEOUT_ERROR), PLAY_TIMEOUT_LIMIT));
 
         Promise.race([playPromise, timeoutPromise]).catch(error => {
           if (PLAY_TIMEOUT_ERROR) {
@@ -221,11 +220,12 @@ function VideoViewer(props: Props) {
       <VideoJs
         source={source}
         isAudio={isAudio}
-        poster={isAudio || (embedded && !autoplayIfEmbedded) ? thumbnail : null}
+        poster={isAudio || (embedded && !autoplayIfEmbedded) ? thumbnail : ''}
         sourceType={forcePlayer ? 'video/mp4' : contentType}
         onPlayerReady={onPlayerReady}
         startMuted={autoplayIfEmbedded}
         toggleVideoTheaterMode={toggleVideoTheaterMode}
+        autoplay={!embedded || autoplayIfEmbedded}
       />
     </div>
   );
