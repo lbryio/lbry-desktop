@@ -149,23 +149,9 @@ function VideoViewer(props: Props) {
       // https://blog.videojs.com/autoplay-best-practices-with-video-js/#Programmatic-Autoplay-and-Success-Failure-Detection
       if (shouldPlay) {
         const playPromise = player.play();
-        const timeoutPromise = new Promise((resolve, reject) => setTimeout(() => reject(PLAY_TIMEOUT_ERROR), PLAY_TIMEOUT_LIMIT));
-
-  const onPlayerReady = useCallback((player: Player) => {
-    if (!embedded) {
-      player.muted(muted);
-      player.volume(volume);
-      player.playbackRate(videoPlaybackRate);
-      addTheaterModeButton(player, toggleVideoTheaterMode);
-    }
-
-      const shouldPlay = !embedded || autoplayIfEmbedded;
-      // https://blog.videojs.com/autoplay-best-practices-with-video-js/#Programmatic-Autoplay-and-Success-Failure-Detection
-      if (shouldPlay) {
-        const playPromise = player.play();
-        const timeoutPromise = new Promise((resolve, reject) => {
-          setTimeout(() => reject(PLAY_TIMEOUT_ERROR), 2000);
-        });
+        const timeoutPromise = new Promise((resolve, reject) =>
+          setTimeout(() => reject(PLAY_TIMEOUT_ERROR), PLAY_TIMEOUT_LIMIT)
+        );
 
         Promise.race([playPromise, timeoutPromise]).catch(error => {
           if (PLAY_TIMEOUT_ERROR) {
