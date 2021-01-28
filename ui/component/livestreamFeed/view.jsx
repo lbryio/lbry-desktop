@@ -8,6 +8,7 @@ import Card from 'component/common/card';
 import Spinner from 'component/spinner';
 import CommentCreate from 'component/commentCreate';
 import Button from 'component/button';
+import MarkdownPreview from 'component/common/markdown-preview';
 
 type Props = {
   uri: string,
@@ -148,7 +149,7 @@ export default function LivestreamFeed(props: Props) {
                       ) : (
                         <div className="livestream__comment-author">{comment.channel_name}</div>
                       )}
-                      <div className="">{comment.comment}</div>
+                      <MarkdownPreview content={comment.comment} simpleLinks />
                     </div>
                   ))}
                 </div>
