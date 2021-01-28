@@ -37,21 +37,36 @@ function FileDrop(props: Props) {
   const { drag, dropData } = useDragDrop();
   const [files, setFiles] = React.useState([]);
   const [error, setError] = React.useState(false);
-  const [target, setTarget] = React.useState(false);
+  const [target, setTarget] = React.useState<?WebFile>(null);
   const hideTimer = React.useRef(null);
   const targetTimer = React.useRef(null);
   const navigationTimer = React.useRef(null);
 
+  // Gets respective icon given a mimetype
+  const getFileIcon = type => {
+    // Not all files have a type
+    if (!type) return ICONS.FILE;
+    // Detect common types
+    const contentType = type.split('/')[0];
+    if (contentType === 'text') return ICONS.TEXT;
+    if (contentType === 'image') return ICONS.IMAGE;
+    if (contentType === 'video') return ICONS.VIDEO;
+    if (contentType === 'audio') return ICONS.AUDIO;
+    // Binary file
+    return ICONS.FILE;
+  };
+
+  // Navigates user to publish page
   const navigateToPublish = React.useCallback(() => {
-    // Navigate only if location is not publish area:
-    // - Prevent spam in history
+    // Navigate only if location is not publish area
+    // - Prevents spam in browser history
     if (history.location.pathname !== PUBLISH_URL) {
       history.push(PUBLISH_URL);
     }
   }, [history]);
 
   // Delay hide and navigation for a smooth transition
-  const hideDropArea = () => {
+  const hideDropArea = React.useCallback(() => {
     hideTimer.current = setTimeout(() => {
       setFiles([]);
       // Navigate to publish area
@@ -59,34 +74,15 @@ function FileDrop(props: Props) {
         navigateToPublish();
       }, NAVIGATE_TIME_OUT);
     }, HIDE_TIME_OUT);
-  };
+  }, [navigateToPublish]);
 
-  const handleFileSelected = selectedFile => {
+  // Handle file selection
+  const handleFileSelected = React.useCallback((selectedFile) => {
     updatePublishForm({ filePath: selectedFile });
     hideDropArea();
-  };
+  }, [updatePublishForm, hideDropArea]);
 
-  const getFileIcon = type => {
-    // Not all files have a type
-    if (!type) {
-      return ICONS.FILE;
-    }
-    // Detect common types
-    const contentType = type.split('/')[0];
-    if (contentType === 'text') {
-      return ICONS.TEXT;
-    } else if (contentType === 'image') {
-      return ICONS.IMAGE;
-    } else if (contentType === 'video') {
-      return ICONS.VIDEO;
-    } else if (contentType === 'audio') {
-      return ICONS.AUDIO;
-    }
-    // Binary file
-    return ICONS.FILE;
-  };
-
-  // Clear timers
+  // Clear timers when unmounted
   React.useEffect(() => {
     return () => {
       // Clear hide timer
@@ -104,8 +100,8 @@ function FileDrop(props: Props) {
     };
   }, []);
 
+  // Clear selected file after modal closed
   React.useEffect(() => {
-    // Clear selected file after modal closed
     if ((target && !files) || !files.length) {
       // Small delay for a better transition
       targetTimer.current = setTimeout(() => {
@@ -114,8 +110,8 @@ function FileDrop(props: Props) {
     }
   }, [files, target]);
 
+  // Handle file drop...
   React.useEffect(() => {
-    // Handle drop...
     if (dropData && !files.length && (!modal || modal.id !== MODALS.FILE_SELECTION)) {
       getTree(dropData)
         .then(entries => {
@@ -129,8 +125,8 @@ function FileDrop(props: Props) {
     }
   }, [dropData, files, modal]);
 
+  // File(s) or directory dropped
   React.useEffect(() => {
-    // Files or directory dropped:
     if (!drag && files.length) {
       // Handle multiple files selection
       if (files.length > 1) {
@@ -138,12 +134,11 @@ function FileDrop(props: Props) {
         setFiles([]);
       } else if (files.length === 1) {
         // Handle single file selection
-        // $FlowFixMe
         setTarget(files[0]);
         handleFileSelected(files[0]);
       }
     }
-  }, [drag, files, error, openModal]);
+  }, [drag, files, error, openModal, handleFileSelected]);
 
   // Show icon based on file type
   const icon = target ? getFileIcon(target.type) : ICONS.PUBLISH;
