@@ -26,8 +26,7 @@ export const DOWNLOAD = 'download';
 export const APPLICATION = 'application';
 export const UNSUPPORTED = 'unsupported';
 
-// PDFs disabled on desktop until we update Electron: https://github.com/electron/electron/issues/12337
-export const UNSUPPORTED_IN_THIS_APP = IS_WEB ? [CAD, COMIC, APPLICATION] : [APPLICATION, PDF];
+export const UNSUPPORTED_IN_THIS_APP = IS_WEB ? [CAD, COMIC, APPLICATION] : [APPLICATION];
 
 export const UNRENDERABLE_MODES = Array.from(
   new Set(UNSUPPORTED_IN_THIS_APP.concat([DOWNLOAD, APPLICATION, UNSUPPORTED]))
