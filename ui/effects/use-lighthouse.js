@@ -2,6 +2,7 @@
 import React from 'react';
 import { lighthouse } from 'redux/actions/search';
 import { getSearchQueryString } from 'util/query-params';
+import { isURIValid } from 'lbry-redux';
 import useThrottle from './use-throttle';
 
 export default function useLighthouse(query: string, showMature?: boolean, size?: number = 5) {
@@ -20,7 +21,7 @@ export default function useLighthouse(query: string, showMature?: boolean, size?
         .search(throttledQuery)
         .then(results => {
           if (isSubscribed) {
-            setResults(results.map(result => `lbry://${result.name}#${result.claimId}`));
+            setResults(results.map(result => `lbry://${result.name}#${result.claimId}`).filter(uri => isURIValid(uri)));
             setLoading(false);
           }
         })

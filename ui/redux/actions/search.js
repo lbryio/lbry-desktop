@@ -1,6 +1,6 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
-import { buildURI, doResolveUris, batchActions } from 'lbry-redux';
+import { buildURI, doResolveUris, batchActions, isURIValid } from 'lbry-redux';
 import { makeSelectSearchUris, makeSelectQueryWithOptions, selectSearchValue } from 'redux/selectors/search';
 import handleFetchResponse from 'util/handle-fetch';
 
@@ -71,7 +71,9 @@ export const doSearch = (rawQuery: string, searchOptions: SearchOptions) => (
           }
 
           const url = buildURI(urlObj);
-          uris.push(url);
+          if (isURIValid(url)) {
+            uris.push(url);
+          }
         }
       });
 
