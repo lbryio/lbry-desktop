@@ -9689,10 +9689,10 @@ remark-attr@^0.8.3:
     html-element-attributes "^2.0.0"
     md-attr-parser "^1.2.1"
 
-remark-breaks@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/remark-breaks/-/remark-breaks-1.0.5.tgz#e9785f8b174f45c05af542fbeb18354b766e1139"
-  integrity sha512-lr8+TlJI273NjEqL27eUthPYPTCgXEj4NaLbnazS3bQaQL2FySlsbtgo52gE36fE1gWeQgkn1VdmWsoT+uA7FA==
+remark-breaks@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/remark-breaks/-/remark-breaks-2.0.1.tgz#5dfe54e5b9ab65cfa1e25d6810fb556dda1c8ec1"
+  integrity sha512-CZKI8xdPUnvMqPxYEIBBUg8C0B0kyn14lkW0abzhfh/P71YRIxCC3wvBh6AejQL602OxF6kNRl1x4HAZA07JyQ==
 
 remark-emoji@^2.0.1:
   version "2.0.2"
