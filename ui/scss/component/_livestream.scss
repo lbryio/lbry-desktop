@@ -58,6 +58,10 @@
   color: #888;
 }
 
+.livestream__comment-author--streamer {
+  color: var(--color-primary);
+}
+
 .livestream__comment-create {
   margin-top: var(--spacing-s);
 }

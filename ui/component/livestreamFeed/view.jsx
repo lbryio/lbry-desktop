@@ -1,5 +1,5 @@
 // @flow
-import { BITWAVE_USERNAME, BITWAVE_EMBED_URL } from 'constants/livestream';
+import { BITWAVE_USERNAME, BITWAVE_EMBED_URL, LIVE_STREAM_CHANNEL_CLAIM_ID } from 'constants/livestream';
 import React from 'react';
 import { Lbry } from 'lbry-redux';
 import classnames from 'classnames';
@@ -138,11 +138,13 @@ export default function LivestreamFeed(props: Props) {
               {!fetchingComments && comments.length > 0 ? (
                 <div className="livestream__comments">
                   {comments.map(comment => (
-                    <div key={comment.comment_id} className="livestream__comment">
+                    <div key={comment.comment_id} className={classnames('livestream__comment')}>
                       {comment.channel_url ? (
                         <Button
                           target="_blank"
-                          className="livestream__comment-author"
+                          className={classnames('livestream__comment-author', {
+                            'livestream__comment-author--streamer': LIVE_STREAM_CHANNEL_CLAIM_ID === comment.channel_id,
+                          })}
                           navigate={comment.channel_url}
                           label={comment.channel_name}
                         />

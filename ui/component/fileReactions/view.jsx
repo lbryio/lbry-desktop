@@ -16,6 +16,7 @@ type Props = {
   likeCount: number,
   dislikeCount: number,
   myReaction: ?string,
+  livestream?: boolean,
 };
 
 function FileReactions(props: Props) {
@@ -28,6 +29,7 @@ function FileReactions(props: Props) {
     myReaction,
     likeCount,
     dislikeCount,
+    livestream,
   } = props;
   const claimId = claim && claim.claim_id;
   const channel = claim && claim.signing_channel && claim.signing_channel.name;
@@ -40,7 +42,10 @@ function FileReactions(props: Props) {
     let fetchInterval;
     if (claimId) {
       fetchReactions();
-      fetchInterval = setInterval(fetchReactions, 10000);
+
+      if (livestream) {
+        fetchInterval = setInterval(fetchReactions, 10000);
+      }
     }
 
     return () => {
@@ -48,7 +53,7 @@ function FileReactions(props: Props) {
         clearInterval(fetchInterval);
       }
     };
-  }, [claimId, doFetchReactions]);
+  }, [claimId, doFetchReactions, livestream]);
 
   return (
     <>

@@ -24,7 +24,7 @@ function FileSubtitle(props: Props) {
         )}
       </div>
 
-      <FileActions uri={uri} hideRepost={livestream} />
+      <FileActions uri={uri} hideRepost={livestream} livestream={livestream} />
     </div>
   );
 }

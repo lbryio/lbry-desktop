@@ -161,89 +161,87 @@ export function CommentCreate(props: Props) {
   }
 
   return (
-    <>
-      <Form
-        onSubmit={handleSubmit}
-        className={classnames('comment__create', {
-          'comment__create--reply': isReply,
-          'comment__create--nested-reply': isNested,
-          'comment__create--bottom': bottom,
-        })}
-      >
-        <FormField
-          disabled={activeChannel === CHANNEL_NEW}
-          type={SIMPLE_SITE ? 'textarea' : advancedEditor && !isReply ? 'markdown' : 'textarea'}
-          name={isReply ? 'content_reply' : 'content_description'}
-          label={
-            <span className="comment-new__label-wrapper">
-              <div className="comment-new__label">{isReply ? __('Replying as') + ' ' : __('Comment as') + ' '}</div>
-              <ChannelSelection channel={activeChannel} hideAnon tiny hideNew onChannelChange={setCommentChannel} />
-            </span>
-          }
-          quickActionLabel={
-            !SIMPLE_SITE && (isReply ? undefined : advancedEditor ? __('Simple Editor') : __('Advanced Editor'))
-          }
-          quickActionHandler={!SIMPLE_SITE && toggleEditorMode}
-          onFocus={onTextareaFocus}
-          onBlur={onTextareaBlur}
-          placeholder={__('Say something about this...')}
-          value={commentValue}
-          charCount={charCount}
-          onChange={handleCommentChange}
-          autoFocus={isReply}
-          textAreaMaxLength={livestream ? FF_MAX_CHARS_IN_LIVESTREAM_COMMENT : FF_MAX_CHARS_IN_COMMENT}
-        />
-        {livestream && hasChannels && (
-          <div className="livestream__emoji-actions">
-            {LIVESTREAM_EMOJIS.map(emoji => (
-              <Button
-                key={emoji}
-                disabled={isPostingComment}
-                type="button"
-                button="alt"
-                className="button--emoji"
-                label={emoji}
-                onClick={() => {
-                  setCommentValue(commentValue ? `${commentValue} ${emoji}` : emoji);
-                }}
-              />
-            ))}
-          </div>
-        )}
-        <div
-          className={classnames('section__actions', {
-            'section__actions--no-margin': !livestream,
-          })}
-        >
-          <Button
-            ref={buttonref}
-            button="primary"
-            disabled={disabled}
-            type="submit"
-            label={
-              isReply
-                ? isPostingComment
-                  ? __('Replying...')
-                  : __('Reply')
-                : isPostingComment
-                ? __('Posting...')
-                : __('Post --[button to submit something]--')
-            }
-            requiresAuth={IS_WEB}
-          />
-          {isReply && (
+    <Form
+      onSubmit={handleSubmit}
+      className={classnames('comment__create', {
+        'comment__create--reply': isReply,
+        'comment__create--nested-reply': isNested,
+        'comment__create--bottom': bottom,
+      })}
+    >
+      <FormField
+        disabled={activeChannel === CHANNEL_NEW}
+        type={SIMPLE_SITE ? 'textarea' : advancedEditor && !isReply ? 'markdown' : 'textarea'}
+        name={isReply ? 'content_reply' : 'content_description'}
+        label={
+          <span className="comment-new__label-wrapper">
+            <div className="comment-new__label">{isReply ? __('Replying as') + ' ' : __('Comment as') + ' '}</div>
+            <ChannelSelection channel={activeChannel} hideAnon tiny hideNew onChannelChange={setCommentChannel} />
+          </span>
+        }
+        quickActionLabel={
+          !SIMPLE_SITE && (isReply ? undefined : advancedEditor ? __('Simple Editor') : __('Advanced Editor'))
+        }
+        quickActionHandler={!SIMPLE_SITE && toggleEditorMode}
+        onFocus={onTextareaFocus}
+        onBlur={onTextareaBlur}
+        placeholder={__('Say something about this...')}
+        value={commentValue}
+        charCount={charCount}
+        onChange={handleCommentChange}
+        autoFocus={isReply}
+        textAreaMaxLength={livestream ? FF_MAX_CHARS_IN_LIVESTREAM_COMMENT : FF_MAX_CHARS_IN_COMMENT}
+      />
+      {livestream && hasChannels && (
+        <div className="livestream__emoji-actions">
+          {LIVESTREAM_EMOJIS.map(emoji => (
             <Button
-              button="link"
-              label={__('Cancel')}
+              key={emoji}
+              disabled={isPostingComment}
+              type="button"
+              button="alt"
+              className="button--emoji"
+              label={emoji}
               onClick={() => {
-                if (onCancelReplying) {
-                  onCancelReplying();
-                }
+                setCommentValue(commentValue ? `${commentValue} ${emoji}` : emoji);
               }}
             />
-          )}
+          ))}
         </div>
-      </Form>
-    </>
+      )}
+      <div
+        className={classnames('section__actions', {
+          'section__actions--no-margin': !livestream,
+        })}
+      >
+        <Button
+          ref={buttonref}
+          button="primary"
+          disabled={disabled}
+          type="submit"
+          label={
+            isReply
+              ? isPostingComment
+                ? __('Replying...')
+                : __('Reply')
+              : isPostingComment
+              ? __('Posting...')
+              : __('Post --[button to submit something]--')
+          }
+          requiresAuth={IS_WEB}
+        />
+        {isReply && (
+          <Button
+            button="link"
+            label={__('Cancel')}
+            onClick={() => {
+              if (onCancelReplying) {
+                onCancelReplying();
+              }
+            }}
+          />
+        )}
+      </div>
+    </Form>
   );
 }

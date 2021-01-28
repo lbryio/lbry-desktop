@@ -26,6 +26,7 @@ type Props = {
   doToast: ({ message: string }) => void,
   clearPlayingUri: () => void,
   hideRepost?: boolean,
+  livestream?: boolean,
 };
 
 function FileActions(props: Props) {
@@ -42,6 +43,7 @@ function FileActions(props: Props) {
     clearPlayingUri,
     doToast,
     hideRepost,
+    livestream,
   } = props;
   const {
     push,
@@ -82,7 +84,7 @@ function FileActions(props: Props) {
 
   const lhsSection = (
     <>
-      {ENABLE_FILE_REACTIONS && <FileReactions uri={uri} />}
+      {ENABLE_FILE_REACTIONS && <FileReactions uri={uri} livestream={livestream} />}
       <ClaimSupportButton uri={uri} fileAction />
       {!hideRepost && (
         <Button
