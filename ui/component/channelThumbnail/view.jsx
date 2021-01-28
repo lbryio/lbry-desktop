@@ -72,7 +72,8 @@ function ChannelThumbnail(props: Props) {
         <img
           alt={__('Channel profile picture')}
           className="channel-thumbnail__default"
-          src={thumbnailPreview || Gerbil}
+          src={!thumbError && thumbnailPreview ? thumbnailPreview : Gerbil}
+          onError={() => setThumbError(true)} // if thumb fails (including due to https replace, show gerbil.
         />
       )}
       {showThumb && (
