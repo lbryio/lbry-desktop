@@ -35,8 +35,8 @@ function ChannelThumbnail(props: Props) {
   } = props;
   const [thumbError, setThumbError] = React.useState(false);
   const shouldResolve = claim === undefined;
-  const thumbnail = rawThumbnail && rawThumbnail.trim().replace(/^http:\/\//i, 'https://');
-  const thumbnailPreview = rawThumbnailPreview && rawThumbnailPreview.trim().replace(/^http:\/\//i, 'https://');
+  const thumbnail = rawThumbnail && rawThumbnail.trim();
+  const thumbnailPreview = rawThumbnailPreview && rawThumbnailPreview.trim();
   const channelThumbnail = thumbnail || thumbnailPreview;
   const showThumb = (!obscure && !!thumbnail) || thumbnailPreview;
   // Generate a random color class based on the first letter of the channel name

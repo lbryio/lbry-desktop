@@ -18,7 +18,7 @@ type Props = {
 
 function FileThumbnail(props: Props) {
   const { claim, uri, doResolveUri, thumbnail: rawThumbnail, children, allowGifs = false, className } = props;
-  const passedThumbnail = rawThumbnail && rawThumbnail.trim().replace(/^http:\/\//i, 'https://');
+  const passedThumbnail = rawThumbnail && rawThumbnail.trim();
   const thumbnailFromClaim =
     uri && claim && claim.value && claim.value.thumbnail ? claim.value.thumbnail.url : undefined;
   const thumbnail = passedThumbnail || thumbnailFromClaim;
