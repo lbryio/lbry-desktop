@@ -186,7 +186,7 @@
     "remark-attr": "^0.8.3",
     "remark-emoji": "^2.0.1",
     "remark-frontmatter": "^2.0.0",
-    "remark-react": "^4.0.3",
+    "remark-react": "^8.0.0",
     "reselect": "^4.0.0",
     "sass": "^1.29.0",
     "sass-loader": "^7.1.0",
