@@ -193,6 +193,8 @@ $thumbnailWidthSmall: 0rem;
 }
 
 .comment__author {
+  max-width: 10rem;
+  white-space: nowrap;
   text-overflow: ellipsis;
   margin-right: var(--spacing-xs);
   height: 100%;
