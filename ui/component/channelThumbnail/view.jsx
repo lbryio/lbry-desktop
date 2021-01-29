@@ -73,7 +73,7 @@ function ChannelThumbnail(props: Props) {
           alt={__('Channel profile picture')}
           className="channel-thumbnail__default"
           src={!thumbError && thumbnailPreview ? thumbnailPreview : Gerbil}
-          onError={() => setThumbError(true)} // if thumb fails (including due to https replace, show gerbil.
+          onError={() => setThumbError(true)}
         />
       )}
       {showThumb && (
@@ -85,7 +85,7 @@ function ChannelThumbnail(props: Props) {
               alt={__('Channel profile picture')}
               className="channel-thumbnail__custom"
               src={!thumbError ? thumbnailPreview || thumbnail : Gerbil}
-              onError={() => setThumbError(true)} // if thumb fails (including due to https replace, show gerbil.
+              onError={() => setThumbError(true)}
             />
           )}
         </>
