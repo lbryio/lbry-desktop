@@ -10846,9 +10846,10 @@ thenify-all@^1.0.0, thenify-all@^1.6.0:
   dependencies:
     any-promise "^1.0.0"
 
-three-full@^17.1.0:
-  version "17.2.0"
-  resolved "https://registry.yarnpkg.com/three-full/-/three-full-17.2.0.tgz#b6086360a9429e733e080093c25d02a3171ba1cc"
+three-full@^28.0.2:
+  version "28.0.2"
+  resolved "https://registry.yarnpkg.com/three-full/-/three-full-28.0.2.tgz#5e75f28904bd6050f868d68b7e68ac747e2a8c76"
+  integrity sha512-KJKj47qYcRbT6efPQ5kV5/uxiIq9lX0tf/eK2B6KarqRUY8JcF+vN9R5r+6wZMekBrO/sGD6gEQkKUcCN7G7tA==
 
 three@*:
   version "0.125.1"
