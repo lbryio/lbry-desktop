@@ -70,7 +70,7 @@
 
 @keyframes menu-animate-in {
   0% {
-    transform: translateY(var(--header-height));
+    transform: translateY(-80px);
     opacity: 0;
   }
   100% {
