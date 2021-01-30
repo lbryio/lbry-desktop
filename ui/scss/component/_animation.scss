@@ -71,10 +71,12 @@
 @keyframes menu-animate-in {
   0% {
     transform: translateY(-100%);
+    pointer-events: none;
     opacity: 0;
   }
   100% {
     transform: translateY(0);
+    pointer-events: all;
     opacity: 1;
   }
 }
