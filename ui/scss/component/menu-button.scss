@@ -10,6 +10,7 @@
   position: absolute;
   z-index: 2;
   font-size: var(--font-body);
+  overflow: hidden;
 }
 
 [data-reach-menu-list] {
