@@ -89,17 +89,16 @@ export default function FileRenderFloating(props: Props) {
   }
 
   function clampToScreen(pos) {
-    const GAP_PX = 10;
     const ESTIMATED_SCROLL_BAR_PX = 50;
     const FLOATING_PLAYER_CLASS = 'content__viewer--floating';
     const fpPlayerElem = document.querySelector(`.${FLOATING_PLAYER_CLASS}`);
 
     if (fpPlayerElem) {
       if (pos.x + fpPlayerElem.getBoundingClientRect().width > getScreenWidth() - ESTIMATED_SCROLL_BAR_PX) {
-        pos.x = getScreenWidth() - fpPlayerElem.getBoundingClientRect().width - ESTIMATED_SCROLL_BAR_PX - GAP_PX;
+        pos.x = getScreenWidth() - fpPlayerElem.getBoundingClientRect().width - ESTIMATED_SCROLL_BAR_PX;
       }
       if (pos.y + fpPlayerElem.getBoundingClientRect().height > getScreenHeight()) {
-        pos.y = getScreenHeight() - fpPlayerElem.getBoundingClientRect().height - GAP_PX * 2;
+        pos.y = getScreenHeight() - fpPlayerElem.getBoundingClientRect().height;
       }
     }
   }
