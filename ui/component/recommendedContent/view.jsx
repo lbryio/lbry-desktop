@@ -61,7 +61,7 @@ export default function RecommendedContent(props: Props) {
           injectedItem={
             SHOW_ADS && IS_WEB ? (
               SIMPLE_SITE ? (
-                <Ads small type={'google'} />
+                <Ads small type={'google'} uri={uri} />
               ) : (
                 !isAuthenticated && <Ads small type={'video'} />
               )
