@@ -48,7 +48,7 @@
   "dependencies": {
     "auto-launch": "^5.0.5",
     "electron-dl": "^1.11.0",
-    "electron-log": "^2.2.12",
+    "electron-log": "^4.3.1",
     "electron-notarize": "^1.0.0",
     "electron-updater": "^4.2.4",
     "express": "^4.17.1",
