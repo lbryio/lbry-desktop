@@ -87,7 +87,7 @@
     "async-exit-hook": "^2.0.1",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.5",
-    "babel-plugin-add-module-exports": "^1.0.0",
+    "babel-plugin-add-module-exports": "^1.0.4",
     "babel-plugin-import-glob": "^2.0.0",
     "babel-plugin-transform-imports": "^1.5.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
