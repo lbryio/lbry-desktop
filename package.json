@@ -146,7 +146,7 @@
     "lint-staged": "^7.0.2",
     "localforage": "^1.7.1",
     "lodash-es": "^4.17.14",
-    "mammoth": "^1.4.6",
+    "mammoth": "^1.4.16",
     "moment": "^2.22.0",
     "node-abi": "^2.5.1",
     "node-fetch": "^2.6.1",
