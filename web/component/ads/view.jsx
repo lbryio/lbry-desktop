@@ -7,6 +7,7 @@ import { withRouter } from 'react-router';
 import I18nMessage from 'component/i18nMessage';
 import Button from 'component/button';
 import classnames from 'classnames';
+// $FlowFixMe
 import { ADS_CHANNEL_BLACKLIST } from 'homepages';
 
 const ADS_URL = '//assets.revcontent.com/master/delivery.js';
