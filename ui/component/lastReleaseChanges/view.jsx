@@ -1,7 +1,6 @@
 // @flow
 import React, { useState, useEffect } from 'react';
-import remark from 'remark';
-import reactRenderer from 'remark-react';
+import MarkdownPreview from 'component/common/markdown-preview';
 import Button from 'component/button';
 import I18nMessage from 'component/i18nMessage';
 
@@ -74,11 +73,7 @@ const LastReleaseChanges = (props: Props) => {
     <div>
       {releaseVersionTitle}
       <p>
-        {
-          remark()
-            .use(reactRenderer)
-            .processSync(releaseChanges).contents
-        }
+        <MarkdownPreview content={releaseChanges} />
       </p>
       {seeReleaseNotes}
     </div>
