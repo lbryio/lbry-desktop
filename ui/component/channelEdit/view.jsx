@@ -19,6 +19,8 @@ import * as PAGES from 'constants/pages';
 import analytics from 'analytics';
 import LbcSymbol from 'component/common/lbc-symbol';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
+import WalletSpendableBalanceHelp from 'component/walletSpendableBalanceHelp';
+
 const LANG_NONE = 'none';
 
 const MAX_TAG_SELECT = 5;
@@ -336,7 +338,12 @@ function ChannelForm(props: Props) {
                     disabled={false}
                     onChange={event => handleBidChange(parseFloat(event.target.value))}
                     placeholder={0.1}
-                    helper={__('Increasing your deposit can help your channel be discovered more easily.')}
+                    helper={
+                      <>
+                        {__('Increasing your deposit can help your channel be discovered more easily.')}
+                        <WalletSpendableBalanceHelp inline />
+                      </>
+                    }
                   />
                 }
               />

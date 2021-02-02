@@ -6,6 +6,7 @@ import Button from 'component/button';
 import analytics from 'analytics';
 import LbcSymbol from 'component/common/lbc-symbol';
 import { MINIMUM_PUBLISH_BID, INVALID_NAME_ERROR } from 'constants/claim';
+import WalletSpendableBalanceHelp from 'component/walletSpendableBalanceHelp';
 
 type Props = {
   balance: number,
@@ -116,9 +117,14 @@ class ChannelCreate extends React.PureComponent<Props, State> {
             step="any"
             min="0"
             type="number"
-            helper={__(
-              'These LBRY Credits remain yours. It is a deposit to reserve the name and can be undone at any time.'
-            )}
+            helper={
+              <>
+                {__(
+                  'These LBRY Credits remain yours. It is a deposit to reserve the name and can be undone at any time.'
+                )}
+                <WalletSpendableBalanceHelp inline />
+              </>
+            }
             error={newChannelBidError}
             value={newChannelBid}
             onChange={event => this.handleNewChannelBidChange(parseFloat(event.target.value))}

@@ -7,6 +7,7 @@ import NameHelpText from './name-help-text';
 import BidHelpText from './bid-help-text';
 import Card from 'component/common/card';
 import LbcSymbol from 'component/common/lbc-symbol';
+import WalletSpendableBalanceHelp from 'component/walletSpendableBalanceHelp';
 
 type Props = {
   name: string,
@@ -141,11 +142,14 @@ function PublishName(props: Props) {
             onChange={event => updatePublishForm({ bid: parseFloat(event.target.value) })}
             onWheel={e => e.stopPropagation()}
             helper={
-              <BidHelpText
-                uri={'lbry://' + name}
-                amountNeededForTakeover={amountNeededForTakeover}
-                isResolvingUri={isResolvingUri}
-              />
+              <>
+                <BidHelpText
+                  uri={'lbry://' + name}
+                  amountNeededForTakeover={amountNeededForTakeover}
+                  isResolvingUri={isResolvingUri}
+                />
+                <WalletSpendableBalanceHelp inline />
+              </>
             }
           />
         </React.Fragment>
