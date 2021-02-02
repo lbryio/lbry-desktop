@@ -8,6 +8,7 @@ import { validateSendTx } from 'util/form-validation';
 import Card from 'component/common/card';
 import I18nMessage from 'component/i18nMessage';
 import LbcSymbol from 'component/common/lbc-symbol';
+import WalletSpendableBalanceHelp from 'component/walletSpendableBalanceHelp';
 
 type DraftTransaction = {
   address: string,
@@ -105,6 +106,7 @@ class WalletSend extends React.PureComponent<Props> {
                     </span>
                   )}
                 </div>
+                <WalletSpendableBalanceHelp />
               </Form>
             )}
           />

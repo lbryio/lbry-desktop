@@ -15,8 +15,9 @@ import SelectChannel from 'component/selectChannel';
 import LbcSymbol from 'component/common/lbc-symbol';
 import { parseURI } from 'lbry-redux';
 import usePersistedState from 'effects/use-persisted-state';
+import WalletSpendableBalanceHelp from 'component/walletSpendableBalanceHelp';
 
-const DEFAULT_TIP_AMOUNTS = [5, 25, 100, 1000];
+const DEFAULT_TIP_AMOUNTS = [1, 5, 25, 100];
 
 type SupportParams = { amount: number, claim_id: string, channel_id?: string };
 
@@ -312,6 +313,7 @@ function WalletSendTip(props: Props) {
                     />
                   )}
                 </div>
+                <WalletSpendableBalanceHelp />
               </>
             )
           }
