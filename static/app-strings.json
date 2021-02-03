@@ -143,7 +143,7 @@
   "Purchase and tip confirmations": "Purchase and tip confirmations",
   "Always confirm before purchasing content or tipping": "Always confirm before purchasing content or tipping",
   "Only confirm purchases or tips over a certain amount": "Only confirm purchases or tips over a certain amount",
-  "When this option is chosen, LBRY won't ask you to confirm downloads or tips below your chosen amount.": "When this option is chosen, LBRY won't ask you to confirm downloads or tips below your chosen amount.",
+  "When this option is chosen, LBRY won't ask you to confirm purchases or tips below your chosen amount.": "When this option is chosen, LBRY won't ask you to confirm purchases or tips below your chosen amount.",
   "Content settings": "Content settings",
   "Notifications": "Notifications",
   "Show Desktop Notifications": "Show Desktop Notifications",

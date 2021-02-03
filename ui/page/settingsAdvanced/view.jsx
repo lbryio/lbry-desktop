@@ -331,7 +331,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
 
                   <p className="help">
                     {__(
-                      "When this option is chosen, LBRY won't ask you to confirm downloads or tips below your chosen amount."
+                      "When this option is chosen, LBRY won't ask you to confirm purchases or tips below your chosen amount."
                     )}
                   </p>
                 </React.Fragment>
