@@ -85,7 +85,7 @@ function Ads(props: Props) {
   useEffect(() => {
     let script;
 
-    if (SHOW_ADS && type === 'google') {
+    if (SHOW_ADS && type === 'google' && !isBlocked) {
       const d = document;
       if (!d.getElementById('googleadscriptid')) {
         try {
@@ -111,7 +111,7 @@ function Ads(props: Props) {
         clearTimeout(googleInit);
       }
     };
-  }, [type]);
+  }, [type, isBlocked]);
 
   const googleAd = (
     <div className="ads__related--google">
