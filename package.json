@@ -135,7 +135,7 @@
     "flow-bin": "^0.97.0",
     "flow-typed": "^2.3.0",
     "formik": "^0.10.4",
-    "hast-util-sanitize": "^1.1.2",
+    "hast-util-sanitize": "^3.0.2",
     "history": "^4.9.0",
     "husky": "^3.1.0",
     "imagesloaded": "^4.1.4",
