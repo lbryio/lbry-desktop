@@ -8,7 +8,7 @@ import I18nMessage from 'component/i18nMessage';
 import Button from 'component/button';
 import classnames from 'classnames';
 // $FlowFixMe
-import { ADS_CHANNEL_BLACKLIST } from 'homepages';
+import { NO_ADS_CHANNEL_IDS } from 'homepages';
 
 const ADS_URL = '//assets.revcontent.com/master/delivery.js';
 const IS_MOBILE = typeof window.orientation !== 'undefined';
@@ -44,7 +44,7 @@ function Ads(props: Props) {
 
   const channelId = claim && claim.signing_channel && claim.signing_channel.claim_id;
 
-  const isBlocked = isMature || (ADS_CHANNEL_BLACKLIST && ADS_CHANNEL_BLACKLIST.includes(channelId));
+  const isBlocked = isMature || (NO_ADS_CHANNEL_IDS && NO_ADS_CHANNEL_IDS.includes(channelId));
   useEffect(() => {
     if (SHOW_ADS && type === 'video') {
       let script;
