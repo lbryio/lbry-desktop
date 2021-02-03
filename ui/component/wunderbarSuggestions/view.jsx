@@ -17,6 +17,7 @@ import { useHistory } from 'react-router';
 import { formatLbryUrlForWeb } from 'util/url';
 import useThrottle from 'effects/use-throttle';
 import Yrbl from 'component/yrbl';
+import type { ElementRef } from 'react';
 
 const WEB_DEV_PREFIX = `${URL_DEV}/`;
 const WEB_LOCAL_PREFIX = `${URL_LOCAL}/`;
@@ -40,7 +41,7 @@ type Props = {
 
 export default function WunderBarSuggestions(props: Props) {
   const { navigateToSearchPage, doShowSnackBar, doResolveUris, showMature, isMobile, doCloseMobileSearch } = props;
-  const inputRef = React.useRef();
+  const inputRef: ElementRef<any> = React.useRef();
   const isFocused = inputRef && inputRef.current && inputRef.current === document.activeElement;
 
   const {
@@ -152,7 +153,27 @@ export default function WunderBarSuggestions(props: Props) {
     }
 
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+
+    // @if TARGET='app'
+    function handleDoubleClick(event) {
+      if (!inputRef.current) {
+        return;
+      }
+
+      event.stopPropagation();
+    }
+
+    inputRef.current.addEventListener('dblclick', handleDoubleClick);
+    // @endif
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      // @if TARGET='app'
+      if (inputRef.current) {
+        inputRef.current.removeEventListener('dblclick', handleDoubleClick);
+      }
+      // @endif
+    };
   }, [inputRef]);
 
   React.useEffect(() => {
