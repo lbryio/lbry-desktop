@@ -13,13 +13,14 @@ import { makeSelectCostInfoForUri, doFetchCostInfoForUri } from 'lbryinc';
 import { selectShowMatureContent, makeSelectClientSetting } from 'redux/selectors/settings';
 import { makeSelectFileRenderModeForUri } from 'redux/selectors/content';
 import { makeSelectCommentForCommentId } from 'redux/selectors/comments';
+import { DISABLE_COMMENTS_TAG } from 'constants/tags';
+
 import FilePage from './view';
 
 const select = (state, props) => {
   const { search } = props.location;
   const urlParams = new URLSearchParams(search);
   const linkedCommentId = urlParams.get('lc');
-  const DISABLE_COMMENTS_TAG = 'disable_comments';
 
   return {
     linkedComment: makeSelectCommentForCommentId(linkedCommentId)(state),
@@ -30,7 +31,7 @@ const select = (state, props) => {
     fileInfo: makeSelectFileInfoForUri(props.uri)(state),
     renderMode: makeSelectFileRenderModeForUri(props.uri)(state),
     videoTheaterMode: makeSelectClientSetting(SETTINGS.VIDEO_THEATER_MODE)(state),
-    disableComments: makeSelectTagInClaimOrChannelForUri(props.uri, DISABLE_COMMENTS_TAG)(state),
+    commentsDisabled: makeSelectTagInClaimOrChannelForUri(props.uri, DISABLE_COMMENTS_TAG)(state),
   };
 };
 

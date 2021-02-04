@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { makeSelectCommentForCommentId } from 'redux/selectors/comments';
-
+import { DISABLE_COMMENTS_TAG } from 'constants/tags';
 import ChannelDiscussion from './view';
-import { makeSelectTagsForUri } from 'lbry-redux';
+import { makeSelectTagInClaimOrChannelForUri } from 'lbry-redux';
 
 const select = (state, props) => {
   const { search } = props.location;
@@ -12,7 +12,7 @@ const select = (state, props) => {
 
   return {
     linkedComment: makeSelectCommentForCommentId(linkedCommentId)(state),
-    tags: makeSelectTagsForUri(props.uri)(state),
+    commentsDisabled: makeSelectTagInClaimOrChannelForUri(props.uri, DISABLE_COMMENTS_TAG)(state),
   };
 };
 

@@ -6,14 +6,14 @@ import Empty from 'component/common/empty';
 type Props = {
   uri: string,
   linkedComment: ?any,
-  tags: Array<string>,
+  commentsDisabled: boolean,
 };
 
 function ChannelDiscussion(props: Props) {
-  const { uri, linkedComment, tags } = props;
+  const { uri, linkedComment, commentsDisabled } = props;
 
-  if (tags.includes('disable_comments')) {
-    return <Empty text={__('Comments are disabled here.')} />;
+  if (commentsDisabled) {
+    return <Empty text={__('This channel has disabled comments on their page.')} />;
   }
   return (
     <section className="section">

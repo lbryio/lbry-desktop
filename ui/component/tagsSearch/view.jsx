@@ -147,7 +147,6 @@ export default function TagsSearch(props: Props) {
       onRemove(selectedTag);
     } else if (onSelect) {
       onSelect([{ name: tag }]);
-      // call an api
     }
   }
   return (

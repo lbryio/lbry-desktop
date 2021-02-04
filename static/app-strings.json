@@ -1562,5 +1562,7 @@
   "Delete supports to spend": "Delete supports to spend",
   "%lbc_amount% boosting content": "%lbc_amount% boosting content",
   "Deposit cannot be higher than your available balance: %balance%": "Deposit cannot be higher than your available balance: %balance%",
+  "This channel has disabled comments on their page.": "This channel has disabled comments on their page.",
+  "The creator of this content has disabled comments.": "The creator of this content has disabled comments.",
   "--end--": "--end--"
 }

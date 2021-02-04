@@ -4,7 +4,7 @@ import { doToggleTagFollowDesktop, doAddTag, doDeleteTag } from 'redux/actions/t
 import { selectUser } from 'redux/selectors/user';
 import DiscoveryFirstRun from './view';
 
-const select = (state, props) => ({
+const select = state => ({
   unfollowedTags: selectUnfollowedTags(state),
   followedTags: selectFollowedTags(state),
   user: selectUser(state),
