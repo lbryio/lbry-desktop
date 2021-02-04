@@ -26,7 +26,7 @@ type Props = {
   linkedComment: any,
   setPrimaryUri: (?string) => void,
   videoTheaterMode: boolean,
-  disableComments: boolean,
+  commentsDisabled: boolean,
 };
 
 function FilePage(props: Props) {
@@ -43,7 +43,7 @@ function FilePage(props: Props) {
     linkedComment,
     setPrimaryUri,
     videoTheaterMode,
-    disableComments,
+    commentsDisabled,
   } = props;
   const cost = costInfo ? costInfo.cost : null;
   const hasFileInfo = fileInfo !== undefined;
@@ -123,8 +123,8 @@ function FilePage(props: Props) {
         <div className="file-page__secondary-content">
           <div>
             {RENDER_MODES.FLOATING_MODES.includes(renderMode) && <FileTitle uri={uri} />}
-            {disableComments && <Empty text={__('Comments are disabled here.')} />}
-            {!disableComments && <CommentsList uri={uri} linkedComment={linkedComment} />}
+            {commentsDisabled && <Empty text={__('The creator of this content has disabled comments.')} />}
+            {!commentsDisabled && <CommentsList uri={uri} linkedComment={linkedComment} />}
           </div>
           {videoTheaterMode && <RecommendedContent uri={uri} />}
         </div>
