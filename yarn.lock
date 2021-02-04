@@ -9196,9 +9196,10 @@ react-dom@^16.8.2:
     prop-types "^15.6.2"
     scheduler "^0.19.0"
 
-react-draggable@^3.3.0:
-  version "3.3.2"
-  resolved "https://registry.yarnpkg.com/react-draggable/-/react-draggable-3.3.2.tgz#966ef1d90f2387af3c2d8bd3516f601ea42ca359"
+react-draggable@^4.4.3:
+  version "4.4.3"
+  resolved "https://registry.yarnpkg.com/react-draggable/-/react-draggable-4.4.3.tgz#0727f2cae5813e36b0e4962bf11b2f9ef2b406f3"
+  integrity sha512-jV4TE59MBuWm7gb6Ns3Q1mxX8Azffb7oTtDtBgFkxRvhDp38YAARmRplrj0+XGkhOJB5XziArX+4HUUABtyZ0w==
   dependencies:
     classnames "^2.2.5"
     prop-types "^15.6.0"
