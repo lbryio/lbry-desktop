@@ -171,7 +171,6 @@ export default function TagsSearch(props: Props) {
           <ul className="tags--remove">
             {!tagsPassedIn.length && <Tag key={`placeholder-tag`} name={'example'} disabled type={'remove'} />}
             {Boolean(tagsPassedIn.length) &&
-              // .filter(t => !UTILITY_TAGS.includes(t.name))
               tagsPassedIn
                 .filter(t => !UTILITY_TAGS.includes(t.name))
                 .map(tag => (
