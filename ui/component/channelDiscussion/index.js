@@ -3,6 +3,7 @@ import { withRouter } from 'react-router';
 import { makeSelectCommentForCommentId } from 'redux/selectors/comments';
 
 import ChannelDiscussion from './view';
+import { makeSelectTagsForUri } from 'lbry-redux';
 
 const select = (state, props) => {
   const { search } = props.location;
@@ -11,6 +12,7 @@ const select = (state, props) => {
 
   return {
     linkedComment: makeSelectCommentForCommentId(linkedCommentId)(state),
+    tags: makeSelectTagsForUri(props.uri)(state),
   };
 };
 

@@ -9,6 +9,7 @@ import FileRenderInline from 'component/fileRenderInline';
 import FileRenderDownload from 'component/fileRenderDownload';
 import RecommendedContent from 'component/recommendedContent';
 import CommentsList from 'component/commentsList';
+import Empty from 'component/common/empty';
 
 export const PRIMARY_PLAYER_WRAPPER_CLASS = 'file-page__video-container';
 
@@ -25,6 +26,7 @@ type Props = {
   linkedComment: any,
   setPrimaryUri: (?string) => void,
   videoTheaterMode: boolean,
+  disableComments: boolean,
 };
 
 function FilePage(props: Props) {
@@ -41,6 +43,7 @@ function FilePage(props: Props) {
     linkedComment,
     setPrimaryUri,
     videoTheaterMode,
+    disableComments,
   } = props;
   const cost = costInfo ? costInfo.cost : null;
   const hasFileInfo = fileInfo !== undefined;
@@ -120,7 +123,8 @@ function FilePage(props: Props) {
         <div className="file-page__secondary-content">
           <div>
             {RENDER_MODES.FLOATING_MODES.includes(renderMode) && <FileTitle uri={uri} />}
-            <CommentsList uri={uri} linkedComment={linkedComment} />
+            {disableComments && <Empty text={__('Comments are disabled here.')} />}
+            {!disableComments && <CommentsList uri={uri} linkedComment={linkedComment} />}
           </div>
           {videoTheaterMode && <RecommendedContent uri={uri} />}
         </div>
