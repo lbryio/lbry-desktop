@@ -69,12 +69,10 @@ export default function TagsSearch(props: Props) {
   const remainingUnfollowedTagsSet = setDifference(unfollowedTagsSet, selectedTagsSet);
   const suggestedTagsSet = setUnion(remainingFollowedTagsSet, remainingUnfollowedTagsSet);
 
-  let countWithoutSpecialTags = selectedTagsSet.has('mature') ? selectedTagsSet.size - 1 : selectedTagsSet.size;
-  if (selectedTagsSet.has('lbry-first')) {
-    countWithoutSpecialTags = countWithoutSpecialTags - 1;
-  }
+  const SPECIAL_TAGS = [...UTILITY_TAGS, 'lbry-first', 'mature'];
+  let countWithoutSpecialTags = selectedTagsSet.size;
 
-  UTILITY_TAGS.forEach(t => {
+  SPECIAL_TAGS.forEach(t => {
     if (selectedTagsSet.has(t)) {
       countWithoutSpecialTags--;
     }
@@ -174,16 +172,18 @@ export default function TagsSearch(props: Props) {
             {!tagsPassedIn.length && <Tag key={`placeholder-tag`} name={'example'} disabled type={'remove'} />}
             {Boolean(tagsPassedIn.length) &&
               // .filter(t => !UTILITY_TAGS.includes(t.name))
-              tagsPassedIn.map(tag => (
-                <Tag
-                  key={`passed${tag.name}`}
-                  name={tag.name}
-                  type="remove"
-                  onClick={() => {
-                    onRemove(tag);
-                  }}
-                />
-              ))}
+              tagsPassedIn
+                .filter(t => !UTILITY_TAGS.includes(t.name))
+                .map(tag => (
+                  <Tag
+                    key={`passed${tag.name}`}
+                    name={tag.name}
+                    type="remove"
+                    onClick={() => {
+                      onRemove(tag);
+                    }}
+                  />
+                ))}
           </ul>
           <FormField
             autoFocus={!disableAutoFocus}
@@ -219,27 +219,28 @@ export default function TagsSearch(props: Props) {
             </ul>
           </section>
         </fieldset-section>
-        {experimentalFeature && onSelect && (
-          <fieldset-section>
-            <label>{__('Control Tags')}</label>
-            {UTILITY_TAGS.map(t => (
-              <FormField
-                key={t}
-                name={t}
-                type="checkbox"
-                blockWrap={false}
-                label={__(
-                  t
-                    .split('_')
-                    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                    .join(' ')
-                )}
-                checked={tagsPassedIn.some(te => te.name === t)}
-                onChange={() => handleUtilityTagCheckbox(t)}
-              />
-            ))}
-          </fieldset-section>
-        )}
+        {experimentalFeature &&
+        onSelect && ( // onSelect ensures this does not appear on TagFollow
+            <fieldset-section>
+              <label>{__('Control Tags')}</label>
+              {UTILITY_TAGS.map(t => (
+                <FormField
+                  key={t}
+                  name={t}
+                  type="checkbox"
+                  blockWrap={false}
+                  label={__(
+                    t
+                      .split('_')
+                      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                      .join(' ')
+                  )}
+                  checked={tagsPassedIn.some(te => te.name === t)}
+                  onChange={() => handleUtilityTagCheckbox(t)}
+                />
+              ))}
+            </fieldset-section>
+          )}
       </Form>
     </React.Fragment>
   );
