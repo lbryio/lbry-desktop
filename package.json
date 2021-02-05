@@ -158,7 +158,7 @@
     "postcss-loader": "^3.0.0",
     "postcss-rtl": "^1.7.3",
     "preprocess-loader": "^0.3.0",
-    "prettier": "^1.11.1",
+    "prettier": "^2.2.1",
     "prop-types": "^15.6.2",
     "qrcode.react": "^0.8.0",
     "raw-loader": "^2.0.0",
