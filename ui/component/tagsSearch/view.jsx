@@ -168,7 +168,7 @@ export default function TagsSearch(props: Props) {
             )}
           </label>
           <ul className="tags--remove">
-            {!tagsPassedIn.length && <Tag key={`placeholder-tag`} name={'example'} disabled type={'remove'} />}
+            {countWithoutSpecialTags === 0 && <Tag key={`placeholder-tag`} name={'example'} disabled type={'remove'} />}
             {Boolean(tagsPassedIn.length) &&
               tagsPassedIn
                 .filter(t => !UTILITY_TAGS.includes(t.name))
