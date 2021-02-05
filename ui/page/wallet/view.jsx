@@ -10,14 +10,14 @@ import YrblWalletEmpty from 'component/yrblWalletEmpty';
 type Props = {
   history: { action: string, push: string => void, replace: string => void },
   location: { search: string, pathname: string },
-  balance: number,
+  totalBalance: ?number,
 };
 
 const WalletPage = (props: Props) => {
-  const { location, balance } = props;
+  const { location, totalBalance } = props;
   const { search } = location;
-  const showIntro = balance === 0;
-  const loading = balance === undefined;
+  const showIntro = totalBalance === 0;
+  const loading = totalBalance === undefined;
 
   return (
     <Page>
