@@ -229,7 +229,7 @@ export default function TagsSearch(props: Props) {
                   blockWrap={false}
                   label={__(
                     t
-                      .split('_')
+                      .split('-')
                       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
                       .join(' ')
                   )}
