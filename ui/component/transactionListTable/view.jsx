@@ -15,7 +15,7 @@ type Props = {
 
 function TransactionListTable(props: Props) {
   const { emptyMessage, rewards, loading, txos } = props;
-  const REVOCABLE_TYPES = ['channel', 'stream', 'repost', 'support', 'claim'];
+  const REVOCABLE_TYPES = ['channel', 'stream', 'repost', 'support', 'claim', 'collection'];
   function revokeClaim(tx: any, cb: (string) => void) {
     props.openModal(MODALS.CONFIRM_CLAIM_REVOKE, { tx, cb });
   }

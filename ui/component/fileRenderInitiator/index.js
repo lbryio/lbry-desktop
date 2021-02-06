@@ -39,11 +39,11 @@ const select = (state, props) => ({
   authenticated: selectUserVerifiedEmail(state),
 });
 
-const perform = dispatch => ({
-  play: uri => {
+const perform = (dispatch) => ({
+  play: (uri) => {
     dispatch(doSetPrimaryUri(uri));
     dispatch(doSetPlayingUri({ uri }));
-    dispatch(doPlayUri(uri, undefined, undefined, fileInfo => dispatch(doAnaltyicsPurchaseEvent(fileInfo))));
+    dispatch(doPlayUri(uri, undefined, undefined, (fileInfo) => dispatch(doAnaltyicsPurchaseEvent(fileInfo))));
   },
 });
 

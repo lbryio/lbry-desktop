@@ -13,7 +13,7 @@ import Card from 'component/common/card';
 import AbandonedChannelPreview from 'component/abandonedChannelPreview';
 import Yrbl from 'component/yrbl';
 import { formatLbryUrlForWeb } from 'util/url';
-import { parseURI } from 'lbry-redux';
+import { parseURI, COLLECTIONS_CONSTS } from 'lbry-redux';
 
 type Props = {
   isResolvingUri: boolean,
@@ -31,6 +31,11 @@ type Props = {
   claimIsPending: boolean,
   isLivestream: boolean,
   beginPublish: (string) => void,
+  collectionId: string,
+  collection: Collection,
+  collectionUrls: Array<string>,
+  isResolvingCollection: boolean,
+  fetchCollectionItems: (string) => void,
 };
 
 function ShowPage(props: Props) {
@@ -46,7 +51,14 @@ function ShowPage(props: Props) {
     claimIsPending,
     isLivestream,
     beginPublish,
+    fetchCollectionItems,
+    collectionId,
+    collection,
+    collectionUrls,
+    isResolvingCollection,
   } = props;
+
+  const { search } = location;
 
   const signingChannel = claim && claim.signing_channel;
   const canonicalUrl = claim && claim.canonical_url;
@@ -55,6 +67,15 @@ function ShowPage(props: Props) {
   const isMine = claim && claim.is_my_output;
   const { contentName, isChannel } = parseURI(uri);
   const { push } = useHistory();
+  const isCollection = claim && claim.value_type === 'collection';
+  const resolvedCollection = collection && collection.id; // not null
+
+  // changed this from 'isCollection' to resolve strangers' collections.
+  React.useEffect(() => {
+    if (collectionId && !resolvedCollection) {
+      fetchCollectionItems(collectionId);
+    }
+  }, [isCollection, resolvedCollection, collectionId, fetchCollectionItems]);
 
   useEffect(() => {
     // @if TARGET='web'
@@ -84,12 +105,24 @@ function ShowPage(props: Props) {
     const newUrl = formatLbryUrlForWeb(claim.canonical_url);
     return <Redirect to={newUrl} />;
   }
+  let urlForCollectionZero;
+  if (claim && claim.value_type === 'collection' && collectionUrls && collectionUrls.length) {
+    urlForCollectionZero = collectionUrls && collectionUrls[0];
+    const claimId = claim.claim_id;
+    const urlParams = new URLSearchParams(search);
+    urlParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, claimId);
+    const newUrl = formatLbryUrlForWeb(`${urlForCollectionZero}?${urlParams.toString()}`);
+    return <Redirect to={newUrl} />;
+  }
 
   let innerContent = '';
   if (!claim || (claim && !claim.name)) {
     innerContent = (
       <Page>
-        {(claim === undefined || isResolvingUri) && (
+        {(claim === undefined ||
+          isResolvingUri ||
+          isResolvingCollection || // added for collection
+          (claim && claim.value_type === 'collection' && !urlForCollectionZero)) && ( // added for collection - make sure we accept urls = []
           <div className="main--empty">
             <Spinner delayed />
           </div>

@@ -83,7 +83,7 @@ function SocialShare(props: Props) {
             name="share_start_at"
             value={startTime}
             disabled={!includeStartTime}
-            onChange={event => setStartTime(event.target.value)}
+            onChange={(event) => setStartTime(event.target.value)}
           />
         </div>
       )}
@@ -166,7 +166,7 @@ function SocialShare(props: Props) {
       {showClaimLinks && (
         <div className="section">
           <CopyableText label={__('LBRY URL')} copyable={`lbry://${lbryUrl}`} />
-          {!isChannel && <CopyableText label={__('Download Link')} copyable={downloadUrl} />}
+          {Boolean(isStream) && <CopyableText label={__('Download Link')} copyable={downloadUrl} />}
         </div>
       )}
     </React.Fragment>

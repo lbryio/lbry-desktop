@@ -4,7 +4,7 @@ import { normalizeURI } from 'lbry-redux';
 import FilePrice from 'component/filePrice';
 import ClaimInsufficientCredits from 'component/claimInsufficientCredits';
 import FileSubtitle from 'component/fileSubtitle';
-import FileAuthor from 'component/fileAuthor';
+import ClaimAuthor from 'component/claimAuthor';
 import Card from 'component/common/card';
 import * as ICONS from 'constants/icons';
 import Icon from 'component/common/icon';
@@ -81,7 +81,7 @@ function FileTitleSection(props: Props) {
             </div>
           ) : (
             <div className="section">
-              <FileAuthor uri={uri} />
+              <ClaimAuthor uri={uri} />
               <FileDescription uri={uri} />
             </div>
           )

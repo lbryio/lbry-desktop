@@ -46,6 +46,7 @@ type Props = {
   doClearPurchasedUriSuccess: () => void,
   user: ?User,
   homepageData: any,
+  hasExperimentalUi: boolean,
 };
 
 type SideNavLink = {
@@ -73,6 +74,7 @@ function SideNavigation(props: Props) {
     homepageData,
     user,
     followedTags,
+    hasExperimentalUi,
   } = props;
 
   const { EXTRA_SIDEBAR_LINKS } = homepageData;
@@ -219,13 +221,27 @@ function SideNavigation(props: Props) {
 
   SIDE_LINKS.push(HOME);
   SIDE_LINKS.push(RECENT_FROM_FOLLOWING);
+  if (!SIMPLE_SITE && hasExperimentalUi) {
+    FULL_LINKS.push({
+      title: 'Lists',
+      link: `/$/${PAGES.LISTS}`,
+      icon: ICONS.STACK,
+      hideForUnauth: true,
+    });
+  }
+  if (!SIMPLE_SITE) {
+    SIDE_LINKS.push(...FULL_LINKS);
+  } else if (SIMPLE_SITE && hasExperimentalUi) {
+    SIDE_LINKS.push({
+      title: 'Lists',
+      link: `/$/${PAGES.LISTS}`,
+      icon: ICONS.STACK,
+      hideForUnauth: true,
+    });
+  }
 
   if (EXTRA_SIDEBAR_LINKS) {
     SIDE_LINKS.push(...EXTRA_SIDEBAR_LINKS);
-  }
-
-  if (!SIMPLE_SITE) {
-    SIDE_LINKS.push(...FULL_LINKS);
   }
 
   const [pulseLibrary, setPulseLibrary] = React.useState(false);

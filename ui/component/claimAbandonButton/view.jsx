@@ -6,13 +6,22 @@ import Button from 'component/button';
 
 type Props = {
   doOpenModal: (string, {}) => void,
-  claim: StreamClaim,
-  abandonActionCallback: any => void,
+  claim: Claim,
+  abandonActionCallback: (any) => void,
   iconSize: number,
 };
 
 export default function ClaimAbandonButton(props: Props) {
   const { doOpenModal, claim, abandonActionCallback } = props;
+  const { value_type } = claim || {};
+  let buttonLabel;
+  if (value_type === 'channel') {
+    buttonLabel = __('Delete Channel');
+  } else if (value_type === 'collection') {
+    buttonLabel = __('Delete List');
+  } else if (value_type === 'stream') {
+    buttonLabel = __('Delete Publish');
+  }
 
   function abandonClaim() {
     doOpenModal(MODALS.CONFIRM_CLAIM_REVOKE, { claim: claim, cb: abandonActionCallback });
@@ -21,7 +30,7 @@ export default function ClaimAbandonButton(props: Props) {
   return (
     <Button
       disabled={!claim}
-      label={__('Delete Channel')}
+      label={buttonLabel}
       button="alt"
       iconColor="red"
       icon={ICONS.DELETE}

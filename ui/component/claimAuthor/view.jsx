@@ -7,7 +7,7 @@ type Props = {
   hideActions?: boolean,
 };
 
-function FileAuthor(props: Props) {
+function ClaimAuthor(props: Props) {
   const { channelUri, hideActions } = props;
 
   return channelUri ? (
@@ -17,4 +17,4 @@ function FileAuthor(props: Props) {
   );
 }
 
-export default FileAuthor;
+export default ClaimAuthor;

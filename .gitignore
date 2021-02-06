@@ -23,8 +23,12 @@ package-lock.json
 /web/.env.defaults
 /custom/*
 /custom/homepages/*
+/custom/content/*
+!/custom/content/default.json
+!/custom/content/test.json
 !/custom/homepages/.gitkeep
 !/custom/homepages
+!/custom/content
 !/custom/homepage.example.js
 !/custom/robots.disallowall
 !/custom/robots.allowall

@@ -29,7 +29,7 @@ type Props = {
   channelIds?: Array<string>,
   tileLayout: boolean,
   doSetClientSetting: (string, boolean, ?boolean) => void,
-  setPage: number => void,
+  setPage: (number) => void,
   hideFilters: boolean,
   searchInLanguage: boolean,
   languageSetting: string,
@@ -74,7 +74,7 @@ function ClaimListHeader(props: Props) {
   const channelIdsInUrl = urlParams.get(CS.CHANNEL_IDS_KEY);
   const channelIdsParam = channelIdsInUrl ? channelIdsInUrl.split(',') : channelIds;
   const feeAmountParam = urlParams.get('fee_amount') || feeAmount || CS.FEE_AMOUNT_ANY;
-  const showDuration = !(claimType && claimType === CS.CLAIM_CHANNEL);
+  const showDuration = !(claimType && claimType === CS.CLAIM_CHANNEL && claimType === CS.CLAIM_COLLECTION);
   const isFiltered = () =>
     Boolean(
       urlParams.get(CS.FRESH_KEY) ||
@@ -144,7 +144,7 @@ function ClaimListHeader(props: Props) {
 
   function buildUrl(delta) {
     const newUrlParams = new URLSearchParams(location.search);
-    CS.KEYS.forEach(k => {
+    CS.KEYS.forEach((k) => {
       // $FlowFixMe get() can return null
       if (urlParams.get(k) !== null) newUrlParams.set(k, urlParams.get(k));
     });
@@ -161,7 +161,11 @@ function ClaimListHeader(props: Props) {
         }
         break;
       case CS.CONTENT_KEY:
-        if (delta.value === CS.CLAIM_CHANNEL || delta.value === CS.CLAIM_REPOST) {
+        if (
+          delta.value === CS.CLAIM_CHANNEL ||
+          delta.value === CS.CLAIM_REPOST ||
+          delta.value === CS.CLAIM_COLLECTION
+        ) {
           newUrlParams.delete(CS.DURATION_KEY);
           newUrlParams.set(CS.CONTENT_KEY, delta.value);
         } else if (delta.value === CS.CONTENT_ALL) {
@@ -212,13 +216,13 @@ function ClaimListHeader(props: Props) {
     <>
       <div className="claim-search__wrapper">
         <div className="claim-search__top">
-          <div className="claim-search__menu-group">
-            {!hideFilters &&
-              CS.ORDER_BY_TYPES.map(type => (
+          {!hideFilters && (
+            <div className="claim-search__menu-group">
+              {CS.ORDER_BY_TYPES.map((type) => (
                 <Button
                   key={type}
                   button="alt"
-                  onClick={e =>
+                  onClick={(e) =>
                     handleChange({
                       key: CS.ORDER_BY_KEY,
                       value: type,
@@ -233,8 +237,8 @@ function ClaimListHeader(props: Props) {
                   label={__(toCapitalCase(type))}
                 />
               ))}
-          </div>
-
+            </div>
+          )}
           <div className="claim-search__menu-group">
             {!hideAdvancedFilter && !SIMPLE_SITE && (
               <Button
@@ -276,21 +280,23 @@ function ClaimListHeader(props: Props) {
                     name="trending_time"
                     label={__('How Fresh')}
                     value={freshnessParam}
-                    onChange={e =>
+                    onChange={(e) =>
                       handleChange({
                         key: CS.FRESH_KEY,
                         value: e.target.value,
                       })
                     }
                   >
-                    {CS.FRESH_TYPES.map(time => (
+                    {CS.FRESH_TYPES.map((time) => (
                       <option key={time} value={time}>
                         {/* i18fixme */}
                         {time === CS.FRESH_DAY && __('Today')}
-                        {time !== CS.FRESH_ALL &&
-                          time !== CS.FRESH_DEFAULT &&
-                          time !== CS.FRESH_DAY &&
-                          __('This ' + toCapitalCase(time)) /* yes, concat before i18n, since it is read from const */}
+                        {
+                          time !== CS.FRESH_ALL &&
+                            time !== CS.FRESH_DEFAULT &&
+                            time !== CS.FRESH_DAY &&
+                            __('This ' + toCapitalCase(time)) /* yes, concat before i18n, since it is read from const */
+                        }
                         {time === CS.FRESH_ALL && __('All time')}
                         {time === CS.FRESH_DEFAULT && __('Default')}
                       </option>
@@ -314,18 +320,19 @@ function ClaimListHeader(props: Props) {
                     name="claimType"
                     label={__('Content Type')}
                     value={contentTypeParam || CS.CONTENT_ALL}
-                    onChange={e =>
+                    onChange={(e) =>
                       handleChange({
                         key: CS.CONTENT_KEY,
                         value: e.target.value,
                       })
                     }
                   >
-                    {CS.CONTENT_TYPES.map(type => {
+                    {CS.CONTENT_TYPES.map((type) => {
                       if (type !== CS.CLAIM_CHANNEL || (type === CS.CLAIM_CHANNEL && !channelIdsParam)) {
                         return (
                           <option key={type} value={type}>
                             {/* i18fixme */}
+                            {type === CS.CLAIM_COLLECTION && __('List')}
                             {type === CS.CLAIM_CHANNEL && __('Channel')}
                             {type === CS.CLAIM_REPOST && __('Repost')}
                             {type === CS.FILE_VIDEO && __('Video')}
@@ -358,7 +365,7 @@ function ClaimListHeader(props: Props) {
                     name="claimType"
                     label={__('Language')}
                     value={languageValue || CS.LANGUAGES_ALL}
-                    onChange={e =>
+                    onChange={(e) =>
                       handleChange({
                         key: CS.LANGUAGE_KEY,
                         value: e.target.value,
@@ -398,14 +405,14 @@ function ClaimListHeader(props: Props) {
                       )
                     }
                     value={durationParam || CS.DURATION_ALL}
-                    onChange={e =>
+                    onChange={(e) =>
                       handleChange({
                         key: CS.DURATION_KEY,
                         value: e.target.value,
                       })
                     }
                   >
-                    {CS.DURATION_TYPES.map(dur => (
+                    {CS.DURATION_TYPES.map((dur) => (
                       <option key={dur} value={dur}>
                         {/* i18fixme */}
                         {dur === CS.DURATION_SHORT && __('Short (< 4 minutes)')}
@@ -428,7 +435,7 @@ function ClaimListHeader(props: Props) {
                   type="select"
                   name="paidcontent"
                   value={feeAmountParam}
-                  onChange={e =>
+                  onChange={(e) =>
                     handleChange({
                       key: CS.FEE_AMOUNT_KEY,
                       value: e.target.value,

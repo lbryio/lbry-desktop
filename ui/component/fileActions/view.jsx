@@ -10,6 +10,7 @@ import { buildURI } from 'lbry-redux';
 import * as RENDER_MODES from 'constants/file_render_modes';
 import { useIsMobile } from 'effects/use-screensize';
 import ClaimSupportButton from 'component/claimSupportButton';
+import ClaimCollectionAddButton from 'component/claimCollectionAddButton';
 import { useHistory } from 'react-router';
 import FileReactions from 'component/fileReactions';
 
@@ -27,6 +28,7 @@ type Props = {
   clearPlayingUri: () => void,
   isLivestreamClaim: boolean,
   reactionsDisabled: boolean,
+  hasExperimentalUi: boolean,
 };
 
 function FileActions(props: Props) {
@@ -44,6 +46,7 @@ function FileActions(props: Props) {
     doToast,
     isLivestreamClaim,
     reactionsDisabled,
+    hasExperimentalUi,
   } = props;
   const {
     push,
@@ -86,6 +89,7 @@ function FileActions(props: Props) {
     <>
       {ENABLE_FILE_REACTIONS && !reactionsDisabled && <FileReactions uri={uri} />}
       <ClaimSupportButton uri={uri} fileAction />
+      {hasExperimentalUi && <ClaimCollectionAddButton uri={uri} fileAction />}
       <Button
         button="alt"
         className="button--file-action"

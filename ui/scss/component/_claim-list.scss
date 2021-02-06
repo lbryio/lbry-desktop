@@ -411,6 +411,12 @@
 .claim-grid__title {
   font-weight: 300;
   font-size: var(--font-large);
+  margin-right: var(--spacing-m);
+}
+
+.claim-grid__title--empty {
+  color: var(--color-text-help);
+  margin-left: var(--spacing-s);
 }
 
 .claim-grid__title--first {
@@ -453,6 +459,10 @@
 
     .claim__menu-button {
       display: block;
+    }
+    .collection-preview__overlay-thumbs {
+      opacity: 1;
+      transition: 0.3s;
     }
   }
 
@@ -537,6 +547,16 @@
   }
 }
 
+.claim-tile-collection__info {
+  display: flex;
+  color: var(--color-subtitle);
+
+  .channel-thumbnail {
+    @include handleChannelGif(2.1rem);
+    margin-right: var(--spacing-s);
+  }
+}
+
 .claim-tile__about {
   font-size: var(--font-xsmall);
   color: var(--color-text-subtitle);
@@ -578,6 +598,35 @@
   .file-price {
     padding: 0.1rem;
   }
+}
+
+.claim-preview__claim-property-overlay {
+  position: absolute;
+  bottom: var(--spacing-xxs);
+  right: var(--spacing-xxs);
+  background-color: var(--color-black);
+  padding: 0.3rem;
+  border-radius: var(--border-radius);
+  opacity: 0.7;
+  z-index: 2;
+
+  .claim-preview__overlay-properties {
+    color: var(--color-white);
+  }
+
+  .file-price {
+    padding: 0.1rem;
+  }
+}
+
+.claim-preview__collection-wrapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  z-index: 2;
+  overflow: hidden;
 }
 
 .claim-preview--tile {
@@ -676,4 +725,53 @@
   top: auto;
   @extend .button--alt;
   padding: 0 var(--spacing-xxs);
+}
+
+.claim-preview__overlay-properties {
+  display: flex;
+  position: relative;
+  align-items: center;
+  color: var(--color-text-help);
+  white-space: nowrap;
+  font-size: var(--font-xsmall);
+  line-height: 1.2;
+  margin-left: 0;
+  margin-top: auto;
+
+  & > *:not(:last-child) {
+    margin-right: var(--spacing-xxs);
+  }
+}
+
+.claim-preview__overlay-properties--small {
+  line-height: 0.9;
+  font-size: var(--font-xxsmall);
+}
+
+.claim__tags {
+  font-size: var(--font-xsmall);
+  line-height: 1.2;
+  margin-left: 0;
+  margin-top: auto;
+  position: relative;
+
+  .tag {
+    @media (max-width: $breakpoint-xsmall) {
+      display: none;
+    }
+    font-size: var(--font-xsmall);
+  }
+
+  & > *:not(:last-child) {
+    margin-right: var(--spacing-xxs);
+  }
+}
+
+.claim__tags--large {
+  flex-wrap: wrap;
+  margin-left: 0;
+
+  & > * {
+    margin-top: var(--spacing-s);
+  }
 }

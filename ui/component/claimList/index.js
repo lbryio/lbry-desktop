@@ -9,6 +9,4 @@ const select = (state) => ({
   claimsByUri: selectClaimsByUri(state),
 });
 
-const perform = (dispatch) => ({});
-
-export default connect(select, perform)(ClaimList);
+export default connect(select)(ClaimList);

@@ -19,7 +19,7 @@ type Props = {
   fetchingFileList: boolean,
   downloadedUrls: Array<string>,
   downloadedUrlsCount: ?number,
-  history: { replace: string => void },
+  history: { replace: (string) => void },
   query: string,
   doPurchaseList: () => void,
   myDownloads: Array<string>,

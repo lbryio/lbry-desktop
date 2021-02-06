@@ -51,8 +51,9 @@ export const CLAIM_TYPE = 'claim_type';
 export const CLAIM_CHANNEL = 'channel';
 export const CLAIM_STREAM = 'stream';
 export const CLAIM_REPOST = 'repost';
-export const CLAIM_TYPES = [CLAIM_CHANNEL, CLAIM_REPOST, CLAIM_STREAM];
+export const CLAIM_COLLECTION = 'collection';
+export const CLAIM_TYPES = [CLAIM_CHANNEL, CLAIM_REPOST, CLAIM_STREAM, CLAIM_COLLECTION];
 
 export const CONTENT_ALL = 'all';
-export const CONTENT_TYPES = [CONTENT_ALL, CLAIM_CHANNEL, CLAIM_REPOST, ...FILE_TYPES];
+export const CONTENT_TYPES = [CONTENT_ALL, CLAIM_CHANNEL, CLAIM_REPOST, CLAIM_COLLECTION, ...FILE_TYPES];
 export const KEYS = [ORDER_BY_KEY, TAGS_KEY, FRESH_KEY, CONTENT_KEY, DURATION_KEY];

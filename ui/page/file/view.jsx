@@ -8,6 +8,7 @@ import FileRenderInitiator from 'component/fileRenderInitiator';
 import FileRenderInline from 'component/fileRenderInline';
 import FileRenderDownload from 'component/fileRenderDownload';
 import RecommendedContent from 'component/recommendedContent';
+import CollectionContent from 'component/collectionContentSidebar';
 import CommentsList from 'component/commentsList';
 import PostViewer from 'component/postViewer';
 import Empty from 'component/common/empty';
@@ -26,6 +27,8 @@ type Props = {
   isMature: boolean,
   linkedComment: any,
   setPrimaryUri: (?string) => void,
+  collection?: Collection,
+  collectionId: string,
   videoTheaterMode: boolean,
   commentsDisabled: boolean,
 };
@@ -45,6 +48,8 @@ function FilePage(props: Props) {
     setPrimaryUri,
     videoTheaterMode,
     commentsDisabled,
+    collection,
+    collectionId,
   } = props;
   const cost = costInfo ? costInfo.cost : null;
   const hasFileInfo = fileInfo !== undefined;
@@ -115,8 +120,12 @@ function FilePage(props: Props) {
 
   if (obscureNsfw && isMature) {
     return (
-      <Page>
-        <FileTitleSection uri={uri} isNsfwBlocked />
+      <Page className="file-page" filePage isMarkdown={isMarkdown}>
+        <div className={classnames('section card-stack', `file-page__${renderMode}`)}>
+          <FileTitleSection uri={uri} isNsfwBlocked />
+        </div>
+        {collection && !isMarkdown && !videoTheaterMode && <CollectionContent id={collectionId} uri={uri} />}
+        {!collection && !isMarkdown && !videoTheaterMode && <RecommendedContent uri={uri} />}
       </Page>
     );
   }
@@ -133,12 +142,13 @@ function FilePage(props: Props) {
               {commentsDisabled && <Empty text={__('The creator of this content has disabled comments.')} />}
               {!commentsDisabled && <CommentsList uri={uri} linkedComment={linkedComment} />}
             </div>
-            {videoTheaterMode && <RecommendedContent uri={uri} />}
+            {!collection && !isMarkdown && videoTheaterMode && <RecommendedContent uri={uri} />}
+            {collection && !isMarkdown && videoTheaterMode && <CollectionContent id={collectionId} uri={uri} />}
           </div>
         )}
       </div>
-
-      {!isMarkdown && !videoTheaterMode && <RecommendedContent uri={uri} />}
+      {collection && !isMarkdown && !videoTheaterMode && <CollectionContent id={collectionId} uri={uri} />}
+      {!collection && !isMarkdown && !videoTheaterMode && <RecommendedContent uri={uri} />}
       {isMarkdown && (
         <div className="file-page__post-comments">
           <CommentsList uri={uri} linkedComment={linkedComment} />

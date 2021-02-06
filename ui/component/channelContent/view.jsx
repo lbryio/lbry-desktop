@@ -32,6 +32,7 @@ type Props = {
   tileLayout: boolean,
   viewHiddenChannels: boolean,
   doResolveUris: (Array<string>, boolean) => void,
+  claimType: string,
 };
 
 function ChannelContent(props: Props) {
@@ -49,6 +50,7 @@ function ChannelContent(props: Props) {
     tileLayout,
     viewHiddenChannels,
     doResolveUris,
+    claimType,
   } = props;
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -58,6 +60,7 @@ function ChannelContent(props: Props) {
   } = useHistory();
   const url = `${pathname}${search}`;
   const claimId = claim && claim.claim_id;
+  const showFilters = !claimType || claimType === 'stream';
 
   function handleInputChange(e) {
     const { value } = e.target;
@@ -134,25 +137,30 @@ function ChannelContent(props: Props) {
         <ClaimListDiscover
           showHiddenByUser={viewHiddenChannels}
           forceShowReposts
+          hideFilters={!showFilters}
+          hideAdvancedFilter={!showFilters}
           tileLayout={tileLayout}
           uris={searchResults}
           channelIds={[claim.claim_id]}
+          claimType={claimType}
           feeAmount={CS.FEE_AMOUNT_ANY}
           defaultOrderBy={CS.ORDER_BY_NEW}
           pageSize={defaultPageSize}
           infiniteScroll={defaultInfiniteScroll}
           injectedItem={SHOW_ADS && !isAuthenticated && IS_WEB && <Ads type="video" />}
           meta={
-            <Form onSubmit={() => {}} className="wunderbar--inline">
-              <Icon icon={ICONS.SEARCH} />
-              <FormField
-                className="wunderbar__input--inline"
-                value={searchQuery}
-                onChange={handleInputChange}
-                type="text"
-                placeholder={__('Search')}
-              />
-            </Form>
+            showFilters && (
+              <Form onSubmit={() => {}} className="wunderbar--inline">
+                <Icon icon={ICONS.SEARCH} />
+                <FormField
+                  className="wunderbar__input--inline"
+                  value={searchQuery}
+                  onChange={handleInputChange}
+                  type="text"
+                  placeholder={__('Search')}
+                />
+              </Form>
+            )
           }
           isChannel
           channelIsMine={channelIsMine}

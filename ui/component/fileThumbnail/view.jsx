@@ -52,6 +52,19 @@ function FileThumbnail(props: Props) {
 
   const thumnailUrl = url ? url.replace(/'/g, "\\'") : '';
 
+  if (!hasResolvedClaim) {
+    return (
+      <div
+        ref={thumbnailRef}
+        data-background-image={thumnailUrl}
+        className={classnames('media__thumb', className, {
+          'media__thumb--resolving': !hasResolvedClaim,
+        })}
+      >
+        {children}
+      </div>
+    );
+  }
   return (
     <div
       ref={thumbnailRef}

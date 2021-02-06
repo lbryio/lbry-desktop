@@ -9,7 +9,7 @@ type Props = {
   claim: StreamClaim,
   fileInfo: FileListItem,
   metadata: StreamMetadata,
-  openFolder: string => void,
+  openFolder: (string) => void,
   contentType: string,
   user: ?any,
 };
@@ -58,7 +58,7 @@ class FileDetails extends PureComponent<Props> {
               </div>
             )}
 
-            {languages && (
+            {mediaType && (
               <div className="media__details">
                 <span>{__('Media Type')}</span>
                 <span>{mediaType}</span>

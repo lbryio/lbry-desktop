@@ -71,7 +71,7 @@ class IconComponent extends React.PureComponent<Props> {
       <Icon
         title={tooltipText}
         size={size || (sectionIcon ? 20 : 16)}
-        className={classnames(`icon icon--${icon}`, className)}
+        className={classnames(`icon icon--${icon}`, className, { 'color-override': iconColor })}
         color={color}
         {...rest}
       />

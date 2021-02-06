@@ -10,6 +10,8 @@ import {
   makeSelectTagInClaimOrChannelForUri,
   makeSelectClaimIsMine,
   makeSelectClaimIsStreamPlaceholder,
+  makeSelectCollectionForId,
+  COLLECTIONS_CONSTS,
 } from 'lbry-redux';
 import { makeSelectCostInfoForUri, doFetchCostInfoForUri } from 'lbryinc';
 import { selectShowMatureContent, makeSelectClientSetting } from 'redux/selectors/settings';
@@ -23,6 +25,7 @@ const select = (state, props) => {
   const { search } = props.location;
   const urlParams = new URLSearchParams(search);
   const linkedCommentId = urlParams.get('lc');
+  const collectionId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID);
 
   return {
     linkedComment: makeSelectCommentForCommentId(linkedCommentId)(state),
@@ -36,6 +39,8 @@ const select = (state, props) => {
     commentsDisabled: makeSelectTagInClaimOrChannelForUri(props.uri, DISABLE_COMMENTS_TAG)(state),
     claimIsMine: makeSelectClaimIsMine(props.uri)(state),
     isLivestream: makeSelectClaimIsStreamPlaceholder(props.uri)(state),
+    collection: makeSelectCollectionForId(collectionId)(state),
+    collectionId,
   };
 };
 

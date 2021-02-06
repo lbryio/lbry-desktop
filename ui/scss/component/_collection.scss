@@ -1,0 +1,133 @@
+.collection-preview__info {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.collection-preview__items {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  card {
+    pointer-events: none;
+  }
+
+  .claim-preview--tile {
+    z-index: 5;
+    margin-bottom: 0;
+    width: 100%;
+    box-shadow: 1px 1px 5px 2px #44444420;
+  }
+}
+
+.collection-preview__overlay-thumbs {
+  top: 0;
+  bottom: 0;
+  position: relative;
+  background-color: black;
+  opacity: 0;
+}
+
+.collection-img__hidden {
+  display: none;
+}
+.collection-preview__overlay-grid {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  opacity: 1;
+  width: 50%;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  .collection-preview__overlay-grid-items {
+    position: relative;
+    transform: scale(0.85);
+    .media__thumb {
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+  }
+}
+
+.collection-preview__overlay-side {
+  position: absolute;
+  opacity: 0.7;
+  background: black;
+  width: 50%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  height: 1000px;
+}
+
+.collection-title__hasEdits {
+  color: var(--color-primary);
+}
+
+.collection-select__item {
+  display: flex;
+  &:first-of-type {
+    margin-top: var(--spacing-xs);
+  }
+  margin-bottom: var(--spacing-xs);
+  margin-left: var(--spacing-xxs);
+}
+
+.icon-collection-select {
+  vertical-align: middle;
+  margin-right: var(--spacing-xs);
+}
+
+.collection-preview__edit-buttons {
+  display: flex;
+  flex-direction: row;
+  margin-top: var(--spacing-xs);
+  margin-bottom: var(--spacing-xs);
+}
+
+.collection-preview__edit-group {
+  &:not(:last-of-type) {
+    margin-right: var(--spacing-s);
+  }
+  margin-right: var(--spacing-s);
+  button {
+    @media (max-width: $breakpoint-small) {
+      padding: var(--spacing-s) var(--spacing-s);
+    }
+  }
+}
+
+.collection-edit__header {
+  position: relative;
+  background-image: var(--color-card-background);
+  display: flex;
+  align-items: flex-end;
+  box-sizing: content-box;
+  color: #fff;
+}
+
+.collection-edit__thumb {
+  position: absolute;
+  top: 0;
+  left: var(--spacing-l);
+  margin-top: calc(var(--spacing-m) * 7);
+  z-index: $metadata-z-index;
+
+  > * {
+    padding: 0 var(--spacing-xs);
+
+    &:not(:last-child) {
+      margin-right: var(--spacing-m);
+    }
+  }
+
+  @media (max-width: $breakpoint-small) {
+    margin-top: 0;
+
+    .button {
+      margin-top: var(--spacing-l);
+    }
+  }
+}

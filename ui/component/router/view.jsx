@@ -24,6 +24,7 @@ import RewardsPage from 'page/rewards';
 import FileListPublished from 'page/fileListPublished';
 import InvitePage from 'page/invite';
 import SearchPage from 'page/search';
+import ListsPage from 'page/lists';
 import LibraryPage from 'page/library';
 import WalletPage from 'page/wallet';
 import TagsFollowingPage from 'page/tagsFollowing';
@@ -55,6 +56,7 @@ import SwapPage from 'page/swap';
 import NotificationsPage from 'page/notifications';
 import SignInWalletPasswordPage from 'page/signInWalletPassword';
 import YoutubeSyncPage from 'page/youtubeSync';
+import CollectionPage from 'page/collection';
 
 import { LINKED_COMMENT_QUERY_PARAM } from 'constants/comment';
 import { parseURI, isURIValid } from 'lbry-redux';
@@ -256,6 +258,7 @@ function AppRouter(props: Props) {
       <Route path={`/$/${PAGES.INVITE}/:referrer`} exact component={InvitedPage} />
       <Route path={`/$/${PAGES.CHECKOUT}`} exact component={CheckoutPage} />
       <Route path={`/$/${PAGES.REPORT_CONTENT}`} exact component={ReportContentPage} />
+      <Route {...props} path={`/$/${PAGES.LIST}/:collectionId`} component={CollectionPage} />
 
       <PrivateRoute {...props} exact path={`/$/${PAGES.YOUTUBE_SYNC}`} component={YoutubeSyncPage} />
       <PrivateRoute {...props} exact path={`/$/${PAGES.TAGS_FOLLOWING}`} component={TagsFollowingPage} />
@@ -282,6 +285,7 @@ function AppRouter(props: Props) {
       <PrivateRoute {...props} path={`/$/${PAGES.REWARDS}`} exact component={RewardsPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.REWARDS_VERIFY}`} component={RewardsVerifyPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.LIBRARY}`} component={LibraryPage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.LISTS}`} component={ListsPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.TAGS_FOLLOWING_MANAGE}`} component={TagsFollowingManagePage} />
       <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_BLOCKED_MUTED}`} component={ListBlockedPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_CREATOR}`} component={SettingsCreatorPage} />

@@ -3,8 +3,8 @@ import * as React from 'react';
 import * as ICONS from 'constants/icons';
 import * as MODALS from 'constants/modal_types';
 import { formatCredits } from 'lbry-redux';
-import FileAuthor from 'component/fileAuthor';
 import FileDetails from 'component/fileDetails';
+import ClaimAuthor from 'component/claimAuthor';
 import FileTitle from 'component/fileTitle';
 import FileActions from 'component/fileActions';
 import FileRenderInitiator from 'component/fileRenderInitiator';
@@ -102,7 +102,7 @@ function PostViewer(props: Props) {
         </div>
       )}
 
-      <FileAuthor uri={uri} />
+      <ClaimAuthor uri={uri} />
 
       <FileRenderInitiator uri={uri} />
       <FileRenderInline uri={uri} />
