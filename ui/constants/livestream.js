@@ -1,6 +1,6 @@
-export const LIVE_STREAM_CHANNEL = '@SlavGuns';
-export const LIVE_STREAM_CHANNEL_CLAIM_ID = '6f3d20c0f872abb32701c07d5e1b667a64a29a95';
-export const BITWAVE_USERNAME = 'slavguns';
+export const LIVE_STREAM_CHANNEL = '@Xirtus';
+export const LIVE_STREAM_CHANNEL_CLAIM_ID = '24849d3c1775043f48debcff358063571815a95d';
+export const BITWAVE_USERNAME = 'xirtus';
 
 // export const LIVE_STREAM_CHANNEL = '@sy-test';
 // export const LIVE_STREAM_CHANNEL_CLAIM_ID = '84b50bafd028692c90a25b83d0929defc73154b2';
