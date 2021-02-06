@@ -4,6 +4,8 @@ import classnames from 'classnames';
 import { ComboboxOption } from '@reach/combobox';
 import FileThumbnail from 'component/fileThumbnail';
 import ChannelThumbnail from 'component/channelThumbnail';
+import FileProperties from 'component/previewOverlayProperties';
+import ClaimProperties from 'component/claimProperties';
 
 type Props = {
   claim: ?Claim,
@@ -18,6 +20,7 @@ export default function WunderbarSuggestion(props: Props) {
   }
 
   const isChannel = claim.value_type === 'channel';
+  const isCollection = claim.value_type === 'collection';
 
   return (
     <ComboboxOption value={uri}>
@@ -26,7 +29,23 @@ export default function WunderbarSuggestion(props: Props) {
           'wunderbar__suggestion--channel': isChannel,
         })}
       >
-        {isChannel ? <ChannelThumbnail uri={uri} /> : <FileThumbnail uri={uri} />}
+        {isChannel && <ChannelThumbnail uri={uri} />}
+        {!isChannel && (
+          <FileThumbnail uri={uri}>
+            {/* @if TARGET='app' */}
+            {!isCollection && (
+              <div className="claim-preview__file-property-overlay">
+                <FileProperties uri={uri} small iconOnly />
+              </div>
+            )}
+            {/* @endif */}
+            {isCollection && (
+              <div className="claim-preview__claim-property-overlay">
+                <ClaimProperties uri={uri} small iconOnly />
+              </div>
+            )}
+          </FileThumbnail>
+        )}
         <span className="wunderbar__suggestion-label">
           <div className="wunderbar__suggestion-title">{claim.value.title}</div>
           <div className="wunderbar__suggestion-name">

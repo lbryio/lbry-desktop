@@ -82,7 +82,7 @@ export default function Card(props: Props) {
                 {subtitle && <div className="card__subtitle">{subtitle}</div>}
               </div>
             </div>
-            <div>
+            <div className="card__title-actions-container">
               {titleActions && (
                 <div
                   className={classnames('card__title-actions', {

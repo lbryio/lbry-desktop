@@ -20,10 +20,11 @@ type Props = {
   pendingAmount: number,
   doOpenModal: (id: string, {}) => void,
   claimIsMine: boolean,
+  expandOverride: boolean,
 };
 
 function FileDescription(props: Props) {
-  const { uri, claim, metadata, pendingAmount, doOpenModal, claimIsMine } = props;
+  const { uri, claim, metadata, pendingAmount, doOpenModal, claimIsMine, expandOverride } = props;
   const [expanded, setExpanded] = React.useState(false);
   const [showCreditDetails, setShowCreditDetails] = React.useState(false);
   const amount = parseFloat(claim.amount) + parseFloat(pendingAmount || claim.meta.support_amount);
@@ -40,9 +41,9 @@ function FileDescription(props: Props) {
     <div>
       <div
         className={classnames({
-          'media__info-text--contracted': !expanded,
+          'media__info-text--contracted': !expanded && !expandOverride,
           'media__info-text--expanded': expanded,
-          'media__info-text--fade': !expanded,
+          'media__info-text--fade': !expanded && !expandOverride,
         })}
       >
         {description && <MarkdownPreview className="markdown-preview--description" content={description} simpleLinks />}
@@ -51,10 +52,14 @@ function FileDescription(props: Props) {
       </div>
 
       <div className="card__bottom-actions">
-        {expanded ? (
-          <Button button="link" label={__('Less')} onClick={() => setExpanded(!expanded)} />
-        ) : (
-          <Button button="link" label={__('More')} onClick={() => setExpanded(!expanded)} />
+        {!expandOverride && (
+          <>
+            {expanded ? (
+              <Button button="link" label={__('Less')} onClick={() => setExpanded(!expanded)} />
+            ) : (
+              <Button button="link" label={__('More')} onClick={() => setExpanded(!expanded)} />
+            )}
+          </>
         )}
 
         <div className="section__actions--no-margin">

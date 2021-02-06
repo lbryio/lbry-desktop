@@ -210,6 +210,28 @@ textarea {
     padding-left: $spacing-width * 2/3;
     flex: 1;
   }
+
+  .column__item--between {
+    justify-content: space-between;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    flex-direction: column;
+    .column__item:not(:first-child) {
+      padding-left: 0;
+      flex: 1;
+    }
+    & > * {
+      margin: 0;
+      margin-bottom: var(--spacing-m);
+      width: 100%;
+      flex-basis: auto;
+
+      &:first-child {
+        margin-right: 0;
+      }
+    }
+  }
 }
 
 .truncated-text {
@@ -351,6 +373,18 @@ textarea {
 .thumbnail-preview {
   width: var(--thumbnail-preview-width);
   height: var(--thumbnail-preview-height);
+  background-color: var(--color-thumbnail-background);
+  padding: var(--spacing-s);
+  font-size: var(--font-small);
+  border-radius: var(--border-radius);
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.thumbnail-picker__preview {
+  width: calc(var(--thumbnail-preview-width) * 1.5);
+  height: calc(var(--thumbnail-preview-height) * 1.5);
   background-color: var(--color-thumbnail-background);
   padding: var(--spacing-s);
   font-size: var(--font-small);

@@ -217,7 +217,9 @@
   padding: 0 var(--spacing-xxs);
 
   .icon {
-    stroke: #777;
+    &:not(.color-override) {
+      stroke: #777;
+    }
   }
 
   .button__label {
@@ -517,6 +519,33 @@ svg + .button__label {
 
   @media (max-width: $breakpoint-small) {
     padding: var(--spacing-m) var(--spacing-s);
+  }
+
+  &:first-of-type {
+    border-left-width: 1px;
+    border-top-left-radius: var(--border-radius);
+    border-bottom-left-radius: var(--border-radius);
+  }
+
+  &:last-of-type {
+    border-top-right-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
+  }
+}
+
+.button-collection-order {
+  height: 100%;
+  font-size: var(--font-base);
+  border-left-width: 0;
+  border-radius: 0;
+  margin: 0;
+  color: var(--color-text);
+  button {
+    padding: var(--spacing-xs);
+  }
+
+  @media (max-width: $breakpoint-small) {
+    padding: var(--spacing-s) var(--spacing-s);
   }
 
   &:first-of-type {

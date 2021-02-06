@@ -11,6 +11,10 @@ import {
   makeSelectClaimWasPurchased,
   makeSelectStreamingUrlForUri,
   makeSelectClaimIsStreamPlaceholder,
+  makeSelectCollectionIsMine,
+  doCollectionEdit,
+  makeSelectUrlsForCollectionId,
+  makeSelectIndexForUrlInCollection,
 } from 'lbry-redux';
 import { selectMutedChannels, makeSelectChannelIsMuted } from 'redux/selectors/blocked';
 import { selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
@@ -40,11 +44,15 @@ const select = (state, props) => ({
   streamingUrl: props.uri && makeSelectStreamingUrlForUri(props.uri)(state),
   wasPurchased: props.uri && makeSelectClaimWasPurchased(props.uri)(state),
   isLivestream: makeSelectClaimIsStreamPlaceholder(props.uri)(state),
+  isCollectionMine: makeSelectCollectionIsMine(props.collectionId)(state),
+  collectionUris: makeSelectUrlsForCollectionId(props.collectionId)(state),
+  collectionIndex: makeSelectIndexForUrlInCollection(props.uri, props.collectionId)(state),
 });
 
 const perform = (dispatch) => ({
   resolveUri: (uri) => dispatch(doResolveUri(uri)),
   getFile: (uri) => dispatch(doFileGet(uri, false)),
+  editCollection: (id, params) => dispatch(doCollectionEdit(id, params)),
 });
 
 export default connect(select, perform)(ClaimPreview);

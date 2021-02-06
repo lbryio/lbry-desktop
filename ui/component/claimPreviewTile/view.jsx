@@ -10,11 +10,12 @@ import ChannelThumbnail from 'component/channelThumbnail';
 import SubscribeButton from 'component/subscribeButton';
 import useGetThumbnail from 'effects/use-get-thumbnail';
 import { formatLbryUrlForWeb } from 'util/url';
-import { parseURI } from 'lbry-redux';
-import FileProperties from 'component/fileProperties';
+import { parseURI, COLLECTIONS_CONSTS } from 'lbry-redux';
+import PreviewOverlayProperties from 'component/previewOverlayProperties';
 import FileDownloadLink from 'component/fileDownloadLink';
 import ClaimRepostAuthor from 'component/claimRepostAuthor';
 import ClaimMenuList from 'component/claimMenuList';
+import CollectionPreviewOverlay from 'component/collectionPreviewOverlay';
 
 type Props = {
   uri: string,
@@ -43,6 +44,7 @@ type Props = {
   properties?: (Claim) => void,
   live?: boolean,
   channelIsMine?: boolean,
+  collectionId?: string,
 };
 
 function ClaimPreviewTile(props: Props) {
@@ -66,13 +68,22 @@ function ClaimPreviewTile(props: Props) {
     properties,
     live,
     channelIsMine,
+    collectionId,
   } = props;
   const isRepost = claim && claim.repost_channel_url;
+  const isCollection = claim && claim.value_type === 'collection';
+  const isStream = claim && claim.value_type === 'stream';
+  const collectionClaimId = isCollection && claim && claim.claim_id;
   const shouldFetch = claim === undefined;
   const thumbnailUrl = useGetThumbnail(uri, claim, streamingUrl, getFile, placeholder) || thumbnail;
   const canonicalUrl = claim && claim.canonical_url;
-  const navigateUrl = formatLbryUrlForWeb(canonicalUrl || uri || '/');
-
+  let navigateUrl = formatLbryUrlForWeb(canonicalUrl || uri || '/');
+  const listId = collectionId || collectionClaimId;
+  if (listId) {
+    const collectionParams = new URLSearchParams();
+    collectionParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, listId);
+    navigateUrl = navigateUrl + `?` + collectionParams.toString();
+  }
   const navLinkProps = {
     to: navigateUrl,
     onClick: (e) => e.stopPropagation(),
@@ -178,12 +189,22 @@ function ClaimPreviewTile(props: Props) {
           {!isChannel && (
             <React.Fragment>
               {/* @if TARGET='app' */}
-              <div className="claim-preview__hover-actions">
-                <FileDownloadLink uri={canonicalUrl} hideOpenButton />
-              </div>
+              {isStream && (
+                <div className="claim-preview__hover-actions">
+                  <FileDownloadLink uri={canonicalUrl} hideOpenButton />
+                </div>
+              )}
               {/* @endif */}
+
               <div className="claim-preview__file-property-overlay">
-                <FileProperties uri={uri} small properties={liveProperty || properties} />
+                <PreviewOverlayProperties uri={uri} properties={liveProperty || properties} />
+              </div>
+            </React.Fragment>
+          )}
+          {isCollection && (
+            <React.Fragment>
+              <div className="claim-preview__collection-wrapper">
+                <CollectionPreviewOverlay collectionId={listId} uri={uri} />
               </div>
             </React.Fragment>
           )}
@@ -197,7 +218,8 @@ function ClaimPreviewTile(props: Props) {
               <UriIndicator uri={uri} />
             </div>
           )}
-          <ClaimMenuList uri={uri} channelIsMine={channelIsMine} isRepost={isRepost} />
+          {/* CHECK CLAIM MENU LIST PARAMS (IS REPOST?) */}
+          <ClaimMenuList uri={uri} collectionId={listId} channelIsMine={channelIsMine} isRepost={isRepost} />
         </h2>
       </NavLink>
       <div>

@@ -3,12 +3,12 @@ import type { Node } from 'react';
 import React, { useEffect, forwardRef } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import classnames from 'classnames';
-import { parseURI } from 'lbry-redux';
+import { parseURI, COLLECTIONS_CONSTS } from 'lbry-redux';
 import { formatLbryUrlForWeb } from 'util/url';
 import { isEmpty } from 'util/object';
 import FileThumbnail from 'component/fileThumbnail';
 import UriIndicator from 'component/uriIndicator';
-import FileProperties from 'component/fileProperties';
+import PreviewOverlayProperties from 'component/previewOverlayProperties';
 import ClaimTags from 'component/claimTags';
 import SubscribeButton from 'component/subscribeButton';
 import ChannelThumbnail from 'component/channelThumbnail';
@@ -25,10 +25,12 @@ import ClaimPreviewLoading from './claim-preview-loading';
 import ClaimPreviewHidden from './claim-preview-no-mature';
 import ClaimPreviewNoContent from './claim-preview-no-content';
 import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
+import Button from 'component/button';
+import * as ICONS from 'constants/icons';
 
 type Props = {
   uri: string,
-  claim: ?Claim,
+  claim: ?Claim, // maybe?
   obscureNsfw: boolean,
   showUserBlocked: boolean,
   claimIsMine: boolean,
@@ -71,6 +73,11 @@ type Props = {
   hideMenu?: boolean,
   isLivestream?: boolean,
   live?: boolean,
+  collectionId?: string,
+  editCollection: (string, CollectionEditParams) => void,
+  isCollectionMine: boolean,
+  collectionUris: Array<Collection>,
+  collectionIndex?: number,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -120,15 +127,22 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     renderActions,
     hideMenu = false,
     // repostUrl,
-    isLivestream,
+    isLivestream, // need both? CHECK
     live,
+    collectionId,
+    collectionIndex,
+    editCollection,
+    isCollectionMine,
+    collectionUris,
   } = props;
   const WrapperElement = wrapperElement || 'li';
   const shouldFetch =
     claim === undefined || (claim !== null && claim.value_type === 'channel' && isEmpty(claim.meta) && !pending);
   const abandoned = !isResolvingUri && !claim;
-  const shouldHideActions = hideActions || type === 'small' || type === 'tooltip';
+  const isMyCollection = collectionId && (isCollectionMine || collectionId.includes('-'));
+  const shouldHideActions = hideActions || isMyCollection || type === 'small' || type === 'tooltip';
   const canonicalUrl = claim && claim.canonical_url;
+  const lastCollectionIndex = collectionUris ? collectionUris.length - 1 : 0;
   let isValid = false;
   if (uri) {
     try {
@@ -138,12 +152,15 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
       isValid = false;
     }
   }
-  const isRepost = claim && claim.repost_url;
-
-  const contentUri = claim && isRepost ? claim.canonical_url || claim.permanent_url : uri;
-  const isChannelUri = isValid ? parseURI(contentUri).isChannel : false;
+  const isCollection = claim && claim.value_type === 'collection';
+  const isChannelUri = isValid ? parseURI(uri).isChannel : false;
   const signingChannel = claim && claim.signing_channel;
-  const navigateUrl = formatLbryUrlForWeb((claim && claim.canonical_url) || uri || '/');
+  let navigateUrl = formatLbryUrlForWeb((claim && claim.canonical_url) || uri || '/');
+  if (collectionId) {
+    const collectionParams = new URLSearchParams();
+    collectionParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, collectionId);
+    navigateUrl = navigateUrl + `?` + collectionParams.toString();
+  }
   const navLinkProps = {
     to: navigateUrl,
     onClick: (e) => e.stopPropagation(),
@@ -188,7 +205,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
 
   // Weird placement warning
   // Make sure this happens after we figure out if this claim needs to be hidden
-  const thumbnailUrl = useGetThumbnail(contentUri, claim, streamingUrl, getFile, shouldHide);
+  const thumbnailUrl = useGetThumbnail(uri, claim, streamingUrl, getFile, shouldHide);
 
   function handleOnClick(e) {
     if (onClick) {
@@ -232,10 +249,10 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     return empty || <ClaimPreviewNoContent isChannel={isChannelUri} type={type} />;
   }
 
-  if (!shouldFetch && showUnresolvedClaim && !isResolvingUri && claim === null) {
-    return <AbandonedChannelPreview uri={contentUri} type />;
+  if (!shouldFetch && showUnresolvedClaim && !isResolvingUri && isChannelUri && claim === null) {
+    return <AbandonedChannelPreview uri={uri} type />;
   }
-  if (placeholder === 'publish' && !claim && contentUri.startsWith('lbry://@')) {
+  if (placeholder === 'publish' && !claim && uri.startsWith('lbry://@')) {
     return null;
   }
 
@@ -271,8 +288,8 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
           })}
         >
           {isChannelUri && claim ? (
-            <UriIndicator uri={contentUri} link>
-              <ChannelThumbnail uri={contentUri} />
+            <UriIndicator uri={uri} link>
+              <ChannelThumbnail uri={uri} />
             </UriIndicator>
           ) : (
             <>
@@ -280,15 +297,15 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                 <NavLink {...navLinkProps}>
                   <FileThumbnail thumbnail={thumbnailUrl}>
                     {/* @if TARGET='app' */}
-                    {claim && (
+                    {claim && !isCollection && (
                       <div className="claim-preview__hover-actions">
                         <FileDownloadLink uri={canonicalUrl} hideOpenButton hideDownloadStatus />
                       </div>
                     )}
                     {/* @endif */}
-                    {!isRepost && !isChannelUri && (
+                    {!isLivestream && (
                       <div className="claim-preview__file-property-overlay">
-                        <FileProperties uri={contentUri} small properties={liveProperty} />
+                        <PreviewOverlayProperties uri={uri} small={type === 'small'} properties={liveProperty} />
                       </div>
                     )}
                   </FileThumbnail>
@@ -303,7 +320,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
             <div className="claim-preview-metadata">
               <div className="claim-preview-info">
                 {pending ? (
-                  <ClaimPreviewTitle uri={contentUri} />
+                  <ClaimPreviewTitle uri={uri} />
                 ) : (
                   <NavLink {...navLinkProps}>
                     <ClaimPreviewTitle uri={uri} />
@@ -318,6 +335,58 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                 {!pending && (
                   <>
                     {renderActions && claim && renderActions(claim)}
+                    {Boolean(isMyCollection && collectionId) && (
+                      <>
+                        <div className="collection-preview__edit-buttons">
+                          <div className="collection-preview__edit-group">
+                            <Button
+                              button="alt"
+                              className={'button-collection-order'}
+                              disabled={collectionIndex === 0}
+                              icon={ICONS.UP}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                if (editCollection) {
+                                  // $FlowFixMe
+                                  editCollection(collectionId, {
+                                    order: { from: collectionIndex, to: Number(collectionIndex || 0) + 1 },
+                                  });
+                                }
+                              }}
+                            />
+                            <Button
+                              button="alt"
+                              className={'button-collection-order'}
+                              icon={ICONS.DOWN}
+                              disabled={collectionIndex === lastCollectionIndex}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                if (editCollection) {
+                                  // $FlowFixMe
+                                  editCollection(collectionId, {
+                                    order: { from: collectionIndex, to: Number(collectionIndex + 1) },
+                                  });
+                                }
+                              }}
+                            />
+                          </div>
+                          <div className="collection-preview__edit-group">
+                            <Button
+                              button="alt"
+                              icon={ICONS.DELETE}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                // $FlowFixMe
+                                if (editCollection) editCollection(collectionId, { claims: [claim], remove: true });
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </>
+                    )}
                     {shouldHideActions || renderActions ? null : actions !== undefined ? (
                       actions
                     ) : (
@@ -329,9 +398,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                         )}
 
                         {isChannelUri && !channelIsBlocked && !claimIsMine && (
-                          <SubscribeButton
-                            uri={contentUri.startsWith('lbry://') ? contentUri : `lbry://${contentUri}`}
-                          />
+                          <SubscribeButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
                         )}
 
                         {includeSupportAction && <ClaimSupportButton uri={uri} />}
@@ -354,7 +421,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
             )}
           </div>
         </div>
-        {!hideMenu && <ClaimMenuList uri={uri} />}
+        {!hideMenu && <ClaimMenuList uri={uri} collectionId={collectionId} />}
       </>
     </WrapperElement>
   );

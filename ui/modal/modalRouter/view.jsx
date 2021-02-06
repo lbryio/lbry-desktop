@@ -40,6 +40,8 @@ import ModalMobileSearch from 'modal/modalMobileSearch';
 import ModalViewImage from 'modal/modalViewImage';
 import ModalMassTipsUnlock from 'modal/modalMassTipUnlock';
 import ModalRemoveBtcSwapAddress from 'modal/modalRemoveBtcSwapAddress';
+import ModalClaimCollectionAdd from 'modal/modalClaimCollectionAdd';
+import ModalDeleteCollection from 'modal/modalRemoveCollection';
 
 type Props = {
   modal: { id: string, modalProps: {} },
@@ -143,6 +145,10 @@ function ModalRouter(props: Props) {
       return <ModalMassTipsUnlock {...modalProps} />;
     case MODALS.CONFIRM_REMOVE_BTC_SWAP_ADDRESS:
       return <ModalRemoveBtcSwapAddress {...modalProps} />;
+    case MODALS.COLLECTION_ADD:
+      return <ModalClaimCollectionAdd {...modalProps} />;
+    case MODALS.COLLECTION_DELETE:
+      return <ModalDeleteCollection {...modalProps} />;
     default:
       return null;
   }

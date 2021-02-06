@@ -15,6 +15,7 @@ export default function useGetThumbnail(
   const isImage = claim && claim.value && claim.value.stream_type === 'image';
   // $FlowFixMe
   const isFree = claim && claim.value && (!claim.value.fee || Number(claim.value.fee.amount) <= 0);
+  const isCollection = claim && claim.value_type === 'collection';
   const thumbnailInClaim = claim && claim.value && claim.value.thumbnail && claim.value.thumbnail.url;
 
   // @if TARGET='web'
@@ -22,6 +23,8 @@ export default function useGetThumbnail(
     thumbnailToUse = thumbnailInClaim;
   } else if (claim && isImage && isFree) {
     thumbnailToUse = generateStreamUrl(claim.name, claim.claim_id);
+  } else if (isCollection) {
+    thumbnailToUse = 'http://spee.ch/default-thumb-odysee:e.jpg';
   }
   // @endif
 

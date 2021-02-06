@@ -5,7 +5,7 @@ import { selectGetSyncErrorMessage, selectSyncFatalError } from 'redux/selectors
 import { doFetchAccessToken, doUserSetReferrer } from 'redux/actions/user';
 import { selectUser, selectAccessToken, selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectUnclaimedRewards } from 'redux/selectors/rewards';
-import { doFetchChannelListMine, selectMyChannelUrls, SETTINGS } from 'lbry-redux';
+import { doFetchChannelListMine, doFetchCollectionListMine, SETTINGS, selectMyChannelUrls } from 'lbry-redux';
 import {
   makeSelectClientSetting,
   selectLanguage,
@@ -52,6 +52,7 @@ const select = (state) => ({
 const perform = (dispatch) => ({
   fetchAccessToken: () => dispatch(doFetchAccessToken()),
   fetchChannelListMine: () => dispatch(doFetchChannelListMine()),
+  fetchCollectionListMine: () => dispatch(doFetchCollectionListMine()),
   setLanguage: (language) => dispatch(doSetLanguage(language)),
   signIn: () => dispatch(doSignIn()),
   requestDownloadUpgrade: () => dispatch(doDownloadUpgradeRequested()),

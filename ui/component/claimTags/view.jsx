@@ -52,7 +52,7 @@ export default function ClaimTags(props: Props) {
   }
 
   return (
-    <div className={classnames('file-properties--small', { 'file-properties--large': type === 'large' })}>
+    <div className={classnames('claim__tags', { 'claim__tags--large': type === 'large' })}>
       {tagsToDisplay.map((tag) => (
         <Tag key={tag} title={tag} name={tag} />
       ))}

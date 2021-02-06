@@ -24,6 +24,8 @@ import ClaimMenuList from 'component/claimMenuList';
 import Yrbl from 'component/yrbl';
 
 export const PAGE_VIEW_QUERY = `view`;
+const CONTENT_PAGE = 'content';
+const LISTS_PAGE = 'lists';
 const ABOUT_PAGE = `about`;
 export const DISCUSSION_PAGE = `discussion`;
 const EDIT_PAGE = 'edit';
@@ -57,7 +59,7 @@ function ChannelPage(props: Props) {
     claim,
     title,
     cover,
-    page,
+    // page, ?page= may come back some day?
     channelIsMine,
     isSubscribed,
     blackListedOutpoints,
@@ -107,15 +109,34 @@ function ChannelPage(props: Props) {
   // If a user changes tabs, update the url so it stays on the same page if they refresh.
   // We don't want to use links here because we can't animate the tab change and using links
   // would alter the Tab label's role attribute, which should stay role="tab" to work with keyboards/screen readers.
-  const tabIndex = currentView === ABOUT_PAGE || editing ? 1 : currentView === DISCUSSION_PAGE ? 2 : 0;
+  let tabIndex;
+  switch (currentView) {
+    case CONTENT_PAGE:
+      tabIndex = 0;
+      break;
+    case LISTS_PAGE:
+      tabIndex = 1;
+      break;
+    case ABOUT_PAGE:
+      tabIndex = 2;
+      break;
+    case DISCUSSION_PAGE:
+      tabIndex = 3;
+      break;
+    default:
+      tabIndex = 0;
+      break;
+  }
 
   function onTabChange(newTabIndex) {
     let url = formatLbryUrlForWeb(uri);
     let search = '?';
 
     if (newTabIndex === 0) {
-      search += `page=${page}`;
+      search += `${PAGE_VIEW_QUERY}=${CONTENT_PAGE}`;
     } else if (newTabIndex === 1) {
+      search += `${PAGE_VIEW_QUERY}=${LISTS_PAGE}`;
+    } else if (newTabIndex === 2) {
       search += `${PAGE_VIEW_QUERY}=${ABOUT_PAGE}`;
     } else {
       search += `${PAGE_VIEW_QUERY}=${DISCUSSION_PAGE}`;
@@ -164,6 +185,7 @@ function ChannelPage(props: Props) {
           {!channelIsBlackListed && <ShareButton uri={uri} />}
           {!(isBlocked || isMuted) && <ClaimSupportButton uri={uri} />}
           {!(isBlocked || isMuted) && (!channelIsBlackListed || isSubscribed) && <SubscribeButton uri={permanentUrl} />}
+          {/* TODO: add channel collections <ClaimCollectionAddButton uri={uri} fileAction /> */}
           <ClaimMenuList uri={claim.permanent_url} inline />
         </div>
         {cover && <img className={classnames('channel-cover__custom')} src={cover} />}
@@ -228,13 +250,27 @@ function ChannelPage(props: Props) {
       ) : (
         <Tabs onChange={onTabChange} index={tabIndex}>
           <TabList className="tabs__list--channel-page">
-            <Tab disabled={editing}>{__('Content')}</Tab>
+            <Tab disabled={editing}>{__('Publishes')}</Tab>
+            <Tab disabled={editing}>{__('Playlists')}</Tab>
             <Tab>{editing ? __('Editing Your Channel') : __('About --[tab title in Channel Page]--')}</Tab>
             <Tab disabled={editing}>{__('Community')}</Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
-              <ChannelContent uri={uri} channelIsBlackListed={channelIsBlackListed} viewHiddenChannels />
+              <ChannelContent
+                claimType={'stream'}
+                uri={uri}
+                channelIsBlackListed={channelIsBlackListed}
+                viewHiddenChannels
+              />
+            </TabPanel>
+            <TabPanel>
+              <ChannelContent
+                claimType={'collection'}
+                uri={uri}
+                channelIsBlackListed={channelIsBlackListed}
+                viewHiddenChannels
+              />
             </TabPanel>
             <TabPanel>
               <ChannelAbout uri={uri} />
