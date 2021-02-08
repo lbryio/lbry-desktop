@@ -1,3 +1,4 @@
+//
 export const LIVE_STREAM_CHANNEL = '@Xirtus';
 export const LIVE_STREAM_CHANNEL_CLAIM_ID = '24849d3c1775043f48debcff358063571815a95d';
 export const BITWAVE_USERNAME = 'xirtus';
