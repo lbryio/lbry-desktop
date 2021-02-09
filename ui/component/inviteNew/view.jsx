@@ -5,7 +5,6 @@ import Button from 'component/button';
 import { Form, FormField } from 'component/common/form';
 import CopyableText from 'component/copyableText';
 import Card from 'component/common/card';
-import SelectChannel from 'component/selectChannel';
 import analytics from 'analytics';
 import I18nMessage from 'component/i18nMessage';
 import LbcSymbol from 'component/common/lbc-symbol';
@@ -21,7 +20,6 @@ type Props = {
 
 function InviteNew(props: Props) {
   const { inviteNew, errorMessage, isPending, referralCode = '', channels } = props;
-  const noChannels = !channels || !(channels.length > 0);
 
   // Email
   const [email, setEmail] = useState('');
@@ -87,14 +85,20 @@ function InviteNew(props: Props) {
         actions={
           <React.Fragment>
             <CopyableText label={__('Your invite link')} copyable={referral} />
-            {!noChannels && (
-              <SelectChannel
-                channel={referralSource}
-                onChannelChange={channel => handleReferralChange(channel)}
+            {channels && channels.length > 0 && (
+              <FormField
+                type="select"
                 label={__('Customize link')}
-                hideAnon
-                injected={[referralCode]}
-              />
+                value={referralSource}
+                onChange={e => handleReferralChange(e.target.value)}
+              >
+                {channels.map(channel => (
+                  <option key={channel.claim_id} value={channel.name}>
+                    {channel.name}
+                  </option>
+                ))}
+                <option value={referralCode}>{referralCode}</option>
+              </FormField>
             )}
           </React.Fragment>
         }

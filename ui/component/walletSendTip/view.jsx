@@ -5,13 +5,13 @@ import * as PAGES from 'constants/pages';
 import React from 'react';
 import Button from 'component/button';
 import { FormField, Form } from 'component/common/form';
-import { MINIMUM_PUBLISH_BID, CHANNEL_ANONYMOUS, CHANNEL_NEW } from 'constants/claim';
+import { MINIMUM_PUBLISH_BID } from 'constants/claim';
 import CreditAmount from 'component/common/credit-amount';
 import I18nMessage from 'component/i18nMessage';
 import { Lbryio } from 'lbryinc';
 import Card from 'component/common/card';
 import classnames from 'classnames';
-import SelectChannel from 'component/selectChannel';
+import ChannelSelector from 'component/channelSelector';
 import LbcSymbol from 'component/common/lbc-symbol';
 import { parseURI } from 'lbry-redux';
 import usePersistedState from 'effects/use-persisted-state';
@@ -34,7 +34,8 @@ type Props = {
   fetchingChannels: boolean,
   instantTipEnabled: boolean,
   instantTipMax: { amount: number, currency: string },
-  channels: ?Array<ChannelClaim>,
+  activeChannelClaim: ?ChannelClaim,
+  incognito: boolean,
 };
 
 function WalletSendTip(props: Props) {
@@ -49,8 +50,9 @@ function WalletSendTip(props: Props) {
     instantTipMax,
     sendSupport,
     closeModal,
-    channels,
     fetchingChannels,
+    incognito,
+    activeChannelClaim,
   } = props;
   const [presetTipAmount, setPresetTipAmount] = usePersistedState('comment-support:presetTip', DEFAULT_TIP_AMOUNTS[0]);
   const [customTipAmount, setCustomTipAmount] = usePersistedState('comment-support:customTip', 1.0);
@@ -58,21 +60,9 @@ function WalletSendTip(props: Props) {
   const [tipError, setTipError] = React.useState();
   const [sendAsTip, setSendAsTip] = usePersistedState('comment-support:sendAsTip', true);
   const [isConfirming, setIsConfirming] = React.useState(false);
-  const [selectedChannel, setSelectedChannel] = usePersistedState('comment-support:channel');
   const { claim_id: claimId } = claim;
   const { channelName } = parseURI(uri);
   const noBalance = balance === 0;
-
-  const channelStrings = channels && channels.map(channel => channel.permanent_url).join(',');
-  React.useEffect(() => {
-    if (!selectedChannel && channelStrings) {
-      const channels = channelStrings.split(',');
-      const newChannelUrl = channels[0];
-      const { claimName } = parseURI(newChannelUrl);
-      setSelectedChannel(claimName);
-    }
-  }, [channelStrings, selectedChannel, setSelectedChannel]);
-
   const tipAmount = useCustomTip ? customTipAmount : presetTipAmount;
   const isSupport = claimIsMine ? true : SIMPLE_SITE ? false : !sendAsTip;
 
@@ -99,12 +89,8 @@ function WalletSendTip(props: Props) {
 
   function sendSupportOrConfirm(instantTipMaxAmount = null) {
     let selectedChannelId;
-    if (selectedChannel !== CHANNEL_ANONYMOUS) {
-      const selectedChannelClaim = channels && channels.find(channelClaim => channelClaim.name === selectedChannel);
-
-      if (selectedChannelClaim) {
-        selectedChannelId = selectedChannelClaim.claim_id;
-      }
+    if (!incognito && activeChannelClaim) {
+      selectedChannelId = activeChannelClaim.claim_id;
     }
 
     if (
@@ -124,12 +110,6 @@ function WalletSendTip(props: Props) {
   }
 
   function handleSubmit() {
-    if (selectedChannel === CHANNEL_NEW) {
-      // This is the submission to create a new channel, and would
-      // be handled by <ChannelSelection>, so do nothing here.
-      return;
-    }
-
     if (tipAmount && claimId) {
       if (instantTipEnabled) {
         if (instantTipMax.currency === 'LBC') {
@@ -196,7 +176,9 @@ function WalletSendTip(props: Props) {
                     <div className="confirm__label">{__('To --[the tip recipient]--')}</div>
                     <div className="confirm__value">{channelName || title}</div>
                     <div className="confirm__label">{__('From --[the tip sender]--')}</div>
-                    <div className="confirm__value">{selectedChannel}</div>
+                    <div className="confirm__value">
+                      {activeChannelClaim && !incognito ? activeChannelClaim.name : __('Anonymous')}
+                    </div>
                     <div className="confirm__label">{__(isSupport ? 'Supporting' : 'Tipping')}</div>
                     <div className="confirm__value">
                       <LbcSymbol postfix={tipAmount} size={22} />
@@ -217,11 +199,7 @@ function WalletSendTip(props: Props) {
             ) : (
               <>
                 <div className="section">
-                  <SelectChannel
-                    label={__('Channel to show support as')}
-                    channel={selectedChannel}
-                    onChannelChange={newChannel => setSelectedChannel(newChannel)}
-                  />
+                  <ChannelSelector />
                 </div>
 
                 <div className="section">

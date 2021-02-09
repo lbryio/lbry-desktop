@@ -6,7 +6,6 @@ import {
   selectIsSendingSupport,
   selectBalance,
   SETTINGS,
-  selectMyChannelClaims,
   makeSelectClaimIsMine,
   selectFetchingMyChannels,
 } from 'lbry-redux';
@@ -14,6 +13,7 @@ import WalletSendTip from './view';
 import { doOpenModal, doHideModal } from 'redux/actions/app';
 import { withRouter } from 'react-router';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
 
 const select = (state, props) => ({
   isPending: selectIsSendingSupport(state),
@@ -22,9 +22,10 @@ const select = (state, props) => ({
   balance: selectBalance(state),
   instantTipEnabled: makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED)(state),
   instantTipMax: makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_MAX)(state),
-  channels: selectMyChannelClaims(state),
   claimIsMine: makeSelectClaimIsMine(props.uri)(state),
   fetchingChannels: selectFetchingMyChannels(state),
+  activeChannelClaim: selectActiveChannelClaim(state),
+  incognito: selectIncognito(state),
 });
 
 const perform = dispatch => ({

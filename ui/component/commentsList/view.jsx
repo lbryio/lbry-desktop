@@ -26,7 +26,7 @@ type Props = {
   totalComments: number,
   fetchingChannels: boolean,
   reactionsById: ?{ [string]: { [REACTION_TYPES.LIKE | REACTION_TYPES.DISLIKE]: number } },
-  activeChannel: string,
+  activeChannelId: ?string,
 };
 
 function CommentList(props: Props) {
@@ -42,7 +42,7 @@ function CommentList(props: Props) {
     totalComments,
     fetchingChannels,
     reactionsById,
-    activeChannel,
+    activeChannelId,
   } = props;
   const commentRef = React.useRef();
   const spinnerRef = React.useRef();
@@ -90,7 +90,7 @@ function CommentList(props: Props) {
         })
         .catch(() => setReadyToDisplayComments(true));
     }
-  }, [fetchReacts, uri, totalComments, activeChannel, fetchingChannels]);
+  }, [fetchReacts, uri, totalComments, activeChannelId, fetchingChannels]);
 
   useEffect(() => {
     if (readyToDisplayComments && linkedCommentId && commentRef && commentRef.current) {

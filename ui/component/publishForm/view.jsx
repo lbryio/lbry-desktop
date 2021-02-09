@@ -9,17 +9,16 @@
  */
 
 import { SITE_NAME } from 'config';
-import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { buildURI, isURIValid, isNameValid, THUMBNAIL_STATUSES } from 'lbry-redux';
 import Button from 'component/button';
-import SelectChannel from 'component/selectChannel';
+import ChannelSelect from 'component/channelSelector';
 import classnames from 'classnames';
 import TagsSelect from 'component/tagsSelect';
 import PublishDescription from 'component/publishDescription';
 import PublishPrice from 'component/publishPrice';
 import PublishFile from 'component/publishFile';
-import PublishName from 'component/publishName';
+import PublishBid from 'component/publishBid';
 import PublishAdditionalOptions from 'component/publishAdditionalOptions';
 import PublishFormErrors from 'component/publishFormErrors';
 import SelectThumbnail from 'component/selectThumbnail';
@@ -60,7 +59,6 @@ type Props = {
     amount: string,
     currency: string,
   },
-  channel: string,
   name: ?string,
   nameError: ?string,
   isResolvingUri: boolean,
@@ -85,6 +83,8 @@ type Props = {
   ytSignupPending: boolean,
   modal: { id: string, modalProps: {} },
   enablePublishPreview: boolean,
+  activeChannelClaim: ?ChannelClaim,
+  incognito: boolean,
 };
 
 function PublishForm(props: Props) {
@@ -101,7 +101,6 @@ function PublishForm(props: Props) {
   const {
     thumbnail,
     name,
-    channel,
     editingURI,
     myClaimForUri,
     resolveUri,
@@ -123,17 +122,16 @@ function PublishForm(props: Props) {
     ytSignupPending,
     modal,
     enablePublishPreview,
+    activeChannelClaim,
+    incognito,
   } = props;
-
-  // Used to check if name should be auto-populated from title
-  const [autoPopulateNameFromTitle, setAutoPopulateNameFromTitle] = useState(!isStillEditing);
 
   const TAGS_LIMIT = 5;
   const fileFormDisabled = mode === PUBLISH_MODES.FILE && !filePath;
   const emptyPostError = mode === PUBLISH_MODES.POST && (!fileText || fileText.trim() === '');
   const formDisabled = (fileFormDisabled && !editingURI) || emptyPostError || publishing;
   const isInProgress = filePath || editingURI || name || title;
-
+  const activeChannelName = activeChannelClaim && activeChannelClaim.name;
   // Editing content info
   const uri = myClaimForUri ? myClaimForUri.permanent_url : undefined;
   const fileMimeType =
@@ -204,16 +202,13 @@ function PublishForm(props: Props) {
 
   // Every time the channel or name changes, resolve the uris to find winning bid amounts
   useEffect(() => {
-    // If they are midway through a channel creation, treat it as anonymous until it completes
-    const channelName = channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW ? '' : channel;
-
     // We are only going to store the full uri, but we need to resolve the uri with and without the channel name
     let uri;
     try {
-      uri = name && buildURI({ streamName: name, channelName });
+      uri = name && buildURI({ streamName: name, activeChannelName });
     } catch (e) {}
 
-    if (channelName && name) {
+    if (activeChannelName && name) {
       // resolve without the channel name so we know the winning bid for it
       try {
         const uriLessChannel = buildURI({ streamName: name });
@@ -227,15 +222,17 @@ function PublishForm(props: Props) {
       checkAvailability(name);
       updatePublishForm({ uri });
     }
-  }, [name, channel, resolveUri, updatePublishForm, checkAvailability]);
+  }, [name, activeChannelName, resolveUri, updatePublishForm, checkAvailability]);
 
   useEffect(() => {
     updatePublishForm({ isMarkdownPost: mode === PUBLISH_MODES.POST });
   }, [mode, updatePublishForm]);
 
-  function handleChannelNameChange(channel) {
-    updatePublishForm({ channel });
-  }
+  useEffect(() => {
+    if (activeChannelName) {
+      updatePublishForm({ channel: undefined });
+    }
+  }, [activeChannelName, incognito, updatePublishForm]);
 
   // @if TARGET='web'
   function createWebFile() {
@@ -331,18 +328,7 @@ function PublishForm(props: Props) {
   // Editing claim uri
   return (
     <div className="card-stack">
-      <Card
-        className={disabled ? 'card--disabled' : undefined}
-        actions={
-          <React.Fragment>
-            <SelectChannel channel={channel} onChannelChange={handleChannelNameChange} />
-            <p className="help">
-              {__('This is a username or handle that your content can be found under.')}{' '}
-              {__('Ex. @Marvel, @TheBeatles, @BooksByJoe')}
-            </p>
-          </React.Fragment>
-        }
-      />
+      <ChannelSelect disabled={disabled} />
 
       <PublishFile
         uri={uri}
@@ -352,8 +338,6 @@ function PublishForm(props: Props) {
         inProgress={isInProgress}
         setPublishMode={setMode}
         setPrevFileText={setPrevFileText}
-        autoPopulateName={autoPopulateNameFromTitle}
-        setAutoPopulateName={setAutoPopulateNameFromTitle}
         header={
           <>
             {MODES.map((modeName, index) => (
@@ -371,6 +355,7 @@ function PublishForm(props: Props) {
           </>
         }
       />
+
       {!publishing && (
         <div className={classnames({ 'card--disabled': formDisabled })}>
           {mode === PUBLISH_MODES.FILE && <PublishDescription disabled={formDisabled} />}
@@ -402,11 +387,7 @@ function PublishForm(props: Props) {
             tagsChosen={tags}
           />
 
-          <PublishName
-            disabled={isStillEditing || formDisabled}
-            autoPopulateName={autoPopulateNameFromTitle}
-            setAutoPopulateName={setAutoPopulateNameFromTitle}
-          />
+          <PublishBid disabled={isStillEditing || formDisabled} />
           <PublishPrice disabled={formDisabled} />
           <PublishAdditionalOptions disabled={formDisabled} />
         </div>

@@ -61,8 +61,7 @@ type Props = {
   setSidebarOpen: boolean => void,
   isAbsoluteSideNavHidden: boolean,
   hideCancel: boolean,
-  myChannels: ?Array<ChannelClaim>,
-  commentChannel: string,
+  activeChannelClaim: ?ChannelClaim,
 };
 
 const Header = (props: Props) => {
@@ -90,8 +89,7 @@ const Header = (props: Props) => {
     isAbsoluteSideNavHidden,
     user,
     hideCancel,
-    myChannels,
-    commentChannel,
+    activeChannelClaim,
   } = props;
   const isMobile = useIsMobile();
   // on the verify page don't let anyone escape other than by closing the tab to keep session data consistent
@@ -102,18 +100,8 @@ const Header = (props: Props) => {
   const hasBackout = Boolean(backout);
   const { backLabel, backNavDefault, title: backTitle, simpleTitle: simpleBackTitle } = backout || {};
   const notificationsEnabled = (user && user.experimental_ui) || false;
-  let channelUrl;
-  let identityChannel;
-  if (myChannels && myChannels.length >= 1) {
-    if (myChannels.length === 1) {
-      identityChannel = myChannels[0];
-    } else if (commentChannel) {
-      identityChannel = myChannels.find(chan => chan.name === commentChannel);
-    } else {
-      identityChannel = myChannels[0];
-    }
-    channelUrl = identityChannel && (identityChannel.permanent_url || identityChannel.canonical_url);
-  }
+  const activeChannelUrl = activeChannelClaim && activeChannelClaim.permanent_url;
+
   // Sign out if they click the "x" when they are on the password prompt
   const authHeaderAction = syncError ? { onClick: signOut } : { navigate: '/' };
   const homeButtonNavigationProps = isVerifyPage ? {} : authHeader ? authHeaderAction : { navigate: '/' };
@@ -288,7 +276,7 @@ const Header = (props: Props) => {
                     history={history}
                     handleThemeToggle={handleThemeToggle}
                     currentTheme={currentTheme}
-                    channelUrl={channelUrl}
+                    activeChannelUrl={activeChannelUrl}
                     openSignOutModal={openSignOutModal}
                     email={email}
                     signOut={signOut}
@@ -341,7 +329,7 @@ type HeaderMenuButtonProps = {
   history: { push: string => void },
   handleThemeToggle: string => void,
   currentTheme: string,
-  channelUrl: ?string,
+  activeChannelUrl: ?string,
   openSignOutModal: () => void,
   email: ?string,
   signOut: () => void,
@@ -354,7 +342,7 @@ function HeaderMenuButtons(props: HeaderMenuButtonProps) {
     history,
     handleThemeToggle,
     currentTheme,
-    channelUrl,
+    activeChannelUrl,
     openSignOutModal,
     email,
     signOut,
@@ -427,8 +415,8 @@ function HeaderMenuButtons(props: HeaderMenuButtonProps) {
             aria-label={__('Your account')}
             title={__('Your account')}
             className={classnames('header__navigation-item mobile-hidden', {
-              'menu__title header__navigation-item--icon': !channelUrl,
-              'header__navigation-item--profile-pic': channelUrl,
+              'menu__title header__navigation-item--icon': !activeChannelUrl,
+              'header__navigation-item--profile-pic': activeChannelUrl,
             })}
             // @if TARGET='app'
             onDoubleClick={e => {
@@ -436,7 +424,11 @@ function HeaderMenuButtons(props: HeaderMenuButtonProps) {
             }}
             // @endif
           >
-            {channelUrl ? <ChannelThumbnail uri={channelUrl} /> : <Icon size={18} icon={ICONS.ACCOUNT} aria-hidden />}
+            {activeChannelUrl ? (
+              <ChannelThumbnail uri={activeChannelUrl} />
+            ) : (
+              <Icon size={18} icon={ICONS.ACCOUNT} aria-hidden />
+            )}
           </MenuButton>
           <MenuList className="menu__list--header">
             <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.UPLOADS}`)}>

@@ -16,13 +16,13 @@ type Props = {
   commentId: string,
   pendingCommentReacts: Array<string>,
   claimIsMine: boolean,
-  activeChannel: string,
+  activeChannelId: ?string,
   claim: ?ChannelClaim,
   doToast: ({ message: string }) => void,
 };
 
 export default function CommentReactions(props: Props) {
-  const { myReacts, othersReacts, commentId, react, claimIsMine, claim, activeChannel, doToast } = props;
+  const { myReacts, othersReacts, commentId, react, claimIsMine, claim, activeChannelId, doToast } = props;
   const {
     push,
     location: { pathname },
@@ -31,8 +31,8 @@ export default function CommentReactions(props: Props) {
     claim &&
     claimIsMine &&
     (claim.value_type === 'channel'
-      ? claim.name === activeChannel
-      : claim.signing_channel && claim.signing_channel.name === activeChannel);
+      ? claim.claim_id === activeChannelId
+      : claim.signing_channel && claim.signing_channel.claim_id === activeChannelId);
   const authorUri =
     claim && claim.value_type === 'channel'
       ? claim.canonical_url
@@ -52,7 +52,7 @@ export default function CommentReactions(props: Props) {
   const creatorLiked = getCountForReact(REACTION_TYPES.CREATOR_LIKE) > 0;
 
   function handleCommentLike() {
-    if (activeChannel) {
+    if (activeChannelId) {
       react(commentId, REACTION_TYPES.LIKE);
     } else {
       promptForChannel();
@@ -60,7 +60,7 @@ export default function CommentReactions(props: Props) {
   }
 
   function handleCommentDislike() {
-    if (activeChannel) {
+    if (activeChannelId) {
       react(commentId, REACTION_TYPES.DISLIKE);
     } else {
       promptForChannel();

@@ -16,7 +16,6 @@ const defaultState: CommentsState = {
   typesReacting: [],
   myReactsByCommentId: undefined,
   othersReactsByCommentId: undefined,
-  commentChannel: '',
 };
 
 export default handleActions(
@@ -29,11 +28,6 @@ export default handleActions(
     [ACTIONS.COMMENT_CREATE_FAILED]: (state: CommentsState, action: any) => ({
       ...state,
       isCommenting: false,
-    }),
-
-    [ACTIONS.COMMENT_SET_CHANNEL]: (state: CommentsState, action: any) => ({
-      ...state,
-      commentChannel: action.data,
     }),
 
     [ACTIONS.COMMENT_CREATE_COMPLETED]: (state: CommentsState, action: any): CommentsState => {

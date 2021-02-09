@@ -33,6 +33,14 @@
   }
 }
 
+.icon__wrapper--Anonymous {
+  background-color: var(--color-gray-1);
+
+  .icon {
+    stroke: var(--color-black);
+  }
+}
+
 .icon--help {
   color: var(--color-subtitle);
   margin-left: var(--spacing-xs);

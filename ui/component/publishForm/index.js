@@ -15,7 +15,7 @@ import {
 } from 'lbry-redux';
 import { doPublishDesktop } from 'redux/actions/publish';
 import { selectUnclaimedRewardValue } from 'redux/selectors/rewards';
-import { selectModal } from 'redux/selectors/app';
+import { selectModal, selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import PublishPage from './view';
 
@@ -32,6 +32,8 @@ const select = state => ({
   totalRewardValue: selectUnclaimedRewardValue(state),
   modal: selectModal(state),
   enablePublishPreview: makeSelectClientSetting(SETTINGS.ENABLE_PUBLISH_PREVIEW)(state),
+  activeChannelClaim: selectActiveChannelClaim(state),
+  incognito: selectIncognito(state),
 });
 
 const perform = dispatch => ({

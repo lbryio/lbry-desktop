@@ -1,12 +1,11 @@
 // @flow
 import { SIMPLE_SITE } from 'config';
 import * as PAGES from 'constants/pages';
-import { CHANNEL_NEW } from 'constants/claim';
 import React, { useEffect, useState } from 'react';
 import classnames from 'classnames';
 import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
-import ChannelSelection from 'component/selectChannel';
+import SelectChannel from 'component/selectChannel';
 import usePersistedState from 'effects/use-persisted-state';
 import { FF_MAX_CHARS_IN_COMMENT } from 'constants/form-field';
 import { useHistory } from 'react-router';
@@ -25,7 +24,7 @@ type Props = {
   isReply: boolean,
   isPostingComment: boolean,
   activeChannel: string,
-  setCommentChannel: string => void,
+  activeChannelClaim: ?ChannelClaim,
 };
 
 export function CommentCreate(props: Props) {
@@ -40,8 +39,7 @@ export function CommentCreate(props: Props) {
     isReply,
     parentId,
     isPostingComment,
-    activeChannel,
-    setCommentChannel,
+    activeChannelClaim,
   } = props;
   const buttonref: ElementRef<any> = React.useRef();
   const { push } = useHistory();
@@ -50,21 +48,7 @@ export function CommentCreate(props: Props) {
   const [charCount, setCharCount] = useState(commentValue.length);
   const [advancedEditor, setAdvancedEditor] = usePersistedState('comment-editor-mode', false);
   const hasChannels = channels && channels.length;
-  const disabled = isPostingComment || activeChannel === CHANNEL_NEW || !commentValue.length;
-  const topChannel =
-    channels &&
-    channels.reduce((top, channel) => {
-      const topClaimCount = (top && top.meta && top.meta.claims_in_channel) || 0;
-      const currentClaimCount = (activeChannel && channel.meta && channel.meta.claims_in_channel) || 0;
-      return topClaimCount >= currentClaimCount ? top : channel;
-    });
-
-  useEffect(() => {
-    // set default channel
-    if ((activeChannel === '' || activeChannel === 'anonymous') && topChannel) {
-      setCommentChannel(topChannel.name);
-    }
-  }, [activeChannel, topChannel, setCommentChannel]);
+  const disabled = isPostingComment || !activeChannelClaim || !commentValue.length;
 
   function handleCommentChange(event) {
     let commentValue;
@@ -94,8 +78,8 @@ export function CommentCreate(props: Props) {
   }
 
   function handleSubmit() {
-    if (activeChannel !== CHANNEL_NEW && commentValue.length) {
-      createComment(commentValue, claimId, activeChannel, parentId).then(res => {
+    if (activeChannelClaim && commentValue.length) {
+      createComment(commentValue, claimId, parentId).then(res => {
         if (res && res.signature) {
           setCommentValue('');
 
@@ -138,13 +122,13 @@ export function CommentCreate(props: Props) {
       })}
     >
       <FormField
-        disabled={activeChannel === CHANNEL_NEW}
+        disabled={!activeChannelClaim}
         type={SIMPLE_SITE ? 'textarea' : advancedEditor && !isReply ? 'markdown' : 'textarea'}
         name={isReply ? 'content_reply' : 'content_description'}
         label={
           <span className="comment-new__label-wrapper">
             <div className="comment-new__label">{isReply ? __('Replying as') + ' ' : __('Comment as') + ' '}</div>
-            <ChannelSelection channel={activeChannel} hideAnon tiny hideNew onChannelChange={setCommentChannel} />
+            <SelectChannel tiny />
           </span>
         }
         quickActionLabel={
