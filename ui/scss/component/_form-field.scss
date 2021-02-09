@@ -105,7 +105,7 @@ label {
   font-size: var(--font-small);
   color: var(--color-input-label);
   display: inline-block;
-  margin-bottom: var(--spacing-xxs);
+  margin-bottom: 0.1rem;
 
   .icon__lbc {
     margin-bottom: 4px;
@@ -361,11 +361,9 @@ fieldset-group {
         border: 1px solid;
         border-top-left-radius: var(--border-radius);
         border-bottom-left-radius: var(--border-radius);
-        border-right: 0;
         border-color: var(--color-input-border);
         color: var(--color-text-help);
         background-color: var(--color-input-bg);
-        border-right: 1px solid var(--border-color);
       }
     }
 

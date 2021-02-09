@@ -58,10 +58,10 @@ const appFilter = createFilter('app', [
   'welcomeVersion',
   'interestedInYoutubeSync',
   'splashAnimationEnabled',
+  'activeChannel',
 ]);
 // We only need to persist the receiveAddress for the wallet
 const walletFilter = createFilter('wallet', ['receiveAddress']);
-const commentsFilter = createFilter('comments', ['commentChannel']);
 const searchFilter = createFilter('search', ['options']);
 const tagsFilter = createFilter('tags', ['followedTags']);
 const subscriptionsFilter = createFilter('subscriptions', ['subscriptions']);
@@ -82,7 +82,6 @@ const whiteListedReducers = [
 ];
 
 const transforms = [
-  commentsFilter,
   fileInfoFilter,
   walletFilter,
   blockedFilter,

@@ -1,15 +1,14 @@
 import * as MODALS from 'constants/modal_types';
 import { connect } from 'react-redux';
-import { selectTotalBalance, selectBalance, formatCredits, selectMyChannelClaims, SETTINGS } from 'lbry-redux';
+import { selectTotalBalance, selectBalance, formatCredits, SETTINGS } from 'lbry-redux';
 import { selectGetSyncErrorMessage } from 'redux/selectors/sync';
 import { selectUserVerifiedEmail, selectUserEmail, selectEmailToVerify, selectUser } from 'redux/selectors/user';
 import { doClearEmailEntry, doClearPasswordEntry } from 'redux/actions/user';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { doSignOut, doOpenModal } from 'redux/actions/app';
 import { makeSelectClientSetting, selectLanguage } from 'redux/selectors/settings';
-import { selectCommentChannel } from 'redux/selectors/comments';
+import { selectHasNavigated, selectActiveChannelClaim } from 'redux/selectors/app';
 import Header from './view';
-import { selectHasNavigated } from 'redux/selectors/app';
 
 const select = state => ({
   language: selectLanguage(state),
@@ -25,8 +24,7 @@ const select = state => ({
   emailToVerify: selectEmailToVerify(state),
   hasNavigated: selectHasNavigated(state),
   user: selectUser(state),
-  myChannels: selectMyChannelClaims(state),
-  commentChannel: selectCommentChannel(state),
+  activeChannelClaim: selectActiveChannelClaim(state),
 });
 
 const perform = dispatch => ({

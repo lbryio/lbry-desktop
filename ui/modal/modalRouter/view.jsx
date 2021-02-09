@@ -34,7 +34,6 @@ import ModalWalletReceive from 'modal/modalWalletReceive';
 import ModalYoutubeWelcome from 'modal/modalYoutubeWelcome';
 import ModalCreateChannel from 'modal/modalChannelCreate';
 import ModalSetReferrer from 'modal/modalSetReferrer';
-import ModalRepost from 'modal/modalRepost';
 import ModalSignOut from 'modal/modalSignOut';
 import ModalSupportsLiquidate from 'modal/modalSupportsLiquidate';
 import ModalConfirmAge from 'modal/modalConfirmAge';
@@ -134,8 +133,6 @@ function ModalRouter(props: Props) {
       return <ModalCreateChannel {...modalProps} />;
     case MODALS.SET_REFERRER:
       return <ModalSetReferrer {...modalProps} />;
-    case MODALS.REPOST:
-      return <ModalRepost {...modalProps} />;
     case MODALS.SIGN_OUT:
       return <ModalSignOut {...modalProps} />;
     case MODALS.CONFIRM_AGE:

@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { selectClaimsById, selectMyChannelClaims } from 'lbry-redux';
 
 export const selectState = state => state.app || {};
 
@@ -84,3 +85,37 @@ export const selectIsPasswordSaved = createSelector(selectState, state => state.
 export const selectInterestedInYoutubeSync = createSelector(selectState, state => state.interestedInYoutubeSync);
 
 export const selectSplashAnimationEnabled = createSelector(selectState, state => state.splashAnimationEnabled);
+
+export const selectActiveChannelId = createSelector(selectState, state => state.activeChannel);
+
+export const selectActiveChannelClaim = createSelector(
+  selectActiveChannelId,
+  selectClaimsById,
+  selectMyChannelClaims,
+  (activeChannelClaimId, claimsById, myChannelClaims) => {
+    if (!activeChannelClaimId || !claimsById || !myChannelClaims || !myChannelClaims.length) {
+      return undefined;
+    }
+
+    const activeChannelClaim = claimsById[activeChannelClaimId];
+    if (activeChannelClaim) {
+      return activeChannelClaim;
+    }
+
+    const myChannelClaimsByEffectiveAmount = myChannelClaims.slice().sort((a, b) => {
+      const effectiveAmountA = (a.meta && Number(a.meta.effective_amount)) || 0;
+      const effectiveAmountB = (b.meta && Number(b.meta.effective_amount)) || 0;
+      if (effectiveAmountA === effectiveAmountB) {
+        return 0;
+      } else if (effectiveAmountA > effectiveAmountB) {
+        return -1;
+      } else {
+        return 1;
+      }
+    });
+
+    return myChannelClaimsByEffectiveAmount[0];
+  }
+);
+
+export const selectIncognito = createSelector(selectState, state => state.incognito);

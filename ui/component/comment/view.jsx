@@ -5,7 +5,6 @@ import { FF_MAX_CHARS_IN_COMMENT } from 'constants/form-field';
 import { SITE_NAME, SIMPLE_SITE, ENABLE_COMMENT_REACTIONS } from 'config';
 import React, { useEffect, useState } from 'react';
 import { parseURI } from 'lbry-redux';
-import { isEmpty } from 'util/object';
 import DateTime from 'component/dateTime';
 import Button from 'component/button';
 import Expandable from 'component/expandable';
@@ -29,10 +28,6 @@ type Props = {
   commentId: string, // sha256 digest identifying the comment
   message: string, // comment body
   timePosted: number, // Comment timestamp
-  channel: ?Claim, // Channel Claim, retrieved to obtain thumbnail
-  pending?: boolean,
-  resolveUri: string => void, // resolves the URI
-  isResolvingUri: boolean, // if the URI is currently being resolved
   channelIsBlocked: boolean, // if the channel is blacklisted in the app
   claimIsMine: boolean, // if you control the claim which this comment was posted on
   commentIsMine: boolean, // if this comment was signed by an owned channel
@@ -53,7 +48,8 @@ type Props = {
   pinComment: (string, boolean) => Promise<any>,
   fetchComments: string => void,
   commentIdentityChannel: any,
-  contentChannel: any,
+  contentChannelPermanentUrl: any,
+  activeChannelClaim: ?ChannelClaim,
 };
 
 const LENGTH_TO_COLLAPSE = 300;
@@ -67,10 +63,6 @@ function Comment(props: Props) {
     authorUri,
     timePosted,
     message,
-    pending,
-    channel,
-    isResolvingUri,
-    resolveUri,
     channelIsBlocked,
     commentIsMine,
     commentId,
@@ -87,8 +79,8 @@ function Comment(props: Props) {
     pinComment,
     fetchComments,
     othersReacts,
-    commentIdentityChannel,
-    contentChannel,
+    contentChannelPermanentUrl,
+    activeChannelClaim,
   } = props;
   const {
     push,
@@ -108,10 +100,7 @@ function Comment(props: Props) {
   const dislikesCount = (othersReacts && othersReacts.dislike) || 0;
   const totalLikesAndDislikes = likesCount + dislikesCount;
   const slimedToDeath = totalLikesAndDislikes >= 5 && dislikesCount / totalLikesAndDislikes > 0.8;
-  // to debounce subsequent requests
-  const shouldFetch =
-    channel === undefined ||
-    (channel !== null && channel.value_type === 'channel' && isEmpty(channel.meta) && !pending);
+
   let channelOwnerOfContent;
   try {
     const { channelName } = parseURI(uri);
@@ -121,11 +110,6 @@ function Comment(props: Props) {
   } catch (e) {}
 
   useEffect(() => {
-    // If author was extracted from the URI, then it must be valid.
-    if (authorUri && author && !isResolvingUri && shouldFetch) {
-      resolveUri(authorUri);
-    }
-
     if (isEditing) {
       setCharCount(editedMessage.length);
 
@@ -143,7 +127,7 @@ function Comment(props: Props) {
         window.removeEventListener('keydown', handleEscape);
       };
     }
-  }, [isResolvingUri, shouldFetch, author, authorUri, resolveUri, editedMessage, isEditing, setEditing]);
+  }, [author, authorUri, editedMessage, isEditing, setEditing]);
 
   function handleEditMessageChanged(event) {
     setCommentValue(!SIMPLE_SITE && advancedEditor ? event : event.target.value);
@@ -262,7 +246,7 @@ function Comment(props: Props) {
                       {__('Block Channel')}
                     </MenuItem>
                   )}
-                  {commentIdentityChannel === contentChannel && isTopLevel && (
+                  {activeChannelClaim && activeChannelClaim.permanent_url === contentChannelPermanentUrl && isTopLevel && (
                     <MenuItem
                       className="comment__menu-option menu__link"
                       onSelect={

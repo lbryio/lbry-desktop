@@ -5,6 +5,10 @@
       overflow-y: hidden;
     }
   }
+
+  [data-reach-menu] {
+    z-index: 10000;
+  }
 }
 
 .modal-overlay {
