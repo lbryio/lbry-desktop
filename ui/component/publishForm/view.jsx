@@ -19,6 +19,8 @@ import PublishDescription from 'component/publishDescription';
 import PublishPrice from 'component/publishPrice';
 import PublishFile from 'component/publishFile';
 import PublishBid from 'component/publishBid';
+import PublishReleaseDate from 'component/publishReleaseDate';
+import PublishName from 'component/publishName';
 import PublishAdditionalOptions from 'component/publishAdditionalOptions';
 import PublishFormErrors from 'component/publishFormErrors';
 import SelectThumbnail from 'component/selectThumbnail';
@@ -413,6 +415,11 @@ function PublishForm(props: Props) {
         }
       />
 
+      {!publishing && (
+        <div className={classnames({ 'card--disabled': formDisabled })}>
+          <PublishReleaseDate />
+        </div>
+      )}
       {!publishing && (
         <div className={classnames({ 'card--disabled': formDisabled })}>
           {mode === PUBLISH_MODES.FILE && <PublishDescription disabled={formDisabled} />}

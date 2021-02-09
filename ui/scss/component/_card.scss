@@ -10,6 +10,11 @@
   }
 }
 
+.card--enable-overflow {
+  overflow: visible;
+  margin-bottom: var(--spacing-m);
+}
+
 .card--disabled {
   opacity: 0.3;
   pointer-events: none;
