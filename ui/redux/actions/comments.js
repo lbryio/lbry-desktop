@@ -1,16 +1,16 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
 import * as REACTION_TYPES from 'constants/reactions';
-import { Lbry, selectClaimsByUri, selectMyChannelClaims } from 'lbry-redux';
+import { Lbry, selectClaimsByUri } from 'lbry-redux';
 import { doToast, doSeeNotifications } from 'redux/actions/notifications';
 import {
   makeSelectCommentIdsForUri,
   makeSelectMyReactionsForComment,
   makeSelectOthersReactionsForComment,
   selectPendingCommentReacts,
-  selectCommentChannel,
 } from 'redux/selectors/comments';
 import { makeSelectNotificationForCommentId } from 'redux/selectors/notifications';
+import { selectActiveChannelClaim } from 'redux/selectors/app';
 
 export function doCommentList(uri: string, page: number = 1, pageSize: number = 99999) {
   return (dispatch: Dispatch, getState: GetState) => {
@@ -49,34 +49,23 @@ export function doCommentList(uri: string, page: number = 1, pageSize: number = 
   };
 }
 
-export function doSetCommentChannel(channelName: string) {
-  return (dispatch: Dispatch) => {
-    dispatch({
-      type: ACTIONS.COMMENT_SET_CHANNEL,
-      data: channelName,
-    });
-  };
-}
-
 export function doCommentReactList(uri: string | null, commentId?: string) {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
-    const channel = selectCommentChannel(state);
+    const activeChannelClaim = selectActiveChannelClaim(state);
     const commentIds = uri ? makeSelectCommentIdsForUri(uri)(state) : [commentId];
-    const myChannels = selectMyChannelClaims(state);
 
     dispatch({
       type: ACTIONS.COMMENT_REACTION_LIST_STARTED,
     });
+
     const params: { comment_ids: string, channel_name?: string, channel_id?: string } = {
       comment_ids: commentIds.join(','),
     };
 
-    if (channel && myChannels) {
-      const claimForChannelName = myChannels && myChannels.find(chan => chan.name === channel);
-      const channelId = claimForChannelName && claimForChannelName.claim_id;
-      params['channel_name'] = channel;
-      params['channel_id'] = channelId;
+    if (activeChannelClaim) {
+      params['channel_name'] = activeChannelClaim.name;
+      params['channel_id'] = activeChannelClaim.claim_id;
     }
 
     return Lbry.comment_react_list(params)
@@ -102,39 +91,38 @@ export function doCommentReactList(uri: string | null, commentId?: string) {
 export function doCommentReact(commentId: string, type: string) {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
-    const channel = selectCommentChannel(state);
+    const activeChannelClaim = selectActiveChannelClaim(state);
     const pendingReacts = selectPendingCommentReacts(state);
-    const myChannels = selectMyChannelClaims(state);
     const notification = makeSelectNotificationForCommentId(commentId)(state);
+
+    if (!activeChannelClaim) {
+      console.error('Unable to react to comment. No activeChannel is set.'); // eslint-disable-line
+      return;
+    }
+
     if (notification && !notification.is_seen) {
       dispatch(doSeeNotifications([notification.id]));
     }
+
     const exclusiveTypes = {
       [REACTION_TYPES.LIKE]: REACTION_TYPES.DISLIKE,
       [REACTION_TYPES.DISLIKE]: REACTION_TYPES.LIKE,
     };
-    if (!channel || !myChannels) {
-      dispatch({
-        type: ACTIONS.COMMENT_REACTION_LIST_FAILED,
-        data: 'No active channel found',
-      });
-      return;
-    }
+
     if (pendingReacts.includes(commentId + exclusiveTypes[type]) || pendingReacts.includes(commentId + type)) {
       // ignore dislikes during likes, for example
       return;
     }
+
     let myReacts = makeSelectMyReactionsForComment(commentId)(state);
     const othersReacts = makeSelectOthersReactionsForComment(commentId)(state);
-    const claimForChannelName = myChannels.find(chan => chan.name === channel);
-    const channelId = claimForChannelName && claimForChannelName.claim_id;
-
     const params: CommentReactParams = {
       comment_ids: commentId,
-      channel_name: channel,
-      channel_id: channelId,
+      channel_name: activeChannelClaim.name,
+      channel_id: activeChannelClaim.claim_id,
       react_type: type,
     };
+
     if (myReacts.includes(type)) {
       params['remove'] = true;
       myReacts.splice(myReacts.indexOf(type), 1);
@@ -197,15 +185,16 @@ export function doCommentReact(commentId: string, type: string) {
   };
 }
 
-export function doCommentCreate(
-  comment: string = '',
-  claim_id: string = '',
-  channel: string,
-  parent_id?: string,
-  uri: string
-) {
+export function doCommentCreate(comment: string = '', claim_id: string = '', parent_id?: string, uri: string) {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
+    const activeChannelClaim = selectActiveChannelClaim(state);
+
+    if (!activeChannelClaim) {
+      console.error('Unable to create comment. No activeChannel is set.'); // eslint-disable-line
+      return;
+    }
+
     dispatch({
       type: ACTIONS.COMMENT_CREATE_STARTED,
     });
@@ -217,28 +206,10 @@ export function doCommentCreate(
       }
     }
 
-    const myChannels = selectMyChannelClaims(state);
-    const namedChannelClaim = myChannels && myChannels.find(myChannel => myChannel.name === channel);
-    const channel_id = namedChannelClaim.claim_id;
-
-    if (channel_id == null) {
-      dispatch({
-        type: ACTIONS.COMMENT_CREATE_FAILED,
-        data: {},
-      });
-      dispatch(
-        doToast({
-          message: 'Channel cannot be anonymous, please select a channel and try again.',
-          isError: true,
-        })
-      );
-      return;
-    }
-
     return Lbry.comment_create({
       comment: comment,
       claim_id: claim_id,
-      channel_id: channel_id,
+      channel_id: activeChannelClaim.claim_id,
       parent_id: parent_id,
     })
       .then((result: CommentCreateResponse) => {
@@ -299,32 +270,23 @@ export function doCommentHide(comment_id: string) {
 export function doCommentPin(commentId: string, remove: boolean) {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
-    // const channel = localStorage.getItem('comment-channel');
-    const channel = selectCommentChannel(state);
-    const myChannels = selectMyChannelClaims(state);
-    const claimForChannelName = myChannels && myChannels.find(chan => chan.name === channel);
-    const channelId = claimForChannelName && claimForChannelName.claim_id;
+    const activeChannel = selectActiveChannelClaim(state);
+
+    if (!activeChannel) {
+      console.error('Unable to pin comment. No activeChannel is set.'); // eslint-disable-line
+      return;
+    }
 
     dispatch({
       type: ACTIONS.COMMENT_PIN_STARTED,
     });
-    if (!channelId || !channel || !commentId) {
-      return dispatch({
-        type: ACTIONS.COMMENT_PIN_FAILED,
-        data: { message: 'missing params - unable to pin' },
-      });
-    }
-    const params: { comment_id: string, channel_name: string, channel_id: string, remove?: boolean } = {
+
+    return Lbry.comment_pin({
       comment_id: commentId,
-      channel_name: channel,
-      channel_id: channelId,
-    };
-
-    if (remove) {
-      params['remove'] = true;
-    }
-
-    return Lbry.comment_pin(params)
+      channel_name: activeChannel.name,
+      channel_id: activeChannel.claim_id,
+      ...(remove ? { remove: true } : {}),
+    })
       .then((result: CommentPinResponse) => {
         dispatch({
           type: ACTIONS.COMMENT_PIN_COMPLETED,

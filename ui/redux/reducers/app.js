@@ -44,6 +44,8 @@ export type AppState = {
   allowAnalytics: boolean,
   hasNavigated: boolean,
   interestedInYoutubeSync: boolean,
+  activeChannel: ?string,
+  incognito: boolean,
 };
 
 const defaultState: AppState = {
@@ -80,6 +82,8 @@ const defaultState: AppState = {
   allowAnalytics: false,
   hasNavigated: false,
   interestedInYoutubeSync: false,
+  activeChannel: undefined,
+  incognito: false,
 };
 
 // @@router comes from react-router
@@ -297,6 +301,19 @@ reducers[ACTIONS.TOGGLE_SPLASH_ANIMATION] = (state, action) => {
   return {
     ...state,
     splashAnimationEnabled: !state.splashAnimationEnabled,
+  };
+};
+
+reducers[ACTIONS.SET_ACTIVE_CHANNEL] = (state, action) => {
+  return {
+    ...state,
+    activeChannel: action.data.claimId,
+  };
+};
+reducers[ACTIONS.SET_INCOGNITO] = (state, action) => {
+  return {
+    ...state,
+    incognito: action.data.enabled,
   };
 };
 

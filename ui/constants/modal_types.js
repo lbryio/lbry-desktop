@@ -36,7 +36,6 @@ export const WALLET_RECEIVE = 'wallet_receive';
 export const CREATE_CHANNEL = 'create_channel';
 export const YOUTUBE_WELCOME = 'youtube_welcome';
 export const SET_REFERRER = 'set_referrer';
-export const REPOST = 'repost';
 export const SIGN_OUT = 'sign_out';
 export const LIQUIDATE_SUPPORTS = 'liquidate_supports';
 export const MASS_TIP_UNLOCK = 'mass_tip_unlock';

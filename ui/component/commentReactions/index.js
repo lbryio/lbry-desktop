@@ -2,19 +2,16 @@ import { connect } from 'react-redux';
 import Comment from './view';
 import { makeSelectClaimIsMine, makeSelectClaimForUri } from 'lbry-redux';
 import { doToast } from 'redux/actions/notifications';
-import {
-  makeSelectMyReactionsForComment,
-  makeSelectOthersReactionsForComment,
-  selectCommentChannel,
-} from 'redux/selectors/comments';
+import { makeSelectMyReactionsForComment, makeSelectOthersReactionsForComment } from 'redux/selectors/comments';
 import { doCommentReact } from 'redux/actions/comments';
+import { selectActiveChannelId } from 'redux/selectors/app';
 
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
   claimIsMine: makeSelectClaimIsMine(props.uri)(state),
   myReacts: makeSelectMyReactionsForComment(props.commentId)(state),
   othersReacts: makeSelectOthersReactionsForComment(props.commentId)(state),
-  activeChannel: selectCommentChannel(state),
+  activeChannelId: selectActiveChannelId(state),
 });
 
 const perform = dispatch => ({

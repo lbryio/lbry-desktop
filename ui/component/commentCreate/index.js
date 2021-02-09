@@ -1,9 +1,10 @@
 import { connect } from 'react-redux';
 import { makeSelectClaimForUri, selectMyChannelClaims, selectFetchingMyChannels } from 'lbry-redux';
-import { selectIsPostingComment, selectCommentChannel } from 'redux/selectors/comments';
-import { doOpenModal } from 'redux/actions/app';
-import { doCommentCreate, doSetCommentChannel } from 'redux/actions/comments';
+import { selectIsPostingComment } from 'redux/selectors/comments';
+import { doOpenModal, doSetActiveChannel } from 'redux/actions/app';
+import { doCommentCreate } from 'redux/actions/comments';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
+import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { CommentCreate } from './view';
 
 const select = (state, props) => ({
@@ -12,14 +13,13 @@ const select = (state, props) => ({
   channels: selectMyChannelClaims(state),
   isFetchingChannels: selectFetchingMyChannels(state),
   isPostingComment: selectIsPostingComment(state),
-  activeChannel: selectCommentChannel(state),
+  activeChannelClaim: selectActiveChannelClaim(state),
 });
 
 const perform = (dispatch, ownProps) => ({
-  createComment: (comment, claimId, channel, parentId) =>
-    dispatch(doCommentCreate(comment, claimId, channel, parentId, ownProps.uri)),
+  createComment: (comment, claimId, parentId) => dispatch(doCommentCreate(comment, claimId, parentId, ownProps.uri)),
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
-  setCommentChannel: name => dispatch(doSetCommentChannel(name)),
+  setActiveChannel: claimId => dispatch(doSetActiveChannel(claimId)),
 });
 
 export default connect(select, perform)(CommentCreate);

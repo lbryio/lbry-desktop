@@ -13,6 +13,7 @@ import Spinner from 'component/spinner';
 import I18nMessage from 'component/i18nMessage';
 import usePersistedState from 'effects/use-persisted-state';
 import * as PUBLISH_MODES from 'constants/publish_types';
+import PublishName from 'component/publishName';
 
 type Props = {
   uri: ?string,
@@ -34,10 +35,8 @@ type Props = {
   size: number,
   duration: number,
   isVid: boolean,
-  autoPopulateName: boolean,
   setPublishMode: string => void,
   setPrevFileText: string => void,
-  setAutoPopulateName: boolean => void,
   header: Node,
 };
 
@@ -63,8 +62,6 @@ function PublishFile(props: Props) {
     isVid,
     setPublishMode,
     setPrevFileText,
-    autoPopulateName,
-    setAutoPopulateName,
     header,
   } = props;
 
@@ -231,10 +228,6 @@ function PublishFile(props: Props) {
     const title = event.target.value;
     // Update title
     updatePublishForm({ title });
-    // Auto populate name from title
-    if (autoPopulateName) {
-      updatePublishForm({ name: parseName(title) });
-    }
   }
 
   function handleFileReaderLoaded(event: ProgressEvent) {
@@ -327,11 +320,6 @@ function PublishFile(props: Props) {
       publishFormParams.name = parseName(fileName);
     }
 
-    // Prevent name autopopulation from title
-    if (autoPopulateName) {
-      setAutoPopulateName(false);
-    }
-
     // File path is not supported on web for security reasons so we use the name instead.
     setCurrentFile(file.path || file.name);
     updatePublishForm(publishFormParams);
@@ -357,6 +345,7 @@ function PublishFile(props: Props) {
       subtitle={isStillEditing && __('You are currently editing your upload.')}
       actions={
         <React.Fragment>
+          <PublishName />
           <FormField
             type="text"
             name="content_title"

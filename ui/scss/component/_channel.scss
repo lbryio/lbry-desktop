@@ -264,10 +264,12 @@ $metadata-z-index: 1;
 }
 
 .menu__list.channel__list {
-  margin-top: var(--spacing-s);
+  margin-top: var(--spacing-xs);
   margin-left: 0;
   border-radius: var(--border-radius);
   background: transparent;
+  max-height: 15rem;
+  overflow-y: scroll;
 
   [role='menuitem'] {
     &[data-selected] {
@@ -314,8 +316,14 @@ $metadata-z-index: 1;
 
   .icon {
     color: var(--color-menu-icon);
-    margin-left: var(--spacing-l);
-    margin-right: var(--spacing-s);
+  }
+
+  .icon__wrapper {
+    padding: 0;
+    height: 2rem;
+    width: 2rem;
+    margin-right: var(--spacing-m);
+    border-radius: var(--border-radius);
   }
 
   &:hover {
@@ -326,5 +334,20 @@ $metadata-z-index: 1;
 .channel__list-item--selected {
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius);
-  background-color: var(--color-card-background-highlighted);
+
+  .icon--ChevronDown {
+    margin-left: var(--spacing-l);
+  }
+}
+
+.channel__list-text {
+  font-weight: var(--font-weight-bold);
+}
+
+.channel__selector {
+  margin-bottom: var(--spacing-m);
+
+  @media (min-width: $breakpoint-small) {
+    margin-bottom: var(--spacing-l);
+  }
 }

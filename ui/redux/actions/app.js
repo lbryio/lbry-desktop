@@ -21,6 +21,7 @@ import {
   SHARED_PREFERENCES,
   DAEMON_SETTINGS,
   SETTINGS,
+  selectMyChannelClaims,
 } from 'lbry-redux';
 import { Lbryio } from 'lbryinc';
 import { selectFollowedTagsList } from 'redux/selectors/tags';
@@ -691,5 +692,56 @@ export function doToggleInterestedInYoutubeSync() {
 export function doToggleSplashAnimation() {
   return {
     type: ACTIONS.TOGGLE_SPLASH_ANIMATION,
+  };
+}
+
+export function doSetActiveChannel(claimId) {
+  return (dispatch, getState) => {
+    if (claimId) {
+      return dispatch({
+        type: ACTIONS.SET_ACTIVE_CHANNEL,
+        data: {
+          claimId,
+        },
+      });
+    }
+
+    // If no claimId is passed, set the active channel to the one with the highest effective_amount
+    const state = getState();
+    const myChannelClaims = selectMyChannelClaims(state);
+
+    if (!myChannelClaims || !myChannelClaims.length) {
+      return;
+    }
+
+    const myChannelClaimsByEffectiveAmount = myChannelClaims.slice().sort((a, b) => {
+      const effectiveAmountA = (a.meta && Number(a.meta.effective_amount)) || 0;
+      const effectiveAmountB = (b.meta && Number(b.meta.effective_amount)) || 0;
+      if (effectiveAmountA === effectiveAmountB) {
+        return 0;
+      } else if (effectiveAmountA > effectiveAmountB) {
+        return -1;
+      } else {
+        return 1;
+      }
+    });
+
+    const newActiveChannelClaim = myChannelClaimsByEffectiveAmount[0];
+
+    dispatch({
+      type: ACTIONS.SET_ACTIVE_CHANNEL,
+      data: {
+        claimId: newActiveChannelClaim.claim_id,
+      },
+    });
+  };
+}
+
+export function doSetIncognito(incognitoEnabled) {
+  return {
+    type: ACTIONS.SET_INCOGNITO,
+    data: {
+      enabled: incognitoEnabled,
+    },
   };
 }
