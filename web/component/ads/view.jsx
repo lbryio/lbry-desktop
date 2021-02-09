@@ -84,10 +84,10 @@ function Ads(props: Props) {
 
   useEffect(() => {
     let script;
-
+    const GOOGLE_AD_ELEMENT_ID = 'googleadscriptid';
     if (SHOW_ADS && type === 'google' && !isBlocked) {
       const d = document;
-      if (!d.getElementById('googleadscriptid')) {
+      if (!d.getElementById(GOOGLE_AD_ELEMENT_ID)) {
         try {
           const s = 'script';
           let fjs = d.getElementsByTagName(s)[0];
@@ -105,6 +105,9 @@ function Ads(props: Props) {
           (window.adsbygoogle = window.adsbygoogle || []).push({});
         }
       }, 1000);
+    } else if (isBlocked) {
+      let fjs = document.getElementById(GOOGLE_AD_ELEMENT_ID);
+      if (fjs) fjs.remove();
     }
     return () => {
       if (googleInit) {
