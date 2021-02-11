@@ -446,6 +446,8 @@ fieldset-section {
   }
 
   .select--slim {
+    margin-bottom: var(--spacing-xxs);
+
     @media (min-width: $breakpoint-small) {
       max-width: none;
     }

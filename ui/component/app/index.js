@@ -16,7 +16,7 @@ import {
   selectIsUpgradeAvailable,
   selectAutoUpdateDownloaded,
   selectModal,
-  selectActiveChannelId,
+  selectActiveChannelClaim,
 } from 'redux/selectors/app';
 import { doGetWalletSyncPreference, doSetLanguage } from 'redux/actions/settings';
 import { doSyncLoop } from 'redux/actions/sync';
@@ -44,7 +44,7 @@ const select = state => ({
   isAuthenticated: selectUserVerifiedEmail(state),
   currentModal: selectModal(state),
   syncFatalError: selectSyncFatalError(state),
-  activeChannelId: selectActiveChannelId(state),
+  activeChannelClaim: selectActiveChannelClaim(state),
   myChannelUrls: selectMyChannelUrls(state),
 });
 

@@ -212,6 +212,7 @@ $thumbnailWidthSmall: 0rem;
 
 .comment__menu {
   align-self: flex-end;
+  line-height: 1;
 
   button {
     border-radius: var(--border-radius);
@@ -239,7 +240,13 @@ $thumbnailWidthSmall: 0rem;
   display: flex;
   align-items: center;
   padding: var(--spacing-s);
-  font-size: var(--font-small);
+  font-size: var(--font-xsmall);
+
+  .menu__link {
+    padding-left: 0;
+    padding-right: 0;
+    padding: 0;
+  }
 }
 
 .comment__menu-icon--hovering {
@@ -254,6 +261,26 @@ $thumbnailWidthSmall: 0rem;
   box-shadow: var(--card-box-shadow);
   border-radius: var(--card-radius);
   padding: var(--spacing-s);
+}
+
+.comment__menu-title {
+  @extend .help;
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--font-small);
+  border-bottom: 1px solid var(--color-border);
+  margin-top: 0;
+  padding-left: var(--spacing-s);
+  padding-bottom: var(--spacing-s);
+  padding-right: var(--spacing-xl);
+}
+
+.comment__menu-help {
+  @extend .help;
+  margin-top: var(--spacing-xs);
+  padding-left: calc(18px + var(--spacing-s));
+  max-width: 15rem;
+  white-space: pre-line;
 }
 
 .comment__actions {
@@ -331,4 +358,28 @@ $thumbnailWidthSmall: 0rem;
   position: absolute;
   top: 0.4rem;
   left: 0.4rem;
+}
+
+.comment__menu-active {
+  padding-left: var(--spacing-s);
+  padding-top: var(--spacing-s);
+  border-top: 1px solid var(--color-border);
+  margin-top: var(--spacing-s);
+  display: flex;
+  align-items: center;
+
+  .channel-thumbnail {
+    margin-right: var(--spacing-xs);
+    height: 1.8rem;
+    width: 1.8rem;
+  }
+}
+
+.comment__menu-channel {
+  @extend .help;
+  font-size: var(--font-xsmall);
+  margin-top: 0;
+  max-width: 10rem;
+  white-space: pre-line;
+  margin-right: var(--spacing-s);
 }

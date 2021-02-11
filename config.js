@@ -12,6 +12,7 @@ const config = {
   LBRY_API_URL: process.env.LBRY_API_URL, //api.lbry.com',
   LBRY_WEB_STREAMING_API: process.env.LBRY_WEB_STREAMING_API, //cdn.lbryplayer.xyz',
   LBRY_WEB_BUFFER_API: process.env.LBRY_WEB_BUFFER_API,
+  COMMENT_SERVER_API: process.env.COMMENT_SERVER_API,
   WELCOME_VERSION: process.env.WELCOME_VERSION,
   DOMAIN: process.env.DOMAIN,
   SHARE_DOMAIN_URL: process.env.SHARE_DOMAIN_URL,
