@@ -229,8 +229,10 @@ function PublishForm(props: Props) {
   }, [mode, updatePublishForm]);
 
   useEffect(() => {
-    if (activeChannelName) {
+    if (incognito) {
       updatePublishForm({ channel: undefined });
+    } else if (activeChannelName) {
+      updatePublishForm({ channel: activeChannelName });
     }
   }, [activeChannelName, incognito, updatePublishForm]);
 
