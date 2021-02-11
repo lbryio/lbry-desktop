@@ -17,9 +17,9 @@ type Props = {
   costInfo: ?{ includesData: boolean, cost: number },
   fileInfo: FileListItem,
   uri: string,
-  fetchFileInfo: string => void,
-  fetchCostInfo: string => void,
-  setViewed: string => void,
+  fetchFileInfo: (string) => void,
+  fetchCostInfo: (string) => void,
+  setViewed: (string) => void,
   renderMode: string,
   obscureNsfw: boolean,
   isMature: boolean,
@@ -27,6 +27,8 @@ type Props = {
   setPrimaryUri: (?string) => void,
   videoTheaterMode: boolean,
   commentsDisabled: boolean,
+  doSetPlayingUri: (uri: string, source: string) => void,
+  floatingPlayerEnabled: boolean,
 };
 
 function FilePage(props: Props) {
@@ -44,9 +46,31 @@ function FilePage(props: Props) {
     setPrimaryUri,
     videoTheaterMode,
     commentsDisabled,
+    doSetPlayingUri,
+    floatingPlayerEnabled,
   } = props;
   const cost = costInfo ? costInfo.cost : null;
   const hasFileInfo = fileInfo !== undefined;
+
+  const onScroll = React.useCallback(() => {
+    if (window.pageYOffset >= 500) {
+      doSetPlayingUri(uri, 'scrolling');
+    } else {
+      doSetPlayingUri(uri, 'markdown');
+    }
+  }, [uri]);
+
+  React.useEffect(() => {
+    if (!floatingPlayerEnabled) {
+      return;
+    }
+
+    window.addEventListener('scroll', onScroll);
+
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, [floatingPlayerEnabled]);
 
   React.useEffect(() => {
     // always refresh file info when entering file page to see if we have the file

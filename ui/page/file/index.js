@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { doSetContentHistoryItem, doSetPrimaryUri } from 'redux/actions/content';
+import { doSetContentHistoryItem, doSetPrimaryUri, doSetPlayingUri } from 'redux/actions/content';
 import { withRouter } from 'react-router';
 import {
   doFetchFileInfo,
@@ -32,14 +32,16 @@ const select = (state, props) => {
     renderMode: makeSelectFileRenderModeForUri(props.uri)(state),
     videoTheaterMode: makeSelectClientSetting(SETTINGS.VIDEO_THEATER_MODE)(state),
     commentsDisabled: makeSelectTagInClaimOrChannelForUri(props.uri, DISABLE_COMMENTS_TAG)(state),
+    floatingPlayerEnabled: makeSelectClientSetting(SETTINGS.FLOATING_PLAYER)(state),
   };
 };
 
-const perform = dispatch => ({
-  fetchFileInfo: uri => dispatch(doFetchFileInfo(uri)),
-  fetchCostInfo: uri => dispatch(doFetchCostInfoForUri(uri)),
-  setViewed: uri => dispatch(doSetContentHistoryItem(uri)),
-  setPrimaryUri: uri => dispatch(doSetPrimaryUri(uri)),
+const perform = (dispatch) => ({
+  fetchFileInfo: (uri) => dispatch(doFetchFileInfo(uri)),
+  fetchCostInfo: (uri) => dispatch(doFetchCostInfoForUri(uri)),
+  setViewed: (uri) => dispatch(doSetContentHistoryItem(uri)),
+  setPrimaryUri: (uri) => dispatch(doSetPrimaryUri(uri)),
+  doSetPlayingUri: (uri, source) => dispatch(doSetPlayingUri({ uri, source })),
 });
 
 export default withRouter(connect(select, perform)(FilePage));
