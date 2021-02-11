@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectThumbnailForUri } from 'lbry-redux';
+import { makeSelectThumbnailForUri, selectMyChannelClaims } from 'lbry-redux';
 import { doCommentUpdate } from 'redux/actions/comments';
 import { selectChannelIsBlocked } from 'redux/selectors/blocked';
 import { doToast } from 'redux/actions/notifications';
@@ -15,12 +15,13 @@ const select = (state, props) => ({
   commentingEnabled: IS_WEB ? Boolean(selectUserVerifiedEmail(state)) : true,
   othersReacts: makeSelectOthersReactionsForComment(props.commentId)(state),
   activeChannelClaim: selectActiveChannelClaim(state),
+  myChannels: selectMyChannelClaims(state),
 });
 
-const perform = dispatch => ({
+const perform = (dispatch) => ({
   closeInlinePlayer: () => dispatch(doSetPlayingUri({ uri: null })),
   updateComment: (commentId, comment) => dispatch(doCommentUpdate(commentId, comment)),
-  doToast: options => dispatch(doToast(options)),
+  doToast: (options) => dispatch(doToast(options)),
 });
 
 export default connect(select, perform)(Comment);
