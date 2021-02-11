@@ -243,8 +243,6 @@ $thumbnailWidthSmall: 0rem;
   font-size: var(--font-xsmall);
 
   .menu__link {
-    padding-left: 0;
-    padding-right: 0;
     padding: 0;
   }
 }
@@ -265,14 +263,12 @@ $thumbnailWidthSmall: 0rem;
 
 .comment__menu-title {
   @extend .help;
-  display: flex;
-  justify-content: space-between;
+  margin-top: 0;
+  padding-left: var(--spacing-xs);
+  padding-right: var(--spacing-xl);
+  padding-bottom: var(--spacing-xs);
   font-size: var(--font-small);
   border-bottom: 1px solid var(--color-border);
-  margin-top: 0;
-  padding-left: var(--spacing-s);
-  padding-bottom: var(--spacing-s);
-  padding-right: var(--spacing-xl);
 }
 
 .comment__menu-help {
@@ -361,8 +357,8 @@ $thumbnailWidthSmall: 0rem;
 }
 
 .comment__menu-active {
-  padding-left: var(--spacing-s);
-  padding-top: var(--spacing-s);
+  padding: var(--spacing-xs);
+  padding-bottom: 0;
   border-top: 1px solid var(--color-border);
   margin-top: var(--spacing-s);
   display: flex;
