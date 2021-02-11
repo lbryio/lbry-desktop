@@ -1563,7 +1563,11 @@
   "Deposit cannot be higher than your available balance: %balance%": "Deposit cannot be higher than your available balance: %balance%",
   "This channel has disabled comments on their page.": "This channel has disabled comments on their page.",
   "The creator of this content has disabled comments.": "The creator of this content has disabled comments.",
-  "These %lbc% help your content in search rankings. You can unlock them but that's less fun. %unlock%": "These %lbc% help your content in search rankings. You can unlock them but that's less fun. %unlock%",
+  "These %lbc% help your content in search rankings. You can unlock them but that's less fun.": "These %lbc% help your content in search rankings. You can unlock them but that's less fun.",
   "You have a lot of tips. This could take some time.": "You have a lot of tips. This could take some time.",
+  "Your immediately spendable balance is %balance%.": "Your immediately spendable balance is %balance%.",
+  "%balance% available.": "%balance% available.",
+  "Unlock all tips": "Unlock all tips",
+  "Unlock All": "Unlock All",
   "--end--": "--end--"
 }
