@@ -109,15 +109,25 @@
     height: var(--height-button);
     width: var(--height-button);
     margin-right: 0;
+    transition: border-radius var(--animation-duration);
     border-radius: calc(var(--height-button) / 2);
 
     img {
+      transition: border-radius var(--animation-duration);
       border-radius: calc(var(--height-button) / 2);
     }
   }
 
   &:hover {
     opacity: 0.7;
+
+    .channel-thumbnail {
+      border-radius: var(--border-radius);
+
+      img {
+        border-radius: var(--border-radius);
+      }
+    }
   }
 }
 
