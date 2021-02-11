@@ -80,9 +80,9 @@ type Props = {
   syncEnabled: boolean,
   currentModal: any,
   syncFatalError: boolean,
-  activeChannelId: ?string,
+  activeChannelClaim: ?ChannelClaim,
   myChannelUrls: ?Array<string>,
-  setActiveChannelIfNotSet: (?string) => void,
+  setActiveChannelIfNotSet: () => void,
   setIncognito: boolean => void,
 };
 
@@ -110,8 +110,8 @@ function App(props: Props) {
     syncLoop,
     currentModal,
     syncFatalError,
-    activeChannelId,
     myChannelUrls,
+    activeChannelClaim,
     setActiveChannelIfNotSet,
     setIncognito,
   } = props;
@@ -144,6 +144,7 @@ function App(props: Props) {
   const hasMyChannels = myChannelUrls && myChannelUrls.length > 0;
   const hasNoChannels = myChannelUrls && myChannelUrls.length === 0;
   const shouldMigrateLanguage = LANGUAGE_MIGRATIONS[language];
+  const hasActiveChannelClaim = activeChannelClaim !== undefined;
 
   let uri;
   try {
@@ -238,12 +239,12 @@ function App(props: Props) {
   }, [theme]);
 
   useEffect(() => {
-    if (hasMyChannels && !activeChannelId) {
+    if (hasMyChannels && !hasActiveChannelClaim) {
       setActiveChannelIfNotSet();
     } else if (hasNoChannels) {
       setIncognito(true);
     }
-  }, [hasMyChannels, activeChannelId, setActiveChannelIfNotSet]);
+  }, [hasMyChannels, hasNoChannels, hasActiveChannelClaim, setActiveChannelIfNotSet, setIncognito]);
 
   useEffect(() => {
     if (!languages.includes(language)) {
