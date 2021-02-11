@@ -74,14 +74,14 @@ type Props = {
   balance: number,
   isStillEditing: boolean,
   clearPublish: () => void,
-  resolveUri: string => void,
+  resolveUri: (string) => void,
   scrollToTop: () => void,
   prepareEdit: (claim: any, uri: string) => void,
   resetThumbnailStatus: () => void,
   amountNeededForTakeover: ?number,
   // Add back type
-  updatePublishForm: any => void,
-  checkAvailability: string => void,
+  updatePublishForm: (any) => void,
+  checkAvailability: (string) => void,
   ytSignupPending: boolean,
   modal: { id: string, modalProps: {} },
   enablePublishPreview: boolean,
@@ -135,11 +135,9 @@ function PublishForm(props: Props) {
   // livestream hardcoded bidnezz
   const isLivestreamCreator =
     myChannels &&
-    myChannels.find(channelClaim => channelClaim.claim_id === LIVE_STREAM_CHANNEL_CLAIM_ID) &&
-    channel === LIVE_STREAM_CHANNEL;
-
-  // Used to check if name should be auto-populated from title
-  const [autoPopulateNameFromTitle, setAutoPopulateNameFromTitle] = useState(!isStillEditing);
+    myChannels.find((channelClaim) => channelClaim.claim_id === LIVE_STREAM_CHANNEL_CLAIM_ID) &&
+    activeChannelClaim &&
+    activeChannelClaim.name === LIVE_STREAM_CHANNEL;
 
   const TAGS_LIMIT = 5;
   const fileFormDisabled = mode === PUBLISH_MODES.FILE && !filePath;
@@ -347,9 +345,9 @@ function PublishForm(props: Props) {
     <div className="card-stack">
       <ChannelSelect disabled={disabled} />
 
-      {isLivestreamCreator && (
+      {isLivestreamCreator && activeChannelName && (
         <div className="livestream__creator-message livestream__publish-checkbox">
-          <h4>{__('Hi %channel%!', { channel })}</h4>
+          <h4>{__('Hi %channel%!', { channel: activeChannelName })}</h4>
           <p>
             Check this box if you have entered video information for your livestream. It doesn't matter what file you
             choose for now, just make the sure the title, description, and tags are correct. Everything else is setup!
@@ -364,7 +362,7 @@ function PublishForm(props: Props) {
             label={__('This is for my livestream')}
             name="is_livestream_checkbox"
             checked={isLivestreamPublish}
-            onChange={e => updatePublishForm({ isLivestreamPublish: e.target.checked })}
+            onChange={(e) => updatePublishForm({ isLivestreamPublish: e.target.checked })}
           />
           {isStillEditing && (
             <FormField
@@ -372,7 +370,7 @@ function PublishForm(props: Props) {
               label={'I am done livestreaming'}
               name="is_livestream_checkbox_done"
               checked={!isLivestreamPublish}
-              onChange={e => updatePublishForm({ isLivestreamPublish: !e.target.checked })}
+              onChange={(e) => updatePublishForm({ isLivestreamPublish: !e.target.checked })}
             />
           )}
         </div>
@@ -418,17 +416,17 @@ function PublishForm(props: Props) {
             help={__(
               "Add tags that are relevant to your content so those who're looking for it can find it more easily. If mature content, ensure it is tagged mature. Tag abuse and missing mature tags will not be tolerated."
             )}
-            onSelect={newTags => {
+            onSelect={(newTags) => {
               const validatedTags = [];
-              newTags.forEach(newTag => {
-                if (!tags.some(tag => tag.name === newTag.name)) {
+              newTags.forEach((newTag) => {
+                if (!tags.some((tag) => tag.name === newTag.name)) {
                   validatedTags.push(newTag);
                 }
               });
               updatePublishForm({ tags: [...tags, ...validatedTags] });
             }}
-            onRemove={clickedTag => {
-              const newTags = tags.slice().filter(tag => tag.name !== clickedTag.name);
+            onRemove={(clickedTag) => {
+              const newTags = tags.slice().filter((tag) => tag.name !== clickedTag.name);
               updatePublishForm({ tags: newTags });
             }}
             tagsChosen={tags}
