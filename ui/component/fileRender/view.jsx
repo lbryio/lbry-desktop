@@ -35,6 +35,9 @@ type Props = {
   thumbnail: string,
   desktopPlayStartTime?: number,
   className?: string,
+  fileInfo: ?FileListItem,
+  openModal: (id: string, { path: string }) => void,
+  claimIsMine: boolean,
 };
 
 class FileRender extends React.PureComponent<Props> {
@@ -76,8 +79,11 @@ class FileRender extends React.PureComponent<Props> {
       fileExtension,
       streamingUrl,
       uri,
+      fileInfo,
       renderMode,
       desktopPlayStartTime,
+      openModal,
+      claimIsMine,
     } = this.props;
     const source = streamingUrl;
 
@@ -93,7 +99,9 @@ class FileRender extends React.PureComponent<Props> {
           />
         );
       case RENDER_MODES.IMAGE:
-        return <ImageViewer uri={uri} source={source} />;
+        return (
+          <ImageViewer uri={uri} source={source} fileInfo={fileInfo} openModal={openModal} claimIsMine={claimIsMine} />
+        );
       case RENDER_MODES.HTML:
         return <HtmlViewer source={downloadPath || source} />;
       case RENDER_MODES.DOCUMENT:
@@ -102,7 +110,7 @@ class FileRender extends React.PureComponent<Props> {
           <DocumentViewer
             source={{
               // @if TARGET='app'
-              file: options => fs.createReadStream(downloadPath, options),
+              file: (options) => fs.createReadStream(downloadPath, options),
               // @endif
               stream: source,
               fileExtension,
@@ -131,7 +139,7 @@ class FileRender extends React.PureComponent<Props> {
           <ComicBookViewer
             source={{
               // @if TARGET='app'
-              file: options => fs.createReadStream(downloadPath, options),
+              file: (options) => fs.createReadStream(downloadPath, options),
               // @endif
               stream: source,
             }}
