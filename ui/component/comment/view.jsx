@@ -10,7 +10,7 @@ import Button from 'component/button';
 import Expandable from 'component/expandable';
 import MarkdownPreview from 'component/common/markdown-preview';
 import ChannelThumbnail from 'component/channelThumbnail';
-import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
+import { Menu, MenuButton } from '@reach/menu-button';
 import Icon from 'component/common/icon';
 import { FormField, Form } from 'component/common/form';
 import classnames from 'classnames';
@@ -19,6 +19,7 @@ import CommentReactions from 'component/commentReactions';
 import CommentsReplies from 'component/commentsReplies';
 import { useHistory } from 'react-router';
 import CommentCreate from 'component/commentCreate';
+import CommentMenuList from 'component/commentMenuList';
 
 type Props = {
   closeInlinePlayer: () => void,
@@ -32,8 +33,7 @@ type Props = {
   claimIsMine: boolean, // if you control the claim which this comment was posted on
   commentIsMine: boolean, // if this comment was signed by an owned channel
   updateComment: (string, string) => void,
-  deleteComment: string => void,
-  blockChannel: string => void,
+  commentModBlock: string => void,
   linkedComment?: any,
   myChannels: ?Array<ChannelClaim>,
   commentingEnabled: boolean,
@@ -45,10 +45,7 @@ type Props = {
     like: number,
     dislike: number,
   },
-  pinComment: (string, boolean) => Promise<any>,
-  fetchComments: string => void,
   commentIdentityChannel: any,
-  contentChannelPermanentUrl: any,
   activeChannelClaim: ?ChannelClaim,
 };
 
@@ -67,8 +64,6 @@ function Comment(props: Props) {
     commentIsMine,
     commentId,
     updateComment,
-    deleteComment,
-    blockChannel,
     linkedComment,
     commentingEnabled,
     myChannels,
@@ -76,11 +71,7 @@ function Comment(props: Props) {
     isTopLevel,
     threadDepth,
     isPinned,
-    pinComment,
-    fetchComments,
     othersReacts,
-    contentChannelPermanentUrl,
-    activeChannelClaim,
   } = props;
   const {
     push,
@@ -133,18 +124,9 @@ function Comment(props: Props) {
     setCommentValue(!SIMPLE_SITE && advancedEditor ? event : event.target.value);
   }
 
-  function handlePinComment(commentId, remove) {
-    pinComment(commentId, remove).then(() => fetchComments(uri));
-  }
-
   function handleEditComment() {
     closeInlinePlayer();
     setEditing(true);
-  }
-
-  function handleDeleteComment() {
-    closeInlinePlayer();
-    deleteComment(commentId);
   }
 
   function handleSubmit() {
@@ -228,38 +210,15 @@ function Comment(props: Props) {
                     icon={ICONS.MORE_VERTICAL}
                   />
                 </MenuButton>
-                <MenuList className="menu__list--comments">
-                  {commentIsMine ? (
-                    <>
-                      <MenuItem className="comment__menu-option menu__link" onSelect={handleEditComment}>
-                        <Icon aria-hidden icon={ICONS.EDIT} />
-                        {__('Edit')}
-                      </MenuItem>
-                      <MenuItem className="comment__menu-option menu__link" onSelect={handleDeleteComment}>
-                        <Icon aria-hidden icon={ICONS.DELETE} />
-                        {__('Delete')}
-                      </MenuItem>
-                    </>
-                  ) : (
-                    <MenuItem className="comment__menu-option menu__link" onSelect={() => blockChannel(authorUri)}>
-                      <Icon aria-hidden icon={ICONS.NO} />
-                      {__('Block Channel')}
-                    </MenuItem>
-                  )}
-                  {activeChannelClaim && activeChannelClaim.permanent_url === contentChannelPermanentUrl && isTopLevel && (
-                    <MenuItem
-                      className="comment__menu-option menu__link"
-                      onSelect={
-                        isPinned ? () => handlePinComment(commentId, true) : () => handlePinComment(commentId, false)
-                      }
-                    >
-                      <span className={'button__content'}>
-                        <Icon aria-hidden icon={ICONS.PIN} className={'icon'} />
-                        {isPinned ? __('Unpin') : __('Pin')}
-                      </span>
-                    </MenuItem>
-                  )}
-                </MenuList>
+                <CommentMenuList
+                  uri={uri}
+                  isTopLevel={isTopLevel}
+                  isPinned={isPinned}
+                  commentId={commentId}
+                  authorUri={authorUri}
+                  commentIsMine={commentIsMine}
+                  handleEditComment={handleEditComment}
+                />
               </Menu>
             </div>
           </div>

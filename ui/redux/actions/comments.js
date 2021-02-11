@@ -11,6 +11,8 @@ import {
 } from 'redux/selectors/comments';
 import { makeSelectNotificationForCommentId } from 'redux/selectors/notifications';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
+import { toHex } from 'util/hex';
+import Comments from 'comments';
 
 export function doCommentList(uri: string, page: number = 1, pageSize: number = 99999) {
   return (dispatch: Dispatch, getState: GetState) => {
@@ -18,15 +20,23 @@ export function doCommentList(uri: string, page: number = 1, pageSize: number = 
     const claim = selectClaimsByUri(state)[uri];
     const claimId = claim ? claim.claim_id : null;
 
+    if (!claimId) {
+      dispatch({
+        type: ACTIONS.COMMENT_LIST_FAILED,
+        data: 'unable to find claim for uri',
+      });
+
+      return;
+    }
+
     dispatch({
       type: ACTIONS.COMMENT_LIST_STARTED,
     });
-    return Lbry.comment_list({
-      claim_id: claimId,
+
+    return Comments.comment_list({
       page,
+      claim_id: claimId,
       page_size: pageSize,
-      include_replies: true,
-      skip_validation: true,
     })
       .then((result: CommentListResponse) => {
         const { items: comments } = result;
@@ -238,35 +248,6 @@ export function doCommentCreate(comment: string = '', claim_id: string = '', par
   };
 }
 
-export function doCommentHide(comment_id: string) {
-  return (dispatch: Dispatch) => {
-    dispatch({
-      type: ACTIONS.COMMENT_HIDE_STARTED,
-    });
-    return Lbry.comment_hide({
-      comment_ids: [comment_id],
-    })
-      .then((result: CommentHideResponse) => {
-        dispatch({
-          type: ACTIONS.COMMENT_HIDE_COMPLETED,
-          data: result,
-        });
-      })
-      .catch(error => {
-        dispatch({
-          type: ACTIONS.COMMENT_HIDE_FAILED,
-          data: error,
-        });
-        dispatch(
-          doToast({
-            message: 'Unable to hide this comment, please try again later.',
-            isError: true,
-          })
-        );
-      });
-  };
-}
-
 export function doCommentPin(commentId: string, remove: boolean) {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
@@ -308,13 +289,33 @@ export function doCommentPin(commentId: string, remove: boolean) {
   };
 }
 
-export function doCommentAbandon(comment_id: string) {
-  return (dispatch: Dispatch) => {
+export function doCommentAbandon(commentId: string, creatorChannelUri?: string) {
+  return async (dispatch: Dispatch, getState: GetState) => {
+    const state = getState();
+    const claim = creatorChannelUri ? selectClaimsByUri(state)[creatorChannelUri] : undefined;
+    const creatorChannelId = claim ? claim.claim_id : null;
+    const creatorChannelName = claim ? claim.name : null;
+    const activeChannelClaim = selectActiveChannelClaim(state);
+
     dispatch({
       type: ACTIONS.COMMENT_ABANDON_STARTED,
     });
-    return Lbry.comment_abandon({
-      comment_id: comment_id,
+
+    let commentIdSignature;
+    if (activeChannelClaim) {
+      try {
+        commentIdSignature = await Lbry.channel_sign({
+          channel_id: activeChannelClaim.claim_id,
+          hexdata: toHex(commentId),
+        });
+      } catch (e) {}
+    }
+
+    return Comments.comment_abandon({
+      comment_id: commentId,
+      ...(creatorChannelId ? { creator_channel_id: creatorChannelId } : {}),
+      ...(creatorChannelName ? { creator_channel_name: creatorChannelName } : {}),
+      ...(commentIdSignature || {}),
     })
       .then((result: CommentAbandonResponse) => {
         // Comment may not be deleted if the signing channel can't be signed.
@@ -323,7 +324,7 @@ export function doCommentAbandon(comment_id: string) {
           dispatch({
             type: ACTIONS.COMMENT_ABANDON_COMPLETED,
             data: {
-              comment_id: comment_id,
+              comment_id: commentId,
             },
           });
         } else {
@@ -343,6 +344,7 @@ export function doCommentAbandon(comment_id: string) {
           type: ACTIONS.COMMENT_ABANDON_FAILED,
           data: error,
         });
+
         dispatch(
           doToast({
             message: 'Unable to delete this comment, please try again later.',
@@ -401,4 +403,41 @@ export function doCommentUpdate(comment_id: string, comment: string) {
         });
     };
   }
+}
+
+// Hides a users comments from all creator's claims and prevent them from commenting in the future
+export function doCommentModBlock(commentAuthor: string) {
+  return async (dispatch: Dispatch, getState: GetState) => {
+    const state = getState();
+    const claim = selectClaimsByUri(state)[commentAuthor];
+
+    if (!claim) {
+      console.error("Can't find claim to block"); // eslint-disable-line
+      return;
+    }
+
+    const creatorIdToBan = claim ? claim.claim_id : null;
+    const creatorNameToBan = claim ? claim.name : null;
+    const activeChannelClaim = selectActiveChannelClaim(state);
+
+    let channelSignature = {};
+    if (activeChannelClaim) {
+      try {
+        channelSignature = await Lbry.channel_sign({
+          channel_id: activeChannelClaim.claim_id,
+          hexdata: toHex(activeChannelClaim.name),
+        });
+      } catch (e) {}
+    }
+
+    return Comments.moderation_block({
+      mod_channel_id: activeChannelClaim.claim_id,
+      mod_channel_name: activeChannelClaim.name,
+      signature: channelSignature.signature,
+      signing_ts: channelSignature.signing_ts,
+      banned_channel_id: creatorIdToBan,
+      banned_channel_name: creatorNameToBan,
+      delete_all: true,
+    });
+  };
 }

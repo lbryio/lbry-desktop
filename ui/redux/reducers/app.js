@@ -310,6 +310,7 @@ reducers[ACTIONS.SET_ACTIVE_CHANNEL] = (state, action) => {
     activeChannel: action.data.claimId,
   };
 };
+
 reducers[ACTIONS.SET_INCOGNITO] = (state, action) => {
   return {
     ...state,

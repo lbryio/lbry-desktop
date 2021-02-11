@@ -3,13 +3,15 @@ import React from 'react';
 import PublishForm from 'component/publishForm';
 import Page from 'component/page';
 import YrblWalletEmpty from 'component/yrblWalletEmpty';
+import Spinner from 'component/spinner';
 
 type Props = {
   balance: number,
+  fetchingChannels: boolean,
 };
 
 function PublishPage(props: Props) {
-  const { balance } = props;
+  const { balance, fetchingChannels } = props;
 
   function scrollToTop() {
     const mainContent = document.querySelector('main');
@@ -32,7 +34,13 @@ function PublishPage(props: Props) {
       }}
     >
       {balance === 0 && <YrblWalletEmpty />}
-      <PublishForm scrollToTop={scrollToTop} disabled={balance === 0} />
+      {balance !== 0 && fetchingChannels ? (
+        <div className="main--empty">
+          <Spinner />
+        </div>
+      ) : (
+        <PublishForm scrollToTop={scrollToTop} disabled={balance === 0} />
+      )}
     </Page>
   );
 }
