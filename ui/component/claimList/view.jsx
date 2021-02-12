@@ -22,7 +22,7 @@ type Props = {
   type: string,
   empty?: string,
   defaultSort?: boolean,
-  onScrollBottom?: any => void,
+  onScrollBottom?: (any) => void,
   page?: number,
   pageSize?: number,
   id?: string,
@@ -36,7 +36,8 @@ type Props = {
   injectedItem: ?Node,
   timedOutMessage?: Node,
   tileLayout?: boolean,
-  renderActions?: Claim => ?Node,
+  renderActions?: (Claim) => ?Node,
+  hideLivestreamClaims?: boolean,
 };
 
 export default function ClaimList(props: Props) {
@@ -61,6 +62,7 @@ export default function ClaimList(props: Props) {
     timedOutMessage,
     tileLayout = false,
     renderActions,
+    hideLivestreamClaims,
   } = props;
 
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
@@ -73,7 +75,7 @@ export default function ClaimList(props: Props) {
   }
 
   useEffect(() => {
-    const handleScroll = debounce(e => {
+    const handleScroll = debounce((e) => {
       if (page && pageSize && onScrollBottom) {
         const mainEl = document.querySelector(`.${MAIN_CLASS}`);
 
@@ -95,7 +97,8 @@ export default function ClaimList(props: Props) {
 
   return tileLayout && !header ? (
     <section className="claim-grid">
-      {urisLength > 0 && uris.map(uri => <ClaimPreviewTile key={uri} uri={uri} />)}
+      {urisLength > 0 &&
+        uris.map((uri) => <ClaimPreviewTile key={uri} uri={uri} hideLivestreamClaims={hideLivestreamClaims} />)}
       {!timedOut && urisLength === 0 && !loading && (
         <div className="empty main--empty">{empty || __('No results')}</div>
       )}
@@ -152,6 +155,7 @@ export default function ClaimList(props: Props) {
                 renderActions={renderActions}
                 showUserBlocked={showHiddenByUser}
                 hideBlock={hideBlock}
+                hideLivestreamClaims={hideLivestreamClaims}
                 customShouldHide={(claim: StreamClaim) => {
                   // Hack to hide spee.ch thumbnail publishes
                   // If it meets these requirements, it was probably uploaded here:

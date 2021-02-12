@@ -1,4 +1,5 @@
 // @flow
+import { LIVE_STREAM_TAG, LIVE_STREAM_CHANNEL_CLAIM_ID } from 'constants/livestream';
 import type { Node } from 'react';
 import React, { useEffect, forwardRef } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
@@ -36,9 +37,9 @@ type Props = {
   claimIsMine: boolean,
   pending?: boolean,
   reflectingProgress?: any, // fxme
-  resolveUri: string => void,
+  resolveUri: (string) => void,
   isResolvingUri: boolean,
-  history: { push: string => void },
+  history: { push: (string) => void },
   title: string,
   nsfw: boolean,
   placeholder: string,
@@ -56,22 +57,23 @@ type Props = {
   channelIsBlocked: boolean,
   isSubscribed: boolean,
   actions: boolean | Node | string | number,
-  properties: boolean | Node | string | number | (Claim => Node),
+  properties: boolean | Node | string | number | ((Claim) => Node),
   empty?: Node,
-  onClick?: any => any,
+  onClick?: (any) => any,
   hideBlock?: boolean,
   streamingUrl: ?string,
-  getFile: string => void,
-  customShouldHide?: Claim => boolean,
+  getFile: (string) => void,
+  customShouldHide?: (Claim) => boolean,
   showUnresolvedClaim?: boolean,
   showNullPlaceholder?: boolean,
   includeSupportAction?: boolean,
   hideActions?: boolean,
-  renderActions?: Claim => ?Node,
+  renderActions?: (Claim) => ?Node,
   wrapperElement?: string,
   hideRepostLabel?: boolean,
   repostUrl?: string,
   livestream?: boolean,
+  hideLivestreamClaims?: boolean,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -122,6 +124,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     renderActions,
     // repostUrl,
     livestream,
+    hideLivestreamClaims,
   } = props;
   const WrapperElement = wrapperElement || 'li';
   const shouldFetch =
@@ -129,6 +132,13 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   const abandoned = !isResolvingUri && !claim;
   const shouldHideActions = hideActions || type === 'small' || type === 'tooltip';
   const canonicalUrl = claim && claim.canonical_url;
+  const isLivestream =
+    claim &&
+    claim.signing_channel &&
+    claim.signing_channel.claim_id === LIVE_STREAM_CHANNEL_CLAIM_ID &&
+    claim.value.tags &&
+    claim.value.tags.includes(LIVE_STREAM_TAG);
+
   let isValid = false;
   if (uri) {
     try {
@@ -146,7 +156,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   const navigateUrl = formatLbryUrlForWeb((claim && claim.canonical_url) || uri || '/');
   const navLinkProps = {
     to: navigateUrl,
-    onClick: e => e.stopPropagation(),
+    onClick: (e) => e.stopPropagation(),
   };
 
   // do not block abandoned and nsfw claims if showUserBlocked is passed
@@ -158,7 +168,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   // This will be replaced once blocking is done at the wallet server level
   if (claim && !claimIsMine && !shouldHide && blackListedOutpoints) {
     shouldHide = blackListedOutpoints.some(
-      outpoint =>
+      (outpoint) =>
         (signingChannel && outpoint.txid === signingChannel.txid && outpoint.nout === signingChannel.nout) ||
         (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
     );
@@ -167,19 +177,19 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   // or signing channel outpoint is in the filter list
   if (claim && !claimIsMine && !shouldHide && filteredOutpoints) {
     shouldHide = filteredOutpoints.some(
-      outpoint =>
+      (outpoint) =>
         (signingChannel && outpoint.txid === signingChannel.txid && outpoint.nout === signingChannel.nout) ||
         (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
     );
   }
   // block stream claims
   if (claim && !shouldHide && !showUserBlocked && blockedChannelUris.length && signingChannel) {
-    shouldHide = blockedChannelUris.some(blockedUri => blockedUri === signingChannel.permanent_url);
+    shouldHide = blockedChannelUris.some((blockedUri) => blockedUri === signingChannel.permanent_url);
   }
   // block channel claims if we can't control for them in claim search
   // e.g. fetchRecommendedSubscriptions
   if (claim && isChannelUri && !shouldHide && !showUserBlocked && blockedChannelUris.length) {
-    shouldHide = blockedChannelUris.some(blockedUri => blockedUri === claim.permanent_url);
+    shouldHide = blockedChannelUris.some((blockedUri) => blockedUri === claim.permanent_url);
   }
 
   if (!shouldHide && customShouldHide && claim) {
@@ -228,7 +238,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     }
   }, [isValid, uri, isResolvingUri, shouldFetch]);
 
-  if (shouldHide && !showNullPlaceholder) {
+  if ((shouldHide && !showNullPlaceholder) || (isLivestream && hideLivestreamClaims)) {
     return null;
   }
 

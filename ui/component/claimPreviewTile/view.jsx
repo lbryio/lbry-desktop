@@ -1,4 +1,5 @@
 // @flow
+import { LIVE_STREAM_TAG, LIVE_STREAM_CHANNEL_CLAIM_ID } from 'constants/livestream';
 import React from 'react';
 import classnames from 'classnames';
 import { NavLink, withRouter } from 'react-router-dom';
@@ -18,9 +19,9 @@ import ClaimRepostAuthor from 'component/claimRepostAuthor';
 type Props = {
   uri: string,
   claim: ?Claim,
-  resolveUri: string => void,
+  resolveUri: (string) => void,
   isResolvingUri: boolean,
-  history: { push: string => void },
+  history: { push: (string) => void },
   thumbnail: string,
   title: string,
   placeholder: boolean,
@@ -33,11 +34,12 @@ type Props = {
     nout: number,
   }>,
   blockedChannelUris: Array<string>,
-  getFile: string => void,
+  getFile: (string) => void,
   placeholder: boolean,
   streamingUrl: string,
   isMature: boolean,
   showMature: boolean,
+  hideLivestreamClaims?: boolean,
 };
 
 function ClaimPreviewTile(props: Props) {
@@ -57,16 +59,23 @@ function ClaimPreviewTile(props: Props) {
     blockedChannelUris,
     isMature,
     showMature,
+    hideLivestreamClaims,
   } = props;
   const isRepost = claim && claim.repost_channel_url;
   const shouldFetch = claim === undefined;
   const thumbnailUrl = useGetThumbnail(uri, claim, streamingUrl, getFile, placeholder) || thumbnail;
   const canonicalUrl = claim && claim.canonical_url;
   const navigateUrl = formatLbryUrlForWeb(canonicalUrl || uri || '/');
+  const isLivestream =
+    claim &&
+    claim.signing_channel &&
+    claim.signing_channel.claim_id === LIVE_STREAM_CHANNEL_CLAIM_ID &&
+    claim.value.tags &&
+    claim.value.tags.includes(LIVE_STREAM_TAG);
 
   const navLinkProps = {
     to: navigateUrl,
-    onClick: e => e.stopPropagation(),
+    onClick: (e) => e.stopPropagation(),
   };
 
   let isChannel;
@@ -112,7 +121,7 @@ function ClaimPreviewTile(props: Props) {
   // This will be replaced once blocking is done at the wallet server level
   if (claim && !shouldHide && blackListedOutpoints) {
     shouldHide = blackListedOutpoints.some(
-      outpoint =>
+      (outpoint) =>
         (signingChannel && outpoint.txid === signingChannel.txid && outpoint.nout === signingChannel.nout) ||
         (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
     );
@@ -121,7 +130,7 @@ function ClaimPreviewTile(props: Props) {
   // or signing channel outpoint is in the filter list
   if (claim && !shouldHide && filteredOutpoints) {
     shouldHide = filteredOutpoints.some(
-      outpoint =>
+      (outpoint) =>
         (signingChannel && outpoint.txid === signingChannel.txid && outpoint.nout === signingChannel.nout) ||
         (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
     );
@@ -129,15 +138,15 @@ function ClaimPreviewTile(props: Props) {
 
   // block stream claims
   if (claim && !shouldHide && blockedChannelUris.length && signingChannel) {
-    shouldHide = blockedChannelUris.some(blockedUri => blockedUri === signingChannel.permanent_url);
+    shouldHide = blockedChannelUris.some((blockedUri) => blockedUri === signingChannel.permanent_url);
   }
   // block channel claims if we can't control for them in claim search
   // e.g. fetchRecommendedSubscriptions
   if (claim && isChannel && !shouldHide && blockedChannelUris.length) {
-    shouldHide = blockedChannelUris.some(blockedUri => blockedUri === claim.permanent_url);
+    shouldHide = blockedChannelUris.some((blockedUri) => blockedUri === claim.permanent_url);
   }
 
-  if (shouldHide) {
+  if (shouldHide || (isLivestream && hideLivestreamClaims)) {
     return null;
   }
 

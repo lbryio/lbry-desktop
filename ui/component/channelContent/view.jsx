@@ -73,7 +73,7 @@ function ChannelContent(props: Props) {
               !showMature ? '&nsfw=false&size=25&from=0' : ''
             }`
           )
-          .then(results => {
+          .then((results) => {
             const urls = results.map(({ name, claimId }) => {
               return `lbry://${name}#${claimId}`;
             });
@@ -124,6 +124,7 @@ function ChannelContent(props: Props) {
 
       {claim && claimsInChannel > 0 ? (
         <ClaimListDiscover
+          hideLivestreamClaims
           forceShowReposts
           tileLayout={tileLayout}
           uris={searchResults}

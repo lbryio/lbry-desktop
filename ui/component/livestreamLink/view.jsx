@@ -21,7 +21,7 @@ export default function LivestreamLink(props: Props) {
       any_tags: [LIVE_STREAM_TAG],
       claim_type: ['stream'],
     })
-      .then(res => {
+      .then((res) => {
         if (res && res.items && res.items.length > 0) {
           const claim = res.items[0];
           setLivestreamClaim(claim);
@@ -33,15 +33,15 @@ export default function LivestreamLink(props: Props) {
   React.useEffect(() => {
     function fetchIsStreaming() {
       fetch(`${BITWAVE_API}/${BITWAVE_USERNAME}`)
-        .then(res => res.json())
-        .then(res => {
+        .then((res) => res.json())
+        .then((res) => {
           if (res && res.data && res.data.live) {
             setIsLivestreaming(true);
           } else {
             setIsLivestreaming(false);
           }
         })
-        .catch(e => {});
+        .catch((e) => {});
     }
 
     let interval;
