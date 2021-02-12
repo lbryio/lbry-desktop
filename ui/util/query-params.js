@@ -10,10 +10,10 @@ export function parseQueryParams(queryString: string) {
     .split('?')
     .pop()
     .split('&')
-    .map(p => p.split('='));
+    .map((p) => p.split('='));
 
   const params = {};
-  parts.forEach(array => {
+  parts.forEach((array) => {
     const [first, second] = array;
     params[first] = second;
   });
@@ -46,8 +46,9 @@ export const getSearchQueryString = (query: string, options: any = {}) => {
     if (claimType) {
       queryParams.push(`claimType=${claimType}`);
 
-      // If they are only searching for channels, strip out the media info
-      if (!claimType.includes(SEARCH_OPTIONS.INCLUDE_CHANNELS)) {
+      const searchingFiles = claimType.includes(SEARCH_OPTIONS.INCLUDE_FILES);
+
+      if (searchingFiles) {
         queryParams.push(
           `mediaType=${[
             SEARCH_OPTIONS.MEDIA_FILE,
@@ -69,7 +70,7 @@ export const getSearchQueryString = (query: string, options: any = {}) => {
   if (nsfw === false) additionalOptions['nsfw'] = false;
 
   if (additionalOptions) {
-    Object.keys(additionalOptions).forEach(key => {
+    Object.keys(additionalOptions).forEach((key) => {
       const option = additionalOptions[key];
       queryParams.push(`${key}=${option}`);
     });
