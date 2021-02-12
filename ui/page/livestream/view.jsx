@@ -1,5 +1,11 @@
 // @flow
-import { LIVE_STREAM_CHANNEL_CLAIM_ID, LIVE_STREAM_TAG, BITWAVE_API, BITWAVE_USERNAME } from 'constants/livestream';
+import {
+  LIVE_STREAM_CHANNEL_CLAIM_ID,
+  LIVE_STREAM_TAG,
+  BITWAVE_API,
+  BITWAVE_EMBED_URL,
+  BITWAVE_USERNAME,
+} from 'constants/livestream';
 import React from 'react';
 import { Lbry } from 'lbry-redux';
 import Page from 'component/page';
@@ -8,18 +14,30 @@ import Spinner from 'component/spinner';
 import Yrbl from 'component/yrbl';
 import Button from 'component/button';
 import analytics from 'analytics';
+import FileViewerEmbeddedTitle from 'component/fileViewerEmbeddedTitle';
+// import LivestreamComments from 'component/livestreamComments';
+import OdyseeLogoWithText from 'component/header/odysee_white.png';
+import { useHistory } from 'react-router';
 
 type Props = {
   doSetPlayingUri: ({ uri: ?string }) => void,
+  doResolveUri: (string) => void,
+  isAuthenticated: boolean,
+  doUserSetReferrer: (string) => void,
 };
 
 export default function LivestreamPage(props: Props) {
-  const { doSetPlayingUri } = props;
+  const { doSetPlayingUri, doResolveUri, isAuthenticated, doUserSetReferrer } = props;
+  const {
+    location: { search },
+  } = useHistory();
   const [isFetching, setIsFetching] = React.useState(true);
   const [isLive, setIsLive] = React.useState(false);
   const [displayCountdown, setDisplayCountdown] = React.useState(false);
   const [livestreamClaim, setLivestreamClaim] = React.useState(false);
   const [activeViewers, setActiveViewers] = React.useState(0);
+  const urlParams = new URLSearchParams(search);
+  const embed = urlParams.get('embed');
   const uriFromLivestreamClaim = livestreamClaim && livestreamClaim.canonical_url;
 
   React.useEffect(() => {
@@ -28,7 +46,7 @@ export default function LivestreamPage(props: Props) {
       any_tags: [LIVE_STREAM_TAG],
       claim_type: ['stream'],
     })
-      .then(res => {
+      .then((res) => {
         if (res && res.items && res.items.length > 0) {
           const claim = res.items[0];
           setLivestreamClaim(claim);
@@ -44,8 +62,8 @@ export default function LivestreamPage(props: Props) {
   React.useEffect(() => {
     function checkBitwave() {
       fetch(`${BITWAVE_API}/${BITWAVE_USERNAME}`)
-        .then(res => res.json())
-        .then(res => {
+        .then((res) => res.json())
+        .then((res) => {
           if (!res || !res.data) {
             setIsLive(false);
             return;
@@ -124,13 +142,58 @@ export default function LivestreamPage(props: Props) {
 
         analytics.apiLogView(uriFromLivestreamClaim, outpoint, claimId);
       }
+
+      if (!isAuthenticated) {
+        const uri = jsonClaim.signing_channel && jsonClaim.signing_channel.permanent_url;
+        if (uri) {
+          doUserSetReferrer(uri.replace('lbry://', ''));
+        }
+      }
     }
-  }, [uriFromLivestreamClaim, stringifiedClaim]);
+  }, [uriFromLivestreamClaim, stringifiedClaim, isAuthenticated]);
+
+  React.useEffect(() => {
+    if (uriFromLivestreamClaim) {
+      doResolveUri(uriFromLivestreamClaim);
+    }
+  }, [uriFromLivestreamClaim, doResolveUri]);
 
   React.useEffect(() => {
     // Set playing uri to null so the popout player doesnt start playing the dummy claim if a user navigates back
     doSetPlayingUri({ uri: null });
   }, [doSetPlayingUri]);
+
+  if (embed) {
+    return !isLive ? (
+      <div className="livestream__embed-countdown file-viewer__overlay">
+        <div className="file-viewer__overlay-secondary">
+          <Button className="file-viewer__overlay-logo--videoend" href={URL}>
+            <img src={OdyseeLogoWithText} />
+          </Button>
+        </div>
+        <div className="file-viewer__overlay-title">{__('Livestream starting soon...')}</div>
+        <div className="file-viewer__overlay-actions">
+          <Button label={__('Watch on Odysee')} button="primary" href="https://odysee.com/$/embed" />
+        </div>
+      </div>
+    ) : (
+      <div className="livestream__embed-page">
+        <div className="livestream__embed-wrapper">
+          {uriFromLivestreamClaim && <FileViewerEmbeddedTitle uri={uriFromLivestreamClaim} />}
+          {uriFromLivestreamClaim && (
+            <div className="file-render file-render--video livestream">
+              <div className="file-viewer">
+                <iframe src={`${BITWAVE_EMBED_URL}/${BITWAVE_USERNAME}?skin=odysee&autoplay=1`} scrolling="no" />
+              </div>
+            </div>
+          )}
+        </div>
+        {/* <div className="livestream__embed-comments">
+          <LivestreamComments uri={uriFromLivestreamClaim} embed />
+        </div> */}
+      </div>
+    );
+  }
 
   return (
     <Page className="file-page" filePage livestream>

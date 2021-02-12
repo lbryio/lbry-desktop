@@ -33,11 +33,11 @@ type Props = {
   isReply: boolean,
   isPostingComment: boolean,
   activeChannelClaim: ?ChannelClaim,
-  setCommentChannel: string => void,
   bottom: boolean,
   onSubmit: (string, string) => void,
   livestream: boolean,
   authenticated: boolean,
+  embed?: boolean,
 };
 
 export function CommentCreate(props: Props) {
@@ -53,11 +53,11 @@ export function CommentCreate(props: Props) {
     parentId,
     isPostingComment,
     activeChannelClaim,
-    setCommentChannel,
     onSubmit,
     bottom,
     livestream,
     authenticated,
+    embed,
   } = props;
   const buttonref: ElementRef<any> = React.useRef();
   const {
@@ -100,7 +100,11 @@ export function CommentCreate(props: Props) {
 
   function handleSubmit() {
     if (activeChannelClaim && commentValue.length) {
-      createComment(commentValue, claimId, parentId).then(res => {
+      createComment(commentValue, claimId, parentId).then((res) => {
+        if (onSubmit) {
+          onSubmit(commentValue, activeChannelClaim.name);
+        }
+
         if (res && res.signature) {
           setCommentValue('');
 
@@ -123,7 +127,9 @@ export function CommentCreate(props: Props) {
       <div
         role="button"
         onClick={() =>
-          authenticated
+          embed
+            ? window.open(`https://odysee.com/$/${PAGES.AUTH}?redirect=/$/${PAGES.LIVESTREAM}`)
+            : authenticated
             ? push(`/$/${PAGES.CHANNEL_NEW}?redirect=${pathname}`)
             : push(`/$/${PAGES.AUTH}?redirect=${pathname}`)
         }
@@ -173,9 +179,9 @@ export function CommentCreate(props: Props) {
         autoFocus={isReply}
         textAreaMaxLength={livestream ? FF_MAX_CHARS_IN_LIVESTREAM_COMMENT : FF_MAX_CHARS_IN_COMMENT}
       />
-      {livestream && hasChannels && (
+      {livestream && hasChannels && !embed && (
         <div className="livestream__emoji-actions">
-          {LIVESTREAM_EMOJIS.map(emoji => (
+          {LIVESTREAM_EMOJIS.map((emoji) => (
             <Button
               key={emoji}
               disabled={isPostingComment}

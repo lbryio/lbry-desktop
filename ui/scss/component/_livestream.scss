@@ -18,7 +18,7 @@
 }
 
 .livestream__discussion {
-  height: 0%;
+  min-height: 0%;
   width: 100%;
   margin-top: var(--spacing-m);
 
@@ -117,5 +117,80 @@
 .livestream__emoji-actions {
   > *:not(:last-child) {
     margin-right: var(--spacing-s);
+  }
+}
+
+.livestream__embed-page {
+  display: flex;
+
+  .file-viewer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    iframe {
+      max-height: none;
+    }
+  }
+}
+
+.livestream__embed-wrapper {
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #000000;
+
+  .livestream {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+}
+
+.livestream__embed-countdown {
+  @extend .livestream__embed-wrapper;
+  justify-content: center;
+}
+
+.livestream__embed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100vh;
+  width: 100vw;
+}
+
+.livestream__embed-comments {
+  width: 30vw;
+  height: 100vh;
+  display: none;
+
+  .livestream__discussion {
+    height: 100vh;
+    margin-left: 0;
+  }
+
+  .card {
+    border-radius: 0;
+  }
+
+  .card__main-actions {
+    height: 100%;
+    width: 30vw;
+  }
+
+  .livestream__comments-wrapper--with-height {
+    height: calc(100% - 200px - (var(--spacing-l)));
+  }
+
+  @media (min-width: $breakpoint-small) {
+    display: inline-block;
   }
 }
