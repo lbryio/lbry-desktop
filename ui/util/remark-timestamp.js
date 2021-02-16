@@ -30,13 +30,6 @@ function findNextTimestamp(value, fromIndex, strictlyFromIndex) {
       }
     }
 
-    if (fromIndex > 0 && fromIndex >= match.index && fromIndex < match.index + match[0].length) {
-      // Skip previously-rejected word, preventing "62:01" from being tokenized as "2:01", for example.
-      // This assumes that a non-zero 'fromIndex' means that a previous lookup has failed.
-      begin = match.index + match[0].length;
-      continue;
-    }
-
     // Exclude trailing colons to allow "0:12: Start of section", for example.
     const str = match[0].replace(/:+$/, '');
 
@@ -84,7 +77,7 @@ function locateTimestamp(value, fromIndex) {
 }
 
 // Generate 'timestamp' markdown node
-const createTimestampNode = text => ({
+const createTimestampNode = (text) => ({
   type: TIMESTAMP_NODE_TYPE,
   value: text,
   children: [{ type: 'text', value: text }],
@@ -145,7 +138,7 @@ const transformer = (node, index, parent) => {
   }
 };
 
-const transform = tree => {
+const transform = (tree) => {
   visit(tree, [TIMESTAMP_NODE_TYPE], transformer);
 };
 
