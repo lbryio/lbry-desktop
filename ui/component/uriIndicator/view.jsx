@@ -9,11 +9,10 @@ type Props = {
   channelUri: ?string,
   link: ?boolean,
   claim: ?Claim,
-
   hideAnonymous: boolean,
   // Lint thinks we aren't using these, even though we are.
   // Possibly because the resolve function is an arrow function that is passed in props?
-  resolveUri: string => void,
+  resolveUri: (string) => void,
   uri: string,
   // to allow for other elements to be nested within the UriIndicator
   children: ?Node,

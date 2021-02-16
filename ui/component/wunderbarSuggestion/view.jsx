@@ -28,7 +28,7 @@ export default function WunderbarSuggestion(props: Props) {
       >
         {isChannel ? <ChannelThumbnail uri={uri} /> : <FileThumbnail uri={uri} />}
         <span className="wunderbar__suggestion-label">
-          <div>{claim.value.title}</div>
+          <div className="wunderbar__suggestion-title">{claim.value.title}</div>
           <div className="wunderbar__suggestion-name">
             {isChannel ? claim.name : (claim.signing_channel && claim.signing_channel.name) || __('Anonymous')}
           </div>

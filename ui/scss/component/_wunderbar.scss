@@ -170,6 +170,9 @@
   font-size: var(--font-small);
   min-width: 0;
   white-space: nowrap;
+}
+
+.wunderbar__suggestion-title {
   overflow: hidden;
   text-overflow: ellipsis;
 }

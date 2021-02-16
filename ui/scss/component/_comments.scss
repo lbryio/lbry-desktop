@@ -204,6 +204,7 @@ $thumbnailWidthSmall: 0rem;
   opacity: 0.5;
   white-space: nowrap;
   height: 100%;
+  margin-left: var(--spacing-xs);
 
   &:focus {
     @include linkFocus;

@@ -17,22 +17,25 @@ type State = { search: SearchState };
 
 export const selectState = (state: State): SearchState => state.search;
 
-export const selectSearchValue: (state: State) => string = createSelector(selectState, state => state.searchQuery);
+export const selectSearchValue: (state: State) => string = createSelector(selectState, (state) => state.searchQuery);
 
-export const selectSearchOptions: (state: State) => SearchOptions = createSelector(selectState, state => state.options);
+export const selectSearchOptions: (state: State) => SearchOptions = createSelector(
+  selectState,
+  (state) => state.options
+);
 
-export const selectIsSearching: (state: State) => boolean = createSelector(selectState, state => state.searching);
+export const selectIsSearching: (state: State) => boolean = createSelector(selectState, (state) => state.searching);
 
 export const selectSearchUrisByQuery: (state: State) => { [string]: Array<string> } = createSelector(
   selectState,
-  state => state.urisByQuery
+  (state) => state.urisByQuery
 );
 
 export const makeSelectSearchUris = (query: string): ((state: State) => Array<string>) =>
   // replace statement below is kind of ugly, and repeated in doSearch action
   createSelector(
     selectSearchUrisByQuery,
-    byQuery => byQuery[query ? query.replace(/^lbry:\/\//i, '').replace(/\//, ' ') : query]
+    (byQuery) => byQuery[query ? query.replace(/^lbry:\/\//i, '').replace(/\//, ' ') : query]
   );
 
 // Creates a query string based on the state in the search reducer
@@ -82,7 +85,7 @@ export const makeSelectRecommendedContentForUri = (uri: string) =>
 
         let searchUris = searchUrisByQuery[searchQuery];
         if (searchUris) {
-          searchUris = searchUris.filter(searchUri => searchUri !== currentUri);
+          searchUris = searchUris.filter((searchUri) => searchUri !== currentUri);
           recommendedContent = searchUris;
         }
       }

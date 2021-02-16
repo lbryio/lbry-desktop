@@ -20,6 +20,7 @@ import CommentsReplies from 'component/commentsReplies';
 import { useHistory } from 'react-router';
 import CommentCreate from 'component/commentCreate';
 import CommentMenuList from 'component/commentMenuList';
+import UriIndicator from 'component/uriIndicator';
 
 type Props = {
   closeInlinePlayer: () => void,
@@ -33,7 +34,7 @@ type Props = {
   claimIsMine: boolean, // if you control the claim which this comment was posted on
   commentIsMine: boolean, // if this comment was signed by an owned channel
   updateComment: (string, string) => void,
-  commentModBlock: string => void,
+  commentModBlock: (string) => void,
   linkedComment?: any,
   myChannels: ?Array<ChannelClaim>,
   commentingEnabled: boolean,
@@ -105,7 +106,7 @@ function Comment(props: Props) {
       setCharCount(editedMessage.length);
 
       // a user will try and press the escape key to cancel editing their comment
-      const handleEscape = event => {
+      const handleEscape = (event) => {
         if (event.keyCode === ESCAPE_KEY) {
           setEditing(false);
         }
@@ -180,11 +181,7 @@ function Comment(props: Props) {
               {!author ? (
                 <span className="comment__author">{__('Anonymous')}</span>
               ) : (
-                <Button
-                  className="button--uri-indicator truncated-text comment__author"
-                  navigate={authorUri}
-                  label={author}
-                />
+                <UriIndicator link uri={authorUri} />
               )}
               <Button
                 className="comment__time"

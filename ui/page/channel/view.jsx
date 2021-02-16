@@ -21,6 +21,7 @@ import ChannelEdit from 'component/channelEdit';
 import classnames from 'classnames';
 import HelpLink from 'component/common/help-link';
 import ClaimSupportButton from 'component/claimSupportButton';
+import ChannelStakedIndicator from 'component/channelStakedIndicator';
 
 export const PAGE_VIEW_QUERY = `view`;
 const ABOUT_PAGE = `about`;
@@ -42,7 +43,7 @@ type Props = {
     txid: string,
     nout: number,
   }>,
-  fetchSubCount: string => void,
+  fetchSubCount: (string) => void,
   subCount: number,
   pending: boolean,
   youtubeChannels: ?Array<{ channel_claim_id: string, sync_status: string, transfer_state: string }>,
@@ -93,7 +94,7 @@ function ChannelPage(props: Props) {
 
   if (claim && blackListedOutpoints) {
     channelIsBlackListed = blackListedOutpoints.some(
-      outpoint => outpoint.txid === claim.txid && outpoint.nout === claim.nout
+      (outpoint) => outpoint.txid === claim.txid && outpoint.nout === claim.nout
     );
   }
 
@@ -171,8 +172,12 @@ function ChannelPage(props: Props) {
             uri={uri}
             obscure={channelIsBlocked}
             allowGifs
+            hideStakedIndicator
           />
-          <h1 className="channel__title">{title || '@' + channelName}</h1>
+          <h1 className="channel__title">
+            {title || '@' + channelName}
+            <ChannelStakedIndicator uri={uri} large />
+          </h1>
           <div className="channel__meta">
             <span>
               {formattedSubCount} {subCount !== 1 ? __('Followers') : __('Follower')}
@@ -198,6 +203,7 @@ function ChannelPage(props: Props) {
         </div>
         <div className="channel-cover__gradient" />
       </header>
+
       <Tabs onChange={onTabChange} index={tabIndex}>
         <TabList className="tabs__list--channel-page">
           <Tab disabled={editing}>{__('Content')}</Tab>

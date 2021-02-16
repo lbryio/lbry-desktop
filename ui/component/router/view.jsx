@@ -70,17 +70,17 @@ type Props = {
     index: number,
     length: number,
     location: { pathname: string },
-    push: string => void,
+    push: (string) => void,
     state: {},
     replaceState: ({}, string, string) => void,
-    listen: any => () => void,
+    listen: (any) => () => void,
   },
   uri: string,
   title: string,
   welcomeVersion: number,
   hasNavigated: boolean,
   setHasNavigated: () => void,
-  setReferrer: string => void,
+  setReferrer: (string) => void,
   hasUnclaimedRefereeReward: boolean,
   homepageData: any,
 };
@@ -95,7 +95,7 @@ function PrivateRoute(props: PrivateRouteProps) {
   return (
     <Route
       {...rest}
-      render={props =>
+      render={(props) =>
         isAuthenticated || !IS_WEB ? (
           <Component {...props} />
         ) : (
@@ -220,7 +220,7 @@ function AppRouter(props: Props) {
         <Route
           key={dynamicRouteProps.route}
           path={dynamicRouteProps.route}
-          component={routerProps => <DiscoverPage {...routerProps} dynamicRouteProps={dynamicRouteProps} />}
+          component={(routerProps) => <DiscoverPage {...routerProps} dynamicRouteProps={dynamicRouteProps} />}
         />
       ))}
 

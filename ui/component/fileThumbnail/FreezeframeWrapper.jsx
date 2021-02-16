@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import Freezeframe from './FreezeframeLite';
 
-const FreezeframeWrapper = props => {
+const FreezeframeWrapper = (props) => {
   const imgRef = React.useRef();
   const freezeframe = React.useRef();
   // eslint-disable-next-line
