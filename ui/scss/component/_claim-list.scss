@@ -249,8 +249,14 @@
   align-items: flex-start;
 
   .channel-thumbnail {
+    display: none;
     @include handleChannelGif(1.4rem);
     margin-right: 0;
+    margin-left: var(--spacing-s);
+
+    @media (min-width: $breakpoint-small) {
+      display: block;
+    }
   }
 }
 
