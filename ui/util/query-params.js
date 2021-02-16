@@ -46,9 +46,12 @@ export const getSearchQueryString = (query: string, options: any = {}) => {
     if (claimType) {
       queryParams.push(`claimType=${claimType}`);
 
-      const searchingFiles = claimType.includes(SEARCH_OPTIONS.INCLUDE_FILES);
-
-      if (searchingFiles) {
+      /*
+       * Due to limitations in lighthouse, we can't pass
+       * the mediaType parameter when searching for
+       * channels or "everything".
+       */
+      if (!claimType.includes(SEARCH_OPTIONS.INCLUDE_CHANNELS)) {
         queryParams.push(
           `mediaType=${[
             SEARCH_OPTIONS.MEDIA_FILE,
