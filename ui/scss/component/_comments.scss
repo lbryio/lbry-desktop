@@ -1,5 +1,5 @@
 $thumbnailWidth: 1.5rem;
-$thumbnailWidthSmall: 0rem;
+$thumbnailWidthSmall: 1rem;
 
 .comments {
   list-style-type: none;
@@ -50,11 +50,22 @@ $thumbnailWidthSmall: 0rem;
     @media (min-width: $breakpoint-small) {
       @include handleChannelGif($thumbnailWidth);
     }
+
+    .channel-staked__wrapper {
+      @media (max-width: $breakpoint-small) {
+        padding: 0;
+        left: 0;
+        bottom: -1rem;
+        padding: -1rem;
+        margin-left: 0;
+      }
+    }
   }
 }
 
 .comment__thumbnail-wrapper {
   flex: 0;
+  margin-top: var(--spacing-xxs);
 }
 
 .comment__content {

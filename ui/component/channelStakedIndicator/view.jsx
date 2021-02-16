@@ -1,4 +1,5 @@
 // @flow
+import { SIMPLE_SITE } from 'config';
 import * as ICONS from 'constants/icons';
 import React from 'react';
 import classnames from 'classnames';
@@ -58,30 +59,32 @@ function ChannelStakedIndicator(props: Props) {
   const icon = getChannelIcon(level);
 
   return (
-    <Tooltip
-      label={
-        <div className="channel-staked__tooltip">
-          <div className="channel-staked__tooltip-icons">
-            <LevelIcon icon={icon} isControlling={isControlling} size={isControlling ? 14 : 10} />
-          </div>
+    SIMPLE_SITE && (
+      <Tooltip
+        label={
+          <div className="channel-staked__tooltip">
+            <div className="channel-staked__tooltip-icons">
+              <LevelIcon icon={icon} isControlling={isControlling} size={isControlling ? 14 : 10} />
+            </div>
 
-          <div className="channel-staked__tooltip-text">
-            <span>{__('Level %current_level%', { current_level: level })}</span>
-            <div className="channel-staked__amount">
-              <LbcSymbol postfix={<CreditAmount amount={amount} showLBC={false} />} size={14} />
+            <div className="channel-staked__tooltip-text">
+              <span>{__('Level %current_level%', { current_level: level })}</span>
+              <div className="channel-staked__amount">
+                <LbcSymbol postfix={<CreditAmount amount={amount} showLBC={false} />} size={14} />
+              </div>
             </div>
           </div>
-        </div>
-      }
-    >
-      <div
-        className={classnames('channel-staked__wrapper', {
-          'channel-staked__wrapper--large': large,
-        })}
+        }
       >
-        <LevelIcon icon={icon} large={large} isControlling={isControlling} />
-      </div>
-    </Tooltip>
+        <div
+          className={classnames('channel-staked__wrapper', {
+            'channel-staked__wrapper--large': large,
+          })}
+        >
+          <LevelIcon icon={icon} large={large} isControlling={isControlling} />
+        </div>
+      </Tooltip>
+    )
   );
 }
 
