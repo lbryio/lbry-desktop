@@ -27,7 +27,7 @@ type Props = {
   updatePublishForm: ({}) => void,
   disabled: boolean,
   publishing: boolean,
-  showToast: string => void,
+  showToast: (string) => void,
   inProgress: boolean,
   clearPublish: () => void,
   ffmpegStatus: any,
@@ -35,8 +35,8 @@ type Props = {
   size: number,
   duration: number,
   isVid: boolean,
-  setPublishMode: string => void,
-  setPrevFileText: string => void,
+  setPublishMode: (string) => void,
+  setPrevFileText: (string) => void,
   header: Node,
 };
 
@@ -73,8 +73,8 @@ function PublishFile(props: Props) {
   const [userOptimize, setUserOptimize] = usePersistedState('publish-file-user-optimize', false);
 
   const RECOMMENDED_BITRATE = 6000000;
-  const TV_PUBLISH_SIZE_LIMIT: number = 2147483648;
-  const TV_PUBLISH_SIZE_LIMIT_STR_GB = '2';
+  const TV_PUBLISH_SIZE_LIMIT: number = 4294967296;
+  const TV_PUBLISH_SIZE_LIMIT_STR_GB = '4';
   const UPLOAD_SIZE_MESSAGE = __(
     '%SITE_NAME% uploads are limited to %limit% GB. Download the app for unrestricted publishing.',
     { SITE_NAME, limit: TV_PUBLISH_SIZE_LIMIT_STR_GB }
@@ -272,11 +272,11 @@ function PublishFile(props: Props) {
       if (isMp4) {
         const video = document.createElement('video');
         video.preload = 'metadata';
-        video.onloadedmetadata = function() {
+        video.onloadedmetadata = () => {
           updateFileInfo(video.duration, file.size, isVideo);
           window.URL.revokeObjectURL(video.src);
         };
-        video.onerror = function() {
+        video.onerror = () => {
           updateFileInfo(0, file.size, isVideo);
         };
         video.src = window.URL.createObjectURL(file);
