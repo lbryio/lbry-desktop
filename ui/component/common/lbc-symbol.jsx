@@ -1,4 +1,5 @@
 // @flow
+import type { Node } from 'react';
 import * as ICONS from 'constants/icons';
 import React from 'react';
 import classnames from 'classnames';
@@ -8,8 +9,8 @@ type Props = {
   withText?: boolean,
   isTitle?: boolean,
   size?: number,
-  prefix?: string | number,
-  postfix?: string | number,
+  prefix?: string | number | Node,
+  postfix?: string | number | Node,
 };
 
 const LbcSymbol = (props: Props) => {

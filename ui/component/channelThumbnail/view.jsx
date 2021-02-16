@@ -4,6 +4,7 @@ import { parseURI } from 'lbry-redux';
 import classnames from 'classnames';
 import Gerbil from './gerbil.png';
 import FreezeframeWrapper from 'component/fileThumbnail/FreezeframeWrapper';
+import ChannelStakedIndicator from 'component/channelStakedIndicator';
 
 type Props = {
   thumbnail: ?string,
@@ -14,9 +15,10 @@ type Props = {
   small?: boolean,
   allowGifs?: boolean,
   claim: ?ChannelClaim,
-  doResolveUri: string => void,
+  doResolveUri: (string) => void,
   isResolving: boolean,
   showDelayedMessage?: boolean,
+  hideStakedIndicator?: boolean,
 };
 
 function ChannelThumbnail(props: Props) {
@@ -32,6 +34,7 @@ function ChannelThumbnail(props: Props) {
     doResolveUri,
     isResolving,
     showDelayedMessage = false,
+    hideStakedIndicator = false,
   } = props;
   const [thumbError, setThumbError] = React.useState(false);
   const shouldResolve = claim === undefined;
@@ -57,7 +60,11 @@ function ChannelThumbnail(props: Props) {
   }, [doResolveUri, shouldResolve, uri]);
 
   if (channelThumbnail && channelThumbnail.endsWith('gif') && !allowGifs) {
-    return <FreezeframeWrapper src={channelThumbnail} className={classnames('channel-thumbnail', className)} />;
+    return (
+      <FreezeframeWrapper src={channelThumbnail} className={classnames('channel-thumbnail', className)}>
+        {!hideStakedIndicator && <ChannelStakedIndicator uri={uri} claim={claim} />}
+      </FreezeframeWrapper>
+    );
   }
 
   return (
@@ -90,6 +97,7 @@ function ChannelThumbnail(props: Props) {
           )}
         </>
       )}
+      {!hideStakedIndicator && <ChannelStakedIndicator uri={uri} claim={claim} />}
     </div>
   );
 }

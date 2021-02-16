@@ -1,6 +1,8 @@
 // @flow
 import type { Node } from 'react';
 import React from 'react';
+import ReachTooltip from '@reach/tooltip';
+import '@reach/tooltip/styles.css';
 
 type Props = {
   label: string | Node,
@@ -10,11 +12,7 @@ type Props = {
 function Tooltip(props: Props) {
   const { children, label } = props;
 
-  if (typeof label !== 'string') {
-    return children;
-  }
-
-  return <span title={label}>{children}</span>;
+  return <ReachTooltip label={label}>{children}</ReachTooltip>;
 }
 
 export default Tooltip;

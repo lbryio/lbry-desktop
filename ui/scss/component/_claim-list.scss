@@ -169,6 +169,11 @@
   .channel-thumbnail {
     @include handleChannelGif(4rem);
   }
+
+  .media__subtitle {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 .claim-preview--pending {
@@ -242,6 +247,11 @@
 
 .claim-preview-info {
   align-items: flex-start;
+
+  .channel-thumbnail {
+    @include handleChannelGif(1.4rem);
+    margin-right: 0;
+  }
 }
 
 .claim-preview-info,
@@ -425,10 +435,6 @@
     &:nth-child(3n + 1) {
       margin-left: 0;
     }
-
-    .channel-thumbnail {
-      display: none;
-    }
   }
 
   @media (max-width: $breakpoint-small) {
@@ -526,11 +532,11 @@
   transform: translateY(calc(var(--spacing-xs) * -1));
   font-size: var(--font-xsmall);
   color: var(--color-text-subtitle);
+}
 
-  .icon {
-    margin-right: var(--spacing-xxs);
-    margin-bottom: -1px; // Offset it slightly because it doesn't look aligned next to all lowercase text + the @ from a channel
-  }
+.claim-preview__repost-icon {
+  margin-right: var(--spacing-xxs);
+  margin-bottom: -1px; // Offset it slightly because it doesn't look aligned next to all lowercase text + the @ from a channel
 }
 
 .claim-tile__repost-author {

@@ -46,10 +46,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  > .button:only-child {
-    margin-left: auto;
-  }
 }
 
 .header__buttons {
@@ -133,6 +129,7 @@
 
 .header__navigation-item--balance {
   @extend .button--link;
+  margin-left: var(--spacing-m);
 }
 
 .header__navigation-item--forward {

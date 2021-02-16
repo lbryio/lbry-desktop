@@ -18,9 +18,9 @@ import ClaimRepostAuthor from 'component/claimRepostAuthor';
 type Props = {
   uri: string,
   claim: ?Claim,
-  resolveUri: string => void,
+  resolveUri: (string) => void,
   isResolvingUri: boolean,
-  history: { push: string => void },
+  history: { push: (string) => void },
   thumbnail: string,
   title: string,
   placeholder: boolean,
@@ -33,7 +33,7 @@ type Props = {
     nout: number,
   }>,
   blockedChannelUris: Array<string>,
-  getFile: string => void,
+  getFile: (string) => void,
   placeholder: boolean,
   streamingUrl: string,
   isMature: boolean,
@@ -66,7 +66,7 @@ function ClaimPreviewTile(props: Props) {
 
   const navLinkProps = {
     to: navigateUrl,
-    onClick: e => e.stopPropagation(),
+    onClick: (e) => e.stopPropagation(),
   };
 
   let isChannel;
@@ -80,13 +80,10 @@ function ClaimPreviewTile(props: Props) {
     }
   }
 
+  let channelUri;
   const signingChannel = claim && claim.signing_channel;
-  let channelThumbnail;
   if (signingChannel) {
-    channelThumbnail =
-      // I should be able to just pass the the uri to <ChannelThumbnail /> but it wasn't working
-      // Come back to me
-      (signingChannel.value && signingChannel.value.thumbnail && signingChannel.value.thumbnail.url) || undefined;
+    channelUri = signingChannel.permanent_url;
   }
 
   function handleClick(e) {
@@ -112,7 +109,7 @@ function ClaimPreviewTile(props: Props) {
   // This will be replaced once blocking is done at the wallet server level
   if (claim && !shouldHide && blackListedOutpoints) {
     shouldHide = blackListedOutpoints.some(
-      outpoint =>
+      (outpoint) =>
         (signingChannel && outpoint.txid === signingChannel.txid && outpoint.nout === signingChannel.nout) ||
         (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
     );
@@ -121,7 +118,7 @@ function ClaimPreviewTile(props: Props) {
   // or signing channel outpoint is in the filter list
   if (claim && !shouldHide && filteredOutpoints) {
     shouldHide = filteredOutpoints.some(
-      outpoint =>
+      (outpoint) =>
         (signingChannel && outpoint.txid === signingChannel.txid && outpoint.nout === signingChannel.nout) ||
         (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
     );
@@ -129,12 +126,12 @@ function ClaimPreviewTile(props: Props) {
 
   // block stream claims
   if (claim && !shouldHide && blockedChannelUris.length && signingChannel) {
-    shouldHide = blockedChannelUris.some(blockedUri => blockedUri === signingChannel.permanent_url);
+    shouldHide = blockedChannelUris.some((blockedUri) => blockedUri === signingChannel.permanent_url);
   }
   // block channel claims if we can't control for them in claim search
   // e.g. fetchRecommendedSubscriptions
   if (claim && isChannel && !shouldHide && blockedChannelUris.length) {
-    shouldHide = blockedChannelUris.some(blockedUri => blockedUri === claim.permanent_url);
+    shouldHide = blockedChannelUris.some((blockedUri) => blockedUri === claim.permanent_url);
   }
 
   if (shouldHide) {
@@ -179,7 +176,12 @@ function ClaimPreviewTile(props: Props) {
       </NavLink>
       <NavLink {...navLinkProps}>
         <h2 className="claim-tile__title">
-          <TruncatedText text={title || (claim && claim.name)} lines={2} />
+          <TruncatedText text={title || (claim && claim.name)} lines={isChannel ? 1 : 2} />
+          {isChannel && (
+            <div className="claim-tile__about">
+              <UriIndicator uri={uri} link />
+            </div>
+          )}
         </h2>
       </NavLink>
       <div>
@@ -191,7 +193,7 @@ function ClaimPreviewTile(props: Props) {
           ) : (
             <React.Fragment>
               <UriIndicator uri={uri} link hideAnonymous>
-                <ChannelThumbnail thumbnailPreview={channelThumbnail} />
+                <ChannelThumbnail uri={channelUri} />
               </UriIndicator>
 
               <div className="claim-tile__about">

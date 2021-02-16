@@ -61,6 +61,7 @@ $metadata-z-index: 1;
 
 .channel-thumbnail {
   display: flex;
+  position: relative;
   height: 5rem;
   width: 5rem;
   background-size: cover;
@@ -166,7 +167,7 @@ $metadata-z-index: 1;
   // Quick hack to get this to work
   // We should have a generic style for "header with button next to it"
   .button {
-    margin-left: var(--spacing-m);
+    margin-left: var(--spacing-xs);
   }
 
   @media (max-width: $breakpoint-small) {
@@ -349,5 +350,61 @@ $metadata-z-index: 1;
 
   @media (min-width: $breakpoint-small) {
     margin-bottom: var(--spacing-l);
+  }
+}
+
+.channel-staked__tooltip {
+  display: flex;
+  align-items: center;
+}
+
+.channel-staked__tooltip-text {
+  margin-left: var(--spacing-xs);
+  font-size: var(--font-xsmall);
+
+  .icon--LBC {
+    opacity: 0.7;
+    margin-top: -2px;
+  }
+}
+
+.channel-staked__wrapper {
+  display: flex;
+  position: absolute;
+  bottom: -0.9rem;
+  left: -0.9rem;
+  padding: 0.25rem;
+  background-color: var(--color-card-background);
+  border-radius: 50%;
+}
+
+.channel-staked__wrapper--large {
+  position: relative;
+  background-color: transparent;
+  display: inline-block;
+  bottom: auto;
+  left: auto;
+  top: var(--spacing-xs);
+  margin-left: var(--spacing-s);
+  padding: 0;
+}
+
+.channel-staked__indicator {
+  margin-left: 2px;
+  z-index: 3;
+  fill: var(--color-gray-3);
+}
+
+.channel-staked__indicator--controlling {
+  fill: #00eaff;
+}
+
+.channel-staked__amount {
+  display: inline-block;
+  font-size: var(--font-xxsmall);
+  margin-left: var(--spacing-s);
+
+  .credit-amount {
+    color: var(--color-gray-3);
   }
 }
