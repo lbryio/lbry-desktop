@@ -46,7 +46,7 @@ type Props = {
   rewardsAcknowledged: boolean,
   interestedInYoutubeSync: boolean,
   doToggleInterestedInYoutubeSync: () => void,
-  setPrefsReady: () => void,
+  prefsReady: boolean,
 };
 
 function UserSignUp(props: Props) {
@@ -72,7 +72,7 @@ function UserSignUp(props: Props) {
     setClientSetting,
     interestedInYoutubeSync,
     doToggleInterestedInYoutubeSync,
-    setPrefsReady,
+    prefsReady,
   } = props;
   const {
     location: { search, pathname },
@@ -90,12 +90,12 @@ function UserSignUp(props: Props) {
   const hasFetchedReward = useFetched(claimingReward);
   const previousHasVerifiedEmail = usePrevious(hasVerifiedEmail);
   const channelCount = channels ? channels.length : 0;
-  const hasClaimedEmailAward = claimedRewards.some(reward => reward.reward_type === REWARDS.TYPE_CONFIRM_EMAIL);
+  const hasClaimedEmailAward = claimedRewards.some((reward) => reward.reward_type === REWARDS.TYPE_CONFIRM_EMAIL);
   const hasYoutubeChannels = youtubeChannels && Boolean(youtubeChannels.length);
   const isYoutubeTransferComplete =
     hasYoutubeChannels &&
     youtubeChannels.every(
-      channel =>
+      (channel) =>
         channel.transfer_state === YOUTUBE_STATUSES.COMPLETED_TRANSFER ||
         channel.sync_status === YOUTUBE_STATUSES.YOUTUBE_SYNC_ABANDONDED
     );
@@ -136,11 +136,10 @@ function UserSignUp(props: Props) {
   }, [fetchUser]);
 
   React.useEffect(() => {
-    if (previousHasVerifiedEmail === false && hasVerifiedEmail) {
-      setPrefsReady();
+    if (previousHasVerifiedEmail === false && hasVerifiedEmail && prefsReady) {
       setSettingAndSync(SETTINGS.FIRST_RUN_STARTED, true);
     }
-  }, [hasVerifiedEmail, previousHasVerifiedEmail, setPrefsReady]);
+  }, [hasVerifiedEmail, previousHasVerifiedEmail, prefsReady]);
 
   React.useEffect(() => {
     // Don't claim the reward if sync is enabled until after a sync has been completed successfully

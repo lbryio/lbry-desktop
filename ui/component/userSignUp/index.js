@@ -1,6 +1,6 @@
 import REWARD_TYPES from 'rewards';
 import { connect } from 'react-redux';
-import { selectGetSyncIsPending, selectSyncHash } from 'redux/selectors/sync';
+import { selectGetSyncIsPending, selectSyncHash, selectPrefsReady } from 'redux/selectors/sync';
 import { doClaimRewardType } from 'redux/actions/rewards';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { selectClaimedRewards, makeSelectIsRewardClaimPending } from 'redux/selectors/rewards';
@@ -22,11 +22,9 @@ import {
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { selectInterestedInYoutubeSync } from 'redux/selectors/app';
 import { doToggleInterestedInYoutubeSync } from 'redux/actions/app';
-import { doSetPrefsReady } from 'redux/actions/sync';
-
 import UserSignIn from './view';
 
-const select = state => ({
+const select = (state) => ({
   emailToVerify: selectEmailToVerify(state),
   user: selectUser(state),
   accessToken: selectAccessToken(state),
@@ -47,9 +45,10 @@ const select = state => ({
   hasSynced: Boolean(selectSyncHash(state)),
   creatingChannel: selectCreatingChannel(state),
   interestedInYoutubeSync: selectInterestedInYoutubeSync(state),
+  prefsReady: selectPrefsReady(state),
 });
 
-const perform = dispatch => ({
+const perform = (dispatch) => ({
   fetchUser: () => dispatch(doUserFetch()),
   claimConfirmEmailReward: () =>
     dispatch(
@@ -65,7 +64,6 @@ const perform = dispatch => ({
     ),
   setClientSetting: (setting, value, pushToPrefs) => dispatch(doSetClientSetting(setting, value, pushToPrefs)),
   doToggleInterestedInYoutubeSync: () => dispatch(doToggleInterestedInYoutubeSync()),
-  setPrefsReady: () => dispatch(doSetPrefsReady()),
 });
 
 export default connect(select, perform)(UserSignIn);
