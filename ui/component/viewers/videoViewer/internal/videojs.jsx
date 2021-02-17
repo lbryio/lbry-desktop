@@ -30,6 +30,7 @@ export type Player = {
   loadingSpinner: any,
   getChild: (string) => any,
   playbackRate: (?number) => number,
+  readyState: () => number,
   userActive: (?boolean) => boolean,
   overlay: (any) => void,
   mobileUi: (any) => void,
