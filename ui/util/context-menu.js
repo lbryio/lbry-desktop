@@ -119,7 +119,11 @@ export function openClaimPreviewMenu(claim, event) {
     });
   }
 
-  openContextMenu(event, templates);
+  injectDevelopmentTemplate(event, templates);
+
+  if (templates.length !== 0) {
+    remote.Menu.buildFromTemplate(templates).popup({});
+  }
 }
 
 // Block context menu
