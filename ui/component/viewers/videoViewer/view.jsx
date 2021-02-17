@@ -19,8 +19,8 @@ const PLAY_TIMEOUT_LIMIT = 2000;
 
 type Props = {
   position: number,
-  changeVolume: number => void,
-  changeMute: boolean => void,
+  changeVolume: (number) => void,
+  changeMute: (boolean) => void,
   source: string,
   contentType: string,
   thumbnail: string,
@@ -36,9 +36,9 @@ type Props = {
   doAnalyticsBuffer: (string, any) => void,
   claimRewards: () => void,
   savePosition: (string, number) => void,
-  clearPosition: string => void,
+  clearPosition: (string) => void,
   toggleVideoTheaterMode: () => void,
-  setVideoPlaybackRate: number => void,
+  setVideoPlaybackRate: (number) => void,
 };
 
 /*
@@ -94,7 +94,7 @@ function VideoViewer(props: Props) {
   }, [uri, previousUri]);
 
   function doTrackingBuffered(e: Event, data: any) {
-    fetch(source, { method: 'HEAD' }).then(response => {
+    fetch(source, { method: 'HEAD' }).then((response) => {
       data.playerPoweredBy = response.headers.get('x-powered-by');
       doAnalyticsBuffer(uri, data);
     });
@@ -150,12 +150,14 @@ function VideoViewer(props: Props) {
       // https://blog.videojs.com/autoplay-best-practices-with-video-js/#Programmatic-Autoplay-and-Success-Failure-Detection
       if (shouldPlay) {
         const playPromise = player.play();
-        const timeoutPromise = new Promise((resolve, reject) => setTimeout(() => reject(PLAY_TIMEOUT_ERROR), PLAY_TIMEOUT_LIMIT));
+        const timeoutPromise = new Promise((resolve, reject) =>
+          setTimeout(() => reject(PLAY_TIMEOUT_ERROR), PLAY_TIMEOUT_LIMIT)
+        );
 
-        Promise.race([playPromise, timeoutPromise]).catch(error => {
+        Promise.race([playPromise, timeoutPromise]).catch((error) => {
           if (PLAY_TIMEOUT_ERROR) {
             const retryPlayPromise = player.play();
-            Promise.race([retryPlayPromise, timeoutPromise]).catch(error => {
+            Promise.race([retryPlayPromise, timeoutPromise]).catch((error) => {
               setIsLoading(false);
               setIsPlaying(false);
             });
@@ -167,6 +169,7 @@ function VideoViewer(props: Props) {
       }
 
       setIsLoading(shouldPlay); // if we are here outside of an embed, we're playing
+
       player.on('tracking:buffered', doTrackingBuffered);
       player.on('tracking:firstplay', doTrackingFirstPlay);
       player.on('ended', onEnded);
@@ -175,9 +178,8 @@ function VideoViewer(props: Props) {
         setIsPlaying(false);
         handlePosition(player);
       });
-      player.on('error', function() {
+      player.on('error', () => {
         const error = player.error();
-
         if (error) {
           analytics.sentryError('Video.js error', error);
         }
