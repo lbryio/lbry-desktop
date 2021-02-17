@@ -9,6 +9,12 @@
   border: none;
 }
 
+.content__viewer--secondary {
+  .vjs-button--theater-mode {
+    display: none;
+  }
+}
+
 .content__viewer--floating {
   position: fixed;
   margin-bottom: 0;

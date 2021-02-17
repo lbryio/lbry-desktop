@@ -544,6 +544,12 @@ video::-internal-media-controls-overlay-cast-button {
   }
 }
 
+.video-js.vjs-fullscreen {
+  .vjs-button--theater-mode {
+    display: none;
+  }
+}
+
 // ****************************************************************************
 // Tap-to-unmute
 // ****************************************************************************

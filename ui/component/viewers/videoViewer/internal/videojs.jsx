@@ -28,11 +28,11 @@ export type Player = {
   ended: () => boolean,
   error: () => any,
   loadingSpinner: any,
-  getChild: string => any,
+  getChild: (string) => any,
   playbackRate: (?number) => number,
   userActive: (?boolean) => boolean,
-  overlay: any => void,
-  mobileUi: any => void,
+  overlay: (any) => void,
+  mobileUi: (any) => void,
   controlBar: {
     addChild: (string, any) => void,
   },
@@ -42,7 +42,7 @@ type Props = {
   source: string,
   sourceType: string,
   poster: ?string,
-  onPlayerReady: Player => void,
+  onPlayerReady: (Player) => void,
   isAudio: boolean,
   startMuted: boolean,
   autoplay: boolean,
@@ -315,7 +315,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     if (e.shiftKey && (e.keyCode === PERIOD_KEYCODE || e.keyCode === COMMA_KEYCODE)) {
       const isSpeedUp = e.keyCode === PERIOD_KEYCODE;
       const rate = player.playbackRate();
-      let rateIndex = videoPlaybackRates.findIndex(x => x === rate);
+      let rateIndex = videoPlaybackRates.findIndex((x) => x === rate);
       if (rateIndex >= 0) {
         rateIndex = isSpeedUp ? Math.min(rateIndex + 1, videoPlaybackRates.length - 1) : Math.max(rateIndex - 1, 0);
         const nextRate = videoPlaybackRates[rateIndex];
@@ -329,6 +329,9 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     // Theater Mode shortcut
     if (e.keyCode === THEATER_MODE_KEYCODE) {
       toggleVideoTheaterMode();
+      if (player.isFullscreen()) {
+        player.exitFullscreen();
+      }
     }
   }
 
@@ -421,7 +424,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   // Update video player and reload when source URL changes
   useEffect(() => {
     // For some reason the video player is responsible for detecting content type this way
-    fetch(source, { method: 'HEAD', cache: 'no-store' }).then(response => {
+    fetch(source, { method: 'HEAD', cache: 'no-store' }).then((response) => {
       const player = playerRef.current;
 
       if (!player) {
