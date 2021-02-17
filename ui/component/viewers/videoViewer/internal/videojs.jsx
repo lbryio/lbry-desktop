@@ -451,7 +451,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     return vjs;
   }
 
-  // This lifecycle hook is only called once (on mount)
+  // This lifecycle hook is only called once (on mount), or when `isAudio` changes.
   useEffect(() => {
     const vjsElement = createVideoPlayerDOM(containerRef.current);
     const vjsPlayer = initializeVideoPlayer(vjsElement);
@@ -475,7 +475,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         player.dispose();
       }
     };
-  }, []);
+  }, [isAudio]);
 
   // Update video player and reload when source URL changes
   useEffect(() => {
