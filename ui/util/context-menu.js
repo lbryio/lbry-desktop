@@ -1,4 +1,4 @@
-import { clipboard, remote } from 'electron';
+import { clipboard, remote, shell } from 'electron';
 import { convertToShareLink } from 'lbry-redux';
 const isDev = process.env.NODE_ENV !== 'production';
 
@@ -111,10 +111,21 @@ export function openClaimPreviewMenu(claim, event) {
 
   if (claim) {
     const shareLink = convertToShareLink(claim.canonical_url || claim.permanent_url);
+    const claimId = claim.claim_id;
+
     templates.push({
       label: 'Copy link',
       click: () => {
         clipboard.writeText(shareLink);
+      },
+    });
+
+    templates.push({ type: 'separator' });
+
+    templates.push({
+      label: 'Report content',
+      click: () => {
+        shell.openExternal(`https://lbry.com/dmca/${claimId}`);
       },
     });
   }
