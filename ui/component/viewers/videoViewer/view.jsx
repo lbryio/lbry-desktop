@@ -76,6 +76,7 @@ function VideoViewer(props: Props) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [showAutoplayCountdown, setShowAutoplayCountdown] = useState(false);
   const [isEndededEmbed, setIsEndededEmbed] = useState(false);
+  const vjsCallbackDataRef: any = React.useRef();
 
   /* isLoading was designed to show loading screen on first play press, rather than completely black screen, but
   breaks because some browsers (e.g. Firefox) block autoplay but leave the player.play Promise pending */
@@ -92,6 +93,16 @@ function VideoViewer(props: Props) {
       setIsLoading(false);
     }
   }, [uri, previousUri]);
+
+  // Update vjsCallbackDataRef (ensures videojs callbacks are not using stale values):
+  useEffect(() => {
+    vjsCallbackDataRef.current = {
+      embedded: embedded,
+      muted: muted,
+      volume: volume,
+      videoPlaybackRate: videoPlaybackRate,
+    };
+  }, [embedded, muted, volume, videoPlaybackRate]);
 
   function doTrackingBuffered(e: Event, data: any) {
     fetch(source, { method: 'HEAD' }).then((response) => {
@@ -137,12 +148,17 @@ function VideoViewer(props: Props) {
     }
   }
 
+  function restoreSavedSettings(player) {
+    if (!vjsCallbackDataRef.current.embedded) {
+      player.muted(vjsCallbackDataRef.current.muted);
+      player.volume(vjsCallbackDataRef.current.volume);
+      player.playbackRate(vjsCallbackDataRef.current.videoPlaybackRate);
+    }
+  }
+
   const onPlayerReady = useCallback(
     (player: Player) => {
       if (!embedded) {
-        player.muted(muted);
-        player.volume(volume);
-        player.playbackRate(videoPlaybackRate);
         addTheaterModeButton(player, toggleVideoTheaterMode);
       }
 
@@ -170,6 +186,12 @@ function VideoViewer(props: Props) {
 
       setIsLoading(shouldPlay); // if we are here outside of an embed, we're playing
 
+      // PR: #5535; Commit: "vjs: Fix 'Video-setting persistence broken'"
+      // Move the restoration to a later `loadedmetadata` phase to counter the
+      // delay from the header-fetch. This is a temp change until the next
+      // re-factoring.
+      player.on('loadedmetadata', () => restoreSavedSettings(player));
+
       player.on('tracking:buffered', doTrackingBuffered);
       player.on('tracking:firstplay', doTrackingFirstPlay);
       player.on('ended', onEnded);
@@ -191,7 +213,12 @@ function VideoViewer(props: Props) {
         }
       });
       player.on('ratechange', () => {
-        if (player) {
+        const HAVE_NOTHING = 0; // https://docs.videojs.com/player#readyState
+        if (player && player.readyState() !== HAVE_NOTHING) {
+          // The playbackRate occasionally resets to 1, typically when loading a fresh video or when 'src' changes.
+          // Videojs says it's a browser quirk (https://github.com/videojs/video.js/issues/2516).
+          // [x] Don't update 'videoPlaybackRate' in this scenario.
+          // [ ] Ideally, the controlBar should be hidden to prevent users from changing the rate while loading.
           setVideoPlaybackRate(player.playbackRate());
         }
       });
