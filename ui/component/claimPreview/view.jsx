@@ -5,7 +5,7 @@ import { NavLink, withRouter } from 'react-router-dom';
 import classnames from 'classnames';
 import { SIMPLE_SITE } from 'config';
 import { parseURI, convertToShareLink } from 'lbry-redux';
-import { openCopyLinkMenu } from 'util/context-menu';
+import { openClaimPreviewMenu } from 'util/context-menu';
 import { formatLbryUrlForWeb } from 'util/url';
 import { isEmpty } from 'util/object';
 import FileThumbnail from 'component/fileThumbnail';
@@ -193,10 +193,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     // @if TARGET='app'
     e.preventDefault();
     e.stopPropagation();
-    if (claim) {
-      const shareLink = convertToShareLink(claim.canonical_url || claim.permanent_url);
-      openCopyLinkMenu(shareLink.replace(/#/g, ':'), e);
-    }
+    openClaimPreviewMenu(claim, e);
     // @endif
   }
 
