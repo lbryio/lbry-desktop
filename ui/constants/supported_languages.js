@@ -7,6 +7,8 @@ const SUPPORTED_LANGUAGES = {
   'zh-Hant': LANGUAGES['zh-Hant'][1],
   hr: LANGUAGES.hr[1],
   nl: LANGUAGES.nl[1],
+  no: LANGUAGES.no[1],
+  fi: LANGUAGES.fi[1],
   fr: LANGUAGES.fr[1],
   de: LANGUAGES.de[1],
   gu: LANGUAGES.gu[1],

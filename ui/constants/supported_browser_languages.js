@@ -7,6 +7,8 @@ const SUPPORTED_BROWSER_LANGUAGES = {
   'zh-Hant': 'zh-Hant',
   hr: 'hr',
   nl: 'nl',
+  no: 'no',
+  fi: 'fi',
   fr: 'fr',
   de: 'de',
   gu: 'gu',
