@@ -1,9 +1,7 @@
 // @flow
-import React, { useCallback, useEffect } from 'react';
+import React from 'react';
 import { Modal } from 'modal/modal';
 import { formatFileSystemPath } from 'util/url';
-import { FormField } from 'component/common/form';
-import usePersistedState from 'effects/use-persisted-state';
 // @if TARGET='app'
 import { shell } from 'electron';
 // @endif
@@ -17,10 +15,13 @@ type Props = {
 };
 
 function ModalOpenExternalResource(props: Props) {
-  const [stopWarning, setStopWarning] = usePersistedState('stop-warning', false);
   const { uri, isTrusted, path, isMine, closeModal } = props;
 
-  const openResource = useCallback(() => {
+  if ((uri && isTrusted) || (path && isMine)) {
+    openResource();
+  }
+
+  function openResource() {
     // @if TARGET='app'
     const { openExternal, openPath, showItemInFolder } = shell;
     if (uri) {
@@ -41,14 +42,7 @@ function ModalOpenExternalResource(props: Props) {
     // @endif
 
     closeModal();
-  }, [closeModal, path, uri]);
-
-  useEffect(() => {
-    if ((uri && isTrusted) || (path && isMine) || stopWarning) {
-      openResource();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [uri, isTrusted, path, isMine, openResource]);
+  }
 
   return (
     <Modal
@@ -66,15 +60,6 @@ function ModalOpenExternalResource(props: Props) {
       </p>
       <blockquote>{uri || path}</blockquote>
       <p>{__('LBRY Inc is not responsible for its content, click continue to proceed at your own risk.')}</p>
-      <div className="stop-warning">
-        <FormField
-          type="checkbox"
-          checked={stopWarning}
-          onChange={() => setStopWarning(!stopWarning)}
-          label={__("Don't Show This Message Again")}
-          name="stop_warning"
-        />
-      </div>
     </Modal>
   );
 }
