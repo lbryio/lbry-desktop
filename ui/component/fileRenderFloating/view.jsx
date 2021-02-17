@@ -129,7 +129,7 @@ export default function FileRenderFloating(props: Props) {
 
   // Listen to main-window resizing and adjust the fp position accordingly:
   useEffect(() => {
-    const handleMainWindowResize = debounce(e => {
+    const handleMainWindowResize = debounce((e) => {
       let newPos = {
         x: Math.round(relativePos.x * getScreenWidth()),
         y: Math.round(relativePos.y * getScreenHeight()),
@@ -248,6 +248,7 @@ export default function FileRenderFloating(props: Props) {
         className={classnames('content__viewer', {
           'content__viewer--floating': isFloating,
           'content__viewer--inline': !isFloating,
+          'content__viewer--secondary': playingUriSource === 'comment',
           'content__viewer--theater-mode': !isFloating && videoTheaterMode,
         })}
         style={
