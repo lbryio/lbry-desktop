@@ -1,4 +1,5 @@
 import { clipboard, remote } from 'electron';
+import { convertToShareLink } from 'lbry-redux';
 const isDev = process.env.NODE_ENV !== 'production';
 
 function injectDevelopmentTemplate(event, templates) {
@@ -105,15 +106,19 @@ export function openSnippetMenu(codeMirror, event) {
   openContextMenu(event, templates, false, selection);
 }
 
-export function openCopyLinkMenu(text, event) {
-  const templates = [
-    {
+export function openClaimPreviewMenu(claim, event) {
+  let templates = [];
+
+  if (claim) {
+    const shareLink = convertToShareLink(claim.canonical_url || claim.permanent_url);
+    templates.push({
       label: 'Copy link',
       click: () => {
-        clipboard.writeText(text);
+        clipboard.writeText(shareLink);
       },
-    },
-  ];
+    });
+  }
+
   openContextMenu(event, templates);
 }
 
