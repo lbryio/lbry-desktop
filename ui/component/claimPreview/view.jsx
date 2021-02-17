@@ -4,8 +4,10 @@ import React, { useEffect, forwardRef } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import classnames from 'classnames';
 import { SIMPLE_SITE } from 'config';
-import { parseURI, convertToShareLink } from 'lbry-redux';
+import { parseURI } from 'lbry-redux';
+// @if TARGET='app'
 import { openClaimPreviewMenu } from 'util/context-menu';
+// @endif
 import { formatLbryUrlForWeb } from 'util/url';
 import { isEmpty } from 'util/object';
 import FileThumbnail from 'component/fileThumbnail';

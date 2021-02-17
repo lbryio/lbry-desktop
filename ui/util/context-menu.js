@@ -107,6 +107,7 @@ export function openSnippetMenu(codeMirror, event) {
 }
 
 export function openClaimPreviewMenu(claim, event) {
+  // @if TARGET='app'
   let templates = [];
 
   if (claim) {
@@ -135,6 +136,7 @@ export function openClaimPreviewMenu(claim, event) {
   if (templates.length !== 0) {
     remote.Menu.buildFromTemplate(templates).popup({});
   }
+  // @endif
 }
 
 // Block context menu
