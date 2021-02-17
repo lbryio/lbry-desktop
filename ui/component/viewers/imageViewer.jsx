@@ -2,6 +2,7 @@
 import React from 'react';
 import Card from 'component/common/card';
 import ErrorText from 'component/common/error-text';
+import ZoomableImage from 'component/zoomableImage';
 
 type Props = {
   source: string,
@@ -21,7 +22,7 @@ function ImageViewer(props: Props) {
       )}
       {!loadingError && (
         <div className="file-viewer">
-          <img src={source} onError={() => setLoadingError(true)} />
+          <ZoomableImage src={source} onError={() => setLoadingError(true)} />
         </div>
       )}
     </React.Fragment>
