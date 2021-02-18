@@ -22,7 +22,7 @@ type Props = {
   type: string,
   empty?: string,
   defaultSort?: boolean,
-  onScrollBottom?: any => void,
+  onScrollBottom?: (any) => void,
   page?: number,
   pageSize?: number,
   id?: string,
@@ -36,7 +36,8 @@ type Props = {
   injectedItem: ?Node,
   timedOutMessage?: Node,
   tileLayout?: boolean,
-  renderActions?: Claim => ?Node,
+  renderActions?: (Claim) => ?Node,
+  searchInLanguage: boolean,
 };
 
 export default function ClaimList(props: Props) {
@@ -61,19 +62,23 @@ export default function ClaimList(props: Props) {
     timedOutMessage,
     tileLayout = false,
     renderActions,
+    searchInLanguage,
   } = props;
 
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
   const timedOut = uris === null;
   const urisLength = (uris && uris.length) || 0;
   const sortedUris = (urisLength > 0 && (currentSort === SORT_NEW ? uris : uris.slice().reverse())) || [];
+  const noResultMsg = searchInLanguage
+    ? __('No results. Contents may be hidden by the Language filter.')
+    : __('No results');
 
   function handleSortChange() {
     setCurrentSort(currentSort === SORT_NEW ? SORT_OLD : SORT_NEW);
   }
 
   useEffect(() => {
-    const handleScroll = debounce(e => {
+    const handleScroll = debounce((e) => {
       if (page && pageSize && onScrollBottom) {
         const mainEl = document.querySelector(`.${MAIN_CLASS}`);
 
@@ -95,10 +100,8 @@ export default function ClaimList(props: Props) {
 
   return tileLayout && !header ? (
     <section className="claim-grid">
-      {urisLength > 0 && uris.map(uri => <ClaimPreviewTile key={uri} uri={uri} />)}
-      {!timedOut && urisLength === 0 && !loading && (
-        <div className="empty main--empty">{empty || __('No results')}</div>
-      )}
+      {urisLength > 0 && uris.map((uri) => <ClaimPreviewTile key={uri} uri={uri} />)}
+      {!timedOut && urisLength === 0 && !loading && <div className="empty main--empty">{empty || noResultMsg}</div>}
       {timedOut && timedOutMessage && <div className="empty main--empty">{timedOutMessage}</div>}
     </section>
   ) : (
@@ -168,9 +171,7 @@ export default function ClaimList(props: Props) {
         </ul>
       )}
 
-      {!timedOut && urisLength === 0 && !loading && (
-        <div className="empty empty--centered">{empty || __('No results')}</div>
-      )}
+      {!timedOut && urisLength === 0 && !loading && <div className="empty empty--centered">{empty || noResultMsg}</div>}
       {!loading && timedOut && timedOutMessage && <div className="empty empty--centered">{timedOutMessage}</div>}
     </section>
   );
