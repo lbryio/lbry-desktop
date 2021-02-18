@@ -23,10 +23,10 @@ function getChannelLevel(amount: number): number {
     case amount >= 50 && amount < 250:
       level = 3;
       break;
-    case amount >= 100 && amount < 1000:
+    case amount >= 250 && amount < 1000:
       level = 4;
       break;
-    case amount > 1000:
+    case amount >= 1000:
       level = 5;
       break;
   }
