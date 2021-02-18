@@ -4,7 +4,7 @@ import React, { useEffect, forwardRef } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import { useImage } from 'react-image';
 import classnames from 'classnames';
-import { CHANNEL_THUMBNAIL_FALLBACK, STREAM_THUMBNAIL_FALLBACK } from 'config';
+import { CHANNEL_THUMBNAIL_FALLBACK, STREAM_THUMBNAIL_FALLBACK, SIMPLE_SITE } from 'config';
 import { parseURI, convertToShareLink } from 'lbry-redux';
 import { openCopyLinkMenu } from 'util/context-menu';
 import { formatLbryUrlForWeb } from 'util/url';
@@ -320,7 +320,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                 </NavLink>
               )}
 
-              {type !== 'small' && !isChannelUri && signingChannel && (
+              {type !== 'small' && !isChannelUri && signingChannel && SIMPLE_SITE && (
                 <ChannelThumbnail uri={signingChannel.permanent_url} />
               )}
             </div>
