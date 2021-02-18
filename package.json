@@ -53,9 +53,8 @@
     "electron-updater": "^4.2.4",
     "express": "^4.17.1",
     "if-env": "^1.0.4",
-    "remove-markdown": "^0.3.0",
-    "react-image": "^4.0.3",
-    "remark-breaks": "^2.0.1",
+	"remark-breaks": "^2.0.1",
+	"remove-markdown": "^0.3.0",
     "tempy": "^0.6.0",
     "videojs-logo": "^2.1.4"
   },

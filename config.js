@@ -41,8 +41,7 @@ const config = {
   PINNED_URI_2: process.env.PINNED_URI_2,
   PINNED_LABEL_2: process.env.PINNED_LABEL_2,
   KNOWN_APP_DOMAINS: process.env.KNOWN_APP_DOMAINS ? process.env.KNOWN_APP_DOMAINS.split(',') : [],
-  CHANNEL_THUMBNAIL_FALLBACK: process.env.CHANNEL_THUMBNAIL_FALLBACK,
-  STREAM_THUMBNAIL_FALLBACK: process.env.STREAM_THUMBNAIL_FALLBACK,
+  THUMBNAIL_FALLBACK: process.env.THUMBNAIL_FALLBACK,
 };
 
 config.URL_LOCAL = `http://localhost:${config.WEB_SERVER_PORT}`;
