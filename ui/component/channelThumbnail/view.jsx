@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import Gerbil from './gerbil.png';
 import FreezeframeWrapper from 'component/fileThumbnail/FreezeframeWrapper';
 import ChannelStakedIndicator from 'component/channelStakedIndicator';
+import { getThumbnailCdnUrl } from 'util/thumbnail';
 
 type Props = {
   thumbnail: ?string,
@@ -67,6 +68,14 @@ function ChannelThumbnail(props: Props) {
     );
   }
 
+  let url = channelThumbnail;
+  // @if TARGET='web'
+  // Pass image urls through a compression proxy
+  if (thumbnail) {
+    url = getThumbnailCdnUrl({ thumbnail });
+  }
+  // @endif
+
   return (
     <div
       className={classnames('channel-thumbnail', className, {
@@ -79,7 +88,7 @@ function ChannelThumbnail(props: Props) {
         <img
           alt={__('Channel profile picture')}
           className="channel-thumbnail__default"
-          src={!thumbError && thumbnailPreview ? thumbnailPreview : Gerbil}
+          src={!thumbError && url ? url : Gerbil}
           onError={() => setThumbError(true)} // if thumb fails (including due to https replace, show gerbil.
         />
       )}
@@ -91,7 +100,7 @@ function ChannelThumbnail(props: Props) {
             <img
               alt={__('Channel profile picture')}
               className="channel-thumbnail__custom"
-              src={!thumbError ? thumbnailPreview || thumbnail : Gerbil}
+              src={!thumbError && url ? url : Gerbil}
               onError={() => setThumbError(true)} // if thumb fails (including due to https replace, show gerbil.
             />
           )}
