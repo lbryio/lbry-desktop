@@ -136,3 +136,4 @@ export const CHANNEL_LEVEL_2 = 'ChannelLevel2';
 export const CHANNEL_LEVEL_3 = 'ChannelLevel3';
 export const CHANNEL_LEVEL_4 = 'ChannelLevel4';
 export const CHANNEL_LEVEL_5 = 'ChannelLevel5';
+export const POPCORN = 'Popcorn';
