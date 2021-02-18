@@ -8,7 +8,6 @@ import 'video.js/dist/alt/video-js-cdn.min.css';
 import eventTracking from 'videojs-event-tracking';
 import * as OVERLAY from './overlays';
 import './plugins/videojs-mobile-ui/plugin';
-// import qualitySelector from 'videojs-hls-quality-selector';
 import hlsQualitySelector from './plugins/videojs-hls-quality-selector/plugin';
 import qualityLevels from 'videojs-contrib-quality-levels';
 import isUserTyping from 'util/detect-typing';

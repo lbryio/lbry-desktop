@@ -205,7 +205,6 @@
     "video.js": "^7.10.1",
     "videojs-contrib-quality-levels": "^2.0.9",
     "videojs-event-tracking": "^1.0.1",
-    "videojs-hls-quality-selector": "^1.1.4",
     "villain-react": "^1.0.9",
     "wavesurfer.js": "^2.2.1",
     "webpack": "^4.28.4",
