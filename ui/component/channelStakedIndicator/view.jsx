@@ -17,16 +17,16 @@ function getChannelLevel(amount: number): number {
   let level = 1;
 
   switch (true) {
-    case amount >= 10 && amount < 1000:
+    case amount >= 1 && amount < 50:
       level = 2;
       break;
-    case amount >= 1000 && amount < 10000:
+    case amount >= 50 && amount < 250:
       level = 3;
       break;
-    case amount >= 10000 && amount < 500000:
+    case amount >= 100 && amount < 1000:
       level = 4;
       break;
-    case amount > 500000:
+    case amount > 1000:
       level = 5;
       break;
   }
