@@ -14,12 +14,14 @@ type Props = {
 
 const SearchOptions = (props: Props) => {
   const { options, setSearchOption, expanded, toggleSearchExpanded } = props;
+  const stringifiedOptions = JSON.stringify(options);
   const resultCount = options[SEARCH_OPTIONS.RESULT_COUNT];
 
   const isFilteringByChannel = useMemo(() => {
-    const claimType = String(options[SEARCH_OPTIONS.CLAIM_TYPE] || '');
+    const jsonOptions = JSON.parse(stringifiedOptions);
+    const claimType = String(jsonOptions[SEARCH_OPTIONS.CLAIM_TYPE] || '');
     return claimType.includes(SEARCH_OPTIONS.INCLUDE_CHANNELS);
-  }, [options]);
+  }, [stringifiedOptions]);
 
   return (
     <div>
