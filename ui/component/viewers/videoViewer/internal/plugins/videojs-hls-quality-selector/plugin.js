@@ -8,7 +8,6 @@ const defaults = {};
 
 // Cross-compatibility for Video.js 5 and 6.
 const registerPlugin = videojs.registerPlugin || videojs.plugin;
-// const dom = videojs.dom || videojs;
 
 /**
  * VideoJS HLS Quality Selector Plugin class.
@@ -25,8 +24,9 @@ class HlsQualitySelectorPlugin {
     this.player = player;
     this.config = options;
 
+    // Ensure dependencies are met
     if (!this.player.qualityLevels) {
-      console.warn(`WARNING: Missing video.js quality levels plugin (required)`);
+      console.error(`Error: Missing video.js quality levels plugin (required) - videojs-hls-quality-selector`);
       return;
     }
 
@@ -42,23 +42,16 @@ class HlsQualitySelectorPlugin {
 
     // Listen for source changes
     this.player.on('loadedmetadata', (e) => {
-      console.log(`Loaded Metadata detected by plugin!`, e);
       this.updatePlugin();
     });
   }
 
   updatePlugin() {
-    console.log(`Updating Quality Selector...`);
-
-    // If there is quality levels plugin and the HLS tech exists
-    // then continue.
+    // If there is the HLS tech
     if (this.getHls()) {
-      console.log('Show quality selector');
       // Show quality selector
       this._qualityButton.show();
     } else {
-      console.log('Hide quality selector');
-      console.log('Source type does not support multiple qulaity levels...');
       // Hide quality selector
       this._qualityButton.hide();
     }
@@ -84,7 +77,6 @@ class HlsQualitySelectorPlugin {
    * Adds the quality menu button to the player control bar.
    */
   createQualityButton() {
-
     const player = this.player;
 
     this._qualityButton = new ConcreteButton(player);
@@ -145,7 +137,7 @@ class HlsQualitySelectorPlugin {
       }).length) {
         const levelItem = this.getQualityMenuItem.call(this, {
           label: levels[i].height + 'p',
-          value: levels[i].height
+          value: levels[i].height,
         });
 
         levelItems.push(levelItem);
