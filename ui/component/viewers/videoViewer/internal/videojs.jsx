@@ -8,7 +8,8 @@ import 'video.js/dist/alt/video-js-cdn.min.css';
 import eventTracking from 'videojs-event-tracking';
 import * as OVERLAY from './overlays';
 import './plugins/videojs-mobile-ui/plugin';
-import qualitySelector from 'videojs-hls-quality-selector';
+// import qualitySelector from 'videojs-hls-quality-selector';
+import hlsQualitySelector from './plugins/videojs-hls-quality-selector/plugin';
 import qualityLevels from 'videojs-contrib-quality-levels';
 import isUserTyping from 'util/detect-typing';
 
@@ -102,7 +103,7 @@ if (!Object.keys(videojs.getPlugins()).includes('eventTracking')) {
 }
 
 if (!Object.keys(videojs.getPlugins()).includes('hlsQualitySelector')) {
-  videojs.registerPlugin('hlsQualitySelector', qualitySelector);
+  videojs.registerPlugin('hlsQualitySelector', hlsQualitySelector);
 }
 
 if (!Object.keys(videojs.getPlugins()).includes('qualityLevels')) {
@@ -379,11 +380,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       // initialize mobile UI
       player.mobileUi(); // Inits mobile version. No-op if Desktop.
 
-      // Add quality selector to player
-      player.hlsQualitySelector({
-        displayCurrentQuality: true,
-      });
-
       // I think this is a callback function
       onPlayerReady(player);
     });
@@ -441,6 +437,17 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       // Update player poster
       // note: the poster prop seems to return null usually.
       if (poster) player.poster(poster);
+
+      // Update player source
+      player.src({
+        src: source,
+        type: type,
+      });
+
+      // Add quality selector to player
+      player.hlsQualitySelector({
+        displayCurrentQuality: true,
+      });
 
       // Update player source
       player.src({

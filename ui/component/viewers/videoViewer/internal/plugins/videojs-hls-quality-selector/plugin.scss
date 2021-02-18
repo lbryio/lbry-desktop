@@ -1,0 +1,9 @@
+// Sass for videojs-hls-quality-selector
+
+.video-js {
+
+  // This class is added to the video.js element by the plugin by default.
+  &.vjs-hls-quality-selector {
+    display: block;
+  }
+}
