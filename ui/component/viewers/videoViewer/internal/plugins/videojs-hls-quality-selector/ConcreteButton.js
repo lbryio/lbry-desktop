@@ -23,7 +23,6 @@ function toTitleCase(string) {
  * Extend vjs button class for quality button.
  */
 export default class ConcreteButton extends VideoJsButtonClass {
-
   /**
    * Button constructor.
    *
@@ -32,7 +31,7 @@ export default class ConcreteButton extends VideoJsButtonClass {
   constructor(player) {
     super(player, {
       title: player.localize('Quality'),
-      name: 'QualityButton'
+      name: 'QualityButton',
     });
   }
 
@@ -52,7 +51,7 @@ export default class ConcreteButton extends VideoJsButtonClass {
    *         The constructed menu
    */
   createMenu() {
-    const menu = new VideoJsMenuClass(this.player_, {menuButton: this});
+    const menu = new VideoJsMenuClass(this.player_, { menuButton: this });
 
     this.hideThreshold_ = 0;
 
@@ -61,9 +60,9 @@ export default class ConcreteButton extends VideoJsButtonClass {
       const titleEl = Dom.createEl('li', {
         className: 'vjs-menu-title',
         innerHTML: toTitleCase(this.options_.title),
-        tabIndex: -1
+        tabIndex: -1,
       });
-      const titleComponent = new VideoJsComponent(this.player_, {el: titleEl});
+      const titleComponent = new VideoJsComponent(this.player_, { el: titleEl });
 
       this.hideThreshold_ += 1;
 
@@ -80,6 +79,5 @@ export default class ConcreteButton extends VideoJsButtonClass {
     }
 
     return menu;
-
   }
 }
