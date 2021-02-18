@@ -2,9 +2,8 @@
 import type { Node } from 'react';
 import React, { useEffect, forwardRef } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
-import { useImage } from 'react-image';
 import classnames from 'classnames';
-import { CHANNEL_THUMBNAIL_FALLBACK, STREAM_THUMBNAIL_FALLBACK, SIMPLE_SITE } from 'config';
+import { SIMPLE_SITE } from 'config';
 import { parseURI, convertToShareLink } from 'lbry-redux';
 import { openCopyLinkMenu } from 'util/context-menu';
 import { formatLbryUrlForWeb } from 'util/url';
@@ -189,11 +188,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   // Weird placement warning
   // Make sure this happens after we figure out if this claim needs to be hidden
   const thumbnailUrl = useGetThumbnail(contentUri, claim, streamingUrl, getFile, shouldHide);
-  const isStream = claim && claim.value_type === 'stream';
-  const { src: thumbnailUrlWithFallback } = useImage({
-    srcList: [thumbnailUrl, isStream ? STREAM_THUMBNAIL_FALLBACK : CHANNEL_THUMBNAIL_FALLBACK],
-    useSuspense: false,
-  });
 
   function handleContextMenu(e) {
     // @if TARGET='app'
@@ -288,7 +282,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
           <>
             {!pending ? (
               <NavLink {...navLinkProps}>
-                <FileThumbnail thumbnail={thumbnailUrlWithFallback}>
+                <FileThumbnail thumbnail={thumbnailUrl}>
                   {/* @if TARGET='app' */}
                   {claim && (
                     <div className="claim-preview__hover-actions">
@@ -304,7 +298,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                 </FileThumbnail>
               </NavLink>
             ) : (
-              <FileThumbnail thumbnail={thumbnailUrlWithFallback} />
+              <FileThumbnail thumbnail={thumbnailUrl} />
             )}
           </>
         )}
