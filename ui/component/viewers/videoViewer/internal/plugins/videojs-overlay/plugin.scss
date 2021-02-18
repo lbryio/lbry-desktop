@@ -225,7 +225,10 @@ $accent-color: var(--color-primary);
 
 // Button glow
 .video-js {
-  .vjs-control {
+  .vjs-control,
+  .vjs-time-divider {
+    user-select: none;
+
     &:focus:before,
     &:hover:before,
     &:focus {
