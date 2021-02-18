@@ -2,7 +2,6 @@
 import type { Node } from 'react';
 import { getThumbnailCdnUrl } from 'util/thumbnail';
 import React from 'react';
-import { THUMBNAIL_FALLBACK } from 'config';
 import FreezeframeWrapper from './FreezeframeWrapper';
 import Placeholder from './placeholder.png';
 import classnames from 'classnames';
@@ -15,11 +14,10 @@ type Props = {
   claim: ?StreamClaim,
   doResolveUri: string => void,
   className?: string,
-  fallbackThumbnail?: string,
 };
 
 function FileThumbnail(props: Props) {
-  const { claim, uri, doResolveUri, thumbnail: rawThumbnail, children, allowGifs = false, className, fallbackThumbnail = THUMBNAIL_FALLBACK } = props;
+  const { claim, uri, doResolveUri, thumbnail: rawThumbnail, children, allowGifs = false, className } = props;
   const passedThumbnail = rawThumbnail && rawThumbnail.trim().replace(/^http:\/\//i, 'https://');
   const thumbnailFromClaim =
     uri && claim && claim.value && claim.value.thumbnail ? claim.value.thumbnail.url : undefined;
@@ -48,11 +46,9 @@ function FileThumbnail(props: Props) {
   }
   // @endif
 
-  const cleanUrl = url ? url.replace(/'/g, "\\'") : '';
-
   return (
     <div
-      style={{ backgroundImage: `url('${cleanUrl}'), url('${fallbackThumbnail}')` }}
+      style={{ backgroundImage: `url('${url ? url.replace(/'/g, "\\'") : ''}')` }}
       className={classnames('media__thumb', className, {
         'media__thumb--resolving': !hasResolvedClaim,
       })}
