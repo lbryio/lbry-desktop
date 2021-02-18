@@ -71,7 +71,7 @@ function ChannelContent(props: Props) {
               !showMature ? '&nsfw=false&size=25&from=0' : ''
             }`
           )
-          .then(results => {
+          .then((results) => {
             const urls = results.map(({ name, claimId }) => {
               return `lbry://${name}#${claimId}`;
             });
@@ -124,11 +124,9 @@ function ChannelContent(props: Props) {
           tileLayout={tileLayout}
           uris={searchResults}
           channelIds={[claim.claim_id]}
-          claimType={CS.CLAIM_TYPES}
           feeAmount={CS.FEE_AMOUNT_ANY}
           defaultOrderBy={CS.ORDER_BY_NEW}
           pageSize={defaultPageSize}
-          streamType={CS.CONTENT_ALL}
           infiniteScroll={defaultInfiniteScroll}
           injectedItem={SHOW_ADS && !isAuthenticated && IS_WEB && <Ads type="video" />}
           meta={
