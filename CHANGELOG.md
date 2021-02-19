@@ -8,14 +8,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- Wallet balance UI improvements ([#5276](https://github.com/lbryio/lbry-desktop/pull/5387))
+- Mass tip unlock ([#5409](https://github.com/lbryio/lbry-desktop/pull/5387))
 - Zoomable image viewer in Markdown (posts and comments) _community pr!_ ([#5387](https://github.com/lbryio/lbry-desktop/pull/5387))
 - Enable PDF Viewer in App _community pr!_ ([#2903](https://github.com/lbryio/lbry-desktop/issues/2903))
 
 ### Changed
 
+- Re-enable PDF Viewer in desktop app _community pr!_ ([#5420](https://github.com/lbryio/lbry-desktop/issues/5420))
+
 ### Fixed
 
 - Player doesn't stop playing when editing a comment that includes a video url _community pr!_ ([#5384](https://github.com/lbryio/lbry-desktop/pull/5384))
+- Winning search result not working correctly with mature content enabled _community pr!_ ([#5388](https://github.com/lbryio/lbry-desktop/pull/5388))
+- Fixes to inline videos in comments _community pr!_ ([#5389](https://github.com/lbryio/lbry-desktop/pull/5389))
+- Search page crashing on some results ([#5428](https://github.com/lbryio/lbry-desktop/pull/5428))
+- Long channel names caused comments to extend underneath related content _community pr!_ ([#5431](https://github.com/lbryio/lbry-desktop/pull/5431))
+- Keep floating player always visible _community pr!_ ([#5448](https://github.com/lbryio/lbry-desktop/pull/5448))
 
 ## [0.49.4] - [2021-01-26]
 
@@ -31,7 +40,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - No longer supporting 32 bit windows
 - Updated lbry-sdk to [0.88.0](https://github.com/lbryio/lbry-sdk/releases/tag/v0.88.0)
-- Improve how spendable balance is displayed ([#5276](https://github.com/lbryio/lbry-desktop/pull/5276))
+- Improve how spendable balance is displayed ([#5409](https://github.com/lbryio/lbry-desktop/pull/5276))
 
 ### Fixed
 
