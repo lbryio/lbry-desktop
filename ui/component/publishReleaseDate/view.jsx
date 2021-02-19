@@ -1,7 +1,6 @@
 // @flow
 import React, { useCallback } from 'react';
-import DatePicker from 'react-date-picker';
-import Card from 'component/common/card';
+import DateTimePicker from 'react-datetime-picker';
 
 type Props = {
   releaseTime: ?number,
@@ -21,22 +20,18 @@ const PublishReleaseDate = (props: Props) => {
   }, []);
 
   return (
-    <Card
-      className="card--enable-overflow"
-      actions={
-        <div>
-          <label className="form-field-date-picker-label">Release date</label>
-          <DatePicker
-            className="date-picker-input"
-            calendarClassName="form-field-date-picker"
-            onChange={onChange}
-            value={dateOrToday(releaseTime)}
-            maxDate={maxDate}
-            format="dd/MM/y"
-          />
-        </div>
-      }
-    />
+    <div className="form-field-date-picker">
+      <label className="form-field-date-picker-label">Release date</label>
+      <DateTimePicker
+        className="date-picker-input"
+        calendarClassName="form-field-calendar"
+        onChange={onChange}
+        value={dateOrToday(releaseTime)}
+        maxDate={maxDate}
+        format="y-MM-dd h:mm a"
+        disableClock
+      />
+    </div>
   );
 };
 

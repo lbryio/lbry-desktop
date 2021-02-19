@@ -462,16 +462,22 @@ fieldset-section {
 }
 
 .date-picker-input {
-  .react-date-picker__wrapper {
+  font-weight: bold;
+
+  .react-datetime-picker__wrapper {
     border: 0;
   }
+}
+
+.form-field-date-picker {
+  margin-bottom: var(--spacing-l);
 }
 
 .form-field-date-picker-label {
   display: block;
 }
 
-.form-field-date-picker {
+.form-field-calendar {
   border-radius: var(--card-radius);
   border: 1px solid var(--color-border);
 }

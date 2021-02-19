@@ -179,7 +179,7 @@ class ModalPublishPreview extends React.PureComponent<Props> {
                       {this.createRow(__('Deposit'), depositValue)}
                       {this.createRow(__('Price'), priceValue)}
                       {this.createRow(__('Language'), language)}
-                      {this.createRow(__('Release Date'), moment(release_time).format('MMMM Do, YYYY'))}
+                      {this.createRow(__('Release Date'), moment(release_time).format('MMMM Do, YYYY - h:mm a'))}
                       {this.createRow(__('License'), licenseValue)}
                       {this.createRow(__('Tags'), tagsValue)}
                     </tbody>
