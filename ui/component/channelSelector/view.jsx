@@ -15,9 +15,9 @@ type Props = {
   onChannelSelect: (url: string) => void,
   hideAnon?: boolean,
   activeChannelClaim: ?ChannelClaim,
-  doSetActiveChannel: string => void,
+  doSetActiveChannel: (string) => void,
   incognito: boolean,
-  doSetIncognito: boolean => void,
+  doSetIncognito: (boolean) => void,
 };
 
 type ListItemProps = {
@@ -76,7 +76,7 @@ function ChannelSelector(props: Props) {
         </MenuButton>
         <MenuList className="menu__list channel__list">
           {channels &&
-            channels.map(channel => (
+            channels.map((channel) => (
               <MenuItem key={channel.permanent_url} onSelect={() => handleChannelSelect(channel)}>
                 <ChannelListItem uri={channel.permanent_url} />
               </MenuItem>
@@ -89,7 +89,7 @@ function ChannelSelector(props: Props) {
           <MenuItem onSelect={() => push(`/$/${PAGES.CHANNEL_NEW}?redirect=${pathname}`)}>
             <div className="channel__list-item">
               <Icon sectionIcon icon={ICONS.CHANNEL} />
-              <h2 className="channel__list-text">Create a new channel</h2>
+              <h2 className="channel__list-text">{__('Create a new channel')}</h2>
             </div>
           </MenuItem>
         </MenuList>

@@ -1180,6 +1180,7 @@
   "Try out the app!": "Try out the app!",
   "Download the app to track files you've viewed and downloaded.": "Download the app to track files you've viewed and downloaded.",
   "Create a New Channel": "Create a New Channel",
+  "Create a new channel": "Create a new channel",  
   "Thumbnail source": "Thumbnail source",
   "Cover source": "Cover source",
   "Your changes will be live in a few minutes": "Your changes will be live in a few minutes",
@@ -1390,6 +1391,7 @@
   "Just press play on something. Anything at all. Yep, even that one. Everybody's doing it.": "Just press play on something. Anything at all. Yep, even that one. Everybody's doing it.",
   "Claim your channel! Create an identity used to securely publish content.": "Claim your channel! Create an identity used to securely publish content.",
   "Launch your own channel by sharing a video.": "Launch your own channel by sharing a video.",
+  "Your First Credit:": "Your First Credit:",
   "Return to the app 24-48 hours following your first use of the app. This reward will self destruct after that time span.": "Return to the app 24-48 hours following your first use of the app. This reward will self destruct after that time span.",
   "Watch content and earn more Credits for each level unlocked! 10 views required for level 1 (Current Score: 2). Only up to 10 views per day count.": "Watch content and earn more Credits for each level unlocked! 10 views required for level 1 (Current Score: 2). Only up to 10 views per day count.",
   "Follow your favorite creators and earn more Credits for each level unlocked! Follow 1 creators for level 1 (Current Score: 1).": "Follow your favorite creators and earn more Credits for each level unlocked! Follow 1 creators for level 1 (Current Score: 1).",
@@ -1572,5 +1574,8 @@
   "%balance% available.": "%balance% available.",
   "Unlock all tips": "Unlock all tips",
   "Unlock All": "Unlock All",
+  "Yeah, well, that's just, like, your opinion, man.": "Yeah, well, that's just, like, your opinion, man.",
+  "Moon cheese is an acquired taste": "Moon cheese is an acquired taste",
+  "Level %current_level%": "Level %current_level%",
   "--end--": "--end--"
 }
