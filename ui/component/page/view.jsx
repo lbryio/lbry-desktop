@@ -1,5 +1,6 @@
 // @flow
 import type { Node } from 'react';
+import * as PAGES from 'constants/pages';
 import React, { Fragment } from 'react';
 import classnames from 'classnames';
 import SideNavigation from 'component/sideNavigation';
@@ -21,12 +22,12 @@ type Props = {
   isUpgradeAvailable: boolean,
   authPage: boolean,
   filePage: boolean,
-  homePage: boolean,
   noHeader: boolean,
   noFooter: boolean,
   noSideNavigation: boolean,
   fullWidthPage: boolean,
   videoTheaterMode: boolean,
+  livestream?: boolean,
   backout: {
     backLabel?: string,
     backNavDefault?: string,
@@ -47,21 +48,26 @@ function Page(props: Props) {
     noSideNavigation = false,
     backout,
     videoTheaterMode,
+    livestream,
   } = props;
 
   const {
     location: { pathname },
   } = useHistory();
-  const [sidebarOpen, setSidebarOpen] = usePersistedState('sidebar', true);
+  const [sidebarOpen, setSidebarOpen] = usePersistedState('sidebar', false);
   const isMediumScreen = useIsMediumScreen();
   const isMobile = useIsMobile();
 
   let isOnFilePage = false;
   try {
-    const url = pathname.slice(1).replace(/:/g, '#');
-    const { isChannel } = parseURI(url);
-    if (!isChannel) {
+    if (pathname.includes(`/$/${PAGES.LIVESTREAM}`)) {
       isOnFilePage = true;
+    } else {
+      const url = pathname.slice(1).replace(/:/g, '#');
+      const { isChannel } = parseURI(url);
+      if (!isChannel) {
+        isOnFilePage = true;
+      }
     }
   } catch (e) {}
 
@@ -104,7 +110,8 @@ function Page(props: Props) {
             'main--full-width': fullWidthPage,
             'main--auth-page': authPage,
             'main--file-page': filePage,
-            'main--theater-mode': isOnFilePage && videoTheaterMode,
+            'main--theater-mode': isOnFilePage && videoTheaterMode && !livestream,
+            'main--livestream': videoTheaterMode && livestream,
           })}
         >
           {children}

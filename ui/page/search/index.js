@@ -14,16 +14,14 @@ import analytics from 'analytics';
 import SearchPage from './view';
 
 const select = (state, props) => {
-  const showMature = makeSelectClientSetting(SETTINGS.SHOW_MATURE)(state);
   const urlParams = new URLSearchParams(props.location.search);
   let urlQuery = urlParams.get('q') || null;
   if (urlQuery) {
     urlQuery = urlQuery.replace(/^lbry:\/\//i, '').replace(/\//, ' ');
   }
-
   const query = makeSelectQueryWithOptions(
     urlQuery,
-    showMature === false ? { nsfw: false, isBackgroundSearch: false } : { isBackgroundSearch: false }
+    { nsfw: false, isBackgroundSearch: false }
   )(state);
   const uris = makeSelectSearchUris(query)(state);
 

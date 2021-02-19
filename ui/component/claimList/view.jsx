@@ -38,6 +38,7 @@ type Props = {
   tileLayout?: boolean,
   renderActions?: (Claim) => ?Node,
   searchInLanguage: boolean,
+  hideLivestreamClaims?: boolean,
 };
 
 export default function ClaimList(props: Props) {
@@ -63,6 +64,7 @@ export default function ClaimList(props: Props) {
     tileLayout = false,
     renderActions,
     searchInLanguage,
+    hideLivestreamClaims,
   } = props;
 
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
@@ -100,8 +102,11 @@ export default function ClaimList(props: Props) {
 
   return tileLayout && !header ? (
     <section className="claim-grid">
-      {urisLength > 0 && uris.map((uri) => <ClaimPreviewTile key={uri} uri={uri} />)}
-      {!timedOut && urisLength === 0 && !loading && <div className="empty main--empty">{empty || noResultMsg}</div>}
+      {urisLength > 0 &&
+        uris.map((uri) => <ClaimPreviewTile key={uri} uri={uri} hideLivestreamClaims={hideLivestreamClaims} />)}
+      {!timedOut && urisLength === 0 && !loading && (
+        <div className="empty main--empty">{empty || __('No results')}</div>
+      )}
       {timedOut && timedOutMessage && <div className="empty main--empty">{timedOutMessage}</div>}
     </section>
   ) : (
@@ -155,6 +160,7 @@ export default function ClaimList(props: Props) {
                 renderActions={renderActions}
                 showUserBlocked={showHiddenByUser}
                 hideBlock={hideBlock}
+                hideLivestreamClaims={hideLivestreamClaims}
                 customShouldHide={(claim: StreamClaim) => {
                   // Hack to hide spee.ch thumbnail publishes
                   // If it meets these requirements, it was probably uploaded here:

@@ -24,14 +24,14 @@ export default function ChannelsPage(props: Props) {
   const { channels, channelUrls, fetchChannelListMine, fetchingChannels, youtubeChannels } = props;
   const [rewardData, setRewardData] = React.useState();
   const hasYoutubeChannels = youtubeChannels && Boolean(youtubeChannels.length);
-  const hasPendingChannels = channels && channels.some(channel => channel.confirmations < 0);
+  const hasPendingChannels = channels && channels.some((channel) => channel.confirmations < 0);
 
   useEffect(() => {
     fetchChannelListMine();
   }, [fetchChannelListMine, hasPendingChannels]);
 
   useEffect(() => {
-    Lbryio.call('user_rewards', 'view_rate').then(data => setRewardData(data));
+    Lbryio.call('user_rewards', 'view_rate').then((data) => setRewardData(data));
   }, [setRewardData]);
 
   return (
@@ -52,7 +52,7 @@ export default function ChannelsPage(props: Props) {
             }
             loading={fetchingChannels}
             uris={channelUrls}
-            renderActions={claim => {
+            renderActions={(claim) => {
               const claimsInChannel = claim.meta.claims_in_channel;
               return claimsInChannel === 0 ? (
                 <span />
@@ -67,7 +67,7 @@ export default function ChannelsPage(props: Props) {
                 </div>
               );
             }}
-            renderProperties={claim => {
+            renderProperties={(claim) => {
               const claimsInChannel = claim.meta.claims_in_channel;
               if (!claim || claimsInChannel === 0) {
                 return null;
@@ -76,7 +76,7 @@ export default function ChannelsPage(props: Props) {
               const channelRewardData =
                 rewardData &&
                 rewardData.rates &&
-                rewardData.rates.find(data => {
+                rewardData.rates.find((data) => {
                   return data.channel_claim_id === claim.claim_id;
                 });
 
@@ -109,7 +109,7 @@ export default function ChannelsPage(props: Props) {
                 subtitle={__("You haven't created a channel yet. All of your beautiful channels will be listed here!")}
                 actions={
                   <div className="section__actions">
-                    <Button button="primary" label={__('New Channel')} navigate={`/$/${PAGES.CHANNEL_NEW}`} />
+                    <Button button="primary" label={__('Create Channel')} navigate={`/$/${PAGES.CHANNEL_NEW}`} />
                   </div>
                 }
               />

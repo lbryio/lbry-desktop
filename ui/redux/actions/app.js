@@ -538,15 +538,9 @@ export function doAnaltyicsPurchaseEvent(fileInfo) {
 }
 
 export function doSignIn() {
-  return (dispatch, getState) => {
-    const state = getState();
-    const user = selectUser(state);
-    const notificationsEnabled = user.experimental_ui;
-
-    if (notificationsEnabled) {
-      dispatch(doSocketConnect());
-      dispatch(doNotificationList());
-    }
+  return dispatch => {
+    dispatch(doSocketConnect());
+    dispatch(doNotificationList());
 
     // @if TARGET='web'
     dispatch(doBalanceSubscribe());

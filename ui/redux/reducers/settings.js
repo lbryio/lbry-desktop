@@ -8,7 +8,7 @@ import { UNSYNCED_SETTINGS } from 'config';
 const { CLIENT_SYNC_KEYS } = SHARED_PREFERENCES;
 const settingsToIgnore = (UNSYNCED_SETTINGS && UNSYNCED_SETTINGS.trim().split(' ')) || [];
 const clientSyncKeys = settingsToIgnore.length
-  ? CLIENT_SYNC_KEYS.filter(k => !settingsToIgnore.includes(k))
+  ? CLIENT_SYNC_KEYS.filter((k) => !settingsToIgnore.includes(k))
   : CLIENT_SYNC_KEYS;
 
 const reducers = {};
@@ -69,7 +69,7 @@ const defaultState = {
     [SETTINGS.AUTOPLAY_NEXT]: true,
     [SETTINGS.FLOATING_PLAYER]: true,
     [SETTINGS.AUTO_DOWNLOAD]: true,
-    [SETTINGS.HIDE_REPOSTS]: false,
+    [SETTINGS.HIDE_REPOSTS]: true,
 
     // OS
     [SETTINGS.AUTO_LAUNCH]: true,
@@ -88,12 +88,12 @@ reducers[ACTIONS.REHYDRATE] = (state, action) => {
   return Object.assign({}, state, { clientSettings });
 };
 
-reducers[ACTIONS.FINDING_FFMPEG_STARTED] = state =>
+reducers[ACTIONS.FINDING_FFMPEG_STARTED] = (state) =>
   Object.assign({}, state, {
     findingFFmpeg: true,
   });
 
-reducers[ACTIONS.FINDING_FFMPEG_COMPLETED] = state =>
+reducers[ACTIONS.FINDING_FFMPEG_COMPLETED] = (state) =>
   Object.assign({}, state, {
     findingFFmpeg: false,
   });
@@ -119,7 +119,7 @@ reducers[ACTIONS.CLIENT_SETTING_CHANGED] = (state, action) => {
   });
 };
 
-reducers[ACTIONS.UPDATE_IS_NIGHT] = state => {
+reducers[ACTIONS.UPDATE_IS_NIGHT] = (state) => {
   const { from, to } = state.clientSettings[SETTINGS.DARK_MODE_TIMES];
   const momentNow = moment();
   const startNightMoment = moment(from.formattedTime, 'HH:mm');
@@ -154,7 +154,7 @@ reducers[LBRY_REDUX_ACTIONS.SHARED_PREFERENCE_SET] = (state, action) => {
   });
 };
 
-reducers[ACTIONS.SYNC_CLIENT_SETTINGS] = state => {
+reducers[ACTIONS.SYNC_CLIENT_SETTINGS] = (state) => {
   const { clientSettings } = state;
   const sharedPreferences = Object.assign({}, state.sharedPreferences);
   const selectedClientSettings = getSubsetFromKeysArray(clientSettings, clientSyncKeys);
