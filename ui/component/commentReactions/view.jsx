@@ -38,7 +38,7 @@ export default function CommentReactions(props: Props) {
       ? claim.canonical_url
       : claim && claim.signing_channel && claim.signing_channel.canonical_url;
 
-  const getCountForReact = type => {
+  const getCountForReact = (type) => {
     let count = 0;
     if (othersReacts && othersReacts[type]) {
       count += othersReacts[type];
@@ -105,7 +105,7 @@ export default function CommentReactions(props: Props) {
           className={classnames('comment__action comment__action--creator-like')}
           onClick={() => react(commentId, REACTION_TYPES.CREATOR_LIKE)}
         >
-          {creatorLiked && <ChannelThumbnail uri={authorUri} className="comment__creator-like" />}
+          {creatorLiked && <ChannelThumbnail uri={authorUri} hideStakedIndicator className="comment__creator-like" />}
         </Button>
       )}
     </>
