@@ -128,6 +128,7 @@ function ChannelContent(props: Props) {
           forceShowReposts
           tileLayout={tileLayout}
           uris={searchResults}
+          streamType={CS.CONTENT_ALL}
           channelIds={[claim.claim_id]}
           feeAmount={CS.FEE_AMOUNT_ANY}
           defaultOrderBy={CS.ORDER_BY_NEW}
