@@ -20,7 +20,7 @@ const CHECK_INTERVAL = 200;
 const AUTH_WAIT_TIMEOUT = 10000;
 
 export function doFetchInviteStatus(shouldCallRewardList = true) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: ACTIONS.USER_INVITE_STATUS_FETCH_STARTED,
     });
@@ -41,7 +41,7 @@ export function doFetchInviteStatus(shouldCallRewardList = true) {
           },
         });
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch({
           type: ACTIONS.USER_INVITE_STATUS_FETCH_FAILURE,
           data: { error },
@@ -56,13 +56,13 @@ export function doInstallNew(appVersion, os = null, firebaseToken = null, callba
     payload.firebase_token = firebaseToken;
   }
 
-  Lbry.status().then(status => {
+  Lbry.status().then((status) => {
     payload.app_id =
       domain && domain !== 'lbry.tv'
         ? (domain.replace(/[.]/gi, '') + status.installation_id).slice(0, 66)
         : status.installation_id;
     payload.node_id = status.lbry_id;
-    Lbry.version().then(version => {
+    Lbry.version().then((version) => {
       payload.daemon_version = version.lbrynet_version;
       payload.operating_system = os || version.os_system;
       payload.platform = version.platform;
@@ -140,7 +140,7 @@ export function doAuthenticate(
   callInstall = true,
   domain = null
 ) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: ACTIONS.AUTHENTICATION_STARTED,
     });
@@ -148,9 +148,9 @@ export function doAuthenticate(
       .then(() => {
         return Lbryio.authenticate(DOMAIN, getDefaultLanguage());
       })
-      .then(user => {
+      .then((user) => {
         if (sessionStorageAvailable) window.sessionStorage.removeItem(AUTH_IN_PROGRESS);
-        Lbryio.getAuthToken().then(token => {
+        Lbryio.getAuthToken().then((token) => {
           dispatch({
             type: ACTIONS.AUTHENTICATION_SUCCESS,
             data: { user, accessToken: token },
@@ -165,7 +165,7 @@ export function doAuthenticate(
           }
         });
       })
-      .catch(error => {
+      .catch((error) => {
         if (sessionStorageAvailable) window.sessionStorage.removeItem(AUTH_IN_PROGRESS);
 
         dispatch({
@@ -177,21 +177,21 @@ export function doAuthenticate(
 }
 
 export function doUserFetch() {
-  return dispatch =>
+  return (dispatch) =>
     new Promise((resolve, reject) => {
       dispatch({
         type: ACTIONS.USER_FETCH_STARTED,
       });
 
       Lbryio.getCurrentUser()
-        .then(user => {
+        .then((user) => {
           dispatch({
             type: ACTIONS.USER_FETCH_SUCCESS,
             data: { user },
           });
           resolve(user);
         })
-        .catch(error => {
+        .catch((error) => {
           reject(error);
           dispatch({
             type: ACTIONS.USER_FETCH_FAILURE,
@@ -203,8 +203,8 @@ export function doUserFetch() {
 
 export function doUserCheckEmailVerified() {
   // This will happen in the background so we don't need loading booleans
-  return dispatch => {
-    Lbryio.getCurrentUser().then(user => {
+  return (dispatch) => {
+    Lbryio.getCurrentUser().then((user) => {
       if (user.has_verified_email) {
         dispatch(doRewardList());
 
@@ -224,7 +224,7 @@ export function doUserPhoneReset() {
 }
 
 export function doUserPhoneNew(phone, countryCode) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: ACTIONS.USER_PHONE_NEW_STARTED,
       data: { phone, country_code: countryCode },
@@ -237,7 +237,7 @@ export function doUserPhoneNew(phone, countryCode) {
       });
     };
 
-    const failure = error => {
+    const failure = (error) => {
       dispatch({
         type: ACTIONS.USER_PHONE_NEW_FAILURE,
         data: { error },
@@ -278,7 +278,7 @@ export function doUserPhoneVerify(verificationCode) {
       },
       'post'
     )
-      .then(user => {
+      .then((user) => {
         if (user.is_identity_verified) {
           dispatch({
             type: ACTIONS.USER_PHONE_VERIFY_SUCCESS,
@@ -287,12 +287,12 @@ export function doUserPhoneVerify(verificationCode) {
           dispatch(doClaimRewardType(rewards.TYPE_NEW_USER));
         }
       })
-      .catch(error => dispatch(doUserPhoneVerifyFailure(error)));
+      .catch((error) => dispatch(doUserPhoneVerifyFailure(error)));
   };
 }
 
 export function doUserEmailToVerify(email) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: ACTIONS.USER_EMAIL_VERIFY_SET,
       data: { email },
@@ -301,7 +301,7 @@ export function doUserEmailToVerify(email) {
 }
 
 export function doUserEmailNew(email) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: ACTIONS.USER_EMAIL_NEW_STARTED,
       email,
@@ -315,7 +315,7 @@ export function doUserEmailNew(email) {
       dispatch(doUserFetch());
     };
 
-    const failure = error => {
+    const failure = (error) => {
       dispatch({
         type: ACTIONS.USER_EMAIL_NEW_FAILURE,
         data: { error },
@@ -323,7 +323,7 @@ export function doUserEmailNew(email) {
     };
 
     Lbryio.call('user_email', 'new', { email, send_verification_email: true }, 'post')
-      .catch(error => {
+      .catch((error) => {
         if (error.response && error.response.status === 409) {
           dispatch({
             type: ACTIONS.USER_EMAIL_NEW_EXISTS,
@@ -341,13 +341,13 @@ export function doUserEmailNew(email) {
 }
 
 export function doUserCheckIfEmailExists(email) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: ACTIONS.USER_EMAIL_NEW_STARTED,
       email,
     });
 
-    const triggerEmailFlow = hasPassword => {
+    const triggerEmailFlow = (hasPassword) => {
       dispatch({
         type: ACTIONS.USER_EMAIL_NEW_SUCCESS,
         data: { email },
@@ -367,18 +367,18 @@ export function doUserCheckIfEmailExists(email) {
       }
     };
 
-    const success = response => {
+    const success = (response) => {
       triggerEmailFlow(response.has_password);
     };
 
-    const failure = error =>
+    const failure = (error) =>
       dispatch({
         type: ACTIONS.USER_EMAIL_NEW_FAILURE,
         data: { error },
       });
 
     Lbryio.call('user', 'exists', { email }, 'post')
-      .catch(error => {
+      .catch((error) => {
         if (error.response && error.response.status === 404) {
           dispatch({
             type: ACTIONS.USER_EMAIL_NEW_DOES_NOT_EXIST,
@@ -394,7 +394,7 @@ export function doUserCheckIfEmailExists(email) {
 }
 
 export function doUserSignIn(email, password) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: ACTIONS.USER_EMAIL_NEW_STARTED,
       email,
@@ -408,14 +408,14 @@ export function doUserSignIn(email, password) {
       dispatch(doUserFetch());
     };
 
-    const failure = error =>
+    const failure = (error) =>
       dispatch({
         type: ACTIONS.USER_EMAIL_NEW_FAILURE,
         data: { error },
       });
 
     Lbryio.call('user', 'signin', { email, ...(password ? { password } : {}) }, 'post')
-      .catch(error => {
+      .catch((error) => {
         if (error.response && error.response.status === 409) {
           dispatch({
             type: ACTIONS.USER_EMAIL_NEW_EXISTS,
@@ -433,7 +433,7 @@ export function doUserSignIn(email, password) {
 }
 
 export function doUserSignUp(email, password) {
-  return dispatch =>
+  return (dispatch) =>
     new Promise((resolve, reject) => {
       dispatch({
         type: ACTIONS.USER_EMAIL_NEW_STARTED,
@@ -449,7 +449,7 @@ export function doUserSignUp(email, password) {
         resolve();
       };
 
-      const failure = error => {
+      const failure = (error) => {
         if (error.response && error.response.status === 409) {
           dispatch({
             type: ACTIONS.USER_EMAIL_NEW_EXISTS,
@@ -468,7 +468,7 @@ export function doUserSignUp(email, password) {
 }
 
 export function doUserPasswordReset(email) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: ACTIONS.USER_PASSWORD_RESET_STARTED,
       email,
@@ -480,7 +480,7 @@ export function doUserPasswordReset(email) {
       });
     };
 
-    const failure = error =>
+    const failure = (error) =>
       dispatch({
         type: ACTIONS.USER_PASSWORD_RESET_FAILURE,
         data: { error },
@@ -491,7 +491,7 @@ export function doUserPasswordReset(email) {
 }
 
 export function doUserPasswordSet(newPassword, oldPassword, authToken) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: ACTIONS.USER_PASSWORD_SET_STARTED,
     });
@@ -503,7 +503,7 @@ export function doUserPasswordSet(newPassword, oldPassword, authToken) {
       dispatch(doUserFetch());
     };
 
-    const failure = error =>
+    const failure = (error) =>
       dispatch({
         type: ACTIONS.USER_PASSWORD_SET_FAILURE,
         data: { error },
@@ -523,7 +523,7 @@ export function doUserPasswordSet(newPassword, oldPassword, authToken) {
 }
 
 export function doUserResendVerificationEmail(email) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: ACTIONS.USER_EMAIL_VERIFY_RETRY_STARTED,
     });
@@ -534,7 +534,7 @@ export function doUserResendVerificationEmail(email) {
       });
     };
 
-    const failure = error => {
+    const failure = (error) => {
       dispatch({
         type: ACTIONS.USER_EMAIL_VERIFY_RETRY_FAILURE,
         data: { error },
@@ -542,7 +542,7 @@ export function doUserResendVerificationEmail(email) {
     };
 
     Lbryio.call('user_email', 'resend_token', { email, only_if_expired: true }, 'post')
-      .catch(error => {
+      .catch((error) => {
         if (error.response && error.response.status === 409) {
           throw error;
         }
@@ -590,7 +590,7 @@ export function doUserEmailVerify(verificationToken, recaptcha) {
       },
       'post'
     )
-      .then(userEmail => {
+      .then((userEmail) => {
         if (userEmail.is_verified) {
           dispatch({
             type: ACTIONS.USER_EMAIL_VERIFY_SUCCESS,
@@ -601,13 +601,13 @@ export function doUserEmailVerify(verificationToken, recaptcha) {
           throw new Error('Your email is still not verified.'); // shouldn't happen
         }
       })
-      .catch(error => dispatch(doUserEmailVerifyFailure(error)));
+      .catch((error) => dispatch(doUserEmailVerifyFailure(error)));
   };
 }
 
 export function doFetchAccessToken() {
-  return dispatch => {
-    const success = token =>
+  return (dispatch) => {
+    const success = (token) =>
       dispatch({
         type: ACTIONS.FETCH_ACCESS_TOKEN_SUCCESS,
         data: { token },
@@ -617,14 +617,14 @@ export function doFetchAccessToken() {
 }
 
 export function doUserIdentityVerify(stripeToken) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: ACTIONS.USER_IDENTITY_VERIFY_STARTED,
       token: stripeToken,
     });
 
     Lbryio.call('user', 'verify_identity', { stripe_token: stripeToken }, 'post')
-      .then(user => {
+      .then((user) => {
         if (user.is_identity_verified) {
           dispatch({
             type: ACTIONS.USER_IDENTITY_VERIFY_SUCCESS,
@@ -635,7 +635,7 @@ export function doUserIdentityVerify(stripeToken) {
           throw new Error('Your identity is still not verified. This should not happen.'); // shouldn't happen
         }
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch({
           type: ACTIONS.USER_IDENTITY_VERIFY_FAILURE,
           data: { error: error.toString() },
@@ -645,13 +645,13 @@ export function doUserIdentityVerify(stripeToken) {
 }
 
 export function doUserInviteNew(email) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: ACTIONS.USER_INVITE_NEW_STARTED,
     });
 
     return Lbryio.call('user', 'invite', { email }, 'post')
-      .then(success => {
+      .then((success) => {
         dispatch({
           type: ACTIONS.USER_INVITE_NEW_SUCCESS,
           data: { email },
@@ -666,7 +666,7 @@ export function doUserInviteNew(email) {
         dispatch(doFetchInviteStatus());
         return success;
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch({
           type: ACTIONS.USER_INVITE_NEW_FAILURE,
           data: { error },
@@ -676,7 +676,7 @@ export function doUserInviteNew(email) {
 }
 
 export function doUserSetReferrerReset() {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: ACTIONS.USER_SET_REFERRER_RESET,
     });
@@ -710,6 +710,8 @@ export function doUserSetReferrer(referrer, shouldClaim) {
             data: { error },
           });
         }
+      } else {
+        referrerCode = claim.permanent_url.replace('lbry://', '');
       }
     }
 
@@ -753,23 +755,23 @@ export function doUserSetCountry(country) {
 }
 
 export function doClaimYoutubeChannels() {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: ACTIONS.USER_YOUTUBE_IMPORT_STARTED,
     });
 
     let transferResponse;
     return Lbry.address_list({ page: 1, page_size: 99999 })
-      .then(addressList => addressList.items[0])
-      .then(address =>
+      .then((addressList) => addressList.items[0])
+      .then((address) =>
         Lbryio.call('yt', 'transfer', {
           address: address.address,
           public_key: address.pubkey,
-        }).then(response => {
+        }).then((response) => {
           if (response && response.length) {
             transferResponse = response;
             return Promise.all(
-              response.map(channelMeta => {
+              response.map((channelMeta) => {
                 if (channelMeta && channelMeta.channel && channelMeta.channel.channel_certificate) {
                   return Lbry.channel_import({
                     channel_data: channelMeta.channel.channel_certificate,
@@ -791,7 +793,7 @@ export function doClaimYoutubeChannels() {
           }
         })
       )
-      .catch(error => {
+      .catch((error) => {
         dispatch({
           type: ACTIONS.USER_YOUTUBE_IMPORT_FAILURE,
           data: String(error),
@@ -801,13 +803,13 @@ export function doClaimYoutubeChannels() {
 }
 
 export function doCheckYoutubeTransfer() {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: ACTIONS.USER_YOUTUBE_IMPORT_STARTED,
     });
 
     return Lbryio.call('yt', 'transfer')
-      .then(response => {
+      .then((response) => {
         if (response && response.length) {
           dispatch({
             type: ACTIONS.USER_YOUTUBE_IMPORT_SUCCESS,
@@ -817,7 +819,7 @@ export function doCheckYoutubeTransfer() {
           throw new Error();
         }
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch({
           type: ACTIONS.USER_YOUTUBE_IMPORT_FAILURE,
           data: String(error),
