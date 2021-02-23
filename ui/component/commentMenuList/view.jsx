@@ -16,8 +16,8 @@ type Props = {
   linkedComment?: any,
   isPinned: boolean,
   pinComment: (string, boolean) => Promise<any>,
-  blockChannel: string => void,
-  fetchComments: string => void,
+  blockChannel: (string) => void,
+  fetchComments: (string) => void,
   handleEditComment: () => void,
   contentChannelPermanentUrl: any,
   activeChannelClaim: ?ChannelClaim,
@@ -139,7 +139,9 @@ function CommentMenuList(props: Props) {
       {activeChannelClaim && (
         <div className="comment__menu-active">
           <ChannelThumbnail uri={activeChannelClaim.permanent_url} />
-          <div className="comment__menu-channel">Interacting as {activeChannelClaim.name}</div>
+          <div className="comment__menu-channel">
+            {__('Interacting as %channelName%', { channelName: activeChannelClaim.name })}
+          </div>
         </div>
       )}
     </MenuList>

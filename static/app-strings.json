@@ -890,6 +890,8 @@
   "Change Inviter": "Change Inviter",
   "You haven't uploaded anything yet. This is where you can find them when you do!": "You haven't uploaded anything yet. This is where you can find them when you do!",
   "You haven't uploaded anything with this channel yet!": "You haven't uploaded anything with this channel yet!",
+  "You haven't uploaded anything": "You haven't uploaded anything",
+  "Upload something to start tracking your stats!": "Upload something to start tracking your stats!",
   "You haven't created a channel yet, let's fix that!": "You haven't created a channel yet, let's fix that!",
   "Upload Something": "Upload Something",
   "Amount cannot be zero": "Amount cannot be zero",
@@ -1181,7 +1183,7 @@
   "Try out the app!": "Try out the app!",
   "Download the app to track files you've viewed and downloaded.": "Download the app to track files you've viewed and downloaded.",
   "Create a New Channel": "Create a New Channel",
-  "Create a new channel": "Create a new channel",  
+  "Create a new channel": "Create a new channel",
   "Thumbnail source": "Thumbnail source",
   "Cover source": "Cover source",
   "Your changes will be live in a few minutes": "Your changes will be live in a few minutes",
@@ -1577,5 +1579,7 @@
   "Yeah, well, that's just, like, your opinion, man.": "Yeah, well, that's just, like, your opinion, man.",
   "Moon cheese is an acquired taste": "Moon cheese is an acquired taste",
   "Level %current_level%": "Level %current_level%",
+  "Creator tools": "Creator tools",
+  "Interacting as %channelName%": "Interacting as %channelName%",
   "--end--": "--end--"
 }
