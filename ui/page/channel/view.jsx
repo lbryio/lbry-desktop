@@ -2,7 +2,6 @@
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import React from 'react';
-import { getThumbnailCdnUrl } from 'util/thumbnail';
 import { parseURI } from 'lbry-redux';
 import { YOUTUBE_STATUSES } from 'lbryinc';
 import Page from 'component/page';
@@ -163,7 +162,7 @@ function ChannelPage(props: Props) {
         {cover && (
           <img
             className={classnames('channel-cover__custom', { 'channel__image--blurred': channelIsBlocked })}
-            src={IS_WEB ? getThumbnailCdnUrl({ thumbnail: cover, height: 200, width: 1000, quality: 100 }) : cover}
+            src={cover}
           />
         )}
         <div className="channel__primary-info">
