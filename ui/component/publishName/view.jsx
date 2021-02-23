@@ -74,6 +74,7 @@ function PublishName(props: Props) {
           name="content_name"
           value={name}
           error={nameError}
+          disabled={isStillEditing}
           onChange={handleNameChange}
           onBlur={() => setBlurred(true)}
         />
