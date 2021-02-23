@@ -19,6 +19,7 @@ import useThrottle from 'effects/use-throttle';
 import Yrbl from 'component/yrbl';
 import type { ElementRef } from 'react';
 
+const LBRY_PROTOCOL = 'lbry://';
 const WEB_DEV_PREFIX = `${URL_DEV}/`;
 const WEB_LOCAL_PREFIX = `${URL_LOCAL}/`;
 const WEB_PROD_PREFIX = `${URL}/`;
@@ -30,10 +31,10 @@ const ESC_KEY_CODE = 27;
 
 type Props = {
   searchQuery: ?string,
-  onSearch: string => void,
-  navigateToSearchPage: string => void,
-  doResolveUris: string => void,
-  doShowSnackBar: string => void,
+  onSearch: (string) => void,
+  navigateToSearchPage: (string) => void,
+  doResolveUris: (string) => void,
+  doShowSnackBar: (string) => void,
   showMature: boolean,
   isMobile: boolean,
   doCloseMobileSearch: () => void,
@@ -55,10 +56,7 @@ export default function WunderBarSuggestions(props: Props) {
   const searchSize = isMobile ? 20 : 5;
   const { results, loading } = useLighthouse(throttledTerm, showMature, searchSize);
   const noResults = throttledTerm && !loading && results && results.length === 0;
-  const nameFromQuery = throttledTerm
-    .trim()
-    .replace(/\s+/g, '')
-    .replace(/:/g, '#');
+  const nameFromQuery = throttledTerm.trim().replace(/\s+/g, '').replace(/:/g, '#');
   const uriFromQuery = `lbry://${nameFromQuery}`;
   let uriFromQueryIsValid = false;
   let channelUrlForTopTest;
@@ -117,9 +115,10 @@ export default function WunderBarSuggestions(props: Props) {
     if (!isLbryUrl) {
       navigateToSearchPage(value);
     } else {
+      let query = 'lbry://' + value.slice(LBRY_PROTOCOL.length).replace(/:/g, '#');
       try {
-        if (isURIValid(value)) {
-          const uri = normalizeURI(value);
+        if (isURIValid(query)) {
+          const uri = normalizeURI(query);
           const normalizedWebUrl = formatLbryUrlForWeb(uri);
           push(normalizedWebUrl);
         } else {
@@ -204,7 +203,7 @@ export default function WunderBarSuggestions(props: Props) {
             ref={inputRef}
             className="wunderbar__input"
             placeholder={__('Search')}
-            onChange={e => setTerm(e.target.value)}
+            onChange={(e) => setTerm(e.target.value)}
             value={term}
           />
 
@@ -217,7 +216,7 @@ export default function WunderBarSuggestions(props: Props) {
                 {uriFromQueryIsValid ? <WunderbarTopSuggestion query={nameFromQuery} /> : null}
 
                 <div className="wunderbar__label">{__('Search Results')}</div>
-                {results.slice(0, isMobile ? 20 : 5).map(uri => (
+                {results.slice(0, isMobile ? 20 : 5).map((uri) => (
                   <WunderbarSuggestion key={uri} uri={uri} />
                 ))}
                 <ComboboxOption value={term} className="wunderbar__more-results">
