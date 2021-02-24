@@ -6,7 +6,7 @@ import classnames from 'classnames';
 import { FormField } from 'component/common/form';
 import Button from 'component/button';
 import TagsSearch from 'component/tagsSearch';
-import { FF_MAX_CHARS_IN_DESCRIPTION } from 'constants/form-field';
+import { FF_MAX_CHARS_IN_DESCRIPTION_CHANNEL } from 'constants/form-field';
 import ErrorText from 'component/common/error-text';
 import ChannelThumbnail from 'component/channelThumbnail';
 import { isNameValid, parseURI } from 'lbry-redux';
@@ -317,7 +317,7 @@ function ChannelForm(props: Props) {
                       placeholder={__('Description of your content')}
                       value={params.description}
                       onChange={text => setParams({ ...params, description: text })}
-                      textAreaMaxLength={FF_MAX_CHARS_IN_DESCRIPTION}
+                      textAreaMaxLength={FF_MAX_CHARS_IN_DESCRIPTION_CHANNEL}
                     />
                   </>
                 }
