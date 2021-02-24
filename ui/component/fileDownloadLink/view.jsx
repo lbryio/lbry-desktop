@@ -13,7 +13,7 @@ type Props = {
   fileInfo: ?FileListItem,
   openModal: (id: string, { path: string }) => void,
   pause: () => void,
-  download: string => void,
+  download: (string) => void,
   costInfo: ?{ cost: string },
   buttonType: ?string,
   showLabel: ?boolean,
@@ -91,6 +91,7 @@ function FileDownloadLink(props: Props) {
     return hideOpenButton ? null : (
       <Button
         button={buttonType}
+        className={buttonType ? undefined : 'button--file-action'}
         title={openLabel}
         label={showLabel ? openLabel : null}
         icon={ICONS.EXTERNAL}
