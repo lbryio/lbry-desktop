@@ -33,8 +33,8 @@ type Props = {
     index: number,
     length: number,
     location: { pathname: string },
-    push: string => void,
-    replace: string => void,
+    push: (string) => void,
+    replace: (string) => void,
   },
   currentTheme: string,
   automaticDarkModeEnabled: boolean,
@@ -58,10 +58,11 @@ type Props = {
   clearPasswordEntry: () => void,
   hasNavigated: boolean,
   sidebarOpen: boolean,
-  setSidebarOpen: boolean => void,
+  setSidebarOpen: (boolean) => void,
   isAbsoluteSideNavHidden: boolean,
   hideCancel: boolean,
   activeChannelClaim: ?ChannelClaim,
+  goToPublish: () => void,
 };
 
 const Header = (props: Props) => {
@@ -90,6 +91,7 @@ const Header = (props: Props) => {
     user,
     hideCancel,
     activeChannelClaim,
+    goToPublish,
   } = props;
   const isMobile = useIsMobile();
   // on the verify page don't let anyone escape other than by closing the tab to keep session data consistent
@@ -181,7 +183,7 @@ const Header = (props: Props) => {
       label={hideBalance || Number(roundedBalance) === 0 ? __('Your Wallet') : roundedBalance}
       icon={ICONS.LBC}
       // @if TARGET='app'
-      onDoubleClick={e => {
+      onDoubleClick={(e) => {
         e.stopPropagation();
       }}
       // @endif
@@ -197,7 +199,7 @@ const Header = (props: Props) => {
         // @endif
       })}
       // @if TARGET='app'
-      onDoubleClick={e => {
+      onDoubleClick={(e) => {
         remote.getCurrentWindow().maximize();
       }}
       // @endif
@@ -250,7 +252,7 @@ const Header = (props: Props) => {
                   if (history.location.pathname === '/') window.location.reload();
                 }}
                 // @if TARGET='app'
-                onDoubleClick={e => {
+                onDoubleClick={(e) => {
                   e.stopPropagation();
                 }}
                 // @endif
@@ -280,6 +282,7 @@ const Header = (props: Props) => {
                     openSignOutModal={openSignOutModal}
                     email={email}
                     signOut={signOut}
+                    goToPublish={goToPublish}
                   />
                 </div>
               )}
@@ -308,7 +311,7 @@ const Header = (props: Props) => {
                     icon={ICONS.REMOVE}
                     {...closeButtonNavigationProps}
                     // @if TARGET='app'
-                    onDoubleClick={e => {
+                    onDoubleClick={(e) => {
                       e.stopPropagation();
                     }}
                     // @endif
@@ -326,13 +329,14 @@ const Header = (props: Props) => {
 type HeaderMenuButtonProps = {
   authenticated: boolean,
   notificationsEnabled: boolean,
-  history: { push: string => void },
-  handleThemeToggle: string => void,
+  history: { push: (string) => void },
+  handleThemeToggle: (string) => void,
   currentTheme: string,
   activeChannelUrl: ?string,
   openSignOutModal: () => void,
   email: ?string,
   signOut: () => void,
+  goToPublish: () => void,
 };
 
 function HeaderMenuButtons(props: HeaderMenuButtonProps) {
@@ -346,6 +350,7 @@ function HeaderMenuButtons(props: HeaderMenuButtonProps) {
     openSignOutModal,
     email,
     signOut,
+    goToPublish,
   } = props;
 
   return (
@@ -357,7 +362,7 @@ function HeaderMenuButtons(props: HeaderMenuButtonProps) {
             title={__('Publish a file, or create a channel')}
             className="header__navigation-item menu__title header__navigation-item--icon mobile-hidden"
             // @if TARGET='app'
-            onDoubleClick={e => {
+            onDoubleClick={(e) => {
               e.stopPropagation();
             }}
             // @endif
@@ -366,7 +371,7 @@ function HeaderMenuButtons(props: HeaderMenuButtonProps) {
           </MenuButton>
 
           <MenuList className="menu__list--header">
-            <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.UPLOAD}`)}>
+            <MenuItem className="menu__link" onSelect={goToPublish}>
               <Icon aria-hidden icon={ICONS.PUBLISH} />
               {__('Upload')}
             </MenuItem>
@@ -386,7 +391,7 @@ function HeaderMenuButtons(props: HeaderMenuButtonProps) {
           title={__('Settings')}
           className="header__navigation-item menu__title header__navigation-item--icon  mobile-hidden"
           // @if TARGET='app'
-          onDoubleClick={e => {
+          onDoubleClick={(e) => {
             e.stopPropagation();
           }}
           // @endif
@@ -419,7 +424,7 @@ function HeaderMenuButtons(props: HeaderMenuButtonProps) {
               'header__navigation-item--profile-pic': activeChannelUrl,
             })}
             // @if TARGET='app'
-            onDoubleClick={e => {
+            onDoubleClick={(e) => {
               e.stopPropagation();
             }}
             // @endif
