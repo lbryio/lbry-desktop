@@ -43,6 +43,7 @@ type Props = {
   streamingUrl: string,
   isMature: boolean,
   showMature: boolean,
+  showHiddenByUser?: boolean,
 };
 
 function ClaimPreviewTile(props: Props) {
@@ -62,6 +63,7 @@ function ClaimPreviewTile(props: Props) {
     blockedChannelUris,
     isMature,
     showMature,
+    showHiddenByUser,
   } = props;
   const isRepost = claim && claim.repost_channel_url;
   const shouldFetch = claim === undefined;
@@ -130,12 +132,12 @@ function ClaimPreviewTile(props: Props) {
   }
 
   // block stream claims
-  if (claim && !shouldHide && blockedChannelUris.length && signingChannel) {
+  if (claim && !shouldHide && !showHiddenByUser && blockedChannelUris.length && signingChannel) {
     shouldHide = blockedChannelUris.some((blockedUri) => blockedUri === signingChannel.permanent_url);
   }
   // block channel claims if we can't control for them in claim search
   // e.g. fetchRecommendedSubscriptions
-  if (claim && isChannel && !shouldHide && blockedChannelUris.length) {
+  if (claim && isChannel && !shouldHide && !showHiddenByUser && blockedChannelUris.length) {
     shouldHide = blockedChannelUris.some((blockedUri) => blockedUri === claim.permanent_url);
   }
 

@@ -100,7 +100,8 @@ export default function ClaimList(props: Props) {
 
   return tileLayout && !header ? (
     <section className="claim-grid">
-      {urisLength > 0 && uris.map((uri) => <ClaimPreviewTile key={uri} uri={uri} />)}
+      {urisLength > 0 &&
+        uris.map((uri) => <ClaimPreviewTile key={uri} uri={uri} showHiddenByUser={showHiddenByUser} />)}
       {!timedOut && urisLength === 0 && !loading && <div className="empty main--empty">{empty || noResultMsg}</div>}
       {timedOut && timedOutMessage && <div className="empty main--empty">{timedOutMessage}</div>}
     </section>
@@ -155,6 +156,7 @@ export default function ClaimList(props: Props) {
                 properties={renderProperties || (type !== 'small' ? undefined : false)}
                 renderActions={renderActions}
                 showUserBlocked={showHiddenByUser}
+                showHiddenByUser={showHiddenByUser}
                 customShouldHide={(claim: StreamClaim) => {
                   // Hack to hide spee.ch thumbnail publishes
                   // If it meets these requirements, it was probably uploaded here:

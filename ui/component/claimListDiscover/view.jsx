@@ -64,6 +64,7 @@ type Props = {
   languageSetting: string,
   searchInLanguage: boolean,
   scrollAnchor?: string,
+  showHiddenByUser?: boolean,
 };
 
 function ClaimListDiscover(props: Props) {
@@ -112,6 +113,7 @@ function ClaimListDiscover(props: Props) {
     languageSetting,
     searchInLanguage,
     scrollAnchor,
+    showHiddenByUser = false,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
   const { search } = location;
@@ -482,6 +484,7 @@ function ClaimListDiscover(props: Props) {
             renderProperties={renderProperties}
             includeSupportAction={includeSupportAction}
             injectedItem={injectedItem}
+            showHiddenByUser={showHiddenByUser}
           />
           {loading && (
             <div className="claim-grid">
@@ -509,6 +512,7 @@ function ClaimListDiscover(props: Props) {
             renderProperties={renderProperties}
             includeSupportAction={includeSupportAction}
             injectedItem={injectedItem}
+            showHiddenByUser={showHiddenByUser}
           />
           {loading && new Array(dynamicPageSize).fill(1).map((x, i) => <ClaimPreview key={i} placeholder="loading" />)}
         </div>
