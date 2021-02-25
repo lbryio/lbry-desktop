@@ -13,7 +13,7 @@ import { formatLbryUrlForWeb } from 'util/url';
 
 type Props = {
   isResolvingUri: boolean,
-  resolveUri: string => void,
+  resolveUri: (string) => void,
   isSubscribed: boolean,
   uri: string,
   claim: StreamClaim,
@@ -39,6 +39,7 @@ function ShowPage(props: Props) {
     isSubscribed,
     claimIsPending,
   } = props;
+
   const signingChannel = claim && claim.signing_channel;
   const canonicalUrl = claim && claim.canonical_url;
   const claimExists = claim !== null && claim !== undefined;
@@ -91,14 +92,16 @@ function ShowPage(props: Props) {
     );
   } else if (claim.name.length && claim.name[0] === '@') {
     innerContent = <ChannelPage uri={uri} location={location} />;
-  } else if (claim && blackListedOutpoints) {
+  } else if (claim) {
     let isClaimBlackListed = false;
 
-    isClaimBlackListed = blackListedOutpoints.some(
-      outpoint =>
-        (signingChannel && outpoint.txid === signingChannel.txid && outpoint.nout === signingChannel.nout) ||
-        (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
-    );
+    isClaimBlackListed =
+      blackListedOutpoints &&
+      blackListedOutpoints.some(
+        (outpoint) =>
+          (signingChannel && outpoint.txid === signingChannel.txid && outpoint.nout === signingChannel.nout) ||
+          (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
+      );
 
     if (isClaimBlackListed && !claimIsMine) {
       innerContent = (
