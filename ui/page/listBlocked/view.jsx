@@ -102,22 +102,38 @@ function ListBlocked(props: Props) {
               />
             </div>
           </div>
-          {
-            <ClaimList
-              uris={viewMode === VIEW_MUTED ? localMutedList : localBlockedList}
-              showUnresolvedClaims
-              showHiddenByUser
-              hideMenu
-              renderActions={(claim) => {
-                return (
-                  <div className="section__actions">
-                    <ChannelBlockButton uri={claim.permanent_url} />
-                    <ChannelMuteButton uri={claim.permanent_url} />
-                  </div>
-                );
-              }}
-            />
-          }
+          <div className="help--notice">
+            {viewMode === VIEW_MUTED
+              ? __(
+                  'Muted channels will be invisible to you in the app. They will not know they are muted and can still interact with you and your content.'
+                )
+              : __(
+                  "Blocked channels will be invisible to you in the app. They will not be able to comment on your content, or reply to you comments left on other channels' content."
+                )}
+          </div>
+          <ClaimList
+            uris={viewMode === VIEW_MUTED ? localMutedList : localBlockedList}
+            showUnresolvedClaims
+            showHiddenByUser
+            hideMenu
+            renderActions={(claim) => {
+              return (
+                <div className="section__actions">
+                  {viewMode === VIEW_MUTED ? (
+                    <>
+                      <ChannelMuteButton uri={claim.permanent_url} />
+                      <ChannelBlockButton uri={claim.permanent_url} />
+                    </>
+                  ) : (
+                    <>
+                      <ChannelBlockButton uri={claim.permanent_url} />
+                      <ChannelMuteButton uri={claim.permanent_url} />
+                    </>
+                  )}
+                </div>
+              );
+            }}
+          />
         </>
       )}
     </Page>
