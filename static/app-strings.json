@@ -1586,5 +1586,6 @@
   "Creator tools": "Creator tools",
   "Interacting as %channelName%": "Interacting as %channelName%",
   "Page Not Found": "Page Not Found",
+  "Transaction limit reached. Try reducing the Description length.": "Transaction limit reached. Try reducing the Description length.",
   "--end--": "--end--"
 }
