@@ -16,6 +16,7 @@ import { selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import { makeSelectHasVisitedUri } from 'redux/selectors/content';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
+import { selectModerationBlockList } from 'redux/selectors/comments';
 import ClaimPreview from './view';
 
 const select = (state, props) => ({
@@ -30,7 +31,8 @@ const select = (state, props) => ({
   nsfw: props.uri && makeSelectClaimIsNsfw(props.uri)(state),
   blackListedOutpoints: selectBlackListedOutpoints(state),
   filteredOutpoints: selectFilteredOutpoints(state),
-  blockedChannelUris: selectMutedChannels(state),
+  mutedUris: selectMutedChannels(state),
+  blockedUris: selectModerationBlockList(state),
   hasVisitedUri: props.uri && makeSelectHasVisitedUri(props.uri)(state),
   channelIsBlocked: props.uri && makeSelectChannelIsMuted(props.uri)(state),
   isSubscribed: props.uri && makeSelectIsSubscribed(props.uri, true)(state),

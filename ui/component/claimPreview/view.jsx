@@ -53,7 +53,8 @@ type Props = {
     txid: string,
     nout: number,
   }>,
-  blockedChannelUris: Array<string>,
+  mutedUris: Array<string>,
+  blockedUris: Array<string>,
   channelIsBlocked: boolean,
   actions: boolean | Node | string | number,
   properties: boolean | Node | string | number | ((Claim) => Node),
@@ -112,7 +113,8 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     properties,
     onClick,
     actions,
-    blockedChannelUris,
+    mutedUris,
+    blockedUris,
     blackListedOutpoints,
     filteredOutpoints,
     includeSupportAction,
@@ -170,13 +172,11 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     );
   }
   // block stream claims
-  if (claim && !shouldHide && !showUserBlocked && blockedChannelUris.length && signingChannel) {
-    shouldHide = blockedChannelUris.some((blockedUri) => blockedUri === signingChannel.permanent_url);
+  if (claim && !shouldHide && !showUserBlocked && mutedUris.length && signingChannel) {
+    shouldHide = mutedUris.some((blockedUri) => blockedUri === signingChannel.permanent_url);
   }
-  // block channel claims if we can't control for them in claim search
-  // e.g. fetchRecommendedSubscriptions
-  if (claim && isChannelUri && !shouldHide && !showUserBlocked && blockedChannelUris.length) {
-    shouldHide = blockedChannelUris.some((blockedUri) => blockedUri === claim.permanent_url);
+  if (claim && !shouldHide && !showUserBlocked && blockedUris.length && signingChannel) {
+    shouldHide = blockedUris.some((blockedUri) => blockedUri === signingChannel.permanent_url);
   }
 
   if (!shouldHide && customShouldHide && claim) {

@@ -13,9 +13,8 @@ export const selectIsFetchingComments = createSelector(selectState, (state) => s
 export const selectIsPostingComment = createSelector(selectState, (state) => state.isCommenting);
 export const selectIsFetchingReacts = createSelector(selectState, (state) => state.isFetchingReacts);
 export const selectOthersReactsById = createSelector(selectState, (state) => state.othersReactsByCommentId);
-export const selectModerationBlockList = createSelector(
-  selectState,
-  (state) => state.moderationBlockList && state.moderationBlockList.reverse()
+export const selectModerationBlockList = createSelector(selectState, (state) =>
+  state.moderationBlockList ? state.moderationBlockList.reverse() : []
 );
 export const selectBlockingByUri = createSelector(selectState, (state) => state.blockingByUri);
 export const selectUnBlockingByUri = createSelector(selectState, (state) => state.unBlockingByUri);

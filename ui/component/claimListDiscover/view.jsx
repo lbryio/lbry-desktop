@@ -30,7 +30,8 @@ type Props = {
     [string]: Array<string>,
   },
   claimSearchByQueryLastPageReached: { [string]: boolean },
-  hiddenUris: Array<string>,
+  mutedUris: Array<string>,
+  blockedUris: Array<string>,
   hiddenNsfwMessage?: Node,
   channelIds?: Array<string>,
   claimIds?: Array<string>,
@@ -79,7 +80,8 @@ function ClaimListDiscover(props: Props) {
     hideReposts,
     history,
     location,
-    hiddenUris,
+    mutedUris,
+    blockedUris,
     hiddenNsfwMessage,
     defaultOrderBy,
     orderBy,
@@ -125,6 +127,7 @@ function ClaimListDiscover(props: Props) {
     (urlParams.get(CS.TAGS_KEY) !== null && urlParams.get(CS.TAGS_KEY)) ||
     (defaultTags && getParamFromTags(defaultTags));
   const freshnessParam = freshness || urlParams.get(CS.FRESH_KEY) || defaultFreshness;
+  const mutedAndBlockedChannelIds = mutedUris.concat(blockedUris).map((uri) => uri.split('#')[1]);
 
   const langParam = urlParams.get(CS.LANGUAGE_KEY) || null;
   const languageParams = searchInLanguage
@@ -204,7 +207,7 @@ function ClaimListDiscover(props: Props) {
     no_totals: true,
     not_channel_ids:
       // If channelIdsParam were passed in, we don't need not_channel_ids
-      !channelIdsParam && hiddenUris && hiddenUris.length ? hiddenUris.map((hiddenUri) => hiddenUri.split('#')[1]) : [],
+      !channelIdsParam ? mutedAndBlockedChannelIds : [],
     not_tags: !showNsfw ? MATURE_TAGS : [],
     order_by:
       orderParam === CS.ORDER_BY_TRENDING
