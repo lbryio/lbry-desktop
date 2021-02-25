@@ -25,10 +25,11 @@ const HISTORY_ITEMS_PER_PAGE = 50;
 
 export const selectState = (state: any) => state.content || {};
 
-export const selectPlayingUri = createSelector(selectState, state => state.playingUri);
-export const selectPrimaryUri = createSelector(selectState, state => state.primaryUri);
+export const selectPlayingUri = createSelector(selectState, (state) => state.playingUri);
+export const selectPrimaryUri = createSelector(selectState, (state) => state.primaryUri);
 
-export const makeSelectIsPlaying = (uri: string) => createSelector(selectPrimaryUri, primaryUri => primaryUri === uri);
+export const makeSelectIsPlaying = (uri: string) =>
+  createSelector(selectPrimaryUri, (primaryUri) => primaryUri === uri);
 
 export const makeSelectIsPlayerFloating = (location: UrlLocation) =>
   createSelector(selectPrimaryUri, selectPlayingUri, selectClaimsByUri, (primaryUri, playingUri, claimsByUri) => {
@@ -55,9 +56,9 @@ export const makeSelectContentPositionForUri = (uri: string) =>
     return state.positions[id] ? state.positions[id][outpoint] : null;
   });
 
-export const selectHistory = createSelector(selectState, state => state.history || []);
+export const selectHistory = createSelector(selectState, (state) => state.history || []);
 
-export const selectHistoryPageCount = createSelector(selectHistory, history =>
+export const selectHistoryPageCount = createSelector(selectHistory, (history) =>
   Math.ceil(history.length / HISTORY_ITEMS_PER_PAGE)
 );
 
@@ -69,10 +70,10 @@ export const makeSelectHistoryForPage = (page: number) =>
   });
 
 export const makeSelectHistoryForUri = (uri: string) =>
-  createSelector(selectHistory, history => history.find(i => i.uri === uri));
+  createSelector(selectHistory, (history) => history.find((i) => i.uri === uri));
 
 export const makeSelectHasVisitedUri = (uri: string) =>
-  createSelector(makeSelectHistoryForUri(uri), history => Boolean(history));
+  createSelector(makeSelectHistoryForUri(uri), (history) => Boolean(history));
 
 export const makeSelectNextUnplayedRecommended = (uri: string) =>
   createSelector(
@@ -118,11 +119,11 @@ export const makeSelectNextUnplayedRecommended = (uri: string) =>
           }
 
           const channel = claim && claim.signing_channel;
-          if (channel && blockedChannels.some(blockedUri => blockedUri === channel.permanent_url)) {
+          if (channel && blockedChannels.some((blockedUri) => blockedUri === channel.permanent_url)) {
             continue;
           }
 
-          if (!history.some(item => item.uri === recommendedForUri[i])) {
+          if (!history.some((item) => item.uri === recommendedForUri[i])) {
             return recommendedForUri[i];
           }
         }
@@ -130,12 +131,12 @@ export const makeSelectNextUnplayedRecommended = (uri: string) =>
     }
   );
 
-export const selectRecentHistory = createSelector(selectHistory, history => {
+export const selectRecentHistory = createSelector(selectHistory, (history) => {
   return history.slice(0, RECENT_HISTORY_AMOUNT);
 });
 
 export const makeSelectCategoryListUris = (uris: ?Array<string>, channel: string) =>
-  createSelector(makeSelectClaimsInChannelForCurrentPageState(channel), channelClaims => {
+  createSelector(makeSelectClaimsInChannelForCurrentPageState(channel), (channelClaims) => {
     if (uris) return uris;
 
     if (channelClaims) {
@@ -153,7 +154,7 @@ export const makeSelectShouldObscurePreview = (uri: string) =>
 
 // should probably be in lbry-redux, yarn link was fighting me
 export const makeSelectFileExtensionForUri = (uri: string) =>
-  createSelector(makeSelectFileNameForUri(uri), fileName => {
+  createSelector(makeSelectFileNameForUri(uri), (fileName) => {
     return fileName && path.extname(fileName).substring(1);
   });
 

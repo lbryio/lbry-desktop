@@ -13,7 +13,7 @@ const select = (state, props) => ({
   renderMode: makeSelectFileRenderModeForUri(props.uri)(state),
 });
 
-const perform = dispatch => ({
+const perform = (dispatch) => ({
   triggerAnalyticsView: (uri, timeToStart) => dispatch(doAnalyticsView(uri, timeToStart)),
   claimRewards: () => dispatch(doClaimEligiblePurchaseRewards()),
 });
