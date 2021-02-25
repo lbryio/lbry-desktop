@@ -22,7 +22,7 @@ export function doOpenFileInFolder(path) {
 }
 
 export function doOpenFileInShell(path) {
-  return dispatch => {
+  return (dispatch) => {
     const success = shell.openPath(path);
     if (!success) {
       dispatch(doOpenFileInFolder(path));
@@ -31,7 +31,7 @@ export function doOpenFileInShell(path) {
 }
 
 export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim, cb) {
-  return dispatch => {
+  return (dispatch) => {
     if (abandonClaim) {
       const [txid, nout] = outpoint.split(':');
       dispatch(doAbandonClaim(txid, Number(nout), cb));
@@ -67,7 +67,7 @@ export function doDeleteFileAndMaybeGoBack(uri, deleteFromComputer, abandonClaim
     }
 
     actions.push(
-      doDeleteFile(outpoint || claimOutpoint, deleteFromComputer, abandonClaim, abandonState => {
+      doDeleteFile(outpoint || claimOutpoint, deleteFromComputer, abandonClaim, (abandonState) => {
         if (abandonState === ABANDON_STATES.DONE) {
           if (abandonClaim) {
             dispatch(goBack());
