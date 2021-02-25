@@ -16,6 +16,10 @@ const defaultState: CommentsState = {
   typesReacting: [],
   myReactsByCommentId: undefined,
   othersReactsByCommentId: undefined,
+  moderationBlockList: undefined,
+  fetchingModerationBlockList: false,
+  blockingByUri: {},
+  unBlockingByUri: {},
 };
 
 export default handleActions(
@@ -144,7 +148,7 @@ export default handleActions(
       };
     },
 
-    [ACTIONS.COMMENT_LIST_STARTED]: state => ({ ...state, isLoading: true }),
+    [ACTIONS.COMMENT_LIST_STARTED]: (state) => ({ ...state, isLoading: true }),
 
     [ACTIONS.COMMENT_LIST_COMPLETED]: (state: CommentsState, action: any) => {
       const { comments, claimId, uri } = action.data;
@@ -227,17 +231,15 @@ export default handleActions(
         isLoading: false,
       };
     },
-    // do nothing
+
     [ACTIONS.COMMENT_ABANDON_FAILED]: (state: CommentsState, action: any) => ({
       ...state,
       isCommenting: false,
     }),
-    // do nothing
     [ACTIONS.COMMENT_UPDATE_STARTED]: (state: CommentsState, action: any) => ({
       ...state,
       isCommenting: true,
     }),
-    // replace existing comment with comment returned here under its comment_id
     [ACTIONS.COMMENT_UPDATE_COMPLETED]: (state: CommentsState, action: any) => {
       const { comment } = action.data;
       const commentById = Object.assign({}, state.commentById);
@@ -249,25 +251,100 @@ export default handleActions(
         isCommenting: false,
       };
     },
-    // nothing can be done here
+
     [ACTIONS.COMMENT_UPDATE_FAILED]: (state: CommentsState, action: any) => ({
       ...state,
       isCmmenting: false,
     }),
-    // nothing can really be done here
-    [ACTIONS.COMMENT_HIDE_STARTED]: (state: CommentsState, action: any) => ({
+    [ACTIONS.COMMENT_MODERATION_BLOCK_LIST_STARTED]: (state: CommentsState, action: any) => ({
       ...state,
-      isLoading: true,
+      fetchingModerationBlockList: true,
     }),
-    [ACTIONS.COMMENT_HIDE_COMPLETED]: (state: CommentsState, action: any) => ({
-      ...state, // todo: add HiddenComments state & create selectors
-      isLoading: false,
-    }),
-    // nothing can be done here
-    [ACTIONS.COMMENT_HIDE_FAILED]: (state: CommentsState, action: any) => ({
+    [ACTIONS.COMMENT_MODERATION_BLOCK_LIST_COMPLETED]: (state: CommentsState, action: any) => {
+      const { blockList } = action.data;
+
+      return {
+        ...state,
+        moderationBlockList: blockList,
+        fetchingModerationBlockList: false,
+      };
+    },
+    [ACTIONS.COMMENT_MODERATION_BLOCK_LIST_FAILED]: (state: CommentsState, action: any) => ({
       ...state,
-      isLoading: false,
+      fetchingModerationBlockList: false,
     }),
+
+    [ACTIONS.COMMENT_MODERATION_BLOCK_STARTED]: (state: CommentsState, action: any) => ({
+      ...state,
+      blockingByUri: {
+        ...state.blockingByUri,
+        [action.data.uri]: true,
+      },
+    }),
+
+    [ACTIONS.COMMENT_MODERATION_UN_BLOCK_STARTED]: (state: CommentsState, action: any) => ({
+      ...state,
+      unBlockingByUri: {
+        ...state.unBlockingByUri,
+        [action.data.uri]: true,
+      },
+    }),
+    [ACTIONS.COMMENT_MODERATION_BLOCK_FAILED]: (state: CommentsState, action: any) => ({
+      ...state,
+      blockingByUri: {
+        ...state.blockingByUri,
+        [action.data.uri]: false,
+      },
+    }),
+
+    [ACTIONS.COMMENT_MODERATION_UN_BLOCK_FAILED]: (state: CommentsState, action: any) => ({
+      ...state,
+      unBlockingByUri: {
+        ...state.unBlockingByUri,
+        [action.data.uri]: false,
+      },
+    }),
+
+    [ACTIONS.COMMENT_MODERATION_BLOCK_COMPLETE]: (state: CommentsState, action: any) => {
+      const { channelUri } = action.data;
+      const commentById = Object.assign({}, state.commentById);
+      const blockingByUri = Object.assign({}, state.blockingByUri);
+      const moderationBlockList = state.moderationBlockList || [];
+      const newModerationBlockList = moderationBlockList.slice();
+
+      for (const commentId in commentById) {
+        const comment = commentById[commentId];
+
+        if (channelUri === comment.channel_url) {
+          delete commentById[comment.comment_id];
+        }
+      }
+
+      delete blockingByUri[channelUri];
+
+      newModerationBlockList.push(channelUri);
+
+      return {
+        ...state,
+        commentById,
+        blockingByUri,
+        moderationBlockList: newModerationBlockList,
+      };
+    },
+    [ACTIONS.COMMENT_MODERATION_UN_BLOCK_COMPLETE]: (state: CommentsState, action: any) => {
+      const { channelUri } = action.data;
+      const unBlockingByUri = Object.assign(state.unBlockingByUri, {});
+      const moderationBlockList = state.moderationBlockList || [];
+      const newModerationBlockList = moderationBlockList.slice().filter((uri) => uri !== channelUri);
+
+      delete unBlockingByUri[channelUri];
+
+      return {
+        ...state,
+        unBlockingByUri,
+        moderationBlockList: newModerationBlockList,
+      };
+    },
   },
   defaultState
 );

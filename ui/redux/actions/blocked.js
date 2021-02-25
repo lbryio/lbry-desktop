@@ -3,7 +3,7 @@ import * as ACTIONS from 'constants/action_types';
 import { selectPrefsReady } from 'redux/selectors/sync';
 import { doAlertWaitingForSync } from 'redux/actions/app';
 
-export const doToggleBlockChannel = (uri: string) => (dispatch: Dispatch, getState: GetState) => {
+export const doToggleMuteChannel = (uri: string) => (dispatch: Dispatch, getState: GetState) => {
   const state = getState();
   const ready = selectPrefsReady(state);
 

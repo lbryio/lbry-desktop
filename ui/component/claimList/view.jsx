@@ -32,12 +32,12 @@ type Props = {
   showUnresolvedClaims?: boolean,
   renderProperties: ?(Claim) => Node,
   includeSupportAction?: boolean,
-  hideBlock: boolean,
   injectedItem: ?Node,
   timedOutMessage?: Node,
   tileLayout?: boolean,
   renderActions?: (Claim) => ?Node,
   searchInLanguage: boolean,
+  hideMenu?: boolean,
 };
 
 export default function ClaimList(props: Props) {
@@ -57,12 +57,12 @@ export default function ClaimList(props: Props) {
     showUnresolvedClaims,
     renderProperties,
     includeSupportAction,
-    hideBlock,
     injectedItem,
     timedOutMessage,
     tileLayout = false,
     renderActions,
     searchInLanguage,
+    hideMenu,
   } = props;
 
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
@@ -149,12 +149,12 @@ export default function ClaimList(props: Props) {
               <ClaimPreview
                 uri={uri}
                 type={type}
+                hideMenu={hideMenu}
                 includeSupportAction={includeSupportAction}
                 showUnresolvedClaim={showUnresolvedClaims}
                 properties={renderProperties || (type !== 'small' ? undefined : false)}
                 renderActions={renderActions}
                 showUserBlocked={showHiddenByUser}
-                hideBlock={hideBlock}
                 customShouldHide={(claim: StreamClaim) => {
                   // Hack to hide spee.ch thumbnail publishes
                   // If it meets these requirements, it was probably uploaded here:

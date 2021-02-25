@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { makeSelectThumbnailForUri, selectMyChannelClaims } from 'lbry-redux';
 import { doCommentUpdate } from 'redux/actions/comments';
-import { selectChannelIsBlocked } from 'redux/selectors/blocked';
+import { makeSelectChannelIsMuted } from 'redux/selectors/blocked';
 import { doToast } from 'redux/actions/notifications';
 import { doSetPlayingUri } from 'redux/actions/content';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
@@ -11,7 +11,7 @@ import Comment from './view';
 
 const select = (state, props) => ({
   thumbnail: props.authorUri && makeSelectThumbnailForUri(props.authorUri)(state),
-  channelIsBlocked: props.authorUri && selectChannelIsBlocked(props.authorUri)(state),
+  channelIsBlocked: props.authorUri && makeSelectChannelIsMuted(props.authorUri)(state),
   commentingEnabled: IS_WEB ? Boolean(selectUserVerifiedEmail(state)) : true,
   othersReacts: makeSelectOthersReactionsForComment(props.commentId)(state),
   activeChannelClaim: selectActiveChannelClaim(state),

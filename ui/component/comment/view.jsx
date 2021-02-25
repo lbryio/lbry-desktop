@@ -200,7 +200,7 @@ function Comment(props: Props) {
             </div>
             <div className="comment__menu">
               <Menu>
-                <MenuButton>
+                <MenuButton className="menu__button">
                   <Icon
                     size={18}
                     className={mouseIsHovering ? 'comment__menu-icon--hovering' : 'comment__menu-icon'}

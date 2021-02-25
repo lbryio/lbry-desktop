@@ -390,6 +390,16 @@ $metadata-z-index: 1;
   padding: 0;
 }
 
+.channel-staked__wrapper--inline {
+  position: relative;
+  background-color: transparent;
+  display: inline-block;
+  bottom: auto;
+  left: auto;
+  top: var(--spacing-xs);
+  padding: 0;
+}
+
 .channel-staked__indicator {
   margin-left: 2px;
   z-index: 3;

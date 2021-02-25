@@ -24,9 +24,9 @@ function isNotFunction(object) {
 }
 
 function createBulkThunkMiddleware() {
-  return ({ dispatch, getState }) => next => action => {
+  return ({ dispatch, getState }) => (next) => (action) => {
     if (action.type === 'BATCH_ACTIONS') {
-      action.actions.filter(isFunction).map(actionFn => actionFn(dispatch, getState));
+      action.actions.filter(isFunction).map((actionFn) => actionFn(dispatch, getState));
     }
     return next(action);
   };
@@ -68,7 +68,6 @@ const subscriptionsFilter = createFilter('subscriptions', ['subscriptions']);
 const blockedFilter = createFilter('blocked', ['blockedChannels']);
 const settingsFilter = createBlacklistFilter('settings', ['loadedLanguages', 'language']);
 const whiteListedReducers = [
-  'comments',
   'fileInfo',
   'publish',
   'wallet',
@@ -143,7 +142,7 @@ const sharedStateFilters = {
   subscriptions: {
     source: 'subscriptions',
     property: 'subscriptions',
-    transform: function(value) {
+    transform: (value) => {
       return value.map(({ uri }) => uri);
     },
   },
@@ -162,7 +161,7 @@ const sharedStateCb = ({ dispatch, getState }) => {
 };
 
 const populateAuthTokenHeader = () => {
-  return next => action => {
+  return (next) => (action) => {
     if (
       (action.type === ACTIONS.USER_FETCH_SUCCESS || action.type === ACTIONS.AUTHENTICATION_SUCCESS) &&
       action.data.user.has_verified_email === true

@@ -27,6 +27,10 @@ declare type CommentsState = {
   myReactsByCommentId: any,
   othersReactsByCommentId: any,
   pendingCommentReactions: Array<string>,
+  moderationBlockList: ?Array<string>,
+  fetchingModerationBlockList: boolean,
+  blockingByUri: {},
+  unBlockingByUri: {},
 };
 
 declare type CommentReactParams = {

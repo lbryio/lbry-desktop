@@ -14,6 +14,8 @@ import { parseURI } from 'lbry-redux';
 import FileProperties from 'component/fileProperties';
 import FileDownloadLink from 'component/fileDownloadLink';
 import ClaimRepostAuthor from 'component/claimRepostAuthor';
+import ClaimMenuList from 'component/claimMenuList';
+
 // @if TARGET='app'
 import { openClaimPreviewMenu } from 'util/context-menu';
 // @endif
@@ -194,6 +196,7 @@ function ClaimPreviewTile(props: Props) {
               <UriIndicator uri={uri} link />
             </div>
           )}
+          <ClaimMenuList uri={uri} />
         </h2>
       </NavLink>
       <div>

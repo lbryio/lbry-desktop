@@ -3,7 +3,6 @@ import type { Node } from 'react';
 import React, { useEffect, forwardRef } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import classnames from 'classnames';
-import { SIMPLE_SITE } from 'config';
 import { parseURI } from 'lbry-redux';
 // @if TARGET='app'
 import { openClaimPreviewMenu } from 'util/context-menu';
@@ -16,7 +15,6 @@ import FileProperties from 'component/fileProperties';
 import ClaimTags from 'component/claimTags';
 import SubscribeButton from 'component/subscribeButton';
 import ChannelThumbnail from 'component/channelThumbnail';
-import BlockButton from 'component/blockButton';
 import ClaimSupportButton from 'component/claimSupportButton';
 import useGetThumbnail from 'effects/use-get-thumbnail';
 import ClaimPreviewTitle from 'component/claimPreviewTitle';
@@ -25,6 +23,8 @@ import ClaimRepostAuthor from 'component/claimRepostAuthor';
 import FileDownloadLink from 'component/fileDownloadLink';
 import AbandonedChannelPreview from 'component/abandonedChannelPreview';
 import PublishPending from 'component/publishPending';
+import ClaimMenuList from 'component/claimMenuList';
+import ChannelStakedIndicator from 'component/channelStakedIndicator';
 import ClaimPreviewLoading from './claim-preview-loading';
 import ClaimPreviewHidden from './claim-preview-no-mature';
 import ClaimPreviewNoContent from './claim-preview-no-content';
@@ -55,12 +55,10 @@ type Props = {
   }>,
   blockedChannelUris: Array<string>,
   channelIsBlocked: boolean,
-  isSubscribed: boolean,
   actions: boolean | Node | string | number,
   properties: boolean | Node | string | number | ((Claim) => Node),
   empty?: Node,
   onClick?: (any) => any,
-  hideBlock?: boolean,
   streamingUrl: ?string,
   getFile: (string) => void,
   customShouldHide?: (Claim) => boolean,
@@ -72,6 +70,7 @@ type Props = {
   wrapperElement?: string,
   hideRepostLabel?: boolean,
   repostUrl?: string,
+  hideMenu?: boolean,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -87,7 +86,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     // is the claim consider nsfw?
     nsfw,
     claimIsMine,
-    isSubscribed,
     streamingUrl,
     // user properties
     channelIsBlocked,
@@ -113,13 +111,13 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     hideActions = false,
     properties,
     onClick,
-    hideBlock,
     actions,
     blockedChannelUris,
     blackListedOutpoints,
     filteredOutpoints,
     includeSupportAction,
     renderActions,
+    hideMenu = false,
     // repostUrl,
   } = props;
   const WrapperElement = wrapperElement || 'li';
@@ -275,7 +273,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
       >
         {isChannelUri && claim ? (
           <UriIndicator uri={contentUri} link>
-            <ChannelThumbnail uri={contentUri} obscure={channelIsBlocked} />
+            <ChannelThumbnail uri={contentUri} />
           </UriIndicator>
         ) : (
           <>
@@ -313,9 +311,9 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                 </NavLink>
               )}
 
-              {type !== 'small' && !isChannelUri && signingChannel && SIMPLE_SITE && (
+              {/* {type !== 'small' && !isChannelUri && signingChannel && SIMPLE_SITE && (
                 <ChannelThumbnail uri={signingChannel.permanent_url} />
-              )}
+              )} */}
             </div>
             <ClaimPreviewSubtitle uri={uri} type={type} />
             {(pending || !!reflectingProgress) && <PublishPending uri={uri} />}
@@ -329,12 +327,17 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                     actions
                   ) : (
                     <div className="claim-preview__primary-actions">
+                      {!isChannelUri && signingChannel && (
+                        <div className="claim-preview__channel-staked">
+                          <ChannelThumbnail uri={signingChannel.permanent_url} hideStakedIndicator />
+                          <ChannelStakedIndicator uri={signingChannel.permanent_url} inline />
+                        </div>
+                      )}
+
                       {isChannelUri && !channelIsBlocked && !claimIsMine && (
                         <SubscribeButton uri={contentUri.startsWith('lbry://') ? contentUri : `lbry://${contentUri}`} />
                       )}
-                      {!hideBlock && isChannelUri && !isSubscribed && (!claimIsMine || channelIsBlocked) && (
-                        <BlockButton uri={contentUri.startsWith('lbry://') ? contentUri : `lbry://${contentUri}`} />
-                      )}
+
                       {includeSupportAction && <ClaimSupportButton uri={uri} />}
                     </div>
                   )}
@@ -355,6 +358,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
           )}
         </div>
       </div>
+      {!hideMenu && <ClaimMenuList uri={uri} />}
     </WrapperElement>
   );
 });

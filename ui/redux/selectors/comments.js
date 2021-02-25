@@ -1,22 +1,28 @@
 // @flow
 import * as SETTINGS from 'constants/settings';
 import { createSelector } from 'reselect';
-import { selectBlockedChannels } from 'redux/selectors/blocked';
+import { selectMutedChannels } from 'redux/selectors/blocked';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { selectBlacklistedOutpointMap, selectFilteredOutpointMap } from 'lbryinc';
 import { selectClaimsById, isClaimNsfw, selectMyActiveClaims } from 'lbry-redux';
 
-const selectState = state => state.comments || {};
+const selectState = (state) => state.comments || {};
 
-export const selectCommentsById = createSelector(selectState, state => state.commentById || {});
-
-export const selectIsFetchingComments = createSelector(selectState, state => state.isLoading);
-
-export const selectIsPostingComment = createSelector(selectState, state => state.isCommenting);
-
-export const selectIsFetchingReacts = createSelector(selectState, state => state.isFetchingReacts);
-
-export const selectOthersReactsById = createSelector(selectState, state => state.othersReactsByCommentId);
+export const selectCommentsById = createSelector(selectState, (state) => state.commentById || {});
+export const selectIsFetchingComments = createSelector(selectState, (state) => state.isLoading);
+export const selectIsPostingComment = createSelector(selectState, (state) => state.isCommenting);
+export const selectIsFetchingReacts = createSelector(selectState, (state) => state.isFetchingReacts);
+export const selectOthersReactsById = createSelector(selectState, (state) => state.othersReactsByCommentId);
+export const selectModerationBlockList = createSelector(
+  selectState,
+  (state) => state.moderationBlockList && state.moderationBlockList.reverse()
+);
+export const selectBlockingByUri = createSelector(selectState, (state) => state.blockingByUri);
+export const selectUnBlockingByUri = createSelector(selectState, (state) => state.unBlockingByUri);
+export const selectFetchingModerationBlockList = createSelector(
+  selectState,
+  (state) => state.fetchingModerationBlockList
+);
 
 export const selectCommentsByClaimId = createSelector(selectState, selectCommentsById, (state, byId) => {
   const byClaimId = state.byId || {};
@@ -40,7 +46,7 @@ export const selectTopLevelCommentsByClaimId = createSelector(selectState, selec
   const comments = {};
 
   // replace every comment_id in the list with the actual comment object
-  Object.keys(byClaimId).forEach(claimId => {
+  Object.keys(byClaimId).forEach((claimId) => {
     const commentIds = byClaimId[claimId];
 
     comments[claimId] = Array(commentIds === null ? 0 : commentIds.length);
@@ -53,14 +59,14 @@ export const selectTopLevelCommentsByClaimId = createSelector(selectState, selec
 });
 
 export const makeSelectCommentForCommentId = (commentId: string) =>
-  createSelector(selectCommentsById, comments => comments[commentId]);
+  createSelector(selectCommentsById, (comments) => comments[commentId]);
 
 export const selectRepliesByParentId = createSelector(selectState, selectCommentsById, (state, byId) => {
   const byParentId = state.repliesByParentId || {};
   const comments = {};
 
   // replace every comment_id in the list with the actual comment object
-  Object.keys(byParentId).forEach(id => {
+  Object.keys(byParentId).forEach((id) => {
     const commentIds = byParentId[id];
 
     comments[id] = Array(commentIds === null ? 0 : commentIds.length);
@@ -77,10 +83,10 @@ export const selectRepliesByParentId = createSelector(selectState, selectComment
   selectState,
   state => state.byId || {}
 ); */
-export const selectCommentsByUri = createSelector(selectState, state => {
+export const selectCommentsByUri = createSelector(selectState, (state) => {
   const byUri = state.commentsByUri || {};
   const comments = {};
-  Object.keys(byUri).forEach(uri => {
+  Object.keys(byUri).forEach((uri) => {
     const claimId = byUri[uri];
     if (claimId === null) {
       comments[uri] = null;
@@ -99,16 +105,16 @@ export const makeSelectCommentIdsForUri = (uri: string) =>
   });
 
 export const makeSelectMyReactionsForComment = (commentId: string) =>
-  createSelector(selectState, state => {
+  createSelector(selectState, (state) => {
     return state.myReactsByCommentId[commentId] || [];
   });
 
 export const makeSelectOthersReactionsForComment = (commentId: string) =>
-  createSelector(selectState, state => {
+  createSelector(selectState, (state) => {
     return state.othersReactsByCommentId[commentId];
   });
 
-export const selectPendingCommentReacts = createSelector(selectState, state => state.pendingCommentReactions);
+export const selectPendingCommentReacts = createSelector(selectState, (state) => state.pendingCommentReactions);
 
 export const makeSelectCommentsForUri = (uri: string) =>
   createSelector(
@@ -116,7 +122,7 @@ export const makeSelectCommentsForUri = (uri: string) =>
     selectCommentsByUri,
     selectClaimsById,
     selectMyActiveClaims,
-    selectBlockedChannels,
+    selectMutedChannels,
     selectBlacklistedOutpointMap,
     selectFilteredOutpointMap,
     makeSelectClientSetting(SETTINGS.SHOW_MATURE),
@@ -125,7 +131,12 @@ export const makeSelectCommentsForUri = (uri: string) =>
       const comments = byClaimId && byClaimId[claimId];
 
       return comments
-        ? comments.filter(comment => {
+        ? comments.filter((comment) => {
+            if (!comment) {
+              // It may have been recently deleted after being blocked
+              return false;
+            }
+
             const channelClaim = claimsById[comment.channel_id];
 
             // Return comment if `channelClaim` doesn't exist so the component knows to resolve the author
@@ -162,7 +173,7 @@ export const makeSelectTopLevelCommentsForUri = (uri: string) =>
     selectCommentsByUri,
     selectClaimsById,
     selectMyActiveClaims,
-    selectBlockedChannels,
+    selectMutedChannels,
     selectBlacklistedOutpointMap,
     selectFilteredOutpointMap,
     makeSelectClientSetting(SETTINGS.SHOW_MATURE),
@@ -171,7 +182,7 @@ export const makeSelectTopLevelCommentsForUri = (uri: string) =>
       const comments = byClaimId && byClaimId[claimId];
 
       return comments
-        ? comments.filter(comment => {
+        ? comments.filter((comment) => {
             if (!comment) {
               return false;
             }
@@ -212,7 +223,7 @@ export const makeSelectRepliesForParentId = (id: string) =>
     selectCommentsById,
     selectClaimsById,
     selectMyActiveClaims,
-    selectBlockedChannels,
+    selectMutedChannels,
     selectBlacklistedOutpointMap,
     selectFilteredOutpointMap,
     makeSelectClientSetting(SETTINGS.SHOW_MATURE),
@@ -223,13 +234,13 @@ export const makeSelectRepliesForParentId = (id: string) =>
       if (!replyIdsForParent.length) return null;
 
       const comments = [];
-      replyIdsForParent.forEach(cid => {
+      replyIdsForParent.forEach((cid) => {
         comments.push(commentsById[cid]);
       });
       // const comments = byParentId && byParentId[id];
 
       return comments
-        ? comments.filter(comment => {
+        ? comments.filter((comment) => {
             if (!comment) {
               return false;
             }
@@ -265,6 +276,20 @@ export const makeSelectRepliesForParentId = (id: string) =>
   );
 
 export const makeSelectTotalCommentsCountForUri = (uri: string) =>
-  createSelector(makeSelectCommentsForUri(uri), comments => {
+  createSelector(makeSelectCommentsForUri(uri), (comments) => {
     return comments ? comments.length : 0;
+  });
+
+export const makeSelectChannelIsBlocked = (uri: string) =>
+  createSelector(selectModerationBlockList, (blockedChannelUris) => {
+    if (!blockedChannelUris || !blockedChannelUris) {
+      return false;
+    }
+
+    return blockedChannelUris.includes(uri);
+  });
+
+export const makeSelectUriIsBlockingOrUnBlocking = (uri: string) =>
+  createSelector(selectBlockingByUri, selectUnBlockingByUri, (blockingByUri, unBlockingByUri) => {
+    return blockingByUri[uri] || unBlockingByUri[uri];
   });

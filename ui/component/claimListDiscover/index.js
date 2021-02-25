@@ -7,12 +7,12 @@ import {
   SETTINGS,
 } from 'lbry-redux';
 import { selectFollowedTags } from 'redux/selectors/tags';
-import { selectBlockedChannels } from 'redux/selectors/blocked';
+import { selectMutedChannels } from 'redux/selectors/blocked';
 import { doToggleTagFollowDesktop } from 'redux/actions/tags';
 import { makeSelectClientSetting, selectLanguage } from 'redux/selectors/settings';
 import ClaimListDiscover from './view';
 
-const select = state => ({
+const select = (state) => ({
   followedTags: selectFollowedTags(state),
   claimSearchByQuery: selectClaimSearchByQuery(state),
   claimSearchByQueryLastPageReached: selectClaimSearchByQueryLastPageReached(state),
@@ -20,7 +20,7 @@ const select = state => ({
   showNsfw: makeSelectClientSetting(SETTINGS.SHOW_MATURE)(state),
   hideReposts: makeSelectClientSetting(SETTINGS.HIDE_REPOSTS)(state),
   languageSetting: selectLanguage(state),
-  hiddenUris: selectBlockedChannels(state),
+  hiddenUris: selectMutedChannels(state),
   searchInLanguage: makeSelectClientSetting(SETTINGS.SEARCH_IN_LANGUAGE)(state),
 });
 

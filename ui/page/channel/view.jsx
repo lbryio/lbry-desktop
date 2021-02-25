@@ -6,7 +6,6 @@ import { parseURI } from 'lbry-redux';
 import { YOUTUBE_STATUSES } from 'lbryinc';
 import Page from 'component/page';
 import SubscribeButton from 'component/subscribeButton';
-import BlockButton from 'component/blockButton';
 import ShareButton from 'component/shareButton';
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
 import { useHistory } from 'react-router';
@@ -21,6 +20,7 @@ import classnames from 'classnames';
 import HelpLink from 'component/common/help-link';
 import ClaimSupportButton from 'component/claimSupportButton';
 import ChannelStakedIndicator from 'component/channelStakedIndicator';
+import ClaimMenuList from 'component/claimMenuList';
 
 export const PAGE_VIEW_QUERY = `view`;
 const ABOUT_PAGE = `about`;
@@ -157,7 +157,7 @@ function ChannelPage(props: Props) {
           {!channelIsBlocked && !channelIsBlackListed && <ShareButton uri={uri} />}
           {!channelIsBlocked && <ClaimSupportButton uri={uri} />}
           {!channelIsBlocked && (!channelIsBlackListed || isSubscribed) && <SubscribeButton uri={permanentUrl} />}
-          {!isSubscribed && <BlockButton uri={permanentUrl} />}
+          <ClaimMenuList uri={claim.permanent_url} inline />
         </div>
         {cover && (
           <img
