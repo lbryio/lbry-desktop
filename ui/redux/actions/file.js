@@ -77,7 +77,7 @@ export function doDeleteFileAndMaybeGoBack(uri, deleteFromComputer, abandonClaim
       })
     );
 
-    if (playingUri === uri) {
+    if (playingUri && playingUri.uri === uri) {
       actions.push(doSetPlayingUri({ uri: null }));
     }
     // it would be nice to stay on the claim if you just want to delete it
