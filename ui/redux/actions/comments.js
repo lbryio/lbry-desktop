@@ -528,28 +528,36 @@ export function doFetchModBlockedList() {
       )
     )
       .then((blockLists) => {
-        let globalBlockList = new Set();
-        blockLists.forEach((channelBlockListData) => {
-          const blockListForChannel = channelBlockListData && channelBlockListData.blocked_channels;
-          if (blockListForChannel) {
-            blockListForChannel.forEach((blockedChannel) => {
-              // REMOVE THIS
-              if (blockedChannel.blocked_channel_name) {
-                const channelUri = buildURI({
-                  channelName: blockedChannel.blocked_channel_name,
-                  claimId: blockedChannel.blocked_channel_id,
-                });
+        let globalBlockList = [];
+        blockLists
+          .sort((a, b) => {
+            return 1;
+          })
+          .forEach((channelBlockListData) => {
+            const blockListForChannel = channelBlockListData && channelBlockListData.blocked_channels;
+            if (blockListForChannel) {
+              blockListForChannel.forEach((blockedChannel) => {
+                // REMOVE THIS
+                if (blockedChannel.blocked_channel_name) {
+                  const channelUri = buildURI({
+                    channelName: blockedChannel.blocked_channel_name,
+                    claimId: blockedChannel.blocked_channel_id,
+                  });
 
-                globalBlockList.add(channelUri);
-              }
-            });
-          }
-        });
+                  if (!globalBlockList.find((blockedChannel) => blockedChannel.channelUri === channelUri)) {
+                    globalBlockList.push({ channelUri, blockedAt: blockedChannel.blocked_at });
+                  }
+                }
+              });
+            }
+          });
 
         dispatch({
           type: ACTIONS.COMMENT_MODERATION_BLOCK_LIST_COMPLETED,
           data: {
-            blockList: Array.from(globalBlockList).reverse(),
+            blockList: globalBlockList
+              .sort((a, b) => new Date(a.blockedAt) - new Date(b.blockedAt))
+              .map((blockedChannel) => blockedChannel.channelUri),
           },
         });
       })
