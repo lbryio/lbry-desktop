@@ -60,3 +60,4 @@ exports.BUY = 'buy';
 exports.CHANNEL_NEW = 'channel/new';
 exports.NOTIFICATIONS = 'notifications';
 exports.YOUTUBE_SYNC = 'youtube';
+exports.GO_LIVE = 'livestream';
