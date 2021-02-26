@@ -55,6 +55,7 @@ jobs:
           NOTARIZATION_USERNAME: ${{ secrets.NOTARIZATION_USERNAME }}
           NOTARIZATION_PASSWORD: ${{ secrets.NOTARIZATION_PASSWORD }}
           WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
+          MOONPAY_SECRET_KEY: ${{ secrets.MOONPAY_SECRET_KEY }}
           CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
           WIN_CSC_LINK: https://s3.amazonaws.com/files.lbry.io/cert/win-csc-2020-2021-08.p12
           CSC_LINK: https://s3.amazonaws.com/files.lbry.io/cert/osx-cert.p12
