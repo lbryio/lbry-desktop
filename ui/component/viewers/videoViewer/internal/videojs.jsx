@@ -239,6 +239,62 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     }
   }
 
+  function resolveCtrlText(e) {
+    // Override the player's control text. We override to:
+    // 1. Add keyboard shortcut to the tool-tip.
+    // 2. Override videojs' i18n and use our own (don't want to have 2 systems).
+    //
+    // Notes:
+    // - For dynamic controls (e.g. play/pause), those unfortunately need to be
+    // updated again at their event-listener level (that's just the way videojs
+    // updates the text), hence the need to listen to 'play', 'pause' and 'volumechange'
+    // on top of just 'loadstart'.
+    // - videojs changes the MuteToggle text at 'loadstart', so this was chosen
+    // as the listener to update static texts.
+    const player = playerRef.current;
+    if (player) {
+      const controlBar = player.getChild('controlBar');
+      switch (e.type) {
+        case 'play':
+          controlBar.getChild('PlayToggle').controlText(__('Pause (space)'));
+          break;
+        case 'pause':
+          controlBar.getChild('PlayToggle').controlText(__('Play (space)'));
+          break;
+        case 'volumechange':
+          controlBar
+            .getChild('VolumePanel')
+            .getChild('MuteToggle')
+            .controlText(player.muted() || player.volume() === 0 ? __('Unmute (m)') : __('Mute (m)'));
+          break;
+        case 'fullscreenchange':
+          controlBar
+            .getChild('FullscreenToggle')
+            .controlText(player.isFullscreen() ? __('Exit Fullscreen (f)') : __('Fullscreen (f)'));
+          break;
+        case 'loadstart':
+          // --- Do everything ---
+          controlBar.getChild('PlaybackRateMenuButton').controlText(__('Playback Rate (<, >)'));
+          controlBar.getChild('QualityButton').controlText(__('Quality'));
+          resolveCtrlText({ type: 'play' });
+          resolveCtrlText({ type: 'pause' });
+          resolveCtrlText({ type: 'volumechange' });
+          resolveCtrlText({ type: 'fullscreenchange' });
+          // (1) The 'Theater mode' button should probably be changed to a class
+          // so that we can use getChild() with a specific name. There might be
+          // clashes if we add a new button in the future.
+          // (2) We'll have to get 'makeSelectClientSetting(SETTINGS.VIDEO_THEATER_MODE)'
+          // as a prop here so we can say "Theater mode|Default mode" instead of
+          // "Toggle Theather mode".
+          controlBar.getChild('Button').controlText(__('Toggle Theater mode (t)'));
+          break;
+        default:
+          if (isDev) throw Error('Unexpected: ' + e.type);
+          break;
+      }
+    }
+  }
+
   function onInitialPlay() {
     const player = playerRef.current;
     if (player && (player.muted() || player.volume() === 0)) {
@@ -369,6 +425,11 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
       // Add various event listeners to player
       player.one('play', onInitialPlay);
+      player.on('play', resolveCtrlText);
+      player.on('pause', resolveCtrlText);
+      player.on('loadstart', resolveCtrlText);
+      player.on('fullscreenchange', resolveCtrlText);
+      player.on('volumechange', resolveCtrlText);
       player.on('volumechange', onVolumeChange);
       player.on('error', onError);
       player.on('ended', onEnded);

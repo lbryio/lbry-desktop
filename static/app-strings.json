@@ -1598,5 +1598,14 @@
   "Are you sure you want to view this content? Viewing will not unblock @%channel%": "Are you sure you want to view this content? Viewing will not unblock @%channel%",
   "Are you sure you want to view this content? Viewing will not unmute @%channel%": "Are you sure you want to view this content? Viewing will not unmute @%channel%",
   "View Content": "View Content",
+  "Mute (m)": "Mute (m)",
+  "Playback Rate (<, >)": "Playback Rate (<, >)",
+  "Fullscreen (f)": "Fullscreen (f)",
+  "Pause (space)": "Pause (space)",
+  "Play (space)": "Play (space)",
+  "Unmute (m)": "Unmute (m)",
+  "Exit Fullscreen (f)": "Exit Fullscreen (f)",
+  "Toggle Theater mode (t)": "Toggle Theater mode (t)",
+  "Quality": "Quality",
   "--end--": "--end--"
 }
