@@ -374,6 +374,10 @@ function HeaderMenuButtons(props: HeaderMenuButtonProps) {
               <Icon aria-hidden icon={ICONS.CHANNEL} />
               {__('New Channel')}
             </MenuItem>
+            <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.GO_LIVE}`)}>
+              <Icon aria-hidden icon={ICONS.VIDEO} />
+              {__('Go Live')}
+            </MenuItem>
           </MenuList>
         </Menu>
       )}
