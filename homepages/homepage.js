@@ -127,12 +127,7 @@ export default function GetHomePageRowData(
       pageSize: getPageSize(12),
       channelIds: YOUTUBER_CHANNEL_IDS,
       limitClaimsPerChannel: 1,
-      releaseTime: `>${Math.floor(
-        moment()
-          .subtract(1, 'months')
-          .startOf('week')
-          .unix()
-      )}`,
+      releaseTime: `>${Math.floor(moment().subtract(1, 'months').startOf('week').unix())}`,
     },
   };
 
@@ -159,18 +154,8 @@ export default function GetHomePageRowData(
       orderBy: ['release_time'],
       releaseTime:
         subscribedChannels.length > 20
-          ? `>${Math.floor(
-          moment()
-            .subtract(6, 'months')
-            .startOf('week')
-            .unix()
-          )}`
-          : `>${Math.floor(
-          moment()
-            .subtract(1, 'year')
-            .startOf('week')
-            .unix()
-          )}`,
+          ? `>${Math.floor(moment().subtract(6, 'months').startOf('week').unix())}`
+          : `>${Math.floor(moment().subtract(1, 'year').startOf('week').unix())}`,
       pageSize: getPageSize(subscribedChannels.length > 3 ? (subscribedChannels.length > 6 ? 16 : 8) : 4),
       channelIds: subscribedChannels.map((subscription: Subscription) => {
         const { channelClaimId } = parseURI(subscription.uri);
@@ -187,12 +172,7 @@ export default function GetHomePageRowData(
       orderBy: ['effective_amount'],
       claimType: ['stream'],
       limitClaimsPerChannel: 2,
-      releaseTime: `>${Math.floor(
-        moment()
-          .subtract(1, 'day')
-          .startOf('day')
-          .unix()
-      )}`,
+      releaseTime: `>${Math.floor(moment().subtract(1, 'day').startOf('day').unix())}`,
     },
   };
 
@@ -205,21 +185,21 @@ export default function GetHomePageRowData(
     },
   };
 
-  const TRENDING_CLASSICS = {
-    title: __('Trending Classics'),
-    link: `/$/${PAGES.DISCOVER}?${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TRENDING}&${CS.FRESH_KEY}=${CS.FRESH_WEEK}`,
-    options: {
-      pageSize: getPageSize(4),
-      claimType: ['stream'],
-      limitClaimsPerChannel: 1,
-      releaseTime: `<${Math.floor(
-        moment()
-          .subtract(6, 'month')
-          .startOf('day')
-          .unix()
-      )}`,
-    },
-  };
+  //   const TRENDING_CLASSICS = {
+  //     title: __('Trending Classics'),
+  //     link: `/$/${PAGES.DISCOVER}?${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TRENDING}&${CS.FRESH_KEY}=${CS.FRESH_WEEK}`,
+  //     options: {
+  //       pageSize: getPageSize(4),
+  //       claimType: ['stream'],
+  //       limitClaimsPerChannel: 1,
+  //       releaseTime: `<${Math.floor(
+  //         moment()
+  //           .subtract(6, 'month')
+  //           .startOf('day')
+  //           .unix()
+  //       )}`,
+  //     },
+  //   };
 
   //   const TRENDING_ON_LBRY = {
   //     title: __('Trending On LBRY'),
@@ -236,7 +216,7 @@ export default function GetHomePageRowData(
 
     options: {
       pageSize: getPageSize(4),
-      tags: followedTags.map(tag => tag.name),
+      tags: followedTags.map((tag) => tag.name),
       claimType: ['stream'],
       limitClaimsPerChannel: 2,
     },
@@ -274,7 +254,7 @@ export default function GetHomePageRowData(
     rowData.push(YOUTUBE_CREATOR_ROW);
   }
 
-  rowData.push(TRENDING_CLASSICS);
+  //   rowData.push(TRENDING_CLASSICS);
   rowData.push(TOP_CONTENT_TODAY);
 
   //   rowData.push(TRENDING_ON_LBRY);
