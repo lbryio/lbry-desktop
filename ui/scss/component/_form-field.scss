@@ -484,7 +484,15 @@ fieldset-section {
 
 .react-datetime-picker__button {
   svg {
-    stroke: var(--color-gray-5);
+    stroke: var(--color-black);
+  }
+}
+
+[theme='dark'] {
+  .react-datetime-picker__button {
+    svg {
+      stroke: var(--color-white);
+    }
   }
 }
 
