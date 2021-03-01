@@ -1,7 +1,7 @@
 //
-export const LIVE_STREAM_CHANNEL = '@OwenBenjamin';
-export const LIVE_STREAM_CHANNEL_CLAIM_ID = '6de621b92bfa14e54ab56e3498a893e21be785cf';
-export const BITWAVE_USERNAME = 'owenbenjaminodysee';
+export const LIVE_STREAM_CHANNEL = '@SaltyCracker';
+export const LIVE_STREAM_CHANNEL_CLAIM_ID = 'ae12172e991e675ed842a0a4412245d8ee1eb398';
+export const BITWAVE_USERNAME = 'saltycracker1';
 
 // export const LIVE_STREAM_CHANNEL = '@sy-test';
 // export const LIVE_STREAM_CHANNEL_CLAIM_ID = '84b50bafd028692c90a25b83d0929defc73154b2';
