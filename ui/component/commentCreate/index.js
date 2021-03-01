@@ -18,9 +18,10 @@ const select = (state, props) => ({
 });
 
 const perform = (dispatch, ownProps) => ({
-  createComment: (comment, claimId, parentId) => dispatch(doCommentCreate(comment, claimId, parentId, ownProps.uri)),
+  createComment: (comment, claimId, parentId) =>
+    dispatch(doCommentCreate(comment, claimId, parentId, ownProps.uri, ownProps.livestream)),
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
-  setActiveChannel: claimId => dispatch(doSetActiveChannel(claimId)),
+  setActiveChannel: (claimId) => dispatch(doSetActiveChannel(claimId)),
 });
 
 export default connect(select, perform)(CommentCreate);
