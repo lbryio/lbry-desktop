@@ -2,7 +2,8 @@
 
 input,
 textarea,
-select {
+select,
+.date-picker-input {
   height: var(--height-input);
   border-radius: var(--border-radius);
   border: 1px solid;
@@ -484,4 +485,55 @@ fieldset-section {
 #automatic_dark_mode_range_start,
 #automatic_dark_mode_range_end {
   min-width: 6em;
+}
+
+.date-picker-input {
+  font-weight: bold;
+
+  .react-datetime-picker__wrapper {
+    border: 0;
+  }
+}
+
+.form-field-date-picker {
+  margin-bottom: var(--spacing-l);
+}
+
+.form-field-date-picker-label {
+  display: block;
+}
+
+.form-field-calendar {
+  border-radius: var(--card-radius);
+  border: 1px solid var(--color-border);
+}
+
+.react-datetime-picker__button {
+  svg {
+    stroke: var(--color-black);
+  }
+}
+
+[theme='dark'] {
+  .react-datetime-picker__button {
+    svg {
+      stroke: var(--color-white);
+    }
+  }
+}
+
+.react-date-picker__calendar {
+  z-index: 1000;
+}
+
+.react-calendar__tile--now,
+.react-calendar__tile--now:enabled:hover,
+.react-calendar__tile--now:enabled:focus {
+  background: var(--color-primary-alt);
+}
+
+.react-calendar__tile--active,
+.react-calendar__tile--active:enabled:hover,
+.react-calendar__tile--active:enabled:focus {
+  background: var(--color-primary);
 }

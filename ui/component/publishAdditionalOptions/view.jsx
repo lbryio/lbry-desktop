@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import usePersistedState from 'effects/use-persisted-state';
 import { FormField } from 'component/common/form';
 import Button from 'component/button';
+import PublishReleaseDate from 'component/publishReleaseDate';
 import LicenseType from './license-type';
 import Card from 'component/common/card';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
@@ -111,6 +112,7 @@ function PublishAdditionalOptions(props: Props) {
 
   return (
     <Card
+      className="card--enable-overflow"
       actions={
         <React.Fragment>
           {!hideSection && (
@@ -151,12 +153,14 @@ function PublishAdditionalOptions(props: Props) {
               )} */}
               {/* @endif */}
               <div className="section">
+                <PublishReleaseDate />
+
                 <FormField
                   label={__('Language')}
                   type="select"
                   name="content_language"
                   value={language}
-                  onChange={event => updatePublishForm({ language: event.target.value })}
+                  onChange={(event) => updatePublishForm({ language: event.target.value })}
                 >
                   {Object.entries(SUPPORTED_LANGUAGES).map(([langkey, langName]) => (
                     // $FlowFixMe
@@ -176,12 +180,12 @@ function PublishAdditionalOptions(props: Props) {
                       licenseUrl: newLicenseUrl,
                     })
                   }
-                  handleLicenseDescriptionChange={event =>
+                  handleLicenseDescriptionChange={(event) =>
                     updatePublishForm({
                       otherLicenseDescription: event.target.value,
                     })
                   }
-                  handleLicenseUrlChange={event => updatePublishForm({ licenseUrl: event.target.value })}
+                  handleLicenseUrlChange={(event) => updatePublishForm({ licenseUrl: event.target.value })}
                 />
               </div>
             </div>

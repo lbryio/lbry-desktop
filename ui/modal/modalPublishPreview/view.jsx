@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import moment from 'moment';
 import Button from 'component/button';
 import { Form, FormField } from 'component/common/form';
 import { Modal } from 'modal/modal';
@@ -28,6 +29,7 @@ type Props = {
     currency: string,
   },
   language: string,
+  release_time: ?string,
   licenseType: string,
   otherLicenseDescription: ?string,
   licenseUrl: ?string,
@@ -61,6 +63,7 @@ const ModalPublishPreview = (props: Props) => {
     contentIsFree,
     fee,
     language,
+    release_time,
     licenseType,
     otherLicenseDescription,
     licenseUrl,
@@ -227,6 +230,7 @@ const ModalPublishPreview = (props: Props) => {
                     {createRow(__('Deposit'), depositValue)}
                     {createRow(__('Price'), priceValue)}
                     {createRow(__('Language'), language)}
+                    {createRow(__('Release Date'), moment(release_time).format('MMMM Do, YYYY - h:mm a'))}
                     {createRow(__('License'), licenseValue)}
                     {createRow(__('Tags'), tagsValue)}
                   </tbody>
