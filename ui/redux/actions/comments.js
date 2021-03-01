@@ -1,6 +1,7 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
 import * as REACTION_TYPES from 'constants/reactions';
+import { BANNED_LIVESTREAM_WORDS } from 'constants/comment';
 import { Lbry, selectClaimsByUri } from 'lbry-redux';
 import { doToast, doSeeNotifications } from 'redux/actions/notifications';
 import {
@@ -50,7 +51,7 @@ export function doCommentList(uri: string, page: number = 1, pageSize: number = 
         });
         return result;
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch({
           type: ACTIONS.COMMENT_LIST_FAILED,
           data: error,
@@ -89,7 +90,7 @@ export function doCommentReactList(uri: string | null, commentId?: string) {
           },
         });
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch({
           type: ACTIONS.COMMENT_REACTION_LIST_FAILED,
           data: error,
@@ -171,14 +172,14 @@ export function doCommentReact(commentId: string, type: string) {
           data: commentId + type,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch({
           type: ACTIONS.COMMENT_REACT_FAILED,
           data: commentId + type,
         });
 
         const myRevertedReactsObj = myReacts
-          .filter(el => el !== type)
+          .filter((el) => el !== type)
           .reduce((acc, el) => {
             acc[el] = 1;
             return acc;
@@ -195,7 +196,13 @@ export function doCommentReact(commentId: string, type: string) {
   };
 }
 
-export function doCommentCreate(comment: string = '', claim_id: string = '', parent_id?: string, uri: string) {
+export function doCommentCreate(
+  comment: string = '',
+  claim_id: string = '',
+  parent_id?: string,
+  uri: string,
+  checkBannedWords: boolean = false
+) {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const activeChannelClaim = selectActiveChannelClaim(state);
@@ -208,6 +215,27 @@ export function doCommentCreate(comment: string = '', claim_id: string = '', par
     dispatch({
       type: ACTIONS.COMMENT_CREATE_STARTED,
     });
+
+    if (checkBannedWords) {
+      const strippedCommentText = comment.trim().toLowerCase().replace(/\s/g, '');
+      for (var i = 0; i < BANNED_LIVESTREAM_WORDS.length; i++) {
+        const bannedWord = BANNED_LIVESTREAM_WORDS[i];
+        if (strippedCommentText.includes(bannedWord)) {
+          dispatch({
+            type: ACTIONS.COMMENT_CREATE_FAILED,
+          });
+
+          dispatch(
+            doToast({
+              message: 'Unable to create comment.',
+              isError: true,
+            })
+          );
+
+          return;
+        }
+      }
+    }
 
     if (parent_id) {
       const notification = makeSelectNotificationForCommentId(parent_id)(state);
@@ -233,7 +261,7 @@ export function doCommentCreate(comment: string = '', claim_id: string = '', par
         });
         return result;
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch({
           type: ACTIONS.COMMENT_CREATE_FAILED,
           data: error,
@@ -274,7 +302,7 @@ export function doCommentPin(commentId: string, remove: boolean) {
           data: result,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch({
           type: ACTIONS.COMMENT_PIN_FAILED,
           data: error,
@@ -339,7 +367,7 @@ export function doCommentAbandon(commentId: string, creatorChannelUri?: string) 
           );
         }
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch({
           type: ACTIONS.COMMENT_ABANDON_FAILED,
           data: error,
@@ -389,7 +417,7 @@ export function doCommentUpdate(comment_id: string, comment: string) {
             );
           }
         })
-        .catch(error => {
+        .catch((error) => {
           dispatch({
             type: ACTIONS.COMMENT_UPDATE_FAILED,
             data: error,
