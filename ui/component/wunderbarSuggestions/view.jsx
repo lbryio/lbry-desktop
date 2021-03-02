@@ -1,5 +1,5 @@
 // @flow
-import { URL, URL_LOCAL, URL_DEV } from 'config';
+import { URL, URL_LOCAL, URL_DEV, KNOWN_APP_DOMAINS } from 'config';
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
 import React from 'react';
@@ -80,10 +80,10 @@ export default function WunderBarSuggestions(props: Props) {
 
     doCloseMobileSearch();
 
-    const includesLbryTvProd = value.includes(WEB_PROD_PREFIX);
-    const includesLbryTvLocal = value.includes(WEB_LOCAL_PREFIX);
-    const includesLbryTvDev = value.includes(WEB_DEV_PREFIX);
-    const wasCopiedFromWeb = includesLbryTvDev || includesLbryTvLocal || includesLbryTvProd;
+    const knownAppDomains = KNOWN_APP_DOMAINS.map((x) => `https://${x}/`); // Match WEB_PROD_PREFIX's 'https://xx/' format.
+    const webDomainList = [WEB_PROD_PREFIX, ...knownAppDomains, WEB_LOCAL_PREFIX, WEB_DEV_PREFIX];
+    const webDomainIndex = webDomainList.findIndex((x) => value.includes(x));
+    const wasCopiedFromWeb = webDomainIndex !== -1;
     const isLbryUrl = value.startsWith('lbry://');
 
     if (inputRef.current) {
@@ -91,10 +91,7 @@ export default function WunderBarSuggestions(props: Props) {
     }
 
     if (wasCopiedFromWeb) {
-      let prefix = WEB_PROD_PREFIX;
-      if (includesLbryTvLocal) prefix = WEB_LOCAL_PREFIX;
-      if (includesLbryTvDev) prefix = WEB_DEV_PREFIX;
-
+      const prefix = webDomainList[webDomainIndex];
       let query = value.slice(prefix.length).replace(/:/g, '#');
 
       if (query.includes(SEARCH_PREFIX)) {
