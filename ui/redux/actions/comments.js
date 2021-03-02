@@ -1,13 +1,14 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
 import * as REACTION_TYPES from 'constants/reactions';
-import { Lbry, buildURI, selectClaimsByUri, selectMyChannelClaims } from 'lbry-redux';
+import { Lbry, parseURI, buildURI, selectClaimsByUri, selectMyChannelClaims } from 'lbry-redux';
 import { doToast, doSeeNotifications } from 'redux/actions/notifications';
 import {
   makeSelectCommentIdsForUri,
   makeSelectMyReactionsForComment,
   makeSelectOthersReactionsForComment,
   selectPendingCommentReacts,
+  selectModerationBlockList,
 } from 'redux/selectors/comments';
 import { makeSelectNotificationForCommentId } from 'redux/selectors/notifications';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
@@ -238,9 +239,15 @@ export function doCommentCreate(comment: string = '', claim_id: string = '', par
           type: ACTIONS.COMMENT_CREATE_FAILED,
           data: error,
         });
+
+        let toastMessage = __('Unable to create comment, please try again later.');
+        if (error && error.message === 'channel is blocked by publisher') {
+          toastMessage = __('Unable to comment. This channel has blocked you.');
+        }
+
         dispatch(
           doToast({
-            message: 'Unable to create comment, please try again later.',
+            message: toastMessage,
             isError: true,
           })
         );
@@ -568,3 +575,42 @@ export function doFetchModBlockedList() {
       });
   };
 }
+
+export const doUpdateBlockListForPublishedChannel = (channelClaim: ChannelClaim) => {
+  return async (dispatch: Dispatch, getState: GetState) => {
+    const state = getState();
+    const blockedUris = selectModerationBlockList(state);
+
+    let channelSignature: ?{
+      signature: string,
+      signing_ts: string,
+    };
+    try {
+      channelSignature = await Lbry.channel_sign({
+        channel_id: channelClaim.claim_id,
+        hexdata: toHex(channelClaim.name),
+      });
+    } catch (e) {}
+
+    if (!channelSignature) {
+      return;
+    }
+
+    return Promise.all(
+      blockedUris.map((uri) => {
+        const { channelName, channelClaimId } = parseURI(uri);
+
+        return Comments.moderation_block({
+          mod_channel_id: channelClaim.claim_id,
+          mod_channel_name: channelClaim.name,
+          // $FlowFixMe
+          signature: channelSignature.signature,
+          // $FlowFixMe
+          signing_ts: channelSignature.signing_ts,
+          blocked_channel_id: channelClaimId,
+          blocked_channel_name: channelName,
+        });
+      })
+    );
+  };
+};

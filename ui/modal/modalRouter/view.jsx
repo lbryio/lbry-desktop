@@ -31,7 +31,6 @@ import ModalCommentAcknowledgement from 'modal/modalCommentAcknowledgement';
 import ModalWalletSend from 'modal/modalWalletSend';
 import ModalWalletReceive from 'modal/modalWalletReceive';
 import ModalYoutubeWelcome from 'modal/modalYoutubeWelcome';
-import ModalCreateChannel from 'modal/modalChannelCreate';
 import ModalSetReferrer from 'modal/modalSetReferrer';
 import ModalSignOut from 'modal/modalSignOut';
 import ModalSupportsLiquidate from 'modal/modalSupportsLiquidate';
@@ -129,8 +128,6 @@ function ModalRouter(props: Props) {
       return <ModalWalletReceive {...modalProps} />;
     case MODALS.YOUTUBE_WELCOME:
       return <ModalYoutubeWelcome />;
-    case MODALS.CREATE_CHANNEL:
-      return <ModalCreateChannel {...modalProps} />;
     case MODALS.SET_REFERRER:
       return <ModalSetReferrer {...modalProps} />;
     case MODALS.SIGN_OUT:

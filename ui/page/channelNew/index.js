@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { selectBalance } from 'lbry-redux';
 import ChannelNew from './view';
 
-const select = state => ({
+const select = (state) => ({
   balance: selectBalance(state),
 });
 

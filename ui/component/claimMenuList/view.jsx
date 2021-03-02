@@ -33,7 +33,7 @@ function ClaimMenuList(props: Props) {
       ? claim.permanent_url
       : claim.signing_channel && claim.signing_channel.permanent_url);
 
-  if (!channelUri) {
+  if (!channelUri || claimIsMine) {
     return null;
   }
 

@@ -16,7 +16,7 @@ import {
   doClearChannelErrors,
 } from 'lbry-redux';
 import { doOpenModal } from 'redux/actions/app';
-
+import { doUpdateBlockListForPublishedChannel } from 'redux/actions/comments';
 import ChannelPage from './view';
 
 const select = (state, props) => ({
@@ -38,12 +38,16 @@ const select = (state, props) => ({
   balance: selectBalance(state),
 });
 
-const perform = dispatch => ({
+const perform = (dispatch) => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
-  updateChannel: params => dispatch(doUpdateChannel(params)),
-  createChannel: params => {
+  updateChannel: (params) => dispatch(doUpdateChannel(params)),
+  createChannel: (params) => {
     const { name, amount, ...optionalParams } = params;
-    return dispatch(doCreateChannel('@' + name, amount, optionalParams));
+    return dispatch(
+      doCreateChannel('@' + name, amount, optionalParams, (channelClaim) => {
+        dispatch(doUpdateBlockListForPublishedChannel(channelClaim));
+      })
+    );
   },
   clearChannelErrors: () => dispatch(doClearChannelErrors()),
 });

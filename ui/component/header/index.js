@@ -10,7 +10,7 @@ import { makeSelectClientSetting, selectLanguage } from 'redux/selectors/setting
 import { selectHasNavigated, selectActiveChannelClaim } from 'redux/selectors/app';
 import Header from './view';
 
-const select = state => ({
+const select = (state) => ({
   language: selectLanguage(state),
   balance: selectBalance(state),
   roundedSpendableBalance: formatCredits(selectBalance(state), 2, true),
@@ -27,10 +27,9 @@ const select = state => ({
   activeChannelClaim: selectActiveChannelClaim(state),
 });
 
-const perform = dispatch => ({
+const perform = (dispatch) => ({
   setClientSetting: (key, value, push) => dispatch(doSetClientSetting(key, value, push)),
   signOut: () => dispatch(doSignOut()),
-  openChannelCreate: () => dispatch(doOpenModal(MODALS.CREATE_CHANNEL)),
   openSignOutModal: () => dispatch(doOpenModal(MODALS.SIGN_OUT)),
   clearEmailEntry: () => dispatch(doClearEmailEntry()),
   clearPasswordEntry: () => dispatch(doClearPasswordEntry()),

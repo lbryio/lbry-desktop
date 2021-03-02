@@ -1,7 +1,5 @@
 // @flow
 
-const EMOJI_REGEX = /(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff])[\ufe0e\ufe0f]?(?:[\u0300-\u036f\ufe20-\ufe23\u20d0-\u20f0]|\ud83c[\udffb-\udfff])?(?:\u200d(?:[^\ud800-\udfff]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff])[\ufe0e\ufe0f]?(?:[\u0300-\u036f\ufe20-\ufe23\u20d0-\u20f0]|\ud83c[\udffb-\udfff])?)*/g;
-
 export function toHex(str: string): string {
   const array = Array.from(str);
 
@@ -9,14 +7,9 @@ export function toHex(str: string): string {
 
   for (var i = 0; i < array.length; i++) {
     const val = array[i];
-
-    const isEmoji = EMOJI_REGEX.test(val);
-
-    const utf = isEmoji
-      ? toUTF8Array(val)
-          .map((num) => num.toString(16))
-          .join('')
-      : val.charCodeAt(0).toString(16);
+    const utf = toUTF8Array(val)
+      .map((num) => num.toString(16))
+      .join('');
 
     result += utf;
   }
@@ -24,7 +17,9 @@ export function toHex(str: string): string {
   return result;
 }
 
-function toUTF8Array(str) {
+// https://gist.github.com/joni/3760795
+// See comment that fixes an issue in the original gist
+function toUTF8Array(str: string): Array<number> {
   var utf8 = [];
   for (var i = 0; i < str.length; i++) {
     var charcode = str.charCodeAt(i);
@@ -46,5 +41,6 @@ function toUTF8Array(str) {
       );
     }
   }
+
   return utf8;
 }

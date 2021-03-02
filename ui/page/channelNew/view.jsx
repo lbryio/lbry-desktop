@@ -21,7 +21,12 @@ function ChannelNew(props: Props) {
     <Page noSideNavigation noFooter backout={{ title: __('Create a channel'), backLabel: __('Cancel') }}>
       {emptyBalance && <YrblWalletEmpty />}
 
-      <ChannelEdit disabled={emptyBalance} onDone={() => push(redirectUrl || `/$/${PAGES.CHANNELS}`)} />
+      <ChannelEdit
+        disabled={emptyBalance}
+        onDone={() => {
+          push(redirectUrl || `/$/${PAGES.CHANNELS}`);
+        }}
+      />
     </Page>
   );
 }

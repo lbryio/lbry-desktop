@@ -24,7 +24,6 @@ import FileDownloadLink from 'component/fileDownloadLink';
 import AbandonedChannelPreview from 'component/abandonedChannelPreview';
 import PublishPending from 'component/publishPending';
 import ClaimMenuList from 'component/claimMenuList';
-import ChannelStakedIndicator from 'component/channelStakedIndicator';
 import ClaimPreviewLoading from './claim-preview-loading';
 import ClaimPreviewHidden from './claim-preview-no-mature';
 import ClaimPreviewNoContent from './claim-preview-no-content';
@@ -329,8 +328,8 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                     <div className="claim-preview__primary-actions">
                       {!isChannelUri && signingChannel && (
                         <div className="claim-preview__channel-staked">
-                          <ChannelThumbnail uri={signingChannel.permanent_url} hideStakedIndicator />
-                          <ChannelStakedIndicator uri={signingChannel.permanent_url} inline />
+                          <ChannelThumbnail uri={signingChannel.permanent_url} />
+                          {/* <ChannelStakedIndicator uri={signingChannel.permanent_url} inline /> */}
                         </div>
                       )}
 
