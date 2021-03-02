@@ -12,6 +12,8 @@ import { useHistory } from 'react-router';
 import type { ElementRef } from 'react';
 import emoji from 'emoji-dictionary';
 
+const COMMENT_SLOW_MODE_SECONDS = 30;
+
 const LIVESTREAM_EMOJIS = [
   emoji.getUnicode('rocket'),
   emoji.getUnicode('jeans'),
@@ -38,6 +40,8 @@ type Props = {
   livestream: boolean,
   authenticated: boolean,
   embed?: boolean,
+  toast: (string) => void,
+  claimIsMine: boolean,
 };
 
 export function CommentCreate(props: Props) {
@@ -58,6 +62,8 @@ export function CommentCreate(props: Props) {
     livestream,
     authenticated,
     embed,
+    toast,
+    claimIsMine,
   } = props;
   const buttonref: ElementRef<any> = React.useRef();
   const {
@@ -66,6 +72,7 @@ export function CommentCreate(props: Props) {
   } = useHistory();
   const { claim_id: claimId } = claim;
   const [commentValue, setCommentValue] = React.useState('');
+  const [lastCommentTime, setLastCommentTime] = React.useState();
   const [charCount, setCharCount] = useState(commentValue.length);
   const [advancedEditor, setAdvancedEditor] = usePersistedState('comment-editor-mode', false);
   const hasChannels = channels && channels.length;
@@ -100,7 +107,20 @@ export function CommentCreate(props: Props) {
 
   function handleSubmit() {
     if (activeChannelClaim && commentValue.length) {
+      const timeUntilCanComment = !lastCommentTime
+        ? 0
+        : lastCommentTime / 1000 - Date.now() / 1000 + COMMENT_SLOW_MODE_SECONDS;
+
+      if (livestream && !claimIsMine && timeUntilCanComment > 0) {
+        toast(
+          __('Slowmode is on. You can comment again in %time% seconds.', { time: Math.floor(timeUntilCanComment) })
+        );
+        return;
+      }
+
       createComment(commentValue, claimId, parentId).then((res) => {
+        setLastCommentTime(Date.now());
+
         if (onSubmit) {
           onSubmit(commentValue, activeChannelClaim.name);
         }
