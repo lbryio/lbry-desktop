@@ -36,6 +36,7 @@ import PasswordResetPage from 'page/passwordReset';
 import PasswordSetPage from 'page/passwordSet';
 import SignInVerifyPage from 'page/signInVerify';
 import ChannelsPage from 'page/channels';
+import LiveStreamPage from 'page/livestream';
 import EmbedWrapperPage from 'page/embedWrapper';
 import TopPage from 'page/top';
 import Welcome from 'page/welcome';
@@ -275,6 +276,7 @@ function AppRouter(props: Props) {
       <PrivateRoute {...props} path={`/$/${PAGES.BLOCKED}`} component={ListBlockedPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.WALLET}`} exact component={WalletPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.CHANNELS}`} component={ChannelsPage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.LIVESTREAM}`} component={LiveStreamPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.BUY}`} component={BuyPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.NOTIFICATIONS}`} component={NotificationsPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.AUTH_WALLET_PASSWORD}`} component={SignInWalletPasswordPage} />

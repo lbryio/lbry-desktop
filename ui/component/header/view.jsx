@@ -100,6 +100,7 @@ const Header = (props: Props) => {
   const hasBackout = Boolean(backout);
   const { backLabel, backNavDefault, title: backTitle, simpleTitle: simpleBackTitle } = backout || {};
   const notificationsEnabled = (user && user.experimental_ui) || false;
+  const livestreamEnabled = (user && user.experimental_ui) || false;
   const activeChannelUrl = activeChannelClaim && activeChannelClaim.permanent_url;
 
   // Sign out if they click the "x" when they are on the password prompt
@@ -280,6 +281,7 @@ const Header = (props: Props) => {
                     openSignOutModal={openSignOutModal}
                     email={email}
                     signOut={signOut}
+                    livestreamEnabled={livestreamEnabled}
                   />
                 </div>
               )}
@@ -333,6 +335,7 @@ type HeaderMenuButtonProps = {
   openSignOutModal: () => void,
   email: ?string,
   signOut: () => void,
+  livestreamEnabled: boolean,
 };
 
 function HeaderMenuButtons(props: HeaderMenuButtonProps) {
@@ -346,6 +349,7 @@ function HeaderMenuButtons(props: HeaderMenuButtonProps) {
     openSignOutModal,
     email,
     signOut,
+    livestreamEnabled,
   } = props;
 
   return (
@@ -374,10 +378,15 @@ function HeaderMenuButtons(props: HeaderMenuButtonProps) {
               <Icon aria-hidden icon={ICONS.CHANNEL} />
               {__('New Channel')}
             </MenuItem>
-            <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.GO_LIVE}`)}>
-              <Icon aria-hidden icon={ICONS.VIDEO} />
-              {__('Go Live')}
-            </MenuItem>
+
+            {/* Go Live Button for LiveStreaming */}
+            {(livestreamEnabled) &&(
+              <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.LIVESTREAM}`)}>
+                <Icon aria-hidden icon={ICONS.VIDEO} />
+                {__('Go Live')}
+              </MenuItem>
+            )}
+
           </MenuList>
         </Menu>
       )}
