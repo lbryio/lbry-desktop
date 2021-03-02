@@ -7,6 +7,7 @@ import { doSetPlayingUri } from 'redux/actions/content';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { makeSelectOthersReactionsForComment } from 'redux/selectors/comments';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
+import { selectPlayingUri } from 'redux/selectors/content';
 import Comment from './view';
 
 const select = (state, props) => ({
@@ -16,10 +17,11 @@ const select = (state, props) => ({
   othersReacts: makeSelectOthersReactionsForComment(props.commentId)(state),
   activeChannelClaim: selectActiveChannelClaim(state),
   myChannels: selectMyChannelClaims(state),
+  playingUri: selectPlayingUri(state),
 });
 
 const perform = (dispatch) => ({
-  closeInlinePlayer: () => dispatch(doSetPlayingUri({ uri: null })),
+  clearPlayingUri: () => dispatch(doSetPlayingUri({ uri: null })),
   updateComment: (commentId, comment) => dispatch(doCommentUpdate(commentId, comment)),
   doToast: (options) => dispatch(doToast(options)),
 });

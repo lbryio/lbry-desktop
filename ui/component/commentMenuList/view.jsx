@@ -7,7 +7,7 @@ import Icon from 'component/common/icon';
 
 type Props = {
   uri: string,
-  closeInlinePlayer: () => void,
+  clearPlayingUri: () => void,
   authorUri: string, // full LBRY Channel URI: lbry://@channel#123...
   commentId: string, // sha256 digest identifying the comment
   claimIsMine: boolean, // if you control the claim which this comment was posted on
@@ -24,6 +24,7 @@ type Props = {
   claimIsMine: boolean,
   isTopLevel: boolean,
   commentModBlock: (string) => void,
+  playingUri: ?PlayingUri,  
 };
 
 function CommentMenuList(props: Props) {
@@ -36,7 +37,7 @@ function CommentMenuList(props: Props) {
     blockChannel,
     pinComment,
     claimIsMine,
-    closeInlinePlayer,
+    clearPlayingUri,
     activeChannelClaim,
     contentChannelPermanentUrl,
     isTopLevel,
@@ -44,6 +45,7 @@ function CommentMenuList(props: Props) {
     handleEditComment,
     fetchComments,
     commentModBlock,
+    playingUri,
   } = props;
   const activeChannelIsCreator = activeChannelClaim && activeChannelClaim.permanent_url === contentChannelPermanentUrl;
 
@@ -52,7 +54,9 @@ function CommentMenuList(props: Props) {
   }
 
   function handleDeleteComment() {
-    closeInlinePlayer();
+    if (playingUri && playingUri.source === 'comment') {
+      clearPlayingUri();
+    }
     deleteComment(commentId, commentIsMine ? undefined : contentChannelPermanentUrl);
   }
 

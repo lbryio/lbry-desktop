@@ -23,7 +23,7 @@ import CommentMenuList from 'component/commentMenuList';
 import UriIndicator from 'component/uriIndicator';
 
 type Props = {
-  closeInlinePlayer: () => void,
+  clearPlayingUri: () => void,
   uri: string,
   author: ?string, // LBRY Channel Name, e.g. @channel
   authorUri: string, // full LBRY Channel URI: lbry://@channel#123...
@@ -48,6 +48,7 @@ type Props = {
   },
   commentIdentityChannel: any,
   activeChannelClaim: ?ChannelClaim,
+  playingUri: ?PlayingUri,
 };
 
 const LENGTH_TO_COLLAPSE = 300;
@@ -55,7 +56,7 @@ const ESCAPE_KEY = 27;
 
 function Comment(props: Props) {
   const {
-    closeInlinePlayer,
+    clearPlayingUri,
     uri,
     author,
     authorUri,
@@ -73,6 +74,7 @@ function Comment(props: Props) {
     threadDepth,
     isPinned,
     othersReacts,
+    playingUri,
   } = props;
   const {
     push,
@@ -126,7 +128,9 @@ function Comment(props: Props) {
   }
 
   function handleEditComment() {
-    closeInlinePlayer();
+    if (playingUri && playingUri.source === 'comment') {
+      clearPlayingUri();
+    }
     setEditing(true);
   }
 
