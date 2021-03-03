@@ -8,6 +8,7 @@
   File upload is carried out in the background by that function.
  */
 
+// import { LIVE_STREAM_CHANNEL, LIVE_STREAM_CHANNEL_CLAIM_ID } from 'constants/livestream';
 import { SITE_NAME } from 'config';
 import React, { useEffect } from 'react';
 import { buildURI, isURIValid, isNameValid, THUMBNAIL_STATUSES } from 'lbry-redux';
@@ -26,6 +27,7 @@ import Card from 'component/common/card';
 import I18nMessage from 'component/i18nMessage';
 import * as PUBLISH_MODES from 'constants/publish_types';
 import { useHistory } from 'react-router';
+import { FormField } from 'component/common/form';
 
 // @if TARGET='app'
 import fs from 'fs';
@@ -88,6 +90,8 @@ type Props = {
   activeChannelClaim: ?ChannelClaim,
   incognito: boolean,
   user: ?{ experimental_ui: boolean },
+  // myChannels: ?Array<ChannelClaim>,
+  // isLivestreamPublish: boolean,
 };
 
 function PublishForm(props: Props) {
@@ -134,7 +138,16 @@ function PublishForm(props: Props) {
     activeChannelClaim,
     incognito,
     user,
+    // myChannels,
+    // isLivestreamPublish,
   } = props;
+
+  // livestream hardcoded bidnezz
+  // const isLivestreamCreator =
+  //   myChannels &&
+  //   myChannels.find((channelClaim) => channelClaim.claim_id === LIVE_STREAM_CHANNEL_CLAIM_ID) &&
+  //   activeChannelClaim &&
+  //   activeChannelClaim.name === LIVE_STREAM_CHANNEL;
 
   const TAGS_LIMIT = 5;
   const fileFormDisabled = mode === PUBLISH_MODES.FILE && !filePath;
@@ -386,6 +399,38 @@ function PublishForm(props: Props) {
     <div className="card-stack">
       <ChannelSelect hideAnon={mode === PUBLISH_MODES.LIVESTREAM} disabled={disabled} />
 
+      {/* old stuff */}
+      {/*{isLivestreamCreator && activeChannelName && (*/}
+      {/*  <div className="livestream__creator-message livestream__publish-checkbox">*/}
+      {/*    <h4>{__('Hi %channel%!', { channel: activeChannelName })}</h4>*/}
+      {/*    <p>*/}
+      {/*      Check this box if you have entered video information for your livestream. It doesn't matter what file you*/}
+      {/*      choose for now, just make the sure the title, description, and tags are correct. Everything else is setup!*/}
+      {/*    </p>*/}
+      {/*    <p>*/}
+      {/*      When you edit this file, there will be another checkbox to turn this back into a regular video so it can be*/}
+      {/*      listed on your channel's page.*/}
+      {/*    </p>*/}
+
+      {/*    <FormField*/}
+      {/*      type={isStillEditing ? 'radio' : 'checkbox'}*/}
+      {/*      label={__('This is for my livestream')}*/}
+      {/*      name="is_livestream_checkbox"*/}
+      {/*      checked={isLivestreamPublish}*/}
+      {/*      onChange={(e) => updatePublishForm({ isLivestreamPublish: e.target.checked })}*/}
+      {/*    />*/}
+      {/*    {isStillEditing && (*/}
+      {/*      <FormField*/}
+      {/*        type="radio"*/}
+      {/*        label={'I am done livestreaming'}*/}
+      {/*        name="is_livestream_checkbox_done"*/}
+      {/*        checked={!isLivestreamPublish}*/}
+      {/*        onChange={(e) => updatePublishForm({ isLivestreamPublish: !e.target.checked })}*/}
+      {/*      />*/}
+      {/*    )}*/}
+      {/*  </div>*/}
+      {/*)}*/}
+
       <PublishFile
         uri={uri}
         mode={mode}
@@ -427,7 +472,7 @@ function PublishForm(props: Props) {
             help={__(
               "Add tags that are relevant to your content so those who're looking for it can find it more easily. If mature content, ensure it is tagged mature. Tag abuse and missing mature tags will not be tolerated."
             )}
-            placeholder={__('gaming, crypto')}
+            placeholder={__('gaming, crypto')} //keep?
             onSelect={(newTags) => {
               const validatedTags = [];
               newTags.forEach((newTag) => {

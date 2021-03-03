@@ -83,3 +83,51 @@
 .ads__claim-text--small {
   font-size: var(--font-small);
 }
+
+.ads__video-nudge,
+.ads__video-notify {
+  position: absolute;
+  z-index: 3;
+}
+
+.ads__video-nudge {
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  font-weight: bold;
+  padding: var(--spacing-xs);
+}
+
+.ads__video-notify {
+  display: flex;
+  align-items: center;
+  right: 0;
+  top: 0;
+  background-color: black;
+  border-bottom-left-radius: var(--border-radius);
+  color: var(--color-white);
+  font-size: var(--font-small);
+  padding: var(--spacing-xs);
+}
+
+.ads__video-link.button--secondary {
+  font-size: var(--font-small);
+  padding: var(--spacing-xs);
+  height: 1.5rem;
+}
+
+.ads__video-close {
+  margin-left: var(--spacing-s);
+  border-radius: var(--border-radius);
+
+  .icon {
+    stroke: var(--color-white);
+
+    &:hover {
+      stroke: var(--color-black);
+      background-color: var(--color-white);
+    }
+  }
+}

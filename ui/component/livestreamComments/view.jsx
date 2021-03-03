@@ -1,4 +1,5 @@
 // @flow
+import { LIVE_STREAM_CHANNEL_CLAIM_ID } from 'constants/livestream'; // just in case?
 import React from 'react';
 import classnames from 'classnames';
 import Card from 'component/common/card';

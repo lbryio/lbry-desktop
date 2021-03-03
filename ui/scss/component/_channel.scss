@@ -103,6 +103,7 @@ $metadata-z-index: 1;
 .channel-thumbnail__custom {
   width: 100%;
   object-fit: cover;
+  font-size: 1px; // To hide the alt text on firefox;
 }
 
 .channel-thumbnail__default {
@@ -274,7 +275,8 @@ $metadata-z-index: 1;
 
     &[data-selected] {
       background: transparent;
-      .channel__list-item {
+      .channel__list-item,
+      .channel-staked__wrapper {
         background-color: var(--color-card-background-highlighted);
       }
     }
@@ -308,6 +310,7 @@ $metadata-z-index: 1;
   background-color: var(--color-card-background);
   padding: var(--spacing-s);
   border-bottom: 1px solid var(--color-border);
+  overflow: hidden;
 
   .channel-thumbnail {
     height: 2rem;
@@ -356,16 +359,12 @@ $metadata-z-index: 1;
 .channel-staked__tooltip {
   display: flex;
   align-items: center;
+  line-height: 1rem;
 }
 
 .channel-staked__tooltip-text {
   margin-left: var(--spacing-xs);
   font-size: var(--font-xsmall);
-
-  .icon--LBC {
-    opacity: 0.7;
-    margin-top: -2px;
-  }
 }
 
 .channel-staked__wrapper {

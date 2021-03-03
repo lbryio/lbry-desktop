@@ -44,6 +44,15 @@ export default handleActions(
         uri,
         livestream,
       }: { comment: Comment, claimId: string, uri: string, livestream: boolean } = action.data;
+
+      // if (livestream) {
+      //   return {
+      //     ...state,
+      //     isLoading: false,
+      //     isCommenting: false,
+      //   };
+      // }
+
       const commentById = Object.assign({}, state.commentById);
       const byId = Object.assign({}, state.byId);
       const topLevelCommentsById = Object.assign({}, state.topLevelCommentsById); // was byId {ClaimId -> [commentIds...]}

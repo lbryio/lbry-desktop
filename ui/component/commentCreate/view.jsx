@@ -7,7 +7,7 @@ import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
 import SelectChannel from 'component/selectChannel';
 import usePersistedState from 'effects/use-persisted-state';
-import { FF_MAX_CHARS_IN_COMMENT } from 'constants/form-field';
+import { FF_MAX_CHARS_IN_COMMENT, FF_MAX_CHARS_IN_LIVESTREAM_COMMENT } from 'constants/form-field';
 import { useHistory } from 'react-router';
 import type { ElementRef } from 'react';
 import emoji from 'emoji-dictionary';
@@ -33,11 +33,16 @@ type Props = {
   parentId: string,
   isReply: boolean,
   isPostingComment: boolean,
-  activeChannel: string,
+  activeChannel: string, // need this?
   activeChannelClaim: ?ChannelClaim,
   livestream?: boolean,
   toast: (string) => void,
   claimIsMine: boolean,
+  // unsure after here:
+  authenticated: boolean,
+  embed?: boolean,
+  bottom: boolean,
+  onSubmit: (string, string) => void,
 };
 
 export function CommentCreate(props: Props) {
@@ -56,9 +61,17 @@ export function CommentCreate(props: Props) {
     livestream,
     toast,
     claimIsMine,
+    // unser after here
+    authenticated,
+    embed,
+    onSubmit,
+    bottom,
   } = props;
   const buttonref: ElementRef<any> = React.useRef();
-  const { push } = useHistory();
+  const {
+    push,
+    location: { pathname },
+  } = useHistory();
   const { claim_id: claimId } = claim;
   const [commentValue, setCommentValue] = React.useState('');
   const [lastCommentTime, setLastCommentTime] = React.useState();
@@ -80,7 +93,7 @@ export function CommentCreate(props: Props) {
 
   function altEnterListener(e: SyntheticKeyboardEvent<*>) {
     const KEYCODE_ENTER = 13;
-    if ((e.ctrlKey || e.metaKey) && e.keyCode === KEYCODE_ENTER) {
+    if ((livestream || e.ctrlKey || e.metaKey) && e.keyCode === KEYCODE_ENTER) {
       e.preventDefault();
       buttonref.current.click();
     }
@@ -112,6 +125,13 @@ export function CommentCreate(props: Props) {
           setCommentValue('');
           setLastCommentTime(Date.now());
 
+          /* THIS GOT LOST?
+                  setLastCommentTime(Date.now());
+
+        if (onSubmit) {
+          onSubmit(commentValue, activeChannelClaim.name);
+        }
+           */
           if (onDoneReplying) {
             onDoneReplying();
           }
@@ -126,9 +146,19 @@ export function CommentCreate(props: Props) {
 
   useEffect(() => setCharCount(commentValue.length), [commentValue]);
 
-  if (!hasChannels) {
+  if (!authenticated || !hasChannels) {
     return (
-      <div role="button" onClick={() => push(`/$/${PAGES.CHANNEL_NEW}`)}>
+      // this was just  onClick={() => push(`/$/${PAGES.CHANNEL_NEW}`)
+      <div
+        role="button"
+        onClick={() =>
+          embed
+            ? window.open(`https://odysee.com/$/${PAGES.AUTH}?redirect=/$/${PAGES.LIVESTREAM}`)
+            : authenticated
+            ? push(`/$/${PAGES.CHANNEL_NEW}?redirect=${pathname}`)
+            : push(`/$/${PAGES.AUTH}?redirect=${pathname}`)
+        }
+      >
         <FormField
           type="textarea"
           name={'comment_signup_prompt'}
@@ -148,6 +178,7 @@ export function CommentCreate(props: Props) {
       className={classnames('comment__create', {
         'comment__create--reply': isReply,
         'comment__create--nested-reply': isNested,
+        'comment__create--bottom': bottom,
       })}
     >
       <FormField
@@ -171,7 +202,7 @@ export function CommentCreate(props: Props) {
         charCount={charCount}
         onChange={handleCommentChange}
         autoFocus={isReply}
-        textAreaMaxLength={FF_MAX_CHARS_IN_COMMENT}
+        textAreaMaxLength={livestream ? FF_MAX_CHARS_IN_LIVESTREAM_COMMENT : FF_MAX_CHARS_IN_COMMENT}
       />
       {livestream && hasChannels && (
         <div className="livestream__emoji-actions">

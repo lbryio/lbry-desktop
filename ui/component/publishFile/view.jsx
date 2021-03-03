@@ -334,7 +334,7 @@ function PublishFile(props: Props) {
       className={disabled || balance === 0 ? 'card--disabled' : ''}
       title={
         <div>
-          {header}
+          {__('Upload') || header}
           {publishing && <Spinner type={'small'} />}
           {inProgress && (
             <div>
@@ -346,7 +346,8 @@ function PublishFile(props: Props) {
       subtitle={isStillEditing && __('You are currently editing your upload.')}
       actions={
         <React.Fragment>
-          <PublishName />
+          <PublishName uri={uri} />
+
           <FormField
             type="text"
             name="content_title"
@@ -356,14 +357,20 @@ function PublishFile(props: Props) {
             value={title}
             onChange={handleTitleChange}
           />
+
           {isPublishFile && (
-            <FileSelector
-              label={__('File')}
-              disabled={disabled}
-              currentPath={currentFile}
-              onFileChosen={handleFileChange}
-            />
+          <FileSelector
+            label={__('Video file')}
+            disabled={disabled}
+            currentPath={currentFile}
+            onFileChosen={handleFileChange}
+            // https://stackoverflow.com/questions/19107685/safari-input-type-file-accept-video-ignores-mp4-files
+            accept="video/mp4,video/x-m4v,video/*"
+            placeholder={__('Select video file to upload')}
+          />
           )}
+          {isPublishFile && getMessage()}
+
 
           {isPublishPost && (
             <PostEditor
@@ -375,7 +382,7 @@ function PublishFile(props: Props) {
               setCurrentFileType={setCurrentFileType}
             />
           )}
-          {isPublishFile && getMessage()}
+          { /* isPublishFile && getMessage()*/}
           {/* @if TARGET='app' */}
           {isPublishFile && (
             <FormField
