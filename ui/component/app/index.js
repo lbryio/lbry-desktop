@@ -27,9 +27,10 @@ import {
   doSetActiveChannel,
   doSetIncognito,
 } from 'redux/actions/app';
+import { doFetchModBlockedList } from 'redux/actions/comments';
 import App from './view';
 
-const select = state => ({
+const select = (state) => ({
   user: selectUser(state),
   accessToken: selectAccessToken(state),
   theme: selectThemePath(state),
@@ -48,18 +49,19 @@ const select = state => ({
   myChannelUrls: selectMyChannelUrls(state),
 });
 
-const perform = dispatch => ({
+const perform = (dispatch) => ({
   fetchAccessToken: () => dispatch(doFetchAccessToken()),
   fetchChannelListMine: () => dispatch(doFetchChannelListMine()),
-  setLanguage: language => dispatch(doSetLanguage(language)),
+  setLanguage: (language) => dispatch(doSetLanguage(language)),
   signIn: () => dispatch(doSignIn()),
   requestDownloadUpgrade: () => dispatch(doDownloadUpgradeRequested()),
   updatePreferences: () => dispatch(doGetAndPopulatePreferences()),
   getWalletSyncPref: () => dispatch(doGetWalletSyncPreference()),
-  syncLoop: noInterval => dispatch(doSyncLoop(noInterval)),
+  syncLoop: (noInterval) => dispatch(doSyncLoop(noInterval)),
   setReferrer: (referrer, doClaim) => dispatch(doUserSetReferrer(referrer, doClaim)),
   setActiveChannelIfNotSet: () => dispatch(doSetActiveChannel()),
   setIncognito: () => dispatch(doSetIncognito()),
+  fetchModBlockedList: () => dispatch(doFetchModBlockedList()),
 });
 
 export default hot(connect(select, perform)(App));

@@ -14,6 +14,8 @@ import { parseURI } from 'lbry-redux';
 import FileProperties from 'component/fileProperties';
 import FileDownloadLink from 'component/fileDownloadLink';
 import ClaimRepostAuthor from 'component/claimRepostAuthor';
+import ClaimMenuList from 'component/claimMenuList';
+
 // @if TARGET='app'
 import { openClaimPreviewMenu } from 'util/context-menu';
 // @endif
@@ -41,6 +43,7 @@ type Props = {
   streamingUrl: string,
   isMature: boolean,
   showMature: boolean,
+  showHiddenByUser?: boolean,
 };
 
 function ClaimPreviewTile(props: Props) {
@@ -60,6 +63,7 @@ function ClaimPreviewTile(props: Props) {
     blockedChannelUris,
     isMature,
     showMature,
+    showHiddenByUser,
   } = props;
   const isRepost = claim && claim.repost_channel_url;
   const shouldFetch = claim === undefined;
@@ -128,12 +132,12 @@ function ClaimPreviewTile(props: Props) {
   }
 
   // block stream claims
-  if (claim && !shouldHide && blockedChannelUris.length && signingChannel) {
+  if (claim && !shouldHide && !showHiddenByUser && blockedChannelUris.length && signingChannel) {
     shouldHide = blockedChannelUris.some((blockedUri) => blockedUri === signingChannel.permanent_url);
   }
   // block channel claims if we can't control for them in claim search
   // e.g. fetchRecommendedSubscriptions
-  if (claim && isChannel && !shouldHide && blockedChannelUris.length) {
+  if (claim && isChannel && !shouldHide && !showHiddenByUser && blockedChannelUris.length) {
     shouldHide = blockedChannelUris.some((blockedUri) => blockedUri === claim.permanent_url);
   }
 
@@ -194,6 +198,7 @@ function ClaimPreviewTile(props: Props) {
               <UriIndicator uri={uri} link />
             </div>
           )}
+          <ClaimMenuList uri={uri} />
         </h2>
       </NavLink>
       <div>

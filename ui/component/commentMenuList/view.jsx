@@ -23,7 +23,7 @@ type Props = {
   activeChannelClaim: ?ChannelClaim,
   claimIsMine: boolean,
   isTopLevel: boolean,
-  //   commentModBlock: string => void,
+  commentModBlock: (string) => void,
 };
 
 function CommentMenuList(props: Props) {
@@ -43,16 +43,9 @@ function CommentMenuList(props: Props) {
     isPinned,
     handleEditComment,
     fetchComments,
-    // commentModBlock,
-    // setActiveChannel,
+    commentModBlock,
   } = props;
   const activeChannelIsCreator = activeChannelClaim && activeChannelClaim.permanent_url === contentChannelPermanentUrl;
-
-  //   let authorChannel;
-  //   try {
-  //     const { claimName } = parseURI(authorUri);
-  //     authorChannel = claimName;
-  //   } catch (e) {}
 
   function handlePinComment(commentId, remove) {
     pinComment(commentId, remove).then(() => fetchComments(uri));
@@ -65,32 +58,16 @@ function CommentMenuList(props: Props) {
 
   function handleCommentBlock() {
     if (claimIsMine) {
-      // Block them from commenting on future content
-      //   commentModBlock(authorUri);
+      commentModBlock(authorUri);
     }
+  }
 
+  function handleCommentMute() {
     blockChannel(authorUri);
   }
 
-  //   function handleChooseChannel() {
-  //     const { channelClaimId } = parseURI(authorUri);
-  //     setActiveChannel(channelClaimId);
-  //   }
-
   return (
-    <MenuList className="menu__list--comments">
-      {/* {commentIsMine && activeChannelClaim && activeChannelClaim.permanent_url !== authorUri && (
-        <MenuItem className="comment__menu-option" onSelect={handleChooseChannel}>
-          <div className="menu__link">
-            <Icon aria-hidden icon={ICONS.CHANNEL} />
-            {__('Use this channel')}
-          </div>
-          <span className="comment__menu-help">
-            {__('Switch to %channel_name% to interact with this comment', { channel_name: authorChannel })}.
-          </span>
-        </MenuItem>
-      )} */}
-
+    <MenuList className="menu__list">
       {activeChannelIsCreator && <div className="comment__menu-title">{__('Creator tools')}</div>}
 
       {activeChannelIsCreator && isTopLevel && (
@@ -123,16 +100,27 @@ function CommentMenuList(props: Props) {
         </MenuItem>
       )}
 
-      {/* Disabled until we deal with current app blocklist parity */}
       {!commentIsMine && (
         <MenuItem className="comment__menu-option" onSelect={handleCommentBlock}>
           <div className="menu__link">
             <Icon aria-hidden icon={ICONS.BLOCK} />
             {__('Block')}
           </div>
-          {/* {activeChannelIsCreator && (
-            <span className="comment__menu-help">Hide this channel's comments and block them from commenting.</span>
-          )} */}
+          {activeChannelIsCreator && (
+            <span className="comment__menu-help">{__('Prevent this channel from interacting with you.')}</span>
+          )}
+        </MenuItem>
+      )}
+
+      {!commentIsMine && (
+        <MenuItem className="comment__menu-option" onSelect={handleCommentMute}>
+          <div className="menu__link">
+            <Icon aria-hidden icon={ICONS.MUTE} />
+            {__('Mute')}
+          </div>
+          {activeChannelIsCreator && (
+            <span className="comment__menu-help">{__('Hide this channel for you only.')}</span>
+          )}
         </MenuItem>
       )}
 

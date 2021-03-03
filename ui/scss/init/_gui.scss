@@ -262,6 +262,12 @@ textarea {
   background-color: var(--color-help-warning-bg);
   color: var(--color-help-warning-text);
   margin-bottom: var(--spacing-s);
+  border: 1px solid var(--color-border);
+}
+
+.help--notice {
+  @extend .help--warning;
+  background-color: var(--color-card-background-highlighted);
 }
 
 .help--inline {

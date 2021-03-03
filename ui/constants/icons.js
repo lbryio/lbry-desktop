@@ -82,6 +82,7 @@ export const LIBRARY = 'Folder';
 export const TAG = 'Tag';
 export const SUPPORT = 'TrendingUp';
 export const BLOCK = 'Slash';
+export const MUTE = 'VolumeX';
 export const UNBLOCK = 'Circle';
 export const VIEW = 'View';
 export const EYE = 'Eye';

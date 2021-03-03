@@ -8,10 +8,11 @@ import {
   makeSelectClaimForUri,
   makeSelectClaimIsPending,
 } from 'lbry-redux';
-import { selectChannelIsBlocked } from 'redux/selectors/blocked';
+import { makeSelectChannelIsMuted } from 'redux/selectors/blocked';
 import { selectBlackListedOutpoints, doFetchSubCount, makeSelectSubCountForUri } from 'lbryinc';
 import { selectYoutubeChannels } from 'redux/selectors/user';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
+import { selectModerationBlockList } from 'redux/selectors/comments';
 import { doOpenModal } from 'redux/actions/app';
 import ChannelPage from './view';
 
@@ -23,16 +24,17 @@ const select = (state, props) => ({
   page: selectCurrentChannelPage(state),
   claim: makeSelectClaimForUri(props.uri)(state),
   isSubscribed: makeSelectIsSubscribed(props.uri, true)(state),
-  channelIsBlocked: selectChannelIsBlocked(props.uri)(state),
+  channelIsBlocked: makeSelectChannelIsMuted(props.uri)(state),
   blackListedOutpoints: selectBlackListedOutpoints(state),
   subCount: makeSelectSubCountForUri(props.uri)(state),
   pending: makeSelectClaimIsPending(props.uri)(state),
   youtubeChannels: selectYoutubeChannels(state),
+  blockedChannels: selectModerationBlockList(state),
 });
 
-const perform = dispatch => ({
+const perform = (dispatch) => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
-  fetchSubCount: claimId => dispatch(doFetchSubCount(claimId)),
+  fetchSubCount: (claimId) => dispatch(doFetchSubCount(claimId)),
 });
 
 export default connect(select, perform)(ChannelPage);

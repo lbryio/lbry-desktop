@@ -32,12 +32,12 @@ type Props = {
   showUnresolvedClaims?: boolean,
   renderProperties: ?(Claim) => Node,
   includeSupportAction?: boolean,
-  hideBlock: boolean,
   injectedItem: ?Node,
   timedOutMessage?: Node,
   tileLayout?: boolean,
   renderActions?: (Claim) => ?Node,
   searchInLanguage: boolean,
+  hideMenu?: boolean,
 };
 
 export default function ClaimList(props: Props) {
@@ -57,12 +57,12 @@ export default function ClaimList(props: Props) {
     showUnresolvedClaims,
     renderProperties,
     includeSupportAction,
-    hideBlock,
     injectedItem,
     timedOutMessage,
     tileLayout = false,
     renderActions,
     searchInLanguage,
+    hideMenu,
   } = props;
 
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
@@ -100,7 +100,8 @@ export default function ClaimList(props: Props) {
 
   return tileLayout && !header ? (
     <section className="claim-grid">
-      {urisLength > 0 && uris.map((uri) => <ClaimPreviewTile key={uri} uri={uri} />)}
+      {urisLength > 0 &&
+        uris.map((uri) => <ClaimPreviewTile key={uri} uri={uri} showHiddenByUser={showHiddenByUser} />)}
       {!timedOut && urisLength === 0 && !loading && <div className="empty main--empty">{empty || noResultMsg}</div>}
       {timedOut && timedOutMessage && <div className="empty main--empty">{timedOutMessage}</div>}
     </section>
@@ -149,12 +150,13 @@ export default function ClaimList(props: Props) {
               <ClaimPreview
                 uri={uri}
                 type={type}
+                hideMenu={hideMenu}
                 includeSupportAction={includeSupportAction}
                 showUnresolvedClaim={showUnresolvedClaims}
                 properties={renderProperties || (type !== 'small' ? undefined : false)}
                 renderActions={renderActions}
                 showUserBlocked={showHiddenByUser}
-                hideBlock={hideBlock}
+                showHiddenByUser={showHiddenByUser}
                 customShouldHide={(claim: StreamClaim) => {
                   // Hack to hide spee.ch thumbnail publishes
                   // If it meets these requirements, it was probably uploaded here:

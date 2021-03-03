@@ -56,14 +56,14 @@ type Props = {
     goForward: () => void,
     index: number,
     length: number,
-    push: string => void,
+    push: (string) => void,
   },
   fetchAccessToken: () => void,
   fetchChannelListMine: () => void,
   signIn: () => void,
   requestDownloadUpgrade: () => void,
   onSignedIn: () => void,
-  setLanguage: string => void,
+  setLanguage: (string) => void,
   isUpgradeAvailable: boolean,
   autoUpdateDownloaded: boolean,
   updatePreferences: () => Promise<any>,
@@ -83,7 +83,8 @@ type Props = {
   activeChannelClaim: ?ChannelClaim,
   myChannelUrls: ?Array<string>,
   setActiveChannelIfNotSet: () => void,
-  setIncognito: boolean => void,
+  setIncognito: (boolean) => void,
+  fetchModBlockedList: () => void,
 };
 
 function App(props: Props) {
@@ -114,6 +115,7 @@ function App(props: Props) {
     activeChannelClaim,
     setActiveChannelIfNotSet,
     setIncognito,
+    fetchModBlockedList,
   } = props;
 
   const appRef = useRef();
@@ -134,7 +136,7 @@ function App(props: Props) {
   const showUpgradeButton =
     (autoUpdateDownloaded || (process.platform === 'linux' && isUpgradeAvailable)) && !upgradeNagClosed;
   // referral claiming
-  const referredRewardAvailable = rewards && rewards.some(reward => reward.reward_type === REWARDS.TYPE_REFEREE);
+  const referredRewardAvailable = rewards && rewards.some((reward) => reward.reward_type === REWARDS.TYPE_REFEREE);
   const urlParams = new URLSearchParams(search);
   const rawReferrerParam = urlParams.get('r');
   const sanitizedReferrerParam = rawReferrerParam && rawReferrerParam.replace(':', '#');
@@ -166,7 +168,7 @@ function App(props: Props) {
 
   useEffect(() => {
     if (!uploadCount) return;
-    const handleBeforeUnload = event => {
+    const handleBeforeUnload = (event) => {
       event.preventDefault();
       event.returnValue = 'magic'; // without setting this to something it doesn't work
     };
@@ -176,7 +178,7 @@ function App(props: Props) {
 
   // allows user to navigate history using the forward and backward buttons on a mouse
   useEffect(() => {
-    const handleForwardAndBackButtons = e => {
+    const handleForwardAndBackButtons = (e) => {
       switch (e.button) {
         case MOUSE_BACK_BTN:
           history.index > 0 && history.goBack();
@@ -192,7 +194,7 @@ function App(props: Props) {
 
   // allows user to pause miniplayer using the spacebar without the page scrolling down
   useEffect(() => {
-    const handleKeyPress = e => {
+    const handleKeyPress = (e) => {
       if (e.key === ' ' && e.target === document.body) {
         e.preventDefault();
       }
@@ -243,6 +245,10 @@ function App(props: Props) {
       setActiveChannelIfNotSet();
     } else if (hasNoChannels) {
       setIncognito(true);
+    }
+
+    if (hasMyChannels) {
+      fetchModBlockedList();
     }
   }, [hasMyChannels, hasNoChannels, hasActiveChannelClaim, setActiveChannelIfNotSet, setIncognito]);
 
@@ -358,7 +364,7 @@ function App(props: Props) {
         [`${MAIN_WRAPPER_CLASS}--scrollbar`]: useCustomScrollbar,
       })}
       ref={appRef}
-      onContextMenu={IS_WEB ? undefined : e => openContextMenu(e)}
+      onContextMenu={IS_WEB ? undefined : (e) => openContextMenu(e)}
     >
       {IS_WEB && lbryTvApiStatus === STATUS_DOWN ? (
         <Yrbl

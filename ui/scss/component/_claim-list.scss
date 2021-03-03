@@ -64,6 +64,12 @@
 .claim-preview__wrapper {
   padding: var(--spacing-m);
   list-style: none;
+
+  &:hover {
+    .claim__menu-button {
+      display: block;
+    }
+  }
 }
 
 .claim-preview__wrapper--notice {
@@ -247,17 +253,6 @@
 
 .claim-preview-info {
   align-items: flex-start;
-
-  .channel-thumbnail {
-    display: none;
-    @include handleChannelGif(1.4rem);
-    margin-right: 0;
-    margin-left: var(--spacing-s);
-
-    @media (min-width: $breakpoint-small) {
-      display: block;
-    }
-  }
 }
 
 .claim-preview-info,
@@ -408,6 +403,10 @@
 
   &:hover {
     cursor: pointer;
+
+    .claim__menu-button {
+      display: block;
+    }
   }
 
   @media (min-width: $breakpoint-large) {
@@ -456,11 +455,22 @@
 }
 
 .claim-tile__title {
-  margin: var(--spacing-s);
+  position: relative;
+
+  padding: var(--spacing-s);
+  padding-right: var(--spacing-m);
+  padding-bottom: 0;
+  margin-bottom: var(--spacing-s);
+
   font-weight: 600;
   color: var(--color-text);
   font-size: var(--font-small);
   min-height: 2rem;
+
+  .claim__menu-button {
+    right: 0.2rem;
+    top: var(--spacing-s);
+  }
 
   @media (min-width: $breakpoint-small) {
     min-height: 2.5rem;
@@ -570,4 +580,37 @@
 
 .claim-preview__null-label {
   margin: auto;
+}
+
+.claim-preview__channel-staked {
+  display: flex;
+  align-items: center;
+
+  .channel-thumbnail {
+    @include handleChannelGif(1.4rem);
+    margin-right: 0;
+  }
+}
+
+.claim__menu-button {
+  position: absolute;
+  top: var(--spacing-xs);
+  right: var(--spacing-xs);
+
+  .icon {
+    stroke: var(--color-text);
+  }
+
+  &:not([aria-expanded='true']) {
+    display: none;
+  }
+}
+
+.claim__menu-button--inline {
+  position: relative;
+  display: block;
+  right: auto;
+  top: auto;
+  @extend .button--alt;
+  padding: 0 var(--spacing-xxs);
 }

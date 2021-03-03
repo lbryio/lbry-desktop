@@ -13,7 +13,7 @@ import {
   makeSelectFileNameForUri,
 } from 'lbry-redux';
 import { makeSelectRecommendedContentForUri } from 'redux/selectors/search';
-import { selectBlockedChannels } from 'redux/selectors/blocked';
+import { selectMutedChannels } from 'redux/selectors/blocked';
 import { selectAllCostInfoByUri, makeSelectCostInfoForUri } from 'lbryinc';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import * as RENDER_MODES from 'constants/file_render_modes';
@@ -81,7 +81,7 @@ export const makeSelectNextUnplayedRecommended = (uri: string) =>
     selectHistory,
     selectClaimsByUri,
     selectAllCostInfoByUri,
-    selectBlockedChannels,
+    selectMutedChannels,
     (
       recommendedForUri: Array<string>,
       history: Array<{ uri: string }>,

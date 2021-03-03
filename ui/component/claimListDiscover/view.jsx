@@ -20,17 +20,18 @@ type Props = {
   doClaimSearch: ({}) => void,
   loading: boolean,
   personalView: boolean,
-  doToggleTagFollowDesktop: string => void,
+  doToggleTagFollowDesktop: (string) => void,
   meta?: Node,
   showNsfw: boolean,
   hideReposts: boolean,
-  history: { action: string, push: string => void, replace: string => void },
+  history: { action: string, push: (string) => void, replace: (string) => void },
   location: { search: string, pathname: string },
   claimSearchByQuery: {
     [string]: Array<string>,
   },
   claimSearchByQueryLastPageReached: { [string]: boolean },
-  hiddenUris: Array<string>,
+  mutedUris: Array<string>,
+  blockedUris: Array<string>,
   hiddenNsfwMessage?: Node,
   channelIds?: Array<string>,
   claimIds?: Array<string>,
@@ -43,13 +44,12 @@ type Props = {
   header?: Node,
   headerLabel?: string | Node,
   name?: string,
-  hideBlock?: boolean,
   hideAdvancedFilter?: boolean,
   claimType?: Array<string>,
   defaultClaimType?: Array<string>,
   streamType?: string | Array<string>,
   defaultStreamType?: string | Array<string>,
-  renderProperties?: Claim => Node,
+  renderProperties?: (Claim) => Node,
   includeSupportAction?: boolean,
   repostedClaimId?: string,
   pageSize?: number,
@@ -64,6 +64,7 @@ type Props = {
   languageSetting: string,
   searchInLanguage: boolean,
   scrollAnchor?: string,
+  showHiddenByUser?: boolean,
 };
 
 function ClaimListDiscover(props: Props) {
@@ -80,7 +81,8 @@ function ClaimListDiscover(props: Props) {
     hideReposts,
     history,
     location,
-    hiddenUris,
+    mutedUris,
+    blockedUris,
     hiddenNsfwMessage,
     defaultOrderBy,
     orderBy,
@@ -89,7 +91,6 @@ function ClaimListDiscover(props: Props) {
     name,
     claimType,
     pageSize,
-    hideBlock,
     defaultClaimType,
     streamType,
     defaultStreamType,
@@ -112,6 +113,7 @@ function ClaimListDiscover(props: Props) {
     languageSetting,
     searchInLanguage,
     scrollAnchor,
+    showHiddenByUser = false,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
   const { search } = location;
@@ -120,13 +122,14 @@ function ClaimListDiscover(props: Props) {
   const isLargeScreen = useIsLargeScreen();
   const [orderParamEntry, setOrderParamEntry] = usePersistedState(`entry-${location.pathname}`, CS.ORDER_BY_TRENDING);
   const [orderParamUser, setOrderParamUser] = usePersistedState(`orderUser-${location.pathname}`, CS.ORDER_BY_TRENDING);
-  const followed = (followedTags && followedTags.map(t => t.name)) || [];
+  const followed = (followedTags && followedTags.map((t) => t.name)) || [];
   const urlParams = new URLSearchParams(search);
   const tagsParam = // can be 'x,y,z' or 'x' or ['x','y'] or CS.CONSTANT
     (tags && getParamFromTags(tags)) ||
     (urlParams.get(CS.TAGS_KEY) !== null && urlParams.get(CS.TAGS_KEY)) ||
     (defaultTags && getParamFromTags(defaultTags));
   const freshnessParam = freshness || urlParams.get(CS.FRESH_KEY) || defaultFreshness;
+  const mutedAndBlockedChannelIds = Array.from(new Set(mutedUris.concat(blockedUris).map((uri) => uri.split('#')[1])));
 
   const langParam = urlParams.get(CS.LANGUAGE_KEY) || null;
   const languageParams = searchInLanguage
@@ -206,7 +209,7 @@ function ClaimListDiscover(props: Props) {
     no_totals: true,
     not_channel_ids:
       // If channelIdsParam were passed in, we don't need not_channel_ids
-      !channelIdsParam && hiddenUris && hiddenUris.length ? hiddenUris.map(hiddenUri => hiddenUri.split('#')[1]) : [],
+      !channelIdsParam ? mutedAndBlockedChannelIds : [],
     not_tags: !showNsfw ? MATURE_TAGS : [],
     order_by:
       orderParam === CS.ORDER_BY_TRENDING
@@ -247,12 +250,7 @@ function ClaimListDiscover(props: Props) {
 
   if (claimType !== CS.CLAIM_CHANNEL) {
     if (orderParam === CS.ORDER_BY_TOP && freshnessParam !== CS.FRESH_ALL) {
-      options.release_time = `>${Math.floor(
-        moment()
-          .subtract(1, freshnessParam)
-          .startOf('hour')
-          .unix()
-      )}`;
+      options.release_time = `>${Math.floor(moment().subtract(1, freshnessParam).startOf('hour').unix())}`;
     } else if (orderParam === CS.ORDER_BY_NEW || orderParam === CS.ORDER_BY_TRENDING) {
       // Warning - hack below
       // If users are following more than 10 channels or tags, limit results to stuff less than a year old
@@ -263,29 +261,15 @@ function ClaimListDiscover(props: Props) {
         (options.channel_ids && options.channel_ids.length > 20) ||
         (options.any_tags && options.any_tags.length > 20)
       ) {
-        options.release_time = `>${Math.floor(
-          moment()
-            .subtract(3, CS.FRESH_MONTH)
-            .startOf('week')
-            .unix()
-        )}`;
+        options.release_time = `>${Math.floor(moment().subtract(3, CS.FRESH_MONTH).startOf('week').unix())}`;
       } else if (
         (options.channel_ids && options.channel_ids.length > 10) ||
         (options.any_tags && options.any_tags.length > 10)
       ) {
-        options.release_time = `>${Math.floor(
-          moment()
-            .subtract(1, CS.FRESH_YEAR)
-            .startOf('week')
-            .unix()
-        )}`;
+        options.release_time = `>${Math.floor(moment().subtract(1, CS.FRESH_YEAR).startOf('week').unix())}`;
       } else {
         // Hack for at least the New page until https://github.com/lbryio/lbry-sdk/issues/2591 is fixed
-        options.release_time = `<${Math.floor(
-          moment()
-            .startOf('minute')
-            .unix()
-        )}`;
+        options.release_time = `<${Math.floor(moment().startOf('minute').unix())}`;
       }
     }
   }
@@ -333,14 +317,14 @@ function ClaimListDiscover(props: Props) {
   if (hideReposts && !options.reposted_claim_id && !forceShowReposts) {
     if (Array.isArray(options.claim_type)) {
       if (options.claim_type.length > 1) {
-        options.claim_type = options.claim_type.filter(claimType => claimType !== 'repost');
+        options.claim_type = options.claim_type.filter((claimType) => claimType !== 'repost');
       }
     } else {
       options.claim_type = ['stream', 'channel'];
     }
   }
 
-  const hasMatureTags = tagsParam && tagsParam.split(',').some(t => MATURE_TAGS.includes(t));
+  const hasMatureTags = tagsParam && tagsParam.split(',').some((t) => MATURE_TAGS.includes(t));
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
   const claimSearchResult = claimSearchByQuery[claimSearchCacheQuery];
   const claimSearchResultLastPageReached = claimSearchByQueryLastPageReached[claimSearchCacheQuery];
@@ -499,8 +483,8 @@ function ClaimListDiscover(props: Props) {
             timedOutMessage={timedOutMessage}
             renderProperties={renderProperties}
             includeSupportAction={includeSupportAction}
-            hideBlock={hideBlock}
             injectedItem={injectedItem}
+            showHiddenByUser={showHiddenByUser}
           />
           {loading && (
             <div className="claim-grid">
@@ -527,8 +511,8 @@ function ClaimListDiscover(props: Props) {
             timedOutMessage={timedOutMessage}
             renderProperties={renderProperties}
             includeSupportAction={includeSupportAction}
-            hideBlock={hideBlock}
             injectedItem={injectedItem}
+            showHiddenByUser={showHiddenByUser}
           />
           {loading && new Array(dynamicPageSize).fill(1).map((x, i) => <ClaimPreview key={i} placeholder="loading" />)}
         </div>

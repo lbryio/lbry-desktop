@@ -41,7 +41,6 @@ export const LIQUIDATE_SUPPORTS = 'liquidate_supports';
 export const MASS_TIP_UNLOCK = 'mass_tip_unlock';
 export const CONFIRM_AGE = 'confirm_age';
 export const SYNC_ENABLE = 'SYNC_ENABLE';
-export const REMOVE_BLOCKED = 'remove_blocked';
 export const IMAGE_UPLOAD = 'image_upload';
 export const MOBILE_SEARCH = 'mobile_search';
 export const VIEW_IMAGE = 'view_image';

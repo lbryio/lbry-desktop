@@ -44,9 +44,9 @@ type DaemonSettings = {
 
 type Props = {
   setDaemonSetting: (string, ?SetDaemonSettingArg) => void,
-  clearDaemonSetting: string => void,
+  clearDaemonSetting: (string) => void,
   setClientSetting: (string, SetDaemonSettingArg) => void,
-  toggle3PAnalytics: boolean => void,
+  toggle3PAnalytics: (boolean) => void,
   clearCache: () => Promise<any>,
   daemonSettings: DaemonSettings,
   allowAnalytics: boolean,
@@ -60,14 +60,13 @@ type Props = {
   autoplay: boolean,
   updateWalletStatus: () => void,
   walletEncrypted: boolean,
-  userBlockedChannelsCount?: number,
   confirmForgetPassword: ({}) => void,
   floatingPlayer: boolean,
   hideReposts: ?boolean,
   clearPlayingUri: () => void,
   darkModeTimes: DarkModeTimes,
   setDarkTime: (string, {}) => void,
-  openModal: string => void,
+  openModal: (string) => void,
   language?: string,
   enterSettings: () => void,
   exitSettings: () => void,
@@ -98,7 +97,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
 
     if (isAuthenticated || !IS_WEB) {
       this.props.updateWalletStatus();
-      getPasswordFromCookie().then(p => {
+      getPasswordFromCookie().then((p) => {
         if (typeof p === 'string') {
           this.setState({ storedPassword: true });
         }
@@ -172,7 +171,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
       setDaemonSetting,
       setClientSetting,
       toggle3PAnalytics,
-      userBlockedChannelsCount,
       floatingPlayer,
       hideReposts,
       clearPlayingUri,
@@ -262,7 +260,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                       value={currentTheme}
                       disabled={automaticDarkModeEnabled}
                     >
-                      {themes.map(theme => (
+                      {themes.map((theme) => (
                         <option key={theme} value={theme}>
                           {theme === 'light' ? __('Light') : __('Dark')}
                         </option>
@@ -282,11 +280,11 @@ class SettingsPage extends React.PureComponent<Props, State> {
                         <FormField
                           type="select"
                           name="automatic_dark_mode_range"
-                          onChange={value => this.onChangeTime(value, { fromTo: 'from', time: 'hour' })}
+                          onChange={(value) => this.onChangeTime(value, { fromTo: 'from', time: 'hour' })}
                           value={darkModeTimes.from.hour}
                           label={__('From --[initial time]--')}
                         >
-                          {startHours.map(time => (
+                          {startHours.map((time) => (
                             <option key={time} value={time}>
                               {this.to12Hour(time)}
                             </option>
@@ -296,10 +294,10 @@ class SettingsPage extends React.PureComponent<Props, State> {
                           type="select"
                           name="automatic_dark_mode_range"
                           label={__('To --[final time]--')}
-                          onChange={value => this.onChangeTime(value, { fromTo: 'to', time: 'hour' })}
+                          onChange={(value) => this.onChangeTime(value, { fromTo: 'to', time: 'hour' })}
                           value={darkModeTimes.to.hour}
                         >
-                          {endHours.map(time => (
+                          {endHours.map((time) => (
                             <option key={time} value={time}>
                               {this.to12Hour(time)}
                             </option>
@@ -342,7 +340,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   <FormField
                     type="checkbox"
                     name="hide_reposts"
-                    onChange={e => {
+                    onChange={(e) => {
                       if (isAuthenticated) {
                         let param = e.target.checked ? { add: 'noreposts' } : { remove: 'noreposts' };
                         Lbryio.call('user_tag', 'edit', param);
@@ -411,7 +409,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   <FormField
                     type="checkbox"
                     name="share_third_party"
-                    onChange={e => toggle3PAnalytics(e.target.checked)}
+                    onChange={(e) => toggle3PAnalytics(e.target.checked)}
                     checked={allowAnalytics}
                     label={__('Allow the app to access third party analytics platforms')}
                     helper={__('We use detailed analytics to improve all aspects of the LBRY experience.')}
@@ -438,21 +436,14 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 />
 
                 <Card
-                  title={__('Blocked channels')}
-                  subtitle={
-                    userBlockedChannelsCount === 0
-                      ? __("You don't have blocked channels.")
-                      : userBlockedChannelsCount === 1
-                      ? __('You have one blocked channel.')
-                      : __('You have %channels% blocked channels.', { channels: userBlockedChannelsCount })
-                  }
+                  title={__('Blocked and muted channels')}
                   actions={
                     <div className="section__actions">
                       <Button
                         button="secondary"
                         label={__('Manage')}
                         icon={ICONS.SETTINGS}
-                        navigate={`/$/${PAGES.BLOCKED}`}
+                        navigate={`/$/${PAGES.SETTINGS_BLOCKED_MUTED}`}
                       />
                     </div>
                   }

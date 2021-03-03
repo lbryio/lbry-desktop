@@ -11,6 +11,7 @@ import CreditAmount from 'component/common/credit-amount';
 type Props = {
   channelClaim: ChannelClaim,
   large?: boolean,
+  inline?: boolean,
 };
 
 function getChannelLevel(amount: number): number {
@@ -47,7 +48,7 @@ function getChannelIcon(level: number): string {
 }
 
 function ChannelStakedIndicator(props: Props) {
-  const { channelClaim, large = false } = props;
+  const { channelClaim, large = false, inline = false } = props;
 
   if (!channelClaim || !channelClaim.meta) {
     return null;
@@ -79,6 +80,7 @@ function ChannelStakedIndicator(props: Props) {
         <div
           className={classnames('channel-staked__wrapper', {
             'channel-staked__wrapper--large': large,
+            'channel-staked__wrapper--inline': inline,
           })}
         >
           <LevelIcon icon={icon} large={large} isControlling={isControlling} />

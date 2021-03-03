@@ -22,7 +22,7 @@ type Props = {
   menuButton: boolean,
   children: any,
   doReadNotifications: ([number]) => void,
-  doDeleteNotification: number => void,
+  doDeleteNotification: (number) => void,
 };
 
 export default function Notification(props: Props) {
@@ -166,10 +166,10 @@ export default function Notification(props: Props) {
 
         <div className="notification__menu">
           <Menu>
-            <MenuButton onClick={e => e.stopPropagation()}>
+            <MenuButton onClick={(e) => e.stopPropagation()}>
               <Icon size={18} icon={ICONS.MORE_VERTICAL} />
             </MenuButton>
-            <MenuList className="menu__list--comments">
+            <MenuList className="menu__list">
               <MenuItem className="menu__link" onSelect={() => doDeleteNotification(id)}>
                 <Icon aria-hidden icon={ICONS.DELETE} />
                 {__('Delete')}

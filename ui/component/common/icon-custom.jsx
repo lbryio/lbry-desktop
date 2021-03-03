@@ -238,6 +238,13 @@ export const icons = {
       <circle cx="12" cy="12" r="10" />
     </g>
   ),
+  [ICONS.MUTE]: buildIcon(
+    <g>
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+      <line x1="23" y1="9" x2="17" y2="15" />
+      <line x1="17" y1="9" x2="23" y2="15" />
+    </g>
+  ),
   [ICONS.LIGHT]: buildIcon(
     <g>
       <circle cx="12" cy="12" r="5" />

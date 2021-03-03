@@ -10,7 +10,7 @@ type Props = {
   doClaimSearch: ({}) => void,
   showNsfw: boolean,
   hideReposts: boolean,
-  history: { action: string, push: string => void, replace: string => void },
+  history: { action: string, push: (string) => void, replace: (string) => void },
   claimSearchByQuery: {
     [string]: Array<string>,
   },
@@ -19,10 +19,10 @@ type Props = {
   },
   // claim search options are below
   tags: Array<string>,
-  hiddenUris: Array<string>,
+  blockedUris: Array<string>,
+  mutedUris: Array<string>,
   claimIds?: Array<string>,
   channelIds?: Array<string>,
-  notChannelIds?: Array<string>,
   pageSize: number,
   orderBy?: Array<string>,
   releaseTime?: string,
@@ -39,12 +39,12 @@ function ClaimTilesDiscover(props: Props) {
     claimSearchByQuery,
     showNsfw,
     hideReposts,
-    hiddenUris,
+    blockedUris,
+    mutedUris,
     // Below are options to pass that are forwarded to claim_search
     tags,
     channelIds,
     claimIds,
-    notChannelIds,
     orderBy,
     pageSize = 8,
     releaseTime,
@@ -60,6 +60,7 @@ function ClaimTilesDiscover(props: Props) {
   const urlParams = new URLSearchParams(location.search);
   const feeAmountInUrl = urlParams.get('fee_amount');
   const feeAmountParam = feeAmountInUrl || feeAmount;
+  const mutedAndBlockedChannelIds = Array.from(new Set(mutedUris.concat(blockedUris).map((uri) => uri.split('#')[1])));
   const options: {
     page_size: number,
     no_totals: boolean,
@@ -86,10 +87,7 @@ function ClaimTilesDiscover(props: Props) {
     not_tags: !showNsfw ? MATURE_TAGS : [],
     any_languages: languages,
     channel_ids: channelIds || [],
-    not_channel_ids:
-      notChannelIds ||
-      // If channelIds were passed in, we don't need not_channel_ids
-      (!channelIds && hiddenUris && hiddenUris.length ? hiddenUris.map(hiddenUri => hiddenUri.split('#')[1]) : []),
+    not_channel_ids: mutedAndBlockedChannelIds || [],
     order_by: orderBy || ['trending_group', 'trending_mixed'],
   };
 
@@ -108,7 +106,7 @@ function ClaimTilesDiscover(props: Props) {
   // https://github.com/lbryio/lbry-desktop/issues/3774
   if (hideReposts) {
     if (Array.isArray(options.claim_type)) {
-      options.claim_type = options.claim_type.filter(claimType => claimType !== 'repost');
+      options.claim_type = options.claim_type.filter((claimType) => claimType !== 'repost');
     } else {
       options.claim_type = ['stream', 'channel'];
     }
@@ -143,7 +141,7 @@ function ClaimTilesDiscover(props: Props) {
   return (
     <ul className="claim-grid">
       {uris && uris.length
-        ? uris.map(uri => <ClaimPreviewTile key={uri} uri={uri} />)
+        ? uris.map((uri) => <ClaimPreviewTile key={uri} uri={uri} />)
         : new Array(pageSize).fill(1).map((x, i) => <ClaimPreviewTile key={i} placeholder />)}
     </ul>
   );

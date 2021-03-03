@@ -8,7 +8,7 @@ import {
   makeSelectClaimForUri,
   SETTINGS,
 } from 'lbry-redux';
-import { selectChannelIsBlocked } from 'redux/selectors/blocked';
+import { makeSelectChannelIsMuted } from 'redux/selectors/blocked';
 import { withRouter } from 'react-router';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
@@ -24,7 +24,7 @@ const select = (state, props) => {
     fetching: makeSelectFetchingChannelClaims(props.uri)(state),
     totalPages: makeSelectTotalPagesInChannelSearch(props.uri, PAGE_SIZE)(state),
     channelIsMine: makeSelectClaimIsMine(props.uri)(state),
-    channelIsBlocked: selectChannelIsBlocked(props.uri)(state),
+    channelIsBlocked: makeSelectChannelIsMuted(props.uri)(state),
     claim: props.uri && makeSelectClaimForUri(props.uri)(state),
     isAuthenticated: selectUserVerifiedEmail(state),
     showMature: makeSelectClientSetting(SETTINGS.SHOW_MATURE)(state),

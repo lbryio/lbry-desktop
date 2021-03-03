@@ -372,9 +372,9 @@ $metadata-z-index: 1;
 .channel-staked__wrapper {
   display: flex;
   position: absolute;
-  padding: 0.25rem;
+  padding: 0.2rem;
   bottom: -0.75rem;
-  left: -0.75rem;
+  left: -0.8rem;
   background-color: var(--color-card-background);
   border-radius: 50%;
 }
@@ -387,6 +387,16 @@ $metadata-z-index: 1;
   left: auto;
   top: var(--spacing-xs);
   margin-left: var(--spacing-s);
+  padding: 0;
+}
+
+.channel-staked__wrapper--inline {
+  position: relative;
+  background-color: transparent;
+  display: inline-block;
+  bottom: auto;
+  left: auto;
+  top: var(--spacing-xs);
   padding: 0;
 }
 
