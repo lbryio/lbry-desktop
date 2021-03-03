@@ -66,3 +66,17 @@
 .icon__lbc--title {
   margin-bottom: 4px;
 }
+
+.icon--Fire {
+  position: relative;
+
+  &:after {
+    content: '';
+    height: 20px;
+    width: 20px;
+    background-color: red;
+    top: 0;
+    right: 0;
+    position: absolute;
+  }
+}
