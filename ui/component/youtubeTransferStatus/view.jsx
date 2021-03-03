@@ -35,20 +35,20 @@ export default function YoutubeTransferStatus(props: Props) {
     addNewChannel,
   } = props;
   const hasChannels = youtubeChannels && youtubeChannels.length > 0;
-  const transferEnabled = youtubeChannels.some(status => status.transferable);
+  const transferEnabled = youtubeChannels.some((status) => status.transferable);
   const hasPendingTransfers = youtubeChannels.some(
-    status => status.transfer_state === YOUTUBE_STATUSES.YOUTUBE_SYNC_PENDING_TRANSFER
+    (status) => status.transfer_state === YOUTUBE_STATUSES.YOUTUBE_SYNC_PENDING_TRANSFER
   );
   const isYoutubeTransferComplete =
     hasChannels &&
     youtubeChannels.every(
-      channel =>
+      (channel) =>
         channel.transfer_state === YOUTUBE_STATUSES.YOUTUBE_SYNC_COMPLETED_TRANSFER ||
         channel.sync_status === YOUTUBE_STATUSES.YOUTUBE_SYNC_ABANDONDED
     );
 
   const isNotElligible =
-    hasChannels && youtubeChannels.every(channel => channel.sync_status === YOUTUBE_STATUSES.YOUTUBE_SYNC_ABANDONDED);
+    hasChannels && youtubeChannels.every((channel) => channel.sync_status === YOUTUBE_STATUSES.YOUTUBE_SYNC_ABANDONDED);
 
   let total;
   let complete;
@@ -119,7 +119,7 @@ export default function YoutubeTransferStatus(props: Props) {
               <I18nMessage
                 tokens={{ here: <Button button="link" href="https://lbry.com/faq/youtube" label={__('here')} /> }}
               >
-                Email help@lbry.com if you think there has been a mistake. Make sure your channel qualifies %here%.
+                Email help@odysee.com if you think there has been a mistake. Make sure your channel qualifies %here%.
               </I18nMessage>
             )}
           </span>

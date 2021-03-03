@@ -16,7 +16,7 @@
 
 .header--minimal {
   box-shadow: none;
-  background-color: transparent;
+  background-color: var(--color-background);
   border-bottom: none;
 }
 
@@ -58,7 +58,6 @@
   justify-content: center;
   align-items: center;
   border-radius: var(--border-radius);
-  color: var(--color-text);
   position: relative;
   font-weight: var(--font-weight-bold);
 
@@ -105,13 +104,7 @@
     height: var(--height-button);
     width: var(--height-button);
     margin-right: 0;
-    transition: border-radius var(--animation-duration);
-    border-radius: calc(var(--height-button) / 2);
-
-    img {
-      transition: border-radius var(--animation-duration);
-      border-radius: calc(var(--height-button) / 2);
-    }
+    border-radius: var(--border-radius);
   }
 
   &:hover {
@@ -128,8 +121,14 @@
 }
 
 .header__navigation-item--balance {
-  @extend .button--link;
+  @extend .button--file-action;
   margin-left: var(--spacing-m);
+  color: var(--color-text);
+  margin-right: var(--spacing-m);
+
+  &:hover {
+    color: var(--color-text);
+  }
 }
 
 .header__navigation-item--forward {
@@ -143,11 +142,25 @@
 }
 
 .header__navigation-item--lbry {
-  padding: var(--spacing-s);
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  margin-left: var(--spacing-m);
+  margin-right: var(--spacing-m);
 
-  .lbry-icon {
-    height: var(--height-button);
-    width: var(--height-button);
+  @media (max-width: $breakpoint-small) {
+    margin-right: var(--spacing-m);
+    height: 5rem;
+
+    .button__label {
+      display: none;
+    }
+  }
+}
+
+.header--minimal {
+  .header__navigation-item--lbry {
+    height: 3rem;
   }
 }
 
