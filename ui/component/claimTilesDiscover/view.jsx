@@ -23,7 +23,6 @@ type Props = {
   mutedUris: Array<string>,
   claimIds?: Array<string>,
   channelIds?: Array<string>,
-  notChannelIds?: Array<string>,
   pageSize: number,
   orderBy?: Array<string>,
   releaseTime?: string,
@@ -46,7 +45,6 @@ function ClaimTilesDiscover(props: Props) {
     tags,
     channelIds,
     claimIds,
-    notChannelIds,
     orderBy,
     pageSize = 8,
     releaseTime,
@@ -89,7 +87,7 @@ function ClaimTilesDiscover(props: Props) {
     not_tags: !showNsfw ? MATURE_TAGS : [],
     any_languages: languages,
     channel_ids: channelIds || [],
-    not_channel_ids: notChannelIds || (!channelIds ? mutedAndBlockedChannelIds : []),
+    not_channel_ids: mutedAndBlockedChannelIds || [],
     order_by: orderBy || ['trending_group', 'trending_mixed'],
   };
 
