@@ -157,7 +157,13 @@ function WalletSendTip(props: Props) {
         />
       ) : (
         <Card
-          title={claimIsMine ? __('Boost your content') : isSupport ? __('Support this content') : __('Support')}
+          title={
+            claimIsMine
+              ? __('Boost your content')
+              : isSupport
+              ? __('Support this content')
+              : __('Support --[button to support a claim]--')
+          }
           subtitle={
             <React.Fragment>
               {isSupport
@@ -203,7 +209,7 @@ function WalletSendTip(props: Props) {
                 </div>
 
                 <div className="section">
-                  {DEFAULT_TIP_AMOUNTS.map(amount => (
+                  {DEFAULT_TIP_AMOUNTS.map((amount) => (
                     <Button
                       key={amount}
                       disabled={amount > balance}
@@ -229,7 +235,7 @@ function WalletSendTip(props: Props) {
                     label={__('Custom')}
                     onClick={() => setUseCustomTip(true)}
                   />
-                  {DEFAULT_TIP_AMOUNTS.some(val => val > balance) && (
+                  {DEFAULT_TIP_AMOUNTS.some((val) => val > balance) && (
                     <Button
                       button="secondary"
                       className="button-toggle-group-action"
@@ -262,7 +268,7 @@ function WalletSendTip(props: Props) {
                       type="number"
                       placeholder="1.23"
                       value={customTipAmount}
-                      onChange={event => handleCustomPriceChange(event)}
+                      onChange={(event) => handleCustomPriceChange(event)}
                     />
                   </div>
                 )}
@@ -270,13 +276,15 @@ function WalletSendTip(props: Props) {
                 <div className="section__actions">
                   <Button
                     autoFocus
-                    icon={isSupport ? undefined : ICONS.SUPPORT}
+                    // icon={isSupport ? undefined : ICONS.SUPPORT}
                     button="primary"
                     type="submit"
                     disabled={fetchingChannels || isPending || tipError || !tipAmount}
                     label={
                       isSupport
-                        ? __('Send Revocable Support')
+                        ? claimIsMine
+                          ? __('Boost This Video')
+                          : __('Send Revocable Support')
                         : __('Send a %amount% Tip', { amount: tipAmount ? `${tipAmount} Credit` : '' })
                     }
                   />

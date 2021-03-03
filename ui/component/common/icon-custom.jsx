@@ -43,8 +43,14 @@ export const icons = {
   // The LBRY icon is different from the base icon set so don't use buildIcon()
   [ICONS.LBRY]: (props: IconProps) => (
     <svg stroke="currentColor" fill="currentColor" x="0px" y="0px" viewBox="0 0 322 254" className="icon lbry-icon">
-      <path d="M296,85.9V100l-138.8,85.3L52.6,134l0.2-7.9l104,51.2L289,96.1v-5.8L164.2,30.1L25,116.2v38.5l131.8,65.2 l137.6-84.4l3.9,6l-141.1,86.4L18.1,159.1v-46.8l145.8-90.2C163.9,22.1,296,85.9,296,85.9z" />
-      <path d="M294.3,150.9l2-12.6l-12.2-2.1l0.8-4.9l17.1,2.9l-2.8,17.5L294.3,150.9L294.3,150.9z" />
+      <g transform="scale(5, 5) translate(5)">
+        <circle fill="#4785d2" cx="28" cy="28" r="28" />
+        <circle fill="white" cx="28" cy="28" r="13" />
+        <circle fill="#4785d2" cx="28" cy="28" r="9" />
+        <circle fill="white" cx="28" cy="28" r="5" />
+        <circle fill="#4785d2" cx="28" cy="28" r="3" />
+        <circle fill="white" cx="28" cy="28" r="1" />
+      </g>
     </svg>
   ),
   [ICONS.LBC]: (props: IconProps) => {
@@ -377,15 +383,52 @@ export const icons = {
       <line x1="7" y1="7" x2="7" y2="7" />
     </g>
   ),
-  [ICONS.SUPPORT]: buildIcon(
-    <g>
-      <polyline points="20 12 20 22 4 22 4 12" />
-      <rect x="2" y="7" width="20" height="5" />
-      <line x1="12" y1="22" x2="12" y2="7" />
-      <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
-      <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
-    </g>
+  [ICONS.SUPPORT]: (props: CustomProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 -1 24 26"
+      width={props.size || '22'}
+      height={props.size || '22'}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <g>
+        <path
+          d="M23.5,8 C23.5,12.142 20.143,15.5 16,15.5 C11.858,15.5 8.5,12.142 8.5,8 C8.5,3.858 11.858,0.5 16,0.5 C20.143,0.5 23.5,3.858 23.5,8 L23.5,8 Z"
+          id="Stroke-1155"
+        />
+        <line x1="15.5" y1="11" x2="15.5" y2="12" id="Stroke-1156" />
+        <line x1="15.5" y1="4" x2="15.5" y2="5" id="Stroke-1157" />
+        <path
+          d="M14,9.5 C14,10.328 14.672,11 15.5,11 C16.328,11 17,10.328 17,9.5 C17,8.671 16.328,8 15.5,8 C14.672,8 14,7.328 14,6.5 C14,5.671 14.672,5 15.5,5 C16.328,5 17,5.671 17,6.5"
+          id="Stroke-1158"
+        />
+        <line x1="7.5" y1="19" x2="7.5" y2="20" id="Stroke-1159" />
+        <line x1="7.5" y1="12" x2="7.5" y2="13" id="Stroke-1160" />
+        <path
+          d="M6,17.5 C6,18.328 6.672,19 7.5,19 C8.328,19 9,18.328 9,17.5 C9,16.671 8.328,16 7.5,16 C6.672,16 6,15.328 6,14.5 C6,13.671 6.672,13 7.5,13 C8.328,13 9,13.671 9,14.5"
+          id="Stroke-1161"
+        />
+        <path
+          d="M8.5264,8.5264 C4.0674,8.2254 0.5004,11.7464 0.5004,16.0004 C0.5004,20.1424 3.8584,23.5004 8.0004,23.5004 C12.2494,23.5004 15.7734,19.9404 15.4734,15.4734"
+          id="Stroke-1162"
+        />
+      </g>
+    </svg>
   ),
+  //   [ICONS.SUPPORT]: buildIcon(
+  //     <g>
+  //       <polyline points="20 12 20 22 4 22 4 12" />
+  //       <rect x="2" y="7" width="20" height="5" />
+  //       <line x1="12" y1="22" x2="12" y2="7" />
+  //       <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
+  //       <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
+  //     </g>
+  //   ),
   [ICONS.EYE]: buildIcon(
     <g>
       <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />

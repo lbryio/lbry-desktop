@@ -15,6 +15,7 @@
     color: var(--color-secondary);
     margin-bottom: var(--spacing-s);
     padding: var(--spacing-xxs);
+    border-radius: var(--border-radius);
   }
 
   fieldset:not(:first-child) {
@@ -34,6 +35,7 @@
 .search__top-link {
   margin-top: var(--spacing-s);
   font-weight: var(--font-weight-body);
+  margin-top: var(--spacing-xs);
 }
 
 .search__top-links {

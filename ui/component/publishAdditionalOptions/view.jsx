@@ -8,6 +8,7 @@ import LicenseType from './license-type';
 import Card from 'component/common/card';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 
+import PublishName from 'component/publishName';
 // @if TARGET='app'
 // import ErrorText from 'component/common/error-text';
 // import { LbryFirst } from 'lbry-redux';
@@ -115,6 +116,7 @@ function PublishAdditionalOptions(props: Props) {
         <React.Fragment>
           {!hideSection && (
             <div className={classnames({ 'card--disabled': !name })}>
+              <PublishName />
               {/* @if TARGET='app' */}
               {/* {showLbryFirstCheckbox && (
                 <div className="section">
@@ -156,7 +158,7 @@ function PublishAdditionalOptions(props: Props) {
                   type="select"
                   name="content_language"
                   value={language}
-                  onChange={event => updatePublishForm({ language: event.target.value })}
+                  onChange={(event) => updatePublishForm({ language: event.target.value })}
                 >
                   {Object.entries(SUPPORTED_LANGUAGES).map(([langkey, langName]) => (
                     // $FlowFixMe
@@ -176,12 +178,12 @@ function PublishAdditionalOptions(props: Props) {
                       licenseUrl: newLicenseUrl,
                     })
                   }
-                  handleLicenseDescriptionChange={event =>
+                  handleLicenseDescriptionChange={(event) =>
                     updatePublishForm({
                       otherLicenseDescription: event.target.value,
                     })
                   }
-                  handleLicenseUrlChange={event => updatePublishForm({ licenseUrl: event.target.value })}
+                  handleLicenseUrlChange={(event) => updatePublishForm({ licenseUrl: event.target.value })}
                 />
               </div>
             </div>

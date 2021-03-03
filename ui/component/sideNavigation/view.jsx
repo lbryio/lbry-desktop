@@ -38,7 +38,7 @@ type Props = {
   uploadCount: number,
   doSignOut: () => void,
   sidebarOpen: boolean,
-  setSidebarOpen: boolean => void,
+  setSidebarOpen: (boolean) => void,
   isMediumScreen: boolean,
   isOnFilePage: boolean,
   unreadCount: number,
@@ -51,6 +51,7 @@ type Props = {
 type SideNavLink = {
   title: string,
   link?: string,
+  route?: string,
   onClick?: () => any,
   icon: string,
   extra?: Node,
@@ -60,7 +61,6 @@ type SideNavLink = {
 function SideNavigation(props: Props) {
   const {
     subscriptions,
-    followedTags,
     doSignOut,
     email,
     purchaseSuccess,
@@ -72,6 +72,7 @@ function SideNavigation(props: Props) {
     unreadCount,
     homepageData,
     user,
+    followedTags,
   } = props;
 
   const { EXTRA_SIDEBAR_LINKS } = homepageData;
@@ -211,7 +212,7 @@ function SideNavigation(props: Props) {
     });
   }
 
-  const notificationsEnabled = user && user.experimental_ui;
+  const notificationsEnabled = SIMPLE_SITE || (user && user.experimental_ui);
   const isAuthenticated = Boolean(email);
   // SIDE LINKS: FOLLOWING, HOME, [FULL,] [EXTRA]
   let SIDE_LINKS: Array<SideNavLink> = [];
@@ -232,7 +233,7 @@ function SideNavigation(props: Props) {
   const isAbsolute = isOnFilePage || isMediumScreen;
   const microNavigation = !sidebarOpen || isMediumScreen;
   const subLinks = email
-    ? MOBILE_LINKS.filter(link => {
+    ? MOBILE_LINKS.filter((link) => {
         if (!notificationsEnabled && link.icon === ICONS.NOTIFICATION) {
           return false;
         }
@@ -290,8 +291,13 @@ function SideNavigation(props: Props) {
       <li className="navigation-link">
         <Button label={__('FAQ')} href="https://odysee.com/@OdyseeHelp:b" />
       </li>
+
       <li className="navigation-link">
-        <Button label={__('Support')} href="https://lbry.com/support" />
+        <Button label={__('Community Guidelines')} href="https://odysee.com/@OdyseeHelp:b/Community-Guidelines:c" />
+      </li>
+
+      <li className="navigation-link">
+        <Button label={__('Support --[used in footer; general help/support]--')} href="https://lbry.com/support" />
       </li>
       <li className="navigation-link">
         <Button label={__('Terms')} href="https://lbry.com/termsofservice" />
@@ -320,11 +326,11 @@ function SideNavigation(props: Props) {
         >
           <div>
             <ul className={classnames('navigation-links', { 'navigation-links--micro': !sidebarOpen })}>
-              {SIDE_LINKS.map(linkProps => {
+              {SIDE_LINKS.map((linkProps) => {
                 //   $FlowFixMe
                 const { hideForUnauth, ...passedProps } = linkProps;
                 return !email && linkProps.hideForUnauth && IS_WEB ? null : (
-                  <li key={linkProps.link}>
+                  <li key={linkProps.route || linkProps.link}>
                     <Button
                       {...passedProps}
                       label={__(linkProps.title)}
@@ -386,7 +392,7 @@ function SideNavigation(props: Props) {
           >
             <div>
               <ul className="navigation-links--absolute">
-                {SIDE_LINKS.map(linkProps => {
+                {SIDE_LINKS.map((linkProps) => {
                   //   $FlowFixMe
                   const { hideForUnauth, link, route, ...passedProps } = linkProps;
                   return !email && linkProps.hideForUnauth && IS_WEB ? null : (
@@ -409,7 +415,7 @@ function SideNavigation(props: Props) {
                 })}
               </ul>
               <ul className="navigation-links--absolute mobile-only">
-                {subLinks.map(linkProps => {
+                {subLinks.map((linkProps) => {
                   const { hideForUnauth, ...passedProps } = linkProps;
 
                   return !email && hideForUnauth && IS_WEB ? null : (
