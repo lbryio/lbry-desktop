@@ -21,7 +21,7 @@ type Props = {
   nag?: Node,
   smallTitle?: boolean,
   onClick?: () => void,
-  children?: any, // not sure how this works
+  children?: any, // wrong type
 };
 
 export default function Card(props: Props) {
