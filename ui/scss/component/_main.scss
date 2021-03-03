@@ -113,6 +113,7 @@
 
     @media (max-width: $breakpoint-small) {
       margin-left: 0;
+      margin-top: var(--spacing-s);
     }
 
     @media (max-width: $breakpoint-medium) {
@@ -139,6 +140,7 @@
   padding-right: 0;
   margin-left: 0;
   margin-right: 0;
+  margin-top: 0;
   width: 100vw;
   max-width: none;
 
