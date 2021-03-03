@@ -1,16 +1,31 @@
-// @Flow
+// @flow
 import * as ICONS from 'constants/icons';
 import React from 'react';
 import Button from 'component/button';
 import Yrbl from 'component/yrbl';
+import { STATUS_DEGRADED, STATUS_FAILING, STATUS_DOWN } from 'web/effects/use-degraded-performance';
 
-export default function SyncFatalError() {
+type Props = {
+  lbryTvApiStatus: string,
+};
+
+export default function SyncFatalError(props: Props) {
+  const { lbryTvApiStatus } = props;
+
+  const downTime =
+    IS_WEB &&
+    (lbryTvApiStatus === STATUS_DEGRADED || lbryTvApiStatus === STATUS_FAILING || lbryTvApiStatus === STATUS_DOWN);
+
   return (
     <div className="main--empty">
       <Yrbl
-        title={__('There is a bug... somewhere')}
+        title={downTime ? __('Under maintenance...') : __('There is a bug... somewhere')}
         subtitle={
-          <p>{__("Try refreshing to fix the issue. If that doesn't work, email help@lbry.com for support.")}</p>
+          <p>
+            {downTime
+              ? __("We're currently upgrading or rebooting our services, please try refreshing in a few minutes.")
+              : __("Try refreshing to fix the issue. If that doesn't work, email help@odysee.com for support.")}
+          </p>
         }
         actions={
           <div className="section__actions">
