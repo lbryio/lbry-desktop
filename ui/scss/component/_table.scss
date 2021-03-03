@@ -7,11 +7,11 @@
     overflow: hidden;
 
     &:first-of-type {
-      padding-left: var(--spacing-l);
+      padding-left: var(--spacing-m);
     }
 
     &:last-of-type {
-      padding-right: var(--spacing-l);
+      padding-right: var(--spacing-m);
     }
   }
 
@@ -102,7 +102,7 @@ th {
 
 .table__header-text {
   width: 100%;
-  margin: 0 var(--spacing-s);
+  margin: 0 var(--spacing-xs);
 }
 
 .table__header-text--between {

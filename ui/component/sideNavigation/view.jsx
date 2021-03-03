@@ -51,6 +51,7 @@ type Props = {
 type SideNavLink = {
   title: string,
   link?: string,
+  route?: string,
   onClick?: () => any,
   icon: string,
   extra?: Node,
@@ -60,7 +61,6 @@ type SideNavLink = {
 function SideNavigation(props: Props) {
   const {
     subscriptions,
-    followedTags,
     doSignOut,
     email,
     purchaseSuccess,
@@ -72,6 +72,7 @@ function SideNavigation(props: Props) {
     unseenCount,
     homepageData,
     user,
+    followedTags,
   } = props;
 
   const { EXTRA_SIDEBAR_LINKS } = homepageData;
@@ -211,7 +212,7 @@ function SideNavigation(props: Props) {
     });
   }
 
-  const notificationsEnabled = user && user.experimental_ui;
+  const notificationsEnabled = SIMPLE_SITE || (user && user.experimental_ui);
   const isAuthenticated = Boolean(email);
   // SIDE LINKS: FOLLOWING, HOME, [FULL,] [EXTRA]
   let SIDE_LINKS: Array<SideNavLink> = [];
@@ -291,8 +292,13 @@ function SideNavigation(props: Props) {
       <li className="navigation-link">
         <Button label={__('FAQ')} href="https://odysee.com/@OdyseeHelp:b" />
       </li>
+
       <li className="navigation-link">
-        <Button label={__('Support')} href="https://lbry.com/support" />
+        <Button label={__('Community Guidelines')} href="https://odysee.com/@OdyseeHelp:b/Community-Guidelines:c" />
+      </li>
+
+      <li className="navigation-link">
+        <Button label={__('Support --[used in footer; general help/support]--')} href="https://lbry.com/support" />
       </li>
       <li className="navigation-link">
         <Button label={__('Terms')} href="https://lbry.com/termsofservice" />
@@ -325,7 +331,7 @@ function SideNavigation(props: Props) {
                 //   $FlowFixMe
                 const { hideForUnauth, ...passedProps } = linkProps;
                 return !email && linkProps.hideForUnauth && IS_WEB ? null : (
-                  <li key={linkProps.link}>
+                  <li key={linkProps.route || linkProps.link}>
                     <Button
                       {...passedProps}
                       label={__(linkProps.title)}

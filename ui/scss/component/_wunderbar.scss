@@ -228,6 +228,7 @@
   @extend .button--alt;
   @extend .header__navigation-item--icon;
   padding: var(--spacing-xs);
+  margin-right: var(--spacing-m);
 
   .button__label {
     color: var(--color-input-placeholder);

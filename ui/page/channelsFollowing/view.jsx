@@ -23,6 +23,7 @@ function ChannelsFollowingPage(props: Props) {
   ) : (
     <Page noFooter fullWidthPage={tileLayout}>
       <ClaimListDiscover
+        hideAdvancedFilter
         tileLayout={tileLayout}
         headerLabel={
           <span>
@@ -31,7 +32,7 @@ function ChannelsFollowingPage(props: Props) {
           </span>
         }
         defaultOrderBy={ORDER_BY_NEW}
-        channelIds={subscribedChannels.map(sub => sub.uri.split('#')[1])}
+        channelIds={subscribedChannels.map((sub) => sub.uri.split('#')[1])}
         meta={
           <Button
             icon={ICONS.SEARCH}

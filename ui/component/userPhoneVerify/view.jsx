@@ -6,7 +6,7 @@ import I18nMessage from 'component/i18nMessage';
 import Card from 'component/common/card';
 
 type Props = {
-  verifyUserPhone: string => void,
+  verifyUserPhone: (string) => void,
   resetPhone: () => void,
   phoneErrorMessage: string,
   phone: string,
@@ -61,7 +61,7 @@ class UserPhoneVerify extends React.PureComponent<Props, State> {
                 name="code"
                 placeholder="1234"
                 value={this.state.code}
-                onChange={event => {
+                onChange={(event) => {
                   this.handleCodeChanged(event);
                 }}
                 label={__('Verification Code')}
@@ -72,7 +72,7 @@ class UserPhoneVerify extends React.PureComponent<Props, State> {
             <p className="help">
               <I18nMessage
                 tokens={{
-                  help_link: <Button button="link" href="mailto:help@lbry.com" label="help@lbry.com" />,
+                  help_link: <Button button="link" href="mailto:help@odysee.com" label="help@odysee.com" />,
                   chat_link: <Button button="link" href="https://chat.lbry.com" label={__('chat')} />,
                 }}
               >

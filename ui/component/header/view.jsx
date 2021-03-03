@@ -19,6 +19,8 @@ import ChannelThumbnail from 'component/channelThumbnail';
 import { remote } from 'electron';
 import { IS_MAC } from 'component/app/view';
 // @endif
+import OdyseeLogoWithWhiteText from './odysee_white.png';
+import OdyseeLogoWithText from './odysee.png';
 
 type Props = {
   user: ?User,
@@ -86,8 +88,8 @@ const Header = (props: Props) => {
     sidebarOpen,
     setSidebarOpen,
     isAbsoluteSideNavHidden,
-    user,
     hideCancel,
+    user,
     activeChannelClaim,
   } = props;
   const isMobile = useIsMobile();
@@ -98,7 +100,7 @@ const Header = (props: Props) => {
   const isPwdResetPage = history.location.pathname.includes(PAGES.AUTH_PASSWORD_RESET);
   const hasBackout = Boolean(backout);
   const { backLabel, backNavDefault, title: backTitle, simpleTitle: simpleBackTitle } = backout || {};
-  const notificationsEnabled = (user && user.experimental_ui) || false;
+  //   const notificationsEnabled = (user && user.experimental_ui) || false; // fix this
   const livestreamEnabled = (ENABLE_NO_SOURCE_CLAIMS && user && user.experimental_ui) || false;
   const activeChannelUrl = activeChannelClaim && activeChannelClaim.permanent_url;
 
@@ -233,19 +235,12 @@ const Header = (props: Props) => {
                     icon={ICONS.MENU}
                     onClick={() => setSidebarOpen(!sidebarOpen)}
                   >
-                    {isAbsoluteSideNavHidden && isMobile && notificationsEnabled && <NotificationBubble />}
+                    {isAbsoluteSideNavHidden && isMobile && <NotificationBubble />}
                   </Button>
                 </span>
               )}
               <Button
-                className="header__navigation-item header__navigation-item--lbry"
-                // @if TARGET='app'
-                label={'LBRY'}
-                // @endif
-                // @if TARGET='web'
-                label={LOGO_TITLE} // eslint-disable-line
-                // @endif
-                icon={ICONS.LBRY}
+                className="header__navigation-item header__navigation-item--lbry header__navigation-item--button-mobile"
                 onClick={() => {
                   if (history.location.pathname === '/') window.location.reload();
                 }}
@@ -255,7 +250,12 @@ const Header = (props: Props) => {
                 }}
                 // @endif
                 {...homeButtonNavigationProps}
-              />
+              >
+                <img
+                  src={currentTheme === 'light' ? OdyseeLogoWithText : OdyseeLogoWithWhiteText}
+                  className="header__odysee"
+                />
+              </Button>
 
               {!authHeader && (
                 <div className="header__center">
@@ -272,7 +272,7 @@ const Header = (props: Props) => {
 
                   <HeaderMenuButtons
                     authenticated={authenticated}
-                    notificationsEnabled={notificationsEnabled}
+                    notificationsEnabled
                     history={history}
                     handleThemeToggle={handleThemeToggle}
                     currentTheme={currentTheme}
@@ -424,6 +424,10 @@ function HeaderMenuButtons(props: HeaderMenuButtonProps) {
             <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.CHANNEL_NEW}`)}>
               <Icon aria-hidden icon={ICONS.CHANNEL} />
               {__('New Channel')}
+            </MenuItem>
+            <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.YOUTUBE_SYNC}`)}>
+              <Icon aria-hidden icon={ICONS.YOUTUBE} />
+              {__('Sync YouTube Channel')}
             </MenuItem>
 
             {livestreamEnabled && (

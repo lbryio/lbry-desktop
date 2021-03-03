@@ -99,7 +99,7 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
                 style={{ display: 'none' }}
                 src={thumbnailSrc}
                 alt={__('Thumbnail Preview')}
-                onError={e => {
+                onError={(e) => {
                   this.setState({
                     thumbnailError: true,
                   });
@@ -131,9 +131,9 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
               <FileSelector
                 currentPath={thumbnailPath}
                 label={__('Thumbnail')}
-                placeholder={__('Choose a thumbnail')}
+                placeholder={__('Thumbnails that entice a viewer to watch a video work best')}
                 accept={accept}
-                onFileChosen={file => openModal(MODALS.CONFIRM_THUMBNAIL_UPLOAD, { file })}
+                onFileChosen={(file) => openModal(MODALS.CONFIRM_THUMBNAIL_UPLOAD, { file })}
               />
             )}
             {status === THUMBNAIL_STATUSES.COMPLETE && thumbnail && (

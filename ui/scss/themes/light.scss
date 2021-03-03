@@ -1,4 +1,16 @@
 :root {
+  --color-primary: #fa6165;
+  --color-primary-alt: #fef1f6;
+  --color-primary-alt-2: #fb7e82;
+  --color-primary-alt-3: #fbcbdd;
+  --color-secondary: #f9902a;
+  --color-secondary-alt: #fee8d2;
+  --color-secondary-alt-2: #fefcf6;
+
+  // Button
+  --color-button-alt-bg: var(--color-gray-1);
+  --color-button-alt-bg-hover: var(--color-gray-2);
+  --color-button-alt-text: black;
   --color-navigation-icon: var(--color-gray-5);
   --color-link-active: var(--color-primary);
   --color-navigation-link: var(--color-gray-5);
@@ -8,22 +20,45 @@
   --color-navigation-hover-text: #3f3f3f;
   --color-link-focus-bg: #f1f1f1;
 
-  --color-header-button: var(--color-button-alt-bg);
+  --color-link: var(--color-primary);
+  --color-button-primary-bg: var(--color-primary);
+  --color-button-primary-bg-hover: var(--color-primary-alt-2);
+  --color-button-primary-text: var(--color-primary-alt);
+  --color-button-primary-hover-text: var(--color-white);
+  --color-button-secondary-bg: var(--color-primary-alt);
+  --color-button-secondary-border: var(--color-primary-alt-3);
+  --color-button-secondary-text: var(--color-primary);
+  --color-button-secondary-bg-hover: var(--color-primary-alt-3);
+  --color-button-toggle-text: var(--color-primary);
+  --color-button-toggle-bg: var(--color-primary-alt);
+  --color-button-toggle-bg-hover: var(--color-primary-alt);
   --color-button-border: var(--color-gray-3);
+  --color-button-toggle-text: var(--color-primary);
+  --color-button-toggle-bg: var(--color-primary-alt);
+  --color-button-toggle-bg-hover: var(--color-primary-alt);
+  --color-header-button: var(--color-button-alt-bg);
+
+  // Input
+  --color-input-bg-selected: var(--color-primary-alt);
+  --color-input-toggle: var(--color-primary);
+  --color-input-toggle-bg: var(--color-secondary-alt-2);
+  --color-input-toggle-bg-hover: var(--color-primary-alt-3);
 
   // Color
   --color-background: #fafafa;
+  --color-focus: #8dbff0;
+
   --color-background--splash: #212529;
   --color-border: #ededed;
   --color-background-overlay: #21252980;
-  --color-nag: #f26522;
+  --color-nag: #fa8700;
   --color-error: #fcafca;
   --color-comment-menu: #e0e0e0;
   --color-comment-menu-hovering: #6a6a6a;
   --color-notice: #fef3ca;
   --color-purchased: var(--color-cost);
   --color-purchased-alt: #ffebc2;
-  --color-purchased-text: var(--color-gray-5);
+  --color-purchased-text: black;
   --color-comment-highlighted: #fff2d9;
   --color-comment-threadline: var(--color-gray-1);
   --color-comment-threadline-hover: var(--color-gray-4);
@@ -38,8 +73,9 @@
   --color-view-icon: var(--color-secondary);
 
   // Text
-  --color-text-selection-bg: var(--color-secondary-alt);
-  --color-text-selection: var(--color-secondary);
+  --color-text-selection-bg: var(--color-primary-alt);
+  --color-text-selection: var(--color-primary);
+
   --color-text-error: var(--color-danger);
   --color-text-empty: #999999;
   --color-text-help: #999999;
@@ -58,7 +94,7 @@
   --color-placeholder-background: #f0f0f0;
   --color-header-background: #ffffff;
   --color-card-background: #ffffff;
-  --color-card-background-highlighted: #f1f7fe;
+  --color-card-background-highlighted: #fff5f5;
   --color-list-header: #fff;
   --color-file-viewer-background: var(--color-card-background);
   --color-tabs-background: var(--color-card-background);
@@ -67,17 +103,17 @@
 
   // Menu
   --color-menu-background: var(--color-header-background);
-  --color-menu-background--selected: var(--color-secondary-alt);
-  --color-menu-background--active: #f0f7ff;
   --color-menu-icon: var(--color-navigation-link);
   --color-menu-icon-active: var(--color-navigation-link);
+  --color-menu-background--selected: var(--color-secondary-alt);
+  --color-menu-background--active: var(--color-primary-alt);
 
   // Search
   --color-search-suggestion: #212529;
   --color-search-suggestion-background: #cce6fb;
 
   // Snack
-  --color-snack-bg: var(--color-primary);
+  --color-snack-bg: var(--color-success);
   --color-snack: var(--color-white);
   --color-snack-bg-error: var(--color-danger);
   --color-snack-upgrade: var(--color-tertiary);
@@ -97,6 +133,12 @@
   --color-editor-url: var(--color-editor-string);
   --color-editor-hr: var(--color-editor-tag);
   --color-editor-hr-preview: #cccccc;
+
+  // Tag
+  --color-tag: var(--color-primary-alt-2);
+  --color-tag-bg: #f9f6f7;
+  --color-tag-hover: var(--color-button-alt-text);
+  --color-tag-bg-hover: var(--color-button-alt-bg-hover);
 
   // Ads
   --color-ads-background: #fae5ff;
