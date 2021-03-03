@@ -352,7 +352,7 @@ function App(props: Props) {
   // @endif
 
   if (syncFatalError) {
-    return <SyncFatalError />;
+    return <SyncFatalError lbryTvApiStatus={lbryTvApiStatus} />;
   }
 
   return (
