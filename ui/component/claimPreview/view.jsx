@@ -127,6 +127,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   const abandoned = !isResolvingUri && !claim;
   const shouldHideActions = hideActions || type === 'small' || type === 'tooltip';
   const canonicalUrl = claim && claim.canonical_url;
+
   let isValid = false;
   if (uri) {
     try {
@@ -277,7 +278,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                     </div>
                   )}
                   {/* @endif */}
-                  {!isRepost && !isChannelUri && (
+                  {!isRepost && !isChannelUri && !isLivestream && (
                     <div className="claim-preview__file-property-overlay">
                       <FileProperties uri={contentUri} small />
                     </div>

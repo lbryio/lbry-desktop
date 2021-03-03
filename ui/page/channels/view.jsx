@@ -109,7 +109,7 @@ export default function ChannelsPage(props: Props) {
                 subtitle={__("You haven't created a channel yet. All of your beautiful channels will be listed here!")}
                 actions={
                   <div className="section__actions">
-                    <Button button="primary" label={__('New Channel')} navigate={`/$/${PAGES.CHANNEL_NEW}`} />
+                    <Button button="primary" label={__('Create Channel')} navigate={`/$/${PAGES.CHANNEL_NEW}`} />
                   </div>
                 }
               />
