@@ -73,6 +73,8 @@ function VideoViewer(props: Props) {
   const claimId = claim && claim.claim_id;
   const isAudio = contentType.includes('audio');
   const forcePlayer = FORCE_CONTENT_TYPE_PLAYER.includes(contentType);
+  const previousUri = usePrevious(uri);
+  const embedded = useContext(EmbedContext);
   const [isPlaying, setIsPlaying] = useState(false);
   const [showAutoplayCountdown, setShowAutoplayCountdown] = useState(false);
   const [isEndededEmbed, setIsEndededEmbed] = useState(false);
@@ -81,9 +83,6 @@ function VideoViewer(props: Props) {
   /* isLoading was designed to show loading screen on first play press, rather than completely black screen, but
   breaks because some browsers (e.g. Firefox) block autoplay but leave the player.play Promise pending */
   const [isLoading, setIsLoading] = useState(false);
-
-  const previousUri = usePrevious(uri);
-  const embedded = useContext(EmbedContext);
 
   // force everything to recent when URI changes, can cause weird corner cases otherwise (e.g. navigate while autoplay is true)
   useEffect(() => {

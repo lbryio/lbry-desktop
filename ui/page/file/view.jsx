@@ -1,4 +1,6 @@
 // @flow
+import { LIVE_STREAM_CHANNEL_CLAIM_ID, LIVE_STREAM_TAG } from 'constants/livestream';
+import * as PAGES from 'constants/pages';
 import * as React from 'react';
 import classnames from 'classnames';
 import Page from 'component/page';
@@ -10,6 +12,9 @@ import FileRenderDownload from 'component/fileRenderDownload';
 import RecommendedContent from 'component/recommendedContent';
 import CommentsList from 'component/commentsList';
 import PostViewer from 'component/postViewer';
+import { Redirect } from 'react-router';
+import Button from 'component/button';
+import I18nMessage from 'component/i18nMessage';
 import Empty from 'component/common/empty';
 
 export const PRIMARY_PLAYER_WRAPPER_CLASS = 'file-page__video-container';
@@ -27,6 +32,8 @@ type Props = {
   linkedComment: any,
   setPrimaryUri: (?string) => void,
   videoTheaterMode: boolean,
+  claim: ?Claim,
+  claimIsMine: boolean,
   commentsDisabled: boolean,
 };
 
@@ -44,11 +51,19 @@ function FilePage(props: Props) {
     linkedComment,
     setPrimaryUri,
     videoTheaterMode,
+    claim,
+    claimIsMine,
     commentsDisabled,
   } = props;
   const cost = costInfo ? costInfo.cost : null;
   const hasFileInfo = fileInfo !== undefined;
   const isMarkdown = renderMode === RENDER_MODES.MARKDOWN;
+  const isLivestream =
+    claim &&
+    claim.signing_channel &&
+    claim.signing_channel.claim_id === LIVE_STREAM_CHANNEL_CLAIM_ID &&
+    claim.value.tags &&
+    claim.value.tags.includes(LIVE_STREAM_TAG);
 
   React.useEffect(() => {
     // always refresh file info when entering file page to see if we have the file
@@ -113,6 +128,10 @@ function FilePage(props: Props) {
     );
   }
 
+  if (!claimIsMine && isLivestream) {
+    return <Redirect to={`/$/${PAGES.LIVESTREAM}`} />;
+  }
+
   if (obscureNsfw && isMature) {
     return (
       <Page>
@@ -129,6 +148,18 @@ function FilePage(props: Props) {
         {!isMarkdown && (
           <div className="file-page__secondary-content">
             <div>
+              {claimIsMine && isLivestream && (
+                <div className="livestream__creator-message">
+                  <h4>{__('Only visible to you')}</h4>
+                  <I18nMessage>
+                    People who view this link will be redirected to your livestream. Make sure to use this for sharing
+                    so your title and thumbnail are displayed properly.
+                  </I18nMessage>
+                  <div className="section__actions">
+                    <Button button="primary" navigate={`/$/${PAGES.LIVESTREAM}`} label={__('View livestream')} />
+                  </div>
+                </div>
+              )}
               {RENDER_MODES.FLOATING_MODES.includes(renderMode) && <FileTitleSection uri={uri} />}
               {commentsDisabled && <Empty text={__('The creator of this content has disabled comments.')} />}
               {!commentsDisabled && <CommentsList uri={uri} linkedComment={linkedComment} />}
