@@ -33,7 +33,7 @@ const RewardTile = (props: Props) => {
 
   return (
     <Card
-      title={reward.reward_title}
+      title={__(reward.reward_title)}
       subtitle={<LbcMessage>{reward.reward_description}</LbcMessage>}
       actions={
         <div className="section__actions">
@@ -53,7 +53,7 @@ const RewardTile = (props: Props) => {
               />
             </>
           )}
-          {!customActionsRewards.some(i => i === reward.reward_type) &&
+          {!customActionsRewards.some((i) => i === reward.reward_type) &&
             (claimed ? (
               <span>
                 <Icon icon={ICONS.COMPLETED} /> {__('Reward claimed.')}

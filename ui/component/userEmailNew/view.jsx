@@ -1,6 +1,6 @@
 // @flow
 import * as PAGES from 'constants/pages';
-import { SITE_NAME } from 'config';
+import { SITE_NAME, DOMAIN } from 'config';
 import React, { useState } from 'react';
 import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
@@ -17,10 +17,10 @@ type Props = {
   emailExists: boolean,
   isPending: boolean,
   syncEnabled: boolean,
-  setSync: boolean => void,
+  setSync: (boolean) => void,
   balance: number,
   daemonSettings: { share_usage_data: boolean },
-  setShareDiagnosticData: boolean => void,
+  setShareDiagnosticData: (boolean) => void,
   doSignUp: (string, ?string) => Promise<any>,
   clearEmailEntry: () => void,
   interestedInYoutubSync: boolean,
@@ -95,7 +95,7 @@ function UserEmailNew(props: Props) {
       <Card
         title={__('Join %SITE_NAME%', { SITE_NAME })}
         // @if TARGET='app'
-        subtitle={__('An account with lbry.tv allows you to earn rewards and backup your data.')}
+        subtitle={__('An account with %domain% allows you to earn rewards and backup your data.', { domain: DOMAIN })}
         // @endif
         actions={
           <div>
@@ -107,14 +107,14 @@ function UserEmailNew(props: Props) {
                 name="sign_up_email"
                 label={__('Email')}
                 value={email}
-                onChange={e => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <FormField
                 type="password"
                 name="sign_in_password"
                 label={__('Password')}
                 value={password}
-                onChange={e => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
               />
 
               {/* @if TARGET='web' */}
