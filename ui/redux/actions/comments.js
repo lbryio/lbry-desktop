@@ -544,7 +544,6 @@ export function doFetchModBlockedList() {
             const blockListForChannel = channelBlockListData && channelBlockListData.blocked_channels;
             if (blockListForChannel) {
               blockListForChannel.forEach((blockedChannel) => {
-                // REMOVE THIS
                 if (blockedChannel.blocked_channel_name) {
                   const channelUri = buildURI({
                     channelName: blockedChannel.blocked_channel_name,
@@ -568,7 +567,7 @@ export function doFetchModBlockedList() {
           },
         });
       })
-      .catch((err) => {
+      .catch(() => {
         dispatch({
           type: ACTIONS.COMMENT_MODERATION_BLOCK_LIST_FAILED,
         });

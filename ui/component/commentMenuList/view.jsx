@@ -107,7 +107,7 @@ function CommentMenuList(props: Props) {
             {__('Block')}
           </div>
           {activeChannelIsCreator && (
-            <span className="comment__menu-help">Prevent this channel from interacting with you.</span>
+            <span className="comment__menu-help">{__('Prevent this channel from interacting with you.')}</span>
           )}
         </MenuItem>
       )}
@@ -118,7 +118,9 @@ function CommentMenuList(props: Props) {
             <Icon aria-hidden icon={ICONS.MUTE} />
             {__('Mute')}
           </div>
-          {activeChannelIsCreator && <span className="comment__menu-help">Hide this channel for you only.</span>}
+          {activeChannelIsCreator && (
+            <span className="comment__menu-help">{__('Hide this channel for you only.')}</span>
+          )}
         </MenuItem>
       )}
 
