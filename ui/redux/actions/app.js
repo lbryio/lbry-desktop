@@ -55,7 +55,7 @@ import { doAuthenticate } from 'redux/actions/user';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import analytics, { SHARE_INTERNAL } from 'analytics';
 import { doSignOutCleanup } from 'util/saved-passwords';
-import { doSocketConnect } from 'redux/actions/websocket';
+import { doNotificationSocketConnect } from 'redux/actions/websocket';
 import { stringifyServerParam, shouldSetSetting } from 'util/sync-settings';
 
 // @if TARGET='app'
@@ -539,7 +539,7 @@ export function doAnaltyicsPurchaseEvent(fileInfo) {
 
 export function doSignIn() {
   return (dispatch) => {
-    dispatch(doSocketConnect());
+    dispatch(doNotificationSocketConnect());
     dispatch(doNotificationList());
 
     // @if TARGET='web'
