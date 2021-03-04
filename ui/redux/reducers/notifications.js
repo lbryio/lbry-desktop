@@ -55,7 +55,8 @@ export default handleActions(
     },
     [ACTIONS.NOTIFICATION_READ_COMPLETED]: (state, action) => {
       const { notifications } = state;
-      const newNotifications = notifications && notifications.map(notification => ({ ...notification, is_read: true }));
+      const newNotifications =
+        notifications && notifications.map((notification) => ({ ...notification, is_read: true }));
       return {
         ...state,
         notifications: newNotifications,
@@ -69,7 +70,7 @@ export default handleActions(
     [ACTIONS.NOTIFICATION_SEEN_COMPLETED]: (state, action) => {
       const { notifications } = state;
       const { notificationIds } = action.data;
-      const newNotifications = notifications.map(notification => {
+      const newNotifications = notifications.map((notification) => {
         if (notificationIds.includes(notification.id)) {
           return { ...notification, is_seen: true };
         }
@@ -85,7 +86,7 @@ export default handleActions(
     [ACTIONS.NOTIFICATION_DELETE_COMPLETED]: (state, action) => {
       const { notifications } = state;
       const { notificationId } = action.data;
-      const newNotifications = notifications.filter(notification => {
+      const newNotifications = notifications.filter((notification) => {
         return notification.id !== notificationId;
       });
 

@@ -45,7 +45,7 @@ export function doNotificationList() {
   return (dispatch: Dispatch) => {
     dispatch({ type: ACTIONS.NOTIFICATION_LIST_STARTED });
     return Lbryio.call('notification', 'list', { is_app_readable: true })
-      .then(response => {
+      .then((response) => {
         const notifications = response || [];
         const channelsToResolve = notifications
           .filter((notification: WebNotification) => {
@@ -59,7 +59,7 @@ export function doNotificationList() {
               return false;
             }
           })
-          .map(notification => {
+          .map((notification) => {
             if (notification.notification_rule === NOTIFICATIONS.NEW_CONTENT) {
               return notification.notification_parameters.device.target;
             } else {
@@ -70,7 +70,7 @@ export function doNotificationList() {
         dispatch(doResolveUris(channelsToResolve));
         dispatch({ type: ACTIONS.NOTIFICATION_LIST_COMPLETED, data: { notifications } });
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch({ type: ACTIONS.NOTIFICATION_LIST_FAILED, data: { error } });
       });
   };
@@ -83,8 +83,8 @@ export function doReadNotifications() {
     const unreadNotifications =
       notifications &&
       notifications
-        .filter(notification => !notification.is_read)
-        .map(notification => notification.id)
+        .filter((notification) => !notification.is_read)
+        .map((notification) => notification.id)
         .join(',');
 
     dispatch({ type: ACTIONS.NOTIFICATION_READ_STARTED });
@@ -92,7 +92,7 @@ export function doReadNotifications() {
       .then(() => {
         dispatch({ type: ACTIONS.NOTIFICATION_READ_COMPLETED });
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch({ type: ACTIONS.NOTIFICATION_READ_FAILED, data: { error } });
       });
   };
@@ -110,7 +110,7 @@ export function doSeeNotifications(notificationIds: Array<string>) {
           },
         });
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch({ type: ACTIONS.NOTIFICATION_SEEN_FAILED, data: { error } });
       });
   };
@@ -121,7 +121,8 @@ export function doSeeAllNotifications() {
     const state = getState();
     const notifications = selectNotifications(state);
     const unSeenNotifications =
-      notifications && notifications.filter(notification => !notification.is_seen).map(notification => notification.id);
+      notifications &&
+      notifications.filter((notification) => !notification.is_seen).map((notification) => notification.id);
 
     dispatch(doSeeNotifications(unSeenNotifications));
   };
