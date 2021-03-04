@@ -21,6 +21,7 @@ const config = {
   SITE_TITLE: process.env.SITE_TITLE,
   SITE_NAME: process.env.SITE_NAME,
   SITE_DESCRIPTION: process.env.SITE_DESCRIPTION,
+  SITE_HELP_EMAIL: process.env.SITE_HELP_EMAIL,
   LOGO_TITLE: process.env.LOGO_TITLE,
   OG_TITLE_SUFFIX: process.env.OG_TITLE_SUFFIX,
   OG_HOMEPAGE_TITLE: process.env.OG_HOMEPAGE_TITLE,

@@ -4,6 +4,7 @@ import React from 'react';
 import Button from 'component/button';
 import Yrbl from 'component/yrbl';
 import { STATUS_DEGRADED, STATUS_FAILING, STATUS_DOWN } from 'web/effects/use-degraded-performance';
+import { SITE_HELP_EMAIL } from 'config';
 
 type Props = {
   lbryTvApiStatus: string,
@@ -24,7 +25,9 @@ export default function SyncFatalError(props: Props) {
           <p>
             {downTime
               ? __("We're currently upgrading or rebooting our services, please try refreshing in a few minutes.")
-              : __("Try refreshing to fix the issue. If that doesn't work, email help@odysee.com for support.")}
+              : __("Try refreshing to fix the issue. If that doesn't work, email %SITE_HELP_EMAIL% for support.", {
+                  SITE_HELP_EMAIL,
+                })}
           </p>
         }
         actions={
