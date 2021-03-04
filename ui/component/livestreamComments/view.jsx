@@ -1,7 +1,6 @@
 // @flow
 import { LIVE_STREAM_CHANNEL_CLAIM_ID } from 'constants/livestream';
 import React from 'react';
-import { Lbry } from 'lbry-redux';
 import classnames from 'classnames';
 import Card from 'component/common/card';
 import Spinner from 'component/spinner';
@@ -14,48 +13,26 @@ type Props = {
   claim: ?StreamClaim,
   activeViewers: number,
   embed?: boolean,
+  doCommentSocketConnect: (string) => void,
+  doCommentList: (string) => void,
+  comments: Array<Comment>,
+  fetchingComments: boolean,
 };
 
 export default function LivestreamFeed(props: Props) {
-  const { claim, uri, embed } = props;
+  const { claim, uri, embed, doCommentSocketConnect, comments, doCommentList, fetchingComments } = props;
   const commentsRef = React.createRef();
   const hasScrolledComments = React.useRef();
-  const [fetchingComments, setFetchingComments] = React.useState(true);
   const [performedInitialScroll, setPerformedInitialScroll] = React.useState(false);
-  const [comments, setComments] = React.useState([]);
   const claimId = claim && claim.claim_id;
   const commentsLength = comments && comments.length;
 
   React.useEffect(() => {
-    function fetchComments() {
-      Lbry.comment_list({
-        claim_id: claimId,
-        page: 1,
-        page_size: 200,
-        include_replies: false,
-        skip_validation: true,
-      }).then((response) => {
-        setFetchingComments(false);
-        const comments = response.items;
-        if (comments) {
-          setComments(comments);
-        }
-      });
-    }
-
-    let interval;
     if (claimId) {
-      interval = setInterval(() => {
-        fetchComments();
-      }, 5000);
+      doCommentList(uri);
+      doCommentSocketConnect(claimId);
     }
-
-    return () => {
-      if (interval) {
-        clearInterval(interval);
-      }
-    };
-  }, [claimId]);
+  }, [claimId, uri]);
 
   React.useEffect(() => {
     const element = commentsRef.current;
@@ -144,23 +121,7 @@ export default function LivestreamFeed(props: Props) {
           </div>
 
           <div className="livestream__comment-create">
-            <CommentCreate
-              livestream
-              bottom
-              embed={embed}
-              uri={uri}
-              onSubmit={(commentValue, channel) => {
-                const commentsWithStub = comments.slice();
-                commentsWithStub.unshift({
-                  comment: commentValue,
-                  channel_name: channel,
-                  timestamp: Date.now() / 1000,
-                  comment_id: Math.random(),
-                });
-
-                setComments(commentsWithStub);
-              }}
-            />
+            <CommentCreate livestream bottom embed={embed} uri={uri} />
           </div>
         </>
       }
