@@ -176,7 +176,7 @@ const Header = (props: Props) => {
           : __('Your Wallet')
       }
       navigate={`/$/${PAGES.WALLET}`}
-      className={balanceButtonProps.className}
+      className={classnames(balanceButtonProps.className, 'header__navigation-item--balance')}
       label={hideBalance || Number(roundedBalance) === 0 ? __('Your Wallet') : roundedBalance}
       icon={ICONS.LBC}
       // @if TARGET='app'
@@ -212,7 +212,7 @@ const Header = (props: Props) => {
             />
             {backTitle && <h1 className="header__auth-title">{isMobile ? simpleBackTitle || backTitle : backTitle}</h1>}
             {authenticated || !IS_WEB ? (
-              <BalanceButton className="header__navigation-item menu__title header__navigation-item--balance" />
+              <BalanceButton className="header__navigation-item menu__title" />
             ) : (
               loginButtons
             )}
@@ -275,10 +275,6 @@ const Header = (props: Props) => {
                     history={history}
                     handleThemeToggle={handleThemeToggle}
                     currentTheme={currentTheme}
-                    activeChannelUrl={activeChannelUrl}
-                    openSignOutModal={openSignOutModal}
-                    email={email}
-                    signOut={signOut}
                   />
                 </div>
               )}
@@ -287,10 +283,77 @@ const Header = (props: Props) => {
             {!authHeader && !backout ? (
               <div className={classnames('header__menu', { 'header__menu--with-balance': !IS_WEB || authenticated })}>
                 {(!IS_WEB || authenticated) && (
-                  <BalanceButton className="header__navigation-item menu__title header__navigation-item--balance mobile-hidden" />
+                  <BalanceButton className="header__navigation-item menu__title mobile-hidden" />
                 )}
 
                 {IS_WEB && !authenticated && loginButtons}
+
+                {(authenticated || !IS_WEB) && (
+                  <Menu>
+                    <MenuButton
+                      aria-label={__('Your account')}
+                      title={__('Your account')}
+                      className={classnames('header__navigation-item', {
+                        'menu__title header__navigation-item--icon': !activeChannelUrl,
+                        'header__navigation-item--profile-pic': activeChannelUrl,
+                      })}
+                      // @if TARGET='app'
+                      onDoubleClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                      // @endif
+                    >
+                      {activeChannelUrl ? (
+                        <ChannelThumbnail uri={activeChannelUrl} />
+                      ) : (
+                        <Icon size={18} icon={ICONS.ACCOUNT} aria-hidden />
+                      )}
+                    </MenuButton>
+                    <MenuList className="menu__list--header">
+                      <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.UPLOADS}`)}>
+                        <Icon aria-hidden icon={ICONS.PUBLISH} />
+                        {__('Uploads')}
+                      </MenuItem>
+                      <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.CHANNELS}`)}>
+                        <Icon aria-hidden icon={ICONS.CHANNEL} />
+                        {__('Channels')}
+                      </MenuItem>
+                      <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.CREATOR_DASHBOARD}`)}>
+                        <Icon aria-hidden icon={ICONS.ANALYTICS} />
+                        {__('Creator Analytics')}
+                      </MenuItem>
+                      <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.REWARDS}`)}>
+                        <Icon aria-hidden icon={ICONS.REWARDS} />
+                        {__('Rewards')}
+                      </MenuItem>
+                      <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.INVITE}`)}>
+                        <Icon aria-hidden icon={ICONS.INVITE} />
+                        {__('Invites')}
+                      </MenuItem>
+
+                      {authenticated ? (
+                        <MenuItem onSelect={IS_WEB ? signOut : openSignOutModal}>
+                          <div className="menu__link">
+                            <Icon aria-hidden icon={ICONS.SIGN_OUT} />
+                            {__('Sign Out')}
+                          </div>
+                          <span className="menu__link-help">{email}</span>
+                        </MenuItem>
+                      ) : !IS_WEB ? (
+                        <>
+                          <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.AUTH}`)}>
+                            <Icon aria-hidden icon={ICONS.SIGN_UP} />
+                            {__('Sign Up')}
+                          </MenuItem>
+                          <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.AUTH_SIGNIN}`)}>
+                            <Icon aria-hidden icon={ICONS.SIGN_IN} />
+                            {__('Sign In')}
+                          </MenuItem>
+                        </>
+                      ) : null}
+                    </MenuList>
+                  </Menu>
+                )}
               </div>
             ) : (
               !isVerifyPage &&
@@ -328,24 +391,10 @@ type HeaderMenuButtonProps = {
   history: { push: (string) => void },
   handleThemeToggle: (string) => void,
   currentTheme: string,
-  activeChannelUrl: ?string,
-  openSignOutModal: () => void,
-  email: ?string,
-  signOut: () => void,
 };
 
 function HeaderMenuButtons(props: HeaderMenuButtonProps) {
-  const {
-    authenticated,
-    notificationsEnabled,
-    history,
-    handleThemeToggle,
-    currentTheme,
-    activeChannelUrl,
-    openSignOutModal,
-    email,
-    signOut,
-  } = props;
+  const { authenticated, notificationsEnabled, history, handleThemeToggle, currentTheme } = props;
 
   return (
     <div className="header__buttons">
@@ -407,73 +456,6 @@ function HeaderMenuButtons(props: HeaderMenuButtonProps) {
           </MenuItem>
         </MenuList>
       </Menu>
-
-      {(authenticated || !IS_WEB) && (
-        <Menu>
-          <MenuButton
-            aria-label={__('Your account')}
-            title={__('Your account')}
-            className={classnames('header__navigation-item mobile-hidden', {
-              'menu__title header__navigation-item--icon': !activeChannelUrl,
-              'header__navigation-item--profile-pic': activeChannelUrl,
-            })}
-            // @if TARGET='app'
-            onDoubleClick={(e) => {
-              e.stopPropagation();
-            }}
-            // @endif
-          >
-            {activeChannelUrl ? (
-              <ChannelThumbnail uri={activeChannelUrl} />
-            ) : (
-              <Icon size={18} icon={ICONS.ACCOUNT} aria-hidden />
-            )}
-          </MenuButton>
-          <MenuList className="menu__list--header">
-            <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.UPLOADS}`)}>
-              <Icon aria-hidden icon={ICONS.PUBLISH} />
-              {__('Uploads')}
-            </MenuItem>
-            <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.CHANNELS}`)}>
-              <Icon aria-hidden icon={ICONS.CHANNEL} />
-              {__('Channels')}
-            </MenuItem>
-            <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.CREATOR_DASHBOARD}`)}>
-              <Icon aria-hidden icon={ICONS.ANALYTICS} />
-              {__('Creator Analytics')}
-            </MenuItem>
-            <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.REWARDS}`)}>
-              <Icon aria-hidden icon={ICONS.REWARDS} />
-              {__('Rewards')}
-            </MenuItem>
-            <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.INVITE}`)}>
-              <Icon aria-hidden icon={ICONS.INVITE} />
-              {__('Invites')}
-            </MenuItem>
-
-            {authenticated ? (
-              <MenuItem onSelect={IS_WEB ? signOut : openSignOutModal}>
-                <div className="menu__link">
-                  <Icon aria-hidden icon={ICONS.SIGN_OUT} />
-                  {__('Sign Out')}
-                </div>
-                <span className="menu__link-help">{email}</span>
-              </MenuItem>
-            ) : !IS_WEB ? (
-              <>
-                <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.AUTH}`)}>
-                  <Icon aria-hidden icon={ICONS.SIGN_UP} />
-                  {__('Sign Up')}
-                </MenuItem>
-                <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.AUTH_SIGNIN}`)}>
-                  <Icon aria-hidden icon={ICONS.SIGN_IN} />
-                  {__('Sign In')}
-                </MenuItem>
-              </>
-            ) : null}
-          </MenuList>
-        </Menu>
-      )}
     </div>
   );
 }

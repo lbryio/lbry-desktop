@@ -6,10 +6,10 @@ import ClaimList from 'component/claimList';
 import Page from 'component/page';
 import Spinner from 'component/spinner';
 import Button from 'component/button';
-import usePrevious from 'effects/use-previous';
 import usePersistedState from 'effects/use-persisted-state';
 import ChannelBlockButton from 'component/channelBlockButton';
 import ChannelMuteButton from 'component/channelMuteButton';
+import Yrbl from 'component/yrbl';
 
 type Props = {
   mutedUris: ?Array<string>,
@@ -22,27 +22,19 @@ const VIEW_MUTED = 'muted';
 
 function ListBlocked(props: Props) {
   const { mutedUris, blockedUris, fetchingModerationBlockList } = props;
-
   const [viewMode, setViewMode] = usePersistedState('blocked-muted:display', VIEW_BLOCKED);
-  const [loading, setLoading] = React.useState(!blockedUris || !blockedUris.length);
 
   // Keep a local list to allow for undoing actions in this component
   const [localBlockedList, setLocalBlockedList] = React.useState(undefined);
   const [localMutedList, setLocalMutedList] = React.useState(undefined);
 
-  const previousFetchingModBlockList = usePrevious(fetchingModerationBlockList);
   const hasLocalMuteList = localMutedList && localMutedList.length > 0;
   const hasLocalBlockList = localBlockedList && localBlockedList.length > 0;
   const stringifiedMutedChannels = JSON.stringify(mutedUris);
   const justMuted = localMutedList && mutedUris && localMutedList.length < mutedUris.length;
   const justBlocked = localBlockedList && blockedUris && localBlockedList.length < blockedUris.length;
   const stringifiedBlockedChannels = JSON.stringify(blockedUris);
-
-  React.useEffect(() => {
-    if (previousFetchingModBlockList && !fetchingModerationBlockList) {
-      setLoading(false);
-    }
-  }, [setLoading, previousFetchingModBlockList, fetchingModerationBlockList]);
+  const showUris = (viewMode === VIEW_MUTED && hasLocalMuteList) || (viewMode === VIEW_BLOCKED && hasLocalBlockList);
 
   React.useEffect(() => {
     const jsonMutedChannels = stringifiedMutedChannels && JSON.parse(stringifiedMutedChannels);
@@ -70,15 +62,22 @@ function ListBlocked(props: Props) {
     }
   }, [stringifiedBlockedChannels, justBlocked, setLocalBlockedList]);
 
+  const mutedHelpText = __(
+    'Muted channels will be invisible to you in the app. They will not know they are muted and can still interact with you and your content.'
+  );
+  const blockedHelpText = __(
+    "Blocked channels will be invisible to you in the app. They will not be able to comment on your content, or reply to you comments left on other channels' content."
+  );
+
   return (
     <Page>
-      {loading && (
+      {fetchingModerationBlockList && (
         <div className="main--empty">
           <Spinner />
         </div>
       )}
 
-      {!loading && (
+      {!fetchingModerationBlockList && (
         <>
           <div className="section__header--actions">
             <div className="section__actions--inline">
@@ -102,38 +101,50 @@ function ListBlocked(props: Props) {
               />
             </div>
           </div>
-          <div className="help--notice">
-            {viewMode === VIEW_MUTED
-              ? __(
-                  'Muted channels will be invisible to you in the app. They will not know they are muted and can still interact with you and your content.'
-                )
-              : __(
-                  "Blocked channels will be invisible to you in the app. They will not be able to comment on your content, or reply to you comments left on other channels' content."
-                )}
-          </div>
-          <ClaimList
-            uris={viewMode === VIEW_MUTED ? localMutedList : localBlockedList}
-            showUnresolvedClaims
-            showHiddenByUser
-            hideMenu
-            renderActions={(claim) => {
-              return (
-                <div className="section__actions">
-                  {viewMode === VIEW_MUTED ? (
-                    <>
-                      <ChannelMuteButton uri={claim.permanent_url} />
-                      <ChannelBlockButton uri={claim.permanent_url} />
-                    </>
-                  ) : (
-                    <>
-                      <ChannelBlockButton uri={claim.permanent_url} />
-                      <ChannelMuteButton uri={claim.permanent_url} />
-                    </>
-                  )}
-                </div>
-              );
-            }}
-          />
+
+          {showUris && <div className="help--notice">{viewMode === VIEW_MUTED ? mutedHelpText : blockedHelpText}</div>}
+
+          {showUris ? (
+            <ClaimList
+              uris={viewMode === VIEW_MUTED ? localMutedList : localBlockedList}
+              showUnresolvedClaims
+              showHiddenByUser
+              hideMenu
+              renderActions={(claim) => {
+                return (
+                  <div className="section__actions">
+                    {viewMode === VIEW_MUTED ? (
+                      <>
+                        <ChannelMuteButton uri={claim.permanent_url} />
+                        <ChannelBlockButton uri={claim.permanent_url} />
+                      </>
+                    ) : (
+                      <>
+                        <ChannelBlockButton uri={claim.permanent_url} />
+                        <ChannelMuteButton uri={claim.permanent_url} />
+                      </>
+                    )}
+                  </div>
+                );
+              }}
+            />
+          ) : (
+            <div className="main--empty">
+              <Yrbl
+                title={
+                  viewMode === VIEW_MUTED
+                    ? __('You do not have any muted channels')
+                    : __('You do not have any blocked channels')
+                }
+                subtitle={viewMode === VIEW_MUTED ? mutedHelpText : blockedHelpText}
+                actions={
+                  <div className="section__actions">
+                    <Button button="primary" label={__('Go Home')} navigate="/" />
+                  </div>
+                }
+              />
+            </div>
+          )}
         </>
       )}
     </Page>

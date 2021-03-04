@@ -1589,5 +1589,9 @@
   "Interacting as %channelName%": "Interacting as %channelName%",
   "Page Not Found": "Page Not Found",
   "Transaction limit reached. Try reducing the Description length.": "Transaction limit reached. Try reducing the Description length.",
+  "You do not have any muted channels": "You do not have any muted channels",
+  "You do not have any blocked channels": "You do not have any blocked channels",
+  "Blocked channels will be invisible to you in the app. They will not be able to comment on your content, or reply to you comments left on other channels' content.": "Blocked channels will be invisible to you in the app. They will not be able to comment on your content, or reply to you comments left on other channels' content.",
+  "Muted channels will be invisible to you in the app. They will not know they are muted and can still interact with you and your content.": "Muted channels will be invisible to you in the app. They will not know they are muted and can still interact with you and your content.",
   "--end--": "--end--"
 }

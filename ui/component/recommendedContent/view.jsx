@@ -58,6 +58,7 @@ export default function RecommendedContent(props: Props) {
           type="small"
           loading={isSearching}
           uris={recommendedContent}
+          hideMenu={isMobile}
           injectedItem={
             SHOW_ADS && IS_WEB ? (
               SIMPLE_SITE ? (

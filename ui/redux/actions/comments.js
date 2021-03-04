@@ -561,9 +561,12 @@ export function doFetchModBlockedList() {
         dispatch({
           type: ACTIONS.COMMENT_MODERATION_BLOCK_LIST_COMPLETED,
           data: {
-            blockList: globalBlockList
-              .sort((a, b) => new Date(a.blockedAt) - new Date(b.blockedAt))
-              .map((blockedChannel) => blockedChannel.channelUri),
+            blockList:
+              globalBlockList.length > 0
+                ? globalBlockList
+                    .sort((a, b) => new Date(a.blockedAt) - new Date(b.blockedAt))
+                    .map((blockedChannel) => blockedChannel.channelUri)
+                : null,
           },
         });
       })
