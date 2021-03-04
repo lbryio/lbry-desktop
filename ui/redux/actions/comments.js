@@ -202,7 +202,7 @@ export function doCommentCreate(
   claim_id: string = '',
   parent_id?: string,
   uri: string,
-  checkBannedWords: boolean = false
+  livestream: boolean = false
 ) {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
@@ -217,7 +217,7 @@ export function doCommentCreate(
       type: ACTIONS.COMMENT_CREATE_STARTED,
     });
 
-    if (checkBannedWords) {
+    if (livestream) {
       const strippedCommentText = comment.trim().toLowerCase().replace(/\s/g, '');
       for (var i = 0; i < BANNED_LIVESTREAM_WORDS.length; i++) {
         const bannedWord = BANNED_LIVESTREAM_WORDS[i];
@@ -256,6 +256,7 @@ export function doCommentCreate(
           type: ACTIONS.COMMENT_CREATE_COMPLETED,
           data: {
             uri,
+            livestream,
             comment: result,
             claimId: claim_id,
           },
