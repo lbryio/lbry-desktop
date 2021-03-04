@@ -12,7 +12,7 @@ import { useHistory } from 'react-router';
 import type { ElementRef } from 'react';
 import emoji from 'emoji-dictionary';
 
-const COMMENT_SLOW_MODE_SECONDS = 0;
+const COMMENT_SLOW_MODE_SECONDS = 5;
 
 const LIVESTREAM_EMOJIS = [
   emoji.getUnicode('rocket'),
