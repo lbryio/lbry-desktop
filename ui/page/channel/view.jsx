@@ -48,6 +48,7 @@ type Props = {
   pending: boolean,
   youtubeChannels: ?Array<{ channel_claim_id: string, sync_status: string, transfer_state: string }>,
   blockedChannels: Array<string>,
+  mutedChannels: Array<string>,
 };
 
 function ChannelPage(props: Props) {
@@ -59,13 +60,13 @@ function ChannelPage(props: Props) {
     page,
     channelIsMine,
     isSubscribed,
-    channelIsBlocked,
     blackListedOutpoints,
     fetchSubCount,
     subCount,
     pending,
     youtubeChannels,
     blockedChannels,
+    mutedChannels,
   } = props;
   const {
     push,
@@ -82,6 +83,7 @@ function ChannelPage(props: Props) {
   const claimId = claim.claim_id;
   const formattedSubCount = Number(subCount).toLocaleString();
   const isBlocked = claim && blockedChannels.includes(claim.permanent_url);
+  const isMuted = claim && mutedChannels.includes(claim.permanent_url);
   const isMyYouTubeChannel =
     claim &&
     youtubeChannels &&
@@ -159,25 +161,14 @@ function ChannelPage(props: Props) {
               navigate={`/$/${PAGES.CHANNELS}`}
             />
           )}
-          {!channelIsBlocked && !channelIsBlackListed && <ShareButton uri={uri} />}
-          {!channelIsBlocked && <ClaimSupportButton uri={uri} />}
-          {!channelIsBlocked && (!channelIsBlackListed || isSubscribed) && <SubscribeButton uri={permanentUrl} />}
+          {!channelIsBlackListed && <ShareButton uri={uri} />}
+          {!(isBlocked || isMuted) && <ClaimSupportButton uri={uri} />}
+          {!(isBlocked || isMuted) && (!channelIsBlackListed || isSubscribed) && <SubscribeButton uri={permanentUrl} />}
           <ClaimMenuList uri={claim.permanent_url} inline />
         </div>
-        {cover && (
-          <img
-            className={classnames('channel-cover__custom', { 'channel__image--blurred': channelIsBlocked })}
-            src={cover}
-          />
-        )}
+        {cover && <img className={classnames('channel-cover__custom')} src={cover} />}
         <div className="channel__primary-info">
-          <ChannelThumbnail
-            className="channel__thumbnail--channel-page"
-            uri={uri}
-            obscure={channelIsBlocked}
-            allowGifs
-            hideStakedIndicator
-          />
+          <ChannelThumbnail className="channel__thumbnail--channel-page" uri={uri} allowGifs hideStakedIndicator />
           <h1 className="channel__title">
             {title || '@' + channelName}
             <ChannelStakedIndicator uri={uri} large />
@@ -208,13 +199,19 @@ function ChannelPage(props: Props) {
         <div className="channel-cover__gradient" />
       </header>
 
-      {isBlocked && !viewBlockedChannel ? (
+      {(isBlocked || isMuted) && !viewBlockedChannel ? (
         <div className="main--empty">
           <Yrbl
-            title={__('This channel is blocked')}
-            subtitle={__('Are you sure you want to view this content? Viewing will not unblock @%channel%', {
-              channel: channelName,
-            })}
+            title={isBlocked ? __('This channel is blocked') : __('This channel is muted')}
+            subtitle={
+              isBlocked
+                ? __('Are you sure you want to view this content? Viewing will not unblock @%channel%', {
+                    channel: channelName,
+                  })
+                : __('Are you sure you want to view this content? Viewing will not unmute @%channel%', {
+                    channel: channelName,
+                  })
+            }
             actions={
               <div className="section__actions">
                 <Button button="primary" label={__('View Content')} onClick={() => setViewBlockedChannel(true)} />
@@ -231,11 +228,7 @@ function ChannelPage(props: Props) {
           </TabList>
           <TabPanels>
             <TabPanel>
-              <ChannelContent
-                uri={uri}
-                channelIsBlackListed={channelIsBlackListed}
-                viewBlockedChannel={viewBlockedChannel}
-              />
+              <ChannelContent uri={uri} channelIsBlackListed={channelIsBlackListed} viewHiddenChannels />
             </TabPanel>
             <TabPanel>
               <ChannelAbout uri={uri} />

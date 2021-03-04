@@ -8,11 +8,11 @@ import {
   makeSelectClaimForUri,
   makeSelectClaimIsPending,
 } from 'lbry-redux';
-import { makeSelectChannelIsMuted } from 'redux/selectors/blocked';
 import { selectBlackListedOutpoints, doFetchSubCount, makeSelectSubCountForUri } from 'lbryinc';
 import { selectYoutubeChannels } from 'redux/selectors/user';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
 import { selectModerationBlockList } from 'redux/selectors/comments';
+import { selectMutedChannels } from 'redux/selectors/blocked';
 import { doOpenModal } from 'redux/actions/app';
 import ChannelPage from './view';
 
@@ -24,12 +24,12 @@ const select = (state, props) => ({
   page: selectCurrentChannelPage(state),
   claim: makeSelectClaimForUri(props.uri)(state),
   isSubscribed: makeSelectIsSubscribed(props.uri, true)(state),
-  channelIsBlocked: makeSelectChannelIsMuted(props.uri)(state),
   blackListedOutpoints: selectBlackListedOutpoints(state),
   subCount: makeSelectSubCountForUri(props.uri)(state),
   pending: makeSelectClaimIsPending(props.uri)(state),
   youtubeChannels: selectYoutubeChannels(state),
   blockedChannels: selectModerationBlockList(state),
+  mutedChannels: selectMutedChannels(state),
 });
 
 const perform = (dispatch) => ({
