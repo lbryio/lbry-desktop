@@ -101,35 +101,27 @@
 }
 
 .header__navigation-item--profile-pic {
+  margin-left: var(--spacing-m);
+
   .channel-thumbnail {
     height: var(--height-button);
     width: var(--height-button);
     margin-right: 0;
-    transition: border-radius var(--animation-duration);
-    border-radius: calc(var(--height-button) / 2);
-
-    img {
-      transition: border-radius var(--animation-duration);
-      border-radius: calc(var(--height-button) / 2);
-    }
   }
 
   &:hover {
     opacity: 0.7;
-
-    .channel-thumbnail {
-      border-radius: var(--border-radius);
-
-      img {
-        border-radius: var(--border-radius);
-      }
-    }
   }
 }
 
 .header__navigation-item--balance {
-  @extend .button--link;
-  margin-left: var(--spacing-m);
+  @extend .button--file-action;
+  margin: 0 var(--spacing-s);
+  color: var(--color-text);
+
+  &:hover {
+    color: var(--color-text);
+  }
 }
 
 .header__navigation-item--forward {

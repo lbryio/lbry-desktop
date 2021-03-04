@@ -456,9 +456,8 @@
 
 .claim-tile__title {
   position: relative;
-
   padding: var(--spacing-s);
-  padding-right: var(--spacing-m);
+  padding-right: var(--spacing-l);
   padding-bottom: 0;
   margin-bottom: var(--spacing-s);
 
@@ -474,6 +473,7 @@
 
   @media (min-width: $breakpoint-small) {
     min-height: 2.5rem;
+    padding-right: var(--spacing-m);
   }
 }
 
@@ -601,8 +601,10 @@
     stroke: var(--color-text);
   }
 
-  &:not([aria-expanded='true']) {
-    display: none;
+  @media (min-width: $breakpoint-small) {
+    &:not([aria-expanded='true']) {
+      display: none;
+    }
   }
 }
 
