@@ -83,8 +83,6 @@
   }
 }*/
 
-$accent-color: var(--color-primary);
-
 .video-js {
   font-size: 12px;
   overflow: hidden;
@@ -144,13 +142,13 @@ $accent-color: var(--color-primary);
 
   // Primary Color Progress
   .vjs-slider-bar {
-    background-color: $accent-color;
+    background-color: var(--color-primary);
   }
 
   // Inner Progress Bar
   .vjs-play-progress {
-    background-color: $accent-color;
-    color: $accent-color;
+    background-color: var(--color-primary);
+    color: var(--color-primary);
   }
 
   // Spacer
@@ -186,7 +184,7 @@ $accent-color: var(--color-primary);
 
 // Tooltip
 .vjs-mouse-display .vjs-time-tooltip {
-  color: $accent-color;
+  color: var(--color-primary);
 }
 
 // Tooltip
