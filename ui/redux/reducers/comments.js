@@ -231,7 +231,11 @@ export default handleActions(
 
       if (commentsForId) {
         const newCommentsForId = commentsForId.slice();
-        newCommentsForId.unshift(comment.comment_id);
+        const commentExists = newCommentsForId.includes(comment.comment_id);
+        if (!commentExists) {
+          newCommentsForId.unshift(comment.comment_id);
+        }
+
         topLevelCommentsById[claimId] = newCommentsForId;
       } else {
         topLevelCommentsById[claimId] = [comment.comment_id];
