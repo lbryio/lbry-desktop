@@ -39,8 +39,6 @@ function ClaimTilesDiscover(props: Props) {
     claimSearchByQuery,
     showNsfw,
     hideReposts,
-    blockedUris,
-    mutedUris,
     // Below are options to pass that are forwarded to claim_search
     tags,
     channelIds,
@@ -60,7 +58,6 @@ function ClaimTilesDiscover(props: Props) {
   const urlParams = new URLSearchParams(location.search);
   const feeAmountInUrl = urlParams.get('fee_amount');
   const feeAmountParam = feeAmountInUrl || feeAmount;
-  const mutedAndBlockedChannelIds = Array.from(new Set(mutedUris.concat(blockedUris).map((uri) => uri.split('#')[1])));
   const options: {
     page_size: number,
     no_totals: boolean,
@@ -87,7 +84,7 @@ function ClaimTilesDiscover(props: Props) {
     not_tags: !showNsfw ? MATURE_TAGS : [],
     any_languages: languages,
     channel_ids: channelIds || [],
-    not_channel_ids: mutedAndBlockedChannelIds || [],
+    not_channel_ids: [],
     order_by: orderBy || ['trending_group', 'trending_mixed'],
   };
 
