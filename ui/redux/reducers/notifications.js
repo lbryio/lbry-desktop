@@ -55,8 +55,16 @@ export default handleActions(
     },
     [ACTIONS.NOTIFICATION_READ_COMPLETED]: (state, action) => {
       const { notifications } = state;
+      const { notificationIds } = action.data;
       const newNotifications =
-        notifications && notifications.map((notification) => ({ ...notification, is_read: true }));
+        notifications &&
+        notifications.map((notification) => {
+          if (notificationIds.includes(notification.id)) {
+            return { ...notification, is_read: true };
+          } else {
+            return { ...notification };
+          }
+        });
       return {
         ...state,
         notifications: newNotifications,

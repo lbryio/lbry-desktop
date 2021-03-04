@@ -76,21 +76,27 @@ export function doNotificationList() {
   };
 }
 
-export function doReadNotifications() {
+export function doReadNotifications(notificationsIds: Array<number>) {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const notifications = selectNotifications(state);
-    const unreadNotifications =
-      notifications &&
-      notifications
-        .filter((notification) => !notification.is_read)
-        .map((notification) => notification.id)
-        .join(',');
+    const unreadNotifications = notifications && notifications.filter((notification) => !notification.is_read);
+
+    let ids;
+    if (notificationsIds && Array.isArray(notificationsIds) && notificationsIds.length !== 0) {
+      // Wipe specified notications.
+      ids = unreadNotifications
+        .filter((notification) => notificationsIds.includes(notification.id))
+        .map((notification) => notification.id);
+    } else {
+      // A null or invalid argument will wipe all unread notifications.
+      ids = unreadNotifications.map((notification) => notification.id);
+    }
 
     dispatch({ type: ACTIONS.NOTIFICATION_READ_STARTED });
-    return Lbryio.call('notification', 'edit', { notification_ids: unreadNotifications, is_read: true })
+    return Lbryio.call('notification', 'edit', { notification_ids: ids.join(','), is_read: true })
       .then(() => {
-        dispatch({ type: ACTIONS.NOTIFICATION_READ_COMPLETED });
+        dispatch({ type: ACTIONS.NOTIFICATION_READ_COMPLETED, data: { notificationIds: ids } });
       })
       .catch((error) => {
         dispatch({ type: ACTIONS.NOTIFICATION_READ_FAILED, data: { error } });
