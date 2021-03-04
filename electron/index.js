@@ -46,7 +46,10 @@ let lbryFirst;
 
 const appState = {};
 
-app.setAsDefaultProtocolClient('lbry');
+if (process.platform !== 'linux') {
+  app.setAsDefaultProtocolClient('lbry');
+}
+
 app.name = 'LBRY';
 app.setAppUserModelId('io.lbry.LBRY');
 app.commandLine.appendSwitch('force-color-profile', 'srgb');
