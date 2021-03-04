@@ -50,7 +50,7 @@ export default function CreatorDashboardPage(props: Props) {
 
   function createStreamKey() {
     if (!activeChannelClaim || !sigData.signature || !sigData.signing_ts) return null;
-    return `${activeChannelClaim.claim_id}?sig=${sigData.signature}&ts=${sigData.signing_ts}`;
+    return `${activeChannelClaim.claim_id}?d=${toHex(activeChannelClaim.name)}&s=${sigData.signature}&t=${sigData.signing_ts}`;
   }
 
   /******/
@@ -143,8 +143,10 @@ export default function CreatorDashboardPage(props: Props) {
           {/* Stream Claim(s) */}
           { livestreamClaim ? (
             <div style={{marginTop: 'var(--spacing-l)'}}>
-              <h4>Your LiveStream Claims</h4>
-              <ClaimPreview uri={livestreamClaim.permanent_url} />
+              <h3>Your LiveStream Claims</h3>
+              <ClaimPreview
+                uri={livestreamClaim.permanent_url}
+              />
             </div>
           ) : (
             <div style={{marginTop: 'var(--spacing-l)'}}>
@@ -153,9 +155,57 @@ export default function CreatorDashboardPage(props: Props) {
             </div>
           )}
 
-          {activeChannelClaim &&
-            <div>Public Key: {activeChannelClaim.value.public_key}</div>
-          }
+          {/* Debug Stuff */}
+          { streamKey && (
+            <div style={{marginTop: 'var(--spacing-l)'}}>
+              <h3>Debug Info</h3>
+
+              {/* Channel ID */}
+              <FormField
+                name={'channelId'}
+                label={'Channel ID'}
+                type={'text'}
+                defaultValue={activeChannelClaim.claim_id}
+                readOnly
+              />
+
+              {/* Signature */}
+              <FormField
+                name={'signature'}
+                label={'Signature'}
+                type={'text'}
+                defaultValue={sigData.signature}
+                readOnly
+              />
+
+              {/* Signature TS */}
+              <FormField
+                name={'signaturets'}
+                label={'Signature Timestamp'}
+                type={'text'}
+                defaultValue={sigData.signing_ts}
+                readOnly
+              />
+
+              {/* Hex Data */}
+              <FormField
+                name={'datahex'}
+                label={'Hex Data'}
+                type={'text'}
+                defaultValue={toHex(activeChannelClaim.name)}
+                readOnly
+              />
+
+              {/* Channel Public Key */}
+              <FormField
+                name={'channelpublickey'}
+                label={'Public Key'}
+                type={'text'}
+                defaultValue={activeChannelClaim.value.public_key}
+                readOnly
+              />
+            </div>
+          )}
         </React.Fragment>
       )}
     </Page>
