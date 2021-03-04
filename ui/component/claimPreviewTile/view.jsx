@@ -16,10 +16,6 @@ import FileDownloadLink from 'component/fileDownloadLink';
 import ClaimRepostAuthor from 'component/claimRepostAuthor';
 import ClaimMenuList from 'component/claimMenuList';
 
-// @if TARGET='app'
-import { openClaimPreviewMenu } from 'util/context-menu';
-// @endif
-
 type Props = {
   uri: string,
   claim: ?Claim,
@@ -157,19 +153,10 @@ function ClaimPreviewTile(props: Props) {
     );
   }
 
-  function handleContextMenu(e) {
-    // @if TARGET='app'
-    e.preventDefault();
-    e.stopPropagation();
-    openClaimPreviewMenu(claim, e);
-    // @endif
-  }
-
   return (
     <li
       role="link"
       onClick={handleClick}
-      onContextMenu={handleContextMenu}
       className={classnames('card claim-preview--tile', {
         'claim-preview__wrapper--channel': isChannel,
       })}

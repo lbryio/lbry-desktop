@@ -4,6 +4,7 @@ import React from 'react';
 import classnames from 'classnames';
 import { Menu, MenuButton, MenuList, MenuItem } from '@reach/menu-button';
 import Icon from 'component/common/icon';
+import { convertToShareLink } from 'lbry-redux';
 
 type Props = {
   claim: ?Claim,
@@ -33,7 +34,7 @@ function ClaimMenuList(props: Props) {
       ? claim.permanent_url
       : claim.signing_channel && claim.signing_channel.permanent_url);
 
-  if (!channelUri || claimIsMine) {
+  if (!channelUri || !claim) {
     return null;
   }
 
@@ -47,6 +48,15 @@ function ClaimMenuList(props: Props) {
     } else {
       doCommentModBlock(channelUri);
     }
+  }
+
+  function handleCopyLink() {
+    const shareLink = convertToShareLink(claim.canonical_url || claim.permanent_url);
+    navigator.clipboard.writeText(shareLink);
+  }
+
+  function handleReportContent() {
+    window.open(`https://lbry.com/dmca/${claim.claim_id}`, '_blank', 'noopener');
   }
 
   return (
@@ -76,7 +86,27 @@ function ClaimMenuList(props: Props) {
                 {channelIsMuted ? __('Unmute Channel') : __('Mute Channel')}
               </div>
             </MenuItem>
+
+            <MenuItem className="menu__separator" disabled onSelect={() => {}}>
+              <hr />
+            </MenuItem>
           </>
+        )}
+
+        <MenuItem className="comment__menu-option" onSelect={handleCopyLink}>
+          <div className="menu__link">
+            <Icon aria-hidden icon={ICONS.SHARE} />
+            {__('Copy Link')}
+          </div>
+        </MenuItem>
+
+        {!claimIsMine && (
+          <MenuItem className="comment__menu-option" onSelect={handleReportContent}>
+            <div className="menu__link">
+              <Icon aria-hidden icon={ICONS.REPORT} />
+              {__('Report Content')}
+            </div>
+          </MenuItem>
         )}
       </MenuList>
     </Menu>
