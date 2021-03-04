@@ -29,7 +29,7 @@ type Props = {
   isAuthenticated: boolean,
   showMature: boolean,
   tileLayout: boolean,
-  viewBlockedChannel: boolean,
+  viewHiddenChannels: boolean,
 };
 
 function ChannelContent(props: Props) {
@@ -45,7 +45,7 @@ function ChannelContent(props: Props) {
     defaultInfiniteScroll = true,
     showMature,
     tileLayout,
-    viewBlockedChannel,
+    viewHiddenChannels,
   } = props;
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -122,7 +122,7 @@ function ChannelContent(props: Props) {
 
       {claim && claimsInChannel > 0 ? (
         <ClaimListDiscover
-          showHiddenByUser={viewBlockedChannel}
+          showHiddenByUser={viewHiddenChannels}
           forceShowReposts
           tileLayout={tileLayout}
           uris={searchResults}
