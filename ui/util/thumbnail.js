@@ -1,9 +1,9 @@
 // @flow
 import { THUMBNAIL_CDN_URL } from 'config';
 
-const THUMBNAIL_HEIGHT = 180;
-const THUMBNAIL_WIDTH = 320;
-const THUMBNAIL_QUALITY = 80;
+const THUMBNAIL_HEIGHT = 220;
+const THUMBNAIL_WIDTH = 390;
+const THUMBNAIL_QUALITY = 100;
 
 type Props = {
   thumbnail: ?string,
