@@ -4,9 +4,6 @@ import React, { useEffect, forwardRef } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import classnames from 'classnames';
 import { parseURI } from 'lbry-redux';
-// @if TARGET='app'
-import { openClaimPreviewMenu } from 'util/context-menu';
-// @endif
 import { formatLbryUrlForWeb } from 'util/url';
 import { isEmpty } from 'util/object';
 import FileThumbnail from 'component/fileThumbnail';
@@ -188,14 +185,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   // Make sure this happens after we figure out if this claim needs to be hidden
   const thumbnailUrl = useGetThumbnail(contentUri, claim, streamingUrl, getFile, shouldHide);
 
-  function handleContextMenu(e) {
-    // @if TARGET='app'
-    e.preventDefault();
-    e.stopPropagation();
-    openClaimPreviewMenu(claim, e);
-    // @endif
-  }
-
   function handleOnClick(e) {
     if (onClick) {
       onClick(e);
@@ -250,7 +239,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
       ref={ref}
       role="link"
       onClick={pending || type === 'inline' ? undefined : handleOnClick}
-      onContextMenu={handleContextMenu}
       className={classnames('claim-preview__wrapper', {
         'claim-preview__wrapper--channel': isChannelUri && type !== 'inline',
         'claim-preview__wrapper--inline': type === 'inline',
