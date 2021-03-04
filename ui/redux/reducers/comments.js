@@ -35,7 +35,21 @@ export default handleActions(
     }),
 
     [ACTIONS.COMMENT_CREATE_COMPLETED]: (state: CommentsState, action: any): CommentsState => {
-      const { comment, claimId, uri }: { comment: Comment, claimId: string, uri: string } = action.data;
+      const {
+        comment,
+        claimId,
+        uri,
+        livestream,
+      }: { comment: Comment, claimId: string, uri: string, livestream: boolean } = action.data;
+
+      if (livestream) {
+        return {
+          ...state,
+          isLoading: false,
+          isCommenting: false,
+        };
+      }
+
       const commentById = Object.assign({}, state.commentById);
       const byId = Object.assign({}, state.byId);
       const topLevelCommentsById = Object.assign({}, state.topLevelCommentsById); // was byId {ClaimId -> [commentIds...]}
@@ -205,6 +219,35 @@ export default handleActions(
       ...state,
       isLoading: false,
     }),
+
+    [ACTIONS.COMMENT_RECEIVED]: (state: CommentsState, action: any) => {
+      const { claimId, comment } = action.data;
+      const commentsByClaimId = Object.assign({}, state.byId);
+      const allCommentsById = Object.assign({}, state.commentById);
+      const topLevelCommentsById = Object.assign({}, state.topLevelCommentsById);
+      const commentsForId = topLevelCommentsById[claimId];
+
+      allCommentsById[comment.comment_id] = comment;
+
+      if (commentsForId) {
+        const newCommentsForId = commentsForId.slice();
+        newCommentsForId.unshift(comment.comment_id);
+        topLevelCommentsById[claimId] = newCommentsForId;
+      } else {
+        topLevelCommentsById[claimId] = [comment.comment_id];
+      }
+
+      // We don't care to keep existing lower level comments since this is just for livestreams
+      commentsByClaimId[claimId] = topLevelCommentsById[claimId];
+
+      return {
+        ...state,
+        byId: commentsByClaimId,
+        commentById: allCommentsById,
+        topLevelCommentsById,
+      };
+    },
+
     [ACTIONS.COMMENT_ABANDON_STARTED]: (state: CommentsState, action: any) => ({
       ...state,
       isLoading: true,
