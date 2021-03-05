@@ -1,14 +1,14 @@
 // @flow
 import * as MODALS from 'constants/modal_types';
 import React from 'react';
-import TxoListItem from './internal/txo-list-item';
+import TxoListItem from 'component/transactionListTableItem';
 import Spinner from 'component/spinner';
 import LbcSymbol from 'component/common/lbc-symbol';
 
 type Props = {
   emptyMessage: ?string,
   loading: boolean,
-  openModal: (id: string, { tx: Txo, cb: string => void }) => void,
+  openModal: (id: string, { tx: Txo, cb: (string) => void }) => void,
   rewards: {},
   txos: Array<Txo>,
 };
@@ -16,7 +16,7 @@ type Props = {
 function TransactionListTable(props: Props) {
   const { emptyMessage, rewards, loading, txos } = props;
   const REVOCABLE_TYPES = ['channel', 'stream', 'repost', 'support', 'claim'];
-  function revokeClaim(tx: any, cb: string => void) {
+  function revokeClaim(tx: any, cb: (string) => void) {
     props.openModal(MODALS.CONFIRM_CLAIM_REVOKE, { tx, cb });
   }
 

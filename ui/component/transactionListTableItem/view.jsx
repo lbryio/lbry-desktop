@@ -9,6 +9,7 @@ import Button from 'component/button';
 import Spinner from 'component/spinner';
 import { toCapitalCase } from 'util/string';
 import { buildURI, parseURI, TXO_LIST as TXO, ABANDON_STATES } from 'lbry-redux';
+import UriIndicator from 'component/uriIndicator';
 
 type Props = {
   txo: Txo,
@@ -17,13 +18,14 @@ type Props = {
   reward: ?{
     reward_title: string,
   },
+  signingChannel: ChannelClaim,
 };
 
 type State = {
   abandonState: string,
 };
 
-class TxoListItem extends React.PureComponent<Props, State> {
+class TransactionListTableItem extends React.PureComponent<Props, State> {
   constructor() {
     super();
     this.state = { abandonState: ABANDON_STATES.READY };
@@ -66,11 +68,11 @@ class TxoListItem extends React.PureComponent<Props, State> {
   }
 
   abandonClaim() {
-    this.props.revokeClaim(this.props.txo, abandonState => this.setState({ abandonState }));
+    this.props.revokeClaim(this.props.txo, (abandonState) => this.setState({ abandonState }));
   }
 
   render() {
-    const { reward, txo, isRevokeable } = this.props;
+    const { reward, txo, isRevokeable, signingChannel } = this.props;
 
     const {
       amount,
@@ -85,7 +87,9 @@ class TxoListItem extends React.PureComponent<Props, State> {
     } = txo;
 
     const isLbryViewReward =
-      txo.signing_channel && txo.signing_channel.channel_id === '74562a01e5836c04040b80bf1f4d685fec02cc90';
+      txo.signing_channel &&
+      (txo.signing_channel.channel_id === '74562a01e5836c04040b80bf1f4d685fec02cc90' ||
+        txo.signing_channel.channel_id === '7d0b0f83a195fd1278e1944ddda4cda8d9c01a56');
     const name = txoListName;
     const isMinus = (type === 'support' || type === 'payment' || type === 'other') && isMyInput && !isMyOutput;
     const isTip = type === 'support' && ((isMyInput && !isMyOutput) || (!isMyInput && isMyOutput));
@@ -138,7 +142,13 @@ class TxoListItem extends React.PureComponent<Props, State> {
         <td>
           {forClaim && <Button button="link" navigate={uri} label={claimName} disabled={!date} />}
           {!forClaim && reward && <span>{reward.reward_title}</span>}
-          {isLbryViewReward && <span className="help--inline">{__('%SITE_NAME% view reward', { SITE_NAME })}</span>}
+          {isLbryViewReward && <div className="table__item-label">{__('%SITE_NAME% view reward', { SITE_NAME })}</div>}
+          {isTip && signingChannel && !isLbryViewReward && (
+            <div className="table__item-label">
+              <UriIndicator uri={signingChannel && signingChannel.permanent_url} link />
+            </div>
+          )}
+          {isTip && !signingChannel && !isLbryViewReward && <div className="table__item-label">Anonymous</div>}
         </td>
 
         <td>
@@ -157,4 +167,4 @@ class TxoListItem extends React.PureComponent<Props, State> {
   }
 }
 
-export default TxoListItem;
+export default TransactionListTableItem;
