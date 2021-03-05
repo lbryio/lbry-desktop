@@ -6,7 +6,6 @@ import ClaimPreviewTile from 'component/claimPreviewTile';
 import { useHistory } from 'react-router';
 
 type Props = {
-  prefixUris?: Array<string>,
   uris: Array<string>,
   doClaimSearch: ({}) => void,
   showNsfw: boolean,
@@ -32,6 +31,7 @@ type Props = {
   timestamp?: string,
   feeAmount?: string,
   limitClaimsPerChannel?: number,
+  pin: boolean,
 };
 
 function ClaimTilesDiscover(props: Props) {
@@ -49,11 +49,11 @@ function ClaimTilesDiscover(props: Props) {
     releaseTime,
     languages,
     claimType,
-    prefixUris,
     timestamp,
     feeAmount,
     limitClaimsPerChannel,
     fetchingClaimSearchByQuery,
+    pin,
   } = props;
   const { location } = useHistory();
   const urlParams = new URLSearchParams(location.search);
@@ -125,21 +125,22 @@ function ClaimTilesDiscover(props: Props) {
   }
 
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
-  const uris = (prefixUris || []).concat(claimSearchByQuery[claimSearchCacheQuery] || []);
+  const uris = claimSearchByQuery[claimSearchCacheQuery] || [];
+
   // Don't use the query from createNormalizedClaimSearchKey for the effect since that doesn't include page & release_time
   const optionsStringForEffect = JSON.stringify(options);
   const isLoading = fetchingClaimSearchByQuery[claimSearchCacheQuery];
   const shouldPerformSearch = !isLoading && uris.length === 0;
 
-  //   const fixUri = 'lbry://@MPCunningham#b/Dear-Coach#f';
-  //   if (uris && uris.length > 2 && window.location.pathname === '/') {
-  //     if (uris.indexOf(fixUri) !== -1) {
-  //       uris.splice(uris.indexOf(fixUri), 1);
-  //     } else {
-  //       uris.pop();
-  //     }
-  //     uris.splice(2, 0, fixUri);
-  //   }
+  const fixUri = 'lbry://@ElectroBOOM#9/remove-your-mustache#9';
+  if (pin && uris && uris.length > 2 && window.location.pathname === '/') {
+    if (uris.indexOf(fixUri) !== -1) {
+      uris.splice(uris.indexOf(fixUri), 1);
+    } else {
+      uris.pop();
+    }
+    uris.splice(2, 0, fixUri);
+  }
 
   React.useEffect(() => {
     if (shouldPerformSearch) {

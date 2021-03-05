@@ -50,18 +50,6 @@ function HomePage(props: Props) {
         </div>
       )}
 
-      {/* <div className="no-evil">
-        <span className="no-evil--blue">D</span>
-        <span className="no-evil--red">o</span>
-        <span className="no-evil--yellow">n</span>
-        <span className="no-evil--blue">'</span>
-        <span className="no-evil--green">t</span> <span className="no-evil--red">b</span>
-        <span className="no-evil--blue">e</span> <span className="no-evil--red">e</span>
-        <span className="no-evil--yellow">v</span>
-        <span className="no-evil--blue">i</span>
-        <span className="no-evil--green">l</span>
-      </div> */}
-
       <h1 className="home__meme">{__("Yeah, well, that's just, like, your opinion, man.")}</h1>
 
       {rowData.map(({ title, route, link, icon, help, options = {} }, index) => (
@@ -76,7 +64,7 @@ function HomePage(props: Props) {
             </h1>
           )}
 
-          <ClaimTilesDiscover {...options} />
+          <ClaimTilesDiscover {...options} pin={route === `/$/${PAGES.GENERAL}`} />
           {(route || link) && (
             <Button
               className="claim-grid__title--secondary"
