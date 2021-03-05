@@ -1,0 +1,7 @@
+[main]
+host = https://www.transifex.com
+
+[lbry-desktop.app-strings]
+source_file = static/app-strings.json
+source_lang = en
+type = KEYVALUEJSON

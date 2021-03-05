@@ -1,0 +1,31 @@
+### macOS ###
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+node_modules
+dist
+/static/lbrynet*
+/static/daemon
+/static/locales
+yarn-error.log
+package-lock.json
+.transifexrc
+.idea/
+/build/daemon*
+/lbrytv/dist/
+/lbrytv/node_modules
+/static/lbry-first/
+/build/lbryFirst*
+/web/dist/*
+/web/node_modules/*
+/web/.env
+/web/.env.defaults
+/custom/*
+/custom/homepages/*
+!/custom/homepages/.gitkeep
+!/custom/homepages
+!/custom/homepage.example.js
+!/custom/robots.disallowall
+!/custom/robots.allowall
+.env
