@@ -1,6 +1,6 @@
 //
-export const LIVE_STREAM_CHANNEL = '@TheDesertLynx';
-export const LIVE_STREAM_CHANNEL_CLAIM_ID = 'ebe792fc52d170c4c4e3dd6c2eb36ce18755322e';
+export const LIVE_STREAM_CHANNEL = '@DigitalCashNetwork';
+export const LIVE_STREAM_CHANNEL_CLAIM_ID = 'c5b0b17838df2f6c31162f64d55f60f34ae8bfc6';
 export const BITWAVE_USERNAME = 'thedesertlynx';
 
 // export const LIVE_STREAM_CHANNEL = '@test-sy';
