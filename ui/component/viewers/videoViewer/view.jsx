@@ -13,6 +13,7 @@ import FileViewerEmbeddedEnded from 'web/component/fileViewerEmbeddedEnded';
 import FileViewerEmbeddedTitle from 'component/fileViewerEmbeddedTitle';
 import LoadingScreen from 'component/common/loading-screen';
 import { addTheaterModeButton } from './internal/theater-mode';
+import './videojs.scss';
 
 const PLAY_TIMEOUT_ERROR = 'play_timeout_error';
 const PLAY_TIMEOUT_LIMIT = 2000;
