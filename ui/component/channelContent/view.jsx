@@ -30,6 +30,7 @@ type Props = {
   showMature: boolean,
   tileLayout: boolean,
   viewHiddenChannels: boolean,
+  doResolveUris: (Array<string>, boolean) => void,
 };
 
 function ChannelContent(props: Props) {
@@ -46,6 +47,7 @@ function ChannelContent(props: Props) {
     showMature,
     tileLayout,
     viewHiddenChannels,
+    doResolveUris,
   } = props;
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -77,6 +79,11 @@ function ChannelContent(props: Props) {
             const urls = results.map(({ name, claimId }) => {
               return `lbry://${name}#${claimId}`;
             });
+
+            // Batch-resolve the urls before calling 'setSearchResults', as the
+            // latter will immediately cause the tiles to resolve, ending up
+            // calling doResolveUri one by one before the batched one.
+            doResolveUris(urls, true);
 
             setSearchResults(urls);
           })
