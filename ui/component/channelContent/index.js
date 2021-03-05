@@ -6,6 +6,7 @@ import {
   makeSelectClaimIsMine,
   makeSelectTotalPagesInChannelSearch,
   makeSelectClaimForUri,
+  doResolveUris,
   SETTINGS,
 } from 'lbry-redux';
 import { makeSelectChannelIsMuted } from 'redux/selectors/blocked';
@@ -32,4 +33,8 @@ const select = (state, props) => {
   };
 };
 
-export default withRouter(connect(select)(ChannelPage));
+const perform = (dispatch) => ({
+  doResolveUris: (uris) => dispatch(doResolveUris(uris)),
+});
+
+export default withRouter(connect(select, perform)(ChannelPage));
