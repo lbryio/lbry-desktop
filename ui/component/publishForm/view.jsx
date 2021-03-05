@@ -25,6 +25,7 @@ import SelectThumbnail from 'component/selectThumbnail';
 import Card from 'component/common/card';
 import I18nMessage from 'component/i18nMessage';
 import * as PUBLISH_MODES from 'constants/publish_types';
+import { FormField } from 'component/common/form';
 
 // @if TARGET='app'
 import fs from 'fs';
@@ -72,14 +73,14 @@ type Props = {
   balance: number,
   isStillEditing: boolean,
   clearPublish: () => void,
-  resolveUri: string => void,
+  resolveUri: (string) => void,
   scrollToTop: () => void,
   prepareEdit: (claim: any, uri: string) => void,
   resetThumbnailStatus: () => void,
   amountNeededForTakeover: ?number,
   // Add back type
-  updatePublishForm: any => void,
-  checkAvailability: string => void,
+  updatePublishForm: (any) => void,
+  checkAvailability: (string) => void,
   ytSignupPending: boolean,
   modal: { id: string, modalProps: {} },
   enablePublishPreview: boolean,
@@ -124,7 +125,11 @@ function PublishForm(props: Props) {
     enablePublishPreview,
     activeChannelClaim,
     incognito,
+    user,
+    isLivestreamPublish,
   } = props;
+
+  const isLivestreamCreator = (user && user.experimental_ui) || false;
 
   const TAGS_LIMIT = 5;
   const fileFormDisabled = mode === PUBLISH_MODES.FILE && !filePath;
@@ -332,6 +337,38 @@ function PublishForm(props: Props) {
     <div className="card-stack">
       <ChannelSelect disabled={disabled} />
 
+      {/* Some LiveStream Publishing Hack Sean made */}
+      {isLivestreamCreator && (
+        <div className="livestream__creator-message livestream__publish-checkbox">
+          <h4>Hello brave beta tester,</h4>
+          <p>
+            Check this box if you have entered video information for your livestream. It doesn't matter what file you
+            choose for now, just make the sure the title, description, and tags are correct. Everything else is setup!
+          </p>
+          <p>
+            When you edit this file, there will be another checkbox to turn this back into a regular video so it can be
+            listed on your channel's page.
+          </p>
+
+          <FormField
+            type={isStillEditing ? 'radio' : 'checkbox'}
+            label={__('This is for my livestream')}
+            name="is_livestream_checkbox"
+            checked={isLivestreamPublish}
+            onChange={(e) => updatePublishForm({ isLivestreamPublish: e.target.checked })}
+          />
+          {isStillEditing && (
+            <FormField
+              type="radio"
+              label={'I am done livestreaming'}
+              name="is_livestream_checkbox_done"
+              checked={!isLivestreamPublish}
+              onChange={(e) => updatePublishForm({ isLivestreamPublish: !e.target.checked })}
+            />
+          )}
+        </div>
+      )}
+
       <PublishFile
         uri={uri}
         mode={mode}
@@ -373,17 +410,17 @@ function PublishForm(props: Props) {
               "Add tags that are relevant to your content so those who're looking for it can find it more easily. If mature content, ensure it is tagged mature. Tag abuse and missing mature tags will not be tolerated."
             )}
             placeholder={__('gaming, crypto')}
-            onSelect={newTags => {
+            onSelect={(newTags) => {
               const validatedTags = [];
-              newTags.forEach(newTag => {
-                if (!tags.some(tag => tag.name === newTag.name)) {
+              newTags.forEach((newTag) => {
+                if (!tags.some((tag) => tag.name === newTag.name)) {
                   validatedTags.push(newTag);
                 }
               });
               updatePublishForm({ tags: [...tags, ...validatedTags] });
             }}
-            onRemove={clickedTag => {
-              const newTags = tags.slice().filter(tag => tag.name !== clickedTag.name);
+            onRemove={(clickedTag) => {
+              const newTags = tags.slice().filter((tag) => tag.name !== clickedTag.name);
               updatePublishForm({ tags: newTags });
             }}
             tagsChosen={tags}
