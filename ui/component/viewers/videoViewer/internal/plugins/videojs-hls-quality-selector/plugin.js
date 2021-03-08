@@ -37,6 +37,9 @@ class HlsQualitySelectorPlugin {
     // Create the quality button.
     this.createQualityButton();
 
+    // Hide quality selector by default
+    this._qualityButton.hide();
+
     // Bind event listeners
     this.bindPlayerEvents();
 
