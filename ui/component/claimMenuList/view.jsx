@@ -87,9 +87,7 @@ function ClaimMenuList(props: Props) {
               </div>
             </MenuItem>
 
-            <MenuItem className="menu__separator" disabled onSelect={() => {}}>
-              <hr />
-            </MenuItem>
+            <hr className="menu__separator" />
           </>
         )}
 
