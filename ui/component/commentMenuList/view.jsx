@@ -24,7 +24,7 @@ type Props = {
   claimIsMine: boolean,
   isTopLevel: boolean,
   commentModBlock: (string) => void,
-  playingUri: ?PlayingUri,  
+  playingUri: ?PlayingUri,
 };
 
 function CommentMenuList(props: Props) {
