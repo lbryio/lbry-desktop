@@ -34,7 +34,7 @@ const select = (state, props) => {
 };
 
 const perform = (dispatch) => ({
-  doResolveUris: (uris) => dispatch(doResolveUris(uris)),
+  doResolveUris: (uris, returnCachedUris) => dispatch(doResolveUris(uris, returnCachedUris)),
 });
 
 export default withRouter(connect(select, perform)(ChannelPage));
