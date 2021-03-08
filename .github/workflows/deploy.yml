@@ -20,7 +20,7 @@ jobs:
     name: 'build'
     strategy:
       matrix:
-        node-version: [12.x]
+        node-version: [12.x, 14.x]
         os:
           - ubuntu-latest
           - macos-latest
