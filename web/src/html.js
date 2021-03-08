@@ -10,6 +10,7 @@ const {
 } = require('../../config.js');
 const { generateEmbedUrl, generateStreamUrl } = require('../../ui/util/web');
 const PAGES = require('../../ui/constants/pages');
+const { CATEGORY_METADATA } = require('./category-metadata');
 const { getClaim } = require('./chainquery');
 const { parseURI } = require('lbry-redux');
 const fs = require('fs');
@@ -43,6 +44,11 @@ function escapeHtmlProperty(property) {
     : '';
 }
 
+function getCategoryMeta(path) {
+  const page = Object.keys(CATEGORY_METADATA).find((x) => path.endsWith(x) || path.endsWith(`${x}/`));
+  return CATEGORY_METADATA[page];
+}
+
 //
 // Normal metadata with option to override certain values
 //
@@ -57,16 +63,17 @@ function buildOgMetadata(overrideOptions = {}) {
     `<meta property="og:description" content="${cleanDescription}" />\n` +
     `<meta property="og:image" content="${OG_IMAGE_URL || `${URL}/public/v2-og.png`}" />\n` +
     '<meta name="twitter:card" content="summary_large_image"/>\n' +
-    `<meta name="twitter:title" content="${(title && title + OG_TITLE_SUFFIX) ||
-      OG_HOMEPAGE_TITLE ||
-      SITE_TITLE}" />\n` +
+    `<meta name="twitter:title" content="${
+      (title && title + OG_TITLE_SUFFIX) || OG_HOMEPAGE_TITLE || SITE_TITLE
+    }" />\n` +
     `<meta name="twitter:description" content="${cleanDescription}" />\n` +
     `<meta name="twitter:image" content="${OG_IMAGE_URL || `${URL}/public/v2-og.png`}"/>\n` +
     `<meta name="twitter:url" content="${URL}" />\n` +
     '<meta property="fb:app_id" content="1673146449633983" />\n' +
     `<link rel="canonical" content="${SITE_CANONICAL_URL || URL}"/>` +
-    `<link rel="search" type="application/opensearchdescription+xml" title="${SITE_NAME ||
-      SITE_TITLE}" href="${URL}/opensearch.xml">`;
+    `<link rel="search" type="application/opensearchdescription+xml" title="${
+      SITE_NAME || SITE_TITLE
+    }" href="${URL}/opensearch.xml">`;
   return head;
 }
 
@@ -227,6 +234,16 @@ async function getHtml(ctx) {
     }
 
     return insertToHead(html);
+  }
+
+  const categoryMeta = getCategoryMeta(requestPath);
+  if (categoryMeta) {
+    const categoryPageMetadata = buildOgMetadata({
+      title: categoryMeta.title,
+      description: categoryMeta.description,
+      image: categoryMeta.image,
+    });
+    return insertToHead(html, categoryPageMetadata);
   }
 
   if (!requestPath.includes('$')) {
