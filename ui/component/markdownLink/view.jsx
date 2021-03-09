@@ -1,5 +1,5 @@
 // @flow
-import { KNOWN_APP_DOMAINS } from 'config';
+import { KNOWN_APP_DOMAINS, SIMPLE_SITE } from 'config';
 import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import { isURIValid } from 'lbry-redux';
@@ -10,6 +10,7 @@ type Props = {
   href: string,
   title?: string,
   embed?: boolean,
+  allowPreview?: boolean,
   children: React.Node,
   parentCommentId?: string,
   isMarkdownPost?: boolean,
@@ -17,7 +18,16 @@ type Props = {
 };
 
 function MarkdownLink(props: Props) {
-  const { children, href, title, embed = false, parentCommentId, isMarkdownPost, simpleLinks = false } = props;
+  const {
+    children,
+    href,
+    title,
+    embed = false,
+    allowPreview = false,
+    parentCommentId,
+    isMarkdownPost,
+    simpleLinks = false,
+  } = props;
 
   let decodedUri;
   try {
@@ -33,6 +43,7 @@ function MarkdownLink(props: Props) {
   // Regex for url protocol
   const protocolRegex = new RegExp('^(https?|lbry|mailto)+:', 'i');
   const protocol = href ? protocolRegex.exec(href) : null;
+  const isLbryLink = href.startsWith('lbry://');
 
   let linkUrlObject;
   try {
@@ -62,6 +73,10 @@ function MarkdownLink(props: Props) {
     }
   }
 
+  // Return timestamp link if it starts with '?t=' (only possible from remark-timestamp).
+  // Return plain text if no valid url.
+  // Return external link if protocol is http or https.
+  // Return local link if protocol is lbry uri.
   if (href.startsWith('?t=')) {
     // Video timestamp markers
     element = (
@@ -80,10 +95,7 @@ function MarkdownLink(props: Props) {
       />
     );
   } else if (!simpleLinks && ((protocol && protocol[0] === 'lbry:' && isURIValid(decodedUri)) || lbryUrlFromLink)) {
-    // Return plain text if no valid url
-    // Return external link if protocol is http or https
-    // Return local link if protocol is lbry uri
-    element = (
+    element = allowPreview ? (
       <ClaimLink
         uri={lbryUrlFromLink || decodedUri}
         autoEmbed={embed}
@@ -92,13 +104,21 @@ function MarkdownLink(props: Props) {
       >
         {children}
       </ClaimLink>
+    ) : (
+      <Button
+        button="link"
+        iconRight={isLbryLink ? undefined : ICONS.EXTERNAL}
+        title={SIMPLE_SITE ? __("This channel isn't staking enough LBRY Credits for link previews.") : children}
+        label={children}
+        className="button--external-link"
+        navigate={isLbryLink ? href : undefined}
+        href={isLbryLink ? undefined : href}
+      />
     );
   } else if (
     simpleLinks ||
     (protocol && (protocol[0] === 'http:' || protocol[0] === 'https:' || protocol[0] === 'mailto:'))
   ) {
-    const isLbryLink = href.startsWith('lbry://');
-
     element = (
       <Button
         button="link"

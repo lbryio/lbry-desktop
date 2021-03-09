@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectThumbnailForUri, selectMyChannelClaims } from 'lbry-redux';
+import { makeSelectStakedLevelForChannelUri, makeSelectThumbnailForUri, selectMyChannelClaims } from 'lbry-redux';
 import { doCommentUpdate } from 'redux/actions/comments';
 import { makeSelectChannelIsMuted } from 'redux/selectors/blocked';
 import { doToast } from 'redux/actions/notifications';
@@ -18,6 +18,7 @@ const select = (state, props) => ({
   activeChannelClaim: selectActiveChannelClaim(state),
   myChannels: selectMyChannelClaims(state),
   playingUri: selectPlayingUri(state),
+  stakedLevel: makeSelectStakedLevelForChannelUri(props.authorUri)(state),
 });
 
 const perform = (dispatch) => ({

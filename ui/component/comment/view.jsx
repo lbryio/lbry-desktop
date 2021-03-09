@@ -49,6 +49,7 @@ type Props = {
   commentIdentityChannel: any,
   activeChannelClaim: ?ChannelClaim,
   playingUri: ?PlayingUri,
+  stakedLevel: number,
 };
 
 const LENGTH_TO_COLLAPSE = 300;
@@ -75,6 +76,7 @@ function Comment(props: Props) {
     isPinned,
     othersReacts,
     playingUri,
+    stakedLevel,
   } = props;
   const {
     push,
@@ -254,10 +256,20 @@ function Comment(props: Props) {
                     </div>
                   ) : editedMessage.length >= LENGTH_TO_COLLAPSE ? (
                     <Expandable>
-                      <MarkdownPreview content={message} promptLinks parentCommentId={commentId} />
+                      <MarkdownPreview
+                        content={message}
+                        promptLinks
+                        parentCommentId={commentId}
+                        stakedLevel={stakedLevel}
+                      />
                     </Expandable>
                   ) : (
-                    <MarkdownPreview content={message} promptLinks parentCommentId={commentId} />
+                    <MarkdownPreview
+                      content={message}
+                      promptLinks
+                      parentCommentId={commentId}
+                      stakedLevel={stakedLevel}
+                    />
                   )}
                 </div>
 
