@@ -17,6 +17,7 @@ type Props = {
   email: ?string,
   website: ?string,
   languages: Array<string>,
+  stakedLevel?: number,
 };
 
 const formatEmail = (email: string) => {
@@ -29,7 +30,7 @@ const formatEmail = (email: string) => {
 };
 
 function ChannelAbout(props: Props) {
-  const { claim, uri, description, email, website, languages } = props;
+  const { claim, uri, description, email, website, languages, stakedLevel } = props;
   const claimId = claim && claim.claim_id;
 
   return (
@@ -40,7 +41,7 @@ function ChannelAbout(props: Props) {
             <>
               <label>{__('Description')}</label>
               <div className="media__info-text media__info-text--constrained">
-                <MarkdownPreview content={description} />
+                <MarkdownPreview content={description} stakedLevel={stakedLevel} />
               </div>
             </>
           )}
@@ -48,7 +49,7 @@ function ChannelAbout(props: Props) {
             <Fragment>
               <label>{__('Contact')}</label>
               <div className="media__info-text">
-                <MarkdownPreview content={formatEmail(email)} />
+                <MarkdownPreview content={formatEmail(email)} simpleLinks />
               </div>
             </Fragment>
           )}
@@ -56,7 +57,7 @@ function ChannelAbout(props: Props) {
             <Fragment>
               <label>{__('Site')}</label>
               <div className="media__info-text">
-                <MarkdownPreview content={website} />
+                <MarkdownPreview content={website} simpleLinks />
               </div>
             </Fragment>
           )}

@@ -34,7 +34,7 @@ type Props = {
   publish: (?string, ?boolean) => void,
   closeModal: () => void,
   enablePublishPreview: boolean,
-  setEnablePublishPreview: boolean => void,
+  setEnablePublishPreview: (boolean) => void,
   isStillEditing: boolean,
 };
 
@@ -105,7 +105,7 @@ class ModalPublishPreview extends React.PureComponent<Props> {
 
     const descriptionValue = description ? (
       <div className="media__info-text-preview">
-        <MarkdownPreview content={description} />
+        <MarkdownPreview content={description} simpleLinks />
       </div>
     ) : null;
 
@@ -124,7 +124,7 @@ class ModalPublishPreview extends React.PureComponent<Props> {
 
     const tagsValue =
       // Do nothing for onClick(). Setting to 'null' results in "View Tag" action -- we don't want to leave the modal.
-      tags.map(tag => <Tag key={tag.name} title={tag.name} name={tag.name} type={'flow'} onClick={() => {}} />);
+      tags.map((tag) => <Tag key={tag.name} title={tag.name} name={tag.name} type={'flow'} onClick={() => {}} />);
 
     const depositValue = bid ? <LbcSymbol postfix={`${bid}`} size={14} /> : <p>---</p>;
 
