@@ -10,30 +10,11 @@ import CreditAmount from 'component/common/credit-amount';
 
 type Props = {
   channelClaim: ChannelClaim,
+  amount: number,
+  level: number,
   large?: boolean,
   inline?: boolean,
 };
-
-function getChannelLevel(amount: number): number {
-  let level = 1;
-
-  switch (true) {
-    case amount >= 1 && amount < 50:
-      level = 2;
-      break;
-    case amount >= 50 && amount < 250:
-      level = 3;
-      break;
-    case amount >= 250 && amount < 1000:
-      level = 4;
-      break;
-    case amount >= 1000:
-      level = 5;
-      break;
-  }
-
-  return level;
-}
 
 function getChannelIcon(level: number): string {
   const icons = {
@@ -48,15 +29,13 @@ function getChannelIcon(level: number): string {
 }
 
 function ChannelStakedIndicator(props: Props) {
-  const { channelClaim, large = false, inline = false } = props;
+  const { channelClaim, amount, level, large = false, inline = false } = props;
 
   if (!channelClaim || !channelClaim.meta) {
     return null;
   }
 
-  const amount = parseFloat(channelClaim.amount) + parseFloat(channelClaim.meta.support_amount) || 0;
   const isControlling = channelClaim && channelClaim.meta.is_controlling;
-  const level = getChannelLevel(amount);
   const icon = getChannelIcon(level);
 
   return (
