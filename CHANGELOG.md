@@ -12,6 +12,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Mass tip unlock ([#5409](https://github.com/lbryio/lbry-desktop/pull/5387))
 - Zoomable image viewer in Markdown (posts and comments) _community pr!_ ([#5387](https://github.com/lbryio/lbry-desktop/pull/5387))
 - Enable PDF Viewer in App _community pr!_ ([#2903](https://github.com/lbryio/lbry-desktop/issues/2903))
+- The search bar now handles both lbry.tv and Odysee links regardless of which site the user is in ([#5604](https://github.com/lbryio/lbry-desktop/issues/5604))
+- The video/audio player's control tooltip is now localized and includes hints for keyboard shortcuts ([#5584](https://github.com/lbryio/lbry-desktop/issues/5584))
+- Finnish and Norwegian language support ([#5532](https://github.com/lbryio/lbry-desktop/issues/5532))
 
 ### Changed
 
@@ -20,11 +23,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 
 - Player doesn't stop playing when editing a comment that includes a video url _community pr!_ ([#5384](https://github.com/lbryio/lbry-desktop/pull/5384))
+- Main video/audio playback stopped every time a comment is edited or deleted ([#5606](https://github.com/lbryio/lbry-desktop/pull/5606))
 - Winning search result not working correctly with mature content enabled _community pr!_ ([#5388](https://github.com/lbryio/lbry-desktop/pull/5388))
 - Fixes to inline videos in comments _community pr!_ ([#5389](https://github.com/lbryio/lbry-desktop/pull/5389))
 - Search page crashing on some results ([#5428](https://github.com/lbryio/lbry-desktop/pull/5428))
 - Long channel names caused comments to extend underneath related content _community pr!_ ([#5431](https://github.com/lbryio/lbry-desktop/pull/5431))
 - Keep floating player always visible _community pr!_ ([#5448](https://github.com/lbryio/lbry-desktop/pull/5448))
+- LBRY Desktop incorrectly setting itself as the default HTML-file application in Linux ([#5617](https://github.com/lbryio/lbry-desktop/pull/5617))
+- All notifications being cleared when only 1 is clicked ([#5619](https://github.com/lbryio/lbry-desktop/pull/5619))
+- Markdown editor's "Create Link (Ctrl-K)" action now directly highlights the URL stub when the label is present ([#5585](https://github.com/lbryio/lbry-desktop/issues/5585))
 
 ## [0.49.4] - [2021-01-26]
 
