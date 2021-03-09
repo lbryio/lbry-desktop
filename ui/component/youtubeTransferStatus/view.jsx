@@ -35,20 +35,20 @@ export default function YoutubeTransferStatus(props: Props) {
     addNewChannel,
   } = props;
   const hasChannels = youtubeChannels && youtubeChannels.length > 0;
-  const transferEnabled = youtubeChannels.some(status => status.transferable);
+  const transferEnabled = youtubeChannels.some((status) => status.transferable);
   const hasPendingTransfers = youtubeChannels.some(
-    status => status.transfer_state === YOUTUBE_STATUSES.YOUTUBE_SYNC_PENDING_TRANSFER
+    (status) => status.transfer_state === YOUTUBE_STATUSES.YOUTUBE_SYNC_PENDING_TRANSFER
   );
   const isYoutubeTransferComplete =
     hasChannels &&
     youtubeChannels.every(
-      channel =>
+      (channel) =>
         channel.transfer_state === YOUTUBE_STATUSES.YOUTUBE_SYNC_COMPLETED_TRANSFER ||
         channel.sync_status === YOUTUBE_STATUSES.YOUTUBE_SYNC_ABANDONDED
     );
 
   const isNotElligible =
-    hasChannels && youtubeChannels.every(channel => channel.sync_status === YOUTUBE_STATUSES.YOUTUBE_SYNC_ABANDONDED);
+    hasChannels && youtubeChannels.every((channel) => channel.sync_status === YOUTUBE_STATUSES.YOUTUBE_SYNC_ABANDONDED);
 
   let total;
   let complete;
@@ -138,6 +138,8 @@ export default function YoutubeTransferStatus(props: Props) {
               const transferState = getMessage(channel);
               const isWaitingForSync =
                 syncStatus === YOUTUBE_STATUSES.YOUTUBE_SYNC_QUEUED ||
+                syncStatus === YOUTUBE_STATUSES.YOUTUBE_SYNC_PENDING ||
+                syncStatus === YOUTUBE_STATUSES.YOUTUBE_SYNC_PENDING_EMAIL ||
                 syncStatus === YOUTUBE_STATUSES.YOUTUBE_SYNC_PENDINGUPGRADE ||
                 syncStatus === YOUTUBE_STATUSES.YOUTUBE_SYNC_SYNCING;
 
