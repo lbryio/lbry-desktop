@@ -15,6 +15,7 @@ type Props = {
     stream: string,
     contentType: string,
   },
+  stakedLevel?: number,
 };
 
 type State = {
@@ -75,11 +76,11 @@ class DocumentViewer extends React.PureComponent<Props, State> {
 
   renderDocument() {
     const { content } = this.state;
-    const { source, theme, renderMode } = this.props;
+    const { source, theme, renderMode, stakedLevel } = this.props;
     const { contentType } = source;
 
     return renderMode === RENDER_MODES.MARKDOWN ? (
-      <MarkdownPreview content={content} isMarkdownPost promptLinks />
+      <MarkdownPreview content={content} isMarkdownPost promptLinks stakedLevel={stakedLevel} />
     ) : (
       <CodeViewer value={content} contentType={contentType} theme={theme} />
     );

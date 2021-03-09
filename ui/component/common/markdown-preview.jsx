@@ -13,6 +13,7 @@ import defaultSchema from 'hast-util-sanitize/lib/github.json';
 import { formatedLinks, inlineLinks } from 'util/remark-lbry';
 import { formattedTimestamp, inlineTimestamp } from 'util/remark-timestamp';
 import ZoomableImage from 'component/zoomableImage';
+import { CHANNEL_STAKED_LEVEL_VIDEO_COMMENTS } from 'config';
 
 type SimpleTextProps = {
   children?: React.Node,
@@ -32,6 +33,7 @@ type MarkdownProps = {
   className?: string,
   parentCommentId?: string,
   isMarkdownPost?: boolean,
+  stakedLevel?: number,
 };
 
 // ****************************************************************************
@@ -93,7 +95,7 @@ const REPLACE_REGEX = /(<iframe\s+src=["'])(.*?(?=))(["']\s*><\/iframe>)/g;
 // ****************************************************************************
 
 const MarkdownPreview = (props: MarkdownProps) => {
-  const { content, strip, simpleLinks, noDataStore, className, parentCommentId, isMarkdownPost } = props;
+  const { content, strip, simpleLinks, noDataStore, className, parentCommentId, isMarkdownPost, stakedLevel } = props;
   const strippedContent = content
     ? content.replace(REPLACE_REGEX, (iframeHtml, y, iframeSrc) => {
         // Let the browser try to create an iframe to see if the markup is valid
@@ -119,12 +121,13 @@ const MarkdownPreview = (props: MarkdownProps) => {
     remarkReactComponents: {
       a: noDataStore
         ? SimpleLink
-        : linkProps => (
+        : (linkProps) => (
             <MarkdownLink
               {...linkProps}
               parentCommentId={parentCommentId}
               isMarkdownPost={isMarkdownPost}
               simpleLinks={simpleLinks}
+              allowPreview={stakedLevel && stakedLevel >= CHANNEL_STAKED_LEVEL_VIDEO_COMMENTS}
             />
           ),
       // Workaraund of remarkOptions.Fragment
