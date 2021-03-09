@@ -199,6 +199,12 @@ const analytics: Analytics = {
       Lbryio.call('feedback', 'search', { query, vote });
     }
   },
+
+  videoFetchDuration: (source, duration) => {
+    sendPromMetric('time_to_fetch', duration);
+    sendMatomoEvent('Media', 'TimeToFetch', source, duration);
+  },
+
   videoStartEvent: (claimId, duration) => {
     sendPromMetric('time_to_start', duration);
     sendMatomoEvent('Media', 'TimeToStart', claimId, duration);
