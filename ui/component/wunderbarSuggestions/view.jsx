@@ -128,6 +128,56 @@ export default function WunderBarSuggestions(props: Props) {
   }
 
   React.useEffect(() => {
+    function handleHomeEndCaretPos(elem, shiftKey, isHome) {
+      if (elem) {
+        const cur = elem.selectionStart ? elem.selectionStart : 0;
+        let begin;
+        let final;
+        let scrollPx;
+
+        if (isHome) {
+          begin = 0;
+          final = shiftKey ? cur : begin;
+          scrollPx = 0;
+        } else {
+          final = elem.value.length;
+          begin = shiftKey ? cur : final;
+          scrollPx = elem.scrollWidth - elem.clientWidth;
+        }
+
+        elem.setSelectionRange(begin, final);
+        elem.scrollLeft = scrollPx;
+        return true;
+      }
+
+      return false;
+    }
+
+    function overrideHomeEndHandling(event) {
+      const { ctrlKey, metaKey, shiftKey, key } = event;
+      if (!ctrlKey && !metaKey) {
+        if (key === 'Home' || key === 'End') {
+          if (handleHomeEndCaretPos(inputRef.current, shiftKey, key === 'Home')) {
+            event.stopPropagation();
+          }
+        }
+      }
+    }
+
+    // Injecting the listener at the element level puts it before
+    // ReachUI::ComboBoxInput's listener, allowing us to skip their handling.
+    if (inputRef.current) {
+      inputRef.current.addEventListener('keydown', overrideHomeEndHandling);
+    }
+
+    return () => {
+      if (inputRef.current) {
+        inputRef.current.removeEventListener('keydown', overrideHomeEndHandling);
+      }
+    };
+  }, [inputRef]);
+
+  React.useEffect(() => {
     function handleKeyDown(event) {
       const { ctrlKey, metaKey, keyCode } = event;
 
