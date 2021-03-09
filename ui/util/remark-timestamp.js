@@ -51,8 +51,8 @@ function findNextTimestamp(value, fromIndex, strictlyFromIndex) {
       case 7: // "9:59:59"
         isValidTimestamp = /^[0-9]:[0-5][0-9]:[0-5][0-9]$/.test(str);
         break;
-      case 8: // "23:59:59"
-        isValidTimestamp = /^[0-2][0-3]:[0-5][0-9]:[0-5][0-9]$/.test(str);
+      case 8: // "99:59:59"
+        isValidTimestamp = /^[0-9][0-9]:[0-5][0-9]:[0-5][0-9]$/.test(str);
         break;
       default:
         // Reject
@@ -84,7 +84,7 @@ function locateTimestamp(value, fromIndex) {
 }
 
 // Generate 'timestamp' markdown node
-const createTimestampNode = text => ({
+const createTimestampNode = (text) => ({
   type: TIMESTAMP_NODE_TYPE,
   value: text,
   children: [{ type: 'text', value: text }],
@@ -145,7 +145,7 @@ const transformer = (node, index, parent) => {
   }
 };
 
-const transform = tree => {
+const transform = (tree) => {
   visit(tree, [TIMESTAMP_NODE_TYPE], transformer);
 };
 
