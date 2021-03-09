@@ -98,11 +98,9 @@ function VideoViewer(props: Props) {
   useEffect(() => {
     vjsCallbackDataRef.current = {
       embedded: embedded,
-      muted: muted,
-      volume: volume,
       videoPlaybackRate: videoPlaybackRate,
     };
-  }, [embedded, muted, volume, videoPlaybackRate]);
+  }, [embedded, videoPlaybackRate]);
 
   function doTrackingBuffered(e: Event, data: any) {
     fetch(source, { method: 'HEAD' }).then((response) => {
@@ -148,10 +146,8 @@ function VideoViewer(props: Props) {
     }
   }
 
-  function restoreSavedSettings(player) {
+  function restorePlaybackRate(player) {
     if (!vjsCallbackDataRef.current.embedded) {
-      player.muted(vjsCallbackDataRef.current.muted);
-      player.volume(vjsCallbackDataRef.current.volume);
       player.playbackRate(vjsCallbackDataRef.current.videoPlaybackRate);
     }
   }
@@ -159,6 +155,9 @@ function VideoViewer(props: Props) {
   const onPlayerReady = useCallback(
     (player: Player) => {
       if (!embedded) {
+        player.muted(muted);
+        player.volume(volume);
+        player.playbackRate(videoPlaybackRate);
         addTheaterModeButton(player, toggleVideoTheaterMode);
       }
 
@@ -186,11 +185,11 @@ function VideoViewer(props: Props) {
 
       setIsLoading(shouldPlay); // if we are here outside of an embed, we're playing
 
-      // PR: #5535; Commit: "vjs: Fix 'Video-setting persistence broken'"
+      // PR: #5535
       // Move the restoration to a later `loadedmetadata` phase to counter the
       // delay from the header-fetch. This is a temp change until the next
       // re-factoring.
-      player.on('loadedmetadata', () => restoreSavedSettings(player));
+      player.on('loadedmetadata', () => restorePlaybackRate(player));
 
       player.on('tracking:buffered', doTrackingBuffered);
       player.on('tracking:firstplay', doTrackingFirstPlay);
