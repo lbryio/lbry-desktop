@@ -41,7 +41,7 @@ class StatusBar extends React.PureComponent<Props, State> {
 
   render() {
     const { hoverUrl, show } = this.state;
-    return <div className={classnames('status-bar', { visible: show })}>{hoverUrl}</div>;
+    return <div className={classnames('status-bar', { visible: show })}>{decodeURI(hoverUrl)}</div>;
   }
 }
 
