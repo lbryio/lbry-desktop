@@ -484,7 +484,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     // For some reason the video player is responsible for detecting content type this way
     fetch(source, { method: 'HEAD', cache: 'no-store' }).then((response) => {
       const deltaFetch = performance.now() - fetchStartedAt;
-      console.log(`Prefetch took: ${deltaFetch.toFixed(3)}ms`);
+      // console.log(`Prefetch took: ${deltaFetch.toFixed(3)}ms`);
 
       // Send fetch duration analytic event (in ms)
       analytics.videoFetchDuration(source, deltaFetch);
