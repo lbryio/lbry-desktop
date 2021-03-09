@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Player doesn't stop playing when editing a comment that includes a video url _community pr!_ ([#5384](https://github.com/lbryio/lbry-desktop/pull/5384))
 - Winning search result not working correctly with mature content enabled _community pr!_ ([#5388](https://github.com/lbryio/lbry-desktop/pull/5388))
+- Home/End key not working as expected in Search Bar ([#5642](https://github.com/lbryio/lbry-desktop/pull/5642))
 - Fixes to inline videos in comments _community pr!_ ([#5389](https://github.com/lbryio/lbry-desktop/pull/5389))
 - Search page crashing on some results ([#5428](https://github.com/lbryio/lbry-desktop/pull/5428))
 - Long channel names caused comments to extend underneath related content _community pr!_ ([#5431](https://github.com/lbryio/lbry-desktop/pull/5431))
