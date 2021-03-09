@@ -50,8 +50,8 @@ class HlsQualitySelectorPlugin {
   }
 
   updatePlugin() {
-    // If there is the HLS tech
-    if (this.getHls()) {
+    // If there is the VHS tech
+    if (this.getVhs()) {
       // Show quality selector
       this._qualityButton.show();
     } else {
@@ -61,11 +61,21 @@ class HlsQualitySelectorPlugin {
   }
 
   /**
-   * Returns HLS Plugin
+   * Deprecated, returns VHS plugin
    *
-   * @return {*} - videojs-hls-contrib plugin.
+   * @return {*} - videojs-http-streaming plugin.
    */
   getHls() {
+    console.warn('hls-quality-selector: WARN: Using getHls options is deprecated. Use getVhs instead.')
+    return this.getVhs();
+  }
+
+  /**
+   * Returns VHS Plugin
+   *
+   * @return {*} - videojs-http-streaming plugin.
+   */
+  getVhs() {
     return this.player.tech({ IWillNotUseThisInPlugins: true }).vhs;
   }
 
