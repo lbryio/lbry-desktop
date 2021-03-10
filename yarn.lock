@@ -4418,6 +4418,40 @@ elliptic@^6.0.0:
     minimalistic-assert "^1.0.1"
     minimalistic-crypto-utils "^1.0.1"
 
+emoji-chars@^1.0.0:
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/emoji-chars/-/emoji-chars-1.0.12.tgz#432591cac3eafd58beb80f8b5b5e950a96c8de17"
+  integrity sha512-1t7WbkKzQ1hV4dHWM4u8g0SFHSAbxx+8o/lvXisDLTesljSFaxl2wLgMtx4wH922sNcIuLbFty/AuqUDJORd1A==
+  dependencies:
+    emoji-unicode-map "^1.0.0"
+
+emoji-dictionary@^1.0.11:
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/emoji-dictionary/-/emoji-dictionary-1.0.11.tgz#dc3463e4d768a1e11ffabc9362ac0092472bd308"
+  integrity sha512-pVTiN0StAU2nYy+BtcX/88DavMDjUcONIA6Qsg7/IyDq8xOsRFuC49F7XLUPr7Shlz4bt0/RAqPjuqjpsj3vbA==
+  dependencies:
+    emoji-chars "^1.0.0"
+    emoji-name-map "^1.0.0"
+    emoji-names "^1.0.1"
+    emoji-unicode-map "^1.0.0"
+    emojilib "^2.0.2"
+
+emoji-name-map@^1.0.0, emoji-name-map@^1.1.0:
+  version "1.2.9"
+  resolved "https://registry.yarnpkg.com/emoji-name-map/-/emoji-name-map-1.2.9.tgz#32a0788e748d9c7185a29a000102fb263fe2892d"
+  integrity sha512-MSM8y6koSqh/2uEMI2VoKA+Ac0qL5RkgFGP/pzL6n5FOrOJ7FOZFxgs7+uNpqA+AT+WmdbMPXkd3HnFXXdz4AA==
+  dependencies:
+    emojilib "^2.0.2"
+    iterate-object "^1.3.1"
+    map-o "^2.0.1"
+
+emoji-names@^1.0.1:
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/emoji-names/-/emoji-names-1.0.12.tgz#4789d72af311e3a9b0343fe8752e77420e32f8f9"
+  integrity sha512-ABXVMPYU9h1/0lNNE9VaT9OxxWXXAv/By8gVMzQYIx7jrhWjyLFVyC34CAN+EP/1e+5WZCklvClo5KSklPCAeg==
+  dependencies:
+    emoji-name-map "^1.0.0"
+
 emoji-regex@^7.0.1, emoji-regex@^7.0.2:
   version "7.0.3"
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-7.0.3.tgz#933a04052860c85e83c122479c4748a8e4c72156"
@@ -4425,6 +4459,19 @@ emoji-regex@^7.0.1, emoji-regex@^7.0.2:
 emoji-regex@^8.0.0:
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-8.0.0.tgz#e818fd69ce5ccfcb404594f842963bf53164cc37"
+
+emoji-unicode-map@^1.0.0:
+  version "1.1.11"
+  resolved "https://registry.yarnpkg.com/emoji-unicode-map/-/emoji-unicode-map-1.1.11.tgz#bc3f726abb186cc4f156316d69322f9067e30947"
+  integrity sha512-GWcWILFyDfR8AU7FRLhKk0lnvcljoEIXejg+XY3Ogz6/ELaQLMo0m4d9R3i79ikIULVEysHBGPsOEcjcFxtN+w==
+  dependencies:
+    emoji-name-map "^1.1.0"
+    iterate-object "^1.3.1"
+
+emojilib@^2.0.2:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/emojilib/-/emojilib-2.4.0.tgz#ac518a8bb0d5f76dda57289ccb2fdf9d39ae721e"
+  integrity sha512-5U0rVMU5Y2n2+ykNLQqMoqklN9ICBT/KsvC1Gz6vqHbz2AXXGkG+Pm5rMWk/8Vjrr/mY9985Hi8DYzn1F09Nyw==
 
 emojis-list@^2.0.0:
   version "2.1.0"
@@ -6676,6 +6723,11 @@ isurl@^1.0.0-alpha5:
     has-to-string-tag-x "^1.2.0"
     is-object "^1.0.1"
 
+iterate-object@^1.3.0, iterate-object@^1.3.1:
+  version "1.3.4"
+  resolved "https://registry.yarnpkg.com/iterate-object/-/iterate-object-1.3.4.tgz#fa50b1d9e58e340a7dd6b4c98c8a5e182e790096"
+  integrity sha512-4dG1D1x/7g8PwHS9aK6QV5V94+ZvyP4+d19qDv43EzImmrndysIl4prmJ1hWWIGCqrZHyaHBm6BSEWHOLnpoNw==
+
 jake@^10.6.1:
   version "10.8.2"
   resolved "https://registry.yarnpkg.com/jake/-/jake-10.8.2.tgz#ebc9de8558160a66d82d0eadc6a2e58fbc500a7b"
@@ -7318,6 +7370,13 @@ map-age-cleaner@^0.1.1:
 map-cache@^0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/map-cache/-/map-cache-0.2.2.tgz#c32abd0bd6525d9b051645bb4f26ac5dc98a0dbf"
+
+map-o@^2.0.1:
+  version "2.0.10"
+  resolved "https://registry.yarnpkg.com/map-o/-/map-o-2.0.10.tgz#b656a75cead939a936c338fb5df8c9d55f0dbb23"
+  integrity sha512-BxazE81fVByHWasyXhqKeo2m7bFKYu+ZbEfiuexMOnklXW+tzDvnlTi/JaklEeuuwqcqJzPaf9q+TWptSGXeLg==
+  dependencies:
+    iterate-object "^1.3.0"
 
 map-stream@~0.1.0:
   version "0.1.0"
