@@ -155,6 +155,7 @@ const WalletBalance = (props: Props) => {
             <Button button="primary" label={__('Buy')} icon={ICONS.BUY} navigate={`/$/${PAGES.BUY}`} />
             <Button button="secondary" label={__('Receive')} icon={ICONS.RECEIVE} navigate={`/$/${PAGES.RECEIVE}`} />
             <Button button="secondary" label={__('Send')} icon={ICONS.SEND} navigate={`/$/${PAGES.SEND}`} />
+            <Button button="secondary" label={__('Swap')} icon={ICONS.REFRESH} navigate={`/$/${PAGES.SWAP}`} />
           </div>
           {(otherCount > WALLET_CONSOLIDATE_UTXOS || consolidateIsPending || consolidatingUtxos) && (
             <p className="help">
