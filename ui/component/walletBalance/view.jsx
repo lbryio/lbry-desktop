@@ -17,7 +17,7 @@ type Props = {
   claimsBalance: number,
   supportsBalance: number,
   tipsBalance: number,
-  doOpenModal: string => void,
+  doOpenModal: (string) => void,
   hasSynced: boolean,
   doFetchUtxoCounts: () => void,
   doUtxoConsolidate: () => void,
@@ -153,12 +153,7 @@ const WalletBalance = (props: Props) => {
           {/* @endif */}
           <div className="section__actions">
             <Button button="primary" label={__('Buy')} icon={ICONS.BUY} navigate={`/$/${PAGES.BUY}`} />
-            <Button
-              button="secondary"
-              label={__('Receive')}
-              icon={ICONS.RECEIVE}
-              onClick={() => doOpenModal(MODALS.WALLET_RECEIVE)}
-            />
+            <Button button="secondary" label={__('Receive')} icon={ICONS.RECEIVE} navigate={`/$/${PAGES.RECEIVE}`} />
             <Button
               button="secondary"
               label={__('Send')}
