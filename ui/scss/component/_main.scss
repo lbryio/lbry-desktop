@@ -256,6 +256,11 @@
   }
 }
 
+.main--send {
+  @extend .main--buy;
+  max-width: 34rem;
+}
+
 .main--empty {
   align-self: center;
   display: flex;

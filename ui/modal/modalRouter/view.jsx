@@ -28,7 +28,6 @@ import ModalWalletUnlock from 'modal/modalWalletUnlock';
 import ModalRewardCode from 'modal/modalRewardCode';
 import ModalPasswordUnsave from 'modal/modalPasswordUnsave';
 import ModalCommentAcknowledgement from 'modal/modalCommentAcknowledgement';
-import ModalWalletSend from 'modal/modalWalletSend';
 import ModalYoutubeWelcome from 'modal/modalYoutubeWelcome';
 import ModalSetReferrer from 'modal/modalSetReferrer';
 import ModalSignOut from 'modal/modalSignOut';
@@ -119,8 +118,6 @@ function ModalRouter(props: Props) {
       return <ModalRewardCode {...modalProps} />;
     case MODALS.COMMENT_ACKNOWEDGEMENT:
       return <ModalCommentAcknowledgement {...modalProps} />;
-    case MODALS.WALLET_SEND:
-      return <ModalWalletSend {...modalProps} />;
     case MODALS.YOUTUBE_WELCOME:
       return <ModalYoutubeWelcome />;
     case MODALS.SET_REFERRER:
