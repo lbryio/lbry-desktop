@@ -32,7 +32,6 @@ export const WALLET_UNLOCK = 'wallet_unlock';
 export const WALLET_SYNC = 'wallet_sync';
 export const WALLET_PASSWORD_UNSAVE = 'wallet_password_unsave';
 export const WALLET_SEND = 'wallet_send';
-export const WALLET_RECEIVE = 'wallet_receive';
 export const CREATE_CHANNEL = 'create_channel';
 export const YOUTUBE_WELCOME = 'youtube_welcome';
 export const SET_REFERRER = 'set_referrer';

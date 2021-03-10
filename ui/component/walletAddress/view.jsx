@@ -4,10 +4,9 @@ import Button from 'component/button';
 import CopyableText from 'component/copyableText';
 import QRCode from 'component/common/qr-code';
 import Card from 'component/common/card';
-import LbcSymbol from 'component/common/lbc-symbol';
 
 type Props = {
-  checkAddressIsMine: string => void,
+  checkAddressIsMine: (string) => void,
   receiveAddress: string,
   getNewAddress: () => void,
   gettingNewAddress: boolean,
@@ -49,7 +48,7 @@ class WalletAddress extends React.PureComponent<Props, State> {
 
     return (
       <Card
-        title={<LbcSymbol prefix={__('Receive')} isTitle />}
+        title={__('Receive Credits')}
         subtitle={__('Use this address to receive LBRY Credits.')}
         actions={
           <React.Fragment>
