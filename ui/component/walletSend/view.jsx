@@ -41,7 +41,7 @@ class WalletSend extends React.PureComponent<Props> {
 
     return (
       <Card
-        title={<LbcSymbol prefix={__('Send')} isTitle />}
+        title={__('Send Credits')}
         subtitle={
           <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>
             Send LBRY Credits to your friends or favorite creators.

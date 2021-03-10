@@ -58,6 +58,7 @@ exports.CHECKOUT = 'checkout';
 exports.CODE_2257 = '2257';
 exports.BUY = 'buy';
 exports.RECEIVE = 'receive';
+exports.SEND = 'send';
 exports.CHANNEL_NEW = 'channel/new';
 exports.NOTIFICATIONS = 'notifications';
 exports.YOUTUBE_SYNC = 'youtube';
