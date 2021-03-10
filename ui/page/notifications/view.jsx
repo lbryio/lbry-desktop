@@ -70,51 +70,46 @@ export default function NotificationsPage(props: Props) {
       )}
       {!fetching && (
         <>
-          <div className="section__header--actions">
-            <div className={'claim-search__input-container'}>
-              <FormField
-                className={classnames('claim-search__dropdown', {
-                  'claim-search__dropdown--selected': filterBy,
-                })}
-                label={__('Filter')}
-                type="select"
-                name="filter"
-                value={filterBy || ALL_NOTIFICATIONS}
-                onChange={(e) => setFilterBy(e.target.value)}
-              >
-                {NOTIFICATION_FILTER_TYPES.map((type) => (
-                  <option key={type} value={type}>
-                    {/* i18fixme */}
-                    {type === ALL_NOTIFICATIONS && __('All')}
-                    {type === NOTIFICATIONS.NOTIFICATION_CREATOR_SUBSCRIBER && __('Followers')}
-                    {type === NOTIFICATIONS.NOTIFICATION_COMMENT && __('Comments')}
-                    {type === NOTIFICATIONS.NOTIFICATION_REPLY && __('Comment replies')}
-                    {type === NOTIFICATIONS.DAILY_WATCH_AVAILABLE && __('Daily watch availability')}
-                    {type === NOTIFICATIONS.DAILY_WATCH_REMIND && __('Daily watch reminders')}
-                    {type === NOTIFICATIONS.NEW_CONTENT && __('New content')}
-                  </option>
-                ))}
-              </FormField>
-            </div>
-          </div>
-          <Card
-            isBodyList
-            title={
-              <span>
-                {__('Notifications')}
-                {fetching && <Spinner type="small" />}
-              </span>
-            }
-            titleActions={
-              unreadCount > 0 && (
+          <div className="claim-list__header">
+            <h1 className="card__title">{__('Notifications')}</h1>
+            <div className="claim-list__alt-controls--wrap">
+              {fetching && <Spinner type="small" />}
+              <div className={'claim-search__input-container'}>
+                <FormField
+                  className={classnames('claim-search__dropdown', {
+                    'claim-search__dropdown--selected': filterBy,
+                  })}
+                  type="select"
+                  name="filter"
+                  value={filterBy || ALL_NOTIFICATIONS}
+                  onChange={(e) => setFilterBy(e.target.value)}
+                >
+                  {NOTIFICATION_FILTER_TYPES.map((type) => (
+                    <option key={type} value={type}>
+                      {/* i18fixme */}
+                      {type === ALL_NOTIFICATIONS && __('All')}
+                      {type === NOTIFICATIONS.NOTIFICATION_CREATOR_SUBSCRIBER && __('Followers')}
+                      {type === NOTIFICATIONS.NOTIFICATION_COMMENT && __('Comments')}
+                      {type === NOTIFICATIONS.NOTIFICATION_REPLY && __('Comment replies')}
+                      {type === NOTIFICATIONS.DAILY_WATCH_AVAILABLE && __('Daily watch availability')}
+                      {type === NOTIFICATIONS.DAILY_WATCH_REMIND && __('Daily watch reminders')}
+                      {type === NOTIFICATIONS.NEW_CONTENT && __('New content')}
+                    </option>
+                  ))}
+                </FormField>
+              </div>
+              {unreadCount > 0 && (
                 <Button
                   icon={ICONS.EYE}
                   onClick={doReadNotifications}
                   button="secondary"
                   label={__('Mark all as read')}
                 />
-              )
-            }
+              )}
+            </div>
+          </div>
+          <Card
+            isBodyList
             body={
               <>
                 {filteredNotifications && filteredNotifications.length > 0 ? (

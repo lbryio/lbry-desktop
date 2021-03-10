@@ -61,6 +61,15 @@
   }
 }
 
+.claim-list__alt-controls--wrap {
+  @extend .claim-list__alt-controls;
+
+  @media (max-width: $breakpoint-small) {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
 .claim-preview__wrapper {
   @include font-sans;
   padding: var(--spacing-m);
