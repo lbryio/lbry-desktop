@@ -1,6 +1,7 @@
 import { DOMAIN } from 'config';
 import { connect } from 'react-redux';
 import { PAGE_SIZE } from 'constants/claim';
+import { LIVE_STREAM_TAG } from 'constants/livestream';
 import {
   doResolveUri,
   makeSelectClaimForUri,
@@ -10,6 +11,7 @@ import {
   normalizeURI,
   makeSelectClaimIsMine,
   makeSelectClaimIsPending,
+  makeSelectTagInClaimOrChannelForUri,
 } from 'lbry-redux';
 import { makeSelectChannelInSubscriptions } from 'redux/selectors/subscriptions';
 import { selectBlackListedOutpoints } from 'lbryinc';
@@ -60,11 +62,13 @@ const select = (state, props) => {
     title: makeSelectTitleForUri(uri)(state),
     claimIsMine: makeSelectClaimIsMine(uri)(state),
     claimIsPending: makeSelectClaimIsPending(uri)(state),
+    // Change to !makeSelectClaimHasSource()
+    isLivestream: makeSelectTagInClaimOrChannelForUri(uri, LIVE_STREAM_TAG)(state),
   };
 };
 
-const perform = dispatch => ({
-  resolveUri: uri => dispatch(doResolveUri(uri)),
+const perform = (dispatch) => ({
+  resolveUri: (uri) => dispatch(doResolveUri(uri)),
 });
 
 export default connect(select, perform)(ShowPage);

@@ -117,6 +117,7 @@
     "electron-is-dev": "^0.3.0",
     "electron-webpack": "^2.8.2",
     "electron-window-state": "^4.1.1",
+    "emoji-dictionary": "^1.0.11",
     "eslint": "^5.15.2",
     "eslint-config-prettier": "^2.9.0",
     "eslint-config-standard": "^12.0.0",
