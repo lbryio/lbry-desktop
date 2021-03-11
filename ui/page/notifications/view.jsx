@@ -2,7 +2,6 @@
 import * as ICONS from 'constants/icons';
 import React from 'react';
 import Page from 'component/page';
-import Card from 'component/common/card';
 import Spinner from 'component/spinner';
 import { FormField } from 'component/common/form';
 import Notification from 'component/notification';
@@ -10,7 +9,6 @@ import Button from 'component/button';
 import usePersistedState from 'effects/use-persisted-state';
 import Yrbl from 'component/yrbl';
 import * as NOTIFICATIONS from 'constants/notifications';
-import classnames from 'classnames';
 
 type Props = {
   notifications: Array<Notification>,
@@ -74,30 +72,7 @@ export default function NotificationsPage(props: Props) {
             <h1 className="card__title">{__('Notifications')}</h1>
             <div className="claim-list__alt-controls--wrap">
               {fetching && <Spinner type="small" />}
-              <div className={'claim-search__input-container'}>
-                <FormField
-                  className={classnames('claim-search__dropdown', {
-                    'claim-search__dropdown--selected': filterBy,
-                  })}
-                  type="select"
-                  name="filter"
-                  value={filterBy || ALL_NOTIFICATIONS}
-                  onChange={(e) => setFilterBy(e.target.value)}
-                >
-                  {NOTIFICATION_FILTER_TYPES.map((type) => (
-                    <option key={type} value={type}>
-                      {/* i18fixme */}
-                      {type === ALL_NOTIFICATIONS && __('All')}
-                      {type === NOTIFICATIONS.NOTIFICATION_CREATOR_SUBSCRIBER && __('Followers')}
-                      {type === NOTIFICATIONS.NOTIFICATION_COMMENT && __('Comments')}
-                      {type === NOTIFICATIONS.NOTIFICATION_REPLY && __('Comment replies')}
-                      {type === NOTIFICATIONS.DAILY_WATCH_AVAILABLE && __('Daily watch availability')}
-                      {type === NOTIFICATIONS.DAILY_WATCH_REMIND && __('Daily watch reminders')}
-                      {type === NOTIFICATIONS.NEW_CONTENT && __('New content')}
-                    </option>
-                  ))}
-                </FormField>
-              </div>
+
               {unreadCount > 0 && (
                 <Button
                   icon={ICONS.EYE}
@@ -106,40 +81,55 @@ export default function NotificationsPage(props: Props) {
                   label={__('Mark all as read')}
                 />
               )}
+              <FormField
+                className="notification__filter"
+                type="select"
+                name="filter"
+                value={filterBy || ALL_NOTIFICATIONS}
+                onChange={(e) => setFilterBy(e.target.value)}
+              >
+                {NOTIFICATION_FILTER_TYPES.map((type) => (
+                  <option key={type} value={type}>
+                    {/* i18fixme */}
+                    {type === ALL_NOTIFICATIONS && __('All')}
+                    {type === NOTIFICATIONS.NOTIFICATION_CREATOR_SUBSCRIBER && __('Followers')}
+                    {type === NOTIFICATIONS.NOTIFICATION_COMMENT && __('Comments')}
+                    {type === NOTIFICATIONS.NOTIFICATION_REPLY && __('Comment replies')}
+                    {type === NOTIFICATIONS.DAILY_WATCH_AVAILABLE && __('Daily watch availability')}
+                    {type === NOTIFICATIONS.DAILY_WATCH_REMIND && __('Daily watch reminders')}
+                    {type === NOTIFICATIONS.NEW_CONTENT && __('New content')}
+                  </option>
+                ))}
+              </FormField>
             </div>
           </div>
-          <Card
-            isBodyList
-            body={
-              <>
-                {filteredNotifications && filteredNotifications.length > 0 ? (
-                  <div className="notification_list">
-                    {filteredNotifications.map((notification, index) => {
-                      return <Notification key={notification.id} notification={notification} />;
-                    })}
+          {filteredNotifications && filteredNotifications.length > 0 ? (
+            <div className="card">
+              <div className="notification_list">
+                {filteredNotifications.map((notification, index) => {
+                  return <Notification key={notification.id} notification={notification} />;
+                })}
+              </div>
+            </div>
+          ) : (
+            <div className="main--empty">
+              <Yrbl
+                title={__('No notifications')}
+                subtitle={
+                  <p>
+                    {isFiltered
+                      ? __('Try selecting another filter.')
+                      : __("You don't have any notifications yet, but they will be here when you do!")}
+                  </p>
+                }
+                actions={
+                  <div className="section__actions">
+                    <Button button="primary" icon={ICONS.HOME} label={__('Go Home')} navigate="/" />
                   </div>
-                ) : (
-                  <div className="main--empty">
-                    <Yrbl
-                      title={__('No notifications')}
-                      subtitle={
-                        <p>
-                          {isFiltered
-                            ? __('Try selecting another filter.')
-                            : __("You don't have any notifications yet, but they will be here when you do!")}
-                        </p>
-                      }
-                      actions={
-                        <div className="section__actions">
-                          <Button button="primary" icon={ICONS.HOME} label={__('Go Home')} navigate="/" />
-                        </div>
-                      }
-                    />
-                  </div>
-                )}
-              </>
-            }
-          />
+                }
+              />
+            </div>
+          )}
         </>
       )}
     </Page>
