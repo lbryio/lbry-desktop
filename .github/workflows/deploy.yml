@@ -74,6 +74,7 @@ jobs:
           ENABLE_COMMENT_REACTIONS: true
           DEFAULT_LANGUAGE: en
           KNOWN_APP_DOMAINS: lbry.tv,lbry.lat,odysee.com
+          CHANNEL_STAKED_LEVEL_VIDEO_COMMENTS: 0
 
       - uses: actions/upload-artifact@v2
         if: |
