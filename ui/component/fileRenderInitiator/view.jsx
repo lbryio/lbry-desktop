@@ -14,12 +14,12 @@ import Nag from 'component/common/nag';
 const SPACE_BAR_KEYCODE = 32;
 
 type Props = {
-  play: string => void,
+  play: (string) => void,
   isLoading: boolean,
   isPlaying: boolean,
   fileInfo: FileListItem,
   uri: string,
-  history: { push: string => void },
+  history: { push: (string) => void },
   location: { search: ?string, pathname: string },
   obscurePreview: boolean,
   insufficientCredits: boolean,
@@ -58,6 +58,7 @@ export default function FileRenderInitiator(props: Props) {
   const isFree = hasCostInfo && cost === 0;
   const fileStatus = fileInfo && fileInfo.status;
   const isPlayable = RENDER_MODES.FLOATING_MODES.includes(renderMode);
+  const isText = RENDER_MODES.TEXT_MODES.includes(renderMode);
 
   function doAuthRedirect() {
     history.push(`/$/${PAGES.AUTH}?redirect=${encodeURIComponent(location.pathname)}`);
@@ -121,6 +122,7 @@ export default function FileRenderInitiator(props: Props) {
       className={classnames('content__cover', {
         'content__cover--disabled': disabled,
         'content__cover--theater-mode': videoTheaterMode,
+        'content__cover--text': isText,
         'card__media--nsfw': obscurePreview,
       })}
     >

@@ -27,6 +27,7 @@ type Props = {
   noSideNavigation: boolean,
   fullWidthPage: boolean,
   videoTheaterMode: boolean,
+  isText?: boolean,
   backout: {
     backLabel?: string,
     backNavDefault?: string,
@@ -47,6 +48,7 @@ function Page(props: Props) {
     noSideNavigation = false,
     backout,
     videoTheaterMode,
+    isText = false,
   } = props;
 
   const {
@@ -105,6 +107,7 @@ function Page(props: Props) {
             'main--auth-page': authPage,
             'main--file-page': filePage,
             'main--theater-mode': isOnFilePage && videoTheaterMode,
+            'main--text': isText,
           })}
         >
           {children}

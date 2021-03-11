@@ -36,7 +36,6 @@
 
 .main-wrapper__inner--filepage {
   padding: 0;
-  padding-top: var(--spacing-s);
 }
 
 .main-wrapper__inner--theater-mode {
@@ -65,10 +64,11 @@
   max-width: var(--page-max-width--filepage);
   margin-left: auto;
   margin-right: auto;
+  margin-top: var(--spacing-m);
+  padding: 0 var(--spacing-m);
   display: flex;
+  flex-direction: row;
   align-items: flex-start;
-  padding-left: var(--spacing-m);
-  padding-right: var(--spacing-m);
   position: relative;
 
   > :first-child {
@@ -77,7 +77,7 @@
 
   .file-page__secondary-content {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     width: 100%;
     margin-top: var(--spacing-m);
@@ -91,6 +91,14 @@
 
     @media (min-width: $breakpoint-medium) {
       flex-direction: row;
+    }
+  }
+
+  .file-page__post-comments {
+    margin-top: var(--spacing-l);
+
+    @media (min-width: $breakpoint-small) {
+      padding: var(--spacing-m);
     }
   }
 
@@ -121,6 +129,7 @@
 
   @media (max-width: $breakpoint-small) {
     padding: var(--spacing-xs);
+    flex-direction: column;
     padding-top: 0;
   }
 }
@@ -181,6 +190,10 @@
     margin-top: var(--spacing-main-padding);
     padding: 0 var(--spacing-l);
   }
+}
+
+.main--text {
+  flex-direction: column;
 }
 
 .main__auth-content {

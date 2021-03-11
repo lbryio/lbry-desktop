@@ -49,6 +49,7 @@
 
 .media__subtitle--centered {
   @extend .media__subtitle;
+  align-self: auto;
   align-items: center;
   display: flex;
 }
@@ -110,6 +111,7 @@
 }
 
 .media__actions {
+  @include font-sans;
   position: relative;
   display: flex;
   flex-wrap: wrap;

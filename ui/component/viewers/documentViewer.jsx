@@ -3,7 +3,6 @@
 import React from 'react';
 import LoadingScreen from 'component/common/loading-screen';
 import MarkdownPreview from 'component/common/markdown-preview';
-import Card from 'component/common/card';
 import CodeViewer from 'component/viewers/codeViewer';
 import * as RENDER_MODES from 'constants/file_render_modes';
 import * as https from 'https';
@@ -42,7 +41,7 @@ class DocumentViewer extends React.PureComponent<Props, State> {
 
       let data = '';
 
-      stream.on('data', chunk => {
+      stream.on('data', (chunk) => {
         data += chunk;
       });
 
@@ -57,25 +56,19 @@ class DocumentViewer extends React.PureComponent<Props, State> {
     // @endif
     // @if TARGET='web'
     if (source && source.stream) {
-      https.get(
-        source.stream,
-        function(response) {
-          if (response.statusCode === 200) {
-            let data = '';
-            response.on('data', function(chunk) {
-              data += chunk;
-            });
-            response.on(
-              'end',
-              function() {
-                this.setState({ content: data, loading: false });
-              }.bind(this)
-            );
-          } else {
-            this.setState({ error: true, loading: false });
-          }
-        }.bind(this)
-      );
+      https.get(source.stream, (response) => {
+        if (response.statusCode === 200) {
+          let data = '';
+          response.on('data', (chunk) => {
+            data += chunk;
+          });
+          response.on('end', () => {
+            this.setState({ content: data, loading: false });
+          });
+        } else {
+          this.setState({ error: true, loading: false });
+        }
+      });
     }
     // @endif
   }
@@ -86,7 +79,7 @@ class DocumentViewer extends React.PureComponent<Props, State> {
     const { contentType } = source;
 
     return renderMode === RENDER_MODES.MARKDOWN ? (
-      <Card body={<MarkdownPreview content={content} isMarkdownPost promptLinks />} />
+      <MarkdownPreview content={content} isMarkdownPost promptLinks />
     ) : (
       <CodeViewer value={content} contentType={contentType} theme={theme} />
     );

@@ -254,7 +254,6 @@ export default function GetHomePageRowData(
     rowData.push(YOUTUBE_CREATOR_ROW);
   }
 
-  //   rowData.push(TRENDING_CLASSICS);
   rowData.push(TOP_CONTENT_TODAY);
 
   //   rowData.push(TRENDING_ON_LBRY);

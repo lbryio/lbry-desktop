@@ -124,6 +124,10 @@
   }
 }
 
+.content__cover--text {
+  margin: 10rem 0;
+}
+
 .content__cover--theater-mode {
   @extend .content__cover;
   border-radius: 0;
@@ -174,8 +178,8 @@
   background-color: #000;
 
   &.content__loading--document {
-    background-color: var(--color-card-background);
-    padding: calc(var(--spacing-xl) * 3) 0;
+    background-color: var(--color-background);
+    padding: calc(var(--spacing-xl) * 5) 0;
 
     .content__loading-text {
       color: var(--color-text);
