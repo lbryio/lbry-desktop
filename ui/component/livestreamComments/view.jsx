@@ -102,7 +102,8 @@ export default function LivestreamFeed(props: Props) {
                       <Button
                         target="_blank"
                         className={classnames('livestream__comment-author', {
-                          'livestream__comment-author--streamer': claim.signing_channel.claim_id === comment.channel_id,
+                          'livestream__comment-author--streamer':
+                            claim.signing_channel && claim.signing_channel.claim_id === comment.channel_id,
                         })}
                         navigate={comment.channel_url}
                         label={comment.channel_name}
