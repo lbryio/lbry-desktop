@@ -97,6 +97,7 @@ export const MORE_VERTICAL = 'MoreVertical';
 export const IMAGE = 'Image';
 export const AUDIO = 'HeadPhones';
 export const VIDEO = 'Video';
+export const LIVESTREAM = 'Livestream';
 export const VOLUME_MUTED = 'VolumeX';
 export const TEXT = 'FileText';
 export const DOWNLOADABLE = 'Downloadable';

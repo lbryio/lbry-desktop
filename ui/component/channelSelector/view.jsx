@@ -30,7 +30,7 @@ function ChannelListItem(props: ListItemProps) {
 
   return (
     <div className={classnames('channel__list-item', { 'channel__list-item--selected': isSelected })}>
-      <ChannelThumbnail uri={uri} />
+      <ChannelThumbnail uri={uri} hideStakedIndicator />
       <ChannelTitle uri={uri} />
       {isSelected && <Icon icon={ICONS.DOWN} />}
     </div>
