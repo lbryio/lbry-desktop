@@ -1,4 +1,7 @@
 // @flow
+import { ENABLE_PREROLL_ADS } from 'config';
+import * as PAGES from 'constants/pages';
+import * as ICONS from 'constants/icons';
 import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { stopContextMenu } from 'util/context-menu';
 import type { Player } from './internal/videojs';
@@ -13,14 +16,18 @@ import FileViewerEmbeddedEnded from 'web/component/fileViewerEmbeddedEnded';
 import FileViewerEmbeddedTitle from 'component/fileViewerEmbeddedTitle';
 import LoadingScreen from 'component/common/loading-screen';
 import { addTheaterModeButton } from './internal/theater-mode';
+import { useGetAds } from 'effects/use-get-ads';
+import Button from 'component/button';
+import I18nMessage from 'component/i18nMessage';
+import { useHistory } from 'react-router';
 
 const PLAY_TIMEOUT_ERROR = 'play_timeout_error';
 const PLAY_TIMEOUT_LIMIT = 2000;
 
 type Props = {
   position: number,
-  changeVolume: number => void,
-  changeMute: boolean => void,
+  changeVolume: (number) => void,
+  changeMute: (boolean) => void,
   source: string,
   contentType: string,
   thumbnail: string,
@@ -36,9 +43,19 @@ type Props = {
   doAnalyticsBuffer: (string, any) => void,
   claimRewards: () => void,
   savePosition: (string, number) => void,
-  clearPosition: string => void,
+  clearPosition: (string) => void,
   toggleVideoTheaterMode: () => void,
-  setVideoPlaybackRate: number => void,
+  setVideoPlaybackRate: (number) => void,
+  authenticated: boolean,
+  homepageData: {
+    PRIMARY_CONTENT_CHANNEL_IDS?: Array<string>,
+    ENLIGHTENMENT_CHANNEL_IDS?: Array<string>,
+    GAMING_CHANNEL_IDS?: Array<string>,
+    SCIENCE_CHANNEL_IDS?: Array<string>,
+    TECHNOLOGY_CHANNEL_IDS?: Array<string>,
+    COMMUNITY_CHANNEL_IDS?: Array<string>,
+    FINCANCE_CHANNEL_IDS?: Array<string>,
+  },
 };
 
 /*
@@ -69,20 +86,45 @@ function VideoViewer(props: Props) {
     desktopPlayStartTime,
     toggleVideoTheaterMode,
     setVideoPlaybackRate,
+    homepageData,
+    authenticated,
   } = props;
+  const {
+    PRIMARY_CONTENT_CHANNEL_IDS = [],
+    ENLIGHTENMENT_CHANNEL_IDS = [],
+    GAMING_CHANNEL_IDS = [],
+    SCIENCE_CHANNEL_IDS = [],
+    TECHNOLOGY_CHANNEL_IDS = [],
+    COMMUNITY_CHANNEL_IDS = [],
+    FINCANCE_CHANNEL_IDS = [],
+  } = homepageData;
+  const adApprovedChannelIds = [
+    ...PRIMARY_CONTENT_CHANNEL_IDS,
+    ...ENLIGHTENMENT_CHANNEL_IDS,
+    ...GAMING_CHANNEL_IDS,
+    ...SCIENCE_CHANNEL_IDS,
+    ...TECHNOLOGY_CHANNEL_IDS,
+    ...COMMUNITY_CHANNEL_IDS,
+    ...FINCANCE_CHANNEL_IDS,
+  ];
   const claimId = claim && claim.claim_id;
+  const channelClaimId = claim && claim.signing_channel && claim.signing_channel.claim_id;
   const isAudio = contentType.includes('audio');
   const forcePlayer = FORCE_CONTENT_TYPE_PLAYER.includes(contentType);
+  const {
+    location: { pathname },
+  } = useHistory();
   const [isPlaying, setIsPlaying] = useState(false);
   const [showAutoplayCountdown, setShowAutoplayCountdown] = useState(false);
   const [isEndededEmbed, setIsEndededEmbed] = useState(false);
-
+  const previousUri = usePrevious(uri);
+  const embedded = useContext(EmbedContext);
+  const approvedVideo = Boolean(channelClaimId) && adApprovedChannelIds.includes(channelClaimId);
+  const adsEnabled = ENABLE_PREROLL_ADS && !authenticated && !embedded && approvedVideo;
+  const [adUrl, setAdUrl, isFetchingAd] = useGetAds(adsEnabled);
   /* isLoading was designed to show loading screen on first play press, rather than completely black screen, but
   breaks because some browsers (e.g. Firefox) block autoplay but leave the player.play Promise pending */
   const [isLoading, setIsLoading] = useState(false);
-
-  const previousUri = usePrevious(uri);
-  const embedded = useContext(EmbedContext);
 
   // force everything to recent when URI changes, can cause weird corner cases otherwise (e.g. navigate while autoplay is true)
   useEffect(() => {
@@ -94,7 +136,7 @@ function VideoViewer(props: Props) {
   }, [uri, previousUri]);
 
   function doTrackingBuffered(e: Event, data: any) {
-    fetch(source, { method: 'HEAD' }).then(response => {
+    fetch(source, { method: 'HEAD' }).then((response) => {
       data.playerPoweredBy = response.headers.get('x-powered-by');
       doAnalyticsBuffer(uri, data);
     });
@@ -114,13 +156,18 @@ function VideoViewer(props: Props) {
     });
   }
 
-  function onEnded() {
+  const onEnded = React.useCallback(() => {
+    if (adUrl) {
+      setAdUrl(null);
+      return;
+    }
+
     if (embedded) {
       setIsEndededEmbed(true);
     } else if (autoplaySetting) {
       setShowAutoplayCountdown(true);
     }
-  }
+  }, [embedded, setIsEndededEmbed, autoplaySetting, setShowAutoplayCountdown, adUrl, setAdUrl]);
 
   function onPlay() {
     setIsLoading(false);
@@ -137,72 +184,76 @@ function VideoViewer(props: Props) {
     }
   }
 
-  const onPlayerReady = useCallback(
-    (player: Player) => {
-      if (!embedded) {
-        player.muted(muted);
-        player.volume(volume);
-        player.playbackRate(videoPlaybackRate);
-        addTheaterModeButton(player, toggleVideoTheaterMode);
-      }
+  const playerReadyDependencyList = [uri, adUrl, embedded, autoplayIfEmbedded];
+  if (!IS_WEB) {
+    playerReadyDependencyList.push(desktopPlayStartTime);
+  }
 
-      const shouldPlay = !embedded || autoplayIfEmbedded;
-      // https://blog.videojs.com/autoplay-best-practices-with-video-js/#Programmatic-Autoplay-and-Success-Failure-Detection
-      if (shouldPlay) {
-        const playPromise = player.play();
-        const timeoutPromise = new Promise((resolve, reject) => setTimeout(() => reject(PLAY_TIMEOUT_ERROR), PLAY_TIMEOUT_LIMIT));
+  const onPlayerReady = useCallback((player: Player) => {
+    if (!embedded) {
+      player.muted(muted);
+      player.volume(volume);
+      player.playbackRate(videoPlaybackRate);
+      addTheaterModeButton(player, toggleVideoTheaterMode);
+    }
 
-        Promise.race([playPromise, timeoutPromise]).catch(error => {
-          if (PLAY_TIMEOUT_ERROR) {
-            const retryPlayPromise = player.play();
-            Promise.race([retryPlayPromise, timeoutPromise]).catch(error => {
-              setIsLoading(false);
-              setIsPlaying(false);
-            });
-          } else {
+    const shouldPlay = !embedded || autoplayIfEmbedded;
+    // https://blog.videojs.com/autoplay-best-practices-with-video-js/#Programmatic-Autoplay-and-Success-Failure-Detection
+    if (shouldPlay) {
+      const playPromise = player.play();
+      const timeoutPromise = new Promise((resolve, reject) =>
+        setTimeout(() => reject(PLAY_TIMEOUT_ERROR), PLAY_TIMEOUT_LIMIT)
+      );
+
+      Promise.race([playPromise, timeoutPromise]).catch((error) => {
+        if (PLAY_TIMEOUT_ERROR) {
+          const retryPlayPromise = player.play();
+          Promise.race([retryPlayPromise, timeoutPromise]).catch((error) => {
             setIsLoading(false);
             setIsPlaying(false);
-          }
-        });
+          });
+        } else {
+          setIsLoading(false);
+          setIsPlaying(false);
+        }
+      });
+    }
+
+    setIsLoading(shouldPlay); // if we are here outside of an embed, we're playing
+    player.on('tracking:buffered', doTrackingBuffered);
+    player.on('tracking:firstplay', doTrackingFirstPlay);
+    player.on('ended', onEnded);
+    player.on('play', onPlay);
+    player.on('pause', () => {
+      setIsPlaying(false);
+      handlePosition(player);
+    });
+    player.on('error', () => {
+      const error = player.error();
+
+      if (error) {
+        analytics.sentryError('Video.js error', error);
       }
-
-      setIsLoading(shouldPlay); // if we are here outside of an embed, we're playing
-      player.on('tracking:buffered', doTrackingBuffered);
-      player.on('tracking:firstplay', doTrackingFirstPlay);
-      player.on('ended', onEnded);
-      player.on('play', onPlay);
-      player.on('pause', () => {
-        setIsPlaying(false);
-        handlePosition(player);
-      });
-      player.on('error', function() {
-        const error = player.error();
-
-        if (error) {
-          analytics.sentryError('Video.js error', error);
-        }
-      });
-      player.on('volumechange', () => {
-        if (player) {
-          changeVolume(player.volume());
-          changeMute(player.muted());
-        }
-      });
-      player.on('ratechange', () => {
-        if (player) {
-          setVideoPlaybackRate(player.playbackRate());
-        }
-      });
-
-      if (position) {
-        player.currentTime(position);
+    });
+    player.on('volumechange', () => {
+      if (player) {
+        changeVolume(player.volume());
+        changeMute(player.muted());
       }
-      player.on('dispose', () => {
-        handlePosition(player);
-      });
-    },
-    IS_WEB ? [uri] : [uri, desktopPlayStartTime]
-  );
+    });
+    player.on('ratechange', () => {
+      if (player) {
+        setVideoPlaybackRate(player.playbackRate());
+      }
+    });
+
+    if (position) {
+      player.currentTime(position);
+    }
+    player.on('dispose', () => {
+      handlePosition(player);
+    });
+  }, playerReadyDependencyList);
 
   return (
     <div
@@ -217,16 +268,50 @@ function VideoViewer(props: Props) {
       {embedded && !isEndededEmbed && <FileViewerEmbeddedTitle uri={uri} />}
       {/* disable this loading behavior because it breaks when player.play() promise hangs */}
       {isLoading && <LoadingScreen status={__('Loading')} />}
-      <VideoJs
-        source={source}
-        isAudio={isAudio}
-        poster={isAudio || (embedded && !autoplayIfEmbedded) ? thumbnail : ''}
-        sourceType={forcePlayer ? 'video/mp4' : contentType}
-        onPlayerReady={onPlayerReady}
-        startMuted={autoplayIfEmbedded}
-        toggleVideoTheaterMode={toggleVideoTheaterMode}
-        autoplay={!embedded || autoplayIfEmbedded}
-      />
+
+      {!isFetchingAd && adUrl && (
+        <>
+          <span className="ads__video-notify">
+            {__('Advertisement')}{' '}
+            <Button
+              className="ads__video-close"
+              icon={ICONS.REMOVE}
+              title={__('Close')}
+              onClick={() => setAdUrl(null)}
+            />
+          </span>
+          <span className="ads__video-nudge">
+            <I18nMessage
+              tokens={{
+                sign_up: (
+                  <Button
+                    button="secondary"
+                    className="ads__video-link"
+                    label={__('Sign Up')}
+                    navigate={`/$/${PAGES.AUTH}?redirect=${pathname}&src=video-ad`}
+                  />
+                ),
+              }}
+            >
+              %sign_up% to turn ads off.
+            </I18nMessage>
+          </span>
+        </>
+      )}
+
+      {!isFetchingAd && (
+        <VideoJs
+          adUrl={adUrl}
+          source={adUrl || source}
+          sourceType={forcePlayer || adUrl ? 'video/mp4' : contentType}
+          isAudio={isAudio}
+          poster={isAudio || (embedded && !autoplayIfEmbedded) ? thumbnail : ''}
+          onPlayerReady={onPlayerReady}
+          startMuted={autoplayIfEmbedded}
+          toggleVideoTheaterMode={toggleVideoTheaterMode}
+          autoplay={!embedded || autoplayIfEmbedded}
+        />
+      )}
     </div>
   );
 }
