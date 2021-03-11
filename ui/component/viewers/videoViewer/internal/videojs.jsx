@@ -49,6 +49,7 @@ type Props = {
   startMuted: boolean,
   autoplay: boolean,
   toggleVideoTheaterMode: () => void,
+  adUrl: ?string,
 };
 
 type VideoJSOptions = {
@@ -171,7 +172,17 @@ class LbryVolumeBarClass extends videojs.getComponent(VIDEOJS_VOLUME_BAR_CLASS) 
 properties for this component should be kept to ONLY those that if changed should REQUIRE an entirely new videojs element
  */
 export default React.memo<Props>(function VideoJs(props: Props) {
-  const { autoplay, startMuted, source, sourceType, poster, isAudio, onPlayerReady, toggleVideoTheaterMode } = props;
+  const {
+    autoplay,
+    startMuted,
+    source,
+    sourceType,
+    poster,
+    isAudio,
+    onPlayerReady,
+    toggleVideoTheaterMode,
+    adUrl,
+  } = props;
 
   const [reload, setReload] = useState('initial');
 
@@ -193,6 +204,13 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       overlay: OVERLAY.OVERLAY_DATA,
     },
   };
+
+  //   if (adUrl) {
+  //     // Add the adUrl to the first entry in `sources`
+  //     // After the ad is finished, it will be removed as a prop to this component
+  //     videoJsOptions.sources.unshift({ src: adUrl, type: 'video/mp4' });
+  //     console.log('added ad');
+  //   }
 
   const tapToUnmuteRef = useRef();
   const tapToRetryRef = useRef();
@@ -333,9 +351,11 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     }
   }
 
-  function onEnded() {
-    showTapButton(TAP.NONE);
-  }
+  const onEnded = React.useCallback(() => {
+    if (!adUrl) {
+      showTapButton(TAP.NONE);
+    }
+  }, [adUrl]);
 
   function handleKeyDown(e: KeyboardEvent) {
     const player = playerRef.current;
