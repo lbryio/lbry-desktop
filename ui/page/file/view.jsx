@@ -3,12 +3,13 @@ import * as React from 'react';
 import classnames from 'classnames';
 import Page from 'component/page';
 import * as RENDER_MODES from 'constants/file_render_modes';
-import FileTitle from 'component/fileTitle';
+import FileTitleSection from 'component/fileTitleSection';
 import FileRenderInitiator from 'component/fileRenderInitiator';
 import FileRenderInline from 'component/fileRenderInline';
 import FileRenderDownload from 'component/fileRenderDownload';
 import RecommendedContent from 'component/recommendedContent';
 import CommentsList from 'component/commentsList';
+import PostViewer from 'component/postViewer';
 import Empty from 'component/common/empty';
 
 export const PRIMARY_PLAYER_WRAPPER_CLASS = 'file-page__video-container';
@@ -17,9 +18,9 @@ type Props = {
   costInfo: ?{ includesData: boolean, cost: number },
   fileInfo: FileListItem,
   uri: string,
-  fetchFileInfo: string => void,
-  fetchCostInfo: string => void,
-  setViewed: string => void,
+  fetchFileInfo: (string) => void,
+  fetchCostInfo: (string) => void,
+  setViewed: (string) => void,
   renderMode: string,
   obscureNsfw: boolean,
   isMature: boolean,
@@ -47,6 +48,7 @@ function FilePage(props: Props) {
   } = props;
   const cost = costInfo ? costInfo.cost : null;
   const hasFileInfo = fileInfo !== undefined;
+  const isText = RENDER_MODES.TEXT_MODES.includes(renderMode);
 
   React.useEffect(() => {
     // always refresh file info when entering file page to see if we have the file
@@ -82,27 +84,21 @@ function FilePage(props: Props) {
     if (RENDER_MODES.UNRENDERABLE_MODES.includes(renderMode)) {
       return (
         <React.Fragment>
-          <FileTitle uri={uri} />
+          <FileTitleSection uri={uri} />
           <FileRenderDownload uri={uri} isFree={cost === 0} />
         </React.Fragment>
       );
     }
 
     if (RENDER_MODES.TEXT_MODES.includes(renderMode)) {
-      return (
-        <React.Fragment>
-          <FileTitle uri={uri} />
-          <FileRenderInitiator uri={uri} />
-          <FileRenderInline uri={uri} />
-        </React.Fragment>
-      );
+      return <PostViewer uri={uri} />;
     }
 
     return (
       <React.Fragment>
         <FileRenderInitiator uri={uri} videoTheaterMode={videoTheaterMode} />
         <FileRenderInline uri={uri} />
-        <FileTitle uri={uri} />
+        <FileTitleSection uri={uri} />
       </React.Fragment>
     );
   }
@@ -110,27 +106,38 @@ function FilePage(props: Props) {
   if (obscureNsfw && isMature) {
     return (
       <Page>
-        <FileTitle uri={uri} isNsfwBlocked />
+        <FileTitleSection uri={uri} isNsfwBlocked />
       </Page>
     );
   }
 
   return (
-    <Page className="file-page" filePage>
-      <div className={classnames('section card-stack', `file-page__${renderMode}`)}>
+    <Page className="file-page" filePage isText={isText}>
+      <div
+        className={classnames('section card-stack', `file-page__${renderMode}`, {
+          'file-page__text': isText,
+        })}
+      >
         {renderFilePageLayout()}
 
-        <div className="file-page__secondary-content">
-          <div>
-            {RENDER_MODES.FLOATING_MODES.includes(renderMode) && <FileTitle uri={uri} />}
-            {commentsDisabled && <Empty text={__('The creator of this content has disabled comments.')} />}
-            {!commentsDisabled && <CommentsList uri={uri} linkedComment={linkedComment} />}
+        {!isText && (
+          <div className="file-page__secondary-content">
+            <div>
+              {RENDER_MODES.FLOATING_MODES.includes(renderMode) && <FileTitleSection uri={uri} />}
+              {commentsDisabled && <Empty text={__('The creator of this content has disabled comments.')} />}
+              {!commentsDisabled && <CommentsList uri={uri} linkedComment={linkedComment} />}
+            </div>
+            {videoTheaterMode && <RecommendedContent uri={uri} />}
           </div>
-          {videoTheaterMode && <RecommendedContent uri={uri} />}
-        </div>
+        )}
       </div>
 
-      {!videoTheaterMode && <RecommendedContent uri={uri} />}
+      {!isText && !videoTheaterMode && <RecommendedContent uri={uri} />}
+      {isText && (
+        <div className="file-page__post-comments">
+          <CommentsList uri={uri} linkedComment={linkedComment} />
+        </div>
+      )}
     </Page>
   );
 }
