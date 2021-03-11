@@ -36,6 +36,7 @@ const MODES = Object.values(PUBLISH_MODES);
 const MODE_TO_I18N_STR = {
   [PUBLISH_MODES.FILE]: 'File',
   [PUBLISH_MODES.POST]: 'Post --[noun, markdown post tab button]--',
+  [PUBLISH_MODES.LIVESTREAM]: 'Livestream --[noun, livestream tab button]--',
 };
 
 type Props = {
@@ -72,14 +73,14 @@ type Props = {
   balance: number,
   isStillEditing: boolean,
   clearPublish: () => void,
-  resolveUri: string => void,
+  resolveUri: (string) => void,
   scrollToTop: () => void,
   prepareEdit: (claim: any, uri: string) => void,
   resetThumbnailStatus: () => void,
   amountNeededForTakeover: ?number,
   // Add back type
-  updatePublishForm: any => void,
-  checkAvailability: string => void,
+  updatePublishForm: (any) => void,
+  checkAvailability: (string) => void,
   ytSignupPending: boolean,
   modal: { id: string, modalProps: {} },
   enablePublishPreview: boolean,
@@ -127,7 +128,7 @@ function PublishForm(props: Props) {
   } = props;
 
   const TAGS_LIMIT = 5;
-  const fileFormDisabled = mode === PUBLISH_MODES.FILE && !filePath;
+  const fileFormDisabled = (mode === PUBLISH_MODES.FILE || mode === PUBLISH_MODES.LIVESTREAM) && !filePath;
   const emptyPostError = mode === PUBLISH_MODES.POST && (!fileText || fileText.trim() === '');
   const formDisabled = (fileFormDisabled && !editingURI) || emptyPostError || publishing;
   const isInProgress = filePath || editingURI || name || title;
@@ -225,12 +226,20 @@ function PublishForm(props: Props) {
   }, [name, activeChannelName, resolveUri, updatePublishForm, checkAvailability]);
 
   useEffect(() => {
-    updatePublishForm({ isMarkdownPost: mode === PUBLISH_MODES.POST });
+    updatePublishForm({
+      isMarkdownPost: mode === PUBLISH_MODES.POST,
+      isLivestreamPublish: mode === PUBLISH_MODES.LIVESTREAM,
+    });
   }, [mode, updatePublishForm]);
 
   useEffect(() => {
     if (incognito) {
       updatePublishForm({ channel: undefined });
+
+      // Anonymous livestreams aren't supported
+      if (mode === PUBLISH_MODES.LIVESTREAM) {
+        setMode(PUBLISH_MODES.FILE);
+      }
     } else if (activeChannelName) {
       updatePublishForm({ channel: activeChannelName });
     }
@@ -301,7 +310,7 @@ function PublishForm(props: Props) {
       }
     }
     // Publish file
-    if (mode === PUBLISH_MODES.FILE) {
+    if (mode === PUBLISH_MODES.FILE || mode === PUBLISH_MODES.LIVESTREAM) {
       runPublish = true;
     }
 
@@ -373,17 +382,17 @@ function PublishForm(props: Props) {
               "Add tags that are relevant to your content so those who're looking for it can find it more easily. If mature content, ensure it is tagged mature. Tag abuse and missing mature tags will not be tolerated."
             )}
             placeholder={__('gaming, crypto')}
-            onSelect={newTags => {
+            onSelect={(newTags) => {
               const validatedTags = [];
-              newTags.forEach(newTag => {
-                if (!tags.some(tag => tag.name === newTag.name)) {
+              newTags.forEach((newTag) => {
+                if (!tags.some((tag) => tag.name === newTag.name)) {
                   validatedTags.push(newTag);
                 }
               });
               updatePublishForm({ tags: [...tags, ...validatedTags] });
             }}
-            onRemove={clickedTag => {
-              const newTags = tags.slice().filter(tag => tag.name !== clickedTag.name);
+            onRemove={(clickedTag) => {
+              const newTags = tags.slice().filter((tag) => tag.name !== clickedTag.name);
               updatePublishForm({ tags: newTags });
             }}
             tagsChosen={tags}
