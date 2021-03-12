@@ -12,13 +12,12 @@
     margin-top: var(--spacing-l);
   }
 
-  .file-page__text {
-    .card {
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
+  .file-page__md {
+    .file-viewer--document {
+      margin-top: var(--spacing-l);
 
-      &:first-child {
-        margin-bottom: 0;
+      @media (min-width: $breakpoint-small) {
+        margin-top: var(--spacing-xl);
       }
     }
 
@@ -129,14 +128,6 @@
   */
   iframe {
     height: calc(100vh - var(--header-height) - var(--spacing-m) * 2);
-  }
-}
-
-.file-viewer--document {
-  margin-top: var(--spacing-l);
-
-  @media (min-width: $breakpoint-small) {
-    margin-top: var(--spacing-xl);
   }
 }
 

@@ -48,7 +48,7 @@ function FilePage(props: Props) {
   } = props;
   const cost = costInfo ? costInfo.cost : null;
   const hasFileInfo = fileInfo !== undefined;
-  const isText = RENDER_MODES.TEXT_MODES.includes(renderMode);
+  const isMarkdown = renderMode === RENDER_MODES.MARKDOWN;
 
   React.useEffect(() => {
     // always refresh file info when entering file page to see if we have the file
@@ -90,8 +90,18 @@ function FilePage(props: Props) {
       );
     }
 
-    if (RENDER_MODES.TEXT_MODES.includes(renderMode)) {
+    if (isMarkdown) {
       return <PostViewer uri={uri} />;
+    }
+
+    if (RENDER_MODES.TEXT_MODES.includes(renderMode)) {
+      return (
+        <React.Fragment>
+          <FileTitleSection uri={uri} />
+          <FileRenderInitiator uri={uri} />
+          <FileRenderInline uri={uri} />
+        </React.Fragment>
+      );
     }
 
     return (
@@ -112,15 +122,11 @@ function FilePage(props: Props) {
   }
 
   return (
-    <Page className="file-page" filePage isText={isText}>
-      <div
-        className={classnames('section card-stack', `file-page__${renderMode}`, {
-          'file-page__text': isText,
-        })}
-      >
+    <Page className="file-page" filePage isMarkdown={isMarkdown}>
+      <div className={classnames('section card-stack', `file-page__${renderMode}`)}>
         {renderFilePageLayout()}
 
-        {!isText && (
+        {!isMarkdown && (
           <div className="file-page__secondary-content">
             <div>
               {RENDER_MODES.FLOATING_MODES.includes(renderMode) && <FileTitleSection uri={uri} />}
@@ -132,8 +138,8 @@ function FilePage(props: Props) {
         )}
       </div>
 
-      {!isText && !videoTheaterMode && <RecommendedContent uri={uri} />}
-      {isText && (
+      {!isMarkdown && !videoTheaterMode && <RecommendedContent uri={uri} />}
+      {isMarkdown && (
         <div className="file-page__post-comments">
           <CommentsList uri={uri} linkedComment={linkedComment} />
         </div>
