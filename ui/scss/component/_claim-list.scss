@@ -576,6 +576,7 @@
 }
 
 .claim-link {
+  @include font-sans;
   position: relative;
 }
 
