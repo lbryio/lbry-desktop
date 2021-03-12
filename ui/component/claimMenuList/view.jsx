@@ -1,12 +1,16 @@
 // @flow
+import { URL, SHARE_DOMAIN_URL } from 'config';
 import * as ICONS from 'constants/icons';
 import React from 'react';
 import classnames from 'classnames';
 import { Menu, MenuButton, MenuList, MenuItem } from '@reach/menu-button';
 import Icon from 'component/common/icon';
-import { convertToShareLink } from 'lbry-redux';
+import { generateShareUrl } from 'util/url';
+
+const SHARE_DOMAIN = SHARE_DOMAIN_URL || URL;
 
 type Props = {
+  uri: string,
   claim: ?Claim,
   inline?: boolean,
   claimIsMine: boolean,
@@ -19,6 +23,7 @@ type Props = {
 
 function ClaimMenuList(props: Props) {
   const {
+    uri,
     claim,
     inline = false,
     claimIsMine,
@@ -33,6 +38,8 @@ function ClaimMenuList(props: Props) {
     (claim.value_type === 'channel'
       ? claim.permanent_url
       : claim.signing_channel && claim.signing_channel.permanent_url);
+
+  const shareUrl: string = generateShareUrl(SHARE_DOMAIN, uri);
 
   if (!channelUri || !claim) {
     return null;
@@ -51,8 +58,7 @@ function ClaimMenuList(props: Props) {
   }
 
   function handleCopyLink() {
-    const shareLink = convertToShareLink(claim.canonical_url || claim.permanent_url);
-    navigator.clipboard.writeText(shareLink);
+    navigator.clipboard.writeText(shareUrl);
   }
 
   function handleReportContent() {
