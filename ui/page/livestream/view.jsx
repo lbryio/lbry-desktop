@@ -10,6 +10,7 @@ import { Lbry } from 'lbry-redux';
 import { toHex } from '../../util/hex';
 import ClaimPreview from '../../component/claimPreview';
 import { FormField } from '../../component/common/form';
+import * as PUBLISH_MODES from '../../constants/publish_types';
 
 type Props = {
   channels: Array<ChannelClaim>,
@@ -98,7 +99,11 @@ export default function CreatorDashboardPage(props: Props) {
           title={__("You haven't created a channel yet, let's fix that!")}
           actions={
             <div className="section__actions">
-              <Button button="primary" navigate={`/$/${PAGES.CHANNEL_NEW}`} label={__('Create A Channel')} />
+              <Button
+                button="primary"
+                navigate={`/$/${PAGES.CHANNEL_NEW}`}
+                label={__('Create A Channel')}
+              />
             </div>
           }
         />
@@ -132,9 +137,13 @@ export default function CreatorDashboardPage(props: Props) {
             </div>)
             : (
               <div>
-                <div style={{marginBottom: '2rem'}}>{JSON.stringify(activeChannelClaim)}</div>
+                <div style={{marginBottom: 'var(--spacing-l)'}}>
+                  {JSON.stringify(activeChannelClaim)}
+                </div>
                 { sigData &&
-                  <div>{JSON.stringify(sigData)}</div>
+                  <div>
+                    {JSON.stringify(sigData)}
+                  </div>
                 }
               </div>
             )
@@ -151,7 +160,14 @@ export default function CreatorDashboardPage(props: Props) {
           ) : (
             <div style={{marginTop: 'var(--spacing-l)'}}>
               <div>You must first publish a livestream claim before your stream will be visible!</div>
-              <div>TODO: add a button for this</div>
+
+              {/* Relies on https://github.com/lbryio/lbry-desktop/pull/5669 */}
+              <Button
+                button="primary"
+                navigate={`/$/${PAGES.UPLOAD}?type=${PUBLISH_MODES.LIVESTREAM.toLowerCase()}`}
+                label={__('Create A LiveStream')}
+              />
+
             </div>
           )}
 

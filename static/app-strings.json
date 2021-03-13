@@ -1623,5 +1623,6 @@
   "Exit Fullscreen (f)": "Exit Fullscreen (f)",
   "Toggle Theater mode (t)": "Toggle Theater mode (t)",
   "Quality": "Quality",
-  "--end--": "--end--"
+  "--end--": "--end--",
+  "Create A LiveStream": "Create A LiveStream",
 }
