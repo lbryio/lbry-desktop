@@ -67,7 +67,10 @@ function MarkdownLink(props: Props) {
       const possibleLbryUrl = linkPathPlusHash ? `lbry://${linkPathPlusHash.replace(/:/g, '#')}` : undefined;
 
       const lbryLinkIsValid = possibleLbryUrl && isURIValid(possibleLbryUrl);
-      if (lbryLinkIsValid) {
+      const isMarkdownLinkWithLabel =
+        children && Array.isArray(children) && React.Children.count(children) === 1 && children.toString() !== href;
+
+      if (lbryLinkIsValid && !isMarkdownLinkWithLabel) {
         lbryUrlFromLink = possibleLbryUrl;
       }
     }
