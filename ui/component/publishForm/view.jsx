@@ -25,6 +25,7 @@ import SelectThumbnail from 'component/selectThumbnail';
 import Card from 'component/common/card';
 import I18nMessage from 'component/i18nMessage';
 import * as PUBLISH_MODES from 'constants/publish_types';
+import { useHistory } from 'react-router';
 
 // @if TARGET='app'
 import fs from 'fs';
@@ -89,13 +90,19 @@ type Props = {
 };
 
 function PublishForm(props: Props) {
-  const [mode, setMode] = React.useState(PUBLISH_MODES.FILE);
+  // Detect upload type from query in URL
+  const urlParams = new URLSearchParams(location.search);
+  const uploadType = urlParams.get('type');
+  const history = useHistory();
+
+  // Component state
+  const [mode, setMode] = React.useState(uploadType || PUBLISH_MODES.FILE);
   const [autoSwitchMode, setAutoSwitchMode] = React.useState(true);
 
-  // Used to checl if the url name has changed:
+  // Used to check if the url name has changed:
   // A new file needs to be provided
   const [prevName, setPrevName] = React.useState(false);
-  // Used to checl if the file has been modified by user
+  // Used to check if the file has been modified by user
   const [fileEdited, setFileEdited] = React.useState(false);
   const [prevFileText, setPrevFileText] = React.useState('');
 
@@ -244,6 +251,42 @@ function PublishForm(props: Props) {
       updatePublishForm({ channel: activeChannelName });
     }
   }, [activeChannelName, incognito, updatePublishForm]);
+
+  useEffect(() => {
+    const _uploadType = uploadType && uploadType.toLowerCase();
+
+    // Default to standard file publish if none specified
+    if (!_uploadType) {
+      setMode(PUBLISH_MODES.FILE);
+      return;
+    }
+
+    // File publish
+    if (_uploadType === PUBLISH_MODES.FILE.toLowerCase()) {
+      setMode(PUBLISH_MODES.FILE);
+      return;
+    }
+    // Post publish
+    if (_uploadType === PUBLISH_MODES.POST.toLowerCase()) {
+      setMode(PUBLISH_MODES.POST);
+      return;
+    }
+    // LiveStream publish
+    if (_uploadType === PUBLISH_MODES.LIVESTREAM.toLowerCase()) {
+      setMode(PUBLISH_MODES.LIVESTREAM);
+      return;
+    }
+
+    // Default to standard file publish
+    setMode(PUBLISH_MODES.FILE);
+  }, [uploadType]);
+
+  useEffect(() => {
+    if (!uploadType) return;
+    const newParams = new URLSearchParams();
+    newParams.set('type', mode.toLowerCase());
+    history.push({search: newParams.toString()});
+  }, [mode, uploadType]);
 
   // @if TARGET='web'
   function createWebFile() {
