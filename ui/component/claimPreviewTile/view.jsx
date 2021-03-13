@@ -182,7 +182,7 @@ function ClaimPreviewTile(props: Props) {
           <TruncatedText text={title || (claim && claim.name)} lines={isChannel ? 1 : 2} />
           {isChannel && (
             <div className="claim-tile__about">
-              <UriIndicator uri={uri} link />
+              <UriIndicator uri={uri} />
             </div>
           )}
           <ClaimMenuList uri={uri} />
