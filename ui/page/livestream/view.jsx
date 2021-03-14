@@ -74,7 +74,7 @@ export default function CreatorDashboardPage(props: Props) {
     })
       .then((res) => {
         if (res && res.items && res.items.length > 0) {
-          const claim = res.items[0];
+          const claim = res.items[res.items.length - 1];
           setLivestreamClaim(claim);
         } else {
           setIsFetching(false);
