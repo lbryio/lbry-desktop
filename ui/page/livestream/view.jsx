@@ -61,7 +61,7 @@ export default function CreatorDashboardPage(props: Props) {
   const [isFetching, setIsFetching] = React.useState(true);
   const [isLive, setIsLive] = React.useState(false);
   const [livestreamClaim, setLivestreamClaim] = React.useState(false);
-  const [livestreamClaims, setLivestreamClaims] = React.useState(false);
+  const [livestreamClaims, setLivestreamClaims] = React.useState([]);
 
   React.useEffect(() => {
     if (!activeChannelClaimStr) return;
