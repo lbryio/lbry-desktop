@@ -61,6 +61,7 @@ export default function CreatorDashboardPage(props: Props) {
   const [isFetching, setIsFetching] = React.useState(true);
   const [isLive, setIsLive] = React.useState(false);
   const [livestreamClaim, setLivestreamClaim] = React.useState(false);
+  const [livestreamClaims, setLivestreamClaims] = React.useState(false);
 
   React.useEffect(() => {
     if (!activeChannelClaimStr) return;
@@ -76,6 +77,7 @@ export default function CreatorDashboardPage(props: Props) {
         if (res && res.items && res.items.length > 0) {
           const claim = res.items[res.items.length - 1];
           setLivestreamClaim(claim);
+          setLivestreamClaims(res.items.reverse());
         } else {
           setIsFetching(false);
         }
@@ -150,12 +152,21 @@ export default function CreatorDashboardPage(props: Props) {
           }
 
           {/* Stream Claim(s) */}
-          { livestreamClaim ? (
+          { livestreamClaim && livestreamClaims ? (
             <div style={{marginTop: 'var(--spacing-l)'}}>
               <h3>Your LiveStream Claims</h3>
+
+              {livestreamClaims.map(claim => (
+                <ClaimPreview
+                  key={claim.uri}
+                  uri={claim.permanent_url}
+                />
+              ))}
+
+              {/*<h3>Your LiveStream Claims</h3>
               <ClaimPreview
                 uri={livestreamClaim.permanent_url}
-              />
+              />*/}
             </div>
           ) : (
             <div style={{marginTop: 'var(--spacing-l)'}}>
@@ -172,7 +183,7 @@ export default function CreatorDashboardPage(props: Props) {
           )}
 
           {/* Debug Stuff */}
-          { streamKey && (
+          { streamKey && false && (
             <div style={{marginTop: 'var(--spacing-l)'}}>
               <h3>Debug Info</h3>
 
