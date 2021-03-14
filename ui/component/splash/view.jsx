@@ -30,7 +30,7 @@ type Props = {
   animationHidden: boolean,
   toggleSplashAnimation: () => void,
   clearWalletServers: () => void,
-  doShowSnackBar: string => void,
+  doShowSnackBar: (string) => void,
 };
 
 type State = {
@@ -109,10 +109,10 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
     const { modal, notifyUnlockWallet, clearWalletServers, doShowSnackBar } = this.props;
     const { launchedModal } = this.state;
 
-    Lbry.status().then(status => {
+    Lbry.status().then((status) => {
       const sdkStatus = status;
       const { wallet } = status;
-      Lbry.wallet_status().then(status => {
+      Lbry.wallet_status().then((status) => {
         if (sdkStatus.is_running && wallet && wallet.available_servers) {
           if (status.is_locked) {
             // Clear the error timeout, it might sit on this step for a while until someone enters their password
@@ -150,7 +150,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
   }
 
   updateStatusCallback(status: StatusResponse, walletStatus: WalletStatusResponse, waitingForUnlock: boolean = false) {
-    if (status.connection_status.code !== 'connected') {
+    if (!status.wallet || !status.wallet.connected) {
       this.setState({ error: true });
       return;
     }
