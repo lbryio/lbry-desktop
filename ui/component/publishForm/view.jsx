@@ -314,6 +314,11 @@ function PublishForm(props: Props) {
       runPublish = true;
     }
 
+    // (Try to) Prevent an anon livestream claim
+    if (mode === PUBLISH_MODES.LIVESTREAM) {
+      updatePublishForm({ channel: activeChannelName });
+    }
+
     if (runPublish) {
       if (enablePublishPreview) {
         setPreviewing(true);
@@ -339,7 +344,10 @@ function PublishForm(props: Props) {
   // Editing claim uri
   return (
     <div className="card-stack">
-      <ChannelSelect disabled={disabled} />
+      <ChannelSelect
+        hideAnon={mode === PUBLISH_MODES.LIVESTREAM}
+        disabled={disabled}
+      />
 
       <PublishFile
         uri={uri}
