@@ -101,6 +101,11 @@
 }
 
 .header__navigation-item--profile-pic {
+  @extend .header__navigation-item--icon;
+  margin-left: var(--spacing-m);
+}
+
+.header__navigation-item--profile-pic--active {
   margin-left: var(--spacing-m);
 
   .channel-thumbnail {

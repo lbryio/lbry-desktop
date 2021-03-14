@@ -162,8 +162,14 @@ const Header = (props: Props) => {
 
   const loginButtons = (
     <div className="header__auth-buttons">
-      <Button navigate={`/$/${PAGES.AUTH_SIGNIN}`} button="link" label={__('Log In')} className="mobile-hidden" />
-      <Button navigate={`/$/${PAGES.AUTH}`} button="primary" label={__('Sign Up')} />
+      {IS_WEB ? (
+        <>
+          <Button navigate={`/$/${PAGES.AUTH_SIGNIN}`} button="link" label={__('Log In')} className="mobile-hidden" />
+          <Button navigate={`/$/${PAGES.AUTH}`} button="primary" label={__('Sign Up')} />
+        </>
+      ) : (
+        <Button navigate={`/$/${PAGES.AUTH_SIGNIN}`} button="link" label={__('Sign In')} className="mobile-hidden" />
+      )}
     </div>
   );
 
@@ -286,7 +292,7 @@ const Header = (props: Props) => {
                   <BalanceButton className="header__navigation-item menu__title mobile-hidden" />
                 )}
 
-                {IS_WEB && !authenticated && loginButtons}
+                {!authenticated && loginButtons}
 
                 {(authenticated || !IS_WEB) && (
                   <Menu>
@@ -294,8 +300,8 @@ const Header = (props: Props) => {
                       aria-label={__('Your account')}
                       title={__('Your account')}
                       className={classnames('header__navigation-item', {
-                        'menu__title header__navigation-item--icon': !activeChannelUrl,
-                        'header__navigation-item--profile-pic': activeChannelUrl,
+                        'menu__title header__navigation-item--profile-pic': !activeChannelUrl,
+                        'header__navigation-item--profile-pic--active': activeChannelUrl,
                       })}
                       // @if TARGET='app'
                       onDoubleClick={(e) => {
