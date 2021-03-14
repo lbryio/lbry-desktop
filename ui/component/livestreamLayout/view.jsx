@@ -1,7 +1,7 @@
 // @flow
 import { BITWAVE_EMBED_URL } from 'constants/livestream';
 import React from 'react';
-import FileTitle from 'component/fileTitle';
+import FileTitleSection from 'component/fileTitleSection';
 import LivestreamComments from 'component/livestreamComments';
 
 type Props = {
@@ -26,7 +26,7 @@ export default function LivestreamLayout(props: Props) {
           </div>
         </div>
 
-        <FileTitle uri={uri} livestream activeViewers={activeViewers} />
+        <FileTitleSection uri={uri} livestream activeViewers={activeViewers} />
       </div>
       <LivestreamComments uri={uri} />
     </>
