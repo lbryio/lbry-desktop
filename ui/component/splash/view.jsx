@@ -150,11 +150,6 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
   }
 
   updateStatusCallback(status: StatusResponse, walletStatus: WalletStatusResponse, waitingForUnlock: boolean = false) {
-    if (!status.wallet || !status.wallet.connected) {
-      this.setState({ error: true });
-      return;
-    }
-
     const { wallet, startup_status: startupStatus } = status;
 
     // If the wallet is locked, stop doing anything and make the user input their password
