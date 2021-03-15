@@ -5,7 +5,7 @@ import { Redirect } from 'react-router-dom';
 import Spinner from 'component/spinner';
 import ChannelPage from 'page/channel';
 import FilePage from 'page/file';
-import LivestreamPage from 'page/livestreamStream';
+import LivestreamPage from 'page/livestream';
 import Page from 'component/page';
 import Button from 'component/button';
 import Card from 'component/common/card';
