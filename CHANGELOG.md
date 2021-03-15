@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+- Updated lbry-sdk to [0.92.0](https://github.com/lbryio/lbry-sdk/releases/tag/v0.92.0)
 - Re-enable PDF Viewer in desktop app _community pr!_ ([#5420](https://github.com/lbryio/lbry-desktop/issues/5420))
 
 ### Fixed
