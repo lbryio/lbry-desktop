@@ -10,16 +10,21 @@ import { PAGE_PARAM, PAGE_SIZE_PARAM } from 'constants/claim';
 import WebUploadList from 'component/webUploadList';
 import Spinner from 'component/spinner';
 import Yrbl from 'component/yrbl';
+import classnames from 'classnames';
+
+const FILTER_ALL = 'stream,repost';
+const FILTER_UPLOADS = 'stream';
+const FILTER_REPOSTS = 'repost';
 
 type Props = {
   uploadCount: number,
   checkPendingPublishes: () => void,
   clearPublish: () => void,
-  fetchClaimListMine: (number, number) => void,
+  fetchClaimListMine: (number, number, boolean, Array<string>) => void,
   fetching: boolean,
   urls: Array<string>,
   urlTotal: number,
-  history: { replace: string => void, push: string => void },
+  history: { replace: (string) => void, push: (string) => void },
   page: number,
   pageSize: number,
 };
@@ -37,6 +42,7 @@ function FileListPublished(props: Props) {
     pageSize,
   } = props;
 
+  const [filterBy, setFilterBy] = React.useState(FILTER_ALL);
   const params = {};
 
   params[PAGE_PARAM] = Number(page);
@@ -51,9 +57,9 @@ function FileListPublished(props: Props) {
   useEffect(() => {
     if (paramsString && fetchClaimListMine) {
       const params = JSON.parse(paramsString);
-      fetchClaimListMine(params.page, params.page_size);
+      fetchClaimListMine(params.page, params.page_size, true, filterBy.split(','));
     }
-  }, [uploadCount, paramsString, fetchClaimListMine]);
+  }, [uploadCount, paramsString, filterBy, fetchClaimListMine]);
 
   return (
     <Page>
@@ -71,7 +77,7 @@ function FileListPublished(props: Props) {
                       button="alt"
                       label={__('Refresh')}
                       icon={ICONS.REFRESH}
-                      onClick={() => fetchClaimListMine(params.page, params.page_size)}
+                      onClick={() => fetchClaimListMine(params.page, params.page_size, true, filterBy.split(','))}
                     />
                   )}
                   <Button
@@ -81,9 +87,34 @@ function FileListPublished(props: Props) {
                     navigate={`/$/${PAGES.UPLOAD}`}
                     onClick={() => clearPublish()}
                   />
+                  <span>
+                    <Button
+                      button="alt"
+                      label={__('All')}
+                      onClick={() => setFilterBy(FILTER_ALL)}
+                      className={classnames(`button-toggle`, {
+                        'button-toggle--active': filterBy === FILTER_ALL,
+                      })}
+                    />
+                    <Button
+                      button="alt"
+                      label={__('Uploads')}
+                      onClick={() => setFilterBy(FILTER_UPLOADS)}
+                      className={classnames(`button-toggle`, {
+                        'button-toggle--active': filterBy === FILTER_UPLOADS,
+                      })}
+                    />
+                    <Button
+                      button="alt"
+                      label={__('Reposts')}
+                      onClick={() => setFilterBy(FILTER_REPOSTS)}
+                      className={classnames(`button-toggle`, {
+                        'button-toggle--active': filterBy === FILTER_REPOSTS,
+                      })}
+                    />
+                  </span>
                 </div>
               }
-              loading={fetching}
               persistedStorageKey="claim-list-published"
               uris={urls}
             />
