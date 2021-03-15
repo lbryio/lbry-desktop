@@ -30,9 +30,10 @@ const select = (state, props) => {
   };
 };
 
-const perform = dispatch => ({
+const perform = (dispatch) => ({
   checkPendingPublishes: () => dispatch(doCheckPendingClaims()),
-  fetchClaimListMine: (page, pageSize) => dispatch(doFetchClaimListMine(page, pageSize)),
+  fetchClaimListMine: (page, pageSize, resolve, filterBy) =>
+    dispatch(doFetchClaimListMine(page, pageSize, resolve, filterBy)),
   clearPublish: () => dispatch(doClearPublish()),
 });
 
