@@ -17,7 +17,7 @@ import {
   selectFetchingMyChannels,
 } from 'lbry-redux';
 import { doToast } from 'redux/actions/notifications';
-import { selectActiveChannelClaim } from 'redux/selectors/app';
+import { selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
 import RepostCreate from './view';
 
 const select = (state, props) => ({
@@ -37,6 +37,7 @@ const select = (state, props) => ({
   isResolvingEnteredRepost: props.repostUri && makeSelectIsUriResolving(`lbry://${props.repostUri}`)(state),
   activeChannelClaim: selectActiveChannelClaim(state),
   fetchingMyChannels: selectFetchingMyChannels(state),
+  incognito: selectIncognito(state),
 });
 
 export default connect(select, {
