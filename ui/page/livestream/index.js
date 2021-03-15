@@ -1,13 +1,18 @@
 import { connect } from 'react-redux';
-import { selectMyChannelClaims, selectFetchingMyChannels } from 'lbry-redux';
-import { selectActiveChannelClaim } from 'redux/selectors/app';
-import { doSetActiveChannel } from 'redux/actions/app';
-import CreatorDashboardPage from './view';
+import { doResolveUri } from 'lbry-redux';
+import { doSetPlayingUri } from 'redux/actions/content';
+import { doUserSetReferrer } from 'redux/actions/user';
+import { selectUserVerifiedEmail } from 'redux/selectors/user';
+import { selectHasUnclaimedRefereeReward } from 'redux/selectors/rewards';
+import LivestreamPage from './view';
 
 const select = (state) => ({
-  channels: selectMyChannelClaims(state),
-  fetchingChannels: selectFetchingMyChannels(state),
-  activeChannelClaim: selectActiveChannelClaim(state),
+  hasUnclaimedRefereeReward: selectHasUnclaimedRefereeReward(state),
+  isAuthenticated: selectUserVerifiedEmail(state),
 });
 
-export default connect(select, { doSetActiveChannel })(CreatorDashboardPage);
+export default connect(select, {
+  doSetPlayingUri,
+  doResolveUri,
+  doUserSetReferrer,
+})(LivestreamPage);
