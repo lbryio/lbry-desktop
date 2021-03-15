@@ -1,5 +1,6 @@
 // @flow
 import * as PAGES from 'constants/pages';
+import * as PUBLISH_MODES from 'constants/publish_types';
 import React from 'react';
 import Page from 'component/page';
 import Spinner from 'component/spinner';
@@ -10,7 +11,10 @@ import { Lbry } from 'lbry-redux';
 import { toHex } from 'util/hex';
 import ClaimPreview from 'component/claimPreview';
 import { FormField } from 'component/common/form';
-import * as PUBLISH_MODES from 'constants/publish_types';
+import CopyableText from 'component/copyableText';
+import Card from 'component/common/card';
+import ClaimList from 'component/claimList';
+import livestream from '../livestream';
 
 type Props = {
   channels: Array<ChannelClaim>,
@@ -62,7 +66,6 @@ export default function LivestreamSetupPage(props: Props) {
 
   const [isFetching, setIsFetching] = React.useState(true);
   const [isLive, setIsLive] = React.useState(false);
-  const [livestreamClaim, setLivestreamClaim] = React.useState(false);
   const [livestreamClaims, setLivestreamClaims] = React.useState([]);
 
   React.useEffect(() => {
@@ -78,7 +81,6 @@ export default function LivestreamSetupPage(props: Props) {
       .then((res) => {
         if (res && res.items && res.items.length > 0) {
           const claim = res.items[res.items.length - 1];
-          setLivestreamClaim(claim);
           setLivestreamClaims(res.items.reverse());
         } else {
           setIsFetching(false);
@@ -109,113 +111,111 @@ export default function LivestreamSetupPage(props: Props) {
         />
       )}
 
-      {!fetchingChannels && activeChannelClaim && (
-        <React.Fragment>
-          {/* Channel Selector */}
-          <ChannelSelector hideAnon />
+      <div className="card-stack">
+        {!fetchingChannels && activeChannelClaim && (
+          <>
+            <ChannelSelector hideAnon />
 
-          {/* Display StreamKey */}
-          {streamKey ? (
-            <div>
-              {/* Stream Server Address */}
-              <FormField
-                name={'livestreamServer'}
-                label={'Stream Server'}
-                type={'text'}
-                defaultValue={'rtmp://stream.odysee.com/live'}
-                readOnly
+            {streamKey && livestreamClaims.length > 0 && (
+              <Card
+                title={__('Your stream key')}
+                actions={
+                  <>
+                    <CopyableText
+                      primaryButton
+                      name="stream-server"
+                      label={__('Stream server')}
+                      copyable="rtmp://stream.odysee.com/live"
+                      snackMessage={__('Copied')}
+                    />
+                    <CopyableText
+                      primaryButton
+                      name="livestream-key"
+                      label={__('Stream key')}
+                      copyable={streamKey}
+                      snackMessage={__('Copied')}
+                    />
+                  </>
+                }
               />
+            )}
 
-              {/* Stream Key */}
-              <FormField name={'livestreamKey'} label={'Stream Key'} type={'text'} defaultValue={streamKey} readOnly />
-            </div>
-          ) : (
-            <div>
-              <div style={{ marginBottom: 'var(--spacing-l)' }}>{JSON.stringify(activeChannelClaim)}</div>
-              {sigData && <div>{JSON.stringify(sigData)}</div>}
-            </div>
-          )}
-
-          {/* Stream Claim(s) */}
-          {livestreamClaim && livestreamClaims ? (
-            <div style={{ marginTop: 'var(--spacing-l)' }}>
-              <h3>Your LiveStream Claims</h3>
-
-              {livestreamClaims.map((claim) => (
-                <ClaimPreview key={claim.uri} uri={claim.permanent_url} />
-              ))}
-
-              {/*<h3>Your LiveStream Claims</h3>
-              <ClaimPreview
-                uri={livestreamClaim.permanent_url}
-              />*/}
-            </div>
-          ) : (
-            <div style={{ marginTop: 'var(--spacing-l)' }}>
-              <div>You must first publish a livestream claim before your stream will be visible!</div>
-
-              {/* Relies on https://github.com/lbryio/lbry-desktop/pull/5669 */}
-              <Button
-                button="primary"
-                navigate={`/$/${PAGES.UPLOAD}?type=${PUBLISH_MODES.LIVESTREAM.toLowerCase()}`}
-                label={__('Create A LiveStream')}
+            {livestreamClaims.length > 0 ? (
+              <ClaimList
+                header={__('Your livestream uploads')}
+                uris={livestreamClaims.map((claim) => claim.permanent_url)}
               />
-            </div>
-          )}
-
-          {/* Debug Stuff */}
-          {streamKey && false && (
-            <div style={{ marginTop: 'var(--spacing-l)' }}>
-              <h3>Debug Info</h3>
-
-              {/* Channel ID */}
-              <FormField
-                name={'channelId'}
-                label={'Channel ID'}
-                type={'text'}
-                defaultValue={activeChannelClaim.claim_id}
-                readOnly
+            ) : (
+              <Yrbl
+                className="livestream__publish-intro"
+                title={__('No livestream publishes found')}
+                subtitle={__('You need to upload your livestream details before you can go live.')}
+                actions={
+                  <div className="section__actions">
+                    <Button
+                      button="primary"
+                      navigate={`/$/${PAGES.UPLOAD}?type=${PUBLISH_MODES.LIVESTREAM.toLowerCase()}`}
+                      label={__('Create A Livestream')}
+                    />
+                  </div>
+                }
               />
+            )}
 
-              {/* Signature */}
-              <FormField
-                name={'signature'}
-                label={'Signature'}
-                type={'text'}
-                defaultValue={sigData.signature}
-                readOnly
-              />
+            {/* Debug Stuff */}
+            {streamKey && false && (
+              <div style={{ marginTop: 'var(--spacing-l)' }}>
+                <h3>Debug Info</h3>
 
-              {/* Signature TS */}
-              <FormField
-                name={'signaturets'}
-                label={'Signature Timestamp'}
-                type={'text'}
-                defaultValue={sigData.signing_ts}
-                readOnly
-              />
+                {/* Channel ID */}
+                <FormField
+                  name={'channelId'}
+                  label={'Channel ID'}
+                  type={'text'}
+                  defaultValue={activeChannelClaim.claim_id}
+                  readOnly
+                />
 
-              {/* Hex Data */}
-              <FormField
-                name={'datahex'}
-                label={'Hex Data'}
-                type={'text'}
-                defaultValue={toHex(activeChannelClaim.name)}
-                readOnly
-              />
+                {/* Signature */}
+                <FormField
+                  name={'signature'}
+                  label={'Signature'}
+                  type={'text'}
+                  defaultValue={sigData.signature}
+                  readOnly
+                />
 
-              {/* Channel Public Key */}
-              <FormField
-                name={'channelpublickey'}
-                label={'Public Key'}
-                type={'text'}
-                defaultValue={activeChannelClaim.value.public_key}
-                readOnly
-              />
-            </div>
-          )}
-        </React.Fragment>
-      )}
+                {/* Signature TS */}
+                <FormField
+                  name={'signaturets'}
+                  label={'Signature Timestamp'}
+                  type={'text'}
+                  defaultValue={sigData.signing_ts}
+                  readOnly
+                />
+
+                {/* Hex Data */}
+                <FormField
+                  name={'datahex'}
+                  label={'Hex Data'}
+                  type={'text'}
+                  defaultValue={toHex(activeChannelClaim.name)}
+                  readOnly
+                />
+
+                {/* Channel Public Key */}
+                <FormField
+                  name={'channelpublickey'}
+                  label={'Public Key'}
+                  type={'text'}
+                  defaultValue={activeChannelClaim.value.public_key}
+                  readOnly
+                />
+              </div>
+            )}
+          </>
+        )}
+      </div>
     </Page>
   );
 }
