@@ -10,10 +10,11 @@ type Props = {
   doToast: ({ message: string }) => void,
   label?: string,
   primaryButton?: boolean,
+  name?: string,
 };
 
 export default function CopyableText(props: Props) {
-  const { copyable, doToast, snackMessage, label, primaryButton = false } = props;
+  const { copyable, doToast, snackMessage, label, primaryButton = false, name } = props;
 
   const input = useRef();
 
@@ -38,6 +39,7 @@ export default function CopyableText(props: Props) {
       type="text"
       className="form-field--copyable"
       readOnly
+      name={name}
       label={label}
       value={copyable || ''}
       ref={input}
