@@ -42,6 +42,7 @@ type Props = {
   isResolvingEnteredRepost: boolean,
   activeChannelClaim: ?ChannelClaim,
   fetchingMyChannels: boolean,
+  incognito: boolean,
 };
 
 function RepostCreate(props: Props) {
@@ -67,6 +68,7 @@ function RepostCreate(props: Props) {
     isResolvingEnteredRepost,
     activeChannelClaim,
     fetchingMyChannels,
+    incognito,
   } = props;
 
   const defaultName = name || (claim && claim.name) || '';
@@ -281,7 +283,7 @@ function RepostCreate(props: Props) {
       doRepost({
         name: enteredRepostName,
         bid: creditsToString(repostBid),
-        channel_id: activeChannelClaim ? activeChannelClaim.claim_id : undefined,
+        channel_id: activeChannelClaim && !incognito ? activeChannelClaim.claim_id : undefined,
         claim_id: repostClaimId,
       }).then((repostClaim: StreamClaim) => {
         doCheckPendingClaims();
