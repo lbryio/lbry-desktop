@@ -7,6 +7,9 @@ const defaultState: CommentsState = {
   byId: {}, // ClaimID -> list of comments
   repliesByParentId: {}, // ParentCommentID -> list of reply comments
   topLevelCommentsById: {}, // ClaimID -> list of top level comments
+  // TODO:
+  // Remove commentsByUri
+  // It is not needed and doesn't provide anything but confusion
   commentsByUri: {}, // URI -> claimId
   isLoading: false,
   isCommenting: false,
@@ -35,7 +38,12 @@ export default handleActions(
     }),
 
     [ACTIONS.COMMENT_CREATE_COMPLETED]: (state: CommentsState, action: any): CommentsState => {
-      const { comment, claimId, uri }: { comment: Comment, claimId: string, uri: string } = action.data;
+      const {
+        comment,
+        claimId,
+        uri,
+        livestream,
+      }: { comment: Comment, claimId: string, uri: string, livestream: boolean } = action.data;
       const commentById = Object.assign({}, state.commentById);
       const byId = Object.assign({}, state.byId);
       const topLevelCommentsById = Object.assign({}, state.topLevelCommentsById); // was byId {ClaimId -> [commentIds...]}
@@ -44,27 +52,31 @@ export default handleActions(
       const comments = byId[claimId] || [];
       const newCommentIds = comments.slice();
 
-      // add the comment by its ID
-      commentById[comment.comment_id] = comment;
+      // If it was created during a livestream, let the websocket handler perform the state update
+      if (!livestream) {
+        // add the comment by its ID
+        commentById[comment.comment_id] = comment;
 
-      // push the comment_id to the top of ID list
-      newCommentIds.unshift(comment.comment_id);
-      byId[claimId] = newCommentIds;
+        // push the comment_id to the top of ID list
+        newCommentIds.unshift(comment.comment_id);
+        byId[claimId] = newCommentIds;
 
-      if (comment['parent_id']) {
-        if (!repliesByParentId[comment.parent_id]) {
-          repliesByParentId[comment.parent_id] = [comment.comment_id];
+        if (comment['parent_id']) {
+          if (!repliesByParentId[comment.parent_id]) {
+            repliesByParentId[comment.parent_id] = [comment.comment_id];
+          } else {
+            repliesByParentId[comment.parent_id].unshift(comment.comment_id);
+          }
         } else {
-          repliesByParentId[comment.parent_id].unshift(comment.comment_id);
-        }
-      } else {
-        if (!topLevelCommentsById[claimId]) {
-          commentsByUri[uri] = claimId;
-          topLevelCommentsById[claimId] = [comment.comment_id];
-        } else {
-          topLevelCommentsById[claimId].unshift(comment.comment_id);
+          if (!topLevelCommentsById[claimId]) {
+            commentsByUri[uri] = claimId;
+            topLevelCommentsById[claimId] = [comment.comment_id];
+          } else {
+            topLevelCommentsById[claimId].unshift(comment.comment_id);
+          }
         }
       }
+
       return {
         ...state,
         topLevelCommentsById,
@@ -205,6 +217,42 @@ export default handleActions(
       ...state,
       isLoading: false,
     }),
+
+    [ACTIONS.COMMENT_RECEIVED]: (state: CommentsState, action: any) => {
+      const { uri, claimId, comment } = action.data;
+      const commentsByUri = Object.assign({}, state.commentsByUri);
+      const commentsByClaimId = Object.assign({}, state.byId);
+      const allCommentsById = Object.assign({}, state.commentById);
+      const topLevelCommentsById = Object.assign({}, state.topLevelCommentsById);
+      const commentsForId = topLevelCommentsById[claimId];
+
+      allCommentsById[comment.comment_id] = comment;
+      commentsByUri[uri] = claimId;
+
+      if (commentsForId) {
+        const newCommentsForId = commentsForId.slice();
+        const commentExists = newCommentsForId.includes(comment.comment_id);
+        if (!commentExists) {
+          newCommentsForId.unshift(comment.comment_id);
+        }
+
+        topLevelCommentsById[claimId] = newCommentsForId;
+      } else {
+        topLevelCommentsById[claimId] = [comment.comment_id];
+      }
+
+      // We don't care to keep existing lower level comments since this is just for livestreams
+      commentsByClaimId[claimId] = topLevelCommentsById[claimId];
+
+      return {
+        ...state,
+        byId: commentsByClaimId,
+        commentById: allCommentsById,
+        commentsByUri,
+        topLevelCommentsById,
+      };
+    },
+
     [ACTIONS.COMMENT_ABANDON_STARTED]: (state: CommentsState, action: any) => ({
       ...state,
       isLoading: true,

@@ -24,7 +24,8 @@ const select = (state, props) => ({
 });
 
 const perform = (dispatch, ownProps) => ({
-  createComment: (comment, claimId, parentId) => dispatch(doCommentCreate(comment, claimId, parentId, ownProps.uri)),
+  createComment: (comment, claimId, parentId) =>
+    dispatch(doCommentCreate(comment, claimId, parentId, ownProps.uri, ownProps.livestream)),
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
   setActiveChannel: (claimId) => dispatch(doSetActiveChannel(claimId)),
   toast: (message) => dispatch(doToast({ message, isError: true })),
