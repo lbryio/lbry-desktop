@@ -352,7 +352,13 @@ function App(props: Props) {
   // @endif
 
   if (syncFatalError) {
-    return <SyncFatalError lbryTvApiStatus={lbryTvApiStatus} />;
+    return (
+      <SyncFatalError
+        // @if TARGET='web'
+        lbryTvApiStatus={lbryTvApiStatus}
+        // @endif
+      />
+    );
   }
 
   return (
