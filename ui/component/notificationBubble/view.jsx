@@ -3,16 +3,16 @@ import React from 'react';
 import classnames from 'classnames';
 
 type Props = {
-  unreadCount: number,
+  unseenCount: number,
   inline: boolean,
   user: ?User,
 };
 
 export default function NotificationHeaderButton(props: Props) {
-  const { unreadCount, inline = false, user } = props;
+  const { unseenCount, inline = false, user } = props;
   const notificationsEnabled = user && user.experimental_ui;
 
-  if (unreadCount === 0 || !notificationsEnabled) {
+  if (unseenCount === 0 || !notificationsEnabled) {
     return null;
   }
 
@@ -24,10 +24,10 @@ export default function NotificationHeaderButton(props: Props) {
     >
       <span
         className={classnames('notification__count', {
-          'notification__bubble--small': unreadCount > 9,
+          'notification__bubble--small': unseenCount > 9,
         })}
       >
-        {unreadCount > 20 ? '20+' : unreadCount}
+        {unseenCount > 20 ? '20+' : unseenCount}
       </span>
     </span>
   );

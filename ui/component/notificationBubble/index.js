@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
-import { selectUnreadNotificationCount } from 'redux/selectors/notifications';
+import { selectUnseenNotificationCount } from 'redux/selectors/notifications';
 import { selectUser } from 'redux/selectors/user';
 import NotificationBubble from './view';
 
-const select = state => ({
-  unreadCount: selectUnreadNotificationCount(state),
+const select = (state) => ({
+  unseenCount: selectUnseenNotificationCount(state),
   user: selectUser(state),
 });
 
