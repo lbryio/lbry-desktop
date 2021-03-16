@@ -2,7 +2,7 @@ import { SETTINGS, DAEMON_SETTINGS } from 'lbry-redux';
 import { createSelector } from 'reselect';
 import homepages from 'homepages';
 import { SIMPLE_SITE } from 'config';
-import { getDefaultHomepageKey, getDefaultLanguage } from 'util/default-languages';
+import { resolveLanguageAlias, getDefaultHomepageKey, getDefaultLanguage } from 'util/default-languages';
 
 const selectState = (state) => state.settings || {};
 
@@ -62,7 +62,8 @@ export const selectHomepageCode = createSelector(makeSelectClientSetting(SETTING
 });
 
 export const selectLanguage = createSelector(makeSelectClientSetting(SETTINGS.LANGUAGE), (setting) => {
-  return setting || getDefaultLanguage();
+  const lang = resolveLanguageAlias(setting) || getDefaultLanguage();
+  return lang;
 });
 
 export const selectHomepageData = createSelector(
