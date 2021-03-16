@@ -6,7 +6,6 @@ import FileActions from 'component/fileActions';
 import FileRenderInitiator from 'component/fileRenderInitiator';
 import FileRenderInline from 'component/fileRenderInline';
 import FileViewCount from 'component/fileViewCount';
-import { formatCredits } from 'lbry-redux';
 import CreditAmount from 'component/common/credit-amount';
 import DateTime from 'component/dateTime';
 
@@ -23,7 +22,6 @@ function PostViewer(props: Props) {
   }
 
   const amount = parseFloat(claim.amount) + parseFloat(claim.meta.support_amount);
-  const formattedAmount = formatCredits(amount, 2, true);
 
   return (
     <div className="post">
@@ -33,7 +31,7 @@ function PostViewer(props: Props) {
         </span>
       </FileTitle>
       <div className="post__info">
-        <CreditAmount amount={formattedAmount} />
+        <CreditAmount amount={amount} />
         <FileViewCount uri={uri} />
       </div>
 
