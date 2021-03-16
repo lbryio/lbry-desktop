@@ -13,13 +13,23 @@ type Props = {
   activeViewers: number,
   embed?: boolean,
   doCommentSocketConnect: (string, string) => void,
+  doCommentSocketDisconnect: (string) => void,
   doCommentList: (string) => void,
   comments: Array<Comment>,
   fetchingComments: boolean,
 };
 
 export default function LivestreamFeed(props: Props) {
-  const { claim, uri, embed, doCommentSocketConnect, comments, doCommentList, fetchingComments } = props;
+  const {
+    claim,
+    uri,
+    embed,
+    doCommentSocketConnect,
+    doCommentSocketDisconnect,
+    comments,
+    doCommentList,
+    fetchingComments,
+  } = props;
   const commentsRef = React.createRef();
   const hasScrolledComments = React.useRef();
   const [performedInitialScroll, setPerformedInitialScroll] = React.useState(false);
@@ -31,7 +41,13 @@ export default function LivestreamFeed(props: Props) {
       doCommentList(uri);
       doCommentSocketConnect(uri, claimId);
     }
-  }, [claimId, uri]);
+
+    return () => {
+      if (claimId) {
+        doCommentSocketDisconnect(claimId);
+      }
+    };
+  }, [claimId, uri, doCommentList, doCommentSocketConnect, doCommentSocketDisconnect]);
 
   React.useEffect(() => {
     const element = commentsRef.current;

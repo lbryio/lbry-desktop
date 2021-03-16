@@ -2,6 +2,8 @@ import * as ACTIONS from 'constants/action_types';
 import { getAuthToken } from 'util/saved-passwords';
 import { doNotificationList } from 'redux/actions/notifications';
 
+const COMMENT_WS_URL = `wss://comments.lbry.com/api/v2/live-chat/subscribe?subscription_id=`;
+
 let sockets = {};
 let retryCount = 0;
 
@@ -26,18 +28,29 @@ export const doSocketConnect = (url, cb) => {
 
       sockets[url].onerror = (e) => {
         console.error('websocket onerror', e); // eslint-disable-line
-        // onerror and onclose will both fire, so nothing is needed here
-      };
-
-      sockets[url].onclose = (e) => {
-        console.error('websocket onclose', e); // eslint-disable-line
         retryCount += 1;
         connectToSocket();
+      };
+
+      sockets[url].onclose = () => {
+        console.log('\n Disconnected from WS\n\n'); // eslint-disable-line
+        sockets[url] = null;
       };
     }, timeToWait);
   }
 
   connectToSocket();
+};
+
+export const doSocketDisconnect = (url) => (dispatch) => {
+  if (sockets[url] !== undefined && sockets[url] !== null) {
+    sockets[url].close();
+    sockets[url] = null;
+
+    dispatch({
+      type: ACTIONS.WS_DISCONNECT,
+    });
+  }
 };
 
 export const doNotificationSocketConnect = () => (dispatch) => {
@@ -56,7 +69,7 @@ export const doNotificationSocketConnect = () => (dispatch) => {
 };
 
 export const doCommentSocketConnect = (uri, claimId) => (dispatch) => {
-  const url = `wss://comments.lbry.com/api/v2/live-chat/subscribe?subscription_id=${claimId}`;
+  const url = `${COMMENT_WS_URL}${claimId}`;
 
   doSocketConnect(url, (response) => {
     if (response.type === 'delta') {
@@ -69,6 +82,7 @@ export const doCommentSocketConnect = (uri, claimId) => (dispatch) => {
   });
 };
 
-export const doSocketDisconnect = () => ({
-  type: ACTIONS.WS_DISCONNECT,
-});
+export const doCommentSocketDisconnect = (claimId) => (dispatch) => {
+  const url = `${COMMENT_WS_URL}${claimId}`;
+  dispatch(doSocketDisconnect(url));
+};
