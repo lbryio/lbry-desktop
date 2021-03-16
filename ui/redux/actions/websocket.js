@@ -55,7 +55,7 @@ export const doNotificationSocketConnect = () => (dispatch) => {
   });
 };
 
-export const doCommentSocketConnect = (claimId) => (dispatch) => {
+export const doCommentSocketConnect = (uri, claimId) => (dispatch) => {
   const url = `wss://comments.lbry.com/api/v2/live-chat/subscribe?subscription_id=${claimId}`;
 
   doSocketConnect(url, (response) => {
@@ -63,7 +63,7 @@ export const doCommentSocketConnect = (claimId) => (dispatch) => {
       const newComment = response.data.comment;
       dispatch({
         type: ACTIONS.COMMENT_RECEIVED,
-        data: { comment: newComment, claimId },
+        data: { comment: newComment, claimId, uri },
       });
     }
   });
