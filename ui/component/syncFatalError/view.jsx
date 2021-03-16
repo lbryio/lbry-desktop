@@ -16,6 +16,7 @@ export default function SyncFatalError(props: Props) {
   const { lbryTvApiStatus } = props;
 
   let downTime = false;
+
   // @if TARGET='web'
   downTime =
     IS_WEB &&
