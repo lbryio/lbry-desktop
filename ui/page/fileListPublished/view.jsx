@@ -68,7 +68,35 @@ function FileListPublished(props: Props) {
         {!!(urls && urls.length) && (
           <>
             <ClaimList
-              header={<h1 className="section__title">{__('Uploads')}</h1>}
+              header={
+                <span>
+                  <Button
+                    button="alt"
+                    label={__('All')}
+                    aria-label={__('All uploads')}
+                    onClick={() => setFilterBy(FILTER_ALL)}
+                    className={classnames(`button-toggle`, {
+                      'button-toggle--active': filterBy === FILTER_ALL,
+                    })}
+                  />
+                  <Button
+                    button="alt"
+                    label={__('Uploads')}
+                    onClick={() => setFilterBy(FILTER_UPLOADS)}
+                    className={classnames(`button-toggle`, {
+                      'button-toggle--active': filterBy === FILTER_UPLOADS,
+                    })}
+                  />
+                  <Button
+                    button="alt"
+                    label={__('Reposts')}
+                    onClick={() => setFilterBy(FILTER_REPOSTS)}
+                    className={classnames(`button-toggle`, {
+                      'button-toggle--active': filterBy === FILTER_REPOSTS,
+                    })}
+                  />
+                </span>
+              }
               headerAltControls={
                 <div className="card__actions--inline">
                   {fetching && <Spinner type="small" />}
@@ -87,32 +115,6 @@ function FileListPublished(props: Props) {
                     navigate={`/$/${PAGES.UPLOAD}`}
                     onClick={() => clearPublish()}
                   />
-                  <span>
-                    <Button
-                      button="alt"
-                      label={__('All')}
-                      onClick={() => setFilterBy(FILTER_ALL)}
-                      className={classnames(`button-toggle`, {
-                        'button-toggle--active': filterBy === FILTER_ALL,
-                      })}
-                    />
-                    <Button
-                      button="alt"
-                      label={__('Uploads')}
-                      onClick={() => setFilterBy(FILTER_UPLOADS)}
-                      className={classnames(`button-toggle`, {
-                        'button-toggle--active': filterBy === FILTER_UPLOADS,
-                      })}
-                    />
-                    <Button
-                      button="alt"
-                      label={__('Reposts')}
-                      onClick={() => setFilterBy(FILTER_REPOSTS)}
-                      className={classnames(`button-toggle`, {
-                        'button-toggle--active': filterBy === FILTER_REPOSTS,
-                      })}
-                    />
-                  </span>
                 </div>
               }
               persistedStorageKey="claim-list-published"
