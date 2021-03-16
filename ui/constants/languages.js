@@ -43,6 +43,7 @@ const LANGUAGES = {
   fa: ['Persian', 'فارسی'],
   ff: ['Peul', 'Fulfulde'],
   fi: ['Finnish', 'Suomi'],
+  fil: ['Filipino', 'Wikang Filipino'],
   fj: ['Fijian', 'Na Vosa Vakaviti'],
   fo: ['Faroese', 'Føroyskt'],
   fr: ['French', 'Français'],
