@@ -443,7 +443,7 @@ function HeaderMenuButtons(props: HeaderMenuButtonProps) {
         </MenuButton>
         <MenuList className="menu__list--header">
           <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.SETTINGS}`)}>
-            <Icon aria-hidden tootlip icon={ICONS.SETTINGS} />
+            <Icon aria-hidden tooltip icon={ICONS.SETTINGS} />
             {__('Settings')}
           </MenuItem>
           <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.HELP}`)}>
