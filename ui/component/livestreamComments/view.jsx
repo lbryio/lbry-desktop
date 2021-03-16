@@ -12,7 +12,7 @@ type Props = {
   claim: ?StreamClaim,
   activeViewers: number,
   embed?: boolean,
-  doCommentSocketConnect: (string) => void,
+  doCommentSocketConnect: (string, string) => void,
   doCommentList: (string) => void,
   comments: Array<Comment>,
   fetchingComments: boolean,
@@ -29,7 +29,7 @@ export default function LivestreamFeed(props: Props) {
   React.useEffect(() => {
     if (claimId) {
       doCommentList(uri);
-      doCommentSocketConnect(claimId);
+      doCommentSocketConnect(uri, claimId);
     }
   }, [claimId, uri]);
 
