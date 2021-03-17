@@ -1,5 +1,5 @@
 // @flow
-// import { LIVE_STREAM_TAG, BITWAVE_API } from 'constants/livestream';
+// import { BITWAVE_API } from 'constants/livestream';
 import React from 'react';
 import Page from 'component/page';
 import LivestreamLayout from 'component/livestreamLayout';

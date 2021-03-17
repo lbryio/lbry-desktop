@@ -135,7 +135,7 @@ function PublishForm(props: Props) {
   } = props;
 
   const TAGS_LIMIT = 5;
-  const fileFormDisabled = (mode === PUBLISH_MODES.FILE || mode === PUBLISH_MODES.LIVESTREAM) && !filePath;
+  const fileFormDisabled = mode === PUBLISH_MODES.FILE && !filePath;
   const emptyPostError = mode === PUBLISH_MODES.POST && (!fileText || fileText.trim() === '');
   const formDisabled = (fileFormDisabled && !editingURI) || emptyPostError || publishing;
   const isInProgress = filePath || editingURI || name || title;
@@ -285,7 +285,7 @@ function PublishForm(props: Props) {
     if (!uploadType) return;
     const newParams = new URLSearchParams();
     newParams.set('type', mode.toLowerCase());
-    history.push({search: newParams.toString()});
+    history.push({ search: newParams.toString() });
   }, [mode, uploadType]);
 
   // @if TARGET='web'
@@ -357,11 +357,6 @@ function PublishForm(props: Props) {
       runPublish = true;
     }
 
-    // (Try to) Prevent an anon livestream claim
-    if (mode === PUBLISH_MODES.LIVESTREAM) {
-      updatePublishForm({ channel: activeChannelName });
-    }
-
     if (runPublish) {
       if (enablePublishPreview) {
         setPreviewing(true);
@@ -387,10 +382,7 @@ function PublishForm(props: Props) {
   // Editing claim uri
   return (
     <div className="card-stack">
-      <ChannelSelect
-        hideAnon={mode === PUBLISH_MODES.LIVESTREAM}
-        disabled={disabled}
-      />
+      <ChannelSelect hideAnon={mode === PUBLISH_MODES.LIVESTREAM} disabled={disabled} />
 
       <PublishFile
         uri={uri}
