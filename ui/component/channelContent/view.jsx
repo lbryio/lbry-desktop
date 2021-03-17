@@ -72,7 +72,7 @@ function ChannelContent(props: Props) {
         lighthouse
           .search(
             `s=${encodeURIComponent(searchQuery)}&channel_id=${encodeURIComponent(claimId)}${
-              !showMature ? '&nsfw=false&size=25&from=0' : ''
+              !showMature ? '&nsfw=false&size=50&from=0' : ''
             }`
           )
           .then((results) => {
