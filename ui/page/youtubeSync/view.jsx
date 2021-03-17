@@ -1,6 +1,7 @@
 // @flow
 import { SITE_NAME, DOMAIN } from 'config';
 import * as PAGES from 'constants/pages';
+import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 import React from 'react';
 import Page from 'component/page';
 import Button from 'component/button';
@@ -13,6 +14,7 @@ import { Lbryio } from 'lbryinc';
 import { useHistory } from 'react-router';
 import YoutubeTransferStatus from 'component/youtubeTransferStatus';
 import Nag from 'component/common/nag';
+import { getDefaultLanguage } from 'util/default-languages';
 
 const STATUS_TOKEN_PARAM = 'status_token';
 const ERROR_MESSAGE_PARAM = 'error_message';
@@ -37,6 +39,7 @@ export default function YoutubeSync(props: Props) {
   const errorMessage = urlParams.get(ERROR_MESSAGE_PARAM);
   const newChannelParam = urlParams.get(NEW_CHANNEL_PARAM);
   const [channel, setChannel] = React.useState('');
+  const [language, setLanguage] = React.useState(getDefaultLanguage());
   const [nameError, setNameError] = React.useState(undefined);
   const [acknowledgedTerms, setAcknowledgedTerms] = React.useState(false);
   const [addingNewChannel, setAddingNewChannel] = React.useState(newChannelParam);
@@ -69,7 +72,8 @@ export default function YoutubeSync(props: Props) {
       immediate_sync: true,
       desired_lbry_channel_name: `@${channel}`,
       return_url: `https://${DOMAIN}/$/${inSignUpFlow ? PAGES.AUTH : PAGES.YOUTUBE_SYNC}`,
-    }).then(ytAuthUrl => {
+      channel_language: language,
+    }).then((ytAuthUrl) => {
       // react-router isn't needed since it's a different domain
       window.location.href = ytAuthUrl;
     });
@@ -136,6 +140,19 @@ export default function YoutubeSync(props: Props) {
                     onChange={handleChannelChange}
                   />
                 </fieldset-group>
+                <FormField
+                  name="language_select"
+                  type="select"
+                  label={__('Channel language')}
+                  onChange={(event) => setLanguage(event.target.value)}
+                  value={language}
+                >
+                  {Object.keys(SUPPORTED_LANGUAGES).map((language) => (
+                    <option key={language} value={language}>
+                      {SUPPORTED_LANGUAGES[language]}
+                    </option>
+                  ))}
+                </FormField>
                 <FormField
                   type="checkbox"
                   name="yt_sync_terms"
