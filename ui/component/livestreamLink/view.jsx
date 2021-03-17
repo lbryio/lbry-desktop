@@ -1,5 +1,4 @@
 // @flow
-import { LIVE_STREAM_TAG } from 'constants/livestream';
 import React from 'react';
 import Card from 'component/common/card';
 import ClaimPreview from 'component/claimPreview';
@@ -18,7 +17,7 @@ export default function LivestreamLink(props: Props) {
   React.useEffect(() => {
     Lbry.claim_search({
       channel_ids: [livestreamChannelId],
-      any_tags: [LIVE_STREAM_TAG],
+      has_no_source: true,
       claim_type: ['stream'],
     })
       .then((res) => {

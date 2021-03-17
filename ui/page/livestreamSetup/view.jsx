@@ -60,10 +60,6 @@ export default function LivestreamSetupPage(props: Props) {
     }`;
   }
 
-  /******/
-
-  const LIVE_STREAM_TAG = 'odysee-livestream';
-
   const [isFetching, setIsFetching] = React.useState(true);
   const [isLive, setIsLive] = React.useState(false);
   const [livestreamClaims, setLivestreamClaims] = React.useState([]);
@@ -75,7 +71,7 @@ export default function LivestreamSetupPage(props: Props) {
 
     Lbry.claim_search({
       channel_ids: [channelClaim.claim_id],
-      any_tags: [LIVE_STREAM_TAG],
+      has_no_source: true,
       claim_type: ['stream'],
     })
       .then((res) => {
