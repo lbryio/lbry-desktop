@@ -1,4 +1,5 @@
 // @flow
+import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import React from 'react';
 import UriIndicator from 'component/uriIndicator';
 import DateTime from 'component/dateTime';
@@ -11,10 +12,11 @@ type Props = {
   pending?: boolean,
   type: string,
   beginPublish: (string) => void,
+  isLivestream: boolean,
 };
 
 function ClaimPreviewSubtitle(props: Props) {
-  const { pending, uri, claim, type, beginPublish } = props;
+  const { pending, uri, claim, type, beginPublish, isLivestream } = props;
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
 
   let isChannel;
@@ -28,13 +30,16 @@ function ClaimPreviewSubtitle(props: Props) {
       {claim ? (
         <React.Fragment>
           <UriIndicator uri={uri} link />{' '}
-          {!pending &&
-            claim &&
-            (isChannel ? (
-              type !== 'inline' && `${claimsInChannel} ${claimsInChannel === 1 ? __('upload') : __('uploads')}`
-            ) : (
-              <DateTime timeAgo uri={uri} />
-            ))}
+          {!pending && claim && (
+            <>
+              {isChannel &&
+                type !== 'inline' &&
+                `${claimsInChannel} ${claimsInChannel === 1 ? __('upload') : __('uploads')}`}
+
+              {!isChannel &&
+                (isLivestream && ENABLE_NO_SOURCE_CLAIMS ? __('Livestream') : <DateTime timeAgo uri={uri} />)}
+            </>
+          )}
         </React.Fragment>
       ) : (
         <React.Fragment>
