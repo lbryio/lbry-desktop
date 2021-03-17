@@ -9,12 +9,10 @@ import ChannelSelector from 'component/channelSelector';
 import Yrbl from 'component/yrbl';
 import { Lbry } from 'lbry-redux';
 import { toHex } from 'util/hex';
-import ClaimPreview from 'component/claimPreview';
 import { FormField } from 'component/common/form';
 import CopyableText from 'component/copyableText';
 import Card from 'component/common/card';
 import ClaimList from 'component/claimList';
-import livestream from '../livestream';
 
 type Props = {
   channels: Array<ChannelClaim>,
@@ -42,12 +40,10 @@ export default function LivestreamSetupPage(props: Props) {
           hexdata: toHex(channelClaim.name),
         })
           .then((data) => {
-            console.log(data);
             setSigData(data);
           })
           .catch((error) => {
             setSigData({ signature: null, signing_ts: null });
-            console.error(error);
           });
       }
     }
@@ -79,10 +75,12 @@ export default function LivestreamSetupPage(props: Props) {
           const claim = res.items[res.items.length - 1];
           setLivestreamClaims(res.items.reverse());
         } else {
+          setLivestreamClaims([]);
           setIsFetching(false);
         }
       })
       .catch(() => {
+        setLivestreamClaims([]);
         setIsFetching(false);
       });
   }, [activeChannelClaimStr]);
