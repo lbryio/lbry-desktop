@@ -328,7 +328,6 @@ function PublishFile(props: Props) {
 
   const isPublishFile = mode === PUBLISH_MODES.FILE;
   const isPublishPost = mode === PUBLISH_MODES.POST;
-  const isPublishLivestream = mode === PUBLISH_MODES.LIVESTREAM;
 
   return (
     <Card
@@ -357,20 +356,13 @@ function PublishFile(props: Props) {
             value={title}
             onChange={handleTitleChange}
           />
-          {(isPublishFile || isPublishLivestream) && (
+          {isPublishFile && (
             <FileSelector
               label={__('File')}
               disabled={disabled}
               currentPath={currentFile}
               onFileChosen={handleFileChange}
             />
-          )}
-
-          {isPublishLivestream && (
-            <div className="help--warning">
-              While livestreaming is in beta, you still need to choose a file to upload. Please choose a small file. No
-              one will see this file.
-            </div>
           )}
 
           {isPublishPost && (
