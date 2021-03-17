@@ -141,7 +141,7 @@ function ClaimPreviewTile(props: Props) {
     return null;
   }
 
-  if (placeholder || isResolvingUri) {
+  if (placeholder || (!claim && isResolvingUri)) {
     return (
       <li className={classnames('claim-preview--tile', {})}>
         <div className="placeholder media__thumb" />
