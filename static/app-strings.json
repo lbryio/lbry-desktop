@@ -1623,6 +1623,8 @@
   "Exit Fullscreen (f)": "Exit Fullscreen (f)",
   "Toggle Theater mode (t)": "Toggle Theater mode (t)",
   "Quality": "Quality",
-  "--end--": "--end--",
   "Create A LiveStream": "Create A LiveStream",
+  "%channel% isn't live right now, but the chat is! Check back later to watch the stream.": "%channel% isn't live right now, but the chat is! Check back later to watch the stream.",
+  "Right now": "Right now",
+  "--end--": "--end--"
 }
