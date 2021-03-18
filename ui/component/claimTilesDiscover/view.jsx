@@ -1,4 +1,5 @@
 // @flow
+import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import React from 'react';
 import { createNormalizedClaimSearchKey, MATURE_TAGS } from 'lbry-redux';
 import ClaimPreviewTile from 'component/claimPreviewTile';
@@ -74,6 +75,8 @@ function ClaimTilesDiscover(props: Props) {
     fee_amount?: string,
     limit_claims_per_channel?: number,
     stream_types?: Array<string>,
+    has_source?: boolean,
+    has_no_source?: boolean,
   } = {
     page_size: pageSize,
     claim_type: claimType || undefined,
@@ -87,6 +90,10 @@ function ClaimTilesDiscover(props: Props) {
     not_channel_ids: [],
     order_by: orderBy || ['trending_group', 'trending_mixed'],
   };
+
+  if (!ENABLE_NO_SOURCE_CLAIMS) {
+    options.has_source = true;
+  }
 
   if (releaseTime) {
     options.release_time = releaseTime;

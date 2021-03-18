@@ -1,4 +1,5 @@
 // @flow
+import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import type { Node } from 'react';
 import * as CS from 'constants/claim_search';
 import React from 'react';
@@ -199,6 +200,8 @@ function ClaimListDiscover(props: Props) {
     reposted_claim_id?: string,
     stream_types?: any,
     fee_amount?: string,
+    has_source?: boolean,
+    has_no_source?: boolean,
   } = {
     page_size: dynamicPageSize,
     page,
@@ -218,6 +221,10 @@ function ClaimListDiscover(props: Props) {
         ? CS.ORDER_BY_NEW_VALUE
         : CS.ORDER_BY_TOP_VALUE, // Sort by top
   };
+
+  if (!ENABLE_NO_SOURCE_CLAIMS) {
+    options.has_source = true;
+  }
 
   if (feeAmountParam && claimType !== CS.CLAIM_CHANNEL) {
     options.fee_amount = feeAmountParam;
