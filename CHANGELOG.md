@@ -4,13 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased on desktop]
+## [0.50.1] - [2021-03-18]
+
+### Fixed
+
+- Upgrade modal extended beyond the height of the app ([#5709](https://github.com/lbryio/lbry-desktop/pull/5709))
+
+## [0.50.0] - [2021-03-18]
 
 ### Added
 
 - New moderation tools: block & mute ([#5572](https://github.com/lbryio/lbry-desktop/pull/5572))
 - Improved markdown file styling ([#5659](https://github.com/lbryio/lbry-desktop/pull/5659))
-- Wallet balance UI improvements ([#5276](https://github.com/lbryio/lbry-desktop/pull/5387))
 - Mass tip unlock ([#5409](https://github.com/lbryio/lbry-desktop/pull/5387))
 - Zoomable image viewer in Markdown (posts and comments) _community pr!_ ([#5387](https://github.com/lbryio/lbry-desktop/pull/5387))
 - Enable PDF Viewer in App _community pr!_ ([#2903](https://github.com/lbryio/lbry-desktop/issues/2903))

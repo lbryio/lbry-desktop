@@ -426,3 +426,8 @@ textarea {
   height: 5rem;
   width: 100%;
 }
+
+.release__notes {
+  max-height: 50vh;
+  overflow: scroll;
+}

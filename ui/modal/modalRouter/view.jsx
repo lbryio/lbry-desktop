@@ -53,8 +53,6 @@ function ModalRouter(props: Props) {
   const { modal, error, location, hideModal } = props;
   const { pathname } = location;
 
-  //   return <ModalMobileSearch />;
-
   React.useEffect(() => {
     hideModal();
   }, [pathname, hideModal]);
