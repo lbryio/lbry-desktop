@@ -168,7 +168,7 @@ export default function NotificationSettingsPage(props: Props) {
                         name={tag.name}
                         onChange={() => handleChangeTag(tag.name, !isEnabled)}
                         checked={isEnabled}
-                        label={tag.description}
+                        label={__(tag.description)}
                       />
                     );
                   })}
