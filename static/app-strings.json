@@ -1674,5 +1674,7 @@
   "Stay up to date on the latest content from your favorite creators.": "Stay up to date on the latest content from your favorite creators.",
   "Receive tutorial emails related to LBRY": "Receive tutorial emails related to LBRY",
   "Create A LiveStream": "Create A LiveStream",
+  "%channel% isn't live right now, but the chat is! Check back later to watch the stream.": "%channel% isn't live right now, but the chat is! Check back later to watch the stream.",
+  "Right now": "Right now",
   "--end--": "--end--"
 }
