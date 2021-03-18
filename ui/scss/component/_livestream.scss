@@ -5,6 +5,7 @@
   position: relative;
   border-radius: var(--border-radius);
 
+  .media__thumb,
   iframe {
     overflow: hidden;
     border-radius: var(--border-radius);

@@ -4,7 +4,7 @@
 .media__thumb {
   @include thumbnail;
   position: relative;
-  border-radius: var(--card-radius);
+  border-radius: var(--border-radius);
   object-fit: cover;
   background-color: var(--color-placeholder-background);
   background-position: center;
