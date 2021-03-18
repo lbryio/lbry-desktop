@@ -43,8 +43,8 @@ const LastReleaseChanges = (props: Props) => {
 
     setFetchingReleaseChanges(true);
     fetch(lastReleaseUrl, options)
-      .then(response => response.json())
-      .then(response => {
+      .then((response) => response.json())
+      .then((response) => {
         setReleaseTag(response.tag_name);
         setReleaseChanges(response.body);
         setFetchingReleaseChanges(false);
@@ -70,7 +70,7 @@ const LastReleaseChanges = (props: Props) => {
   }
 
   return (
-    <div>
+    <div className="release__notes">
       {releaseVersionTitle}
       <p>
         <MarkdownPreview content={releaseChanges} />
