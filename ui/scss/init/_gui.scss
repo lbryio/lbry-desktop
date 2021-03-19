@@ -371,9 +371,15 @@ textarea {
   background-color: var(--color-primary-alt);
 }
 
-.notice-message--above-content {
+.notice-message--loud {
   @extend .notice-message;
-  margin-bottom: var(--spacing-l);
+  background-color: #fef1f6;
+  color: var(--color-black);
+  font-weight: bold;
+
+  .button {
+    color: #fa6165;
+  }
 }
 
 .privacy-img {
@@ -430,4 +436,16 @@ textarea {
 .release__notes {
   max-height: 50vh;
   overflow: scroll;
+}
+
+.signup__odysee-logo {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    margin-top: var(--spacing-xl);
+    height: 4rem;
+  }
 }

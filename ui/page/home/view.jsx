@@ -1,12 +1,14 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
-import { SITE_NAME, SIMPLE_SITE } from 'config';
+import { SITE_NAME, SIMPLE_SITE, DOMAIN } from 'config';
 import React from 'react';
 import Page from 'component/page';
 import Button from 'component/button';
 import ClaimTilesDiscover from 'component/claimTilesDiscover';
 import Icon from 'component/common/icon';
+import I18nMessage from 'component/i18nMessage';
+import LbcSymbol from 'component/common/lbc-symbol';
 
 type Props = {
   authenticated: boolean,
@@ -35,6 +37,34 @@ function HomePage(props: Props) {
 
   return (
     <Page fullWidthPage>
+      {IS_WEB && DOMAIN === 'lbry.tv' && (
+        <div className="notice-message--loud">
+          <h1 className="section__title">
+            <I18nMessage
+              tokens={{
+                odysee: <Button label={__('odysee.com')} button="link" href="https://odysee.com?src=lbrytv-retired" />,
+              }}
+            >
+              lbry.tv is being retired in favor of %odysee%
+            </I18nMessage>
+          </h1>
+          <p className="section__subtitle">
+            <I18nMessage
+              tokens={{
+                desktop_app: (
+                  <Button label={__('desktop app')} button="link" href="https://lbry.com/get?src=lbrytv-retired" />
+                ),
+                odysee: <Button label={__('odysee.com')} button="link" href="https://odysee.com?src=lbrytv-retired" />,
+                credits: <LbcSymbol />,
+              }}
+            >
+              You will have to switch to the %desktop_app% or %odysee% in the near future. Your existing login details
+              will work on %odysee% and all of your %credits% and other settings will be there.
+            </I18nMessage>
+          </p>
+        </div>
+      )}
+
       {!SIMPLE_SITE && (authenticated || !IS_WEB) && !subscribedChannels.length && (
         <div className="notice-message">
           <h1 className="section__title">
