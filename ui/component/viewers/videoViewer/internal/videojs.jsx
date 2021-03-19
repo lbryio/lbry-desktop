@@ -86,17 +86,21 @@ const SMALL_F_KEYCODE = 70;
 const SMALL_M_KEYCODE = 77;
 const SMALL_T_KEYCODE = 84;
 const ARROW_LEFT_KEYCODE = 37;
+const ARROW_UP_KEYCODE = 38;
 const ARROW_RIGHT_KEYCODE = 39;
+const ARROW_DOWN_KEYCODE = 40;
 const COMMA_KEYCODE = 188;
 const PERIOD_KEYCODE = 190;
 const SMALL_J_KEYCODE = 74;
 const SMALL_K_KEYCODE = 75;
 const SMALL_L_KEYCODE = 76;
 
-
 const FULLSCREEN_KEYCODE = SMALL_F_KEYCODE;
 const MUTE_KEYCODE = SMALL_M_KEYCODE;
 const THEATER_MODE_KEYCODE = SMALL_T_KEYCODE;
+
+const VOLUME_UP_KEYCODE = ARROW_UP_KEYCODE;
+const VOLUME_DOWN_KEYCODE = ARROW_DOWN_KEYCODE;
 
 const SEEK_FORWARD_KEYCODE = SMALL_L_KEYCODE;
 const SEEK_BACKWARD_KEYCODE = SMALL_J_KEYCODE;
@@ -357,6 +361,16 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     // Mute/Unmute Shortcuts
     if (e.keyCode === MUTE_KEYCODE) {
       videoNode.muted = !videoNode.muted;
+    }
+    if (e.keyCode === VOLUME_DOWN_KEYCODE) {
+      player.volume(player.volume()-0.05);
+      OVERLAY.showVolumeverlay(player, Math.round(player.volume()*100));
+      player.userActive(true);
+    } 
+    if (e.keyCode === VOLUME_UP_KEYCODE) {
+      player.volume(player.volume()+0.05);
+      OVERLAY.showVolumeverlay(player, Math.round(player.volume()*100));
+      player.userActive(true);
     }
 
     // Seeking Shortcuts
