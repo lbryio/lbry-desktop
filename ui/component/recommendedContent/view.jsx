@@ -6,43 +6,28 @@ import Ads from 'web/component/ads';
 import Card from 'component/common/card';
 import { useIsMobile, useIsMediumScreen } from 'effects/use-screensize';
 
-type Options = {
-  related_to: string,
-  nsfw?: boolean,
-};
-
 type Props = {
   uri: string,
-  claim: ?StreamClaim,
   recommendedContent: Array<string>,
   nextRecommendedUri: string,
   isSearching: boolean,
-  search: (string, Options) => void,
+  doFetchRecommendedContent: (string, boolean) => void,
   mature: boolean,
   isAuthenticated: boolean,
 };
 
 export default function RecommendedContent(props: Props) {
-  const { uri, claim, search, mature, recommendedContent, nextRecommendedUri, isSearching, isAuthenticated } = props;
+  const {
+    uri,
+    doFetchRecommendedContent,
+    mature,
+    recommendedContent,
+    nextRecommendedUri,
+    isSearching,
+    isAuthenticated,
+  } = props;
   const isMobile = useIsMobile();
   const isMedium = useIsMediumScreen();
-
-  const stringifiedClaim = JSON.stringify(claim);
-  const getRecommendedContent = React.useCallback(() => {
-    if (stringifiedClaim) {
-      const jsonClaim = JSON.parse(stringifiedClaim);
-      if (jsonClaim && jsonClaim.value && jsonClaim.claim_id) {
-        const options: Options = { size: 20, related_to: jsonClaim.claim_id, isBackgroundSearch: true };
-        if (jsonClaim && !mature) {
-          options['nsfw'] = false;
-        }
-        const { title } = jsonClaim.value;
-        if (title && options) {
-          search(title, options);
-        }
-      }
-    }
-  }, [stringifiedClaim, mature, search]);
 
   function reorderList(recommendedContent) {
     let newList = recommendedContent;
@@ -61,8 +46,8 @@ export default function RecommendedContent(props: Props) {
   }
 
   React.useEffect(() => {
-    getRecommendedContent();
-  }, [uri, getRecommendedContent]);
+    doFetchRecommendedContent(uri, mature);
+  }, [uri, mature, doFetchRecommendedContent]);
 
   return (
     <Card

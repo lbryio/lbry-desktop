@@ -1,5 +1,11 @@
 import { connect } from 'react-redux';
-import { makeSelectFileInfoForUri, makeSelectTitleForUri, makeSelectStreamingUrlForUri, SETTINGS } from 'lbry-redux';
+import {
+  makeSelectFileInfoForUri,
+  makeSelectTitleForUri,
+  makeSelectStreamingUrlForUri,
+  makeSelectClaimIsNsfw,
+  SETTINGS,
+} from 'lbry-redux';
 import {
   makeSelectIsPlayerFloating,
   selectPrimaryUri,
@@ -8,6 +14,7 @@ import {
 } from 'redux/selectors/content';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { doSetPlayingUri } from 'redux/actions/content';
+import { doFetchRecommendedContent } from 'redux/actions/search';
 import { withRouter } from 'react-router';
 import FileRenderFloating from './view';
 
@@ -22,6 +29,7 @@ const select = (state, props) => {
     playingUri,
     title: makeSelectTitleForUri(uri)(state),
     fileInfo: makeSelectFileInfoForUri(uri)(state),
+    mature: makeSelectClaimIsNsfw(props.uri)(state),
     isFloating: makeSelectIsPlayerFloating(props.location)(state),
     streamingUrl: makeSelectStreamingUrlForUri(uri)(state),
     floatingPlayerEnabled: makeSelectClientSetting(SETTINGS.FLOATING_PLAYER)(state),
@@ -30,8 +38,9 @@ const select = (state, props) => {
   };
 };
 
-const perform = dispatch => ({
+const perform = (dispatch) => ({
   closeFloatingPlayer: () => dispatch(doSetPlayingUri({ uri: null })),
+  doFetchRecommendedContent: (uri, mature) => dispatch(doFetchRecommendedContent(uri, mature)),
 });
 
 export default withRouter(connect(select, perform)(FileRenderFloating));

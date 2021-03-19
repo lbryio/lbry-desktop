@@ -1,6 +1,6 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
-import { buildURI, doResolveUris, batchActions, isURIValid } from 'lbry-redux';
+import { buildURI, doResolveUris, batchActions, isURIValid, makeSelectClaimForUri } from 'lbry-redux';
 import { makeSelectSearchUris, makeSelectQueryWithOptions, selectSearchValue } from 'redux/selectors/search';
 import handleFetchResponse from 'util/handle-fetch';
 
@@ -57,7 +57,7 @@ export const doSearch = (rawQuery: string, searchOptions: SearchOptions) => (
       const uris = [];
       const actions = [];
 
-      data.forEach(result => {
+      data.forEach((result) => {
         if (result) {
           const { name, claimId } = result;
           const urlObj: LbryUrlObj = {};
@@ -88,7 +88,7 @@ export const doSearch = (rawQuery: string, searchOptions: SearchOptions) => (
       });
       dispatch(batchActions(...actions));
     })
-    .catch(e => {
+    .catch((e) => {
       dispatch({
         type: ACTIONS.SEARCH_FAIL,
       });
@@ -110,6 +110,22 @@ export const doUpdateSearchOptions = (newOptions: SearchOptions, additionalOptio
   if (searchValue) {
     // After updating, perform a search with the new options
     dispatch(doSearch(searchValue, additionalOptions));
+  }
+};
+
+export const doFetchRecommendedContent = (uri: string, mature: boolean) => (dispatch: Dispatch, getState: GetState) => {
+  const state = getState();
+  const claim = makeSelectClaimForUri(uri)(state);
+
+  if (claim && claim.value && claim.claim_id) {
+    const options: SearchOptions = { size: 20, related_to: claim.claim_id, isBackgroundSearch: true };
+    if (!mature) {
+      options['nsfw'] = false;
+    }
+    const { title } = claim.value;
+    if (title && options) {
+      dispatch(doSearch(title, options));
+    }
   }
 };
 
