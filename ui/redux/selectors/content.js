@@ -123,7 +123,23 @@ export const makeSelectNextUnplayedRecommended = (uri: string) =>
             continue;
           }
 
-          if (!history.some((item) => item.uri === recommendedForUri[i])) {
+          const recommendedUriInfo = parseURI(recommendedUri);
+          const recommendedUriShort = recommendedUriInfo.claimName + '#' + recommendedUriInfo.claimId.substring(0, 1);
+
+          if (claimsByUri[uri] && claimsByUri[uri].claim_id === recommendedUriInfo.claimId) {
+            // Skip myself (same claim ID)
+            continue;
+          }
+
+          if (
+            !history.some((h) => {
+              const directMatch = h.uri === recommendedForUri[i];
+              const shortUriMatch = h.uri.includes(recommendedUriShort);
+              const idMatch = claimsByUri[h.uri] && claimsByUri[h.uri].claim_id === recommendedUriInfo.claimId;
+
+              return directMatch || shortUriMatch || idMatch;
+            })
+          ) {
             return recommendedForUri[i];
           }
         }
