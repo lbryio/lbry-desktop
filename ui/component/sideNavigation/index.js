@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
-import { selectPurchaseUriSuccess, doClearPurchasedUriSuccess } from 'lbry-redux';
+import { doResolveUris, selectPurchaseUriSuccess, doClearPurchasedUriSuccess } from 'lbry-redux';
 import { selectFollowedTags } from 'redux/selectors/tags';
 import { selectUserVerifiedEmail, selectUser } from 'redux/selectors/user';
 import { selectHomepageData, selectLanguage } from 'redux/selectors/settings';
@@ -23,4 +23,5 @@ const select = (state) => ({
 export default connect(select, {
   doSignOut,
   doClearPurchasedUriSuccess,
+  doResolveUris
 })(SideNavigation);

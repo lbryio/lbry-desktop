@@ -13,6 +13,7 @@ type Props = {
   thumbnailPreview: ?string,
   obscure?: boolean,
   small?: boolean,
+  verysmall?: boolean,
   allowGifs?: boolean,
   claim: ?ChannelClaim,
   doResolveUri: (string) => void,
@@ -29,6 +30,7 @@ function ChannelThumbnail(props: Props) {
     thumbnailPreview: rawThumbnailPreview,
     obscure,
     small = false,
+    verysmall,
     allowGifs = false,
     claim,
     doResolveUri,
@@ -61,7 +63,12 @@ function ChannelThumbnail(props: Props) {
 
   if (channelThumbnail && channelThumbnail.endsWith('gif') && !allowGifs) {
     return (
-      <FreezeframeWrapper src={channelThumbnail} className={classnames('channel-thumbnail', className)}>
+      <FreezeframeWrapper src={channelThumbnail} className={classnames('channel-thumbnail', className, {
+        [colorClassName]: !showThumb,
+        'channel-thumbnail--small': small,
+        'channel-thumbnail--verysmall': verysmall,
+        'channel-thumbnail--resolving': isResolving,
+      })}>
         {!hideStakedIndicator && <ChannelStakedIndicator uri={uri} claim={claim} />}
       </FreezeframeWrapper>
     );
@@ -72,6 +79,7 @@ function ChannelThumbnail(props: Props) {
       className={classnames('channel-thumbnail', className, {
         [colorClassName]: !showThumb,
         'channel-thumbnail--small': small,
+        'channel-thumbnail--verysmall': verysmall,
         'channel-thumbnail--resolving': isResolving,
       })}
     >

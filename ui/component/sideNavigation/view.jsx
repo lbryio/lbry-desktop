@@ -8,6 +8,8 @@ import classnames from 'classnames';
 import Icon from 'component/common/icon';
 import NotificationBubble from 'component/notificationBubble';
 import I18nMessage from 'component/i18nMessage';
+import ChannelThumbnail from 'component/channelThumbnail';
+import ChannelTitle from 'component/channelTitle';
 import { PINNED_LABEL_1, PINNED_URI_1, PINNED_URI_2, PINNED_LABEL_2, SIMPLE_SITE } from 'config';
 // @if TARGET='app'
 import { IS_MAC } from 'component/app/view';
@@ -46,6 +48,7 @@ type Props = {
   doClearPurchasedUriSuccess: () => void,
   user: ?User,
   homepageData: any,
+  doResolveUris: (Array<string>) => void,
 };
 
 type SideNavLink = {
@@ -72,6 +75,7 @@ function SideNavigation(props: Props) {
     unseenCount,
     homepageData,
     user,
+    doResolveUris,
   } = props;
 
   const { EXTRA_SIDEBAR_LINKS } = homepageData;
@@ -271,6 +275,16 @@ function SideNavigation(props: Props) {
     return () => window.removeEventListener('keydown', handleKeydown);
   }, [sidebarOpen, setSidebarOpen, isAbsolute]);
 
+  React.useEffect(() => {
+    if (subscriptions.length > 0) {
+      const subscriptionUris = subscriptions.map(({ uri }) => {
+        return uri;
+      });
+
+      doResolveUris(subscriptionUris);
+    }
+  }, [doResolveUris]);
+
   const unAuthNudge = (
     <div className="navigation__auth-nudge">
       <span>
@@ -350,10 +364,11 @@ function SideNavigation(props: Props) {
                   <li key={uri} className="navigation-link__wrapper">
                     <Button
                       navigate={uri}
-                      label={channelName}
                       className="navigation-link"
                       activeClass="navigation-link--active"
-                    />
+                    ><ChannelThumbnail uri={uri} verysmall={true} />
+                      <ChannelTitle uri={uri} />
+                    </Button>
                   </li>
                 ))}
               </ul>
@@ -433,10 +448,11 @@ function SideNavigation(props: Props) {
                     <li key={uri} className="navigation-link__wrapper">
                       <Button
                         navigate={uri}
-                        label={channelName}
                         className="navigation-link"
                         activeClass="navigation-link--active"
-                      />
+                      ><ChannelThumbnail uri={uri} verysmall={true} />
+                      <ChannelTitle uri={uri} />
+                    </Button>
                     </li>
                   ))}
                 </ul>
