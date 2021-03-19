@@ -22,6 +22,7 @@ export const INLINE_PLAYER_WRAPPER_CLASS = 'inline-player__wrapper';
 type Props = {
   isFloating: boolean,
   fileInfo: FileListItem,
+  mature: boolean,
   uri: string,
   streamingUrl?: string,
   title: ?string,
@@ -31,11 +32,13 @@ type Props = {
   playingUri: ?PlayingUri,
   primaryUri: ?string,
   videoTheaterMode: boolean,
+  doFetchRecommendedContent: (string, boolean) => void,
 };
 
 export default function FileRenderFloating(props: Props) {
   const {
     fileInfo,
+    mature,
     uri,
     streamingUrl,
     title,
@@ -46,6 +49,7 @@ export default function FileRenderFloating(props: Props) {
     playingUri,
     primaryUri,
     videoTheaterMode,
+    doFetchRecommendedContent,
   } = props;
   const {
     location: { pathname },
@@ -200,6 +204,12 @@ export default function FileRenderFloating(props: Props) {
       // @endif
     };
   }, [uri]);
+
+  useEffect(() => {
+    if (isFloating) {
+      doFetchRecommendedContent(uri, mature);
+    }
+  }, [uri, mature, isFloating]);
 
   if (!isPlayable || !uri || (isFloating && (isMobile || !floatingPlayerEnabled))) {
     return null;
