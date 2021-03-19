@@ -70,9 +70,9 @@ export default function YoutubeSync(props: Props) {
     Lbryio.call('yt', 'new', {
       type: 'sync',
       immediate_sync: true,
+      channel_language: language,
       desired_lbry_channel_name: `@${channel}`,
       return_url: `https://${DOMAIN}/$/${inSignUpFlow ? PAGES.AUTH : PAGES.YOUTUBE_SYNC}`,
-      channel_language: language,
     }).then((ytAuthUrl) => {
       // react-router isn't needed since it's a different domain
       window.location.href = ytAuthUrl;
