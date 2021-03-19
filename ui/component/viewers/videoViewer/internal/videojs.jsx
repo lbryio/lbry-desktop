@@ -89,14 +89,21 @@ const ARROW_LEFT_KEYCODE = 37;
 const ARROW_RIGHT_KEYCODE = 39;
 const COMMA_KEYCODE = 188;
 const PERIOD_KEYCODE = 190;
+const SMALL_J_KEYCODE = 74;
+const SMALL_K_KEYCODE = 75;
+const SMALL_L_KEYCODE = 76;
+
 
 const FULLSCREEN_KEYCODE = SMALL_F_KEYCODE;
 const MUTE_KEYCODE = SMALL_M_KEYCODE;
 const THEATER_MODE_KEYCODE = SMALL_T_KEYCODE;
 
-const SEEK_FORWARD_KEYCODE = ARROW_RIGHT_KEYCODE;
-const SEEK_BACKWARD_KEYCODE = ARROW_LEFT_KEYCODE;
+const SEEK_FORWARD_KEYCODE = SMALL_L_KEYCODE;
+const SEEK_BACKWARD_KEYCODE = SMALL_J_KEYCODE;
+const SEEK_FORWARD_KEYCODE_5 = ARROW_RIGHT_KEYCODE;
+const SEEK_BACKWARD_KEYCODE_5 = ARROW_LEFT_KEYCODE;
 
+const SEEK_STEP_5 = 5;
 const SEEK_STEP = 10; // time to seek in seconds
 
 if (!Object.keys(videojs.getPlugins()).includes('eventTracking')) {
@@ -334,7 +341,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       return;
     }
 
-    if (e.keyCode === SPACE_BAR_KEYCODE) {
+    if (e.keyCode === SPACE_BAR_KEYCODE || e.keyCode === SMALL_K_KEYCODE) {
       videoNode.paused ? videoNode.play() : videoNode.pause();
     }
 
@@ -365,6 +372,17 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         const newDuration = currentTime - SEEK_STEP;
         videoNode.currentTime = newDuration < 0 ? 0 : newDuration;
         OVERLAY.showSeekedOverlay(player, SEEK_STEP, false);
+        player.userActive(true);
+      } 
+      if (e.keyCode === SEEK_FORWARD_KEYCODE_5) {
+        const newDuration = currentTime + SEEK_STEP_5;
+        videoNode.currentTime = newDuration < 0 ? 0 : newDuration;
+        OVERLAY.showSeekedOverlay(player, SEEK_STEP_5, true);
+        player.userActive(true);
+      } else if (e.keyCode === SEEK_BACKWARD_KEYCODE_5) {
+        const newDuration = currentTime - SEEK_STEP_5;
+        videoNode.currentTime = newDuration < 0 ? 0 : newDuration;
+        OVERLAY.showSeekedOverlay(player, SEEK_STEP_5, false);
         player.userActive(true);
       }
     }
