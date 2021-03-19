@@ -17,8 +17,8 @@ type Props = {
   emailDoesNotExist: boolean,
   doClearEmailEntry: () => void,
   doUserSignIn: (string, ?string) => void,
-  doUserCheckIfEmailExists: string => void,
-  doSetWalletSyncPreference: boolean => void,
+  doUserCheckIfEmailExists: (string) => void,
+  doSetWalletSyncPreference: (boolean) => void,
   doSetClientSetting: (string, boolean, ?boolean) => void,
   isPending: boolean,
 };
@@ -87,7 +87,7 @@ function UserEmailReturning(props: Props) {
                   name="sign_in_email"
                   label={__('Email')}
                   value={email}
-                  onChange={e => setEmail(e.target.value)}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
 
                 {/* @if TARGET='app' */}
@@ -119,7 +119,7 @@ function UserEmailReturning(props: Props) {
             </div>
           }
           nag={
-            <React.Fragment>
+            <>
               {!emailDoesNotExist && emailExistsFromUrl && (
                 <Nag type="helpful" relative message={__('That email is already in use. Did you mean to log in?')} />
               )}
@@ -134,7 +134,7 @@ function UserEmailReturning(props: Props) {
               {!emailExistsFromUrl && !emailDoesNotExist && errorMessage && (
                 <Nag type="error" relative message={errorMessage} />
               )}
-            </React.Fragment>
+            </>
           }
         />
       )}

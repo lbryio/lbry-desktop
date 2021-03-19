@@ -11,18 +11,19 @@ import { doSetWalletSyncPreference, doSetDaemonSetting } from 'redux/actions/set
 import { selectDaemonSettings, makeSelectClientSetting } from 'redux/selectors/settings';
 import UserEmailNew from './view';
 
-const select = state => ({
+const select = (state) => ({
   isPending: selectEmailNewIsPending(state),
   errorMessage: selectEmailNewErrorMessage(state),
   syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
   daemonSettings: selectDaemonSettings(state),
   emailExists: selectEmailAlreadyExists(state),
   user: selectUser(state),
+  currentTheme: makeSelectClientSetting(SETTINGS.THEME)(state),
 });
 
-const perform = dispatch => ({
-  setSync: value => dispatch(doSetWalletSyncPreference(value)),
-  setShareDiagnosticData: shouldShareData =>
+const perform = (dispatch) => ({
+  setSync: (value) => dispatch(doSetWalletSyncPreference(value)),
+  setShareDiagnosticData: (shouldShareData) =>
     dispatch(doSetDaemonSetting(DAEMON_SETTINGS.SHARE_USAGE_DATA, shouldShareData)),
   doSignUp: (email, password) => dispatch(doUserSignUp(email, password)),
   clearEmailEntry: () => dispatch(doClearEmailEntry()),
