@@ -80,7 +80,7 @@ export class FormField extends React.PureComponent<Props> {
       labelOnLeft,
       blockWrap,
       charCount,
-      textAreaMaxLength = FF_MAX_CHARS_DEFAULT,
+      textAreaMaxLength,
       quickActionLabel,
       quickActionHandler,
       ...inputProps
@@ -208,7 +208,7 @@ export class FormField extends React.PureComponent<Props> {
         // to pass the current value to it's callback, nor query the current
         // text length from the callback. So, we'll use our own widget.
         const hasCharCount = charCount !== undefined && charCount >= 0;
-        const countInfo = hasCharCount && (
+        const countInfo = hasCharCount && textAreaMaxLength !== undefined && (
           <span className="comment__char-count-mde">{`${charCount || '0'}/${textAreaMaxLength}`}</span>
         );
 
@@ -242,7 +242,7 @@ export class FormField extends React.PureComponent<Props> {
         );
       } else if (type === 'textarea') {
         const hasCharCount = charCount !== undefined && charCount >= 0;
-        const countInfo = hasCharCount && (
+        const countInfo = hasCharCount && textAreaMaxLength !== undefined && (
           <span className="comment__char-count">{`${charCount || '0'}/${textAreaMaxLength}`}</span>
         );
         input = (
@@ -255,7 +255,13 @@ export class FormField extends React.PureComponent<Props> {
                 {quickAction}
               </div>
             )}
-            <textarea type={type} id={name} maxLength={textAreaMaxLength} ref={this.input} {...inputProps} />
+            <textarea
+              type={type}
+              id={name}
+              maxLength={textAreaMaxLength || FF_MAX_CHARS_DEFAULT}
+              ref={this.input}
+              {...inputProps}
+            />
             {countInfo}
           </fieldset-section>
         );
