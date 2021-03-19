@@ -1,5 +1,4 @@
 // @flow
-import { SIMPLE_SITE } from 'config';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import React from 'react';
@@ -64,7 +63,7 @@ function WalletSendTip(props: Props) {
   const { channelName } = parseURI(uri);
   const noBalance = balance === 0;
   const tipAmount = useCustomTip ? customTipAmount : presetTipAmount;
-  const isSupport = claimIsMine ? true : SIMPLE_SITE ? false : !sendAsTip;
+  const isSupport = claimIsMine || !sendAsTip;
 
   React.useEffect(() => {
     const regexp = RegExp(/^(\d*([.]\d{0,8})?)$/);
@@ -157,21 +156,37 @@ function WalletSendTip(props: Props) {
         />
       ) : (
         <Card
-          title={
-            claimIsMine
-              ? __('Boost your content')
-              : isSupport
-              ? __('Support this content')
-              : __('Support --[button to support a claim]--')
-          }
+          title={<LbcSymbol postfix={claimIsMine ? __('Boost your content') : __('Support this content')} size={22} />}
           subtitle={
             <React.Fragment>
-              {isSupport
-                ? __(
-                    'This will increase the overall bid amount for this content, which will boost its ability to be discovered while active.'
-                  )
-                : __('Show this channel your appreciation by sending a donation.')}{' '}
-              <Button label={__('Learn more')} button="link" href="https://lbry.com/faq/tipping" />.
+              {!claimIsMine && (
+                <div className="section">
+                  <Button
+                    key="tip"
+                    icon={ICONS.SUPPORT}
+                    label={__('Tip')}
+                    button="alt"
+                    onClick={() => setSendAsTip(true)}
+                    className={classnames('button-toggle', { 'button-toggle--active': sendAsTip })}
+                  />
+                  <Button
+                    key="boost"
+                    icon={ICONS.TRENDING}
+                    label={__('Boost')}
+                    button="alt"
+                    onClick={() => setSendAsTip(false)}
+                    className={classnames('button-toggle', { 'button-toggle--active': !sendAsTip })}
+                  />
+                </div>
+              )}
+              <div className="section__subtitle">
+                {isSupport
+                  ? __(
+                      'This will increase the overall bid amount for this content, which will boost its ability to be discovered while active.'
+                    )
+                  : __('Show this channel your appreciation by sending a donation.')}{' '}
+                <Button label={__('Learn more')} button="link" href="https://lbry.com/faq/tipping" />
+              </div>
             </React.Fragment>
           }
           actions={
@@ -185,7 +200,7 @@ function WalletSendTip(props: Props) {
                     <div className="confirm__value">
                       {activeChannelClaim && !incognito ? activeChannelClaim.name : __('Anonymous')}
                     </div>
-                    <div className="confirm__label">{__(isSupport ? 'Supporting' : 'Tipping')}</div>
+                    <div className="confirm__label">{__(isSupport ? 'Boosting' : 'Tipping')}</div>
                     <div className="confirm__value">
                       <LbcSymbol postfix={tipAmount} size={22} />
                     </div>
@@ -276,28 +291,17 @@ function WalletSendTip(props: Props) {
                 <div className="section__actions">
                   <Button
                     autoFocus
-                    icon={isSupport ? undefined : ICONS.SUPPORT}
+                    icon={isSupport ? ICONS.TRENDING : ICONS.SUPPORT}
                     button="primary"
                     type="submit"
                     disabled={fetchingChannels || isPending || tipError || !tipAmount}
                     label={
                       isSupport
-                        ? claimIsMine
-                          ? __('Boost This Video')
-                          : __('Send Revocable Support')
+                        ? __('Boost This Content')
                         : __('Send a %amount% Tip', { amount: tipAmount ? `${tipAmount} Credit` : '' })
                     }
                   />
                   {fetchingChannels && <span className="help">{__('Loading your channels...')}</span>}
-                  {!claimIsMine && !fetchingChannels && !SIMPLE_SITE && (
-                    <FormField
-                      name="toggle-is-support"
-                      type="checkbox"
-                      label={__('Make this a tip')}
-                      checked={sendAsTip}
-                      onChange={() => setSendAsTip(!sendAsTip)}
-                    />
-                  )}
                 </div>
                 <WalletSpendableBalanceHelp />
               </>
