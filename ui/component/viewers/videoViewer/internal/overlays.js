@@ -97,3 +97,22 @@ export function showSeekedOverlay(player, duration, isForward) {
 
   showOneOffOverlay(player, OVERLAY_CLASS_SEEKED, overlayJsx, 'center');
 }
+
+/**
+ * Displays a transient "Volume Percentage" overlay.
+ *
+ * @param player The videojs instance.
+ * @param percentage how much % of volume active.
+ */
+export function showVolumeverlay(player, percentage) {
+  const overlayJsx = (
+    <div>
+      <p>
+        {percentage}
+        {'%'}
+      </p>
+    </div>
+  );
+
+  showOneOffOverlay(player, OVERLAY_CLASS_SEEKED, overlayJsx, 'center');
+}
