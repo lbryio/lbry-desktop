@@ -1,4 +1,5 @@
 // @flow
+import { BITWAVE_API } from 'constants/livestream';
 import React from 'react';
 import Card from 'component/common/card';
 import ClaimPreview from 'component/claimPreview';
@@ -30,27 +31,27 @@ export default function LivestreamLink(props: Props) {
   }, [livestreamChannelId]);
 
   React.useEffect(() => {
-    // function fetchIsStreaming() {
-    //   //   fetch(``)
-    //   //     .then((res) => res.json())
-    //   //     .then((res) => {
-    //   //       if (res && res.data && res.data.live) {
-    //   //         setIsLivestreaming(true);
-    //   //       } else {
-    //   //         setIsLivestreaming(false);
-    //   //       }
-    //   //     })
-    //   //     .catch((e) => {});
-    // }
-    // let interval;
-    // if (livestreamChannelId) {
-    //   interval = setInterval(fetchIsStreaming, 5000);
-    // }
-    // return () => {
-    //   if (interval) {
-    //     clearInterval(interval);
-    //   }
-    // };
+    function fetchIsStreaming() {
+      fetch(`${BITWAVE_API}/MarkPugner`)
+        .then((res) => res.json())
+        .then((res) => {
+          if (res && res.data && res.data.live) {
+            setIsLivestreaming(true);
+          } else {
+            setIsLivestreaming(false);
+          }
+        })
+        .catch((e) => {});
+    }
+    let interval;
+    if (livestreamChannelId) {
+      interval = setInterval(fetchIsStreaming, 5000);
+    }
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
   }, [livestreamChannelId]);
 
   if (!livestreamClaim || !isLivestreaming) {

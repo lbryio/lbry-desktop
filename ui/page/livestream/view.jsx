@@ -1,5 +1,5 @@
 // @flow
-// import { BITWAVE_API } from 'constants/livestream';
+import { BITWAVE_API } from 'constants/livestream';
 import React from 'react';
 import Page from 'component/page';
 import LivestreamLayout from 'component/livestreamLayout';
@@ -16,67 +16,36 @@ type Props = {
 export default function LivestreamPage(props: Props) {
   const { uri, claim, doSetPlayingUri, isAuthenticated, doUserSetReferrer } = props;
   const [activeViewers, setActiveViewers] = React.useState(0);
+  const [isLive, setIsLive] = React.useState(false);
 
   React.useEffect(() => {
-    // function checkIsLive() {
-    //   fetch(`${BITWAVE_API}/`)
-    //     .then((res) => res.json())
-    //     .then((res) => {
-    //       if (!res || !res.data) {
-    //         setIsLive(false);
-    //         return;
-    //       }
-    // setActiveViewers(res.data.viewCount);
-    //       if (res.data.live) {
-    //         setDisplayCountdown(false);
-    //         setIsLive(true);
-    //         setIsFetching(false);
-    //         return;
-    //       }
-    //       // Not live, but see if we can display the countdown;
-    //       const scheduledTime = res.data.scheduled;
-    //       if (scheduledTime) {
-    //         const scheduledDate = new Date(scheduledTime);
-    //         const lastLiveTimestamp = res.data.timestamp;
-    //         let isLivestreamOver = false;
-    //         if (lastLiveTimestamp) {
-    //           const timestampDate = new Date(lastLiveTimestamp);
-    //           isLivestreamOver = timestampDate.getTime() > scheduledDate.getTime();
-    //         }
-    //         if (isLivestreamOver) {
-    //           setDisplayCountdown(false);
-    //           setIsLive(false);
-    //         } else {
-    //           const datePlusTenMinuteBuffer = scheduledDate.setMinutes(10, 0, 0);
-    //           const isInFuture = Date.now() < datePlusTenMinuteBuffer;
-    //           if (isInFuture) {
-    //             setDisplayCountdown(true);
-    //             setIsLive(false);
-    //           } else {
-    //             setDisplayCountdown(false);
-    //             setIsLive(false);
-    //           }
-    //         }
-    //         setIsFetching(false);
-    //       } else {
-    //         // Offline and no countdown happening
-    //         setIsLive(false);
-    //         setDisplayCountdown(false);
-    //         setActiveViewers(0);
-    //         setIsFetching(false);
-    //       }
-    //     });
-    // }
-    // let interval;
-    // checkIsLive();
-    // if (uri) {
-    //   interval = setInterval(checkIsLive, 10000);
-    // }
-    // return () => {
-    //   if (interval) {
-    //     clearInterval(interval);
-    //   }
-    // };
+    function checkIsLive() {
+      fetch(`${BITWAVE_API}/MarkPugner`)
+        .then((res) => res.json())
+        .then((res) => {
+          if (!res || !res.data) {
+            setIsLive(false);
+            return;
+          }
+
+          setActiveViewers(res.data.viewCount);
+
+          if (res.data.live) {
+            setIsLive(true);
+          }
+        });
+    }
+
+    let interval;
+    checkIsLive();
+    if (uri) {
+      interval = setInterval(checkIsLive, 10000);
+    }
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
   }, [uri]);
 
   const stringifiedClaim = JSON.stringify(claim);
@@ -108,7 +77,7 @@ export default function LivestreamPage(props: Props) {
 
   return (
     <Page className="file-page" filePage livestream>
-      <LivestreamLayout uri={uri} activeViewers={activeViewers} />
+      <LivestreamLayout uri={uri} activeViewers={activeViewers} isLive={isLive} />
     </Page>
   );
 }
