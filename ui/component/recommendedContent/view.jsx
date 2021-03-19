@@ -15,6 +15,7 @@ type Props = {
   uri: string,
   claim: ?StreamClaim,
   recommendedContent: Array<string>,
+  nextRecommendedUri: string,
   isSearching: boolean,
   search: (string, Options) => void,
   mature: boolean,
@@ -22,7 +23,7 @@ type Props = {
 };
 
 export default function RecommendedContent(props: Props) {
-  const { uri, claim, search, mature, recommendedContent, isSearching, isAuthenticated } = props;
+  const { uri, claim, search, mature, recommendedContent, nextRecommendedUri, isSearching, isAuthenticated } = props;
   const isMobile = useIsMobile();
   const isMedium = useIsMediumScreen();
 
@@ -43,6 +44,22 @@ export default function RecommendedContent(props: Props) {
     }
   }, [stringifiedClaim, mature, search]);
 
+  function reorderList(recommendedContent) {
+    let newList = recommendedContent;
+    if (newList) {
+      const index = newList.indexOf(nextRecommendedUri);
+      if (index === -1) {
+        // This would be weird. Shouldn't happen since it is derived from the same list.
+      } else if (index !== 0) {
+        // Swap the "next" item to the top of the list
+        const a = newList[0];
+        newList[0] = nextRecommendedUri;
+        newList[index] = a;
+      }
+    }
+    return newList;
+  }
+
   React.useEffect(() => {
     getRecommendedContent();
   }, [uri, getRecommendedContent]);
@@ -57,7 +74,7 @@ export default function RecommendedContent(props: Props) {
         <ClaimList
           type="small"
           loading={isSearching}
-          uris={recommendedContent}
+          uris={reorderList(recommendedContent)}
           hideMenu={isMobile}
           injectedItem={
             SHOW_ADS && IS_WEB ? (
