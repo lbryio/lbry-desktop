@@ -8,7 +8,7 @@ import classnames from 'classnames';
 import Icon from 'component/common/icon';
 import NotificationBubble from 'component/notificationBubble';
 import I18nMessage from 'component/i18nMessage';
-import { PINNED_LABEL_1, PINNED_URI_1, PINNED_URI_2, PINNED_LABEL_2, SIMPLE_SITE } from 'config';
+import { PINNED_LABEL_1, PINNED_URI_1, PINNED_URI_2, PINNED_LABEL_2, SIMPLE_SITE, DOMAIN } from 'config';
 // @if TARGET='app'
 import { IS_MAC } from 'component/app/view';
 // @endif
@@ -271,16 +271,17 @@ function SideNavigation(props: Props) {
     return () => window.removeEventListener('keydown', handleKeydown);
   }, [sidebarOpen, setSidebarOpen, isAbsolute]);
 
-  const unAuthNudge = (
-    <div className="navigation__auth-nudge">
-      <span>
-        <I18nMessage tokens={{ lbc: <Icon icon={ICONS.LBC} /> }}>
-          Sign up to earn %lbc% for you and your favorite creators.
-        </I18nMessage>
-      </span>
-      <Button button="secondary" label={__('Sign Up')} navigate={`/$/${PAGES.AUTH}?src=sidenav_nudge`} />
-    </div>
-  );
+  const unAuthNudge =
+    DOMAIN === 'lbry.tv' ? null : (
+      <div className="navigation__auth-nudge">
+        <span>
+          <I18nMessage tokens={{ lbc: <Icon icon={ICONS.LBC} /> }}>
+            Sign up to earn %lbc% for you and your favorite creators.
+          </I18nMessage>
+        </span>
+        <Button button="secondary" label={__('Sign Up')} navigate={`/$/${PAGES.AUTH}?src=sidenav_nudge`} />
+      </div>
+    );
 
   const helpLinks = (
     <ul className="navigation__tertiary navigation-links--small">
