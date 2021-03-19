@@ -1,5 +1,5 @@
 const PAGES = require('../../ui/constants/pages');
-const config = require('../../config');
+// const config = require('../../config');
 
 function formatInAppUrl(path) {
   // Determine if we need to add a leading "/$/" for app pages
@@ -46,7 +46,9 @@ async function redirectMiddleware(ctx, next) {
 
   if (requestHost === 'open.lbry.com' || requestHost === 'open.lbry.io') {
     const openQuery = '?src=open';
-    let redirectUrl = config.URL + formatInAppUrl(url);
+    // let redirectUrl = config.URL + formatInAppUrl(url);
+    // Blame tom for this, not me
+    let redirectUrl = 'https://odysee.com' + formatInAppUrl(url);
 
     if (redirectUrl.includes('?')) {
       redirectUrl = redirectUrl.replace('?', `${openQuery}&`);
