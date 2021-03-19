@@ -41,11 +41,11 @@ export default function RecommendedContent(props: Props) {
         }
       }
     }
-  }, [stringifiedClaim, mature]);
+  }, [stringifiedClaim, mature, search]);
 
   React.useEffect(() => {
     getRecommendedContent();
-  }, [uri]);
+  }, [uri, getRecommendedContent]);
 
   return (
     <Card
