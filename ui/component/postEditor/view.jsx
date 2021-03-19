@@ -1,6 +1,5 @@
 // @flow
 import React, { useEffect } from 'react';
-import { FF_MAX_CHARS_IN_POST } from 'constants/form-field';
 import { FormField } from 'component/common/form';
 
 type Props = {
@@ -12,10 +11,10 @@ type Props = {
   fileMimeType: ?string,
   streamingUrl: ?string,
   isStillEditing: boolean,
-  fetchStreamingUrl: string => void,
-  setPrevFileText: string => void,
+  fetchStreamingUrl: (string) => void,
+  setPrevFileText: (string) => void,
   updatePublishForm: ({}) => void,
-  setCurrentFileType: string => void,
+  setCurrentFileType: (string) => void,
 };
 
 function PostEditor(props: Props) {
@@ -62,7 +61,7 @@ function PostEditor(props: Props) {
 
   useEffect(() => {
     function readFileStream(url) {
-      return fetch(url).then(res => res.text());
+      return fetch(url).then((res) => res.text());
     }
 
     async function updateEditorText(url) {
@@ -107,8 +106,7 @@ function PostEditor(props: Props) {
       placeholder={__('My content for this post...')}
       value={ready ? fileText : __('Loading...')}
       disabled={!ready || disabled}
-      onChange={value => updatePublishForm({ fileText: value })}
-      textAreaMaxLength={FF_MAX_CHARS_IN_POST}
+      onChange={(value) => updatePublishForm({ fileText: value })}
     />
   );
 }
