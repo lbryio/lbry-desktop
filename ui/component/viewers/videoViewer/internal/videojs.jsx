@@ -363,13 +363,13 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       videoNode.muted = !videoNode.muted;
     }
     if (e.keyCode === VOLUME_DOWN_KEYCODE) {
-      player.volume(player.volume()-0.05);
-      OVERLAY.showVolumeverlay(player, Math.round(player.volume()*100));
+      player.volume(player.volume() - 0.05);
+      OVERLAY.showVolumeverlay(player, Math.round(player.volume() * 100));
       player.userActive(true);
-    } 
+    }
     if (e.keyCode === VOLUME_UP_KEYCODE) {
-      player.volume(player.volume()+0.05);
-      OVERLAY.showVolumeverlay(player, Math.round(player.volume()*100));
+      player.volume(player.volume() + 0.05);
+      OVERLAY.showVolumeverlay(player, Math.round(player.volume() * 100));
       player.userActive(true);
     }
 
@@ -387,7 +387,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         videoNode.currentTime = newDuration < 0 ? 0 : newDuration;
         OVERLAY.showSeekedOverlay(player, SEEK_STEP, false);
         player.userActive(true);
-      } 
+      }
       if (e.keyCode === SEEK_FORWARD_KEYCODE_5) {
         const newDuration = currentTime + SEEK_STEP_5;
         videoNode.currentTime = newDuration < 0 ? 0 : newDuration;
