@@ -226,4 +226,23 @@ th {
     white-space: normal;
     max-width: 70%;
   }
+
+  .channel-value {
+    display: flex;
+    align-items: center;
+
+    .channel-thumbnail {
+      height: 1.3rem;
+      width: 1.3rem;
+      margin-right: var(--spacing-s);
+    }
+
+    .icon__wrapper {
+      padding: 0;
+      height: 1.3rem;
+      width: 1.3rem;
+      margin-right: var(--spacing-s);
+      border-radius: var(--border-radius);
+    }
+  }
 }

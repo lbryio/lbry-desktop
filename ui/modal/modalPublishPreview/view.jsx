@@ -8,6 +8,9 @@ import Tag from 'component/tag';
 import MarkdownPreview from 'component/common/markdown-preview';
 import { COPYRIGHT, OTHER } from 'constants/licenses';
 import LbcSymbol from 'component/common/lbc-symbol';
+import ChannelThumbnail from 'component/channelThumbnail';
+import * as ICONS from 'constants/icons';
+import Icon from 'component/common/icon';
 
 type Props = {
   filePath: string | WebFile,
@@ -36,6 +39,7 @@ type Props = {
   enablePublishPreview: boolean,
   setEnablePublishPreview: (boolean) => void,
   isStillEditing: boolean,
+  myChannels: ?Array<ChannelClaim>,
 };
 
 class ModalPublishPreview extends React.PureComponent<Props> {
@@ -96,6 +100,7 @@ class ModalPublishPreview extends React.PureComponent<Props> {
       enablePublishPreview,
       setEnablePublishPreview,
       isStillEditing,
+      myChannels,
     } = this.props;
 
     const modalTitle = isStillEditing ? __('Confirm Edit') : __('Confirm Upload');
@@ -137,6 +142,21 @@ class ModalPublishPreview extends React.PureComponent<Props> {
       }
     }
 
+    const channelValue = (channel) => {
+      const channelClaim = myChannels && myChannels.find((x) => x.name === channel);
+      return channel ? (
+        <div className="channel-value">
+          {channelClaim && <ChannelThumbnail uri={channelClaim.permanent_url} />}
+          {channel}
+        </div>
+      ) : (
+        <div className="channel-value">
+          <Icon sectionIcon icon={ICONS.ANONYMOUS} />
+          <i>{__('Anonymous')}</i>
+        </div>
+      );
+    };
+
     return (
       <Modal isOpen contentLabel={modalTitle} type="card" onAborted={closeModal}>
         <Form onSubmit={() => this.onConfirmed()}>
@@ -151,7 +171,7 @@ class ModalPublishPreview extends React.PureComponent<Props> {
                       {isOptimizeAvail && this.createRow(__('Transcode'), optimize ? __('Yes') : __('No'))}
                       {this.createRow(__('Title'), title)}
                       {this.createRow(__('Description'), descriptionValue)}
-                      {this.createRow(__('Channel'), channel)}
+                      {this.createRow(__('Channel'), channelValue(channel))}
                       {this.createRow(__('URL'), uri)}
                       {this.createRow(__('Deposit'), depositValue)}
                       {this.createRow(__('Price'), priceValue)}
