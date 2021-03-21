@@ -8,7 +8,29 @@ import I18nMessage from 'component/i18nMessage';
 import Button from 'component/button';
 import classnames from 'classnames';
 // $FlowFixMe
+
 import { NO_ADS_CHANNEL_IDS } from 'homepages';
+
+const NO_ADS_TEXT_KEYWORDS = [
+  'juifs',
+  'holocaust',
+  'orona',
+  'vaccin',
+  'pcr',
+  'covid',
+  'pfizer',
+  'propogand',
+  'conspira',
+  'pandem',
+  'moutons',
+  'negroes',
+  'sars-cov',
+  'vacuna',
+  'blancs',
+  'whites',
+  'silvano trotta',
+  'covid-19',
+];
 
 const ADS_URL = '//assets.revcontent.com/master/delivery.js';
 const IS_MOBILE = typeof window.orientation !== 'undefined';
@@ -27,7 +49,7 @@ type Props = {
   type: string,
   small: boolean,
   theme: string,
-  claim: GenericClaim,
+  claim: Claim,
   isMature: boolean,
 };
 
@@ -43,8 +65,34 @@ function Ads(props: Props) {
   let googleInit;
 
   const channelId = claim && claim.signing_channel && claim.signing_channel.claim_id;
+  let claimString: string = '';
+  if (claim) claimString = claim.name;
+  if (claim && claim.value) {
+    if (claim.value.tags) {
+      claimString = claimString + claim.value.tags.join(',');
+    }
+    if (claim.value.description) {
+      claimString = claimString + claim.value.description;
+    }
+    if (claim.value.title) {
+      claimString = claimString + claim.value.title;
+    }
+  }
+  claimString = claimString.toLowerCase();
 
-  const isBlocked = isMature || (NO_ADS_CHANNEL_IDS && NO_ADS_CHANNEL_IDS.includes(channelId));
+  const checkStringForAdsense = (text, words) => {
+    for (let i = 0; i < words.length; i++) {
+      if (text.includes(words[i])) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const isBlocked =
+    isMature ||
+    (NO_ADS_CHANNEL_IDS && NO_ADS_CHANNEL_IDS.includes(channelId)) ||
+    checkStringForAdsense(claimString, NO_ADS_TEXT_KEYWORDS);
   useEffect(() => {
     if (SHOW_ADS && type === 'video') {
       let script;
