@@ -43,11 +43,13 @@ export default function LivestreamLink(props: Props) {
         })
         .catch((e) => {});
     }
+
     let interval;
     if (livestreamChannelId) {
       if (!interval) fetchIsStreaming();
-      interval = setInterval(fetchIsStreaming, 15 * 1000);
+      interval = setInterval(fetchIsStreaming, 10 * 1000);
     }
+
     return () => {
       if (interval) {
         clearInterval(interval);

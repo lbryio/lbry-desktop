@@ -11,16 +11,25 @@ type Props = {
   doSetPlayingUri: ({ uri: ?string }) => void,
   isAuthenticated: boolean,
   doUserSetReferrer: (string) => void,
+  channelClaim: ChannelClaim,
 };
 
 export default function LivestreamPage(props: Props) {
-  const { uri, claim, doSetPlayingUri, isAuthenticated, doUserSetReferrer } = props;
+  const {
+    uri,
+    claim,
+    doSetPlayingUri,
+    isAuthenticated,
+    doUserSetReferrer,
+    channelClaim,
+  } = props;
   const [activeViewers, setActiveViewers] = React.useState(0);
   const [isLive, setIsLive] = React.useState(false);
+  const livestreamChannelId = channelClaim && channelClaim.signing_channel && channelClaim.signing_channel.claim_id;
 
   React.useEffect(() => {
     function checkIsLive() {
-      fetch(`${BITWAVE_API}/MarkPugner`)
+      fetch(`${BITWAVE_API}/${livestreamChannelId}`)
         .then((res) => res.json())
         .then((res) => {
           if (!res || !res.data) {
@@ -30,23 +39,24 @@ export default function LivestreamPage(props: Props) {
 
           setActiveViewers(res.data.viewCount);
 
-          if (res.data.live) {
-            setIsLive(true);
+          if (res.data.hasOwnProperty('live')) {
+            setIsLive(res.data.live);
           }
         });
     }
 
     let interval;
-    checkIsLive();
-    if (uri) {
-      interval = setInterval(checkIsLive, 10000);
+    if (livestreamChannelId) {
+      if (!interval) checkIsLive();
+      interval = setInterval(checkIsLive, 10 * 1000);
     }
+
     return () => {
       if (interval) {
         clearInterval(interval);
       }
     };
-  }, [uri]);
+  }, [livestreamChannelId]);
 
   const stringifiedClaim = JSON.stringify(claim);
   React.useEffect(() => {
@@ -77,7 +87,11 @@ export default function LivestreamPage(props: Props) {
 
   return (
     <Page className="file-page" filePage livestream>
-      <LivestreamLayout uri={uri} activeViewers={activeViewers} isLive={isLive} />
+      <LivestreamLayout
+        uri={uri}
+        activeViewers={activeViewers}
+        isLive={isLive}
+      />
     </Page>
   );
 }
