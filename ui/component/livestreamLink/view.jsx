@@ -23,7 +23,7 @@ export default function LivestreamLink(props: Props) {
     })
       .then((res) => {
         if (res && res.items && res.items.length > 0) {
-          const claim = res.items[0];
+          const claim = res.items[res.items.length - 1];
           setLivestreamClaim(claim);
         }
       })
@@ -32,10 +32,10 @@ export default function LivestreamLink(props: Props) {
 
   React.useEffect(() => {
     function fetchIsStreaming() {
-      fetch(`${BITWAVE_API}/MarkPugner`)
+      fetch(`${BITWAVE_API}/${livestreamChannelId}`)
         .then((res) => res.json())
         .then((res) => {
-          if (res && res.data && res.data.live) {
+          if (res && res.data && res.data.success && res.data.data && res.data.data.live) {
             setIsLivestreaming(true);
           } else {
             setIsLivestreaming(false);
