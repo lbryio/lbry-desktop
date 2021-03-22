@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased for Desktop]
+
+### Added
+
+### Changed
+
+- Keyboard shortcut additions and changes _community pr!_ ([#5717](https://github.com/lbryio/lbry-desktop/pull/5717))
+- Removed the 10k character-limit when editing _Posts_ ([#5719](https://github.com/lbryio/lbry-desktop/pull/5719))
+
+### Fixed
+
+- Autoplay looping to a previous video or itself ([#5711](https://github.com/lbryio/lbry-desktop/pull/5711))
+- Autoplay not working in mini-player mode ([#5716](https://github.com/lbryio/lbry-desktop/pull/5716))
+
 ## [0.50.1] - [2021-03-18]
 
 ### Fixed
