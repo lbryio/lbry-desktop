@@ -35,7 +35,7 @@ export default function LivestreamLink(props: Props) {
       fetch(`${BITWAVE_API}/${livestreamChannelId}`)
         .then((res) => res.json())
         .then((res) => {
-          if (res && res.data && res.data.success && res.data.data && res.data.data.live) {
+          if (res && res.success && res.data && res.data.live) {
             setIsLivestreaming(true);
           } else {
             setIsLivestreaming(false);
@@ -45,7 +45,8 @@ export default function LivestreamLink(props: Props) {
     }
     let interval;
     if (livestreamChannelId) {
-      interval = setInterval(fetchIsStreaming, 5000);
+      if (!interval) fetchIsStreaming();
+      interval = setInterval(fetchIsStreaming, 15 * 1000);
     }
     return () => {
       if (interval) {
