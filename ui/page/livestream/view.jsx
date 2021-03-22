@@ -15,20 +15,14 @@ type Props = {
 };
 
 export default function LivestreamPage(props: Props) {
-  const {
-    uri,
-    claim,
-    doSetPlayingUri,
-    isAuthenticated,
-    doUserSetReferrer,
-    channelClaim,
-  } = props;
+  const { uri, claim, doSetPlayingUri, isAuthenticated, doUserSetReferrer, channelClaim } = props;
   const [activeViewers, setActiveViewers] = React.useState(0);
   const [isLive, setIsLive] = React.useState(false);
   const livestreamChannelId = channelClaim && channelClaim.signing_channel && channelClaim.signing_channel.claim_id;
 
   React.useEffect(() => {
     function checkIsLive() {
+      // $FlowFixMe Bitwave's API can handle garbage
       fetch(`${BITWAVE_API}/${livestreamChannelId}`)
         .then((res) => res.json())
         .then((res) => {
@@ -87,11 +81,7 @@ export default function LivestreamPage(props: Props) {
 
   return (
     <Page className="file-page" filePage livestream>
-      <LivestreamLayout
-        uri={uri}
-        activeViewers={activeViewers}
-        isLive={isLive}
-      />
+      <LivestreamLayout uri={uri} activeViewers={activeViewers} isLive={isLive} />
     </Page>
   );
 }
