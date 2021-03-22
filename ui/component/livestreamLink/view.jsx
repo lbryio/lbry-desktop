@@ -32,6 +32,7 @@ export default function LivestreamLink(props: Props) {
 
   React.useEffect(() => {
     function fetchIsStreaming() {
+      // $FlowFixMe Bitwave's API can handle garbage
       fetch(`${BITWAVE_API}/${livestreamChannelId}`)
         .then((res) => res.json())
         .then((res) => {
