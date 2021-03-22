@@ -223,7 +223,7 @@ function ClaimListDiscover(props: Props) {
   };
 
   if (!ENABLE_NO_SOURCE_CLAIMS) {
-    // options.has_source = true;
+    options.has_source = true;
   }
 
   if (feeAmountParam && claimType !== CS.CLAIM_CHANNEL) {

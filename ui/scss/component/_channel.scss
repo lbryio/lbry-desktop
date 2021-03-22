@@ -263,12 +263,15 @@ $metadata-z-index: 1;
 .menu__list.channel__list {
   margin-top: var(--spacing-xs);
   margin-left: 0;
+  padding: 0;
   border-radius: var(--border-radius);
   background: transparent;
   max-height: 15rem;
   overflow-y: scroll;
 
   [role='menuitem'] {
+    margin: 0;
+
     &[data-selected] {
       background: transparent;
       .channel__list-item {

@@ -5,6 +5,7 @@ import { Redirect } from 'react-router-dom';
 import Spinner from 'component/spinner';
 import ChannelPage from 'page/channel';
 import FilePage from 'page/file';
+import LivestreamPage from 'page/livestream';
 import Page from 'component/page';
 import Button from 'component/button';
 import Card from 'component/common/card';
@@ -25,6 +26,7 @@ type Props = {
   title: string,
   claimIsMine: boolean,
   claimIsPending: boolean,
+  isLivestream: boolean,
 };
 
 function ShowPage(props: Props) {
@@ -38,6 +40,7 @@ function ShowPage(props: Props) {
     claimIsMine,
     isSubscribed,
     claimIsPending,
+    isLivestream,
   } = props;
 
   const signingChannel = claim && claim.signing_channel;
@@ -119,6 +122,10 @@ function ShowPage(props: Props) {
           />
         </Page>
       );
+    }
+
+    if (isLivestream) {
+      innerContent = <LivestreamPage uri={uri} />;
     } else {
       innerContent = <FilePage uri={uri} location={location} />;
     }

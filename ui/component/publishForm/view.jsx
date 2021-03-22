@@ -25,6 +25,7 @@ import SelectThumbnail from 'component/selectThumbnail';
 import Card from 'component/common/card';
 import I18nMessage from 'component/i18nMessage';
 import * as PUBLISH_MODES from 'constants/publish_types';
+import { useHistory } from 'react-router';
 
 // @if TARGET='app'
 import fs from 'fs';
@@ -36,6 +37,7 @@ const MODES = Object.values(PUBLISH_MODES);
 const MODE_TO_I18N_STR = {
   [PUBLISH_MODES.FILE]: 'File',
   [PUBLISH_MODES.POST]: 'Post --[noun, markdown post tab button]--',
+  [PUBLISH_MODES.LIVESTREAM]: 'Livestream --[noun, livestream tab button]--',
 };
 
 type Props = {
@@ -72,14 +74,14 @@ type Props = {
   balance: number,
   isStillEditing: boolean,
   clearPublish: () => void,
-  resolveUri: string => void,
+  resolveUri: (string) => void,
   scrollToTop: () => void,
   prepareEdit: (claim: any, uri: string) => void,
   resetThumbnailStatus: () => void,
   amountNeededForTakeover: ?number,
   // Add back type
-  updatePublishForm: any => void,
-  checkAvailability: string => void,
+  updatePublishForm: (any) => void,
+  checkAvailability: (string) => void,
   ytSignupPending: boolean,
   modal: { id: string, modalProps: {} },
   enablePublishPreview: boolean,
@@ -88,13 +90,19 @@ type Props = {
 };
 
 function PublishForm(props: Props) {
-  const [mode, setMode] = React.useState(PUBLISH_MODES.FILE);
+  // Detect upload type from query in URL
+  const { push, location } = useHistory();
+  const urlParams = new URLSearchParams(location.search);
+  const uploadType = urlParams.get('type');
+
+  // Component state
+  const [mode, setMode] = React.useState(uploadType || PUBLISH_MODES.FILE);
   const [autoSwitchMode, setAutoSwitchMode] = React.useState(true);
 
-  // Used to checl if the url name has changed:
+  // Used to check if the url name has changed:
   // A new file needs to be provided
   const [prevName, setPrevName] = React.useState(false);
-  // Used to checl if the file has been modified by user
+  // Used to check if the file has been modified by user
   const [fileEdited, setFileEdited] = React.useState(false);
   const [prevFileText, setPrevFileText] = React.useState('');
 
@@ -225,16 +233,60 @@ function PublishForm(props: Props) {
   }, [name, activeChannelName, resolveUri, updatePublishForm, checkAvailability]);
 
   useEffect(() => {
-    updatePublishForm({ isMarkdownPost: mode === PUBLISH_MODES.POST });
+    updatePublishForm({
+      isMarkdownPost: mode === PUBLISH_MODES.POST,
+      isLivestreamPublish: mode === PUBLISH_MODES.LIVESTREAM,
+    });
   }, [mode, updatePublishForm]);
 
   useEffect(() => {
     if (incognito) {
       updatePublishForm({ channel: undefined });
+
+      // Anonymous livestreams aren't supported
+      if (mode === PUBLISH_MODES.LIVESTREAM) {
+        setMode(PUBLISH_MODES.FILE);
+      }
     } else if (activeChannelName) {
       updatePublishForm({ channel: activeChannelName });
     }
   }, [activeChannelName, incognito, updatePublishForm]);
+
+  useEffect(() => {
+    const _uploadType = uploadType && uploadType.toLowerCase();
+
+    // Default to standard file publish if none specified
+    if (!_uploadType) {
+      setMode(PUBLISH_MODES.FILE);
+      return;
+    }
+
+    // File publish
+    if (_uploadType === PUBLISH_MODES.FILE.toLowerCase()) {
+      setMode(PUBLISH_MODES.FILE);
+      return;
+    }
+    // Post publish
+    if (_uploadType === PUBLISH_MODES.POST.toLowerCase()) {
+      setMode(PUBLISH_MODES.POST);
+      return;
+    }
+    // LiveStream publish
+    if (_uploadType === PUBLISH_MODES.LIVESTREAM.toLowerCase()) {
+      setMode(PUBLISH_MODES.LIVESTREAM);
+      return;
+    }
+
+    // Default to standard file publish
+    setMode(PUBLISH_MODES.FILE);
+  }, [uploadType]);
+
+  useEffect(() => {
+    if (!uploadType) return;
+    const newParams = new URLSearchParams();
+    newParams.set('type', mode.toLowerCase());
+    push({ search: newParams.toString() });
+  }, [mode, uploadType]);
 
   // @if TARGET='web'
   function createWebFile() {
@@ -301,7 +353,7 @@ function PublishForm(props: Props) {
       }
     }
     // Publish file
-    if (mode === PUBLISH_MODES.FILE) {
+    if (mode === PUBLISH_MODES.FILE || mode === PUBLISH_MODES.LIVESTREAM) {
       runPublish = true;
     }
 
@@ -330,7 +382,7 @@ function PublishForm(props: Props) {
   // Editing claim uri
   return (
     <div className="card-stack">
-      <ChannelSelect disabled={disabled} />
+      <ChannelSelect hideAnon={mode === PUBLISH_MODES.LIVESTREAM} disabled={disabled} />
 
       <PublishFile
         uri={uri}
@@ -349,6 +401,7 @@ function PublishForm(props: Props) {
                 label={__(MODE_TO_I18N_STR[String(modeName)] || '---')}
                 button="alt"
                 onClick={() => {
+                  // $FlowFixMe
                   setMode(modeName);
                 }}
                 className={classnames('button-toggle', { 'button-toggle--active': mode === modeName })}
@@ -373,17 +426,17 @@ function PublishForm(props: Props) {
               "Add tags that are relevant to your content so those who're looking for it can find it more easily. If mature content, ensure it is tagged mature. Tag abuse and missing mature tags will not be tolerated."
             )}
             placeholder={__('gaming, crypto')}
-            onSelect={newTags => {
+            onSelect={(newTags) => {
               const validatedTags = [];
-              newTags.forEach(newTag => {
-                if (!tags.some(tag => tag.name === newTag.name)) {
+              newTags.forEach((newTag) => {
+                if (!tags.some((tag) => tag.name === newTag.name)) {
                   validatedTags.push(newTag);
                 }
               });
               updatePublishForm({ tags: [...tags, ...validatedTags] });
             }}
-            onRemove={clickedTag => {
-              const newTags = tags.slice().filter(tag => tag.name !== clickedTag.name);
+            onRemove={(clickedTag) => {
+              const newTags = tags.slice().filter((tag) => tag.name !== clickedTag.name);
               updatePublishForm({ tags: newTags });
             }}
             tagsChosen={tags}

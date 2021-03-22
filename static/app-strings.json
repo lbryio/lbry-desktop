@@ -1181,6 +1181,7 @@
   "Try out the app!": "Try out the app!",
   "Download the app to track files you've viewed and downloaded.": "Download the app to track files you've viewed and downloaded.",
   "Create a new channel": "Create a new channel",
+  "Go Live": "Go Live",
   "Thumbnail source": "Thumbnail source",
   "Cover source": "Cover source",
   "Your changes will be live in a few minutes": "Your changes will be live in a few minutes",
@@ -1672,5 +1673,8 @@
   "Receive emails about the latest rewards that are available to LBRY users.": "Receive emails about the latest rewards that are available to LBRY users.",
   "Stay up to date on the latest content from your favorite creators.": "Stay up to date on the latest content from your favorite creators.",
   "Receive tutorial emails related to LBRY": "Receive tutorial emails related to LBRY",
+  "Create A LiveStream": "Create A LiveStream",
+  "%channel% isn't live right now, but the chat is! Check back later to watch the stream.": "%channel% isn't live right now, but the chat is! Check back later to watch the stream.",
+  "Right now": "Right now",
   "--end--": "--end--"
 }
