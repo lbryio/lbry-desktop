@@ -8,7 +8,6 @@ import I18nMessage from 'component/i18nMessage';
 import Button from 'component/button';
 import classnames from 'classnames';
 // $FlowFixMe
-
 import { NO_ADS_CHANNEL_IDS } from 'homepages';
 
 const NO_ADS_TEXT_KEYWORDS = [
