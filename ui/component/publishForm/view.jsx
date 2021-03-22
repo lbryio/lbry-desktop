@@ -91,9 +91,9 @@ type Props = {
 
 function PublishForm(props: Props) {
   // Detect upload type from query in URL
+  const { push, location } = useHistory();
   const urlParams = new URLSearchParams(location.search);
   const uploadType = urlParams.get('type');
-  const history = useHistory();
 
   // Component state
   const [mode, setMode] = React.useState(uploadType || PUBLISH_MODES.FILE);
@@ -285,7 +285,7 @@ function PublishForm(props: Props) {
     if (!uploadType) return;
     const newParams = new URLSearchParams();
     newParams.set('type', mode.toLowerCase());
-    history.push({ search: newParams.toString() });
+    push({ search: newParams.toString() });
   }, [mode, uploadType]);
 
   // @if TARGET='web'
@@ -401,6 +401,7 @@ function PublishForm(props: Props) {
                 label={__(MODE_TO_I18N_STR[String(modeName)] || '---')}
                 button="alt"
                 onClick={() => {
+                  // $FlowFixMe
                   setMode(modeName);
                 }}
                 className={classnames('button-toggle', { 'button-toggle--active': mode === modeName })}
