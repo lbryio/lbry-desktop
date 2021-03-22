@@ -98,11 +98,11 @@ export function CommentCreate(props: Props) {
     if (activeChannelClaim && commentValue.length) {
       const timeUntilCanComment = !lastCommentTime
         ? 0
-        : lastCommentTime / 1000 - Date.now() / 1000 + COMMENT_SLOW_MODE_SECONDS;
+        : (lastCommentTime - Date.now()) / 1000 + COMMENT_SLOW_MODE_SECONDS;
 
       if (livestream && !claimIsMine && timeUntilCanComment > 0) {
         toast(
-          __('Slowmode is on. You can comment again in %time% seconds.', { time: Math.floor(timeUntilCanComment) })
+          __('Slowmode is on. You can comment again in %time% seconds.', { time: Math.ceil(timeUntilCanComment) })
         );
         return;
       }
@@ -110,6 +110,7 @@ export function CommentCreate(props: Props) {
       createComment(commentValue, claimId, parentId).then((res) => {
         if (res && res.signature) {
           setCommentValue('');
+          setLastCommentTime(Date.now());
 
           if (onDoneReplying) {
             onDoneReplying();
