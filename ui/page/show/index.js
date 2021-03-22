@@ -10,7 +10,6 @@ import {
   normalizeURI,
   makeSelectClaimIsMine,
   makeSelectClaimIsPending,
-  makeSelectTagInClaimOrChannelForUri,
   makeSelectClaimHasSource,
 } from 'lbry-redux';
 import { makeSelectChannelInSubscriptions } from 'redux/selectors/subscriptions';
