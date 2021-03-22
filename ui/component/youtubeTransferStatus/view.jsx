@@ -219,6 +219,8 @@ export default function YoutubeTransferStatus(props: Props) {
               {youtubeChannels.length > 1
                 ? __('You will be able to claim your channels once they finish syncing.')
                 : __('You will be able to claim your channel once it has finished syncing.')}{' '}
+              {youtubeImportPending &&
+                __('You will not be able to edit the channel or content until the transfer process completes.')}{' '}
               <Button button="link" label={__('Learn More')} href="https://lbry.com/faq/youtube#transfer" />{' '}
               {addNewChannel && <Button button="link" label={__('Add Another Channel')} onClick={addNewChannel} />}
             </p>
