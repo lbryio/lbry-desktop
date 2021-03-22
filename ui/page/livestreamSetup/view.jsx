@@ -56,8 +56,6 @@ export default function LivestreamSetupPage(props: Props) {
     }`;
   }
 
-  const [isFetching, setIsFetching] = React.useState(true);
-  const [isLive, setIsLive] = React.useState(false);
   const [livestreamClaims, setLivestreamClaims] = React.useState([]);
 
   React.useEffect(() => {
@@ -72,16 +70,13 @@ export default function LivestreamSetupPage(props: Props) {
     })
       .then((res) => {
         if (res && res.items && res.items.length > 0) {
-          const claim = res.items[res.items.length - 1];
           setLivestreamClaims(res.items.reverse());
         } else {
           setLivestreamClaims([]);
-          setIsFetching(false);
         }
       })
       .catch(() => {
         setLivestreamClaims([]);
-        setIsFetching(false);
       });
   }, [activeChannelClaimStr]);
 
