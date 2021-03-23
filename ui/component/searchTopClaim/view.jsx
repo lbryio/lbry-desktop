@@ -115,7 +115,7 @@ export default function SearchTopClaim(props: Props) {
               ),
               publish: (
                 <span>
-                  <Button button="link" onClick={() => beginPublish(name)} label={'publish'} />
+                  <Button button="link" onClick={() => beginPublish(name)} label={__('publish')} />
                 </span>
               ),
             }}
