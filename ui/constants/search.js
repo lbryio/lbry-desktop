@@ -24,4 +24,5 @@ export const SEARCH_OPTIONS = {
   SORT: 'sort_by',
   SORT_ACCENDING: '^release_time',
   SORT_DESCENDING: 'release_time',
+  EXACT: 'exact',
 };

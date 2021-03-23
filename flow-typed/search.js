@@ -17,6 +17,7 @@ declare type SearchOptions = {
   SORT: string,
   SORT_ACCENDING: string,
   SORT_DESCENDING: string,
+  EXACT: string,
 };
 
 declare type SearchState = {
