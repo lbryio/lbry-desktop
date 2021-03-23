@@ -18,9 +18,11 @@ import { selectUnclaimedRewardValue } from 'redux/selectors/rewards';
 import { selectModal, selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import PublishPage from './view';
+import { selectUser } from '../../redux/selectors/user';
 
 const select = state => ({
   ...selectPublishFormValues(state),
+  user: selectUser(state),
   // The winning claim for a short lbry uri
   amountNeededForTakeover: selectTakeOverAmount(state),
   // My previously published claims under this short lbry uri

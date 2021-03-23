@@ -87,6 +87,7 @@ type Props = {
   enablePublishPreview: boolean,
   activeChannelClaim: ?ChannelClaim,
   incognito: boolean,
+  user: ?{ experimental_ui: boolean },
 };
 
 function PublishForm(props: Props) {
@@ -132,6 +133,7 @@ function PublishForm(props: Props) {
     enablePublishPreview,
     activeChannelClaim,
     incognito,
+    user,
   } = props;
 
   const TAGS_LIMIT = 5;
@@ -394,7 +396,7 @@ function PublishForm(props: Props) {
         setPrevFileText={setPrevFileText}
         header={
           <>
-            {MODES.map((modeName, index) => (
+            {MODES.map((modeName, index) => !((index === 2) && user && user.experimental_ui) && (
               <Button
                 key={index}
                 icon={modeName}
