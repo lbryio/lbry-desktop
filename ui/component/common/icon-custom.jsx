@@ -1240,12 +1240,6 @@ export const icons = {
       <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
     </g>
   ),
-  [ICONS.LIVESTREAM]: buildIcon(
-    <g>
-      <polygon points="23 7 16 12 23 17 23 7" />
-      <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
-    </g>
-  ),
   [ICONS.CHANNEL_LEVEL_1]: (props: CustomProps) => (
     <svg
       {...props}

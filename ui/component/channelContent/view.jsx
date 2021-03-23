@@ -9,7 +9,6 @@ import Button from 'component/button';
 import ClaimListDiscover from 'component/claimListDiscover';
 import Ads from 'web/component/ads';
 import Icon from 'component/common/icon';
-import LivestreamLink from 'component/livestreamLink';
 import { Form, FormField } from 'component/common/form';
 import { DEBOUNCE_WAIT_DURATION_MS } from 'constants/search';
 import { lighthouse } from 'redux/actions/search';
@@ -106,8 +105,6 @@ function ChannelContent(props: Props) {
       {!fetching && Boolean(claimsInChannel) && !channelIsBlocked && !channelIsBlackListed && (
         <HiddenNsfwClaims uri={uri} />
       )}
-
-      <LivestreamLink uri={uri} />
 
       {!fetching && channelIsBlackListed && (
         <section className="card card--section">

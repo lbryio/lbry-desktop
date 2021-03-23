@@ -1,5 +1,4 @@
 // @flow
-import { LOGO_TITLE, ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import * as ICONS from 'constants/icons';
 import { SETTINGS } from 'lbry-redux';
 import * as PAGES from 'constants/pages';
@@ -11,6 +10,7 @@ import WunderBar from 'component/wunderbar';
 import Icon from 'component/common/icon';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import NavigationButton from 'component/navigationButton';
+import { LOGO_TITLE } from 'config';
 import { useIsMobile } from 'effects/use-screensize';
 import NotificationBubble from 'component/notificationBubble';
 import NotificationHeaderButton from 'component/notificationHeaderButton';
@@ -99,7 +99,6 @@ const Header = (props: Props) => {
   const hasBackout = Boolean(backout);
   const { backLabel, backNavDefault, title: backTitle, simpleTitle: simpleBackTitle } = backout || {};
   const notificationsEnabled = (user && user.experimental_ui) || false;
-  const livestreamEnabled = (ENABLE_NO_SOURCE_CLAIMS && user && user.experimental_ui) || false;
   const activeChannelUrl = activeChannelClaim && activeChannelClaim.permanent_url;
 
   // Sign out if they click the "x" when they are on the password prompt
@@ -276,7 +275,6 @@ const Header = (props: Props) => {
                     history={history}
                     handleThemeToggle={handleThemeToggle}
                     currentTheme={currentTheme}
-                    livestreamEnabled={livestreamEnabled}
                   />
                 </div>
               )}
@@ -393,11 +391,10 @@ type HeaderMenuButtonProps = {
   history: { push: (string) => void },
   handleThemeToggle: (string) => void,
   currentTheme: string,
-  livestreamEnabled: boolean,
 };
 
 function HeaderMenuButtons(props: HeaderMenuButtonProps) {
-  const { authenticated, notificationsEnabled, history, handleThemeToggle, currentTheme, livestreamEnabled } = props;
+  const { authenticated, notificationsEnabled, history, handleThemeToggle, currentTheme } = props;
 
   return (
     <div className="header__buttons">
@@ -425,13 +422,6 @@ function HeaderMenuButtons(props: HeaderMenuButtonProps) {
               <Icon aria-hidden icon={ICONS.CHANNEL} />
               {__('New Channel')}
             </MenuItem>
-
-            {livestreamEnabled && (
-              <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.LIVESTREAM}`)}>
-                <Icon aria-hidden icon={ICONS.VIDEO} />
-                {__('Go Live')}
-              </MenuItem>
-            )}
           </MenuList>
         </Menu>
       )}

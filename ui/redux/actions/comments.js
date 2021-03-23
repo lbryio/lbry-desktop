@@ -196,13 +196,7 @@ export function doCommentReact(commentId: string, type: string) {
   };
 }
 
-export function doCommentCreate(
-  comment: string = '',
-  claim_id: string = '',
-  parent_id?: string,
-  uri: string,
-  livestream?: boolean = false
-) {
+export function doCommentCreate(comment: string = '', claim_id: string = '', parent_id?: string, uri: string) {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const activeChannelClaim = selectActiveChannelClaim(state);
@@ -234,7 +228,6 @@ export function doCommentCreate(
           type: ACTIONS.COMMENT_CREATE_COMPLETED,
           data: {
             uri,
-            livestream,
             comment: result,
             claimId: claim_id,
           },

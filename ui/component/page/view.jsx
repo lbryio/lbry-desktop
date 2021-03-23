@@ -28,7 +28,6 @@ type Props = {
   fullWidthPage: boolean,
   videoTheaterMode: boolean,
   isMarkdown?: boolean,
-  livestream?: boolean,
   backout: {
     backLabel?: string,
     backNavDefault?: string,
@@ -50,7 +49,6 @@ function Page(props: Props) {
     backout,
     videoTheaterMode,
     isMarkdown = false,
-    livestream,
   } = props;
 
   const {
@@ -108,9 +106,8 @@ function Page(props: Props) {
             'main--full-width': fullWidthPage,
             'main--auth-page': authPage,
             'main--file-page': filePage,
+            'main--theater-mode': isOnFilePage && videoTheaterMode,
             'main--markdown': isMarkdown,
-            'main--theater-mode': isOnFilePage && videoTheaterMode && !livestream,
-            'main--livestream': livestream,
           })}
         >
           {children}

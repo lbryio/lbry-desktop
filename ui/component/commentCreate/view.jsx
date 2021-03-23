@@ -10,16 +10,6 @@ import usePersistedState from 'effects/use-persisted-state';
 import { FF_MAX_CHARS_IN_COMMENT } from 'constants/form-field';
 import { useHistory } from 'react-router';
 import type { ElementRef } from 'react';
-import emoji from 'emoji-dictionary';
-
-const COMMENT_SLOW_MODE_SECONDS = 5;
-const LIVESTREAM_EMOJIS = [
-  emoji.getUnicode('rocket'),
-  emoji.getUnicode('jeans'),
-  emoji.getUnicode('fire'),
-  emoji.getUnicode('heart'),
-  emoji.getUnicode('open_mouth'),
-];
 
 type Props = {
   uri: string,
@@ -35,9 +25,6 @@ type Props = {
   isPostingComment: boolean,
   activeChannel: string,
   activeChannelClaim: ?ChannelClaim,
-  livestream?: boolean,
-  toast: (string) => void,
-  claimIsMine: boolean,
 };
 
 export function CommentCreate(props: Props) {
@@ -53,15 +40,11 @@ export function CommentCreate(props: Props) {
     parentId,
     isPostingComment,
     activeChannelClaim,
-    livestream,
-    toast,
-    claimIsMine,
   } = props;
   const buttonref: ElementRef<any> = React.useRef();
   const { push } = useHistory();
   const { claim_id: claimId } = claim;
   const [commentValue, setCommentValue] = React.useState('');
-  const [lastCommentTime, setLastCommentTime] = React.useState();
   const [charCount, setCharCount] = useState(commentValue.length);
   const [advancedEditor, setAdvancedEditor] = usePersistedState('comment-editor-mode', false);
   const hasChannels = channels && channels.length;
@@ -96,21 +79,9 @@ export function CommentCreate(props: Props) {
 
   function handleSubmit() {
     if (activeChannelClaim && commentValue.length) {
-      const timeUntilCanComment = !lastCommentTime
-        ? 0
-        : (lastCommentTime - Date.now()) / 1000 + COMMENT_SLOW_MODE_SECONDS;
-
-      if (livestream && !claimIsMine && timeUntilCanComment > 0) {
-        toast(
-          __('Slowmode is on. You can comment again in %time% seconds.', { time: Math.ceil(timeUntilCanComment) })
-        );
-        return;
-      }
-
-      createComment(commentValue, claimId, parentId).then((res) => {
+      createComment(commentValue, claimId, parentId).then(res => {
         if (res && res.signature) {
           setCommentValue('');
-          setLastCommentTime(Date.now());
 
           if (onDoneReplying) {
             onDoneReplying();
@@ -173,23 +144,6 @@ export function CommentCreate(props: Props) {
         autoFocus={isReply}
         textAreaMaxLength={FF_MAX_CHARS_IN_COMMENT}
       />
-      {livestream && hasChannels && (
-        <div className="livestream__emoji-actions">
-          {LIVESTREAM_EMOJIS.map((emoji) => (
-            <Button
-              key={emoji}
-              disabled={isPostingComment}
-              type="button"
-              button="alt"
-              className="button--emoji"
-              label={emoji}
-              onClick={() => {
-                setCommentValue(commentValue ? `${commentValue} ${emoji}` : emoji);
-              }}
-            />
-          ))}
-        </div>
-      )}
       <div className="section__actions section__actions--no-margin">
         <Button
           ref={buttonref}

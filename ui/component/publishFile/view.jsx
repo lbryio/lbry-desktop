@@ -364,7 +364,6 @@ function PublishFile(props: Props) {
               onFileChosen={handleFileChange}
             />
           )}
-
           {isPublishPost && (
             <PostEditor
               label={__('Post --[noun, markdown post tab button]--')}
