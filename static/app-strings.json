@@ -1332,6 +1332,7 @@
   "Tech": "Tech",
   "Lab": "Lab",
   "Technology": "Technology",
+  "Movies": "Movies",
   "News": "News",
   "News & Politics": "News & Politics",
   "Finance 2.0": "Finance 2.0",
@@ -1682,5 +1683,8 @@
   "Live stream in progress": "Live stream in progress",
   "Live discussion": "Live discussion",
   "Livestream": "Livestream",
+  "lbry.tv is being retired in favor of %odysee% and new sign ups are disabled. Sign up on %odysee% instead": "lbry.tv is being retired in favor of %odysee% and new sign ups are disabled. Sign up on %odysee% instead",
+  "lbry.tv is being retired in favor of %odysee%": "lbry.tv is being retired in favor of %odysee%",
+  "You will have to switch to the %desktop_app% or %odysee% in the near future. Your existing login details will work on %odysee% and all of your %credits% and other settings will be there.": "You will have to switch to the %desktop_app% or %odysee% in the near future. Your existing login details will work on %odysee% and all of your %credits% and other settings will be there.",
   "--end--": "--end--"
 }
