@@ -65,7 +65,7 @@ export default function LivestreamLink(props: Props) {
   return (
     <Card
       className="livestream__channel-link"
-      title="Live stream in progress"
+      title={__('Live stream in progress')}
       actions={<ClaimPreview uri={livestreamClaim.canonical_url} livestream type="inline" />}
     />
   );
