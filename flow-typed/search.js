@@ -14,6 +14,9 @@ declare type SearchOptions = {
   MEDIA_TEXT: string,
   MEDIA_IMAGE: string,
   MEDIA_APPLICATION: string,
+  SORT: string,
+  SORT_ACCENDING: string,
+  SORT_DESCENDING: string,
 };
 
 declare type SearchState = {
