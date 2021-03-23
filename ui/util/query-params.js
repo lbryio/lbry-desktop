@@ -65,11 +65,17 @@ export const getSearchQueryString = (query: string, options: any = {}) => {
         );
       }
     }
+
+    const sortBy = options[SEARCH_OPTIONS.SORT];
+    if (sortBy) {
+      queryParams.push(`${SEARCH_OPTIONS.SORT}=${sortBy}`);
+    }
   }
 
   const additionalOptions = {};
   const { related_to } = options;
   const { nsfw } = options;
+
   if (related_to) additionalOptions['related_to'] = related_to;
   if (nsfw === false) additionalOptions['nsfw'] = false;
 
