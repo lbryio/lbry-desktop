@@ -1677,5 +1677,10 @@
   "Create A LiveStream": "Create A LiveStream",
   "%channel% isn't live right now, but the chat is! Check back later to watch the stream.": "%channel% isn't live right now, but the chat is! Check back later to watch the stream.",
   "Right now": "Right now",
+  "%viewer_count% currently watching": "%viewer_count% currently watching",
+  "Slowmode is on. You can comment again in %time% seconds.": "Slowmode is on. You can comment again in %time% seconds.",
+  "Live stream in progress": "Live stream in progress",
+  "Live discussion": "Live discussion",
+  "Livestream": "Livestream",
   "--end--": "--end--"
 }
