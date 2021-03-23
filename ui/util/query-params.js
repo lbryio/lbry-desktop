@@ -34,9 +34,10 @@ export function updateQueryParam(uri: string, key: string, value: string) {
 
 export const getSearchQueryString = (query: string, options: any = {}) => {
   const FORCE_FREE_ONLY = SIMPLE_SITE;
+  const isSurroundedByQuotes = (str) => str[0] === '"' && str[str.length - 1] === '"';
   const encodedQuery = encodeURIComponent(query);
   const queryParams = [
-    `s=${encodedQuery}`,
+    options.exact && !isSurroundedByQuotes(encodedQuery) ? `s="${encodedQuery}"` : `s=${encodedQuery}`,
     `size=${options.size || DEFAULT_SEARCH_SIZE}`,
     `from=${options.from || DEFAULT_SEARCH_RESULT_FROM}`,
   ];
