@@ -1,5 +1,6 @@
 // @flow
 import { SEARCH_OPTIONS } from 'constants/search';
+import { SIMPLE_SITE } from 'config';
 
 const DEFAULT_SEARCH_RESULT_FROM = 0;
 const DEFAULT_SEARCH_SIZE = 20;
@@ -32,6 +33,7 @@ export function updateQueryParam(uri: string, key: string, value: string) {
 }
 
 export const getSearchQueryString = (query: string, options: any = {}) => {
+  const FORCE_FREE_ONLY = SIMPLE_SITE;
   const encodedQuery = encodeURIComponent(query);
   const queryParams = [
     `s=${encodedQuery}`,
@@ -47,9 +49,8 @@ export const getSearchQueryString = (query: string, options: any = {}) => {
       queryParams.push(`claimType=${claimType}`);
 
       /*
-       * Due to limitations in lighthouse, we can't pass
-       * the mediaType parameter when searching for
-       * channels or "everything".
+       * Due to limitations in lighthouse, we can't pass the mediaType parameter
+       * when searching for channels or "everything".
        */
       if (!claimType.includes(SEARCH_OPTIONS.INCLUDE_CHANNELS)) {
         queryParams.push(
@@ -77,6 +78,14 @@ export const getSearchQueryString = (query: string, options: any = {}) => {
       const option = additionalOptions[key];
       queryParams.push(`${key}=${option}`);
     });
+  }
+
+  if (FORCE_FREE_ONLY) {
+    const index = queryParams.findIndex((q) => q.startsWith('free_only'));
+    if (index > -1) {
+      queryParams.splice(index, 1);
+    }
+    queryParams.push(`free_only=true`);
   }
 
   return queryParams.join('&');
