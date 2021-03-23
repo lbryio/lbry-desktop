@@ -122,9 +122,7 @@ function ShowPage(props: Props) {
           />
         </Page>
       );
-    }
-
-    if (isLivestream) {
+    } else if (isLivestream) {
       innerContent = <LivestreamPage uri={uri} />;
     } else {
       innerContent = <FilePage uri={uri} location={location} />;
