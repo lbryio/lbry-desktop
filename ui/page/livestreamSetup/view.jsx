@@ -18,10 +18,11 @@ type Props = {
   channels: Array<ChannelClaim>,
   fetchingChannels: boolean,
   activeChannelClaim: ?ChannelClaim,
+  pendingClaims: Array<Claim>,
 };
 
 export default function LivestreamSetupPage(props: Props) {
-  const { channels, fetchingChannels, activeChannelClaim } = props;
+  const { channels, fetchingChannels, activeChannelClaim, pendingClaims } = props;
 
   const [sigData, setSigData] = React.useState({ signature: undefined, signing_ts: undefined });
 
@@ -57,6 +58,9 @@ export default function LivestreamSetupPage(props: Props) {
   }
 
   const [livestreamClaims, setLivestreamClaims] = React.useState([]);
+  // $FlowFixMe
+  const pendingLiveStreamClaims = pendingClaims.filter((claim) => !(claim && claim.value && claim.value.source));
+  const totalLivestreamClaims = pendingLiveStreamClaims.concat(livestreamClaims);
 
   React.useEffect(() => {
     if (!activeChannelClaimStr) return;
@@ -105,7 +109,7 @@ export default function LivestreamSetupPage(props: Props) {
           <>
             <ChannelSelector hideAnon />
 
-            {streamKey && livestreamClaims.length > 0 && (
+            {streamKey && totalLivestreamClaims.length > 0 && (
               <Card
                 title={__('Your stream key')}
                 actions={
@@ -129,10 +133,10 @@ export default function LivestreamSetupPage(props: Props) {
               />
             )}
 
-            {livestreamClaims.length > 0 ? (
+            {totalLivestreamClaims.length > 0 ? (
               <ClaimList
                 header={__('Your livestream uploads')}
-                uris={livestreamClaims.map((claim) => claim.permanent_url)}
+                uris={totalLivestreamClaims.map((claim) => claim.permanent_url)}
               />
             ) : (
               <Yrbl

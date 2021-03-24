@@ -11,20 +11,20 @@ import { useHistory } from 'react-router';
 
 type Props = {
   uri: string,
-  resolveUri: string => void,
+  resolveUri: (string) => void,
   claim: Claim,
-  doPlayUri: string => void,
+  doPlayUri: (string) => void,
   costInfo: any,
   streamingUrl: string,
-  doFetchCostInfoForUri: string => void,
+  doFetchCostInfoForUri: (string) => void,
   isResolvingUri: boolean,
   blackListedOutpoints: Array<{
     txid: string,
     nout: number,
   }>,
 };
-// $FlowFixMe apparently flow thinks this is wrong.
-export const EmbedContext = React.createContext();
+
+export const EmbedContext = React.createContext<any>();
 const EmbedWrapperPage = (props: Props) => {
   const {
     resolveUri,
@@ -54,7 +54,7 @@ const EmbedWrapperPage = (props: Props) => {
     claim &&
     blackListedOutpoints &&
     blackListedOutpoints.some(
-      outpoint =>
+      (outpoint) =>
         (signingChannel && outpoint.txid === signingChannel.txid && outpoint.nout === signingChannel.nout) ||
         (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
     );

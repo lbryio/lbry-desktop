@@ -8,7 +8,7 @@
   File upload is carried out in the background by that function.
  */
 
-import { SITE_NAME } from 'config';
+import { SITE_NAME, ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import React, { useEffect } from 'react';
 import { buildURI, isURIValid, isNameValid, THUMBNAIL_STATUSES } from 'lbry-redux';
 import Button from 'component/button';
@@ -31,14 +31,6 @@ import { useHistory } from 'react-router';
 import fs from 'fs';
 import tempy from 'tempy';
 // @endif
-
-const MODES = Object.values(PUBLISH_MODES);
-
-const MODE_TO_I18N_STR = {
-  [PUBLISH_MODES.FILE]: 'File',
-  [PUBLISH_MODES.POST]: 'Post --[noun, markdown post tab button]--',
-  [PUBLISH_MODES.LIVESTREAM]: 'Livestream --[noun, livestream tab button]--',
-};
 
 type Props = {
   disabled: boolean,
@@ -92,21 +84,6 @@ type Props = {
 
 function PublishForm(props: Props) {
   // Detect upload type from query in URL
-  const { push, location } = useHistory();
-  const urlParams = new URLSearchParams(location.search);
-  const uploadType = urlParams.get('type');
-
-  // Component state
-  const [mode, setMode] = React.useState(uploadType || PUBLISH_MODES.FILE);
-  const [autoSwitchMode, setAutoSwitchMode] = React.useState(true);
-
-  // Used to check if the url name has changed:
-  // A new file needs to be provided
-  const [prevName, setPrevName] = React.useState(false);
-  // Used to check if the file has been modified by user
-  const [fileEdited, setFileEdited] = React.useState(false);
-  const [prevFileText, setPrevFileText] = React.useState('');
-
   const {
     thumbnail,
     name,
@@ -135,6 +112,31 @@ function PublishForm(props: Props) {
     incognito,
     user,
   } = props;
+
+  const { push, location } = useHistory();
+  const urlParams = new URLSearchParams(location.search);
+  const uploadType = urlParams.get('type');
+  // $FlowFixMe
+  const MODES =
+    ENABLE_NO_SOURCE_CLAIMS && user && user.experimental_ui
+      ? Object.values(PUBLISH_MODES)
+      : Object.values(PUBLISH_MODES).filter((mode) => mode !== PUBLISH_MODES.LIVESTREAM);
+
+  const MODE_TO_I18N_STR = {
+    [PUBLISH_MODES.FILE]: 'File',
+    [PUBLISH_MODES.POST]: 'Post --[noun, markdown post tab button]--',
+    [PUBLISH_MODES.LIVESTREAM]: 'Livestream --[noun, livestream tab button]--',
+  };
+  // Component state
+  const [mode, setMode] = React.useState(uploadType || PUBLISH_MODES.FILE);
+  const [autoSwitchMode, setAutoSwitchMode] = React.useState(true);
+
+  // Used to check if the url name has changed:
+  // A new file needs to be provided
+  const [prevName, setPrevName] = React.useState(false);
+  // Used to check if the file has been modified by user
+  const [fileEdited, setFileEdited] = React.useState(false);
+  const [prevFileText, setPrevFileText] = React.useState('');
 
   const TAGS_LIMIT = 5;
   const fileFormDisabled = mode === PUBLISH_MODES.FILE && !filePath;
@@ -396,9 +398,9 @@ function PublishForm(props: Props) {
         setPrevFileText={setPrevFileText}
         header={
           <>
-            {MODES.map((modeName, index) => !((index === 2) && user && user.experimental_ui) && (
+            {MODES.map((modeName) => (
               <Button
-                key={index}
+                key={String(modeName)}
                 icon={modeName}
                 label={__(MODE_TO_I18N_STR[String(modeName)] || '---')}
                 button="alt"
