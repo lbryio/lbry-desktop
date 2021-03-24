@@ -198,6 +198,7 @@ const analytics: Analytics = {
   },
 
   videoFetchDuration: (source, duration) => {
+    sendPromMetric('time_to_fetch', duration);
     sendMatomoEvent('Media', 'TimeToFetch', source, duration);
   },
 

@@ -45,7 +45,7 @@ export default function SearchPage(props: Props) {
   const additionalOptions: AdditionalOptions = { isBackgroundSearch: false };
   const [from, setFrom] = React.useState(0);
 
-  additionalOptions['nsfw'] = showNsfw;
+  additionalOptions['nsfw'] = SIMPLE_SITE ? false : showNsfw;
   additionalOptions['from'] = from;
 
   const modifiedUrlQuery = urlQuery.trim().replace(/\s+/g, '').replace(/:/g, '#');
