@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { doSearch } from 'redux/actions/search';
+import { SIMPLE_SITE } from 'config';
 import {
   selectIsSearching,
   makeSelectSearchUris,
@@ -19,11 +20,15 @@ const select = (state, props) => {
   if (urlQuery) {
     urlQuery = urlQuery.replace(/^lbry:\/\//i, '').replace(/\//, ' ');
   }
-
   const query = makeSelectQueryWithOptions(
     urlQuery,
-    showMature === false ? { nsfw: false, isBackgroundSearch: false } : { isBackgroundSearch: false }
+    SIMPLE_SITE
+      ? { nsfw: false, isBackgroundSearch: false }
+      : showMature === false
+      ? { nsfw: false, isBackgroundSearch: false }
+      : { isBackgroundSearch: false }
   )(state);
+
   const uris = makeSelectSearchUris(query)(state);
   const hasReachedMaxResultsLength = makeSelectHasReachedMaxResultsLength(query)(state);
 
