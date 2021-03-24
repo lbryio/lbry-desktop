@@ -41,6 +41,7 @@ type Props = {
   embed?: boolean,
   toast: (string) => void,
   claimIsMine: boolean,
+  commentingEnabled: boolean,
 };
 
 export function CommentCreate(props: Props) {
@@ -63,6 +64,7 @@ export function CommentCreate(props: Props) {
     embed,
     toast,
     claimIsMine,
+    commentingEnabled,
   } = props;
   const buttonref: ElementRef<any> = React.useRef();
   const {
@@ -111,9 +113,7 @@ export function CommentCreate(props: Props) {
         : (lastCommentTime - Date.now()) / 1000 + COMMENT_SLOW_MODE_SECONDS;
 
       if (livestream && !claimIsMine && timeUntilCanComment > 0) {
-        toast(
-          __('Slowmode is on. You can comment again in %time% seconds.', { time: Math.ceil(timeUntilCanComment) })
-        );
+        toast(__('Slowmode is on. You can comment again in %time% seconds.', { time: Math.ceil(timeUntilCanComment) }));
         return;
       }
 
@@ -140,7 +140,7 @@ export function CommentCreate(props: Props) {
 
   useEffect(() => setCharCount(commentValue.length), [commentValue]);
 
-  if (!authenticated || !hasChannels) {
+  if (commentingEnabled || !hasChannels) {
     return (
       <div
         role="button"
