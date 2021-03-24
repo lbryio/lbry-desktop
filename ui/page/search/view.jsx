@@ -24,8 +24,8 @@ type Props = {
   isSearching: boolean,
   location: UrlLocation,
   uris: Array<string>,
-  onFeedbackNegative: string => void,
-  onFeedbackPositive: string => void,
+  onFeedbackNegative: (string) => void,
+  onFeedbackPositive: (string) => void,
   showNsfw: boolean,
   isAuthenticated: boolean,
 };
@@ -49,10 +49,7 @@ export default function SearchPage(props: Props) {
 
   additionalOptions['nsfw'] = showNsfw;
 
-  const modifiedUrlQuery = urlQuery
-    .trim()
-    .replace(/\s+/g, '')
-    .replace(/:/g, '#');
+  const modifiedUrlQuery = urlQuery.trim().replace(/\s+/g, '').replace(/:/g, '#');
   const uriFromQuery = `lbry://${modifiedUrlQuery}`;
 
   let streamName;
@@ -72,7 +69,7 @@ export default function SearchPage(props: Props) {
     try {
       const dummyUrlForClaimId = `x#${urlQuery}`;
       ({ claimId } = parseURI(dummyUrlForClaimId));
-      Lbry.claim_search({ claim_id: claimId }).then(res => {
+      Lbry.claim_search({ claim_id: claimId }).then((res) => {
         if (res.items && res.items.length) {
           const claim = res.items[0];
           const url = formatLbryUrlForWeb(claim.canonical_url);
@@ -100,7 +97,7 @@ export default function SearchPage(props: Props) {
             <ClaimList
               uris={uris}
               loading={isSearching}
-              header={!SIMPLE_SITE && <SearchOptions additionalOptions={additionalOptions} />}
+              header={<SearchOptions simple={SIMPLE_SITE} additionalOptions={additionalOptions} />}
               injectedItem={
                 SHOW_ADS && IS_WEB ? (SIMPLE_SITE ? false : !isAuthenticated && <Ads small type={'video'} />) : false
               }
