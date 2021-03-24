@@ -103,11 +103,29 @@ class ModalPublishPreview extends React.PureComponent<Props> {
       myChannels,
     } = this.props;
 
-    const modalTitle = isStillEditing ? __('Confirm Edit') : __('Confirm Upload');
-    const confirmBtnText = isStillEditing ? __('Save') : __('Upload');
     const txFee = previewResponse ? previewResponse['total_fee'] : null;
+    //   $FlowFixMe add outputs[0] etc to PublishResponse type
+    const livestream =
+      //   $FlowFixMe
+      previewResponse.outputs[0] && previewResponse.outputs[0].value && !previewResponse.outputs[0].value.source;
     const isOptimizeAvail = filePath && filePath !== '' && isVid && ffmpegStatus.available;
+    let modalTitle;
+    if (isStillEditing) {
+      modalTitle = __('Confirm Edit');
+    } else if (livestream) {
+      modalTitle = __('Create Livestream');
+    } else {
+      modalTitle = __('Confirm Upload');
+    }
 
+    let confirmBtnText;
+    if (isStillEditing) {
+      confirmBtnText = __('Save');
+    } else if (livestream) {
+      confirmBtnText = __('Create');
+    } else {
+      confirmBtnText = __('Upload');
+    }
     const descriptionValue = description ? (
       <div className="media__info-text-preview">
         <MarkdownPreview content={description} simpleLinks />
@@ -167,7 +185,7 @@ class ModalPublishPreview extends React.PureComponent<Props> {
                 <div className="section">
                   <table className="table table--condensed table--publish-preview">
                     <tbody>
-                      {!isMarkdownPost && this.createRow(__('File'), this.resolveFilePathName(filePath))}
+                      {!livestream && !isMarkdownPost && this.createRow(__('File'), this.resolveFilePathName(filePath))}
                       {isOptimizeAvail && this.createRow(__('Transcode'), optimize ? __('Yes') : __('No'))}
                       {this.createRow(__('Title'), title)}
                       {this.createRow(__('Description'), descriptionValue)}
