@@ -6,7 +6,7 @@ import { ipcRenderer, remote } from 'electron';
 import path from 'path';
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
-import { DOMAIN } from 'config';
+import { DOMAIN, SIMPLE_SITE } from 'config';
 import {
   Lbry,
   doBalanceSubscribe,
@@ -541,7 +541,7 @@ export function doSignIn() {
   return (dispatch, getState) => {
     const state = getState();
     const user = selectUser(state);
-    const notificationsEnabled = user.experimental_ui;
+    const notificationsEnabled = SIMPLE_SITE || user.experimental_ui;
 
     if (notificationsEnabled) {
       dispatch(doNotificationSocketConnect());
