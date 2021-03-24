@@ -14,7 +14,7 @@ export const STATUS_DOWN = 'down';
 const getParams = (user) => {
   const headers = {};
   const token = getAuthToken();
-  if (token && user.has_verified_email) {
+  if (token && user && user.has_verified_email) {
     headers[X_LBRY_AUTH_TOKEN] = token;
   }
   const params = { headers };
