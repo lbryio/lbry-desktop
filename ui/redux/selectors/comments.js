@@ -105,12 +105,20 @@ export const makeSelectCommentIdsForUri = (uri: string) =>
 
 export const makeSelectMyReactionsForComment = (commentId: string) =>
   createSelector(selectState, (state) => {
+    if (!state.myReactsByCommentId) {
+      return [];
+    }
+
     return state.myReactsByCommentId[commentId] || [];
   });
 
 export const makeSelectOthersReactionsForComment = (commentId: string) =>
   createSelector(selectState, (state) => {
-    return state.othersReactsByCommentId[commentId];
+    if (!state.othersReactsByCommentId) {
+      return {};
+    }
+
+    return state.othersReactsByCommentId[commentId] || {};
   });
 
 export const selectPendingCommentReacts = createSelector(selectState, (state) => state.pendingCommentReactions);

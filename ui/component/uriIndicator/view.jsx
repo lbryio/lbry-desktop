@@ -17,6 +17,7 @@ type Props = {
   // to allow for other elements to be nested within the UriIndicator
   children: ?Node,
   inline: boolean,
+  external?: boolean,
 };
 
 class UriIndicator extends React.PureComponent<Props> {
@@ -37,7 +38,7 @@ class UriIndicator extends React.PureComponent<Props> {
   };
 
   render() {
-    const { link, isResolvingUri, claim, children, inline, hideAnonymous = false } = this.props;
+    const { link, isResolvingUri, claim, children, inline, hideAnonymous = false, external = false } = this.props;
 
     if (!claim) {
       return <span className="empty">{isResolvingUri ? 'Validating...' : 'Unused'}</span>;
@@ -74,10 +75,14 @@ class UriIndicator extends React.PureComponent<Props> {
       }
 
       if (children) {
-        return <Button navigate={channelLink}>{children}</Button>;
+        return (
+          <Button target={external ? '_blank' : undefined} navigate={channelLink}>
+            {children}
+          </Button>
+        );
       } else {
         return (
-          <Button className="button--uri-indicator" navigate={channelLink}>
+          <Button className="button--uri-indicator" navigate={channelLink} target={external ? '_blank' : undefined}>
             {inner}
           </Button>
         );

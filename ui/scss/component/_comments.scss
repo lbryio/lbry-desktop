@@ -34,6 +34,7 @@ $thumbnailWidthSmall: 1rem;
 }
 
 .comment {
+  width: 100%;
   display: flex;
   flex-direction: column;
   font-size: var(--font-small);
@@ -99,6 +100,10 @@ $thumbnailWidthSmall: 1rem;
   &:not(:first-child) {
     margin-top: var(--spacing-l);
   }
+}
+
+.comment--livestream {
+  margin-right: 0;
 }
 
 .comment--slimed {
