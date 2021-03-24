@@ -8,7 +8,7 @@
   File upload is carried out in the background by that function.
  */
 
-import { SITE_NAME, ENABLE_NO_SOURCE_CLAIMS } from 'config';
+import { SITE_NAME, ENABLE_NO_SOURCE_CLAIMS, SIMPLE_SITE } from 'config';
 import React, { useEffect } from 'react';
 import { buildURI, isURIValid, isNameValid, THUMBNAIL_STATUSES } from 'lbry-redux';
 import Button from 'component/button';
@@ -123,7 +123,7 @@ function PublishForm(props: Props) {
       : Object.values(PUBLISH_MODES).filter((mode) => mode !== PUBLISH_MODES.LIVESTREAM);
 
   const MODE_TO_I18N_STR = {
-    [PUBLISH_MODES.FILE]: 'File',
+    [PUBLISH_MODES.FILE]: SIMPLE_SITE ? 'Video' : 'File',
     [PUBLISH_MODES.POST]: 'Post --[noun, markdown post tab button]--',
     [PUBLISH_MODES.LIVESTREAM]: 'Livestream --[noun, livestream tab button]--',
   };
