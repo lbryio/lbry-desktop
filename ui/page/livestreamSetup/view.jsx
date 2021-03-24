@@ -82,7 +82,7 @@ export default function LivestreamSetupPage(props: Props) {
       .catch(() => {
         setLivestreamClaims([]);
       });
-  }, [activeChannelClaimStr]);
+  }, [activeChannelClaimStr, pendingClaims.length]);
 
   return (
     <Page>
