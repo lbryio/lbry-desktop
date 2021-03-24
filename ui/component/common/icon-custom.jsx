@@ -7,6 +7,7 @@ import { v4 as uuid } from 'uuid';
 type IconProps = {
   size: number,
   color: string,
+  title?: string,
 };
 
 type CustomProps = {
@@ -18,7 +19,7 @@ type CustomProps = {
 // Icons with tooltips need to use this function so the ref can be properly forwarded
 const buildIcon = (iconStrokes: React$Node, customSvgValues = {}) =>
   forwardRef((props: IconProps, ref) => {
-    const { size = 24, color = 'currentColor', ...otherProps } = props;
+    const { size = 24, color = 'currentColor', title, ...otherProps } = props;
     return (
       <svg
         ref={ref}
@@ -35,6 +36,7 @@ const buildIcon = (iconStrokes: React$Node, customSvgValues = {}) =>
         {...customSvgValues}
       >
         {iconStrokes}
+        {title && <title>{title}</title>}
       </svg>
     );
   });
