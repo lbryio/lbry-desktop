@@ -1,5 +1,4 @@
 // @flow
-import { LIVE_STREAM_TAG, LIVE_STREAM_CHANNEL_CLAIM_ID } from 'constants/livestream';
 import React from 'react';
 import classnames from 'classnames';
 import { NavLink, withRouter } from 'react-router-dom';
@@ -42,6 +41,7 @@ type Props = {
   showMature: boolean,
   showHiddenByUser?: boolean,
   hideLivestreamClaims?: boolean,
+  isLivestream: boolean,
 };
 
 function ClaimPreviewTile(props: Props) {
@@ -63,18 +63,13 @@ function ClaimPreviewTile(props: Props) {
     showMature,
     showHiddenByUser,
     hideLivestreamClaims,
+    isLivestream,
   } = props;
   const isRepost = claim && claim.repost_channel_url;
   const shouldFetch = claim === undefined;
   const thumbnailUrl = useGetThumbnail(uri, claim, streamingUrl, getFile, placeholder) || thumbnail;
   const canonicalUrl = claim && claim.canonical_url;
   const navigateUrl = formatLbryUrlForWeb(canonicalUrl || uri || '/');
-  const isLivestream =
-    claim &&
-    claim.signing_channel &&
-    claim.signing_channel.claim_id === LIVE_STREAM_CHANNEL_CLAIM_ID &&
-    claim.value.tags &&
-    claim.value.tags.includes(LIVE_STREAM_TAG);
 
   const navLinkProps = {
     to: navigateUrl,

@@ -1,5 +1,4 @@
 // @flow
-import { LIVE_STREAM_CHANNEL_CLAIM_ID, LIVE_STREAM_TAG } from 'constants/livestream';
 import * as PAGES from 'constants/pages';
 import * as React from 'react';
 import classnames from 'classnames';
@@ -35,6 +34,7 @@ type Props = {
   claim: ?Claim,
   claimIsMine: boolean,
   commentsDisabled: boolean,
+  isLivestream: boolean,
 };
 
 function FilePage(props: Props) {
@@ -51,19 +51,14 @@ function FilePage(props: Props) {
     linkedComment,
     setPrimaryUri,
     videoTheaterMode,
-    claim,
+
     claimIsMine,
     commentsDisabled,
+    isLivestream,
   } = props;
   const cost = costInfo ? costInfo.cost : null;
   const hasFileInfo = fileInfo !== undefined;
   const isMarkdown = renderMode === RENDER_MODES.MARKDOWN;
-  const isLivestream =
-    claim &&
-    claim.signing_channel &&
-    claim.signing_channel.claim_id === LIVE_STREAM_CHANNEL_CLAIM_ID &&
-    claim.value.tags &&
-    claim.value.tags.includes(LIVE_STREAM_TAG);
 
   React.useEffect(() => {
     // always refresh file info when entering file page to see if we have the file

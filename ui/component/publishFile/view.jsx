@@ -334,7 +334,7 @@ function PublishFile(props: Props) {
       className={disabled || balance === 0 ? 'card--disabled' : ''}
       title={
         <div>
-          {__('Upload') || header}
+          {header}
           {publishing && <Spinner type={'small'} />}
           {inProgress && (
             <div>
