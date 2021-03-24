@@ -140,7 +140,7 @@ export function CommentCreate(props: Props) {
 
   useEffect(() => setCharCount(commentValue.length), [commentValue]);
 
-  if (!authenticated || !hasChannels) {
+  if (!hasChannels) {
     return (
       <div
         role="button"
