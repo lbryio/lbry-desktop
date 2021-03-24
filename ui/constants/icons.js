@@ -51,6 +51,7 @@ export const MORE = 'More';
 export const SHARE_LINK = 'ShareLink';
 export const ACCOUNT = 'User';
 export const SETTINGS = 'Settings';
+export const FILTER = 'Filter';
 export const INVITE = 'Users';
 export const FILE = 'File';
 export const FULLSCREEN = 'Maximize';
