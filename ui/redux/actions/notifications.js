@@ -3,7 +3,7 @@ import * as ACTIONS from 'constants/action_types';
 import * as NOTIFICATIONS from 'constants/notifications';
 import { Lbryio } from 'lbryinc';
 import { v4 as uuid } from 'uuid';
-import { selectNotifications } from 'redux/selectors/notifications';
+import { selectNotifications, selectNotificationsFiltered } from 'redux/selectors/notifications';
 import { doResolveUris } from 'lbry-redux';
 
 export function doToast(params: ToastParams) {
@@ -41,10 +41,16 @@ export function doDismissError() {
   };
 }
 
-export function doNotificationList() {
+export function doNotificationList(rule: string = '') {
   return (dispatch: Dispatch) => {
     dispatch({ type: ACTIONS.NOTIFICATION_LIST_STARTED });
-    return Lbryio.call('notification', 'list', { is_app_readable: true })
+
+    let params: any = { is_app_readable: true };
+    if (rule && rule !== NOTIFICATIONS.NOTIFICATION_RULE_NONE) {
+      params.type = rule;
+    }
+
+    return Lbryio.call('notification', 'list', params)
       .then((response) => {
         const notifications = response || [];
         const channelsToResolve = notifications
@@ -68,7 +74,13 @@ export function doNotificationList() {
           });
 
         dispatch(doResolveUris(channelsToResolve));
-        dispatch({ type: ACTIONS.NOTIFICATION_LIST_COMPLETED, data: { notifications } });
+        dispatch({
+          type: ACTIONS.NOTIFICATION_LIST_COMPLETED,
+          data: {
+            newNotifications: notifications,
+            filterRule: rule,
+          },
+        });
       })
       .catch((error) => {
         dispatch({ type: ACTIONS.NOTIFICATION_LIST_FAILED, data: { error } });
@@ -80,17 +92,20 @@ export function doReadNotifications(notificationsIds: Array<number>) {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const notifications = selectNotifications(state);
-    const unreadNotifications = notifications && notifications.filter((notification) => !notification.is_read);
+    const notificationsFiltered = selectNotificationsFiltered(state);
+
+    if (!notifications || !notificationsFiltered) {
+      return;
+    }
 
     let ids;
     if (notificationsIds && Array.isArray(notificationsIds) && notificationsIds.length !== 0) {
-      // Wipe specified notications.
-      ids = unreadNotifications
-        .filter((notification) => notificationsIds.includes(notification.id))
-        .map((notification) => notification.id);
+      // Wipe specified notifications.
+      ids = notificationsIds;
     } else {
       // A null or invalid argument will wipe all unread notifications.
-      ids = unreadNotifications.map((notification) => notification.id);
+      const getUnreadIds = (list) => list.filter((n) => !n.is_read).map((n) => n.id);
+      ids = [...new Set([...getUnreadIds(notifications), ...getUnreadIds(notificationsFiltered)])];
     }
 
     dispatch({ type: ACTIONS.NOTIFICATION_READ_STARTED });
@@ -126,11 +141,16 @@ export function doSeeAllNotifications() {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const notifications = selectNotifications(state);
-    const unSeenNotifications =
-      notifications &&
-      notifications.filter((notification) => !notification.is_seen).map((notification) => notification.id);
+    const notificationsFiltered = selectNotificationsFiltered(state);
 
-    dispatch(doSeeNotifications(unSeenNotifications));
+    if (!notifications || !notificationsFiltered) {
+      return;
+    }
+
+    const getUnseenIds = (list) => list.filter((n) => !n.is_seen).map((n) => n.id);
+    const unseenIds = [...new Set([...getUnseenIds(notifications), ...getUnseenIds(notificationsFiltered)])];
+
+    dispatch(doSeeNotifications(unseenIds));
   };
 }
 

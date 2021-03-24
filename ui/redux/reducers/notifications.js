@@ -4,6 +4,7 @@ import { handleActions } from 'util/redux-utils';
 
 const defaultState: NotificationState = {
   notifications: [],
+  notificationsFiltered: [],
   fetchingNotifications: false,
   toasts: [],
   errors: [],
@@ -40,12 +41,20 @@ export default handleActions(
       };
     },
     [ACTIONS.NOTIFICATION_LIST_COMPLETED]: (state, action) => {
-      const { notifications } = action.data;
-      return {
-        ...state,
-        notifications,
-        fetchingNotifications: false,
-      };
+      const { filterRule, newNotifications } = action.data;
+      if (filterRule && filterRule !== '') {
+        return {
+          ...state,
+          notificationsFiltered: newNotifications,
+          fetchingNotifications: false,
+        };
+      } else {
+        return {
+          ...state,
+          notifications: newNotifications,
+          fetchingNotifications: false,
+        };
+      }
     },
     [ACTIONS.NOTIFICATION_LIST_FAILED]: (state, action) => {
       return {
@@ -54,20 +63,26 @@ export default handleActions(
       };
     },
     [ACTIONS.NOTIFICATION_READ_COMPLETED]: (state, action) => {
-      const { notifications } = state;
+      const { notifications, notificationsFiltered } = state;
       const { notificationIds } = action.data;
-      const newNotifications =
-        notifications &&
-        notifications.map((notification) => {
-          if (notificationIds.includes(notification.id)) {
-            return { ...notification, is_read: true };
-          } else {
-            return { ...notification };
-          }
-        });
+
+      const markIdsAsRead = (list, ids) => {
+        return (
+          list &&
+          list.map((n) => {
+            if (ids.includes(n.id)) {
+              return { ...n, is_read: true };
+            } else {
+              return { ...n };
+            }
+          })
+        );
+      };
+
       return {
         ...state,
-        notifications: newNotifications,
+        notifications: markIdsAsRead(notifications, notificationIds),
+        notificationsFiltered: markIdsAsRead(notificationsFiltered, notificationIds),
       };
     },
     [ACTIONS.NOTIFICATION_READ_FAILED]: (state, action) => {
@@ -76,31 +91,36 @@ export default handleActions(
       };
     },
     [ACTIONS.NOTIFICATION_SEEN_COMPLETED]: (state, action) => {
-      const { notifications } = state;
+      const { notifications, notificationsFiltered } = state;
       const { notificationIds } = action.data;
-      const newNotifications = notifications.map((notification) => {
-        if (notificationIds.includes(notification.id)) {
-          return { ...notification, is_seen: true };
-        }
 
-        return notification;
-      });
+      const markIdsAsSeen = (list, ids) => {
+        return list.map((n) => {
+          if (ids.includes(n.id)) {
+            return { ...n, is_seen: true };
+          }
+          return n;
+        });
+      };
 
       return {
         ...state,
-        notifications: newNotifications,
+        notifications: markIdsAsSeen(notifications, notificationIds),
+        notificationsFiltered: markIdsAsSeen(notificationsFiltered, notificationIds),
       };
     },
     [ACTIONS.NOTIFICATION_DELETE_COMPLETED]: (state, action) => {
-      const { notifications } = state;
+      const { notifications, notificationsFiltered } = state;
       const { notificationId } = action.data;
-      const newNotifications = notifications.filter((notification) => {
-        return notification.id !== notificationId;
-      });
+
+      const deleteId = (list, id) => {
+        return list.filter((n) => n.id !== id);
+      };
 
       return {
         ...state,
-        notifications: newNotifications,
+        notifications: deleteId(notifications, notificationId),
+        notificationsFiltered: deleteId(notificationsFiltered, notificationId),
       };
     },
 
