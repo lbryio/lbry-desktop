@@ -13,13 +13,13 @@ const NO_WALLET_ERROR = 'no wallet found for this user';
 const BAD_PASSWORD_ERROR_NAME = 'InvalidPasswordError';
 
 export function doSetDefaultAccount(success, failure) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: ACTIONS.SET_DEFAULT_ACCOUNT,
     });
 
     Lbry.account_list()
-      .then(accountList => {
+      .then((accountList) => {
         const { lbc_mainnet: accounts } = accountList;
         let defaultId;
         for (let i = 0; i < accounts.length; ++i) {
@@ -43,7 +43,7 @@ export function doSetDefaultAccount(success, failure) {
                 success();
               }
             })
-            .catch(err => {
+            .catch((err) => {
               if (failure) {
                 failure(err);
               }
@@ -53,7 +53,7 @@ export function doSetDefaultAccount(success, failure) {
           failure('Could not set a default account'); // fail
         }
       })
-      .catch(err => {
+      .catch((err) => {
         if (failure) {
           failure(err);
         }
@@ -62,13 +62,13 @@ export function doSetDefaultAccount(success, failure) {
 }
 
 export function doSetSync(oldHash, newHash, data) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: ACTIONS.SET_SYNC_STARTED,
     });
 
     return Lbryio.call('sync', 'set', { old_hash: oldHash, new_hash: newHash, data }, 'post')
-      .then(response => {
+      .then((response) => {
         if (!response.hash) {
           throw Error('No hash returned for sync/set.');
         }
@@ -78,7 +78,7 @@ export function doSetSync(oldHash, newHash, data) {
           data: { syncHash: response.hash },
         });
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch({
           type: ACTIONS.SET_SYNC_FAILED,
           data: { error },
@@ -94,7 +94,7 @@ export const doGetSyncDesktop = (cb?, password) => (dispatch, getState) => {
   const setSyncPending = selectSetSyncIsPending(state);
   const syncLocked = selectSyncIsLocked(state);
 
-  return getSavedPassword().then(savedPassword => {
+  return getSavedPassword().then((savedPassword) => {
     const passwordArgument = password || password === '' ? password : savedPassword === null ? '' : savedPassword;
 
     if (syncEnabled && !getSyncPending && !setSyncPending && !syncLocked) {
@@ -128,7 +128,7 @@ export function doSyncLoop(noInterval) {
 }
 
 export function doSyncUnsubscribe() {
-  return dispatch => {
+  return (dispatch) => {
     if (syncTimer) {
       clearInterval(syncTimer);
     }
@@ -148,7 +148,7 @@ export function doGetSync(passedPassword, callback) {
     }
   }
 
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: ACTIONS.GET_SYNC_STARTED,
     });
@@ -156,7 +156,7 @@ export function doGetSync(passedPassword, callback) {
     const data = {};
 
     Lbry.wallet_status()
-      .then(status => {
+      .then((status) => {
         if (status.is_locked) {
           return Lbry.wallet_unlock({ password });
         }
@@ -164,15 +164,15 @@ export function doGetSync(passedPassword, callback) {
         // Wallet is already unlocked
         return true;
       })
-      .then(isUnlocked => {
+      .then((isUnlocked) => {
         if (isUnlocked) {
           return Lbry.sync_hash();
         }
         data.unlockFailed = true;
         throw new Error();
       })
-      .then(hash => Lbryio.call('sync', 'get', { hash }, 'post'))
-      .then(response => {
+      .then((hash) => Lbryio.call('sync', 'get', { hash }, 'post'))
+      .then((response) => {
         const syncHash = response.hash;
         data.syncHash = syncHash;
         data.syncData = response.data;
@@ -183,7 +183,7 @@ export function doGetSync(passedPassword, callback) {
           return Lbry.sync_apply({ password, data: response.data, blocking: true });
         }
       })
-      .then(response => {
+      .then((response) => {
         if (!response) {
           dispatch({ type: ACTIONS.GET_SYNC_COMPLETED, data });
           handleCallback(null, data.changed);
@@ -200,7 +200,7 @@ export function doGetSync(passedPassword, callback) {
         dispatch({ type: ACTIONS.GET_SYNC_COMPLETED, data });
         handleCallback(null, data.changed);
       })
-      .catch(syncAttemptError => {
+      .catch((syncAttemptError) => {
         const badPasswordError =
           syncAttemptError && syncAttemptError.data && syncAttemptError.data.name === BAD_PASSWORD_ERROR_NAME;
 
@@ -248,7 +248,7 @@ export function doGetSync(passedPassword, callback) {
                 dispatch(doSetSync('', walletHash, syncApplyData, password));
                 handleCallback();
               })
-              .catch(syncApplyError => {
+              .catch((syncApplyError) => {
                 handleCallback(syncApplyError);
               });
           }
@@ -258,7 +258,7 @@ export function doGetSync(passedPassword, callback) {
 }
 
 export function doSyncApply(syncHash, syncData, password) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: ACTIONS.SYNC_APPLY_STARTED,
     });
@@ -286,14 +286,14 @@ export function doSyncApply(syncHash, syncData, password) {
 }
 
 export function doCheckSync() {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: ACTIONS.GET_SYNC_STARTED,
     });
 
-    Lbry.sync_hash().then(hash => {
+    Lbry.sync_hash().then((hash) => {
       Lbryio.call('sync', 'get', { hash }, 'post')
-        .then(response => {
+        .then((response) => {
           const data = {
             hasSyncedWallet: true,
             syncHash: response.hash,
@@ -314,19 +314,19 @@ export function doCheckSync() {
 }
 
 export function doResetSync() {
-  return dispatch =>
-    new Promise(resolve => {
+  return (dispatch) =>
+    new Promise((resolve) => {
       dispatch({ type: ACTIONS.SYNC_RESET });
       resolve();
     });
 }
 
 export function doSyncEncryptAndDecrypt(oldPassword, newPassword, encrypt) {
-  return dispatch => {
+  return (dispatch) => {
     const data = {};
     return Lbry.sync_hash()
-      .then(hash => Lbryio.call('sync', 'get', { hash }, 'post'))
-      .then(syncGetResponse => {
+      .then((hash) => Lbryio.call('sync', 'get', { hash }, 'post'))
+      .then((syncGetResponse) => {
         data.oldHash = syncGetResponse.hash;
 
         return Lbry.sync_apply({ password: oldPassword, data: syncGetResponse.data });
@@ -339,7 +339,7 @@ export function doSyncEncryptAndDecrypt(oldPassword, newPassword, encrypt) {
         }
       })
       .then(() => Lbry.sync_apply({ password: newPassword }))
-      .then(syncApplyResponse => {
+      .then((syncApplyResponse) => {
         if (syncApplyResponse.hash !== data.oldHash) {
           return dispatch(doSetSync(data.oldHash, syncApplyResponse.hash, syncApplyResponse.data));
         }

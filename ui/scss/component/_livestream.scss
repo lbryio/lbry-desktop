@@ -48,10 +48,6 @@
   margin-top: var(--spacing-s);
   display: flex;
   flex-wrap: wrap;
-
-  > :first-child {
-    margin-right: var(--spacing-s);
-  }
 }
 
 .livestream__comment-author {

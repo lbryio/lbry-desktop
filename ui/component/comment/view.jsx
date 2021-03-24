@@ -50,6 +50,7 @@ type Props = {
   activeChannelClaim: ?ChannelClaim,
   playingUri: ?PlayingUri,
   stakedLevel: number,
+  livestream?: boolean,
 };
 
 const LENGTH_TO_COLLAPSE = 300;
@@ -77,6 +78,7 @@ function Comment(props: Props) {
     othersReacts,
     playingUri,
     stakedLevel,
+    livestream,
   } = props;
   const {
     push,
@@ -162,6 +164,7 @@ function Comment(props: Props) {
       className={classnames('comment', {
         'comment--top-level': isTopLevel,
         'comment--reply': !isTopLevel,
+        'comment--livestream': livestream,
       })}
       id={commentId}
       onMouseOver={() => setMouseHover(true)}
@@ -173,13 +176,20 @@ function Comment(props: Props) {
           'comment--slimed': slimedToDeath && !displayDeadComment,
         })}
       >
-        <div className="comment__thumbnail-wrapper">
-          {authorUri ? (
-            <ChannelThumbnail uri={authorUri} obscure={channelIsBlocked} small className="comment__author-thumbnail" />
-          ) : (
-            <ChannelThumbnail small className="comment__author-thumbnail" />
-          )}
-        </div>
+        {!livestream && (
+          <div className="comment__thumbnail-wrapper">
+            {authorUri ? (
+              <ChannelThumbnail
+                uri={authorUri}
+                obscure={channelIsBlocked}
+                small
+                className="comment__author-thumbnail"
+              />
+            ) : (
+              <ChannelThumbnail small className="comment__author-thumbnail" />
+            )}
+          </div>
+        )}
 
         <div className="comment__body_container">
           <div className="comment__meta">
@@ -187,13 +197,15 @@ function Comment(props: Props) {
               {!author ? (
                 <span className="comment__author">{__('Anonymous')}</span>
               ) : (
-                <UriIndicator link uri={authorUri} />
+                <UriIndicator link external={livestream} uri={authorUri} />
               )}
-              <Button
-                className="comment__time"
-                onClick={handleTimeClick}
-                label={<DateTime date={timePosted} timeAgo />}
-              />
+              {!livestream && (
+                <Button
+                  className="comment__time"
+                  onClick={handleTimeClick}
+                  label={<DateTime date={timePosted} timeAgo />}
+                />
+              )}
 
               {isPinned && (
                 <span className="comment__pin">
@@ -273,18 +285,20 @@ function Comment(props: Props) {
                   )}
                 </div>
 
-                <div className="comment__actions">
-                  {threadDepth !== 0 && (
-                    <Button
-                      requiresAuth={IS_WEB}
-                      label={commentingEnabled ? __('Reply') : __('Log in to reply')}
-                      className="comment__action"
-                      onClick={handleCommentReply}
-                      icon={ICONS.REPLY}
-                    />
-                  )}
-                  {ENABLE_COMMENT_REACTIONS && <CommentReactions uri={uri} commentId={commentId} />}
-                </div>
+                {!livestream && (
+                  <div className="comment__actions">
+                    {threadDepth !== 0 && (
+                      <Button
+                        requiresAuth={IS_WEB}
+                        label={commentingEnabled ? __('Reply') : __('Log in to reply')}
+                        className="comment__action"
+                        onClick={handleCommentReply}
+                        icon={ICONS.REPLY}
+                      />
+                    )}
+                    {ENABLE_COMMENT_REACTIONS && <CommentReactions uri={uri} commentId={commentId} />}
+                  </div>
+                )}
 
                 {isReplying && (
                   <CommentCreate

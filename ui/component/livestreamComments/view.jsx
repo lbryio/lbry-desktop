@@ -4,8 +4,7 @@ import classnames from 'classnames';
 import Card from 'component/common/card';
 import Spinner from 'component/spinner';
 import CommentCreate from 'component/commentCreate';
-import Button from 'component/button';
-import MarkdownPreview from 'component/common/markdown-preview';
+import CommentView from 'component/comment';
 
 type Props = {
   uri: string,
@@ -114,20 +113,17 @@ export default function LivestreamFeed(props: Props) {
               <div className="livestream__comments">
                 {comments.map((comment) => (
                   <div key={comment.comment_id} className={classnames('livestream__comment')}>
-                    {comment.channel_url ? (
-                      <Button
-                        target="_blank"
-                        className={classnames('livestream__comment-author', {
-                          'livestream__comment-author--streamer':
-                            claim.signing_channel && claim.signing_channel.claim_id === comment.channel_id,
-                        })}
-                        navigate={comment.channel_url}
-                        label={comment.channel_name}
-                      />
-                    ) : (
-                      <div className="livestream__comment-author">{comment.channel_name}</div>
-                    )}
-                    <MarkdownPreview content={comment.comment} simpleLinks />
+                    <CommentView
+                      livestream
+                      isTopLevel
+                      uri={uri}
+                      authorUri={comment.channel_url}
+                      author={comment.channel_name}
+                      claimId={comment.claim_id}
+                      commentId={comment.comment_id}
+                      message={comment.comment}
+                      timePosted={comment.timestamp * 1000}
+                    />
                   </div>
                 ))}
               </div>
