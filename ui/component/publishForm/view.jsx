@@ -179,13 +179,26 @@ function PublishForm(props: Props) {
     }
   }, [modal]);
 
+  const isLivestream = mode === PUBLISH_MODES.LIVESTREAM;
   let submitLabel;
-  if (isStillEditing) {
-    submitLabel = !publishing ? __('Save') : __('Saving...');
+  if (publishing) {
+    if (isStillEditing) {
+      submitLabel = __('Saving...');
+    } else if (isLivestream) {
+      submitLabel = __('Creating...');
+    } else {
+      submitLabel = __('Uploading...');
+    }
   } else if (previewing) {
     submitLabel = __('Preparing...');
   } else {
-    submitLabel = !publishing ? __('Upload') : __('Uploading...');
+    if (isStillEditing) {
+      submitLabel = __('Save');
+    } else if (isLivestream) {
+      submitLabel = __('Create');
+    } else {
+      submitLabel = __('Upload');
+    }
   }
 
   useEffect(() => {
@@ -239,7 +252,7 @@ function PublishForm(props: Props) {
   useEffect(() => {
     updatePublishForm({
       isMarkdownPost: mode === PUBLISH_MODES.POST,
-      isLivestreamPublish: mode === PUBLISH_MODES.LIVESTREAM,
+      isLivestreamPublish: isLivestream,
     });
   }, [mode, updatePublishForm]);
 
@@ -248,7 +261,7 @@ function PublishForm(props: Props) {
       updatePublishForm({ channel: undefined });
 
       // Anonymous livestreams aren't supported
-      if (mode === PUBLISH_MODES.LIVESTREAM) {
+      if (isLivestream) {
         setMode(PUBLISH_MODES.FILE);
       }
     } else if (activeChannelName) {
@@ -357,7 +370,7 @@ function PublishForm(props: Props) {
       }
     }
     // Publish file
-    if (mode === PUBLISH_MODES.FILE || mode === PUBLISH_MODES.LIVESTREAM) {
+    if (mode === PUBLISH_MODES.FILE || isLivestream) {
       runPublish = true;
     }
 
@@ -386,7 +399,7 @@ function PublishForm(props: Props) {
   // Editing claim uri
   return (
     <div className="card-stack">
-      <ChannelSelect hideAnon={mode === PUBLISH_MODES.LIVESTREAM} disabled={disabled} />
+      <ChannelSelect hideAnon={isLivestream} disabled={disabled} />
 
       <PublishFile
         uri={uri}

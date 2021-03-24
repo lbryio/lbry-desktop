@@ -10,20 +10,38 @@ import Nag from 'component/common/nag';
 type Props = {
   closeModal: () => void,
   clearPublish: () => void,
-  navigate: string => void,
+  navigate: (string) => void,
   uri: string,
   isEdit: boolean,
   filePath: ?string,
   lbryFirstError: ?string,
+  claim: Claim,
 };
 
 class ModalPublishSuccess extends React.PureComponent<Props> {
   render() {
-    const { closeModal, clearPublish, navigate, uri, isEdit, filePath, lbryFirstError } = this.props;
-    const contentLabel = isEdit ? __('Update published') : __('File published');
-    const publishMessage = isEdit
-      ? __('Your update is now pending on LBRY. It will take a few minutes to appear for other users.')
-      : __('Your file is now pending on LBRY. It will take a few minutes to appear for other users.');
+    const { closeModal, clearPublish, navigate, uri, isEdit, filePath, lbryFirstError, claim } = this.props;
+    //   $FlowFixMe
+    const livestream = claim && claim.value && claim.value_type === 'stream' && !claim.value.source;
+    let contentLabel;
+    if (livestream) {
+      contentLabel = __('Livestream Created');
+    } else if (isEdit) {
+      contentLabel = __('Update published');
+    } else {
+      contentLabel = __('File published');
+    }
+
+    let publishMessage;
+    if (isEdit) {
+      publishMessage = __('Your update is now pending. It will take a few minutes to appear for other users.');
+    } else if (livestream) {
+      publishMessage = __(
+        'Your livestream is now pending. You will be able to start shortly at the streaming dashboard.'
+      );
+    } else {
+      publishMessage = __('Your file is now pending on LBRY. It will take a few minutes to appear for other users.');
+    }
 
     function handleClose() {
       clearPublish();
@@ -54,15 +72,28 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
           }
           actions={
             <div className="section__actions">
-              <Button
-                button="primary"
-                label={__('View My Uploads')}
-                onClick={() => {
-                  clearPublish();
-                  navigate(`/$/${PAGES.UPLOADS}`);
-                  closeModal();
-                }}
-              />
+              {!livestream && (
+                <Button
+                  button="primary"
+                  label={__('View My Uploads')}
+                  onClick={() => {
+                    clearPublish();
+                    navigate(`/$/${PAGES.UPLOADS}`);
+                    closeModal();
+                  }}
+                />
+              )}
+              {livestream && (
+                <Button
+                  button="primary"
+                  label={__('View My Dashboard')}
+                  onClick={() => {
+                    clearPublish();
+                    navigate(`/$/${PAGES.LIVESTREAM}`);
+                    closeModal();
+                  }}
+                />
+              )}
               <Button button="link" label={__('Close')} onClick={handleClose} />
             </div>
           }

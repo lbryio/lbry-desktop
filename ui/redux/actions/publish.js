@@ -16,7 +16,7 @@ import analytics from 'analytics';
 import { doOpenModal } from 'redux/actions/app';
 
 export const doPublishDesktop = (filePath: string, preview?: boolean) => (dispatch: Dispatch, getState: () => {}) => {
-  const publishPreview = previewResponse => {
+  const publishPreview = (previewResponse) => {
     dispatch(
       doOpenModal(MODALS.PUBLISH_PREVIEW, {
         previewResponse,
@@ -42,7 +42,7 @@ export const doPublishDesktop = (filePath: string, preview?: boolean) => (dispat
     // We have to fake a temp claim until the new pending one is returned by claim_list_mine
     // We can't rely on claim_list_mine because there might be some delay before the new claims are returned
     // Doing this allows us to show the pending claim immediately, it will get overwritten by the real one
-    const isMatch = claim => claim.claim_id === pendingClaim.claim_id;
+    const isMatch = (claim) => claim.claim_id === pendingClaim.claim_id;
     const isEdit = myClaims.some(isMatch);
 
     actions.push({
@@ -73,7 +73,7 @@ export const doPublishDesktop = (filePath: string, preview?: boolean) => (dispat
     // @endif
   };
 
-  const publishFail = error => {
+  const publishFail = (error) => {
     const actions = [];
     actions.push({
       type: ACTIONS.PUBLISH_FAIL,
@@ -91,7 +91,7 @@ export const doPublishDesktop = (filePath: string, preview?: boolean) => (dispat
   // on the publishes page. This doesn't exist on desktop so wait until we get a response
   // from the SDK
   // @if TARGET='web'
-  dispatch(push(`/$/${PAGES.UPLOADS}`));
+  dispatch(push(filePath ? `/$/${PAGES.UPLOADS}` : `/$/${PAGES.LIVESTREAM}`));
   // @endif
 
   dispatch(doPublish(publishSuccess, publishFail));
