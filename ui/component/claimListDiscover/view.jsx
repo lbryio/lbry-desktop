@@ -46,7 +46,7 @@ type Props = {
   headerLabel?: string | Node,
   name?: string,
   hideAdvancedFilter?: boolean,
-  claimType?: Array<string>,
+  claimType?: string | Array<string>,
   defaultClaimType?: Array<string>,
   streamType?: string | Array<string>,
   defaultStreamType?: string | Array<string>,
@@ -194,7 +194,7 @@ function ClaimListDiscover(props: Props) {
     not_channel_ids: Array<string>,
     order_by: Array<string>,
     release_time?: string,
-    claim_type?: Array<string>,
+    claim_type?: string | Array<string>,
     name?: string,
     duration?: string,
     reposted_claim_id?: string,
@@ -222,7 +222,7 @@ function ClaimListDiscover(props: Props) {
         : CS.ORDER_BY_TOP_VALUE, // Sort by top
   };
 
-  if (!ENABLE_NO_SOURCE_CLAIMS) {
+  if (!ENABLE_NO_SOURCE_CLAIMS && (!claimType || claimType === CS.CLAIM_STREAM)) {
     options.has_source = true;
   }
 

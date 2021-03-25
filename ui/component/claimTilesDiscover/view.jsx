@@ -28,7 +28,7 @@ type Props = {
   orderBy?: Array<string>,
   releaseTime?: string,
   languages?: Array<string>,
-  claimType?: Array<string>,
+  claimType?: string | Array<string>,
   timestamp?: string,
   feeAmount?: string,
   limitClaimsPerChannel?: number,
@@ -70,7 +70,7 @@ function ClaimTilesDiscover(props: Props) {
     order_by: Array<string>,
     languages?: Array<string>,
     release_time?: string,
-    claim_type?: Array<string>,
+    claim_type?: string | Array<string>,
     timestamp?: string,
     fee_amount?: string,
     limit_claims_per_channel?: number,
@@ -91,7 +91,7 @@ function ClaimTilesDiscover(props: Props) {
     order_by: orderBy || ['trending_group', 'trending_mixed'],
   };
 
-  if (!ENABLE_NO_SOURCE_CLAIMS) {
+  if (!ENABLE_NO_SOURCE_CLAIMS && (!claimType || claimType === 'stream')) {
     options.has_source = true;
   }
 
