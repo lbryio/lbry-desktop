@@ -10,7 +10,9 @@ import Page from 'component/page';
 import Button from 'component/button';
 import Card from 'component/common/card';
 import AbandonedChannelPreview from 'component/abandonedChannelPreview';
+import Yrbl from 'component/yrbl';
 import { formatLbryUrlForWeb } from 'util/url';
+import { parseURI } from 'lbry-redux';
 
 type Props = {
   isResolvingUri: boolean,
@@ -27,6 +29,7 @@ type Props = {
   claimIsMine: boolean,
   claimIsPending: boolean,
   isLivestream: boolean,
+  beginPublish: (string) => void,
 };
 
 function ShowPage(props: Props) {
@@ -41,6 +44,7 @@ function ShowPage(props: Props) {
     isSubscribed,
     claimIsPending,
     isLivestream,
+    beginPublish,
   } = props;
 
   const signingChannel = claim && claim.signing_channel;
@@ -48,6 +52,7 @@ function ShowPage(props: Props) {
   const claimExists = claim !== null && claim !== undefined;
   const haventFetchedYet = claim === undefined;
   const isMine = claim && claim.is_my_output;
+  const { contentName } = parseURI(uri);
 
   useEffect(() => {
     // @if TARGET='web'
@@ -84,11 +89,20 @@ function ShowPage(props: Props) {
       <Page>
         {(claim === undefined || isResolvingUri) && (
           <div className="main--empty">
-            <Spinner />
+            <Spinner delayed />
           </div>
         )}
         {!isResolvingUri && !isSubscribed && (
-          <span className="empty">{__("There's nothing available at this location.")}</span>
+          <div className="main--empty">
+            <Yrbl
+              title={__('No Content Found')}
+              subtitle={
+                <div className="section__actions">
+                  <Button button="primary" label={__('Publish Something')} onClick={() => beginPublish(contentName)} />
+                </div>
+              }
+            />
+          </div>
         )}
         {!isResolvingUri && isSubscribed && claim === null && <AbandonedChannelPreview uri={uri} type={'large'} />}
       </Page>
