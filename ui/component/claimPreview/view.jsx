@@ -195,10 +195,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
       onClick(e);
     }
 
-    if (isLivestream) {
-      return;
-    }
-
     if (claim && !pending) {
       history.push(navigateUrl);
     }
