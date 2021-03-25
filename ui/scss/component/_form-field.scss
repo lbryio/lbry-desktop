@@ -406,6 +406,11 @@ fieldset-group {
   width: 7em;
 }
 
+.form-field--price-amount--auto {
+  width: auto;
+  min-width: 100%;
+}
+
 .form-field--address {
   min-width: 18em;
 }

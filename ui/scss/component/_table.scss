@@ -154,6 +154,12 @@ th {
   }
 }
 
+.table--btc-swap {
+  tr {
+    white-space: nowrap;
+  }
+}
+
 .table--rewards {
   td:nth-of-type(1) {
     width: 40%;
