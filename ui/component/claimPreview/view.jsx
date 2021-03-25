@@ -24,6 +24,7 @@ import ClaimMenuList from 'component/claimMenuList';
 import ClaimPreviewLoading from './claim-preview-loading';
 import ClaimPreviewHidden from './claim-preview-no-mature';
 import ClaimPreviewNoContent from './claim-preview-no-content';
+import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
 
 type Props = {
   uri: string,
@@ -68,6 +69,7 @@ type Props = {
   hideRepostLabel?: boolean,
   repostUrl?: string,
   hideMenu?: boolean,
+  isLivestream?: boolean,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -117,6 +119,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     renderActions,
     hideMenu = false,
     // repostUrl,
+    isLivestream,
   } = props;
   const WrapperElement = wrapperElement || 'li';
   const shouldFetch =
@@ -201,7 +204,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     }
   }, [isValid, uri, isResolvingUri, shouldFetch, resolveUri]);
 
-  if (shouldHide && !showNullPlaceholder) {
+  if ((shouldHide && !showNullPlaceholder) || (isLivestream && !ENABLE_NO_SOURCE_CLAIMS)) {
     return null;
   }
 
