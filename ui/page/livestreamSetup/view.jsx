@@ -58,8 +58,10 @@ export default function LivestreamSetupPage(props: Props) {
   }
 
   const [livestreamClaims, setLivestreamClaims] = React.useState([]);
-  // $FlowFixMe
-  const pendingLiveStreamClaims = pendingClaims.filter((claim) => !(claim && claim.value && claim.value.source));
+  const pendingLiveStreamClaims =
+    // $FlowFixMe
+    pendingClaims ? pendingClaims.filter((claim) => !(claim && claim.value && claim.value.source)) : [];
+  const pendingLength = pendingLiveStreamClaims.length;
   const totalLivestreamClaims = pendingLiveStreamClaims.concat(livestreamClaims);
 
   React.useEffect(() => {
@@ -82,7 +84,7 @@ export default function LivestreamSetupPage(props: Props) {
       .catch(() => {
         setLivestreamClaims([]);
       });
-  }, [activeChannelClaimStr]);
+  }, [activeChannelClaimStr, pendingLength]);
 
   return (
     <Page>
