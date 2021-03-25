@@ -1,3 +1,4 @@
+import * as PAGES from 'constants/pages';
 import { DOMAIN } from 'config';
 import { connect } from 'react-redux';
 import { PAGE_SIZE } from 'constants/claim';
@@ -11,7 +12,10 @@ import {
   makeSelectClaimIsMine,
   makeSelectClaimIsPending,
   makeSelectClaimIsStreamPlaceholder,
+  doClearPublish,
+  doPrepareEdit,
 } from 'lbry-redux';
+import { push } from 'connected-react-router';
 import { makeSelectChannelInSubscriptions } from 'redux/selectors/subscriptions';
 import { selectBlackListedOutpoints } from 'lbryinc';
 import ShowPage from './view';
@@ -67,6 +71,11 @@ const select = (state, props) => {
 
 const perform = (dispatch) => ({
   resolveUri: (uri) => dispatch(doResolveUri(uri)),
+  beginPublish: (name) => {
+    dispatch(doClearPublish());
+    dispatch(doPrepareEdit({ name }));
+    dispatch(push(`/$/${PAGES.UPLOAD}`));
+  },
 });
 
 export default connect(select, perform)(ShowPage);
