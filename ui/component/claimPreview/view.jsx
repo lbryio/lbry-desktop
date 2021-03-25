@@ -68,7 +68,7 @@ type Props = {
   hideRepostLabel?: boolean,
   repostUrl?: string,
   hideMenu?: boolean,
-  livestream?: boolean,
+  isLivestream?: boolean,
   hideLivestreamClaims?: boolean,
 };
 
@@ -119,7 +119,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     renderActions,
     hideMenu = false,
     // repostUrl,
-    livestream,
+    isLivestream,
     hideLivestreamClaims,
   } = props;
   const WrapperElement = wrapperElement || 'li';
@@ -195,7 +195,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
       onClick(e);
     }
 
-    if (livestream) {
+    if (isLivestream) {
       return;
     }
 
@@ -210,7 +210,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     }
   }, [isValid, uri, isResolvingUri, shouldFetch, resolveUri]);
 
-  if ((shouldHide && !showNullPlaceholder) || (!livestream && hideLivestreamClaims)) {
+  if ((shouldHide && !showNullPlaceholder) || (isLivestream && hideLivestreamClaims)) {
     return null;
   }
 
@@ -283,7 +283,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                     </div>
                   )}
                   {/* @endif */}
-                  {!isRepost && !isChannelUri && !livestream && (
+                  {!isRepost && !isChannelUri && !isLivestream && (
                     <div className="claim-preview__file-property-overlay">
                       <FileProperties uri={contentUri} small />
                     </div>
