@@ -29,6 +29,7 @@ const perform = (dispatch) => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
   prepareEdit: (publishData, uri, fileInfo) => {
     if (publishData.signing_channel) {
+      dispatch(doSetIncognito(false));
       dispatch(doSetActiveChannel(publishData.signing_channel.claim_id));
     } else {
       dispatch(doSetIncognito(true));
