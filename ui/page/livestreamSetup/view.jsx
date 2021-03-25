@@ -25,6 +25,7 @@ export default function LivestreamSetupPage(props: Props) {
   const { channels, fetchingChannels, activeChannelClaim, pendingClaims } = props;
 
   const [sigData, setSigData] = React.useState({ signature: undefined, signing_ts: undefined });
+  const [componentReady, setComponentReady] = React.useState(false);
 
   const hasChannels = channels && channels.length > 0;
   const activeChannelClaimStr = JSON.stringify(activeChannelClaim);
@@ -42,13 +43,14 @@ export default function LivestreamSetupPage(props: Props) {
         })
           .then((data) => {
             setSigData(data);
+            setComponentReady(true);
           })
           .catch((error) => {
             setSigData({ signature: null, signing_ts: null });
           });
       }
     }
-  }, [activeChannelClaimStr, setSigData]);
+  }, [activeChannelClaimStr, setSigData, setComponentReady]);
 
   function createStreamKey() {
     if (!activeChannelClaim || !sigData.signature || !sigData.signing_ts) return null;
@@ -88,7 +90,7 @@ export default function LivestreamSetupPage(props: Props) {
 
   return (
     <Page>
-      {fetchingChannels && (
+      {fetchingChannels && !componentReady && (
         <div className="main--empty">
           <Spinner delayed />
         </div>
@@ -135,7 +137,7 @@ export default function LivestreamSetupPage(props: Props) {
               />
             )}
 
-            {totalLivestreamClaims.length > 0 ? (
+            {componentReady && totalLivestreamClaims.length > 0 ? (
               <ClaimList
                 header={__('Your livestream uploads')}
                 uris={totalLivestreamClaims.map((claim) => claim.permanent_url)}
