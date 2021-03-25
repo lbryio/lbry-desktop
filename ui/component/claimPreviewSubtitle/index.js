@@ -5,7 +5,7 @@ import {
   makeSelectClaimIsPending,
   doClearPublish,
   doPrepareEdit,
-  makeSelectClaimHasSource,
+  makeSelectClaimIsStreamPlaceholder,
 } from 'lbry-redux';
 import { push } from 'connected-react-router';
 import ClaimPreviewSubtitle from './view';
@@ -13,7 +13,7 @@ import ClaimPreviewSubtitle from './view';
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
   pending: makeSelectClaimIsPending(props.uri)(state),
-  isLivestream: !makeSelectClaimHasSource(props.uri)(state),
+  isLivestream: makeSelectClaimIsStreamPlaceholder(props.uri)(state),
 });
 
 const perform = (dispatch) => ({

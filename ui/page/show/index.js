@@ -10,7 +10,7 @@ import {
   normalizeURI,
   makeSelectClaimIsMine,
   makeSelectClaimIsPending,
-  makeSelectClaimHasSource,
+  makeSelectClaimIsStreamPlaceholder,
 } from 'lbry-redux';
 import { makeSelectChannelInSubscriptions } from 'redux/selectors/subscriptions';
 import { selectBlackListedOutpoints } from 'lbryinc';
@@ -61,7 +61,7 @@ const select = (state, props) => {
     title: makeSelectTitleForUri(uri)(state),
     claimIsMine: makeSelectClaimIsMine(uri)(state),
     claimIsPending: makeSelectClaimIsPending(uri)(state),
-    isLivestream: !makeSelectClaimHasSource(uri)(state),
+    isLivestream: makeSelectClaimIsStreamPlaceholder(uri)(state),
   };
 };
 
