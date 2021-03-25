@@ -460,7 +460,7 @@ function PublishForm(props: Props) {
           />
 
           <PublishBid disabled={isStillEditing || formDisabled} />
-          <PublishPrice disabled={formDisabled} />
+          {!isLivestream && <PublishPrice disabled={formDisabled} />}
           <PublishAdditionalOptions disabled={formDisabled} />
         </div>
       )}
