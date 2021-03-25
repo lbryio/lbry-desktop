@@ -63,6 +63,7 @@ function FileDescription(props: Props) {
               button="link"
               className="expandable__button"
               icon={ICONS.UNLOCK}
+              aria-label={__('Unlock tips')}
               onClick={() => {
                 doOpenModal(MODALS.LIQUIDATE_SUPPORTS, { uri });
               }}
