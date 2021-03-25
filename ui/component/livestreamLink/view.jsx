@@ -16,18 +16,20 @@ export default function LivestreamLink(props: Props) {
   const livestreamChannelId = channelClaim.claim_id || ''; // TODO: fail in a safer way, probably
 
   React.useEffect(() => {
-    Lbry.claim_search({
-      channel_ids: [livestreamChannelId],
-      has_no_source: true,
-      claim_type: ['stream'],
-    })
-      .then((res) => {
-        if (res && res.items && res.items.length > 0) {
-          const claim = res.items[res.items.length - 1];
-          setLivestreamClaim(claim);
-        }
+    if (livestreamChannelId) {
+      Lbry.claim_search({
+        channel_ids: [livestreamChannelId],
+        has_no_source: true,
+        claim_type: ['stream'],
       })
-      .catch(() => {});
+        .then((res) => {
+          if (res && res.items && res.items.length > 0) {
+            const claim = res.items[res.items.length - 1];
+            setLivestreamClaim(claim);
+          }
+        })
+        .catch(() => {});
+    }
   }, [livestreamChannelId]);
 
   React.useEffect(() => {
