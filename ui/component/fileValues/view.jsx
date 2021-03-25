@@ -13,7 +13,7 @@ type Props = {
   claim: StreamClaim,
   fileInfo: FileListItem,
   metadata: StreamMetadata,
-  openFolder: string => void,
+  openFolder: (string) => void,
   contentType: string,
   user: ?any,
   pendingAmount: string,
@@ -62,6 +62,7 @@ class FileValues extends PureComponent<Props> {
                     className="expandable__button"
                     icon={ICONS.UNLOCK}
                     label={<CreditAmount amount={Number(supportsAmount)} precision={2} />}
+                    aria-label={__('Unlock tips')}
                     onClick={() => {
                       openModal(MODALS.LIQUIDATE_SUPPORTS, { uri });
                     }}
