@@ -27,6 +27,7 @@ export const HISTORY = 'Clock';
 export const HOME = 'Home';
 export const OVERVIEW = 'Activity';
 export const WALLET = 'List';
+export const COIN_SWAP = 'CoinSwap';
 export const PHONE = 'Phone';
 export const COMPLETE = 'Check';
 export const COMPLETED = 'CheckCircle';

@@ -359,3 +359,7 @@ svg + .button__label {
     top: var(--spacing-s);
   }
 }
+
+.button--hash-id {
+  @include font-mono;
+}

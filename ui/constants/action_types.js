@@ -282,6 +282,10 @@ export const COMMENT_RECEIVED = 'COMMENT_RECEIVED';
 // Blocked channels
 export const TOGGLE_BLOCK_CHANNEL = 'TOGGLE_BLOCK_CHANNEL';
 
+// Coin swap
+export const ADD_BTC_ADDRESS = 'ADD_BTC_ADDRESS';
+export const REMOVE_BTC_ADDRESS = 'REMOVE_BTC_ADDRESS';
+
 // Tags
 export const TOGGLE_TAG_FOLLOW = 'TOGGLE_TAG_FOLLOW';
 export const TAG_ADD = 'TAG_ADD';
