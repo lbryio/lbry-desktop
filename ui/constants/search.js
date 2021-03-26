@@ -32,3 +32,5 @@ export const SEARCH_OPTIONS = {
   TIME_FILTER_THIS_MONTH: 'thismonth',
   TIME_FILTER_THIS_YEAR: 'thisyear',
 };
+
+export const SEARCH_PAGE_SIZE = 20;

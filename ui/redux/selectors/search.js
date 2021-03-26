@@ -11,6 +11,7 @@ import {
   makeSelectIsUriResolving,
 } from 'lbry-redux';
 import { createSelector } from 'reselect';
+import { createNormalizedSearchKey } from 'util/search';
 
 type State = { search: SearchState };
 
@@ -30,12 +31,31 @@ export const selectSearchUrisByQuery: (state: State) => { [string]: Array<string
   (state) => state.urisByQuery
 );
 
+export const selectHasReachedMaxResultsLength: (state: State) => { [boolean]: Array<boolean> } = createSelector(
+  selectState,
+  (state) => state.hasReachedMaxResultsLength
+);
+
 export const makeSelectSearchUris = (query: string): ((state: State) => Array<string>) =>
   // replace statement below is kind of ugly, and repeated in doSearch action
-  createSelector(
-    selectSearchUrisByQuery,
-    (byQuery) => byQuery[query ? query.replace(/^lbry:\/\//i, '').replace(/\//, ' ') : query]
-  );
+  createSelector(selectSearchUrisByQuery, (byQuery) => {
+    if (query) {
+      query = query.replace(/^lbry:\/\//i, '').replace(/\//, ' ');
+      const normalizedQuery = createNormalizedSearchKey(query);
+      return byQuery[normalizedQuery];
+    }
+    return byQuery[query];
+  });
+
+export const makeSelectHasReachedMaxResultsLength = (query: string): ((state: State) => boolean) =>
+  createSelector(selectHasReachedMaxResultsLength, (hasReachedMaxResultsLength) => {
+    if (query) {
+      query = query.replace(/^lbry:\/\//i, '').replace(/\//, ' ');
+      const normalizedQuery = createNormalizedSearchKey(query);
+      return hasReachedMaxResultsLength[normalizedQuery];
+    }
+    return hasReachedMaxResultsLength[query];
+  });
 
 // Creates a query string based on the state in the search reducer
 // Can be overrided by passing in custom sizes/from values for other areas pagination
@@ -81,8 +101,9 @@ export const makeSelectRecommendedContentForUri = (uri: string) =>
 
         options['nsfw'] = isMature;
         const searchQuery = getSearchQueryString(title.replace(/\//, ' '), options);
+        const normalizedSearchQuery = createNormalizedSearchKey(searchQuery);
 
-        let searchUris = searchUrisByQuery[searchQuery];
+        let searchUris = searchUrisByQuery[normalizedSearchQuery];
         if (searchUris) {
           searchUris = searchUris.filter((searchUri) => searchUri !== currentUri);
           recommendedContent = searchUris;

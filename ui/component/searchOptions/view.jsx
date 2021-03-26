@@ -1,5 +1,5 @@
 // @flow
-import { SEARCH_OPTIONS } from 'constants/search';
+import { SEARCH_OPTIONS, SEARCH_PAGE_SIZE } from 'constants/search';
 import * as ICONS from 'constants/icons';
 import React, { useMemo } from 'react';
 import { Form, FormField } from 'component/common/form';
@@ -48,7 +48,6 @@ const SearchOptions = (props: Props) => {
   const { options, simple, setSearchOption, expanded, toggleSearchExpanded } = props;
 
   const stringifiedOptions = JSON.stringify(options);
-  const resultCount = options[SEARCH_OPTIONS.RESULT_COUNT];
 
   const isFilteringByChannel = useMemo(() => {
     const jsonOptions = JSON.parse(stringifiedOptions);
@@ -59,6 +58,14 @@ const SearchOptions = (props: Props) => {
   if (simple) {
     delete TYPES_ADVANCED[SEARCH_OPTIONS.MEDIA_APPLICATION];
   }
+
+  React.useEffect(() => {
+    // We no longer let the user set the search results count, but the value
+    // will be in local storage for existing users. Override that.
+    if (options[SEARCH_OPTIONS.RESULT_COUNT] !== SEARCH_PAGE_SIZE) {
+      setSearchOption(SEARCH_OPTIONS.RESULT_COUNT, SEARCH_PAGE_SIZE);
+    }
+  }, []);
 
   function addRow(label: string, value: any) {
     return (
@@ -153,21 +160,6 @@ const SearchOptions = (props: Props) => {
           )}
         />
       </div>
-      {!simple && (
-        <FormField
-          type="select"
-          name="result-count"
-          value={resultCount}
-          onChange={(e) => setSearchOption(SEARCH_OPTIONS.RESULT_COUNT, e.target.value)}
-          blockWrap={false}
-          label={__('Returned Results')}
-        >
-          <option value={10}>10</option>
-          <option value={30}>30</option>
-          <option value={50}>50</option>
-          <option value={100}>100</option>
-        </FormField>
-      )}
     </>
   );
 
