@@ -113,7 +113,7 @@ function PublishForm(props: Props) {
     user,
   } = props;
 
-  const { push, location } = useHistory();
+  const { replace, location } = useHistory();
   const urlParams = new URLSearchParams(location.search);
   const uploadType = urlParams.get('type');
   // $FlowFixMe
@@ -302,7 +302,7 @@ function PublishForm(props: Props) {
     if (!uploadType) return;
     const newParams = new URLSearchParams();
     newParams.set('type', mode.toLowerCase());
-    push({ search: newParams.toString() });
+    replace({ search: newParams.toString() });
   }, [mode, uploadType]);
 
   // @if TARGET='web'
