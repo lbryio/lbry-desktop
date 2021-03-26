@@ -8,17 +8,18 @@ type Props = {
   uri: string,
   livestream?: boolean,
   activeViewers?: number,
+  stateOfViewers: string,
 };
 
 function FileSubtitle(props: Props) {
-  const { uri, livestream = false, activeViewers = 0 } = props;
+  const { uri, livestream = false, activeViewers = 0, stateOfViewers } = props;
 
   return (
     <div className="media__subtitle--between">
       <div className="file__viewdate">
         {livestream ? <span>{__('Right now')}</span> : <DateTime uri={uri} show={DateTime.SHOW_DATE} />}
         {livestream ? (
-          <span>{__('%viewer_count% currently watching', { viewer_count: activeViewers })}</span>
+          <span>{__('%viewer_count% currently %viewer_state%', { viewer_count: activeViewers, viewer_state: stateOfViewers })}</span>
         ) : (
           <FileViewCount uri={uri} />
         )}
