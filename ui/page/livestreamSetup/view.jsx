@@ -37,14 +37,12 @@ export default function LivestreamSetupPage(props: Props) {
   const helpText = (
     <div className="section__subtitle">
       <p>
-        {__(
-          `The Go Live process begins by first submitting your Livestream details and waiting for approval confirmation.`
-        )}{' '}
+        {__(`Create a Livestream by first submitting your Livestream details and waiting for approval confirmation.`)}{' '}
         {__(
           `The livestream will not be visible on your channel until you are live, but you can share the URL in advance.`
         )}{' '}
         {__(
-          `Once the your livestream is confirmed, configure your streaming software (OBS, Restream, etc) at the server URL above along with the stream key.`
+          `Once the your livestream is confirmed, configure your streaming software (OBS, Restream, etc) and input the server URL along with the stream key in it.`
         )}
       </p>
       <p>{__(`To ensure the best streaming experience with OBS, open settings -> output`)}</p>
@@ -56,17 +54,24 @@ export default function LivestreamSetupPage(props: Props) {
         <li>{__(`Profile: High`)}</li>
         <li>{__(`Tune: Zerolatency`)}</li>
       </ul>
-      <p>{__(`If not using OBS, make sure the bitrate is below 5Mbps or the stream will not work.`)}</p>
+      <p>
+        {__(`If using other livestreaming software, make sure the bitrate is below 5Mbps or the stream will not work.`)}
+      </p>
       <p>
         {__(
-          `You'll need to record your own stream through your software if you plan to share it afterward. You can also delete it if you prefer not to upload the copy. In the near future, we'll support a more streamlined process that will let you upload the replay.`
+          `Please note: You'll need to record your own stream through your software if you plan to share it afterward. You can also delete it if you prefer not to upload the copy. In the near future, we'll support a more streamlined process that will let you upload the replay.`
+        )}
+      </p>
+      <p>
+        {__(
+          `In the near future, this manual step will be removed and you will be able to share the stream right after its finished without needing to record it yourself.`
         )}
       </p>
       <p>
         {__(`After your livestream:
-      Click the Upload Stream button. This will allow you to edit any final details before uploading and select the saved mp4 file you recorded.`)}
+      Click the Upload Stream button. This will allow you to edit details before sharing on Odysee. Be sure to select the saved mp4 file you recorded.`)}
       </p>
-      <p>{__(`Click save once you are done.`)}</p>
+      <p>{__(`Click *save* and you are done!`)}</p>
     </div>
   );
   React.useEffect(() => {
