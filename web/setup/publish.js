@@ -16,13 +16,13 @@ export default function apiPublishCallViaWeb(
   connectionString: string,
   token: string,
   method: string,
-  params: { file_path: string, preview: boolean },
+  params: { file_path: string, preview: boolean, remote_url?: string }, // new param for remoteUrl
   resolve: Function,
   reject: Function
 ) {
-  const { file_path: filePath, preview } = params;
+  const { file_path: filePath, preview, remote_url: remoteUrl } = params;
 
-  if (!filePath) {
+  if (!filePath && !remoteUrl) {
     return apiCall(method, params, resolve, reject);
   }
 
@@ -37,7 +37,14 @@ export default function apiPublishCallViaWeb(
 
   // Putting a dummy value here, the server is going to process the POSTed file
   // and set the file_path itself
-  params.file_path = '__POST_FILE__';
+
+  const body = new FormData();
+  if (fileField) {
+    body.append('file', fileField);
+    params.file_path = '__POST_FILE__';
+  } else if (remoteUrl) {
+    body.append('remote_url', remoteUrl);
+  }
 
   const jsonPayload = JSON.stringify({
     jsonrpc: '2.0',
@@ -45,8 +52,7 @@ export default function apiPublishCallViaWeb(
     params,
     id: counter,
   });
-  const body = new FormData();
-  body.append('file', fileField);
+  // no fileData? do the livestream remote publish
   body.append('json_payload', jsonPayload);
 
   function makeRequest(connectionString, method, token, body, params) {
@@ -55,7 +61,7 @@ export default function apiPublishCallViaWeb(
       xhr.open(method, connectionString);
       xhr.setRequestHeader(X_LBRY_AUTH_TOKEN, token);
       xhr.responseType = 'json';
-      xhr.upload.onprogress = e => {
+      xhr.upload.onprogress = (e) => {
         let percentComplete = Math.ceil((e.loaded / e.total) * 100);
         window.store.dispatch(doUpdateUploadProgress(percentComplete, params, xhr));
       };
@@ -76,7 +82,7 @@ export default function apiPublishCallViaWeb(
   }
 
   return makeRequest(connectionString, 'POST', token, body, params)
-    .then(xhr => {
+    .then((xhr) => {
       let error;
       if (xhr && xhr.response) {
         if (xhr.status >= 200 && xhr.status < 300 && !xhr.response.error) {

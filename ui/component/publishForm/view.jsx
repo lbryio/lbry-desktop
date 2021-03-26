@@ -478,7 +478,7 @@ function PublishForm(props: Props) {
               previewing
             }
           />
-          <Button button="link" onClick={clearPublish} label={__('Cancel')} />
+          <Button button="link" onClick={clearPublish} label={__('New')} />
         </div>
         <p className="help">
           {!formDisabled && !formValid ? (

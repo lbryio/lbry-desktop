@@ -25,6 +25,7 @@ type Props = {
   myChannels: ?Array<ChannelClaim>,
   doToast: ({ message: string }) => void,
   clearPlayingUri: () => void,
+  isLivestreamClaim: boolean,
 };
 
 function FileActions(props: Props) {
@@ -40,6 +41,7 @@ function FileActions(props: Props) {
     myChannels,
     clearPlayingUri,
     doToast,
+    isLivestreamClaim,
   } = props;
   const {
     push,
@@ -112,7 +114,18 @@ function FileActions(props: Props) {
           className="button--file-action"
           icon={ICONS.EDIT}
           label={__('Edit')}
-          navigate="/$/upload"
+          navigate="/$/upload?type=livestream"
+          onClick={() => {
+            prepareEdit(claim, editUri, fileInfo);
+          }}
+        />
+      )}
+      {claimIsMine && isLivestreamClaim && (
+        <Button
+          className="button--file-action"
+          icon={ICONS.PUBLISH}
+          label={__('Publish Replay')}
+          navigate="/$/upload?type=file"
           onClick={() => {
             prepareEdit(claim, editUri, fileInfo);
           }}
