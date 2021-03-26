@@ -55,11 +55,13 @@ export default function LivestreamSetupPage(props: Props) {
         <li>{__(`Tune: Zerolatency`)}</li>
       </ul>
       <p>
-        {__(`If using other livestreaming software, make sure the bitrate is below 5Mbps or the stream will not work.`)}
+        {__(
+          `If using other livestreaming software, make sure the bitrate is below 5000 kbps or the stream will not work.`
+        )}
       </p>
       <p>
         {__(
-          `Please note: You'll need to record your own stream through your software if you plan to share it afterward. You can also delete it if you prefer not to upload the copy. In the near future, we'll support a more streamlined process that will let you upload the replay.`
+          `Please note: You'll need to record your own stream through your software if you plan to share it afterward. You can also delete it if you prefer not to upload the copy.`
         )}
       </p>
       <p>
@@ -69,9 +71,9 @@ export default function LivestreamSetupPage(props: Props) {
       </p>
       <p>
         {__(`After your livestream:
-      Click the Upload Stream button. This will allow you to edit details before sharing on Odysee. Be sure to select the saved mp4 file you recorded.`)}
+      Click the Publish Replay button. This will allow you to edit details before sharing on Odysee. Be sure to select the saved mp4 file you recorded.`)}
       </p>
-      <p>{__(`Click *save* and you are done!`)}</p>
+      <p>{__(`Click Save and you are done!`)}</p>
     </div>
   );
   React.useEffect(() => {

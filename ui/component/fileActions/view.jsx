@@ -3,6 +3,7 @@ import { SIMPLE_SITE, SITE_NAME, ENABLE_FILE_REACTIONS } from 'config';
 import * as PAGES from 'constants/pages';
 import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
+import * as PUBLISH_MODES from 'constants/publish_types';
 import React from 'react';
 import Button from 'component/button';
 import FileDownloadLink from 'component/fileDownloadLink';
@@ -114,7 +115,7 @@ function FileActions(props: Props) {
           className="button--file-action"
           icon={ICONS.EDIT}
           label={__('Edit')}
-          navigate={`/$/upload${isLivestreamClaim ? '?type=livestream' : ''}`}
+          navigate={`/$/${PAGES.UPLOAD}${isLivestreamClaim ? `?ytype=${PUBLISH_MODES.LIVESTREAM}` : ''}`}
           onClick={() => {
             prepareEdit(claim, editUri, fileInfo);
           }}
@@ -125,7 +126,7 @@ function FileActions(props: Props) {
           className="button--file-action"
           icon={ICONS.PUBLISH}
           label={__('Publish Replay')}
-          navigate="/$/upload?type=file"
+          navigate={`/$/${PAGES.UPLOAD}?ytype=${PUBLISH_MODES.FILE}`}
           onClick={() => {
             prepareEdit(claim, editUri, fileInfo);
           }}

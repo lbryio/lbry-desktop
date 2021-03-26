@@ -93,7 +93,7 @@ export const doPublishDesktop = (filePath: string, preview?: boolean) => (dispat
   // on the publishes page. This doesn't exist on desktop so wait until we get a response
   // from the SDK
   // @if TARGET='web'
-  dispatch(push(noFile ? `/$/${PAGES.UPLOADS}` : `/$/${PAGES.LIVESTREAM}`));
+  dispatch(push(noFile ? `/$/${PAGES.LIVESTREAM}` : `/$/${PAGES.UPLOADS}`));
   // @endif
 
   dispatch(doPublish(publishSuccess, publishFail));
