@@ -164,8 +164,8 @@ export default function LivestreamSetupPage(props: Props) {
             {showHelpTest && (
               <Card
                 titleActions={<Button button="close" icon={ICONS.REMOVE} onClick={() => setShowHelpTest(false)} />}
-                title={__('Livestreaming Beta')}
-                subtitle={__(`You're invited to try our live streaming beta. Bear with us as we iron it out!`)}
+                title={__('Go Live on Odysee')}
+                subtitle={__(`You're invited to try out our new livestreaming service while in beta!`)}
                 actions={helpText}
               />
             )}
