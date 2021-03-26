@@ -14,7 +14,7 @@ import { doError } from 'redux/actions/notifications';
 import { push } from 'connected-react-router';
 import analytics from 'analytics';
 import { doOpenModal } from 'redux/actions/app';
-
+export const NO_FILE = '---';
 export const doPublishDesktop = (filePath: string, preview?: boolean) => (dispatch: Dispatch, getState: () => {}) => {
   const publishPreview = (previewResponse) => {
     dispatch(
@@ -23,6 +23,8 @@ export const doPublishDesktop = (filePath: string, preview?: boolean) => (dispat
       })
     );
   };
+
+  const noFile = !filePath || filePath === NO_FILE;
 
   const publishSuccess = (successResponse, lbryFirstError) => {
     const state = getState();
@@ -91,7 +93,7 @@ export const doPublishDesktop = (filePath: string, preview?: boolean) => (dispat
   // on the publishes page. This doesn't exist on desktop so wait until we get a response
   // from the SDK
   // @if TARGET='web'
-  dispatch(push(filePath ? `/$/${PAGES.UPLOADS}` : `/$/${PAGES.LIVESTREAM}`));
+  dispatch(push(noFile ? `/$/${PAGES.UPLOADS}` : `/$/${PAGES.LIVESTREAM}`));
   // @endif
 
   dispatch(doPublish(publishSuccess, publishFail));

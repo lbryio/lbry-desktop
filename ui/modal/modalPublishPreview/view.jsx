@@ -11,6 +11,7 @@ import LbcSymbol from 'component/common/lbc-symbol';
 import ChannelThumbnail from 'component/channelThumbnail';
 import * as ICONS from 'constants/icons';
 import Icon from 'component/common/icon';
+import { NO_FILE } from 'redux/actions/publish';
 
 type Props = {
   filePath: string | WebFile,
@@ -52,7 +53,7 @@ class ModalPublishPreview extends React.PureComponent<Props> {
 
   resolveFilePathName(filePath: string | WebFile) {
     if (!filePath) {
-      return '---';
+      return NO_FILE;
     }
 
     if (typeof filePath === 'string') {
