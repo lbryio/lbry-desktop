@@ -9,7 +9,7 @@ import {
   SETTINGS,
   makeSelectTagInClaimOrChannelForUri,
   makeSelectClaimIsMine,
-  makeSelectClaimHasSource,
+  makeSelectClaimIsStreamPlaceholder,
 } from 'lbry-redux';
 import { makeSelectCostInfoForUri, doFetchCostInfoForUri } from 'lbryinc';
 import { selectShowMatureContent, makeSelectClientSetting } from 'redux/selectors/settings';
@@ -35,7 +35,7 @@ const select = (state, props) => {
     videoTheaterMode: makeSelectClientSetting(SETTINGS.VIDEO_THEATER_MODE)(state),
     commentsDisabled: makeSelectTagInClaimOrChannelForUri(props.uri, DISABLE_COMMENTS_TAG)(state),
     claimIsMine: makeSelectClaimIsMine(props.uri)(state),
-    isLivestream: !makeSelectClaimHasSource(props.uri)(state),
+    isLivestream: makeSelectClaimIsStreamPlaceholder(props.uri)(state),
   };
 };
 

@@ -8,7 +8,7 @@ import {
   doFileGet,
   makeSelectChannelForClaimUri,
   makeSelectClaimIsNsfw,
-  makeSelectClaimHasSource,
+  makeSelectClaimIsStreamPlaceholder,
 } from 'lbry-redux';
 import { selectMutedChannels } from 'redux/selectors/blocked';
 import { selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
@@ -26,7 +26,7 @@ const select = (state, props) => ({
   blockedChannelUris: selectMutedChannels(state),
   showMature: selectShowMatureContent(state),
   isMature: makeSelectClaimIsNsfw(props.uri)(state),
-  isLivestream: !makeSelectClaimHasSource(props.uri)(state),
+  isLivestream: makeSelectClaimIsStreamPlaceholder(props.uri)(state),
 });
 
 const perform = (dispatch) => ({
