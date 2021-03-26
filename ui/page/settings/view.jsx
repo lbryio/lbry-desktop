@@ -277,14 +277,14 @@ class SettingsPage extends React.PureComponent<Props, State> {
                       ))}
                     </FormField>
                   </fieldset-section>
-                  <fieldset-section>
-                    <FormField
+                  {/* <fieldset-section>
+                     <FormField
                       type="checkbox"
                       name="automatic_dark_mode"
                       onChange={() => this.onAutomaticDarkModeChange(!automaticDarkModeEnabled)}
                       checked={automaticDarkModeEnabled}
                       label={__('Automatic dark mode')}
-                    />
+                    /> 
                     {automaticDarkModeEnabled && (
                       <fieldset-group class="fieldset-group--smushed">
                         <FormField
@@ -315,7 +315,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                         </FormField>
                       </fieldset-group>
                     )}
-                  </fieldset-section>
+                  </fieldset-section>*/}
                   <fieldset-section>
                     <FormField
                       type="checkbox"
