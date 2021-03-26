@@ -12,10 +12,12 @@ import SearchTopClaim from 'component/searchTopClaim';
 import { formatLbryUrlForWeb } from 'util/url';
 import { useHistory } from 'react-router';
 import ClaimPreview from 'component/claimPreview';
+import { SEARCH_PAGE_SIZE } from 'constants/search';
 
 type AdditionalOptions = {
   isBackgroundSearch: boolean,
   nsfw?: boolean,
+  from?: number,
 };
 
 type Props = {
@@ -28,6 +30,7 @@ type Props = {
   onFeedbackPositive: (string) => void,
   showNsfw: boolean,
   isAuthenticated: boolean,
+  hasReachedMaxResultsLength: boolean,
 };
 
 export default function SearchPage(props: Props) {
@@ -41,13 +44,16 @@ export default function SearchPage(props: Props) {
     showNsfw,
     isAuthenticated,
     searchOptions,
+    hasReachedMaxResultsLength,
   } = props;
   const { push } = useHistory();
   const urlParams = new URLSearchParams(location.search);
   const urlQuery = urlParams.get('q') || '';
   const additionalOptions: AdditionalOptions = { isBackgroundSearch: false };
+  const [from, setFrom] = React.useState(0);
 
   additionalOptions['nsfw'] = showNsfw;
+  additionalOptions['from'] = from;
 
   const modifiedUrlQuery = urlQuery.trim().replace(/\s+/g, '').replace(/:/g, '#');
   const uriFromQuery = `lbry://${modifiedUrlQuery}`;
@@ -88,6 +94,12 @@ export default function SearchPage(props: Props) {
     }
   }, [search, urlQuery, stringifiedOptions, stringifiedSearchOptions]);
 
+  function loadMore() {
+    if (!isSearching && !hasReachedMaxResultsLength) {
+      setFrom(from + SEARCH_PAGE_SIZE);
+    }
+  }
+
   return (
     <Page>
       <section className="search">
@@ -97,6 +109,11 @@ export default function SearchPage(props: Props) {
             <ClaimList
               uris={uris}
               loading={isSearching}
+              onScrollBottom={loadMore}
+              // 'page' is 1-indexed; It's not the same as 'from', but it just
+              // needs to be unique to indicate when a fetch is needed.
+              page={from + 1}
+              pageSize={SEARCH_PAGE_SIZE}
               header={<SearchOptions simple={SIMPLE_SITE} additionalOptions={additionalOptions} />}
               injectedItem={
                 SHOW_ADS && IS_WEB ? (SIMPLE_SITE ? false : !isAuthenticated && <Ads small type={'video'} />) : false

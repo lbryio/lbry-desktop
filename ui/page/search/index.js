@@ -7,6 +7,7 @@ import {
   makeSelectSearchUris,
   makeSelectQueryWithOptions,
   selectSearchOptions,
+  makeSelectHasReachedMaxResultsLength,
 } from 'redux/selectors/search';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
@@ -26,6 +27,7 @@ const select = (state, props) => {
     showMature === false ? { nsfw: false, isBackgroundSearch: false } : { isBackgroundSearch: false }
   )(state);
   const uris = makeSelectSearchUris(query)(state);
+  const hasReachedMaxResultsLength = makeSelectHasReachedMaxResultsLength(query)(state);
 
   return {
     isSearching: selectIsSearching(state),
@@ -33,6 +35,7 @@ const select = (state, props) => {
     uris: uris,
     isAuthenticated: selectUserVerifiedEmail(state),
     searchOptions: selectSearchOptions(state),
+    hasReachedMaxResultsLength: hasReachedMaxResultsLength,
   };
 };
 
