@@ -115,7 +115,7 @@ function FileActions(props: Props) {
           className="button--file-action"
           icon={ICONS.EDIT}
           label={__('Edit')}
-          navigate={`/$/${PAGES.UPLOAD}${isLivestreamClaim ? `?ytype=${PUBLISH_MODES.LIVESTREAM}` : ''}`}
+          navigate={`/$/${PAGES.UPLOAD}${isLivestreamClaim ? `?type=${PUBLISH_MODES.LIVESTREAM}` : ''}`}
           onClick={() => {
             prepareEdit(claim, editUri, fileInfo);
           }}
@@ -126,7 +126,7 @@ function FileActions(props: Props) {
           className="button--file-action"
           icon={ICONS.PUBLISH}
           label={__('Publish Replay')}
-          navigate={`/$/${PAGES.UPLOAD}?ytype=${PUBLISH_MODES.FILE}`}
+          navigate={`/$/${PAGES.UPLOAD}?type=${PUBLISH_MODES.FILE}`}
           onClick={() => {
             prepareEdit(claim, editUri, fileInfo);
           }}
