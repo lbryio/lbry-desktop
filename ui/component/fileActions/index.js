@@ -5,6 +5,7 @@ import {
   makeSelectClaimForUri,
   doPrepareEdit,
   selectMyChannelClaims,
+  makeSelectClaimIsStreamPlaceholder,
 } from 'lbry-redux';
 import { makeSelectCostInfoForUri } from 'lbryinc';
 import { doSetPlayingUri } from 'redux/actions/content';
@@ -21,6 +22,7 @@ const select = (state, props) => ({
   renderMode: makeSelectFileRenderModeForUri(props.uri)(state),
   costInfo: makeSelectCostInfoForUri(props.uri)(state),
   myChannels: selectMyChannelClaims(state),
+  isLivestreamClaim: makeSelectClaimIsStreamPlaceholder(props.uri)(state),
 });
 
 const perform = (dispatch) => ({

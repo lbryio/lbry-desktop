@@ -18,9 +18,9 @@ import { selectUnclaimedRewardValue } from 'redux/selectors/rewards';
 import { selectModal, selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import PublishPage from './view';
-import { selectUser } from '../../redux/selectors/user';
+import { selectUser } from 'redux/selectors/user';
 
-const select = state => ({
+const select = (state) => ({
   ...selectPublishFormValues(state),
   user: selectUser(state),
   // The winning claim for a short lbry uri
@@ -38,14 +38,14 @@ const select = state => ({
   incognito: selectIncognito(state),
 });
 
-const perform = dispatch => ({
-  updatePublishForm: value => dispatch(doUpdatePublishForm(value)),
+const perform = (dispatch) => ({
+  updatePublishForm: (value) => dispatch(doUpdatePublishForm(value)),
   clearPublish: () => dispatch(doClearPublish()),
-  resolveUri: uri => dispatch(doResolveUri(uri)),
+  resolveUri: (uri) => dispatch(doResolveUri(uri)),
   publish: (filePath, preview) => dispatch(doPublishDesktop(filePath, preview)),
   prepareEdit: (claim, uri) => dispatch(doPrepareEdit(claim, uri)),
   resetThumbnailStatus: () => dispatch(doResetThumbnailStatus()),
-  checkAvailability: name => dispatch(doCheckPublishNameAvailability(name)),
+  checkAvailability: (name) => dispatch(doCheckPublishNameAvailability(name)),
 });
 
 export default connect(select, perform)(PublishPage);
