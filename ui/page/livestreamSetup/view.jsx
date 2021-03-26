@@ -28,6 +28,7 @@ export default function LivestreamSetupPage(props: Props) {
 
   const [sigData, setSigData] = React.useState({ signature: undefined, signing_ts: undefined });
   const [showHelpTest, setShowHelpTest] = usePersistedState('livestream-help-seen', true);
+  const [spin, setSpin] = React.useState(true);
 
   const hasChannels = channels && channels.length > 0;
   const activeChannelClaimStr = JSON.stringify(activeChannelClaim);
@@ -118,11 +119,13 @@ export default function LivestreamSetupPage(props: Props) {
         } else {
           setLivestreamClaims([]);
         }
+        setSpin(false);
       })
       .catch(() => {
         setLivestreamClaims([]);
+        setSpin(false);
       });
-  }, [activeChannelClaimStr, pendingLength, setShowHelpTest]);
+  }, [activeChannelClaimStr, pendingLength, setSpin]);
 
   return (
     <Page>
@@ -143,14 +146,21 @@ export default function LivestreamSetupPage(props: Props) {
           }
         />
       )}
+      {!fetchingChannels && (
+        <div className="section__actions--between">
+          <ChannelSelector hideAnon />
+          <Button button="link" onClick={() => setShowHelpTest(!showHelpTest)} label={__('How does this work?')} />
+        </div>
+      )}
 
+      {spin && !fetchingChannels && (
+        <div className="main--empty">
+          <Spinner delayed />
+        </div>
+      )}
       <div className="card-stack">
-        {!fetchingChannels && activeChannelClaim && (
+        {!spin && !fetchingChannels && activeChannelClaim && (
           <>
-            <div className="section__actions--between">
-              <ChannelSelector hideAnon />
-              <Button button="link" onClick={() => setShowHelpTest(!showHelpTest)} label={__('How does this work?')} />
-            </div>
             {showHelpTest && (
               <Card
                 titleActions={<Button button="close" icon={ICONS.REMOVE} onClick={() => setShowHelpTest(false)} />}
