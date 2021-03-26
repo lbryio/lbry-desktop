@@ -114,7 +114,7 @@ function FileActions(props: Props) {
           className="button--file-action"
           icon={ICONS.EDIT}
           label={__('Edit')}
-          navigate="/$/upload?type=livestream"
+          navigate={`/$/upload${isLivestreamClaim ? '?type=livestream' : ''}`}
           onClick={() => {
             prepareEdit(claim, editUri, fileInfo);
           }}
