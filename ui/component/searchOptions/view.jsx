@@ -4,12 +4,14 @@ import * as ICONS from 'constants/icons';
 import React, { useMemo } from 'react';
 import { Form, FormField } from 'component/common/form';
 import Button from 'component/button';
+import { DARK_THEME } from 'constants/themes';
 
 type Props = {
   setSearchOption: (string, boolean | string | number) => void,
   options: {},
   expanded: boolean,
   toggleSearchExpanded: () => void,
+  theme: string,
 };
 
 const SearchOptions = (props: Props) => {
@@ -32,7 +34,7 @@ const SearchOptions = (props: Props) => {
         onClick={toggleSearchExpanded}
       />
       {expanded && (
-        <Form className="search__options">
+        <Form className={`search__options${props.theme === DARK_THEME ? ' dark' : ''}`}>
           <fieldset>
             <legend className="search__legend">{__('Search For')}</legend>
             {[

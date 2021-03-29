@@ -4,11 +4,13 @@ import { selectSearchOptions, makeSelectQueryWithOptions } from 'redux/selectors
 import { doToggleSearchExpanded } from 'redux/actions/app';
 import { selectSearchOptionsExpanded } from 'redux/selectors/app';
 import SearchOptions from './view';
+import { selectTheme } from 'redux/selectors/settings';
 
-const select = state => ({
+const select = (state) => ({
   options: selectSearchOptions(state),
   expanded: selectSearchOptionsExpanded(state),
   query: makeSelectQueryWithOptions(undefined, {})(state),
+  theme: selectTheme(state),
 });
 
 const perform = (dispatch, ownProps) => {
