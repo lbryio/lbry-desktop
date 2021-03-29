@@ -250,6 +250,13 @@ function PublishForm(props: Props) {
   }, [name, activeChannelName, resolveUri, updatePublishForm, checkAvailability]);
 
   useEffect(() => {
+    // because editingURI is lbry://channel_short/claim_long and that particular shape won't map to the claimId yet
+    if (editingURI) {
+      resolveUri(editingURI);
+    }
+  }, [editingURI, resolveUri]);
+
+  useEffect(() => {
     updatePublishForm({
       isMarkdownPost: mode === PUBLISH_MODES.POST,
       isLivestreamPublish: isLivestream,
@@ -434,7 +441,7 @@ function PublishForm(props: Props) {
           {mode === PUBLISH_MODES.FILE && <PublishDescription disabled={formDisabled} />}
           <Card actions={<SelectThumbnail />} />
           <TagsSelect
-            suggestMature
+            suggestMature={!SIMPLE_SITE}
             disableAutoFocus
             hideHeader
             label={__('Selected Tags')}
