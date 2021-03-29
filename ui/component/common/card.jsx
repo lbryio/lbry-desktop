@@ -20,6 +20,8 @@ type Props = {
   defaultExpand?: boolean,
   nag?: Node,
   smallTitle?: boolean,
+  onClick?: () => void,
+  children?: any, // not sure how this works
 };
 
 export default function Card(props: Props) {
@@ -37,12 +39,21 @@ export default function Card(props: Props) {
     smallTitle = false,
     defaultExpand,
     nag,
+    onClick,
+    children,
   } = props;
   const [expanded, setExpanded] = useState(defaultExpand);
   const expandable = defaultExpand !== undefined;
 
   return (
-    <section className={classnames(className, 'card')}>
+    <section
+      className={classnames(className, 'card')}
+      onClick={() => {
+        if (onClick) {
+          onClick();
+        }
+      }}
+    >
       {(title || subtitle) && (
         <div
           className={classnames('card__header--between', {
@@ -93,6 +104,7 @@ export default function Card(props: Props) {
             </div>
           )}
           {actions && <div className="card__main-actions">{actions}</div>}
+          {children && <div className="card__main-actions">{children}</div>}
         </>
       )}
 

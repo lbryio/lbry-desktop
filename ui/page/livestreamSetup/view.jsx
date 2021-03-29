@@ -24,16 +24,34 @@ type Props = {
 };
 
 export default function LivestreamSetupPage(props: Props) {
+  const LIVESTREAM_CLAIM_POLL_IN_MS = 60000;
   const { channels, fetchingChannels, activeChannelClaim, pendingClaims } = props;
 
   const [sigData, setSigData] = React.useState({ signature: undefined, signing_ts: undefined });
   const [showHelpTest, setShowHelpTest] = usePersistedState('livestream-help-seen', true);
   const [spin, setSpin] = React.useState(true);
+  const [livestreamClaims, setLivestreamClaims] = React.useState([]);
 
   const hasChannels = channels && channels.length > 0;
   const activeChannelClaimStr = JSON.stringify(activeChannelClaim);
-  const streamKey = createStreamKey();
 
+  function createStreamKey() {
+    if (!activeChannelClaim || !sigData.signature || !sigData.signing_ts) return null;
+    return `${activeChannelClaim.claim_id}?d=${toHex(activeChannelClaim.name)}&s=${sigData.signature}&t=${
+      sigData.signing_ts
+    }`;
+  }
+
+  const streamKey = createStreamKey();
+  const pendingLiveStreamClaims = pendingClaims
+    ? pendingClaims.filter(
+        (claim) =>
+          // $FlowFixMe
+          claim.value_type === 'stream' && !(claim.value && claim.value.source)
+      )
+    : [];
+  const pendingLength = pendingLiveStreamClaims.length;
+  const totalLivestreamClaims = pendingLiveStreamClaims.concat(livestreamClaims);
   const helpText = (
     <div className="section__subtitle">
       <p>
@@ -76,6 +94,7 @@ export default function LivestreamSetupPage(props: Props) {
       <p>{__(`Click Save and you are done!`)}</p>
     </div>
   );
+
   React.useEffect(() => {
     if (activeChannelClaimStr) {
       const channelClaim = JSON.parse(activeChannelClaimStr);
@@ -96,47 +115,44 @@ export default function LivestreamSetupPage(props: Props) {
     }
   }, [activeChannelClaimStr, setSigData]);
 
-  function createStreamKey() {
-    if (!activeChannelClaim || !sigData.signature || !sigData.signing_ts) return null;
-    return `${activeChannelClaim.claim_id}?d=${toHex(activeChannelClaim.name)}&s=${sigData.signature}&t=${
-      sigData.signing_ts
-    }`;
-  }
-
-  const [livestreamClaims, setLivestreamClaims] = React.useState([]);
-  const pendingLiveStreamClaims =
-    // $FlowFixMe
-    pendingClaims ? pendingClaims.filter((claim) => !(claim && claim.value && claim.value.source)) : [];
-  const pendingLength = pendingLiveStreamClaims.length;
-  const totalLivestreamClaims = pendingLiveStreamClaims.concat(livestreamClaims);
-
   React.useEffect(() => {
+    let checkClaimsInterval;
     if (!activeChannelClaimStr) return;
-
     const channelClaim = JSON.parse(activeChannelClaimStr);
 
-    Lbry.claim_search({
-      channel_ids: [channelClaim.claim_id],
-      has_no_source: true,
-      claim_type: ['stream'],
-    })
-      .then((res) => {
-        if (res && res.items && res.items.length > 0) {
-          setLivestreamClaims(res.items.reverse());
-        } else {
-          setLivestreamClaims([]);
-        }
-        setSpin(false);
+    function checkLivestreamClaims() {
+      Lbry.claim_search({
+        channel_ids: [channelClaim.claim_id],
+        has_no_source: true,
+        claim_type: ['stream'],
       })
-      .catch(() => {
-        setLivestreamClaims([]);
-        setSpin(false);
-      });
+        .then((res) => {
+          if (res && res.items && res.items.length > 0) {
+            setLivestreamClaims(res.items.reverse());
+          } else {
+            setLivestreamClaims([]);
+          }
+          setSpin(false);
+        })
+        .catch(() => {
+          setLivestreamClaims([]);
+          setSpin(false);
+        });
+    }
+    if (!checkClaimsInterval) {
+      checkLivestreamClaims();
+      checkClaimsInterval = setInterval(checkLivestreamClaims, LIVESTREAM_CLAIM_POLL_IN_MS);
+    }
+    return () => {
+      if (checkClaimsInterval) {
+        clearInterval(checkClaimsInterval);
+      }
+    };
   }, [activeChannelClaimStr, pendingLength, setSpin]);
 
   return (
     <Page>
-      {fetchingChannels && (
+      {(fetchingChannels || spin) && (
         <div className="main--empty">
           <Spinner delayed />
         </div>

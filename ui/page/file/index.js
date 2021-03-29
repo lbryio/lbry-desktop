@@ -8,6 +8,8 @@ import {
   makeSelectClaimIsNsfw,
   SETTINGS,
   makeSelectTagInClaimOrChannelForUri,
+  makeSelectClaimIsMine,
+  makeSelectClaimIsStreamPlaceholder,
 } from 'lbry-redux';
 import { makeSelectCostInfoForUri, doFetchCostInfoForUri } from 'lbryinc';
 import { selectShowMatureContent, makeSelectClientSetting } from 'redux/selectors/settings';
@@ -32,14 +34,16 @@ const select = (state, props) => {
     renderMode: makeSelectFileRenderModeForUri(props.uri)(state),
     videoTheaterMode: makeSelectClientSetting(SETTINGS.VIDEO_THEATER_MODE)(state),
     commentsDisabled: makeSelectTagInClaimOrChannelForUri(props.uri, DISABLE_COMMENTS_TAG)(state),
+    claimIsMine: makeSelectClaimIsMine(props.uri)(state),
+    isLivestream: makeSelectClaimIsStreamPlaceholder(props.uri)(state),
   };
 };
 
-const perform = dispatch => ({
-  fetchFileInfo: uri => dispatch(doFetchFileInfo(uri)),
-  fetchCostInfo: uri => dispatch(doFetchCostInfoForUri(uri)),
-  setViewed: uri => dispatch(doSetContentHistoryItem(uri)),
-  setPrimaryUri: uri => dispatch(doSetPrimaryUri(uri)),
+const perform = (dispatch) => ({
+  fetchFileInfo: (uri) => dispatch(doFetchFileInfo(uri)),
+  fetchCostInfo: (uri) => dispatch(doFetchCostInfoForUri(uri)),
+  setViewed: (uri) => dispatch(doSetContentHistoryItem(uri)),
+  setPrimaryUri: (uri) => dispatch(doSetPrimaryUri(uri)),
 });
 
 export default withRouter(connect(select, perform)(FilePage));

@@ -248,106 +248,110 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
         'claim-preview__wrapper--small': type === 'small',
       })}
     >
-      {!hideRepostLabel && <ClaimRepostAuthor uri={uri} />}
+      <>
+        {!hideRepostLabel && <ClaimRepostAuthor uri={uri} />}
 
-      <div
-        className={classnames('claim-preview', {
-          'claim-preview--small': type === 'small' || type === 'tooltip',
-          'claim-preview--large': type === 'large',
-          'claim-preview--inline': type === 'inline',
-          'claim-preview--tooltip': type === 'tooltip',
-          'claim-preview--channel': isChannelUri,
-          'claim-preview--visited': !isChannelUri && !claimIsMine && hasVisitedUri,
-          'claim-preview--pending': pending,
-        })}
-      >
-        {isChannelUri && claim ? (
-          <UriIndicator uri={contentUri} link>
-            <ChannelThumbnail uri={contentUri} />
-          </UriIndicator>
-        ) : (
-          <>
-            {!pending ? (
-              <NavLink {...navLinkProps}>
-                <FileThumbnail thumbnail={thumbnailUrl}>
-                  {/* @if TARGET='app' */}
-                  {claim && (
-                    <div className="claim-preview__hover-actions">
-                      <FileDownloadLink uri={canonicalUrl} hideOpenButton hideDownloadStatus />
-                    </div>
-                  )}
-                  {/* @endif */}
-                  {!isRepost && !isChannelUri && (
-                    <div className="claim-preview__file-property-overlay">
-                      <FileProperties uri={contentUri} small />
-                    </div>
-                  )}
-                </FileThumbnail>
-              </NavLink>
-            ) : (
-              <FileThumbnail thumbnail={thumbnailUrl} />
-            )}
-          </>
-        )}
-
-        <div className="claim-preview__text">
-          <div className="claim-preview-metadata">
-            <div className="claim-preview-info">
-              {pending ? (
-                <ClaimPreviewTitle uri={contentUri} />
-              ) : (
+        <div
+          className={classnames('claim-preview', {
+            'claim-preview--small': type === 'small' || type === 'tooltip',
+            'claim-preview--large': type === 'large',
+            'claim-preview--inline': type === 'inline',
+            'claim-preview--tooltip': type === 'tooltip',
+            'claim-preview--channel': isChannelUri,
+            'claim-preview--visited': !isChannelUri && !claimIsMine && hasVisitedUri,
+            'claim-preview--pending': pending,
+          })}
+        >
+          {isChannelUri && claim ? (
+            <UriIndicator uri={contentUri} link>
+              <ChannelThumbnail uri={contentUri} />
+            </UriIndicator>
+          ) : (
+            <>
+              {!pending ? (
                 <NavLink {...navLinkProps}>
-                  <ClaimPreviewTitle uri={uri} />
+                  <FileThumbnail thumbnail={thumbnailUrl}>
+                    {/* @if TARGET='app' */}
+                    {claim && (
+                      <div className="claim-preview__hover-actions">
+                        <FileDownloadLink uri={canonicalUrl} hideOpenButton hideDownloadStatus />
+                      </div>
+                    )}
+                    {/* @endif */}
+                    {!isRepost && !isChannelUri && !isLivestream && (
+                      <div className="claim-preview__file-property-overlay">
+                        <FileProperties uri={contentUri} small />
+                      </div>
+                    )}
+                  </FileThumbnail>
                 </NavLink>
+              ) : (
+                <FileThumbnail thumbnail={thumbnailUrl} />
               )}
+            </>
+          )}
 
-              {/* {type !== 'small' && !isChannelUri && signingChannel && SIMPLE_SITE && (
+          <div className="claim-preview__text">
+            <div className="claim-preview-metadata">
+              <div className="claim-preview-info">
+                {pending ? (
+                  <ClaimPreviewTitle uri={contentUri} />
+                ) : (
+                  <NavLink {...navLinkProps}>
+                    <ClaimPreviewTitle uri={uri} />
+                  </NavLink>
+                )}
+
+                {/* {type !== 'small' && !isChannelUri && signingChannel && SIMPLE_SITE && (
                 <ChannelThumbnail uri={signingChannel.permanent_url} />
               )} */}
+              </div>
+              <ClaimPreviewSubtitle uri={uri} type={type} />
+              {(pending || !!reflectingProgress) && <PublishPending uri={uri} />}
             </div>
-            <ClaimPreviewSubtitle uri={uri} type={type} />
-            {(pending || !!reflectingProgress) && <PublishPending uri={uri} />}
+            {type !== 'small' && (
+              <div className="claim-preview__actions">
+                {!pending && (
+                  <>
+                    {renderActions && claim && renderActions(claim)}
+                    {shouldHideActions || renderActions ? null : actions !== undefined ? (
+                      actions
+                    ) : (
+                      <div className="claim-preview__primary-actions">
+                        {!isChannelUri && signingChannel && (
+                          <div className="claim-preview__channel-staked">
+                            <ChannelThumbnail uri={signingChannel.permanent_url} />
+                          </div>
+                        )}
+
+                        {isChannelUri && !channelIsBlocked && !claimIsMine && (
+                          <SubscribeButton
+                            uri={contentUri.startsWith('lbry://') ? contentUri : `lbry://${contentUri}`}
+                          />
+                        )}
+
+                        {includeSupportAction && <ClaimSupportButton uri={uri} />}
+                      </div>
+                    )}
+                  </>
+                )}
+                {claim && (
+                  <React.Fragment>
+                    {typeof properties === 'function' ? (
+                      properties(claim)
+                    ) : properties !== undefined ? (
+                      properties
+                    ) : (
+                      <ClaimTags uri={uri} type={type} />
+                    )}
+                  </React.Fragment>
+                )}
+              </div>
+            )}
           </div>
-          {type !== 'small' && (
-            <div className="claim-preview__actions">
-              {!pending && (
-                <>
-                  {renderActions && claim && renderActions(claim)}
-                  {shouldHideActions || renderActions ? null : actions !== undefined ? (
-                    actions
-                  ) : (
-                    <div className="claim-preview__primary-actions">
-                      {!isChannelUri && signingChannel && (
-                        <div className="claim-preview__channel-staked">
-                          <ChannelThumbnail uri={signingChannel.permanent_url} />
-                        </div>
-                      )}
-
-                      {isChannelUri && !channelIsBlocked && !claimIsMine && (
-                        <SubscribeButton uri={contentUri.startsWith('lbry://') ? contentUri : `lbry://${contentUri}`} />
-                      )}
-
-                      {includeSupportAction && <ClaimSupportButton uri={uri} />}
-                    </div>
-                  )}
-                </>
-              )}
-              {claim && (
-                <React.Fragment>
-                  {typeof properties === 'function' ? (
-                    properties(claim)
-                  ) : properties !== undefined ? (
-                    properties
-                  ) : (
-                    <ClaimTags uri={uri} type={type} />
-                  )}
-                </React.Fragment>
-              )}
-            </div>
-          )}
         </div>
-      </div>
-      {!hideMenu && <ClaimMenuList uri={uri} />}
+        {!hideMenu && <ClaimMenuList uri={uri} />}
+      </>
     </WrapperElement>
   );
 });

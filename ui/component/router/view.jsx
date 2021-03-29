@@ -52,7 +52,7 @@ import YoutubeSyncPage from 'page/youtubeSync';
 
 import { LINKED_COMMENT_QUERY_PARAM } from 'constants/comment';
 import { parseURI, isURIValid } from 'lbry-redux';
-import { SITE_TITLE, WELCOME_VERSION } from 'config';
+import { SITE_TITLE, WELCOME_VERSION, SIMPLE_SITE } from 'config';
 
 // Tell the browser we are handling scroll restoration
 if ('scrollRestoration' in history) {
@@ -218,6 +218,7 @@ function AppRouter(props: Props) {
 
       <Route path={`/`} exact component={HomePage} />
       <Route path={`/$/${PAGES.DISCOVER}`} exact component={DiscoverPage} />
+      {SIMPLE_SITE && <Route path={`/$/${PAGES.WILD_WEST}`} exact component={DiscoverPage} />}
       {/* $FlowFixMe */}
       {dynamicRoutes.map((dynamicRouteProps: RowDataItem) => (
         <Route

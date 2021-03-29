@@ -16,6 +16,8 @@ const select = (state) => ({
   ...selectPublishFormValues(state),
   myChannels: selectMyChannelClaims(state),
   isVid: makeSelectPublishFormValue('fileVid')(state),
+  publishSuccess: makeSelectPublishFormValue('publishSuccess')(state),
+  publishing: makeSelectPublishFormValue('publishing')(state),
   isStillEditing: selectIsStillEditing(state),
   ffmpegStatus: selectFfmpegStatus(state),
   enablePublishPreview: makeSelectClientSetting(SETTINGS.ENABLE_PUBLISH_PREVIEW)(state),
