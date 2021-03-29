@@ -64,11 +64,12 @@ export default function LivestreamLink(props: Props) {
     return null;
   }
 
-  return (
-    <Card
-      className="livestream__channel-link"
-      title={__('Live stream in progress')}
-      actions={<ClaimPreview uri={livestreamClaim.canonical_url} livestream type="inline" />}
-    />
+  // gonna pass the wrapper in so I don't have to rewrite the dmca/blocking logic in claimPreview.
+  const element = (props: { children: any }) => (
+    <Card className="livestream__channel-link" title={__('Live stream in progress')}>
+      {props.children}
+    </Card>
   );
+
+  return <ClaimPreview uri={livestreamClaim.canonical_url} wrapperElement={element} type="inline" />;
 }
