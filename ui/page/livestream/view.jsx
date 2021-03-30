@@ -1,5 +1,5 @@
 // @flow
-import { BITWAVE_API } from 'constants/livestream';
+import { BITWAVE_LIVE_API } from 'constants/livestream';
 import React from 'react';
 import Page from 'component/page';
 import LivestreamLayout from 'component/livestreamLayout';
@@ -56,7 +56,7 @@ export default function LivestreamPage(props: Props) {
     let interval;
     function checkIsLive() {
       // $FlowFixMe Bitwave's API can handle garbage
-      fetch(`${BITWAVE_API}/${livestreamChannelId}`)
+      fetch(`${BITWAVE_LIVE_API}/${livestreamChannelId}`)
         .then((res) => res.json())
         .then((res) => {
           if (!res || !res.data) {

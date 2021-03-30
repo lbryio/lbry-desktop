@@ -172,6 +172,10 @@
   }
 }
 
+.section__actions--align-bottom {
+  align-items: flex-end;
+}
+
 .section__actions--no-margin {
   @extend .section__actions;
   margin-top: 0;

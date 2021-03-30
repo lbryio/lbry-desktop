@@ -29,9 +29,10 @@ export const doPublishDesktop = (filePath: string, preview?: boolean) => (dispat
   const noFileParam = !filePath || filePath === NO_FILE;
   const state = getState();
   const editingUri = makeSelectPublishFormValue('editingURI')(state) || '';
+  const remoteUrl = makeSelectPublishFormValue('remoteFileUrl')(state);
   const claim = makeSelectClaimForUri(editingUri)(state) || {};
   const hasSourceFile = claim.value && claim.value.source;
-  const redirectToLivestream = noFileParam && !hasSourceFile;
+  const redirectToLivestream = noFileParam && !hasSourceFile && !remoteUrl;
 
   const publishSuccess = (successResponse, lbryFirstError) => {
     const state = getState();
