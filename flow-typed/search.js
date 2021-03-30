@@ -18,6 +18,12 @@ declare type SearchOptions = {
   SORT_ACCENDING: string,
   SORT_DESCENDING: string,
   EXACT: string,
+  TIME_FILTER: string,
+  TIME_FILTER_LAST_HOUR: string,
+  TIME_FILTER_TODAY: string,
+  TIME_FILTER_THIS_WEEK: string,
+  TIME_FILTER_THIS_MONTH: string,
+  TIME_FILTER_THIS_YEAR: string,
 };
 
 declare type SearchState = {

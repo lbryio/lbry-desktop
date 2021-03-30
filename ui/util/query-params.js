@@ -71,6 +71,11 @@ export const getSearchQueryString = (query: string, options: any = {}) => {
     if (sortBy) {
       queryParams.push(`${SEARCH_OPTIONS.SORT}=${sortBy}`);
     }
+
+    const timeFilter = options[SEARCH_OPTIONS.TIME_FILTER];
+    if (timeFilter) {
+      queryParams.push(`${SEARCH_OPTIONS.TIME_FILTER}=${timeFilter}`);
+    }
   }
 
   const additionalOptions = {};
