@@ -419,6 +419,10 @@ function PublishForm(props: Props) {
       </div>
     );
   }
+<<<<<<< HEAD
+=======
+
+>>>>>>> final please
   // Editing claim uri
   return (
     <div className="card-stack">

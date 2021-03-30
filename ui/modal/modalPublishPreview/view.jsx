@@ -43,6 +43,7 @@ type Props = {
   myChannels: ?Array<ChannelClaim>,
   publishSuccess: boolean,
   publishing: boolean,
+  clearPublish: () => void,
 };
 
 // class ModalPublishPreview extends React.PureComponent<Props> {
@@ -74,6 +75,7 @@ const ModalPublishPreview = (props: Props) => {
     publishing,
     publish,
     closeModal,
+    clearPublish,
   } = props;
   const livestream =
     //   $FlowFixMe
