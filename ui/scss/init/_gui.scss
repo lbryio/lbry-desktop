@@ -366,9 +366,14 @@ textarea {
 }
 
 .notice-message {
+  position: relative;
   border-radius: var(--border-radius);
   padding: var(--spacing-l);
   background-color: var(--color-primary-alt);
+
+  ~ .card {
+    margin-top: var(--spacing-m);
+  }
 }
 
 .notice-message--loud {

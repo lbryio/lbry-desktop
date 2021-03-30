@@ -111,17 +111,15 @@
     width: 35rem;
     margin-left: var(--spacing-m);
 
-    @media (max-width: $breakpoint-small) {
-      margin-left: 0;
-    }
-
     @media (max-width: $breakpoint-medium) {
       width: 100%;
+      margin-left: 0;
       margin-top: var(--spacing-l);
     }
   }
 
   @media (max-width: $breakpoint-medium) {
+    flex-direction: column;
     > :first-child {
       margin-right: 0;
     }
