@@ -80,7 +80,9 @@ function HomePage(props: Props) {
         </div>
       )}
 
-      <h1 className="home__meme">{__("#HelpLBRYsavecrypto")}</h1>
+      <h1 className="home__meme">
+        <Button button="link" label={'HelpLBRYSaveCrypto.com'} href="https://helplbrysavecrypto.com" />
+      </h1>
 
       {rowData.map(({ title, route, link, icon, help, options = {} }, index) => (
         <div key={title} className="claim-grid__wrapper">
