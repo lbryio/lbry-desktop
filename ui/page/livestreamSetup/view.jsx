@@ -229,7 +229,6 @@ export default function LivestreamSetupPage(props: Props) {
                 )}
                 <div className="section">
                   <ClaimList
-                    className="section"
                     header={__('Your livestream uploads')}
                     uris={livestreamClaims
                       .filter((c) => !pendingLiveStreamClaims.some((p) => p.permanent_url === c.permanent_url))
