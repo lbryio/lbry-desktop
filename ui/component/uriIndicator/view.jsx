@@ -18,6 +18,7 @@ type Props = {
   children: ?Node,
   inline: boolean,
   external?: boolean,
+  className?: string,
 };
 
 class UriIndicator extends React.PureComponent<Props> {
@@ -38,7 +39,16 @@ class UriIndicator extends React.PureComponent<Props> {
   };
 
   render() {
-    const { link, isResolvingUri, claim, children, inline, hideAnonymous = false, external = false } = this.props;
+    const {
+      link,
+      isResolvingUri,
+      claim,
+      children,
+      inline,
+      hideAnonymous = false,
+      external = false,
+      className,
+    } = this.props;
 
     if (!claim) {
       return <span className="empty">{isResolvingUri ? 'Validating...' : 'Unused'}</span>;
@@ -52,7 +62,7 @@ class UriIndicator extends React.PureComponent<Props> {
       }
 
       return (
-        <span dir="auto" className={classnames('channel-name', { 'channel-name--inline': inline })}>
+        <span dir="auto" className={classnames('channel-name', className, { 'channel-name--inline': inline })}>
           Anonymous
         </span>
       );
@@ -76,13 +86,17 @@ class UriIndicator extends React.PureComponent<Props> {
 
       if (children) {
         return (
-          <Button target={external ? '_blank' : undefined} navigate={channelLink}>
+          <Button className={className} target={external ? '_blank' : undefined} navigate={channelLink}>
             {children}
           </Button>
         );
       } else {
         return (
-          <Button className="button--uri-indicator" navigate={channelLink} target={external ? '_blank' : undefined}>
+          <Button
+            className={classnames(className, 'button--uri-indicator')}
+            navigate={channelLink}
+            target={external ? '_blank' : undefined}
+          >
             {inner}
           </Button>
         );

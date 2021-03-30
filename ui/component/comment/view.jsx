@@ -197,7 +197,7 @@ function Comment(props: Props) {
               {!author ? (
                 <span className="comment__author">{__('Anonymous')}</span>
               ) : (
-                <UriIndicator link external={livestream} uri={authorUri} />
+                <UriIndicator className="comment__author" link external={livestream} uri={authorUri} />
               )}
               {!livestream && (
                 <Button
