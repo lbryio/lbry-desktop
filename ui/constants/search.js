@@ -25,4 +25,10 @@ export const SEARCH_OPTIONS = {
   SORT_ACCENDING: '^release_time',
   SORT_DESCENDING: 'release_time',
   EXACT: 'exact',
+  TIME_FILTER: 'time_filter',
+  TIME_FILTER_LAST_HOUR: 'lasthour',
+  TIME_FILTER_TODAY: 'today',
+  TIME_FILTER_THIS_WEEK: 'thisweek',
+  TIME_FILTER_THIS_MONTH: 'thismonth',
+  TIME_FILTER_THIS_YEAR: 'thisyear',
 };
