@@ -109,7 +109,7 @@ function FileActions(props: Props) {
       />
     </>
   );
-
+// ${isLivestreamClaim ? `?type=${PUBLISH_MODES.LIVESTREAM}` : ''}
   const rhsSection = (
     <>
       {!SIMPLE_SITE && <FileDownloadLink uri={uri} />}
@@ -118,25 +118,13 @@ function FileActions(props: Props) {
         <Button
           className="button--file-action"
           icon={ICONS.EDIT}
-          label={__('Edit')}
-          navigate={`/$/${PAGES.UPLOAD}${isLivestreamClaim ? `?type=${PUBLISH_MODES.LIVESTREAM}` : ''}`}
+          label={isLivestreamClaim ? __('Update') : __('Edit')}
+          navigate={`/$/${PAGES.UPLOAD}`}
           onClick={() => {
             prepareEdit(claim, editUri, fileInfo);
           }}
         />
       )}
-      {claimIsMine && isLivestreamClaim && (
-        <Button
-          className="button--file-action"
-          icon={ICONS.PUBLISH}
-          label={__('Publish Replay')}
-          navigate={`/$/${PAGES.UPLOAD}?type=${PUBLISH_MODES.FILE}`}
-          onClick={() => {
-            prepareEdit(claim, editUri, fileInfo);
-          }}
-        />
-      )}
-
       {showDelete && (
         <Button
           title={__('Remove from your library')}

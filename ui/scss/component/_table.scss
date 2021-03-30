@@ -40,10 +40,26 @@
   td {
     padding: 0.5rem 1rem;
   }
+
+  th {
+    font-size: var(--font-xsmall);
+    color: var(--color-text-help);
+    padding-bottom: var(--spacing-xxxs);
+    @media (max-width: $breakpoint-small) {
+      padding-left: var(--spacing-xs) !important;
+      padding-right: var(--spacing-xs) !important;
+    }
+  }
 }
 
 th {
   text-align: left;
+}
+
+td {
+  @media (max-width: $breakpoint-small) {
+    font-size: var(--font-small);
+  }
 }
 
 .table--fixed {
