@@ -43,8 +43,9 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
       publishMessage = __('Your file is now pending on LBRY. It will take a few minutes to appear for other users.');
     }
 
+    clearPublish();
+
     function handleClose() {
-      clearPublish();
       closeModal();
     }
 

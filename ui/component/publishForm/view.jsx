@@ -26,6 +26,7 @@ import Card from 'component/common/card';
 import I18nMessage from 'component/i18nMessage';
 import * as PUBLISH_MODES from 'constants/publish_types';
 import { useHistory } from 'react-router';
+import Spinner from 'component/spinner';
 
 // @if TARGET='app'
 import fs from 'fs';
@@ -410,6 +411,14 @@ function PublishForm(props: Props) {
     }
   }, [autoSwitchMode, editingURI, fileMimeType, myClaimForUri, mode, setMode, setAutoSwitchMode]);
 
+  if (publishing) {
+    return (
+      <div className="main--empty">
+        <h1 className="section__subtitle">{__('Publishing...')}</h1>
+        <Spinner delayed />
+      </div>
+    );
+  }
   // Editing claim uri
   return (
     <div className="card-stack">
