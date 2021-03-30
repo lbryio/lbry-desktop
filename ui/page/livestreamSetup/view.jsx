@@ -227,14 +227,16 @@ export default function LivestreamSetupPage(props: Props) {
                     />
                   </div>
                 )}
-                <div className="section">
-                  <ClaimList
-                    header={__('Your livestream uploads')}
-                    uris={livestreamClaims
-                      .filter((c) => !pendingLiveStreamClaims.some((p) => p.permanent_url === c.permanent_url))
-                      .map((claim) => claim.permanent_url)}
-                  />
-                </div>
+                {Boolean(livestreamClaims.length) && (
+                  <div className="section">
+                    <ClaimList
+                      header={__('Your livestream uploads')}
+                      uris={livestreamClaims
+                        .filter((c) => !pendingLiveStreamClaims.some((p) => p.permanent_url === c.permanent_url))
+                        .map((claim) => claim.permanent_url)}
+                    />
+                  </div>
+                )}
               </>
             ) : (
               <Yrbl
