@@ -43,6 +43,7 @@ type Props = {
   myChannels: ?Array<ChannelClaim>,
   publishSuccess: boolean,
   publishing: boolean,
+  clearPublish: () => void,
 };
 
 // class ModalPublishPreview extends React.PureComponent<Props> {
@@ -74,27 +75,26 @@ const ModalPublishPreview = (props: Props) => {
     publishing,
     publish,
     closeModal,
+    clearPublish,
   } = props;
   const livestream =
     //   $FlowFixMe
     previewResponse.outputs[0] && previewResponse.outputs[0].value && !previewResponse.outputs[0].value.source;
+  // @if TARGET='web'
   React.useEffect(() => {
-    console.log('publishSuccess', publishSuccess);
     if (publishing && !livestream) {
-      console.log('doPublishing');
       closeModal();
     }
     if (publishSuccess && livestream) {
-      console.log('doPublishSuccess');
+      clearPublish();
       closeModal();
     }
   }, [publishSuccess, publishing, livestream]);
-
+  // @endif
   // const waitForSuccess = false;
   function onConfirmed() {
     // Publish for real:
     publish(getFilePathName(filePath), false);
-    console.log('filePAath', filePath);
   }
 
   function getFilePathName(filePath: string | WebFile) {

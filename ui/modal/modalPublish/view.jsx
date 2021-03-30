@@ -42,9 +42,9 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
     } else {
       publishMessage = __('Your video will appear on Odysee shortly.');
     }
+    clearPublish();
 
     function handleClose() {
-      clearPublish();
       closeModal();
     }
 
