@@ -71,6 +71,8 @@
 }
 
 .post__date {
+  display: block;
+  margin-top: var(--spacing-s);
   font-size: var(--font-small);
   color: var(--color-help);
 }
