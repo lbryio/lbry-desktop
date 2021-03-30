@@ -1,15 +1,4 @@
 // @flow
-import * as ACTIONS from 'constants/action_types';
-import {
-  DOWNLOADED,
-  DOWNLOADING,
-  NOTIFY_ONLY,
-  VIEW_ALL,
-  VIEW_LATEST_FIRST,
-  SUGGESTED_TOP_BID,
-  SUGGESTED_TOP_SUBSCRIBED,
-  SUGGESTED_FEATURED,
-} from 'constants/subscriptions';
 
 declare type Subscription = {
   channelName: string, // @CryptoCandor,

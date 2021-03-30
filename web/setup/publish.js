@@ -42,8 +42,10 @@ export default function apiPublishCallViaWeb(
   if (fileField) {
     body.append('file', fileField);
     params.file_path = '__POST_FILE__';
+    delete params['remote_url'];
   } else if (remoteUrl) {
     body.append('remote_url', remoteUrl);
+    delete params['remote_url'];
   }
 
   const jsonPayload = JSON.stringify({
