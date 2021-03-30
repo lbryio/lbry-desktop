@@ -194,6 +194,7 @@ export default function LivestreamSetupPage(props: Props) {
             )}
             {streamKey && totalLivestreamClaims.length > 0 && (
               <Card
+                className="section"
                 title={__('Your stream key')}
                 actions={
                   <>
@@ -217,10 +218,25 @@ export default function LivestreamSetupPage(props: Props) {
             )}
 
             {totalLivestreamClaims.length > 0 ? (
-              <ClaimList
-                header={__('Your livestream uploads')}
-                uris={totalLivestreamClaims.map((claim) => claim.permanent_url)}
-              />
+              <>
+                {Boolean(pendingLiveStreamClaims.length) && (
+                  <div className="section">
+                    <ClaimList
+                      header={__('Your pending livestream uploads')}
+                      uris={pendingLiveStreamClaims.map((claim) => claim.permanent_url)}
+                    />
+                  </div>
+                )}
+                <div className="section">
+                  <ClaimList
+                    className="section"
+                    header={__('Your livestream uploads')}
+                    uris={livestreamClaims
+                      .filter((c) => !pendingLiveStreamClaims.some((p) => p.permanent_url === c.permanent_url))
+                      .map((claim) => claim.permanent_url)}
+                  />
+                </div>
+              </>
             ) : (
               <Yrbl
                 className="livestream__publish-intro"
