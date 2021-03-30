@@ -23,7 +23,7 @@ const TYPES_ADVANCED = {
 
 const TIME_FILTER = {
   '': 'None',
-  [SEARCH_OPTIONS.TIME_FILTER_LAST_HOUR]: 'Last Hour',
+  // [SEARCH_OPTIONS.TIME_FILTER_LAST_HOUR]: 'Last Hour', -- disable (doesn't work)
   [SEARCH_OPTIONS.TIME_FILTER_TODAY]: 'Last 24 Hours',
   [SEARCH_OPTIONS.TIME_FILTER_THIS_WEEK]: 'This Week',
   [SEARCH_OPTIONS.TIME_FILTER_THIS_MONTH]: 'This Month',
