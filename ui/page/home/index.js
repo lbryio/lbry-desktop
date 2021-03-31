@@ -1,17 +1,16 @@
-import * as SETTINGS from 'constants/settings';
 import { connect } from 'react-redux';
 import { selectFollowedTags } from 'redux/selectors/tags';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
-import { makeSelectClientSetting, selectHomepageData } from 'redux/selectors/settings';
+import { selectShowMatureContent, selectHomepageData } from 'redux/selectors/settings';
 
 import DiscoverPage from './view';
 
-const select = state => ({
+const select = (state) => ({
   followedTags: selectFollowedTags(state),
   subscribedChannels: selectSubscriptions(state),
   authenticated: selectUserVerifiedEmail(state),
-  showNsfw: makeSelectClientSetting(SETTINGS.SHOW_MATURE)(state),
+  showNsfw: selectShowMatureContent(state),
   homepageData: selectHomepageData(state),
 });
 

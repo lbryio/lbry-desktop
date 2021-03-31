@@ -1,28 +1,28 @@
 import * as MODALS from 'constants/modal_types';
 import { connect } from 'react-redux';
-import { selectLanguage, makeSelectClientSetting } from 'redux/selectors/settings';
+import { selectLanguage, selectShowMatureContent } from 'redux/selectors/settings';
 import { doToast } from 'redux/actions/notifications';
 import { doSearch } from 'redux/actions/search';
 import { doOpenModal, doHideModal } from 'redux/actions/app';
 import { withRouter } from 'react-router';
-import { doResolveUris, SETTINGS } from 'lbry-redux';
+import { doResolveUris } from 'lbry-redux';
 import analytics from 'analytics';
 import Wunderbar from './view';
 
 const select = (state, props) => ({
   language: selectLanguage(state),
-  showMature: makeSelectClientSetting(SETTINGS.SHOW_MATURE)(state),
+  showMature: selectShowMatureContent(state),
 });
 
 const perform = (dispatch, ownProps) => ({
-  doResolveUris: uris => dispatch(doResolveUris(uris)),
+  doResolveUris: (uris) => dispatch(doResolveUris(uris)),
   doSearch: (query, options) => dispatch(doSearch(query, options)),
-  navigateToSearchPage: query => {
+  navigateToSearchPage: (query) => {
     let encodedQuery = encodeURIComponent(query);
     ownProps.history.push({ pathname: `/$/search`, search: `?q=${encodedQuery}` });
     analytics.apiLogSearch();
   },
-  doShowSnackBar: message => dispatch(doToast({ isError: true, message })),
+  doShowSnackBar: (message) => dispatch(doToast({ isError: true, message })),
   doOpenMobileSearch: () => dispatch(doOpenModal(MODALS.MOBILE_SEARCH)),
   doCloseMobileSearch: () => dispatch(doHideModal()),
 });
