@@ -10,7 +10,12 @@ import {
   doExitSettingsPage,
 } from 'redux/actions/settings';
 import { doSetPlayingUri } from 'redux/actions/content';
-import { makeSelectClientSetting, selectDaemonSettings, selectLanguage } from 'redux/selectors/settings';
+import {
+  makeSelectClientSetting,
+  selectDaemonSettings,
+  selectLanguage,
+  selectShowMatureContent,
+} from 'redux/selectors/settings';
 import { doWalletStatus, selectWalletIsEncrypted, SETTINGS } from 'lbry-redux';
 import SettingsPage from './view';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
@@ -19,7 +24,7 @@ const select = (state) => ({
   daemonSettings: selectDaemonSettings(state),
   allowAnalytics: selectAllowAnalytics(state),
   isAuthenticated: selectUserVerifiedEmail(state),
-  showNsfw: makeSelectClientSetting(SETTINGS.SHOW_MATURE)(state),
+  showNsfw: selectShowMatureContent(state),
   currentTheme: makeSelectClientSetting(SETTINGS.THEME)(state),
   themes: makeSelectClientSetting(SETTINGS.THEMES)(state),
   automaticDarkModeEnabled: makeSelectClientSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED)(state),

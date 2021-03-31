@@ -12,7 +12,7 @@ import {
 import { makeSelectChannelIsMuted } from 'redux/selectors/blocked';
 import { withRouter } from 'react-router';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { makeSelectClientSetting, selectShowMatureContent } from 'redux/selectors/settings';
 
 import ChannelPage from './view';
 
@@ -28,7 +28,7 @@ const select = (state, props) => {
     channelIsBlocked: makeSelectChannelIsMuted(props.uri)(state),
     claim: props.uri && makeSelectClaimForUri(props.uri)(state),
     isAuthenticated: selectUserVerifiedEmail(state),
-    showMature: makeSelectClientSetting(SETTINGS.SHOW_MATURE)(state),
+    showMature: selectShowMatureContent(state),
     tileLayout: makeSelectClientSetting(SETTINGS.TILE_LAYOUT)(state),
   };
 };

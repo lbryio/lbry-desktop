@@ -1,8 +1,7 @@
 // @flow
-import * as SETTINGS from 'constants/settings';
 import { createSelector } from 'reselect';
 import { selectMutedChannels } from 'redux/selectors/blocked';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { selectShowMatureContent } from 'redux/selectors/settings';
 import { selectBlacklistedOutpointMap, selectFilteredOutpointMap } from 'lbryinc';
 import { selectClaimsById, isClaimNsfw, selectMyActiveClaims } from 'lbry-redux';
 
@@ -132,7 +131,7 @@ export const makeSelectCommentsForUri = (uri: string) =>
     selectMutedChannels,
     selectBlacklistedOutpointMap,
     selectFilteredOutpointMap,
-    makeSelectClientSetting(SETTINGS.SHOW_MATURE),
+    selectShowMatureContent,
     (byClaimId, byUri, claimsById, myClaims, blockedChannels, blacklistedMap, filteredMap, showMatureContent) => {
       const claimId = byUri[uri];
       const comments = byClaimId && byClaimId[claimId];
@@ -183,7 +182,7 @@ export const makeSelectTopLevelCommentsForUri = (uri: string) =>
     selectMutedChannels,
     selectBlacklistedOutpointMap,
     selectFilteredOutpointMap,
-    makeSelectClientSetting(SETTINGS.SHOW_MATURE),
+    selectShowMatureContent,
     (byClaimId, byUri, claimsById, myClaims, blockedChannels, blacklistedMap, filteredMap, showMatureContent) => {
       const claimId = byUri[uri];
       const comments = byClaimId && byClaimId[claimId];
@@ -233,7 +232,7 @@ export const makeSelectRepliesForParentId = (id: string) =>
     selectMutedChannels,
     selectBlacklistedOutpointMap,
     selectFilteredOutpointMap,
-    makeSelectClientSetting(SETTINGS.SHOW_MATURE),
+    selectShowMatureContent,
     (state, commentsById, claimsById, myClaims, blockedChannels, blacklistedMap, filteredMap, showMatureContent) => {
       // const claimId = byUri[uri]; // just parentId (id)
       const replyIdsByParentId = state.repliesByParentId;

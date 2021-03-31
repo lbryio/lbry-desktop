@@ -1,12 +1,11 @@
 // @flow
 import { getSearchQueryString } from 'util/query-params';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { selectShowMatureContent } from 'redux/selectors/settings';
 import {
   parseURI,
   makeSelectClaimForUri,
   makeSelectClaimIsNsfw,
   buildURI,
-  SETTINGS,
   isClaimNsfw,
   makeSelectPendingClaimForUri,
   makeSelectIsUriResolving,
@@ -105,7 +104,7 @@ export const makeSelectWinningUriForQuery = (query: string) => {
   } catch (e) {}
 
   return createSelector(
-    makeSelectClientSetting(SETTINGS.SHOW_MATURE),
+    selectShowMatureContent,
     makeSelectPendingClaimForUri(uriFromQuery),
     makeSelectClaimForUri(uriFromQuery),
     makeSelectClaimForUri(channelUriFromQuery),
