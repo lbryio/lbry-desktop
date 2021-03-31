@@ -217,7 +217,7 @@
     "webpack-hot-middleware": "^2.24.3",
     "webpack-merge": "^4.2.1",
     "webpack-node-externals": "^1.7.2",
-    "y18n": "^4.0.0",
+    "y18n": "^4.0.1",
     "yarnhook": "^0.2.0"
   },
   "engines": {
