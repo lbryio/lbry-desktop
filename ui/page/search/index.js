@@ -8,6 +8,7 @@ import {
   selectSearchOptions,
   makeSelectHasReachedMaxResultsLength,
 } from 'redux/selectors/search';
+import { selectShowMatureContent } from 'redux/selectors/settings';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import SearchPage from './view';
 
@@ -23,7 +24,7 @@ const select = (state, props) => {
 
   return {
     isSearching: selectIsSearching(state),
-    showNsfw: false,
+    showNsfw: selectShowMatureContent(state),
     uris: uris,
     isAuthenticated: selectUserVerifiedEmail(state),
     searchOptions: selectSearchOptions(state),
