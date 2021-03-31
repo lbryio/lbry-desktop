@@ -22,7 +22,9 @@ export const makeSelectClientSetting = (setting) =>
   createSelector(selectClientSettings, (settings) => (settings ? settings[setting] : undefined));
 
 // refactor me
-export const selectShowMatureContent = SIMPLE_SITE ? () => () => false : makeSelectClientSetting(SETTINGS.SHOW_MATURE);
+export const selectShowMatureContent = SIMPLE_SITE
+  ? createSelector(() => false)
+  : makeSelectClientSetting(SETTINGS.SHOW_MATURE);
 
 // and me
 export const selectShowRepostedContent = makeSelectClientSetting(SETTINGS.HIDE_REPOSTS);

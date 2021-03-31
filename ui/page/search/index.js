@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { doToast, SETTINGS } from 'lbry-redux';
+import { doToast } from 'lbry-redux';
 import { withRouter } from 'react-router';
 import { doSearch } from 'redux/actions/search';
 import {
@@ -8,13 +8,13 @@ import {
   makeSelectQueryWithOptions,
   selectSearchOptions,
 } from 'redux/selectors/search';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { selectShowMatureContent } from 'redux/selectors/settings';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import analytics from 'analytics';
 import SearchPage from './view';
 
 const select = (state, props) => {
-  const showMature = makeSelectClientSetting(SETTINGS.SHOW_MATURE)(state);
+  const showMature = selectShowMatureContent(state);
   const urlParams = new URLSearchParams(props.location.search);
   let urlQuery = urlParams.get('q') || null;
   if (urlQuery) {
@@ -29,16 +29,16 @@ const select = (state, props) => {
 
   return {
     isSearching: selectIsSearching(state),
-    showNsfw: makeSelectClientSetting(SETTINGS.SHOW_MATURE)(state),
+    showNsfw: showMature,
     uris: uris,
     isAuthenticated: selectUserVerifiedEmail(state),
     searchOptions: selectSearchOptions(state),
   };
 };
 
-const perform = dispatch => ({
+const perform = (dispatch) => ({
   search: (query, options) => dispatch(doSearch(query, options)),
-  onFeedbackPositive: query => {
+  onFeedbackPositive: (query) => {
     analytics.apiSearchFeedback(query, 1);
     dispatch(
       doToast({
@@ -46,7 +46,7 @@ const perform = dispatch => ({
       })
     );
   },
-  onFeedbackNegative: query => {
+  onFeedbackNegative: (query) => {
     analytics.apiSearchFeedback(query, 0);
     dispatch(
       doToast({
