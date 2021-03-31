@@ -1,11 +1,13 @@
 // @flow
 import { URL, SHARE_DOMAIN_URL } from 'config';
 import * as ICONS from 'constants/icons';
+import * as PAGES from 'constants/pages';
 import React from 'react';
 import classnames from 'classnames';
 import { Menu, MenuButton, MenuList, MenuItem } from '@reach/menu-button';
 import Icon from 'component/common/icon';
 import { generateShareUrl } from 'util/url';
+import { useHistory } from 'react-router';
 
 const SHARE_DOMAIN = SHARE_DOMAIN_URL || URL;
 
@@ -33,6 +35,9 @@ function ClaimMenuList(props: Props) {
     doCommentModBlock,
     doCommentModUnBlock,
   } = props;
+
+  const { push } = useHistory();
+
   const channelUri =
     claim &&
     (claim.value_type === 'channel'
@@ -62,7 +67,7 @@ function ClaimMenuList(props: Props) {
   }
 
   function handleReportContent() {
-    window.open(`https://lbry.com/dmca/${claim.claim_id}`, '_blank', 'noopener');
+    push(`/$/${PAGES.REPORT_CONTENT}?claimId=${claim.claim_id}`);
   }
 
   return (
