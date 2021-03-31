@@ -134,7 +134,7 @@ function FileActions(props: Props) {
           title={__('Report content')}
           className="button--file-action"
           icon={ICONS.REPORT}
-          href={`https://lbry.com/dmca/${claimId}`}
+          navigate={`/$/${PAGES.REPORT_CONTENT}?claimId=${claimId}`}
         />
       )}
     </>
