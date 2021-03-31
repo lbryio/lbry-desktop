@@ -201,6 +201,13 @@ function PublishForm(props: Props) {
     }
   }
 
+  // if you enter the page and it is stuck in publishing, "stop it."
+  useEffect(() => {
+    if (publishing) {
+      clearPublish();
+    }
+  }, []);
+
   useEffect(() => {
     if (!thumbnail) {
       resetThumbnailStatus();
