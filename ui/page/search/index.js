@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { doToast, SETTINGS } from 'lbry-redux';
+import { doToast } from 'lbry-redux';
 import { withRouter } from 'react-router';
 import { doSearch } from 'redux/actions/search';
 import {
@@ -8,7 +8,7 @@ import {
   makeSelectQueryWithOptions,
   selectSearchOptions,
 } from 'redux/selectors/search';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { selectShowMatureContent } from 'redux/selectors/settings';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import analytics from 'analytics';
 import SearchPage from './view';
@@ -24,7 +24,7 @@ const select = (state, props) => {
 
   return {
     isSearching: selectIsSearching(state),
-    showNsfw: makeSelectClientSetting(SETTINGS.SHOW_MATURE)(state),
+    showNsfw: selectShowMatureContent(state),
     uris: uris,
     isAuthenticated: selectUserVerifiedEmail(state),
     searchOptions: selectSearchOptions(state),
