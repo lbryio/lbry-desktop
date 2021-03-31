@@ -33,6 +33,7 @@ type Props = {
   feeAmount?: string,
   limitClaimsPerChannel?: number,
   streamTypes?: Array<string>,
+  pin?: boolean,
 };
 
 function ClaimTilesDiscover(props: Props) {
@@ -55,7 +56,7 @@ function ClaimTilesDiscover(props: Props) {
     limitClaimsPerChannel,
     fetchingClaimSearchByQuery,
     streamTypes,
-    // pin,
+    pin,
   } = props;
   const { location } = useHistory();
   const urlParams = new URLSearchParams(location.search);
@@ -140,15 +141,15 @@ function ClaimTilesDiscover(props: Props) {
   const isLoading = fetchingClaimSearchByQuery[claimSearchCacheQuery];
   const shouldPerformSearch = !isLoading && uris.length === 0;
 
-  //   const fixUri = 'lbry://@ElectroBOOM#9/remove-your-mustache#9';
-  //   if (pin && uris && uris.length > 2 && window.location.pathname === '/') {
-  //     if (uris.indexOf(fixUri) !== -1) {
-  //       uris.splice(uris.indexOf(fixUri), 1);
-  //     } else {
-  //       uris.pop();
-  //     }
-  //     uris.splice(2, 0, fixUri);
-  //   }
+  const fixUri = 'lbry://@samtime#1/us-gov-tries-suing-a-cryptocurrency-lbry#8';
+  if (pin && uris && uris.length > 2 && window.location.pathname === '/') {
+    if (uris.indexOf(fixUri) !== -1) {
+      uris.splice(uris.indexOf(fixUri), 1);
+    } else {
+      uris.pop();
+    }
+    uris.splice(2, 0, fixUri);
+  }
 
   React.useEffect(() => {
     if (shouldPerformSearch) {
