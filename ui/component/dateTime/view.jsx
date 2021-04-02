@@ -52,7 +52,7 @@ class DateTime extends React.PureComponent<Props> {
         return null;
       }
 
-      return <span>{DateTime.getTimeAgoStr(date)}</span>;
+      return <span title={moment(date).format('MMMM Do, YYYY hh:mm A')}>{DateTime.getTimeAgoStr(date)}</span>;
     }
 
     return (
