@@ -2,12 +2,13 @@ import * as ACTIONS from 'constants/action_types';
 import { getAuthToken } from 'util/saved-passwords';
 import { doNotificationList } from 'redux/actions/notifications';
 
+const NOTIFICATION_WS_URL = 'wss://api.lbry.com/subscribe?auth_token=';
 const COMMENT_WS_URL = `wss://comments.lbry.com/api/v2/live-chat/subscribe?subscription_id=`;
 
 let sockets = {};
 let retryCount = 0;
 
-export const doSocketConnect = (url, cb) => {
+export const doSocketConnect = (url, retryOnDisconnect, cb) => {
   function connectToSocket() {
     if (sockets[url] !== undefined && sockets[url] !== null) {
       sockets[url].close();
@@ -21,6 +22,7 @@ export const doSocketConnect = (url, cb) => {
         retryCount = 0;
         console.log('\nConnected to WS \n\n'); // eslint-disable-line
       };
+
       sockets[url].onmessage = (e) => {
         const data = JSON.parse(e.data);
         cb(data);
@@ -28,13 +30,17 @@ export const doSocketConnect = (url, cb) => {
 
       sockets[url].onerror = (e) => {
         console.error('websocket onerror', e); // eslint-disable-line
-        retryCount += 1;
-        connectToSocket();
+        // onerror and onclose will both fire, so nothing is needed here
       };
 
       sockets[url].onclose = () => {
         console.log('\n Disconnected from WS\n\n'); // eslint-disable-line
-        sockets[url] = null;
+        if (retryOnDisconnect) {
+          retryCount += 1;
+          connectToSocket();
+        } else {
+          sockets[url] = null;
+        }
       };
     }, timeToWait);
   }
@@ -60,8 +66,9 @@ export const doNotificationSocketConnect = () => (dispatch) => {
     return;
   }
 
-  const url = `wss://api.lbry.com/subscribe?auth_token=${authToken}`;
-  doSocketConnect(url, (data) => {
+  const url = `${NOTIFICATION_WS_URL}${authToken}`;
+
+  doSocketConnect(url, true, (data) => {
     if (data.type === 'pending_notification') {
       dispatch(doNotificationList());
     }
@@ -71,7 +78,7 @@ export const doNotificationSocketConnect = () => (dispatch) => {
 export const doCommentSocketConnect = (uri, claimId) => (dispatch) => {
   const url = `${COMMENT_WS_URL}${claimId}`;
 
-  doSocketConnect(url, (response) => {
+  doSocketConnect(url, false, (response) => {
     if (response.type === 'delta') {
       const newComment = response.data.comment;
       dispatch({
