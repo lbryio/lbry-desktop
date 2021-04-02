@@ -13,7 +13,10 @@ import defaultSchema from 'hast-util-sanitize/lib/github.json';
 import { formatedLinks, inlineLinks } from 'util/remark-lbry';
 import { formattedTimestamp, inlineTimestamp } from 'util/remark-timestamp';
 import ZoomableImage from 'component/zoomableImage';
-import { CHANNEL_STAKED_LEVEL_VIDEO_COMMENTS } from 'config';
+import { CHANNEL_STAKED_LEVEL_VIDEO_COMMENTS, SIMPLE_SITE } from 'config';
+import Button from 'component/button';
+import Icon from 'component/common/icon';
+import * as ICONS from 'constants/icons';
 
 type SimpleTextProps = {
   children?: React.Node,
@@ -23,6 +26,13 @@ type SimpleLinkProps = {
   href?: string,
   title?: string,
   children?: React.Node,
+};
+
+type ImageLinkProps = {
+  src: string,
+  title?: string,
+  alt?: string,
+  helpText?: string,
 };
 
 type MarkdownProps = {
@@ -82,6 +92,32 @@ const SimpleLink = (props: SimpleLinkProps) => {
 // ****************************************************************************
 // ****************************************************************************
 
+const SimpleImageLink = (props: ImageLinkProps) => {
+  const { src, title, alt, helpText } = props;
+  if (!src) {
+    return null;
+  }
+
+  return (
+    <div className="preview-link__img--no-preview">
+      <Button
+        button="link"
+        icon={ICONS.IMAGE}
+        iconSize={28}
+        iconRight={ICONS.EXTERNAL}
+        label={title || alt}
+        title={title || alt}
+        className="button--external-link"
+        href={src}
+      />
+      {helpText && <Icon className="icon--help" icon={ICONS.HELP} tooltip size={24} customTooltipText={helpText} />}
+    </div>
+  );
+};
+
+// ****************************************************************************
+// ****************************************************************************
+
 // Use github sanitation schema
 const schema = { ...defaultSchema };
 
@@ -90,6 +126,13 @@ schema.protocols.href.push('lbry');
 schema.attributes.a.push('embed');
 
 const REPLACE_REGEX = /(<iframe\s+src=["'])(.*?(?=))(["']\s*><\/iframe>)/g;
+
+// ****************************************************************************
+// ****************************************************************************
+
+function isStakeEnoughForPreview(stakedLevel) {
+  return stakedLevel && stakedLevel >= CHANNEL_STAKED_LEVEL_VIDEO_COMMENTS;
+}
 
 // ****************************************************************************
 // ****************************************************************************
@@ -127,12 +170,23 @@ const MarkdownPreview = (props: MarkdownProps) => {
               parentCommentId={parentCommentId}
               isMarkdownPost={isMarkdownPost}
               simpleLinks={simpleLinks}
-              allowPreview={stakedLevel && stakedLevel >= CHANNEL_STAKED_LEVEL_VIDEO_COMMENTS}
+              allowPreview={isStakeEnoughForPreview(stakedLevel)}
             />
           ),
       // Workaraund of remarkOptions.Fragment
       div: React.Fragment,
-      img: ZoomableImage,
+      img: isStakeEnoughForPreview(stakedLevel)
+        ? ZoomableImage
+        : (imgProps) => (
+            <SimpleImageLink
+              src={imgProps.src}
+              alt={imgProps.alt}
+              title={imgProps.title}
+              helpText={
+                SIMPLE_SITE ? __("This channel isn't staking enough LBRY Credits for inline image previews.") : ''
+              }
+            />
+          ),
     },
   };
 

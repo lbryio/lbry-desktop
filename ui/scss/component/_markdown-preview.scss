@@ -260,6 +260,29 @@
     width: 8rem;
   }
 
+  .preview-link__img--no-preview {
+    margin: var(--spacing-s) var(--spacing-m);
+    padding: var(--spacing-s);
+    background-color: var(--color-card-background);
+
+    border-bottom-left-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+
+    .button {
+      max-width: 90%;
+    }
+  }
+
   .preview-link__description {
     margin-top: var(--spacing-s);
   }
