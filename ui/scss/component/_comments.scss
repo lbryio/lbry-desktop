@@ -192,6 +192,13 @@ $thumbnailWidthSmall: 1rem;
   }
 }
 
+.comment__creator {
+  .icon {
+    padding-top: 1px;
+    stroke: var(--color-primary);
+  }
+}
+
 .comment__message {
   word-break: break-word;
   max-width: 35rem;
@@ -213,6 +220,14 @@ $thumbnailWidthSmall: 1rem;
   text-overflow: ellipsis;
   margin-right: var(--spacing-xs);
   height: 100%;
+}
+
+.comment__author--creator {
+  @extend .comment__meta-information;
+  padding-left: var(--spacing-xxs);
+  padding-right: var(--spacing-xxs);
+  background-color: var(--color-primary-alt);
+  border-radius: var(--border-radius);
 }
 
 .comment__time {

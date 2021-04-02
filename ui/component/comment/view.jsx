@@ -25,6 +25,7 @@ import UriIndicator from 'component/uriIndicator';
 type Props = {
   clearPlayingUri: () => void,
   uri: string,
+  claim: StreamClaim,
   author: ?string, // LBRY Channel Name, e.g. @channel
   authorUri: string, // full LBRY Channel URI: lbry://@channel#123...
   commentId: string, // sha256 digest identifying the comment
@@ -59,6 +60,7 @@ const ESCAPE_KEY = 27;
 function Comment(props: Props) {
   const {
     clearPlayingUri,
+    claim,
     uri,
     author,
     authorUri,
@@ -98,6 +100,7 @@ function Comment(props: Props) {
   const dislikesCount = (othersReacts && othersReacts.dislike) || 0;
   const totalLikesAndDislikes = likesCount + dislikesCount;
   const slimedToDeath = totalLikesAndDislikes >= 5 && dislikesCount / totalLikesAndDislikes > 0.8;
+  const commentByOwnerOfContent = claim && claim.signing_channel && claim.signing_channel.permanent_url === authorUri;
 
   let channelOwnerOfContent;
   try {
@@ -197,7 +200,14 @@ function Comment(props: Props) {
               {!author ? (
                 <span className="comment__author">{__('Anonymous')}</span>
               ) : (
-                <UriIndicator className="comment__author" link external={livestream} uri={authorUri} />
+                <UriIndicator
+                  className={classnames('comment__author', {
+                    'comment__author--creator': commentByOwnerOfContent,
+                  })}
+                  link
+                  external={livestream}
+                  uri={authorUri}
+                />
               )}
               {!livestream && (
                 <Button
