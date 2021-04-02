@@ -30,6 +30,6 @@ export default function I18nMessage(props: Props) {
   return (
     // style={{height: iframeHeight}}
     // ref={iframeRef}
-    <iframe src={src} title={title} onLoad={onLoad} />
+    <iframe src={src} title={title} onLoad={onLoad} sandbox="" />
   );
 }
