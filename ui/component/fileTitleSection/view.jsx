@@ -36,9 +36,9 @@ function FileTitleSection(props: Props) {
           <h1 className="section__title">{__('Help LBRY Save Crypto')}</h1>
           <p className="section__subtitle">
             {__(
-              'The SEC doesn’t understand blockchain. The claims made in SEC vs. LBRY would destroy the United States cryptocurrency industry.'
+              'The US government is attempting to destroy the cryptocurrency industry. Can you help?'
             )}{' '}
-            <Button label={__('Learn more')} button="link" href="https://helplbrysavecrypto.com" />
+            <Button label={__('Learn more and sign petition')} button="link" href="https://helplbrysavecrypto.com" />
           </p>
         </div>
       )}
