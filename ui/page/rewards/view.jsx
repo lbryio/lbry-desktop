@@ -69,7 +69,7 @@ class RewardsPage extends PureComponent<Props> {
 
               <p>
                 {__(
-                  'We apologize for this inconvenience, but have added this additional step to prevent abuse. Users on VPN or shared connections will continue to see this message and are not not eligible for Rewards.'
+                  'We apologize for this inconvenience, but have added this additional step to prevent abuse. Users on VPN or shared connections will continue to see this message and are not eligible for Rewards.'
                 )}
               </p>
               <p>
@@ -156,7 +156,7 @@ class RewardsPage extends PureComponent<Props> {
           'card--disabled': isNotEligible,
         })}
       >
-        {rewards.map(reward => (
+        {rewards.map((reward) => (
           <RewardTile key={reward.claim_code} reward={reward} />
         ))}
         {this.renderCustomRewardCode()}
