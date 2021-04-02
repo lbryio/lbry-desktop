@@ -29,7 +29,7 @@ export const selectPlayingUri = createSelector(selectState, (state) => state.pla
 export const selectPrimaryUri = createSelector(selectState, (state) => state.primaryUri);
 
 export const makeSelectIsPlaying = (uri: string) =>
-  createSelector(selectPlayingUri, (playingUri) => playingUri && playingUri.uri === uri);
+  createSelector(selectPrimaryUri, (primaryUri) => primaryUri === uri);
 
 export const makeSelectIsPlayerFloating = (location: UrlLocation) =>
   createSelector(selectPrimaryUri, selectPlayingUri, selectClaimsByUri, (primaryUri, playingUri, claimsByUri) => {
