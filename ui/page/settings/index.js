@@ -28,6 +28,7 @@ const select = (state) => ({
   currentTheme: makeSelectClientSetting(SETTINGS.THEME)(state),
   themes: makeSelectClientSetting(SETTINGS.THEMES)(state),
   automaticDarkModeEnabled: makeSelectClientSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED)(state),
+  clock24h: makeSelectClientSetting(SETTINGS.CLOCK_24H)(state),
   autoplay: makeSelectClientSetting(SETTINGS.AUTOPLAY)(state),
   walletEncrypted: selectWalletIsEncrypted(state),
   autoDownload: makeSelectClientSetting(SETTINGS.AUTO_DOWNLOAD)(state),

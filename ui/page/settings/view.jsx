@@ -57,6 +57,7 @@ type Props = {
   currentTheme: string,
   themes: Array<string>,
   automaticDarkModeEnabled: boolean,
+  clock24h: boolean,
   autoplay: boolean,
   updateWalletStatus: () => void,
   walletEncrypted: boolean,
@@ -125,6 +126,10 @@ class SettingsPage extends React.PureComponent<Props, State> {
     this.props.setClientSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED, value);
   }
 
+  onClock24hChange(value: boolean) {
+    this.props.setClientSetting(SETTINGS.CLOCK_24H, value);
+  }
+
   onConfirmForgetPassword() {
     const { confirmForgetPassword } = this.props;
     confirmForgetPassword({
@@ -165,6 +170,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
       currentTheme,
       themes,
       automaticDarkModeEnabled,
+      clock24h,
       autoplay,
       walletEncrypted,
       // autoDownload,
@@ -305,6 +311,15 @@ class SettingsPage extends React.PureComponent<Props, State> {
                         </FormField>
                       </fieldset-group>
                     )}
+                  </fieldset-section>
+                  <fieldset-section>
+                    <FormField
+                      type="checkbox"
+                      name="clock24h"
+                      onChange={() => this.onClock24hChange(!clock24h)}
+                      checked={clock24h}
+                      label={__('24-hour clock')}
+                    />
                   </fieldset-section>
                 </React.Fragment>
               }
