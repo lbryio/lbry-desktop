@@ -145,7 +145,11 @@ class SettingsPage extends React.PureComponent<Props, State> {
     this.props.setDarkTime(value, options);
   }
 
-  to12Hour(time: string) {
+  formatHour(time: string, clock24h: boolean) {
+    if (clock24h) {
+      return `${time}:00`;
+    }
+
     const now = new Date(0, 0, 0, Number(time));
 
     const hour = now.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit' });
@@ -292,7 +296,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                         >
                           {startHours.map((time) => (
                             <option key={time} value={time}>
-                              {this.to12Hour(time)}
+                              {this.formatHour(time, clock24h)}
                             </option>
                           ))}
                         </FormField>
@@ -305,7 +309,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                         >
                           {endHours.map((time) => (
                             <option key={time} value={time}>
-                              {this.to12Hour(time)}
+                              {this.formatHour(time, clock24h)}
                             </option>
                           ))}
                         </FormField>
