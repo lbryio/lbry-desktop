@@ -93,6 +93,8 @@ type PrivateRouteProps = Props & {
 
 function PrivateRoute(props: PrivateRouteProps) {
   const { component: Component, isAuthenticated, ...rest } = props;
+  const urlSearchParams = new URLSearchParams(props.location.search);
+  const redirectUrl = urlSearchParams.get('redirect');
   return (
     <Route
       {...rest}
@@ -100,7 +102,7 @@ function PrivateRoute(props: PrivateRouteProps) {
         isAuthenticated || !IS_WEB ? (
           <Component {...props} />
         ) : (
-          <Redirect to={`/$/${PAGES.AUTH}?redirect=${props.location.pathname}`} />
+          <Redirect to={`/$/${PAGES.AUTH}?redirect=${redirectUrl || props.location.pathname}`} />
         )
       }
     />
@@ -122,7 +124,7 @@ function AppRouter(props: Props) {
     setReferrer,
     homepageData,
   } = props;
-  const { entries } = history;
+  const { entries, listen, action: historyAction } = history;
   const entryIndex = history.index;
   const urlParams = new URLSearchParams(search);
   const resetScroll = urlParams.get('reset_scroll');
@@ -134,13 +136,13 @@ function AppRouter(props: Props) {
 
   // For people arriving at settings page from deeplinks, know whether they can "go back"
   useEffect(() => {
-    const unlisten = history.listen((location, action) => {
+    const unlisten = listen((location, action) => {
       if (action === 'PUSH') {
         if (!hasNavigated && setHasNavigated) setHasNavigated();
       }
     });
     return unlisten;
-  }, [hasNavigated, setHasNavigated]);
+  }, [listen, hasNavigated, setHasNavigated]);
 
   useEffect(() => {
     if (!hasNavigated && hasUnclaimedRefereeReward && !isAuthenticated) {
@@ -179,7 +181,7 @@ function AppRouter(props: Props) {
 
   useEffect(() => {
     if (!hasLinkedCommentInUrl) {
-      if (hash && history.action === 'PUSH') {
+      if (hash && historyAction === 'PUSH') {
         const id = hash.replace('#', '');
         const element = document.getElementById(id);
         if (element) {
@@ -189,7 +191,7 @@ function AppRouter(props: Props) {
         window.scrollTo(0, currentScroll);
       }
     }
-  }, [currentScroll, pathname, search, hash, resetScroll, hasLinkedCommentInUrl]);
+  }, [currentScroll, pathname, search, hash, resetScroll, hasLinkedCommentInUrl, historyAction]);
 
   // react-router doesn't decode pathanmes before doing the route matching check
   // We have to redirect here because if we redirect on the server, it might get encoded again

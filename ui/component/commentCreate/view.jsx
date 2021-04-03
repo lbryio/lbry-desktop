@@ -58,7 +58,10 @@ export function CommentCreate(props: Props) {
     claimIsMine,
   } = props;
   const buttonref: ElementRef<any> = React.useRef();
-  const { push } = useHistory();
+  const {
+    push,
+    location: { pathname },
+  } = useHistory();
   const { claim_id: claimId } = claim;
   const [commentValue, setCommentValue] = React.useState('');
   const [lastCommentTime, setLastCommentTime] = React.useState();
@@ -101,9 +104,7 @@ export function CommentCreate(props: Props) {
         : (lastCommentTime - Date.now()) / 1000 + COMMENT_SLOW_MODE_SECONDS;
 
       if (livestream && !claimIsMine && timeUntilCanComment > 0) {
-        toast(
-          __('Slowmode is on. You can comment again in %time% seconds.', { time: Math.ceil(timeUntilCanComment) })
-        );
+        toast(__('Slowmode is on. You can comment again in %time% seconds.', { time: Math.ceil(timeUntilCanComment) }));
         return;
       }
 
@@ -128,7 +129,17 @@ export function CommentCreate(props: Props) {
 
   if (!hasChannels) {
     return (
-      <div role="button" onClick={() => push(`/$/${PAGES.CHANNEL_NEW}`)}>
+      <div
+        role="button"
+        onClick={() => {
+          const pathPlusRedirect = `/$/${PAGES.CHANNEL_NEW}?redirect=${pathname}`;
+          if (livestream) {
+            window.open(pathPlusRedirect);
+          } else {
+            push(pathPlusRedirect);
+          }
+        }}
+      >
         <FormField
           type="textarea"
           name={'comment_signup_prompt'}
