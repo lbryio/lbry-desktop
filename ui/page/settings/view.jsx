@@ -289,7 +289,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                       <fieldset-group class="fieldset-group--smushed">
                         <FormField
                           type="select"
-                          name="automatic_dark_mode_range"
+                          name="automatic_dark_mode_range_start"
                           onChange={(value) => this.onChangeTime(value, { fromTo: 'from', time: 'hour' })}
                           value={darkModeTimes.from.hour}
                           label={__('From --[initial time]--')}
@@ -302,7 +302,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                         </FormField>
                         <FormField
                           type="select"
-                          name="automatic_dark_mode_range"
+                          name="automatic_dark_mode_range_end"
                           label={__('To --[final time]--')}
                           onChange={(value) => this.onChangeTime(value, { fromTo: 'to', time: 'hour' })}
                           value={darkModeTimes.to.hour}
