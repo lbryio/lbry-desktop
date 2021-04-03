@@ -459,3 +459,8 @@ fieldset-section {
     }
   }
 }
+
+#automatic_dark_mode_range_start,
+#automatic_dark_mode_range_end {
+  min-width: 6em;
+}
