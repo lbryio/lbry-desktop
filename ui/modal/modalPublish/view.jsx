@@ -19,6 +19,10 @@ type Props = {
 };
 
 class ModalPublishSuccess extends React.PureComponent<Props> {
+  componentDidMount() {
+    const { clearPublish } = this.props;
+    clearPublish();
+  }
   render() {
     const { closeModal, clearPublish, navigate, uri, isEdit, filePath, lbryFirstError, claim } = this.props;
     //   $FlowFixMe
@@ -42,8 +46,6 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
     } else {
       publishMessage = __('Your file is now pending on LBRY. It will take a few minutes to appear for other users.');
     }
-
-    clearPublish();
 
     function handleClose() {
       closeModal();

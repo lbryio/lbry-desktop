@@ -25,7 +25,6 @@ export default function LivestreamPage(props: Props) {
   const STREAMING_POLL_INTERVAL_IN_MS = 10000;
   const LIVESTREAM_CLAIM_POLL_IN_MS = 60000;
 
-  // the component needs to check if the channel has published a new livestream, so we know if it should check
   React.useEffect(() => {
     let checkClaimsInterval;
     function checkHasLivestreamClaim() {
