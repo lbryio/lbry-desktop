@@ -13,6 +13,7 @@ export const INSTANT_PURCHASE_MAX = 'instant_purchase_max';
 export const THEME = 'theme';
 export const THEMES = 'themes';
 export const AUTOMATIC_DARK_MODE_ENABLED = 'automatic_dark_mode_enabled';
+export const CLOCK_24H = 'clock_24h';
 export const AUTOPLAY = 'autoplay';
 export const OS_NOTIFICATIONS_ENABLED = 'os_notifications_enabled';
 export const AUTO_DOWNLOAD = 'auto_download';

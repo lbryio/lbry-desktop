@@ -7,6 +7,7 @@ type Props = {
   timeAgo?: boolean,
   formatOptions: {},
   show?: string,
+  clock24h: boolean,
 };
 
 class DateTime extends React.PureComponent<Props> {
@@ -45,20 +46,25 @@ class DateTime extends React.PureComponent<Props> {
   }
 
   render() {
-    const { date, timeAgo, show } = this.props;
+    const { date, timeAgo, show, clock24h } = this.props;
+
+    let clockFormat = 'hh:mm A';
+    if (clock24h) {
+      clockFormat = 'HH:mm';
+    }
 
     if (timeAgo) {
       if (!date) {
         return null;
       }
 
-      return <span title={moment(date).format('MMMM Do, YYYY hh:mm A')}>{DateTime.getTimeAgoStr(date)}</span>;
+      return <span title={moment(date).format(`MMMM Do, YYYY ${clockFormat}`)}>{DateTime.getTimeAgoStr(date)}</span>;
     }
 
     return (
       <span>
         {date && show === DateTime.SHOW_DATE && moment(date).format('MMMM Do, YYYY')}
-        {date && show === DateTime.SHOW_TIME && moment(date).format('hh:mm A')}
+        {date && show === DateTime.SHOW_TIME && moment(date).format(clockFormat)}
         {!date && '...'}
       </span>
     );
