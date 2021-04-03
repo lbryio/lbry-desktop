@@ -80,7 +80,6 @@ const ModalPublishPreview = (props: Props) => {
     previewResponse.outputs[0] && previewResponse.outputs[0].value && !previewResponse.outputs[0].value.source;
   // leave the confirm modal up if we're not going straight to upload/reflecting
   // @if TARGET='web'
-
   React.useEffect(() => {
     if (publishing && !livestream) {
       closeModal();
@@ -88,9 +87,7 @@ const ModalPublishPreview = (props: Props) => {
       closeModal();
     }
   }, [publishSuccess, publishing, livestream]);
-
   // @endif
-  // const waitForSuccess = false;
   function onConfirmed() {
     // Publish for real:
     publish(getFilePathName(filePath), false);
