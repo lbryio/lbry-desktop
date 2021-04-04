@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Fixed
 
+- Fix display of upload date and view count on smaller screens ([#5822](https://github.com/lbryio/lbry-desktop/issues/5822))
 - Autoplay looping to a previous video or itself ([#5711](https://github.com/lbryio/lbry-desktop/pull/5711))
 - Autoplay not working in mini-player mode ([#5716](https://github.com/lbryio/lbry-desktop/pull/5716))
 - Edited claim accidentally moved to 'Anonymous' ([#5767](https://github.com/lbryio/lbry-desktop/pull/5767))
