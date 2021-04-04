@@ -54,7 +54,7 @@ export default function LivestreamFeed(props: Props) {
     function handleScroll() {
       if (element) {
         const scrollHeight = element.scrollHeight - element.offsetHeight;
-        const isAtBottom = scrollHeight === element.scrollTop;
+        const isAtBottom = scrollHeight <= element.scrollTop + 100;
 
         if (!isAtBottom) {
           hasScrolledComments.current = true;
@@ -71,7 +71,7 @@ export default function LivestreamFeed(props: Props) {
         // Only update comment scroll if the user hasn't scrolled up to view old comments
         // If they have, do nothing
         if (!hasScrolledComments.current || !performedInitialScroll) {
-          element.scrollTop = element.scrollHeight - element.offsetHeight;
+          setTimeout(() => (element.scrollTop = element.scrollHeight - element.offsetHeight + 100), 20);
 
           if (!performedInitialScroll) {
             setPerformedInitialScroll(true);
