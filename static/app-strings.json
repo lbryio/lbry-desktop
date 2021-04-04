@@ -1741,7 +1741,7 @@
   "Processing...": "Processing...",
   "View Past Swaps": "View Past Swaps",
   "Remove address": "Remove address",
-  "Waiting for BTC": "Waiting for BTC",
+  "Waiting %sendAmount% BTC": "Waiting %sendAmount% BTC",
   "Waiting to receive your bitcoin.": "Waiting to receive your bitcoin.",
   "Sending LBC": "Sending LBC",
   "Bitcoin received. Sending your LBC.": "Bitcoin received. Sending your LBC.",

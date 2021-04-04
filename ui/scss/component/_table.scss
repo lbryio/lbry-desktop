@@ -158,6 +158,10 @@ th {
   tr {
     white-space: nowrap;
   }
+
+  td:nth-of-type(2) {
+    font-size: var(--font-small);
+  }
 }
 
 .table--rewards {
