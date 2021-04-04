@@ -6,19 +6,19 @@ import Card from 'component/common/card';
 import I18nMessage from 'component/i18nMessage';
 
 type Props = {
-  btcAddress: string,
-  doRemoveBtcAddress: (string) => void,
+  sendAddress: string,
+  removeCoinSwap: (string) => void,
   closeModal: () => void,
 };
 
 function ModalRemoveBtcSwapAddress(props: Props) {
-  const { btcAddress, doRemoveBtcAddress, closeModal } = props;
+  const { sendAddress, removeCoinSwap, closeModal } = props;
 
   return (
     <Modal isOpen contentLabel={__('Confirm Address Removal')} type="card" onAborted={closeModal}>
       <Card
         title={__('Remove BTC Swap Address')}
-        subtitle={<I18nMessage tokens={{ btc_address: <em>{`${btcAddress}`}</em> }}>Remove %btc_address%?</I18nMessage>}
+        subtitle={<I18nMessage tokens={{ address: <em>{`${sendAddress}`}</em> }}>Remove %address%?</I18nMessage>}
         body={<p className="help--warning">{__('This process cannot be reversed.')}</p>}
         actions={
           <>
@@ -27,7 +27,7 @@ function ModalRemoveBtcSwapAddress(props: Props) {
                 button="primary"
                 label={__('OK')}
                 onClick={() => {
-                  doRemoveBtcAddress(btcAddress);
+                  removeCoinSwap(sendAddress);
                   closeModal();
                 }}
               />

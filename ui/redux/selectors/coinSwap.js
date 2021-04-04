@@ -3,6 +3,6 @@ import { createSelector } from 'reselect';
 
 const selectState = (state: { coinSwap: CoinSwapState }) => state.coinSwap || {};
 
-export const selectBtcAddresses = createSelector(selectState, (state: CoinSwapState) => {
-  return state.btcAddresses.filter((x) => typeof x === 'string');
+export const selectCoinSwaps = createSelector(selectState, (state: CoinSwapState) => {
+  return state.coinSwaps.filter((x) => typeof x.sendAddress === 'string');
 });
