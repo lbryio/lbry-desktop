@@ -1,0 +1,55 @@
+:root {
+  // Generic colors
+  --color-primary: #257761;
+  --color-primary-alt: #e4f4ef;
+  --color-primary-alt-2: #4b8576;
+  --color-secondary: #295284;
+  --color-secondary-alt: #d9eaff;
+  --color-tertiary: #552470;
+  --color-tertiary-alt: #f7e8ff;
+  --color-danger: #9b2023;
+  --color-danger-alt: #fccdce;
+  --color-warning: #fff58c;
+  --color-cost: #ffd580;
+  --color-focus: #93cff2;
+  --color-notification: #f02849;
+
+  --color-fire: #ff6635;
+  --color-fire-outside: #ff6635;
+  --color-glow: #ffd73550;
+  --color-slime: #81c554;
+  --color-success: #009e65;
+
+  --color-black: #111;
+  --color-white: #fdfdfd;
+  --color-white-alt: #fafafa;
+  --color-gray-1: #eff1f4;
+  --color-gray-2: #d8dde1;
+  --color-gray-3: #ced4da;
+  --color-gray-4: #abb1b7;
+  --color-gray-5: #666a6d;
+
+  // Text
+  --color-text: var(--color-black);
+  --color-text-subtitle: var(--color-gray-5);
+  --color-text-inverse: #fdfdfd;
+
+  // Components
+
+  // Button
+
+  // Input
+  --color-input-color: #111111;
+  --color-input-label: var(--color-gray-5);
+  --color-input-placeholder: #212529;
+  --color-input-bg: var(--color-gray-1);
+  --color-input-bg-copyable: #434b53;
+  --color-input-border: var(--color-border);
+  --color-input-border-active: var(--color-secondary);
+  --color-input-toggle: var(--color-secondary);
+  --color-input-toggle-bg: var(--color-gray-1);
+  --color-input-toggle-bg-hover: var(--color-secondary-alt);
+
+  // Table
+  --color-table-highlight: var(--color-white-alt);
+}
