@@ -7,7 +7,7 @@ import LivestreamFeed from './view';
 
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
-  comments: makeSelectTopLevelCommentsForUri(props.uri)(state),
+  comments: makeSelectTopLevelCommentsForUri(props.uri)(state).slice(0, 25),
   fetchingComments: selectIsFetchingComments(state),
 });
 
