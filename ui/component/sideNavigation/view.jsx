@@ -1,5 +1,6 @@
 // @flow
 import type { Node } from 'react';
+import { BITWAVE_API } from 'constants/livestream';
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
 import React from 'react';
@@ -33,6 +34,7 @@ const RECENT_FROM_FOLLOWING = {
 
 type Props = {
   subscriptions: Array<Subscription>,
+  claims: Array<Claim>,
   followedTags: Array<Tag>,
   email: ?string,
   uploadCount: number,
@@ -60,6 +62,7 @@ type SideNavLink = {
 function SideNavigation(props: Props) {
   const {
     subscriptions,
+    claims,
     followedTags,
     doSignOut,
     email,
@@ -73,6 +76,40 @@ function SideNavigation(props: Props) {
     homepageData,
     user,
   } = props;
+  const channelsLive = [];
+  
+  React.useEffect(() => {
+    claims.filter(function( element ) {
+      return element !== undefined;
+   }).map(({ claim_id, permanent_url, name }) => {
+      function fetchIsStreaming() {
+        // $FlowFixMe Bitwave's API can handle garbage
+        fetch(`${BITWAVE_API}/${claim_id}`)
+          .catch((e) => {})
+          .then((res) => res.json())
+          .then((res) => {
+            if (res && res.success && res.data && res.data.live) {
+              channelsLive.push({
+                uri: permanent_url,
+                channelName: name,
+              });
+            }
+          });
+      }
+
+      let interval;
+      if (claim_id) {
+        if (!interval) fetchIsStreaming();
+        interval = setInterval(fetchIsStreaming, 10 * 1000);
+      }
+
+      return () => {
+        if (interval) {
+          clearInterval(interval);
+        }
+      };
+    });
+  }, [claims]);
 
   const { EXTRA_SIDEBAR_LINKS } = homepageData;
 
@@ -347,6 +384,17 @@ function SideNavigation(props: Props) {
 
             {sidebarOpen && isPersonalized && subscriptions && subscriptions.length > 0 && (
               <ul className="navigation__secondary navigation-links">
+                {channelsLive.map(({ uri, channelName }, index) => (
+                  <li key={uri} className="navigation-link__wrapper">
+                    <Button
+                      navigate={uri}
+                      label={channelName}
+                      className="navigation-link"
+                      activeClass="navigation-link--active"
+                      icon={ICONS.VIDEO}
+                    />
+                  </li>
+                ))}
                 {subscriptions.map(({ uri, channelName }, index) => (
                   <li key={uri} className="navigation-link__wrapper">
                     <Button
@@ -430,6 +478,17 @@ function SideNavigation(props: Props) {
               </ul>
               {sidebarOpen && isPersonalized && subscriptions && subscriptions.length > 0 && (
                 <ul className="navigation__secondary navigation-links">
+                  {channelsLive.map(({ uri, channelName }, index) => (
+                    <li key={uri} className="navigation-link__wrapper">
+                      <Button
+                        navigate={uri}
+                        label={channelName}
+                        className="navigation-link"
+                        activeClass="navigation-link--active"
+                        icon={ICONS.VIDEO}
+                      />
+                    </li>
+                  ))}
                   {subscriptions.map(({ uri, channelName }, index) => (
                     <li key={uri} className="navigation-link__wrapper">
                       <Button
