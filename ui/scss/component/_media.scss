@@ -57,12 +57,13 @@
 .media__subtitle--between {
   @extend .media__subtitle;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-direction: row;
 
-  @media (min-width: $breakpoint-small) {
-    justify-content: space-between;
-    align-items: flex-end;
-    flex-direction: row;
+  // smaller screen
+  @media (max-width: $breakpoint-medium) {
+    display: block;
   }
 }
 

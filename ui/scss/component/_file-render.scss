@@ -691,14 +691,20 @@ video::-internal-media-controls-overlay-cast-button {
 .file__viewdate {
   display: flex;
   justify-content: space-between;
+  flex-direction: column;
   margin-bottom: var(--spacing-s);
 
-  @media (min-width: $breakpoint-small) {
-    flex-direction: column;
-    margin-bottom: 0;
+  > :first-child {
+    margin-bottom: var(--spacing-s);
+  }
+
+  @media (max-width: $breakpoint-medium) {
+    flex-direction: row;
+    justify-content: start;
 
     > :first-child {
-      margin-bottom: var(--spacing-s);
+      margin-bottom: 0;
+      margin-right: 1rem;
     }
   }
 }
