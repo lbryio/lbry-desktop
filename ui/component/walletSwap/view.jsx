@@ -261,8 +261,8 @@ function WalletSwap(props: Props) {
     });
   }
 
-  function getStatusStr(btcAddress) {
-    const status = statusMap[btcAddress];
+  function getStatusStr(coinSwap: CoinSwapInfo) {
+    const status = statusMap[coinSwap.sendAddress];
     if (!status) {
       return '---';
     }
@@ -270,7 +270,7 @@ function WalletSwap(props: Props) {
     let msg;
     switch (status.Status) {
       case BTC_API_STATUS_PENDING:
-        msg = __('Waiting for BTC');
+        msg = __('Waiting %sendAmount% BTC', { sendAmount: coinSwap.sendAmount });
         break;
       case BTC_API_STATUS_PROCESSING:
         msg = __('Sending LBC');
@@ -442,7 +442,7 @@ function WalletSwap(props: Props) {
                             }}
                           />
                         </td>
-                        <td>{isRefreshingStatus ? '...' : getStatusStr(x.sendAddress)}</td>
+                        <td>{isRefreshingStatus ? '...' : getStatusStr(x)}</td>
                         <td>
                           <Button
                             button="link"
