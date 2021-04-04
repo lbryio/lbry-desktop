@@ -47,24 +47,16 @@ const NAG_RATE_CALL_FAILED = 'Unable to obtain exchange rate. Try again later.';
 
 type Props = {
   receiveAddress: string,
-  btcAddresses: Array<string>,
+  coinSwaps: Array<CoinSwapInfo>,
   doToast: ({ message: string }) => void,
-  doAddBtcAddress: (string) => void,
+  addCoinSwap: (CoinSwapInfo) => void,
   getNewAddress: () => void,
   checkAddressIsMine: (string) => void,
   openModal: (string, {}) => void,
 };
 
 function WalletSwap(props: Props) {
-  const {
-    receiveAddress,
-    doToast,
-    btcAddresses,
-    doAddBtcAddress,
-    getNewAddress,
-    checkAddressIsMine,
-    openModal,
-  } = props;
+  const { receiveAddress, doToast, coinSwaps, addCoinSwap, getNewAddress, checkAddressIsMine, openModal } = props;
 
   const [btc, setBtc] = usePersistedState('swap-btc-amount', 0.001);
   const [btcError, setBtcError] = React.useState();
@@ -92,9 +84,9 @@ function WalletSwap(props: Props) {
     setBtcAddress(null);
   }
 
-  function removeBtcAddress(btcAddress) {
+  function removeCoinSwap(sendAddress) {
     openModal(MODALS.CONFIRM_REMOVE_BTC_SWAP_ADDRESS, {
-      btcAddress: btcAddress,
+      sendAddress: sendAddress,
     });
   }
 
@@ -236,7 +228,12 @@ function WalletSwap(props: Props) {
     })
       .then((result) => {
         setBtcAddress(result);
-        doAddBtcAddress(result);
+        addCoinSwap({
+          coin: 'btc',
+          sendAddress: result,
+          sendAmount: btc,
+          lbcAmount: lbc,
+        });
       })
       .catch((err) => {
         setNag({ msg: err === INTERNAL_APIS_DOWN ? NAG_SWAP_CALL_FAILED : err.message, type: 'error' });
@@ -259,8 +256,8 @@ function WalletSwap(props: Props) {
     setNag(null);
     setIsRefreshingStatus(true);
 
-    btcAddresses.forEach((x) => {
-      queryStatus(x, null, null);
+    coinSwaps.forEach((x) => {
+      queryStatus(x.sendAddress, null, null);
     });
   }
 
@@ -357,9 +354,7 @@ function WalletSwap(props: Props) {
           disabled={isSwapping || isNaN(btc) || btc === 0 || lbc === 0 || btcError}
           label={isSwapping ? __('Processing...') : __('Start Swap')}
         />
-        {btcAddresses.length !== 0 && (
-          <Button button="link" label={__('View Past Swaps')} onClick={handleViewPastSwaps} />
-        )}
+        {coinSwaps.length !== 0 && <Button button="link" label={__('View Past Swaps')} onClick={handleViewPastSwaps} />}
       </div>
     </>
   );
@@ -424,37 +419,36 @@ function WalletSwap(props: Props) {
                 </tr>
               </thead>
               <tbody>
-                {btcAddresses.length === 0 && (
+                {coinSwaps.length === 0 && (
                   <tr>
                     <td>{'---'}</td>
                   </tr>
                 )}
-                {btcAddresses.length !== 0 &&
-                  btcAddresses.map((x) => {
-                    const shortBtcAddress = x.substring(0, 7);
+                {coinSwaps.length !== 0 &&
+                  coinSwaps.map((x) => {
                     return (
-                      <tr key={x}>
+                      <tr key={x.sendAddress}>
                         <td>
                           <Button
                             button="link"
                             className="button--hash-id"
-                            title={x}
-                            label={shortBtcAddress}
+                            title={x.sendAddress}
+                            label={x.sendAddress.substring(0, 7)}
                             onClick={() => {
-                              clipboard.writeText(x);
+                              clipboard.writeText(x.sendAddress);
                               doToast({
                                 message: __('Address copied.'),
                               });
                             }}
                           />
                         </td>
-                        <td>{isRefreshingStatus ? '...' : getStatusStr(x)}</td>
+                        <td>{isRefreshingStatus ? '...' : getStatusStr(x.sendAddress)}</td>
                         <td>
                           <Button
                             button="link"
                             icon={ICONS.REMOVE}
                             title={__('Remove address')}
-                            onClick={() => removeBtcAddress(x)}
+                            onClick={() => removeCoinSwap(x.sendAddress)}
                           />
                         </td>
                       </tr>
@@ -467,7 +461,7 @@ function WalletSwap(props: Props) {
       </div>
       <div className="section__actions">
         <Button autoFocus onClick={handleCancelPending} button="primary" label={__('Go Back')} />
-        {btcAddresses.length !== 0 && !isRefreshingStatus && (
+        {coinSwaps.length !== 0 && !isRefreshingStatus && (
           <Button button="link" label={__('Refresh')} onClick={handleViewPastSwaps} />
         )}
         {isRefreshingStatus && <Spinner type="small" />}

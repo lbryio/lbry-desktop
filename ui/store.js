@@ -66,7 +66,7 @@ const searchFilter = createFilter('search', ['options']);
 const tagsFilter = createFilter('tags', ['followedTags']);
 const subscriptionsFilter = createFilter('subscriptions', ['subscriptions']);
 const blockedFilter = createFilter('blocked', ['blockedChannels']);
-const btcAddressesFilter = createFilter('coinSwap', ['btcAddresses']);
+const coinSwapsFilter = createFilter('coinSwap', ['coinSwaps']);
 const settingsFilter = createBlacklistFilter('settings', ['loadedLanguages', 'language']);
 const whiteListedReducers = [
   'fileInfo',
@@ -86,7 +86,7 @@ const transforms = [
   fileInfoFilter,
   walletFilter,
   blockedFilter,
-  btcAddressesFilter,
+  coinSwapsFilter,
   tagsFilter,
   appFilter,
   searchFilter,
@@ -122,8 +122,8 @@ const triggerSharedStateActions = [
   ACTIONS.CHANNEL_SUBSCRIBE,
   ACTIONS.CHANNEL_UNSUBSCRIBE,
   ACTIONS.TOGGLE_BLOCK_CHANNEL,
-  ACTIONS.ADD_BTC_ADDRESS,
-  ACTIONS.REMOVE_BTC_ADDRESS,
+  ACTIONS.ADD_COIN_SWAP,
+  ACTIONS.REMOVE_COIN_SWAP,
   ACTIONS.TOGGLE_TAG_FOLLOW,
   LBRY_REDUX_ACTIONS.CREATE_CHANNEL_COMPLETED,
   ACTIONS.SYNC_CLIENT_SETTINGS,
@@ -156,7 +156,7 @@ const sharedStateFilters = {
     property: 'following',
   },
   blocked: { source: 'blocked', property: 'blockedChannels' },
-  btc_addresses: { source: 'coinSwap', property: 'btcAddresses' },
+  coin_swaps: { source: 'coinSwap', property: 'coinSwaps' },
   settings: { source: 'settings', property: 'sharedPreferences' },
   app_welcome_version: { source: 'app', property: 'welcomeVersion' },
   sharing_3P: { source: 'app', property: 'allowAnalytics' },

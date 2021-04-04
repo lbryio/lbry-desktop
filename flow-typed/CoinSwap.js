@@ -1,10 +1,27 @@
+declare type CoinSwapInfo = {
+  coin: string,
+  sendAddress: string,
+  sendAmount: number,
+  lbcAmount: number,
+}
+
 declare type CoinSwapState = {
-  btcAddresses: Array<string>
+  coinSwaps: Array<CoinSwapInfo>
 };
 
 declare type CoinSwapAction = {
   type: string,
   data: {
-    btcAddress: string,
+    coin: string,
+    sendAddress: string,
+    sendAmount: number,
+    lbcAmount: number,
+  },
+};
+
+declare type CoinSwapRemoveAction = {
+  type: string,
+  data: {
+    sendAddress: string,
   },
 };

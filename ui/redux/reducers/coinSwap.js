@@ -4,41 +4,47 @@ import { ACTIONS as LBRY_REDUX_ACTIONS } from 'lbry-redux';
 import { handleActions } from 'util/redux-utils';
 
 const defaultState: CoinSwapState = {
-  btcAddresses: [],
+  coinSwaps: [],
 };
 
 export default handleActions(
   {
-    [ACTIONS.ADD_BTC_ADDRESS]: (state: CoinSwapState, action: CoinSwapAction): CoinSwapState => {
-      const { btcAddresses } = state;
-      const { btcAddress } = action.data;
-      let newBtcAddresses = btcAddresses.slice();
-      if (!newBtcAddresses.includes(btcAddress)) {
-        newBtcAddresses.push(btcAddress);
+    [ACTIONS.ADD_COIN_SWAP]: (state: CoinSwapState, action: CoinSwapAction): CoinSwapState => {
+      const { coinSwaps } = state;
+      const { coin, sendAddress, sendAmount, lbcAmount } = action.data;
+
+      let newCoinSwaps = coinSwaps.slice();
+      if (!newCoinSwaps.find((x) => x.sendAddress === sendAddress)) {
+        newCoinSwaps.push({
+          coin: coin,
+          sendAddress: sendAddress,
+          sendAmount: sendAmount,
+          lbcAmount: lbcAmount,
+        });
       }
+
       return {
-        btcAddresses: newBtcAddresses,
+        coinSwaps: newCoinSwaps,
       };
     },
-    [ACTIONS.REMOVE_BTC_ADDRESS]: (state: CoinSwapState, action: CoinSwapAction): CoinSwapState => {
-      const { btcAddresses } = state;
-      const { btcAddress } = action.data;
-      let newBtcAddresses = btcAddresses.slice();
-      newBtcAddresses = newBtcAddresses.filter((x) => x !== btcAddress);
+    [ACTIONS.REMOVE_COIN_SWAP]: (state: CoinSwapState, action: CoinSwapRemoveAction): CoinSwapState => {
+      const { coinSwaps } = state;
+      const { sendAddress } = action.data;
+      let newCoinSwaps = coinSwaps.slice();
+      newCoinSwaps = newCoinSwaps.filter((x) => x.sendAddress !== sendAddress);
       return {
-        btcAddresses: newBtcAddresses,
+        coinSwaps: newCoinSwaps,
       };
     },
     [LBRY_REDUX_ACTIONS.USER_STATE_POPULATE]: (
       state: CoinSwapState,
-      action: { data: { btcAddresses: ?Array<string> } }
+      action: { data: { coinSwaps: ?Array<CoinSwapInfo> } }
     ) => {
-      const { btcAddresses } = action.data;
-      const sanitizedBtcAddresses = btcAddresses && btcAddresses.filter((e) => typeof e === 'string');
+      const { coinSwaps } = action.data;
+      const sanitizedCoinSwaps = coinSwaps && coinSwaps.filter((x) => typeof x.sendAddress === 'string');
       return {
         ...state,
-        btcAddresses:
-          sanitizedBtcAddresses && sanitizedBtcAddresses.length ? sanitizedBtcAddresses : state.btcAddresses,
+        coinSwaps: sanitizedCoinSwaps && sanitizedCoinSwaps.length ? sanitizedCoinSwaps : state.coinSwaps,
       };
     },
   },

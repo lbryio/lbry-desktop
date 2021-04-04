@@ -3,7 +3,7 @@ import * as ACTIONS from 'constants/action_types';
 import { selectPrefsReady } from 'redux/selectors/sync';
 import { doAlertWaitingForSync } from 'redux/actions/app';
 
-export const doAddBtcAddress = (btcAddress: string) => (dispatch: Dispatch, getState: GetState) => {
+export const doAddCoinSwap = (coinSwap: CoinSwapInfo) => (dispatch: Dispatch, getState: GetState) => {
   const state = getState();
   const ready = selectPrefsReady(state);
 
@@ -12,14 +12,17 @@ export const doAddBtcAddress = (btcAddress: string) => (dispatch: Dispatch, getS
   }
 
   dispatch({
-    type: ACTIONS.ADD_BTC_ADDRESS,
+    type: ACTIONS.ADD_COIN_SWAP,
     data: {
-      btcAddress,
+      coin: coinSwap.coin,
+      sendAddress: coinSwap.sendAddress,
+      sendAmount: coinSwap.sendAmount,
+      lbcAmount: coinSwap.lbcAmount,
     },
   });
 };
 
-export const doRemoveBtcAddress = (btcAddress: string) => (dispatch: Dispatch, getState: GetState) => {
+export const doRemoveCoinSwap = (sendAddress: string) => (dispatch: Dispatch, getState: GetState) => {
   const state = getState();
   const ready = selectPrefsReady(state);
 
@@ -28,9 +31,9 @@ export const doRemoveBtcAddress = (btcAddress: string) => (dispatch: Dispatch, g
   }
 
   dispatch({
-    type: ACTIONS.REMOVE_BTC_ADDRESS,
+    type: ACTIONS.REMOVE_COIN_SWAP,
     data: {
-      btcAddress,
+      sendAddress,
     },
   });
 };
