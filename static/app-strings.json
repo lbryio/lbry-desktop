@@ -1743,6 +1743,8 @@
   "Remove address": "Remove address",
   "Waiting %sendAmount% BTC": "Waiting %sendAmount% BTC",
   "Waiting to receive your bitcoin.": "Waiting to receive your bitcoin.",
+  "Confirming %sendAmount% BTC": "Confirming %sendAmount% BTC",
+  "Confirming BTC transaction.": "Confirming BTC transaction.",
   "Sending LBC": "Sending LBC",
   "Bitcoin received. Sending your LBC.": "Bitcoin received. Sending your LBC.",
   "Completed": "Completed",
