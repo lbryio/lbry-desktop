@@ -1757,6 +1757,7 @@
   "Unable to obtain exchange rate. Try again later.": "Unable to obtain exchange rate. Try again later.",
   "The BTC amount needs to be higher": "The BTC amount needs to be higher",
   "The BTC amount is too high": "The BTC amount is too high",
+  "Address": "Address",
   "Confirm Address Removal": "Confirm Address Removal",
   "Remove BTC Swap Address": "Remove BTC Swap Address",
   "This process cannot be reversed.": "This process cannot be reversed.",
