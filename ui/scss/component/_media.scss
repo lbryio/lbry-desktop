@@ -61,7 +61,6 @@
   align-items: flex-end;
   flex-direction: row;
 
-  // smaller screen
   @media (max-width: $breakpoint-medium) {
     display: block;
   }
