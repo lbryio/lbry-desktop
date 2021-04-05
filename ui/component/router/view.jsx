@@ -158,11 +158,11 @@ function AppRouter(props: Props) {
     if (uri) {
       const { channelName, streamName } = parseURI(uri);
 
-      if (typeof title !== 'undefined' && title !== '') {
+      if (title) {
         document.title = title;
-      } else if (streamName !== undefined && streamName !== null) {
+      } else if (streamName) {
         document.title = streamName;
-      } else if (channelName !== undefined && channelName !== null) {
+      } else if (channelName) {
         document.title = channelName;
       } else {
         document.title = IS_WEB ? SITE_TITLE : 'LBRY';
