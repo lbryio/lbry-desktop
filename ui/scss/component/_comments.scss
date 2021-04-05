@@ -179,8 +179,9 @@ $thumbnailWidthSmall: 1rem;
 }
 
 .comment__meta-information {
-  justify-content: flex-start;
   display: flex;
+  justify-content: flex-start;
+  align-items: center;
   height: 100%;
 }
 
@@ -189,13 +190,6 @@ $thumbnailWidthSmall: 1rem;
 
   .icon {
     padding-top: 1px;
-  }
-}
-
-.comment__creator {
-  .icon {
-    padding-top: 1px;
-    stroke: var(--color-primary);
   }
 }
 
@@ -223,11 +217,13 @@ $thumbnailWidthSmall: 1rem;
 }
 
 .comment__author--creator {
-  @extend .comment__meta-information;
-  padding-left: var(--spacing-xxs);
-  padding-right: var(--spacing-xxs);
+  padding: 0 3px;
   background-color: var(--color-primary-alt);
   border-radius: var(--border-radius);
+
+  &.button--uri-indicator {
+    color: var(--color-link);
+  }
 }
 
 .comment__time {
