@@ -8,9 +8,9 @@ import { getDefaultLanguage } from 'util/default-languages';
 
 type Props = {
   language: string,
-  setLanguage: string => void,
+  setLanguage: (string) => void,
   searchInLanguage: boolean,
-  setSearchInLanguage: boolean => void,
+  setSearchInLanguage: (boolean) => void,
 };
 
 function SettingLanguage(props: Props) {
@@ -41,11 +41,16 @@ function SettingLanguage(props: Props) {
           'Multi-language support is brand new and incomplete. Switching your language may have unintended consequences, like glossolalia.'
         )}
       >
-        {Object.keys(languages).map(language => (
-          <option key={language} value={language}>
-            {languages[language]}
-          </option>
-        ))}
+        {Object.values(languages)
+          .sort()
+          .map((language) => {
+            const lang = String(language);
+            return (
+              <option key={lang} value={lang}>
+                {lang}
+              </option>
+            );
+          })}
       </FormField>
       {previousLanguage && <Spinner type="small" />}
       <FormField
