@@ -12,8 +12,10 @@ import QRCode from 'component/common/qr-code';
 import usePersistedState from 'effects/use-persisted-state';
 import * as ICONS from 'constants/icons';
 import * as MODALS from 'constants/modal_types';
+import * as PAGES from 'constants/pages';
 import { clipboard } from 'electron';
 import I18nMessage from 'component/i18nMessage';
+import { Redirect, useHistory } from 'react-router';
 
 const BTC_SATOSHIS = 100000000;
 const BTC_MAX = 21000000;
@@ -48,6 +50,7 @@ const NAG_RATE_CALL_FAILED = 'Unable to obtain exchange rate. Try again later.';
 type Props = {
   receiveAddress: string,
   coinSwaps: Array<CoinSwapInfo>,
+  isAuthenticated: boolean,
   doToast: ({ message: string }) => void,
   addCoinSwap: (CoinSwapInfo) => void,
   getNewAddress: () => void,
@@ -56,7 +59,16 @@ type Props = {
 };
 
 function WalletSwap(props: Props) {
-  const { receiveAddress, doToast, coinSwaps, addCoinSwap, getNewAddress, checkAddressIsMine, openModal } = props;
+  const {
+    receiveAddress,
+    doToast,
+    coinSwaps,
+    isAuthenticated,
+    addCoinSwap,
+    getNewAddress,
+    checkAddressIsMine,
+    openModal,
+  } = props;
 
   const [btc, setBtc] = usePersistedState('swap-btc-amount', 0.001);
   const [btcError, setBtcError] = React.useState();
@@ -69,6 +81,7 @@ function WalletSwap(props: Props) {
   const [isSwapping, setIsSwapping] = React.useState(false);
   const [statusMap, setStatusMap] = React.useState({});
   const [isRefreshingStatus, setIsRefreshingStatus] = React.useState(false);
+  const { location } = useHistory();
 
   const status = btcAddress ? statusMap[btcAddress] : null;
   const btcTxId = status && status.receipt_txid ? status.receipt_txid : null;
@@ -468,6 +481,10 @@ function WalletSwap(props: Props) {
       </div>
     </>
   );
+
+  if (!isAuthenticated) {
+    return <Redirect to={`/$/${PAGES.AUTH_SIGNIN}?redirect=${location.pathname}`} />;
+  }
 
   return (
     <Form onSubmit={handleStartSwap}>
