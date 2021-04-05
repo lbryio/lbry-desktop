@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 - Japanese, Afrikaans, Filipino, Thai and Vietnamese language support ([#5684](https://github.com/lbryio/lbry-desktop/issues/5684))
+- Highlight comments made by content owner _community pr!_ ([#5744](https://github.com/lbryio/lbry-desktop/pull/5744))
 
 ### Changed
 
@@ -21,6 +22,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Autoplay looping to a previous video or itself ([#5711](https://github.com/lbryio/lbry-desktop/pull/5711))
 - Autoplay not working in mini-player mode ([#5716](https://github.com/lbryio/lbry-desktop/pull/5716))
 - Edited claim accidentally moved to 'Anonymous' ([#5767](https://github.com/lbryio/lbry-desktop/pull/5767))
+
+## [0.50.2] - [2021-04-2]
+
+### Changed
+
+- Disable PDFs until security issue is fixed
 
 ## [0.50.1] - [2021-03-18]
 
