@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- Japanese, Afrikaans, Filipino, Thai and Vietnamese language support ([#5684](https://github.com/lbryio/lbry-desktop/issues/5684))
+
 ### Changed
 
 - Keyboard shortcut additions and changes _community pr!_ ([#5717](https://github.com/lbryio/lbry-desktop/pull/5717))
