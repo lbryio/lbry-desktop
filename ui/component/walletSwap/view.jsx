@@ -29,16 +29,19 @@ const DEBOUNCE_BTC_CHANGE_MS = 400;
 const INTERNAL_APIS_DOWN = 'internal_apis_down';
 const BTC_API_STATUS_PENDING = 'Pending';
 const BTC_API_STATUS_PROCESSING = 'Processing';
+const BTC_API_STATUS_CONFIRMING = 'Confirming';
 const BTC_API_STATUS_SUCCESS = 'Success';
 const BTC_API_STATUS_ERROR = 'Error';
 
 const ACTION_MAIN = 'action_main';
 const ACTION_STATUS_PENDING = 'action_pending';
+const ACTION_STATUS_CONFIRMING = 'action_confirming';
 const ACTION_STATUS_PROCESSING = 'action_processing';
 const ACTION_STATUS_SUCCESS = 'action_success';
 const ACTION_PAST_SWAPS = 'action_past_swaps';
 
 const NAG_API_STATUS_PENDING = 'Waiting to receive your bitcoin.';
+const NAG_API_STATUS_CONFIRMING = 'Confirming BTC transaction.';
 const NAG_API_STATUS_PROCESSING = 'Bitcoin received. Sending your LBC.';
 const NAG_API_STATUS_SUCCESS = 'LBC sent. You should see it in your wallet.';
 const NAG_API_STATUS_ERROR = 'An error occurred on the previous swap.';
@@ -165,6 +168,10 @@ function WalletSwap(props: Props) {
               setAction(ACTION_STATUS_PENDING);
               setNag({ msg: NAG_API_STATUS_PENDING, type: 'helpful' });
               break;
+            case BTC_API_STATUS_CONFIRMING:
+              setAction(ACTION_STATUS_CONFIRMING);
+              setNag({ msg: NAG_API_STATUS_CONFIRMING, type: 'helpful' });
+              break;
             case BTC_API_STATUS_PROCESSING:
               setAction(ACTION_STATUS_PROCESSING);
               setNag({ msg: NAG_API_STATUS_PROCESSING, type: 'helpful' });
@@ -274,7 +281,7 @@ function WalletSwap(props: Props) {
     });
   }
 
-  function getStatusStr(coinSwap: CoinSwapInfo) {
+  function getShortStatusStr(coinSwap: CoinSwapInfo) {
     const status = statusMap[coinSwap.sendAddress];
     if (!status) {
       return '---';
@@ -284,6 +291,9 @@ function WalletSwap(props: Props) {
     switch (status.Status) {
       case BTC_API_STATUS_PENDING:
         msg = __('Waiting %sendAmount% BTC', { sendAmount: coinSwap.sendAmount });
+        break;
+      case BTC_API_STATUS_CONFIRMING:
+        msg = __('Confirming %sendAmount% BTC', { sendAmount: coinSwap.sendAmount });
         break;
       case BTC_API_STATUS_PROCESSING:
         msg = __('Sending LBC');
@@ -318,13 +328,20 @@ function WalletSwap(props: Props) {
     switch (action) {
       case ACTION_MAIN:
         return actionMain;
+
       case ACTION_STATUS_PENDING:
         return actionPending;
-      case ACTION_STATUS_SUCCESS: // fall-through
-      case ACTION_STATUS_PROCESSING:
+
+      case ACTION_STATUS_CONFIRMING:
+        return actionConfirmingSend;
+
+      case ACTION_STATUS_PROCESSING: // fall-through
+      case ACTION_STATUS_SUCCESS:
         return actionProcessingAndSuccess;
+
       case ACTION_PAST_SWAPS:
         return actionPastSwaps;
+
       default:
         if (IS_DEV) throw new Error('Unhandled action: ' + action);
         return actionMain;
@@ -399,6 +416,21 @@ function WalletSwap(props: Props) {
     </>
   );
 
+  const actionConfirmingSend = (
+    <>
+      <div className="section section--padded card--inline confirm__wrapper">
+        <div className="section">
+          <div className="confirm__label">{__('Confirming')}</div>
+          <div className="confirm__value">{btc} BTC</div>
+          {getViewTransactionElement(true)}
+        </div>
+      </div>
+      <div className="section__actions">
+        <Button autoFocus onClick={handleCancelPending} button="primary" label={__('Go Back')} />
+      </div>
+    </>
+  );
+
   const actionProcessingAndSuccess = (
     <>
       <div className="section section--padded card--inline confirm__wrapper">
@@ -455,7 +487,7 @@ function WalletSwap(props: Props) {
                             }}
                           />
                         </td>
-                        <td>{isRefreshingStatus ? '...' : getStatusStr(x)}</td>
+                        <td>{isRefreshingStatus ? '...' : getShortStatusStr(x)}</td>
                         <td>
                           <Button
                             button="link"
