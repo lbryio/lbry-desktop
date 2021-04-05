@@ -160,9 +160,9 @@ function AppRouter(props: Props) {
 
       if (typeof title !== 'undefined' && title !== '') {
         document.title = title;
-      } else if (streamName) {
+      } else if (streamName !== undefined && streamName !== null) {
         document.title = streamName;
-      } else if (channelName) {
+      } else if (channelName !== undefined && channelName !== null) {
         document.title = channelName;
       } else {
         document.title = IS_WEB ? SITE_TITLE : 'LBRY';
