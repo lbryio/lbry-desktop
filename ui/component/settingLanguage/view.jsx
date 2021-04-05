@@ -41,13 +41,20 @@ function SettingLanguage(props: Props) {
           'Multi-language support is brand new and incomplete. Switching your language may have unintended consequences, like glossolalia.'
         )}
       >
-        {Object.values(languages)
-          .sort()
+        {Object.entries(languages)
+          .sort((a, b) => {
+            const lhs = String(a[1]);
+            const rhs = String(b[1]);
+            if (lhs < rhs) return -1;
+            if (lhs > rhs) return 1;
+            return 0;
+          })
           .map((language) => {
-            const lang = String(language);
+            const langKey = language[0];
+            const langName = String(language[1]);
             return (
-              <option key={lang} value={lang}>
-                {lang}
+              <option key={langKey} value={langKey}>
+                {langName}
               </option>
             );
           })}
