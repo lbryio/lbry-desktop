@@ -458,8 +458,8 @@ function WalletSwap(props: Props) {
             <table className="table table--btc-swap">
               <thead>
                 <tr>
-                  <th>BTC address</th>
-                  <th>Status</th>
+                  <th>{__('Address')}</th>
+                  <th>{__('Status')}</th>
                   <th />
                 </tr>
               </thead>
