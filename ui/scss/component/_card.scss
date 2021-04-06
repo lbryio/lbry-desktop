@@ -255,6 +255,24 @@
   color: var(--color-text-subtitle);
   margin: var(--spacing-s) 0;
   font-size: var(--font-body);
+
+  .button{
+    margin: calc(var(--spacing-xxs) / 2) calc(var(--spacing-xxs) / 2);
+    height: calc(var(--height-button) * 2 / 3);
+    padding: var(--spacing-s);
+    border-radius: var(--height-input);
+    font-size: var(--font-small);
+  }
+}
+
+.related_content-more--contracted {
+  margin: calc(var(--spacing-s) * -1) 0;
+  height: calc(var(--height-button) * 0.9);
+  overflow: hidden;
+}
+
+.related_content-more--expanded {
+  margin: calc(var(--spacing-s) * -1) 0;
 }
 
 .card__body {
