@@ -1,0 +1,28 @@
+// dat.gui component
+
+.gui-container {
+  top: 0;
+  right: 0;
+  position: absolute;
+
+  .dg.main {
+    margin: 0;
+    padding: 0;
+    overflow: inherit;
+
+    li {
+      margin: 0;
+    }
+
+    input {
+      height: initial;
+    }
+
+    input[type='checkbox'] {
+      height: 12px;
+      width: 12px;
+      padding: 0;
+      margin: 0;
+    }
+  }
+}
