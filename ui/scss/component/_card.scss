@@ -265,13 +265,7 @@
   }
 }
 
-.related_content-more--contracted {
-  margin: calc(var(--spacing-s) * -1) 0;
-  height: calc(var(--height-button) * 0.9);
-  overflow: hidden;
-}
-
-.related_content-more--expanded {
+.related_content-more {
   margin: calc(var(--spacing-s) * -1) 0;
 }
 
