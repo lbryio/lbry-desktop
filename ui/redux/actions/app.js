@@ -543,8 +543,9 @@ export function doSignIn() {
     const user = selectUser(state);
     const notificationsEnabled = SIMPLE_SITE || user.experimental_ui;
 
+    dispatch(doNotificationSocketConnect(notificationsEnabled));
+
     if (notificationsEnabled) {
-      dispatch(doNotificationSocketConnect());
       dispatch(doNotificationList());
     }
 
