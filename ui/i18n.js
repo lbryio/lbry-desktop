@@ -1,5 +1,3 @@
-import { getDefaultLanguage, resolveLanguageAlias } from './util/default-languages';
-
 // @if TARGET='app'
 let fs = require('fs');
 // @endif
@@ -33,7 +31,7 @@ function saveMessageDesktop(message) {
     knownMessages[message] = removeContextMetadata(message);
     knownMessages[END] = END;
 
-    fs.writeFile(messagesFilePath, JSON.stringify(knownMessages, null, 2) + '\n', 'utf-8', (err) => {
+    fs.writeFile(messagesFilePath, JSON.stringify(knownMessages, null, 2) + '\n', 'utf-8', err => {
       if (err) {
         throw err;
       }
@@ -85,10 +83,9 @@ export function __(message, tokens) {
     return '';
   }
 
-  const language = resolveLanguageAlias(
-    localStorageAvailable ? window.localStorage.getItem('language') || 'en' : getDefaultLanguage() || 'en'
-  );
-
+  const language = localStorageAvailable
+    ? window.localStorage.getItem('language') || 'en'
+    : window.navigator.language.slice(0, 2) || 'en';
   if (!isProduction) {
     IS_WEB ? saveMessageWeb(message) : saveMessageDesktop(message);
   }
@@ -100,7 +97,7 @@ export function __(message, tokens) {
     return translatedMessage;
   }
 
-  return translatedMessage.replace(/%([^%]+)%/g, ($1, $2) => {
+  return translatedMessage.replace(/%([^%]+)%/g, function($1, $2) {
     return tokens.hasOwnProperty($2) ? tokens[$2] : $2;
   });
 }

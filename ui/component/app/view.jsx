@@ -37,6 +37,7 @@ import {
   STATUS_DOWN,
 } from 'web/effects/use-degraded-performance';
 // @endif
+import LANGUAGE_MIGRATIONS from 'constants/language-migrations';
 export const MAIN_WRAPPER_CLASS = 'main-wrapper';
 export const IS_MAC = navigator.userAgent.indexOf('Mac OS X') !== -1;
 
@@ -144,6 +145,7 @@ function App(props: Props) {
   const useCustomScrollbar = !IS_MAC;
   const hasMyChannels = myChannelUrls && myChannelUrls.length > 0;
   const hasNoChannels = myChannelUrls && myChannelUrls.length === 0;
+  const shouldMigrateLanguage = LANGUAGE_MIGRATIONS[language];
   const hasActiveChannelClaim = activeChannelClaim !== undefined;
 
   let uri;
@@ -256,6 +258,12 @@ function App(props: Props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [language, languages]);
+
+  useEffect(() => {
+    if (shouldMigrateLanguage) {
+      setLanguage(shouldMigrateLanguage);
+    }
+  }, [shouldMigrateLanguage, setLanguage]);
 
   useEffect(() => {
     // Check that previousHasVerifiedEmail was not undefined instead of just not truthy
