@@ -1,5 +1,5 @@
 // @flow
-import { KNOWN_APP_DOMAINS } from 'config';
+import { KNOWN_APP_DOMAINS, SIMPLE_SITE } from 'config';
 import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import { isURIValid } from 'lbry-redux';
@@ -98,16 +98,25 @@ function MarkdownLink(props: Props) {
       />
     );
   } else if (!simpleLinks && ((protocol && protocol[0] === 'lbry:' && isURIValid(decodedUri)) || lbryUrlFromLink)) {
-    element = (
+    element = allowPreview ? (
       <ClaimLink
         uri={lbryUrlFromLink || decodedUri}
         autoEmbed={embed}
         parentCommentId={parentCommentId}
         isMarkdownPost={isMarkdownPost}
-        allowPreview={allowPreview}
       >
         {children}
       </ClaimLink>
+    ) : (
+      <Button
+        button="link"
+        iconRight={isLbryLink ? undefined : ICONS.EXTERNAL}
+        title={SIMPLE_SITE ? __("This channel isn't staking enough LBRY Credits for link previews.") : children}
+        label={children}
+        className="button--external-link"
+        navigate={isLbryLink ? href : undefined}
+        href={isLbryLink ? undefined : href}
+      />
     );
   } else if (
     simpleLinks ||

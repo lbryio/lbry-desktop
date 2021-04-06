@@ -12,17 +12,16 @@ type Props = {
   uri: string,
   thumbnail: string,
   claim: ?Claim,
-  doResolveUri: (string) => void,
-  doFetchCostInfoForUri: (string) => void,
+  doResolveUri: string => void,
+  doFetchCostInfoForUri: string => void,
   costInfo: ?{ cost: number },
   floatingPlayerEnabled: boolean,
   doPlayUri: (string, ?boolean, ?boolean, (GetResponse) => void) => void,
-  doAnaltyicsPurchaseEvent: (GetResponse) => void,
+  doAnaltyicsPurchaseEvent: GetResponse => void,
   parentCommentId?: string,
   isMarkdownPost: boolean,
   doSetPlayingUri: ({}) => void,
   renderMode: string,
-  allowPreview?: boolean,
 };
 
 export default function EmbedPlayButton(props: Props) {
@@ -40,7 +39,6 @@ export default function EmbedPlayButton(props: Props) {
     parentCommentId,
     isMarkdownPost,
     renderMode,
-    allowPreview,
   } = props;
   const {
     push,
@@ -50,7 +48,7 @@ export default function EmbedPlayButton(props: Props) {
   const hasResolvedUri = claim !== undefined;
   const hasCostInfo = costInfo !== undefined;
   const disabled = !hasResolvedUri || !costInfo;
-  const canPlayInline = [RENDER_MODES.AUDIO, RENDER_MODES.VIDEO].includes(renderMode) && allowPreview;
+  const canPlayInline = [RENDER_MODES.AUDIO, RENDER_MODES.VIDEO].includes(renderMode);
 
   useEffect(() => {
     if (!hasResolvedUri) {
@@ -71,7 +69,7 @@ export default function EmbedPlayButton(props: Props) {
       const formattedUrl = formatLbryUrlForWeb(uri);
       push(formattedUrl);
     } else {
-      doPlayUri(uri, undefined, undefined, (fileInfo) => {
+      doPlayUri(uri, undefined, undefined, fileInfo => {
         let playingOptions: PlayingUri = { uri, pathname };
         if (parentCommentId) {
           playingOptions.source = 'comment';
@@ -86,15 +84,13 @@ export default function EmbedPlayButton(props: Props) {
     }
   }
 
-  const backgroundImage = allowPreview ? `url('${thumbnail.replace(/'/g, "\\'")}')` : '';
-
   return (
     <div
       disabled={disabled}
       role="button"
       className="embed__inline-button"
       onClick={handleClick}
-      style={{ backgroundImage: backgroundImage }}
+      style={{ backgroundImage: `url('${thumbnail.replace(/'/g, "\\'")}')` }}
     >
       <FileViewerEmbeddedTitle uri={uri} isInApp />
       <Button
