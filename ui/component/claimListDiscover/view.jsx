@@ -17,6 +17,8 @@ import { useIsLargeScreen } from 'effects/use-screensize';
 
 type Props = {
   uris: Array<string>,
+  showHeader: boolean,
+  type: string,
   subscribedChannels: Array<Subscription>,
   doClaimSearch: ({}) => void,
   loading: boolean,
@@ -72,6 +74,8 @@ function ClaimListDiscover(props: Props) {
   const {
     doClaimSearch,
     claimSearchByQuery,
+    showHeader = true,
+    type,
     claimSearchByQueryLastPageReached,
     tags,
     defaultTags,
@@ -503,13 +507,15 @@ function ClaimListDiscover(props: Props) {
         </div>
       ) : (
         <div>
+          {showHeader && (
           <div className="section__header--actions">
             {headerToUse}
             {meta && <div className="section__actions--no-margin">{meta}</div>}
           </div>
-
+          )}
           <ClaimList
             id={claimSearchCacheQuery}
+            type={type}
             loading={loading}
             uris={uris || claimSearchResult}
             onScrollBottom={handleScrollBottom}
@@ -521,7 +527,7 @@ function ClaimListDiscover(props: Props) {
             injectedItem={injectedItem}
             showHiddenByUser={showHiddenByUser}
           />
-          {loading && new Array(dynamicPageSize).fill(1).map((x, i) => <ClaimPreview key={i} placeholder="loading" />)}
+          {loading && new Array(dynamicPageSize).fill(1).map((x, i) => <ClaimPreview key={i} placeholder="loading" type={type} />)}
         </div>
       )}
     </React.Fragment>
