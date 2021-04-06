@@ -57,7 +57,7 @@ jobs:
           WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
           CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
           WIN_CSC_LINK: https://s3.amazonaws.com/files.lbry.io/cert/win-csc-2020-2021-08.p12
-          CSC_LINK: https://s3.amazonaws.com/files.lbry.io/cert/osx-cert.p12
+          CSC_LINK: https://s3.amazonaws.com/files.lbry.io/cert/osx-csc-2021-2022.p12
 
           # UI
           MATOMO_URL: https://analytics.lbry.com/
