@@ -199,6 +199,7 @@ function VideoViewer(props: Props) {
       player.playbackRate(vjsCallbackDataRef.current.videoPlaybackRate);
     }
   }
+
   const playerReadyDependencyList = [uri, adUrl, embedded, autoplayIfEmbedded];
   if (!IS_WEB) {
     playerReadyDependencyList.push(desktopPlayStartTime);
