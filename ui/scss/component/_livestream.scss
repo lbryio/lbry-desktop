@@ -48,6 +48,10 @@
   margin-top: var(--spacing-s);
   display: flex;
   flex-wrap: wrap;
+
+  .comment__body_container {
+    margin-left: 0;
+  }
 }
 
 .livestream__comment-author {
