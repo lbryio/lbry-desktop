@@ -1,5 +1,5 @@
 import LANGUAGES from './languages';
-
+// supported_browser_languages
 const SUPPORTED_LANGUAGES = {
   af: LANGUAGES.af[1],
   en: LANGUAGES.en[1],
