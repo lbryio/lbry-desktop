@@ -3,10 +3,25 @@ import { app, BrowserWindow, dialog, shell, screen, nativeImage } from 'electron
 import isDev from 'electron-is-dev';
 import windowStateKeeper from 'electron-window-state';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
+import { SUPPORTED_SUB_LANGUAGE_CODES, SUB_LANG_CODE_LEN } from 'constants/supported_sub_languages';
+import SUPPORTED_BROWSER_LANGUAGES from 'constants/supported_browser_languages';
 import { TO_TRAY_WHEN_CLOSED } from 'constants/settings';
 
 import setupBarMenu from './menu/setupBarMenu';
 import * as PAGES from 'constants/pages';
+
+function GetAppLangCode() {
+  // https://www.electronjs.org/docs/api/locales
+  // 1. Gets the user locale.
+  // 2. Converts unsupported sub-languages to its primary (e.g. "en-GB" -> "en").
+  //    Note that the primary itself may or may not be a supported language
+  //    (up to clients to verify against SUPPORTED_LANGUAGES).
+  const langCode = app.getLocale();
+  if (langCode.length === SUB_LANG_CODE_LEN && !SUPPORTED_SUB_LANGUAGE_CODES.includes(langCode)) {
+    return SUPPORTED_BROWSER_LANGUAGES[langCode.slice(0, 2)];
+  }
+  return SUPPORTED_BROWSER_LANGUAGES[langCode];
+}
 
 export default appState => {
   // Get primary display dimensions from Electron.
@@ -156,9 +171,11 @@ export default appState => {
     window.webContents.session.setUserAgent(`LBRY/${app.getVersion()}`);
 
     // restore the user's previous language - we have to do this from here because only electron process can access app.getLocale()
-    // Update: we don't really need to call app.getLocale (didn't work anyway), so we could move this if we want.
     window.webContents.executeJavaScript("localStorage.getItem('language')").then(storedLanguage => {
-      const language = storedLanguage;
+      const language =
+        storedLanguage && storedLanguage !== 'undefined' && storedLanguage !== 'null'
+          ? storedLanguage
+          : GetAppLangCode();
       if (language !== 'en' && SUPPORTED_LANGUAGES[language]) {
         window.webContents.send('language-set', language);
       }
