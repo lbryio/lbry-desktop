@@ -4,13 +4,13 @@
 
 module.exports.CATEGORY_METADATA = {
   //   [PAGES.BIG_HITS]: {
-  //     title: '',
-  //     description: '',
+  //     title: 'Big Hits',
+  //     description: 'Animation, pop culture, comedy, and all the other weird on Odysee',
   //     image: '',
   //   },
   //   [PAGES.COMMUNITY]: {
-  //     title: '',
-  //     description: '',
+  //     title: 'The Universe',
+  //     description: 'Podcasts, life, learning, and everything else on Odysee',
   //     image: '',
   //   },
   //   [PAGES.ENLIGHTENMENT]: {
@@ -19,13 +19,13 @@ module.exports.CATEGORY_METADATA = {
   //     image: '',
   //   },
   //   [PAGES.FINANCE]: {
-  //     title: '',
-  //     description: '',
+  //     title: 'Finance 2.0',
+  //     description: 'Crypto, Money, Economics, Markets on Odysee ',
   //     image: '',
   //   },
   //   [PAGES.GAMING]: {
-  //     title: '',
-  //     description: '',
+  //     title: 'Gaming',
+  //     description: 'Pew pew bzzz gaming on Odysee',
   //     image: '',
   //   },
   //   [PAGES.GENERAL]: {
@@ -34,13 +34,13 @@ module.exports.CATEGORY_METADATA = {
   //     image: '',
   //   },
   //   [PAGES.LAB]: {
-  //     title: '',
-  //     description: '',
+  //     title: 'Lab',
+  //     description: 'Science - the real kind, on Odysee',
   //     image: '',
   //   },
   //   [PAGES.NEWS]: {
-  //     title: '',
-  //     description: '',
+  //     title: 'News & Politics',
+  //     description: 'Stay up to date with all that's happening around the world on Odysee',
   //     image: '',
   //   },
   //   [PAGES.RABBIT_HOLE]: {
@@ -54,13 +54,13 @@ module.exports.CATEGORY_METADATA = {
   //     image: '',
   //   },
   //   [PAGES.TECHNOLOGY]: {
-  //     title: '',
-  //     description: '',
+  //     title: 'Tech',
+  //     description: 'Hardware, software, startups, photography on Odysee',
   //     image: '',
   //   },
   //   [PAGES.WILD_WEST]: {
-  //     title: '',
-  //     description: '',
+  //     title: 'Wild West',
+  //     description: 'Boosted by user credits, this is what the community promotes on Odysee',
   //     image: '',
   //   },
 };
