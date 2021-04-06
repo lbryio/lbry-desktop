@@ -59,7 +59,7 @@ export const doSocketDisconnect = (url) => (dispatch) => {
   }
 };
 
-export const doNotificationSocketConnect = () => (dispatch) => {
+export const doNotificationSocketConnect = (enableNotifications) => (dispatch) => {
   const authToken = getAuthToken();
   if (!authToken) {
     console.error('Unable to connect to web socket because auth token is missing'); // eslint-disable-line
@@ -69,8 +69,14 @@ export const doNotificationSocketConnect = () => (dispatch) => {
   const url = `${NOTIFICATION_WS_URL}${authToken}`;
 
   doSocketConnect(url, true, (data) => {
-    if (data.type === 'pending_notification') {
-      dispatch(doNotificationList());
+    switch (data.type) {
+      case 'pending_notifications':
+        if (enableNotifications) {
+          dispatch(doNotificationList());
+        }
+        break;
+      case 'swap-status':
+        break;
     }
   });
 };
