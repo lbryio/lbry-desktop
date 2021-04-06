@@ -1,7 +1,6 @@
 import LANGUAGES from './languages';
 // supported_browser_languages
 const SUPPORTED_LANGUAGES = {
-  af: LANGUAGES.af[1],
   en: LANGUAGES.en[1],
   da: LANGUAGES.da[1],
   'zh-Hans': LANGUAGES['zh-Hans'][1],
@@ -10,13 +9,11 @@ const SUPPORTED_LANGUAGES = {
   nl: LANGUAGES.nl[1],
   no: LANGUAGES.no[1],
   fi: LANGUAGES.fi[1],
-  fil: LANGUAGES.fil[1],
   fr: LANGUAGES.fr[1],
   de: LANGUAGES.de[1],
   gu: LANGUAGES.gu[1],
   hi: LANGUAGES.hi[1],
   id: LANGUAGES.id[1],
-  ja: LANGUAGES.ja[1],
   jv: LANGUAGES.jv[1],
   it: LANGUAGES.it[1],
   ms: LANGUAGES.ms[1],
@@ -29,7 +26,6 @@ const SUPPORTED_LANGUAGES = {
   ru: LANGUAGES.ru[1],
   sr: LANGUAGES.sr[1],
   sk: LANGUAGES.sk[1],
-  th: LANGUAGES.th[1],
   ur: LANGUAGES.ur[1],
   ca: LANGUAGES.ca[1],
   es: LANGUAGES.es[1],
@@ -38,7 +34,6 @@ const SUPPORTED_LANGUAGES = {
   cs: LANGUAGES.cs[1],
   kn: LANGUAGES.kn[1],
   uk: LANGUAGES.uk[1],
-  vi: LANGUAGES.vi[1],
 };
 
 // Properties: language code (e.g. 'ja')
