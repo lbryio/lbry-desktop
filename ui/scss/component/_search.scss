@@ -9,21 +9,7 @@
 
 .search__options {
   margin-top: var(--spacing-s);
-  padding-left: var(--spacing-m);
-
-  transition: all 0.3s ease-out;
-
-  // These will be expanded by 'search__options--expanded'.
-  max-height: 0;
-  opacity: 0;
-  visibility: hidden;
-
-  .search__legend {
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-small);
-    margin-bottom: var(--spacing-s);
-    padding: var(--spacing-xxs);
-  }
+  display: none;
 
   fieldset:not(:first-child) {
     margin-top: var(--spacing-m);
@@ -34,9 +20,16 @@
     table-layout: fixed;
   }
 
+  td {
+    vertical-align: middle;
+  }
+
   td:nth-of-type(1) {
-    width: 20%;
-    vertical-align: top;
+    width: 25%;
+
+    &:not(:first-of-type) {
+      width: 20%;
+    }
   }
 
   .claim-type-filter {
@@ -77,11 +70,17 @@
   }
 
   .media-types {
-    margin-top: var(--spacing-s);
+    margin-top: var(--spacing-m);
+    display: flex;
+    flex-direction: column;
 
     label {
       display: flex;
       align-items: center;
+    }
+
+    @media (min-width: $breakpoint-small) {
+      flex-direction: row;
     }
   }
 
@@ -91,15 +90,26 @@
     margin-top: 0;
 
     &:not(:first-of-type) {
-      margin-left: var(--spacing-m);
+      margin-top: var(--spacing-s);
+    }
+
+    @media (min-width: $breakpoint-small) {
+      &:not(:first-of-type) {
+        margin-left: var(--spacing-m);
+        margin-top: 0;
+      }
     }
   }
 }
 
 .search__options--expanded {
-  max-height: 400px; // how to not hardcode this :(
-  opacity: 1;
-  visibility: visible;
+  display: block;
+}
+
+.search__legend {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-small);
+  padding: var(--spacing-xxs);
 }
 
 .search__top-link {

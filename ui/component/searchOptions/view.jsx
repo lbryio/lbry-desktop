@@ -127,9 +127,9 @@ const SearchOptions = (props: Props) => {
           onClick={() => updateSearchOptions(SEARCH_OPTIONS.CLAIM_TYPE, SEARCH_OPTIONS.INCLUDE_FILES_AND_CHANNELS)}
         />
       </div>
-      <div className="media-types">
-        {options[SEARCH_OPTIONS.CLAIM_TYPE] === SEARCH_OPTIONS.INCLUDE_FILES &&
-          Object.entries(TYPES_ADVANCED).map((t) => {
+      {options[SEARCH_OPTIONS.CLAIM_TYPE] === SEARCH_OPTIONS.INCLUDE_FILES && (
+        <div className="media-types">
+          {Object.entries(TYPES_ADVANCED).map((t) => {
             const option = t[0];
             return (
               <FormField
@@ -144,7 +144,8 @@ const SearchOptions = (props: Props) => {
               />
             );
           })}
-      </div>
+        </div>
+      )}
     </>
   );
 

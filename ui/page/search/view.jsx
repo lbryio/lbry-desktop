@@ -1,17 +1,14 @@
 // @flow
 import { SIMPLE_SITE, SHOW_ADS } from 'config';
-import * as ICONS from 'constants/icons';
 import React, { useEffect } from 'react';
 import { Lbry, parseURI, isNameValid } from 'lbry-redux';
 import ClaimList from 'component/claimList';
 import Page from 'component/page';
 import SearchOptions from 'component/searchOptions';
-import Button from 'component/button';
 import Ads from 'web/component/ads';
 import SearchTopClaim from 'component/searchTopClaim';
 import { formatLbryUrlForWeb } from 'util/url';
 import { useHistory } from 'react-router';
-import ClaimPreview from 'component/claimPreview';
 import { SEARCH_PAGE_SIZE } from 'constants/search';
 
 type AdditionalOptions = {
@@ -26,8 +23,6 @@ type Props = {
   isSearching: boolean,
   location: UrlLocation,
   uris: Array<string>,
-  onFeedbackNegative: (string) => void,
-  onFeedbackPositive: (string) => void,
   showNsfw: boolean,
   isAuthenticated: boolean,
   hasReachedMaxResultsLength: boolean,
@@ -37,8 +32,6 @@ export default function SearchPage(props: Props) {
   const {
     search,
     uris,
-    onFeedbackPositive,
-    onFeedbackNegative,
     location,
     isSearching,
     showNsfw,
@@ -128,25 +121,7 @@ export default function SearchPage(props: Props) {
               injectedItem={
                 SHOW_ADS && IS_WEB ? (SIMPLE_SITE ? false : !isAuthenticated && <Ads small type={'video'} />) : false
               }
-              headerAltControls={
-                <>
-                  <span>{__('Find what you were looking for?')}</span>
-                  <Button
-                    button="alt"
-                    description={__('Yes')}
-                    onClick={() => onFeedbackPositive(urlQuery)}
-                    icon={ICONS.YES}
-                  />
-                  <Button
-                    button="alt"
-                    description={__('No')}
-                    onClick={() => onFeedbackNegative(urlQuery)}
-                    icon={ICONS.NO}
-                  />
-                </>
-              }
             />
-            {isSearching && new Array(5).fill(1).map((x, i) => <ClaimPreview key={i} placeholder="loading" />)}
 
             <div className="main--empty help">{__('These search results are provided by LBRY, Inc.')}</div>
           </>
