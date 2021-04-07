@@ -42,10 +42,11 @@ type Props = {
   simple: boolean,
   expanded: boolean,
   toggleSearchExpanded: () => void,
+  onSearchOptionsChanged: (string) => void,
 };
 
 const SearchOptions = (props: Props) => {
-  const { options, simple, setSearchOption, expanded, toggleSearchExpanded } = props;
+  const { options, simple, setSearchOption, expanded, toggleSearchExpanded, onSearchOptionsChanged } = props;
 
   const stringifiedOptions = JSON.stringify(options);
 
@@ -66,6 +67,13 @@ const SearchOptions = (props: Props) => {
       setSearchOption(SEARCH_OPTIONS.RESULT_COUNT, SEARCH_PAGE_SIZE);
     }
   }, []);
+
+  function updateSearchOptions(option, value) {
+    setSearchOption(option, value);
+    if (onSearchOptionsChanged) {
+      onSearchOptionsChanged(option);
+    }
+  }
 
   function addRow(label: string, value: any) {
     return (
@@ -116,7 +124,7 @@ const SearchOptions = (props: Props) => {
             'close-button--visible': options[SEARCH_OPTIONS.CLAIM_TYPE] !== SEARCH_OPTIONS.INCLUDE_FILES_AND_CHANNELS,
           })}
           icon={ICONS.REMOVE}
-          onClick={() => setSearchOption(SEARCH_OPTIONS.CLAIM_TYPE, SEARCH_OPTIONS.INCLUDE_FILES_AND_CHANNELS)}
+          onClick={() => updateSearchOptions(SEARCH_OPTIONS.CLAIM_TYPE, SEARCH_OPTIONS.INCLUDE_FILES_AND_CHANNELS)}
         />
       </div>
       <div className="media-types">
@@ -132,7 +140,7 @@ const SearchOptions = (props: Props) => {
                 disabled={options[SEARCH_OPTIONS.CLAIM_TYPE] !== SEARCH_OPTIONS.INCLUDE_FILES}
                 label={t[1]}
                 checked={!isFilteringByChannel && options[option]}
-                onChange={() => setSearchOption(option, !options[option])}
+                onChange={() => updateSearchOptions(option, !options[option])}
               />
             );
           })}
@@ -147,7 +155,7 @@ const SearchOptions = (props: Props) => {
           type="checkbox"
           name="exact-match"
           checked={options[SEARCH_OPTIONS.EXACT]}
-          onChange={() => setSearchOption(SEARCH_OPTIONS.EXACT, !options[SEARCH_OPTIONS.EXACT])}
+          onChange={() => updateSearchOptions(SEARCH_OPTIONS.EXACT, !options[SEARCH_OPTIONS.EXACT])}
           label={__('Exact match')}
         />
         <Icon
@@ -169,7 +177,7 @@ const SearchOptions = (props: Props) => {
         type="select"
         name="upload-date"
         value={options[SEARCH_OPTIONS.TIME_FILTER]}
-        onChange={(e) => setSearchOption(SEARCH_OPTIONS.TIME_FILTER, e.target.value)}
+        onChange={(e) => updateSearchOptions(SEARCH_OPTIONS.TIME_FILTER, e.target.value)}
         blockWrap={false}
       >
         {OBJ_TO_OPTION_ELEM(TIME_FILTER)}
@@ -180,7 +188,7 @@ const SearchOptions = (props: Props) => {
           'close-button--visible': options[SEARCH_OPTIONS.TIME_FILTER] !== '',
         })}
         icon={ICONS.REMOVE}
-        onClick={() => setSearchOption(SEARCH_OPTIONS.TIME_FILTER, '')}
+        onClick={() => updateSearchOptions(SEARCH_OPTIONS.TIME_FILTER, '')}
       />
     </div>
   );
@@ -192,7 +200,7 @@ const SearchOptions = (props: Props) => {
         name="sort-by"
         blockWrap={false}
         value={options[SEARCH_OPTIONS.SORT]}
-        onChange={(e) => setSearchOption(SEARCH_OPTIONS.SORT, e.target.value)}
+        onChange={(e) => updateSearchOptions(SEARCH_OPTIONS.SORT, e.target.value)}
       >
         {OBJ_TO_OPTION_ELEM(SORT_BY)}
       </FormField>
