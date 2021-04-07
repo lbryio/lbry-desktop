@@ -44,13 +44,14 @@ export const getSearchQueryString = (query: string, options: any = {}) => {
     // `mediaType=${SEARCH_OPTIONS.MEDIA_VIDEO}`,
     // `claimType=${SEARCH_OPTIONS.INCLUDE_FILES}`,
   ];
-  //   const { isBackgroundSearch } = options;
-  //   const includeUserOptions = typeof isBackgroundSearch === 'undefined' ? false : !isBackgroundSearch;
 
-  //   if (includeUserOptions) {
-  //     const claimType = options[SEARCH_OPTIONS.CLAIM_TYPE];
-  //     if (claimType) {
-  //       queryParams.push(`claimType=${claimType}`);
+  const { isBackgroundSearch } = options;
+  const includeUserOptions = typeof isBackgroundSearch === 'undefined' ? false : !isBackgroundSearch;
+
+  if (includeUserOptions) {
+    const claimType = options[SEARCH_OPTIONS.CLAIM_TYPE];
+    if (claimType) {
+      queryParams.push(`claimType=${claimType}`);
 
       /*
        * Due to limitations in lighthouse, we can't pass the mediaType parameter
