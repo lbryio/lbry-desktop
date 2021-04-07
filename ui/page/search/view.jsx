@@ -100,6 +100,10 @@ export default function SearchPage(props: Props) {
     }
   }
 
+  function resetPage() {
+    setFrom(0);
+  }
+
   return (
     <Page>
       <section className="search">
@@ -114,7 +118,13 @@ export default function SearchPage(props: Props) {
               // needs to be unique to indicate when a fetch is needed.
               page={from + 1}
               pageSize={SEARCH_PAGE_SIZE}
-              header={<SearchOptions simple={SIMPLE_SITE} additionalOptions={additionalOptions} />}
+              header={
+                <SearchOptions
+                  simple={SIMPLE_SITE}
+                  additionalOptions={additionalOptions}
+                  onSearchOptionsChanged={resetPage}
+                />
+              }
               injectedItem={
                 SHOW_ADS && IS_WEB ? (SIMPLE_SITE ? false : !isAuthenticated && <Ads small type={'video'} />) : false
               }
