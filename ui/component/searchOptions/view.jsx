@@ -58,6 +58,8 @@ const SearchOptions = (props: Props) => {
 
   if (simple) {
     delete TYPES_ADVANCED[SEARCH_OPTIONS.MEDIA_APPLICATION];
+    delete TYPES_ADVANCED[SEARCH_OPTIONS.MEDIA_IMAGE];
+    delete TYPES_ADVANCED[SEARCH_OPTIONS.MEDIA_AUDIO];
   }
 
   React.useEffect(() => {
