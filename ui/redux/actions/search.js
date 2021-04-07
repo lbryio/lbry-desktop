@@ -5,7 +5,8 @@ import {
   makeSelectSearchUris,
   makeSelectQueryWithOptions,
   selectSearchValue,
-  selectSearchOptions} from 'redux/selectors/search';
+  selectSearchOptions,
+} from 'redux/selectors/search';
 import handleFetchResponse from 'util/handle-fetch';
 
 type Dispatch = (action: any) => any;
@@ -93,6 +94,7 @@ export const doSearch = (rawQuery: string, searchOptions: SearchOptions) => (
         type: ACTIONS.SEARCH_SUCCESS,
         data: {
           query: queryWithOptions,
+          from: from,
           size: size,
           uris,
         },

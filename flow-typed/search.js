@@ -37,6 +37,7 @@ declare type SearchSuccess = {
   type: ACTIONS.SEARCH_SUCCESS,
   data: {
     query: string,
+    from: number,
     size: number,
     uris: Array<string>,
   },
