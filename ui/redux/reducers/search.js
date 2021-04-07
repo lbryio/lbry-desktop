@@ -27,11 +27,11 @@ export default handleActions(
       searching: true,
     }),
     [ACTIONS.SEARCH_SUCCESS]: (state: SearchState, action: SearchSuccess): SearchState => {
-      const { query, uris, size } = action.data;
+      const { query, uris, from, size } = action.data;
       const normalizedQuery = createNormalizedSearchKey(query);
 
       let newUris = uris;
-      if (state.urisByQuery[normalizedQuery]) {
+      if (from !== 0 && state.urisByQuery[normalizedQuery]) {
         newUris = Array.from(new Set(state.urisByQuery[normalizedQuery].concat(uris)));
       }
 
