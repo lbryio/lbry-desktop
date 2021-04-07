@@ -26,10 +26,10 @@ if (isProduction) {
 // @endif
 
 type Analytics = {
-  error: string => Promise<any>,
+  error: (string) => Promise<any>,
   sentryError: ({} | string, {}) => Promise<any>,
   pageView: (string, ?string) => void,
-  setUser: Object => void,
+  setUser: (Object) => void,
   toggleInternal: (boolean, ?boolean) => void,
   apiLogView: (string, string, string, ?number, ?() => void) => Promise<any>,
   apiLogPublish: (ChannelClaim | StreamClaim) => void,
@@ -55,9 +55,9 @@ type Analytics = {
   emailVerifiedEvent: () => void,
   rewardEligibleEvent: () => void,
   startupEvent: () => void,
-  purchaseEvent: number => void,
-  readyEvent: number => void,
-  openUrlEvent: string => void,
+  purchaseEvent: (number) => void,
+  readyEvent: (number) => void,
+  openUrlEvent: (string) => void,
 };
 
 type LogPublishParams = {
@@ -75,8 +75,8 @@ if (window.localStorage.getItem(SHARE_INTERNAL) === 'true') internalAnalyticsEna
 // @endif
 
 const analytics: Analytics = {
-  error: message => {
-    return new Promise(resolve => {
+  error: (message) => {
+    return new Promise((resolve) => {
       if (internalAnalyticsEnabled && isProduction) {
         return Lbryio.call('event', 'desktop_error', { error_message: message }).then(() => {
           resolve(true);
@@ -87,9 +87,9 @@ const analytics: Analytics = {
     });
   },
   sentryError: (error, errorInfo) => {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       if (internalAnalyticsEnabled && isProduction) {
-        Sentry.withScope(scope => {
+        Sentry.withScope((scope) => {
           scope.setExtras(errorInfo);
           const eventId = Sentry.captureException(error);
           resolve(eventId);
@@ -114,7 +114,7 @@ const analytics: Analytics = {
       MatomoInstance.trackPageView(params);
     }
   },
-  setUser: userId => {
+  setUser: (userId) => {
     if (internalAnalyticsEnabled && userId) {
       window._paq.push(['setUserId', String(userId)]);
       // @if TARGET='app'
@@ -188,16 +188,9 @@ const analytics: Analytics = {
     }
   },
 
-  apiSyncTags: params => {
+  apiSyncTags: (params) => {
     if (internalAnalyticsEnabled && isProduction) {
       Lbryio.call('content_tags', 'sync', params);
-    }
-  },
-
-  apiSearchFeedback: (query, vote) => {
-    if (isProduction) {
-      // We don't need to worry about analytics enabled here because users manually click on the button to provide feedback
-      Lbryio.call('feedback', 'search', { query, vote });
     }
   },
 
@@ -238,10 +231,10 @@ const analytics: Analytics = {
       });
     }
   },
-  playerLoadedEvent: embedded => {
+  playerLoadedEvent: (embedded) => {
     sendMatomoEvent('Player', 'Loaded', embedded ? 'embedded' : 'onsite');
   },
-  playerStartedEvent: embedded => {
+  playerStartedEvent: (embedded) => {
     sendMatomoEvent('Player', 'Started', embedded ? 'embedded' : 'onsite');
   },
   tagFollowEvent: (tag, following) => {
@@ -316,7 +309,7 @@ analytics.pageView(
 
 // Listen for url changes and report
 // This will include search queries
-history.listen(location => {
+history.listen((location) => {
   const { pathname, search } = location;
 
   const page = `${pathname}${search}`;
