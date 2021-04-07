@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import Gerbil from './gerbil.png';
 import FreezeframeWrapper from 'component/fileThumbnail/FreezeframeWrapper';
 import ChannelStakedIndicator from 'component/channelStakedIndicator';
+import useLazyLoading from '../../util/useLazyLoading';
 
 type Props = {
   thumbnail: ?string,
@@ -42,6 +43,7 @@ function ChannelThumbnail(props: Props) {
   const thumbnailPreview = rawThumbnailPreview && rawThumbnailPreview.trim().replace(/^http:\/\//i, 'https://');
   const channelThumbnail = thumbnail || thumbnailPreview;
   const showThumb = (!obscure && !!thumbnail) || thumbnailPreview;
+  const thumbnailRef = React.useRef(null);
   // Generate a random color class based on the first letter of the channel name
   const { channelName } = parseURI(uri);
   let initializer;
@@ -58,6 +60,8 @@ function ChannelThumbnail(props: Props) {
       doResolveUri(uri);
     }
   }, [doResolveUri, shouldResolve, uri]);
+
+  useLazyLoading(thumbnailRef, 0.25, [showThumb]);
 
   if (channelThumbnail && channelThumbnail.endsWith('gif') && !allowGifs) {
     return (
@@ -77,9 +81,10 @@ function ChannelThumbnail(props: Props) {
     >
       {!showThumb && (
         <img
+          ref={thumbnailRef}
           alt={__('Channel profile picture')}
           className="channel-thumbnail__default"
-          src={!thumbError && thumbnailPreview ? thumbnailPreview : Gerbil}
+          data-src={!thumbError && thumbnailPreview ? thumbnailPreview : Gerbil}
           onError={() => setThumbError(true)} // if thumb fails (including due to https replace, show gerbil.
         />
       )}
@@ -89,9 +94,10 @@ function ChannelThumbnail(props: Props) {
             <div className="chanel-thumbnail--waiting">{__('This will be visible in a few minutes.')}</div>
           ) : (
             <img
+              ref={thumbnailRef}
               alt={__('Channel profile picture')}
               className="channel-thumbnail__custom"
-              src={!thumbError ? thumbnailPreview || thumbnail : Gerbil}
+              data-src={!thumbError ? thumbnailPreview || thumbnail : Gerbil}
               onError={() => setThumbError(true)} // if thumb fails (including due to https replace, show gerbil.
             />
           )}

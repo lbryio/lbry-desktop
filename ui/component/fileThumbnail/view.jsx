@@ -5,6 +5,7 @@ import React from 'react';
 import FreezeframeWrapper from './FreezeframeWrapper';
 import Placeholder from './placeholder.png';
 import classnames from 'classnames';
+import useLazyLoading from '../../util/useLazyLoading';
 
 type Props = {
   uri: string,
@@ -12,7 +13,7 @@ type Props = {
   children?: Node,
   allowGifs: boolean,
   claim: ?StreamClaim,
-  doResolveUri: string => void,
+  doResolveUri: (string) => void,
   className?: string,
 };
 
@@ -23,12 +24,15 @@ function FileThumbnail(props: Props) {
     uri && claim && claim.value && claim.value.thumbnail ? claim.value.thumbnail.url : undefined;
   const thumbnail = passedThumbnail || thumbnailFromClaim;
   const hasResolvedClaim = claim !== undefined;
+  const thumbnailRef = React.useRef(null);
 
   React.useEffect(() => {
     if (!hasResolvedClaim && uri) {
       doResolveUri(uri);
     }
   }, [hasResolvedClaim, uri, doResolveUri]);
+
+  useLazyLoading(thumbnailRef);
 
   if (!allowGifs && thumbnail && thumbnail.endsWith('gif')) {
     return (
@@ -46,9 +50,12 @@ function FileThumbnail(props: Props) {
   }
   // @endif
 
+  const thumnailUrl = url ? url.replace(/'/g, "\\'") : '';
+
   return (
     <div
-      style={{ backgroundImage: `url('${url ? url.replace(/'/g, "\\'") : ''}')` }}
+      ref={thumbnailRef}
+      data-background-image={thumnailUrl}
       className={classnames('media__thumb', className, {
         'media__thumb--resolving': !hasResolvedClaim,
       })}
