@@ -1,5 +1,5 @@
 // @flow
-import { LOGO_TITLE, ENABLE_NO_SOURCE_CLAIMS } from 'config';
+import { LOGO_TITLE, ENABLE_NO_SOURCE_CLAIMS, CHANNEL_STAKED_LEVEL_LIVESTREAM } from 'config';
 import * as ICONS from 'constants/icons';
 import { SETTINGS } from 'lbry-redux';
 import * as PAGES from 'constants/pages';
@@ -61,6 +61,7 @@ type Props = {
   isAbsoluteSideNavHidden: boolean,
   hideCancel: boolean,
   activeChannelClaim: ?ChannelClaim,
+  activeChannelStakedLevel: number,
 };
 
 const Header = (props: Props) => {
@@ -89,6 +90,7 @@ const Header = (props: Props) => {
     user,
     hideCancel,
     activeChannelClaim,
+    activeChannelStakedLevel,
   } = props;
   const isMobile = useIsMobile();
   // on the verify page don't let anyone escape other than by closing the tab to keep session data consistent
@@ -99,7 +101,12 @@ const Header = (props: Props) => {
   const hasBackout = Boolean(backout);
   const { backLabel, backNavDefault, title: backTitle, simpleTitle: simpleBackTitle } = backout || {};
   const notificationsEnabled = (user && user.experimental_ui) || false;
-  const livestreamEnabled = (ENABLE_NO_SOURCE_CLAIMS && user && user.experimental_ui) || false;
+  const livestreamEnabled = Boolean(
+    ENABLE_NO_SOURCE_CLAIMS &&
+      user &&
+      !user.odysee_live_disabled &&
+      (activeChannelStakedLevel >= CHANNEL_STAKED_LEVEL_LIVESTREAM || user.odysee_live_enabled)
+  );
   const activeChannelUrl = activeChannelClaim && activeChannelClaim.permanent_url;
 
   // Sign out if they click the "x" when they are on the password prompt

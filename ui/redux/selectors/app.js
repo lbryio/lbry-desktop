@@ -1,11 +1,11 @@
 import { createSelector } from 'reselect';
-import { selectClaimsById, selectMyChannelClaims } from 'lbry-redux';
+import { selectClaimsById, selectMyChannelClaims, makeSelectStakedLevelForChannelUri } from 'lbry-redux';
 
-export const selectState = state => state.app || {};
+export const selectState = (state) => state.app || {};
 
-export const selectPlatform = createSelector(selectState, state => state.platform);
+export const selectPlatform = createSelector(selectState, (state) => state.platform);
 
-export const selectUpdateUrl = createSelector(selectPlatform, platform => {
+export const selectUpdateUrl = createSelector(selectPlatform, (platform) => {
   switch (platform) {
     case 'darwin':
       return 'https://lbry.com/get/lbry.dmg';
@@ -18,11 +18,11 @@ export const selectUpdateUrl = createSelector(selectPlatform, platform => {
   }
 });
 
-export const selectHasClickedComment = createSelector(selectState, state => state.hasClickedComment);
+export const selectHasClickedComment = createSelector(selectState, (state) => state.hasClickedComment);
 
-export const selectRemoteVersion = createSelector(selectState, state => state.remoteVersion);
+export const selectRemoteVersion = createSelector(selectState, (state) => state.remoteVersion);
 
-export const selectIsUpgradeAvailable = createSelector(selectState, state => state.isUpgradeAvailable);
+export const selectIsUpgradeAvailable = createSelector(selectState, (state) => state.isUpgradeAvailable);
 
 export const selectUpgradeFilename = createSelector(selectPlatform, selectRemoteVersion, (platform, version) => {
   switch (platform) {
@@ -37,29 +37,29 @@ export const selectUpgradeFilename = createSelector(selectPlatform, selectRemote
   }
 });
 
-export const selectDownloadProgress = createSelector(selectState, state => state.downloadProgress);
+export const selectDownloadProgress = createSelector(selectState, (state) => state.downloadProgress);
 
-export const selectDownloadComplete = createSelector(selectState, state => state.upgradeDownloadCompleted);
+export const selectDownloadComplete = createSelector(selectState, (state) => state.upgradeDownloadCompleted);
 
-export const selectIsUpgradeSkipped = createSelector(selectState, state => state.isUpgradeSkipped);
+export const selectIsUpgradeSkipped = createSelector(selectState, (state) => state.isUpgradeSkipped);
 
-export const selectUpgradeDownloadPath = createSelector(selectState, state => state.downloadPath);
+export const selectUpgradeDownloadPath = createSelector(selectState, (state) => state.downloadPath);
 
-export const selectUpgradeDownloadItem = createSelector(selectState, state => state.downloadItem);
+export const selectUpgradeDownloadItem = createSelector(selectState, (state) => state.downloadItem);
 
-export const selectAutoUpdateDownloaded = createSelector(selectState, state => state.autoUpdateDownloaded);
+export const selectAutoUpdateDownloaded = createSelector(selectState, (state) => state.autoUpdateDownloaded);
 
-export const selectAutoUpdateDeclined = createSelector(selectState, state => state.autoUpdateDeclined);
+export const selectAutoUpdateDeclined = createSelector(selectState, (state) => state.autoUpdateDeclined);
 
-export const selectDaemonVersionMatched = createSelector(selectState, state => state.daemonVersionMatched);
+export const selectDaemonVersionMatched = createSelector(selectState, (state) => state.daemonVersionMatched);
 
-export const selectVolume = createSelector(selectState, state => state.volume);
+export const selectVolume = createSelector(selectState, (state) => state.volume);
 
-export const selectMute = createSelector(selectState, state => state.muted);
+export const selectMute = createSelector(selectState, (state) => state.muted);
 
-export const selectUpgradeTimer = createSelector(selectState, state => state.checkUpgradeTimer);
+export const selectUpgradeTimer = createSelector(selectState, (state) => state.checkUpgradeTimer);
 
-export const selectModal = createSelector(selectState, state => {
+export const selectModal = createSelector(selectState, (state) => {
   if (!state.modal) {
     return null;
   }
@@ -70,23 +70,23 @@ export const selectModal = createSelector(selectState, state => {
   };
 });
 
-export const selectSearchOptionsExpanded = createSelector(selectState, state => state.searchOptionsExpanded);
+export const selectSearchOptionsExpanded = createSelector(selectState, (state) => state.searchOptionsExpanded);
 
-export const selectWelcomeVersion = createSelector(selectState, state => state.welcomeVersion);
+export const selectWelcomeVersion = createSelector(selectState, (state) => state.welcomeVersion);
 
-export const selectHasNavigated = createSelector(selectState, state => state.hasNavigated);
+export const selectHasNavigated = createSelector(selectState, (state) => state.hasNavigated);
 
-export const selectAllowAnalytics = createSelector(selectState, state => state.allowAnalytics);
+export const selectAllowAnalytics = createSelector(selectState, (state) => state.allowAnalytics);
 
-export const selectScrollStartingPosition = createSelector(selectState, state => state.currentScroll);
+export const selectScrollStartingPosition = createSelector(selectState, (state) => state.currentScroll);
 
-export const selectIsPasswordSaved = createSelector(selectState, state => state.isPasswordSaved);
+export const selectIsPasswordSaved = createSelector(selectState, (state) => state.isPasswordSaved);
 
-export const selectInterestedInYoutubeSync = createSelector(selectState, state => state.interestedInYoutubeSync);
+export const selectInterestedInYoutubeSync = createSelector(selectState, (state) => state.interestedInYoutubeSync);
 
-export const selectSplashAnimationEnabled = createSelector(selectState, state => state.splashAnimationEnabled);
+export const selectSplashAnimationEnabled = createSelector(selectState, (state) => state.splashAnimationEnabled);
 
-export const selectActiveChannelId = createSelector(selectState, state => state.activeChannel);
+export const selectActiveChannelId = createSelector(selectState, (state) => state.activeChannel);
 
 export const selectActiveChannelClaim = createSelector(
   selectActiveChannelId,
@@ -118,4 +118,19 @@ export const selectActiveChannelClaim = createSelector(
   }
 );
 
-export const selectIncognito = createSelector(selectState, state => state.incognito);
+export const selectActiveChannelStakedLevel = createSelector(
+  (state) => state,
+  selectActiveChannelClaim,
+  (state, activeChannelClaim) => {
+    if (!activeChannelClaim) {
+      return 0;
+    }
+
+    const uri = activeChannelClaim.permanent_url;
+    const stakedLevel = makeSelectStakedLevelForChannelUri(uri)(state);
+
+    return stakedLevel;
+  }
+);
+
+export const selectIncognito = createSelector(selectState, (state) => state.incognito);

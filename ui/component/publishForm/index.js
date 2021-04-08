@@ -15,7 +15,12 @@ import {
 } from 'lbry-redux';
 import { doPublishDesktop } from 'redux/actions/publish';
 import { selectUnclaimedRewardValue } from 'redux/selectors/rewards';
-import { selectModal, selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
+import {
+  selectModal,
+  selectActiveChannelClaim,
+  selectIncognito,
+  selectActiveChannelStakedLevel,
+} from 'redux/selectors/app';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import PublishPage from './view';
 import { selectUser } from 'redux/selectors/user';
@@ -36,6 +41,7 @@ const select = (state) => ({
   enablePublishPreview: makeSelectClientSetting(SETTINGS.ENABLE_PUBLISH_PREVIEW)(state),
   activeChannelClaim: selectActiveChannelClaim(state),
   incognito: selectIncognito(state),
+  activeChannelStakedLevel: selectActiveChannelStakedLevel(state),
 });
 
 const perform = (dispatch) => ({
