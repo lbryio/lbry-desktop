@@ -84,6 +84,19 @@ function PublishFile(props: Props) {
   const SOURCE_NONE = 'none';
   const SOURCE_SELECT = 'select';
   const SOURCE_UPLOAD = 'upload';
+
+  const RECOMMENDED_BITRATE = 6000000;
+  const TV_PUBLISH_SIZE_LIMIT: number = 4294967296;
+  const TV_PUBLISH_SIZE_LIMIT_STR_GB = '4';
+  const PAGE_SIZE = 4;
+
+  const PROCESSING_MB_PER_SECOND = 0.5;
+  const MINUTES_THRESHOLD = 30;
+  const HOURS_THRESHOLD = MINUTES_THRESHOLD * 60;
+  const MARKDOWN_FILE_EXTENSIONS = ['txt', 'md', 'markdown'];
+  const sizeInMB = Number(size) / 1000000;
+  const secondsToProcess = sizeInMB / PROCESSING_MB_PER_SECOND;
+
   const fileSelectorModes = [
     { label: __('Select Replay'), actionName: SOURCE_SELECT, icon: ICONS.MENU },
     { label: __('Upload'), actionName: SOURCE_UPLOAD, icon: ICONS.PUBLISH },
@@ -102,28 +115,16 @@ function PublishFile(props: Props) {
   const [fileSelectSource, setFileSelectSource] = useState(
     IS_WEB && showSourceSelector ? SOURCE_SELECT : SOURCE_UPLOAD
   );
-  console.log('FSS', fileSelectSource);
   // const [showFileUpdate, setShowFileUpdate] = useState(false);
   const [selectedFileIndex, setSelectedFileIndex] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const PAGE_SIZE = 4;
   const totalPages =
     hasLivestreamData && livestreamData.length > PAGE_SIZE ? Math.ceil(livestreamData.length / PAGE_SIZE) : 1;
 
-  const RECOMMENDED_BITRATE = 6000000;
-  const TV_PUBLISH_SIZE_LIMIT: number = 4294967296;
-  const TV_PUBLISH_SIZE_LIMIT_STR_GB = '4';
   const UPLOAD_SIZE_MESSAGE = __(
     '%SITE_NAME% uploads are limited to %limit% GB. Download the app for unrestricted publishing.',
     { SITE_NAME, limit: TV_PUBLISH_SIZE_LIMIT_STR_GB }
   );
-  const PROCESSING_MB_PER_SECOND = 0.5;
-  const MINUTES_THRESHOLD = 30;
-  const HOURS_THRESHOLD = MINUTES_THRESHOLD * 60;
-  const MARKDOWN_FILE_EXTENSIONS = ['txt', 'md', 'markdown'];
-
-  const sizeInMB = Number(size) / 1000000;
-  const secondsToProcess = sizeInMB / PROCESSING_MB_PER_SECOND;
 
   // Reset filePath if publish mode changed
   useEffect(() => {
@@ -300,11 +301,15 @@ function PublishFile(props: Props) {
   function handleFileSource(source) {
     if (source === SOURCE_NONE) {
       // clear files and remotes...
+      // https://github.com/lbryio/lbry-desktop/issues/5855
+      // publish is trying to use one field to share html file blob and string and such
+      // $FlowFixMe
       handleFileChange(false);
       updatePublishForm({ remoteFileUrl: undefined });
     } else if (source === SOURCE_UPLOAD) {
       updatePublishForm({ remoteFileUrl: undefined });
     } else if (source === SOURCE_SELECT) {
+      // $FlowFixMe
       handleFileChange(false);
       if (selectedFileIndex !== null) {
         updatePublishForm({ remoteFileUrl: livestreamData[selectedFileIndex].data.fileLocation });

@@ -149,9 +149,10 @@ function PublishForm(props: Props) {
     [PUBLISH_MODES.POST]: 'Post --[noun, markdown post tab button]--',
     [PUBLISH_MODES.LIVESTREAM]: 'Livestream --[noun, livestream tab button]--',
   };
-  // Component state
+
   const [mode, setMode] = React.useState(uploadType || PUBLISH_MODES.FILE);
   const [isCheckingLivestreams, setCheckingLivestreams] = React.useState(false);
+
   let customSubtitle;
   if (mode === PUBLISH_MODES.LIVESTREAM || isLivestreamClaim) {
     if (isLivestreamClaim) {
@@ -225,10 +226,10 @@ function PublishForm(props: Props) {
     }
   }, [modal]);
 
+  // move this to lbryinc OR to a file under ui, and/or provide a standardized livestreaming config.
   function checkLivestreams() {
     // $FlowFixMe Bitwave's API can handle garbage
-    // fetch(`http://api.bitwave.tv/v1/replays/odysee/${claimChannelId}`)
-    const fakeId = '2bfe6cdb24a21bdc1b76fb7c416edd50e9e85945';
+    const fakeId = '2bfe6cdb24a21bdc1b76fb7c416edd50e9e85945'; // remove this when done testing
     setCheckingLivestreams(true);
     fetch(`https://api.bitwave.tv/v1/replays/odysee/${fakeId}`) // claimChannelId
       .then((res) => res.json())
@@ -244,8 +245,7 @@ function PublishForm(props: Props) {
         setCheckingLivestreams(false);
       });
   }
-  // const fakeLive = true;
-  // const fakeId = '2bfe6cdb24a21bdc1b76fb7c416edd50e9e85945';
+
   useEffect(() => {
     if (claimChannelId && isLivestreamClaim) {
       checkLivestreams();

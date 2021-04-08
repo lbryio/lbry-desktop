@@ -3,7 +3,6 @@ import { SIMPLE_SITE, SITE_NAME, ENABLE_FILE_REACTIONS } from 'config';
 import * as PAGES from 'constants/pages';
 import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
-import * as PUBLISH_MODES from 'constants/publish_types';
 import React from 'react';
 import Button from 'component/button';
 import FileDownloadLink from 'component/fileDownloadLink';
@@ -109,7 +108,7 @@ function FileActions(props: Props) {
       />
     </>
   );
-// ${isLivestreamClaim ? `?type=${PUBLISH_MODES.LIVESTREAM}` : ''}
+
   const rhsSection = (
     <>
       {!SIMPLE_SITE && <FileDownloadLink uri={uri} />}
