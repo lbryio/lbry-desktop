@@ -12,7 +12,7 @@ export default function SwapPage(props: Props) {
       className="main--swap"
       backout={{
         backoutLabel: __('Done'),
-        title: __('Swap Bitcoin'),
+        title: __('Swap Crypto'),
       }}
     >
       <WalletSwap />

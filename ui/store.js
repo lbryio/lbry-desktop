@@ -156,7 +156,13 @@ const sharedStateFilters = {
     property: 'following',
   },
   blocked: { source: 'blocked', property: 'blockedChannels' },
-  coin_swaps: { source: 'coinSwap', property: 'coinSwaps' },
+  coin_swap_codes: {
+    source: 'coinSwap',
+    property: 'coinSwaps',
+    transform: (coinSwaps) => {
+      return coinSwaps.map((coinSwapInfo) => coinSwapInfo.chargeCode);
+    },
+  },
   settings: { source: 'settings', property: 'sharedPreferences' },
   app_welcome_version: { source: 'app', property: 'welcomeVersion' },
   sharing_3P: { source: 'app', property: 'allowAnalytics' },

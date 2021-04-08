@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import WalletSwap from './view';
 import { doOpenModal } from 'redux/actions/app';
-import { doAddCoinSwap } from 'redux/actions/coinSwap';
+import { doAddCoinSwap, doQueryCoinSwapStatus } from 'redux/actions/coinSwap';
 import { doToast } from 'redux/actions/notifications';
 import { selectCoinSwaps } from 'redux/selectors/coinSwap';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
@@ -20,6 +20,7 @@ const perform = (dispatch) => ({
   addCoinSwap: (coinSwap) => dispatch(doAddCoinSwap(coinSwap)),
   getNewAddress: () => dispatch(doGetNewAddress()),
   checkAddressIsMine: (address) => dispatch(doCheckAddressIsMine(address)),
+  queryCoinSwapStatus: (sendAddress) => dispatch(doQueryCoinSwapStatus(sendAddress)),
 });
 
 export default withRouter(connect(select, perform)(WalletSwap));
