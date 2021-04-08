@@ -28,4 +28,6 @@ declare type User = {
   device_types: Array<DeviceType>,
   lbry_first_approved: boolean,
   experimental_ui: boolean,
+  odysee_live_enabled: boolean,
+  odysee_live_disabled: boolean,
 };

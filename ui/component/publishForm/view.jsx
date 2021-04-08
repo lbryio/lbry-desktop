@@ -8,7 +8,7 @@
   File upload is carried out in the background by that function.
  */
 
-import { SITE_NAME, ENABLE_NO_SOURCE_CLAIMS, SIMPLE_SITE } from 'config';
+import { SITE_NAME, ENABLE_NO_SOURCE_CLAIMS, SIMPLE_SITE, CHANNEL_STAKED_LEVEL_LIVESTREAM } from 'config';
 import React, { useEffect } from 'react';
 import { buildURI, isURIValid, isNameValid, THUMBNAIL_STATUSES } from 'lbry-redux';
 import Button from 'component/button';
@@ -80,7 +80,8 @@ type Props = {
   enablePublishPreview: boolean,
   activeChannelClaim: ?ChannelClaim,
   incognito: boolean,
-  user: ?{ experimental_ui: boolean },
+  user: ?User,
+  activeChannelStakedLevel: number,
 };
 
 function PublishForm(props: Props) {
@@ -112,16 +113,21 @@ function PublishForm(props: Props) {
     activeChannelClaim,
     incognito,
     user,
+    activeChannelStakedLevel,
   } = props;
 
   const { replace, location } = useHistory();
   const urlParams = new URLSearchParams(location.search);
   const uploadType = urlParams.get('type');
+  const livestreamEnabled =
+    ENABLE_NO_SOURCE_CLAIMS &&
+    user &&
+    !user.odysee_live_disabled &&
+    (activeChannelStakedLevel >= CHANNEL_STAKED_LEVEL_LIVESTREAM || user.odysee_live_enabled);
   // $FlowFixMe
-  const MODES =
-    ENABLE_NO_SOURCE_CLAIMS && user && user.experimental_ui
-      ? Object.values(PUBLISH_MODES)
-      : Object.values(PUBLISH_MODES).filter((mode) => mode !== PUBLISH_MODES.LIVESTREAM);
+  const MODES = livestreamEnabled
+    ? Object.values(PUBLISH_MODES)
+    : Object.values(PUBLISH_MODES).filter((mode) => mode !== PUBLISH_MODES.LIVESTREAM);
 
   const MODE_TO_I18N_STR = {
     [PUBLISH_MODES.FILE]: SIMPLE_SITE ? 'Video' : 'File',
@@ -304,14 +310,14 @@ function PublishForm(props: Props) {
       return;
     }
     // LiveStream publish
-    if (_uploadType === PUBLISH_MODES.LIVESTREAM.toLowerCase()) {
+    if (_uploadType === PUBLISH_MODES.LIVESTREAM.toLowerCase() && livestreamEnabled) {
       setMode(PUBLISH_MODES.LIVESTREAM);
       return;
     }
 
     // Default to standard file publish
     setMode(PUBLISH_MODES.FILE);
-  }, [uploadType]);
+  }, [uploadType, livestreamEnabled]);
 
   useEffect(() => {
     if (!uploadType) return;
