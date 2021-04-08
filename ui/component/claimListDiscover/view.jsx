@@ -508,10 +508,10 @@ function ClaimListDiscover(props: Props) {
       ) : (
         <div>
           {showHeader && (
-          <div className="section__header--actions">
-            {headerToUse}
-            {meta && <div className="section__actions--no-margin">{meta}</div>}
-          </div>
+            <div className="section__header--actions">
+              {headerToUse}
+              {meta && <div className="section__actions--no-margin">{meta}</div>}
+            </div>
           )}
           <ClaimList
             id={claimSearchCacheQuery}
@@ -527,7 +527,10 @@ function ClaimListDiscover(props: Props) {
             injectedItem={injectedItem}
             showHiddenByUser={showHiddenByUser}
           />
-          {loading && new Array(dynamicPageSize).fill(1).map((x, i) => <ClaimPreview key={i} placeholder="loading" type={type} />)}
+          {loading &&
+            new Array(dynamicPageSize)
+              .fill(1)
+              .map((x, i) => <ClaimPreview key={i} placeholder="loading" type={type} />)}
         </div>
       )}
     </React.Fragment>

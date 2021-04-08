@@ -44,3 +44,10 @@
     margin-top: 0;
   }
 }
+
+.recommended-content__toggles {
+  button {
+    padding: 0 var(--spacing-xs);
+    height: 2rem;
+  }
+}
