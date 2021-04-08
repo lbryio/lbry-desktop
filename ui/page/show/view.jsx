@@ -1,7 +1,8 @@
 // @flow
 import { DOMAIN } from 'config';
+import * as PAGES from 'constants/pages';
 import React, { useEffect } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 import Spinner from 'component/spinner';
 import ChannelPage from 'page/channel';
 import FilePage from 'page/file';
@@ -52,7 +53,9 @@ function ShowPage(props: Props) {
   const claimExists = claim !== null && claim !== undefined;
   const haventFetchedYet = claim === undefined;
   const isMine = claim && claim.is_my_output;
-  const { contentName } = parseURI(uri);
+  const { channelName, contentName } = parseURI(uri);
+  const { push } = useHistory();
+  const isContentNameChannel = channelName && !contentName;
 
   useEffect(() => {
     // @if TARGET='web'
@@ -95,11 +98,24 @@ function ShowPage(props: Props) {
         {!isResolvingUri && !isSubscribed && (
           <div className="main--empty">
             <Yrbl
-              title={__('No Content Found')}
+              title={isContentNameChannel ? __('Channel Not Found') : __('No Content Found')}
               subtitle={
-                <div className="section__actions">
-                  <Button button="primary" label={__('Publish Something')} onClick={() => beginPublish(contentName)} />
-                </div>
+                isContentNameChannel ? (
+                  __(`Probably because you didn't make it.`)
+                ) : (
+                  <div className="section__actions">
+                    <Button
+                      button="primary"
+                      label={__('Publish Something')}
+                      onClick={() => beginPublish(contentName)}
+                    />
+                    <Button
+                      button="secondary"
+                      onClick={() => push(`/$/${PAGES.REPOST_NEW}?to=${contentName}`)}
+                      label={__('Repost Something')}
+                    />
+                  </div>
+                )
               }
             />
           </div>
