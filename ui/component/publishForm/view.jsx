@@ -231,7 +231,7 @@ function PublishForm(props: Props) {
     // $FlowFixMe Bitwave's API can handle garbage
     const fakeId = '2bfe6cdb24a21bdc1b76fb7c416edd50e9e85945'; // remove this when done testing
     setCheckingLivestreams(true);
-    fetch(`https://api.bitwave.tv/v1/replays/odysee/${fakeId}`) // claimChannelId
+    fetch(`https://api.bitwave.tv/v1/replays/odysee/${claimChannelId}`) // claimChannelId
       .then((res) => res.json())
       .then((res) => {
         if (!res || !res.data) {
