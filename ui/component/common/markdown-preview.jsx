@@ -15,7 +15,6 @@ import { formattedTimestamp, inlineTimestamp } from 'util/remark-timestamp';
 import ZoomableImage from 'component/zoomableImage';
 import { CHANNEL_STAKED_LEVEL_VIDEO_COMMENTS, SIMPLE_SITE } from 'config';
 import Button from 'component/button';
-import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
 
 type SimpleTextProps = {
@@ -99,19 +98,14 @@ const SimpleImageLink = (props: ImageLinkProps) => {
   }
 
   return (
-    <div className="preview-link__img--no-preview">
-      <Button
-        button="link"
-        icon={ICONS.IMAGE}
-        iconSize={28}
-        iconRight={ICONS.EXTERNAL}
-        label={title || alt}
-        title={title || alt}
-        className="button--external-link"
-        href={src}
-      />
-      {helpText && <Icon className="icon--help" icon={ICONS.HELP} tooltip size={24} customTooltipText={helpText} />}
-    </div>
+    <Button
+      button="link"
+      iconRight={ICONS.EXTERNAL}
+      label={title || alt || src}
+      title={helpText || title || alt || src}
+      className="button--external-link"
+      href={src}
+    />
   );
 };
 
