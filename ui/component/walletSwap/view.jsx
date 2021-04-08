@@ -8,6 +8,7 @@ import LbcSymbol from 'component/common/lbc-symbol';
 import Spinner from 'component/spinner';
 import Nag from 'component/common/nag';
 import CopyableText from 'component/copyableText';
+import Icon from 'component/common/icon';
 import QRCode from 'component/common/qr-code';
 import usePersistedState from 'effects/use-persisted-state';
 import * as ICONS from 'constants/icons';
@@ -17,20 +18,21 @@ import { clipboard } from 'electron';
 import I18nMessage from 'component/i18nMessage';
 import { Redirect, useHistory } from 'react-router';
 
-const BTC_SATOSHIS = 100000000;
-const BTC_MAX = 21000000;
-const BTC_MIN = 1 / BTC_SATOSHIS;
+const ENABLE_ALTERNATIVE_COINS = true;
 
-const STATUS_FETCH_INTERVAL_MS = 60000;
+const BTC_SATOSHIS = 100000000;
+const LBC_MAX = 21000000;
+const LBC_MIN = 1;
 
 const IS_DEV = process.env.NODE_ENV !== 'production';
 const DEBOUNCE_BTC_CHANGE_MS = 400;
 
 const INTERNAL_APIS_DOWN = 'internal_apis_down';
-const BTC_API_STATUS_PENDING = 'Pending';
-const BTC_API_STATUS_PROCESSING = 'Processing';
-const BTC_API_STATUS_CONFIRMING = 'Confirming';
-const BTC_API_STATUS_SUCCESS = 'Success';
+const BTC_API_STATUS_PENDING = 'NEW'; // Started swap, waiting for coin.
+const BTC_API_STATUS_CONFIRMING = 'PENDING'; // Coin receiving, waiting confirmation.
+const BTC_API_STATUS_PROCESSING = 'COMPLETED'; // Coin confirmed. Sending LBC.
+const BTC_API_STATUS_UNRESOLVED = 'UNRESOLVED'; // Underpaid, overpaid, etc.
+const BTC_API_STATUS_EXPIRED = 'EXPIRED'; // Charge expired (60 minutes).
 const BTC_API_STATUS_ERROR = 'Error';
 
 const ACTION_MAIN = 'action_main';
@@ -40,15 +42,16 @@ const ACTION_STATUS_PROCESSING = 'action_processing';
 const ACTION_STATUS_SUCCESS = 'action_success';
 const ACTION_PAST_SWAPS = 'action_past_swaps';
 
-const NAG_API_STATUS_PENDING = 'Waiting to receive your bitcoin.';
-const NAG_API_STATUS_CONFIRMING = 'Confirming BTC transaction.';
-const NAG_API_STATUS_PROCESSING = 'Bitcoin received. Sending your LBC.';
-const NAG_API_STATUS_SUCCESS = 'LBC sent. You should see it in your wallet.';
+const NAG_API_STATUS_PENDING = 'Waiting to receive your crypto.';
+const NAG_API_STATUS_CONFIRMING = 'Confirming transaction.';
+const NAG_API_STATUS_PROCESSING = 'Crypto received. Sending your Credits.';
+const NAG_API_STATUS_SUCCESS = 'Credits sent. You should see it in your wallet.';
 const NAG_API_STATUS_ERROR = 'An error occurred on the previous swap.';
 const NAG_SWAP_CALL_FAILED = 'Failed to initiate swap.';
 // const NAG_STATUS_CALL_FAILED = 'Failed to query swap status.';
 const NAG_SERVER_DOWN = 'The system is currently down. Come back later.';
 const NAG_RATE_CALL_FAILED = 'Unable to obtain exchange rate. Try again later.';
+const NAG_EXPIRED = 'Swap expired.';
 
 type Props = {
   receiveAddress: string,
@@ -59,6 +62,7 @@ type Props = {
   getNewAddress: () => void,
   checkAddressIsMine: (string) => void,
   openModal: (string, {}) => void,
+  queryCoinSwapStatus: (string) => void,
 };
 
 function WalletSwap(props: Props) {
@@ -71,24 +75,23 @@ function WalletSwap(props: Props) {
     getNewAddress,
     checkAddressIsMine,
     openModal,
+    queryCoinSwapStatus,
   } = props;
 
   const [btc, setBtc] = usePersistedState('swap-btc-amount', 0.001);
   const [btcError, setBtcError] = React.useState();
-  const [btcAddress, setBtcAddress] = React.useState();
   const [lbc, setLbc] = React.useState(0);
   const [action, setAction] = React.useState(ACTION_MAIN);
   const [nag, setNag] = React.useState(null);
   const [showQr, setShowQr] = React.useState(false);
   const [isFetchingRate, setIsFetchingRate] = React.useState(false);
   const [isSwapping, setIsSwapping] = React.useState(false);
-  const [statusMap, setStatusMap] = React.useState({});
   const [isRefreshingStatus, setIsRefreshingStatus] = React.useState(false);
   const { location } = useHistory();
-
-  const status = btcAddress ? statusMap[btcAddress] : null;
-  const btcTxId = status && status.receipt_txid ? status.receipt_txid : null;
-  const lbcTxId = status && status.lbc_txid ? status.lbc_txid : null;
+  const [swap, setSwap] = React.useState({});
+  const [coin, setCoin] = React.useState('bitcoin');
+  const [lastStatusQuery, setLastStatusQuery] = React.useState();
+  const { goBack } = useHistory();
 
   function formatLbcString(lbc) {
     return lbc === 0 ? '---' : lbc.toLocaleString(undefined, { minimumFractionDigits: 8 });
@@ -97,12 +100,12 @@ function WalletSwap(props: Props) {
   function returnToMainAction() {
     setIsSwapping(false);
     setAction(ACTION_MAIN);
-    setBtcAddress(null);
+    setSwap(null);
   }
 
-  function removeCoinSwap(sendAddress) {
+  function removeCoinSwap(chargeCode) {
     openModal(MODALS.CONFIRM_REMOVE_BTC_SWAP_ADDRESS, {
-      sendAddress: sendAddress,
+      chargeCode: chargeCode,
     });
   }
 
@@ -115,7 +118,7 @@ function WalletSwap(props: Props) {
     }
   }, [receiveAddress, getNewAddress, checkAddressIsMine]);
 
-  // Get 'btc::rate'
+  // Get 'btc/rate'
   React.useEffect(() => {
     if (isNaN(btc) || btc === 0) {
       setLbc(0);
@@ -126,11 +129,11 @@ function WalletSwap(props: Props) {
 
     const timer = setTimeout(() => {
       Lbryio.call('btc', 'rate', { satoshi: BTC_SATOSHIS })
-        .then((result) => {
+        .then((rate) => {
           setIsFetchingRate(false);
-          setLbc(btc / result);
+          setLbc((btc * BTC_SATOSHIS) / Math.round(BTC_SATOSHIS * rate));
         })
-        .catch((e) => {
+        .catch(() => {
           setIsFetchingRate(false);
           setLbc(0);
           setNag({ msg: NAG_RATE_CALL_FAILED, type: 'error' });
@@ -140,78 +143,71 @@ function WalletSwap(props: Props) {
     return () => clearTimeout(timer);
   }, [btc]);
 
-  function queryStatus(btcAddress, successCb, failureCb) {
-    Lbryio.call('btc', 'status', { pay_to_address: btcAddress })
-      .then((result) => {
-        setStatusMap((statusMap) => {
-          const tmpMap = { ...statusMap };
-          if (btcAddress) {
-            tmpMap[btcAddress] = result;
-          }
-          return tmpMap;
-        });
-        if (successCb) successCb(result);
-      })
-      .catch((err) => {
-        if (failureCb) failureCb(err);
-      });
-  }
-
-  // Poll 'btc::status'
+  // Resolve 'swap' with the latest info from 'coinSwaps'
   React.useEffect(() => {
-    function fetchBtcStatus() {
-      queryStatus(
-        btcAddress,
-        (result) => {
-          switch (result.Status) {
-            case BTC_API_STATUS_PENDING:
-              setAction(ACTION_STATUS_PENDING);
-              setNag({ msg: NAG_API_STATUS_PENDING, type: 'helpful' });
-              break;
-            case BTC_API_STATUS_CONFIRMING:
-              setAction(ACTION_STATUS_CONFIRMING);
-              setNag({ msg: NAG_API_STATUS_CONFIRMING, type: 'helpful' });
-              break;
-            case BTC_API_STATUS_PROCESSING:
-              setAction(ACTION_STATUS_PROCESSING);
-              setNag({ msg: NAG_API_STATUS_PROCESSING, type: 'helpful' });
-              break;
-            case BTC_API_STATUS_SUCCESS:
-              setAction(ACTION_STATUS_SUCCESS);
-              setNag({ msg: NAG_API_STATUS_SUCCESS, type: 'helpful' });
-              setIsSwapping(false);
-              break;
-            case BTC_API_STATUS_ERROR:
-              setNag({ msg: NAG_API_STATUS_ERROR, type: 'error' });
-              returnToMainAction();
-              break;
-            default:
-              if (IS_DEV) throw new Error('Unhandled status: "' + result.Status + '"');
-              break;
-          }
-        },
-        (err) => {
-          returnToMainAction();
-          setNag({
-            msg: err === INTERNAL_APIS_DOWN ? NAG_SERVER_DOWN : err.message /* NAG_STATUS_CALL_FAILED */,
-            type: 'error',
-          });
+    const swapInfo = swap && coinSwaps.find((x) => x.chargeCode === swap.chargeCode);
+    if (!swapInfo) {
+      return;
+    }
+
+    const jsonSwap = JSON.stringify(swap);
+    const jsonSwapInfo = JSON.stringify(swapInfo);
+    if (jsonSwap !== jsonSwapInfo) {
+      setSwap({ ...swapInfo });
+    }
+
+    if (!swapInfo.status) {
+      return;
+    }
+
+    switch (swapInfo.status.status) {
+      case BTC_API_STATUS_PENDING:
+        setAction(ACTION_STATUS_PENDING);
+        setNag({ msg: NAG_API_STATUS_PENDING, type: 'helpful' });
+        break;
+      case BTC_API_STATUS_CONFIRMING:
+        setAction(ACTION_STATUS_CONFIRMING);
+        setNag({ msg: NAG_API_STATUS_CONFIRMING, type: 'helpful' });
+        break;
+      case BTC_API_STATUS_PROCESSING:
+        if (swapInfo.status.lbcTxid) {
+          setAction(ACTION_STATUS_SUCCESS);
+          setNag({ msg: NAG_API_STATUS_SUCCESS, type: 'helpful' });
+          setIsSwapping(false);
+        } else {
+          setAction(ACTION_STATUS_PROCESSING);
+          setNag({ msg: NAG_API_STATUS_PROCESSING, type: 'helpful' });
         }
-      );
+        break;
+      case BTC_API_STATUS_ERROR:
+        setNag({ msg: NAG_API_STATUS_ERROR, type: 'error' });
+        break;
+      case INTERNAL_APIS_DOWN:
+        setNag({ msg: NAG_SERVER_DOWN, type: 'error' });
+        break;
+      case BTC_API_STATUS_EXPIRED:
+        setNag({ msg: NAG_EXPIRED, type: 'error' });
+        if (action === ACTION_PAST_SWAPS) {
+          setAction(ACTION_STATUS_PENDING);
+        }
+        break;
+      case BTC_API_STATUS_UNRESOLVED:
+        setNag({
+          msg: __(
+            'Received amount did not match order code %chargeCode%. Contact hello@lbry.com to resolve the payment.',
+            { chargeCode: swapInfo.chargeCode }
+          ),
+          type: 'error',
+        });
+        if (action === ACTION_PAST_SWAPS) {
+          setAction(ACTION_STATUS_PENDING);
+        }
+        break;
+      default:
+        setNag({ msg: swapInfo.status.status, type: 'error' });
+        break;
     }
-
-    let fetchInterval;
-    if (btcAddress && isSwapping) {
-      fetchBtcStatus();
-      fetchInterval = setInterval(fetchBtcStatus, STATUS_FETCH_INTERVAL_MS);
-    }
-
-    return () => {
-      if (fetchInterval) {
-        clearInterval(fetchInterval);
-      }
-    };
-  }, [btcAddress, isSwapping]);
+  }, [swap, coinSwaps]);
 
   // Validate entered BTC
   React.useEffect(() => {
@@ -236,9 +232,64 @@ function WalletSwap(props: Props) {
     return () => clearTimeout(timer);
   }, [isRefreshingStatus]);
 
+  function getCoinAddress(coin) {
+    if (swap && swap.sendAddresses) {
+      return swap.sendAddresses[coin];
+    }
+    return '';
+  }
+
+  function getCoinSendAmountStr(coin) {
+    if (swap && swap.sendAmounts && swap.sendAmounts[coin]) {
+      return `${swap.sendAmounts[coin].amount} ${swap.sendAmounts[coin].currency}`;
+    }
+    return '';
+  }
+
+  function currencyToCoin(currency) {
+    const MAP = {
+      DAI: 'dai',
+      USDC: 'usdc',
+      BTC: 'bitcoin',
+      ETH: 'ethereum',
+      LTC: 'litecoin',
+      BCH: 'bitcoincash',
+    };
+    return MAP[currency] || 'bitcoin';
+  }
+
+  function getSentAmountStr(swapInfo) {
+    if (swapInfo && swapInfo.status) {
+      const currency = swapInfo.status.receiptCurrency;
+      const coin = currencyToCoin(currency);
+      return getCoinSendAmountStr(coin);
+    }
+    return '';
+  }
+
+  function getCoinLabel(coin) {
+    const COIN_LABEL = {
+      dai: 'Dai',
+      usdc: 'USD Coin',
+      bitcoin: 'Bitcoin',
+      ethereum: 'Ethereum',
+      litecoin: 'Litecoin',
+      bitcoincash: 'Bitcoin Cash',
+    };
+
+    return COIN_LABEL[coin] || coin;
+  }
+
+  function getLbcAmountStrForSwap(swap) {
+    if (swap && swap.lbcAmount) {
+      return formatLbcString(swap.lbcAmount);
+    }
+    return '---';
+  }
+
   function handleStartSwap() {
     setIsSwapping(true);
-    setBtcAddress(null);
+    setSwap(null);
     setNag(null);
 
     Lbryio.call('btc', 'swap', {
@@ -246,24 +297,22 @@ function WalletSwap(props: Props) {
       btc_satoshi_provided: parseInt(btc * BTC_SATOSHIS),
       pay_to_wallet_address: receiveAddress,
     })
-      .then((result) => {
-        setBtcAddress(result);
-        addCoinSwap({
-          coin: 'btc',
-          sendAddress: result,
-          sendAmount: btc,
+      .then((response) => {
+        const swap = {
+          chargeCode: response.Exchange.charge_code,
+          coins: Object.keys(response.Charge.data.addresses),
+          sendAddresses: response.Charge.data.addresses,
+          sendAmounts: response.Charge.data.pricing,
           lbcAmount: lbc,
-        });
+        };
+
+        setSwap({ ...swap });
+        addCoinSwap({ ...swap });
       })
       .catch((err) => {
         setNag({ msg: err === INTERNAL_APIS_DOWN ? NAG_SWAP_CALL_FAILED : err.message, type: 'error' });
         returnToMainAction();
       });
-  }
-
-  function handleCancelPending() {
-    returnToMainAction();
-    setNag(null);
   }
 
   function handleBtcChange(event: SyntheticInputEvent<*>) {
@@ -276,52 +325,129 @@ function WalletSwap(props: Props) {
     setNag(null);
     setIsRefreshingStatus(true);
 
-    coinSwaps.forEach((x) => {
-      queryStatus(x.sendAddress, null, null);
-    });
+    const now = Date.now();
+    if (!lastStatusQuery || now - lastStatusQuery > 30000) {
+      // There is a '200/minute' limit in the commerce API. If the history is
+      // long, or if the user goes trigger-happy, the limit could be reached
+      // easily. Statuses don't change often, so just limit it to every 30s.
+      setLastStatusQuery(now);
+      coinSwaps.forEach((x) => {
+        queryCoinSwapStatus(x.chargeCode);
+      });
+    }
   }
 
   function getShortStatusStr(coinSwap: CoinSwapInfo) {
-    const status = statusMap[coinSwap.sendAddress];
-    if (!status) {
+    const swapInfo = coinSwaps.find((x) => x.chargeCode === coinSwap.chargeCode);
+    if (!swapInfo || !swapInfo.status) {
       return '---';
     }
 
     let msg;
-    switch (status.Status) {
+    switch (swapInfo.status.status) {
       case BTC_API_STATUS_PENDING:
-        msg = __('Waiting %sendAmount% BTC', { sendAmount: coinSwap.sendAmount });
+        msg = __('Waiting');
         break;
       case BTC_API_STATUS_CONFIRMING:
-        msg = __('Confirming %sendAmount% BTC', { sendAmount: coinSwap.sendAmount });
+        msg = __('Confirming');
         break;
       case BTC_API_STATUS_PROCESSING:
-        msg = __('Sending LBC');
-        break;
-      case BTC_API_STATUS_SUCCESS:
-        msg = __('Completed');
+        if (swapInfo.status.lbcTxid) {
+          msg = __('Credits sent');
+        } else {
+          msg = __('Sending Credits');
+        }
         break;
       case BTC_API_STATUS_ERROR:
         msg = __('Failed');
         break;
+      case BTC_API_STATUS_EXPIRED:
+        msg = __('Expired');
+        break;
+      case BTC_API_STATUS_UNRESOLVED:
+        msg = __('Unresolved');
+        break;
       default:
-        msg = '?';
+        msg = swapInfo.status.status;
         // if (IS_DEV) throw new Error('Unhandled "status": ' + status.Status);
         break;
     }
     return msg;
   }
 
-  function getViewTransactionElement(isSend) {
+  function getViewTransactionElement(swap, isSend) {
+    if (!swap || !swap.status) {
+      return '';
+    }
+
+    const explorerUrl = (coin, txid) => {
+      if (!txid) {
+        return '';
+      }
+      switch (coin) {
+        case 'DAI':
+        case 'USDC':
+        default:
+          return '';
+        case 'BTC':
+          return `https://www.blockchain.com/btc/tx/${txid}`;
+        case 'ETH':
+          return `https://www.blockchain.com/eth/tx/${txid}`;
+        case 'LTC':
+          return `https://live.blockcypher.com/ltc/tx/${txid}/`;
+        case 'BCH':
+          return `https://www.blockchain.com/bch/tx/${txid}`;
+      }
+    };
+
     if (isSend) {
-      return btcTxId ? (
-        <Button button="link" href={`https://www.blockchain.com/btc/tx/${btcTxId}`} label={__('View transaction')} />
+      const sendTxId = swap.status.receiptTxid;
+      const url = explorerUrl(swap.status.receiptCurrency, sendTxId);
+      return sendTxId ? (
+        <>
+          {url && <Button button="link" href={url} label={__('View transaction')} />}
+          {!url && (
+            <Button
+              button="link"
+              label={sendTxId.substring(0, 7)}
+              title={sendTxId}
+              onClick={() => {
+                clipboard.writeText(sendTxId);
+                doToast({
+                  message: __('Transaction ID copied.'),
+                });
+              }}
+            />
+          )}
+        </>
       ) : null;
     } else {
+      const lbcTxId = swap.status.lbcTxid;
       return lbcTxId ? (
         <Button button="link" href={`https://explorer.lbry.com/tx/${lbcTxId}`} label={__('View transaction')} />
       ) : null;
     }
+  }
+
+  function getCloseButton() {
+    return (
+      <>
+        <Button autoFocus button="primary" label={__('Close')} onClick={() => goBack()} />
+        <Icon
+          className="icon--help"
+          icon={ICONS.HELP}
+          tooltip
+          size={16}
+          customTooltipText={__(
+            'This page can be closed while the transactions are in progress.\nYou can view the status later from:\n • Wallet » Swap » View Past Swaps'
+          )}
+        />
+      </>
+    );
+  }
+
+  function getGap() {
+    return <div className="confirm__value" />; // better way?
   }
 
   function getActionElement() {
@@ -368,7 +494,7 @@ function WalletSwap(props: Props) {
             disabled={isSwapping}
             onChange={(event) => handleBtcChange(event)}
           />
-          <div className="confirm__value" />
+          {getGap()}
           <div className="confirm__label">{__('Credits')}</div>
           <div className="confirm__value">
             <LbcSymbol postfix={formatLbcString(lbc)} size={22} />
@@ -384,7 +510,10 @@ function WalletSwap(props: Props) {
           disabled={isSwapping || isNaN(btc) || btc === 0 || lbc === 0 || btcError}
           label={isSwapping ? __('Processing...') : __('Start Swap')}
         />
-        {coinSwaps.length !== 0 && <Button button="link" label={__('View Past Swaps')} onClick={handleViewPastSwaps} />}
+        {!isSwapping && coinSwaps.length !== 0 && (
+          <Button button="link" label={__('View Past Swaps')} onClick={handleViewPastSwaps} />
+        )}
+        {isSwapping && <Spinner type="small" />}
       </div>
     </>
   );
@@ -393,26 +522,43 @@ function WalletSwap(props: Props) {
     <>
       <div className="section section--padded card--inline confirm__wrapper">
         <div className="section">
+          {swap && swap.coins && ENABLE_ALTERNATIVE_COINS && (
+            <>
+              <FormField
+                type="select"
+                name="select_coin"
+                value={coin}
+                label={__('Alternative coins')}
+                onChange={(e) => setCoin(e.target.value)}
+              >
+                {swap.coins.map((x) => (
+                  <option key={x} value={x}>
+                    {getCoinLabel(x)}
+                  </option>
+                ))}
+              </FormField>
+              {getGap()}
+            </>
+          )}
           <div className="confirm__label">{__('Send')}</div>
-          <div className="confirm__value">{btc} BTC</div>
+          <CopyableText primaryButton copyable={getCoinSendAmountStr(coin)} snackMessage={__('Amount copied.')} />
+          {getGap()}
           <div className="confirm__label">{__('To')}</div>
-          <CopyableText primaryButton copyable={btcAddress} snackMessage={__('Address copied.')} />
-          <div className="card__actions--inline">
+          <CopyableText primaryButton copyable={getCoinAddress(coin)} snackMessage={__('Address copied.')} />
+          <div className="confirm__value--subitem">
             <Button
               button="link"
               label={showQr ? __('Hide QR code') : __('Show QR code')}
               onClick={() => setShowQr(!showQr)}
             />
-            {showQr && btcAddress && <QRCode value={btcAddress} />}
+            {showQr && getCoinAddress(coin) && <QRCode value={getCoinAddress(coin)} />}
           </div>
-          <div className="confirm__value" />
+          {getGap()}
           <div className="confirm__label">{__('Receive')}</div>
-          <div className="confirm__value">{<LbcSymbol postfix={formatLbcString(lbc)} size={22} />}</div>
+          <div className="confirm__value">{<LbcSymbol postfix={getLbcAmountStrForSwap(swap)} size={22} />}</div>
         </div>
       </div>
-      <div className="section__actions">
-        <Button autoFocus onClick={handleCancelPending} button="primary" label={__('Go Back')} />
-      </div>
+      <div className="section__actions">{getCloseButton()}</div>
     </>
   );
 
@@ -421,13 +567,11 @@ function WalletSwap(props: Props) {
       <div className="section section--padded card--inline confirm__wrapper">
         <div className="section">
           <div className="confirm__label">{__('Confirming')}</div>
-          <div className="confirm__value">{btc} BTC</div>
-          {getViewTransactionElement(true)}
+          <div className="confirm__value confirm__value--no-gap">{getSentAmountStr(swap)}</div>
+          <div className="confirm__value--subitem">{getViewTransactionElement(swap, true)}</div>
         </div>
       </div>
-      <div className="section__actions">
-        <Button autoFocus onClick={handleCancelPending} button="primary" label={__('Go Back')} />
-      </div>
+      <div className="section__actions">{getCloseButton()}</div>
     </>
   );
 
@@ -436,17 +580,19 @@ function WalletSwap(props: Props) {
       <div className="section section--padded card--inline confirm__wrapper">
         <div className="section">
           <div className="confirm__label">{__('Sent')}</div>
-          <div className="confirm__value">{btc} BTC</div>
-          {getViewTransactionElement(true)}
-          <div className="confirm__value" />
+          <div className="confirm__value confirm__value--no-gap">{getSentAmountStr(swap)}</div>
+          <div className="confirm__value--subitem">{getViewTransactionElement(swap, true)}</div>
+          {getGap()}
           <div className="confirm__label">{action === ACTION_STATUS_SUCCESS ? __('Received') : __('Receiving')}</div>
-          <div className="confirm__value">{<LbcSymbol postfix={formatLbcString(lbc)} size={22} />}</div>
-          {action === ACTION_STATUS_SUCCESS && getViewTransactionElement(false)}
+          <div className="confirm__value confirm__value--no-gap">
+            {<LbcSymbol postfix={getLbcAmountStrForSwap(swap)} size={22} />}
+          </div>
+          {action === ACTION_STATUS_SUCCESS && (
+            <div className="confirm__value--subitem">{getViewTransactionElement(swap, false)}</div>
+          )}
         </div>
       </div>
-      <div className="section__actions">
-        <Button autoFocus onClick={handleCancelPending} button="primary" label={__('Go Back')} />
-      </div>
+      <div className="section__actions">{getCloseButton()}</div>
     </>
   );
 
@@ -458,7 +604,7 @@ function WalletSwap(props: Props) {
             <table className="table table--btc-swap">
               <thead>
                 <tr>
-                  <th>{__('Address')}</th>
+                  <th>{__('Code')}</th>
                   <th>{__('Status')}</th>
                   <th />
                 </tr>
@@ -472,18 +618,15 @@ function WalletSwap(props: Props) {
                 {coinSwaps.length !== 0 &&
                   coinSwaps.map((x) => {
                     return (
-                      <tr key={x.sendAddress}>
+                      <tr key={x.chargeCode}>
                         <td>
                           <Button
                             button="link"
                             className="button--hash-id"
-                            title={x.sendAddress}
-                            label={x.sendAddress.substring(0, 7)}
+                            title={x.chargeCode}
+                            label={x.chargeCode}
                             onClick={() => {
-                              clipboard.writeText(x.sendAddress);
-                              doToast({
-                                message: __('Address copied.'),
-                              });
+                              setSwap({ ...x });
                             }}
                           />
                         </td>
@@ -492,8 +635,8 @@ function WalletSwap(props: Props) {
                           <Button
                             button="link"
                             icon={ICONS.REMOVE}
-                            title={__('Remove address')}
-                            onClick={() => removeCoinSwap(x.sendAddress)}
+                            title={__('Remove swap')}
+                            onClick={() => removeCoinSwap(x.chargeCode)}
                           />
                         </td>
                       </tr>
@@ -505,7 +648,15 @@ function WalletSwap(props: Props) {
         </div>
       </div>
       <div className="section__actions">
-        <Button autoFocus onClick={handleCancelPending} button="primary" label={__('Go Back')} />
+        <Button
+          autoFocus
+          button="primary"
+          label={__('Go Back')}
+          onClick={() => {
+            returnToMainAction();
+            setNag(null);
+          }}
+        />
         {coinSwaps.length !== 0 && !isRefreshingStatus && (
           <Button button="link" label={__('Refresh')} onClick={handleViewPastSwaps} />
         )}
@@ -521,8 +672,8 @@ function WalletSwap(props: Props) {
   return (
     <Form onSubmit={handleStartSwap}>
       <Card
-        title={<I18nMessage tokens={{ lbc: <LbcSymbol size={22} /> }}>Swap Bitcoin for %lbc%</I18nMessage>}
-        subtitle={__('Send bitcoin to the address provided and you will be sent an equivalent amount of Credits.')}
+        title={<I18nMessage tokens={{ lbc: <LbcSymbol size={22} /> }}>Swap Crypto for %lbc%</I18nMessage>}
+        subtitle={__('Send crypto to the address provided and you will be sent an equivalent amount of Credits.')}
         actions={getActionElement()}
         nag={nag ? <Nag relative type={nag.type} message={__(nag.msg)} /> : null}
       />

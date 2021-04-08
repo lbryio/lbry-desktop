@@ -6,7 +6,7 @@ import { doRemoveCoinSwap } from 'redux/actions/coinSwap';
 const select = (state, props) => ({});
 
 const perform = (dispatch) => ({
-  removeCoinSwap: (sendAddress) => dispatch(doRemoveCoinSwap(sendAddress)),
+  removeCoinSwap: (chargeCode) => dispatch(doRemoveCoinSwap(chargeCode)),
   closeModal: () => dispatch(doHideModal()),
 });
 

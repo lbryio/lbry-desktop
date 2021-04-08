@@ -406,6 +406,14 @@ textarea {
   }
 }
 
+.confirm__value--no-gap {
+  margin-bottom: 0;
+}
+
+.confirm__value--subitem {
+  font-size: var(--font-xsmall);
+}
+
 .mobile-only {
   display: none;
 
