@@ -131,7 +131,7 @@ const REPLACE_REGEX = /(<iframe\s+src=["'])(.*?(?=))(["']\s*><\/iframe>)/g;
 // ****************************************************************************
 
 function isStakeEnoughForPreview(stakedLevel) {
-  return stakedLevel && stakedLevel >= CHANNEL_STAKED_LEVEL_VIDEO_COMMENTS;
+  return !stakedLevel || stakedLevel >= CHANNEL_STAKED_LEVEL_VIDEO_COMMENTS;
 }
 
 // ****************************************************************************
