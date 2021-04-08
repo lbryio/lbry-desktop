@@ -76,7 +76,15 @@ export default function Card(props: Props) {
             </div>
           </div>
           <div>
-            {titleActions && <div className="card__title-actions">{titleActions}</div>}
+            {titleActions && (
+              <div
+                className={classnames('card__title-actions', {
+                  'card__title-actions--small': smallTitle,
+                })}
+              >
+                {titleActions}
+              </div>
+            )}
             {expandable && (
               <div className="card__title-actions">
                 <Button

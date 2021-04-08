@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimIsNsfw } from 'lbry-redux';
+import { makeSelectClaimIsNsfw, makeSelectClaimForUri } from 'lbry-redux';
 import { doFetchRecommendedContent } from 'redux/actions/search';
 import { makeSelectRecommendedContentForUri, selectIsSearching } from 'redux/selectors/search';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
@@ -12,6 +12,7 @@ const select = (state, props) => ({
   nextRecommendedUri: makeSelectNextUnplayedRecommended(props.uri)(state),
   isSearching: selectIsSearching(state),
   isAuthenticated: selectUserVerifiedEmail(state),
+  claim: makeSelectClaimForUri(props.uri)(state),
 });
 
 const perform = (dispatch) => ({
