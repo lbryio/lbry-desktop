@@ -35,7 +35,6 @@ type Props = {
   thumbnail: string,
   desktopPlayStartTime?: number,
   className?: string,
-  stakedLevel?: number,
 };
 
 class FileRender extends React.PureComponent<Props> {
@@ -79,7 +78,6 @@ class FileRender extends React.PureComponent<Props> {
       uri,
       renderMode,
       desktopPlayStartTime,
-      stakedLevel,
     } = this.props;
     const source = streamingUrl;
 
@@ -104,7 +102,7 @@ class FileRender extends React.PureComponent<Props> {
           <DocumentViewer
             source={{
               // @if TARGET='app'
-              file: options => fs.createReadStream(downloadPath, options),
+              file: (options) => fs.createReadStream(downloadPath, options),
               // @endif
               stream: source,
               fileExtension,
@@ -112,7 +110,6 @@ class FileRender extends React.PureComponent<Props> {
             }}
             renderMode={renderMode}
             theme={currentTheme}
-            stakedLevel={stakedLevel}
           />
         );
       case RENDER_MODES.DOCX:
@@ -134,7 +131,7 @@ class FileRender extends React.PureComponent<Props> {
           <ComicBookViewer
             source={{
               // @if TARGET='app'
-              file: options => fs.createReadStream(downloadPath, options),
+              file: (options) => fs.createReadStream(downloadPath, options),
               // @endif
               stream: source,
             }}
