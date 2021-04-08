@@ -7,6 +7,10 @@ import Ads from 'web/component/ads';
 import Card from 'component/common/card';
 import { useIsMobile, useIsMediumScreen } from 'effects/use-screensize';
 import Button from 'component/button';
+import classnames from 'classnames';
+
+const VIEW_ALL_RELATED = 'view_all_related';
+const VIEW_MORE_FROM = 'view_more_from';
 
 type Props = {
   uri: string,
@@ -16,6 +20,7 @@ type Props = {
   doFetchRecommendedContent: (string, boolean) => void,
   mature: boolean,
   isAuthenticated: boolean,
+  claim: ?StreamClaim,
 };
 
 export default function RecommendedContent(props: Props) {
@@ -27,9 +32,11 @@ export default function RecommendedContent(props: Props) {
     nextRecommendedUri,
     isSearching,
     isAuthenticated,
+    claim,
   } = props;
-  const [expanded, setExpanded] = React.useState(false);
-  const [allRelated, setAllRelated] = React.useState(true);
+  const [viewMode, setViewMode] = React.useState(VIEW_ALL_RELATED);
+  const signingChannel = claim && claim.signing_channel;
+  const channelName = signingChannel ? signingChannel.name : null;
   const isMobile = useIsMobile();
   const isMedium = useIsMediumScreen();
 
@@ -59,38 +66,30 @@ export default function RecommendedContent(props: Props) {
       smallTitle={!isMobile && !isMedium}
       className="file-page__recommended"
       title={__('Related')}
-      subtitle={
-        <div
-          className={classnames({
-            'related_content-more--contracted': !expanded,
-            'related_content-more--expanded': expanded,
-          })}
-        >
-          <Button
-            button="alt"
-            label={__('All')}
-            onClick={() => {
-              setAllRelated(true);
-              setMoreFrom(false);
-              setTagList(false);
-            }}
-          />
-          {channelName && (
+      titleActions={
+        signingChannel && (
+          <div className="recommended-content__toggles">
             <Button
-              button="alt"
-              label={__('More from %claim_name%', { claim_name: channelName })}
-              onClick={() => {
-                setAllRelated(false);
-                setMoreFrom(true);
-                setTagList(false);
-              }}
+              className={classnames('button-toggle', {
+                'button-toggle--active': viewMode === VIEW_ALL_RELATED,
+              })}
+              label={__('All')}
+              onClick={() => setViewMode(VIEW_ALL_RELATED)}
             />
-          )}
-        </div>
+
+            <Button
+              className={classnames('button-toggle', {
+                'button-toggle--active': viewMode === VIEW_MORE_FROM,
+              })}
+              label={__('More from %claim_name%', { claim_name: channelName })}
+              onClick={() => setViewMode(VIEW_MORE_FROM)}
+            />
+          </div>
+        )
       }
       body={
         <div>
-          {allRelated && (
+          {viewMode === VIEW_ALL_RELATED && (
             <ClaimList
               type="small"
               loading={isSearching}
@@ -110,9 +109,9 @@ export default function RecommendedContent(props: Props) {
               empty={__('No related content found')}
             />
           )}
-          {moreFrom && (
+          {viewMode === VIEW_MORE_FROM && signingChannel && (
             <ClaimListDiscover
-              hideAdvancedFilter={true}
+              hideAdvancedFilter
               tileLayout={false}
               showHeader={false}
               type="small"
@@ -120,7 +119,7 @@ export default function RecommendedContent(props: Props) {
               orderBy="new"
               pageSize={20}
               infiniteScroll={false}
-              hideFilters={true}
+              hideFilters
               channelIds={[signingChannel.claim_id]}
               loading={isSearching}
               hideMenu={isMobile}
