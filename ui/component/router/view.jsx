@@ -13,6 +13,7 @@ import BackupPage from 'page/backup';
 import Code2257Page from 'web/page/code2257';
 // @endif
 import ReportPage from 'page/report';
+import ReportContentPage from 'page/reportContent';
 import ShowPage from 'page/show';
 import PublishPage from 'page/publish';
 import DiscoverPage from 'page/discover';
@@ -252,6 +253,7 @@ function AppRouter(props: Props) {
       <Route path={`/$/${PAGES.SETTINGS_ADVANCED}`} exact component={SettingsAdvancedPage} />
       <Route path={`/$/${PAGES.INVITE}/:referrer`} exact component={InvitedPage} />
       <Route path={`/$/${PAGES.CHECKOUT}`} exact component={CheckoutPage} />
+      <Route path={`/$/${PAGES.REPORT_CONTENT}`} exact component={ReportContentPage} />
 
       <PrivateRoute {...props} exact path={`/$/${PAGES.YOUTUBE_SYNC}`} component={YoutubeSyncPage} />
       <PrivateRoute {...props} exact path={`/$/${PAGES.TAGS_FOLLOWING}`} component={TagsFollowingPage} />

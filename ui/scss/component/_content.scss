@@ -190,3 +190,7 @@
 .content__loading-text {
   color: var(--color-white);
 }
+
+.content__non-clickable {
+  pointer-events: none;
+}

@@ -14,6 +14,19 @@
   max-width: 40rem;
 }
 
+.section--vertical-compact {
+  fieldset-section,
+  fieldset-section.radio,
+  div.checkbox,
+  div.section {
+    margin-top: var(--spacing-s);
+  }
+
+  .channel__selector {
+    margin-bottom: var(--spacing-s);
+  }
+}
+
 .section--help {
   border-radius: var(--border-radius);
   background-color: var(--color-primary-alt);

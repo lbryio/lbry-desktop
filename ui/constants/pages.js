@@ -29,6 +29,7 @@ exports.UPLOAD = 'upload';
 exports.UPLOADS = 'uploads';
 exports.GET_CREDITS = 'getcredits';
 exports.REPORT = 'report';
+exports.REPORT_CONTENT = 'report_content';
 exports.REWARDS = 'rewards';
 exports.REWARDS_VERIFY = 'rewards/verify';
 exports.REPOST_NEW = 'repost';
