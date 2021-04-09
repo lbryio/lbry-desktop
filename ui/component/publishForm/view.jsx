@@ -123,9 +123,9 @@ function PublishForm(props: Props) {
 
   const { replace, location } = useHistory();
   const urlParams = new URLSearchParams(location.search);
-  const uploadType = urlParams.get('type');
+  const TYPE_PARAM = 'type';
+  const uploadType = urlParams.get(TYPE_PARAM);
   const enableLivestream = ENABLE_NO_SOURCE_CLAIMS && user && user.experimental_ui;
-
   // $FlowFixMe
   const AVAILABLE_MODES = Object.values(PUBLISH_MODES).filter((mode) => {
     if (editingURI) {
@@ -258,7 +258,7 @@ function PublishForm(props: Props) {
     // $FlowFixMe Bitwave's API can handle garbage
     const fakeId = '2bfe6cdb24a21bdc1b76fb7c416edd50e9e85945'; // remove this when done testing
     setCheckingLivestreams(true);
-    fetch(`https://api.bitwave.tv/v1/replays/odysee/${channelId}?signature=${signature}&signing_ts=${timestamp}`) // claimChannelId
+    fetch(`https://api.bitwave.tv/v1/replays/odysee/${fakeId}?signature=${signature}&signing_ts=${timestamp}`) // claimChannelId
       .then((res) => res.json())
       .then((res) => {
         if (!res || !res.data) {
@@ -419,7 +419,7 @@ function PublishForm(props: Props) {
   useEffect(() => {
     if (!uploadType) return;
     const newParams = new URLSearchParams();
-    newParams.set('type', mode.toLowerCase());
+    newParams.set(TYPE_PARAM, mode.toLowerCase());
     replace({ search: newParams.toString() });
   }, [mode, uploadType]);
 

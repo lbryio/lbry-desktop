@@ -146,10 +146,23 @@ function PublishFile(props: Props) {
     }
   }, [hasLivestreamData, isLivestreamClaim, setFileSelectSource]);
 
+  const normalizeUrlForProtocol = (url) => {
+    if (url.startsWith('https://')) {
+      return url;
+    } else {
+      if (url.startsWith('http://')) {
+        return url;
+      } else {
+        return `https://${url}`;
+      }
+    }
+  };
   // update remoteUrl when replay selected
   useEffect(() => {
     if (selectedFileIndex !== null) {
-      updatePublishForm({ remoteFileUrl: livestreamData[selectedFileIndex].data.fileLocation });
+      updatePublishForm({
+        remoteFileUrl: normalizeUrlForProtocol(livestreamData[selectedFileIndex].data.fileLocation),
+      });
     }
   }, [selectedFileIndex, updatePublishForm]);
 
@@ -552,7 +565,7 @@ function PublishFile(props: Props) {
                                 <td>
                                   <CopyableText
                                     primaryButton
-                                    copyable={item.data.fileLocation}
+                                    copyable={normalizeUrlForProtocol(item.data.fileLocation)}
                                     snackMessage={__('Url copied.')}
                                   />
                                 </td>
