@@ -10,7 +10,7 @@
 
 import { SITE_NAME, ENABLE_NO_SOURCE_CLAIMS, SIMPLE_SITE } from 'config';
 import React, { useEffect } from 'react';
-import { buildURI, isURIValid, isNameValid, THUMBNAIL_STATUSES } from 'lbry-redux';
+import { buildURI, isURIValid, isNameValid, THUMBNAIL_STATUSES, Lbry } from 'lbry-redux';
 import Button from 'component/button';
 import ChannelSelect from 'component/channelSelector';
 import classnames from 'classnames';
@@ -27,6 +27,7 @@ import I18nMessage from 'component/i18nMessage';
 import * as PUBLISH_MODES from 'constants/publish_types';
 import { useHistory } from 'react-router';
 import Spinner from 'component/spinner';
+import { toHex } from 'util/hex';
 
 // @if TARGET='app'
 import fs from 'fs';
@@ -184,12 +185,15 @@ function PublishForm(props: Props) {
   const [prevFileText, setPrevFileText] = React.useState('');
 
   const [livestreamData, setLivestreamData] = React.useState([]);
+  const [signedMessage, setSignedMessage] = React.useState({});
+  const signedMessageStr = JSON.stringify(signedMessage);
   const TAGS_LIMIT = 5;
   const fileFormDisabled = mode === PUBLISH_MODES.FILE && !filePath;
   const emptyPostError = mode === PUBLISH_MODES.POST && (!fileText || fileText.trim() === '');
   const formDisabled = (fileFormDisabled && !editingURI) || emptyPostError || publishing;
   const isInProgress = filePath || editingURI || name || title;
   const activeChannelName = activeChannelClaim && activeChannelClaim.name;
+  const activeChannelClaimStr = JSON.stringify(activeChannelClaim);
   // Editing content info
   const fileMimeType =
     myClaimForUri && myClaimForUri.value && myClaimForUri.value.source
@@ -218,6 +222,29 @@ function PublishForm(props: Props) {
     : formValidLessFile;
 
   const [previewing, setPreviewing] = React.useState(false);
+
+  React.useEffect(() => {
+    if (activeChannelClaimStr) {
+      const channelClaim = JSON.parse(activeChannelClaimStr);
+      const message = 'get-claim-id-replays';
+      setSignedMessage({ signature: null, signing_ts: null });
+      // ensure we have a channel
+      if (channelClaim.claim_id) {
+        Lbry.channel_sign({
+          channel_id: channelClaim.claim_id,
+          hexdata: toHex(message),
+        })
+          .then((data) => {
+            console.log('data', data);
+            setSignedMessage(data);
+          })
+          .catch((error) => {
+            setSignedMessage({ signature: null, signing_ts: null });
+          });
+      }
+    }
+  }, [activeChannelClaimStr, setSignedMessage]);
+
   useEffect(() => {
     if (!modal) {
       setTimeout(() => {
@@ -227,11 +254,11 @@ function PublishForm(props: Props) {
   }, [modal]);
 
   // move this to lbryinc OR to a file under ui, and/or provide a standardized livestreaming config.
-  function checkLivestreams() {
+  function checkLivestreams(channelId, signature, timestamp) {
     // $FlowFixMe Bitwave's API can handle garbage
     const fakeId = '2bfe6cdb24a21bdc1b76fb7c416edd50e9e85945'; // remove this when done testing
     setCheckingLivestreams(true);
-    fetch(`https://api.bitwave.tv/v1/replays/odysee/${claimChannelId}`) // claimChannelId
+    fetch(`https://api.bitwave.tv/v1/replays/odysee/${channelId}?signature=${signature}&signing_ts=${timestamp}`) // claimChannelId
       .then((res) => res.json())
       .then((res) => {
         if (!res || !res.data) {
@@ -247,10 +274,11 @@ function PublishForm(props: Props) {
   }
 
   useEffect(() => {
-    if (claimChannelId && isLivestreamClaim) {
-      checkLivestreams();
+    const signedMessage = JSON.parse(signedMessageStr);
+    if (claimChannelId && isLivestreamClaim && signedMessage.signature) {
+      checkLivestreams(claimChannelId, signedMessage.signature, signedMessage.signing_ts);
     }
-  }, [claimChannelId, isLivestreamClaim]);
+  }, [claimChannelId, isLivestreamClaim, signedMessageStr]);
 
   const isLivestreamMode = mode === PUBLISH_MODES.LIVESTREAM;
   let submitLabel;
