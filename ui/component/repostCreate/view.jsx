@@ -85,7 +85,7 @@ function RepostCreate(props: Props) {
 
   const { replace, goBack } = useHistory();
   const resolvingRepost = isResolvingEnteredRepost || isResolvingPassedRepost;
-  const repostUrlName = `lbry://${!activeChannelClaim ? '' : `${activeChannelClaim.name}/`}`;
+  const repostUrlName = `lbry://${incognito || !activeChannelClaim ? '' : `${activeChannelClaim.name}/`}`;
 
   const contentFirstRender = React.useRef(true);
   const setAutoRepostBid = amount => {
