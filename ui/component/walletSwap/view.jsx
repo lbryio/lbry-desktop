@@ -78,9 +78,9 @@ function WalletSwap(props: Props) {
     queryCoinSwapStatus,
   } = props;
 
-  const [btc, setBtc] = usePersistedState('swap-btc-amount', 0.001);
-  const [btcError, setBtcError] = React.useState();
-  const [lbc, setLbc] = React.useState(0);
+  const [btc, setBtc] = React.useState(0);
+  const [lbcError, setLbcError] = React.useState();
+  const [lbc, setLbc] = usePersistedState('swap-desired-lbc', LBC_MIN);
   const [action, setAction] = React.useState(ACTION_MAIN);
   const [nag, setNag] = React.useState(null);
   const [showQr, setShowQr] = React.useState(false);
@@ -93,8 +93,8 @@ function WalletSwap(props: Props) {
   const [lastStatusQuery, setLastStatusQuery] = React.useState();
   const { goBack } = useHistory();
 
-  function formatLbcString(lbc) {
-    return lbc === 0 ? '---' : lbc.toLocaleString(undefined, { minimumFractionDigits: 8 });
+  function formatCoinAmountString(amount) {
+    return amount === 0 ? '---' : amount.toLocaleString(undefined, { minimumFractionDigits: 8 });
   }
 
   function returnToMainAction() {
@@ -118,10 +118,10 @@ function WalletSwap(props: Props) {
     }
   }, [receiveAddress, getNewAddress, checkAddressIsMine]);
 
-  // Get 'btc/rate'
+  // Get 'btc/rate' and calculate required BTC.
   React.useEffect(() => {
-    if (isNaN(btc) || btc === 0) {
-      setLbc(0);
+    if (isNaN(lbc) || lbc === 0) {
+      setBtc(0);
       return;
     }
 
@@ -131,17 +131,17 @@ function WalletSwap(props: Props) {
       Lbryio.call('btc', 'rate', { satoshi: BTC_SATOSHIS })
         .then((rate) => {
           setIsFetchingRate(false);
-          setLbc((btc * BTC_SATOSHIS) / Math.round(BTC_SATOSHIS * rate));
+          setBtc((lbc * Math.round(BTC_SATOSHIS * rate)) / BTC_SATOSHIS);
         })
         .catch(() => {
           setIsFetchingRate(false);
-          setLbc(0);
+          setBtc(0);
           setNag({ msg: NAG_RATE_CALL_FAILED, type: 'error' });
         });
     }, DEBOUNCE_BTC_CHANGE_MS);
 
     return () => clearTimeout(timer);
-  }, [btc]);
+  }, [lbc]);
 
   // Resolve 'swap' with the latest info from 'coinSwaps'
   React.useEffect(() => {
@@ -209,16 +209,16 @@ function WalletSwap(props: Props) {
     }
   }, [swap, coinSwaps]);
 
-  // Validate entered BTC
+  // Validate entered LBC
   React.useEffect(() => {
     let msg;
-    if (btc < BTC_MIN) {
-      msg = __('The BTC amount needs to be higher');
-    } else if (btc > BTC_MAX) {
-      msg = __('The BTC amount is too high');
+    if (lbc < LBC_MIN) {
+      msg = __('The amount needs to be higher');
+    } else if (lbc > LBC_MAX) {
+      msg = __('The amount is too high');
     }
-    setBtcError(msg);
-  }, [btc]);
+    setLbcError(msg);
+  }, [lbc]);
 
   // 'Refresh' button feedback
   React.useEffect(() => {
@@ -282,7 +282,7 @@ function WalletSwap(props: Props) {
 
   function getLbcAmountStrForSwap(swap) {
     if (swap && swap.lbcAmount) {
-      return formatLbcString(swap.lbcAmount);
+      return formatCoinAmountString(swap.lbcAmount);
     }
     return '---';
   }
@@ -293,17 +293,20 @@ function WalletSwap(props: Props) {
     setNag(null);
 
     Lbryio.call('btc', 'swap', {
-      lbc_satoshi_requested: parseInt(lbc * BTC_SATOSHIS),
-      btc_satoshi_provided: parseInt(btc * BTC_SATOSHIS),
+      lbc_satoshi_requested: parseInt(lbc * BTC_SATOSHIS + 0.5),
+      btc_satoshi_provided: parseInt(btc * BTC_SATOSHIS + 0.5),
       pay_to_wallet_address: receiveAddress,
     })
       .then((response) => {
+        const btcAmount = response.Charge.data.pricing['bitcoin'].amount;
+        const rate = response.Exchange.rate;
+
         const swap = {
           chargeCode: response.Exchange.charge_code,
           coins: Object.keys(response.Charge.data.addresses),
           sendAddresses: response.Charge.data.addresses,
           sendAmounts: response.Charge.data.pricing,
-          lbcAmount: lbc,
+          lbcAmount: (btcAmount * BTC_SATOSHIS) / rate,
         };
 
         setSwap({ ...swap });
@@ -313,11 +316,6 @@ function WalletSwap(props: Props) {
         setNag({ msg: err === INTERNAL_APIS_DOWN ? NAG_SWAP_CALL_FAILED : err.message, type: 'error' });
         returnToMainAction();
       });
-  }
-
-  function handleBtcChange(event: SyntheticInputEvent<*>) {
-    const btc = parseFloat(event.target.value);
-    setBtc(btc);
   }
 
   function handleViewPastSwaps() {
@@ -480,24 +478,32 @@ function WalletSwap(props: Props) {
         <div className="section">
           <FormField
             autoFocus
-            label={__('Bitcoin')}
+            label={
+              <I18nMessage
+                tokens={{
+                  lbc: <LbcSymbol size={22} />,
+                }}
+              >
+                Enter desired %lbc%
+              </I18nMessage>
+            }
             type="number"
-            name="btc"
+            name="lbc"
             className="form-field--price-amount--auto"
             affixClass="form-field--fix-no-height"
-            max={BTC_MAX}
-            min={BTC_MIN}
+            max={LBC_MAX}
+            min={LBC_MIN}
             step={1 / BTC_SATOSHIS}
             placeholder="12.34"
-            value={btc}
-            error={btcError}
+            value={lbc}
+            error={lbcError}
             disabled={isSwapping}
-            onChange={(event) => handleBtcChange(event)}
+            onChange={(event) => setLbc(parseFloat(event.target.value))}
           />
           {getGap()}
-          <div className="confirm__label">{__('Credits')}</div>
+          <div className="confirm__label">{__('Estimated BTC price')}</div>
           <div className="confirm__value">
-            <LbcSymbol postfix={formatLbcString(lbc)} size={22} />
+            {formatCoinAmountString(btc)} {btc === 0 ? '' : 'BTC'}
             {isFetchingRate && <Spinner type="small" />}
           </div>
         </div>
@@ -507,7 +513,7 @@ function WalletSwap(props: Props) {
           autoFocus
           onClick={handleStartSwap}
           button="primary"
-          disabled={isSwapping || isNaN(btc) || btc === 0 || lbc === 0 || btcError}
+          disabled={isSwapping || isNaN(btc) || btc === 0 || lbc === 0 || lbcError}
           label={isSwapping ? __('Processing...') : __('Start Swap')}
         />
         {!isSwapping && coinSwaps.length !== 0 && (
