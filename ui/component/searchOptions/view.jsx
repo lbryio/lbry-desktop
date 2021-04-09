@@ -22,7 +22,7 @@ const TYPES_ADVANCED = {
 };
 
 const TIME_FILTER = {
-  '': 'None',
+  '': 'All',
   // [SEARCH_OPTIONS.TIME_FILTER_LAST_HOUR]: 'Last Hour', -- disable (doesn't work)
   [SEARCH_OPTIONS.TIME_FILTER_TODAY]: 'Last 24 Hours',
   [SEARCH_OPTIONS.TIME_FILTER_THIS_WEEK]: 'This Week',
@@ -210,6 +210,9 @@ const SearchOptions = (props: Props) => {
     </div>
   );
 
+  const uploadDateLabel =
+    options[SEARCH_OPTIONS.CLAIM_TYPE] === SEARCH_OPTIONS.INCLUDE_CHANNELS ? __('Creation Date') : __('Upload Date');
+
   return (
     <div>
       <Button
@@ -227,7 +230,7 @@ const SearchOptions = (props: Props) => {
         <table className="table table--condensed">
           <tbody>
             {addRow(__('Type'), typeElem)}
-            {addRow(__('Upload Date'), uploadDateElem)}
+            {addRow(uploadDateLabel, uploadDateElem)}
             {addRow(__('Sort By'), sortByElem)}
             {addRow(__('Other Options'), otherOptionsElem)}
           </tbody>
