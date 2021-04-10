@@ -13,6 +13,7 @@ import FileViewerEmbeddedEnded from 'web/component/fileViewerEmbeddedEnded';
 import FileViewerEmbeddedTitle from 'component/fileViewerEmbeddedTitle';
 import LoadingScreen from 'component/common/loading-screen';
 import { addTheaterModeButton } from './internal/theater-mode';
+import { addLoopButton } from './internal/loop-mode';
 
 const PLAY_TIMEOUT_ERROR = 'play_timeout_error';
 const PLAY_TIMEOUT_LIMIT = 2000;
@@ -31,6 +32,7 @@ type Props = {
   uri: string,
   autoplaySetting: boolean,
   autoplayIfEmbedded: boolean,
+  loop: boolean,
   desktopPlayStartTime?: number,
   doAnalyticsView: (string, number) => Promise<any>,
   doAnalyticsBuffer: (string, any) => void,
@@ -38,6 +40,7 @@ type Props = {
   savePosition: (string, number) => void,
   clearPosition: (string) => void,
   toggleVideoTheaterMode: () => void,
+  toggleLoop: () => void,
   setVideoPlaybackRate: (number) => void,
 };
 
@@ -61,6 +64,7 @@ function VideoViewer(props: Props) {
     volume,
     autoplaySetting,
     autoplayIfEmbedded,
+    loop,
     doAnalyticsView,
     doAnalyticsBuffer,
     claimRewards,
@@ -68,6 +72,7 @@ function VideoViewer(props: Props) {
     clearPosition,
     desktopPlayStartTime,
     toggleVideoTheaterMode,
+    toggleLoop,
     setVideoPlaybackRate,
   } = props;
   const claimId = claim && claim.claim_id;
@@ -159,6 +164,7 @@ function VideoViewer(props: Props) {
         player.volume(volume);
         player.playbackRate(videoPlaybackRate);
         addTheaterModeButton(player, toggleVideoTheaterMode);
+        addLoopButton(player, toggleLoop);
       }
 
       const shouldPlay = !embedded || autoplayIfEmbedded;
@@ -254,6 +260,7 @@ function VideoViewer(props: Props) {
         startMuted={autoplayIfEmbedded}
         toggleVideoTheaterMode={toggleVideoTheaterMode}
         autoplay={!embedded || autoplayIfEmbedded}
+        loop={loop}
       />
     </div>
   );

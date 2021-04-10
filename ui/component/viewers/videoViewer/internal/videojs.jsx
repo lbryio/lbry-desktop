@@ -48,6 +48,7 @@ type Props = {
   isAudio: boolean,
   startMuted: boolean,
   autoplay: boolean,
+  loop: boolean,
   toggleVideoTheaterMode: () => void,
 };
 
@@ -171,7 +172,7 @@ class LbryVolumeBarClass extends videojs.getComponent(VIDEOJS_VOLUME_BAR_CLASS) 
 properties for this component should be kept to ONLY those that if changed should REQUIRE an entirely new videojs element
  */
 export default React.memo<Props>(function VideoJs(props: Props) {
-  const { autoplay, startMuted, source, sourceType, poster, isAudio, onPlayerReady, toggleVideoTheaterMode } = props;
+  const { autoplay, loop, startMuted, source, sourceType, poster, isAudio, onPlayerReady, toggleVideoTheaterMode } = props;
 
   const [reload, setReload] = useState('initial');
 
@@ -202,6 +203,9 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     UNMUTE: 'UNMUTE',
     RETRY: 'RETRY',
   };
+
+  const videoNode: ?HTMLVideoElement = containerRef.current && containerRef.current.querySelector('video, audio');
+  videoNode ? videoNode.loop = loop : null;
 
   function showTapButton(tapButton) {
     const setButtonVisibility = (theRef, newState) => {
@@ -299,7 +303,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
           // (2) We'll have to get 'makeSelectClientSetting(SETTINGS.VIDEO_THEATER_MODE)'
           // as a prop here so we can say "Theater mode|Default mode" instead of
           // "Toggle Theather mode".
-          controlBar.getChild('Button').controlText(__('Toggle Theater mode (t)'));
+          // controlBar.getChild('Button').controlText(__('Toggle Theater mode (t)'));
           break;
         default:
           if (isDev) throw Error('Unexpected: ' + e.type);

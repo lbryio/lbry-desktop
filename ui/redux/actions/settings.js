@@ -424,3 +424,12 @@ export function toggleVideoTheaterMode() {
     dispatch(doSetClientSetting(SETTINGS.VIDEO_THEATER_MODE, !videoTheaterMode));
   };
 }
+
+export function toggleLoop() {
+  return (dispatch, getState) => {
+    const state = getState();
+    const loop = makeSelectClientSetting(SETTINGS.LOOP)(state);
+
+    dispatch(doSetClientSetting(SETTINGS.LOOP, !loop));
+  };
+}
