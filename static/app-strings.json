@@ -1444,6 +1444,7 @@
   "Gain a following to earn this reward. 1 validated followers needed for level 1 (Current Score: 0). This amount may not match your total followers.": "Gain a following to earn this reward. 1 validated followers needed for level 1 (Current Score: 0). This amount may not match your total followers.",
   "Some extra Credits for you and the person that brought you to us.": "Some extra Credits for you and the person that brought you to us.",
   "Daily Watch Reward": "Daily Watch Reward",
+  "%SITE_NAME% view reward": "%SITE_NAME% view reward",
   "You earned %lbc% for looking at neat stuff. ": "You earned %lbc% for looking at neat stuff. ",
   "Earn a random reward of at least %lbc% for watching anything at all.": "Earn a random reward of at least %lbc% for watching anything at all.",
   "You have already claimed this reward within the last 24 hours.": "You have already claimed this reward within the last 24 hours.",
@@ -1733,5 +1734,6 @@
   "Learn more and sign petition": "Learn more and sign petition",
   "Publishing...": "Publishing...",
   "Collection": "Collection",
+  "More from %claim_name%": "More from %claim_name%",
   "--end--": "--end--"
 }
