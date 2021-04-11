@@ -134,18 +134,20 @@ export default function WunderBarSuggestions(props: Props) {
         let begin;
         let final;
         let scrollPx;
+        let direction = 'none';
 
         if (isHome) {
           begin = 0;
           final = shiftKey ? cur : begin;
           scrollPx = 0;
+          direction = 'backward';
         } else {
           final = elem.value.length;
           begin = shiftKey ? cur : final;
           scrollPx = elem.scrollWidth - elem.clientWidth;
         }
 
-        elem.setSelectionRange(begin, final);
+        elem.setSelectionRange(begin, final, direction);
         elem.scrollLeft = scrollPx;
         return true;
       }
