@@ -188,7 +188,7 @@ const SearchOptions = (props: Props) => {
       <Button
         button="close"
         className={classnames('close-button', {
-          'close-button--visible': options[SEARCH_OPTIONS.TIME_FILTER] !== '',
+          'close-button--visible': options[SEARCH_OPTIONS.TIME_FILTER],
         })}
         icon={ICONS.REMOVE}
         onClick={() => updateSearchOptions(SEARCH_OPTIONS.TIME_FILTER, '')}
