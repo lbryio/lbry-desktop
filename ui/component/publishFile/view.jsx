@@ -8,7 +8,7 @@ import PostEditor from 'component/postEditor';
 import FileSelector from 'component/common/file-selector';
 import Button from 'component/button';
 import Card from 'component/common/card';
-import { Form, FormField } from 'component/common/form';
+import { FormField } from 'component/common/form';
 import Spinner from 'component/spinner';
 import I18nMessage from 'component/i18nMessage';
 import usePersistedState from 'effects/use-persisted-state';
@@ -98,9 +98,9 @@ function PublishFile(props: Props) {
   const secondsToProcess = sizeInMB / PROCESSING_MB_PER_SECOND;
 
   const fileSelectorModes = [
-    { label: __('Select Replay'), actionName: SOURCE_SELECT, icon: ICONS.MENU },
+    { label: __('Choose Replay'), actionName: SOURCE_SELECT, icon: ICONS.MENU },
     { label: __('Upload'), actionName: SOURCE_UPLOAD, icon: ICONS.PUBLISH },
-    { label: __('Not Yet'), actionName: SOURCE_NONE, icon: ICONS.REMOVE },
+    { label: __('None'), actionName: SOURCE_NONE, icon: ICONS.REMOVE },
   ];
 
   const hasLivestreamData = livestreamData && Boolean(livestreamData.length);
@@ -575,28 +575,26 @@ function PublishFile(props: Props) {
                     </table>
                   </div>
                 </fieldset-section>
-                <Form style={totalPages <= 1 ? { display: 'none' } : null} onSubmit={handlePaginateReplays}>
-                  <fieldset-group class="fieldset-group--smushed fieldgroup--paginate">
-                    <fieldset-section>
-                      <ReactPaginate
-                        pageCount={totalPages}
-                        pageRangeDisplayed={2}
-                        previousLabel="‹"
-                        nextLabel="›"
-                        activeClassName="pagination__item--selected"
-                        pageClassName="pagination__item"
-                        previousClassName="pagination__item pagination__item--previous"
-                        nextClassName="pagination__item pagination__item--next"
-                        breakClassName="pagination__item pagination__item--break"
-                        marginPagesDisplayed={2}
-                        onPageChange={(e) => handlePaginateReplays(e.selected + 1)}
-                        forcePage={currentPage - 1}
-                        initialPage={currentPage - 1}
-                        containerClassName="pagination"
-                      />
-                    </fieldset-section>
-                  </fieldset-group>
-                </Form>
+                <fieldset-group class="fieldset-group--smushed fieldgroup--paginate">
+                  <fieldset-section>
+                    <ReactPaginate
+                      pageCount={totalPages}
+                      pageRangeDisplayed={2}
+                      previousLabel="‹"
+                      nextLabel="›"
+                      activeClassName="pagination__item--selected"
+                      pageClassName="pagination__item"
+                      previousClassName="pagination__item pagination__item--previous"
+                      nextClassName="pagination__item pagination__item--next"
+                      breakClassName="pagination__item pagination__item--break"
+                      marginPagesDisplayed={2}
+                      onPageChange={(e) => handlePaginateReplays(e.selected + 1)}
+                      forcePage={currentPage - 1}
+                      initialPage={currentPage - 1}
+                      containerClassName="pagination"
+                    />
+                  </fieldset-section>
+                </fieldset-group>
               </>
             )}
           </>

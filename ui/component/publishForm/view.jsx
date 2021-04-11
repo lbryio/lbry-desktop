@@ -28,6 +28,7 @@ import * as PUBLISH_MODES from 'constants/publish_types';
 import { useHistory } from 'react-router';
 import Spinner from 'component/spinner';
 import { toHex } from 'util/hex';
+import { BITWAVE_REPLAY_API } from 'constants/livestream';
 
 // @if TARGET='app'
 import fs from 'fs';
@@ -239,7 +240,6 @@ function PublishForm(props: Props) {
           hexdata: toHex(message),
         })
           .then((data) => {
-            console.log('data', data);
             setSignedMessage(data);
           })
           .catch((error) => {
@@ -261,7 +261,7 @@ function PublishForm(props: Props) {
   function checkLivestreams(channelId, signature, timestamp) {
     // $FlowFixMe Bitwave's API can handle garbage
     setCheckingLivestreams(true);
-    fetch(`https://api.bitwave.tv/v1/replays/odysee/${channelId}?signature=${signature}&signing_ts=${timestamp}`) // claimChannelId
+    fetch(`${BITWAVE_REPLAY_API}/${channelId}?signature=${signature}&signing_ts=${timestamp}`) // claimChannelId
       .then((res) => res.json())
       .then((res) => {
         if (!res || !res.data) {
