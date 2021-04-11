@@ -3,6 +3,17 @@ import * as ACTIONS from 'constants/action_types';
 import { ACTIONS as LBRY_REDUX_ACTIONS } from 'lbry-redux';
 import { handleActions } from 'util/redux-utils';
 
+const SWAP_HISTORY_LENGTH_LIMIT = 10;
+
+function getBottomEntries(array, count) {
+  const curCount = array.length;
+  if (curCount < count) {
+    return array;
+  } else {
+    return array.slice(curCount - count);
+  }
+}
+
 const defaultState: CoinSwapState = {
   coinSwaps: [],
 };
@@ -79,19 +90,27 @@ export default handleActions(
           },
         };
       } else {
-        newCoinSwaps.push({
-          chargeCode: charge.code,
-          coins: Object.keys(charge.addresses),
-          sendAddresses: charge.addresses,
-          sendAmounts: charge.pricing,
-          lbcAmount: calculateLbcAmount(charge.pricing, exchange, 0),
-          status: {
-            status: lastTimeline.status,
-            receiptCurrency: lastTimeline.payment.value.currency,
-            receiptTxid: lastTimeline.payment.transaction_id,
-            lbcTxid: exchange.lbc_txid || '',
-          },
-        });
+        // If a pending swap is removed, the websocket will return an update
+        // when it expires, for example, causing the entry to re-appear. This
+        // might be a good thing (e.g. to get back accidental removals), but it
+        // actually causes synchronization confusion across multiple instances.
+        const IGNORED_DELETED_SWAPS = true;
+
+        if (!IGNORED_DELETED_SWAPS) {
+          newCoinSwaps.push({
+            chargeCode: charge.code,
+            coins: Object.keys(charge.addresses),
+            sendAddresses: charge.addresses,
+            sendAmounts: charge.pricing,
+            lbcAmount: calculateLbcAmount(charge.pricing, exchange, 0),
+            status: {
+              status: lastTimeline.status,
+              receiptCurrency: lastTimeline.payment.value.currency,
+              receiptTxid: lastTimeline.payment.transaction_id,
+              lbcTxid: exchange.lbc_txid || '',
+            },
+          });
+        }
       }
 
       return {
@@ -104,27 +123,32 @@ export default handleActions(
       action: { data: { coinSwapCodes: ?Array<string> } }
     ) => {
       const { coinSwapCodes } = action.data;
-      const newCoinSwaps = state.coinSwaps.slice();
+      const newCoinSwaps = [];
 
       if (coinSwapCodes) {
         coinSwapCodes.forEach((chargeCode) => {
-          if (!newCoinSwaps.find((x) => x.chargeCode === chargeCode)) {
-            newCoinSwaps.push({
-              // Just restore the 'chargeCode', and query the other data
-              // via 'btc/status' later.
-              chargeCode: chargeCode,
-              coins: [],
-              sendAddresses: {},
-              sendAmounts: {},
-              lbcAmount: 0,
-            });
+          if (chargeCode && typeof chargeCode === 'string') {
+            const existingSwap = state.coinSwaps.find((x) => x.chargeCode === chargeCode);
+            if (existingSwap) {
+              newCoinSwaps.push({ ...existingSwap });
+            } else {
+              newCoinSwaps.push({
+                // Just restore the 'chargeCode', and query the other data
+                // via 'btc/status' later.
+                chargeCode: chargeCode,
+                coins: [],
+                sendAddresses: {},
+                sendAmounts: {},
+                lbcAmount: 0,
+              });
+            }
           }
         });
       }
 
       return {
         ...state,
-        coinSwaps: newCoinSwaps,
+        coinSwaps: getBottomEntries(newCoinSwaps, SWAP_HISTORY_LENGTH_LIMIT),
       };
     },
   },
