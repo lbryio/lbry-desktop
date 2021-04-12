@@ -1,5 +1,5 @@
 // @flow
-import { SITE_NAME } from 'config';
+import { SITE_NAME, WEB_PUBLISH_SIZE_LIMIT_GB } from 'config';
 import type { Node } from 'react';
 import * as ICONS from 'constants/icons';
 import React, { useState, useEffect } from 'react';
@@ -86,9 +86,8 @@ function PublishFile(props: Props) {
   const SOURCE_UPLOAD = 'upload';
 
   const RECOMMENDED_BITRATE = 6000000;
-  const TV_PUBLISH_SIZE_LIMIT: number = 4294967296;
-  const TV_PUBLISH_SIZE_LIMIT_STR_GB = '4';
-  const PAGE_SIZE = 4;
+  const TV_PUBLISH_SIZE_LIMIT_BYTES = WEB_PUBLISH_SIZE_LIMIT_GB * 1073741824;
+  const TV_PUBLISH_SIZE_LIMIT_GB_STR = String(WEB_PUBLISH_SIZE_LIMIT_GB);
 
   const PROCESSING_MB_PER_SECOND = 0.5;
   const MINUTES_THRESHOLD = 30;
@@ -96,6 +95,16 @@ function PublishFile(props: Props) {
   const MARKDOWN_FILE_EXTENSIONS = ['txt', 'md', 'markdown'];
   const sizeInMB = Number(size) / 1000000;
   const secondsToProcess = sizeInMB / PROCESSING_MB_PER_SECOND;
+  const ffmpegAvail = ffmpegStatus.available;
+  const [oversized, setOversized] = useState(false);
+  const [currentFile, setCurrentFile] = useState(null);
+  const [currentFileType, setCurrentFileType] = useState(null);
+  const [optimizeAvail, setOptimizeAvail] = useState(false);
+  const [userOptimize, setUserOptimize] = usePersistedState('publish-file-user-optimize', false);
+  const UPLOAD_SIZE_MESSAGE = __(
+    '%SITE_NAME% uploads are limited to %limit% GB. Download the app for unrestricted publishing.',
+    { SITE_NAME, limit: TV_PUBLISH_SIZE_LIMIT_GB_STR }
+  );
 
   const fileSelectorModes = [
     { label: __('Choose Replay'), actionName: SOURCE_SELECT, icon: ICONS.MENU },
@@ -106,25 +115,15 @@ function PublishFile(props: Props) {
   const hasLivestreamData = livestreamData && Boolean(livestreamData.length);
   const showSourceSelector = isLivestreamClaim && hasLivestreamData;
 
-  const ffmpegAvail = ffmpegStatus.available;
-  const [oversized, setOversized] = useState(false);
-  const [currentFile, setCurrentFile] = useState(null);
-  const [currentFileType, setCurrentFileType] = useState(null);
-  const [optimizeAvail, setOptimizeAvail] = useState(false);
-  const [userOptimize, setUserOptimize] = usePersistedState('publish-file-user-optimize', false);
   const [fileSelectSource, setFileSelectSource] = useState(
     IS_WEB && showSourceSelector ? SOURCE_SELECT : SOURCE_UPLOAD
   );
   // const [showFileUpdate, setShowFileUpdate] = useState(false);
   const [selectedFileIndex, setSelectedFileIndex] = useState(null);
+  const PAGE_SIZE = 4;
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages =
     hasLivestreamData && livestreamData.length > PAGE_SIZE ? Math.ceil(livestreamData.length / PAGE_SIZE) : 1;
-
-  const UPLOAD_SIZE_MESSAGE = __(
-    '%SITE_NAME% uploads are limited to %limit% GB. Download the app for unrestricted publishing.',
-    { SITE_NAME, limit: TV_PUBLISH_SIZE_LIMIT_STR_GB }
-  );
 
   // Reset filePath if publish mode changed
   useEffect(() => {
@@ -284,7 +283,7 @@ function PublishFile(props: Props) {
         <p className="help">
           {__(
             'For video content, use MP4s in H264/AAC format and a friendly bitrate (under 5 Mbps) and resolution (720p) for more reliable streaming. %SITE_NAME% uploads are restricted to %limit% GB.',
-            { SITE_NAME, limit: TV_PUBLISH_SIZE_LIMIT_STR_GB }
+            { SITE_NAME, limit: TV_PUBLISH_SIZE_LIMIT_GB_STR }
           )}{' '}
           <Button button="link" label={__('Upload Guide')} href="https://lbry.com/faq/video-publishing-guide" />
         </p>
@@ -411,7 +410,7 @@ function PublishFile(props: Props) {
 
     // @if TARGET='web'
     // we only need to enforce file sizes on 'web'
-    if (file.size && Number(file.size) > TV_PUBLISH_SIZE_LIMIT) {
+    if (file.size && Number(file.size) > TV_PUBLISH_SIZE_LIMIT_BYTES) {
       setOversized(true);
       showToast(__(UPLOAD_SIZE_MESSAGE));
       updatePublishForm({ filePath: '', name: '' });
