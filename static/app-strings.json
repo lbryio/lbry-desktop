@@ -1782,6 +1782,7 @@
   "Craft an epic post clearly explaining... whatever.": "Craft an epic post clearly explaining... whatever.",
   "waiting": "waiting",
   "%viewer_count% currently %viewer_state%": "%viewer_count% currently %viewer_state%",
+  "Choose Replay": "Choose Replay",
   "More from %claim_name%": "More from %claim_name%",
   "--end--": "--end--"
 }

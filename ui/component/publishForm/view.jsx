@@ -145,7 +145,7 @@ function PublishForm(props: Props) {
       if (mode === PUBLISH_MODES.LIVESTREAM) {
         return enableLivestream;
       }
-      return false;
+      return true;
     }
   });
 
