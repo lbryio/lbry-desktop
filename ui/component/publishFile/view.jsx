@@ -15,6 +15,7 @@ import usePersistedState from 'effects/use-persisted-state';
 import * as PUBLISH_MODES from 'constants/publish_types';
 import PublishName from 'component/publishName';
 import CopyableText from 'component/copyableText';
+import Empty from 'component/common/empty';
 import moment from 'moment';
 import classnames from 'classnames';
 import ReactPaginate from 'react-paginate';
@@ -45,7 +46,6 @@ type Props = {
   header: Node,
   livestreamData: LivestreamReplayData,
   isLivestreamClaim: boolean,
-  remoteUrl?: string,
   checkLivestreams: () => void,
   isCheckingLivestreams: boolean,
 };
@@ -76,7 +76,6 @@ function PublishFile(props: Props) {
     livestreamData,
     isLivestreamClaim,
     subtitle,
-    remoteUrl,
     checkLivestreams,
     isCheckingLivestreams,
   } = props;
@@ -109,11 +108,11 @@ function PublishFile(props: Props) {
   const fileSelectorModes = [
     { label: __('Choose Replay'), actionName: SOURCE_SELECT, icon: ICONS.MENU },
     { label: __('Upload'), actionName: SOURCE_UPLOAD, icon: ICONS.PUBLISH },
-    { label: __('None'), actionName: SOURCE_NONE, icon: ICONS.REMOVE },
+    { label: __('None'), actionName: SOURCE_NONE },
   ];
 
   const hasLivestreamData = livestreamData && Boolean(livestreamData.length);
-  const showSourceSelector = isLivestreamClaim && hasLivestreamData;
+  const showSourceSelector = isLivestreamClaim;
 
   const [fileSelectSource, setFileSelectSource] = useState(
     IS_WEB && showSourceSelector ? SOURCE_SELECT : SOURCE_UPLOAD
@@ -227,13 +226,6 @@ function PublishFile(props: Props) {
     }
   }
 
-  function getSourceMessage() {
-    if (remoteUrl || filePath) {
-      return __('Replay selected for update');
-    } else {
-      return __('No replay selected');
-    }
-  }
   function getUploadMessage() {
     // @if TARGET='web'
     if (oversized) {
@@ -470,14 +462,14 @@ function PublishFile(props: Props) {
           <>
             {showSourceSelector && (
               <fieldset-section>
-                <div className="section__actions--between">
+                <div className="section__actions--between section__actions--align-bottom">
                   <div>
                     <label>{__('Add replay video')}</label>
-                    <div>
+                    <div className="button-group">
                       {fileSelectorModes.map((fmode) => (
                         <Button
                           key={fmode.label}
-                          icon={fmode.icon}
+                          icon={fmode.icon || undefined}
                           iconSize={18}
                           label={fmode.label}
                           button="alt"
@@ -491,15 +483,16 @@ function PublishFile(props: Props) {
                         />
                       ))}
                     </div>
-                    <div className="help--inline">{getSourceMessage()}</div>
                   </div>
-                  <Button
-                    button="secondary"
-                    label={__('Check for Replays')}
-                    disabled={isCheckingLivestreams}
-                    icon={ICONS.REFRESH}
-                    onClick={() => checkLivestreams()}
-                  />
+                  {fileSelectSource === SOURCE_SELECT && (
+                    <Button
+                      button="secondary"
+                      label={__('Check for Replays')}
+                      disabled={isCheckingLivestreams}
+                      icon={ICONS.REFRESH}
+                      onClick={() => checkLivestreams()}
+                    />
+                  )}
                 </div>
               </fieldset-section>
             )}
@@ -518,58 +511,54 @@ function PublishFile(props: Props) {
                 {getUploadMessage()}
               </>
             )}
-            {fileSelectSource === SOURCE_SELECT && showFileUpload && (
+            {fileSelectSource === SOURCE_SELECT && showFileUpload && hasLivestreamData && (
               <>
                 <fieldset-section>
                   <label>{__('Select Replay')}</label>
                   <div className="table__wrapper">
                     <table className="table table--livestream-data">
                       <tbody>
-                        {livestreamData &&
-                          livestreamData
-                            .slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
-                            .map((item, i) => (
-                              <tr
+                        {livestreamData.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE).map((item, i) => (
+                          <tr
+                            onClick={() => setSelectedFileIndex((currentPage - 1) * PAGE_SIZE + i)}
+                            key={item.id}
+                            className={classnames('livestream__data-row', {
+                              'livestream__data-row--selected': selectedFileIndex === (currentPage - 1) * PAGE_SIZE + i,
+                            })}
+                          >
+                            <td>
+                              <FormField
+                                type="radio"
+                                checked={selectedFileIndex === (currentPage - 1) * PAGE_SIZE + i}
+                                label={null}
                                 onClick={() => setSelectedFileIndex((currentPage - 1) * PAGE_SIZE + i)}
-                                key={item.id}
-                                className={classnames('livestream__data-row', {
-                                  'livestream__data-row--selected':
-                                    selectedFileIndex === (currentPage - 1) * PAGE_SIZE + i,
-                                })}
-                              >
-                                <td>
-                                  <FormField
-                                    type="radio"
-                                    checked={selectedFileIndex === (currentPage - 1) * PAGE_SIZE + i}
-                                    label={null}
-                                    onClick={() => setSelectedFileIndex((currentPage - 1) * PAGE_SIZE + i)}
-                                    className="livestream__data-row-radio"
-                                  />
-                                </td>
-                                <td>
-                                  <div className="livestream_thumb_container">
-                                    {item.data.thumbnails.slice(0, 3).map((thumb) => (
-                                      <img key={thumb} className="livestream___thumb" src={thumb} />
-                                    ))}
-                                  </div>
-                                </td>
-                                <td>
-                                  {`${Math.floor(item.data.fileDuration / 60)} ${
-                                    Math.floor(item.data.fileDuration / 60) > 1 ? __('minutes') : __('minute')
-                                  }`}
-                                  <div className="table__item-label">
-                                    {`${moment(item.data.uploadedAt).from(moment())}`}
-                                  </div>
-                                </td>
-                                <td>
-                                  <CopyableText
-                                    primaryButton
-                                    copyable={normalizeUrlForProtocol(item.data.fileLocation)}
-                                    snackMessage={__('Url copied.')}
-                                  />
-                                </td>
-                              </tr>
-                            ))}
+                                className="livestream__data-row-radio"
+                              />
+                            </td>
+                            <td>
+                              <div className="livestream_thumb_container">
+                                {item.data.thumbnails.slice(0, 3).map((thumb) => (
+                                  <img key={thumb} className="livestream___thumb" src={thumb} />
+                                ))}
+                              </div>
+                            </td>
+                            <td>
+                              {`${Math.floor(item.data.fileDuration / 60)} ${
+                                Math.floor(item.data.fileDuration / 60) > 1 ? __('minutes') : __('minute')
+                              }`}
+                              <div className="table__item-label">
+                                {`${moment(item.data.uploadedAt).from(moment())}`}
+                              </div>
+                            </td>
+                            <td>
+                              <CopyableText
+                                primaryButton
+                                copyable={normalizeUrlForProtocol(item.data.fileLocation)}
+                                snackMessage={__('Url copied.')}
+                              />
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
@@ -595,6 +584,16 @@ function PublishFile(props: Props) {
                   </fieldset-section>
                 </fieldset-group>
               </>
+            )}
+            {fileSelectSource === SOURCE_SELECT && showFileUpload && !hasLivestreamData && !isCheckingLivestreams && (
+              <div className="main--empty empty">
+                <Empty text={__('No replays found.')} />
+              </div>
+            )}
+            {fileSelectSource === SOURCE_SELECT && showFileUpload && !hasLivestreamData && isCheckingLivestreams && (
+              <div className="main--empty empty">
+                <Spinner small />
+              </div>
             )}
           </>
           {/* @endif */}
