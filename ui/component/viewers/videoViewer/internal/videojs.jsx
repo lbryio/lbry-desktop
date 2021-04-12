@@ -49,6 +49,7 @@ type Props = {
   startMuted: boolean,
   autoplay: boolean,
   toggleVideoTheaterMode: () => void,
+  adUrl: ?string,
 };
 
 type VideoJSOptions = {
@@ -171,7 +172,17 @@ class LbryVolumeBarClass extends videojs.getComponent(VIDEOJS_VOLUME_BAR_CLASS) 
 properties for this component should be kept to ONLY those that if changed should REQUIRE an entirely new videojs element
  */
 export default React.memo<Props>(function VideoJs(props: Props) {
-  const { autoplay, startMuted, source, sourceType, poster, isAudio, onPlayerReady, toggleVideoTheaterMode } = props;
+  const {
+    autoplay,
+    startMuted,
+    source,
+    sourceType,
+    poster,
+    isAudio,
+    onPlayerReady,
+    toggleVideoTheaterMode,
+    adUrl,
+  } = props;
 
   const [reload, setReload] = useState('initial');
 
@@ -333,9 +344,11 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     }
   }
 
-  function onEnded() {
-    showTapButton(TAP.NONE);
-  }
+  const onEnded = React.useCallback(() => {
+    if (!adUrl) {
+      showTapButton(TAP.NONE);
+    }
+  }, [adUrl]);
 
   function handleKeyDown(e: KeyboardEvent) {
     const player = playerRef.current;

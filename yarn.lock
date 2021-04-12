@@ -11498,6 +11498,13 @@ vary@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
 
+vast-client@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/vast-client/-/vast-client-3.1.1.tgz#75f044ff1554e0f193302dfa1c20c7f7006fd1f8"
+  integrity sha512-ED32RnLthWgAjQiEPsbqqC4LkN8+EhFyevHVh2SsmlPr6auugjswdbv+VgaQ/d7KUH/vpZ675HzVkIqkB2ibiQ==
+  dependencies:
+    xmldom "^0.3.0"
+
 vendors@^1.0.0:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/vendors/-/vendors-1.0.4.tgz#e2b800a53e7a29b93506c3cf41100d16c4c4ad8e"
@@ -11997,6 +12004,11 @@ xmldom@^0.1.27:
   version "0.1.31"
   resolved "https://registry.yarnpkg.com/xmldom/-/xmldom-0.1.31.tgz#b76c9a1bd9f0a9737e5a72dc37231cf38375e2ff"
   integrity sha512-yS2uJflVQs6n+CyjHoaBmVSqIDevTAWrzMmjG1Gc7h1qQ7uVozNhEPJAwZXWyGQ/Gafo3fCwrcaokezLPupVyQ==
+
+xmldom@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/xmldom/-/xmldom-0.3.0.tgz#e625457f4300b5df9c2e1ecb776147ece47f3e5a"
+  integrity sha512-z9s6k3wxE+aZHgXYxSTpGDo7BYOUfJsIRyoZiX6HTjwpwfS2wpQBQKa2fD+ShLyPkqDYo5ud7KitmLZ2Cd6r0g==
 
 xpipe@*:
   version "1.0.5"
