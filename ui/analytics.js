@@ -51,6 +51,9 @@ type Analytics = {
       readyState: number,
     }
   ) => void,
+  adsFetchedEvent: () => void,
+  adsReceivedEvent: (any) => void,
+  adsErrorEvent: (any) => void,
   emailProvidedEvent: () => void,
   emailVerifiedEvent: () => void,
   rewardEligibleEvent: () => void,
@@ -230,6 +233,15 @@ const analytics: Analytics = {
         }),
       });
     }
+  },
+  adsFetchedEvent: () => {
+    sendMatomoEvent('Media', 'AdsFetched');
+  },
+  adsReceivedEvent: (response) => {
+    sendMatomoEvent('Media', 'AdsReceived', JSON.stringify(response));
+  },
+  adsErrorEvent: (response) => {
+    sendMatomoEvent('Media', 'AdsError', JSON.stringify(response));
   },
   playerLoadedEvent: (embedded) => {
     sendMatomoEvent('Player', 'Loaded', embedded ? 'embedded' : 'onsite');
