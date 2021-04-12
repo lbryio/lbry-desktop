@@ -53,9 +53,8 @@ function ShowPage(props: Props) {
   const claimExists = claim !== null && claim !== undefined;
   const haventFetchedYet = claim === undefined;
   const isMine = claim && claim.is_my_output;
-  const { channelName, contentName } = parseURI(uri);
+  const { contentName, isChannel } = parseURI(uri);
   const { push } = useHistory();
-  const isContentNameChannel = channelName && !contentName;
 
   useEffect(() => {
     // @if TARGET='web'
@@ -98,9 +97,9 @@ function ShowPage(props: Props) {
         {!isResolvingUri && !isSubscribed && (
           <div className="main--empty">
             <Yrbl
-              title={isContentNameChannel ? __('Channel Not Found') : __('No Content Found')}
+              title={isChannel ? __('Channel Not Found') : __('No Content Found')}
               subtitle={
-                isContentNameChannel ? (
+                isChannel ? (
                   __(`Probably because you didn't make it.`)
                 ) : (
                   <div className="section__actions">
