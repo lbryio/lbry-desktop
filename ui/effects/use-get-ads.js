@@ -3,7 +3,7 @@ import React from 'react';
 import { VASTClient } from 'vast-client';
 import analytics from 'analytics';
 
-const PRE_ROLL_ADS_PROVIDER = '`https://tag.targeting.unrulymedia.com/rmp/216276/0/vast2?vastfw=vpaid&w=300&h=500&url=';
+const PRE_ROLL_ADS_PROVIDER = 'https://tag.targeting.unrulymedia.com/rmp/216276/0/vast2?vastfw=vpaid&w=300&h=500&url=';
 
 // Ignores any call made 1 minutes or less after the last successful ad
 const ADS_CAP_LEVEL = 1 * 60 * 1000;
