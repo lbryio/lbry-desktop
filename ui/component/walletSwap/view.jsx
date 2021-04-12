@@ -379,23 +379,9 @@ function WalletSwap(props: Props) {
     }
 
     const explorerUrl = (coin, txid) => {
-      if (!txid) {
-        return '';
-      }
-      switch (coin) {
-        case 'DAI':
-        case 'USDC':
-        default:
-          return '';
-        case 'BTC':
-          return `https://www.blockchain.com/btc/tx/${txid}`;
-        case 'ETH':
-          return `https://www.blockchain.com/eth/tx/${txid}`;
-        case 'LTC':
-          return `https://live.blockcypher.com/ltc/tx/${txid}/`;
-        case 'BCH':
-          return `https://www.blockchain.com/bch/tx/${txid}`;
-      }
+      // It's unclear whether we can link to sites like blockchain.com.
+      // Don't do it for now.
+      return '';
     };
 
     if (isSend) {
@@ -407,7 +393,7 @@ function WalletSwap(props: Props) {
           {!url && (
             <Button
               button="link"
-              label={sendTxId.substring(0, 7)}
+              label={__('Copy transaction ID')}
               title={sendTxId}
               onClick={() => {
                 clipboard.writeText(sendTxId);

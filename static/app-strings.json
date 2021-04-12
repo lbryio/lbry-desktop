@@ -1765,6 +1765,7 @@
   "This process cannot be reversed.": "This process cannot be reversed.",
   "View transaction": "View transaction",
   "Amount copied.": "Amount copied.",
+  "Copy transaction ID": "Copy transaction ID",
   "Transaction ID copied.": "Transaction ID copied.",
   "This page can be closed while the transactions are in progress.\nYou can view the status later from:\n • Wallet » Swap » View Past Swaps": "This page can be closed while the transactions are in progress.\nYou can view the status later from:\n • Wallet » Swap » View Past Swaps",
   "Credits sent": "Credits sent",
