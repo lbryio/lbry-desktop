@@ -1,6 +1,7 @@
 // @flow
 import { SHOW_ADS, DOMAIN, SIMPLE_SITE } from 'config';
 import * as ICONS from 'constants/icons';
+import * as PAGES from 'constants/pages';
 import React, { useRef } from 'react';
 import Page from 'component/page';
 import ClaimListDiscover from 'component/claimListDiscover';
@@ -20,8 +21,8 @@ type Props = {
   followedTags: Array<Tag>,
   repostedUri: string,
   repostedClaim: ?GenericClaim,
-  doToggleTagFollowDesktop: string => void,
-  doResolveUri: string => void,
+  doToggleTagFollowDesktop: (string) => void,
+  doResolveUri: (string) => void,
   isAuthenticated: boolean,
   dynamicRouteProps: RowDataItem,
   tileLayout: boolean,
@@ -82,6 +83,13 @@ function DiscoverPage(props: Props) {
       <span>
         <Icon icon={ICONS.TAG} size={10} />
         {(tag === CS.TAGS_ALL && __('All Content')) || (tag === CS.TAGS_FOLLOWED && __('Followed Tags')) || tag}
+
+        <Button
+          className="claim-search__tags-link"
+          button="link"
+          label={__('Manage Tags')}
+          navigate={`/$/${PAGES.TAGS_FOLLOWING_MANAGE}`}
+        />
       </span>
     );
   } else {
