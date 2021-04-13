@@ -72,9 +72,8 @@
   }
 }
 
-.navigation__secondary--tags {
-  @extend .navigation__secondary;
-  margin-left: var(--spacing-l);
+.navigation__tertiary {
+  margin-top: var(--spacing-m);
 }
 
 .navigation-link {

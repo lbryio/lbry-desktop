@@ -359,7 +359,7 @@ function SideNavigation(props: Props) {
                 ))}
               </ul>
             )}
-            {!SIMPLE_SITE && sidebarOpen && isPersonalized && followedTags && followedTags.length > 0 && (
+            {sidebarOpen && isPersonalized && followedTags && followedTags.length > 0 && (
               <ul className="navigation__secondary navigation-links navigation-links--small">
                 {followedTags.map(({ name }, key) => (
                   <li key={name} className="navigation-link__wrapper">
@@ -442,7 +442,7 @@ function SideNavigation(props: Props) {
                   ))}
                 </ul>
               )}
-              {!SIMPLE_SITE && sidebarOpen && isPersonalized && followedTags && followedTags.length > 0 && (
+              {sidebarOpen && isPersonalized && followedTags && followedTags.length > 0 && (
                 <ul className="navigation__secondary navigation-links navigation-links--small">
                   {followedTags.map(({ name }, key) => (
                     <li key={name} className="navigation-link__wrapper">
