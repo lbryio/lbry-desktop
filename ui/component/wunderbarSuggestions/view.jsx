@@ -1,4 +1,5 @@
 // @flow
+import type { ElementRef } from 'react';
 import { URL, URL_LOCAL, URL_DEV, KNOWN_APP_DOMAINS } from 'config';
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
@@ -17,7 +18,6 @@ import { useHistory } from 'react-router';
 import { formatLbryUrlForWeb } from 'util/url';
 import useThrottle from 'effects/use-throttle';
 import Yrbl from 'component/yrbl';
-import type { ElementRef } from 'react';
 
 const LBRY_PROTOCOL = 'lbry://';
 const WEB_DEV_PREFIX = `${URL_DEV}/`;
@@ -25,6 +25,7 @@ const WEB_LOCAL_PREFIX = `${URL_LOCAL}/`;
 const WEB_PROD_PREFIX = `${URL}/`;
 const SEARCH_PREFIX = `$/${PAGES.SEARCH}q=`;
 const INVALID_URL_ERROR = "Invalid LBRY URL entered. Only A-Z, a-z, 0-9, and '-' allowed.";
+const TAG_SEARCH_PREFIX = 'tag:';
 
 const L_KEY_CODE = 76;
 const ESC_KEY_CODE = 27;
@@ -109,7 +110,10 @@ export default function WunderBarSuggestions(props: Props) {
       }
     }
 
-    if (!isLbryUrl) {
+    if (value.startsWith(TAG_SEARCH_PREFIX)) {
+      const tag = value.slice(TAG_SEARCH_PREFIX.length);
+      push(`/$/${PAGES.DISCOVER}?t=${tag}`);
+    } else if (!isLbryUrl) {
       navigateToSearchPage(value);
     } else {
       let query = 'lbry://' + value.slice(LBRY_PROTOCOL.length).replace(/:/g, '#');
@@ -268,9 +272,18 @@ export default function WunderBarSuggestions(props: Props) {
                 {results.slice(0, isMobile ? 20 : 5).map((uri) => (
                   <WunderbarSuggestion key={uri} uri={uri} />
                 ))}
-                <ComboboxOption value={term} className="wunderbar__more-results">
-                  <Button button="link" label={__('View All Results')} />
-                </ComboboxOption>
+
+                <div className="wunderbar__bottom-links">
+                  <ComboboxOption value={term} className="wunderbar__more-results">
+                    <Button button="link" label={__('View All Results')} />
+                  </ComboboxOption>
+                  <ComboboxOption value={`${TAG_SEARCH_PREFIX}${term}`} className="wunderbar__more-results">
+                    <Button className="wunderbar__tag-search" button="link">
+                      Explore
+                      <div className="tag">{term.split(' ').join('')}</div>
+                    </Button>
+                  </ComboboxOption>
+                </div>
               </ComboboxList>
             </ComboboxPopover>
           )}

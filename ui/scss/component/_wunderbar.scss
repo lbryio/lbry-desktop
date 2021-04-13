@@ -192,7 +192,7 @@
   }
 
   @media (min-width: $breakpoint-small) {
-    margin-bottom: var(--spacing-m);
+    margin-bottom: var(--spacing-xs);
   }
 }
 
@@ -238,6 +238,29 @@
     &:focus {
       box-shadow: none;
     }
+  }
+}
+
+.wunderbar__tag-search {
+  .tag {
+    display: flex;
+    align-items: center;
+    height: 1.2rem;
+    margin-left: var(--spacing-xxs);
+
+    &:hover {
+      background-color: var(--color-tag-bg);
+      color: var(--color-tag);
+    }
+  }
+}
+
+.wunderbar__bottom-links {
+  display: flex;
+  align-items: center;
+
+  :first-child {
+    flex: 1;
   }
 }
 
