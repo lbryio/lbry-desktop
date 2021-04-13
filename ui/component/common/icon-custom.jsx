@@ -1660,6 +1660,36 @@ export const icons = {
       </g>
     </svg>
   ),
+  [ICONS.MIND_BLOWN]: (props: CustomProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 25 24"
+      width={props.size || '18'}
+      height={props.size || '16'}
+      fill="none"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <g transform="matrix(1,0,0,1,0,0)">
+        <path
+          d="M21.2,5a3.034,3.034,0,0,0-3.067-3,3.077,3.077,0,0,0-1.847.62,5.392,5.392,0,0,0-8.572,0A3.077,3.077,0,0,0,5.867,2,3.034,3.034,0,0,0,2.8,5"
+          fill="none"
+        />
+        <path d="M2.8,5a2.251,2.251,0,1,0,0,4.5H5.5" fill="none" />
+        <path d="M21.2,5a2.251,2.251,0,1,1,0,4.5H18.5" fill="none" />
+        <path d="M8.5,7.5V9.366A3.134,3.134,0,0,1,5.366,12.5" fill="none" />
+        <path d="M15.5,7.5V9.366A3.134,3.134,0,0,0,18.634,12.5" fill="none" />
+        <path d="M10.5 8.5L10.5 10.5" fill="none" />
+        <path d="M13.5 8.5L13.5 10.5" fill="none" />
+        <path d="M8.5,15.75a.25.25,0,1,1-.25.25.25.25,0,0,1,.25-.25" fill="none" />
+        <path d="M15.5,15.75a.25.25,0,1,1-.25.25.25.25,0,0,1,.25-.25" fill="none" />
+        <path d="M12,17.5A1.5,1.5,0,0,0,10.5,19v1a1.5,1.5,0,0,0,3,0V19A1.5,1.5,0,0,0,12,17.5Z" fill="none" />
+        <path d="M18.634,12.5S18,13.5,12,13.5s-6.634-1-6.634-1a7.5,7.5,0,1,0,13.268,0Z" fill="none" />
+      </g>
+    </svg>
+  ),
   [ICONS.MOVIES]: (props: CustomProps) => (
     <svg
       {...props}

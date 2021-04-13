@@ -151,6 +151,7 @@ export const UNIVERSE = 'Universe';
 export const CHEESE = 'Cheese';
 export const PEACE = 'Peace';
 export const PORK_BUN = 'PorkBun';
+export const MIND_BLOWN = 'MindBlown';
 export const LIVESTREAM = 'Livestream';
 export const LIVESTREAM_SOLID = 'LivestreamSolid';
 export const LIVESTREAM_MONOCHROME = 'LivestreamMono';
