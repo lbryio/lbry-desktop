@@ -267,6 +267,7 @@ svg + .button__label {
   border-radius: 0;
   margin: 0;
   background-color: var(--color-card-background);
+  color: var(--color-text);
 
   @media (max-width: $breakpoint-small) {
     padding: var(--spacing-m) var(--spacing-s);
