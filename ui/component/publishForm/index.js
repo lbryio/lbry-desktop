@@ -14,6 +14,7 @@ import {
   SETTINGS,
   selectMyChannelClaims,
   makeSelectClaimIsStreamPlaceholder,
+  makeSelectPublishFormValue,
 } from 'lbry-redux';
 import * as RENDER_MODES from 'constants/file_render_modes';
 import { doPublishDesktop } from 'redux/actions/publish';
@@ -45,6 +46,8 @@ const select = (state) => {
     // If I clicked the "edit" button, have I changed the uri?
     // Need this to make it easier to find the source on previously published content
     myClaimForUri,
+    filePath: makeSelectPublishFormValue('filePath')(state),
+    remoteUrl: makeSelectPublishFormValue('remoteFileUrl')(state),
     isStillEditing: selectIsStillEditing(state),
     isResolvingUri: selectIsResolvingPublishUris(state),
     totalRewardValue: selectUnclaimedRewardValue(state),

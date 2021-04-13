@@ -9,7 +9,8 @@
  */
 
 import { SITE_NAME, ENABLE_NO_SOURCE_CLAIMS, SIMPLE_SITE, CHANNEL_STAKED_LEVEL_LIVESTREAM } from 'config';
-import React, { useEffect } from 'react';
+import { SITE_NAME, ENABLE_NO_SOURCE_CLAIMS, SIMPLE_SITE } from 'config';
+import React, { useEffect, useState } from 'react';
 import { buildURI, isURIValid, isNameValid, THUMBNAIL_STATUSES, Lbry } from 'lbry-redux';
 import Button from 'component/button';
 import ChannelSelect from 'component/channelSelector';
@@ -87,6 +88,7 @@ type Props = {
   isLivestreamClaim: boolean,
   isPostClaim: boolean,
   permanentUrl: ?string,
+  remoteUrl: ?string,
 };
 
 function PublishForm(props: Props) {
@@ -122,6 +124,7 @@ function PublishForm(props: Props) {
     isLivestreamClaim,
     isPostClaim,
     permanentUrl,
+    remoteUrl,
   } = props;
 
   const { replace, location } = useHistory();
@@ -189,8 +192,9 @@ function PublishForm(props: Props) {
   const [fileEdited, setFileEdited] = React.useState(false);
   const [prevFileText, setPrevFileText] = React.useState('');
 
+  const [waitForFile, setWaitForFile] = useState(false);
   const [livestreamData, setLivestreamData] = React.useState([]);
-  const [signedMessage, setSignedMessage] = React.useState({});
+  const [signedMessage, setSignedMessage] = React.useState({ signature: undefined, signing_ts: undefined });
   const signedMessageStr = JSON.stringify(signedMessage);
   const TAGS_LIMIT = 5;
   const fileFormDisabled = mode === PUBLISH_MODES.FILE && !filePath;
@@ -208,6 +212,7 @@ function PublishForm(props: Props) {
 
   const nameEdited = isStillEditing && name !== prevName;
 
+  const waitingForFile = waitForFile && !remoteUrl && !filePath;
   // If they are editing, they don't need a new file chosen
   const formValidLessFile =
     name &&
@@ -222,8 +227,8 @@ function PublishForm(props: Props) {
 
   const formValid = isOverwritingExistingClaim
     ? false
-    : editingURI && !filePath
-    ? isStillEditing && formValidLessFile
+    : editingURI && !filePath // if we're editing we don't need a file
+    ? isStillEditing && formValidLessFile && !waitingForFile
     : formValidLessFile;
 
   const [previewing, setPreviewing] = React.useState(false);
@@ -258,10 +263,9 @@ function PublishForm(props: Props) {
   }, [modal]);
 
   // move this to lbryinc OR to a file under ui, and/or provide a standardized livestreaming config.
-  function checkLivestreams(channelId, signature, timestamp) {
-    // $FlowFixMe Bitwave's API can handle garbage
+  function fetchLivestreams(channelId, signature, timestamp) {
     setCheckingLivestreams(true);
-    fetch(`${BITWAVE_REPLAY_API}/${channelId}?signature=${signature}&signing_ts=${timestamp}`) // claimChannelId
+    fetch(`${BITWAVE_REPLAY_API}/${channelId}?signature=${signature || ''}&signing_ts=${timestamp || ''}`) // claimChannelId
       .then((res) => res.json())
       .then((res) => {
         if (!res || !res.data) {
@@ -279,7 +283,7 @@ function PublishForm(props: Props) {
   useEffect(() => {
     const signedMessage = JSON.parse(signedMessageStr);
     if (claimChannelId && isLivestreamClaim && signedMessage.signature) {
-      checkLivestreams(claimChannelId, signedMessage.signature, signedMessage.signing_ts);
+      fetchLivestreams(claimChannelId, signedMessage.signature, signedMessage.signing_ts);
     }
   }, [claimChannelId, isLivestreamClaim, signedMessageStr]);
 
@@ -544,8 +548,11 @@ function PublishForm(props: Props) {
         setPrevFileText={setPrevFileText}
         livestreamData={livestreamData}
         subtitle={customSubtitle}
+        setWaitForFile={setWaitForFile}
         isCheckingLivestreams={isCheckingLivestreams}
-        checkLivestreams={checkLivestreams}
+        checkLivestreams={(claimChannelId, signature = signedMessage.signature, ts = signedMessage.signing_ts) =>
+          fetchLivestreams(claimChannelId, signature, ts)
+        }
         header={
           <>
             {AVAILABLE_MODES.map((modeName) => (
@@ -619,7 +626,7 @@ function PublishForm(props: Props) {
         </div>
         <p className="help">
           {!formDisabled && !formValid ? (
-            <PublishFormErrors mode={mode} />
+            <PublishFormErrors mode={mode} waitForFile={waitingForFile} />
           ) : (
             <I18nMessage
               tokens={{

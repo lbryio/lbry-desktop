@@ -48,6 +48,7 @@ type Props = {
   isLivestreamClaim: boolean,
   checkLivestreams: () => void,
   isCheckingLivestreams: boolean,
+  setWaitForFile: (boolean) => void,
 };
 
 function PublishFile(props: Props) {
@@ -78,6 +79,7 @@ function PublishFile(props: Props) {
     subtitle,
     checkLivestreams,
     isCheckingLivestreams,
+    setWaitForFile,
   } = props;
 
   const SOURCE_NONE = 'none';
@@ -111,6 +113,7 @@ function PublishFile(props: Props) {
     { label: __('None'), actionName: SOURCE_NONE },
   ];
 
+  const livestreamDataStr = JSON.stringify(livestreamData);
   const hasLivestreamData = livestreamData && Boolean(livestreamData.length);
   const showSourceSelector = isLivestreamClaim;
 
@@ -138,6 +141,7 @@ function PublishFile(props: Props) {
   // set default file source to select if necessary
   useEffect(() => {
     if (hasLivestreamData && isLivestreamClaim) {
+      setWaitForFile(true);
       setFileSelectSource(SOURCE_SELECT);
     } else if (isLivestreamClaim) {
       setFileSelectSource(SOURCE_NONE);
@@ -157,12 +161,13 @@ function PublishFile(props: Props) {
   };
   // update remoteUrl when replay selected
   useEffect(() => {
-    if (selectedFileIndex !== null) {
+    const livestreamData = JSON.parse(livestreamDataStr);
+    if (selectedFileIndex !== null && livestreamData && livestreamData.length) {
       updatePublishForm({
         remoteFileUrl: normalizeUrlForProtocol(livestreamData[selectedFileIndex].data.fileLocation),
       });
     }
-  }, [selectedFileIndex, updatePublishForm]);
+  }, [selectedFileIndex, updatePublishForm, livestreamDataStr]);
 
   useEffect(() => {
     if (!filePath || filePath === '') {
@@ -320,6 +325,7 @@ function PublishFile(props: Props) {
       }
     }
     setFileSelectSource(source);
+    setWaitForFile(source !== SOURCE_NONE);
   }
 
   function handleTitleChange(event) {

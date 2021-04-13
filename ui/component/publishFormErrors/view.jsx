@@ -12,14 +12,26 @@ type Props = {
   filePath: ?string,
   isStillEditing: boolean,
   uploadThumbnailStatus: string,
+  waitForFile: boolean,
 };
 
 function PublishFormErrors(props: Props) {
-  const { name, title, bid, bidError, editingURI, filePath, isStillEditing, uploadThumbnailStatus } = props;
+  const {
+    name,
+    title,
+    bid,
+    bidError,
+    editingURI,
+    filePath,
+    isStillEditing,
+    uploadThumbnailStatus,
+    waitForFile,
+  } = props;
   // These are extra help
   // If there is an error it will be presented as an inline error as well
   return (
     <div className="error__text">
+      {waitForFile && <div>{__('Choose a replay file, or select None')}</div>}
       {!title && <div>{__('A title is required')}</div>}
       {!name && <div>{__('A URL is required')}</div>}
       {!isNameValid(name, false) && INVALID_NAME_ERROR}
