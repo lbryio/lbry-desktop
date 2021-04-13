@@ -46,7 +46,9 @@ type Props = {
   header: Node,
   livestreamData: LivestreamReplayData,
   isLivestreamClaim: boolean,
-  checkLivestreams: () => void,
+  checkLivestreams: (string, ?string, ?string) => void,
+  channelId: string,
+  channelSignature: { signature?: string, signing_ts?: string },
   isCheckingLivestreams: boolean,
   setWaitForFile: (boolean) => void,
 };
@@ -78,6 +80,8 @@ function PublishFile(props: Props) {
     isLivestreamClaim,
     subtitle,
     checkLivestreams,
+    channelId,
+    channelSignature,
     isCheckingLivestreams,
     setWaitForFile,
   } = props;
@@ -496,7 +500,9 @@ function PublishFile(props: Props) {
                       label={__('Check for Replays')}
                       disabled={isCheckingLivestreams}
                       icon={ICONS.REFRESH}
-                      onClick={() => checkLivestreams()}
+                      onClick={() =>
+                        checkLivestreams(channelId, channelSignature.signature, channelSignature.signing_ts)
+                      }
                     />
                   )}
                 </div>
@@ -517,7 +523,7 @@ function PublishFile(props: Props) {
                 {getUploadMessage()}
               </>
             )}
-            {fileSelectSource === SOURCE_SELECT && showFileUpload && hasLivestreamData && (
+            {fileSelectSource === SOURCE_SELECT && showFileUpload && hasLivestreamData && !isCheckingLivestreams && (
               <>
                 <fieldset-section>
                   <label>{__('Select Replay')}</label>
@@ -596,7 +602,7 @@ function PublishFile(props: Props) {
                 <Empty text={__('No replays found.')} />
               </div>
             )}
-            {fileSelectSource === SOURCE_SELECT && showFileUpload && !hasLivestreamData && isCheckingLivestreams && (
+            {fileSelectSource === SOURCE_SELECT && showFileUpload && isCheckingLivestreams && (
               <div className="main--empty empty">
                 <Spinner small />
               </div>

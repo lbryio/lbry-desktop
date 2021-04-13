@@ -550,9 +550,9 @@ function PublishForm(props: Props) {
         subtitle={customSubtitle}
         setWaitForFile={setWaitForFile}
         isCheckingLivestreams={isCheckingLivestreams}
-        checkLivestreams={(claimChannelId, signature = signedMessage.signature, ts = signedMessage.signing_ts) =>
-          fetchLivestreams(claimChannelId, signature, ts)
-        }
+        checkLivestreams={fetchLivestreams}
+        channelId={claimChannelId}
+        channelSignature={signedMessage}
         header={
           <>
             {AVAILABLE_MODES.map((modeName) => (
