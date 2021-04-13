@@ -101,7 +101,8 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
   if (Number(claim.fee) <= 0 && claim.source_media_type && claim.source_media_type.startsWith('image/')) {
     imageThumbnail = generateStreamUrl(claim.name, claim.claim_id);
   }
-  const claimThumbnail = escapeHtmlProperty(claim.thumbnail_url) || imageThumbnail || `${URL}/public/v2-og.png`;
+  const claimThumbnail =
+    escapeHtmlProperty(claim.thumbnail_url) || imageThumbnail || OG_IMAGE_URL || `${URL}/public/v2-og.png`;
 
   // Allow for ovverriding default claim based og metadata
   const title = overrideOptions.title || claimTitle;
