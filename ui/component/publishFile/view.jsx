@@ -112,17 +112,17 @@ function PublishFile(props: Props) {
   );
 
   const fileSelectorModes = [
-    { label: __('Choose Replay'), actionName: SOURCE_SELECT, icon: ICONS.MENU },
     { label: __('Upload'), actionName: SOURCE_UPLOAD, icon: ICONS.PUBLISH },
+    { label: __('Choose Replay'), actionName: SOURCE_SELECT, icon: ICONS.MENU },
     { label: __('None'), actionName: SOURCE_NONE },
   ];
 
   const livestreamDataStr = JSON.stringify(livestreamData);
   const hasLivestreamData = livestreamData && Boolean(livestreamData.length);
-  const showSourceSelector = isLivestreamClaim;
+  const showSourceSelector = isLivestreamClaim || (hasLivestreamData && mode === PUBLISH_MODES.FILE);
 
   const [fileSelectSource, setFileSelectSource] = useState(
-    IS_WEB && showSourceSelector ? SOURCE_SELECT : SOURCE_UPLOAD
+    IS_WEB && showSourceSelector && name ? SOURCE_SELECT : SOURCE_UPLOAD
   );
   // const [showFileUpdate, setShowFileUpdate] = useState(false);
   const [selectedFileIndex, setSelectedFileIndex] = useState(null);
@@ -437,7 +437,7 @@ function PublishFile(props: Props) {
     updatePublishForm(publishFormParams);
   }
 
-  const showFileUpload = mode === PUBLISH_MODES.FILE || (mode === PUBLISH_MODES.LIVESTREAM && hasLivestreamData);
+  const showFileUpload = mode === PUBLISH_MODES.FILE;
   const isPublishPost = mode === PUBLISH_MODES.POST;
 
   return (
@@ -474,7 +474,7 @@ function PublishFile(props: Props) {
               <fieldset-section>
                 <div className="section__actions--between section__actions--align-bottom">
                   <div>
-                    <label>{__('Add replay video')}</label>
+                    <label>{__('Replay video available')}</label>
                     <div className="button-group">
                       {fileSelectorModes.map((fmode) => (
                         <Button

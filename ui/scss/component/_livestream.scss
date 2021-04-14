@@ -257,7 +257,7 @@
   }
   &:nth-child(n) {
     &.livestream__data-row--selected {
-      background-color: var(--color-input-toggle-bg-hover);
+      background-color: var(--color-button-toggle-bg);
     }
   }
   td {

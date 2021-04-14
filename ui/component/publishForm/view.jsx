@@ -130,6 +130,7 @@ function PublishForm(props: Props) {
   const urlParams = new URLSearchParams(location.search);
   const TYPE_PARAM = 'type';
   const uploadType = urlParams.get(TYPE_PARAM);
+  const _uploadType = uploadType && uploadType.toLowerCase();
   const enableLivestream =
     ENABLE_NO_SOURCE_CLAIMS &&
     user &&
@@ -137,6 +138,7 @@ function PublishForm(props: Props) {
     (activeChannelStakedLevel >= CHANNEL_STAKED_LEVEL_LIVESTREAM || user.odysee_live_enabled);
   // $FlowFixMe
   const AVAILABLE_MODES = Object.values(PUBLISH_MODES).filter((mode) => {
+    // $FlowFixMe
     if (editingURI) {
       if (isPostClaim) {
         return mode === PUBLISH_MODES.POST;
@@ -145,11 +147,10 @@ function PublishForm(props: Props) {
       } else {
         return mode === PUBLISH_MODES.FILE;
       }
+    } else if (_uploadType) {
+      return mode === _uploadType && (mode !== PUBLISH_MODES.LIVESTREAM || enableLivestream);
     } else {
-      if (mode === PUBLISH_MODES.LIVESTREAM) {
-        return enableLivestream;
-      }
-      return true;
+      return mode !== PUBLISH_MODES.LIVESTREAM || enableLivestream;
     }
   });
 
@@ -159,7 +160,7 @@ function PublishForm(props: Props) {
     [PUBLISH_MODES.LIVESTREAM]: 'Livestream --[noun, livestream tab button]--',
   };
 
-  const [mode, setMode] = React.useState(uploadType || PUBLISH_MODES.FILE);
+  const [mode, setMode] = React.useState(_uploadType || PUBLISH_MODES.FILE);
   const [isCheckingLivestreams, setCheckingLivestreams] = React.useState(false);
 
   let customSubtitle;
@@ -208,7 +209,9 @@ function PublishForm(props: Props) {
     myClaimForUri && myClaimForUri.value && myClaimForUri.value.source
       ? myClaimForUri.value.source.media_type
       : undefined;
-  const claimChannelId = myClaimForUri && myClaimForUri.signing_channel && myClaimForUri.signing_channel.claim_id;
+  const claimChannelId =
+    (myClaimForUri && myClaimForUri.signing_channel && myClaimForUri.signing_channel.claim_id) ||
+    (activeChannelClaim && activeChannelClaim.claim_id);
 
   const nameEdited = isStillEditing && name !== prevName;
 
@@ -283,10 +286,10 @@ function PublishForm(props: Props) {
 
   useEffect(() => {
     const signedMessage = JSON.parse(signedMessageStr);
-    if (claimChannelId && isLivestreamClaim && signedMessage.signature) {
+    if (claimChannelId && signedMessage.signature) {
       fetchLivestreams(claimChannelId, signedMessage.signature, signedMessage.signing_ts);
     }
-  }, [claimChannelId, isLivestreamClaim, signedMessageStr]);
+  }, [claimChannelId, signedMessageStr]);
 
   const isLivestreamMode = mode === PUBLISH_MODES.LIVESTREAM;
   let submitLabel;
@@ -395,8 +398,6 @@ function PublishForm(props: Props) {
 
   // set mode based on urlParams 'type'
   useEffect(() => {
-    const _uploadType = uploadType && uploadType.toLowerCase();
-
     // Default to standard file publish if none specified
     if (!_uploadType) {
       setMode(PUBLISH_MODES.FILE);
@@ -425,15 +426,15 @@ function PublishForm(props: Props) {
 
     // Default to standard file publish
     setMode(PUBLISH_MODES.FILE);
-  }, [uploadType, enableLivestream]);
+  }, [_uploadType, enableLivestream]);
 
   // if we have a type urlparam, update it? necessary?
   useEffect(() => {
-    if (!uploadType) return;
+    if (!_uploadType) return;
     const newParams = new URLSearchParams();
     newParams.set(TYPE_PARAM, mode.toLowerCase());
     replace({ search: newParams.toString() });
-  }, [mode, uploadType]);
+  }, [mode, _uploadType]);
 
   // @if TARGET='web'
   function createWebFile() {
@@ -575,7 +576,7 @@ function PublishForm(props: Props) {
 
       {!publishing && (
         <div className={classnames({ 'card--disabled': formDisabled })}>
-          {mode === PUBLISH_MODES.FILE && <PublishDescription disabled={formDisabled} />}
+          {mode !== PUBLISH_MODES.POST && <PublishDescription disabled={formDisabled} />}
           <Card actions={<SelectThumbnail livestreamdData={livestreamData} />} />
           <TagsSelect
             suggestMature={!SIMPLE_SITE}
