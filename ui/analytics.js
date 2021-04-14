@@ -39,6 +39,9 @@ type Analytics = {
   playerStartedEvent: (?boolean) => void,
   videoFetchDuration: (string, number) => void,
   videoStartEvent: (string, number) => void,
+  adsFetchedEvent: () => void,
+  adsReceivedEvent: (any) => void,
+  adsErrorEvent: (any) => void,
   videoBufferEvent: (
     StreamClaim,
     {
@@ -51,9 +54,6 @@ type Analytics = {
       readyState: number,
     }
   ) => void,
-  adsFetchedEvent: () => void,
-  adsReceivedEvent: (any) => void,
-  adsErrorEvent: (any) => void,
   emailProvidedEvent: () => void,
   emailVerifiedEvent: () => void,
   rewardEligibleEvent: () => void,

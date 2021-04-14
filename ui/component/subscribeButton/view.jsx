@@ -15,13 +15,12 @@ type SubscriptionArgs = {
 type Props = {
   permanentUrl: ?string,
   isSubscribed: boolean,
-  doChannelSubscribe: SubscriptionArgs => void,
-  doChannelUnsubscribe: SubscriptionArgs => void,
+  doChannelSubscribe: (SubscriptionArgs) => void,
+  doChannelUnsubscribe: (SubscriptionArgs) => void,
   showSnackBarOnSubscribe: boolean,
   doToast: ({ message: string }) => void,
   shrinkOnMobile: boolean,
   notificationsDisabled: boolean,
-  user: ?User,
 };
 
 export default function SubscribeButton(props: Props) {
@@ -34,14 +33,12 @@ export default function SubscribeButton(props: Props) {
     doToast,
     shrinkOnMobile = false,
     notificationsDisabled,
-    user,
   } = props;
 
   const buttonRef = useRef();
   const isMobile = useIsMobile();
   let isHovering = useHover(buttonRef);
   isHovering = isMobile ? true : isHovering;
-  const uiNotificationsEnabled = user && user.experimental_ui;
 
   const { channelName } = parseURI(permanentUrl);
   const claimName = '@' + channelName;
@@ -66,7 +63,7 @@ export default function SubscribeButton(props: Props) {
         requiresAuth={IS_WEB}
         label={label}
         title={titlePrefix}
-        onClick={e => {
+        onClick={(e) => {
           e.stopPropagation();
 
           subscriptionHandler({
@@ -80,7 +77,7 @@ export default function SubscribeButton(props: Props) {
           }
         }}
       />
-      {isSubscribed && uiNotificationsEnabled && (
+      {isSubscribed && (
         <Button
           button="alt"
           icon={notificationsDisabled ? ICONS.BELL : ICONS.BELL_ON}

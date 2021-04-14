@@ -66,3 +66,4 @@ exports.NOTIFICATIONS = 'notifications';
 exports.YOUTUBE_SYNC = 'youtube';
 exports.LIVESTREAM = 'livestream';
 exports.LIVESTREAM_CURRENT = 'live';
+exports.GENERAL = 'general';
