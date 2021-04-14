@@ -22,6 +22,7 @@ const SUPPORTED_LANGUAGES = {
   pa: LANGUAGES.pa[1],
   pl: LANGUAGES.pl[1],
   pt: LANGUAGES.pt[1],
+  'pt-BR': LANGUAGES['pt-BR'][1],
   ro: LANGUAGES.ro[1],
   ru: LANGUAGES.ru[1],
   sr: LANGUAGES.sr[1],
