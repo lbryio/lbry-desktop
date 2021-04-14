@@ -1,3 +1,5 @@
+// @flow
+import type { ElementRef } from 'react';
 import { useEffect } from 'react';
 
 /**
@@ -6,7 +8,11 @@ import { useEffect } from 'react';
  * @param {Number} [threshold=0.5] - The percent visible in order for loading to begin.
  * @param {Array<>} [deps=[]] - The dependencies this lazy-load is reliant on.
  */
-export default function useLazyLoading(elementRef, threshold = 0.25, deps = []) {
+export default function useLazyLoading(
+  elementRef: { current: ?ElementRef<any> },
+  threshold: number = 0.25,
+  deps: Array<any> = []
+) {
   useEffect(() => {
     if (!elementRef.current) {
       return;
@@ -22,6 +28,7 @@ export default function useLazyLoading(elementRef, threshold = 0.25, deps = []) 
 
             // useful for lazy loading img tags
             if (target.dataset.src) {
+              // $FlowFixMe
               target.src = target.dataset.src;
               return;
             }
@@ -41,7 +48,5 @@ export default function useLazyLoading(elementRef, threshold = 0.25, deps = []) 
     );
 
     lazyLoadingObserver.observe(elementRef.current);
-
-    // re-run whenever the element ref changes
   }, deps);
 }

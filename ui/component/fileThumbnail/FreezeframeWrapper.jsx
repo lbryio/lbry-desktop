@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import Freezeframe from './FreezeframeLite';
-import useLazyLoading from '../../util/useLazyLoading';
+import useLazyLoading from 'effects/use-lazy-loading';
 
 const FreezeframeWrapper = (props) => {
   const imgRef = React.useRef();
