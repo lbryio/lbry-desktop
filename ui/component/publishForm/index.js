@@ -58,7 +58,7 @@ const select = (state) => {
     myChannels: selectMyChannelClaims(state),
     incognito: selectIncognito(state),
     activeChannelStakedLevel: selectActiveChannelStakedLevel(state),
-  }
+  };
 };
 
 const perform = (dispatch) => ({
