@@ -34,7 +34,7 @@ export default function SearchPage(props: Props) {
     uris,
     location,
     isSearching,
-    showNsfw,
+    //  showNsfw,
     isAuthenticated,
     searchOptions,
     hasReachedMaxResultsLength,

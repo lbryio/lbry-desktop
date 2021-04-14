@@ -156,7 +156,7 @@ function PublishAdditionalOptions(props: Props) {
                   type="select"
                   name="content_language"
                   value={language}
-                  onChange={event => updatePublishForm({ language: event.target.value })}
+                  onChange={(event) => updatePublishForm({ language: event.target.value })}
                 >
                   {Object.entries(SUPPORTED_LANGUAGES).map(([langkey, langName]) => (
                     // $FlowFixMe
@@ -176,12 +176,12 @@ function PublishAdditionalOptions(props: Props) {
                       licenseUrl: newLicenseUrl,
                     })
                   }
-                  handleLicenseDescriptionChange={event =>
+                  handleLicenseDescriptionChange={(event) =>
                     updatePublishForm({
                       otherLicenseDescription: event.target.value,
                     })
                   }
-                  handleLicenseUrlChange={event => updatePublishForm({ licenseUrl: event.target.value })}
+                  handleLicenseUrlChange={(event) => updatePublishForm({ licenseUrl: event.target.value })}
                 />
               </div>
             </div>

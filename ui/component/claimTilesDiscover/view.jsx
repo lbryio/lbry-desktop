@@ -49,7 +49,7 @@ export function prioritizeActiveLivestreams(
   let liveChannelIds = Object.keys(livestreamMap);
 
   // 1. Collect active livestreams from the primary search to put in front.
-  uris.forEach(uri => {
+  uris.forEach((uri) => {
     const claim = claimsByUri[uri];
     if (claimIsLive(claim, liveChannelIds)) {
       liveUris.push(uri);
@@ -66,7 +66,7 @@ export function prioritizeActiveLivestreams(
     });
     const livestreamsOnlyUris = claimSearchByQuery[livestreamsOnlySearchCacheQuery];
     if (livestreamsOnlyUris) {
-      livestreamsOnlyUris.forEach(uri => {
+      livestreamsOnlyUris.forEach((uri) => {
         const claim = claimsByUri[uri];
         if (!uris.includes(uri) && claimIsLive(claim, liveChannelIds)) {
           liveUris.push(uri);
@@ -78,7 +78,7 @@ export function prioritizeActiveLivestreams(
   }
 
   // 3. Finalize uris by putting live livestreams in front.
-  const newUris = liveUris.concat(uris.filter(uri => !liveUris.includes(uri)));
+  const newUris = liveUris.concat(uris.filter((uri) => !liveUris.includes(uri)));
   uris.splice(0, uris.length, ...newUris);
 }
 
@@ -92,7 +92,7 @@ type Props = {
   doClaimSearch: ({}) => void,
   showNsfw: boolean,
   hideReposts: boolean,
-  history: { action: string, push: string => void, replace: string => void },
+  history: { action: string, push: (string) => void, replace: (string) => void },
   claimSearchByQuery: { [string]: Array<string> },
   fetchingClaimSearchByQuery: { [string]: boolean },
   claimsByUri: { [string]: any },
@@ -113,9 +113,11 @@ type Props = {
   limitClaimsPerChannel?: number,
   hasSource?: boolean,
   hasNoSource?: boolean,
-  renderProperties?: Claim => ?Node,
+  renderProperties?: (Claim) => ?Node,
   liveLivestreamsFirst?: boolean,
   livestreamMap?: { [string]: any },
+  streamTypes?: Array<string>,
+  pin?: boolean,
 };
 
 function ClaimTilesDiscover(props: Props) {
@@ -135,7 +137,6 @@ function ClaimTilesDiscover(props: Props) {
     languages,
     claimType,
     streamTypes,
-    prefixUris,
     timestamp,
     feeAmount,
     limitClaimsPerChannel,
@@ -147,13 +148,15 @@ function ClaimTilesDiscover(props: Props) {
     mutedUris,
     liveLivestreamsFirst,
     livestreamMap,
+    pin,
+    prefixUris,
   } = props;
 
   const { location } = useHistory();
   const urlParams = new URLSearchParams(location.search);
   const feeAmountInUrl = urlParams.get('fee_amount');
-  const feeAmountParam = feeAmountInUrl || feeAmount;
-  const mutedAndBlockedChannelIds = Array.from(new Set(mutedUris.concat(blockedUris).map(uri => uri.split('#')[1])));
+  const feeAmountParam = feeAmountInUrl || feeAmount || CS.FEE_AMOUNT_ONLY_FREE;
+  const mutedAndBlockedChannelIds = Array.from(new Set(mutedUris.concat(blockedUris).map((uri) => uri.split('#')[1])));
   const liveUris = [];
 
   const options: {
@@ -211,7 +214,7 @@ function ClaimTilesDiscover(props: Props) {
   // https://github.com/lbryio/lbry-desktop/issues/3774
   if (hideReposts) {
     if (Array.isArray(options.claim_type)) {
-      options.claim_type = options.claim_type.filter(claimType => claimType !== 'repost');
+      options.claim_type = options.claim_type.filter((claimType) => claimType !== 'repost');
     } else {
       options.claim_type = ['stream', 'channel'];
     }
@@ -241,6 +244,16 @@ function ClaimTilesDiscover(props: Props) {
   const isLoading = fetchingClaimSearchByQuery[claimSearchCacheQuery];
   const shouldPerformSearch = !isLoading && uris.length === 0;
 
+  const fixUri = 'lbry://@CrackerMilk#6/king-of-the-castle#2';
+  if (pin && uris && uris.length > 2 && window.location.pathname === '/') {
+    if (uris.indexOf(fixUri) !== -1) {
+      uris.splice(uris.indexOf(fixUri), 1);
+    } else {
+      uris.pop();
+    }
+    uris.splice(2, 0, fixUri);
+  }
+
   React.useEffect(() => {
     if (shouldPerformSearch) {
       const searchOptions = JSON.parse(optionsStringForEffect);
@@ -254,7 +267,7 @@ function ClaimTilesDiscover(props: Props) {
     }
   }, [doClaimSearch, shouldPerformSearch, optionsStringForEffect, liveLivestreamsFirst]);
 
-  const resolveLive = index => {
+  const resolveLive = (index) => {
     if (liveLivestreamsFirst && livestreamMap && index < liveUris.length) {
       return true;
     }

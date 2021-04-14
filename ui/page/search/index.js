@@ -14,7 +14,6 @@ import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import SearchPage from './view';
 
 const select = (state, props) => {
-  const showMature = selectShowMatureContent(state);
   const urlParams = new URLSearchParams(props.location.search);
   let urlQuery = urlParams.get('q') || null;
   if (urlQuery) {
@@ -34,7 +33,7 @@ const select = (state, props) => {
 
   return {
     isSearching: selectIsSearching(state),
-    showNsfw: showMature,
+    showNsfw: selectShowMatureContent(state),
     uris: uris,
     isAuthenticated: selectUserVerifiedEmail(state),
     searchOptions: selectSearchOptions(state),

@@ -1,5 +1,6 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
+import { SEARCH_OPTIONS } from 'constants/search';
 import { buildURI, doResolveUris, batchActions, isURIValid, makeSelectClaimForUri } from 'lbry-redux';
 import {
   makeSelectSearchUris,
@@ -135,6 +136,10 @@ export const doFetchRecommendedContent = (uri: string, mature: boolean) => (disp
     if (!mature) {
       options['nsfw'] = false;
     }
+
+    options[SEARCH_OPTIONS.CLAIM_TYPE] = SEARCH_OPTIONS.INCLUDE_FILES;
+    options[SEARCH_OPTIONS.MEDIA_VIDEO] = true;
+
     const { title } = claim.value;
     if (title && options) {
       dispatch(doSearch(title, options));

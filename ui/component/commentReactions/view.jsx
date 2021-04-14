@@ -77,7 +77,7 @@ export default function CommentReactions(props: Props) {
       <Button
         requiresAuth={IS_WEB}
         title={__('Upvote')}
-        icon={ICONS.UPVOTE}
+        icon={myReacts.includes(REACTION_TYPES.LIKE) ? ICONS.FIRE_ACTIVE : ICONS.FIRE}
         className={classnames('comment__action', {
           'comment__action--active': myReacts && myReacts.includes(REACTION_TYPES.LIKE),
         })}
@@ -87,7 +87,7 @@ export default function CommentReactions(props: Props) {
       <Button
         requiresAuth={IS_WEB}
         title={__('Downvote')}
-        icon={ICONS.DOWNVOTE}
+        icon={myReacts.includes(REACTION_TYPES.DISLIKE) ? ICONS.SLIME_ACTIVE : ICONS.SLIME}
         className={classnames('comment__action', {
           'comment__action--active': myReacts && myReacts.includes(REACTION_TYPES.DISLIKE),
         })}
