@@ -8,13 +8,14 @@ const {
   SITE_DESCRIPTION,
   SITE_NAME,
 } = require('../../config.js');
-const { generateEmbedUrl, generateStreamUrl } = require('../../ui/util/web');
+const { generateEmbedUrl, generateStreamUrl, generateDirectUrl } = require('../../ui/util/web');
 const PAGES = require('../../ui/constants/pages');
 const { CATEGORY_METADATA } = require('./category-metadata');
 const { getClaim } = require('./chainquery');
 const { parseURI } = require('lbry-redux');
 const fs = require('fs');
 const path = require('path');
+const moment = require('moment');
 const removeMd = require('remove-markdown');
 const { getJsBundleId } = require('../bundle-id.js');
 const jsBundleId = getJsBundleId();
@@ -166,6 +167,40 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
   return head;
 }
 
+function buildGoogleVideoMetadata(claimUri, claim) {
+  if (!claim.source_media_type || !claim.source_media_type.startsWith('video/')) {
+    return '';
+  }
+
+  const { claimName } = parseURI(claimUri);
+  const claimTitle = escapeHtmlProperty(claim.title ? claim.title : claimName);
+  const claimDescription =
+    claim.description && claim.description.length > 0
+      ? escapeHtmlProperty(truncateDescription(claim.description))
+      : `View ${claimTitle} on ${SITE_NAME}`;
+  const claimThumbnail = escapeHtmlProperty(claim.thumbnail_url) || OG_IMAGE_URL || `${URL}/public/v2-og.png`;
+  const releaseTime = claim.release_time || 0;
+
+  // https://developers.google.com/search/docs/data-types/video
+  const googleVideoMetadata = {
+    // --- Must ---
+    '@context': 'https://schema.org',
+    '@type': 'VideoObject',
+    name: `${claimTitle}`,
+    description: `${removeMd(claimDescription)}`,
+    thumbnailUrl: `${claimThumbnail}`,
+    uploadDate: `${new Date(releaseTime * 1000).toISOString()}`,
+    // --- Recommended ---
+    duration: moment.duration(claim.duration).toISOString(),
+    contentUrl: generateDirectUrl(claim.name, claim.claim_id),
+    embedUrl: generateEmbedUrl(claim.name, claim.claim_id),
+  };
+
+  return (
+    '<script type="application/ld+json">\n' + JSON.stringify(googleVideoMetadata, null, '  ') + '\n' + '</script>\n'
+  );
+}
+
 async function getClaimFromChainqueryOrRedirect(ctx, url, ignoreRedirect = false) {
   const { isChannel, streamName, channelName, channelClaimId, streamClaimId } = parseURI(url);
   const claimName = isChannel ? '@' + channelName : streamName;
@@ -231,7 +266,8 @@ async function getHtml(ctx) {
 
     if (claim) {
       const ogMetadata = buildClaimOgMetadata(claimUri, claim);
-      return insertToHead(html, ogMetadata);
+      const googleVideoMetadata = buildGoogleVideoMetadata(claimUri, claim);
+      return insertToHead(html, ogMetadata.concat('\n', googleVideoMetadata));
     }
 
     return insertToHead(html);
@@ -253,7 +289,8 @@ async function getHtml(ctx) {
 
     if (claim) {
       const ogMetadata = buildClaimOgMetadata(claimUri, claim);
-      return insertToHead(html, ogMetadata);
+      const googleVideoMetadata = buildGoogleVideoMetadata(claimUri, claim);
+      return insertToHead(html, ogMetadata.concat('\n', googleVideoMetadata));
     }
   }
 
