@@ -114,12 +114,12 @@ function VideoViewer(props: Props) {
   const {
     location: { pathname },
   } = useHistory();
+  const previousUri = usePrevious(uri);
+  const embedded = useContext(EmbedContext);
   const [isPlaying, setIsPlaying] = useState(false);
   const [showAutoplayCountdown, setShowAutoplayCountdown] = useState(false);
   const [isEndededEmbed, setIsEndededEmbed] = useState(false);
   const vjsCallbackDataRef: any = React.useRef();
-  const previousUri = usePrevious(uri);
-  const embedded = useContext(EmbedContext);
   const approvedVideo = Boolean(channelClaimId) && adApprovedChannelIds.includes(channelClaimId);
   const adsEnabled = ENABLE_PREROLL_ADS && !authenticated && !embedded && approvedVideo;
   const [adUrl, setAdUrl, isFetchingAd] = useGetAds(approvedVideo, adsEnabled);
