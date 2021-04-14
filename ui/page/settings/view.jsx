@@ -1,6 +1,6 @@
 // @flow
 import * as PAGES from 'constants/pages';
-import * as MODALS from 'constants/modal_types';
+// import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import { SETTINGS } from 'lbry-redux';
@@ -17,7 +17,7 @@ import classnames from 'classnames';
 import { getPasswordFromCookie } from 'util/saved-passwords';
 // $FlowFixMe
 import homepages from 'homepages';
-import { Lbryio } from 'lbryinc';
+// import { Lbryio } from 'lbryinc';
 import Yrbl from 'component/yrbl';
 
 type Price = {
@@ -169,7 +169,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
     const {
       daemonSettings,
       allowAnalytics,
-      showNsfw,
+      //   showNsfw,
       isAuthenticated,
       currentTheme,
       themes,
@@ -182,11 +182,11 @@ class SettingsPage extends React.PureComponent<Props, State> {
       setClientSetting,
       toggle3PAnalytics,
       floatingPlayer,
-      hideReposts,
+      //   hideReposts,
       clearPlayingUri,
       darkModeTimes,
       clearCache,
-      openModal,
+      //   openModal,
     } = this.props;
     const { storedPassword } = this.state;
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
@@ -356,7 +356,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     )}
                   />
 
-                  <FormField
+                  {/* <FormField
                     type="checkbox"
                     name="hide_reposts"
                     onChange={(e) => {
@@ -370,7 +370,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     checked={hideReposts}
                     label={__('Hide reposts')}
                     helper={__('You will not see reposts by people you follow or receive email notifying about them.')}
-                  />
+                  /> */}
 
                   {/* <FormField
                     type="checkbox"
@@ -381,7 +381,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     helper={__('Anonymous content is published without a channel.')}
                   /> */}
 
-                  <FormField
+                  {/* <FormField
                     type="checkbox"
                     name="show_nsfw"
                     onChange={() =>
@@ -394,7 +394,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     helper={__(
                       'Mature content may include nudity, intense sexuality, profanity, or other adult content. By displaying mature content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  '
                     )}
-                  />
+                  /> */}
                 </React.Fragment>
               }
             />
