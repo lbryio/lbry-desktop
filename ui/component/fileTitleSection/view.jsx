@@ -20,12 +20,12 @@ type Props = {
   nsfw: boolean,
   isNsfwBlocked: boolean,
   livestream?: boolean,
+  isLive?: boolean,
   activeViewers?: number,
-  stateOfViewers: string,
 };
 
 function FileTitleSection(props: Props) {
-  const { title, uri, nsfw, isNsfwBlocked, livestream = false, activeViewers, stateOfViewers } = props;
+  const { title, uri, nsfw, isNsfwBlocked, livestream = false, isLive = false, activeViewers } = props;
   const [hasAcknowledgedSec, setHasAcknowledgedSec] = usePersistedState('sec-nag', false);
 
   return (
@@ -35,9 +35,7 @@ function FileTitleSection(props: Props) {
           <Button button="close" icon={ICONS.REMOVE} onClick={() => setHasAcknowledgedSec(true)} />
           <h1 className="section__title">{__('Help LBRY Save Crypto')}</h1>
           <p className="section__subtitle">
-            {__(
-              'The US government is attempting to destroy the cryptocurrency industry. Can you help?'
-            )}{' '}
+            {__('The US government is attempting to destroy the cryptocurrency industry. Can you help?')}{' '}
             <Button label={__('Learn more and sign petition')} button="link" href="https://helplbrysavecrypto.com" />
           </p>
         </div>
@@ -59,12 +57,7 @@ function FileTitleSection(props: Props) {
         body={
           <React.Fragment>
             <ClaimInsufficientCredits uri={uri} />
-            <FileSubtitle
-              uri={uri}
-              livestream={livestream}
-              activeViewers={activeViewers}
-              stateOfViewers={stateOfViewers}
-            />
+            <FileSubtitle uri={uri} isLive={isLive} livestream={livestream} activeViewers={activeViewers} />
           </React.Fragment>
         }
         actions={
