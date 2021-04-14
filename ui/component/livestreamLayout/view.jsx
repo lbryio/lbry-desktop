@@ -41,13 +41,7 @@ export default function LivestreamLayout(props: Props) {
             })}
           </div>
         )}
-        <FileTitleSection
-          uri={uri}
-          livestream
-          isLive={isLive}
-          activeViewers={activeViewers}
-          stateOfViewers={isLive ? __('watching') : __('waiting')}
-        />
+        <FileTitleSection uri={uri} livestream isLive={isLive} activeViewers={activeViewers} />
       </div>
       <LivestreamComments uri={uri} />
     </>
