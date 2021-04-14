@@ -26,7 +26,10 @@
   height: calc(100vh - var(--header-height));
   border-right: 1px solid var(--color-border);
   padding-top: var(--spacing-l);
-  padding-bottom: var(--spacing-xl);
+  padding-bottom: var(--spacing-l);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 
   @media (min-width: $breakpoint-small) {
     overflow-y: hidden;
@@ -34,6 +37,10 @@
     &:hover {
       overflow-y: auto;
     }
+  }
+
+  @media (min-width: $breakpoint-small) {
+    justify-content: space-between;
   }
 }
 
@@ -221,7 +228,16 @@
   @extend .navigation-links;
   margin-right: 0;
   padding-right: 0;
-  font-size: var(--font-small);
+  margin-top: var(--spacing-xl);
+  margin-bottom: 0;
+
+  .navigation-link {
+    font-size: var(--font-small);
+  }
+
+  .button__label {
+    color: var(--color-text-help);
+  }
 
   .button__content {
     align-items: flex-start;

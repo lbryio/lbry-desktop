@@ -14,6 +14,12 @@
   --color-focus: #93cff2;
   --color-notification: #f02849;
 
+  --color-fire: #ff6635;
+  --color-fire-outside: #ff6635;
+  --color-glow: #ffd73550;
+  --color-slime: #81c554;
+  --color-success: #009e65;
+
   --color-black: #111;
   --color-white: #fdfdfd;
   --color-white-alt: #fafafa;
@@ -31,19 +37,6 @@
   // Components
 
   // Button
-  --color-button-primary-bg: var(--color-primary);
-  --color-button-primary-text: var(--color-primary-alt);
-  --color-button-primary-bg-hover: var(--color-primary-alt-2);
-  --color-button-primary-hover-text: var(--color-primary-alt);
-  --color-button-secondary-bg: var(--color-secondary-alt);
-  --color-button-secondary-border: var(--color-secondary-alt);
-  --color-button-secondary-text: var(--color-secondary);
-  --color-button-secondary-bg-hover: #b9d0e9;
-  --color-button-alt-bg: var(--color-gray-1);
-  --color-button-alt-text: var(--color-text);
-  --color-button-alt-bg-hover: var(--color-gray-2);
-  --color-link: var(--color-primary);
-  --color-link-hover: var(--color-black);
 
   // Input
   --color-input-color: #111111;
@@ -59,10 +52,4 @@
 
   // Table
   --color-table-highlight: var(--color-white-alt);
-
-  // Tag
-  --color-tag: var(--color-gray-5);
-  --color-tag-bg: var(--color-button-alt-bg);
-  --color-tag-hover: var(--color-button-alt-text);
-  --color-tag-bg-hover: var(--color-button-alt-bg-hover);
 }

@@ -18,7 +18,8 @@ const MOONPAY_KEY = process.env.MOONPAY_SECRET_KEY;
 const COUNTRIES = Array.from(
   new Set(
     countryData.all
-      .map(country => country.name)
+      .filter((country) => country.status !== 'deleted')
+      .map((country) => country.name)
       .sort((a, b) => {
         if (a > b) {
           return 1;
@@ -39,7 +40,7 @@ type Props = {
   email: string,
   user: ?User,
   doGetNewAddress: () => void,
-  doUserSetCountry: string => void,
+  doUserSetCountry: (string) => void,
 };
 
 export default function BuyPage(props: Props) {
@@ -65,7 +66,7 @@ export default function BuyPage(props: Props) {
 
   React.useEffect(() => {
     if (MOONPAY_KEY && !url && receiveAddress) {
-      let url = `https://buy.moonpay.io?apiKey=pk_live_xNFffrN5NWKy6fu0ggbV8VQIwRieRzy&colorCode=%23257761&currencyCode=lbc&showWalletAddressForm=true&walletAddress=${receiveAddress}`;
+      let url = `https://buy.moonpay.io?apiKey=pk_live_xNFffrN5NWKy6fu0ggbV8VQIwRieRzy&colorCode=%23fa6165&currencyCode=lbc&showWalletAddressForm=true&walletAddress=${receiveAddress}`;
       if (email) {
         url += `&email=${encodeURIComponent(email)}`;
       }
@@ -148,7 +149,7 @@ export default function BuyPage(props: Props) {
                         'Only some countries are eligible at this time. We are working to make this available to everyone.'
                       )}
                       value={country}
-                      onChange={e => setCountry(e.target.value)}
+                      onChange={(e) => setCountry(e.target.value)}
                     >
                       <option value="" disabled defaultValue>
                         {__('Select your country')}

@@ -19,13 +19,18 @@ function FileSubtitle(props: Props) {
       <div className="file__viewdate">
         {livestream ? <span>{__('Right now')}</span> : <DateTime uri={uri} show={DateTime.SHOW_DATE} />}
         {livestream ? (
-          <span>{__('%viewer_count% currently %viewer_state%', { viewer_count: activeViewers, viewer_state: stateOfViewers })}</span>
+          <span>
+            {__('%viewer_count% currently %viewer_state%', {
+              viewer_count: activeViewers,
+              viewer_state: stateOfViewers,
+            })}
+          </span>
         ) : (
           <FileViewCount uri={uri} />
         )}
       </div>
-
-      <FileActions uri={uri} />
+      {/* did I need these params? */}
+      <FileActions uri={uri} hideRepost={livestream} livestream={livestream} />
     </div>
   );
 }

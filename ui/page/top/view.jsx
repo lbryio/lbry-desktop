@@ -5,14 +5,14 @@ import Page from 'component/page';
 import ClaimListDiscover from 'component/claimListDiscover';
 import ClaimEffectiveAmount from 'component/claimEffectiveAmount';
 import SearchTopClaim from 'component/searchTopClaim';
-import { ORDER_BY_TOP, FRESH_ALL } from 'constants/claim_search';
+import * as CS from 'constants/claim_search';
 import Button from 'component/button';
 import I18nMessage from 'component/i18nMessage';
 import * as PAGES from 'constants/pages';
 
 type Props = {
   name: string,
-  beginPublish: string => void,
+  beginPublish: (string) => void,
 };
 
 function TopPage(props: Props) {
@@ -25,8 +25,9 @@ function TopPage(props: Props) {
       <SearchTopClaim query={name} hideLink setChannelActive={setChannelActive} />
       <ClaimListDiscover
         name={channelActive ? `@${queryName}` : queryName}
-        defaultFreshness={FRESH_ALL}
-        defaultOrderBy={ORDER_BY_TOP}
+        defaultFreshness={CS.FRESH_ALL}
+        defaultOrderBy={CS.ORDER_BY_TOP}
+        streamType={CS.CONTENT_ALL}
         meta={
           <div className="search__top-links">
             <I18nMessage
@@ -46,7 +47,7 @@ function TopPage(props: Props) {
           </div>
         }
         includeSupportAction
-        renderProperties={claim => (
+        renderProperties={(claim) => (
           <span className="claim-preview__custom-properties">
             {claim.meta.is_controlling && <span className="help--inline">{__('Currently winning')}</span>}
             <ClaimEffectiveAmount uri={claim.repost_url || claim.canonical_url} />

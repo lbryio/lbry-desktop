@@ -119,7 +119,7 @@ export default function YoutubeTransferStatus(props: Props) {
               <I18nMessage
                 tokens={{ here: <Button button="link" href="https://lbry.com/faq/youtube" label={__('here')} /> }}
               >
-                Email help@lbry.com if you think there has been a mistake. Make sure your channel qualifies %here%.
+                Email help@odysee.com if you think there has been a mistake. Make sure your channel qualifies %here%.
               </I18nMessage>
             )}
           </span>

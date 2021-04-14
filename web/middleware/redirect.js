@@ -55,7 +55,7 @@ async function redirectMiddleware(ctx, next) {
     } else {
       redirectUrl += openQuery;
     }
-
+    ctx.status = 301;
     ctx.redirect(redirectUrl);
     return;
   }

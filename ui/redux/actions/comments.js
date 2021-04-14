@@ -2,6 +2,7 @@
 import * as ACTIONS from 'constants/action_types';
 import * as REACTION_TYPES from 'constants/reactions';
 import { Lbry, parseURI, buildURI, selectClaimsByUri, selectMyChannelClaims } from 'lbry-redux';
+// import { BANNED_LIVESTREAM_WORDS } from 'constants/comment';
 import { doToast, doSeeNotifications } from 'redux/actions/notifications';
 import {
   makeSelectCommentIdsForUri,
@@ -215,6 +216,27 @@ export function doCommentCreate(
     dispatch({
       type: ACTIONS.COMMENT_CREATE_STARTED,
     });
+
+    // if (livestream) {
+    //   const strippedCommentText = comment.trim().toLowerCase().replace(/\s/g, '');
+    //   for (var i = 0; i < BANNED_LIVESTREAM_WORDS.length; i++) {
+    //     const bannedWord = BANNED_LIVESTREAM_WORDS[i];
+    //     if (strippedCommentText.includes(bannedWord)) {
+    //       dispatch({
+    //         type: ACTIONS.COMMENT_CREATE_FAILED,
+    //       });
+    //
+    //       dispatch(
+    //         doToast({
+    //           message: 'Unable to create comment.',
+    //           isError: true,
+    //         })
+    //       );
+    //
+    //       return;
+    //     }
+    //   }
+    // }
 
     if (parent_id) {
       const notification = makeSelectNotificationForCommentId(parent_id)(state);

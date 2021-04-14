@@ -559,6 +559,7 @@ function PublishForm(props: Props) {
               <Button
                 key={String(modeName)}
                 icon={modeName}
+                iconSize={18}
                 label={__(MODE_TO_I18N_STR[String(modeName)] || '---')}
                 button="alt"
                 onClick={() => {

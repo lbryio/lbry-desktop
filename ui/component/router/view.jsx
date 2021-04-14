@@ -292,6 +292,7 @@ function AppRouter(props: Props) {
 
       <Route path={`/$/${PAGES.EMBED}/:claimName`} exact component={EmbedWrapperPage} />
       <Route path={`/$/${PAGES.EMBED}/:claimName/:claimId`} exact component={EmbedWrapperPage} />
+
       {/* Below need to go at the end to make sure we don't match any of our pages first */}
       <Route path="/:claimName" exact component={ShowPage} />
       <Route path="/:claimName/:streamName" exact component={ShowPage} />
