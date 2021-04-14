@@ -55,9 +55,11 @@ export default function LivestreamSetupPage(props: Props) {
   const helpText = (
     <div className="section__subtitle">
       <p>
-        {__(`Create a Livestream by first submitting your Livestream details and waiting for approval confirmation.`)}{' '}
         {__(
-          `The livestream will not be visible on your channel until you are live, but you can share the URL in advance.`
+          `Create a Livestream by first submitting your livestream details and waiting for approval confirmation. This can be done well in advance and will take a few minutes.`
+        )}{' '}
+        {__(
+          `The livestream will not be visible on your channel page until you are live, but you can share the URL in advance.`
         )}{' '}
         {__(
           `Once the your livestream is confirmed, configure your streaming software (OBS, Restream, etc) and input the server URL along with the stream key in it.`
@@ -73,25 +75,18 @@ export default function LivestreamSetupPage(props: Props) {
         <li>{__(`Tune: Zerolatency`)}</li>
       </ul>
       <p>
-        {__(
-          `If using other livestreaming software, make sure the bitrate is below 5000 kbps or the stream will not work.`
-        )}
+        {__(`If using other streaming software, make sure the bitrate is below 4500 kbps or the stream will not work.`)}
       </p>
       <p>
-        {__(
-          `Please note: You'll need to record your own stream through your software if you plan to share it afterward. You can also delete it if you prefer not to upload the copy.`
-        )}
+        {__(`After your stream:
+      Click the Update button on the content page. This will allow you to select a replay or upload your own edited MP4. Replays are limited to 4 hours and may take a few minutes to show (use the Check For Replays button).`)}
       </p>
+      <p>{__(`Click Save, then confirm, and you are done!`)}</p>
       <p>
         {__(
-          `In the near future, this manual step will be removed and you will be able to share the stream right after its finished without needing to record it yourself.`
+          `Note: If you don't plan on publishing your replay, you'll want to delete your livestream and then start with a fresh one next time.`
         )}
       </p>
-      <p>
-        {__(`After your livestream:
-      Click the Publish Replay button. This will allow you to edit details before sharing on Odysee. Be sure to select the saved mp4 file you recorded.`)}
-      </p>
-      <p>{__(`Click Save and you are done!`)}</p>
     </div>
   );
 

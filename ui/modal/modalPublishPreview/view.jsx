@@ -43,6 +43,8 @@ type Props = {
   myChannels: ?Array<ChannelClaim>,
   publishSuccess: boolean,
   publishing: boolean,
+  isLivestreamClaim: boolean,
+  remoteFile: string,
 };
 
 // class ModalPublishPreview extends React.PureComponent<Props> {
@@ -74,10 +76,14 @@ const ModalPublishPreview = (props: Props) => {
     publishing,
     publish,
     closeModal,
+    isLivestreamClaim,
+    remoteFile,
   } = props;
+
   const livestream =
+    (uri && isLivestreamClaim) ||
     //   $FlowFixMe
-    previewResponse.outputs[0] && previewResponse.outputs[0].value && !previewResponse.outputs[0].value.source;
+    (previewResponse.outputs[0] && previewResponse.outputs[0].value && !previewResponse.outputs[0].value.source);
   // leave the confirm modal up if we're not going straight to upload/reflecting
   // @if TARGET='web'
   React.useEffect(() => {
@@ -122,7 +128,11 @@ const ModalPublishPreview = (props: Props) => {
   const isOptimizeAvail = filePath && filePath !== '' && isVid && ffmpegStatus.available;
   let modalTitle;
   if (isStillEditing) {
-    modalTitle = __('Confirm Edit');
+    if (livestream) {
+      modalTitle = __('Confirm Update');
+    } else {
+      modalTitle = __('Confirm Edit');
+    }
   } else if (livestream) {
     modalTitle = __('Create Livestream');
   } else {
@@ -208,6 +218,7 @@ const ModalPublishPreview = (props: Props) => {
                 <table className="table table--condensed table--publish-preview">
                   <tbody>
                     {!livestream && !isMarkdownPost && createRow(__('File'), getFilePathName(filePath))}
+                    {livestream && remoteFile && createRow(__('Replay'), __('Remote File Selected'))}
                     {isOptimizeAvail && createRow(__('Transcode'), optimize ? __('Yes') : __('No'))}
                     {createRow(__('Title'), title)}
                     {createRow(__('Description'), descriptionValue)}
