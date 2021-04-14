@@ -70,7 +70,7 @@ export const selectHomepageData = createSelector(
   selectHomepageCode,
   (homepageCode) => {
     // homepages = { 'en': homepageFile, ... }
-    return homepages[homepageCode];
+    return homepages[homepageCode] || homepages['en'];
   }
 );
 

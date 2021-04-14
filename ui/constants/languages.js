@@ -129,6 +129,7 @@ const LANGUAGES = {
   pl: ['Polish', 'Polski'],
   ps: ['Pashto', 'پښتو'],
   pt: ['Portuguese', 'Português'],
+  'pt-BR': ['Portuguese (Brazil)', 'Português (Brasil)'],
   qu: ['Quechua', 'Runa Simi'],
   rm: ['Raeto Romance', 'Rumantsch'],
   rn: ['Kirundi', 'Kirundi'],

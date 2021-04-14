@@ -22,6 +22,7 @@ const SUPPORTED_BROWSER_LANGUAGES = {
   pa: 'pa',
   pl: 'pl',
   pt: 'pt',
+  'pt-BR': 'pt-BR',
   ro: 'ro',
   ru: 'ru',
   sr: 'sr',
