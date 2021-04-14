@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import Gerbil from './gerbil.png';
 import FreezeframeWrapper from 'component/fileThumbnail/FreezeframeWrapper';
 import ChannelStakedIndicator from 'component/channelStakedIndicator';
-import useLazyLoading from '../../util/useLazyLoading';
+import useLazyLoading from 'effects/use-lazy-loading';
 
 type Props = {
   thumbnail: ?string,

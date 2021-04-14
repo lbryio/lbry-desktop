@@ -5,7 +5,7 @@ import React from 'react';
 import FreezeframeWrapper from './FreezeframeWrapper';
 import Placeholder from './placeholder.png';
 import classnames from 'classnames';
-import useLazyLoading from '../../util/useLazyLoading';
+import useLazyLoading from 'effects/use-lazy-loading';
 
 type Props = {
   uri: string,
