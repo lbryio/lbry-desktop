@@ -9,7 +9,6 @@
  */
 
 import { SITE_NAME, ENABLE_NO_SOURCE_CLAIMS, SIMPLE_SITE, CHANNEL_STAKED_LEVEL_LIVESTREAM } from 'config';
-import { SITE_NAME, ENABLE_NO_SOURCE_CLAIMS, SIMPLE_SITE } from 'config';
 import React, { useEffect, useState } from 'react';
 import { buildURI, isURIValid, isNameValid, THUMBNAIL_STATUSES, Lbry } from 'lbry-redux';
 import Button from 'component/button';
@@ -131,7 +130,8 @@ function PublishForm(props: Props) {
   const urlParams = new URLSearchParams(location.search);
   const TYPE_PARAM = 'type';
   const uploadType = urlParams.get(TYPE_PARAM);
-  const enableLivestream = ENABLE_NO_SOURCE_CLAIMS  &&
+  const enableLivestream =
+    ENABLE_NO_SOURCE_CLAIMS &&
     user &&
     !user.odysee_live_disabled &&
     (activeChannelStakedLevel >= CHANNEL_STAKED_LEVEL_LIVESTREAM || user.odysee_live_enabled);
@@ -413,7 +413,7 @@ function PublishForm(props: Props) {
       return;
     }
     // LiveStream publish
-    if (_uploadType === PUBLISH_MODES.LIVESTREAM.toLowerCase() && livestreamEnabled) {
+    if (_uploadType === PUBLISH_MODES.LIVESTREAM.toLowerCase() && enableLivestream) {
       if (enableLivestream) {
         setMode(PUBLISH_MODES.LIVESTREAM);
       } else {
