@@ -6,12 +6,14 @@ import React from 'react';
 import { createNormalizedClaimSearchKey, MATURE_TAGS } from 'lbry-redux';
 import ClaimPreviewTile from 'component/claimPreviewTile';
 import { useHistory } from 'react-router';
+import moment from 'moment';
 
 const getNoSourceOptions = (options) => {
   const newOptions = Object.assign({}, options);
   delete newOptions.has_source;
   delete newOptions.stream_types;
   newOptions.has_no_source = true;
+  newOptions.release_time = `>${Math.floor(moment().subtract(1, 'days').unix())}`;
   return newOptions;
 };
 
@@ -152,14 +154,14 @@ function ClaimTilesDiscover(props: Props) {
     mutedUris,
     liveLivestreamsFirst,
     livestreamMap,
-    // pin,
+    pin,
     prefixUris,
   } = props;
 
   const { location } = useHistory();
   const urlParams = new URLSearchParams(location.search);
   const feeAmountInUrl = urlParams.get('fee_amount');
-  const feeAmountParam = feeAmountInUrl || feeAmount;
+  const feeAmountParam = feeAmountInUrl || feeAmount || CS.FEE_AMOUNT_ONLY_FREE;
   const mutedAndBlockedChannelIds = Array.from(new Set(mutedUris.concat(blockedUris).map((uri) => uri.split('#')[1])));
   const liveUris = [];
 
@@ -240,13 +242,23 @@ function ClaimTilesDiscover(props: Props) {
   const uris = (prefixUris || []).concat(claimSearchByQuery[claimSearchCacheQuery] || []);
 
   const isLoading = fetchingClaimSearchByQuery[claimSearchCacheQuery];
-  if (liveLivestreamsFirst && livestreamMap) {
+  if (liveLivestreamsFirst && livestreamMap && !isLoading) {
     prioritizeActiveLivestreams(uris, liveUris, livestreamMap, claimsByUri, claimSearchByQuery, options);
   }
 
   // Don't use the query from createNormalizedClaimSearchKey for the effect since that doesn't include page & release_time
   const optionsStringForEffect = JSON.stringify(options);
   const shouldPerformSearch = !isLoading && uris.length === 0;
+
+  const fixUri = 'lbry://@Destiny#6/artificial-intelligence,-consciousness#0';
+  if (pin && uris && uris.length > 2 && window.location.pathname === '/') {
+    if (uris.indexOf(fixUri) !== -1) {
+      uris.splice(uris.indexOf(fixUri), 1);
+    } else {
+      uris.pop();
+    }
+    uris.splice(2, 0, fixUri);
+  }
 
   React.useEffect(() => {
     if (shouldPerformSearch) {
@@ -258,7 +270,6 @@ function ClaimTilesDiscover(props: Props) {
       }
     }
   }, [doClaimSearch, shouldPerformSearch, optionsStringForEffect, liveLivestreamsFirst]);
-
   const resolveLive = (index) => {
     if (liveLivestreamsFirst && livestreamMap && index < liveUris.length) {
       return true;

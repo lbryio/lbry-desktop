@@ -19,6 +19,7 @@ const MOONPAY_KEY = process.env.MOONPAY_SECRET_KEY;
 const COUNTRIES = Array.from(
   new Set(
     countryData.all
+      .filter((country) => country.status !== 'deleted')
       .map((country) => country.name)
       .sort((a, b) => {
         if (a > b) {
