@@ -6,9 +6,10 @@ const NOTIFICATION_WS_URL = 'wss://api.lbry.com/subscribe?auth_token=';
 const COMMENT_WS_URL = `wss://comments.lbry.com/api/v2/live-chat/subscribe?subscription_id=`;
 
 let sockets = {};
+let closingSockets = {};
 let retryCount = 0;
 
-export const doSocketConnect = (url, retryOnDisconnect, cb) => {
+export const doSocketConnect = (url, cb) => {
   function connectToSocket() {
     if (sockets[url] !== undefined && sockets[url] !== null) {
       sockets[url].close();
@@ -35,11 +36,11 @@ export const doSocketConnect = (url, retryOnDisconnect, cb) => {
 
       sockets[url].onclose = () => {
         console.log('\n Disconnected from WS\n\n'); // eslint-disable-line
-        if (retryOnDisconnect) {
+        if (!closingSockets[url]) {
           retryCount += 1;
           connectToSocket();
         } else {
-          sockets[url] = null;
+          closingSockets[url] = null;
         }
       };
     }, timeToWait);
@@ -50,6 +51,7 @@ export const doSocketConnect = (url, retryOnDisconnect, cb) => {
 
 export const doSocketDisconnect = (url) => (dispatch) => {
   if (sockets[url] !== undefined && sockets[url] !== null) {
+    closingSockets[url] = true;
     sockets[url].close();
     sockets[url] = null;
 
@@ -68,7 +70,7 @@ export const doNotificationSocketConnect = (enableNotifications) => (dispatch) =
 
   const url = `${NOTIFICATION_WS_URL}${authToken}`;
 
-  doSocketConnect(url, true, (data) => {
+  doSocketConnect(url, (data) => {
     switch (data.type) {
       case 'pending_notifications':
         if (enableNotifications) {
@@ -88,7 +90,7 @@ export const doNotificationSocketConnect = (enableNotifications) => (dispatch) =
 export const doCommentSocketConnect = (uri, claimId) => (dispatch) => {
   const url = `${COMMENT_WS_URL}${claimId}`;
 
-  doSocketConnect(url, false, (response) => {
+  doSocketConnect(url, (response) => {
     if (response.type === 'delta') {
       const newComment = response.data.comment;
       dispatch({
