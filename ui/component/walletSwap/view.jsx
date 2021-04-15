@@ -665,7 +665,7 @@ function WalletSwap(props: Props) {
     <Form onSubmit={handleStartSwap}>
       <Card
         title={<I18nMessage tokens={{ lbc: <LbcSymbol size={22} /> }}>Swap Crypto for %lbc%</I18nMessage>}
-        subtitle={__('Send crypto to the address provided and you will be sent an equivalent amount of Credits.')}
+        subtitle={__('Send crypto to the address provided and you will be sent an equivalent amount of Credits. You can pay with BCH, LTC, ETH, USDC or DAI after starting the swap.')}
         actions={getActionElement()}
         nag={nag ? <Nag relative type={nag.type} message={__(nag.msg)} /> : null}
       />
