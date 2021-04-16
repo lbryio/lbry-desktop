@@ -81,7 +81,6 @@ const VIDEO_JS_OPTIONS: VideoJSOptions = {
   },
 };
 
-const F11_KEYCODE = 122;
 const SPACE_BAR_KEYCODE = 32;
 const SMALL_F_KEYCODE = 70;
 const SMALL_M_KEYCODE = 77;
@@ -185,7 +184,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   } = props;
 
   const [reload, setReload] = useState('initial');
-
   const playerRef = useRef();
   const containerRef = useRef();
   const videoJsOptions = {
@@ -352,90 +350,111 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
   function handleKeyDown(e: KeyboardEvent) {
     const player = playerRef.current;
-    const videoNode: ?HTMLVideoElement = containerRef.current && containerRef.current.querySelector('video, audio');
+    const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
+    if (!videoNode || !player || isUserTyping()) return;
+    handleSingleKeyActions(e);
+    handleShiftKeyActions(e);
+  }
 
-    if (!videoNode || !player || isUserTyping()) {
-      return;
-    }
+  function handleShiftKeyActions(e: KeyboardEvent) {
+    if (e.altKey || e.ctrlKey || e.metaKey || !e.shiftKey) return;
+    if (e.keyCode === PERIOD_KEYCODE) changePlaybackSpeed(true);
+    if (e.keyCode === COMMA_KEYCODE) changePlaybackSpeed(false);
+  }
 
-    if (e.keyCode === SPACE_BAR_KEYCODE || e.keyCode === SMALL_K_KEYCODE) {
-      videoNode.paused ? videoNode.play() : videoNode.pause();
-    }
+  function handleSingleKeyActions(e: KeyboardEvent) {
+    if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    if (e.keyCode === SPACE_BAR_KEYCODE || e.keyCode === SMALL_K_KEYCODE) togglePlay();
+    if (e.keyCode === FULLSCREEN_KEYCODE) toggleFullscreen();
+    if (e.keyCode === MUTE_KEYCODE) toggleMute();
+    if (e.keyCode === VOLUME_UP_KEYCODE) volumeUp();
+    if (e.keyCode === VOLUME_DOWN_KEYCODE) volumeDown();
+    if (e.keyCode === THEATER_MODE_KEYCODE) toggleTheaterMode();
+    if (e.keyCode === SEEK_FORWARD_KEYCODE) seekVideo(SEEK_STEP);
+    if (e.keyCode === SEEK_BACKWARD_KEYCODE) seekVideo(-SEEK_STEP);
+    if (e.keyCode === SEEK_FORWARD_KEYCODE_5) seekVideo(SEEK_STEP_5);
+    if (e.keyCode === SEEK_BACKWARD_KEYCODE_5) seekVideo(-SEEK_STEP_5);
+  }
 
-    // Fullscreen toggle shortcuts
-    if (e.keyCode === FULLSCREEN_KEYCODE || e.keyCode === F11_KEYCODE) {
-      if (!player.isFullscreen()) {
-        player.requestFullscreen();
-      } else {
-        player.exitFullscreen();
-      }
+  function seekVideo(stepSize: number) {
+    const player = playerRef.current;
+    const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
+    if (!videoNode || !player) return;
+    const duration = videoNode.duration;
+    const currentTime = videoNode.currentTime;
+    const newDuration = currentTime + stepSize;
+    if (newDuration < 0) {
+      videoNode.currentTime = 0;
+    } else if (newDuration > duration) {
+      videoNode.currentTime = duration;
+    } else {
+      videoNode.currentTime = newDuration;
     }
+    OVERLAY.showSeekedOverlay(player, Math.abs(stepSize), stepSize > 0);
+    player.userActive(true);
+  }
 
-    // Mute/Unmute Shortcuts
-    if (e.keyCode === MUTE_KEYCODE) {
-      videoNode.muted = !videoNode.muted;
-    }
-    if (e.keyCode === VOLUME_DOWN_KEYCODE) {
-      player.volume(player.volume() - 0.05);
-      OVERLAY.showVolumeverlay(player, Math.round(player.volume() * 100));
+  function changePlaybackSpeed(shouldSpeedUp: boolean) {
+    const player = playerRef.current;
+    if (!player) return;
+    const isSpeedUp = shouldSpeedUp;
+    const rate = player.playbackRate();
+    let rateIndex = videoPlaybackRates.findIndex((x) => x === rate);
+    if (rateIndex >= 0) {
+      rateIndex = isSpeedUp ? Math.min(rateIndex + 1, videoPlaybackRates.length - 1) : Math.max(rateIndex - 1, 0);
+      const nextRate = videoPlaybackRates[rateIndex];
+
+      OVERLAY.showPlaybackRateOverlay(player, nextRate, isSpeedUp);
       player.userActive(true);
+      player.playbackRate(nextRate);
     }
-    if (e.keyCode === VOLUME_UP_KEYCODE) {
-      player.volume(player.volume() + 0.05);
-      OVERLAY.showVolumeverlay(player, Math.round(player.volume() * 100));
-      player.userActive(true);
-    }
+  }
 
-    // Seeking Shortcuts
-    if (!e.altKey) {
-      const duration = videoNode.duration;
-      const currentTime = videoNode.currentTime;
-      if (e.keyCode === SEEK_FORWARD_KEYCODE) {
-        const newDuration = currentTime + SEEK_STEP;
-        videoNode.currentTime = newDuration > duration ? duration : newDuration;
-        OVERLAY.showSeekedOverlay(player, SEEK_STEP, true);
-        player.userActive(true);
-      } else if (e.keyCode === SEEK_BACKWARD_KEYCODE) {
-        const newDuration = currentTime - SEEK_STEP;
-        videoNode.currentTime = newDuration < 0 ? 0 : newDuration;
-        OVERLAY.showSeekedOverlay(player, SEEK_STEP, false);
-        player.userActive(true);
-      }
-      if (e.keyCode === SEEK_FORWARD_KEYCODE_5) {
-        const newDuration = currentTime + SEEK_STEP_5;
-        videoNode.currentTime = newDuration < 0 ? 0 : newDuration;
-        OVERLAY.showSeekedOverlay(player, SEEK_STEP_5, true);
-        player.userActive(true);
-      } else if (e.keyCode === SEEK_BACKWARD_KEYCODE_5) {
-        const newDuration = currentTime - SEEK_STEP_5;
-        videoNode.currentTime = newDuration < 0 ? 0 : newDuration;
-        OVERLAY.showSeekedOverlay(player, SEEK_STEP_5, false);
-        player.userActive(true);
-      }
+  function toggleFullscreen() {
+    const player = playerRef.current;
+    if (!player) return;
+    if (!player.isFullscreen()) {
+      player.requestFullscreen();
+    } else {
+      player.exitFullscreen();
     }
+  }
 
-    // Playback-Rate Shortcuts ('>' = speed up, '<' = speed down)
-    if (e.shiftKey && (e.keyCode === PERIOD_KEYCODE || e.keyCode === COMMA_KEYCODE)) {
-      const isSpeedUp = e.keyCode === PERIOD_KEYCODE;
-      const rate = player.playbackRate();
-      let rateIndex = videoPlaybackRates.findIndex((x) => x === rate);
-      if (rateIndex >= 0) {
-        rateIndex = isSpeedUp ? Math.min(rateIndex + 1, videoPlaybackRates.length - 1) : Math.max(rateIndex - 1, 0);
-        const nextRate = videoPlaybackRates[rateIndex];
-
-        OVERLAY.showPlaybackRateOverlay(player, nextRate, isSpeedUp);
-        player.userActive(true);
-        player.playbackRate(nextRate);
-      }
+  function toggleTheaterMode() {
+    const player = playerRef.current;
+    if (!player) return;
+    toggleVideoTheaterMode();
+    if (player.isFullscreen()) {
+      player.exitFullscreen();
     }
+  }
 
-    // Theater Mode shortcut
-    if (e.keyCode === THEATER_MODE_KEYCODE) {
-      toggleVideoTheaterMode();
-      if (player.isFullscreen()) {
-        player.exitFullscreen();
-      }
-    }
+  function toggleMute() {
+    const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
+    if (!videoNode) return;
+    videoNode.muted = !videoNode.muted;
+  }
+
+  function togglePlay() {
+    const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
+    if (!videoNode) return;
+    videoNode.paused ? videoNode.play() : videoNode.pause();
+  }
+
+  function volumeUp() {
+    const player = playerRef.current;
+    if (!player) return;
+    player.volume(player.volume() + 0.05);
+    OVERLAY.showVolumeverlay(player, Math.round(player.volume() * 100));
+    player.userActive(true);
+  }
+
+  function volumeDown() {
+    const player = playerRef.current;
+    if (!player) return;
+    player.volume(player.volume() - 0.05);
+    OVERLAY.showVolumeverlay(player, Math.round(player.volume() * 100));
+    player.userActive(true);
   }
 
   // Create the video DOM element and wrapper
