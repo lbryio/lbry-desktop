@@ -4,6 +4,7 @@ export const NOTIFICATION_REPLY = 'comment-reply';
 export const DAILY_WATCH_AVAILABLE = 'daily_watch_available';
 export const DAILY_WATCH_REMIND = 'daily_watch_remind';
 export const NEW_CONTENT = 'new_content';
+export const NEW_LIVESTREAM = 'new_livestream';
 
 export const NOTIFICATION_RULE_NONE = '';
 export const NOTIFICATION_RULE_COMMENTS = 'comments';

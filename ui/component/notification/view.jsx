@@ -74,6 +74,9 @@ export default function Notification(props: Props) {
     case NOTIFICATIONS.NEW_CONTENT:
       icon = <ChannelThumbnail small uri={notification_parameters.dynamic.channel_url} />;
       break;
+    case NOTIFICATIONS.NEW_LIVESTREAM:
+      icon = <ChannelThumbnail small uri={notification_parameters.dynamic.channel_url} />;
+      break;
     case NOTIFICATIONS.DAILY_WATCH_AVAILABLE:
     case NOTIFICATIONS.DAILY_WATCH_REMIND:
       icon = <Icon icon={ICONS.LBC} sectionIcon />;
@@ -147,12 +150,13 @@ export default function Notification(props: Props) {
             </div>
 
             {notification_rule === NOTIFICATIONS.NEW_CONTENT && (
-              <>
-                <FileThumbnail
-                  uri={notification_parameters.device.target}
-                  className="notification__content-thumbnail"
-                />
-              </>
+              <FileThumbnail uri={notification_parameters.device.target} className="notification__content-thumbnail" />
+            )}
+            {notification_rule === NOTIFICATIONS.NEW_LIVESTREAM && (
+              <FileThumbnail
+                thumbnail={notification_parameters.device.image_url}
+                className="notification__content-thumbnail"
+              />
             )}
           </div>
 
