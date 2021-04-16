@@ -1,5 +1,6 @@
 // @flow
-import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
+import { ENABLE_NO_SOURCE_CLAIMS, SIMPLE_SITE } from 'config';
+import * as CS from 'constants/claim_search';
 import React from 'react';
 import { createNormalizedClaimSearchKey, MATURE_TAGS } from 'lbry-redux';
 import ClaimPreviewTile from 'component/claimPreviewTile';
@@ -29,6 +30,7 @@ type Props = {
   releaseTime?: string,
   languages?: Array<string>,
   claimType?: string | Array<string>,
+  streamTypes?: Array<string>,
   timestamp?: string,
   feeAmount?: string,
   limitClaimsPerChannel?: number,
@@ -49,6 +51,7 @@ function ClaimTilesDiscover(props: Props) {
     releaseTime,
     languages,
     claimType,
+    streamTypes,
     prefixUris,
     timestamp,
     feeAmount,
@@ -89,6 +92,7 @@ function ClaimTilesDiscover(props: Props) {
     channel_ids: channelIds || [],
     not_channel_ids: [],
     order_by: orderBy || ['trending_group', 'trending_mixed'],
+    stream_types: streamTypes || SIMPLE_SITE ? [CS.FILE_VIDEO, CS.FILE_AUDIO] : undefined,
   };
 
   if (!ENABLE_NO_SOURCE_CLAIMS && (!claimType || claimType === 'stream')) {

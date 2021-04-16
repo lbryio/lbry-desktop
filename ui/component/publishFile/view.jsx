@@ -512,13 +512,13 @@ function PublishFile(props: Props) {
             {fileSelectSource === SOURCE_UPLOAD && showFileUpload && (
               <>
                 <FileSelector
-                  label={SIMPLE_SITE ? __('Video file') : __('File')}
+                  label={SIMPLE_SITE ? __('Video/audio file') : __('File')}
                   disabled={disabled}
                   currentPath={currentFile}
                   onFileChosen={handleFileChange}
                   // https://stackoverflow.com/questions/19107685/safari-input-type-file-accept-video-ignores-mp4-files
-                  accept={SIMPLE_SITE ? 'video/mp4,video/x-m4v,video/*' : undefined}
-                  placeholder={SIMPLE_SITE ? __('Select video file to upload') : __('Select a file to upload')}
+                  accept={SIMPLE_SITE ? 'video/mp4,video/x-m4v,video/*,audio/*' : undefined}
+                  placeholder={SIMPLE_SITE ? __('Select video or audio file to upload') : __('Select a file to upload')}
                 />
                 {getUploadMessage()}
               </>
