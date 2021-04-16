@@ -183,6 +183,13 @@ export const icons = {
       />
     </g>
   ),
+  [ICONS.FETCH]: buildIcon(
+    <g fill="none" fillRule="evenodd" strokeLinecap="round">
+      <polyline points="8 17 12 21 16 17" />
+      <line x1="12" y1="12" x2="12" y2="21" />
+      <path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29" />
+    </g>
+  ),
   [ICONS.SUBSCRIBE]: buildIcon(
     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
   ),
