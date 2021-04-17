@@ -22,7 +22,7 @@ type Props = {
   fetchTxoPage: () => void,
   fetchTransactions: () => void,
   isFetchingTransactions: boolean,
-  transactionItems: Array<Transaction>,
+  transactionsFile: string,
   updateTxoPageParams: (any) => void,
   toast: (string, boolean) => void,
 };
@@ -41,9 +41,8 @@ function TxoList(props: Props) {
     fetchTransactions,
     updateTxoPageParams,
     history,
-    transactionItems,
-    toast,
     isFetchingTransactions,
+    transactionsFile,
   } = props;
 
   const urlParams = new URLSearchParams(search);
@@ -192,16 +191,17 @@ function TxoList(props: Props) {
       title={<div className="table__header-text">{__(`Transactions`)}</div>}
       titleActions={
         <div className="card__actions--inline">
+          {!isFetchingTransactions && transactionsFile === null && (
+            <label>{<span className="error__text">{__('Failed to process fetched data.')}</span>}</label>
+          )}
           <div className="txo__export">
             <FileExporter
-              data={transactionItems}
+              data={transactionsFile}
               label={__('Export')}
               tooltip={__('Fetch transaction data for export')}
               defaultFileName={'transactions-history.csv'}
-              parseFormat={'csv'}
               onFetch={() => fetchTransactions()}
-              isFetching={isFetchingTransactions}
-              onError={(errMsg) => toast(__(errMsg), true)}
+              progressMsg={isFetchingTransactions ? __('Fetching data') : ''}
             />
           </div>
           <Button button="alt" icon={ICONS.REFRESH} label={__('Refresh')} onClick={() => fetchTxoPage()} />

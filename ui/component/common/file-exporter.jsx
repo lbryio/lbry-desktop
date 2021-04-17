@@ -4,19 +4,15 @@ import * as ICONS from 'constants/icons';
 import React from 'react';
 import Button from 'component/button';
 import Spinner from 'component/spinner';
-import parseData from 'util/parse-data';
 
 type Props = {
-  data: Array<any>,
+  data: any,
   label: string,
   tooltip?: string,
   defaultFileName?: string,
   filters?: Array<string>,
-  parseFormat: string,
   onFetch?: () => void,
-  isFetching?: boolean,
-  onSuccess?: () => void,
-  onError?: (string) => void,
+  progressMsg?: string,
   disabled?: boolean,
 };
 
@@ -27,21 +23,10 @@ class FileExporter extends React.PureComponent<Props> {
   }
 
   handleDownload() {
-    const { data, defaultFileName, filters, parseFormat, onSuccess, onError } = this.props;
-
-    if ((!data || data.length === 0) && onError) {
-      onError('No data to export');
-      return;
-    }
-
-    const parsed = parseData(data, parseFormat, filters);
-    if (!parsed && onError) {
-      onError('Failed to process fetched data.');
-      return;
-    }
+    const { data, defaultFileName } = this.props;
 
     const element = document.createElement('a');
-    const file = new Blob([parsed], { type: 'text/plain' });
+    const file = new Blob([data], { type: 'text/plain' });
     element.href = URL.createObjectURL(file);
     element.download = defaultFileName || 'file.txt';
     // $FlowFixMe
@@ -49,21 +34,15 @@ class FileExporter extends React.PureComponent<Props> {
     element.click();
     // $FlowFixMe
     document.body.removeChild(element);
-
-    if (onSuccess) {
-      onSuccess();
-    }
   }
 
   render() {
-    const { data, label, tooltip, disabled, onFetch, isFetching } = this.props;
+    const { data, label, tooltip, disabled, onFetch, progressMsg } = this.props;
 
     if (onFetch) {
-      const isDataFetched = data && data.length !== 0;
-
       return (
         <>
-          {!isFetching && (
+          {!progressMsg && (
             <div className="button-group">
               <Button
                 button="alt"
@@ -73,7 +52,7 @@ class FileExporter extends React.PureComponent<Props> {
                 aria-label={tooltip}
                 onClick={() => onFetch()}
               />
-              {isDataFetched && (
+              {data && (
                 <Button
                   button="alt"
                   disabled={disabled}
@@ -84,9 +63,9 @@ class FileExporter extends React.PureComponent<Props> {
               )}
             </div>
           )}
-          {isFetching && (
+          {progressMsg && (
             <>
-              {__('Fetching data')}
+              {__(progressMsg)}
               <Spinner type="small" />
             </>
           )}

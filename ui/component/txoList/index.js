@@ -1,11 +1,10 @@
 import { connect } from 'react-redux';
 import { doOpenModal } from 'redux/actions/app';
-import { doToast } from 'redux/actions/notifications';
 import {
   selectIsFetchingTxos,
   selectIsFetchingTransactions,
-  selectTransactionItems,
   selectFetchingTxosError,
+  selectTransactionsFile,
   selectTxoPage,
   selectTxoPageNumber,
   selectTxoItemCount,
@@ -23,7 +22,7 @@ const select = (state) => ({
   txoItemCount: selectTxoItemCount(state),
   loading: selectIsFetchingTxos(state),
   isFetchingTransactions: selectIsFetchingTransactions(state),
-  transactionItems: selectTransactionItems(state),
+  transactionsFile: selectTransactionsFile(state),
 });
 
 const perform = (dispatch) => ({
@@ -31,7 +30,6 @@ const perform = (dispatch) => ({
   fetchTxoPage: () => dispatch(doFetchTxoPage()),
   fetchTransactions: () => dispatch(doFetchTransactions()),
   updateTxoPageParams: (params) => dispatch(doUpdateTxoPageParams(params)),
-  toast: (message, isError) => dispatch(doToast({ message, isError })),
 });
 
 export default withRouter(connect(select, perform)(TxoList));
