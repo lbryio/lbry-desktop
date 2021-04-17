@@ -191,7 +191,7 @@ function buildGoogleVideoMetadata(claimUri, claim) {
     thumbnailUrl: `${claimThumbnail}`,
     uploadDate: `${new Date(releaseTime * 1000).toISOString()}`,
     // --- Recommended ---
-    duration: moment.duration(claim.duration).toISOString(),
+    duration: moment.duration(claim.duration * 1000).toISOString(),
     contentUrl: generateDirectUrl(claim.name, claim.claim_id),
     embedUrl: generateEmbedUrl(claim.name, claim.claim_id),
   };
