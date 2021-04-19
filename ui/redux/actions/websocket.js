@@ -72,7 +72,7 @@ export const doNotificationSocketConnect = (enableNotifications) => (dispatch) =
 
   doSocketConnect(url, (data) => {
     switch (data.type) {
-      case 'pending_notifications':
+      case 'pending_notification':
         if (enableNotifications) {
           dispatch(doNotificationList());
         }
