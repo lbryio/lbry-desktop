@@ -10,7 +10,6 @@ type Props = {
   clearPlayingUri: () => void,
   authorUri: string, // full LBRY Channel URI: lbry://@channel#123...
   commentId: string, // sha256 digest identifying the comment
-  claimIsMine: boolean, // if you control the claim which this comment was posted on
   commentIsMine: boolean, // if this comment was signed by an owned channel
   deleteComment: (string, ?string) => void,
   linkedComment?: any,
@@ -21,7 +20,6 @@ type Props = {
   handleEditComment: () => void,
   contentChannelPermanentUrl: any,
   activeChannelClaim: ?ChannelClaim,
-  claimIsMine: boolean,
   isTopLevel: boolean,
   commentModBlock: (string) => void,
   playingUri: ?PlayingUri,
@@ -36,7 +34,6 @@ function CommentMenuList(props: Props) {
     deleteComment,
     blockChannel,
     pinComment,
-    claimIsMine,
     clearPlayingUri,
     activeChannelClaim,
     contentChannelPermanentUrl,
@@ -61,9 +58,7 @@ function CommentMenuList(props: Props) {
   }
 
   function handleCommentBlock() {
-    if (claimIsMine) {
-      commentModBlock(authorUri);
-    }
+    commentModBlock(authorUri);
   }
 
   function handleCommentMute() {
