@@ -154,7 +154,7 @@ function PublishForm(props: Props) {
   });
 
   const MODE_TO_I18N_STR = {
-    [PUBLISH_MODES.FILE]: SIMPLE_SITE ? 'Video' : 'File',
+    [PUBLISH_MODES.FILE]: SIMPLE_SITE ? 'Video/Audio' : 'File',
     [PUBLISH_MODES.POST]: 'Post --[noun, markdown post tab button]--',
     [PUBLISH_MODES.LIVESTREAM]: 'Livestream --[noun, livestream tab button]--',
   };
@@ -219,6 +219,7 @@ function PublishForm(props: Props) {
     isNameValid(name, false) &&
     title &&
     bid &&
+    thumbnail &&
     !bidError &&
     !emptyPostError &&
     !(uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS);

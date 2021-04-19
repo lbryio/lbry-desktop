@@ -42,7 +42,7 @@ function PublishFormErrors(props: Props) {
       {uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS && (
         <div>{__('Please wait for thumbnail to finish uploading')}</div>
       )}
-      {!thumbnail && <div>{__('Audio files require a thumbnail. Please upload or provide an image URL above.')}</div>}
+      {!thumbnail && <div>{__('A thumbnail is required. Please upload or provide an image URL above.')}</div>}
       {editingURI && !isStillEditing && !filePath && (
         <div>{__('Please reselect a file after changing the LBRY URL')}</div>
       )}
