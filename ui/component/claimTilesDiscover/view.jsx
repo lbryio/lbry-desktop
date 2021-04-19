@@ -92,7 +92,7 @@ function ClaimTilesDiscover(props: Props) {
     channel_ids: channelIds || [],
     not_channel_ids: [],
     order_by: orderBy || ['trending_group', 'trending_mixed'],
-    stream_types: streamTypes || SIMPLE_SITE ? [CS.FILE_VIDEO, CS.FILE_AUDIO] : undefined,
+    stream_types: streamTypes === null ? undefined : SIMPLE_SITE ? [CS.FILE_VIDEO, CS.FILE_AUDIO] : undefined,
   };
 
   if (!ENABLE_NO_SOURCE_CLAIMS && (!claimType || claimType === 'stream')) {

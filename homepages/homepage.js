@@ -151,6 +151,7 @@ export default function GetHomePageRowData(
     link: `/$/${PAGES.CHANNELS_FOLLOWING}`,
     icon: ICONS.SUBSCRIBE,
     options: {
+      streamTypes: null,
       orderBy: ['release_time'],
       releaseTime:
         subscribedChannels.length > 20
@@ -232,16 +233,6 @@ export default function GetHomePageRowData(
     },
   };
 
-  const LATEST_FROM_LBRYCAST = {
-    title: __('Latest From @lbrycast'),
-    link: `/@lbrycast:4`,
-    options: {
-      orderBy: ['release_time'],
-      pageSize: getPageSize(4),
-      channelIds: ['4c29f8b013adea4d5cca1861fb2161d5089613ea'],
-    },
-  };
-
   if (showPersonalizedChannels) rowData.push(RECENT_FROM_FOLLOWING);
   if (showPersonalizedTags && !showIndividualTags) rowData.push(TRENDING_FOR_TAGS);
   if (showPersonalizedTags && showIndividualTags) {
@@ -259,7 +250,6 @@ export default function GetHomePageRowData(
   //   rowData.push(TRENDING_ON_LBRY);
 
   rowData.push(LATEST_FROM_LBRY);
-  rowData.push(LATEST_FROM_LBRYCAST);
 
   if (!showPersonalizedChannels) rowData.push(TOP_CHANNELS);
 
