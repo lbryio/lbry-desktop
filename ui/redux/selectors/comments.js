@@ -124,6 +124,12 @@ export const makeSelectOthersReactionsForComment = (commentId: string) =>
 
 export const selectPendingCommentReacts = createSelector(selectState, (state) => state.pendingCommentReactions);
 
+export const selectSettingsByChannelId = createSelector(selectState, (state) => state.settingsByChannelId);
+
+export const selectFetchingCreatorSettings = createSelector(selectState, (state) => state.fetchingSettings);
+
+export const selectFetchingBlockedWords = createSelector(selectState, (state) => state.fetchingBlockedWords);
+
 export const makeSelectCommentsForUri = (uri: string) =>
   createSelector(
     selectCommentsByClaimId,

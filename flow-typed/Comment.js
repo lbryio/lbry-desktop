@@ -15,6 +15,14 @@ declare type Comment = {
   support_amount: number,
 };
 
+declare type PerChannelSettings = {
+  words?: Array<string>,
+  comments_enabled?: boolean,
+  min_tip_amount_comment?: number,
+  min_tip_amount_super_chat?: number,
+  slow_mode_min_gap?: number,
+};
+
 // todo: relate individual comments to their commentId
 declare type CommentsState = {
   commentsByUri: { [string]: string },
@@ -33,6 +41,9 @@ declare type CommentsState = {
   fetchingModerationBlockList: boolean,
   blockingByUri: {},
   unBlockingByUri: {},
+  settingsByChannelId: { [string]: PerChannelSettings }, // ChannelID -> settings
+  fetchingSettings: boolean,
+  fetchingBlockedWords: boolean,
 };
 
 declare type CommentReactParams = {
@@ -44,7 +55,6 @@ declare type CommentReactParams = {
   remove?: boolean,
 };
 
-// @flow
 declare type CommentListParams = {
   page: number,
   page_size: number,
@@ -76,3 +86,29 @@ declare type CommentCreateParams = {
 declare type SuperListParams = {};
 
 declare type ModerationBlockParams = {};
+
+declare type SettingsParams = {
+  channel_name: string,
+  channel_id: string,
+  signature: string,
+  signing_ts: string,
+};
+
+declare type UpdateSettingsParams = {
+  channel_name: string,
+  channel_id: string,
+  signature: string,
+  signing_ts: string,
+  comments_enabled?: boolean,
+  min_tip_amount_comment?: number,
+  min_tip_amount_super_chat?: number,
+  slow_mode_min_gap?: number,
+}
+
+declare type BlockWordParams = {
+  channel_name: string,
+  channel_id: string,
+  signature: string,
+  signing_ts: string,
+  words: string, // CSV list of containing words to block comment on content
+};
