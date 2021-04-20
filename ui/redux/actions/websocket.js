@@ -88,7 +88,7 @@ export const doNotificationSocketConnect = (enableNotifications) => (dispatch) =
 };
 
 export const doCommentSocketConnect = (uri, claimId) => (dispatch) => {
-  const url = `${COMMENT_WS_URL}${claimId}`;
+  const url = `${COMMENT_WS_URL}${claimId}&category=${claimId}`;
 
   doSocketConnect(url, (response) => {
     if (response.type === 'delta') {
