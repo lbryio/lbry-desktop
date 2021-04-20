@@ -11,12 +11,12 @@ type Props = {
   tagsPassedIn: Array<Tag>,
   unfollowedTags: Array<Tag>,
   followedTags: Array<Tag>,
-  doToggleTagFollowDesktop: string => void,
-  doAddTag: string => void,
-  onSelect?: Tag => void,
+  doToggleTagFollowDesktop: (string) => void,
+  doAddTag: (string) => void,
+  onSelect?: (Tag) => void,
   suggestMature?: boolean,
   disableAutoFocus?: boolean,
-  onRemove: Tag => void,
+  onRemove: (Tag) => void,
   placeholder?: string,
   label?: string,
   disabled?: boolean,
@@ -54,7 +54,7 @@ export default function TagsSearch(props: Props) {
     user,
   } = props;
   const [newTag, setNewTag] = useState('');
-  const doesTagMatch = name => {
+  const doesTagMatch = (name) => {
     const nextTag = newTag.substr(newTag.lastIndexOf(',') + 1, newTag.length).trim();
     return newTag ? name.toLowerCase().includes(nextTag.toLowerCase()) : true;
   };
@@ -62,9 +62,9 @@ export default function TagsSearch(props: Props) {
   // Make sure there are no duplicates, then trim
   // suggestedTags = (followedTags - tagsPassedIn) + unfollowedTags
   const experimentalFeature = user && user.experimental_ui;
-  const followedTagsSet = new Set(followedTags.map(tag => tag.name));
-  const selectedTagsSet = new Set(tagsPassedIn.map(tag => tag.name));
-  const unfollowedTagsSet = new Set(unfollowedTags.map(tag => tag.name));
+  const followedTagsSet = new Set(followedTags.map((tag) => tag.name));
+  const selectedTagsSet = new Set(tagsPassedIn.map((tag) => tag.name));
+  const unfollowedTagsSet = new Set(unfollowedTags.map((tag) => tag.name));
   const remainingFollowedTagsSet = setDifference(followedTagsSet, selectedTagsSet);
   const remainingUnfollowedTagsSet = setDifference(unfollowedTagsSet, selectedTagsSet);
   const suggestedTagsSet = setUnion(remainingFollowedTagsSet, remainingUnfollowedTagsSet);
@@ -72,7 +72,7 @@ export default function TagsSearch(props: Props) {
   const SPECIAL_TAGS = [...UTILITY_TAGS, 'lbry-first', 'mature'];
   let countWithoutSpecialTags = selectedTagsSet.size;
 
-  SPECIAL_TAGS.forEach(t => {
+  SPECIAL_TAGS.forEach((t) => {
     if (selectedTagsSet.has(t)) {
       countWithoutSpecialTags--;
     }
@@ -80,12 +80,10 @@ export default function TagsSearch(props: Props) {
 
   // const countWithoutLbryFirst = selectedTagsSet.has('lbry-first') ? selectedTagsSet.size - 1 : selectedTagsSet.size;
   const maxed = Boolean(limitSelect && countWithoutSpecialTags >= limitSelect);
-  const suggestedTags = Array.from(suggestedTagsSet)
-    .filter(doesTagMatch)
-    .slice(0, limitShow);
+  const suggestedTags = Array.from(suggestedTagsSet).filter(doesTagMatch).slice(0, limitShow);
 
   // tack 'mature' onto the end if it's not already in the list
-  if (!newTag && suggestMature && !suggestedTags.some(tag => tag === 'mature')) {
+  if (!newTag && suggestMature && !suggestedTags.some((tag) => tag === 'mature')) {
     suggestedTags.push('mature');
   }
 
@@ -108,19 +106,19 @@ export default function TagsSearch(props: Props) {
         tags
           .split(',')
           .slice(0, limitSelect - countWithoutSpecialTags)
-          .map(newTag => newTag.trim().toLowerCase())
-          .filter(newTag => !UNALLOWED_TAGS.includes(newTag))
+          .map((newTag) => newTag.trim().toLowerCase())
+          .filter((newTag) => !UNALLOWED_TAGS.includes(newTag))
       )
     );
 
     // Split into individual tags, normalize the tags, and remove duplicates with a set.
     if (onSelect) {
-      const arrOfObjectTags = newTagsArr.map(tag => {
+      const arrOfObjectTags = newTagsArr.map((tag) => {
         return { name: tag };
       });
       onSelect(arrOfObjectTags);
     } else {
-      newTagsArr.forEach(tag => {
+      newTagsArr.forEach((tag) => {
         if (!unfollowedTags.some(({ name }) => name === tag)) {
           doAddTag(tag);
         }
@@ -136,13 +134,13 @@ export default function TagsSearch(props: Props) {
     if (onSelect) {
       onSelect([{ name: tag }]);
     } else {
-      const wasFollowing = followedTags.map(t => t.name).includes(tag);
+      const wasFollowing = followedTags.map((t) => t.name).includes(tag);
       doToggleTagFollowDesktop(tag);
       analytics.tagFollowEvent(tag, !wasFollowing);
     }
   }
   function handleUtilityTagCheckbox(tag: string) {
-    const selectedTag = tagsPassedIn.find(te => te.name === tag);
+    const selectedTag = tagsPassedIn.find((te) => te.name === tag);
     if (selectedTag) {
       onRemove(selectedTag);
     } else if (onSelect) {
@@ -171,8 +169,8 @@ export default function TagsSearch(props: Props) {
             {countWithoutSpecialTags === 0 && <Tag key={`placeholder-tag`} name={'example'} disabled type={'remove'} />}
             {Boolean(tagsPassedIn.length) &&
               tagsPassedIn
-                .filter(t => !UTILITY_TAGS.includes(t.name))
-                .map(tag => (
+                .filter((t) => !UTILITY_TAGS.includes(t.name))
+                .map((tag) => (
                   <Tag
                     key={`passed${tag.name}`}
                     name={tag.name}
@@ -202,10 +200,10 @@ export default function TagsSearch(props: Props) {
                   key={`entered${newTag}`}
                   name={newTag}
                   type="add"
-                  onClick={newTag.includes('') ? e => handleSubmit(e) : e => handleTagClick(newTag)}
+                  onClick={newTag.includes('') ? (e) => handleSubmit(e) : (e) => handleTagClick(newTag)}
                 />
               )}
-              {suggestedTags.map(tag => (
+              {suggestedTags.map((tag) => (
                 <Tag
                   disabled={tag !== 'mature' && maxed}
                   key={`suggested${tag}`}
@@ -218,10 +216,10 @@ export default function TagsSearch(props: Props) {
           </section>
         </fieldset-section>
         {experimentalFeature &&
-        onSelect && ( // onSelect ensures this does not appear on TagFollow
+          onSelect && ( // onSelect ensures this does not appear on TagFollow
             <fieldset-section>
               <label>{__('Control Tags')}</label>
-              {UTILITY_TAGS.map(t => (
+              {UTILITY_TAGS.map((t) => (
                 <FormField
                   key={t}
                   name={t}
@@ -230,10 +228,10 @@ export default function TagsSearch(props: Props) {
                   label={__(
                     t
                       .split('-')
-                      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
                       .join(' ')
                   )}
-                  checked={tagsPassedIn.some(te => te.name === t)}
+                  checked={tagsPassedIn.some((te) => te.name === t)}
                   onChange={() => handleUtilityTagCheckbox(t)}
                 />
               ))}
