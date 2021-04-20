@@ -682,3 +682,212 @@ export const doUpdateBlockListForPublishedChannel = (channelClaim: ChannelClaim)
     );
   };
 };
+
+export const doFetchCreatorSettings = (channelClaimIds: Array<string> = []) => {
+  return async (dispatch: Dispatch, getState: GetState) => {
+    const state = getState();
+    const myChannels = selectMyChannelClaims(state);
+
+    dispatch({
+      type: ACTIONS.COMMENT_FETCH_SETTINGS_STARTED,
+    });
+
+    let channelSignatures = [];
+    if (myChannels) {
+      for (const channelClaim of myChannels) {
+        if (channelClaimIds.length !== 0 && !channelClaimIds.includes(channelClaim.claim_id)) {
+          continue;
+        }
+
+        try {
+          const channelSignature = await Lbry.channel_sign({
+            channel_id: channelClaim.claim_id,
+            hexdata: toHex(channelClaim.name),
+          });
+
+          channelSignatures.push({ ...channelSignature, claim_id: channelClaim.claim_id, name: channelClaim.name });
+        } catch (e) {}
+      }
+    }
+
+    return Promise.all(
+      channelSignatures.map((signatureData) =>
+        Comments.setting_list({
+          channel_name: signatureData.name,
+          channel_id: signatureData.claim_id,
+          signature: signatureData.signature,
+          signing_ts: signatureData.signing_ts,
+        })
+      )
+    )
+      .then((settings) => {
+        const settingsByChannelId = {};
+
+        for (let i = 0; i < channelSignatures.length; ++i) {
+          const channelId = channelSignatures[i].claim_id;
+          settingsByChannelId[channelId] = settings[i];
+
+          settingsByChannelId[channelId].words = settingsByChannelId[channelId].words.split(',');
+
+          delete settingsByChannelId[channelId].channel_name;
+          delete settingsByChannelId[channelId].channel_id;
+          delete settingsByChannelId[channelId].signature;
+          delete settingsByChannelId[channelId].signing_ts;
+        }
+
+        dispatch({
+          type: ACTIONS.COMMENT_FETCH_SETTINGS_COMPLETED,
+          data: settingsByChannelId,
+        });
+      })
+      .catch(() => {
+        dispatch({
+          type: ACTIONS.COMMENT_FETCH_SETTINGS_FAILED,
+        });
+      });
+  };
+};
+
+/**
+ * Updates creator settings, except for 'Words', which will be handled by
+ * 'doCommentWords, doCommentBlockWords, etc.'
+ *
+ * @param channelClaim
+ * @param settings
+ * @returns {function(Dispatch, GetState): Promise<R>|Promise<unknown>|*}
+ */
+export const doUpdateCreatorSettings = (channelClaim: ChannelClaim, settings: PerChannelSettings) => {
+  return async (dispatch: Dispatch, getState: GetState) => {
+    let channelSignature: ?{
+      signature: string,
+      signing_ts: string,
+    };
+    try {
+      channelSignature = await Lbry.channel_sign({
+        channel_id: channelClaim.claim_id,
+        hexdata: toHex(channelClaim.name),
+      });
+    } catch (e) {}
+
+    if (!channelSignature) {
+      return;
+    }
+
+    return Comments.setting_update({
+      channel_name: channelClaim.name,
+      channel_id: channelClaim.claim_id,
+      signature: channelSignature.signature,
+      signing_ts: channelSignature.signing_ts,
+      ...settings,
+    }).catch((err) => {
+      dispatch(
+        doToast({
+          message: err.message,
+          isError: true,
+        })
+      );
+    });
+  };
+};
+
+export const doCommentWords = (channelClaim: ChannelClaim, words: Array<string>, isUnblock: boolean) => {
+  return async (dispatch: Dispatch, getState: GetState) => {
+    let channelSignature: ?{
+      signature: string,
+      signing_ts: string,
+    };
+    try {
+      channelSignature = await Lbry.channel_sign({
+        channel_id: channelClaim.claim_id,
+        hexdata: toHex(channelClaim.name),
+      });
+    } catch (e) {}
+
+    if (!channelSignature) {
+      return;
+    }
+
+    const cmd = isUnblock ? Comments.setting_unblock_word : Comments.setting_block_word;
+
+    return cmd({
+      channel_name: channelClaim.name,
+      channel_id: channelClaim.claim_id,
+      words: words.join(','),
+      signature: channelSignature.signature,
+      signing_ts: channelSignature.signing_ts,
+    }).catch((err) => {
+      dispatch(
+        doToast({
+          message: err.message,
+          isError: true,
+        })
+      );
+    });
+  };
+};
+
+export const doCommentBlockWords = (channelClaim: ChannelClaim, words: Array<string>) => {
+  return (dispatch: Dispatch) => {
+    return dispatch(doCommentWords(channelClaim, words, false));
+  };
+};
+
+export const doCommentUnblockWords = (channelClaim: ChannelClaim, words: Array<string>) => {
+  return (dispatch: Dispatch) => {
+    return dispatch(doCommentWords(channelClaim, words, true));
+  };
+};
+
+export const doFetchBlockedWords = () => {
+  return async (dispatch: Dispatch, getState: GetState) => {
+    const state = getState();
+    const myChannels = selectMyChannelClaims(state);
+
+    dispatch({
+      type: ACTIONS.COMMENT_FETCH_BLOCKED_WORDS_STARTED,
+    });
+
+    let channelSignatures = [];
+    if (myChannels) {
+      for (const channelClaim of myChannels) {
+        try {
+          const channelSignature = await Lbry.channel_sign({
+            channel_id: channelClaim.claim_id,
+            hexdata: toHex(channelClaim.name),
+          });
+
+          channelSignatures.push({ ...channelSignature, claim_id: channelClaim.claim_id, name: channelClaim.name });
+        } catch (e) {}
+      }
+    }
+
+    return Promise.all(
+      channelSignatures.map((signatureData) =>
+        Comments.setting_list_blocked_words({
+          channel_name: signatureData.name,
+          channel_id: signatureData.claim_id,
+          signature: signatureData.signature,
+          signing_ts: signatureData.signing_ts,
+        })
+      )
+    )
+      .then((blockedWords) => {
+        const blockedWordsByChannelId = {};
+
+        for (let i = 0; i < channelSignatures.length; ++i) {
+          const claim_id = channelSignatures[i].claim_id;
+          blockedWordsByChannelId[claim_id] = blockedWords[i].word_list;
+        }
+
+        dispatch({
+          type: ACTIONS.COMMENT_FETCH_BLOCKED_WORDS_COMPLETED,
+          data: blockedWordsByChannelId,
+        });
+      })
+      .catch(() => {
+        dispatch({
+          type: ACTIONS.COMMENT_FETCH_BLOCKED_WORDS_FAILED,
+        });
+      });
+  };
+};

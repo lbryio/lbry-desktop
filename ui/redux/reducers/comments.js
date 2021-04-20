@@ -24,6 +24,9 @@ const defaultState: CommentsState = {
   fetchingModerationBlockList: false,
   blockingByUri: {},
   unBlockingByUri: {},
+  settingsByChannelId: {}, // ChannelId -> PerChannelSettings
+  fetchingSettings: false,
+  fetchingBlockedWords: false,
 };
 
 export default handleActions(
@@ -450,6 +453,50 @@ export default handleActions(
         ...state,
         unBlockingByUri,
         moderationBlockList: newModerationBlockList,
+      };
+    },
+
+    [ACTIONS.COMMENT_FETCH_SETTINGS_STARTED]: (state: CommentsState, action: any) => ({
+      ...state,
+      fetchingSettings: true,
+    }),
+    [ACTIONS.COMMENT_FETCH_SETTINGS_FAILED]: (state: CommentsState, action: any) => ({
+      ...state,
+      fetchingSettings: false,
+    }),
+    [ACTIONS.COMMENT_FETCH_SETTINGS_COMPLETED]: (state: CommentsState, action: any) => {
+      return {
+        ...state,
+        settingsByChannelId: action.data,
+        fetchingSettings: false,
+      };
+    },
+
+    [ACTIONS.COMMENT_FETCH_BLOCKED_WORDS_STARTED]: (state: CommentsState, action: any) => ({
+      ...state,
+      fetchingBlockedWords: true,
+    }),
+    [ACTIONS.COMMENT_FETCH_BLOCKED_WORDS_FAILED]: (state: CommentsState, action: any) => ({
+      ...state,
+      fetchingBlockedWords: false,
+    }),
+    [ACTIONS.COMMENT_FETCH_BLOCKED_WORDS_COMPLETED]: (state: CommentsState, action: any) => {
+      const blockedWordsByChannelId = action.data;
+      const settingsByChannelId = Object.assign({}, state.settingsByChannelId);
+
+      // blockedWordsByChannelId: {string: [string]}
+      Object.entries(blockedWordsByChannelId).forEach((x) => {
+        const channelId = x[0];
+        if (!settingsByChannelId[channelId]) {
+          settingsByChannelId[channelId] = {};
+        }
+        settingsByChannelId[channelId].words = x[1];
+      });
+
+      return {
+        ...state,
+        settingsByChannelId,
+        fetchingBlockedWords: false,
       };
     },
   },
