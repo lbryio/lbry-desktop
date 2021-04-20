@@ -533,7 +533,18 @@ function WalletSwap(props: Props) {
             </>
           )}
           <div className="confirm__label">{__('Send')}</div>
-          <CopyableText primaryButton copyable={getCoinSendAmountStr(coin)} snackMessage={__('Amount copied.')} />
+          <CopyableText
+            primaryButton
+            copyable={getCoinSendAmountStr(coin)}
+            snackMessage={__('Amount copied.')}
+            onCopy={(inputElem) => {
+              const inputStr = inputElem.value;
+              const selectEndIndex = inputStr.lastIndexOf(' ');
+              if (selectEndIndex > -1 && inputStr.substring(0, selectEndIndex).match(/[\d.]/)) {
+                inputElem.setSelectionRange(0, selectEndIndex, 'forward');
+              }
+            }}
+          />
           {getGap()}
           <div className="confirm__label">{__('To')}</div>
           <CopyableText primaryButton copyable={getCoinAddress(coin)} snackMessage={__('Address copied.')} />
@@ -665,7 +676,9 @@ function WalletSwap(props: Props) {
     <Form onSubmit={handleStartSwap}>
       <Card
         title={<I18nMessage tokens={{ lbc: <LbcSymbol size={22} /> }}>Swap Crypto for %lbc%</I18nMessage>}
-        subtitle={__('Send crypto to the address provided and you will be sent an equivalent amount of Credits. You can pay with BCH, LTC, ETH, USDC or DAI after starting the swap.')}
+        subtitle={__(
+          'Send crypto to the address provided and you will be sent an equivalent amount of Credits. You can pay with BCH, LTC, ETH, USDC or DAI after starting the swap.'
+        )}
         actions={getActionElement()}
         nag={nag ? <Nag relative type={nag.type} message={__(nag.msg)} /> : null}
       />
