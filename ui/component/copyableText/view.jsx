@@ -11,10 +11,11 @@ type Props = {
   label?: string,
   primaryButton?: boolean,
   name?: string,
+  onCopy?: (string) => string,
 };
 
 export default function CopyableText(props: Props) {
-  const { copyable, doToast, snackMessage, label, primaryButton = false, name } = props;
+  const { copyable, doToast, snackMessage, label, primaryButton = false, name, onCopy } = props;
 
   const input = useRef();
 
@@ -22,7 +23,11 @@ export default function CopyableText(props: Props) {
     const topRef = input.current;
     if (topRef && topRef.input && topRef.input.current) {
       topRef.input.current.select();
+      if (onCopy) {
+        onCopy(topRef.input.current);
+      }
     }
+
     document.execCommand('copy');
   }
 
