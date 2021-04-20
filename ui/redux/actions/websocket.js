@@ -3,7 +3,7 @@ import { getAuthToken } from 'util/saved-passwords';
 import { doNotificationList } from 'redux/actions/notifications';
 
 const NOTIFICATION_WS_URL = 'wss://api.lbry.com/subscribe?auth_token=';
-const COMMENT_WS_URL = `wss://comments.lbry.com/api/v2/live-chat/subscribe?subscription_id=`;
+const COMMENT_WS_URL = 'wss://sockety.lbry.com/ws/commentron?id=';
 
 let sockets = {};
 let closingSockets = {};
