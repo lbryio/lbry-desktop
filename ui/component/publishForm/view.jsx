@@ -46,6 +46,7 @@ type Props = {
   editingURI: ?string,
   title: ?string,
   thumbnail: ?string,
+  thumbnailError: ?boolean,
   uploadThumbnailStatus: ?string,
   thumbnailPath: ?string,
   description: ?string,
@@ -95,6 +96,7 @@ function PublishForm(props: Props) {
   // Detect upload type from query in URL
   const {
     thumbnail,
+    thumbnailError,
     name,
     editingURI,
     myClaimForUri,
@@ -227,6 +229,7 @@ function PublishForm(props: Props) {
     thumbnail &&
     !bidError &&
     !emptyPostError &&
+    !thumbnailError &&
     !(uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS);
 
   const isOverwritingExistingClaim = !editingURI && myClaimForUri;

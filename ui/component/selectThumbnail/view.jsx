@@ -17,23 +17,15 @@ type Props = {
   formDisabled: boolean,
   uploadThumbnailStatus: string,
   thumbnailPath: ?string,
+  thumbnailError: ?string,
   openModal: (id: string, {}) => void,
   updatePublishForm: ({}) => void,
   resetThumbnailStatus: () => void,
 };
 
-type State = {
-  thumbnailError: boolean,
-};
-
-class SelectThumbnail extends React.PureComponent<Props, State> {
+class SelectThumbnail extends React.PureComponent<Props> {
   constructor() {
     super();
-
-    this.state = {
-      thumbnailError: false,
-    };
-
     (this: any).handleThumbnailChange = this.handleThumbnailChange.bind(this);
   }
 
@@ -41,8 +33,10 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
     const { updatePublishForm } = this.props;
     const newThumbnail = e.target.value.replace(' ', '');
 
-    updatePublishForm({ thumbnail: newThumbnail });
-    this.setState({ thumbnailError: false });
+    updatePublishForm({
+      thumbnail: newThumbnail,
+      thumbnailError: false,
+    });
   }
 
   render() {
@@ -56,10 +50,10 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
       openModal,
       updatePublishForm,
       thumbnailPath,
+      thumbnailError,
       resetThumbnailStatus,
     } = this.props;
 
-    const { thumbnailError } = this.state;
     const accept = '.png, .jpg, .jpeg, .gif';
 
     const outpoint = myClaimForUri ? `${myClaimForUri.txid}:${myClaimForUri.nout}` : undefined;
@@ -99,10 +93,8 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
                 style={{ display: 'none' }}
                 src={thumbnailSrc}
                 alt={__('Thumbnail Preview')}
-                onError={e => {
-                  this.setState({
-                    thumbnailError: true,
-                  });
+                onError={(e) => {
+                  updatePublishForm({ thumbnailError: true });
                 }}
               />
             </div>
@@ -133,7 +125,7 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
                 label={__('Thumbnail')}
                 placeholder={__('Choose a thumbnail')}
                 accept={accept}
-                onFileChosen={file => openModal(MODALS.CONFIRM_THUMBNAIL_UPLOAD, { file })}
+                onFileChosen={(file) => openModal(MODALS.CONFIRM_THUMBNAIL_UPLOAD, { file })}
               />
             )}
             {status === THUMBNAIL_STATUSES.COMPLETE && thumbnail && (
