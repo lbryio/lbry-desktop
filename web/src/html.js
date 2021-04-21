@@ -191,10 +191,18 @@ function buildGoogleVideoMetadata(claimUri, claim) {
     thumbnailUrl: `${claimThumbnail}`,
     uploadDate: `${new Date(releaseTime * 1000).toISOString()}`,
     // --- Recommended ---
-    duration: moment.duration(claim.duration * 1000).toISOString(),
+    duration: claim.duration ? moment.duration(claim.duration * 1000).toISOString() : undefined,
     contentUrl: generateDirectUrl(claim.name, claim.claim_id),
     embedUrl: generateEmbedUrl(claim.name, claim.claim_id),
   };
+
+  if (
+    !googleVideoMetadata.description.replace(/\s/g, '').length ||
+    googleVideoMetadata.thumbnailUrl.startsWith('data:image') ||
+    !googleVideoMetadata.thumbnailUrl.startsWith('http')
+  ) {
+    return '';
+  }
 
   return (
     '<script type="application/ld+json">\n' + JSON.stringify(googleVideoMetadata, null, '  ') + '\n' + '</script>\n'
