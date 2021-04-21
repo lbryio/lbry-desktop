@@ -35,7 +35,7 @@ class SelectThumbnail extends React.PureComponent<Props> {
 
     updatePublishForm({
       thumbnail: newThumbnail,
-      thumbnailError: false,
+      thumbnailError: newThumbnail.startsWith('data:image'),
     });
   }
 
