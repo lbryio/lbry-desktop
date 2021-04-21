@@ -532,7 +532,7 @@ function WalletSwap(props: Props) {
               {getGap()}
             </>
           )}
-          <div className="confirm__label">{__('Send')}</div>
+          <div className="confirm__label">{__('Send (USE COPY BUTTON, ENSURE EXACT AMOUNT IS SENT!)')}</div>
           <CopyableText
             primaryButton
             copyable={getCoinSendAmountStr(coin)}
