@@ -14,11 +14,14 @@ type Props = {
   doToggleTagFollowDesktop: (string) => void,
   doAddTag: (string) => void,
   onSelect?: (Tag) => void,
+  hideSuggestions?: boolean,
   suggestMature?: boolean,
   disableAutoFocus?: boolean,
   onRemove: (Tag) => void,
   placeholder?: string,
   label?: string,
+  labelAddNew?: string,
+  labelSuggestions?: string,
   disabled?: boolean,
   limitSelect?: number,
   limitShow?: number,
@@ -44,10 +47,13 @@ export default function TagsSearch(props: Props) {
     doAddTag,
     onSelect,
     onRemove,
+    hideSuggestions,
     suggestMature,
     disableAutoFocus,
     placeholder,
     label,
+    labelAddNew,
+    labelSuggestions,
     disabled,
     limitSelect = TAG_FOLLOW_MAX,
     limitShow = 5,
@@ -189,31 +195,33 @@ export default function TagsSearch(props: Props) {
             type="text"
             value={newTag}
             disabled={disabled}
-            label={__('Add Tags')}
+            label={labelAddNew || __('Add Tags')}
           />
-          <section>
-            <label>{newTag.length ? __('Matching') : __('Known Tags')}</label>
-            <ul className="tags">
-              {Boolean(newTag.length) && !suggestedTags.includes(newTag) && (
-                <Tag
-                  disabled={newTag !== 'mature' && maxed}
-                  key={`entered${newTag}`}
-                  name={newTag}
-                  type="add"
-                  onClick={newTag.includes('') ? (e) => handleSubmit(e) : (e) => handleTagClick(newTag)}
-                />
-              )}
-              {suggestedTags.map((tag) => (
-                <Tag
-                  disabled={tag !== 'mature' && maxed}
-                  key={`suggested${tag}`}
-                  name={tag}
-                  type="add"
-                  onClick={() => handleTagClick(tag)}
-                />
-              ))}
-            </ul>
-          </section>
+          {!hideSuggestions && (
+            <section>
+              <label>{labelSuggestions || (newTag.length ? __('Matching') : __('Known Tags'))}</label>
+              <ul className="tags">
+                {Boolean(newTag.length) && !suggestedTags.includes(newTag) && (
+                  <Tag
+                    disabled={newTag !== 'mature' && maxed}
+                    key={`entered${newTag}`}
+                    name={newTag}
+                    type="add"
+                    onClick={newTag.includes('') ? (e) => handleSubmit(e) : (e) => handleTagClick(newTag)}
+                  />
+                )}
+                {suggestedTags.map((tag) => (
+                  <Tag
+                    disabled={tag !== 'mature' && maxed}
+                    key={`suggested${tag}`}
+                    name={tag}
+                    type="add"
+                    onClick={() => handleTagClick(tag)}
+                  />
+                ))}
+              </ul>
+            </section>
+          )}
         </fieldset-section>
         {experimentalFeature &&
           onSelect && ( // onSelect ensures this does not appear on TagFollow
