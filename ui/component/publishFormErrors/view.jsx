@@ -31,6 +31,9 @@ function PublishFormErrors(props: Props) {
   } = props;
   // These are extra help
   // If there is an error it will be presented as an inline error as well
+
+  const isUploadingThumbnail = uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS;
+
   return (
     <div className="error__text">
       {waitForFile && <div>{__('Choose a replay file, or select None')}</div>}
@@ -39,10 +42,10 @@ function PublishFormErrors(props: Props) {
       {!isNameValid(name, false) && INVALID_NAME_ERROR}
       {!bid && <div>{__('A deposit amount is required')}</div>}
       {bidError && <div>{__('Please check your deposit amount.')}</div>}
-      {uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS && (
-        <div>{__('Please wait for thumbnail to finish uploading')}</div>
+      {isUploadingThumbnail && <div>{__('Please wait for thumbnail to finish uploading')}</div>}
+      {!isUploadingThumbnail && !thumbnail && (
+        <div>{__('A thumbnail is required. Please upload or provide an image URL above.')}</div>
       )}
-      {!thumbnail && <div>{__('A thumbnail is required. Please upload or provide an image URL above.')}</div>}
       {editingURI && !isStillEditing && !filePath && (
         <div>{__('Please reselect a file after changing the LBRY URL')}</div>
       )}

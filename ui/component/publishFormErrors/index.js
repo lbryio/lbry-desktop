@@ -9,7 +9,7 @@ const select = (state) => ({
   bidError: makeSelectPublishFormValue('bidError')(state),
   editingURI: makeSelectPublishFormValue('editingURI')(state),
   uploadThumbnailStatus: makeSelectPublishFormValue('uploadThumbnailStatus')(state),
-  thumbnail: makeSelectPublishFormValue('thumbnail_url')(state),
+  thumbnail: makeSelectPublishFormValue('thumbnail')(state),
   isStillEditing: selectIsStillEditing(state),
 });
 
