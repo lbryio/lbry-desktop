@@ -71,6 +71,7 @@ type Props = {
   language?: string,
   enterSettings: () => void,
   exitSettings: () => void,
+  myChannelUrls: ?Array<string>,
 };
 
 type State = {
@@ -187,6 +188,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
       darkModeTimes,
       clearCache,
       openModal,
+      myChannelUrls,
     } = this.props;
     const { storedPassword } = this.state;
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
@@ -467,6 +469,22 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     </div>
                   }
                 />
+
+                {myChannelUrls && myChannelUrls.length > 0 && (
+                  <Card
+                    title={__('Creator settings')}
+                    actions={
+                      <div className="section__actions">
+                        <Button
+                          button="secondary"
+                          label={__('Manage')}
+                          icon={ICONS.SETTINGS}
+                          navigate={`/$/${PAGES.SETTINGS_CREATOR}`}
+                        />
+                      </div>
+                    }
+                  />
+                )}
 
                 <Card
                   title={__('Advanced settings')}

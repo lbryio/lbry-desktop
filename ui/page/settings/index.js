@@ -16,7 +16,7 @@ import {
   selectLanguage,
   selectShowMatureContent,
 } from 'redux/selectors/settings';
-import { doWalletStatus, selectWalletIsEncrypted, SETTINGS } from 'lbry-redux';
+import { doWalletStatus, selectMyChannelUrls, selectWalletIsEncrypted, SETTINGS } from 'lbry-redux';
 import SettingsPage from './view';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 
@@ -37,6 +37,7 @@ const select = (state) => ({
   hideReposts: makeSelectClientSetting(SETTINGS.HIDE_REPOSTS)(state),
   darkModeTimes: makeSelectClientSetting(SETTINGS.DARK_MODE_TIMES)(state),
   language: selectLanguage(state),
+  myChannelUrls: selectMyChannelUrls(state),
 });
 
 const perform = (dispatch) => ({

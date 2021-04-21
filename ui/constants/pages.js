@@ -38,6 +38,7 @@ exports.SETTINGS = 'settings';
 exports.SETTINGS_NOTIFICATIONS = 'settings/notifications';
 exports.SETTINGS_ADVANCED = 'settings/advanced';
 exports.SETTINGS_BLOCKED_MUTED = 'settings/block_and_mute';
+exports.SETTINGS_CREATOR = 'settings/creator';
 exports.SHOW = 'show';
 exports.ACCOUNT = 'account';
 exports.SEARCH = 'search';
