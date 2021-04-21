@@ -1,21 +1,19 @@
 # Contribute to LBRY
 
-
 **First:** if you're unsure or afraid of anything, just ask or submit the issue or pull request anyways. You won't be yelled at for giving your best effort. The worst that can happen is that you'll be politely asked to change something. We appreciate any sort of contributions, and don't want a wall of rules to get in the way of that.
 
 However, for those individuals who want a bit more guidance on the best way to contribute to the project, read on. This document will cover what we're looking for. By addressing all the points we're looking for, it raises the chances we can quickly merge or address your contributions.
 
-
 ## TL;DR?
 
-* [Here](https://github.com/lbryio/lbry-desktop/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+no%3Aassignee)
+- [Here](https://github.com/lbryio/lbry-desktop/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+no%3Aassignee)
   is a list of help wanted issues.
-* Comment on an issue to let us know if you are going to work on it, don't take an issue that someone reserved less than 3 days ago.
-* Submit a pull request and get paid in LBC.
-* Don't hesitate to contact us with any questions or comments.
-* [Check out this video for a quickstart guide to running and developing the desktop app](https://spee.ch/7da73fc508ffc4ff8b2711e3c3950110430b0c5f/LBRYAppDesign.mp4).
+- Comment on an issue to let us know if you are going to work on it, don't take an issue that someone reserved less than 3 days ago.
+- Submit a pull request and get paid in LBC.
+- Don't hesitate to contact us with any questions or comments.
 
 ## Contents
+
 - [Choose an Issue](#choose-an-issue)
 - [Code Overview](#code-overview)
   - [Libraries](#libraries)
@@ -38,20 +36,20 @@ receives contributions from individuals outside the core team -- such as yoursel
 
 To make contributing as easy and rewarding as possible, we have instituted the following system:
 
-* Anyone can view all issues in the system by clicking on the
+- Anyone can view all issues in the system by clicking on the
   [Issues](https://github.com/lbryio/lbry-desktop/issues) button at the top of the page. Feel free to
   add an issue if you think we have missed something (and you might earn some LBC in the process
   because we do tip people for reporting bugs).
-* Once on the [Issues](https://github.com/lbryio/lbry-desktop/issues) page, a potential contributor can
+- Once on the [Issues](https://github.com/lbryio/lbry-desktop/issues) page, a potential contributor can
   filter issues by the
   [Help Wanted](https://github.com/lbryio/lbry-desktop/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+no%3Aassignee)
   label to see a curated list of suggested issues with which community members can help.
-* Every
+- Every
   [Help Wanted](https://github.com/lbryio/lbry-desktop/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+no%3Aassignee)
   issue is ranked on a scale from zero to four.
 
-| Level                                                                                                                                            | Description                                                                                        |
-| ------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------- |
+| Level                                                                                                                                                | Description                                                                                         |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
 | [**level 0**](https://github.com/lbryio/lbry-desktop/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level%3A+0%22+no%3Aassignee) | Typos and text edits -- a tech-savvy non-programmer can fix these.                                  |
 | [**level 1**](https://github.com/lbryio/lbry-desktop/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level%3A+1%22+no%3Aassignee) | Programming issues that require little knowledge of how the LBRY app works.                         |
 | [**level 2**](https://github.com/lbryio/lbry-desktop/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level%3A+2%22+no%3Aassignee) | Issues of average difficulty that require the developer to dig into how the app works a little bit. |
@@ -80,7 +78,7 @@ our styling rules and code best practices.
 
 ### Libraries
 
-This project uses [lbry-redux](https://github.com/lbryio/lbry-redux) and [lbryionc](https://github.com/lbryio/lbryinc) to share Redux and LBRY API specific code with [lbry-android](https://github.com/lbryio/lbry-android) and other LBRY apps. Over time, more Redux code that is suitable to be shared will be moved into lbry-redux. If modifying Redux code, you may be asked to make some of your changes in lbry-redux rather than lbry-desktop. The steps to work with lbry-redux locally can be found [here](https://github.com/lbryio/lbry-redux#local-development).
+This project uses [lbry-redux](https://github.com/lbryio/lbry-redux) and [lbryionc](https://github.com/lbryio/lbryinc) to share Redux and LBRY API specific code with other LBRY apps. Over time, more Redux code that is suitable to be shared will be moved into lbry-redux. If modifying Redux code, you may be asked to make some of your changes in lbry-redux rather than lbry-desktop. The steps to work with lbry-redux locally can be found [here](https://github.com/lbryio/lbry-redux#local-development).
 
 ### Flow
 
@@ -140,15 +138,15 @@ Editor integrations are available [here](https://prettier.io/docs/en/editors.htm
 
 There are a few tools integrated to the project that will ease the process of debugging:
 
-* [Chrome DevTools](https://developer.chrome.com/devtools)
-  * Also available for the main process as a [remote target](chrome://inspect/#devices).
-* [Electron Devtron](https://electronjs.org/devtron)
-* [React DevTools](https://github.com/facebook/react-devtools)
-* [Redux DevTools](https://github.com/gaearon/redux-devtools)
+- [Chrome DevTools](https://developer.chrome.com/devtools)
+  - Also available for the main process as a [remote target](chrome://inspect/#devices).
+- [Electron Devtron](https://electronjs.org/devtron)
+- [React DevTools](https://github.com/facebook/react-devtools)
+- [Redux DevTools](https://github.com/gaearon/redux-devtools)
 
 ## Submit a Pull Request
 
-* After deciding what to work on, a potential contributor can
+- After deciding what to work on, a potential contributor can
   [fork](https://help.github.com/articles/fork-a-repo/) this repository, make his or her changes,
   and submit a
   [pull request](https://help.github.com/articles/creating-a-pull-request-from-a-fork/). A
@@ -157,12 +155,12 @@ There are a few tools integrated to the project that will ease the process of de
   manner and, therefore, not begin working on anything reserved (or updated) within the last 3 days.
   If someone has been officially assigned an issue via GitHub's assignment system, it is also not
   available. Contributors are encouraged to ask if they have any questions about issue availability.
-* The [changelog](https://github.com/lbryio/lbry-desktop/blob/master/CHANGELOG.md) should be updated to
+- The [changelog](https://github.com/lbryio/lbry-desktop/blob/master/CHANGELOG.md) should be updated to
   include a reference to the fix/change/addition. See previous entries for format.
-* Once the pull request is visible in the LBRY repo, a LBRY team member will review it and make sure
+- Once the pull request is visible in the LBRY repo, a LBRY team member will review it and make sure
   it is up to our standards. At this point, the contributor may have to change his or her code based
   on our suggestions and comments.
-* Then, upon a satisfactory review of the code, we will merge it and send the contributor a tip (in
+- Then, upon a satisfactory review of the code, we will merge it and send the contributor a tip (in
   LBC) for the contribution.
 
 We are dedicated to being fair and friendly in this process. In **general**, level 4 issues will be
@@ -191,10 +189,10 @@ will earn you an extra 50 LBC on top of what we would otherwise tip you.
 
 # Get in Touch
 
-| Name                                    | Role                                                                                                                                                                                                           | Discord     | Email        |
-| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- | ------------
-| [Tom](https://github.com/tzarebczan)    | Community manager. He knows more than anyone about the app and all of its flaws. Reach out to him with any questions about how the app works, if a bug has been reported, or if a feature should be requested. | jiggytom    | tom@lbry.com  |
-| [Sean](https://github.com/seanyesmunt)  | The primary engineer working on the app. Feel free to ask any questions about the code.                                                                          | sean        | sean@lbry.com |
+| Name                                   | Role                                                                                                                                                                                                           | Discord  | Email         |
+| -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------------- |
+| [Tom](https://github.com/tzarebczan)   | Community manager. He knows more than anyone about the app and all of its flaws. Reach out to him with any questions about how the app works, if a bug has been reported, or if a feature should be requested. | jiggytom | tom@lbry.com  |
+| [Sean](https://github.com/seanyesmunt) | The primary engineer working on the app. Feel free to ask any questions about the code.                                                                                                                        | sean     | sean@lbry.com |
 
 Join our Discord [here](https://chat.lbry.com/).
 

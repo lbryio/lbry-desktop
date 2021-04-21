@@ -63,10 +63,10 @@ To install from source or make changes to the application, continue to the next 
 **Community maintained** builds for Arch Linux and Flatpak are available, see below. These installs will need to be updated manually as the in-app update process only supports Debian installs at this time.
 _Note: If coming from a deb install, the directory structure is different and you'll need to [migrate data](https://lbry.com/faq/backup-data)._
 
-|                | Flatpak                                                           | Arch                                                                                      | Nixpkgs                                                                                | ARM/ARM64                                   |
-| -------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | ------------------------------------------- |
-| Latest Release | [FlatHub Page](https://flathub.org/apps/details/io.lbry.lbry-app) | [AUR Package](https://aur.archlinux.org/packages/lbry-app-bin/)                           | [Nixpkgs](https://search.nixos.org/packages?channel=unstable&show=lbry&query=lbry)     | [Build Guide](https://lbry.tv/@LBRYarm:5)   |
-| Maintainers    | [@kcSeb](https://keybase.io/kcseb)                                | [@kcSeb](https://keybase.io/kcseb)/[@TimurKiyivinski](https://github.com/TimurKiyivinski) | [@Enderger](https://github.com/enderger)                                               | [@Madiator2011](https://github.com/kodxana) |
+|                | Flatpak                                                           | Arch                                                                                      | Nixpkgs                                                                            | ARM/ARM64                                   |
+| -------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ------------------------------------------- |
+| Latest Release | [FlatHub Page](https://flathub.org/apps/details/io.lbry.lbry-app) | [AUR Package](https://aur.archlinux.org/packages/lbry-app-bin/)                           | [Nixpkgs](https://search.nixos.org/packages?channel=unstable&show=lbry&query=lbry) | [Build Guide](https://lbry.tv/@LBRYarm:5)   |
+| Maintainers    | [@kcSeb](https://keybase.io/kcseb)                                | [@kcSeb](https://keybase.io/kcseb)/[@TimurKiyivinski](https://github.com/TimurKiyivinski) | [@Enderger](https://github.com/enderger)                                           | [@Madiator2011](https://github.com/kodxana) |
 
 ## Usage
 
@@ -88,15 +88,11 @@ You can run the web version (lbry.tv), the electron app, or both at the same tim
 
 #### Run the electron app
 
-`yarn compile:electron` (this is only needed the first time you run the app)
-
 `yarn dev`
 
 - If you want to build and launch the production app you can run `yarn build`. This will give you an executable inside the `/dist` folder. We use [electron-builder](https://github.com/electron-userland/electron-builder) to create distributable packages.
 
 #### Run the web app for development
-
-`yarn compile:web` (this is only needed the first time you run the app)
 
 `yarn dev:web`
 
@@ -110,11 +106,12 @@ You can run the web version (lbry.tv), the electron app, or both at the same tim
 cp .env.defaults .env
 nano .env
 ```
+
 - To specify your own OG-IMAGE
-You can either place a png named v2-og.png in the /custom folder or specify the OG_IMAGE_URL in .env
+  You can either place a png named v2-og.png in the /custom folder or specify the OG_IMAGE_URL in .env
 
 - To specify your own channels to be followed on first run
-`AUTO_FOLLOW_URLS=lbry://@chan#123...a lbry://@chan2#456...a`
+  `AUTO_FOLLOW_URLS=lbry://@chan#123...a lbry://@chan2#456...a`
 
 - If you want to customize the homepage content
 
@@ -132,7 +129,7 @@ PINNED_LABEL_2=OtherLinkText
 ```
 
 - Finally `NODE_ENV=production yarn compile:web` to rebuild
-_Note: You don't need to edit the .env file in the /web folder - that is copied during compile._
+  _Note: You don't need to edit the .env file in the /web folder - that is copied during compile._
 
 #### Deploy the web app (_experimental_)
 
