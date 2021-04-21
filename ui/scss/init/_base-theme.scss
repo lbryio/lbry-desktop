@@ -115,6 +115,12 @@
   --color-tag-hover: var(--color-primary-alt);
   --color-tag-bg-hover: var(--color-button-primary-bg);
 
+  // Tags (words)
+  --color-tag-words: var(--color-gray-5);
+  --color-tag-words-bg: var(--color-button-alt-bg);
+  --color-tag-words-hover: var(--color-button-alt-text);
+  --color-tag-words-bg-hover: var(--color-button-alt-bg-hover);
+
   // Menu
   --color-menu-background: var(--color-header-background);
   --color-menu-background--active: var(--color-card-background-highlighted);
