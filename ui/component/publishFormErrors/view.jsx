@@ -13,6 +13,7 @@ type Props = {
   isStillEditing: boolean,
   uploadThumbnailStatus: string,
   thumbnail: string,
+  thumbnailError: boolean,
   waitForFile: boolean,
 };
 
@@ -27,6 +28,7 @@ function PublishFormErrors(props: Props) {
     isStillEditing,
     uploadThumbnailStatus,
     thumbnail,
+    thumbnailError,
     waitForFile,
   } = props;
   // These are extra help
@@ -46,6 +48,7 @@ function PublishFormErrors(props: Props) {
       {!isUploadingThumbnail && !thumbnail && (
         <div>{__('A thumbnail is required. Please upload or provide an image URL above.')}</div>
       )}
+      {thumbnailError && <div>{__('Thumbnail is invalid.')}</div>}
       {editingURI && !isStillEditing && !filePath && (
         <div>{__('Please reselect a file after changing the LBRY URL')}</div>
       )}

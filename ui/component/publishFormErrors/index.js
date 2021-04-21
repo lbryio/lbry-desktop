@@ -10,6 +10,7 @@ const select = (state) => ({
   editingURI: makeSelectPublishFormValue('editingURI')(state),
   uploadThumbnailStatus: makeSelectPublishFormValue('uploadThumbnailStatus')(state),
   thumbnail: makeSelectPublishFormValue('thumbnail')(state),
+  thumbnailError: makeSelectPublishFormValue('thumbnailError')(state),
   isStillEditing: selectIsStillEditing(state),
 });
 

@@ -11,6 +11,7 @@ declare type UpdatePublishFormData = {
   thumbnail_url?: string,
   uploadThumbnailStatus?: string,
   thumbnailPath?: string,
+  thumbnailError?: boolean,
   description?: string,
   language?: string,
   channel?: string,
