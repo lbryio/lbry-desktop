@@ -2,7 +2,7 @@ import * as ACTIONS from 'constants/action_types';
 import { getAuthToken } from 'util/saved-passwords';
 import { doNotificationList } from 'redux/actions/notifications';
 
-const NOTIFICATION_WS_URL = 'wss://api.lbry.com/subscribe?auth_token=';
+const NOTIFICATION_WS_URL = 'wss://sockety.lbry.com/ws/internal?id=';
 const COMMENT_WS_URL = 'wss://sockety.lbry.com/ws/commentron?id=';
 
 let sockets = {};
