@@ -35,7 +35,12 @@ function fetchCommentsApi(method: string, params: {}) {
 
   return fetch(url, options)
     .then((res) => res.json())
-    .then((res) => res.result);
+    .then((res) => {
+      if (res.error) {
+        throw new Error(res.error.message);
+      }
+      return res.result;
+    });
 }
 
 export default Comments;
