@@ -309,6 +309,17 @@ export function doCommentCreate(
           toastMessage = __('Unable to comment. This channel has blocked you.');
         }
 
+        if (error) {
+          const BLOCKED_WORDS_ERR_MSG = 'the comment contents are blocked by';
+
+          if (error.message === 'channel is blocked by publisher') {
+            toastMessage = __('Unable to comment. This channel has blocked you.');
+          } else if (error.message.startsWith(BLOCKED_WORDS_ERR_MSG)) {
+            const channelName = error.message.substring(BLOCKED_WORDS_ERR_MSG.length);
+            toastMessage = __('The comment contains contents that are blocked by %author%', { author: channelName });
+          }
+        }
+
         dispatch(
           doToast({
             message: toastMessage,
