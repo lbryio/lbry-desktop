@@ -1422,6 +1422,8 @@
   "Controversial": "Controversial",
   "Show Replies": "Show Replies",
   "Unable to create comment, please try again later.": "Unable to create comment, please try again later.",
+  "Unable to comment. This channel has blocked you.": "Unable to comment. This channel has blocked you.",
+  "The comment contains contents that are blocked by %author%": "The comment contains contents that are blocked by %author%",
   "Your channel is still being setup, try again in a few moments.": "Your channel is still being setup, try again in a few moments.",
   "Unable to delete this comment, please try again later.": "Unable to delete this comment, please try again later.",
   "Unable to edit this comment, please try again later.": "Unable to edit this comment, please try again later.",
