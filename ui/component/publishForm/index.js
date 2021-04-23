@@ -50,6 +50,7 @@ const select = (state) => {
     isStillEditing: selectIsStillEditing(state),
     filePath: makeSelectPublishFormValue('filePath')(state),
     remoteUrl: makeSelectPublishFormValue('remoteFileUrl')(state),
+    publishSuccess: makeSelectPublishFormValue('publishSuccess')(state),
     isResolvingUri: selectIsResolvingPublishUris(state),
     totalRewardValue: selectUnclaimedRewardValue(state),
     modal: selectModal(state),

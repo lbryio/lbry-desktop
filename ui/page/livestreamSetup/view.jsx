@@ -133,7 +133,7 @@ export default function LivestreamSetupPage(props: Props) {
     <Page>
       {fetchingChannels && (
         <div className="main--empty">
-          <Spinner />
+          <Spinner delayed />
         </div>
       )}
 
@@ -157,11 +157,11 @@ export default function LivestreamSetupPage(props: Props) {
 
       {fetchingLivestreams && !fetchingChannels && !hasLivestreamClaims && (
         <div className="main--empty">
-          <Spinner />
+          <Spinner delayed />
         </div>
       )}
       <div className="card-stack">
-        {hasLivestreamClaims && !fetchingChannels && channelId && (
+        {!fetchingChannels && channelId && (
           <>
             {showHelp && (
               <Card
