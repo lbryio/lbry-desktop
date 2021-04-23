@@ -66,6 +66,7 @@ type Props = {
   licenseUrl: ?string,
   useLBRYUploader: ?boolean,
   publishing: boolean,
+  publishSuccess: boolean,
   balance: number,
   isStillEditing: boolean,
   clearPublish: () => void,
@@ -107,6 +108,7 @@ function PublishForm(props: Props) {
     filePath,
     fileText,
     publishing,
+    publishSuccess,
     clearPublish,
     isStillEditing,
     tags,
@@ -315,10 +317,10 @@ function PublishForm(props: Props) {
 
   // if you enter the page and it is stuck in publishing, "stop it."
   useEffect(() => {
-    if (publishing) {
+    if (publishing || publishSuccess) {
       clearPublish();
     }
-  }, []);
+  }, [clearPublish]);
 
   useEffect(() => {
     if (!thumbnail) {

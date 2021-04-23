@@ -317,13 +317,13 @@ function PublishFile(props: Props) {
       // https://github.com/lbryio/lbry-desktop/issues/5855
       // publish is trying to use one field to share html file blob and string and such
       // $FlowFixMe
-      handleFileChange(false);
+      handleFileChange(false, false);
       updatePublishForm({ remoteFileUrl: undefined });
     } else if (source === SOURCE_UPLOAD) {
       updatePublishForm({ remoteFileUrl: undefined });
     } else if (source === SOURCE_SELECT) {
       // $FlowFixMe
-      handleFileChange(false);
+      handleFileChange(false, false);
       if (selectedFileIndex !== null) {
         updatePublishForm({ remoteFileUrl: livestreamData[selectedFileIndex].data.fileLocation });
       }
@@ -347,14 +347,14 @@ function PublishFile(props: Props) {
     }
   }
 
-  function handleFileChange(file: WebFile) {
+  function handleFileChange(file: WebFile, clearName = true) {
     const { showToast } = props;
     window.URL = window.URL || window.webkitURL;
     setOversized(false);
 
     // select file, start to select a new one, then cancel
     if (!file) {
-      if (isStillEditing) {
+      if (isStillEditing || !clearName) {
         updatePublishForm({ filePath: '' });
       } else {
         updatePublishForm({ filePath: '', name: '' });
