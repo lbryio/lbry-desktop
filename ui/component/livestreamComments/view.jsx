@@ -1,10 +1,14 @@
 // @flow
 import React from 'react';
 import classnames from 'classnames';
-import Card from 'component/common/card';
 import Spinner from 'component/spinner';
 import CommentCreate from 'component/commentCreate';
-import CommentView from 'component/comment';
+import LivestreamComment from 'component/livestreamComment';
+import Button from 'component/button';
+import UriIndicator from 'component/uriIndicator';
+import CreditAmount from 'component/common/credit-amount';
+import ChannelThumbnail from 'component/channelThumbnail';
+import Tooltip from 'component/common/tooltip';
 
 type Props = {
   uri: string,
@@ -16,9 +20,15 @@ type Props = {
   doCommentList: (string) => void,
   comments: Array<Comment>,
   fetchingComments: boolean,
+  doSuperChatList: (string) => void,
+  superChats: Array<Comment>,
+  superChatsTotalAmount: number,
 };
 
-export default function LivestreamFeed(props: Props) {
+const VIEW_MODE_CHAT = 'view_chat';
+const VIEW_MODE_SUPER_CHAT = 'view_superchat';
+
+export default function LivestreamComments(props: Props) {
   const {
     claim,
     uri,
@@ -28,16 +38,22 @@ export default function LivestreamFeed(props: Props) {
     comments,
     doCommentList,
     fetchingComments,
+    doSuperChatList,
+    superChats,
+    superChatsTotalAmount,
   } = props;
   const commentsRef = React.createRef();
   const hasScrolledComments = React.useRef();
+  const [viewMode, setViewMode] = React.useState(VIEW_MODE_CHAT);
   const [performedInitialScroll, setPerformedInitialScroll] = React.useState(false);
   const claimId = claim && claim.claim_id;
   const commentsLength = comments && comments.length;
+  const commentsToDisplay = viewMode === VIEW_MODE_CHAT ? comments : superChats;
 
   React.useEffect(() => {
     if (claimId) {
       doCommentList(uri);
+      doSuperChatList(uri);
       doCommentSocketConnect(uri, claimId);
     }
 
@@ -46,7 +62,7 @@ export default function LivestreamFeed(props: Props) {
         doCommentSocketDisconnect(claimId);
       }
     };
-  }, [claimId, uri, doCommentList, doCommentSocketConnect, doCommentSocketDisconnect]);
+  }, [claimId, uri, doCommentList, doSuperChatList, doCommentSocketConnect, doCommentSocketDisconnect]);
 
   React.useEffect(() => {
     const element = commentsRef.current;
@@ -92,51 +108,87 @@ export default function LivestreamFeed(props: Props) {
   }
 
   return (
-    <Card
-      title={__('Live discussion')}
-      smallTitle
-      className="livestream__discussion"
-      actions={
-        <>
-          {fetchingComments && (
-            <div className="main--empty">
-              <Spinner />
-            </div>
-          )}
-          <div
-            ref={commentsRef}
-            className={classnames('livestream__comments-wrapper', {
-              'livestream__comments-wrapper--with-height': commentsLength > 0,
-            })}
-          >
-            {!fetchingComments && comments.length > 0 ? (
-              <div className="livestream__comments">
-                {comments.map((comment) => (
-                  <div key={comment.comment_id} className={classnames('livestream__comment')}>
-                    <CommentView
-                      livestream
-                      isTopLevel
-                      uri={uri}
-                      authorUri={comment.channel_url}
-                      author={comment.channel_name}
-                      claimId={comment.claim_id}
-                      commentId={comment.comment_id}
-                      message={comment.comment}
-                      timePosted={comment.timestamp * 1000}
-                    />
-                  </div>
+    <div className="card livestream__discussion">
+      <div className="card__header--between livestream-discussion__header">
+        <div className="livestream-discussion__title">{__('Live discussion')}</div>
+        {superChatsTotalAmount > 0 && (
+          <div className="recommended-content__toggles">
+            <Button
+              className={classnames('button-toggle', {
+                'button-toggle--active': viewMode === VIEW_MODE_CHAT,
+              })}
+              label={__('Chat')}
+              onClick={() => setViewMode(VIEW_MODE_CHAT)}
+            />
+
+            <Button
+              className={classnames('button-toggle', {
+                'button-toggle--active': viewMode === VIEW_MODE_SUPER_CHAT,
+              })}
+              label={
+                <>
+                  <CreditAmount amount={superChatsTotalAmount} size={8} /> {__('Tipped')}
+                </>
+              }
+              onClick={() => setViewMode(VIEW_MODE_SUPER_CHAT)}
+            />
+          </div>
+        )}
+      </div>
+      <>
+        {fetchingComments && !comments && (
+          <div className="main--empty">
+            <Spinner />
+          </div>
+        )}
+        <div ref={commentsRef} className="livestream__comments-wrapper">
+          {viewMode === VIEW_MODE_CHAT && superChatsTotalAmount > 0 && (
+            <div className="livestream-superchats__wrapper">
+              <div className="livestream-superchats__inner">
+                {superChats.map((superChat: Comment) => (
+                  <Tooltip key={superChat.comment_id} label={superChat.comment}>
+                    <div className="livestream-superchat">
+                      <div className="livestream-superchat__thumbnail">
+                        <ChannelThumbnail uri={superChat.channel_url} xsmall />
+                      </div>
+
+                      <div className="livestream-superchat__info">
+                        <UriIndicator uri={superChat.channel_url} link />
+                        <CreditAmount
+                          size={10}
+                          className="livestream-superchat__amount-large"
+                          amount={superChat.support_amount}
+                        />
+                      </div>
+                    </div>
+                  </Tooltip>
                 ))}
               </div>
-            ) : (
-              <div className="main--empty" />
-            )}
-          </div>
+            </div>
+          )}
+
+          {!fetchingComments && comments.length > 0 ? (
+            <div className="livestream__comments">
+              {commentsToDisplay.map((comment) => (
+                <LivestreamComment
+                  key={comment.comment_id}
+                  uri={uri}
+                  authorUri={comment.channel_url}
+                  commentId={comment.comment_id}
+                  message={comment.comment}
+                  supportAmount={comment.support_amount}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="main--empty" style={{ flex: 1 }} />
+          )}
 
           <div className="livestream__comment-create">
             <CommentCreate livestream bottom embed={embed} uri={uri} />
           </div>
-        </>
-      }
-    />
+        </div>
+      </>
+    </div>
   );
 }

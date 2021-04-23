@@ -440,6 +440,21 @@ fieldset-group {
   margin-top: 2.5%;
 }
 
+.form-field__textarea-info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--spacing-xxs);
+  margin-bottom: var(--spacing-s);
+}
+
+.form-field__quick-emojis {
+  > *:not(:last-child) {
+    margin-right: var(--spacing-s);
+  }
+}
+
 fieldset-section {
   .form-field__internal-option {
     margin-top: var(--spacing-s);

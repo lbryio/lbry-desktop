@@ -39,6 +39,8 @@ export const selectCommentsByClaimId = createSelector(selectState, selectComment
   return comments;
 });
 
+export const selectSuperchatsByUri = createSelector(selectState, (state) => state.superChatsByUri);
+
 export const selectTopLevelCommentsByClaimId = createSelector(selectState, selectCommentsById, (state, byId) => {
   const byClaimId = state.topLevelCommentsById || {};
   const comments = {};
@@ -298,4 +300,27 @@ export const makeSelectChannelIsBlocked = (uri: string) =>
 export const makeSelectUriIsBlockingOrUnBlocking = (uri: string) =>
   createSelector(selectBlockingByUri, selectUnBlockingByUri, (blockingByUri, unBlockingByUri) => {
     return blockingByUri[uri] || unBlockingByUri[uri];
+  });
+
+export const makeSelectSuperChatDataForUri = (uri: string) =>
+  createSelector(selectSuperchatsByUri, (byUri) => {
+    return byUri[uri];
+  });
+
+export const makeSelectSuperChatsForUri = (uri: string) =>
+  createSelector(makeSelectSuperChatDataForUri(uri), (superChatData) => {
+    if (!superChatData) {
+      return undefined;
+    }
+
+    return superChatData.comments;
+  });
+
+export const makeSelectSuperChatTotalAmountForUri = (uri: string) =>
+  createSelector(makeSelectSuperChatDataForUri(uri), (superChatData) => {
+    if (!superChatData) {
+      return 0;
+    }
+
+    return superChatData.totalAmount;
   });

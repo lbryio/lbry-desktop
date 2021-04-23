@@ -16,8 +16,8 @@ import Empty from 'component/common/empty';
 
 type Props = {
   comments: Array<Comment>,
-  fetchComments: string => void,
-  fetchReacts: string => Promise<any>,
+  fetchComments: (string) => void,
+  fetchReacts: (string) => Promise<any>,
   uri: string,
   claimIsMine: boolean,
   myChannels: ?Array<ChannelClaim>,
@@ -129,11 +129,11 @@ function CommentList(props: Props) {
 
     if (linkedComment) {
       if (!linkedComment.parent_id) {
-        orderedComments = arrayOfComments.filter(c => c.comment_id !== linkedComment.comment_id);
+        orderedComments = arrayOfComments.filter((c) => c.comment_id !== linkedComment.comment_id);
         orderedComments.unshift(linkedComment);
       } else {
-        const parentComment = arrayOfComments.find(c => c.comment_id === linkedComment.parent_id);
-        orderedComments = arrayOfComments.filter(c => c.comment_id !== linkedComment.parent_id);
+        const parentComment = arrayOfComments.find((c) => c.comment_id === linkedComment.parent_id);
+        orderedComments = arrayOfComments.filter((c) => c.comment_id !== linkedComment.parent_id);
 
         if (parentComment) {
           orderedComments.unshift(parentComment);
@@ -218,7 +218,7 @@ function CommentList(props: Props) {
           <ul className="comments" ref={commentRef}>
             {comments &&
               displayedComments &&
-              displayedComments.map(comment => {
+              displayedComments.map((comment) => {
                 return (
                   <CommentView
                     isTopLevel
@@ -235,6 +235,7 @@ function CommentList(props: Props) {
                     commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}
                     linkedComment={linkedComment}
                     isPinned={comment.is_pinned}
+                    supportAmount={comment.support_amount}
                   />
                 );
               })}

@@ -11,6 +11,7 @@ const defaultState: CommentsState = {
   // Remove commentsByUri
   // It is not needed and doesn't provide anything but confusion
   commentsByUri: {}, // URI -> claimId
+  superChatsByUri: {},
   isLoading: false,
   isCommenting: false,
   myComments: undefined,
@@ -213,6 +214,28 @@ export default handleActions(
       };
     },
 
+    [ACTIONS.COMMENT_SUPER_CHAT_LIST_FAILED]: (state: CommentsState, action: any) => ({
+      ...state,
+      isLoading: false,
+    }),
+    [ACTIONS.COMMENT_SUPER_CHAT_LIST_STARTED]: (state) => ({ ...state, isLoading: true }),
+
+    [ACTIONS.COMMENT_SUPER_CHAT_LIST_COMPLETED]: (state: CommentsState, action: any) => {
+      const { comments, totalAmount, uri } = action.data;
+
+      return {
+        ...state,
+        superChatsByUri: {
+          ...state.superChatsByUri,
+          [uri]: {
+            comments,
+            totalAmount,
+          },
+        },
+        isLoading: false,
+      };
+    },
+
     [ACTIONS.COMMENT_LIST_FAILED]: (state: CommentsState, action: any) => ({
       ...state,
       isLoading: false,
@@ -224,6 +247,7 @@ export default handleActions(
       const commentsByClaimId = Object.assign({}, state.byId);
       const allCommentsById = Object.assign({}, state.commentById);
       const topLevelCommentsById = Object.assign({}, state.topLevelCommentsById);
+      const superChatsByUri = Object.assign({}, state.superChatsByUri);
       const commentsForId = topLevelCommentsById[claimId];
 
       allCommentsById[comment.comment_id] = comment;
@@ -244,12 +268,47 @@ export default handleActions(
       // We don't care to keep existing lower level comments since this is just for livestreams
       commentsByClaimId[claimId] = topLevelCommentsById[claimId];
 
+      if (comment.support_amount > 0) {
+        const superChatForUri = superChatsByUri[uri];
+        const superChatCommentsForUri = superChatForUri && superChatForUri.comments;
+
+        let sortedSuperChatComments = [];
+        let hasAddedNewComment = false;
+        if (superChatCommentsForUri && superChatCommentsForUri.length > 0) {
+          // Go for the entire length of superChatCommentsForUri since a comment will be added to this list
+          for (var i = 0; i < superChatCommentsForUri.length; i++) {
+            const existingSuperChat = superChatCommentsForUri[i];
+            if (existingSuperChat.support_amount < comment.support_amount && !hasAddedNewComment) {
+              hasAddedNewComment = true;
+              sortedSuperChatComments.push(comment);
+              sortedSuperChatComments.push(existingSuperChat);
+            } else {
+              sortedSuperChatComments.push(existingSuperChat);
+            }
+
+            // If the new superchat hasn't been added yet, it must be the smallest superchat in the list
+            if (
+              i === superChatCommentsForUri.length - 1 &&
+              sortedSuperChatComments.length === superChatCommentsForUri.length
+            ) {
+              sortedSuperChatComments.push(comment);
+            }
+          }
+
+          superChatsByUri[uri].comments = sortedSuperChatComments;
+          superChatsByUri[uri].totalAmount += 1;
+        } else {
+          superChatsByUri[uri] = { comments: [comment], totalAmount: comment.support_amount };
+        }
+      }
+
       return {
         ...state,
         byId: commentsByClaimId,
         commentById: allCommentsById,
         commentsByUri,
         topLevelCommentsById,
+        superChatsByUri,
       };
     },
 

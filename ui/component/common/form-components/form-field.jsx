@@ -8,6 +8,15 @@ import { openEditorMenu, stopContextMenu } from 'util/context-menu';
 import { FF_MAX_CHARS_DEFAULT } from 'constants/form-field';
 import 'easymde/dist/easymde.min.css';
 import Button from 'component/button';
+import emoji from 'emoji-dictionary';
+
+const QUICK_EMOJIS = [
+  emoji.getUnicode('rocket'),
+  emoji.getUnicode('jeans'),
+  emoji.getUnicode('fire'),
+  emoji.getUnicode('heart'),
+  emoji.getUnicode('open_mouth'),
+];
 
 type Props = {
   name: string,
@@ -26,9 +35,6 @@ type Props = {
   affixClass?: string, // class applied to prefix/postfix label
   autoFocus?: boolean,
   labelOnLeft: boolean,
-  inputProps?: {
-    disabled?: boolean,
-  },
   inputButton?: React$Node,
   blockWrap: boolean,
   charCount?: number,
@@ -38,6 +44,9 @@ type Props = {
   max?: number,
   quickActionLabel?: string,
   quickActionHandler?: (any) => any,
+  disabled?: boolean,
+  onChange: (any) => void,
+  value?: string | number,
 };
 
 export class FormField extends React.PureComponent<Props> {
@@ -262,7 +271,25 @@ export class FormField extends React.PureComponent<Props> {
               ref={this.input}
               {...inputProps}
             />
-            {countInfo}
+            <div className="form-field__textarea-info">
+              <div className="form-field__quick-emojis">
+                {QUICK_EMOJIS.map((emoji) => (
+                  <Button
+                    key={emoji}
+                    disabled={inputProps.disabled}
+                    type="button"
+                    className="button--emoji"
+                    label={emoji}
+                    onClick={() => {
+                      inputProps.onChange({
+                        target: { value: inputProps.value ? `${inputProps.value} ${emoji}` : emoji },
+                      });
+                    }}
+                  />
+                ))}
+              </div>
+              {countInfo}
+            </div>
           </fieldset-section>
         );
       } else {

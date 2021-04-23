@@ -90,13 +90,9 @@
 .claim-search__menu-group {
   display: flex;
   flex-wrap: nowrap;
-
-  &:last-of-type {
-    .button-toggle:last-of-type {
-      margin-right: 0;
-    }
-  }
+  margin-right: var(--spacing-s);
 }
+
 .claim-search__menu-group--between {
   display: flex;
   flex-wrap: nowrap;

@@ -1,3 +1,5 @@
+$discussion-header__height: 3rem;
+
 .livestream {
   flex: 1;
   width: 100%;
@@ -23,52 +25,125 @@
 }
 
 .livestream__discussion {
-  min-height: 0%;
   width: 100%;
   margin-top: var(--spacing-m);
+  margin-bottom: var(--spacing-s);
 
   @media (min-width: $breakpoint-small) {
-    width: 35rem;
-    margin-left: var(--spacing-m);
-    margin-top: 0;
+    margin: 0;
+    width: var(--livestream-comments-width);
+    height: calc(100vh - var(--header-height));
+    position: fixed;
+    right: 0;
+    top: var(--header-height);
+    bottom: 0;
+    border-radius: 0;
+    border-top: none;
+    border-bottom: none;
+    border-right: none;
+
+    .card__main-actions {
+      padding: 0;
+    }
   }
 }
 
-.livestream__comments-wrapper {
-  overflow-y: scroll;
+.livestream-discussion__header {
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--spacing-s);
+  margin-bottom: 0;
+  align-items: center;
+
+  @media (min-width: $breakpoint-small) {
+    height: $discussion-header__height;
+    padding: 0 var(--spacing-s);
+    padding-right: 0;
+  }
 }
 
-.livestream__comments-wrapper--with-height {
-  height: 40vh;
+.livestream-discussion__title {
+  @extend .card__title-section;
+  @extend .card__title-section--small;
+  padding: 0;
+}
+
+.livestream__comments-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - var(--header-height) - #{$discussion-header__height});
 }
 
 .livestream__comments {
   display: flex;
   flex-direction: column-reverse;
   font-size: var(--font-small);
+  overflow-y: scroll;
+  overflow-x: visible;
+  padding-top: var(--spacing-s);
+  width: 100%;
 }
 
-.livestream__comment {
-  margin-top: var(--spacing-s);
-  display: flex;
-  flex-wrap: wrap;
+.livestream-comment {
+  list-style-type: none;
+  position: relative;
 
-  .comment__body_container {
-    margin-left: 0;
+  .channel-name {
+    font-size: var(--font-xsmall);
+  }
+
+  &:last-of-type {
+    padding-top: var(--spacing-m);
   }
 }
 
-.livestream__comment-author {
-  font-weight: var(--font-weight-bold);
-  color: #888;
+.livestream-comment--superchat {
+  + .livestream-comment--superchat {
+    margin-bottom: var(--spacing-xxs);
+  }
+
+  .livestream-comment__info {
+    margin-top: calc(var(--spacing-xxs) / 2);
+  }
+
+  &::before {
+    position: absolute;
+    left: 0;
+    height: 100%;
+    max-height: 4rem;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    width: 5px;
+    background-color: var(--color-superchat);
+    content: '';
+  }
 }
 
-.livestream__comment-author--streamer {
-  color: var(--color-primary);
+.livestream-comment__body {
+  display: flex;
+  align-items: flex-start;
+}
+
+.livestream-comment__body {
+  display: flex;
+  align-items: flex-start;
+  margin-left: var(--spacing-s);
+
+  .channel-thumbnail {
+    margin-top: var(--spacing-xxs);
+    flex-shrink: 0;
+  }
+}
+
+.livestream-comment__menu {
+  position: absolute;
+  right: var(--spacing-xs);
+  top: var(--spacing-xs);
 }
 
 .livestream__comment-create {
-  margin-top: var(--spacing-s);
+  padding: var(--spacing-s);
+  border-top: 1px solid var(--color-border);
+  margin-top: auto;
 }
 
 .livestream__channel-link {
@@ -119,91 +194,143 @@
   }
 }
 
-.livestream__emoji-actions {
-  margin-bottom: var(--spacing-m);
-
-  > *:not(:last-child) {
-    margin-right: var(--spacing-s);
-  }
-}
-
-.livestream__embed-page {
-  display: flex;
-
-  .file-viewer {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-
-    iframe {
-      max-height: none;
-    }
-  }
-}
-
-.livestream__embed-wrapper {
-  height: 100vh;
-  width: 100vw;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #000000;
-
-  .livestream {
-    margin-top: auto;
-    margin-bottom: auto;
-  }
-}
-
-.livestream__embed-countdown {
-  @extend .livestream__embed-wrapper;
-  justify-content: center;
-}
-
-.livestream__embed {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 100vh;
-  width: 100vw;
-}
-
-.livestream__embed-comments {
-  width: 30vw;
-  height: 100vh;
-  display: none;
-
-  .livestream__discussion {
-    height: 100vh;
-    margin-left: 0;
-  }
-
-  .card {
-    border-radius: 0;
-  }
-
-  .card__main-actions {
-    height: 100%;
-    width: 30vw;
-  }
-
-  .livestream__comments-wrapper--with-height {
-    height: calc(100% - 200px - (var(--spacing-l)));
-  }
-
-  @media (min-width: $breakpoint-small) {
-    display: inline-block;
-  }
-}
-
 .livestream__publish-intro {
   margin-top: var(--spacing-l);
+}
+
+.livestream__viewer-count {
+  display: flex;
+  align-items: center;
+
+  .icon {
+    margin-left: var(--spacing-xs);
+  }
+}
+
+.livestream-superchats__wrapper {
+  flex-shrink: 0;
+  position: relative;
+  overflow-x: scroll;
+  padding: var(--spacing-s) var(--spacing-xs);
+  border-bottom: 1px solid var(--color-border);
+  font-size: var(--font-small);
+  background-color: var(--color-card-background);
+
+  @media (min-width: $breakpoint-small) {
+    padding: var(--spacing-xs);
+    width: var(--livestream-comments-width);
+  }
+}
+
+.livestream-superchat__amount-large {
+  .credit-amount {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+  }
+}
+
+.livestream-superchats__inner {
+  display: flex;
+}
+
+.livestream-superchat {
+  display: flex;
+  margin-right: var(--spacing-xs);
+  padding: var(--spacing-xxs);
+  border-radius: var(--border-radius);
+
+  .channel-thumbnail {
+    margin-right: var(--spacing-xs);
+  }
+
+  &:first-of-type {
+    background-color: var(--color-superchat);
+
+    .channel-name {
+      max-width: 8rem;
+    }
+  }
+
+  &:nth-of-type(2) {
+    background-color: var(--color-superchat-2);
+  }
+  &:nth-of-type(3) {
+    background-color: var(--color-superchat-3);
+  }
+
+  &:nth-of-type(-n + 3) {
+    .channel-name,
+    .credit-amount {
+      color: var(--color-black);
+    }
+  }
+
+  .channel-name {
+    max-width: 5rem;
+  }
+}
+
+.livestream-superchat__info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: var(--font-xsmall);
+}
+
+.livestream-superchat__banner {
+  border-top-right-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+  padding: 0.25rem var(--spacing-s);
+  display: inline-block;
+  position: relative;
+}
+
+// This is just a two small circles that overlap to make it look like
+// the banner and the left border are connected
+.livestream-superchat__banner-corner {
+  height: calc(var(--border-radius) * 2);
+  width: calc(var(--border-radius) * 2);
+  border-radius: 50%;
+  position: absolute;
+  background-color: var(--color-superchat);
+  bottom: 0;
+  left: 0;
+  transform: translateX(25%) translateY(50%);
+
+  &::after {
+    content: '';
+    height: calc(var(--border-radius) * 2);
+    width: calc(var(--border-radius) * 2);
+    border-top-left-radius: var(--border-radius);
+    background-color: var(--color-card-background);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    transform: translateX(25%) translateY(50%);
+  }
+}
+
+.livestream-comment__text {
+  padding-right: var(--spacing-xxs);
+  padding-bottom: var(--spacing-xxs);
+}
+
+.livestream-superchat__tooltip-amount {
+  margin-top: var(--spacing-xs);
+  margin-left: 0;
+  background-color: transparent;
+  padding: 0;
+}
+
+.livestream__superchat-comment {
+  margin-top: var(--spacing-s);
+  max-width: 5rem;
+  overflow-wrap: break-word;
+}
+
+.livestream-superchat__amount-large {
+  min-width: 2.5rem;
 }
 
 .table--livestream-data {

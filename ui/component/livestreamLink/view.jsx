@@ -4,6 +4,8 @@ import React from 'react';
 import Card from 'component/common/card';
 import ClaimPreview from 'component/claimPreview';
 import { Lbry } from 'lbry-redux';
+import { useHistory } from 'react-router';
+import { formatLbryUrlForWeb } from 'util/url';
 
 type Props = {
   channelClaim: ChannelClaim,
@@ -11,6 +13,7 @@ type Props = {
 
 export default function LivestreamLink(props: Props) {
   const { channelClaim } = props;
+  const { push } = useHistory();
   const [livestreamClaim, setLivestreamClaim] = React.useState(false);
   const [isLivestreaming, setIsLivestreaming] = React.useState(false);
   const livestreamChannelId = channelClaim.claim_id || ''; // TODO: fail in a safer way, probably
@@ -66,7 +69,14 @@ export default function LivestreamLink(props: Props) {
 
   // gonna pass the wrapper in so I don't have to rewrite the dmca/blocking logic in claimPreview.
   const element = (props: { children: any }) => (
-    <Card className="livestream__channel-link" title={__('Live stream in progress')}>
+    <Card
+      role="button"
+      className="livestream__channel-link"
+      title={__('Live stream in progress')}
+      onClick={() => {
+        push(formatLbryUrlForWeb(livestreamClaim.canonical_url));
+      }}
+    >
       {props.children}
     </Card>
   );

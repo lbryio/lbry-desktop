@@ -127,10 +127,10 @@
   position: relative;
   display: flex;
   align-items: center;
-  margin-top: var(--spacing-l);
+  margin-top: var(--spacing-m);
 
   ~ .section {
-    margin-top: var(--spacing-l);
+    margin-top: var(--spacing-m);
   }
 
   &:only-child,
@@ -139,7 +139,7 @@
   }
 
   > *:not(:last-child) {
-    margin-right: var(--spacing-m);
+    margin-right: var(--spacing-s);
   }
 
   @media (max-width: $breakpoint-small) {
@@ -161,7 +161,6 @@
 
   .button--primary ~ .button--link,
   .button--secondary ~ .button--link {
-    margin-left: var(--spacing-s);
     padding: var(--spacing-s) var(--spacing-m);
     height: var(--button-height);
   }

@@ -127,6 +127,8 @@
 }
 
 .recommended-content__toggles {
+  margin-right: var(--spacing-s);
+
   button {
     padding: 0 var(--spacing-xs);
     height: 2rem;

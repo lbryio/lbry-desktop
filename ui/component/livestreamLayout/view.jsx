@@ -3,6 +3,7 @@ import { BITWAVE_EMBED_URL } from 'constants/livestream';
 import React from 'react';
 import FileTitleSection from 'component/fileTitleSection';
 import LivestreamComments from 'component/livestreamComments';
+import { useIsMobile } from 'effects/use-screensize';
 
 type Props = {
   uri: string,
@@ -13,6 +14,7 @@ type Props = {
 
 export default function LivestreamLayout(props: Props) {
   const { claim, uri, isLive, activeViewers } = props;
+  const isMobile = useIsMobile();
 
   if (!claim || !claim.signing_channel) {
     return null;
@@ -41,9 +43,11 @@ export default function LivestreamLayout(props: Props) {
             })}
           </div>
         )}
+
+        {isMobile && <LivestreamComments uri={uri} />}
+
         <FileTitleSection uri={uri} livestream isLive={isLive} activeViewers={activeViewers} />
       </div>
-      <LivestreamComments uri={uri} />
     </>
   );
 }

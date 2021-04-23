@@ -142,4 +142,14 @@
   // Scrollbar
   --color-scrollbar-thumb-bg: rgba(255, 255, 255, 0.2);
   --color-scrollbar-track-bg: transparent;
+
+  // Superchat
+  --color-superchat-text: var(--color-black);
+  --color-superchat-text__light: var(--color-text);
+  --color-superchat: #fcd34d;
+  --color-superchat__light: #ef4e1647;
+  --color-superchat-2: #fde68a;
+  --color-superchat-3: #fef3c7;
+  --color-superchat-3__light: #58066087;
+  --color-superchat-4: #fffbeb;
 }

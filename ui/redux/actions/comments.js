@@ -60,6 +60,44 @@ export function doCommentList(uri: string, page: number = 1, pageSize: number = 
   };
 }
 
+export function doSuperChatList(uri: string) {
+  return (dispatch: Dispatch, getState: GetState) => {
+    const state = getState();
+    const claim = selectClaimsByUri(state)[uri];
+    const claimId = claim ? claim.claim_id : null;
+
+    if (!claimId) {
+      console.error('No claimId found for uri: ', uri); //eslint-disable-line
+      return;
+    }
+
+    dispatch({
+      type: ACTIONS.COMMENT_SUPER_CHAT_LIST_STARTED,
+    });
+
+    return Comments.super_list({
+      claim_id: claimId,
+    })
+      .then((result: CommentListResponse) => {
+        const { items: comments, total_amount: totalAmount } = result;
+        dispatch({
+          type: ACTIONS.COMMENT_SUPER_CHAT_LIST_COMPLETED,
+          data: {
+            comments,
+            totalAmount,
+            uri: uri,
+          },
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: ACTIONS.COMMENT_SUPER_CHAT_LIST_FAILED,
+          data: error,
+        });
+      });
+  };
+}
+
 export function doCommentReactList(uri: string | null, commentId?: string) {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
@@ -201,9 +239,10 @@ export function doCommentCreate(
   claim_id: string = '',
   parent_id?: string,
   uri: string,
-  livestream?: boolean = false
+  livestream?: boolean = false,
+  txid?: string
 ) {
-  return (dispatch: Dispatch, getState: GetState) => {
+  return async (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const activeChannelClaim = selectActiveChannelClaim(state);
 
@@ -216,6 +255,16 @@ export function doCommentCreate(
       type: ACTIONS.COMMENT_CREATE_STARTED,
     });
 
+    let signatureData;
+    if (activeChannelClaim) {
+      try {
+        signatureData = await Lbry.channel_sign({
+          channel_id: activeChannelClaim.claim_id,
+          hexdata: toHex(comment),
+        });
+      } catch (e) {}
+    }
+
     if (parent_id) {
       const notification = makeSelectNotificationForCommentId(parent_id)(state);
       if (notification && !notification.is_seen) {
@@ -223,11 +272,19 @@ export function doCommentCreate(
       }
     }
 
-    return Lbry.comment_create({
+    if (!signatureData) {
+      return dispatch(doToast({ isError: true, message: __('Unable to verify your channel. Please try again.') }));
+    }
+
+    return Comments.comment_create({
       comment: comment,
       claim_id: claim_id,
       channel_id: activeChannelClaim.claim_id,
+      channel_name: activeChannelClaim.name,
       parent_id: parent_id,
+      signature: signatureData.signature,
+      signing_ts: signatureData.signing_ts,
+      ...(txid ? { support_tx_id: txid } : {}),
     })
       .then((result: CommentCreateResponse) => {
         dispatch({
@@ -258,6 +315,8 @@ export function doCommentCreate(
             isError: true,
           })
         );
+
+        return Promise.reject(error);
       });
   };
 }

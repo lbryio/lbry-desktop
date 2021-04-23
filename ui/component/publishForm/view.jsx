@@ -613,7 +613,7 @@ function PublishForm(props: Props) {
         </div>
       )}
       <section>
-        <div className="card__actions">
+        <div className="section__actions">
           <Button
             button="primary"
             onClick={handlePublish}

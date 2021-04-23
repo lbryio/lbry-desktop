@@ -22,7 +22,7 @@ function CommentsReplies(props: Props) {
   const sortedComments = comments ? [...comments].reverse() : [];
   const numberOfComments = comments ? comments.length : 0;
   const linkedCommentId = linkedComment ? linkedComment.comment_id : '';
-  const commentsIndexOfLInked = comments && sortedComments.findIndex(e => e.comment_id === linkedCommentId);
+  const commentsIndexOfLInked = comments && sortedComments.findIndex((e) => e.comment_id === linkedCommentId);
 
   function showMore() {
     if (start > 0) {
@@ -105,6 +105,7 @@ function CommentsReplies(props: Props) {
                       linkedComment={linkedComment}
                       commentingEnabled={commentingEnabled}
                       handleCommentDone={handleCommentDone}
+                      supportAmount={comment.support_amount}
                     />
                   );
                 })}
