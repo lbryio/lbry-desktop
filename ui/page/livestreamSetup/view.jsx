@@ -16,7 +16,6 @@ import CopyableText from 'component/copyableText';
 import Card from 'component/common/card';
 import ClaimList from 'component/claimList';
 import usePersistedState from 'effects/use-persisted-state';
-import usePrevious from 'effects/use-previous';
 
 type Props = {
   channels: Array<ChannelClaim>,
@@ -24,47 +23,43 @@ type Props = {
   activeChannelClaim: ?ChannelClaim,
   pendingClaims: Array<Claim>,
   doNewLivestream: (string) => void,
+  fetchNoSourceClaims: (string) => void,
+  myLivestreamClaims: Array<Claim>,
+  fetchingLivestreams: boolean,
+  channelId: ?string,
+  channelName: ?string,
 };
 
 export default function LivestreamSetupPage(props: Props) {
   const LIVESTREAM_CLAIM_POLL_IN_MS = 60000;
-  const { channels, fetchingChannels, activeChannelClaim, pendingClaims, doNewLivestream } = props;
+  const {
+    channels,
+    fetchingChannels,
+    activeChannelClaim,
+    pendingClaims,
+    doNewLivestream,
+    fetchNoSourceClaims,
+    myLivestreamClaims,
+    fetchingLivestreams,
+    channelId,
+    channelName,
+  } = props;
 
   const [sigData, setSigData] = React.useState({ signature: undefined, signing_ts: undefined });
-  const [showHelpTest, setShowHelpTest] = usePersistedState('livestream-help-seen', true);
-  const [spin, setSpin] = React.useState(true);
-  const [livestreamClaims, setLivestreamClaims] = React.useState([]);
+  const [showHelp, setShowHelp] = usePersistedState('livestream-help-seen', true);
 
   const hasChannels = channels && channels.length > 0;
-  const activeChannelClaimStr = JSON.stringify(activeChannelClaim);
+  const hasLivestreamClaims = Boolean(myLivestreamClaims.length || pendingClaims.length);
 
   function createStreamKey() {
-    if (!activeChannelClaim || !sigData.signature || !sigData.signing_ts) return null;
-    return `${activeChannelClaim.claim_id}?d=${toHex(activeChannelClaim.name)}&s=${sigData.signature}&t=${
-      sigData.signing_ts
-    }`;
+    if (!channelId || !channelName || !sigData.signature || !sigData.signing_ts) return null;
+    return `${channelId}?d=${toHex(channelName)}&s=${sigData.signature}&t=${sigData.signing_ts}`;
   }
 
   const streamKey = createStreamKey();
-  const pendingLiveStreamClaims = pendingClaims
-    ? pendingClaims.filter(
-        (claim) =>
-          // $FlowFixMe
-          claim.value_type === 'stream' && !(claim.value && claim.value.source)
-      )
-    : [];
-  const [localPending, setLocalPending] = React.useState([]); //
-  const localPendingStr = JSON.stringify(localPending);
-  const pendingLivestreamClaimsStr = JSON.stringify(pendingLiveStreamClaims);
-  const prevPendingLiveStreamClaimStr = usePrevious(pendingLivestreamClaimsStr);
-  const liveStreamClaimsStr = JSON.stringify(livestreamClaims);
-  const prevLiveStreamClaimsStr = JSON.stringify(liveStreamClaimsStr);
-  const pendingLength = pendingLiveStreamClaims.length;
-  const totalLivestreamClaims = pendingLiveStreamClaims.concat(livestreamClaims);
-  const activeChannelId = activeChannelClaim && activeChannelClaim.claim_id;
-  const localPendingForChannel = localPending.filter(
-    (claim) => claim.signing_channel && claim.signing_channel.claim_id === activeChannelId
-  );
+
+  const pendingLength = pendingClaims.length;
+  const totalLivestreamClaims = pendingClaims.concat(myLivestreamClaims);
   const helpText = (
     <div className="section__subtitle">
       <p>
@@ -104,112 +99,41 @@ export default function LivestreamSetupPage(props: Props) {
   );
 
   React.useEffect(() => {
-    if (activeChannelClaimStr) {
-      const channelClaim = JSON.parse(activeChannelClaimStr);
-
-      // ensure we have a channel
-      if (channelClaim.claim_id) {
-        Lbry.channel_sign({
-          channel_id: channelClaim.claim_id,
-          hexdata: toHex(channelClaim.name),
-        })
-          .then((data) => {
-            setSigData(data);
-          })
-          .catch((error) => {
-            setSigData({ signature: null, signing_ts: null });
-          });
-      }
-    }
-  }, [activeChannelClaimStr, setSigData]);
-
-  // The following 2 effects handle the time between pending disappearing and claim_search being able to find it.
-  // We'll maintain our own pending list:
-  // add to it when there are new things in pending
-  // remove items only when our claim_search finds it
-  React.useEffect(() => {
-    // add to localPending when pending changes
-    const localPending = JSON.parse(localPendingStr);
-    const pendingLivestreamClaims = JSON.parse(pendingLivestreamClaimsStr);
-    if (
-      pendingLiveStreamClaims !== prevPendingLiveStreamClaimStr ||
-      (pendingLivestreamClaims.length && !localPending.length)
-    ) {
-      const prevPendingLivestreamClaims = prevPendingLiveStreamClaimStr
-        ? JSON.parse(prevPendingLiveStreamClaimStr)
-        : [];
-      const pendingClaimIds = pendingLivestreamClaims.map((claim) => claim.claim_id);
-      const prevPendingClaimIds = prevPendingLivestreamClaims.map((claim) => claim.claim_id);
-      const newLocalPending = [];
-      if (pendingClaimIds.length > prevPendingClaimIds.length) {
-        pendingLivestreamClaims.forEach((pendingClaim) => {
-          if (!localPending.some((lClaim) => lClaim.claim_id === pendingClaim.claim_id)) {
-            newLocalPending.push(pendingClaim);
-          }
-        });
-        setLocalPending(localPending.concat(newLocalPending));
-      }
-    }
-  }, [pendingLivestreamClaimsStr, prevPendingLiveStreamClaimStr, localPendingStr, setLocalPending]);
-
-  React.useEffect(() => {
-    // remove from localPending when livestreamClaims found
-    const localPending = JSON.parse(localPendingStr);
-    if (liveStreamClaimsStr !== prevLiveStreamClaimsStr && localPending.length) {
-      const livestreamClaims = JSON.parse(liveStreamClaimsStr);
-      setLocalPending(
-        localPending.filter((pending) => !livestreamClaims.some((claim) => claim.claim_id === pending.claim_id))
-      );
-    }
-  }, [liveStreamClaimsStr, prevLiveStreamClaimsStr, localPendingStr, setLocalPending]);
-
-  const checkLivestreams = React.useCallback(
-    function checkLivestreamClaims(channelClaimId, setLivestreamClaims, setSpin) {
-      Lbry.claim_search({
-        channel_ids: [channelClaimId],
-        has_no_source: true,
-        claim_type: ['stream'],
-        include_purchase_receipt: true,
+    // ensure we have a channel
+    if (channelId && channelName) {
+      Lbry.channel_sign({
+        channel_id: channelId,
+        hexdata: toHex(channelName),
       })
-        .then((res) => {
-          if (res && res.items && res.items.length > 0) {
-            setLivestreamClaims(res.items.reverse());
-          } else {
-            setLivestreamClaims([]);
-          }
-          setSpin(false);
+        .then((data) => {
+          setSigData(data);
         })
-        .catch(() => {
-          setLivestreamClaims([]);
-          setSpin(false);
+        .catch((error) => {
+          setSigData({ signature: null, signing_ts: null });
         });
-    },
-    [activeChannelId]
-  );
+    }
+  }, [channelName, channelId, setSigData]);
+
   React.useEffect(() => {
     let checkClaimsInterval;
-    if (!activeChannelClaimStr) return;
-    const channelClaim = JSON.parse(activeChannelClaimStr);
+    if (!channelId) return;
 
     if (!checkClaimsInterval) {
-      checkLivestreams(channelClaim.claim_id, setLivestreamClaims, setSpin);
-      checkClaimsInterval = setInterval(
-        () => checkLivestreams(channelClaim.claim_id, setLivestreamClaims, setSpin),
-        LIVESTREAM_CLAIM_POLL_IN_MS
-      );
+      fetchNoSourceClaims(channelId);
+      checkClaimsInterval = setInterval(() => fetchNoSourceClaims(channelId), LIVESTREAM_CLAIM_POLL_IN_MS);
     }
     return () => {
       if (checkClaimsInterval) {
         clearInterval(checkClaimsInterval);
       }
     };
-  }, [activeChannelClaimStr, pendingLength, setSpin, checkLivestreams]);
+  }, [channelId, pendingLength, fetchNoSourceClaims]);
 
   return (
     <Page>
-      {(fetchingChannels || spin) && (
+      {fetchingChannels && (
         <div className="main--empty">
-          <Spinner delayed />
+          <Spinner />
         </div>
       )}
 
@@ -227,21 +151,21 @@ export default function LivestreamSetupPage(props: Props) {
       {!fetchingChannels && (
         <div className="section__actions--between">
           <ChannelSelector hideAnon />
-          <Button button="link" onClick={() => setShowHelpTest(!showHelpTest)} label={__('How does this work?')} />
+          <Button button="link" onClick={() => setShowHelp(!showHelp)} label={__('How does this work?')} />
         </div>
       )}
 
-      {spin && !fetchingChannels && (
+      {fetchingLivestreams && !fetchingChannels && !hasLivestreamClaims && (
         <div className="main--empty">
-          <Spinner delayed />
+          <Spinner />
         </div>
       )}
       <div className="card-stack">
-        {!spin && !fetchingChannels && activeChannelClaim && (
+        {hasLivestreamClaims && !fetchingChannels && channelId && (
           <>
-            {showHelpTest && (
+            {showHelp && (
               <Card
-                titleActions={<Button button="close" icon={ICONS.REMOVE} onClick={() => setShowHelpTest(false)} />}
+                titleActions={<Button button="close" icon={ICONS.REMOVE} onClick={() => setShowHelp(false)} />}
                 title={__('Go Live on Odysee')}
                 subtitle={__(`You're invited to try out our new livestreaming service while in beta!`)}
                 actions={helpText}
@@ -274,15 +198,15 @@ export default function LivestreamSetupPage(props: Props) {
 
             {totalLivestreamClaims.length > 0 ? (
               <>
-                {Boolean(localPendingForChannel.length) && (
+                {Boolean(pendingClaims.length) && (
                   <div className="section">
                     <ClaimList
                       header={__('Your pending livestream uploads')}
-                      uris={localPendingForChannel.map((claim) => claim.permanent_url)}
+                      uris={pendingClaims.map((claim) => claim.permanent_url)}
                     />
                   </div>
                 )}
-                {Boolean(livestreamClaims.length) && (
+                {Boolean(myLivestreamClaims.length) && (
                   <div className="section">
                     <ClaimList
                       header={__('Your livestream uploads')}
@@ -292,7 +216,7 @@ export default function LivestreamSetupPage(props: Props) {
                             check_again: (
                               <Button
                                 button="link"
-                                onClick={() => checkLivestreams(activeChannelId, setLivestreamClaims, setSpin)}
+                                onClick={() => fetchNoSourceClaims(channelId)}
                                 label={__('Check again')}
                               />
                             ),
@@ -301,8 +225,10 @@ export default function LivestreamSetupPage(props: Props) {
                           Nothing here yet. %check_again%
                         </I18nMessage>
                       }
-                      uris={livestreamClaims
-                        .filter((c) => !pendingLiveStreamClaims.some((p) => p.permanent_url === c.permanent_url))
+                      uris={myLivestreamClaims
+                        .filter(
+                          (claim) => !pendingClaims.some((pending) => pending.permanent_url === claim.permanent_url)
+                        )
                         .map((claim) => claim.permanent_url)}
                     />
                   </div>
@@ -327,8 +253,7 @@ export default function LivestreamSetupPage(props: Props) {
                     <Button
                       button="alt"
                       onClick={() => {
-                        setSpin(true);
-                        checkLivestreams(activeChannelId, setLivestreamClaims, setSpin);
+                        fetchNoSourceClaims(channelId);
                       }}
                       label={__('Check again...')}
                     />
@@ -338,7 +263,7 @@ export default function LivestreamSetupPage(props: Props) {
             )}
 
             {/* Debug Stuff */}
-            {streamKey && false && (
+            {streamKey && false && activeChannelClaim && (
               <div style={{ marginTop: 'var(--spacing-l)' }}>
                 <h3>Debug Info</h3>
 
