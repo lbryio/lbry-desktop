@@ -9,6 +9,10 @@ let sockets = {};
 let closingSockets = {};
 let retryCount = 0;
 
+const getCommentSocketUrl = (claimId) => {
+  return `${COMMENT_WS_URL}${claimId}&category=${claimId}`;
+};
+
 export const doSocketConnect = (url, cb) => {
   function connectToSocket() {
     if (sockets[url] !== undefined && sockets[url] !== null) {
@@ -88,7 +92,7 @@ export const doNotificationSocketConnect = (enableNotifications) => (dispatch) =
 };
 
 export const doCommentSocketConnect = (uri, claimId) => (dispatch) => {
-  const url = `${COMMENT_WS_URL}${claimId}&category=${claimId}`;
+  const url = getCommentSocketUrl(claimId);
 
   doSocketConnect(url, (response) => {
     if (response.type === 'delta') {
@@ -102,6 +106,7 @@ export const doCommentSocketConnect = (uri, claimId) => (dispatch) => {
 };
 
 export const doCommentSocketDisconnect = (claimId) => (dispatch) => {
-  const url = `${COMMENT_WS_URL}${claimId}`;
+  const url = getCommentSocketUrl(claimId);
+
   dispatch(doSocketDisconnect(url));
 };
