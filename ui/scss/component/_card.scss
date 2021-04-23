@@ -17,7 +17,7 @@
 
 .card--section {
   position: relative;
-  padding: var(--spacing-l);
+  padding: var(--spacing-m);
 }
 
 .card--reward-total {
@@ -82,23 +82,22 @@
 
 .card__title-section {
   @extend .section__flex;
-  padding: var(--spacing-m) var(--spacing-l);
 
-  @media (max-width: $breakpoint-small) {
-    padding: 0;
+  @media (min-width: $breakpoint-small) {
+    padding: var(--spacing-s) var(--spacing-m);
   }
 }
 
 .card__title-section--body-list {
-  padding: var(--spacing-m);
+  padding-left: var(--spacing-s);
 
-  @media (max-width: $breakpoint-small) {
-    padding: 0;
+  @media (min-width: $breakpoint-small) {
+    padding: var(--spacing-m);
   }
 }
 
 .card__title-section--small {
-  padding: var(--spacing-s) var(--spacing-m);
+  padding: var(--spacing-s);
 }
 
 .card__actions--inline {
@@ -175,7 +174,7 @@
 .card__title {
   display: block;
   align-items: center;
-  font-size: var(--font-title);
+  font-size: var(--font-large);
   font-weight: var(--font-weight-light);
 
   & > *:not(:last-child) {
@@ -200,11 +199,9 @@
 
 .card__title-actions {
   align-self: flex-start;
-  padding: var(--spacing-m);
-  padding-right: var(--spacing-l);
 
-  @media (max-width: $breakpoint-small) {
-    padding: 0;
+  @media (min-width: $breakpoint-small) {
+    padding: var(--spacing-s);
   }
 }
 
@@ -248,6 +245,13 @@
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
+
+  @media (max-width: $breakpoint-small) {
+    padding: var(--spacing-s);
+    padding-bottom: 0;
+    margin: 0;
+    margin-bottom: var(--spacing-s);
+  }
 }
 
 .card__header--nowrap {
@@ -262,7 +266,7 @@
 }
 
 .card__body {
-  padding: var(--spacing-l);
+  padding: var(--spacing-m);
 
   &:not(.card__body--no-title) {
     padding-top: 0;
@@ -279,10 +283,11 @@
 }
 
 .card__main-actions {
-  padding: var(--spacing-l);
+  padding: var(--spacing-m);
   padding-bottom: 0;
-  margin-bottom: var(--spacing-l);
+  margin-bottom: var(--spacing-s);
   border-top: 1px solid var(--color-border);
+  height: 100%;
 
   &:only-child {
     border-top: none;
@@ -290,10 +295,10 @@
 }
 
 .card__body-actions {
-  padding: var(--spacing-l);
+  padding: var(--spacing-s);
 
-  @media (max-width: $breakpoint-small) {
-    padding: var(--spacing-s);
+  @media (min-width: $breakpoint-small) {
+    padding: var(--spacing-m);
   }
 }
 
@@ -317,15 +322,12 @@
   }
 }
 
-.card__header,
 .card__body,
 .card__main-actions {
-  @media (max-width: $breakpoint-small) {
-    padding: var(--spacing-s);
-    padding-bottom: 0;
-    margin: 0;
-    margin-bottom: var(--spacing-s);
-  }
+  padding: var(--spacing-m);
+  padding-bottom: 0;
+  margin: 0;
+  margin-bottom: var(--spacing-m);
 }
 
 .card__bottom-gutter {

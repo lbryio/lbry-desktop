@@ -30,12 +30,12 @@ type Props = {
   persistedStorageKey?: string,
   showHiddenByUser: boolean,
   showUnresolvedClaims?: boolean,
-  renderProperties: ?(Claim) => Node,
+  renderActions?: (Claim) => ?Node,
+  renderProperties?: (Claim) => ?Node,
   includeSupportAction?: boolean,
   injectedItem: ?Node,
   timedOutMessage?: Node,
   tileLayout?: boolean,
-  renderActions?: (Claim) => ?Node,
   searchInLanguage: boolean,
   hideMenu?: boolean,
 };
@@ -55,12 +55,12 @@ export default function ClaimList(props: Props) {
     page,
     showHiddenByUser,
     showUnresolvedClaims,
-    renderProperties,
     includeSupportAction,
     injectedItem,
     timedOutMessage,
     tileLayout = false,
     renderActions,
+    renderProperties,
     searchInLanguage,
     hideMenu,
   } = props;
@@ -101,7 +101,9 @@ export default function ClaimList(props: Props) {
   return tileLayout && !header ? (
     <section className="claim-grid">
       {urisLength > 0 &&
-        uris.map((uri) => <ClaimPreviewTile key={uri} uri={uri} showHiddenByUser={showHiddenByUser} />)}
+        uris.map((uri) => (
+          <ClaimPreviewTile key={uri} uri={uri} showHiddenByUser={showHiddenByUser} properties={renderProperties} />
+        ))}
       {!timedOut && urisLength === 0 && !loading && <div className="empty main--empty">{empty || noResultMsg}</div>}
       {timedOut && timedOutMessage && <div className="empty main--empty">{timedOutMessage}</div>}
     </section>

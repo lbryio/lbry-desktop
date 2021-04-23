@@ -232,7 +232,7 @@
 }
 
 .button--emoji {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   border-radius: 3rem;
 }
 
@@ -282,10 +282,6 @@ svg + .button__label {
   &:last-of-type {
     border-top-right-radius: var(--border-radius);
     border-bottom-right-radius: var(--border-radius);
-    // since we're abusing "button-toggle" let it stand alone properly
-    &:not(:first-of-type) {
-      margin-right: var(--spacing-s);
-    }
   }
 }
 

@@ -12,11 +12,13 @@ declare type Comment = {
   is_channel_signature_valid?: boolean, // whether or not the signature could be validated
   parent_id?: number, // comment_id of comment this is in reply to
   is_pinned: boolean,
+  support_amount: number,
 };
 
 // todo: relate individual comments to their commentId
 declare type CommentsState = {
   commentsByUri: { [string]: string },
+  superChatsByUri: { [string]: { totalAmount: number, comments: Array<Comment> } },
   byId: { [string]: Array<string> },
   repliesByParentId: { [string]: Array<string> }, // ParentCommentID -> list of reply comments
   topLevelCommentsById: { [string]: Array<string> }, // ClaimID -> list of top level comments
@@ -41,3 +43,36 @@ declare type CommentReactParams = {
   clear_types?: string,
   remove?: boolean,
 };
+
+// @flow
+declare type CommentListParams = {
+  page: number,
+  page_size: number,
+  claim_id: string,
+};
+
+declare type CommentListResponse = {
+  items: Array<Comment>,
+  total_amount: number,
+};
+
+declare type CommentAbandonParams = {
+  comment_id: string,
+  creator_channel_id?: string,
+  creator_channel_name?: string,
+  channel_id?: string,
+  hexdata?: string,
+};
+
+declare type CommentCreateParams = {
+  comment: string,
+  claim_id: string,
+  parent_id?: string,
+  signature: string,
+  signing_ts: number,
+  support_tx_id?: string,
+};
+
+declare type SuperListParams = {};
+
+declare type ModerationBlockParams = {};

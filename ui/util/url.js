@@ -8,7 +8,7 @@ function encodeWithApostropheEncode(string) {
   return encodeURIComponent(string).replace(/'/g, '%27');
 }
 
-export const formatLbryUrlForWeb = uri => {
+export const formatLbryUrlForWeb = (uri) => {
   let newUrl = uri.replace('lbry://', '/').replace(/#/g, ':');
   if (newUrl.startsWith('/?')) {
     // This is a lbry link to an internal page ex: lbry://?rewards
@@ -18,7 +18,7 @@ export const formatLbryUrlForWeb = uri => {
   return newUrl;
 };
 
-export const formatFileSystemPath = path => {
+export const formatFileSystemPath = (path) => {
   if (!path) {
     return;
   }
@@ -37,7 +37,7 @@ export const formatFileSystemPath = path => {
   ex: lbry://?rewards
   ex: open.lbry.com/?rewards
 */
-export const formatInAppUrl = path => {
+export const formatInAppUrl = (path) => {
   // Determine if we need to add a leading "/$/" for app pages
   const APP_PAGE_REGEX = /(\?)([a-z]*)(.*)/;
   const appPageMatches = APP_PAGE_REGEX.exec(path);
@@ -75,7 +75,7 @@ export const formatWebUrlIntoLbryUrl = (pathname, search) => {
   return appLink;
 };
 
-export const generateInitialUrl = hash => {
+export const generateInitialUrl = (hash) => {
   let url = '/';
   if (hash) {
     hash = hash.replace('#', '');
@@ -88,7 +88,7 @@ export const generateLbryContentUrl = (canonicalUrl, permanentUrl) => {
   return canonicalUrl ? canonicalUrl.split('lbry://')[1] : permanentUrl.split('lbry://')[1];
 };
 
-export const generateLbryWebUrl = lbryUrl => {
+export const generateLbryWebUrl = (lbryUrl) => {
   return lbryUrl.replace(/#/g, ':');
 };
 

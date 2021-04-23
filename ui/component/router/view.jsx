@@ -38,6 +38,7 @@ import PasswordSetPage from 'page/passwordSet';
 import SignInVerifyPage from 'page/signInVerify';
 import ChannelsPage from 'page/channels';
 import LiveStreamSetupPage from 'page/livestreamSetup';
+import LivestreamCurrentPage from 'page/livestreamCurrent';
 import EmbedWrapperPage from 'page/embedWrapper';
 import TopPage from 'page/top';
 import Welcome from 'page/welcome';
@@ -285,6 +286,7 @@ function AppRouter(props: Props) {
       <PrivateRoute {...props} path={`/$/${PAGES.WALLET}`} exact component={WalletPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.CHANNELS}`} component={ChannelsPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.LIVESTREAM}`} component={LiveStreamSetupPage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.LIVESTREAM_CURRENT}`} component={LivestreamCurrentPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.BUY}`} component={BuyPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.RECEIVE}`} component={ReceivePage} />
       <PrivateRoute {...props} path={`/$/${PAGES.SEND}`} component={SendPage} />

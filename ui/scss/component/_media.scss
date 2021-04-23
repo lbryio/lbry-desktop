@@ -60,6 +60,7 @@
   justify-content: space-between;
   align-items: flex-end;
   flex-direction: row;
+  flex-wrap: wrap;
 
   @media (max-width: $breakpoint-medium) {
     display: block;

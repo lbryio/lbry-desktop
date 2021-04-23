@@ -3,6 +3,7 @@ import { BITWAVE_LIVE_API } from 'constants/livestream';
 import React from 'react';
 import Page from 'component/page';
 import LivestreamLayout from 'component/livestreamLayout';
+import LivestreamComments from 'component/livestreamComments';
 import analytics from 'analytics';
 import { Lbry } from 'lbry-redux';
 
@@ -111,7 +112,7 @@ export default function LivestreamPage(props: Props) {
   }, [doSetPlayingUri]);
 
   return (
-    <Page className="file-page" filePage livestream>
+    <Page className="file-page" noFooter livestream rightSide={<LivestreamComments uri={uri} />}>
       <LivestreamLayout uri={uri} activeViewers={activeViewers} isLive={isLive} />
     </Page>
   );

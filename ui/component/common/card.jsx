@@ -47,10 +47,12 @@ export default function Card(props: Props) {
 
   return (
     <section
+      role="button"
       className={classnames(className, 'card')}
-      onClick={() => {
+      onClick={(e) => {
         if (onClick) {
           onClick();
+          e.stopPropagation();
         }
       }}
     >

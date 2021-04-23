@@ -15,6 +15,7 @@ $thumbnailWidthSmall: 1rem;
 
 .comment__sort {
   margin: var(--spacing-s) 0;
+  margin-right: var(--spacing-s);
   display: block;
 
   @media (min-width: $breakpoint-small) {
@@ -24,7 +25,6 @@ $thumbnailWidthSmall: 1rem;
 }
 
 .comment__create {
-  padding-bottom: var(--spacing-m);
   font-size: var(--font-small);
 }
 
@@ -39,6 +39,7 @@ $thumbnailWidthSmall: 1rem;
   flex-direction: column;
   font-size: var(--font-small);
   margin: 0;
+  position: relative;
 
   &:not(:first-child) {
     margin-top: var(--spacing-l);
@@ -53,13 +54,11 @@ $thumbnailWidthSmall: 1rem;
     }
 
     .channel-staked__wrapper {
-      @media (max-width: $breakpoint-small) {
-        padding: 0;
-        left: 0;
-        bottom: -1rem;
-        padding: -1rem;
-        margin-left: 0;
-      }
+      padding: 0;
+      left: calc(#{$thumbnailWidthSmall} / 4);
+      bottom: -1rem;
+      padding: -1rem;
+      margin-left: 0;
     }
   }
 }
@@ -102,12 +101,26 @@ $thumbnailWidthSmall: 1rem;
   }
 }
 
-.comment--livestream {
-  margin-right: 0;
-}
-
 .comment--slimed {
   opacity: 0.6;
+}
+
+.comment__sc-preview {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-s);
+  margin: var(--spacing-s) 0;
+}
+
+.comment__edit-input {
+  margin-top: var(--spacing-xxs);
+}
+
+.comment__scpreview-amount {
+  margin-right: var(--spacing-m);
+  font-size: var(--font-large);
 }
 
 .comment__threadline {
@@ -155,12 +168,12 @@ $thumbnailWidthSmall: 1rem;
   border-radius: 4px;
 }
 
-.comment__body_container {
+.comment__body-container {
   flex: 1;
   margin-left: var(--spacing-xs);
 
   @media (min-width: $breakpoint-small) {
-    margin-left: var(--spacing-m);
+    margin-left: var(--spacing-s);
   }
 }
 
@@ -231,7 +244,7 @@ $thumbnailWidthSmall: 1rem;
   opacity: 0.5;
   white-space: nowrap;
   height: 100%;
-  margin-left: var(--spacing-xs);
+  margin-right: var(--spacing-xs);
 
   &:focus {
     @include linkFocus;
@@ -252,9 +265,7 @@ $thumbnailWidthSmall: 1rem;
 }
 
 .comment__char-count {
-  align-self: flex-end;
   font-size: var(--font-xsmall);
-  padding-top: var(--spacing-xxs);
 }
 
 .comment__char-count-mde {
@@ -406,4 +417,8 @@ $thumbnailWidthSmall: 1rem;
   max-width: 10rem;
   white-space: pre-line;
   margin-right: var(--spacing-s);
+}
+
+.comment__tip-input {
+  margin: var(--spacing-s) 0;
 }

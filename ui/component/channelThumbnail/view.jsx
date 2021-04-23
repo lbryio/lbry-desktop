@@ -19,6 +19,7 @@ type Props = {
   isResolving: boolean,
   showDelayedMessage?: boolean,
   hideStakedIndicator?: boolean,
+  xsmall?: boolean,
 };
 
 function ChannelThumbnail(props: Props) {
@@ -29,6 +30,7 @@ function ChannelThumbnail(props: Props) {
     thumbnailPreview: rawThumbnailPreview,
     obscure,
     small = false,
+    xsmall = false,
     allowGifs = false,
     claim,
     doResolveUri,
@@ -72,6 +74,7 @@ function ChannelThumbnail(props: Props) {
       className={classnames('channel-thumbnail', className, {
         [colorClassName]: !showThumb,
         'channel-thumbnail--small': small,
+        'channel-thumbnail--xsmall': xsmall,
         'channel-thumbnail--resolving': isResolving,
       })}
     >

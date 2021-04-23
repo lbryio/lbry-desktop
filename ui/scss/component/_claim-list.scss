@@ -356,7 +356,8 @@
 
 .claim-grid__header {
   margin-bottom: var(--spacing-m);
-  display: inline-block;
+  display: flex;
+  align-items: center;
 
   .button {
     &:hover {

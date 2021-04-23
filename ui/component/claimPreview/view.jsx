@@ -301,10 +301,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                     <ClaimPreviewTitle uri={uri} />
                   </NavLink>
                 )}
-
-                {/* {type !== 'small' && !isChannelUri && signingChannel && SIMPLE_SITE && (
-                <ChannelThumbnail uri={signingChannel.permanent_url} />
-              )} */}
               </div>
               <ClaimPreviewSubtitle uri={uri} type={type} />
               {(pending || !!reflectingProgress) && <PublishPending uri={uri} />}

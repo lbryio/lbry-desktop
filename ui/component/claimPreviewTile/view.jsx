@@ -40,6 +40,7 @@ type Props = {
   isMature: boolean,
   showMature: boolean,
   showHiddenByUser?: boolean,
+  properties?: (Claim) => void,
 };
 
 function ClaimPreviewTile(props: Props) {
@@ -60,6 +61,7 @@ function ClaimPreviewTile(props: Props) {
     isMature,
     showMature,
     showHiddenByUser,
+    properties,
   } = props;
   const isRepost = claim && claim.repost_channel_url;
   const shouldFetch = claim === undefined;
@@ -171,7 +173,7 @@ function ClaimPreviewTile(props: Props) {
               </div>
               {/* @endif */}
               <div className="claim-preview__file-property-overlay">
-                <FileProperties uri={uri} small />
+                <FileProperties uri={uri} small properties={properties} />
               </div>
             </React.Fragment>
           )}

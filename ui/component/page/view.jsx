@@ -29,6 +29,7 @@ type Props = {
   videoTheaterMode: boolean,
   isMarkdown?: boolean,
   livestream?: boolean,
+  rightSide?: Node,
   backout: {
     backLabel?: string,
     backNavDefault?: string,
@@ -51,6 +52,7 @@ function Page(props: Props) {
     videoTheaterMode,
     isMarkdown = false,
     livestream,
+    rightSide,
   } = props;
 
   const {
@@ -114,6 +116,8 @@ function Page(props: Props) {
           })}
         >
           {children}
+
+          {!isMobile && rightSide && <div className="main__right-side">{rightSide}</div>}
         </main>
         {/* @if TARGET='app' */}
         <StatusBar />

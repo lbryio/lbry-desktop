@@ -1336,7 +1336,7 @@ export const icons = {
     <svg
       {...props}
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
+      viewBox="2 0 24 24"
       width={props.size || '18'}
       height={props.size || '18'}
       fill="currentColor"
@@ -1728,6 +1728,269 @@ export const icons = {
       </g>
     </svg>
   ),
+  [ICONS.LIVESTREAM]: (props: CustomProps) => (
+    <svg
+      version="1.1"
+      id="Layer_1"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+      x="0px"
+      y="0px"
+      viewBox="0 0 36 36"
+      width={props.size || '18'}
+      height={props.size || '16'}
+      className={props.className}
+    >
+      <g id="XMLID_505_">
+        <linearGradient
+          id="XMLID_420_"
+          gradientUnits="userSpaceOnUse"
+          x1="-519.065"
+          y1="1525.4059"
+          x2="-508.6628"
+          y2="1525.4059"
+        >
+          <stop offset="1.970443e-002" stopColor="#FFC200" />
+          <stop offset="0.3866" stopColor="#FF31BD" />
+          <stop offset="0.6245" stopColor="#8E31BD" />
+          <stop offset="0.7758" stopColor="#6E8EDE" />
+          <stop offset="1" stopColor="#57EABA" />
+        </linearGradient>
+        <circle
+          id="XMLID_508_"
+          fill="none"
+          stroke="url(XMLID_420_)"
+          strokeWidth="2.4678"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeMiterlimit="10"
+          cx="-513.9"
+          cy="1525.4"
+          r="4"
+        />
+        <path
+          id="XMLID_507_"
+          fill="#FF7B5B"
+          d="M-521,1518.3c-1.8,1.8-2.9,4.3-2.9,7.1c0,2.6,1,4.9,2.5,6.7L-521,1518.3z"
+        />
+        <path
+          id="XMLID_506_"
+          fill="#FF7B5B"
+          d="M-506.9,1532.1c1.8-1.8,2.9-4.3,2.9-7.1c0-2.6-1-4.9-2.5-6.7L-506.9,1532.1z"
+        />
+      </g>
+      <rect id="XMLID_125_" x="0" y="0" fill="none" width="36" height="36" stroke="none" /> {/* }//fill="#FFFFFF" */}
+      <linearGradient
+        id="XMLID_421_"
+        gradientUnits="userSpaceOnUse"
+        x1="-1625.151"
+        y1="-2518.4661"
+        x2="-1596.6696"
+        y2="-2518.4661"
+        gradientTransform="matrix(-1 0 0 -1 -1589.489 -2500.4661)"
+      >
+        <stop offset="1.970443e-002" stopColor="#FFC200" />
+        <stop offset="0.4731" stopColor="#FF31BD" />
+        <stop offset="0.6947" stopColor="#8E31BD" />
+        <stop offset="1" stopColor="#57EABA" />
+      </linearGradient>
+      <path
+        id="XMLID_124_"
+        fill="none"
+        stroke="url(#XMLID_421_)"
+        strokeWidth="2.94"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeMiterlimit="10"
+        d="M21.4,5.2L21.4,5.2c7.1,0,12.8,5.7,12.8,12.8v0c0,7.1-5.7,12.8-12.8,12.8H8.7V18C8.7,10.9,14.4,5.2,21.4,5.2z"
+      />
+      <linearGradient id="XMLID_422_" gradientUnits="userSpaceOnUse" x1="18.041" y1="32.147" x2="38.7776" y2="-0.9289">
+        <stop offset="1.970443e-002" stopColor="#FFC200" />
+        <stop offset="0.4731" stopColor="#FF31BD" />
+        <stop offset="0.6947" stopColor="#8E31BD" />
+        <stop offset="1" stopColor="#57EABA" />
+      </linearGradient>
+      <rect id="XMLID_123_" x="26.9" y="13.8" fill="url(#XMLID_422_)" stroke="none" width="2.8" height="3.8" />
+      <linearGradient
+        id="XMLID_423_"
+        gradientUnits="userSpaceOnUse"
+        x1="13.0856"
+        y1="29.0402"
+        x2="33.8223"
+        y2="-4.0356"
+      >
+        <stop offset="1.970443e-002" stopColor="#FFC200" />
+        <stop offset="0.4731" stopColor="#FF31BD" />
+        <stop offset="0.6947" stopColor="#8E31BD" />
+        <stop offset="1" stopColor="#57EABA" />
+      </linearGradient>
+      <rect id="XMLID_122_" x="20" y="13.8" fill="url(#XMLID_422_)" stroke="none" width="2.8" height="3.8" />
+      <linearGradient id="XMLID_424_" gradientUnits="userSpaceOnUse" x1="0.338" y1="17.7555" x2="17.2654" y2="17.7555">
+        <stop offset="1.970443e-002" stopColor="#FFC200" />
+        <stop offset="0.4731" stopColor="#FF31BD" />
+        <stop offset="0.6947" stopColor="#8E31BD" />
+        <stop offset="1" stopColor="#57EABA" />
+      </linearGradient>
+      <circle
+        id="XMLID_121_"
+        fill="none"
+        stroke="#6E8EDE"
+        strokeWidth="2.94"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeMiterlimit="10"
+        cx="8.8"
+        cy="17.8"
+        r="6"
+      />
+    </svg>
+  ),
+  [ICONS.LIVESTREAM_SOLID]: (props: CustomProps) => (
+    <svg
+      id="prefix__Layer_1"
+      xmlns="http://www.w3.org/2000/svg"
+      x={0}
+      y={0}
+      fill="none"
+      width={props.size || '18'}
+      height={props.size || '16'}
+      viewBox="0 0 36 36"
+      xmlSpace="preserve"
+      {...props}
+    >
+      <style>{'.prefix__st1{fill:#ff7b5b}.prefix__st3{fill:#79d1b6}'}</style>
+      <g id="prefix__XMLID_505_">
+        <linearGradient
+          id="prefix__XMLID_410_"
+          gradientUnits="userSpaceOnUse"
+          x1={-571.815}
+          y1={1525.406}
+          x2={-561.413}
+          y2={1525.406}
+        >
+          <stop offset={0.02} stopColor="#ffc200" />
+          <stop offset={0.387} stopColor="#ff31bd" />
+          <stop offset={0.625} stopColor="#8e31bd" />
+          <stop offset={0.776} stopColor="#6e8ede" />
+          <stop offset={1} stopColor="#57eaba" />
+        </linearGradient>
+        <circle
+          id="prefix__XMLID_508_"
+          cx={-566.6}
+          cy={1525.4}
+          r={4}
+          fill="none"
+          stroke="url(#prefix__XMLID_410_)"
+          strokeWidth={2.468}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeMiterlimit={10}
+        />
+        <path
+          id="prefix__XMLID_507_"
+          className="prefix__st1"
+          d="M-573.7 1518.3c-1.8 1.8-2.9 4.3-2.9 7.1 0 2.6 1 4.9 2.5 6.7l.4-13.8z"
+        />
+        <path
+          id="prefix__XMLID_506_"
+          className="prefix__st1"
+          d="M-559.6 1532.1c1.8-1.8 2.9-4.3 2.9-7.1 0-2.6-1-4.9-2.5-6.7l-.4 13.8z"
+        />
+      </g>
+      <path
+        id="prefix__XMLID_20_"
+        d="M21.4 5.2h0c7.1 0 12.8 5.7 12.8 12.8v0c0 7.1-5.7 12.8-12.8 12.8H8.7V18c0-7.1 5.7-12.8 12.7-12.8z"
+        fill="none"
+        stroke="#e729e1"
+        strokeWidth={2.94}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeMiterlimit={10}
+      />
+      <path id="prefix__XMLID_19_" className="prefix__st3" stroke="none" d="M26.9 13.8h2.8v3.8h-2.8z" />
+      <path id="prefix__XMLID_18_" className="prefix__st3" stroke="none" d="M20 13.8h2.8v3.8H20z" />
+      <circle
+        id="prefix__XMLID_17_"
+        cx={8.8}
+        cy={17.8}
+        r={6}
+        fill="none"
+        stroke="#ffa100"
+        strokeWidth={2.94}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeMiterlimit={10}
+      />
+    </svg>
+  ),
+  [ICONS.LIVESTREAM_MONOCHROME]: (props: CustomProps) => (
+    <svg
+      id="prefix__Layer_1"
+      xmlns="http://www.w3.org/2000/svg"
+      x={0}
+      y={0}
+      fill="currentColor"
+      stroke="currentColor"
+      width={props.size || '18'}
+      height={props.size || '16'}
+      viewBox="0 0 36 36"
+      xmlSpace="preserve"
+      {...props}
+    >
+      <g id="prefix__XMLID_505_">
+        <linearGradient
+          id="prefix__XMLID_410_"
+          gradientUnits="userSpaceOnUse"
+          x1={-571.815}
+          y1={1525.406}
+          x2={-561.413}
+          y2={1525.406}
+        >
+          <stop offset={0.02} stopColor="#ffc200" />
+          <stop offset={0.387} stopColor="#ff31bd" />
+          <stop offset={0.625} stopColor="#8e31bd" />
+          <stop offset={0.776} stopColor="#6e8ede" />
+          <stop offset={1} stopColor="#57eaba" />
+        </linearGradient>
+        <circle
+          id="prefix__XMLID_508_"
+          cx={-566.6}
+          cy={1525.4}
+          r={4}
+          fill="none"
+          strokeWidth={2.468}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeMiterlimit={10}
+        />
+        <path id="prefix__XMLID_507_" d="M-573.7 1518.3c-1.8 1.8-2.9 4.3-2.9 7.1 0 2.6 1 4.9 2.5 6.7l.4-13.8z" />
+        <path id="prefix__XMLID_506_" d="M-559.6 1532.1c1.8-1.8 2.9-4.3 2.9-7.1 0-2.6-1-4.9-2.5-6.7l-.4 13.8z" />
+      </g>
+      <path
+        id="prefix__XMLID_20_"
+        d="M21.4 5.2h0c7.1 0 12.8 5.7 12.8 12.8v0c0 7.1-5.7 12.8-12.8 12.8H8.7V18c0-7.1 5.7-12.8 12.7-12.8z"
+        fill="none"
+        strokeWidth={2.94}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeMiterlimit={10}
+      />
+      <path id="prefix__XMLID_19_" d="M26.9 13.8h2.8v3.8h-2.8z" />
+      <path id="prefix__XMLID_18_" d="M20 13.8h2.8v3.8H20z" />
+      <circle
+        id="prefix__XMLID_17_"
+        cx={8.8}
+        cy={17.8}
+        r={6}
+        fill="none"
+        strokeWidth={2.94}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeMiterlimit={10}
+      />
+    </svg>
+  ),
+
   [ICONS.LIVESTREAM]: (props: CustomProps) => (
     <svg
       version="1.1"
