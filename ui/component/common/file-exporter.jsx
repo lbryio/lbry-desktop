@@ -3,92 +3,86 @@ import * as ICONS from 'constants/icons';
 
 import React from 'react';
 import Button from 'component/button';
-import parseData from 'util/parse-data';
-import { remote } from 'electron';
-import path from 'path';
-// @if TARGET='app'
-import fs from 'fs';
-// @endif
+import Spinner from 'component/spinner';
 
 type Props = {
-  data: Array<any>,
-  title: string,
+  data: any,
   label: string,
-  defaultPath?: string,
-  filters: Array<string>,
-  onFileCreated?: string => void,
-  disabled: boolean,
+  tooltip?: string,
+  defaultFileName?: string,
+  filters?: Array<string>,
+  onFetch?: () => void,
+  progressMsg?: string,
+  disabled?: boolean,
 };
 
 class FileExporter extends React.PureComponent<Props> {
-  static defaultProps = {
-    filters: [],
-  };
-
   constructor() {
     super();
-    (this: any).handleButtonClick = this.handleButtonClick.bind(this);
+    (this: any).handleDownload = this.handleDownload.bind(this);
   }
 
-  handleFileCreation(filename: string, data: any) {
-    const { onFileCreated } = this.props;
-    // @if TARGET='app'
-    fs.writeFile(filename, data, err => {
-      if (err) throw err;
-      // Do something after creation
+  handleDownload() {
+    const { data, defaultFileName } = this.props;
 
-      if (onFileCreated) {
-        onFileCreated(filename);
-      }
-    });
-    // @endif
-  }
-
-  handleButtonClick() {
-    const { title, data, defaultPath, filters } = this.props;
-
-    const options = {
-      title,
-      defaultPath,
-      filters: [
-        {
-          name: 'CSV',
-          extensions: ['csv'],
-        },
-        {
-          name: 'JSON',
-          extensions: ['json'],
-        },
-      ],
-    };
-
-    remote.dialog.showSaveDialog(remote.getCurrentWindow(), options, filename => {
-      // User hit cancel so do nothing:
-      if (!filename) return;
-      // Get extension and remove initial dot
-      // @if TARGET='app'
-      const format = path.extname(filename).replace(/\./g, '');
-      // @endif
-      // Parse data to string with the chosen format
-      const parsed = parseData(data, format, filters);
-      // Write file
-      if (parsed) {
-        this.handleFileCreation(filename, parsed);
-      }
-    });
+    const element = document.createElement('a');
+    const file = new Blob([data], { type: 'text/plain' });
+    element.href = URL.createObjectURL(file);
+    element.download = defaultFileName || 'file.txt';
+    // $FlowFixMe
+    document.body.appendChild(element);
+    element.click();
+    // $FlowFixMe
+    document.body.removeChild(element);
   }
 
   render() {
-    const { label, disabled } = this.props;
-    return (
-      <Button
-        button="primary"
-        disabled={disabled}
-        icon={ICONS.DOWNLOAD}
-        label={label || __('Export')}
-        onClick={this.handleButtonClick}
-      />
-    );
+    const { data, label, tooltip, disabled, onFetch, progressMsg } = this.props;
+
+    if (onFetch) {
+      return (
+        <>
+          {!progressMsg && (
+            <div className="button-group">
+              <Button
+                button="alt"
+                disabled={disabled}
+                icon={ICONS.FETCH}
+                label={label}
+                aria-label={tooltip}
+                onClick={() => onFetch()}
+              />
+              {data && (
+                <Button
+                  button="alt"
+                  disabled={disabled}
+                  icon={ICONS.DOWNLOAD}
+                  aria-label={__('Download fetched file')}
+                  onClick={this.handleDownload}
+                />
+              )}
+            </div>
+          )}
+          {progressMsg && (
+            <>
+              {__(progressMsg)}
+              <Spinner type="small" />
+            </>
+          )}
+        </>
+      );
+    } else {
+      return (
+        <Button
+          button="primary"
+          disabled={disabled}
+          icon={ICONS.DOWNLOAD}
+          label={label || __('Export')}
+          aria-label={tooltip}
+          onClick={this.handleDownload}
+        />
+      );
+    }
   }
 }
 

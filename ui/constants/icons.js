@@ -11,6 +11,7 @@ export const ARROW_LEFT = 'ChevronLeft';
 export const ARROW_RIGHT = 'ChevronRight';
 export const DOWNLOAD = 'Download';
 export const PUBLISH = 'UploadCloud';
+export const FETCH = 'Fetch';
 export const REMOVE = 'X';
 export const ADD = 'Plus';
 export const SUBTRACT = 'Subtract';

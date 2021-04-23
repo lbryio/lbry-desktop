@@ -11,15 +11,20 @@ import Card from 'component/common/card';
 import { toCapitalCase } from 'util/string';
 import classnames from 'classnames';
 import HelpLink from 'component/common/help-link';
+import FileExporter from 'component/common/file-exporter';
 
 type Props = {
   search: string,
-  history: { action: string, push: string => void, replace: string => void },
+  history: { action: string, push: (string) => void, replace: (string) => void },
   txoPage: Array<Transaction>,
   txoPageNumber: string,
   txoItemCount: number,
   fetchTxoPage: () => void,
-  updateTxoPageParams: any => void,
+  fetchTransactions: () => void,
+  isFetchingTransactions: boolean,
+  transactionsFile: string,
+  updateTxoPageParams: (any) => void,
+  toast: (string, boolean) => void,
 };
 
 type Delta = {
@@ -28,7 +33,17 @@ type Delta = {
 };
 
 function TxoList(props: Props) {
-  const { search, txoPage, txoItemCount, fetchTxoPage, updateTxoPageParams, history } = props;
+  const {
+    search,
+    txoPage,
+    txoItemCount,
+    fetchTxoPage,
+    fetchTransactions,
+    updateTxoPageParams,
+    history,
+    isFetchingTransactions,
+    transactionsFile,
+  } = props;
 
   const urlParams = new URLSearchParams(search);
   const page = urlParams.get(TXO.PAGE) || String(1);
@@ -176,6 +191,19 @@ function TxoList(props: Props) {
       title={<div className="table__header-text">{__(`Transactions`)}</div>}
       titleActions={
         <div className="card__actions--inline">
+          {!isFetchingTransactions && transactionsFile === null && (
+            <label>{<span className="error__text">{__('Failed to process fetched data.')}</span>}</label>
+          )}
+          <div className="txo__export">
+            <FileExporter
+              data={transactionsFile}
+              label={__('Export')}
+              tooltip={__('Fetch transaction data for export')}
+              defaultFileName={'transactions-history.csv'}
+              onFetch={() => fetchTransactions()}
+              progressMsg={isFetchingTransactions ? __('Fetching data') : ''}
+            />
+          </div>
           <Button button="alt" icon={ICONS.REFRESH} label={__('Refresh')} onClick={() => fetchTxoPage()} />
         </div>
       }
@@ -195,9 +223,9 @@ function TxoList(props: Props) {
                     </>
                   }
                   value={type || 'all'}
-                  onChange={e => handleChange({ dkey: TXO.TYPE, value: e.target.value })}
+                  onChange={(e) => handleChange({ dkey: TXO.TYPE, value: e.target.value })}
                 >
-                  {Object.values(TXO.DROPDOWN_TYPES).map(v => {
+                  {Object.values(TXO.DROPDOWN_TYPES).map((v) => {
                     const stringV = String(v);
                     return (
                       <option key={stringV} value={stringV}>
@@ -214,9 +242,9 @@ function TxoList(props: Props) {
                     name="subtype"
                     label={__('Payment Type')}
                     value={subtype || 'all'}
-                    onChange={e => handleChange({ dkey: TXO.SUB_TYPE, value: e.target.value })}
+                    onChange={(e) => handleChange({ dkey: TXO.SUB_TYPE, value: e.target.value })}
                   >
-                    {Object.values(TXO.DROPDOWN_SUBTYPES).map(v => {
+                    {Object.values(TXO.DROPDOWN_SUBTYPES).map((v) => {
                       const stringV = String(v);
                       return (
                         <option key={stringV} value={stringV}>
@@ -234,7 +262,7 @@ function TxoList(props: Props) {
                     <div className={'txo__radios'}>
                       <Button
                         button="alt"
-                        onClick={e => handleChange({ dkey: TXO.ACTIVE, value: 'active' })}
+                        onClick={(e) => handleChange({ dkey: TXO.ACTIVE, value: 'active' })}
                         className={classnames(`button-toggle`, {
                           'button-toggle--active': active === TXO.ACTIVE,
                         })}
@@ -242,7 +270,7 @@ function TxoList(props: Props) {
                       />
                       <Button
                         button="alt"
-                        onClick={e => handleChange({ dkey: TXO.ACTIVE, value: 'spent' })}
+                        onClick={(e) => handleChange({ dkey: TXO.ACTIVE, value: 'spent' })}
                         className={classnames(`button-toggle`, {
                           'button-toggle--active': active === 'spent',
                         })}
@@ -250,7 +278,7 @@ function TxoList(props: Props) {
                       />
                       <Button
                         button="alt"
-                        onClick={e => handleChange({ dkey: TXO.ACTIVE, value: 'all' })}
+                        onClick={(e) => handleChange({ dkey: TXO.ACTIVE, value: 'all' })}
                         className={classnames(`button-toggle`, {
                           'button-toggle--active': active === 'all',
                         })}
