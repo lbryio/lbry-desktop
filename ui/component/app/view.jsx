@@ -208,7 +208,7 @@ function App(props: Props) {
         e.preventDefault();
       }
 
-      if ((os !== 'Darwin' && e.ctrlKey && e.keyCode === 70) || (e.keyCode === 70 && e.metaKey)) {
+      if (!IS_WEB && ((os !== 'Darwin' && e.ctrlKey && e.keyCode === 70) || (e.keyCode === 70 && e.metaKey))) {
         setSearchWindow(true);
         e.preventDefault();
       }
@@ -407,7 +407,7 @@ function App(props: Props) {
         />
       ) : (
         <React.Fragment>
-          {!IS_WEB && searchWindow && <SearchScrenInput />}
+          {searchWindow && <SearchScrenInput />}
           <Router />
           <ModalRouter />
           <FileDrop />
