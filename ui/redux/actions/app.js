@@ -66,6 +66,14 @@ const Fs = remote.require('fs');
 
 const CHECK_UPGRADE_INTERVAL = 10 * 60 * 1000;
 
+export function doSetSearchWindow(showSearchWindow) {
+  return {
+    type: ACTIONS.SET_SEARCH_WINDOW,
+    data: {
+      showSearchWindow,
+    },
+  };
+}
 export function doOpenModal(id, modalProps = {}) {
   return {
     type: ACTIONS.SHOW_MODAL,

@@ -17,6 +17,7 @@ import Nag from 'component/common/nag';
 import REWARDS from 'rewards';
 import usePersistedState from 'effects/use-persisted-state';
 import FileDrop from 'component/fileDrop';
+import SearchScrenInput from 'component/searchScreenInput';
 import NagContinueFirstRun from 'component/nagContinueFirstRun';
 import Spinner from 'component/spinner';
 import SyncFatalError from 'component/syncFatalError';
@@ -38,6 +39,9 @@ import {
 } from 'web/effects/use-degraded-performance';
 // @endif
 import LANGUAGE_MIGRATIONS from 'constants/language-migrations';
+
+const os = require('os').type();
+
 export const MAIN_WRAPPER_CLASS = 'main-wrapper';
 export const IS_MAC = navigator.userAgent.indexOf('Mac OS X') !== -1;
 
@@ -85,6 +89,8 @@ type Props = {
   setActiveChannelIfNotSet: () => void,
   setIncognito: (boolean) => void,
   fetchModBlockedList: () => void,
+  searchWindow: any,
+  setSearchWindow: (boolean) => void,
 };
 
 function App(props: Props) {
@@ -110,6 +116,8 @@ function App(props: Props) {
     isAuthenticated,
     syncLoop,
     currentModal,
+    searchWindow,
+    setSearchWindow,
     syncFatalError,
     myChannelUrls,
     activeChannelClaim,
@@ -193,15 +201,27 @@ function App(props: Props) {
   });
 
   // allows user to pause miniplayer using the spacebar without the page scrolling down
+  // allows user to search in the app in the desktop version
   useEffect(() => {
     const handleKeyPress = (e) => {
       if (e.key === ' ' && e.target === document.body) {
         e.preventDefault();
       }
+
+      if ((os !== 'Darwin' && e.ctrlKey && e.keyCode === 70) || (e.keyCode === 70 && e.metaKey)) {
+        setSearchWindow(true);
+        e.preventDefault();
+      }
+
+      if (e.key === 'Escape') {
+        setSearchWindow(false);
+        e.preventDefault();
+      }
     };
+
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, []);
+  }, [searchWindow, setSearchWindow]);
 
   // Enable ctrl +/- zooming on Desktop.
   // @if TARGET='app'
@@ -250,7 +270,14 @@ function App(props: Props) {
     if (hasMyChannels) {
       fetchModBlockedList();
     }
-  }, [hasMyChannels, hasNoChannels, hasActiveChannelClaim, setActiveChannelIfNotSet, setIncognito]);
+  }, [
+    hasMyChannels,
+    hasNoChannels,
+    hasActiveChannelClaim,
+    setActiveChannelIfNotSet,
+    setIncognito,
+    fetchModBlockedList,
+  ]);
 
   useEffect(() => {
     if (!languages.includes(language)) {
@@ -380,6 +407,7 @@ function App(props: Props) {
         />
       ) : (
         <React.Fragment>
+          {!IS_WEB && searchWindow && <SearchScrenInput />}
           <Router />
           <ModalRouter />
           <FileDrop />

@@ -17,6 +17,7 @@ import {
   selectAutoUpdateDownloaded,
   selectModal,
   selectActiveChannelClaim,
+  selectSearchWindow,
 } from 'redux/selectors/app';
 import { doGetWalletSyncPreference, doSetLanguage } from 'redux/actions/settings';
 import { doSyncLoop } from 'redux/actions/sync';
@@ -26,6 +27,7 @@ import {
   doGetAndPopulatePreferences,
   doSetActiveChannel,
   doSetIncognito,
+  doSetSearchWindow,
 } from 'redux/actions/app';
 import { doFetchModBlockedList } from 'redux/actions/comments';
 import App from './view';
@@ -44,12 +46,14 @@ const select = (state) => ({
   rewards: selectUnclaimedRewards(state),
   isAuthenticated: selectUserVerifiedEmail(state),
   currentModal: selectModal(state),
+  searchWindow: selectSearchWindow(state),
   syncFatalError: selectSyncFatalError(state),
   activeChannelClaim: selectActiveChannelClaim(state),
   myChannelUrls: selectMyChannelUrls(state),
 });
 
 const perform = (dispatch) => ({
+  setSearchWindow: (isOpen) => dispatch(doSetSearchWindow(isOpen)),
   fetchAccessToken: () => dispatch(doFetchAccessToken()),
   fetchChannelListMine: () => dispatch(doFetchChannelListMine()),
   setLanguage: (language) => dispatch(doSetLanguage(language)),

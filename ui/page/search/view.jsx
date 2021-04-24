@@ -80,6 +80,7 @@ export default function SearchPage(props: Props) {
 
   const stringifiedOptions = JSON.stringify(additionalOptions);
   const stringifiedSearchOptions = JSON.stringify(searchOptions);
+
   useEffect(() => {
     if (urlQuery) {
       const jsonOptions = JSON.parse(stringifiedOptions);

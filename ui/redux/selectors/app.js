@@ -59,6 +59,8 @@ export const selectMute = createSelector(selectState, (state) => state.muted);
 
 export const selectUpgradeTimer = createSelector(selectState, (state) => state.checkUpgradeTimer);
 
+export const selectSearchWindow = createSelector(selectState, (state) => state.showSearchWindow);
+
 export const selectModal = createSelector(selectState, (state) => {
   if (!state.modal) {
     return null;
