@@ -146,7 +146,7 @@ function CommentList(props: Props) {
   }
 
   // Default to newest first for apps that don't have comment reactions
-  const sortedComments = reactionsById ? sortComments({ comments, reactionsById, sort, isMyComment }) : [];
+  const sortedComments = reactionsById ? sortComments({ comments, reactionsById, sort }) : [];
   const displayedComments = readyToDisplayComments
     ? prepareComments(sortedComments, linkedComment).slice(start, end)
     : [];

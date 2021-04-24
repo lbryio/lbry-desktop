@@ -8,16 +8,13 @@ import { SORT_COMMENTS_NEW, SORT_COMMENTS_BEST, SORT_COMMENTS_CONTROVERSIAL } fr
 type SortProps = {
   comments: ?Array<Comment>,
   reactionsById: {},
-  sort: string,
-  isMyComment: string => boolean,
+  sort: string
 };
 
 export function sortComments(sortProps: SortProps): Array<Comment> {
-  const { comments, reactionsById, sort, isMyComment } = sortProps;
+  const { comments, reactionsById, sort } = sortProps;
 
-  if (!comments) {
-    return [];
-  }
+  if (!comments) return [];
 
   return comments.slice().sort((a: Comment, b: Comment) => {
     if (a.is_pinned) {
@@ -26,18 +23,7 @@ export function sortComments(sortProps: SortProps): Array<Comment> {
       return 1;
     }
 
-    if (sort === SORT_COMMENTS_NEW) {
-      return 0;
-    }
-
-    const aIsMine = isMyComment(a.channel_id);
-    const bIsMine = isMyComment(b.channel_id);
-
-    if (aIsMine) {
-      return -1;
-    } else if (bIsMine) {
-      return 1;
-    }
+    if (sort === SORT_COMMENTS_NEW) return 0;
 
     const aReactions = reactionsById[a.comment_id];
     const bReactions = reactionsById[b.comment_id];
