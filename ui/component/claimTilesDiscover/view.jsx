@@ -62,11 +62,16 @@ function ClaimTilesDiscover(props: Props) {
     fetchingClaimSearchByQuery,
     hasNoSource,
     renderProperties,
+    blockedUris,
+    mutedUris,
   } = props;
+
   const { location } = useHistory();
   const urlParams = new URLSearchParams(location.search);
   const feeAmountInUrl = urlParams.get('fee_amount');
   const feeAmountParam = feeAmountInUrl || feeAmount;
+  const mutedAndBlockedChannelIds = Array.from(new Set(mutedUris.concat(blockedUris).map((uri) => uri.split('#')[1])));
+
   const options: {
     page_size: number,
     no_totals: boolean,
@@ -95,7 +100,7 @@ function ClaimTilesDiscover(props: Props) {
     not_tags: !showNsfw ? MATURE_TAGS : [],
     any_languages: languages,
     channel_ids: channelIds || [],
-    not_channel_ids: [],
+    not_channel_ids: mutedAndBlockedChannelIds,
     order_by: orderBy || ['trending_group', 'trending_mixed'],
     stream_types: streamTypes === null ? undefined : SIMPLE_SITE ? [CS.FILE_VIDEO, CS.FILE_AUDIO] : undefined,
   };
