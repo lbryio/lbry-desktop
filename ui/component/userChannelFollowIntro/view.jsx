@@ -14,28 +14,32 @@ type Props = {
   onBack: () => void,
   channelSubscribe: (sub: Subscription) => void,
   homepageData: any,
+  prefsReady: boolean,
 };
 
 const channelsToSubscribe = AUTO_FOLLOW_CHANNELS.trim()
   .split(' ')
-  .filter(x => x !== '');
+  .filter((x) => x !== '');
 
 function UserChannelFollowIntro(props: Props) {
-  const { subscribedChannels, channelSubscribe, onContinue, onBack, homepageData } = props;
+  const { subscribedChannels, channelSubscribe, onContinue, onBack, homepageData, prefsReady } = props;
   const { PRIMARY_CONTENT_CHANNEL_IDS } = homepageData;
   const followingCount = (subscribedChannels && subscribedChannels.length) || 0;
 
   // subscribe to lbry
   useEffect(() => {
-    if (channelsToSubscribe && channelsToSubscribe.length) {
-      channelsToSubscribe.forEach(c =>
-        channelSubscribe({
-          channelName: parseURI(c).claimName,
-          uri: c,
-        })
-      );
+    if (channelsToSubscribe && channelsToSubscribe.length && prefsReady) {
+      const delayedChannelSubscribe = () => {
+        channelsToSubscribe.forEach((c) =>
+          channelSubscribe({
+            channelName: parseURI(c).claimName,
+            uri: c,
+          })
+        );
+      };
+      setTimeout(delayedChannelSubscribe, 1000);
     }
-  }, []);
+  }, [prefsReady]);
 
   return (
     <Card
