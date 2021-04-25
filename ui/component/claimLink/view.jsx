@@ -5,6 +5,7 @@ import EmbedPlayButton from 'component/embedPlayButton';
 import Button from 'component/button';
 import UriIndicator from 'component/uriIndicator';
 import { INLINE_PLAYER_WRAPPER_CLASS } from 'component/fileRenderFloating/view';
+import { SIMPLE_SITE } from 'config';
 
 type Props = {
   uri: string,
@@ -12,7 +13,7 @@ type Props = {
   children: React.Node,
   description: ?string,
   isResolvingUri: boolean,
-  doResolveUri: string => void,
+  doResolveUri: (string) => void,
   blackListedOutpoints: Array<{
     txid: string,
     nout: number,
@@ -20,6 +21,7 @@ type Props = {
   playingUri: ?PlayingUri,
   parentCommentId?: string,
   isMarkdownPost?: boolean,
+  allowPreview: boolean,
 };
 
 class ClaimLink extends React.Component<Props> {
@@ -29,6 +31,7 @@ class ClaimLink extends React.Component<Props> {
     thumbnail: null,
     description: null,
     isResolvingUri: false,
+    allowPreview: false,
   };
 
   componentDidMount() {
@@ -46,7 +49,7 @@ class ClaimLink extends React.Component<Props> {
       let blackListed = false;
 
       blackListed = blackListedOutpoints.some(
-        outpoint =>
+        (outpoint) =>
           (signingChannel && outpoint.txid === signingChannel.txid && outpoint.nout === signingChannel.nout) ||
           (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
       );
@@ -63,7 +66,16 @@ class ClaimLink extends React.Component<Props> {
   };
 
   render() {
-    const { uri, claim, children, isResolvingUri, playingUri, parentCommentId, isMarkdownPost } = this.props;
+    const {
+      uri,
+      claim,
+      children,
+      isResolvingUri,
+      playingUri,
+      parentCommentId,
+      isMarkdownPost,
+      allowPreview,
+    } = this.props;
     const isUnresolved = (!isResolvingUri && !claim) || !claim;
     const isBlacklisted = this.isClaimBlackListed();
     const isPlayingInline =
@@ -81,7 +93,7 @@ class ClaimLink extends React.Component<Props> {
 
     return isChannel ? (
       <UriIndicator uri={uri} link />
-    ) : (
+    ) : allowPreview ? (
       <div className={classnames('claim-link')}>
         <div
           className={classnames({
@@ -92,6 +104,14 @@ class ClaimLink extends React.Component<Props> {
         </div>
         <Button button="link" className="preview-link__url" label={uri} navigate={uri} />
       </div>
+    ) : (
+      <Button
+        button="link"
+        title={SIMPLE_SITE ? __("This channel isn't staking enough LBRY Credits for link previews.") : children}
+        label={children}
+        className="button--external-link"
+        navigate={uri}
+      />
     );
   }
 }

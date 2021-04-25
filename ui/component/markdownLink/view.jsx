@@ -1,5 +1,5 @@
 // @flow
-import { KNOWN_APP_DOMAINS, SIMPLE_SITE } from 'config';
+import { KNOWN_APP_DOMAINS } from 'config';
 import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import { isURIValid } from 'lbry-redux';
@@ -43,7 +43,6 @@ function MarkdownLink(props: Props) {
   // Regex for url protocol
   const protocolRegex = new RegExp('^(https?|lbry|mailto)+:', 'i');
   const protocol = href ? protocolRegex.exec(href) : null;
-  const isLbryLink = href.startsWith('lbry://');
 
   let linkUrlObject;
   try {
@@ -98,30 +97,23 @@ function MarkdownLink(props: Props) {
       />
     );
   } else if (!simpleLinks && ((protocol && protocol[0] === 'lbry:' && isURIValid(decodedUri)) || lbryUrlFromLink)) {
-    element = allowPreview ? (
+    element = (
       <ClaimLink
         uri={lbryUrlFromLink || decodedUri}
         autoEmbed={embed}
         parentCommentId={parentCommentId}
         isMarkdownPost={isMarkdownPost}
+        allowPreview={allowPreview}
       >
         {children}
       </ClaimLink>
-    ) : (
-      <Button
-        button="link"
-        iconRight={isLbryLink ? undefined : ICONS.EXTERNAL}
-        title={SIMPLE_SITE ? __("This channel isn't staking enough LBRY Credits for link previews.") : children}
-        label={children}
-        className="button--external-link"
-        navigate={isLbryLink ? href : undefined}
-        href={isLbryLink ? undefined : href}
-      />
     );
   } else if (
     simpleLinks ||
     (protocol && (protocol[0] === 'http:' || protocol[0] === 'https:' || protocol[0] === 'mailto:'))
   ) {
+    const isLbryLink = href.startsWith('lbry://');
+
     element = (
       <Button
         button="link"
