@@ -30,9 +30,11 @@
   transform: translateY(-130%);
   font-size: var(--font-xsmall);
   color: var(--color-text-subtitle);
+  overflow: visible;
 
   .icon {
     margin-right: var(--spacing-xs);
+    stroke: var(--color-text-subtitle);
   }
 
   @media (max-width: $breakpoint-small) {
@@ -179,6 +181,20 @@
       @include handleChannelGif(5rem);
     }
   }
+
+  .claim-preview__text {
+    height: 7.5rem;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    .channel-thumbnail {
+      @include handleChannelGif(6rem);
+    }
+
+    .claim-preview__text {
+      height: 3.5rem;
+    }
+  }
 }
 
 .claim-preview--small {
@@ -202,12 +218,16 @@
 
 .claim-preview--inline {
   .channel-thumbnail {
-    @include handleChannelGif(var(--channel-thumbnail-width--small));
+    @include handleChannelGif(3rem);
+
+    @media (min-width: $breakpoint-small) {
+      @include handleChannelGif(var(--channel-thumbnail-width--small));
+    }
   }
 
   .claim-preview__actions {
     align-self: flex-end;
-    margin-top: 0;
+    //margin-top: 0;
     margin-bottom: auto;
     justify-content: flex-end;
     width: auto;
@@ -218,11 +238,17 @@
     flex-direction: row;
     justify-content: space-between;
     flex-wrap: wrap;
+    align-items: center;
   }
 
   @media (max-width: $breakpoint-xsmall) {
     .claim-preview__actions {
-      align-self: flex-start;
+      .claim-preview__primary-actions {
+        .button {
+          margin-top: 0;
+        }
+      }
+      //align-self: flex-start;
     }
   }
 }
@@ -256,9 +282,9 @@
   flex-direction: column;
   flex: 1;
 
-  @media (max-width: $breakpoint-small) {
-    margin-bottom: var(--spacing-s);
-  }
+  //@media (max-width: $breakpoint-small) {
+  //  margin-bottom: var(--spacing-s);
+  //}
 }
 
 .claim-preview-info {
@@ -276,7 +302,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  margin-top: auto;
+  //margin-top: auto;
   width: 100%;
 
   @media (min-width: $breakpoint-small) {
@@ -286,7 +312,14 @@
 
 .claim-preview__primary-actions {
   @extend .section__actions;
-  margin-top: 0;
+  margin-right: 0;
+  margin-top: var(--spacing-s);
+
+  &:first-child {
+    .button {
+      margin-top: var(--spacing-s);
+    }
+  }
 }
 
 .claim-preview__actions--header {
@@ -385,6 +418,16 @@
 .claim-grid__title {
   font-weight: 300;
   font-size: var(--font-large);
+}
+
+.claim-grid__title--first {
+  text-align: center;
+  width: 100%;
+  margin-bottom: var(--spacing-l);
+
+  .no-evil {
+    font-size: var(--font-heading);
+  }
 }
 
 .claim-grid__title--secondary {

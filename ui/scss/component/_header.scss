@@ -16,7 +16,7 @@
 
 .header--minimal {
   box-shadow: none;
-  background-color: transparent;
+  background-color: var(--color-background);
   border-bottom: none;
 }
 
@@ -135,11 +135,25 @@
 }
 
 .header__navigation-item--lbry {
-  padding: var(--spacing-s);
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  margin-left: var(--spacing-m);
+  margin-right: var(--spacing-m);
 
-  .lbry-icon {
-    height: var(--height-button);
-    width: var(--height-button);
+  @media (max-width: $breakpoint-small) {
+    margin-right: var(--spacing-m);
+    height: 5rem;
+
+    .button__label {
+      display: none;
+    }
+  }
+}
+
+.header--minimal {
+  .header__navigation-item--lbry {
+    height: 3rem;
   }
 }
 

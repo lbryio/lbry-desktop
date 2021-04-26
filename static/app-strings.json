@@ -1866,7 +1866,7 @@
   "Fetching data": "Fetching data",
   "Download fetched file": "Download fetched file",
   "No data to export": "No data to export",
-  "Failed to process fetched data.": "Failed to process fetched data.", 
+  "Failed to process fetched data.": "Failed to process fetched data.",
   "More from %claim_name%": "More from %claim_name%",
   "Upload that unlabeled video you found behind the TV in 1991": "Upload that unlabeled video you found behind the TV in 1991",
   "Select Replay": "Select Replay",
@@ -1878,5 +1878,8 @@
   "Audio files require a thumbnail. Please upload or provide an image URL above.": "Audio files require a thumbnail. Please upload or provide an image URL above.",
   "You can upload your own recording or select a replay when your stream is over": "You can upload your own recording or select a replay when your stream is over",
   "This channel isn't staking enough LBRY Credits for inline image previews.": "This channel isn't staking enough LBRY Credits for inline image previews.",
+  "Fromage": "Fromage",
+  "Latest": "Latest",
+  "Tá Rolando": "Tá Rolando",
   "--end--": "--end--"
 }

@@ -1,7 +1,7 @@
 .nudge {
   z-index: 3;
   position: absolute;
-  left: 0;
+  //left: 0;
   top: 4rem;
   white-space: normal;
   overflow: visible;
@@ -10,6 +10,7 @@
   box-shadow: var(--card-box-shadow);
   background-color: var(--color-secondary);
   color: var(--color-white);
+  font-weight: bold;
 
   .button--close {
     .icon {

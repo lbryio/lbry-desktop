@@ -37,7 +37,7 @@ $nag-error-z-index: 999;
 }
 
 .nag--helpful {
-  background-color: var(--color-secondary);
+  background-color: var(--color-primary);
   color: var(--color-white);
   z-index: $nag-helpful-z-index;
 }
@@ -82,7 +82,7 @@ $nag-error-z-index: 999;
 
 .nag__button--helpful {
   &:hover {
-    background-color: var(--color-secondary-alt);
+    //background-color: var(--color-secondary-alt);
     color: var(--color-secondary);
   }
 }
