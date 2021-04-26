@@ -214,6 +214,7 @@ input-submit {
     border-left: 2px solid;
     border-bottom: 2px solid;
     border-color: var(--color-input-toggle);
+    border-left-color: var(--color-input-toggle);
     transform: rotate(-45deg);
     left: 6px;
     top: 6px;
@@ -240,7 +241,7 @@ input-submit {
     height: 12px;
     width: 12px;
     border-radius: 50%;
-    background-color: var(--color-secondary);
+    background-color: var(--color-primary);
     left: 6px;
     top: 5px;
   }
@@ -356,7 +357,7 @@ fieldset-group {
         text-overflow: ellipsis;
         overflow: hidden;
         padding: 0.5rem;
-        padding-right: var(--spacing-s);
+        //padding-right: var(--spacing-s);
         height: var(--height-input);
         border: 1px solid;
         border-top-left-radius: var(--border-radius);

@@ -33,6 +33,10 @@ $thumbnailWidthSmall: 1rem;
   position: relative;
 }
 
+.comment__create--bottom {
+  padding-bottom: 0;
+}
+
 .comment {
   width: 100%;
   display: flex;
@@ -59,6 +63,11 @@ $thumbnailWidthSmall: 1rem;
       bottom: -1rem;
       padding: -1rem;
       margin-left: 0;
+    }
+    .channel-staked__indicator {
+      @media (max-width: $breakpoint-small) {
+        margin-left: 0.1rem;
+      }
     }
   }
 }
@@ -308,6 +317,10 @@ $thumbnailWidthSmall: 1rem;
   padding-bottom: var(--spacing-xs);
   font-size: var(--font-small);
   border-bottom: 1px solid var(--color-border);
+
+  &:not(:last-child) {
+    margin-bottom: var(--spacing-xs);
+  }
 }
 
 .comment__menu-help {
