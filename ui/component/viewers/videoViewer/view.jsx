@@ -122,7 +122,7 @@ function VideoViewer(props: Props) {
   const embedded = useContext(EmbedContext);
   const approvedVideo = Boolean(channelClaimId) && adApprovedChannelIds.includes(channelClaimId);
   const adsEnabled = ENABLE_PREROLL_ADS && !authenticated && !embedded && approvedVideo;
-  const [adUrl, setAdUrl, isFetchingAd] = useGetAds(adsEnabled);
+  const [adUrl, setAdUrl, isFetchingAd] = useGetAds(approvedVideo, adsEnabled);
   /* isLoading was designed to show loading screen on first play press, rather than completely black screen, but
   breaks because some browsers (e.g. Firefox) block autoplay but leave the player.play Promise pending */
   const [isLoading, setIsLoading] = useState(false);
