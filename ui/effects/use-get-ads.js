@@ -9,12 +9,14 @@ const PRE_ROLL_ADS_PROVIDER = 'https://tag.targeting.unrulymedia.com/rmp/216276/
 const ADS_CAP_LEVEL = 1 * 60 * 1000;
 const vastClient = new VASTClient(0, ADS_CAP_LEVEL);
 
-export function useGetAds(adsEnabled: boolean): [?string, (?string) => void, boolean] {
+export function useGetAds(approvedVideo: boolean, adsEnabled: boolean): [?string, (?string) => void, boolean] {
   const [isFetching, setIsFetching] = React.useState(true);
   const [adUrl, setAdUrl] = React.useState();
 
+  // Fetch ads for all approved videos, even if we won't show ads to the user
+  // Unruly needs more fetches before they will start returning ads ¯\_(ツ)_/¯
   React.useEffect(() => {
-    if (!adsEnabled) {
+    if (!approvedVideo) {
       setIsFetching(false);
       return;
     }
@@ -37,7 +39,7 @@ export function useGetAds(adsEnabled: boolean): [?string, (?string) => void, boo
           // Dummy video file
           //   const adUrl = 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4';
 
-          if (adUrl) {
+          if (adsEnabled && adUrl) {
             setAdUrl(adUrl);
           }
         }
@@ -47,7 +49,7 @@ export function useGetAds(adsEnabled: boolean): [?string, (?string) => void, boo
       .catch(() => {
         setIsFetching(false);
       });
-  }, [adsEnabled]);
+  }, [approvedVideo, adsEnabled]);
 
   return [adUrl, setAdUrl, isFetching];
 }
