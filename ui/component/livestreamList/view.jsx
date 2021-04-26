@@ -57,6 +57,7 @@ export default function LivestreamList() {
       {livestreamMap && Object.keys(livestreamMap).length > 0 && (
         <ClaimTilesDiscover
           hasNoSource
+          streamTypes={null}
           channelIds={Object.keys(livestreamMap)}
           limitClaimsPerChannel={1}
           renderProperties={(claim) => {

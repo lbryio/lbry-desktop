@@ -296,7 +296,7 @@ export default handleActions(
           }
 
           superChatsByUri[uri].comments = sortedSuperChatComments;
-          superChatsByUri[uri].totalAmount += 1;
+          superChatsByUri[uri].totalAmount += comment.support_amount;
         } else {
           superChatsByUri[uri] = { comments: [comment], totalAmount: comment.support_amount };
         }
