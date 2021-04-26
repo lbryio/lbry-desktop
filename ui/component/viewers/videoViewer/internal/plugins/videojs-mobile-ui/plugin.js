@@ -13,7 +13,7 @@ const defaults = {
     iOS: false,
   },
   touchControls: {
-    seekSeconds: 10,
+    seekSeconds: 5,
     tapTimeout: 300,
     disableOnEnd: false,
   },
