@@ -129,6 +129,7 @@ $discussion-header__height: 3rem;
   margin-left: var(--spacing-s);
 
   .channel-thumbnail {
+    @include handleChannelGif(2rem);
     margin-top: var(--spacing-xxs);
     flex-shrink: 0;
   }
@@ -242,6 +243,7 @@ $discussion-header__height: 3rem;
 
   .channel-thumbnail {
     margin-right: var(--spacing-xs);
+    @include handleChannelGif(2rem);
   }
 
   &:first-of-type {
