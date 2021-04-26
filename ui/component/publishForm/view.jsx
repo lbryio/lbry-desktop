@@ -202,7 +202,7 @@ function PublishForm(props: Props) {
   const [signedMessage, setSignedMessage] = React.useState({ signature: undefined, signing_ts: undefined });
   const signedMessageStr = JSON.stringify(signedMessage);
   const TAGS_LIMIT = 5;
-  const fileFormDisabled = mode === PUBLISH_MODES.FILE && !filePath;
+  const fileFormDisabled = mode === PUBLISH_MODES.FILE && !filePath && !remoteUrl;
   const emptyPostError = mode === PUBLISH_MODES.POST && (!fileText || fileText.trim() === '');
   const formDisabled = (fileFormDisabled && !editingURI) || emptyPostError || publishing;
   const isInProgress = filePath || editingURI || name || title;
