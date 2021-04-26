@@ -214,9 +214,7 @@ function ClaimListDiscover(props: Props) {
     // no_totals makes it so the sdk doesn't have to calculate total number pages for pagination
     // it's faster, but we will need to remove it if we start using total_pages
     no_totals: true,
-    not_channel_ids:
-      // If channelIdsParam were passed in, we don't need not_channel_ids
-      !channelIdsParam ? mutedAndBlockedChannelIds : [],
+    not_channel_ids: mutedAndBlockedChannelIds,
     not_tags: !showNsfw ? MATURE_TAGS : [],
     order_by:
       orderParam === CS.ORDER_BY_TRENDING
