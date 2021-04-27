@@ -58,6 +58,7 @@ function CommentList(props: Props) {
   const [readyToDisplayComments, setReadyToDisplayComments] = React.useState(
     Boolean(reactionsById) || !ENABLE_COMMENT_REACTIONS
   );
+  const [justCommented, setjustCommented] = React.useState(false);
   const linkedCommentId = linkedComment && linkedComment.comment_id;
   const hasNoComments = !totalComments;
   const moreBelow = totalComments - end > 0;
@@ -146,7 +147,7 @@ function CommentList(props: Props) {
   }
 
   // Default to newest first for apps that don't have comment reactions
-  const sortedComments = reactionsById ? sortComments({ comments, reactionsById, sort }) : [];
+  const sortedComments = reactionsById ? sortComments({ comments, reactionsById, sort, isMyComment, justCommented }) : [];
   const displayedComments = readyToDisplayComments
     ? prepareComments(sortedComments, linkedComment).slice(start, end)
     : [];
@@ -209,7 +210,7 @@ function CommentList(props: Props) {
       }
       actions={
         <>
-          <CommentCreate uri={uri} />
+          <CommentCreate uri={uri} setjustCommented={setjustCommented} />
 
           {!isFetchingComments && hasNoComments && (
             <Empty padded text={__('That was pretty deep. What do you think?')} />

@@ -8,11 +8,13 @@ import { SORT_COMMENTS_NEW, SORT_COMMENTS_BEST, SORT_COMMENTS_CONTROVERSIAL } fr
 type SortProps = {
   comments: ?Array<Comment>,
   reactionsById: {},
-  sort: string
+  sort: string,
+  isMyComment: string => boolean,
+  justCommented: boolean,
 };
 
 export function sortComments(sortProps: SortProps): Array<Comment> {
-  const { comments, reactionsById, sort } = sortProps;
+  const { comments, reactionsById, sort, isMyComment, justCommented } = sortProps;
 
   if (!comments) return [];
 
@@ -24,6 +26,15 @@ export function sortComments(sortProps: SortProps): Array<Comment> {
     }
 
     if (sort === SORT_COMMENTS_NEW) return 0;
+
+    const aIsMine = isMyComment(a.channel_id);
+    const bIsMine = isMyComment(b.channel_id);
+
+    if (aIsMine && justCommented) {
+      return -1;
+    } else if (bIsMine && justCommented) {
+      return 1;
+    }
 
     const aReactions = reactionsById[a.comment_id];
     const bReactions = reactionsById[b.comment_id];
