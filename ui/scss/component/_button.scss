@@ -65,11 +65,11 @@
   // color: var(--color-button-secondary-text);
 
   .button__label {
-    color: var(--color-button-primary-text);
+    color: var(--color-button-secondary-text);
   }
 
   .icon {
-    stroke: var(--color-button-primary-text);
+    stroke: var(--color-button-secondary-text);
   }
 
   &:hover {

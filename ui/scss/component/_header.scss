@@ -140,7 +140,11 @@
   align-items: center;
   margin-left: var(--spacing-m);
   margin-right: var(--spacing-m);
-
+  // move to lbry theme?
+  .lbry-icon {
+    height: var(--height-button);
+    width: var(--height-button);
+  }
   @media (max-width: $breakpoint-small) {
     margin-right: var(--spacing-m);
     height: 5rem;
