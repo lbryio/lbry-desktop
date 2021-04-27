@@ -29,10 +29,12 @@ export function sortComments(sortProps: SortProps): Array<Comment> {
 
     const aIsMine = isMyComment(a.channel_id);
     const bIsMine = isMyComment(b.channel_id);
+    const aIsMyRecent = a.comment_id === comments[0].comment_id;
+    const bIsMyRecent = b.comment_id === comments[0].comment_id;
 
-    if (aIsMine && justCommented) {
+    if (aIsMine && justCommented && aIsMyRecent) {
       return -1;
-    } else if (bIsMine && justCommented) {
+    } else if (bIsMine && justCommented && bIsMyRecent) {
       return 1;
     }
 
