@@ -47,7 +47,7 @@ export default function Card(props: Props) {
 
   return (
     <section
-      role="button"
+      role={onClick ? 'button' : undefined}
       className={classnames(className, 'card')}
       onClick={(e) => {
         if (onClick) {
