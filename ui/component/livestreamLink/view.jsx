@@ -1,5 +1,6 @@
 // @flow
 import { BITWAVE_LIVE_API } from 'constants/livestream';
+import * as CS from 'constants/claim_search';
 import React from 'react';
 import Card from 'component/common/card';
 import ClaimPreview from 'component/claimPreview';
@@ -24,6 +25,7 @@ export default function LivestreamLink(props: Props) {
         channel_ids: [livestreamChannelId],
         has_no_source: true,
         claim_type: ['stream'],
+        order_by: CS.ORDER_BY_NEW_VALUE,
       })
         .then((res) => {
           if (res && res.items && res.items.length > 0) {
@@ -70,7 +72,6 @@ export default function LivestreamLink(props: Props) {
   // gonna pass the wrapper in so I don't have to rewrite the dmca/blocking logic in claimPreview.
   const element = (props: { children: any }) => (
     <Card
-      role="button"
       className="livestream__channel-link"
       title={__('Live stream in progress')}
       onClick={() => {
