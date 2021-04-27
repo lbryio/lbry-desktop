@@ -34,7 +34,6 @@
 
 .button--primary {
   background-color: var(--color-button-primary-bg);
-  // color: var(--color-button-primary-text);
 
   .button__label {
     color: var(--color-button-primary-text);
@@ -62,7 +61,6 @@
 .button--secondary {
   background-color: var(--color-button-secondary-bg);
   border: 1px solid var(--color-button-secondary-border);
-  // color: var(--color-button-secondary-text);
 
   .button__label {
     color: var(--color-button-secondary-text);
@@ -548,8 +546,6 @@ svg + .button__label {
 }
 
 .button-toggle--active {
-  //color: var(--color-primary);
-  //background-color: var(--color-primary-alt);
   color: var(--color-button-toggle-text);
   background-color: var(--color-button-toggle-bg);
 
