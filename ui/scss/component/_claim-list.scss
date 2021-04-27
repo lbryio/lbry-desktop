@@ -227,7 +227,6 @@
 
   .claim-preview__actions {
     align-self: flex-end;
-    //margin-top: 0;
     margin-bottom: auto;
     justify-content: flex-end;
     width: auto;
@@ -248,7 +247,6 @@
           margin-top: 0;
         }
       }
-      //align-self: flex-start;
     }
   }
 }
@@ -281,10 +279,6 @@
   display: flex;
   flex-direction: column;
   flex: 1;
-
-  //@media (max-width: $breakpoint-small) {
-  //  margin-bottom: var(--spacing-s);
-  //}
 }
 
 .claim-preview-info {
@@ -302,7 +296,6 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  //margin-top: auto;
   width: 100%;
 
   @media (min-width: $breakpoint-small) {
