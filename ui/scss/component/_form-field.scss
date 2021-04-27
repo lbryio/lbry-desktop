@@ -363,8 +363,9 @@ fieldset-group {
         border-top-left-radius: var(--border-radius);
         border-bottom-left-radius: var(--border-radius);
         border-color: var(--color-input-border);
-        color: var(--color-text-help);
-        background-color: var(--color-input-bg);
+        border-right-color: var(--color-input-prefix-border);
+        color: var(--color-text);
+        background-color: var(--color-input-prefix-bg);
       }
     }
 
