@@ -621,6 +621,19 @@
   }
 }
 
+.claim-preview__live {
+  .claim-preview__file-property-overlay {
+    opacity: 1; // The original 0.7 is not visible over bright thumbnails
+    color: var(--color-white-alt);
+    background-color: var(--color-live);
+  }
+
+  .file-properties {
+    font-weight: var(--font-weight-bold);
+    margin-top: 2px; // Even out bottom spacing due to all caps "LIVE".
+  }
+}
+
 .claim-link {
   @include font-sans;
   position: relative;
