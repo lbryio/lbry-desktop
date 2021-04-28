@@ -40,8 +40,7 @@ type Props = {
   limitClaimsPerChannel?: number,
   hasNoSource?: boolean,
   renderProperties?: (Claim) => ?Node,
-  // Passing in 'livestreamMap' indicates that we want to sort "live"
-  // livestreams first, and also embelish the "live" tiles.
+  liveLivestreamsFirst?: boolean,
   livestreamMap?: { [string]: any },
 };
 
@@ -71,6 +70,7 @@ function ClaimTilesDiscover(props: Props) {
     renderProperties,
     blockedUris,
     mutedUris,
+    liveLivestreamsFirst,
     livestreamMap,
   } = props;
 
@@ -156,25 +156,50 @@ function ClaimTilesDiscover(props: Props) {
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
   let uris = (prefixUris || []).concat(claimSearchByQuery[claimSearchCacheQuery] || []);
 
-  // Push active livestreams to the front:
-  if (livestreamMap) {
-    const liveChannelIds = Object.keys(livestreamMap);
+  if (liveLivestreamsFirst && livestreamMap) {
+    let liveChannelIds = Object.keys(livestreamMap);
 
-    uris.forEach((uri) => {
-      const claim = claimsByUri[uri];
-      if (
+    const claimIsLive = (claim, liveChannelIds) => {
+      // This function relies on:
+      // 1. Only 1 actual livestream per channel (i.e. all other livestream-claims
+      //    for that channel actually point to the same source).
+      // 2. 'liveChannelIds' needs to be pruned after being accounted for,
+      //    otherwise all livestream-claims will be "live" (we'll only take the
+      //    latest one as "live").
+      return (
         claim &&
         claim.value_type === 'stream' &&
         claim.value.source === undefined &&
         claim.signing_channel &&
         liveChannelIds.includes(claim.signing_channel.claim_id)
-      ) {
+      );
+    };
+
+    // 1. Collect active livestreams from the primary search to put in front.
+    uris.forEach((uri) => {
+      const claim = claimsByUri[uri];
+      if (claimIsLive(claim, liveChannelIds)) {
         liveUris.push(uri);
-        // This live channel has been accounted for, so ignore it's older livestreams:
+        // This live channel has been accounted for, so remove it.
         liveChannelIds.splice(liveChannelIds.indexOf(claim.signing_channel.claim_id), 1);
       }
     });
 
+    // 2. Now, repeat on the secondary search.
+    const livestreamsOnlySearchCacheQuery = createNormalizedClaimSearchKey({ ...options, has_no_source: true });
+    const livestreamsOnlyUris = claimSearchByQuery[livestreamsOnlySearchCacheQuery];
+    if (livestreamsOnlyUris) {
+      livestreamsOnlyUris.forEach((uri) => {
+        const claim = claimsByUri[uri];
+        if (!uris.includes(uri) && claimIsLive(claim, liveChannelIds)) {
+          liveUris.push(uri);
+          // This live channel has been accounted for, so remove it.
+          liveChannelIds.splice(liveChannelIds.indexOf(claim.signing_channel.claim_id), 1);
+        }
+      });
+    }
+
+    // 3. Finalize uris by putting live livestreams in front.
     uris = liveUris.concat(uris.filter((uri) => !liveUris.includes(uri)));
   }
 
@@ -187,11 +212,14 @@ function ClaimTilesDiscover(props: Props) {
     if (shouldPerformSearch) {
       const searchOptions = JSON.parse(optionsStringForEffect);
       doClaimSearch(searchOptions);
+      if (liveLivestreamsFirst) {
+        doClaimSearch({ ...searchOptions, has_no_source: true });
+      }
     }
-  }, [doClaimSearch, shouldPerformSearch, optionsStringForEffect]);
+  }, [doClaimSearch, shouldPerformSearch, optionsStringForEffect, liveLivestreamsFirst]);
 
   const resolveLive = (index) => {
-    if (livestreamMap && index < liveUris.length) {
+    if (liveLivestreamsFirst && livestreamMap && index < liveUris.length) {
       return true;
     }
     return undefined;
