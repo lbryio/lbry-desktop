@@ -68,7 +68,13 @@ function Comment(props: Props) {
               icon={ICONS.MORE_VERTICAL}
             />
           </MenuButton>
-          <CommentMenuList uri={uri} commentId={commentId} authorUri={authorUri} commentIsMine={commentIsMine} />
+          <CommentMenuList
+            uri={uri}
+            commentId={commentId}
+            authorUri={authorUri}
+            commentIsMine={commentIsMine}
+            disableEdit
+          />
         </Menu>
       </div>
     </li>
