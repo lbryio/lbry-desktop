@@ -7,6 +7,7 @@ import { setSavedPassword } from 'util/saved-passwords';
 import usePersistedState from 'effects/use-persisted-state';
 import I18nMessage from 'component/i18nMessage';
 import { useHistory } from 'react-router';
+import { SITE_HELP_EMAIL } from 'config';
 
 type Props = {
   getSync: ((any, boolean) => void, ?string) => void,
@@ -53,7 +54,7 @@ function SyncPassword(props: Props) {
               error={passwordError && __('Wrong password for %email%', { email })}
               label={__('Password for %email%', { email })}
               value={password}
-              onChange={e => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <FormField
               name="remember-password"
@@ -75,7 +76,7 @@ function SyncPassword(props: Props) {
               <I18nMessage
                 tokens={{
                   help: <Button button="link" label={__('help guide')} href="https://lbry.com/faq/account-sync" />,
-                  email: <Button button="link" label={'help@lbry.com'} href="mailto:help@lbry.com" />,
+                  email: <Button button="link" href={`mailto:${SITE_HELP_EMAIL}`} label={`${SITE_HELP_EMAIL}`} />,
                 }}
               >
                 If you are having issues, checkout our %help% or email us at %email%.

@@ -1,7 +1,8 @@
 // @flow
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
-import { ORDER_BY_NEW } from 'constants/claim_search';
+import * as CS from 'constants/claim_search';
+import { SIMPLE_SITE } from 'config';
 import React from 'react';
 import ChannelsFollowingDiscoverPage from 'page/channelsFollowingDiscover';
 import ClaimListDiscover from 'component/claimListDiscover';
@@ -23,6 +24,8 @@ function ChannelsFollowingPage(props: Props) {
   ) : (
     <Page noFooter fullWidthPage={tileLayout}>
       <ClaimListDiscover
+        hideAdvancedFilter={SIMPLE_SITE}
+        streamType={SIMPLE_SITE ? CS.CONTENT_ALL : undefined}
         tileLayout={tileLayout}
         headerLabel={
           <span>
@@ -30,8 +33,8 @@ function ChannelsFollowingPage(props: Props) {
             {__('Following')}
           </span>
         }
-        defaultOrderBy={ORDER_BY_NEW}
-        channelIds={subscribedChannels.map(sub => sub.uri.split('#')[1])}
+        defaultOrderBy={CS.ORDER_BY_NEW}
+        channelIds={subscribedChannels.map((sub) => sub.uri.split('#')[1])}
         meta={
           <Button
             icon={ICONS.SEARCH}

@@ -4,14 +4,15 @@ import Button from 'component/button';
 import UserSignOutButton from 'component/userSignOutButton';
 import I18nMessage from 'component/i18nMessage';
 import Card from 'component/common/card';
+import { SITE_HELP_EMAIL } from 'config';
 const THIRTY_SECONDS_IN_MS = 30000;
 type Props = {
   email: string,
   isReturningUser: boolean,
-  resendVerificationEmail: string => void,
+  resendVerificationEmail: (string) => void,
   resendingEmail: boolean,
   checkEmailVerified: () => void,
-  toast: string => void,
+  toast: (string) => void,
   user: {
     has_verified_email: boolean,
   },
@@ -102,7 +103,7 @@ class UserEmailVerify extends React.PureComponent<Props, State> {
               <p className="help--card-actions">
                 <I18nMessage
                   tokens={{
-                    help_link: <Button button="link" href="mailto:help@lbry.com" label="help@lbry.com" />,
+                    help_link: <Button button="link" href={`mailto:${SITE_HELP_EMAIL}`} label={`${SITE_HELP_EMAIL}`} />,
                     chat_link: <Button button="link" href="https://chat.lbry.com" label={__('chat')} />,
                   }}
                 >
