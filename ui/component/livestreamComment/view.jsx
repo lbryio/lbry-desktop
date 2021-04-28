@@ -74,6 +74,7 @@ function Comment(props: Props) {
             authorUri={authorUri}
             commentIsMine={commentIsMine}
             disableEdit
+            disableRemove={supportAmount > 0}
           />
         </Menu>
       </div>

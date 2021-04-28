@@ -24,6 +24,7 @@ type Props = {
   commentModBlock: (string) => void,
   playingUri: ?PlayingUri,
   disableEdit?: boolean,
+  disableRemove?: boolean,
 };
 
 function CommentMenuList(props: Props) {
@@ -45,6 +46,7 @@ function CommentMenuList(props: Props) {
     commentModBlock,
     playingUri,
     disableEdit,
+    disableRemove,
   } = props;
   const activeChannelIsCreator = activeChannelClaim && activeChannelClaim.permanent_url === contentChannelPermanentUrl;
 
@@ -83,7 +85,8 @@ function CommentMenuList(props: Props) {
         </MenuItem>
       )}
 
-      {activeChannelClaim &&
+      {!disableRemove &&
+        activeChannelClaim &&
         (activeChannelClaim.permanent_url === authorUri ||
           activeChannelClaim.permanent_url === contentChannelPermanentUrl) && (
           <MenuItem className="comment__menu-option" onSelect={handleDeleteComment}>
