@@ -1,5 +1,5 @@
 // @flow
-import { SITE_NAME } from 'config';
+import { SITE_NAME, SITE_HELP_EMAIL } from 'config';
 import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import classnames from 'classnames';
@@ -117,9 +117,14 @@ export default function YoutubeTransferStatus(props: Props) {
             {isYoutubeTransferComplete && !isNotElligible && __('View your channel or choose a new channel to sync.')}
             {isNotElligible && (
               <I18nMessage
-                tokens={{ here: <Button button="link" href="https://lbry.com/faq/youtube" label={__('here')} /> }}
+                tokens={{
+                  here: (
+                    <Button button="link" href="https://lbry.com/faq/youtube" label={__('here')} />
+                    ),
+                  email: SITE_HELP_EMAIL,
+                }}
               >
-                Email help@lbry.com if you think there has been a mistake. Make sure your channel qualifies %here%.
+                Email %email% if you think there has been a mistake. Make sure your channel qualifies %here%.
               </I18nMessage>
             )}
           </span>

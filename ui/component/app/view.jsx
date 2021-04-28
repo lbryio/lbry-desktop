@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 import analytics from 'analytics';
 import { buildURI, parseURI } from 'lbry-redux';
+import { SIMPLE_SITE } from 'config';
 import Router from 'component/router/index';
 import ModalRouter from 'modal/modalRouter';
 import ReactModal from 'react-modal';
@@ -399,12 +400,12 @@ function App(props: Props) {
 
           {/* @if TARGET='web' */}
           <YoutubeWelcome />
-          {!shouldHideNag && <OpenInAppLink uri={uri} />}
+          {!SIMPLE_SITE && !shouldHideNag && <OpenInAppLink uri={uri} />}
           {!shouldHideNag && <NagContinueFirstRun />}
           {(lbryTvApiStatus === STATUS_DEGRADED || lbryTvApiStatus === STATUS_FAILING) && !shouldHideNag && (
             <NagDegradedPerformance onClose={() => setLbryTvApiStatus(STATUS_OK)} />
           )}
-          {lbryTvApiStatus === STATUS_OK && showAnalyticsNag && !shouldHideNag && (
+          {!SIMPLE_SITE && lbryTvApiStatus === STATUS_OK && showAnalyticsNag && !shouldHideNag && (
             <NagDataCollection onClose={handleAnalyticsDismiss} />
           )}
           {/* @endif */}
