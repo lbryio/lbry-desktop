@@ -20,6 +20,9 @@ type Props = {
   fetchingClaimSearchByQuery: {
     [string]: boolean,
   },
+  claimsByUri: {
+    [string]: any,
+  },
   // claim search options are below
   tags: Array<string>,
   blockedUris: Array<string>,
@@ -37,12 +40,16 @@ type Props = {
   limitClaimsPerChannel?: number,
   hasNoSource?: boolean,
   renderProperties?: (Claim) => ?Node,
+  // Passing in 'livestreamMap' indicates that we want to sort "live"
+  // livestreams first, and also embelish the "live" tiles.
+  livestreamMap?: { [string]: any },
 };
 
 function ClaimTilesDiscover(props: Props) {
   const {
     doClaimSearch,
     claimSearchByQuery,
+    claimsByUri,
     showNsfw,
     hideReposts,
     // Below are options to pass that are forwarded to claim_search
@@ -64,6 +71,7 @@ function ClaimTilesDiscover(props: Props) {
     renderProperties,
     blockedUris,
     mutedUris,
+    livestreamMap,
   } = props;
 
   const { location } = useHistory();
@@ -71,6 +79,7 @@ function ClaimTilesDiscover(props: Props) {
   const feeAmountInUrl = urlParams.get('fee_amount');
   const feeAmountParam = feeAmountInUrl || feeAmount;
   const mutedAndBlockedChannelIds = Array.from(new Set(mutedUris.concat(blockedUris).map((uri) => uri.split('#')[1])));
+  const liveUris = [];
 
   const options: {
     page_size: number,
@@ -145,7 +154,30 @@ function ClaimTilesDiscover(props: Props) {
   }
 
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
-  const uris = (prefixUris || []).concat(claimSearchByQuery[claimSearchCacheQuery] || []);
+  let uris = (prefixUris || []).concat(claimSearchByQuery[claimSearchCacheQuery] || []);
+
+  // Push active livestreams to the front:
+  if (livestreamMap) {
+    const liveChannelIds = Object.keys(livestreamMap);
+
+    uris.forEach((uri) => {
+      const claim = claimsByUri[uri];
+      if (
+        claim &&
+        claim.value_type === 'stream' &&
+        claim.value.source === undefined &&
+        claim.signing_channel &&
+        liveChannelIds.includes(claim.signing_channel.claim_id)
+      ) {
+        liveUris.push(uri);
+        // This live channel has been accounted for, so ignore it's older livestreams:
+        liveChannelIds.splice(liveChannelIds.indexOf(claim.signing_channel.claim_id), 1);
+      }
+    });
+
+    uris = liveUris.concat(uris.filter((uri) => !liveUris.includes(uri)));
+  }
+
   // Don't use the query from createNormalizedClaimSearchKey for the effect since that doesn't include page & release_time
   const optionsStringForEffect = JSON.stringify(options);
   const isLoading = fetchingClaimSearchByQuery[claimSearchCacheQuery];
@@ -158,10 +190,19 @@ function ClaimTilesDiscover(props: Props) {
     }
   }, [doClaimSearch, shouldPerformSearch, optionsStringForEffect]);
 
+  const resolveLive = (index) => {
+    if (livestreamMap && index < liveUris.length) {
+      return true;
+    }
+    return undefined;
+  };
+
   return (
     <ul className="claim-grid">
       {uris && uris.length
-        ? uris.map((uri) => <ClaimPreviewTile key={uri} uri={uri} properties={renderProperties} />)
+        ? uris.map((uri, index) => (
+            <ClaimPreviewTile key={uri} uri={uri} properties={renderProperties} live={resolveLive(index)} />
+          ))
         : new Array(pageSize).fill(1).map((x, i) => <ClaimPreviewTile key={i} placeholder />)}
     </ul>
   );

@@ -9,6 +9,7 @@ import ClaimTilesDiscover from 'component/claimTilesDiscover';
 import Icon from 'component/common/icon';
 import I18nMessage from 'component/i18nMessage';
 import LbcSymbol from 'component/common/lbc-symbol';
+import useGetLivestreams from 'effects/use-get-livestreams';
 
 type Props = {
   authenticated: boolean,
@@ -24,6 +25,7 @@ function HomePage(props: Props) {
   const showPersonalizedTags = (authenticated || !IS_WEB) && followedTags && followedTags.length > 0;
   const showIndividualTags = showPersonalizedTags && followedTags.length < 5;
   const { default: getHomepage } = homepageData;
+  const { livestreamMap } = useGetLivestreams(0);
 
   const rowData: Array<RowDataItem> = getHomepage(
     authenticated,
@@ -91,7 +93,7 @@ function HomePage(props: Props) {
             </h1>
           )}
 
-          <ClaimTilesDiscover {...options} />
+          <ClaimTilesDiscover {...options} livestreamMap={livestreamMap} />
           {(route || link) && (
             <Button
               className="claim-grid__title--secondary"
