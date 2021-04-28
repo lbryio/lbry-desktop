@@ -30,7 +30,6 @@ type Props = {
   claimIsMine: boolean,
   claimIsPending: boolean,
   isLivestream: boolean,
-  claimIsMine: Boolean,
   beginPublish: (string) => void,
 };
 
