@@ -1,4 +1,5 @@
 const SUPPORTED_BROWSER_LANGUAGES = {
+  af: 'af',
   en: 'en',
   da: 'da',
   'zh-CN': 'zh-Hans',
@@ -9,11 +10,13 @@ const SUPPORTED_BROWSER_LANGUAGES = {
   nl: 'nl',
   no: 'no',
   fi: 'fi',
+  fil: 'fil',
   fr: 'fr',
   de: 'de',
   gu: 'gu',
   hi: 'hi',
   id: 'id',
+  ja: 'ja',
   jv: 'jv',
   it: 'it',
   ms: 'ms',
@@ -27,6 +30,7 @@ const SUPPORTED_BROWSER_LANGUAGES = {
   ru: 'ru',
   sr: 'sr',
   sk: 'sk',
+  th: 'th',
   ur: 'ur',
   ca: 'ca',
   es: 'es',
@@ -35,6 +39,7 @@ const SUPPORTED_BROWSER_LANGUAGES = {
   cs: 'cs',
   kn: 'kn',
   uk: 'uk',
+  vi: 'vi',
 };
 
 export default SUPPORTED_BROWSER_LANGUAGES;
