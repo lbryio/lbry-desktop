@@ -41,6 +41,7 @@ type Props = {
   showMature: boolean,
   showHiddenByUser?: boolean,
   properties?: (Claim) => void,
+  live?: boolean,
 };
 
 function ClaimPreviewTile(props: Props) {
@@ -62,6 +63,7 @@ function ClaimPreviewTile(props: Props) {
     showMature,
     showHiddenByUser,
     properties,
+    live,
   } = props;
   const isRepost = claim && claim.repost_channel_url;
   const shouldFetch = claim === undefined;
@@ -155,12 +157,18 @@ function ClaimPreviewTile(props: Props) {
     );
   }
 
+  let liveProperty = null;
+  if (live === true) {
+    liveProperty = (claim) => <>LIVE</>;
+  }
+
   return (
     <li
       role="link"
       onClick={handleClick}
       className={classnames('card claim-preview--tile', {
         'claim-preview__wrapper--channel': isChannel,
+        'claim-preview__live': live,
       })}
     >
       <NavLink {...navLinkProps}>
@@ -173,7 +181,7 @@ function ClaimPreviewTile(props: Props) {
               </div>
               {/* @endif */}
               <div className="claim-preview__file-property-overlay">
-                <FileProperties uri={uri} small properties={properties} />
+                <FileProperties uri={uri} small properties={liveProperty || properties} />
               </div>
             </React.Fragment>
           )}
