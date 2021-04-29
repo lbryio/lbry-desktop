@@ -68,6 +68,8 @@ type Props = {
   searchInLanguage: boolean,
   scrollAnchor?: string,
   showHiddenByUser?: boolean,
+  liveLivestreamsFirst?: boolean,
+  livestreamMap?: { [string]: any },
 };
 
 function ClaimListDiscover(props: Props) {
@@ -119,6 +121,8 @@ function ClaimListDiscover(props: Props) {
     searchInLanguage,
     scrollAnchor,
     showHiddenByUser = false,
+    liveLivestreamsFirst,
+    livestreamMap,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
   const { search } = location;
@@ -494,6 +498,8 @@ function ClaimListDiscover(props: Props) {
             includeSupportAction={includeSupportAction}
             injectedItem={injectedItem}
             showHiddenByUser={showHiddenByUser}
+            liveLivestreamsFirst={liveLivestreamsFirst}
+            livestreamMap={livestreamMap}
           />
           {loading && (
             <div className="claim-grid">
@@ -524,6 +530,8 @@ function ClaimListDiscover(props: Props) {
             includeSupportAction={includeSupportAction}
             injectedItem={injectedItem}
             showHiddenByUser={showHiddenByUser}
+            liveLivestreamsFirst={liveLivestreamsFirst}
+            livestreamMap={livestreamMap}
           />
           {loading &&
             new Array(dynamicPageSize)
