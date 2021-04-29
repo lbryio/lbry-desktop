@@ -17,18 +17,18 @@ export default handleActions(
       const newSubscriptions: Array<Subscription> = state.subscriptions.slice();
       let newFollowing: Array<Following> = state.following.slice();
       // prevent duplicates in the sidebar
-      if (!newSubscriptions.some(sub => sub.uri === newSubscription.uri)) {
+      if (!newSubscriptions.some((sub) => sub.uri === newSubscription.uri)) {
         //   $FlowFixMe
         newSubscriptions.unshift(newSubscription);
       }
 
-      if (!newFollowing.some(sub => sub.uri === newSubscription.uri)) {
+      if (!newFollowing.some((sub) => sub.uri === newSubscription.uri)) {
         newFollowing.unshift({
           uri: newSubscription.uri,
           notificationsDisabled: newSubscription.notificationsDisabled,
         });
       } else {
-        newFollowing = newFollowing.map(following => {
+        newFollowing = newFollowing.map((following) => {
           if (following.uri === newSubscription.uri) {
             return {
               uri: newSubscription.uri,
@@ -50,10 +50,12 @@ export default handleActions(
       const subscriptionToRemove: Subscription = action.data;
       const newSubscriptions = state.subscriptions
         .slice()
-        .filter(subscription => subscription.channelName !== subscriptionToRemove.channelName);
+        .filter(
+          (subscription) => subscription.channelName.toLowerCase() !== subscriptionToRemove.channelName.toLowerCase()
+        );
       const newFollowing = state.following
         .slice()
-        .filter(subscription => subscription.uri !== subscriptionToRemove.uri);
+        .filter((subscription) => subscription.uri !== subscriptionToRemove.uri);
 
       return {
         ...state,
@@ -95,7 +97,7 @@ export default handleActions(
       if (!subscriptions) {
         newSubscriptions = state.subscriptions;
       } else {
-        const parsedSubscriptions = subscriptions.map(uri => {
+        const parsedSubscriptions = subscriptions.map((uri) => {
           const { channelName } = parseURI(uri);
 
           return {
