@@ -15,13 +15,14 @@ type SubscriptionArgs = {
 type Props = {
   permanentUrl: ?string,
   isSubscribed: boolean,
-  doChannelSubscribe: SubscriptionArgs => void,
-  doChannelUnsubscribe: SubscriptionArgs => void,
+  doChannelSubscribe: (SubscriptionArgs) => void,
+  doChannelUnsubscribe: (SubscriptionArgs) => void,
   showSnackBarOnSubscribe: boolean,
   doToast: ({ message: string }) => void,
   shrinkOnMobile: boolean,
   notificationsDisabled: boolean,
   user: ?User,
+  uri: string,
 };
 
 export default function SubscribeButton(props: Props) {
@@ -35,6 +36,7 @@ export default function SubscribeButton(props: Props) {
     shrinkOnMobile = false,
     notificationsDisabled,
     user,
+    uri,
   } = props;
 
   const buttonRef = useRef();
@@ -43,6 +45,7 @@ export default function SubscribeButton(props: Props) {
   isHovering = isMobile ? true : isHovering;
   const uiNotificationsEnabled = user && user.experimental_ui;
 
+  const { channelName: rawChannelName } = parseURI(uri);
   const { channelName } = parseURI(permanentUrl);
   const claimName = '@' + channelName;
 
@@ -55,6 +58,32 @@ export default function SubscribeButton(props: Props) {
   const label = isMobile && shrinkOnMobile ? '' : unfollowOverride || subscriptionLabel;
   const titlePrefix = isSubscribed ? __('Unfollow this channel') : __('Follow this channel');
 
+  if (isSubscribed && !permanentUrl && rawChannelName) {
+    return (
+      <div className="button-group">
+        <Button
+          ref={buttonRef}
+          iconColor="red"
+          largestLabel={isMobile && shrinkOnMobile ? '' : subscriptionLabel}
+          icon={ICONS.UNSUBSCRIBE}
+          button={'alt'}
+          requiresAuth={IS_WEB}
+          label={label}
+          title={titlePrefix}
+          onClick={(e) => {
+            e.stopPropagation();
+
+            subscriptionHandler({
+              channelName: '@' + rawChannelName,
+              uri: uri,
+              notificationsDisabled: true,
+            });
+          }}
+        />
+      </div>
+    );
+  }
+
   return permanentUrl ? (
     <div className="button-group">
       <Button
@@ -66,7 +95,7 @@ export default function SubscribeButton(props: Props) {
         requiresAuth={IS_WEB}
         label={label}
         title={titlePrefix}
-        onClick={e => {
+        onClick={(e) => {
           e.stopPropagation();
 
           subscriptionHandler({

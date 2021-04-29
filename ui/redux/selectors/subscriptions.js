@@ -9,25 +9,25 @@ import {
 import { swapKeyAndValue } from 'util/swap-json';
 
 // Returns the entire subscriptions state
-const selectState = state => state.subscriptions || {};
+const selectState = (state) => state.subscriptions || {};
 
 // Returns the list of channel uris a user is subscribed to
 export const selectSubscriptions = createSelector(
   selectState,
-  state => state.subscriptions && state.subscriptions.sort((a, b) => a.channelName.localeCompare(b.channelName))
+  (state) => state.subscriptions && state.subscriptions.sort((a, b) => a.channelName.localeCompare(b.channelName))
 );
 
-export const selectFollowing = createSelector(selectState, state => state.following && state.following);
+export const selectFollowing = createSelector(selectState, (state) => state.following && state.following);
 
 // Fetching list of users subscriptions
-export const selectIsFetchingSubscriptions = createSelector(selectState, state => state.loading);
+export const selectIsFetchingSubscriptions = createSelector(selectState, (state) => state.loading);
 
 // The current view mode on the subscriptions page
-export const selectViewMode = createSelector(selectState, state => state.viewMode);
+export const selectViewMode = createSelector(selectState, (state) => state.viewMode);
 
 // Suggested subscriptions from internal apis
-export const selectSuggested = createSelector(selectState, state => state.suggested);
-export const selectIsFetchingSuggested = createSelector(selectState, state => state.loadingSuggested);
+export const selectSuggested = createSelector(selectState, (state) => state.suggested);
+export const selectIsFetchingSuggested = createSelector(selectState, (state) => state.loadingSuggested);
 export const selectSuggestedChannels = createSelector(
   selectSubscriptions,
   selectSuggested,
@@ -55,7 +55,7 @@ export const selectSuggestedChannels = createSelector(
     // If a uri isn't already in the suggested object, add it
     const suggestedChannels = { ...topSubscribedSuggestions };
 
-    Object.keys(featuredSuggestions).forEach(uri => {
+    Object.keys(featuredSuggestions).forEach((uri) => {
       if (!suggestedChannels[uri]) {
         const channelLabel = featuredSuggestions[uri];
         suggestedChannels[uri] = channelLabel;
@@ -73,15 +73,15 @@ export const selectSuggestedChannels = createSelector(
       }
     });
 
-    return Object.keys(suggestedChannels).map(uri => ({
+    return Object.keys(suggestedChannels).map((uri) => ({
       uri,
       label: suggestedChannels[uri],
     }));
   }
 );
 
-export const selectFirstRunCompleted = createSelector(selectState, state => state.firstRunCompleted);
-export const selectshowSuggestedSubs = createSelector(selectState, state => state.showSuggestedSubs);
+export const selectFirstRunCompleted = createSelector(selectState, (state) => state.firstRunCompleted);
+export const selectshowSuggestedSubs = createSelector(selectState, (state) => state.showSuggestedSubs);
 
 // Fetching any claims that are a part of a users subscriptions
 export const selectSubscriptionsBeingFetched = createSelector(
@@ -89,7 +89,7 @@ export const selectSubscriptionsBeingFetched = createSelector(
   selectAllFetchingChannelClaims,
   (subscriptions, fetchingChannelClaims) => {
     const fetchingSubscriptionMap = {};
-    subscriptions.forEach(sub => {
+    subscriptions.forEach((sub) => {
       const isFetching = fetchingChannelClaims && fetchingChannelClaims[sub.uri];
       if (isFetching) {
         fetchingSubscriptionMap[sub.uri] = true;
@@ -102,17 +102,17 @@ export const selectSubscriptionsBeingFetched = createSelector(
 
 // Returns true if a user is subscribed to the channel associated with the uri passed in
 // Accepts content or channel uris
-export const makeSelectChannelInSubscriptions = uri =>
-  createSelector(selectSubscriptions, subscriptions => subscriptions.some(sub => sub.uri === uri));
+export const makeSelectChannelInSubscriptions = (uri) =>
+  createSelector(selectSubscriptions, (subscriptions) => subscriptions.some((sub) => sub.uri === uri));
 
-export const makeSelectIsSubscribed = uri =>
+export const makeSelectIsSubscribed = (uri) =>
   createSelector(
     selectSubscriptions,
     makeSelectChannelForClaimUri(uri, true),
     makeSelectClaimForUri(uri),
     (subscriptions, channelUri, claim) => {
       if (channelUri) {
-        return subscriptions.some(sub => sub.uri === channelUri);
+        return subscriptions.some((sub) => sub.uri === channelUri);
       }
 
       // If we couldn't get a channel uri from the claim uri, the uri passed in might be a channel already
@@ -123,21 +123,25 @@ export const makeSelectIsSubscribed = uri =>
 
       if (isChannel && claim) {
         const uri = claim.permanent_url;
-        return subscriptions.some(sub => sub.uri === uri);
+        return subscriptions.some((sub) => sub.uri === uri);
+      }
+
+      if (isChannel && !claim) {
+        return subscriptions.some((sub) => sub.uri === uri);
       }
 
       return false;
     }
   );
 
-export const makeSelectNotificationsDisabled = uri =>
+export const makeSelectNotificationsDisabled = (uri) =>
   createSelector(
     selectFollowing,
     makeSelectChannelForClaimUri(uri, true),
     makeSelectClaimForUri(uri),
     (following, channelUri, claim) => {
       if (channelUri) {
-        return following.some(following => following.uri === channelUri && following.notificationsDisabled);
+        return following.some((following) => following.uri === channelUri && following.notificationsDisabled);
       }
 
       // If we couldn't get a channel uri from the claim uri, the uri passed in might be a channel already
@@ -148,7 +152,7 @@ export const makeSelectNotificationsDisabled = uri =>
 
       if (isChannel && claim) {
         const uri = claim.permanent_url;
-        const disabled = following.some(sub => {
+        const disabled = following.some((sub) => {
           return sub.uri === uri && sub.notificationsDisabled === true;
         });
 

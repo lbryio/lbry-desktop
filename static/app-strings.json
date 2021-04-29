@@ -1886,7 +1886,6 @@
   "No replays found.": "No replays found.",
   "Replay video available": "Replay video available",
   "Check for Replays:": "Check for Replays",
-  "A thumbnail is required. Please upload or provide an image URL above.": "A thumbnail is required. Please upload or provide an image URL above.",
   "You can upload your own recording or select a replay when your stream is over": "You can upload your own recording or select a replay when your stream is over",
   "This channel isn't staking enough LBRY Credits for inline image previews.": "This channel isn't staking enough LBRY Credits for inline image previews.",
   "Fromage": "Fromage",
@@ -1894,6 +1893,7 @@
   "Tá Rolando": "Tá Rolando",
   "Watch content and earn more Credits for each level unlocked! 10 views required for level 1 (Current Score: 0). Only up to 10 views per day count.": "Watch content and earn more Credits for each level unlocked! 10 views required for level 1 (Current Score: 0). Only up to 10 views per day count.",
   "Follow your favorite creators and earn more Credits for each level unlocked! Follow 1 creators for level 1 (Current Score: 0).": "Follow your favorite creators and earn more Credits for each level unlocked! Follow 1 creators for level 1 (Current Score: 0).",
-  "Video/Audio": "Video/Audio",
+  "Channel Not Found": "Channel Not Found",
+  "Probably because you didn't make it.": "Probably because you didn't make it.",
   "--end--": "--end--"
 }

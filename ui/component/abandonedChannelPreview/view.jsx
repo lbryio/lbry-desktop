@@ -5,6 +5,7 @@ import ChannelThumbnail from 'component/channelThumbnail';
 import { parseURI } from 'lbry-redux';
 import ChannelBlockButton from 'component/channelBlockButton';
 import ChannelMuteButton from 'component/channelMuteButton';
+import SubscribeButton from 'component/subscribeButton';
 
 type Props = {
   uri: string,
@@ -30,6 +31,7 @@ function AbandonedChannelPreview(props: Props) {
             <div className="section__actions">
               <ChannelBlockButton uri={uri} />
               <ChannelMuteButton uri={uri} />
+              <SubscribeButton uri={uri} />
             </div>
           </div>
         </div>
