@@ -9,6 +9,7 @@ import { FormField } from 'component/common/form';
 import usePersistedState from 'effects/use-persisted-state';
 import debounce from 'util/debounce';
 import ClaimPreviewTile from 'component/claimPreviewTile';
+import { prioritizeActiveLivestreams } from 'component/claimTilesDiscover/view';
 
 const DEBOUNCE_SCROLL_HANDLER_MS = 150;
 const SORT_NEW = 'new';
@@ -38,6 +39,10 @@ type Props = {
   tileLayout?: boolean,
   searchInLanguage: boolean,
   hideMenu?: boolean,
+  claimSearchByQuery: { [string]: Array<string> },
+  claimsByUri: { [string]: any },
+  liveLivestreamsFirst?: boolean,
+  livestreamMap?: { [string]: any },
 };
 
 export default function ClaimList(props: Props) {
@@ -63,15 +68,32 @@ export default function ClaimList(props: Props) {
     renderProperties,
     searchInLanguage,
     hideMenu,
+    claimSearchByQuery,
+    claimsByUri,
+    liveLivestreamsFirst,
+    livestreamMap,
   } = props;
 
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
   const timedOut = uris === null;
   const urisLength = (uris && uris.length) || 0;
+
+  const liveUris = [];
+  if (liveLivestreamsFirst && livestreamMap) {
+    prioritizeActiveLivestreams(uris, liveUris, livestreamMap, claimsByUri, claimSearchByQuery);
+  }
+
   const sortedUris = (urisLength > 0 && (currentSort === SORT_NEW ? uris : uris.slice().reverse())) || [];
   const noResultMsg = searchInLanguage
     ? __('No results. Contents may be hidden by the Language filter.')
     : __('No results');
+
+  const resolveLive = (index) => {
+    if (liveLivestreamsFirst && livestreamMap && index < liveUris.length) {
+      return true;
+    }
+    return undefined;
+  };
 
   function handleSortChange() {
     setCurrentSort(currentSort === SORT_NEW ? SORT_OLD : SORT_NEW);
@@ -101,8 +123,14 @@ export default function ClaimList(props: Props) {
   return tileLayout && !header ? (
     <section className="claim-grid">
       {urisLength > 0 &&
-        uris.map((uri) => (
-          <ClaimPreviewTile key={uri} uri={uri} showHiddenByUser={showHiddenByUser} properties={renderProperties} />
+        uris.map((uri, index) => (
+          <ClaimPreviewTile
+            key={uri}
+            uri={uri}
+            showHiddenByUser={showHiddenByUser}
+            properties={renderProperties}
+            live={resolveLive(index)}
+          />
         ))}
       {!timedOut && urisLength === 0 && !loading && <div className="empty main--empty">{empty || noResultMsg}</div>}
       {timedOut && timedOutMessage && <div className="empty main--empty">{timedOutMessage}</div>}
@@ -165,12 +193,9 @@ export default function ClaimList(props: Props) {
                   // Hack to hide spee.ch thumbnail publishes
                   // If it meets these requirements, it was probably uploaded here:
                   // https://github.com/lbryio/lbry-redux/blob/master/src/redux/actions/publish.js#L74-L79
-                  if (claim.name.length === 24 && !claim.name.includes(' ') && claim.value.author === 'Spee.ch') {
-                    return true;
-                  } else {
-                    return false;
-                  }
+                  return claim.name.length === 24 && !claim.name.includes(' ') && claim.value.author === 'Spee.ch';
                 }}
+                live={resolveLive(index)}
               />
             </React.Fragment>
           ))}

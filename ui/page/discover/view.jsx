@@ -15,6 +15,7 @@ import * as CS from 'constants/claim_search';
 import Ads from 'web/component/ads';
 import LbcSymbol from 'component/common/lbc-symbol';
 import I18nMessage from 'component/i18nMessage';
+import useGetLivestreams from 'effects/use-get-livestreams';
 
 type Props = {
   location: { search: string },
@@ -43,6 +44,7 @@ function DiscoverPage(props: Props) {
   const buttonRef = useRef();
   const isHovering = useHover(buttonRef);
   const isMobile = useIsMobile();
+  const { livestreamMap } = useGetLivestreams(0);
 
   const urlParams = new URLSearchParams(search);
   const claimType = urlParams.get('claim_type');
@@ -148,6 +150,8 @@ function DiscoverPage(props: Props) {
             )
           )
         }
+        liveLivestreamsFirst
+        livestreamMap={livestreamMap}
       />
     </Page>
   );

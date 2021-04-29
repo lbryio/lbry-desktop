@@ -70,6 +70,7 @@ type Props = {
   repostUrl?: string,
   hideMenu?: boolean,
   isLivestream?: boolean,
+  live?: boolean,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -120,6 +121,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     hideMenu = false,
     // repostUrl,
     isLivestream,
+    live,
   } = props;
   const WrapperElement = wrapperElement || 'li';
   const shouldFetch =
@@ -237,6 +239,11 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     return null;
   }
 
+  let liveProperty = null;
+  if (live === true) {
+    liveProperty = (claim) => <>LIVE</>;
+  }
+
   return (
     <WrapperElement
       ref={ref}
@@ -246,6 +253,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
         'claim-preview__wrapper--channel': isChannelUri && type !== 'inline',
         'claim-preview__wrapper--inline': type === 'inline',
         'claim-preview__wrapper--small': type === 'small',
+        'claim-preview__live': live,
       })}
     >
       <>
@@ -278,9 +286,9 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                       </div>
                     )}
                     {/* @endif */}
-                    {!isRepost && !isChannelUri && !isLivestream && (
+                    {!isRepost && !isChannelUri && (
                       <div className="claim-preview__file-property-overlay">
-                        <FileProperties uri={contentUri} small />
+                        <FileProperties uri={contentUri} small properties={liveProperty} />
                       </div>
                     )}
                   </FileThumbnail>
