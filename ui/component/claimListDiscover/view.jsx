@@ -70,6 +70,7 @@ type Props = {
   showHiddenByUser?: boolean,
   liveLivestreamsFirst?: boolean,
   livestreamMap?: { [string]: any },
+  hasSource?: boolean,
 };
 
 function ClaimListDiscover(props: Props) {
@@ -123,6 +124,7 @@ function ClaimListDiscover(props: Props) {
     showHiddenByUser = false,
     liveLivestreamsFirst,
     livestreamMap,
+    hasSource,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
   const { search } = location;
@@ -228,7 +230,7 @@ function ClaimListDiscover(props: Props) {
         : CS.ORDER_BY_TOP_VALUE, // Sort by top
   };
 
-  if (!ENABLE_NO_SOURCE_CLAIMS && (!claimType || claimType === CS.CLAIM_STREAM)) {
+  if (hasSource || (!ENABLE_NO_SOURCE_CLAIMS && (!claimType || claimType === CS.CLAIM_STREAM))) {
     options.has_source = true;
   }
 

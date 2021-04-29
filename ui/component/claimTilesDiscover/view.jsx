@@ -111,6 +111,7 @@ type Props = {
   timestamp?: string,
   feeAmount?: string,
   limitClaimsPerChannel?: number,
+  hasSource?: boolean,
   hasNoSource?: boolean,
   renderProperties?: (Claim) => ?Node,
   liveLivestreamsFirst?: boolean,
@@ -139,6 +140,7 @@ function ClaimTilesDiscover(props: Props) {
     feeAmount,
     limitClaimsPerChannel,
     fetchingClaimSearchByQuery,
+    hasSource,
     hasNoSource,
     renderProperties,
     blockedUris,
@@ -189,7 +191,7 @@ function ClaimTilesDiscover(props: Props) {
 
   if (ENABLE_NO_SOURCE_CLAIMS && hasNoSource) {
     options.has_no_source = true;
-  } else if (!ENABLE_NO_SOURCE_CLAIMS && (!claimType || claimType === 'stream')) {
+  } else if (hasSource || (!ENABLE_NO_SOURCE_CLAIMS && (!claimType || claimType === 'stream'))) {
     options.has_source = true;
   }
 
