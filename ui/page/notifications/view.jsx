@@ -11,24 +11,16 @@ import Yrbl from 'component/yrbl';
 import * as NOTIFICATIONS from 'constants/notifications';
 import useFetched from 'effects/use-fetched';
 
-const RULE_LABELS = {
-  [NOTIFICATIONS.NOTIFICATION_RULE_NONE]: 'All',
-  [NOTIFICATIONS.NOTIFICATION_RULE_COMMENTS]: 'Comments',
-  [NOTIFICATIONS.NOTIFICATION_RULE_REPLIES]: 'Replies',
-  [NOTIFICATIONS.NOTIFICATION_RULE_FOLLOWERS]: 'Followers',
-  [NOTIFICATIONS.NOTIFICATION_RULE_NEW_CONTENT]: 'New content',
-  [NOTIFICATIONS.NOTIFICATION_RULE_OTHERS]: 'Others',
-};
-
 type Props = {
   notifications: Array<Notification>,
   notificationsFiltered: Array<Notification>,
+  notificationCategories: Array<NotificationCategory>,
   fetching: boolean,
   unreadCount: number,
   unseenCount: number,
   doSeeAllNotifications: () => void,
   doReadNotifications: () => void,
-  doNotificationList: (string) => void,
+  doNotificationList: (?Array<string>) => void,
 };
 
 export default function NotificationsPage(props: Props) {
@@ -41,17 +33,17 @@ export default function NotificationsPage(props: Props) {
     doSeeAllNotifications,
     doReadNotifications,
     doNotificationList,
+    notificationCategories,
   } = props;
-
   const initialFetchDone = useFetched(fetching);
-  const [rule, setRule] = usePersistedState('notifications--rule', NOTIFICATIONS.NOTIFICATION_RULE_NONE);
-  const isFiltered = rule !== NOTIFICATIONS.NOTIFICATION_RULE_NONE;
+  const [name, setName] = usePersistedState('notifications--rule', NOTIFICATIONS.NOTIFICATION_NAME_ALL);
+  const isFiltered = name !== NOTIFICATIONS.NOTIFICATION_NAME_ALL;
   const list = isFiltered ? notificationsFiltered : notifications;
 
   React.useEffect(() => {
     if (unseenCount > 0 || unreadCount > 0) {
       // If there are unread notifications when entering the page, reset to All.
-      setRule(NOTIFICATIONS.NOTIFICATION_RULE_NONE);
+      setName(NOTIFICATIONS.NOTIFICATION_NAME_ALL);
     }
   }, []);
 
@@ -61,14 +53,26 @@ export default function NotificationsPage(props: Props) {
     }
   }, [unseenCount, doSeeAllNotifications]);
 
+  const stringifiedNotificationCategories = JSON.stringify(notificationCategories);
   React.useEffect(() => {
-    if (rule && rule !== '') {
-      // Fetch filtered list when:
-      // (1) 'rule' changed
-      // (2) new "all" notifications received (e.g. from websocket).
-      doNotificationList(rule);
+    if (stringifiedNotificationCategories) {
+      const arrayNotificationCategories = JSON.parse(stringifiedNotificationCategories);
+
+      if (name !== NOTIFICATIONS.NOTIFICATION_NAME_ALL) {
+        // Fetch filtered list when:
+        // (1) 'name' changed
+        // (2) new "all" notifications received (e.g. from websocket).
+        try {
+          const matchingCategory = arrayNotificationCategories.find((category) => category.name === name);
+          if (matchingCategory) {
+            doNotificationList(matchingCategory.types);
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
     }
-  }, [rule, notifications]);
+  }, [name, notifications, stringifiedNotificationCategories]);
 
   const notificationListElement = (
     <>
@@ -80,24 +84,26 @@ export default function NotificationsPage(props: Props) {
           {unreadCount > 0 && (
             <Button icon={ICONS.EYE} onClick={doReadNotifications} button="secondary" label={__('Mark all as read')} />
           )}
-          <FormField
-            className="notification__filter"
-            type="select"
-            name="filter"
-            value={rule}
-            onChange={(e) => setRule(e.target.value)}
-          >
-            {Object.entries(RULE_LABELS).map((r) => {
-              return (
-                <option key={r[0]} value={r[0]}>
-                  {__(String(r[1]))}
-                </option>
-              );
-            })}
-          </FormField>
+          {notificationCategories && (
+            <FormField
+              className="notification__filter"
+              type="select"
+              name="filter"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            >
+              {notificationCategories.map((category) => {
+                return (
+                  <option key={category.name} value={category.name}>
+                    {__(category.name)}
+                  </option>
+                );
+              })}
+            </FormField>
+          )}
         </div>
       </div>
-      {list && list.length > 0 ? (
+      {list && list.length > 0 && !(isFiltered && fetching) ? (
         <div className="card">
           <div className="notification_list">
             {list.map((notification, index) => {

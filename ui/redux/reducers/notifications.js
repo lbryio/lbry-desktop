@@ -5,6 +5,7 @@ import { handleActions } from 'util/redux-utils';
 const defaultState: NotificationState = {
   notifications: [],
   notificationsFiltered: [],
+  notificationCategories: undefined,
   fetchingNotifications: false,
   toasts: [],
   errors: [],
@@ -42,7 +43,7 @@ export default handleActions(
     },
     [ACTIONS.NOTIFICATION_LIST_COMPLETED]: (state, action) => {
       const { filterRule, newNotifications } = action.data;
-      if (filterRule && filterRule !== '') {
+      if (filterRule) {
         return {
           ...state,
           notificationsFiltered: newNotifications,
@@ -60,6 +61,14 @@ export default handleActions(
       return {
         ...state,
         fetchingNotifications: false,
+      };
+    },
+    [ACTIONS.NOTIFICATION_CATEGORIES_COMPLETED]: (state, action) => {
+      const { notificationCategories } = action.data;
+
+      return {
+        ...state,
+        notificationCategories,
       };
     },
     [ACTIONS.NOTIFICATION_READ_COMPLETED]: (state, action) => {

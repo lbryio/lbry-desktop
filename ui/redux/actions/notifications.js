@@ -3,7 +3,11 @@ import * as ACTIONS from 'constants/action_types';
 import * as NOTIFICATIONS from 'constants/notifications';
 import { Lbryio } from 'lbryinc';
 import { v4 as uuid } from 'uuid';
-import { selectNotifications, selectNotificationsFiltered } from 'redux/selectors/notifications';
+import {
+  selectNotifications,
+  selectNotificationsFiltered,
+  selectNotificationCategories,
+} from 'redux/selectors/notifications';
 import { doResolveUris } from 'lbry-redux';
 
 export function doToast(params: ToastParams) {
@@ -41,17 +45,32 @@ export function doDismissError() {
   };
 }
 
-export function doNotificationList(rule: string = '') {
-  return (dispatch: Dispatch) => {
+export function doNotificationList(types?: Array<string>) {
+  return async (dispatch: Dispatch, getState: GetState) => {
+    const state = getState();
+    const notificationTypes = selectNotificationCategories(state);
+
     dispatch({ type: ACTIONS.NOTIFICATION_LIST_STARTED });
 
     let params: any = { is_app_readable: true };
-    if (rule && rule !== NOTIFICATIONS.NOTIFICATION_RULE_NONE) {
-      params.type = rule;
+    if (types) {
+      params.type = types.join(',');
     }
 
-    return Lbryio.call('notification', 'list', params)
-      .then((response) => {
+    try {
+      if (!notificationTypes) {
+        const notificationCategories = await Lbryio.call('notification', 'categories');
+        if (notificationCategories) {
+          dispatch({
+            type: ACTIONS.NOTIFICATION_CATEGORIES_COMPLETED,
+            data: {
+              notificationCategories: notificationCategories.reverse(),
+            },
+          });
+        }
+      }
+
+      return Lbryio.call('notification', 'list', params).then((response) => {
         const notifications = response || [];
         const channelsToResolve = notifications
           .filter((notification: WebNotification) => {
@@ -78,13 +97,13 @@ export function doNotificationList(rule: string = '') {
           type: ACTIONS.NOTIFICATION_LIST_COMPLETED,
           data: {
             newNotifications: notifications,
-            filterRule: rule,
+            filterRule: Boolean(types),
           },
         });
-      })
-      .catch((error) => {
-        dispatch({ type: ACTIONS.NOTIFICATION_LIST_FAILED, data: { error } });
       });
+    } catch (error) {
+      dispatch({ type: ACTIONS.NOTIFICATION_LIST_FAILED, data: { error } });
+    }
   };
 }
 
