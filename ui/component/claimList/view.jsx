@@ -43,6 +43,7 @@ type Props = {
   claimsByUri: { [string]: any },
   liveLivestreamsFirst?: boolean,
   livestreamMap?: { [string]: any },
+  searchOptions?: any,
 };
 
 export default function ClaimList(props: Props) {
@@ -72,6 +73,7 @@ export default function ClaimList(props: Props) {
     claimsByUri,
     liveLivestreamsFirst,
     livestreamMap,
+    searchOptions,
   } = props;
 
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
@@ -80,7 +82,7 @@ export default function ClaimList(props: Props) {
 
   const liveUris = [];
   if (liveLivestreamsFirst && livestreamMap) {
-    prioritizeActiveLivestreams(uris, liveUris, livestreamMap, claimsByUri, claimSearchByQuery);
+    prioritizeActiveLivestreams(uris, liveUris, livestreamMap, claimsByUri, claimSearchByQuery, searchOptions);
   }
 
   const sortedUris = (urisLength > 0 && (currentSort === SORT_NEW ? uris : uris.slice().reverse())) || [];

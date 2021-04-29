@@ -448,6 +448,9 @@ function ClaimListDiscover(props: Props) {
     if (shouldPerformSearch) {
       const searchOptions = JSON.parse(optionsStringForEffect);
       doClaimSearch(searchOptions);
+      if (liveLivestreamsFirst && options.page === 1) {
+        doClaimSearch({ ...searchOptions, has_no_source: true });
+      }
     }
   }, [doClaimSearch, shouldPerformSearch, optionsStringForEffect, forceRefresh]);
 
@@ -500,6 +503,7 @@ function ClaimListDiscover(props: Props) {
             showHiddenByUser={showHiddenByUser}
             liveLivestreamsFirst={liveLivestreamsFirst}
             livestreamMap={livestreamMap}
+            searchOptions={options}
           />
           {loading && (
             <div className="claim-grid">
@@ -532,6 +536,7 @@ function ClaimListDiscover(props: Props) {
             showHiddenByUser={showHiddenByUser}
             liveLivestreamsFirst={liveLivestreamsFirst}
             livestreamMap={livestreamMap}
+            searchOptions={options}
           />
           {loading &&
             new Array(dynamicPageSize)
