@@ -93,7 +93,7 @@ function HomePage(props: Props) {
             </h1>
           )}
 
-          <ClaimTilesDiscover {...options} liveLivestreamsFirst livestreamMap={livestreamMap} />
+          <ClaimTilesDiscover {...options} liveLivestreamsFirst livestreamMap={livestreamMap} hasSource />
           {(route || link) && (
             <Button
               className="claim-grid__title--secondary"

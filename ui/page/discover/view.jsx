@@ -152,6 +152,7 @@ function DiscoverPage(props: Props) {
         }
         liveLivestreamsFirst
         livestreamMap={livestreamMap}
+        hasSource
       />
     </Page>
   );
