@@ -1,13 +1,14 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import React from 'react';
+import { parseURI } from 'lbry-redux';
 import MarkdownPreview from 'component/common/markdown-preview';
 import ChannelThumbnail from 'component/channelThumbnail';
 import { Menu, MenuButton } from '@reach/menu-button';
 import Icon from 'component/common/icon';
 import classnames from 'classnames';
 import CommentMenuList from 'component/commentMenuList';
-import UriIndicator from 'component/uriIndicator';
+import Button from 'component/button';
 import CreditAmount from 'component/common/credit-amount';
 
 type Props = {
@@ -25,6 +26,7 @@ function Comment(props: Props) {
   const { claim, uri, authorUri, message, commentIsMine, commentId, stakedLevel, supportAmount } = props;
   const [mouseIsHovering, setMouseHover] = React.useState(false);
   const commentByOwnerOfContent = claim && claim.signing_channel && claim.signing_channel.permanent_url === authorUri;
+  const { claimName } = parseURI(authorUri);
 
   return (
     <li
@@ -44,14 +46,15 @@ function Comment(props: Props) {
       <div className="livestream-comment__body">
         {supportAmount > 0 && <ChannelThumbnail uri={authorUri} xsmall />}
         <div className="livestream-comment__info">
-          <UriIndicator
-            className={classnames('comment__author', {
+          <Button
+            className={classnames('button--uri-indicator comment__author', {
               'comment__author--creator': commentByOwnerOfContent,
             })}
-            link
-            external
-            uri={authorUri}
-          />
+            target="_blank"
+            navigate={authorUri}
+          >
+            {claimName}
+          </Button>
 
           <div className="livestream-comment__text">
             <MarkdownPreview content={message} promptLinks stakedLevel={stakedLevel} />
