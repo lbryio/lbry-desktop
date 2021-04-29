@@ -53,7 +53,7 @@
     "electron-updater": "^4.2.4",
     "express": "^4.17.1",
     "if-env": "^1.0.4",
-    "react-datetime-picker": "^3.1.0",
+    "react-datetime-picker": "^3.2.1",
     "remove-markdown": "^0.3.0",
     "tempy": "^0.6.0",
     "videojs-logo": "^2.1.4"
