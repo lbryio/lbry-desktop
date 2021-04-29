@@ -7,6 +7,85 @@ import { createNormalizedClaimSearchKey, MATURE_TAGS } from 'lbry-redux';
 import ClaimPreviewTile from 'component/claimPreviewTile';
 import { useHistory } from 'react-router';
 
+/**
+ * Updates 'uris' by adding and/or moving active livestreams to the front of
+ * list.
+ * 'liveUris' is also updated with any entries that were moved to the
+ * front, for convenience.
+ *
+ * @param uris [Ref]
+ * @param liveUris [Ref]
+ * @param livestreamMap
+ * @param claimsByUri
+ * @param claimSearchByQuery
+ * @param options
+ */
+export function prioritizeActiveLivestreams(
+  uris: Array<string>,
+  liveUris: Array<string>,
+  livestreamMap: { [string]: any },
+  claimsByUri: { [string]: any },
+  claimSearchByQuery: { [string]: Array<string> },
+  options: any
+) {
+  if (!livestreamMap || !uris) return;
+
+  const claimIsLive = (claim, liveChannelIds) => {
+    // This function relies on:
+    // 1. Only 1 actual livestream per channel (i.e. all other livestream-claims
+    //    for that channel actually point to the same source).
+    // 2. 'liveChannelIds' needs to be pruned after being accounted for,
+    //    otherwise all livestream-claims will be "live" (we'll only take the
+    //    latest one as "live").
+    return (
+      claim &&
+      claim.value_type === 'stream' &&
+      claim.value.source === undefined &&
+      claim.signing_channel &&
+      liveChannelIds.includes(claim.signing_channel.claim_id)
+    );
+  };
+
+  let liveChannelIds = Object.keys(livestreamMap);
+
+  // 1. Collect active livestreams from the primary search to put in front.
+  uris.forEach((uri) => {
+    const claim = claimsByUri[uri];
+    if (claimIsLive(claim, liveChannelIds)) {
+      liveUris.push(uri);
+      // This live channel has been accounted for, so remove it.
+      liveChannelIds.splice(liveChannelIds.indexOf(claim.signing_channel.claim_id), 1);
+    }
+  });
+
+  // 2. Now, repeat on the secondary search.
+  if (options) {
+    const livestreamsOnlySearchCacheQuery = createNormalizedClaimSearchKey({
+      ...options,
+      has_no_source: true,
+    });
+    const livestreamsOnlyUris = claimSearchByQuery[livestreamsOnlySearchCacheQuery];
+    if (livestreamsOnlyUris) {
+      livestreamsOnlyUris.forEach((uri) => {
+        const claim = claimsByUri[uri];
+        if (!uris.includes(uri) && claimIsLive(claim, liveChannelIds)) {
+          liveUris.push(uri);
+          // This live channel has been accounted for, so remove it.
+          liveChannelIds.splice(liveChannelIds.indexOf(claim.signing_channel.claim_id), 1);
+        }
+      });
+    }
+  }
+
+  // 3. Finalize uris by putting live livestreams in front.
+  const newUris = liveUris.concat(uris.filter((uri) => !liveUris.includes(uri)));
+  uris.splice(0, uris.length, ...newUris);
+}
+
+// ****************************************************************************
+// ClaimTilesDiscover
+// ****************************************************************************
+
 type Props = {
   prefixUris?: Array<string>,
   uris: Array<string>,
@@ -14,15 +93,9 @@ type Props = {
   showNsfw: boolean,
   hideReposts: boolean,
   history: { action: string, push: (string) => void, replace: (string) => void },
-  claimSearchByQuery: {
-    [string]: Array<string>,
-  },
-  fetchingClaimSearchByQuery: {
-    [string]: boolean,
-  },
-  claimsByUri: {
-    [string]: any,
-  },
+  claimSearchByQuery: { [string]: Array<string> },
+  fetchingClaimSearchByQuery: { [string]: boolean },
+  claimsByUri: { [string]: any },
   // claim search options are below
   tags: Array<string>,
   blockedUris: Array<string>,
@@ -154,53 +227,10 @@ function ClaimTilesDiscover(props: Props) {
   }
 
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
-  let uris = (prefixUris || []).concat(claimSearchByQuery[claimSearchCacheQuery] || []);
+  const uris = (prefixUris || []).concat(claimSearchByQuery[claimSearchCacheQuery] || []);
 
   if (liveLivestreamsFirst && livestreamMap) {
-    let liveChannelIds = Object.keys(livestreamMap);
-
-    const claimIsLive = (claim, liveChannelIds) => {
-      // This function relies on:
-      // 1. Only 1 actual livestream per channel (i.e. all other livestream-claims
-      //    for that channel actually point to the same source).
-      // 2. 'liveChannelIds' needs to be pruned after being accounted for,
-      //    otherwise all livestream-claims will be "live" (we'll only take the
-      //    latest one as "live").
-      return (
-        claim &&
-        claim.value_type === 'stream' &&
-        claim.value.source === undefined &&
-        claim.signing_channel &&
-        liveChannelIds.includes(claim.signing_channel.claim_id)
-      );
-    };
-
-    // 1. Collect active livestreams from the primary search to put in front.
-    uris.forEach((uri) => {
-      const claim = claimsByUri[uri];
-      if (claimIsLive(claim, liveChannelIds)) {
-        liveUris.push(uri);
-        // This live channel has been accounted for, so remove it.
-        liveChannelIds.splice(liveChannelIds.indexOf(claim.signing_channel.claim_id), 1);
-      }
-    });
-
-    // 2. Now, repeat on the secondary search.
-    const livestreamsOnlySearchCacheQuery = createNormalizedClaimSearchKey({ ...options, has_no_source: true });
-    const livestreamsOnlyUris = claimSearchByQuery[livestreamsOnlySearchCacheQuery];
-    if (livestreamsOnlyUris) {
-      livestreamsOnlyUris.forEach((uri) => {
-        const claim = claimsByUri[uri];
-        if (!uris.includes(uri) && claimIsLive(claim, liveChannelIds)) {
-          liveUris.push(uri);
-          // This live channel has been accounted for, so remove it.
-          liveChannelIds.splice(liveChannelIds.indexOf(claim.signing_channel.claim_id), 1);
-        }
-      });
-    }
-
-    // 3. Finalize uris by putting live livestreams in front.
-    uris = liveUris.concat(uris.filter((uri) => !liveUris.includes(uri)));
+    prioritizeActiveLivestreams(uris, liveUris, livestreamMap, claimsByUri, claimSearchByQuery, options);
   }
 
   // Don't use the query from createNormalizedClaimSearchKey for the effect since that doesn't include page & release_time
