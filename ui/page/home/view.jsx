@@ -25,7 +25,7 @@ function HomePage(props: Props) {
   const showPersonalizedTags = (authenticated || !IS_WEB) && followedTags && followedTags.length > 0;
   const showIndividualTags = showPersonalizedTags && followedTags.length < 5;
   const { default: getHomepage } = homepageData;
-  const { livestreamMap } = useGetLivestreams(0);
+  const { livestreamMap } = useGetLivestreams();
 
   const rowData: Array<RowDataItem> = getHomepage(
     authenticated,

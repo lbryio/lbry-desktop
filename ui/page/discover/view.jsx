@@ -44,7 +44,7 @@ function DiscoverPage(props: Props) {
   const buttonRef = useRef();
   const isHovering = useHover(buttonRef);
   const isMobile = useIsMobile();
-  const { livestreamMap } = useGetLivestreams(0);
+  const { livestreamMap } = useGetLivestreams();
 
   const urlParams = new URLSearchParams(search);
   const claimType = urlParams.get('claim_type');
