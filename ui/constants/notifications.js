@@ -6,7 +6,7 @@ export const DAILY_WATCH_REMIND = 'daily_watch_remind';
 export const NEW_CONTENT = 'new_content';
 export const NEW_LIVESTREAM = 'new_livestream';
 
-export const NOTIFICATION_RULE_NONE = '';
+export const NOTIFICATION_NAME_ALL = 'All';
 export const NOTIFICATION_RULE_COMMENTS = 'comments';
 export const NOTIFICATION_RULE_REPLIES = 'comment_replies';
 export const NOTIFICATION_RULE_FOLLOWERS = 'followers';

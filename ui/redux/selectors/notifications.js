@@ -6,6 +6,8 @@ export const selectNotifications = createSelector(selectState, (state) => state.
 
 export const selectNotificationsFiltered = createSelector(selectState, (state) => state.notificationsFiltered);
 
+export const selectNotificationCategories = createSelector(selectState, (state) => state.notificationCategories);
+
 export const makeSelectNotificationForCommentId = (id) =>
   createSelector(selectNotifications, (notifications) => {
     const match =

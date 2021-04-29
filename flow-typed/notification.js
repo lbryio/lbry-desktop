@@ -36,3 +36,8 @@ declare type WebNotification = {
   user_id: number,
   group_count?: number,
 };
+
+declare type NotificationCategory = {
+  name: string,
+  types: ?Array<string>,
+};
