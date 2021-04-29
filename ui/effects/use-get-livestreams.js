@@ -6,10 +6,11 @@ import { BITWAVE_LIVE_API } from 'constants/livestream';
  * Gets latest livestream info list. Returns null (instead of a blank object)
  * when there are no active livestreams.
  *
+ * @param minViewers
  * @param refreshMs
  * @returns {{livestreamMap: null, loading: boolean}}
  */
-export default function useGetLivestreams(refreshMs: number) {
+export default function useGetLivestreams(minViewers: number = 0, refreshMs: number = 0) {
   const [loading, setLoading] = React.useState(true);
   const [livestreamMap, setLivestreamMap] = React.useState(null);
 
@@ -25,7 +26,9 @@ export default function useGetLivestreams(refreshMs: number) {
           }
 
           const livestreamMap = res.data.reduce((acc, curr) => {
-            acc[curr.claimId] = curr;
+            if (curr.viewCount >= minViewers) {
+              acc[curr.claimId] = curr;
+            }
             return acc;
           }, {});
 

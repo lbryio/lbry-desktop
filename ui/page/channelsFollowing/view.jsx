@@ -19,7 +19,7 @@ type Props = {
 function ChannelsFollowingPage(props: Props) {
   const { subscribedChannels, tileLayout } = props;
   const hasSubsribedChannels = subscribedChannels.length > 0;
-  const { livestreamMap } = useGetLivestreams(0);
+  const { livestreamMap } = useGetLivestreams();
 
   return !hasSubsribedChannels ? (
     <ChannelsFollowingDiscoverPage />
