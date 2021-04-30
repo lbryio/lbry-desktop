@@ -20,7 +20,7 @@ export default function LbcMessage(props: Props) {
   return (
     <I18nMessage tokens={{ lbc: amount ? <CreditAmount badge noFormat amount={amount} /> : undefined }}>
       {/* Catch any rogue LBC's left */}
-      {tokenizedMessage.replace(/LBC/g, 'Credits')}
+      {tokenizedMessage.replace(/\sLBC/g, ' Credits')}
     </I18nMessage>
   );
 }
