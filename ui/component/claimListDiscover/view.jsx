@@ -450,7 +450,9 @@ function ClaimListDiscover(props: Props) {
     if (shouldPerformSearch) {
       const searchOptions = JSON.parse(optionsStringForEffect);
       doClaimSearch(searchOptions);
+
       if (liveLivestreamsFirst && options.page === 1) {
+        delete searchOptions.has_source;
         doClaimSearch({ ...searchOptions, has_no_source: true });
       }
     }
