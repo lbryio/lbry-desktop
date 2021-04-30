@@ -16,6 +16,7 @@ import { PAGE_VIEW_QUERY, DISCUSSION_PAGE } from 'page/channel/view';
 import FileThumbnail from 'component/fileThumbnail';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import NotificationContentChannelMenu from 'component/notificationContentChannelMenu';
+import LbcMessage from 'component/common/lbc-message';
 
 type Props = {
   notification: WebNotification,
@@ -134,17 +135,23 @@ export default function Notification(props: Props) {
           <div className="notification__content">
             <div className="notification__text-wrapper">
               {!isCommentNotification && (
-                <div className="notification__title">{notification_parameters.device.title}</div>
+                <div className="notification__title">
+                  <LbcMessage>{notification_parameters.device.title}</LbcMessage>
+                </div>
               )}
 
               {isCommentNotification && commentText ? (
                 <>
-                  <div className="notification__title">{notification_parameters.device.title}</div>
+                  <div className="notification__title">
+                    <LbcMessage>{notification_parameters.device.title}</LbcMessage>
+                  </div>
                   <div className="notification__text mobile-hidden">{commentText}</div>
                 </>
               ) : (
                 <>
-                  <div className="notification__text">{notification_parameters.device.text}</div>
+                  <div className="notification__text">
+                    <LbcMessage>{notification_parameters.device.text}</LbcMessage>
+                  </div>
                 </>
               )}
             </div>
