@@ -65,14 +65,6 @@
   svg {
     stroke: var(--color-text);
   }
-
-  &:hover {
-    color: var(--color-link-active);
-
-    svg {
-      stroke: var(--color-link-active);
-    }
-  }
 }
 
 .header__navigation-item--back,
@@ -84,7 +76,7 @@
   margin-right: var(--spacing-s);
 
   &:hover {
-    background-color: var(--color-primary-alt);
+    background-color: var(--color-header-button-hover);
   }
 
   @media (min-width: $breakpoint-small) {

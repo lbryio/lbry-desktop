@@ -90,12 +90,6 @@
   font-size: var(--font-body);
 }
 
-.section__subtitle--status {
-  @extend .section__subtitle;
-  padding: var(--spacing-s);
-  background-color: var(--color-text-warning);
-}
-
 .section__divider {
   display: flex;
   align-items: center;

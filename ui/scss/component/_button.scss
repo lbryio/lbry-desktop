@@ -556,7 +556,7 @@ svg + .button__label {
   &:hover {
     cursor: default;
     text-decoration: none;
-    background-color: var(--color-primary-alt);
+    background-color: var(--color-button-toggle-bg);
   }
 }
 
