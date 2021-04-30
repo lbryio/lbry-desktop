@@ -3,7 +3,7 @@ import { doUpdatePublishForm, makeSelectPublishFormValue } from 'lbry-redux';
 import PublishReleaseDate from './view';
 
 const select = (state) => ({
-  releaseTime: makeSelectPublishFormValue('release_time')(state),
+  releaseTime: makeSelectPublishFormValue('releaseTime')(state),
 });
 
 const perform = (dispatch) => ({

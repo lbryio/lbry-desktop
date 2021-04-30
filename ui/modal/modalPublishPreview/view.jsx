@@ -29,7 +29,7 @@ type Props = {
     currency: string,
   },
   language: string,
-  release_time: ?string,
+  releaseTimeEdited: ?number,
   licenseType: string,
   otherLicenseDescription: ?string,
   licenseUrl: ?string,
@@ -63,7 +63,7 @@ const ModalPublishPreview = (props: Props) => {
     contentIsFree,
     fee,
     language,
-    release_time,
+    releaseTimeEdited,
     licenseType,
     otherLicenseDescription,
     licenseUrl,
@@ -210,6 +210,10 @@ const ModalPublishPreview = (props: Props) => {
     );
   };
 
+  const releaseTimeStr = (time) => {
+    return time ? moment(new Date(time * 1000)).format('MMMM Do, YYYY - h:mm a') : '';
+  };
+
   return (
     <Modal isOpen contentLabel={modalTitle} type="card" onAborted={closeModal}>
       <Form onSubmit={onConfirmed}>
@@ -230,7 +234,7 @@ const ModalPublishPreview = (props: Props) => {
                     {createRow(__('Deposit'), depositValue)}
                     {createRow(__('Price'), priceValue)}
                     {createRow(__('Language'), language)}
-                    {createRow(__('Release Date'), moment(release_time).format('MMMM Do, YYYY - h:mm a'))}
+                    {releaseTimeEdited && createRow(__('Release Date'), releaseTimeStr(releaseTimeEdited))}
                     {createRow(__('License'), licenseValue)}
                     {createRow(__('Tags'), tagsValue)}
                   </tbody>
