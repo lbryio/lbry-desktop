@@ -21,7 +21,7 @@ const PublishReleaseDate = (props: Props) => {
 
   return (
     <div className="form-field-date-picker">
-      <label className="form-field-date-picker-label">Release date</label>
+      <label>Release date</label>
       <DateTimePicker
         className="date-picker-input"
         calendarClassName="form-field-calendar"
