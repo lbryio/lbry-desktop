@@ -26,13 +26,6 @@
   color: var(--color-tertiary);
 }
 
-.badge--cost {
-  @extend .badge;
-  background-color: var(--color-cost);
-  color: var(--color-black);
-  line-height: 1;
-}
-
 .badge--free {
   @extend .badge;
   background-color: var(--color-secondary-alt);

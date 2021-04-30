@@ -127,7 +127,7 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
               placeholder={__('Shh...')}
               type="password"
               name="wallet-new-password"
-              onChange={event => this.onChangeNewPassword(event)}
+              onChange={(event) => this.onChangeNewPassword(event)}
             />
           </fieldset-section>
           <fieldset-section>
@@ -137,7 +137,7 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
               placeholder={__('Your eyes only')}
               type="password"
               name="wallet-new-password-confirm"
-              onChange={event => this.onChangeNewPasswordConfirm(event)}
+              onChange={(event) => this.onChangeNewPasswordConfirm(event)}
             />
           </fieldset-section>
           <fieldset-section>
@@ -145,12 +145,12 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
               label={__('Remember Password')}
               type="checkbox"
               name="wallet-remember-password"
-              onChange={event => this.onChangeRememberPassword(event)}
+              onChange={(event) => this.onChangeRememberPassword(event)}
               checked={this.state.rememberPassword}
             />
           </fieldset-section>
 
-          <div className="section__subtitle--status">
+          <div className="help--warning">
             {__(
               'If your password is lost, it cannot be recovered. You will not be able to access your wallet without a password.'
             )}
@@ -166,7 +166,7 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
             placeholder={__('Type "%acknowledgement_text%"', { acknowledgement_text: acknowledgementText })}
             type="text"
             name="wallet-understand"
-            onChange={event => this.onChangeUnderstandConfirm(event)}
+            onChange={(event) => this.onChangeUnderstandConfirm(event)}
           />
           {failMessage && <div className="error__text">{__(failMessage)}</div>}
         </Form>

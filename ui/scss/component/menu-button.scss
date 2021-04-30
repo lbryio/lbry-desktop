@@ -54,7 +54,7 @@
 
 .menu__title {
   &[aria-expanded='true'] {
-    background-color: var(--color-primary-alt);
+    background-color: var(--color-header-button-active);
   }
 }
 
