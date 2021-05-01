@@ -60,6 +60,8 @@ export function prioritizeActiveLivestreams(
 
   // 2. Now, repeat on the secondary search.
   if (options) {
+    // options has to match original search transformations to find the results
+    delete options.has_source;
     const livestreamsOnlySearchCacheQuery = createNormalizedClaimSearchKey({
       ...options,
       has_no_source: true,
