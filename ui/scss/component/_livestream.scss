@@ -316,6 +316,11 @@ $discussion-header__height: 3rem;
 .livestream-comment__text {
   padding-right: var(--spacing-xxs);
   padding-bottom: var(--spacing-xxs);
+  .markdown-preview {
+    p {
+      word-break: break-all;
+    }
+  }
 }
 
 .livestream-superchat__tooltip-amount {
