@@ -19,6 +19,7 @@ const select = (state, props) => {
   if (urlQuery) {
     urlQuery = urlQuery.replace(/^lbry:\/\//i, '').replace(/\//, ' ');
   }
+  const showMature = selectShowMatureContent(state);
   const query = makeSelectQueryWithOptions(
     urlQuery,
     SIMPLE_SITE
@@ -33,7 +34,7 @@ const select = (state, props) => {
 
   return {
     isSearching: selectIsSearching(state),
-    showNsfw: selectShowMatureContent(state),
+    showNsfw: showMature,
     uris: uris,
     isAuthenticated: selectUserVerifiedEmail(state),
     searchOptions: selectSearchOptions(state),
