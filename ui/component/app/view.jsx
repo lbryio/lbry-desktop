@@ -208,13 +208,8 @@ function App(props: Props) {
         e.preventDefault();
       }
 
-      if ((os !== 'Darwin' && e.ctrlKey && e.keyCode === 70) || (e.keyCode === 70 && e.metaKey)) {
+      if (!IS_WEB && ((os !== 'Darwin' && e.ctrlKey && e.keyCode === 70) || (e.keyCode === 70 && e.metaKey))) {
         setSearchWindow(true);
-        e.preventDefault();
-      }
-
-      if (e.key === 'Escape') {
-        setSearchWindow(false);
         e.preventDefault();
       }
     };
@@ -407,12 +402,15 @@ function App(props: Props) {
         />
       ) : (
         <React.Fragment>
-          {!IS_WEB && searchWindow && <SearchScrenInput />}
           <Router />
           <ModalRouter />
           <FileDrop />
           <FileRenderFloating />
           {isEnhancedLayout && <Yrbl className="yrbl--enhanced" />}
+
+          {/* @if TARGET='app' */}
+          {searchWindow && <SearchScrenInput />}
+          {/* @endif */}
 
           {/* @if TARGET='app' */}
           {showUpgradeButton && (
