@@ -301,16 +301,25 @@ function WalletSwap(props: Props) {
         const btcAmount = response.Charge.data.pricing['bitcoin'].amount;
         const rate = response.Exchange.rate;
 
-        const swap = {
+        const timeline = response.Charge.data.timeline;
+        const lastTimeline = timeline[timeline.length - 1];
+
+        const newSwap = {
           chargeCode: response.Exchange.charge_code,
           coins: Object.keys(response.Charge.data.addresses),
           sendAddresses: response.Charge.data.addresses,
           sendAmounts: response.Charge.data.pricing,
           lbcAmount: (btcAmount * BTC_SATOSHIS) / rate,
+          status: {
+            status: lastTimeline.status,
+            receiptCurrency: lastTimeline.payment.value.currency,
+            receiptTxid: lastTimeline.payment.transaction_id,
+            lbcTxid: response.Exchange.lbc_txid || '',
+          },
         };
 
-        setSwap({ ...swap });
-        addCoinSwap({ ...swap });
+        setSwap({ ...newSwap });
+        addCoinSwap({ ...newSwap });
       })
       .catch((err) => {
         setNag({ msg: err === INTERNAL_APIS_DOWN ? NAG_SWAP_CALL_FAILED : err.message, type: 'error' });
