@@ -1,5 +1,8 @@
 // @flow
 import React, { useEffect, useRef } from 'react';
+import { remote } from 'electron';
+
+const win = remote.BrowserWindow.getFocusedWindow();
 
 const os = require('os').type();
 
@@ -38,7 +41,8 @@ const SearchScreenInput = (props: Props) => {
       ref={inputRef}
       autoFocus
       onChange={(e) => {
-        window.find(e.target.value);
+        // win.webContents.unselect();
+        win.webContents.findInPage(e.target.value);
       }}
       placeholder="Search in LBRY ;)"
       className="search-screen-input"
