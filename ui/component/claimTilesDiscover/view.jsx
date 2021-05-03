@@ -7,6 +7,13 @@ import { createNormalizedClaimSearchKey, MATURE_TAGS } from 'lbry-redux';
 import ClaimPreviewTile from 'component/claimPreviewTile';
 import { useHistory } from 'react-router';
 
+const getNoSourceOptions = (options) => {
+  const newOptions = Object.assign({}, options);
+  delete newOptions.has_source;
+  newOptions.has_no_souce = true;
+  return newOptions;
+};
+
 /**
  * Updates 'uris' by adding and/or moving active livestreams to the front of
  * list.
@@ -62,10 +69,7 @@ export function prioritizeActiveLivestreams(
   if (options) {
     // options has to match original search transformations to find the results
     delete options.has_source;
-    const livestreamsOnlySearchCacheQuery = createNormalizedClaimSearchKey({
-      ...options,
-      has_no_source: true,
-    });
+    const livestreamsOnlySearchCacheQuery = createNormalizedClaimSearchKey(getNoSourceOptions(options));
     const livestreamsOnlyUris = claimSearchByQuery[livestreamsOnlySearchCacheQuery];
     if (livestreamsOnlyUris) {
       livestreamsOnlyUris.forEach((uri) => {
@@ -237,13 +241,13 @@ function ClaimTilesDiscover(props: Props) {
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
   const uris = (prefixUris || []).concat(claimSearchByQuery[claimSearchCacheQuery] || []);
 
-  if (liveLivestreamsFirst && livestreamMap) {
-    prioritizeActiveLivestreams(uris, liveUris, livestreamMap, claimsByUri, claimSearchByQuery, options);
-  }
+  const isLoading = fetchingClaimSearchByQuery[claimSearchCacheQuery];
+  // if (liveLivestreamsFirst && livestreamMap && !isLoading) {
+  //   prioritizeActiveLivestreams(uris, liveUris, livestreamMap, claimsByUri, claimSearchByQuery, options);
+  // }
 
   // Don't use the query from createNormalizedClaimSearchKey for the effect since that doesn't include page & release_time
   const optionsStringForEffect = JSON.stringify(options);
-  const isLoading = fetchingClaimSearchByQuery[claimSearchCacheQuery];
   const shouldPerformSearch = !isLoading && uris.length === 0;
 
   const fixUri = 'lbry://@CrackerMilk#6/king-of-the-castle#2';
@@ -262,13 +266,10 @@ function ClaimTilesDiscover(props: Props) {
       doClaimSearch(searchOptions);
 
       if (liveLivestreamsFirst) {
-        delete searchOptions.has_source;
-        delete searchOptions.stream_types;
-        doClaimSearch({ ...searchOptions, has_no_source: true });
+        doClaimSearch(getNoSourceOptions(searchOptions));
       }
     }
   }, [doClaimSearch, shouldPerformSearch, optionsStringForEffect, liveLivestreamsFirst]);
-
   const resolveLive = (index) => {
     if (liveLivestreamsFirst && livestreamMap && index < liveUris.length) {
       return true;
