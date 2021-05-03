@@ -40,8 +40,6 @@ import {
 // @endif
 import LANGUAGE_MIGRATIONS from 'constants/language-migrations';
 
-const os = require('os').type();
-
 export const MAIN_WRAPPER_CLASS = 'main-wrapper';
 export const IS_MAC = navigator.userAgent.indexOf('Mac OS X') !== -1;
 
@@ -89,8 +87,6 @@ type Props = {
   setActiveChannelIfNotSet: () => void,
   setIncognito: (boolean) => void,
   fetchModBlockedList: () => void,
-  searchWindow: any,
-  setSearchWindow: (boolean) => void,
 };
 
 function App(props: Props) {
@@ -116,8 +112,6 @@ function App(props: Props) {
     isAuthenticated,
     syncLoop,
     currentModal,
-    searchWindow,
-    setSearchWindow,
     syncFatalError,
     myChannelUrls,
     activeChannelClaim,
@@ -201,22 +195,15 @@ function App(props: Props) {
   });
 
   // allows user to pause miniplayer using the spacebar without the page scrolling down
-  // allows user to search in the app in the desktop version
   useEffect(() => {
     const handleKeyPress = (e) => {
       if (e.key === ' ' && e.target === document.body) {
         e.preventDefault();
       }
-
-      if (!IS_WEB && ((os !== 'Darwin' && e.ctrlKey && e.keyCode === 70) || (e.keyCode === 70 && e.metaKey))) {
-        setSearchWindow(true);
-        e.preventDefault();
-      }
     };
-
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [searchWindow, setSearchWindow]);
+  }, []);
 
   // Enable ctrl +/- zooming on Desktop.
   // @if TARGET='app'
@@ -409,7 +396,7 @@ function App(props: Props) {
           {isEnhancedLayout && <Yrbl className="yrbl--enhanced" />}
 
           {/* @if TARGET='app' */}
-          {searchWindow && <SearchScrenInput />}
+          <SearchScrenInput />
           {/* @endif */}
 
           {/* @if TARGET='app' */}

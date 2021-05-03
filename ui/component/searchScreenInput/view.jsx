@@ -1,32 +1,44 @@
-import React, { useEffect, useRef, useState } from 'react';
+// @flow
+import React, { useEffect, useRef } from 'react';
 
 const os = require('os').type();
 
-const SearchScreenInput = () => {
-  const [searchString, setSearchSring] = useState('');
+type Props = {
+  setSearchWindow: (boolean) => void,
+  searchWindow: any,
+};
+
+const SearchScreenInput = (props: Props) => {
+  const { setSearchWindow, searchWindow } = props;
   const inputRef = useRef();
 
   useEffect(() => {
-    // refocus with ctrl-f after search
     const handleKeyPress = (e) => {
-      if ((os !== 'Darwin' && e.ctrlKey && e.keyCode === 70) || (e.keyCode === 70 && e.metaKey)) {
-        window.focus();
-        inputRef.current.focus();
+      if (!IS_WEB && ((os !== 'Darwin' && e.ctrlKey && e.keyCode === 70) || (e.keyCode === 70 && e.metaKey))) {
+        setSearchWindow(true);
+        e.preventDefault();
+      }
+
+      if (e.key === 'Escape') {
+        setSearchWindow(false);
         e.preventDefault();
       }
     };
 
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [searchString]);
+  }, [setSearchWindow]);
+
+  if (!searchWindow) {
+    return null;
+  }
 
   return (
     <input
       ref={inputRef}
-      onKeyPress={(e) => e.key === 'Enter' && window.find(searchString)}
       autoFocus
       onChange={(e) => {
-        setSearchSring(e.target.value);
+        window.find(e.target.value);
       }}
       placeholder="Search in LBRY ;)"
       className="search-screen-input"

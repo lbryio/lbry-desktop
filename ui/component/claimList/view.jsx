@@ -111,7 +111,6 @@ export default function ClaimList(props: Props) {
         'claim-list--small': type === 'small',
       })}
     >
-      */}
       {header !== false && (
         <React.Fragment>
           {header && (

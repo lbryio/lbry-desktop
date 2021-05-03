@@ -1,6 +1,6 @@
 .search-screen-input {
   position: fixed;
-  right: 32px;
+  right: var(--spacing-xl);
   z-index: 1000;
-  bottom: 32px;
+  top: var(--spacing-xl);
 }
