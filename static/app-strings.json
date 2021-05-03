@@ -1786,7 +1786,7 @@
   "Remove %address%?": "Remove %address%?",
   "This process cannot be reversed.": "This process cannot be reversed.",
   "View transaction": "View transaction",
-  "Send (USE COPY BUTTON, ENSURE EXACT AMOUNT IS SENT!)": "Send (USE COPY BUTTON, ENSURE EXACT AMOUNT IS SENT!)",
+  "Use the copy button to ensure the EXACT amount is sent!": "Use the copy button to ensure the EXACT amount is sent!",
   "Amount copied.": "Amount copied.",
   "Copy transaction ID": "Copy transaction ID",
   "Transaction ID copied.": "Transaction ID copied.",
