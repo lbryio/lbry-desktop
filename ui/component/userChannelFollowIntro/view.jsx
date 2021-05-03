@@ -14,6 +14,7 @@ type Props = {
   channelSubscribe: (sub: Subscription) => void,
   homepageData: any,
   prefsReady: boolean,
+  onBack?: () => void,
 };
 
 const channelsToSubscribe = AUTO_FOLLOW_CHANNELS.trim()
@@ -48,6 +49,16 @@ function UserChannelFollowIntro(props: Props) {
       )}
       actions={
         <React.Fragment>
+          {onBack && (
+            <div className="section__actions--between">
+              <Button button="secondary" onClick={onBack} label={__('Back')} />
+              <Button
+                button={subscribedChannels.length < 1 ? 'alt' : 'primary'}
+                onClick={onContinue}
+                label={subscribedChannels.length < 1 ? __('Skip') : __('Continue')}
+              />
+            </div>
+          )}
           <div className="section__body">
             <ClaimListDiscover
               hideFilters
