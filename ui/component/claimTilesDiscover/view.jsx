@@ -10,7 +10,8 @@ import { useHistory } from 'react-router';
 const getNoSourceOptions = (options) => {
   const newOptions = Object.assign({}, options);
   delete newOptions.has_source;
-  newOptions.has_no_souce = true;
+  delete newOptions.stream_types;
+  newOptions.has_no_source = true;
   return newOptions;
 };
 
@@ -68,7 +69,6 @@ export function prioritizeActiveLivestreams(
   // 2. Now, repeat on the secondary search.
   if (options) {
     // options has to match original search transformations to find the results
-    delete options.has_source;
     const livestreamsOnlySearchCacheQuery = createNormalizedClaimSearchKey(getNoSourceOptions(options));
     const livestreamsOnlyUris = claimSearchByQuery[livestreamsOnlySearchCacheQuery];
     if (livestreamsOnlyUris) {
@@ -242,9 +242,9 @@ function ClaimTilesDiscover(props: Props) {
   const uris = (prefixUris || []).concat(claimSearchByQuery[claimSearchCacheQuery] || []);
 
   const isLoading = fetchingClaimSearchByQuery[claimSearchCacheQuery];
-  // if (liveLivestreamsFirst && livestreamMap && !isLoading) {
-  //   prioritizeActiveLivestreams(uris, liveUris, livestreamMap, claimsByUri, claimSearchByQuery, options);
-  // }
+  if (liveLivestreamsFirst && livestreamMap && !isLoading) {
+    prioritizeActiveLivestreams(uris, liveUris, livestreamMap, claimsByUri, claimSearchByQuery, options);
+  }
 
   // Don't use the query from createNormalizedClaimSearchKey for the effect since that doesn't include page & release_time
   const optionsStringForEffect = JSON.stringify(options);
