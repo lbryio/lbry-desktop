@@ -60,6 +60,7 @@ export default function LivestreamList() {
           streamTypes={null}
           channelIds={Object.keys(livestreamMap)}
           limitClaimsPerChannel={1}
+          pageSize={50}
           renderProperties={(claim) => {
             const livestream = livestreamMap[claim.signing_channel.claim_id];
 
