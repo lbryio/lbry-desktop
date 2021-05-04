@@ -23,6 +23,8 @@ type Props = {
   isTopLevel: boolean,
   commentModBlock: (string) => void,
   playingUri: ?PlayingUri,
+  disableEdit?: boolean,
+  disableRemove?: boolean,
 };
 
 function CommentMenuList(props: Props) {
@@ -43,6 +45,8 @@ function CommentMenuList(props: Props) {
     fetchComments,
     commentModBlock,
     playingUri,
+    disableEdit,
+    disableRemove,
   } = props;
   const activeChannelIsCreator = activeChannelClaim && activeChannelClaim.permanent_url === contentChannelPermanentUrl;
 
@@ -81,7 +85,8 @@ function CommentMenuList(props: Props) {
         </MenuItem>
       )}
 
-      {activeChannelClaim &&
+      {!disableRemove &&
+        activeChannelClaim &&
         (activeChannelClaim.permanent_url === authorUri ||
           activeChannelClaim.permanent_url === contentChannelPermanentUrl) && (
           <MenuItem className="comment__menu-option" onSelect={handleDeleteComment}>
@@ -92,7 +97,7 @@ function CommentMenuList(props: Props) {
           </MenuItem>
         )}
 
-      {commentIsMine && activeChannelClaim && activeChannelClaim.permanent_url === authorUri && (
+      {commentIsMine && activeChannelClaim && activeChannelClaim.permanent_url === authorUri && !disableEdit && (
         <MenuItem className="comment__menu-option menu__link" onSelect={handleEditComment}>
           <Icon aria-hidden icon={ICONS.EDIT} />
           {__('Edit')}

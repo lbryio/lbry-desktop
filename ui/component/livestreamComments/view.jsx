@@ -23,6 +23,7 @@ type Props = {
   doSuperChatList: (string) => void,
   superChats: Array<Comment>,
   superChatsTotalAmount: number,
+  myChannels: ?Array<ChannelClaim>,
 };
 
 const VIEW_MODE_CHAT = 'view_chat';
@@ -41,6 +42,7 @@ export default function LivestreamComments(props: Props) {
     doSuperChatList,
     superChats,
     superChatsTotalAmount,
+    myChannels,
   } = props;
   const commentsRef = React.createRef();
   const hasScrolledComments = React.useRef();
@@ -49,6 +51,18 @@ export default function LivestreamComments(props: Props) {
   const claimId = claim && claim.claim_id;
   const commentsLength = comments && comments.length;
   const commentsToDisplay = viewMode === VIEW_MODE_CHAT ? comments : superChats;
+
+  // todo: implement comment_list --mine in SDK so redux can grab with selectCommentIsMine
+  function isMyComment(channelId: string) {
+    if (myChannels != null && channelId != null) {
+      for (let i = 0; i < myChannels.length; i++) {
+        if (myChannels[i].claim_id === channelId) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
 
   React.useEffect(() => {
     if (claimId) {
@@ -177,6 +191,7 @@ export default function LivestreamComments(props: Props) {
                   commentId={comment.comment_id}
                   message={comment.comment}
                   supportAmount={comment.support_amount}
+                  commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}
                 />
               ))}
             </div>
