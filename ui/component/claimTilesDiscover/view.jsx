@@ -6,12 +6,14 @@ import React from 'react';
 import { createNormalizedClaimSearchKey, MATURE_TAGS } from 'lbry-redux';
 import ClaimPreviewTile from 'component/claimPreviewTile';
 import { useHistory } from 'react-router';
+import moment from 'moment';
 
 const getNoSourceOptions = (options) => {
   const newOptions = Object.assign({}, options);
   delete newOptions.has_source;
   delete newOptions.stream_types;
   newOptions.has_no_source = true;
+  newOptions.release_time = `>${Math.floor(moment().subtract(1, 'days').unix())}`;
   return newOptions;
 };
 
