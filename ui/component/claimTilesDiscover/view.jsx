@@ -7,6 +7,14 @@ import { createNormalizedClaimSearchKey, MATURE_TAGS } from 'lbry-redux';
 import ClaimPreviewTile from 'component/claimPreviewTile';
 import { useHistory } from 'react-router';
 
+const getNoSourceOptions = (options) => {
+  const newOptions = Object.assign({}, options);
+  delete newOptions.has_source;
+  delete newOptions.stream_types;
+  newOptions.has_no_source = true;
+  return newOptions;
+};
+
 /**
  * Updates 'uris' by adding and/or moving active livestreams to the front of
  * list.
@@ -49,7 +57,7 @@ export function prioritizeActiveLivestreams(
   let liveChannelIds = Object.keys(livestreamMap);
 
   // 1. Collect active livestreams from the primary search to put in front.
-  uris.forEach(uri => {
+  uris.forEach((uri) => {
     const claim = claimsByUri[uri];
     if (claimIsLive(claim, liveChannelIds)) {
       liveUris.push(uri);
@@ -60,13 +68,10 @@ export function prioritizeActiveLivestreams(
 
   // 2. Now, repeat on the secondary search.
   if (options) {
-    const livestreamsOnlySearchCacheQuery = createNormalizedClaimSearchKey({
-      ...options,
-      has_no_source: true,
-    });
+    const livestreamsOnlySearchCacheQuery = createNormalizedClaimSearchKey(getNoSourceOptions(options));
     const livestreamsOnlyUris = claimSearchByQuery[livestreamsOnlySearchCacheQuery];
     if (livestreamsOnlyUris) {
-      livestreamsOnlyUris.forEach(uri => {
+      livestreamsOnlyUris.forEach((uri) => {
         const claim = claimsByUri[uri];
         if (!uris.includes(uri) && claimIsLive(claim, liveChannelIds)) {
           liveUris.push(uri);
@@ -78,7 +83,7 @@ export function prioritizeActiveLivestreams(
   }
 
   // 3. Finalize uris by putting live livestreams in front.
-  const newUris = liveUris.concat(uris.filter(uri => !liveUris.includes(uri)));
+  const newUris = liveUris.concat(uris.filter((uri) => !liveUris.includes(uri)));
   uris.splice(0, uris.length, ...newUris);
 }
 
@@ -92,7 +97,7 @@ type Props = {
   doClaimSearch: ({}) => void,
   showNsfw: boolean,
   hideReposts: boolean,
-  history: { action: string, push: string => void, replace: string => void },
+  history: { action: string, push: (string) => void, replace: (string) => void },
   claimSearchByQuery: { [string]: Array<string> },
   fetchingClaimSearchByQuery: { [string]: boolean },
   claimsByUri: { [string]: any },
@@ -113,9 +118,10 @@ type Props = {
   limitClaimsPerChannel?: number,
   hasSource?: boolean,
   hasNoSource?: boolean,
-  renderProperties?: Claim => ?Node,
+  renderProperties?: (Claim) => ?Node,
   liveLivestreamsFirst?: boolean,
   livestreamMap?: { [string]: any },
+  pin?: boolean,
 };
 
 function ClaimTilesDiscover(props: Props) {
@@ -135,7 +141,6 @@ function ClaimTilesDiscover(props: Props) {
     languages,
     claimType,
     streamTypes,
-    prefixUris,
     timestamp,
     feeAmount,
     limitClaimsPerChannel,
@@ -147,13 +152,15 @@ function ClaimTilesDiscover(props: Props) {
     mutedUris,
     liveLivestreamsFirst,
     livestreamMap,
+    // pin,
+    prefixUris,
   } = props;
 
   const { location } = useHistory();
   const urlParams = new URLSearchParams(location.search);
   const feeAmountInUrl = urlParams.get('fee_amount');
   const feeAmountParam = feeAmountInUrl || feeAmount;
-  const mutedAndBlockedChannelIds = Array.from(new Set(mutedUris.concat(blockedUris).map(uri => uri.split('#')[1])));
+  const mutedAndBlockedChannelIds = Array.from(new Set(mutedUris.concat(blockedUris).map((uri) => uri.split('#')[1])));
   const liveUris = [];
 
   const options: {
@@ -211,7 +218,7 @@ function ClaimTilesDiscover(props: Props) {
   // https://github.com/lbryio/lbry-desktop/issues/3774
   if (hideReposts) {
     if (Array.isArray(options.claim_type)) {
-      options.claim_type = options.claim_type.filter(claimType => claimType !== 'repost');
+      options.claim_type = options.claim_type.filter((claimType) => claimType !== 'repost');
     } else {
       options.claim_type = ['stream', 'channel'];
     }
@@ -232,13 +239,13 @@ function ClaimTilesDiscover(props: Props) {
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
   const uris = (prefixUris || []).concat(claimSearchByQuery[claimSearchCacheQuery] || []);
 
+  const isLoading = fetchingClaimSearchByQuery[claimSearchCacheQuery];
   if (liveLivestreamsFirst && livestreamMap) {
     prioritizeActiveLivestreams(uris, liveUris, livestreamMap, claimsByUri, claimSearchByQuery, options);
   }
 
   // Don't use the query from createNormalizedClaimSearchKey for the effect since that doesn't include page & release_time
   const optionsStringForEffect = JSON.stringify(options);
-  const isLoading = fetchingClaimSearchByQuery[claimSearchCacheQuery];
   const shouldPerformSearch = !isLoading && uris.length === 0;
 
   React.useEffect(() => {
@@ -247,14 +254,12 @@ function ClaimTilesDiscover(props: Props) {
       doClaimSearch(searchOptions);
 
       if (liveLivestreamsFirst) {
-        delete searchOptions.has_source;
-        delete searchOptions.stream_types;
-        doClaimSearch({ ...searchOptions, has_no_source: true });
+        doClaimSearch(getNoSourceOptions(searchOptions));
       }
     }
   }, [doClaimSearch, shouldPerformSearch, optionsStringForEffect, liveLivestreamsFirst]);
 
-  const resolveLive = index => {
+  const resolveLive = (index) => {
     if (liveLivestreamsFirst && livestreamMap && index < liveUris.length) {
       return true;
     }
