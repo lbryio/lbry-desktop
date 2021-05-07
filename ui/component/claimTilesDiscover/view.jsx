@@ -251,7 +251,7 @@ function ClaimTilesDiscover(props: Props) {
   const shouldPerformSearch = !isLoading && uris.length === 0;
 
   const fixUris = [
-    'lbry://@Destiny#6/artificial-intelligence,-consciousness#0',
+    'lbry://@Destiny#6/explaining-past-hot-takes-to-a-bloomberg#5',
     'lbry://@CrackerMilk#6/larp#4',
     'lbry://@hammyandolivia#c/talking-corgi-loses-his-legs!-shorts#2',
   ];
