@@ -250,14 +250,20 @@ function ClaimTilesDiscover(props: Props) {
   const optionsStringForEffect = JSON.stringify(options);
   const shouldPerformSearch = !isLoading && uris.length === 0;
 
-  const fixUri = 'lbry://@hammyandolivia#c/talking-corgi-loses-his-legs!-shorts#2';
+  const fixUris = [
+    'lbry://@Destiny#6/artificial-intelligence,-consciousness#0',
+    'lbry://@CrackerMilk#6/larp#4',
+    'lbry://@hammyandolivia#c/talking-corgi-loses-his-legs!-shorts#2',
+  ];
   if (pin && uris && uris.length > 2 && window.location.pathname === '/') {
-    if (uris.indexOf(fixUri) !== -1) {
-      uris.splice(uris.indexOf(fixUri), 1);
-    } else {
-      uris.pop();
-    }
-    uris.splice(2, 0, fixUri);
+    fixUris.forEach((fixUri) => {
+      if (uris.indexOf(fixUri) !== -1) {
+        uris.splice(uris.indexOf(fixUri), 1);
+      } else {
+        uris.pop();
+      }
+    });
+    uris.splice(2, 0, ...fixUris);
   }
 
   React.useEffect(() => {
