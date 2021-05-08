@@ -71,7 +71,8 @@ type Props = {
   liveLivestreamsFirst?: boolean,
   livestreamMap?: { [string]: any },
   hasSource?: boolean,
-  isChannel?: boolean
+  isChannel?: boolean,
+  channelUri?: boolean
 };
 
 function ClaimListDiscover(props: Props) {
@@ -126,7 +127,8 @@ function ClaimListDiscover(props: Props) {
     liveLivestreamsFirst,
     livestreamMap,
     hasSource,
-    isChannel = false
+    isChannel = false,
+    channelIsMine = false
   } = props;
   const didNavigateForward = history.action === 'PUSH';
   const { search } = location;
@@ -530,6 +532,7 @@ function ClaimListDiscover(props: Props) {
             liveLivestreamsFirst={liveLivestreamsFirst}
             livestreamMap={livestreamMap}
             searchOptions={options}
+            channelIsMine={channelIsMine}
           />
           {loading && (
             <div className="claim-grid">

@@ -21,6 +21,8 @@ type Props = {
   doToggleMuteChannel: (string) => void,
   doCommentModBlock: (string) => void,
   doCommentModUnBlock: (string) => void,
+  channelIsMine: boolean,
+  isRepost: boolean,
 };
 
 function ClaimMenuList(props: Props) {

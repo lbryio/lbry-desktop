@@ -8,7 +8,7 @@ import ClaimPreview from './view';
 
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
-  claimIsMine: makeSelectClaimIsMine(props.uri)(state),
+  claimIsMine: props.channelIsMine ? (props.isRepost ? makeSelectClaimIsMine(props.uri)(state) : true) : makeSelectClaimIsMine(props.uri)(state),
   channelIsMuted: makeSelectChannelIsMuted(props.uri)(state),
   channelIsBlocked: makeSelectChannelIsBlocked(props.uri)(state),
 });
