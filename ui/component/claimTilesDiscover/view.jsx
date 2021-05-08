@@ -251,9 +251,9 @@ function ClaimTilesDiscover(props: Props) {
   const shouldPerformSearch = !isLoading && uris.length === 0;
 
   const fixUris = [
-    'lbry://@Destiny#6/explaining-past-hot-takes-to-a-bloomberg#5',
-    'lbry://@CrackerMilk#6/larp#4',
-    'lbry://@hammyandolivia#c/talking-corgi-loses-his-legs!-shorts#2',
+    'lbry://@Destiny#6/conservative-debate-derails-into#e',
+    'lbry://@CrackerMilk#6/becoming-a-psychopath#1',
+    'lbry://@hammyandolivia#c/dog-runs-from-a-dinosaur!-shorts-corgi#0',
   ];
   if (pin && uris && uris.length > 2 && window.location.pathname === '/') {
     fixUris.forEach((fixUri) => {
