@@ -71,6 +71,7 @@ type Props = {
   liveLivestreamsFirst?: boolean,
   livestreamMap?: { [string]: any },
   hasSource?: boolean,
+  isChannel?: boolean
 };
 
 function ClaimListDiscover(props: Props) {
@@ -125,6 +126,7 @@ function ClaimListDiscover(props: Props) {
     liveLivestreamsFirst,
     livestreamMap,
     hasSource,
+    isChannel = false
   } = props;
   const didNavigateForward = history.action === 'PUSH';
   const { search } = location;
@@ -220,7 +222,7 @@ function ClaimListDiscover(props: Props) {
     // no_totals makes it so the sdk doesn't have to calculate total number pages for pagination
     // it's faster, but we will need to remove it if we start using total_pages
     no_totals: true,
-    not_channel_ids: mutedAndBlockedChannelIds,
+    not_channel_ids: isChannel ? null : mutedAndBlockedChannelIds,
     not_tags: !showNsfw ? MATURE_TAGS : [],
     order_by:
       orderParam === CS.ORDER_BY_TRENDING

@@ -154,6 +154,7 @@ function ChannelContent(props: Props) {
               />
             </Form>
           }
+          isChannel
         />
       ) : (
         <section className="main--empty">{__("This channel hasn't published anything yet")}</section>
