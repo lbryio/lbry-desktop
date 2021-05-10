@@ -26,6 +26,7 @@ type Props = {
   limitSelect?: number,
   limitShow?: number,
   user: User,
+  disableControlTags?: boolean,
 };
 
 const UNALLOWED_TAGS = ['lbry-first'];
@@ -58,6 +59,7 @@ export default function TagsSearch(props: Props) {
     limitSelect = TAG_FOLLOW_MAX,
     limitShow = 5,
     user,
+    disableControlTags,
   } = props;
   const [newTag, setNewTag] = useState('');
   const doesTagMatch = (name) => {
@@ -224,6 +226,7 @@ export default function TagsSearch(props: Props) {
           )}
         </fieldset-section>
         {experimentalFeature &&
+          !disableControlTags &&
           onSelect && ( // onSelect ensures this does not appear on TagFollow
             <fieldset-section>
               <label>{__('Control Tags')}</label>
