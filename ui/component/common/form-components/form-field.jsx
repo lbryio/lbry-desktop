@@ -47,6 +47,7 @@ type Props = {
   disabled?: boolean,
   onChange: (any) => void,
   value?: string | number,
+  noEmojis?: boolean,
 };
 
 export class FormField extends React.PureComponent<Props> {
@@ -92,6 +93,7 @@ export class FormField extends React.PureComponent<Props> {
       textAreaMaxLength,
       quickActionLabel,
       quickActionHandler,
+      noEmojis,
       ...inputProps
     } = this.props;
     const errorMessage = typeof error === 'object' ? error.message : error;
@@ -272,7 +274,7 @@ export class FormField extends React.PureComponent<Props> {
               {...inputProps}
             />
             <div className="form-field__textarea-info">
-              <div className="form-field__quick-emojis">
+              {!noEmojis && <div className="form-field__quick-emojis">
                 {QUICK_EMOJIS.map((emoji) => (
                   <Button
                     key={emoji}
@@ -287,7 +289,7 @@ export class FormField extends React.PureComponent<Props> {
                     }}
                   />
                 ))}
-              </div>
+              </div>}
               {countInfo}
             </div>
           </fieldset-section>

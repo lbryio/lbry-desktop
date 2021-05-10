@@ -377,6 +377,7 @@ export default function ReportContent(props: Props) {
                       onChange={(e) => updateInput('relationship_to_copyrighted_content', e.target.value)}
                       charCount={input.relationship_to_copyrighted_content.length}
                       textAreaMaxLength={FF_MAX_CHARS_REPORT_CONTENT_DETAILS}
+                      noEmojis
                     />
                     <FormField
                       type="checkbox"
@@ -449,6 +450,7 @@ export default function ReportContent(props: Props) {
                       value={input.clarification}
                       textAreaMaxLength={FF_MAX_CHARS_REPORT_CONTENT_DETAILS}
                       onChange={(e) => updateInput('clarification', e.target.value)}
+                      noEmojis
                     />
                   </div>
                 );
@@ -491,6 +493,7 @@ export default function ReportContent(props: Props) {
                     charCount={input.additionalDetails.length}
                     textAreaMaxLength={FF_MAX_CHARS_REPORT_CONTENT_DETAILS}
                     placeholder={__('Provide additional details')}
+                    noEmojis
                   />
                 </div>
               </>
