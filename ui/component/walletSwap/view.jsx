@@ -322,7 +322,15 @@ function WalletSwap(props: Props) {
         addCoinSwap({ ...newSwap });
       })
       .catch((err) => {
-        setNag({ msg: err === INTERNAL_APIS_DOWN ? NAG_SWAP_CALL_FAILED : err.message, type: 'error' });
+        const translateError = (err) => {
+          // TODO: https://github.com/lbryio/lbry.go/issues/87
+          // Translate error codes instead of strings when it is available.
+          if (err === 'users are currently limited to 4 transactions per month') {
+            return __('Users are currently limited to 4 completed swaps per month or 5 pending swaps.');
+          }
+          return err;
+        };
+        setNag({ msg: err === INTERNAL_APIS_DOWN ? NAG_SWAP_CALL_FAILED : translateError(err.message), type: 'error' });
         returnToMainAction();
       });
   }

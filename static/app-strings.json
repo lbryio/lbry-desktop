@@ -1794,6 +1794,7 @@
   "Credits sent": "Credits sent",
   "Unresolved": "Unresolved",
   "Received amount did not match order code %chargeCode%. Contact hello@lbry.com to resolve the payment.": "Received amount did not match order code %chargeCode%. Contact hello@lbry.com to resolve the payment.",
+  "Users are currently limited to 4 completed swaps per month or 5 pending swaps.": "Users are currently limited to 4 completed swaps per month or 5 pending swaps.",
   "publish": "publish",
   "Sexual content": "Sexual content",
   "Violent or repulsive content": "Violent or repulsive content",
