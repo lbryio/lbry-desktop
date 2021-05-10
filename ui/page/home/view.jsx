@@ -84,7 +84,7 @@ function HomePage(props: Props) {
 
       <h1 className="home__meme">
         <Button button="link" href="https://helplbrysavecrypto.com">
-          {__("i got 99 securities but LBC ain't one.")}
+          {__("mayonnaise is still not an instrument")}
         </Button>
       </h1>
 
