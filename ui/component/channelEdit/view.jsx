@@ -361,6 +361,7 @@ function ChannelForm(props: Props) {
                   <TagsSearch
                     suggestMature={!SIMPLE_SITE}
                     disableAutoFocus
+                    disableControlTags
                     limitSelect={MAX_TAG_SELECT}
                     tagsPassedIn={params.tags || []}
                     label={__('Selected Tags')}

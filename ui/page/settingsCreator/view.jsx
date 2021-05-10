@@ -176,6 +176,7 @@ export default function SettingsCreatorPage(props: Props) {
                   tagsPassedIn={mutedWordTags}
                   placeholder={__('Add words to block')}
                   hideSuggestions
+                  disableControlTags
                 />
               </div>
             }
