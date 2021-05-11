@@ -502,6 +502,15 @@ fieldset-section {
     display: block;
   }
 
+  .controls {
+    display: flex;
+
+    .date-picker-input,
+    .button--link {
+      margin-right: var(--spacing-m);
+    }
+  }
+
   .react-datetime-picker__button {
     svg {
       stroke: var(--color-text);
