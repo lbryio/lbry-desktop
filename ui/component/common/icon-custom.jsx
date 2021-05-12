@@ -385,6 +385,13 @@ export const icons = {
       <line x1="12" y1="16" x2="12" y2="16" />
     </g>
   ),
+  [ICONS.INFO]: buildIcon(
+    <g>
+      <circle cx="12" cy="12" r="10" />
+      <line x1="12" y1="8" x2="12" y2="8" />
+      <line x1="12" y1="12" x2="12" y2="16" />
+    </g>
+  ),
   [ICONS.UNLOCK]: buildIcon(
     <g>
       <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />

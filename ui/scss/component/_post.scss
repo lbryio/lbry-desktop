@@ -70,6 +70,32 @@
   }
 }
 
+.post__info--expanded {
+  margin-bottom: var(--spacing-s);
+}
+
+.post__info--grouped {
+  .button--link {
+    margin-right: var(--spacing-s);
+  }
+
+  .dim {
+    color: var(--color-text-subtitle);
+    stroke: var(--color-text-subtitle);
+  }
+}
+
+.post__info--credit-details {
+  @include font-sans;
+  margin-top: var(--spacing-l);
+  margin-bottom: var(--spacing-l);
+  width: 75%;
+
+  .tag {
+    margin-top: 0;
+  }
+}
+
 .post__date {
   display: block;
   margin-top: var(--spacing-s);
