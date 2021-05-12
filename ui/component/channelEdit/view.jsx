@@ -333,6 +333,7 @@ function ChannelForm(props: Props) {
             <TabPanel>
               <Card
                 body={
+                <>
                   <FormField
                     className="form-field--price-amount"
                     type="number"
@@ -352,6 +353,8 @@ function ChannelForm(props: Props) {
                       </>
                     }
                   />
+                  <Button icon={ICONS.BUY} button="secondary" title={__('Buy more LBRY Credits')} navigate={`/$/${PAGES.BUY}`} />
+                </>
                 }
               />
             </TabPanel>

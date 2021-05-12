@@ -1,4 +1,7 @@
 // @flow
+import * as ICONS from 'constants/icons';
+import * as PAGES from 'constants/pages';
+import Button from 'component/button';
 import { MINIMUM_PUBLISH_BID } from 'constants/claim';
 import React, { useState, useEffect } from 'react';
 import { FormField } from 'component/common/form';
@@ -45,6 +48,7 @@ function PublishName(props: Props) {
   return (
     <Card
       actions={
+      <>
         <FormField
           type="number"
           name="content_bid"
@@ -69,6 +73,8 @@ function PublishName(props: Props) {
             </>
           }
         />
+        <Button icon={ICONS.BUY} button="secondary" title={__('Buy more LBRY Credits')} navigate={`/$/${PAGES.BUY}`} />
+      </>
       }
     />
   );
