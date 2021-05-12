@@ -145,11 +145,16 @@ export default function Notification(props: Props) {
                   <div className="notification__title">
                     <LbcMessage>{notification_parameters.device.title}</LbcMessage>
                   </div>
-                  <div className="notification__text mobile-hidden">{commentText}</div>
+                  <div title={commentText} className="notification__text mobile-hidden">
+                    {commentText}
+                  </div>
                 </>
               ) : (
                 <>
-                  <div className="notification__text">
+                  <div
+                    title={notification_parameters.device.text.replace(/\sLBC/g, ' Credits')}
+                    className="notification__text"
+                  >
                     <LbcMessage>{notification_parameters.device.text}</LbcMessage>
                   </div>
                 </>
