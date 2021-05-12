@@ -6,6 +6,7 @@
 export const REWARDS = 'Award';
 export const LOCAL = 'Folder';
 export const ALERT = 'AlertCircle';
+export const INFO = 'InfoCircle';
 export const COPY = 'Clipboard';
 export const ARROW_LEFT = 'ChevronLeft';
 export const ARROW_RIGHT = 'ChevronRight';
