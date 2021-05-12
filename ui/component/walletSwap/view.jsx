@@ -17,6 +17,7 @@ import * as PAGES from 'constants/pages';
 import { clipboard } from 'electron';
 import I18nMessage from 'component/i18nMessage';
 import { Redirect, useHistory } from 'react-router';
+import classnames from 'classnames';
 
 const ENABLE_ALTERNATIVE_COINS = true;
 
@@ -63,6 +64,8 @@ type Props = {
   checkAddressIsMine: (string) => void,
   openModal: (string, {}) => void,
   queryCoinSwapStatus: (string) => void,
+  buyMethod: boolean,
+  setBuyMethod: () => boolean,
 };
 
 function WalletSwap(props: Props) {
@@ -76,6 +79,8 @@ function WalletSwap(props: Props) {
     checkAddressIsMine,
     openModal,
     queryCoinSwapStatus,
+    buyMethod,
+    setBuyMethod
   } = props;
 
   const [btc, setBtc] = React.useState(0);
@@ -682,6 +687,28 @@ function WalletSwap(props: Props) {
     return <Redirect to={`/$/${PAGES.AUTH_SIGNIN}?redirect=${location.pathname}`} />;
   }
 
+  const tabs = (
+    <div className="section">
+      <Button
+        key="Buy"
+        icon={ICONS.BUY}
+        label={__('Buy')}
+        button="alt"
+        className={classnames('button-toggle', { 'button-toggle--active': buyMethod })}
+        onClick={() => setBuyMethod(true)}
+      />
+      <Button
+        key="Swap"
+        icon={ICONS.COIN_SWAP}
+        label={__('Swap')}
+        button="alt"
+        className={classnames('button-toggle', { 'button-toggle--active': !buyMethod })}
+        onClick={() => setBuyMethod(false)}
+      />
+      <Button button="primary" icon={ICONS.REWARDS} navigate={`/$/${PAGES.REWARDS}`} title={__('Earn LBRY Credits Rewards')} />
+    </div>
+  );
+
   return (
     <Form onSubmit={handleStartSwap}>
       <Card
@@ -689,7 +716,12 @@ function WalletSwap(props: Props) {
         subtitle={__(
           'Send crypto to the address provided and you will be sent an equivalent amount of Credits. You can pay with BCH, LTC, ETH, USDC or DAI after starting the swap.'
         )}
-        actions={getActionElement()}
+        actions={
+        <div>
+        {tabs}
+          {(getActionElement())}
+        </div>
+        }
         nag={nag ? <Nag relative type={nag.type} message={__(nag.msg)} /> : null}
       />
     </Form>

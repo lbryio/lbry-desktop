@@ -2,10 +2,13 @@
 import React from 'react';
 import Page from 'component/page';
 import WalletSwap from 'component/walletSwap';
+import WalletBuy from 'component/walletBuy';
 
 type Props = {};
 
 export default function SwapPage(props: Props) {
+  const [buyMethod, setBuyMethod] = React.useState(false);
+
   return (
     <Page
       noSideNavigation
@@ -15,7 +18,8 @@ export default function SwapPage(props: Props) {
         title: __('Swap Crypto'),
       }}
     >
-      <WalletSwap />
+      {!buyMethod ? <WalletSwap buyMethod={buyMethod} setBuyMethod={setBuyMethod} />
+      : <WalletBuy buyMethod={buyMethod} setBuyMethod={setBuyMethod} />}
     </Page>
   );
 }

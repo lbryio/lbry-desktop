@@ -14,6 +14,7 @@ import Button from 'component/button';
 import Nag from 'component/common/nag';
 import I18nMessage from 'component/i18nMessage';
 import { SIMPLE_SITE } from 'config';
+import classnames from 'classnames';
 
 const MOONPAY_KEY = process.env.MOONPAY_SECRET_KEY;
 const COUNTRIES = Array.from(
@@ -41,10 +42,12 @@ type Props = {
   user: ?User,
   doGetNewAddress: () => void,
   doUserSetCountry: (string) => void,
+  buyMethod: boolean,
+  setBuyMethod: () => boolean,
 };
 
 export default function WalletBuy(props: Props) {
-  const { receiveAddress, gettingNewAddress, doGetNewAddress, email, user, doUserSetCountry } = props;
+  const { receiveAddress, gettingNewAddress, doGetNewAddress, email, user, doUserSetCountry, buyMethod, setBuyMethod } = props;
   const initialCountry = (user && user.country) || '';
   const [url, setUrl] = React.useState();
   const [country, setCountry] = React.useState(initialCountry);
@@ -93,6 +96,27 @@ export default function WalletBuy(props: Props) {
       LBRY, Inc. partners with Moonpay to provide the option to purchase LBRY Credits. %learn_more%.
     </I18nMessage>
   );
+  const tabs = (
+    <div className="section">
+      <Button
+        key="Buy"
+        icon={ICONS.BUY}
+        label={__('Buy')}
+        button="alt"
+        className={classnames('button-toggle', { 'button-toggle--active': buyMethod })}
+        onClick={() => setBuyMethod(true)}
+      />
+      <Button
+        key="Swap"
+        icon={ICONS.COIN_SWAP}
+        label={__('Swap')}
+        button="alt"
+        className={classnames('button-toggle', { 'button-toggle--active': !buyMethod })}
+        onClick={() => setBuyMethod(false)}
+      />
+      <Button button="primary" icon={ICONS.REWARDS} navigate={`/$/${PAGES.REWARDS}`} title={__('Earn LBRY Credits Rewards')} />
+    </div>
+  );
 
   return (
       <>
@@ -108,6 +132,7 @@ export default function WalletBuy(props: Props) {
               subtitle={subtitle}
               actions={
               <div>
+                {tabs}
                 {url ? (
                   <iframe
                     allow="accelerometer; autoplay; camera; gyroscope; payment"
@@ -132,6 +157,7 @@ export default function WalletBuy(props: Props) {
               nag={country && !isValid && <Nag relative type="helpful" message={"This country isn't supported yet."} />}
               actions={
                 <div>
+                  {tabs}
                   <div className="section">
                     <FormField
                       label={__('Country')}
