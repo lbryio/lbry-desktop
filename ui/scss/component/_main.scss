@@ -332,6 +332,33 @@
   margin-right: auto;
 }
 
+.main__sign-up--graphic {
+  max-width: 47rem;
+
+  .card__second-pane {
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-login-graphic-background);
+
+    .signup-image {
+      @media (max-width: $breakpoint-small) {
+        width: 50%;
+      }
+    }
+  }
+
+  .card__title {
+    font-size: var(--font-heading);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .card__main-actions {
+    border: none;
+  }
+}
+
 .main__channel-creation {
   margin-left: auto;
   margin-right: auto;
