@@ -1,5 +1,5 @@
 // @flow
-import { SITE_NAME } from 'config';
+import { SITE_NAME, SIMPLE_SITE } from 'config';
 import * as PAGES from 'constants/pages';
 import React, { useState } from 'react';
 import { FormField, Form } from 'component/common/form';
@@ -9,6 +9,8 @@ import { useHistory } from 'react-router-dom';
 import UserEmailVerify from 'component/userEmailVerify';
 import Card from 'component/common/card';
 import Nag from 'component/common/nag';
+import classnames from 'classnames';
+import LoginGraphic from 'component/loginGraphic';
 
 type Props = {
   user: ?User,
@@ -69,7 +71,11 @@ function UserEmailReturning(props: Props) {
   }
 
   return (
-    <div className="main__sign-in">
+    <div
+      className={classnames('main__sign-in', {
+        'main__sign-up--graphic': SIMPLE_SITE && !showEmailVerification,
+      })}
+    >
       {showEmailVerification ? (
         <UserEmailVerify />
       ) : (
@@ -136,6 +142,7 @@ function UserEmailReturning(props: Props) {
               )}
             </>
           }
+          secondPane={SIMPLE_SITE && <LoginGraphic />}
         />
       )}
     </div>

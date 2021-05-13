@@ -356,3 +356,25 @@
   justify-content: space-between;
   align-items: center;
 }
+
+.card__multi-pane {
+  display: flex;
+
+  @media (max-width: $breakpoint-small) {
+    flex-direction: column;
+  }
+
+  .card__main-actions {
+    height: unset;
+  }
+
+  .card__second-pane {
+    border-left: 1px solid var(--color-border);
+    max-width: 50%;
+
+    @media (max-width: $breakpoint-small) {
+      border-top: 1px solid var(--color-border);
+      max-width: 100%;
+    }
+  }
+}

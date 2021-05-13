@@ -1,6 +1,6 @@
 // @flow
 import * as PAGES from 'constants/pages';
-import { SITE_NAME, DOMAIN } from 'config';
+import { SITE_NAME, DOMAIN, SIMPLE_SITE } from 'config';
 import React, { useState } from 'react';
 import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
@@ -14,6 +14,7 @@ import Nag from 'component/common/nag';
 import classnames from 'classnames';
 import OdyseeLogoWithWhiteText from 'component/header/odysee_white.png';
 import OdyseeLogoWithText from 'component/header/odysee.png';
+import LoginGraphic from 'component/loginGraphic';
 
 type Props = {
   errorMessage: ?string,
@@ -96,7 +97,11 @@ function UserEmailNew(props: Props) {
   }, [emailExists]);
 
   return (
-    <div className="main__sign-up">
+    <div
+      className={classnames('main__sign-up', {
+        'main__sign-up--graphic': SIMPLE_SITE,
+      })}
+    >
       <Card
         title={__('Join %SITE_NAME%', { SITE_NAME })}
         // @if TARGET='app'
@@ -208,6 +213,7 @@ function UserEmailNew(props: Props) {
             {errorMessage && <Nag type="error" relative message={<ErrorText>{errorMessage}</ErrorText>} />}
           </>
         }
+        secondPane={SIMPLE_SITE && <LoginGraphic />}
       />
 
       {IS_WEB && DOMAIN === 'lbry.tv' && (
