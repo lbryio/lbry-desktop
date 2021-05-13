@@ -2,10 +2,10 @@
 const PAGES = require('../constants/pages');
 const { parseURI, buildURI } = require('lbry-redux');
 
-function encodeWithApostropheEncode(string) {
-  // encodeURIComponent doesn't encode `'`
-  // in most cases this is fine, but wordpress doesn't like it
-  return encodeURIComponent(string).replace(/'/g, '%27');
+function encodeWithSpecialCharEncode(string) {
+  // encodeURIComponent doesn't encode `'` and others
+  // which other services may not like
+  return encodeURIComponent(string).replace(/'/g, '%27').replace(/\(/g, '%28').replace(/\)/g, '%29');
 }
 
 export const formatLbryUrlForWeb = (uri) => {
@@ -94,7 +94,7 @@ export const generateLbryWebUrl = (lbryUrl) => {
 
 export const generateEncodedLbryURL = (domain, lbryWebUrl, includeStartTime, startTime) => {
   const queryParam = includeStartTime ? `?t=${startTime}` : '';
-  const encodedPart = encodeWithApostropheEncode(`${lbryWebUrl}${queryParam}`);
+  const encodedPart = encodeWithSpecialCharEncode(`${lbryWebUrl}${queryParam}`);
   return `${domain}/${encodedPart}`;
 };
 
@@ -113,9 +113,9 @@ export const generateShareUrl = (domain, lbryUrl, referralCode, rewardsApproved,
   const { streamName, streamClaimId, channelName, channelClaimId } = parseURI(lbryUrl);
 
   let uriParts = {
-    ...(streamName ? { streamName: encodeWithApostropheEncode(streamName) } : {}),
+    ...(streamName ? { streamName: encodeWithSpecialCharEncode(streamName) } : {}),
     ...(streamClaimId ? { streamClaimId } : {}),
-    ...(channelName ? { channelName: encodeWithApostropheEncode(channelName) } : {}),
+    ...(channelName ? { channelName: encodeWithSpecialCharEncode(channelName) } : {}),
     ...(channelClaimId ? { channelClaimId } : {}),
   };
 
