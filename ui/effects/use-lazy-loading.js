@@ -1,6 +1,6 @@
 // @flow
 import type { ElementRef } from 'react';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 /**
  * Helper React hook for lazy loading images
@@ -13,6 +13,8 @@ export default function useLazyLoading(
   threshold: number = 0.25,
   deps: Array<any> = []
 ) {
+  const [srcLoaded, setSrcLoaded] = React.useState(false);
+
   useEffect(() => {
     if (!elementRef.current) {
       return;
@@ -30,6 +32,7 @@ export default function useLazyLoading(
             if (target.dataset.src) {
               // $FlowFixMe
               target.src = target.dataset.src;
+              setSrcLoaded(true);
               return;
             }
 
@@ -49,4 +52,6 @@ export default function useLazyLoading(
 
     lazyLoadingObserver.observe(elementRef.current);
   }, deps);
+
+  return srcLoaded;
 }
