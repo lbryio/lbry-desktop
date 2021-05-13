@@ -46,7 +46,6 @@ export default function FileRenderInitiator(props: Props) {
     history,
     location,
     thumbnail,
-    autoplay,
     renderMode,
     hasCostInfo,
     costInfo,
@@ -54,6 +53,16 @@ export default function FileRenderInitiator(props: Props) {
     authenticated,
     videoTheaterMode,
   } = props;
+
+  // force autoplay if a timestamp is present
+  let autoplay = props.autoplay;
+  // get current url
+  const url = window.location.href;
+  // check if there is a time parameter, if so force autoplay
+  if (url.indexOf('t=')) {
+    autoplay = true;
+  }
+
   const cost = costInfo && costInfo.cost;
   const isFree = hasCostInfo && cost === 0;
   const fileStatus = fileInfo && fileInfo.status;
