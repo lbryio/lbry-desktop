@@ -91,6 +91,7 @@
 
 .media__info-text--fade {
   -webkit-mask-image: -webkit-gradient(linear, left 30%, left bottom, from(rgba(0, 0, 0, 1)), to(rgba(0, 0, 0, 0)));
+  overflow-wrap: anywhere;
 }
 
 .media__info-expand {
