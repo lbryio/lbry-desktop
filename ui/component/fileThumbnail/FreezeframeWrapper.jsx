@@ -10,11 +10,13 @@ const FreezeframeWrapper = (props) => {
   // eslint-disable-next-line
   const { src, className, children } = props;
 
-  useEffect(() => {
-    freezeframe.current = new Freezeframe(imgRef.current);
-  }, []);
+  const srcLoaded = useLazyLoading(imgRef);
 
-  useLazyLoading(imgRef);
+  useEffect(() => {
+    if (srcLoaded) {
+      freezeframe.current = new Freezeframe(imgRef.current);
+    }
+  }, [srcLoaded]);
 
   return (
     <div className={classnames(className, 'freezeframe-wrapper')}>
