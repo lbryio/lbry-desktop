@@ -31,7 +31,9 @@ export default function Notification(props: Props) {
   const { push } = useHistory();
   const { notification_rule, notification_parameters, is_read, id } = notification;
   const isCommentNotification =
-    notification_rule === NOTIFICATIONS.NOTIFICATION_COMMENT || notification_rule === NOTIFICATIONS.NOTIFICATION_REPLY;
+    notification_rule === NOTIFICATIONS.NOTIFICATION_COMMENT ||
+    notification_rule === NOTIFICATIONS.NOTIFICATION_REPLY ||
+    notification_rule === NOTIFICATIONS.CREATOR_COMMENT;
   const commentText = isCommentNotification && notification_parameters.dynamic.comment;
   const channelUrl =
     (notification_rule === NOTIFICATIONS.NEW_CONTENT && notification.notification_parameters.dynamic.channel_url) || '';
@@ -70,6 +72,7 @@ export default function Notification(props: Props) {
       icon = <Icon icon={ICONS.SUBSCRIBE} sectionIcon />;
       break;
     case NOTIFICATIONS.NOTIFICATION_COMMENT:
+    case NOTIFICATIONS.CREATOR_COMMENT:
       icon = <ChannelThumbnail small uri={notification_parameters.dynamic.comment_author} />;
       break;
     case NOTIFICATIONS.NOTIFICATION_REPLY:
