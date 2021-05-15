@@ -10,14 +10,13 @@ type SortProps = {
   reactionsById: {},
   sort: string,
   isMyComment: string => boolean,
+  justCommented: boolean,
 };
 
 export function sortComments(sortProps: SortProps): Array<Comment> {
-  const { comments, reactionsById, sort, isMyComment } = sortProps;
+  const { comments, reactionsById, sort, isMyComment, justCommented } = sortProps;
 
-  if (!comments) {
-    return [];
-  }
+  if (!comments) return [];
 
   return comments.slice().sort((a: Comment, b: Comment) => {
     if (a.is_pinned) {
@@ -26,16 +25,16 @@ export function sortComments(sortProps: SortProps): Array<Comment> {
       return 1;
     }
 
-    if (sort === SORT_COMMENTS_NEW) {
-      return 0;
-    }
+    if (sort === SORT_COMMENTS_NEW) return 0;
 
     const aIsMine = isMyComment(a.channel_id);
     const bIsMine = isMyComment(b.channel_id);
+    const aIsMyRecent = a.comment_id === comments[0].comment_id;
+    const bIsMyRecent = b.comment_id === comments[0].comment_id;
 
-    if (aIsMine) {
+    if (aIsMine && justCommented && aIsMyRecent) {
       return -1;
-    } else if (bIsMine) {
+    } else if (bIsMine && justCommented && bIsMyRecent) {
       return 1;
     }
 
