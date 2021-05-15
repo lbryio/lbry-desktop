@@ -44,6 +44,7 @@ type Props = {
   liveLivestreamsFirst?: boolean,
   livestreamMap?: { [string]: any },
   searchOptions?: any,
+  channelIsMine: boolean,
 };
 
 export default function ClaimList(props: Props) {
@@ -74,6 +75,7 @@ export default function ClaimList(props: Props) {
     liveLivestreamsFirst,
     livestreamMap,
     searchOptions,
+    channelIsMine,
   } = props;
 
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
@@ -132,6 +134,7 @@ export default function ClaimList(props: Props) {
             showHiddenByUser={showHiddenByUser}
             properties={renderProperties}
             live={resolveLive(index)}
+            channelIsMine={channelIsMine}
           />
         ))}
       {!timedOut && urisLength === 0 && !loading && <div className="empty main--empty">{empty || noResultMsg}</div>}
