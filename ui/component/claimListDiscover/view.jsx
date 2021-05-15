@@ -23,11 +23,11 @@ type Props = {
   doClaimSearch: ({}) => void,
   loading: boolean,
   personalView: boolean,
-  doToggleTagFollowDesktop: string => void,
+  doToggleTagFollowDesktop: (string) => void,
   meta?: Node,
   showNsfw: boolean,
   hideReposts: boolean,
-  history: { action: string, push: string => void, replace: string => void },
+  history: { action: string, push: (string) => void, replace: (string) => void },
   location: { search: string, pathname: string },
   claimSearchByQuery: {
     [string]: Array<string>,
@@ -52,7 +52,7 @@ type Props = {
   defaultClaimType?: Array<string>,
   streamType?: string | Array<string>,
   defaultStreamType?: string | Array<string>,
-  renderProperties?: Claim => Node,
+  renderProperties?: (Claim) => Node,
   includeSupportAction?: boolean,
   repostedClaimId?: string,
   pageSize?: number,
@@ -72,7 +72,7 @@ type Props = {
   livestreamMap?: { [string]: any },
   hasSource?: boolean,
   isChannel?: boolean,
-  channelUri?: boolean
+  channelIsMine?: boolean,
 };
 
 function ClaimListDiscover(props: Props) {
@@ -128,7 +128,7 @@ function ClaimListDiscover(props: Props) {
     livestreamMap,
     hasSource,
     isChannel = false,
-    channelIsMine = false
+    channelIsMine = false,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
   const { search } = location;
@@ -137,14 +137,14 @@ function ClaimListDiscover(props: Props) {
   const isLargeScreen = useIsLargeScreen();
   const [orderParamEntry, setOrderParamEntry] = usePersistedState(`entry-${location.pathname}`, CS.ORDER_BY_TRENDING);
   const [orderParamUser, setOrderParamUser] = usePersistedState(`orderUser-${location.pathname}`, CS.ORDER_BY_TRENDING);
-  const followed = (followedTags && followedTags.map(t => t.name)) || [];
+  const followed = (followedTags && followedTags.map((t) => t.name)) || [];
   const urlParams = new URLSearchParams(search);
   const tagsParam = // can be 'x,y,z' or 'x' or ['x','y'] or CS.CONSTANT
     (tags && getParamFromTags(tags)) ||
     (urlParams.get(CS.TAGS_KEY) !== null && urlParams.get(CS.TAGS_KEY)) ||
     (defaultTags && getParamFromTags(defaultTags));
   const freshnessParam = freshness || urlParams.get(CS.FRESH_KEY) || defaultFreshness;
-  const mutedAndBlockedChannelIds = Array.from(new Set(mutedUris.concat(blockedUris).map(uri => uri.split('#')[1])));
+  const mutedAndBlockedChannelIds = Array.from(new Set(mutedUris.concat(blockedUris).map((uri) => uri.split('#')[1])));
 
   const langParam = urlParams.get(CS.LANGUAGE_KEY) || null;
   const languageParams = searchInLanguage
@@ -205,7 +205,7 @@ function ClaimListDiscover(props: Props) {
     not_tags: Array<string>,
     channel_ids?: Array<string>,
     claim_ids?: Array<string>,
-    not_channel_ids: Array<string>,
+    not_channel_ids?: Array<string>,
     order_by: Array<string>,
     release_time?: string,
     claim_type?: string | Array<string>,
@@ -224,7 +224,7 @@ function ClaimListDiscover(props: Props) {
     // no_totals makes it so the sdk doesn't have to calculate total number pages for pagination
     // it's faster, but we will need to remove it if we start using total_pages
     no_totals: true,
-    not_channel_ids: isChannel ? null : mutedAndBlockedChannelIds,
+    not_channel_ids: isChannel ? undefined : mutedAndBlockedChannelIds,
     not_tags: !showNsfw ? MATURE_TAGS : [],
     order_by:
       orderParam === CS.ORDER_BY_TRENDING
@@ -269,12 +269,7 @@ function ClaimListDiscover(props: Props) {
 
   if (claimType !== CS.CLAIM_CHANNEL) {
     if (orderParam === CS.ORDER_BY_TOP && freshnessParam !== CS.FRESH_ALL) {
-      options.release_time = `>${Math.floor(
-        moment()
-          .subtract(1, freshnessParam)
-          .startOf('hour')
-          .unix()
-      )}`;
+      options.release_time = `>${Math.floor(moment().subtract(1, freshnessParam).startOf('hour').unix())}`;
     } else if (orderParam === CS.ORDER_BY_NEW || orderParam === CS.ORDER_BY_TRENDING) {
       // Warning - hack below
       // If users are following more than 10 channels or tags, limit results to stuff less than a year old
@@ -285,29 +280,15 @@ function ClaimListDiscover(props: Props) {
         (options.channel_ids && options.channel_ids.length > 20) ||
         (options.any_tags && options.any_tags.length > 20)
       ) {
-        options.release_time = `>${Math.floor(
-          moment()
-            .subtract(3, CS.FRESH_MONTH)
-            .startOf('week')
-            .unix()
-        )}`;
+        options.release_time = `>${Math.floor(moment().subtract(3, CS.FRESH_MONTH).startOf('week').unix())}`;
       } else if (
         (options.channel_ids && options.channel_ids.length > 10) ||
         (options.any_tags && options.any_tags.length > 10)
       ) {
-        options.release_time = `>${Math.floor(
-          moment()
-            .subtract(1, CS.FRESH_YEAR)
-            .startOf('week')
-            .unix()
-        )}`;
+        options.release_time = `>${Math.floor(moment().subtract(1, CS.FRESH_YEAR).startOf('week').unix())}`;
       } else {
         // Hack for at least the New page until https://github.com/lbryio/lbry-sdk/issues/2591 is fixed
-        options.release_time = `<${Math.floor(
-          moment()
-            .startOf('minute')
-            .unix()
-        )}`;
+        options.release_time = `<${Math.floor(moment().startOf('minute').unix())}`;
       }
     }
   }
@@ -355,14 +336,14 @@ function ClaimListDiscover(props: Props) {
   if (hideReposts && !options.reposted_claim_id && !forceShowReposts) {
     if (Array.isArray(options.claim_type)) {
       if (options.claim_type.length > 1) {
-        options.claim_type = options.claim_type.filter(claimType => claimType !== 'repost');
+        options.claim_type = options.claim_type.filter((claimType) => claimType !== 'repost');
       }
     } else {
       options.claim_type = ['stream', 'channel'];
     }
   }
 
-  const hasMatureTags = tagsParam && tagsParam.split(',').some(t => MATURE_TAGS.includes(t));
+  const hasMatureTags = tagsParam && tagsParam.split(',').some((t) => MATURE_TAGS.includes(t));
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
   const claimSearchResult = claimSearchByQuery[claimSearchCacheQuery];
   const claimSearchResultLastPageReached = claimSearchByQueryLastPageReached[claimSearchCacheQuery];

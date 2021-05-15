@@ -44,7 +44,7 @@ type Props = {
   liveLivestreamsFirst?: boolean,
   livestreamMap?: { [string]: any },
   searchOptions?: any,
-  channelIsMine: boolean
+  channelIsMine: boolean,
 };
 
 export default function ClaimList(props: Props) {
@@ -75,7 +75,7 @@ export default function ClaimList(props: Props) {
     liveLivestreamsFirst,
     livestreamMap,
     searchOptions,
-    channelIsMine
+    channelIsMine,
   } = props;
 
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
