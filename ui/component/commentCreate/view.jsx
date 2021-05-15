@@ -35,7 +35,7 @@ type Props = {
   toast: (string) => void,
   claimIsMine: boolean,
   sendTip: ({}, (any) => void, (any) => void) => void,
-  setjustCommented: (boolean) => void
+  setjustCommented: (boolean) => void,
 };
 
 export function CommentCreate(props: Props) {
@@ -54,7 +54,7 @@ export function CommentCreate(props: Props) {
     toast,
     claimIsMine,
     sendTip,
-    setjustCommented
+    setjustCommented,
   } = props;
   const buttonref: ElementRef<any> = React.useRef();
   const {
