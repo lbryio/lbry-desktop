@@ -6,14 +6,7 @@ import React from 'react';
 import { createNormalizedClaimSearchKey, MATURE_TAGS } from 'lbry-redux';
 import ClaimPreviewTile from 'component/claimPreviewTile';
 import { useHistory } from 'react-router';
-
-const getNoSourceOptions = (options) => {
-  const newOptions = Object.assign({}, options);
-  delete newOptions.has_source;
-  delete newOptions.stream_types;
-  newOptions.has_no_source = true;
-  return newOptions;
-};
+import { getLivestreamOnlyOptions } from 'util/search';
 
 /**
  * Updates 'uris' by adding and/or moving active livestreams to the front of
@@ -68,7 +61,7 @@ export function prioritizeActiveLivestreams(
 
   // 2. Now, repeat on the secondary search.
   if (options) {
-    const livestreamsOnlySearchCacheQuery = createNormalizedClaimSearchKey(getNoSourceOptions(options));
+    const livestreamsOnlySearchCacheQuery = createNormalizedClaimSearchKey(getLivestreamOnlyOptions(options));
     const livestreamsOnlyUris = claimSearchByQuery[livestreamsOnlySearchCacheQuery];
     if (livestreamsOnlyUris) {
       livestreamsOnlyUris.forEach((uri) => {
@@ -254,7 +247,7 @@ function ClaimTilesDiscover(props: Props) {
       doClaimSearch(searchOptions);
 
       if (liveLivestreamsFirst) {
-        doClaimSearch(getNoSourceOptions(searchOptions));
+        doClaimSearch(getLivestreamOnlyOptions(searchOptions));
       }
     }
   }, [doClaimSearch, shouldPerformSearch, optionsStringForEffect, liveLivestreamsFirst]);
