@@ -5,23 +5,38 @@ import { Form } from 'component/common/form';
 import { Modal } from 'modal/modal';
 import Card from 'component/common/card';
 import LbcSymbol from 'component/common/lbc-symbol';
+import ClaimPreview from 'component/claimPreview';
+
+type TipParams = { amount: number, claim_id: string, channel_id?: string };
 
 type Props = {
-  address: string,
+  destination: string,
   amount: number,
   closeModal: () => void,
   sendToAddress: (string, number) => void,
+  sendTip: (TipParams, boolean) => void,
+  isAddress: boolean,
+  claim: StreamClaim,
+  activeChannelClaim: ?ChannelClaim,
+  incognito: boolean
 };
 
 class ModalConfirmTransaction extends React.PureComponent<Props> {
   onConfirmed() {
-    const { closeModal, sendToAddress, amount, address } = this.props;
-    sendToAddress(address, amount);
+    const { closeModal, sendToAddress, sendTip, amount, destination, isAddress, claim } = this.props;
+    if (!isAddress) {
+      const claimId = claim && claim.claim_id;
+      const tipParams: TipParams = { amount: amount, claim_id: claimId };
+      sendTip(tipParams, false);
+    } else {
+      sendToAddress(destination, amount);
+    }
     closeModal();
   }
 
   render() {
-    const { amount, address, closeModal } = this.props;
+    const { amount, destination, closeModal, isAddress, incognito, activeChannelClaim } = this.props;
+    const activeChannelUrl = activeChannelClaim && activeChannelClaim.canonical_url;
     const title = __('Confirm Transaction');
     return (
       <Modal isOpen contentLabel={title} type="card" onAborted={closeModal}>
@@ -31,10 +46,31 @@ class ModalConfirmTransaction extends React.PureComponent<Props> {
             body={
               <div className="section section--padded card--inline confirm__wrapper">
                 <div className="section">
+
                   <div className="confirm__label">{__('Sending')}</div>
                   <div className="confirm__value">{<LbcSymbol postfix={amount} size={22} />}</div>
+
+                  {!isAddress && <div className="confirm__label">{__('From')}</div>}
+                  {!isAddress && <div className="confirm__value">
+                    {incognito ? 'Anonymous' :
+                    <ClaimPreview
+                      key={activeChannelUrl}
+                      uri={activeChannelUrl}
+                      actions={''}
+                      type={'small'}
+                    />}
+                  </div>}
+
                   <div className="confirm__label">{__('To')}</div>
-                  <div className="confirm__value">{address}</div>
+                  <div className="confirm__value">{!isAddress ?
+                    <ClaimPreview
+                      key={destination}
+                      uri={destination}
+                      actions={''}
+                      type={'small'}
+                    /> : destination}
+                  </div>
+
                 </div>
               </div>
             }
