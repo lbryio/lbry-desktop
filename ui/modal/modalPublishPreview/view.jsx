@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import moment from 'moment';
 import Button from 'component/button';
 import { Form, FormField } from 'component/common/form';
 import { Modal } from 'modal/modal';
@@ -28,6 +29,7 @@ type Props = {
     currency: string,
   },
   language: string,
+  releaseTimeEdited: ?number,
   licenseType: string,
   otherLicenseDescription: ?string,
   licenseUrl: ?string,
@@ -61,6 +63,7 @@ const ModalPublishPreview = (props: Props) => {
     contentIsFree,
     fee,
     language,
+    releaseTimeEdited,
     licenseType,
     otherLicenseDescription,
     licenseUrl,
@@ -207,6 +210,10 @@ const ModalPublishPreview = (props: Props) => {
     );
   };
 
+  const releaseTimeStr = (time) => {
+    return time ? moment(new Date(time * 1000)).format('MMMM Do, YYYY - h:mm a') : '';
+  };
+
   return (
     <Modal isOpen contentLabel={modalTitle} type="card" onAborted={closeModal}>
       <Form onSubmit={onConfirmed}>
@@ -227,6 +234,7 @@ const ModalPublishPreview = (props: Props) => {
                     {createRow(__('Deposit'), depositValue)}
                     {createRow(__('Price'), priceValue)}
                     {createRow(__('Language'), language)}
+                    {releaseTimeEdited && createRow(__('Release Date'), releaseTimeStr(releaseTimeEdited))}
                     {createRow(__('License'), licenseValue)}
                     {createRow(__('Tags'), tagsValue)}
                   </tbody>
