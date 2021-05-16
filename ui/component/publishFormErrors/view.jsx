@@ -35,6 +35,7 @@ function PublishFormErrors(props: Props) {
   // If there is an error it will be presented as an inline error as well
 
   const isUploadingThumbnail = uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS;
+  const isReadyToSelectThumbnail = uploadThumbnailStatus === THUMBNAIL_STATUSES.READY;
 
   return (
     <div className="error__text">
@@ -45,7 +46,7 @@ function PublishFormErrors(props: Props) {
       {!bid && <div>{__('A deposit amount is required')}</div>}
       {bidError && <div>{__('Please check your deposit amount.')}</div>}
       {isUploadingThumbnail && <div>{__('Please wait for thumbnail to finish uploading')}</div>}
-      {!isUploadingThumbnail && !thumbnail && (
+      {!isUploadingThumbnail && (!thumbnail || isReadyToSelectThumbnail) && (
         <div>{__('A thumbnail is required. Please upload or provide an image URL above.')}</div>
       )}
       {thumbnailError && <div>{__('Thumbnail is invalid.')}</div>}

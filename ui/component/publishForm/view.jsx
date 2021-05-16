@@ -230,7 +230,8 @@ function PublishForm(props: Props) {
     !bidError &&
     !emptyPostError &&
     !thumbnailError &&
-    !(uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS);
+    !(uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS) &&
+    !(uploadThumbnailStatus === THUMBNAIL_STATUSES.READY);
 
   const isOverwritingExistingClaim = !editingURI && myClaimForUri;
 

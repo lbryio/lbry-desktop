@@ -112,7 +112,9 @@ class SelectThumbnail extends React.PureComponent<Props> {
                 <Button
                   button="link"
                   label={__('Use thumbnail upload tool')}
-                  onClick={() => updatePublishForm({ uploadThumbnailStatus: THUMBNAIL_STATUSES.READY })}
+                  onClick={() =>
+                    updatePublishForm({ uploadThumbnailStatus: THUMBNAIL_STATUSES.READY, thumbnailError: false })
+                  }
                 />
               </div>
             </div>
