@@ -20,13 +20,13 @@ type DraftTransaction = {
 };
 
 type Props = {
-  openModal: (id: string, { address: string, amount: number }) => void,
+  openModal: (id: string, { address: string, amount: number, isAddress: boolean }) => void,
   balance: number,
   isAddress: boolean,
-  setIsAddress: () => boolean,
+  setIsAddress: (boolean) => boolean,
   contentUri: string,
   contentClaim?: StreamClaim,
-  setEnteredContentUri: () => string
+  setEnteredContentUri: (string) => string,
 };
 
 class WalletSend extends React.PureComponent<Props> {
@@ -42,8 +42,8 @@ class WalletSend extends React.PureComponent<Props> {
 
     if (amount && (address || contentUri)) {
       const destination = isAddress ? address : contentUri;
-      const modalProps = { destination, amount, isAddress };
-  
+      const modalProps = { address: destination, amount, isAddress };
+
       openModal(MODALS.CONFIRM_TRANSACTION, modalProps);
     }
   }
@@ -55,9 +55,10 @@ class WalletSend extends React.PureComponent<Props> {
       <Card
         title={__('Send Credits')}
         subtitle={
-        <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>
-          Send LBRY Credits to your friends or favorite creators.
-        </I18nMessage>}
+          <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>
+            Send LBRY Credits to your friends or favorite creators.
+          </I18nMessage>
+        }
         actions={
           <Formik
             initialValues={{
@@ -84,26 +85,36 @@ class WalletSend extends React.PureComponent<Props> {
                     className={classnames('button-toggle', { 'button-toggle--active': !isAddress })}
                   />
                 </div>
-                
+
                 <div className="section">
                   {!isAddress && <ChannelSelector />}
 
                   <Form onSubmit={handleSubmit}>
+                    {!isAddress && (
+                      <FormField
+                        type="text"
+                        name="search"
+                        placeholder={__('Enter a name, @username or URL')}
+                        className="form-field--address"
+                        label={__('Recipient search')}
+                        onChange={(event) => setEnteredContentUri(event.target.value)}
+                        onBlur={handleBlur}
+                        value={values.search}
+                      />
+                    )}
 
-                    {!isAddress && <FormField
-                      type="text"
-                      name="search"
-                      placeholder="Enter a name, @username or URL"
-                      className="form-field--address"
-                      label={__('Recipient search')}
-                      onChange={event => setEnteredContentUri(event.target.value)}
-                      onBlur={handleBlur}
-                      value={values.search}
-                    />}
-
-                    {!isAddress && <fieldset-section>
-                      <ClaimPreview key={contentUri} uri={contentUri} actions={''} type={'small'} showNullPlaceholder hideMenu />
-                    </fieldset-section>}
+                    {!isAddress && (
+                      <fieldset-section>
+                        <ClaimPreview
+                          key={contentUri}
+                          uri={contentUri}
+                          actions={''}
+                          type={'small'}
+                          showNullPlaceholder
+                          hideMenu
+                        />
+                      </fieldset-section>
+                    )}
 
                     <fieldset-group class="fieldset-group--smushed">
                       <FormField
@@ -120,16 +131,18 @@ class WalletSend extends React.PureComponent<Props> {
                         onBlur={handleBlur}
                         value={values.amount}
                       />
-                      {isAddress && <FormField
-                        type="text"
-                        name="address"
-                        placeholder={"bbFxRyXXXXXXXXXXXZD8nE7XTLUxYnddTs"}
-                        className="form-field--address"
-                        label={__('Recipient Address')}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.address}
-                      />}
+                      {isAddress && (
+                        <FormField
+                          type="text"
+                          name="address"
+                          placeholder={'bbFxRyXXXXXXXXXXXZD8nE7XTLUxYnddTs'}
+                          className="form-field--address"
+                          label={__('Recipient Address')}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          value={values.address}
+                        />
+                      )}
                     </fieldset-group>
 
                     <div className="card__actions">
@@ -137,15 +150,15 @@ class WalletSend extends React.PureComponent<Props> {
                         button="primary"
                         type="submit"
                         label={__('Send')}
-                        disabled={isAddress ?
-                            !values.address ||
-                            !!Object.keys(errors).length ||
-                            !(parseFloat(values.amount) > 0.0) ||
-                            parseFloat(values.amount) >= balance
-                          :
-                            !contentClaim ||
-                            !(parseFloat(values.amount) > 0.0) ||
-                            parseFloat(values.amount) >= balance
+                        disabled={
+                          isAddress
+                            ? !values.address ||
+                              !!Object.keys(errors).length ||
+                              !(parseFloat(values.amount) > 0.0) ||
+                              parseFloat(values.amount) >= balance
+                            : !contentClaim ||
+                              !(parseFloat(values.amount) > 0.0) ||
+                              parseFloat(values.amount) >= balance
                         }
                       />
                       {!!Object.keys(errors).length || (

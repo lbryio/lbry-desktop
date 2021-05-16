@@ -18,7 +18,7 @@ type Props = {
   isAddress: boolean,
   claim: StreamClaim,
   activeChannelClaim: ?ChannelClaim,
-  incognito: boolean
+  incognito: boolean,
 };
 
 class ModalConfirmTransaction extends React.PureComponent<Props> {
@@ -46,31 +46,28 @@ class ModalConfirmTransaction extends React.PureComponent<Props> {
             body={
               <div className="section section--padded card--inline confirm__wrapper">
                 <div className="section">
-
                   <div className="confirm__label">{__('Sending')}</div>
                   <div className="confirm__value">{<LbcSymbol postfix={amount} size={22} />}</div>
 
                   {!isAddress && <div className="confirm__label">{__('From')}</div>}
-                  {!isAddress && <div className="confirm__value">
-                    {incognito ? 'Anonymous' :
-                    <ClaimPreview
-                      key={activeChannelUrl}
-                      uri={activeChannelUrl}
-                      actions={''}
-                      type={'small'}
-                    />}
-                  </div>}
+                  {!isAddress && (
+                    <div className="confirm__value">
+                      {incognito ? (
+                        'Anonymous'
+                      ) : (
+                        <ClaimPreview key={activeChannelUrl} uri={activeChannelUrl} actions={''} type={'small'} />
+                      )}
+                    </div>
+                  )}
 
                   <div className="confirm__label">{__('To')}</div>
-                  <div className="confirm__value">{!isAddress ?
-                    <ClaimPreview
-                      key={destination}
-                      uri={destination}
-                      actions={''}
-                      type={'small'}
-                    /> : destination}
+                  <div className="confirm__value">
+                    {!isAddress ? (
+                      <ClaimPreview key={destination} uri={destination} actions={''} type={'small'} />
+                    ) : (
+                      destination
+                    )}
                   </div>
-
                 </div>
               </div>
             }
