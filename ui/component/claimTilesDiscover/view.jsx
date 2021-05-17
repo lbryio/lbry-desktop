@@ -244,6 +244,7 @@ function ClaimTilesDiscover(props: Props) {
   const fixUris = [
     'lbry://@Destiny#6/richard-wolff-responds-to-destiny-debate#7',
     'lbry://@hammyandolivia#c/corgis-enjoy-lick-mats!-(live)#7',
+    'lbry://@majorityreport#7/fighting-the-monopoly-men#9',
   ];
   if (pin && uris && uris.length > 2 && window.location.pathname === '/') {
     fixUris.forEach((fixUri) => {
