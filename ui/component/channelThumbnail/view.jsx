@@ -67,7 +67,7 @@ function ChannelThumbnail(props: Props) {
     }
   }, [doResolveUri, shouldResolve, uri]);
 
-  useLazyLoading(thumbnailRef, 0.25, [showThumb]);
+  useLazyLoading(thumbnailRef, 0.25, [showThumb, thumbError, channelThumbnail]);
 
   if (isGif && !allowGifs) {
     return (
@@ -99,7 +99,7 @@ function ChannelThumbnail(props: Props) {
           ref={thumbnailRef}
           alt={__('Channel profile picture')}
           className="channel-thumbnail__default"
-          src={!thumbError && url ? url : Gerbil}
+          data-src={!thumbError && url ? url : Gerbil}
           onError={() => setThumbError(true)} // if thumb fails (including due to https replace, show gerbil.
         />
       )}
@@ -112,7 +112,7 @@ function ChannelThumbnail(props: Props) {
               ref={thumbnailRef}
               alt={__('Channel profile picture')}
               className="channel-thumbnail__custom"
-              src={!thumbError && url ? url : Gerbil}
+              data-src={!thumbError && url ? url : Gerbil}
               onError={() => setThumbError(true)} // if thumb fails (including due to https replace, show gerbil.
             />
           )}
