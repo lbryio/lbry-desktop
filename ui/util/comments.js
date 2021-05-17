@@ -9,8 +9,8 @@ type SortProps = {
   comments: ?Array<Comment>,
   reactionsById: {},
   sort: string,
-  isMyComment: string => boolean,
-  justCommented: boolean,
+  isMyComment: (string) => boolean,
+  justCommented: Array<string>,
 };
 
 export function sortComments(sortProps: SortProps): Array<Comment> {
@@ -29,12 +29,12 @@ export function sortComments(sortProps: SortProps): Array<Comment> {
 
     const aIsMine = isMyComment(a.channel_id);
     const bIsMine = isMyComment(b.channel_id);
-    const aIsMyRecent = a.comment_id === comments[0].comment_id;
-    const bIsMyRecent = b.comment_id === comments[0].comment_id;
+    const aIsMyRecent = justCommented.includes(a.comment_id);
+    const bIsMyRecent = justCommented.includes(b.comment_id);
 
-    if (aIsMine && justCommented && aIsMyRecent) {
+    if (aIsMine && justCommented.length && aIsMyRecent) {
       return -1;
-    } else if (bIsMine && justCommented && bIsMyRecent) {
+    } else if (bIsMine && justCommented.length && bIsMyRecent) {
       return 1;
     }
 

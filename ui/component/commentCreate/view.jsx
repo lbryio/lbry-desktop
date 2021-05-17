@@ -35,7 +35,7 @@ type Props = {
   toast: (string) => void,
   claimIsMine: boolean,
   sendTip: ({}, (any) => void, (any) => void) => void,
-  setjustCommented: (boolean) => void,
+  justCommented: Array<string>,
 };
 
 export function CommentCreate(props: Props) {
@@ -54,7 +54,7 @@ export function CommentCreate(props: Props) {
     toast,
     claimIsMine,
     sendTip,
-    setjustCommented,
+    justCommented,
   } = props;
   const buttonref: ElementRef<any> = React.useRef();
   const {
@@ -153,7 +153,7 @@ export function CommentCreate(props: Props) {
           setLastCommentTime(Date.now());
           setIsReviewingSupportComment(false);
           setIsSupportComment(false);
-          setjustCommented(true);
+          justCommented.push(res.comment_id);
 
           if (onDoneReplying) {
             onDoneReplying();
