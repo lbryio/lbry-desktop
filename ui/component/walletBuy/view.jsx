@@ -43,7 +43,7 @@ type Props = {
   doGetNewAddress: () => void,
   doUserSetCountry: (string) => void,
   buyMethod: boolean,
-  setBuyMethod: () => boolean,
+  setBuyMethod: (boolean) => void,
 };
 
 export default function WalletBuy(props: Props) {

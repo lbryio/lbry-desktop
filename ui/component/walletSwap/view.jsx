@@ -65,7 +65,7 @@ type Props = {
   openModal: (string, {}) => void,
   queryCoinSwapStatus: (string) => void,
   buyMethod: boolean,
-  setBuyMethod: () => boolean,
+  setBuyMethod: (boolean) => void,
 };
 
 function WalletSwap(props: Props) {
@@ -80,7 +80,7 @@ function WalletSwap(props: Props) {
     openModal,
     queryCoinSwapStatus,
     buyMethod,
-    setBuyMethod
+    setBuyMethod,
   } = props;
 
   const [btc, setBtc] = React.useState(0);
@@ -212,7 +212,7 @@ function WalletSwap(props: Props) {
         setNag({ msg: swapInfo.status.status, type: 'error' });
         break;
     }
-  }, [swap, coinSwaps]);
+  }, [swap, coinSwaps, action]);
 
   // Validate entered LBC
   React.useEffect(() => {
