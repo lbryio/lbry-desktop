@@ -58,7 +58,7 @@ function CommentList(props: Props) {
   const [readyToDisplayComments, setReadyToDisplayComments] = React.useState(
     Boolean(reactionsById) || !ENABLE_COMMENT_REACTIONS
   );
-  const [justCommented, setjustCommented] = React.useState(false);
+  const [justCommented] = React.useState([]);
   const linkedCommentId = linkedComment && linkedComment.comment_id;
   const hasNoComments = !totalComments;
   const moreBelow = totalComments - end > 0;
@@ -210,7 +210,7 @@ function CommentList(props: Props) {
       }
       actions={
         <>
-          <CommentCreate uri={uri} setjustCommented={setjustCommented} />
+          <CommentCreate uri={uri} justCommented={justCommented} />
 
           {!isFetchingComments && hasNoComments && (
             <Empty padded text={__('That was pretty deep. What do you think?')} />
