@@ -21,6 +21,7 @@ type Props = {
   showDelayedMessage?: boolean,
   hideStakedIndicator?: boolean,
   xsmall?: boolean,
+  noOptimization?: boolean,
 };
 
 function ChannelThumbnail(props: Props) {
@@ -38,12 +39,14 @@ function ChannelThumbnail(props: Props) {
     isResolving,
     showDelayedMessage = false,
     hideStakedIndicator = false,
+    noOptimization,
   } = props;
   const [thumbError, setThumbError] = React.useState(false);
   const shouldResolve = claim === undefined;
   const thumbnail = rawThumbnail && rawThumbnail.trim().replace(/^http:\/\//i, 'https://');
   const thumbnailPreview = rawThumbnailPreview && rawThumbnailPreview.trim().replace(/^http:\/\//i, 'https://');
   const channelThumbnail = thumbnail || thumbnailPreview;
+  const isGif = channelThumbnail && channelThumbnail.endsWith('gif');
   const showThumb = (!obscure && !!thumbnail) || thumbnailPreview;
   // Generate a random color class based on the first letter of the channel name
   const { channelName } = parseURI(uri);
@@ -62,7 +65,7 @@ function ChannelThumbnail(props: Props) {
     }
   }, [doResolveUri, shouldResolve, uri]);
 
-  if (channelThumbnail && channelThumbnail.endsWith('gif') && !allowGifs) {
+  if (isGif && !allowGifs) {
     return (
       <FreezeframeWrapper src={channelThumbnail} className={classnames('channel-thumbnail', className)}>
         {!hideStakedIndicator && <ChannelStakedIndicator uri={uri} claim={claim} />}
@@ -72,8 +75,8 @@ function ChannelThumbnail(props: Props) {
 
   let url = channelThumbnail;
   // @if TARGET='web'
-  // Pass image urls through a compression proxy
-  if (thumbnail) {
+  // Pass image urls through a compression proxy, except for GIFs.
+  if (thumbnail && !noOptimization && !(isGif && allowGifs)) {
     url = getThumbnailCdnUrl({ thumbnail });
   }
   // @endif
