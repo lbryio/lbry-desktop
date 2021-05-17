@@ -59,7 +59,7 @@ export default function FileRenderInitiator(props: Props) {
   // get current url
   const url = window.location.href;
   // check if there is a time parameter, if so force autoplay
-  if (url.indexOf('t=')) {
+  if (url.indexOf('t=') > -1) {
     autoplay = true;
   }
 
