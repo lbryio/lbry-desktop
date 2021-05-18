@@ -1,9 +1,13 @@
 [theme='dark'] {
   // Color overrides
-  --color-secondary: #1d3b63;
+  --color-primary: #2bbb90;
+  --color-primary-alt: #3e675d;
+  --color-primary-alt-2: #065f46;
+  --color-primary-alt-3: #34e5b0;
+  --color-secondary: #204166;
   --color-secondary-alt: #dbeafe;
   --color-secondary-alt-2: #bfdbfe;
-  --color-secondary-alt-3: #172f4f;
+  --color-secondary-alt-3: #2c5c8c;
 
   // Structure
   --color-background: var(--color-gray-10);
@@ -29,14 +33,14 @@
   --color-header-button-active: var(--color-gray-6);
 
   // Button
-  --color-button-primary-bg: var(--color-primary);
+  --color-button-primary-bg: var(--color-primary-alt);
   --color-button-primary-bg-hover: var(--color-primary-alt-2);
-  --color-button-primary-text: var(--color-primary-alt);
+  --color-button-primary-text: var(--color-gray-2);
   --color-button-primary-hover-text: var(--color-primary-alt);
   --color-button-secondary-bg: var(--color-secondary);
   --color-button-secondary-border: var(--color-secondary);
   --color-button-secondary-bg-hover: var(--color-secondary-alt-3);
-  --color-button-secondary-text: var(--color-secondary-alt);
+  --color-button-secondary-text: var(--color-gray-2);
   --color-button-alt-bg: var(--color-gray-7);
   --color-button-alt-bg-hover: var(--color-gray-6);
   --color-button-alt-text: var(--color-gray-1);
@@ -73,9 +77,9 @@
 
   // Tags
   --color-tag: var(--color-primary-alt-3);
-  --color-tag-bg: var(--color-gray-6);
+  --color-tag-bg: var(--color-gray-7);
   --color-tag-hover: var(--color-white);
-  --color-tag-bg-hover: var(--color-primary);
+  --color-tag-bg-hover: var(--color-primary-alt);
 
   // Menu
   --color-menu-background: var(--color-header-background);
