@@ -127,7 +127,7 @@ export default function FileRenderInitiator(props: Props) {
   return (
     <div
       onClick={disabled ? undefined : shouldRedirect ? doAuthRedirect : viewFile}
-      style={thumbnail && !obscurePreview ? { backgroundImage: `url("${thumbnail}")` } : {}}
+      style={thumbnail && !obscurePreview && !autoplay ? { backgroundImage: `url("${thumbnail}")` } : {}}
       className={classnames('content__cover', {
         'content__cover--disabled': disabled,
         'content__cover--theater-mode': videoTheaterMode,
