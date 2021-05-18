@@ -25,6 +25,7 @@ type Props = {
   isAddress: boolean,
   setIsAddress: (boolean) => boolean,
   contentUri: string,
+  contentError: string,
   contentClaim?: StreamClaim,
   setEnteredContentUri: (string) => string,
 };
@@ -49,7 +50,7 @@ class WalletSend extends React.PureComponent<Props> {
   }
 
   render() {
-    const { balance, isAddress, setIsAddress, contentUri, contentClaim, setEnteredContentUri } = this.props;
+    const { balance, isAddress, setIsAddress, contentUri, contentClaim, setEnteredContentUri, contentError } = this.props;
 
     return (
       <Card
@@ -94,6 +95,7 @@ class WalletSend extends React.PureComponent<Props> {
                       <FormField
                         type="text"
                         name="search"
+                        error={contentError}
                         placeholder={__('Enter a name, @username or URL')}
                         className="form-field--address"
                         label={__('Recipient search')}
@@ -153,12 +155,12 @@ class WalletSend extends React.PureComponent<Props> {
                         disabled={
                           isAddress
                             ? !values.address ||
-                              !!Object.keys(errors).length ||
-                              !(parseFloat(values.amount) > 0.0) ||
-                              parseFloat(values.amount) >= balance
+                            !!Object.keys(errors).length ||
+                            !(parseFloat(values.amount) > 0.0) ||
+                            parseFloat(values.amount) >= balance
                             : !contentClaim ||
-                              !(parseFloat(values.amount) > 0.0) ||
-                              parseFloat(values.amount) >= balance
+                            !(parseFloat(values.amount) > 0.0) ||
+                            parseFloat(values.amount) >= balance
                         }
                       />
                       {!!Object.keys(errors).length || (

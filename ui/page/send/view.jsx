@@ -103,7 +103,7 @@ export default function SendPage(props: Props) {
         setContentUri(``);
       }
     }
-  }, [enteredContent, setContentUri, setContentError, contentError]);
+  }, [enteredContent, setContentUri, setContentError, parseURI, isNameValid]);
 
   return (
     <Page
@@ -122,6 +122,7 @@ export default function SendPage(props: Props) {
         isAddress={isAddress}
         setIsAddress={setIsAddress}
         contentUri={contentUri}
+        contentError={contentError}
         setEnteredContentUri={setEnteredContentUri}
       />
     </Page>
