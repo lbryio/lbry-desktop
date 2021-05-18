@@ -99,7 +99,7 @@ function ChannelThumbnail(props: Props) {
           ref={thumbnailRef}
           alt={__('Channel profile picture')}
           className="channel-thumbnail__default"
-          src={!thumbError && url ? url : Spaceman}
+          data-src={!thumbError && url ? url : Spaceman}
           onError={() => setThumbError(true)} // if thumb fails (including due to https replace, show gerbil.
         />
       )}
@@ -112,7 +112,7 @@ function ChannelThumbnail(props: Props) {
               ref={thumbnailRef}
               alt={__('Channel profile picture')}
               className="channel-thumbnail__custom"
-              src={!thumbError && url ? url : Spaceman}
+              data-src={!thumbError && url ? url : Spaceman}
               onError={() => setThumbError(true)} // if thumb fails (including due to https replace, show gerbil.
             />
           )}
