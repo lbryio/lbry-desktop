@@ -1,5 +1,5 @@
 [theme='dark'] {
-  // Color overides
+  // Color overrides
   --color-primary: #e50054;
   --color-primary-alt: #66001880;
   --color-fire: #ff6635;
@@ -27,7 +27,6 @@
   // Header
   --color-header-button: #2b2037;
   --color-header-background: #140f1a;
-  --color-header-button: #2b2037;
 
   // Button
   --color-button-primary-text: white;
@@ -92,6 +91,9 @@
   --color-comment-threadline: #24192f;
   --color-comment-threadline-hover: var(--color-gray-4);
 
+  // Snack
+  --color-snack-bg: var(--color-secondary);
+
   // Other
   --color-tab-text: var(--color-white);
   --color-tabs-background: var(--color-card-background);
@@ -107,7 +109,6 @@
   --color-placeholder-background: #0f0b14;
   --color-spinner-light: white;
   --color-spinner-dark: #212529;
-  --color-snack-bg: var(--color-secondary);
 
   // Editor
   --color-editor-cursor: var(--color-text);
