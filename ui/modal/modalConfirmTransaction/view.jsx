@@ -57,7 +57,7 @@ class ModalConfirmTransaction extends React.PureComponent<Props> {
                       {incognito ? (
                         'Anonymous'
                       ) : (
-                        <ClaimPreview key={activeChannelUrl} uri={activeChannelUrl} actions={''} type={'small'} hideMenu />
+                        <ClaimPreview key={activeChannelUrl} uri={activeChannelUrl} actions={''} type={'small'} hideMenu hideRepostLabel />
                       )}
                     </div>
                   )}
@@ -65,7 +65,7 @@ class ModalConfirmTransaction extends React.PureComponent<Props> {
                   <div className="confirm__label">{__('To')}</div>
                   <div className="confirm__value">
                     {!isAddress ? (
-                      <ClaimPreview key={destination} uri={destination} actions={''} type={'small'} hideMenu />
+                      <ClaimPreview key={destination} uri={destination} actions={''} type={'small'} hideMenu hideRepostLabel />
                     ) : (
                       destination
                     )}

@@ -130,6 +130,7 @@ class WalletSend extends React.PureComponent<Props> {
                           type={'small'}
                           showNullPlaceholder
                           hideMenu
+                          hideRepostLabel
                         />
                       </fieldset-section>
                     )}
