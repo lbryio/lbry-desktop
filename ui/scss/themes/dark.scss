@@ -6,14 +6,14 @@
   --color-fire-outside: #ff9b20;
 
   // Structure
-  --color-background: #0a070d;
+  --color-background: #140e1b;
   --color-background-overlay: #0c0d0e95;
-  --color-border: #21182a;
-  --color-card-background: #140e1b;
-  --color-card-background-highlighted: #2b2037;
+  --color-border: #30243d;
+  --color-card-background: #181021;
+  --color-card-background-highlighted: #241c30;
 
   // Text
-  --color-text: var(--color-white);
+  --color-text: var(--color-gray-1);
   --color-text-subtitle: var(--color-gray-4);
   --color-text-empty: var(--color-text-subtitle);
   --color-text-help: #bbbbbb;
@@ -26,8 +26,8 @@
   --color-help-warning-text: var(--color-white-alt);
 
   // Header
-  --color-header-button: #2b2037;
-  --color-header-background: #140f1a;
+  --color-header-button: #38274c;
+  --color-header-background: #231830;
 
   // Button
   --color-button-primary-text: white;
@@ -36,13 +36,13 @@
   --color-button-secondary-border: #4f1c82;
   --color-button-secondary-bg-hover: #3b1c5b;
   --color-button-secondary-text: #efefef;
-  --color-button-alt-bg: #241a2d;
+  --color-button-alt-bg: var(--color-header-button);
   --color-button-alt-bg-hover: #2b2037;
   --color-button-toggle-text: var(--color-text);
   --color-button-toggle-bg: var(--color-primary-alt);
   --color-button-toggle-bg-hover: var(--color-primary-alt);
   --color-button-alt-text: #e2e9f0;
-  --color-button-border: #3d2d4e;
+  --color-button-border: #5b4475;
   --color-link: var(--color-primary);
   --color-link-hover: #d75673;
   --color-link-active: #ec1d4c;
@@ -52,7 +52,7 @@
   --color-input: #f4f4f5;
   --color-input-label: #a7a7a7;
   --color-input-placeholder: #f4f4f5;
-  --color-input-bg: #2b2037;
+  --color-input-bg: var(--color-header-button);
   --color-input-bg-copyable: #4c3861;
   --color-input-border: var(--color-border);
   --color-input-border-active: var(--color-secondary);
@@ -104,7 +104,7 @@
   --color-thumbnail-background: var(--color-gray-5);
   --color-tooltip-bg: #2f3337;
   --color-focus: #e91e6329;
-  --color-placeholder-background: #0f0b14;
+  --color-placeholder-background: #261a35;
   --color-spinner-light: white;
   --color-spinner-dark: #212529;
 
