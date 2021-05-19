@@ -19,11 +19,12 @@ type Props = {
   claim: StreamClaim,
   activeChannelClaim: ?ChannelClaim,
   incognito: boolean,
+  setConfirmed: (boolean) => void,
 };
 
 class ModalConfirmTransaction extends React.PureComponent<Props> {
   onConfirmed() {
-    const { closeModal, sendToAddress, sendTip, amount, destination, isAddress, claim } = this.props;
+    const { closeModal, sendToAddress, sendTip, amount, destination, isAddress, claim, setConfirmed } = this.props;
     if (!isAddress) {
       const claimId = claim && claim.claim_id;
       const tipParams: TipParams = { amount: amount, claim_id: claimId };
@@ -31,6 +32,7 @@ class ModalConfirmTransaction extends React.PureComponent<Props> {
     } else {
       sendToAddress(destination, amount);
     }
+    setConfirmed(true);
     closeModal();
   }
 

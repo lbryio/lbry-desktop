@@ -11,9 +11,11 @@ type Props = {};
 export default function SendPage(props: Props) {
   const [isAddress, setIsAddress] = React.useState(true);
   const [contentUri, setContentUri] = React.useState('');
+  const [draftTransaction, setDraftTransaction] = React.useState({ address: '', amount: '' });
   const [enteredContent, setEnteredContentUri] = React.useState(undefined);
   const contentFirstRender = React.useRef(true);
   const [contentError, setContentError] = React.useState('');
+  const [confirmed, setConfirmed] = React.useState(false);
 
   function getSearchUri(value) {
     const WEB_DEV_PREFIX = `${URL_DEV}/`;
@@ -124,6 +126,10 @@ export default function SendPage(props: Props) {
         contentUri={contentUri}
         contentError={contentError}
         setEnteredContentUri={setEnteredContentUri}
+        confirmed={confirmed}
+        setConfirmed={setConfirmed}
+        draftTransaction={draftTransaction}
+        setDraftTransaction={setDraftTransaction}
       />
     </Page>
   );

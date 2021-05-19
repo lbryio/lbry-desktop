@@ -20,7 +20,9 @@ type DraftTransaction = {
 };
 
 type Props = {
-  openModal: (id: string, { address: string, amount: number, isAddress: boolean }) => void,
+  openModal: (id: string, { destination: string, amount: string, isAddress: boolean }) => void,
+  draftTransaction: { address: string, amount: string },
+  setDraftTransaction: ({ address: string, amount: string }) => void,
   balance: number,
   isAddress: boolean,
   setIsAddress: (boolean) => void,
@@ -28,6 +30,8 @@ type Props = {
   contentError: string,
   contentClaim?: StreamClaim,
   setEnteredContentUri: (string) => void,
+  confirmed: boolean,
+  setConfirmed: (boolean) => void,
 };
 
 class WalletSend extends React.PureComponent<Props> {
@@ -35,22 +39,34 @@ class WalletSend extends React.PureComponent<Props> {
     super();
 
     (this: any).handleSubmit = this.handleSubmit.bind(this);
+    (this: any).handleClear = this.handleClear.bind(this);
   }
 
   handleSubmit(values: DraftTransaction) {
-    const { openModal, isAddress, contentUri } = this.props;
-    const { address, amount } = values;
+    const { draftTransaction, openModal, isAddress, contentUri, setConfirmed } = this.props;
+    const { address } = values;
     const destination = isAddress ? address : contentUri;
+    const amount = draftTransaction.amount;
 
     if (amount && destination) {
-      const modalProps = { destination, amount, isAddress };
+      const modalProps = { destination, amount, isAddress, setConfirmed };
 
       openModal(MODALS.CONFIRM_TRANSACTION, modalProps);
     }
   }
 
+  handleClear() {
+    const { setDraftTransaction, setConfirmed } = this.props;
+    setDraftTransaction({
+      address: '',
+      amount: '',
+    });
+    setConfirmed(false);
+  }
+
   render() {
-    const { balance, isAddress, setIsAddress, contentUri, contentClaim, setEnteredContentUri, contentError } = this.props;
+    const { draftTransaction, setDraftTransaction, balance, isAddress, setIsAddress, contentUri, contentClaim, setEnteredContentUri, contentError, confirmed } = this.props;
+    if (confirmed) this.handleClear();
 
     return (
       <Card
@@ -129,9 +145,9 @@ class WalletSend extends React.PureComponent<Props> {
                         min="0"
                         step="any"
                         placeholder="12.34"
-                        onChange={handleChange}
+                        onChange={(event) => setDraftTransaction({ address: draftTransaction.address, amount: event.target.value })}
                         onBlur={handleBlur}
-                        value={values.amount}
+                        value={draftTransaction.amount}
                       />
                       {isAddress && (
                         <FormField
@@ -156,20 +172,20 @@ class WalletSend extends React.PureComponent<Props> {
                           isAddress
                             ? !values.address ||
                             !!Object.keys(errors).length ||
-                            !(parseFloat(values.amount) > 0.0) ||
-                            parseFloat(values.amount) >= balance
+                            !(parseFloat(draftTransaction.amount) > 0.0) ||
+                            parseFloat(draftTransaction.amount) >= balance
                             : !contentClaim ||
-                            !(parseFloat(values.amount) > 0.0) ||
-                            parseFloat(values.amount) >= balance
+                            !(parseFloat(draftTransaction.amount) > 0.0) ||
+                            parseFloat(draftTransaction.amount) >= balance
                         }
                       />
                       {!!Object.keys(errors).length || (
                         <span className="error__text">
                           {(!!values.address && touched.address && errors.address) ||
-                            (!!values.amount && touched.amount && errors.amount) ||
-                            (parseFloat(values.amount) === balance &&
+                            (!!draftTransaction.amount && touched.amount && errors.amount) ||
+                            (parseFloat(draftTransaction.amount) === balance &&
                               __('Decrease amount to account for transaction fee')) ||
-                            (parseFloat(values.amount) > balance && __('Not enough Credits'))}
+                            (parseFloat(draftTransaction.amount) > balance && __('Not enough Credits'))}
                         </span>
                       )}
                     </div>
