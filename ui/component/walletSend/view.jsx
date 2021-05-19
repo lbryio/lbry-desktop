@@ -4,7 +4,7 @@ import React from 'react';
 import Button from 'component/button';
 import { Form, FormField } from 'component/common/form';
 import { Formik } from 'formik';
-import { validateSendTx } from 'util/form-validation';
+import validateSendTx from 'util/form-validation';
 import Card from 'component/common/card';
 import I18nMessage from 'component/i18nMessage';
 import LbcSymbol from 'component/common/lbc-symbol';
@@ -12,12 +12,6 @@ import WalletSpendableBalanceHelp from 'component/walletSpendableBalanceHelp';
 import classnames from 'classnames';
 import ChannelSelector from 'component/channelSelector';
 import ClaimPreview from 'component/claimPreview';
-
-type DraftTransaction = {
-  address: string,
-  search: string,
-  amount: ?number, // So we can use a placeholder in the input
-};
 
 type Props = {
   openModal: (id: string, { destination: string, amount: string, isAddress: boolean }) => void,
@@ -42,17 +36,14 @@ class WalletSend extends React.PureComponent<Props> {
     (this: any).handleClear = this.handleClear.bind(this);
   }
 
-  handleSubmit(values: DraftTransaction) {
+  handleSubmit() {
     const { draftTransaction, openModal, isAddress, contentUri, setConfirmed } = this.props;
-    const { address } = values;
-    const destination = isAddress ? address : contentUri;
+    const destination = isAddress ? draftTransaction.address : contentUri;
     const amount = draftTransaction.amount;
 
-    if (amount && destination) {
-      const modalProps = { destination, amount, isAddress, setConfirmed };
+    const modalProps = { destination, amount, isAddress, setConfirmed };
 
-      openModal(MODALS.CONFIRM_TRANSACTION, modalProps);
-    }
+    openModal(MODALS.CONFIRM_TRANSACTION, modalProps);
   }
 
   handleClear() {
@@ -83,8 +74,7 @@ class WalletSend extends React.PureComponent<Props> {
               amount: '',
             }}
             onSubmit={this.handleSubmit}
-            validate={isAddress && validateSendTx}
-            render={({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
+            render={({ values, errors, touched, handleBlur, handleSubmit }) => (
               <div>
                 <div className="section">
                   <Button
@@ -157,9 +147,9 @@ class WalletSend extends React.PureComponent<Props> {
                           placeholder={'bbFxRyXXXXXXXXXXXZD8nE7XTLUxYnddTs'}
                           className="form-field--address"
                           label={__('Recipient Address')}
-                          onChange={handleChange}
+                          onChange={(event) => setDraftTransaction({ address: event.target.value, amount: draftTransaction.amount })}
                           onBlur={handleBlur}
-                          value={values.address}
+                          value={draftTransaction.address}
                         />
                       )}
                     </fieldset-group>
@@ -172,12 +162,12 @@ class WalletSend extends React.PureComponent<Props> {
                         disabled={
                           !(parseFloat(draftTransaction.amount) > 0.0) ||
                           parseFloat(draftTransaction.amount) >= balance ||
-                          (isAddress ? !values.address || !!Object.keys(errors).length : !contentClaim)
+                          (isAddress ? !draftTransaction.address || validateSendTx(draftTransaction.address).address !== '' : !contentClaim)
                         }
                       />
                       {!!Object.keys(errors).length || (
                         <span className="error__text">
-                          {(!!values.address && touched.address && errors.address) ||
+                          {(!!draftTransaction.address && touched.address && errors.address) ||
                             (!!draftTransaction.amount && touched.amount && errors.amount) ||
                             (parseFloat(draftTransaction.amount) === balance &&
                               __('Decrease amount to account for transaction fee')) ||
