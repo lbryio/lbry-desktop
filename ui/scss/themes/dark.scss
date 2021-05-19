@@ -1,12 +1,16 @@
 [theme='dark'] {
-  // Color overides
-  --color-secondary: #1d3b63;
+  // Color overrides
+  --color-primary: #2bbb90;
+  --color-primary-alt: #3e675d;
+  --color-primary-alt-2: #065f46;
+  --color-primary-alt-3: #34e5b0;
+  --color-secondary: #204166;
   --color-secondary-alt: #dbeafe;
   --color-secondary-alt-2: #bfdbfe;
-  --color-secondary-alt-3: #172f4f;
+  --color-secondary-alt-3: #2c5c8c;
 
   // Structure
-  --color-background: var(--color-gray-10);
+  --color-background: var(--color-gray-9);
   --color-background-overlay: #11182795;
   --color-border: var(--color-gray-7);
   --color-card-background: var(--color-gray-8);
@@ -19,8 +23,8 @@
   --color-text-help: #bbbbbb;
   --color-text-warning: #212529;
   --color-text-warning--background: var(--lbry-yellow-1);
-  --color-text-error: var(--color-danger);
-  --color-error: var(--color-danger-alt);
+  --color-text-error: #f87171;
+  --color-error: #61373f;
 
   // Header
   --color-header-background: var(--color-gray-8);
@@ -29,14 +33,14 @@
   --color-header-button-active: var(--color-gray-6);
 
   // Button
-  --color-button-primary-bg: var(--color-primary);
+  --color-button-primary-bg: var(--color-primary-alt);
   --color-button-primary-bg-hover: var(--color-primary-alt-2);
-  --color-button-primary-text: var(--color-primary-alt);
+  --color-button-primary-text: var(--color-gray-2);
   --color-button-primary-hover-text: var(--color-primary-alt);
   --color-button-secondary-bg: var(--color-secondary);
   --color-button-secondary-border: var(--color-secondary);
   --color-button-secondary-bg-hover: var(--color-secondary-alt-3);
-  --color-button-secondary-text: var(--color-secondary-alt);
+  --color-button-secondary-text: var(--color-gray-2);
   --color-button-alt-bg: var(--color-gray-7);
   --color-button-alt-bg-hover: var(--color-gray-6);
   --color-button-alt-text: var(--color-gray-1);
@@ -55,7 +59,7 @@
   --color-input-bg-copyable: var(--color-gray-6);
   --color-input-border: var(--color-border);
   --color-input-border-active: var(--color-secondary);
-  --color-input-toggle: var(--color-primary);
+  --color-input-toggle: var(--color-primary-alt-3);
   --color-input-toggle-bg: var(--color-input-bg);
   --color-input-toggle-bg-hover: var(--color-secondary);
   --color-input-bg-selected: var(--color-primary-alt);
@@ -73,9 +77,9 @@
 
   // Tags
   --color-tag: var(--color-primary-alt-3);
-  --color-tag-bg: var(--color-gray-6);
+  --color-tag-bg: var(--color-gray-7);
   --color-tag-hover: var(--color-white);
-  --color-tag-bg-hover: var(--color-primary);
+  --color-tag-bg-hover: var(--color-primary-alt);
 
   // Menu
   --color-menu-background: var(--color-header-background);
@@ -110,7 +114,6 @@
   --color-tab-divider: var(--color-white);
   --color-modal-background: var(--color-card-background);
   --color-notice: #58563b;
-  --color-error: #61373f;
   --color-purchased: #ffd580;
   --color-purchased-alt: var(--color-purchased);
   --color-purchased-text: var(--color-gray-5);
