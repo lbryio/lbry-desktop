@@ -242,7 +242,7 @@ function ClaimTilesDiscover(props: Props) {
   const shouldPerformSearch = !isLoading && uris.length === 0;
 
   const fixUris = [
-    'lbry://@Kona_and_Suba_Guinea_Pig_Adventures#c/chip-and-his-best-friend-dale#4',
+    'lbry://@Destiny#6/youtubers-fight-back-against-apple-louis#e',
   ];
   if (pin && uris && uris.length > 2 && window.location.pathname === '/') {
     fixUris.forEach((fixUri) => {
