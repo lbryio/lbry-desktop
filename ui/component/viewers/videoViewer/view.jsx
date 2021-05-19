@@ -221,6 +221,12 @@ function VideoViewer(props: Props) {
       );
 
       Promise.race([playPromise, timeoutPromise]).catch((error) => {
+        if (typeof error === 'object' && error.name && error.name === 'NotAllowedError') {
+          if (player.autoplay() && !player.muted()) {
+            player.muted(true);
+          }
+        }
+
         if (PLAY_TIMEOUT_ERROR) {
           const retryPlayPromise = player.play();
           Promise.race([retryPlayPromise, timeoutPromise]).catch((error) => {

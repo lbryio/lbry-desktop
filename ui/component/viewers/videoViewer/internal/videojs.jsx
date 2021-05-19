@@ -38,6 +38,7 @@ export type Player = {
   controlBar: {
     addChild: (string, any) => void,
   },
+  autoplay: (any) => boolean,
 };
 
 type Props = {
