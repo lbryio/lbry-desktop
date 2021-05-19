@@ -23,11 +23,11 @@ type Props = {
   openModal: (id: string, { address: string, amount: number, isAddress: boolean }) => void,
   balance: number,
   isAddress: boolean,
-  setIsAddress: (boolean) => boolean,
+  setIsAddress: (boolean) => void,
   contentUri: string,
   contentError: string,
   contentClaim?: StreamClaim,
-  setEnteredContentUri: (string) => string,
+  setEnteredContentUri: (string) => void,
 };
 
 class WalletSend extends React.PureComponent<Props> {
@@ -40,10 +40,10 @@ class WalletSend extends React.PureComponent<Props> {
   handleSubmit(values: DraftTransaction) {
     const { openModal, isAddress, contentUri } = this.props;
     const { address, amount } = values;
+    const destination = isAddress ? address : contentUri;
 
-    if (amount && (address || contentUri)) {
-      const destination = isAddress ? address : contentUri;
-      const modalProps = { address: destination, amount, isAddress };
+    if (amount && destination) {
+      const modalProps = { destination, amount, isAddress };
 
       openModal(MODALS.CONFIRM_TRANSACTION, modalProps);
     }
