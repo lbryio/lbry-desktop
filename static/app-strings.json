@@ -1662,7 +1662,7 @@
   "Unlock all tips": "Unlock all tips",
   "Unlock All": "Unlock All",
   "i got 99 securities but LBC ain't one.": "i got 99 securities but LBC ain't one.",
-  "mayonnaise is still not an instrument": "mayonnaise is still not an instrument",
+  "i'm a peacock, you gotta let me fly": "i'm a peacock, you gotta let me fly",
   "Moon cheese is an acquired taste": "Moon cheese is an acquired taste",
   "Nothing found here. Like big tech ethics.": "Nothing found here. Like big tech ethics.",
   "Level %current_level%": "Level %current_level%",
@@ -1891,5 +1891,9 @@
   "Latest": "Latest",
   "Channel Not Found": "Channel Not Found",
   "Probably because you didn't make it.": "Probably because you didn't make it.",
+  "Set custom release date": "Set custom release date",
+  "Now": "Now",
+  "Set to current date and time": "Set to current date and time",
+  "Remove custom release date": "Remove custom release date",
   "--end--": "--end--"
 }
