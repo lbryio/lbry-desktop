@@ -170,14 +170,9 @@ class WalletSend extends React.PureComponent<Props> {
                         type="submit"
                         label={__('Send')}
                         disabled={
-                          isAddress
-                            ? !values.address ||
-                            !!Object.keys(errors).length ||
-                            !(parseFloat(draftTransaction.amount) > 0.0) ||
-                            parseFloat(draftTransaction.amount) >= balance
-                            : !contentClaim ||
-                            !(parseFloat(draftTransaction.amount) > 0.0) ||
-                            parseFloat(draftTransaction.amount) >= balance
+                          !(parseFloat(draftTransaction.amount) > 0.0) ||
+                          parseFloat(draftTransaction.amount) >= balance ||
+                          (isAddress ? !values.address || !!Object.keys(errors).length : !contentClaim)
                         }
                       />
                       {!!Object.keys(errors).length || (
