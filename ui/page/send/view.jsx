@@ -16,6 +16,7 @@ export default function SendPage(props: Props) {
   const contentFirstRender = React.useRef(true);
   const [contentError, setContentError] = React.useState('');
   const [confirmed, setConfirmed] = React.useState(false);
+  const [sendLabel, setSendLabel] = React.useState('Send');
 
   function getSearchUri(value) {
     const WEB_DEV_PREFIX = `${URL_DEV}/`;
@@ -130,6 +131,8 @@ export default function SendPage(props: Props) {
         setConfirmed={setConfirmed}
         draftTransaction={draftTransaction}
         setDraftTransaction={setDraftTransaction}
+        sendLabel={sendLabel}
+        setSendLabel={setSendLabel}
       />
     </Page>
   );

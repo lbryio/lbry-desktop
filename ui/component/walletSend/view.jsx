@@ -26,6 +26,14 @@ type Props = {
   setEnteredContentUri: (string) => void,
   confirmed: boolean,
   setConfirmed: (boolean) => void,
+  sendLabel: string,
+  setSendLabel: (string) => void,
+  snack: ?{
+    linkTarget: ?string,
+    linkText: ?string,
+    message: string,
+    isError: boolean,
+  },
 };
 
 class WalletSend extends React.PureComponent<Props> {
@@ -37,11 +45,11 @@ class WalletSend extends React.PureComponent<Props> {
   }
 
   handleSubmit() {
-    const { draftTransaction, openModal, isAddress, contentUri, setConfirmed } = this.props;
+    const { draftTransaction, openModal, isAddress, contentUri, setConfirmed, setSendLabel } = this.props;
     const destination = isAddress ? draftTransaction.address : contentUri;
     const amount = draftTransaction.amount;
 
-    const modalProps = { destination, amount, isAddress, setConfirmed };
+    const modalProps = { destination, amount, isAddress, setConfirmed, setSendLabel };
 
     openModal(MODALS.CONFIRM_TRANSACTION, modalProps);
   }
@@ -56,8 +64,23 @@ class WalletSend extends React.PureComponent<Props> {
   }
 
   render() {
-    const { draftTransaction, setDraftTransaction, balance, isAddress, setIsAddress, contentUri, contentClaim, setEnteredContentUri, contentError, confirmed } = this.props;
+    const {
+      draftTransaction,
+      setDraftTransaction,
+      balance,
+      isAddress,
+      setIsAddress,
+      contentUri,
+      contentClaim,
+      setEnteredContentUri,
+      contentError,
+      confirmed,
+      sendLabel,
+      setSendLabel,
+      snack,
+    } = this.props;
     if (confirmed) this.handleClear();
+    if (snack) setSendLabel('Send');
 
     return (
       <Card
@@ -158,10 +181,11 @@ class WalletSend extends React.PureComponent<Props> {
                       <Button
                         button="primary"
                         type="submit"
-                        label={__('Send')}
+                        label={__(sendLabel)}
                         disabled={
                           !(parseFloat(draftTransaction.amount) > 0.0) ||
                           parseFloat(draftTransaction.amount) >= balance ||
+                          sendLabel === 'Sending...' ||
                           (isAddress ? !draftTransaction.address || validateSendTx(draftTransaction.address).address !== '' : !contentClaim)
                         }
                       />
