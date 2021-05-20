@@ -45,11 +45,11 @@ class WalletSend extends React.PureComponent<Props> {
   }
 
   handleSubmit() {
-    const { draftTransaction, openModal, isAddress, contentUri, setConfirmed, setSendLabel } = this.props;
+    const { draftTransaction, openModal, isAddress, contentUri, setConfirmed } = this.props;
     const destination = isAddress ? draftTransaction.address : contentUri;
     const amount = draftTransaction.amount;
 
-    const modalProps = { destination, amount, isAddress, setConfirmed, setSendLabel };
+    const modalProps = { destination, amount, isAddress, setConfirmed };
 
     openModal(MODALS.CONFIRM_TRANSACTION, modalProps);
   }
@@ -79,7 +79,10 @@ class WalletSend extends React.PureComponent<Props> {
       setSendLabel,
       snack,
     } = this.props;
-    if (confirmed) this.handleClear();
+    if (confirmed) {
+      this.handleClear();
+      setSendLabel('Sending...');
+    }
     if (snack) setSendLabel('Send');
 
     return (
