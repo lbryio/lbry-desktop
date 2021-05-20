@@ -128,9 +128,12 @@ dd {
 }
 
 blockquote {
-  padding: 0.8rem;
-  background-color: var(--color-blockquote-bg);
-  border-left: 0.3rem solid var(--color-blockquote);
+  padding: 0 0.8rem;
+  margin-top: var(--spacing-xxs);
+  margin-bottom: var(--spacing-xxs);
+  opacity: 0.9;
+  border-left: 0.2rem solid var(--color-blockquote);
+  color: var(--color-text-subtitle);
 }
 
 code {

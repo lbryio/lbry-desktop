@@ -312,7 +312,7 @@
   }
 
   .CodeMirror-code {
-    @include font-mono;
+    @include font-sans;
     letter-spacing: 0.1rem;
   }
 
