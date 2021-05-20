@@ -1,14 +1,10 @@
 // @flow
 import { regexAddress } from 'lbry-redux';
 
-type DraftTxValues = {
-  address: string,
-  // amount: number
-};
-
-export const validateSendTx = (formValues: DraftTxValues) => {
-  const { address } = formValues;
-  const errors = {};
+export default function validateSendTx(address: string) {
+  const errors = {
+    address: '',
+  };
 
   // All we need to check is if the address is valid
   // If values are missing, users wont' be able to submit the form
