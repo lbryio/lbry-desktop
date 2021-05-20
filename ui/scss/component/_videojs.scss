@@ -13,7 +13,7 @@
       height: 5rem;
       width: 100%;
       background: rgba(20, 20, 20, 0.45);
-      background: linear-gradient(0deg, rgba(0,0,0,.85) 10%, rgba(0,0,0,0) 100%);
+      background: linear-gradient(0deg, rgba(0, 0, 0, 0.85) 10%, rgba(0, 0, 0, 0) 100%);
     }
   }
 
@@ -29,7 +29,7 @@
     // Circle play head
     .vjs-play-progress::before {
       transform: scale(0);
-      transition: transform .3s;
+      transition: transform 0.3s;
     }
 
     &:hover {
@@ -57,7 +57,7 @@
 
   // Primary Color Progress
   .vjs-slider-bar {
-    background-color: var(--color-primary);
+    background-color: var(--color-gray-5);
   }
 
   // Inner Progress Bar
@@ -87,24 +87,23 @@
   // Volume slider
   .vjs-volume-panel {
     &.vjs-control {
-      transition: .2s;
+      transition: 0.2s;
     }
 
     .vjs-volume-control.vjs-volume-horizontal {
-      transition: .2s;
+      transition: 0.2s;
     }
   }
 }
 
-
 // Tooltip
 .vjs-mouse-display .vjs-time-tooltip {
-  color: var(--color-primary);
+  color: white;
 }
 
 // Tooltip
 .video-js {
-  .vjs-progress-control{
+  .vjs-progress-control {
     .vjs-play-progress {
       .vjs-time-tooltip {
         display: none;
@@ -113,28 +112,25 @@
   }
 }
 
-
 // Transitions control bar between active / inactive
 .vjs-has-started {
   .vjs-control-bar {
     opacity: 1;
-    transition: .1s;
+    transition: 0.1s;
   }
 
   &.vjs-user-inactive.vjs-playing {
     .vjs-control-bar {
       opacity: 0;
-      transition: .3s;
+      transition: 0.3s;
     }
   }
 
   &.vjs-user-active.vjs-playing {
     .vjs-control-bar {
-
     }
   }
 }
-
 
 // Button glow
 .video-js {
