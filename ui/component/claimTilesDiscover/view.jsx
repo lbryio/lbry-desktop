@@ -242,7 +242,9 @@ function ClaimTilesDiscover(props: Props) {
   const shouldPerformSearch = !isLoading && uris.length === 0;
 
   const fixUris = [
-    'lbry://@SgtDucky#4/the-ten-bromanments-man-code-rules-that#e',
+    'lbry://@ChrissieMayr#3/the-dramatic-fall-of-former-“king-of#8',
+    'lbry://@hammyandolivia#c/corgi-facetiming-his-hoomans-shorts#f',
+    'lbry://@thebiteshot#4/must-have-gear-for-a-home-studio#c',
   ];
   if (pin && uris && uris.length > 2 && window.location.pathname === '/') {
     fixUris.forEach((fixUri) => {
