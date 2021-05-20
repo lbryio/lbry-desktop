@@ -161,7 +161,7 @@
     display: inline-block;
     border-radius: 0.2rem;
     font-size: var(--font-small);
-    padding: calc(var(--spacing-xxs) - 4px) var(--spacing-xxs) calc(var(--spacing-xxs) - 5px);
+    padding: calc(var(--spacing-xxs) - 4px) calc(var(--spacing-xxs) * 3 / 4) calc(var(--spacing-xxs) - 6px);
   }
 
   a {
