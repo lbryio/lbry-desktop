@@ -17,7 +17,7 @@ type Props = {
   embed?: boolean,
   doCommentSocketConnect: (string, string) => void,
   doCommentSocketDisconnect: (string) => void,
-  doCommentList: (string) => void,
+  doCommentList: (string, number, number) => void,
   comments: Array<Comment>,
   fetchingComments: boolean,
   doSuperChatList: (string) => void,
@@ -66,7 +66,7 @@ export default function LivestreamComments(props: Props) {
 
   React.useEffect(() => {
     if (claimId) {
-      doCommentList(uri);
+      doCommentList(uri, 1, 75);
       doSuperChatList(uri);
       doCommentSocketConnect(uri, claimId);
     }
