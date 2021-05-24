@@ -120,7 +120,9 @@ export default function FileRenderInitiator(props: Props) {
   but for playables, always render so area can be used to fill with floating player
    */
   if (isPlaying && !isPlayable) {
-    return null;
+    if (isFree || claimWasPurchased) {
+      return null;
+    }
   }
 
   const showAppNag = IS_WEB && RENDER_MODES.UNSUPPORTED_IN_THIS_APP.includes(renderMode);
