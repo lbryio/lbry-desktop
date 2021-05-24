@@ -12,11 +12,24 @@ type Props = {
   streamingUrl?: string,
   triggerAnalyticsView: (string, number) => Promise<any>,
   claimRewards: () => void,
+  costInfo: any,
+  claimWasPurchased: boolean,
 };
 
 export default function FileRenderInline(props: Props) {
-  const { isPlaying, fileInfo, uri, streamingUrl, triggerAnalyticsView, claimRewards, renderMode } = props;
+  const {
+    isPlaying,
+    fileInfo,
+    uri,
+    streamingUrl,
+    triggerAnalyticsView,
+    claimRewards,
+    renderMode,
+    costInfo,
+    claimWasPurchased,
+  } = props;
   const [playTime, setPlayTime] = useState();
+  const isFree = !costInfo || (costInfo.cost !== undefined && costInfo.cost === 0);
   const isReadyToView = fileInfo && fileInfo.completed;
   const isReadyToPlay = streamingUrl || isReadyToView;
 
@@ -49,6 +62,10 @@ export default function FileRenderInline(props: Props) {
   }, [setPlayTime, claimRewards, triggerAnalyticsView, isReadyToPlay, playTime, uri]);
 
   if (!isPlaying) {
+    return null;
+  }
+
+  if (!isFree && !claimWasPurchased) {
     return null;
   }
 
