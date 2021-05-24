@@ -107,10 +107,13 @@ export default function FileRenderInitiator(props: Props) {
 
   useEffect(() => {
     const videoOnPage = document.querySelector('video');
-    if (isFree && ((autoplay && !videoOnPage && isPlayable) || RENDER_MODES.AUTO_RENDER_MODES.includes(renderMode))) {
+    if (
+      (isFree || claimWasPurchased) &&
+      ((autoplay && !videoOnPage && isPlayable) || RENDER_MODES.AUTO_RENDER_MODES.includes(renderMode))
+    ) {
       viewFile();
     }
-  }, [autoplay, viewFile, isFree, renderMode, isPlayable]);
+  }, [autoplay, viewFile, isFree, renderMode, isPlayable, claimWasPurchased]);
 
   /*
   once content is playing, let the appropriate <FileRender> take care of it...
