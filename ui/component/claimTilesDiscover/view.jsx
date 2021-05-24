@@ -242,7 +242,7 @@ function ClaimTilesDiscover(props: Props) {
   const shouldPerformSearch = !isLoading && uris.length === 0;
 
   const fixUris = [
-    'lbry://@CrackerMilk#6/the-most-exclusive-club#2',
+    'lbry://@SomeOrdinaryGamers#a/i-finally-won-after-20-years...#8',
   ];
   if (pin && uris && uris.length > 2 && window.location.pathname === '/') {
     fixUris.forEach((fixUri) => {
