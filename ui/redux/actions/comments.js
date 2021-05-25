@@ -751,7 +751,31 @@ export const doFetchCreatorSettings = (channelClaimIds: Array<string> = []) => {
           data: settingsByChannelId,
         });
       })
-      .catch(() => {
+      .catch((err) => {
+        // TODO: Use error codes when available.
+        // TODO: The "validation is disallowed" thing ideally should just be a
+        //       success case that returns a null setting, instead of an error.
+        //       As we are using 'Promise.all', if one channel fails, everyone
+        //       fails. This forces us to remove the batch functionality of this
+        //       function. However, since this "validation is disallowed" thing
+        //       is potentially a temporary one to handle spammers, I retained
+        //       the batch functionality for now.
+        if (err.message === 'validation is disallowed for non controlling channels') {
+          const settingsByChannelId = {};
+          for (let i = 0; i < channelSignatures.length; ++i) {
+            const channelId = channelSignatures[i].claim_id;
+            // 'undefined' means "fetching or have not fetched";
+            // 'null' means "feature not available for this channel";
+            settingsByChannelId[channelId] = null;
+          }
+
+          dispatch({
+            type: ACTIONS.COMMENT_FETCH_SETTINGS_COMPLETED,
+            data: settingsByChannelId,
+          });
+          return;
+        }
+
         dispatch({
           type: ACTIONS.COMMENT_FETCH_SETTINGS_FAILED,
         });

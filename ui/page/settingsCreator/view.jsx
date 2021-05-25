@@ -120,7 +120,10 @@ export default function SettingsCreatorPage(props: Props) {
     }
   }, [lastUpdated, activeChannelClaim, fetchCreatorSettings]);
 
-  const isBusy = !activeChannelClaim || !settingsByChannelId || !settingsByChannelId[activeChannelClaim.claim_id];
+  const isBusy =
+    !activeChannelClaim || !settingsByChannelId || settingsByChannelId[activeChannelClaim.claim_id] === undefined;
+  const isDisabled =
+    activeChannelClaim && settingsByChannelId && settingsByChannelId[activeChannelClaim.claim_id] === null;
 
   return (
     <Page
@@ -138,7 +141,13 @@ export default function SettingsCreatorPage(props: Props) {
           <Spinner />
         </div>
       )}
-      {!isBusy && (
+      {isDisabled && (
+        <Card
+          title={__('Settings unavailable for this channel')}
+          subtitle={__("This channel isn't staking enough LBRY Credits to enable Creator Settings.")}
+        />
+      )}
+      {!isBusy && !isDisabled && (
         <>
           {FEATURE_IS_READY && (
             <Card
