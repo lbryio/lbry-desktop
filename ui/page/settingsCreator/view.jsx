@@ -11,6 +11,8 @@ import I18nMessage from 'component/i18nMessage';
 
 const DEBOUNCE_REFRESH_MS = 1000;
 
+const FEATURE_IS_READY = false;
+
 type Props = {
   activeChannelClaim: ChannelClaim,
   settingsByChannelId: { [string]: PerChannelSettings },
@@ -138,30 +140,32 @@ export default function SettingsCreatorPage(props: Props) {
       )}
       {!isBusy && (
         <>
-          <Card
-            title={__('General')}
-            actions={
-              <>
-                <FormField
-                  type="checkbox"
-                  name="comments_enabled"
-                  label={__('Enable comments for channel.')}
-                  checked={commentsEnabled}
-                  onChange={() => setSettings({ comments_enabled: !commentsEnabled })}
-                />
-                <FormField
-                  name="slow_mode_min_gap"
-                  label={__('Minimum time gap in seconds for Slow Mode in livestream chat.')}
-                  min={0}
-                  step={1}
-                  type="number"
-                  placeholder="1"
-                  value={slowModeMinGap}
-                  onChange={(e) => setSettings({ slow_mode_min_gap: e.target.value })}
-                />
-              </>
-            }
-          />
+          {FEATURE_IS_READY && (
+            <Card
+              title={__('General')}
+              actions={
+                <>
+                  <FormField
+                    type="checkbox"
+                    name="comments_enabled"
+                    label={__('Enable comments for channel.')}
+                    checked={commentsEnabled}
+                    onChange={() => setSettings({ comments_enabled: !commentsEnabled })}
+                  />
+                  <FormField
+                    name="slow_mode_min_gap"
+                    label={__('Minimum time gap in seconds for Slow Mode in livestream chat.')}
+                    min={0}
+                    step={1}
+                    type="number"
+                    placeholder="1"
+                    value={slowModeMinGap}
+                    onChange={(e) => setSettings({ slow_mode_min_gap: e.target.value })}
+                  />
+                </>
+              }
+            />
+          )}
           <Card
             title={__('Filter')}
             actions={
@@ -181,45 +185,47 @@ export default function SettingsCreatorPage(props: Props) {
               </div>
             }
           />
-          <Card
-            title={__('Tip')}
-            actions={
-              <>
-                <FormField
-                  name="min_tip_amount_comment"
-                  label={
-                    <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>Minimum %lbc% tip amount for comments</I18nMessage>
-                  }
-                  helper={__(
-                    'Enabling a minimum amount to comment will force all comments, including livestreams, to have tips associated with them. This can help prevent spam.'
-                  )}
-                  className="form-field--price-amount"
-                  min={0}
-                  step="any"
-                  type="number"
-                  placeholder="1"
-                  value={minTipAmountComment}
-                  onChange={(e) => setSettings({ min_tip_amount_comment: parseFloat(e.target.value) })}
-                />
-                <FormField
-                  name="min_tip_amount_super_chat"
-                  label={
-                    <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>Minimum %lbc% tip amount for hyperchats</I18nMessage>
-                  }
-                  helper={__(
-                    'Enabling a minimum amount to hyperchat will force all TIPPED comments to have this value in order to be shown. This still allows regular comments to be posted.'
-                  )}
-                  className="form-field--price-amount"
-                  min={0}
-                  step="any"
-                  type="number"
-                  placeholder="1"
-                  value={minTipAmountSuperChat}
-                  onChange={(e) => setSettings({ min_tip_amount_super_chat: parseFloat(e.target.value) })}
-                />
-              </>
-            }
-          />
+          {FEATURE_IS_READY && (
+            <Card
+              title={__('Tip')}
+              actions={
+                <>
+                  <FormField
+                    name="min_tip_amount_comment"
+                    label={
+                      <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>Minimum %lbc% tip amount for comments</I18nMessage>
+                    }
+                    helper={__(
+                      'Enabling a minimum amount to comment will force all comments, including livestreams, to have tips associated with them. This can help prevent spam.'
+                    )}
+                    className="form-field--price-amount"
+                    min={0}
+                    step="any"
+                    type="number"
+                    placeholder="1"
+                    value={minTipAmountComment}
+                    onChange={(e) => setSettings({ min_tip_amount_comment: parseFloat(e.target.value) })}
+                  />
+                  <FormField
+                    name="min_tip_amount_super_chat"
+                    label={
+                      <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>Minimum %lbc% tip amount for hyperchats</I18nMessage>
+                    }
+                    helper={__(
+                      'Enabling a minimum amount to hyperchat will force all TIPPED comments to have this value in order to be shown. This still allows regular comments to be posted.'
+                    )}
+                    className="form-field--price-amount"
+                    min={0}
+                    step="any"
+                    type="number"
+                    placeholder="1"
+                    value={minTipAmountSuperChat}
+                    onChange={(e) => setSettings({ min_tip_amount_super_chat: parseFloat(e.target.value) })}
+                  />
+                </>
+              }
+            />
+          )}
         </>
       )}
     </Page>
