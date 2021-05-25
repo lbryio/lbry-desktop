@@ -1873,6 +1873,8 @@
   "Enabling a minimum amount to comment will force all comments, including livestreams, to have tips associated with them. This can help prevent spam.": "Enabling a minimum amount to comment will force all comments, including livestreams, to have tips associated with them. This can help prevent spam.",
   "Minimum %lbc% tip amount for hyperchats": "Minimum %lbc% tip amount for hyperchats",
   "Enabling a minimum amount to hyperchat will force all TIPPED comments to have this value in order to be shown. This still allows regular comments to be posted.": "Enabling a minimum amount to hyperchat will force all TIPPED comments to have this value in order to be shown. This still allows regular comments to be posted.",
+  "Settings unavailable for this channel": "Settings unavailable for this channel",
+  "This channel isn't staking enough LBRY Credits to enable Creator Settings.": "This channel isn't staking enough LBRY Credits to enable Creator Settings.",
   "We apologize for this inconvenience, but have added this additional step to prevent abuse. Users on VPN or shared connections will continue to see this message and are not eligible for Rewards.": "We apologize for this inconvenience, but have added this additional step to prevent abuse. Users on VPN or shared connections will continue to see this message and are not eligible for Rewards.",
   "Help LBRY Save Crypto": "Help LBRY Save Crypto",
   "The US government is attempting to destroy the cryptocurrency industry. Can you help?": "The US government is attempting to destroy the cryptocurrency industry. Can you help?",
