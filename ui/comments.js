@@ -8,6 +8,12 @@ const Comments = {
   moderation_block: (params: ModerationBlockParams) => fetchCommentsApi('moderation.Block', params),
   moderation_unblock: (params: ModerationBlockParams) => fetchCommentsApi('moderation.UnBlock', params),
   moderation_block_list: (params: ModerationBlockParams) => fetchCommentsApi('moderation.BlockedList', params),
+  moderation_add_delegate: (params: ModerationAddDelegateParams) => fetchCommentsApi('moderation.AddDelegate', params),
+  moderation_remove_delegate: (params: ModerationRemoveDelegateParams) =>
+    fetchCommentsApi('moderation.RemoveDelegate', params),
+  moderation_list_delegates: (params: ModerationListDelegatesParams) =>
+    fetchCommentsApi('moderation.ListDelegates', params),
+  moderation_am_i: (params: ModerationAmIParams) => fetchCommentsApi('moderation.AmI', params),
   comment_list: (params: CommentListParams) => fetchCommentsApi('comment.List', params),
   comment_abandon: (params: CommentAbandonParams) => fetchCommentsApi('comment.Abandon', params),
   comment_create: (params: CommentCreateParams) => fetchCommentsApi('comment.Create', params),
