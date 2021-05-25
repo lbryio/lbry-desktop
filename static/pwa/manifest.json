@@ -1,0 +1,14 @@
+{
+  "name": "LBRY",
+  "short_name": "LBRY",
+  "theme_color": "#183793",
+  "background_color": "#FAFAFA",
+  "display": "minimal-ui",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [{
+    "src": "/public/pwa/icon-512.png",
+    "type" : "image/png",
+    "sizes": "512x512"
+  }]
+}

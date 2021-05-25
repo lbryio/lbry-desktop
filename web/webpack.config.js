@@ -20,6 +20,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 const hasSentryToken = process.env.SENTRY_AUTH_TOKEN !== undefined;
 const jsBundleId = getJsBundleId();
 
+// copy static files to dist file
 const copyWebpackCommands = [
   {
     from: `${STATIC_ROOT}/index-web.html`,
@@ -54,6 +55,10 @@ const copyWebpackCommands = [
   {
     from: `${STATIC_ROOT}/font/`,
     to: `${DIST_ROOT}/public/font/`,
+  },
+  {
+    from: `${STATIC_ROOT}/pwa/`,
+    to: `${DIST_ROOT}/public/pwa/`,
   },
 ];
 
@@ -111,6 +116,7 @@ const webConfig = {
   devServer: {
     port: WEBPACK_WEB_PORT,
     contentBase: path.join(__dirname, 'dist'),
+    disableHostCheck: true, // to allow debugging with ngrok
   },
   module: {
     rules: [
