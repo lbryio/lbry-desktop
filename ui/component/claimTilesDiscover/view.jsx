@@ -242,7 +242,7 @@ function ClaimTilesDiscover(props: Props) {
   const shouldPerformSearch = !isLoading && uris.length === 0;
 
   const fixUris = [
-    'lbry://@expandlove#8/morning-routine-in-the-mountains-of#7',
+    'lbry://@drnora#e/why-you-need-a-blood-pressure-machine#d',
   ];
   if (pin && uris && uris.length > 2 && window.location.pathname === '/') {
     fixUris.forEach((fixUri) => {
