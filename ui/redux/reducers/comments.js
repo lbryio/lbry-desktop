@@ -1,6 +1,7 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
 import { handleActions } from 'util/redux-utils';
+import { BLOCK_LEVEL } from 'constants/comment';
 
 const defaultState: CommentsState = {
   commentById: {}, // commentId -> Comment
@@ -21,9 +22,17 @@ const defaultState: CommentsState = {
   myReactsByCommentId: undefined,
   othersReactsByCommentId: undefined,
   moderationBlockList: undefined,
+  adminBlockList: undefined,
+  moderatorBlockList: undefined,
+  moderatorBlockListDelegatorsMap: {},
   fetchingModerationBlockList: false,
+  moderationDelegatesById: {},
+  fetchingModerationDelegates: false,
+  moderationDelegatorsById: {},
+  fetchingModerationDelegators: false,
   blockingByUri: {},
   unBlockingByUri: {},
+  togglingForDelegatorMap: {},
   commentsDisabledChannelIds: [],
   settingsByChannelId: {}, // ChannelId -> PerChannelSettings
   fetchingSettings: false,
@@ -391,11 +400,14 @@ export default handleActions(
       fetchingModerationBlockList: true,
     }),
     [ACTIONS.COMMENT_MODERATION_BLOCK_LIST_COMPLETED]: (state: CommentsState, action: any) => {
-      const { blockList } = action.data;
+      const { personalBlockList, adminBlockList, moderatorBlockList, moderatorBlockListDelegatorsMap } = action.data;
 
       return {
         ...state,
-        moderationBlockList: blockList,
+        moderationBlockList: personalBlockList,
+        adminBlockList: adminBlockList,
+        moderatorBlockList: moderatorBlockList,
+        moderatorBlockListDelegatorsMap: moderatorBlockListDelegatorsMap,
         fetchingModerationBlockList: false,
       };
     },
@@ -404,75 +416,312 @@ export default handleActions(
       fetchingModerationBlockList: false,
     }),
 
-    [ACTIONS.COMMENT_MODERATION_BLOCK_STARTED]: (state: CommentsState, action: any) => ({
-      ...state,
-      blockingByUri: {
-        ...state.blockingByUri,
-        [action.data.uri]: true,
-      },
-    }),
+    [ACTIONS.COMMENT_MODERATION_BLOCK_STARTED]: (state: CommentsState, action: any) => {
+      const { blockedUri, creatorUri, blockLevel } = action.data;
 
-    [ACTIONS.COMMENT_MODERATION_UN_BLOCK_STARTED]: (state: CommentsState, action: any) => ({
-      ...state,
-      unBlockingByUri: {
-        ...state.unBlockingByUri,
-        [action.data.uri]: true,
-      },
-    }),
-    [ACTIONS.COMMENT_MODERATION_BLOCK_FAILED]: (state: CommentsState, action: any) => ({
-      ...state,
-      blockingByUri: {
-        ...state.blockingByUri,
-        [action.data.uri]: false,
-      },
-    }),
+      switch (blockLevel) {
+        default:
+        case BLOCK_LEVEL.SELF:
+        case BLOCK_LEVEL.ADMIN:
+          return {
+            ...state,
+            blockingByUri: {
+              ...state.blockingByUri,
+              [blockedUri]: true,
+            },
+          };
 
-    [ACTIONS.COMMENT_MODERATION_UN_BLOCK_FAILED]: (state: CommentsState, action: any) => ({
-      ...state,
-      unBlockingByUri: {
-        ...state.unBlockingByUri,
-        [action.data.uri]: false,
-      },
-    }),
+        case BLOCK_LEVEL.MODERATOR:
+          const newMap = Object.assign({}, state.togglingForDelegatorMap);
+          const togglingDelegatorsForBlockedUri = newMap[blockedUri];
+          if (togglingDelegatorsForBlockedUri) {
+            if (!togglingDelegatorsForBlockedUri.includes(creatorUri)) {
+              togglingDelegatorsForBlockedUri.push(creatorUri);
+            }
+          } else {
+            newMap[blockedUri] = [creatorUri];
+          }
+
+          return {
+            ...state,
+            togglingForDelegatorMap: newMap,
+          };
+      }
+    },
+
+    [ACTIONS.COMMENT_MODERATION_UN_BLOCK_STARTED]: (state: CommentsState, action: any) => {
+      const { blockedUri, creatorUri, blockLevel } = action.data;
+
+      switch (blockLevel) {
+        default:
+        case BLOCK_LEVEL.SELF:
+        case BLOCK_LEVEL.ADMIN:
+          return {
+            ...state,
+            unBlockingByUri: {
+              ...state.unBlockingByUri,
+              [blockedUri]: true,
+            },
+          };
+
+        case BLOCK_LEVEL.MODERATOR:
+          const newMap = Object.assign({}, state.togglingForDelegatorMap);
+          const togglingDelegatorsForBlockedUri = newMap[blockedUri];
+          if (togglingDelegatorsForBlockedUri) {
+            if (!togglingDelegatorsForBlockedUri.includes(creatorUri)) {
+              togglingDelegatorsForBlockedUri.push(creatorUri);
+            }
+          } else {
+            newMap[blockedUri] = [creatorUri];
+          }
+
+          return {
+            ...state,
+            togglingForDelegatorMap: newMap,
+          };
+      }
+    },
+
+    [ACTIONS.COMMENT_MODERATION_BLOCK_FAILED]: (state: CommentsState, action: any) => {
+      const { blockedUri, creatorUri, blockLevel } = action.data;
+
+      switch (blockLevel) {
+        default:
+        case BLOCK_LEVEL.SELF:
+        case BLOCK_LEVEL.ADMIN:
+          return {
+            ...state,
+            blockingByUri: {
+              ...state.blockingByUri,
+              [blockedUri]: false,
+            },
+          };
+
+        case BLOCK_LEVEL.MODERATOR:
+          const newMap = Object.assign({}, state.togglingForDelegatorMap);
+          const togglingDelegatorsForBlockedUri = newMap[blockedUri];
+          if (togglingDelegatorsForBlockedUri) {
+            newMap[blockedUri] = togglingDelegatorsForBlockedUri.filter((x) => x !== creatorUri);
+          }
+
+          return {
+            ...state,
+            togglingForDelegatorMap: newMap,
+          };
+      }
+    },
+
+    [ACTIONS.COMMENT_MODERATION_UN_BLOCK_FAILED]: (state: CommentsState, action: any) => {
+      const { blockedUri, creatorUri, blockLevel } = action.data;
+
+      switch (blockLevel) {
+        default:
+        case BLOCK_LEVEL.SELF:
+        case BLOCK_LEVEL.ADMIN:
+          return {
+            ...state,
+            unBlockingByUri: {
+              ...state.unBlockingByUri,
+              [blockedUri]: false,
+            },
+          };
+
+        case BLOCK_LEVEL.MODERATOR:
+          const newMap = Object.assign({}, state.togglingForDelegatorMap);
+          const togglingDelegatorsForBlockedUri = newMap[blockedUri];
+          if (togglingDelegatorsForBlockedUri) {
+            newMap[blockedUri] = togglingDelegatorsForBlockedUri.filter((x) => x !== creatorUri);
+          }
+
+          return {
+            ...state,
+            togglingForDelegatorMap: newMap,
+          };
+      }
+    },
 
     [ACTIONS.COMMENT_MODERATION_BLOCK_COMPLETE]: (state: CommentsState, action: any) => {
-      const { channelUri } = action.data;
+      const { blockedUri, creatorUri, blockLevel } = action.data;
       const commentById = Object.assign({}, state.commentById);
       const blockingByUri = Object.assign({}, state.blockingByUri);
-      const moderationBlockList = state.moderationBlockList || [];
-      const newModerationBlockList = moderationBlockList.slice();
 
       for (const commentId in commentById) {
         const comment = commentById[commentId];
 
-        if (channelUri === comment.channel_url) {
+        if (blockedUri === comment.channel_url) {
           delete commentById[comment.comment_id];
         }
       }
 
-      delete blockingByUri[channelUri];
+      switch (blockLevel) {
+        case BLOCK_LEVEL.SELF: {
+          const blockList = state.moderationBlockList || [];
+          const newBlockList = blockList.slice();
+          newBlockList.push(blockedUri);
+          delete blockingByUri[blockedUri];
 
-      newModerationBlockList.push(channelUri);
+          return {
+            ...state,
+            commentById,
+            blockingByUri,
+            moderationBlockList: newBlockList,
+          };
+        }
 
-      return {
-        ...state,
-        commentById,
-        blockingByUri,
-        moderationBlockList: newModerationBlockList,
-      };
+        case BLOCK_LEVEL.MODERATOR: {
+          const blockList = state.moderatorBlockList || [];
+          const newBlockList = blockList.slice();
+
+          // Update main block list
+          if (!newBlockList.includes(blockedUri)) {
+            newBlockList.push(blockedUri);
+          }
+
+          // Update list of delegators
+          const moderatorBlockListDelegatorsMap = Object.assign({}, state.moderatorBlockListDelegatorsMap);
+          const delegatorUrisForBlockedUri = moderatorBlockListDelegatorsMap[blockedUri];
+          if (delegatorUrisForBlockedUri) {
+            if (!delegatorUrisForBlockedUri.includes(creatorUri)) {
+              delegatorUrisForBlockedUri.push(creatorUri);
+            }
+          } else {
+            moderatorBlockListDelegatorsMap[blockedUri] = [creatorUri];
+          }
+
+          // Remove "toggling" flag
+          const togglingMap = Object.assign({}, state.togglingForDelegatorMap);
+          const togglingDelegatorsForBlockedUri = togglingMap[blockedUri];
+          if (togglingDelegatorsForBlockedUri) {
+            togglingMap[blockedUri] = togglingDelegatorsForBlockedUri.filter((x) => x !== creatorUri);
+          }
+
+          return {
+            ...state,
+            commentById,
+            moderatorBlockList: newBlockList,
+            moderatorBlockListDelegatorsMap,
+            togglingForDelegatorMap: togglingMap,
+          };
+        }
+
+        case BLOCK_LEVEL.ADMIN:
+          const blockList = state.adminBlockList || [];
+          const newBlockList = blockList.slice();
+          newBlockList.push(blockedUri);
+          delete blockingByUri[blockedUri];
+
+          return {
+            ...state,
+            commentById,
+            blockingByUri,
+            adminBlockList: newBlockList,
+          };
+      }
     },
     [ACTIONS.COMMENT_MODERATION_UN_BLOCK_COMPLETE]: (state: CommentsState, action: any) => {
-      const { channelUri } = action.data;
+      const { blockedUri, creatorUri, blockLevel } = action.data;
       const unBlockingByUri = Object.assign(state.unBlockingByUri, {});
-      const moderationBlockList = state.moderationBlockList || [];
-      const newModerationBlockList = moderationBlockList.slice().filter((uri) => uri !== channelUri);
 
-      delete unBlockingByUri[channelUri];
+      switch (blockLevel) {
+        case BLOCK_LEVEL.SELF: {
+          const blockList = state.moderationBlockList || [];
+          delete unBlockingByUri[blockedUri];
+          return {
+            ...state,
+            unBlockingByUri,
+            moderationBlockList: blockList.slice().filter((uri) => uri !== blockedUri),
+          };
+        }
+
+        case BLOCK_LEVEL.ADMIN: {
+          const blockList = state.adminBlockList || [];
+          delete unBlockingByUri[blockedUri];
+          return {
+            ...state,
+            unBlockingByUri,
+            adminBlockList: blockList.slice().filter((uri) => uri !== blockedUri),
+          };
+        }
+
+        case BLOCK_LEVEL.MODERATOR: {
+          const blockList = state.moderatorBlockList || [];
+          const newBlockList = blockList.slice();
+          const togglingMap = Object.assign({}, state.togglingForDelegatorMap);
+
+          const moderatorBlockListDelegatorsMap = Object.assign({}, state.moderatorBlockListDelegatorsMap);
+          const delegatorUrisForBlockedUri = moderatorBlockListDelegatorsMap[blockedUri];
+          if (delegatorUrisForBlockedUri) {
+            const index = delegatorUrisForBlockedUri.indexOf(creatorUri);
+            if (index > -1) {
+              // Remove from delegators list
+              delegatorUrisForBlockedUri.splice(index, 1);
+
+              // // Remove blocked entry if it was removed for all delegators
+              // if (delegatorUrisForBlockedUri.length === 0) {
+              //   delete moderatorBlockListDelegatorsMap[blockedUri];
+              //   newBlockList = newBlockList.filter((uri) => uri !== blockedUri);
+              // }
+
+              // Remove from "toggling" flag
+              const togglingDelegatorsForBlockedUri = togglingMap[blockedUri];
+              if (togglingDelegatorsForBlockedUri) {
+                togglingMap[blockedUri] = togglingDelegatorsForBlockedUri.filter((x) => x !== creatorUri);
+              }
+            }
+          }
+
+          return {
+            ...state,
+            moderatorBlockList: newBlockList,
+            togglingForDelegatorMap: togglingMap,
+          };
+        }
+      }
+    },
+
+    [ACTIONS.COMMENT_FETCH_MODERATION_DELEGATES_STARTED]: (state: CommentsState, action: any) => ({
+      ...state,
+      fetchingModerationDelegates: true,
+    }),
+    [ACTIONS.COMMENT_FETCH_MODERATION_DELEGATES_FAILED]: (state: CommentsState, action: any) => ({
+      ...state,
+      fetchingModerationDelegates: false,
+    }),
+    [ACTIONS.COMMENT_FETCH_MODERATION_DELEGATES_COMPLETED]: (state: CommentsState, action: any) => {
+      const moderationDelegatesById = Object.assign({}, state.moderationDelegatesById);
+      if (action.data.delegates) {
+        moderationDelegatesById[action.data.id] = action.data.delegates.map((delegate) => {
+          return {
+            channelId: delegate.channel_id,
+            channelName: delegate.channel_name,
+          };
+        });
+      } else {
+        moderationDelegatesById[action.data.id] = [];
+      }
 
       return {
         ...state,
-        unBlockingByUri,
-        moderationBlockList: newModerationBlockList,
+        fetchingModerationDelegates: false,
+        moderationDelegatesById: moderationDelegatesById,
+      };
+    },
+
+    [ACTIONS.COMMENT_MODERATION_AM_I_LIST_STARTED]: (state: CommentsState, action: any) => ({
+      ...state,
+      fetchingModerationDelegators: true,
+    }),
+
+    [ACTIONS.COMMENT_MODERATION_AM_I_LIST_FAILED]: (state: CommentsState, action: any) => ({
+      ...state,
+      fetchingModerationDelegators: true,
+    }),
+
+    [ACTIONS.COMMENT_MODERATION_AM_I_LIST_COMPLETED]: (state: CommentsState, action: any) => {
+      return {
+        ...state,
+        fetchingModerationDelegators: true,
+        moderationDelegatorsById: action.data,
       };
     },
 
