@@ -28,7 +28,7 @@ module.exports.CATEGORY_METADATA = {
     description: 'Pew pew bzzz gaming on Odysee',
     image: 'https://spee.ch/category-gaming:5.jpg?quality=80&height=1200&width=627',
   },
-  [PAGES.PRIMARY_CHEESE]: {
+  [PAGES.GENERAL]: {
     title: 'Cheese',
     description: 'Cheese is the answer to life, the universe, and everything. We have primo cheese on Odysee',
     image: 'https://spee.ch/category-primary:5.jpg?quality=80&height=1200&width=627',
