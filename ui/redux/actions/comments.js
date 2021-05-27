@@ -536,7 +536,7 @@ export function doCommentModToggleBlock(channelUri: string, unblock: boolean = f
         };
 
     const commentAction = unblock ? Comments.moderation_unblock : Comments.moderation_block;
-
+    // $FlowFixMe
     return Promise.allSettled(
       channelSignatures.map((signatureData) =>
         commentAction({
@@ -600,7 +600,7 @@ export function doFetchModBlockedList() {
         } catch (e) {}
       }
     }
-
+    // $FlowFixMe
     return Promise.allSettled(
       channelSignatures.map((signatureData) =>
         Comments.moderation_block_list({
