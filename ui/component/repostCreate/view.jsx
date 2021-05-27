@@ -20,20 +20,20 @@ import Spinner from 'component/spinner';
 type Props = {
   doToast: ({ message: string }) => void,
   doClearRepostError: () => void,
-  doRepost: StreamRepostOptions => Promise<*>,
+  doRepost: (StreamRepostOptions) => Promise<*>,
   title: string,
   claim?: StreamClaim,
   enteredContentClaim?: StreamClaim,
   balance: number,
   channels: ?Array<ChannelClaim>,
-  doCheckPublishNameAvailability: string => Promise<*>,
+  doCheckPublishNameAvailability: (string) => Promise<*>,
   error: ?string,
   reposting: boolean,
   uri: string,
   name: string,
   contentUri: string,
-  setRepostUri: string => void,
-  setContentUri: string => void,
+  setRepostUri: (string) => void,
+  setContentUri: (string) => void,
   doCheckPendingClaims: () => void,
   redirectUri?: string,
   passedRepostAmount: number,
@@ -88,7 +88,7 @@ function RepostCreate(props: Props) {
   const repostUrlName = `lbry://${incognito || !activeChannelClaim ? '' : `${activeChannelClaim.name}/`}`;
 
   const contentFirstRender = React.useRef(true);
-  const setAutoRepostBid = amount => {
+  const setAutoRepostBid = (amount) => {
     if (balance && balance > 0.02) {
       if (uri) {
         setRepostBid(0.01);
@@ -113,7 +113,7 @@ function RepostCreate(props: Props) {
     const isLbryUrl = value.startsWith('lbry://') && value !== 'lbry://';
     const error = '';
 
-    const addLbryIfNot = term => {
+    const addLbryIfNot = (term) => {
       return term.startsWith('lbry://') ? term : `lbry://${term}`;
     };
     if (wasCopiedFromWeb) {
@@ -178,7 +178,7 @@ function RepostCreate(props: Props) {
 
   React.useEffect(() => {
     if (enteredRepostName && isNameValid(enteredRepostName, false)) {
-      doCheckPublishNameAvailability(enteredRepostName).then(r => setAvailable(r));
+      doCheckPublishNameAvailability(enteredRepostName).then((r) => setAvailable(r));
     }
   }, [enteredRepostName, doCheckPublishNameAvailability]);
 
@@ -316,7 +316,7 @@ function RepostCreate(props: Props) {
           <div>
             {uri && (
               <fieldset-section>
-                <ClaimPreview key={uri} uri={uri} actions={''} type={'inline'} showNullPlaceholder />
+                <ClaimPreview key={uri} uri={uri} actions={''} showNullPlaceholder />
               </fieldset-section>
             )}
             {!uri && name && (
@@ -327,7 +327,7 @@ function RepostCreate(props: Props) {
                   name="content_url"
                   value={enteredContent}
                   error={contentError}
-                  onChange={event => setEnteredContentUri(event.target.value)}
+                  onChange={(event) => setEnteredContentUri(event.target.value)}
                   placeholder={__('Enter a name or %domain% URL', { domain: SITE_URL })}
                 />
               </>
@@ -359,7 +359,7 @@ function RepostCreate(props: Props) {
                     type="text"
                     name="repost_name"
                     value={enteredRepostName}
-                    onChange={event => setEnteredRepostName(event.target.value)}
+                    onChange={(event) => setEnteredRepostName(event.target.value)}
                     placeholder={__('MyFunName')}
                   />
                 </fieldset-group>
@@ -384,8 +384,8 @@ function RepostCreate(props: Props) {
                   </>
                 }
                 disabled={!enteredRepostName || resolvingRepost}
-                onChange={event => setRepostBid(event.target.value)}
-                onWheel={e => e.stopPropagation()}
+                onChange={(event) => setRepostBid(event.target.value)}
+                onWheel={(e) => e.stopPropagation()}
               />
             </React.Fragment>
 
