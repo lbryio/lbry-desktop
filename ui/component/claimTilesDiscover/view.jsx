@@ -156,6 +156,8 @@ function ClaimTilesDiscover(props: Props) {
   const mutedAndBlockedChannelIds = Array.from(new Set(mutedUris.concat(blockedUris).map((uri) => uri.split('#')[1])));
   const liveUris = [];
 
+  const [prevUris, setPrevUris] = React.useState([]);
+
   const options: {
     page_size: number,
     no_totals: boolean,
@@ -229,10 +231,15 @@ function ClaimTilesDiscover(props: Props) {
     options.claim_ids = claimIds;
   }
 
-  const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
-  const uris = (prefixUris || []).concat(claimSearchByQuery[claimSearchCacheQuery] || []);
+  const mainSearchKey = createNormalizedClaimSearchKey(options);
+  const livestreamSearchKey = liveLivestreamsFirst
+    ? createNormalizedClaimSearchKey(getLivestreamOnlyOptions(options))
+    : undefined;
 
-  const isLoading = fetchingClaimSearchByQuery[claimSearchCacheQuery];
+  let uris = (prefixUris || []).concat(claimSearchByQuery[mainSearchKey] || []);
+
+  const isLoading = fetchingClaimSearchByQuery[mainSearchKey];
+
   if (liveLivestreamsFirst && livestreamMap) {
     prioritizeActiveLivestreams(uris, liveUris, livestreamMap, claimsByUri, claimSearchByQuery, options);
   }
@@ -240,6 +247,18 @@ function ClaimTilesDiscover(props: Props) {
   // Don't use the query from createNormalizedClaimSearchKey for the effect since that doesn't include page & release_time
   const optionsStringForEffect = JSON.stringify(options);
   const shouldPerformSearch = !isLoading && uris.length === 0;
+
+  if (
+    prefixUris === undefined &&
+    (claimSearchByQuery[mainSearchKey] === undefined ||
+      (livestreamSearchKey && claimSearchByQuery[livestreamSearchKey] === undefined))
+  ) {
+    // This is a new query and we don't have results yet ...
+    if (prevUris.length !== 0) {
+      // ... but we have previous results. Use it until new results are here.
+      uris = prevUris;
+    }
+  }
 
   React.useEffect(() => {
     if (shouldPerformSearch) {
@@ -251,6 +270,12 @@ function ClaimTilesDiscover(props: Props) {
       }
     }
   }, [doClaimSearch, shouldPerformSearch, optionsStringForEffect, liveLivestreamsFirst]);
+
+  React.useEffect(() => {
+    if (JSON.stringify(prevUris) !== JSON.stringify(uris) && !shouldPerformSearch) {
+      setPrevUris(uris);
+    }
+  }, [shouldPerformSearch, prevUris, uris]);
 
   const resolveLive = (index) => {
     if (liveLivestreamsFirst && livestreamMap && index < liveUris.length) {
