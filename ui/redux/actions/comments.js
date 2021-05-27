@@ -537,7 +537,7 @@ export function doCommentModToggleBlock(channelUri: string, unblock: boolean = f
 
     const commentAction = unblock ? Comments.moderation_unblock : Comments.moderation_block;
 
-    return Promise.all(
+    return Promise.allSettled(
       channelSignatures.map((signatureData) =>
         commentAction({
           mod_channel_id: signatureData.claim_id,
@@ -601,7 +601,7 @@ export function doFetchModBlockedList() {
       }
     }
 
-    return Promise.all(
+    return Promise.allSettled(
       channelSignatures.map((signatureData) =>
         Comments.moderation_block_list({
           mod_channel_id: signatureData.claim_id,
@@ -611,7 +611,8 @@ export function doFetchModBlockedList() {
         })
       )
     )
-      .then((blockLists) => {
+      .then((res) => {
+        const blockLists = res.map((r) => r.value);
         let globalBlockList = [];
         blockLists
           .sort((a, b) => {
