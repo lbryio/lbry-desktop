@@ -4,13 +4,10 @@ import { ACTIONS as LBRY_REDUX_ACTIONS, DEFAULT_KNOWN_TAGS, DEFAULT_FOLLOWED_TAG
 import { handleActions } from 'util/redux-utils';
 
 function getDefaultKnownTags() {
-  return DEFAULT_FOLLOWED_TAGS.concat(DEFAULT_KNOWN_TAGS).reduce(
-    (tagsMap, tag) => ({
-      ...tagsMap,
-      [tag]: { name: tag },
-    }),
-    {}
-  );
+  return DEFAULT_FOLLOWED_TAGS.concat(DEFAULT_KNOWN_TAGS).reduce((tagsMap, tag) => {
+    tagsMap[tag] = { name: tag };
+    return tagsMap;
+  }, {});
 }
 
 const defaultState: TagState = {
@@ -27,7 +24,7 @@ export default handleActions(
       let newFollowedTags = followedTags.slice();
 
       if (newFollowedTags.includes(name)) {
-        newFollowedTags = newFollowedTags.filter(tag => tag !== name);
+        newFollowedTags = newFollowedTags.filter((tag) => tag !== name);
       } else {
         newFollowedTags.push(name);
       }
@@ -57,7 +54,7 @@ export default handleActions(
 
       let newKnownTags = { ...knownTags };
       delete newKnownTags[name];
-      const newFollowedTags = followedTags.filter(tag => tag !== name);
+      const newFollowedTags = followedTags.filter((tag) => tag !== name);
 
       return {
         ...state,
