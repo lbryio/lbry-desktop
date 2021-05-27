@@ -405,7 +405,7 @@ fieldset-group {
 }
 
 .form-field--price-amount {
-  width: 7em;
+  max-width: 6em;
 }
 
 .form-field--price-amount--auto {
@@ -415,6 +415,9 @@ fieldset-group {
 
 .form-field--address {
   min-width: 18em;
+  @media (max-width: $breakpoint-xxsmall) {
+    min-width: 10em;
+  }
 }
 
 .form-field__help {
