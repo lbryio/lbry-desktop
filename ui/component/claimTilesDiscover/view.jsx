@@ -285,7 +285,7 @@ function ClaimTilesDiscover(props: Props) {
   };
 
   const modifiedUris = uris ? uris.slice() : [];
-  const fixUris = ['lbry://@Kona_and_Suba_Guinea_Pig_Adventures#c/tiny-steals-my-computer!-she-plays-games#6'];
+  const fixUris = ['lbry://@Destiny#6/debating-lauren-southern-into-rethinking#c'];
   if (pin && modifiedUris && modifiedUris.length > 2 && window.location.pathname === '/') {
     fixUris.forEach((fixUri) => {
       if (modifiedUris.indexOf(fixUri) !== -1) {
