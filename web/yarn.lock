@@ -3331,17 +3331,17 @@ latest-version@^3.0.0:
   dependencies:
     package-json "^4.0.0"
 
-lbry-redux@lbryio/lbry-redux#c107d9cc4c4b2cc31f182f196ab6a033aefe976e:
+lbry-redux@lbryio/lbry-redux#ecfcc95bebbdbe303b3ea065134457a5e168fb89:
   version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/c107d9cc4c4b2cc31f182f196ab6a033aefe976e"
+  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/ecfcc95bebbdbe303b3ea065134457a5e168fb89"
   dependencies:
     proxy-polyfill "0.1.6"
     reselect "^3.0.0"
-    uuid "^3.3.2"
+    uuid "^8.3.1"
 
-lbryinc@lbryio/lbryinc#6a52f8026cdc7cd56d200fb5c46f852e0139bbeb:
+lbryinc@lbryio/lbryinc#8f9a58bfc8312a65614fd7327661cdcc502c4e59:
   version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbryinc/tar.gz/6a52f8026cdc7cd56d200fb5c46f852e0139bbeb"
+  resolved "https://codeload.github.com/lbryio/lbryinc/tar.gz/8f9a58bfc8312a65614fd7327661cdcc502c4e59"
   dependencies:
     reselect "^3.0.0"
 
@@ -5420,6 +5420,11 @@ uuid@^8.3.0:
   version "8.3.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.0.tgz#ab738085ca22dc9a8c92725e459b1d507df5d6ea"
   integrity sha512-fX6Z5o4m6XsXBdli9g7DtWgAx+osMsRRZFKma1mIUsLCz6vRvv+pz5VNbyu9UEDzpMWulZfvpgb/cmDXVulYFQ==
+
+uuid@^8.3.1:
+  version "8.3.2"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
+  integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
 
 vary@^1.1.2, vary@~1.1.2:
   version "1.1.2"
