@@ -489,6 +489,22 @@ export function doCommentUpdate(comment_id: string, comment: string) {
   }
 }
 
+async function channelSignName(channelClaimId: string, channelName: string) {
+  let signedObject;
+
+  try {
+    signedObject = await Lbry.channel_sign({
+      channel_id: channelClaimId,
+      hexdata: toHex(channelName),
+    });
+
+    signedObject['claim_id'] = channelClaimId;
+    signedObject['name'] = channelName;
+  } catch (e) {}
+
+  return signedObject;
+}
+
 // Hides a users comments from all creator's claims and prevent them from commenting in the future
 export function doCommentModToggleBlock(channelUri: string, unblock: boolean = false) {
   return async (dispatch: Dispatch, getState: GetState) => {
@@ -512,18 +528,6 @@ export function doCommentModToggleBlock(channelUri: string, unblock: boolean = f
     const creatorNameForAction = claim ? claim.name : null;
 
     let channelSignatures = [];
-    if (myChannels) {
-      for (const channelClaim of myChannels) {
-        try {
-          const channelSignature = await Lbry.channel_sign({
-            channel_id: channelClaim.claim_id,
-            hexdata: toHex(channelClaim.name),
-          });
-
-          channelSignatures.push({ ...channelSignature, claim_id: channelClaim.claim_id, name: channelClaim.name });
-        } catch (e) {}
-      }
-    }
 
     const sharedModBlockParams = unblock
       ? {
@@ -536,27 +540,39 @@ export function doCommentModToggleBlock(channelUri: string, unblock: boolean = f
         };
 
     const commentAction = unblock ? Comments.moderation_unblock : Comments.moderation_block;
-    // $FlowFixMe
-    return Promise.allSettled(
-      channelSignatures.map((signatureData) =>
-        commentAction({
-          mod_channel_id: signatureData.claim_id,
-          mod_channel_name: signatureData.name,
-          signature: signatureData.signature,
-          signing_ts: signatureData.signing_ts,
-          ...sharedModBlockParams,
-        })
-      )
-    )
-      .then(() => {
-        dispatch({
-          type: unblock ? ACTIONS.COMMENT_MODERATION_UN_BLOCK_COMPLETE : ACTIONS.COMMENT_MODERATION_BLOCK_COMPLETE,
-          data: { channelUri },
-        });
 
-        if (!unblock) {
-          dispatch(doToast({ message: __('Channel blocked. You will not see them again.') }));
-        }
+    return Promise.all(myChannels.map((channel) => channelSignName(channel.claim_id, channel.name)))
+      .then((response) => {
+        channelSignatures = response;
+        // $FlowFixMe
+        return Promise.allSettled(
+          channelSignatures
+            .filter((x) => x !== undefined && x !== null)
+            .map((signatureData) =>
+              commentAction({
+                mod_channel_id: signatureData.claim_id,
+                mod_channel_name: signatureData.name,
+                signature: signatureData.signature,
+                signing_ts: signatureData.signing_ts,
+                ...sharedModBlockParams,
+              })
+            )
+        )
+          .then(() => {
+            dispatch({
+              type: unblock ? ACTIONS.COMMENT_MODERATION_UN_BLOCK_COMPLETE : ACTIONS.COMMENT_MODERATION_BLOCK_COMPLETE,
+              data: { channelUri },
+            });
+
+            if (!unblock) {
+              dispatch(doToast({ message: __('Channel blocked. You will not see them again.') }));
+            }
+          })
+          .catch(() => {
+            dispatch({
+              type: unblock ? ACTIONS.COMMENT_MODERATION_UN_BLOCK_FAILED : ACTIONS.COMMENT_MODERATION_BLOCK_FAILED,
+            });
+          });
       })
       .catch(() => {
         dispatch({
@@ -588,65 +604,65 @@ export function doFetchModBlockedList() {
     });
 
     let channelSignatures = [];
-    if (myChannels) {
-      for (const channelClaim of myChannels) {
-        try {
-          const channelSignature = await Lbry.channel_sign({
-            channel_id: channelClaim.claim_id,
-            hexdata: toHex(channelClaim.name),
-          });
 
-          channelSignatures.push({ ...channelSignature, claim_id: channelClaim.claim_id, name: channelClaim.name });
-        } catch (e) {}
-      }
-    }
-    // $FlowFixMe
-    return Promise.allSettled(
-      channelSignatures.map((signatureData) =>
-        Comments.moderation_block_list({
-          mod_channel_id: signatureData.claim_id,
-          mod_channel_name: signatureData.name,
-          signature: signatureData.signature,
-          signing_ts: signatureData.signing_ts,
-        })
-      )
-    )
-      .then((res) => {
-        const blockLists = res.map((r) => r.value);
-        let globalBlockList = [];
-        blockLists
-          .sort((a, b) => {
-            return 1;
-          })
-          .forEach((channelBlockListData) => {
-            const blockListForChannel = channelBlockListData && channelBlockListData.blocked_channels;
-            if (blockListForChannel) {
-              blockListForChannel.forEach((blockedChannel) => {
-                if (blockedChannel.blocked_channel_name) {
-                  const channelUri = buildURI({
-                    channelName: blockedChannel.blocked_channel_name,
-                    claimId: blockedChannel.blocked_channel_id,
+    return Promise.all(myChannels.map((channel) => channelSignName(channel.claim_id, channel.name)))
+      .then((response) => {
+        channelSignatures = response;
+        // $FlowFixMe
+        return Promise.allSettled(
+          channelSignatures
+            .filter((x) => x !== undefined && x !== null)
+            .map((signatureData) =>
+              Comments.moderation_block_list({
+                mod_channel_id: signatureData.claim_id,
+                mod_channel_name: signatureData.name,
+                signature: signatureData.signature,
+                signing_ts: signatureData.signing_ts,
+              })
+            )
+        )
+          .then((res) => {
+            const blockLists = res.map((r) => r.value);
+            let globalBlockList = [];
+            blockLists
+              .sort((a, b) => {
+                return 1;
+              })
+              .forEach((channelBlockListData) => {
+                const blockListForChannel = channelBlockListData && channelBlockListData.blocked_channels;
+                if (blockListForChannel) {
+                  blockListForChannel.forEach((blockedChannel) => {
+                    if (blockedChannel.blocked_channel_name) {
+                      const channelUri = buildURI({
+                        channelName: blockedChannel.blocked_channel_name,
+                        claimId: blockedChannel.blocked_channel_id,
+                      });
+
+                      if (!globalBlockList.find((blockedChannel) => blockedChannel.channelUri === channelUri)) {
+                        globalBlockList.push({ channelUri, blockedAt: blockedChannel.blocked_at });
+                      }
+                    }
                   });
-
-                  if (!globalBlockList.find((blockedChannel) => blockedChannel.channelUri === channelUri)) {
-                    globalBlockList.push({ channelUri, blockedAt: blockedChannel.blocked_at });
-                  }
                 }
               });
-            }
-          });
 
-        dispatch({
-          type: ACTIONS.COMMENT_MODERATION_BLOCK_LIST_COMPLETED,
-          data: {
-            blockList:
-              globalBlockList.length > 0
-                ? globalBlockList
-                    .sort((a, b) => new Date(a.blockedAt) - new Date(b.blockedAt))
-                    .map((blockedChannel) => blockedChannel.channelUri)
-                : null,
-          },
-        });
+            dispatch({
+              type: ACTIONS.COMMENT_MODERATION_BLOCK_LIST_COMPLETED,
+              data: {
+                blockList:
+                  globalBlockList.length > 0
+                    ? globalBlockList
+                        .sort((a, b) => new Date(a.blockedAt) - new Date(b.blockedAt))
+                        .map((blockedChannel) => blockedChannel.channelUri)
+                    : null,
+              },
+            });
+          })
+          .catch(() => {
+            dispatch({
+              type: ACTIONS.COMMENT_MODERATION_BLOCK_LIST_FAILED,
+            });
+          });
       })
       .catch(() => {
         dispatch({
