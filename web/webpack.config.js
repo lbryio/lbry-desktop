@@ -20,11 +20,12 @@ const isProduction = process.env.NODE_ENV === 'production';
 const hasSentryToken = process.env.SENTRY_AUTH_TOKEN !== undefined;
 const jsBundleId = getJsBundleId();
 
-// copy static files to dist file
+// copy static files to dist folder
 const copyWebpackCommands = [
   {
     from: `${STATIC_ROOT}/index-web.html`,
     to: `${DIST_ROOT}/index.html`,
+    // add javascript script to index.html, generate/insert metatags
     transform(content, path) {
       return insertToHead(content.toString(), buildBasicOgMetadata());
     },
@@ -79,6 +80,12 @@ if (fs.existsSync(ROBOTS_TXT_PATH)) {
     force: true,
   });
 }
+
+// clear the dist folder of existing js files before compilation
+let regex = /^.*\.(json|js|map)$/;
+fs.readdirSync(`${DIST_ROOT}/public/`)
+  .filter(f => regex.test(f))
+  .map(f => fs.unlinkSync(`${DIST_ROOT}/public/` + f));
 
 let plugins = [
   new WriteFilePlugin(),
