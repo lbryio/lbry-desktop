@@ -336,11 +336,16 @@
   max-width: 47rem;
 
   .card__second-pane {
+    width: 50%;
     border: none;
     display: flex;
     align-items: center;
     justify-content: center;
     background: var(--color-login-graphic-background);
+
+    @media (max-width: $breakpoint-small) {
+      width: 100%;
+    }
 
     .signup-image {
       @media (max-width: $breakpoint-small) {
