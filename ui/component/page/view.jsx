@@ -12,7 +12,6 @@ import usePersistedState from 'effects/use-persisted-state';
 import { useHistory } from 'react-router';
 import { useIsMobile, useIsMediumScreen } from 'effects/use-screensize';
 import { parseURI } from 'lbry-redux';
-import { SIMPLE_SITE } from 'config';
 
 export const MAIN_CLASS = 'main';
 type Props = {
@@ -59,7 +58,7 @@ function Page(props: Props) {
   const {
     location: { pathname },
   } = useHistory();
-  const [sidebarOpen, setSidebarOpen] = usePersistedState('sidebar', !SIMPLE_SITE);
+  const [sidebarOpen, setSidebarOpen] = usePersistedState('sidebar', false);
   const isMediumScreen = useIsMediumScreen();
   const isMobile = useIsMobile();
 
