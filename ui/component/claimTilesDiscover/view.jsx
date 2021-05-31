@@ -285,7 +285,7 @@ function ClaimTilesDiscover(props: Props) {
   };
 
   const modifiedUris = uris ? uris.slice() : [];
-  const fixUris = ['lbry://@CrackerMilk#6/grab-me-a-cold-one#3'];
+  const fixUris = ['lbry://@SomeOrdinaryGamers#a/android-is-for-poor-people...#9'];
   if (pin && modifiedUris && modifiedUris.length > 2 && window.location.pathname === '/') {
     fixUris.forEach((fixUri) => {
       if (modifiedUris.indexOf(fixUri) !== -1) {
