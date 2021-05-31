@@ -1,4 +1,5 @@
 // @flow
+import * as ICONS from 'constants/icons';
 import React from 'react';
 import Page from 'component/page';
 import Card from 'component/common/card';
@@ -14,6 +15,8 @@ import Nag from 'component/common/nag';
 import I18nMessage from 'component/i18nMessage';
 import LbcSymbol from 'component/common/lbc-symbol';
 import { SIMPLE_SITE } from 'config';
+import classnames from 'classnames';
+import WalletSwap from 'component/walletSwap';
 
 const MOONPAY_KEY = process.env.MOONPAY_SECRET_KEY;
 const COUNTRIES = Array.from(
@@ -34,6 +37,11 @@ const COUNTRIES = Array.from(
   )
 );
 
+const TAB = {
+  BUY: 'BUY',
+  SWAP: 'SWAP',
+};
+
 type Props = {
   receiveAddress: ?string,
   gettingNewAddress: boolean,
@@ -46,6 +54,7 @@ type Props = {
 export default function BuyPage(props: Props) {
   const { receiveAddress, gettingNewAddress, doGetNewAddress, email, user, doUserSetCountry } = props;
   const initialCountry = (user && user.country) || '';
+  const [tab, setTab] = React.useState(TAB.BUY);
   const [url, setUrl] = React.useState();
   const [country, setCountry] = React.useState(initialCountry);
   const [showPurchaseScreen, setShowPurchaseScreen] = React.useState(false);
@@ -97,93 +106,125 @@ export default function BuyPage(props: Props) {
   return (
     <Page
       noSideNavigation
-      className="main--buy"
+      className="main--swap"
       backout={{
         backoutLabel: __('Done'),
-        title: (
-          <>
-            <LbcSymbol prefix={__('Buy')} size={28} />
-          </>
-        ),
+        title: <LbcSymbol prefix={__('Buy or Swap')} size={28} />,
       }}
     >
-      {!user && (
-        <div className="main--empty">
-          <Spinner delayed />
-        </div>
-      )}
+      <div className="section">
+        <Button
+          key="tip"
+          icon={ICONS.BUY}
+          label={__('Buy')}
+          button="alt"
+          onClick={() => setTab(TAB.BUY)}
+          className={classnames('button-toggle', { 'button-toggle--active': tab === TAB.BUY })}
+        />
+        <Button
+          key="boost"
+          icon={ICONS.COIN_SWAP}
+          label={__('Swap')}
+          button="alt"
+          onClick={() => setTab(TAB.SWAP)}
+          className={classnames('button-toggle', { 'button-toggle--active': tab === TAB.SWAP })}
+        />
+      </div>
+      <div className="section">
+        {tab === TAB.SWAP && <WalletSwap />}
+        {tab === TAB.BUY && (
+          <>
+            {!user && (
+              <div className="main--empty">
+                <Spinner delayed />
+              </div>
+            )}
 
-      {user && (
-        <>
-          {showPurchaseScreen ? (
-            <Card
-              title={title}
-              subtitle={subtitle}
-              actions={
-                url ? (
-                  <iframe
-                    allow="accelerometer; autoplay; camera; gyroscope; payment"
-                    frameBorder="0"
-                    src={url}
-                    width="100%"
-                  >
-                    <p>{__('Your browser does not support iframes.')}</p>
-                  </iframe>
-                ) : (
-                  <div className="main--empty">
-                    <Spinner delayed />
-                  </div>
-                )
-              }
-            />
-          ) : (
-            <Card
-              title={title}
-              subtitle={subtitle}
-              nag={country && !isValid && <Nag relative type="helpful" message={"This country isn't supported yet."} />}
-              actions={
-                <div>
-                  <div className="section">
-                    <FormField
-                      label={__('Country')}
-                      type="select"
-                      name="country-codes"
-                      helper={__(
-                        'Only some countries are eligible at this time. We are working to make this available to everyone.'
-                      )}
-                      value={country}
-                      onChange={(e) => setCountry(e.target.value)}
-                    >
-                      <option value="" disabled defaultValue>
-                        {__('Select your country')}
-                      </option>
-                      {COUNTRIES.map((country, index) => (
-                        <option key={country} value={country}>
-                          {country}
-                        </option>
-                      ))}
-                    </FormField>
-                  </div>
-                  {country && (
-                    <div className="section">
-                      {isValid ? (
-                        <div className="section__actions">
-                          <Button button="primary" label={__('Continue')} onClick={() => setShowPurchaseScreen(true)} />
-                        </div>
+            {user && (
+              <>
+                {showPurchaseScreen ? (
+                  <Card
+                    title={title}
+                    subtitle={subtitle}
+                    actions={
+                      url ? (
+                        <iframe
+                          allow="accelerometer; autoplay; camera; gyroscope; payment"
+                          frameBorder="0"
+                          src={url}
+                          width="100%"
+                        >
+                          <p>{__('Your browser does not support iframes.')}</p>
+                        </iframe>
                       ) : (
-                        <div className="section__actions">
-                          <Button button="alt" label={__('Go Back')} onClick={() => goBack()} />
-                          <Button button="link" label={__('Try Anyway')} onClick={() => setShowPurchaseScreen(true)} />
+                        <div className="main--empty">
+                          <Spinner delayed />
                         </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              }
-            />
-          )}
-        </>
-      )}
+                      )
+                    }
+                  />
+                ) : (
+                  <Card
+                    title={title}
+                    subtitle={subtitle}
+                    nag={
+                      country &&
+                      !isValid && <Nag relative type="helpful" message={"This country isn't supported yet."} />
+                    }
+                    actions={
+                      <div>
+                        <div className="section">
+                          <FormField
+                            label={__('Country')}
+                            type="select"
+                            name="country-codes"
+                            helper={__(
+                              'Only some countries are eligible at this time. We are working to make this available to everyone.'
+                            )}
+                            value={country}
+                            onChange={(e) => setCountry(e.target.value)}
+                          >
+                            <option value="" disabled defaultValue>
+                              {__('Select your country')}
+                            </option>
+                            {COUNTRIES.map((country, index) => (
+                              <option key={country} value={country}>
+                                {country}
+                              </option>
+                            ))}
+                          </FormField>
+                        </div>
+                        {country && (
+                          <div className="section">
+                            {isValid ? (
+                              <div className="section__actions">
+                                <Button
+                                  button="primary"
+                                  label={__('Continue')}
+                                  onClick={() => setShowPurchaseScreen(true)}
+                                />
+                              </div>
+                            ) : (
+                              <div className="section__actions">
+                                <Button button="alt" label={__('Go Back')} onClick={() => goBack()} />
+                                <Button
+                                  button="link"
+                                  label={__('Try Anyway')}
+                                  onClick={() => setShowPurchaseScreen(true)}
+                                />
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    }
+                  />
+                )}
+              </>
+            )}
+          </>
+        )}
+      </div>
     </Page>
   );
 }
