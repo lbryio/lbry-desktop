@@ -6,6 +6,7 @@ import * as PAGES from 'constants/pages';
 import { LINKED_COMMENT_QUERY_PARAM } from 'constants/comment';
 import { parseURI, isURIValid } from 'lbry-redux';
 import { SITE_TITLE, WELCOME_VERSION, SIMPLE_SITE } from 'config';
+import LoadingBarOneOff from 'component/loadingBarOneOff';
 
 import HomePage from 'page/home';
 
@@ -219,7 +220,7 @@ function AppRouter(props: Props) {
   }
 
   return (
-    <React.Suspense fallback={<div>TODO.....................</div>}>
+    <React.Suspense fallback={<LoadingBarOneOff />}>
       <Switch>
         {/* @if TARGET='app' */}
         {welcomeVersion < WELCOME_VERSION && <Route path="/*" component={Welcome} />}

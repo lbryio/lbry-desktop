@@ -2,6 +2,7 @@
 import React from 'react';
 import { withRouter } from 'react-router';
 import * as MODALS from 'constants/modal_types';
+import LoadingBarOneOff from 'component/loadingBarOneOff';
 
 const ModalAffirmPurchase = React.lazy(() => import('modal/modalAffirmPurchase' /* webpackChunkName: "modalAffirmPurchase" */));
 const ModalAutoGenerateThumbnail = React.lazy(() => import('modal/modalAutoGenerateThumbnail' /* webpackChunkName: "modalAutoGenerateThumbnail" */));
@@ -162,7 +163,7 @@ function ModalRouter(props: Props) {
   }
 
   return (
-    <React.Suspense fallback={null}>
+    <React.Suspense fallback={<LoadingBarOneOff />}>
       <SelectedModal {...modalProps} />
     </React.Suspense>
   );

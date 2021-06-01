@@ -9736,6 +9736,11 @@ react-time-picker@^4.2.0:
     react-fit "^1.0.3"
     update-input-width "^1.1.1"
 
+react-top-loading-bar@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/react-top-loading-bar/-/react-top-loading-bar-2.0.1.tgz#c8805ad9c1068766fdd3cadd414e67cfdf1878e9"
+  integrity sha512-wkRlK9Rte4TU817GDcjlsCoDOxrrnvsNvK609FKyio0EIrmmqjQDz5DB8HbN88CHNZBy5Lh/OBALc03ioWFPuQ==
+
 react@^16.8.2:
   version "16.13.0"
   resolved "https://registry.yarnpkg.com/react/-/react-16.13.0.tgz#d046eabcdf64e457bbeed1e792e235e1b9934cf7"
