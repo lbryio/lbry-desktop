@@ -84,7 +84,7 @@ function HomePage(props: Props) {
 
       <h1 className="home__meme">
         <Button button="link" href="https://odysee.com/@Odysee:8?view=discussion">
-          {__("there's so much room for activities")}
+          {__("Drake, where's the door hole?")}
         </Button>
       </h1>
 
