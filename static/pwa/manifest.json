@@ -1,14 +1,29 @@
 {
-  "name": "LBRY",
-  "short_name": "LBRY",
+  "name": "Odysee",
+  "short_name": "Odysee",
   "theme_color": "#183793",
   "background_color": "#FAFAFA",
   "display": "minimal-ui",
+  "description": "Odysee is a place where you can find great videos, music, ebooks, and more: imagine a vast digital library that is available on all of your devices.",
   "scope": "/",
   "start_url": "/",
-  "icons": [{
-    "src": "/public/pwa/icon-512.png",
-    "type" : "image/png",
-    "sizes": "512x512"
-  }]
+  "icons": [
+    {
+      "src": "/public/pwa/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/public/pwa/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ,
+    {
+      "src": "/public/pwa/icon-180.png",
+      "type": "image/png",
+      "sizes": "180x180"
+    }
+  ],
+  "prefer_related_applications": false
 }
