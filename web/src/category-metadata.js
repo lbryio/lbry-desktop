@@ -21,7 +21,7 @@ module.exports.CATEGORY_METADATA = {
   [PAGES.FINANCE]: {
     title: 'Finance 2.0',
     description: 'Crypto, Money, Economics, Markets on Odysee ',
-    image: '',
+    image: 'https://spee.ch/category-finance:c.jpg?quality=80&height=1200&width=630',
   },
   [PAGES.GAMING]: {
     title: 'Gaming',
