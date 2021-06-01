@@ -162,7 +162,9 @@ class WalletSend extends React.PureComponent<Props> {
                         min="0"
                         step="any"
                         placeholder="12.34"
-                        onChange={(event) => setDraftTransaction({ address: draftTransaction.address, amount: event.target.value })}
+                        onChange={(event) =>
+                          setDraftTransaction({ address: draftTransaction.address, amount: event.target.value })
+                        }
                         onBlur={handleBlur}
                         value={draftTransaction.amount}
                       />
@@ -172,8 +174,10 @@ class WalletSend extends React.PureComponent<Props> {
                           name="address"
                           placeholder={'bbFxRyXXXXXXXXXXXZD8nE7XTLUxYnddTs'}
                           className="form-field--address"
-                          label={__('Recipient Address')}
-                          onChange={(event) => setDraftTransaction({ address: event.target.value, amount: draftTransaction.amount })}
+                          label={__('Recipient address')}
+                          onChange={(event) =>
+                            setDraftTransaction({ address: event.target.value, amount: draftTransaction.amount })
+                          }
                           onBlur={handleBlur}
                           value={draftTransaction.address}
                         />
@@ -189,7 +193,9 @@ class WalletSend extends React.PureComponent<Props> {
                           !(parseFloat(draftTransaction.amount) > 0.0) ||
                           parseFloat(draftTransaction.amount) >= balance ||
                           sendLabel === 'Sending...' ||
-                          (isAddress ? !draftTransaction.address || validateSendTx(draftTransaction.address).address !== '' : !contentClaim)
+                          (isAddress
+                            ? !draftTransaction.address || validateSendTx(draftTransaction.address).address !== ''
+                            : !contentClaim)
                         }
                       />
                       {!!Object.keys(errors).length || (
