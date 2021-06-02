@@ -88,7 +88,7 @@ function conditionallyAddPWA() {
   return head;
 }
 
-function buildBasicOgMetadataAndPWA() {
+function buildHead() {
   const head = '<!-- VARIABLE_HEAD_BEGIN -->' + conditionallyAddPWA() + buildOgMetadata() + '<!-- VARIABLE_HEAD_END -->';
   return head;
 }
@@ -312,8 +312,8 @@ async function getHtml(ctx) {
     }
   }
 
-  const ogMetadata = buildBasicOgMetadata();
+  const ogMetadata = buildHead();
   return insertToHead(html, ogMetadata);
 }
 
-module.exports = { insertToHead, buildBasicOgMetadataAndPWA, getHtml };
+module.exports = { insertToHead, buildHead, getHtml };

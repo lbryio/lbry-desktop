@@ -8,7 +8,7 @@ const WriteFilePlugin = require('write-file-webpack-plugin');
 const { DefinePlugin, ProvidePlugin } = require('webpack');
 const SentryWebpackPlugin = require('@sentry/webpack-plugin');
 const { getJsBundleId } = require('./bundle-id.js');
-const { insertToHead, buildBasicOgMetadataAndPWA } = require('./src/html');
+const { insertToHead, buildHead } = require('./src/html');
 const { insertVariableXml, getOpenSearchXml } = require('./src/xml');
 
 const CUSTOM_ROOT = path.resolve(__dirname, '../custom/');
@@ -27,7 +27,7 @@ const copyWebpackCommands = [
     to: `${DIST_ROOT}/index.html`,
     // add javascript script to index.html, generate/insert metatags
     transform(content, path) {
-      return insertToHead(content.toString(), buildBasicOgMetadataAndPWA());
+      return insertToHead(content.toString(), buildHead());
     },
     force: true,
   },
