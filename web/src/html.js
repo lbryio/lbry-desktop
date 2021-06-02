@@ -78,8 +78,18 @@ function buildOgMetadata(overrideOptions = {}) {
   return head;
 }
 
-function buildBasicOgMetadata() {
-  const head = '<!-- VARIABLE_HEAD_BEGIN -->' + buildOgMetadata() + '<!-- VARIABLE_HEAD_END -->';
+function conditionallyAddPWA() {
+  let head = '';
+  if (SITE_TITLE === 'Odysee') {
+    head +=  '<link rel="manifest" href="./public/pwa/manifest.json"/>'
+    head += '<link rel="apple-touch-icon" sizes="180x180" href="./public/pwa/icon-180.png">'
+    head += '<script src="./serviceWorker.js"></script>'
+  }
+  return head;
+}
+
+function buildBasicOgMetadataAndPWA() {
+  const head = '<!-- VARIABLE_HEAD_BEGIN -->' + conditionallyAddPWA() + buildOgMetadata() + '<!-- VARIABLE_HEAD_END -->';
   return head;
 }
 
@@ -306,4 +316,4 @@ async function getHtml(ctx) {
   return insertToHead(html, ogMetadata);
 }
 
-module.exports = { insertToHead, buildBasicOgMetadata, getHtml };
+module.exports = { insertToHead, buildBasicOgMetadataAndPWA, getHtml };
