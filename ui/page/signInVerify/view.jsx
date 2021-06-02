@@ -92,7 +92,7 @@ function SignInVerifyPage(props: Props) {
     <Page authPage>
       <div className="main__sign-up">
         <Card
-          title={isAuthenticationSuccess ? __('Log in success!') : __('Log in to %SITE_NAME%', { SITE_NAME })}
+          title={isAuthenticationSuccess ? __('Log in success!') : __('Log in')}
           subtitle={
             <React.Fragment>
               <p>
