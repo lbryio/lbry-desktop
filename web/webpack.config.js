@@ -61,6 +61,11 @@ const copyWebpackCommands = [
     from: `${STATIC_ROOT}/pwa/`,
     to: `${DIST_ROOT}/public/pwa/`,
   },
+  // move serviceWorker to directory root
+  {
+    from: `${STATIC_ROOT}/pwa/serviceWorker.js`,
+    to: `${DIST_ROOT}/`,
+  },
 ];
 
 const CUSTOM_OG_PATH = `${CUSTOM_ROOT}/v2-og.png`;
