@@ -75,6 +75,12 @@ if (fs.existsSync(ROBOTS_TXT_PATH)) {
   });
 }
 
+// clear the dist folder of existing js files before compilation
+let regex = /^.*\.(json|js|map)$/;
+fs.readdirSync(`${DIST_ROOT}/public/`)
+  .filter(f => regex.test(f))
+  .map(f => fs.unlinkSync(`${DIST_ROOT}/public/` + f));
+
 let plugins = [
   new WriteFilePlugin(),
   new CopyWebpackPlugin(copyWebpackCommands),
