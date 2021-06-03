@@ -211,13 +211,28 @@
 }
 
 .file-viewer__overlay-logo {
-  color: var(--color-white);
-  font-weight: bold;
+  height: 3.5rem;
+  width: 12rem;
+  display: flex;
+  align-items: center;
 
-  .icon {
-    height: 30px;
-    stroke-width: 5px;
+  &:hover {
+    filter: drop-shadow(1px 2px 10px var(--color-gray-3));
   }
+
+  @media (max-width: $breakpoint-small) {
+    margin-right: var(--spacing-m);
+    width: 2.5rem;
+
+    .button__label {
+      display: none;
+    }
+  }
+}
+
+.file-viewer__overlay-logo--videoend {
+  height: 3.5rem;
+  width: 12rem;
 }
 
 .file-viewer--is-playing:not(:hover) .file-viewer__embedded-header {
@@ -227,11 +242,15 @@
 .file-viewer__embedded-header {
   position: absolute;
   display: flex;
+  align-items: center;
   justify-content: space-between;
   width: 100%;
   top: 0;
   opacity: 1;
   z-index: 2;
+  height: 4rem;
+  padding-left: var(--spacing-m);
+  padding-right: var(--spacing-s);
   font-size: var(--font-large);
   overflow-x: hidden;
   overflow-y: hidden;
@@ -241,7 +260,6 @@
   border-top-right-radius: var(--border-radius);
 
   .button {
-    padding: var(--spacing-s);
     color: var(--color-white);
     z-index: 2;
 

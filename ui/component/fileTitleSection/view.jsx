@@ -10,7 +10,6 @@ import * as ICONS from 'constants/icons';
 import Icon from 'component/common/icon';
 import I18nMessage from 'component/i18nMessage';
 import Button from 'component/button';
-import * as PAGES from 'constants/pages';
 import FileDescription from 'component/fileDescription';
 import usePersistedState from 'effects/use-persisted-state';
 
@@ -65,17 +64,16 @@ function FileTitleSection(props: Props) {
             <div className="main--empty">
               <h2>
                 <Icon className="icon--hidden" icon={ICONS.EYE_OFF} />
-                {__('Mature content blocked.')}
+                {__('Mature content is not supported on Odysee.')}
               </h2>
               <div>
                 <I18nMessage
                   tokens={{
-                    content_settings: (
-                      <Button button="link" label={__('content settings')} navigate={`/$/${PAGES.SETTINGS}`} />
-                    ),
+                    download_url: <Button label={__('lbry.com')} button="link" href="https://lbry.com/get" />,
                   }}
                 >
-                  Change this in your %content_settings%.
+                  You can download the LBRY Desktop or Android app on %download_url% and enable mature content in
+                  Settings.
                 </I18nMessage>
               </div>
             </div>

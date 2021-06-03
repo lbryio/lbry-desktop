@@ -2,6 +2,7 @@
 import * as ACTIONS from 'constants/action_types';
 import * as REACTION_TYPES from 'constants/reactions';
 import { Lbry, parseURI, buildURI, selectClaimsByUri, selectMyChannelClaims } from 'lbry-redux';
+// import { BANNED_LIVESTREAM_WORDS } from 'constants/comment';
 import { doToast, doSeeNotifications } from 'redux/actions/notifications';
 import {
   makeSelectCommentIdsForUri,

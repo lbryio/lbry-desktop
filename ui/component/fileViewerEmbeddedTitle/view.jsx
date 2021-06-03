@@ -5,7 +5,8 @@ import FilePrice from 'component/filePrice';
 import { formatLbryUrlForWeb } from 'util/url';
 import { withRouter } from 'react-router';
 import { URL } from 'config';
-import * as ICONS from 'constants/icons';
+import OdyseeLogo from 'component/header/odysee_logo.png';
+import OdyseeLogoWithText from 'component/header/odysee_white.png';
 
 type Props = {
   uri: string,
@@ -36,7 +37,10 @@ function FileViewerEmbeddedTitle(props: Props) {
         {...contentLinkProps}
       />
       <div className="file-viewer__embedded-info">
-        <Button className="file-viewer__overlay-logo" icon={ICONS.LBRY} aria-label={__('Home')} {...lbryLinkProps} />
+        <Button className="file-viewer__overlay-logo" aria-label={__('Home')} {...lbryLinkProps}>
+          <img src={OdyseeLogo} className=" mobile-only" />
+          <img src={OdyseeLogoWithText} className=" mobile-hidden" />
+        </Button>
         {isInApp && <FilePrice uri={uri} />}
       </div>
     </div>

@@ -37,7 +37,7 @@ export function prioritizeActiveLivestreams(
     //    for that channel actually point to the same source).
     // 2. 'liveChannelIds' needs to be pruned after being accounted for,
     //    otherwise all livestream-claims will be "live" (we'll only take the
-    //    latest one as "live").
+    //    latest one as "live" ).
     return (
       claim &&
       claim.value_type === 'stream' &&
@@ -145,14 +145,14 @@ function ClaimTilesDiscover(props: Props) {
     mutedUris,
     liveLivestreamsFirst,
     livestreamMap,
-    // pin,
+    pin,
     prefixUris,
   } = props;
 
   const { location } = useHistory();
   const urlParams = new URLSearchParams(location.search);
   const feeAmountInUrl = urlParams.get('fee_amount');
-  const feeAmountParam = feeAmountInUrl || feeAmount;
+  const feeAmountParam = feeAmountInUrl || feeAmount || CS.FEE_AMOUNT_ONLY_FREE;
   const mutedAndBlockedChannelIds = Array.from(new Set(mutedUris.concat(blockedUris).map((uri) => uri.split('#')[1])));
   const liveUris = [];
 
@@ -239,8 +239,8 @@ function ClaimTilesDiscover(props: Props) {
   let uris = (prefixUris || []).concat(claimSearchByQuery[mainSearchKey] || []);
 
   const isLoading = fetchingClaimSearchByQuery[mainSearchKey];
-
-  if (liveLivestreamsFirst && livestreamMap) {
+  // && !isLoading isn't on master, doesn't seem to affect the functionality, don't recall why it was added.
+  if (liveLivestreamsFirst && livestreamMap && !isLoading) {
     prioritizeActiveLivestreams(uris, liveUris, livestreamMap, claimsByUri, claimSearchByQuery, options);
   }
 
@@ -284,10 +284,23 @@ function ClaimTilesDiscover(props: Props) {
     return undefined;
   };
 
+  const modifiedUris = uris ? uris.slice() : [];
+  const fixUris = [];
+  if (pin && modifiedUris && modifiedUris.length > 2 && window.location.pathname === '/') {
+    fixUris.forEach((fixUri) => {
+      if (modifiedUris.indexOf(fixUri) !== -1) {
+        modifiedUris.splice(modifiedUris.indexOf(fixUri), 1);
+      } else {
+        modifiedUris.pop();
+      }
+    });
+    modifiedUris.splice(2, 0, ...fixUris);
+  }
+
   return (
     <ul className="claim-grid">
-      {uris && uris.length
-        ? uris.map((uri, index) => (
+      {modifiedUris && modifiedUris.length
+        ? modifiedUris.map((uri, index) => (
             <ClaimPreviewTile key={uri} uri={uri} properties={renderProperties} live={resolveLive(index)} />
           ))
         : new Array(pageSize).fill(1).map((x, i) => <ClaimPreviewTile key={i} placeholder />)}
