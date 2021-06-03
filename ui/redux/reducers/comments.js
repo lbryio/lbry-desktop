@@ -24,6 +24,7 @@ const defaultState: CommentsState = {
   fetchingModerationBlockList: false,
   blockingByUri: {},
   unBlockingByUri: {},
+  commentsDisabledChannelIds: [],
   settingsByChannelId: {}, // ChannelId -> PerChannelSettings
   fetchingSettings: false,
   fetchingBlockedWords: false,
@@ -167,7 +168,25 @@ export default handleActions(
     [ACTIONS.COMMENT_LIST_STARTED]: (state) => ({ ...state, isLoading: true }),
 
     [ACTIONS.COMMENT_LIST_COMPLETED]: (state: CommentsState, action: any) => {
-      const { comments, claimId, uri } = action.data;
+      const { comments, claimId, uri, disabled, authorClaimId } = action.data;
+      const commentsDisabledChannelIds = [...state.commentsDisabledChannelIds];
+
+      if (disabled) {
+        if (!commentsDisabledChannelIds.includes(authorClaimId)) {
+          commentsDisabledChannelIds.push(authorClaimId);
+        }
+
+        return {
+          ...state,
+          commentsDisabledChannelIds,
+          isLoading: false,
+        };
+      } else {
+        const index = commentsDisabledChannelIds.indexOf(authorClaimId);
+        if (index > -1) {
+          commentsDisabledChannelIds.splice(index, 1);
+        }
+      }
 
       const commentById = Object.assign({}, state.commentById);
       const byId = Object.assign({}, state.byId);
@@ -213,6 +232,7 @@ export default handleActions(
         byId,
         commentById,
         commentsByUri,
+        commentsDisabledChannelIds,
         isLoading: false,
       };
     },

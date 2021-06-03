@@ -10,11 +10,13 @@ import { doOpenModal, doSetActiveChannel } from 'redux/actions/app';
 import { doCommentCreate } from 'redux/actions/comments';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
+import { makeSelectCommentsDisabledForUri } from 'redux/selectors/comments';
 import { doToast } from 'redux/actions/notifications';
 import { CommentCreate } from './view';
 
 const select = (state, props) => ({
   commentingEnabled: IS_WEB ? Boolean(selectUserVerifiedEmail(state)) : true,
+  commentsDisabledBySettings: makeSelectCommentsDisabledForUri(props.uri)(state),
   claim: makeSelectClaimForUri(props.uri)(state),
   channels: selectMyChannelClaims(state),
   isFetchingChannels: selectFetchingMyChannels(state),

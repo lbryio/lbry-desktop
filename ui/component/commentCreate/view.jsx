@@ -15,6 +15,7 @@ import WalletTipAmountSelector from 'component/walletTipAmountSelector';
 import CreditAmount from 'component/common/credit-amount';
 import ChannelThumbnail from 'component/channelThumbnail';
 import UriIndicator from 'component/uriIndicator';
+import Empty from 'component/common/empty';
 
 const COMMENT_SLOW_MODE_SECONDS = 5;
 
@@ -22,6 +23,7 @@ type Props = {
   uri: string,
   claim: StreamClaim,
   createComment: (string, string, string, ?string) => Promise<any>,
+  commentsDisabledBySettings: boolean,
   channels: ?Array<ChannelClaim>,
   onDoneReplying?: () => void,
   onCancelReplying?: () => void,
@@ -41,6 +43,7 @@ type Props = {
 export function CommentCreate(props: Props) {
   const {
     createComment,
+    commentsDisabledBySettings,
     claim,
     channels,
     onDoneReplying,
@@ -167,6 +170,10 @@ export function CommentCreate(props: Props) {
 
   function toggleEditorMode() {
     setAdvancedEditor(!advancedEditor);
+  }
+
+  if (commentsDisabledBySettings) {
+    return <Empty padded text={__('This channel has disabled comments on their page.')} />;
   }
 
   if (!hasChannels) {
