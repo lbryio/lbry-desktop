@@ -16,6 +16,7 @@ import Empty from 'component/common/empty';
 
 type Props = {
   comments: Array<Comment>,
+  commentsDisabledBySettings: boolean,
   fetchComments: (string) => void,
   fetchReacts: (string) => Promise<any>,
   uri: string,
@@ -35,6 +36,7 @@ function CommentList(props: Props) {
     fetchReacts,
     uri,
     comments,
+    commentsDisabledBySettings,
     claimIsMine,
     myChannels,
     isFetchingComments,
@@ -147,7 +149,9 @@ function CommentList(props: Props) {
   }
 
   // Default to newest first for apps that don't have comment reactions
-  const sortedComments = reactionsById ? sortComments({ comments, reactionsById, sort, isMyComment, justCommented }) : [];
+  const sortedComments = reactionsById
+    ? sortComments({ comments, reactionsById, sort, isMyComment, justCommented })
+    : [];
   const displayedComments = readyToDisplayComments
     ? prepareComments(sortedComments, linkedComment).slice(start, end)
     : [];
@@ -212,7 +216,7 @@ function CommentList(props: Props) {
         <>
           <CommentCreate uri={uri} justCommented={justCommented} />
 
-          {!isFetchingComments && hasNoComments && (
+          {!commentsDisabledBySettings && !isFetchingComments && hasNoComments && (
             <Empty padded text={__('That was pretty deep. What do you think?')} />
           )}
 

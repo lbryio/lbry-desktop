@@ -34,10 +34,15 @@ export function doCommentList(uri: string, page: number = 1, pageSize: number = 
       type: ACTIONS.COMMENT_LIST_STARTED,
     });
 
+    // Adding 'channel_id' and 'channel_name' enables "CreatorSettings > commentsEnabled".
+    const authorChannelClaim = claim.value_type === 'channel' ? claim : claim.signing_channel;
+
     return Comments.comment_list({
       page,
       claim_id: claimId,
       page_size: pageSize,
+      channel_id: authorChannelClaim ? authorChannelClaim.claim_id : undefined,
+      channel_name: authorChannelClaim ? authorChannelClaim.name : undefined,
     })
       .then((result: CommentListResponse) => {
         const { items: comments } = result;
@@ -46,16 +51,27 @@ export function doCommentList(uri: string, page: number = 1, pageSize: number = 
           data: {
             comments,
             claimId: claimId,
+            authorClaimId: authorChannelClaim ? authorChannelClaim.claim_id : undefined,
             uri: uri,
           },
         });
         return result;
       })
       .catch((error) => {
-        dispatch({
-          type: ACTIONS.COMMENT_LIST_FAILED,
-          data: error,
-        });
+        if (error.message === 'comments are disabled by the creator') {
+          dispatch({
+            type: ACTIONS.COMMENT_LIST_COMPLETED,
+            data: {
+              authorClaimId: authorChannelClaim ? authorChannelClaim.claim_id : undefined,
+              disabled: true,
+            },
+          });
+        } else {
+          dispatch({
+            type: ACTIONS.COMMENT_LIST_FAILED,
+            data: error,
+          });
+        }
       });
   };
 }

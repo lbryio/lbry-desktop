@@ -149,18 +149,18 @@ export default function SettingsCreatorPage(props: Props) {
       )}
       {!isBusy && !isDisabled && (
         <>
-          {FEATURE_IS_READY && (
-            <Card
-              title={__('General')}
-              actions={
-                <>
-                  <FormField
-                    type="checkbox"
-                    name="comments_enabled"
-                    label={__('Enable comments for channel.')}
-                    checked={commentsEnabled}
-                    onChange={() => setSettings({ comments_enabled: !commentsEnabled })}
-                  />
+          <Card
+            title={__('General')}
+            actions={
+              <>
+                <FormField
+                  type="checkbox"
+                  name="comments_enabled"
+                  label={__('Enable comments for channel.')}
+                  checked={commentsEnabled}
+                  onChange={() => setSettings({ comments_enabled: !commentsEnabled })}
+                />
+                {FEATURE_IS_READY && (
                   <FormField
                     name="slow_mode_min_gap"
                     label={__('Minimum time gap in seconds for Slow Mode in livestream chat.')}
@@ -171,10 +171,10 @@ export default function SettingsCreatorPage(props: Props) {
                     value={slowModeMinGap}
                     onChange={(e) => setSettings({ slow_mode_min_gap: e.target.value })}
                   />
-                </>
-              }
-            />
-          )}
+                )}
+              </>
+            }
+          />
           <Card
             title={__('Filter')}
             actions={
