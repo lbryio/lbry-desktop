@@ -29,6 +29,7 @@ type Props = {
   videoTheaterMode: boolean,
   isMarkdown?: boolean,
   livestream?: boolean,
+  chatDisabled: boolean,
   rightSide?: Node,
   backout: {
     backLabel?: string,
@@ -53,6 +54,7 @@ function Page(props: Props) {
     isMarkdown = false,
     livestream,
     rightSide,
+    chatDisabled,
   } = props;
 
   const {
@@ -112,7 +114,7 @@ function Page(props: Props) {
             'main--file-page': filePage,
             'main--markdown': isMarkdown,
             'main--theater-mode': isOnFilePage && videoTheaterMode && !livestream,
-            'main--livestream': livestream,
+            'main--livestream': livestream && !chatDisabled,
           })}
         >
           {children}

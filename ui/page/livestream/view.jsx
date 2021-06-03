@@ -14,10 +14,11 @@ type Props = {
   isAuthenticated: boolean,
   doUserSetReferrer: (string) => void,
   channelClaim: ChannelClaim,
+  chatDisabled: boolean,
 };
 
 export default function LivestreamPage(props: Props) {
-  const { uri, claim, doSetPlayingUri, isAuthenticated, doUserSetReferrer, channelClaim } = props;
+  const { uri, claim, doSetPlayingUri, isAuthenticated, doUserSetReferrer, channelClaim, chatDisabled } = props;
   const [activeViewers, setActiveViewers] = React.useState(0);
   const [isLive, setIsLive] = React.useState(false);
   const livestreamChannelId = channelClaim && channelClaim.signing_channel && channelClaim.signing_channel.claim_id;
@@ -112,7 +113,13 @@ export default function LivestreamPage(props: Props) {
   }, [doSetPlayingUri]);
 
   return (
-    <Page className="file-page" noFooter livestream rightSide={<LivestreamComments uri={uri} />}>
+    <Page
+      className="file-page"
+      noFooter
+      livestream
+      chatDisabled={chatDisabled}
+      rightSide={!chatDisabled && <LivestreamComments uri={uri} />}
+    >
       <LivestreamLayout uri={uri} activeViewers={activeViewers} isLive={isLive} />
     </Page>
   );
