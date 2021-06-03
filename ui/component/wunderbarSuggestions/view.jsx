@@ -18,6 +18,7 @@ import { useHistory } from 'react-router';
 import { formatLbryUrlForWeb } from 'util/url';
 import useThrottle from 'effects/use-throttle';
 import Yrbl from 'component/yrbl';
+import { SEARCH_OPTIONS } from 'constants/search';
 
 const LBRY_PROTOCOL = 'lbry://';
 const WEB_DEV_PREFIX = `${URL_DEV}/`;
@@ -39,10 +40,25 @@ type Props = {
   showMature: boolean,
   isMobile: boolean,
   doCloseMobileSearch: () => void,
+  channelsOnly?: boolean,
+  noTopSuggestion?: boolean,
+  noBottomLinks?: boolean,
+  customSelectAction?: (string) => void,
 };
 
 export default function WunderBarSuggestions(props: Props) {
-  const { navigateToSearchPage, doShowSnackBar, doResolveUris, showMature, isMobile, doCloseMobileSearch } = props;
+  const {
+    navigateToSearchPage,
+    doShowSnackBar,
+    doResolveUris,
+    showMature,
+    isMobile,
+    doCloseMobileSearch,
+    channelsOnly,
+    noTopSuggestion,
+    noBottomLinks,
+    customSelectAction,
+  } = props;
   const inputRef: ElementRef<any> = React.useRef();
   const isFocused = inputRef && inputRef.current && inputRef.current === document.activeElement;
 
@@ -55,7 +71,10 @@ export default function WunderBarSuggestions(props: Props) {
   const [term, setTerm] = React.useState(queryFromUrl);
   const throttledTerm = useThrottle(term, 500) || '';
   const searchSize = isMobile ? 20 : 5;
-  const { results, loading } = useLighthouse(throttledTerm, showMature, searchSize);
+  const additionalOptions = channelsOnly
+    ? { isBackgroundSearch: false, [SEARCH_OPTIONS.CLAIM_TYPE]: SEARCH_OPTIONS.INCLUDE_CHANNELS }
+    : {};
+  const { results, loading } = useLighthouse(throttledTerm, showMature, searchSize, additionalOptions);
   const noResults = throttledTerm && !loading && results && results.length === 0;
   const nameFromQuery = throttledTerm.trim().replace(/\s+/g, '').replace(/:/g, '#');
   const uriFromQuery = `lbry://${nameFromQuery}`;
@@ -89,6 +108,12 @@ export default function WunderBarSuggestions(props: Props) {
 
     if (inputRef.current) {
       inputRef.current.blur();
+    }
+
+    if (customSelectAction) {
+      // Give them full results, as our resolved one might truncate the claimId.
+      customSelectAction(results ? results.find((r) => r.startsWith(value)) : '');
+      return;
     }
 
     if (wasCopiedFromWeb) {
@@ -266,24 +291,26 @@ export default function WunderBarSuggestions(props: Props) {
               className={classnames('wunderbar__suggestions', { 'wunderbar__suggestions--mobile': isMobile })}
             >
               <ComboboxList>
-                {uriFromQueryIsValid ? <WunderbarTopSuggestion query={nameFromQuery} /> : null}
+                {uriFromQueryIsValid && !noTopSuggestion ? <WunderbarTopSuggestion query={nameFromQuery} /> : null}
 
                 <div className="wunderbar__label">{__('Search Results')}</div>
                 {results.slice(0, isMobile ? 20 : 5).map((uri) => (
                   <WunderbarSuggestion key={uri} uri={uri} />
                 ))}
 
-                <div className="wunderbar__bottom-links">
-                  <ComboboxOption value={term} className="wunderbar__more-results">
-                    <Button button="link" label={__('View All Results')} />
-                  </ComboboxOption>
-                  <ComboboxOption value={`${TAG_SEARCH_PREFIX}${term}`} className="wunderbar__more-results">
-                    <Button className="wunderbar__tag-search" button="link">
-                      {__('Explore')}
-                      <div className="tag">{term.split(' ').join('')}</div>
-                    </Button>
-                  </ComboboxOption>
-                </div>
+                {!noBottomLinks && (
+                  <div className="wunderbar__bottom-links">
+                    <ComboboxOption value={term} className="wunderbar__more-results">
+                      <Button button="link" label={__('View All Results')} />
+                    </ComboboxOption>
+                    <ComboboxOption value={`${TAG_SEARCH_PREFIX}${term}`} className="wunderbar__more-results">
+                      <Button className="wunderbar__tag-search" button="link">
+                        {__('Explore')}
+                        <div className="tag">{term.split(' ').join('')}</div>
+                      </Button>
+                    </ComboboxOption>
+                  </div>
+                )}
               </ComboboxList>
             </ComboboxPopover>
           )}
