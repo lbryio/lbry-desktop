@@ -19,6 +19,14 @@
       @media (min-width: $breakpoint-small) {
         margin-top: var(--spacing-xl);
       }
+
+      .button {
+        display: inline;
+
+        .button__content {
+          display: inline;
+        }
+      }
     }
 
     .media__actions {
