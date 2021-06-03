@@ -214,7 +214,7 @@ function SideNavigation(props: Props) {
     });
   }
 
-  const notificationsEnabled = user && user.experimental_ui;
+  const notificationsEnabled = SIMPLE_SITE || (user && user.experimental_ui);
   const isAuthenticated = Boolean(email);
   // SIDE LINKS: FOLLOWING, HOME, [FULL,] [EXTRA]
   let SIDE_LINKS: Array<SideNavLink> = [];
@@ -308,6 +308,11 @@ function SideNavigation(props: Props) {
       <li className="navigation-link">
         <Button label={__('FAQ')} href="https://odysee.com/@OdyseeHelp:b" />
       </li>
+
+      <li className="navigation-link">
+        <Button label={__('Community Guidelines')} href="https://odysee.com/@OdyseeHelp:b/Community-Guidelines:c" />
+      </li>
+
       <li className="navigation-link">
         <Button label={__('Support --[used in footer; general help/support]--')} href="https://lbry.com/support" />
       </li>

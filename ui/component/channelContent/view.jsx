@@ -135,12 +135,14 @@ function ChannelContent(props: Props) {
 
       {claim && claimsInChannel > 0 ? (
         <ClaimListDiscover
+          hideLivestreamClaims
           showHiddenByUser={viewHiddenChannels}
           forceShowReposts
           hideFilters={!showFilters}
           hideAdvancedFilter={!showFilters}
           tileLayout={tileLayout}
           uris={searchResults}
+          streamType={CS.CONTENT_ALL}
           channelIds={[claim.claim_id]}
           claimType={claimType}
           feeAmount={CS.FEE_AMOUNT_ANY}
