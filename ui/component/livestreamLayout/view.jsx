@@ -10,10 +10,11 @@ type Props = {
   claim: ?StreamClaim,
   isLive: boolean,
   activeViewers: number,
+  chatDisabled: boolean,
 };
 
 export default function LivestreamLayout(props: Props) {
-  const { claim, uri, isLive, activeViewers } = props;
+  const { claim, uri, isLive, activeViewers, chatDisabled } = props;
   const isMobile = useIsMobile();
 
   if (!claim || !claim.signing_channel) {
@@ -35,6 +36,14 @@ export default function LivestreamLayout(props: Props) {
             />
           </div>
         </div>
+
+        {Boolean(chatDisabled) && (
+          <div className="help--notice">
+            {__('%channel% has disabled chat for this stream. Enjoy!', {
+              channel: channelName || __('This channel'),
+            })}
+          </div>
+        )}
 
         {!isLive && (
           <div className="help--notice">

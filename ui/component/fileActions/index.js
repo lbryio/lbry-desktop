@@ -6,7 +6,9 @@ import {
   doPrepareEdit,
   selectMyChannelClaims,
   makeSelectClaimIsStreamPlaceholder,
+  makeSelectTagInClaimOrChannelForUri,
 } from 'lbry-redux';
+import { DISABLE_COMMENTS_TAG } from 'constants/tags';
 import { makeSelectCostInfoForUri } from 'lbryinc';
 import { doSetPlayingUri } from 'redux/actions/content';
 import { doToast } from 'redux/actions/notifications';
@@ -23,6 +25,7 @@ const select = (state, props) => ({
   costInfo: makeSelectCostInfoForUri(props.uri)(state),
   myChannels: selectMyChannelClaims(state),
   isLivestreamClaim: makeSelectClaimIsStreamPlaceholder(props.uri)(state),
+  reactionsDisabled: makeSelectTagInClaimOrChannelForUri(props.uri, DISABLE_COMMENTS_TAG)(state),
 });
 
 const perform = (dispatch) => ({
