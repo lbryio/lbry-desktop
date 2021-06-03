@@ -31,5 +31,4 @@ router.get('*', async ctx => {
   ctx.body = html;
 });
 
-
 module.exports = router;
