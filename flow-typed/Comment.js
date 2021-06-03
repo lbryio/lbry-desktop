@@ -41,6 +41,7 @@ declare type CommentsState = {
   fetchingModerationBlockList: boolean,
   blockingByUri: {},
   unBlockingByUri: {},
+  commentsDisabledChannelIds: Array<string>,
   settingsByChannelId: { [string]: PerChannelSettings }, // ChannelID -> settings
   fetchingSettings: boolean,
   fetchingBlockedWords: boolean,
