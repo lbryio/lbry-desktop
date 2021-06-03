@@ -45,6 +45,7 @@ export default function Notification(props: Props) {
       notificationTarget = `/$/${PAGES.CHANNELS_FOLLOWING}`;
       break;
     case NOTIFICATIONS.MISSED_OUT:
+    case NOTIFICATIONS.REWARDS_APPROVAL_PROMPT:
       notificationTarget = `/$/${PAGES.REWARDS_VERIFY}?redirect=/$/${PAGES.REWARDS}`;
       break;
     default:
@@ -87,6 +88,7 @@ export default function Notification(props: Props) {
     case NOTIFICATIONS.DAILY_WATCH_AVAILABLE:
     case NOTIFICATIONS.DAILY_WATCH_REMIND:
     case NOTIFICATIONS.MISSED_OUT:
+    case NOTIFICATIONS.REWARDS_APPROVAL_PROMPT:
       icon = <Icon icon={ICONS.LBC} sectionIcon />;
       break;
     default:
