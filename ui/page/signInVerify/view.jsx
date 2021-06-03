@@ -1,5 +1,4 @@
 // @flow
-import { SITE_NAME } from 'config';
 import * as PAGES from 'constants/pages';
 import React, { useState } from 'react';
 import { withRouter } from 'react-router';

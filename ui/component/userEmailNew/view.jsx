@@ -1,6 +1,6 @@
 // @flow
 import * as PAGES from 'constants/pages';
-import { SITE_NAME, DOMAIN, SIMPLE_SITE } from 'config';
+import { DOMAIN, SIMPLE_SITE } from 'config';
 import React, { useState } from 'react';
 import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
