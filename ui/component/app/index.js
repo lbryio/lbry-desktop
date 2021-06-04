@@ -34,7 +34,7 @@ import {
   doSetActiveChannel,
   doSetIncognito,
 } from 'redux/actions/app';
-import { doFetchModBlockedList } from 'redux/actions/comments';
+import { doFetchModBlockedList, doFetchCommentModAmIList } from 'redux/actions/comments';
 import App from './view';
 
 const select = (state) => ({
@@ -72,6 +72,7 @@ const perform = (dispatch) => ({
   setIncognito: () => dispatch(doSetIncognito()),
   fetchModBlockedList: () => dispatch(doFetchModBlockedList()),
   resolveUris: (uris) => dispatch(doResolveUris(uris)),
+  fetchModAmIList: () => dispatch(doFetchCommentModAmIList()),
 });
 
 export default hot(connect(select, perform)(App));
