@@ -1,5 +1,5 @@
 // @flow
-import { SIMPLE_SITE, SITE_NAME, ENABLE_FILE_REACTIONS } from 'config';
+import { SITE_NAME, ENABLE_FILE_REACTIONS } from 'config';
 import * as PAGES from 'constants/pages';
 import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
@@ -109,7 +109,7 @@ function FileActions(props: Props) {
 
   const rhsSection = (
     <>
-      {!SIMPLE_SITE && <FileDownloadLink uri={uri} />}
+      <FileDownloadLink uri={uri} />
 
       {claimIsMine && (
         <Button
