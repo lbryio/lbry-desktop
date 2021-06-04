@@ -4,7 +4,7 @@
   "theme_color": "#fa6164",
   "background_color": "#FAFAFA",
   "display": "minimal-ui",
-  "description": "Odysee is a place where you can find great videos, music, ebooks, and more: imagine a vast digital library that is available on all of your devices.",
+  "description": "Launch your own channel | Watch and share videos",
   "scope": "/",
   "start_url": "/",
   "icons": [
@@ -17,8 +17,7 @@
       "src": "/public/pwa/icon-512.png",
       "type": "image/png",
       "sizes": "512x512"
-    }
-  ,
+    },
     {
       "src": "/public/pwa/icon-180.png",
       "type": "image/png",
