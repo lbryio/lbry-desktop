@@ -15,6 +15,7 @@ const CUSTOM_ROOT = path.resolve(__dirname, '../custom/');
 const STATIC_ROOT = path.resolve(__dirname, '../static/');
 const UI_ROOT = path.resolve(__dirname, '../ui/');
 const DIST_ROOT = path.resolve(__dirname, 'dist/');
+const WEB_STATIC_ROOT = path.resolve(__dirname, 'static/');
 const WEB_PLATFORM_ROOT = __dirname;
 const isProduction = process.env.NODE_ENV === 'production';
 const hasSentryToken = process.env.SENTRY_AUTH_TOKEN !== undefined;
@@ -58,12 +59,11 @@ const copyWebpackCommands = [
     to: `${DIST_ROOT}/public/font/`,
   },
   {
-    from: `${STATIC_ROOT}/pwa/`,
+    from: `${WEB_STATIC_ROOT}/pwa/`,
     to: `${DIST_ROOT}/public/pwa/`,
   },
-  // move serviceWorker to directory root
   {
-    from: `${STATIC_ROOT}/pwa/serviceWorker.js`,
+    from: `${WEB_STATIC_ROOT}/pwa/serviceWorker.js`,
     to: `${DIST_ROOT}/`,
   },
 ];
