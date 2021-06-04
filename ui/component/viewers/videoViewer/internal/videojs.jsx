@@ -75,7 +75,6 @@ const VIDEO_JS_OPTIONS: VideoJSOptions = {
   responsive: true,
   controls: true,
   html5: {
-    nativeControlsForTouch: IS_IOS,
     hls: {
       overrideNative: !videojs.browser.IS_ANY_SAFARI,
     },
