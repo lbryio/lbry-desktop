@@ -578,6 +578,9 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         type: type,
       });
 
+      // set playsinline for mobile
+      player.children_[0].setAttribute('playsinline', '');
+
       // Add quality selector to player
       player.hlsQualitySelector({
         displayCurrentQuality: true,
