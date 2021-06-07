@@ -47,6 +47,10 @@
 .footer__section {
   margin-left: var(--spacing-xl);
 
+  &:not(:last-child) {
+    padding-right: var(--spacing-xl);
+  }
+
   @media (max-width: $breakpoint-small) {
     margin-left: var(--spacing-l);
   }

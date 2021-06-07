@@ -80,23 +80,22 @@ const sections = [
 export default function Footer() {
   return (
     <footer className="footer">
-      {sections.map(({ name, links }) => {
-        return (
-          <div key={name} className="footer__section">
-            <div className="footer__section-title">{__(name)}</div>
-            <ul className="ul--no-style">
-              {/* $FlowFixMe */}
+      <ul className="navigation__tertiary footer__links bright ul--no-style">
+        {sections.map(({ name, links }) => {
+          return (
+            <li key={name} className="footer__section">
+              <div className="footer__section-title">{__(name)}</div>
               {links.map(({ label, link, navigate }) => {
                 return (
                   <li key={label}>
-                    <Button className="footer__link" href={link} navigate={navigate} label={__(label)} />
+                    <Button className="footer__link" label={__(label)} href={link} navigate={navigate} />
                   </li>
                 );
               })}
-            </ul>
-          </div>
-        );
-      })}
+            </li>
+          );
+        })}
+      </ul>
     </footer>
   );
 }
