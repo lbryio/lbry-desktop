@@ -31,7 +31,7 @@ function LoginGraphic(props: any) {
 
   return (
     <div className="signup-image" ref={containerRef}>
-      <img alt={__('%SITE_NAME% login image', { SITE_NAME })} src={src} onError={() => setError(true)} />
+      <img alt={__('%SITE_NAME% login', { SITE_NAME })} src={src} onError={() => setError(true)} />
     </div>
   );
 }
