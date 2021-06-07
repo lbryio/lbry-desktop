@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { doFetchModBlockedList } from 'redux/actions/comments';
 import { selectMutedChannels } from 'redux/selectors/blocked';
 import { selectModerationBlockList, selectFetchingModerationBlockList } from 'redux/selectors/comments';
 import ListBlocked from './view';
@@ -9,4 +10,8 @@ const select = (state) => ({
   fetchingModerationBlockList: selectFetchingModerationBlockList(state),
 });
 
-export default connect(select)(ListBlocked);
+const perform = (dispatch) => ({
+  fetchModBlockedList: () => dispatch(doFetchModBlockedList()),
+});
+
+export default connect(select, perform)(ListBlocked);

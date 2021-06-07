@@ -15,13 +15,14 @@ type Props = {
   mutedUris: ?Array<string>,
   blockedUris: ?Array<string>,
   fetchingModerationBlockList: boolean,
+  fetchModBlockedList: () => void,
 };
 
 const VIEW_BLOCKED = 'blocked';
 const VIEW_MUTED = 'muted';
 
 function ListBlocked(props: Props) {
-  const { mutedUris, blockedUris, fetchingModerationBlockList } = props;
+  const { mutedUris, blockedUris, fetchingModerationBlockList, fetchModBlockedList } = props;
   const [viewMode, setViewMode] = usePersistedState('blocked-muted:display', VIEW_BLOCKED);
 
   // Keep a local list to allow for undoing actions in this component
@@ -99,6 +100,9 @@ function ListBlocked(props: Props) {
                 })}
                 onClick={() => setViewMode(VIEW_MUTED)}
               />
+            </div>
+            <div className="section__actions--inline">
+              <Button icon={ICONS.REFRESH} button="alt" label={__('Refresh')} onClick={() => fetchModBlockedList()} />
             </div>
           </div>
 
