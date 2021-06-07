@@ -14,7 +14,7 @@
   --color-background-overlay: #21252999;
   --color-border: var(--color-gray-7);
   --color-card-background: var(--color-gray-8);
-  --color-card-background-highlighted: var(--color-gray-9);
+  --color-card-background-highlighted: var(--color-gray-7);
 
   // Text
   --color-text: var(--color-white);
@@ -34,7 +34,7 @@
 
   // Header
   --color-header-background: var(--color-gray-8);
-  --color-header-button: var(--color-gray-7);
+  --color-header-button: var(--color-gray-6);
   --color-header-button-hover: var(--color-gray-6);
   --color-header-button-active: var(--color-gray-6);
 
@@ -60,7 +60,7 @@
   --color-input: var(--color-white);
   --color-input-label: var(--color-gray-3);
   --color-input-placeholder: var(--color-gray-1);
-  --color-input-bg: var(--color-gray-7);
+  --color-input-bg: var(--color-header-button);
   --color-input-bg-copyable: var(--color-gray-6);
   --color-input-border: var(--color-border);
   --color-input-border-active: var(--color-secondary);
@@ -127,7 +127,6 @@
   --color-help-warning-bg: #d97706;
   --color-help-warning-text: white;
   --color-blockquote: var(--color-gray-5);
-  --color-blockquote-bg: var(--color-card-background-highlighted);
   --color-placeholder-background: #4e5862;
   --color-spinner-light: #5a6570;
   --color-spinner-dark: #212529;
