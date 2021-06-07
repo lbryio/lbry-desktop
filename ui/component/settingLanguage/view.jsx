@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { FormField } from 'component/common/form';
 import Spinner from 'component/spinner';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
-import { getDefaultLanguage } from 'util/default-languages';
+import { getDefaultLanguage, sortLanguageMap } from 'util/default-languages';
 
 type Props = {
   language: string,
@@ -15,9 +15,7 @@ type Props = {
 
 function SettingLanguage(props: Props) {
   const { language, setLanguage, searchInLanguage, setSearchInLanguage } = props;
-
   const [previousLanguage, setPreviousLanguage] = useState(null);
-  const languages = SUPPORTED_LANGUAGES;
 
   if (previousLanguage && language !== previousLanguage) {
     setPreviousLanguage(null);
@@ -41,23 +39,11 @@ function SettingLanguage(props: Props) {
           'Multi-language support is brand new and incomplete. Switching your language may have unintended consequences, like glossolalia.'
         )}
       >
-        {Object.entries(languages)
-          .sort((a, b) => {
-            const lhs = String(a[1]);
-            const rhs = String(b[1]);
-            if (lhs < rhs) return -1;
-            if (lhs > rhs) return 1;
-            return 0;
-          })
-          .map((language) => {
-            const langKey = language[0];
-            const langName = String(language[1]);
-            return (
-              <option key={langKey} value={langKey}>
-                {langName}
-              </option>
-            );
-          })}
+        {sortLanguageMap(SUPPORTED_LANGUAGES).map(([langKey, langName]) => (
+          <option key={langKey} value={langKey}>
+            {langName}
+          </option>
+        ))}
       </FormField>
       {previousLanguage && <Spinner type="small" />}
       <FormField

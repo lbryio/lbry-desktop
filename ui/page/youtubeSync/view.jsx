@@ -14,7 +14,7 @@ import { Lbryio } from 'lbryinc';
 import { useHistory } from 'react-router';
 import YoutubeTransferStatus from 'component/youtubeTransferStatus';
 import Nag from 'component/common/nag';
-import { getDefaultLanguage } from 'util/default-languages';
+import { getDefaultLanguage, sortLanguageMap } from 'util/default-languages';
 
 const STATUS_TOKEN_PARAM = 'status_token';
 const ERROR_MESSAGE_PARAM = 'error_message';
@@ -147,9 +147,9 @@ export default function YoutubeSync(props: Props) {
                   onChange={(event) => setLanguage(event.target.value)}
                   value={language}
                 >
-                  {Object.keys(SUPPORTED_LANGUAGES).map((language) => (
-                    <option key={language} value={language}>
-                      {SUPPORTED_LANGUAGES[language]}
+                  {sortLanguageMap(SUPPORTED_LANGUAGES).map(([langKey, langName]) => (
+                    <option key={langKey} value={langKey}>
+                      {langName}
                     </option>
                   ))}
                 </FormField>

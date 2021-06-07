@@ -21,6 +21,7 @@ import LbcSymbol from 'component/common/lbc-symbol';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 import WalletSpendableBalanceHelp from 'component/walletSpendableBalanceHelp';
 import { SIMPLE_SITE } from 'config';
+import { sortLanguageMap } from 'util/default-languages';
 
 const LANG_NONE = 'none';
 
@@ -416,9 +417,9 @@ function ChannelForm(props: Props) {
                       <option key={'pri-langNone'} value={LANG_NONE}>
                         {__('None selected')}
                       </option>
-                      {Object.keys(SUPPORTED_LANGUAGES).map((language) => (
-                        <option key={language} value={language}>
-                          {SUPPORTED_LANGUAGES[language]}
+                      {sortLanguageMap(SUPPORTED_LANGUAGES).map(([langKey, langName]) => (
+                        <option key={langKey} value={langKey}>
+                          {langName}
                         </option>
                       ))}
                     </FormField>
@@ -434,13 +435,11 @@ function ChannelForm(props: Props) {
                       <option key={'sec-langNone'} value={LANG_NONE}>
                         {__('None selected')}
                       </option>
-                      {Object.keys(SUPPORTED_LANGUAGES)
-                        .filter((lang) => lang !== languageParam[0])
-                        .map((language) => (
-                          <option key={language} value={language}>
-                            {SUPPORTED_LANGUAGES[language]}
-                          </option>
-                        ))}
+                      {sortLanguageMap(SUPPORTED_LANGUAGES).map(([langKey, langName]) => (
+                        <option key={langKey} value={langKey} disabled={langKey === languageParam[0]}>
+                          {langName}
+                        </option>
+                      ))}
                     </FormField>
                   </>
                 }

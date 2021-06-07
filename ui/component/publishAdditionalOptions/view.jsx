@@ -8,6 +8,7 @@ import PublishReleaseDate from 'component/publishReleaseDate';
 import LicenseType from './license-type';
 import Card from 'component/common/card';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
+import { sortLanguageMap } from 'util/default-languages';
 
 // @if TARGET='app'
 // import ErrorText from 'component/common/error-text';
@@ -162,9 +163,8 @@ function PublishAdditionalOptions(props: Props) {
                   value={language}
                   onChange={(event) => updatePublishForm({ language: event.target.value })}
                 >
-                  {Object.entries(SUPPORTED_LANGUAGES).map(([langkey, langName]) => (
-                    // $FlowFixMe
-                    <option key={langkey} value={langkey}>
+                  {sortLanguageMap(SUPPORTED_LANGUAGES).map(([langKey, langName]) => (
+                    <option key={langKey} value={langKey}>
                       {langName}
                     </option>
                   ))}
