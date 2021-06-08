@@ -1,4 +1,3 @@
-// @flow
 import * as PAGES from 'constants/pages';
 import React from 'react';
 import Button from 'component/button';
