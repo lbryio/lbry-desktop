@@ -152,15 +152,15 @@ function VideoViewer(props: Props) {
   }
 
   function doTrackingFirstPlay(e: Event, data: any) {
-    let timeToStartInMs = data.secondsToLoad * 1000;
+    let timeToStart = data.secondsToLoad;
 
     if (desktopPlayStartTime !== undefined) {
       const differenceToAdd = Date.now() - desktopPlayStartTime;
-      timeToStartInMs += differenceToAdd;
+      timeToStart += differenceToAdd;
     }
     analytics.playerStartedEvent(embedded);
-    analytics.videoStartEvent(claimId, timeToStartInMs);
-    doAnalyticsView(uri, timeToStartInMs).then(() => {
+    analytics.videoStartEvent(claimId, timeToStart);
+    doAnalyticsView(uri, timeToStart).then(() => {
       claimRewards();
     });
   }
