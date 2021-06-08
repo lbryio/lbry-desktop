@@ -285,7 +285,12 @@ function ClaimTilesDiscover(props: Props) {
   };
 
   const modifiedUris = uris ? uris.slice() : [];
-  const fixUris = [];
+  const fixUris = [
+    'lbry://@bcpov#d2/i-built-a-step-up-jump!#c',
+    'lbry://@KrishMohanHaha#6/Why-Religion-Is-Used-For-Violence--Road-Reflections-#d',
+    'lbry://@CigarVixen#7/weekly-top-5-cigars-50#8',
+                  ];
+                   
   if (pin && modifiedUris && modifiedUris.length > 2 && window.location.pathname === '/') {
     fixUris.forEach((fixUri) => {
       if (modifiedUris.indexOf(fixUri) !== -1) {
