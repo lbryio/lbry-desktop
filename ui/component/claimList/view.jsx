@@ -44,7 +44,6 @@ type Props = {
   liveLivestreamsFirst?: boolean,
   livestreamMap?: { [string]: any },
   searchOptions?: any,
-  channelIsMine: boolean,
   collectionId?: string,
 };
 
@@ -76,7 +75,6 @@ export default function ClaimList(props: Props) {
     liveLivestreamsFirst,
     livestreamMap,
     searchOptions,
-    channelIsMine,
     collectionId,
   } = props;
 
@@ -136,7 +134,6 @@ export default function ClaimList(props: Props) {
             showHiddenByUser={showHiddenByUser}
             properties={renderProperties}
             live={resolveLive(index)}
-            channelIsMine={channelIsMine}
             collectionId={collectionId}
           />
         ))}

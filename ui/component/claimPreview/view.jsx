@@ -30,7 +30,7 @@ import * as ICONS from 'constants/icons';
 
 type Props = {
   uri: string,
-  claim: ?Claim, // maybe?
+  claim: ?Claim,
   obscureNsfw: boolean,
   showUserBlocked: boolean,
   claimIsMine: boolean,
@@ -155,6 +155,8 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   const isCollection = claim && claim.value_type === 'collection';
   const isChannelUri = isValid ? parseURI(uri).isChannel : false;
   const signingChannel = claim && claim.signing_channel;
+  const channelUri = claim && (signingChannel ? signingChannel.permanent_url : claim.permanent_url);
+
   let navigateUrl = formatLbryUrlForWeb((claim && claim.canonical_url) || uri || '/');
   if (collectionId) {
     const collectionParams = new URLSearchParams();
@@ -421,7 +423,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
             )}
           </div>
         </div>
-        {!hideMenu && <ClaimMenuList uri={uri} collectionId={collectionId} />}
+        {!hideMenu && <ClaimMenuList uri={uri} collectionId={collectionId} channelUri={channelUri} />}
       </>
     </WrapperElement>
   );
