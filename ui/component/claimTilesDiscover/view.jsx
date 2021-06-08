@@ -287,7 +287,7 @@ function ClaimTilesDiscover(props: Props) {
   const modifiedUris = uris ? uris.slice() : [];
   const fixUris = [
     'lbry://@bcpov#d2/i-built-a-step-up-jump!#c',
-    'lbry://@KrishMohanHaha#6/Why-Religion-Is-Used-For-Violence--Road-Reflections-#d',
+    'lbry://@AdrianLogan#5/how-to-form-deeper-connections-with#9',
     'lbry://@CigarVixen#7/weekly-top-5-cigars-50#8',
                   ];
                    
