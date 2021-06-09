@@ -5,7 +5,14 @@ import { selectGetSyncErrorMessage, selectSyncFatalError } from 'redux/selectors
 import { doFetchAccessToken, doUserSetReferrer } from 'redux/actions/user';
 import { selectUser, selectAccessToken, selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectUnclaimedRewards } from 'redux/selectors/rewards';
-import { doFetchChannelListMine, doFetchCollectionListMine, SETTINGS, selectMyChannelUrls } from 'lbry-redux';
+import {
+  doFetchChannelListMine,
+  doFetchCollectionListMine,
+  SETTINGS,
+  selectMyChannelUrls,
+  doResolveUris,
+} from 'lbry-redux';
+import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import {
   makeSelectClientSetting,
   selectLanguage,
@@ -47,6 +54,7 @@ const select = (state) => ({
   syncFatalError: selectSyncFatalError(state),
   activeChannelClaim: selectActiveChannelClaim(state),
   myChannelUrls: selectMyChannelUrls(state),
+  subscriptions: selectSubscriptions(state),
 });
 
 const perform = (dispatch) => ({
@@ -63,6 +71,7 @@ const perform = (dispatch) => ({
   setActiveChannelIfNotSet: () => dispatch(doSetActiveChannel()),
   setIncognito: () => dispatch(doSetIncognito()),
   fetchModBlockedList: () => dispatch(doFetchModBlockedList()),
+  resolveUris: (uris) => dispatch(doResolveUris(uris)),
 });
 
 export default hot(connect(select, perform)(App));
