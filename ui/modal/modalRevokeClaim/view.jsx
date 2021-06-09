@@ -15,15 +15,17 @@ type Props = {
   tx: Txo,
   claim: GenericClaim,
   cb: () => void,
+  isRepost: boolean,
 };
 
 export default function ModalRevokeClaim(props: Props) {
-  const { tx, claim, closeModal, abandonTxo, abandonClaim, cb } = props;
+  const { tx, claim, closeModal, abandonTxo, abandonClaim, cb, isRepost } = props;
   const { value_type: valueType, type, normalized_name: name, is_my_input: isSupport } = tx || claim;
   const [channelName, setChannelName] = useState('');
 
-  const shouldConfirmChannel =
-    valueType === txnTypes.CHANNEL || type === txnTypes.CHANNEL || (type === txnTypes.UPDATE && name.startsWith('@'));
+  const shouldConfirmChannel = !isRepost && (
+    valueType === txnTypes.CHANNEL || type === txnTypes.CHANNEL || (type === txnTypes.UPDATE && name.startsWith('@'))
+  );
 
   function getButtonLabel(type: string, isSupport: boolean) {
     if (isSupport && type === txnTypes.SUPPORT) {

@@ -258,8 +258,7 @@ export const makeSelectSigningIsMine = (rawUri: string) => {
       } catch (e) {
         return false;
       }
-      const repostedChannel = claims && claims[uri] && claims[uri].reposted_claim && (claims[uri].reposted_claim.signing_channel || claims[uri].reposted_claim);
-      const signingChannel = claims && claims[uri] && (repostedChannel || claims[uri].signing_channel || claims[uri]);
+      const signingChannel = claims && claims[uri] && (claims[uri].signing_channel || claims[uri]);
 
       return signingChannel && myClaims.has(signingChannel.claim_id);
     });

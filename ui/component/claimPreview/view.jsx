@@ -135,6 +135,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     isCollectionMine,
     collectionUris,
   } = props;
+  const isRepost = claim && claim.repost_channel_url;
   const WrapperElement = wrapperElement || 'li';
   const shouldFetch =
     claim === undefined || (claim !== null && claim.value_type === 'channel' && isEmpty(claim.meta) && !pending);
@@ -422,7 +423,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
             )}
           </div>
         </div>
-        {!hideMenu && <ClaimMenuList uri={uri} collectionId={collectionId} channelUri={channelUri} />}
+        {!hideMenu && <ClaimMenuList uri={uri} collectionId={collectionId} channelUri={channelUri} isRepost={isRepost} />}
       </>
     </WrapperElement>
   );

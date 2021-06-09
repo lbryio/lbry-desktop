@@ -64,6 +64,7 @@ function ClaimMenuList(props: Props) {
     channelIsBlocked,
     doCommentModBlock,
     doCommentModUnBlock,
+    isRepost,
     doCollectionEdit,
     hasClaimInWatchLater,
     collectionId,
@@ -156,10 +157,10 @@ function ClaimMenuList(props: Props) {
   }
 
   function handleDelete() {
-    if (!isChannel) {
+    if (!isRepost && !isChannel) {
       openModal(MODALS.CONFIRM_FILE_REMOVE, { uri });
     } else {
-      openModal(MODALS.CONFIRM_CLAIM_REVOKE, { claim: claim, cb: () => replace(`/$/${PAGES.CHANNELS}`) });
+      openModal(MODALS.CONFIRM_CLAIM_REVOKE, { claim, cb: !isRepost && (() => replace(`/$/${PAGES.CHANNELS}`)), isRepost });
     }
   }
 
@@ -195,7 +196,7 @@ function ClaimMenuList(props: Props) {
               {subscriptionLabel}
             </div>
           </MenuItem>
-        ) : (
+        ) : (!isRepost &&
           <MenuItem className="comment__menu-option" onSelect={handleAnalytics}>
             <div className="menu__link">
               <Icon aria-hidden icon={ICONS.ANALYTICS} />
@@ -294,7 +295,7 @@ function ClaimMenuList(props: Props) {
           </>
         ) : (
           <>
-            {!isChannelPage && (
+            {!isChannelPage && !isRepost && (
               <MenuItem className="comment__menu-option" onSelect={handleEdit}>
                 <div className="menu__link">
                   <Icon aria-hidden icon={ICONS.EDIT} />
