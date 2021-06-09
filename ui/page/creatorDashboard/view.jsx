@@ -7,6 +7,7 @@ import Button from 'component/button';
 import CreatorAnalytics from 'component/creatorAnalytics';
 import ChannelSelector from 'component/channelSelector';
 import Yrbl from 'component/yrbl';
+import { useHistory } from 'react-router';
 
 type Props = {
   channels: Array<ChannelClaim>,
@@ -17,6 +18,10 @@ type Props = {
 export default function CreatorDashboardPage(props: Props) {
   const { channels, fetchingChannels, activeChannelClaim } = props;
   const hasChannels = channels && channels.length > 0;
+  const [activeChanged, setActiveChanged] = React.useState(false);
+  const { location: { search } } = useHistory();
+  const urlParams = new URLSearchParams(search);
+  const channelParam = urlParams.get('channel');
 
   return (
     <Page>
@@ -40,8 +45,8 @@ export default function CreatorDashboardPage(props: Props) {
 
       {!fetchingChannels && activeChannelClaim && (
         <React.Fragment>
-          <ChannelSelector hideAnon />
-          <CreatorAnalytics uri={activeChannelClaim.canonical_url} />
+          <ChannelSelector hideAnon uri={channelParam} activeChanged={activeChanged} setActiveChanged={setActiveChanged} />
+          <CreatorAnalytics uri={!activeChanged && channelParam ? channelParam : activeChannelClaim.canonical_url} />
         </React.Fragment>
       )}
     </Page>

@@ -79,6 +79,7 @@ function ClaimMenuList(props: Props) {
   } = props;
   const incognito = channelUri && !(channelUri.includes('@'));
   const signingChannel = claim && (claim.signing_channel || claim);
+  const permanentUrl = signingChannel && signingChannel.permanent_url;
   const isChannel = !incognito && signingChannel === claim;
   const showDelete = claimIsMine || (fileInfo && (fileInfo.written_bytes > 0 || fileInfo.blobs_completed > 0));
   const subscriptionLabel = isSubscribed ? __('Unfollow') : __('Follow');
@@ -100,7 +101,6 @@ function ClaimMenuList(props: Props) {
     (claim.value.stream_type === 'audio' || claim.value.stream_type === 'video');
 
   function handleFollow() {
-    const permanentUrl = signingChannel && signingChannel.permanent_url;
     const { channelName } = parseURI(permanentUrl);
     const subscriptionHandler = isSubscribed ? doChannelUnsubscribe : doChannelSubscribe;
 
@@ -112,7 +112,7 @@ function ClaimMenuList(props: Props) {
   }
 
   function handleAnalytics() {
-    push(`/$/${PAGES.CREATOR_DASHBOARD}?channel=${encodeURIComponent(signingChannel.canonical_url)}`);
+    push(`/$/${PAGES.CREATOR_DASHBOARD}?channel=${encodeURIComponent(permanentUrl)}`);
   }
 
   function handleToggleMute() {
