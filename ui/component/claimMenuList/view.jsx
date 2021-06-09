@@ -271,7 +271,7 @@ function ClaimMenuList(props: Props) {
           </>
         )}
 
-        {channelUri && !claimIsMine && !isMyCollection ? !incognito && (
+        {(!claimIsMine || channelIsBlocked) && channelUri && !isMyCollection ? !incognito && (
           <>
             <MenuItem className="comment__menu-option" onSelect={handleToggleBlock}>
               <div className="menu__link">
