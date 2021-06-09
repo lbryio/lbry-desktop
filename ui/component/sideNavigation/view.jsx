@@ -8,6 +8,7 @@ import classnames from 'classnames';
 import Icon from 'component/common/icon';
 import NotificationBubble from 'component/notificationBubble';
 import I18nMessage from 'component/i18nMessage';
+import ChannelThumbnail from 'component/channelThumbnail';
 import { PINNED_LABEL_1, PINNED_URI_1, PINNED_URI_2, PINNED_LABEL_2, SIMPLE_SITE, DOMAIN } from 'config';
 // @if TARGET='app'
 import { IS_MAC } from 'component/app/view';
@@ -362,15 +363,8 @@ function SideNavigation(props: Props) {
 
             {sidebarOpen && isPersonalized && subscriptions && subscriptions.length > 0 && (
               <ul className="navigation__secondary navigation-links">
-                {subscriptions.map(({ uri, channelName }, index) => (
-                  <li key={uri} className="navigation-link__wrapper">
-                    <Button
-                      navigate={uri}
-                      label={channelName}
-                      className="navigation-link"
-                      activeClass="navigation-link--active"
-                    />
-                  </li>
+                {subscriptions.map((subscription) => (
+                  <SubscriptionListItem key={subscription.uri} subscription={subscription} />
                 ))}
               </ul>
             )}
@@ -445,15 +439,8 @@ function SideNavigation(props: Props) {
               </ul>
               {sidebarOpen && isPersonalized && subscriptions && subscriptions.length > 0 && (
                 <ul className="navigation__secondary navigation-links">
-                  {subscriptions.map(({ uri, channelName }, index) => (
-                    <li key={uri} className="navigation-link__wrapper">
-                      <Button
-                        navigate={uri}
-                        label={channelName}
-                        className="navigation-link"
-                        activeClass="navigation-link--active"
-                      />
-                    </li>
+                  {subscriptions.map((subscription) => (
+                    <SubscriptionListItem key={subscription.uri} subscription={subscription} />
                   ))}
                 </ul>
               )}
@@ -481,6 +468,24 @@ function SideNavigation(props: Props) {
         </>
       )}
     </div>
+  );
+}
+
+function SubscriptionListItem({ subscription }: { subscription: Subscription }) {
+  const { uri, channelName } = subscription;
+  return (
+    <li className="navigation-link__wrapper">
+      <Button
+        navigate={uri}
+        className="navigation-link navigation-link--with-thumbnail"
+        activeClass="navigation-link--active"
+      >
+        <ChannelThumbnail uri={uri} />
+        <span dir="auto" className="button__label">
+          {channelName}
+        </span>
+      </Button>
+    </li>
   );
 }
 

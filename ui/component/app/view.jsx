@@ -1,6 +1,6 @@
 // @flow
 import * as PAGES from 'constants/pages';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useLayoutEffect } from 'react';
 import classnames from 'classnames';
 import analytics from 'analytics';
 import { buildURI, parseURI } from 'lbry-redux';
@@ -84,9 +84,11 @@ type Props = {
   syncFatalError: boolean,
   activeChannelClaim: ?ChannelClaim,
   myChannelUrls: ?Array<string>,
+  subscriptions: Array<Subscription>,
   setActiveChannelIfNotSet: () => void,
   setIncognito: (boolean) => void,
   fetchModBlockedList: () => void,
+  resolveUris: (Array<string>) => void,
 };
 
 function App(props: Props) {
@@ -119,6 +121,8 @@ function App(props: Props) {
     setActiveChannelIfNotSet,
     setIncognito,
     fetchModBlockedList,
+    resolveUris,
+    subscriptions,
   } = props;
 
   const appRef = useRef();
@@ -136,6 +140,8 @@ function App(props: Props) {
   // @endif
   const { pathname, hash, search } = props.location;
   const [upgradeNagClosed, setUpgradeNagClosed] = useState(false);
+  const [resolvedSubscriptions, setResolvedSubscriptions] = useState(false);
+  const [sidebarOpen] = usePersistedState('sidebar', true);
   const showUpgradeButton =
     (autoUpdateDownloaded || (process.platform === 'linux' && isUpgradeAvailable)) && !upgradeNagClosed;
   // referral claiming
@@ -150,6 +156,7 @@ function App(props: Props) {
   const hasNoChannels = myChannelUrls && myChannelUrls.length === 0;
   const shouldMigrateLanguage = LANGUAGE_MIGRATIONS[language];
   const hasActiveChannelClaim = activeChannelClaim !== undefined;
+  const isPersonalized = !IS_WEB || hasVerifiedEmail;
 
   let uri;
   try {
@@ -337,6 +344,16 @@ function App(props: Props) {
       if (IS_WEB) setReadyForSync(true);
     }
   }, [hasVerifiedEmail, signIn, hasSignedIn]);
+
+  // batch resolve subscriptions to be used by the sideNavigation component.
+  // add it here so that it only resolves the first time, despite route changes.
+  // useLayoutEffect because it has to be executed before the sideNavigation component requests them
+  useLayoutEffect(() => {
+    if (sidebarOpen && isPersonalized && subscriptions && !resolvedSubscriptions) {
+      setResolvedSubscriptions(true);
+      resolveUris(subscriptions.map((sub) => sub.uri));
+    }
+  }, [sidebarOpen, isPersonalized, resolvedSubscriptions, subscriptions, resolveUris, setResolvedSubscriptions]);
 
   // @if TARGET='web'
   useDegradedPerformance(setLbryTvApiStatus, user);

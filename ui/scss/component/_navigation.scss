@@ -104,6 +104,16 @@
     flex-direction: column;
   }
 
+  &.navigation-link--with-thumbnail .button__content {
+    flex-direction: row;
+
+    .channel-thumbnail {
+      @include handleChannelGif(1.5rem);
+      flex-shrink: 0;
+      margin-right: var(--spacing-s);
+    }
+  }
+
   &:hover:not(.navigation-link--active),
   &:focus {
     @extend .navigation-link--highlighted;
@@ -114,8 +124,8 @@
     margin-bottom: 0;
 
     .icon {
-      height: 1rem;
-      width: 1rem;
+      height: 1.5rem;
+      width: 1.5rem;
     }
 
     .button__content {
@@ -201,8 +211,8 @@
     margin-bottom: 0;
 
     .icon {
-      height: 1rem;
-      width: 1rem;
+      height: 1.5rem;
+      width: 1.5rem;
     }
 
     .button__content {
