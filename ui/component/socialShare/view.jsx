@@ -92,13 +92,14 @@ function SocialShare(props: Props) {
           className="share"
           iconSize={24}
           icon={ICONS.TWITTER}
+          title={__('Share on Twitter')}
           href={`https://twitter.com/intent/tweet?text=${encodedLbryURL}`}
         />
         <Button
           className="share"
           iconSize={24}
           icon={ICONS.REDDIT}
-          title={__('Share on Facebook')}
+          title={__('Share on Reddit')}
           href={`https://reddit.com/submit?url=${encodedLbryURL}`}
         />
         {IOS && (
