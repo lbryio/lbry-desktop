@@ -4,7 +4,10 @@ import CollectionPreviewTile from 'component/collectionPreviewTile';
 import ClaimList from 'component/claimList';
 import Button from 'component/button';
 import { COLLECTIONS_CONSTS } from 'lbry-redux';
+import Icon from 'component/common/icon';
+import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
+import Yrbl from '../yrbl';
 
 type Props = {
   builtinCollections: CollectionGroup,
@@ -44,16 +47,18 @@ export default function CollectionsListMine(props: Props) {
                       className="claim-grid__title"
                       button="link"
                       navigate={`/$/${PAGES.LIST}/${list.id}`}
-                      label={list.name}
+                      label={
+                        <span className="claim-grid__title-span">
+                          {list.name}
+                          <div className="claim-grid__title--empty">
+                            <Icon className="icon--margin-right" icon={ICONS.STACK} />
+                            {itemUrls.length}
+                          </div>
+                        </span>
+                      }
                     />
                   </h1>
-                  <ClaimList
-                    tileLayout
-                    key={list.name}
-                    uris={itemUrls}
-                    collectionId={list.id}
-                    empty={__('Nothing in %collection_name%', { collection_name: list.name })}
-                  />
+                  <ClaimList tileLayout key={list.name} uris={itemUrls.slice(0, 6)} collectionId={list.id} />
                 </>
               )}
               {!(itemUrls && itemUrls.length) && (
@@ -66,12 +71,12 @@ export default function CollectionsListMine(props: Props) {
           </div>
         );
       })}
-      {Boolean(hasCollections) && (
-        <div className="claim-grid__wrapper">
-          <h1 className="claim-grid__header">
-            <span className="claim-grid__title">{__('Playlists')}</span>
-          </h1>
-
+      <div className="claim-grid__wrapper">
+        <h1 className="claim-grid__header claim-grid__title">
+          {__('Playlists')}
+          <div className="claim-grid__title--empty">(Empty)</div>
+        </h1>
+        {Boolean(hasCollections) && (
           <>
             <div className="claim-grid">
               {unpublishedCollectionsList &&
@@ -84,8 +89,21 @@ export default function CollectionsListMine(props: Props) {
                 publishedList.map((key) => <CollectionPreviewTile tileLayout collectionId={key} key={key} />)}
             </div>
           </>
-        </div>
-      )}
+        )}
+        {!hasCollections && (
+          <div className="main--empty">
+            <Yrbl
+              type={'sad'}
+              title={__('You have no lists yet. Better start hoarding!')}
+              // actions={
+              //   <div className="section__actions">
+              //     <Button button="primary" label={__('View Content')} onClick={() => setViewBlockedChannel(true)} />
+              //   </div>
+              // }
+            />
+          </div>
+        )}
+      </div>
     </>
   );
 }
