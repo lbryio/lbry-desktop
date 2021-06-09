@@ -48,6 +48,7 @@ type Props = {
   isSubscribed: boolean,
   doChannelSubscribe: (SubscriptionArgs) => void,
   doChannelUnsubscribe: (SubscriptionArgs) => void,
+  isChannelPage: boolean,
 };
 
 function ClaimMenuList(props: Props) {
@@ -76,6 +77,7 @@ function ClaimMenuList(props: Props) {
     isSubscribed,
     doChannelSubscribe,
     doChannelUnsubscribe,
+    isChannelPage = false,
   } = props;
   const incognito = channelUri && !(channelUri.includes('@'));
   const signingChannel = claim && (claim.signing_channel || claim);
@@ -186,7 +188,7 @@ function ClaimMenuList(props: Props) {
       </MenuButton>
       <MenuList className="menu__list">
 
-        {!incognito && (!claimIsMine ? (
+        {!incognito && (!claimIsMine ? (!isChannelPage &&
           <MenuItem className="comment__menu-option" onSelect={handleFollow}>
             <div className="menu__link">
               <Icon aria-hidden icon={ICONS.SUBSCRIBE} />
@@ -201,12 +203,15 @@ function ClaimMenuList(props: Props) {
             </div>
           </MenuItem>
         ))}
-        <MenuItem className="comment__menu-option" onSelect={handleSupport}>
-          <div className="menu__link">
-            <Icon aria-hidden icon={ICONS.LBC} />
-            {__('Support')}
-          </div>
-        </MenuItem>
+
+        {!isChannelPage && (
+          <MenuItem className="comment__menu-option" onSelect={handleSupport}>
+            <div className="menu__link">
+              <Icon aria-hidden icon={ICONS.LBC} />
+              {__('Support')}
+            </div>
+          </MenuItem>
+          )}
 
         {hasExperimentalUi && (
           <>
@@ -289,12 +294,14 @@ function ClaimMenuList(props: Props) {
           </>
         ) : (
           <>
-            <MenuItem className="comment__menu-option" onSelect={handleEdit}>
-              <div className="menu__link">
-                <Icon aria-hidden icon={ICONS.EDIT} />
-                {__('Edit')}
-              </div>
-            </MenuItem>
+            {!isChannelPage && (
+              <MenuItem className="comment__menu-option" onSelect={handleEdit}>
+                <div className="menu__link">
+                  <Icon aria-hidden icon={ICONS.EDIT} />
+                  {__('Edit')}
+                </div>
+              </MenuItem>
+            )}
 
             {showDelete && (
               <MenuItem className="comment__menu-option" onSelect={handleDelete}>
