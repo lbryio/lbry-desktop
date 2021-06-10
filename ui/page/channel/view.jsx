@@ -269,6 +269,7 @@ function ChannelPage(props: Props) {
                 uri={uri}
                 channelIsBlackListed={channelIsBlackListed}
                 viewHiddenChannels
+                empty={__('No Content Found')}
               />
             </TabPanel>
             <TabPanel>
@@ -277,6 +278,16 @@ function ChannelPage(props: Props) {
                 uri={uri}
                 channelIsBlackListed={channelIsBlackListed}
                 viewHiddenChannels
+                empty={__('No Lists Found')}
+              />
+            </TabPanel>
+            <TabPanel>
+              <ChannelContent
+                claimType={'repost'}
+                uri={uri}
+                channelIsBlackListed={channelIsBlackListed}
+                viewHiddenChannels
+                empty={__('No Reposts Found')}
               />
             </TabPanel>
             <TabPanel>
