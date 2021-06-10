@@ -1,6 +1,7 @@
 // Can't use aliases here because we're doing exports/require
+
 const PAGES = require('../constants/pages');
-const { parseURI, buildURI } = require('lbry-redux');
+const { parseURI, buildURI, COLLECTIONS_CONSTS } = require('lbry-redux');
 
 function encodeWithSpecialCharEncode(string) {
   // encodeURIComponent doesn't encode `'` and others
@@ -92,16 +93,37 @@ export const generateLbryWebUrl = (lbryUrl) => {
   return lbryUrl.replace(/#/g, ':');
 };
 
-export const generateEncodedLbryURL = (domain, lbryWebUrl, includeStartTime, startTime) => {
-  const queryParam = includeStartTime ? `?t=${startTime}` : '';
-  const encodedPart = encodeWithSpecialCharEncode(`${lbryWebUrl}${queryParam}`);
+export const generateEncodedLbryURL = (domain, lbryWebUrl, includeStartTime, startTime, listId) => {
+  let urlParams = new URLSearchParams();
+
+  if (includeStartTime) {
+    urlParams.append('t', startTime.toString());
+  }
+
+  if (listId) {
+    urlParams.append(COLLECTIONS_CONSTS.COLLECTION_ID, listId);
+  }
+  const urlParamsString = urlParams.toString();
+  const encodedPart = encodeWithSpecialCharEncode(`${lbryWebUrl}?${urlParamsString}`);
   return `${domain}/${encodedPart}`;
 };
 
-export const generateShareUrl = (domain, lbryUrl, referralCode, rewardsApproved, includeStartTime, startTime) => {
+export const generateShareUrl = (
+  domain,
+  lbryUrl,
+  referralCode,
+  rewardsApproved,
+  includeStartTime,
+  startTime,
+  listId
+) => {
   let urlParams = new URLSearchParams();
   if (referralCode && rewardsApproved) {
     urlParams.append('r', referralCode);
+  }
+
+  if (listId) {
+    urlParams.append(COLLECTIONS_CONSTS.COLLECTION_ID, listId);
   }
 
   if (includeStartTime) {
