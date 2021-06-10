@@ -74,6 +74,7 @@ type Props = {
   hasSource?: boolean,
   isChannel?: boolean,
   channelIsMine?: boolean,
+  empty?: string,
 };
 
 function ClaimListDiscover(props: Props) {
@@ -130,6 +131,7 @@ function ClaimListDiscover(props: Props) {
     hasSource,
     isChannel = false,
     channelIsMine = false,
+    empty,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
   const { search } = location;
@@ -546,6 +548,7 @@ function ClaimListDiscover(props: Props) {
             liveLivestreamsFirst={liveLivestreamsFirst}
             livestreamMap={livestreamMap}
             searchOptions={options}
+            empty={empty}
           />
           {loading &&
             new Array(dynamicPageSize)

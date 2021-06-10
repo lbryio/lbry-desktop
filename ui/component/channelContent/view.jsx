@@ -33,6 +33,7 @@ type Props = {
   viewHiddenChannels: boolean,
   doResolveUris: (Array<string>, boolean) => void,
   claimType: string,
+  empty?: string,
 };
 
 function ChannelContent(props: Props) {
@@ -51,6 +52,7 @@ function ChannelContent(props: Props) {
     viewHiddenChannels,
     doResolveUris,
     claimType,
+    empty,
   } = props;
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -164,6 +166,7 @@ function ChannelContent(props: Props) {
           }
           isChannel
           channelIsMine={channelIsMine}
+          empty={empty}
         />
       ) : (
         <section className="main--empty">{__("This channel hasn't published anything yet")}</section>
