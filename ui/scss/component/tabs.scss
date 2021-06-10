@@ -25,7 +25,7 @@
   border-top: none;
 
   @media (max-width: $breakpoint-small) {
-    padding-left: var(--spacing-s);
+    padding-left: var(--spacing-m);
   }
 }
 
@@ -50,7 +50,7 @@
   }
 
   @media (max-width: $breakpoint-xsmall) {
-    margin-right: var(--spacing-m);
+    margin-right: var(--spacing-s);
   }
 }
 
