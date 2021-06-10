@@ -3,7 +3,7 @@
   "short_name": "Odysee",
   "theme_color": "#fa6164",
   "background_color": "#FAFAFA",
-  "display": "minimal-ui",
+  "display": "standalone",
   "description": "Launch your own channel | Watch and share videos",
   "scope": "/",
   "start_url": "/",
