@@ -37,7 +37,6 @@ type Analytics = {
   tagFollowEvent: (string, boolean, ?string) => void,
   playerLoadedEvent: (?boolean) => void,
   playerStartedEvent: (?boolean) => void,
-  videoFetchDuration: (string, number) => void,
   videoStartEvent: (string, number) => void,
   videoBufferEvent: (
     StreamClaim,
