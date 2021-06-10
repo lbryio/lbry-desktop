@@ -350,7 +350,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                                 if (editCollection) {
                                   // $FlowFixMe
                                   editCollection(collectionId, {
-                                    order: { from: collectionIndex, to: Number(collectionIndex || 0) + 1 },
+                                    order: { from: collectionIndex, to: Number(collectionIndex) - 1 },
                                   });
                                 }
                               }}
