@@ -6,6 +6,7 @@ import * as PAGES from 'constants/pages';
 import { useHistory } from 'react-router-dom';
 import CollectionEdit from 'component/collectionEdit';
 import Card from 'component/common/card';
+import Button from 'component/button';
 import CollectionActions from 'component/collectionActions';
 import classnames from 'classnames';
 import ClaimAuthor from 'component/claimAuthor';
@@ -32,7 +33,7 @@ type Props = {
   isMyCollection: boolean,
   claimIsPending: boolean,
   collectionHasEdits: boolean,
-  deleteCollection: (string) => void,
+  deleteCollection: (string, string) => void,
   editCollection: (string, CollectionEditParams) => void,
   fetchCollectionItems: (string, () => void) => void,
   resolveUris: (string) => void,
@@ -51,6 +52,7 @@ export default function CollectionPage(props: Props) {
     claimIsPending,
     isResolvingCollection,
     fetchCollectionItems,
+    deleteCollection,
   } = props;
 
   const {
@@ -83,7 +85,14 @@ export default function CollectionPage(props: Props) {
     </div>
   );
 
-  const unpublished = <span className="help">{__('Unpublished Edit')}</span>;
+  const unpublished = (
+    <Button
+      button="close"
+      icon={ICONS.REFRESH}
+      label={__('Clear Edits')}
+      onClick={() => deleteCollection(collectionId, COLLECTIONS_CONSTS.COL_KEY_EDITED)}
+    />
+  );
 
   let titleActions;
   if (collectionHasEdits) {
@@ -104,7 +113,6 @@ export default function CollectionPage(props: Props) {
         <span>
           <Icon icon={ICONS.STACK} className="icon--margin-right" />
           {claim ? claim.value.title || claim.name : collection && collection.name}
-          {collectionHasEdits && <span className={'collection-title__hasEdits'}>(*)</span>}
         </span>
       }
       titleActions={titleActions}

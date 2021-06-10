@@ -13,7 +13,7 @@ import {
   makeSelectClaimIsPending,
   makeSelectClaimForClaimId,
   makeSelectCollectionIsMine,
-  doLocalCollectionDelete,
+  doCollectionDelete,
   doCollectionEdit,
   makeSelectChannelForClaimUri,
   makeSelectCountForCollectionId,
@@ -50,7 +50,7 @@ const select = (state, props) => {
 
 const perform = (dispatch) => ({
   fetchCollectionItems: (claimId, cb) => dispatch(doFetchItemsInCollection({ collectionId: claimId }, cb)), // if this collection is not resolved, resolve it
-  deleteCollection: (id) => dispatch(doLocalCollectionDelete(id)),
+  deleteCollection: (id, colKey) => dispatch(doCollectionDelete(id, colKey)),
   editCollection: (id, params) => dispatch(doCollectionEdit(id, params)),
 });
 
