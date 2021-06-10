@@ -62,6 +62,8 @@ export function CommentCreate(props: Props) {
     location: { pathname },
   } = useHistory();
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [commentFailure, setCommentFailure] = React.useState(false);
+  const [successTip, setSuccessTip] = React.useState({ txid: undefined, tipAmount: undefined });
   const { claim_id: claimId } = claim;
   const [isSupportComment, setIsSupportComment] = React.useState();
   const [isReviewingSupportComment, setIsReviewingSupportComment] = React.useState();
@@ -120,6 +122,13 @@ export function CommentCreate(props: Props) {
       return;
     }
 
+    if (commentFailure && tipAmount === successTip.tipAmount) {
+      handleCreateComment(successTip.txid);
+      return;
+    } else {
+      setSuccessTip({ txid: undefined, tipAmount: undefined });
+    }
+
     const params = {
       amount: tipAmount,
       claim_id: claimId,
@@ -135,6 +144,7 @@ export function CommentCreate(props: Props) {
         setTimeout(() => {
           handleCreateComment(txid);
         }, 1500);
+        setSuccessTip({ txid, tipAmount });
       },
       () => {
         setIsSubmitting(false);
@@ -153,6 +163,7 @@ export function CommentCreate(props: Props) {
           setLastCommentTime(Date.now());
           setIsReviewingSupportComment(false);
           setIsSupportComment(false);
+          setCommentFailure(false);
           justCommented.push(res.comment_id);
 
           if (onDoneReplying) {
@@ -162,6 +173,7 @@ export function CommentCreate(props: Props) {
       })
       .catch(() => {
         setIsSubmitting(false);
+        setCommentFailure(true);
       });
   }
 
@@ -212,7 +224,7 @@ export function CommentCreate(props: Props) {
             autoFocus
             button="primary"
             disabled={disabled}
-            label={isSubmitting ? __('Sending...') : __('Send')}
+            label={isSubmitting ? __('Sending...') : (commentFailure && tipAmount === successTip.tipAmount) ? __('Re-submit') : __('Send')}
             onClick={handleSupportComment}
           />
           <Button button="link" label={__('Cancel')} onClick={() => setIsReviewingSupportComment(false)} />
