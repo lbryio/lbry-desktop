@@ -326,24 +326,12 @@ class SettingsStripeCard extends React.Component<Props, State> {
   }
 
   componentDidUpdate() {
-    if (!scriptLoading) {
-      this.updateStripeHandler();
-    }
+
   }
 
   componentWillUnmount() {
     // pretty sure this doesn't exist
     // $FlowFixMe
-    if (this.loadPromise) {
-      // $FlowFixMe
-      this.loadPromise.reject();
-    }
-    // pretty sure this doesn't exist
-    // $FlowFixMe
-    if (CardVerify.stripeHandler && this.state.open) {
-      // $FlowFixMe
-      CardVerify.stripeHandler.close();
-    }
   }
 
   onScriptLoaded = () => {
@@ -359,11 +347,11 @@ class SettingsStripeCard extends React.Component<Props, State> {
   };
 
   onScriptError = (...args) => {
-    this.setState({ scriptFailedToLoad: true });
+
   };
 
   onClosed = () => {
-    this.setState({ open: false });
+
   };
 
   updateStripeHandler() {

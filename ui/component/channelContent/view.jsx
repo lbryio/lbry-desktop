@@ -144,7 +144,8 @@ function ChannelContent(props: Props) {
         hideAdvancedFilter={!showFilters}
         tileLayout={tileLayout}
         uris={searchResults}
-        channelIds={[claim.claim_id]}
+        streamType={CS.CONTENT_ALL}
+        channelIds={[claimId]}
         claimType={claimType}
         feeAmount={CS.FEE_AMOUNT_ANY}
         defaultOrderBy={CS.ORDER_BY_NEW}
