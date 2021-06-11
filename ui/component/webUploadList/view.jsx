@@ -21,7 +21,7 @@ export default function WebUploadList(props: Props) {
     !!uploadCount && (
       <Card
         title={__('Currently Uploading')}
-        subtitle={__('Leave the app running until upload is complete')}
+        subtitle={__('Please leave the app running until upload is complete')}
         body={
           <section>
             {/* $FlowFixMe */}
