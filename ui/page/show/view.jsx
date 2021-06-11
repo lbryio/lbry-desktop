@@ -5,15 +5,16 @@ import React, { useEffect } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
 import Spinner from 'component/spinner';
 import ChannelPage from 'page/channel';
-import FilePage from 'page/file';
-import LivestreamPage from 'page/livestream';
 import Page from 'component/page';
 import Button from 'component/button';
 import Card from 'component/common/card';
-import AbandonedChannelPreview from 'component/abandonedChannelPreview';
-import Yrbl from 'component/yrbl';
 import { formatLbryUrlForWeb } from 'util/url';
 import { parseURI, COLLECTIONS_CONSTS } from 'lbry-redux';
+
+const AbandonedChannelPreview = React.lazy(() => import('component/abandonedChannelPreview' /* webpackChunkName: "abandonedChannelPreview" */));
+const FilePage = React.lazy(() => import('page/file' /* webpackChunkName: "filePage" */));
+const LivestreamPage = React.lazy(() => import('page/livestream' /* webpackChunkName: "livestream" */));
+const Yrbl = React.lazy(() => import('component/yrbl' /* webpackChunkName: "yrbl" */));
 
 type Props = {
   isResolvingUri: boolean,
@@ -157,7 +158,11 @@ function ShowPage(props: Props) {
             />
           </div>
         )}
-        {!isResolvingUri && isSubscribed && claim === null && <AbandonedChannelPreview uri={uri} type={'large'} />}
+        {!isResolvingUri && isSubscribed && claim === null && (
+          <React.Suspense fallback={null}>
+            <AbandonedChannelPreview uri={uri} type={'large'} />
+          </React.Suspense>
+        )}
       </Page>
     );
   } else if (claim.name.length && claim.name[0] === '@') {
@@ -196,7 +201,7 @@ function ShowPage(props: Props) {
     }
   }
 
-  return innerContent;
+  return <React.Suspense fallback={null}>{innerContent}</React.Suspense>;
 }
 
 export default ShowPage;

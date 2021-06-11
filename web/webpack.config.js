@@ -118,6 +118,7 @@ const webConfig = {
     filename: '[name].js',
     path: path.join(__dirname, 'dist/public/'),
     publicPath: '/public/',
+    chunkFilename: '[name]-[chunkhash].js',
   },
   devServer: {
     port: WEBPACK_WEB_PORT,

@@ -84,6 +84,11 @@
     font-size: 10px;
   }
 
+  .vjs-playback-rate .vjs-menu .vjs-menu-content .vjs-menu-item {
+    margin: 0 0;
+    padding: 5px 10px;
+  }
+
   // Volume slider
   .vjs-volume-panel {
     &.vjs-control {

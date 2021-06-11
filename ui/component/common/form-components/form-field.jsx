@@ -274,22 +274,24 @@ export class FormField extends React.PureComponent<Props> {
               {...inputProps}
             />
             <div className="form-field__textarea-info">
-              {!noEmojis && <div className="form-field__quick-emojis">
-                {QUICK_EMOJIS.map((emoji) => (
-                  <Button
-                    key={emoji}
-                    disabled={inputProps.disabled}
-                    type="button"
-                    className="button--emoji"
-                    label={emoji}
-                    onClick={() => {
-                      inputProps.onChange({
-                        target: { value: inputProps.value ? `${inputProps.value} ${emoji}` : emoji },
-                      });
-                    }}
-                  />
-                ))}
-              </div>}
+              {!noEmojis && (
+                <div className="form-field__quick-emojis">
+                  {QUICK_EMOJIS.map((emoji) => (
+                    <Button
+                      key={emoji}
+                      disabled={inputProps.disabled}
+                      type="button"
+                      className="button--emoji"
+                      label={emoji}
+                      onClick={() => {
+                        inputProps.onChange({
+                          target: { value: inputProps.value ? `${inputProps.value} ${emoji}` : emoji },
+                        });
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
               {countInfo}
             </div>
           </fieldset-section>

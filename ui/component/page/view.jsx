@@ -4,7 +4,6 @@ import React, { Fragment } from 'react';
 import classnames from 'classnames';
 import SideNavigation from 'component/sideNavigation';
 import Header from 'component/header';
-import Footer from 'web/component/footer';
 /* @if TARGET='app' */
 import StatusBar from 'component/common/status-bar';
 /* @endif */
@@ -12,6 +11,8 @@ import usePersistedState from 'effects/use-persisted-state';
 import { useHistory } from 'react-router';
 import { useIsMobile, useIsMediumScreen } from 'effects/use-screensize';
 import { parseURI } from 'lbry-redux';
+
+const Footer = React.lazy(() => import('web/component/footer' /* webpackChunkName: "component/footer" */));
 
 export const MAIN_CLASS = 'main';
 type Props = {
@@ -126,7 +127,7 @@ function Page(props: Props) {
         {/* @endif */}
       </div>
       {/* @if TARGET='web' */}
-      {!noFooter && <Footer />}
+      {!noFooter && <React.Suspense fallback={null}><Footer /></React.Suspense>}
       {/* @endif */}
     </Fragment>
   );
