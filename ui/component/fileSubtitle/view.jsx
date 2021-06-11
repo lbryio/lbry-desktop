@@ -21,8 +21,8 @@ function FileSubtitle(props: Props) {
 
         <FileViewCount uri={uri} livestream={livestream} activeViewers={activeViewers} isLive={isLive} />
       </div>
-
-      <FileActions uri={uri} />
+      {/* did I need these params? */}
+      <FileActions uri={uri} hideRepost={livestream} livestream={livestream} />
     </div>
   );
 }

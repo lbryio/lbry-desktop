@@ -281,8 +281,8 @@ $discussion-header__height: 3rem;
 }
 
 .livestream-superchat__banner {
-  border-top-right-radius: var(--border-radius);
-  border-bottom-right-radius: var(--border-radius);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
   padding: 0.25rem var(--spacing-s);
   display: inline-block;
   position: relative;
@@ -298,7 +298,7 @@ $discussion-header__height: 3rem;
   background-color: var(--color-superchat);
   bottom: 0;
   left: 0;
-  transform: translateX(25%) translateY(50%);
+  transform: translateX(0) translateY(50%);
 
   &::after {
     content: '';
@@ -316,6 +316,11 @@ $discussion-header__height: 3rem;
 .livestream-comment__text {
   padding-right: var(--spacing-xxs);
   padding-bottom: var(--spacing-xxs);
+  .markdown-preview {
+    p {
+      word-break: break-all;
+    }
+  }
 }
 
 .livestream-superchat__tooltip-amount {
