@@ -620,6 +620,12 @@ svg + .button__label {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
   }
+
+  .button--file-action {
+    &:first-child {
+      margin-right: var(--spacing-s);
+    }
+  }
 }
 
 .button--file-action {

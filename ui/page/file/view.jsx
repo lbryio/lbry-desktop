@@ -1,4 +1,5 @@
 // @flow
+import * as PAGES from 'constants/pages';
 import * as React from 'react';
 import classnames from 'classnames';
 import Page from 'component/page';
@@ -11,6 +12,9 @@ import RecommendedContent from 'component/recommendedContent';
 import CollectionContent from 'component/collectionContentSidebar';
 import CommentsList from 'component/commentsList';
 import PostViewer from 'component/postViewer';
+import { Redirect } from 'react-router';
+import Button from 'component/button';
+import I18nMessage from 'component/i18nMessage';
 import Empty from 'component/common/empty';
 
 export const PRIMARY_PLAYER_WRAPPER_CLASS = 'file-page__video-container';
@@ -30,7 +34,9 @@ type Props = {
   collection?: Collection,
   collectionId: string,
   videoTheaterMode: boolean,
+  claimIsMine: boolean,
   commentsDisabled: boolean,
+  isLivestream: boolean,
 };
 
 function FilePage(props: Props) {
@@ -47,9 +53,12 @@ function FilePage(props: Props) {
     linkedComment,
     setPrimaryUri,
     videoTheaterMode,
+
+    claimIsMine,
     commentsDisabled,
     collection,
     collectionId,
+    isLivestream,
   } = props;
   const cost = costInfo ? costInfo.cost : null;
   const hasFileInfo = fileInfo !== undefined;
@@ -118,6 +127,10 @@ function FilePage(props: Props) {
     );
   }
 
+  if (!claimIsMine && isLivestream) {
+    return <Redirect to={`/$/${PAGES.LIVESTREAM}`} />;
+  }
+
   if (obscureNsfw && isMature) {
     return (
       <Page className="file-page" filePage isMarkdown={isMarkdown}>
@@ -138,6 +151,18 @@ function FilePage(props: Props) {
         {!isMarkdown && (
           <div className="file-page__secondary-content">
             <div>
+              {claimIsMine && isLivestream && (
+                <div className="livestream__creator-message">
+                  <h4>{__('Only visible to you')}</h4>
+                  <I18nMessage>
+                    People who view this link will be redirected to your livestream. Make sure to use this for sharing
+                    so your title and thumbnail are displayed properly.
+                  </I18nMessage>
+                  <div className="section__actions">
+                    <Button button="primary" navigate={`/$/${PAGES.LIVESTREAM}`} label={__('View livestream')} />
+                  </div>
+                </div>
+              )}
               {RENDER_MODES.FLOATING_MODES.includes(renderMode) && <FileTitleSection uri={uri} />}
               {commentsDisabled && <Empty text={__('The creator of this content has disabled comments.')} />}
               {!commentsDisabled && <CommentsList uri={uri} linkedComment={linkedComment} />}

@@ -13,7 +13,6 @@ type Props = {
 
 function NameHelpText(props: Props) {
   const { uri, myClaimForUri, onEditMyClaim, isStillEditing } = props;
-
   let nameHelpText;
 
   if (isStillEditing) {
