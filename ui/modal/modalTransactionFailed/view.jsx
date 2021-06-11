@@ -12,7 +12,7 @@ class ModalTransactionFailed extends React.PureComponent<Props> {
 
     return (
       <Modal isOpen contentLabel={__('Transaction failed')} title={__('Transaction failed')} onConfirmed={closeModal}>
-        <p>{__('Sorry about that. Contact help@lbry.com if you continue to have issues.')}</p>
+        <p>{__('Sorry about that. Contact help@odysee.com if you continue to have issues.')}</p>
       </Modal>
     );
   }

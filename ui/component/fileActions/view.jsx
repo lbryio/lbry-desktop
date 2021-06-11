@@ -1,5 +1,5 @@
 // @flow
-import { SITE_NAME, ENABLE_FILE_REACTIONS } from 'config';
+import { SIMPLE_SITE, SITE_NAME, ENABLE_FILE_REACTIONS } from 'config';
 import * as PAGES from 'constants/pages';
 import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
@@ -26,6 +26,7 @@ type Props = {
   myChannels: ?Array<ChannelClaim>,
   doToast: ({ message: string }) => void,
   clearPlayingUri: () => void,
+  hideRepost?: boolean,
   isLivestreamClaim: boolean,
   reactionsDisabled: boolean,
   hasExperimentalUi: boolean,
@@ -44,6 +45,7 @@ function FileActions(props: Props) {
     myChannels,
     clearPlayingUri,
     doToast,
+    hideRepost,
     isLivestreamClaim,
     reactionsDisabled,
     hasExperimentalUi,
@@ -90,24 +92,26 @@ function FileActions(props: Props) {
 
   const lhsSection = (
     <>
-      {ENABLE_FILE_REACTIONS && !reactionsDisabled && <FileReactions uri={uri} />}
+      {ENABLE_FILE_REACTIONS && !reactionsDisabled && <FileReactions uri={uri} livestream={isLivestreamClaim} />}
       <ClaimSupportButton uri={uri} fileAction />
       {hasExperimentalUi && <ClaimCollectionAddButton uri={uri} fileAction />}
-      <Button
-        button="alt"
-        className="button--file-action"
-        icon={ICONS.REPOST}
-        label={
-          claim.meta.reposted > 1 ? __(`%repost_total% Reposts`, { repost_total: claim.meta.reposted }) : __('Repost')
-        }
-        description={__('Repost')}
-        requiresAuth={IS_WEB}
-        onClick={handleRepostClick}
-      />
+      {!hideRepost && (
+        <Button
+          button="alt"
+          className="button--file-action"
+          icon={ICONS.REPOST}
+          label={
+            claim.meta.reposted > 1 ? __(`%repost_total% Reposts`, { repost_total: claim.meta.reposted }) : __('Repost')
+          }
+          description={__('Repost')}
+          requiresAuth={IS_WEB}
+          onClick={handleRepostClick}
+        />
+      )}
       <Button
         className="button--file-action"
         icon={ICONS.SHARE}
-        label={__('Share')}
+        label={isMobile ? undefined : __('Share')}
         title={__('Share')}
         onClick={() => openModal(MODALS.SOCIAL_SHARE, { uri, webShareable, collectionId })}
       />
@@ -116,7 +120,7 @@ function FileActions(props: Props) {
 
   const rhsSection = (
     <>
-      <FileDownloadLink uri={uri} />
+      {!SIMPLE_SITE && <FileDownloadLink uri={uri} />}
 
       {claimIsMine && (
         <Button
