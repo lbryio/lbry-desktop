@@ -147,7 +147,7 @@ function ClaimTilesDiscover(props: Props) {
     mutedUris,
     liveLivestreamsFirst,
     livestreamMap,
-    pin, // let's pin from /web folder
+    pin,
     pinUrls,
     prefixUris,
     showNoSourceClaims,
@@ -156,7 +156,7 @@ function ClaimTilesDiscover(props: Props) {
   const { location } = useHistory();
   const urlParams = new URLSearchParams(location.search);
   const feeAmountInUrl = urlParams.get('fee_amount');
-  const feeAmountParam = feeAmountInUrl || feeAmount;
+  const feeAmountParam = feeAmountInUrl || feeAmount || CS.FEE_AMOUNT_ONLY_FREE;
   const mutedAndBlockedChannelIds = Array.from(
     new Set(mutedUris.concat(blockedUris).map((uri) => splitBySeparator(uri)[1]))
   );
@@ -291,7 +291,9 @@ function ClaimTilesDiscover(props: Props) {
   };
 
   const modifiedUris = uris ? uris.slice() : [];
-  const fixUris = pinUrls || ['lbry://@AlisonMorrow#6/LBRY#8'];
+  const fixUris = pinUrls || [
+    'lbry://@EmperorLemon#e/sacrifices-to-the-church-of-nintendo#0',
+  ];
 
   if (pin && modifiedUris && modifiedUris.length > 2 && window.location.pathname === '/') {
     fixUris.forEach((fixUri) => {
@@ -308,8 +310,13 @@ function ClaimTilesDiscover(props: Props) {
     <ul className="claim-grid">
       {modifiedUris && modifiedUris.length
         ? modifiedUris.map((uri, index) => (
-            <ClaimPreviewTile key={uri} uri={uri} properties={renderProperties} live={resolveLive(index)} />
-          ))
+          <ClaimPreviewTile
+            showNoSourceClaims={hasNoSource || showNoSourceClaims}
+            key={uri}
+            uri={uri}
+            properties={renderProperties}
+            live={resolveLive(index)}
+          />          ))
         : new Array(pageSize)
             .fill(1)
             .map((x, i) => (

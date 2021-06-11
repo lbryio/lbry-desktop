@@ -361,8 +361,24 @@ function ClaimListDiscover(props: Props) {
 
   const hasMatureTags = tagsParam && tagsParam.split(',').some((t) => MATURE_TAGS.includes(t));
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
-  const claimSearchResult = claimSearchByQuery[claimSearchCacheQuery];
+  let claimSearchResult = claimSearchByQuery[claimSearchCacheQuery];
   const claimSearchResultLastPageReached = claimSearchByQueryLastPageReached[claimSearchCacheQuery];
+
+  // uncomment to fix an item on a page
+  //   const fixUri = 'lbry://@corbettreport#0/lbryodysee#5';
+  //   if (
+  //     orderParam === CS.ORDER_BY_NEW &&
+  //     claimSearchResult &&
+  //     claimSearchResult.length > 2 &&
+  //     window.location.pathname === '/$/rabbithole'
+  //   ) {
+  //     if (claimSearchResult.indexOf(fixUri) !== -1) {
+  //       claimSearchResult.splice(claimSearchResult.indexOf(fixUri), 1);
+  //     } else {
+  //       claimSearchResult.pop();
+  //     }
+  //     claimSearchResult.splice(2, 0, fixUri);
+  //   }
 
   const [prevOptions, setPrevOptions] = React.useState(null);
 
