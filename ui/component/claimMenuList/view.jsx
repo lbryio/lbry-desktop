@@ -82,7 +82,7 @@ function ClaimMenuList(props: Props) {
   } = props;
   const incognito = channelUri && !(channelUri.includes('@'));
   const signingChannel = claim && (claim.signing_channel || claim);
-  const permanentUrl = signingChannel && signingChannel.permanent_url;
+  const permanentUrl = String(signingChannel && signingChannel.permanent_url);
   const isChannel = !incognito && signingChannel === claim;
   const showDelete = claimIsMine || (fileInfo && (fileInfo.written_bytes > 0 || fileInfo.blobs_completed > 0));
   const subscriptionLabel = isSubscribed ? __('Unfollow') : __('Follow');
