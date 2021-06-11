@@ -7,6 +7,7 @@ import FreezeframeWrapper from 'component/fileThumbnail/FreezeframeWrapper';
 import ChannelStakedIndicator from 'component/channelStakedIndicator';
 import OptimizedImage from 'component/optimizedImage';
 import { AVATAR_DEFAULT } from 'config';
+import ThumbnailBrokenImage from './thumbnail-broken.png';
 
 type Props = {
   thumbnail: ?string,
@@ -75,6 +76,16 @@ function ChannelThumbnail(props: Props) {
       </FreezeframeWrapper>
     );
   }
+
+  let thumbnailSrc;
+  if (!channelThumbnail) {
+    thumbnailSrc = defaultAvater;
+  } else if (thumbError) {
+    thumbnailSrc = ThumbnailBrokenImage;
+  } else {
+    thumbnailSrc = channelThumbnail;
+  }
+
   return (
     <div
       className={classnames('channel-thumbnail', className, {
@@ -84,29 +95,17 @@ function ChannelThumbnail(props: Props) {
         'channel-thumbnail--resolving': isResolving,
       })}
     >
-      {!showThumb && (
+      {showDelayedMessage ? (
+        <div className="channel-thumbnail--waiting">{__('This will be visible in a few minutes.')}</div>
+        ) : (
         <OptimizedImage
           alt={__('Channel profile picture')}
-          className="channel-thumbnail__default"
-          src={!thumbError && channelThumbnail ? channelThumbnail : defaultAvater}
+          className={!channelThumbnail ? 'channel-thumbnail__default' : 'channel-thumbnail__custom'}
+          src={thumbnailSrc}
           loading={noLazyLoad ? undefined : 'lazy'}
-          onError={() => setThumbError(true)} // if thumb fails (including due to https replace, show gerbil.
+          onError={() => setThumbError(true)}
+          onLoad={() => thumbnailSrc !== ThumbnailBrokenImage && setThumbError(false)}
         />
-      )}
-      {showThumb && (
-        <>
-          {showDelayedMessage && thumbError ? (
-            <div className="chanel-thumbnail--waiting">{__('This will be visible in a few minutes.')}</div>
-          ) : (
-            <OptimizedImage
-              alt={__('Channel profile picture')}
-              className="channel-thumbnail__custom"
-              src={!thumbError && channelThumbnail ? channelThumbnail : defaultAvater}
-              loading={noLazyLoad ? undefined : 'lazy'}
-              onError={() => setThumbError(true)} // if thumb fails (including due to https replace, show gerbil.
-            />
-          )}
-        </>
       )}
       {!hideStakedIndicator && <ChannelStakedIndicator uri={uri} claim={claim} />}
     </div>
