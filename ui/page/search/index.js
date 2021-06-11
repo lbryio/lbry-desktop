@@ -13,7 +13,6 @@ import { getSearchQueryString } from 'util/query-params';
 import SearchPage from './view';
 
 const select = (state, props) => {
-  const showMature = selectShowMatureContent(state);
   const urlParams = new URLSearchParams(props.location.search);
 
   let urlQuery = urlParams.get('q') || null;

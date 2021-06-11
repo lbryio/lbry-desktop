@@ -31,7 +31,10 @@ type Props = {
   isReply: boolean,
   activeChannel: string,
   activeChannelClaim: ?ChannelClaim,
-  livestream?: boolean,
+  bottom: boolean,
+  onSubmit: (string, string) => void,
+  livestream: boolean,
+  embed?: boolean,
   toast: (string) => void,
   claimIsMine: boolean,
   sendTip: ({}, (any) => void, (any) => void) => void,
@@ -51,7 +54,11 @@ export function CommentCreate(props: Props) {
     isReply,
     parentId,
     activeChannelClaim,
+    onSubmit,
+    bottom,
     livestream,
+    embed,
+    toast,
     claimIsMine,
     sendTip,
     justCommented,
@@ -87,7 +94,7 @@ export function CommentCreate(props: Props) {
 
   function altEnterListener(e: SyntheticKeyboardEvent<*>) {
     const KEYCODE_ENTER = 13;
-    if ((e.ctrlKey || e.metaKey) && e.keyCode === KEYCODE_ENTER) {
+    if ((livestream || e.ctrlKey || e.metaKey) && e.keyCode === KEYCODE_ENTER) {
       e.preventDefault();
       buttonref.current.click();
     }
@@ -155,6 +162,10 @@ export function CommentCreate(props: Props) {
           setCommentFailure(false);
           justCommented.push(res.comment_id);
 
+          if (onSubmit) {
+            onSubmit(commentValue, activeChannelClaim.name);
+          }
+
           if (onDoneReplying) {
             onDoneReplying();
           }
@@ -179,6 +190,11 @@ export function CommentCreate(props: Props) {
       <div
         role="button"
         onClick={() => {
+          if (embed) {
+            window.open(`https://odysee.com/$/${PAGES.AUTH}?redirect=/$/${PAGES.LIVESTREAM}`);
+            return;
+          }
+
           const pathPlusRedirect = `/$/${PAGES.CHANNEL_NEW}?redirect=${pathname}`;
           if (livestream) {
             window.open(pathPlusRedirect);
@@ -232,6 +248,7 @@ export function CommentCreate(props: Props) {
       className={classnames('comment__create', {
         'comment__create--reply': isReply,
         'comment__create--nested-reply': isNested,
+        'comment__create--bottom': bottom,
       })}
     >
       <FormField

@@ -233,7 +233,6 @@ function ClaimPreviewTile(props: Props) {
               <UriIndicator uri={uri} />
             </div>
           )}
-          {/* CHECK CLAIM MENU LIST PARAMS (IS REPOST?) */}
           <ClaimMenuList uri={uri} collectionId={listId} channelUri={channelUri} isRepost={isRepost} />
         </h2>
       </NavLink>
