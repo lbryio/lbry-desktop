@@ -180,7 +180,7 @@ function VideoViewer(props: Props) {
     }
   }, [embedded, setIsEndededEmbed, autoplaySetting, setShowAutoplayCountdown, adUrl, setAdUrl]);
 
-  function onPlay(player) {
+  function onPlay() {
     setIsLoading(false);
     setIsPlaying(true);
     setShowAutoplayCountdown(false);
@@ -233,14 +233,19 @@ function VideoViewer(props: Props) {
 
       Promise.race([playPromise, timeoutPromise]).catch((error) => {
         if (typeof error === 'object' && error.name && error.name === 'NotAllowedError') {
-          // Autoplay disallowed by browser
-          player.play();
+          if (player.autoplay() && !player.muted()) {
+            player.muted(true);
+            // another version had player.play()
+          }
         }
 
         // Autoplay failed
         if (PLAY_TIMEOUT_ERROR) {
-          setIsLoading(false);
-          setIsPlaying(false);
+          const retryPlayPromise = player.play();
+          Promise.race([retryPlayPromise, timeoutPromise]).catch((error) => {
+            setIsLoading(false);
+            setIsPlaying(false);
+          });
         } else {
           setIsLoading(false);
           setIsPlaying(false);
@@ -259,10 +264,9 @@ function VideoViewer(props: Props) {
     player.on('tracking:buffered', doTrackingBuffered);
     player.on('tracking:firstplay', doTrackingFirstPlay);
     player.on('ended', onEnded);
-    player.on('play', () => onPlay(player));
-    player.on('pause', () => onPause(player));
-    player.on('dispose', () => onDispose(player));
-
+    player.on('play', onPlay);
+    player.on('pause', onPause);
+    player.on('dispose', onDispose);
     player.on('error', () => {
       const error = player.error();
       if (error) {

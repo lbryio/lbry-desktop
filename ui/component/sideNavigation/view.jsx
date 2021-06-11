@@ -312,6 +312,11 @@ function SideNavigation(props: Props) {
       <li className="navigation-link">
         <Button label={__('FAQ')} href="https://odysee.com/@OdyseeHelp:b" />
       </li>
+
+      <li className="navigation-link">
+        <Button label={__('Community Guidelines')} href="https://odysee.com/@OdyseeHelp:b/Community-Guidelines:c" />
+      </li>
+
       <li className="navigation-link">
         <Button label={__('Support --[used in footer; general help/support]--')} href="https://lbry.com/support" />
       </li>
