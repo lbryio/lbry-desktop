@@ -127,6 +127,9 @@ function ChannelsFollowingDiscover(props: Props) {
         claimType={CS.CLAIM_CHANNEL}
         claimIds={CUSTOM_HOMEPAGE && channelIds ? channelIds : undefined}
         scrollAnchor={MORE_CHANNELS_ANCHOR}
+        maxPages={3}
+        hideFilters
+        header={<h1 className="section__title">{__('Moon cheese is an acquired taste')}</h1>}
       />
     </Page>
   );

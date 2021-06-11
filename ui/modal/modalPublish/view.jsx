@@ -46,6 +46,7 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
     } else {
       publishMessage = __('Your content will be live shortly.');
     }
+    clearPublish();
 
     function handleClose() {
       closeModal();
