@@ -87,7 +87,7 @@ function ClaimMenuList(props: Props) {
   const showDelete = claimIsMine || (fileInfo && (fileInfo.written_bytes > 0 || fileInfo.blobs_completed > 0));
   const subscriptionLabel = isSubscribed ? __('Unfollow') : __('Follow');
 
-  const { push } = useHistory();
+  const { push, replace } = useHistory();
   if (!claim) {
     return null;
   }
