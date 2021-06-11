@@ -319,14 +319,6 @@ function ChannelPage(props: Props) {
               />
             </TabPanel>
             <TabPanel>
-              <ChannelContent
-                claimType={'repost'}
-                uri={uri}
-                channelIsBlackListed={channelIsBlackListed}
-                viewHiddenChannels
-              />
-            </TabPanel>
-            <TabPanel>
               <ChannelAbout uri={uri} />
             </TabPanel>
             <TabPanel>
