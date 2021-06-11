@@ -19,6 +19,8 @@ import ChannelThumbnail from 'component/channelThumbnail';
 import { remote } from 'electron';
 import { IS_MAC } from 'component/app/view';
 // @endif
+import OdyseeLogoWithWhiteText from './odysee_white.png';
+import OdyseeLogoWithText from './odysee.png';
 
 type Props = {
   user: ?User,
@@ -251,14 +253,7 @@ const Header = (props: Props) => {
                 </span>
               )}
               <Button
-                className="header__navigation-item header__navigation-item--lbry"
-                // @if TARGET='app'
-                label={'LBRY'}
-                // @endif
-                // @if TARGET='web'
-                label={LOGO_TITLE} // eslint-disable-line
-                // @endif
-                icon={ICONS.LBRY}
+                className="header__navigation-item header__navigation-item--lbry header__navigation-item--button-mobile"
                 onClick={() => {
                   if (history.location.pathname === '/') window.location.reload();
                 }}
@@ -268,7 +263,12 @@ const Header = (props: Props) => {
                 }}
                 // @endif
                 {...homeButtonNavigationProps}
-              />
+              >
+                <img
+                  src={currentTheme === 'light' ? OdyseeLogoWithText : OdyseeLogoWithWhiteText}
+                  className="header__odysee"
+                />
+              </Button>
 
               {!authHeader && (
                 <div className="header__center">

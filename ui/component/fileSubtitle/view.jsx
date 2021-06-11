@@ -22,7 +22,7 @@ function FileSubtitle(props: Props) {
         <FileViewCount uri={uri} livestream={livestream} activeViewers={activeViewers} isLive={isLive} />
       </div>
 
-      <FileActions uri={uri} />
+      <FileActions uri={uri} hideRepost={livestream} livestream={livestream} />
     </div>
   );
 }
