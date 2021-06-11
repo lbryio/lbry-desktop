@@ -6,6 +6,8 @@ import Gerbil from './gerbil.png';
 import FreezeframeWrapper from 'component/fileThumbnail/FreezeframeWrapper';
 import ChannelStakedIndicator from 'component/channelStakedIndicator';
 import { getThumbnailCdnUrl } from 'util/thumbnail';
+import useLazyLoading from 'effects/use-lazy-loading';
+import ThumbnailBrokenImage from './thumbnail-broken.png';
 
 const FONT_PX = 16.0;
 const IMG_XSMALL_REM = 2.1;
@@ -103,6 +105,15 @@ function ChannelThumbnail(props: Props) {
   }
   // @endif
 
+  let thumbnailSrc;
+  if (!url) {
+    thumbnailSrc = Gerbil;
+  } else if (thumbError) {
+    thumbnailSrc = ThumbnailBrokenImage;
+  } else {
+    thumbnailSrc = url;
+  }
+
   return (
     <div
       className={classnames('channel-thumbnail', className, {
@@ -112,35 +123,20 @@ function ChannelThumbnail(props: Props) {
         'channel-thumbnail--resolving': isResolving,
       })}
     >
-      {!showThumb && (
+      {showDelayedMessage ? (
+        <div className="channel-thumbnail--waiting">{__('This will be visible in a few minutes.')}</div>
+        ) : (
         <img
           ref={thumbnailRef}
           alt={__('Channel profile picture')}
-          className="channel-thumbnail__default"
-          src={!thumbError && url ? url : Gerbil}
+          className={!url ? 'channel-thumbnail__default' : 'channel-thumbnail__custom'}
+          data-src={thumbnailSrc}
           width={thumbnailSize}
           height={thumbnailSize}
           loading={noLazyLoad ? undefined : 'lazy'}
-          onError={() => setThumbError(true)} // if thumb fails (including due to https replace, show gerbil.
+          onError={() => setThumbError(true)}
+          onLoad={() => thumbnailSrc !== ThumbnailBrokenImage && setThumbError(false)}
         />
-      )}
-      {showThumb && (
-        <>
-          {showDelayedMessage && thumbError ? (
-            <div className="chanel-thumbnail--waiting">{__('This will be visible in a few minutes.')}</div>
-          ) : (
-            <img
-              ref={thumbnailRef}
-              alt={__('Channel profile picture')}
-              className="channel-thumbnail__custom"
-              src={!thumbError && url ? url : Gerbil}
-              width={thumbnailSize}
-              height={thumbnailSize}
-              loading={noLazyLoad ? undefined : 'lazy'}
-              onError={() => setThumbError(true)} // if thumb fails (including due to https replace, show gerbil.
-            />
-          )}
-        </>
       )}
       {!hideStakedIndicator && <ChannelStakedIndicator uri={uri} claim={claim} />}
     </div>

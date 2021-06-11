@@ -22,6 +22,7 @@ import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 import WalletSpendableBalanceHelp from 'component/walletSpendableBalanceHelp';
 import { SIMPLE_SITE } from 'config';
 import { sortLanguageMap } from 'util/default-languages';
+import ThumbnailBrokenImage from './thumbnail-broken.png';
 
 const LANG_NONE = 'none';
 
@@ -219,6 +220,13 @@ function ChannelForm(props: Props) {
     clearChannelErrors();
   }, [clearChannelErrors]);
 
+  let coverSrc;
+  if (coverError) {
+    coverSrc = ThumbnailBrokenImage;
+  } else {
+    coverSrc = params.coverUrl;
+  }
+
   // TODO clear and bail after submit
   return (
     <>
@@ -241,12 +249,14 @@ function ChannelForm(props: Props) {
               iconSize={18}
             />
           </div>
-          {params.coverUrl &&
-            (coverError ? (
-              <div className="channel-cover__custom--waiting">{__('This will be visible in a few minutes.')}</div>
-            ) : (
-              <img className="channel-cover__custom" src={params.coverUrl} onError={() => setCoverError(true)} />
-            ))}
+          {params.coverUrl && (
+            <img
+              className="channel-cover__custom"
+              src={coverSrc}
+              onError={() => setCoverError(true)}
+              onLoad={() => coverSrc !== ThumbnailBrokenImage && setCoverError(false)}
+            />
+          )}
           <div className="channel__primary-info">
             <div className="channel__edit-thumb">
               <Button
@@ -270,7 +280,6 @@ function ChannelForm(props: Props) {
               uri={uri}
               thumbnailPreview={params.thumbnailUrl}
               allowGifs
-              showDelayedMessage
             />
             <h1 className="channel__title">
               {params.title || (channelName && '@' + channelName) || (params.name && '@' + params.name)}
