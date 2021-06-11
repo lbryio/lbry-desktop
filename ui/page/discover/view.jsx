@@ -2,6 +2,7 @@
 import { SHOW_ADS, DOMAIN, SIMPLE_SITE } from 'config';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
+import * as CS from 'constants/claim_search';
 import React, { useRef } from 'react';
 import Page from 'component/page';
 import ClaimListDiscover from 'component/claimListDiscover';
@@ -11,11 +12,11 @@ import { useIsMobile } from 'effects/use-screensize';
 import analytics from 'analytics';
 import HiddenNsfw from 'component/common/hidden-nsfw';
 import Icon from 'component/common/icon';
-import * as CS from 'constants/claim_search';
 import Ads from 'web/component/ads';
 import LbcSymbol from 'component/common/lbc-symbol';
 import I18nMessage from 'component/i18nMessage';
 import useGetLivestreams from 'effects/use-get-livestreams';
+import moment from 'moment';
 
 type Props = {
   location: { search: string },
@@ -97,8 +98,8 @@ function DiscoverPage(props: Props) {
   } else {
     headerLabel = (
       <span>
-        <Icon icon={(dynamicRouteProps && dynamicRouteProps.icon) || ICONS.DISCOVER} size={10} />
-        {(dynamicRouteProps && dynamicRouteProps.title) || __('All Content')}
+        <Icon icon={(dynamicRouteProps && dynamicRouteProps.icon) || ICONS.WILD_WEST} size={10} />
+        {(dynamicRouteProps && dynamicRouteProps.title) || __('Wild West')}
       </span>
     );
   }
@@ -106,9 +107,11 @@ function DiscoverPage(props: Props) {
   return (
     <Page noFooter fullWidthPage={tileLayout}>
       <ClaimListDiscover
-        limitClaimsPerChannel={3}
+        hideAdvancedFilter
+        hideFilters={!dynamicRouteProps}
         header={repostedUri ? <span /> : undefined}
         tileLayout={repostedUri ? false : tileLayout}
+        defaultOrderBy={dynamicRouteProps ? undefined : CS.ORDER_BY_TRENDING}
         claimType={claimType ? [claimType] : undefined}
         headerLabel={headerLabel}
         tags={tags}
@@ -117,8 +120,17 @@ function DiscoverPage(props: Props) {
         injectedItem={
           SHOW_ADS && IS_WEB ? (SIMPLE_SITE ? false : !isAuthenticated && <Ads small type={'video'} />) : false
         }
+        // Assume wild west page if no dynamicRouteProps
+        // Not a very good solution, but just doing it for now
+        // until we are sure this page will stay around
+        releaseTime={!dynamicRouteProps && `>${Math.floor(moment().subtract(1, 'day').startOf('week').unix())}`}
+        feeAmount={!dynamicRouteProps && CS.FEE_AMOUNT_ANY}
         channelIds={
           (dynamicRouteProps && dynamicRouteProps.options && dynamicRouteProps.options.channelIds) || undefined
+        }
+        limitClaimsPerChannel={
+          (dynamicRouteProps && dynamicRouteProps.options && dynamicRouteProps.options.limitClaimsPerChannel) ||
+          undefined
         }
         meta={
           !dynamicRouteProps ? (

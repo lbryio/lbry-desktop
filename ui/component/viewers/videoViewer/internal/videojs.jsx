@@ -9,6 +9,7 @@ import eventTracking from 'videojs-event-tracking';
 import * as OVERLAY from './overlays';
 import './plugins/videojs-mobile-ui/plugin';
 import hlsQualitySelector from './plugins/videojs-hls-quality-selector/plugin';
+import recsys from './plugins/videojs-recsys/plugin';
 import qualityLevels from 'videojs-contrib-quality-levels';
 import isUserTyping from 'util/detect-typing';
 
@@ -50,16 +51,18 @@ type Props = {
   autoplay: boolean,
   toggleVideoTheaterMode: () => void,
   adUrl: ?string,
+  claimId: ?string,
+  userId: ?number,
 };
 
-type VideoJSOptions = {
-  controls: boolean,
-  preload: string,
-  playbackRates: Array<number>,
-  responsive: boolean,
-  poster?: string,
-  muted?: boolean,
-};
+// type VideoJSOptions = {
+//   controls: boolean,
+//   preload: string,
+//   playbackRates: Array<number>,
+//   responsive: boolean,
+//   poster: ?string,
+//   muted: ?boolean,
+// };
 
 const videoPlaybackRates = [0.25, 0.5, 0.75, 1, 1.1, 1.25, 1.5, 1.75, 2];
 
@@ -68,7 +71,7 @@ const IS_IOS =
     (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) &&
   !window.MSStream;
 
-const VIDEO_JS_OPTIONS: VideoJSOptions = {
+const VIDEO_JS_OPTIONS = {
   preload: 'auto',
   playbackRates: videoPlaybackRates,
   responsive: true,
@@ -119,6 +122,10 @@ if (!Object.keys(videojs.getPlugins()).includes('hlsQualitySelector')) {
 
 if (!Object.keys(videojs.getPlugins()).includes('qualityLevels')) {
   videojs.registerPlugin('qualityLevels', qualityLevels);
+}
+
+if (!Object.keys(videojs.getPlugins()).includes('recsys')) {
+  videojs.registerPlugin('recsys', recsys);
 }
 
 // ****************************************************************************
@@ -180,6 +187,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     onPlayerReady,
     toggleVideoTheaterMode,
     adUrl,
+    claimId,
+    userId,
   } = props;
 
   const [reload, setReload] = useState('initial');
@@ -581,6 +590,13 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       // Add quality selector to player
       player.hlsQualitySelector({
         displayCurrentQuality: true,
+      });
+
+      // Add recsys plugin
+      // TODO: Add an if(odysee.com) around this function to only use recsys on odysee
+      player.recsys({
+        videoId: claimId,
+        userId: userId,
       });
 
       // Update player source
