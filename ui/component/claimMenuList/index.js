@@ -24,7 +24,7 @@ import ClaimPreview from './view';
 import fs from 'fs';
 
 const select = (state, props) => {
-  const claim = makeSelectClaimForUri(props.uri)(state);
+  const claim = makeSelectClaimForUri(props.uri, false)(state);
   const permanentUri = claim && claim.permanent_url;
   return {
     claim,
