@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { doToggleMuteChannel } from 'redux/actions/blocked';
+import { doChannelMute, doChannelUnmute } from 'redux/actions/blocked';
 import { makeSelectChannelIsMuted } from 'redux/selectors/blocked';
 import ChannelMuteButton from './view';
 
@@ -8,5 +8,6 @@ const select = (state, props) => ({
 });
 
 export default connect(select, {
-  doToggleMuteChannel,
+  doChannelMute,
+  doChannelUnmute,
 })(ChannelMuteButton);

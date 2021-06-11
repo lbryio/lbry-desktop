@@ -6,17 +6,26 @@ type Props = {
   uri: string,
   isMuted: boolean,
   channelClaim: ?ChannelClaim,
-  doToggleMuteChannel: (string) => void,
+  doChannelMute: (string, boolean) => void,
+  doChannelUnmute: (string, boolean) => void,
 };
 
 function ChannelBlockButton(props: Props) {
-  const { uri, doToggleMuteChannel, isMuted } = props;
+  const { uri, doChannelMute, doChannelUnmute, isMuted } = props;
+
+  function handleClick() {
+    if (isMuted) {
+      doChannelUnmute(uri, false);
+    } else {
+      doChannelMute(uri, false);
+    }
+  }
 
   return (
     <Button
       button={isMuted ? 'alt' : 'secondary'}
       label={isMuted ? __('Unmute') : __('Mute')}
-      onClick={() => doToggleMuteChannel(uri)}
+      onClick={handleClick}
     />
   );
 }

@@ -11,6 +11,8 @@ import {
   parseURI,
   makeSelectContentTypeForUri,
   makeSelectFileNameForUri,
+  normalizeURI,
+  selectMyActiveClaims,
 } from 'lbry-redux';
 import { makeSelectRecommendedContentForUri } from 'redux/selectors/search';
 import { selectMutedChannels } from 'redux/selectors/blocked';
@@ -243,3 +245,22 @@ export const makeSelectInsufficientCreditsForUri = (uri: string) =>
       return !isMine && costInfo && costInfo.cost > 0 && costInfo.cost > balance;
     }
   );
+
+export const makeSelectSigningIsMine = (rawUri: string) => {
+    let uri;
+    try {
+      uri = normalizeURI(rawUri);
+    } catch (e) { }
+
+    return createSelector(selectClaimsByUri, selectMyActiveClaims, (claims, myClaims) => {
+      try {
+        parseURI(uri);
+      } catch (e) {
+        return false;
+      }
+      const repostedChannel = claims && claims[uri] && claims[uri].reposted_claim && (claims[uri].reposted_claim.signing_channel || claims[uri].reposted_claim);
+      const signingChannel = claims && claims[uri] && (repostedChannel || claims[uri].signing_channel || claims[uri]);
+
+      return signingChannel && myClaims.has(signingChannel.claim_id);
+    });
+  };

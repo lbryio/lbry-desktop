@@ -15,7 +15,7 @@ type Props = {
   linkedComment?: any,
   isPinned: boolean,
   pinComment: (string, boolean) => Promise<any>,
-  blockChannel: (string) => void,
+  muteChannel: (string) => void,
   fetchComments: (string) => void,
   handleEditComment: () => void,
   contentChannelPermanentUrl: any,
@@ -34,7 +34,7 @@ function CommentMenuList(props: Props) {
     commentIsMine,
     commentId,
     deleteComment,
-    blockChannel,
+    muteChannel,
     pinComment,
     clearPlayingUri,
     activeChannelClaim,
@@ -66,7 +66,7 @@ function CommentMenuList(props: Props) {
   }
 
   function handleCommentMute() {
-    blockChannel(authorUri);
+    muteChannel(authorUri);
   }
 
   return (
