@@ -42,6 +42,7 @@ const ClaimCollectionAdd = (props: Props) => {
   function handleAddCollection() {
     addCollection(newCollectionName, [permanentUrl], isChannel ? 'collection' : 'playlist');
     setNewCollectionName('');
+    setAddNewCollection(false);
   }
 
   function altEnterListener(e: SyntheticKeyboardEvent<*>) {
@@ -58,6 +59,18 @@ const ClaimCollectionAdd = (props: Props) => {
 
   function onTextareaBlur() {
     window.removeEventListener('keydown', altEnterListener);
+  }
+
+  function handleDone() {
+    if (addNewCollection && newCollectionName) {
+      handleAddCollection();
+    }
+    closeModal();
+  }
+
+  function handleClearNew() {
+    setNewCollectionName('');
+    setAddNewCollection(false);
   }
 
   return (
@@ -107,13 +120,22 @@ const ClaimCollectionAdd = (props: Props) => {
                 onFocus={onTextareaFocus}
                 onBlur={onTextareaBlur}
                 inputButton={
-                  <Button
-                    button={'secondary'}
-                    icon={ICONS.ADD}
-                    disabled={!newCollectionName.length}
-                    onClick={() => handleAddCollection()}
-                    ref={buttonref}
-                  />
+                  <>
+                    <Button
+                      button={'alt'}
+                      icon={ICONS.ADD}
+                      className={'button-toggle'}
+                      disabled={!newCollectionName.length}
+                      onClick={() => handleAddCollection()}
+                      ref={buttonref}
+                    />
+                    <Button
+                      button={'alt'}
+                      className={'button-toggle'}
+                      icon={ICONS.REMOVE}
+                      onClick={() => handleClearNew()}
+                    />
+                  </>
                 }
                 onChange={handleNameInput}
               />
@@ -123,7 +145,7 @@ const ClaimCollectionAdd = (props: Props) => {
             )}
           </fieldset-section>
           <div className="card__actions">
-            <Button button="secondary" label={__('Done')} onClick={closeModal} />
+            <Button button="secondary" label={__('Done')} disabled={addNewCollection} onClick={handleDone} />
           </div>
         </div>
       }
