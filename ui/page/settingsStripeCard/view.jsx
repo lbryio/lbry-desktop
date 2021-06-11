@@ -29,7 +29,7 @@ type Props = {
   openModal: (string, {}) => void,
   setAsConfirmingCard: () => void,
 };
-//
+
 // type State = {
 //   open: boolean,
 //   currentFlowStage: string,
