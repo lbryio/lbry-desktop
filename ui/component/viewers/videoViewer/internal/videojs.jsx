@@ -553,21 +553,16 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       }
 
       let type = sourceType;
-
+      let finalSource = source;
       // override type if we receive an .m3u8 (transcoded mp4)
       if (response && response.redirected && response.url && response.url.endsWith('m3u8')) {
         type = 'application/x-mpegURL';
+        finalSource = response.url;
       }
 
       // Update player poster
       // note: the poster prop seems to return null usually.
       if (poster) player.poster(poster);
-
-      // Update player source
-      player.src({
-        src: source,
-        type: type,
-      });
 
       // set playsinline for mobile
       player.children_[0].setAttribute('playsinline', '');
@@ -579,7 +574,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
       // Update player source
       player.src({
-        src: source,
+        src: finalSource,
         type: type,
       });
 
