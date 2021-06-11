@@ -33,7 +33,7 @@ const AbandonedChannelPreview = React.lazy(() =>
 
 type Props = {
   uri: string,
-  claim: ?Claim, // maybe?
+  claim: ?Claim,
   obscureNsfw: boolean,
   showUserBlocked: boolean,
   claimIsMine: boolean,

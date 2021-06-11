@@ -136,14 +136,15 @@ function ChannelContent(props: Props) {
       {!channelIsMine && claimsInChannel > 0 && <HiddenNsfwClaims uri={uri} />}
 
       <ClaimListDiscover
-        defaultFreshness={CS.FRESH_ALL}
+        hideLivestreamClaims
         showHiddenByUser={viewHiddenChannels}
         forceShowReposts
         hideFilters={!showFilters}
         hideAdvancedFilter={!showFilters}
         tileLayout={tileLayout}
         uris={searchResults}
-        channelIds={[claim.claim_id]}
+        streamType={CS.CONTENT_ALL}
+        channelIds={[claimId]}
         claimType={claimType}
         feeAmount={CS.FEE_AMOUNT_ANY}
         defaultOrderBy={CS.ORDER_BY_NEW}
