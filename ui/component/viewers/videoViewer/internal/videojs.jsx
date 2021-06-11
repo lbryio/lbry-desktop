@@ -5,7 +5,7 @@ import Button from 'component/button';
 import * as ICONS from 'constants/icons';
 import classnames from 'classnames';
 import videojs from 'video.js';
-// import 'video.js/dist/alt/video-js-cdn.min.css'; --> 'scss/third-party.scss'
+import 'video.js/dist/alt/video-js-cdn.min.css';
 import eventTracking from 'videojs-event-tracking';
 import * as OVERLAY from './overlays';
 import './plugins/videojs-mobile-ui/plugin';
@@ -56,14 +56,14 @@ type Props = {
   userId: ?number,
 };
 
-type VideoJSOptions = {
-  controls: boolean,
-  preload: string,
-  playbackRates: Array<number>,
-  responsive: boolean,
-  poster?: string,
-  muted?: boolean,
-};
+// type VideoJSOptions = {
+//   controls: boolean,
+//   preload: string,
+//   playbackRates: Array<number>,
+//   responsive: boolean,
+//   poster?: string,
+//   muted?: boolean,
+// };
 
 const videoPlaybackRates = [0.25, 0.5, 0.75, 1, 1.1, 1.25, 1.5, 1.75, 2];
 
@@ -72,7 +72,7 @@ const IS_IOS =
     (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) &&
   !window.MSStream;
 
-const VIDEO_JS_OPTIONS: VideoJSOptions = {
+const VIDEO_JS_OPTIONS = {
   preload: 'auto',
   playbackRates: videoPlaybackRates,
   responsive: true,

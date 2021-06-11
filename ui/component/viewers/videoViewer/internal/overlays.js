@@ -4,7 +4,7 @@ import * as ICONS from 'constants/icons';
 import ReactDOMServer from 'react-dom/server';
 
 import './plugins/videojs-overlay/plugin';
-// import './plugins/videojs-overlay/plugin.scss'; --> 'scss/third-party.scss'
+import './plugins/videojs-overlay/plugin.scss';
 
 // ****************************************************************************
 // ****************************************************************************

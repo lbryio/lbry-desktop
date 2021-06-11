@@ -1,7 +1,7 @@
 import { SETTINGS, DAEMON_SETTINGS } from 'lbry-redux';
 import { createSelector } from 'reselect';
 import homepages from 'homepages';
-import { SIMPLE_SITE } from 'config';
+import { ENABLE_MATURE } from 'config';
 import { getDefaultHomepageKey, getDefaultLanguage } from 'util/default-languages';
 
 const selectState = (state) => state.settings || {};
@@ -22,7 +22,7 @@ export const makeSelectClientSetting = (setting) =>
   createSelector(selectClientSettings, (settings) => (settings ? settings[setting] : undefined));
 
 // refactor me
-export const selectShowMatureContent = SIMPLE_SITE
+export const selectShowMatureContent = !ENABLE_MATURE
   ? createSelector(() => false)
   : makeSelectClientSetting(SETTINGS.SHOW_MATURE);
 

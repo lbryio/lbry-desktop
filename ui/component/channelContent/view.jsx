@@ -1,5 +1,5 @@
 // @flow
-import { SHOW_ADS } from 'config';
+import { SHOW_ADS, ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import * as CS from 'constants/claim_search';
 import * as ICONS from 'constants/icons';
 import React, { Fragment } from 'react';
@@ -136,14 +136,15 @@ function ChannelContent(props: Props) {
       {!channelIsMine && claimsInChannel > 0 && <HiddenNsfwClaims uri={uri} />}
 
       <ClaimListDiscover
-        defaultFreshness={CS.FRESH_ALL}
+        showNoSourceClaims={ENABLE_NO_SOURCE_CLAIMS}
         showHiddenByUser={viewHiddenChannels}
         forceShowReposts
         hideFilters={!showFilters}
         hideAdvancedFilter={!showFilters}
         tileLayout={tileLayout}
         uris={searchResults}
-        channelIds={[claim.claim_id]}
+        streamType={CS.CONTENT_ALL}
+        channelIds={[claimId]}
         claimType={claimType}
         feeAmount={CS.FEE_AMOUNT_ANY}
         defaultOrderBy={CS.ORDER_BY_NEW}

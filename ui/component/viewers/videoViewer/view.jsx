@@ -5,6 +5,7 @@ import * as ICONS from 'constants/icons';
 import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { stopContextMenu } from 'util/context-menu';
 import type { Player } from './internal/videojs';
+import VideoJs from './internal/videojs';
 import analytics from 'analytics';
 import { EmbedContext } from 'page/embedWrapper/view';
 import classnames from 'classnames';
@@ -19,8 +20,6 @@ import { useGetAds } from 'effects/use-get-ads';
 import Button from 'component/button';
 import I18nMessage from 'component/i18nMessage';
 import { useHistory } from 'react-router';
-
-const VideoJs = React.lazy(() => import('./internal/videojs' /* webpackChunkName: "videojs" */));
 
 const PLAY_TIMEOUT_ERROR = 'play_timeout_error';
 const PLAY_TIMEOUT_LIMIT = 2000;
@@ -181,7 +180,7 @@ function VideoViewer(props: Props) {
     }
   }, [embedded, setIsEndededEmbed, autoplaySetting, setShowAutoplayCountdown, adUrl, setAdUrl]);
 
-  function onPlay(player) {
+  function onPlay() {
     setIsLoading(false);
     setIsPlaying(true);
     setShowAutoplayCountdown(false);
@@ -234,14 +233,19 @@ function VideoViewer(props: Props) {
 
       Promise.race([playPromise, timeoutPromise]).catch((error) => {
         if (typeof error === 'object' && error.name && error.name === 'NotAllowedError') {
-          // Autoplay disallowed by browser
-          player.play();
+          if (player.autoplay() && !player.muted()) {
+            player.muted(true);
+            // another version had player.play()
+          }
         }
 
         // Autoplay failed
         if (PLAY_TIMEOUT_ERROR) {
-          setIsLoading(false);
-          setIsPlaying(false);
+          const retryPlayPromise = player.play();
+          Promise.race([retryPlayPromise, timeoutPromise]).catch((error) => {
+            setIsLoading(false);
+            setIsPlaying(false);
+          });
         } else {
           setIsLoading(false);
           setIsPlaying(false);
@@ -260,10 +264,9 @@ function VideoViewer(props: Props) {
     player.on('tracking:buffered', doTrackingBuffered);
     player.on('tracking:firstplay', doTrackingFirstPlay);
     player.on('ended', onEnded);
-    player.on('play', () => onPlay(player));
-    player.on('pause', () => onPause(player));
-    player.on('dispose', () => onDispose(player));
-
+    player.on('play', onPlay);
+    player.on('pause', onPause);
+    player.on('dispose', onDispose);
     player.on('error', () => {
       const error = player.error();
       if (error) {
@@ -337,21 +340,19 @@ function VideoViewer(props: Props) {
       )}
 
       {!isFetchingAd && (
-        <React.Suspense fallback={null}>
-          <VideoJs
-            adUrl={adUrl}
-            source={adUrl || source}
-            sourceType={forcePlayer || adUrl ? 'video/mp4' : contentType}
-            isAudio={isAudio}
-            poster={isAudio || (embedded && !autoplayIfEmbedded) ? thumbnail : ''}
-            onPlayerReady={onPlayerReady}
-            startMuted={autoplayIfEmbedded}
-            toggleVideoTheaterMode={toggleVideoTheaterMode}
-            autoplay={!embedded || autoplayIfEmbedded}
-            claimId={claimId}
-            userId={userId}
-          />
-        </React.Suspense>
+        <VideoJs
+          adUrl={adUrl}
+          source={adUrl || source}
+          sourceType={forcePlayer || adUrl ? 'video/mp4' : contentType}
+          isAudio={isAudio}
+          poster={isAudio || (embedded && !autoplayIfEmbedded) ? thumbnail : ''}
+          onPlayerReady={onPlayerReady}
+          startMuted={autoplayIfEmbedded}
+          toggleVideoTheaterMode={toggleVideoTheaterMode}
+          autoplay={!embedded || autoplayIfEmbedded}
+          claimId={claimId}
+          userId={userId}
+        />
       )}
     </div>
   );

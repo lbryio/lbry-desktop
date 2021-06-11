@@ -60,8 +60,12 @@ ol {
     position: relative;
     list-style-position: outside;
     margin: var(--spacing-xs) 0;
-    margin-left: var(--spacing-xl);
+    margin-left: var(--spacing-s);
     margin-bottom: 0;
+
+    @media (min-width: $breakpoint-small) {
+      margin-left: var(--spacing-xl);
+    }
   }
 }
 
@@ -267,10 +271,10 @@ textarea {
   margin-top: var(--spacing-s);
 
   &:not(:last-child) {
-    margin-bottom: var(--spacing-s);
+    margin-bottom: var(--spacing-m);
   }
 
-  .button--link ~ .button--link {
+  .button--link + .button--link {
     margin-left: var(--spacing-s);
   }
 
@@ -497,5 +501,18 @@ textarea {
   img {
     margin-top: var(--spacing-xl);
     height: 4rem;
+  }
+}
+
+.home__meme {
+  text-align: center;
+  font-weight: bold;
+  line-height: 1;
+  font-size: 1rem;
+  margin-bottom: var(--spacing-m);
+
+  @media (min-width: $breakpoint-small) {
+    font-size: 1.2rem;
+    margin-bottom: var(--spacing-l);
   }
 }

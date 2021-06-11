@@ -14,12 +14,12 @@ import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import SearchPage from './view';
 
 const select = (state, props) => {
-  const showMature = selectShowMatureContent(state);
   const urlParams = new URLSearchParams(props.location.search);
   let urlQuery = urlParams.get('q') || null;
   if (urlQuery) {
     urlQuery = urlQuery.replace(/^lbry:\/\//i, '').replace(/\//, ' ');
   }
+  const showMature = selectShowMatureContent(state);
   const query = makeSelectQueryWithOptions(
     urlQuery,
     SIMPLE_SITE

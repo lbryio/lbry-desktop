@@ -47,7 +47,15 @@ function HomePage(props: Props) {
         ))}
       </ul>
     );
-    const claimTiles = <ClaimTilesDiscover {...options} liveLivestreamsFirst livestreamMap={livestreamMap} hasSource />;
+    const claimTiles = (
+      <ClaimTilesDiscover
+        {...options}
+        liveLivestreamsFirst
+        livestreamMap={livestreamMap}
+        hasSource
+        pin={route === `/$/${PAGES.GENERAL}`}
+      />
+    );
 
     return (
       <div key={title} className="claim-grid__wrapper">
@@ -125,6 +133,13 @@ function HomePage(props: Props) {
           </p>
         </div>
       )}
+
+      <h1 className="home__meme">
+        <Button button="link" href="https://odysee.com/@Odysee:8?view=discussion">
+          {'big gulps, huh?'}
+        </Button>
+      </h1>
+
       {rowData.map(({ title, route, link, icon, help, options = {} }, index) => {
         return getRowElements(title, route, link, icon, help, options, index);
       })}
