@@ -8,7 +8,7 @@ type Props = {
   currentValue: string,
   title: string,
   helpText: string,
-  onUpdate: string => void,
+  onUpdate: (string) => void,
   assetName: string,
 };
 

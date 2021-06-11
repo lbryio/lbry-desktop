@@ -1,5 +1,4 @@
 // @flow
-
 import React from 'react';
 import FileSelector from 'component/common/file-selector';
 import { SPEECH_URLS } from 'lbry-redux';
@@ -8,7 +7,6 @@ import Button from 'component/button';
 import Card from 'component/common/card';
 import { generateThumbnailName } from 'util/generate-thumbnail-name';
 import usePersistedState from 'effects/use-persisted-state';
-import classnames from 'classnames';
 
 const accept = '.png, .jpg, .jpeg, .gif';
 const SPEECH_READY = 'READY';
@@ -32,19 +30,6 @@ function SelectAsset(props: Props) {
   const [useUrl, setUseUrl] = usePersistedState('thumbnail-upload:mode', false);
   const [url, setUrl] = React.useState('');
   const [error, setError] = React.useState();
-
-  React.useEffect(() => {
-    if (pathSelected && fileSelected) {
-      doUploadAsset();
-    }
-  }, [pathSelected, fileSelected]);
-
-  function handleToggleMode(useUrl) {
-    setPathSelected('');
-    setFileSelected(null);
-    setUrl('');
-    setUseUrl(useUrl);
-  }
 
   function doUploadAsset() {
     const uploadError = (error = '') => {
@@ -93,30 +78,6 @@ function SelectAsset(props: Props) {
   }
   const formBody = (
     <>
-      <div className={'section__header--actions'}>
-        <div>
-          <Button
-            button="alt"
-            className={classnames('button-toggle', {
-              'button-toggle--active': useUrl, // disable on upload status
-            })}
-            label={__('URL')}
-            onClick={() => {
-              handleToggleMode(true);
-            }}
-          />
-          <Button
-            button="alt"
-            className={classnames('button-toggle', {
-              'button-toggle--active': !useUrl, // disable on upload status
-            })}
-            label={__('Upload')}
-            onClick={() => {
-              handleToggleMode(false);
-            }}
-          />
-        </div>
-      </div>
       <fieldset-section>
         {error && <div className="error__text">{error}</div>}
         {useUrl ? (
@@ -151,6 +112,25 @@ function SelectAsset(props: Props) {
           />
         )}
       </fieldset-section>
+
+      <div className="section__actions">
+        {onDone && (
+          <Button
+            button="primary"
+            type="submit"
+            label={__('Done')}
+            disabled={(uploadStatus === SPEECH_UPLOADING) || !pathSelected || !fileSelected}
+            onClick={() => doUploadAsset()}
+          />
+        )}
+        <FormField
+          name="toggle-upload"
+          type="checkbox"
+          label={__('Use a URL')}
+          checked={useUrl}
+          onChange={() => setUseUrl(!useUrl)}
+        />
+      </div>
     </>
   );
 
