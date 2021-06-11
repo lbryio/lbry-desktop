@@ -1,0 +1,143 @@
+// Extends reach-ui menu button base stylesheet
+/* Used to detect in JavaScript if apps have loaded styles or not. */
+:root {
+  --reach-menu-button: 1;
+}
+
+[data-reach-menu] {
+  display: block;
+  position: absolute;
+  z-index: 2;
+  font-size: var(--font-body);
+}
+
+[data-reach-menu-list] {
+  display: block;
+  white-space: nowrap;
+  outline: none;
+  background-color: var(--color-menu-background);
+  border: 1px solid var(--border-color);
+  border-top: none;
+}
+
+[data-reach-menu-item] {
+  display: block;
+  z-index: 2;
+
+  &:focus {
+    box-shadow: none;
+  }
+}
+
+[data-reach-menu-item] {
+  cursor: pointer;
+  display: block;
+  color: inherit;
+  font: inherit;
+  text-decoration: initial;
+  border-radius: var(--border-radius);
+}
+
+[data-reach-menu-item][data-selected] {
+  background-color: var(--color-menu-background--active);
+  box-shadow: none;
+}
+
+.menu__button {
+  &:hover {
+    .icon {
+      border-radius: var(--border-radius);
+      background-color: var(--color-card-background-highlighted);
+    }
+  }
+}
+
+.menu__title {
+  &[aria-expanded='true'] {
+    background-color: var(--color-header-button-active);
+  }
+}
+
+.menu__list {
+  box-shadow: var(--card-box-shadow);
+  animation: menu-animate-in var(--animation-duration) var(--animation-style);
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-xs) 0;
+
+  [data-reach-menu-item] {
+    margin: 0 var(--spacing-xs);
+  }
+}
+
+.menu__list--header {
+  @extend .menu__list;
+  margin-top: 19px;
+}
+
+.menu__list--comments {
+  @extend .menu__list;
+}
+
+.menu__link {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-s);
+  padding-right: var(--spacing-l);
+  height: var(--button-height);
+
+  .icon {
+    stroke: var(--color-menu-icon);
+    margin-right: var(--spacing-s);
+  }
+
+  .badge {
+    margin-left: var(--spacing-s);
+  }
+}
+
+.menu__link-help {
+  @extend .menu__link;
+  color: var(--color-text-help);
+  font-size: var(--font-small);
+  padding-top: 0;
+}
+
+.menu__link--notification {
+  display: flex;
+  align-items: flex-start;
+
+  .icon__wrapper {
+    height: 2.5rem;
+    width: 2.5rem;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.menu__link--notification-nolink {
+  @extend .menu__link--notification;
+
+  &:hover {
+    cursor: default;
+  }
+}
+
+.menu__link--all-notifications {
+  @extend .button--alt;
+  width: auto;
+  align-self: flex-start;
+  margin-right: auto;
+  font-weight: var(--font-weight-bold);
+  margin-top: var(--spacing-m);
+}
+
+.menu__separator {
+  margin-top: var(--border-radius);
+  margin-bottom: var(--border-radius);
+}
