@@ -86,6 +86,7 @@ function ChannelForm(props: Props) {
   const [nameError, setNameError] = React.useState(undefined);
   const [bidError, setBidError] = React.useState('');
   const [coverError, setCoverError] = React.useState(false);
+  const [thumbError, setThumbError] = React.useState(false);
   const { claim_id: claimId } = claim || {};
   const [params, setParams]: [any, (any) => void] = React.useState(getChannelParams());
   const { channelName } = parseURI(uri);
@@ -176,10 +177,12 @@ function ChannelForm(props: Props) {
 
   function handleThumbnailChange(thumbnailUrl: string) {
     setParams({ ...params, thumbnailUrl });
+    setThumbError(false);
   }
 
   function handleCoverChange(coverUrl: string) {
     setParams({ ...params, coverUrl });
+    setCoverError(false);
   }
 
   function handleSubmit() {
@@ -203,6 +206,9 @@ function ChannelForm(props: Props) {
   let errorMsg = updateError || createError;
   if (errorMsg && errorMsg.includes(LIMIT_ERR_PARTIAL_MSG)) {
     errorMsg = __('Transaction limit reached. Try reducing the Description length.');
+  }
+  if (thumbError || coverError) {
+    errorMsg = __('Invalid %error_type%', { error_type: (thumbError && 'thumbnail') || (coverError && 'cover image') });
   }
 
   React.useEffect(() => {
@@ -254,7 +260,6 @@ function ChannelForm(props: Props) {
               className="channel-cover__custom"
               src={coverSrc}
               onError={() => setCoverError(true)}
-              onLoad={() => coverSrc !== ThumbnailBrokenImage && setCoverError(false)}
             />
           )}
           <div className="channel__primary-info">
@@ -280,6 +285,8 @@ function ChannelForm(props: Props) {
               uri={uri}
               thumbnailPreview={params.thumbnailUrl}
               allowGifs
+              setThumbError={(v) => setThumbError(v)}
+              thumbError={thumbError}
             />
             <h1 className="channel__title">
               {params.title || (channelName && '@' + channelName) || (params.name && '@' + params.name)}
@@ -465,7 +472,7 @@ function ChannelForm(props: Props) {
                 <Button
                   button="primary"
                   disabled={
-                    creatingChannel || updatingChannel || nameError || bidError || (isNewChannel && !params.name)
+                    creatingChannel || updatingChannel || nameError || bidError || thumbError || coverError || (isNewChannel && !params.name)
                   }
                   label={creatingChannel || updatingChannel ? __('Submitting') : __('Submit')}
                   onClick={handleSubmit}

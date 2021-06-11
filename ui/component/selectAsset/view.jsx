@@ -23,12 +23,12 @@ type Props = {
 };
 
 function SelectAsset(props: Props) {
-  const { onUpdate, onDone, assetName, recommended, title, inline } = props;
+  const { onUpdate, onDone, assetName, currentValue, recommended, title, inline } = props;
   const [pathSelected, setPathSelected] = React.useState('');
   const [fileSelected, setFileSelected] = React.useState<any>(null);
   const [uploadStatus, setUploadStatus] = React.useState(SPEECH_READY);
   const [useUrl, setUseUrl] = usePersistedState('thumbnail-upload:mode', false);
-  const [url, setUrl] = React.useState('');
+  const [url, setUrl] = React.useState(currentValue);
   const [error, setError] = React.useState();
 
   function doUploadAsset() {

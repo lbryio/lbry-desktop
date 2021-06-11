@@ -24,6 +24,10 @@ type Props = {
   showDelayedMessage?: boolean,
   noLazyLoad?: boolean,
   hideStakedIndicator?: boolean,
+  xsmall?: boolean,
+  noOptimization?: boolean,
+  setThumbError: (boolean) => void,
+  thumbError: boolean,
 };
 
 function ChannelThumbnail(props: Props) {
@@ -42,8 +46,10 @@ function ChannelThumbnail(props: Props) {
     showDelayedMessage = false,
     noLazyLoad,
     hideStakedIndicator = false,
+    noOptimization,
+    setThumbError,
+    thumbError,
   } = props;
-  const [thumbError, setThumbError] = React.useState(false);
   const shouldResolve = claim === undefined;
   const thumbnail = rawThumbnail && rawThumbnail.trim().replace(/^http:\/\//i, 'https://');
   const thumbnailPreview = rawThumbnailPreview && rawThumbnailPreview.trim().replace(/^http:\/\//i, 'https://');
@@ -104,7 +110,6 @@ function ChannelThumbnail(props: Props) {
           src={thumbnailSrc}
           loading={noLazyLoad ? undefined : 'lazy'}
           onError={() => setThumbError(true)}
-          onLoad={() => thumbnailSrc !== ThumbnailBrokenImage && setThumbError(false)}
         />
       )}
       {!hideStakedIndicator && <ChannelStakedIndicator uri={uri} claim={claim} />}
