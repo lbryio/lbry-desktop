@@ -84,7 +84,12 @@ function ShowPage(props: Props) {
       // Only redirect if we are in lbry.tv land
       // replaceState will fail if on a different domain (like webcache.googleusercontent.com)
       if (canonicalUrlPath !== window.location.pathname && DOMAIN === window.location.hostname) {
-        history.replaceState(history.state, '', canonicalUrlPath);
+        const urlParams = new URLSearchParams(search);
+        if (urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID)) {
+          const listId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID) || '';
+          urlParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, listId);
+        }
+        history.replaceState(history.state, '', `${canonicalUrlPath}?${urlParams.toString()}`);
       }
     }
     // @endif
