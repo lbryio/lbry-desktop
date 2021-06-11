@@ -506,7 +506,7 @@ async function channelSignName(channelClaimId: string, channelName: string) {
 }
 
 // Hides a users comments from all creator's claims and prevent them from commenting in the future
-export function doCommentModToggleBlock(channelUri: string, unblock: boolean = false) {
+export function doCommentModToggleBlock(channelUri: string, showLink: boolean, unblock: boolean = false) {
   return async (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const myChannels = selectMyChannelClaims(state);
@@ -531,13 +531,13 @@ export function doCommentModToggleBlock(channelUri: string, unblock: boolean = f
 
     const sharedModBlockParams = unblock
       ? {
-          un_blocked_channel_id: creatorIdForAction,
-          un_blocked_channel_name: creatorNameForAction,
-        }
+        un_blocked_channel_id: creatorIdForAction,
+        un_blocked_channel_name: creatorNameForAction,
+      }
       : {
-          blocked_channel_id: creatorIdForAction,
-          blocked_channel_name: creatorNameForAction,
-        };
+        blocked_channel_id: creatorIdForAction,
+        blocked_channel_name: creatorNameForAction,
+      };
 
     const commentAction = unblock ? Comments.moderation_unblock : Comments.moderation_block;
 
@@ -564,9 +564,11 @@ export function doCommentModToggleBlock(channelUri: string, unblock: boolean = f
               data: { channelUri },
             });
 
-            if (!unblock) {
-              dispatch(doToast({ message: __('Channel blocked. You will not see them again.') }));
-            }
+            dispatch(doToast({
+              message: __(!unblock ? 'Channel blocked. They will not interact with you again.' : 'Channel unblocked!'),
+              linkText: __(showLink ? 'See All' : ''),
+              linkTarget: '/settings/block_and_mute',
+            }));
           })
           .catch(() => {
             dispatch({
@@ -582,15 +584,15 @@ export function doCommentModToggleBlock(channelUri: string, unblock: boolean = f
   };
 }
 
-export function doCommentModBlock(commentAuthor: string) {
+export function doCommentModBlock(commentAuthor: string, showLink: boolean = true) {
   return (dispatch: Dispatch) => {
-    return dispatch(doCommentModToggleBlock(commentAuthor));
+    return dispatch(doCommentModToggleBlock(commentAuthor, showLink));
   };
 }
 
-export function doCommentModUnBlock(commentAuthor: string) {
+export function doCommentModUnBlock(commentAuthor: string, showLink: boolean = true) {
   return (dispatch: Dispatch) => {
-    return dispatch(doCommentModToggleBlock(commentAuthor, true));
+    return dispatch(doCommentModToggleBlock(commentAuthor, showLink, true));
   };
 }
 

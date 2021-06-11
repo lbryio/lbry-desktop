@@ -43,7 +43,6 @@ type Props = {
   showHiddenByUser?: boolean,
   properties?: (Claim) => void,
   live?: boolean,
-  channelIsMine?: boolean,
   collectionId?: string,
 };
 
@@ -67,7 +66,6 @@ function ClaimPreviewTile(props: Props) {
     showHiddenByUser,
     properties,
     live,
-    channelIsMine,
     collectionId,
   } = props;
   const isRepost = claim && claim.repost_channel_url;
@@ -100,11 +98,8 @@ function ClaimPreviewTile(props: Props) {
     }
   }
 
-  let channelUri;
   const signingChannel = claim && claim.signing_channel;
-  if (signingChannel) {
-    channelUri = signingChannel.permanent_url;
-  }
+  const channelUri = signingChannel && signingChannel.permanent_url;
 
   function handleClick(e) {
     if (navigateUrl) {
@@ -219,7 +214,7 @@ function ClaimPreviewTile(props: Props) {
             </div>
           )}
           {/* CHECK CLAIM MENU LIST PARAMS (IS REPOST?) */}
-          <ClaimMenuList uri={uri} collectionId={listId} channelIsMine={channelIsMine} isRepost={isRepost} />
+          <ClaimMenuList uri={uri} collectionId={listId} channelUri={channelUri} isRepost={isRepost} />
         </h2>
       </NavLink>
       <div>

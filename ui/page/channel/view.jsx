@@ -191,8 +191,7 @@ function ChannelPage(props: Props) {
           {!channelIsBlackListed && <ShareButton uri={uri} />}
           {!(isBlocked || isMuted) && <ClaimSupportButton uri={uri} />}
           {!(isBlocked || isMuted) && (!channelIsBlackListed || isSubscribed) && <SubscribeButton uri={permanentUrl} />}
-          {/* TODO: add channel collections <ClaimCollectionAddButton uri={uri} fileAction /> */}
-          <ClaimMenuList uri={claim.permanent_url} inline />
+          <ClaimMenuList uri={claim.permanent_url} channelUri={claim.permanent_url} inline />
         </div>
         {cover && <img className={classnames('channel-cover__custom')} src={cover} />}
         <div className="channel__primary-info">

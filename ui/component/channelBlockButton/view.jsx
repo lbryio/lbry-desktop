@@ -6,8 +6,8 @@ type Props = {
   uri: string,
   isBlocked: boolean,
   isBlockingOrUnBlocking: boolean,
-  doCommentModUnBlock: (string) => void,
-  doCommentModBlock: (string) => void,
+  doCommentModUnBlock: (string, boolean) => void,
+  doCommentModBlock: (string, boolean) => void,
 };
 
 function ChannelBlockButton(props: Props) {
@@ -15,9 +15,9 @@ function ChannelBlockButton(props: Props) {
 
   function handleClick() {
     if (isBlocked) {
-      doCommentModUnBlock(uri);
+      doCommentModUnBlock(uri, false);
     } else {
-      doCommentModBlock(uri);
+      doCommentModBlock(uri, false);
     }
   }
 
@@ -30,8 +30,8 @@ function ChannelBlockButton(props: Props) {
             ? __('Unblocking...')
             : __('Unblock')
           : isBlockingOrUnBlocking
-          ? __('Blocking...')
-          : __('Block')
+            ? __('Blocking...')
+            : __('Block')
       }
       onClick={handleClick}
     />

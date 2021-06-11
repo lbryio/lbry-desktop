@@ -161,6 +161,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     collectionParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, collectionId);
     navigateUrl = navigateUrl + `?` + collectionParams.toString();
   }
+  const channelUri = claim && (signingChannel ? signingChannel.permanent_url : claim.permanent_url);
   const navLinkProps = {
     to: navigateUrl,
     onClick: (e) => e.stopPropagation(),
@@ -421,7 +422,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
             )}
           </div>
         </div>
-        {!hideMenu && <ClaimMenuList uri={uri} collectionId={collectionId} />}
+        {!hideMenu && <ClaimMenuList uri={uri} collectionId={collectionId} channelUri={channelUri} />}
       </>
     </WrapperElement>
   );
