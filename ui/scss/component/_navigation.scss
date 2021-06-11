@@ -39,6 +39,10 @@
       overflow-y: auto;
     }
   }
+
+  @media (min-width: $breakpoint-small) {
+    justify-content: space-between;
+  }
 }
 
 .navigation--mac {

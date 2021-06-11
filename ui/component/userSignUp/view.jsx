@@ -1,5 +1,4 @@
 // @flow
-import * as PAGES from 'constants/pages';
 import React from 'react';
 import classnames from 'classnames';
 import { useHistory } from 'react-router';
@@ -7,7 +6,6 @@ import UserEmailNew from 'component/userEmailNew';
 import UserEmailVerify from 'component/userEmailVerify';
 import UserFirstChannel from 'component/userFirstChannel';
 import UserChannelFollowIntro from 'component/userChannelFollowIntro';
-import UserTagFollowIntro from 'component/userTagFollowIntro';
 import YoutubeSync from 'page/youtubeSync';
 import { DEFAULT_BID_FOR_FIRST_CHANNEL } from 'component/userFirstChannel/view';
 import { YOUTUBE_STATUSES } from 'lbryinc';
@@ -42,7 +40,6 @@ type Props = {
   creatingChannel: boolean,
   setClientSetting: (string, boolean, ?boolean) => void,
   followingAcknowledged: boolean,
-  tagsAcknowledged: boolean,
   rewardsAcknowledged: boolean,
   interestedInYoutubeSync: boolean,
   doToggleInterestedInYoutubeSync: () => void,
@@ -67,7 +64,6 @@ function UserSignUp(props: Props) {
     fetchingChannels,
     creatingChannel,
     followingAcknowledged,
-    tagsAcknowledged,
     rewardsAcknowledged,
     setClientSetting,
     interestedInYoutubeSync,
@@ -118,8 +114,7 @@ function UserSignUp(props: Props) {
       interestedInYoutubeSync);
   const showYoutubeTransfer = hasVerifiedEmail && hasYoutubeChannels && !isYoutubeTransferComplete;
   const showFollowIntro = step === 'channels' || (hasVerifiedEmail && !followingAcknowledged);
-  const showTagsIntro = step === 'tags' || (hasVerifiedEmail && !tagsAcknowledged);
-  const canHijackSignInFlowWithSpinner = hasVerifiedEmail && !showFollowIntro && !showTagsIntro && !rewardsAcknowledged;
+  const canHijackSignInFlowWithSpinner = hasVerifiedEmail && !showFollowIntro && !rewardsAcknowledged;
   const isCurrentlyFetchingSomething = fetchingChannels || claimingReward || syncingWallet || creatingChannel;
   const isWaitingForSomethingToFinish =
     // If the user has claimed the email award, we need to wait until the balance updates sometime in the future
@@ -203,22 +198,6 @@ function UserSignUp(props: Props) {
 
           setSettingAndSync(SETTINGS.FOLLOWING_ACKNOWLEDGED, false);
           replace(`${pathname}?${urlParams.toString()}`);
-        }}
-      />
-    ),
-    showTagsIntro && (
-      <UserTagFollowIntro
-        onContinue={() => {
-          let url = `/$/${PAGES.AUTH}?reset_scroll=1&${STEP_PARAM}=channels`;
-          if (redirect) {
-            url += `&${REDIRECT_PARAM}=${redirect}`;
-          }
-          if (shouldRedirectImmediately) {
-            url += `&${REDIRECT_IMMEDIATELY_PARAM}=true`;
-          }
-
-          replace(url);
-          setSettingAndSync(SETTINGS.TAGS_ACKNOWLEDGED, true);
         }}
       />
     ),

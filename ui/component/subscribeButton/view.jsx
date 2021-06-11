@@ -43,7 +43,6 @@ export default function SubscribeButton(props: Props) {
   const isMobile = useIsMobile();
   let isHovering = useHover(buttonRef);
   isHovering = isMobile ? true : isHovering;
-  const uiNotificationsEnabled = user && user.experimental_ui;
 
   const { channelName: rawChannelName } = parseURI(uri);
   const { channelName } = parseURI(permanentUrl);
@@ -109,7 +108,7 @@ export default function SubscribeButton(props: Props) {
           }
         }}
       />
-      {isSubscribed && uiNotificationsEnabled && (
+      {isSubscribed && (
         <Button
           button="alt"
           icon={notificationsDisabled ? ICONS.BELL : ICONS.BELL_ON}
