@@ -13,13 +13,16 @@ type Props = {
 class ModalConfirmThumbnailUpload extends React.PureComponent<Props> {
   upload() {
     const { upload, updatePublishForm, closeModal, file } = this.props;
-    upload(file);
-    updatePublishForm({ thumbnailPath: file.path });
-    closeModal();
+    if (file) {
+      upload(file);
+      updatePublishForm({ thumbnailPath: file.path });
+      closeModal();
+    }
   }
 
   render() {
     const { closeModal, file } = this.props;
+    const filePath = file && (file.path || file.name);
 
     return (
       <Modal
@@ -33,7 +36,7 @@ class ModalConfirmThumbnailUpload extends React.PureComponent<Props> {
       >
         <label>{__('Are you sure you want to upload this thumbnail to %domain%', { domain: DOMAIN })}?</label>
 
-        <blockquote>{file.path || file.name}</blockquote>
+        <blockquote>{filePath}</blockquote>
       </Modal>
     );
   }

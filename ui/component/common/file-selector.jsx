@@ -7,7 +7,7 @@ import { FormField } from 'component/common/form';
 type Props = {
   type: string,
   currentPath?: ?string,
-  onFileChosen: WebFile => void,
+  onFileChosen: (WebFile) => void,
   label?: string,
   placeholder?: string,
   accept?: string,
@@ -19,17 +19,6 @@ type Props = {
 class FileSelector extends React.PureComponent<Props> {
   static defaultProps = {
     autoFocus: false,
-  };
-
-  componentDidUpdate(prevProps: Props) {
-    // If the form has just been cleared,
-    // clear the file input
-    if (prevProps.currentPath && !this.props.currentPath) {
-      this.fileInput.current.value = null;
-    }
-  }
-
-  static defaultProps = {
     type: 'file',
   };
 
@@ -39,6 +28,7 @@ class FileSelector extends React.PureComponent<Props> {
     super();
     this.fileInput = React.createRef();
     this.handleFileInputSelection = this.handleFileInputSelection.bind(this);
+    this.handleDirectoryInputSelection = this.handleDirectoryInputSelection.bind(this);
     this.fileInputButton = this.fileInputButton.bind(this);
   }
 
@@ -53,6 +43,7 @@ class FileSelector extends React.PureComponent<Props> {
     if (this.props.onFileChosen) {
       this.props.onFileChosen(file);
     }
+    this.fileInput.current.value = null; // clear the file input
   };
 
   handleDirectoryInputSelection = () => {
