@@ -273,48 +273,54 @@ function ClaimMenuList(props: Props) {
                 </div>
               </MenuItem>
             )}
+            {!isChannelPage && (
+              <hr className="menu__separator" />
+            )}
+          </>
+        )}
+
+        {!isMyCollection && (
+          <>
+            {(!claimIsMine || channelIsBlocked) && channelUri ? !incognito && (
+              <>
+                <MenuItem className="comment__menu-option" onSelect={handleToggleBlock}>
+                  <div className="menu__link">
+                    <Icon aria-hidden icon={ICONS.BLOCK} />
+                    {channelIsBlocked ? __('Unblock Channel') : __('Block Channel')}
+                  </div>
+                </MenuItem>
+
+                <MenuItem className="comment__menu-option" onSelect={handleToggleMute}>
+                  <div className="menu__link">
+                    <Icon aria-hidden icon={ICONS.MUTE} />
+                    {channelIsMuted ? __('Unmute Channel') : __('Mute Channel')}
+                  </div>
+                </MenuItem>
+              </>
+            ) : (
+              <>
+                {!isChannelPage && !isRepost && (
+                  <MenuItem className="comment__menu-option" onSelect={handleEdit}>
+                    <div className="menu__link">
+                      <Icon aria-hidden icon={ICONS.EDIT} />
+                      {__('Edit')}
+                    </div>
+                  </MenuItem>
+                )}
+
+                {showDelete && (
+                  <MenuItem className="comment__menu-option" onSelect={handleDelete}>
+                    <div className="menu__link">
+                      <Icon aria-hidden icon={ICONS.DELETE} />
+                      {__('Delete')}
+                    </div>
+                  </MenuItem>
+                )}
+              </>
+            )}
             <hr className="menu__separator" />
           </>
         )}
-
-        {(!claimIsMine || channelIsBlocked) && channelUri && !isMyCollection ? !incognito && (
-          <>
-            <MenuItem className="comment__menu-option" onSelect={handleToggleBlock}>
-              <div className="menu__link">
-                <Icon aria-hidden icon={ICONS.BLOCK} />
-                {channelIsBlocked ? __('Unblock Channel') : __('Block Channel')}
-              </div>
-            </MenuItem>
-
-            <MenuItem className="comment__menu-option" onSelect={handleToggleMute}>
-              <div className="menu__link">
-                <Icon aria-hidden icon={ICONS.MUTE} />
-                {channelIsMuted ? __('Unmute Channel') : __('Mute Channel')}
-              </div>
-            </MenuItem>
-          </>
-        ) : (
-          <>
-            {!isChannelPage && !isRepost && (
-              <MenuItem className="comment__menu-option" onSelect={handleEdit}>
-                <div className="menu__link">
-                  <Icon aria-hidden icon={ICONS.EDIT} />
-                  {__('Edit')}
-                </div>
-              </MenuItem>
-            )}
-
-            {showDelete && (
-              <MenuItem className="comment__menu-option" onSelect={handleDelete}>
-                <div className="menu__link">
-                  <Icon aria-hidden icon={ICONS.DELETE} />
-                  {__('Delete')}
-                </div>
-              </MenuItem>
-            )}
-          </>
-        )}
-        <hr className="menu__separator" />
 
         <MenuItem className="comment__menu-option" onSelect={handleCopyLink}>
           <div className="menu__link">
