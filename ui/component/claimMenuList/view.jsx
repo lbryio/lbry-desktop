@@ -82,7 +82,7 @@ function ClaimMenuList(props: Props) {
   } = props;
   const incognito = channelUri && !(channelUri.includes('@'));
   const signingChannel = claim && (claim.signing_channel || claim);
-  const permanentUrl = String(signingChannel && signingChannel.permanent_url);
+  const permanentUrl = String(channelUri);
   const isChannel = !incognito && signingChannel === claim;
   const showDelete = claimIsMine || (fileInfo && (fileInfo.written_bytes > 0 || fileInfo.blobs_completed > 0));
   const subscriptionLabel = isSubscribed ? __('Unfollow') : __('Follow');
@@ -138,7 +138,6 @@ function ClaimMenuList(props: Props) {
     if (!isChannel) {
       const signingChannelName = signingChannel && signingChannel.name;
 
-      let editUri;
       const uriObject: { streamName: string, streamClaimId: string, channelName?: string } = {
         streamName: claim.name,
         streamClaimId: claim.claim_id,
@@ -146,7 +145,7 @@ function ClaimMenuList(props: Props) {
       if (signingChannelName) {
         uriObject.channelName = signingChannelName;
       }
-      editUri = buildURI(uriObject);
+      const editUri = buildURI(uriObject);
 
       push(`/$/${PAGES.UPLOAD}`);
       prepareEdit(claim, editUri, fileInfo);
@@ -160,7 +159,7 @@ function ClaimMenuList(props: Props) {
     if (!isRepost && !isChannel) {
       openModal(MODALS.CONFIRM_FILE_REMOVE, { uri });
     } else {
-      openModal(MODALS.CONFIRM_CLAIM_REVOKE, { claim, cb: !isRepost && (() => replace(`/$/${PAGES.CHANNELS}`)), isRepost });
+      openModal(MODALS.CONFIRM_CLAIM_REVOKE, { claim, cb: !isRepost && (() => replace(`/$/${PAGES.CHANNELS}`)) });
     }
   }
 
@@ -189,14 +188,14 @@ function ClaimMenuList(props: Props) {
       </MenuButton>
       <MenuList className="menu__list">
 
-        {!incognito && (!claimIsMine ? (!isChannelPage &&
+        {!incognito && !isRepost && (!claimIsMine ? (!isChannelPage &&
           <MenuItem className="comment__menu-option" onSelect={handleFollow}>
             <div className="menu__link">
               <Icon aria-hidden icon={ICONS.SUBSCRIBE} />
               {subscriptionLabel}
             </div>
           </MenuItem>
-        ) : (!isRepost &&
+        ) : (
           <MenuItem className="comment__menu-option" onSelect={handleAnalytics}>
             <div className="menu__link">
               <Icon aria-hidden icon={ICONS.ANALYTICS} />
@@ -204,15 +203,6 @@ function ClaimMenuList(props: Props) {
             </div>
           </MenuItem>
         ))}
-
-        {!isChannelPage && (
-          <MenuItem className="comment__menu-option" onSelect={handleSupport}>
-            <div className="menu__link">
-              <Icon aria-hidden icon={ICONS.LBC} />
-              {__('Support')}
-            </div>
-          </MenuItem>
-          )}
 
         {hasExperimentalUi && (
           <>
@@ -273,15 +263,25 @@ function ClaimMenuList(props: Props) {
                 </div>
               </MenuItem>
             )}
-            {!isChannelPage && (
-              <hr className="menu__separator" />
-            )}
+          </>
+        )}
+
+        {!isChannelPage && (
+          <>
+            <MenuItem className="comment__menu-option" onSelect={handleSupport}>
+              <div className="menu__link">
+                <Icon aria-hidden icon={ICONS.LBC} />
+                {__('Support')}
+              </div>
+            </MenuItem>
+            <hr className="menu__separator" />
           </>
         )}
 
         {!isMyCollection && (
           <>
-            {(!claimIsMine || channelIsBlocked) && channelUri ? !incognito && (
+            {(!claimIsMine || channelIsBlocked) && channelUri
+            ? !incognito && !isRepost && (
               <>
                 <MenuItem className="comment__menu-option" onSelect={handleToggleBlock}>
                   <div className="menu__link">
@@ -318,7 +318,9 @@ function ClaimMenuList(props: Props) {
                 )}
               </>
             )}
-            <hr className="menu__separator" />
+            {!isRepost && (
+              <hr className="menu__separator" />
+            )}
           </>
         )}
 
