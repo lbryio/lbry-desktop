@@ -59,7 +59,7 @@ $contentMaxWidth: 60rem;
 }
 
 .notification__wrapper--unread {
-  background-color: #2d2d33;
+  background-color: var(--color-card-background-highlighted);
 
   &:hover {
     background-color: var(--color-button-secondary-bg);

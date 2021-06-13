@@ -21,7 +21,11 @@ export default function NagDegradedPerformance(props: Props) {
             <I18nMessage
               tokens={{
                 more_information: (
-                  <Button button="link" label={__('more')} href="https://lbry.com/faq/privacy-and-data" />
+                  <Button
+                    button="link"
+                    label={__('more --[value for "more_information"]--')}
+                    href="https://lbry.com/faq/privacy-and-data"
+                  />
                 ),
               }}
             >
@@ -37,7 +41,11 @@ export default function NagDegradedPerformance(props: Props) {
             <I18nMessage
               tokens={{
                 more_information: (
-                  <Button button="link" label={__('more')} href="https://lbry.com/faq/privacy-and-data" />
+                  <Button
+                    button="link"
+                    label={__('more --[value for "more_information"]--')}
+                    href="https://lbry.com/faq/privacy-and-data"
+                  />
                 ),
               }}
             >

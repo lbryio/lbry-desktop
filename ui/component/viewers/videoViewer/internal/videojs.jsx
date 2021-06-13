@@ -11,7 +11,6 @@ import './plugins/videojs-mobile-ui/plugin';
 import hlsQualitySelector from './plugins/videojs-hls-quality-selector/plugin';
 import qualityLevels from 'videojs-contrib-quality-levels';
 import isUserTyping from 'util/detect-typing';
-import analytics from 'analytics';
 
 const isDev = process.env.NODE_ENV !== 'production';
 
@@ -545,15 +544,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
   // Update video player and reload when source URL changes
   useEffect(() => {
-    const fetchStartedAt = performance.now();
     // For some reason the video player is responsible for detecting content type this way
     fetch(source, { method: 'HEAD', cache: 'no-store' }).then((response) => {
-      const deltaFetch = performance.now() - fetchStartedAt;
-      // console.log(`Prefetch took: ${deltaFetch.toFixed(3)}ms`);
-
-      // Send fetch duration analytic event (in ms)
-      analytics.videoFetchDuration(source, deltaFetch);
-
       const player = playerRef.current;
 
       if (!player) {
@@ -561,21 +553,16 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       }
 
       let type = sourceType;
-
+      let finalSource = source;
       // override type if we receive an .m3u8 (transcoded mp4)
       if (response && response.redirected && response.url && response.url.endsWith('m3u8')) {
         type = 'application/x-mpegURL';
+        finalSource = response.url;
       }
 
       // Update player poster
       // note: the poster prop seems to return null usually.
       if (poster) player.poster(poster);
-
-      // Update player source
-      player.src({
-        src: source,
-        type: type,
-      });
 
       // set playsinline for mobile
       player.children_[0].setAttribute('playsinline', '');
@@ -587,7 +574,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
       // Update player source
       player.src({
-        src: source,
+        src: finalSource,
         type: type,
       });
 

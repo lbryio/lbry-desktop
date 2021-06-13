@@ -414,6 +414,10 @@
   margin-right: var(--spacing-m);
 }
 
+.claim-grid__title-span {
+  display: flex;
+}
+
 .claim-grid__title--empty {
   color: var(--color-text-help);
   margin-left: var(--spacing-s);

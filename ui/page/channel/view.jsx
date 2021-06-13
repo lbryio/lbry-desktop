@@ -26,6 +26,7 @@ import Yrbl from 'component/yrbl';
 export const PAGE_VIEW_QUERY = `view`;
 const CONTENT_PAGE = 'content';
 const LISTS_PAGE = 'lists';
+const REPOSTS_PAGE = 'reposts';
 const ABOUT_PAGE = `about`;
 export const DISCUSSION_PAGE = `discussion`;
 const EDIT_PAGE = 'edit';
@@ -117,11 +118,14 @@ function ChannelPage(props: Props) {
     case LISTS_PAGE:
       tabIndex = 1;
       break;
-    case ABOUT_PAGE:
+    case REPOSTS_PAGE:
       tabIndex = 2;
       break;
-    case DISCUSSION_PAGE:
+    case ABOUT_PAGE:
       tabIndex = 3;
+      break;
+    case DISCUSSION_PAGE:
+      tabIndex = 4;
       break;
     default:
       tabIndex = 0;
@@ -137,6 +141,8 @@ function ChannelPage(props: Props) {
     } else if (newTabIndex === 1) {
       search += `${PAGE_VIEW_QUERY}=${LISTS_PAGE}`;
     } else if (newTabIndex === 2) {
+      search += `${PAGE_VIEW_QUERY}=${REPOSTS_PAGE}`;
+    } else if (newTabIndex === 3) {
       search += `${PAGE_VIEW_QUERY}=${ABOUT_PAGE}`;
     } else {
       search += `${PAGE_VIEW_QUERY}=${DISCUSSION_PAGE}`;
@@ -252,6 +258,7 @@ function ChannelPage(props: Props) {
           <TabList className="tabs__list--channel-page">
             <Tab disabled={editing}>{__('Publishes')}</Tab>
             <Tab disabled={editing}>{__('Playlists')}</Tab>
+            <Tab disabled={editing}>{__('Reposts')}</Tab>
             <Tab>{editing ? __('Editing Your Channel') : __('About --[tab title in Channel Page]--')}</Tab>
             <Tab disabled={editing}>{__('Community')}</Tab>
           </TabList>
@@ -262,6 +269,7 @@ function ChannelPage(props: Props) {
                 uri={uri}
                 channelIsBlackListed={channelIsBlackListed}
                 viewHiddenChannels
+                empty={__('No Content Found')}
               />
             </TabPanel>
             <TabPanel>
@@ -270,6 +278,16 @@ function ChannelPage(props: Props) {
                 uri={uri}
                 channelIsBlackListed={channelIsBlackListed}
                 viewHiddenChannels
+                empty={__('No Lists Found')}
+              />
+            </TabPanel>
+            <TabPanel>
+              <ChannelContent
+                claimType={'repost'}
+                uri={uri}
+                channelIsBlackListed={channelIsBlackListed}
+                viewHiddenChannels
+                empty={__('No Reposts Found')}
               />
             </TabPanel>
             <TabPanel>

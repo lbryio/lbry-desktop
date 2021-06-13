@@ -6,7 +6,7 @@ import * as ICONS from 'constants/icons';
 import React from 'react';
 import Button from 'component/button';
 import FileDownloadLink from 'component/fileDownloadLink';
-import { buildURI } from 'lbry-redux';
+import { buildURI, COLLECTIONS_CONSTS } from 'lbry-redux';
 import * as RENDER_MODES from 'constants/file_render_modes';
 import { useIsMobile } from 'effects/use-screensize';
 import ClaimSupportButton from 'component/claimSupportButton';
@@ -50,7 +50,7 @@ function FileActions(props: Props) {
   } = props;
   const {
     push,
-    location: { pathname },
+    location: { pathname, search },
   } = useHistory();
   const isMobile = useIsMobile();
   const webShareable = costInfo && costInfo.cost === 0 && RENDER_MODES.WEB_SHAREABLE_MODES.includes(renderMode);
@@ -74,6 +74,9 @@ function FileActions(props: Props) {
 
     editUri = buildURI(uriObject);
   }
+
+  const urlParams = new URLSearchParams(search);
+  const collectionId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID);
 
   function handleRepostClick() {
     if (!hasChannels) {
@@ -106,7 +109,7 @@ function FileActions(props: Props) {
         icon={ICONS.SHARE}
         label={__('Share')}
         title={__('Share')}
-        onClick={() => openModal(MODALS.SOCIAL_SHARE, { uri, webShareable })}
+        onClick={() => openModal(MODALS.SOCIAL_SHARE, { uri, webShareable, collectionId })}
       />
     </>
   );

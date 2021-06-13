@@ -234,7 +234,7 @@ const ModalPublishPreview = (props: Props) => {
                     {createRow(__('Deposit'), depositValue)}
                     {createRow(__('Price'), priceValue)}
                     {createRow(__('Language'), language)}
-                    {releaseTimeEdited && createRow(__('Release Date'), releaseTimeStr(releaseTimeEdited))}
+                    {releaseTimeEdited && createRow(__('Release date'), releaseTimeStr(releaseTimeEdited))}
                     {createRow(__('License'), licenseValue)}
                     {createRow(__('Tags'), tagsValue)}
                   </tbody>

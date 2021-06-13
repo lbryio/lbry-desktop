@@ -22,11 +22,13 @@ type Props = {
   referralCode: string,
   user: any,
   position: number,
+  collectionId?: number,
 };
 
 function SocialShare(props: Props) {
-  const { claim, title, referralCode, user, webShareable, position } = props;
+  const { claim, title, referralCode, user, webShareable, position, collectionId } = props;
   const [showEmbed, setShowEmbed] = React.useState(false);
+  const [includeCollectionId, setIncludeCollectionId] = React.useState(Boolean(collectionId)); // unless it *is* a collection?
   const [showClaimLinks, setShowClaimLinks] = React.useState(false);
   const [includeStartTime, setincludeStartTime]: [boolean, any] = React.useState(false);
   const [startTime, setStartTime]: [string, any] = React.useState(secondsToHms(position));
@@ -46,14 +48,22 @@ function SocialShare(props: Props) {
   const rewardsApproved = user && user.is_reward_approved;
   const lbryUrl: string = generateLbryContentUrl(canonicalUrl, permanentUrl);
   const lbryWebUrl: string = generateLbryWebUrl(lbryUrl);
-  const encodedLbryURL: string = generateEncodedLbryURL(SHARE_DOMAIN, lbryWebUrl, includeStartTime, startTimeSeconds);
+  const includedCollectionId = collectionId && includeCollectionId ? collectionId : null;
+  const encodedLbryURL: string = generateEncodedLbryURL(
+    SHARE_DOMAIN,
+    lbryWebUrl,
+    includeStartTime,
+    startTimeSeconds,
+    includedCollectionId
+  );
   const shareUrl: string = generateShareUrl(
     SHARE_DOMAIN,
     lbryUrl,
     referralCode,
     rewardsApproved,
     includeStartTime,
-    startTimeSeconds
+    startTimeSeconds,
+    includedCollectionId
   );
   const downloadUrl = `${generateDownloadUrl(name, claimId)}`;
 
@@ -70,7 +80,7 @@ function SocialShare(props: Props) {
     <React.Fragment>
       <CopyableText copyable={shareUrl} />
       {showStartAt && (
-        <div className="section__start-at">
+        <div className="section__checkbox">
           <FormField
             type="checkbox"
             name="share_start_at_checkbox"
@@ -87,18 +97,30 @@ function SocialShare(props: Props) {
           />
         </div>
       )}
+      {Boolean(collectionId) && (
+        <div className="section__checkbox">
+          <FormField
+            type="checkbox"
+            name="share_collection_id_checkbox"
+            onChange={() => setIncludeCollectionId(!includeCollectionId)}
+            checked={includeCollectionId}
+            label={__('Include List ID')}
+          />
+        </div>
+      )}
       <div className="section__actions">
         <Button
           className="share"
           iconSize={24}
           icon={ICONS.TWITTER}
+          title={__('Share on Twitter')}
           href={`https://twitter.com/intent/tweet?text=${encodedLbryURL}`}
         />
         <Button
           className="share"
           iconSize={24}
           icon={ICONS.REDDIT}
-          title={__('Share on Facebook')}
+          title={__('Share on Reddit')}
           href={`https://reddit.com/submit?url=${encodedLbryURL}`}
         />
         {IOS && (
