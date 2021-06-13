@@ -112,6 +112,17 @@
       flex-shrink: 0;
       margin-right: var(--spacing-s);
     }
+
+    .channel-staked__wrapper {
+      margin-bottom: 0.2rem;
+      left: -0.55rem;
+
+      .channel-staked__indicator {
+        height: 0.75rem;
+        width: 0.75rem;
+        margin-left: 0;
+      }
+    }
   }
 
   &:hover:not(.navigation-link--active),
