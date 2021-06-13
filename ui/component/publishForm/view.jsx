@@ -629,7 +629,7 @@ function PublishForm(props: Props) {
               previewing
             }
           />
-          <Button button="link" onClick={clearPublish} label={__('New')} />
+          <Button button="link" onClick={clearPublish} label={__('New --[clears Publish Form]--')} />
         </div>
         <p className="help">
           {!formDisabled && !formValid ? (

@@ -78,7 +78,7 @@ const PublishReleaseDate = (props: Props) => {
 
   return (
     <div className="form-field-date-picker">
-      <label>Release date</label>
+      <label>{__('Release date')}</label>
       <div className="controls">
         {showDatePicker && (
           <DateTimePicker
