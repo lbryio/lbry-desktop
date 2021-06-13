@@ -161,7 +161,7 @@ function PublishAdditionalOptions(props: Props) {
                   type="select"
                   name="content_language"
                   value={language}
-                  onChange={(event) => updatePublishForm({ languages: [event.target.value] })}
+                  onChange={(event) => updatePublishForm({ language: event.target.value })}
                 >
                   {sortLanguageMap(SUPPORTED_LANGUAGES).map(([langKey, langName]) => (
                     <option key={langKey} value={langKey}>
