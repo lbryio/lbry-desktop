@@ -61,13 +61,6 @@ const ClaimCollectionAdd = (props: Props) => {
     window.removeEventListener('keydown', altEnterListener);
   }
 
-  function handleDone() {
-    if (addNewCollection && newCollectionName) {
-      handleAddCollection();
-    }
-    closeModal();
-  }
-
   function handleClearNew() {
     setNewCollectionName('');
     setAddNewCollection(false);
@@ -145,7 +138,7 @@ const ClaimCollectionAdd = (props: Props) => {
             )}
           </fieldset-section>
           <div className="card__actions">
-            <Button button="secondary" label={__('Done')} disabled={addNewCollection} onClick={handleDone} />
+            <Button button="secondary" label={__('Done')} disabled={addNewCollection} onClick={closeModal} />
           </div>
         </div>
       }
