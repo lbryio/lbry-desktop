@@ -16,17 +16,11 @@ import ComicBookViewer from 'component/viewers/comicBookViewer';
 import ThreeViewer from 'component/viewers/threeViewer';
 // @endif
 
-const AppViewer = React.lazy(() => import('component/viewers/appViewer' /* webpackChunkName: "viewers/appViewer" */));
-const HtmlViewer = React.lazy(() =>
-  import('component/viewers/htmlViewer' /* webpackChunkName: "viewers/htmlViewer" */)
-);
-const ImageViewer = React.lazy(() =>
-  import('component/viewers/imageViewer' /* webpackChunkName: "viewers/imageViewer" */)
-);
-const PdfViewer = React.lazy(() => import('component/viewers/pdfViewer' /* webpackChunkName: "viewers/pdfViewer" */));
-const VideoViewer = React.lazy(() =>
-  import('component/viewers/videoViewer' /* webpackChunkName: "viewers/videoViewer" */)
-);
+const AppViewer = React.lazy(() => import('component/viewers/appViewer' /* webpackChunkName: "appViewer" */));
+const HtmlViewer = React.lazy(() => import('component/viewers/htmlViewer' /* webpackChunkName: "htmlViewer" */));
+const ImageViewer = React.lazy(() => import('component/viewers/imageViewer' /* webpackChunkName: "imageViewer" */));
+const PdfViewer = React.lazy(() => import('component/viewers/pdfViewer' /* webpackChunkName: "pdfViewer" */));
+const VideoViewer = React.lazy(() => import('component/viewers/videoViewer' /* webpackChunkName: "videoViewer" */));
 
 type Props = {
   uri: string,
