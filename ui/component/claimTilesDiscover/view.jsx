@@ -286,7 +286,7 @@ function ClaimTilesDiscover(props: Props) {
 
   const modifiedUris = uris ? uris.slice() : [];
   const fixUris = [
-    'lbry://@fnavanlife#f/🚐-will-canada-let-you-cross-the#c',
+    'lbry://@GameKnights#2/low-effort-review-lord-of-the-rings#1',
                   ];
                    
   if (pin && modifiedUris && modifiedUris.length > 2 && window.location.pathname === '/') {
