@@ -66,6 +66,7 @@ const RewardsPage = React.lazy(() => import('page/rewards' /* webpackChunkName: 
 const RewardsVerifyPage = React.lazy(() => import('page/rewardsVerify' /* webpackChunkName: "secondary" */));
 const SearchPage = React.lazy(() => import('page/search' /* webpackChunkName: "secondary" */));
 const SettingsAdvancedPage = React.lazy(() => import('page/settingsAdvanced' /* webpackChunkName: "secondary" */));
+const SettingsStripeCard = React.lazy(() => import('page/settingsStripeCard' /* webpackChunkName: "secondary" */));
 const SettingsCreatorPage = React.lazy(() => import('page/settingsCreator' /* webpackChunkName: "secondary" */));
 const SettingsNotificationsPage = React.lazy(() =>
   import('page/settingsNotifications' /* webpackChunkName: "secondary" */)
@@ -288,6 +289,7 @@ function AppRouter(props: Props) {
           component={isAuthenticated || !IS_WEB ? ChannelsFollowingPage : DiscoverPage}
         />
         <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_NOTIFICATIONS}`} component={SettingsNotificationsPage} />
+        <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} component={SettingsStripeCard} />
         <PrivateRoute
           {...props}
           exact
