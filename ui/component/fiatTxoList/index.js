@@ -13,10 +13,8 @@ import {
   doUpdateTxoPageParams,
 } from 'lbry-redux';
 import { withRouter } from 'react-router';
-import StripeAccountConnection from './view';
-import { createSelector } from 'reselect';
+import TxoList from './view';
 
-// function that receives state parameter and returns object of functions that accept  state
 const select = (state) => ({
   txoFetchError: selectFetchingTxosError(state),
   txoPage: selectTxoPage(state),
@@ -34,6 +32,4 @@ const perform = (dispatch) => ({
   updateTxoPageParams: (params) => dispatch(doUpdateTxoPageParams(params)),
 });
 
-var thing = connect(select, perform)(StripeAccountConnection)
-
-export default withRouter(thing);
+export default withRouter(connect(select, perform)(TxoList));
