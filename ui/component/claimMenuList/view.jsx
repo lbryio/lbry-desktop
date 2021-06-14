@@ -80,6 +80,8 @@ function ClaimMenuList(props: Props) {
     doChannelUnsubscribe,
     isChannelPage = false,
   } = props;
+  const repostedContent = claim && claim.reposted_claim;
+  const contentClaim = repostedContent || claim;
   const incognito = channelUri && !(channelUri.includes('@'));
   const signingChannel = claim && (claim.signing_channel || claim);
   const permanentUrl = String(channelUri);
@@ -96,12 +98,13 @@ function ClaimMenuList(props: Props) {
   const isCollectionClaim = claim && claim.value_type === 'collection';
   // $FlowFixMe
   const isPlayable =
-    claim &&
-    !claim.repost_url &&
+    contentClaim &&
     // $FlowFixMe
-    claim.value.stream_type &&
+    contentClaim.value &&
     // $FlowFixMe
-    (claim.value.stream_type === 'audio' || claim.value.stream_type === 'video');
+    contentClaim.value.stream_type &&
+    // $FlowFixMe
+    (contentClaim.value.stream_type === 'audio' || contentClaim.value.stream_type === 'video');
 
   function handleFollow() {
     const { channelName } = parseURI(permanentUrl);
@@ -172,7 +175,8 @@ function ClaimMenuList(props: Props) {
   }
 
   function handleReportContent() {
-    push(`/$/${PAGES.REPORT_CONTENT}?claimId=${claim.claim_id}`);
+    // $FlowFixMe
+    push(`/$/${PAGES.REPORT_CONTENT}?claimId=${(repostedContent && repostedContent.claim_id) || claim.claim_id}`);
   }
 
   return (
@@ -218,7 +222,7 @@ function ClaimMenuList(props: Props) {
                       }),
                     });
                     doCollectionEdit(COLLECTIONS_CONSTS.WATCH_LATER_ID, {
-                      claims: [claim],
+                      claims: [contentClaim],
                       remove: hasClaimInWatchLater,
                       type: 'playlist',
                     });
