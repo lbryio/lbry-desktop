@@ -10,8 +10,6 @@ import Icon from 'component/common/icon';
 import { useHistory } from 'react-router';
 
 type Props = {
-  uri: string,
-  claim: ?Claim,
   selectedChannelUrl: string, // currently selected channel
   channels: ?Array<ChannelClaim>,
   onChannelSelect: (url: string) => void,
@@ -20,8 +18,6 @@ type Props = {
   doSetActiveChannel: (string) => void,
   incognito: boolean,
   doSetIncognito: (boolean) => void,
-  activeChanged: boolean,
-  setActiveChanged: (boolean) => void,
 };
 
 type ListItemProps = {
@@ -56,19 +52,15 @@ function IncognitoSelector(props: IncognitoSelectorProps) {
 }
 
 function ChannelSelector(props: Props) {
-  const { claim, channels, activeChannelClaim, doSetActiveChannel, hideAnon = false, incognito, doSetIncognito, activeChanged, setActiveChanged } = props;
+  const { channels, activeChannelClaim, doSetActiveChannel, hideAnon = false, incognito, doSetIncognito } = props;
   const {
     push,
     location: { pathname },
   } = useHistory();
-  const selectedClaimId = claim && claim.claim_id;
-  if (selectedClaimId && !activeChanged) doSetActiveChannel(selectedClaimId);
-
   const activeChannelUrl = activeChannelClaim && activeChannelClaim.permanent_url;
 
   function handleChannelSelect(channelClaim) {
     doSetIncognito(false);
-    setActiveChanged(true);
     doSetActiveChannel(channelClaim.claim_id);
   }
 

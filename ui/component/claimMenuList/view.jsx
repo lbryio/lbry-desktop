@@ -117,10 +117,6 @@ function ClaimMenuList(props: Props) {
     });
   }
 
-  function handleAnalytics() {
-    push(`/$/${PAGES.CREATOR_DASHBOARD}?channel=${encodeURIComponent(permanentUrl)}`);
-  }
-
   function handleToggleMute() {
     if (channelIsMuted) {
       doChannelUnmute(channelUri);
@@ -191,22 +187,14 @@ function ClaimMenuList(props: Props) {
         <Icon size={20} icon={ICONS.MORE_VERTICAL} />
       </MenuButton>
       <MenuList className="menu__list">
-
-        {!incognito && !isRepost && (!claimIsMine ? (!isChannelPage &&
+        {!incognito && !isRepost && !claimIsMine && !isChannelPage && (
           <MenuItem className="comment__menu-option" onSelect={handleFollow}>
             <div className="menu__link">
               <Icon aria-hidden icon={ICONS.SUBSCRIBE} />
               {subscriptionLabel}
             </div>
           </MenuItem>
-        ) : (
-          <MenuItem className="comment__menu-option" onSelect={handleAnalytics}>
-            <div className="menu__link">
-              <Icon aria-hidden icon={ICONS.ANALYTICS} />
-              {__('Channel Analytics')}
-            </div>
-          </MenuItem>
-        ))}
+        )}
 
         {hasExperimentalUi && (
           <>
