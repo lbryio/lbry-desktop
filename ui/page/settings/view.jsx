@@ -205,6 +205,21 @@ class SettingsPage extends React.PureComponent<Props, State> {
         }}
         className="card-stack"
       >
+
+        <Card
+          title={__('Add card to tip creators in fiat currency')}
+          actions={
+            <div className="section__actions">
+              <Button
+                button="secondary"
+                label={__('Manage Cards')}
+                icon={ICONS.WALLET}
+                navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`}
+              />
+            </div>
+          }
+        />
+
         <Card title={__('Language')} actions={<SettingLanguage />} />
         {homepages && Object.keys(homepages).length > 1 && (
           <Card title={__('Homepage')} actions={<HomepageSelector />} />
@@ -224,20 +239,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
             />
           </div>
         )}
-
-        <Card
-          title={__('Add a card to tip creators in fiat currency')}
-          actions={
-            <div className="section__actions">
-              <Button
-                button="secondary"
-                label={__('Manage Cards')}
-                icon={ICONS.SETTINGS}
-                navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`}
-              />
-            </div>
-          }
-        />
 
         {!IS_WEB && noDaemonSettings ? (
           <section className="card card--section">

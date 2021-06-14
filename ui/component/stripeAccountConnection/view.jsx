@@ -2,29 +2,18 @@
 import * as ICONS from 'constants/icons';
 import React, { useEffect } from 'react';
 import { withRouter } from 'react-router';
-import { TXO_LIST as TXO } from 'lbry-redux';
-import TransactionListTable from 'component/transactionListTable';
-import Paginate from 'component/common/paginate';
-import { FormField } from 'component/common/form-components/form-field';
 import Button from 'component/button';
 import Card from 'component/common/card';
-import { toCapitalCase } from 'util/string';
-import classnames from 'classnames';
-import HelpLink from 'component/common/help-link';
-import FileExporter from 'component/common/file-exporter';
+import { Lbryio } from 'lbryinc';
 
-type Props = {
-  search: string,
-  history: { action: string, push: (string) => void, replace: (string) => void },
-  txoPage: Array<Transaction>,
-  txoPageNumber: string,
-  txoItemCount: number,
-  fetchTxoPage: () => void,
-  fetchTransactions: () => void,
-  isFetchingTransactions: boolean,
-  transactionsFile: string,
-  updateTxoPageParams: (any) => void,
-  toast: (string, boolean) => void,
+// var stripeConnectionUrl = 'hello';
+
+// type Props = {
+//   stripeConnectionUrl: string,
+// };
+
+type State = {
+  stripeConnectionUrl: string,
 };
 
 type Delta = {
@@ -32,33 +21,35 @@ type Delta = {
   value: string,
 };
 
-function TxoList(props: Props) {
-  const {
-    search,
-    txoPage,
-    txoItemCount,
-    fetchTxoPage,
-    fetchTransactions,
-    updateTxoPageParams,
-    history,
-    isFetchingTransactions,
-    transactionsFile,
-  } = props;
+function TxoList(state: State, props: Props) {
 
-  const urlParams = new URLSearchParams(search);
-  const page = urlParams.get(TXO.PAGE) || String(1);
-  const pageSize = urlParams.get(TXO.PAGE_SIZE) || String(TXO.PAGE_SIZE_DEFAULT);
-  const type = urlParams.get(TXO.TYPE) || TXO.ALL;
-  const subtype = urlParams.get(TXO.SUB_TYPE);
-  const active = urlParams.get(TXO.ACTIVE) || TXO.ALL;
+  let { stripeConnectionUrl } = state;
 
-  const currentUrlParams = {
-    page,
-    pageSize,
-    active,
-    type,
-    subtype,
-  };
+  console.log(this);
+
+  let that = this;
+
+  stripeConnectionUrl = 'https://www.hello.com';
+
+  setTimeout(function(){
+    that.setState({ stripeConnectionUrl: 'https://fred.com' });
+  }, 5000);
+
+  useEffect(() => {
+    Lbryio.call('account', 'link', {}, 'post').then(response2 => {
+
+      // props.stripeConnectionUrl = response2.url;
+      console.log(response2);
+      console.log('here!!');
+
+      stripeConnectionUrl = response2.url;
+
+      // stripeConnectionUrl(response2.url);
+
+    });
+  });
+
+  // props.stripeConnectionUrl = 'https://fred.com';
 
   // useEffect(() => {
   //   if (paramsString && updateTxoPageParams) {
@@ -78,8 +69,14 @@ function TxoList(props: Props) {
               <div>
                 <h3>Connect your account to Stripe to receive tips from viewers directly to your bank account</h3>
               </div>
-              <div>
-                <a href="#" className="stripe-connect"><span>Connect with Stripe</span></a>
+              <div className="section__actions">
+                <a href={stripeConnectionUrl}>
+                  <Button
+                    button="secondary"
+                    label={__('Connect To Stripe')}
+                    icon={ICONS.FINANCE}
+                  />
+                </a>
               </div>
             </div>
           </div>
