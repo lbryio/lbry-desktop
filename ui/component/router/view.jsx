@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
 import SettingsPage from 'page/settings';
 import SettingsNotificationsPage from 'page/settingsNotifications';
+import SettingsStripeCard from 'page/settingsStripeCard';
 import SettingsAdvancedPage from 'page/settingsAdvanced';
 import SettingsCreatorPage from 'page/settingsCreator';
 import HelpPage from 'page/help';
@@ -266,6 +267,7 @@ function AppRouter(props: Props) {
         component={isAuthenticated || !IS_WEB ? ChannelsFollowingPage : DiscoverPage}
       />
       <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_NOTIFICATIONS}`} component={SettingsNotificationsPage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} component={SettingsStripeCard} />
       <PrivateRoute
         {...props}
         exact

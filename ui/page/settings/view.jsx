@@ -225,6 +225,20 @@ class SettingsPage extends React.PureComponent<Props, State> {
           </div>
         )}
 
+        <Card
+          title={__('Add a card to tip creators in fiat currency')}
+          actions={
+            <div className="section__actions">
+              <Button
+                button="secondary"
+                label={__('Manage Cards')}
+                icon={ICONS.SETTINGS}
+                navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`}
+              />
+            </div>
+          }
+        />
+
         {!IS_WEB && noDaemonSettings ? (
           <section className="card card--section">
             <div className="card__title card__title--deprecated">{__('Failed to load settings.')}</div>
