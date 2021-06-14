@@ -137,6 +137,7 @@ function ChannelContent(props: Props) {
 
       {claim && claimsInChannel > 0 ? (
         <ClaimListDiscover
+          defaultFreshness={CS.FRESH_ALL}
           showHiddenByUser={viewHiddenChannels}
           forceShowReposts
           hideFilters={!showFilters}
