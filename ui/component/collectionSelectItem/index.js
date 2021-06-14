@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import {
   doCollectionEdit,
-  makeSelectClaimForUri,
   makeSelectCollectionForId,
   makeSelectClaimIsPending,
   makeSelectCollectionForIdHasClaimUrl,
@@ -12,7 +11,6 @@ const select = (state, props) => {
   return {
     collection: makeSelectCollectionForId(props.collectionId)(state),
     hasClaim: makeSelectCollectionForIdHasClaimUrl(props.collectionId, props.uri)(state),
-    claim: makeSelectClaimForUri(props.uri)(state),
     collectionPending: makeSelectClaimIsPending(props.collectionId)(state),
   };
 };
