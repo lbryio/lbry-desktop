@@ -3,13 +3,13 @@ import React from 'react';
 import classnames from 'classnames';
 import { NavLink, useHistory } from 'react-router-dom';
 import ClaimPreviewTile from 'component/claimPreviewTile';
-import CollectionPreviewOverlay from 'component/collectionPreviewOverlay';
 import TruncatedText from 'component/common/truncated-text';
 import CollectionCount from './collectionCount';
 import CollectionPrivate from './collectionPrivate';
 import CollectionMenuList from 'component/collectionMenuList';
 import { formatLbryUrlForWeb } from 'util/url';
 import { COLLECTIONS_CONSTS } from 'lbry-redux';
+import FileThumbnail from 'component/fileThumbnail';
 
 type Props = {
   uri: string,
@@ -141,16 +141,13 @@ function CollectionPreviewTile(props: Props) {
   return (
     <li role="link" onClick={handleClick} className={'card claim-preview--tile'}>
       <NavLink {...navLinkProps}>
-        <div className={classnames('media__thumb')}>
+        <FileThumbnail uri={collectionItemUrls && collectionItemUrls.length && collectionItemUrls[0]}>
           <React.Fragment>
-            <div className="claim-preview__collection-wrapper">
-              <CollectionPreviewOverlay collectionId={collectionId} />
-            </div>
             <div className="claim-preview__claim-property-overlay">
               <CollectionCount count={collectionCount} />
             </div>
           </React.Fragment>
-        </div>
+        </FileThumbnail>
       </NavLink>
       <NavLink {...navLinkProps}>
         <h2 className="claim-tile__title">
