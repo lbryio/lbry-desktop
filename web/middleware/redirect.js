@@ -44,6 +44,10 @@ async function redirectMiddleware(ctx, next) {
     return;
   }
 
+  if (path.endsWith('%E2%80%8B')) {
+    ctx.redirect(path.replace('%E2%80%8B', ''));
+  }
+
   if (requestHost === 'open.lbry.com' || requestHost === 'open.lbry.io') {
     const openQuery = '?src=open';
     // let redirectUrl = config.URL + formatInAppUrl(url);
