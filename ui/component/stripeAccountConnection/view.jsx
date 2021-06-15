@@ -1,98 +1,4 @@
 // @flow
-// import * as ICONS from 'constants/icons';
-// import React, { useEffect } from 'react';
-// import { withRouter } from 'react-router';
-// import Button from 'component/button';
-// import Card from 'component/common/card';
-// import { Lbryio } from 'lbryinc';
-//
-// // var stripeConnectionUrl = 'hello';
-//
-// // type Props = {
-// //   stripeConnectionUrl: string,
-// // };
-//
-//
-// type State = {
-//   stripeConnectionUrl: string,
-// };
-//
-// type Delta = {
-//   dkey: string,
-//   value: string,
-// };
-//
-// class StripeConnection extends React.PureComponent<Props, State> {
-//
-//   let { stripeConnectionUrl } = state;
-//
-//   console.log(this);
-//
-//   let that = this;
-//
-//   stripeConnectionUrl = 'https://www.hello.com';
-//
-//   setTimeout(function(){
-//     that.setState({ stripeConnectionUrl: 'https://fred.com' });
-//   }, 5000);
-//
-//   useEffect(() => {
-//     Lbryio.call('account', 'link', {}, 'post').then(response2 => {
-//
-//       // props.stripeConnectionUrl = response2.url;
-//       console.log(response2);
-//       console.log('here!!');
-//
-//       stripeConnectionUrl = response2.url;
-//
-//       // stripeConnectionUrl(response2.url);
-//
-//     });
-//   });
-//
-//   // props.stripeConnectionUrl = 'https://fred.com';
-//
-//   // useEffect(() => {
-//   //   if (paramsString && updateTxoPageParams) {
-//   //     const params = JSON.parse(paramsString);
-//   //     updateTxoPageParams(params);
-//   //   }
-//   // }, [paramsString, updateTxoPageParams]);
-//
-//   return (
-//     <Card
-//       title={<div className="table__header-text">{__(`Connect to Stripe`)}</div>}
-//       isBodyList
-//       body={
-//         <div>
-//           <div className="card__body-actions">
-//             <div>
-//               <div>
-//                 <h3>Connect your account to Stripe to receive tips from viewers directly to your bank account</h3>
-//               </div>
-//               <div className="section__actions">
-//                 <a href={stripeConnectionUrl}>
-//                   <Button
-//                     button="secondary"
-//                     label={__('Connect To Stripe')}
-//                     icon={ICONS.FINANCE}
-//                   />
-//                 </a>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//       }
-//     />
-//   );
-// }
-//
-// export default withRouter(TxoList);
-
-
-
-
-// @flow
 import * as ICONS from 'constants/icons';
 import React, { useEffect, useState } from 'react';
 import { withRouter } from 'react-router';
@@ -100,9 +6,9 @@ import Button from 'component/button';
 import Card from 'component/common/card';
 import { Lbryio } from 'lbryinc';
 
-
 type Props = {
   source: string,
+  user: User,
 };
 
 type State = {
@@ -127,7 +33,10 @@ class DocxViewer extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    const { source } = this.props;
+    const { source, user } = this.props;
+
+    console.log('user here');
+    console.log(user);
 
     var that = this;
 
@@ -156,6 +65,10 @@ class DocxViewer extends React.Component<Props, State> {
           });
         });
       }
+    }).catch(function(error) {
+      console.log('heres the error');
+      console.log(error);
+      console.log('end of the error');
     });
   }
 
