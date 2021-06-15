@@ -84,10 +84,10 @@ function ClaimMenuList(props: Props) {
   } = props;
   const repostedContent = claim && claim.reposted_claim;
   const contentClaim = repostedContent || claim;
-  const incognito = channelUri && !channelUri.includes('@');
+  const incognitoClaim = channelUri && !channelUri.includes('@');
   const signingChannel = claim && (claim.signing_channel || claim);
   const permanentUrl = String(channelUri);
-  const isChannel = !incognito && signingChannel === claim;
+  const isChannel = !incognitoClaim && signingChannel === claim;
   const showDelete = claimIsMine || (fileInfo && (fileInfo.written_bytes > 0 || fileInfo.blobs_completed > 0));
   const subscriptionLabel = isSubscribed ? __('Unfollow') : __('Follow');
 
@@ -189,15 +189,6 @@ function ClaimMenuList(props: Props) {
         <Icon size={20} icon={ICONS.MORE_VERTICAL} />
       </MenuButton>
       <MenuList className="menu__list">
-        {!incognito && !isRepost && !claimIsMine && !isChannelPage && (
-          <MenuItem className="comment__menu-option" onSelect={handleFollow}>
-            <div className="menu__link">
-              <Icon aria-hidden icon={ICONS.SUBSCRIBE} />
-              {subscriptionLabel}
-            </div>
-          </MenuItem>
-        )}
-
         {hasExperimentalUi && (
           <>
             {/* WATCH LATER */}
@@ -270,7 +261,14 @@ function ClaimMenuList(props: Props) {
             )}
           </>
         )}
-
+        {!incognitoClaim && !isRepost && !claimIsMine && !isChannelPage && (
+          <MenuItem className="comment__menu-option" onSelect={handleFollow}>
+            <div className="menu__link">
+              <Icon aria-hidden icon={ICONS.SUBSCRIBE} />
+              {subscriptionLabel}
+            </div>
+          </MenuItem>
+        )}
         {!isChannelPage && (
           <>
             <MenuItem className="comment__menu-option" onSelect={handleSupport}>
@@ -286,7 +284,7 @@ function ClaimMenuList(props: Props) {
         {!isMyCollection && (
           <>
             {(!claimIsMine || channelIsBlocked) && channelUri ? (
-              !incognito &&
+              !incognitoClaim &&
               !isRepost && (
                 <>
                   <MenuItem className="comment__menu-option" onSelect={handleToggleBlock}>
