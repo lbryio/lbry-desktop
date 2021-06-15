@@ -110,7 +110,8 @@ type State = {
   loading: boolean,
   content: ?string,
   stripeConnectionUrl: string,
-  alreadyUpdated: boolean
+  alreadyUpdated: boolean,
+  accountConfirmed: boolean
 };
 
 class DocxViewer extends React.Component<Props, State> {
@@ -120,6 +121,7 @@ class DocxViewer extends React.Component<Props, State> {
       error: false,
       content: null,
       loading: true,
+      accountConfirmed: false,
     };
   }
 
@@ -130,25 +132,34 @@ class DocxViewer extends React.Component<Props, State> {
 
     console.log(that.state);
 
-    Lbryio.call('account', 'link', {}, 'post').then(response2 => {
-      // props.stripeConnectionUrl = response2.url;
-      // console.log(response2);
-      // console.log('here!!');
-      //
-      // console.log(that.state);
+    // call the account status endpoint
+    Lbryio.call('account', 'status', {}, 'post').then(accountStatusResponse => {
+      // if charges already enabled, no need to generate an account link
+      if (accountStatusResponse.charges_enabled){
 
-      that.setState({
-        stripeConnectionUrl: response2.url,
-        alreadyUpdated: true,
-      });
-      // stripeConnectionUrl(response2.url);
+        // account has already been confirmed
+        that.setState({
+          accountConfirmed: true,
+        });
 
+        // update the frontend
+        console.log(accountStatusResponse);
+      } else {
+        Lbryio.call('account', 'link', {}, 'post').then(accountLinkResponse => {
+
+          // console.log(accountLinkResponse);
+
+          that.setState({
+            stripeConnectionUrl: accountLinkResponse.url,
+            alreadyUpdated: true,
+          });
+        });
+      }
     });
-
   }
 
   render() {
-    const { content, error, loading, stripeConnectionUrl } = this.state;
+    const { content, error, loading, stripeConnectionUrl, accountConfirmed } = this.state;
 
     return (
       <Card
@@ -156,31 +167,46 @@ class DocxViewer extends React.Component<Props, State> {
         isBodyList
         body={
           <div>
+            {!accountConfirmed &&
+              <div className="card__body-actions">
+                <div>
+                  <div>
+                    <h3>Connect your account to Stripe to receive tips from viewers directly to your bank account</h3>
+                  </div>
+                  <div className="section__actions">
+                    <a href={stripeConnectionUrl}>
+                      <Button
+                        button="secondary"
+                        label={__('Connect To Stripe')}
+                        icon={ICONS.FINANCE}
+                      />
+                    </a>
+                  </div>
+                </div>
+              </div>
+            }
+            {accountConfirmed &&
             <div className="card__body-actions">
               <div>
                 <div>
-                  <h3>Connect your account to Stripe to receive tips from viewers directly to your bank account</h3>
+                  <h3>Congratulations! Your account has been connected with Stripe.</h3>
                 </div>
                 <div className="section__actions">
-                  <a href={stripeConnectionUrl}>
+                  <a href="/$/wallet">
                     <Button
                       button="secondary"
-                      label={__('Connect To Stripe')}
+                      label={__('View Transactions')}
                       icon={ICONS.FINANCE}
                     />
                   </a>
                 </div>
               </div>
             </div>
+            }
           </div>
         }
       />
-
-
-
-
-
-  );
+    );
   }
 }
 
