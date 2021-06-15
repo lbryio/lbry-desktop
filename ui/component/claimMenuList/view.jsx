@@ -261,32 +261,36 @@ function ClaimMenuList(props: Props) {
             )}
           </>
         )}
-        {!incognitoClaim && !isRepost && !claimIsMine && !isChannelPage && (
-          <MenuItem className="comment__menu-option" onSelect={handleFollow}>
-            <div className="menu__link">
-              <Icon aria-hidden icon={ICONS.SUBSCRIBE} />
-              {subscriptionLabel}
-            </div>
-          </MenuItem>
-        )}
         {!isChannelPage && (
           <>
+            <hr className="menu__separator" />
             <MenuItem className="comment__menu-option" onSelect={handleSupport}>
               <div className="menu__link">
                 <Icon aria-hidden icon={ICONS.LBC} />
                 {__('Support')}
               </div>
             </MenuItem>
-            <hr className="menu__separator" />
           </>
         )}
 
+        {!incognitoClaim && !isRepost && !claimIsMine && !isChannelPage && (
+          <>
+            <hr className="menu__separator" />
+            <MenuItem className="comment__menu-option" onSelect={handleFollow}>
+              <div className="menu__link">
+                <Icon aria-hidden icon={ICONS.SUBSCRIBE} />
+                {subscriptionLabel}
+              </div>
+            </MenuItem>
+          </>
+        )}
         {!isMyCollection && (
           <>
             {(!claimIsMine || channelIsBlocked) && channelUri ? (
               !incognitoClaim &&
               !isRepost && (
                 <>
+                  <hr className="menu__separator" />
                   <MenuItem className="comment__menu-option" onSelect={handleToggleBlock}>
                     <div className="menu__link">
                       <Icon aria-hidden icon={ICONS.BLOCK} />
@@ -323,10 +327,9 @@ function ClaimMenuList(props: Props) {
                 )}
               </>
             )}
-            {!isRepost && <hr className="menu__separator" />}
           </>
         )}
-
+        <hr className="menu__separator" />
         <MenuItem className="comment__menu-option" onSelect={handleCopyLink}>
           <div className="menu__link">
             <Icon aria-hidden icon={ICONS.SHARE} />
