@@ -33,7 +33,9 @@ class DocxViewer extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    const { source, user } = this.props;
+    const { user } = this.props;
+
+    this.experimentalUiEnabled = user && user.experimental_ui;
 
     console.log('user here');
     console.log(user);
@@ -73,26 +75,28 @@ class DocxViewer extends React.Component<Props, State> {
   }
 
   render() {
-    const { content, error, loading, stripeConnectionUrl, accountConfirmed, accountPendingConfirmation } = this.state;
+    const { stripeConnectionUrl, accountConfirmed, accountPendingConfirmation } = this.state;
 
-    return (
-      <Card
-        title={<div className="table__header-text">{__(`Connect to Stripe`)}</div>}
-        isBodyList
-        body={
-          <div>
-            {/* show while waiting for account status */}
-            {!accountConfirmed && !accountPendingConfirmation &&
-            <div className="card__body-actions">
-              <div>
+    if (this.experimentalUiEnabled) {
+      console.log('hello!!');
+      return (
+        <Card
+          title={<div className="table__header-text">{__(`Connect to Stripe`)}</div>}
+          isBodyList
+          body={
+            <div>
+              {/* show while waiting for account status */}
+              {!accountConfirmed && !accountPendingConfirmation && this.experimentalUiEnabled &&
+              <div className="card__body-actions">
                 <div>
-                  <h3>Getting your Stripe account connection status...</h3>
+                  <div>
+                    <h3>Getting your Stripe account connection status...</h3>
+                  </div>
                 </div>
               </div>
-            </div>
-            }
-            {/* user has yet to complete their integration */}
-            {!accountConfirmed && accountPendingConfirmation &&
+              }
+              {/* user has yet to complete their integration */}
+              {!accountConfirmed && accountPendingConfirmation && this.experimentalUiEnabled &&
               <div className="card__body-actions">
                 <div>
                   <div>
@@ -109,30 +113,33 @@ class DocxViewer extends React.Component<Props, State> {
                   </div>
                 </div>
               </div>
-            }
-            {/* user has completed their integration */}
-            {accountConfirmed &&
-            <div className="card__body-actions">
-              <div>
+              }
+              {/* user has completed their integration */}
+              {accountConfirmed && this.experimentalUiEnabled &&
+              <div className="card__body-actions">
                 <div>
-                  <h3>Congratulations! Your account has been connected with Stripe.</h3>
-                </div>
-                <div className="section__actions">
-                  <a href="/$/wallet">
-                    <Button
-                      button="secondary"
-                      label={__('View Your Stripe Setup')}
-                      icon={ICONS.SETTINGS}
-                    />
-                  </a>
+                  <div>
+                    <h3>Congratulations! Your account has been connected with Stripe.</h3>
+                  </div>
+                  <div className="section__actions">
+                    <a href="/$/wallet">
+                      <Button
+                        button="secondary"
+                        label={__('View Your Stripe Setup')}
+                        icon={ICONS.SETTINGS}
+                      />
+                    </a>
+                  </div>
                 </div>
               </div>
+              }
             </div>
-            }
-          </div>
-        }
-      />
-    );
+          }
+        />
+      );
+    } else {
+      return (<></>);
+    }
   }
 }
 
