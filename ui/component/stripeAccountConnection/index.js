@@ -15,6 +15,8 @@ import {
 import { withRouter } from 'react-router';
 import StripeAccountConnection from './view';
 import { createSelector } from 'reselect';
+import { selectUser } from 'redux/selectors/user';
+
 
 // function that receives state parameter and returns object of functions that accept  state
 const select = (state) => ({
@@ -25,6 +27,7 @@ const select = (state) => ({
   loading: selectIsFetchingTxos(state),
   isFetchingTransactions: selectIsFetchingTransactions(state),
   transactionsFile: selectTransactionsFile(state),
+  user: selectUser(state),
 });
 
 const perform = (dispatch) => ({
