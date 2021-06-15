@@ -8,6 +8,7 @@ type Props = {
   children: any,
   lastUpdateDate?: any,
   skipWait?: boolean,
+  placeholder?: any,
 };
 
 export default function WaitUntilOnPage(props: Props) {
@@ -19,17 +20,17 @@ export default function WaitUntilOnPage(props: Props) {
   }, [props.lastUpdateDate]);
 
   React.useEffect(() => {
-    const handleDisplayingRef = debounce(e => {
+    const handleDisplayingRef = debounce((e) => {
       const element = ref && ref.current;
       if (element) {
         const bounding = element.getBoundingClientRect();
         if (
-          bounding.top >= 0 &&
-          bounding.left >= 0 &&
+          bounding.bottom >= 0 &&
+          bounding.right >= 0 &&
           // $FlowFixMe
-          bounding.right <= (window.innerWidth || document.documentElement.clientWidth) &&
+          bounding.top <= (window.innerHeight || document.documentElement.clientHeight) &&
           // $FlowFixMe
-          bounding.bottom <= (window.innerHeight || document.documentElement.clientHeight)
+          bounding.left <= (window.innerWidth || document.documentElement.clientWidth)
         ) {
           setShouldRender(true);
         }
@@ -46,5 +47,12 @@ export default function WaitUntilOnPage(props: Props) {
     }
   }, [ref, setShouldRender, shouldRender]);
 
-  return <div ref={ref}>{(props.skipWait || shouldRender) && props.children}</div>;
+  const render = props.skipWait || shouldRender;
+
+  return (
+    <div ref={ref}>
+      {render && props.children}
+      {!render && props.placeholder !== undefined && props.placeholder}
+    </div>
+  );
 }
