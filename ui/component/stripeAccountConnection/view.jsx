@@ -28,7 +28,7 @@ class DocxViewer extends React.Component<Props, State> {
       content: null,
       loading: true,
       accountConfirmed: false,
-      accountPendingConfirmation: false
+      accountPendingConfirmation: false,
     };
   }
 
@@ -37,17 +37,14 @@ class DocxViewer extends React.Component<Props, State> {
 
     this.experimentalUiEnabled = user && user.experimental_ui;
 
-    console.log('user here');
-    console.log(user);
-
     var that = this;
-
-    console.log(that.state);
 
     // call the account status endpoint
     Lbryio.call('account', 'status', {}, 'post').then(accountStatusResponse => {
       // if charges already enabled, no need to generate an account link
-      if (accountStatusResponse.charges_enabled){
+      if (accountStatusResponse.charges_enabled) {
+
+        console.log(accountStatusResponse);
 
         // account has already been confirmed
         that.setState({
@@ -57,20 +54,38 @@ class DocxViewer extends React.Component<Props, State> {
         // update the frontend
         console.log(accountStatusResponse);
       } else {
-        Lbryio.call('account', 'link', {}, 'post').then(accountLinkResponse => {
-
-          // console.log(accountLinkResponse);
+        Lbryio.call('account', 'link', {
+          return_url: 'http://localhost:9090/$/wallet',
+          refresh_url: 'http://localhost:9090/$/wallet',
+        }, 'post').then(accountLinkResponse => {
+          console.log(accountLinkResponse);
 
           that.setState({
             stripeConnectionUrl: accountLinkResponse.url,
-            alreadyUpdated: true,
+            accountPendingConfirmation: true,
           });
         });
       }
     }).catch(function(error) {
-      console.log('heres the error');
-      console.log(error);
-      console.log('end of the error');
+      // errorString passed from the API (with a 403 error)
+      const errorString = 'account not linked to user, please link first';
+
+      // if it's beamer's error indicating the account is not linked yet
+      if (error.message.indexOf(errorString) > -1) {
+        // tell the frontend it's not confirmed, to show the proper markup
+
+        Lbryio.call('account', 'link', {
+          return_url: 'http://localhost:9090/$/wallet',
+          refresh_url: 'http://localhost:9090/$/wallet',
+        }, 'post').then(accountLinkResponse => {
+          console.log(accountLinkResponse);
+
+          that.setState({
+            stripeConnectionUrl: accountLinkResponse.url,
+            accountPendingConfirmation: true,
+          });
+        });
+      }
     });
   }
 
@@ -78,7 +93,6 @@ class DocxViewer extends React.Component<Props, State> {
     const { stripeConnectionUrl, accountConfirmed, accountPendingConfirmation } = this.state;
 
     if (this.experimentalUiEnabled) {
-      console.log('hello!!');
       return (
         <Card
           title={<div className="table__header-text">{__(`Connect to Stripe`)}</div>}
@@ -86,7 +100,7 @@ class DocxViewer extends React.Component<Props, State> {
           body={
             <div>
               {/* show while waiting for account status */}
-              {!accountConfirmed && !accountPendingConfirmation && this.experimentalUiEnabled &&
+              {!accountConfirmed && !accountPendingConfirmation &&
               <div className="card__body-actions">
                 <div>
                   <div>
@@ -96,7 +110,7 @@ class DocxViewer extends React.Component<Props, State> {
               </div>
               }
               {/* user has yet to complete their integration */}
-              {!accountConfirmed && accountPendingConfirmation && this.experimentalUiEnabled &&
+              {!accountConfirmed && accountPendingConfirmation &&
               <div className="card__body-actions">
                 <div>
                   <div>
@@ -115,7 +129,7 @@ class DocxViewer extends React.Component<Props, State> {
               </div>
               }
               {/* user has completed their integration */}
-              {accountConfirmed && this.experimentalUiEnabled &&
+              {accountConfirmed &&
               <div className="card__body-actions">
                 <div>
                   <div>
