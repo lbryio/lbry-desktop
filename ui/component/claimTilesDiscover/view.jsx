@@ -286,7 +286,7 @@ function ClaimTilesDiscover(props: Props) {
 
   const modifiedUris = uris ? uris.slice() : [];
   const fixUris = [
-    'lbry://@GameKnights#2/low-effort-review-lord-of-the-rings#1',
+    'lbry://@SomeOrdinaryGamers#a/xbox-e3-2021-was-really-good...#0',
                   ];
                    
   if (pin && modifiedUris && modifiedUris.length > 2 && window.location.pathname === '/') {
