@@ -122,6 +122,7 @@ class DocxViewer extends React.Component<Props, State> {
       content: null,
       loading: true,
       accountConfirmed: false,
+      accountPendingConfirmation: false
     };
   }
 
@@ -159,7 +160,7 @@ class DocxViewer extends React.Component<Props, State> {
   }
 
   render() {
-    const { content, error, loading, stripeConnectionUrl, accountConfirmed } = this.state;
+    const { content, error, loading, stripeConnectionUrl, accountConfirmed, accountPendingConfirmation } = this.state;
 
     return (
       <Card
@@ -167,7 +168,18 @@ class DocxViewer extends React.Component<Props, State> {
         isBodyList
         body={
           <div>
-            {!accountConfirmed &&
+            {/* show while waiting for account status */}
+            {!accountConfirmed && !accountPendingConfirmation &&
+            <div className="card__body-actions">
+              <div>
+                <div>
+                  <h3>Getting your Stripe account connection status...</h3>
+                </div>
+              </div>
+            </div>
+            }
+            {/* user has yet to complete their integration */}
+            {!accountConfirmed && accountPendingConfirmation &&
               <div className="card__body-actions">
                 <div>
                   <div>
@@ -185,6 +197,7 @@ class DocxViewer extends React.Component<Props, State> {
                 </div>
               </div>
             }
+            {/* user has completed their integration */}
             {accountConfirmed &&
             <div className="card__body-actions">
               <div>
@@ -195,8 +208,8 @@ class DocxViewer extends React.Component<Props, State> {
                   <a href="/$/wallet">
                     <Button
                       button="secondary"
-                      label={__('View Transactions')}
-                      icon={ICONS.FINANCE}
+                      label={__('View Your Stripe Setup')}
+                      icon={ICONS.SETTINGS}
                     />
                   </a>
                 </div>
