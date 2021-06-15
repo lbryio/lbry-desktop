@@ -7,7 +7,9 @@ import { COLLECTIONS_CONSTS } from 'lbry-redux';
 import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
-import Yrbl from '../yrbl';
+import Yrbl from 'component/yrbl';
+import usePersistedState from 'effects/use-persisted-state';
+import Card from 'component/common/card';
 
 type Props = {
   builtinCollections: CollectionGroup,
@@ -33,6 +35,17 @@ export default function CollectionsListMine(props: Props) {
   const watchLater = builtinCollectionsList.find((list) => list.id === COLLECTIONS_CONSTS.WATCH_LATER_ID);
   const favorites = builtinCollectionsList.find((list) => list.id === COLLECTIONS_CONSTS.FAVORITES_ID);
   const builtin = [watchLater, favorites];
+  const [showHelp, setShowHelp] = usePersistedState('livestream-help-seen', true);
+
+  const helpText = (
+    <div className="section__subtitle">
+      <p>{__(`Find some content you want to add to a list`)}</p>
+      <p>{__(`Use the menu to add it to a list`)}</p>
+      <p>{__(`Create as many lists as you wish`)}</p>
+      <p>{__(`Keep the list private, or publish it (transaction fees apply).`)}</p>
+    </div>
+  );
+
   return (
     <>
       {builtin.map((list: Collection) => {
@@ -72,12 +85,22 @@ export default function CollectionsListMine(props: Props) {
         );
       })}
       <div className="claim-grid__wrapper">
-        <h1 className="claim-grid__header claim-grid__title">
-          {__('Playlists')}
-          <div className="claim-grid__title--empty">(Empty)</div>
-        </h1>
+        <div className="claim-grid__header claim-grid__header--between section">
+          <h1 className="claim-grid__title">
+            {__('Playlists')}
+            {!hasCollections && <div className="claim-grid__title--empty">(Empty)</div>}
+          </h1>
+          <Button button="link" onClick={() => setShowHelp(!showHelp)} label={__('How does this work?')} />
+        </div>
+        {showHelp && (
+          <Card
+            titleActions={<Button button="close" icon={ICONS.REMOVE} onClick={() => setShowHelp(false)} />}
+            title={__('Introducing Lists')}
+            actions={helpText}
+          />
+        )}
         {Boolean(hasCollections) && (
-          <>
+          <div className="section">
             <div className="claim-grid">
               {unpublishedCollectionsList &&
                 unpublishedCollectionsList.length > 0 &&
@@ -88,7 +111,7 @@ export default function CollectionsListMine(props: Props) {
                 publishedList.length > 0 &&
                 publishedList.map((key) => <CollectionPreviewTile tileLayout collectionId={key} key={key} />)}
             </div>
-          </>
+          </div>
         )}
         {!hasCollections && (
           <div className="main--empty">

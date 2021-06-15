@@ -22,6 +22,7 @@ import ClaimSupportButton from 'component/claimSupportButton';
 import ChannelStakedIndicator from 'component/channelStakedIndicator';
 import ClaimMenuList from 'component/claimMenuList';
 import Yrbl from 'component/yrbl';
+import I18nMessage from '../../component/i18nMessage';
 
 export const PAGE_VIEW_QUERY = `view`;
 const CONTENT_PAGE = 'content';
@@ -52,6 +53,7 @@ type Props = {
   youtubeChannels: ?Array<{ channel_claim_id: string, sync_status: string, transfer_state: string }>,
   blockedChannels: Array<string>,
   mutedChannels: Array<string>,
+  unpublishedCollections: CollectionGroup,
 };
 
 function ChannelPage(props: Props) {
@@ -70,6 +72,7 @@ function ChannelPage(props: Props) {
     youtubeChannels,
     blockedChannels,
     mutedChannels,
+    unpublishedCollections,
   } = props;
   const {
     push,
@@ -99,6 +102,31 @@ function ChannelPage(props: Props) {
         return true;
       }
     });
+
+  const hasUnpublishedCollections = unpublishedCollections && Object.keys(unpublishedCollections).length;
+
+  let collectionEmpty;
+  if (channelIsMine) {
+    collectionEmpty = hasUnpublishedCollections ? (
+      <section className="main--empty">
+        {
+          <p>
+            <I18nMessage
+              tokens={{
+                pick: <Button button="link" navigate={`/$/${PAGES.LISTS}`} label={__('Pick')} />,
+              }}
+            >
+              You have unpublished lists! %pick% one and publish it!
+            </I18nMessage>
+          </p>
+        }
+      </section>
+    ) : (
+      <section className="main--empty">{__('You have no lists! Create one from any playable content.')}</section>
+    );
+  } else {
+    collectionEmpty = <section className="main--empty">{__('You have unpublished lists')}</section>;
+  }
   let channelIsBlackListed = false;
 
   if (claim && blackListedOutpoints) {
@@ -269,7 +297,7 @@ function ChannelPage(props: Props) {
                 uri={uri}
                 channelIsBlackListed={channelIsBlackListed}
                 viewHiddenChannels
-                empty={__('No Content Found')}
+                empty={<section className="main--empty">{__('No Content Found')}</section>}
               />
             </TabPanel>
             <TabPanel>
@@ -278,7 +306,7 @@ function ChannelPage(props: Props) {
                 uri={uri}
                 channelIsBlackListed={channelIsBlackListed}
                 viewHiddenChannels
-                empty={__('No Lists Found')}
+                empty={collectionEmpty}
               />
             </TabPanel>
             <TabPanel>
@@ -287,7 +315,7 @@ function ChannelPage(props: Props) {
                 uri={uri}
                 channelIsBlackListed={channelIsBlackListed}
                 viewHiddenChannels
-                empty={__('No Reposts Found')}
+                empty={<section className="main--empty">{__('No Reposts Found')}</section>}
               />
             </TabPanel>
             <TabPanel>

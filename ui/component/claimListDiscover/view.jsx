@@ -512,6 +512,7 @@ function ClaimListDiscover(props: Props) {
             liveLivestreamsFirst={liveLivestreamsFirst}
             livestreamMap={livestreamMap}
             searchOptions={options}
+            empty={empty}
           />
           {loading && (
             <div className="claim-grid">
