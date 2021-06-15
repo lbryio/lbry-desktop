@@ -7,7 +7,7 @@ import FreezeframeWrapper from 'component/fileThumbnail/FreezeframeWrapper';
 import ChannelStakedIndicator from 'component/channelStakedIndicator';
 import { getThumbnailCdnUrl } from 'util/thumbnail';
 import useLazyLoading from 'effects/use-lazy-loading';
-import ThumbnailBrokenImage from './thumbnail-broken.png';
+import ThumbnailBrokenImage from 'component/selectThumbnail/thumbnail-broken.png';
 
 const FONT_PX = 16.0;
 const IMG_XSMALL_REM = 2.1;
