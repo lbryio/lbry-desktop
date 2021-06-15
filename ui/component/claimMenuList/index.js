@@ -8,6 +8,7 @@ import {
   makeSelectNameForCollectionId,
   makeSelectCollectionIsMine,
   COLLECTIONS_CONSTS,
+  makeSelectEditedCollectionForId,
 } from 'lbry-redux';
 import { makeSelectChannelIsMuted } from 'redux/selectors/blocked';
 import { doChannelMute, doChannelUnmute } from 'redux/actions/blocked';
@@ -38,6 +39,7 @@ const select = (state, props) => {
     collectionName: makeSelectNameForCollectionId(props.collectionId)(state),
     isMyCollection: makeSelectCollectionIsMine(props.collectionId)(state),
     hasExperimentalUi: makeSelectUserPropForProp(USER.EXPERIMENTAL_UI)(state),
+    editedCollection: makeSelectEditedCollectionForId(props.collectionId)(state),
   };
 };
 

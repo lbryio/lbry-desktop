@@ -408,10 +408,15 @@
   }
 }
 
+.claim-grid__header--between {
+  justify-content: space-between;
+}
+
 .claim-grid__title {
   font-weight: 300;
   font-size: var(--font-large);
   margin-right: var(--spacing-m);
+  display: flex;
 }
 
 .claim-grid__title-span {

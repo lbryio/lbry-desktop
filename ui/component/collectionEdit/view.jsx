@@ -235,7 +235,7 @@ function CollectionForm(props: Props) {
     <>
       <div className={classnames('main--contained', { 'card--disabled': disabled })}>
         <Tabs>
-          <TabList className="tabs__list--channel-page">
+          <TabList className="tabs__list--collection-edit-page">
             <Tab>{__('General')}</Tab>
             <Tab>{__('Items')}</Tab>
             <Tab>{__('Credits')}</Tab>

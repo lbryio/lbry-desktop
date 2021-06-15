@@ -26,7 +26,7 @@ type Props = {
   channelIsBlackListed: boolean,
   defaultPageSize?: number,
   defaultInfiniteScroll?: Boolean,
-  claim: ?Claim,
+  claim: Claim,
   isAuthenticated: boolean,
   showMature: boolean,
   tileLayout: boolean,
@@ -135,43 +135,39 @@ function ChannelContent(props: Props) {
 
       {!channelIsMine && claimsInChannel > 0 && <HiddenNsfwClaims uri={uri} />}
 
-      {claim && claimsInChannel > 0 ? (
-        <ClaimListDiscover
-          defaultFreshness={CS.FRESH_ALL}
-          showHiddenByUser={viewHiddenChannels}
-          forceShowReposts
-          hideFilters={!showFilters}
-          hideAdvancedFilter={!showFilters}
-          tileLayout={tileLayout}
-          uris={searchResults}
-          channelIds={[claim.claim_id]}
-          claimType={claimType}
-          feeAmount={CS.FEE_AMOUNT_ANY}
-          defaultOrderBy={CS.ORDER_BY_NEW}
-          pageSize={defaultPageSize}
-          infiniteScroll={defaultInfiniteScroll}
-          injectedItem={SHOW_ADS && !isAuthenticated && IS_WEB && <Ads type="video" />}
-          meta={
-            showFilters && (
-              <Form onSubmit={() => {}} className="wunderbar--inline">
-                <Icon icon={ICONS.SEARCH} />
-                <FormField
-                  className="wunderbar__input--inline"
-                  value={searchQuery}
-                  onChange={handleInputChange}
-                  type="text"
-                  placeholder={__('Search')}
-                />
-              </Form>
-            )
-          }
-          isChannel
-          channelIsMine={channelIsMine}
-          empty={empty}
-        />
-      ) : (
-        <section className="main--empty">{__("This channel hasn't published anything yet")}</section>
-      )}
+      <ClaimListDiscover
+        defaultFreshness={CS.FRESH_ALL}
+        showHiddenByUser={viewHiddenChannels}
+        forceShowReposts
+        hideFilters={!showFilters}
+        hideAdvancedFilter={!showFilters}
+        tileLayout={tileLayout}
+        uris={searchResults}
+        channelIds={[claim.claim_id]}
+        claimType={claimType}
+        feeAmount={CS.FEE_AMOUNT_ANY}
+        defaultOrderBy={CS.ORDER_BY_NEW}
+        pageSize={defaultPageSize}
+        infiniteScroll={defaultInfiniteScroll}
+        injectedItem={SHOW_ADS && !isAuthenticated && IS_WEB && <Ads type="video" />}
+        meta={
+          showFilters && (
+            <Form onSubmit={() => {}} className="wunderbar--inline">
+              <Icon icon={ICONS.SEARCH} />
+              <FormField
+                className="wunderbar__input--inline"
+                value={searchQuery}
+                onChange={handleInputChange}
+                type="text"
+                placeholder={__('Search')}
+              />
+            </Form>
+          )
+        }
+        isChannel
+        channelIsMine={channelIsMine}
+        empty={empty}
+      />
     </Fragment>
   );
 }

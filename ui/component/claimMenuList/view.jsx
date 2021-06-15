@@ -49,6 +49,7 @@ type Props = {
   doChannelSubscribe: (SubscriptionArgs) => void,
   doChannelUnsubscribe: (SubscriptionArgs) => void,
   isChannelPage: boolean,
+  editedCollection: Collection,
 };
 
 function ClaimMenuList(props: Props) {
@@ -79,10 +80,11 @@ function ClaimMenuList(props: Props) {
     doChannelSubscribe,
     doChannelUnsubscribe,
     isChannelPage = false,
+    editedCollection,
   } = props;
   const repostedContent = claim && claim.reposted_claim;
   const contentClaim = repostedContent || claim;
-  const incognito = channelUri && !(channelUri.includes('@'));
+  const incognito = channelUri && !channelUri.includes('@');
   const signingChannel = claim && (claim.signing_channel || claim);
   const permanentUrl = String(channelUri);
   const isChannel = !incognito && signingChannel === claim;
@@ -226,6 +228,17 @@ function ClaimMenuList(props: Props) {
             {/* COLLECTION OPERATIONS */}
             {collectionId && collectionName && isCollectionClaim && (
               <>
+                {Boolean(editedCollection) && (
+                  <MenuItem
+                    className="comment__menu-option"
+                    onSelect={() => push(`/$/${PAGES.LIST}/${collectionId}?view=edit`)}
+                  >
+                    <div className="menu__link">
+                      <Icon aria-hidden iconColor={'red'} icon={ICONS.PUBLISH} />
+                      {__('Publish')}
+                    </div>
+                  </MenuItem>
+                )}
                 <MenuItem className="comment__menu-option" onSelect={() => push(`/$/${PAGES.LIST}/${collectionId}`)}>
                   <div className="menu__link">
                     <Icon aria-hidden icon={ICONS.VIEW} />
@@ -272,23 +285,25 @@ function ClaimMenuList(props: Props) {
 
         {!isMyCollection && (
           <>
-            {(!claimIsMine || channelIsBlocked) && channelUri
-            ? !incognito && !isRepost && (
-              <>
-                <MenuItem className="comment__menu-option" onSelect={handleToggleBlock}>
-                  <div className="menu__link">
-                    <Icon aria-hidden icon={ICONS.BLOCK} />
-                    {channelIsBlocked ? __('Unblock Channel') : __('Block Channel')}
-                  </div>
-                </MenuItem>
+            {(!claimIsMine || channelIsBlocked) && channelUri ? (
+              !incognito &&
+              !isRepost && (
+                <>
+                  <MenuItem className="comment__menu-option" onSelect={handleToggleBlock}>
+                    <div className="menu__link">
+                      <Icon aria-hidden icon={ICONS.BLOCK} />
+                      {channelIsBlocked ? __('Unblock Channel') : __('Block Channel')}
+                    </div>
+                  </MenuItem>
 
-                <MenuItem className="comment__menu-option" onSelect={handleToggleMute}>
-                  <div className="menu__link">
-                    <Icon aria-hidden icon={ICONS.MUTE} />
-                    {channelIsMuted ? __('Unmute Channel') : __('Mute Channel')}
-                  </div>
-                </MenuItem>
-              </>
+                  <MenuItem className="comment__menu-option" onSelect={handleToggleMute}>
+                    <div className="menu__link">
+                      <Icon aria-hidden icon={ICONS.MUTE} />
+                      {channelIsMuted ? __('Unmute Channel') : __('Mute Channel')}
+                    </div>
+                  </MenuItem>
+                </>
+              )
             ) : (
               <>
                 {!isChannelPage && !isRepost && (
@@ -310,9 +325,7 @@ function ClaimMenuList(props: Props) {
                 )}
               </>
             )}
-            {!isRepost && (
-              <hr className="menu__separator" />
-            )}
+            {!isRepost && <hr className="menu__separator" />}
           </>
         )}
 

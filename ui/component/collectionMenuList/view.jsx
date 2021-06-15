@@ -37,7 +37,16 @@ function ClaimMenuList(props: Props) {
             <MenuItem className="comment__menu-option" onSelect={() => push(`/$/${PAGES.LIST}/${collectionId}`)}>
               <div className="menu__link">
                 <Icon aria-hidden icon={ICONS.VIEW} />
-                {__('Edit List')}
+                {__('View List')}
+              </div>
+            </MenuItem>
+            <MenuItem
+              className="comment__menu-option"
+              onSelect={() => push(`/$/${PAGES.LIST}/${collectionId}?view=edit`)}
+            >
+              <div className="menu__link">
+                <Icon aria-hidden icon={ICONS.PUBLISH} />
+                {__('Publish List')}
               </div>
             </MenuItem>
             <MenuItem
