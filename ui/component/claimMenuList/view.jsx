@@ -41,7 +41,6 @@ type Props = {
   collectionId: string,
   isMyCollection: boolean,
   doToast: ({ message: string }) => void,
-  hasExperimentalUi: boolean,
   claimIsMine: boolean,
   fileInfo: FileListItem,
   prepareEdit: ({}, string, {}) => void,
@@ -72,7 +71,6 @@ function ClaimMenuList(props: Props) {
     collectionName,
     isMyCollection,
     doToast,
-    hasExperimentalUi,
     claimIsMine,
     fileInfo,
     prepareEdit,
@@ -189,33 +187,29 @@ function ClaimMenuList(props: Props) {
         <Icon size={20} icon={ICONS.MORE_VERTICAL} />
       </MenuButton>
       <MenuList className="menu__list">
-        {hasExperimentalUi && (
+        {/* WATCH LATER */}
+        {isPlayable && !collectionId && (
           <>
-            {/* WATCH LATER */}
-            {isPlayable && !collectionId && (
-              <>
-                <MenuItem
-                  className="comment__menu-option"
-                  onSelect={() => {
-                    doToast({
-                      message: __('Item %action% Watch Later', {
-                        action: hasClaimInWatchLater ? __('removed from') : __('added to'),
-                      }),
-                    });
-                    doCollectionEdit(COLLECTIONS_CONSTS.WATCH_LATER_ID, {
-                      claims: [contentClaim],
-                      remove: hasClaimInWatchLater,
-                      type: 'playlist',
-                    });
-                  }}
-                >
-                  <div className="menu__link">
-                    <Icon aria-hidden icon={hasClaimInWatchLater ? ICONS.DELETE : ICONS.TIME} />
-                    {hasClaimInWatchLater ? __('In Watch Later') : __('Watch Later')}
-                  </div>
-                </MenuItem>
-              </>
-            )}
+            <MenuItem
+              className="comment__menu-option"
+              onSelect={() => {
+                doToast({
+                  message: __('Item %action% Watch Later', {
+                    action: hasClaimInWatchLater ? __('removed from') : __('added to'),
+                  }),
+                });
+                doCollectionEdit(COLLECTIONS_CONSTS.WATCH_LATER_ID, {
+                  claims: [contentClaim],
+                  remove: hasClaimInWatchLater,
+                  type: 'playlist',
+                });
+              }}
+            >
+              <div className="menu__link">
+                <Icon aria-hidden icon={hasClaimInWatchLater ? ICONS.DELETE : ICONS.TIME} />
+                {hasClaimInWatchLater ? __('In Watch Later') : __('Watch Later')}
+              </div>
+            </MenuItem>
             {/* COLLECTION OPERATIONS */}
             {collectionId && collectionName && isCollectionClaim && (
               <>

@@ -16,8 +16,6 @@ import { doSetActiveChannel, doSetIncognito, doOpenModal } from 'redux/actions/a
 import { doCommentModBlock, doCommentModUnBlock } from 'redux/actions/comments';
 import { makeSelectChannelIsBlocked } from 'redux/selectors/comments';
 import { doToast } from 'redux/actions/notifications';
-import { makeSelectUserPropForProp } from 'redux/selectors/user';
-import * as USER from 'constants/user';
 import { makeSelectSigningIsMine } from 'redux/selectors/content';
 import { doChannelSubscribe, doChannelUnsubscribe } from 'redux/actions/subscriptions';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
@@ -38,7 +36,6 @@ const select = (state, props) => {
     claimInCollection: makeSelectCollectionForIdHasClaimUrl(props.collectionId, permanentUri)(state),
     collectionName: makeSelectNameForCollectionId(props.collectionId)(state),
     isMyCollection: makeSelectCollectionIsMine(props.collectionId)(state),
-    hasExperimentalUi: makeSelectUserPropForProp(USER.EXPERIMENTAL_UI)(state),
     editedCollection: makeSelectEditedCollectionForId(props.collectionId)(state),
   };
 };
