@@ -46,7 +46,6 @@ type Props = {
   doClearPurchasedUriSuccess: () => void,
   user: ?User,
   homepageData: any,
-  hasExperimentalUi: boolean,
 };
 
 type SideNavLink = {
@@ -74,7 +73,6 @@ function SideNavigation(props: Props) {
     homepageData,
     user,
     followedTags,
-    hasExperimentalUi,
   } = props;
 
   const { EXTRA_SIDEBAR_LINKS } = homepageData;
@@ -221,7 +219,7 @@ function SideNavigation(props: Props) {
 
   SIDE_LINKS.push(HOME);
   SIDE_LINKS.push(RECENT_FROM_FOLLOWING);
-  if (!SIMPLE_SITE && hasExperimentalUi) {
+  if (!SIMPLE_SITE) {
     FULL_LINKS.push({
       title: 'Lists',
       link: `/$/${PAGES.LISTS}`,
@@ -231,7 +229,7 @@ function SideNavigation(props: Props) {
   }
   if (!SIMPLE_SITE) {
     SIDE_LINKS.push(...FULL_LINKS);
-  } else if (SIMPLE_SITE && hasExperimentalUi) {
+  } else if (SIMPLE_SITE) {
     SIDE_LINKS.push({
       title: 'Lists',
       link: `/$/${PAGES.LISTS}`,

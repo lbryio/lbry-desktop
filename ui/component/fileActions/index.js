@@ -9,14 +9,12 @@ import {
   makeSelectTagInClaimOrChannelForUri,
 } from 'lbry-redux';
 import { DISABLE_COMMENTS_TAG } from 'constants/tags';
-import { makeSelectUserPropForProp } from 'redux/selectors/user';
 import { makeSelectCostInfoForUri } from 'lbryinc';
 import { doSetPlayingUri } from 'redux/actions/content';
 import { doToast } from 'redux/actions/notifications';
 import { doOpenModal, doSetActiveChannel, doSetIncognito } from 'redux/actions/app';
 import fs from 'fs';
 import FileActions from './view';
-import * as USER from 'constants/user';
 import { makeSelectFileRenderModeForUri } from 'redux/selectors/content';
 
 const select = (state, props) => ({
@@ -28,7 +26,6 @@ const select = (state, props) => ({
   myChannels: selectMyChannelClaims(state),
   isLivestreamClaim: makeSelectClaimIsStreamPlaceholder(props.uri)(state),
   reactionsDisabled: makeSelectTagInClaimOrChannelForUri(props.uri, DISABLE_COMMENTS_TAG)(state),
-  hasExperimentalUi: makeSelectUserPropForProp(USER.EXPERIMENTAL_UI)(state),
 });
 
 const perform = (dispatch) => ({
