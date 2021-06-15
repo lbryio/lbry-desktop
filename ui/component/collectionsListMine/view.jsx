@@ -39,10 +39,14 @@ export default function CollectionsListMine(props: Props) {
 
   const helpText = (
     <div className="section__subtitle">
-      <p>{__(`Find some content you want to add to a list`)}</p>
-      <p>{__(`Use the menu to add it to a list`)}</p>
-      <p>{__(`Create as many lists as you wish`)}</p>
-      <p>{__(`Keep the list private, or publish it (transaction fees apply).`)}</p>
+      <p>{__(`Thanks for checking out our new lists feature!`)}</p>
+      <p>{__(`From content pages or content preview menus, you can add content to lists or add new lists.`)}</p>
+      <p>
+        {__(
+          `Right now lists are for playable content only, but soon you can make lists of lists of lists of lists! Listception!`
+        )}
+      </p>
+      <p>{__(`Keep a list private, or publish it (transaction fees and bidding apply).`)}</p>
     </div>
   );
 
