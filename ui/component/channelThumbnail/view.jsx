@@ -7,7 +7,7 @@ import FreezeframeWrapper from 'component/fileThumbnail/FreezeframeWrapper';
 import ChannelStakedIndicator from 'component/channelStakedIndicator';
 import OptimizedImage from 'component/optimizedImage';
 import { AVATAR_DEFAULT } from 'config';
-import ThumbnailBrokenImage from './thumbnail-broken.png';
+import ThumbnailBrokenImage from 'component/selectThumbnail/thumbnail-broken.png';
 
 type Props = {
   thumbnail: ?string,

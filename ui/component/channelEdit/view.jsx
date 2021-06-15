@@ -22,7 +22,7 @@ import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 import WalletSpendableBalanceHelp from 'component/walletSpendableBalanceHelp';
 import { SIMPLE_SITE } from 'config';
 import { sortLanguageMap } from 'util/default-languages';
-import ThumbnailBrokenImage from './thumbnail-broken.png';
+import ThumbnailBrokenImage from 'component/selectThumbnail/thumbnail-broken.png';
 
 const LANG_NONE = 'none';
 
