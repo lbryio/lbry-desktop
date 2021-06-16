@@ -188,8 +188,8 @@ function ClaimMenuList(props: Props) {
       </MenuButton>
       <MenuList className="menu__list">
         {/* WATCH LATER */}
-        {isPlayable && !collectionId && (
           <>
+          {isPlayable && !collectionId && (
             <MenuItem
               className="comment__menu-option"
               onSelect={() => {
@@ -210,6 +210,7 @@ function ClaimMenuList(props: Props) {
                 {hasClaimInWatchLater ? __('In Watch Later') : __('Watch Later')}
               </div>
             </MenuItem>
+          )}
             {/* COLLECTION OPERATIONS */}
             {collectionId && collectionName && isCollectionClaim && (
               <>
@@ -254,7 +255,6 @@ function ClaimMenuList(props: Props) {
               </MenuItem>
             )}
           </>
-        )}
         {!isChannelPage && (
           <>
             <hr className="menu__separator" />
