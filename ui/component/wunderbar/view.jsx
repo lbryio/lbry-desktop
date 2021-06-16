@@ -6,7 +6,7 @@ import { useIsMobile } from 'effects/use-screensize';
 import WunderbarSuggestions from 'component/wunderbarSuggestions';
 
 type Props = {
-  doOpenMobileSearch: () => void,
+  doOpenMobileSearch: (any) => void,
   channelsOnly?: boolean,
   noTopSuggestion?: boolean,
   noBottomLinks?: boolean,
@@ -18,7 +18,7 @@ export default function WunderBar(props: Props) {
   const isMobile = useIsMobile();
 
   return isMobile ? (
-    <Button icon={ICONS.SEARCH} className="wunderbar__mobile-search" onClick={() => doOpenMobileSearch()} />
+    <Button icon={ICONS.SEARCH} className="wunderbar__mobile-search" onClick={() => doOpenMobileSearch({ ...props })} />
   ) : (
     <WunderbarSuggestions
       channelsOnly={channelsOnly}

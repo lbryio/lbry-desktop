@@ -13,8 +13,17 @@ import {
 import { makeSelectChannelIsMuted } from 'redux/selectors/blocked';
 import { doChannelMute, doChannelUnmute } from 'redux/actions/blocked';
 import { doSetActiveChannel, doSetIncognito, doOpenModal } from 'redux/actions/app';
-import { doCommentModBlock, doCommentModUnBlock } from 'redux/actions/comments';
-import { makeSelectChannelIsBlocked } from 'redux/selectors/comments';
+import {
+  doCommentModBlock,
+  doCommentModUnBlock,
+  doCommentModBlockAsAdmin,
+  doCommentModUnBlockAsAdmin,
+} from 'redux/actions/comments';
+import {
+  selectHasAdminChannel,
+  makeSelectChannelIsBlocked,
+  makeSelectChannelIsAdminBlocked,
+} from 'redux/selectors/comments';
 import { doToast } from 'redux/actions/notifications';
 import { makeSelectSigningIsMine } from 'redux/selectors/content';
 import { doChannelSubscribe, doChannelUnsubscribe } from 'redux/actions/subscriptions';
@@ -33,6 +42,8 @@ const select = (state, props) => {
     channelIsBlocked: makeSelectChannelIsBlocked(props.uri)(state),
     fileInfo: makeSelectFileInfoForUri(props.uri)(state),
     isSubscribed: makeSelectIsSubscribed(props.channelUri, true)(state),
+    channelIsAdminBlocked: makeSelectChannelIsAdminBlocked(props.uri)(state),
+    isAdmin: selectHasAdminChannel(state),
     claimInCollection: makeSelectCollectionForIdHasClaimUrl(props.collectionId, permanentUri)(state),
     collectionName: makeSelectNameForCollectionId(props.collectionId)(state),
     isMyCollection: makeSelectCollectionIsMine(props.collectionId)(state),
@@ -57,6 +68,9 @@ const perform = (dispatch) => ({
   doChannelUnmute: (channelUri) => dispatch(doChannelUnmute(channelUri)),
   doCommentModBlock: (channelUri) => dispatch(doCommentModBlock(channelUri)),
   doCommentModUnBlock: (channelUri) => dispatch(doCommentModUnBlock(channelUri)),
+  doCommentModBlockAsAdmin: (commenterUri, blockerId) => dispatch(doCommentModBlockAsAdmin(commenterUri, blockerId)),
+  doCommentModUnBlockAsAdmin: (commenterUri, blockerId) =>
+    dispatch(doCommentModUnBlockAsAdmin(commenterUri, blockerId)),
   doChannelSubscribe: (subscription) => dispatch(doChannelSubscribe(subscription)),
   doChannelUnsubscribe: (subscription) => dispatch(doChannelUnsubscribe(subscription)),
   doCollectionEdit: (collection, props) => dispatch(doCollectionEdit(collection, props)),

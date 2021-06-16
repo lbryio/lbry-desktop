@@ -8,6 +8,8 @@ import Spinner from 'component/spinner';
 import { FormField } from 'component/common/form-components/form-field';
 import LbcSymbol from 'component/common/lbc-symbol';
 import I18nMessage from 'component/i18nMessage';
+import { parseURI } from 'lbry-redux';
+import WunderBar from 'component/wunderbar';
 
 const DEBOUNCE_REFRESH_MS = 1000;
 
@@ -18,24 +20,35 @@ type Props = {
   settingsByChannelId: { [string]: PerChannelSettings },
   fetchingCreatorSettings: boolean,
   fetchingBlockedWords: boolean,
+  moderationDelegatesById: { [string]: Array<{ channelId: string, channelName: string }> },
   commentBlockWords: (ChannelClaim, Array<string>) => void,
   commentUnblockWords: (ChannelClaim, Array<string>) => void,
+  commentModAddDelegate: (string, string, ChannelClaim) => void,
+  commentModRemoveDelegate: (string, string, ChannelClaim) => void,
+  commentModListDelegates: (ChannelClaim) => void,
   fetchCreatorSettings: (Array<string>) => void,
   updateCreatorSettings: (ChannelClaim, PerChannelSettings) => void,
+  doToast: ({ message: string }) => void,
 };
 
 export default function SettingsCreatorPage(props: Props) {
   const {
     activeChannelClaim,
     settingsByChannelId,
+    moderationDelegatesById,
     commentBlockWords,
     commentUnblockWords,
+    commentModAddDelegate,
+    commentModRemoveDelegate,
+    commentModListDelegates,
     fetchCreatorSettings,
     updateCreatorSettings,
+    doToast,
   } = props;
 
   const [commentsEnabled, setCommentsEnabled] = React.useState(true);
   const [mutedWordTags, setMutedWordTags] = React.useState([]);
+  const [moderatorTags, setModeratorTags] = React.useState([]);
   const [minTipAmountComment, setMinTipAmountComment] = React.useState(0);
   const [minTipAmountSuperChat, setMinTipAmountSuperChat] = React.useState(0);
   const [slowModeMinGap, setSlowModeMinGap] = React.useState(0);
@@ -96,6 +109,71 @@ export default function SettingsCreatorPage(props: Props) {
     commentUnblockWords(activeChannelClaim, ['', tagToRemove.name]);
     setLastUpdated(Date.now());
   }
+
+  function addModerator(newTags: Array<Tag>) {
+    // Ignoring multiple entries for now, although <TagsSearch> supports it.
+    let modUri;
+    try {
+      modUri = parseURI(newTags[0].name);
+    } catch (e) {}
+
+    if (modUri && modUri.isChannel && modUri.claimName && modUri.claimId) {
+      if (!moderatorTags.some((modTag) => modTag.name === newTags[0].name)) {
+        setModeratorTags([...moderatorTags, newTags[0]]);
+        commentModAddDelegate(modUri.claimId, modUri.claimName, activeChannelClaim);
+        setLastUpdated(Date.now());
+      }
+    } else {
+      doToast({ message: __('Invalid channel URL "%url%"', { url: newTags[0].name }), isError: true });
+    }
+  }
+
+  function removeModerator(tagToRemove: Tag) {
+    let modUri;
+    try {
+      modUri = parseURI(tagToRemove.name);
+    } catch (e) {}
+
+    if (modUri && modUri.isChannel && modUri.claimName && modUri.claimId) {
+      const newModeratorTags = moderatorTags.slice().filter((t) => t.name !== tagToRemove.name);
+      setModeratorTags(newModeratorTags);
+      commentModRemoveDelegate(modUri.claimId, modUri.claimName, activeChannelClaim);
+      setLastUpdated(Date.now());
+    }
+  }
+
+  function handleChannelSearchSelect(value: string) {
+    let uriInfo;
+    try {
+      uriInfo = parseURI(value);
+    } catch (e) {}
+
+    if (uriInfo && uriInfo.path) {
+      addModerator([{ name: uriInfo.path }]);
+    }
+  }
+
+  // Update local moderator states with data from API.
+  React.useEffect(() => {
+    commentModListDelegates(activeChannelClaim);
+  }, [activeChannelClaim, commentModListDelegates]);
+
+  React.useEffect(() => {
+    if (activeChannelClaim) {
+      const delegates = moderationDelegatesById[activeChannelClaim.claim_id];
+      if (delegates) {
+        setModeratorTags(
+          delegates.map((d) => {
+            return {
+              name: d.channelName + '#' + d.channelId,
+            };
+          })
+        );
+      } else {
+        setModeratorTags([]);
+      }
+    }
+  }, [activeChannelClaim, moderationDelegatesById]);
 
   // Update local states with data from API.
   React.useEffect(() => {
@@ -235,6 +313,34 @@ export default function SettingsCreatorPage(props: Props) {
               }
             />
           )}
+          <Card
+            title={__('Delegation')}
+            className="card--enable-overflow"
+            actions={
+              <div className="tag--blocked-words">
+                <label>{__('Add moderator')}</label>
+                <WunderBar
+                  channelsOnly
+                  noTopSuggestion
+                  noBottomLinks
+                  customSelectAction={handleChannelSearchSelect}
+                  placeholder={__('Add moderator')}
+                />
+                <TagsSearch
+                  label={__('Moderators')}
+                  labelAddNew={__('Add moderators')}
+                  placeholder={__('Add moderator channel URL (e.g. "@lbry#3f")')}
+                  onRemove={removeModerator}
+                  onSelect={addModerator}
+                  tagsPassedIn={moderatorTags}
+                  disableAutoFocus
+                  hideInputField
+                  hideSuggestions
+                  disableControlTags
+                />
+              </div>
+            }
+          />
         </>
       )}
     </Page>
