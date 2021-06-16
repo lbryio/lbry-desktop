@@ -92,7 +92,7 @@ function FileActions(props: Props) {
     <>
       {ENABLE_FILE_REACTIONS && !reactionsDisabled && <FileReactions uri={uri} livestream={isLivestreamClaim} />}
       <ClaimSupportButton uri={uri} fileAction />
-      {hasExperimentalUi && <ClaimCollectionAddButton uri={uri} fileAction />}
+      <ClaimCollectionAddButton uri={uri} fileAction />
       {!hideRepost && (
         <Button
           button="alt"
