@@ -40,14 +40,13 @@ export default function CollectionsListMine(props: Props) {
 
   const helpText = (
     <div className="section__subtitle">
-      <p>{__(`Thanks for checking out our new lists feature!`)}</p>
-      <p>{__(`From content pages or content preview menus, you can add content to lists or add new lists.`)}</p>
+      <p>{__(`Everyone starts with 2 private lists - Watch Later and Favorites.`)}</p>
+      <p>{__(`Add content to existing lists or new lists from content pages or content previews.`)}</p>
       <p>
         {__(
-          `Right now lists are for playable content only, but soon you can make lists of lists of lists of lists! Listception!`
+          `By default, lists are private. You can edit them and later publish them from the Lists page or the Publish context menu on this page. Similar to uploads, small blockchain fees apply.`
         )}
       </p>
-      <p>{__(`Keep a list private, or publish it (transaction fees and bidding apply).`)}</p>
     </div>
   );
 
