@@ -46,6 +46,7 @@ export default function WunderBarSuggestions(props: Props) {
   const inputRef: ElementRef<any> = React.useRef();
   const isFocused = inputRef && inputRef.current && inputRef.current === document.activeElement;
 
+  const THROTTLE_MS = 1000;
   const {
     push,
     location: { search },
@@ -53,7 +54,7 @@ export default function WunderBarSuggestions(props: Props) {
   const urlParams = new URLSearchParams(search);
   const queryFromUrl = urlParams.get('q') || '';
   const [term, setTerm] = React.useState(queryFromUrl);
-  const throttledTerm = useThrottle(term, 500) || '';
+  const throttledTerm = useThrottle(term, THROTTLE_MS) || '';
   const searchSize = isMobile ? 20 : 5;
   const { results, loading } = useLighthouse(throttledTerm, showMature, searchSize);
   const noResults = throttledTerm && !loading && results && results.length === 0;
