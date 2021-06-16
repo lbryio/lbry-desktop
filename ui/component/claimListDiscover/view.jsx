@@ -76,7 +76,6 @@ type Props = {
   releaseTime?: string,
   hideLivestreamClaims?: boolean,
   isChannel?: boolean,
-  // channelIsMine?: boolean, //CHECK
   empty?: string,
 };
 
@@ -135,7 +134,6 @@ function ClaimListDiscover(props: Props) {
     livestreamMap,
     hasSource,
     isChannel = false,
-    // channelIsMine = false, //RBCHECK that ClaimList handles this
     hideLivestreamClaims,
     empty,
   } = props;
