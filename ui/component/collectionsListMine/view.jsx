@@ -10,6 +10,7 @@ import * as PAGES from 'constants/pages';
 import Yrbl from 'component/yrbl';
 import usePersistedState from 'effects/use-persisted-state';
 import Card from 'component/common/card';
+import classnames from 'classnames';
 
 type Props = {
   builtinCollections: CollectionGroup,
@@ -104,7 +105,12 @@ export default function CollectionsListMine(props: Props) {
           />
         )}
         {Boolean(hasCollections) && (
-          <div className="section">
+          <div
+            className={classnames({
+              section: showHelp,
+            })}
+          >
+            {/* TODO: fix above spacing hack */}
             <div className="claim-grid">
               {unpublishedCollectionsList &&
                 unpublishedCollectionsList.length > 0 &&
