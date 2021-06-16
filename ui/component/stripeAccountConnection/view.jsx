@@ -57,7 +57,7 @@ class DocxViewer extends React.Component<Props, State> {
       } else {
         Lbryio.call('account', 'link', {
           return_url: STRIPE_ACCOUNT_CONNECTION_SUCCESS_URL,
-          refresh_url: STRIPE_ACCOUNT_FAILURE_CONNECTION_URL,
+          refresh_url: STRIPE_ACCOUNT_CONNECTION_FAILURE_URL,
         }, 'post').then(accountLinkResponse => {
           console.log(accountLinkResponse);
 
