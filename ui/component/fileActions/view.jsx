@@ -1,5 +1,5 @@
 // @flow
-import { SITE_NAME, ENABLE_FILE_REACTIONS } from 'config';
+import { SIMPLE_SITE, SITE_NAME, ENABLE_FILE_REACTIONS } from 'config';
 import * as PAGES from 'constants/pages';
 import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
