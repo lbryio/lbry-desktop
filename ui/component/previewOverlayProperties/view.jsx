@@ -65,7 +65,7 @@ export default function PreviewOverlayProperties(props: Props) {
           {isCollection && claim && !iconOnly && <div>{claimCount}</div>}
           {!iconOnly && isStream && <VideoDuration uri={uri} />}
           {isStream && <FileType uri={uri} small={small} />}
-          {isSubscribed && <Icon tooltip size={size} icon={ICONS.SUBSCRIBE} />}
+          {isSubscribed && !isCollection && <Icon tooltip size={size} icon={ICONS.SUBSCRIBE} />}
           {!claimIsMine && downloaded && <Icon size={size} tooltip icon={ICONS.LIBRARY} />}
           <FilePrice hideFree uri={uri} />
         </>
