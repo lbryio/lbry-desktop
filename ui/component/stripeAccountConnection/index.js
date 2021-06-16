@@ -17,7 +17,6 @@ import StripeAccountConnection from './view';
 import { createSelector } from 'reselect';
 import { selectUser } from 'redux/selectors/user';
 
-
 // function that receives state parameter and returns object of functions that accept  state
 const select = (state) => ({
   txoFetchError: selectFetchingTxosError(state),
