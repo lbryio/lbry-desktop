@@ -29,10 +29,14 @@ type Props = {
   inline?: boolean,
   channelIsMuted: boolean,
   channelIsBlocked: boolean,
+  channelIsAdminBlocked: boolean,
+  isAdmin: boolean,
   doChannelMute: (string) => void,
   doChannelUnmute: (string) => void,
   doCommentModBlock: (string) => void,
   doCommentModUnBlock: (string) => void,
+  doCommentModBlockAsAdmin: (string, string) => void,
+  doCommentModUnBlockAsAdmin: (string, string) => void,
   isRepost: boolean,
   doCollectionEdit: (string, any) => void,
   hasClaimInWatchLater: boolean,
@@ -62,9 +66,13 @@ function ClaimMenuList(props: Props) {
     doChannelUnmute,
     channelIsMuted,
     channelIsBlocked,
+    channelIsAdminBlocked,
+    isAdmin,
     doCommentModBlock,
     doCommentModUnBlock,
     isRepost,
+    doCommentModBlockAsAdmin,
+    doCommentModUnBlockAsAdmin,
     doCollectionEdit,
     hasClaimInWatchLater,
     collectionId,
@@ -164,6 +172,14 @@ function ClaimMenuList(props: Props) {
 
   function handleSupport() {
     openModal(MODALS.SEND_TIP, { uri, isSupport: true });
+  }
+
+  function handleToggleAdminBlock() {
+    if (channelIsAdminBlocked) {
+      doCommentModUnBlockAsAdmin(channelUri, '');
+    } else {
+      doCommentModBlockAsAdmin(channelUri, '');
+    }
   }
 
   function handleCopyLink() {
@@ -291,6 +307,15 @@ function ClaimMenuList(props: Props) {
                       {channelIsBlocked ? __('Unblock Channel') : __('Block Channel')}
                     </div>
                   </MenuItem>
+
+                  {isAdmin && (
+                    <MenuItem className="comment__menu-option" onSelect={handleToggleAdminBlock}>
+                      <div className="menu__link">
+                        <Icon aria-hidden icon={ICONS.GLOBE} />
+                        {channelIsAdminBlocked ? __('Global Unblock Channel') : __('Global Block Channel')}
+                      </div>
+                    </MenuItem>
+                  )}
 
                   <MenuItem className="comment__menu-option" onSelect={handleToggleMute}>
                     <div className="menu__link">

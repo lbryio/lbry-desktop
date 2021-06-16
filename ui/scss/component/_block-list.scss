@@ -1,0 +1,18 @@
+.block-list--moderator {
+  .button__content {
+    align-items: flex-start;
+  }
+
+  .section__actions {
+    flex-wrap: wrap;
+  }
+}
+
+.block-list--delegator {
+  padding: var(--spacing-s);
+
+  .button--alt,
+  .button--secondary {
+    margin-top: var(--spacing-xxs);
+  }
+}

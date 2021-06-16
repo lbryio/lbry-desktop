@@ -15,6 +15,7 @@ type Props = {
   doAddTag: (string) => void,
   onSelect?: (Tag) => void,
   hideSuggestions?: boolean,
+  hideInputField?: boolean,
   suggestMature?: boolean,
   disableAutoFocus?: boolean,
   onRemove: (Tag) => void,
@@ -49,6 +50,7 @@ export default function TagsSearch(props: Props) {
     onSelect,
     onRemove,
     hideSuggestions,
+    hideInputField,
     suggestMature,
     disableAutoFocus,
     placeholder,
@@ -189,16 +191,18 @@ export default function TagsSearch(props: Props) {
                   />
                 ))}
           </ul>
-          <FormField
-            autoFocus={!disableAutoFocus}
-            className="tag__input"
-            onChange={onChange}
-            placeholder={placeholder || __('gaming, crypto')}
-            type="text"
-            value={newTag}
-            disabled={disabled}
-            label={labelAddNew || __('Add Tags')}
-          />
+          {!hideInputField && (
+            <FormField
+              autoFocus={!disableAutoFocus}
+              className="tag__input"
+              onChange={onChange}
+              placeholder={placeholder || __('gaming, crypto')}
+              type="text"
+              value={newTag}
+              disabled={disabled}
+              label={labelAddNew || __('Add Tags')}
+            />
+          )}
           {!hideSuggestions && (
             <section>
               <label>{labelSuggestions || (newTag.length ? __('Matching') : __('Known Tags'))}</label>

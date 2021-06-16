@@ -318,6 +318,12 @@ $thumbnailWidthSmall: 1rem;
   font-size: var(--font-small);
   border-bottom: 1px solid var(--color-border);
 
+  &:not(:first-child) {
+    margin-top: var(--spacing-xs);
+    padding-top: var(--spacing-xs);
+    border-top: 1px solid var(--color-border);
+  }
+
   &:not(:last-child) {
     margin-bottom: var(--spacing-xs);
   }
