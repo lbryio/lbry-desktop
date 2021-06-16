@@ -5,6 +5,7 @@ import { withRouter } from 'react-router';
 import Button from 'component/button';
 import Card from 'component/common/card';
 import { Lbryio } from 'lbryinc';
+import { STRIPE_ACCOUNT_CONNECTION_SUCCESS_URL, STRIPE_ACCOUNT_CONNECTION_FAILURE_URL } from 'config';
 
 type Props = {
   source: string,
@@ -55,8 +56,8 @@ class DocxViewer extends React.Component<Props, State> {
         console.log(accountStatusResponse);
       } else {
         Lbryio.call('account', 'link', {
-          return_url: 'http://localhost:9090/$/wallet',
-          refresh_url: 'http://localhost:9090/$/wallet',
+          return_url: STRIPE_ACCOUNT_CONNECTION_SUCCESS_URL,
+          refresh_url: STRIPE_ACCOUNT_FAILURE_CONNECTION_URL,
         }, 'post').then(accountLinkResponse => {
           console.log(accountLinkResponse);
 
@@ -75,8 +76,8 @@ class DocxViewer extends React.Component<Props, State> {
         // tell the frontend it's not confirmed, to show the proper markup
 
         Lbryio.call('account', 'link', {
-          return_url: 'http://localhost:9090/$/wallet',
-          refresh_url: 'http://localhost:9090/$/wallet',
+          return_url: STRIPE_ACCOUNT_CONNECTION_SUCCESS_URL,
+          refresh_url: STRIPE_ACCOUNT_FAILURE_CONNECTION_URL,
         }, 'post').then(accountLinkResponse => {
           console.log(accountLinkResponse);
 
