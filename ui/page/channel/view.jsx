@@ -125,7 +125,7 @@ function ChannelPage(props: Props) {
       <section className="main--empty">{__('You have no lists! Create one from any playable content.')}</section>
     );
   } else {
-    collectionEmpty = <section className="main--empty">{__('You have unpublished lists')}</section>;
+    collectionEmpty = <section className="main--empty">{__('No Lists Found')}</section>;
   }
   let channelIsBlackListed = false;
 
