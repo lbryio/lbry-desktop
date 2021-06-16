@@ -11,10 +11,11 @@ export default function useLighthouse(
   size?: number = 5,
   additionalOptions: any = {}
 ) {
+  const THROTTLE_MS = 1000;
   const [results, setResults] = React.useState();
   const [loading, setLoading] = React.useState();
   const queryString = query ? getSearchQueryString(query, { nsfw: showMature, size, ...additionalOptions }) : '';
-  const throttledQuery = useThrottle(queryString, 500);
+  const throttledQuery = useThrottle(queryString, THROTTLE_MS);
 
   React.useEffect(() => {
     if (throttledQuery) {
