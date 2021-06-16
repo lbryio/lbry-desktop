@@ -41,6 +41,7 @@ function SocialShare(props: Props) {
 
   const { canonical_url: canonicalUrl, permanent_url: permanentUrl, name, claim_id: claimId } = claim;
   const isChannel = claim.value_type === 'channel';
+  const isCollection = claim.value_type === 'collection';
   const isStream = claim.value_type === 'stream';
   const isVideo = isStream && claim.value.stream_type === 'video';
   const isAudio = isStream && claim.value.stream_type === 'audio';
@@ -147,7 +148,7 @@ function SocialShare(props: Props) {
           title={__('Share on Facebook')}
           href={`https://facebook.com/sharer/sharer.php?u=${encodedLbryURL}`}
         />
-        {webShareable && !isChannel && (
+        {webShareable && !isCollection && !isChannel && (
           <Button
             className="share"
             iconSize={24}
