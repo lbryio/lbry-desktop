@@ -114,8 +114,7 @@ function FileActions(props: Props) {
 
   const rhsSection = (
     <>
-      <FileDownloadLink uri={uri} />
-
+      {!SIMPLE_SITE && <FileDownloadLink uri={uri} />}
       {claimIsMine && (
         <Button
           className="button--file-action"
