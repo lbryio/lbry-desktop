@@ -10,6 +10,7 @@ import * as PAGES from 'constants/pages';
 import Yrbl from 'component/yrbl';
 import usePersistedState from 'effects/use-persisted-state';
 import Card from 'component/common/card';
+import classnames from 'classnames';
 
 type Props = {
   builtinCollections: CollectionGroup,
@@ -39,17 +40,11 @@ export default function CollectionsListMine(props: Props) {
 
   const helpText = (
     <div className="section__subtitle">
-      <p>{__(`Thanks for checking out our new lists feature!`)}</p>
       <p>{__(`Everyone starts with 2 private lists - Watch Later and Favorites.`)}</p>
-      <p>{__(`From content pages or content preview menus, you can add content to lists or create new lists.`)}</p>
+      <p>{__(`Add content to existing lists or new lists from content pages or content previews.`)}</p>
       <p>
         {__(
-          `By default, lists are private. You can edit them and later publish to a channel (or anonymously) from the List page or the Publish context menu on this page. Similar to uploads, transaction fees and bidding apply.`
-        )}
-      </p>
-      <p>
-        {__(
-          `Right now, lists are for playable content only. Lots of other improvements and features are in the works, stay tuned!`
+          `By default, lists are private. You can edit them and later publish them from the Lists page or the Publish context menu on this page. Similar to uploads, small blockchain fees apply.`
         )}
       </p>
     </div>
@@ -109,7 +104,12 @@ export default function CollectionsListMine(props: Props) {
           />
         )}
         {Boolean(hasCollections) && (
-          <div className="section">
+          <div
+            className={classnames({
+              section: showHelp,
+            })}
+          >
+            {/* TODO: fix above spacing hack */}
             <div className="claim-grid">
               {unpublishedCollectionsList &&
                 unpublishedCollectionsList.length > 0 &&
