@@ -6,6 +6,8 @@ import Button from 'component/button';
 import Page from 'component/page';
 import Card from 'component/common/card';
 import { SETTINGS } from 'lbry-redux';
+import { Lbryio } from 'lbryinc';
+import { STRIPE_ACCOUNT_CONNECTION_FAILURE_URL, STRIPE_ACCOUNT_CONNECTION_SUCCESS_URL } from '../../../config';
 
 let scriptLoading = false;
 let scriptLoaded = false;
@@ -54,7 +56,14 @@ class CardVerify extends React.Component<Props, State> {
     var publicKey = 'pk_test_NoL1JWL7i1ipfhVId5KfDZgo';
 
     // client secret of the SetupIntent (don't share with anyone but customer)
-    var clientSecret = 'seti_1J06NBIrsVv9ySuhNe8kilMp_secret_JdN7X7QEudCP69ZpnL7njukN2ytXhlk';
+    // var clientSecret = 'seti_1J3ULjIrsVv9ySuhkUWZXOmV_secret_Jgs5DyXwLF12743YO1apFxQvnawbCna';
+    var clientSecret = '';
+
+    Lbryio.call('customer', 'setup', {}, 'post').then(customerSetupResponse => {
+      console.log('credit card response');
+      console.log(customerSetupResponse);
+      clientSecret = customerSetupResponse.client_secret;
+    });
 
     // TODO: have to fix this
     setTimeout(function(){
@@ -220,22 +229,15 @@ class CardVerify extends React.Component<Props, State> {
 
         <Card
           title={__('Connect your card to tip creators')}
-          subtitle={__('Securey connect your card through Stripe to tip your favorite creators')}
+          subtitle={__('Securely connect your card through Stripe to tip your favorite creators')}
         />
 
         <div className="sr-root">
           <div className="sr-main">
             <div className="sr-payment-form card">
-              {/*<div className="sr-form-row">*/}
-              {/*  <label>*/}
-              {/*    Account details*/}
-              {/*  </label>*/}
-              {/*  <input type="text" id="email" placeholder="Email address" />*/}
-              {/*</div>*/}
-
               <div className="sr-form-row">
-                <label>
-                  Payment details
+                <label className="payment-details">
+                  Payment Details
                 </label>
                 <div className="sr-input sr-element sr-card-element" id="card-element">
                 </div>
