@@ -1,159 +1,189 @@
-// @flow
-import * as ICONS from 'constants/icons';
-import * as PAGES from 'constants/pages';
-import * as React from 'react';
-
-import Page from 'component/page';
-import { FormField } from 'component/common/form';
-import Card from 'component/common/card';
-import { Lbryio } from 'lbryinc';
-import { useHistory } from 'react-router';
-import { Redirect } from 'react-router-dom';
-import Yrbl from 'component/yrbl';
+/* eslint-disable no-undef */
+/* eslint-disable react/prop-types */
+import React from 'react';
 import Button from 'component/button';
+import Page from 'component/page';
+import Card from 'component/common/card';
 import { SETTINGS } from 'lbry-redux';
 
-type Props = {
-  osNotificationsEnabled: boolean,
-  isAuthenticated: boolean,
-  setClientSetting: (string, boolean) => void,
-};
+let scriptLoading = false;
+let scriptLoaded = false;
+let scriptDidError = false;
 
-export default function NotificationSettingsPage(props: Props) {
-  const { osNotificationsEnabled, setClientSetting, isAuthenticated } = props;
-  const [error, setError] = React.useState();
-  const [tagMap, setTagMap] = React.useState({});
-  const [tags, setTags] = React.useState();
-  const [enabledEmails, setEnabledEmails] = React.useState();
-  const { location } = useHistory();
-  const urlParams = new URLSearchParams(location.search);
-  const verificationToken = urlParams.get('verification_token');
-  const lbryIoParams = verificationToken ? { auth_token: verificationToken } : undefined;
+// Flow does not like the way this stripe plugin works
+// Disabled because it was a huge pain
+// type Props = {
+//   disabled: boolean,
+//   label: ?string,
+//   email: string,
 
-  React.useEffect(() => {
-    Lbryio.call('tag', 'list', lbryIoParams)
-      .then(setTags)
-      .catch(e => {
-        setError(true);
+//   // =====================================================
+//   // Required by stripe
+//   // see Stripe docs for more info:
+//   //   https://stripe.com/docs/checkout#integration-custom
+//   // =====================================================
+
+//   // Your publishable key (test or live).
+//   // can't use "key" as a prop in react, so have to change the keyname
+//   stripeKey: string,
+
+//   // The callback to invoke when the Checkout process is complete.
+//   //   function(token)
+//   //     token is the token object created.
+//   //     token.id can be used to create a charge or customer.
+//   //     token.email contains the email address entered by the user.
+//   token: string,
+// };
+
+class CardVerify extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      open: false,
+      scriptFailedToLoad: false,
+    };
+  }
+
+  componentDidMount() {
+    if (scriptLoaded) {
+      return;
+    }
+
+    if (scriptLoading) {
+      return;
+    }
+
+    scriptLoading = true;
+
+    const script = document.createElement('script');
+    script.src = 'https://checkout.stripe.com/checkout.js';
+    script.async = true;
+
+    this.loadPromise = (() => {
+      let canceled = false;
+      const promise = new Promise((resolve, reject) => {
+        script.onload = () => {
+          scriptLoaded = true;
+          scriptLoading = false;
+          resolve();
+          this.onScriptLoaded();
+        };
+        script.onerror = event => {
+          scriptDidError = true;
+          scriptLoading = false;
+          reject(event);
+          this.onScriptError(event);
+        };
+      });
+      const wrappedPromise = new Promise((resolve, reject) => {
+        promise.then(() => (canceled ? reject({ isCanceled: true }) : resolve()));
+        promise.catch(error => (canceled ? reject({ isCanceled: true }) : reject(error)));
       });
 
-    Lbryio.call('user_email', 'status', lbryIoParams)
-      .then(res => {
-        const enabledEmails =
-          res.emails &&
-          Object.keys(res.emails).reduce((acc, email) => {
-            const isEnabled = res.emails[email];
-            return [...acc, { email, isEnabled }];
-          }, []);
+      return {
+        promise: wrappedPromise,
+        reject() {
+          canceled = true;
+        },
+      };
+    })();
 
-        setTagMap(res.tags);
-        setEnabledEmails(enabledEmails);
-      })
-      .catch(e => {
-        setError(true);
+    this.loadPromise.promise.then(this.onScriptLoaded).catch(this.onScriptError);
+
+    // $FlowFixMe
+    document.body.appendChild(script);
+  }
+
+  componentDidUpdate() {
+    if (!scriptLoading) {
+      this.updateStripeHandler();
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.loadPromise) {
+      this.loadPromise.reject();
+    }
+    if (CardVerify.stripeHandler && this.state.open) {
+      CardVerify.stripeHandler.close();
+    }
+  }
+
+  onScriptLoaded = () => {
+    if (!CardVerify.stripeHandler) {
+      CardVerify.stripeHandler = StripeCheckout.configure({
+        key: 'pk_test_NoL1JWL7i1ipfhVId5KfDZgo',
       });
-  }, []);
 
-  function handleChangeTag(name, newIsEnabled) {
-    const tagParams = newIsEnabled ? { add: name } : { remove: name };
+      if (this.hasPendingClick) {
+        this.showStripeDialog();
+      }
+    }
+  };
 
-    Lbryio.call('user_tag', 'edit', { ...lbryIoParams, ...tagParams }).then(() => {
-      const newTagMap = { ...tagMap };
-      newTagMap[name] = newIsEnabled;
+  onScriptError = (...args) => {
+    this.setState({ scriptFailedToLoad: true });
+  };
 
-      setTagMap(newTagMap);
+  onClosed = () => {
+    this.setState({ open: false });
+  };
+
+  updateStripeHandler() {
+    if (!CardVerify.stripeHandler) {
+      CardVerify.stripeHandler = StripeCheckout.configure({
+        key: this.props.stripeKey,
+      });
+    }
+  }
+
+  showStripeDialog() {
+    this.setState({ open: true });
+    CardVerify.stripeHandler.open({
+      allowRememberMe: false,
+      closed: this.onClosed,
+      description: __('Confirm Identity'),
+      email: this.props.email,
+      locale: 'auto',
+      panelLabel: 'Verify',
+      token: this.props.token,
+      zipCode: true,
     });
   }
 
-  function handleChangeEmail(email, newIsEnabled) {
-    Lbryio.call('user_email', 'edit', {
-      email: email,
-      enabled: newIsEnabled,
-      ...lbryIoParams,
-    })
-      .then(() => {
-        const newEnabledEmails = enabledEmails
-          ? enabledEmails.map(userEmail => {
-              if (email === userEmail.email) {
-                return { email, isEnabled: newIsEnabled };
-              }
+  onClick = () => {
+    if (scriptDidError) {
+      try {
+        throw new Error('Tried to call onClick, but StripeCheckout failed to load');
+      } catch (x) {}
+    } else if (CardVerify.stripeHandler) {
+      this.showStripeDialog();
+    } else {
+      this.hasPendingClick = true;
+    }
+  };
 
-              return userEmail;
-            })
-          : [];
+  render() {
+    const { scriptFailedToLoad } = this.props;
 
-        setEnabledEmails(newEnabledEmails);
-      })
-      .catch(e => {
-        setError(true);
-      });
-  }
+    return (
 
-  if (IS_WEB && !isAuthenticated && !verificationToken) {
-    return <Redirect to={`/$/${PAGES.AUTH_SIGNIN}?redirect=${location.pathname}`} />;
-  }
-
-  return (
-    <Page backout={{ title: __('Manage Stripe card'), backLabel: __('Done') }} noFooter noSideNavigation>
-      {error ? (
-        <Yrbl
-          type="sad"
-          title={__('Uh oh')}
-          subtitle={__('There was an error displaying this page.')}
-          actions={
-            <div className="section__actions">
-              <Button
-                button="secondary"
-                label={__('Refresh')}
-                icon={ICONS.REFRESH}
-                onClick={() => window.location.reload()}
-              />
-              <Button button="secondary" label={__('Go Home')} icon={ICONS.HOME} navigate={'/'} />
-            </div>
-          }
-        />
-      ) : (
-        <div className="card-stack">
-          {/* @if TARGET='app' */}
-          <Card
-            title={__('App notifications')}
-            subtitle={__('Notification settings for the desktop app.')}
-            actions={
-              <FormField
-                type="checkbox"
-                name="desktopNotification"
-                onChange={() => setClientSetting(SETTINGS.OS_NOTIFICATIONS_ENABLED, !osNotificationsEnabled)}
-                checked={osNotificationsEnabled}
-                label={__('Show Desktop Notifications')}
-                helper={__('Get notified when an upload or channel is confirmed.')}
-              />
-            }
-          />
-
-          {/* @endif */}
-
-          {enabledEmails && enabledEmails.length > 0 && (
-            <Card
-              title={enabledEmails.length === 1 ? __('Your email') : __('Receiving addresses')}
-              subtitle={__('Uncheck your email below if you want to stop receiving messages.')}
-              actions={
-                <>
-                  {enabledEmails.map(({ email, isEnabled }) => (
-                    <FormField
-                      type="checkbox"
-                      name={`active-email:${email}`}
-                      key={email}
-                      onChange={() => handleChangeEmail(email, !isEnabled)}
-                      checked={isEnabled}
-                      label={email}
-                    />
-                  ))}
-                </>
-              }
-            />
+      <Page backout={{ title: __('Manage Stripe card'), backLabel: __('Done') }} noFooter noSideNavigation>
+        <div>
+          {scriptFailedToLoad && (
+            <div className="error__text">There was an error connecting to Stripe. Please try again later.</div>
           )}
         </div>
-      )}
-    </Page>
-  );
+
+        <Card
+          title={__('App notifications')}
+          subtitle={__('Notification settings for the desktop app.')}
+        />
+      </Page>
+    );
+  }
 }
+
+export default CardVerify;
+/* eslint-enable no-undef */
+/* eslint-enable react/prop-types */
