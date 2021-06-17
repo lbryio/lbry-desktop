@@ -45,6 +45,8 @@ class CardVerify extends React.Component {
   }
 
   componentDidMount() {
+    console.log("SOMETHING");
+
     if (scriptLoaded) {
       return;
     }
@@ -59,65 +61,54 @@ class CardVerify extends React.Component {
     script.src = 'https://js.stripe.com/v3/';
     script.async = true;
 
-    this.loadPromise = (() => {
-      let canceled = false;
-      const promise = new Promise((resolve, reject) => {
-        script.onload = () => {
-          scriptLoaded = true;
-          scriptLoading = false;
-          resolve();
-          this.onScriptLoaded();
-        };
-        script.onerror = event => {
-          scriptDidError = true;
-          scriptLoading = false;
-          reject(event);
-          this.onScriptError(event);
-        };
-      });
-      const wrappedPromise = new Promise((resolve, reject) => {
-        promise.then(() => (canceled ? reject({ isCanceled: true }) : resolve()));
-        promise.catch(error => (canceled ? reject({ isCanceled: true }) : reject(error)));
-      });
-
-      return {
-        promise: wrappedPromise,
-        reject() {
-          canceled = true;
-        },
-      };
-    })();
-
-    this.loadPromise.promise.then(this.onScriptLoaded).catch(this.onScriptError);
+    // this.loadPromise = (() => {
+    //   let canceled = false;
+    //   const promise = new Promise((resolve, reject) => {
+    //     script.onload = () => {
+    //       scriptLoaded = true;
+    //       scriptLoading = false;
+    //       resolve();
+    //       this.onScriptLoaded();
+    //     };
+    //     script.onerror = event => {
+    //       scriptDidError = true;
+    //       scriptLoading = false;
+    //       reject(event);
+    //       this.onScriptError(event);
+    //     };
+    //   });
+    //   const wrappedPromise = new Promise((resolve, reject) => {
+    //     promise.then(() => (canceled ? reject({ isCanceled: true }) : resolve()));
+    //     promise.catch(error => (canceled ? reject({ isCanceled: true }) : reject(error)));
+    //   });
+    //
+    //   return {
+    //     promise: wrappedPromise,
+    //     reject() {
+    //       canceled = true;
+    //     },
+    //   };
+    // })();
+    //
+    // this.loadPromise.promise.then(this.onScriptLoaded).catch(this.onScriptError);
 
     // $FlowFixMe
     document.body.appendChild(script);
-  }
 
-  componentDidUpdate() {
-    if (!scriptLoading) {
-      this.updateStripeHandler();
-    }
-  }
 
-  componentWillUnmount() {
-    if (this.loadPromise) {
-      this.loadPromise.reject();
-    }
-    if (CardVerify.stripeHandler && this.state.open) {
-      CardVerify.stripeHandler.close();
-    }
-  }
+    // run after the dom is loaded
+    // window.addEventListener("DOMContentLoaded", function() {
 
-  onScriptLoaded = () => {
+      console.log('FRONTEND LOADED');
+
     // public key of the stripe account
     var publicKey = 'pk_test_NoL1JWL7i1ipfhVId5KfDZgo';
 
     // client secret of the SetupIntent (don't share with anyone but customer)
     var clientSecret = 'seti_1J06NBIrsVv9ySuhNe8kilMp_secret_JdN7X7QEudCP69ZpnL7njukN2ytXhlk';
 
-    // run after the dom is loaded
-    window.addEventListener("DOMContentLoaded", function() {
+
+    setTimeout(function(){
       var stripeElements = function(publicKey, setupIntent) {
         var stripe = Stripe(publicKey);
         var elements = stripe.elements();
@@ -213,10 +204,36 @@ class CardVerify extends React.Component {
         });
       };
 
+
+
+      }, 1500)
+
+
+
+
       // getPublicKey();
-    }, false);
+    // }, false);
 
 
+
+  }
+
+  componentDidUpdate() {
+    if (!scriptLoading) {
+      this.updateStripeHandler();
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.loadPromise) {
+      this.loadPromise.reject();
+    }
+    if (CardVerify.stripeHandler && this.state.open) {
+      CardVerify.stripeHandler.close();
+    }
+  }
+
+  onScriptLoaded = () => {
     // if (!CardVerify.stripeHandler) {
     //   CardVerify.stripeHandler = StripeCheckout.configure({
     //     key: 'pk_test_NoL1JWL7i1ipfhVId5KfDZgo',
