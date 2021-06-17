@@ -15,7 +15,7 @@ export default function NagNoUser() {
             SITE_NAME,
           }}
         >
-          %DOMAIN% id not available. Account functions will be unavailable. Refresh to try again.
+          Could not get a user ID. Account functions will be unavailable. Try again in a bit.
         </I18nMessage>
       }
       actionText={__('Refresh')}
