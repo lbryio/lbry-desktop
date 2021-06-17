@@ -29,7 +29,7 @@ $discussion-header__height: 3rem;
   margin-top: var(--spacing-m);
   margin-bottom: var(--spacing-s);
 
-  @media (min-width: $breakpoint-small) {
+  @media (min-width: $breakpoint-medium) {
     margin: 0;
     width: var(--livestream-comments-width);
     height: calc(100vh - var(--header-height));

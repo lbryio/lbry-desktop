@@ -172,10 +172,14 @@
   width: calc(100vw - var(--spacing-xs) * 2);
   margin: var(--spacing-xs);
 
-  @media (min-width: $breakpoint-small) {
+  @media (min-width: $breakpoint-medium) {
     margin: var(--spacing-m);
     margin-right: calc(var(--livestream-comments-width) + var(--spacing-m));
     width: calc(100vw - var(--livestream-comments-width) - var(--spacing-m) * 2);
+  }
+
+  @media (min-width: $breakpoint-large) {
+    margin-right: calc(10vw + var(--livestream-comments-width) + var(--spacing-m));
   }
 }
 
