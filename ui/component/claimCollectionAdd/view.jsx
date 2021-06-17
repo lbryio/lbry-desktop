@@ -79,7 +79,15 @@ const ClaimCollectionAdd = (props: Props) => {
                   .filter((list) => (isChannel ? list.type === 'collection' : list.type === 'playlist'))
                   .map((l) => {
                     const { id } = l;
-                    return <CollectionSelectItem claim={claim} collectionId={id} uri={permanentUrl} key={id} category={'builtin'} />;
+                    return (
+                      <CollectionSelectItem
+                        claim={claim}
+                        collectionId={id}
+                        uri={permanentUrl}
+                        key={id}
+                        category={'builtin'}
+                      />
+                    );
                   })}
                 {unpublished &&
                   (Object.values(unpublished): any)
@@ -88,7 +96,13 @@ const ClaimCollectionAdd = (props: Props) => {
                     .map((l) => {
                       const { id } = l;
                       return (
-                        <CollectionSelectItem claim={claim} collectionId={id} uri={permanentUrl} key={id} category={'unpublished'} />
+                        <CollectionSelectItem
+                          claim={claim}
+                          collectionId={id}
+                          uri={permanentUrl}
+                          key={id}
+                          category={'unpublished'}
+                        />
                       );
                     })}
                 {published &&
@@ -96,7 +110,13 @@ const ClaimCollectionAdd = (props: Props) => {
                     // $FlowFixMe
                     const { id } = l;
                     return (
-                      <CollectionSelectItem claim={claim} collectionId={id} uri={permanentUrl} key={id} category={'published'} />
+                      <CollectionSelectItem
+                        claim={claim}
+                        collectionId={id}
+                        uri={permanentUrl}
+                        key={id}
+                        category={'published'}
+                      />
                     );
                   })}
               </div>
@@ -109,7 +129,7 @@ const ClaimCollectionAdd = (props: Props) => {
                 type="text"
                 name="new_collection"
                 value={newCollectionName}
-                label={'New List Title'}
+                label={__('New List Title')}
                 onFocus={onTextareaFocus}
                 onBlur={onTextareaBlur}
                 inputButton={
@@ -134,7 +154,7 @@ const ClaimCollectionAdd = (props: Props) => {
               />
             )}
             {!addNewCollection && (
-              <Button button={'link'} label={'New List'} onClick={() => setAddNewCollection(true)} />
+              <Button button={'link'} label={__('New List')} onClick={() => setAddNewCollection(true)} />
             )}
           </fieldset-section>
           <div className="card__actions">

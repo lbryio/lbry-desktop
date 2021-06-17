@@ -27,7 +27,7 @@ export default function CollectionAddButton(props: Props) {
       className={classnames({ 'button--file-action': fileAction })}
       icon={fileAction ? ICONS.ADD : ICONS.LIBRARY}
       iconSize={fileAction ? 22 : undefined}
-      label={uri ? __('Save') : 'New List'}
+      label={uri ? __('Save') : __('New List')}
       requiresAuth={IS_WEB}
       title={__('Add this claim to a list')}
       onClick={(e) => {
