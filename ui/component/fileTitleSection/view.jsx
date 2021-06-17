@@ -13,6 +13,7 @@ import Button from 'component/button';
 import * as PAGES from 'constants/pages';
 import FileDescription from 'component/fileDescription';
 import usePersistedState from 'effects/use-persisted-state';
+import { SIMPLE_SITE } from 'config';
 
 type Props = {
   uri: string,
@@ -68,15 +69,27 @@ function FileTitleSection(props: Props) {
                 {__('Mature content blocked.')}
               </h2>
               <div>
-                <I18nMessage
-                  tokens={{
-                    content_settings: (
-                      <Button button="link" label={__('content settings')} navigate={`/$/${PAGES.SETTINGS}`} />
-                    ),
-                  }}
-                >
-                  Change this in your %content_settings%.
-                </I18nMessage>
+                {!SIMPLE_SITE &&
+                  <I18nMessage
+                    tokens={{
+                      content_settings: (
+                        <Button button="link" label={__('content settings')} navigate={`/$/${PAGES.SETTINGS}`} />
+                      ),
+                    }}
+                  >
+                    Change this in your %content_settings%.
+                  </I18nMessage>
+                }
+                {SIMPLE_SITE &&
+                  <I18nMessage
+                    tokens={{
+                      download_url: <Button label={__('lbry.com')} button="link" href="https://lbry.com/get" />,
+                    }}
+                  >
+                    You can download the LBRY Desktop or Android app on %download_url% and enable mature content in
+                    Settings.
+                  </I18nMessage>
+                }
               </div>
             </div>
           ) : (
