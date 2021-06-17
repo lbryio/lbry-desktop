@@ -1,7 +1,7 @@
 // @flow
 import * as REACTION_TYPES from 'constants/reactions';
 import * as ICONS from 'constants/icons';
-import { SORT_COMMENTS_NEW, SORT_COMMENTS_BEST, SORT_COMMENTS_CONTROVERSIAL } from 'constants/comment';
+import { COMMENT_PAGE_SIZE_TOP_LEVEL, SORT_BY } from 'constants/comment';
 import React, { useEffect } from 'react';
 import classnames from 'classnames';
 import CommentView from 'component/comment';
@@ -11,59 +11,70 @@ import Card from 'component/common/card';
 import CommentCreate from 'component/commentCreate';
 import usePersistedState from 'effects/use-persisted-state';
 import { ENABLE_COMMENT_REACTIONS } from 'config';
-import { sortComments } from 'util/comments';
 import Empty from 'component/common/empty';
+import debounce from 'util/debounce';
+
+const DEBOUNCE_SCROLL_HANDLER_MS = 50;
 
 type Props = {
-  comments: Array<Comment>,
+  allCommentIds: any,
+  topLevelComments: Array<Comment>,
+  topLevelTotalPages: number,
   commentsDisabledBySettings: boolean,
-  fetchComments: (string) => void,
-  fetchReacts: (string) => Promise<any>,
+  fetchTopLevelComments: (string, number, number, number) => void,
+  fetchComment: (string) => void,
+  fetchReacts: (Array<string>) => Promise<any>,
+  resetComments: (string) => void,
   uri: string,
   claimIsMine: boolean,
   myChannels: ?Array<ChannelClaim>,
   isFetchingComments: boolean,
-  linkedComment: any,
+  linkedCommentId?: string,
   totalComments: number,
   fetchingChannels: boolean,
-  reactionsById: ?{ [string]: { [REACTION_TYPES.LIKE | REACTION_TYPES.DISLIKE]: number } },
+  myReactsByCommentId: ?{ [string]: Array<string> }, // "CommentId:MyChannelId" -> reaction array (note the ID concatenation)
+  othersReactsById: ?{ [string]: { [REACTION_TYPES.LIKE | REACTION_TYPES.DISLIKE]: number } },
   activeChannelId: ?string,
 };
 
 function CommentList(props: Props) {
   const {
-    fetchComments,
+    allCommentIds,
+    fetchTopLevelComments,
+    fetchComment,
     fetchReacts,
+    resetComments,
     uri,
-    comments,
+    topLevelComments,
+    topLevelTotalPages,
     commentsDisabledBySettings,
     claimIsMine,
     myChannels,
     isFetchingComments,
-    linkedComment,
+    linkedCommentId,
     totalComments,
     fetchingChannels,
-    reactionsById,
+    myReactsByCommentId,
+    othersReactsById,
     activeChannelId,
   } = props;
+
   const commentRef = React.useRef();
   const spinnerRef = React.useRef();
-  const [sort, setSort] = usePersistedState(
-    'comment-sort',
-    ENABLE_COMMENT_REACTIONS ? SORT_COMMENTS_BEST : SORT_COMMENTS_NEW
-  );
+  const DEFAULT_SORT = ENABLE_COMMENT_REACTIONS ? SORT_BY.POPULARITY : SORT_BY.NEWEST;
+  const [sort, setSort] = usePersistedState('comment-sort-by', DEFAULT_SORT);
+  const [page, setPage] = React.useState(0);
+  const totalFetchedComments = allCommentIds ? allCommentIds.length : 0;
 
-  const [start] = React.useState(0);
-  const [end, setEnd] = React.useState(9);
   // Display comments immediately if not fetching reactions
   // If not, wait to show comments until reactions are fetched
   const [readyToDisplayComments, setReadyToDisplayComments] = React.useState(
-    Boolean(reactionsById) || !ENABLE_COMMENT_REACTIONS
+    Boolean(othersReactsById) || !ENABLE_COMMENT_REACTIONS
   );
-  const [justCommented] = React.useState([]);
-  const linkedCommentId = linkedComment && linkedComment.comment_id;
+
   const hasNoComments = !totalComments;
-  const moreBelow = totalComments - end > 0;
+  const moreBelow = page < topLevelTotalPages;
+
   const isMyComment = (channelId: string): boolean => {
     if (myChannels != null && channelId != null) {
       for (let i = 0; i < myChannels.length; i++) {
@@ -75,86 +86,106 @@ function CommentList(props: Props) {
     return false;
   };
 
-  const handleMoreBelow = React.useCallback(() => {
-    if (moreBelow) {
-      setEnd(end + 10);
+  function changeSort(newSort) {
+    if (sort !== newSort) {
+      setSort(newSort);
+      setPage(0); // Invalidate existing comments
     }
-  }, [end, setEnd, moreBelow]);
+  }
 
+  // Reset comments
   useEffect(() => {
-    fetchComments(uri);
-  }, [fetchComments, uri]);
-
-  useEffect(() => {
-    if (totalComments && ENABLE_COMMENT_REACTIONS && !fetchingChannels) {
-      fetchReacts(uri)
-        .then(() => {
-          setReadyToDisplayComments(true);
-        })
-        .catch(() => setReadyToDisplayComments(true));
+    if (page === 0) {
+      resetComments(uri);
+      setPage(1);
     }
-  }, [fetchReacts, uri, totalComments, activeChannelId, fetchingChannels]);
+  }, [page, uri, resetComments]);
+
+  // Fetch top-level comments
+  useEffect(() => {
+    if (page !== 0) {
+      if (page === 1 && linkedCommentId) {
+        fetchComment(linkedCommentId);
+      }
+
+      fetchTopLevelComments(uri, page, COMMENT_PAGE_SIZE_TOP_LEVEL, sort);
+    }
+  }, [fetchTopLevelComments, uri, page, resetComments, sort, linkedCommentId, fetchComment]);
+
+  // Fetch reacts
+  useEffect(() => {
+    if (totalFetchedComments > 0 && ENABLE_COMMENT_REACTIONS && !fetchingChannels) {
+      let idsForReactionFetch;
+
+      if (!othersReactsById || !myReactsByCommentId) {
+        idsForReactionFetch = allCommentIds;
+      } else {
+        idsForReactionFetch = allCommentIds.filter((commentId) => {
+          const key = activeChannelId ? `${commentId}:${activeChannelId}` : commentId;
+          return !othersReactsById[key] || !myReactsByCommentId[key];
+        });
+      }
+
+      if (idsForReactionFetch.length !== 0) {
+        fetchReacts(idsForReactionFetch)
+          .then(() => {
+            setReadyToDisplayComments(true);
+          })
+          .catch(() => setReadyToDisplayComments(true));
+      }
+    }
+  }, [
+    totalFetchedComments,
+    allCommentIds,
+    othersReactsById,
+    myReactsByCommentId,
+    fetchReacts,
+    uri,
+    activeChannelId,
+    fetchingChannels,
+  ]);
 
   useEffect(() => {
     if (readyToDisplayComments && linkedCommentId && commentRef && commentRef.current) {
       commentRef.current.scrollIntoView({ block: 'start' });
-      window.scrollBy(0, -100);
+      window.scrollBy(0, -125);
     }
   }, [readyToDisplayComments, linkedCommentId]);
 
   useEffect(() => {
-    function handleCommentScroll(e) {
+    const handleCommentScroll = debounce(() => {
       // $FlowFixMe
       const rect = spinnerRef.current.getBoundingClientRect();
 
       const isInViewport =
-        rect.top >= 0 &&
-        rect.left >= 0 &&
+        rect.bottom >= 0 &&
+        rect.right >= 0 &&
         // $FlowFixMe
-        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
         // $FlowFixMe
-        rect.right <= (window.innerWidth || document.documentElement.clientWidth);
+        rect.left <= (window.innerWidth || document.documentElement.clientWidth);
 
-      if (isInViewport) {
-        handleMoreBelow();
+      if (isInViewport && page < topLevelTotalPages) {
+        setPage(page + 1);
       }
-    }
+    }, DEBOUNCE_SCROLL_HANDLER_MS);
 
     if (!isFetchingComments && readyToDisplayComments && moreBelow && spinnerRef && spinnerRef.current) {
       window.addEventListener('scroll', handleCommentScroll);
     }
 
     return () => window.removeEventListener('scroll', handleCommentScroll);
-  }, [moreBelow, handleMoreBelow, spinnerRef, isFetchingComments, readyToDisplayComments]);
+  }, [
+    page,
+    moreBelow,
+    spinnerRef,
+    isFetchingComments,
+    readyToDisplayComments,
+    topLevelComments.length,
+    topLevelTotalPages,
+  ]);
 
-  function prepareComments(arrayOfComments, linkedComment, isFetchingComments) {
-    let orderedComments = [];
-
-    if (linkedComment) {
-      if (!linkedComment.parent_id) {
-        orderedComments = arrayOfComments.filter((c) => c.comment_id !== linkedComment.comment_id);
-        orderedComments.unshift(linkedComment);
-      } else {
-        const parentComment = arrayOfComments.find((c) => c.comment_id === linkedComment.parent_id);
-        orderedComments = arrayOfComments.filter((c) => c.comment_id !== linkedComment.parent_id);
-
-        if (parentComment) {
-          orderedComments.unshift(parentComment);
-        }
-      }
-    } else {
-      orderedComments = arrayOfComments;
-    }
-    return orderedComments;
-  }
-
-  // Default to newest first for apps that don't have comment reactions
-  const sortedComments = reactionsById
-    ? sortComments({ comments, reactionsById, sort, isMyComment, justCommented })
-    : [];
-  const displayedComments = readyToDisplayComments
-    ? prepareComments(sortedComments, linkedComment).slice(start, end)
-    : [];
+  const displayedComments = readyToDisplayComments ? topLevelComments : [];
 
   return (
     <Card
@@ -174,9 +205,9 @@ function CommentList(props: Props) {
                 label={__('Best')}
                 icon={ICONS.BEST}
                 iconSize={18}
-                onClick={() => setSort(SORT_COMMENTS_BEST)}
+                onClick={() => changeSort(SORT_BY.POPULARITY)}
                 className={classnames(`button-toggle`, {
-                  'button-toggle--active': sort === SORT_COMMENTS_BEST,
+                  'button-toggle--active': sort === SORT_BY.POPULARITY,
                 })}
               />
               <Button
@@ -184,9 +215,9 @@ function CommentList(props: Props) {
                 label={__('Controversial')}
                 icon={ICONS.CONTROVERSIAL}
                 iconSize={18}
-                onClick={() => setSort(SORT_COMMENTS_CONTROVERSIAL)}
+                onClick={() => changeSort(SORT_BY.CONTROVERSY)}
                 className={classnames(`button-toggle`, {
-                  'button-toggle--active': sort === SORT_COMMENTS_CONTROVERSIAL,
+                  'button-toggle--active': sort === SORT_BY.CONTROVERSY,
                 })}
               />
               <Button
@@ -194,9 +225,9 @@ function CommentList(props: Props) {
                 label={__('New')}
                 icon={ICONS.NEW}
                 iconSize={18}
-                onClick={() => setSort(SORT_COMMENTS_NEW)}
+                onClick={() => changeSort(SORT_BY.NEWEST)}
                 className={classnames(`button-toggle`, {
-                  'button-toggle--active': sort === SORT_COMMENTS_NEW,
+                  'button-toggle--active': sort === SORT_BY.NEWEST,
                 })}
               />
             </span>
@@ -206,22 +237,21 @@ function CommentList(props: Props) {
             icon={ICONS.REFRESH}
             title={__('Refresh')}
             onClick={() => {
-              fetchComments(uri);
-              fetchReacts(uri);
+              setPage(0);
             }}
           />
         </>
       }
       actions={
         <>
-          <CommentCreate uri={uri} justCommented={justCommented} />
+          <CommentCreate uri={uri} />
 
           {!commentsDisabledBySettings && !isFetchingComments && hasNoComments && (
             <Empty padded text={__('That was pretty deep. What do you think?')} />
           )}
 
           <ul className="comments" ref={commentRef}>
-            {comments &&
+            {topLevelComments &&
               displayedComments &&
               displayedComments.map((comment) => {
                 return (
@@ -238,9 +268,10 @@ function CommentList(props: Props) {
                     timePosted={comment.timestamp * 1000}
                     claimIsMine={claimIsMine}
                     commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}
-                    linkedComment={linkedComment}
+                    linkedCommentId={linkedCommentId}
                     isPinned={comment.is_pinned}
                     supportAmount={comment.support_amount}
+                    numDirectReplies={comment.replies}
                   />
                 );
               })}

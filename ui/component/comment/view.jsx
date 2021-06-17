@@ -1,6 +1,7 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
+import { SORT_BY, COMMENT_PAGE_SIZE_REPLIES } from 'constants/comment';
 import { FF_MAX_CHARS_IN_COMMENT } from 'constants/form-field';
 import { SITE_NAME, SIMPLE_SITE, ENABLE_COMMENT_REACTIONS } from 'config';
 import React, { useEffect, useState } from 'react';
@@ -36,8 +37,10 @@ type Props = {
   claimIsMine: boolean, // if you control the claim which this comment was posted on
   commentIsMine: boolean, // if this comment was signed by an owned channel
   updateComment: (string, string) => void,
+  fetchReplies: (string, string, number, number, number) => void,
   commentModBlock: (string) => void,
-  linkedComment?: any,
+  linkedCommentId?: string,
+  linkedCommentAncestors: { [string]: Array<string> },
   myChannels: ?Array<ChannelClaim>,
   commentingEnabled: boolean,
   doToast: ({ message: string }) => void,
@@ -53,6 +56,7 @@ type Props = {
   playingUri: ?PlayingUri,
   stakedLevel: number,
   supportAmount: number,
+  numDirectReplies: number,
 };
 
 const LENGTH_TO_COLLAPSE = 300;
@@ -71,7 +75,9 @@ function Comment(props: Props) {
     commentIsMine,
     commentId,
     updateComment,
-    linkedComment,
+    fetchReplies,
+    linkedCommentId,
+    linkedCommentAncestors,
     commentingEnabled,
     myChannels,
     doToast,
@@ -82,18 +88,23 @@ function Comment(props: Props) {
     playingUri,
     stakedLevel,
     supportAmount,
+    numDirectReplies,
   } = props;
+
   const {
     push,
     replace,
     location: { pathname, search },
   } = useHistory();
+
   const [isReplying, setReplying] = React.useState(false);
   const [isEditing, setEditing] = useState(false);
   const [editedMessage, setCommentValue] = useState(message);
   const [charCount, setCharCount] = useState(editedMessage.length);
   // used for controlling the visibility of the menu icon
   const [mouseIsHovering, setMouseHover] = useState(false);
+  const [showReplies, setShowReplies] = useState(false);
+  const [page, setPage] = useState(0);
   const [advancedEditor] = usePersistedState('comment-editor-mode', false);
   const [displayDeadComment, setDisplayDeadComment] = React.useState(false);
   const hasChannels = myChannels && myChannels.length > 0;
@@ -110,6 +121,18 @@ function Comment(props: Props) {
       channelOwnerOfContent = channelName;
     }
   } catch (e) {}
+
+  // Auto-expand (limited to linked-comments for now, but can be for all)
+  useEffect(() => {
+    if (
+      linkedCommentId &&
+      linkedCommentAncestors[linkedCommentId] &&
+      linkedCommentAncestors[linkedCommentId].includes(commentId)
+    ) {
+      setShowReplies(true);
+      setPage(1);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (isEditing) {
@@ -130,6 +153,12 @@ function Comment(props: Props) {
       };
     }
   }, [author, authorUri, editedMessage, isEditing, setEditing]);
+
+  useEffect(() => {
+    if (page > 0) {
+      fetchReplies(uri, commentId, page, COMMENT_PAGE_SIZE_REPLIES, SORT_BY.OLDEST);
+    }
+  }, [page, uri, commentId, fetchReplies]);
 
   function handleEditMessageChanged(event) {
     setCommentValue(!SIMPLE_SITE && advancedEditor ? event : event.target.value);
@@ -176,7 +205,7 @@ function Comment(props: Props) {
     >
       <div
         className={classnames('comment__content', {
-          'comment--highlighted': linkedComment && linkedComment.comment_id === commentId,
+          'comment--highlighted': linkedCommentId && linkedCommentId === commentId,
           'comment--slimed': slimedToDeath && !displayDeadComment,
         })}
       >
@@ -302,13 +331,43 @@ function Comment(props: Props) {
                   {ENABLE_COMMENT_REACTIONS && <CommentReactions uri={uri} commentId={commentId} />}
                 </div>
 
+                {numDirectReplies > 0 && !showReplies && (
+                  <div className="comment__actions">
+                    <Button
+                      label={
+                        numDirectReplies < 2
+                          ? __('Show reply')
+                          : __('Show %count% replies', { count: numDirectReplies })
+                      }
+                      button="link"
+                      onClick={() => {
+                        setShowReplies(true);
+                        if (page === 0) {
+                          setPage(1);
+                        }
+                      }}
+                    />
+                  </div>
+                )}
+
+                {numDirectReplies > 0 && showReplies && (
+                  <div className="comment__actions">
+                    <Button label={__('Hide replies')} button="link" onClick={() => setShowReplies(false)} />
+                  </div>
+                )}
+
                 {isReplying && (
                   <CommentCreate
                     isReply
                     uri={uri}
                     parentId={commentId}
-                    onDoneReplying={() => setReplying(false)}
-                    onCancelReplying={() => setReplying(false)}
+                    onDoneReplying={() => {
+                      setShowReplies(true);
+                      setReplying(false);
+                    }}
+                    onCancelReplying={() => {
+                      setReplying(false);
+                    }}
                   />
                 )}
               </>
@@ -317,7 +376,16 @@ function Comment(props: Props) {
         </div>
       </div>
 
-      <CommentsReplies threadDepth={threadDepth - 1} uri={uri} parentId={commentId} linkedComment={linkedComment} />
+      {showReplies && (
+        <CommentsReplies
+          threadDepth={threadDepth - 1}
+          uri={uri}
+          parentId={commentId}
+          linkedCommentId={linkedCommentId}
+          numDirectReplies={numDirectReplies}
+          onShowMore={() => setPage(page + 1)}
+        />
+      )}
     </li>
   );
 }
