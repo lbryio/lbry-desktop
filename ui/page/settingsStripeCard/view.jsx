@@ -1,3 +1,4 @@
+// @flow
 /* eslint-disable no-undef */
 /* eslint-disable react/prop-types */
 import React from 'react';
@@ -35,8 +36,14 @@ let scriptDidError = false;
 //   token: string,
 // };
 
-class CardVerify extends React.Component {
-  constructor(props) {
+type Props = {
+  disabled: boolean,
+  label: ?string,
+  email: ?string,
+}
+
+class CardVerify extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       open: false,
@@ -45,7 +52,8 @@ class CardVerify extends React.Component {
   }
 
   componentDidMount() {
-    console.log("SOMETHING");
+
+    var that = this;
 
     if (scriptLoaded) {
       return;
@@ -108,6 +116,7 @@ class CardVerify extends React.Component {
     var clientSecret = 'seti_1J06NBIrsVv9ySuhNe8kilMp_secret_JdN7X7QEudCP69ZpnL7njukN2ytXhlk';
 
 
+    // TODO: have to fix this
     setTimeout(function(){
       var stripeElements = function(publicKey, setupIntent) {
         var stripe = Stripe(publicKey);
@@ -142,12 +151,19 @@ class CardVerify extends React.Component {
           el.classList.remove("focused");
         });
 
+        var email = that.props.email;
+
+        console.log('email');
+
+        console.log(that.props);
+        console.log('email');
+        console.log(email);
+
         // Handle payment submission when user clicks the pay button.
         var button = document.getElementById("submit");
         button.addEventListener("click", function(event) {
           event.preventDefault();
           changeLoadingState(true);
-          var email = document.getElementById("email").value;
 
           stripe
             .confirmCardSetup(clientSecret, {
@@ -300,19 +316,19 @@ class CardVerify extends React.Component {
         </div>
 
         <Card
-          title={__('App notifications')}
-          subtitle={__('Notification settings for the desktop app.')}
+          title={__('Connect your card to tip creators')}
+          subtitle={__('Securey connect your card through Stripe to tip your favorite creators')}
         />
 
         <div className="sr-root">
           <div className="sr-main">
             <div className="sr-payment-form card">
-              <div className="sr-form-row">
-                <label>
-                  Account details
-                </label>
-                <input type="text" id="email" placeholder="Email address" />
-              </div>
+              {/*<div className="sr-form-row">*/}
+              {/*  <label>*/}
+              {/*    Account details*/}
+              {/*  </label>*/}
+              {/*  <input type="text" id="email" placeholder="Email address" />*/}
+              {/*</div>*/}
 
               <div className="sr-form-row">
                 <label>
