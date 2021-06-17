@@ -32,23 +32,10 @@ body {
   padding: 48px;
   align-content: center;
   justify-content: center;
-  height: auto;
-  min-height: 100vh;
+  height: 400px;
   margin: 0 auto;
 }
-.sr-main {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: 100%;
-  align-self: center;
-  padding: 50px 50px 75px 50px;
-  background: var(--body-color);
-  width: var(--form-width);
-  border-radius: var(--radius);
-  box-shadow: 0px 0px 0px 0.5px rgba(50, 50, 93, 0.1),
-  0px 2px 5px 0px rgba(50, 50, 93, 0.1), 0px 1px 1.5px 0px rgba(0, 0, 0, 0.07);
-}
+
 .sr-picker {
   display: flex;
   justify-content: space-between;
