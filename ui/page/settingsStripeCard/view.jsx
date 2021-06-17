@@ -159,7 +159,7 @@ class CardVerify extends React.Component<Props, State> {
           changeLoadingState(false);
         });
       };
-      }, 1500)
+      }, 200)
 
   }
 
@@ -241,7 +241,7 @@ class CardVerify extends React.Component<Props, State> {
                 </div>
               </div>
               <div className="sr-field-error" id="card-errors" role="alert"></div>
-              <button id="submit">
+              <button className="linkButton" id="submit">
                 <div className="spinner hidden" id="spinner"></div>
                 <span id="button-text">Link your card to your account</span>
               </button>
