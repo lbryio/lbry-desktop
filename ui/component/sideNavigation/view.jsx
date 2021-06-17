@@ -480,7 +480,7 @@ function SubscriptionListItem({ subscription }: { subscription: Subscription }) 
         className="navigation-link navigation-link--with-thumbnail"
         activeClass="navigation-link--active"
       >
-        <ChannelThumbnail uri={uri} />
+        <ChannelThumbnail uri={uri} hideStakedIndicator />
         <span dir="auto" className="button__label">
           {channelName}
         </span>
