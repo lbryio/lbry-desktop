@@ -44,6 +44,8 @@ type Props = {
   properties?: (Claim) => void,
   live?: boolean,
   collectionId?: string,
+  hideLivestreamClaims?: boolean,
+  isLivestream?: boolean,
 };
 
 function ClaimPreviewTile(props: Props) {
@@ -67,6 +69,8 @@ function ClaimPreviewTile(props: Props) {
     properties,
     live,
     collectionId,
+    hideLivestreamClaims,
+    isLivestream,
   } = props;
   const isRepost = claim && claim.repost_channel_url;
   const isCollection = claim && claim.value_type === 'collection';
@@ -149,7 +153,7 @@ function ClaimPreviewTile(props: Props) {
     shouldHide = blockedChannelUris.some((blockedUri) => blockedUri === claim.permanent_url);
   }
 
-  if (shouldHide) {
+  if (shouldHide || (isLivestream && hideLivestreamClaims)) {
     return null;
   }
 
