@@ -288,7 +288,11 @@ function RepostCreate(props: Props) {
       }).then((repostClaim: StreamClaim) => {
         doCheckPendingClaims();
         analytics.apiLogPublish(repostClaim);
-        doToast({ message: __('Woohoo! Successfully reposted this claim.') });
+        doToast({
+          message: __('Woohoo! Successfully reposted this claim.'),
+          linkText: __('Uploads'),
+          linkTarget: '/uploads',
+        });
         replace(getRedirect(contentUri, uri, redirectUri));
       });
     }

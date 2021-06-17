@@ -15,12 +15,19 @@ type Props = {
   tx: Txo,
   claim: GenericClaim,
   cb: () => void,
+  doResolveUri: (string) => void,
 };
 
 export default function ModalRevokeClaim(props: Props) {
-  const { tx, claim, closeModal, abandonTxo, abandonClaim, cb } = props;
+  const { tx, claim, closeModal, abandonTxo, abandonClaim, cb, doResolveUri } = props;
   const { value_type: valueType, type, normalized_name: name, is_my_input: isSupport } = tx || claim;
   const [channelName, setChannelName] = useState('');
+
+  React.useEffect(() => {
+    if (claim) {
+      doResolveUri(claim.permanent_url);
+    }
+  }, [claim, doResolveUri]);
 
   const shouldConfirmChannel =
     valueType === txnTypes.CHANNEL || type === txnTypes.CHANNEL || (type === txnTypes.UPDATE && name.startsWith('@'));
