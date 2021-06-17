@@ -11,31 +11,6 @@ let scriptLoading = false;
 let scriptLoaded = false;
 let scriptDidError = false;
 
-// Flow does not like the way this stripe plugin works
-// Disabled because it was a huge pain
-// type Props = {
-//   disabled: boolean,
-//   label: ?string,
-//   email: string,
-
-//   // =====================================================
-//   // Required by stripe
-//   // see Stripe docs for more info:
-//   //   https://stripe.com/docs/checkout#integration-custom
-//   // =====================================================
-
-//   // Your publishable key (test or live).
-//   // can't use "key" as a prop in react, so have to change the keyname
-//   stripeKey: string,
-
-//   // The callback to invoke when the Checkout process is complete.
-//   //   function(token)
-//   //     token is the token object created.
-//   //     token.id can be used to create a charge or customer.
-//   //     token.email contains the email address entered by the user.
-//   token: string,
-// };
-
 type Props = {
   disabled: boolean,
   label: ?string,
@@ -69,52 +44,17 @@ class CardVerify extends React.Component<Props, State> {
     script.src = 'https://js.stripe.com/v3/';
     script.async = true;
 
-    // this.loadPromise = (() => {
-    //   let canceled = false;
-    //   const promise = new Promise((resolve, reject) => {
-    //     script.onload = () => {
-    //       scriptLoaded = true;
-    //       scriptLoading = false;
-    //       resolve();
-    //       this.onScriptLoaded();
-    //     };
-    //     script.onerror = event => {
-    //       scriptDidError = true;
-    //       scriptLoading = false;
-    //       reject(event);
-    //       this.onScriptError(event);
-    //     };
-    //   });
-    //   const wrappedPromise = new Promise((resolve, reject) => {
-    //     promise.then(() => (canceled ? reject({ isCanceled: true }) : resolve()));
-    //     promise.catch(error => (canceled ? reject({ isCanceled: true }) : reject(error)));
-    //   });
-    //
-    //   return {
-    //     promise: wrappedPromise,
-    //     reject() {
-    //       canceled = true;
-    //     },
-    //   };
-    // })();
-    //
-    // this.loadPromise.promise.then(this.onScriptLoaded).catch(this.onScriptError);
-
     // $FlowFixMe
     document.body.appendChild(script);
 
-
     // run after the dom is loaded
     // window.addEventListener("DOMContentLoaded", function() {
-
-      console.log('FRONTEND LOADED');
 
     // public key of the stripe account
     var publicKey = 'pk_test_NoL1JWL7i1ipfhVId5KfDZgo';
 
     // client secret of the SetupIntent (don't share with anyone but customer)
     var clientSecret = 'seti_1J06NBIrsVv9ySuhNe8kilMp_secret_JdN7X7QEudCP69ZpnL7njukN2ytXhlk';
-
 
     // TODO: have to fix this
     setTimeout(function(){
@@ -219,18 +159,7 @@ class CardVerify extends React.Component<Props, State> {
           changeLoadingState(false);
         });
       };
-
-
-
       }, 1500)
-
-
-
-
-      // getPublicKey();
-    // }, false);
-
-
 
   }
 
@@ -276,32 +205,6 @@ class CardVerify extends React.Component<Props, State> {
     //   });
     // }
   }
-
-  showStripeDialog() {
-    this.setState({ open: true });
-    // CardVerify.stripeHandler.open({
-    //   allowRememberMe: false,
-    //   closed: this.onClosed,
-    //   description: __('Confirm Identity'),
-    //   email: this.props.email,
-    //   locale: 'auto',
-    //   panelLabel: 'Verify',
-    //   token: this.props.token,
-    //   zipCode: true,
-    // });
-  }
-
-  onClick = () => {
-    if (scriptDidError) {
-      try {
-        throw new Error('Tried to call onClick, but StripeCheckout failed to load');
-      } catch (x) {}
-    } else if (CardVerify.stripeHandler) {
-      this.showStripeDialog();
-    } else {
-      this.hasPendingClick = true;
-    }
-  };
 
   render() {
     const { scriptFailedToLoad } = this.props;
