@@ -30,6 +30,7 @@ import OpenInAppLink from 'web/component/openInAppLink';
 import YoutubeWelcome from 'web/component/youtubeReferralWelcome';
 import NagDegradedPerformance from 'web/component/nag-degraded-performance';
 import NagDataCollection from 'web/component/nag-data-collection';
+import NagNoUser from 'web/component/nag-no-user';
 import {
   useDegradedPerformance,
   STATUS_OK,
@@ -363,7 +364,7 @@ function App(props: Props) {
   // Require an internal-api user on lbry.tv
   // This also prevents the site from loading in the un-authed state while we wait for internal-apis to return for the first time
   // It's not needed on desktop since there is no un-authed state
-  if (!user) {
+  if (user === undefined) {
     return (
       <div className="main--empty">
         <Spinner delayed />
@@ -428,6 +429,7 @@ function App(props: Props) {
           {!SIMPLE_SITE && lbryTvApiStatus === STATUS_OK && showAnalyticsNag && !shouldHideNag && (
             <NagDataCollection onClose={handleAnalyticsDismiss} />
           )}
+          {user === null && <NagNoUser />}
           {/* @endif */}
         </React.Fragment>
       )}

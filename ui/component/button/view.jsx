@@ -38,6 +38,7 @@ type Props = {
   myref: any,
   dispatch: any,
   'aria-label'?: string,
+  user: ?User,
 };
 
 // use forwardRef to allow consumers to pass refs to the button content if they want to
@@ -69,9 +70,13 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
     myref,
     dispatch, // <button> doesn't know what to do with dispatch
     pathname,
+    user,
     authSrc,
     ...otherProps
   } = props;
+
+  console.log('user', user);
+  const disable = disabled || (user === null && requiresAuth);
 
   const combinedClassName = classnames(
     'button',
@@ -82,7 +87,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
           'button--alt': button === 'alt',
           'button--inverse': button === 'inverse',
           'button--close': button === 'close',
-          'button--disabled': disabled,
+          'button--disabled': disable,
           'button--link': button === 'link',
         }
       : 'button--no-style',
@@ -184,12 +189,12 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
     return (
       <NavLink
         exact
-        onClick={e => {
+        onClick={(e) => {
           e.stopPropagation();
         }}
         to={redirectUrl}
         title={title || defaultTooltip}
-        disabled={disabled}
+        disabled={disable}
         className={combinedClassName}
         activeClassName={activeClass}
       >
@@ -203,8 +208,8 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
       exact
       to={path}
       title={title || defaultTooltip}
-      disabled={disabled}
-      onClick={e => {
+      disabled={disable}
+      onClick={(e) => {
         e.stopPropagation();
         if (onClick) {
           onClick();
@@ -222,13 +227,13 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
       title={title || defaultTooltip}
       aria-label={description || label || title}
       className={combinedClassName}
-      onClick={e => {
+      onClick={(e) => {
         if (onClick) {
           e.stopPropagation();
           onClick(e);
         }
       }}
-      disabled={disabled}
+      disabled={disable}
       type={type}
       {...otherProps}
     >
