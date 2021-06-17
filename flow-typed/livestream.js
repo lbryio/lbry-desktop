@@ -23,4 +23,5 @@ declare type LivestreamReplayData = Array<LivestreamReplayItem>;
 
 declare type LivestreamState = {
   fetchingById: {},
+  viewersById: {},
 }

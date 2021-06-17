@@ -21,11 +21,11 @@ type Props = {
   isNsfwBlocked: boolean,
   livestream?: boolean,
   isLive?: boolean,
-  activeViewers?: number,
+  viewers?: number,
 };
 
 function FileTitleSection(props: Props) {
-  const { title, uri, nsfw, isNsfwBlocked, livestream = false, isLive = false, activeViewers } = props;
+  const { title, uri, nsfw, isNsfwBlocked, livestream = false, isLive = false, viewers } = props;
   const [hasAcknowledgedSec, setHasAcknowledgedSec] = usePersistedState('sec-nag', false);
 
   return (
@@ -57,7 +57,7 @@ function FileTitleSection(props: Props) {
         body={
           <React.Fragment>
             <ClaimInsufficientCredits uri={uri} />
-            <FileSubtitle uri={uri} isLive={isLive} livestream={livestream} activeViewers={activeViewers} />
+            <FileSubtitle uri={uri} isLive={isLive} livestream={livestream} activeViewers={viewers} />
           </React.Fragment>
         }
         actions={

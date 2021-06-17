@@ -19,7 +19,6 @@ type Props = {
 
 export default function LivestreamPage(props: Props) {
   const { uri, claim, doSetPlayingUri, isAuthenticated, doUserSetReferrer, channelClaim, chatDisabled } = props;
-  const [activeViewers, setActiveViewers] = React.useState(0);
   const [isLive, setIsLive] = React.useState(false);
   const livestreamChannelId = channelClaim && channelClaim.signing_channel && channelClaim.signing_channel.claim_id;
   const [hasLivestreamClaim, setHasLivestreamClaim] = React.useState(false);
@@ -65,8 +64,6 @@ export default function LivestreamPage(props: Props) {
             setIsLive(false);
             return;
           }
-
-          setActiveViewers(res.data.viewCount);
 
           if (res.data.hasOwnProperty('live')) {
             setIsLive(res.data.live);
@@ -120,7 +117,7 @@ export default function LivestreamPage(props: Props) {
       chatDisabled={chatDisabled}
       rightSide={!chatDisabled && <LivestreamComments uri={uri} />}
     >
-      <LivestreamLayout uri={uri} activeViewers={activeViewers} isLive={isLive} />
+      <LivestreamLayout uri={uri} isLive={isLive} />
     </Page>
   );
 }

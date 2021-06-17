@@ -4,6 +4,7 @@ import { handleActions } from 'util/redux-utils';
 
 const defaultState: LivestreamState = {
   fetchingById: {},
+  viewersById: {},
 };
 
 export default handleActions(
@@ -28,6 +29,12 @@ export default handleActions(
       newIdsFetching[claimId] = false;
 
       return { ...state, fetchingById: newIdsFetching };
+    },
+    [ACTIONS.VIEWERS_RECEIVED]: (state: LivestreamState, action: any) => {
+      const { connected, claimId } = action.data;
+      const newViewersById = Object.assign({}, state.viewersById);
+      newViewersById[claimId] = connected;
+      return { ...state, viewersById: newViewersById };
     },
   },
   defaultState
