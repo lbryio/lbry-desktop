@@ -1,7 +1,6 @@
 // @flow
 import * as ICONS from 'constants/icons';
-import React, { useEffect, useState } from 'react';
-import { withRouter } from 'react-router';
+import React from 'react';
 import Button from 'component/button';
 import Card from 'component/common/card';
 import { Lbryio } from 'lbryinc';
@@ -21,7 +20,7 @@ type State = {
   accountConfirmed: boolean
 };
 
-class DocxViewer extends React.Component<Props, State> {
+class StripeAccountConnection extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -40,32 +39,33 @@ class DocxViewer extends React.Component<Props, State> {
 
     var that = this;
 
+    function getAndSetAccountLink(){
+      Lbryio.call('account', 'link', {
+        return_url: STRIPE_ACCOUNT_CONNECTION_SUCCESS_URL,
+        refresh_url: STRIPE_ACCOUNT_CONNECTION_FAILURE_URL,
+      }, 'post').then(accountLinkResponse => {
+
+        // stripe link for user to navigate to and confirm account
+        const stripeConnectionUrl = accountLinkResponse.url;
+
+        that.setState({
+          stripeConnectionUrl,
+          accountPendingConfirmation: true,
+        });
+      });
+    }
+
     // call the account status endpoint
     Lbryio.call('account', 'status', {}, 'post').then(accountStatusResponse => {
       // if charges already enabled, no need to generate an account link
       if (accountStatusResponse.charges_enabled) {
-
-        console.log(accountStatusResponse);
-
         // account has already been confirmed
         that.setState({
           accountConfirmed: true,
         });
-
-        // update the frontend
-        console.log(accountStatusResponse);
       } else {
-        Lbryio.call('account', 'link', {
-          return_url: STRIPE_ACCOUNT_CONNECTION_SUCCESS_URL,
-          refresh_url: STRIPE_ACCOUNT_CONNECTION_FAILURE_URL,
-        }, 'post').then(accountLinkResponse => {
-          console.log(accountLinkResponse);
-
-          that.setState({
-            stripeConnectionUrl: accountLinkResponse.url,
-            accountPendingConfirmation: true,
-          });
-        });
+        // get stripe link and set it on the frontend
+        getAndSetAccountLink();
       }
     }).catch(function(error) {
       // errorString passed from the API (with a 403 error)
@@ -73,19 +73,11 @@ class DocxViewer extends React.Component<Props, State> {
 
       // if it's beamer's error indicating the account is not linked yet
       if (error.message.indexOf(errorString) > -1) {
-        // tell the frontend it's not confirmed, to show the proper markup
-
-        Lbryio.call('account', 'link', {
-          return_url: STRIPE_ACCOUNT_CONNECTION_SUCCESS_URL,
-          refresh_url: STRIPE_ACCOUNT_CONNECTION_FAILURE_URL,
-        }, 'post').then(accountLinkResponse => {
-          console.log(accountLinkResponse);
-
-          that.setState({
-            stripeConnectionUrl: accountLinkResponse.url,
-            accountPendingConfirmation: true,
-          });
-        });
+        // get stripe link and set it on the frontend
+        getAndSetAccountLink();
+      } else {
+        // not an error from Beamer, throw it
+        throw new Error(error);
       }
     });
   }
@@ -158,4 +150,4 @@ class DocxViewer extends React.Component<Props, State> {
   }
 }
 
-export default DocxViewer;
+export default StripeAccountConnection;
