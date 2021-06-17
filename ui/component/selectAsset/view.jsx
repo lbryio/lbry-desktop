@@ -103,7 +103,7 @@ function SelectAsset(props: Props) {
             className={classnames('button-toggle', {
               'button-toggle--active': useUrl, // disable on upload status
             })}
-            label={__('Url')}
+            label={__('URL')}
             onClick={() => {
               handleToggleMode(true);
             }}

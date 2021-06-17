@@ -60,7 +60,7 @@ const ThumbnailPicker = (props: Props) => {
               onUpdate={updateThumb}
               currentValue={thumbnailParam}
               assetName={'Image'}
-              recommended={'(16:9)'}
+              recommended={__('(16:9)')}
             />
           </div>
         </div>
@@ -103,7 +103,7 @@ const ThumbnailPicker = (props: Props) => {
                 onUpdate={updateThumb}
                 currentValue={thumbnailParam}
                 assetName={'Thumbnail'}
-                recommended={'(16:9)'}
+                recommended={__('(16:9)')}
               />
             </div>
           </div>
