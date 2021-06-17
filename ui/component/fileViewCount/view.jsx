@@ -6,6 +6,7 @@ import HelpLink from 'component/common/help-link';
 type Props = {
   claim: ?StreamClaim,
   fetchViewCount: (string) => void,
+  fetchingViewCount: boolean,
   uri: string,
   viewCount: string,
   livestream?: boolean,
@@ -36,14 +37,14 @@ function FileViewCount(props: Props) {
 
   return (
     <span className="media__subtitle--centered">
-      {activeViewers !== undefined
-        ? __('%viewer_count% currently %viewer_state%', {
-            viewer_count: activeViewers,
-            viewer_state: isLive ? __('watching') : __('waiting'),
-          })
-        : viewCount !== 1
-        ? __('%view_count% views', { view_count: formattedViewCount })
-        : __('1 view')}
+      {isLive &&
+        __('%viewer_count% currently %viewer_state%', {
+          viewer_count: activeViewers === undefined ? '...' : activeViewers,
+          viewer_state: isLive ? __('watching') : __('waiting'),
+        })}
+      {!isLive &&
+        activeViewers === undefined &&
+        (viewCount !== 1 ? __('%view_count% views', { view_count: formattedViewCount }) : __('1 view'))}
       {!SIMPLE_SITE && <HelpLink href="https://lbry.com/faq/views" />}
     </span>
   );

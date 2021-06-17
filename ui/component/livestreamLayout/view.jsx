@@ -9,12 +9,11 @@ type Props = {
   uri: string,
   claim: ?StreamClaim,
   isLive: boolean,
-  activeViewers: number,
   chatDisabled: boolean,
 };
 
 export default function LivestreamLayout(props: Props) {
-  const { claim, uri, isLive, activeViewers, chatDisabled } = props;
+  const { claim, uri, isLive, chatDisabled } = props;
   const isMobile = useIsMobile();
 
   if (!claim || !claim.signing_channel) {
@@ -55,7 +54,7 @@ export default function LivestreamLayout(props: Props) {
 
         {isMobile && <LivestreamComments uri={uri} />}
 
-        <FileTitleSection uri={uri} livestream isLive={isLive} activeViewers={activeViewers} />
+        <FileTitleSection uri={uri} livestream isLive={isLive} />
       </div>
     </>
   );
