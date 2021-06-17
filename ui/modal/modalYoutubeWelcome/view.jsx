@@ -5,6 +5,7 @@ import { Modal } from 'modal/modal';
 import Card from 'component/common/card';
 import Confetti from 'react-confetti';
 import Button from 'component/button';
+import { SIMPLE_SITE } from 'config';
 
 type Props = { doHideModal: () => void };
 
@@ -15,18 +16,27 @@ const YoutubeWelcome = (props: Props) => {
     <Modal isOpen type="card" onAborted={doHideModal}>
       <Confetti recycle={false} style={{ position: 'fixed' }} numberOfPieces={100} />
       <Card
-        title={__("You're free!")}
+        title={!SIMPLE_SITE ? __("You're free!") : __('Welcome to Odysee')}
         subtitle={
-          <React.Fragment>
-            <p>
-              {__("You've escaped the land of spying, censorship, and exploitation.")}
-              <span className="emoji"> 💩</span>
-            </p>
-            <p>
-              {__('Welcome to the land of content freedom.')}
-              <span className="emoji"> 🌈</span>
-            </p>
-          </React.Fragment>
+          !SIMPLE_SITE ? (
+            <React.Fragment>
+              <p>
+                {__("You've escaped the land of spying, censorship, and exploitation.")}
+                <span className="emoji"> 💩</span>
+              </p>
+              <p>
+                {__('Welcome to the land of content freedom.')}
+                <span className="emoji"> 🌈</span>
+              </p>
+            </React.Fragment>
+          ) : (
+            <React.Fragment>
+              <p>
+                {__('You make the party extra special!')}
+                <span className="emoji"> 💖</span>
+              </p>
+            </React.Fragment>
+          )
         }
         actions={
           <div className="card__actions">
