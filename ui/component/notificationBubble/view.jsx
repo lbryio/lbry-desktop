@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import classnames from 'classnames';
-
+import { SIMPLE_SITE } from 'config';
 type Props = {
   unseenCount: number,
   inline: boolean,
@@ -10,7 +10,7 @@ type Props = {
 
 export default function NotificationHeaderButton(props: Props) {
   const { unseenCount, inline = false, user } = props;
-  const notificationsEnabled = user && user.experimental_ui;
+  const notificationsEnabled = SIMPLE_SITE || (user && user.experimental_ui);
 
   if (unseenCount === 0 || !notificationsEnabled) {
     return null;
