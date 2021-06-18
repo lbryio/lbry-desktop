@@ -24,6 +24,48 @@ import { useHistory } from 'react-router';
 const PLAY_TIMEOUT_ERROR = 'play_timeout_error';
 const PLAY_TIMEOUT_LIMIT = 2000;
 
+/* TODO: Move constants elsewhere */
+const recsysEndpoint = 'https://clickstream.odysee.com/log/video/view';
+const recsysId = 'lighthouse-v0';
+
+/* RecSys */
+const Recsys = {
+  event: {
+    start: 0,
+    stop: 1,
+    scrub: 2,
+    speed: 3,
+  },
+};
+
+function newRecsysEvent(eventType, offset, arg) {
+  if (arg) {
+    return {
+      event: eventType,
+      offset: offset,
+      arg: arg,
+    };
+  } else {
+    return {
+      event: eventType,
+      offset: offset,
+    };
+  }
+}
+
+function sendRecsysEvent(recsysEvent) {
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(recsysEvent),
+  };
+  fetch(recsysEndpoint, requestOptions)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(`Recsys response data:`, data);
+    });
+}
+
 type Props = {
   position: number,
   changeVolume: (number) => void,
@@ -144,6 +186,14 @@ function VideoViewer(props: Props) {
     };
   }, [embedded, videoPlaybackRate]);
 
+  // Used to detect and send recsys events
+  useEffect(() => {
+    history.listen((location) => {
+      console.log(`You changed the page to: ${location.pathname}`);
+      // todo: recsys videoid change goes here
+    });
+  }, [history]);
+
   function doTrackingBuffered(e: Event, data: any) {
     fetch(source, { method: 'HEAD' }).then((response) => {
       data.playerPoweredBy = response.headers.get('x-powered-by');
@@ -185,11 +235,22 @@ function VideoViewer(props: Props) {
     setIsEndededEmbed(false);
   }
 
+  function onPause(player) {
+    setIsPlaying(false);
+    handlePosition(player);
+  }
+
+  function onDispose(player) {
+    handlePosition(player);
+  }
+
   function handlePosition(player) {
     if (player.ended()) {
       clearPosition(uri);
     } else {
       savePosition(uri, player.currentTime());
+      const rsevent = newRecsysEvent(Recsys.event.scrub, player.currentTime());
+      sendRecsysEvent(rsevent);
     }
   }
 
@@ -222,17 +283,11 @@ function VideoViewer(props: Props) {
 
       Promise.race([playPromise, timeoutPromise]).catch((error) => {
         if (typeof error === 'object' && error.name && error.name === 'NotAllowedError') {
-          if (player.autoplay() && !player.muted()) {
-            player.muted(true);
-          }
+          // Autoplay disallowed by browser
         }
 
         if (PLAY_TIMEOUT_ERROR) {
-          const retryPlayPromise = player.play();
-          Promise.race([retryPlayPromise, timeoutPromise]).catch((error) => {
-            setIsLoading(false);
-            setIsPlaying(false);
-          });
+          // Autoplay failed
         } else {
           setIsLoading(false);
           setIsPlaying(false);
@@ -252,10 +307,9 @@ function VideoViewer(props: Props) {
     player.on('tracking:firstplay', doTrackingFirstPlay);
     player.on('ended', onEnded);
     player.on('play', onPlay);
-    player.on('pause', () => {
-      setIsPlaying(false);
-      handlePosition(player);
-    });
+    player.on('pause', () => onPause(player));
+    player.on('dispose', () => onDispose(player));
+
     player.on('error', () => {
       const error = player.error();
       if (error) {
@@ -282,9 +336,6 @@ function VideoViewer(props: Props) {
     if (position) {
       player.currentTime(position);
     }
-    player.on('dispose', () => {
-      handlePosition(player);
-    });
   }, playerReadyDependencyList);
 
   return (
