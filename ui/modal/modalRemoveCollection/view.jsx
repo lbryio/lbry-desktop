@@ -24,7 +24,7 @@ function ModalRemoveCollection(props: Props) {
   const [confirmName, setConfirmName] = useState('');
 
   return (
-    <Modal isOpen contentLabel={__('Confirm Collection Unpublish')} type="card" onAborted={closeModal}>
+    <Modal isOpen contentLabel={__('Confirm List Unpublish')} type="card" onAborted={closeModal}>
       <Card
         title={__('Delete List')}
         body={
@@ -36,7 +36,7 @@ function ModalRemoveCollection(props: Props) {
             </React.Fragment>
           ) : (
             <I18nMessage tokens={{ title: <cite>{uri && title ? `"${title}"` : `"${collectionName}"`}</cite> }}>
-              Are you sure you'd like to remove collection %title%?
+              Are you sure you'd like to remove "%title%"?
             </I18nMessage>
           )
         }
