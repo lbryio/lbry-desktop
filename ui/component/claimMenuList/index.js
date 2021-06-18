@@ -38,6 +38,7 @@ const select = (state, props) => {
     claim,
     claimIsMine: makeSelectSigningIsMine(props.uri)(state),
     hasClaimInWatchLater: makeSelectCollectionForIdHasClaimUrl(COLLECTIONS_CONSTS.WATCH_LATER_ID, permanentUri)(state),
+    hasClaimInCustom: makeSelectCollectionForIdHasClaimUrl(COLLECTIONS_CONSTS.FAVORITES_ID, permanentUri)(state),
     channelIsMuted: makeSelectChannelIsMuted(props.uri)(state),
     channelIsBlocked: makeSelectChannelIsBlocked(props.uri)(state),
     fileInfo: makeSelectFileInfoForUri(props.uri)(state),

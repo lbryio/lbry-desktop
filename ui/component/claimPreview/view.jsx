@@ -18,6 +18,7 @@ import ClaimPreviewTitle from 'component/claimPreviewTitle';
 import ClaimPreviewSubtitle from 'component/claimPreviewSubtitle';
 import ClaimRepostAuthor from 'component/claimRepostAuthor';
 import FileDownloadLink from 'component/fileDownloadLink';
+import FileWatchLaterLink from 'component/fileWatchLaterLink';
 import PublishPending from 'component/publishPending';
 import ClaimMenuList from 'component/claimMenuList';
 import ClaimPreviewLoading from './claim-preview-loading';
@@ -158,6 +159,15 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
       isValid = false;
     }
   }
+  // $FlowFixMe
+  const isPlayable =
+    claim &&
+    // $FlowFixMe
+    claim.value &&
+    // $FlowFixMe
+    claim.value.stream_type &&
+    // $FlowFixMe
+    (claim.value.stream_type === 'audio' || claim.value.stream_type === 'video');
   const isCollection = claim && claim.value_type === 'collection';
   const isChannelUri = isValid ? parseURI(uri).isChannel : false;
   const signingChannel = claim && claim.signing_channel;
@@ -317,6 +327,11 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                     {!isLivestream && (
                       <div className="claim-preview__file-property-overlay">
                         <PreviewOverlayProperties uri={uri} small={type === 'small'} properties={liveProperty} />
+                      </div>
+                    )}
+                    {isPlayable && (
+                      <div className="claim-preview__hover-actions">
+                        <FileWatchLaterLink uri={uri} />
                       </div>
                     )}
                   </FileThumbnail>
