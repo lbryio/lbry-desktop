@@ -1,0 +1,92 @@
+.yrbl__wrap {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: left;
+
+  .section__actions {
+    flex-wrap: wrap;
+
+    > * {
+      margin-bottom: var(--spacing-s);
+    }
+  }
+
+  @media (min-width: $breakpoint-small) {
+    flex-direction: row;
+  }
+}
+
+.yrbl {
+  display: none;
+  height: 10rem;
+
+  @media (min-width: $breakpoint-small) {
+    display: block;
+    height: 20rem;
+    margin-right: calc(var(--spacing-xl) * 2);
+  }
+}
+
+.yrbl--always-show {
+  display: block;
+}
+
+.yrbl--small {
+  display: none;
+
+  @media (min-width: $breakpoint-small) {
+    display: block;
+    height: 8rem;
+    margin-right: calc(var(--spacing-xl));
+  }
+}
+
+.yrbl__content {
+  max-width: 400px;
+}
+
+.yrbl--first-run {
+  align-self: center;
+  height: 250px;
+  width: auto;
+  margin: 0 var(--spacing-l);
+}
+
+.yrbl--search {
+  justify-content: flex-start;
+  margin: 0;
+
+  .yrbl {
+    height: 18rem;
+  }
+}
+
+// Get weird here
+.yrbl--enhanced {
+  position: absolute;
+  z-index: 9999;
+  height: 95vh;
+  width: 95vh;
+  left: 0;
+  right: 0;
+  opacity: 0.5;
+  animation-name: enhancedAnimation;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-timing-function: ease-out;
+}
+
+@-webkit-keyframes enhancedAnimation {
+  from {
+    left: 0;
+    transform: rotate(0deg);
+  }
+  to {
+    left: 50vw;
+    transform: rotate(360deg);
+  }
+}
