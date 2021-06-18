@@ -40,6 +40,7 @@ type Props = {
   isRepost: boolean,
   doCollectionEdit: (string, any) => void,
   hasClaimInWatchLater: boolean,
+  hasClaimInCustom: boolean,
   claimInCollection: boolean,
   collectionName?: string,
   collectionId: string,
@@ -75,6 +76,7 @@ function ClaimMenuList(props: Props) {
     doCommentModUnBlockAsAdmin,
     doCollectionEdit,
     hasClaimInWatchLater,
+    hasClaimInCustom,
     collectionId,
     collectionName,
     isMyCollection,
@@ -96,6 +98,7 @@ function ClaimMenuList(props: Props) {
   const isChannel = !incognitoClaim && signingChannel === claim;
   const showDelete = claimIsMine || (fileInfo && (fileInfo.written_bytes > 0 || fileInfo.blobs_completed > 0));
   const subscriptionLabel = isSubscribed ? __('Unfollow') : __('Follow');
+  const lastCollectionName = 'Favorites';
 
   const { push, replace } = useHistory();
   if (!claim) {
@@ -242,6 +245,29 @@ function ClaimMenuList(props: Props) {
               <div className="menu__link">
                 <Icon aria-hidden icon={hasClaimInWatchLater ? ICONS.DELETE : ICONS.TIME} />
                 {hasClaimInWatchLater ? __('In Watch Later') : __('Watch Later')}
+              </div>
+            </MenuItem>
+          )}
+          {/* CUSTOM LIST */}
+          {isPlayable && !collectionId && (
+            <MenuItem
+              className="comment__menu-option"
+              onSelect={() => {
+                doToast({
+                  message: __(`Item %action% ${lastCollectionName}`, {
+                    action: hasClaimInCustom ? __('removed from') : __('added to'),
+                  }),
+                });
+                doCollectionEdit(COLLECTIONS_CONSTS.FAVORITES_ID, {
+                  claims: [contentClaim],
+                  remove: hasClaimInCustom,
+                  type: 'playlist',
+                });
+              }}
+            >
+              <div className="menu__link">
+                <Icon aria-hidden icon={hasClaimInCustom ? ICONS.DELETE : ICONS.STAR} />
+                {hasClaimInCustom ? __(`In ${lastCollectionName}`) : __(`${lastCollectionName}`)}
               </div>
             </MenuItem>
           )}

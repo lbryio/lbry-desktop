@@ -6,6 +6,7 @@ import Button from 'component/button';
 import * as PAGES from 'constants/pages';
 import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
+import { COLLECTIONS_CONSTS } from 'lbry-redux';
 
 type Props = {
   collectionUrls: Array<Claim>,
@@ -26,7 +27,10 @@ export default function CollectionContent(props: Props) {
       className="file-page__recommended"
       title={
         <span>
-          <Icon icon={ICONS.STACK} className="icon--margin-right" />
+          <Icon
+            icon={(id === COLLECTIONS_CONSTS.WATCH_LATER_ID && ICONS.TIME) ||
+              (id === COLLECTIONS_CONSTS.FAVORITES_ID && ICONS.STAR) || ICONS.STACK}
+            className="icon--margin-right" />
           {collectionName}
         </span>
       }
