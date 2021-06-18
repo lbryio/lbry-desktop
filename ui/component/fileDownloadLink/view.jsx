@@ -3,6 +3,7 @@ import * as ICONS from 'constants/icons';
 import * as MODALS from 'constants/modal_types';
 import React, { useState } from 'react';
 import Button from 'component/button';
+import { webDownloadClaim } from 'util/downloadClaim';
 
 type Props = {
   uri: string,
@@ -46,16 +47,7 @@ function FileDownloadLink(props: Props) {
   // @if TARGET='web'
   React.useEffect(() => {
     if (didClickDownloadButton && streamingUrl) {
-      let element = document.createElement('a');
-      element.setAttribute('href', `${streamingUrl}?download=true`);
-      element.setAttribute('download', fileName);
-      element.style.display = 'none';
-      // $FlowFixMe
-      document.body.appendChild(element);
-      element.click();
-      // $FlowFixMe
-      document.body.removeChild(element);
-
+      webDownloadClaim(streamingUrl, fileName);
       setDidClickDownloadButton(false);
     }
   }, [streamingUrl, didClickDownloadButton, fileName]);

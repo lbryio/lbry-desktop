@@ -1,5 +1,5 @@
 // @flow
-import { SIMPLE_SITE, SITE_NAME, ENABLE_FILE_REACTIONS } from 'config';
+import { SITE_NAME, ENABLE_FILE_REACTIONS } from 'config';
 import * as PAGES from 'constants/pages';
 import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
@@ -13,6 +13,9 @@ import ClaimSupportButton from 'component/claimSupportButton';
 import ClaimCollectionAddButton from 'component/claimCollectionAddButton';
 import { useHistory } from 'react-router';
 import FileReactions from 'component/fileReactions';
+import { Menu, MenuButton, MenuList, MenuItem } from '@reach/menu-button';
+import Icon from 'component/common/icon';
+import { webDownloadClaim } from 'util/downloadClaim';
 
 type Props = {
   uri: string,
@@ -28,6 +31,8 @@ type Props = {
   clearPlayingUri: () => void,
   isLivestreamClaim: boolean,
   reactionsDisabled: boolean,
+  download: (string) => void,
+  streamingUrl: ?string,
 };
 
 function FileActions(props: Props) {
@@ -45,6 +50,8 @@ function FileActions(props: Props) {
     doToast,
     isLivestreamClaim,
     reactionsDisabled,
+    download,
+    streamingUrl,
   } = props;
   const {
     push,
@@ -57,6 +64,8 @@ function FileActions(props: Props) {
   const claimId = claim && claim.claim_id;
   const { signing_channel: signingChannel } = claim;
   const channelName = signingChannel && signingChannel.name;
+  const fileName = claim && claim.value && claim.value.source && claim.value.source.name;
+
   // We want to use the short form uri for editing
   // This is what the user is used to seeing, they don't care about the claim id
   // We will select the claim id before they publish
@@ -75,6 +84,22 @@ function FileActions(props: Props) {
 
   const urlParams = new URLSearchParams(search);
   const collectionId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID);
+
+  // @if TARGET='web'
+  const [downloadClicked, setDownloadClicked] = React.useState(false);
+
+  function handleWebDownload() {
+    // download() causes 'streamingUrl' to be populated.
+    download(uri);
+    setDownloadClicked(true);
+  }
+
+  React.useEffect(() => {
+    if (downloadClicked && streamingUrl) {
+      webDownloadClaim(streamingUrl, fileName);
+    }
+  }, [downloadClicked, streamingUrl, fileName]);
+  // @endif
 
   function handleRepostClick() {
     if (!hasChannels) {
@@ -114,7 +139,9 @@ function FileActions(props: Props) {
 
   const rhsSection = (
     <>
-      {!SIMPLE_SITE && <FileDownloadLink uri={uri} />}
+      {/* @if TARGET='app' */}
+      <FileDownloadLink uri={uri} />
+      {/* @endif */}
       {claimIsMine && (
         <Button
           className="button--file-action"
@@ -135,14 +162,38 @@ function FileActions(props: Props) {
           onClick={() => openModal(MODALS.CONFIRM_FILE_REMOVE, { uri })}
         />
       )}
-      {!claimIsMine && (
-        <Button
-          title={__('Report content')}
+      <Menu>
+        <MenuButton
           className="button--file-action"
-          icon={ICONS.REPORT}
-          navigate={`/$/${PAGES.REPORT_CONTENT}?claimId=${claimId}`}
-        />
-      )}
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+          }}
+        >
+          <Icon size={20} icon={ICONS.MORE} />
+        </MenuButton>
+        <MenuList className="menu__list">
+          {/* @if TARGET='web' */}
+          <MenuItem className="comment__menu-option" onSelect={handleWebDownload}>
+            <div className="menu__link">
+              <Icon aria-hidden icon={ICONS.DOWNLOAD} />
+              {__('Download')}
+            </div>
+          </MenuItem>
+          {/* @endif */}
+          {!claimIsMine && (
+            <MenuItem
+              className="comment__menu-option"
+              onSelect={() => push(`/$/${PAGES.REPORT_CONTENT}?claimId=${claimId}`)}
+            >
+              <div className="menu__link">
+                <Icon aria-hidden icon={ICONS.REPORT} />
+                {__('Report content')}
+              </div>
+            </MenuItem>
+          )}
+        </MenuList>
+      </Menu>
     </>
   );
 
