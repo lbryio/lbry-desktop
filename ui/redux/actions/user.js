@@ -101,7 +101,7 @@ export function doInstallNewWithParams(
 
 function checkAuthBusy() {
   let time = Date.now();
-  return new Promise(function (resolve, reject) {
+  return new Promise(function(resolve, reject) {
     (function waitForAuth() {
       try {
         sessionStorage.setItem('test', 'available');
