@@ -266,6 +266,11 @@ function App(props: Props) {
   useEffect(() => {
     if (!languages.includes(language)) {
       setLanguage(language);
+      
+      if (LANGUAGES[language].length >= 3) {
+      	document.documentElement.dir = LANGUAGES[value][2]
+      }
+   
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [language, languages]);
