@@ -11,6 +11,7 @@ import Yrbl from 'component/yrbl';
 import LbcSymbol from 'component/common/lbc-symbol';
 import * as PAGES from 'constants/pages';
 import HelpLink from 'component/common/help-link';
+import { useHistory } from 'react-router';
 
 type Props = {
   channels: Array<ChannelClaim>,
@@ -18,13 +19,15 @@ type Props = {
   fetchChannelListMine: () => void,
   fetchingChannels: boolean,
   youtubeChannels: ?Array<any>,
+  doSetActiveChannel: (string) => void,
 };
 
 export default function ChannelsPage(props: Props) {
-  const { channels, channelUrls, fetchChannelListMine, fetchingChannels, youtubeChannels } = props;
+  const { channels, channelUrls, fetchChannelListMine, fetchingChannels, youtubeChannels, doSetActiveChannel } = props;
   const [rewardData, setRewardData] = React.useState();
   const hasYoutubeChannels = youtubeChannels && Boolean(youtubeChannels.length);
   const hasPendingChannels = channels && channels.some((channel) => channel.confirmations < 0);
+  const { push } = useHistory();
 
   useEffect(() => {
     fetchChannelListMine();
@@ -62,7 +65,10 @@ export default function ChannelsPage(props: Props) {
                     button="alt"
                     icon={ICONS.ANALYTICS}
                     label={__('Analytics')}
-                    navigate={`/$/${PAGES.CREATOR_DASHBOARD}?channel=${encodeURIComponent(claim.canonical_url)}`}
+                    onClick={() => {
+                      doSetActiveChannel(claim.claim_id);
+                      push(`/$/${PAGES.CREATOR_DASHBOARD}`);
+                    }}
                   />
                 </div>
               );
