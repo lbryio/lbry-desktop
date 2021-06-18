@@ -5,7 +5,6 @@ import Nag from 'component/common/nag';
 import I18nMessage from 'component/i18nMessage';
 
 export default function NagNoUser() {
-
   return (
     <Nag
       type="error"
