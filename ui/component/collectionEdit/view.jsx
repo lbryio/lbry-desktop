@@ -21,6 +21,7 @@ import { INVALID_NAME_ERROR } from 'constants/claim';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 import * as PAGES from 'constants/pages';
 import analytics from 'analytics';
+import * as ICONS from '../../constants/icons';
 const LANG_NONE = 'none';
 const MAX_TAG_SELECT = 5;
 
@@ -86,6 +87,7 @@ function CollectionForm(props: Props) {
     collection,
     collectionUrls,
     collectionClaimIds,
+    clearCollectionErrors,
   } = props;
   const activeChannelName = activeChannelClaim && activeChannelClaim.name;
   let prefix = IS_WEB ? `${DOMAIN}/` : 'lbry://';
@@ -163,6 +165,7 @@ function CollectionForm(props: Props) {
   React.useEffect(() => {
     const collectionClaimIds = JSON.parse(collectionClaimIdsString);
     setParams({ ...params, claims: collectionClaimIds });
+    clearCollectionErrors();
   }, [collectionClaimIdsString, setParams]);
 
   function handleLanguageChange(index, code) {
@@ -228,12 +231,16 @@ function CollectionForm(props: Props) {
       setParams({ ...params, channel_id: activeChannelId });
     }
   }, [activeChannelId, incognito, setParams]);
+
   const itemError = !params.claims.length ? __('Cannot publish empty list') : '';
   const submitError = nameError || bidError || itemError || updateError || createError;
 
   return (
     <>
       <div className={classnames('main--contained', { 'card--disabled': disabled })}>
+        <div>
+          <Button button="close" label={__('New')} icon={ICONS.REFRESH} onClick={() => alert()} />
+        </div>
         <Tabs>
           <TabList className="tabs__list--collection-edit-page">
             <Tab>{__('General')}</Tab>

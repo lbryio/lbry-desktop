@@ -11,11 +11,11 @@ import {
   selectUpdatingCollection,
   selectCreateCollectionError,
   selectBalance,
-  doClearCollectionErrors,
   selectCreatingCollection,
   makeSelectCollectionForId,
   makeSelectUrlsForCollectionId,
   makeSelectClaimIdsForCollectionId,
+  ACTIONS as LBRY_REDUX_ACTIONS,
 } from 'lbry-redux';
 import { doOpenModal } from 'redux/actions/app';
 
@@ -47,7 +47,7 @@ const perform = (dispatch) => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
   publishCollectionUpdate: (params) => dispatch(doCollectionPublishUpdate(params)),
   publishCollection: (params, collectionId) => dispatch(doCollectionPublish(params, collectionId)),
-  clearCollectionErrors: () => dispatch(doClearCollectionErrors()),
+  clearCollectionErrors: () => dispatch({ type: LBRY_REDUX_ACTIONS.CLEAR_COLLECTION_ERRORS }),
 });
 
 export default connect(select, perform)(CollectionPage);
