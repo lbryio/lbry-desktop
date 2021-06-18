@@ -75,7 +75,6 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
     ...otherProps
   } = props;
 
-  console.log('user', user);
   const disable = disabled || (user === null && requiresAuth);
 
   const combinedClassName = classnames(
