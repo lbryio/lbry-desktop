@@ -80,7 +80,7 @@ function SelectAsset(props: Props) {
   }
 
   // Note for translators: e.g. "Thumbnail  (1:1)"
-  const label = __('%image_type%  %recommended_ratio%', { image_type: assetName, recommended_ratio: recommended });
+  const label = `${__(assetName)} ${__(recommended)}`;
   const selectFileLabel = __('Select File');
   const selectedLabel = pathSelected ? __('URL Selected') : __('File Selected');
 
@@ -89,10 +89,7 @@ function SelectAsset(props: Props) {
     fileSelectorLabel = __('Uploading...');
   } else {
     // Include the same label/recommendation for both 'URL' and 'UPLOAD'.
-    fileSelectorLabel = __('%label% • %status%', {
-      label: label,
-      status: fileSelected || pathSelected ? selectedLabel : selectFileLabel,
-    });
+    fileSelectorLabel = `${label} ${fileSelected || pathSelected ? __(selectedLabel) : __(selectFileLabel)}`;
   }
   const formBody = (
     <>
