@@ -66,7 +66,7 @@ export default function CollectionsListMine(props: Props) {
                       navigate={`/$/${PAGES.LIST}/${list.id}`}
                       label={
                         <span className="claim-grid__title-span">
-                          {list.name}
+                          {__(`${list.name}`)}
                           <div className="claim-grid__title--empty">
                             <Icon className="icon--margin-right" icon={ICONS.STACK} />
                             {itemUrls.length}
@@ -80,7 +80,7 @@ export default function CollectionsListMine(props: Props) {
               )}
               {!(itemUrls && itemUrls.length) && (
                 <h1 className="claim-grid__header claim-grid__title">
-                  {__('%collection_name%', { collection_name: list.name })}{' '}
+                  {__(`${list.name}`)}
                   <div className="claim-grid__title--empty">(Empty)</div>
                 </h1>
               )}
