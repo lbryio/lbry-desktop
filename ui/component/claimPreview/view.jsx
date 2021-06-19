@@ -78,6 +78,7 @@ type Props = {
   isCollectionMine: boolean,
   collectionUris: Array<Collection>,
   collectionIndex?: number,
+  disableNavigation?: boolean,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -134,6 +135,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     editCollection,
     isCollectionMine,
     collectionUris,
+    disableNavigation,
   } = props;
   const isRepost = claim && claim.repost_channel_url;
   const WrapperElement = wrapperElement || 'li';
@@ -214,7 +216,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
       onClick(e);
     }
 
-    if (claim && !pending) {
+    if (claim && !pending && !disableNavigation) {
       history.push(navigateUrl);
     }
   }
@@ -423,7 +425,9 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
             )}
           </div>
         </div>
-        {!hideMenu && <ClaimMenuList uri={uri} collectionId={collectionId} channelUri={channelUri} isRepost={isRepost} />}
+        {!hideMenu && (
+          <ClaimMenuList uri={uri} collectionId={collectionId} channelUri={channelUri} isRepost={isRepost} />
+        )}
       </>
     </WrapperElement>
   );

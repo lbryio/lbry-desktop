@@ -3,13 +3,15 @@ import * as React from 'react';
 import Card from 'component/common/card';
 import TagsSearch from 'component/tagsSearch';
 import Page from 'component/page';
+import Button from 'component/button';
 import ChannelSelector from 'component/channelSelector';
 import Spinner from 'component/spinner';
 import { FormField } from 'component/common/form-components/form-field';
 import LbcSymbol from 'component/common/lbc-symbol';
 import I18nMessage from 'component/i18nMessage';
-import { parseURI } from 'lbry-redux';
-import WunderBar from 'component/wunderbar';
+import { isNameValid, parseURI } from 'lbry-redux';
+import ClaimPreview from 'component/claimPreview';
+import { getUriForSearchTerm } from 'util/search';
 
 const DEBOUNCE_REFRESH_MS = 1000;
 
@@ -49,6 +51,9 @@ export default function SettingsCreatorPage(props: Props) {
   const [commentsEnabled, setCommentsEnabled] = React.useState(true);
   const [mutedWordTags, setMutedWordTags] = React.useState([]);
   const [moderatorTags, setModeratorTags] = React.useState([]);
+  const [moderatorSearchTerm, setModeratorSearchTerm] = React.useState('');
+  const [moderatorSearchError, setModeratorSearchError] = React.useState('');
+  const [moderatorSearchClaimUri, setModeratorSearchClaimUri] = React.useState('');
   const [minTipAmountComment, setMinTipAmountComment] = React.useState(0);
   const [minTipAmountSuperChat, setMinTipAmountSuperChat] = React.useState(0);
   const [slowModeMinGap, setSlowModeMinGap] = React.useState(0);
@@ -142,16 +147,38 @@ export default function SettingsCreatorPage(props: Props) {
     }
   }
 
-  function handleChannelSearchSelect(value: string) {
-    let uriInfo;
-    try {
-      uriInfo = parseURI(value);
-    } catch (e) {}
-
-    if (uriInfo && uriInfo.path) {
-      addModerator([{ name: uriInfo.path }]);
+  function handleChannelSearchSelect(claim) {
+    if (claim && claim.name && claim.claim_id) {
+      addModerator([{ name: claim.name + '#' + claim.claim_id }]);
     }
   }
+
+  // 'moderatorSearchTerm' to 'moderatorSearchClaimUri'
+  React.useEffect(() => {
+    if (!moderatorSearchTerm) {
+      setModeratorSearchError('');
+      setModeratorSearchClaimUri('');
+    } else {
+      const [searchUri, error] = getUriForSearchTerm(moderatorSearchTerm);
+      setModeratorSearchError(error ? __('Something not quite right..') : '');
+
+      try {
+        const { streamName, channelName, isChannel } = parseURI(searchUri);
+
+        if (!isChannel && streamName && isNameValid(streamName)) {
+          setModeratorSearchError(__('Not a channel (prefix with "@", or enter the channel URL)'));
+          setModeratorSearchClaimUri('');
+        } else if (isChannel && channelName && isNameValid(channelName)) {
+          setModeratorSearchClaimUri(searchUri);
+        }
+      } catch (e) {
+        if (moderatorSearchTerm !== '@') {
+          setModeratorSearchError('');
+        }
+        setModeratorSearchClaimUri('');
+      }
+    }
+  }, [moderatorSearchTerm, setModeratorSearchError]);
 
   // Update local moderator states with data from API.
   React.useEffect(() => {
@@ -318,18 +345,44 @@ export default function SettingsCreatorPage(props: Props) {
             className="card--enable-overflow"
             actions={
               <div className="tag--blocked-words">
-                <label>{__('Add moderator')}</label>
-                <WunderBar
-                  channelsOnly
-                  noTopSuggestion
-                  noBottomLinks
-                  customSelectAction={handleChannelSearchSelect}
-                  placeholder={__('Add moderator')}
+                <FormField
+                  type="text"
+                  name="moderator_search"
+                  className="form-field--address"
+                  label={__('Add moderator')}
+                  placeholder={__('Enter a @username or URL')}
+                  helper={__('examples: @channel, @channel#3, https://odysee.com/@Odysee:8, lbry://@Odysee#8')}
+                  value={moderatorSearchTerm}
+                  onChange={(e) => setModeratorSearchTerm(e.target.value)}
+                  error={moderatorSearchError}
                 />
+                {moderatorSearchClaimUri && (
+                  <div className="section">
+                    <ClaimPreview
+                      key={moderatorSearchClaimUri}
+                      uri={moderatorSearchClaimUri}
+                      // type={'small'}
+                      // showNullPlaceholder
+                      hideMenu
+                      hideRepostLabel
+                      disableNavigation
+                      properties={''}
+                      renderActions={(claim) => {
+                        return (
+                          <Button
+                            requiresAuth
+                            button="primary"
+                            label={__('Add as moderator')}
+                            onClick={() => handleChannelSearchSelect(claim)}
+                          />
+                        );
+                      }}
+                    />
+                  </div>
+                )}
                 <TagsSearch
                   label={__('Moderators')}
                   labelAddNew={__('Add moderators')}
-                  placeholder={__('Add moderator channel URL (e.g. "@lbry#3f")')}
                   onRemove={removeModerator}
                   onSelect={addModerator}
                   tagsPassedIn={moderatorTags}

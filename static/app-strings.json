@@ -1911,6 +1911,7 @@
   "Enabling a minimum amount to hyperchat will force all TIPPED comments to have this value in order to be shown. This still allows regular comments to be posted.": "Enabling a minimum amount to hyperchat will force all TIPPED comments to have this value in order to be shown. This still allows regular comments to be posted.",
   "Settings unavailable for this channel": "Settings unavailable for this channel",
   "This channel isn't staking enough LBRY Credits to enable Creator Settings.": "This channel isn't staking enough LBRY Credits to enable Creator Settings.",
+  "Not a channel (prefix with \"@\", or enter the channel URL)": "Not a channel (prefix with \"@\", or enter the channel URL)",
   "We apologize for this inconvenience, but have added this additional step to prevent abuse. Users on VPN or shared connections will continue to see this message and are not eligible for Rewards.": "We apologize for this inconvenience, but have added this additional step to prevent abuse. Users on VPN or shared connections will continue to see this message and are not eligible for Rewards.",
   "Help LBRY Save Crypto": "Help LBRY Save Crypto",
   "The US government is attempting to destroy the cryptocurrency industry. Can you help?": "The US government is attempting to destroy the cryptocurrency industry. Can you help?",
@@ -1994,5 +1995,6 @@
   "Item added to Watch Later": "Item added to Watch Later",
   "Your publish is being confirmed and will be live soon": "Your publish is being confirmed and will be live soon",
   "Clear Edits": "Clear Edits",
+  "Something not quite right..": "Something not quite right..",
   "--end--": "--end--"
 }
