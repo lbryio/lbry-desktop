@@ -1,6 +1,7 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
 import * as REACTION_TYPES from 'constants/reactions';
+import * as PAGES from 'constants/pages';
 import { BLOCK_LEVEL } from 'constants/comment';
 import { Lbry, parseURI, buildURI, selectClaimsById, selectClaimsByUri, selectMyChannelClaims } from 'lbry-redux';
 import { doToast, doSeeNotifications } from 'redux/actions/notifications';
@@ -941,7 +942,8 @@ export const doUpdateBlockListForPublishedChannel = (channelClaim: ChannelClaim)
 export function doCommentModAddDelegate(
   modChannelId: string,
   modChannelName: string,
-  creatorChannelClaim: ChannelClaim
+  creatorChannelClaim: ChannelClaim,
+  showToast: boolean = false
 ) {
   return async (dispatch: Dispatch, getState: GetState) => {
     let signature: ?{
@@ -966,14 +968,29 @@ export function doCommentModAddDelegate(
       creator_channel_name: creatorChannelClaim.name,
       signature: signature.signature,
       signing_ts: signature.signing_ts,
-    }).catch((err) => {
-      dispatch(
-        doToast({
-          message: err.message,
-          isError: true,
-        })
-      );
-    });
+    })
+      .then(() => {
+        if (showToast) {
+          dispatch(
+            doToast({
+              message: __('Added %user% as moderator for %myChannel%', {
+                user: modChannelName,
+                myChannel: creatorChannelClaim.name,
+              }),
+              linkText: __('Manage'),
+              linkTarget: `/${PAGES.SETTINGS_CREATOR}`,
+            })
+          );
+        }
+      })
+      .catch((err) => {
+        dispatch(
+          doToast({
+            message: err.message,
+            isError: true,
+          })
+        );
+      });
   };
 }
 

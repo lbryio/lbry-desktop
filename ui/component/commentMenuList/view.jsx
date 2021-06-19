@@ -4,6 +4,7 @@ import React from 'react';
 import { MenuList, MenuItem } from '@reach/menu-button';
 import ChannelThumbnail from 'component/channelThumbnail';
 import Icon from 'component/common/icon';
+import { parseURI } from 'lbry-redux';
 
 type Props = {
   uri: string,
@@ -25,6 +26,7 @@ type Props = {
   commentModBlock: (string) => void,
   commentModBlockAsAdmin: (string, string) => void,
   commentModBlockAsModerator: (string, string, string) => void,
+  commentModAddDelegate: (string, string, ChannelClaim) => void,
   playingUri: ?PlayingUri,
   disableEdit?: boolean,
   disableRemove?: boolean,
@@ -51,6 +53,7 @@ function CommentMenuList(props: Props) {
     commentModBlock,
     commentModBlockAsAdmin,
     commentModBlockAsModerator,
+    commentModAddDelegate,
     playingUri,
     disableEdit,
     disableRemove,
@@ -93,6 +96,13 @@ function CommentMenuList(props: Props) {
     muteChannel(authorUri);
   }
 
+  function assignAsModerator() {
+    if (activeChannelClaim && authorUri) {
+      const { channelName, channelClaimId } = parseURI(authorUri);
+      commentModAddDelegate(channelClaimId, channelName, activeChannelClaim);
+    }
+  }
+
   function blockCommentAsModerator() {
     if (activeChannelClaim && contentChannelClaim) {
       commentModBlockAsModerator(authorUri, contentChannelClaim.claim_id, activeChannelClaim.claim_id);
@@ -117,6 +127,20 @@ function CommentMenuList(props: Props) {
           <span className={'button__content'}>
             <Icon aria-hidden icon={ICONS.PIN} className={'icon'} />
             {isPinned ? __('Unpin') : __('Pin')}
+          </span>
+        </MenuItem>
+      )}
+
+      {activeChannelIsCreator && (
+        <MenuItem className="comment__menu-option" onSelect={assignAsModerator}>
+          <div className="menu__link">
+            <Icon aria-hidden icon={ICONS.ADD} />
+            {__('Add as moderator')}
+          </div>
+          <span className="comment__menu-help">
+            {__('Assign this user to moderate %channel%', {
+              channel: activeChannelClaim ? activeChannelClaim.name : __('your channel'),
+            })}
           </span>
         </MenuItem>
       )}

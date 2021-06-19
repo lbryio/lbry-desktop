@@ -7,6 +7,7 @@ import {
   doCommentModBlock,
   doCommentModBlockAsAdmin,
   doCommentModBlockAsModerator,
+  doCommentModAddDelegate,
 } from 'redux/actions/comments';
 import { doChannelMute } from 'redux/actions/blocked';
 // import { doSetActiveChannel } from 'redux/actions/app';
@@ -36,6 +37,8 @@ const perform = (dispatch) => ({
   commentModBlockAsAdmin: (commenterUri, blockerId) => dispatch(doCommentModBlockAsAdmin(commenterUri, blockerId)),
   commentModBlockAsModerator: (commenterUri, creatorId, blockerId) =>
     dispatch(doCommentModBlockAsModerator(commenterUri, creatorId, blockerId)),
+  commentModAddDelegate: (modChanId, modChanName, creatorChannelClaim) =>
+    dispatch(doCommentModAddDelegate(modChanId, modChanName, creatorChannelClaim, true)),
 });
 
 export default connect(select, perform)(CommentMenuList);
