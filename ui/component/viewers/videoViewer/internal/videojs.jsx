@@ -564,6 +564,12 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       // note: the poster prop seems to return null usually.
       if (poster) player.poster(poster);
 
+      // Update player source
+      player.src({
+        src: finalSource,
+        type: type,
+      });
+
       // set playsinline for mobile
       player.children_[0].setAttribute('playsinline', '');
 
