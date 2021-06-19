@@ -566,11 +566,7 @@ function doCommentModToggleBlock(
       blockerChannelClaims = blockerChannelClaims.filter((x) => blockerIds.includes(x.claim_id));
     }
 
-    const commenterClaim = selectClaimsByUri(state)[commenterUri];
-    if (!commenterClaim) {
-      console.error("Can't find claim to block"); // eslint-disable-line
-      return;
-    }
+    const { channelName, channelClaimId } = parseURI(commenterUri);
 
     const creatorClaim = selectClaimsById(state)[creatorId];
     if (creatorId && !creatorClaim) {
@@ -587,8 +583,8 @@ function doCommentModToggleBlock(
       },
     });
 
-    const commenterIdForAction = commenterClaim ? commenterClaim.claim_id : null;
-    const commenterNameForAction = commenterClaim ? commenterClaim.name : null;
+    const commenterIdForAction = channelClaimId;
+    const commenterNameForAction = channelName;
 
     let channelSignatures = [];
 
