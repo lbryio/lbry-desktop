@@ -286,7 +286,6 @@ function ClaimTilesDiscover(props: Props) {
 
   const modifiedUris = uris ? uris.slice() : [];
   const fixUris = [
-    'lbry://@passionforfood#3/chewy-lemon-sugar-cookies-recipe#a',
     'lbry://@DarkHorsePodcastClips#b/Ivermectin-Vs-Vaccines#8',
                   ];
                    
