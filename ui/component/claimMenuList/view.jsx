@@ -204,14 +204,16 @@ function ClaimMenuList(props: Props) {
       </MenuButton>
       <MenuList className="menu__list">
         {/* WATCH LATER */}
-          <>
+        <>
           {isPlayable && !collectionId && (
             <MenuItem
               className="comment__menu-option"
               onSelect={() => {
                 doToast({
                   message: __('Item %action% Watch Later', {
-                    action: hasClaimInWatchLater ? __('removed from') : __('added to'),
+                    action: hasClaimInWatchLater
+                      ? __('removed from --[substring for "Item %action% Watch Later"]--')
+                      : __('added to --[substring for "Item %action% Watch Later"]--'),
                   }),
                 });
                 doCollectionEdit(COLLECTIONS_CONSTS.WATCH_LATER_ID, {
@@ -227,50 +229,50 @@ function ClaimMenuList(props: Props) {
               </div>
             </MenuItem>
           )}
-            {/* COLLECTION OPERATIONS */}
-            {collectionId && collectionName && isCollectionClaim && (
-              <>
-                {Boolean(editedCollection) && (
-                  <MenuItem
-                    className="comment__menu-option"
-                    onSelect={() => push(`/$/${PAGES.LIST}/${collectionId}?view=edit`)}
-                  >
-                    <div className="menu__link">
-                      <Icon aria-hidden iconColor={'red'} icon={ICONS.PUBLISH} />
-                      {__('Publish')}
-                    </div>
-                  </MenuItem>
-                )}
-                <MenuItem className="comment__menu-option" onSelect={() => push(`/$/${PAGES.LIST}/${collectionId}`)}>
-                  <div className="menu__link">
-                    <Icon aria-hidden icon={ICONS.VIEW} />
-                    {__('View List')}
-                  </div>
-                </MenuItem>
+          {/* COLLECTION OPERATIONS */}
+          {collectionId && collectionName && isCollectionClaim && (
+            <>
+              {Boolean(editedCollection) && (
                 <MenuItem
                   className="comment__menu-option"
-                  onSelect={() => openModal(MODALS.COLLECTION_DELETE, { collectionId })}
+                  onSelect={() => push(`/$/${PAGES.LIST}/${collectionId}?view=edit`)}
                 >
                   <div className="menu__link">
-                    <Icon aria-hidden icon={ICONS.DELETE} />
-                    {__('Delete List')}
+                    <Icon aria-hidden iconColor={'red'} icon={ICONS.PUBLISH} />
+                    {__('Publish')}
                   </div>
                 </MenuItem>
-              </>
-            )}
-            {/* CURRENTLY ONLY SUPPORT PLAYLISTS FOR PLAYABLE; LATER DIFFERENT TYPES */}
-            {isPlayable && (
-              <MenuItem
-                className="comment__menu-option"
-                onSelect={() => openModal(MODALS.COLLECTION_ADD, { uri, type: 'playlist' })}
-              >
+              )}
+              <MenuItem className="comment__menu-option" onSelect={() => push(`/$/${PAGES.LIST}/${collectionId}`)}>
                 <div className="menu__link">
-                  <Icon aria-hidden icon={ICONS.STACK} />
-                  {__('Add to Lists')}
+                  <Icon aria-hidden icon={ICONS.VIEW} />
+                  {__('View List')}
                 </div>
               </MenuItem>
-            )}
-          </>
+              <MenuItem
+                className="comment__menu-option"
+                onSelect={() => openModal(MODALS.COLLECTION_DELETE, { collectionId })}
+              >
+                <div className="menu__link">
+                  <Icon aria-hidden icon={ICONS.DELETE} />
+                  {__('Delete List')}
+                </div>
+              </MenuItem>
+            </>
+          )}
+          {/* CURRENTLY ONLY SUPPORT PLAYLISTS FOR PLAYABLE; LATER DIFFERENT TYPES */}
+          {isPlayable && (
+            <MenuItem
+              className="comment__menu-option"
+              onSelect={() => openModal(MODALS.COLLECTION_ADD, { uri, type: 'playlist' })}
+            >
+              <div className="menu__link">
+                <Icon aria-hidden icon={ICONS.STACK} />
+                {__('Add to Lists')}
+              </div>
+            </MenuItem>
+          )}
+        </>
         {!isChannelPage && (
           <>
             <hr className="menu__separator" />
