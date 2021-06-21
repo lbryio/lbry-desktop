@@ -9,13 +9,14 @@ import { withRouter } from 'react-router';
 import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
 import { makeSelectClientSetting, selectHomepageData } from 'redux/selectors/settings';
 import { toggleVideoTheaterMode, doSetClientSetting } from 'redux/actions/settings';
-import { selectUserVerifiedEmail } from 'redux/selectors/user';
+import { selectUserVerifiedEmail, selectUser } from 'redux/selectors/user';
 
 const select = (state, props) => {
   const { search } = props.location;
   const urlParams = new URLSearchParams(search);
   const autoplay = urlParams.get('autoplay');
   const position = urlParams.get('t') !== null ? urlParams.get('t') : makeSelectContentPositionForUri(props.uri)(state);
+  const userId = selectUser(state).id;
 
   return {
     autoplayIfEmbedded: Boolean(autoplay),
@@ -29,6 +30,7 @@ const select = (state, props) => {
     claim: makeSelectClaimForUri(props.uri)(state),
     homepageData: selectHomepageData(state),
     authenticated: selectUserVerifiedEmail(state),
+    userId: userId,
   };
 };
 
