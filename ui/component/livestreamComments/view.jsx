@@ -84,8 +84,8 @@ export default function LivestreamComments(props: Props) {
 
     function handleScroll() {
       if (discussionElement) {
-        const negativeCommentHeight = (-1 * commentElement.offsetHeight);
-        const isAtRecent = discussionElement.scrollTop >= negativeCommentHeight;
+        const negativeCommentHeight = commentElement && (-1 * commentElement.offsetHeight);
+        const isAtRecent = negativeCommentHeight && (discussionElement.scrollTop >= negativeCommentHeight);
 
         setScrollBottom(isAtRecent);
       }
