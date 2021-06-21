@@ -58,18 +58,22 @@ function sendRecsysEvents(recsys) {
     body: JSON.stringify(recsys),
   };
 
-  fetch(recsysEndpoint, requestOptions)
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(`Recsys response data:`, data);
-    });
+  try {
+    fetch(recsysEndpoint, requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        // console.log(`Recsys response data:`, data);
+      });
+  } catch (error) {
+    // console.error(`Recsys Error`, error);
+  }
 }
 
 const defaults = {
   endpoint: recsysEndpoint,
   recsysId: recsysId,
-  videoId: '0',
-  userId: '0',
+  videoId: null,
+  userId: 0,
   debug: false,
 };
 
@@ -81,7 +85,9 @@ class RecsysPlugin extends Component {
     super(player, options);
 
     // Plugin started
-    console.log(`Created recsys plugin for: videoId:${options.videoId}, userId:${options.userId}`);
+    if (options.debug) {
+      this.log(`Created recsys plugin for: videoId:${options.videoId}, userId:${options.userId}`);
+    }
 
     // To help with debugging, we'll add a global vjs object with the video js player
     window.vjs = player;
@@ -101,6 +107,7 @@ class RecsysPlugin extends Component {
     player.on('timeupdate', (event) => this.onTimeUpdate(event));
     player.on('seeked', (event) => this.onSeeked(event));
 
+    // Event trigger to send recsys event
     player.on('dispose', (event) => this.onDispose(event));
   }
 
@@ -120,7 +127,6 @@ class RecsysPlugin extends Component {
       this.loadedAt,
       false
     );
-    console.log(event);
     sendRecsysEvents(event);
   }
 
@@ -154,7 +160,6 @@ class RecsysPlugin extends Component {
   }
 
   onSeeked(event) {
-    console.log(event);
     const recsysEvent = newRecsysEvent(RecsysData.event.scrub, this.lastTimeUpdate, this.player.currentTime());
     this.log('onSeeked', recsysEvent);
     this.addRecsysEvent(recsysEvent);
@@ -165,7 +170,9 @@ class RecsysPlugin extends Component {
   }
 
   log(...args) {
-    console.log(`Recsys Debug:`, JSON.stringify(args));
+    if (this.options_.debug) {
+      console.log(`Recsys Debug:`, JSON.stringify(args));
+    }
   }
 }
 
