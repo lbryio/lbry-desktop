@@ -180,7 +180,7 @@ function VideoViewer(props: Props) {
     }
   }, [embedded, setIsEndededEmbed, autoplaySetting, setShowAutoplayCountdown, adUrl, setAdUrl]);
 
-  function onPlay() {
+  function onPlay(player) {
     setIsLoading(false);
     setIsPlaying(true);
     setShowAutoplayCountdown(false);
