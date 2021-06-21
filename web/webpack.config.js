@@ -1,4 +1,4 @@
-const { WEBPACK_WEB_PORT, LBRY_WEB_API } = require('../config.js');
+const { WEBPACK_WEB_PORT, LBRY_WEB_API, SIMPLE_SITE } = require('../config.js');
 const path = require('path');
 const fs = require('fs');
 const merge = require('webpack-merge');
@@ -139,6 +139,7 @@ const webConfig = {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         options: {
+          isOdysee: Boolean(SIMPLE_SITE),
           TARGET: 'web',
           ppOptions: {
             type: 'js',

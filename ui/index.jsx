@@ -44,6 +44,9 @@ import 'scss/all.scss';
 
 // @if TARGET='web'
 // These overrides can't live in web/ because they need to use the same instance of `Lbry`
+// @if isOdysee
+  import 'web/themes/odysee/all.scss';
+// @endif
 import apiPublishCallViaWeb from 'web/setup/publish';
 
 // Sentry error logging setup
