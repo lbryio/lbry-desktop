@@ -45,7 +45,7 @@ export default function LivestreamComments(props: Props) {
     myChannels,
   } = props;
   const commentsRef = React.createRef();
-  const [isBottomScroll, setIsBottomScroll] = React.useState();
+  const [scrollBottom, setScrollBottom] = React.useState(true);
   const [viewMode, setViewMode] = React.useState(VIEW_MODE_CHAT);
   const [performedInitialScroll, setPerformedInitialScroll] = React.useState(false);
   const claimId = claim && claim.claim_id;
@@ -79,30 +79,33 @@ export default function LivestreamComments(props: Props) {
   }, [claimId, uri, doCommentList, doSuperChatList, doCommentSocketConnect, doCommentSocketDisconnect]);
 
   React.useEffect(() => {
-    const element = document.querySelector('.livestream__comments');
+    const discussionElement = document.querySelector('.livestream__comments');
+    const commentElement = document.querySelector('.livestream-comment');
 
     function handleScroll() {
-      if (element) {
-        const isAtBottom = element.scrollTop >= -100;
-        setIsBottomScroll(isAtBottom);
+      if (discussionElement) {
+        const negativeCommentHeight = (-1 * commentElement.offsetHeight);
+        const isAtRecent = discussionElement.scrollTop >= negativeCommentHeight;
+
+        setScrollBottom(isAtRecent);
       }
     }
 
-    if (element) {
-      element.addEventListener('scroll', handleScroll);
+    if (discussionElement) {
+      discussionElement.addEventListener('scroll', handleScroll);
 
       if (commentsLength > 0) {
         // Only update comment scroll if the user hasn't scrolled up to view old comments
         // If they have, do nothing
         if (!performedInitialScroll) {
-          setTimeout(() => (element.scrollTop = element.scrollHeight - element.offsetHeight + 100), 20);
+          setTimeout(() => (discussionElement.scrollTop = discussionElement.scrollHeight - discussionElement.offsetHeight + 100), 20);
           setPerformedInitialScroll(true);
         }
       }
 
-      return () => element.removeEventListener('scroll', handleScroll);
+      return () => discussionElement.removeEventListener('scroll', handleScroll);
     }
-  }, [commentsLength, isBottomScroll, performedInitialScroll, setPerformedInitialScroll, setIsBottomScroll]);
+  }, [commentsLength, performedInitialScroll, setPerformedInitialScroll, setScrollBottom]);
 
   if (!claim) {
     return null;
@@ -191,7 +194,7 @@ export default function LivestreamComments(props: Props) {
             <div className="main--empty" style={{ flex: 1 }} />
           )}
 
-          {!isBottomScroll && (
+          {!scrollBottom && (
             <Button
               button="alt"
               className="livestream__comments-scroll__down"
