@@ -582,6 +582,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       });
 
       // Add recsys plugin
+      // TODO: Add an if(odysee.com) around this function to only use recsys on odysee
       player.recsys({
         videoId: claimId,
         userId: userId,
