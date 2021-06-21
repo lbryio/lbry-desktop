@@ -27,6 +27,16 @@
           display: inline;
         }
       }
+
+      .claim-link {
+        .button {
+          display: block;
+  
+          .button__content {
+            display: block;
+          }
+        }
+      }
     }
 
     .media__actions {
