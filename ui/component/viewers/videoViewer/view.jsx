@@ -24,48 +24,6 @@ import { useHistory } from 'react-router';
 const PLAY_TIMEOUT_ERROR = 'play_timeout_error';
 const PLAY_TIMEOUT_LIMIT = 2000;
 
-/* TODO: Move constants elsewhere */
-const recsysEndpoint = 'https://clickstream.odysee.com/log/video/view';
-const recsysId = 'lighthouse-v0';
-
-/* RecSys */
-const Recsys = {
-  event: {
-    start: 0,
-    stop: 1,
-    scrub: 2,
-    speed: 3,
-  },
-};
-
-function newRecsysEvent(eventType, offset, arg) {
-  if (arg) {
-    return {
-      event: eventType,
-      offset: offset,
-      arg: arg,
-    };
-  } else {
-    return {
-      event: eventType,
-      offset: offset,
-    };
-  }
-}
-
-function sendRecsysEvent(recsysEvent) {
-  const requestOptions = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(recsysEvent),
-  };
-  fetch(recsysEndpoint, requestOptions)
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(`Recsys response data:`, data);
-    });
-}
-
 type Props = {
   position: number,
   changeVolume: (number) => void,
@@ -89,6 +47,7 @@ type Props = {
   toggleVideoTheaterMode: () => void,
   setVideoPlaybackRate: (number) => void,
   authenticated: boolean,
+  userId: number,
   homepageData: {
     PRIMARY_CONTENT_CHANNEL_IDS?: Array<string>,
     ENLIGHTENMENT_CHANNEL_IDS?: Array<string>,
@@ -130,6 +89,7 @@ function VideoViewer(props: Props) {
     setVideoPlaybackRate,
     homepageData,
     authenticated,
+    userId,
   } = props;
   const {
     PRIMARY_CONTENT_CHANNEL_IDS = [],
@@ -186,14 +146,6 @@ function VideoViewer(props: Props) {
     };
   }, [embedded, videoPlaybackRate]);
 
-  // Used to detect and send recsys events
-  useEffect(() => {
-    history.listen((location) => {
-      console.log(`You changed the page to: ${location.pathname}`);
-      // todo: recsys videoid change goes here
-    });
-  }, [history]);
-
   function doTrackingBuffered(e: Event, data: any) {
     fetch(source, { method: 'HEAD' }).then((response) => {
       data.playerPoweredBy = response.headers.get('x-powered-by');
@@ -249,8 +201,6 @@ function VideoViewer(props: Props) {
       clearPosition(uri);
     } else {
       savePosition(uri, player.currentTime());
-      const rsevent = newRecsysEvent(Recsys.event.scrub, player.currentTime());
-      sendRecsysEvent(rsevent);
     }
   }
 
@@ -306,7 +256,7 @@ function VideoViewer(props: Props) {
     player.on('tracking:buffered', doTrackingBuffered);
     player.on('tracking:firstplay', doTrackingFirstPlay);
     player.on('ended', onEnded);
-    player.on('play', onPlay);
+    player.on('play', () => onPlay(player));
     player.on('pause', () => onPause(player));
     player.on('dispose', () => onDispose(player));
 
@@ -393,6 +343,8 @@ function VideoViewer(props: Props) {
           startMuted={autoplayIfEmbedded}
           toggleVideoTheaterMode={toggleVideoTheaterMode}
           autoplay={!embedded || autoplayIfEmbedded}
+          claimId={claimId}
+          userId={userId}
         />
       )}
     </div>
