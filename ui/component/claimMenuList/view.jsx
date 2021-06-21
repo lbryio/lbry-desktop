@@ -97,7 +97,7 @@ function ClaimMenuList(props: Props) {
   const showDelete = claimIsMine || (fileInfo && (fileInfo.written_bytes > 0 || fileInfo.blobs_completed > 0));
   const subscriptionLabel = isSubscribed ? __('Unfollow') : __('Follow');
 
-  const { push } = useHistory();
+  const { push, replace } = useHistory();
   if (!claim) {
     return null;
   }
@@ -166,7 +166,7 @@ function ClaimMenuList(props: Props) {
     if (!isRepost && !isChannel) {
       openModal(MODALS.CONFIRM_FILE_REMOVE, { uri });
     } else {
-      openModal(MODALS.CONFIRM_CLAIM_REVOKE, { claim });
+      openModal(MODALS.CONFIRM_CLAIM_REVOKE, { claim, cb: !isRepost && (() => replace(`/$/${PAGES.CHANNELS}`)) });
     }
   }
 
