@@ -29,7 +29,6 @@ class CardVerify extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-
     var that = this;
 
     if (scriptLoaded) {
@@ -65,7 +64,7 @@ class CardVerify extends React.Component<Props, State> {
       clientSecret = customerSetupResponse.client_secret;
     });
 
-    // TODO: have to fix this
+    // TODO: have to fix this, using so that the script is available
     setTimeout(function(){
       var stripeElements = function(publicKey, setupIntent) {
         var stripe = Stripe(publicKey);
@@ -109,8 +108,8 @@ class CardVerify extends React.Component<Props, State> {
         console.log(email);
 
         // Handle payment submission when user clicks the pay button.
-        var button = document.getElementById("submit");
-        button.addEventListener("click", function(event) {
+        var button = document.getElementById('submit');
+        button.addEventListener('click', function(event) {
           event.preventDefault();
           changeLoadingState(true);
 
@@ -118,8 +117,8 @@ class CardVerify extends React.Component<Props, State> {
             .confirmCardSetup(clientSecret, {
               payment_method: {
                 card: card,
-                billing_details: { email: email }
-              }
+                billing_details: { email: email },
+              },
             })
             .then(function(result) {
               if (result.error) {
@@ -128,12 +127,14 @@ class CardVerify extends React.Component<Props, State> {
                 displayError.textContent = result.error.message;
               } else {
                 // The PaymentMethod was successfully set up
+                // hide and show the proper divs
                 orderComplete(stripe, clientSecret);
               }
             });
         });
       };
 
+      // TODO: possible bug here where clientSecret isn't done
       stripeElements(publicKey, clientSecret);
 
       // Show a spinner on payment submission
@@ -155,15 +156,9 @@ class CardVerify extends React.Component<Props, State> {
 
           console.log(result);
 
-          var setupIntent = result.setupIntent;
-          var setupIntentJson = JSON.stringify(setupIntent, null, 2);
-
-          document.querySelector(".sr-payment-form").classList.add("hidden");
-          document.querySelector(".sr-result").classList.remove("hidden");
-          document.querySelector("pre").textContent = setupIntentJson;
-          setTimeout(function() {
-            document.querySelector(".sr-result").classList.add("expand");
-          }, 200);
+          document.querySelector('.cardInput').classList.add("hidden");
+          document.querySelector('.headerCard').classList.add("hidden");
+          document.querySelector('.successCard').classList.remove("hidden");
 
           changeLoadingState(false);
         });
@@ -220,21 +215,23 @@ class CardVerify extends React.Component<Props, State> {
 
     return (
 
-      <Page backout={{ title: __('Manage Stripe card'), backLabel: __('Done') }} noFooter noSideNavigation>
+      <Page backout={{ title: __('Manage Card'), backLabel: __('Done') }} noFooter noSideNavigation>
         <div>
           {scriptFailedToLoad && (
             <div className="error__text">There was an error connecting to Stripe. Please try again later.</div>
           )}
         </div>
 
-        <Card
-          title={__('Connect your card to tip creators')}
-          subtitle={__('Securely connect your card through Stripe to tip your favorite creators')}
-        />
+        <div className="headerCard">
+          <Card
+            title={__('Connect your card with Odysee')}
+            subtitle={__('Securely connect your card to your Odysee account to tip your favorite creators')}
+          />
+        </div>
 
         <div className="sr-root">
           <div className="sr-main">
-            <div className="sr-payment-form card">
+            <div className="sr-payment-form card cardInput">
               <div className="sr-form-row">
                 <label className="payment-details">
                   Payment Details
@@ -248,11 +245,14 @@ class CardVerify extends React.Component<Props, State> {
                 <span id="button-text">Link your card to your account</span>
               </button>
             </div>
-            <div className="sr-result hidden">
-              <p>Card setup completed<br /></p>
-              <pre>
-            <code></code>
-          </pre>
+            <div className="successCard hidden">
+              <Card
+                title={__('Card successfully added!')}
+                subtitle={__('Congratulations! Your card has been successfully added to your Odysee account')}
+              />
+              <Card
+                subtitle={__('You can now tip your favorite creators while viewing their content')}
+              />
             </div>
           </div>
         </div>
