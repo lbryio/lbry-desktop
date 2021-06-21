@@ -7,7 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased for Desktop]
 
 ### Added
-- Send a tip with your comment ([#6157](https://github.com/lbryio/lbry-desktop/pull/6157))
+- Private and Publishable Playlists ([#6157](https://github.com/lbryio/lbry-desktop/pull/6157))
 - Channel thumbnails in following side menu ([#6193](https://github.com/lbryio/lbry-desktop/pull/6193))
 - Web is now PWA app ([#6120](https://github.com/lbryio/lbry-desktop/pull/6120))
 - Send a tip with your comment ([#5920](https://github.com/lbryio/lbry-desktop/issues/5920))
