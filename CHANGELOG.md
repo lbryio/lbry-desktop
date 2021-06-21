@@ -7,18 +7,30 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased for Desktop]
 
 ### Added
-
+- Private and Publishable Playlists ([#6157](https://github.com/lbryio/lbry-desktop/pull/6157))
+- Channel thumbnails in following side menu ([#6193](https://github.com/lbryio/lbry-desktop/pull/6193))
+- Web is now PWA app ([#6120](https://github.com/lbryio/lbry-desktop/pull/6120))
 - Send a tip with your comment ([#5920](https://github.com/lbryio/lbry-desktop/issues/5920))
 - Search for tags in search dropdown ([#5876](https://github.com/lbryio/lbry-desktop/issues/5876))
 - Japanese, Afrikaans, Filipino, Thai and Vietnamese language support ([#5684](https://github.com/lbryio/lbry-desktop/issues/5684))
+- Brazilian-Portuguese language support ([#5900](https://github.com/lbryio/lbry-desktop/issues/5900))  
 - Highlight comments made by content owner _community pr!_ ([#5744](https://github.com/lbryio/lbry-desktop/pull/5744))
 - Ability to report infringing content directly from the application ([#5808](https://github.com/lbryio/lbry-desktop/pull/5808))
 - Re-added ability to export wallet transactions ([#5899](https://github.com/lbryio/lbry-desktop/pull/5899))
+- 24-hour clock setting _community pr!_ ([#5820](https://github.com/lbryio/lbry-desktop/pull/5820))
+- "Related" (recommendations) section: added option to view more from current creator _community pr!_ ([#5847](https://github.com/lbryio/lbry-desktop/pull/5847))
+- Wallet: ability to swap cryptocurrency into LBC ([#5654](https://github.com/lbryio/lbry-desktop/pull/5654))
+- Wallet: ability to send LBC directly to a user through a name or URL search _community pr!_ ([#5990](https://github.com/lbryio/lbry-desktop/pull/5990))
+- Publish: ability to edit the Release Date field ([#6049](https://github.com/lbryio/lbry-desktop/pull/6049))
+- Creator Settings: ability to mute specific words in comments ([#5934](https://github.com/lbryio/lbry-desktop/pull/5934))
+- Creator Settings: ability to disable comments + assign moderators ([#6199](https://github.com/lbryio/lbry-desktop/pull/6199))
+- Additional options in context-menu _community pr!_ ([#6106](https://github.com/lbryio/lbry-desktop/pull/6106))
 
 ### Changed
 
 - Keyboard shortcut additions and changes _community pr!_ ([#5717](https://github.com/lbryio/lbry-desktop/pull/5717))
 - Removed the 10k character-limit when editing _Posts_ ([#5719](https://github.com/lbryio/lbry-desktop/pull/5719))
+- Improved search functionality (more filters, infinite-scroll, etc.) ([#5742](https://github.com/lbryio/lbry-desktop/pull/5742))
 
 ### Fixed
 
@@ -27,6 +39,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Autoplay looping to a previous video or itself ([#5711](https://github.com/lbryio/lbry-desktop/pull/5711))
 - Autoplay not working in mini-player mode ([#5716](https://github.com/lbryio/lbry-desktop/pull/5716))
 - Edited claim accidentally moved to 'Anonymous' ([#5767](https://github.com/lbryio/lbry-desktop/pull/5767))
+- Squished "Upload Date" and "View Count" on smaller screens _community pr!_ ([#5823](https://github.com/lbryio/lbry-desktop/pull/5823))
+- Home and End key not working in search bar ([#5867](https://github.com/lbryio/lbry-desktop/pull/5867))
+- Unable to buy paid-Images or Posts ([#6114](https://github.com/lbryio/lbry-desktop/pull/6114))
 
 ## [0.50.2] - [2021-04-2]
 
