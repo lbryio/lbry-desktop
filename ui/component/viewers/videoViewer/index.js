@@ -16,7 +16,7 @@ const select = (state, props) => {
   const urlParams = new URLSearchParams(search);
   const autoplay = urlParams.get('autoplay');
   const position = urlParams.get('t') !== null ? urlParams.get('t') : makeSelectContentPositionForUri(props.uri)(state);
-  const userId = selectUser(state).id;
+  const userId = selectUser(state) && selectUser(state).id;
 
   return {
     autoplayIfEmbedded: Boolean(autoplay),
