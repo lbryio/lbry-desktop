@@ -52,6 +52,7 @@ type Props = {
   toggleVideoTheaterMode: () => void,
   adUrl: ?string,
   claimId: ?string,
+  userId: ?number,
 };
 
 type VideoJSOptions = {
