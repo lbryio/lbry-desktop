@@ -200,6 +200,11 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       eventTracking: true,
       overlay: OVERLAY.OVERLAY_DATA,
     },
+    // fixes problem of errant CC button showing up on iOS
+    // TODO: find the source of why the button recently began to show up on iOS
+    controlBar: {
+      subsCapsButton: false,
+    },
   };
 
   const tapToUnmuteRef = useRef();
