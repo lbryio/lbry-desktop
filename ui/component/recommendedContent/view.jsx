@@ -1,5 +1,5 @@
 // @flow
-import { SHOW_ADS, SIMPLE_SITE } from 'config';
+import { SHOW_ADS } from 'config';
 import React from 'react';
 import ClaimList from 'component/claimList';
 import ClaimListDiscover from 'component/claimListDiscover';
@@ -95,17 +95,7 @@ export default function RecommendedContent(props: Props) {
               loading={isSearching}
               uris={reorderList(recommendedContent)}
               hideMenu={isMobile}
-              injectedItem={
-                SHOW_ADS && IS_WEB ? (
-                  SIMPLE_SITE ? (
-                    <Ads small type={'google'} uri={uri} />
-                  ) : (
-                    !isAuthenticated && <Ads small type={'video'} />
-                  )
-                ) : (
-                  false
-                )
-              }
+              injectedItem={SHOW_ADS && IS_WEB && !isAuthenticated && <Ads small type={'video'} />}
               empty={__('No related content found')}
             />
           )}
@@ -123,17 +113,7 @@ export default function RecommendedContent(props: Props) {
               channelIds={[signingChannel.claim_id]}
               loading={isSearching}
               hideMenu={isMobile}
-              injectedItem={
-                SHOW_ADS && IS_WEB ? (
-                  SIMPLE_SITE ? (
-                    <Ads small type={'google'} uri={uri} />
-                  ) : (
-                    !isAuthenticated && <Ads small type={'video'} />
-                  )
-                ) : (
-                  false
-                )
-              }
+              injectedItem={SHOW_ADS && IS_WEB && !isAuthenticated && <Ads small type={'video'} />}
               empty={__('No related content found')}
             />
           )}
