@@ -28,6 +28,8 @@ type Props = {
 
 const VIEW_MODE_CHAT = 'view_chat';
 const VIEW_MODE_SUPER_CHAT = 'view_superchat';
+const COMMENT_SCROLL_OFFSET = 100;
+const COMMENT_SCROLL_TIMEOUT = 25;
 
 export default function LivestreamComments(props: Props) {
   const {
@@ -84,8 +86,8 @@ export default function LivestreamComments(props: Props) {
 
     function handleScroll() {
       if (discussionElement) {
-        const negativeCommentHeight = commentElement && (-1 * commentElement.offsetHeight);
-        const isAtRecent = negativeCommentHeight && (discussionElement.scrollTop >= negativeCommentHeight);
+        const negativeCommentHeight = commentElement && -1 * commentElement.offsetHeight;
+        const isAtRecent = negativeCommentHeight && discussionElement.scrollTop >= negativeCommentHeight;
 
         setScrollBottom(isAtRecent);
       }
@@ -98,7 +100,12 @@ export default function LivestreamComments(props: Props) {
         // Only update comment scroll if the user hasn't scrolled up to view old comments
         // If they have, do nothing
         if (!performedInitialScroll) {
-          setTimeout(() => (discussionElement.scrollTop = discussionElement.scrollHeight - discussionElement.offsetHeight + 100), 20);
+          setTimeout(
+            () =>
+              (discussionElement.scrollTop =
+                discussionElement.scrollHeight - discussionElement.offsetHeight + COMMENT_SCROLL_OFFSET),
+            COMMENT_SCROLL_TIMEOUT
+          );
           setPerformedInitialScroll(true);
         }
       }
