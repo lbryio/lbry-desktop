@@ -301,7 +301,6 @@ function SideNavigation(props: Props) {
           navigate={`/$/${PAGES.AUTH}?src=sidenav_nudge`}
           disabled={user === null}
         />{' '}
-        //
       </div>
     );
 
