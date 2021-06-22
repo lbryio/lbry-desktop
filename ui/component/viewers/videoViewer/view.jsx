@@ -234,10 +234,13 @@ function VideoViewer(props: Props) {
       Promise.race([playPromise, timeoutPromise]).catch((error) => {
         if (typeof error === 'object' && error.name && error.name === 'NotAllowedError') {
           // Autoplay disallowed by browser
+          player.play();
         }
 
+        // Autoplay failed
         if (PLAY_TIMEOUT_ERROR) {
-          // Autoplay failed
+          setIsLoading(false);
+          setIsPlaying(false);
         } else {
           setIsLoading(false);
           setIsPlaying(false);
