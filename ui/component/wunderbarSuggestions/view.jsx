@@ -16,7 +16,6 @@ import WunderbarTopSuggestion from 'component/wunderbarTopSuggestion';
 import WunderbarSuggestion from 'component/wunderbarSuggestion';
 import { useHistory } from 'react-router';
 import { formatLbryUrlForWeb } from 'util/url';
-import useThrottle from 'effects/use-throttle';
 import Yrbl from 'component/yrbl';
 import { SEARCH_OPTIONS } from 'constants/search';
 
@@ -30,6 +29,9 @@ const TAG_SEARCH_PREFIX = 'tag:';
 
 const L_KEY_CODE = 76;
 const ESC_KEY_CODE = 27;
+
+const WUNDERBAR_INPUT_DEBOUNCE_MS = 500;
+const LIGHTHOUSE_MIN_CHARACTERS = 3;
 
 type Props = {
   searchQuery: ?string,
@@ -62,7 +64,6 @@ export default function WunderBarSuggestions(props: Props) {
   const inputRef: ElementRef<any> = React.useRef();
   const isFocused = inputRef && inputRef.current && inputRef.current === document.activeElement;
 
-  const THROTTLE_MS = 1000;
   const {
     push,
     location: { search },
@@ -70,14 +71,14 @@ export default function WunderBarSuggestions(props: Props) {
   const urlParams = new URLSearchParams(search);
   const queryFromUrl = urlParams.get('q') || '';
   const [term, setTerm] = React.useState(queryFromUrl);
-  const throttledTerm = useThrottle(term, THROTTLE_MS) || '';
+  const [debouncedTerm, setDebouncedTerm] = React.useState('');
   const searchSize = isMobile ? 20 : 5;
   const additionalOptions = channelsOnly
     ? { isBackgroundSearch: false, [SEARCH_OPTIONS.CLAIM_TYPE]: SEARCH_OPTIONS.INCLUDE_CHANNELS }
     : {};
-  const { results, loading } = useLighthouse(throttledTerm, showMature, searchSize, additionalOptions);
-  const noResults = throttledTerm && !loading && results && results.length === 0;
-  const nameFromQuery = throttledTerm.trim().replace(/\s+/g, '').replace(/:/g, '#');
+  const { results, loading } = useLighthouse(debouncedTerm, showMature, searchSize, additionalOptions, 0);
+  const noResults = debouncedTerm && !loading && results && results.length === 0;
+  const nameFromQuery = debouncedTerm.trim().replace(/\s+/g, '').replace(/:/g, '#');
   const uriFromQuery = `lbry://${nameFromQuery}`;
   let uriFromQueryIsValid = false;
   let channelUrlForTopTest;
@@ -156,6 +157,16 @@ export default function WunderBarSuggestions(props: Props) {
       }
     }
   }
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      if (debouncedTerm !== term) {
+        setDebouncedTerm(term.length < LIGHTHOUSE_MIN_CHARACTERS ? '' : term);
+      }
+    }, WUNDERBAR_INPUT_DEBOUNCE_MS);
+
+    return () => clearTimeout(timer);
+  }, [term, debouncedTerm]);
 
   React.useEffect(() => {
     function handleHomeEndCaretPos(elem, shiftKey, isHome) {
@@ -295,7 +306,7 @@ export default function WunderBarSuggestions(props: Props) {
                 {uriFromQueryIsValid && !noTopSuggestion ? <WunderbarTopSuggestion query={nameFromQuery} /> : null}
 
                 <div className="wunderbar__label">{__('Search Results')}</div>
-                {results.slice(0, isMobile ? 20 : 5).map((uri) => (
+                {results.slice(0, term.length < LIGHTHOUSE_MIN_CHARACTERS ? 0 : isMobile ? 20 : 5).map((uri) => (
                   <WunderbarSuggestion key={uri} uri={uri} />
                 ))}
 
