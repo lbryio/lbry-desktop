@@ -1,0 +1,43 @@
+[ignore]
+.*\.typeface\.json
+.*/node_modules/findup/.*
+
+
+[include]
+
+[libs]
+./flow-typed
+node_modules/lbry-redux/flow-typed/
+node_modules/lbryinc/flow-typed/
+
+[untyped]
+.*/node_modules/lbry-redux
+.*/node_modules/lbryinc
+
+[lints]
+
+[options]
+suppress_comment=\\(.\\|\n\\)*\\$FlowFixMe
+suppress_comment=\\(.\\|\n\\)*\\$FlowIssue
+module.name_mapper='^constants\(.*\)$' -> '<PROJECT_ROOT>/ui/constants\1'
+module.name_mapper='^util\(.*\)$' -> '<PROJECT_ROOT>/ui/util\1'
+module.name_mapper='^redux\(.*\)$' -> '<PROJECT_ROOT>/ui/redux\1'
+module.name_mapper='^types\(.*\)$' -> '<PROJECT_ROOT>/ui/types\1'
+module.name_mapper='^component\(.*\)$' -> '<PROJECT_ROOT>/ui/component\1'
+module.name_mapper='^page\(.*\)$' -> '<PROJECT_ROOT>/ui/page\1'
+module.name_mapper='^lbry\(.*\)$' -> '<PROJECT_ROOT>/ui/lbry\1'
+module.name_mapper='^modal\(.*\)$' -> '<PROJECT_ROOT>/ui/modal\1'
+module.name_mapper='^app\(.*\)$' -> '<PROJECT_ROOT>/ui/app\1'
+module.name_mapper='^native\(.*\)$' -> '<PROJECT_ROOT>/ui/native\1'
+module.name_mapper='^analytics\(.*\)$' -> '<PROJECT_ROOT>/ui/analytics\1'
+module.name_mapper='^rewards\(.*\)$' -> '<PROJECT_ROOT>/ui/rewards\1'
+module.name_mapper='^i18n\(.*\)$' -> '<PROJECT_ROOT>/ui/i18n\1'
+module.name_mapper='^effects\(.*\)$' -> '<PROJECT_ROOT>/ui/effects\1'
+module.name_mapper='^comments\(.*\)$' -> '<PROJECT_ROOT>/ui/comments\1'
+module.name_mapper='^config\(.*\)$' -> '<PROJECT_ROOT>/config\1'
+module.name_mapper='^web\/component\(.*\)$' -> '<PROJECT_ROOT>/web/component\1'
+module.name_mapper='^web\/effects\(.*\)$' -> '<PROJECT_ROOT>/web/effects\1'
+module.name_mapper='^web\/page\(.*\)$' -> '<PROJECT_ROOT>/web/page\1'
+module.name_mapper='^homepage\(.*\)$' -> '<PROJECT_ROOT>/ui/util/homepage\1'
+
+[strict]
