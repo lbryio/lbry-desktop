@@ -79,6 +79,7 @@ type Props = {
   collectionUris: Array<Collection>,
   collectionIndex?: number,
   disableNavigation?: boolean,
+  collectionIsPending?: boolean,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -135,6 +136,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     editCollection,
     isCollectionMine,
     collectionUris,
+    collectionIsPending,
     disableNavigation,
   } = props;
   const isRepost = claim && claim.repost_channel_url;
@@ -346,7 +348,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                             <Button
                               button="alt"
                               className={'button-collection-order'}
-                              disabled={collectionIndex === 0}
+                              disabled={collectionIndex === 0 || collectionIsPending}
                               icon={ICONS.UP}
                               onClick={(e) => {
                                 e.preventDefault();
@@ -363,7 +365,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                               button="alt"
                               className={'button-collection-order'}
                               icon={ICONS.DOWN}
-                              disabled={collectionIndex === lastCollectionIndex}
+                              disabled={collectionIndex === lastCollectionIndex || collectionIsPending}
                               onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -379,6 +381,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                           <div className="collection-preview__edit-group">
                             <Button
                               button="alt"
+                              disabled={collectionIsPending}
                               icon={ICONS.DELETE}
                               onClick={(e) => {
                                 e.preventDefault();

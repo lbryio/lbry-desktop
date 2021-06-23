@@ -81,7 +81,7 @@ export default function CollectionPage(props: Props) {
   const pending = (
     <div className="help card__title--help">
       <Spinner type={'small'} />
-      {__('Your publish is being confirmed and will be live soon')}
+      {__('Please wait for confirmation before making further changes')}
     </div>
   );
 

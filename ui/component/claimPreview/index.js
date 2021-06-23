@@ -15,6 +15,7 @@ import {
   doCollectionEdit,
   makeSelectUrlsForCollectionId,
   makeSelectIndexForUrlInCollection,
+  makeSelectClaimIdIsPending,
 } from 'lbry-redux';
 import { selectMutedChannels, makeSelectChannelIsMuted } from 'redux/selectors/blocked';
 import { selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
@@ -47,6 +48,7 @@ const select = (state, props) => ({
   isCollectionMine: makeSelectCollectionIsMine(props.collectionId)(state),
   collectionUris: makeSelectUrlsForCollectionId(props.collectionId)(state),
   collectionIndex: makeSelectIndexForUrlInCollection(props.uri, props.collectionId)(state),
+  collectionIsPending: makeSelectClaimIdIsPending(props.collectionId)(state),
 });
 
 const perform = (dispatch) => ({
