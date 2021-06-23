@@ -18,6 +18,7 @@ import { useHistory } from 'react-router';
 import { formatLbryUrlForWeb } from 'util/url';
 import Yrbl from 'component/yrbl';
 import { SEARCH_OPTIONS } from 'constants/search';
+import Spinner from 'component/spinner';
 
 const LBRY_PROTOCOL = 'lbry://';
 const WEB_DEV_PREFIX = `${URL_DEV}/`;
@@ -94,6 +95,9 @@ export default function WunderBarSuggestions(props: Props) {
   if (channelUrlForTopTest) {
     topUrisToTest.push(uriFromQuery);
   }
+
+  const isTyping = debouncedTerm !== term;
+  const showPlaceholder = isTyping || loading;
 
   function handleSelect(value) {
     if (!value) {
@@ -297,7 +301,7 @@ export default function WunderBarSuggestions(props: Props) {
             value={term}
           />
 
-          {isFocused && results && results.length > 0 && (
+          {isFocused && (
             <ComboboxPopover
               portal={false}
               className={classnames('wunderbar__suggestions', { 'wunderbar__suggestions--mobile': isMobile })}
@@ -306,9 +310,12 @@ export default function WunderBarSuggestions(props: Props) {
                 {uriFromQueryIsValid && !noTopSuggestion ? <WunderbarTopSuggestion query={nameFromQuery} /> : null}
 
                 <div className="wunderbar__label">{__('Search Results')}</div>
-                {results.slice(0, term.length < LIGHTHOUSE_MIN_CHARACTERS ? 0 : isMobile ? 20 : 5).map((uri) => (
-                  <WunderbarSuggestion key={uri} uri={uri} />
-                ))}
+
+                {showPlaceholder && term.length > LIGHTHOUSE_MIN_CHARACTERS ? <Spinner type="small" /> : null}
+
+                {!showPlaceholder && results
+                  ? results.slice(0, isMobile ? 20 : 5).map((uri) => <WunderbarSuggestion key={uri} uri={uri} />)
+                  : null}
 
                 {!noBottomLinks && (
                   <div className="wunderbar__bottom-links">
