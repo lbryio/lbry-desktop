@@ -63,9 +63,11 @@ function WalletSendTip(props: Props) {
   const { channelName } = parseURI(uri);
   const noBalance = balance === 0;
   const tipAmount = useCustomTip ? customTipAmount : presetTipAmount;
+  // TODO: what does this mean?
   const isSupport = claimIsMine || !sendAsTip;
 
   React.useEffect(() => {
+    // TODO: what is this regexp testing against? number from 0-8?
     const regexp = RegExp(/^(\d*([.]\d{0,8})?)$/);
     const validTipInput = regexp.test(String(tipAmount));
     let tipError;
@@ -132,6 +134,7 @@ function WalletSendTip(props: Props) {
 
   return (
     <Form onSubmit={handleSubmit}>
+      {/* if there is no LBC balance, show user frontend to get credits */}
       {noBalance ? (
         <Card
           title={<I18nMessage tokens={{ lbc: <LbcSymbol size={22} /> }}>Supporting content requires %lbc%</I18nMessage>}
@@ -161,21 +164,32 @@ function WalletSendTip(props: Props) {
             <React.Fragment>
               {!claimIsMine && (
                 <div className="section">
+                  {/* tip LBC section */}
                   <Button
                     key="tip"
-                    icon={ICONS.SUPPORT}
+                    icon={ICONS.LBC}
                     label={__('Tip')}
                     button="alt"
                     onClick={() => setSendAsTip(true)}
                     className={classnames('button-toggle', { 'button-toggle--active': sendAsTip })}
                   />
+                  {/* tip fiat section */}
+                  <Button
+                    key="tip-fiat"
+                    icon={ICONS.FINANCE}
+                    label={__('Tip Fiat')}
+                    button="alt"
+                    onClick={() => setSendAsTip(false)}
+                    className={classnames('button-toggle', { 'button-toggle--active': !sendAsTip })}
+                  />
+                  {/* tip LBC section */}
                   <Button
                     key="boost"
                     icon={ICONS.TRENDING}
                     label={__('Boost')}
                     button="alt"
                     onClick={() => setSendAsTip(false)}
-                    className={classnames('button-toggle', { 'button-toggle--active': !sendAsTip })}
+                    className={classnames('button-toggle', { 'button-toggle--active': !sendAsTip && 1 == 2 })}
                   />
                 </div>
               )}
