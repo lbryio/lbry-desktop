@@ -111,7 +111,6 @@ class CardVerify extends React.Component {
       CardVerify.stripeHandler = StripeCheckout.configure({
         key: 'pk_test_NoL1JWL7i1ipfhVId5KfDZgo',
       });
-      alert('pk_test_NoL1JWL7i1ipfhVId5KfDZgo');
 
       if (this.hasPendingClick) {
         this.showStripeDialog();
