@@ -10,10 +10,21 @@ import ClaimProperties from 'component/claimProperties';
 type Props = {
   claim: ?Claim,
   uri: string,
+  isResolvingUri: boolean,
 };
 
 export default function WunderbarSuggestion(props: Props) {
-  const { claim, uri } = props;
+  const { claim, uri, isResolvingUri } = props;
+
+  if (isResolvingUri) {
+    return (
+      <ComboboxOption value={uri}>
+        <div className="wunderbar__suggestion">
+          <div className="media__thumb media__thumb--resolving" />
+        </div>
+      </ComboboxOption>
+    );
+  }
 
   if (!claim) {
     return null;
