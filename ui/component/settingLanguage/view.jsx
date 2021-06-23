@@ -26,13 +26,13 @@ function SettingLanguage(props: Props) {
     const { value } = e.target;
     setPreviousLanguage(language || getDefaultLanguage());
     setLanguage(value);
-    if (LANGUAGES[value].length >=3) {
-    	document.documentElement.dir = LANGUAGES[value][2];
+    if (document && document.documentElement) {
+      if (LANGUAGES[value].length >= 3) {
+        document.documentElement.dir = LANGUAGES[value][2];
+      } else {
+        document.documentElement.dir = 'ltr';
+      }
     }
-    else{
-    	document.documentElement.dir = 'ltr';
-    }
- 
   }
 
   return (
