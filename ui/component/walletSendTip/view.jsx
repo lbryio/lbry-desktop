@@ -26,10 +26,10 @@ type Props = {
   title: string,
   claim: StreamClaim,
   isPending: boolean,
+  isSupport: boolean,
   sendSupport: (SupportParams, boolean) => void,
   closeModal: () => void,
   balance: number,
-  isSupport: boolean,
   fetchingChannels: boolean,
   instantTipEnabled: boolean,
   instantTipMax: { amount: number, currency: string },
@@ -64,9 +64,13 @@ function WalletSendTip(props: Props) {
   const noBalance = balance === 0;
   const tipAmount = useCustomTip ? customTipAmount : presetTipAmount;
   // TODO: what does this mean?
+  const [activeTab] = usePersistedState('comment-support:activeTab', 'TipLBC');
+  console.log(activeTab);
+
   const isSupport = claimIsMine || !sendAsTip;
 
   React.useEffect(() => {
+
     // TODO: what is this regexp testing against? number from 0-8?
     const regexp = RegExp(/^(\d*([.]\d{0,8})?)$/);
     const validTipInput = regexp.test(String(tipAmount));
@@ -88,12 +92,9 @@ function WalletSendTip(props: Props) {
     setTipError(tipError);
   }, [tipAmount, balance, setTipError]);
 
+  //
   function sendSupportOrConfirm(instantTipMaxAmount = null) {
-    let selectedChannelId;
-    if (!incognito && activeChannelClaim) {
-      selectedChannelId = activeChannelClaim.claim_id;
-    }
-
+    // send a tip
     if (
       !isSupport &&
       !isConfirming &&
@@ -101,17 +102,24 @@ function WalletSendTip(props: Props) {
     ) {
       setIsConfirming(true);
     } else {
+      // send a boost
       const supportParams: SupportParams = { amount: tipAmount, claim_id: claimId };
-      if (selectedChannelId) {
-        supportParams.channel_id = selectedChannelId;
+
+      // include channel name if donation not anonymous
+      if (activeChannelClaim && !incognito) {
+        supportParams.channel_id = activeChannelClaim.claim_id;
       }
+
+      // send tip/boost
       sendSupport(supportParams, isSupport);
       closeModal();
     }
   }
 
+  // when the form button is clicked
   function handleSubmit() {
     if (tipAmount && claimId) {
+      // send an instant tip (no need to go to an exchange first)
       if (instantTipEnabled) {
         if (instantTipMax.currency === 'LBC') {
           sendSupportOrConfirm(instantTipMax.amount);
@@ -130,6 +138,16 @@ function WalletSendTip(props: Props) {
   function handleCustomPriceChange(event: SyntheticInputEvent<*>) {
     const tipAmount = parseFloat(event.target.value);
     setCustomTipAmount(tipAmount);
+  }
+
+  // conditionally set Icon during render
+  let iconToUse;
+  if (!isSupport) {
+    iconToUse = ICONS.LBC;
+  } else if (isSupport) {
+    iconToUse = ICONS.FINANCE;
+  } else {
+    iconToUse = ICONS.LBC;
   }
 
   return (
@@ -158,6 +176,7 @@ function WalletSendTip(props: Props) {
           }
         />
       ) : (
+        // if there is lbc, the main card
         <Card
           title={<LbcSymbol postfix={claimIsMine ? __('Boost your content') : __('Support this content')} size={22} />}
           subtitle={
@@ -193,6 +212,8 @@ function WalletSendTip(props: Props) {
                   />
                 </div>
               )}
+
+              {/* short explainer under the button */}
               <div className="section__subtitle">
                 {isSupport
                   ? __(
@@ -204,6 +225,7 @@ function WalletSendTip(props: Props) {
             </React.Fragment>
           }
           actions={
+            // if the transaction is confirming?
             isConfirming ? (
               <>
                 <div className="section section--padded card--inline confirm__wrapper">
@@ -237,6 +259,7 @@ function WalletSendTip(props: Props) {
                   <ChannelSelector />
                 </div>
 
+                {/* section to pick tip/boost amount */}
                 <div className="section">
                   {DEFAULT_TIP_AMOUNTS.map((amount) => (
                     <Button
@@ -248,7 +271,7 @@ function WalletSendTip(props: Props) {
                         'button-toggle--disabled': amount > balance,
                       })}
                       label={amount}
-                      icon={ICONS.LBC}
+                      icon={iconToUse}
                       onClick={() => {
                         setPresetTipAmount(amount);
                         setUseCustomTip(false);
@@ -260,7 +283,7 @@ function WalletSendTip(props: Props) {
                     className={classnames('button-toggle button-toggle--expandformobile', {
                       'button-toggle--active': !DEFAULT_TIP_AMOUNTS.includes(tipAmount),
                     })}
-                    icon={ICONS.LBC}
+                    icon={iconToUse}
                     label={__('Custom')}
                     onClick={() => setUseCustomTip(true)}
                   />
@@ -302,6 +325,7 @@ function WalletSendTip(props: Props) {
                   </div>
                 )}
 
+                {/* send tip/boost button */}
                 <div className="section__actions">
                   <Button
                     autoFocus
