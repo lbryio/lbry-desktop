@@ -65,7 +65,15 @@ function WalletSendTip(props: Props) {
   const tipAmount = useCustomTip ? customTipAmount : presetTipAmount;
   // TODO: what does this mean?
   const [activeTab] = usePersistedState('comment-support:activeTab', 'TipLBC');
-  console.log(activeTab);
+
+  let iconToUse;
+  if (activeTab === 'Boost') {
+    iconToUse = ICONS.LBC;
+  } else if (activeTab === 'TipFiat') {
+    iconToUse = ICONS.FINANCE;
+  } else if (activeTab === 'TipLBC') {
+    iconToUse = ICONS.LBC;
+  }
 
   const isSupport = claimIsMine || !sendAsTip;
 
@@ -140,16 +148,6 @@ function WalletSendTip(props: Props) {
     setCustomTipAmount(tipAmount);
   }
 
-  // conditionally set Icon during render
-  let iconToUse;
-  if (!isSupport) {
-    iconToUse = ICONS.LBC;
-  } else if (isSupport) {
-    iconToUse = ICONS.FINANCE;
-  } else {
-    iconToUse = ICONS.LBC;
-  }
-
   return (
     <Form onSubmit={handleSubmit}>
       {/* if there is no LBC balance, show user frontend to get credits */}
@@ -190,7 +188,7 @@ function WalletSendTip(props: Props) {
                     label={__('Tip')}
                     button="alt"
                     onClick={() => setSendAsTip(true)}
-                    className={classnames('button-toggle', { 'button-toggle--active': sendAsTip })}
+                    className={classnames('button-toggle', { 'button-toggle--active': activeTab === 'TipLBC' })}
                   />
                   {/* tip fiat section */}
                   <Button
@@ -199,7 +197,7 @@ function WalletSendTip(props: Props) {
                     label={__('Tip Fiat')}
                     button="alt"
                     onClick={() => setSendAsTip(false)}
-                    className={classnames('button-toggle', { 'button-toggle--active': !sendAsTip })}
+                    className={classnames('button-toggle', { 'button-toggle--active': activeTab === 'TipFiat' })}
                   />
                   {/* tip LBC section */}
                   <Button
@@ -208,7 +206,7 @@ function WalletSendTip(props: Props) {
                     label={__('Boost')}
                     button="alt"
                     onClick={() => setSendAsTip(false)}
-                    className={classnames('button-toggle', { 'button-toggle--active': !sendAsTip && 1 == 2 })}
+                    className={classnames('button-toggle', { 'button-toggle--active': activeTab === 'Boost' })}
                   />
                 </div>
               )}
@@ -264,7 +262,7 @@ function WalletSendTip(props: Props) {
                   {DEFAULT_TIP_AMOUNTS.map((amount) => (
                     <Button
                       key={amount}
-                      disabled={amount > balance}
+                      disabled={amount > balance && activeTab !== 'TipFiat'}
                       button="alt"
                       className={classnames('button-toggle button-toggle--expandformobile', {
                         'button-toggle--active': tipAmount === amount,
