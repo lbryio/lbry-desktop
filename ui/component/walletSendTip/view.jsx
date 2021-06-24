@@ -66,13 +66,16 @@ function WalletSendTip(props: Props) {
   // TODO: what does this mean?
   const [activeTab, setActiveTab] = usePersistedState('comment-support:activeTab', 'TipLBC');
 
-  let iconToUse;
+  let iconToUse, explainerText;
   if (activeTab === 'Boost') {
     iconToUse = ICONS.LBC;
+    explainerText = 'This will increase the overall bid amount for this content, which will boost its ability to be discovered while active. ';
   } else if (activeTab === 'TipFiat') {
     iconToUse = ICONS.FINANCE;
+    explainerText = 'This tip will be made through your card and sent to the creator and then they will be able to receive the funds. ';
   } else if (activeTab === 'TipLBC') {
     iconToUse = ICONS.LBC;
+    explainerText = 'Show this channel your appreciation by sending a donation. ';
   }
 
   function buildButtonText(amount){
@@ -85,7 +88,13 @@ function WalletSendTip(props: Props) {
     }
   }
 
-  // let buttonText;
+    // ? __(
+    // 'This will increase the overall bid amount for this content, which will boost its ability to be discovered while active.'
+    // )
+    // : __('')}{' '}
+
+
+// let buttonText;
   // if (activeTab === 'Boost') {
   //   buttonText = 'Boost This Content';
   // } else if (activeTab === 'TipFiat') {
@@ -236,12 +245,8 @@ function WalletSendTip(props: Props) {
 
               {/* short explainer under the button */}
               <div className="section__subtitle">
-                {isSupport
-                  ? __(
-                      'This will increase the overall bid amount for this content, which will boost its ability to be discovered while active.'
-                    )
-                  : __('Show this channel your appreciation by sending a donation.')}{' '}
-                <Button label={__('Learn more')} button="link" href="https://lbry.com/faq/tipping" />
+                {explainerText}
+                {activeTab !== 'TipFiat' && <Button label={__('Learn more')} button="link" href="https://lbry.com/faq/tipping" />}
               </div>
             </React.Fragment>
           }
