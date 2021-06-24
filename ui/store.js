@@ -60,6 +60,7 @@ const appFilter = createFilter('app', [
   'splashAnimationEnabled',
   'activeChannel',
 ]);
+const claimsFilter = createFilter('claims', ['pendingById']);
 // We only need to persist the receiveAddress for the wallet
 const walletFilter = createFilter('wallet', ['receiveAddress']);
 const searchFilter = createFilter('search', ['options']);
@@ -68,8 +69,9 @@ const subscriptionsFilter = createFilter('subscriptions', ['subscriptions']);
 const blockedFilter = createFilter('blocked', ['blockedChannels']);
 const coinSwapsFilter = createFilter('coinSwap', ['coinSwaps']);
 const settingsFilter = createBlacklistFilter('settings', ['loadedLanguages', 'language']);
-const collectionsFilter = createFilter('collections', ['builtin', 'saved', 'unpublished', 'edited']);
+const collectionsFilter = createFilter('collections', ['builtin', 'saved', 'unpublished', 'edited', 'pending']);
 const whiteListedReducers = [
+  'claims',
   'fileInfo',
   'publish',
   'wallet',
@@ -85,6 +87,7 @@ const whiteListedReducers = [
 ];
 
 const transforms = [
+  claimsFilter,
   fileInfoFilter,
   walletFilter,
   blockedFilter,
