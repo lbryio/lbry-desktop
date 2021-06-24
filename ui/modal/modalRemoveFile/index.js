@@ -2,15 +2,16 @@ import { connect } from 'react-redux';
 import { doDeleteFileAndMaybeGoBack } from 'redux/actions/file';
 import {
   makeSelectTitleForUri,
-  makeSelectClaimIsMine,
+  doResolveUri,
   makeSelectClaimForUri,
   makeSelectIsAbandoningClaimForUri,
 } from 'lbry-redux';
 import { doHideModal } from 'redux/actions/app';
 import ModalRemoveFile from './view';
+import { makeSelectSigningIsMine } from 'redux/selectors/content';
 
 const select = (state, props) => ({
-  claimIsMine: makeSelectClaimIsMine(props.uri)(state),
+  claimIsMine: makeSelectSigningIsMine(props.uri)(state),
   title: makeSelectTitleForUri(props.uri)(state),
   claim: makeSelectClaimForUri(props.uri)(state),
   isAbandoning: makeSelectIsAbandoningClaimForUri(props.uri)(state),
@@ -18,8 +19,9 @@ const select = (state, props) => ({
 
 const perform = dispatch => ({
   closeModal: () => dispatch(doHideModal()),
-  deleteFile: (uri, deleteFromComputer, abandonClaim) => {
-    dispatch(doDeleteFileAndMaybeGoBack(uri, deleteFromComputer, abandonClaim));
+  doResolveUri: (uri) => dispatch(doResolveUri(uri)),
+  deleteFile: (uri, deleteFromComputer, abandonClaim, doGoBack) => {
+    dispatch(doDeleteFileAndMaybeGoBack(uri, deleteFromComputer, abandonClaim, doGoBack));
   },
 });
 

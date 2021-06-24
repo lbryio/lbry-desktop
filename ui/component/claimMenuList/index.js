@@ -5,7 +5,6 @@ import {
   makeSelectFileInfoForUri,
   doPrepareEdit,
   makeSelectCollectionForIdHasClaimUrl,
-  makeSelectNameForCollectionId,
   makeSelectCollectionIsMine,
   COLLECTIONS_CONSTS,
   makeSelectEditedCollectionForId,
@@ -34,20 +33,28 @@ import fs from 'fs';
 
 const select = (state, props) => {
   const claim = makeSelectClaimForUri(props.uri, false)(state);
-  const permanentUri = claim && claim.permanent_url;
+  const repostedClaim = claim && claim.reposted_claim;
+  const contentClaim = repostedClaim || claim;
+  const contentSigningChannel = contentClaim && contentClaim.signing_channel;
+  const contentPermanentUri = contentClaim && contentClaim.permanent_url;
+  const contentChannelUri = (contentSigningChannel && contentSigningChannel.permanent_url) || contentPermanentUri;
+
   return {
     claim,
+    repostedClaim,
+    contentClaim,
+    contentSigningChannel,
+    contentChannelUri,
     claimIsMine: makeSelectSigningIsMine(props.uri)(state),
-    hasClaimInWatchLater: makeSelectCollectionForIdHasClaimUrl(COLLECTIONS_CONSTS.WATCH_LATER_ID, permanentUri)(state),
-    hasClaimInCustom: makeSelectCollectionForIdHasClaimUrl(COLLECTIONS_CONSTS.FAVORITES_ID, permanentUri)(state),
-    channelIsMuted: makeSelectChannelIsMuted(props.uri)(state),
-    channelIsBlocked: makeSelectChannelIsBlocked(props.uri)(state),
+    hasClaimInWatchLater: makeSelectCollectionForIdHasClaimUrl(COLLECTIONS_CONSTS.WATCH_LATER_ID, contentPermanentUri)(state),
+    hasClaimInCustom: makeSelectCollectionForIdHasClaimUrl(COLLECTIONS_CONSTS.FAVORITES_ID, contentPermanentUri)(state),
+    channelIsMuted: makeSelectChannelIsMuted(contentChannelUri)(state),
+    channelIsBlocked: makeSelectChannelIsBlocked(contentChannelUri)(state),
     fileInfo: makeSelectFileInfoForUri(props.uri)(state),
-    isSubscribed: makeSelectIsSubscribed(props.channelUri, true)(state),
+    isSubscribed: makeSelectIsSubscribed(contentChannelUri, true)(state),
     channelIsAdminBlocked: makeSelectChannelIsAdminBlocked(props.uri)(state),
     isAdmin: selectHasAdminChannel(state),
-    claimInCollection: makeSelectCollectionForIdHasClaimUrl(props.collectionId, permanentUri)(state),
-    collectionName: makeSelectNameForCollectionId(props.collectionId)(state),
+    claimInCollection: makeSelectCollectionForIdHasClaimUrl(props.collectionId, contentPermanentUri)(state),
     isMyCollection: makeSelectCollectionIsMine(props.collectionId)(state),
     editedCollection: makeSelectEditedCollectionForId(props.collectionId)(state),
     isAuthenticated: Boolean(selectUserVerifiedEmail(state)),
@@ -71,7 +78,8 @@ const perform = (dispatch) => ({
   doChannelUnmute: (channelUri) => dispatch(doChannelUnmute(channelUri)),
   doCommentModBlock: (channelUri) => dispatch(doCommentModBlock(channelUri)),
   doCommentModUnBlock: (channelUri) => dispatch(doCommentModUnBlock(channelUri)),
-  doCommentModBlockAsAdmin: (commenterUri, blockerId) => dispatch(doCommentModBlockAsAdmin(commenterUri, blockerId)),
+  doCommentModBlockAsAdmin: (commenterUri, blockerId) =>
+    dispatch(doCommentModBlockAsAdmin(commenterUri, blockerId)),
   doCommentModUnBlockAsAdmin: (commenterUri, blockerId) =>
     dispatch(doCommentModUnBlockAsAdmin(commenterUri, blockerId)),
   doChannelSubscribe: (subscription) => dispatch(doChannelSubscribe(subscription)),
