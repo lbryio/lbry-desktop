@@ -75,6 +75,29 @@ function WalletSendTip(props: Props) {
     iconToUse = ICONS.LBC;
   }
 
+  function buildButtonText(amount){
+    if (activeTab === 'Boost') {
+      return 'Boost This Content';
+    } else if (activeTab === 'TipFiat') {
+      return 'Send a ' + amount + ' amount';
+    } else if (activeTab === 'TipLBC') {
+      return 'Send a ' + amount + ' amount';
+    }
+  }
+
+  // let buttonText;
+  // if (activeTab === 'Boost') {
+  //   buttonText = 'Boost This Content';
+  // } else if (activeTab === 'TipFiat') {
+  //   buttonText = ICONS.FINANCE;
+  // } else if (activeTab === 'TipLBC') {
+  //   buttonText = ICONS.LBC;
+
+    // isSupport
+    // ? __('Boost This Content')
+    // : __('Send a %amount% Tip', { amount: tipAmount ? `${tipAmount} Credit` : '' })
+
+
   const isSupport = claimIsMine || !sendAsTip;
 
   React.useEffect(() => {
@@ -285,7 +308,7 @@ function WalletSendTip(props: Props) {
                     label={__('Custom')}
                     onClick={() => setUseCustomTip(true)}
                   />
-                  {DEFAULT_TIP_AMOUNTS.some((val) => val > balance) && (
+                  {DEFAULT_TIP_AMOUNTS.some((val) => val > balance) && activeTab !== 'TipFiat' && (
                     <Button
                       button="secondary"
                       className="button-toggle-group-action"
@@ -331,11 +354,7 @@ function WalletSendTip(props: Props) {
                     button="primary"
                     type="submit"
                     disabled={fetchingChannels || isPending || tipError || !tipAmount}
-                    label={
-                      isSupport
-                        ? __('Boost This Content')
-                        : __('Send a %amount% Tip', { amount: tipAmount ? `${tipAmount} Credit` : '' })
-                    }
+                    label={buildButtonText()}
                   />
                   {fetchingChannels && <span className="help">{__('Loading your channels...')}</span>}
                 </div>
