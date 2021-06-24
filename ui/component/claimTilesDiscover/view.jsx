@@ -286,7 +286,7 @@ function ClaimTilesDiscover(props: Props) {
 
   const modifiedUris = uris ? uris.slice() : [];
   const fixUris = [
-    'lbry://@ElectricInfected#5/how-did-dessert-become-breakfast#7',
+    'lbry://@Destiny#6/the-surprise-crowder-seder-debate#9',
                   ];
                    
   if (pin && modifiedUris && modifiedUris.length > 2 && window.location.pathname === '/') {
