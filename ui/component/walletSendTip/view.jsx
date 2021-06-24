@@ -64,7 +64,7 @@ function WalletSendTip(props: Props) {
   const noBalance = balance === 0;
   const tipAmount = useCustomTip ? customTipAmount : presetTipAmount;
   // TODO: what does this mean?
-  const [activeTab] = usePersistedState('comment-support:activeTab', 'TipLBC');
+  const [activeTab, setActiveTab] = usePersistedState('comment-support:activeTab', 'TipLBC');
 
   let iconToUse;
   if (activeTab === 'Boost') {
@@ -185,9 +185,9 @@ function WalletSendTip(props: Props) {
                   <Button
                     key="tip"
                     icon={ICONS.LBC}
-                    label={__('Tip')}
+                    label={__('Tip LBC')}
                     button="alt"
-                    onClick={() => setSendAsTip(true)}
+                    onClick={() => setActiveTab('TipLBC')}
                     className={classnames('button-toggle', { 'button-toggle--active': activeTab === 'TipLBC' })}
                   />
                   {/* tip fiat section */}
@@ -196,7 +196,7 @@ function WalletSendTip(props: Props) {
                     icon={ICONS.FINANCE}
                     label={__('Tip Fiat')}
                     button="alt"
-                    onClick={() => setSendAsTip(false)}
+                    onClick={() => setActiveTab('TipFiat')}
                     className={classnames('button-toggle', { 'button-toggle--active': activeTab === 'TipFiat' })}
                   />
                   {/* tip LBC section */}
@@ -205,7 +205,7 @@ function WalletSendTip(props: Props) {
                     icon={ICONS.TRENDING}
                     label={__('Boost')}
                     button="alt"
-                    onClick={() => setSendAsTip(false)}
+                    onClick={() => setActiveTab('Boost')}
                     className={classnames('button-toggle', { 'button-toggle--active': activeTab === 'Boost' })}
                   />
                 </div>
