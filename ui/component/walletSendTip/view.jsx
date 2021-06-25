@@ -63,49 +63,20 @@ function WalletSendTip(props: Props) {
   const { channelName } = parseURI(uri);
   const noBalance = balance === 0;
   const tipAmount = useCustomTip ? customTipAmount : presetTipAmount;
-  // TODO: what does this mean?
+
   const [activeTab, setActiveTab] = usePersistedState('comment-support:activeTab', 'TipLBC');
 
   let iconToUse, explainerText;
   if (activeTab === 'Boost') {
     iconToUse = ICONS.LBC;
-    explainerText = 'This will increase the overall bid amount for this content, which will boost its ability to be discovered while active. ';
+    explainerText = 'This will increase the overall bid amount for this content, which will boost its ability to be discovered while active. You can cancel your Boost later and receive back your LBC.';
   } else if (activeTab === 'TipFiat') {
     iconToUse = ICONS.FINANCE;
-    explainerText = 'This tip will be made through your card and sent to the creator and then they will be able to receive the funds. ';
+    explainerText = 'This tip will be made through your card and sent to the creator at which point they will be able to withdraw the funds.  ';
   } else if (activeTab === 'TipLBC') {
     iconToUse = ICONS.LBC;
-    explainerText = 'Show this channel your appreciation by sending a donation. ';
+    explainerText = 'Show this channel your appreciation by sending a donation. This is a one time donation which is not refundable.';
   }
-
-  function buildButtonText(amount){
-    if (activeTab === 'Boost') {
-      return 'Boost This Content';
-    } else if (activeTab === 'TipFiat') {
-      return 'Send a ' + amount + ' amount';
-    } else if (activeTab === 'TipLBC') {
-      return 'Send a ' + amount + ' amount';
-    }
-  }
-
-    // ? __(
-    // 'This will increase the overall bid amount for this content, which will boost its ability to be discovered while active.'
-    // )
-    // : __('')}{' '}
-
-
-// let buttonText;
-  // if (activeTab === 'Boost') {
-  //   buttonText = 'Boost This Content';
-  // } else if (activeTab === 'TipFiat') {
-  //   buttonText = ICONS.FINANCE;
-  // } else if (activeTab === 'TipLBC') {
-  //   buttonText = ICONS.LBC;
-
-    // isSupport
-    // ? __('Boost This Content')
-    // : __('Send a %amount% Tip', { amount: tipAmount ? `${tipAmount} Credit` : '' })
-
 
   const isSupport = claimIsMine || !sendAsTip;
 
@@ -178,6 +149,16 @@ function WalletSendTip(props: Props) {
   function handleCustomPriceChange(event: SyntheticInputEvent<*>) {
     const tipAmount = parseFloat(event.target.value);
     setCustomTipAmount(tipAmount);
+  }
+
+  function buildButtonText() {
+    if (activeTab === 'Boost') {
+      return 'Boost This Content';
+    } else if (activeTab === 'TipFiat') {
+      return 'Send a $' + tipAmount + ' USD Tip';
+    } else if (activeTab === 'TipLBC') {
+      return 'Send a ' + tipAmount + ' LBC Tip';
+    }
   }
 
   return (
