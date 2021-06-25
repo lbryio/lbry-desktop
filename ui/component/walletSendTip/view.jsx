@@ -69,13 +69,13 @@ function WalletSendTip(props: Props) {
   let iconToUse, explainerText;
   if (activeTab === 'Boost') {
     iconToUse = ICONS.LBC;
-    explainerText = 'This will increase the overall bid amount for this content, which will boost its ability to be discovered while active. You can cancel your Boost later and receive back your LBC.';
+    explainerText = 'This will increase the overall bid amount for this content, which will boost its ability to be discovered. You can cancel your Boost later and receive back your LBC. ';
   } else if (activeTab === 'TipFiat') {
     iconToUse = ICONS.FINANCE;
     explainerText = 'This tip will be made through your card and sent to the creator at which point they will be able to withdraw the funds.  ';
   } else if (activeTab === 'TipLBC') {
     iconToUse = ICONS.LBC;
-    explainerText = 'Show this channel your appreciation by sending a donation. This is a one time donation which is not refundable.';
+    explainerText = 'Show this channel your appreciation by sending a donation. This is a one time donation which is not refundable. ';
   }
 
   const isSupport = claimIsMine || !sendAsTip;
@@ -155,7 +155,7 @@ function WalletSendTip(props: Props) {
     if (activeTab === 'Boost') {
       return 'Boost This Content';
     } else if (activeTab === 'TipFiat') {
-      return 'Send a $' + tipAmount + ' USD Tip';
+      return 'Send a $' + tipAmount + ' Tip';
     } else if (activeTab === 'TipLBC') {
       return 'Send a ' + tipAmount + ' LBC Tip';
     }
@@ -313,11 +313,11 @@ function WalletSendTip(props: Props) {
                       label={
                         <React.Fragment>
                           {__('Custom support amount')}{' '}
-                          <I18nMessage
+                          { activeTab !== 'TipFiat' ? <I18nMessage
                             tokens={{ lbc_balance: <CreditAmount precision={4} amount={balance} showLBC={false} /> }}
                           >
                             (%lbc_balance% Credits available)
-                          </I18nMessage>
+                          </I18nMessage> : 'in USD' }
                         </React.Fragment>
                       }
                       className="form-field--price-amount"
@@ -344,7 +344,7 @@ function WalletSendTip(props: Props) {
                   />
                   {fetchingChannels && <span className="help">{__('Loading your channels...')}</span>}
                 </div>
-                <WalletSpendableBalanceHelp />
+                {activeTab !== 'TipFiat' ? <WalletSpendableBalanceHelp /> : <div className="help">The payment will be made from your saved card</div>}
               </>
             )
           }
