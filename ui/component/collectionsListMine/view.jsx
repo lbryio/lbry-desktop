@@ -81,7 +81,7 @@ export default function CollectionsListMine(props: Props) {
               {!(itemUrls && itemUrls.length) && (
                 <h1 className="claim-grid__header claim-grid__title">
                   {__(`${list.name}`)}
-                  <div className="claim-grid__title--empty">(Empty)</div>
+                  <div className="claim-grid__title--empty">{__('(Empty) --[indicates empty playlist]--')}</div>
                 </h1>
               )}
             </>
@@ -92,7 +92,9 @@ export default function CollectionsListMine(props: Props) {
         <div className="claim-grid__header claim-grid__header--between section">
           <h1 className="claim-grid__title">
             {__('Playlists')}
-            {!hasCollections && <div className="claim-grid__title--empty">(Empty)</div>}
+            {!hasCollections && (
+              <div className="claim-grid__title--empty">{__('(Empty) --[indicates empty playlist]--')}</div>
+            )}
           </h1>
           <Button button="link" onClick={() => setShowHelp(!showHelp)} label={__('How does this work?')} />
         </div>
