@@ -9,7 +9,10 @@ import * as PAGES from 'constants/pages';
 import * as RENDER_MODES from 'constants/file_render_modes';
 import Button from 'component/button';
 import isUserTyping from 'util/detect-typing';
+import { getThumbnailCdnUrl } from 'util/thumbnail';
 import Nag from 'component/common/nag';
+// $FlowFixMe cannot resolve ...
+import FileRenderPlaceholder from 'static/img/fileRenderPlaceholder.png';
 
 const SPACE_BAR_KEYCODE = 32;
 
@@ -23,7 +26,7 @@ type Props = {
   location: { search: ?string, pathname: string },
   obscurePreview: boolean,
   insufficientCredits: boolean,
-  thumbnail?: string,
+  claimThumbnail?: string,
   autoplay: boolean,
   hasCostInfo: boolean,
   costInfo: any,
@@ -45,7 +48,7 @@ export default function FileRenderInitiator(props: Props) {
     insufficientCredits,
     history,
     location,
-    thumbnail,
+    claimThumbnail,
     renderMode,
     hasCostInfo,
     costInfo,
@@ -68,6 +71,29 @@ export default function FileRenderInitiator(props: Props) {
   const fileStatus = fileInfo && fileInfo.status;
   const isPlayable = RENDER_MODES.FLOATING_MODES.includes(renderMode);
   const isText = RENDER_MODES.TEXT_MODES.includes(renderMode);
+  const [thumbnail, setThumbnail] = React.useState(FileRenderPlaceholder);
+  const containerRef = React.useRef<any>();
+
+  React.useEffect(() => {
+    if (claimThumbnail) {
+      setTimeout(() => {
+        let newThumbnail = claimThumbnail;
+
+        // @if TARGET='web'
+        if (
+          containerRef.current &&
+          containerRef.current.parentElement &&
+          containerRef.current.parentElement.offsetWidth
+        ) {
+          const dimen = containerRef.current.parentElement.offsetWidth;
+          newThumbnail = getThumbnailCdnUrl({ thumbnail: newThumbnail, width: dimen, height: dimen });
+        }
+        // @endif
+
+        setThumbnail(newThumbnail);
+      }, 200);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function doAuthRedirect() {
     history.push(`/$/${PAGES.AUTH}?redirect=${encodeURIComponent(location.pathname)}`);
@@ -131,8 +157,9 @@ export default function FileRenderInitiator(props: Props) {
 
   return (
     <div
+      ref={containerRef}
       onClick={disabled ? undefined : shouldRedirect ? doAuthRedirect : viewFile}
-      style={thumbnail && !obscurePreview && !autoplay ? { backgroundImage: `url("${thumbnail}")` } : {}}
+      style={thumbnail && !obscurePreview ? { backgroundImage: `url("${thumbnail}")` } : {}}
       className={classnames('content__cover', {
         'content__cover--disabled': disabled,
         'content__cover--theater-mode': videoTheaterMode,

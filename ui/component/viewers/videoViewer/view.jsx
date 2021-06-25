@@ -5,7 +5,6 @@ import * as ICONS from 'constants/icons';
 import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { stopContextMenu } from 'util/context-menu';
 import type { Player } from './internal/videojs';
-import VideoJs from './internal/videojs';
 import analytics from 'analytics';
 import { EmbedContext } from 'page/embedWrapper/view';
 import classnames from 'classnames';
@@ -20,6 +19,8 @@ import { useGetAds } from 'effects/use-get-ads';
 import Button from 'component/button';
 import I18nMessage from 'component/i18nMessage';
 import { useHistory } from 'react-router';
+
+const VideoJs = React.lazy(() => import('./internal/videojs' /* webpackChunkName: "videojs" */));
 
 const PLAY_TIMEOUT_ERROR = 'play_timeout_error';
 const PLAY_TIMEOUT_LIMIT = 2000;
@@ -332,17 +333,19 @@ function VideoViewer(props: Props) {
       )}
 
       {!isFetchingAd && (
-        <VideoJs
-          adUrl={adUrl}
-          source={adUrl || source}
-          sourceType={forcePlayer || adUrl ? 'video/mp4' : contentType}
-          isAudio={isAudio}
-          poster={isAudio || (embedded && !autoplayIfEmbedded) ? thumbnail : ''}
-          onPlayerReady={onPlayerReady}
-          startMuted={autoplayIfEmbedded}
-          toggleVideoTheaterMode={toggleVideoTheaterMode}
-          autoplay={!embedded || autoplayIfEmbedded}
-        />
+        <React.Suspense fallback={null}>
+          <VideoJs
+            adUrl={adUrl}
+            source={adUrl || source}
+            sourceType={forcePlayer || adUrl ? 'video/mp4' : contentType}
+            isAudio={isAudio}
+            poster={isAudio || (embedded && !autoplayIfEmbedded) ? thumbnail : ''}
+            onPlayerReady={onPlayerReady}
+            startMuted={autoplayIfEmbedded}
+            toggleVideoTheaterMode={toggleVideoTheaterMode}
+            autoplay={!embedded || autoplayIfEmbedded}
+          />
+        </React.Suspense>
       )}
     </div>
   );

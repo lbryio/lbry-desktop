@@ -1,13 +1,14 @@
 // @flow
 import React, { useEffect } from 'react';
 import classnames from 'classnames';
-import FileRender from 'component/fileRender';
 import FileViewerEmbeddedTitle from 'component/fileViewerEmbeddedTitle';
 import Spinner from 'component/spinner';
 import Button from 'component/button';
 import Card from 'component/common/card';
 import { formatLbryUrlForWeb } from 'util/url';
 import { useHistory } from 'react-router';
+
+const FileRender = React.lazy(() => import('component/fileRender' /* webpackChunkName: "fileRender" */));
 
 type Props = {
   uri: string,
@@ -98,7 +99,9 @@ const EmbedWrapperPage = (props: Props) => {
     >
       <EmbedContext.Provider value>
         {readyToDisplay ? (
-          <FileRender uri={uri} embedded />
+          <React.Suspense fallback={null}>
+            <FileRender uri={uri} embedded />
+          </React.Suspense>
         ) : (
           <div className="embed__loading">
             <FileViewerEmbeddedTitle uri={uri} />

@@ -13,7 +13,7 @@ type Props = {
   title: ?string,
   thumbnail: ?string,
   description: ?string,
-  history: { push: string => void },
+  history: { push: (string) => void },
 };
 
 class PreviewLink extends React.PureComponent<Props> {

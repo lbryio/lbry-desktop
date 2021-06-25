@@ -20,6 +20,7 @@
   },
   "main": "./dist/electron/main.js",
   "scripts": {
+    "analyze": "source-map-explorer --only-mapped dist/electron/webpack/ui*.js --html dist/sourceMap.html",
     "compile:electron": "node --max_old_space_size=4096 ./node_modules/webpack/bin/webpack.js --config webpack.electron.config.js",
     "compile:web": "yarn copyenv && cd web && node --max_old_space_size=4096 ./node_modules/webpack/bin/webpack.js --config webpack.config.js",
     "compile": "cross-env NODE_ENV=production yarn compile:electron && cross-env NODE_ENV=production yarn compile:web",
@@ -54,7 +55,9 @@
     "express": "^4.17.1",
     "if-env": "^1.0.4",
     "react-datetime-picker": "^3.2.1",
+    "react-top-loading-bar": "^2.0.1",
     "remove-markdown": "^0.3.0",
+    "source-map-explorer": "^2.5.2",
     "tempy": "^0.6.0",
     "videojs-logo": "^2.1.4"
   },

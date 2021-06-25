@@ -6,9 +6,11 @@ import React from 'react';
 import Page from 'component/page';
 import Button from 'component/button';
 import ClaimTilesDiscover from 'component/claimTilesDiscover';
+import ClaimPreviewTile from 'component/claimPreviewTile';
 import Icon from 'component/common/icon';
 import I18nMessage from 'component/i18nMessage';
 import LbcSymbol from 'component/common/lbc-symbol';
+import WaitUntilOnPage from 'component/common/wait-until-on-page';
 import useGetLivestreams from 'effects/use-get-livestreams';
 
 type Props = {
@@ -36,6 +38,48 @@ function HomePage(props: Props) {
     showIndividualTags,
     showNsfw
   );
+
+  function getRowElements(title, route, link, icon, help, options, index) {
+    const tilePlaceholder = (
+      <ul className="claim-grid">
+        {new Array(options.pageSize || 8).fill(1).map((x, i) => (
+          <ClaimPreviewTile key={i} placeholder />
+        ))}
+      </ul>
+    );
+    const claimTiles = <ClaimTilesDiscover {...options} liveLivestreamsFirst livestreamMap={livestreamMap} hasSource />;
+
+    return (
+      <div key={title} className="claim-grid__wrapper">
+        {index !== 0 && title && typeof title === 'string' && (
+          <h1 className="claim-grid__header">
+            <Button navigate={route || link} button="link">
+              {icon && <Icon className="claim-grid__header-icon" sectionIcon icon={icon} size={20} />}
+              <span className="claim-grid__title">{__(title)}</span>
+              {help}
+            </Button>
+          </h1>
+        )}
+
+        {index === 0 && <>{claimTiles}</>}
+        {index !== 0 && (
+          <WaitUntilOnPage name={title} placeholder={tilePlaceholder}>
+            {claimTiles}
+          </WaitUntilOnPage>
+        )}
+
+        {(route || link) && (
+          <Button
+            className="claim-grid__title--secondary"
+            button="link"
+            navigate={route || link}
+            iconRight={ICONS.ARROW_RIGHT}
+            label={__('View More')}
+          />
+        )}
+      </div>
+    );
+  }
 
   return (
     <Page fullWidthPage>
@@ -81,30 +125,9 @@ function HomePage(props: Props) {
           </p>
         </div>
       )}
-      {rowData.map(({ title, route, link, icon, help, options = {} }, index) => (
-        <div key={title} className="claim-grid__wrapper">
-          {index !== 0 && title && typeof title === 'string' && (
-            <h1 className="claim-grid__header">
-              <Button navigate={route || link} button="link">
-                {icon && <Icon className="claim-grid__header-icon" sectionIcon icon={icon} size={20} />}
-                <span className="claim-grid__title">{__(title)}</span>
-                {help}
-              </Button>
-            </h1>
-          )}
-
-          <ClaimTilesDiscover {...options} liveLivestreamsFirst livestreamMap={livestreamMap} hasSource />
-          {(route || link) && (
-            <Button
-              className="claim-grid__title--secondary"
-              button="link"
-              navigate={route || link}
-              iconRight={ICONS.ARROW_RIGHT}
-              label={__('View More')}
-            />
-          )}
-        </div>
-      ))}
+      {rowData.map(({ title, route, link, icon, help, options = {} }, index) => {
+        return getRowElements(title, route, link, icon, help, options, index);
+      })}
     </Page>
   );
 }

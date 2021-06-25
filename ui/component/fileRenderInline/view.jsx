@@ -1,8 +1,9 @@
 // @flow
 import React, { useState, useEffect } from 'react';
-import FileRender from 'component/fileRender';
 import LoadingScreen from 'component/common/loading-screen';
 import { NON_STREAM_MODES } from 'constants/file_render_modes';
+
+const FileRender = React.lazy(() => import('component/fileRender' /* webpackChunkName: "fileRender" */));
 
 type Props = {
   isPlaying: boolean,
@@ -69,5 +70,11 @@ export default function FileRenderInline(props: Props) {
     return null;
   }
 
-  return renderContent ? <FileRender uri={uri} /> : <LoadingScreen isDocument />;
+  return renderContent ? (
+    <React.Suspense fallback={null}>
+      <FileRender uri={uri} />
+    </React.Suspense>
+  ) : (
+    <LoadingScreen isDocument />
+  );
 }

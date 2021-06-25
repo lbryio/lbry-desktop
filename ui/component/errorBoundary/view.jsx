@@ -1,18 +1,19 @@
 // @flow
 import type { Node } from 'react';
 import React from 'react';
-import Yrbl from 'component/yrbl';
-import Button from 'component/button';
 import { withRouter } from 'react-router';
 import analytics from 'analytics';
-import I18nMessage from 'component/i18nMessage';
 import Native from 'native';
 import { Lbry } from 'lbry-redux';
+
+const Button = React.lazy(() => import('component/button' /* webpackChunkName: "button" */));
+const I18nMessage = React.lazy(() => import('component/i18nMessage' /* webpackChunkName: "i18nMessage" */));
+const Yrbl = React.lazy(() => import('component/yrbl' /* webpackChunkName: "yrbl" */));
 
 type Props = {
   children: Node,
   history: {
-    replace: string => void,
+    replace: (string) => void,
   },
 };
 
@@ -36,7 +37,7 @@ class ErrorBoundary extends React.Component<Props, State> {
 
   componentDidCatch(error, errorInfo) {
     // @if TARGET='web'
-    analytics.sentryError(error, errorInfo).then(sentryEventId => {
+    analytics.sentryError(error, errorInfo).then((sentryEventId) => {
       this.setState({ sentryEventId });
     });
     // @endif
@@ -49,7 +50,7 @@ class ErrorBoundary extends React.Component<Props, State> {
         errorMessage += `sdk version: ${sdkVersion}\n`;
         errorMessage += `page: ${window.location.href.split('.html')[1]}\n`;
         errorMessage += `${error.stack}`;
-        analytics.error(errorMessage).then(isSharingData => {
+        analytics.error(errorMessage).then((isSharingData) => {
           this.setState({ desktopErrorReported: isSharingData });
         });
       });
@@ -74,27 +75,29 @@ class ErrorBoundary extends React.Component<Props, State> {
     if (hasError) {
       return (
         <div className="main main--full-width main--empty">
-          <Yrbl
-            type="sad"
-            title={__('Aw shucks!')}
-            subtitle={
-              <I18nMessage
-                tokens={{
-                  refreshing_the_app_link: (
-                    <Button
-                      button="link"
-                      className="load-screen__button"
-                      label={__('refreshing the app')}
-                      onClick={this.refresh}
-                    />
-                  ),
-                }}
-              >
-                There was an error. Try %refreshing_the_app_link% to fix it. If that doesn't work, try pressing
-                Ctrl+R/Cmd+R.
-              </I18nMessage>
-            }
-          />
+          <React.Suspense fallback={null}>
+            <Yrbl
+              type="sad"
+              title={__('Aw shucks!')}
+              subtitle={
+                <I18nMessage
+                  tokens={{
+                    refreshing_the_app_link: (
+                      <Button
+                        button="link"
+                        className="load-screen__button"
+                        label={__('refreshing the app')}
+                        onClick={this.refresh}
+                      />
+                    ),
+                  }}
+                >
+                  There was an error. Try %refreshing_the_app_link% to fix it. If that doesn't work, try pressing
+                  Ctrl+R/Cmd+R.
+                </I18nMessage>
+              }
+            />
+          </React.Suspense>
           {!errorWasReported && (
             <div className="error__wrapper">
               <span className="error__text">

@@ -18,7 +18,6 @@ import ClaimPreviewTitle from 'component/claimPreviewTitle';
 import ClaimPreviewSubtitle from 'component/claimPreviewSubtitle';
 import ClaimRepostAuthor from 'component/claimRepostAuthor';
 import FileDownloadLink from 'component/fileDownloadLink';
-import AbandonedChannelPreview from 'component/abandonedChannelPreview';
 import PublishPending from 'component/publishPending';
 import ClaimMenuList from 'component/claimMenuList';
 import ClaimPreviewLoading from './claim-preview-loading';
@@ -27,6 +26,10 @@ import ClaimPreviewNoContent from './claim-preview-no-content';
 import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import Button from 'component/button';
 import * as ICONS from 'constants/icons';
+
+const AbandonedChannelPreview = React.lazy(() =>
+  import('component/abandonedChannelPreview' /* webpackChunkName: "abandonedChannelPreview" */)
+);
 
 type Props = {
   uri: string,
@@ -254,7 +257,11 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   }
 
   if (!shouldFetch && showUnresolvedClaim && !isResolvingUri && isChannelUri && claim === null) {
-    return <AbandonedChannelPreview uri={uri} type />;
+    return (
+      <React.Suspense fallback={null}>
+        <AbandonedChannelPreview uri={uri} type />
+      </React.Suspense>
+    );
   }
   if (placeholder === 'publish' && !claim && uri.startsWith('lbry://@')) {
     return null;
