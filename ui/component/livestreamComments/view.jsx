@@ -28,6 +28,8 @@ type Props = {
 
 const VIEW_MODE_CHAT = 'view_chat';
 const VIEW_MODE_SUPER_CHAT = 'view_superchat';
+const COMMENT_SCROLL_OFFSET = 100;
+const COMMENT_SCROLL_TIMEOUT = 25;
 
 export default function LivestreamComments(props: Props) {
   const {
@@ -45,7 +47,7 @@ export default function LivestreamComments(props: Props) {
     myChannels,
   } = props;
   const commentsRef = React.createRef();
-  const hasScrolledComments = React.useRef();
+  const [scrollBottom, setScrollBottom] = React.useState(true);
   const [viewMode, setViewMode] = React.useState(VIEW_MODE_CHAT);
   const [performedInitialScroll, setPerformedInitialScroll] = React.useState(false);
   const claimId = claim && claim.claim_id;
@@ -79,46 +81,46 @@ export default function LivestreamComments(props: Props) {
   }, [claimId, uri, doCommentList, doSuperChatList, doCommentSocketConnect, doCommentSocketDisconnect]);
 
   React.useEffect(() => {
-    const element = commentsRef.current;
+    const discussionElement = document.querySelector('.livestream__comments');
+    const commentElement = document.querySelector('.livestream-comment');
 
     function handleScroll() {
-      if (element) {
-        const scrollHeight = element.scrollHeight - element.offsetHeight;
-        const isAtBottom = scrollHeight <= element.scrollTop + 100;
+      if (discussionElement) {
+        const negativeCommentHeight = commentElement && -1 * commentElement.offsetHeight;
+        const isAtRecent = negativeCommentHeight && discussionElement.scrollTop >= negativeCommentHeight;
 
-        if (!isAtBottom) {
-          hasScrolledComments.current = true;
-        } else {
-          hasScrolledComments.current = false;
-        }
+        setScrollBottom(isAtRecent);
       }
     }
 
-    if (element) {
-      element.addEventListener('scroll', handleScroll);
+    if (discussionElement) {
+      discussionElement.addEventListener('scroll', handleScroll);
 
       if (commentsLength > 0) {
         // Only update comment scroll if the user hasn't scrolled up to view old comments
         // If they have, do nothing
-        if (!hasScrolledComments.current || !performedInitialScroll) {
-          setTimeout(() => (element.scrollTop = element.scrollHeight - element.offsetHeight + 100), 20);
-
-          if (!performedInitialScroll) {
-            setPerformedInitialScroll(true);
-          }
+        if (!performedInitialScroll) {
+          setTimeout(
+            () =>
+              (discussionElement.scrollTop =
+                discussionElement.scrollHeight - discussionElement.offsetHeight + COMMENT_SCROLL_OFFSET),
+            COMMENT_SCROLL_TIMEOUT
+          );
+          setPerformedInitialScroll(true);
         }
       }
-    }
 
-    return () => {
-      if (element) {
-        element.removeEventListener('scroll', handleScroll);
-      }
-    };
-  }, [commentsRef, commentsLength, performedInitialScroll]);
+      return () => discussionElement.removeEventListener('scroll', handleScroll);
+    }
+  }, [commentsLength, performedInitialScroll, setPerformedInitialScroll, setScrollBottom]);
 
   if (!claim) {
     return null;
+  }
+
+  function scrollBack() {
+    const element = document.querySelector('.livestream__comments');
+    if (element) element.scrollTop = 0;
   }
 
   return (
@@ -197,6 +199,15 @@ export default function LivestreamComments(props: Props) {
             </div>
           ) : (
             <div className="main--empty" style={{ flex: 1 }} />
+          )}
+
+          {!scrollBottom && (
+            <Button
+              button="alt"
+              className="livestream__comments-scroll__down"
+              label={__('Recent Comments')}
+              onClick={() => scrollBack()}
+            />
           )}
 
           <div className="livestream__comment-create">

@@ -4,7 +4,7 @@ import { doOpenModal } from 'redux/actions/app';
 import Wunderbar from './view';
 
 const perform = (dispatch, ownProps) => ({
-  doOpenMobileSearch: () => dispatch(doOpenModal(MODALS.MOBILE_SEARCH)),
+  doOpenMobileSearch: (props) => dispatch(doOpenModal(MODALS.MOBILE_SEARCH, props)),
 });
 
 export default connect(null, perform)(Wunderbar);

@@ -2,7 +2,7 @@
 import type { Node } from 'react';
 import React from 'react';
 import ReachTooltip from '@reach/tooltip';
-import '@reach/tooltip/styles.css';
+// import '@reach/tooltip/styles.css'; --> 'scss/third-party.scss'
 
 type Props = {
   label: string | Node,

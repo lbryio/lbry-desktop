@@ -15,7 +15,7 @@ function LoginGraphic(props: any) {
 
       let newSrc = imgUrl && imgUrl.trim().replace(/^http:\/\//i, 'https://');
       // @if TARGET='web'
-      // Pass image urls through a compression proxy, except for GIFs.
+      // Pass image urls through a compression proxy.
       newSrc = getThumbnailCdnUrl({ thumbnail: newSrc, width: newWidth, height: newWidth * 2 });
       // @endif
 

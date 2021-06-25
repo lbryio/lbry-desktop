@@ -18,7 +18,6 @@ import ClaimPreviewTitle from 'component/claimPreviewTitle';
 import ClaimPreviewSubtitle from 'component/claimPreviewSubtitle';
 import ClaimRepostAuthor from 'component/claimRepostAuthor';
 import FileDownloadLink from 'component/fileDownloadLink';
-import AbandonedChannelPreview from 'component/abandonedChannelPreview';
 import PublishPending from 'component/publishPending';
 import ClaimMenuList from 'component/claimMenuList';
 import ClaimPreviewLoading from './claim-preview-loading';
@@ -27,6 +26,10 @@ import ClaimPreviewNoContent from './claim-preview-no-content';
 import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import Button from 'component/button';
 import * as ICONS from 'constants/icons';
+
+const AbandonedChannelPreview = React.lazy(() =>
+  import('component/abandonedChannelPreview' /* webpackChunkName: "abandonedChannelPreview" */)
+);
 
 type Props = {
   uri: string,
@@ -78,6 +81,7 @@ type Props = {
   isCollectionMine: boolean,
   collectionUris: Array<Collection>,
   collectionIndex?: number,
+  disableNavigation?: boolean,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -134,6 +138,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     editCollection,
     isCollectionMine,
     collectionUris,
+    disableNavigation,
   } = props;
   const isRepost = claim && claim.repost_channel_url;
   const WrapperElement = wrapperElement || 'li';
@@ -162,7 +167,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     collectionParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, collectionId);
     navigateUrl = navigateUrl + `?` + collectionParams.toString();
   }
-  const channelUri = claim && (signingChannel ? signingChannel.permanent_url : claim.permanent_url);
+  const channelUri = !isChannelUri ? signingChannel && signingChannel.permanent_url : claim && claim.permanent_url;
   const navLinkProps = {
     to: navigateUrl,
     onClick: (e) => e.stopPropagation(),
@@ -214,7 +219,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
       onClick(e);
     }
 
-    if (claim && !pending) {
+    if (claim && !pending && !disableNavigation) {
       history.push(navigateUrl);
     }
   }
@@ -252,7 +257,11 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   }
 
   if (!shouldFetch && showUnresolvedClaim && !isResolvingUri && isChannelUri && claim === null) {
-    return <AbandonedChannelPreview uri={uri} type />;
+    return (
+      <React.Suspense fallback={null}>
+        <AbandonedChannelPreview uri={uri} type />
+      </React.Suspense>
+    );
   }
   if (placeholder === 'publish' && !claim && uri.startsWith('lbry://@')) {
     return null;
@@ -423,7 +432,9 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
             )}
           </div>
         </div>
-        {!hideMenu && <ClaimMenuList uri={uri} collectionId={collectionId} channelUri={channelUri} isRepost={isRepost} />}
+        {!hideMenu && (
+          <ClaimMenuList uri={uri} collectionId={collectionId} channelUri={channelUri} isRepost={isRepost} />
+        )}
       </>
     </WrapperElement>
   );

@@ -1,23 +1,24 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import * as RENDER_MODES from 'constants/file_render_modes';
+import { INLINE_PLAYER_WRAPPER_CLASS } from 'constants/classnames';
 import React, { useEffect, useState } from 'react';
 import Button from 'component/button';
 import classnames from 'classnames';
 import LoadingScreen from 'component/common/loading-screen';
-import FileRender from 'component/fileRender';
 import UriIndicator from 'component/uriIndicator';
 import usePersistedState from 'effects/use-persisted-state';
 import { PRIMARY_PLAYER_WRAPPER_CLASS } from 'page/file/view';
-import Draggable from 'react-draggable';
 import { onFullscreenChange } from 'util/full-screen';
 import { useIsMobile } from 'effects/use-screensize';
 import debounce from 'util/debounce';
 import { useHistory } from 'react-router';
 
+const Draggable = React.lazy(() => import('react-draggable' /* webpackChunkName: "draggable" */));
+const FileRender = React.lazy(() => import('component/fileRender' /* webpackChunkName: "fileRender" */));
+
 const IS_DESKTOP_MAC = typeof process === 'object' ? process.platform === 'darwin' : false;
 const DEBOUNCE_WINDOW_RESIZE_HANDLER_MS = 60;
-export const INLINE_PLAYER_WRAPPER_CLASS = 'inline-player__wrapper';
 
 type Props = {
   isFloating: boolean,
@@ -243,72 +244,76 @@ export default function FileRenderFloating(props: Props) {
   }
 
   return (
-    <Draggable
-      onDrag={handleDragMove}
-      onStart={handleDragStart}
-      onStop={handleDragStop}
-      defaultPosition={position}
-      position={isFloating ? position : { x: 0, y: 0 }}
-      bounds="parent"
-      disabled={!isFloating}
-      handle=".draggable"
-      cancel=".button"
-    >
-      <div
-        className={classnames('content__viewer', {
-          'content__viewer--floating': isFloating,
-          'content__viewer--inline': !isFloating,
-          'content__viewer--secondary': playingUriSource === 'comment',
-          'content__viewer--theater-mode': !isFloating && videoTheaterMode,
-        })}
-        style={
-          !isFloating && fileViewerRect
-            ? {
-                width: fileViewerRect.width,
-                height: fileViewerRect.height,
-                left: fileViewerRect.x,
-                // 80px is header height in scss/init/vars.scss
-                top: fileViewerRect.windowOffset + fileViewerRect.top - 80 - (IS_DESKTOP_MAC ? 24 : 0),
-              }
-            : {}
-        }
+    <React.Suspense fallback={null}>
+      <Draggable
+        onDrag={handleDragMove}
+        onStart={handleDragStart}
+        onStop={handleDragStop}
+        defaultPosition={position}
+        position={isFloating ? position : { x: 0, y: 0 }}
+        bounds="parent"
+        disabled={!isFloating}
+        handle=".draggable"
+        cancel=".button"
       >
         <div
-          className={classnames('content__wrapper', {
-            'content__wrapper--floating': isFloating,
+          className={classnames('content__viewer', {
+            'content__viewer--floating': isFloating,
+            'content__viewer--inline': !isFloating,
+            'content__viewer--secondary': playingUriSource === 'comment',
+            'content__viewer--theater-mode': !isFloating && videoTheaterMode,
           })}
+          style={
+            !isFloating && fileViewerRect
+              ? {
+                  width: fileViewerRect.width,
+                  height: fileViewerRect.height,
+                  left: fileViewerRect.x,
+                  // 80px is header height in scss/init/vars.scss
+                  top: fileViewerRect.windowOffset + fileViewerRect.top - 80 - (IS_DESKTOP_MAC ? 24 : 0),
+                }
+              : {}
+          }
         >
-          {isFloating && (
-            <Button
-              title={__('Close')}
-              onClick={closeFloatingPlayer}
-              icon={ICONS.REMOVE}
-              button="primary"
-              className="content__floating-close"
-            />
-          )}
+          <div
+            className={classnames('content__wrapper', {
+              'content__wrapper--floating': isFloating,
+            })}
+          >
+            {isFloating && (
+              <Button
+                title={__('Close')}
+                onClick={closeFloatingPlayer}
+                icon={ICONS.REMOVE}
+                button="primary"
+                className="content__floating-close"
+              />
+            )}
 
-          {isReadyToPlay ? (
-            <FileRender
-              className="draggable"
-              uri={uri}
-              // @if TARGET='app'
-              desktopPlayStartTime={desktopPlayStartTime}
-              // @endif
-            />
-          ) : (
-            <LoadingScreen status={loadingMessage} />
-          )}
-          {isFloating && (
-            <div className="draggable content__info">
-              <div className="claim-preview__title" title={title || uri}>
-                <Button label={title || uri} navigate={uri} button="link" className="content__floating-link" />
+            {isReadyToPlay ? (
+              <React.Suspense fallback={null}>
+                <FileRender
+                  className="draggable"
+                  uri={uri}
+                  // @if TARGET='app'
+                  desktopPlayStartTime={desktopPlayStartTime}
+                  // @endif
+                />
+              </React.Suspense>
+            ) : (
+              <LoadingScreen status={loadingMessage} />
+            )}
+            {isFloating && (
+              <div className="draggable content__info">
+                <div className="claim-preview__title" title={title || uri}>
+                  <Button label={title || uri} navigate={uri} button="link" className="content__floating-link" />
+                </div>
+                <UriIndicator link uri={uri} />
               </div>
-              <UriIndicator link uri={uri} />
-            </div>
-          )}
+            )}
+          </div>
         </div>
-      </div>
-    </Draggable>
+      </Draggable>
+    </React.Suspense>
   );
 }

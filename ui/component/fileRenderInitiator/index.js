@@ -23,7 +23,7 @@ import FileRenderInitiator from './view';
 import { doAnaltyicsPurchaseEvent } from 'redux/actions/app';
 
 const select = (state, props) => ({
-  thumbnail: makeSelectThumbnailForUri(props.uri)(state),
+  claimThumbnail: makeSelectThumbnailForUri(props.uri)(state),
   fileInfo: makeSelectFileInfoForUri(props.uri)(state),
   obscurePreview: makeSelectShouldObscurePreview(props.uri)(state),
   isPlaying: makeSelectIsPlaying(props.uri)(state),

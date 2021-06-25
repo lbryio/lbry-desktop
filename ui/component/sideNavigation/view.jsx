@@ -295,7 +295,12 @@ function SideNavigation(props: Props) {
             Sign up to earn %lbc% for you and your favorite creators.
           </I18nMessage>
         </span>
-        <Button button="secondary" label={__('Sign Up')} navigate={`/$/${PAGES.AUTH}?src=sidenav_nudge`} />
+        <Button
+          button="secondary"
+          label={__('Sign Up')}
+          navigate={`/$/${PAGES.AUTH}?src=sidenav_nudge`}
+          disabled={user === null}
+        />{' '}
       </div>
     );
 

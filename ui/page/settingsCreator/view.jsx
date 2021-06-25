@@ -3,11 +3,15 @@ import * as React from 'react';
 import Card from 'component/common/card';
 import TagsSearch from 'component/tagsSearch';
 import Page from 'component/page';
+import Button from 'component/button';
 import ChannelSelector from 'component/channelSelector';
 import Spinner from 'component/spinner';
 import { FormField } from 'component/common/form-components/form-field';
 import LbcSymbol from 'component/common/lbc-symbol';
 import I18nMessage from 'component/i18nMessage';
+import { isNameValid, parseURI } from 'lbry-redux';
+import ClaimPreview from 'component/claimPreview';
+import { getUriForSearchTerm } from 'util/search';
 
 const DEBOUNCE_REFRESH_MS = 1000;
 
@@ -18,24 +22,38 @@ type Props = {
   settingsByChannelId: { [string]: PerChannelSettings },
   fetchingCreatorSettings: boolean,
   fetchingBlockedWords: boolean,
+  moderationDelegatesById: { [string]: Array<{ channelId: string, channelName: string }> },
   commentBlockWords: (ChannelClaim, Array<string>) => void,
   commentUnblockWords: (ChannelClaim, Array<string>) => void,
+  commentModAddDelegate: (string, string, ChannelClaim) => void,
+  commentModRemoveDelegate: (string, string, ChannelClaim) => void,
+  commentModListDelegates: (ChannelClaim) => void,
   fetchCreatorSettings: (Array<string>) => void,
   updateCreatorSettings: (ChannelClaim, PerChannelSettings) => void,
+  doToast: ({ message: string }) => void,
 };
 
 export default function SettingsCreatorPage(props: Props) {
   const {
     activeChannelClaim,
     settingsByChannelId,
+    moderationDelegatesById,
     commentBlockWords,
     commentUnblockWords,
+    commentModAddDelegate,
+    commentModRemoveDelegate,
+    commentModListDelegates,
     fetchCreatorSettings,
     updateCreatorSettings,
+    doToast,
   } = props;
 
   const [commentsEnabled, setCommentsEnabled] = React.useState(true);
   const [mutedWordTags, setMutedWordTags] = React.useState([]);
+  const [moderatorTags, setModeratorTags] = React.useState([]);
+  const [moderatorSearchTerm, setModeratorSearchTerm] = React.useState('');
+  const [moderatorSearchError, setModeratorSearchError] = React.useState('');
+  const [moderatorSearchClaimUri, setModeratorSearchClaimUri] = React.useState('');
   const [minTipAmountComment, setMinTipAmountComment] = React.useState(0);
   const [minTipAmountSuperChat, setMinTipAmountSuperChat] = React.useState(0);
   const [slowModeMinGap, setSlowModeMinGap] = React.useState(0);
@@ -97,6 +115,93 @@ export default function SettingsCreatorPage(props: Props) {
     setLastUpdated(Date.now());
   }
 
+  function addModerator(newTags: Array<Tag>) {
+    // Ignoring multiple entries for now, although <TagsSearch> supports it.
+    let modUri;
+    try {
+      modUri = parseURI(newTags[0].name);
+    } catch (e) {}
+
+    if (modUri && modUri.isChannel && modUri.claimName && modUri.claimId) {
+      if (!moderatorTags.some((modTag) => modTag.name === newTags[0].name)) {
+        setModeratorTags([...moderatorTags, newTags[0]]);
+        commentModAddDelegate(modUri.claimId, modUri.claimName, activeChannelClaim);
+        setLastUpdated(Date.now());
+      }
+    } else {
+      doToast({ message: __('Invalid channel URL "%url%"', { url: newTags[0].name }), isError: true });
+    }
+  }
+
+  function removeModerator(tagToRemove: Tag) {
+    let modUri;
+    try {
+      modUri = parseURI(tagToRemove.name);
+    } catch (e) {}
+
+    if (modUri && modUri.isChannel && modUri.claimName && modUri.claimId) {
+      const newModeratorTags = moderatorTags.slice().filter((t) => t.name !== tagToRemove.name);
+      setModeratorTags(newModeratorTags);
+      commentModRemoveDelegate(modUri.claimId, modUri.claimName, activeChannelClaim);
+      setLastUpdated(Date.now());
+    }
+  }
+
+  function handleChannelSearchSelect(claim) {
+    if (claim && claim.name && claim.claim_id) {
+      addModerator([{ name: claim.name + '#' + claim.claim_id }]);
+    }
+  }
+
+  // 'moderatorSearchTerm' to 'moderatorSearchClaimUri'
+  React.useEffect(() => {
+    if (!moderatorSearchTerm) {
+      setModeratorSearchError('');
+      setModeratorSearchClaimUri('');
+    } else {
+      const [searchUri, error] = getUriForSearchTerm(moderatorSearchTerm);
+      setModeratorSearchError(error ? __('Something not quite right..') : '');
+
+      try {
+        const { streamName, channelName, isChannel } = parseURI(searchUri);
+
+        if (!isChannel && streamName && isNameValid(streamName)) {
+          setModeratorSearchError(__('Not a channel (prefix with "@", or enter the channel URL)'));
+          setModeratorSearchClaimUri('');
+        } else if (isChannel && channelName && isNameValid(channelName)) {
+          setModeratorSearchClaimUri(searchUri);
+        }
+      } catch (e) {
+        if (moderatorSearchTerm !== '@') {
+          setModeratorSearchError('');
+        }
+        setModeratorSearchClaimUri('');
+      }
+    }
+  }, [moderatorSearchTerm, setModeratorSearchError]);
+
+  // Update local moderator states with data from API.
+  React.useEffect(() => {
+    commentModListDelegates(activeChannelClaim);
+  }, [activeChannelClaim, commentModListDelegates]);
+
+  React.useEffect(() => {
+    if (activeChannelClaim) {
+      const delegates = moderationDelegatesById[activeChannelClaim.claim_id];
+      if (delegates) {
+        setModeratorTags(
+          delegates.map((d) => {
+            return {
+              name: d.channelName + '#' + d.channelId,
+            };
+          })
+        );
+      } else {
+        setModeratorTags([]);
+      }
+    }
+  }, [activeChannelClaim, moderationDelegatesById]);
+
   // Update local states with data from API.
   React.useEffect(() => {
     if (lastUpdated !== 0 && Date.now() - lastUpdated < DEBOUNCE_REFRESH_MS) {
@@ -149,18 +254,18 @@ export default function SettingsCreatorPage(props: Props) {
       )}
       {!isBusy && !isDisabled && (
         <>
-          {FEATURE_IS_READY && (
-            <Card
-              title={__('General')}
-              actions={
-                <>
-                  <FormField
-                    type="checkbox"
-                    name="comments_enabled"
-                    label={__('Enable comments for channel.')}
-                    checked={commentsEnabled}
-                    onChange={() => setSettings({ comments_enabled: !commentsEnabled })}
-                  />
+          <Card
+            title={__('General')}
+            actions={
+              <>
+                <FormField
+                  type="checkbox"
+                  name="comments_enabled"
+                  label={__('Enable comments for channel.')}
+                  checked={commentsEnabled}
+                  onChange={() => setSettings({ comments_enabled: !commentsEnabled })}
+                />
+                {FEATURE_IS_READY && (
                   <FormField
                     name="slow_mode_min_gap"
                     label={__('Minimum time gap in seconds for Slow Mode in livestream chat.')}
@@ -171,10 +276,10 @@ export default function SettingsCreatorPage(props: Props) {
                     value={slowModeMinGap}
                     onChange={(e) => setSettings({ slow_mode_min_gap: e.target.value })}
                   />
-                </>
-              }
-            />
-          )}
+                )}
+              </>
+            }
+          />
           <Card
             title={__('Filter')}
             actions={
@@ -235,6 +340,60 @@ export default function SettingsCreatorPage(props: Props) {
               }
             />
           )}
+          <Card
+            title={__('Delegation')}
+            className="card--enable-overflow"
+            actions={
+              <div className="tag--blocked-words">
+                <FormField
+                  type="text"
+                  name="moderator_search"
+                  className="form-field--address"
+                  label={__('Add moderator')}
+                  placeholder={__('Enter a @username or URL')}
+                  helper={__('examples: @channel, @channel#3, https://odysee.com/@Odysee:8, lbry://@Odysee#8')}
+                  value={moderatorSearchTerm}
+                  onChange={(e) => setModeratorSearchTerm(e.target.value)}
+                  error={moderatorSearchError}
+                />
+                {moderatorSearchClaimUri && (
+                  <div className="section">
+                    <ClaimPreview
+                      key={moderatorSearchClaimUri}
+                      uri={moderatorSearchClaimUri}
+                      // type={'small'}
+                      // showNullPlaceholder
+                      hideMenu
+                      hideRepostLabel
+                      disableNavigation
+                      properties={''}
+                      renderActions={(claim) => {
+                        return (
+                          <Button
+                            requiresAuth
+                            button="primary"
+                            label={__('Add as moderator')}
+                            onClick={() => handleChannelSearchSelect(claim)}
+                          />
+                        );
+                      }}
+                    />
+                  </div>
+                )}
+                <TagsSearch
+                  label={__('Moderators')}
+                  labelAddNew={__('Add moderators')}
+                  onRemove={removeModerator}
+                  onSelect={addModerator}
+                  tagsPassedIn={moderatorTags}
+                  disableAutoFocus
+                  hideInputField
+                  hideSuggestions
+                  disableControlTags
+                />
+              </div>
+            }
+          />
         </>
       )}
     </Page>

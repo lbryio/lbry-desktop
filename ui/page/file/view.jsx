@@ -10,8 +10,9 @@ import FileRenderDownload from 'component/fileRenderDownload';
 import RecommendedContent from 'component/recommendedContent';
 import CollectionContent from 'component/collectionContentSidebar';
 import CommentsList from 'component/commentsList';
-import PostViewer from 'component/postViewer';
 import Empty from 'component/common/empty';
+
+const PostViewer = React.lazy(() => import('component/postViewer' /* webpackChunkName: "postViewer" */));
 
 export const PRIMARY_PLAYER_WRAPPER_CLASS = 'file-page__video-container';
 
@@ -96,7 +97,11 @@ function FilePage(props: Props) {
     }
 
     if (isMarkdown) {
-      return <PostViewer uri={uri} />;
+      return (
+        <React.Suspense fallback={null}>
+          <PostViewer uri={uri} />
+        </React.Suspense>
+      );
     }
 
     if (RENDER_MODES.TEXT_MODES.includes(renderMode)) {

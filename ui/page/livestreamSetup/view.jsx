@@ -86,8 +86,9 @@ export default function LivestreamSetupPage(props: Props) {
         {__(`If using other streaming software, make sure the bitrate is below 4500 kbps or the stream will not work.`)}
       </p>
       <p>
-        {__(`After your stream:
-      Click the Update button on the content page. This will allow you to select a replay or upload your own edited MP4. Replays are limited to 4 hours and may take a few minutes to show (use the Check For Replays button).`)}
+        {__(
+          `After your stream:\nClick the Update button on the content page. This will allow you to select a replay or upload your own edited MP4. Replays are limited to 4 hours and may take a few minutes to show (use the Check For Replays button).`
+        )}
       </p>
       <p>{__(`Click Save, then confirm, and you are done!`)}</p>
       <p>

@@ -1,11 +1,12 @@
 import Button from './view';
 import React, { forwardRef } from 'react';
 import { connect } from 'react-redux';
-import { selectUserVerifiedEmail } from 'redux/selectors/user';
+import { selectUser, selectUserVerifiedEmail } from 'redux/selectors/user';
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   pathname: state.router.location.pathname,
   emailVerified: selectUserVerifiedEmail(state),
+  user: selectUser(state),
 });
 
 const ConnectedButton = connect(mapStateToProps)(Button);

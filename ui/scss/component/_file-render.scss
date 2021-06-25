@@ -27,6 +27,16 @@
           display: inline;
         }
       }
+
+      .claim-link {
+        .button {
+          display: block;
+
+          .button__content {
+            display: block;
+          }
+        }
+      }
     }
 
     .media__actions {
@@ -518,7 +528,7 @@ video::-internal-media-controls-overlay-cast-button {
   .vjs-playback-rate .vjs-menu {
     // Extend the width to prevent a potential scrollbar from blocking the text.
     width: 8em;
-    left: -2em;
+    left: -3em;
   }
 }
 

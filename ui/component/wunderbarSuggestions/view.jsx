@@ -8,7 +8,7 @@ import classnames from 'classnames';
 import Icon from 'component/common/icon';
 import { isURIValid, normalizeURI, parseURI } from 'lbry-redux';
 import { Combobox, ComboboxInput, ComboboxPopover, ComboboxList, ComboboxOption } from '@reach/combobox';
-import '@reach/combobox/styles.css';
+// import '@reach/combobox/styles.css'; --> 'scss/third-party.scss'
 import useLighthouse from 'effects/use-lighthouse';
 import { Form } from 'component/common/form';
 import Button from 'component/button';
@@ -16,8 +16,9 @@ import WunderbarTopSuggestion from 'component/wunderbarTopSuggestion';
 import WunderbarSuggestion from 'component/wunderbarSuggestion';
 import { useHistory } from 'react-router';
 import { formatLbryUrlForWeb } from 'util/url';
-import useThrottle from 'effects/use-throttle';
 import Yrbl from 'component/yrbl';
+import { SEARCH_OPTIONS } from 'constants/search';
+import Spinner from 'component/spinner';
 
 const LBRY_PROTOCOL = 'lbry://';
 const WEB_DEV_PREFIX = `${URL_DEV}/`;
@@ -30,6 +31,9 @@ const TAG_SEARCH_PREFIX = 'tag:';
 const L_KEY_CODE = 76;
 const ESC_KEY_CODE = 27;
 
+const WUNDERBAR_INPUT_DEBOUNCE_MS = 500;
+const LIGHTHOUSE_MIN_CHARACTERS = 3;
+
 type Props = {
   searchQuery: ?string,
   onSearch: (string) => void,
@@ -39,10 +43,25 @@ type Props = {
   showMature: boolean,
   isMobile: boolean,
   doCloseMobileSearch: () => void,
+  channelsOnly?: boolean,
+  noTopSuggestion?: boolean,
+  noBottomLinks?: boolean,
+  customSelectAction?: (string) => void,
 };
 
 export default function WunderBarSuggestions(props: Props) {
-  const { navigateToSearchPage, doShowSnackBar, doResolveUris, showMature, isMobile, doCloseMobileSearch } = props;
+  const {
+    navigateToSearchPage,
+    doShowSnackBar,
+    doResolveUris,
+    showMature,
+    isMobile,
+    doCloseMobileSearch,
+    channelsOnly,
+    noTopSuggestion,
+    noBottomLinks,
+    customSelectAction,
+  } = props;
   const inputRef: ElementRef<any> = React.useRef();
   const isFocused = inputRef && inputRef.current && inputRef.current === document.activeElement;
 
@@ -53,11 +72,14 @@ export default function WunderBarSuggestions(props: Props) {
   const urlParams = new URLSearchParams(search);
   const queryFromUrl = urlParams.get('q') || '';
   const [term, setTerm] = React.useState(queryFromUrl);
-  const throttledTerm = useThrottle(term, 500) || '';
+  const [debouncedTerm, setDebouncedTerm] = React.useState('');
   const searchSize = isMobile ? 20 : 5;
-  const { results, loading } = useLighthouse(throttledTerm, showMature, searchSize);
-  const noResults = throttledTerm && !loading && results && results.length === 0;
-  const nameFromQuery = throttledTerm.trim().replace(/\s+/g, '').replace(/:/g, '#');
+  const additionalOptions = channelsOnly
+    ? { isBackgroundSearch: false, [SEARCH_OPTIONS.CLAIM_TYPE]: SEARCH_OPTIONS.INCLUDE_CHANNELS }
+    : {};
+  const { results, loading } = useLighthouse(debouncedTerm, showMature, searchSize, additionalOptions, 0);
+  const noResults = debouncedTerm && !loading && results && results.length === 0;
+  const nameFromQuery = debouncedTerm.trim().replace(/\s+/g, '').replace(/:/g, '#');
   const uriFromQuery = `lbry://${nameFromQuery}`;
   let uriFromQueryIsValid = false;
   let channelUrlForTopTest;
@@ -74,6 +96,9 @@ export default function WunderBarSuggestions(props: Props) {
     topUrisToTest.push(uriFromQuery);
   }
 
+  const isTyping = debouncedTerm !== term;
+  const showPlaceholder = isTyping || loading;
+
   function handleSelect(value) {
     if (!value) {
       return;
@@ -89,6 +114,12 @@ export default function WunderBarSuggestions(props: Props) {
 
     if (inputRef.current) {
       inputRef.current.blur();
+    }
+
+    if (customSelectAction) {
+      // Give them full results, as our resolved one might truncate the claimId.
+      customSelectAction(results ? results.find((r) => r.startsWith(value)) : '');
+      return;
     }
 
     if (wasCopiedFromWeb) {
@@ -130,6 +161,16 @@ export default function WunderBarSuggestions(props: Props) {
       }
     }
   }
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      if (debouncedTerm !== term) {
+        setDebouncedTerm(term.length < LIGHTHOUSE_MIN_CHARACTERS ? '' : term);
+      }
+    }, WUNDERBAR_INPUT_DEBOUNCE_MS);
+
+    return () => clearTimeout(timer);
+  }, [term, debouncedTerm]);
 
   React.useEffect(() => {
     function handleHomeEndCaretPos(elem, shiftKey, isHome) {
@@ -260,30 +301,35 @@ export default function WunderBarSuggestions(props: Props) {
             value={term}
           />
 
-          {isFocused && results && results.length > 0 && (
+          {isFocused && (
             <ComboboxPopover
               portal={false}
               className={classnames('wunderbar__suggestions', { 'wunderbar__suggestions--mobile': isMobile })}
             >
               <ComboboxList>
-                {uriFromQueryIsValid ? <WunderbarTopSuggestion query={nameFromQuery} /> : null}
+                {uriFromQueryIsValid && !noTopSuggestion ? <WunderbarTopSuggestion query={nameFromQuery} /> : null}
 
                 <div className="wunderbar__label">{__('Search Results')}</div>
-                {results.slice(0, isMobile ? 20 : 5).map((uri) => (
-                  <WunderbarSuggestion key={uri} uri={uri} />
-                ))}
 
-                <div className="wunderbar__bottom-links">
-                  <ComboboxOption value={term} className="wunderbar__more-results">
-                    <Button button="link" label={__('View All Results')} />
-                  </ComboboxOption>
-                  <ComboboxOption value={`${TAG_SEARCH_PREFIX}${term}`} className="wunderbar__more-results">
-                    <Button className="wunderbar__tag-search" button="link">
-                      {__('Explore')}
-                      <div className="tag">{term.split(' ').join('')}</div>
-                    </Button>
-                  </ComboboxOption>
-                </div>
+                {showPlaceholder && term.length > LIGHTHOUSE_MIN_CHARACTERS ? <Spinner type="small" /> : null}
+
+                {!showPlaceholder && results
+                  ? results.slice(0, isMobile ? 20 : 5).map((uri) => <WunderbarSuggestion key={uri} uri={uri} />)
+                  : null}
+
+                {!noBottomLinks && (
+                  <div className="wunderbar__bottom-links">
+                    <ComboboxOption value={term} className="wunderbar__more-results">
+                      <Button button="link" label={__('View All Results')} />
+                    </ComboboxOption>
+                    <ComboboxOption value={`${TAG_SEARCH_PREFIX}${term}`} className="wunderbar__more-results">
+                      <Button className="wunderbar__tag-search" button="link">
+                        {__('Explore')}
+                        <div className="tag">{term.split(' ').join('')}</div>
+                      </Button>
+                    </ComboboxOption>
+                  </div>
+                )}
               </ComboboxList>
             </ComboboxPopover>
           )}

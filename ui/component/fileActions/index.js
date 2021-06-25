@@ -7,12 +7,13 @@ import {
   selectMyChannelClaims,
   makeSelectClaimIsStreamPlaceholder,
   makeSelectTagInClaimOrChannelForUri,
+  makeSelectStreamingUrlForUri,
 } from 'lbry-redux';
 import { DISABLE_COMMENTS_TAG } from 'constants/tags';
 import { makeSelectCostInfoForUri } from 'lbryinc';
-import { doSetPlayingUri } from 'redux/actions/content';
+import { doSetPlayingUri, doPlayUri } from 'redux/actions/content';
 import { doToast } from 'redux/actions/notifications';
-import { doOpenModal, doSetActiveChannel, doSetIncognito } from 'redux/actions/app';
+import { doOpenModal, doSetActiveChannel, doSetIncognito, doAnalyticsView } from 'redux/actions/app';
 import fs from 'fs';
 import FileActions from './view';
 import { makeSelectFileRenderModeForUri } from 'redux/selectors/content';
@@ -26,6 +27,7 @@ const select = (state, props) => ({
   myChannels: selectMyChannelClaims(state),
   isLivestreamClaim: makeSelectClaimIsStreamPlaceholder(props.uri)(state),
   reactionsDisabled: makeSelectTagInClaimOrChannelForUri(props.uri, DISABLE_COMMENTS_TAG)(state),
+  streamingUrl: makeSelectStreamingUrlForUri(props.uri)(state),
 });
 
 const perform = (dispatch) => ({
@@ -42,6 +44,7 @@ const perform = (dispatch) => ({
   },
   clearPlayingUri: () => dispatch(doSetPlayingUri({ uri: null })),
   doToast: (options) => dispatch(doToast(options)),
+  download: (uri) => dispatch(doPlayUri(uri, false, true, () => dispatch(doAnalyticsView(uri)))),
 });
 
 export default connect(select, perform)(FileActions);

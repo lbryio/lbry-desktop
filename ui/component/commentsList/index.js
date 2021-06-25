@@ -5,6 +5,7 @@ import {
   selectIsFetchingComments,
   makeSelectTotalCommentsCountForUri,
   selectOthersReactsById,
+  makeSelectCommentsDisabledForUri,
 } from 'redux/selectors/comments';
 import { doCommentList, doCommentReactList } from 'redux/actions/comments';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
@@ -18,14 +19,15 @@ const select = (state, props) => ({
   claimIsMine: makeSelectClaimIsMine(props.uri)(state),
   isFetchingComments: selectIsFetchingComments(state),
   commentingEnabled: IS_WEB ? Boolean(selectUserVerifiedEmail(state)) : true,
+  commentsDisabledBySettings: makeSelectCommentsDisabledForUri(props.uri)(state),
   fetchingChannels: selectFetchingMyChannels(state),
   reactionsById: selectOthersReactsById(state),
   activeChannelId: selectActiveChannelId(state),
 });
 
-const perform = dispatch => ({
-  fetchComments: uri => dispatch(doCommentList(uri)),
-  fetchReacts: uri => dispatch(doCommentReactList(uri)),
+const perform = (dispatch) => ({
+  fetchComments: (uri) => dispatch(doCommentList(uri)),
+  fetchReacts: (uri) => dispatch(doCommentReactList(uri)),
 });
 
 export default connect(select, perform)(CommentsList);

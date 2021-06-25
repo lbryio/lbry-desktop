@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 import { selectMutedChannels } from 'redux/selectors/blocked';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import { selectBlacklistedOutpointMap, selectFilteredOutpointMap } from 'lbryinc';
-import { selectClaimsById, isClaimNsfw, selectMyActiveClaims } from 'lbry-redux';
+import { selectClaimsById, isClaimNsfw, selectMyActiveClaims, makeSelectClaimForUri } from 'lbry-redux';
 
 const selectState = (state) => state.comments || {};
 
@@ -11,16 +11,61 @@ export const selectCommentsById = createSelector(selectState, (state) => state.c
 export const selectIsFetchingComments = createSelector(selectState, (state) => state.isLoading);
 export const selectIsPostingComment = createSelector(selectState, (state) => state.isCommenting);
 export const selectIsFetchingReacts = createSelector(selectState, (state) => state.isFetchingReacts);
+export const selectCommentsDisabledChannelIds = createSelector(
+  selectState,
+  (state) => state.commentsDisabledChannelIds
+);
 export const selectOthersReactsById = createSelector(selectState, (state) => state.othersReactsByCommentId);
+
 export const selectModerationBlockList = createSelector(selectState, (state) =>
   state.moderationBlockList ? state.moderationBlockList.reverse() : []
 );
+export const selectAdminBlockList = createSelector(selectState, (state) =>
+  state.adminBlockList ? state.adminBlockList.reverse() : []
+);
+export const selectModeratorBlockList = createSelector(selectState, (state) =>
+  state.moderatorBlockList ? state.moderatorBlockList.reverse() : []
+);
+
+export const selectModeratorBlockListDelegatorsMap = createSelector(
+  selectState,
+  (state) => state.moderatorBlockListDelegatorsMap
+);
+
+export const selectTogglingForDelegatorMap = createSelector(selectState, (state) => state.togglingForDelegatorMap);
+
 export const selectBlockingByUri = createSelector(selectState, (state) => state.blockingByUri);
 export const selectUnBlockingByUri = createSelector(selectState, (state) => state.unBlockingByUri);
 export const selectFetchingModerationBlockList = createSelector(
   selectState,
   (state) => state.fetchingModerationBlockList
 );
+
+export const selectModerationDelegatesById = createSelector(selectState, (state) => state.moderationDelegatesById);
+export const selectIsFetchingModerationDelegates = createSelector(
+  selectState,
+  (state) => state.fetchingModerationDelegates
+);
+
+export const selectModerationDelegatorsById = createSelector(selectState, (state) => state.moderationDelegatorsById);
+export const selectIsFetchingModerationDelegators = createSelector(
+  selectState,
+  (state) => state.fetchingModerationDelegators
+);
+
+export const selectHasAdminChannel = createSelector(selectState, (state) => {
+  const myChannelIds = Object.keys(state.moderationDelegatorsById);
+  for (let i = 0; i < myChannelIds.length; ++i) {
+    const id = myChannelIds[i];
+    if (state.moderationDelegatorsById[id] && state.moderationDelegatorsById[id].global) {
+      return true;
+    }
+  }
+  return false;
+
+  /// Lint doesn't like this:
+  // return Object.values(state.moderationDelegatorsById).some((x) => x.global);
+});
 
 export const selectCommentsByClaimId = createSelector(selectState, selectCommentsById, (state, byId) => {
   const byClaimId = state.byId || {};
@@ -294,6 +339,7 @@ export const makeSelectTotalCommentsCountForUri = (uri: string) =>
     return comments ? comments.length : 0;
   });
 
+// Personal list
 export const makeSelectChannelIsBlocked = (uri: string) =>
   createSelector(selectModerationBlockList, (blockedChannelUris) => {
     if (!blockedChannelUris || !blockedChannelUris) {
@@ -301,6 +347,27 @@ export const makeSelectChannelIsBlocked = (uri: string) =>
     }
 
     return blockedChannelUris.includes(uri);
+  });
+
+export const makeSelectChannelIsAdminBlocked = (uri: string) =>
+  createSelector(selectAdminBlockList, (list) => {
+    return list ? list.includes(uri) : false;
+  });
+
+export const makeSelectChannelIsModeratorBlocked = (uri: string) =>
+  createSelector(selectModeratorBlockList, (list) => {
+    return list ? list.includes(uri) : false;
+  });
+
+export const makeSelectChannelIsModeratorBlockedForCreator = (uri: string, creatorUri: string) =>
+  createSelector(selectModeratorBlockList, selectModeratorBlockListDelegatorsMap, (blockList, delegatorsMap) => {
+    if (!blockList) return false;
+    return blockList.includes(uri) && delegatorsMap[uri] && delegatorsMap[uri].includes(creatorUri);
+  });
+
+export const makeSelectIsTogglingForDelegator = (uri: string, creatorUri: string) =>
+  createSelector(selectTogglingForDelegatorMap, (togglingForDelegatorMap) => {
+    return togglingForDelegatorMap[uri] && togglingForDelegatorMap[uri].includes(creatorUri);
   });
 
 export const makeSelectUriIsBlockingOrUnBlocking = (uri: string) =>
@@ -329,4 +396,16 @@ export const makeSelectSuperChatTotalAmountForUri = (uri: string) =>
     }
 
     return superChatData.totalAmount;
+  });
+
+export const makeSelectCommentsDisabledForUri = (uri: string) =>
+  createSelector(selectCommentsDisabledChannelIds, makeSelectClaimForUri(uri), (commentsDisabledChannelIds, claim) => {
+    const channelClaim = !claim
+      ? null
+      : claim.value_type === 'channel'
+      ? claim
+      : claim.signing_channel && claim.is_channel_signature_valid
+      ? claim.signing_channel
+      : null;
+    return channelClaim && channelClaim.claim_id && commentsDisabledChannelIds.includes(channelClaim.claim_id);
   });

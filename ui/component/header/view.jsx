@@ -170,8 +170,14 @@ const Header = (props: Props) => {
 
   const loginButtons = (
     <div className="header__auth-buttons">
-      <Button navigate={`/$/${PAGES.AUTH_SIGNIN}`} button="link" label={__('Log In')} className="mobile-hidden" />
-      <Button navigate={`/$/${PAGES.AUTH}`} button="primary" label={__('Sign Up')} />
+      <Button
+        navigate={`/$/${PAGES.AUTH_SIGNIN}`}
+        button="link"
+        label={__('Log In')}
+        className="mobile-hidden"
+        disabled={user === null}
+      />
+      <Button navigate={`/$/${PAGES.AUTH}`} button="primary" label={__('Sign Up')} disabled={user === null} />
     </div>
   );
 
