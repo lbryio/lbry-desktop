@@ -21,7 +21,6 @@ import { INVALID_NAME_ERROR } from 'constants/claim';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 import * as PAGES from 'constants/pages';
 import analytics from 'analytics';
-import * as ICONS from '../../constants/icons';
 const LANG_NONE = 'none';
 const MAX_TAG_SELECT = 5;
 
@@ -238,9 +237,6 @@ function CollectionForm(props: Props) {
   return (
     <>
       <div className={classnames('main--contained', { 'card--disabled': disabled })}>
-        <div>
-          <Button button="close" label={__('New')} icon={ICONS.REFRESH} onClick={() => alert()} />
-        </div>
         <Tabs>
           <TabList className="tabs__list--collection-edit-page">
             <Tab>{__('General')}</Tab>
