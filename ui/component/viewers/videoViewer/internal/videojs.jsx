@@ -201,7 +201,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       overlay: OVERLAY.OVERLAY_DATA,
     },
     // fixes problem of errant CC button showing up on iOS
-    // TODO: find the source of why the button recently began to show up on iOS
+    // the true fix here is to fix the m3u8 file, see: https://github.com/lbryio/lbry-desktop/pull/6315
     controlBar: {
       subsCapsButton: false,
     },
