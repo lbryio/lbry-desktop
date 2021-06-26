@@ -3,8 +3,16 @@
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+## [0.51.1] - [2021-06-26]
 
-## [Unreleased for Desktop]
+### Added
+
+### Changed
+
+### Fixed
+- Enable sign up on desktop ([#6071](https://github.com/lbryio/lbry-desktop/issues/6071))
+
+## [0.51.0] - [2021-06-26]
 
 ### Added
 - Private and Publishable Playlists ([#6157](https://github.com/lbryio/lbry-desktop/pull/6157))
