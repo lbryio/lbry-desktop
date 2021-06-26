@@ -286,7 +286,7 @@ function ClaimTilesDiscover(props: Props) {
 
   const modifiedUris = uris ? uris.slice() : [];
   const fixUris = [
-    'lbry://@ChrisWilliamson#6/jordan-peterson-why-you-still-need-to#8',
+    'lbry://@SomeOrdinaryGamers#a/terrible-karen'-movie-trailer...#3',
                   ];
                    
   if (pin && modifiedUris && modifiedUris.length > 2 && window.location.pathname === '/') {
