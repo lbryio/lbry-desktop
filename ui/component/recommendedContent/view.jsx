@@ -23,7 +23,7 @@ type Props = {
   claim: ?StreamClaim,
 };
 
-export default function RecommendedContent(props: Props) {
+export default React.memo<Props>(function RecommendedContent(props: Props) {
   const {
     uri,
     doFetchRecommendedContent,
@@ -121,4 +121,42 @@ export default function RecommendedContent(props: Props) {
       }
     />
   );
+}, areEqual);
+
+function areEqual(prevProps: Props, nextProps: Props) {
+  const a = prevProps;
+  const b = nextProps;
+
+  if (
+    a.uri !== b.uri ||
+    a.nextRecommendedUri !== b.nextRecommendedUri ||
+    a.isAuthenticated !== b.isAuthenticated ||
+    a.isSearching !== b.isSearching ||
+    a.mature !== b.mature ||
+    (a.recommendedContent && !b.recommendedContent) ||
+    (!a.recommendedContent && b.recommendedContent) ||
+    (a.claim && !b.claim) ||
+    (!a.claim && b.claim)
+  ) {
+    return false;
+  }
+
+  if (a.claim && b.claim && a.claim.claim_id !== b.claim.claim_id) {
+    return false;
+  }
+
+  if (a.recommendedContent && b.recommendedContent) {
+    if (a.recommendedContent.length !== b.recommendedContent.length) {
+      return false;
+    }
+
+    let i = a.recommendedContent.length;
+    while (i--) {
+      if (a.recommendedContent[i] !== b.recommendedContent[i]) {
+        return false;
+      }
+    }
+  }
+
+  return true;
 }
