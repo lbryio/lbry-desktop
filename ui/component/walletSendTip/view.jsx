@@ -194,14 +194,14 @@ function WalletSendTip(props: Props) {
           }
         />
       ) : (
-        // if there is lbc, the main card
+        // if there is lbc, the main tip/boost gui
         <Card
           title={<LbcSymbol postfix={claimIsMine ? __('Boost your content') : __('Support this content')} size={22} />}
           subtitle={
             <React.Fragment>
               {!claimIsMine && (
                 <div className="section">
-                  {/* tip LBC section */}
+                  {/* tip LBC tab button */}
                   <Button
                     key="tip"
                     icon={ICONS.LBC}
@@ -210,7 +210,7 @@ function WalletSendTip(props: Props) {
                     onClick={() => setActiveTab('TipLBC')}
                     className={classnames('button-toggle', { 'button-toggle--active': activeTab === 'TipLBC' })}
                   />
-                  {/* tip fiat section */}
+                  {/* tip fiat tab button */}
                   <Button
                     key="tip-fiat"
                     icon={ICONS.FINANCE}
@@ -219,7 +219,7 @@ function WalletSendTip(props: Props) {
                     onClick={() => setActiveTab('TipFiat')}
                     className={classnames('button-toggle', { 'button-toggle--active': activeTab === 'TipFiat' })}
                   />
-                  {/* tip LBC section */}
+                  {/* tip LBC tab button */}
                   <Button
                     key="boost"
                     icon={ICONS.TRENDING}
@@ -281,7 +281,7 @@ function WalletSendTip(props: Props) {
                       disabled={shouldDisableAmountSelector(amount)}
                       button="alt"
                       className={classnames('button-toggle button-toggle--expandformobile', {
-                        'button-toggle--active': tipAmount === amount,
+                        'button-toggle--active': tipAmount === amount && !useCustomTip,
                         'button-toggle--disabled': amount > balance,
                       })}
                       label={amount}
@@ -295,7 +295,7 @@ function WalletSendTip(props: Props) {
                   <Button
                     button="alt"
                     className={classnames('button-toggle button-toggle--expandformobile', {
-                      'button-toggle--active': !DEFAULT_TIP_AMOUNTS.includes(tipAmount),
+                      'button-toggle--active': useCustomTip, // set as active
                     })}
                     icon={iconToUse}
                     label={__('Custom')}
