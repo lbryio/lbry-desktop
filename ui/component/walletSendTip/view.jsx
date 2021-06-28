@@ -171,7 +171,7 @@ function WalletSendTip(props: Props) {
     if (activeTab === 'TipLBC') {
       return 'Tipping LBC';
     } else if (activeTab === 'TipFiat') {
-      return 'Tipping Fiat';
+      return 'Tipping Fiat (USD)';
     } else if (activeTab === 'Boost') {
       return 'Boosting';
     }
@@ -261,7 +261,7 @@ function WalletSendTip(props: Props) {
                     </div>
                     <div className="confirm__label">{setConfirmLabel()}</div>
                     <div className="confirm__value">
-                      <LbcSymbol postfix={tipAmount} size={22} />
+                      {activeTab === 'TipFiat' ? <p>$ {tipAmount}</p> : <LbcSymbol postfix={tipAmount} size={22} />}
                     </div>
                   </div>
                 </div>
