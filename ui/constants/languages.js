@@ -55,7 +55,7 @@ const LANGUAGES = {
   gu: ['Gujarati', 'ગુજરાતી'],
   gv: ['Manx', 'Gaelg'],
   ha: ['Hausa', 'هَوُسَ'],
-  he: ['Hebrew', 'עברית'],
+  he: ['Hebrew', 'עברית', 'rtl'],
   hi: ['Hindi', 'हिन्दी'],
   ho: ['Hiri Motu', 'Hiri Motu'],
   hr: ['Croatian', 'Hrvatski'],
