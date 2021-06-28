@@ -52,7 +52,7 @@ type Props = {
   onDone: () => void,
   openModal: (
     id: string,
-    { onUpdate: (string) => void, assetName: string, helpText: string, currentValue: string, title: string }
+    { onUpdate: (string, boolean) => void, assetName: string, helpText: string, currentValue: string, title: string }
   ) => void,
   uri: string,
   disabled: boolean,
