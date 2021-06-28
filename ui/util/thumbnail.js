@@ -20,7 +20,7 @@ export function getThumbnailCdnUrl(props: Props) {
   }
 
   if (thumbnail && !thumbnail.includes('https://spee.ch')) {
-    return `${THUMBNAIL_CDN_URL}${thumbnail}&quality=${quality}&height=${height}&width=${width}`;
+    return `${THUMBNAIL_CDN_URL}s:${width}:${height}/quality:${quality}/plain/${thumbnail}`;
   }
 
   if (thumbnail && thumbnail.includes('https://spee.ch')) {
