@@ -58,7 +58,7 @@ function ChannelThumbnail(props: Props) {
   const shouldResolve = claim === undefined;
   const thumbnail = rawThumbnail && rawThumbnail.trim().replace(/^http:\/\//i, 'https://');
   const thumbnailPreview = rawThumbnailPreview && rawThumbnailPreview.trim().replace(/^http:\/\//i, 'https://');
-  const channelThumbnail = thumbnail || thumbnailPreview;
+  const channelThumbnail = thumbnailPreview || thumbnail;
   const isGif = channelThumbnail && channelThumbnail.endsWith('gif');
   const showThumb = (!obscure && !!thumbnail) || thumbnailPreview;
   const thumbnailRef = React.useRef(null);
@@ -106,7 +106,7 @@ function ChannelThumbnail(props: Props) {
   let url = channelThumbnail;
   // @if TARGET='web'
   // Pass image urls through a compression proxy, except for GIFs.
-  if (thumbnail && !(isGif && allowGifs)) {
+  if (!thumbnailPreview && thumbnail && !(isGif && allowGifs)) {
     url = getThumbnailCdnUrl({ thumbnail, width: thumbnailSize, height: thumbnailSize, quality: 85 });
   }
   // @endif

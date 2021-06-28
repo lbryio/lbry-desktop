@@ -15,7 +15,7 @@ const SPEECH_UPLOADING = 'UPLOADING';
 type Props = {
   assetName: string,
   currentValue: ?string,
-  onUpdate: (string) => void,
+  onUpdate: (string, boolean) => void,
   recommended: string,
   title: string,
   onDone?: () => void,
@@ -38,7 +38,7 @@ function SelectAsset(props: Props) {
 
     const onSuccess = (thumbnailUrl) => {
       setUploadStatus(SPEECH_READY);
-      onUpdate(thumbnailUrl);
+      onUpdate(thumbnailUrl, !useUrl);
 
       if (onDone) {
         onDone();
@@ -90,7 +90,7 @@ function SelectAsset(props: Props) {
             value={url}
             onChange={(e) => {
               setUrl(e.target.value);
-              onUpdate(e.target.value);
+              onUpdate(e.target.value, !useUrl);
             }}
           />
         ) : (

@@ -83,8 +83,11 @@ function ChannelForm(props: Props) {
     openModal,
     disabled,
   } = props;
+  const currentThumbnail = thumbnailUrl;
+  const currentCover = coverUrl;
   const [nameError, setNameError] = React.useState(undefined);
   const [bidError, setBidError] = React.useState('');
+  const [isUpload, setIsUpload] = React.useState({ cover: false, thumbnail: false });
   const [coverError, setCoverError] = React.useState(false);
   const [thumbError, setThumbError] = React.useState(false);
   const { claim_id: claimId } = claim || {};
@@ -175,13 +178,15 @@ function ChannelForm(props: Props) {
     setParams({ ...params, languages: langs });
   }
 
-  function handleThumbnailChange(thumbnailUrl: string) {
-    setParams({ ...params, thumbnailUrl });
+  function handleThumbnailChange(thumbnailUrl: string, uploadSelected: boolean) {
+    setParams({ ...params, thumbnailUrl: (thumbnailUrl || currentThumbnail) });
+    setIsUpload({ ...isUpload, thumbnail: uploadSelected });
     setThumbError(false);
   }
 
-  function handleCoverChange(coverUrl: string) {
-    setParams({ ...params, coverUrl });
+  function handleCoverChange(coverUrl: string, uploadSelected: boolean) {
+    setParams({ ...params, coverUrl: (coverUrl || currentCover) });
+    setIsUpload({ ...isUpload, cover: uploadSelected });
     setCoverError(false);
   }
 
@@ -207,7 +212,7 @@ function ChannelForm(props: Props) {
   if (errorMsg && errorMsg.includes(LIMIT_ERR_PARTIAL_MSG)) {
     errorMsg = __('Transaction limit reached. Try reducing the Description length.');
   }
-  if (thumbError || coverError) {
+  if ((!isUpload.thumbnail && thumbError) || (!isUpload.cover && coverError)) {
     errorMsg = __('Invalid %error_type%', { error_type: (thumbError && 'thumbnail') || (coverError && 'cover image') });
   }
 
@@ -244,7 +249,7 @@ function ChannelForm(props: Props) {
               title={__('Cover')}
               onClick={() =>
                 openModal(MODALS.IMAGE_UPLOAD, {
-                  onUpdate: (coverUrl) => handleCoverChange(coverUrl),
+                  onUpdate: (coverUrl, isUpload) => handleCoverChange(coverUrl, isUpload),
                   title: __('Edit Cover Image'),
                   helpText: __('(6.25:1)'),
                   assetName: __('Cover Image'),
@@ -255,12 +260,16 @@ function ChannelForm(props: Props) {
               iconSize={18}
             />
           </div>
-          {params.coverUrl && (
-            <img
-              className="channel-cover__custom"
-              src={coverSrc}
-              onError={() => setCoverError(true)}
-            />
+          {params.coverUrl &&
+            (coverError && isUpload.cover ? (
+              <div className="channel-cover__custom--waiting">{__('This will be visible in a few minutes.')}</div>
+            ) : (
+              <img
+                className="channel-cover__custom"
+                src={coverSrc}
+                onError={() => setCoverError(true)}
+              />
+            )
           )}
           <div className="channel__primary-info">
             <div className="channel__edit-thumb">
@@ -269,7 +278,7 @@ function ChannelForm(props: Props) {
                 title={__('Edit')}
                 onClick={() =>
                   openModal(MODALS.IMAGE_UPLOAD, {
-                    onUpdate: (v) => handleThumbnailChange(v),
+                    onUpdate: (thumbnailUrl, isUpload) => handleThumbnailChange(thumbnailUrl, isUpload),
                     title: __('Edit Thumbnail Image'),
                     helpText: __('(1:1)'),
                     assetName: __('Thumbnail'),
@@ -285,6 +294,7 @@ function ChannelForm(props: Props) {
               uri={uri}
               thumbnailPreview={params.thumbnailUrl}
               allowGifs
+              showDelayedMessage={isUpload.thumbnail}
               setThumbError={(v) => setThumbError(v)}
               thumbError={thumbError}
             />
@@ -472,7 +482,9 @@ function ChannelForm(props: Props) {
                 <Button
                   button="primary"
                   disabled={
-                    creatingChannel || updatingChannel || nameError || bidError || thumbError || coverError || (isNewChannel && !params.name)
+                    creatingChannel || updatingChannel || nameError || bidError ||
+                    (!isUpload.thumbnail && thumbError) || (!isUpload.cover && coverError) ||
+                    (isNewChannel && !params.name)
                   }
                   label={creatingChannel || updatingChannel ? __('Submitting') : __('Submit')}
                   onClick={handleSubmit}
