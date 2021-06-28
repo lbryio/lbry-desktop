@@ -1,0 +1,196 @@
+.content__viewer {
+  @extend .card;
+  position: absolute;
+  top: var(--spacing-s);
+}
+
+.content__viewer--inline {
+  max-height: var(--inline-player-max-height);
+  border: none;
+}
+
+.content__viewer--secondary {
+  .vjs-button--theater-mode {
+    display: none;
+  }
+}
+
+.content__viewer--floating {
+  position: fixed;
+  margin-bottom: 0;
+  height: calc(var(--floating-viewer-height) + var(--floating-viewer-info-height));
+  overflow: hidden;
+  left: calc(var(--spacing-l) + var(--spacing-s));
+  z-index: 9999;
+
+  &:hover {
+    .content__floating-close {
+      visibility: visible;
+      z-index: 9999;
+    }
+  }
+}
+
+.content__viewer--theater-mode {
+  top: 0;
+  border-radius: 0;
+  border: none;
+}
+
+.content__wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.content__wrapper--floating {
+  height: var(--floating-viewer-height);
+  width: var(--floating-viewer-width);
+
+  .vjs-button--theater-mode {
+    display: none;
+  }
+}
+
+.content__actions {
+  visibility: hidden;
+  display: flex;
+
+  .button {
+    @extend .button--close;
+    height: 1.5rem;
+    top: 0;
+    position: relative;
+    margin-left: var(--spacing-s);
+
+    svg {
+      color: var(--color-white);
+    }
+  }
+}
+
+.content__floating-close {
+  visibility: hidden;
+  position: absolute;
+  top: var(--spacing-s);
+  right: var(--spacing-s);
+  width: 3rem;
+  height: 3rem;
+}
+
+.content__floating-link {
+  color: var(--color-text);
+}
+
+.content__floating-close {
+  z-index: 3; /*must be one higher than .file-viewer__overlay */
+}
+
+.content__info {
+  cursor: grab;
+  height: var(--floating-viewer-info-height);
+  padding: var(--spacing-m);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  white-space: nowrap;
+}
+
+.content__cover {
+  @include thumbnail;
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-radius: var(--card-radius);
+  border: 1px solid var(--color-border);
+  justify-content: center;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  max-height: var(--inline-player-max-height);
+  margin: auto;
+
+  &:not(.card__media--nsfw) {
+    background-color: #000; // solid black to blend nicely when the video starts (if it doesn't take the full width)
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:-webkit-full-screen {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.content__cover--text {
+  margin: 10rem 0;
+}
+
+.content__cover--theater-mode {
+  @extend .content__cover;
+  border-radius: 0;
+}
+
+.content__cover--none {
+  @include thumbnail;
+  cursor: default;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  margin: auto;
+
+  &:-webkit-full-screen {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.content__cover--disabled {
+  pointer-events: none;
+  .nag {
+    /* boo fire Jeremy */
+    pointer-events: auto;
+  }
+  &:after {
+    content: '';
+    background: rgba(255, 255, 255, 0.5);
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+  }
+}
+
+.content__loading {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 var(--spacing-l);
+  background-color: #000;
+
+  &.content__loading--document {
+    background-color: var(--color-background);
+    padding: calc(var(--spacing-xl) * 5) 0;
+
+    .content__loading-text {
+      color: var(--color-text);
+    }
+  }
+}
+
+.content__loading-text {
+  color: var(--color-white);
+}
+
+.content__non-clickable {
+  pointer-events: none;
+}

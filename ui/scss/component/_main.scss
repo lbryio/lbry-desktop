@@ -1,0 +1,393 @@
+.main-wrapper {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.main-wrapper--mac {
+  margin-top: calc(var(--header-height) + var(--mac-titlebar-height));
+}
+
+.main-wrapper__inner {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  min-height: calc(100vh - var(--header-height));
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: var(--header-height);
+  padding: var(--spacing-l); // Unfortunately this is coupled with .claim-preview--tile width calculation
+  padding-left: 0;
+  padding-right: 0;
+
+  > :first-child {
+    flex-shrink: 0;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    padding: var(--spacing-xs);
+    padding-top: var(--spacing-m);
+  }
+
+  @media (min-width: $breakpoint-large) {
+    width: 100%;
+  }
+}
+
+.main-wrapper__inner--filepage {
+  padding: 0;
+}
+
+.main-wrapper__inner--theater-mode {
+  padding-top: 0;
+}
+
+.main {
+  position: relative;
+  width: calc(100% - var(--side-nav-width) - var(--spacing-l));
+  max-width: var(--page-max-width);
+  z-index: 0;
+  margin-right: auto;
+  margin-left: auto;
+
+  @media (max-width: $breakpoint-medium) and (min-width: $breakpoint-small) {
+    margin: 0 var(--spacing-l);
+  }
+
+  @media (max-width: $breakpoint-medium) {
+    width: 100%;
+  }
+}
+
+.main--file-page {
+  width: 100%;
+  max-width: var(--page-max-width--filepage);
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: var(--spacing-m);
+  padding: 0 var(--spacing-m);
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  position: relative;
+
+  > :first-child {
+    flex-grow: 2;
+  }
+
+  .file-page__secondary-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    margin-top: var(--spacing-m);
+    max-width: var(--page-max-width--filepage);
+    margin-left: auto;
+    margin-right: auto;
+
+    > :first-child {
+      flex: 1;
+    }
+
+    @media (min-width: $breakpoint-medium) {
+      flex-direction: row;
+    }
+  }
+
+  .file-page__post-comments {
+    margin-top: var(--spacing-l);
+
+    @media (min-width: $breakpoint-small) {
+      padding: var(--spacing-m);
+    }
+  }
+
+  .file-page__info {
+    margin-top: var(--spacing-m);
+  }
+
+  .file-page__recommended {
+    height: 0%;
+    width: 35rem;
+    margin-left: var(--spacing-m);
+
+    @media (max-width: $breakpoint-medium) {
+      width: 100%;
+      margin-left: 0;
+      margin-top: var(--spacing-l);
+    }
+  }
+
+  @media (max-width: $breakpoint-medium) {
+    flex-direction: column;
+    > :first-child {
+      margin-right: 0;
+    }
+  }
+
+  @media (max-width: $breakpoint-small) {
+    padding: var(--spacing-xs);
+    flex-direction: column;
+    padding-top: 0;
+  }
+}
+
+.main--theater-mode {
+  padding-left: 0;
+  padding-right: 0;
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 0;
+  width: 100vw;
+  max-width: none;
+
+  > :first-child {
+    margin-right: 0;
+  }
+
+  .file-page__info {
+    padding: 0 var(--spacing-m);
+    margin-top: var(--spacing-m);
+    max-width: var(--page-max-width--filepage);
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .file-page__recommended {
+    width: 25rem;
+  }
+
+  .file-page__secondary-content {
+    padding: 0 var(--spacing-s);
+
+    @media (min-width: $breakpoint-medium) {
+      flex-direction: row;
+    }
+  }
+}
+
+.main--livestream {
+  width: calc(100vw - var(--spacing-xs) * 2);
+  margin: var(--spacing-xs);
+
+  @media (min-width: $breakpoint-small) {
+    margin: var(--spacing-m);
+    margin-right: calc(var(--livestream-comments-width) + var(--spacing-m));
+    width: calc(100vw - var(--livestream-comments-width) - var(--spacing-m) * 2);
+  }
+}
+
+.main--full-width {
+  @extend .main;
+
+  @media (min-width: $breakpoint-large) {
+    max-width: none;
+    width: 100%;
+    margin: 0 var(--spacing-l);
+  }
+}
+
+.main--auth-page {
+  width: 100%;
+  max-width: 70rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 var(--spacing-s);
+
+  @media (min-width: $breakpoint-small) {
+    margin-top: var(--spacing-main-padding);
+    padding: 0 var(--spacing-l);
+  }
+}
+
+.main--markdown {
+  flex-direction: column;
+}
+
+.main__auth-content {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  padding-bottom: var(--spacing-xl);
+
+  @media (min-width: $breakpoint-small) {
+    flex-direction: row;
+
+    > :first-child {
+      position: fixed;
+      background-color: var(--color-background);
+      width: calc(40% - var(--spacing-l));
+      margin-top: var(--spacing-xl);
+    }
+
+    > :nth-child(2) {
+      width: 50%;
+      margin-left: auto;
+    }
+  }
+
+  @media (min-width: $breakpoint-medium) {
+    > :first-child {
+      width: calc(30% - var(--spacing-l));
+      max-width: 25rem;
+    }
+
+    > :nth-child(2) {
+      width: 50%;
+      margin-left: auto;
+    }
+  }
+}
+
+.main--buy {
+  @extend .main--auth-page;
+  max-width: 30rem;
+  min-height: 400px;
+
+  .card {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  iframe {
+    min-height: 420px;
+    background-color: var(--color-card-background);
+    margin-bottom: 2rem;
+  }
+
+  .sm:bg-grey-lighter {
+    background-color: var(--color-card-background);
+  }
+}
+
+.main--send {
+  @extend .main--buy;
+  max-width: 34rem;
+}
+
+.main--swap {
+  @extend .main--buy;
+  max-width: 34rem;
+}
+
+.main--report-content {
+  @extend .main--auth-page;
+  max-width: 40rem;
+}
+
+.main--empty {
+  align-self: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  padding: 0 var(--spacing-m);
+  margin-top: var(--spacing-l);
+  margin-bottom: var(--spacing-l);
+  width: 100%;
+
+  > .card {
+    width: 100%;
+  }
+
+  @media (min-width: $breakpoint-small) {
+    margin-top: 100px;
+    margin-bottom: 100px;
+  }
+}
+
+.main--launching {
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--color-background);
+}
+
+.main--contained {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 60rem;
+  text-align: left;
+
+  & > * {
+    width: 100%;
+  }
+}
+
+.main--hoisted {
+  margin-top: calc(var(--spacing-s) * -1);
+  @media (min-width: $breakpoint-small) {
+    margin-top: calc(var(--spacing-l) * -1);
+  }
+}
+
+.main__sign-in,
+.main__sign-up {
+  max-width: 27rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.main__sign-up--graphic {
+  max-width: 47rem;
+
+  .card__second-pane {
+    width: 50%;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-login-graphic-background);
+
+    @media (max-width: $breakpoint-small) {
+      width: 100%;
+    }
+
+    .signup-image {
+      @media (max-width: $breakpoint-small) {
+        width: 50%;
+      }
+    }
+  }
+
+  .card__title {
+    font-size: var(--font-heading);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .card__main-actions {
+    border: none;
+  }
+}
+
+.main__channel-creation {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 32rem;
+}
+
+.main-wrapper--scrollbar {
+  // The W3C future standard; currently supported by Firefox only.
+  // It'll hopefully auto fallback to this when 'webkit-scrollbar' below is deprecated in the future.
+  scrollbar-width: auto;
+  scrollbar-color: var(--color-scrollbar-thumb-bg) var(--color-scrollbar-track-bg);
+}
+
+.main-wrapper--scrollbar *::-webkit-scrollbar {
+  width: 12px;
+}
+
+.main-wrapper--scrollbar *::-webkit-scrollbar-track {
+  background: var(--color-scrollbar-track-bg);
+}
+
+.main-wrapper--scrollbar *::-webkit-scrollbar-thumb {
+  // Don't set 'border-radius' because Firefox's 'scrollbar-xx'
+  // standard currently doesn't support it. Stick with square
+  // scrollbar for all browsers.
+  background-color: var(--color-scrollbar-thumb-bg);
+}
