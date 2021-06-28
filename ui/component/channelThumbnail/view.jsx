@@ -53,7 +53,7 @@ function ChannelThumbnail(props: Props) {
   const shouldResolve = claim === undefined;
   const thumbnail = rawThumbnail && rawThumbnail.trim().replace(/^http:\/\//i, 'https://');
   const thumbnailPreview = rawThumbnailPreview && rawThumbnailPreview.trim().replace(/^http:\/\//i, 'https://');
-  const channelThumbnail = thumbnail || thumbnailPreview;
+  const channelThumbnail = thumbnailPreview || thumbnail;
   const isGif = channelThumbnail && channelThumbnail.endsWith('gif');
   const showThumb = (!obscure && !!thumbnail) || thumbnailPreview;
   const defaultAvater = AVATAR_DEFAULT || Gerbil;
