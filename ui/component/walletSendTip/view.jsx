@@ -27,7 +27,7 @@ type Props = {
   claim: StreamClaim,
   isPending: boolean,
   isSupport: boolean,
-  sendSupport: (SupportParams, boolean) => void,
+  sendSupport: (SupportParams, boolean) => void, // function that comes from lbry-redux
   closeModal: () => void,
   balance: number,
   fetchingChannels: boolean,
@@ -161,6 +161,13 @@ function WalletSendTip(props: Props) {
     }
   }
 
+  const hasCardSaved = false;
+
+  function shouldDisableAmountSelector(amount) {
+    console.log(amount);
+    return (amount > balance && activeTab !== 'TipFiat') || (activeTab === 'TipFiat' && !hasCardSaved);
+  }
+
   return (
     <Form onSubmit={handleSubmit}>
       {/* if there is no LBC balance, show user frontend to get credits */}
@@ -271,7 +278,7 @@ function WalletSendTip(props: Props) {
                   {DEFAULT_TIP_AMOUNTS.map((amount) => (
                     <Button
                       key={amount}
-                      disabled={amount > balance && activeTab !== 'TipFiat'}
+                      disabled={shouldDisableAmountSelector(amount)}
                       button="alt"
                       className={classnames('button-toggle button-toggle--expandformobile', {
                         'button-toggle--active': tipAmount === amount,
@@ -293,6 +300,7 @@ function WalletSendTip(props: Props) {
                     icon={iconToUse}
                     label={__('Custom')}
                     onClick={() => setUseCustomTip(true)}
+                    disabled={activeTab === 'TipFiat' && hasCardSaved !== true}
                   />
                   {DEFAULT_TIP_AMOUNTS.some((val) => val > balance) && activeTab !== 'TipFiat' && (
                     <Button
