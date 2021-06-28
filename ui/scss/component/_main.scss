@@ -87,6 +87,7 @@
 
     > :first-child {
       flex: 1;
+      max-width: 100%;
     }
 
     @media (min-width: $breakpoint-medium) {
