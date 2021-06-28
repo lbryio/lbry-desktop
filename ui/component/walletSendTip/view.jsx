@@ -107,7 +107,6 @@ function WalletSendTip(props: Props) {
   function sendSupportOrConfirm(instantTipMaxAmount = null) {
     // send a tip
     if (
-      !isSupport &&
       !isConfirming &&
       (!instantTipMaxAmount || !instantTipEnabled || tipAmount > instantTipMaxAmount)
     ) {
@@ -166,6 +165,16 @@ function WalletSendTip(props: Props) {
   function shouldDisableAmountSelector(amount) {
     console.log(amount);
     return (amount > balance && activeTab !== 'TipFiat') || (activeTab === 'TipFiat' && !hasCardSaved);
+  }
+
+  function setConfirmLabel() {
+    if (activeTab === 'TipLBC') {
+      return 'Tipping LBC';
+    } else if (activeTab === 'TipFiat') {
+      return 'Tipping Fiat';
+    } else if (activeTab === 'Boost') {
+      return 'Boosting';
+    }
   }
 
   return (
@@ -239,7 +248,7 @@ function WalletSendTip(props: Props) {
             </React.Fragment>
           }
           actions={
-            // if the transaction is confirming?
+            // confirmation modal, allow  user to confirm or cancel transaction
             isConfirming ? (
               <>
                 <div className="section section--padded card--inline confirm__wrapper">
@@ -250,7 +259,7 @@ function WalletSendTip(props: Props) {
                     <div className="confirm__value">
                       {activeChannelClaim && !incognito ? activeChannelClaim.name : __('Anonymous')}
                     </div>
-                    <div className="confirm__label">{__(isSupport ? 'Boosting' : 'Tipping')}</div>
+                    <div className="confirm__label">{setConfirmLabel()}</div>
                     <div className="confirm__value">
                       <LbcSymbol postfix={tipAmount} size={22} />
                     </div>
