@@ -70,7 +70,15 @@ function WalletSendTip(props: Props) {
   const [sendAsTip, setSendAsTip] = usePersistedState('comment-support:sendAsTip', true);
   const [isConfirming, setIsConfirming] = React.useState(false);
   const { claim_id: claimId } = claim;
+  console.log('claim');
+  console.log(claim);
   const { channelName } = parseURI(uri);
+  console.log('channel name');
+  console.log(channelName);
+
+  const channelClaimId = claim.signing_channel.claim_id;
+  const tipChannelName = claim.signing_channel.name;
+  const sourceClaimId = claim.claim_id;
 
   const noBalance = balance === 0;
   const tipAmount = useCustomTip ? customTipAmount : presetTipAmount;
@@ -158,20 +166,22 @@ function WalletSendTip(props: Props) {
           });
         }
       } else if (activeTab === 'TipFiat') {
-
-        if (!isConfirming){
+        if (!isConfirming) {
           setIsConfirming(true);
-        } else if (isConfirming){
+        } else if (isConfirming) {
+
+          console.log(tipChannelName, channelClaimId, sourceClaimId);
+
           Lbryio.call('customer', 'tip', {
             amount: 100 * tipAmount, // convert from dollars to cents
-            channel_name: '@MyOdyseeChannel',
-            channel_claim_id: '148455f7eda466a5a6b6d73437c90b6148f85792',
+            channel_name: tipChannelName,
+            channel_claim_id: channelClaimId,
             currency: 'USD',
             anonymous: false,
-            source_claim_id: '148455f7eda466a5a6b6d73437c90b6148f85792'
+            source_claim_id: sourceClaimId,
           }, 'post').then(customerTipResponse => {
             doToast({
-              message: __('You sent $%amount% as a tip to @MyOdyseeChannel, I\'m sure they appreciate it!', { amount: tipAmount }),
+              message: __('You sent $%amount% as a tip to %tipChannelName%, I\'m sure they appreciate it!', { amount: tipAmount, tipChannelName  }),
             });
             console.log(customerTipResponse);
           });
