@@ -67,6 +67,9 @@ function WalletSendTip(props: Props) {
 
   const [activeTab, setActiveTab] = usePersistedState('comment-support:activeTab', 'TipLBC');
 
+  // TODO: get this as a call from the backend
+  const hasCardSaved = true;
+
   let iconToUse, explainerText;
   if (activeTab === 'Boost') {
     iconToUse = ICONS.LBC;
@@ -104,6 +107,7 @@ function WalletSendTip(props: Props) {
     } else if (tipAmount > balance) {
       tipError = __('Not enough Credits');
     }
+
     setTipError(tipError);
   }, [tipAmount, balance, setTipError]);
 
@@ -163,9 +167,6 @@ function WalletSendTip(props: Props) {
       return 'Send a ' + tipAmount + ' LBC Tip';
     }
   }
-
-  // TODO: get this as a call from the backend
-  const hasCardSaved = false;
 
   function shouldDisableAmountSelector(amount) {
     return (amount > balance && activeTab !== 'TipFiat') || (activeTab === 'TipFiat' && !hasCardSaved);
@@ -355,7 +356,7 @@ function WalletSendTip(props: Props) {
                         </React.Fragment>
                       }
                       className="form-field--price-amount"
-                      error={tipError}
+                      error={tipError && activeTab !== 'TipFiat'}
                       min="0"
                       step="any"
                       type="number"
@@ -373,7 +374,7 @@ function WalletSendTip(props: Props) {
                     icon={isSupport ? ICONS.TRENDING : ICONS.SUPPORT}
                     button="primary"
                     type="submit"
-                    disabled={fetchingChannels || isPending || tipError || !tipAmount || (activeTab === 'TipFiat' && !hasCardSaved)}
+                    disabled={fetchingChannels || isPending || (tipError && activeTab !== 'TipFiat') || !tipAmount || (activeTab === 'TipFiat' && !hasCardSaved)}
                     label={buildButtonText()}
                   />
                   {fetchingChannels && <span className="help">{__('Loading your channels...')}</span>}
