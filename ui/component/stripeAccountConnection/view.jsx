@@ -17,7 +17,8 @@ type State = {
   content: ?string,
   stripeConnectionUrl: string,
   alreadyUpdated: boolean,
-  accountConfirmed: boolean
+  accountConfirmed: boolean,
+  unpaidBalance: string
 };
 
 class StripeAccountConnection extends React.Component<Props, State> {
@@ -29,6 +30,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
       loading: true,
       accountConfirmed: false,
       accountPendingConfirmation: false,
+      unpaidBalance: 0,
     };
   }
 
@@ -60,6 +62,16 @@ class StripeAccountConnection extends React.Component<Props, State> {
       // if charges already enabled, no need to generate an account link
       if (accountStatusResponse.charges_enabled) {
         // account has already been confirmed
+
+        const yetToBeCashedOutBalance = accountStatusResponse.total_received_unpaid;
+        if (yetToBeCashedOutBalance) {
+          that.setState({
+            unpaidBalance: yetToBeCashedOutBalance,
+          });
+        }
+
+        console.log(accountStatusResponse.total_received_unpaid);
+
         that.setState({
           accountConfirmed: true,
         });
@@ -83,7 +95,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
   }
 
   render() {
-    const { stripeConnectionUrl, accountConfirmed, accountPendingConfirmation } = this.state;
+    const { stripeConnectionUrl, accountConfirmed, accountPendingConfirmation, unpaidBalance } = this.state;
 
     if (this.experimentalUiEnabled) {
       return (
@@ -127,6 +139,9 @@ class StripeAccountConnection extends React.Component<Props, State> {
                 <div>
                   <div>
                     <h3>Congratulations! Your account has been connected with Stripe.</h3>
+                    {unpaidBalance && <div><br></br>
+                      <h3>Your account balance is ${unpaidBalance/100} USD. When the functionality exists you will be able to withdraw your balance.</h3>
+                    </div>}
                   </div>
                   <div className="section__actions">
                     <a href="/$/wallet">
