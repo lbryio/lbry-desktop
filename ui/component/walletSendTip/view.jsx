@@ -20,7 +20,7 @@ const DEFAULT_TIP_AMOUNTS = [1, 5, 25, 100];
 let userHasAlreadySetupPayment;
 
 // TODO: come up with a better way to do this
-setTimeout(function(){
+setTimeout(function() {
   Lbryio.call('customer', 'status', {}, 'post').then(customerStatusResponse => {
     userHasAlreadySetupPayment = Boolean(customerStatusResponse.Customer.invoice_settings.default_payment_method.id);
   });
@@ -43,6 +43,7 @@ type Props = {
   instantTipMax: { amount: number, currency: string },
   activeChannelClaim: ?ChannelClaim,
   incognito: boolean,
+  doToast: ({ message: string }) => void,
 };
 
 function WalletSendTip(props: Props) {
@@ -60,6 +61,7 @@ function WalletSendTip(props: Props) {
     fetchingChannels,
     incognito,
     activeChannelClaim,
+    doToast,
   } = props;
   const [presetTipAmount, setPresetTipAmount] = usePersistedState('comment-support:presetTip', DEFAULT_TIP_AMOUNTS[0]);
   const [customTipAmount, setCustomTipAmount] = usePersistedState('comment-support:customTip', 1.0);
@@ -156,10 +158,29 @@ function WalletSendTip(props: Props) {
           });
         }
       } else if (activeTab === 'TipFiat') {
-        console.log('tip amount');
-        console.log(tipAmount);
-        alert('sending here');
-        // pretty sure this runs if it's a boost
+
+        if (!isConfirming){
+          setIsConfirming(true);
+        } else if (isConfirming){
+          Lbryio.call('customer', 'tip', {
+            amount: 100 * tipAmount, // convert from dollars to cents
+            channel_name: '@MyOdyseeChannel',
+            channel_claim_id: '148455f7eda466a5a6b6d73437c90b6148f85792',
+            currency: 'USD',
+            anonymous: false,
+            source_claim_id: '148455f7eda466a5a6b6d73437c90b6148f85792'
+          }, 'post').then(customerTipResponse => {
+            doToast({
+              message: __('You sent $%amount% as a tip to @MyOdyseeChannel, I\'m sure they appreciate it!', { amount: tipAmount }),
+            });
+            console.log(customerTipResponse);
+          });
+
+          closeModal();
+        } else {
+          alert ('Problem!');
+        }
+
       } else {
         sendSupportOrConfirm();
       }
