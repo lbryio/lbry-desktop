@@ -100,7 +100,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
     if (this.experimentalUiEnabled) {
       return (
         <Card
-          title={<div className="table__header-text">{__(`Connect to Stripe`)}</div>}
+          title={<div className="table__header-text">{__(`Connect A Bank Account`)}</div>}
           isBodyList
           body={
             <div>
@@ -109,7 +109,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
               <div className="card__body-actions">
                 <div>
                   <div>
-                    <h3>Getting your Stripe account connection status...</h3>
+                    <h3>Getting your Bank Account Connection status...</h3>
                   </div>
                 </div>
               </div>
@@ -119,13 +119,13 @@ class StripeAccountConnection extends React.Component<Props, State> {
               <div className="card__body-actions">
                 <div>
                   <div>
-                    <h3>Connect your account to Stripe to receive tips from viewers directly to your bank account</h3>
+                    <h3>Connect your Bank Account to Odysee to receive directly from users</h3>
                   </div>
                   <div className="section__actions">
                     <a href={stripeConnectionUrl}>
                       <Button
                         button="secondary"
-                        label={__('Connect To Stripe')}
+                        label={__('Connect Your Bank Account')}
                         icon={ICONS.FINANCE}
                       />
                     </a>
@@ -138,7 +138,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
               <div className="card__body-actions">
                 <div>
                   <div>
-                    <h3>Congratulations! Your account has been connected with Stripe.</h3>
+                    <h3>Congratulations! Your account has been connected with Odysee.</h3>
                     {unpaidBalance && <div><br></br>
                       <h3>Your account balance is ${unpaidBalance/100} USD. When the functionality exists you will be able to withdraw your balance.</h3>
                     </div>}
@@ -147,7 +147,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
                     <a href="/$/wallet">
                       <Button
                         button="secondary"
-                        label={__('View Your Stripe Setup')}
+                        label={__('View Your Transaction History')}
                         icon={ICONS.SETTINGS}
                       />
                     </a>
