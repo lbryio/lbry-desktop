@@ -61,6 +61,7 @@ function WalletSendTip(props: Props) {
   const [isConfirming, setIsConfirming] = React.useState(false);
   const { claim_id: claimId } = claim;
   const { channelName } = parseURI(uri);
+
   const noBalance = balance === 0;
   const tipAmount = useCustomTip ? customTipAmount : presetTipAmount;
 
@@ -73,6 +74,9 @@ function WalletSendTip(props: Props) {
   } else if (activeTab === 'TipFiat') {
     iconToUse = ICONS.FINANCE;
     explainerText = 'This tip will be made through your card and sent to the creator at which point they will be able to withdraw the funds.  ';
+    if (!hasCardSaved) {
+      explainerText += 'You must add a card to use this functionality. ';
+    }
   } else if (activeTab === 'TipLBC') {
     iconToUse = ICONS.LBC;
     explainerText = 'Show this channel your appreciation by sending a donation. This is a one time donation which is not refundable. ';
@@ -160,10 +164,10 @@ function WalletSendTip(props: Props) {
     }
   }
 
+  // TODO: get this as a call from the backend
   const hasCardSaved = false;
 
   function shouldDisableAmountSelector(amount) {
-    console.log(amount);
     return (amount > balance && activeTab !== 'TipFiat') || (activeTab === 'TipFiat' && !hasCardSaved);
   }
 
@@ -216,7 +220,11 @@ function WalletSendTip(props: Props) {
                     icon={ICONS.LBC}
                     label={__('Tip LBC')}
                     button="alt"
-                    onClick={() => setActiveTab('TipLBC')}
+                    onClick={() => {
+                      if (!isConfirming) {
+                        setActiveTab('TipLBC');
+                      }
+                    }}
                     className={classnames('button-toggle', { 'button-toggle--active': activeTab === 'TipLBC' })}
                   />
                   {/* tip fiat tab button */}
@@ -225,7 +233,11 @@ function WalletSendTip(props: Props) {
                     icon={ICONS.FINANCE}
                     label={__('Tip Fiat')}
                     button="alt"
-                    onClick={() => setActiveTab('TipFiat')}
+                    onClick={() => {
+                      if (!isConfirming) {
+                        setActiveTab('TipFiat');
+                      }
+                    }}
                     className={classnames('button-toggle', { 'button-toggle--active': activeTab === 'TipFiat' })}
                   />
                   {/* tip LBC tab button */}
@@ -234,7 +246,11 @@ function WalletSendTip(props: Props) {
                     icon={ICONS.TRENDING}
                     label={__('Boost')}
                     button="alt"
-                    onClick={() => setActiveTab('Boost')}
+                    onClick={() => {
+                      if (!isConfirming) {
+                        setActiveTab('Boost');
+                      }
+                    }}
                     className={classnames('button-toggle', { 'button-toggle--active': activeTab === 'Boost' })}
                   />
                 </div>
@@ -243,6 +259,7 @@ function WalletSendTip(props: Props) {
               {/* short explainer under the button */}
               <div className="section__subtitle">
                 {explainerText}
+                {activeTab === 'TipFiat' && !hasCardSaved && <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add A Card')} button="link" />}
                 {activeTab !== 'TipFiat' && <Button label={__('Learn more')} button="link" href="https://lbry.com/faq/tipping" />}
               </div>
             </React.Fragment>
@@ -356,7 +373,7 @@ function WalletSendTip(props: Props) {
                     icon={isSupport ? ICONS.TRENDING : ICONS.SUPPORT}
                     button="primary"
                     type="submit"
-                    disabled={fetchingChannels || isPending || tipError || !tipAmount}
+                    disabled={fetchingChannels || isPending || tipError || !tipAmount || (activeTab === 'TipFiat' && !hasCardSaved)}
                     label={buildButtonText()}
                   />
                   {fetchingChannels && <span className="help">{__('Loading your channels...')}</span>}
