@@ -17,6 +17,14 @@ import usePersistedState from 'effects/use-persisted-state';
 import WalletSpendableBalanceHelp from 'component/walletSpendableBalanceHelp';
 
 const DEFAULT_TIP_AMOUNTS = [1, 5, 25, 100];
+let userHasAlreadySetupPayment;
+
+// TODO: come up with a better way to do this
+setTimeout(function(){
+  Lbryio.call('customer', 'status', {}, 'post').then(customerStatusResponse => {
+    userHasAlreadySetupPayment = Boolean(customerStatusResponse.Customer.invoice_settings.default_payment_method.id);
+  });
+}, 500);
 
 type SupportParams = { amount: number, claim_id: string, channel_id?: string };
 
@@ -68,7 +76,7 @@ function WalletSendTip(props: Props) {
   const [activeTab, setActiveTab] = usePersistedState('comment-support:activeTab', 'TipLBC');
 
   // TODO: get this as a call from the backend
-  const hasCardSaved = true;
+  const hasCardSaved = userHasAlreadySetupPayment;
 
   let iconToUse, explainerText;
   if (activeTab === 'Boost') {
@@ -147,6 +155,11 @@ function WalletSendTip(props: Props) {
             sendSupportOrConfirm(instantTipMax.amount / LBC_USD);
           });
         }
+      } else if (activeTab === 'TipFiat') {
+        console.log('tip amount');
+        console.log(tipAmount);
+        alert('sending here');
+        // pretty sure this runs if it's a boost
       } else {
         sendSupportOrConfirm();
       }
@@ -208,7 +221,7 @@ function WalletSendTip(props: Props) {
           }
         />
       ) : (
-        // if there is lbc, the main tip/boost gui
+        // if there is lbc, the main tip/boost gui with the 3 tabs at the top
         <Card
           title={<LbcSymbol postfix={claimIsMine ? __('Boost your content') : __('Support this content')} size={22} />}
           subtitle={
