@@ -286,8 +286,7 @@ function ClaimTilesDiscover(props: Props) {
 
   const modifiedUris = uris ? uris.slice() : [];
   const fixUris = [
-    'lbry://@JungleSurvival#f/incredible-secret-millionaire#a',
-    'lbry://@JamesJulierArt#0/ipad-painting-tutorial-lava-flow-art-in#8',
+    'lbry://@summitforwellness#9/trail-run-to-cherry-creek-falls-(trying#3',
                   ];
                    
   if (pin && modifiedUris && modifiedUris.length > 2 && window.location.pathname === '/') {
