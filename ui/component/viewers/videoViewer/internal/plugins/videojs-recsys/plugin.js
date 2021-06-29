@@ -271,7 +271,7 @@ const onPlayerReady = (player, options) => {
  * @function plugin
  * @param    {Object} [options={}]
  */
-const plugin = function (options) {
+const plugin = function(options) {
   this.ready(() => {
     onPlayerReady(this, videojs.mergeOptions(defaults, options));
   });
