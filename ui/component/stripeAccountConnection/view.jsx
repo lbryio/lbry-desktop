@@ -139,8 +139,10 @@ class StripeAccountConnection extends React.Component<Props, State> {
                 <div>
                   <div>
                     <h3>Congratulations! Your account has been connected with Odysee.</h3>
-                    {unpaidBalance && <div><br></br>
+                    {unpaidBalance > 0 ? <div><br></br>
                       <h3>Your account balance is ${unpaidBalance/100} USD. When the functionality exists you will be able to withdraw your balance.</h3>
+                    </div> : <div><br></br>
+                      <h3>Your account balance is $0 USD. When you receive a tip you will see it here.</h3>
                     </div>}
                   </div>
                   <div className="section__actions">
