@@ -47,6 +47,8 @@
 }
 
 .snack-bar__message {
+  overflow: hidden;
+  text-overflow: ellipsis;
   align-items: center;
   display: flex;
   flex-direction: row;
