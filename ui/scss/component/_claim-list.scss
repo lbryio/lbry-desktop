@@ -94,6 +94,10 @@
 
 .claim-preview__wrapper--small {
   padding: var(--spacing-s);
+
+  .button--uri-indicator {
+    max-width: 12rem;
+  }
 }
 
 .claim-preview {
