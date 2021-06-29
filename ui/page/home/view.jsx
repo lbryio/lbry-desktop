@@ -47,7 +47,15 @@ function HomePage(props: Props) {
         ))}
       </ul>
     );
-    const claimTiles = <ClaimTilesDiscover {...options} liveLivestreamsFirst livestreamMap={livestreamMap} hasSource pin={route === `/$/${PAGES.GENERAL}`}/>;
+    const claimTiles = (
+      <ClaimTilesDiscover
+        {...options}
+        liveLivestreamsFirst
+        livestreamMap={livestreamMap}
+        hasSource
+        pin={route === `/$/${PAGES.GENERAL}`}
+      />
+    );
 
     return (
       <div key={title} className="claim-grid__wrapper">
@@ -128,7 +136,7 @@ function HomePage(props: Props) {
 
       <h1 className="home__meme">
         <Button button="link" href="https://odysee.com/@Odysee:8?view=discussion">
-          {"this is my favorite store on the citadel"}
+          {'this is my favorite store on the citadel'}
         </Button>
       </h1>
 
