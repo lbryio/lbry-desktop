@@ -1,5 +1,6 @@
 // @flow
 import React, { useEffect, useRef, useState } from 'react';
+import { SIMPLE_SITE } from 'config';
 import Button from 'component/button';
 import * as ICONS from 'constants/icons';
 import classnames from 'classnames';
@@ -9,6 +10,7 @@ import eventTracking from 'videojs-event-tracking';
 import * as OVERLAY from './overlays';
 import './plugins/videojs-mobile-ui/plugin';
 import hlsQualitySelector from './plugins/videojs-hls-quality-selector/plugin';
+import recsys from './plugins/videojs-recsys/plugin';
 import qualityLevels from 'videojs-contrib-quality-levels';
 import isUserTyping from 'util/detect-typing';
 
@@ -50,6 +52,8 @@ type Props = {
   autoplay: boolean,
   toggleVideoTheaterMode: () => void,
   adUrl: ?string,
+  claimId: ?string,
+  userId: ?number,
 };
 
 type VideoJSOptions = {
@@ -121,6 +125,10 @@ if (!Object.keys(videojs.getPlugins()).includes('qualityLevels')) {
   videojs.registerPlugin('qualityLevels', qualityLevels);
 }
 
+if (!Object.keys(videojs.getPlugins()).includes('recsys')) {
+  videojs.registerPlugin('recsys', recsys);
+}
+
 // ****************************************************************************
 // LbryVolumeBarClass
 // ****************************************************************************
@@ -180,6 +188,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     onPlayerReady,
     toggleVideoTheaterMode,
     adUrl,
+    claimId,
+    userId,
   } = props;
 
   const [reload, setReload] = useState('initial');
@@ -582,6 +592,14 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       player.hlsQualitySelector({
         displayCurrentQuality: true,
       });
+
+      // Add recsys plugin
+      if (SIMPLE_SITE) {
+        player.recsys({
+          videoId: claimId,
+          userId: userId,
+        });
+      }
 
       // Update player source
       player.src({
