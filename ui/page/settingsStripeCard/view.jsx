@@ -58,11 +58,32 @@ class CardVerify extends React.Component<Props, State> {
     // var clientSecret = 'seti_1J3ULjIrsVv9ySuhkUWZXOmV_secret_Jgs5DyXwLF12743YO1apFxQvnawbCna';
     var clientSecret = '';
 
-    Lbryio.call('customer', 'setup', {}, 'post').then(customerSetupResponse => {
-      console.log('credit card response');
-      console.log(customerSetupResponse);
-      clientSecret = customerSetupResponse.client_secret;
-    });
+    setTimeout(function(){
+      Lbryio.call('customer', 'status', {}, 'post').then(customerStatusResponse => {
+        console.log('customer status response');
+        console.log(customerStatusResponse);
+
+        const defaultPaymentMethod = customerStatusResponse.Customer.invoice_settings.default_payment_method;
+
+        var userHasAlreadySetupPayment = Boolean(defaultPaymentMethod && defaultPaymentMethod.id);
+
+        console.log('user has already verified');
+        console.log(userHasAlreadySetupPayment);
+
+        // show different frontend if user already has card
+        if (userHasAlreadySetupPayment) {
+          document.querySelector('.cardInput').classList.add("hidden");
+          document.querySelector('.headerCard').classList.add("hidden");
+          document.querySelector('.successCard').classList.remove("hidden");
+        }
+
+      });
+    }, 500);
+
+
+    // Lbryio.call('customer', 'setup', {}, 'post').then(customerSetupResponse => {
+    //   clientSecret = customerSetupResponse.client_secret;
+    // });
 
     // TODO: have to fix this, using so that the script is available
     setTimeout(function(){
@@ -100,12 +121,6 @@ class CardVerify extends React.Component<Props, State> {
         });
 
         var email = that.props.email;
-
-        console.log('email');
-
-        console.log(that.props);
-        console.log('email');
-        console.log(email);
 
         // Handle payment submission when user clicks the pay button.
         var button = document.getElementById('submit');
@@ -248,10 +263,7 @@ class CardVerify extends React.Component<Props, State> {
             <div className="successCard hidden">
               <Card
                 title={__('Card successfully added!')}
-                subtitle={__('Congratulations! Your card has been successfully added to your Odysee account')}
-              />
-              <Card
-                subtitle={__('You can now tip your favorite creators while viewing their content')}
+                subtitle={__('Congratulations! Your card has been successfully added to your Odysee account. You can now tip your favorite creators while viewing their content.')}
               />
             </div>
           </div>
