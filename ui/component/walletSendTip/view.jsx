@@ -184,7 +184,11 @@ function WalletSendTip(props: Props) {
               message: __('You sent $%amount% as a tip to %tipChannelName%, I\'m sure they appreciate it!', { amount: tipAmount, tipChannelName  }),
             });
             console.log(customerTipResponse);
-          });
+          }).catch(function(error){
+            console.log(error);
+          })
+
+          ;
 
           closeModal();
         } else {
