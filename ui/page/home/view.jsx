@@ -132,9 +132,9 @@ function HomePage(props: Props) {
         </Button>
       </h1>
 
-      {rowData.map(({ title, route, link, icon, help, options = {} }, index) => (
+      {rowData.map(({ title, route, link, icon, help, options = {} }, index) => {
         return getRowElements(title, route, link, icon, help, options, index);
-      ))}
+      })}
     </Page>
   );
 }
