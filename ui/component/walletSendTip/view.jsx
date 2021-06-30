@@ -18,6 +18,7 @@ import WalletSpendableBalanceHelp from 'component/walletSpendableBalanceHelp';
 
 const DEFAULT_TIP_AMOUNTS = [1, 5, 25, 100];
 let userHasAlreadySetupPayment;
+let creatorCanReceiveTips;
 
 // TODO: come up with a better way to do this
 setTimeout(function() {
@@ -76,9 +77,22 @@ function WalletSendTip(props: Props) {
   console.log('channel name');
   console.log(channelName);
 
+  const [canReceiveFiatTip, setCanReceiveFiatTip] = React.useState();
+
   const channelClaimId = claim.signing_channel.claim_id;
   const tipChannelName = claim.signing_channel.name;
   const sourceClaimId = claim.claim_id;
+
+  Lbryio.call('account', 'check', {
+    channel_claim_id: channelClaimId,
+    channel_name: tipChannelName,
+  }, 'post').then(accountCheckResponse => {
+    if (accountCheckResponse === true && canReceiveFiatTip !== true) {
+      setCanReceiveFiatTip(true);
+    }
+  }).catch(function(error) {
+    console.log(error);
+  });
 
   const noBalance = balance === 0;
   const tipAmount = useCustomTip ? customTipAmount : presetTipAmount;
@@ -184,8 +198,10 @@ function WalletSendTip(props: Props) {
               message: __('You sent $%amount% as a tip to %tipChannelName%, I\'m sure they appreciate it!', { amount: tipAmount, tipChannelName  }),
             });
             console.log(customerTipResponse);
-          }).catch(function(error){
+          }).catch(function(error) {
             console.log(error);
+            // TODO: be smarter about showing the error here
+            doToast({ message: error.message, isError: true })
           })
 
           ;
@@ -217,7 +233,7 @@ function WalletSendTip(props: Props) {
   }
 
   function shouldDisableAmountSelector(amount) {
-    return (amount > balance && activeTab !== 'TipFiat') || (activeTab === 'TipFiat' && !hasCardSaved);
+    return (amount > balance && activeTab !== 'TipFiat') || (activeTab === 'TipFiat' && ( !hasCardSaved || !canReceiveFiatTip));
   }
 
   function setConfirmLabel() {
@@ -422,12 +438,16 @@ function WalletSendTip(props: Props) {
                     icon={isSupport ? ICONS.TRENDING : ICONS.SUPPORT}
                     button="primary"
                     type="submit"
-                    disabled={fetchingChannels || isPending || (tipError && activeTab !== 'TipFiat') || !tipAmount || (activeTab === 'TipFiat' && !hasCardSaved)}
+                    disabled={fetchingChannels || isPending ||
+                    (tipError && activeTab !== 'TipFiat') || !tipAmount ||
+                    (activeTab === 'TipFiat' && (!hasCardSaved || !canReceiveFiatTip))}
                     label={buildButtonText()}
                   />
                   {fetchingChannels && <span className="help">{__('Loading your channels...')}</span>}
                 </div>
-                {activeTab !== 'TipFiat' ? <WalletSpendableBalanceHelp /> : <div className="help">The payment will be made from your saved card</div>}
+                {activeTab !== 'TipFiat' ? <WalletSpendableBalanceHelp /> :
+                  !canReceiveFiatTip ? <div className="help">Only select creators can receive tips at this time</div> :
+                  <div className="help">The payment will be made from your saved card</div>}
               </>
             )
           }
