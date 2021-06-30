@@ -60,6 +60,8 @@
     "remove-markdown": "^0.3.0",
     "source-map-explorer": "^2.5.2",
     "tempy": "^0.6.0",
+    "videojs-contrib-ads": "^6.9.0",
+    "videojs-ima": "^1.11.0",
     "videojs-logo": "^2.1.4"
   },
   "devDependencies": {

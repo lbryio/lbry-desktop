@@ -1,5 +1,5 @@
 // Created by xander on 6/21/2021
-import videojs from 'video.js/dist/video.min.js';
+import videojs from 'video.js';
 import { v4 as uuidV4 } from 'uuid';
 const VERSION = '0.0.1';
 

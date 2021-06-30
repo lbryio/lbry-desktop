@@ -1,4 +1,4 @@
-import videojs from 'video.js/dist/video.min.js';
+import videojs from 'video.js';
 import './touchOverlay.js';
 import window from 'global/window';
 import './plugin.scss';

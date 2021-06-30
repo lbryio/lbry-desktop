@@ -148,7 +148,10 @@ function VideoViewer(props: Props) {
   }, [embedded, videoPlaybackRate]);
 
   function doTrackingBuffered(e: Event, data: any) {
+    console.log(`tracking buffered`, e);
+    console.log(`Source (tracking buffered): ${source}`);
     fetch(source, { method: 'HEAD' }).then((response) => {
+      console.log(`Source Response (tracking buffered)`, response);
       data.playerPoweredBy = response.headers.get('x-powered-by');
       doAnalyticsBuffer(uri, data);
     });
@@ -179,7 +182,9 @@ function VideoViewer(props: Props) {
     } else if (autoplaySetting) {
       setShowAutoplayCountdown(true);
     }
-  }, [embedded, setIsEndededEmbed, autoplaySetting, setShowAutoplayCountdown, adUrl, setAdUrl]);
+
+    clearPosition(uri);
+  }, [embedded, setIsEndededEmbed, autoplaySetting, setShowAutoplayCountdown, adUrl, setAdUrl, clearPosition, uri]);
 
   function onPlay() {
     setIsLoading(false);
@@ -198,11 +203,7 @@ function VideoViewer(props: Props) {
   }
 
   function handlePosition(player) {
-    if (player.ended()) {
-      clearPosition(uri);
-    } else {
-      savePosition(uri, player.currentTime());
-    }
+    savePosition(uri, player.currentTime());
   }
 
   function restorePlaybackRate(player) {
@@ -235,21 +236,12 @@ function VideoViewer(props: Props) {
       Promise.race([playPromise, timeoutPromise]).catch((error) => {
         if (typeof error === 'object' && error.name && error.name === 'NotAllowedError') {
           if (player.autoplay() && !player.muted()) {
-            player.muted(true);
+            // player.muted(true);
             // another version had player.play()
           }
         }
-
-        if (PLAY_TIMEOUT_ERROR) {
-          const retryPlayPromise = player.play();
-          Promise.race([retryPlayPromise, timeoutPromise]).catch((error) => {
-            setIsLoading(false);
-            setIsPlaying(false);
-          });
-        } else {
-          setIsLoading(false);
-          setIsPlaying(false);
-        }
+        setIsLoading(false);
+        setIsPlaying(false);
       });
     }
 
