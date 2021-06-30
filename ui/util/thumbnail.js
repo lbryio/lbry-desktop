@@ -15,7 +15,7 @@ type Props = {
 export function getThumbnailCdnUrl(props: Props) {
   const { thumbnail, height = THUMBNAIL_HEIGHT, width = THUMBNAIL_WIDTH, quality = THUMBNAIL_QUALITY } = props;
 
-  if (!THUMBNAIL_CDN_URL || !thumbnail) {
+  if (!THUMBNAIL_CDN_URL || !thumbnail || thumbnail.includes('https://thumbnails.lbry.com')) {
     return thumbnail;
   }
 
