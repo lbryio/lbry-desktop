@@ -59,6 +59,9 @@ class CardVerify extends React.Component<Props, State> {
     var clientSecret = '';
 
     setTimeout(function(){
+
+      console.log("RUNNING HERE")
+
       Lbryio.call('customer', 'status', {}, 'post').then(customerStatusResponse => {
         console.log('customer status response');
         console.log(customerStatusResponse);
@@ -75,15 +78,19 @@ class CardVerify extends React.Component<Props, State> {
           document.querySelector('.cardInput').classList.add("hidden");
           document.querySelector('.headerCard').classList.add("hidden");
           document.querySelector('.successCard').classList.remove("hidden");
+        } else {
+          Lbryio.call('customer', 'setup', {}, 'post').then(customerSetupResponse => {
+            console.log(customerSetupResponse);
+
+            clientSecret = customerSetupResponse.client_secret;
+          });
         }
 
       });
     }, 500);
 
 
-    // Lbryio.call('customer', 'setup', {}, 'post').then(customerSetupResponse => {
-    //   clientSecret = customerSetupResponse.client_secret;
-    // });
+
 
     // TODO: have to fix this, using so that the script is available
     setTimeout(function(){
@@ -178,7 +185,7 @@ class CardVerify extends React.Component<Props, State> {
           changeLoadingState(false);
         });
       };
-      }, 200)
+      }, 500)
 
   }
 
@@ -186,6 +193,8 @@ class CardVerify extends React.Component<Props, State> {
     if (!scriptLoading) {
       this.updateStripeHandler();
     }
+
+    console.log('DID UPDATE!');
   }
 
   componentWillUnmount() {
