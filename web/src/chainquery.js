@@ -9,7 +9,7 @@ const pool = mysql.createPool({
 });
 
 function queryPool(sql, params) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     pool.query(sql, params, (error, rows) => {
       if (error) {
         console.log('error', error); // eslint-disable-line
@@ -56,5 +56,23 @@ module.exports.getClaim = async function getClaim(claimName, claimId, channelNam
 
   sql += ' ORDER BY claim.bid_state DESC LIMIT 1';
 
+  return queryPool(sql, params);
+};
+
+module.exports.getChannelClaim = async function getChannelClaim(channelClaimId) {
+  const params = [];
+  const select = ['claim_id', 'name', 'title', 'thumbnail_url', 'description'].join(', ');
+
+  const sql = `SELECT ${select} FROM claim WHERE claim_id = "${channelClaimId}"`;
+  return queryPool(sql, params);
+};
+
+module.exports.getClaimsFromChannel = async function getClaimsFromChannel(channelClaimId, count = 10) {
+  const params = [];
+  const select = ['claim_id', 'name', 'title', 'thumbnail_url', 'description', 'created_at'].join(', ');
+  const sort = 'ORDER BY created_at DESC';
+  const limit = `LIMIT ${count}`;
+
+  const sql = `SELECT ${select} FROM claim WHERE publisher_id = "${channelClaimId}" ${sort} ${limit}`;
   return queryPool(sql, params);
 };

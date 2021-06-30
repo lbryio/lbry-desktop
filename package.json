@@ -53,6 +53,7 @@
     "electron-notarize": "^1.0.0",
     "electron-updater": "^4.2.4",
     "express": "^4.17.1",
+    "feed": "^4.2.2",
     "if-env": "^1.0.4",
     "react-datetime-picker": "^3.2.1",
     "react-top-loading-bar": "^2.0.1",

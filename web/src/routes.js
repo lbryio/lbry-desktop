@@ -1,4 +1,5 @@
 const { getHtml } = require('./html');
+const { getRss } = require('./rss');
 const { generateStreamUrl } = require('../../ui/util/web');
 const fetch = require('node-fetch');
 const Router = require('@koa/router');
@@ -40,6 +41,12 @@ router.get(`/$/download/:claimName/:claimId`, async (ctx) => {
 router.get(`/$/stream/:claimName/:claimId`, async (ctx) => {
   const streamUrl = getStreamUrl(ctx);
   ctx.redirect(streamUrl);
+});
+
+router.get(`/$/rss/:claimName/:claimId`, async (ctx) => {
+  const xml = await getRss(ctx);
+  ctx.set('Content-Type', 'application/rss+xml');
+  ctx.body = xml;
 });
 
 router.get('*', async (ctx) => {
