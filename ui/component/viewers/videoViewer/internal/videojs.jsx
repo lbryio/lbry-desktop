@@ -13,8 +13,13 @@ import hlsQualitySelector from './plugins/videojs-hls-quality-selector/plugin';
 import recsys from './plugins/videojs-recsys/plugin';
 import qualityLevels from 'videojs-contrib-quality-levels';
 import isUserTyping from 'util/detect-typing';
+import 'videojs-contrib-ads';
+import 'videojs-ima';
+// import aniview from './plugins/videojs-aniview/plugin';
 
 const isDev = process.env.NODE_ENV !== 'production';
+const macroUrl =
+  'https://vast.aniview.com/api/adserver61/vast/?AV_PUBLISHERID=60afcbc58cfdb065440d2426&AV_CHANNELID=60b354389c7adb506d0bd9a4&AV_URL=[URL_MACRO]&cb=[TIMESTAMP_MACRO]&AV_WIDTH=[WIDTH_MACRO]&AV_HEIGHT=[HEIGHT_MACRO]&AV_SCHAIN=[SCHAIN_MACRO]&AV_CCPA=[CCPA_MACRO]&AV_GDPR=[GDPR_MACRO]&AV_CONSENT=[CONSENT_MACRO]&skip=true&skiptimer=5&usevslot=true&hidecontrols=false';
 
 export type Player = {
   on: (string, (any) => void) => void,
@@ -54,6 +59,7 @@ type Props = {
   adUrl: ?string,
   claimId: ?string,
   userId: ?number,
+  allowPreRoll: ?boolean,
 };
 
 type VideoJSOptions = {
@@ -78,7 +84,7 @@ const VIDEO_JS_OPTIONS: VideoJSOptions = {
   responsive: true,
   controls: true,
   html5: {
-    hls: {
+    vhs: {
       overrideNative: !videojs.browser.IS_ANY_SAFARI,
     },
   },
@@ -190,6 +196,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     adUrl,
     claimId,
     userId,
+    allowPreRoll,
   } = props;
 
   const [reload, setReload] = useState('initial');
@@ -321,7 +328,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
           // clashes if we add a new button in the future.
           // (2) We'll have to get 'makeSelectClientSetting(SETTINGS.VIDEO_THEATER_MODE)'
           // as a prop here so we can say "Theater mode|Default mode" instead of
-          // "Toggle Theather mode".
+          // "Toggle Theater mode".
           controlBar.getChild('Button').controlText(__('Toggle Theater mode (t)'));
           break;
         default:
@@ -337,6 +344,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       // The css starts as "hidden". We make it visible here without
       // re-rendering the whole thing.
       showTapButton(TAP.UNMUTE);
+    } else {
+      showTapButton(TAP.NONE);
     }
   }
 
@@ -350,6 +359,10 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   function onError() {
     const player = playerRef.current;
     showTapButton(TAP.RETRY);
+
+    // reattach initial play listener in case we recover from error successfully
+    // $FlowFixMe
+    player.one('play', onInitialPlay);
 
     if (player && player.loadingSpinner) {
       player.loadingSpinner.hide();
@@ -473,9 +486,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
   // Create the video DOM element and wrapper
   function createVideoPlayerDOM(container) {
-    if (!container) {
-      return;
-    }
+    if (!container) return;
 
     // This seems like a poor way to generate the DOM for video.js
     const wrapper = document.createElement('div');
@@ -489,19 +500,51 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     return el;
   }
 
+  function detectFileType() {
+    console.log(`Detecting file type via pre-fetch...`);
+    return new Promise(async (res, rej) => {
+      try {
+        const response = await fetch(source, { method: 'HEAD', cache: 'no-store' });
+
+        // Temp variables to hold results
+        let finalType = sourceType;
+        let finalSource = source;
+
+        // override type if we receive an .m3u8 (transcoded mp4)
+        // do we need to check if explicitly redirected
+        // or is checking extension only a safer method
+        if (response && response.redirected && response.url && response.url.endsWith('m3u8')) {
+          finalType = 'application/x-mpegURL';
+          finalSource = response.url;
+        }
+
+        console.log(`File type is: ${finalType}`);
+
+        // Modify video source in options
+        videoJsOptions.sources = [
+          {
+            src: finalSource,
+            type: finalType,
+          },
+        ];
+
+        return res(videoJsOptions);
+      } catch (error) {
+        console.error(`Failed to pre-fetch video!`);
+        return rej(error);
+      }
+    });
+  }
+
   // Initialize video.js
   function initializeVideoPlayer(el) {
-    if (!el) {
-      return;
-    }
+    if (!el) return;
 
     const vjs = videojs(el, videoJsOptions, () => {
       const player = playerRef.current;
 
       // this seems like a weird thing to have to check for here
-      if (!player) {
-        return;
-      }
+      if (!player) return;
 
       // Add various event listeners to player
       player.one('play', onInitialPlay);
@@ -517,12 +560,44 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       // Replace volume bar with custom LBRY volume bar
       LbryVolumeBarClass.replaceExisting(player);
 
+      // Add reloadSourceOnError plugin
+      player.reloadSourceOnError({ errorInterval: 10 });
+
       // initialize mobile UI
       player.mobileUi(); // Inits mobile version. No-op if Desktop.
+
+      // Add quality selector to player
+      player.hlsQualitySelector({
+        displayCurrentQuality: true,
+      });
+
+      // Add recsys plugin
+      // TODO: Add an if(odysee.com) around this function to only use recsys on odysee
+      player.recsys({
+        videoId: claimId,
+        userId: userId,
+      });
+
+      // set playsinline for mobile
+      // TODO: make this better
+      player.children_[0].setAttribute('playsinline', '');
 
       // I think this is a callback function
       onPlayerReady(player);
     });
+
+    // pre-roll ads
+    // This must be initialized earlier than everything else
+    // otherwise a race condition occurs if we place this in the onReady call back
+    if (allowPreRoll && !SIMPLE_SITE && window.google) {
+      const google = window.google;
+      // player.aniview();
+      vjs.ima({
+        // $FlowFixMe
+        vpaidMode: google.ima.ImaSdkSettings.VpaidMode.INSECURE,
+        adTagUrl: macroUrl,
+      });
+    }
 
     // fixes #3498 (https://github.com/lbryio/lbry-desktop/issues/3498)
     // summary: on firefox the focus would stick to the fullscreen button which caused buggy behavior with spacebar
@@ -534,16 +609,21 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   // This lifecycle hook is only called once (on mount), or when `isAudio` changes.
   useEffect(() => {
     const vjsElement = createVideoPlayerDOM(containerRef.current);
-    const vjsPlayer = initializeVideoPlayer(vjsElement);
 
-    // Add reference to player to global scope
-    window.player = vjsPlayer;
+    // Detect source file type via pre-fetch (async)
+    detectFileType().then(() => {
+      // Initialize Video.js
+      const vjsPlayer = initializeVideoPlayer(vjsElement);
 
-    // Set reference in component state
-    playerRef.current = vjsPlayer;
+      // Add reference to player to global scope
+      window.player = vjsPlayer;
 
-    // Add event listener for keyboard shortcuts
-    window.addEventListener('keydown', handleKeyDown);
+      // Set reference in component state
+      playerRef.current = vjsPlayer;
+
+      // Add event listener for keyboard shortcuts
+      window.addEventListener('keydown', handleKeyDown);
+    });
 
     // Cleanup
     return () => {
@@ -561,51 +641,28 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   useEffect(() => {
     // For some reason the video player is responsible for detecting content type this way
     fetch(source, { method: 'HEAD', cache: 'no-store' }).then((response) => {
-      const player = playerRef.current;
-
-      if (!player) {
-        return;
-      }
-
-      let type = sourceType;
+      let finalType = sourceType;
       let finalSource = source;
+
       // override type if we receive an .m3u8 (transcoded mp4)
+      // do we need to check if explicitly redirected
+      // or is checking extension only a safer method
       if (response && response.redirected && response.url && response.url.endsWith('m3u8')) {
-        type = 'application/x-mpegURL';
+        finalType = 'application/x-mpegURL';
         finalSource = response.url;
       }
 
-      // Update player poster
-      // note: the poster prop seems to return null usually.
-      if (poster) player.poster(poster);
+      // Modify video source in options
+      videoJsOptions.sources = [
+        {
+          src: finalSource,
+          type: finalType,
+        },
+      ];
 
       // Update player source
-      player.src({
-        src: finalSource,
-        type: type,
-      });
-
-      // set playsinline for mobile
-      player.children_[0].setAttribute('playsinline', '');
-
-      // Add quality selector to player
-      player.hlsQualitySelector({
-        displayCurrentQuality: true,
-      });
-
-      // Add recsys plugin
-      if (SIMPLE_SITE) {
-        player.recsys({
-          videoId: claimId,
-          userId: userId,
-        });
-      }
-
-      // Update player source
-      player.src({
-        src: finalSource,
-        type: type,
-      });
+      const player = playerRef.current;
+      if (!player) return;
 
       // PR #5570: Temp workaround to avoid double Play button until the next re-architecture.
       if (!player.paused()) {
@@ -613,6 +670,20 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       }
     });
   }, [source, reload]);
+
+  // Load IMA3 SDK for aniview
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = `https://imasdk.googleapis.com/js/sdkloader/ima3.js`;
+    script.async = true;
+    // $FlowFixMe
+    document.body.appendChild(script);
+
+    return () => {
+      // $FlowFixMe
+      document.body.removeChild(script);
+    };
+  });
 
   return (
     // $FlowFixMe
