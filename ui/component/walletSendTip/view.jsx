@@ -17,15 +17,6 @@ import usePersistedState from 'effects/use-persisted-state';
 import WalletSpendableBalanceHelp from 'component/walletSpendableBalanceHelp';
 
 const DEFAULT_TIP_AMOUNTS = [1, 5, 25, 100];
-let userHasAlreadySetupPayment;
-let creatorCanReceiveTips;
-
-// TODO: come up with a better way to do this
-setTimeout(function() {
-  Lbryio.call('customer', 'status', {}, 'post').then(customerStatusResponse => {
-    userHasAlreadySetupPayment = Boolean(customerStatusResponse.Customer.invoice_settings.default_payment_method.id);
-  });
-}, 500);
 
 type SupportParams = { amount: number, claim_id: string, channel_id?: string };
 
@@ -78,10 +69,23 @@ function WalletSendTip(props: Props) {
   console.log(channelName);
 
   const [canReceiveFiatTip, setCanReceiveFiatTip] = React.useState();
+  const [hasSavedCard, setHasSavedCard] = React.useState();
 
   const channelClaimId = claim.signing_channel.claim_id;
   const tipChannelName = claim.signing_channel.name;
   const sourceClaimId = claim.claim_id;
+
+// TODO: come up with a better way to do this
+  setTimeout(function() {
+    Lbryio.call('customer', 'status', {}, 'post').then(customerStatusResponse => {
+      const defaultPaymentMethodId = customerStatusResponse.Customer &&
+        customerStatusResponse.Customer.invoice_settings &&
+        customerStatusResponse.Customer.invoice_settings.default_payment_method &&
+        customerStatusResponse.Customer.invoice_settings.default_payment_method.id
+
+      setHasSavedCard(Boolean(defaultPaymentMethodId));
+    });
+  }, 100);
 
   Lbryio.call('account', 'check', {
     channel_claim_id: channelClaimId,
@@ -100,7 +104,7 @@ function WalletSendTip(props: Props) {
   const [activeTab, setActiveTab] = usePersistedState('comment-support:activeTab', 'TipLBC');
 
   // TODO: get this as a call from the backend
-  const hasCardSaved = userHasAlreadySetupPayment;
+  const hasCardSaved = hasSavedCard;
 
   let iconToUse, explainerText;
   if (activeTab === 'Boost') {
@@ -233,7 +237,7 @@ function WalletSendTip(props: Props) {
   }
 
   function shouldDisableAmountSelector(amount) {
-    return (amount > balance && activeTab !== 'TipFiat') || (activeTab === 'TipFiat' && ( !hasCardSaved || !canReceiveFiatTip));
+    return (amount > balance && activeTab !== 'TipFiat') || (activeTab === 'TipFiat' && (!hasCardSaved || !canReceiveFiatTip));
   }
 
   function setConfirmLabel() {
@@ -391,7 +395,7 @@ function WalletSendTip(props: Props) {
                     icon={iconToUse}
                     label={__('Custom')}
                     onClick={() => setUseCustomTip(true)}
-                    disabled={activeTab === 'TipFiat' && hasCardSaved !== true}
+                    disabled={activeTab === 'TipFiat' && (!hasCardSaved || !canReceiveFiatTip)}
                   />
                   {DEFAULT_TIP_AMOUNTS.some((val) => val > balance) && activeTab !== 'TipFiat' && (
                     <Button
