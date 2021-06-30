@@ -32,16 +32,6 @@ class CardVerify extends React.Component<Props, State> {
   componentDidMount() {
     var that = this;
 
-    if (scriptLoaded) {
-      return;
-    }
-
-    if (scriptLoading) {
-      return;
-    }
-
-    scriptLoading = true;
-
     const script = document.createElement('script');
     script.src = 'https://js.stripe.com/v3/';
     script.async = true;
@@ -209,20 +199,16 @@ class CardVerify extends React.Component<Props, State> {
             console.log(result);
 
             changeLoadingState(false);
-          })
+          });
         };
       }, 0);
     }
-    }
-
-
+  }
 
   componentDidUpdate() {
     if (!scriptLoading) {
       this.updateStripeHandler();
     }
-
-    console.log('DID UPDATE!');
   }
 
   componentWillUnmount() {
