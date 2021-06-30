@@ -178,7 +178,9 @@ function VideoViewer(props: Props) {
     } else if (autoplaySetting) {
       setShowAutoplayCountdown(true);
     }
-  }, [embedded, setIsEndededEmbed, autoplaySetting, setShowAutoplayCountdown, adUrl, setAdUrl]);
+
+    clearPosition(uri);
+  }, [embedded, setIsEndededEmbed, autoplaySetting, setShowAutoplayCountdown, adUrl, setAdUrl, clearPosition, uri]);
 
   function onPlay(player) {
     setIsLoading(false);
@@ -187,21 +189,17 @@ function VideoViewer(props: Props) {
     setIsEndededEmbed(false);
   }
 
-  function onPause(player) {
+  function onPause(event, player) {
     setIsPlaying(false);
     handlePosition(player);
   }
 
-  function onDispose(player) {
+  function onDispose(event, player) {
     handlePosition(player);
   }
 
   function handlePosition(player) {
-    if (player.ended()) {
-      clearPosition(uri);
-    } else {
-      savePosition(uri, player.currentTime());
-    }
+    savePosition(uri, player.currentTime());
   }
 
   function restorePlaybackRate(player) {
@@ -233,18 +231,13 @@ function VideoViewer(props: Props) {
 
       Promise.race([playPromise, timeoutPromise]).catch((error) => {
         if (typeof error === 'object' && error.name && error.name === 'NotAllowedError') {
-          // Autoplay disallowed by browser
-          player.play();
+          if (player.autoplay() && !player.muted()) {
+            // player.muted(true);
+            // another version had player.play()
+          }
         }
-
-        // Autoplay failed
-        if (PLAY_TIMEOUT_ERROR) {
-          setIsLoading(false);
-          setIsPlaying(false);
-        } else {
-          setIsLoading(false);
-          setIsPlaying(false);
-        }
+        setIsLoading(false);
+        setIsPlaying(false);
       });
     }
 
@@ -259,10 +252,9 @@ function VideoViewer(props: Props) {
     player.on('tracking:buffered', doTrackingBuffered);
     player.on('tracking:firstplay', doTrackingFirstPlay);
     player.on('ended', onEnded);
-    player.on('play', () => onPlay(player));
-    player.on('pause', () => onPause(player));
-    player.on('dispose', () => onDispose(player));
-
+    player.on('play', onPlay);
+    player.on('pause', (event) => onPause(event, player));
+    player.on('dispose', (event) => onDispose(event, player));
     player.on('error', () => {
       const error = player.error();
       if (error) {
@@ -348,6 +340,7 @@ function VideoViewer(props: Props) {
           autoplay={!embedded || autoplayIfEmbedded}
           claimId={claimId}
           userId={userId}
+          allowPreRoll={!embedded && !authenticated}
         />
       )}
     </div>
