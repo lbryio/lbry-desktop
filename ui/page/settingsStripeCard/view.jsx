@@ -49,7 +49,7 @@ class CardVerify extends React.Component<Props, State> {
     // TODO: fix this, should be a cleaner way
     setTimeout(function() {
       Lbryio.call('customer', 'status', {}, 'post').then(customerStatusResponse => {
-
+        
         const defaultPaymentMethod = customerStatusResponse.Customer.invoice_settings.default_payment_method;
 
         var userHasAlreadySetupPayment = Boolean(defaultPaymentMethod && defaultPaymentMethod.id);
@@ -85,12 +85,12 @@ class CardVerify extends React.Component<Props, State> {
               currentFlowStage: 'confirmingCard',
             });
 
-            // Lbryio.call('customer', 'setup', {}, 'post').then(customerSetupResponse => {
-            //   console.log(customerSetupResponse);
-            //
-            //   clientSecret = customerSetupResponse.client_secret;
-            //   setupStripe();
-            // });
+            Lbryio.call('customer', 'setup', {}, 'post').then(customerSetupResponse => {
+              console.log(customerSetupResponse);
+
+              clientSecret = customerSetupResponse.client_secret;
+              setupStripe();
+            });
 
           } else {
             console.log('Unseen before error');
