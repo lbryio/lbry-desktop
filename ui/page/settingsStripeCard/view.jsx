@@ -49,16 +49,14 @@ class CardVerify extends React.Component<Props, State> {
     // $FlowFixMe
     document.body.appendChild(script);
 
-    // run after the dom is loaded
-    // window.addEventListener("DOMContentLoaded", function() {
-
     // public key of the stripe account
     var publicKey = 'pk_test_NoL1JWL7i1ipfhVId5KfDZgo';
 
     // client secret of the SetupIntent (don't share with anyone but customer)
-    // var clientSecret = 'seti_1J3ULjIrsVv9ySuhkUWZXOmV_secret_Jgs5DyXwLF12743YO1apFxQvnawbCna';
     var clientSecret = '';
 
+    // setting a timeout to let the client secret populate
+    // TODO: fix this, should be a cleaner way
     setTimeout(function() {
       Lbryio.call('customer', 'status', {}, 'post').then(customerStatusResponse => {
 
@@ -80,78 +78,97 @@ class CardVerify extends React.Component<Props, State> {
             console.log(customerSetupResponse);
 
             clientSecret = customerSetupResponse.client_secret;
+
+            setupStripe();
           });
         }
       }).catch(function(error) {
           console.log(error);
 
-          // TODO: check the error better
-          that.setState({
-            currentFlowStage: 'confirmingCard',
-          });
+          // errorString passed from the API (with a 403 error)
+          const errorString = 'user as customer is not setup yet';
 
-          Lbryio.call('customer', 'setup', {}, 'post').then(customerSetupResponse => {
-            console.log(customerSetupResponse);
+          // if it's beamer's error indicating the account is not linked yet
+          if (error.message.indexOf(errorString) > -1) {
+            // TODO: check the error better
+            that.setState({
+              currentFlowStage: 'confirmingCard',
+            });
 
-            clientSecret = customerSetupResponse.client_secret;
-          });
+            // Lbryio.call('customer', 'setup', {}, 'post').then(customerSetupResponse => {
+            //   console.log(customerSetupResponse);
+            //
+            //   clientSecret = customerSetupResponse.client_secret;
+            //   setupStripe();
+            // });
+
+          } else {
+            console.log('Unseen before error');
+          }
         });
     }, 250);
 
+    function setupStripe(){
+      // TODO: have to fix this, using so that the script is available
+      setTimeout(function(){
+        var stripeElements = function(publicKey, setupIntent) {
+          var stripe = Stripe(publicKey);
+          var elements = stripe.elements();
 
-
-
-    // TODO: have to fix this, using so that the script is available
-    setTimeout(function(){
-      var stripeElements = function(publicKey, setupIntent) {
-        var stripe = Stripe(publicKey);
-        var elements = stripe.elements();
-
-        // Element styles
-        var style = {
-          base: {
-            fontSize: "16px",
-            color: "#32325d",
-            fontFamily:
-              "-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif",
-            fontSmoothing: "antialiased",
-            "::placeholder": {
-              color: "rgba(0,0,0,0.4)"
+          // Element styles
+          var style = {
+            base: {
+              fontSize: "16px",
+              color: "#32325d",
+              fontFamily:
+                "-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif",
+              fontSmoothing: "antialiased",
+              "::placeholder": {
+                color: "rgba(0,0,0,0.4)"
+              }
             }
-          }
-        };
+          };
 
-        var card = elements.create("card", { style: style });
+          var card = elements.create("card", { style: style });
 
-        card.mount("#card-element");
+          card.mount("#card-element");
 
-        // Element focus ring
-        card.on("focus", function() {
-          var el = document.getElementById("card-element");
-          el.classList.add("focused");
-        });
+          // Element focus ring
+          card.on("focus", function() {
+            var el = document.getElementById("card-element");
+            el.classList.add("focused");
+          });
 
-        card.on("blur", function() {
-          var el = document.getElementById("card-element");
-          el.classList.remove("focused");
-        });
+          card.on("blur", function() {
+            var el = document.getElementById("card-element");
+            el.classList.remove("focused");
+          });
 
-        var email = that.props.email;
+          var email = that.props.email;
 
-        // Handle payment submission when user clicks the pay button.
-        var button = document.getElementById('submit');
-        button.addEventListener('click', function(event) {
-          event.preventDefault();
-          changeLoadingState(true);
+          // Handle payment submission when user clicks the pay button.
+          var button = document.getElementById('submit');
+          button.addEventListener('click', function(event) {
 
-          stripe
-            .confirmCardSetup(clientSecret, {
+            event.preventDefault();
+
+            // if client secret wasn't loaded properly
+            if (!clientSecret){
+              var displayErrorText = 'There was an error in generating your payment method. Please contact a developer';
+              var displayError = document.getElementById("card-errors");
+              displayError.textContent = displayErrorText;
+
+              return;
+            };
+
+            changeLoadingState(true);
+
+            stripe.confirmCardSetup(clientSecret, {
               payment_method: {
                 card: card,
                 billing_details: { email: email },
               },
-            })
-            .then(function(result) {
+            }).then(function(result) {
               if (result.error) {
                 changeLoadingState(false);
                 var displayError = document.getElementById("card-errors");
@@ -161,45 +178,44 @@ class CardVerify extends React.Component<Props, State> {
                 // hide and show the proper divs
                 orderComplete(stripe, clientSecret);
               }
-            });
-        });
-      };
-
-      // TODO: possible bug here where clientSecret isn't done
-      stripeElements(publicKey, clientSecret);
-
-      // Show a spinner on payment submission
-      var changeLoadingState = function(isLoading) {
-        if (isLoading) {
-          document.querySelector("button").disabled = true;
-          document.querySelector("#spinner").classList.remove("hidden");
-          document.querySelector("#button-text").classList.add("hidden");
-        } else {
-          document.querySelector("button").disabled = false;
-          document.querySelector("#spinner").classList.add("hidden");
-          document.querySelector("#button-text").classList.remove("hidden");
-        }
-      };
-
-      /* Shows a success / error message when the payment is complete */
-      var orderComplete = function(stripe, clientSecret) {
-        stripe.retrieveSetupIntent(clientSecret).then(function(result) {
-
-          that.setState({
-            currentFlowStage: 'cardConfirmed',
+            })
           });
+        };
 
-          console.log(result);
+        // TODO: possible bug here where clientSecret isn't done
+        stripeElements(publicKey, clientSecret);
 
-          // document.querySelector('.cardInput').classList.add("hidden");
-          // document.querySelector('.headerCard').classList.add("hidden");
-          // document.querySelector('.successCard').classList.remove("hidden");
+        // Show a spinner on payment submission
+        var changeLoadingState = function(isLoading) {
+          if (isLoading) {
+            document.querySelector("button").disabled = true;
+            document.querySelector("#spinner").classList.remove("hidden");
+            document.querySelector("#button-text").classList.add("hidden");
+          } else {
+            document.querySelector("button").disabled = false;
+            document.querySelector("#spinner").classList.add("hidden");
+            document.querySelector("#button-text").classList.remove("hidden");
+          }
+        };
 
-          changeLoadingState(false);
-        });
-      };
-      }, 500);
-  }
+        // shows a success / error message when the payment is complete
+        var orderComplete = function(stripe, clientSecret) {
+          stripe.retrieveSetupIntent(clientSecret).then(function(result) {
+
+            that.setState({
+              currentFlowStage: 'cardConfirmed',
+            });
+
+            console.log(result);
+
+            changeLoadingState(false);
+          })
+        };
+      }, 0);
+    }
+    }
+
+
 
   componentDidUpdate() {
     if (!scriptLoading) {
@@ -262,10 +278,6 @@ class CardVerify extends React.Component<Props, State> {
             <div className="error__text">There was an error connecting to Stripe. Please try again later.</div>
           )}
         </div>
-
-        {/*{currentFlowStage === 'loading' && <h2>Loading</h2>}*/}
-        {/*{currentFlowStage === 'confirmingCard' && <h2>Confirming Card</h2>}*/}
-        {/*{currentFlowStage === 'cardConfirmed' && <h2>Card Confirmed</h2>}*/}
 
         {currentFlowStage === 'loading' && <div className="headerCard">
           <Card
