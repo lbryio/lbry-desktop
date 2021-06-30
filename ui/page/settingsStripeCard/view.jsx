@@ -25,6 +25,7 @@ class CardVerify extends React.Component<Props, State> {
     this.state = {
       open: false,
       scriptFailedToLoad: false,
+      currentFlowStage: 'loading', // loading, confirmingCard, cardConfirmed
     };
   }
 
@@ -58,36 +59,44 @@ class CardVerify extends React.Component<Props, State> {
     // var clientSecret = 'seti_1J3ULjIrsVv9ySuhkUWZXOmV_secret_Jgs5DyXwLF12743YO1apFxQvnawbCna';
     var clientSecret = '';
 
-    setTimeout(function(){
-
-      console.log("RUNNING HERE")
-
+    setTimeout(function() {
       Lbryio.call('customer', 'status', {}, 'post').then(customerStatusResponse => {
-        console.log('customer status response');
-        console.log(customerStatusResponse);
 
         const defaultPaymentMethod = customerStatusResponse.Customer.invoice_settings.default_payment_method;
 
         var userHasAlreadySetupPayment = Boolean(defaultPaymentMethod && defaultPaymentMethod.id);
 
-        console.log('user has already verified');
-        console.log(userHasAlreadySetupPayment);
-
         // show different frontend if user already has card
         if (userHasAlreadySetupPayment) {
-          document.querySelector('.cardInput').classList.add("hidden");
-          document.querySelector('.headerCard').classList.add("hidden");
-          document.querySelector('.successCard').classList.remove("hidden");
+          that.setState({
+            currentFlowStage: 'cardConfirmed',
+          });
         } else {
+          that.setState({
+            currentFlowStage: 'confirmingCard',
+          });
+
           Lbryio.call('customer', 'setup', {}, 'post').then(customerSetupResponse => {
             console.log(customerSetupResponse);
 
             clientSecret = customerSetupResponse.client_secret;
           });
         }
+      }).catch(function(error) {
+          console.log(error);
 
-      });
-    }, 500);
+          // TODO: check the error better
+          that.setState({
+            currentFlowStage: 'confirmingCard',
+          });
+
+          Lbryio.call('customer', 'setup', {}, 'post').then(customerSetupResponse => {
+            console.log(customerSetupResponse);
+
+            clientSecret = customerSetupResponse.client_secret;
+          });
+        });
+    }, 250);
 
 
 
@@ -176,17 +185,20 @@ class CardVerify extends React.Component<Props, State> {
       var orderComplete = function(stripe, clientSecret) {
         stripe.retrieveSetupIntent(clientSecret).then(function(result) {
 
+          that.setState({
+            currentFlowStage: 'cardConfirmed',
+          });
+
           console.log(result);
 
-          document.querySelector('.cardInput').classList.add("hidden");
-          document.querySelector('.headerCard').classList.add("hidden");
-          document.querySelector('.successCard').classList.remove("hidden");
+          // document.querySelector('.cardInput').classList.add("hidden");
+          // document.querySelector('.headerCard').classList.add("hidden");
+          // document.querySelector('.successCard').classList.remove("hidden");
 
           changeLoadingState(false);
         });
       };
-      }, 500)
-
+      }, 500);
   }
 
   componentDidUpdate() {
@@ -237,6 +249,11 @@ class CardVerify extends React.Component<Props, State> {
   render() {
     const { scriptFailedToLoad } = this.props;
 
+    const { currentFlowStage } = this.state;
+
+    console.log(currentFlowStage);
+
+
     return (
 
       <Page backout={{ title: __('Manage Card'), backLabel: __('Done') }} noFooter noSideNavigation>
@@ -246,14 +263,25 @@ class CardVerify extends React.Component<Props, State> {
           )}
         </div>
 
-        <div className="headerCard">
+        {/*{currentFlowStage === 'loading' && <h2>Loading</h2>}*/}
+        {/*{currentFlowStage === 'confirmingCard' && <h2>Confirming Card</h2>}*/}
+        {/*{currentFlowStage === 'cardConfirmed' && <h2>Card Confirmed</h2>}*/}
+
+        {currentFlowStage === 'loading' && <div className="headerCard">
+          <Card
+            title={__('Connect your card with Odysee')}
+            subtitle={__('Getting your card connection status...')}
+          />
+        </div>}
+
+        {currentFlowStage === 'confirmingCard' && <div className="headerCard">
           <Card
             title={__('Connect your card with Odysee')}
             subtitle={__('Securely connect your card to your Odysee account to tip your favorite creators')}
           />
-        </div>
+        </div>}
 
-        <div className="sr-root">
+        {currentFlowStage === 'confirmingCard' && <div className="sr-root">
           <div className="sr-main">
             <div className="sr-payment-form card cardInput">
               <div className="sr-form-row">
@@ -269,14 +297,15 @@ class CardVerify extends React.Component<Props, State> {
                 <span id="button-text">Link your card to your account</span>
               </button>
             </div>
-            <div className="successCard hidden">
-              <Card
-                title={__('Card successfully added!')}
-                subtitle={__('Congratulations! Your card has been successfully added to your Odysee account. You can now tip your favorite creators while viewing their content.')}
-              />
-            </div>
           </div>
-        </div>
+        </div>}
+
+        {currentFlowStage === 'cardConfirmed' && <div className="successCard">
+          <Card
+            title={__('Card successfully added!')}
+            subtitle={__('Congratulations! Your card has been successfully added to your Odysee account. You can now tip your favorite creators while viewing their content.')}
+          />
+        </div>}
 
       </Page>
     );

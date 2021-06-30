@@ -36,7 +36,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
 
   componentDidMount() {
     const { user } = this.props;
-
+    
     this.experimentalUiEnabled = user && user.experimental_ui;
 
     var that = this;
@@ -119,7 +119,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
               <div className="card__body-actions">
                 <div>
                   <div>
-                    <h3>Connect your Bank Account to Odysee to receive directly from users</h3>
+                    <h3>Connect your Bank Account to Odysee to receive donations directly from users</h3>
                   </div>
                   <div className="section__actions">
                     <a href={stripeConnectionUrl}>
