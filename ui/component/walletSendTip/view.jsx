@@ -69,7 +69,7 @@ function WalletSendTip(props: Props) {
   console.log(channelName);
 
   const [canReceiveFiatTip, setCanReceiveFiatTip] = React.useState();
-  const [hasSavedCard, setHasSavedCard] = React.useState();
+  const [hasSavedCard, setHasSavedCard] = usePersistedState('comment-support:hasSavedCard', false);
 
   const channelClaimId = claim.signing_channel.claim_id;
   const tipChannelName = claim.signing_channel.name;
