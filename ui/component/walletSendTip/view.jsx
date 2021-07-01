@@ -62,14 +62,10 @@ function WalletSendTip(props: Props) {
   const [sendAsTip, setSendAsTip] = usePersistedState('comment-support:sendAsTip', true);
   const [isConfirming, setIsConfirming] = React.useState(false);
   const { claim_id: claimId } = claim;
-  console.log('claim');
-  console.log(claim);
   const { channelName } = parseURI(uri);
-  console.log('channel name');
-  console.log(channelName);
 
   const [canReceiveFiatTip, setCanReceiveFiatTip] = React.useState();
-  const [hasSavedCard, setHasSavedCard] = usePersistedState('comment-support:hasSavedCard', false);
+  const [hasCardSaved, setHasSavedCard] = usePersistedState('comment-support:hasCardSaved', false);
 
   const channelClaimId = claim.signing_channel.claim_id;
   const tipChannelName = claim.signing_channel.name;
@@ -102,9 +98,6 @@ function WalletSendTip(props: Props) {
   const tipAmount = useCustomTip ? customTipAmount : presetTipAmount;
 
   const [activeTab, setActiveTab] = usePersistedState('comment-support:activeTab', 'TipLBC');
-
-  // TODO: get this as a call from the backend
-  const hasCardSaved = hasSavedCard;
 
   let iconToUse, explainerText;
   if (activeTab === 'Boost') {
@@ -187,15 +180,14 @@ function WalletSendTip(props: Props) {
         if (!isConfirming) {
           setIsConfirming(true);
         } else if (isConfirming) {
-
-          console.log(tipChannelName, channelClaimId, sourceClaimId);
+          let sendAnonymously = !activeChannelClaim || incognito
 
           Lbryio.call('customer', 'tip', {
             amount: 100 * tipAmount, // convert from dollars to cents
             channel_name: tipChannelName,
             channel_claim_id: channelClaimId,
             currency: 'USD',
-            anonymous: false,
+            anonymous: sendAnonymously,
             source_claim_id: sourceClaimId,
           }, 'post').then(customerTipResponse => {
             doToast({
