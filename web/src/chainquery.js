@@ -58,21 +58,3 @@ module.exports.getClaim = async function getClaim(claimName, claimId, channelNam
 
   return queryPool(sql, params);
 };
-
-module.exports.getChannelClaim = async function getChannelClaim(channelClaimId) {
-  const params = [];
-  const select = ['claim_id', 'name', 'title', 'thumbnail_url', 'description'].join(', ');
-
-  const sql = `SELECT ${select} FROM claim WHERE claim_id = "${channelClaimId}"`;
-  return queryPool(sql, params);
-};
-
-module.exports.getClaimsFromChannel = async function getClaimsFromChannel(channelClaimId, count = 10) {
-  const params = [];
-  const select = ['claim_id', 'name', 'title', 'thumbnail_url', 'description', 'created_at'].join(', ');
-  const sort = 'ORDER BY created_at DESC';
-  const limit = `LIMIT ${count}`;
-
-  const sql = `SELECT ${select} FROM claim WHERE publisher_id = "${channelClaimId}" ${sort} ${limit}`;
-  return queryPool(sql, params);
-};

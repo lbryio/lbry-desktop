@@ -1,27 +1,56 @@
-const { URL, SITE_NAME } = require('../../config.js');
-const { getChannelClaim, getClaimsFromChannel } = require('./chainquery');
+const { URL, SITE_NAME, LBRY_WEB_API } = require('../../config.js');
+const { Lbry } = require('lbry-redux');
 const Feed = require('feed').Feed;
 
-async function getChannelClaimFromChainquery(claimId) {
-  const rows = await getChannelClaim(claimId);
-  if (rows && rows.length) {
-    const claim = rows[0];
-    return claim;
-  }
+const SDK_API_PATH = `${LBRY_WEB_API}/api/v1`;
+const proxyURL = `${SDK_API_PATH}/proxy`;
+Lbry.setDaemonConnectionString(proxyURL);
 
-  return undefined;
+async function doClaimSearch(options) {
+  let results;
+  try {
+    results = await Lbry.claim_search(options);
+  } catch {}
+  return results ? results.items : undefined;
+}
+
+async function getChannelClaim(claimId) {
+  const options = {
+    claim_ids: [claimId],
+    page_size: 1,
+    no_totals: true,
+  };
+
+  const claims = await doClaimSearch(options);
+  return claims ? claims[0] : undefined;
+}
+
+async function getClaimsFromChannel(claimId, count) {
+  const options = {
+    channel_ids: [claimId],
+    page_size: count,
+    has_source: true,
+    claim_type: 'stream',
+    order_by: ['creation_timestamp'],
+    no_totals: true,
+  };
+
+  return await doClaimSearch(options);
 }
 
 async function getFeed(channelClaim) {
   const replaceLineFeeds = (str) => str.replace(/(?:\r\n|\r|\n)/g, '<br>');
 
+  const value = channelClaim.value;
+  const title = value ? value.title : channelClaim.name;
+
   const options = {
-    title: channelClaim.title + ' on ' + SITE_NAME,
-    description: channelClaim.description ? replaceLineFeeds(channelClaim.description) : '',
+    title: title + ' on ' + SITE_NAME,
+    description: value ? replaceLineFeeds(value.description) : '',
     link: `${URL}/${channelClaim.name}:${channelClaim.claim_id}`,
     favicon: URL + '/public/favicon.png',
     generator: SITE_NAME + ' RSS Feed',
-    image: channelClaim.thumbnail_url,
+    image: value ? value.thumbnail.url : '',
     author: {
       name: channelClaim.name,
       link: URL + '/' + channelClaim.name + ':' + channelClaim.claim_id,
@@ -30,17 +59,20 @@ async function getFeed(channelClaim) {
 
   const feed = new Feed(options);
 
-  const latestClaims = await getClaimsFromChannel(channelClaim.claim_id, 10);
+  const latestClaims = await getClaimsFromChannel(channelClaim.claim_id, 50);
 
   latestClaims.forEach((c) => {
+    const meta = c.meta;
+    const value = c.value;
+
     feed.addItem({
       guid: c.claim_id,
       id: c.claim_id,
-      title: c.title,
-      description: c.description ? replaceLineFeeds(c.description) : '',
-      image: c.thumbnail_url,
+      title: value ? value.title : c.name,
+      description: value ? replaceLineFeeds(value.description) : '',
+      image: value ? value.thumbnail.url : '',
       link: URL + '/' + c.name + ':' + c.claim_id,
-      date: new Date(c.created_at),
+      date: new Date(meta ? meta.creation_timestamp * 1000 : null),
     });
   });
 
@@ -52,13 +84,13 @@ async function getRss(ctx) {
     return 'Invalid URL';
   }
 
-  const channelClaim = await getChannelClaimFromChainquery(ctx.params.claimId);
-  if (channelClaim) {
-    const feed = await getFeed(channelClaim);
-    return feed.rss2();
+  const channelClaim = await getChannelClaim(ctx.params.claimId);
+  if (typeof channelClaim === 'string' || !channelClaim) {
+    return channelClaim;
   }
 
-  return 'Invalid channel';
+  const feed = await getFeed(channelClaim);
+  return feed.rss2();
 }
 
 module.exports = { getRss };
