@@ -64,7 +64,7 @@ function WalletSendTip(props: Props) {
   const { claim_id: claimId } = claim;
   const { channelName } = parseURI(uri);
 
-  const [canReceiveFiatTip, setCanReceiveFiatTip] = React.useState();
+  const [canReceiveFiatTip, setCanReceiveFiatTip] = React.useState(); // dont persist because it needs to be calc'd per creator
   const [hasCardSaved, setHasSavedCard] = usePersistedState('comment-support:hasCardSaved', false);
 
   const channelClaimId = claim.signing_channel.claim_id;
@@ -196,17 +196,12 @@ function WalletSendTip(props: Props) {
             console.log(customerTipResponse);
           }).catch(function(error) {
             console.log(error);
-            // TODO: be smarter about showing the error here
-            doToast({ message: error.message, isError: true })
-          })
-
-          ;
+            doToast({ message: error.message, isError: true });
+          });
 
           closeModal();
-        } else {
-          alert ('Problem!');
         }
-
+      // if it's a boost
       } else {
         sendSupportOrConfirm();
       }
@@ -219,12 +214,25 @@ function WalletSendTip(props: Props) {
   }
 
   function buildButtonText() {
+    // test if frontend will show up as isNan
+    function isNan(tipAmount) {
+      // testing for NaN ES5 style https://stackoverflow.com/a/35912757/3973137
+      // also sometimes it's returned as a string
+      if (tipAmount !== tipAmount || tipAmount === 'NaN') {
+        return true;
+      }
+      return false;
+    }
+
+    // if it's a valid number display it, otherwise do an empty string
+    const displayAmount = !isNan(tipAmount) ? tipAmount : '';
+
     if (activeTab === 'Boost') {
       return 'Boost This Content';
     } else if (activeTab === 'TipFiat') {
-      return 'Send a $' + tipAmount + ' Tip';
+      return 'Send a $' + displayAmount + ' Tip';
     } else if (activeTab === 'TipLBC') {
-      return 'Send a ' + tipAmount + ' LBC Tip';
+      return 'Send a ' + displayAmount + ' LBC Tip';
     }
   }
 
