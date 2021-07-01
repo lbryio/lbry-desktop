@@ -53,6 +53,7 @@ type Props = {
   doChannelUnsubscribe: (SubscriptionArgs) => void,
   isChannelPage: boolean,
   editedCollection: Collection,
+  fatal?: boolean,
 };
 
 function ClaimMenuList(props: Props) {
@@ -87,6 +88,7 @@ function ClaimMenuList(props: Props) {
     doChannelUnsubscribe,
     isChannelPage = false,
     editedCollection,
+    fatal,
   } = props;
   const repostedContent = claim && claim.reposted_claim;
   const contentClaim = repostedContent || claim;
@@ -202,12 +204,19 @@ function ClaimMenuList(props: Props) {
       >
         <Icon size={20} icon={ICONS.MORE_VERTICAL} />
       </MenuButton>
-      <MenuList className="menu__list">
+      <MenuList
+        className="menu__list"
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+        }}
+      >
         {/* WATCH LATER */}
         <>
           {isPlayable && !collectionId && (
             <MenuItem
               className="comment__menu-option"
+              disabled={fatal}
               onSelect={() => {
                 doToast({
                   message: __('Item %action% Watch Later', {
@@ -236,6 +245,7 @@ function ClaimMenuList(props: Props) {
                 <MenuItem
                   className="comment__menu-option"
                   onSelect={() => push(`/$/${PAGES.LIST}/${collectionId}?view=edit`)}
+                  disabled={fatal}
                 >
                   <div className="menu__link">
                     <Icon aria-hidden iconColor={'red'} icon={ICONS.PUBLISH} />
@@ -243,7 +253,11 @@ function ClaimMenuList(props: Props) {
                   </div>
                 </MenuItem>
               )}
-              <MenuItem className="comment__menu-option" onSelect={() => push(`/$/${PAGES.LIST}/${collectionId}`)}>
+              <MenuItem
+                className="comment__menu-option"
+                onSelect={() => push(`/$/${PAGES.LIST}/${collectionId}`)}
+                disabled={fatal}
+              >
                 <div className="menu__link">
                   <Icon aria-hidden icon={ICONS.VIEW} />
                   {__('View List')}
@@ -252,6 +266,7 @@ function ClaimMenuList(props: Props) {
               <MenuItem
                 className="comment__menu-option"
                 onSelect={() => openModal(MODALS.COLLECTION_DELETE, { collectionId })}
+                disabled={fatal}
               >
                 <div className="menu__link">
                   <Icon aria-hidden icon={ICONS.DELETE} />
@@ -265,6 +280,7 @@ function ClaimMenuList(props: Props) {
             <MenuItem
               className="comment__menu-option"
               onSelect={() => openModal(MODALS.COLLECTION_ADD, { uri, type: 'playlist' })}
+              disabled={fatal}
             >
               <div className="menu__link">
                 <Icon aria-hidden icon={ICONS.STACK} />
@@ -276,7 +292,7 @@ function ClaimMenuList(props: Props) {
         {!isChannelPage && (
           <>
             <hr className="menu__separator" />
-            <MenuItem className="comment__menu-option" onSelect={handleSupport}>
+            <MenuItem className="comment__menu-option" onSelect={handleSupport} disabled={fatal}>
               <div className="menu__link">
                 <Icon aria-hidden icon={ICONS.LBC} />
                 {__('Support')}
@@ -288,7 +304,7 @@ function ClaimMenuList(props: Props) {
         {!incognitoClaim && !isRepost && !claimIsMine && !isChannelPage && (
           <>
             <hr className="menu__separator" />
-            <MenuItem className="comment__menu-option" onSelect={handleFollow}>
+            <MenuItem className="comment__menu-option" onSelect={handleFollow} disabled={fatal}>
               <div className="menu__link">
                 <Icon aria-hidden icon={ICONS.SUBSCRIBE} />
                 {subscriptionLabel}

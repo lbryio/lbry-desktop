@@ -84,6 +84,7 @@ function ModalRemoveFile(props: Props) {
           <>
             <div className="section__actions">
               <Button
+                disableOnFatal
                 button="primary"
                 label={isAbandoning ? __('Removing...') : __('OK')}
                 disabled={isAbandoning}

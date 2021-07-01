@@ -325,6 +325,7 @@ function VideoViewer(props: Props) {
                     button="secondary"
                     className="ads__video-link"
                     label={__('Sign Up')}
+                    disableOnFatal
                     navigate={`/$/${PAGES.AUTH}?redirect=${pathname}&src=video-ad`}
                   />
                 ),

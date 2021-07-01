@@ -19,7 +19,7 @@ export default function CheckoutPage() {
         }
         actions={
           <div className="section__actions">
-            <Button button="primary" label={__('Checkout')} />
+            <Button button="primary" label={__('Checkout')} disableOnFatal />
             <div>
               <img src={CreditCards} style={{ height: '1.5rem' }} />
             </div>

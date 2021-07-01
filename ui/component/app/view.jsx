@@ -36,6 +36,7 @@ const Nag = React.lazy(() => import('component/common/nag' /* webpackChunkName: 
 const NagContinueFirstRun = React.lazy(() =>
   import('component/nagContinueFirstRun' /* webpackChunkName: "secondary" */)
 );
+const NagFatalError = React.lazy(() => import('web/component/nag-fatal-error' /* webpackChunkName: "secondary" */));
 const OpenInAppLink = React.lazy(() => import('web/component/openInAppLink' /* webpackChunkName: "secondary" */));
 
 // @if TARGET='web'
@@ -51,7 +52,6 @@ const YoutubeWelcome = React.lazy(() =>
 );
 // @endif
 
-const SyncFatalError = React.lazy(() => import('component/syncFatalError' /* webpackChunkName: "syncFatalError" */));
 const Yrbl = React.lazy(() => import('component/yrbl' /* webpackChunkName: "yrbl" */));
 
 // ****************************************************************************
@@ -391,18 +391,6 @@ function App(props: Props) {
   }
   // @endif
 
-  if (syncFatalError) {
-    return (
-      <React.Suspense fallback={null}>
-        <SyncFatalError
-          // @if TARGET='web'
-          lbryTvApiStatus={lbryTvApiStatus}
-          // @endif
-        />
-      </React.Suspense>
-    );
-  }
-
   return (
     <div
       className={classnames(MAIN_WRAPPER_CLASS, {
@@ -455,6 +443,7 @@ function App(props: Props) {
               <NagDataCollection onClose={handleAnalyticsDismiss} />
             )}
             {user === null && <NagNoUser />}
+            {syncFatalError && <NagFatalError />}
             {/* @endif */}
           </React.Suspense>
         </React.Fragment>

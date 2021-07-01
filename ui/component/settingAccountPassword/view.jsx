@@ -52,7 +52,7 @@ export default function SettingAccountPassword(props: Props) {
                   name="setting_set_old_password"
                   label={__('Old Password')}
                   value={oldPassword}
-                  onChange={e => setOldPassword(e.target.value)}
+                  onChange={(e) => setOldPassword(e.target.value)}
                 />
               )}
               <FormField
@@ -60,13 +60,24 @@ export default function SettingAccountPassword(props: Props) {
                 name="setting_set_new_password"
                 label={__('New Password')}
                 value={newPassword}
-                onChange={e => setNewPassword(e.target.value)}
+                onChange={(e) => setNewPassword(e.target.value)}
               />
 
               <div className="section__actions">
-                <Button button="primary" type="submit" label={__('Set Password')} disabled={!newPassword} />
+                <Button
+                  button="primary"
+                  type="submit"
+                  label={__('Set Password')}
+                  disabled={!newPassword}
+                  disableOnFatal
+                />
                 {hasPassword ? (
-                  <Button button="link" label={__('Forgot Password?')} navigate={`/$/${PAGES.AUTH_PASSWORD_RESET}`} />
+                  <Button
+                    button="link"
+                    label={__('Forgot Password?')}
+                    navigate={`/$/${PAGES.AUTH_PASSWORD_RESET}`}
+                    disableOnFatal
+                  />
                 ) : (
                   <Button button="link" label={__('Cancel')} onClick={() => setIsAddingPassword(false)} />
                 )}
@@ -82,6 +93,7 @@ export default function SettingAccountPassword(props: Props) {
           <Button
             button="primary"
             label={hasPassword ? __('Update Your Password') : __('Add A Password')}
+            disableOnFatal
             onClick={() => setIsAddingPassword(true)}
           />
         )

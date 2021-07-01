@@ -24,7 +24,6 @@ type Props = {
   doClaimSearch: ({}) => void,
   loading: boolean,
   personalView: boolean,
-  doToggleTagFollowDesktop: (string) => void,
   meta?: Node,
   showNsfw: boolean,
   hideReposts: boolean,

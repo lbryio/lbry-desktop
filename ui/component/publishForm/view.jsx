@@ -621,6 +621,7 @@ function PublishForm(props: Props) {
             button="primary"
             onClick={handlePublish}
             label={submitLabel}
+            disableOnFatal
             disabled={
               formDisabled ||
               !formValid ||

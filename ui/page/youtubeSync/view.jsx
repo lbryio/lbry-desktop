@@ -185,6 +185,7 @@ export default function YoutubeSync(props: Props) {
                     button="primary"
                     type="submit"
                     disabled={nameError || !channel || !acknowledgedTerms}
+                    disableOnFatal
                     label={__('Claim Now')}
                   />
 

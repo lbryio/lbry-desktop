@@ -89,7 +89,14 @@ function ChannelBlockButton(props: Props) {
     }
   }
 
-  return <Button button={isBlocked ? 'alt' : 'secondary'} label={getButtonText(blockLevel)} onClick={handleClick} />;
+  return (
+    <Button
+      button={isBlocked ? 'alt' : 'secondary'}
+      label={getButtonText(blockLevel)}
+      onClick={handleClick}
+      disableOnFatal
+    />
+  );
 }
 
 export default ChannelBlockButton;

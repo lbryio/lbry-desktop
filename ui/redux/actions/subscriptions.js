@@ -59,9 +59,13 @@ export function doToggleSubscription(subscription: SubscriptionArgs, isSubscribe
       }
     }
 
-    dispatch(doToast({
-      message: __(!isSubscribed ? 'You followed %CHANNEL_NAME%!' : 'Unfollowed %CHANNEL_NAME%.', { CHANNEL_NAME: subscription.channelName }),
-    }));
+    dispatch(
+      doToast({
+        message: __(!isSubscribed ? 'You followed %CHANNEL_NAME%!' : 'Unfollowed %CHANNEL_NAME%.', {
+          CHANNEL_NAME: subscription.channelName,
+        }),
+      })
+    );
   };
 }
 

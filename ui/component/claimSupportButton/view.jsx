@@ -30,6 +30,7 @@ export default function ClaimSupportButton(props: Props) {
       label={isRepost ? __('Support Repost') : __('Support --[button to support a claim]--')}
       requiresAuth={IS_WEB}
       title={__('Support this claim')}
+      disableOnFatal
       onClick={() => doOpenModal(MODALS.SEND_TIP, { uri, isSupport: true })}
     />
   );

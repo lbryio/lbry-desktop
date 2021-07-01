@@ -2,11 +2,13 @@ import Button from './view';
 import React, { forwardRef } from 'react';
 import { connect } from 'react-redux';
 import { selectUser, selectUserVerifiedEmail } from 'redux/selectors/user';
+import { selectSyncFatalError } from 'redux/selectors/sync';
 
 const mapStateToProps = (state) => ({
   pathname: state.router.location.pathname,
   emailVerified: selectUserVerifiedEmail(state),
   user: selectUser(state),
+  fatal: selectSyncFatalError(state),
 });
 
 const ConnectedButton = connect(mapStateToProps)(Button);

@@ -458,6 +458,7 @@ function ChannelForm(props: Props) {
                   disabled={
                     creatingChannel || updatingChannel || nameError || bidError || (isNewChannel && !params.name)
                   }
+                  disableOnFatal
                   label={creatingChannel || updatingChannel ? __('Submitting') : __('Submit')}
                   onClick={handleSubmit}
                 />

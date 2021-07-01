@@ -148,6 +148,7 @@ function ShowPage(props: Props) {
                       button="primary"
                       label={__('Publish Something')}
                       onClick={() => beginPublish(contentName)}
+                      disableOnFatal
                     />
                     <Button
                       button="secondary"

@@ -40,7 +40,14 @@ function TopPage(props: Props) {
                     label={__('Repost Here')}
                   />
                 ),
-                publish: <Button button="secondary" onClick={() => beginPublish(queryName)} label={'Publish Here'} />,
+                publish: (
+                  <Button
+                    button="secondary"
+                    onClick={() => beginPublish(queryName)}
+                    label={'Publish Here'}
+                    disableOnFatal
+                  />
+                ),
               }}
             >
               %repost% %publish%

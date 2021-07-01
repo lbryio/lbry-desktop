@@ -48,6 +48,7 @@ class TransactionListTableItem extends React.PureComponent<Props, State> {
       return (
         <Button
           disabled={abandonState === ABANDON_STATES.DONE}
+          disableOnFatal
           button="secondary"
           icon={ICONS.UNLOCK}
           onClick={this.abandonClaim}
@@ -59,6 +60,7 @@ class TransactionListTableItem extends React.PureComponent<Props, State> {
     return (
       <Button
         disabled={abandonState === ABANDON_STATES.DONE}
+        disableOnFatal
         button="secondary"
         icon={ICONS.DELETE}
         onClick={this.abandonClaim}

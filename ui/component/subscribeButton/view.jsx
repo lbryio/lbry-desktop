@@ -70,6 +70,7 @@ export default function SubscribeButton(props: Props) {
           requiresAuth={IS_WEB}
           label={label}
           title={titlePrefix}
+          disableOnFatal
           onClick={(e) => {
             e.stopPropagation();
 
@@ -95,6 +96,7 @@ export default function SubscribeButton(props: Props) {
         requiresAuth={IS_WEB}
         label={label}
         title={titlePrefix}
+        disableOnFatal
         onClick={(e) => {
           e.stopPropagation();
 
@@ -114,6 +116,7 @@ export default function SubscribeButton(props: Props) {
           button="alt"
           icon={notificationsDisabled ? ICONS.BELL : ICONS.BELL_ON}
           aria-label={notificationsDisabled ? __('Turn on notifications') : __('Turn off notifications')}
+          disableOnFatal
           onClick={() => {
             const newNotificationsDisabled = !notificationsDisabled;
 

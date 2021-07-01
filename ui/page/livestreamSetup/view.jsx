@@ -246,6 +246,7 @@ export default function LivestreamSetupPage(props: Props) {
                   <div className="section__actions">
                     <Button
                       button="primary"
+                      disableOnFatal
                       onClick={() =>
                         doNewLivestream(`/$/${PAGES.UPLOAD}?type=${PUBLISH_MODES.LIVESTREAM.toLowerCase()}`)
                       }

@@ -10,6 +10,7 @@ import {
   COLLECTIONS_CONSTS,
   makeSelectEditedCollectionForId,
 } from 'lbry-redux';
+import { selectSyncFatalError } from 'redux/selectors/sync';
 import { makeSelectChannelIsMuted } from 'redux/selectors/blocked';
 import { doChannelMute, doChannelUnmute } from 'redux/actions/blocked';
 import { doSetActiveChannel, doSetIncognito, doOpenModal } from 'redux/actions/app';
@@ -48,6 +49,7 @@ const select = (state, props) => {
     collectionName: makeSelectNameForCollectionId(props.collectionId)(state),
     isMyCollection: makeSelectCollectionIsMine(props.collectionId)(state),
     editedCollection: makeSelectEditedCollectionForId(props.collectionId)(state),
+    fatal: selectSyncFatalError(state),
   };
 };
 

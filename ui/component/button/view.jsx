@@ -39,6 +39,8 @@ type Props = {
   dispatch: any,
   'aria-label'?: string,
   user: ?User,
+  disableOnFatal?: boolean,
+  fatal: boolean,
 };
 
 // use forwardRef to allow consumers to pass refs to the button content if they want to
@@ -72,10 +74,12 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
     pathname,
     user,
     authSrc,
+    disableOnFatal,
+    fatal,
     ...otherProps
   } = props;
 
-  const disable = disabled || (user === null && requiresAuth);
+  const disable = disabled || (user === null && requiresAuth) || (fatal && disableOnFatal);
 
   const combinedClassName = classnames(
     'button',

@@ -33,6 +33,7 @@ function TagsFollowingPage(props: Props) {
             icon={ICONS.EDIT}
             label={__('Manage')}
             requiresAuth={IS_WEB}
+            disableOnFatal
             navigate={`/$/${PAGES.TAGS_FOLLOWING_MANAGE}`}
           />
         }
