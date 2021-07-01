@@ -4,7 +4,20 @@ import React from 'react';
 import Button from 'component/button';
 import Card from 'component/common/card';
 import { Lbryio } from 'lbryinc';
-import { STRIPE_ACCOUNT_CONNECTION_SUCCESS_URL, STRIPE_ACCOUNT_CONNECTION_FAILURE_URL } from 'config';
+import { URL, WEBPACK_WEB_PORT } from 'config';
+
+const isDev = process.env.NODE_ENV !== 'production';
+
+let successStripeRedirectUrl, failureStripeRedirectUrl;
+let successEndpoint = '/$/wallet';
+let failureEndpoint = '/$/wallet';
+if (isDev) {
+  successStripeRedirectUrl = 'localhost:' + WEBPACK_WEB_PORT + successEndpoint;
+  failureStripeRedirectUrl = 'localhost:' + WEBPACK_WEB_PORT + failureEndpoint;
+} else {
+  successStripeRedirectUrl = URL + successEndpoint;
+  failureStripeRedirectUrl = URL + failureEndpoint;
+}
 
 type Props = {
   source: string,
@@ -36,15 +49,15 @@ class StripeAccountConnection extends React.Component<Props, State> {
 
   componentDidMount() {
     const { user } = this.props;
-    
+
     this.experimentalUiEnabled = user && user.experimental_ui;
 
     var that = this;
 
     function getAndSetAccountLink(){
       Lbryio.call('account', 'link', {
-        return_url: STRIPE_ACCOUNT_CONNECTION_SUCCESS_URL,
-        refresh_url: STRIPE_ACCOUNT_CONNECTION_FAILURE_URL,
+        return_url: successStripeRedirectUrl,
+        refresh_url: failureStripeRedirectUrl,
       }, 'post').then(accountLinkResponse => {
 
         // stripe link for user to navigate to and confirm account
