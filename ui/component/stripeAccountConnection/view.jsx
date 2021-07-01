@@ -110,7 +110,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
   render() {
     const { stripeConnectionUrl, accountConfirmed, accountPendingConfirmation, unpaidBalance } = this.state;
 
-    if (this.experimentalUiEnabled) {
+    if (1 === 1) {
       return (
         <Card
           title={<div className="table__header-text">{__(`Connect A Bank Account`)}</div>}
