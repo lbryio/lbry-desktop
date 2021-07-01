@@ -1,6 +1,4 @@
 // @flow
-import { getSearchQueryString } from 'util/query-params';
-import { selectShowMatureContent } from 'redux/selectors/settings';
 import {
   parseURI,
   makeSelectClaimForUri,
@@ -10,28 +8,68 @@ import {
   makeSelectPendingClaimForUri,
   makeSelectIsUriResolving,
 } from 'lbry-redux';
+
 import { createSelector } from 'reselect';
+import { getSearchQueryString } from 'util/query-params';
 import { createNormalizedSearchKey } from 'util/search';
+import { selectShowMatureContent } from 'redux/selectors/settings';
 
-type State = { search: SearchState };
+/**
+ * Search State related type declarations
+ */
+type CustomOptions = {
+  isBackgroundSearch?: boolean,
+  size?: number,
+  from?: number,
+  related_to?: string,
+  nsfw?: boolean,
+};
 
-export const selectState = (state: State): SearchState => state.search;
+type UrisByQuery = {
+  [string]: Array<string>,
+};
 
-export const selectSearchValue: (state: State) => string = createSelector(selectState, (state) => state.searchQuery);
+type HasReachedMaxResultsLength = {
+  [string]: boolean,
+};
 
-export const selectSearchOptions: (state: State) => SearchOptions = createSelector(
-  selectState,
-  (state) => state.options
-);
+type SearchState = {
+  options: CustomOptions,
+  urisByQuery: UrisByQuery,
+  hasReachedMaxResultsLength: HasReachedMaxResultsLength,
+  searching: boolean,
+};
 
-export const selectIsSearching: (state: State) => boolean = createSelector(selectState, (state) => state.searching);
+type State = {
+  search: SearchState,
+};
 
-export const selectSearchUrisByQuery: (state: State) => { [string]: Array<string> } = createSelector(
+/**
+ * Gets search state from redux state
+ */
+type iSelectSearchState = (state: State) => SearchState;
+export const selectState: iSelectSearchState = (state) => state.search;
+
+/**
+ * Custom Selectors
+ */
+type iSelectSearchValue = (state: State) => string;
+export const selectSearchValue: iSelectSearchValue = createSelector(selectState, (state) => state.searchQuery);
+
+type iSelectSearchOptions = (state: State) => SearchOptions;
+export const selectSearchOptions: iSelectSearchOptions = createSelector(selectState, (state) => state.options);
+
+type iSelectIsSearching = (state: State) => boolean;
+export const selectIsSearching: iSelectIsSearching = createSelector(selectState, (state) => state.searching);
+
+type iSelectSearchUrisByQuery = (state: State) => { [string]: Array<string> };
+export const selectSearchUrisByQuery: iSelectSearchUrisByQuery = createSelector(
   selectState,
   (state) => state.urisByQuery
 );
 
-export const selectHasReachedMaxResultsLength: (state: State) => { [boolean]: Array<boolean> } = createSelector(
+type iSelectHasReachedMaxResultsLength = (state: State) => { [boolean]: Array<boolean> };
+export const selectHasReachedMaxResultsLength: iSelectHasReachedMaxResultsLength = createSelector(
   selectState,
   (state) => state.hasReachedMaxResultsLength
 );
@@ -58,22 +96,12 @@ export const makeSelectHasReachedMaxResultsLength = (query: string): ((state: St
   });
 
 // Creates a query string based on the state in the search reducer
-// Can be overrided by passing in custom sizes/from values for other areas pagination
-
-type CustomOptions = {
-  isBackgroundSearch?: boolean,
-  size?: number,
-  from?: number,
-  related_to?: string,
-  nsfw?: boolean,
-};
+// Can be overridden by passing in custom sizes/from values for other areas pagination
 
 export const makeSelectQueryWithOptions = (customQuery: ?string, options: CustomOptions) =>
   createSelector(selectSearchValue, selectSearchOptions, (query, defaultOptions) => {
-    const searchOptions = { ...defaultOptions, ...options };
-    const queryString = getSearchQueryString(customQuery || query, searchOptions);
-
-    return queryString;
+    const searchOptions: CustomOptions = { ...defaultOptions, ...options };
+    return getSearchQueryString(customQuery || query, searchOptions);
   });
 
 export const makeSelectRecommendedContentForUri = (uri: string) =>
@@ -85,28 +113,27 @@ export const makeSelectRecommendedContentForUri = (uri: string) =>
       let recommendedContent;
       if (claim) {
         // always grab full URL - this can change once search returns canonical
-        const currentUri = buildURI({ streamClaimId: claim.claim_id, streamName: claim.name });
+        const currentUri = buildURI({
+          streamClaimId: claim.claim_id,
+          streamName: claim.name,
+        });
 
         const { title } = claim.value;
 
-        if (!title) {
-          return;
-        }
+        if (!title) return;
 
-        const options: {
-          related_to?: string,
-          nsfw?: boolean,
-          isBackgroundSearch?: boolean,
-        } = { related_to: claim.claim_id, isBackgroundSearch: true };
+        const options: CustomOptions = {
+          related_to: claim.claim_id,
+          isBackgroundSearch: true,
+          nsfw: isMature,
+        };
 
-        options['nsfw'] = isMature;
         const searchQuery = getSearchQueryString(title.replace(/\//, ' '), options);
         const normalizedSearchQuery = createNormalizedSearchKey(searchQuery);
 
         let searchUris = searchUrisByQuery[normalizedSearchQuery];
         if (searchUris) {
-          searchUris = searchUris.filter((searchUri) => searchUri !== currentUri);
-          recommendedContent = searchUris;
+          recommendedContent = searchUris.filter((searchUri) => searchUri !== currentUri);
         }
       }
       return recommendedContent;
@@ -115,7 +142,6 @@ export const makeSelectRecommendedContentForUri = (uri: string) =>
 
 export const makeSelectWinningUriForQuery = (query: string) => {
   const uriFromQuery = `lbry://${query}`;
-
   let channelUriFromQuery;
   try {
     const { isChannel } = parseURI(uriFromQuery);
@@ -134,11 +160,13 @@ export const makeSelectWinningUriForQuery = (query: string) => {
       const claim2Mature = claim2 && isClaimNsfw(claim2);
       let pendingAmount = pendingClaim && pendingClaim.amount;
 
-      if (!claim1 && !claim2) {
-        return undefined;
-      } else if (!claim1 && claim2) {
+      if (!claim1 && !claim2) return undefined;
+
+      if (!claim1 && claim2) {
         return matureEnabled ? claim2.canonical_url : claim2Mature ? undefined : claim2.canonical_url;
-      } else if (claim1 && !claim2) {
+      }
+
+      if (claim1 && !claim2) {
         return matureEnabled
           ? claim1.repost_url || claim1.canonical_url
           : claim1Mature
@@ -146,8 +174,8 @@ export const makeSelectWinningUriForQuery = (query: string) => {
           : claim1.repost_url || claim1.canonical_url;
       }
 
-      const effectiveAmount1 = claim1 && (claim1.repost_bid_amount || claim1.meta.effective_amount);
       // claim2 will never have a repost_bid_amount because reposts never start with "@"
+      const effectiveAmount1 = claim1 && (claim1.repost_bid_amount || claim1.meta.effective_amount);
       const effectiveAmount2 = claim2 && claim2.meta.effective_amount;
 
       if (!matureEnabled) {
@@ -164,6 +192,7 @@ export const makeSelectWinningUriForQuery = (query: string) => {
         Number(effectiveAmount1) > Number(effectiveAmount2)
           ? claim1.repost_url || claim1.canonical_url
           : claim2.canonical_url;
+
       if (pendingAmount && pendingAmount > effectiveAmount1 && pendingAmount > effectiveAmount2) {
         return pendingAmount.permanent_url;
       } else {
@@ -178,16 +207,12 @@ export const makeSelectIsResolvingWinningUri = (query: string = '') => {
   let channelUriFromQuery;
   try {
     const { isChannel } = parseURI(uriFromQuery);
-    if (!isChannel) {
-      channelUriFromQuery = `lbry://@${query}`;
-    }
+    if (!isChannel) channelUriFromQuery = `lbry://@${query}`;
   } catch (e) {}
 
   return createSelector(
     makeSelectIsUriResolving(uriFromQuery),
     channelUriFromQuery ? makeSelectIsUriResolving(channelUriFromQuery) : () => {},
-    (claim1IsResolving, claim2IsResolving) => {
-      return claim1IsResolving || claim2IsResolving;
-    }
+    (claim1IsResolving, claim2IsResolving) => claim1IsResolving || claim2IsResolving
   );
 };
