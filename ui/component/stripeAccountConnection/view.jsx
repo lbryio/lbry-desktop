@@ -4,9 +4,16 @@ import React from 'react';
 import Button from 'component/button';
 import Card from 'component/common/card';
 import { Lbryio } from 'lbryinc';
-import { URL, WEBPACK_WEB_PORT } from 'config';
+import { URL, WEBPACK_WEB_PORT, STRIPE_PUBLIC_KEY } from 'config';
 
 const isDev = process.env.NODE_ENV !== 'production';
+
+let stripeEnvironment = 'test';
+// if the key contains pk_live it's a live key
+// update the environment for the calls to the backend to indicate which environment to hit
+if (STRIPE_PUBLIC_KEY.indexOf('pk_live') > -1) {
+  stripeEnvironment = 'live';
+}
 
 let successStripeRedirectUrl, failureStripeRedirectUrl;
 let successEndpoint = '/$/wallet';
@@ -54,12 +61,12 @@ class StripeAccountConnection extends React.Component<Props, State> {
 
     var that = this;
 
-    function getAndSetAccountLink(){
+    function getAndSetAccountLink() {
       Lbryio.call('account', 'link', {
         return_url: successStripeRedirectUrl,
         refresh_url: failureStripeRedirectUrl,
+        environment: stripeEnvironment,
       }, 'post').then(accountLinkResponse => {
-
         // stripe link for user to navigate to and confirm account
         const stripeConnectionUrl = accountLinkResponse.url;
 
@@ -71,7 +78,9 @@ class StripeAccountConnection extends React.Component<Props, State> {
     }
 
     // call the account status endpoint
-    Lbryio.call('account', 'status', {}, 'post').then(accountStatusResponse => {
+    Lbryio.call('account', 'status', {
+      environment: stripeEnvironment,
+    }, 'post').then(accountStatusResponse => {
       // if charges already enabled, no need to generate an account link
       if (accountStatusResponse.charges_enabled) {
         // account has already been confirmed

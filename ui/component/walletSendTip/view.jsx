@@ -15,6 +15,14 @@ import LbcSymbol from 'component/common/lbc-symbol';
 import { parseURI } from 'lbry-redux';
 import usePersistedState from 'effects/use-persisted-state';
 import WalletSpendableBalanceHelp from 'component/walletSpendableBalanceHelp';
+import { STRIPE_PUBLIC_KEY } from 'config';
+
+let stripeEnvironment = 'test';
+// if the key contains pk_live it's a live key
+// update the environment for the calls to the backend to indicate which environment to hit
+if (STRIPE_PUBLIC_KEY.indexOf('pk_live') > -1) {
+  stripeEnvironment = 'live';
+}
 
 const DEFAULT_TIP_AMOUNTS = [1, 5, 25, 100];
 
@@ -73,7 +81,9 @@ function WalletSendTip(props: Props) {
 
 // TODO: come up with a better way to do this
   setTimeout(function() {
-    Lbryio.call('customer', 'status', {}, 'post').then(customerStatusResponse => {
+    Lbryio.call('customer', 'status', {
+      environment: stripeEnvironment,
+    }, 'post').then(customerStatusResponse => {
       const defaultPaymentMethodId = customerStatusResponse.Customer &&
         customerStatusResponse.Customer.invoice_settings &&
         customerStatusResponse.Customer.invoice_settings.default_payment_method &&
@@ -86,6 +96,7 @@ function WalletSendTip(props: Props) {
   Lbryio.call('account', 'check', {
     channel_claim_id: channelClaimId,
     channel_name: tipChannelName,
+    environment: stripeEnvironment,
   }, 'post').then(accountCheckResponse => {
     if (accountCheckResponse === true && canReceiveFiatTip !== true) {
       setCanReceiveFiatTip(true);
@@ -189,6 +200,7 @@ function WalletSendTip(props: Props) {
             currency: 'USD',
             anonymous: sendAnonymously,
             source_claim_id: sourceClaimId,
+            environment: stripeEnvironment,
           }, 'post').then(customerTipResponse => {
             doToast({
               message: __('You sent $%amount% as a tip to %tipChannelName%, I\'m sure they appreciate it!', { amount: tipAmount, tipChannelName  }),
