@@ -4,7 +4,7 @@ import { SIMPLE_SITE } from 'config';
 import Button from 'component/button';
 import * as ICONS from 'constants/icons';
 import classnames from 'classnames';
-import videojs from 'video.js/dist/video.min.js';
+import videojs from 'video.js';
 // import 'video.js/dist/alt/video-js-cdn.min.css'; --> 'scss/third-party.scss'
 import eventTracking from 'videojs-event-tracking';
 import * as OVERLAY from './overlays';
