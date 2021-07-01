@@ -284,38 +284,17 @@ function ChannelPage(props: Props) {
       ) : (
         <Tabs onChange={onTabChange} index={tabIndex}>
           <TabList className="tabs__list--channel-page">
-            <Tab disabled={editing}>{__('Publishes')}</Tab>
-            <Tab disabled={editing}>{__('Playlists')}</Tab>
-            <Tab disabled={editing}>{__('Reposts')}</Tab>
+            <Tab disabled={editing}>{__('Content')}</Tab>
             <Tab>{editing ? __('Editing Your Channel') : __('About --[tab title in Channel Page]--')}</Tab>
             <Tab disabled={editing}>{__('Community')}</Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
               <ChannelContent
-                claimType={'stream'}
                 uri={uri}
                 channelIsBlackListed={channelIsBlackListed}
                 viewHiddenChannels
                 empty={<section className="main--empty">{__('No Content Found')}</section>}
-              />
-            </TabPanel>
-            <TabPanel>
-              <ChannelContent
-                claimType={'collection'}
-                uri={uri}
-                channelIsBlackListed={channelIsBlackListed}
-                viewHiddenChannels
-                empty={collectionEmpty}
-              />
-            </TabPanel>
-            <TabPanel>
-              <ChannelContent
-                claimType={'repost'}
-                uri={uri}
-                channelIsBlackListed={channelIsBlackListed}
-                viewHiddenChannels
-                empty={<section className="main--empty">{__('No Reposts Found')}</section>}
               />
             </TabPanel>
             <TabPanel>
