@@ -279,7 +279,7 @@ function ClaimMenuList(props: Props) {
             <MenuItem className="comment__menu-option" onSelect={handleSupport}>
               <div className="menu__link">
                 <Icon aria-hidden icon={ICONS.LBC} />
-                {__('Support')}
+                {__('Support --[button to support a claim]--')}
               </div>
             </MenuItem>
           </>
