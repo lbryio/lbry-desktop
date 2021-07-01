@@ -50,7 +50,6 @@ type Props = {
   youtubeChannels: ?Array<{ channel_claim_id: string, sync_status: string, transfer_state: string }>,
   blockedChannels: Array<string>,
   mutedChannels: Array<string>,
-  unpublishedCollections: CollectionGroup,
 };
 
 function ChannelPage(props: Props) {
@@ -69,7 +68,6 @@ function ChannelPage(props: Props) {
     youtubeChannels,
     blockedChannels,
     mutedChannels,
-    unpublishedCollections,
   } = props;
   const {
     push,
@@ -100,8 +98,6 @@ function ChannelPage(props: Props) {
       }
     });
 
-  const hasUnpublishedCollections = unpublishedCollections && Object.keys(unpublishedCollections).length;
-
   let channelIsBlackListed = false;
 
   if (claim && blackListedOutpoints) {
@@ -122,7 +118,7 @@ function ChannelPage(props: Props) {
       tabIndex = 1;
       break;
     case DISCUSSION_PAGE:
-      tabIndex = 2
+      tabIndex = 2;
       break;
     default:
       tabIndex = 0;
