@@ -7,11 +7,19 @@ import Page from 'component/page';
 import Card from 'component/common/card';
 import { SETTINGS } from 'lbry-redux';
 import { Lbryio } from 'lbryinc';
-import { STRIPE_ACCOUNT_CONNECTION_FAILURE_URL, STRIPE_ACCOUNT_CONNECTION_SUCCESS_URL } from '../../../config';
+import { STRIPE_PUBLIC_KEY } from 'config';
+
 
 let scriptLoading = false;
 let scriptLoaded = false;
 let scriptDidError = false;
+
+let stripeEnvironment = 'test';
+// if the key contains pk_live it's a live key
+// update the environment for the calls to the backend to indicate which environment to hit
+if (STRIPE_PUBLIC_KEY.indexOf('pk_live') > -1) {
+  stripeEnvironment = 'live';
+}
 
 type Props = {
   disabled: boolean,
@@ -40,7 +48,7 @@ class CardVerify extends React.Component<Props, State> {
     document.body.appendChild(script);
 
     // public key of the stripe account
-    var publicKey = 'pk_test_NoL1JWL7i1ipfhVId5KfDZgo';
+    var publicKey = '';
 
     // client secret of the SetupIntent (don't share with anyone but customer)
     var clientSecret = '';
@@ -48,8 +56,10 @@ class CardVerify extends React.Component<Props, State> {
     // setting a timeout to let the client secret populate
     // TODO: fix this, should be a cleaner way
     setTimeout(function() {
-      Lbryio.call('customer', 'status', {}, 'post').then(customerStatusResponse => {
-        
+      Lbryio.call('customer', 'status', {
+        environment: stripeEnvironment,
+      }, 'post').then(customerStatusResponse => {
+
         const defaultPaymentMethod = customerStatusResponse.Customer.invoice_settings.default_payment_method;
 
         var userHasAlreadySetupPayment = Boolean(defaultPaymentMethod && defaultPaymentMethod.id);
@@ -64,7 +74,9 @@ class CardVerify extends React.Component<Props, State> {
             currentFlowStage: 'confirmingCard',
           });
 
-          Lbryio.call('customer', 'setup', {}, 'post').then(customerSetupResponse => {
+          Lbryio.call('customer', 'setup', {
+            environment: stripeEnvironment,
+          }, 'post').then(customerSetupResponse => {
             console.log(customerSetupResponse);
 
             clientSecret = customerSetupResponse.client_secret;
@@ -85,7 +97,9 @@ class CardVerify extends React.Component<Props, State> {
               currentFlowStage: 'confirmingCard',
             });
 
-            Lbryio.call('customer', 'setup', {}, 'post').then(customerSetupResponse => {
+            Lbryio.call('customer', 'setup', {
+              environment: stripeEnvironment,
+            }, 'post').then(customerSetupResponse => {
               console.log(customerSetupResponse);
 
               clientSecret = customerSetupResponse.client_secret;
