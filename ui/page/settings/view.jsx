@@ -207,12 +207,12 @@ class SettingsPage extends React.PureComponent<Props, State> {
       >
 
         <Card
-          title={__('Add card to tip creators in fiat currency')}
+          title={__('Add card to tip creators in USD')}
           actions={
             <div className="section__actions">
               <Button
                 button="secondary"
-                label={__('Manage Cards')}
+                label={__('Manage Card')}
                 icon={ICONS.WALLET}
                 navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`}
               />
