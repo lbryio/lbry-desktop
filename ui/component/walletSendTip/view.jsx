@@ -395,6 +395,9 @@ function WalletSendTip(props: Props) {
                   <ChannelSelector />
                 </div>
 
+                {activeTab === 'TipFiat' && !hasCardSaved && <h3 className="add-card-prompt"><Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card')} button="link" /> To Tip Creators</h3>}
+
+
                 {/* section to pick tip/boost amount */}
                 <div className="section">
                   {DEFAULT_TIP_AMOUNTS.map((amount) => (
@@ -414,6 +417,7 @@ function WalletSendTip(props: Props) {
                       }}
                     />
                   ))}
+
                   <Button
                     button="alt"
                     className={classnames('button-toggle button-toggle--expandformobile', {
@@ -424,6 +428,7 @@ function WalletSendTip(props: Props) {
                     onClick={() => setUseCustomTip(true)}
                     disabled={activeTab === 'TipFiat' && (!hasCardSaved || !canReceiveFiatTip)}
                   />
+
                   {DEFAULT_TIP_AMOUNTS.some((val) => val > balance) && activeTab !== 'TipFiat' && (
                     <Button
                       button="secondary"
