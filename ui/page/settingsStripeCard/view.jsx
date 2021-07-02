@@ -48,7 +48,7 @@ class CardVerify extends React.Component<Props, State> {
     document.body.appendChild(script);
 
     // public key of the stripe account
-    var publicKey = '';
+    var publicKey = STRIPE_PUBLIC_KEY;
 
     // client secret of the SetupIntent (don't share with anyone but customer)
     var clientSecret = '';
