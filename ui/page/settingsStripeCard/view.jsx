@@ -8,6 +8,7 @@ import Card from 'component/common/card';
 import { SETTINGS } from 'lbry-redux';
 import { Lbryio } from 'lbryinc';
 import { STRIPE_PUBLIC_KEY } from 'config';
+import classnames from 'classnames';
 
 let scriptLoading = false;
 let scriptLoaded = false;
@@ -33,6 +34,7 @@ class CardVerify extends React.Component<Props, State> {
       open: false,
       scriptFailedToLoad: false,
       currentFlowStage: 'loading', // loading, confirmingCard, cardConfirmed
+      customerTransactions: [],
     };
   }
 
@@ -70,6 +72,18 @@ class CardVerify extends React.Component<Props, State> {
           that.setState({
             currentFlowStage: 'cardConfirmed',
           });
+
+          // get customer transactions
+          Lbryio.call('customer', 'list', {
+            environment: stripeEnvironment,
+          }, 'post').then(customerTransactionsResponse => {
+            that.setState({
+              customerTransactions: customerTransactionsResponse,
+            })
+
+            console.log(customerTransactionsResponse);
+          });
+
           // otherwise, prompt them to save a card
         } else {
           that.setState({
@@ -288,7 +302,7 @@ class CardVerify extends React.Component<Props, State> {
   render() {
     const { scriptFailedToLoad } = this.props;
 
-    const { currentFlowStage } = this.state;
+    const { currentFlowStage, customerTransactions } = this.state;
 
     console.log(currentFlowStage);
 
@@ -338,6 +352,10 @@ class CardVerify extends React.Component<Props, State> {
             title={__('Card successfully added!')}
             subtitle={__('Congratulations! Your card has been successfully added to your Odysee account. You can now tip your favorite creators while viewing their content.')}
           />
+
+          {customerTransactions.map((transactions) => (
+            <h2>{transactions.id}</h2>
+          ))}
         </div>}
 
       </Page>
