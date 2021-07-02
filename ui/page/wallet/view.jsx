@@ -3,7 +3,6 @@ import React from 'react';
 import { withRouter } from 'react-router';
 import WalletBalance from 'component/walletBalance';
 import TxoList from 'component/txoList';
-import FiatTxoList from 'component/fiatTxoList';
 import StripeAccountConnection from 'component/stripeAccountConnection';
 import Page from 'component/page';
 import Spinner from 'component/spinner';
@@ -37,7 +36,6 @@ const WalletPage = (props: Props) => {
               <WalletBalance />
               <StripeAccountConnection />
               <TxoList search={search} />
-              <FiatTxoList search={search} />
             </div>
           )}
         </>

@@ -10,11 +10,19 @@ import { Lbryio } from 'lbryinc';
 import { STRIPE_PUBLIC_KEY } from 'config';
 import classnames from 'classnames';
 import TxoListItem from 'component/transactionListTableItem';
+import DateTime from 'component/dateTime';
+
 
 
 let scriptLoading = false;
 let scriptLoaded = false;
 let scriptDidError = false;
+
+const dateFormat = {
+  month: 'short',
+  day: 'numeric',
+  year: 'numeric',
+};
 
 
 let stripeEnvironment = 'test';
@@ -260,9 +268,26 @@ class CardVerify extends React.Component<Props, State> {
         // shows a success / error message when the payment is complete
         var orderComplete = function(stripe, clientSecret) {
           stripe.retrieveSetupIntent(clientSecret).then(function(result) {
-            that.setState({
-              currentFlowStage: 'cardConfirmed',
-            });
+
+            Lbryio.call('customer', 'status', {
+              environment: stripeEnvironment,
+            }, 'post').then(customerStatusResponse => {
+
+              var card = customerStatusResponse.PaymentMethods[0].card;
+
+              var cardDetails = {
+                brand: card.brand,
+                expiryYear: card.exp_year,
+                expiryMonth: card.exp_month,
+                lastFour: card.last4
+              };
+
+              that.setState({
+                currentFlowStage: 'cardConfirmed',
+                pageTitle: 'Tip History',
+                userCardDetails: cardDetails,
+              });
+            })
 
             console.log(result);
 
@@ -384,12 +409,12 @@ class CardVerify extends React.Component<Props, State> {
           />
           <br />
 
-          {!customerTransactions && <Card
+          {(!customerTransactions || customerTransactions.length === 0) && <Card
             title={__('Tip History')}
             subtitle={__('You have not sent any tips yet. When you do they will appear here. ')}
           />}
 
-          {customerTransactions && <Card
+          {customerTransactions && customerTransactions.length > 0 && <Card
             title={__('Tip History')}
             body={<><div className="table__wrapper">
               <table className="table table--transactions">
@@ -406,6 +431,12 @@ class CardVerify extends React.Component<Props, State> {
                 customerTransactions.map((transaction) => (
                   <tr>
                     <td>{transaction.created_at}</td>
+
+                      {/*<DateTime date={transaction.createdAt} show={DateTime.SHOW_DATE} formatOptions={dateFormat} />*/}
+                      {/*<div className="table__item-label">*/}
+                      {/*  <DateTime date={transaction.createdAt} show={DateTime.SHOW_TIME} />*/}
+                      {/*</div>*/}
+
                     <td>{transaction.channel_name}</td>
                     <td>${transaction.tipped_amount / 100}</td>
                     <td>{transaction.private_tip ? 'Yes' :  'No'}</td>
