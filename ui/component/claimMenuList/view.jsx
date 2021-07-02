@@ -358,10 +358,10 @@ function ClaimMenuList(props: Props) {
 
         <hr className="menu__separator" />
 
-        {isChannelPage && (
+        {isChannelPage && IS_WEB && (
           <MenuItem className="comment__menu-option" onSelect={handleCopyRssLink}>
             <div className="menu__link">
-              <Icon aria-hidden icon={ICONS.SHARE} />
+              <Icon aria-hidden icon={ICONS.RSS} />
               {__('Copy RSS URL')}
             </div>
           </MenuItem>

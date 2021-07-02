@@ -46,11 +46,11 @@ async function getFeed(channelClaim) {
 
   const options = {
     title: title + ' on ' + SITE_NAME,
-    description: value ? replaceLineFeeds(value.description) : '',
+    description: value && value.description ? replaceLineFeeds(value.description) : '',
     link: `${URL}/${channelClaim.name}:${channelClaim.claim_id}`,
     favicon: URL + '/public/favicon.png',
     generator: SITE_NAME + ' RSS Feed',
-    image: value ? value.thumbnail.url : '',
+    image: value && value.thumbnail ? value.thumbnail.url : '',
     author: {
       name: channelClaim.name,
       link: URL + '/' + channelClaim.name + ':' + channelClaim.claim_id,
@@ -69,8 +69,8 @@ async function getFeed(channelClaim) {
       guid: c.claim_id,
       id: c.claim_id,
       title: value ? value.title : c.name,
-      description: value ? replaceLineFeeds(value.description) : '',
-      image: value ? value.thumbnail.url : '',
+      description: value && value.description ? replaceLineFeeds(value.description) : '',
+      image: value && value.thumbnail ? value.thumbnail.url : '',
       link: URL + '/' + c.name + ':' + c.claim_id,
       date: new Date(meta ? meta.creation_timestamp * 1000 : null),
     });

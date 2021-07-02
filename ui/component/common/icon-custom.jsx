@@ -2299,4 +2299,21 @@ export const icons = {
       </g>
     </svg>
   ),
+  [ICONS.RSS]: (props: CustomProps) => (
+    <svg
+      viewBox="0 0 24 24"
+      width={props.size || '18'}
+      height={props.size || '18'}
+      xmlns="http://www.w3.org/2000/svg"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      stroke="currentColor"
+      fill="none"
+    >
+      <g>
+        <path d="M.75 19.497a3.75 3.75 0 107.5 0 3.75 3.75 0 10-7.5 0zM.75 8.844a11.328 11.328 0 0114.4 14.4M.75 1.113a18.777 18.777 0 0122.139 22.123" />
+      </g>
+    </svg>
+  ),
 };
