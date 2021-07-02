@@ -38,7 +38,8 @@ class CardVerify extends React.Component<Props, State> {
       scriptFailedToLoad: false,
       currentFlowStage: 'loading', // loading, confirmingCard, cardConfirmed
       customerTransactions: [],
-      pageTitle: 'Add Card'
+      pageTitle: 'Add Card',
+      userCardDetails: {},
     };
   }
 
@@ -73,9 +74,20 @@ class CardVerify extends React.Component<Props, State> {
 
         // show different frontend if user already has card
         if (userHasAlreadySetupPayment) {
+
+          var card = customerStatusResponse.PaymentMethods[0].card;
+          
+          var cardDetails = {
+            brand: card.brand,
+            expiryYear: card.exp_year,
+            expiryMonth: card.exp_month,
+            lastFour: card.last4
+          };
+
           that.setState({
             currentFlowStage: 'cardConfirmed',
-            pageTitle: 'Tip History'
+            pageTitle: 'Tip History',
+            userCardDetails: cardDetails,
           });
 
           // get customer transactions
@@ -307,9 +319,7 @@ class CardVerify extends React.Component<Props, State> {
   render() {
     const { scriptFailedToLoad } = this.props;
 
-    const { currentFlowStage, customerTransactions, pageTitle } = this.state;
-
-    console.log(currentFlowStage);
+    const { currentFlowStage, customerTransactions, pageTitle, userCardDetails } = this.state;
 
     return (
 
@@ -360,15 +370,30 @@ class CardVerify extends React.Component<Props, State> {
 
           {/*<br></br>*/}
 
+          <Card
+            title={__('Card Details')}
+            // subtitle={'Brand: ' + userCardDetails.brand.toUpperCase()}
+            // expandable: true
+            // // subtitle={'Last 4: ' + userCardDetails.lastFour}
+            body={<>
+              <h4 className="grey-text">Brand: {userCardDetails.brand.toUpperCase()} &nbsp;
+                Last 4:  {userCardDetails.lastFour} &nbsp;
+                Expires: {userCardDetails.expiryMonth}/{userCardDetails.expiryYear} &nbsp;
+                </h4>
+              </>}
+          />
+          <br />
+
+          {customerTransactions && <Card
+            title={__('Tip History')}
+            subtitle={''}
+          />}
+
           {!customerTransactions && <Card
             title={__('Tip History')}
             subtitle={__('You have not sent any tips yet. When you do they will appear here. ')}
           />}
 
-          {customerTransactions && <Card
-            title={__('Tip History')}
-            subtitle={__('')}
-          />}
 
           {customerTransactions && <div className="table__wrapper">
             <table className="table table--transactions">
