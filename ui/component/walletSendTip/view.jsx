@@ -127,16 +127,16 @@ function WalletSendTip(props: Props) {
   let iconToUse, explainerText;
   if (activeTab === 'Boost') {
     iconToUse = ICONS.LBC;
-    explainerText = 'This will increase the overall bid amount for this content, which will boost its ability to be discovered. You can cancel your Boost later and receive back your LBC. ';
+    explainerText = 'This refundable boost will improve the discoverability of this content while active. ';
   } else if (activeTab === 'TipFiat') {
     iconToUse = ICONS.FINANCE;
-    explainerText = 'This tip will be made through your card and sent to the creator at which point they will be able to withdraw the funds.  ';
-    if (!hasCardSaved) {
-      explainerText += 'You must add a card to use this functionality. ';
-    }
+    explainerText = 'Show this channel your appreciation by sending a donation of cash in USD.  ';
+    // if (!hasCardSaved) {
+    //   explainerText += 'You must add a card to use this functionality. ';
+    // }
   } else if (activeTab === 'TipLBC') {
     iconToUse = ICONS.LBC;
-    explainerText = 'Show this channel your appreciation by sending a donation. This is a one time donation which is not refundable. ';
+    explainerText = 'Show this channel your appreciation by sending a donation of Credits. ';
   }
 
   const isSupport = claimIsMine || !sendAsTip;
@@ -314,7 +314,7 @@ function WalletSendTip(props: Props) {
                   <Button
                     key="tip"
                     icon={ICONS.LBC}
-                    label={__('Tip LBC')}
+                    label={__('Tip')}
                     button="alt"
                     onClick={() => {
                       if (!isConfirming) {
@@ -327,7 +327,7 @@ function WalletSendTip(props: Props) {
                   <Button
                     key="tip-fiat"
                     icon={ICONS.FINANCE}
-                    label={__('Tip Fiat')}
+                    label={__('Tip')}
                     button="alt"
                     onClick={() => {
                       if (!isConfirming) {
@@ -355,8 +355,8 @@ function WalletSendTip(props: Props) {
               {/* short explainer under the button */}
               <div className="section__subtitle">
                 {explainerText}
-                {activeTab === 'TipFiat' && !hasCardSaved && <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add A Card')} button="link" />}
-                {activeTab !== 'TipFiat' && <Button label={__('Learn more')} button="link" href="https://lbry.com/faq/tipping" />}
+                {/*{activeTab === 'TipFiat' && !hasCardSaved && <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add A Card')} button="link" />}*/}
+                {<Button label={__('Learn more')} button="link" href="https://lbry.com/faq/tipping" />}
               </div>
             </React.Fragment>
           }

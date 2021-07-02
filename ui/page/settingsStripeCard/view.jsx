@@ -38,6 +38,7 @@ class CardVerify extends React.Component<Props, State> {
       scriptFailedToLoad: false,
       currentFlowStage: 'loading', // loading, confirmingCard, cardConfirmed
       customerTransactions: [],
+      pageTitle: 'Add Card'
     };
   }
 
@@ -74,6 +75,7 @@ class CardVerify extends React.Component<Props, State> {
         if (userHasAlreadySetupPayment) {
           that.setState({
             currentFlowStage: 'cardConfirmed',
+            pageTitle: 'Tip History'
           });
 
           // get customer transactions
@@ -305,13 +307,13 @@ class CardVerify extends React.Component<Props, State> {
   render() {
     const { scriptFailedToLoad } = this.props;
 
-    const { currentFlowStage, customerTransactions } = this.state;
+    const { currentFlowStage, customerTransactions, pageTitle } = this.state;
 
     console.log(currentFlowStage);
 
     return (
 
-      <Page backout={{ title: __('Manage Card'), backLabel: __('Done') }} noFooter noSideNavigation>
+      <Page backout={{ title: pageTitle, backLabel: __('Done') }} noFooter noSideNavigation>
         <div>
           {scriptFailedToLoad && (
             <div className="error__text">There was an error connecting to Stripe. Please try again later.</div>
@@ -326,10 +328,10 @@ class CardVerify extends React.Component<Props, State> {
         </div>}
 
         {currentFlowStage === 'confirmingCard' && <div className="headerCard toConfirmCard">
-          <Card
-            title={__('Connect your card with Odysee')}
-            subtitle={__('Securely connect your card to your Odysee account to tip your favorite creators')}
-          />
+          {/*<Card*/}
+          {/*  title={__('Connect your card with Odysee')}*/}
+          {/*  subtitle={__('Securely connect your card to your Odysee account to tip your favorite creators')}*/}
+          {/*/>*/}
         </div>}
 
         {currentFlowStage === 'confirmingCard' && <div className="sr-root">
@@ -337,29 +339,38 @@ class CardVerify extends React.Component<Props, State> {
             <div className="sr-payment-form card cardInput">
               <div className="sr-form-row">
                 <label className="payment-details">
-                  Payment Details
+                  Card Details
                 </label>
                 <div className="sr-input sr-element sr-card-element" id="card-element" />
               </div>
               <div className="sr-field-error" id="card-errors" role="alert" />
               <button className="linkButton" id="submit">
                 <div className="spinner hidden" id="spinner" />
-                <span id="button-text">Link your card to your account</span>
+                <span id="button-text">Add Card</span>
               </button>
             </div>
           </div>
         </div>}
 
         {currentFlowStage === 'cardConfirmed' && <div className="successCard">
-          <Card
-            title={__('Card successfully added!')}
-            subtitle={__('Congratulations! Your card has been successfully added to your Odysee account. You can now tip your favorite creators while viewing their content.')}
-          />
+          {/*<Card*/}
+          {/*  title={__('Card successfully added!')}*/}
+          {/*  subtitle={__('Congratulations! Your card has been successfully added to your Odysee account. You can now tip your favorite creators while viewing their content.')}*/}
+          {/*/>*/}
 
-          <br></br>
-          <h2>Your Tip History</h2>
+          {/*<br></br>*/}
 
-          <div className="table__wrapper">
+          {!customerTransactions && <Card
+            title={__('Tip History')}
+            subtitle={__('You have not sent any tips yet. When you do they will appear here. ')}
+          />}
+
+          {customerTransactions && <Card
+            title={__('Tip History')}
+            subtitle={__('')}
+          />}
+
+          {customerTransactions && <div className="table__wrapper">
             <table className="table table--transactions">
               <thead>
               <tr>
@@ -381,7 +392,7 @@ class CardVerify extends React.Component<Props, State> {
               ))}
               </tbody>
             </table>
-          </div>
+          </div>}
 
           {/*{customerTransactions.map((transactions) => (*/}
           {/*  <h2>{transactions.id}</h2>*/}
