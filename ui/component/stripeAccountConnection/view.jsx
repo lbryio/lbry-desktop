@@ -19,8 +19,8 @@ let successStripeRedirectUrl, failureStripeRedirectUrl;
 let successEndpoint = '/$/wallet';
 let failureEndpoint = '/$/wallet';
 if (isDev) {
-  successStripeRedirectUrl = 'localhost:' + WEBPACK_WEB_PORT + successEndpoint;
-  failureStripeRedirectUrl = 'localhost:' + WEBPACK_WEB_PORT + failureEndpoint;
+  successStripeRedirectUrl = 'http://localhost:' + WEBPACK_WEB_PORT + successEndpoint;
+  failureStripeRedirectUrl = 'http://localhost:' + WEBPACK_WEB_PORT + failureEndpoint;
 } else {
   successStripeRedirectUrl = URL + successEndpoint;
   failureStripeRedirectUrl = URL + failureEndpoint;
