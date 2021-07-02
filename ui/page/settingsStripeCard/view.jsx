@@ -76,7 +76,7 @@ class CardVerify extends React.Component<Props, State> {
         if (userHasAlreadySetupPayment) {
 
           var card = customerStatusResponse.PaymentMethods[0].card;
-          
+
           var cardDetails = {
             brand: card.brand,
             expiryYear: card.exp_year,
@@ -384,40 +384,37 @@ class CardVerify extends React.Component<Props, State> {
           />
           <br />
 
-          {customerTransactions && <Card
-            title={__('Tip History')}
-            subtitle={''}
-          />}
-
           {!customerTransactions && <Card
             title={__('Tip History')}
             subtitle={__('You have not sent any tips yet. When you do they will appear here. ')}
           />}
 
-
-          {customerTransactions && <div className="table__wrapper">
-            <table className="table table--transactions">
-              <thead>
-              <tr>
-                <th className="date-header">{__('Date')}</th>
-                <th>{<>{__('Receiving Channel Name')}</>}</th>
-                <th>{__('Amount (USD)')} </th>
-                <th>{__('Anonymous')}</th>
-              </tr>
-              </thead>
-              <tbody>
-              {customerTransactions &&
-              customerTransactions.map((transaction) => (
+          {customerTransactions && <Card
+            title={__('Tip History')}
+            body={<><div className="table__wrapper">
+              <table className="table table--transactions">
+                <thead>
                 <tr>
-                  <td>{transaction.created_at}</td>
-                  <td>{transaction.channel_name}</td>
-                  <td>${transaction.tipped_amount / 100}</td>
-                  <td>{transaction.private_tip ? 'Yes' :  'No'}</td>
+                  <th className="date-header">{__('Date')}</th>
+                  <th>{<>{__('Receiving Channel Name')}</>}</th>
+                  <th>{__('Amount (USD)')} </th>
+                  <th>{__('Anonymous')}</th>
                 </tr>
-              ))}
-              </tbody>
-            </table>
-          </div>}
+                </thead>
+                <tbody>
+                {customerTransactions &&
+                customerTransactions.map((transaction) => (
+                  <tr>
+                    <td>{transaction.created_at}</td>
+                    <td>{transaction.channel_name}</td>
+                    <td>${transaction.tipped_amount / 100}</td>
+                    <td>{transaction.private_tip ? 'Yes' :  'No'}</td>
+                  </tr>
+                ))}
+                </tbody>
+              </table>
+            </div></>}
+          />}
 
           {/*{customerTransactions.map((transactions) => (*/}
           {/*  <h2>{transactions.id}</h2>*/}
