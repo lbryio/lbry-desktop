@@ -75,8 +75,19 @@ function WalletSendTip(props: Props) {
   const [canReceiveFiatTip, setCanReceiveFiatTip] = React.useState(); // dont persist because it needs to be calc'd per creator
   const [hasCardSaved, setHasSavedCard] = usePersistedState('comment-support:hasCardSaved', false);
 
-  const channelClaimId = claim.signing_channel.claim_id;
-  const tipChannelName = claim.signing_channel.name;
+  // setup variables for tip API
+  let channelClaimId, tipChannelName;
+  // if there is a signing channel it's on a file
+  if (claim.signing_channel){
+    channelClaimId = claim.signing_channel.claim_id;
+    tipChannelName = claim.signing_channel.name;
+
+  // otherwise it's on the channel page
+  } else {
+    channelClaimId = claim.claim_id;
+    tipChannelName = claim.name;
+  }
+
   const sourceClaimId = claim.claim_id;
 
 // TODO: come up with a better way to do this
