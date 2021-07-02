@@ -9,7 +9,6 @@ import { SETTINGS } from 'lbry-redux';
 import { Lbryio } from 'lbryinc';
 import { STRIPE_PUBLIC_KEY } from 'config';
 
-
 let scriptLoading = false;
 let scriptLoaded = false;
 let scriptDidError = false;
@@ -59,7 +58,6 @@ class CardVerify extends React.Component<Props, State> {
       Lbryio.call('customer', 'status', {
         environment: stripeEnvironment,
       }, 'post').then(customerStatusResponse => {
-
         const defaultPaymentMethod = customerStatusResponse.Customer.invoice_settings.default_payment_method;
 
         var userHasAlreadySetupPayment = Boolean(defaultPaymentMethod && defaultPaymentMethod.id);
@@ -85,36 +83,35 @@ class CardVerify extends React.Component<Props, State> {
           });
         }
       }).catch(function(error) {
-          console.log(error);
+        console.log(error);
 
-          // errorString passed from the API (with a 403 error)
-          const errorString = 'user as customer is not setup yet';
+        // errorString passed from the API (with a 403 error)
+        const errorString = 'user as customer is not setup yet';
 
-          // if it's beamer's error indicating the account is not linked yet
-          if (error.message.indexOf(errorString) > -1) {
-            // TODO: check the error better
-            that.setState({
-              currentFlowStage: 'confirmingCard',
-            });
+        // if it's beamer's error indicating the account is not linked yet
+        if (error.message.indexOf(errorString) > -1) {
+          // TODO: check the error better
+          that.setState({
+            currentFlowStage: 'confirmingCard',
+          });
 
-            Lbryio.call('customer', 'setup', {
-              environment: stripeEnvironment,
-            }, 'post').then(customerSetupResponse => {
-              console.log(customerSetupResponse);
+          Lbryio.call('customer', 'setup', {
+            environment: stripeEnvironment,
+          }, 'post').then(customerSetupResponse => {
+            console.log(customerSetupResponse);
 
-              clientSecret = customerSetupResponse.client_secret;
-              setupStripe();
-            });
-
-          } else {
-            console.log('Unseen before error');
-          }
-        });
+            clientSecret = customerSetupResponse.client_secret;
+            setupStripe();
+          });
+        } else {
+          console.log('Unseen before error');
+        }
+      });
     }, 250);
 
-    function setupStripe(){
+    function setupStripe() {
       // TODO: have to fix this, using so that the script is available
-      setTimeout(function(){
+      setTimeout(function() {
         var stripeElements = function(publicKey, setupIntent) {
           var stripe = Stripe(publicKey);
           var elements = stripe.elements();
@@ -122,48 +119,49 @@ class CardVerify extends React.Component<Props, State> {
           // Element styles
           var style = {
             base: {
-              fontSize: "16px",
-              color: "#32325d",
+              fontSize: '16px',
+              color: '#32325d',
               fontFamily:
-                "-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif",
-              fontSmoothing: "antialiased",
-              "::placeholder": {
-                color: "rgba(0,0,0,0.4)"
-              }
-            }
+                '-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif',
+              fontSmoothing: 'antialiased',
+              '::placeholder': {
+                color: 'rgba(0,0,0,0.4)',
+              },
+            },
           };
 
-          var card = elements.create("card", { style: style });
+          var card = elements.create('card', { style: style });
 
-          card.mount("#card-element");
+          card.mount('#card-element');
 
           // Element focus ring
-          card.on("focus", function() {
-            var el = document.getElementById("card-element");
-            el.classList.add("focused");
+          card.on('focus', function() {
+            var el = document.getElementById('card-element');
+            el.classList.add('focused');
           });
 
-          card.on("blur", function() {
-            var el = document.getElementById("card-element");
-            el.classList.remove("focused");
+          card.on('blur', function() {
+            var el = document.getElementById('card-element');
+            el.classList.remove('focused');
+          });
+
+          card.on('ready', function() {
+            card.focus();
           });
 
           var email = that.props.email;
 
-          // Handle payment submission when user clicks the pay button.
-          var button = document.getElementById('submit');
-          button.addEventListener('click', function(event) {
-
+          function submitForm(event) {
             event.preventDefault();
 
             // if client secret wasn't loaded properly
-            if (!clientSecret){
+            if (!clientSecret) {
               var displayErrorText = 'There was an error in generating your payment method. Please contact a developer';
-              var displayError = document.getElementById("card-errors");
+              var displayError = document.getElementById('card-errors');
               displayError.textContent = displayErrorText;
 
               return;
-            };
+            }
 
             changeLoadingState(true);
 
@@ -174,16 +172,32 @@ class CardVerify extends React.Component<Props, State> {
               },
             }).then(function(result) {
               if (result.error) {
+                console.log(result);
+
                 changeLoadingState(false);
-                var displayError = document.getElementById("card-errors");
+                var displayError = document.getElementById('card-errors');
                 displayError.textContent = result.error.message;
               } else {
                 // The PaymentMethod was successfully set up
                 // hide and show the proper divs
                 orderComplete(stripe, clientSecret);
               }
-            })
+            });
+          }
+
+          // Handle payment submission when user clicks the pay button.
+          var button = document.getElementById('submit');
+          button.addEventListener('click', function(event) {
+            submitForm(event);
           });
+
+          // currently doesn't work because the iframe javascript context is different
+          // would be nice though if it's even technically possible
+          // window.addEventListener('keyup', function(event) {
+          //   if (event.keyCode === 13) {
+          //     submitForm(event);
+          //   }
+          // }, false);
         };
 
         // TODO: possible bug here where clientSecret isn't done
@@ -192,20 +206,19 @@ class CardVerify extends React.Component<Props, State> {
         // Show a spinner on payment submission
         var changeLoadingState = function(isLoading) {
           if (isLoading) {
-            document.querySelector("button").disabled = true;
-            document.querySelector("#spinner").classList.remove("hidden");
-            document.querySelector("#button-text").classList.add("hidden");
+            document.querySelector('button').disabled = true;
+            document.querySelector('#spinner').classList.remove('hidden');
+            document.querySelector('#button-text').classList.add('hidden');
           } else {
-            document.querySelector("button").disabled = false;
-            document.querySelector("#spinner").classList.add("hidden");
-            document.querySelector("#button-text").classList.remove("hidden");
+            document.querySelector('button').disabled = false;
+            document.querySelector('#spinner').classList.add('hidden');
+            document.querySelector('#button-text').classList.remove('hidden');
           }
         };
 
         // shows a success / error message when the payment is complete
         var orderComplete = function(stripe, clientSecret) {
           stripe.retrieveSetupIntent(clientSecret).then(function(result) {
-
             that.setState({
               currentFlowStage: 'cardConfirmed',
             });
@@ -269,7 +282,6 @@ class CardVerify extends React.Component<Props, State> {
 
     console.log(currentFlowStage);
 
-
     return (
 
       <Page backout={{ title: __('Manage Card'), backLabel: __('Done') }} noFooter noSideNavigation>
@@ -279,14 +291,14 @@ class CardVerify extends React.Component<Props, State> {
           )}
         </div>
 
-        {currentFlowStage === 'loading' && <div className="headerCard">
+        {currentFlowStage === 'loading' && <div className="headerCard toConfirmCard">
           <Card
             title={__('Connect your card with Odysee')}
             subtitle={__('Getting your card connection status...')}
           />
         </div>}
 
-        {currentFlowStage === 'confirmingCard' && <div className="headerCard">
+        {currentFlowStage === 'confirmingCard' && <div className="headerCard toConfirmCard">
           <Card
             title={__('Connect your card with Odysee')}
             subtitle={__('Securely connect your card to your Odysee account to tip your favorite creators')}
@@ -300,12 +312,11 @@ class CardVerify extends React.Component<Props, State> {
                 <label className="payment-details">
                   Payment Details
                 </label>
-                <div className="sr-input sr-element sr-card-element" id="card-element">
-                </div>
+                <div className="sr-input sr-element sr-card-element" id="card-element" />
               </div>
-              <div className="sr-field-error" id="card-errors" role="alert"></div>
+              <div className="sr-field-error" id="card-errors" role="alert" />
               <button className="linkButton" id="submit">
-                <div className="spinner hidden" id="spinner"></div>
+                <div className="spinner hidden" id="spinner" />
                 <span id="button-text">Link your card to your account</span>
               </button>
             </div>
