@@ -109,7 +109,7 @@ class CardVerify extends React.Component {
   onScriptLoaded = () => {
     if (!CardVerify.stripeHandler) {
       CardVerify.stripeHandler = StripeCheckout.configure({
-        key: 'pk_test_NoL1JWL7i1ipfhVId5KfDZgo',
+        key: this.props.stripeKey,
       });
 
       if (this.hasPendingClick) {
