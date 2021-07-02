@@ -9,10 +9,13 @@ import { SETTINGS } from 'lbry-redux';
 import { Lbryio } from 'lbryinc';
 import { STRIPE_PUBLIC_KEY } from 'config';
 import classnames from 'classnames';
+import TxoListItem from 'component/transactionListTableItem';
+
 
 let scriptLoading = false;
 let scriptLoaded = false;
 let scriptDidError = false;
+
 
 let stripeEnvironment = 'test';
 // if the key contains pk_live it's a live key
@@ -353,9 +356,36 @@ class CardVerify extends React.Component<Props, State> {
             subtitle={__('Congratulations! Your card has been successfully added to your Odysee account. You can now tip your favorite creators while viewing their content.')}
           />
 
-          {customerTransactions.map((transactions) => (
-            <h2>{transactions.id}</h2>
-          ))}
+          <br></br>
+          <h2>Your Tip History</h2>
+
+          <div className="table__wrapper">
+            <table className="table table--transactions">
+              <thead>
+              <tr>
+                <th className="date-header">{__('Date')}</th>
+                <th>{<>{__('Receiving Channel Name')}</>}</th>
+                <th>{__('Amount (USD)')} </th>
+                <th>{__('Anonymous')}</th>
+              </tr>
+              </thead>
+              <tbody>
+              {customerTransactions &&
+              customerTransactions.map((transaction) => (
+                <tr>
+                  <td>{transaction.created_at}</td>
+                  <td>{transaction.channel_name}</td>
+                  <td>${transaction.tipped_amount / 100}</td>
+                  <td>{transaction.private_tip ? 'Yes' :  'No'}</td>
+                </tr>
+              ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/*{customerTransactions.map((transactions) => (*/}
+          {/*  <h2>{transactions.id}</h2>*/}
+          {/*))}*/}
         </div>}
 
       </Page>
