@@ -9,7 +9,7 @@ const pool = mysql.createPool({
 });
 
 function queryPool(sql, params) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     pool.query(sql, params, (error, rows) => {
       if (error) {
         console.log('error', error); // eslint-disable-line

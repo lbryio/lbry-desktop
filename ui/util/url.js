@@ -147,3 +147,9 @@ export const generateShareUrl = (
   const url = `${domain}/${lbryWebUrl}` + (urlParamsString === '' ? '' : `?${urlParamsString}`);
   return url;
 };
+
+export const generateRssUrl = (domain, lbryUrl) => {
+  const { channelName, channelClaimId } = parseURI(lbryUrl);
+  const url = `${domain}/$/rss/@${channelName}/${channelClaimId}`;
+  return url;
+};
