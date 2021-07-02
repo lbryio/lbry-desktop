@@ -55,11 +55,14 @@ class CardVerify extends React.Component<Props, State> {
     // setting a timeout to let the client secret populate
     // TODO: fix this, should be a cleaner way
     setTimeout(function() {
+
+      // check if customer has card setup already
       Lbryio.call('customer', 'status', {
         environment: stripeEnvironment,
       }, 'post').then(customerStatusResponse => {
-        const defaultPaymentMethod = customerStatusResponse.Customer.invoice_settings.default_payment_method;
 
+        // user has a card saved if their defaultPaymentMethod has an id
+        const defaultPaymentMethod = customerStatusResponse.Customer.invoice_settings.default_payment_method;
         var userHasAlreadySetupPayment = Boolean(defaultPaymentMethod && defaultPaymentMethod.id);
 
         // show different frontend if user already has card
@@ -67,11 +70,13 @@ class CardVerify extends React.Component<Props, State> {
           that.setState({
             currentFlowStage: 'cardConfirmed',
           });
+          // otherwise, prompt them to save a card
         } else {
           that.setState({
             currentFlowStage: 'confirmingCard',
           });
 
+          // get a payment method secret for frontend
           Lbryio.call('customer', 'setup', {
             environment: stripeEnvironment,
           }, 'post').then(customerSetupResponse => {
@@ -79,9 +84,11 @@ class CardVerify extends React.Component<Props, State> {
 
             clientSecret = customerSetupResponse.client_secret;
 
+            // instantiate stripe elements
             setupStripe();
           });
         }
+        // if the status call fails, either an actual error or need to run setup first
       }).catch(function(error) {
         console.log(error);
 
@@ -90,17 +97,20 @@ class CardVerify extends React.Component<Props, State> {
 
         // if it's beamer's error indicating the account is not linked yet
         if (error.message.indexOf(errorString) > -1) {
-          // TODO: check the error better
+          // send them to save a card
           that.setState({
             currentFlowStage: 'confirmingCard',
           });
 
+          // get a payment method secret for frontend
           Lbryio.call('customer', 'setup', {
             environment: stripeEnvironment,
           }, 'post').then(customerSetupResponse => {
             console.log(customerSetupResponse);
 
             clientSecret = customerSetupResponse.client_secret;
+
+            // instantiate stripe elements
             setupStripe();
           });
         } else {
