@@ -90,8 +90,10 @@ function WalletSendTip(props: Props) {
 
   const sourceClaimId = claim.claim_id;
 
-// TODO: come up with a better way to do this
+  // TODO: come up with a better way to do this,
+  // TODO: waiting 100ms to wait for token to populate
   setTimeout(function() {
+    // check if customer has credit card saved
     Lbryio.call('customer', 'status', {
       environment: stripeEnvironment,
     }, 'post').then(customerStatusResponse => {
@@ -104,6 +106,7 @@ function WalletSendTip(props: Props) {
     });
   }, 100);
 
+  // check if creator has an account saved
   Lbryio.call('account', 'check', {
     channel_claim_id: channelClaimId,
     channel_name: tipChannelName,
@@ -198,6 +201,7 @@ function WalletSendTip(props: Props) {
             sendSupportOrConfirm(instantTipMax.amount / LBC_USD);
           });
         }
+        // sending fiat tip
       } else if (activeTab === 'TipFiat') {
         if (!isConfirming) {
           setIsConfirming(true);
@@ -224,7 +228,7 @@ function WalletSendTip(props: Props) {
 
           closeModal();
         }
-      // if it's a boost
+      // if it's a boost (?)
       } else {
         sendSupportOrConfirm();
       }
