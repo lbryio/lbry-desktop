@@ -9,7 +9,7 @@ import Spinner from 'component/spinner';
 import YrblWalletEmpty from 'component/yrblWalletEmpty';
 
 type Props = {
-  history: { action: string, push: string => void, replace: string => void },
+  history: { action: string, push: (string) => void, replace: (string) => void },
   location: { search: string, pathname: string },
   totalBalance: ?number,
 };
@@ -34,7 +34,9 @@ const WalletPage = (props: Props) => {
           ) : (
             <div className="card-stack">
               <WalletBalance />
+              {/* @if TARGET='web' */}
               <StripeAccountConnection />
+              {/* @endif */}
               <TxoList search={search} />
             </div>
           )}
