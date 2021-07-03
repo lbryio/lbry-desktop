@@ -329,13 +329,26 @@ export function doCommentCreate(
         }
 
         if (error) {
-          const BLOCKED_WORDS_ERR_MSG = 'the comment contents are blocked by';
-
-          if (error.message === 'channel is blocked by publisher') {
-            toastMessage = __('Unable to comment. This channel has blocked you.');
-          } else if (error.message.startsWith(BLOCKED_WORDS_ERR_MSG)) {
-            const channelName = error.message.substring(BLOCKED_WORDS_ERR_MSG.length);
-            toastMessage = __('The comment contains contents that are blocked by %author%', { author: channelName });
+          // TODO: Use error codes when commentron implements it.
+          switch (error.message) {
+            case 'channel is blocked by publisher':
+              toastMessage = __('Unable to comment. This channel has blocked you.');
+              break;
+            case 'channel is not allowed to post comments':
+              toastMessage = __('Unable to comment. Your channel has been blocked by an admin.');
+              break;
+            case 'comments are disabled by the creator':
+              toastMessage = __('Unable to comment. The content owner has disabled comments.');
+              break;
+            default:
+              const BLOCKED_WORDS_ERR_MSG = 'the comment contents are blocked by';
+              if (error.message.startsWith(BLOCKED_WORDS_ERR_MSG)) {
+                const channelName = error.message.substring(BLOCKED_WORDS_ERR_MSG.length);
+                toastMessage = __('The comment contains contents that are blocked by %author%', {
+                  author: channelName,
+                });
+              }
+              break;
           }
         }
 
