@@ -44,6 +44,7 @@ type Props = {
   activeChannelClaim: ?ChannelClaim,
   incognito: boolean,
   doToast: ({ message: string }) => void,
+  isAuthenticated: boolean,
 };
 
 function WalletSendTip(props: Props) {
@@ -62,6 +63,7 @@ function WalletSendTip(props: Props) {
     incognito,
     activeChannelClaim,
     doToast,
+    isAuthenticated,
   } = props;
   const [presetTipAmount, setPresetTipAmount] = usePersistedState('comment-support:presetTip', DEFAULT_TIP_AMOUNTS[0]);
   const [customTipAmount, setCustomTipAmount] = usePersistedState('comment-support:customTip', 1.0);
@@ -91,8 +93,10 @@ function WalletSendTip(props: Props) {
 
   // TODO: come up with a better way to do this,
   // TODO: waiting 100ms to wait for token to populate
-  setTimeout(function () {
-    // check if customer has credit card saved
+
+  // check if creator has an account saved
+  React.useEffect(() => {
+  if (channelClaimId && isAuthenticated) {
     Lbryio.call(
       'customer',
       'status',
@@ -109,27 +113,31 @@ function WalletSendTip(props: Props) {
 
       setHasSavedCard(Boolean(defaultPaymentMethodId));
     });
-  }, 100);
+    }
+  }, [channelClaimId, isAuthenticated]);
 
-  // check if creator has an account saved
-  Lbryio.call(
-    'account',
-    'check',
-    {
-      channel_claim_id: channelClaimId,
-      channel_name: tipChannelName,
-      environment: stripeEnvironment,
-    },
-    'post'
-  )
-    .then((accountCheckResponse) => {
-      if (accountCheckResponse === true && canReceiveFiatTip !== true) {
-        setCanReceiveFiatTip(true);
-      }
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+  React.useEffect(() => {
+    if (channelClaimId) {
+    Lbryio.call(
+      'account',
+      'check',
+      {
+        channel_claim_id: channelClaimId,
+        channel_name: tipChannelName,
+        environment: stripeEnvironment,
+      },
+      'post'
+    )
+      .then((accountCheckResponse) => {
+        if (accountCheckResponse === true && canReceiveFiatTip !== true) {
+          setCanReceiveFiatTip(true);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
+  }, [channelClaimId]);
 
   const noBalance = balance === 0;
   const tipAmount = useCustomTip ? customTipAmount : presetTipAmount;
