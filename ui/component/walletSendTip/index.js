@@ -15,6 +15,7 @@ import { withRouter } from 'react-router';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
 import { doToast } from 'redux/actions/notifications';
+import { selectUserVerifiedEmail } from 'redux/selectors/user';
 
 const select = (state, props) => ({
   isPending: selectIsSendingSupport(state),
@@ -27,6 +28,7 @@ const select = (state, props) => ({
   fetchingChannels: selectFetchingMyChannels(state),
   activeChannelClaim: selectActiveChannelClaim(state),
   incognito: selectIncognito(state),
+  isAuthenticated: Boolean(selectUserVerifiedEmail(state)),
 });
 
 const perform = dispatch => ({
