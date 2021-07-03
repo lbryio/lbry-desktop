@@ -38,6 +38,7 @@ exports.REWARDS_VERIFY = 'rewards/verify';
 exports.REPOST_NEW = 'repost';
 exports.SEND = 'send';
 exports.SETTINGS = 'settings';
+exports.SETTINGS_STRIPE_CARD = 'settings/card';
 exports.SETTINGS_NOTIFICATIONS = 'settings/notifications';
 exports.SETTINGS_ADVANCED = 'settings/advanced';
 exports.SETTINGS_BLOCKED_MUTED = 'settings/block_and_mute';
