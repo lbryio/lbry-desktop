@@ -71,7 +71,7 @@ const WalletBalance = (props: Props) => {
             Your total balance. All of this is yours, but some %lbc% is in use on channels and content right now.
           </I18nMessage>
         ) : (
-          <span>{__('Your total balance.')}</span>
+          <span>{__('Your total balance')}</span>
         )
       }
       actions={
