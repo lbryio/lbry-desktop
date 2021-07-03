@@ -206,6 +206,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
         className="card-stack"
       >
         {/* @if TARGET='web' */}
+        {isAuthenticated &&
         <Card
           title={__('Add card to tip creators in USD')}
           actions={
@@ -219,6 +220,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
             </div>
           }
         />
+        }
         {/* @endif */}
 
         <Card title={__('Language')} actions={<SettingLanguage />} />
