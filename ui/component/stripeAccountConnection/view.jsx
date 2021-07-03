@@ -38,6 +38,7 @@ type State = {
   stripeConnectionUrl: string,
   alreadyUpdated: boolean,
   accountConfirmed: boolean,
+  accountNotConfirmedButReceivedTips: boolean,
   unpaidBalance: string
 };
 
@@ -50,6 +51,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
       loading: true,
       accountConfirmed: false,
       accountPendingConfirmation: false,
+      accountNotConfirmedButReceivedTips: false,
       unpaidBalance: 0,
     };
   }
@@ -61,7 +63,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
 
     var that = this;
 
-    function getAndSetAccountLink() {
+    function getAndSetAccountLink(stillNeedToConfirmAccount) {
       Lbryio.call('account', 'link', {
         return_url: successStripeRedirectUrl,
         refresh_url: failureStripeRedirectUrl,
@@ -70,10 +72,17 @@ class StripeAccountConnection extends React.Component<Props, State> {
         // stripe link for user to navigate to and confirm account
         const stripeConnectionUrl = accountLinkResponse.url;
 
+        // set connection url on frontend
         that.setState({
           stripeConnectionUrl,
-          accountPendingConfirmation: true,
         });
+
+        // show the account confirmation link if not created already
+        if (stillNeedToConfirmAccount) {
+          that.setState({
+            accountPendingConfirmation: true,
+          });
+        }
       });
     }
 
@@ -81,25 +90,35 @@ class StripeAccountConnection extends React.Component<Props, State> {
     Lbryio.call('account', 'status', {
       environment: stripeEnvironment,
     }, 'post').then(accountStatusResponse => {
+
+      const yetToBeCashedOutBalance = accountStatusResponse.total_received_unpaid;
+      if (yetToBeCashedOutBalance) {
+        that.setState({
+          unpaidBalance: yetToBeCashedOutBalance,
+        });
+      }
+
       // if charges already enabled, no need to generate an account link
       if (accountStatusResponse.charges_enabled) {
         // account has already been confirmed
 
-        const yetToBeCashedOutBalance = accountStatusResponse.total_received_unpaid;
-        if (yetToBeCashedOutBalance) {
-          that.setState({
-            unpaidBalance: yetToBeCashedOutBalance,
-          });
-        }
-
-        console.log(accountStatusResponse.total_received_unpaid);
-
         that.setState({
           accountConfirmed: true,
         });
+        // user has not confirmed an account but have received payments
+      } else if (accountStatusResponse.total_received_unpaid > 0) {
+
+        that.setState({
+          accountNotConfirmedButReceivedTips: true,
+        });
+
+        getAndSetAccountLink();
+
+        // user has not received any amount or confirmed an account
       } else {
         // get stripe link and set it on the frontend
-        getAndSetAccountLink();
+        // pass true so it updates the frontend
+        getAndSetAccountLink(true);
       }
     }).catch(function(error) {
       // errorString passed from the API (with a 403 error)
@@ -117,10 +136,10 @@ class StripeAccountConnection extends React.Component<Props, State> {
   }
 
   render() {
-    const { stripeConnectionUrl, accountConfirmed, accountPendingConfirmation, unpaidBalance } = this.state;
+    const { stripeConnectionUrl, accountConfirmed, accountPendingConfirmation, unpaidBalance, accountNotConfirmedButReceivedTips } = this.state;
 
     const { user } = this.props;
-    
+
     if (user.fiat_enabled) {
       return (
         <Card
@@ -129,7 +148,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
           body={
             <div>
               {/* show while waiting for account status */}
-              {!accountConfirmed && !accountPendingConfirmation &&
+              {!accountConfirmed && !accountPendingConfirmation && !accountNotConfirmedButReceivedTips &&
               <div className="card__body-actions">
                 <div>
                   <div>
@@ -164,19 +183,34 @@ class StripeAccountConnection extends React.Component<Props, State> {
                   <div>
                     <h3>Congratulations! Your account has been connected with Odysee.</h3>
                     {unpaidBalance > 0 ? <div><br></br>
-                      <h3>Your account balance is ${unpaidBalance/100} USD. When the functionality exists you will be able to withdraw your balance.</h3>
+                      <h3>Your account balance is ${unpaidBalance/100} USD. Functionality to view your transactions and withdraw your balance will be landing shortly.</h3>
                     </div> : <div><br></br>
                       <h3>Your account balance is $0 USD. When you receive a tip you will see it here.</h3>
                     </div>}
                   </div>
-                  <div className="section__actions">
-                    <a href="/$/wallet">
-                      <Button
-                        button="secondary"
-                        label={__('View Your Transaction History')}
-                        icon={ICONS.SETTINGS}
-                      />
-                    </a>
+                </div>
+              </div>
+              }
+              {accountNotConfirmedButReceivedTips &&
+              <div className="card__body-actions">
+                <div>
+                  <div>
+                    <h3>Congratulations, you have already begun receiving tips on Odysee!</h3>
+                    <div><br></br>
+                      <h3>Your pending account balance is ${unpaidBalance/100} USD. Functionality to view and receive your transactions will land soon.</h3>
+                    </div><br></br>
+                    <div>
+                      <h3>Connect your Bank Account to be able to cash your pending balance out to your account.</h3>
+                    </div>
+                    <div className="section__actions">
+                      <a href={stripeConnectionUrl}>
+                        <Button
+                          button="secondary"
+                          label={__('Connect Your Bank Account')}
+                          icon={ICONS.FINANCE}
+                        />
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
