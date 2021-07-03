@@ -2,17 +2,13 @@
 /* eslint-disable no-undef */
 /* eslint-disable react/prop-types */
 import React from 'react';
-import Button from 'component/button';
 import Page from 'component/page';
 import Card from 'component/common/card';
 import { SETTINGS } from 'lbry-redux';
 import { Lbryio } from 'lbryinc';
 import { STRIPE_PUBLIC_KEY } from 'config';
 import classnames from 'classnames';
-import TxoListItem from 'component/transactionListTableItem';
-import DateTime from 'component/dateTime';
-
-
+import moment from 'moment';
 
 let scriptLoading = false;
 let scriptLoaded = false;
@@ -23,7 +19,6 @@ const dateFormat = {
   day: 'numeric',
   year: 'numeric',
 };
-
 
 let stripeEnvironment = 'test';
 // if the key contains pk_live it's a live key
@@ -70,7 +65,6 @@ class CardVerify extends React.Component<Props, State> {
     // setting a timeout to let the client secret populate
     // TODO: fix this, should be a cleaner way
     setTimeout(function() {
-
       // check if customer has card setup already
       Lbryio.call('customer', 'status', {
         environment: stripeEnvironment,
@@ -272,14 +266,13 @@ class CardVerify extends React.Component<Props, State> {
             Lbryio.call('customer', 'status', {
               environment: stripeEnvironment,
             }, 'post').then(customerStatusResponse => {
-
               var card = customerStatusResponse.PaymentMethods[0].card;
 
               var cardDetails = {
                 brand: card.brand,
                 expiryYear: card.exp_year,
                 expiryMonth: card.exp_month,
-                lastFour: card.last4
+                lastFour: card.last4,
               };
 
               that.setState({
@@ -287,7 +280,7 @@ class CardVerify extends React.Component<Props, State> {
                 pageTitle: 'Tip History',
                 userCardDetails: cardDetails,
               });
-            })
+            });
 
             console.log(result);
 
@@ -362,13 +355,6 @@ class CardVerify extends React.Component<Props, State> {
           />
         </div>}
 
-        {currentFlowStage === 'confirmingCard' && <div className="headerCard toConfirmCard">
-          {/*<Card*/}
-          {/*  title={__('Connect your card with Odysee')}*/}
-          {/*  subtitle={__('Securely connect your card to your Odysee account to tip your favorite creators')}*/}
-          {/*/>*/}
-        </div>}
-
         {currentFlowStage === 'confirmingCard' && <div className="sr-root">
           <div className="sr-main">
             <div className="sr-payment-form card cardInput">
@@ -388,18 +374,8 @@ class CardVerify extends React.Component<Props, State> {
         </div>}
 
         {currentFlowStage === 'cardConfirmed' && <div className="successCard">
-          {/*<Card*/}
-          {/*  title={__('Card successfully added!')}*/}
-          {/*  subtitle={__('Congratulations! Your card has been successfully added to your Odysee account. You can now tip your favorite creators while viewing their content.')}*/}
-          {/*/>*/}
-
-          {/*<br></br>*/}
-
           <Card
             title={__('Card Details')}
-            // subtitle={'Brand: ' + userCardDetails.brand.toUpperCase()}
-            // expandable: true
-            // // subtitle={'Last 4: ' + userCardDetails.lastFour}
             body={<>
               <h4 className="grey-text">Brand: {userCardDetails.brand.toUpperCase()} &nbsp;
                 Last 4:  {userCardDetails.lastFour} &nbsp;
@@ -429,14 +405,8 @@ class CardVerify extends React.Component<Props, State> {
                 <tbody>
                 {customerTransactions &&
                 customerTransactions.map((transaction) => (
-                  <tr>
-                    <td>{transaction.created_at}</td>
-
-                      {/*<DateTime date={transaction.createdAt} show={DateTime.SHOW_DATE} formatOptions={dateFormat} />*/}
-                      {/*<div className="table__item-label">*/}
-                      {/*  <DateTime date={transaction.createdAt} show={DateTime.SHOW_TIME} />*/}
-                      {/*</div>*/}
-
+                  <tr key={transaction.name + transaction.created_at}>
+                    <td>{moment(transaction.created_at).format('LLL')}</td>
                     <td>{transaction.channel_name}</td>
                     <td>${transaction.tipped_amount / 100}</td>
                     <td>{transaction.private_tip ? 'Yes' :  'No'}</td>
@@ -446,10 +416,6 @@ class CardVerify extends React.Component<Props, State> {
               </table>
             </div></>}
           />}
-
-          {/*{customerTransactions.map((transactions) => (*/}
-          {/*  <h2>{transactions.id}</h2>*/}
-          {/*))}*/}
         </div>}
 
       </Page>
