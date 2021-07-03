@@ -358,6 +358,7 @@ function WalletSendTip(props: Props) {
                     className={classnames('button-toggle', { 'button-toggle--active': activeTab === TAB_LBC })}
                   />
                   {/* tip fiat tab button */}
+                  { /* @if TARGET='web' */ }
                   <Button
                     key="tip-fiat"
                     icon={ICONS.FINANCE}
@@ -370,6 +371,7 @@ function WalletSendTip(props: Props) {
                     }}
                     className={classnames('button-toggle', { 'button-toggle--active': activeTab === TAB_FIAT })}
                   />
+                  { /* @endif */ }
                   {/* tip LBC tab button */}
                   <Button
                     key="boost"
