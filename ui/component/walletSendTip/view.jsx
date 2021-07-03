@@ -91,7 +91,7 @@ function WalletSendTip(props: Props) {
 
   // TODO: come up with a better way to do this,
   // TODO: waiting 100ms to wait for token to populate
-  setTimeout(function() {
+  setTimeout(function () {
     // check if customer has credit card saved
     Lbryio.call(
       'customer',
@@ -127,14 +127,14 @@ function WalletSendTip(props: Props) {
         setCanReceiveFiatTip(true);
       }
     })
-    .catch(function(error) {
+    .catch(function (error) {
       console.log(error);
     });
 
   const noBalance = balance === 0;
   const tipAmount = useCustomTip ? customTipAmount : presetTipAmount;
 
-  const [activeTab, setActiveTab] = usePersistedState('comment-support:activeTab', 'TipLBC');
+  const [activeTab, setActiveTab] = React.useState('TipLBC');
 
   let iconToUse, explainerText;
   if (activeTab === 'Boost') {
@@ -154,7 +154,7 @@ function WalletSendTip(props: Props) {
   const isSupport = claimIsMine || activeTab !== 'TipLBC';
 
   React.useEffect(() => {
-    // TODO: what is this regexp testing against? number from 0-8?
+    // Regex for number up to 8 decimal places
     const regexp = RegExp(/^(\d*([.]\d{0,8})?)$/);
     const validTipInput = regexp.test(String(tipAmount));
     let tipError;
@@ -239,7 +239,7 @@ function WalletSendTip(props: Props) {
               });
               console.log(customerTipResponse);
             })
-            .catch(function(error) {
+            .catch(function (error) {
               console.log(error);
               doToast({ message: error.message, isError: true });
             });
@@ -416,8 +416,12 @@ function WalletSendTip(props: Props) {
                   <ChannelSelector />
                 </div>
 
-                {activeTab === 'TipFiat' && !hasCardSaved && <h3 className="add-card-prompt"><Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card')} button="link" /> To Tip Creators</h3>}
-
+                {activeTab === 'TipFiat' && !hasCardSaved && (
+                  <h3 className="add-card-prompt">
+                    <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card')} button="link" /> To
+                    Tip Creators
+                  </h3>
+                )}
 
                 {/* section to pick tip/boost amount */}
                 <div className="section">
