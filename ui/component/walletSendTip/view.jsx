@@ -232,8 +232,10 @@ function WalletSendTip(props: Props) {
             'tip',
             {
               amount: 100 * tipAmount, // convert from dollars to cents
-              channel_name: tipChannelName,
-              channel_claim_id: channelClaimId,
+              creator_channel_name: tipChannelName, // creator_channel_name
+              creator_channel_claim_id: channelClaimId,
+              tipper_channel_name: sendAnonymously ? '' : activeChannelClaim.name,
+              tipper_channel_claim_id: sendAnonymously ? '' : activeChannelClaim.claim_id,
               currency: 'USD',
               anonymous: sendAnonymously,
               source_claim_id: sourceClaimId,
