@@ -22,6 +22,7 @@ import ClaimSupportButton from 'component/claimSupportButton';
 import ChannelStakedIndicator from 'component/channelStakedIndicator';
 import ClaimMenuList from 'component/claimMenuList';
 import Yrbl from 'component/yrbl';
+import I18nMessage from 'component/i18nMessage';
 
 export const PAGE_VIEW_QUERY = `view`;
 const CONTENT_PAGE = 'content';
