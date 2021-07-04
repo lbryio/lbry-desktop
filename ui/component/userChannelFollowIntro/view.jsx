@@ -21,7 +21,7 @@ const channelsToSubscribe = AUTO_FOLLOW_CHANNELS.trim()
   .filter((x) => x !== '');
 
 function UserChannelFollowIntro(props: Props) {
-  const { subscribedChannels, channelSubscribe, onContinue, onBack, homepageData, prefsReady } = props;
+  const { subscribedChannels, channelSubscribe, onContinue, homepageData, prefsReady } = props;
   const { PRIMARY_CONTENT_CHANNEL_IDS } = homepageData;
   const followingCount = (subscribedChannels && subscribedChannels.length) || 0;
 

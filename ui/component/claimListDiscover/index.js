@@ -21,7 +21,6 @@ export const selectClaimsById = createSelector(
   state => state.byId || {}
 );
 
-
 const select = (state) => ({
   followedTags: selectFollowedTags(state),
   claimSearchByQuery: selectClaimSearchByQuery(state),

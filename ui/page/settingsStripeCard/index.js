@@ -1,8 +1,7 @@
 import { connect } from 'react-redux';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { selectosNotificationsEnabled } from 'redux/selectors/settings';
-import { selectUserVerifiedEmail } from 'redux/selectors/user';
-import { selectUserEmail } from 'redux/selectors/user';
+import { selectUserVerifiedEmail, selectUserEmail } from 'redux/selectors/user';
 
 import SettingsPage from './view';
 

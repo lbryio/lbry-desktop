@@ -41,7 +41,7 @@
     "react-hooks/rules-of-hooks": "error",
     "react/no-unescaped-entities": 0,
     "space-before-function-paren": [
-      "error",
+      "warn",
       {
         "anonymous": "never",
         "named": "never",

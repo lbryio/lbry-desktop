@@ -21,7 +21,6 @@ type Props = {
   doToast: ({ message: string }) => void,
   shrinkOnMobile: boolean,
   notificationsDisabled: boolean,
-  user: ?User,
   uri: string,
 };
 
@@ -35,7 +34,6 @@ export default function SubscribeButton(props: Props) {
     doToast,
     shrinkOnMobile = false,
     notificationsDisabled,
-    user,
     uri,
   } = props;
 

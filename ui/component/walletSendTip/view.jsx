@@ -136,7 +136,7 @@ function WalletSendTip(props: Props) {
           setCanReceiveFiatTip(true);
         }
       })
-      .catch(function (error) {
+      .catch(function(error) {
         console.log(error);
       });
     }
@@ -276,7 +276,7 @@ function WalletSendTip(props: Props) {
     function isNan(tipAmount) {
       // testing for NaN ES5 style https://stackoverflow.com/a/35912757/3973137
       // also sometimes it's returned as a string
-      if (tipAmount !== tipAmount || tipAmount === 'NaN') {
+      if (tipAmount !== tipAmount || tipAmount === 'NaN') { //eslint-disable-line
         return true;
       }
       return false;
