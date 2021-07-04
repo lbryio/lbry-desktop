@@ -25,6 +25,7 @@ import Yrbl from 'component/yrbl';
 
 export const PAGE_VIEW_QUERY = `view`;
 const CONTENT_PAGE = 'content';
+const LISTS_PAGE = 'lists';
 const ABOUT_PAGE = `about`;
 export const DISCUSSION_PAGE = `discussion`;
 const EDIT_PAGE = 'edit';
@@ -50,6 +51,7 @@ type Props = {
   youtubeChannels: ?Array<{ channel_claim_id: string, sync_status: string, transfer_state: string }>,
   blockedChannels: Array<string>,
   mutedChannels: Array<string>,
+  unpublishedCollections: CollectionGroup,
 };
 
 function ChannelPage(props: Props) {
@@ -68,6 +70,7 @@ function ChannelPage(props: Props) {
     youtubeChannels,
     blockedChannels,
     mutedChannels,
+    unpublishedCollections,
   } = props;
   const {
     push,
@@ -98,6 +101,31 @@ function ChannelPage(props: Props) {
       }
     });
 
+  const hasUnpublishedCollections = unpublishedCollections && Object.keys(unpublishedCollections).length;
+
+  let collectionEmpty;
+  if (channelIsMine) {
+    collectionEmpty = hasUnpublishedCollections ? (
+      <section className="main--empty">
+        {
+          <p>
+            <I18nMessage
+              tokens={{
+                pick: <Button button="link" navigate={`/$/${PAGES.LISTS}`} label={__('Pick')} />,
+              }}
+            >
+              You have unpublished lists! %pick% one and publish it!
+            </I18nMessage>
+          </p>
+        }
+      </section>
+    ) : (
+      <section className="main--empty">{__('You have no lists! Create one from any playable content.')}</section>
+    );
+  } else {
+    collectionEmpty = <section className="main--empty">{__('No Lists Found')}</section>;
+  }
+
   let channelIsBlackListed = false;
 
   if (claim && blackListedOutpoints) {
@@ -114,11 +142,14 @@ function ChannelPage(props: Props) {
     case CONTENT_PAGE:
       tabIndex = 0;
       break;
-    case ABOUT_PAGE:
+    case LISTS_PAGE:
       tabIndex = 1;
       break;
-    case DISCUSSION_PAGE:
+    case ABOUT_PAGE:
       tabIndex = 2;
+      break;
+    case DISCUSSION_PAGE:
+      tabIndex = 3;
       break;
     default:
       tabIndex = 0;
@@ -132,6 +163,8 @@ function ChannelPage(props: Props) {
     if (newTabIndex === 0) {
       search += `${PAGE_VIEW_QUERY}=${CONTENT_PAGE}`;
     } else if (newTabIndex === 1) {
+      search += `${PAGE_VIEW_QUERY}=${LISTS_PAGE}`;
+    } else if (newTabIndex === 2) {
       search += `${PAGE_VIEW_QUERY}=${ABOUT_PAGE}`;
     } else {
       search += `${PAGE_VIEW_QUERY}=${DISCUSSION_PAGE}`;
@@ -240,6 +273,7 @@ function ChannelPage(props: Props) {
         <Tabs onChange={onTabChange} index={tabIndex}>
           <TabList className="tabs__list--channel-page">
             <Tab disabled={editing}>{__('Content')}</Tab>
+            <Tab disabled={editing}>{__('Playlists')}</Tab>
             <Tab>{editing ? __('Editing Your Channel') : __('About --[tab title in Channel Page]--')}</Tab>
             <Tab disabled={editing}>{__('Community')}</Tab>
           </TabList>
@@ -250,6 +284,15 @@ function ChannelPage(props: Props) {
                 channelIsBlackListed={channelIsBlackListed}
                 viewHiddenChannels
                 empty={<section className="main--empty">{__('No Content Found')}</section>}
+              />
+            </TabPanel>
+            <TabPanel>
+              <ChannelContent
+                claimType={'collection'}
+                uri={uri}
+                channelIsBlackListed={channelIsBlackListed}
+                viewHiddenChannels
+                empty={collectionEmpty}
               />
             </TabPanel>
             <TabPanel>
