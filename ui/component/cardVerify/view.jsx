@@ -111,6 +111,7 @@ class CardVerify extends React.Component {
       CardVerify.stripeHandler = StripeCheckout.configure({
         key: this.props.stripeKey,
       });
+
       if (this.hasPendingClick) {
         this.showStripeDialog();
       }

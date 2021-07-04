@@ -108,7 +108,7 @@ function UserEmailNew(props: Props) {
         subtitle={__('An account allows you to earn rewards and backup your data.')}
         // @endif
         actions={
-          <div className={classnames({ 'card--disabled': DOMAIN === 'lbry.tv' })}>
+          <div className={classnames({ 'card--disabled': DOMAIN === 'lbry.tv' && IS_WEB })}>
             <Form onSubmit={handleSubmit} className="section">
               <FormField
                 autoFocus

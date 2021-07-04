@@ -41,6 +41,7 @@ const config = {
   CHANNEL_STAKED_LEVEL_VIDEO_COMMENTS: process.env.CHANNEL_STAKED_LEVEL_VIDEO_COMMENTS,
   CHANNEL_STAKED_LEVEL_LIVESTREAM: process.env.CHANNEL_STAKED_LEVEL_LIVESTREAM,
   WEB_PUBLISH_SIZE_LIMIT_GB: process.env.WEB_PUBLISH_SIZE_LIMIT_GB,
+  LOADING_BAR_COLOR: process.env.LOADING_BAR_COLOR,
   SIMPLE_SITE: process.env.SIMPLE_SITE === 'true',
   SHOW_ADS: process.env.SHOW_ADS === 'true',
   PINNED_URI_1: process.env.PINNED_URI_1,
@@ -48,6 +49,7 @@ const config = {
   PINNED_URI_2: process.env.PINNED_URI_2,
   PINNED_LABEL_2: process.env.PINNED_LABEL_2,
   KNOWN_APP_DOMAINS: process.env.KNOWN_APP_DOMAINS ? process.env.KNOWN_APP_DOMAINS.split(',') : [],
+  STRIPE_PUBLIC_KEY: process.env.STRIPE_PUBLIC_KEY,
 };
 
 config.URL_LOCAL = `http://localhost:${config.WEB_SERVER_PORT}`;

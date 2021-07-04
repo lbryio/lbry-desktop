@@ -85,15 +85,17 @@ export default function FileRenderInitiator(props: Props) {
           containerRef.current.parentElement &&
           containerRef.current.parentElement.offsetWidth
         ) {
-          const dimen = containerRef.current.parentElement.offsetWidth;
-          newThumbnail = getThumbnailCdnUrl({ thumbnail: newThumbnail, width: dimen, height: dimen });
+          const w = containerRef.current.parentElement.offsetWidth;
+          newThumbnail = getThumbnailCdnUrl({ thumbnail: newThumbnail, width: w, height: w });
         }
         // @endif
 
-        setThumbnail(newThumbnail);
+        if (newThumbnail !== thumbnail) {
+          setThumbnail(newThumbnail);
+        }
       }, 200);
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [claimThumbnail]);
 
   function doAuthRedirect() {
     history.push(`/$/${PAGES.AUTH}?redirect=${encodeURIComponent(location.pathname)}`);

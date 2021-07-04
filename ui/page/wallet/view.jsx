@@ -3,12 +3,13 @@ import React from 'react';
 import { withRouter } from 'react-router';
 import WalletBalance from 'component/walletBalance';
 import TxoList from 'component/txoList';
+import StripeAccountConnection from 'component/stripeAccountConnection';
 import Page from 'component/page';
 import Spinner from 'component/spinner';
 import YrblWalletEmpty from 'component/yrblWalletEmpty';
 
 type Props = {
-  history: { action: string, push: string => void, replace: string => void },
+  history: { action: string, push: (string) => void, replace: (string) => void },
   location: { search: string, pathname: string },
   totalBalance: ?number,
 };
@@ -33,6 +34,9 @@ const WalletPage = (props: Props) => {
           ) : (
             <div className="card-stack">
               <WalletBalance />
+              {/* @if TARGET='web' */}
+              <StripeAccountConnection />
+              {/* @endif */}
               <TxoList search={search} />
             </div>
           )}

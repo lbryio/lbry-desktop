@@ -48,6 +48,7 @@ type Props = {
   toggleVideoTheaterMode: () => void,
   setVideoPlaybackRate: (number) => void,
   authenticated: boolean,
+  userId: number,
   homepageData: {
     PRIMARY_CONTENT_CHANNEL_IDS?: Array<string>,
     ENLIGHTENMENT_CHANNEL_IDS?: Array<string>,
@@ -89,6 +90,7 @@ function VideoViewer(props: Props) {
     setVideoPlaybackRate,
     homepageData,
     authenticated,
+    userId,
   } = props;
   const {
     PRIMARY_CONTENT_CHANNEL_IDS = [],
@@ -179,11 +181,20 @@ function VideoViewer(props: Props) {
     }
   }, [embedded, setIsEndededEmbed, autoplaySetting, setShowAutoplayCountdown, adUrl, setAdUrl]);
 
-  function onPlay() {
+  function onPlay(player) {
     setIsLoading(false);
     setIsPlaying(true);
     setShowAutoplayCountdown(false);
     setIsEndededEmbed(false);
+  }
+
+  function onPause(player) {
+    setIsPlaying(false);
+    handlePosition(player);
+  }
+
+  function onDispose(player) {
+    handlePosition(player);
   }
 
   function handlePosition(player) {
@@ -223,17 +234,14 @@ function VideoViewer(props: Props) {
 
       Promise.race([playPromise, timeoutPromise]).catch((error) => {
         if (typeof error === 'object' && error.name && error.name === 'NotAllowedError') {
-          if (player.autoplay() && !player.muted()) {
-            player.muted(true);
-          }
+          // Autoplay disallowed by browser
+          player.play();
         }
 
+        // Autoplay failed
         if (PLAY_TIMEOUT_ERROR) {
-          const retryPlayPromise = player.play();
-          Promise.race([retryPlayPromise, timeoutPromise]).catch((error) => {
-            setIsLoading(false);
-            setIsPlaying(false);
-          });
+          setIsLoading(false);
+          setIsPlaying(false);
         } else {
           setIsLoading(false);
           setIsPlaying(false);
@@ -252,11 +260,10 @@ function VideoViewer(props: Props) {
     player.on('tracking:buffered', doTrackingBuffered);
     player.on('tracking:firstplay', doTrackingFirstPlay);
     player.on('ended', onEnded);
-    player.on('play', onPlay);
-    player.on('pause', () => {
-      setIsPlaying(false);
-      handlePosition(player);
-    });
+    player.on('play', () => onPlay(player));
+    player.on('pause', () => onPause(player));
+    player.on('dispose', () => onDispose(player));
+
     player.on('error', () => {
       const error = player.error();
       if (error) {
@@ -283,10 +290,7 @@ function VideoViewer(props: Props) {
     if (position) {
       player.currentTime(position);
     }
-    player.on('dispose', () => {
-      handlePosition(player);
-    });
-  }, playerReadyDependencyList);
+  }, playerReadyDependencyList); // eslint-disable-line
 
   return (
     <div
@@ -344,6 +348,8 @@ function VideoViewer(props: Props) {
             startMuted={autoplayIfEmbedded}
             toggleVideoTheaterMode={toggleVideoTheaterMode}
             autoplay={!embedded || autoplayIfEmbedded}
+            claimId={claimId}
+            userId={userId}
           />
         </React.Suspense>
       )}

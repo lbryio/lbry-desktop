@@ -7,7 +7,6 @@ import {
   selectCurrentChannelPage,
   makeSelectClaimForUri,
   makeSelectClaimIsPending,
-  selectMyUnpublishedCollections,
 } from 'lbry-redux';
 import { selectBlackListedOutpoints, doFetchSubCount, makeSelectSubCountForUri } from 'lbryinc';
 import { selectYoutubeChannels } from 'redux/selectors/user';
@@ -31,7 +30,6 @@ const select = (state, props) => ({
   youtubeChannels: selectYoutubeChannels(state),
   blockedChannels: selectModerationBlockList(state),
   mutedChannels: selectMutedChannels(state),
-  unpublishedCollections: selectMyUnpublishedCollections(state),
 });
 
 const perform = (dispatch) => ({

@@ -4,7 +4,7 @@ import * as ICONS from 'constants/icons';
 import ReactDOMServer from 'react-dom/server';
 
 import './plugins/videojs-overlay/plugin';
-import './plugins/videojs-overlay/plugin.scss';
+// import './plugins/videojs-overlay/plugin.scss'; --> 'scss/third-party.scss'
 
 // ****************************************************************************
 // ****************************************************************************
@@ -45,7 +45,7 @@ export const OVERLAY_DATA = {
  */
 function showOneOffOverlay(player, className, overlayJsx, align) {
   // Delete existing:
-  OVERLAY_DATA.overlays = OVERLAY_DATA.overlays.filter(x => x.name !== OVERLAY_NAME_ONE_OFF);
+  OVERLAY_DATA.overlays = OVERLAY_DATA.overlays.filter((x) => x.name !== OVERLAY_NAME_ONE_OFF);
   // Create new one:
   OVERLAY_DATA.overlays.push({
     name: OVERLAY_NAME_ONE_OFF,

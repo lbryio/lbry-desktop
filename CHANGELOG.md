@@ -3,8 +3,16 @@
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+## [0.51.1] - [2021-06-26]
 
-## [Unreleased for Desktop]
+### Added
+
+### Changed
+
+### Fixed
+- Enable sign up on desktop ([#6071](https://github.com/lbryio/lbry-desktop/issues/6071))
+
+## [0.51.0] - [2021-06-26]
 
 ### Added
 - Private and Publishable Playlists ([#6157](https://github.com/lbryio/lbry-desktop/pull/6157))
@@ -31,6 +39,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Keyboard shortcut additions and changes _community pr!_ ([#5717](https://github.com/lbryio/lbry-desktop/pull/5717))
 - Removed the 10k character-limit when editing _Posts_ ([#5719](https://github.com/lbryio/lbry-desktop/pull/5719))
 - Improved search functionality (more filters, infinite-scroll, etc.) ([#5742](https://github.com/lbryio/lbry-desktop/pull/5742))
+- Removed google related section ads ([#6312](https://github.com/lbryio/lbry-desktop/pull/6312))
+- Debounce and min characters on wunderbar search ([#6319](https://github.com/lbryio/lbry-desktop/pull/6319))
+- Don't use optimizer for gif thumbnails ([#6320](https://github.com/lbryio/lbry-desktop/pull/6320))
+- Upgraded [LBRY SDK 0.99.0](https://github.com/lbryio/lbry/releases/tag/v0.99.0)
 
 ### Fixed
 

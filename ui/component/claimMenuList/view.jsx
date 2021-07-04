@@ -7,7 +7,7 @@ import React from 'react';
 import classnames from 'classnames';
 import { Menu, MenuButton, MenuList, MenuItem } from '@reach/menu-button';
 import Icon from 'component/common/icon';
-import { generateShareUrl } from 'util/url';
+import { generateShareUrl, generateRssUrl } from 'util/url';
 import { useHistory } from 'react-router';
 import { buildURI, parseURI, COLLECTIONS_CONSTS } from 'lbry-redux';
 
@@ -103,6 +103,7 @@ function ClaimMenuList(props: Props) {
   }
 
   const shareUrl: string = generateShareUrl(SHARE_DOMAIN, uri);
+  const rssUrl: string = generateRssUrl(URL, uri);
   const isCollectionClaim = claim && claim.value_type === 'collection';
   // $FlowFixMe
   const isPlayable =
@@ -180,6 +181,10 @@ function ClaimMenuList(props: Props) {
     } else {
       doCommentModBlockAsAdmin(channelUri, '');
     }
+  }
+
+  function handleCopyRssLink() {
+    navigator.clipboard.writeText(rssUrl);
   }
 
   function handleCopyLink() {
@@ -279,7 +284,7 @@ function ClaimMenuList(props: Props) {
             <MenuItem className="comment__menu-option" onSelect={handleSupport}>
               <div className="menu__link">
                 <Icon aria-hidden icon={ICONS.LBC} />
-                {__('Support')}
+                {__('Support --[button to support a claim]--')}
               </div>
             </MenuItem>
           </>
@@ -350,7 +355,18 @@ function ClaimMenuList(props: Props) {
             )}
           </>
         )}
+
         <hr className="menu__separator" />
+
+        {isChannelPage && IS_WEB && (
+          <MenuItem className="comment__menu-option" onSelect={handleCopyRssLink}>
+            <div className="menu__link">
+              <Icon aria-hidden icon={ICONS.RSS} />
+              {__('Copy RSS URL')}
+            </div>
+          </MenuItem>
+        )}
+
         <MenuItem className="comment__menu-option" onSelect={handleCopyLink}>
           <div className="menu__link">
             <Icon aria-hidden icon={ICONS.SHARE} />
