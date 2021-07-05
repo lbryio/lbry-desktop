@@ -8,31 +8,40 @@ type Props = {
   children: any,
   skipWait?: boolean,
   placeholder?: any,
+  yOffset?: number,
 };
 
 export default function WaitUntilOnPage(props: Props) {
+  const { yOffset } = props;
   const ref = React.useRef();
   const [shouldRender, setShouldRender] = React.useState(false);
 
-  const shouldElementRender = React.useCallback((ref) => {
-    const element = ref && ref.current;
-    if (element) {
-      const bounding = element.getBoundingClientRect();
-      if (
-        bounding.width > 0 &&
-        bounding.height > 0 &&
-        bounding.bottom >= 0 &&
-        bounding.right >= 0 &&
+  const shouldElementRender = React.useCallback(
+    (ref) => {
+      const element = ref && ref.current;
+      if (element) {
+        const bounding = element.getBoundingClientRect();
         // $FlowFixMe
-        bounding.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+        const windowH = window.innerHeight || document.documentElement.clientHeight;
         // $FlowFixMe
-        bounding.left <= (window.innerWidth || document.documentElement.clientWidth)
-      ) {
-        return true;
+        const windowW = window.innerWidth || document.documentElement.clientWidth;
+
+        const isApproachingViewport = yOffset && bounding.top < windowH + yOffset;
+        const isInViewport = // also covers "element is larger than viewport".
+          bounding.width > 0 &&
+          bounding.height > 0 &&
+          bounding.bottom >= 0 &&
+          bounding.right >= 0 &&
+          bounding.top <= windowH &&
+          bounding.left <= windowW;
+
+        return isInViewport || isApproachingViewport;
       }
-    }
-    return false;
-  }, []);
+
+      return false;
+    },
+    [yOffset]
+  );
 
   // Handles "element is already in viewport when mounted".
   React.useEffect(() => {
