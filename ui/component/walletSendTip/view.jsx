@@ -152,16 +152,16 @@ function WalletSendTip(props: Props) {
   let iconToUse, explainerText;
   if (activeTab === TAB_BOOST) {
     iconToUse = ICONS.LBC;
-    explainerText = 'This refundable boost will improve the discoverability of this content while active. ';
+    explainerText = __('This refundable boost will improve the discoverability of this content while active.');
   } else if (activeTab === TAB_FIAT) {
     iconToUse = ICONS.FINANCE;
-    explainerText = 'Show this channel your appreciation by sending a donation of cash in USD.  ';
+    explainerText = __('Show this channel your appreciation by sending a donation of cash in USD.');
     // if (!hasCardSaved) {
-    //   explainerText += 'You must add a card to use this functionality. ';
+    //   explainerText += __('You must add a card to use this functionality.');
     // }
   } else if (activeTab === TAB_LBC) {
     iconToUse = ICONS.LBC;
-    explainerText = 'Show this channel your appreciation by sending a donation of Credits. ';
+    explainerText = __('Show this channel your appreciation by sending a donation of Credits.');
   }
 
   const isSupport = claimIsMine || activeTab === TAB_BOOST;
@@ -289,11 +289,11 @@ function WalletSendTip(props: Props) {
     const displayAmount = !isNan(tipAmount) ? tipAmount : '';
 
     if (activeTab === TAB_BOOST) {
-      return 'Boost This Content';
+      return __('Boost This Content');
     } else if (activeTab === TAB_FIAT) {
-      return 'Send a $' + displayAmount + ' Tip';
+      return __('Send a $%displayAmount% Tip', { displayAmount });
     } else if (activeTab === TAB_LBC) {
-      return 'Send a ' + displayAmount + ' LBC Tip';
+      return __('Send a %displayAmount% LBC Tip', { displayAmount });
     }
   }
 
@@ -305,11 +305,11 @@ function WalletSendTip(props: Props) {
 
   function setConfirmLabel() {
     if (activeTab === TAB_LBC) {
-      return 'Tipping LBC';
+      return __('Tipping LBC');
     } else if (activeTab === TAB_FIAT) {
-      return 'Tipping Fiat (USD)';
+      return __('Tipping Fiat (USD)');
     } else if (activeTab === TAB_BOOST) {
-      return 'Boosting';
+      return __('Boosting');
     }
   }
 
@@ -436,7 +436,7 @@ function WalletSendTip(props: Props) {
                 {activeTab === TAB_FIAT && !hasCardSaved && (
                   <h3 className="add-card-prompt">
                     <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card')} button="link" /> To
-                    Tip Creators
+                    {__('Tip Creators')}
                   </h3>
                 )}
 
@@ -534,9 +534,9 @@ function WalletSendTip(props: Props) {
                 {activeTab !== TAB_FIAT ? (
                   <WalletSpendableBalanceHelp />
                 ) : !canReceiveFiatTip ? (
-                  <div className="help">Only select creators can receive tips at this time</div>
+                  <div className="help">{__('Only select creators can receive tips at this time')}</div>
                 ) : (
-                  <div className="help">The payment will be made from your saved card</div>
+                  <div className="help">{__('The payment will be made from your saved card')}</div>
                 )}
               </>
             )
