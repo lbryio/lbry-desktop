@@ -163,7 +163,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
     if (user.fiat_enabled) {
       return (
         <Card
-          title={<div className="table__header-text">{__(`Connect A Bank Account`)}</div>}
+          title={<div className="table__header-text">{__('Connect a bank account')}</div>}
           isBodyList
           body={
             <div>
@@ -172,7 +172,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
                 <div className="card__body-actions">
                   <div>
                     <div>
-                      <h3>Getting your Bank Account Connection status...</h3>
+                      <h3>{__('Getting your bank account connection status...')}</h3>
                     </div>
                   </div>
                 </div>
@@ -182,11 +182,11 @@ class StripeAccountConnection extends React.Component<Props, State> {
                 <div className="card__body-actions">
                   <div>
                     <div>
-                      <h3>Connect your Bank Account to Odysee to receive donations directly from users</h3>
+                      <h3>{__('Connect your bank account to Odysee to receive donations directly from users')}</h3>
                     </div>
                     <div className="section__actions">
                       <a href={stripeConnectionUrl}>
-                        <Button button="secondary" label={__('Connect Your Bank Account')} icon={ICONS.FINANCE} />
+                        <Button button="secondary" label={__('Connect your bank account')} icon={ICONS.FINANCE} />
                       </a>
                     </div>
                   </div>
@@ -197,19 +197,21 @@ class StripeAccountConnection extends React.Component<Props, State> {
                 <div className="card__body-actions">
                   <div>
                     <div>
-                      <h3>Congratulations! Your account has been connected with Odysee.</h3>
+                      <h3>{__('Congratulations! Your account has been connected with Odysee.')}</h3>
                       {unpaidBalance > 0 ? (
                         <div>
                           <br />
                           <h3>
-                            Your account balance is ${unpaidBalance / 100} USD. Functionality to view your transactions
-                            and withdraw your balance will be landing shortly.
+                            {__(
+                              'Your account balance is %balance% USD. Functionality to view your transactions and withdraw your balance will be landing shortly.',
+                              { balance: unpaidBalance / 100 }
+                            )}
                           </h3>
                         </div>
                       ) : (
                         <div>
                           <br />
-                          <h3>Your account balance is $0 USD. When you receive a tip you will see it here.</h3>
+                          <h3>{__('Your account balance is $0 USD. When you receive a tip you will see it here.')}</h3>
                         </div>
                       )}
                     </div>
@@ -220,21 +222,25 @@ class StripeAccountConnection extends React.Component<Props, State> {
                 <div className="card__body-actions">
                   <div>
                     <div>
-                      <h3>Congratulations, you have already begun receiving tips on Odysee!</h3>
+                      <h3>{__('Congratulations, you have already begun receiving tips on Odysee!')}</h3>
                       <div>
                         <br />
                         <h3>
-                          Your pending account balance is ${unpaidBalance / 100} USD. Functionality to view and receive
-                          your transactions will land soon.
+                          {__(
+                            'Your pending account balance is %balance% USD. Functionality to view and receive your transactions will land soon.',
+                            { balance: unpaidBalance / 100 }
+                          )}
                         </h3>
                       </div>
                       <br />
                       <div>
-                        <h3>Connect your Bank Account to be able to cash your pending balance out to your account.</h3>
+                        <h3>
+                          {__('Connect your bank account to be able to cash your pending balance out to your account.')}
+                        </h3>
                       </div>
                       <div className="section__actions">
                         <a href={stripeConnectionUrl}>
-                          <Button button="secondary" label={__('Connect Your Bank Account')} icon={ICONS.FINANCE} />
+                          <Button button="secondary" label={__('Connect your bank account')} icon={ICONS.FINANCE} />
                         </a>
                       </div>
                     </div>
