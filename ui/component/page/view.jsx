@@ -1,6 +1,5 @@
 // @flow
 import type { Node } from 'react';
-import * as PAGES from 'constants/pages';
 import React, { Fragment } from 'react';
 import classnames from 'classnames';
 import SideNavigation from 'component/sideNavigation';

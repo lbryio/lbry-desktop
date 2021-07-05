@@ -512,7 +512,7 @@ function PublishFile(props: Props) {
             {fileSelectSource === SOURCE_UPLOAD && showFileUpload && (
               <>
                 <FileSelector
-                  label={SIMPLE_SITE ? __('Video/audio file') : __('File')}
+                  label={__('File')}
                   disabled={disabled}
                   currentPath={currentFile}
                   onFileChosen={handleFileChange}
