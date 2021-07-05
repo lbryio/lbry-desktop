@@ -6,8 +6,6 @@ import Gerbil from './gerbil.png';
 import FreezeframeWrapper from 'component/fileThumbnail/FreezeframeWrapper';
 import ChannelStakedIndicator from 'component/channelStakedIndicator';
 import { getThumbnailCdnUrl } from 'util/thumbnail';
-import useLazyLoading from 'effects/use-lazy-loading';
-import ThumbnailBrokenImage from 'component/selectThumbnail/thumbnail-broken.png';
 
 const FONT_PX = 16.0;
 const IMG_XSMALL_REM = 2.1;
@@ -51,9 +49,7 @@ function ChannelThumbnail(props: Props) {
     showDelayedMessage = false,
     noLazyLoad,
     hideStakedIndicator = false,
-    noOptimization,
     setThumbError,
-    thumbError,
   } = props;
   const shouldResolve = claim === undefined;
   const thumbnail = rawThumbnail && rawThumbnail.trim().replace(/^http:\/\//i, 'https://');
@@ -111,15 +107,6 @@ function ChannelThumbnail(props: Props) {
   }
   // @endif
 
-  let thumbnailSrc;
-  if (!url) {
-    thumbnailSrc = Gerbil;
-  } else if (thumbError) {
-    thumbnailSrc = ThumbnailBrokenImage;
-  } else {
-    thumbnailSrc = url;
-  }
-
   return (
     <div
       className={classnames('channel-thumbnail', className, {
@@ -136,7 +123,7 @@ function ChannelThumbnail(props: Props) {
           ref={thumbnailRef}
           alt={__('Channel profile picture')}
           className={!url ? 'channel-thumbnail__default' : 'channel-thumbnail__custom'}
-          data-src={thumbnailSrc}
+          src={url || Gerbil}
           width={thumbnailSize}
           height={thumbnailSize}
           loading={noLazyLoad ? undefined : 'lazy'}
