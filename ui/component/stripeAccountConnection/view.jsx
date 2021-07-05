@@ -36,10 +36,11 @@ type State = {
   loading: boolean,
   content: ?string,
   stripeConnectionUrl: string,
-  alreadyUpdated: boolean,
+  // alreadyUpdated: boolean,
   accountConfirmed: boolean,
+  accountPendingConfirmation: boolean,
   accountNotConfirmedButReceivedTips: boolean,
-  unpaidBalance: string
+  unpaidBalance: number,
 };
 
 class StripeAccountConnection extends React.Component<Props, State> {
@@ -53,22 +54,30 @@ class StripeAccountConnection extends React.Component<Props, State> {
       accountPendingConfirmation: false,
       accountNotConfirmedButReceivedTips: false,
       unpaidBalance: 0,
+      stripeConnectionUrl: '',
+      // alreadyUpdated: false,
     };
   }
 
   componentDidMount() {
     const { user } = this.props;
 
+    // $FlowFixMe
     this.experimentalUiEnabled = user && user.experimental_ui;
 
     var that = this;
 
     function getAndSetAccountLink(stillNeedToConfirmAccount) {
-      Lbryio.call('account', 'link', {
-        return_url: successStripeRedirectUrl,
-        refresh_url: failureStripeRedirectUrl,
-        environment: stripeEnvironment,
-      }, 'post').then(accountLinkResponse => {
+      Lbryio.call(
+        'account',
+        'link',
+        {
+          return_url: successStripeRedirectUrl,
+          refresh_url: failureStripeRedirectUrl,
+          environment: stripeEnvironment,
+        },
+        'post'
+      ).then((accountLinkResponse) => {
         // stripe link for user to navigate to and confirm account
         const stripeConnectionUrl = accountLinkResponse.url;
 
@@ -87,54 +96,67 @@ class StripeAccountConnection extends React.Component<Props, State> {
     }
 
     // call the account status endpoint
-    Lbryio.call('account', 'status', {
-      environment: stripeEnvironment,
-    }, 'post').then(accountStatusResponse => {
-      const yetToBeCashedOutBalance = accountStatusResponse.total_received_unpaid;
-      if (yetToBeCashedOutBalance) {
-        that.setState({
-          unpaidBalance: yetToBeCashedOutBalance,
-        });
-      }
+    Lbryio.call(
+      'account',
+      'status',
+      {
+        environment: stripeEnvironment,
+      },
+      'post'
+    )
+      .then((accountStatusResponse) => {
+        const yetToBeCashedOutBalance = accountStatusResponse.total_received_unpaid;
+        if (yetToBeCashedOutBalance) {
+          that.setState({
+            unpaidBalance: yetToBeCashedOutBalance,
+          });
+        }
 
-      // if charges already enabled, no need to generate an account link
-      if (accountStatusResponse.charges_enabled) {
-        // account has already been confirmed
+        // if charges already enabled, no need to generate an account link
+        if (accountStatusResponse.charges_enabled) {
+          // account has already been confirmed
 
-        that.setState({
-          accountConfirmed: true,
-        });
-        // user has not confirmed an account but have received payments
-      } else if (accountStatusResponse.total_received_unpaid > 0) {
-        that.setState({
-          accountNotConfirmedButReceivedTips: true,
-        });
+          that.setState({
+            accountConfirmed: true,
+          });
+          // user has not confirmed an account but have received payments
+        } else if (accountStatusResponse.total_received_unpaid > 0) {
+          that.setState({
+            accountNotConfirmedButReceivedTips: true,
+          });
 
-        getAndSetAccountLink();
+          getAndSetAccountLink();
 
-        // user has not received any amount or confirmed an account
-      } else {
-        // get stripe link and set it on the frontend
-        // pass true so it updates the frontend
-        getAndSetAccountLink(true);
-      }
-    }).catch(function(error) {
-      // errorString passed from the API (with a 403 error)
-      const errorString = 'account not linked to user, please link first';
+          // user has not received any amount or confirmed an account
+        } else {
+          // get stripe link and set it on the frontend
+          // pass true so it updates the frontend
+          getAndSetAccountLink(true);
+        }
+      })
+      .catch(function (error) {
+        // errorString passed from the API (with a 403 error)
+        const errorString = 'account not linked to user, please link first';
 
-      // if it's beamer's error indicating the account is not linked yet
-      if (error.message.indexOf(errorString) > -1) {
-        // get stripe link and set it on the frontend
-        getAndSetAccountLink();
-      } else {
-        // not an error from Beamer, throw it
-        throw new Error(error);
-      }
-    });
+        // if it's beamer's error indicating the account is not linked yet
+        if (error.message.indexOf(errorString) > -1) {
+          // get stripe link and set it on the frontend
+          getAndSetAccountLink();
+        } else {
+          // not an error from Beamer, throw it
+          throw new Error(error);
+        }
+      });
   }
 
   render() {
-    const { stripeConnectionUrl, accountConfirmed, accountPendingConfirmation, unpaidBalance, accountNotConfirmedButReceivedTips } = this.state;
+    const {
+      stripeConnectionUrl,
+      accountConfirmed,
+      accountPendingConfirmation,
+      unpaidBalance,
+      accountNotConfirmedButReceivedTips,
+    } = this.state;
 
     const { user } = this.props;
 
@@ -146,79 +168,85 @@ class StripeAccountConnection extends React.Component<Props, State> {
           body={
             <div>
               {/* show while waiting for account status */}
-              {!accountConfirmed && !accountPendingConfirmation && !accountNotConfirmedButReceivedTips &&
-              <div className="card__body-actions">
-                <div>
+              {!accountConfirmed && !accountPendingConfirmation && !accountNotConfirmedButReceivedTips && (
+                <div className="card__body-actions">
                   <div>
-                    <h3>Getting your Bank Account Connection status...</h3>
-                  </div>
-                </div>
-              </div>
-              }
-              {/* user has yet to complete their integration */}
-              {!accountConfirmed && accountPendingConfirmation &&
-              <div className="card__body-actions">
-                <div>
-                  <div>
-                    <h3>Connect your Bank Account to Odysee to receive donations directly from users</h3>
-                  </div>
-                  <div className="section__actions">
-                    <a href={stripeConnectionUrl}>
-                      <Button
-                        button="secondary"
-                        label={__('Connect Your Bank Account')}
-                        icon={ICONS.FINANCE}
-                      />
-                    </a>
-                  </div>
-                </div>
-              </div>
-              }
-              { /* user has completed their integration */ }
-              {accountConfirmed &&
-              <div className="card__body-actions">
-                <div>
-                  <div>
-                    <h3>Congratulations! Your account has been connected with Odysee.</h3>
-                    {unpaidBalance > 0 ? <div><br />
-                      <h3>Your account balance is ${unpaidBalance / 100} USD. Functionality to view your transactions and withdraw your balance will be landing shortly.</h3>
-                    </div> : <div><br />
-                      <h3>Your account balance is $0 USD. When you receive a tip you will see it here.</h3>
-                    </div>}
-                  </div>
-                </div>
-              </div>
-              }
-              { accountNotConfirmedButReceivedTips &&
-              <div className="card__body-actions">
-                <div>
-                  <div>
-                    <h3>Congratulations, you have already begun receiving tips on Odysee!</h3>
-                    <div><br />
-                      <h3>Your pending account balance is ${unpaidBalance / 100} USD. Functionality to view and receive your transactions will land soon.</h3>
-                    </div><br />
                     <div>
-                      <h3>Connect your Bank Account to be able to cash your pending balance out to your account.</h3>
+                      <h3>Getting your Bank Account Connection status...</h3>
+                    </div>
+                  </div>
+                </div>
+              )}
+              {/* user has yet to complete their integration */}
+              {!accountConfirmed && accountPendingConfirmation && (
+                <div className="card__body-actions">
+                  <div>
+                    <div>
+                      <h3>Connect your Bank Account to Odysee to receive donations directly from users</h3>
                     </div>
                     <div className="section__actions">
                       <a href={stripeConnectionUrl}>
-                        <Button
-                          button="secondary"
-                          label={__('Connect Your Bank Account')}
-                          icon={ICONS.FINANCE}
-                        />
+                        <Button button="secondary" label={__('Connect Your Bank Account')} icon={ICONS.FINANCE} />
                       </a>
                     </div>
                   </div>
                 </div>
-              </div>
-              }
+              )}
+              {/* user has completed their integration */}
+              {accountConfirmed && (
+                <div className="card__body-actions">
+                  <div>
+                    <div>
+                      <h3>Congratulations! Your account has been connected with Odysee.</h3>
+                      {unpaidBalance > 0 ? (
+                        <div>
+                          <br />
+                          <h3>
+                            Your account balance is ${unpaidBalance / 100} USD. Functionality to view your transactions
+                            and withdraw your balance will be landing shortly.
+                          </h3>
+                        </div>
+                      ) : (
+                        <div>
+                          <br />
+                          <h3>Your account balance is $0 USD. When you receive a tip you will see it here.</h3>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+              {accountNotConfirmedButReceivedTips && (
+                <div className="card__body-actions">
+                  <div>
+                    <div>
+                      <h3>Congratulations, you have already begun receiving tips on Odysee!</h3>
+                      <div>
+                        <br />
+                        <h3>
+                          Your pending account balance is ${unpaidBalance / 100} USD. Functionality to view and receive
+                          your transactions will land soon.
+                        </h3>
+                      </div>
+                      <br />
+                      <div>
+                        <h3>Connect your Bank Account to be able to cash your pending balance out to your account.</h3>
+                      </div>
+                      <div className="section__actions">
+                        <a href={stripeConnectionUrl}>
+                          <Button button="secondary" label={__('Connect Your Bank Account')} icon={ICONS.FINANCE} />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           }
         />
       );
     } else {
-      return (<></>); // probably null;
+      return <></>; // probably null;
     }
   }
 }
