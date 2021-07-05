@@ -75,6 +75,8 @@ function WalletSendTip(props: Props) {
   const [isConfirming, setIsConfirming] = React.useState(false);
   const { claim_id: claimId } = claim;
   const { channelName } = parseURI(uri);
+  const activeChannelName = activeChannelClaim && activeChannelClaim.name;
+  const activeChannelId = activeChannelClaim && activeChannelClaim.claim_id;
 
   const [canReceiveFiatTip, setCanReceiveFiatTip] = React.useState(); // dont persist because it needs to be calc'd per creator
   const [hasCardSaved, setHasSavedCard] = usePersistedState('comment-support:hasCardSaved', false);
@@ -99,46 +101,46 @@ function WalletSendTip(props: Props) {
 
   // check if creator has an account saved
   React.useEffect(() => {
-  if (channelClaimId && isAuthenticated) {
-    Lbryio.call(
-      'customer',
-      'status',
-      {
-        environment: stripeEnvironment,
-      },
-      'post'
-    ).then((customerStatusResponse) => {
-      const defaultPaymentMethodId =
-        customerStatusResponse.Customer &&
-        customerStatusResponse.Customer.invoice_settings &&
-        customerStatusResponse.Customer.invoice_settings.default_payment_method &&
-        customerStatusResponse.Customer.invoice_settings.default_payment_method.id;
+    if (channelClaimId && isAuthenticated) {
+      Lbryio.call(
+        'customer',
+        'status',
+        {
+          environment: stripeEnvironment,
+        },
+        'post'
+      ).then((customerStatusResponse) => {
+        const defaultPaymentMethodId =
+          customerStatusResponse.Customer &&
+          customerStatusResponse.Customer.invoice_settings &&
+          customerStatusResponse.Customer.invoice_settings.default_payment_method &&
+          customerStatusResponse.Customer.invoice_settings.default_payment_method.id;
 
-      setHasSavedCard(Boolean(defaultPaymentMethodId));
-    });
+        setHasSavedCard(Boolean(defaultPaymentMethodId));
+      });
     }
   }, [channelClaimId, isAuthenticated]);
 
   React.useEffect(() => {
     if (channelClaimId) {
-    Lbryio.call(
-      'account',
-      'check',
-      {
-        channel_claim_id: channelClaimId,
-        channel_name: tipChannelName,
-        environment: stripeEnvironment,
-      },
-      'post'
-    )
-      .then((accountCheckResponse) => {
-        if (accountCheckResponse === true && canReceiveFiatTip !== true) {
-          setCanReceiveFiatTip(true);
-        }
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
+      Lbryio.call(
+        'account',
+        'check',
+        {
+          channel_claim_id: channelClaimId,
+          channel_name: tipChannelName,
+          environment: stripeEnvironment,
+        },
+        'post'
+      )
+        .then((accountCheckResponse) => {
+          if (accountCheckResponse === true && canReceiveFiatTip !== true) {
+            setCanReceiveFiatTip(true);
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     }
   }, [channelClaimId]);
 
@@ -234,8 +236,8 @@ function WalletSendTip(props: Props) {
               amount: 100 * tipAmount, // convert from dollars to cents
               creator_channel_name: tipChannelName, // creator_channel_name
               creator_channel_claim_id: channelClaimId,
-              tipper_channel_name: sendAnonymously ? '' : activeChannelClaim.name,
-              tipper_channel_claim_id: sendAnonymously ? '' : activeChannelClaim.claim_id,
+              tipper_channel_name: sendAnonymously ? '' : activeChannelName,
+              tipper_channel_claim_id: sendAnonymously ? '' : activeChannelId,
               currency: 'USD',
               anonymous: sendAnonymously,
               source_claim_id: sourceClaimId,
@@ -276,7 +278,8 @@ function WalletSendTip(props: Props) {
     function isNan(tipAmount) {
       // testing for NaN ES5 style https://stackoverflow.com/a/35912757/3973137
       // also sometimes it's returned as a string
-      if (tipAmount !== tipAmount || tipAmount === 'NaN') { //eslint-disable-line
+      // eslint-disable-next-line
+      if (tipAmount !== tipAmount || tipAmount === 'NaN') {
         return true;
       }
       return false;
@@ -296,8 +299,7 @@ function WalletSendTip(props: Props) {
 
   function shouldDisableAmountSelector(amount) {
     return (
-      (amount > balance && activeTab !== TAB_FIAT) ||
-      (activeTab === TAB_FIAT && (!hasCardSaved || !canReceiveFiatTip))
+      (amount > balance && activeTab !== TAB_FIAT) || (activeTab === TAB_FIAT && (!hasCardSaved || !canReceiveFiatTip))
     );
   }
 
@@ -358,7 +360,7 @@ function WalletSendTip(props: Props) {
                     className={classnames('button-toggle', { 'button-toggle--active': activeTab === TAB_LBC })}
                   />
                   {/* tip fiat tab button */}
-                  { /* @if TARGET='web' */ }
+                  {/* @if TARGET='web' */}
                   <Button
                     key="tip-fiat"
                     icon={ICONS.FINANCE}
@@ -371,7 +373,7 @@ function WalletSendTip(props: Props) {
                     }}
                     className={classnames('button-toggle', { 'button-toggle--active': activeTab === TAB_FIAT })}
                   />
-                  { /* @endif */ }
+                  {/* @endif */}
                   {/* tip LBC tab button */}
                   <Button
                     key="boost"
