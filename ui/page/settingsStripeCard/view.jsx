@@ -4,21 +4,13 @@
 import React from 'react';
 import Page from 'component/page';
 import Card from 'component/common/card';
-import { SETTINGS } from 'lbry-redux';
 import { Lbryio } from 'lbryinc';
 import { STRIPE_PUBLIC_KEY } from 'config';
-import classnames from 'classnames';
 import moment from 'moment';
 
 let scriptLoading = false;
-let scriptLoaded = false;
-let scriptDidError = false;
-
-const dateFormat = {
-  month: 'short',
-  day: 'numeric',
-  year: 'numeric',
-};
+// let scriptLoaded = false;
+// let scriptDidError = false; // these could probably be in state if managing locally
 
 let stripeEnvironment = 'test';
 // if the key contains pk_live it's a live key
@@ -69,21 +61,19 @@ class CardVerify extends React.Component<Props, State> {
       Lbryio.call('customer', 'status', {
         environment: stripeEnvironment,
       }, 'post').then(customerStatusResponse => {
-
         // user has a card saved if their defaultPaymentMethod has an id
         const defaultPaymentMethod = customerStatusResponse.Customer.invoice_settings.default_payment_method;
         var userHasAlreadySetupPayment = Boolean(defaultPaymentMethod && defaultPaymentMethod.id);
 
         // show different frontend if user already has card
         if (userHasAlreadySetupPayment) {
-
           var card = customerStatusResponse.PaymentMethods[0].card;
 
           var cardDetails = {
             brand: card.brand,
             expiryYear: card.exp_year,
             expiryMonth: card.exp_month,
-            lastFour: card.last4
+            lastFour: card.last4,
           };
 
           that.setState({
@@ -98,7 +88,7 @@ class CardVerify extends React.Component<Props, State> {
           }, 'post').then(customerTransactionsResponse => {
             that.setState({
               customerTransactions: customerTransactionsResponse,
-            })
+            });
 
             console.log(customerTransactionsResponse);
           });
@@ -262,7 +252,6 @@ class CardVerify extends React.Component<Props, State> {
         // shows a success / error message when the payment is complete
         var orderComplete = function(stripe, clientSecret) {
           stripe.retrieveSetupIntent(clientSecret).then(function(result) {
-
             Lbryio.call('customer', 'status', {
               environment: stripeEnvironment,
             }, 'post').then(customerStatusResponse => {

@@ -90,7 +90,6 @@ class StripeAccountConnection extends React.Component<Props, State> {
     Lbryio.call('account', 'status', {
       environment: stripeEnvironment,
     }, 'post').then(accountStatusResponse => {
-
       const yetToBeCashedOutBalance = accountStatusResponse.total_received_unpaid;
       if (yetToBeCashedOutBalance) {
         that.setState({
@@ -107,7 +106,6 @@ class StripeAccountConnection extends React.Component<Props, State> {
         });
         // user has not confirmed an account but have received payments
       } else if (accountStatusResponse.total_received_unpaid > 0) {
-
         that.setState({
           accountNotConfirmedButReceivedTips: true,
         });
@@ -176,29 +174,29 @@ class StripeAccountConnection extends React.Component<Props, State> {
                 </div>
               </div>
               }
-              {/* user has completed their integration */}
+              { /* user has completed their integration */ }
               {accountConfirmed &&
               <div className="card__body-actions">
                 <div>
                   <div>
                     <h3>Congratulations! Your account has been connected with Odysee.</h3>
-                    {unpaidBalance > 0 ? <div><br></br>
-                      <h3>Your account balance is ${unpaidBalance/100} USD. Functionality to view your transactions and withdraw your balance will be landing shortly.</h3>
-                    </div> : <div><br></br>
+                    {unpaidBalance > 0 ? <div><br />
+                      <h3>Your account balance is ${unpaidBalance / 100} USD. Functionality to view your transactions and withdraw your balance will be landing shortly.</h3>
+                    </div> : <div><br />
                       <h3>Your account balance is $0 USD. When you receive a tip you will see it here.</h3>
                     </div>}
                   </div>
                 </div>
               </div>
               }
-              {accountNotConfirmedButReceivedTips &&
+              { accountNotConfirmedButReceivedTips &&
               <div className="card__body-actions">
                 <div>
                   <div>
                     <h3>Congratulations, you have already begun receiving tips on Odysee!</h3>
-                    <div><br></br>
-                      <h3>Your pending account balance is ${unpaidBalance/100} USD. Functionality to view and receive your transactions will land soon.</h3>
-                    </div><br></br>
+                    <div><br />
+                      <h3>Your pending account balance is ${unpaidBalance / 100} USD. Functionality to view and receive your transactions will land soon.</h3>
+                    </div><br />
                     <div>
                       <h3>Connect your Bank Account to be able to cash your pending balance out to your account.</h3>
                     </div>
@@ -220,7 +218,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
         />
       );
     } else {
-      return (<></>);
+      return (<></>); // probably null;
     }
   }
 }
