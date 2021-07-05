@@ -62,7 +62,11 @@ export default function WaitUntilOnPage(props: Props) {
 
     if (ref && ref.current && !shouldRender) {
       window.addEventListener('scroll', handleDisplayingRef);
-      return () => window.removeEventListener('scroll', handleDisplayingRef);
+      window.addEventListener('resize', handleDisplayingRef);
+      return () => {
+        window.removeEventListener('scroll', handleDisplayingRef);
+        window.removeEventListener('resize', handleDisplayingRef);
+      };
     }
   }, [ref, setShouldRender, shouldRender, shouldElementRender]);
 
