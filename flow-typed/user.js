@@ -28,6 +28,7 @@ declare type User = {
   device_types: Array<DeviceType>,
   lbry_first_approved: boolean,
   experimental_ui: boolean,
+  fiat_enabled: boolean,
   odysee_live_enabled: boolean,
   odysee_live_disabled: boolean,
   global_mod: boolean,

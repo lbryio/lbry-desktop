@@ -1,4 +1,4 @@
-// @flow
+// restore flow
 /* eslint-disable no-undef */
 /* eslint-disable react/prop-types */
 import React from 'react';
@@ -19,14 +19,25 @@ if (STRIPE_PUBLIC_KEY.indexOf('pk_live') > -1) {
   stripeEnvironment = 'live';
 }
 
-type Props = {
-  disabled: boolean,
-  label: ?string,
-  email: ?string,
-}
+// type Props = {
+//   disabled: boolean,
+//   label: ?string,
+//   email: ?string,
+//   scriptFailedToLoad: boolean,
+// };
+//
+// type State = {
+//   open: boolean,
+//   currentFlowStage: string,
+//   customerTransactions: Array<any>,
+//   pageTitle: string,
+//   userCardDetails: any, // fill this out
+//   scriptFailedToLoad: boolean,
+// };
 
 class CardVerify extends React.Component<Props, State> {
-  constructor(props: Props) {
+  constructor(props) {
+    // :Props
     super(props);
     this.state = {
       open: false,
@@ -56,96 +67,118 @@ class CardVerify extends React.Component<Props, State> {
 
     // setting a timeout to let the client secret populate
     // TODO: fix this, should be a cleaner way
-    setTimeout(function() {
+    setTimeout(function () {
       // check if customer has card setup already
-      Lbryio.call('customer', 'status', {
-        environment: stripeEnvironment,
-      }, 'post').then(customerStatusResponse => {
-        // user has a card saved if their defaultPaymentMethod has an id
-        const defaultPaymentMethod = customerStatusResponse.Customer.invoice_settings.default_payment_method;
-        var userHasAlreadySetupPayment = Boolean(defaultPaymentMethod && defaultPaymentMethod.id);
+      Lbryio.call(
+        'customer',
+        'status',
+        {
+          environment: stripeEnvironment,
+        },
+        'post'
+      )
+        .then((customerStatusResponse) => {
+          // user has a card saved if their defaultPaymentMethod has an id
+          const defaultPaymentMethod = customerStatusResponse.Customer.invoice_settings.default_payment_method;
+          var userHasAlreadySetupPayment = Boolean(defaultPaymentMethod && defaultPaymentMethod.id);
 
-        // show different frontend if user already has card
-        if (userHasAlreadySetupPayment) {
-          var card = customerStatusResponse.PaymentMethods[0].card;
+          // show different frontend if user already has card
+          if (userHasAlreadySetupPayment) {
+            var card = customerStatusResponse.PaymentMethods[0].card;
 
-          var cardDetails = {
-            brand: card.brand,
-            expiryYear: card.exp_year,
-            expiryMonth: card.exp_month,
-            lastFour: card.last4,
-          };
+            var cardDetails = {
+              brand: card.brand,
+              expiryYear: card.exp_year,
+              expiryMonth: card.exp_month,
+              lastFour: card.last4,
+            };
 
-          that.setState({
-            currentFlowStage: 'cardConfirmed',
-            pageTitle: 'Tip History',
-            userCardDetails: cardDetails,
-          });
-
-          // get customer transactions
-          Lbryio.call('customer', 'list', {
-            environment: stripeEnvironment,
-          }, 'post').then(customerTransactionsResponse => {
             that.setState({
-              customerTransactions: customerTransactionsResponse,
+              currentFlowStage: 'cardConfirmed',
+              pageTitle: 'Tip History',
+              userCardDetails: cardDetails,
             });
 
-            console.log(customerTransactionsResponse);
-          });
+            // get customer transactions
+            Lbryio.call(
+              'customer',
+              'list',
+              {
+                environment: stripeEnvironment,
+              },
+              'post'
+            ).then((customerTransactionsResponse) => {
+              that.setState({
+                customerTransactions: customerTransactionsResponse,
+              });
 
-          // otherwise, prompt them to save a card
-        } else {
-          that.setState({
-            currentFlowStage: 'confirmingCard',
-          });
+              console.log(customerTransactionsResponse);
+            });
 
-          // get a payment method secret for frontend
-          Lbryio.call('customer', 'setup', {
-            environment: stripeEnvironment,
-          }, 'post').then(customerSetupResponse => {
-            console.log(customerSetupResponse);
+            // otherwise, prompt them to save a card
+          } else {
+            that.setState({
+              currentFlowStage: 'confirmingCard',
+            });
 
-            clientSecret = customerSetupResponse.client_secret;
+            // get a payment method secret for frontend
+            Lbryio.call(
+              'customer',
+              'setup',
+              {
+                environment: stripeEnvironment,
+              },
+              'post'
+            ).then((customerSetupResponse) => {
+              console.log(customerSetupResponse);
 
-            // instantiate stripe elements
-            setupStripe();
-          });
-        }
-        // if the status call fails, either an actual error or need to run setup first
-      }).catch(function(error) {
-        console.log(error);
+              clientSecret = customerSetupResponse.client_secret;
 
-        // errorString passed from the API (with a 403 error)
-        const errorString = 'user as customer is not setup yet';
+              // instantiate stripe elements
+              setupStripe();
+            });
+          }
+          // if the status call fails, either an actual error or need to run setup first
+        })
+        .catch(function (error) {
+          console.log(error);
 
-        // if it's beamer's error indicating the account is not linked yet
-        if (error.message.indexOf(errorString) > -1) {
-          // send them to save a card
-          that.setState({
-            currentFlowStage: 'confirmingCard',
-          });
+          // errorString passed from the API (with a 403 error)
+          const errorString = 'user as customer is not setup yet';
 
-          // get a payment method secret for frontend
-          Lbryio.call('customer', 'setup', {
-            environment: stripeEnvironment,
-          }, 'post').then(customerSetupResponse => {
-            console.log(customerSetupResponse);
+          // if it's beamer's error indicating the account is not linked yet
+          if (error.message.indexOf(errorString) > -1) {
+            // send them to save a card
+            that.setState({
+              currentFlowStage: 'confirmingCard',
+            });
 
-            clientSecret = customerSetupResponse.client_secret;
+            // get a payment method secret for frontend
+            Lbryio.call(
+              'customer',
+              'setup',
+              {
+                environment: stripeEnvironment,
+              },
+              'post'
+            ).then((customerSetupResponse) => {
+              console.log(customerSetupResponse);
 
-            // instantiate stripe elements
-            setupStripe();
-          });
-        } else {
-          console.log('Unseen before error');
-        }
-      });
+              clientSecret = customerSetupResponse.client_secret;
+
+              // instantiate stripe elements
+              setupStripe();
+            });
+          } else {
+            console.log('Unseen before error');
+          }
+        });
     }, 250);
 
     function setupStripe() {
       // TODO: have to fix this, using so that the script is available
-      setTimeout(function() {
-        var stripeElements = function(publicKey, setupIntent) {
+      setTimeout(function () {
+        var stripeElements = function (publicKey, setupIntent) {
           var stripe = Stripe(publicKey);
           var elements = stripe.elements();
 
@@ -154,8 +187,7 @@ class CardVerify extends React.Component<Props, State> {
             base: {
               fontSize: '16px',
               color: '#32325d',
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif',
+              fontFamily: '-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif',
               fontSmoothing: 'antialiased',
               '::placeholder': {
                 color: 'rgba(0,0,0,0.4)',
@@ -168,17 +200,17 @@ class CardVerify extends React.Component<Props, State> {
           card.mount('#card-element');
 
           // Element focus ring
-          card.on('focus', function() {
+          card.on('focus', function () {
             var el = document.getElementById('card-element');
             el.classList.add('focused');
           });
 
-          card.on('blur', function() {
+          card.on('blur', function () {
             var el = document.getElementById('card-element');
             el.classList.remove('focused');
           });
 
-          card.on('ready', function() {
+          card.on('ready', function () {
             card.focus();
           });
 
@@ -198,29 +230,31 @@ class CardVerify extends React.Component<Props, State> {
 
             changeLoadingState(true);
 
-            stripe.confirmCardSetup(clientSecret, {
-              payment_method: {
-                card: card,
-                billing_details: { email: email },
-              },
-            }).then(function(result) {
-              if (result.error) {
-                console.log(result);
+            stripe
+              .confirmCardSetup(clientSecret, {
+                payment_method: {
+                  card: card,
+                  billing_details: { email: email },
+                },
+              })
+              .then(function (result) {
+                if (result.error) {
+                  console.log(result);
 
-                changeLoadingState(false);
-                var displayError = document.getElementById('card-errors');
-                displayError.textContent = result.error.message;
-              } else {
-                // The PaymentMethod was successfully set up
-                // hide and show the proper divs
-                orderComplete(stripe, clientSecret);
-              }
-            });
+                  changeLoadingState(false);
+                  var displayError = document.getElementById('card-errors');
+                  displayError.textContent = result.error.message;
+                } else {
+                  // The PaymentMethod was successfully set up
+                  // hide and show the proper divs
+                  orderComplete(stripe, clientSecret);
+                }
+              });
           }
 
           // Handle payment submission when user clicks the pay button.
           var button = document.getElementById('submit');
-          button.addEventListener('click', function(event) {
+          button.addEventListener('click', function (event) {
             submitForm(event);
           });
 
@@ -237,24 +271,35 @@ class CardVerify extends React.Component<Props, State> {
         stripeElements(publicKey, clientSecret);
 
         // Show a spinner on payment submission
-        var changeLoadingState = function(isLoading) {
+        var changeLoadingState = function (isLoading) {
           if (isLoading) {
+            // $FlowFixMe
             document.querySelector('button').disabled = true;
+            // $FlowFixMe
             document.querySelector('#spinner').classList.remove('hidden');
+            // $FlowFixMe
             document.querySelector('#button-text').classList.add('hidden');
           } else {
+            // $FlowFixMe
             document.querySelector('button').disabled = false;
+            // $FlowFixMe
             document.querySelector('#spinner').classList.add('hidden');
+            // $FlowFixMe
             document.querySelector('#button-text').classList.remove('hidden');
           }
         };
 
         // shows a success / error message when the payment is complete
-        var orderComplete = function(stripe, clientSecret) {
-          stripe.retrieveSetupIntent(clientSecret).then(function(result) {
-            Lbryio.call('customer', 'status', {
-              environment: stripeEnvironment,
-            }, 'post').then(customerStatusResponse => {
+        var orderComplete = function (stripe, clientSecret) {
+          stripe.retrieveSetupIntent(clientSecret).then(function (result) {
+            Lbryio.call(
+              'customer',
+              'status',
+              {
+                environment: stripeEnvironment,
+              },
+              'post'
+            ).then((customerStatusResponse) => {
               var card = customerStatusResponse.PaymentMethods[0].card;
 
               var cardDetails = {
@@ -287,10 +332,16 @@ class CardVerify extends React.Component<Props, State> {
   }
 
   componentWillUnmount() {
+    // pretty sure this doesn't exist
+    // $FlowFixMe
     if (this.loadPromise) {
+      // $FlowFixMe
       this.loadPromise.reject();
     }
+    // pretty sure this doesn't exist
+    // $FlowFixMe
     if (CardVerify.stripeHandler && this.state.open) {
+      // $FlowFixMe
       CardVerify.stripeHandler.close();
     }
   }
@@ -329,7 +380,6 @@ class CardVerify extends React.Component<Props, State> {
     const { currentFlowStage, customerTransactions, pageTitle, userCardDetails } = this.state;
 
     return (
-
       <Page backout={{ title: pageTitle, backLabel: __('Done') }} noFooter noSideNavigation>
         <div>
           {scriptFailedToLoad && (
@@ -337,76 +387,86 @@ class CardVerify extends React.Component<Props, State> {
           )}
         </div>
 
-        {currentFlowStage === 'loading' && <div className="headerCard toConfirmCard">
-          <Card
-            title={__('Connect your card with Odysee')}
-            subtitle={__('Getting your card connection status...')}
-          />
-        </div>}
+        {currentFlowStage === 'loading' && (
+          <div className="headerCard toConfirmCard">
+            <Card title={__('Connect your card with Odysee')} subtitle={__('Getting your card connection status...')} />
+          </div>
+        )}
 
-        {currentFlowStage === 'confirmingCard' && <div className="sr-root">
-          <div className="sr-main">
-            <div className="sr-payment-form card cardInput">
-              <div className="sr-form-row">
-                <label className="payment-details">
-                  Card Details
-                </label>
-                <div className="sr-input sr-element sr-card-element" id="card-element" />
+        {currentFlowStage === 'confirmingCard' && (
+          <div className="sr-root">
+            <div className="sr-main">
+              <div className="sr-payment-form card cardInput">
+                <div className="sr-form-row">
+                  <label className="payment-details">Card Details</label>
+                  <div className="sr-input sr-element sr-card-element" id="card-element" />
+                </div>
+                <div className="sr-field-error" id="card-errors" role="alert" />
+                <button className="linkButton" id="submit">
+                  <div className="spinner hidden" id="spinner" />
+                  <span id="button-text">Add Card</span>
+                </button>
               </div>
-              <div className="sr-field-error" id="card-errors" role="alert" />
-              <button className="linkButton" id="submit">
-                <div className="spinner hidden" id="spinner" />
-                <span id="button-text">Add Card</span>
-              </button>
             </div>
           </div>
-        </div>}
+        )}
 
-        {currentFlowStage === 'cardConfirmed' && <div className="successCard">
-          <Card
-            title={__('Card Details')}
-            body={<>
-              <h4 className="grey-text">Brand: {userCardDetails.brand.toUpperCase()} &nbsp;
-                Last 4:  {userCardDetails.lastFour} &nbsp;
-                Expires: {userCardDetails.expiryMonth}/{userCardDetails.expiryYear} &nbsp;
-                </h4>
-              </>}
-          />
-          <br />
+        {currentFlowStage === 'cardConfirmed' && (
+          <div className="successCard">
+            <Card
+              title={__('Card Details')}
+              body={
+                <>
+                  <h4 className="grey-text">
+                    Brand: {userCardDetails.brand.toUpperCase()} &nbsp; Last 4: {userCardDetails.lastFour} &nbsp;
+                    Expires: {userCardDetails.expiryMonth}/{userCardDetails.expiryYear} &nbsp;
+                  </h4>
+                </>
+              }
+            />
+            <br />
 
-          {(!customerTransactions || customerTransactions.length === 0) && <Card
-            title={__('Tip History')}
-            subtitle={__('You have not sent any tips yet. When you do they will appear here. ')}
-          />}
+            {(!customerTransactions || customerTransactions.length === 0) && (
+              <Card
+                title={__('Tip History')}
+                subtitle={__('You have not sent any tips yet. When you do they will appear here. ')}
+              />
+            )}
 
-          {customerTransactions && customerTransactions.length > 0 && <Card
-            title={__('Tip History')}
-            body={<><div className="table__wrapper">
-              <table className="table table--transactions">
-                <thead>
-                <tr>
-                  <th className="date-header">{__('Date')}</th>
-                  <th>{<>{__('Receiving Channel Name')}</>}</th>
-                  <th>{__('Amount (USD)')} </th>
-                  <th>{__('Anonymous')}</th>
-                </tr>
-                </thead>
-                <tbody>
-                {customerTransactions &&
-                customerTransactions.map((transaction) => (
-                  <tr key={transaction.name + transaction.created_at}>
-                    <td>{moment(transaction.created_at).format('LLL')}</td>
-                    <td>{transaction.channel_name}</td>
-                    <td>${transaction.tipped_amount / 100}</td>
-                    <td>{transaction.private_tip ? 'Yes' :  'No'}</td>
-                  </tr>
-                ))}
-                </tbody>
-              </table>
-            </div></>}
-          />}
-        </div>}
-
+            {customerTransactions && customerTransactions.length > 0 && (
+              <Card
+                title={__('Tip History')}
+                body={
+                  <>
+                    <div className="table__wrapper">
+                      <table className="table table--transactions">
+                        <thead>
+                          <tr>
+                            <th className="date-header">{__('Date')}</th>
+                            <th>{<>{__('Receiving Channel Name')}</>}</th>
+                            <th>{__('Amount (USD)')} </th>
+                            <th>{__('Anonymous')}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {customerTransactions &&
+                            customerTransactions.map((transaction) => (
+                              <tr key={transaction.name + transaction.created_at}>
+                                <td>{moment(transaction.created_at).format('LLL')}</td>
+                                <td>{transaction.channel_name}</td>
+                                <td>${transaction.tipped_amount / 100}</td>
+                                <td>{transaction.private_tip ? 'Yes' : 'No'}</td>
+                              </tr>
+                            ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </>
+                }
+              />
+            )}
+          </div>
+        )}
       </Page>
     );
   }
