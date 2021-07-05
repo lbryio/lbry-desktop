@@ -276,14 +276,14 @@ class CardVerify extends React.Component<Props, State> {
             // $FlowFixMe
             document.querySelector('button').disabled = true;
             // $FlowFixMe
-            document.querySelector('#spinner').classList.remove('hidden');
+            document.querySelector('#stripe-spinner').classList.remove('hidden');
             // $FlowFixMe
             document.querySelector('#button-text').classList.add('hidden');
           } else {
             // $FlowFixMe
             document.querySelector('button').disabled = false;
             // $FlowFixMe
-            document.querySelector('#spinner').classList.add('hidden');
+            document.querySelector('#stripe-spinner').classList.add('hidden');
             // $FlowFixMe
             document.querySelector('#button-text').classList.remove('hidden');
           }
@@ -403,7 +403,7 @@ class CardVerify extends React.Component<Props, State> {
                 </div>
                 <div className="sr-field-error" id="card-errors" role="alert" />
                 <button className="linkButton" id="submit">
-                  <div className="spinner hidden" id="spinner" />
+                  <div className="stripe__spinner hidden" id="stripe-spinner" />
                   <span id="button-text">Add Card</span>
                 </button>
               </div>
