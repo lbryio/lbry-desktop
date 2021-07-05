@@ -182,9 +182,9 @@ function Comment(props: Props) {
       >
         <div className="comment__thumbnail-wrapper">
           {authorUri ? (
-            <ChannelThumbnail uri={authorUri} obscure={channelIsBlocked} small className="comment__author-thumbnail" />
+            <ChannelThumbnail uri={authorUri} obscure={channelIsBlocked} xsmall className="comment__author-thumbnail" />
           ) : (
-            <ChannelThumbnail small className="comment__author-thumbnail" />
+            <ChannelThumbnail xsmall className="comment__author-thumbnail" />
           )}
         </div>
 

@@ -3,11 +3,14 @@ import React from 'react';
 import { parseURI } from 'lbry-redux';
 import classnames from 'classnames';
 import Gerbil from './gerbil.png';
-import Transparent from './transparent_1x1.png';
 import FreezeframeWrapper from 'component/fileThumbnail/FreezeframeWrapper';
 import ChannelStakedIndicator from 'component/channelStakedIndicator';
 import { getThumbnailCdnUrl } from 'util/thumbnail';
-import useLazyLoading from 'effects/use-lazy-loading';
+
+const FONT_PX = 16.0;
+const IMG_XSMALL_REM = 2.1;
+const IMG_SMALL_REM = 3.0;
+const IMG_NORMAL_REM = 10.0;
 
 type Props = {
   thumbnail: ?string,
@@ -16,14 +19,14 @@ type Props = {
   thumbnailPreview: ?string,
   obscure?: boolean,
   small?: boolean,
+  xsmall?: boolean,
   allowGifs?: boolean,
   claim: ?ChannelClaim,
   doResolveUri: (string) => void,
   isResolving: boolean,
   showDelayedMessage?: boolean,
+  noLazyLoad?: boolean,
   hideStakedIndicator?: boolean,
-  xsmall?: boolean,
-  noOptimization?: boolean,
 };
 
 function ChannelThumbnail(props: Props) {
@@ -40,8 +43,8 @@ function ChannelThumbnail(props: Props) {
     doResolveUri,
     isResolving,
     showDelayedMessage = false,
+    noLazyLoad,
     hideStakedIndicator = false,
-    noOptimization,
   } = props;
   const [thumbError, setThumbError] = React.useState(false);
   const shouldResolve = claim === undefined;
@@ -51,6 +54,8 @@ function ChannelThumbnail(props: Props) {
   const isGif = channelThumbnail && channelThumbnail.endsWith('gif');
   const showThumb = (!obscure && !!thumbnail) || thumbnailPreview;
   const thumbnailRef = React.useRef(null);
+  const thumbnailSize = calcRenderedImgWidth(); // currently always 1:1
+
   // Generate a random color class based on the first letter of the channel name
   const { channelName } = parseURI(uri);
   let initializer;
@@ -62,13 +67,25 @@ function ChannelThumbnail(props: Props) {
     colorClassName = `channel-thumbnail__default--4`;
   }
 
+  function calcRenderedImgWidth() {
+    let rem;
+    if (xsmall) {
+      rem = IMG_XSMALL_REM;
+    } else if (small) {
+      rem = IMG_SMALL_REM;
+    } else {
+      rem = IMG_NORMAL_REM;
+    }
+
+    const devicePixelRatio = window.devicePixelRatio || 1.0;
+    return Math.ceil(rem * devicePixelRatio * FONT_PX);
+  }
+
   React.useEffect(() => {
     if (shouldResolve && uri) {
       doResolveUri(uri);
     }
   }, [doResolveUri, shouldResolve, uri]);
-
-  useLazyLoading(thumbnailRef, 0.25, [showThumb, thumbError, channelThumbnail]);
 
   if (isGif && !allowGifs) {
     return (
@@ -81,8 +98,8 @@ function ChannelThumbnail(props: Props) {
   let url = channelThumbnail;
   // @if TARGET='web'
   // Pass image urls through a compression proxy, except for GIFs.
-  if (thumbnail && !noOptimization && !(isGif && allowGifs)) {
-    url = getThumbnailCdnUrl({ thumbnail });
+  if (thumbnail && !(isGif && allowGifs)) {
+    url = getThumbnailCdnUrl({ thumbnail, width: thumbnailSize, height: thumbnailSize, quality: 85 });
   }
   // @endif
 
@@ -100,8 +117,10 @@ function ChannelThumbnail(props: Props) {
           ref={thumbnailRef}
           alt={__('Channel profile picture')}
           className="channel-thumbnail__default"
-          data-src={!thumbError && url ? url : Gerbil}
-          src={Transparent}
+          src={!thumbError && url ? url : Gerbil}
+          width={thumbnailSize}
+          height={thumbnailSize}
+          loading={noLazyLoad ? undefined : 'lazy'}
           onError={() => setThumbError(true)} // if thumb fails (including due to https replace, show gerbil.
         />
       )}
@@ -114,8 +133,10 @@ function ChannelThumbnail(props: Props) {
               ref={thumbnailRef}
               alt={__('Channel profile picture')}
               className="channel-thumbnail__custom"
-              data-src={!thumbError && url ? url : Gerbil}
-              src={Transparent}
+              src={!thumbError && url ? url : Gerbil}
+              width={thumbnailSize}
+              height={thumbnailSize}
+              loading={noLazyLoad ? undefined : 'lazy'}
               onError={() => setThumbError(true)} // if thumb fails (including due to https replace, show gerbil.
             />
           )}

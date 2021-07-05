@@ -105,7 +105,9 @@ export default function CommentReactions(props: Props) {
           className={classnames('comment__action comment__action--creator-like')}
           onClick={() => react(commentId, REACTION_TYPES.CREATOR_LIKE)}
         >
-          {creatorLiked && <ChannelThumbnail uri={authorUri} hideStakedIndicator className="comment__creator-like" />}
+          {creatorLiked && (
+            <ChannelThumbnail xsmall uri={authorUri} hideStakedIndicator className="comment__creator-like" />
+          )}
         </Button>
       )}
     </>

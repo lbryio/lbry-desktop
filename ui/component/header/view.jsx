@@ -319,7 +319,7 @@ const Header = (props: Props) => {
                       // @endif
                     >
                       {activeChannelUrl ? (
-                        <ChannelThumbnail uri={activeChannelUrl} />
+                        <ChannelThumbnail uri={activeChannelUrl} small noLazyLoad />
                       ) : (
                         <Icon size={18} icon={ICONS.ACCOUNT} aria-hidden />
                       )}

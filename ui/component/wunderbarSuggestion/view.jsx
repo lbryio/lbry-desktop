@@ -40,7 +40,7 @@ export default function WunderbarSuggestion(props: Props) {
           'wunderbar__suggestion--channel': isChannel,
         })}
       >
-        {isChannel && <ChannelThumbnail uri={uri} />}
+        {isChannel && <ChannelThumbnail small uri={uri} />}
         {!isChannel && (
           <FileThumbnail uri={uri}>
             {/* @if TARGET='app' */}
