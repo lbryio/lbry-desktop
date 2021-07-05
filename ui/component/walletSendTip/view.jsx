@@ -293,7 +293,7 @@ function WalletSendTip(props: Props) {
     } else if (activeTab === TAB_FIAT) {
       return __('Send a $%displayAmount% Tip', { displayAmount });
     } else if (activeTab === TAB_LBC) {
-      return __('Send a %displayAmount% LBC Tip', { displayAmount });
+      return __('Send a %displayAmount% Credit Tip', { displayAmount });
     }
   }
 
@@ -305,7 +305,7 @@ function WalletSendTip(props: Props) {
 
   function setConfirmLabel() {
     if (activeTab === TAB_LBC) {
-      return __('Tipping LBC');
+      return __('Tipping Credit');
     } else if (activeTab === TAB_FIAT) {
       return __('Tipping Fiat (USD)');
     } else if (activeTab === TAB_BOOST) {
