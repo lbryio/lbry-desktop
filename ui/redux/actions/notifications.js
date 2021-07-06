@@ -124,7 +124,7 @@ export function doReadNotifications(notificationsIds: Array<number>) {
     } else {
       // A null or invalid argument will wipe all unread notifications.
       const getUnreadIds = (list) => list.filter((n) => !n.is_read).map((n) => n.id);
-      ids = [...new Set([...getUnreadIds(notifications), ...getUnreadIds(notificationsFiltered)])];
+      ids = Array.from(new Set([...getUnreadIds(notifications), ...getUnreadIds(notificationsFiltered)]));
     }
 
     dispatch({ type: ACTIONS.NOTIFICATION_READ_STARTED });
@@ -167,7 +167,7 @@ export function doSeeAllNotifications() {
     }
 
     const getUnseenIds = (list) => list.filter((n) => !n.is_seen).map((n) => n.id);
-    const unseenIds = [...new Set([...getUnseenIds(notifications), ...getUnseenIds(notificationsFiltered)])];
+    const unseenIds = Array.from(new Set([...getUnseenIds(notifications), ...getUnseenIds(notificationsFiltered)]));
 
     dispatch(doSeeNotifications(unseenIds));
   };
