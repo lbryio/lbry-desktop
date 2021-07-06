@@ -51,6 +51,7 @@ const config = {
   KNOWN_APP_DOMAINS: process.env.KNOWN_APP_DOMAINS ? process.env.KNOWN_APP_DOMAINS.split(',') : [],
   STRIPE_PUBLIC_KEY: process.env.STRIPE_PUBLIC_KEY,
   ENABLE_UI_NOTIFICATIONS: process.env.ENABLE_UI_NOTIFICATIONS === 'true',
+  ENABLE_MATURE: process.env.ENABLE_MATURE === 'true',
 };
 
 config.URL_LOCAL = `http://localhost:${config.WEB_SERVER_PORT}`;
