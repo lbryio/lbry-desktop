@@ -5,6 +5,7 @@ import { parseURI } from 'lbry-redux';
 import Button from 'component/button';
 import useHover from 'effects/use-hover';
 import { useIsMobile } from 'effects/use-screensize';
+import { ENABLE_UI_NOTIFICATIONS } from 'config';
 
 type SubscriptionArgs = {
   channelName: string,
@@ -43,6 +44,7 @@ export default function SubscribeButton(props: Props) {
   const isMobile = useIsMobile();
   let isHovering = useHover(buttonRef);
   isHovering = isMobile ? true : isHovering;
+  const uiNotificationsEnabled = (user && user.experimental_ui) || ENABLE_UI_NOTIFICATIONS;
 
   const { channelName: rawChannelName } = parseURI(uri);
   const { channelName } = parseURI(permanentUrl);
@@ -108,7 +110,7 @@ export default function SubscribeButton(props: Props) {
           }
         }}
       />
-      {isSubscribed && (
+      {isSubscribed && uiNotificationsEnabled && (
         <Button
           button="alt"
           icon={notificationsDisabled ? ICONS.BELL : ICONS.BELL_ON}
