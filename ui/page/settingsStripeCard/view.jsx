@@ -7,6 +7,9 @@ import Card from 'component/common/card';
 import { Lbryio } from 'lbryinc';
 import { STRIPE_PUBLIC_KEY } from 'config';
 import moment from 'moment';
+import Plastic from 'react-plastic';
+import Button from 'component/button';
+import * as ICONS from 'constants/icons';
 
 let scriptLoading = false;
 // let scriptLoaded = false;
@@ -86,11 +89,20 @@ class SettingsStripeCard extends React.Component<Props, State> {
           if (userHasAlreadySetupPayment) {
             var card = customerStatusResponse.PaymentMethods[0].card;
 
+            var customer = customerStatusResponse.Customer;
+
+            var topOfDisplay = customer.email.split('@')[0];
+            var bottomOfDisplay = '@' + customer.email.split('@')[1];
+
+            console.log(customerStatusResponse.Customer);
+
             var cardDetails = {
               brand: card.brand,
               expiryYear: card.exp_year,
               expiryMonth: card.exp_month,
               lastFour: card.last4,
+              topOfDisplay: topOfDisplay,
+              bottomOfDisplay: bottomOfDisplay,
             };
 
             that.setState({
@@ -302,11 +314,18 @@ class SettingsStripeCard extends React.Component<Props, State> {
             ).then((customerStatusResponse) => {
               var card = customerStatusResponse.PaymentMethods[0].card;
 
+              var customer = customerStatusResponse.Customer;
+
+              var topOfDisplay = customer.email.split('@')[0];
+              var bottomOfDisplay = '@' + customer.email.split('@')[1];
+
               var cardDetails = {
                 brand: card.brand,
                 expiryYear: card.exp_year,
                 expiryMonth: card.exp_month,
                 lastFour: card.last4,
+                topOfDisplay,
+                bottomOfDisplay,
               };
 
               that.setState({
@@ -417,10 +436,14 @@ class SettingsStripeCard extends React.Component<Props, State> {
               title={__('Card Details')}
               body={
                 <>
-                  <h4 className="grey-text">
-                    Brand: {userCardDetails.brand.toUpperCase()} &nbsp; Last 4: {userCardDetails.lastFour} &nbsp;
-                    Expires: {userCardDetails.expiryMonth}/{userCardDetails.expiryYear} &nbsp;
-                  </h4>
+                  <Plastic
+                    type={userCardDetails.brand}
+                    name={userCardDetails.topOfDisplay + ' ' + userCardDetails.bottomOfDisplay}
+                    expiry={userCardDetails.expiryMonth + '/' + userCardDetails.expiryYear}
+                    number={'____________' + userCardDetails.lastFour}
+                  />
+                  <br></br>
+                  <Button button="secondary" label={__('Remove Card')} icon={ICONS.DELETE} />
                 </>
               }
             />
