@@ -1,3 +1,17 @@
+//plastic card image creator
+.jp-card-name {
+  bottom: -7px !important;
+}
+
+.jp-card-container {
+  margin: 0 !important;
+  margin-top: 8px !important;
+}
+
+.stripe__card-link-text {
+  color: rgb(253, 253, 253)
+}
+
 .date-header {
   width: 30%;
 }
@@ -15,7 +29,7 @@
   padding: 48px;
   align-content: center;
   justify-content: center;
-  height: 400px;
+  height: 319px;
   margin: 0 auto;
 }
 

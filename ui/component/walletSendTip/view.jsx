@@ -96,10 +96,7 @@ function WalletSendTip(props: Props) {
 
   const sourceClaimId = claim.claim_id;
 
-  // TODO: come up with a better way to do this,
-  // TODO: waiting 100ms to wait for token to populate
-
-  // check if creator has an account saved
+  // check if creator has a payment method saved
   React.useEffect(() => {
     if (channelClaimId && isAuthenticated) {
       Lbryio.call(
@@ -121,6 +118,12 @@ function WalletSendTip(props: Props) {
     }
   }, [channelClaimId, isAuthenticated]);
 
+  // check if creator has an account saved
+  React.useEffect(() => {
+    var tipInputElement = document.getElementById('tip-input');
+    if (tipInputElement) { tipInputElement.focus() }
+  }, []);
+
   React.useEffect(() => {
     if (channelClaimId) {
       Lbryio.call(
@@ -139,7 +142,7 @@ function WalletSendTip(props: Props) {
           }
         })
         .catch(function (error) {
-          console.log(error);
+          // console.log(error);
         });
     }
   }, [channelClaimId]);
@@ -170,13 +173,13 @@ function WalletSendTip(props: Props) {
     explainerText = __('This refundable boost will improve the discoverability of this %claimTypeText% while active.', {claimTypeText});
   } else if (activeTab === TAB_FIAT) {
     iconToUse = ICONS.FINANCE;
-    explainerText = __('Show this channel your appreciation by sending a donation of cash in USD.');
+    explainerText = __('Show this channel your appreciation by sending a donation in USD. ');
     // if (!hasCardSaved) {
     //   explainerText += __('You must add a card to use this functionality.');
     // }
   } else if (activeTab === TAB_LBC) {
     iconToUse = ICONS.LBC;
-    explainerText = __('Show this channel your appreciation by sending a donation of Credits.');
+    explainerText = __('Show this channel your appreciation by sending a donation of Credits. ');
   }
 
   const isSupport = claimIsMine || activeTab === TAB_BOOST;
@@ -187,22 +190,34 @@ function WalletSendTip(props: Props) {
     const validTipInput = regexp.test(String(tipAmount));
     let tipError;
 
-    if (!tipAmount) {
-      tipError = __('Amount must be a number');
-    } else if (tipAmount <= 0) {
+    if (tipAmount === 0) {
       tipError = __('Amount must be a positive number');
-    } else if (tipAmount < MINIMUM_PUBLISH_BID) {
-      tipError = __('Amount must be higher');
-    } else if (!validTipInput) {
-      tipError = __('Amount must have no more than 8 decimal places');
-    } else if (tipAmount === balance) {
-      tipError = __('Please decrease the amount to account for transaction fees');
-    } else if (tipAmount > balance) {
-      tipError = __('Not enough Credits');
+    } else if (!tipAmount || typeof tipAmount !== 'number') {
+      tipError = __('Amount must be a number');
+    }
+
+    // if it's not fiat, aka it's boost or lbc tip
+    else if (activeTab !== TAB_FIAT) {
+      if (!validTipInput) {
+        tipError = __('Amount must have no more than 8 decimal places');
+      } else if (tipAmount === balance) {
+        tipError = __('Please decrease the amount to account for transaction fees');
+      } else if (tipAmount > balance) {
+        tipError = __('Not enough Credits');
+      } else if (tipAmount < MINIMUM_PUBLISH_BID) {
+        tipError = __('Amount must be higher');
+      }
+    //  if tip fiat tab
+    } else {
+      if (tipAmount < 1) {
+        tipError = __('Amount must be at least one dollar');
+      } else if (tipAmount > 1000) {
+        tipError = __('Amount cannot be over 1000 dollars');
+      }
     }
 
     setTipError(tipError);
-  }, [tipAmount, balance, setTipError]);
+  }, [tipAmount, balance, setTipError, activeTab]);
 
   //
   function sendSupportOrConfirm(instantTipMaxAmount = null) {
@@ -267,11 +282,15 @@ function WalletSendTip(props: Props) {
                   tipChannelName,
                 }),
               });
-              console.log(customerTipResponse);
             })
-            .catch(function (error) {
-              console.log(error);
-              doToast({ message: error.message, isError: true });
+            .catch(function(error) {
+              var displayError = 'Sorry, there was an error in processing your payment!';
+
+              if (error.message !== 'payment intent failed to confirm') {
+                displayError = error.message;
+              }
+
+              doToast({ message: displayError, isError: true });
             });
 
           closeModal();
@@ -285,6 +304,7 @@ function WalletSendTip(props: Props) {
 
   function handleCustomPriceChange(event: SyntheticInputEvent<*>) {
     const tipAmount = parseFloat(event.target.value);
+
     setCustomTipAmount(tipAmount);
   }
 
@@ -368,6 +388,8 @@ function WalletSendTip(props: Props) {
                     label={__('Tip')}
                     button="alt"
                     onClick={() => {
+                      var tipInputElement = document.getElementById('tip-input');
+                      if (tipInputElement) { tipInputElement.focus() }
                       if (!isConfirming) {
                         setActiveTab(TAB_LBC);
                       }
@@ -382,6 +404,8 @@ function WalletSendTip(props: Props) {
                     label={__('Tip')}
                     button="alt"
                     onClick={() => {
+                      var tipInputElement = document.getElementById('tip-input');
+                      if (tipInputElement) { tipInputElement.focus() }
                       if (!isConfirming) {
                         setActiveTab(TAB_FIAT);
                       }
@@ -396,6 +420,8 @@ function WalletSendTip(props: Props) {
                     label={__('Boost')}
                     button="alt"
                     onClick={() => {
+                      var tipInputElement = document.getElementById('tip-input');
+                      if (tipInputElement) { tipInputElement.focus() }
                       if (!isConfirming) {
                         setActiveTab(TAB_BOOST);
                       }
@@ -483,6 +509,7 @@ function WalletSendTip(props: Props) {
                     icon={iconToUse}
                     label={__('Custom')}
                     onClick={() => setUseCustomTip(true)}
+                    // disabled if it's receive fiat and there is no card or creator can't receive tips
                     disabled={activeTab === TAB_FIAT && (!hasCardSaved || !canReceiveFiatTip)}
                   />
 

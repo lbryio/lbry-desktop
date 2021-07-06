@@ -307,6 +307,7 @@ function CommentList(props: Props) {
                     isPinned={comment.is_pinned}
                     supportAmount={comment.support_amount}
                     numDirectReplies={comment.replies}
+                    isFiat={comment.is_fiat}
                   />
                 );
               })}

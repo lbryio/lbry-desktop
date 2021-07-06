@@ -45,3 +45,4 @@ export const VIEW_IMAGE = 'view_image';
 export const CONFIRM_REMOVE_BTC_SWAP_ADDRESS = 'confirm_remove_btc_swap_address';
 export const COLLECTION_ADD = 'collection_add';
 export const COLLECTION_DELETE = 'collection_delete';
+export const CONFIRM_REMOVE_CARD = 'CONFIRM_REMOVE_CARD';

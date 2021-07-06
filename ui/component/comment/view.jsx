@@ -59,6 +59,7 @@ type Props = {
   stakedLevel: number,
   supportAmount: number,
   numDirectReplies: number,
+  isFiat: boolean
 };
 
 const LENGTH_TO_COLLAPSE = 300;
@@ -91,6 +92,7 @@ function Comment(props: Props) {
     stakedLevel,
     supportAmount,
     numDirectReplies,
+    isFiat,
   } = props;
 
   const {
@@ -240,7 +242,7 @@ function Comment(props: Props) {
                 label={<DateTime date={timePosted} timeAgo />}
               />
 
-              {supportAmount > 0 && <CreditAmount amount={supportAmount} superChatLight size={12} />}
+              {supportAmount > 0 && <CreditAmount isFiat={isFiat} amount={supportAmount} superChatLight size={12} />}
 
               {isPinned && (
                 <span className="comment__pin">
