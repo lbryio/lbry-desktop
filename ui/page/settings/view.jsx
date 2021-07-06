@@ -72,6 +72,7 @@ type Props = {
   enterSettings: () => void,
   exitSettings: () => void,
   myChannelUrls: ?Array<string>,
+  user: User,
 };
 
 type State = {
@@ -189,6 +190,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
       clearCache,
       openModal,
       myChannelUrls,
+      user,
     } = this.props;
     const { storedPassword } = this.state;
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
@@ -206,14 +208,32 @@ class SettingsPage extends React.PureComponent<Props, State> {
         className="card-stack"
       >
         {/* @if TARGET='web' */}
-        <Card
-          title={__('Add card to tip creators in USD')}
+        {user && user.fiat_enabled  && <Card
+          title={__('Bank Accounts')}
+          subtitle={__('Connect a bank account to receive tips and compensation in your local currency')}
           actions={
             <div className="section__actions">
               <Button
                 button="secondary"
-                label={__('Manage Card')}
-                icon={ICONS.WALLET}
+                label={__('Manage')}
+                icon={ICONS.SETTINGS}
+                navigate={`/$/${PAGES.SETTINGS_STRIPE_ACCOUNT}`}
+              />
+            </div>
+          }
+        />}
+        {/* @endif */}
+
+        {/* @if TARGET='web' */}
+        <Card
+          title={__('Payment Methods')}
+          subtitle={__('Add a credit card to tip creators in their local currency')}
+          actions={
+            <div className="section__actions">
+              <Button
+                button="secondary"
+                label={__('Manage')}
+                icon={ICONS.SETTINGS}
                 navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`}
               />
             </div>

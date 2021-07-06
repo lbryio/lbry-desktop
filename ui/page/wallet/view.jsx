@@ -34,9 +34,6 @@ const WalletPage = (props: Props) => {
           ) : (
             <div className="card-stack">
               <WalletBalance />
-              {/* @if TARGET='web' */}
-              <StripeAccountConnection />
-              {/* @endif */}
               <TxoList search={search} />
             </div>
           )}
