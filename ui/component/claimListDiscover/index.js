@@ -12,14 +12,6 @@ import { doToggleTagFollowDesktop } from 'redux/actions/tags';
 import { makeSelectClientSetting, selectShowMatureContent, selectLanguage } from 'redux/selectors/settings';
 import { selectModerationBlockList } from 'redux/selectors/comments';
 import ClaimListDiscover from './view';
-import { createSelector } from 'reselect';
-
-const selectState = state => state.claims || {};
-
-export const selectClaimsById = createSelector(
-  selectState,
-  state => state.byId || {}
-);
 
 const select = (state) => ({
   followedTags: selectFollowedTags(state),
