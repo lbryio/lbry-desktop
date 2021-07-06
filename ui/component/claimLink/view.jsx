@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import EmbedPlayButton from 'component/embedPlayButton';
 import Button from 'component/button';
 import UriIndicator from 'component/uriIndicator';
-import { INLINE_PLAYER_WRAPPER_CLASS } from 'constants/classnames';
+import { INLINE_PLAYER_WRAPPER_CLASS } from 'component/fileRenderFloating/view';
 import { SIMPLE_SITE } from 'config';
 
 type Props = {
