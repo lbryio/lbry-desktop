@@ -70,7 +70,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
 
     // setting a timeout to let the client secret populate
     // TODO: fix this, should be a cleaner way
-    setTimeout(function () {
+    setTimeout(function() {
       // check if customer has card setup already
       Lbryio.call(
         'customer',
@@ -152,7 +152,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
           });
           // if the status call fails, either an actual error or need to run setup first
         })
-        .catch(function (error) {
+        .catch(function(error) {
           console.log(error);
 
           // errorString passed from the API (with a 403 error)
@@ -189,8 +189,8 @@ class SettingsStripeCard extends React.Component<Props, State> {
 
     function setupStripe() {
       // TODO: have to fix this, using so that the script is available
-      setTimeout(function () {
-        var stripeElements = function (publicKey, setupIntent) {
+      setTimeout(function() {
+        var stripeElements = function(publicKey, setupIntent) {
           var stripe = Stripe(publicKey);
           var elements = stripe.elements();
 
@@ -212,17 +212,17 @@ class SettingsStripeCard extends React.Component<Props, State> {
           card.mount('#card-element');
 
           // Element focus ring
-          card.on('focus', function () {
+          card.on('focus', function() {
             var el = document.getElementById('card-element');
             el.classList.add('focused');
           });
 
-          card.on('blur', function () {
+          card.on('blur', function() {
             var el = document.getElementById('card-element');
             el.classList.remove('focused');
           });
 
-          card.on('ready', function () {
+          card.on('ready', function() {
             card.focus();
           });
 
@@ -249,7 +249,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
                   billing_details: { email: email },
                 },
               })
-              .then(function (result) {
+              .then(function(result) {
                 if (result.error) {
                   console.log(result);
 
@@ -266,7 +266,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
 
           // Handle payment submission when user clicks the pay button.
           var button = document.getElementById('submit');
-          button.addEventListener('click', function (event) {
+          button.addEventListener('click', function(event) {
             submitForm(event);
           });
 
@@ -283,7 +283,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
         stripeElements(publicKey, clientSecret);
 
         // Show a spinner on payment submission
-        var changeLoadingState = function (isLoading) {
+        var changeLoadingState = function(isLoading) {
           if (isLoading) {
             // $FlowFixMe
             document.querySelector('button').disabled = true;
@@ -302,8 +302,8 @@ class SettingsStripeCard extends React.Component<Props, State> {
         };
 
         // shows a success / error message when the payment is complete
-        var orderComplete = function (stripe, clientSecret) {
-          stripe.retrieveSetupIntent(clientSecret).then(function (result) {
+        var orderComplete = function(stripe, clientSecret) {
+          stripe.retrieveSetupIntent(clientSecret).then(function(result) {
             Lbryio.call(
               'customer',
               'status',
@@ -412,7 +412,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
           </div>
         )}
 
-        {/*customer has not added a card yet*/}
+        {/* customer has not added a card yet */}
         {currentFlowStage === 'confirmingCard' && (
           <div className="sr-root">
             <div className="sr-main">
@@ -431,7 +431,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
           </div>
         )}
 
-        {/*if the user has already confirmed their card*/}
+        {/* if the user has already confirmed their card */}
         {currentFlowStage === 'cardConfirmed' && (
           <div className="successCard">
             <Card
@@ -444,14 +444,14 @@ class SettingsStripeCard extends React.Component<Props, State> {
                     expiry={userCardDetails.expiryMonth + '/' + userCardDetails.expiryYear}
                     number={'____________' + userCardDetails.lastFour}
                   />
-                  <br></br>
+                  <br />
                   <Button button="secondary" label={__('Remove Card')} icon={ICONS.DELETE} />
                 </>
               }
             />
             <br />
 
-            {/*if a user has no transactions yet */}
+            {/* if a user has no transactions yet */}
             {(!customerTransactions || customerTransactions.length === 0) && (
               <Card
                 title={__('Tip History')}
@@ -462,7 +462,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
           </div>
         )}
 
-        {/*customer already has transactions*/}
+        {/* customer already has transactions */}
         {customerTransactions && customerTransactions.length > 0 && (
           <Card
             title={__('Tip History')}
@@ -483,7 +483,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
                     customerTransactions.reverse().map((transaction) => (
                       <tr key={transaction.name + transaction.created_at}>
                         <td>{moment(transaction.created_at).format('LLL')}</td>
-                        <td>{transaction.channel_name}</td>
+                        <td><a href="/">{transaction.channel_name}</a></td>
                         <td>${transaction.tipped_amount / 100}</td>
                         <td>{transaction.private_tip ? 'Yes' : 'No'}</td>
                       </tr>
