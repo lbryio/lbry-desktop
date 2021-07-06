@@ -483,7 +483,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
                     customerTransactions.reverse().map((transaction) => (
                       <tr key={transaction.name + transaction.created_at}>
                         <td>{moment(transaction.created_at).format('LLL')}</td>
-                        <td>{transaction.channel_name}</td>
+                        <td><a href="/">{transaction.channel_name}</a></td>
                         <td>${transaction.tipped_amount / 100}</td>
                         <td>{transaction.private_tip ? 'Yes' : 'No'}</td>
                       </tr>
