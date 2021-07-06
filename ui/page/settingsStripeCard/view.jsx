@@ -111,22 +111,6 @@ class SettingsStripeCard extends React.Component<Props, State> {
               userCardDetails: cardDetails,
             });
 
-            // get customer transactions
-            Lbryio.call(
-              'customer',
-              'list',
-              {
-                environment: stripeEnvironment,
-              },
-              'post'
-            ).then((customerTransactionsResponse) => {
-              that.setState({
-                customerTransactions: customerTransactionsResponse,
-              });
-
-              console.log(customerTransactionsResponse);
-            });
-
             // otherwise, prompt them to save a card
           } else {
             that.setState({
@@ -150,6 +134,22 @@ class SettingsStripeCard extends React.Component<Props, State> {
               setupStripe();
             });
           }
+
+          // get customer transactions
+          Lbryio.call(
+            'customer',
+            'list',
+            {
+              environment: stripeEnvironment,
+            },
+            'post'
+          ).then((customerTransactionsResponse) => {
+            that.setState({
+              customerTransactions: customerTransactionsResponse,
+            });
+
+            console.log(customerTransactionsResponse);
+          });
           // if the status call fails, either an actual error or need to run setup first
         })
         .catch(function (error) {
@@ -412,6 +412,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
           </div>
         )}
 
+        {/*customer has not added a card yet*/}
         {currentFlowStage === 'confirmingCard' && (
           <div className="sr-root">
             <div className="sr-main">
@@ -430,6 +431,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
           </div>
         )}
 
+        {/*if the user has already confirmed their card*/}
         {currentFlowStage === 'cardConfirmed' && (
           <div className="successCard">
             <Card
@@ -449,6 +451,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
             />
             <br />
 
+            {/*if a user has no transactions yet */}
             {(!customerTransactions || customerTransactions.length === 0) && (
               <Card
                 title={__('Tip History')}
@@ -456,40 +459,43 @@ class SettingsStripeCard extends React.Component<Props, State> {
               />
             )}
 
-            {customerTransactions && customerTransactions.length > 0 && (
-              <Card
-                title={__('Tip History')}
-                body={
-                  <>
-                    <div className="table__wrapper">
-                      <table className="table table--transactions">
-                        <thead>
-                          <tr>
-                            <th className="date-header">{__('Date')}</th>
-                            <th>{<>{__('Receiving Channel Name')}</>}</th>
-                            <th>{__('Amount (USD)')} </th>
-                            <th>{__('Anonymous')}</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {customerTransactions &&
-                            customerTransactions.map((transaction) => (
-                              <tr key={transaction.name + transaction.created_at}>
-                                <td>{moment(transaction.created_at).format('LLL')}</td>
-                                <td>{transaction.channel_name}</td>
-                                <td>${transaction.tipped_amount / 100}</td>
-                                <td>{transaction.private_tip ? 'Yes' : 'No'}</td>
-                              </tr>
-                            ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </>
-                }
-              />
-            )}
           </div>
         )}
+
+        {/*customer already has transactions*/}
+        {customerTransactions && customerTransactions.length > 0 && (
+          <Card
+            title={__('Tip History')}
+            body={
+              <>
+                <div className="table__wrapper">
+                  <table className="table table--transactions">
+                    <thead>
+                    <tr>
+                      <th className="date-header">{__('Date')}</th>
+                      <th>{<>{__('Receiving Channel Name')}</>}</th>
+                      <th>{__('Amount (USD)')} </th>
+                      <th>{__('Anonymous')}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {customerTransactions &&
+                    customerTransactions.reverse().map((transaction) => (
+                      <tr key={transaction.name + transaction.created_at}>
+                        <td>{moment(transaction.created_at).format('LLL')}</td>
+                        <td>{transaction.channel_name}</td>
+                        <td>${transaction.tipped_amount / 100}</td>
+                        <td>{transaction.private_tip ? 'Yes' : 'No'}</td>
+                      </tr>
+                    ))}
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            }
+          />
+        )}
+
       </Page>
     );
   }
