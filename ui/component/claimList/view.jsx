@@ -45,7 +45,7 @@ type Props = {
   livestreamMap?: { [string]: any },
   searchOptions?: any,
   collectionId?: string,
-  hideLivestreamClaims?: boolean,
+  showNoSourceClaims?: boolean,
 };
 
 export default function ClaimList(props: Props) {
@@ -77,7 +77,7 @@ export default function ClaimList(props: Props) {
     livestreamMap,
     searchOptions,
     collectionId,
-    hideLivestreamClaims,
+    showNoSourceClaims,
   } = props;
 
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
@@ -137,7 +137,7 @@ export default function ClaimList(props: Props) {
             properties={renderProperties}
             live={resolveLive(index)}
             collectionId={collectionId}
-            hideLivestreamClaims={hideLivestreamClaims}
+            showNoSourceClaims={showNoSourceClaims}
           />
         ))}
       {!timedOut && urisLength === 0 && !loading && <div className="empty main--empty">{empty || noResultMsg}</div>}
@@ -198,7 +198,7 @@ export default function ClaimList(props: Props) {
                 showUserBlocked={showHiddenByUser}
                 showHiddenByUser={showHiddenByUser}
                 collectionId={collectionId}
-                hideLivestreamClaims={hideLivestreamClaims}
+                showNoSourceClaims={showNoSourceClaims}
                 customShouldHide={(claim: StreamClaim) => {
                   // Hack to hide spee.ch thumbnail publishes
                   // If it meets these requirements, it was probably uploaded here:
