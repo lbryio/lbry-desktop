@@ -8,7 +8,7 @@ import {
   makeSelectSuperChatsForUri,
   makeSelectSuperChatTotalAmountForUri,
 } from 'redux/selectors/comments';
-import LivestreamFeed from './view';
+import LivestreamComments from './view';
 
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
@@ -24,4 +24,4 @@ export default connect(select, {
   doCommentSocketDisconnect,
   doCommentList,
   doSuperChatList,
-})(LivestreamFeed);
+})(LivestreamComments);

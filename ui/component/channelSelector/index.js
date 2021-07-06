@@ -2,9 +2,9 @@ import { connect } from 'react-redux';
 import { selectMyChannelClaims } from 'lbry-redux';
 import { selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
 import { doSetActiveChannel, doSetIncognito } from 'redux/actions/app';
-import SelectChannel from './view';
+import ChannelSelector from './view';
 
-const select = state => ({
+const select = (state) => ({
   channels: selectMyChannelClaims(state),
   activeChannelClaim: selectActiveChannelClaim(state),
   incognito: selectIncognito(state),
@@ -13,4 +13,4 @@ const select = state => ({
 export default connect(select, {
   doSetActiveChannel,
   doSetIncognito,
-})(SelectChannel);
+})(ChannelSelector);

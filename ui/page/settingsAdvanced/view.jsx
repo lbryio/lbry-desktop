@@ -38,7 +38,7 @@ type DaemonSettings = {
 
 type Props = {
   setDaemonSetting: (string, ?SetDaemonSettingArg) => void,
-  clearDaemonSetting: string => void,
+  clearDaemonSetting: (string) => void,
   setClientSetting: (string, SetDaemonSettingArg) => void,
   daemonSettings: DaemonSettings,
   isAuthenticated: boolean,
@@ -64,7 +64,7 @@ type State = {
   storedPassword: boolean,
 };
 
-class SettingsPage extends React.PureComponent<Props, State> {
+class SettingsAdvancedPage extends React.PureComponent<Props, State> {
   constructor(props: Props) {
     super(props);
 
@@ -98,7 +98,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
 
     if (isAuthenticated || !IS_WEB) {
       this.props.updateWalletStatus();
-      getPasswordFromCookie().then(p => {
+      getPasswordFromCookie().then((p) => {
         if (typeof p === 'string') {
           this.setState({ storedPassword: true });
         }
@@ -493,7 +493,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                         onChange={this.onMaxConnectionsChange}
                         value={daemonSettings.max_connections_per_download}
                       >
-                        {connectionOptions.map(connectionOption => (
+                        {connectionOptions.map((connectionOption) => (
                           <option key={connectionOption} value={connectionOption}>
                             {connectionOption}
                           </option>
@@ -521,4 +521,4 @@ class SettingsPage extends React.PureComponent<Props, State> {
   }
 }
 
-export default SettingsPage;
+export default SettingsAdvancedPage;

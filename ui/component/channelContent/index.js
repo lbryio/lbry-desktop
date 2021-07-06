@@ -14,7 +14,7 @@ import { withRouter } from 'react-router';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { makeSelectClientSetting, selectShowMatureContent } from 'redux/selectors/settings';
 
-import ChannelPage from './view';
+import ChannelContent from './view';
 
 const select = (state, props) => {
   const { search } = props.location;
@@ -37,4 +37,4 @@ const perform = (dispatch) => ({
   doResolveUris: (uris, returnCachedUris) => dispatch(doResolveUris(uris, returnCachedUris)),
 });
 
-export default withRouter(connect(select, perform)(ChannelPage));
+export default withRouter(connect(select, perform)(ChannelContent));

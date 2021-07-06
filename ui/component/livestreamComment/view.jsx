@@ -22,7 +22,7 @@ type Props = {
   supportAmount: number,
 };
 
-function Comment(props: Props) {
+function LivestreamComment(props: Props) {
   const { claim, uri, authorUri, message, commentIsMine, commentId, stakedLevel, supportAmount } = props;
   const [mouseIsHovering, setMouseHover] = React.useState(false);
   const commentByOwnerOfContent = claim && claim.signing_channel && claim.signing_channel.permanent_url === authorUri;
@@ -85,4 +85,4 @@ function Comment(props: Props) {
   );
 }
 
-export default Comment;
+export default LivestreamComment;

@@ -19,7 +19,7 @@ import {
 } from 'lbry-redux';
 import { doOpenModal } from 'redux/actions/app';
 
-import CollectionPage from './view';
+import CollectionForm from './view';
 import { selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
 
 const select = (state, props) => ({
@@ -50,4 +50,4 @@ const perform = (dispatch) => ({
   clearCollectionErrors: () => dispatch({ type: LBRY_REDUX_ACTIONS.CLEAR_COLLECTION_ERRORS }),
 });
 
-export default connect(select, perform)(CollectionPage);
+export default connect(select, perform)(CollectionForm);
