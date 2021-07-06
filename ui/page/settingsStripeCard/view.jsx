@@ -35,7 +35,7 @@ if (STRIPE_PUBLIC_KEY.indexOf('pk_live') > -1) {
 //   scriptFailedToLoad: boolean,
 // };
 
-class CardVerify extends React.Component<Props, State> {
+class SettingsStripeCard extends React.Component<Props, State> {
   constructor(props) {
     // :Props
     super(props);
@@ -472,6 +472,6 @@ class CardVerify extends React.Component<Props, State> {
   }
 }
 
-export default CardVerify;
+export default SettingsStripeCard;
 /* eslint-enable no-undef */
 /* eslint-enable react/prop-types */

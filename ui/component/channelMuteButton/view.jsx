@@ -10,7 +10,7 @@ type Props = {
   doChannelUnmute: (string, boolean) => void,
 };
 
-function ChannelBlockButton(props: Props) {
+function ChannelMuteButton(props: Props) {
   const { uri, doChannelMute, doChannelUnmute, isMuted } = props;
 
   function handleClick() {
@@ -22,12 +22,8 @@ function ChannelBlockButton(props: Props) {
   }
 
   return (
-    <Button
-      button={isMuted ? 'alt' : 'secondary'}
-      label={isMuted ? __('Unmute') : __('Mute')}
-      onClick={handleClick}
-    />
+    <Button button={isMuted ? 'alt' : 'secondary'} label={isMuted ? __('Unmute') : __('Mute')} onClick={handleClick} />
   );
 }
 
-export default ChannelBlockButton;
+export default ChannelMuteButton;

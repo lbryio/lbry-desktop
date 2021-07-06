@@ -17,7 +17,7 @@ import {
 } from 'lbry-redux';
 import { doOpenModal } from 'redux/actions/app';
 import { doUpdateBlockListForPublishedChannel } from 'redux/actions/comments';
-import ChannelPage from './view';
+import ChannelForm from './view';
 
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
@@ -52,4 +52,4 @@ const perform = (dispatch) => ({
   clearChannelErrors: () => dispatch(doClearChannelErrors()),
 });
 
-export default connect(select, perform)(ChannelPage);
+export default connect(select, perform)(ChannelForm);

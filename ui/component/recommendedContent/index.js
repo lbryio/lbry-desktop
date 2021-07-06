@@ -4,7 +4,7 @@ import { doFetchRecommendedContent } from 'redux/actions/search';
 import { makeSelectRecommendedContentForUri, selectIsSearching } from 'redux/selectors/search';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { makeSelectNextUnplayedRecommended } from 'redux/selectors/content';
-import RecommendedVideos from './view';
+import RecommendedContent from './view';
 
 const select = (state, props) => ({
   mature: makeSelectClaimIsNsfw(props.uri)(state),
@@ -19,4 +19,4 @@ const perform = (dispatch) => ({
   doFetchRecommendedContent: (uri, mature) => dispatch(doFetchRecommendedContent(uri, mature)),
 });
 
-export default connect(select, perform)(RecommendedVideos);
+export default connect(select, perform)(RecommendedContent);
