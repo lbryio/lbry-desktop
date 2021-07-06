@@ -6,6 +6,7 @@ import {
   makeSelectNotificationsDisabled,
 } from 'redux/selectors/subscriptions';
 import { makeSelectPermanentUrlForUri } from 'lbry-redux';
+import { selectUser } from 'redux/selectors/user';
 import { doToast } from 'redux/actions/notifications';
 import SubscribeButton from './view';
 
@@ -14,6 +15,7 @@ const select = (state, props) => ({
   firstRunCompleted: selectFirstRunCompleted(state),
   permanentUrl: makeSelectPermanentUrlForUri(props.uri)(state),
   notificationsDisabled: makeSelectNotificationsDisabled(props.uri)(state),
+  user: selectUser(state),
 });
 
 export default connect(select, {
