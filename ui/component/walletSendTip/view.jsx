@@ -152,16 +152,16 @@ function WalletSendTip(props: Props) {
   let iconToUse, explainerText;
   if (activeTab === TAB_BOOST) {
     iconToUse = ICONS.LBC;
-    explainerText = __('This refundable boost will improve the discoverability of this content while active.');
+    explainerText = __('This refundable boost will improve the discoverability of this content while active. ');
   } else if (activeTab === TAB_FIAT) {
     iconToUse = ICONS.FINANCE;
-    explainerText = __('Show this channel your appreciation by sending a donation of cash in USD.');
+    explainerText = __('Show this channel your appreciation by sending a donation of cash in USD. ');
     // if (!hasCardSaved) {
     //   explainerText += __('You must add a card to use this functionality.');
     // }
   } else if (activeTab === TAB_LBC) {
     iconToUse = ICONS.LBC;
-    explainerText = __('Show this channel your appreciation by sending a donation of Credits.');
+    explainerText = __('Show this channel your appreciation by sending a donation of Credits. ');
   }
 
   const isSupport = claimIsMine || activeTab === TAB_BOOST;
@@ -436,7 +436,7 @@ function WalletSendTip(props: Props) {
                 {activeTab === TAB_FIAT && !hasCardSaved && (
                   <h3 className="add-card-prompt">
                     <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card')} button="link" /> To
-                    {__('Tip Creators')}
+                    {__(' Tip Creators')}
                   </h3>
                 )}
 
