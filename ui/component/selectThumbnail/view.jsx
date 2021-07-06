@@ -123,7 +123,7 @@ class SelectThumbnail extends React.PureComponent<Props> {
               <FileSelector
                 currentPath={thumbnailPath}
                 label={__('Thumbnail')}
-                placeholder={__('Thumbnails that entice a viewer to watch a video work best')}
+                placeholder={__('Choose an enticing thumbnail')}
                 accept={accept}
                 onFileChosen={(file) => openModal(MODALS.CONFIRM_THUMBNAIL_UPLOAD, { file })}
               />
