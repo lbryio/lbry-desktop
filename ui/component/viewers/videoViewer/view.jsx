@@ -198,7 +198,7 @@ function VideoViewer(props: Props) {
     handlePosition(player);
   }
 
-  function onDispose(player) {
+  function onDispose(event, player) {
     handlePosition(player);
   }
 
@@ -258,7 +258,7 @@ function VideoViewer(props: Props) {
     player.on('ended', onEnded);
     player.on('play', onPlay);
     player.on('pause', onPause);
-    player.on('dispose', onDispose);
+    player.on('dispose', (event) => onDispose(event, player));
     player.on('error', () => {
       const error = player.error();
       if (error) {

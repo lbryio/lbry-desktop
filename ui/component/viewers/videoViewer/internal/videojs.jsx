@@ -296,10 +296,14 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       const controlBar = player.getChild('controlBar');
       switch (e.type) {
         case 'play':
-          controlBar.getChild('PlayToggle').controlText(__('Pause (space)'));
+          controlBar
+            .getChild('PlayToggle')
+            .controlText(__('Pause (space)'));
           break;
         case 'pause':
-          controlBar.getChild('PlayToggle').controlText(__('Play (space)'));
+          controlBar
+            .getChild('PlayToggle')
+            .controlText(__('Play (space)'));
           break;
         case 'volumechange':
           controlBar
@@ -314,8 +318,12 @@ export default React.memo<Props>(function VideoJs(props: Props) {
           break;
         case 'loadstart':
           // --- Do everything ---
-          controlBar.getChild('PlaybackRateMenuButton').controlText(__('Playback Rate (<, >)'));
-          controlBar.getChild('QualityButton').controlText(__('Quality'));
+          controlBar
+            .getChild('PlaybackRateMenuButton')
+            .controlText(__('Playback Rate (<, >)'));
+          controlBar
+            .getChild('QualityButton')
+            .controlText(__('Quality'));
           resolveCtrlText({ type: 'play' });
           resolveCtrlText({ type: 'pause' });
           resolveCtrlText({ type: 'volumechange' });
@@ -325,8 +333,10 @@ export default React.memo<Props>(function VideoJs(props: Props) {
           // clashes if we add a new button in the future.
           // (2) We'll have to get 'makeSelectClientSetting(SETTINGS.VIDEO_THEATER_MODE)'
           // as a prop here so we can say "Theater mode|Default mode" instead of
-          // "Toggle Theather mode".
-          controlBar.getChild('Button').controlText(__('Toggle Theater mode (t)'));
+          // "Toggle Theater mode".
+          controlBar
+            .getChild('Button')
+            .controlText(__('Toggle Theater mode (t)'));
           break;
         default:
           if (isDev) throw Error('Unexpected: ' + e.type);
@@ -509,7 +519,11 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         // override type if we receive an .m3u8 (transcoded mp4)
         // do we need to check if explicitly redirected
         // or is checking extension only a safer method
-        if (response && response.redirected && response.url && response.url.endsWith('m3u8')) {
+        if (response &&
+          response.redirected &&
+          response.url &&
+          response.url.endsWith('m3u8')
+        ) {
           finalType = 'application/x-mpegURL';
           finalSource = response.url;
         }
@@ -562,9 +576,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       // initialize mobile UI
       player.mobileUi(); // Inits mobile version. No-op if Desktop.
 
-      // I think this is a callback function
-      onPlayerReady(player);
-
       // Add quality selector to player
       player.hlsQualitySelector({
         displayCurrentQuality: true,
@@ -577,17 +588,22 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         userId: userId,
       });
 
-      // player.aniview();
-
-      player.ima({
-        // id: 'ad_content_video',
-        vpaidMode: google.ima.ImaSdkSettings.VpaidMode.INSECURE,
-        adTagUrl: macroUrl,
-      });
-
       // set playsinline for mobile
       // TODO: make this better
       player.children_[0].setAttribute('playsinline', '');
+
+      // I think this is a callback function
+      onPlayerReady(player);
+    });
+
+    // pre-roll ads
+    // This must be initialized earlier than everything else
+    // otherwise a race condition occurs if we place this in the onReady call back
+    // player.aniview();
+    vjs.ima({
+      // $FlowFixMe
+      vpaidMode: google.ima.ImaSdkSettings.VpaidMode.INSECURE,
+      adTagUrl: macroUrl,
     });
 
     // fixes #3498 (https://github.com/lbryio/lbry-desktop/issues/3498)
@@ -674,7 +690,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       // $FlowFixMe
       document.body.removeChild(script);
     };
-  }, [source, reload]);
+  });
 
   return (
     // $FlowFixMe
