@@ -265,18 +265,16 @@ export default function SettingsCreatorPage(props: Props) {
                   checked={commentsEnabled}
                   onChange={() => setSettings({ comments_enabled: !commentsEnabled })}
                 />
-                {FEATURE_IS_READY && (
-                  <FormField
-                    name="slow_mode_min_gap"
-                    label={__('Minimum time gap in seconds for Slow Mode in livestream chat.')}
-                    min={0}
-                    step={1}
-                    type="number"
-                    placeholder="1"
-                    value={slowModeMinGap}
-                    onChange={(e) => setSettings({ slow_mode_min_gap: e.target.value })}
-                  />
-                )}
+                <FormField
+                  name="slow_mode_min_gap"
+                  label={__('Minimum time gap in seconds between comments (affects livestream chat as well).')}
+                  min={0}
+                  step={1}
+                  type="number"
+                  placeholder="1"
+                  value={slowModeMinGap}
+                  onChange={(e) => setSettings({ slow_mode_min_gap: parseInt(e.target.value) })}
+                />
               </>
             }
           />
