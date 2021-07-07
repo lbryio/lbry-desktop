@@ -1,6 +1,7 @@
 // @flow
 import { remote } from 'electron';
 import React from 'react';
+import { lazyImport } from 'util/lazyImport';
 import classnames from 'classnames';
 import * as RENDER_MODES from 'constants/file_render_modes';
 import VideoViewer from 'component/viewers/videoViewer';
@@ -17,10 +18,10 @@ import ComicBookViewer from 'component/viewers/comicBookViewer';
 import ThreeViewer from 'component/viewers/threeViewer';
 // @endif
 
-const AppViewer = React.lazy(() => import('component/viewers/appViewer' /* webpackChunkName: "appViewer" */));
-const HtmlViewer = React.lazy(() => import('component/viewers/htmlViewer' /* webpackChunkName: "htmlViewer" */));
-const ImageViewer = React.lazy(() => import('component/viewers/imageViewer' /* webpackChunkName: "imageViewer" */));
-const PdfViewer = React.lazy(() => import('component/viewers/pdfViewer' /* webpackChunkName: "pdfViewer" */));
+const AppViewer = lazyImport(() => import('component/viewers/appViewer' /* webpackChunkName: "appViewer" */));
+const HtmlViewer = lazyImport(() => import('component/viewers/htmlViewer' /* webpackChunkName: "htmlViewer" */));
+const ImageViewer = lazyImport(() => import('component/viewers/imageViewer' /* webpackChunkName: "imageViewer" */));
+const PdfViewer = lazyImport(() => import('component/viewers/pdfViewer' /* webpackChunkName: "pdfViewer" */));
 
 type Props = {
   uri: string,

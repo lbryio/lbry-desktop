@@ -2,6 +2,7 @@
 import type { Node } from 'react';
 import React, { useEffect, forwardRef } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
+import { lazyImport } from 'util/lazyImport';
 import classnames from 'classnames';
 import { parseURI, COLLECTIONS_CONSTS } from 'lbry-redux';
 import { formatLbryUrlForWeb } from 'util/url';
@@ -27,9 +28,7 @@ import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import Button from 'component/button';
 import * as ICONS from 'constants/icons';
 
-const AbandonedChannelPreview = React.lazy(() =>
-  import('component/abandonedChannelPreview' /* webpackChunkName: "abandonedChannelPreview" */)
-);
+const AbandonedChannelPreview = lazyImport(() => import('component/abandonedChannelPreview' /* webpackChunkName: "abandonedChannelPreview" */));
 
 type Props = {
   uri: string,
