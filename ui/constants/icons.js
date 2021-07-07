@@ -162,3 +162,4 @@ export const STACK = 'stack';
 export const TIME = 'time';
 export const GLOBE = 'globe';
 export const RSS = 'rss';
+export const STAR = 'star';
