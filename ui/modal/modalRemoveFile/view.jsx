@@ -32,7 +32,7 @@ function ModalRemoveFile(props: Props) {
         title={__('Remove File')}
         subtitle={
           <I18nMessage tokens={{ title: <cite>{`"${title}"`}</cite> }}>
-            Are you sure you'd like to remove %title% from LBRY?
+            Are you sure you'd like to remove %title%?
           </I18nMessage>
         }
         body={
@@ -55,7 +55,7 @@ function ModalRemoveFile(props: Props) {
                     <I18nMessage
                       tokens={{ lbc: <LbcSymbol prefix={__('reclaim %amount%', { amount: claim.amount })} /> }}
                     >
-                      Abandon on blockchain (%lbc%)
+                      Remove from blockchain (%lbc%)
                     </I18nMessage>
                   }
                   type="checkbox"
@@ -63,7 +63,7 @@ function ModalRemoveFile(props: Props) {
                   onChange={() => setAbandonChecked(!abandonChecked)}
                 />
                 {abandonChecked === true && (
-                  <p className="help error__text">{__('This action is permanent and cannot be undone.')}</p>
+                  <p className="help error__text">{__('This action is permanent and cannot be undone')}</p>
                 )}
 
                 {/* @if TARGET='app' */}
@@ -86,7 +86,7 @@ function ModalRemoveFile(props: Props) {
               <Button
                 button="primary"
                 label={isAbandoning ? __('Removing...') : __('OK')}
-                disabled={isAbandoning}
+                disabled={isAbandoning || !(deleteChecked || abandonChecked)}
                 onClick={() => deleteFile(uri, deleteChecked, claimIsMine ? abandonChecked : false)}
               />
               <Button button="link" label={__('Cancel')} onClick={closeModal} />

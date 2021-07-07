@@ -50,8 +50,8 @@ export default function ModalRevokeClaim(props: Props) {
           <p>{__('Are you sure you want to remove this boost?')}</p>
           <p>
             <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>
-              These Credits are permanently yours and this boost can be removed at any time. Removing this boost will reduce 
-              discoverability and return %lbc% to your spendable balance.
+              These Credits are permanently yours and this boost can be removed at any time. Removing this boost will
+              reduce discoverability and return %lbc% to your spendable balance.
             </I18nMessage>
           </p>
         </React.Fragment>
@@ -71,12 +71,10 @@ export default function ModalRevokeClaim(props: Props) {
       return (
         <React.Fragment>
           <p>
-            {__(
-              "This will permanently remove your channel. Content published under this channel will be orphaned."
-            )}
+            {__('This will permanently remove your channel. Content published under this channel will be orphaned.')}
           </p>
           <p>{__('Are you sure? Type %name% to confirm that you wish to remove the channel.', { name })}</p>
-          <FormField type={'text'} onChange={e => setChannelName(e.target.value)} />
+          <FormField type={'text'} onChange={(e) => setChannelName(e.target.value)} />
         </React.Fragment>
       );
     }
