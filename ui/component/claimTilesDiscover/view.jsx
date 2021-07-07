@@ -37,7 +37,7 @@ export function prioritizeActiveLivestreams(
     //    for that channel actually point to the same source).
     // 2. 'liveChannelIds' needs to be pruned after being accounted for,
     //    otherwise all livestream-claims will be "live" (we'll only take the
-    //    latest one as "live").
+    //    latest one as "live" ).
     return (
       claim &&
       claim.value_type === 'stream' &&
@@ -145,7 +145,7 @@ function ClaimTilesDiscover(props: Props) {
     mutedUris,
     liveLivestreamsFirst,
     livestreamMap,
-    // pin,
+    // pin, // let's pin from /web folder
     prefixUris,
   } = props;
 
@@ -240,7 +240,7 @@ function ClaimTilesDiscover(props: Props) {
 
   const isLoading = fetchingClaimSearchByQuery[mainSearchKey];
 
-  if (liveLivestreamsFirst && livestreamMap) {
+  if (liveLivestreamsFirst && livestreamMap && !isLoading) {
     prioritizeActiveLivestreams(uris, liveUris, livestreamMap, claimsByUri, claimSearchByQuery, options);
   }
 

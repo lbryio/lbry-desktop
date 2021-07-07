@@ -6,8 +6,8 @@ import {
   makeSelectNotificationsDisabled,
 } from 'redux/selectors/subscriptions';
 import { makeSelectPermanentUrlForUri } from 'lbry-redux';
-import { doToast } from 'redux/actions/notifications';
 import { selectUser } from 'redux/selectors/user';
+import { doToast } from 'redux/actions/notifications';
 import SubscribeButton from './view';
 
 const select = (state, props) => ({
