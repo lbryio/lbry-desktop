@@ -2,45 +2,73 @@
 import React from 'react';
 import debounce from 'util/debounce';
 
-const DEBOUNCE_SCROLL_HANDLER_MS = 25;
+const DEBOUNCE_SCROLL_HANDLER_MS = 50;
 
 type Props = {
   children: any,
   skipWait?: boolean,
   placeholder?: any,
+  yOffset?: number,
 };
 
 export default function WaitUntilOnPage(props: Props) {
+  const { yOffset } = props;
   const ref = React.useRef();
   const [shouldRender, setShouldRender] = React.useState(false);
 
-  React.useEffect(() => {
-    const handleDisplayingRef = debounce((e) => {
+  const shouldElementRender = React.useCallback(
+    (ref) => {
       const element = ref && ref.current;
       if (element) {
         const bounding = element.getBoundingClientRect();
-        if (
+        // $FlowFixMe
+        const windowH = window.innerHeight || document.documentElement.clientHeight;
+        // $FlowFixMe
+        const windowW = window.innerWidth || document.documentElement.clientWidth;
+
+        const isApproachingViewport = yOffset && bounding.top < windowH + yOffset;
+        const isInViewport = // also covers "element is larger than viewport".
+          bounding.width > 0 &&
+          bounding.height > 0 &&
           bounding.bottom >= 0 &&
           bounding.right >= 0 &&
-          // $FlowFixMe
-          bounding.top <= (window.innerHeight || document.documentElement.clientHeight) &&
-          // $FlowFixMe
-          bounding.left <= (window.innerWidth || document.documentElement.clientWidth)
-        ) {
-          setShouldRender(true);
-        }
+          bounding.top <= windowH &&
+          bounding.left <= windowW;
+
+        return isInViewport || isApproachingViewport;
       }
 
-      if (element && !shouldRender) {
-        window.addEventListener('scroll', handleDisplayingRef);
-        return () => window.removeEventListener('scroll', handleDisplayingRef);
+      return false;
+    },
+    [yOffset]
+  );
+
+  // Handles "element is already in viewport when mounted".
+  React.useEffect(() => {
+    setTimeout(() => {
+      if (!shouldRender && shouldElementRender(ref)) {
+        setShouldRender(true);
+      }
+    }, 500);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Handles "element scrolled into viewport".
+  React.useEffect(() => {
+    const handleDisplayingRef = debounce(() => {
+      if (shouldElementRender(ref)) {
+        setShouldRender(true);
       }
     }, DEBOUNCE_SCROLL_HANDLER_MS);
 
-    if (ref) {
-      handleDisplayingRef();
+    if (ref && ref.current && !shouldRender) {
+      window.addEventListener('scroll', handleDisplayingRef);
+      window.addEventListener('resize', handleDisplayingRef);
+      return () => {
+        window.removeEventListener('scroll', handleDisplayingRef);
+        window.removeEventListener('resize', handleDisplayingRef);
+      };
     }
-  }, [ref, setShouldRender, shouldRender]);
+  }, [ref, setShouldRender, shouldRender, shouldElementRender]);
 
   const render = props.skipWait || shouldRender;
 

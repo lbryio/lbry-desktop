@@ -3,6 +3,7 @@ import { remote } from 'electron';
 import React from 'react';
 import classnames from 'classnames';
 import * as RENDER_MODES from 'constants/file_render_modes';
+import VideoViewer from 'component/viewers/videoViewer';
 import { withRouter } from 'react-router-dom';
 import fs from 'fs';
 import analytics from 'analytics';
@@ -20,7 +21,6 @@ const AppViewer = React.lazy(() => import('component/viewers/appViewer' /* webpa
 const HtmlViewer = React.lazy(() => import('component/viewers/htmlViewer' /* webpackChunkName: "htmlViewer" */));
 const ImageViewer = React.lazy(() => import('component/viewers/imageViewer' /* webpackChunkName: "imageViewer" */));
 const PdfViewer = React.lazy(() => import('component/viewers/pdfViewer' /* webpackChunkName: "pdfViewer" */));
-const VideoViewer = React.lazy(() => import('component/viewers/videoViewer' /* webpackChunkName: "videoViewer" */));
 
 type Props = {
   uri: string,
@@ -86,14 +86,12 @@ class FileRender extends React.PureComponent<Props> {
       case RENDER_MODES.AUDIO:
       case RENDER_MODES.VIDEO:
         return (
-          <React.Suspense fallback={null}>
-            <VideoViewer
-              uri={uri}
-              source={source}
-              contentType={contentType}
-              desktopPlayStartTime={desktopPlayStartTime}
-            />
-          </React.Suspense>
+          <VideoViewer
+            uri={uri}
+            source={source}
+            contentType={contentType}
+            desktopPlayStartTime={desktopPlayStartTime}
+          />
         );
       case RENDER_MODES.IMAGE:
         return (

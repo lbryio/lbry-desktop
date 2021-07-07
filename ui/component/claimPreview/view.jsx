@@ -33,7 +33,7 @@ const AbandonedChannelPreview = React.lazy(() =>
 
 type Props = {
   uri: string,
-  claim: ?Claim, // maybe?
+  claim: ?Claim,
   obscureNsfw: boolean,
   showUserBlocked: boolean,
   claimIsMine: boolean,
@@ -300,7 +300,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
         >
           {isChannelUri && claim ? (
             <UriIndicator uri={uri} link>
-              <ChannelThumbnail uri={uri} />
+              <ChannelThumbnail uri={uri} small={type === 'inline'} />
             </UriIndicator>
           ) : (
             <>
@@ -404,7 +404,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                       <div className="claim-preview__primary-actions">
                         {!isChannelUri && signingChannel && (
                           <div className="claim-preview__channel-staked">
-                            <ChannelThumbnail uri={signingChannel.permanent_url} />
+                            <ChannelThumbnail uri={signingChannel.permanent_url} xsmall />
                           </div>
                         )}
 

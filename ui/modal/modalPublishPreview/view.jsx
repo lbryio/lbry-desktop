@@ -199,7 +199,7 @@ const ModalPublishPreview = (props: Props) => {
     const channelClaim = myChannels && myChannels.find((x) => x.name === channel);
     return channel ? (
       <div className="channel-value">
-        {channelClaim && <ChannelThumbnail uri={channelClaim.permanent_url} />}
+        {channelClaim && <ChannelThumbnail xsmall noLazyLoad uri={channelClaim.permanent_url} />}
         {channel}
       </div>
     ) : (

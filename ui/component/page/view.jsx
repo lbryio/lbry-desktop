@@ -22,7 +22,6 @@ type Props = {
   isUpgradeAvailable: boolean,
   authPage: boolean,
   filePage: boolean,
-  homePage: boolean,
   noHeader: boolean,
   noFooter: boolean,
   noSideNavigation: boolean,

@@ -63,7 +63,7 @@ function HomePage(props: Props) {
 
         {index === 0 && <>{claimTiles}</>}
         {index !== 0 && (
-          <WaitUntilOnPage name={title} placeholder={tilePlaceholder}>
+          <WaitUntilOnPage name={title} placeholder={tilePlaceholder} yOffset={800}>
             {claimTiles}
           </WaitUntilOnPage>
         )}

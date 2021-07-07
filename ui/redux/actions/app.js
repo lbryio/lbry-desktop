@@ -23,6 +23,7 @@ import {
   DAEMON_SETTINGS,
   SETTINGS,
   selectMyChannelClaims,
+  doCheckPendingClaims,
 } from 'lbry-redux';
 import { Lbryio } from 'lbryinc';
 import { selectFollowedTagsList } from 'redux/selectors/tags';
@@ -550,6 +551,7 @@ export function doSignIn() {
     if (notificationsEnabled) {
       dispatch(doNotificationList());
     }
+    dispatch(doCheckPendingClaims());
 
     // @if TARGET='web'
     dispatch(doBalanceSubscribe());
