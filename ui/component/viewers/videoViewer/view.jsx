@@ -193,7 +193,7 @@ function VideoViewer(props: Props) {
     setIsEndededEmbed(false);
   }
 
-  function onPause(player) {
+  function onPause(event, player) {
     setIsPlaying(false);
     handlePosition(player);
   }
@@ -257,7 +257,7 @@ function VideoViewer(props: Props) {
     player.on('tracking:firstplay', doTrackingFirstPlay);
     player.on('ended', onEnded);
     player.on('play', onPlay);
-    player.on('pause', onPause);
+    player.on('pause', (event) => onPause(event, player));
     player.on('dispose', (event) => onDispose(event, player));
     player.on('error', () => {
       const error = player.error();
