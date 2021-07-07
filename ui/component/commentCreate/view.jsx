@@ -17,8 +17,6 @@ import ChannelThumbnail from 'component/channelThumbnail';
 import UriIndicator from 'component/uriIndicator';
 import Empty from 'component/common/empty';
 
-const COMMENT_SLOW_MODE_SECONDS = 5;
-
 type Props = {
   uri: string,
   claim: StreamClaim,
@@ -54,7 +52,6 @@ export function CommentCreate(props: Props) {
     parentId,
     activeChannelClaim,
     livestream,
-    toast,
     claimIsMine,
     sendTip,
     justCommented,
@@ -72,7 +69,6 @@ export function CommentCreate(props: Props) {
   const [isReviewingSupportComment, setIsReviewingSupportComment] = React.useState();
   const [tipAmount, setTipAmount] = React.useState(1);
   const [commentValue, setCommentValue] = React.useState('');
-  const [lastCommentTime, setLastCommentTime] = React.useState();
   const [advancedEditor, setAdvancedEditor] = usePersistedState('comment-editor-mode', false);
   const hasChannels = channels && channels.length;
   const disabled = isSubmitting || !activeChannelClaim || !commentValue.length;
@@ -107,15 +103,6 @@ export function CommentCreate(props: Props) {
 
   function handleSubmit() {
     if (activeChannelClaim && commentValue.length) {
-      const timeUntilCanComment = !lastCommentTime
-        ? 0
-        : (lastCommentTime - Date.now()) / 1000 + COMMENT_SLOW_MODE_SECONDS;
-
-      if (livestream && !claimIsMine && timeUntilCanComment > 0) {
-        toast(__('Slowmode is on. You can comment again in %time% seconds.', { time: Math.ceil(timeUntilCanComment) }));
-        return;
-      }
-
       handleCreateComment();
     }
   }
@@ -163,7 +150,6 @@ export function CommentCreate(props: Props) {
 
         if (res && res.signature) {
           setCommentValue('');
-          setLastCommentTime(Date.now());
           setIsReviewingSupportComment(false);
           setIsSupportComment(false);
           setCommentFailure(false);

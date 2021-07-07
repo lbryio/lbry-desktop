@@ -11,7 +11,6 @@ import { doCommentCreate } from 'redux/actions/comments';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { makeSelectCommentsDisabledForUri } from 'redux/selectors/comments';
-import { doToast } from 'redux/actions/notifications';
 import { CommentCreate } from './view';
 
 const select = (state, props) => ({
@@ -29,7 +28,6 @@ const perform = (dispatch, ownProps) => ({
     dispatch(doCommentCreate(comment, claimId, parentId, ownProps.uri, ownProps.livestream, txid)),
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
   setActiveChannel: (claimId) => dispatch(doSetActiveChannel(claimId)),
-  toast: (message) => dispatch(doToast({ message, isError: true })),
   sendTip: (params, callback, errorCallback) => dispatch(doSendTip(params, false, callback, errorCallback, false)),
 });
 
