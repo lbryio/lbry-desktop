@@ -58,6 +58,7 @@ type Props = {
   adUrl: ?string,
   claimId: ?string,
   userId: ?number,
+  allowPreRoll: ?boolean,
 };
 
 // type VideoJSOptions = {
@@ -194,6 +195,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     adUrl,
     claimId,
     userId,
+    allowPreRoll,
   } = props;
 
   const [reload, setReload] = useState('initial');
@@ -599,12 +601,14 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     // pre-roll ads
     // This must be initialized earlier than everything else
     // otherwise a race condition occurs if we place this in the onReady call back
-    // player.aniview();
-    vjs.ima({
-      // $FlowFixMe
-      vpaidMode: google.ima.ImaSdkSettings.VpaidMode.INSECURE,
-      adTagUrl: macroUrl,
-    });
+    if (allowPreRoll) {
+      // player.aniview();
+      vjs.ima({
+        // $FlowFixMe
+        vpaidMode: google.ima.ImaSdkSettings.VpaidMode.INSECURE,
+        adTagUrl: macroUrl,
+      });
+    }
 
     // fixes #3498 (https://github.com/lbryio/lbry-desktop/issues/3498)
     // summary: on firefox the focus would stick to the fullscreen button which caused buggy behavior with spacebar

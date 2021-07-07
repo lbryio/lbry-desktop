@@ -345,6 +345,7 @@ function VideoViewer(props: Props) {
             autoplay={!embedded || autoplayIfEmbedded}
             claimId={claimId}
             userId={userId}
+            allowPreRoll={!embedded && !authenticated}
           />
         </React.Suspense>
       )}
