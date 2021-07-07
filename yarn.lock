@@ -1134,10 +1134,24 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
+<<<<<<< 9695026428ab94e852dfe41101cfe8ae29a191bb
 "@babel/runtime@^7.11.2", "@babel/runtime@^7.12.5", "@babel/runtime@^7.5.5", "@babel/runtime@^7.9.2":
   version "7.14.6"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.14.6.tgz#535203bc0892efc7dec60bdc27b2ecf6e409062d"
   integrity sha512-/PCB2uJ7oM44tz8YhC4Z/6PeOKXp4K588f+5M3clr1M4zbqztlo0XEfJ2LEzj/FgwfgGcIdl8n7YYjTCI0BYwg==
+=======
+"@babel/runtime@^7.11.2", "@babel/runtime@^7.12.5":
+  version "7.14.6"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.14.6.tgz#535203bc0892efc7dec60bdc27b2ecf6e409062d"
+  integrity sha512-/PCB2uJ7oM44tz8YhC4Z/6PeOKXp4K588f+5M3clr1M4zbqztlo0XEfJ2LEzj/FgwfgGcIdl8n7YYjTCI0BYwg==
+  dependencies:
+    regenerator-runtime "^0.13.4"
+
+"@babel/runtime@^7.9.2":
+  version "7.10.5"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.10.5.tgz#303d8bd440ecd5a491eae6117fd3367698674c5c"
+  integrity sha512-otddXKhdNn7d0ptoFRHtMLa8LqDxLYwTjB4nYgM1yy5N6gU/MUf8zqyyLltCH3yAVitBzmwK4us+DD0l/MauAg==
+>>>>>>> update yarn
   dependencies:
     regenerator-runtime "^0.13.4"
 
@@ -16307,6 +16321,11 @@ url-toolkit@^2.1.6, url-toolkit@^2.2.1:
   resolved "https://registry.yarnpkg.com/url-toolkit/-/url-toolkit-2.2.2.tgz#51ef27b56d3187185f9ecf4a8ac7e8f55203c89d"
   integrity sha512-l25w6Sy+Iy3/IbogunxhWwljPaDnqpiKvrQRoLBm6DfISco7NyRIS7Zf6+Oxhy1T8kHxWdwLND7ZZba6NjXMug==
 
+url-toolkit@^2.2.1:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/url-toolkit/-/url-toolkit-2.2.2.tgz#51ef27b56d3187185f9ecf4a8ac7e8f55203c89d"
+  integrity sha512-l25w6Sy+Iy3/IbogunxhWwljPaDnqpiKvrQRoLBm6DfISco7NyRIS7Zf6+Oxhy1T8kHxWdwLND7ZZba6NjXMug==
+
 url@^0.11.0:
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/url/-/url-0.11.0.tgz#3838e97cfc60521eb73c525a8e55bfdd9e2e28f1"
@@ -16447,6 +16466,7 @@ vfile@^2.0.0:
     unist-util-stringify-position "^1.0.0"
     vfile-message "^1.0.0"
 
+<<<<<<< 9695026428ab94e852dfe41101cfe8ae29a191bb
 "video.js@^6 || ^7", video.js@^7.13.3:
   version "7.13.3"
   resolved "https://registry.yarnpkg.com/video.js/-/video.js-7.13.3.tgz#5efab7bd56267406307f64d110662b2ccb3d7530"
@@ -16467,6 +16487,9 @@ vfile@^2.0.0:
     videojs-vtt.js "^0.15.3"
 
 video.js@^7.0.0:
+=======
+"video.js@^6 || ^7", video.js@^7.0.0:
+>>>>>>> update yarn
   version "7.10.2"
   resolved "https://registry.yarnpkg.com/video.js/-/video.js-7.10.2.tgz#5156aabad7820e726d72ea6c32324059c68885a4"
   integrity sha512-kJTTrqcQn2MhPzWR8zQs6W3HPJWpowO/ZGZcKt2dcJeJdJT0dEDLYtiFdjV37SylCmu66V0flRnV8cipbthveQ==
@@ -16480,6 +16503,7 @@ video.js@^7.0.0:
     videojs-font "3.2.0"
     videojs-vtt.js "^0.15.2"
 
+<<<<<<< 14148d86be4c6d5ce8e677b8ae34d26185c816c1
 videojs-contrib-ads@^6.6.5, videojs-contrib-ads@^6.9.0:
   version "6.9.0"
   resolved "https://registry.yarnpkg.com/videojs-contrib-ads/-/videojs-contrib-ads-6.9.0.tgz#c792d6fda77254b277545cc3222352fc653b5833"
@@ -16487,6 +16511,26 @@ videojs-contrib-ads@^6.6.5, videojs-contrib-ads@^6.9.0:
   dependencies:
     global "^4.3.2"
     video.js "^6 || ^7"
+=======
+video.js@^7.13.3:
+  version "7.13.3"
+  resolved "https://registry.yarnpkg.com/video.js/-/video.js-7.13.3.tgz#5efab7bd56267406307f64d110662b2ccb3d7530"
+  integrity sha512-rIGPFRh3v0HqSdfj+/iByKRDBgLVqILK/4i/hW15DfjvgCGhwbw53bRBoJXy496hwh/XYeOAqckc87L2FN375g==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    "@videojs/http-streaming" "2.9.1"
+    "@videojs/vhs-utils" "^3.0.2"
+    "@videojs/xhr" "2.5.1"
+    aes-decrypter "3.1.2"
+    global "^4.4.0"
+    keycode "^2.2.0"
+    m3u8-parser "4.7.0"
+    mpd-parser "0.17.0"
+    mux.js "5.11.1"
+    safe-json-parse "4.0.0"
+    videojs-font "3.2.0"
+    videojs-vtt.js "^0.15.3"
+>>>>>>> update yarn
 
 videojs-contrib-quality-levels@^2.0.9:
   version "2.0.9"
@@ -16529,6 +16573,13 @@ videojs-logo@^2.1.4:
     video.js "^6 || ^7"
 
 videojs-vtt.js@^0.15.2, videojs-vtt.js@^0.15.3:
+  version "0.15.3"
+  resolved "https://registry.yarnpkg.com/videojs-vtt.js/-/videojs-vtt.js-0.15.3.tgz#84260393b79487fcf195d9372f812d7fab83a993"
+  integrity sha512-5FvVsICuMRx6Hd7H/Y9s9GDeEtYcXQWzGMS+sl4UX3t/zoHp3y+isSfIPRochnTH7h+Bh1ILyC639xy9Z6kPag==
+  dependencies:
+    global "^4.3.1"
+
+videojs-vtt.js@^0.15.3:
   version "0.15.3"
   resolved "https://registry.yarnpkg.com/videojs-vtt.js/-/videojs-vtt.js-0.15.3.tgz#84260393b79487fcf195d9372f812d7fab83a993"
   integrity sha512-5FvVsICuMRx6Hd7H/Y9s9GDeEtYcXQWzGMS+sl4UX3t/zoHp3y+isSfIPRochnTH7h+Bh1ILyC639xy9Z6kPag==
