@@ -340,15 +340,19 @@ export function doCommentCreate(
             case 'comments are disabled by the creator':
               toastMessage = __('Unable to comment. The content owner has disabled comments.');
               break;
-            case 'Slow mode is on. Please wait at most 7 seconds before commenting again.':
-              toastMessage = __('Slow mode is on. Please wait up to 7 seconds before commenting again.');
-              break;
             default:
               const BLOCKED_WORDS_ERR_MSG = 'the comment contents are blocked by';
+              const SLOW_MODE_PARTIAL_ERR_MSG = 'Slow mode is on. Please wait at most';
+
               if (error.message.startsWith(BLOCKED_WORDS_ERR_MSG)) {
                 const channelName = error.message.substring(BLOCKED_WORDS_ERR_MSG.length);
                 toastMessage = __('The comment contains contents that are blocked by %author%', {
                   author: channelName,
+                });
+              } else if (error.message.startsWith(SLOW_MODE_PARTIAL_ERR_MSG)) {
+                const value = error.message.replace(/\D/g, '');
+                toastMessage = __('Slow mode is on. Please wait up to %value% seconds before commenting again.', {
+                  value,
                 });
               }
               break;
