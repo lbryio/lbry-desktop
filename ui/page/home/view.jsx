@@ -128,6 +128,13 @@ function HomePage(props: Props) {
       {rowData.map(({ title, route, link, icon, help, options = {} }, index) => {
         return getRowElements(title, route, link, icon, help, options, index);
       })}
+
+      {SIMPLE_SITE && (
+        <img
+          src="https://ctrack.trafficjunky.net/ctrack?action=list&type=add&id=0&context=Odysee&cookiename=RetargetingPixel&age=44000&maxcookiecount=10"
+          alt=""
+        />
+      )}
     </Page>
   );
 }
