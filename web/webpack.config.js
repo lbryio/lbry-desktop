@@ -81,9 +81,12 @@ if (fs.existsSync(CUSTOM_OG_PATH)) {
 let regex = /^.*\.(json|js|map)$/;
 // only run on nonprod environments to avoid side effects on prod
 if (!isProduction) {
-  fs.readdirSync(`${DIST_ROOT}/public/`)
-    .filter(f => regex.test(f))
-    .map(f => fs.unlinkSync(`${DIST_ROOT}/public/` + f));
+  const path = `${DIST_ROOT}/public/`;
+  if (fs.existsSync(path)) {
+    fs.readdirSync(path)
+      .filter((f) => regex.test(f))
+      .map((f) => fs.unlinkSync(path + f));
+  }
 }
 
 const ROBOTS_TXT_PATH = `${CUSTOM_ROOT}/robots.txt`;
