@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import classnames from 'classnames';
+import { lazyImport } from 'util/lazyImport';
 import Page from 'component/page';
 import * as RENDER_MODES from 'constants/file_render_modes';
 import FileTitleSection from 'component/fileTitleSection';
@@ -12,7 +13,7 @@ import CollectionContent from 'component/collectionContentSidebar';
 import CommentsList from 'component/commentsList';
 import Empty from 'component/common/empty';
 
-const PostViewer = React.lazy(() => import('component/postViewer' /* webpackChunkName: "postViewer" */));
+const PostViewer = lazyImport(() => import('component/postViewer' /* webpackChunkName: "postViewer" */));
 
 export const PRIMARY_PLAYER_WRAPPER_CLASS = 'file-page__video-container';
 

@@ -2,6 +2,7 @@
 import type { Node } from 'react';
 import React, { Fragment } from 'react';
 import classnames from 'classnames';
+import { lazyImport } from 'util/lazyImport';
 import SideNavigation from 'component/sideNavigation';
 import Header from 'component/header';
 /* @if TARGET='app' */
@@ -12,7 +13,7 @@ import { useHistory } from 'react-router';
 import { useIsMobile, useIsMediumScreen } from 'effects/use-screensize';
 import { parseURI } from 'lbry-redux';
 
-const Footer = React.lazy(() => import('web/component/footer' /* webpackChunkName: "secondary" */));
+const Footer = lazyImport(() => import('web/component/footer' /* webpackChunkName: "secondary" */));
 
 export const MAIN_CLASS = 'main';
 type Props = {

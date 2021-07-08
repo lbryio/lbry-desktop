@@ -2,6 +2,7 @@
 import { DOMAIN } from 'config';
 import * as PAGES from 'constants/pages';
 import React, { useEffect } from 'react';
+import { lazyImport } from 'util/lazyImport';
 import { Redirect, useHistory } from 'react-router-dom';
 import Spinner from 'component/spinner';
 import ChannelPage from 'page/channel';
@@ -11,12 +12,10 @@ import Card from 'component/common/card';
 import { formatLbryUrlForWeb } from 'util/url';
 import { parseURI, COLLECTIONS_CONSTS } from 'lbry-redux';
 
-const AbandonedChannelPreview = React.lazy(() =>
-  import('component/abandonedChannelPreview' /* webpackChunkName: "abandonedChannelPreview" */)
-);
-const FilePage = React.lazy(() => import('page/file' /* webpackChunkName: "filePage" */));
-const LivestreamPage = React.lazy(() => import('page/livestream' /* webpackChunkName: "livestream" */));
-const Yrbl = React.lazy(() => import('component/yrbl' /* webpackChunkName: "yrbl" */));
+const AbandonedChannelPreview = lazyImport(() => import('component/abandonedChannelPreview' /* webpackChunkName: "abandonedChannelPreview" */));
+const FilePage = lazyImport(() => import('page/file' /* webpackChunkName: "filePage" */));
+const LivestreamPage = lazyImport(() => import('page/livestream' /* webpackChunkName: "livestream" */));
+const Yrbl = lazyImport(() => import('component/yrbl' /* webpackChunkName: "yrbl" */));
 
 type Props = {
   isResolvingUri: boolean,
