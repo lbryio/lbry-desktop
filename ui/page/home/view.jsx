@@ -1,7 +1,7 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
-import { SITE_NAME, SIMPLE_SITE, DOMAIN } from 'config';
+import { SITE_NAME, SIMPLE_SITE, DOMAIN, ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import React from 'react';
 import Page from 'component/page';
 import Button from 'component/button';
@@ -43,7 +43,7 @@ function HomePage(props: Props) {
     const tilePlaceholder = (
       <ul className="claim-grid">
         {new Array(options.pageSize || 8).fill(1).map((x, i) => (
-          <ClaimPreviewTile key={i} placeholder />
+          <ClaimPreviewTile showNoSourceClaims={ENABLE_NO_SOURCE_CLAIMS} key={i} placeholder />
         ))}
       </ul>
     );
@@ -52,6 +52,7 @@ function HomePage(props: Props) {
         {...options}
         liveLivestreamsFirst
         livestreamMap={livestreamMap}
+        showNoSourceClaims={ENABLE_NO_SOURCE_CLAIMS}
         hasSource
         pin={route === `/$/${PAGES.GENERAL}`}
       />

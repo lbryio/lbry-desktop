@@ -115,6 +115,7 @@ type Props = {
   liveLivestreamsFirst?: boolean,
   livestreamMap?: { [string]: any },
   pin?: boolean,
+  showNoSourceClaims?: boolean,
 };
 
 function ClaimTilesDiscover(props: Props) {
@@ -147,6 +148,7 @@ function ClaimTilesDiscover(props: Props) {
     livestreamMap,
     pin,
     prefixUris,
+    showNoSourceClaims,
   } = props;
 
   const { location } = useHistory();
@@ -304,9 +306,19 @@ function ClaimTilesDiscover(props: Props) {
     <ul className="claim-grid">
       {modifiedUris && modifiedUris.length
         ? modifiedUris.map((uri, index) => (
-            <ClaimPreviewTile key={uri} uri={uri} properties={renderProperties} live={resolveLive(index)} />
+            <ClaimPreviewTile
+              showNoSourceClaims={hasNoSource || showNoSourceClaims}
+              key={uri}
+              uri={uri}
+              properties={renderProperties}
+              live={resolveLive(index)}
+            />
           ))
-        : new Array(pageSize).fill(1).map((x, i) => <ClaimPreviewTile key={i} placeholder />)}
+        : new Array(pageSize)
+            .fill(1)
+            .map((x, i) => (
+              <ClaimPreviewTile showNoSourceClaims={hasNoSource || showNoSourceClaims} key={i} placeholder />
+            ))}
     </ul>
   );
 }
