@@ -5,15 +5,24 @@ import React, { useEffect } from 'react';
 /**
  * Helper React hook for lazy loading images
  * @param elementRef - A React useRef instance to the element to lazy load.
- * @param {Number} [threshold=0.5] - The percent visible in order for loading to begin.
+ * @param yOffsetPx - Number of pixels from the viewport to start loading.
  * @param {Array<>} [deps=[]] - The dependencies this lazy-load is reliant on.
  */
 export default function useLazyLoading(
   elementRef: { current: ?ElementRef<any> },
-  threshold: number = 0.25,
+  yOffsetPx: number = 500,
   deps: Array<any> = []
 ) {
   const [srcLoaded, setSrcLoaded] = React.useState(false);
+  const threshold = 0.01;
+
+  function calcRootMargin(value) {
+    const devicePixelRatio = window.devicePixelRatio || 1.0;
+    if (devicePixelRatio < 1.0) {
+      return Math.ceil(value / devicePixelRatio);
+    }
+    return Math.ceil(value * devicePixelRatio);
+  }
 
   useEffect(() => {
     if (!elementRef.current) {
@@ -45,11 +54,12 @@ export default function useLazyLoading(
       },
       {
         root: null,
-        rootMargin: '0px',
-        threshold,
+        rootMargin: `0px 0px ${calcRootMargin(yOffsetPx)}px 0px`,
+        threshold: [threshold],
       }
     );
 
+    // $FlowFixMe
     lazyLoadingObserver.observe(elementRef.current);
   }, deps);
 
