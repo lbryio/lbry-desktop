@@ -90,6 +90,9 @@ export default function Notification(props: Props) {
     case RULE.REWARDS_APPROVAL_PROMPT:
       icon = <Icon icon={ICONS.LBC} sectionIcon />;
       break;
+    case RULE.FIAT_TIP:
+      icon = <Icon icon={ICONS.FINANCE} sectionIcon />;
+      break;
     default:
       icon = <Icon icon={ICONS.NOTIFICATION} sectionIcon />;
   }
