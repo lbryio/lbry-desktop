@@ -4,6 +4,14 @@ import debounce from 'util/debounce';
 
 const DEBOUNCE_SCROLL_HANDLER_MS = 50;
 
+function scaleToDevicePixelRatio(value) {
+  const devicePixelRatio = window.devicePixelRatio || 1.0;
+  if (devicePixelRatio < 1.0) {
+    return Math.ceil(value / devicePixelRatio);
+  }
+  return Math.ceil(value * devicePixelRatio);
+}
+
 type Props = {
   children: any,
   skipWait?: boolean,
@@ -26,7 +34,7 @@ export default function WaitUntilOnPage(props: Props) {
         // $FlowFixMe
         const windowW = window.innerWidth || document.documentElement.clientWidth;
 
-        const isApproachingViewport = yOffset && bounding.top < windowH + yOffset;
+        const isApproachingViewport = yOffset && bounding.top < windowH + scaleToDevicePixelRatio(yOffset);
         const isInViewport = // also covers "element is larger than viewport".
           bounding.width > 0 &&
           bounding.height > 0 &&
