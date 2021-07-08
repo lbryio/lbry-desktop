@@ -1,5 +1,5 @@
 // @flow
-import { SHOW_ADS, DOMAIN, SIMPLE_SITE } from 'config';
+import { SHOW_ADS, DOMAIN, SIMPLE_SITE, ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import React, { useRef } from 'react';
@@ -153,6 +153,7 @@ function DiscoverPage(props: Props) {
         liveLivestreamsFirst
         livestreamMap={livestreamMap}
         hasSource
+        showNoSourceClaims={ENABLE_NO_SOURCE_CLAIMS}
       />
     </Page>
   );

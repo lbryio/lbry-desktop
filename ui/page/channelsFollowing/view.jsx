@@ -2,7 +2,7 @@
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
 import * as CS from 'constants/claim_search';
-import { SIMPLE_SITE } from 'config';
+import { SIMPLE_SITE, ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import React from 'react';
 import ChannelsFollowingDiscoverPage from 'page/channelsFollowingDiscover';
 import ClaimListDiscover from 'component/claimListDiscover';
@@ -47,6 +47,7 @@ function ChannelsFollowingPage(props: Props) {
         }
         liveLivestreamsFirst
         livestreamMap={livestreamMap}
+        showNoSourceClaims={ENABLE_NO_SOURCE_CLAIMS}
         hasSource
       />
     </Page>
