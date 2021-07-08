@@ -10,10 +10,7 @@ import moment from 'moment';
 import Plastic from 'react-plastic';
 import Button from 'component/button';
 import * as ICONS from 'constants/icons';
-
-let scriptLoading = false;
-// let scriptLoaded = false;
-// let scriptDidError = false; // these could probably be in state if managing locally
+import * as MODALS from 'constants/modal_types';
 
 let stripeEnvironment = 'test';
 // if the key contains pk_live it's a live key
@@ -22,12 +19,16 @@ if (STRIPE_PUBLIC_KEY.indexOf('pk_live') > -1) {
   stripeEnvironment = 'live';
 }
 
-// type Props = {
-//   disabled: boolean,
-//   label: ?string,
-//   email: ?string,
-//   scriptFailedToLoad: boolean,
-// };
+// eslint-disable-next-line flowtype/no-types-missing-file-annotation
+type Props = {
+  disabled: boolean,
+  label: ?string,
+  email: ?string,
+  scriptFailedToLoad: boolean,
+  doOpenModal: (string, {}) => void,
+  openModal: (string, {}) => void,
+
+};
 //
 // type State = {
 //   open: boolean,
@@ -54,6 +55,8 @@ class SettingsStripeCard extends React.Component<Props, State> {
 
   componentDidMount() {
     var that = this;
+
+    console.log(this.props);
 
     const script = document.createElement('script');
     script.src = 'https://js.stripe.com/v3/';
@@ -344,57 +347,22 @@ class SettingsStripeCard extends React.Component<Props, State> {
     }
   }
 
-  componentDidUpdate() {
-    if (!scriptLoading) {
-      this.updateStripeHandler();
-    }
-  }
 
-  componentWillUnmount() {
-    // pretty sure this doesn't exist
-    // $FlowFixMe
-    if (this.loadPromise) {
-      // $FlowFixMe
-      this.loadPromise.reject();
-    }
-    // pretty sure this doesn't exist
-    // $FlowFixMe
-    if (CardVerify.stripeHandler && this.state.open) {
-      // $FlowFixMe
-      CardVerify.stripeHandler.close();
-    }
-  }
 
-  onScriptLoaded = () => {
-    // if (!CardVerify.stripeHandler) {
-    //   CardVerify.stripeHandler = StripeCheckout.configure({
-    //     key: 'pk_test_NoL1JWL7i1ipfhVId5KfDZgo',
-    //   });
-    //
-    //   if (this.hasPendingClick) {
-    //     this.showStripeDialog();
-    //   }
-    // }
-  };
+  abandonClaim() {
+    console.log('here');
+    console.log(this);
 
-  onScriptError = (...args) => {
-    this.setState({ scriptFailedToLoad: true });
-  };
+    console.log(this.props.doOpenModal);
+    console.log(MODALS.LIQUIDATE_SUPPORTS);
 
-  onClosed = () => {
-    this.setState({ open: false });
-  };
+    this.props.doOpenModal(MODALS.LIQUIDATE_SUPPORTS, { uri: 'https://hello.com' });
 
-  updateStripeHandler() {
-    // if (!CardVerify.stripeHandler) {
-    //   CardVerify.stripeHandler = StripeCheckout.configure({
-    //     key: this.props.stripeKey,
-    //   });
-    // }
+    // this.props.doOpenModal(MODALS.CONFIRM_REMOVE_CARD, { cardId: 'hello' });
   }
 
   render() {
-    const { scriptFailedToLoad } = this.props;
+    const { scriptFailedToLoad, doOpenModal, openModal } = this.props;
 
     const { currentFlowStage, customerTransactions, pageTitle, userCardDetails } = this.state;
 
@@ -445,7 +413,16 @@ class SettingsStripeCard extends React.Component<Props, State> {
                     number={'____________' + userCardDetails.lastFour}
                   />
                   <br />
-                  <Button button="secondary" label={__('Remove Card')} icon={ICONS.DELETE} />
+                  <Button
+                    button="secondary"
+                    label={__('Remove Card')}
+                    icon={ICONS.DELETE}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      openModal(MODALS.CONFIRM_REMOVE_CARD, { uri: 'hello',  });
+                    }}
+                    />
                 </>
               }
             />
@@ -498,6 +475,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
                             navigate={'/' + transaction.channel_name + ':' + transaction.source_claim_id}
                             label={transaction.channel_claim_id === transaction.source_claim_id ? 'Channel Page' : 'File Page'}
                             button="link"
+
                           />
                         </td>
                         <td>${transaction.tipped_amount / 100}</td>
