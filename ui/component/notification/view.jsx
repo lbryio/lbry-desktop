@@ -1,8 +1,7 @@
 // @flow
-
-import * as NOTIFICATIONS from 'constants/notifications';
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
+import { RULE } from 'constants/notifications';
 import React from 'react';
 import classnames from 'classnames';
 import Icon from 'component/common/icon';
@@ -31,21 +30,21 @@ export default function Notification(props: Props) {
   const { push } = useHistory();
   const { notification_rule, notification_parameters, is_read, id } = notification;
   const isCommentNotification =
-    notification_rule === NOTIFICATIONS.NOTIFICATION_COMMENT ||
-    notification_rule === NOTIFICATIONS.NOTIFICATION_REPLY ||
-    notification_rule === NOTIFICATIONS.CREATOR_COMMENT;
+    notification_rule === RULE.COMMENT ||
+    notification_rule === RULE.COMMENT_REPLY ||
+    notification_rule === RULE.CREATOR_COMMENT;
   const commentText = isCommentNotification && notification_parameters.dynamic.comment;
   const channelUrl =
-    (notification_rule === NOTIFICATIONS.NEW_CONTENT && notification.notification_parameters.dynamic.channel_url) || '';
+    (notification_rule === RULE.NEW_CONTENT && notification.notification_parameters.dynamic.channel_url) || '';
 
   let notificationTarget;
   switch (notification_rule) {
-    case NOTIFICATIONS.DAILY_WATCH_AVAILABLE:
-    case NOTIFICATIONS.DAILY_WATCH_REMIND:
+    case RULE.DAILY_WATCH_AVAILABLE:
+    case RULE.DAILY_WATCH_REMIND:
       notificationTarget = `/$/${PAGES.CHANNELS_FOLLOWING}`;
       break;
-    case NOTIFICATIONS.MISSED_OUT:
-    case NOTIFICATIONS.REWARDS_APPROVAL_PROMPT:
+    case RULE.MISSED_OUT:
+    case RULE.REWARDS_APPROVAL_PROMPT:
       notificationTarget = `/$/${PAGES.REWARDS_VERIFY}?redirect=/$/${PAGES.REWARDS}`;
       break;
     default:
@@ -69,26 +68,26 @@ export default function Notification(props: Props) {
 
   let icon;
   switch (notification_rule) {
-    case NOTIFICATIONS.NOTIFICATION_CREATOR_SUBSCRIBER:
+    case RULE.CREATOR_SUBSCRIBER:
       icon = <Icon icon={ICONS.SUBSCRIBE} sectionIcon />;
       break;
-    case NOTIFICATIONS.NOTIFICATION_COMMENT:
-    case NOTIFICATIONS.CREATOR_COMMENT:
+    case RULE.COMMENT:
+    case RULE.CREATOR_COMMENT:
       icon = <ChannelThumbnail small uri={notification_parameters.dynamic.comment_author} />;
       break;
-    case NOTIFICATIONS.NOTIFICATION_REPLY:
+    case RULE.COMMENT_REPLY:
       icon = <ChannelThumbnail small uri={notification_parameters.dynamic.reply_author} />;
       break;
-    case NOTIFICATIONS.NEW_CONTENT:
+    case RULE.NEW_CONTENT:
       icon = <ChannelThumbnail small uri={notification_parameters.dynamic.channel_url} />;
       break;
-    case NOTIFICATIONS.NEW_LIVESTREAM:
+    case RULE.NEW_LIVESTREAM:
       icon = <ChannelThumbnail small uri={notification_parameters.dynamic.channel_url} />;
       break;
-    case NOTIFICATIONS.DAILY_WATCH_AVAILABLE:
-    case NOTIFICATIONS.DAILY_WATCH_REMIND:
-    case NOTIFICATIONS.MISSED_OUT:
-    case NOTIFICATIONS.REWARDS_APPROVAL_PROMPT:
+    case RULE.DAILY_WATCH_AVAILABLE:
+    case RULE.DAILY_WATCH_REMIND:
+    case RULE.MISSED_OUT:
+    case RULE.REWARDS_APPROVAL_PROMPT:
       icon = <Icon icon={ICONS.LBC} sectionIcon />;
       break;
     default:
@@ -170,10 +169,10 @@ export default function Notification(props: Props) {
               )}
             </div>
 
-            {notification_rule === NOTIFICATIONS.NEW_CONTENT && (
+            {notification_rule === RULE.NEW_CONTENT && (
               <FileThumbnail uri={notification_parameters.device.target} className="notification__content-thumbnail" />
             )}
-            {notification_rule === NOTIFICATIONS.NEW_LIVESTREAM && (
+            {notification_rule === RULE.NEW_LIVESTREAM && (
               <FileThumbnail
                 thumbnail={notification_parameters.device.image_url}
                 className="notification__content-thumbnail"
@@ -199,7 +198,7 @@ export default function Notification(props: Props) {
                 <Icon aria-hidden icon={ICONS.DELETE} />
                 {__('Delete')}
               </MenuItem>
-              {notification_rule === NOTIFICATIONS.NEW_CONTENT && channelUrl ? (
+              {notification_rule === RULE.NEW_CONTENT && channelUrl ? (
                 <NotificationContentChannelMenu uri={channelUrl} />
               ) : null}
             </MenuList>
