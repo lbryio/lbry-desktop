@@ -16,15 +16,17 @@ async function doClaimSearch(options) {
   return results ? results.items : undefined;
 }
 
-async function getChannelClaim(claimId) {
-  const options = {
-    claim_ids: [claimId],
-    page_size: 1,
-    no_totals: true,
-  };
+async function getChannelClaim(name, claimId) {
+  let claim;
+  try {
+    const url = `lbry://${name}#${claimId}`;
+    const response = await Lbry.resolve({ urls: [url] });
 
-  const claims = await doClaimSearch(options);
-  return claims ? claims[0] : undefined;
+    if (response && response[url] && !response[url].error) {
+      claim = response && response[url];
+    }
+  } catch {}
+  return claim || 'The RSS URL is invalid or is not associated with any channel.';
 }
 
 async function getClaimsFromChannel(claimId, count) {
@@ -86,7 +88,7 @@ async function getRss(ctx) {
     return 'Invalid URL';
   }
 
-  const channelClaim = await getChannelClaim(ctx.params.claimId);
+  const channelClaim = await getChannelClaim(ctx.params.claimName, ctx.params.claimId);
   if (typeof channelClaim === 'string' || !channelClaim) {
     return channelClaim;
   }
