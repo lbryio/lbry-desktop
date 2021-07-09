@@ -18,7 +18,21 @@ import aniview from './plugins/videojs-aniview/plugin';
 
 const isDev = process.env.NODE_ENV !== 'production';
 const macroUrl =
-  'https://vast.aniview.com/api/adserver61/vast/?AV_PUBLISHERID=60afcbc58cfdb065440d2426&AV_CHANNELID=60b354389c7adb506d0bd9a4&AV_URL=[URL_MACRO]&cb=[TIMESTAMP_MACRO]&AV_WIDTH=[WIDTH_MACRO]&AV_HEIGHT=[HEIGHT_MACRO]&AV_SCHAIN=[SCHAIN_MACRO]&AV_CCPA=[CCPA_MACRO]&AV_GDPR=[GDPR_MACRO]&AV_CONSENT=[CONSENT_MACRO]&skip=true&skiptimer=5&usevslot=true&hidecontrols=false';
+  `https://vast.aniview.com/api/adserver61/vast/` +
+  `?AV_PUBLISHERID=60afcbc58cfdb065440d2426` +
+  `&AV_CHANNELID=60b354389c7adb506d0bd9a4` +
+  `&AV_URL=[URL_MACRO]` +
+  `&cb=[TIMESTAMP_MACRO]` +
+  `&AV_WIDTH=[WIDTH_MACRO]` +
+  `&AV_HEIGHT=[HEIGHT_MACRO]` +
+  `&AV_SCHAIN=[SCHAIN_MACRO]` +
+  `&AV_CCPA=[CCPA_MACRO]` +
+  `&AV_GDPR=[GDPR_MACRO]` +
+  `&AV_CONSENT=[CONSENT_MACRO]` +
+  `&skip=true` +
+  `&skiptimer=5` +
+  `&usevslot=true` +
+  `&hidecontrols=false`;
 
 export type Player = {
   on: (string, (any) => void) => void,
@@ -500,7 +514,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     const wrapper = document.createElement('div');
     wrapper.setAttribute('data-vjs-player', 'true');
     const el = document.createElement(isAudio ? 'audio' : 'video');
-    el.className = 'video-js';
+    el.className = 'video-js vjs-big-play-centered ';
     wrapper.appendChild(el);
 
     container.appendChild(wrapper);
