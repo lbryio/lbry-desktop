@@ -18,7 +18,7 @@ import {
 } from 'redux/selectors/settings';
 import { doWalletStatus, selectMyChannelUrls, selectWalletIsEncrypted, SETTINGS } from 'lbry-redux';
 import SettingsPage from './view';
-import { selectUserVerifiedEmail } from 'redux/selectors/user';
+import { selectUserVerifiedEmail, selectUser } from 'redux/selectors/user';
 
 const select = (state) => ({
   daemonSettings: selectDaemonSettings(state),
@@ -38,6 +38,7 @@ const select = (state) => ({
   darkModeTimes: makeSelectClientSetting(SETTINGS.DARK_MODE_TIMES)(state),
   language: selectLanguage(state),
   myChannelUrls: selectMyChannelUrls(state),
+  user: selectUser(state),
 });
 
 const perform = (dispatch) => ({

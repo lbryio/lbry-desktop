@@ -72,6 +72,7 @@ type Props = {
   enterSettings: () => void,
   exitSettings: () => void,
   myChannelUrls: ?Array<string>,
+  user: User,
 };
 
 type State = {
@@ -189,6 +190,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
       clearCache,
       openModal,
       myChannelUrls,
+      user,
     } = this.props;
     const { storedPassword } = this.state;
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
@@ -206,7 +208,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
         className="card-stack"
       >
         {/* @if TARGET='web' */}
-        <Card
+        {user && user.fiat_enabled  && <Card
           title={__('Add payout method to receive tips from viewers')}
           actions={
             <div className="section__actions">
@@ -218,7 +220,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
               />
             </div>
           }
-        />
+        />}
         {/* @endif */}
 
         {/* @if TARGET='web' */}

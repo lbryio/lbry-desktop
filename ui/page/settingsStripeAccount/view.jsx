@@ -17,8 +17,8 @@ if (STRIPE_PUBLIC_KEY.indexOf('pk_live') > -1) {
 }
 
 let successStripeRedirectUrl, failureStripeRedirectUrl;
-let successEndpoint = '/$/wallet';
-let failureEndpoint = '/$/wallet';
+let successEndpoint = '/$/settings/tip_account';
+let failureEndpoint = '/$/settings/tip_account';
 if (isDev) {
   successStripeRedirectUrl = 'http://localhost:' + WEBPACK_WEB_PORT + successEndpoint;
   failureStripeRedirectUrl = 'http://localhost:' + WEBPACK_WEB_PORT + failureEndpoint;
@@ -113,6 +113,18 @@ class StripeAccountConnection extends React.Component<Props, State> {
           that.setState({
             unpaidBalance: yetToBeCashedOutBalance,
           });
+
+          Lbryio.call(
+            'account',
+            'list',
+            {
+              environment: stripeEnvironment,
+            },
+            'post'
+          )
+            .then((accountListResponse) => {
+              console.log(accountListResponse);
+            });
         }
 
         // if charges already enabled, no need to generate an account link
@@ -211,7 +223,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
                             <br />
                             <h3>
                               {__(
-                                'Your account balance is %balance% USD. Functionality to view your transactions and withdraw your balance will be landing shortly.',
+                                'Your account balance is $%balance% USD. Functionality to view your transactions and withdraw your balance will be landing shortly.',
                                 { balance: unpaidBalance / 100 }
                               )}
                             </h3>
@@ -235,7 +247,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
                           <br />
                           <h3>
                             {__(
-                              'Your pending account balance is %balance% USD. Functionality to view and receive your transactions will land soon.',
+                              'Your pending account balance is $%balance% USD. Functionality to view and receive your transactions will land soon.',
                               { balance: unpaidBalance / 100 }
                             )}
                           </h3>
