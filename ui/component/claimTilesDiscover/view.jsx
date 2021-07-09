@@ -288,7 +288,7 @@ function ClaimTilesDiscover(props: Props) {
 
   const modifiedUris = uris ? uris.slice() : [];
   const fixUris = [
-    'lbry://@SomeOrdinaryGamers#a/the-nintendo-switch-oled-is#9',
+    "lbry://@AlisonMorrow#6/corporate-news-can-break-youtube's-rules#9",
                   ];
 
   if (pin && modifiedUris && modifiedUris.length > 2 && window.location.pathname === '/') {
