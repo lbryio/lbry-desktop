@@ -24,6 +24,8 @@ import CommentMenuList from 'component/commentMenuList';
 import UriIndicator from 'component/uriIndicator';
 import CreditAmount from 'component/common/credit-amount';
 
+const AUTO_EXPAND_ALL_REPLIES = false;
+
 type Props = {
   clearPlayingUri: () => void,
   uri: string,
@@ -124,11 +126,12 @@ function Comment(props: Props) {
 
   // Auto-expand (limited to linked-comments for now, but can be for all)
   useEffect(() => {
-    if (
+    const isInLinkedCommentChain =
       linkedCommentId &&
       linkedCommentAncestors[linkedCommentId] &&
-      linkedCommentAncestors[linkedCommentId].includes(commentId)
-    ) {
+      linkedCommentAncestors[linkedCommentId].includes(commentId);
+
+    if (isInLinkedCommentChain || AUTO_EXPAND_ALL_REPLIES) {
       setShowReplies(true);
       setPage(1);
     }
