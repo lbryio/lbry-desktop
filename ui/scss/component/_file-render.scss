@@ -580,7 +580,7 @@ video::-internal-media-controls-overlay-cast-button {
     @extend .button--icon;
     @extend .button--play;
     border: none;
-    position: static;
+    /*position: static;*/
     z-index: 2;
 
     .vjs-icon-placeholder {
