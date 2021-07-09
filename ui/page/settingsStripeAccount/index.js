@@ -1,21 +1,13 @@
 import { connect } from 'react-redux';
-import { doSetClientSetting } from 'redux/actions/settings';
-import { selectosNotificationsEnabled } from 'redux/selectors/settings';
-import { selectUserVerifiedEmail, selectUserEmail } from 'redux/selectors/user';
-import { doOpenModal } from 'redux/actions/app';
+import { withRouter } from 'react-router';
+import StripeAccountConnection from './view';
+import { selectUser } from 'redux/selectors/user';
 
-import SettingsPage from './view';
-
-const select = state => ({
-  osNotificationsEnabled: selectosNotificationsEnabled(state),
-  isAuthenticated: Boolean(selectUserVerifiedEmail(state)),
-  email: selectUserEmail(state),
+// function that receives state parameter and returns object of functions that accept  state
+const select = (state) => ({
+  user: selectUser(state),
 });
 
-const perform = dispatch => ({
-  setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
-  doOpenModal,
-  openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
-});
+const perform = (dispatch) => ({});
 
-export default connect(select, perform)(SettingsPage);
+export default withRouter(connect(select, perform)(StripeAccountConnection));
