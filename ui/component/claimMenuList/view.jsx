@@ -103,7 +103,7 @@ function ClaimMenuList(props: Props) {
   }
 
   const shareUrl: string = generateShareUrl(SHARE_DOMAIN, uri);
-  const rssUrl: string = generateRssUrl(URL, uri);
+  const rssUrl: string = isChannel ? generateRssUrl(URL, uri) : '';
   const isCollectionClaim = claim && claim.value_type === 'collection';
   // $FlowFixMe
   const isPlayable =
