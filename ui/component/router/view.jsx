@@ -69,6 +69,7 @@ const RewardsVerifyPage = lazyImport(() => import('page/rewardsVerify' /* webpac
 const SearchPage = lazyImport(() => import('page/search' /* webpackChunkName: "secondary" */));
 const SettingsAdvancedPage = lazyImport(() => import('page/settingsAdvanced' /* webpackChunkName: "secondary" */));
 const SettingsStripeCard = lazyImport(() => import('page/settingsStripeCard' /* webpackChunkName: "secondary" */));
+const SettingsStripeAccount = lazyImport(() => import('page/settingsStripeAccount' /* webpackChunkName: "secondary" */));
 const SettingsCreatorPage = lazyImport(() => import('page/settingsCreator' /* webpackChunkName: "secondary" */));
 const SettingsNotificationsPage = lazyImport(() =>
   import('page/settingsNotifications' /* webpackChunkName: "secondary" */)
@@ -292,6 +293,7 @@ function AppRouter(props: Props) {
         />
         <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_NOTIFICATIONS}`} component={SettingsNotificationsPage} />
         <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} component={SettingsStripeCard} />
+        <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_STRIPE_ACCOUNT}`} component={SettingsStripeAccount} />
         <PrivateRoute
           {...props}
           exact

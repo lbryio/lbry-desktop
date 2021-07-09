@@ -207,6 +207,22 @@ class SettingsPage extends React.PureComponent<Props, State> {
       >
         {/* @if TARGET='web' */}
         <Card
+          title={__('Add payout method to receive tips from viewers')}
+          actions={
+            <div className="section__actions">
+              <Button
+                button="secondary"
+                label={__('Manage Account Connection')}
+                icon={ICONS.FINANCE}
+                navigate={`/$/${PAGES.SETTINGS_STRIPE_ACCOUNT}`}
+              />
+            </div>
+          }
+        />
+        {/* @endif */}
+
+        {/* @if TARGET='web' */}
+        <Card
           title={__('Add card to tip creators in USD')}
           actions={
             <div className="section__actions">
