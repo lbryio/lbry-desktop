@@ -150,6 +150,6 @@ export const generateShareUrl = (
 
 export const generateRssUrl = (domain, lbryUrl) => {
   const { channelName, channelClaimId } = parseURI(lbryUrl);
-  const url = `${domain}/$/rss/@${channelName}/${channelClaimId.slice(0, 2)}`;
+  const url = `${domain}/$/rss/@${channelName}${channelClaimId ? `/${channelClaimId.slice(0, 2)}` : ''}`;
   return url;
 };
