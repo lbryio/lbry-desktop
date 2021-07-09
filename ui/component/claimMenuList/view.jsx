@@ -44,7 +44,7 @@ type Props = {
   collectionName?: string,
   collectionId: string,
   isMyCollection: boolean,
-  doToast: ({ message: string }) => void,
+  doToast: ({ message: string, isError?: boolean }) => void,
   claimIsMine: boolean,
   fileInfo: FileListItem,
   prepareEdit: ({}, string, {}) => void,
@@ -183,12 +183,23 @@ function ClaimMenuList(props: Props) {
     }
   }
 
+  function copyToClipboard(textToCopy, successMsg, failureMsg) {
+    navigator.clipboard
+      .writeText(textToCopy)
+      .then(() => {
+        doToast({ message: __(successMsg) });
+      })
+      .catch(() => {
+        doToast({ message: __(failureMsg), isError: true });
+      });
+  }
+
   function handleCopyRssLink() {
-    navigator.clipboard.writeText(rssUrl);
+    copyToClipboard(rssUrl, 'RSS URL copied.', 'Failed to copy RSS URL.');
   }
 
   function handleCopyLink() {
-    navigator.clipboard.writeText(shareUrl);
+    copyToClipboard(shareUrl, 'Link copied.', 'Failed to copy link.');
   }
 
   function handleReportContent() {
