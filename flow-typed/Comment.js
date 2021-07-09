@@ -108,6 +108,7 @@ declare type CommentByIdParams = {
 }
 
 declare type CommentByIdResponse = {
+  item: Comment,
   items: Comment,
   ancestors: Array<Comment>,
 }

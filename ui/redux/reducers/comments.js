@@ -287,10 +287,15 @@ export default handleActions(
         // in reality this doesn't matter and we can just
         // sort comments by their timestamp
         const commentIds = Array(comments.length);
-        totalCommentsById[claimId] = totalItems;
+
+        // totalCommentsById[claimId] = totalItems;
+        // --> currently, this value is only correct when done via a top-level query.
+        // Until this is fixed, I'm moving it downwards to **
 
         // --- Top-level comments ---
         if (!parentId) {
+          totalCommentsById[claimId] = totalItems; // **
+
           topLevelTotalCommentsById[claimId] = totalFilteredItems;
           topLevelTotalPagesById[claimId] = totalPages;
 

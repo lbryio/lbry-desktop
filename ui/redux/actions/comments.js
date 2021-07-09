@@ -109,12 +109,12 @@ export function doCommentById(commentId: string) {
   return (dispatch: Dispatch, getState: GetState) => {
     return Comments.comment_by_id({ comment_id: commentId, with_ancestors: true })
       .then((result: CommentByIdResponse) => {
-        const { items, ancestors } = result;
+        const { item, items, ancestors } = result;
 
         dispatch({
           type: ACTIONS.COMMENT_BY_ID_COMPLETED,
           data: {
-            comment: items,
+            comment: item || items, // Requested a change to rename it to 'item'. This covers both.
             ancestors: ancestors,
           },
         });
