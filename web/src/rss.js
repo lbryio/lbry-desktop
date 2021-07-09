@@ -42,27 +42,36 @@ async function getClaimsFromChannel(claimId, count) {
   return await doClaimSearch(options);
 }
 
-async function getFeed(channelClaim) {
-  const replaceLineFeeds = (str) => str.replace(/(?:\r\n|\r|\n)/g, '<br>');
+async function getFeed(channelClaim, feedLink) {
+  const replaceLineFeeds = (str) => str.replace(/(?:\r\n|\r|\n)/g, '<br />');
+  const fmtDescription = (description) => replaceLineFeeds(description);
+  const sanitizeThumbsUrl = (url) => {
+    if (typeof url === 'string' && url.startsWith('https://')) {
+      return encodeURI(url).replace(/&/g, '%26');
+    }
+    return '';
+  };
 
   const value = channelClaim.value;
   const title = value ? value.title : channelClaim.name;
 
   const options = {
-    title: title + ' on ' + SITE_NAME,
-    description: value && value.description ? replaceLineFeeds(value.description) : '',
-    link: `${URL}/${channelClaim.name}:${channelClaim.claim_id}`,
     favicon: URL + '/public/favicon.png',
     generator: SITE_NAME + ' RSS Feed',
-    image: value && value.thumbnail ? value.thumbnail.url : '',
+    title: title + ' on ' + SITE_NAME,
+    description: fmtDescription(value && value.description ? value.description : ''),
+    link: encodeURI(`${URL}/${channelClaim.name}:${channelClaim.claim_id}`),
+    image: sanitizeThumbsUrl(value && value.thumbnail ? value.thumbnail.url : ''),
+    feedLinks: {
+      rss: encodeURI(feedLink),
+    },
     author: {
-      name: channelClaim.name,
-      link: URL + '/' + channelClaim.name + ':' + channelClaim.claim_id,
+      name: encodeURI(channelClaim.name),
+      link: encodeURI(URL + '/' + channelClaim.name + ':' + channelClaim.claim_id),
     },
   };
 
   const feed = new Feed(options);
-
   const latestClaims = await getClaimsFromChannel(channelClaim.claim_id, NUM_ENTRIES);
 
   latestClaims.forEach((c) => {
@@ -70,17 +79,23 @@ async function getFeed(channelClaim) {
     const value = c.value;
 
     feed.addItem({
-      guid: c.claim_id,
       id: c.claim_id,
-      title: value ? value.title : c.name,
-      description: value && value.description ? replaceLineFeeds(value.description) : '',
-      image: value && value.thumbnail ? value.thumbnail.url : '',
-      link: URL + '/' + c.name + ':' + c.claim_id,
+      guid: encodeURI(URL + '/' + c.name + ':' + c.claim_id),
+      title: value && value.title ? value.title : c.name,
+      description: fmtDescription(value && value.description ? value.description : ''),
+      image: sanitizeThumbsUrl(value && value.thumbnail ? value.thumbnail.url : ''),
+      link: encodeURI(URL + '/' + c.name + ':' + c.claim_id),
       date: new Date(meta ? meta.creation_timestamp * 1000 : null),
     });
   });
 
   return feed;
+}
+
+function postProcess(feed) {
+  // Handle 'Feed' creating an invalid MIME type when trying to guess
+  // from 'https://thumbnails.lbry.com/UCgQ8eREJzR1dO' style of URLs.
+  return feed.replace(/type="image\/\/.*"\/>/g, 'type="image/*"/>');
 }
 
 async function getRss(ctx) {
@@ -93,8 +108,8 @@ async function getRss(ctx) {
     return channelClaim;
   }
 
-  const feed = await getFeed(channelClaim);
-  return feed.rss2();
+  const feed = await getFeed(channelClaim, `${URL}/$/rss/${ctx.params.claimName}/${ctx.params.claimId}`);
+  return postProcess(feed.rss2());
 }
 
 module.exports = { getRss };
