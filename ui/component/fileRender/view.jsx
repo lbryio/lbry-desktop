@@ -97,13 +97,13 @@ class FileRender extends React.PureComponent<Props> {
       case RENDER_MODES.IMAGE:
         return (
           <React.Suspense fallback={null}>
-            <ImageViewer uri={uri} source={source} />;
+            <ImageViewer uri={uri} source={source} />
           </React.Suspense>
         );
       case RENDER_MODES.HTML:
         return (
           <React.Suspense fallback={null}>
-            <HtmlViewer source={downloadPath || source} />;
+            <HtmlViewer source={downloadPath || source} />
           </React.Suspense>
         );
       case RENDER_MODES.DOCUMENT:
@@ -127,7 +127,7 @@ class FileRender extends React.PureComponent<Props> {
       case RENDER_MODES.PDF:
         return (
           <React.Suspense fallback={null}>
-            <PdfViewer source={downloadPath || source} />;
+            <PdfViewer source={downloadPath || source} />
           </React.Suspense>
         );
       case RENDER_MODES.CAD:
@@ -155,7 +155,7 @@ class FileRender extends React.PureComponent<Props> {
       case RENDER_MODES.APPLICATION:
         return (
           <React.Suspense fallback={null}>
-            <AppViewer uri={uri} />;
+            <AppViewer uri={uri} />
           </React.Suspense>
         );
     }
