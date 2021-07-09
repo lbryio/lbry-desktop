@@ -6,6 +6,8 @@ const SDK_API_PATH = `${LBRY_WEB_API}/api/v1`;
 const proxyURL = `${SDK_API_PATH}/proxy`;
 Lbry.setDaemonConnectionString(proxyURL);
 
+const NUM_ENTRIES = 500;
+
 async function doClaimSearch(options) {
   let results;
   try {
@@ -59,7 +61,7 @@ async function getFeed(channelClaim) {
 
   const feed = new Feed(options);
 
-  const latestClaims = await getClaimsFromChannel(channelClaim.claim_id, 50);
+  const latestClaims = await getClaimsFromChannel(channelClaim.claim_id, NUM_ENTRIES);
 
   latestClaims.forEach((c) => {
     const meta = c.meta;
