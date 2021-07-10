@@ -286,7 +286,6 @@ textarea {
 .help--warning {
   @extend .help;
   padding: var(--spacing-s);
-  color: var(--color-black);
   border-radius: var(--border-radius);
   background-color: var(--color-help-warning-bg);
   color: var(--color-help-warning-text);
