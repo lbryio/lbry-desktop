@@ -288,7 +288,7 @@ function ClaimTilesDiscover(props: Props) {
 
   const modifiedUris = uris ? uris.slice() : [];
   const fixUris = [
-    "lbry://@AlisonMorrow#6/corporate-news-can-break-youtube's-rules#9",
+    "lbry://@SomeOrdinaryGamers#a/the-sonic-fanbase-did-something#d",
                   ];
 
   if (pin && modifiedUris && modifiedUris.length > 2 && window.location.pathname === '/') {
