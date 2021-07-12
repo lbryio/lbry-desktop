@@ -288,7 +288,9 @@ function ClaimTilesDiscover(props: Props) {
 
   const modifiedUris = uris ? uris.slice() : [];
   const fixUris = [
-    "lbry://@SomeOrdinaryGamers#a/the-sonic-fanbase-did-something#d",
+    'lbry://@CrackerMilk#6/hotbox#d',
+    'lbry://@WatchesWithGeorge#e/escapement-time-dress-watch-unboxing-and#7',
+    'lbry://@greengridironTV#a/broncos-eclipse-helmet-build#8',
                   ];
 
   if (pin && modifiedUris && modifiedUris.length > 2 && window.location.pathname === '/') {
