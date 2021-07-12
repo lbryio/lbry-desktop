@@ -228,7 +228,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
                             <br />
                             <h3>
                               {__(
-                                'Your account balance is $%balance% USD. Functionality to view your transactions and withdraw your balance will be landing shortly.',
+                                'Your pending account balance is $%balance% USD.',
                                 { balance: unpaidBalance / 100 }
                               )}
                             </h3>
@@ -252,7 +252,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
                           <br />
                           <h3>
                             {__(
-                              'Your pending account balance is $%balance% USD. Functionality to view and receive your transactions will land soon.',
+                              'Your pending account balance is $%balance% USD.',
                               { balance: unpaidBalance / 100 }
                             )}
                           </h3>
@@ -293,7 +293,9 @@ class StripeAccountConnection extends React.Component<Props, State> {
                         <th>{<>{__('Receiving Channel Name')}</>}</th>
                         <th>{__('Tip Location')}</th>
                         <th>{__('Amount (USD)')} </th>
-                        <th>{__('Anonymous')}</th>
+                        <th>{__('Processing Fee')}</th>
+                        <th>{__('Odysee Fee')}</th>
+                        <th>{__('Received Amount')}</th>
                       </tr>
                       </thead>
                       <tbody>
@@ -319,7 +321,9 @@ class StripeAccountConnection extends React.Component<Props, State> {
                             />
                           </td>
                           <td>${transaction.tipped_amount / 100}</td>
-                          <td>{transaction.private_tip ? 'Yes' : 'No'}</td>
+                          <td>${transaction.transaction_fee / 100}</td>
+                          <td>${transaction.application_fee / 100}</td>
+                          <td>${transaction.received_amount / 100}</td>
                         </tr>
                       ))}
                       </tbody>
