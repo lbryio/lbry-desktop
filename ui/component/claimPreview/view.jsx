@@ -36,6 +36,7 @@ const AbandonedChannelPreview = lazyImport(() =>
 type Props = {
   uri: string,
   claim: ?Claim,
+  active: boolean,
   obscureNsfw: boolean,
   showUserBlocked: boolean,
   claimIsMine: boolean,
@@ -113,6 +114,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     pending,
     empty,
     // modifiers
+    active,
     customShouldHide,
     showNullPlaceholder,
     // value from show mature content user setting
@@ -293,6 +295,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
         'claim-preview__wrapper--inline': type === 'inline',
         'claim-preview__wrapper--small': type === 'small',
         'claim-preview__live': live,
+        'claim-preview__active': active,
       })}
     >
       <>

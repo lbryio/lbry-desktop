@@ -4,19 +4,19 @@ import {
   makeSelectUrlsForCollectionId,
   makeSelectNameForCollectionId,
   makeSelectCollectionForId,
-  makeSelectClaimForClaimId,
+  makeSelectClaimForUri,
   makeSelectClaimIsMine,
 } from 'lbry-redux';
 
 const select = (state, props) => {
-  const claim = makeSelectClaimForClaimId(props.id)(state);
+  const claim = makeSelectClaimForUri(props.uri)(state);
   const url = claim && claim.permanent_url;
 
   return {
+    url,
     collection: makeSelectCollectionForId(props.id)(state),
     collectionUrls: makeSelectUrlsForCollectionId(props.id)(state),
     collectionName: makeSelectNameForCollectionId(props.id)(state),
-    claim,
     isMine: makeSelectClaimIsMine(url)(state),
   };
 };
