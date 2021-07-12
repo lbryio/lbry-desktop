@@ -123,7 +123,8 @@ function WalletSendTip(props: Props) {
 
   // check if creator has an account saved
   React.useEffect(() => {
-    document.getElementById('tip-input').focus();
+    var tipInputElement = document.getElementById('tip-input');
+    if (tipInputElement) { tipInputElement.focus() }
   }, []);
 
   React.useEffect(() => {
@@ -390,7 +391,8 @@ function WalletSendTip(props: Props) {
                     label={__('Tip')}
                     button="alt"
                     onClick={() => {
-                      document.getElementById('tip-input').focus();
+                      var tipInputElement = document.getElementById('tip-input');
+                      if (tipInputElement) { tipInputElement.focus() }
                       if (!isConfirming) {
                         setActiveTab(TAB_LBC);
                       }
@@ -405,7 +407,8 @@ function WalletSendTip(props: Props) {
                     label={__('Tip')}
                     button="alt"
                     onClick={() => {
-                      document.getElementById('tip-input').focus();
+                      var tipInputElement = document.getElementById('tip-input');
+                      if (tipInputElement) { tipInputElement.focus() }
                       if (!isConfirming) {
                         setActiveTab(TAB_FIAT);
                       }
@@ -420,7 +423,8 @@ function WalletSendTip(props: Props) {
                     label={__('Boost')}
                     button="alt"
                     onClick={() => {
-                      document.getElementById('tip-input').focus();
+                      var tipInputElement = document.getElementById('tip-input');
+                      if (tipInputElement) { tipInputElement.focus() }
                       if (!isConfirming) {
                         setActiveTab(TAB_BOOST);
                       }

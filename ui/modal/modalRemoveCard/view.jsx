@@ -56,11 +56,13 @@ export default function ModalRevokeClaim(props: Props) {
   // const label = getButtonLabel(type, isSupport);
 
   function removeCard(context) {
-    console.log(context);
-    console.log('this');
-    console.log(this);
-    console.log(that);
-    alert('hello!');
+    alert('Have to use reducx to remove card here')
+    closeModal();
+    // console.log(context);
+    // console.log('this');
+    // console.log(this);
+    // console.log(that);
+    // alert('hello!');
     // console.log('running here')
   }
 
