@@ -6,6 +6,7 @@ import Card from 'component/common/card';
 import Page from 'component/page';
 import { Lbryio } from 'lbryinc';
 import { URL, WEBPACK_WEB_PORT, STRIPE_PUBLIC_KEY } from 'config';
+import moment from 'moment';
 
 const isDev = process.env.NODE_ENV !== 'production';
 
@@ -42,7 +43,7 @@ type State = {
   accountPendingConfirmation: boolean,
   accountNotConfirmedButReceivedTips: boolean,
   unpaidBalance: number,
-  pageTitle: string
+  pageTitle: string,
 };
 
 class StripeAccountConnection extends React.Component<Props, State> {
@@ -58,6 +59,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
       unpaidBalance: 0,
       stripeConnectionUrl: '',
       pageTitle: 'Add Payout Method',
+      accountTransactions: [],
       // alreadyUpdated: false,
     };
   }
@@ -123,6 +125,11 @@ class StripeAccountConnection extends React.Component<Props, State> {
             'post'
           )
             .then((accountListResponse) => {
+
+              that.setState({
+                accountTransactions: accountListResponse,
+              });
+
               console.log(accountListResponse);
             });
         }
@@ -172,10 +179,8 @@ class StripeAccountConnection extends React.Component<Props, State> {
       unpaidBalance,
       accountNotConfirmedButReceivedTips,
       pageTitle,
+      accountTransactions,
     } = this.state;
-
-    console.log('page title');
-    console.log(pageTitle)
 
     const { user } = this.props;
 
@@ -270,6 +275,60 @@ class StripeAccountConnection extends React.Component<Props, State> {
               </div>
             }
           />
+          <br />
+
+
+          {/* customer already has transactions */}
+          {accountTransactions && accountTransactions.length > 0 && (
+
+            <Card
+              title={__('Tip History')}
+              body={
+                <>
+                  <div className="table__wrapper">
+                    <table className="table table--transactions">
+                      <thead>
+                      <tr>
+                        <th className="date-header">{__('Date')}</th>
+                        <th>{<>{__('Receiving Channel Name')}</>}</th>
+                        <th>{__('Tip Location')}</th>
+                        <th>{__('Amount (USD)')} </th>
+                        <th>{__('Anonymous')}</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      {accountTransactions &&
+                      accountTransactions.reverse().map((transaction) => (
+                        <tr key={transaction.name + transaction.created_at}>
+                          <td>{moment(transaction.created_at).format('LLL')}</td>
+                          <td>
+                            <Button
+                              className="stripe__card-link-text"
+                              navigate={'/' + transaction.channel_name + ':' + transaction.channel_claim_id}
+                              label={transaction.channel_name}
+                              button="link"
+                            />
+                          </td>
+                          <td>
+                            <Button
+                              className="stripe__card-link-text"
+                              navigate={'/' + transaction.channel_name + ':' + transaction.source_claim_id}
+                              label={transaction.channel_claim_id === transaction.source_claim_id ? 'Channel Page' : 'File Page'}
+                              button="link"
+
+                            />
+                          </td>
+                          <td>${transaction.tipped_amount / 100}</td>
+                          <td>{transaction.private_tip ? 'Yes' : 'No'}</td>
+                        </tr>
+                      ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </>
+              }
+            />
+          )}
         </Page>
       );
     } else {
