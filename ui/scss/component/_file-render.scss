@@ -497,7 +497,7 @@ video::-internal-media-controls-overlay-cast-button {
   // --- Unhide desired components per layout ---
   &.vjs-layout-x-small {
     .vjs-playback-rate {
-      display: inherit;
+      display: flex !important;
     }
   }
 
@@ -506,7 +506,7 @@ video::-internal-media-controls-overlay-cast-button {
     .vjs-time-divider,
     .vjs-duration,
     .vjs-playback-rate {
-      display: inherit;
+      display: flex !important;
     }
   }
 
