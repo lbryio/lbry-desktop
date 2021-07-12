@@ -252,11 +252,16 @@ function WalletSendTip(props: Props) {
                   tipChannelName,
                 }),
               });
-              console.log(customerTipResponse);
             })
             .catch(function (error) {
-              console.log(error);
-              doToast({ message: error.message, isError: true });
+
+              var displayError = 'Sorry, there was an error in processing your payment!'
+
+              if (error.message !== 'payment intent failed to confirm') {
+                displayError = error.message;
+              }
+
+              doToast({ message: displayError, isError: true });
             });
 
           closeModal();
