@@ -9,18 +9,17 @@ import * as ICONS from 'constants/icons';
 import { COLLECTIONS_CONSTS } from 'lbry-redux';
 
 type Props = {
+  id: string,
+  url: string,
+  isMine: boolean,
   collectionUrls: Array<Claim>,
   collectionName: string,
   collection: any,
   createUnpublishedCollection: (string, Array<any>, ?string) => void,
-  id: string,
-  claim: Claim,
-  isMine: boolean,
 };
 
 export default function CollectionContent(props: Props) {
-  const { collectionUrls, collectionName, id } = props;
-
+  const { collectionUrls, collectionName, id, url } = props;
   return (
     <Card
       isBodyList
@@ -40,7 +39,16 @@ export default function CollectionContent(props: Props) {
           <Button label={'View List'} button="link" navigate={`/$/${PAGES.LIST}/${id}`} />
         </>
       }
-      body={<ClaimList isCardBody type="small" uris={collectionUrls} collectionId={id} empty={__('List is Empty')} />}
+      body={
+        <ClaimList
+          isCardBody
+          type="small"
+          activeUri={url}
+          uris={collectionUrls}
+          collectionId={id}
+          empty={__('List is Empty')}
+        />
+      }
     />
   );
 }

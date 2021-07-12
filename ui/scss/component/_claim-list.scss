@@ -705,6 +705,10 @@
   }
 }
 
+.claim-preview__active {
+  background-color: var(--color-card-background-highlighted);
+}
+
 .claim-preview__live {
   .claim-preview__file-property-overlay {
     opacity: 1; // The original 0.7 is not visible over bright thumbnails
