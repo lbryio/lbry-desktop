@@ -32,7 +32,9 @@ const macroUrl =
   `&AV_CONSENT=[CONSENT_MACRO]` +
   `&skip=true` +
   `&skiptimer=5` +
+  `&logo=false` +
   `&usevslot=true` +
+  `&vastretry=3` +
   `&hidecontrols=false`;
 
 export type Player = {
@@ -603,7 +605,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     // pre-roll ads
     // This must be initialized earlier than everything else
     // otherwise a race condition occurs if we place this in the onReady call back
-    if (allowPreRoll && !SIMPLE_SITE && window.google) {
+    if (allowPreRoll && SIMPLE_SITE && window.google) {
       const google = window.google;
       // player.aniview();
       vjs.ima({
