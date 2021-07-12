@@ -18,6 +18,12 @@ function getStreamUrl(ctx) {
   return streamUrl;
 }
 
+const rssMiddleware = async (ctx) => {
+  const xml = await getRss(ctx);
+  ctx.set('Content-Type', 'application/rss+xml');
+  ctx.body = xml;
+};
+
 router.get(`/$/api/content/get`, async (ctx) => {
   let content;
   try {
@@ -43,11 +49,8 @@ router.get(`/$/stream/:claimName/:claimId`, async (ctx) => {
   ctx.redirect(streamUrl);
 });
 
-router.get(`/$/rss/:claimName/:claimId`, async (ctx) => {
-  const xml = await getRss(ctx);
-  ctx.set('Content-Type', 'application/rss+xml');
-  ctx.body = xml;
-});
+router.get(`/$/rss/:claimName/:claimId`, rssMiddleware);
+router.get(`/$/rss/:claimName::claimId`, rssMiddleware);
 
 router.get('*', async (ctx) => {
   const html = await getHtml(ctx);

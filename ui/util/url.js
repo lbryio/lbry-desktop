@@ -148,8 +148,11 @@ export const generateShareUrl = (
   return url;
 };
 
-export const generateRssUrl = (domain, lbryUrl) => {
-  const { channelName, channelClaimId } = parseURI(lbryUrl);
-  const url = `${domain}/$/rss/@${channelName}${channelClaimId ? `/${channelClaimId.slice(0, 2)}` : ''}`;
+export const generateRssUrl = (domain, channelClaim) => {
+  if (!channelClaim || channelClaim.value_type !== 'channel' || !channelClaim.canonical_url) {
+    return '';
+  }
+
+  const url = `${domain}/$/rss/${channelClaim.canonical_url.replace('lbry://', '').replace('#', ':')}`;
   return url;
 };
