@@ -138,8 +138,8 @@ function WalletSendTip(props: Props) {
             setCanReceiveFiatTip(true);
           }
         })
-        .catch(function (error) {
-          console.log(error);
+        .catch(function(error) {
+          // console.log(error);
         });
     }
   }, [channelClaimId]);
@@ -187,22 +187,34 @@ function WalletSendTip(props: Props) {
     const validTipInput = regexp.test(String(tipAmount));
     let tipError;
 
-    if (!tipAmount) {
-      tipError = __('Amount must be a number');
-    } else if (tipAmount <= 0) {
+    if (tipAmount === 0) {
       tipError = __('Amount must be a positive number');
-    } else if (tipAmount < MINIMUM_PUBLISH_BID) {
-      tipError = __('Amount must be higher');
-    } else if (!validTipInput) {
-      tipError = __('Amount must have no more than 8 decimal places');
-    } else if (tipAmount === balance) {
-      tipError = __('Please decrease the amount to account for transaction fees');
-    } else if (tipAmount > balance) {
-      tipError = __('Not enough Credits');
+    } else if (!tipAmount || typeof tipAmount !== 'number') {
+      tipError = __('Amount must be a number');
+    }
+
+    // if it's not fiat, aka it's boost or lbc tip
+    else if (activeTab !== TAB_FIAT) {
+      if (!validTipInput) {
+        tipError = __('Amount must have no more than 8 decimal places');
+      } else if (tipAmount === balance) {
+        tipError = __('Please decrease the amount to account for transaction fees');
+      } else if (tipAmount > balance) {
+        tipError = __('Not enough Credits');
+      } else if (tipAmount < MINIMUM_PUBLISH_BID) {
+        tipError = __('Amount must be higher');
+      }
+    //  if tip fiat tab
+    } else {
+      if (tipAmount < 1) {
+        tipError = __('Amount must be at least one dollar');
+      } else if (tipAmount > 1000) {
+        tipError = __('Amount cannot be over 1000 dollars');
+      }
     }
 
     setTipError(tipError);
-  }, [tipAmount, balance, setTipError]);
+  }, [tipAmount, balance, setTipError, activeTab]);
 
   //
   function sendSupportOrConfirm(instantTipMaxAmount = null) {
@@ -268,9 +280,8 @@ function WalletSendTip(props: Props) {
                 }),
               });
             })
-            .catch(function (error) {
-
-              var displayError = 'Sorry, there was an error in processing your payment!'
+            .catch(function(error) {
+              var displayError = 'Sorry, there was an error in processing your payment!';
 
               if (error.message !== 'payment intent failed to confirm') {
                 displayError = error.message;
@@ -290,6 +301,7 @@ function WalletSendTip(props: Props) {
 
   function handleCustomPriceChange(event: SyntheticInputEvent<*>) {
     const tipAmount = parseFloat(event.target.value);
+
     setCustomTipAmount(tipAmount);
   }
 
@@ -488,6 +500,7 @@ function WalletSendTip(props: Props) {
                     icon={iconToUse}
                     label={__('Custom')}
                     onClick={() => setUseCustomTip(true)}
+                    // disabled if it's receive fiat and there is no card or creator can't receive tips
                     disabled={activeTab === TAB_FIAT && (!hasCardSaved || !canReceiveFiatTip)}
                   />
 
@@ -522,7 +535,7 @@ function WalletSendTip(props: Props) {
                         </React.Fragment>
                       }
                       className="form-field--price-amount"
-                      error={tipError && activeTab !== TAB_FIAT}
+                      error={tipError}
                       min="0"
                       step="any"
                       type="number"
