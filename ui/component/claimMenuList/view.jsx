@@ -103,7 +103,7 @@ function ClaimMenuList(props: Props) {
   }
 
   const shareUrl: string = generateShareUrl(SHARE_DOMAIN, uri);
-  const rssUrl: string = isChannel ? generateRssUrl(URL, uri) : '';
+  const rssUrl: string = isChannel ? generateRssUrl(URL, claim) : '';
   const isCollectionClaim = claim && claim.value_type === 'collection';
   // $FlowFixMe
   const isPlayable =
@@ -369,7 +369,7 @@ function ClaimMenuList(props: Props) {
 
         <hr className="menu__separator" />
 
-        {isChannelPage && IS_WEB && (
+        {isChannelPage && IS_WEB && rssUrl && (
           <MenuItem className="comment__menu-option" onSelect={handleCopyRssLink}>
             <div className="menu__link">
               <Icon aria-hidden icon={ICONS.RSS} />

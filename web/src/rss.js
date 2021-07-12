@@ -108,7 +108,7 @@ async function getRss(ctx) {
     return channelClaim;
   }
 
-  const feed = await getFeed(channelClaim, `${URL}/$/rss/${ctx.params.claimName}/${ctx.params.claimId}`);
+  const feed = await getFeed(channelClaim, `${URL}${ctx.request.url}`);
   return postProcess(feed.rss2());
 }
 
