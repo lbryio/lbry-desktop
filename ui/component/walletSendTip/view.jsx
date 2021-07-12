@@ -147,7 +147,7 @@ function WalletSendTip(props: Props) {
   const noBalance = balance === 0;
   const tipAmount = useCustomTip ? customTipAmount : presetTipAmount;
 
-  const [activeTab, setActiveTab] = React.useState(TAB_LBC);
+  const [activeTab, setActiveTab] = React.useState(claimIsMine ? TAB_BOOST : TAB_LBC);
 
   let iconToUse, explainerText;
   if (activeTab === TAB_BOOST) {
