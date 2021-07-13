@@ -97,6 +97,9 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
   const combinedRef = useCombinedRefs(ref, innerRef, myref);
   const size = iconSize || (!label && !children) ? 18 : undefined; // Fall back to default
 
+  // Label can be a string or object ( use title instead )
+  const ariaLabel = description || (typeof label === 'string' ? label : title);
+
   const content = (
     <span className="button__content">
       {icon && <Icon icon={icon} iconColor={iconColor} size={iconSize} />}
@@ -224,7 +227,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
     <button
       ref={combinedRef}
       title={title || defaultTooltip}
-      aria-label={description || label || title}
+      aria-label={ariaLabel}
       className={combinedClassName}
       onClick={(e) => {
         if (onClick) {
