@@ -1,8 +1,8 @@
 import { SETTINGS, DAEMON_SETTINGS } from 'lbry-redux';
 import { createSelector } from 'reselect';
-import homepages from 'homepages';
 import { ENABLE_MATURE } from 'config';
 import { getDefaultHomepageKey, getDefaultLanguage } from 'util/default-languages';
+const homepages = require('homepages');
 
 const selectState = (state) => state.settings || {};
 
@@ -70,7 +70,8 @@ export const selectHomepageData = createSelector(
   selectHomepageCode,
   (homepageCode) => {
     // homepages = { 'en': homepageFile, ... }
-    return homepages[homepageCode] || homepages['en'];
+    // mixin Homepages here
+    return homepages[homepageCode] || homepages['en'] || {};
   }
 );
 

@@ -12,6 +12,7 @@ import I18nMessage from 'component/i18nMessage';
 import LbcSymbol from 'component/common/lbc-symbol';
 import WaitUntilOnPage from 'component/common/wait-until-on-page';
 import useGetLivestreams from 'effects/use-get-livestreams';
+import { GetLinksData } from 'util/buildHomepage';
 
 // @if TARGET='web'
 import Pixel from 'web/component/pixel';
@@ -30,10 +31,11 @@ function HomePage(props: Props) {
   const showPersonalizedChannels = (authenticated || !IS_WEB) && subscribedChannels && subscribedChannels.length > 0;
   const showPersonalizedTags = (authenticated || !IS_WEB) && followedTags && followedTags.length > 0;
   const showIndividualTags = showPersonalizedTags && followedTags.length < 5;
-  const { default: getHomepage } = homepageData;
   const { livestreamMap } = useGetLivestreams();
 
-  const rowData: Array<RowDataItem> = getHomepage(
+  const rowData: Array<RowDataItem> = GetLinksData(
+    homepageData,
+    true,
     authenticated,
     showPersonalizedChannels,
     showPersonalizedTags,
@@ -58,7 +60,7 @@ function HomePage(props: Props) {
         livestreamMap={livestreamMap}
         showNoSourceClaims={ENABLE_NO_SOURCE_CLAIMS}
         hasSource
-        pin={route === `/$/${PAGES.GENERAL}`}
+        pin={route === `/$/${PAGES.GENERAL}`} // use pinUrls here
       />
     );
 
@@ -139,6 +141,7 @@ function HomePage(props: Props) {
         </div>
       )}
       {rowData.map(({ title, route, link, icon, help, options = {} }, index) => {
+        // add pins here
         return getRowElements(title, route, link, icon, help, options, index);
       })}
       {/* @if TARGET='web' */}

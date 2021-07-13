@@ -20,7 +20,7 @@ declare type RowDataItem = {
   options?: {
     channelIds?: Array<string>,
     limitClaimsPerChannel?: number,
-    pageSize: number,
+    pageSize?: number,
   },
   route?: string,
   hideForUnauth?: boolean,
