@@ -1,38 +1,7 @@
-// @flow
-import * as PAGES from 'constants/pages';
-import * as ICONS from 'constants/icons';
-import * as CS from 'constants/claim_search';
-import { parseURI } from 'lbry-redux';
-import moment from 'moment';
-import { toCapitalCase } from 'util/string';
-import { useIsLargeScreen } from 'effects/use-screensize';
+import * as PAGES from '../ui/constants/pages';
+import * as CS from '../ui/constants/claim_search';
 
-export type RowDataItem = {
-  title: string,
-  link?: string,
-  help?: any,
-  options?: {},
-  icon?: string,
-};
-
-export default function GetHomePageRowData(
-  authenticated: boolean,
-  showPersonalizedChannels: boolean,
-  showPersonalizedTags: boolean,
-  subscribedChannels: Array<Subscription>,
-  followedTags: Array<Tag>,
-  showIndividualTags: boolean,
-  showNsfw: boolean
-) {
-  const isLargeScreen = useIsLargeScreen();
-
-  function getPageSize(originalSize) {
-    return isLargeScreen ? originalSize * (3 / 2) : originalSize;
-  }
-
-  let rowData: Array<RowDataItem> = [];
-  const individualTagDataItems: Array<RowDataItem> = [];
-  const YOUTUBER_CHANNEL_IDS = [
+const YOUTUBER_CHANNEL_IDS = [
     'fb364ef587872515f545a5b4b3182b58073f230f',
     '589276465a23c589801d874f484cc39f307d7ec7',
     'ba79c80788a9e1751e49ad401f5692d86f73a2db',
@@ -116,142 +85,18 @@ export default function GetHomePageRowData(
     'e8f68563d242f6ac9784dcbc41dd86c28a9391d6',
   ];
 
-  const YOUTUBE_CREATOR_ROW = {
-    title: __('CableTube Escape Artists'),
-    link: `/$/${PAGES.DISCOVER}?${CS.CLAIM_TYPE}=${CS.CLAIM_STREAM}&${CS.CHANNEL_IDS_KEY}=${YOUTUBER_CHANNEL_IDS.join(
-      ','
-    )}`,
-    options: {
-      claimType: ['stream'],
-      orderBy: ['release_time'],
-      pageSize: getPageSize(12),
-      channelIds: YOUTUBER_CHANNEL_IDS,
-      limitClaimsPerChannel: 1,
-      releaseTime: `>${Math.floor(moment().subtract(1, 'months').startOf('week').unix())}`,
-    },
+  const YOUTUBERS = {
+      ids: YOUTUBER_CHANNEL_IDS,
+      link: `/$/${PAGES.DISCOVER}?${CS.CLAIM_TYPE}=${CS.CLAIM_STREAM}&${CS.CHANNEL_IDS_KEY}=${YOUTUBER_CHANNEL_IDS.join(
+        ','
+      )}`,
+      name: 'general',
+      label: 'CableTube Escape Artists',
+      channelLimit: 1,
+      daysOfContent: 30,
+      pageSize: 24,
+      //pinnedUrls: [],
+      //mixIn: [],
   };
 
-  if (followedTags.length) {
-    followedTags.forEach((tag: Tag) => {
-      const tagName = `#${toCapitalCase(tag.name)}`;
-      individualTagDataItems.push({
-        title: __('Trending for %tagName%', { tagName: tagName }),
-        link: `/$/${PAGES.DISCOVER}?t=${tag.name}`,
-        options: {
-          pageSize: 4,
-          tags: [tag.name],
-          claimType: ['stream'],
-        },
-      });
-    });
-  }
-
-  const RECENT_FROM_FOLLOWING = {
-    title: __('Recent From Following'),
-    link: `/$/${PAGES.CHANNELS_FOLLOWING}`,
-    icon: ICONS.SUBSCRIBE,
-    options: {
-      streamTypes: null,
-      orderBy: ['release_time'],
-      releaseTime:
-        subscribedChannels.length > 20
-          ? `>${Math.floor(moment().subtract(6, 'months').startOf('week').unix())}`
-          : `>${Math.floor(moment().subtract(1, 'year').startOf('week').unix())}`,
-      pageSize: getPageSize(subscribedChannels.length > 3 ? (subscribedChannels.length > 6 ? 16 : 8) : 4),
-      channelIds: subscribedChannels.map((subscription: Subscription) => {
-        const { channelClaimId } = parseURI(subscription.uri);
-        return channelClaimId;
-      }),
-    },
-  };
-
-  const TOP_CONTENT_TODAY = {
-    title: __('Top Content from Today'),
-    link: `/$/${PAGES.DISCOVER}?${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${CS.FRESH_DAY}`,
-    options: {
-      pageSize: getPageSize(showPersonalizedChannels || showPersonalizedTags ? 4 : 8),
-      orderBy: ['effective_amount'],
-      claimType: ['stream'],
-      limitClaimsPerChannel: 2,
-      releaseTime: `>${Math.floor(moment().subtract(1, 'day').startOf('day').unix())}`,
-    },
-  };
-
-  const TOP_CHANNELS = {
-    title: __('Top Channels On LBRY'),
-    link: `/$/${PAGES.DISCOVER}?claim_type=channel&${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${CS.FRESH_ALL}`,
-    options: {
-      orderBy: ['effective_amount'],
-      claimType: ['channel'],
-    },
-  };
-
-  //   const TRENDING_CLASSICS = {
-  //     title: __('Trending Classics'),
-  //     link: `/$/${PAGES.DISCOVER}?${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TRENDING}&${CS.FRESH_KEY}=${CS.FRESH_WEEK}`,
-  //     options: {
-  //       pageSize: getPageSize(4),
-  //       claimType: ['stream'],
-  //       limitClaimsPerChannel: 1,
-  //       releaseTime: `<${Math.floor(
-  //         moment()
-  //           .subtract(6, 'month')
-  //           .startOf('day')
-  //           .unix()
-  //       )}`,
-  //     },
-  //   };
-
-  //   const TRENDING_ON_LBRY = {
-  //     title: __('Trending On LBRY'),
-  //     link: `/$/${PAGES.DISCOVER}`,
-  //     options: {
-  //       pageSize: showPersonalizedChannels || showPersonalizedTags ? 4 : 8,
-  //     },
-  //   };
-
-  const TRENDING_FOR_TAGS = {
-    title: __('Trending For Your Tags'),
-    link: `/$/${PAGES.TAGS_FOLLOWING}`,
-    icon: ICONS.TAG,
-
-    options: {
-      pageSize: getPageSize(4),
-      tags: followedTags.map((tag) => tag.name),
-      claimType: ['stream'],
-      limitClaimsPerChannel: 2,
-    },
-  };
-
-  const LATEST_FROM_LBRY = {
-    title: __('Latest From @lbry'),
-    link: `/@lbry:3f`,
-    options: {
-      orderBy: ['release_time'],
-      pageSize: getPageSize(4),
-      channelIds: ['3fda836a92faaceedfe398225fb9b2ee2ed1f01a'],
-    },
-  };
-
-  if (showPersonalizedChannels) rowData.push(RECENT_FROM_FOLLOWING);
-  if (showPersonalizedTags && !showIndividualTags) rowData.push(TRENDING_FOR_TAGS);
-  if (showPersonalizedTags && showIndividualTags) {
-    individualTagDataItems.forEach((item: RowDataItem) => {
-      rowData.push(item);
-    });
-  }
-
-  if (!authenticated) {
-    rowData.push(YOUTUBE_CREATOR_ROW);
-  }
-
-  rowData.push(TOP_CONTENT_TODAY);
-
-  //   rowData.push(TRENDING_ON_LBRY);
-
-  rowData.push(LATEST_FROM_LBRY);
-
-  if (!showPersonalizedChannels) rowData.push(TOP_CHANNELS);
-
-  return rowData;
-}
+module.exports = { YOUTUBERS };

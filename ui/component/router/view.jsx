@@ -8,6 +8,7 @@ import { LINKED_COMMENT_QUERY_PARAM } from 'constants/comment';
 import { parseURI, isURIValid } from 'lbry-redux';
 import { SITE_TITLE, WELCOME_VERSION, SIMPLE_SITE } from 'config';
 import LoadingBarOneOff from 'component/loadingBarOneOff';
+import { GetLinksData } from 'util/buildHomepage';
 
 import HomePage from 'page/home';
 
@@ -21,7 +22,9 @@ const Code2257Page = lazyImport(() => import('web/page/code2257' /* webpackChunk
 
 // Chunk: "secondary"
 const SignInPage = lazyImport(() => import('page/signIn' /* webpackChunkName: "secondary" */));
-const SignInWalletPasswordPage = lazyImport(() => import('page/signInWalletPassword' /* webpackChunkName: "secondary" */));
+const SignInWalletPasswordPage = lazyImport(() =>
+  import('page/signInWalletPassword' /* webpackChunkName: "secondary" */)
+);
 const SignUpPage = lazyImport(() => import('page/signUp' /* webpackChunkName: "secondary" */));
 const SignInVerifyPage = lazyImport(() => import('page/signInVerify' /* webpackChunkName: "secondary" */));
 
@@ -36,7 +39,9 @@ const WalletPage = lazyImport(() => import('page/wallet' /* webpackChunkName: "s
 const NotificationsPage = lazyImport(() => import('page/notifications' /* webpackChunkName: "secondary" */));
 const CollectionPage = lazyImport(() => import('page/collection' /* webpackChunkName: "secondary" */));
 const ChannelNew = lazyImport(() => import('page/channelNew' /* webpackChunkName: "secondary" */));
-const ChannelsFollowingDiscoverPage = lazyImport(() => import('page/channelsFollowingDiscover' /* webpackChunkName: "secondary" */));
+const ChannelsFollowingDiscoverPage = lazyImport(() =>
+  import('page/channelsFollowingDiscover' /* webpackChunkName: "secondary" */)
+);
 const ChannelsFollowingPage = lazyImport(() => import('page/channelsFollowing' /* webpackChunkName: "secondary" */));
 const ChannelsPage = lazyImport(() => import('page/channels' /* webpackChunkName: "secondary" */));
 const CheckoutPage = lazyImport(() => import('page/checkoutPage' /* webpackChunkName: "checkoutPage" */));
@@ -65,10 +70,14 @@ const SearchPage = lazyImport(() => import('page/search' /* webpackChunkName: "s
 const SettingsAdvancedPage = lazyImport(() => import('page/settingsAdvanced' /* webpackChunkName: "secondary" */));
 const SettingsStripeCard = lazyImport(() => import('page/settingsStripeCard' /* webpackChunkName: "secondary" */));
 const SettingsCreatorPage = lazyImport(() => import('page/settingsCreator' /* webpackChunkName: "secondary" */));
-const SettingsNotificationsPage = lazyImport(() => import('page/settingsNotifications' /* webpackChunkName: "secondary" */));
+const SettingsNotificationsPage = lazyImport(() =>
+  import('page/settingsNotifications' /* webpackChunkName: "secondary" */)
+);
 const SettingsPage = lazyImport(() => import('page/settings' /* webpackChunkName: "secondary" */));
 const ShowPage = lazyImport(() => import('page/show' /* webpackChunkName: "secondary" */));
-const TagsFollowingManagePage = lazyImport(() => import('page/tagsFollowingManage' /* webpackChunkName: "secondary" */));
+const TagsFollowingManagePage = lazyImport(() =>
+  import('page/tagsFollowingManage' /* webpackChunkName: "secondary" */)
+);
 const TagsFollowingPage = lazyImport(() => import('page/tagsFollowing' /* webpackChunkName: "secondary" */));
 const TopPage = lazyImport(() => import('page/top' /* webpackChunkName: "secondary" */));
 const Welcome = lazyImport(() => import('page/welcome' /* webpackChunkName: "secondary" */));
@@ -150,7 +159,7 @@ function AppRouter(props: Props) {
   const resetScroll = urlParams.get('reset_scroll');
   const hasLinkedCommentInUrl = urlParams.get(LINKED_COMMENT_QUERY_PARAM);
 
-  const dynamicRoutes = Object.values(homepageData).filter(
+  const dynamicRoutes = GetLinksData(homepageData).filter(
     (potentialRoute: any) => potentialRoute && potentialRoute.route
   );
 
