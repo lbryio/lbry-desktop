@@ -15,14 +15,13 @@ import analytics from 'analytics';
 type Props = {
   claim: ?ChannelClaim,
   fetchingChannels: boolean,
-  prepareEdit: string => void,
 };
 
 const UNAUTHENTICATED_ERROR = 'unauthenticated';
 const GENERIC_ERROR = 'error';
 
 export default function CreatorAnalytics(props: Props) {
-  const { prepareEdit, claim } = props;
+  const { claim } = props;
   const history = useHistory();
   const [stats, setStats] = React.useState();
   const [error, setError] = React.useState();
@@ -39,11 +38,11 @@ export default function CreatorAnalytics(props: Props) {
     if (claimId && channelForEffect && channelHasClaims) {
       setFetchingStats(true);
       Lbryio.call('reports', 'content', { claim_id: claimId })
-        .then(res => {
+        .then((res) => {
           setFetchingStats(false);
           setStats(res);
         })
-        .catch(error => {
+        .catch((error) => {
           if (error.response.status === 401) {
             setError(UNAUTHENTICATED_ERROR);
             const channelToSend = JSON.parse(channelForEffect);
@@ -218,12 +217,7 @@ export default function CreatorAnalytics(props: Props) {
                     button="primary"
                     icon={ICONS.PUBLISH}
                     label={__('Upload')}
-                    onClick={() => {
-                      if (claim) {
-                        prepareEdit(claim.name);
-                        history.push(`/$/${PAGES.UPLOAD}`);
-                      }
-                    }}
+                    onClick={() => history.push(`/$/${PAGES.UPLOAD}`)}
                   />
                 </div>
               }
