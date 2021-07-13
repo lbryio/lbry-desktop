@@ -153,6 +153,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
         className={combinedClassName}
         title={title}
         onClick={onClick}
+        aria-label={ariaLabel}
       >
         {content}
       </a>
@@ -199,6 +200,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
         disabled={disable}
         className={combinedClassName}
         activeClassName={activeClass}
+        aria-label={ariaLabel}
       >
         {content}
       </NavLink>
@@ -219,6 +221,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
       }}
       className={combinedClassName}
       activeClassName={activeClass}
+      aria-label={ariaLabel}
       {...otherProps}
     >
       {content}
