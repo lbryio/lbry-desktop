@@ -13,7 +13,7 @@ type Props = {
   label: ?string,
   reward: Reward,
   button: ?boolean,
-  claimReward: Reward => void,
+  claimReward: (Reward) => void,
 };
 
 const RewardLink = (props: Props) => {
@@ -36,6 +36,7 @@ const RewardLink = (props: Props) => {
       button={button ? 'primary' : 'link'}
       disabled={isPending}
       label={<LbcMessage>{displayLabel}</LbcMessage>}
+      aria-label={displayLabel}
       onClick={() => {
         claimReward(reward);
       }}
