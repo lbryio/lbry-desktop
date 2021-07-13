@@ -2043,5 +2043,8 @@
   "Trending for #Art": "Trending for #Art",
   "Trending for #Education": "Trending for #Education",
   "Trending for #Technology": "Trending for #Technology",
+  "Enter a @username or URL": "Enter a @username or URL",
+  "examples: @channel, @channel#3, https://odysee.com/@Odysee:8, lbry://@Odysee#8": "examples: @channel, @channel#3, https://odysee.com/@Odysee:8, lbry://@Odysee#8",
+  "Moderators": "Moderators",
   "--end--": "--end--"
 }
