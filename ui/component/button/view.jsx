@@ -102,7 +102,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
 
   const content = (
     <span className="button__content">
-      {icon && <Icon icon={icon} iconColor={iconColor} size={iconSize} />}
+      {icon && <Icon aria-hidden icon={icon} iconColor={iconColor} size={iconSize} />}
 
       {!largestLabel && label && (
         <span dir="auto" className="button__label">
@@ -139,7 +139,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
       )}
 
       {children && children}
-      {iconRight && <Icon icon={iconRight} iconColor={iconColor} size={size} />}
+      {iconRight && <Icon aria-hidden icon={iconRight} iconColor={iconColor} size={size} />}
     </span>
   );
 

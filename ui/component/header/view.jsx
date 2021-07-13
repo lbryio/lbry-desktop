@@ -244,6 +244,7 @@ const Header = (props: Props) => {
                     }
                     className="header__navigation-item menu__title header__navigation-item--icon"
                     icon={ICONS.MENU}
+                    aria-expanded={sidebarOpen}
                     onClick={() => setSidebarOpen(!sidebarOpen)}
                   >
                     {isAbsoluteSideNavHidden && isMobile && notificationsEnabled && <NotificationBubble />}
