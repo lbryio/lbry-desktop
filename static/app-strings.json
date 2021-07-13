@@ -2044,5 +2044,7 @@
   "The payment will be made from your saved card": "The payment will be made from your saved card",
   "A channel is required to comment on lbry.tv": "A channel is required to comment on lbry.tv",
   "Commenting...": "Commenting...",
+  "Reset": "Reset",
+  "Reset to original (previous) publish date": "Reset to original (previous) publish date",
   "--end--": "--end--"
 }
