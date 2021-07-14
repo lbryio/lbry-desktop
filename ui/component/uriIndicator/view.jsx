@@ -48,6 +48,7 @@ class UriIndicator extends React.PureComponent<Props> {
       hideAnonymous = false,
       external = false,
       className,
+      ...props
     } = this.props;
 
     if (!claim) {
@@ -86,7 +87,7 @@ class UriIndicator extends React.PureComponent<Props> {
 
       if (children) {
         return (
-          <Button className={className} target={external ? '_blank' : undefined} navigate={channelLink}>
+          <Button className={className} target={external ? '_blank' : undefined} navigate={channelLink} {...props}>
             {children}
           </Button>
         );
@@ -96,6 +97,7 @@ class UriIndicator extends React.PureComponent<Props> {
             className={classnames(className, 'button--uri-indicator')}
             navigate={channelLink}
             target={external ? '_blank' : undefined}
+            {...props}
           >
             {inner}
           </Button>
