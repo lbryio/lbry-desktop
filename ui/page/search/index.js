@@ -1,43 +1,42 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { doSearch } from 'redux/actions/search';
-import { SIMPLE_SITE } from 'config';
 import {
   selectIsSearching,
   makeSelectSearchUris,
-  makeSelectQueryWithOptions,
   selectSearchOptions,
   makeSelectHasReachedMaxResultsLength,
 } from 'redux/selectors/search';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
+import { getSearchQueryString } from 'util/query-params';
 import SearchPage from './view';
 
 const select = (state, props) => {
   const showMature = selectShowMatureContent(state);
   const urlParams = new URLSearchParams(props.location.search);
+
   let urlQuery = urlParams.get('q') || null;
   if (urlQuery) {
     urlQuery = urlQuery.replace(/^lbry:\/\//i, '').replace(/\//, ' ');
   }
-  const query = makeSelectQueryWithOptions(
-    urlQuery,
-    SIMPLE_SITE
-      ? { nsfw: false, isBackgroundSearch: false }
-      : showMature === false
-      ? { nsfw: false, isBackgroundSearch: false }
-      : { isBackgroundSearch: false }
-  )(state);
 
+  const searchOptions = {
+    ...selectSearchOptions(state),
+    isBackgroundSearch: false,
+    nsfw: showMature,
+  };
+
+  const query = getSearchQueryString(urlQuery, searchOptions);
   const uris = makeSelectSearchUris(query)(state);
   const hasReachedMaxResultsLength = makeSelectHasReachedMaxResultsLength(query)(state);
 
   return {
+    urlQuery,
+    searchOptions,
     isSearching: selectIsSearching(state),
-    showNsfw: showMature,
     uris: uris,
     isAuthenticated: selectUserVerifiedEmail(state),
-    searchOptions: selectSearchOptions(state),
     hasReachedMaxResultsLength: hasReachedMaxResultsLength,
   };
 };
