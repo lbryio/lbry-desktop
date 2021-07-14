@@ -58,6 +58,8 @@ class SettingsStripeCard extends React.Component<Props, State> {
 
     console.log(this.props);
 
+    var doToast = this.props.doToast;
+
     const script = document.createElement('script');
     script.src = 'https://js.stripe.com/v3/';
     script.async = true;
@@ -162,7 +164,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
           const errorString = 'user as customer is not setup yet';
 
           // if it's beamer's error indicating the account is not linked yet
-          if (error.message.indexOf(errorString) > -1) {
+          if (error.message && error.message.indexOf(errorString) > -1) {
             // send them to save a card
             that.setState({
               currentFlowStage: 'confirmingCard',
@@ -184,6 +186,9 @@ class SettingsStripeCard extends React.Component<Props, State> {
               // instantiate stripe elements
               setupStripe();
             });
+          } else if (error === 'internal_apis_down') {
+            var displayString = 'There was an error from the server, please let support know'
+            doToast({ message: displayString, isError: true });
           } else {
             console.log('Unseen before error');
           }
