@@ -153,6 +153,7 @@ function CommentList(props: Props) {
     fetchingChannels,
   ]);
 
+  // Scroll to linked-comment
   useEffect(() => {
     if (readyToDisplayComments && linkedCommentId && commentRef && commentRef.current) {
       commentRef.current.scrollIntoView({ block: 'start' });
@@ -160,17 +161,18 @@ function CommentList(props: Props) {
     }
   }, [readyToDisplayComments, linkedCommentId]);
 
+  // Infinite scroll
   useEffect(() => {
-    const handleCommentScroll = debounce(() => {
-      // $FlowFixMe
-      const rect = spinnerRef.current.getBoundingClientRect();
-      // $FlowFixMe
-      const windowH = window.innerHeight || document.documentElement.clientHeight;
-      // $FlowFixMe
-      const windowW = window.innerWidth || document.documentElement.clientWidth;
+    function shouldFetchNextPage(page, topLevelTotalPages, window, document, yPrefetchPx = 1000) {
+      if (!spinnerRef || !spinnerRef.current) {
+        return false;
+      }
 
-      const Y_OFFSET_PX = 1000;
-      const isApproachingViewport = Y_OFFSET_PX && rect.top < windowH + scaleToDevicePixelRatio(Y_OFFSET_PX);
+      const rect = spinnerRef.current.getBoundingClientRect(); // $FlowFixMe
+      const windowH = window.innerHeight || document.documentElement.clientHeight; // $FlowFixMe
+      const windowW = window.innerWidth || document.documentElement.clientWidth; // $FlowFixMe
+
+      const isApproachingViewport = yPrefetchPx !== 0 && rect.top < windowH + scaleToDevicePixelRatio(yPrefetchPx);
 
       const isInViewport =
         rect.width > 0 &&
@@ -182,16 +184,23 @@ function CommentList(props: Props) {
         // $FlowFixMe
         rect.left <= windowW;
 
-      if ((isInViewport || isApproachingViewport) && page < topLevelTotalPages) {
+      return (isInViewport || isApproachingViewport) && page < topLevelTotalPages;
+    }
+
+    const handleCommentScroll = debounce(() => {
+      if (shouldFetchNextPage(page, topLevelTotalPages, window, document)) {
         setPage(page + 1);
       }
     }, DEBOUNCE_SCROLL_HANDLER_MS);
 
     if (!isFetchingComments && readyToDisplayComments && moreBelow && spinnerRef && spinnerRef.current) {
-      window.addEventListener('scroll', handleCommentScroll);
+      if (shouldFetchNextPage(page, topLevelTotalPages, window, document, 0)) {
+        setPage(page + 1);
+      } else {
+        window.addEventListener('scroll', handleCommentScroll);
+        return () => window.removeEventListener('scroll', handleCommentScroll);
+      }
     }
-
-    return () => window.removeEventListener('scroll', handleCommentScroll);
   }, [
     page,
     moreBelow,
