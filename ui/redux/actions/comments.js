@@ -105,7 +105,7 @@ export function doCommentList(
   };
 }
 
-export function doCommentById(commentId: string) {
+export function doCommentById(commentId: string, toastIfNotFound: boolean = true) {
   return (dispatch: Dispatch, getState: GetState) => {
     return Comments.comment_by_id({ comment_id: commentId, with_ancestors: true })
       .then((result: CommentByIdResponse) => {
@@ -122,7 +122,16 @@ export function doCommentById(commentId: string) {
         return result;
       })
       .catch((error) => {
-        devToast(dispatch, error.message);
+        if (error.message === 'sql: no rows in result set' && toastIfNotFound) {
+          dispatch(
+            doToast({
+              isError: true,
+              message: __('The requested comment is no longer available.'),
+            })
+          );
+        } else {
+          devToast(dispatch, error.message);
+        }
       });
   };
 }
