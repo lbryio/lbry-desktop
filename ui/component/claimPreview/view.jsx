@@ -29,7 +29,9 @@ import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import Button from 'component/button';
 import * as ICONS from 'constants/icons';
 
-const AbandonedChannelPreview = lazyImport(() => import('component/abandonedChannelPreview' /* webpackChunkName: "abandonedChannelPreview" */));
+const AbandonedChannelPreview = lazyImport(() =>
+  import('component/abandonedChannelPreview' /* webpackChunkName: "abandonedChannelPreview" */)
+);
 
 type Props = {
   uri: string,
@@ -308,13 +310,13 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
           })}
         >
           {isChannelUri && claim ? (
-            <UriIndicator uri={uri} link>
+            <UriIndicator aria-hidden tabindex={-1} uri={uri} link>
               <ChannelThumbnail uri={uri} small={type === 'inline'} />
             </UriIndicator>
           ) : (
             <>
               {!pending ? (
-                <NavLink {...navLinkProps}>
+                <NavLink aria-hidden tabindex={-1} {...navLinkProps}>
                   <FileThumbnail thumbnail={thumbnailUrl}>
                     {/* @if TARGET='app' */}
                     {claim && !isCollection && (
