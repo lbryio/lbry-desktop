@@ -13,6 +13,9 @@ import WalletSpendableBalanceHelp from 'component/walletSpendableBalanceHelp';
 
 const DEFAULT_TIP_AMOUNTS = [1, 5, 25, 100];
 
+const TAB_FIAT = 'TabFiat';
+const TAB_LBC = 'TabLBC';
+
 type Props = {
   balance: number,
   amount: number,
@@ -20,9 +23,11 @@ type Props = {
 };
 
 function WalletTipAmountSelector(props: Props) {
-  const { balance, amount, onChange } = props;
+  const { balance, amount, onChange, activeTab } = props;
   const [useCustomTip, setUseCustomTip] = usePersistedState('comment-support:useCustomTip', false);
   const [tipError, setTipError] = React.useState();
+
+  console.log(activeTab);
 
   React.useEffect(() => {
     const regexp = RegExp(/^(\d*([.]\d{0,8})?)$/);
@@ -63,7 +68,7 @@ function WalletTipAmountSelector(props: Props) {
               'button-toggle--disabled': amount > balance,
             })}
             label={defaultAmount}
-            icon={ICONS.LBC}
+            icon={activeTab === TAB_LBC ? ICONS.LBC : ICONS.FINANCE}
             onClick={() => {
               handleCustomPriceChange(defaultAmount);
               setUseCustomTip(false);
@@ -75,7 +80,7 @@ function WalletTipAmountSelector(props: Props) {
           className={classnames('button-toggle button-toggle--expandformobile', {
             'button-toggle--active': !DEFAULT_TIP_AMOUNTS.includes(amount),
           })}
-          icon={ICONS.LBC}
+          icon={activeTab === TAB_LBC ? ICONS.LBC : ICONS.FINANCE}
           label={__('Custom')}
           onClick={() => setUseCustomTip(true)}
         />
