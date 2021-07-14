@@ -53,6 +53,8 @@ function CommentList(props: Props) {
     ENABLE_COMMENT_REACTIONS ? SORT_COMMENTS_BEST : SORT_COMMENTS_NEW
   );
 
+  console.log(comments);
+
   const [start] = React.useState(0);
   const [end, setEnd] = React.useState(9);
   // Display comments immediately if not fetching reactions
@@ -241,6 +243,7 @@ function CommentList(props: Props) {
                     linkedComment={linkedComment}
                     isPinned={comment.is_pinned}
                     supportAmount={comment.support_amount}
+                    isFiat={comment.is_fiat}
                   />
                 );
               })}

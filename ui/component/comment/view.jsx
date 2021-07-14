@@ -53,6 +53,7 @@ type Props = {
   playingUri: ?PlayingUri,
   stakedLevel: number,
   supportAmount: number,
+  isFiat: boolean
 };
 
 const LENGTH_TO_COLLAPSE = 300;
@@ -82,6 +83,7 @@ function Comment(props: Props) {
     playingUri,
     stakedLevel,
     supportAmount,
+    isFiat,
   } = props;
   const {
     push,
@@ -208,7 +210,7 @@ function Comment(props: Props) {
                 label={<DateTime date={timePosted} timeAgo />}
               />
 
-              {supportAmount > 0 && <CreditAmount amount={supportAmount} superChatLight size={12} />}
+              {supportAmount > 0 && <CreditAmount isFiat={isFiat} amount={supportAmount} superChatLight size={12} />}
 
               {isPinned && (
                 <span className="comment__pin">
