@@ -11,6 +11,7 @@ import * as OVERLAY from './overlays';
 import './plugins/videojs-mobile-ui/plugin';
 import hlsQualitySelector from './plugins/videojs-hls-quality-selector/plugin';
 import recsys from './plugins/videojs-recsys/plugin';
+import './plugins/videojs-watchman/plugin';
 import qualityLevels from 'videojs-contrib-quality-levels';
 import isUserTyping from 'util/detect-typing';
 // import './plugins/videojs-aniview/plugin';
@@ -568,6 +569,13 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       player.recsys({
         videoId: claimId,
         userId: userId,
+      });
+
+      player.watchman({
+        reportRate: 15,
+        videoUrl: claimId,
+        userId: userId,
+        debug: true,
       });
 
       // set playsinline for mobile
