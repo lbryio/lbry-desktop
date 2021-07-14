@@ -2,32 +2,42 @@ import { connect } from 'react-redux';
 import { makeSelectClaimIsMine, selectFetchingMyChannels, selectMyChannelClaims } from 'lbry-redux';
 import {
   makeSelectTopLevelCommentsForUri,
+  makeSelectTopLevelTotalPagesForUri,
   selectIsFetchingComments,
   makeSelectTotalCommentsCountForUri,
   selectOthersReactsById,
   makeSelectCommentsDisabledForUri,
+  selectMyReactionsByCommentId,
+  makeSelectCommentIdsForUri,
 } from 'redux/selectors/comments';
-import { doCommentList, doCommentReactList } from 'redux/actions/comments';
+import { doCommentReset, doCommentList, doCommentById, doCommentReactList } from 'redux/actions/comments';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectActiveChannelId } from 'redux/selectors/app';
 import CommentsList from './view';
 
-const select = (state, props) => ({
-  myChannels: selectMyChannelClaims(state),
-  comments: makeSelectTopLevelCommentsForUri(props.uri)(state),
-  totalComments: makeSelectTotalCommentsCountForUri(props.uri)(state),
-  claimIsMine: makeSelectClaimIsMine(props.uri)(state),
-  isFetchingComments: selectIsFetchingComments(state),
-  commentingEnabled: IS_WEB ? Boolean(selectUserVerifiedEmail(state)) : true,
-  commentsDisabledBySettings: makeSelectCommentsDisabledForUri(props.uri)(state),
-  fetchingChannels: selectFetchingMyChannels(state),
-  reactionsById: selectOthersReactsById(state),
-  activeChannelId: selectActiveChannelId(state),
-});
+const select = (state, props) => {
+  return {
+    myChannels: selectMyChannelClaims(state),
+    allCommentIds: makeSelectCommentIdsForUri(props.uri)(state),
+    topLevelComments: makeSelectTopLevelCommentsForUri(props.uri)(state),
+    topLevelTotalPages: makeSelectTopLevelTotalPagesForUri(props.uri)(state),
+    totalComments: makeSelectTotalCommentsCountForUri(props.uri)(state),
+    claimIsMine: makeSelectClaimIsMine(props.uri)(state),
+    isFetchingComments: selectIsFetchingComments(state),
+    commentingEnabled: IS_WEB ? Boolean(selectUserVerifiedEmail(state)) : true,
+    commentsDisabledBySettings: makeSelectCommentsDisabledForUri(props.uri)(state),
+    fetchingChannels: selectFetchingMyChannels(state),
+    myReactsByCommentId: selectMyReactionsByCommentId(state),
+    othersReactsById: selectOthersReactsById(state),
+    activeChannelId: selectActiveChannelId(state),
+  };
+};
 
 const perform = (dispatch) => ({
-  fetchComments: (uri) => dispatch(doCommentList(uri)),
-  fetchReacts: (uri) => dispatch(doCommentReactList(uri)),
+  fetchTopLevelComments: (uri, page, pageSize, sortBy) => dispatch(doCommentList(uri, '', page, pageSize, sortBy)),
+  fetchComment: (commentId) => dispatch(doCommentById(commentId)),
+  fetchReacts: (commentIds) => dispatch(doCommentReactList(commentIds)),
+  resetComments: (uri) => dispatch(doCommentReset(uri)),
 });
 
 export default connect(select, perform)(CommentsList);

@@ -13,6 +13,7 @@ import { formatLbryUrlForWeb } from 'util/url';
 import { parseURI, COLLECTIONS_CONSTS } from 'lbry-redux';
 import PreviewOverlayProperties from 'component/previewOverlayProperties';
 import FileDownloadLink from 'component/fileDownloadLink';
+import FileWatchLaterLink from 'component/fileWatchLaterLink';
 import ClaimRepostAuthor from 'component/claimRepostAuthor';
 import ClaimMenuList from 'component/claimMenuList';
 import CollectionPreviewOverlay from 'component/collectionPreviewOverlay';
@@ -75,6 +76,15 @@ function ClaimPreviewTile(props: Props) {
   const isRepost = claim && claim.repost_channel_url;
   const isCollection = claim && claim.value_type === 'collection';
   const isStream = claim && claim.value_type === 'stream';
+  // $FlowFixMe
+  const isPlayable =
+    claim &&
+    // $FlowFixMe
+    claim.value &&
+    // $FlowFixMe
+    claim.value.stream_type &&
+    // $FlowFixMe
+    (claim.value.stream_type === 'audio' || claim.value.stream_type === 'video');
   const collectionClaimId = isCollection && claim && claim.claim_id;
   const shouldFetch = claim === undefined;
   const thumbnailUrl = useGetThumbnail(uri, claim, streamingUrl, getFile, placeholder) || thumbnail;
@@ -194,6 +204,12 @@ function ClaimPreviewTile(props: Props) {
                 </div>
               )}
               {/* @endif */}
+
+              {isPlayable && (
+                <div className="claim-preview__hover-actions">
+                  <FileWatchLaterLink uri={uri} />
+                </div>
+              )}
 
               <div className="claim-preview__file-property-overlay">
                 <PreviewOverlayProperties uri={uri} properties={liveProperty || properties} />

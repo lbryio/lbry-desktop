@@ -28,6 +28,7 @@ import { doToast } from 'redux/actions/notifications';
 import { makeSelectSigningIsMine } from 'redux/selectors/content';
 import { doChannelSubscribe, doChannelUnsubscribe } from 'redux/actions/subscriptions';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
+import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import ClaimPreview from './view';
 import fs from 'fs';
 
@@ -38,6 +39,7 @@ const select = (state, props) => {
     claim,
     claimIsMine: makeSelectSigningIsMine(props.uri)(state),
     hasClaimInWatchLater: makeSelectCollectionForIdHasClaimUrl(COLLECTIONS_CONSTS.WATCH_LATER_ID, permanentUri)(state),
+    hasClaimInCustom: makeSelectCollectionForIdHasClaimUrl(COLLECTIONS_CONSTS.FAVORITES_ID, permanentUri)(state),
     channelIsMuted: makeSelectChannelIsMuted(props.uri)(state),
     channelIsBlocked: makeSelectChannelIsBlocked(props.uri)(state),
     fileInfo: makeSelectFileInfoForUri(props.uri)(state),
@@ -48,6 +50,7 @@ const select = (state, props) => {
     collectionName: makeSelectNameForCollectionId(props.collectionId)(state),
     isMyCollection: makeSelectCollectionIsMine(props.collectionId)(state),
     editedCollection: makeSelectEditedCollectionForId(props.collectionId)(state),
+    isAuthenticated: Boolean(selectUserVerifiedEmail(state)),
   };
 };
 

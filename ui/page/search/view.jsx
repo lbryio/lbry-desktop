@@ -11,42 +11,20 @@ import { formatLbryUrlForWeb } from 'util/url';
 import { useHistory } from 'react-router';
 import { SEARCH_PAGE_SIZE } from 'constants/search';
 
-type AdditionalOptions = {
-  isBackgroundSearch: boolean,
-  nsfw?: boolean,
-  from?: number,
-};
-
 type Props = {
-  search: (string, AdditionalOptions) => void,
-  searchOptions: {},
+  urlQuery: string,
+  searchOptions: SearchOptions,
+  search: (string, SearchOptions) => void,
   isSearching: boolean,
-  location: UrlLocation,
   uris: Array<string>,
-  showNsfw: boolean,
   isAuthenticated: boolean,
   hasReachedMaxResultsLength: boolean,
 };
 
 export default function SearchPage(props: Props) {
-  const {
-    search,
-    uris,
-    location,
-    isSearching,
-    showNsfw,
-    isAuthenticated,
-    searchOptions,
-    hasReachedMaxResultsLength,
-  } = props;
+  const { urlQuery, searchOptions, search, uris, isSearching, isAuthenticated, hasReachedMaxResultsLength } = props;
   const { push } = useHistory();
-  const urlParams = new URLSearchParams(location.search);
-  const urlQuery = urlParams.get('q') || '';
-  const additionalOptions: AdditionalOptions = { isBackgroundSearch: false };
   const [from, setFrom] = React.useState(0);
-
-  additionalOptions['nsfw'] = SIMPLE_SITE ? false : showNsfw;
-  additionalOptions['from'] = from;
 
   const modifiedUrlQuery = urlQuery.trim().replace(/\s+/g, '').replace(/:/g, '#');
   const uriFromQuery = `lbry://${modifiedUrlQuery}`;
@@ -78,14 +56,14 @@ export default function SearchPage(props: Props) {
     } catch (e) {}
   }
 
-  const stringifiedOptions = JSON.stringify(additionalOptions);
   const stringifiedSearchOptions = JSON.stringify(searchOptions);
+
   useEffect(() => {
     if (urlQuery) {
-      const jsonOptions = JSON.parse(stringifiedOptions);
-      search(urlQuery, jsonOptions);
+      const searchOptions = JSON.parse(stringifiedSearchOptions);
+      search(urlQuery, { ...searchOptions, from: from });
     }
-  }, [search, urlQuery, stringifiedOptions, stringifiedSearchOptions]);
+  }, [search, urlQuery, stringifiedSearchOptions, from]);
 
   function loadMore() {
     if (!isSearching && !hasReachedMaxResultsLength) {
@@ -114,7 +92,7 @@ export default function SearchPage(props: Props) {
               header={
                 <SearchOptions
                   simple={SIMPLE_SITE}
-                  additionalOptions={additionalOptions}
+                  additionalOptions={searchOptions}
                   onSearchOptionsChanged={resetPage}
                 />
               }

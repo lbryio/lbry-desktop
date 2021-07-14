@@ -25,7 +25,7 @@ function CollectionSelectItem(props: Props) {
   let icon;
   switch (category) {
     case 'builtin':
-      icon = id === COLLECTIONS_CONSTS.WATCH_LATER_ID ? ICONS.TIME : ICONS.STACK;
+      icon = (id === COLLECTIONS_CONSTS.WATCH_LATER_ID && ICONS.TIME) || (id === COLLECTIONS_CONSTS.FAVORITES_ID && ICONS.STAR) || ICONS.STACK;
       break;
     case 'published':
       icon = ICONS.STACK;

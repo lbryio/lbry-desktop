@@ -7,18 +7,15 @@ import Icon from 'component/common/icon';
 import { parseURI } from 'lbry-redux';
 
 type Props = {
-  uri: string,
   claim: ?Claim,
   clearPlayingUri: () => void,
   authorUri: string, // full LBRY Channel URI: lbry://@channel#123...
   commentId: string, // sha256 digest identifying the comment
   commentIsMine: boolean, // if this comment was signed by an owned channel
   deleteComment: (string, ?string) => void,
-  linkedComment?: any,
   isPinned: boolean,
-  pinComment: (string, boolean) => Promise<any>,
+  pinComment: (string, string, boolean) => Promise<any>,
   muteChannel: (string) => void,
-  fetchComments: (string) => void,
   handleEditComment: () => void,
   contentChannelPermanentUrl: any,
   activeChannelClaim: ?ChannelClaim,
@@ -35,7 +32,6 @@ type Props = {
 
 function CommentMenuList(props: Props) {
   const {
-    uri,
     claim,
     authorUri,
     commentIsMine,
@@ -49,7 +45,6 @@ function CommentMenuList(props: Props) {
     isTopLevel,
     isPinned,
     handleEditComment,
-    fetchComments,
     commentModBlock,
     commentModBlockAsAdmin,
     commentModBlockAsModerator,
@@ -77,8 +72,8 @@ function CommentMenuList(props: Props) {
     activeModeratorInfo &&
     Object.values(activeModeratorInfo.delegators).includes(contentChannelClaim.claim_id);
 
-  function handlePinComment(commentId, remove) {
-    pinComment(commentId, remove).then(() => fetchComments(uri));
+  function handlePinComment(commentId, claimId, remove) {
+    pinComment(commentId, claimId, remove);
   }
 
   function handleDeleteComment() {
@@ -122,7 +117,7 @@ function CommentMenuList(props: Props) {
       {activeChannelIsCreator && isTopLevel && (
         <MenuItem
           className="comment__menu-option menu__link"
-          onSelect={isPinned ? () => handlePinComment(commentId, true) : () => handlePinComment(commentId, false)}
+          onSelect={() => handlePinComment(commentId, claim ? claim.claim_id : '', isPinned)}
         >
           <span className={'button__content'}>
             <Icon aria-hidden icon={ICONS.PIN} className={'icon'} />

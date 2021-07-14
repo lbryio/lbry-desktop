@@ -677,9 +677,31 @@
 
   & > * {
     color: var(--color-black);
-    background-color: var(--color-white);
-    padding: var(--spacing-xs);
+    background-color: var(--color-black);
     border-radius: var(--border-radius);
+    padding: var(--spacing-xxs);
+    margin-right: 0;
+    &:hover {
+      background-color: var(--color-button-alt-bg);
+    }
+  }
+
+  .button--file-action {
+    margin: 0 0;
+    padding: var(--spacing-xxs) var(--spacing-xxs);
+    height: unset;
+
+    .button__label {
+      color: var(--color-text);
+      font-size: var(--font-small);
+      display: none;
+    }
+
+    &:hover {
+      .button__label {
+        display: inline;
+      }
+    }
   }
 }
 

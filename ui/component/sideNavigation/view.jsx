@@ -9,7 +9,8 @@ import Icon from 'component/common/icon';
 import NotificationBubble from 'component/notificationBubble';
 import I18nMessage from 'component/i18nMessage';
 import ChannelThumbnail from 'component/channelThumbnail';
-import { PINNED_LABEL_1, PINNED_URI_1, PINNED_URI_2, PINNED_LABEL_2, SIMPLE_SITE, DOMAIN, ENABLE_UI_NOTIFICATIONS } from 'config';
+import { GetLinksData } from 'util/buildHomepage';
+import { SIMPLE_SITE, DOMAIN, ENABLE_UI_NOTIFICATIONS } from 'config';
 // @if TARGET='app'
 import { IS_MAC } from 'component/app/view';
 // @endif
@@ -76,8 +77,7 @@ function SideNavigation(props: Props) {
     followedTags,
   } = props;
 
-  const { EXTRA_SIDEBAR_LINKS } = homepageData;
-
+  const EXTRA_SIDEBAR_LINKS = GetLinksData(homepageData);
   const FULL_LINKS: Array<SideNavLink> = [
     {
       title: 'Your Tags',
@@ -197,22 +197,6 @@ function SideNavigation(props: Props) {
     },
   ];
 
-  if (PINNED_URI_1 && PINNED_LABEL_1) {
-    MOBILE_LINKS.push({
-      title: PINNED_LABEL_1,
-      link: PINNED_URI_1,
-      icon: ICONS.PINNED,
-    });
-  }
-
-  if (PINNED_URI_2 && PINNED_LABEL_2) {
-    MOBILE_LINKS.push({
-      title: PINNED_LABEL_2,
-      link: PINNED_URI_2,
-      icon: ICONS.PINNED,
-    });
-  }
-
   const notificationsEnabled = ENABLE_UI_NOTIFICATIONS || (user && user.experimental_ui);
   const isAuthenticated = Boolean(email);
   // SIDE LINKS: FOLLOWING, HOME, [FULL,] [EXTRA]
@@ -239,8 +223,17 @@ function SideNavigation(props: Props) {
     });
   }
 
-  if (EXTRA_SIDEBAR_LINKS) {
+  if (SIMPLE_SITE && EXTRA_SIDEBAR_LINKS) {
+    // $FlowFixMe
     SIDE_LINKS.push(...EXTRA_SIDEBAR_LINKS);
+
+    const WILD_WEST = {
+      title: 'Wild West',
+      link: `/$/${PAGES.WILD_WEST}`,
+      icon: ICONS.WILD_WEST,
+    };
+
+    SIDE_LINKS.push(WILD_WEST);
   }
 
   const [pulseLibrary, setPulseLibrary] = React.useState(false);
@@ -275,7 +268,7 @@ function SideNavigation(props: Props) {
       if (e.keyCode === ESCAPE_KEY_CODE && isAbsolute) {
         setSidebarOpen(false);
       } else if (e.keyCode === BACKSLASH_KEY_CODE) {
-        const hasActiveInput = document.querySelector('input:focus');
+        const hasActiveInput = document.querySelector('input:focus, textarea:focus');
         if (!hasActiveInput) {
           setSidebarOpen(!sidebarOpen);
         }
