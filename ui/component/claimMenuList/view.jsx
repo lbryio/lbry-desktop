@@ -224,10 +224,10 @@ function ClaimMenuList(props: Props) {
         <Icon size={20} icon={ICONS.MORE_VERTICAL} />
       </MenuButton>
       <MenuList className="menu__list">
-        {/* WATCH LATER */}
         {(!IS_WEB || (IS_WEB && isAuthenticated)) && (
           <>
             <>
+              {/* WATCH LATER */}
               {isPlayable && !collectionId && (
                 <MenuItem
                   className="comment__menu-option"
