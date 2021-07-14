@@ -14,7 +14,15 @@ import { ENABLE_COMMENT_REACTIONS } from 'config';
 import Empty from 'component/common/empty';
 import debounce from 'util/debounce';
 
-const DEBOUNCE_SCROLL_HANDLER_MS = 50;
+const DEBOUNCE_SCROLL_HANDLER_MS = 200;
+
+function scaleToDevicePixelRatio(value) {
+  const devicePixelRatio = window.devicePixelRatio || 1.0;
+  if (devicePixelRatio < 1.0) {
+    return Math.ceil(value / devicePixelRatio);
+  }
+  return Math.ceil(value * devicePixelRatio);
+}
 
 type Props = {
   allCommentIds: any,
@@ -156,16 +164,25 @@ function CommentList(props: Props) {
     const handleCommentScroll = debounce(() => {
       // $FlowFixMe
       const rect = spinnerRef.current.getBoundingClientRect();
+      // $FlowFixMe
+      const windowH = window.innerHeight || document.documentElement.clientHeight;
+      // $FlowFixMe
+      const windowW = window.innerWidth || document.documentElement.clientWidth;
+
+      const Y_OFFSET_PX = 1000;
+      const isApproachingViewport = Y_OFFSET_PX && rect.top < windowH + scaleToDevicePixelRatio(Y_OFFSET_PX);
 
       const isInViewport =
+        rect.width > 0 &&
+        rect.height > 0 &&
         rect.bottom >= 0 &&
         rect.right >= 0 &&
         // $FlowFixMe
-        rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.top <= windowH &&
         // $FlowFixMe
-        rect.left <= (window.innerWidth || document.documentElement.clientWidth);
+        rect.left <= windowW;
 
-      if (isInViewport && page < topLevelTotalPages) {
+      if ((isInViewport || isApproachingViewport) && page < topLevelTotalPages) {
         setPage(page + 1);
       }
     }, DEBOUNCE_SCROLL_HANDLER_MS);
