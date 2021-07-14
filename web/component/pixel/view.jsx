@@ -1,13 +1,19 @@
 // @flow
 import React from 'react';
 import { SIMPLE_SITE } from 'config';
+import { useIsMobile } from 'effects/use-screensize';
+
 type Props = {
   type: string,
+  isAuthenticated: boolean,
 };
 
 const Pixel = (props: Props) => {
-  const { type } = props;
-  if (!SIMPLE_SITE) {
+  const { type, isAuthenticated } = props;
+  const isMobile = useIsMobile();
+
+  // TODO: restrict to country
+  if (!SIMPLE_SITE || isMobile || isAuthenticated) {
     return null;
   }
   if (type === 'retargeting') {
