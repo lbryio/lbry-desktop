@@ -13,6 +13,10 @@ import LbcSymbol from 'component/common/lbc-symbol';
 import WaitUntilOnPage from 'component/common/wait-until-on-page';
 import useGetLivestreams from 'effects/use-get-livestreams';
 
+// @if TARGET='web'
+import Pixel from 'web/component/pixel';
+// @endif
+
 type Props = {
   authenticated: boolean,
   followedTags: Array<Tag>,
@@ -128,13 +132,9 @@ function HomePage(props: Props) {
       {rowData.map(({ title, route, link, icon, help, options = {} }, index) => {
         return getRowElements(title, route, link, icon, help, options, index);
       })}
-
-      {SIMPLE_SITE && (
-        <img
-          src="https://ctrack.trafficjunky.net/ctrack?action=list&type=add&id=0&context=Odysee&cookiename=RetargetingPixel&age=44000&maxcookiecount=10"
-          alt=""
-        />
-      )}
+      {/* @if TARGET='web' */}
+      <Pixel type={'retargeting'} />
+      {/* @endif */}
     </Page>
   );
 }
