@@ -45,6 +45,7 @@ class CreditAmount extends React.PureComponent<Props> {
       size,
       superChat,
       superChatLight,
+      isFiat,
     } = this.props;
     const minimumRenderableAmount = 10 ** (-1 * precision);
     const fullPrice = formatFullPrice(amount, 2);
@@ -60,6 +61,9 @@ class CreditAmount extends React.PureComponent<Props> {
           : formatCredits(amount, precision, true);
     }
 
+    console.log('is fiat');
+    console.log(isFiat);
+
     let amountText;
     if (showFree && isFree) {
       amountText = __('Free');
@@ -70,8 +74,10 @@ class CreditAmount extends React.PureComponent<Props> {
         amountText = `+${amountText}`;
       }
 
-      if (showLBC) {
+      if (showLBC && !isFiat) {
         amountText = <LbcSymbol postfix={amountText} size={size} />;
+      } else if (showLBC && isFiat){
+        amountText = <p> ${amountText} </p>;
       }
 
       if (fee) {

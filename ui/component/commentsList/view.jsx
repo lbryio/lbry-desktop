@@ -78,6 +78,8 @@ function CommentList(props: Props) {
 
   const [reactionFetchCount, setReactionFetchCount] = React.useState(0);
 
+  const [start] = React.useState(0);
+  const [end, setEnd] = React.useState(9);
   // Display comments immediately if not fetching reactions
   // If not, wait to show comments until reactions are fetched
   const [readyToDisplayComments, setReadyToDisplayComments] = React.useState(
@@ -307,6 +309,7 @@ function CommentList(props: Props) {
                     isPinned={comment.is_pinned}
                     supportAmount={comment.support_amount}
                     numDirectReplies={comment.replies}
+                    isFiat={comment.is_fiat}
                   />
                 );
               })}
