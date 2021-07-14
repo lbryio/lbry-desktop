@@ -471,7 +471,7 @@
     cursor: pointer;
 
     .claim__menu-button {
-      display: block;
+      opacity: 1;
     }
     .collection-preview__overlay-thumbs {
       opacity: 1;
@@ -535,11 +535,6 @@
   color: var(--color-text);
   font-size: var(--font-small);
   min-height: 2rem;
-
-  .claim__menu-button {
-    right: 0.2rem;
-    top: var(--spacing-s);
-  }
 
   @media (min-width: $breakpoint-small) {
     min-height: 2.5rem;
@@ -737,6 +732,23 @@
   }
 }
 
+.claim-tile__header {
+  position: relative;
+
+  .claim__menu-button {
+    right: 0.2rem;
+    top: var(--spacing-s);
+
+    &:focus {
+      opacity: 1;
+      .icon {
+        background-color: var(--color-button-alt-bg);
+        border-radius: var(--border-radius);
+      }
+    }
+  }
+}
+
 .claim__menu-button {
   position: absolute;
   top: var(--spacing-xs);
@@ -748,7 +760,7 @@
 
   @media (min-width: $breakpoint-small) {
     &:not([aria-expanded='true']) {
-      display: none;
+      opacity: 0;
     }
   }
 }

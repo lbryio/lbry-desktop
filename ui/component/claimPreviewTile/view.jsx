@@ -225,18 +225,21 @@ function ClaimPreviewTile(props: Props) {
           )}
         </FileThumbnail>
       </NavLink>
-      <NavLink {...navLinkProps}>
-        <h2 className="claim-tile__title">
-          <TruncatedText text={title || (claim && claim.name)} lines={isChannel ? 1 : 2} />
-          {isChannel && (
-            <div className="claim-tile__about">
-              <UriIndicator uri={uri} />
-            </div>
-          )}
-          {/* CHECK CLAIM MENU LIST PARAMS (IS REPOST?) */}
-          <ClaimMenuList uri={uri} collectionId={listId} channelUri={channelUri} isRepost={isRepost} />
-        </h2>
-      </NavLink>
+      <div className="claim-tile__header">
+        <NavLink {...navLinkProps}>
+          <h2 className="claim-tile__title">
+            <TruncatedText text={title || (claim && claim.name)} lines={isChannel ? 1 : 2} />
+            {isChannel && (
+              <div className="claim-tile__about">
+                <UriIndicator uri={uri} />
+              </div>
+            )}
+          </h2>
+        </NavLink>
+        {/* CHECK CLAIM MENU LIST PARAMS (IS REPOST?) */}
+        <ClaimMenuList uri={uri} collectionId={listId} channelUri={channelUri} isRepost={isRepost} />
+      </div>
+
       <div>
         <div className="claim-tile__info">
           {isChannel ? (
