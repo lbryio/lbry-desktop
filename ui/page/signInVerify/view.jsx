@@ -8,7 +8,9 @@ import Button from 'component/button';
 import { Lbryio } from 'lbryinc';
 import I18nMessage from 'component/i18nMessage';
 import Card from 'component/common/card';
-
+// @if TARGET='web'
+import Pixel from 'web/component/pixel';
+// @endif
 type Props = {
   history: { push: (string) => void, location: { search: string } },
   doToast: ({}) => void,
@@ -132,11 +134,9 @@ function SignInVerifyPage(props: Props) {
           }
         />
       </div>
-
-      <img
-        src="https://ctrack.trafficjunky.net/ctrack?action=list&type=add&id=0&context=Odysee&cookiename=KillPixel&age=0&maxcookiecount=10"
-        alt=""
-      />
+      {/* @if TARGET='web' */}
+      <Pixel type={'kill'} />
+      {/* @endif */}
     </Page>
   );
 }
