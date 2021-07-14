@@ -356,6 +356,11 @@ export const makeSelectRepliesForParentId = (id: string) =>
     }
   );
 
+export const makeSelectTotalRepliesForParentId = (parentId: string) =>
+  createSelector(selectState, (state) => {
+    return state.totalRepliesByParentId[parentId] || 0;
+  });
+
 export const makeSelectTotalCommentsCountForUri = (uri: string) =>
   createSelector(selectState, selectCommentsByUri, (state, byUri) => {
     const claimId = byUri[uri];

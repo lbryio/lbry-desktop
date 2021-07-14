@@ -4,9 +4,11 @@ import React from 'react';
 import Comment from 'component/comment';
 import Button from 'component/button';
 import Spinner from 'component/spinner';
+import ChannelThumbnail from 'component/channelThumbnail';
 
 type Props = {
-  comments: Array<any>,
+  fetchedReplies: Array<any>,
+  totalReplies: number,
   uri: string,
   parentId: string,
   claimIsMine: boolean,
@@ -23,7 +25,8 @@ function CommentsReplies(props: Props) {
   const {
     uri,
     parentId,
-    comments,
+    fetchedReplies,
+    totalReplies,
     claimIsMine,
     myChannels,
     linkedCommentId,
@@ -54,7 +57,7 @@ function CommentsReplies(props: Props) {
     return false;
   }
 
-  const displayedComments = comments;
+  const displayedComments = fetchedReplies;
 
   return (
     Boolean(numDirectReplies) && (
@@ -69,7 +72,7 @@ function CommentsReplies(props: Props) {
             />
           </div>
         )}
-        {comments && displayedComments && isExpanded && (
+        {fetchedReplies && displayedComments && isExpanded && (
           <div>
             <div className="comment__replies">
               <Button className="comment__threadline" aria-label="Hide Replies" onClick={() => setExpanded(false)} />
@@ -96,11 +99,28 @@ function CommentsReplies(props: Props) {
                     />
                   );
                 })}
+                {totalReplies < numDirectReplies && (
+                  <li className="comment comment--reply">
+                    <div className="comment__content">
+                      <div className="comment__thumbnail-wrapper">
+                        <ChannelThumbnail xsmall className="comment__author-thumbnail" />
+                      </div>
+                      <div className="comment__body-container comment--blocked">
+                        <div className="comment__meta">
+                          <em>---</em>
+                        </div>
+                        <div>
+                          <em>{__('Comment(s) blocked.')}</em>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                )}
               </ul>
             </div>
           </div>
         )}
-        {isExpanded && comments && displayedComments.length < numDirectReplies && (
+        {isExpanded && fetchedReplies && displayedComments.length < totalReplies && (
           <div className="comment__actions--nested">
             <Button button="link" label={__('Show more')} onClick={showMore} className="button--uri-indicator" />
           </div>
