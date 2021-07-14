@@ -17,6 +17,9 @@ import ChannelThumbnail from 'component/channelThumbnail';
 import UriIndicator from 'component/uriIndicator';
 import Empty from 'component/common/empty';
 
+const TAB_FIAT = 'TabFiat';
+const TAB_LBC = 'TabLBC';
+
 type Props = {
   uri: string,
   claim: StreamClaim,
@@ -73,6 +76,8 @@ export function CommentCreate(props: Props) {
   const hasChannels = channels && channels.length;
   const disabled = isSubmitting || !activeChannelClaim || !commentValue.length;
   const charCount = commentValue.length;
+
+  const [activeTab, setActiveTab] = React.useState('');
 
   function handleCommentChange(event) {
     let commentValue;
@@ -259,7 +264,7 @@ export function CommentCreate(props: Props) {
         autoFocus={isReply}
         textAreaMaxLength={livestream ? FF_MAX_CHARS_IN_LIVESTREAM_COMMENT : FF_MAX_CHARS_IN_COMMENT}
       />
-      {isSupportComment && <WalletTipAmountSelector amount={tipAmount} onChange={(amount) => setTipAmount(amount)} />}
+      {isSupportComment && <WalletTipAmountSelector activeTab={activeTab} amount={tipAmount} onChange={(amount) => setTipAmount(amount)} />}
       <div className="section__actions section__actions--no-margin">
         {isSupportComment ? (
           <>
@@ -267,7 +272,7 @@ export function CommentCreate(props: Props) {
               disabled={disabled}
               type="button"
               button="primary"
-              icon={ICONS.LBC}
+              icon={activeTab === TAB_LBC ? ICONS.LBC : ICONS.FINANCE}
               label={__('Review')}
               onClick={() => setIsReviewingSupportComment(true)}
             />
@@ -292,8 +297,20 @@ export function CommentCreate(props: Props) {
               }
               requiresAuth={IS_WEB}
             />
+            {/* TODO: add here */}
             {!claimIsMine && (
-              <Button disabled={disabled} button="alt" icon={ICONS.LBC} onClick={() => setIsSupportComment(true)} />
+              <Button disabled={disabled} button="alt" icon={ICONS.LBC} onClick={() => {
+                setIsSupportComment(true);
+                setActiveTab(TAB_LBC);
+                // alert('hitting!');
+              }} />
+            )}
+            {!claimIsMine && (
+              <Button disabled={disabled} button="alt" icon={ICONS.FINANCE} onClick={() => {
+                setIsSupportComment(true);
+                setActiveTab(TAB_FIAT);
+                // alert('hitting!');
+              }} />
             )}
             {isReply && (
               <Button
