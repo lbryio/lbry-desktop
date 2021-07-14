@@ -219,7 +219,10 @@ $contentMaxWidth: 60rem;
     stroke: var(--color-text-help);
   }
 
-  button {
+  .notification__menu-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: var(--border-radius);
 
     &:focus {

@@ -79,7 +79,7 @@
 
   &:hover {
     .claim__menu-button {
-      display: block;
+      opacity: 1 !important;
     }
   }
 }
@@ -471,7 +471,7 @@
     cursor: pointer;
 
     .claim__menu-button {
-      opacity: 1;
+      opacity: 1 !important;
     }
     .collection-preview__overlay-thumbs {
       opacity: 1;
@@ -738,14 +738,6 @@
   .claim__menu-button {
     right: 0.2rem;
     top: var(--spacing-s);
-
-    &:focus {
-      opacity: 1;
-      .icon {
-        background-color: var(--color-button-alt-bg);
-        border-radius: var(--border-radius);
-      }
-    }
   }
 }
 
@@ -758,8 +750,16 @@
     stroke: var(--color-text);
   }
 
+  &:focus {
+    opacity: 1;
+    .icon {
+      background-color: var(--color-button-alt-bg);
+      border-radius: var(--border-radius);
+    }
+  }
+
   @media (min-width: $breakpoint-small) {
-    &:not([aria-expanded='true']) {
+    &:not(:focus):not([aria-expanded='true']) {
       opacity: 0;
     }
   }
