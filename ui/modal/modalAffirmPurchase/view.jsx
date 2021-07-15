@@ -6,6 +6,7 @@ import { Modal } from 'modal/modal';
 import Card from 'component/common/card';
 import I18nMessage from 'component/i18nMessage';
 import Button from 'component/button';
+import { isURIEqual } from 'lbry-redux';
 
 // This number is tied to transitions in scss/purchase.scss
 const ANIMATION_LENGTH = 2500;
@@ -16,7 +17,7 @@ type Props = {
   uri: string,
   cancelPurchase: () => void,
   metadata: StreamMetadata,
-  analyticsPurchaseEvent: GetResponse => void,
+  analyticsPurchaseEvent: (GetResponse) => void,
   playingUri: ?PlayingUri,
   setPlayingUri: (?string) => void,
 };
@@ -37,7 +38,7 @@ function ModalAffirmPurchase(props: Props) {
 
   function onAffirmPurchase() {
     setPurchasing(true);
-    loadVideo(uri, fileInfo => {
+    loadVideo(uri, (fileInfo) => {
       setPurchasing(false);
       setSuccess(true);
       analyticsPurchaseEvent(fileInfo);
@@ -49,7 +50,7 @@ function ModalAffirmPurchase(props: Props) {
   }
 
   function cancelPurchase() {
-    if (playingUri && uri === playingUri.uri) {
+    if (playingUri && isURIEqual(uri, playingUri.uri)) {
       setPlayingUri(null);
     }
 

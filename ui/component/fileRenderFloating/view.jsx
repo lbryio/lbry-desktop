@@ -14,6 +14,7 @@ import { onFullscreenChange } from 'util/full-screen';
 import { useIsMobile } from 'effects/use-screensize';
 import debounce from 'util/debounce';
 import { useHistory } from 'react-router';
+import { isURIEqual } from 'lbry-redux';
 
 const IS_DESKTOP_MAC = typeof process === 'object' ? process.platform === 'darwin' : false;
 const DEBOUNCE_WINDOW_RESIZE_HANDLER_MS = 60;
@@ -55,7 +56,7 @@ export default function FileRenderFloating(props: Props) {
     location: { pathname },
   } = useHistory();
   const isMobile = useIsMobile();
-  const mainFilePlaying = playingUri && playingUri.uri === primaryUri;
+  const mainFilePlaying = playingUri && isURIEqual(playingUri.uri, primaryUri);
   const [fileViewerRect, setFileViewerRect] = useState();
   const [desktopPlayStartTime, setDesktopPlayStartTime] = useState();
   const [wasDragging, setWasDragging] = useState(false);

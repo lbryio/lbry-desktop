@@ -2,7 +2,7 @@
 import * as ACTIONS from 'constants/action_types';
 import { handleActions } from 'util/redux-utils';
 import { BLOCK_LEVEL } from 'constants/comment';
-
+import { isURIEqual } from 'lbry-redux';
 const defaultState: CommentsState = {
   commentById: {}, // commentId -> Comment
   byId: {}, // ClaimID -> list of comments
@@ -548,7 +548,7 @@ export default handleActions(
       for (const commentId in commentById) {
         const comment = commentById[commentId];
 
-        if (blockedUri === comment.channel_url) {
+        if (isURIEqual(blockedUri, comment.channel_url)) {
           delete commentById[comment.comment_id];
         }
       }

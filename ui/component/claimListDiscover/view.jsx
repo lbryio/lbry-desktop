@@ -5,7 +5,7 @@ import * as CS from 'constants/claim_search';
 import React from 'react';
 import usePersistedState from 'effects/use-persisted-state';
 import { withRouter } from 'react-router';
-import { createNormalizedClaimSearchKey, MATURE_TAGS } from 'lbry-redux';
+import { createNormalizedClaimSearchKey, MATURE_TAGS, splitBySeparator } from 'lbry-redux';
 import Button from 'component/button';
 import moment from 'moment';
 import ClaimList from 'component/claimList';
@@ -151,7 +151,9 @@ function ClaimListDiscover(props: Props) {
     (urlParams.get(CS.TAGS_KEY) !== null && urlParams.get(CS.TAGS_KEY)) ||
     (defaultTags && getParamFromTags(defaultTags));
   const freshnessParam = freshness || urlParams.get(CS.FRESH_KEY) || defaultFreshness;
-  const mutedAndBlockedChannelIds = Array.from(new Set(mutedUris.concat(blockedUris).map((uri) => uri.split('#')[1])));
+  const mutedAndBlockedChannelIds = Array.from(
+    new Set(mutedUris.concat(blockedUris).map((uri) => splitBySeparator(uri)[1]))
+  );
 
   const langParam = urlParams.get(CS.LANGUAGE_KEY) || null;
   const languageParams = searchInLanguage

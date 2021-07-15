@@ -3,7 +3,15 @@ import * as ACTIONS from 'constants/action_types';
 import * as REACTION_TYPES from 'constants/reactions';
 import * as PAGES from 'constants/pages';
 import { BLOCK_LEVEL } from 'constants/comment';
-import { Lbry, parseURI, buildURI, selectClaimsById, selectClaimsByUri, selectMyChannelClaims } from 'lbry-redux';
+import {
+  Lbry,
+  parseURI,
+  buildURI,
+  selectClaimsById,
+  selectClaimsByUri,
+  selectMyChannelClaims,
+  isURIEqual,
+} from 'lbry-redux';
 import { doToast, doSeeNotifications } from 'redux/actions/notifications';
 import {
   makeSelectCommentIdsForUri,
@@ -849,7 +857,7 @@ export function doFetchModBlockedList() {
                           claimId: blockedChannel.blocked_channel_id,
                         });
 
-                        if (!blockedList.find((blockedChannel) => blockedChannel.channelUri === channelUri)) {
+                        if (!blockedList.find((blockedChannel) => isURIEqual(blockedChannel.channelUri, channelUri))) {
                           blockedList.push({ channelUri, blockedAt: blockedChannel.blocked_at });
                         }
 

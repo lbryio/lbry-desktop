@@ -3,7 +3,7 @@ import { ENABLE_NO_SOURCE_CLAIMS, SIMPLE_SITE } from 'config';
 import * as CS from 'constants/claim_search';
 import type { Node } from 'react';
 import React from 'react';
-import { createNormalizedClaimSearchKey, MATURE_TAGS } from 'lbry-redux';
+import { createNormalizedClaimSearchKey, MATURE_TAGS, splitBySeparator } from 'lbry-redux';
 import ClaimPreviewTile from 'component/claimPreviewTile';
 import { useHistory } from 'react-router';
 import { getLivestreamOnlyOptions } from 'util/search';
@@ -155,7 +155,9 @@ function ClaimTilesDiscover(props: Props) {
   const urlParams = new URLSearchParams(location.search);
   const feeAmountInUrl = urlParams.get('fee_amount');
   const feeAmountParam = feeAmountInUrl || feeAmount || CS.FEE_AMOUNT_ONLY_FREE;
-  const mutedAndBlockedChannelIds = Array.from(new Set(mutedUris.concat(blockedUris).map((uri) => uri.split('#')[1])));
+  const mutedAndBlockedChannelIds = Array.from(
+    new Set(mutedUris.concat(blockedUris).map((uri) => splitBySeparator(uri)[1]))
+  );
   const liveUris = [];
 
   const [prevUris, setPrevUris] = React.useState([]);
@@ -287,9 +289,7 @@ function ClaimTilesDiscover(props: Props) {
   };
 
   const modifiedUris = uris ? uris.slice() : [];
-  const fixUris = [
-    'lbry://@EmperorLemon#e/sacrifices-to-the-church-of-nintendo#0',
-                  ];
+  const fixUris = ['lbry://@EmperorLemon#e/sacrifices-to-the-church-of-nintendo#0'];
 
   if (pin && modifiedUris && modifiedUris.length > 2 && window.location.pathname === '/') {
     fixUris.forEach((fixUri) => {
