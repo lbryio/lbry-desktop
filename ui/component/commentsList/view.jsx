@@ -37,6 +37,7 @@ type Props = {
   claimIsMine: boolean,
   myChannels: ?Array<ChannelClaim>,
   isFetchingComments: boolean,
+  isFetchingReacts: boolean,
   linkedCommentId?: string,
   totalComments: number,
   fetchingChannels: boolean,
@@ -59,6 +60,7 @@ function CommentList(props: Props) {
     claimIsMine,
     myChannels,
     isFetchingComments,
+    isFetchingReacts,
     linkedCommentId,
     totalComments,
     fetchingChannels,
@@ -122,7 +124,7 @@ function CommentList(props: Props) {
 
   // Fetch reacts
   useEffect(() => {
-    if (totalFetchedComments > 0 && ENABLE_COMMENT_REACTIONS && !fetchingChannels) {
+    if (totalFetchedComments > 0 && ENABLE_COMMENT_REACTIONS && !fetchingChannels && !isFetchingReacts) {
       let idsForReactionFetch;
 
       if (!othersReactsById || !myReactsByCommentId) {
@@ -151,6 +153,7 @@ function CommentList(props: Props) {
     uri,
     activeChannelId,
     fetchingChannels,
+    isFetchingReacts,
   ]);
 
   // Scroll to linked-comment
