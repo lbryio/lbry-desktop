@@ -74,10 +74,10 @@ function WalletTipAmountSelector(props: Props) {
         {DEFAULT_TIP_AMOUNTS.map((defaultAmount) => (
           <Button
             key={defaultAmount}
-            disabled={activeTab === TAB_LBC && amount > balance}
+            disabled={(activeTab === TAB_LBC) && defaultAmount > balance}
             button="alt"
             className={classnames('button-toggle button-toggle--expandformobile', {
-              'button-toggle--active': defaultAmount === amount,
+              'button-toggle--active': defaultAmount === amount && !useCustomTip,
               'button-toggle--disabled': amount > balance,
             })}
             label={defaultAmount}
@@ -91,7 +91,7 @@ function WalletTipAmountSelector(props: Props) {
         <Button
           button="alt"
           className={classnames('button-toggle button-toggle--expandformobile', {
-            'button-toggle--active': !DEFAULT_TIP_AMOUNTS.includes(amount),
+            'button-toggle--active': useCustomTip,
           })}
           icon={activeTab === TAB_LBC ? ICONS.LBC : ICONS.FINANCE}
           label={__('Custom')}
