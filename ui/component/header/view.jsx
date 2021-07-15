@@ -64,6 +64,8 @@ type Props = {
   activeChannelStakedLevel: number,
 };
 
+// Allow screen reader users ( or keyboard navigation )
+// to jump to main content
 const SkipNavigationButton = () => {
   const skipNavigation = (e) => {
     // Match any focusable element
@@ -252,6 +254,7 @@ const Header = (props: Props) => {
         ) : (
           <>
             <div className="header__navigation">
+              <SkipNavigationButton />
               {!authHeader && (
                 <span style={{ position: 'relative' }}>
                   <Button
@@ -289,8 +292,6 @@ const Header = (props: Props) => {
                 // @endif
                 {...homeButtonNavigationProps}
               />
-
-              <SkipNavigationButton />
 
               {!authHeader && (
                 <div className="header__center">
