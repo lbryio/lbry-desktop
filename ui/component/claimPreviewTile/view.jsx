@@ -193,7 +193,7 @@ function ClaimPreviewTile(props: Props) {
         'claim-preview__live': live,
       })}
     >
-      <NavLink aria-hidden tabindex={-1} {...navLinkProps}>
+      <NavLink aria-hidden tabIndex={-1} {...navLinkProps}>
         <FileThumbnail thumbnail={thumbnailUrl} allowGifs>
           {!isChannel && (
             <React.Fragment>
@@ -248,7 +248,7 @@ function ClaimPreviewTile(props: Props) {
             </div>
           ) : (
             <React.Fragment>
-              <UriIndicator aria-hidden tabindex={-1} uri={uri} link hideAnonymous>
+              <UriIndicator aria-hidden tabIndex={-1} uri={uri} link hideAnonymous>
                 <ChannelThumbnail uri={channelUri} xsmall />
               </UriIndicator>
 

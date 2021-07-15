@@ -310,13 +310,13 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
           })}
         >
           {isChannelUri && claim ? (
-            <UriIndicator aria-hidden tabindex={-1} uri={uri} link>
+            <UriIndicator aria-hidden tabIndex={-1} uri={uri} link>
               <ChannelThumbnail uri={uri} small={type === 'inline'} />
             </UriIndicator>
           ) : (
             <>
               {!pending ? (
-                <NavLink aria-hidden tabindex={-1} {...navLinkProps}>
+                <NavLink aria-hidden tabIndex={-1} {...navLinkProps}>
                   <FileThumbnail thumbnail={thumbnailUrl}>
                     {/* @if TARGET='app' */}
                     {claim && !isCollection && (

@@ -68,9 +68,9 @@ const SkipNavigationButton = () => {
   const skipNavigation = (e) => {
     // Match any focusable element
     const focusableElementQuery = `
-      #main-content [tabindex]:not([tabindex="-1"]):not(:disabled),
-      #main-content a:not([aria-hidden]):not([tabindex="-1"]):not(:disabled),
-      #main-content button:not([aria-hidden]):not([tabindex="-1"]):not(:disabled)
+      #main-content [tabindex]:not([tabIndex="-1"]):not(:disabled),
+      #main-content a:not([aria-hidden]):not([tabIndex="-1"]):not(:disabled),
+      #main-content button:not([aria-hidden]):not([tabIndex="-1"]):not(:disabled)
     `;
     // Find first focusable element
     const element = document.querySelector(focusableElementQuery);
