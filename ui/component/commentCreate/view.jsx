@@ -16,6 +16,15 @@ import CreditAmount from 'component/common/credit-amount';
 import ChannelThumbnail from 'component/channelThumbnail';
 import UriIndicator from 'component/uriIndicator';
 import Empty from 'component/common/empty';
+import { STRIPE_PUBLIC_KEY } from 'config';
+import { Lbryio } from 'lbryinc';
+
+let stripeEnvironment = 'test';
+// if the key contains pk_live it's a live key
+// update the environment for the calls to the backend to indicate which environment to hit
+if (STRIPE_PUBLIC_KEY.indexOf('pk_live') > -1) {
+  stripeEnvironment = 'live';
+}
 
 const TAB_FIAT = 'TabFiat';
 const TAB_LBC = 'TabLBC';
@@ -131,6 +140,11 @@ export function CommentCreate(props: Props) {
       channel_id: activeChannelClaim.claim_id,
     };
 
+    const activeChannelName = activeChannelClaim && activeChannelClaim.name;
+    const activeChannelId = activeChannelClaim && activeChannelClaim.claim_id;
+
+    console.log(activeChannelClaim);
+
     setIsSubmitting(true);
 
     if (activeTab === TAB_LBC) {
@@ -152,8 +166,55 @@ export function CommentCreate(props: Props) {
         }
       );
     } else {
+      // setup variables for tip API
+      let channelClaimId, tipChannelName;
+      // if there is a signing channel it's on a file
+      if (claim.signing_channel) {
+        channelClaimId = claim.signing_channel.claim_id;
+        tipChannelName = claim.signing_channel.name;
 
-      const stripeEnvironment = 'test';
+        // otherwise it's on the channel page
+      } else {
+        channelClaimId = claim.claim_id;
+        tipChannelName = claim.name;
+      }
+
+      const sourceClaimId = claim.claim_id;
+
+      Lbryio.call(
+        'customer',
+        'tip',
+        {
+          amount: 100 * tipAmount, // convert from dollars to cents
+          creator_channel_name: tipChannelName, // creator_channel_name
+          creator_channel_claim_id: channelClaimId,
+          tipper_channel_name: activeChannelName,
+          tipper_channel_claim_id: activeChannelId,
+          currency: 'USD',
+          anonymous: false,
+          source_claim_id: sourceClaimId,
+          environment: stripeEnvironment,
+        },
+        'post'
+      )
+        .then((customerTipResponse) => {
+          console.log(customerTipResponse);
+
+          const paymentIntendId = customerTipResponse.payment_intent_id;
+
+          handleCreateComment(null, paymentIntendId, stripeEnvironment);
+          // handleCreateComment(null);
+        })
+        .catch(function(error) {
+          var displayError = 'Sorry, there was an error in processing your payment!';
+
+          if (error.message !== 'payment intent failed to confirm') {
+            displayError = error.message;
+          }
+
+          // doToast({ message: displayError, isError: true });
+        });
+
       const paymentIntentId = 'pi_1JDDZUIrsVv9ySuhbVmQvXs2';
 
       handleCreateComment(null, paymentIntentId, stripeEnvironment);
@@ -180,16 +241,10 @@ export function CommentCreate(props: Props) {
   function handleCreateComment(txid, payment_intent_id, environment) {
     setIsSubmitting(true);
 
-    console.log('txid pii env')
-    console.log(txid, payment_intent_id, environment)
-
     createComment(commentValue, claimId, parentId, txid, payment_intent_id, environment)
       .then((res) => {
         // allow a new comment to be sent on frontend
         setIsSubmitting(false);
-
-        console.log(res);
-
 
         if (res && res.signature) {
           setCommentValue('');
@@ -204,7 +259,6 @@ export function CommentCreate(props: Props) {
         }
       })
       .catch((e) => {
-        console.log(e);
         setIsSubmitting(false);
         setCommentFailure(true);
       });
