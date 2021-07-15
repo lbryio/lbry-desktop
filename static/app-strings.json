@@ -1458,6 +1458,8 @@
   "Your channel is still being setup, try again in a few moments.": "Your channel is still being setup, try again in a few moments.",
   "Unable to delete this comment, please try again later.": "Unable to delete this comment, please try again later.",
   "Unable to edit this comment, please try again later.": "Unable to edit this comment, please try again later.",
+  "No active channel selected.": "No active channel selected.",
+  "Unable to verify your channel. Please try again.": "Unable to verify your channel. Please try again.",
   "Channel cannot be anonymous, please select a channel and try again.": "Channel cannot be anonymous, please select a channel and try again.",
   "Change to list layout": "Change to list layout",
   "Change to tile layout": "Change to tile layout",
