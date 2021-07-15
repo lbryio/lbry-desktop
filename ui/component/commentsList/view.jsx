@@ -13,6 +13,7 @@ import usePersistedState from 'effects/use-persisted-state';
 import { ENABLE_COMMENT_REACTIONS } from 'config';
 import Empty from 'component/common/empty';
 import debounce from 'util/debounce';
+import { useIsMobile } from 'effects/use-screensize';
 
 const DEBOUNCE_SCROLL_HANDLER_MS = 200;
 
@@ -74,6 +75,8 @@ function CommentList(props: Props) {
   const DEFAULT_SORT = ENABLE_COMMENT_REACTIONS ? SORT_BY.POPULARITY : SORT_BY.NEWEST;
   const [sort, setSort] = usePersistedState('comment-sort-by', DEFAULT_SORT);
   const [page, setPage] = React.useState(0);
+  const isMobile = useIsMobile();
+  const [expandedComments, setExpandedComments] = React.useState(!isMobile);
   const totalFetchedComments = allCommentIds ? allCommentIds.length : 0;
 
   // Display comments immediately if not fetching reactions
@@ -191,7 +194,7 @@ function CommentList(props: Props) {
     }
 
     const handleCommentScroll = debounce(() => {
-      if (shouldFetchNextPage(page, topLevelTotalPages, window, document)) {
+      if (!isMobile && shouldFetchNextPage(page, topLevelTotalPages, window, document)) {
         setPage(page + 1);
       }
     }, DEBOUNCE_SCROLL_HANDLER_MS);
@@ -205,6 +208,7 @@ function CommentList(props: Props) {
       }
     }
   }, [
+    isMobile,
     page,
     moreBelow,
     spinnerRef,
@@ -279,7 +283,10 @@ function CommentList(props: Props) {
             <Empty padded text={__('That was pretty deep. What do you think?')} />
           )}
 
-          <ul className="comments" ref={commentRef}>
+          <ul className={classnames({
+              'comments': expandedComments,
+              'comments--contracted': !expandedComments,
+            })} ref={commentRef}>
             {topLevelComments &&
               displayedComments &&
               displayedComments.map((comment) => {
@@ -307,7 +314,36 @@ function CommentList(props: Props) {
               })}
           </ul>
 
-          {(isFetchingComments || moreBelow) && (
+          {isMobile && (
+            <div className="card__bottom-actions--comments">
+              {moreBelow && (
+                <Button
+                  button="alt"
+                  title={!expandedComments ? __('Expand Comments') : __('Load More')}
+                  label={!expandedComments ? __('Expand Comments') : __('Load More')}
+                  onClick={() => {
+                    if (!expandedComments) {
+                      setExpandedComments(true);
+                    } else {
+                      setPage(page + 1);
+                    }
+                  }}
+                />
+              )}
+              {expandedComments && (
+                <Button
+                  button="alt"
+                  title={__('Collapse Thread')}
+                  label={__('Collapse Thread')}
+                  onClick={() => {
+                    setExpandedComments(false);
+                  }}
+                />
+              )}
+            </div>
+          )}
+
+          {(isFetchingComments || (!isMobile && moreBelow)) && (
             <div className="main--empty" ref={spinnerRef}>
               <Spinner type="small" />
             </div>
