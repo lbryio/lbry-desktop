@@ -4,8 +4,6 @@ import { handleActions } from 'util/redux-utils';
 import { BLOCK_LEVEL } from 'constants/comment';
 import { isURIEqual } from 'lbry-redux';
 
-const IS_DEV = process.env.NODE_ENV !== 'production';
-
 const defaultState: CommentsState = {
   commentById: {}, // commentId -> Comment
   byId: {}, // ClaimID -> list of fetched comment IDs.
@@ -277,6 +275,15 @@ export default handleActions(
       const totalRepliesByParentId = Object.assign({}, state.totalRepliesByParentId);
       const isLoadingByParentId = Object.assign({}, state.isLoadingByParentId);
 
+      if (!parentId) {
+        totalCommentsById[claimId] = totalItems;
+        topLevelTotalCommentsById[claimId] = totalFilteredItems;
+        topLevelTotalPagesById[claimId] = totalPages;
+      } else {
+        totalRepliesByParentId[parentId] = totalFilteredItems;
+        isLoadingByParentId[parentId] = false;
+      }
+
       const commonUpdateAction = (comment, commentById, commentIds, index) => {
         // map the comment_ids to the new comments
         commentById[comment.comment_id] = comment;
@@ -289,46 +296,19 @@ export default handleActions(
         // sort comments by their timestamp
         const commentIds = Array(comments.length);
 
-        // totalCommentsById[claimId] = totalItems;
-        // --> currently, this value is only correct when done via a top-level query.
-        // Until this is fixed, I'm moving it downwards to **
-
         // --- Top-level comments ---
         if (!parentId) {
-          totalCommentsById[claimId] = totalItems; // **
-
-          topLevelTotalCommentsById[claimId] = totalFilteredItems;
-          topLevelTotalPagesById[claimId] = totalPages;
-
-          if (!topLevelCommentsById[claimId]) {
-            topLevelCommentsById[claimId] = [];
-          }
-
-          const topLevelCommentIds = topLevelCommentsById[claimId];
-
           for (let i = 0; i < comments.length; ++i) {
             const comment = comments[i];
             commonUpdateAction(comment, commentById, commentIds, i);
-
-            if (IS_DEV && comment['parent_id']) console.error('Invalid top-level comment:', comment); // eslint-disable-line
-
-            if (!topLevelCommentIds.includes(comment.comment_id)) {
-              topLevelCommentIds.push(comment.comment_id);
-            }
+            pushToArrayInObject(topLevelCommentsById, claimId, comment.comment_id);
           }
         }
         // --- Replies ---
         else {
-          totalRepliesByParentId[parentId] = totalFilteredItems;
-          isLoadingByParentId[parentId] = false;
-
           for (let i = 0; i < comments.length; ++i) {
             const comment = comments[i];
             commonUpdateAction(comment, commentById, commentIds, i);
-
-            if (IS_DEV && !comment['parent_id']) console.error('Missing parent_id:', comment); // eslint-disable-line
-            if (IS_DEV && comment.parent_id !== parentId) console.error('Black sheep in the family?:', comment); // eslint-disable-line
-
             pushToArrayInObject(repliesByParentId, parentId, comment.comment_id);
           }
         }
