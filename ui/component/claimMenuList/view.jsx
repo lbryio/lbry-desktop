@@ -411,7 +411,7 @@ function ClaimMenuList(props: Props) {
 
         <MenuItem className="comment__menu-option" onSelect={handleCopyLink}>
           <div className="menu__link">
-            <Icon aria-hidden icon={ICONS.SHARE} />
+            <Icon aria-hidden icon={ICONS.COPY_LINK} />
             {__('Copy Link')}
           </div>
         </MenuItem>
