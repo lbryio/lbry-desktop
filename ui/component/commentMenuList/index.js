@@ -3,6 +3,7 @@ import { makeSelectChannelPermUrlForClaimUri, makeSelectClaimIsMine, makeSelectC
 import {
   doCommentAbandon,
   doCommentPin,
+  doCommentList,
   doCommentModBlock,
   doCommentModBlockAsAdmin,
   doCommentModBlockAsModerator,
@@ -29,7 +30,8 @@ const perform = (dispatch) => ({
   clearPlayingUri: () => dispatch(doSetPlayingUri({ uri: null })),
   deleteComment: (commentId, creatorChannelUrl) => dispatch(doCommentAbandon(commentId, creatorChannelUrl)),
   muteChannel: (channelUri) => dispatch(doChannelMute(channelUri)),
-  pinComment: (commentId, claimId, remove) => dispatch(doCommentPin(commentId, claimId, remove)),
+  pinComment: (commentId, remove) => dispatch(doCommentPin(commentId, remove)),
+  fetchComments: (uri) => dispatch(doCommentList(uri)),
   //   setActiveChannel: channelId => dispatch(doSetActiveChannel(channelId)),
   commentModBlock: (commenterUri) => dispatch(doCommentModBlock(commenterUri)),
   commentModBlockAsAdmin: (commenterUri, blockerId) => dispatch(doCommentModBlockAsAdmin(commenterUri, blockerId)),

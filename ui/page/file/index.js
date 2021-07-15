@@ -16,6 +16,7 @@ import {
 import { makeSelectCostInfoForUri, doFetchCostInfoForUri } from 'lbryinc';
 import { selectShowMatureContent, makeSelectClientSetting } from 'redux/selectors/settings';
 import { makeSelectFileRenderModeForUri } from 'redux/selectors/content';
+import { makeSelectCommentForCommentId } from 'redux/selectors/comments';
 import { DISABLE_COMMENTS_TAG } from 'constants/tags';
 
 import FilePage from './view';
@@ -23,10 +24,11 @@ import FilePage from './view';
 const select = (state, props) => {
   const { search } = props.location;
   const urlParams = new URLSearchParams(search);
+  const linkedCommentId = urlParams.get('lc');
   const collectionId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID);
 
   return {
-    linkedCommentId: urlParams.get('lc'),
+    linkedComment: makeSelectCommentForCommentId(linkedCommentId)(state),
     costInfo: makeSelectCostInfoForUri(props.uri)(state),
     metadata: makeSelectMetadataForUri(props.uri)(state),
     obscureNsfw: !selectShowMatureContent(state),
