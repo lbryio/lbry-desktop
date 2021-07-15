@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState, useLayoutEffect } from 'react';
 import { lazyImport } from 'util/lazyImport';
 import classnames from 'classnames';
 import analytics from 'analytics';
+import { Helmet } from 'react-helmet';
 import { buildURI, parseURI } from 'lbry-redux';
 import { SIMPLE_SITE } from 'config';
 import Router from 'component/router/index';
@@ -34,14 +35,22 @@ import LANGUAGE_MIGRATIONS from 'constants/language-migrations';
 const FileDrop = lazyImport(() => import('component/fileDrop' /* webpackChunkName: "secondary" */));
 const ModalRouter = lazyImport(() => import('modal/modalRouter' /* webpackChunkName: "secondary" */));
 const Nag = lazyImport(() => import('component/common/nag' /* webpackChunkName: "secondary" */));
-const NagContinueFirstRun = lazyImport(() => import('component/nagContinueFirstRun' /* webpackChunkName: "secondary" */));
+const NagContinueFirstRun = lazyImport(() =>
+  import('component/nagContinueFirstRun' /* webpackChunkName: "secondary" */)
+);
 const OpenInAppLink = lazyImport(() => import('web/component/openInAppLink' /* webpackChunkName: "secondary" */));
 
 // @if TARGET='web'
-const NagDataCollection = lazyImport(() => import('web/component/nag-data-collection' /* webpackChunkName: "secondary" */));
-const NagDegradedPerformance = lazyImport(() => import('web/component/nag-degraded-performance' /* webpackChunkName: "secondary" */));
+const NagDataCollection = lazyImport(() =>
+  import('web/component/nag-data-collection' /* webpackChunkName: "secondary" */)
+);
+const NagDegradedPerformance = lazyImport(() =>
+  import('web/component/nag-degraded-performance' /* webpackChunkName: "secondary" */)
+);
 const NagNoUser = lazyImport(() => import('web/component/nag-no-user' /* webpackChunkName: "nag-no-user" */));
-const YoutubeWelcome = lazyImport(() => import('web/component/youtubeReferralWelcome' /* webpackChunkName: "secondary" */));
+const YoutubeWelcome = lazyImport(() =>
+  import('web/component/youtubeReferralWelcome' /* webpackChunkName: "secondary" */)
+);
 // @endif
 
 const SyncFatalError = lazyImport(() => import('component/syncFatalError' /* webpackChunkName: "syncFatalError" */));
@@ -407,6 +416,9 @@ function App(props: Props) {
       ref={appRef}
       onContextMenu={IS_WEB ? undefined : (e) => openContextMenu(e)}
     >
+      {/* Define main language */}
+      <Helmet htmlAttributes={{ lang: language }} />
+
       {IS_WEB && lbryTvApiStatus === STATUS_DOWN ? (
         <React.Suspense fallback={null}>
           <Yrbl
