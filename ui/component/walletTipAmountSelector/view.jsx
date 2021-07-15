@@ -34,21 +34,34 @@ function WalletTipAmountSelector(props: Props) {
     const validTipInput = regexp.test(String(amount));
     let tipError;
 
-    if (!amount) {
-      tipError = __('Amount must be a number');
-    } else if (amount <= 0) {
+    if (amount === 0) {
       tipError = __('Amount must be a positive number');
-    } else if (amount < MINIMUM_PUBLISH_BID) {
-      tipError = __('Amount must be higher');
-    } else if (!validTipInput) {
-      tipError = __('Amount must have no more than 8 decimal places');
-    } else if (amount === balance) {
-      tipError = __('Please decrease the amount to account for transaction fees');
-    } else if (amount > balance) {
-      tipError = __('Not enough Credits');
+    } else if (!amount || typeof amount !== 'number') {
+      tipError = __('Amount must be a number');
     }
+
+    // if it's not fiat, aka it's boost or lbc tip
+    else if (activeTab !== TAB_FIAT) {
+      if (!validTipInput) {
+        tipError = __('Amount must have no more than 8 decimal places');
+      } else if (amount === balance) {
+        tipError = __('Please decrease the amount to account for transaction fees');
+      } else if (amount > balance) {
+        tipError = __('Not enough Credits');
+      } else if (amount < MINIMUM_PUBLISH_BID) {
+        tipError = __('Amount must be higher');
+      }
+      //  if tip fiat tab
+    } else {
+      if (amount < 1) {
+        tipError = __('Amount must be at least one dollar');
+      } else if (amount > 1000) {
+        tipError = __('Amount cannot be over 1000 dollars');
+      }
+    }
+
     setTipError(tipError);
-  }, [amount, balance, setTipError]);
+  }, [amount, balance, setTipError, activeTab]);
 
   function handleCustomPriceChange(amount: number) {
     const tipAmount = parseFloat(amount);
@@ -61,7 +74,7 @@ function WalletTipAmountSelector(props: Props) {
         {DEFAULT_TIP_AMOUNTS.map((defaultAmount) => (
           <Button
             key={defaultAmount}
-            disabled={amount > balance}
+            disabled={activeTab === TAB_LBC && amount > balance}
             button="alt"
             className={classnames('button-toggle button-toggle--expandformobile', {
               'button-toggle--active': defaultAmount === amount,
@@ -100,13 +113,15 @@ function WalletTipAmountSelector(props: Props) {
           <FormField
             autoFocus
             name="tip-input"
-            label={
+            label={ activeTab === TAB_LBC ?
               <React.Fragment>
                 {__('Custom support amount')}{' '}
                 <I18nMessage tokens={{ lbc_balance: <CreditAmount precision={4} amount={balance} /> }}>
                   (%lbc_balance% available)
                 </I18nMessage>
-              </React.Fragment>
+              </React.Fragment> : <><div className="">
+                <span className="help--spendable">Send a tip directly from your attached card</span>
+              </div></>
             }
             className="form-field--price-amount"
             error={tipError}
