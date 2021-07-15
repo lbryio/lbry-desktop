@@ -64,6 +64,24 @@ type Props = {
   activeChannelStakedLevel: number,
 };
 
+const SkipNavigationButton = () => {
+  const skipNavigation = (e) => {
+    // Match any focusable element
+    const focusableElementQuery = `
+      #main-content [tabindex]:not([tabindex="-1"]):not(:disabled),
+      #main-content a:not([aria-hidden]):not([tabindex="-1"]):not(:disabled),
+      #main-content button:not([aria-hidden]):not([tabindex="-1"]):not(:disabled)
+    `;
+    // Find first focusable element
+    const element = document.querySelector(focusableElementQuery);
+    // Trigger focus to skip navigation
+    if (element && element.focus) {
+      element.focus();
+    }
+  };
+  return <Button className={'skip-button'} onClick={skipNavigation} label={__('Skip Navigation')} button={'link'} />;
+};
+
 const Header = (props: Props) => {
   const {
     balance,
@@ -254,6 +272,7 @@ const Header = (props: Props) => {
               <Button
                 className="header__navigation-item header__navigation-item--lbry"
                 // @if TARGET='app'
+                aria-label={__('Home')}
                 label={'LBRY'}
                 // @endif
                 // @if TARGET='web'
@@ -270,6 +289,8 @@ const Header = (props: Props) => {
                 // @endif
                 {...homeButtonNavigationProps}
               />
+
+              <SkipNavigationButton />
 
               {!authHeader && (
                 <div className="header__center">
