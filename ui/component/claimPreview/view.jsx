@@ -352,7 +352,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                 {pending ? (
                   <ClaimPreviewTitle uri={uri} />
                 ) : (
-                  <NavLink {...navLinkProps}>
+                  <NavLink aria-current={active && 'page'} {...navLinkProps}>
                     <ClaimPreviewTitle uri={uri} />
                   </NavLink>
                 )}
