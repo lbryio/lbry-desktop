@@ -21,6 +21,7 @@ import CollectionPreviewOverlay from 'component/collectionPreviewOverlay';
 type Props = {
   uri: string,
   claim: ?Claim,
+  mediaDuration?: string,
   resolveUri: (string) => void,
   isResolvingUri: boolean,
   history: { push: (string) => void },
@@ -72,6 +73,7 @@ function ClaimPreviewTile(props: Props) {
     showNoSourceClaims,
     isLivestream,
     collectionId,
+    mediaDuration,
   } = props;
   const isRepost = claim && claim.repost_channel_url;
   const isCollection = claim && claim.value_type === 'collection';
@@ -114,6 +116,18 @@ function ClaimPreviewTile(props: Props) {
 
   const signingChannel = claim && claim.signing_channel;
   const channelUri = !isChannel ? signingChannel && signingChannel.permanent_url : claim && claim.permanent_url;
+  const channelTitle = signingChannel && (signingChannel.value.title || signingChannel.name);
+
+  // Aria-label value for claim preview
+  let ariaLabelData = title;
+
+  if (!isChannel && channelTitle) {
+    if (mediaDuration) {
+      ariaLabelData = __('%title% by %channelTitle%, %mediaDuration%', { title, channelTitle, mediaDuration });
+    } else {
+      ariaLabelData = __('%title% by %channelTitle%', { title, channelTitle });
+    }
+  }
 
   function handleClick(e) {
     if (navigateUrl) {
@@ -226,7 +240,7 @@ function ClaimPreviewTile(props: Props) {
         </FileThumbnail>
       </NavLink>
       <div className="claim-tile__header">
-        <NavLink {...navLinkProps}>
+        <NavLink aria-label={ariaLabelData} {...navLinkProps}>
           <h2 className="claim-tile__title">
             <TruncatedText text={title || (claim && claim.name)} lines={isChannel ? 1 : 2} />
             {isChannel && (
