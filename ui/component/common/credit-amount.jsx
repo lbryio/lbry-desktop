@@ -76,8 +76,8 @@ class CreditAmount extends React.PureComponent<Props> {
 
       if (showLBC && !isFiat) {
         amountText = <LbcSymbol postfix={amountText} size={size} />;
-      } else if (showLBC && isFiat){
-        amountText = <p> ${amountText} </p>;
+      } else if (showLBC && isFiat) {
+        amountText = <p> ${amountText}.00</p>;
       }
 
       if (fee) {
