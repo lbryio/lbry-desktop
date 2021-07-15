@@ -395,13 +395,6 @@ export function doCommentCreate(
   return async (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
 
-    console.log('comment claim_id parent_id uri livestream txid payment_intent_id environment');
-    console.log(comment, claim_id, parent_id, uri, livestream, txid, payment_intent_id, environment);
-
-    // payment_intent_id = 'pi_1JDDZUIrsVv9ySuhbVmQvXs2'
-    //
-    // environment = 'test'
-
     // get active channel that will receive comment and optional tip
     const activeChannelClaim = selectActiveChannelClaim(state);
 
