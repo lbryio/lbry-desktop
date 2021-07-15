@@ -201,6 +201,12 @@ export function CommentCreate(props: Props) {
           const paymentIntendId = customerTipResponse.payment_intent_id;
 
           handleCreateComment(null, paymentIntendId, stripeEnvironment);
+
+          setCommentValue('');
+          setIsReviewingSupportComment(false);
+          setIsSupportComment(false);
+          setCommentFailure(false);
+          setIsSubmitting(false);
           // handleCreateComment(null);
         })
         .catch(function(error) {
@@ -212,21 +218,6 @@ export function CommentCreate(props: Props) {
 
           // doToast({ message: displayError, isError: true });
         });
-
-      const paymentIntentId = 'pi_1JDDZUIrsVv9ySuhbVmQvXs2';
-
-      handleCreateComment(null, paymentIntentId, stripeEnvironment);
-
-      // TODO: get transaction id, blah blah
-      // hit create comment with fiat amount etc
-
-      setCommentValue('');
-      setIsReviewingSupportComment(false);
-      setIsSupportComment(false);
-      setCommentFailure(false);
-      setIsSubmitting(false);
-
-      // alert('Sorry fiat tip is not implemented yet!');
     }
   }
 

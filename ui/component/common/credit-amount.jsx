@@ -18,6 +18,7 @@ type Props = {
   size?: number,
   superChat?: boolean,
   superChatLight?: boolean,
+  isFiat?: boolean
 };
 
 class CreditAmount extends React.PureComponent<Props> {
