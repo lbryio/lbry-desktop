@@ -149,10 +149,25 @@ function WalletSendTip(props: Props) {
 
   const [activeTab, setActiveTab] = React.useState(claimIsMine ? TAB_BOOST : TAB_LBC);
 
+  function setClaimTypeText() {
+    if (claim.value_type === 'stream') {
+      return __('Content'); 
+    } else if (claim.value_type === 'channel') {
+      return __('Channel');
+    } else if (claim.value_type === 'repost') {
+      return __('Repost');
+    } else if (claim.value_type === 'collection') {
+      return __('List');
+    }	else {
+      return __('Claim');
+    }
+  }
+  const claimTypeText = setClaimTypeText();
+
   let iconToUse, explainerText;
   if (activeTab === TAB_BOOST) {
     iconToUse = ICONS.LBC;
-    explainerText = __('This refundable boost will improve the discoverability of this content while active.');
+    explainerText = __('This refundable boost will improve the discoverability of this %claimTypeText% while active.', {claimTypeText});
   } else if (activeTab === TAB_FIAT) {
     iconToUse = ICONS.FINANCE;
     explainerText = __('Show this channel your appreciation by sending a donation of cash in USD.');
@@ -289,7 +304,7 @@ function WalletSendTip(props: Props) {
     const displayAmount = !isNan(tipAmount) ? tipAmount : '';
 
     if (activeTab === TAB_BOOST) {
-      return __('Boost This Content');
+      return (claimIsMine ?  __('Boost Your %claimTypeText%', {claimTypeText}) : __('Boost This %claimTypeText%', {claimTypeText}));
     } else if (activeTab === TAB_FIAT) {
       return __('Send a $%displayAmount% Tip', { displayAmount });
     } else if (activeTab === TAB_LBC) {
@@ -341,7 +356,7 @@ function WalletSendTip(props: Props) {
       ) : (
         // if there is lbc, the main tip/boost gui with the 3 tabs at the top
         <Card
-          title={<LbcSymbol postfix={claimIsMine ? __('Boost your content') : __('Support this content')} size={22} />}
+          title={<LbcSymbol postfix={claimIsMine ? __('Boost Your %claimTypeText%', {claimTypeText}) : __('Support This %claimTypeText%', {claimTypeText})} size={22} />}
           subtitle={
             <React.Fragment>
               {!claimIsMine && (
