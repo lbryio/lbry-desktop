@@ -120,7 +120,13 @@ function WalletTipAmountSelector(props: Props) {
         </div>
       )}
 
-      {!useCustomTip && <WalletSpendableBalanceHelp />}
+      {!useCustomTip && activeTab === TAB_LBC && <WalletSpendableBalanceHelp />}
+      {!useCustomTip && activeTab === TAB_FIAT && <>
+        <div className="help">
+          <span className="help--spendable">Send a tip directly from your attached card</span>
+        </div>
+      </>}
+
     </>
   );
 }

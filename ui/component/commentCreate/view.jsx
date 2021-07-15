@@ -132,19 +132,30 @@ export function CommentCreate(props: Props) {
 
     setIsSubmitting(true);
 
-    sendTip(
-      params,
-      (response) => {
-        const { txid } = response;
-        setTimeout(() => {
-          handleCreateComment(txid);
-        }, 1500);
-        setSuccessTip({ txid, tipAmount });
-      },
-      () => {
-        setIsSubmitting(false);
-      }
-    );
+    if (activeTab === TAB_LBC) {
+      // call sendTip and then run the callback from the response
+      // second parameter is callback
+      sendTip(
+        params,
+        (response) => {
+          const { txid } = response;
+          setTimeout(() => {
+            handleCreateComment(txid);
+          }, 1500);
+          setSuccessTip({ txid, tipAmount });
+        },
+        () => {
+          setIsSubmitting(false);
+        }
+      );
+    } else {
+      setCommentValue('');
+      setIsReviewingSupportComment(false);
+      setIsSupportComment(false);
+      setCommentFailure(false);
+
+      alert('Sorry fiat tip is not implemented yet!');
+    }
   }
 
   function handleCreateComment(txid) {
@@ -209,7 +220,7 @@ export function CommentCreate(props: Props) {
     return (
       <div className="comment__create">
         <div className="comment__sc-preview">
-          <CreditAmount className="comment__scpreview-amount" amount={tipAmount} size={18} />
+          <CreditAmount className="comment__scpreview-amount" isFiat={activeTab === TAB_FIAT} amount={tipAmount} size={18} />
 
           <ChannelThumbnail xsmall uri={activeChannelClaim.canonical_url} />
           <div>
@@ -222,6 +233,7 @@ export function CommentCreate(props: Props) {
             autoFocus
             button="primary"
             disabled={disabled}
+            // whether to show sending, send, or resubmit
             label={isSubmitting ? __('Sending...') : (commentFailure && tipAmount === successTip.tipAmount) ? __('Re-submit') : __('Send')}
             onClick={handleSupportComment}
           />
@@ -299,14 +311,14 @@ export function CommentCreate(props: Props) {
             />
             {/* TODO: add here */}
             {!claimIsMine && (
-              <Button disabled={disabled} button="alt" icon={ICONS.LBC} onClick={() => {
+              <Button disabled={disabled} button="alt" className="thatButton" icon={ICONS.LBC} onClick={() => {
                 setIsSupportComment(true);
                 setActiveTab(TAB_LBC);
                 // alert('hitting!');
               }} />
             )}
             {!claimIsMine && (
-              <Button disabled={disabled} button="alt" icon={ICONS.FINANCE} onClick={() => {
+              <Button disabled={disabled} button="alt" className="thisButton" icon={ICONS.FINANCE} onClick={() => {
                 setIsSupportComment(true);
                 setActiveTab(TAB_FIAT);
                 // alert('hitting!');
