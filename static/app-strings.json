@@ -2044,9 +2044,6 @@
   "The payment will be made from your saved card": "The payment will be made from your saved card",
   "A channel is required to comment on lbry.tv": "A channel is required to comment on lbry.tv",
   "Commenting...": "Commenting...",
-  "Trending for #Art": "Trending for #Art",
-  "Trending for #Education": "Trending for #Education",
-  "Trending for #Technology": "Trending for #Technology",
   "Add to Watch Later": "Add to Watch Later",
   "Remove from Watch Later": "Remove from Watch Later",
   "Added": "Added",
@@ -2055,6 +2052,9 @@
   "added to": "added to",
   "removed from": "removed from",
   "Item removed from Watch Later": "Item removed from Watch Later",
-  "Skip navigation": "Skip navigation",
+  "Skip Navigation": "Skip Navigation",
+  "Trending for #Art": "Trending for #Art",
+  "Trending for #Education": "Trending for #Education",
+  "Trending for #Technology": "Trending for #Technology",
   "--end--": "--end--"
 }
