@@ -79,7 +79,7 @@
 
   &:hover {
     .claim__menu-button {
-      opacity: 1 !important;
+      opacity: 1;
     }
   }
 }
@@ -471,7 +471,7 @@
     cursor: pointer;
 
     .claim__menu-button {
-      opacity: 1 !important;
+      opacity: 1;
     }
     .collection-preview__overlay-thumbs {
       opacity: 1;
@@ -739,25 +739,29 @@
   }
 }
 
-.claim__menu-button {
-  position: absolute;
-  top: var(--spacing-xs);
-  right: var(--spacing-xs);
+.menu__button {
+  &.claim__menu-button {
+    position: absolute;
+    top: var(--spacing-xs);
+    right: var(--spacing-xs);
+  }
 
-  @media (min-width: $breakpoint-small) {
-    &:not(:focus):not([aria-expanded='true']) {
-      opacity: 0;
-    }
+  &.claim__menu-button--inline {
+    position: relative;
+    @extend .button--alt;
+    width: var(--height-button);
+    padding: 0;
+    border-radius: var(--border-radius);
   }
 }
 
-.claim__menu-button--inline {
-  position: relative;
-  display: block;
-  right: auto;
-  top: auto;
-  @extend .button--alt;
-  padding: 0 var(--spacing-xxs);
+@media (min-width: $breakpoint-small) {
+  .claim-preview--tile:not(:hover),
+  .claim-preview__wrapper:not(:hover) {
+    .claim__menu-button:not(:focus):not([aria-expanded='true']) {
+      opacity: 0;
+    }
+  }
 }
 
 .claim-preview__overlay-properties {
