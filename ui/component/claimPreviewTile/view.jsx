@@ -10,7 +10,7 @@ import ChannelThumbnail from 'component/channelThumbnail';
 import SubscribeButton from 'component/subscribeButton';
 import useGetThumbnail from 'effects/use-get-thumbnail';
 import { formatLbryUrlForWeb } from 'util/url';
-import { parseURI, COLLECTIONS_CONSTS } from 'lbry-redux';
+import { parseURI, COLLECTIONS_CONSTS, isURIEqual } from 'lbry-redux';
 import PreviewOverlayProperties from 'component/previewOverlayProperties';
 import FileDownloadLink from 'component/fileDownloadLink';
 import FileWatchLaterLink from 'component/fileWatchLaterLink';
@@ -155,12 +155,12 @@ function ClaimPreviewTile(props: Props) {
 
   // block stream claims
   if (claim && !shouldHide && !showHiddenByUser && blockedChannelUris.length && signingChannel) {
-    shouldHide = blockedChannelUris.some((blockedUri) => blockedUri === signingChannel.permanent_url);
+    shouldHide = blockedChannelUris.some((blockedUri) => isURIEqual(blockedUri, signingChannel.permanent_url));
   }
   // block channel claims if we can't control for them in claim search
   // e.g. fetchRecommendedSubscriptions
-  if (claim && isChannel && !shouldHide && !showHiddenByUser && blockedChannelUris.length) {
-    shouldHide = blockedChannelUris.some((blockedUri) => blockedUri === claim.permanent_url);
+  if (claim && isChannel && !shouldHide && !showHiddenByUser && blockedChannelUris.length && signingChannel) {
+    shouldHide = blockedChannelUris.some((blockedUri) => isURIEqual(blockedUri, signingChannel.permanent_url));
   }
 
   if (shouldHide || (isLivestream && !showNoSourceClaims)) {
