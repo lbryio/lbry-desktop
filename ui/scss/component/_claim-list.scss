@@ -265,7 +265,7 @@
 .claim-preview__title {
   font-weight: var(--font-weight-bold);
   font-size: var(--font-body);
-  margin-right: auto;
+  margin-right: var(--spacing-l);
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 100%;
@@ -538,7 +538,6 @@
 
   @media (min-width: $breakpoint-small) {
     min-height: 2.5rem;
-    padding-right: var(--spacing-m);
   }
 }
 
@@ -737,7 +736,6 @@
 
   .claim__menu-button {
     right: 0.2rem;
-    top: var(--spacing-s);
   }
 }
 
@@ -745,18 +743,6 @@
   position: absolute;
   top: var(--spacing-xs);
   right: var(--spacing-xs);
-
-  .icon {
-    stroke: var(--color-text);
-  }
-
-  &:focus {
-    opacity: 1;
-    .icon {
-      background-color: var(--color-button-alt-bg);
-      border-radius: var(--border-radius);
-    }
-  }
 
   @media (min-width: $breakpoint-small) {
     &:not(:focus):not([aria-expanded='true']) {

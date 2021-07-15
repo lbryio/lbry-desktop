@@ -218,17 +218,6 @@ $contentMaxWidth: 60rem;
   .icon {
     stroke: var(--color-text-help);
   }
-
-  .notification__menu-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: var(--border-radius);
-
-    &:focus {
-      @include linkFocus;
-    }
-  }
 }
 
 .notification__filter {
