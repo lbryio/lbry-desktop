@@ -35,7 +35,6 @@ type Props = {
   toast: (string) => void,
   claimIsMine: boolean,
   sendTip: ({}, (any) => void, (any) => void) => void,
-  justCommented: Array<string>,
 };
 
 export function CommentCreate(props: Props) {
@@ -54,7 +53,6 @@ export function CommentCreate(props: Props) {
     livestream,
     claimIsMine,
     sendTip,
-    justCommented,
   } = props;
   const buttonref: ElementRef<any> = React.useRef();
   const {
@@ -153,7 +151,6 @@ export function CommentCreate(props: Props) {
           setIsReviewingSupportComment(false);
           setIsSupportComment(false);
           setCommentFailure(false);
-          justCommented.push(res.comment_id);
 
           if (onDoneReplying) {
             onDoneReplying();
@@ -217,7 +214,13 @@ export function CommentCreate(props: Props) {
             autoFocus
             button="primary"
             disabled={disabled}
-            label={isSubmitting ? __('Sending...') : (commentFailure && tipAmount === successTip.tipAmount) ? __('Re-submit') : __('Send')}
+            label={
+              isSubmitting
+                ? __('Sending...')
+                : commentFailure && tipAmount === successTip.tipAmount
+                ? __('Re-submit')
+                : __('Send')
+            }
             onClick={handleSupportComment}
           />
           <Button button="link" label={__('Cancel')} onClick={() => setIsReviewingSupportComment(false)} />

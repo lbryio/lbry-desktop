@@ -3,17 +3,26 @@ import * as ACTIONS from 'constants/action_types';
 import { handleActions } from 'util/redux-utils';
 import { BLOCK_LEVEL } from 'constants/comment';
 import { isURIEqual } from 'lbry-redux';
+
+const IS_DEV = process.env.NODE_ENV !== 'production';
+
 const defaultState: CommentsState = {
   commentById: {}, // commentId -> Comment
-  byId: {}, // ClaimID -> list of comments
-  repliesByParentId: {}, // ParentCommentID -> list of reply comments
-  topLevelCommentsById: {}, // ClaimID -> list of top level comments
+  byId: {}, // ClaimID -> list of fetched comment IDs.
+  totalCommentsById: {}, // ClaimId -> ultimate total (including replies) in commentron.
+  repliesByParentId: {}, // ParentCommentID -> list of fetched replies.
+  totalRepliesByParentId: {}, // ParentCommentID -> total replies in commentron.
+  topLevelCommentsById: {}, // ClaimID -> list of fetched top level comments.
+  topLevelTotalPagesById: {}, // ClaimID -> total number of top-level pages in commentron. Based on COMMENT_PAGE_SIZE_TOP_LEVEL.
+  topLevelTotalCommentsById: {}, // ClaimID -> total top level comments in commentron.
   // TODO:
   // Remove commentsByUri
   // It is not needed and doesn't provide anything but confusion
   commentsByUri: {}, // URI -> claimId
+  linkedCommentAncestors: {}, // {"linkedCommentId": ["parentId", "grandParentId", ...]}
   superChatsByUri: {},
   isLoading: false,
+  isLoadingByParentId: {},
   isCommenting: false,
   myComments: undefined,
   isFetchingReacts: false,
@@ -39,6 +48,14 @@ const defaultState: CommentsState = {
   fetchingBlockedWords: false,
 };
 
+function pushToArrayInObject(obj, key, valueToPush) {
+  if (!obj[key]) {
+    obj[key] = [valueToPush];
+  } else if (!obj[key].includes(valueToPush)) {
+    obj[key].push(valueToPush);
+  }
+}
+
 export default handleActions(
   {
     [ACTIONS.COMMENT_CREATE_STARTED]: (state: CommentsState, action: any): CommentsState => ({
@@ -58,10 +75,13 @@ export default handleActions(
         uri,
         livestream,
       }: { comment: Comment, claimId: string, uri: string, livestream: boolean } = action.data;
+
       const commentById = Object.assign({}, state.commentById);
       const byId = Object.assign({}, state.byId);
+      const totalCommentsById = Object.assign({}, state.totalCommentsById);
       const topLevelCommentsById = Object.assign({}, state.topLevelCommentsById); // was byId {ClaimId -> [commentIds...]}
       const repliesByParentId = Object.assign({}, state.repliesByParentId); // {ParentCommentID -> [commentIds...] } list of reply comments
+      const totalRepliesByParentId = Object.assign({}, state.totalRepliesByParentId);
       const commentsByUri = Object.assign({}, state.commentsByUri);
       const comments = byId[claimId] || [];
       const newCommentIds = comments.slice();
@@ -75,11 +95,26 @@ export default handleActions(
         newCommentIds.unshift(comment.comment_id);
         byId[claimId] = newCommentIds;
 
+        if (totalCommentsById[claimId]) {
+          totalCommentsById[claimId] += 1;
+        }
+
         if (comment['parent_id']) {
           if (!repliesByParentId[comment.parent_id]) {
             repliesByParentId[comment.parent_id] = [comment.comment_id];
           } else {
             repliesByParentId[comment.parent_id].unshift(comment.comment_id);
+          }
+
+          if (!totalRepliesByParentId[comment.parent_id]) {
+            totalRepliesByParentId[comment.parent_id] = 1;
+          } else {
+            totalRepliesByParentId[comment.parent_id] += 1;
+          }
+
+          // Update the parent's "replies" value
+          if (commentById[comment.parent_id]) {
+            commentById[comment.parent_id].replies = (commentById[comment.parent_id].replies || 0) + 1;
           }
         } else {
           if (!topLevelCommentsById[claimId]) {
@@ -95,8 +130,10 @@ export default handleActions(
         ...state,
         topLevelCommentsById,
         repliesByParentId,
+        totalRepliesByParentId,
         commentById,
         byId,
+        totalCommentsById,
         commentsByUri,
         isLoading: false,
         isCommenting: false,
@@ -147,12 +184,14 @@ export default handleActions(
     },
 
     [ACTIONS.COMMENT_REACTION_LIST_COMPLETED]: (state: CommentsState, action: any): CommentsState => {
-      const { myReactions, othersReactions } = action.data;
+      const { myReactions, othersReactions, channelId } = action.data;
       const myReacts = Object.assign({}, state.myReactsByCommentId);
       const othersReacts = Object.assign({}, state.othersReactsByCommentId);
+
       if (myReactions) {
         Object.entries(myReactions).forEach(([commentId, reactions]) => {
-          myReacts[commentId] = Object.entries(reactions).reduce((acc, [name, count]) => {
+          const key = channelId ? `${commentId}:${channelId}` : commentId;
+          myReacts[key] = Object.entries(reactions).reduce((acc, [name, count]) => {
             if (count === 1) {
               acc.push(name);
             }
@@ -160,9 +199,11 @@ export default handleActions(
           }, []);
         });
       }
+
       if (othersReactions) {
         Object.entries(othersReactions).forEach(([commentId, reactions]) => {
-          othersReacts[commentId] = reactions;
+          const key = channelId ? `${commentId}:${channelId}` : commentId;
+          othersReacts[key] = reactions;
         });
       }
 
@@ -174,10 +215,32 @@ export default handleActions(
       };
     },
 
-    [ACTIONS.COMMENT_LIST_STARTED]: (state) => ({ ...state, isLoading: true }),
+    [ACTIONS.COMMENT_LIST_STARTED]: (state, action: any) => {
+      const { parentId } = action.data;
+      const isLoadingByParentId = Object.assign({}, state.isLoadingByParentId);
+      if (parentId) {
+        isLoadingByParentId[parentId] = true;
+      }
+
+      return {
+        ...state,
+        isLoading: true,
+        isLoadingByParentId,
+      };
+    },
 
     [ACTIONS.COMMENT_LIST_COMPLETED]: (state: CommentsState, action: any) => {
-      const { comments, claimId, uri, disabled, authorClaimId } = action.data;
+      const {
+        comments,
+        parentId,
+        totalItems,
+        totalFilteredItems,
+        totalPages,
+        claimId,
+        uri,
+        disabled,
+        authorClaimId,
+      } = action.data;
       const commentsDisabledChannelIds = [...state.commentsDisabledChannelIds];
 
       if (disabled) {
@@ -185,10 +248,16 @@ export default handleActions(
           commentsDisabledChannelIds.push(authorClaimId);
         }
 
+        const isLoadingByParentId = Object.assign({}, state.isLoadingByParentId);
+        if (parentId) {
+          isLoadingByParentId[parentId] = false;
+        }
+
         return {
           ...state,
           commentsDisabledChannelIds,
           isLoading: false,
+          isLoadingByParentId,
         };
       } else {
         const index = commentsDisabledChannelIds.indexOf(authorClaimId);
@@ -200,49 +269,135 @@ export default handleActions(
       const commentById = Object.assign({}, state.commentById);
       const byId = Object.assign({}, state.byId);
       const topLevelCommentsById = Object.assign({}, state.topLevelCommentsById); // was byId {ClaimId -> [commentIds...]}
+      const topLevelTotalCommentsById = Object.assign({}, state.topLevelTotalCommentsById);
+      const topLevelTotalPagesById = Object.assign({}, state.topLevelTotalPagesById);
       const commentsByUri = Object.assign({}, state.commentsByUri);
+      const repliesByParentId = Object.assign({}, state.repliesByParentId);
+      const totalCommentsById = Object.assign({}, state.totalCommentsById);
+      const totalRepliesByParentId = Object.assign({}, state.totalRepliesByParentId);
+      const isLoadingByParentId = Object.assign({}, state.isLoadingByParentId);
 
-      const tempRepliesByParent = {};
-      const topLevelComments = [];
+      const commonUpdateAction = (comment, commentById, commentIds, index) => {
+        // map the comment_ids to the new comments
+        commentById[comment.comment_id] = comment;
+        commentIds[index] = comment.comment_id;
+      };
+
       if (comments) {
         // we use an Array to preserve order of listing
         // in reality this doesn't matter and we can just
         // sort comments by their timestamp
         const commentIds = Array(comments.length);
 
-        // map the comment_ids to the new comments
-        for (let i = 0; i < comments.length; i++) {
-          const comment = comments[i];
-          if (comment['parent_id']) {
-            if (!tempRepliesByParent[comment.parent_id]) {
-              tempRepliesByParent[comment.parent_id] = [comment.comment_id];
-            } else {
-              tempRepliesByParent[comment.parent_id].push(comment.comment_id);
-            }
-          } else {
-            commentById[comment.comment_id] = comment;
-            topLevelComments.push(comment.comment_id);
-          }
-          commentIds[i] = comments[i].comment_id;
-          commentById[commentIds[i]] = comments[i];
-        }
-        topLevelCommentsById[claimId] = topLevelComments;
+        // totalCommentsById[claimId] = totalItems;
+        // --> currently, this value is only correct when done via a top-level query.
+        // Until this is fixed, I'm moving it downwards to **
 
-        byId[claimId] = commentIds;
+        // --- Top-level comments ---
+        if (!parentId) {
+          totalCommentsById[claimId] = totalItems; // **
+
+          topLevelTotalCommentsById[claimId] = totalFilteredItems;
+          topLevelTotalPagesById[claimId] = totalPages;
+
+          if (!topLevelCommentsById[claimId]) {
+            topLevelCommentsById[claimId] = [];
+          }
+
+          const topLevelCommentIds = topLevelCommentsById[claimId];
+
+          for (let i = 0; i < comments.length; ++i) {
+            const comment = comments[i];
+            commonUpdateAction(comment, commentById, commentIds, i);
+
+            if (IS_DEV && comment['parent_id']) console.error('Invalid top-level comment:', comment); // eslint-disable-line
+
+            if (!topLevelCommentIds.includes(comment.comment_id)) {
+              topLevelCommentIds.push(comment.comment_id);
+            }
+          }
+        }
+        // --- Replies ---
+        else {
+          totalRepliesByParentId[parentId] = totalFilteredItems;
+          isLoadingByParentId[parentId] = false;
+
+          for (let i = 0; i < comments.length; ++i) {
+            const comment = comments[i];
+            commonUpdateAction(comment, commentById, commentIds, i);
+
+            if (IS_DEV && !comment['parent_id']) console.error('Missing parent_id:', comment); // eslint-disable-line
+            if (IS_DEV && comment.parent_id !== parentId) console.error('Black sheep in the family?:', comment); // eslint-disable-line
+
+            pushToArrayInObject(repliesByParentId, parentId, comment.comment_id);
+          }
+        }
+
+        byId[claimId] ? byId[claimId].push(...commentIds) : (byId[claimId] = commentIds);
         commentsByUri[uri] = claimId;
       }
-
-      const repliesByParentId = Object.assign({}, state.repliesByParentId, tempRepliesByParent); // {ParentCommentID -> [commentIds...] } list of reply comments
 
       return {
         ...state,
         topLevelCommentsById,
+        topLevelTotalCommentsById,
+        topLevelTotalPagesById,
         repliesByParentId,
+        totalCommentsById,
+        totalRepliesByParentId,
         byId,
         commentById,
         commentsByUri,
         commentsDisabledChannelIds,
         isLoading: false,
+        isLoadingByParentId,
+      };
+    },
+
+    [ACTIONS.COMMENT_BY_ID_COMPLETED]: (state: CommentsState, action: any) => {
+      const { comment, ancestors } = action.data;
+      const claimId = comment.claim_id;
+
+      const commentById = Object.assign({}, state.commentById);
+      const byId = Object.assign({}, state.byId);
+      const topLevelCommentsById = Object.assign({}, state.topLevelCommentsById); // was byId {ClaimId -> [commentIds...]}
+      const topLevelTotalCommentsById = Object.assign({}, state.topLevelTotalCommentsById);
+      const topLevelTotalPagesById = Object.assign({}, state.topLevelTotalPagesById);
+      const repliesByParentId = Object.assign({}, state.repliesByParentId);
+      const linkedCommentAncestors = Object.assign({}, state.linkedCommentAncestors);
+
+      const updateStore = (comment, commentById, byId, repliesByParentId, topLevelCommentsById) => {
+        // 'comment.ByID' doesn't populate 'replies'. We should have at least 1
+        // at the moment, and the correct value will populated by 'comment.List'.
+        commentById[comment.comment_id] = { ...comment, replies: 1 };
+        byId[claimId] ? byId[claimId].unshift(comment.comment_id) : (byId[claimId] = [comment.comment_id]);
+
+        const parentId = comment.parent_id;
+        if (comment.parent_id) {
+          pushToArrayInObject(repliesByParentId, parentId, comment.comment_id);
+        } else {
+          pushToArrayInObject(topLevelCommentsById, claimId, comment.comment_id);
+        }
+      };
+
+      updateStore(comment, commentById, byId, repliesByParentId, topLevelCommentsById);
+
+      if (ancestors) {
+        ancestors.forEach((ancestor) => {
+          updateStore(ancestor, commentById, byId, repliesByParentId, topLevelCommentsById);
+          pushToArrayInObject(linkedCommentAncestors, comment.comment_id, ancestor.comment_id);
+        });
+      }
+
+      return {
+        ...state,
+        topLevelCommentsById,
+        topLevelTotalCommentsById,
+        topLevelTotalPagesById,
+        repliesByParentId,
+        byId,
+        commentById,
+        linkedCommentAncestors,
       };
     },
 
@@ -272,6 +427,51 @@ export default handleActions(
       ...state,
       isLoading: false,
     }),
+
+    [ACTIONS.COMMENT_LIST_RESET]: (state: CommentsState, action: any) => {
+      const { claimId } = action.data;
+
+      const byId = Object.assign({}, state.byId);
+      const totalCommentsById = Object.assign({}, state.totalCommentsById);
+      const topLevelCommentsById = Object.assign({}, state.topLevelCommentsById); // was byId {ClaimId -> [commentIds...]}
+      const topLevelTotalCommentsById = Object.assign({}, state.topLevelTotalCommentsById);
+      const topLevelTotalPagesById = Object.assign({}, state.topLevelTotalPagesById);
+      const myReacts = Object.assign({}, state.myReactsByCommentId);
+      const othersReacts = Object.assign({}, state.othersReactsByCommentId);
+
+      function deleteReacts(reactObj, commentIdsToRemove) {
+        if (commentIdsToRemove && commentIdsToRemove.length > 0) {
+          let reactionKeys = Object.keys(reactObj);
+          reactionKeys.forEach((rk) => {
+            const colonIndex = rk.indexOf(':');
+            const commentId = colonIndex === -1 ? rk : rk.substring(0, colonIndex);
+            if (commentIdsToRemove.includes(commentId)) {
+              delete reactObj[rk];
+            }
+          });
+        }
+      }
+
+      deleteReacts(myReacts, byId[claimId]);
+      deleteReacts(othersReacts, byId[claimId]);
+
+      delete byId[claimId];
+      delete totalCommentsById[claimId];
+      delete topLevelCommentsById[claimId];
+      delete topLevelTotalCommentsById[claimId];
+      delete topLevelTotalPagesById[claimId];
+
+      return {
+        ...state,
+        byId,
+        totalCommentsById,
+        topLevelCommentsById,
+        topLevelTotalCommentsById,
+        topLevelTotalPagesById,
+        myReactsByCommentId: myReacts,
+        othersReactsByCommentId: othersReacts,
+      };
+    },
 
     [ACTIONS.COMMENT_RECEIVED]: (state: CommentsState, action: any) => {
       const { uri, claimId, comment } = action.data;
@@ -352,21 +552,50 @@ export default handleActions(
       const { comment_id } = action.data;
       const commentById = Object.assign({}, state.commentById);
       const byId = Object.assign({}, state.byId);
+      const repliesByParentId = Object.assign({}, state.repliesByParentId); // {ParentCommentID -> [commentIds...] } list of reply comments
+      const totalRepliesByParentId = Object.assign({}, state.totalRepliesByParentId);
+      const totalCommentsById = Object.assign({}, state.totalCommentsById);
+
+      const comment = commentById[comment_id];
 
       // to remove the comment and its references
-      const claimId = commentById[comment_id].claim_id;
+      const claimId = comment.claim_id;
       for (let i = 0; i < byId[claimId].length; i++) {
         if (byId[claimId][i] === comment_id) {
           byId[claimId].splice(i, 1);
           break;
         }
       }
+
+      // Update replies
+      if (comment['parent_id'] && repliesByParentId[comment.parent_id]) {
+        const index = repliesByParentId[comment.parent_id].indexOf(comment.comment_id);
+        if (index > -1) {
+          repliesByParentId[comment.parent_id].splice(index, 1);
+
+          if (commentById[comment.parent_id]) {
+            commentById[comment.parent_id].replies = Math.max(0, (commentById[comment.parent_id].replies || 0) - 1);
+          }
+
+          if (totalRepliesByParentId[comment.parent_id]) {
+            totalRepliesByParentId[comment.parent_id] = Math.max(0, totalRepliesByParentId[comment.parent_id] - 1);
+          }
+        }
+      }
+
+      if (totalCommentsById[claimId]) {
+        totalCommentsById[claimId] = Math.max(0, totalCommentsById[claimId] - 1);
+      }
+
       delete commentById[comment_id];
 
       return {
         ...state,
         commentById,
         byId,
+        totalCommentsById,
+        repliesByParentId,
+        totalRepliesByParentId,
         isLoading: false,
       };
     },
@@ -390,11 +619,41 @@ export default handleActions(
         isCommenting: false,
       };
     },
-
     [ACTIONS.COMMENT_UPDATE_FAILED]: (state: CommentsState, action: any) => ({
       ...state,
       isCmmenting: false,
     }),
+
+    [ACTIONS.COMMENT_PIN_COMPLETED]: (state: CommentsState, action: any) => {
+      const { pinnedComment, claimId, unpin } = action.data;
+      const commentById = Object.assign({}, state.commentById);
+      const topLevelCommentsById = Object.assign({}, state.topLevelCommentsById);
+
+      if (pinnedComment && topLevelCommentsById[claimId]) {
+        const index = topLevelCommentsById[claimId].indexOf(pinnedComment.comment_id);
+        if (index > -1) {
+          topLevelCommentsById[claimId].splice(index, 1);
+
+          if (unpin) {
+            // Without the sort score, I have no idea where to put it. Just
+            // dump it at the bottom. Users can refresh if they want it back to
+            // the correct sorted position.
+            topLevelCommentsById[claimId].push(pinnedComment.comment_id);
+          } else {
+            topLevelCommentsById[claimId].unshift(pinnedComment.comment_id);
+          }
+
+          commentById[pinnedComment.comment_id] = pinnedComment;
+        }
+      }
+
+      return {
+        ...state,
+        commentById,
+        topLevelCommentsById,
+      };
+    },
+
     [ACTIONS.COMMENT_MODERATION_BLOCK_LIST_STARTED]: (state: CommentsState, action: any) => ({
       ...state,
       fetchingModerationBlockList: true,
