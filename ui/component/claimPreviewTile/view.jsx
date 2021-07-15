@@ -200,14 +200,14 @@ function ClaimPreviewTile(props: Props) {
               {/* @if TARGET='app' */}
               {isStream && (
                 <div className="claim-preview__hover-actions">
-                  <FileDownloadLink uri={canonicalUrl} hideOpenButton />
+                  <FileDownloadLink focusable={false} uri={canonicalUrl} hideOpenButton />
                 </div>
               )}
               {/* @endif */}
 
               {isPlayable && (
                 <div className="claim-preview__hover-actions">
-                  <FileWatchLaterLink uri={uri} />
+                  <FileWatchLaterLink focusable={false} uri={uri} />
                 </div>
               )}
 

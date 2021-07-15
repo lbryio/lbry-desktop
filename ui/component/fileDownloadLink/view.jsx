@@ -11,6 +11,7 @@ type Props = {
   claimIsMine: boolean,
   downloading: boolean,
   loading: boolean,
+  focusable: boolean,
   fileInfo: ?FileListItem,
   openModal: (id: string, { path: string }) => void,
   pause: () => void,
@@ -35,6 +36,7 @@ function FileDownloadLink(props: Props) {
     uri,
     claim,
     buttonType,
+    focusable = true,
     showLabel = false,
     hideOpenButton = false,
     hideDownloadStatus = false,
@@ -91,6 +93,8 @@ function FileDownloadLink(props: Props) {
           pause();
           openModal(MODALS.CONFIRM_EXTERNAL_RESOURCE, { path: fileInfo.download_path, isMine: claimIsMine });
         }}
+        aria-hidden={!focusable}
+        tabIndex={focusable ? 0 : -1}
       />
     );
   }
@@ -105,6 +109,8 @@ function FileDownloadLink(props: Props) {
       icon={ICONS.DOWNLOAD}
       label={showLabel ? label : null}
       onClick={handleDownload}
+      aria-hidden={!focusable}
+      tabIndex={focusable ? 0 : -1}
     />
   );
 }

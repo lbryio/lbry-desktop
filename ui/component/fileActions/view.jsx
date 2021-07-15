@@ -117,7 +117,6 @@ function FileActions(props: Props) {
       <ClaimSupportButton uri={uri} fileAction />
       <ClaimCollectionAddButton uri={uri} fileAction />
       <Button
-        button="alt"
         className="button--file-action"
         icon={ICONS.REPOST}
         label={

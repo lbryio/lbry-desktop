@@ -17,7 +17,8 @@
     width: 0;
     height: 0;
     overflow: hidden;
-    margin: 0 var(--spacing-s);
+    margin-right: var(--spacing-l);
+
     &:focus {
       opacity: 1;
       position: relative;
