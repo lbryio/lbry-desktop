@@ -130,7 +130,7 @@ function CommentList(props: Props) {
       } else {
         idsForReactionFetch = allCommentIds.filter((commentId) => {
           const key = activeChannelId ? `${commentId}:${activeChannelId}` : commentId;
-          return !othersReactsById[key] || !myReactsByCommentId[key];
+          return !othersReactsById[key] || (activeChannelId && !myReactsByCommentId[key]);
         });
       }
 
