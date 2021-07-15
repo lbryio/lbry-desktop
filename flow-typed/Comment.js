@@ -13,7 +13,6 @@ declare type Comment = {
   parent_id?: number, // comment_id of comment this is in reply to
   is_pinned: boolean,
   support_amount: number,
-  replies: number, // number of direct replies (i.e. excluding nested replies).
 };
 
 declare type PerChannelSettings = {
@@ -28,21 +27,15 @@ declare type PerChannelSettings = {
 declare type CommentsState = {
   commentsByUri: { [string]: string },
   superChatsByUri: { [string]: { totalAmount: number, comments: Array<Comment> } },
-  byId: { [string]: Array<string> }, // ClaimID -> list of fetched comment IDs.
-  totalCommentsById: {}, // ClaimId -> ultimate total (including replies) in commentron.
-  repliesByParentId: { [string]: Array<string> }, // ParentCommentID -> list of fetched replies.
-  totalRepliesByParentId: {}, // ParentCommentID -> total replies in commentron.
-  topLevelCommentsById: { [string]: Array<string> }, // ClaimID -> list of fetched top level comments.
-  topLevelTotalPagesById: { [string]: number }, // ClaimID -> total number of top-level pages in commentron. Based on COMMENT_PAGE_SIZE_TOP_LEVEL.
-  topLevelTotalCommentsById: { [string]: number }, // ClaimID -> total top level comments in commentron.
+  byId: { [string]: Array<string> },
+  repliesByParentId: { [string]: Array<string> }, // ParentCommentID -> list of reply comments
+  topLevelCommentsById: { [string]: Array<string> }, // ClaimID -> list of top level comments
   commentById: { [string]: Comment },
-  linkedCommentAncestors: { [string]: Array<string> }, // {"linkedCommentId": ["parentId", "grandParentId", ...]}
   isLoading: boolean,
-  isLoadingByParentId: { [string]: boolean },
   myComments: ?Set<string>,
   isFetchingReacts: boolean,
-  myReactsByCommentId: ?{ [string]: Array<string> }, // {"CommentId:MyChannelId": ["like", "dislike", ...]}
-  othersReactsByCommentId: ?{ [string]: { [string]: number } }, // {"CommentId:MyChannelId": {"like": 2, "dislike": 2, ...}}
+  myReactsByCommentId: any,
+  othersReactsByCommentId: any,
   pendingCommentReactions: Array<string>,
   moderationBlockList: ?Array<string>, // @KP rename to "personalBlockList"?
   adminBlockList: ?Array<string>,
@@ -71,47 +64,16 @@ declare type CommentReactParams = {
   remove?: boolean,
 };
 
-declare type CommentReactListParams = {
-  comment_ids?: string,
-  channel_id?: string,
-  channel_name?: string,
-  wallet_id?: string,
-  react_types?: string,
-};
-
 declare type CommentListParams = {
-  page: number,             // pagination: which page of results
-  page_size: number,        // pagination: nr of comments to show in a page (max 200)
-  claim_id: string,         // claim id of claim being commented on
-  channel_name?: string,    // signing channel name of claim (enables 'commentsEnabled' check)
-  channel_id?: string,      // signing channel claim id of claim (enables 'commentsEnabled' check)
-  author_claim_id?: string, // filters comments to just this author
-  parent_id?: string,       // filters comments to those under this thread
-  top_level?: boolean,      // filters to only top level comments
-  hidden?: boolean,         // if true, will show hidden comments as well
-  sort_by?: number,         // NEWEST=0, OLDEST=1, CONTROVERSY=2, POPULARITY=3,
+  page: number,
+  page_size: number,
+  claim_id: string,
 };
 
 declare type CommentListResponse = {
   items: Array<Comment>,
-  page: number,
-  page_size: number,
-  total_items: number,          // Grand total for the claim being commented on.
-  total_filtered_items: number, // Total for filtered queries (e.g. top_level=true, parent_id=xxx, etc.).
-  total_pages: number,
-  has_hidden_comments: boolean,
+  total_amount: number,
 };
-
-declare type CommentByIdParams = {
-  comment_id: string,
-  with_ancestors: boolean,
-}
-
-declare type CommentByIdResponse = {
-  item: Comment,
-  items: Comment,
-  ancestors: Array<Comment>,
-}
 
 declare type CommentAbandonParams = {
   comment_id: string,
@@ -131,16 +93,6 @@ declare type CommentCreateParams = {
 };
 
 declare type SuperListParams = {};
-
-declare type SuperListResponse = {
-  page: number,
-  page_size: number,
-  total_pages: number,
-  total_items: number,
-  total_amount: number,
-  items: Array<Comment>,
-  has_hidden_comments: boolean,
-};
 
 declare type ModerationBlockParams = {};
 

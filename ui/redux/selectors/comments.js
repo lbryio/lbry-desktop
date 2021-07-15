@@ -9,7 +9,6 @@ const selectState = (state) => state.comments || {};
 
 export const selectCommentsById = createSelector(selectState, (state) => state.commentById || {});
 export const selectIsFetchingComments = createSelector(selectState, (state) => state.isLoading);
-export const selectIsFetchingCommentsByParentId = createSelector(selectState, (state) => state.isLoadingByParentId);
 export const selectIsPostingComment = createSelector(selectState, (state) => state.isCommenting);
 export const selectIsFetchingReacts = createSelector(selectState, (state) => state.isFetchingReacts);
 export const selectCommentsDisabledChannelIds = createSelector(
@@ -144,28 +143,19 @@ export const selectCommentsByUri = createSelector(selectState, (state) => {
   return comments;
 });
 
-export const selectLinkedCommentAncestors = createSelector(selectState, (state) => state.linkedCommentAncestors);
-
 export const makeSelectCommentIdsForUri = (uri: string) =>
   createSelector(selectState, selectCommentsByUri, selectClaimsById, (state, byUri) => {
     const claimId = byUri[uri];
     return state.byId[claimId];
   });
 
-export const selectMyReactionsByCommentId = createSelector(selectState, (state) => state.myReactsByCommentId);
-
-/**
- * makeSelectMyReactionsForComment
- *
- * @param commentIdChannelId Format = "commentId:MyChannelId".
- */
-export const makeSelectMyReactionsForComment = (commentIdChannelId: string) =>
+export const makeSelectMyReactionsForComment = (commentId: string) =>
   createSelector(selectState, (state) => {
     if (!state.myReactsByCommentId) {
       return [];
     }
 
-    return state.myReactsByCommentId[commentIdChannelId] || [];
+    return state.myReactsByCommentId[commentId] || [];
   });
 
 export const makeSelectOthersReactionsForComment = (commentId: string) =>
@@ -286,18 +276,6 @@ export const makeSelectTopLevelCommentsForUri = (uri: string) =>
     }
   );
 
-export const makeSelectTopLevelTotalCommentsForUri = (uri: string) =>
-  createSelector(selectState, selectCommentsByUri, (state, byUri) => {
-    const claimId = byUri[uri];
-    return state.topLevelTotalCommentsById[claimId] || 0;
-  });
-
-export const makeSelectTopLevelTotalPagesForUri = (uri: string) =>
-  createSelector(selectState, selectCommentsByUri, (state, byUri) => {
-    const claimId = byUri[uri];
-    return state.topLevelTotalPagesById[claimId] || 0;
-  });
-
 export const makeSelectRepliesForParentId = (id: string) =>
   createSelector(
     selectState, // no selectRepliesByParentId
@@ -356,15 +334,9 @@ export const makeSelectRepliesForParentId = (id: string) =>
     }
   );
 
-export const makeSelectTotalRepliesForParentId = (parentId: string) =>
-  createSelector(selectState, (state) => {
-    return state.totalRepliesByParentId[parentId] || 0;
-  });
-
 export const makeSelectTotalCommentsCountForUri = (uri: string) =>
-  createSelector(selectState, selectCommentsByUri, (state, byUri) => {
-    const claimId = byUri[uri];
-    return state.totalCommentsById[claimId] || 0;
+  createSelector(makeSelectCommentsForUri(uri), (comments) => {
+    return comments ? comments.length : 0;
   });
 
 // Personal list

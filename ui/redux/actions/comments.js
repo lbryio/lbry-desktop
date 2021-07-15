@@ -2,10 +2,11 @@
 import * as ACTIONS from 'constants/action_types';
 import * as REACTION_TYPES from 'constants/reactions';
 import * as PAGES from 'constants/pages';
-import { SORT_BY, BLOCK_LEVEL } from 'constants/comment';
+import { BLOCK_LEVEL } from 'constants/comment';
 import { Lbry, parseURI, buildURI, selectClaimsById, selectClaimsByUri, selectMyChannelClaims } from 'lbry-redux';
 import { doToast, doSeeNotifications } from 'redux/actions/notifications';
 import {
+  makeSelectCommentIdsForUri,
   makeSelectMyReactionsForComment,
   makeSelectOthersReactionsForComment,
   selectPendingCommentReacts,
@@ -17,22 +18,7 @@ import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { toHex } from 'util/hex';
 import Comments from 'comments';
 
-const isDev = process.env.NODE_ENV !== 'production';
-
-function devToast(dispatch, msg) {
-  if (isDev) {
-    console.error(msg); // eslint-disable-line
-    dispatch(doToast({ isError: true, message: `DEV: ${msg}` }));
-  }
-}
-
-export function doCommentList(
-  uri: string,
-  parentId: string,
-  page: number = 1,
-  pageSize: number = 99999,
-  sortBy: number = SORT_BY.NEWEST
-) {
+export function doCommentList(uri: string, page: number = 1, pageSize: number = 99999) {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const claim = selectClaimsByUri(state)[uri];
@@ -49,9 +35,6 @@ export function doCommentList(
 
     dispatch({
       type: ACTIONS.COMMENT_LIST_STARTED,
-      data: {
-        parentId,
-      },
     });
 
     // Adding 'channel_id' and 'channel_name' enables "CreatorSettings > commentsEnabled".
@@ -61,28 +44,20 @@ export function doCommentList(
       page,
       claim_id: claimId,
       page_size: pageSize,
-      parent_id: parentId || undefined,
-      top_level: !parentId,
       channel_id: authorChannelClaim ? authorChannelClaim.claim_id : undefined,
       channel_name: authorChannelClaim ? authorChannelClaim.name : undefined,
-      sort_by: sortBy,
     })
       .then((result: CommentListResponse) => {
-        const { items: comments, total_items, total_filtered_items, total_pages } = result;
+        const { items: comments } = result;
         dispatch({
           type: ACTIONS.COMMENT_LIST_COMPLETED,
           data: {
             comments,
-            parentId,
-            totalItems: total_items,
-            totalFilteredItems: total_filtered_items,
-            totalPages: total_pages,
             claimId: claimId,
             authorClaimId: authorChannelClaim ? authorChannelClaim.claim_id : undefined,
             uri: uri,
           },
         });
-
         return result;
       })
       .catch((error) => {
@@ -95,67 +70,12 @@ export function doCommentList(
             },
           });
         } else {
-          devToast(dispatch, `doCommentList: ${error.message}`);
           dispatch({
             type: ACTIONS.COMMENT_LIST_FAILED,
             data: error,
           });
         }
       });
-  };
-}
-
-export function doCommentById(commentId: string, toastIfNotFound: boolean = true) {
-  return (dispatch: Dispatch, getState: GetState) => {
-    return Comments.comment_by_id({ comment_id: commentId, with_ancestors: true })
-      .then((result: CommentByIdResponse) => {
-        const { item, items, ancestors } = result;
-
-        dispatch({
-          type: ACTIONS.COMMENT_BY_ID_COMPLETED,
-          data: {
-            comment: item || items, // Requested a change to rename it to 'item'. This covers both.
-            ancestors: ancestors,
-          },
-        });
-
-        return result;
-      })
-      .catch((error) => {
-        if (error.message === 'sql: no rows in result set' && toastIfNotFound) {
-          dispatch(
-            doToast({
-              isError: true,
-              message: __('The requested comment is no longer available.'),
-            })
-          );
-        } else {
-          devToast(dispatch, error.message);
-        }
-      });
-  };
-}
-
-export function doCommentReset(uri: string) {
-  return (dispatch: Dispatch, getState: GetState) => {
-    const state = getState();
-    const claim = selectClaimsByUri(state)[uri];
-    const claimId = claim ? claim.claim_id : null;
-
-    if (!claimId) {
-      dispatch({
-        type: ACTIONS.COMMENT_LIST_FAILED,
-        data: 'unable to find claim for uri',
-      });
-      return;
-    }
-
-    dispatch({
-      type: ACTIONS.COMMENT_LIST_RESET,
-      data: {
-        claimId,
-      },
-    });
   };
 }
 
@@ -177,7 +97,7 @@ export function doSuperChatList(uri: string) {
     return Comments.super_list({
       claim_id: claimId,
     })
-      .then((result: SuperListResponse) => {
+      .then((result: CommentListResponse) => {
         const { items: comments, total_amount: totalAmount } = result;
         dispatch({
           type: ACTIONS.COMMENT_SUPER_CHAT_LIST_COMPLETED,
@@ -197,16 +117,17 @@ export function doSuperChatList(uri: string) {
   };
 }
 
-export function doCommentReactList(commentIds: Array<string>) {
+export function doCommentReactList(uri: string | null, commentId?: string) {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const activeChannelClaim = selectActiveChannelClaim(state);
+    const commentIds = uri ? makeSelectCommentIdsForUri(uri)(state) : [commentId];
 
     dispatch({
       type: ACTIONS.COMMENT_REACTION_LIST_STARTED,
     });
 
-    const params: CommentReactListParams = {
+    const params: { comment_ids: string, channel_name?: string, channel_id?: string } = {
       comment_ids: commentIds.join(','),
     };
 
@@ -223,12 +144,10 @@ export function doCommentReactList(commentIds: Array<string>) {
           data: {
             myReactions: myReactions || {},
             othersReactions,
-            channelId: activeChannelClaim ? activeChannelClaim.claim_id : undefined,
           },
         });
       })
       .catch((error) => {
-        devToast(dispatch, `doCommentReactList: ${error.message}`);
         dispatch({
           type: ACTIONS.COMMENT_REACTION_LIST_FAILED,
           data: error,
@@ -263,9 +182,8 @@ export function doCommentReact(commentId: string, type: string) {
       return;
     }
 
-    const reactKey = `${commentId}:${activeChannelClaim.claim_id}`;
-    const myReacts = makeSelectMyReactionsForComment(reactKey)(state);
-    const othersReacts = makeSelectOthersReactionsForComment(reactKey)(state);
+    let myReacts = makeSelectMyReactionsForComment(commentId)(state);
+    const othersReacts = makeSelectOthersReactionsForComment(commentId)(state);
     const params: CommentReactParams = {
       comment_ids: commentId,
       channel_name: activeChannelClaim.name,
@@ -299,8 +217,8 @@ export function doCommentReact(commentId: string, type: string) {
     dispatch({
       type: ACTIONS.COMMENT_REACTION_LIST_COMPLETED,
       data: {
-        myReactions: { [reactKey]: myReactsObj },
-        othersReactions: { [reactKey]: othersReacts },
+        myReactions: { [commentId]: myReactsObj },
+        othersReactions: { [commentId]: othersReacts },
       },
     });
 
@@ -453,7 +371,7 @@ export function doCommentCreate(
   };
 }
 
-export function doCommentPin(commentId: string, claimId: string, remove: boolean) {
+export function doCommentPin(commentId: string, remove: boolean) {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const activeChannel = selectActiveChannelClaim(state);
@@ -476,11 +394,7 @@ export function doCommentPin(commentId: string, claimId: string, remove: boolean
       .then((result: CommentPinResponse) => {
         dispatch({
           type: ACTIONS.COMMENT_PIN_COMPLETED,
-          data: {
-            pinnedComment: result.items,
-            claimId,
-            unpin: remove,
-          },
+          data: result,
         });
       })
       .catch((error) => {
