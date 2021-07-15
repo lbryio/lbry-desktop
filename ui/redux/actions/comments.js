@@ -348,6 +348,9 @@ export function doCommentCreate(
             case 'comments are disabled by the creator':
               toastMessage = __('Unable to comment. The content owner has disabled comments.');
               break;
+            case 'duplicate comment!':
+              toastMessage = __('Please do not spam.');
+              break;
             default:
               const BLOCKED_WORDS_ERR_MSG = 'the comment contents are blocked by';
               const SLOW_MODE_PARTIAL_ERR_MSG = 'Slow mode is on. Please wait at most';
