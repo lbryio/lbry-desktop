@@ -653,7 +653,6 @@ export function doGetAndPopulatePreferences() {
     }
 
     function failCb(er) {
-      debugger;
       dispatch(
         doToast({
           isError: true,
@@ -683,7 +682,7 @@ export function doHandleSyncComplete(error, hasNewData) {
         dispatch(doFetchChannelListMine());
       }
     } else {
-      console.log('DHSC error', error);
+      console.error('DHSC error', error);
     }
   };
 }
