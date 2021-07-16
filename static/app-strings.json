@@ -2054,7 +2054,6 @@
   "Item removed from Watch Later": "Item removed from Watch Later",
   "Skip Navigation": "Skip Navigation",
   "In Favorites": "In Favorites",
-  "%title% by %channelTitle%, %mediaDuration%": "%title% by %channelTitle%, %mediaDuration%",
-  "%title% by %channelTitle%": "%title% by %channelTitle%",
+  "by %channelTitle%": "by %channelTitle%",
   "--end--": "--end--"
 }

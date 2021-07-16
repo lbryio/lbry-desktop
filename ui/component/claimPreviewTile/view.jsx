@@ -122,11 +122,11 @@ function ClaimPreviewTile(props: Props) {
   let ariaLabelData = title;
 
   if (!isChannel && channelTitle) {
-    if (mediaDuration) {
-      ariaLabelData = __('%title% by %channelTitle%, %mediaDuration%', { title, channelTitle, mediaDuration });
-    } else {
-      ariaLabelData = __('%title% by %channelTitle%', { title, channelTitle });
-    }
+    ariaLabelData += ' ' + __('by %channelTitle%', { channelTitle });
+  }
+
+  if (mediaDuration) {
+    ariaLabelData += ' ' + mediaDuration;
   }
 
   function handleClick(e) {
