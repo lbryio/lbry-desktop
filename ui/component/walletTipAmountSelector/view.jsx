@@ -32,16 +32,16 @@ type Props = {
   isAuthenticated: boolean,
   claim: StreamClaim,
   uri: string,
+  onTipErrorChange: (string) => void,
 };
 
 function WalletTipAmountSelector(props: Props) {
-  const { balance, amount, onChange, activeTab, isAuthenticated, claim, uri } = props;
+  const { balance, amount, onChange, activeTab, isAuthenticated, claim, uri, onTipErrorChange } = props;
   const [useCustomTip, setUseCustomTip] = usePersistedState('comment-support:useCustomTip', false);
   const [tipError, setTipError] = React.useState();
 
   const [canReceiveFiatTip, setCanReceiveFiatTip] = React.useState(); // dont persist because it needs to be calc'd per creator
   const [hasCardSaved, setHasSavedCard] = usePersistedState('comment-support:hasCardSaved', false);
-
 
   console.log(activeTab);
 
@@ -82,8 +82,8 @@ function WalletTipAmountSelector(props: Props) {
       setHasSavedCard(Boolean(defaultPaymentMethodId));
     });
   }, []);
+
   //
-  // // TODO: can't do at the moment because of can't populate channelClaimId
   React.useEffect(() => {
     Lbryio.call(
       'account',
@@ -104,7 +104,7 @@ function WalletTipAmountSelector(props: Props) {
         // console.log(error);
       });
   }, []);
-  
+
   React.useEffect(() => {
 
     // setHasSavedCard(false);
@@ -141,6 +141,7 @@ function WalletTipAmountSelector(props: Props) {
     }
 
     setTipError(tipError);
+    onTipErrorChange(tipError);
   }, [amount, balance, setTipError, activeTab]);
 
   function handleCustomPriceChange(amount: number) {

@@ -49,6 +49,7 @@ type Props = {
   sendTip: ({}, (any) => void, (any) => void) => void,
   justCommented: Array<string>,
   doToast: ({ message: string }) => void,
+  disabled: boolean,
 };
 
 export function CommentCreate(props: Props) {
@@ -86,10 +87,17 @@ export function CommentCreate(props: Props) {
   const [commentValue, setCommentValue] = React.useState('');
   const [advancedEditor, setAdvancedEditor] = usePersistedState('comment-editor-mode', false);
   const hasChannels = channels && channels.length;
-  const disabled = isSubmitting || !activeChannelClaim || !commentValue.length;
   const charCount = commentValue.length;
 
+  let disabled = isSubmitting || !activeChannelClaim || !commentValue.length;
+
   const [activeTab, setActiveTab] = React.useState('');
+
+  const [tipError, setTipError] = React.useState();
+
+  // React.useEffect(() => {
+  //   setTipError('yes');
+  // }, []);
 
   function handleCommentChange(event) {
     let commentValue;
@@ -353,12 +361,14 @@ export function CommentCreate(props: Props) {
         autoFocus={isReply}
         textAreaMaxLength={livestream ? FF_MAX_CHARS_IN_LIVESTREAM_COMMENT : FF_MAX_CHARS_IN_COMMENT}
       />
-      {isSupportComment && <WalletTipAmountSelector claim={claim} activeTab={activeTab} amount={tipAmount} onChange={(amount) => setTipAmount(amount)} />}
+      {/* TODO: the tip validation is done in selector */}
+      {isSupportComment && <WalletTipAmountSelector onTipErrorChange={setTipError} claim={claim} activeTab={activeTab} amount={tipAmount} onChange={(amount) => setTipAmount(amount)} />}
       <div className="section__actions section__actions--no-margin">
         {isSupportComment ? (
           <>
             <Button
-              disabled={disabled}
+              // TODO: add better check here
+              disabled={disabled || tipError}
               type="button"
               button="primary"
               icon={activeTab === TAB_LBC ? ICONS.LBC : ICONS.FINANCE}
