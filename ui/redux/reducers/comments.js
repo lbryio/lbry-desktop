@@ -986,9 +986,22 @@ export default handleActions(
       fetchingSettings: false,
     }),
     [ACTIONS.COMMENT_FETCH_SETTINGS_COMPLETED]: (state: CommentsState, action: any) => {
+      const settingsByChannelId = Object.assign({}, action.data);
+      const BTC_SATOSHIS = 100000000;
+
+      const channelIds = Object.keys(settingsByChannelId);
+      channelIds.forEach((ci) => {
+        if (settingsByChannelId[ci].min_tip_amount_comment) {
+          settingsByChannelId[ci].min_tip_amount_comment /= BTC_SATOSHIS;
+        }
+        if (settingsByChannelId[ci].min_tip_amount_super_chat) {
+          settingsByChannelId[ci].min_tip_amount_super_chat /= BTC_SATOSHIS;
+        }
+      });
+
       return {
         ...state,
-        settingsByChannelId: action.data,
+        settingsByChannelId,
         fetchingSettings: false,
       };
     },
