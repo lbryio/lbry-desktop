@@ -226,6 +226,11 @@
   }
 }
 
+.card__title-actions--link {
+  margin-top: var(--spacing-xs);
+  margin-right: var(--spacing-xs);
+}
+
 .card__title-actions--small {
   padding: 0;
 }
