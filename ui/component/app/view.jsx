@@ -16,6 +16,7 @@ import usePrevious from 'effects/use-previous';
 import REWARDS from 'rewards';
 import usePersistedState from 'effects/use-persisted-state';
 import Spinner from 'component/spinner';
+import LANGUAGES from 'constants/languages';
 // @if TARGET='app'
 import useZoom from 'effects/use-zoom';
 import useHistoryNav from 'effects/use-history-nav';
@@ -278,6 +279,10 @@ function App(props: Props) {
   useEffect(() => {
     if (!languages.includes(language)) {
       setLanguage(language);
+
+      if (document && document.documentElement && LANGUAGES[language].length >= 3) {
+        document.documentElement.dir = LANGUAGES[language][2];
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [language, languages]);
