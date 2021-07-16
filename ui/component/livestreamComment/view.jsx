@@ -20,10 +20,11 @@ type Props = {
   commentIsMine: boolean,
   stakedLevel: number,
   supportAmount: number,
+  isFiat: boolean,
 };
 
 function LivestreamComment(props: Props) {
-  const { claim, uri, authorUri, message, commentIsMine, commentId, stakedLevel, supportAmount } = props;
+  const { claim, uri, authorUri, message, commentIsMine, commentId, stakedLevel, supportAmount, isFiat } = props;
   const [mouseIsHovering, setMouseHover] = React.useState(false);
   const commentByOwnerOfContent = claim && claim.signing_channel && claim.signing_channel.permanent_url === authorUri;
   const { claimName } = parseURI(authorUri);
@@ -39,7 +40,7 @@ function LivestreamComment(props: Props) {
       {supportAmount > 0 && (
         <div className="super-chat livestream-superchat__banner">
           <div className="livestream-superchat__banner-corner" />
-          <CreditAmount amount={supportAmount} superChat className="livestream-superchat__amount" />
+          <CreditAmount isFiat={isFiat} amount={supportAmount} superChat className="livestream-superchat__amount" />
         </div>
       )}
 

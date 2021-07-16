@@ -62,9 +62,6 @@ class CreditAmount extends React.PureComponent<Props> {
           : formatCredits(amount, precision, true);
     }
 
-    console.log('is fiat');
-    console.log(isFiat);
-
     let amountText;
     if (showFree && isFree) {
       amountText = __('Free');
