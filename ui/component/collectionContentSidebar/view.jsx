@@ -34,10 +34,10 @@ export default function CollectionContent(props: Props) {
         </span>
       }
       titleActions={
-        <>
+        <div className="card__title-actions--link">
           {/* TODO: BUTTON TO SAVE COLLECTION - Probably save/copy modal */}
           <Button label={'View List'} button="link" navigate={`/$/${PAGES.LIST}/${id}`} />
-        </>
+        </div>
       }
       body={
         <ClaimList
