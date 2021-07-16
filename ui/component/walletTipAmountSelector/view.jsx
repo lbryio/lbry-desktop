@@ -50,63 +50,67 @@ function WalletTipAmountSelector(props: Props) {
   // setup variables for tip API
   let channelClaimId, tipChannelName;
   // if there is a signing channel it's on a file
-  if (claim.signing_channel) {
-    channelClaimId = claim.signing_channel.claim_id;
-    tipChannelName = claim.signing_channel.name;
+  // if (claim.signing_channel) {
+  //   channelClaimId = claim.signing_channel.claim_id;
+  //   tipChannelName = claim.signing_channel.name;
+  //
+  //   // otherwise it's on the channel page
+  // } else {
+  //   channelClaimId = claim.claim_id;
+  //   tipChannelName = claim.name;
+  // }
 
-    // otherwise it's on the channel page
-  } else {
-    channelClaimId = claim.claim_id;
-    tipChannelName = claim.name;
-  }
+  // // check if creator has a payment method saved
+  // React.useEffect(() => {
+  //   Lbryio.call(
+  //     'customer',
+  //     'status',
+  //     {
+  //       environment: stripeEnvironment,
+  //     },
+  //     'post'
+  //   ).then((customerStatusResponse) => {
+  //     const defaultPaymentMethodId =
+  //       customerStatusResponse.Customer &&
+  //       customerStatusResponse.Customer.invoice_settings &&
+  //       customerStatusResponse.Customer.invoice_settings.default_payment_method &&
+  //       customerStatusResponse.Customer.invoice_settings.default_payment_method.id;
+  //
+  //     console.log('here');
+  //     console.log(defaultPaymentMethodId);
+  //
+  //     setHasSavedCard(Boolean(defaultPaymentMethodId));
+  //   });
+  // }, []);
+  //
+  // // TODO: can't do at the moment because of can't populate channelClaimId
+  // React.useEffect(() => {
+  //   Lbryio.call(
+  //     'account',
+  //     'check',
+  //     {
+  //       channel_claim_id: channelClaimId,
+  //       channel_name: tipChannelName,
+  //       environment: stripeEnvironment,
+  //     },
+  //     'post'
+  //   )
+  //     .then((accountCheckResponse) => {
+  //       if (accountCheckResponse === true && canReceiveFiatTip !== true) {
+  //         setCanReceiveFiatTip(true);
+  //       }
+  //     })
+  //     .catch(function(error) {
+  //       // console.log(error);
+  //     });
+  // }, []);
 
-  // check if creator has a payment method saved
+
   React.useEffect(() => {
-    Lbryio.call(
-      'customer',
-      'status',
-      {
-        environment: stripeEnvironment,
-      },
-      'post'
-    ).then((customerStatusResponse) => {
-      const defaultPaymentMethodId =
-        customerStatusResponse.Customer &&
-        customerStatusResponse.Customer.invoice_settings &&
-        customerStatusResponse.Customer.invoice_settings.default_payment_method &&
-        customerStatusResponse.Customer.invoice_settings.default_payment_method.id;
 
-      console.log('here');
-      console.log(defaultPaymentMethodId);
+    setHasSavedCard(false);
+    setCanReceiveFiatTip(true);
 
-      setHasSavedCard(Boolean(defaultPaymentMethodId));
-    });
-  }, []);
-
-  // TODO: can't do at the moment because of can't populate channelClaimId
-  React.useEffect(() => {
-    Lbryio.call(
-      'account',
-      'check',
-      {
-        channel_claim_id: channelClaimId,
-        channel_name: tipChannelName,
-        environment: stripeEnvironment,
-      },
-      'post'
-    )
-      .then((accountCheckResponse) => {
-        if (accountCheckResponse === true && canReceiveFiatTip !== true) {
-          setCanReceiveFiatTip(true);
-        }
-      })
-      .catch(function(error) {
-        // console.log(error);
-      });
-  }, []);
-
-
-  React.useEffect(() => {
     const regexp = RegExp(/^(\d*([.]\d{0,8})?)$/);
     const validTipInput = regexp.test(String(amount));
     let tipError;
@@ -186,6 +190,15 @@ function WalletTipAmountSelector(props: Props) {
       </div>
 
       {useCustomTip && (
+        <>
+          <div className="help">
+                  <span className="help--spendable">
+                    <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card ')} button="link" /> To {__(' Tip Creators')}
+                  </span>
+          </div></>
+      )}
+
+      {useCustomTip && (
         <div className="comment__tip-input">
           <FormField
             autoFocus
@@ -198,10 +211,8 @@ function WalletTipAmountSelector(props: Props) {
                 </I18nMessage>
               </React.Fragment>
               // TODO: add conditional based on hasSavedCard
-              : <><div className="help"><span className="help--spendable">
-                <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card')} button="link" /> To
-                {__(' Tip Creators')}
-              </span></div></>
+              : <>
+                </>
 
               // <>
               //   <div className="">
@@ -221,18 +232,36 @@ function WalletTipAmountSelector(props: Props) {
         </div>
       )}
 
-      // TODO: add conditional based on hasSavedCard
+      {/*// TODO: add conditional based on hasSavedCard*/}
+      {/* lbc tab */}
       {!useCustomTip && activeTab === TAB_LBC && <WalletSpendableBalanceHelp />}
-      {!useCustomTip && activeTab === TAB_FIAT &&
-      <><div className="help"><span className="help--spendable">
-        <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card')} button="link" /> To
-        {__(' Tip Creators')}
-      </span></div></>
-      // <>
-      //   <div className="help">
-      //     <span className="help--spendable">Send a tip directly from your attached card</span>
-      //   </div>
-      // </>
+      {/* fiat button but no card saved */}
+      {!useCustomTip && activeTab === TAB_FIAT && !hasCardSaved &&
+      <>
+        <div className="help">
+          <span className="help--spendable">
+            <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card ')} button="link" /> To {__(' Tip Creators')}
+          </span>
+        </div>
+      </>
+      }
+
+      {/* has card saved but cant creator cant receive tips */}
+      {!useCustomTip && activeTab === TAB_FIAT && hasCardSaved && !canReceiveFiatTip &&
+      <>
+        <div className="help">
+          <span className="help--spendable">Only select creators can receive tips at this time</span>
+        </div>
+      </>
+      }
+
+      {/* has card saved but cant creator cant receive tips */}
+      {!useCustomTip && activeTab === TAB_FIAT && hasCardSaved && canReceiveFiatTip &&
+      <>
+        <div className="help">
+          <span className="help--spendable">Send a tip directly from your attached card</span>
+        </div>
+      </>
       }
 
     </>
