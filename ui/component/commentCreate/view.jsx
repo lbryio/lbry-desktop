@@ -188,7 +188,7 @@ export function CommentCreate(props: Props) {
         'customer',
         'tip',
         {
-          amount: 100 * tipAmount, // convert from dollars to cents
+          amount: 100 * Math.round(tipAmount * 100) / 100, // convert from dollars to cents
           creator_channel_name: tipChannelName, // creator_channel_name
           creator_channel_claim_id: channelClaimId,
           tipper_channel_name: activeChannelName,
@@ -296,7 +296,7 @@ export function CommentCreate(props: Props) {
     return (
       <div className="comment__create">
         <div className="comment__sc-preview">
-          <CreditAmount className="comment__scpreview-amount" isFiat={activeTab === TAB_FIAT} amount={tipAmount} size={18} />
+          <CreditAmount className="comment__scpreview-amount" isFiat={activeTab === TAB_FIAT} amount={tipAmount} size={activeTab === TAB_LBC ? 18 : 2} />
 
           <ChannelThumbnail xsmall uri={activeChannelClaim.canonical_url} />
           <div>
