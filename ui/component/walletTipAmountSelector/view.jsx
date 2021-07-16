@@ -50,66 +50,65 @@ function WalletTipAmountSelector(props: Props) {
   // setup variables for tip API
   let channelClaimId, tipChannelName;
   // if there is a signing channel it's on a file
-  // if (claim.signing_channel) {
-  //   channelClaimId = claim.signing_channel.claim_id;
-  //   tipChannelName = claim.signing_channel.name;
-  //
-  //   // otherwise it's on the channel page
-  // } else {
-  //   channelClaimId = claim.claim_id;
-  //   tipChannelName = claim.name;
-  // }
+  if (claim.signing_channel) {
+    channelClaimId = claim.signing_channel.claim_id;
+    tipChannelName = claim.signing_channel.name;
 
-  // // check if creator has a payment method saved
-  // React.useEffect(() => {
-  //   Lbryio.call(
-  //     'customer',
-  //     'status',
-  //     {
-  //       environment: stripeEnvironment,
-  //     },
-  //     'post'
-  //   ).then((customerStatusResponse) => {
-  //     const defaultPaymentMethodId =
-  //       customerStatusResponse.Customer &&
-  //       customerStatusResponse.Customer.invoice_settings &&
-  //       customerStatusResponse.Customer.invoice_settings.default_payment_method &&
-  //       customerStatusResponse.Customer.invoice_settings.default_payment_method.id;
-  //
-  //     console.log('here');
-  //     console.log(defaultPaymentMethodId);
-  //
-  //     setHasSavedCard(Boolean(defaultPaymentMethodId));
-  //   });
-  // }, []);
+    // otherwise it's on the channel page
+  } else {
+    channelClaimId = claim.claim_id;
+    tipChannelName = claim.name;
+  }
+
+  // check if creator has a payment method saved
+  React.useEffect(() => {
+    Lbryio.call(
+      'customer',
+      'status',
+      {
+        environment: stripeEnvironment,
+      },
+      'post'
+    ).then((customerStatusResponse) => {
+      const defaultPaymentMethodId =
+        customerStatusResponse.Customer &&
+        customerStatusResponse.Customer.invoice_settings &&
+        customerStatusResponse.Customer.invoice_settings.default_payment_method &&
+        customerStatusResponse.Customer.invoice_settings.default_payment_method.id;
+
+      console.log('here');
+      console.log(defaultPaymentMethodId);
+
+      setHasSavedCard(Boolean(defaultPaymentMethodId));
+    });
+  }, []);
   //
   // // TODO: can't do at the moment because of can't populate channelClaimId
-  // React.useEffect(() => {
-  //   Lbryio.call(
-  //     'account',
-  //     'check',
-  //     {
-  //       channel_claim_id: channelClaimId,
-  //       channel_name: tipChannelName,
-  //       environment: stripeEnvironment,
-  //     },
-  //     'post'
-  //   )
-  //     .then((accountCheckResponse) => {
-  //       if (accountCheckResponse === true && canReceiveFiatTip !== true) {
-  //         setCanReceiveFiatTip(true);
-  //       }
-  //     })
-  //     .catch(function(error) {
-  //       // console.log(error);
-  //     });
-  // }, []);
-
+  React.useEffect(() => {
+    Lbryio.call(
+      'account',
+      'check',
+      {
+        channel_claim_id: channelClaimId,
+        channel_name: tipChannelName,
+        environment: stripeEnvironment,
+      },
+      'post'
+    )
+      .then((accountCheckResponse) => {
+        if (accountCheckResponse === true && canReceiveFiatTip !== true) {
+          setCanReceiveFiatTip(true);
+        }
+      })
+      .catch(function(error) {
+        // console.log(error);
+      });
+  }, []);
 
   React.useEffect(() => {
 
-    setHasSavedCard(false);
-    setCanReceiveFiatTip(true);
+    // setHasSavedCard(false);
+    // setCanReceiveFiatTip(true);
 
     const regexp = RegExp(/^(\d*([.]\d{0,8})?)$/);
     const validTipInput = regexp.test(String(amount));

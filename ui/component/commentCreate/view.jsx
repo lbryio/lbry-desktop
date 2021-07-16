@@ -357,7 +357,7 @@ export function CommentCreate(props: Props) {
         autoFocus={isReply}
         textAreaMaxLength={livestream ? FF_MAX_CHARS_IN_LIVESTREAM_COMMENT : FF_MAX_CHARS_IN_COMMENT}
       />
-      {isSupportComment && <WalletTipAmountSelector activeTab={activeTab} amount={tipAmount} onChange={(amount) => setTipAmount(amount)} />}
+      {isSupportComment && <WalletTipAmountSelector claim={claim} activeTab={activeTab} amount={tipAmount} onChange={(amount) => setTipAmount(amount)} />}
       <div className="section__actions section__actions--no-margin">
         {isSupportComment ? (
           <>
