@@ -56,7 +56,6 @@
     "feed": "^4.2.2",
     "if-env": "^1.0.4",
     "react-datetime-picker": "^3.2.1",
-    "react-helmet": "^6.1.0",
     "react-top-loading-bar": "^2.0.1",
     "remove-markdown": "^0.3.0",
     "source-map-explorer": "^2.5.2",

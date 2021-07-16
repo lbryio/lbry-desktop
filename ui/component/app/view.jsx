@@ -4,7 +4,6 @@ import React, { useEffect, useRef, useState, useLayoutEffect } from 'react';
 import { lazyImport } from 'util/lazyImport';
 import classnames from 'classnames';
 import analytics from 'analytics';
-import { Helmet } from 'react-helmet';
 import { buildURI, parseURI } from 'lbry-redux';
 import { SIMPLE_SITE } from 'config';
 import Router from 'component/router/index';
@@ -285,6 +284,11 @@ function App(props: Props) {
   }, [hasMyChannels, hasNoChannels, hasActiveChannelClaim, setActiveChannelIfNotSet, setIncognito]);
 
   useEffect(() => {
+    // $FlowFixMe
+    document.documentElement.setAttribute('lang', language);
+  }, [language]);
+
+  useEffect(() => {
     if (!languages.includes(language)) {
       setLanguage(language);
     }
@@ -416,9 +420,6 @@ function App(props: Props) {
       ref={appRef}
       onContextMenu={IS_WEB ? undefined : (e) => openContextMenu(e)}
     >
-      {/* Define main language */}
-      <Helmet htmlAttributes={{ lang: language }} />
-
       {IS_WEB && lbryTvApiStatus === STATUS_DOWN ? (
         <React.Suspense fallback={null}>
           <Yrbl
