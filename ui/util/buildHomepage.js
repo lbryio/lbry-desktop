@@ -38,12 +38,29 @@ export type HomepageCat = {
   mixIn?: Array<string>,
 };
 
+// type HomepageData = {
+//   [string]: {
+//     [string]: HomepageCat,
+//   },
+// };
+
 function getLimitPerChannel(size, isChannel) {
   if (isChannel) {
     return 1;
   } else {
     return size < 250 ? (size < 150 ? 3 : 2) : 1;
   }
+}
+
+export function getAllIds(all: any) {
+  const idsSet: Set<string> = new Set();
+  (Object.values(all): any).forEach((cat) => {
+    if (cat.channelIds) {
+      cat.channelIds.forEach((id) => idsSet.add(id));
+    }
+  });
+  // $FlowFixMe
+  return Array.from(idsSet);
 }
 
 export const getHomepageRowForCat = (cat: HomepageCat) => {
@@ -106,7 +123,7 @@ export const getHomepageRowForCat = (cat: HomepageCat) => {
 };
 
 export function GetLinksData(
-  all: any,
+  all: any, // HomepageData type?
   isHomepage?: boolean = false,
   authenticated?: boolean,
   showPersonalizedChannels?: boolean,
