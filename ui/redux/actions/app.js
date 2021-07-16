@@ -672,15 +672,10 @@ export function doGetAndPopulatePreferences() {
   };
 }
 
-export function doHandleSyncComplete(error, hasNewData) {
+export function doHandleSyncComplete(error) {
   return (dispatch) => {
     if (!error) {
       dispatch(doGetAndPopulatePreferences());
-
-      if (hasNewData) {
-        // we just got sync data, better update our channels
-        dispatch(doFetchChannelListMine());
-      }
     } else {
       console.error('Error in doHandleSyncComplete', error);
     }
