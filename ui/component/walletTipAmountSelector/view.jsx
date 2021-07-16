@@ -119,9 +119,17 @@ function WalletTipAmountSelector(props: Props) {
                 <I18nMessage tokens={{ lbc_balance: <CreditAmount precision={4} amount={balance} /> }}>
                   (%lbc_balance% available)
                 </I18nMessage>
-              </React.Fragment> : <><div className="">
-                <span className="help--spendable">Send a tip directly from your attached card</span>
-              </div></>
+              </React.Fragment>
+              : <><div className="help"><span className="help--spendable">
+                <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card')} button="link" /> To
+                {__(' Tip Creators')}
+              </span></div></>
+
+              // <>
+              //   <div className="">
+              //     <span className="help--spendable">Send a tip directly from your attached card</span>
+              //   </div>
+              // </>
             }
             className="form-field--price-amount"
             error={tipError}
@@ -136,11 +144,17 @@ function WalletTipAmountSelector(props: Props) {
       )}
 
       {!useCustomTip && activeTab === TAB_LBC && <WalletSpendableBalanceHelp />}
-      {!useCustomTip && activeTab === TAB_FIAT && <>
-        <div className="help">
-          <span className="help--spendable">Send a tip directly from your attached card</span>
-        </div>
-      </>}
+      {!useCustomTip && activeTab === TAB_FIAT &&
+      <><div className="help"><span className="help--spendable">
+        <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card')} button="link" /> To
+        {__(' Tip Creators')}
+      </span></div></>
+      // <>
+      //   <div className="help">
+      //     <span className="help--spendable">Send a tip directly from your attached card</span>
+      //   </div>
+      // </>
+      }
 
     </>
   );
