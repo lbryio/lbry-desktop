@@ -96,10 +96,7 @@ function WalletSendTip(props: Props) {
 
   const sourceClaimId = claim.claim_id;
 
-  // TODO: come up with a better way to do this,
-  // TODO: waiting 100ms to wait for token to populate
-
-  // check if creator has an account saved
+  // check if creator has a payment method saved
   React.useEffect(() => {
     if (channelClaimId && isAuthenticated) {
       Lbryio.call(
