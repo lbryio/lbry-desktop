@@ -151,14 +151,14 @@ function WalletSendTip(props: Props) {
 
   function setClaimTypeText() {
     if (claim.value_type === 'stream') {
-      return __('Content'); 
+      return __('Content');
     } else if (claim.value_type === 'channel') {
       return __('Channel');
     } else if (claim.value_type === 'repost') {
       return __('Repost');
     } else if (claim.value_type === 'collection') {
       return __('List');
-    }	else {
+    } else {
       return __('Claim');
     }
   }
