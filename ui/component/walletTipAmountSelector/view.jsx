@@ -10,6 +10,15 @@ import I18nMessage from 'component/i18nMessage';
 import classnames from 'classnames';
 import usePersistedState from 'effects/use-persisted-state';
 import WalletSpendableBalanceHelp from 'component/walletSpendableBalanceHelp';
+import { Lbryio } from 'lbryinc';
+import { STRIPE_PUBLIC_KEY } from 'config';
+
+let stripeEnvironment = 'test';
+// if the key contains pk_live it's a live key
+// update the environment for the calls to the backend to indicate which environment to hit
+if (STRIPE_PUBLIC_KEY.indexOf('pk_live') > -1) {
+  stripeEnvironment = 'live';
+}
 
 const DEFAULT_TIP_AMOUNTS = [1, 5, 25, 100];
 
@@ -20,14 +29,82 @@ type Props = {
   balance: number,
   amount: number,
   onChange: (number) => void,
+  isAuthenticated: boolean,
+  claim: StreamClaim,
+  uri: string,
 };
 
 function WalletTipAmountSelector(props: Props) {
-  const { balance, amount, onChange, activeTab } = props;
+  const { balance, amount, onChange, activeTab, isAuthenticated, claim, uri } = props;
   const [useCustomTip, setUseCustomTip] = usePersistedState('comment-support:useCustomTip', false);
   const [tipError, setTipError] = React.useState();
 
+  const [canReceiveFiatTip, setCanReceiveFiatTip] = React.useState(); // dont persist because it needs to be calc'd per creator
+  const [hasCardSaved, setHasSavedCard] = usePersistedState('comment-support:hasCardSaved', false);
+
+
   console.log(activeTab);
+
+  console.log(claim);
+
+  // setup variables for tip API
+  let channelClaimId, tipChannelName;
+  // if there is a signing channel it's on a file
+  if (claim.signing_channel) {
+    channelClaimId = claim.signing_channel.claim_id;
+    tipChannelName = claim.signing_channel.name;
+
+    // otherwise it's on the channel page
+  } else {
+    channelClaimId = claim.claim_id;
+    tipChannelName = claim.name;
+  }
+
+  // check if creator has a payment method saved
+  React.useEffect(() => {
+    Lbryio.call(
+      'customer',
+      'status',
+      {
+        environment: stripeEnvironment,
+      },
+      'post'
+    ).then((customerStatusResponse) => {
+      const defaultPaymentMethodId =
+        customerStatusResponse.Customer &&
+        customerStatusResponse.Customer.invoice_settings &&
+        customerStatusResponse.Customer.invoice_settings.default_payment_method &&
+        customerStatusResponse.Customer.invoice_settings.default_payment_method.id;
+
+      console.log('here');
+      console.log(defaultPaymentMethodId);
+
+      setHasSavedCard(Boolean(defaultPaymentMethodId));
+    });
+  }, []);
+
+  // TODO: can't do at the moment because of can't populate channelClaimId
+  React.useEffect(() => {
+    Lbryio.call(
+      'account',
+      'check',
+      {
+        channel_claim_id: channelClaimId,
+        channel_name: tipChannelName,
+        environment: stripeEnvironment,
+      },
+      'post'
+    )
+      .then((accountCheckResponse) => {
+        if (accountCheckResponse === true && canReceiveFiatTip !== true) {
+          setCanReceiveFiatTip(true);
+        }
+      })
+      .catch(function(error) {
+        // console.log(error);
+      });
+  }, []);
+
 
   React.useEffect(() => {
     const regexp = RegExp(/^(\d*([.]\d{0,8})?)$/);
@@ -120,6 +197,7 @@ function WalletTipAmountSelector(props: Props) {
                   (%lbc_balance% available)
                 </I18nMessage>
               </React.Fragment>
+              // TODO: add conditional based on hasSavedCard
               : <><div className="help"><span className="help--spendable">
                 <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card')} button="link" /> To
                 {__(' Tip Creators')}
@@ -143,6 +221,7 @@ function WalletTipAmountSelector(props: Props) {
         </div>
       )}
 
+      // TODO: add conditional based on hasSavedCard
       {!useCustomTip && activeTab === TAB_LBC && <WalletSpendableBalanceHelp />}
       {!useCustomTip && activeTab === TAB_FIAT &&
       <><div className="help"><span className="help--spendable">

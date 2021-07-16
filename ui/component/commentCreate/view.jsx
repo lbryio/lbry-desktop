@@ -71,6 +71,7 @@ export function CommentCreate(props: Props) {
     doToast,
   } = props;
   const buttonref: ElementRef<any> = React.useRef();
+
   const {
     push,
     location: { pathname },
@@ -292,6 +293,7 @@ export function CommentCreate(props: Props) {
   }
 
   if (isReviewingSupportComment && activeChannelClaim) {
+
     return (
       <div className="comment__create">
         <div className="comment__sc-preview">
