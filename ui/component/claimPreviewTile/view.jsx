@@ -268,7 +268,7 @@ function ClaimPreviewTile(props: Props) {
             </div>
           ) : (
             <React.Fragment>
-              <UriIndicator aria-hidden tabIndex={-1} uri={uri} link hideAnonymous>
+              <UriIndicator focusable={false} uri={uri} link hideAnonymous>
                 <ChannelThumbnail uri={channelUri} xsmall />
               </UriIndicator>
 

@@ -19,6 +19,7 @@ type Props = {
   inline: boolean,
   external?: boolean,
   className?: string,
+  focusable: boolean,
 };
 
 class UriIndicator extends React.PureComponent<Props> {
@@ -45,10 +46,10 @@ class UriIndicator extends React.PureComponent<Props> {
       claim,
       children,
       inline,
-      hideAnonymous = false,
+      focusable = true,
       external = false,
+      hideAnonymous = false,
       className,
-      ...props
     } = this.props;
 
     if (!claim) {
@@ -87,7 +88,13 @@ class UriIndicator extends React.PureComponent<Props> {
 
       if (children) {
         return (
-          <Button className={className} target={external ? '_blank' : undefined} navigate={channelLink} {...props}>
+          <Button
+            aria-hidden={!focusable}
+            tabIndex={focusable ? 0 : -1}
+            className={className}
+            target={external ? '_blank' : undefined}
+            navigate={channelLink}
+          >
             {children}
           </Button>
         );
@@ -97,7 +104,8 @@ class UriIndicator extends React.PureComponent<Props> {
             className={classnames(className, 'button--uri-indicator')}
             navigate={channelLink}
             target={external ? '_blank' : undefined}
-            {...props}
+            aria-hidden={!focusable}
+            tabIndex={focusable ? 0 : -1}
           >
             {inner}
           </Button>
