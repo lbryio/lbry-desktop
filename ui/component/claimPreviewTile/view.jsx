@@ -20,6 +20,7 @@ import CollectionPreviewOverlay from 'component/collectionPreviewOverlay';
 
 type Props = {
   uri: string,
+  date?: any,
   claim: ?Claim,
   mediaDuration?: string,
   resolveUri: (string) => void,
@@ -54,6 +55,7 @@ function ClaimPreviewTile(props: Props) {
   const {
     history,
     uri,
+    date,
     isResolvingUri,
     thumbnail,
     title,
@@ -125,8 +127,12 @@ function ClaimPreviewTile(props: Props) {
     ariaLabelData += ' ' + __('by %channelTitle%', { channelTitle });
   }
 
+  if (date) {
+    ariaLabelData += ' ' + DateTime.getTimeAgoStr(date);
+  }
+
   if (mediaDuration) {
-    ariaLabelData += ' ' + mediaDuration;
+    ariaLabelData += ', ' + mediaDuration;
   }
 
   function handleClick(e) {

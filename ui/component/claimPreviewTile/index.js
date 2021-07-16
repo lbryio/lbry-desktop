@@ -9,6 +9,7 @@ import {
   makeSelectChannelForClaimUri,
   makeSelectClaimIsNsfw,
   makeSelectClaimIsStreamPlaceholder,
+  makeSelectDateForUri,
 } from 'lbry-redux';
 import { selectMutedChannels } from 'redux/selectors/blocked';
 import { selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
@@ -24,6 +25,7 @@ const select = (state, props) => {
   return {
     claim,
     mediaDuration,
+    date: props.uri && makeSelectDateForUri(props.uri)(state),
     channel: props.uri && makeSelectChannelForClaimUri(props.uri)(state),
     isResolvingUri: props.uri && makeSelectIsUriResolving(props.uri)(state),
     thumbnail: props.uri && makeSelectThumbnailForUri(props.uri)(state),
