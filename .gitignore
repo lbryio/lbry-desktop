@@ -33,3 +33,6 @@ package-lock.json
 !/custom/robots.disallowall
 !/custom/robots.allowall
 .env
+.env.ody
+.env.desktop
+.env.lbrytv
