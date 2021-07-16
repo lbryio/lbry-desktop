@@ -4,6 +4,11 @@
   position: relative;
 }
 
+.collection__subtitle {
+  display: flex;
+  margin-bottom: var(--spacing-s);
+}
+
 .collection-preview__items {
   display: flex;
   align-items: center;
