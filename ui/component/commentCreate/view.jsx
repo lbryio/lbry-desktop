@@ -47,6 +47,8 @@ type Props = {
   toast: (string) => void,
   claimIsMine: boolean,
   sendTip: ({}, (any) => void, (any) => void) => void,
+  justCommented: Array<string>,
+  doToast: ({ message: string }) => void,
 };
 
 export function CommentCreate(props: Props) {
@@ -65,6 +67,8 @@ export function CommentCreate(props: Props) {
     livestream,
     claimIsMine,
     sendTip,
+    justCommented,
+    doToast,
   } = props;
   const buttonref: ElementRef<any> = React.useRef();
   const {
@@ -216,7 +220,7 @@ export function CommentCreate(props: Props) {
             displayError = error.message;
           }
 
-          // doToast({ message: displayError, isError: true });
+          doToast({ message: displayError, isError: true });
         });
     }
   }
