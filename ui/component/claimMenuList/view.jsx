@@ -7,7 +7,7 @@ import React from 'react';
 import classnames from 'classnames';
 import { Menu, MenuButton, MenuList, MenuItem } from '@reach/menu-button';
 import Icon from 'component/common/icon';
-import { generateShareUrl, generateRssUrl } from 'util/url';
+import { generateShareUrl, generateRssUrl, generateLbryContentUrl } from 'util/url';
 import { useHistory } from 'react-router';
 import { buildURI, parseURI, COLLECTIONS_CONSTS } from 'lbry-redux';
 
@@ -107,7 +107,8 @@ function ClaimMenuList(props: Props) {
     return null;
   }
 
-  const shareUrl: string = generateShareUrl(SHARE_DOMAIN, uri);
+  const lbryUrl: string = generateLbryContentUrl(claim.canonical_url, claim.permanent_url);
+  const shareUrl: string = generateShareUrl(SHARE_DOMAIN, lbryUrl);
   const rssUrl: string = isChannel ? generateRssUrl(URL, claim) : '';
   const isCollectionClaim = claim && claim.value_type === 'collection';
   // $FlowFixMe
