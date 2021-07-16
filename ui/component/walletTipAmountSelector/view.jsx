@@ -189,14 +189,33 @@ function WalletTipAmountSelector(props: Props) {
         )}
       </div>
 
-      {useCustomTip && (
-        <>
-          <div className="help">
-                  <span className="help--spendable">
-                    <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card ')} button="link" /> To {__(' Tip Creators')}
-                  </span>
-          </div></>
-      )}
+      {useCustomTip && activeTab === TAB_FIAT && !hasCardSaved &&
+      <>
+        <div className="help">
+          <span className="help--spendable">
+            <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card ')} button="link" /> To {__(' Tip Creators')}
+          </span>
+        </div>
+      </>
+      }
+
+      {/* has card saved but cant creator cant receive tips */}
+      {useCustomTip && activeTab === TAB_FIAT && hasCardSaved && !canReceiveFiatTip &&
+      <>
+        <div className="help">
+          <span className="help--spendable">Only select creators can receive tips at this time</span>
+        </div>
+      </>
+      }
+
+      {/* has card saved but cant creator cant receive tips */}
+      {useCustomTip && activeTab === TAB_FIAT && hasCardSaved && canReceiveFiatTip &&
+      <>
+        <div className="help">
+          <span className="help--spendable">Send a tip directly from your attached card</span>
+        </div>
+      </>
+      }
 
       {useCustomTip && (
         <div className="comment__tip-input">
@@ -234,7 +253,7 @@ function WalletTipAmountSelector(props: Props) {
 
       {/*// TODO: add conditional based on hasSavedCard*/}
       {/* lbc tab */}
-      {!useCustomTip && activeTab === TAB_LBC && <WalletSpendableBalanceHelp />}
+      {activeTab === TAB_LBC && <WalletSpendableBalanceHelp />}
       {/* fiat button but no card saved */}
       {!useCustomTip && activeTab === TAB_FIAT && !hasCardSaved &&
       <>
