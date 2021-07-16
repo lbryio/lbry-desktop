@@ -43,6 +43,12 @@ function WalletTipAmountSelector(props: Props) {
   const [canReceiveFiatTip, setCanReceiveFiatTip] = React.useState(); // dont persist because it needs to be calc'd per creator
   const [hasCardSaved, setHasSavedCard] = usePersistedState('comment-support:hasCardSaved', false);
 
+  function shouldDisableAmountSelector(amount) {
+    return (
+      (amount > balance && activeTab !== TAB_FIAT) || (activeTab === TAB_FIAT && (!hasCardSaved || !canReceiveFiatTip))
+    );
+  }
+
   console.log(activeTab);
 
   console.log(claim);
@@ -155,7 +161,7 @@ function WalletTipAmountSelector(props: Props) {
         {DEFAULT_TIP_AMOUNTS.map((defaultAmount) => (
           <Button
             key={defaultAmount}
-            disabled={(activeTab === TAB_LBC) && defaultAmount > balance}
+            disabled={shouldDisableAmountSelector(defaultAmount)}
             button="alt"
             className={classnames('button-toggle button-toggle--expandformobile', {
               'button-toggle--active': defaultAmount === amount && !useCustomTip,
@@ -171,6 +177,7 @@ function WalletTipAmountSelector(props: Props) {
         ))}
         <Button
           button="alt"
+          disabled={activeTab === TAB_FIAT && (!hasCardSaved || !canReceiveFiatTip)}
           className={classnames('button-toggle button-toggle--expandformobile', {
             'button-toggle--active': useCustomTip,
           })}
