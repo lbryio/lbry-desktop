@@ -14,7 +14,7 @@ type Props = {
   collectionItemUrls: Array<string>,
 };
 
-function CollectionPreviewTileOverlay(props: Props) {
+function CollectionPreviewOverlay(props: Props) {
   const { collectionItemUrls } = props;
 
   if (collectionItemUrls && collectionItemUrls.length > 0) {
@@ -39,4 +39,4 @@ function CollectionPreviewTileOverlay(props: Props) {
   return null;
 }
 
-export default withRouter(CollectionPreviewTileOverlay);
+export default withRouter(CollectionPreviewOverlay);

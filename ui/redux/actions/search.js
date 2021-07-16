@@ -1,13 +1,9 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
 import { buildURI, doResolveUris, batchActions, isURIValid, makeSelectClaimForUri } from 'lbry-redux';
-import {
-  makeSelectSearchUris,
-  makeSelectQueryWithOptions,
-  selectSearchValue,
-  selectSearchOptions,
-} from 'redux/selectors/search';
+import { makeSelectSearchUris, selectSearchValue } from 'redux/selectors/search';
 import handleFetchResponse from 'util/handle-fetch';
+import { getSearchQueryString } from 'util/query-params';
 
 type Dispatch = (action: any) => any;
 type GetState = () => { search: SearchState };
@@ -44,10 +40,9 @@ export const doSearch = (rawQuery: string, searchOptions: SearchOptions) => (
 
   const state = getState();
 
-  const mainOptions: any = selectSearchOptions(state);
-  const queryWithOptions = makeSelectQueryWithOptions(query, searchOptions)(state);
+  const queryWithOptions = getSearchQueryString(query, searchOptions);
 
-  const size = mainOptions.size;
+  const size = searchOptions.size;
   const from = searchOptions.from;
 
   // If we have already searched for something, we don't need to do anything
@@ -101,7 +96,7 @@ export const doSearch = (rawQuery: string, searchOptions: SearchOptions) => (
       });
       dispatch(batchActions(...actions));
     })
-    .catch((e) => {
+    .catch(() => {
       dispatch({
         type: ACTIONS.SEARCH_FAIL,
       });

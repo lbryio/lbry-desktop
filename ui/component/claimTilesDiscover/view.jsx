@@ -3,7 +3,7 @@ import { ENABLE_NO_SOURCE_CLAIMS, SIMPLE_SITE } from 'config';
 import * as CS from 'constants/claim_search';
 import type { Node } from 'react';
 import React from 'react';
-import { createNormalizedClaimSearchKey, MATURE_TAGS } from 'lbry-redux';
+import { createNormalizedClaimSearchKey, MATURE_TAGS, splitBySeparator } from 'lbry-redux';
 import ClaimPreviewTile from 'component/claimPreviewTile';
 import { useHistory } from 'react-router';
 import { getLivestreamOnlyOptions } from 'util/search';
@@ -37,7 +37,7 @@ export function prioritizeActiveLivestreams(
     //    for that channel actually point to the same source).
     // 2. 'liveChannelIds' needs to be pruned after being accounted for,
     //    otherwise all livestream-claims will be "live" (we'll only take the
-    //    latest one as "live").
+    //    latest one as "live" ).
     return (
       claim &&
       claim.value_type === 'stream' &&
@@ -115,6 +115,7 @@ type Props = {
   liveLivestreamsFirst?: boolean,
   livestreamMap?: { [string]: any },
   pin?: boolean,
+  showNoSourceClaims?: boolean,
 };
 
 function ClaimTilesDiscover(props: Props) {
@@ -145,15 +146,18 @@ function ClaimTilesDiscover(props: Props) {
     mutedUris,
     liveLivestreamsFirst,
     livestreamMap,
-    // pin,
+    // pin, // let's pin from /web folder
     prefixUris,
+    showNoSourceClaims,
   } = props;
 
   const { location } = useHistory();
   const urlParams = new URLSearchParams(location.search);
   const feeAmountInUrl = urlParams.get('fee_amount');
   const feeAmountParam = feeAmountInUrl || feeAmount;
-  const mutedAndBlockedChannelIds = Array.from(new Set(mutedUris.concat(blockedUris).map((uri) => uri.split('#')[1])));
+  const mutedAndBlockedChannelIds = Array.from(
+    new Set(mutedUris.concat(blockedUris).map((uri) => splitBySeparator(uri)[1]))
+  );
   const liveUris = [];
 
   const [prevUris, setPrevUris] = React.useState([]);
@@ -240,7 +244,7 @@ function ClaimTilesDiscover(props: Props) {
 
   const isLoading = fetchingClaimSearchByQuery[mainSearchKey];
 
-  if (liveLivestreamsFirst && livestreamMap) {
+  if (liveLivestreamsFirst && livestreamMap && !isLoading) {
     prioritizeActiveLivestreams(uris, liveUris, livestreamMap, claimsByUri, claimSearchByQuery, options);
   }
 
@@ -290,7 +294,11 @@ function ClaimTilesDiscover(props: Props) {
         ? uris.map((uri, index) => (
             <ClaimPreviewTile key={uri} uri={uri} properties={renderProperties} live={resolveLive(index)} />
           ))
-        : new Array(pageSize).fill(1).map((x, i) => <ClaimPreviewTile key={i} placeholder />)}
+        : new Array(pageSize)
+            .fill(1)
+            .map((x, i) => (
+              <ClaimPreviewTile showNoSourceClaims={hasNoSource || showNoSourceClaims} key={i} placeholder />
+            ))}
     </ul>
   );
 }

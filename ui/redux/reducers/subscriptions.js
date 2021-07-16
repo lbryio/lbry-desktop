@@ -1,6 +1,6 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
-import { parseURI, ACTIONS as LBRY_REDUX_ACTIONS } from 'lbry-redux';
+import { parseURI, normalizeURI, isURIEqual, ACTIONS as LBRY_REDUX_ACTIONS } from 'lbry-redux';
 import { handleActions } from 'util/redux-utils';
 
 const defaultState: SubscriptionState = {
@@ -17,21 +17,21 @@ export default handleActions(
       const newSubscriptions: Array<Subscription> = state.subscriptions.slice();
       let newFollowing: Array<Following> = state.following.slice();
       // prevent duplicates in the sidebar
-      if (!newSubscriptions.some((sub) => sub.uri === newSubscription.uri)) {
+      if (!newSubscriptions.some((sub) => isURIEqual(sub.uri, newSubscription.uri))) {
         //   $FlowFixMe
         newSubscriptions.unshift(newSubscription);
       }
 
-      if (!newFollowing.some((sub) => sub.uri === newSubscription.uri)) {
+      if (!newFollowing.some((sub) => isURIEqual(sub.uri, newSubscription.uri))) {
         newFollowing.unshift({
           uri: newSubscription.uri,
           notificationsDisabled: newSubscription.notificationsDisabled,
         });
       } else {
         newFollowing = newFollowing.map((following) => {
-          if (following.uri === newSubscription.uri) {
+          if (isURIEqual(following.uri, newSubscription.uri)) {
             return {
-              uri: newSubscription.uri,
+              uri: normalizeURI(newSubscription.uri),
               notificationsDisabled: newSubscription.notificationsDisabled,
             };
           } else {

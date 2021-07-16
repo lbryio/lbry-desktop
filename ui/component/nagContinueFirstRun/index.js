@@ -1,11 +1,11 @@
 import { connect } from 'react-redux';
 import { SETTINGS } from 'lbry-redux';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
-import UserSignIn from './view';
+import NagContinueFirstRun from './view';
 
-const select = state => ({
+const select = (state) => ({
   followingAcknowledged: makeSelectClientSetting(SETTINGS.FOLLOWING_ACKNOWLEDGED)(state),
   firstRunStarted: makeSelectClientSetting(SETTINGS.FIRST_RUN_STARTED)(state),
 });
 
-export default connect(select)(UserSignIn);
+export default connect(select)(NagContinueFirstRun);

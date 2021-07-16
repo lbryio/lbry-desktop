@@ -1,7 +1,7 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
-import { SITE_NAME, SIMPLE_SITE, DOMAIN } from 'config';
+import { SITE_NAME, SIMPLE_SITE, DOMAIN, ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import React from 'react';
 import Page from 'component/page';
 import Button from 'component/button';
@@ -12,6 +12,11 @@ import I18nMessage from 'component/i18nMessage';
 import LbcSymbol from 'component/common/lbc-symbol';
 import WaitUntilOnPage from 'component/common/wait-until-on-page';
 import useGetLivestreams from 'effects/use-get-livestreams';
+import { GetLinksData } from 'util/buildHomepage';
+
+// @if TARGET='web'
+import Pixel from 'web/component/pixel';
+// @endif
 
 type Props = {
   authenticated: boolean,
@@ -26,10 +31,11 @@ function HomePage(props: Props) {
   const showPersonalizedChannels = (authenticated || !IS_WEB) && subscribedChannels && subscribedChannels.length > 0;
   const showPersonalizedTags = (authenticated || !IS_WEB) && followedTags && followedTags.length > 0;
   const showIndividualTags = showPersonalizedTags && followedTags.length < 5;
-  const { default: getHomepage } = homepageData;
   const { livestreamMap } = useGetLivestreams();
 
-  const rowData: Array<RowDataItem> = getHomepage(
+  const rowData: Array<RowDataItem> = GetLinksData(
+    homepageData,
+    true,
     authenticated,
     showPersonalizedChannels,
     showPersonalizedTags,
@@ -43,11 +49,20 @@ function HomePage(props: Props) {
     const tilePlaceholder = (
       <ul className="claim-grid">
         {new Array(options.pageSize || 8).fill(1).map((x, i) => (
-          <ClaimPreviewTile key={i} placeholder />
+          <ClaimPreviewTile showNoSourceClaims={ENABLE_NO_SOURCE_CLAIMS} key={i} placeholder />
         ))}
       </ul>
     );
-    const claimTiles = <ClaimTilesDiscover {...options} liveLivestreamsFirst livestreamMap={livestreamMap} hasSource />;
+    const claimTiles = (
+      <ClaimTilesDiscover
+        {...options}
+        liveLivestreamsFirst
+        livestreamMap={livestreamMap}
+        showNoSourceClaims={ENABLE_NO_SOURCE_CLAIMS}
+        hasSource
+        pin={route === `/$/${PAGES.GENERAL}`} // use pinUrls here
+      />
+    );
 
     return (
       <div key={title} className="claim-grid__wrapper">
@@ -126,8 +141,12 @@ function HomePage(props: Props) {
         </div>
       )}
       {rowData.map(({ title, route, link, icon, help, options = {} }, index) => {
+        // add pins here
         return getRowElements(title, route, link, icon, help, options, index);
       })}
+      {/* @if TARGET='web' */}
+      <Pixel type={'retargeting'} />
+      {/* @endif */}
     </Page>
   );
 }

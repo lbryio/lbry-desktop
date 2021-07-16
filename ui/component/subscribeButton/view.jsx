@@ -16,9 +16,8 @@ type SubscriptionArgs = {
 type Props = {
   permanentUrl: ?string,
   isSubscribed: boolean,
-  doChannelSubscribe: (SubscriptionArgs) => void,
-  doChannelUnsubscribe: (SubscriptionArgs) => void,
-  showSnackBarOnSubscribe: boolean,
+  doChannelSubscribe: (SubscriptionArgs, boolean) => void,
+  doChannelUnsubscribe: (SubscriptionArgs, boolean) => void,
   doToast: ({ message: string }) => void,
   shrinkOnMobile: boolean,
   notificationsDisabled: boolean,
@@ -32,7 +31,6 @@ export default function SubscribeButton(props: Props) {
     doChannelSubscribe,
     doChannelUnsubscribe,
     isSubscribed,
-    showSnackBarOnSubscribe,
     doToast,
     shrinkOnMobile = false,
     notificationsDisabled,
@@ -78,7 +76,7 @@ export default function SubscribeButton(props: Props) {
               channelName: '@' + rawChannelName,
               uri: uri,
               notificationsDisabled: true,
-            });
+            }, true);
           }}
         />
       </div>
@@ -103,11 +101,7 @@ export default function SubscribeButton(props: Props) {
             channelName: claimName,
             uri: permanentUrl,
             notificationsDisabled: true,
-          });
-
-          if (showSnackBarOnSubscribe) {
-            doToast({ message: __('Now following %channel%!', { channel: claimName }) });
-          }
+          }, true);
         }}
       />
       {isSubscribed && uiNotificationsEnabled && (
@@ -122,11 +116,10 @@ export default function SubscribeButton(props: Props) {
               channelName: claimName,
               uri: permanentUrl,
               notificationsDisabled: newNotificationsDisabled,
-            });
+            }, false);
 
-            if (newNotificationsDisabled === false) {
-              doToast({ message: __('Notifications turned on for %channel%!', { channel: claimName }) });
-            }
+            doToast({ message: __(newNotificationsDisabled ? 'Notifications turned off for %channel%' : 'Notifications turned on for %channel%!',
+              { channel: claimName }) });
           }}
         />
       )}

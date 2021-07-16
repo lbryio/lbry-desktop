@@ -2,7 +2,7 @@
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
 import * as CS from 'constants/claim_search';
-import { SIMPLE_SITE } from 'config';
+import { SIMPLE_SITE, ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import React from 'react';
 import ChannelsFollowingDiscoverPage from 'page/channelsFollowingDiscover';
 import ClaimListDiscover from 'component/claimListDiscover';
@@ -10,6 +10,7 @@ import Page from 'component/page';
 import Button from 'component/button';
 import Icon from 'component/common/icon';
 import useGetLivestreams from 'effects/use-get-livestreams';
+import { splitBySeparator } from 'lbry-redux';
 
 type Props = {
   subscribedChannels: Array<Subscription>,
@@ -36,7 +37,7 @@ function ChannelsFollowingPage(props: Props) {
           </span>
         }
         defaultOrderBy={CS.ORDER_BY_NEW}
-        channelIds={subscribedChannels.map((sub) => sub.uri.split('#')[1])}
+        channelIds={subscribedChannels.map((sub) => splitBySeparator(sub.uri)[1])}
         meta={
           <Button
             icon={ICONS.SEARCH}
@@ -47,6 +48,7 @@ function ChannelsFollowingPage(props: Props) {
         }
         liveLivestreamsFirst
         livestreamMap={livestreamMap}
+        showNoSourceClaims={ENABLE_NO_SOURCE_CLAIMS}
         hasSource
       />
     </Page>

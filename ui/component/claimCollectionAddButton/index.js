@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { doOpenModal } from 'redux/actions/app';
-import PlaylistAddButton from './view';
+import CollectionAddButton from './view';
 import { makeSelectClaimForUri } from 'lbry-redux';
 
 const select = (state, props) => ({
@@ -9,4 +9,4 @@ const select = (state, props) => ({
 
 export default connect(select, {
   doOpenModal,
-})(PlaylistAddButton);
+})(CollectionAddButton);

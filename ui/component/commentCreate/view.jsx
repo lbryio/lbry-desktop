@@ -17,8 +17,6 @@ import ChannelThumbnail from 'component/channelThumbnail';
 import UriIndicator from 'component/uriIndicator';
 import Empty from 'component/common/empty';
 
-const COMMENT_SLOW_MODE_SECONDS = 5;
-
 type Props = {
   uri: string,
   claim: StreamClaim,
@@ -37,7 +35,6 @@ type Props = {
   toast: (string) => void,
   claimIsMine: boolean,
   sendTip: ({}, (any) => void, (any) => void) => void,
-  justCommented: Array<string>,
 };
 
 export function CommentCreate(props: Props) {
@@ -54,10 +51,8 @@ export function CommentCreate(props: Props) {
     parentId,
     activeChannelClaim,
     livestream,
-    toast,
     claimIsMine,
     sendTip,
-    justCommented,
   } = props;
   const buttonref: ElementRef<any> = React.useRef();
   const {
@@ -72,7 +67,6 @@ export function CommentCreate(props: Props) {
   const [isReviewingSupportComment, setIsReviewingSupportComment] = React.useState();
   const [tipAmount, setTipAmount] = React.useState(1);
   const [commentValue, setCommentValue] = React.useState('');
-  const [lastCommentTime, setLastCommentTime] = React.useState();
   const [advancedEditor, setAdvancedEditor] = usePersistedState('comment-editor-mode', false);
   const hasChannels = channels && channels.length;
   const disabled = isSubmitting || !activeChannelClaim || !commentValue.length;
@@ -107,15 +101,6 @@ export function CommentCreate(props: Props) {
 
   function handleSubmit() {
     if (activeChannelClaim && commentValue.length) {
-      const timeUntilCanComment = !lastCommentTime
-        ? 0
-        : (lastCommentTime - Date.now()) / 1000 + COMMENT_SLOW_MODE_SECONDS;
-
-      if (livestream && !claimIsMine && timeUntilCanComment > 0) {
-        toast(__('Slowmode is on. You can comment again in %time% seconds.', { time: Math.ceil(timeUntilCanComment) }));
-        return;
-      }
-
       handleCreateComment();
     }
   }
@@ -163,11 +148,9 @@ export function CommentCreate(props: Props) {
 
         if (res && res.signature) {
           setCommentValue('');
-          setLastCommentTime(Date.now());
           setIsReviewingSupportComment(false);
           setIsSupportComment(false);
           setCommentFailure(false);
-          justCommented.push(res.comment_id);
 
           if (onDoneReplying) {
             onDoneReplying();
@@ -231,7 +214,13 @@ export function CommentCreate(props: Props) {
             autoFocus
             button="primary"
             disabled={disabled}
-            label={isSubmitting ? __('Sending...') : (commentFailure && tipAmount === successTip.tipAmount) ? __('Re-submit') : __('Send')}
+            label={
+              isSubmitting
+                ? __('Sending...')
+                : commentFailure && tipAmount === successTip.tipAmount
+                ? __('Re-submit')
+                : __('Send')
+            }
             onClick={handleSupportComment}
           />
           <Button button="link" label={__('Cancel')} onClick={() => setIsReviewingSupportComment(false)} />

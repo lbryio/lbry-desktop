@@ -57,25 +57,6 @@ export const makeSelectHasReachedMaxResultsLength = (query: string): ((state: St
     return hasReachedMaxResultsLength[query];
   });
 
-// Creates a query string based on the state in the search reducer
-// Can be overrided by passing in custom sizes/from values for other areas pagination
-
-type CustomOptions = {
-  isBackgroundSearch?: boolean,
-  size?: number,
-  from?: number,
-  related_to?: string,
-  nsfw?: boolean,
-};
-
-export const makeSelectQueryWithOptions = (customQuery: ?string, options: CustomOptions) =>
-  createSelector(selectSearchValue, selectSearchOptions, (query, defaultOptions) => {
-    const searchOptions = { ...defaultOptions, ...options };
-    const queryString = getSearchQueryString(customQuery || query, searchOptions);
-
-    return queryString;
-  });
-
 export const makeSelectRecommendedContentForUri = (uri: string) =>
   createSelector(
     makeSelectClaimForUri(uri),

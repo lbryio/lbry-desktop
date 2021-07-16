@@ -77,6 +77,18 @@ if (fs.existsSync(CUSTOM_OG_PATH)) {
   });
 }
 
+// clear the dist folder of existing js files before compilation
+let regex = /^.*\.(json|js|map)$/;
+// only run on nonprod environments to avoid side effects on prod
+if (!isProduction) {
+  const path = `${DIST_ROOT}/public/`;
+  if (fs.existsSync(path)) {
+    fs.readdirSync(path)
+      .filter((f) => regex.test(f))
+      .map((f) => fs.unlinkSync(path + f));
+  }
+}
+
 const ROBOTS_TXT_PATH = `${CUSTOM_ROOT}/robots.txt`;
 if (fs.existsSync(ROBOTS_TXT_PATH)) {
   copyWebpackCommands.push({

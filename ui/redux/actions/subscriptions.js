@@ -13,7 +13,7 @@ type SubscriptionArgs = {
   notificationsDisabled?: boolean,
 };
 
-export function doToggleSubscription(subscription: SubscriptionArgs, isSubscribed: boolean = false) {
+export function doToggleSubscription(subscription: SubscriptionArgs, followToast: boolean, isSubscribed: boolean = false) {
   return async (dispatch: Dispatch, getState: GetState) => {
     const {
       settings: { daemonSettings },
@@ -58,21 +58,22 @@ export function doToggleSubscription(subscription: SubscriptionArgs, isSubscribe
         });
       }
     }
-
-    dispatch(doToast({
-      message: __(!isSubscribed ? 'You followed %CHANNEL_NAME%!' : 'Unfollowed %CHANNEL_NAME%.', { CHANNEL_NAME: subscription.channelName }),
-    }));
+    if (followToast) {
+      dispatch(doToast({
+        message: __(!isSubscribed ? 'You followed %CHANNEL_NAME%!' : 'Unfollowed %CHANNEL_NAME%.', { CHANNEL_NAME: subscription.channelName }),
+      }));
+    }
   };
 }
 
-export function doChannelSubscribe(subscription: SubscriptionArgs) {
+export function doChannelSubscribe(subscription: SubscriptionArgs, followToast: boolean = true) {
   return (dispatch: Dispatch) => {
-    return dispatch(doToggleSubscription(subscription));
+    return dispatch(doToggleSubscription(subscription, followToast));
   };
 }
 
-export function doChannelUnsubscribe(subscription: SubscriptionArgs) {
+export function doChannelUnsubscribe(subscription: SubscriptionArgs, followToast: boolean = true) {
   return (dispatch: Dispatch) => {
-    return dispatch(doToggleSubscription(subscription, true));
+    return dispatch(doToggleSubscription(subscription, followToast, true));
   };
 }

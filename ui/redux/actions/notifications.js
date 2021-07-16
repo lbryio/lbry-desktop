@@ -1,6 +1,6 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
-import * as NOTIFICATIONS from 'constants/notifications';
+import { RULE } from 'constants/notifications';
 import { Lbryio } from 'lbryinc';
 import { v4 as uuid } from 'uuid';
 import {
@@ -77,7 +77,7 @@ export function doNotificationList(types?: Array<string>) {
             if (
               (notification.notification_parameters.dynamic &&
                 notification.notification_parameters.dynamic.comment_author) ||
-              notification.notification_rule === NOTIFICATIONS.NEW_CONTENT
+              notification.notification_rule === RULE.NEW_CONTENT
             ) {
               return true;
             } else {
@@ -85,7 +85,7 @@ export function doNotificationList(types?: Array<string>) {
             }
           })
           .map((notification) => {
-            if (notification.notification_rule === NOTIFICATIONS.NEW_CONTENT) {
+            if (notification.notification_rule === RULE.NEW_CONTENT) {
               return notification.notification_parameters.device.target;
             } else {
               return notification.notification_parameters.dynamic.comment_author;

@@ -3,83 +3,85 @@ import React, { useEffect } from 'react';
 import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
 
 import * as PAGES from 'constants/pages';
+import { lazyImport } from 'util/lazyImport';
 import { LINKED_COMMENT_QUERY_PARAM } from 'constants/comment';
 import { parseURI, isURIValid } from 'lbry-redux';
 import { SITE_TITLE, WELCOME_VERSION, SIMPLE_SITE } from 'config';
 import LoadingBarOneOff from 'component/loadingBarOneOff';
+import { GetLinksData } from 'util/buildHomepage';
 
 import HomePage from 'page/home';
 
 // @if TARGET='app'
-const BackupPage = React.lazy(() => import('page/backup' /* webpackChunkName: "backup" */));
+const BackupPage = lazyImport(() => import('page/backup' /* webpackChunkName: "backup" */));
 // @endif
 
 // @if TARGET='web'
-const Code2257Page = React.lazy(() => import('web/page/code2257'));
+const Code2257Page = lazyImport(() => import('web/page/code2257' /* webpackChunkName: "code2257" */));
 // @endif
 
 // Chunk: "secondary"
-const SignInPage = React.lazy(() => import('page/signIn' /* webpackChunkName: "secondary" */));
-const SignInWalletPasswordPage = React.lazy(() =>
+const SignInPage = lazyImport(() => import('page/signIn' /* webpackChunkName: "secondary" */));
+const SignInWalletPasswordPage = lazyImport(() =>
   import('page/signInWalletPassword' /* webpackChunkName: "secondary" */)
 );
-const SignUpPage = React.lazy(() => import('page/signUp' /* webpackChunkName: "secondary" */));
-const SignInVerifyPage = React.lazy(() => import('page/signInVerify' /* webpackChunkName: "secondary" */));
+const SignUpPage = lazyImport(() => import('page/signUp' /* webpackChunkName: "secondary" */));
+const SignInVerifyPage = lazyImport(() => import('page/signInVerify' /* webpackChunkName: "secondary" */));
 
 // Chunk: "wallet/secondary"
-const BuyPage = React.lazy(() => import('page/buy' /* webpackChunkName: "secondary" */));
-const ReceivePage = React.lazy(() => import('page/receive' /* webpackChunkName: "secondary" */));
-const SendPage = React.lazy(() => import('page/send' /* webpackChunkName: "secondary" */));
-const SwapPage = React.lazy(() => import('page/swap' /* webpackChunkName: "secondary" */));
-const WalletPage = React.lazy(() => import('page/wallet' /* webpackChunkName: "secondary" */));
+const BuyPage = lazyImport(() => import('page/buy' /* webpackChunkName: "secondary" */));
+const ReceivePage = lazyImport(() => import('page/receive' /* webpackChunkName: "secondary" */));
+const SendPage = lazyImport(() => import('page/send' /* webpackChunkName: "secondary" */));
+const SwapPage = lazyImport(() => import('page/swap' /* webpackChunkName: "secondary" */));
+const WalletPage = lazyImport(() => import('page/wallet' /* webpackChunkName: "secondary" */));
 
 // Chunk: none
-const NotificationsPage = React.lazy(() => import('page/notifications' /* webpackChunkName: "secondary" */));
-const CollectionPage = React.lazy(() => import('page/collection' /* webpackChunkName: "secondary" */));
-const ChannelNew = React.lazy(() => import('page/channelNew' /* webpackChunkName: "secondary" */));
-const ChannelsFollowingDiscoverPage = React.lazy(() =>
+const NotificationsPage = lazyImport(() => import('page/notifications' /* webpackChunkName: "secondary" */));
+const CollectionPage = lazyImport(() => import('page/collection' /* webpackChunkName: "secondary" */));
+const ChannelNew = lazyImport(() => import('page/channelNew' /* webpackChunkName: "secondary" */));
+const ChannelsFollowingDiscoverPage = lazyImport(() =>
   import('page/channelsFollowingDiscover' /* webpackChunkName: "secondary" */)
 );
-const ChannelsFollowingPage = React.lazy(() => import('page/channelsFollowing' /* webpackChunkName: "secondary" */));
-const ChannelsPage = React.lazy(() => import('page/channels' /* webpackChunkName: "secondary" */));
-const CheckoutPage = React.lazy(() => import('page/checkoutPage' /* webpackChunkName: "checkoutPage" */));
-const CreatorDashboard = React.lazy(() => import('page/creatorDashboard' /* webpackChunkName: "secondary" */));
-const DiscoverPage = React.lazy(() => import('page/discover' /* webpackChunkName: "secondary" */));
-const EmbedWrapperPage = React.lazy(() => import('page/embedWrapper' /* webpackChunkName: "secondary" */));
-const FileListPublished = React.lazy(() => import('page/fileListPublished' /* webpackChunkName: "secondary" */));
-const FourOhFourPage = React.lazy(() => import('page/fourOhFour' /* webpackChunkName: "fourOhFour" */));
-const HelpPage = React.lazy(() => import('page/help' /* webpackChunkName: "help" */));
-const InvitePage = React.lazy(() => import('page/invite' /* webpackChunkName: "secondary" */));
-const InvitedPage = React.lazy(() => import('page/invited' /* webpackChunkName: "secondary" */));
-const LibraryPage = React.lazy(() => import('page/library' /* webpackChunkName: "secondary" */));
-const ListBlockedPage = React.lazy(() => import('page/listBlocked' /* webpackChunkName: "secondary" */));
-const ListsPage = React.lazy(() => import('page/lists' /* webpackChunkName: "secondary" */));
-const LiveStreamSetupPage = React.lazy(() => import('page/livestreamSetup' /* webpackChunkName: "secondary" */));
-const LivestreamCurrentPage = React.lazy(() => import('page/livestreamCurrent' /* webpackChunkName: "secondary" */));
-const PasswordResetPage = React.lazy(() => import('page/passwordReset' /* webpackChunkName: "secondary" */));
-const PasswordSetPage = React.lazy(() => import('page/passwordSet' /* webpackChunkName: "secondary" */));
-const PublishPage = React.lazy(() => import('page/publish' /* webpackChunkName: "secondary" */));
-const ReportContentPage = React.lazy(() => import('page/reportContent' /* webpackChunkName: "secondary" */));
-const ReportPage = React.lazy(() => import('page/report' /* webpackChunkName: "secondary" */));
-const RepostNew = React.lazy(() => import('page/repost' /* webpackChunkName: "secondary" */));
-const RewardsPage = React.lazy(() => import('page/rewards' /* webpackChunkName: "secondary" */));
-const RewardsVerifyPage = React.lazy(() => import('page/rewardsVerify' /* webpackChunkName: "secondary" */));
-const SearchPage = React.lazy(() => import('page/search' /* webpackChunkName: "secondary" */));
-const SettingsAdvancedPage = React.lazy(() => import('page/settingsAdvanced' /* webpackChunkName: "secondary" */));
-const SettingsStripeCard = React.lazy(() => import('page/settingsStripeCard' /* webpackChunkName: "secondary" */));
-const SettingsCreatorPage = React.lazy(() => import('page/settingsCreator' /* webpackChunkName: "secondary" */));
-const SettingsNotificationsPage = React.lazy(() =>
+const ChannelsFollowingPage = lazyImport(() => import('page/channelsFollowing' /* webpackChunkName: "secondary" */));
+const ChannelsPage = lazyImport(() => import('page/channels' /* webpackChunkName: "secondary" */));
+const CheckoutPage = lazyImport(() => import('page/checkoutPage' /* webpackChunkName: "checkoutPage" */));
+const CreatorDashboard = lazyImport(() => import('page/creatorDashboard' /* webpackChunkName: "secondary" */));
+const DiscoverPage = lazyImport(() => import('page/discover' /* webpackChunkName: "secondary" */));
+const EmbedWrapperPage = lazyImport(() => import('page/embedWrapper' /* webpackChunkName: "secondary" */));
+const FileListPublished = lazyImport(() => import('page/fileListPublished' /* webpackChunkName: "secondary" */));
+const FourOhFourPage = lazyImport(() => import('page/fourOhFour' /* webpackChunkName: "fourOhFour" */));
+const HelpPage = lazyImport(() => import('page/help' /* webpackChunkName: "help" */));
+const InvitePage = lazyImport(() => import('page/invite' /* webpackChunkName: "secondary" */));
+const InvitedPage = lazyImport(() => import('page/invited' /* webpackChunkName: "secondary" */));
+const LibraryPage = lazyImport(() => import('page/library' /* webpackChunkName: "secondary" */));
+const ListBlockedPage = lazyImport(() => import('page/listBlocked' /* webpackChunkName: "secondary" */));
+const ListsPage = lazyImport(() => import('page/lists' /* webpackChunkName: "secondary" */));
+const LiveStreamSetupPage = lazyImport(() => import('page/livestreamSetup' /* webpackChunkName: "secondary" */));
+const LivestreamCurrentPage = lazyImport(() => import('page/livestreamCurrent' /* webpackChunkName: "secondary" */));
+const PasswordResetPage = lazyImport(() => import('page/passwordReset' /* webpackChunkName: "secondary" */));
+const PasswordSetPage = lazyImport(() => import('page/passwordSet' /* webpackChunkName: "secondary" */));
+const PublishPage = lazyImport(() => import('page/publish' /* webpackChunkName: "secondary" */));
+const ReportContentPage = lazyImport(() => import('page/reportContent' /* webpackChunkName: "secondary" */));
+const ReportPage = lazyImport(() => import('page/report' /* webpackChunkName: "secondary" */));
+const RepostNew = lazyImport(() => import('page/repost' /* webpackChunkName: "secondary" */));
+const RewardsPage = lazyImport(() => import('page/rewards' /* webpackChunkName: "secondary" */));
+const RewardsVerifyPage = lazyImport(() => import('page/rewardsVerify' /* webpackChunkName: "secondary" */));
+const SearchPage = lazyImport(() => import('page/search' /* webpackChunkName: "secondary" */));
+const SettingsAdvancedPage = lazyImport(() => import('page/settingsAdvanced' /* webpackChunkName: "secondary" */));
+const SettingsStripeCard = lazyImport(() => import('page/settingsStripeCard' /* webpackChunkName: "secondary" */));
+const SettingsCreatorPage = lazyImport(() => import('page/settingsCreator' /* webpackChunkName: "secondary" */));
+const SettingsNotificationsPage = lazyImport(() =>
   import('page/settingsNotifications' /* webpackChunkName: "secondary" */)
 );
-const SettingsPage = React.lazy(() => import('page/settings' /* webpackChunkName: "secondary" */));
-const ShowPage = React.lazy(() => import('page/show' /* webpackChunkName: "secondary" */));
-const TagsFollowingManagePage = React.lazy(() =>
+const SettingsPage = lazyImport(() => import('page/settings' /* webpackChunkName: "secondary" */));
+const ShowPage = lazyImport(() => import('page/show' /* webpackChunkName: "secondary" */));
+const TagsFollowingManagePage = lazyImport(() =>
   import('page/tagsFollowingManage' /* webpackChunkName: "secondary" */)
 );
-const TagsFollowingPage = React.lazy(() => import('page/tagsFollowing' /* webpackChunkName: "secondary" */));
-const TopPage = React.lazy(() => import('page/top' /* webpackChunkName: "secondary" */));
-const Welcome = React.lazy(() => import('page/welcome' /* webpackChunkName: "secondary" */));
-const YoutubeSyncPage = React.lazy(() => import('page/youtubeSync' /* webpackChunkName: "secondary" */));
+const TagsFollowingPage = lazyImport(() => import('page/tagsFollowing' /* webpackChunkName: "secondary" */));
+const TopPage = lazyImport(() => import('page/top' /* webpackChunkName: "secondary" */));
+const Welcome = lazyImport(() => import('page/welcome' /* webpackChunkName: "secondary" */));
+const YoutubeSyncPage = lazyImport(() => import('page/youtubeSync' /* webpackChunkName: "secondary" */));
 
 // Tell the browser we are handling scroll restoration
 if ('scrollRestoration' in history) {
@@ -157,7 +159,7 @@ function AppRouter(props: Props) {
   const resetScroll = urlParams.get('reset_scroll');
   const hasLinkedCommentInUrl = urlParams.get(LINKED_COMMENT_QUERY_PARAM);
 
-  const dynamicRoutes = Object.values(homepageData).filter(
+  const dynamicRoutes = GetLinksData(homepageData).filter(
     (potentialRoute: any) => potentialRoute && potentialRoute.route
   );
 

@@ -15,7 +15,7 @@ type Props = {
   collectionId: string,
 };
 
-function ClaimMenuList(props: Props) {
+function CollectionMenuList(props: Props) {
   const { inline = false, collectionId, collectionName, doOpenModal } = props;
 
   const { push } = useHistory();
@@ -65,4 +65,4 @@ function ClaimMenuList(props: Props) {
   );
 }
 
-export default ClaimMenuList;
+export default CollectionMenuList;

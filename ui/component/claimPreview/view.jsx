@@ -2,8 +2,9 @@
 import type { Node } from 'react';
 import React, { useEffect, forwardRef } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
+import { lazyImport } from 'util/lazyImport';
 import classnames from 'classnames';
-import { parseURI, COLLECTIONS_CONSTS } from 'lbry-redux';
+import { parseURI, COLLECTIONS_CONSTS, isURIEqual } from 'lbry-redux';
 import { formatLbryUrlForWeb } from 'util/url';
 import { isEmpty } from 'util/object';
 import FileThumbnail from 'component/fileThumbnail';
@@ -18,6 +19,7 @@ import ClaimPreviewTitle from 'component/claimPreviewTitle';
 import ClaimPreviewSubtitle from 'component/claimPreviewSubtitle';
 import ClaimRepostAuthor from 'component/claimRepostAuthor';
 import FileDownloadLink from 'component/fileDownloadLink';
+import FileWatchLaterLink from 'component/fileWatchLaterLink';
 import PublishPending from 'component/publishPending';
 import ClaimMenuList from 'component/claimMenuList';
 import ClaimPreviewLoading from './claim-preview-loading';
@@ -27,13 +29,14 @@ import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import Button from 'component/button';
 import * as ICONS from 'constants/icons';
 
-const AbandonedChannelPreview = React.lazy(() =>
+const AbandonedChannelPreview = lazyImport(() =>
   import('component/abandonedChannelPreview' /* webpackChunkName: "abandonedChannelPreview" */)
 );
 
 type Props = {
   uri: string,
   claim: ?Claim,
+  active: boolean,
   obscureNsfw: boolean,
   showUserBlocked: boolean,
   claimIsMine: boolean,
@@ -111,6 +114,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     pending,
     empty,
     // modifiers
+    active,
     customShouldHide,
     showNullPlaceholder,
     // value from show mature content user setting
@@ -158,6 +162,15 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
       isValid = false;
     }
   }
+  // $FlowFixMe
+  const isPlayable =
+    claim &&
+    // $FlowFixMe
+    claim.value &&
+    // $FlowFixMe
+    claim.value.stream_type &&
+    // $FlowFixMe
+    (claim.value.stream_type === 'audio' || claim.value.stream_type === 'video');
   const isCollection = claim && claim.value_type === 'collection';
   const isChannelUri = isValid ? parseURI(uri).isChannel : false;
   const signingChannel = claim && claim.signing_channel;
@@ -198,10 +211,10 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   }
   // block stream claims
   if (claim && !shouldHide && !showUserBlocked && mutedUris.length && signingChannel) {
-    shouldHide = mutedUris.some((blockedUri) => blockedUri === signingChannel.permanent_url);
+    shouldHide = mutedUris.some((blockedUri) => isURIEqual(blockedUri, signingChannel.permanent_url));
   }
   if (claim && !shouldHide && !showUserBlocked && blockedUris.length && signingChannel) {
-    shouldHide = blockedUris.some((blockedUri) => blockedUri === signingChannel.permanent_url);
+    shouldHide = blockedUris.some((blockedUri) => isURIEqual(blockedUri, signingChannel.permanent_url));
   }
 
   if (!shouldHide && customShouldHide && claim) {
@@ -282,6 +295,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
         'claim-preview__wrapper--inline': type === 'inline',
         'claim-preview__wrapper--small': type === 'small',
         'claim-preview__live': live,
+        'claim-preview__active': active,
       })}
     >
       <>
@@ -319,6 +333,11 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                         <PreviewOverlayProperties uri={uri} small={type === 'small'} properties={liveProperty} />
                       </div>
                     )}
+                    {isPlayable && (
+                      <div className="claim-preview__hover-actions">
+                        <FileWatchLaterLink uri={uri} />
+                      </div>
+                    )}
                   </FileThumbnail>
                 </NavLink>
               ) : (
@@ -333,7 +352,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                 {pending ? (
                   <ClaimPreviewTitle uri={uri} />
                 ) : (
-                  <NavLink {...navLinkProps}>
+                  <NavLink aria-current={active && 'page'} {...navLinkProps}>
                     <ClaimPreviewTitle uri={uri} />
                   </NavLink>
                 )}

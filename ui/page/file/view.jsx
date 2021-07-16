@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import classnames from 'classnames';
+import { lazyImport } from 'util/lazyImport';
 import Page from 'component/page';
 import * as RENDER_MODES from 'constants/file_render_modes';
 import FileTitleSection from 'component/fileTitleSection';
@@ -12,7 +13,7 @@ import CollectionContent from 'component/collectionContentSidebar';
 import CommentsList from 'component/commentsList';
 import Empty from 'component/common/empty';
 
-const PostViewer = React.lazy(() => import('component/postViewer' /* webpackChunkName: "postViewer" */));
+const PostViewer = lazyImport(() => import('component/postViewer' /* webpackChunkName: "postViewer" */));
 
 export const PRIMARY_PLAYER_WRAPPER_CLASS = 'file-page__video-container';
 
@@ -26,7 +27,7 @@ type Props = {
   renderMode: string,
   obscureNsfw: boolean,
   isMature: boolean,
-  linkedComment: any,
+  linkedCommentId?: string,
   setPrimaryUri: (?string) => void,
   collection?: Collection,
   collectionId: string,
@@ -45,7 +46,7 @@ function FilePage(props: Props) {
     obscureNsfw,
     isMature,
     costInfo,
-    linkedComment,
+    linkedCommentId,
     setPrimaryUri,
     videoTheaterMode,
     commentsDisabled,
@@ -145,7 +146,7 @@ function FilePage(props: Props) {
             <div>
               {RENDER_MODES.FLOATING_MODES.includes(renderMode) && <FileTitleSection uri={uri} />}
               {commentsDisabled && <Empty text={__('The creator of this content has disabled comments.')} />}
-              {!commentsDisabled && <CommentsList uri={uri} linkedComment={linkedComment} />}
+              {!commentsDisabled && <CommentsList uri={uri} linkedCommentId={linkedCommentId} />}
             </div>
             {!collection && !isMarkdown && videoTheaterMode && <RecommendedContent uri={uri} />}
             {collection && !isMarkdown && videoTheaterMode && <CollectionContent id={collectionId} uri={uri} />}
@@ -156,7 +157,7 @@ function FilePage(props: Props) {
       {!collection && !isMarkdown && !videoTheaterMode && <RecommendedContent uri={uri} />}
       {isMarkdown && (
         <div className="file-page__post-comments">
-          <CommentsList uri={uri} linkedComment={linkedComment} />
+          <CommentsList uri={uri} linkedCommentId={linkedCommentId} />
         </div>
       )}
     </Page>

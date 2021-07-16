@@ -497,7 +497,7 @@ video::-internal-media-controls-overlay-cast-button {
   // --- Unhide desired components per layout ---
   &.vjs-layout-x-small {
     .vjs-playback-rate {
-      display: inherit;
+      display: flex !important;
     }
   }
 
@@ -506,7 +506,7 @@ video::-internal-media-controls-overlay-cast-button {
     .vjs-time-divider,
     .vjs-duration,
     .vjs-playback-rate {
-      display: inherit;
+      display: flex !important;
     }
   }
 
@@ -571,16 +571,16 @@ video::-internal-media-controls-overlay-cast-button {
 
 .file-render {
   .video-js {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    /*display: flex;*/
+    /*align-items: center;*/
+    /*justify-content: center;*/
   }
 
   .vjs-big-play-button {
     @extend .button--icon;
     @extend .button--play;
     border: none;
-    position: static;
+    /*position: static;*/
     z-index: 2;
 
     .vjs-icon-placeholder {

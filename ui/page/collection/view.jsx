@@ -111,7 +111,10 @@ export default function CollectionPage(props: Props) {
     <Card
       title={
         <span>
-          <Icon icon={ICONS.STACK} className="icon--margin-right" />
+          <Icon
+            icon={(collectionId === COLLECTIONS_CONSTS.WATCH_LATER_ID && ICONS.TIME) ||
+              (collectionId === COLLECTIONS_CONSTS.FAVORITES_ID && ICONS.STAR) || ICONS.STACK}
+            className="icon--margin-right" />
           {claim ? claim.value.title || claim.name : collection && collection.name}
         </span>
       }

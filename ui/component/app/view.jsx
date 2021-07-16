@@ -1,6 +1,7 @@
 // @flow
 import * as PAGES from 'constants/pages';
 import React, { useEffect, useRef, useState, useLayoutEffect } from 'react';
+import { lazyImport } from 'util/lazyImport';
 import classnames from 'classnames';
 import analytics from 'analytics';
 import { buildURI, parseURI } from 'lbry-redux';
@@ -31,29 +32,21 @@ import {
 // @endif
 import LANGUAGE_MIGRATIONS from 'constants/language-migrations';
 
-const FileDrop = React.lazy(() => import('component/fileDrop' /* webpackChunkName: "secondary" */));
-const ModalRouter = React.lazy(() => import('modal/modalRouter' /* webpackChunkName: "secondary" */));
-const Nag = React.lazy(() => import('component/common/nag' /* webpackChunkName: "secondary" */));
-const NagContinueFirstRun = React.lazy(() =>
-  import('component/nagContinueFirstRun' /* webpackChunkName: "secondary" */)
-);
-const OpenInAppLink = React.lazy(() => import('web/component/openInAppLink' /* webpackChunkName: "secondary" */));
+const FileDrop = lazyImport(() => import('component/fileDrop' /* webpackChunkName: "secondary" */));
+const ModalRouter = lazyImport(() => import('modal/modalRouter' /* webpackChunkName: "secondary" */));
+const Nag = lazyImport(() => import('component/common/nag' /* webpackChunkName: "secondary" */));
+const NagContinueFirstRun = lazyImport(() => import('component/nagContinueFirstRun' /* webpackChunkName: "secondary" */));
+const OpenInAppLink = lazyImport(() => import('web/component/openInAppLink' /* webpackChunkName: "secondary" */));
 
 // @if TARGET='web'
-const NagDataCollection = React.lazy(() =>
-  import('web/component/nag-data-collection' /* webpackChunkName: "secondary" */)
-);
-const NagDegradedPerformance = React.lazy(() =>
-  import('web/component/nag-degraded-performance' /* webpackChunkName: "secondary" */)
-);
-const NagNoUser = React.lazy(() => import('web/component/nag-no-user' /* webpackChunkName: "nag-no-user" */));
-const YoutubeWelcome = React.lazy(() =>
-  import('web/component/youtubeReferralWelcome' /* webpackChunkName: "secondary" */)
-);
+const NagDataCollection = lazyImport(() => import('web/component/nag-data-collection' /* webpackChunkName: "secondary" */));
+const NagDegradedPerformance = lazyImport(() => import('web/component/nag-degraded-performance' /* webpackChunkName: "secondary" */));
+const NagNoUser = lazyImport(() => import('web/component/nag-no-user' /* webpackChunkName: "nag-no-user" */));
+const YoutubeWelcome = lazyImport(() => import('web/component/youtubeReferralWelcome' /* webpackChunkName: "secondary" */));
 // @endif
 
-const SyncFatalError = React.lazy(() => import('component/syncFatalError' /* webpackChunkName: "syncFatalError" */));
-const Yrbl = React.lazy(() => import('component/yrbl' /* webpackChunkName: "yrbl" */));
+const SyncFatalError = lazyImport(() => import('component/syncFatalError' /* webpackChunkName: "syncFatalError" */));
+const Yrbl = lazyImport(() => import('component/yrbl' /* webpackChunkName: "yrbl" */));
 
 // ****************************************************************************
 

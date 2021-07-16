@@ -35,6 +35,7 @@
     "object-curly-spacing": 0,
     "one-var": 0,
     "prefer-promise-reject-errors": 0,
+    "promise/param-names": 0,
     "react/jsx-indent": 0,
     "react/jsx-no-comment-textnodes": 0,
     "react-hooks/exhaustive-deps": "warn",

@@ -68,7 +68,9 @@ export default function CollectionsListMine(props: Props) {
                         <span className="claim-grid__title-span">
                           {__(`${list.name}`)}
                           <div className="claim-grid__title--empty">
-                            <Icon className="icon--margin-right" icon={ICONS.STACK} />
+                            <Icon className="icon--margin-right"
+                              icon={(list.id === COLLECTIONS_CONSTS.WATCH_LATER_ID && ICONS.TIME) ||
+                                (list.id === COLLECTIONS_CONSTS.FAVORITES_ID && ICONS.STAR) || ICONS.STACK} />
                             {itemUrls.length}
                           </div>
                         </span>
