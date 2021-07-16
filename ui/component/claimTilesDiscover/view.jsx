@@ -291,9 +291,7 @@ function ClaimTilesDiscover(props: Props) {
   };
 
   const modifiedUris = uris ? uris.slice() : [];
-  const fixUris = pinUrls || [
-    'lbry://@EmperorLemon#e/this-is-what-true-fear-looks-like.#c', 'lbry://@AlisonMorrow#6/LBRY#8'
-  ];
+  const fixUris = pinUrls || ['lbry://@AlisonMorrow#6/LBRY#8'];
 
   if (pin && modifiedUris && modifiedUris.length > 2 && window.location.pathname === '/') {
     fixUris.forEach((fixUri) => {
