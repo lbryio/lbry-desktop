@@ -15,7 +15,9 @@ import { getUriForSearchTerm } from 'util/search';
 
 const DEBOUNCE_REFRESH_MS = 1000;
 
-const FEATURE_IS_READY = false;
+const LBC_MAX = 21000000;
+const LBC_MIN = 0;
+const LBC_STEP = 1.0;
 
 type Props = {
   activeChannelClaim: ChannelClaim,
@@ -297,47 +299,46 @@ export default function SettingsCreatorPage(props: Props) {
               </div>
             }
           />
-          {FEATURE_IS_READY && (
-            <Card
-              title={__('Tip')}
-              actions={
-                <>
-                  <FormField
-                    name="min_tip_amount_comment"
-                    label={
-                      <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>Minimum %lbc% tip amount for comments</I18nMessage>
-                    }
-                    helper={__(
-                      'Enabling a minimum amount to comment will force all comments, including livestreams, to have tips associated with them. This can help prevent spam.'
-                    )}
-                    className="form-field--price-amount"
-                    min={0}
-                    step="any"
-                    type="number"
-                    placeholder="1"
-                    value={minTipAmountComment}
-                    onChange={(e) => setSettings({ min_tip_amount_comment: parseFloat(e.target.value) })}
-                  />
-                  <FormField
-                    name="min_tip_amount_super_chat"
-                    label={
-                      <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>Minimum %lbc% tip amount for hyperchats</I18nMessage>
-                    }
-                    helper={__(
-                      'Enabling a minimum amount to hyperchat will force all TIPPED comments to have this value in order to be shown. This still allows regular comments to be posted.'
-                    )}
-                    className="form-field--price-amount"
-                    min={0}
-                    step="any"
-                    type="number"
-                    placeholder="1"
-                    value={minTipAmountSuperChat}
-                    onChange={(e) => setSettings({ min_tip_amount_super_chat: parseFloat(e.target.value) })}
-                  />
-                </>
-              }
-            />
-          )}
+          <Card
+            title={__('Tip')}
+            actions={
+              <>
+                <FormField
+                  name="min_tip_amount_comment"
+                  label={
+                    <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>Minimum %lbc% tip amount for comments</I18nMessage>
+                  }
+                  helper={__(
+                    'Enabling a minimum amount to comment will force all comments, including livestreams, to have tips associated with them. This can help prevent spam.'
+                  )}
+                  className="form-field--price-amount"
+                  max={LBC_MAX}
+                  min={LBC_MIN}
+                  step={LBC_STEP}
+                  type="number"
+                  placeholder="3.14"
+                  value={minTipAmountComment}
+                  onChange={(e) => setSettings({ min_tip_amount_comment: parseFloat(e.target.value) })}
+                />
+                <FormField
+                  name="min_tip_amount_super_chat"
+                  label={
+                    <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>Minimum %lbc% tip amount for hyperchats</I18nMessage>
+                  }
+                  helper={__(
+                    'Enabling a minimum amount to hyperchat will force all TIPPED comments to have this value in order to be shown. This still allows regular comments to be posted.'
+                  )}
+                  className="form-field--price-amount"
+                  min={0}
+                  step="any"
+                  type="number"
+                  placeholder="1"
+                  value={minTipAmountSuperChat}
+                  onChange={(e) => setSettings({ min_tip_amount_super_chat: parseFloat(e.target.value) })}
+                />
+              </>
+            }
+          />
           <Card
             title={__('Delegation')}
             className="card--enable-overflow"

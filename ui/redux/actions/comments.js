@@ -1458,19 +1458,19 @@ export const doFetchCreatorSettings = (channelClaimIds: Array<string> = []) => {
  */
 export const doUpdateCreatorSettings = (channelClaim: ChannelClaim, settings: PerChannelSettings) => {
   return async (dispatch: Dispatch, getState: GetState) => {
-    let channelSignature: ?{
-      signature: string,
-      signing_ts: string,
-    };
-    try {
-      channelSignature = await Lbry.channel_sign({
-        channel_id: channelClaim.claim_id,
-        hexdata: toHex(channelClaim.name),
-      });
-    } catch (e) {}
-
+    const channelSignature = await channelSignName(channelClaim.claim_id, channelClaim.name);
     if (!channelSignature) {
+      devToast(dispatch, 'doUpdateCreatorSettings: failed to sign channel name');
       return;
+    }
+
+    const BTC_SATOSHIS = 100000000;
+
+    if (settings.min_tip_amount_comment !== undefined) {
+      settings.min_tip_amount_comment *= BTC_SATOSHIS;
+    }
+    if (settings.min_tip_amount_super_chat !== undefined) {
+      settings.min_tip_amount_super_chat *= BTC_SATOSHIS;
     }
 
     return Comments.setting_update({
@@ -1480,12 +1480,7 @@ export const doUpdateCreatorSettings = (channelClaim: ChannelClaim, settings: Pe
       signing_ts: channelSignature.signing_ts,
       ...settings,
     }).catch((err) => {
-      dispatch(
-        doToast({
-          message: err.message,
-          isError: true,
-        })
-      );
+      dispatch(doToast({ message: err.message, isError: true }));
     });
   };
 };

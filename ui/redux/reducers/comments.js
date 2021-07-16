@@ -1023,9 +1023,22 @@ export default handleActions(
       // because the GUI only shows 1 channel's setting at a time, and *always*
       // re-fetches to get latest data before displaying. Either rename this to
       // 'activeChannelCreatorSettings', or append the new data properly.
+      const settingsByChannelId = Object.assign({}, action.data);
+      const BTC_SATOSHIS = 100000000;
+
+      const channelIds = Object.keys(settingsByChannelId);
+      channelIds.forEach((ci) => {
+        if (settingsByChannelId[ci].min_tip_amount_comment) {
+          settingsByChannelId[ci].min_tip_amount_comment /= BTC_SATOSHIS;
+        }
+        if (settingsByChannelId[ci].min_tip_amount_super_chat) {
+          settingsByChannelId[ci].min_tip_amount_super_chat /= BTC_SATOSHIS;
+        }
+      });
+
       return {
         ...state,
-        settingsByChannelId: action.data,
+        settingsByChannelId,
         fetchingSettings: false,
       };
     },
