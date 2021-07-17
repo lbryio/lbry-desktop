@@ -27,7 +27,7 @@ type Props = {
   scriptFailedToLoad: boolean,
   doOpenModal: (string, {}) => void,
   openModal: (string, {}) => void,
-
+  setAsConfirmingCard: () => void,
 };
 //
 // type State = {
@@ -197,6 +197,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
         });
     }, 250);
 
+
     function setupStripe() {
       // TODO: have to fix this, using so that the script is available
       setTimeout(function() {
@@ -356,6 +357,14 @@ class SettingsStripeCard extends React.Component<Props, State> {
 
 
   render() {
+    var that = this;
+    
+    function setAsConfirmingCard(){
+      that.setState({
+        currentFlowStage: 'confirmingCard',
+      })
+    }
+
     const { scriptFailedToLoad, doOpenModal, openModal } = this.props;
 
     const { currentFlowStage, customerTransactions, pageTitle, userCardDetails, paymentMethodId } = this.state;
@@ -415,7 +424,8 @@ class SettingsStripeCard extends React.Component<Props, State> {
                       e.preventDefault();
                       e.stopPropagation();
                       openModal(MODALS.CONFIRM_REMOVE_CARD, {
-                        paymentMethodId: paymentMethodId
+                        paymentMethodId: paymentMethodId,
+                        setAsConfirmingCard: setAsConfirmingCard,
                       });
                     }}
                     />
