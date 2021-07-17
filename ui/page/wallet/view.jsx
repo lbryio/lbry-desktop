@@ -3,7 +3,6 @@ import React from 'react';
 import { withRouter } from 'react-router';
 import WalletBalance from 'component/walletBalance';
 import TxoList from 'component/txoList';
-import StripeAccountConnection from 'component/stripeAccountConnection';
 import Page from 'component/page';
 import Spinner from 'component/spinner';
 import YrblWalletEmpty from 'component/yrblWalletEmpty';

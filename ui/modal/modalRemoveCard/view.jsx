@@ -1,16 +1,11 @@
 // @flow
-import React, { useState } from 'react';
+import React from 'react';
 import { Modal } from 'modal/modal';
-import { FormField } from 'component/common/form';
-import * as txnTypes from 'constants/transaction_types';
 import Card from 'component/common/card';
 import Button from 'component/button';
-import I18nMessage from 'component/i18nMessage';
-import LbcSymbol from 'component/common/lbc-symbol';
 import * as ICONS from 'constants/icons';
 import { Lbryio } from 'lbryinc';
 import { STRIPE_PUBLIC_KEY } from 'config';
-
 
 let stripeEnvironment = 'test';
 // if the key contains pk_live it's a live key
@@ -18,7 +13,6 @@ let stripeEnvironment = 'test';
 if (STRIPE_PUBLIC_KEY.indexOf('pk_live') > -1) {
   stripeEnvironment = 'live';
 }
-
 
 type Props = {
   closeModal: () => void,
@@ -34,7 +28,6 @@ type Props = {
 };
 
 export default function ModalRevokeClaim(props: Props) {
-
   var that = this;
   console.log(that);
 
@@ -44,9 +37,9 @@ export default function ModalRevokeClaim(props: Props) {
 
   console.log(uri);
 
-  console.log(setAsConfirmingCard)
+  console.log(setAsConfirmingCard);
 
-  function removeCard(){
+  function removeCard() {
     console.log(paymentMethodId);
 
     Lbryio.call(
@@ -54,19 +47,17 @@ export default function ModalRevokeClaim(props: Props) {
       'detach',
       {
         environment: stripeEnvironment,
-        payment_method_id: paymentMethodId
+        payment_method_id: paymentMethodId,
       },
       'post'
     ).then((removeCardResponse) => {
-      console.log(removeCardResponse)
+      console.log(removeCardResponse);
 
-      //TODO: add toast here
+      // TODO: add toast here
       // closeModal();
 
-      location.reload();
-
+      window.location.reload();
     });
-
   }
 
   return (
