@@ -8,8 +8,16 @@ import Button from 'component/button';
 import I18nMessage from 'component/i18nMessage';
 import LbcSymbol from 'component/common/lbc-symbol';
 import * as ICONS from 'constants/icons';
+import { Lbryio } from 'lbryinc';
+import { STRIPE_PUBLIC_KEY } from 'config';
 
-console.log('running here!');
+
+let stripeEnvironment = 'test';
+// if the key contains pk_live it's a live key
+// update the environment for the calls to the backend to indicate which environment to hit
+if (STRIPE_PUBLIC_KEY.indexOf('pk_live') > -1) {
+  stripeEnvironment = 'live';
+}
 
 
 type Props = {
@@ -20,50 +28,37 @@ type Props = {
   claim: GenericClaim,
   cb: () => void,
   doResolveUri: (string) => void,
+  uri: string,
 };
 
 export default function ModalRevokeClaim(props: Props) {
+
   var that = this;
   console.log(that);
 
   console.log(props);
 
-  const { tx, claim, closeModal, abandonTxo, abandonClaim, cb, doResolveUri } = props;
-  const [channelName, setChannelName] = useState('');
+  const { closeModal, uri, paymentMethodId } = props;
 
-  React.useEffect(() => {
-    if (claim) {
-      doResolveUri(claim.permanent_url);
-    }
-  }, [claim, doResolveUri]);
+  console.log(uri);
 
-  function getButtonLabel(type: string, isSupport: boolean) {
-    if (isSupport && type === txnTypes.SUPPORT) {
-      return __('Confirm Support Removal');
-    } else if (type === txnTypes.SUPPORT) {
-      return __('Confirm Tip Unlock');
-    } else if (type === txnTypes.CHANNEL) {
-      return __('Confirm Channel Removal');
-    }
-    return __('Confirm Removal');
-  }
+  function removeCard(){
+    console.log(paymentMethodId);
 
-  // function revokeClaim() {
-  //   tx ? abandonTxo(tx, cb) : abandonClaim(claim.txid, claim.nout, cb);
-  //   closeModal();
-  // }
+    Lbryio.call(
+      'customer',
+      'detach',
+      {
+        environment: stripeEnvironment,
+        payment_method_id: paymentMethodId
+      },
+      'post'
+    ).then((removeCardResponse) => {
+      console.log(removeCardResponse)
 
-  // const label = getButtonLabel(type, isSupport);
-
-  function removeCard(context) {
-    alert('Have to use reducx to remove card here')
-    closeModal();
-    // console.log(context);
-    // console.log('this');
-    // console.log(this);
-    // console.log(that);
-    // alert('hello!');
-    // console.log('running here')
+      //TODO: add toast here
+      closeModal();
+    });
   }
 
   return (

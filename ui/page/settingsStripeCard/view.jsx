@@ -50,6 +50,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
       customerTransactions: [],
       pageTitle: 'Add Card',
       userCardDetails: {},
+      paymentMethodId: '',
     };
   }
 
@@ -114,6 +115,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
               currentFlowStage: 'cardConfirmed',
               pageTitle: 'Tip History',
               userCardDetails: cardDetails,
+              paymentMethodId: customerStatusResponse.PaymentMethods[0].id,
             });
 
             // otherwise, prompt them to save a card
@@ -353,23 +355,10 @@ class SettingsStripeCard extends React.Component<Props, State> {
   }
 
 
-
-  abandonClaim() {
-    console.log('here');
-    console.log(this);
-
-    console.log(this.props.doOpenModal);
-    console.log(MODALS.LIQUIDATE_SUPPORTS);
-
-    this.props.doOpenModal(MODALS.LIQUIDATE_SUPPORTS, { uri: 'https://hello.com' });
-
-    // this.props.doOpenModal(MODALS.CONFIRM_REMOVE_CARD, { cardId: 'hello' });
-  }
-
   render() {
     const { scriptFailedToLoad, doOpenModal, openModal } = this.props;
 
-    const { currentFlowStage, customerTransactions, pageTitle, userCardDetails } = this.state;
+    const { currentFlowStage, customerTransactions, pageTitle, userCardDetails, paymentMethodId } = this.state;
 
     return (
       <Page backout={{ title: pageTitle, backLabel: __('Done') }} noFooter noSideNavigation>
@@ -425,7 +414,9 @@ class SettingsStripeCard extends React.Component<Props, State> {
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
-                      openModal(MODALS.CONFIRM_REMOVE_CARD, { uri: 'hello',  });
+                      openModal(MODALS.CONFIRM_REMOVE_CARD, {
+                        paymentMethodId: paymentMethodId
+                      });
                     }}
                     />
                 </>
