@@ -76,7 +76,7 @@ function CommentList(props: Props) {
   const [page, setPage] = React.useState(0);
   const totalFetchedComments = allCommentIds ? allCommentIds.length : 0;
 
-  const [noReactsOccurrence, setNoReactsOccurrence] = React.useState(0);
+  const [reactionFetchCount, setReactionFetchCount] = React.useState(0);
 
   // Display comments immediately if not fetching reactions
   // If not, wait to show comments until reactions are fetched
@@ -131,13 +131,6 @@ function CommentList(props: Props) {
 
       if (!othersReactsById || !myReactsByCommentId) {
         idsForReactionFetch = allCommentIds;
-
-        if (noReactsOccurrence > 3) {
-          // Still no reactions fetched after 3 attempts. Let's stop for now.
-          return;
-        } else {
-          setNoReactsOccurrence(noReactsOccurrence + 1);
-        }
       } else {
         idsForReactionFetch = allCommentIds.filter((commentId) => {
           const key = activeChannelId ? `${commentId}:${activeChannelId}` : commentId;
@@ -145,7 +138,9 @@ function CommentList(props: Props) {
         });
       }
 
-      if (idsForReactionFetch.length !== 0) {
+      if (idsForReactionFetch.length !== 0 && reactionFetchCount < 500) {
+        setReactionFetchCount(reactionFetchCount + 1);
+
         fetchReacts(idsForReactionFetch)
           .then(() => {
             setReadyToDisplayComments(true);
@@ -163,8 +158,8 @@ function CommentList(props: Props) {
     activeChannelId,
     fetchingChannels,
     isFetchingReacts,
-    noReactsOccurrence,
-    setNoReactsOccurrence,
+    reactionFetchCount,
+    setReactionFetchCount,
   ]);
 
   // Scroll to linked-comment
