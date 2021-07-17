@@ -61,7 +61,7 @@ export default function ModalRevokeClaim(props: Props) {
       console.log(removeCardResponse)
 
       //TODO: add toast here
-      closeModal();
+      // closeModal();
 
       location.reload();
 

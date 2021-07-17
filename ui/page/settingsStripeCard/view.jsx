@@ -343,6 +343,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
                 currentFlowStage: 'cardConfirmed',
                 pageTitle: 'Tip History',
                 userCardDetails: cardDetails,
+                paymentMethodId: customerStatusResponse.PaymentMethods[0].id,
               });
             });
 
