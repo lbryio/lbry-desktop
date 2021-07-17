@@ -1,6 +1,6 @@
 // @flow
 import type { ElementRef } from 'react';
-import { SIMPLE_SITE } from 'config';
+import { SIMPLE_SITE, STRIPE_PUBLIC_KEY } from 'config';
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
 import React from 'react';
@@ -16,7 +16,6 @@ import CreditAmount from 'component/common/credit-amount';
 import ChannelThumbnail from 'component/channelThumbnail';
 import UriIndicator from 'component/uriIndicator';
 import Empty from 'component/common/empty';
-import { STRIPE_PUBLIC_KEY } from 'config';
 import { Lbryio } from 'lbryinc';
 
 let stripeEnvironment = 'test';
@@ -228,7 +227,7 @@ export function CommentCreate(props: Props) {
 
           // handleCreateComment(null);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           var displayError = 'Sorry, there was an error in processing your payment!';
 
           if (error.message !== 'payment intent failed to confirm') {
@@ -305,11 +304,15 @@ export function CommentCreate(props: Props) {
   }
 
   if (isReviewingSupportComment && activeChannelClaim) {
-
     return (
       <div className="comment__create">
         <div className="comment__sc-preview">
-          <CreditAmount className="comment__scpreview-amount" isFiat={activeTab === TAB_FIAT} amount={tipAmount} size={activeTab === TAB_LBC ? 18 : 2} />
+          <CreditAmount
+            className="comment__scpreview-amount"
+            isFiat={activeTab === TAB_FIAT}
+            amount={tipAmount}
+            size={activeTab === TAB_LBC ? 18 : 2}
+          />
 
           <ChannelThumbnail xsmall uri={activeChannelClaim.canonical_url} />
           <div>
@@ -371,7 +374,15 @@ export function CommentCreate(props: Props) {
         textAreaMaxLength={livestream ? FF_MAX_CHARS_IN_LIVESTREAM_COMMENT : FF_MAX_CHARS_IN_COMMENT}
       />
       {/* TODO: the tip validation is done in selector */}
-      {isSupportComment && <WalletTipAmountSelector onTipErrorChange={setTipError} claim={claim} activeTab={activeTab} amount={tipAmount} onChange={(amount) => setTipAmount(amount)} />}
+      {isSupportComment && (
+        <WalletTipAmountSelector
+          onTipErrorChange={setTipError}
+          claim={claim}
+          activeTab={activeTab}
+          amount={tipAmount}
+          onChange={(amount) => setTipAmount(amount)}
+        />
+      )}
       <div className="section__actions section__actions--no-margin">
         {isSupportComment ? (
           <>
@@ -406,16 +417,28 @@ export function CommentCreate(props: Props) {
               requiresAuth={IS_WEB}
             />
             {!claimIsMine && (
-              <Button disabled={disabled} button="alt" className="thatButton" icon={ICONS.LBC} onClick={() => {
-                setIsSupportComment(true);
-                setActiveTab(TAB_LBC);
-              }} />
+              <Button
+                disabled={disabled}
+                button="alt"
+                className="thatButton"
+                icon={ICONS.LBC}
+                onClick={() => {
+                  setIsSupportComment(true);
+                  setActiveTab(TAB_LBC);
+                }}
+              />
             )}
             {!claimIsMine && (
-              <Button disabled={disabled} button="alt" className="thisButton" icon={ICONS.FINANCE} onClick={() => {
-                setIsSupportComment(true);
-                setActiveTab(TAB_FIAT);
-              }} />
+              <Button
+                disabled={disabled}
+                button="alt"
+                className="thisButton"
+                icon={ICONS.FINANCE}
+                onClick={() => {
+                  setIsSupportComment(true);
+                  setActiveTab(TAB_FIAT);
+                }}
+              />
             )}
             {isReply && (
               <Button
