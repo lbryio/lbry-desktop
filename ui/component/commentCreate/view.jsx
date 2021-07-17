@@ -192,11 +192,13 @@ export function CommentCreate(props: Props) {
 
       const sourceClaimId = claim.claim_id;
 
+      var roundedAmount = Math.round(tipAmount * 100) / 100;
+
       Lbryio.call(
         'customer',
         'tip',
         {
-          amount: 100 * Math.round(tipAmount * 100) / 100, // convert from dollars to cents
+          amount: 100 * roundedAmount, // convert from dollars to cents
           creator_channel_name: tipChannelName, // creator_channel_name
           creator_channel_claim_id: channelClaimId,
           tipper_channel_name: activeChannelName,
@@ -220,6 +222,14 @@ export function CommentCreate(props: Props) {
           setIsSupportComment(false);
           setCommentFailure(false);
           setIsSubmitting(false);
+
+          doToast({
+            message: __("You sent $%formattedAmount% as a tip to %tipChannelName%, I'm sure they appreciate it!", {
+              formattedAmount: roundedAmount.toFixed(2), // force show decimal places
+              tipChannelName,
+            }),
+          });
+
           // handleCreateComment(null);
         })
         .catch(function(error) {
