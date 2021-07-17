@@ -100,7 +100,7 @@ function CommentsReplies(props: Props) {
                       />
                     );
                   })}
-                {totalReplies < numDirectReplies && (
+                {!isFetchingByParentId[parentId] && totalReplies < numDirectReplies && (
                   <li className="comment comment--reply">
                     <div className="comment__content">
                       <div className="comment__thumbnail-wrapper">
