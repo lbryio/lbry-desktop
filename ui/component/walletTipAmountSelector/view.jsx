@@ -185,7 +185,7 @@ function WalletTipAmountSelector(props: Props) {
           label={__('Custom')}
           onClick={() => setUseCustomTip(true)}
         />
-        {DEFAULT_TIP_AMOUNTS.some((val) => val > balance) && (
+        {activeTab === TAB_LBC && DEFAULT_TIP_AMOUNTS.some((val) => val > balance) && (
           <Button
             button="secondary"
             className="button-toggle-group-action"
