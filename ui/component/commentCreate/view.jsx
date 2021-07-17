@@ -95,10 +95,6 @@ export function CommentCreate(props: Props) {
 
   const [tipError, setTipError] = React.useState();
 
-  // React.useEffect(() => {
-  //   setTipError('yes');
-  // }, []);
-
   function handleCommentChange(event) {
     let commentValue;
     if (isReply) {
@@ -410,19 +406,17 @@ export function CommentCreate(props: Props) {
               }
               requiresAuth={IS_WEB}
             />
-            {/* TODO: add here */}
+            {/* lbc and cash icon to click on to do tip flow */}
             {!claimIsMine && (
-              <Button disabled={disabled} button="alt" className="thatButton" icon={ICONS.LBC} onClick={() => {
+              <Button disabled={disabled} button="alt" icon={ICONS.LBC} onClick={() => {
                 setIsSupportComment(true);
                 setActiveTab(TAB_LBC);
-                // alert('hitting!');
               }} />
             )}
             {!claimIsMine && (
-              <Button disabled={disabled} button="alt" className="thisButton" icon={ICONS.FINANCE} onClick={() => {
+              <Button disabled={disabled} button="alt" icon={ICONS.FINANCE} onClick={() => {
                 setIsSupportComment(true);
                 setActiveTab(TAB_FIAT);
-                // alert('hitting!');
               }} />
             )}
             {isReply && (
