@@ -29,6 +29,8 @@ type Props = {
   cb: () => void,
   doResolveUri: (string) => void,
   uri: string,
+  paymentMethodId: string,
+  setAsConfirmingCard: () => void,
 };
 
 export default function ModalRevokeClaim(props: Props) {
@@ -38,9 +40,11 @@ export default function ModalRevokeClaim(props: Props) {
 
   console.log(props);
 
-  const { closeModal, uri, paymentMethodId } = props;
+  const { closeModal, uri, paymentMethodId, setAsConfirmingCard } = props;
 
   console.log(uri);
+
+  console.log(setAsConfirmingCard)
 
   function removeCard(){
     console.log(paymentMethodId);
@@ -58,11 +62,15 @@ export default function ModalRevokeClaim(props: Props) {
 
       //TODO: add toast here
       closeModal();
+
+      location.reload();
+
     });
+
   }
 
   return (
-    <Modal isOpen contentLabel={'hello'} type="card" onAborted={closeModal}>
+    <Modal ariaHideApp={false} isOpen contentLabel={'hello'} type="card" onAborted={closeModal}>
       <Card
         title={'Confirm Remove Card'}
         // body={getMsgBody(type, isSupport, name)}
