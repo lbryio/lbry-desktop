@@ -18,7 +18,7 @@ type Props = {
   size?: number,
   superChat?: boolean,
   superChatLight?: boolean,
-  isFiat?: boolean
+  isFiat?: boolean,
 };
 
 class CreditAmount extends React.PureComponent<Props> {
@@ -75,7 +75,7 @@ class CreditAmount extends React.PureComponent<Props> {
       if (showLBC && !isFiat) {
         amountText = <LbcSymbol postfix={amountText} size={size} />;
       } else if (showLBC && isFiat) {
-        amountText = <p> ${(Math.round(amountText * 100) / 100).toFixed(2)}</p>;
+        amountText = <p> ${(Math.round(Number(amountText) * 100) / 100).toFixed(2)}</p>;
       }
 
       if (fee) {

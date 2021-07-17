@@ -8,6 +8,6 @@ const select = (state) => ({
   user: selectUser(state),
 });
 
-const perform = (dispatch) => ({});
+// const perform = (dispatch) => ({});
 
-export default withRouter(connect(select, perform)(StripeAccountConnection));
+export default withRouter(connect(select)(StripeAccountConnection));

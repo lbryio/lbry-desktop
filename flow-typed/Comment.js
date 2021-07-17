@@ -14,6 +14,7 @@ declare type Comment = {
   is_pinned: boolean,
   support_amount: number,
   replies: number, // number of direct replies (i.e. excluding nested replies).
+  is_fiat?: boolean,
 };
 
 declare type PerChannelSettings = {
