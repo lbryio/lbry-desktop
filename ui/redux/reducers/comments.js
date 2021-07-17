@@ -143,10 +143,24 @@ export default handleActions(
       isFetchingReacts: true,
     }),
 
-    [ACTIONS.COMMENT_REACTION_LIST_FAILED]: (state: CommentsState, action: any) => ({
-      ...state,
-      isFetchingReacts: false,
-    }),
+    [ACTIONS.COMMENT_REACTION_LIST_FAILED]: (state: CommentsState, action: any) => {
+      const { channelId, commentIds } = action.data;
+      const myReactsByCommentId = Object.assign({}, state.myReactsByCommentId);
+      const othersReactsByCommentId = Object.assign({}, state.othersReactsByCommentId);
+
+      commentIds.forEach((commentId) => {
+        const key = channelId ? `${commentId}:${channelId}` : commentId;
+        myReactsByCommentId[key] = [];
+        othersReactsByCommentId[key] = {};
+      });
+
+      return {
+        ...state,
+        isFetchingReacts: false,
+        myReactsByCommentId,
+        othersReactsByCommentId,
+      };
+    },
 
     [ACTIONS.COMMENT_REACT_FAILED]: (state: CommentsState, action: any): CommentsState => {
       const commentReaction = action.data; // String: reactionHash + type
@@ -182,28 +196,24 @@ export default handleActions(
     },
 
     [ACTIONS.COMMENT_REACTION_LIST_COMPLETED]: (state: CommentsState, action: any): CommentsState => {
-      const { myReactions, othersReactions, channelId } = action.data;
+      const { myReactions, othersReactions, channelId, commentIds } = action.data;
       const myReacts = Object.assign({}, state.myReactsByCommentId);
       const othersReacts = Object.assign({}, state.othersReactsByCommentId);
 
-      if (myReactions) {
-        Object.entries(myReactions).forEach(([commentId, reactions]) => {
-          const key = channelId ? `${commentId}:${channelId}` : commentId;
-          myReacts[key] = Object.entries(reactions).reduce((acc, [name, count]) => {
-            if (count === 1) {
-              acc.push(name);
-            }
-            return acc;
-          }, []);
-        });
-      }
+      commentIds.forEach((commentId) => {
+        const key = channelId ? `${commentId}:${channelId}` : commentId;
+        const mine = myReactions ? myReactions[commentId] : {};
+        const others = othersReactions ? othersReactions[commentId] : {};
 
-      if (othersReactions) {
-        Object.entries(othersReactions).forEach(([commentId, reactions]) => {
-          const key = channelId ? `${commentId}:${channelId}` : commentId;
-          othersReacts[key] = reactions;
-        });
-      }
+        myReacts[key] = Object.entries(mine).reduce((acc, [name, count]) => {
+          if (count === 1) {
+            acc.push(name);
+          }
+          return acc;
+        }, []);
+
+        othersReacts[key] = others;
+      });
 
       return {
         ...state,
