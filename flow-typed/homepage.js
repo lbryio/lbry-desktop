@@ -17,6 +17,7 @@ declare type RowDataItem = {
   help?: any,
   icon?: string,
   extra?: any,
+  pinUrls?: Array<string>,
   options?: {
     channelIds?: Array<string>,
     limitClaimsPerChannel?: number,

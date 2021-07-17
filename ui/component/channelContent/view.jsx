@@ -1,5 +1,5 @@
 // @flow
-import { SHOW_ADS, ENABLE_NO_SOURCE_CLAIMS } from 'config';
+import { SHOW_ADS, ENABLE_NO_SOURCE_CLAIMS, SIMPLE_SITE } from 'config';
 import * as CS from 'constants/claim_search';
 import * as ICONS from 'constants/icons';
 import React, { Fragment } from 'react';
@@ -144,7 +144,8 @@ function ChannelContent(props: Props) {
         hideAdvancedFilter={!showFilters}
         tileLayout={tileLayout}
         uris={searchResults}
-        channelIds={[claim.claim_id]}
+        streamType={SIMPLE_SITE ? CS.CONTENT_ALL : undefined}
+        channelIds={[claimId]}
         claimType={claimType}
         feeAmount={CS.FEE_AMOUNT_ANY}
         defaultOrderBy={CS.ORDER_BY_NEW}
