@@ -158,7 +158,7 @@ function WalletSendTip(props: Props) {
     explainerText = __('This refundable boost will improve the discoverability of this content while active. ');
   } else if (activeTab === TAB_FIAT) {
     iconToUse = ICONS.FINANCE;
-    explainerText = __('Show this channel your appreciation by sending a donation of cash in USD. ');
+    explainerText = __('Show this channel your appreciation by sending a donation in USD. ');
     // if (!hasCardSaved) {
     //   explainerText += __('You must add a card to use this functionality.');
     // }

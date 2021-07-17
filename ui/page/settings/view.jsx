@@ -196,7 +196,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
     const startHours = ['18', '19', '20', '21'];
     const endHours = ['5', '6', '7', '8'];
-    
+
     return (
       <Page
         noFooter
@@ -209,13 +209,14 @@ class SettingsPage extends React.PureComponent<Props, State> {
       >
         {/* @if TARGET='web' */}
         {user && user.fiat_enabled  && <Card
-          title={__('Add payout method to receive tips from viewers')}
+          title={__('Bank Accounts')}
+          subtitle={__('Connect a bank account to receive tips and compensation in your local currency')}
           actions={
             <div className="section__actions">
               <Button
                 button="secondary"
-                label={__('Manage Account Connection')}
-                icon={ICONS.FINANCE}
+                label={__('Manage')}
+                icon={ICONS.SETTINGS}
                 navigate={`/$/${PAGES.SETTINGS_STRIPE_ACCOUNT}`}
               />
             </div>
@@ -225,13 +226,14 @@ class SettingsPage extends React.PureComponent<Props, State> {
 
         {/* @if TARGET='web' */}
         <Card
-          title={__('Add card to tip creators in USD')}
+          title={__('Payment Methods')}
+          subtitle={__('Add a credit card to tip creators in their local currency')}
           actions={
             <div className="section__actions">
               <Button
                 button="secondary"
-                label={__('Manage Card')}
-                icon={ICONS.WALLET}
+                label={__('Manage')}
+                icon={ICONS.SETTINGS}
                 navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`}
               />
             </div>
