@@ -115,6 +115,7 @@ type Props = {
   liveLivestreamsFirst?: boolean,
   livestreamMap?: { [string]: any },
   pin?: boolean,
+  pinUrls?: Array<string>,
   showNoSourceClaims?: boolean,
 };
 
@@ -146,7 +147,8 @@ function ClaimTilesDiscover(props: Props) {
     mutedUris,
     liveLivestreamsFirst,
     livestreamMap,
-    // pin, // let's pin from /web folder
+    pin, // let's pin from /web folder
+    pinUrls,
     prefixUris,
     showNoSourceClaims,
   } = props;
@@ -288,10 +290,24 @@ function ClaimTilesDiscover(props: Props) {
     return undefined;
   };
 
+  const modifiedUris = uris ? uris.slice() : [];
+  const fixUris = pinUrls || ['lbry://@AlisonMorrow#6/LBRY#8'];
+
+  if (pin && modifiedUris && modifiedUris.length > 2 && window.location.pathname === '/') {
+    fixUris.forEach((fixUri) => {
+      if (modifiedUris.indexOf(fixUri) !== -1) {
+        modifiedUris.splice(modifiedUris.indexOf(fixUri), 1);
+      } else {
+        modifiedUris.pop();
+      }
+    });
+    modifiedUris.splice(2, 0, ...fixUris);
+  }
+
   return (
     <ul className="claim-grid">
-      {uris && uris.length
-        ? uris.map((uri, index) => (
+      {modifiedUris && modifiedUris.length
+        ? modifiedUris.map((uri, index) => (
             <ClaimPreviewTile key={uri} uri={uri} properties={renderProperties} live={resolveLive(index)} />
           ))
         : new Array(pageSize)

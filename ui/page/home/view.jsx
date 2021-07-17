@@ -45,7 +45,7 @@ function HomePage(props: Props) {
     showNsfw
   );
 
-  function getRowElements(title, route, link, icon, help, options, index) {
+  function getRowElements(title, route, link, icon, help, options, index, pinUrls) {
     const tilePlaceholder = (
       <ul className="claim-grid">
         {new Array(options.pageSize || 8).fill(1).map((x, i) => (
@@ -60,6 +60,7 @@ function HomePage(props: Props) {
         livestreamMap={livestreamMap}
         showNoSourceClaims={ENABLE_NO_SOURCE_CLAIMS}
         hasSource
+        pinUrls={pinUrls}
         pin={route === `/$/${PAGES.GENERAL}`} // use pinUrls here
       />
     );
@@ -140,9 +141,9 @@ function HomePage(props: Props) {
           </p>
         </div>
       )}
-      {rowData.map(({ title, route, link, icon, help, options = {} }, index) => {
+      {rowData.map(({ title, route, link, icon, help, pinUrls, options = {} }, index) => {
         // add pins here
-        return getRowElements(title, route, link, icon, help, options, index);
+        return getRowElements(title, route, link, icon, help, options, index, pinUrls);
       })}
       {/* @if TARGET='web' */}
       <Pixel type={'retargeting'} />
