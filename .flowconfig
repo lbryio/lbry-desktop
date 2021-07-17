@@ -1,6 +1,7 @@
 [ignore]
 .*\.typeface\.json
 .*/node_modules/findup/.*
+.*/node_modules/react-plastic/.*
 
 
 [include]
