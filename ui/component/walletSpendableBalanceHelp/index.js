@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { selectBalance } from 'lbry-redux';
 import WalletSpendableBalanceHelp from './view';
 
-const select = (state, props) => ({
+const select = (state) => ({
   balance: selectBalance(state),
 });
 

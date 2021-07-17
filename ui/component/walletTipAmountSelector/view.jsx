@@ -33,10 +33,11 @@ type Props = {
   claim: StreamClaim,
   uri: string,
   onTipErrorChange: (string) => void,
+  activeTab: string,
 };
 
 function WalletTipAmountSelector(props: Props) {
-  const { balance, amount, onChange, activeTab, isAuthenticated, claim, uri, onTipErrorChange } = props;
+  const { balance, amount, onChange, activeTab, claim, onTipErrorChange } = props;
   const [useCustomTip, setUseCustomTip] = usePersistedState('comment-support:useCustomTip', false);
   const [tipError, setTipError] = React.useState();
 
@@ -106,19 +107,18 @@ function WalletTipAmountSelector(props: Props) {
           setCanReceiveFiatTip(true);
         }
       })
-      .catch(function(error) {
+      .catch(function (error) {
         // console.log(error);
       });
   }, []);
 
   React.useEffect(() => {
-
     // setHasSavedCard(false);
     // setCanReceiveFiatTip(true);
 
     const regexp = RegExp(/^(\d*([.]\d{0,8})?)$/);
     const validTipInput = regexp.test(String(amount));
-    let tipError;
+    let tipError = '';
 
     if (amount === 0) {
       tipError = __('Amount must be a positive number');
@@ -196,49 +196,52 @@ function WalletTipAmountSelector(props: Props) {
         )}
       </div>
 
-      {useCustomTip && activeTab === TAB_FIAT && !hasCardSaved &&
-      <>
-        <div className="help">
-          <span className="help--spendable">
-            <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card ')} button="link" /> To {__(' Tip Creators')}
-          </span>
-        </div>
-      </>
-      }
+      {useCustomTip && activeTab === TAB_FIAT && !hasCardSaved && (
+        <>
+          <div className="help">
+            <span className="help--spendable">
+              <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card ')} button="link" /> To{' '}
+              {__(' Tip Creators')}
+            </span>
+          </div>
+        </>
+      )}
 
       {/* has card saved but cant creator cant receive tips */}
-      {useCustomTip && activeTab === TAB_FIAT && hasCardSaved && !canReceiveFiatTip &&
-      <>
-        <div className="help">
-          <span className="help--spendable">Only select creators can receive tips at this time</span>
-        </div>
-      </>
-      }
+      {useCustomTip && activeTab === TAB_FIAT && hasCardSaved && !canReceiveFiatTip && (
+        <>
+          <div className="help">
+            <span className="help--spendable">Only select creators can receive tips at this time</span>
+          </div>
+        </>
+      )}
 
       {/* has card saved but cant creator cant receive tips */}
-      {useCustomTip && activeTab === TAB_FIAT && hasCardSaved && canReceiveFiatTip &&
-      <>
-        <div className="help">
-          <span className="help--spendable">Send a tip directly from your attached card</span>
-        </div>
-      </>
-      }
+      {useCustomTip && activeTab === TAB_FIAT && hasCardSaved && canReceiveFiatTip && (
+        <>
+          <div className="help">
+            <span className="help--spendable">Send a tip directly from your attached card</span>
+          </div>
+        </>
+      )}
 
       {useCustomTip && (
         <div className="comment__tip-input">
           <FormField
             autoFocus
             name="tip-input"
-            label={ activeTab === TAB_LBC ?
-              <React.Fragment>
-                {__('Custom support amount')}{' '}
-                <I18nMessage tokens={{ lbc_balance: <CreditAmount precision={4} amount={balance} /> }}>
-                  (%lbc_balance% available)
-                </I18nMessage>
-              </React.Fragment>
-              // TODO: add conditional based on hasSavedCard
-              : <>
-                </>
+            label={
+              activeTab === TAB_LBC ? (
+                <React.Fragment>
+                  {__('Custom support amount')}{' '}
+                  <I18nMessage tokens={{ lbc_balance: <CreditAmount precision={4} amount={balance} /> }}>
+                    (%lbc_balance% available)
+                  </I18nMessage>
+                </React.Fragment>
+              ) : (
+                // TODO: add conditional based on hasSavedCard
+                <></>
+              )
 
               // <>
               //   <div className="">
@@ -258,38 +261,37 @@ function WalletTipAmountSelector(props: Props) {
         </div>
       )}
 
-      {/*// TODO: add conditional based on hasSavedCard*/}
       {/* lbc tab */}
       {activeTab === TAB_LBC && <WalletSpendableBalanceHelp />}
       {/* fiat button but no card saved */}
-      {!useCustomTip && activeTab === TAB_FIAT && !hasCardSaved &&
-      <>
-        <div className="help">
-          <span className="help--spendable">
-            <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card ')} button="link" /> To {__(' Tip Creators')}
-          </span>
-        </div>
-      </>
-      }
+      {!useCustomTip && activeTab === TAB_FIAT && !hasCardSaved && (
+        <>
+          <div className="help">
+            <span className="help--spendable">
+              <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card ')} button="link" /> To{' '}
+              {__(' Tip Creators')}
+            </span>
+          </div>
+        </>
+      )}
 
       {/* has card saved but cant creator cant receive tips */}
-      {!useCustomTip && activeTab === TAB_FIAT && hasCardSaved && !canReceiveFiatTip &&
-      <>
-        <div className="help">
-          <span className="help--spendable">Only select creators can receive tips at this time</span>
-        </div>
-      </>
-      }
+      {!useCustomTip && activeTab === TAB_FIAT && hasCardSaved && !canReceiveFiatTip && (
+        <>
+          <div className="help">
+            <span className="help--spendable">Only select creators can receive tips at this time</span>
+          </div>
+        </>
+      )}
 
       {/* has card saved but cant creator cant receive tips */}
-      {!useCustomTip && activeTab === TAB_FIAT && hasCardSaved && canReceiveFiatTip &&
-      <>
-        <div className="help">
-          <span className="help--spendable">Send a tip directly from your attached card</span>
-        </div>
-      </>
-      }
-
+      {!useCustomTip && activeTab === TAB_FIAT && hasCardSaved && canReceiveFiatTip && (
+        <>
+          <div className="help">
+            <span className="help--spendable">Send a tip directly from your attached card</span>
+          </div>
+        </>
+      )}
     </>
   );
 }
