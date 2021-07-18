@@ -147,7 +147,7 @@ function ClaimTilesDiscover(props: Props) {
     mutedUris,
     liveLivestreamsFirst,
     livestreamMap,
-    pin, // let's pin from /web folder
+    pin,
     pinUrls,
     prefixUris,
     showNoSourceClaims,
