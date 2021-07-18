@@ -221,13 +221,6 @@ export function doCommentReactList(commentIds: Array<string>) {
     if (activeChannelClaim) {
       const signatureData = await channelSignName(activeChannelClaim.claim_id, activeChannelClaim.name);
       if (!signatureData) {
-        dispatch({
-          type: ACTIONS.COMMENT_REACTION_LIST_FAILED,
-          data: {
-            channelId: activeChannelClaim ? activeChannelClaim.claim_id : undefined,
-            commentIds,
-          },
-        });
         return dispatch(doToast({ isError: true, message: __('Unable to verify your channel. Please try again.') }));
       }
 
@@ -243,10 +236,9 @@ export function doCommentReactList(commentIds: Array<string>) {
         dispatch({
           type: ACTIONS.COMMENT_REACTION_LIST_COMPLETED,
           data: {
-            myReactions,
+            myReactions: myReactions || {},
             othersReactions,
             channelId: activeChannelClaim ? activeChannelClaim.claim_id : undefined,
-            commentIds,
           },
         });
       })
@@ -254,10 +246,7 @@ export function doCommentReactList(commentIds: Array<string>) {
         devToast(dispatch, `doCommentReactList: ${error.message}`);
         dispatch({
           type: ACTIONS.COMMENT_REACTION_LIST_FAILED,
-          data: {
-            channelId: activeChannelClaim ? activeChannelClaim.claim_id : undefined,
-            commentIds,
-          },
+          data: error,
         });
       });
   };
