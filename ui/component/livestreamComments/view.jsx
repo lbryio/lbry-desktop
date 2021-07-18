@@ -159,7 +159,7 @@ export default function LivestreamComments(props: Props) {
           </div>
         )}
         <div ref={commentsRef} className="livestream__comments-wrapper">
-          {viewMode === VIEW_MODE_CHAT && superChatsTotalAmount > 0 && (
+          {viewMode === VIEW_MODE_CHAT && superChatsTotalAmount > 0 && superChats && (
             <div className="livestream-superchats__wrapper">
               <div className="livestream-superchats__inner">
                 {superChats.map((superChat: Comment) => (

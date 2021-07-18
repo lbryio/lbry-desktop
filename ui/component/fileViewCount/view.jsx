@@ -37,12 +37,12 @@ function FileViewCount(props: Props) {
 
   return (
     <span className="media__subtitle--centered">
-      {isLive &&
+      {livestream &&
         __('%viewer_count% currently %viewer_state%', {
           viewer_count: activeViewers === undefined ? '...' : activeViewers,
           viewer_state: isLive ? __('watching') : __('waiting'),
         })}
-      {!isLive &&
+      {!livestream &&
         activeViewers === undefined &&
         (viewCount !== 1 ? __('%view_count% views', { view_count: formattedViewCount }) : __('1 view'))}
       {!SIMPLE_SITE && <HelpLink href="https://lbry.com/faq/views" />}
