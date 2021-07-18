@@ -34,25 +34,34 @@ type Props = {
   uri: string,
   onTipErrorChange: (string) => void,
   activeTab: string,
+  shouldDisableReviewButton: (string) => void
 };
 
 function WalletTipAmountSelector(props: Props) {
-  const { balance, amount, onChange, activeTab, claim, onTipErrorChange } = props;
+  const { balance, amount, onChange, activeTab, claim, onTipErrorChange, shouldDisableReviewButton } = props;
   const [useCustomTip, setUseCustomTip] = usePersistedState('comment-support:useCustomTip', false);
   const [tipError, setTipError] = React.useState();
 
   const [canReceiveFiatTip, setCanReceiveFiatTip] = React.useState(); // dont persist because it needs to be calc'd per creator
   const [hasCardSaved, setHasSavedCard] = usePersistedState('comment-support:hasCardSaved', false);
 
+  /**
+   * whether tip amount selection/review functionality should be disabled
+   * @param [amount] LBC amount (optional)
+   * @returns {boolean}
+   */
   function shouldDisableAmountSelector(amount) {
-    return (
-      (amount > balance && activeTab !== TAB_FIAT) || (activeTab === TAB_FIAT && (!hasCardSaved || !canReceiveFiatTip))
-    );
+
+    const shouldDisable =
+      // if it's LBC but the balance isn't enough
+      (amount > balance && activeTab !== TAB_FIAT) ||
+      // if it's fiat but there's no card saved OR the creator can't receive fiat tips
+      (activeTab === TAB_FIAT && (!hasCardSaved || !canReceiveFiatTip));
+
+    shouldDisableReviewButton(shouldDisable);
+
+    return shouldDisable;
   }
-
-  console.log(activeTab);
-
-  console.log(claim);
 
   // setup variables for tip API
   let channelClaimId, tipChannelName;
@@ -82,9 +91,6 @@ function WalletTipAmountSelector(props: Props) {
         customerStatusResponse.Customer.invoice_settings &&
         customerStatusResponse.Customer.invoice_settings.default_payment_method &&
         customerStatusResponse.Customer.invoice_settings.default_payment_method.id;
-
-      console.log('here');
-      console.log(defaultPaymentMethodId);
 
       setHasSavedCard(Boolean(defaultPaymentMethodId));
     });
@@ -230,6 +236,7 @@ function WalletTipAmountSelector(props: Props) {
           <FormField
             autoFocus
             name="tip-input"
+            disabled={shouldDisableAmountSelector()}
             label={
               activeTab === TAB_LBC ? (
                 <React.Fragment>
@@ -239,7 +246,6 @@ function WalletTipAmountSelector(props: Props) {
                   </I18nMessage>
                 </React.Fragment>
               ) : (
-                // TODO: add conditional based on hasSavedCard
                 <></>
               )
 
