@@ -34,7 +34,7 @@ type Props = {
   uri: string,
   onTipErrorChange: (string) => void,
   activeTab: string,
-  shouldDisableReviewButton: (string) => void
+  shouldDisableReviewButton: (boolean) => void
 };
 
 function WalletTipAmountSelector(props: Props) {
@@ -45,23 +45,21 @@ function WalletTipAmountSelector(props: Props) {
   const [canReceiveFiatTip, setCanReceiveFiatTip] = React.useState(); // dont persist because it needs to be calc'd per creator
   const [hasCardSaved, setHasSavedCard] = usePersistedState('comment-support:hasCardSaved', false);
 
+  // if it's fiat but there's no card saved OR the creator can't receive fiat tips
+  const shouldDisableFiatSelectors = (activeTab === TAB_FIAT && (!hasCardSaved || !canReceiveFiatTip));
+
   /**
    * whether tip amount selection/review functionality should be disabled
    * @param [amount] LBC amount (optional)
    * @returns {boolean}
    */
   function shouldDisableAmountSelector(amount) {
-
-    const shouldDisable =
-      // if it's LBC but the balance isn't enough
-      (amount > balance && activeTab !== TAB_FIAT) ||
-      // if it's fiat but there's no card saved OR the creator can't receive fiat tips
-      (activeTab === TAB_FIAT && (!hasCardSaved || !canReceiveFiatTip));
-
-    shouldDisableReviewButton(shouldDisable);
-
-    return shouldDisable;
+    // if it's LBC but the balance isn't enough, or fiat conditions met
+    // $FlowFixMe
+    return (amount > balance && activeTab !== TAB_FIAT) || shouldDisableFiatSelectors;
   }
+
+  shouldDisableReviewButton(shouldDisableFiatSelectors);
 
   // setup variables for tip API
   let channelClaimId, tipChannelName;
