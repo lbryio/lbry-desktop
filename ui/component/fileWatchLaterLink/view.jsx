@@ -14,12 +14,7 @@ type Props = {
 };
 
 function FileWatchLaterLink(props: Props) {
-  const {
-    claim,
-    hasClaimInWatchLater,
-    doToast,
-    doCollectionEdit,
-  } = props;
+  const { claim, hasClaimInWatchLater, doToast, doCollectionEdit } = props;
   const buttonRef = useRef();
   let isHovering = useHover(buttonRef);
 
@@ -30,9 +25,7 @@ function FileWatchLaterLink(props: Props) {
   function handleWatchLater(e) {
     e.preventDefault();
     doToast({
-      message: __('Item %action% Watch Later', {
-        action: hasClaimInWatchLater ? __('removed from') : __('added to'),
-      }),
+      message: hasClaimInWatchLater ? __('Item removed from Watch Later') : __('Item added to Watch Later'),
       linkText: !hasClaimInWatchLater && __('See All'),
       linkTarget: !hasClaimInWatchLater && '/list/watchlater',
     });
@@ -53,7 +46,10 @@ function FileWatchLaterLink(props: Props) {
       title={title}
       label={label}
       className="button--file-action"
-      icon={(hasClaimInWatchLater && (isHovering ? ICONS.REMOVE : ICONS.COMPLETED)) || (isHovering ? ICONS.COMPLETED : ICONS.TIME)}
+      icon={
+        (hasClaimInWatchLater && (isHovering ? ICONS.REMOVE : ICONS.COMPLETED)) ||
+        (isHovering ? ICONS.COMPLETED : ICONS.TIME)
+      }
       onClick={(e) => handleWatchLater(e)}
     />
   );

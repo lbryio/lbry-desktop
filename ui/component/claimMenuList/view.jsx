@@ -234,11 +234,9 @@ function ClaimMenuList(props: Props) {
                   className="comment__menu-option"
                   onSelect={() => {
                     doToast({
-                      message: __('Item %action% Watch Later', {
-                        action: hasClaimInWatchLater
-                          ? __('removed from --[substring for "Item %action% Watch Later"]--')
-                          : __('added to --[substring for "Item %action% Watch Later"]--'),
-                      }),
+                      message: hasClaimInWatchLater
+                        ? __('Item removed from Watch Later')
+                        : __('Item added to Watch Later'),
                     });
                     doCollectionEdit(COLLECTIONS_CONSTS.WATCH_LATER_ID, {
                       claims: [contentClaim],
@@ -259,9 +257,9 @@ function ClaimMenuList(props: Props) {
                   className="comment__menu-option"
                   onSelect={() => {
                     doToast({
-                      message: __(`Item %action% ${lastCollectionName}`, {
-                        action: hasClaimInCustom ? __('removed from') : __('added to'),
-                      }),
+                      message: hasClaimInCustom
+                        ? __('Item removed from %lastCollectionName%', { lastCollectionName })
+                        : __('Item added to %lastCollectionName%', { lastCollectionName }),
                     });
                     doCollectionEdit(COLLECTIONS_CONSTS.FAVORITES_ID, {
                       claims: [contentClaim],
@@ -272,7 +270,9 @@ function ClaimMenuList(props: Props) {
                 >
                   <div className="menu__link">
                     <Icon aria-hidden icon={hasClaimInCustom ? ICONS.DELETE : ICONS.STAR} />
-                    {hasClaimInCustom ? __(`In ${lastCollectionName}`) : __(`${lastCollectionName}`)}
+                    {hasClaimInCustom
+                      ? __('In %lastCollectionName%', { lastCollectionName })
+                      : __(`${lastCollectionName}`)}
                   </div>
                 </MenuItem>
               )}
