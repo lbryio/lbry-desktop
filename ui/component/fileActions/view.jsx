@@ -162,38 +162,42 @@ function FileActions(props: Props) {
           onClick={() => openModal(MODALS.CONFIRM_FILE_REMOVE, { uri })}
         />
       )}
-      <Menu>
-        <MenuButton
-          className="button--file-action"
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-          }}
-        >
-          <Icon size={20} icon={ICONS.MORE} />
-        </MenuButton>
-        <MenuList className="menu__list">
-          {/* @if TARGET='web' */}
-          <MenuItem className="comment__menu-option" onSelect={handleWebDownload}>
-            <div className="menu__link">
-              <Icon aria-hidden icon={ICONS.DOWNLOAD} />
-              {__('Download')}
-            </div>
-          </MenuItem>
-          {/* @endif */}
-          {!claimIsMine && (
-            <MenuItem
-              className="comment__menu-option"
-              onSelect={() => push(`/$/${PAGES.REPORT_CONTENT}?claimId=${claimId}`)}
-            >
-              <div className="menu__link">
-                <Icon aria-hidden icon={ICONS.REPORT} />
-                {__('Report content')}
-              </div>
-            </MenuItem>
-          )}
-        </MenuList>
-      </Menu>
+      {(!isLivestreamClaim || !claimIsMine) && (
+        <Menu>
+          <MenuButton
+            className="button--file-action"
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+            }}
+          >
+            <Icon size={20} icon={ICONS.MORE} />
+          </MenuButton>
+          <MenuList className="menu__list">
+            {/* @if TARGET='web' */}
+            {!isLivestreamClaim && (
+              <MenuItem className="comment__menu-option" onSelect={handleWebDownload}>
+                <div className="menu__link">
+                  <Icon aria-hidden icon={ICONS.DOWNLOAD} />
+                  {__('Download')}
+                </div>
+              </MenuItem>
+            )}
+            {/* @endif */}
+            {!claimIsMine && (
+              <MenuItem
+                className="comment__menu-option"
+                onSelect={() => push(`/$/${PAGES.REPORT_CONTENT}?claimId=${claimId}`)}
+              >
+                <div className="menu__link">
+                  <Icon aria-hidden icon={ICONS.REPORT} />
+                  {__('Report content')}
+                </div>
+              </MenuItem>
+            )}
+          </MenuList>
+        </Menu>
+      )}
     </>
   );
 
