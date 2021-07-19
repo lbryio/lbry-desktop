@@ -37,7 +37,6 @@ type Props = {
   onDoneReplying?: () => void,
   onCancelReplying?: () => void,
   isNested: boolean,
-  isFetchingChannels: boolean,
   parentId: string,
   isReply: boolean,
   activeChannel: string,
@@ -47,7 +46,6 @@ type Props = {
   claimIsMine: boolean,
   sendTip: ({}, (any) => void, (any) => void) => void,
   doToast: ({ message: string }) => void,
-  disabled: boolean,
 };
 
 export function CommentCreate(props: Props) {
@@ -59,7 +57,6 @@ export function CommentCreate(props: Props) {
     onDoneReplying,
     onCancelReplying,
     isNested,
-    isFetchingChannels,
     isReply,
     parentId,
     activeChannelClaim,
@@ -90,8 +87,17 @@ export function CommentCreate(props: Props) {
 
   const [tipError, setTipError] = React.useState();
 
-  const disabled = isSubmitting || !activeChannelClaim || !commentValue.length;
+  const disabled = isSubmitting || !commentValue.length;
   const [shouldDisableReviewButton, setShouldDisableReviewButton] = React.useState();
+
+  function handleRedirect() {
+    const pathPlusRedirect = `/$/${PAGES.CHANNEL_NEW}?redirect=${pathname}`;
+    if (livestream) {
+      window.open(pathPlusRedirect);
+    } else {
+      push(pathPlusRedirect);
+    }
+  }
 
   function handleCommentChange(event) {
     let commentValue;
@@ -146,8 +152,6 @@ export function CommentCreate(props: Props) {
 
     const activeChannelName = activeChannelClaim && activeChannelClaim.name;
     const activeChannelId = activeChannelClaim && activeChannelClaim.claim_id;
-
-    console.log(activeChannelClaim);
 
     setIsSubmitting(true);
 
@@ -204,8 +208,6 @@ export function CommentCreate(props: Props) {
         'post'
       )
         .then((customerTipResponse) => {
-          console.log(customerTipResponse);
-
           const paymentIntendId = customerTipResponse.payment_intent_id;
 
           handleCreateComment(null, paymentIntendId, stripeEnvironment);
@@ -275,32 +277,6 @@ export function CommentCreate(props: Props) {
     return <Empty padded text={__('This channel has disabled comments on their page.')} />;
   }
 
-  if (!hasChannels) {
-    return (
-      <div
-        role="button"
-        onClick={() => {
-          const pathPlusRedirect = `/$/${PAGES.CHANNEL_NEW}?redirect=${pathname}`;
-          if (livestream) {
-            window.open(pathPlusRedirect);
-          } else {
-            push(pathPlusRedirect);
-          }
-        }}
-      >
-        <FormField
-          type="textarea"
-          name={'comment_signup_prompt'}
-          placeholder={__('Say something about this...')}
-          label={isFetchingChannels ? __('Comment') : undefined}
-        />
-        <div className="section__actions--no-margin">
-          <Button disabled button="primary" label={__('Post --[button to submit something]--')} requiresAuth={IS_WEB} />
-        </div>
-      </div>
-    );
-  }
-
   if (isReviewingSupportComment && activeChannelClaim) {
     return (
       <div className="comment__create">
@@ -340,14 +316,13 @@ export function CommentCreate(props: Props) {
 
   return (
     <Form
-      onSubmit={handleSubmit}
+      onSubmit={!hasChannels ? handleRedirect : handleSubmit}
       className={classnames('comment__create', {
         'comment__create--reply': isReply,
         'comment__create--nested-reply': isNested,
       })}
     >
       <FormField
-        disabled={!activeChannelClaim}
         type={SIMPLE_SITE ? 'textarea' : advancedEditor && !isReply ? 'markdown' : 'textarea'}
         name={isReply ? 'content_reply' : 'content_description'}
         label={
@@ -391,6 +366,7 @@ export function CommentCreate(props: Props) {
               icon={activeTab === TAB_LBC ? ICONS.LBC : ICONS.FINANCE}
               label={__('Review')}
               onClick={() => setIsReviewingSupportComment(true)}
+              requiresAuth={IS_WEB}
             />
 
             <Button disabled={disabled} button="link" label={__('Cancel')} onClick={() => setIsSupportComment(false)} />

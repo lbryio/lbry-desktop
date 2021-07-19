@@ -3,7 +3,6 @@ import {
   makeSelectClaimForUri,
   makeSelectClaimIsMine,
   selectMyChannelClaims,
-  selectFetchingMyChannels,
   doSendTip,
 } from 'lbry-redux';
 import { doOpenModal, doSetActiveChannel } from 'redux/actions/app';
@@ -19,7 +18,6 @@ const select = (state, props) => ({
   commentsDisabledBySettings: makeSelectCommentsDisabledForUri(props.uri)(state),
   claim: makeSelectClaimForUri(props.uri)(state),
   channels: selectMyChannelClaims(state),
-  isFetchingChannels: selectFetchingMyChannels(state),
   activeChannelClaim: selectActiveChannelClaim(state),
   claimIsMine: makeSelectClaimIsMine(props.uri)(state),
 });
