@@ -25,11 +25,11 @@ const select = (state, props) => {
   };
 };
 
-const perform = dispatch => {
+const perform = (dispatch) => {
   return {
-    resolveUri: uri => dispatch(doResolveUri(uri)),
-    doPlayUri: uri => dispatch(doPlayUri(uri)),
-    doFetchCostInfoForUri: uri => dispatch(doFetchCostInfoForUri(uri)),
+    resolveUri: (uri) => dispatch(doResolveUri(uri)),
+    doPlayUri: (uri) => dispatch(doPlayUri(uri)),
+    doFetchCostInfoForUri: (uri) => dispatch(doFetchCostInfoForUri(uri)),
   };
 };
 
