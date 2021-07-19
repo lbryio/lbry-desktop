@@ -115,6 +115,18 @@ function FilePage(props: Props) {
       );
     }
 
+    if (renderMode === RENDER_MODES.IMAGE) {
+      return (
+        <React.Fragment>
+          <div className="file-render--img-container">
+            <FileRenderInitiator uri={uri} />
+            <FileRenderInline uri={uri} />
+          </div>
+          <FileTitleSection uri={uri} />
+        </React.Fragment>
+      );
+    }
+
     return (
       <React.Fragment>
         <FileRenderInitiator uri={uri} videoTheaterMode={videoTheaterMode} />
