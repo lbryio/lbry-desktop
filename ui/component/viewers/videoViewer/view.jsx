@@ -7,7 +7,7 @@ import { stopContextMenu } from 'util/context-menu';
 import type { Player } from './internal/videojs';
 import VideoJs from './internal/videojs';
 import analytics from 'analytics';
-import { EmbedContext } from 'web/page/embedWrapper/view';
+import { EmbedContext } from 'page/embedWrapper/view';
 import classnames from 'classnames';
 import { FORCE_CONTENT_TYPE_PLAYER } from 'constants/claim';
 import AutoplayCountdown from 'component/autoplayCountdown';
