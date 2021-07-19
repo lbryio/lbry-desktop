@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import { Modal } from 'modal/modal';
+import { SITE_HELP_EMAIL } from 'config';
 
 type Props = {
   closeModal: () => void,
@@ -12,7 +13,11 @@ class ModalTransactionFailed extends React.PureComponent<Props> {
 
     return (
       <Modal isOpen contentLabel={__('Transaction failed')} title={__('Transaction failed')} onConfirmed={closeModal}>
-        <p>{__('Sorry about that. Contact help@lbry.com if you continue to have issues.')}</p>
+        <p>
+          {__("Try refreshing to fix the issue. If that doesn't work, email %SITE_HELP_EMAIL% for support.", {
+            SITE_HELP_EMAIL,
+          })}
+        </p>
       </Modal>
     );
   }
