@@ -14,7 +14,7 @@ class ModalTransactionFailed extends React.PureComponent<Props> {
     return (
       <Modal isOpen contentLabel={__('Transaction failed')} title={__('Transaction failed')} onConfirmed={closeModal}>
         <p>
-          {__("Try refreshing to fix the issue. If that doesn't work, email %SITE_HELP_EMAIL% for support.", {
+          {__('Sorry about that. Contact %SITE_HELP_EMAIL% if you continue to have issues.', {
             SITE_HELP_EMAIL,
           })}
         </p>
