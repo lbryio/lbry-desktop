@@ -476,7 +476,7 @@ function WalletSendTip(props: Props) {
 
                 {activeTab === TAB_FIAT && !hasCardSaved && (
                   <h3 className="add-card-prompt">
-                    <Button navigates={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card')} button="link" />
+                    <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card')} button="link" />
                     {' '}{__('To Tip Creators')}
                   </h3>
                 )}
