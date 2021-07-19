@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import { makeSelectChannelPermUrlForClaimUri, makeSelectClaimIsMine, makeSelectClaimForUri } from 'lbry-redux';
 import {
-  doCommentAbandon,
   doCommentPin,
   doCommentModBlock,
   doCommentModBlockAsAdmin,
@@ -10,6 +9,7 @@ import {
 } from 'redux/actions/comments';
 import { doChannelMute } from 'redux/actions/blocked';
 // import { doSetActiveChannel } from 'redux/actions/app';
+import { doOpenModal } from 'redux/actions/app';
 import { doSetPlayingUri } from 'redux/actions/content';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { selectPlayingUri } from 'redux/selectors/content';
@@ -26,8 +26,8 @@ const select = (state, props) => ({
 });
 
 const perform = (dispatch) => ({
+  openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
   clearPlayingUri: () => dispatch(doSetPlayingUri({ uri: null })),
-  deleteComment: (commentId, creatorChannelUrl) => dispatch(doCommentAbandon(commentId, creatorChannelUrl)),
   muteChannel: (channelUri) => dispatch(doChannelMute(channelUri)),
   pinComment: (commentId, claimId, remove) => dispatch(doCommentPin(commentId, claimId, remove)),
   //   setActiveChannel: channelId => dispatch(doSetActiveChannel(channelId)),
