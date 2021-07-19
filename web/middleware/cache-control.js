@@ -14,6 +14,7 @@ const STATIC_ASSET_PATHS = [
   '/public/img/gerbil-happy.png',
   '/public/img/gerbil-sad.png',
   '/public/img/placeholder.png',
+  '/public/img/placeholderTx.gif',
   '/public/img/thumbnail-broken.png',
   '/public/img/thumbnail-missing.png',
   '/public/img/total-background.png',
