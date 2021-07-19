@@ -10,7 +10,7 @@ const STATIC_ASSET_PATHS = [
   '/public/font/v1/700i.woff',
   '/public/favicon.png',
   '/public/img/busy.gif',
-  '/public/img/fileRenderPlaceholder.gif',
+  '/public/img/fileRenderPlaceholder.png',
   '/public/img/gerbil-happy.png',
   '/public/img/gerbil-sad.png',
   '/public/img/placeholder.png',
