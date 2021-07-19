@@ -1,9 +1,11 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
+import { SEARCH_OPTIONS } from 'constants/search';
 import { buildURI, doResolveUris, batchActions, isURIValid, makeSelectClaimForUri } from 'lbry-redux';
 import { makeSelectSearchUris, selectSearchValue } from 'redux/selectors/search';
 import handleFetchResponse from 'util/handle-fetch';
 import { getSearchQueryString } from 'util/query-params';
+import { SIMPLE_SITE } from 'config';
 
 type Dispatch = (action: any) => any;
 type GetState = () => { search: SearchState };
@@ -129,6 +131,11 @@ export const doFetchRecommendedContent = (uri: string, mature: boolean) => (disp
     const options: SearchOptions = { size: 20, related_to: claim.claim_id, isBackgroundSearch: true };
     if (!mature) {
       options['nsfw'] = false;
+    }
+
+    if (SIMPLE_SITE) {
+      options[SEARCH_OPTIONS.CLAIM_TYPE] = SEARCH_OPTIONS.INCLUDE_FILES;
+      options[SEARCH_OPTIONS.MEDIA_VIDEO] = true;
     }
     const { title } = claim.value;
     if (title && options) {
