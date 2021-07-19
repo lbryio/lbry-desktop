@@ -16,6 +16,7 @@ import { GetLinksData } from 'util/buildHomepage';
 
 // @if TARGET='web'
 import Pixel from 'web/component/pixel';
+import Meme from 'web/component/meme';
 // @endif
 
 type Props = {
@@ -141,12 +142,15 @@ function HomePage(props: Props) {
           </p>
         </div>
       )}
+      {/* @if TARGET='web' */}
+      {SIMPLE_SITE && <Meme />}
+      {/* @endif */}
       {rowData.map(({ title, route, link, icon, help, pinUrls, options = {} }, index) => {
         // add pins here
         return getRowElements(title, route, link, icon, help, options, index, pinUrls);
       })}
       {/* @if TARGET='web' */}
-      <Pixel type={'retargeting'} />
+        <Pixel type={'retargeting'} />
       {/* @endif */}
     </Page>
   );
