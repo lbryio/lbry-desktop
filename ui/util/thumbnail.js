@@ -3,7 +3,7 @@ import { THUMBNAIL_CDN_URL } from 'config';
 
 const THUMBNAIL_HEIGHT = 220;
 const THUMBNAIL_WIDTH = 390;
-const THUMBNAIL_QUALITY = 100;
+const THUMBNAIL_QUALITY = 85;
 
 type Props = {
   thumbnail: ?string,
