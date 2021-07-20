@@ -19,7 +19,7 @@ type SearchOptions = {
 };
 
 let lighthouse = {
-  CONNECTION_STRING: 'https://lighthouse.lbry.com/search',
+  CONNECTION_STRING: 'https://cn.lighthouse.lbry.com/search',
   search: (queryString: string) => fetch(`${lighthouse.CONNECTION_STRING}?${queryString}`).then(handleFetchResponse),
 };
 
