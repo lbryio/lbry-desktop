@@ -44,7 +44,7 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
         'Your livestream is now pending. You will be able to start shortly at the streaming dashboard.'
       );
     } else {
-      publishMessage = __('Your file is now pending on LBRY. It will take a few minutes to appear for other users.');
+      publishMessage = __('Your content will be live shortly.');
     }
 
     function handleClose() {
@@ -54,7 +54,7 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
     return (
       <Modal isOpen type="card" contentLabel={__(contentLabel)} onAborted={handleClose}>
         <Card
-          title={__('Success')}
+          title={livestream ? __('Livestream Created') : __('Success')}
           subtitle={publishMessage}
           body={
             <React.Fragment>
