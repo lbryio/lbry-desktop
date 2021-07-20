@@ -62,6 +62,7 @@ const config = {
   ENABLE_UI_NOTIFICATIONS: process.env.ENABLE_UI_NOTIFICATIONS === 'true',
   ENABLE_MATURE: process.env.ENABLE_MATURE === 'true',
   CUSTOM_HOMEPAGE: process.env.CUSTOM_HOMEPAGE === 'true',
+  SHOW_TAGS_INTRO: process.env.SHOW_TAGS_INTRO === 'true',
 };
 
 config.URL_LOCAL = `http://localhost:${config.WEB_SERVER_PORT}`;
