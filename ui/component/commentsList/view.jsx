@@ -13,6 +13,7 @@ import usePersistedState from 'effects/use-persisted-state';
 import { ENABLE_COMMENT_REACTIONS } from 'config';
 import Empty from 'component/common/empty';
 import debounce from 'util/debounce';
+import analytics from 'analytics';
 
 const DEBOUNCE_SCROLL_HANDLER_MS = 200;
 
@@ -76,6 +77,8 @@ function CommentList(props: Props) {
   const [page, setPage] = React.useState(0);
   const totalFetchedComments = allCommentIds ? allCommentIds.length : 0;
 
+  const [lastRequestedIds, setLastRequestedIds] = React.useState([]);
+
   // Display comments immediately if not fetching reactions
   // If not, wait to show comments until reactions are fetched
   const [readyToDisplayComments, setReadyToDisplayComments] = React.useState(
@@ -137,6 +140,14 @@ function CommentList(props: Props) {
       }
 
       if (idsForReactionFetch.length !== 0) {
+        const isEq = (a, b) => a.length === b.length && a.every((value, index) => value === b[index]);
+        if (isEq(idsForReactionFetch, lastRequestedIds)) {
+          const fromScratch = !othersReactsById || !myReactsByCommentId ? 's' : '';
+          analytics.commentReactionFetchDupEvent(`${fromScratch}${activeChannelId || ''}`, idsForReactionFetch);
+        }
+
+        setLastRequestedIds(idsForReactionFetch);
+
         fetchReacts(idsForReactionFetch)
           .then(() => {
             setReadyToDisplayComments(true);
@@ -154,6 +165,8 @@ function CommentList(props: Props) {
     activeChannelId,
     fetchingChannels,
     isFetchingReacts,
+    lastRequestedIds,
+    setLastRequestedIds,
   ]);
 
   // Scroll to linked-comment

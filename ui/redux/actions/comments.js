@@ -24,6 +24,7 @@ import { makeSelectNotificationForCommentId } from 'redux/selectors/notification
 import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { toHex } from 'util/hex';
 import Comments from 'comments';
+import analytics from 'analytics';
 
 const isDev = process.env.NODE_ENV !== 'production';
 
@@ -245,6 +246,7 @@ export function doCommentReactList(commentIds: Array<string>) {
       })
       .catch((error) => {
         devToast(dispatch, `doCommentReactList: ${error.message}`);
+        analytics.commentReactionFetchFailedEvent(activeChannelClaim ? activeChannelClaim.claim_id : '', commentIds);
         dispatch({
           type: ACTIONS.COMMENT_REACTION_LIST_FAILED,
           data: error,

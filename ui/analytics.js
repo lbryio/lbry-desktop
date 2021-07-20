@@ -58,6 +58,8 @@ type Analytics = {
   rewardEligibleEvent: () => void,
   startupEvent: () => void,
   purchaseEvent: (number) => void,
+  commentReactionFetchFailedEvent: (string, Array<string>) => void,
+  commentReactionFetchDupEvent: (string, Array<string>) => void,
   readyEvent: (number) => void,
   openUrlEvent: (string) => void,
 };
@@ -272,6 +274,14 @@ const analytics: Analytics = {
   },
   purchaseEvent: (purchaseInt: number) => {
     sendMatomoEvent('Purchase', 'Purchase-Complete', 'someLabel', purchaseInt);
+  },
+  commentReactionFetchFailedEvent: (claimId: string, commentIds: Array<string>) => {
+    const idCsv = commentIds.map((c) => c.slice(0, 5)).join(',');
+    sendMatomoEvent('Comment', 'Reaction-Fetch-Failed', `${claimId}:${idCsv}`);
+  },
+  commentReactionFetchDupEvent: (claimId: string, commentIds: Array<string>) => {
+    const idCsv = commentIds.map((c) => c.slice(0, 5)).join(',');
+    sendMatomoEvent('Comment', 'Reaction-Fetch-Dup', `${claimId}:${idCsv}`);
   },
 };
 
