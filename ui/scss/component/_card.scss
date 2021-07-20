@@ -391,6 +391,11 @@
   align-items: center;
 }
 
+.card__bottom-actions--comments {
+  @extend .card__bottom-actions;
+  margin-top: var(--spacing-s);
+}
+
 .card__multi-pane {
   display: flex;
 

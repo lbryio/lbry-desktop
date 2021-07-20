@@ -7,6 +7,14 @@ $thumbnailWidthSmall: 1rem;
   margin-top: var(--spacing-l);
 }
 
+.comments--contracted {
+  @extend .comments;
+  max-height: 5rem;
+  overflow: hidden;
+  -webkit-mask-image: -webkit-gradient(linear, left 30%, left bottom, from(rgba(0, 0, 0, 1)), to(rgba(0, 0, 0, 0)));
+  overflow-wrap: anywhere;
+}
+
 .comments--replies {
   list-style-type: none;
   margin-left: var(--spacing-s);
