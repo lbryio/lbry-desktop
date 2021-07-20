@@ -1,0 +1,41 @@
+.file-properties {
+  display: flex;
+  position: relative;
+  align-items: center;
+  font-size: var(--font-small);
+  color: var(--color-text-help);
+  margin-left: var(--spacing-m);
+  white-space: nowrap;
+
+  & > *:not(:last-child) {
+    margin-right: var(--spacing-s);
+  }
+}
+
+.file-properties--large {
+  flex-wrap: wrap;
+  margin-left: 0;
+
+  & > * {
+    margin-top: var(--spacing-s);
+  }
+}
+
+.file-properties--small {
+  font-size: var(--font-xsmall);
+  line-height: 1.2;
+  margin-left: 0;
+  margin-top: auto;
+  position: relative;
+
+  .tag {
+    @media (max-width: $breakpoint-xsmall) {
+      display: none;
+    }
+    font-size: var(--font-xsmall);
+  }
+
+  & > *:not(:last-child) {
+    margin-right: var(--spacing-xxs);
+  }
+}
