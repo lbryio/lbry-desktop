@@ -118,9 +118,7 @@ export default function YoutubeTransferStatus(props: Props) {
             {isNotElligible && (
               <I18nMessage
                 tokens={{
-                  here: (
-                    <Button button="link" href="https://lbry.com/faq/youtube" label={__('here')} />
-                    ),
+                  here: <Button button="link" href="https://lbry.com/faq/youtube" label={__('here')} />,
                   email: SITE_HELP_EMAIL,
                 }}
               >
