@@ -111,14 +111,14 @@ export function doSyncLoop(noInterval) {
     const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
     const syncLocked = selectSyncIsLocked(state);
     if (hasVerifiedEmail && syncEnabled && !syncLocked) {
-      dispatch(doGetSyncDesktop((error, hasNewData) => dispatch(doHandleSyncComplete(error, hasNewData))));
+      dispatch(doGetSyncDesktop((error) => dispatch(doHandleSyncComplete(error))));
       dispatch(doAnalyticsTagSync());
       if (!noInterval) {
         syncTimer = setInterval(() => {
           const state = getState();
           const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
           if (syncEnabled) {
-            dispatch(doGetSyncDesktop((error, hasNewData) => dispatch(doHandleSyncComplete(error, hasNewData))));
+            dispatch(doGetSyncDesktop((error) => dispatch(doHandleSyncComplete(error))));
             dispatch(doAnalyticsTagSync());
           }
         }, SYNC_INTERVAL);

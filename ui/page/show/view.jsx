@@ -66,7 +66,6 @@ function ShowPage(props: Props) {
   const canonicalUrl = claim && claim.canonical_url;
   const claimExists = claim !== null && claim !== undefined;
   const haventFetchedYet = claim === undefined;
-  const isMine = claim && claim.is_my_output;
   const { contentName, isChannel } = parseURI(uri);
   const { push } = useHistory();
   const isCollection = claim && claim.value_type === 'collection';
@@ -98,11 +97,11 @@ function ShowPage(props: Props) {
 
     if (
       (resolveUri && !isResolvingUri && uri && haventFetchedYet) ||
-      (claimExists && !claimIsPending && (!canonicalUrl || isMine === undefined))
+      (claimExists && !claimIsPending && !canonicalUrl)
     ) {
       resolveUri(uri);
     }
-  }, [resolveUri, isResolvingUri, canonicalUrl, uri, claimExists, haventFetchedYet, history, isMine, claimIsPending]);
+  }, [resolveUri, isResolvingUri, canonicalUrl, uri, claimExists, haventFetchedYet, history, claimIsPending]);
 
   // Don't navigate directly to repost urls
   // Always redirect to the actual content
