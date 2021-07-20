@@ -76,8 +76,6 @@ function CommentList(props: Props) {
   const [page, setPage] = React.useState(0);
   const totalFetchedComments = allCommentIds ? allCommentIds.length : 0;
 
-  const [reactionFetchCount, setReactionFetchCount] = React.useState(0);
-
   // Display comments immediately if not fetching reactions
   // If not, wait to show comments until reactions are fetched
   const [readyToDisplayComments, setReadyToDisplayComments] = React.useState(
@@ -138,9 +136,7 @@ function CommentList(props: Props) {
         });
       }
 
-      if (idsForReactionFetch.length !== 0 && reactionFetchCount < 500) {
-        setReactionFetchCount(reactionFetchCount + 1);
-
+      if (idsForReactionFetch.length !== 0) {
         fetchReacts(idsForReactionFetch)
           .then(() => {
             setReadyToDisplayComments(true);
@@ -158,8 +154,6 @@ function CommentList(props: Props) {
     activeChannelId,
     fetchingChannels,
     isFetchingReacts,
-    reactionFetchCount,
-    setReactionFetchCount,
   ]);
 
   // Scroll to linked-comment
