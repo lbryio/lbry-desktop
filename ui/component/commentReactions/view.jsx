@@ -1,5 +1,5 @@
 // @flow
-import { ENABLE_CREATOR_REACTIONS } from 'config';
+import { ENABLE_CREATOR_REACTIONS, SIMPLE_SITE } from 'config';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import * as REACTION_TYPES from 'constants/reactions';
@@ -50,6 +50,16 @@ export default function CommentReactions(props: Props) {
   };
 
   const creatorLiked = getCountForReact(REACTION_TYPES.CREATOR_LIKE) > 0;
+  const likeIcon = SIMPLE_SITE
+    ? myReacts.includes(REACTION_TYPES.LIKE)
+      ? ICONS.FIRE_ACTIVE
+      : ICONS.FIRE
+    : ICONS.UPVOTE;
+  const dislikeIcon = SIMPLE_SITE
+    ? myReacts.includes(REACTION_TYPES.DISLIKE)
+      ? ICONS.SLIME_ACTIVE
+      : ICONS.SLIME
+    : ICONS.DOWNVOTE;
 
   function handleCommentLike() {
     if (activeChannelId) {
@@ -77,7 +87,7 @@ export default function CommentReactions(props: Props) {
       <Button
         requiresAuth={IS_WEB}
         title={__('Upvote')}
-        icon={myReacts.includes(REACTION_TYPES.LIKE) ? ICONS.FIRE_ACTIVE : ICONS.FIRE}
+        icon={likeIcon}
         className={classnames('comment__action', {
           'comment__action--active': myReacts && myReacts.includes(REACTION_TYPES.LIKE),
         })}
@@ -87,7 +97,7 @@ export default function CommentReactions(props: Props) {
       <Button
         requiresAuth={IS_WEB}
         title={__('Downvote')}
-        icon={myReacts.includes(REACTION_TYPES.DISLIKE) ? ICONS.SLIME_ACTIVE : ICONS.SLIME}
+        icon={dislikeIcon}
         className={classnames('comment__action', {
           'comment__action--active': myReacts && myReacts.includes(REACTION_TYPES.DISLIKE),
         })}
