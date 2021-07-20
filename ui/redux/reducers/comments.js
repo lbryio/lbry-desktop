@@ -182,12 +182,15 @@ export default handleActions(
     },
 
     [ACTIONS.COMMENT_REACTION_LIST_COMPLETED]: (state: CommentsState, action: any): CommentsState => {
-      const { myReactions, othersReactions, channelId } = action.data;
+      const { myReactions, othersReactions, channelId, commentIds } = action.data;
       const myReacts = Object.assign({}, state.myReactsByCommentId);
       const othersReacts = Object.assign({}, state.othersReactsByCommentId);
 
-      if (myReactions) {
-        Object.entries(myReactions).forEach(([commentId, reactions]) => {
+      const myReactionsEntries = myReactions ? Object.entries(myReactions) : [];
+      const othersReactionsEntries = othersReactions ? Object.entries(othersReactions) : [];
+
+      if (myReactionsEntries.length > 0) {
+        myReactionsEntries.forEach(([commentId, reactions]) => {
           const key = channelId ? `${commentId}:${channelId}` : commentId;
           myReacts[key] = Object.entries(reactions).reduce((acc, [name, count]) => {
             if (count === 1) {
@@ -196,12 +199,22 @@ export default handleActions(
             return acc;
           }, []);
         });
+      } else {
+        commentIds.forEach((commentId) => {
+          const key = channelId ? `${commentId}:${channelId}` : commentId;
+          myReacts[key] = [];
+        });
       }
 
-      if (othersReactions) {
-        Object.entries(othersReactions).forEach(([commentId, reactions]) => {
+      if (othersReactionsEntries.length > 0) {
+        othersReactionsEntries.forEach(([commentId, reactions]) => {
           const key = channelId ? `${commentId}:${channelId}` : commentId;
           othersReacts[key] = reactions;
+        });
+      } else {
+        commentIds.forEach((commentId) => {
+          const key = channelId ? `${commentId}:${channelId}` : commentId;
+          othersReacts[key] = {};
         });
       }
 

@@ -236,9 +236,10 @@ export function doCommentReactList(commentIds: Array<string>) {
         dispatch({
           type: ACTIONS.COMMENT_REACTION_LIST_COMPLETED,
           data: {
-            myReactions: myReactions || {},
+            myReactions,
             othersReactions,
             channelId: activeChannelClaim ? activeChannelClaim.claim_id : undefined,
+            commentIds,
           },
         });
       })
@@ -379,7 +380,7 @@ export function doCommentCreate(
   livestream?: boolean = false,
   txid?: string,
   payment_intent_id?: string,
-  environment?: string,
+  environment?: string
 ) {
   return async (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
