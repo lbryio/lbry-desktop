@@ -7,10 +7,10 @@ import Card from 'component/common/card';
 import { Lbryio } from 'lbryinc';
 import { STRIPE_PUBLIC_KEY } from 'config';
 import moment from 'moment';
-
-let scriptLoading = false;
-// let scriptLoaded = false;
-// let scriptDidError = false; // these could probably be in state if managing locally
+import Plastic from 'react-plastic';
+import Button from 'component/button';
+import * as ICONS from 'constants/icons';
+import * as MODALS from 'constants/modal_types';
 
 let stripeEnvironment = 'test';
 // if the key contains pk_live it's a live key
@@ -19,13 +19,17 @@ if (STRIPE_PUBLIC_KEY.indexOf('pk_live') > -1) {
   stripeEnvironment = 'live';
 }
 
-// type Props = {
-//   disabled: boolean,
-//   label: ?string,
-//   email: ?string,
-//   scriptFailedToLoad: boolean,
-// };
-//
+// eslint-disable-next-line flowtype/no-types-missing-file-annotation
+type Props = {
+  disabled: boolean,
+  label: ?string,
+  email: ?string,
+  scriptFailedToLoad: boolean,
+  doOpenModal: (string, {}) => void,
+  openModal: (string, {}) => void,
+  setAsConfirmingCard: () => void,
+};
+
 // type State = {
 //   open: boolean,
 //   currentFlowStage: string,
@@ -46,11 +50,16 @@ class SettingsStripeCard extends React.Component<Props, State> {
       customerTransactions: [],
       pageTitle: 'Add Card',
       userCardDetails: {},
+      paymentMethodId: '',
     };
   }
 
   componentDidMount() {
-    var that = this;
+    let that = this;
+
+    console.log(this.props);
+
+    let doToast = this.props.doToast;
 
     const script = document.createElement('script');
     script.src = 'https://js.stripe.com/v3/';
@@ -60,10 +69,10 @@ class SettingsStripeCard extends React.Component<Props, State> {
     document.body.appendChild(script);
 
     // public key of the stripe account
-    var publicKey = STRIPE_PUBLIC_KEY;
+    let publicKey = STRIPE_PUBLIC_KEY;
 
     // client secret of the SetupIntent (don't share with anyone but customer)
-    var clientSecret = '';
+    let clientSecret = '';
 
     // setting a timeout to let the client secret populate
     // TODO: fix this, should be a cleaner way
@@ -80,39 +89,33 @@ class SettingsStripeCard extends React.Component<Props, State> {
         .then((customerStatusResponse) => {
           // user has a card saved if their defaultPaymentMethod has an id
           const defaultPaymentMethod = customerStatusResponse.Customer.invoice_settings.default_payment_method;
-          var userHasAlreadySetupPayment = Boolean(defaultPaymentMethod && defaultPaymentMethod.id);
+          let userHasAlreadySetupPayment = Boolean(defaultPaymentMethod && defaultPaymentMethod.id);
 
           // show different frontend if user already has card
           if (userHasAlreadySetupPayment) {
-            var card = customerStatusResponse.PaymentMethods[0].card;
+            let card = customerStatusResponse.PaymentMethods[0].card;
 
-            var cardDetails = {
+            let customer = customerStatusResponse.Customer;
+
+            let topOfDisplay = customer.email.split('@')[0];
+            let bottomOfDisplay = '@' + customer.email.split('@')[1];
+
+            console.log(customerStatusResponse.Customer);
+
+            let cardDetails = {
               brand: card.brand,
               expiryYear: card.exp_year,
               expiryMonth: card.exp_month,
               lastFour: card.last4,
+              topOfDisplay: topOfDisplay,
+              bottomOfDisplay: bottomOfDisplay,
             };
 
             that.setState({
               currentFlowStage: 'cardConfirmed',
               pageTitle: 'Tip History',
               userCardDetails: cardDetails,
-            });
-
-            // get customer transactions
-            Lbryio.call(
-              'customer',
-              'list',
-              {
-                environment: stripeEnvironment,
-              },
-              'post'
-            ).then((customerTransactionsResponse) => {
-              that.setState({
-                customerTransactions: customerTransactionsResponse,
-              });
-
-              console.log(customerTransactionsResponse);
+              paymentMethodId: customerStatusResponse.PaymentMethods[0].id,
             });
 
             // otherwise, prompt them to save a card
@@ -138,6 +141,22 @@ class SettingsStripeCard extends React.Component<Props, State> {
               setupStripe();
             });
           }
+
+          // get customer transactions
+          Lbryio.call(
+            'customer',
+            'list',
+            {
+              environment: stripeEnvironment,
+            },
+            'post'
+          ).then((customerTransactionsResponse) => {
+            that.setState({
+              customerTransactions: customerTransactionsResponse,
+            });
+
+            console.log(customerTransactionsResponse);
+          });
           // if the status call fails, either an actual error or need to run setup first
         })
         .catch(function (error) {
@@ -147,7 +166,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
           const errorString = 'user as customer is not setup yet';
 
           // if it's beamer's error indicating the account is not linked yet
-          if (error.message.indexOf(errorString) > -1) {
+          if (error.message && error.message.indexOf(errorString) > -1) {
             // send them to save a card
             that.setState({
               currentFlowStage: 'confirmingCard',
@@ -169,6 +188,9 @@ class SettingsStripeCard extends React.Component<Props, State> {
               // instantiate stripe elements
               setupStripe();
             });
+          } else if (error === 'internal_apis_down') {
+            var displayString = 'There was an error from the server, please let support know';
+            doToast({ message: displayString, isError: true });
           } else {
             console.log('Unseen before error');
           }
@@ -300,19 +322,27 @@ class SettingsStripeCard extends React.Component<Props, State> {
               },
               'post'
             ).then((customerStatusResponse) => {
-              var card = customerStatusResponse.PaymentMethods[0].card;
+              let card = customerStatusResponse.PaymentMethods[0].card;
 
-              var cardDetails = {
+              let customer = customerStatusResponse.Customer;
+
+              let topOfDisplay = customer.email.split('@')[0];
+              let bottomOfDisplay = '@' + customer.email.split('@')[1];
+
+              let cardDetails = {
                 brand: card.brand,
                 expiryYear: card.exp_year,
                 expiryMonth: card.exp_month,
                 lastFour: card.last4,
+                topOfDisplay,
+                bottomOfDisplay,
               };
 
               that.setState({
                 currentFlowStage: 'cardConfirmed',
                 pageTitle: 'Tip History',
                 userCardDetails: cardDetails,
+                paymentMethodId: customerStatusResponse.PaymentMethods[0].id,
               });
             });
 
@@ -325,59 +355,18 @@ class SettingsStripeCard extends React.Component<Props, State> {
     }
   }
 
-  componentDidUpdate() {
-    if (!scriptLoading) {
-      this.updateStripeHandler();
-    }
-  }
-
-  componentWillUnmount() {
-    // pretty sure this doesn't exist
-    // $FlowFixMe
-    if (this.loadPromise) {
-      // $FlowFixMe
-      this.loadPromise.reject();
-    }
-    // pretty sure this doesn't exist
-    // $FlowFixMe
-    if (CardVerify.stripeHandler && this.state.open) {
-      // $FlowFixMe
-      CardVerify.stripeHandler.close();
-    }
-  }
-
-  onScriptLoaded = () => {
-    // if (!CardVerify.stripeHandler) {
-    //   CardVerify.stripeHandler = StripeCheckout.configure({
-    //     key: 'pk_test_NoL1JWL7i1ipfhVId5KfDZgo',
-    //   });
-    //
-    //   if (this.hasPendingClick) {
-    //     this.showStripeDialog();
-    //   }
-    // }
-  };
-
-  onScriptError = (...args) => {
-    this.setState({ scriptFailedToLoad: true });
-  };
-
-  onClosed = () => {
-    this.setState({ open: false });
-  };
-
-  updateStripeHandler() {
-    // if (!CardVerify.stripeHandler) {
-    //   CardVerify.stripeHandler = StripeCheckout.configure({
-    //     key: this.props.stripeKey,
-    //   });
-    // }
-  }
-
   render() {
-    const { scriptFailedToLoad } = this.props;
+    let that = this;
 
-    const { currentFlowStage, customerTransactions, pageTitle, userCardDetails } = this.state;
+    function setAsConfirmingCard() {
+      that.setState({
+        currentFlowStage: 'confirmingCard',
+      });
+    }
+
+    const { scriptFailedToLoad, openModal } = this.props;
+
+    const { currentFlowStage, customerTransactions, pageTitle, userCardDetails, paymentMethodId } = this.state;
 
     return (
       <Page backout={{ title: pageTitle, backLabel: __('Done') }} noFooter noSideNavigation>
@@ -393,6 +382,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
           </div>
         )}
 
+        {/* customer has not added a card yet */}
         {currentFlowStage === 'confirmingCard' && (
           <div className="sr-root">
             <div className="sr-main">
@@ -411,61 +401,100 @@ class SettingsStripeCard extends React.Component<Props, State> {
           </div>
         )}
 
+        {/* if the user has already confirmed their card */}
         {currentFlowStage === 'cardConfirmed' && (
           <div className="successCard">
             <Card
               title={__('Card Details')}
               body={
                 <>
-                  <h4 className="grey-text">
-                    Brand: {userCardDetails.brand.toUpperCase()} &nbsp; Last 4: {userCardDetails.lastFour} &nbsp;
-                    Expires: {userCardDetails.expiryMonth}/{userCardDetails.expiryYear} &nbsp;
-                  </h4>
+                  <Plastic
+                    type={userCardDetails.brand}
+                    name={userCardDetails.topOfDisplay + ' ' + userCardDetails.bottomOfDisplay}
+                    expiry={userCardDetails.expiryMonth + '/' + userCardDetails.expiryYear}
+                    number={'____________' + userCardDetails.lastFour}
+                  />
+                  <br />
+                  <Button
+                    button="secondary"
+                    label={__('Remove Card')}
+                    icon={ICONS.DELETE}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      openModal(MODALS.CONFIRM_REMOVE_CARD, {
+                        paymentMethodId: paymentMethodId,
+                        setAsConfirmingCard: setAsConfirmingCard,
+                      });
+                    }}
+                  />
                 </>
               }
             />
             <br />
 
+            {/* if a user has no transactions yet */}
             {(!customerTransactions || customerTransactions.length === 0) && (
               <Card
                 title={__('Tip History')}
                 subtitle={__('You have not sent any tips yet. When you do they will appear here. ')}
               />
             )}
-
-            {customerTransactions && customerTransactions.length > 0 && (
-              <Card
-                title={__('Tip History')}
-                body={
-                  <>
-                    <div className="table__wrapper">
-                      <table className="table table--transactions">
-                        <thead>
-                          <tr>
-                            <th className="date-header">{__('Date')}</th>
-                            <th>{<>{__('Receiving Channel Name')}</>}</th>
-                            <th>{__('Amount (USD)')} </th>
-                            <th>{__('Anonymous')}</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {customerTransactions &&
-                            customerTransactions.map((transaction) => (
-                              <tr key={transaction.name + transaction.created_at}>
-                                <td>{moment(transaction.created_at).format('LLL')}</td>
-                                <td>{transaction.channel_name}</td>
-                                <td>${transaction.tipped_amount / 100}</td>
-                                <td>{transaction.private_tip ? 'Yes' : 'No'}</td>
-                              </tr>
-                            ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </>
-                }
-              />
-            )}
           </div>
+        )}
+
+        {/* customer already has transactions */}
+        {customerTransactions && customerTransactions.length > 0 && (
+          <Card
+            title={__('Tip History')}
+            body={
+              <>
+                <div className="table__wrapper">
+                  <table className="table table--transactions">
+                    <thead>
+                      <tr>
+                        <th className="date-header">{__('Date')}</th>
+                        <th>{<>{__('Receiving Channel Name')}</>}</th>
+                        <th>{__('Tip Location')}</th>
+                        <th>{__('Amount (USD)')} </th>
+                        <th>{__('Anonymous')}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {customerTransactions &&
+                        customerTransactions.reverse().map((transaction) => (
+                          <tr key={transaction.name + transaction.created_at}>
+                            <td>{moment(transaction.created_at).format('LLL')}</td>
+                            <td>
+                              <Button
+                                className="stripe__card-link-text"
+                                navigate={'/' + transaction.channel_name + ':' + transaction.channel_claim_id}
+                                label={transaction.channel_name}
+                                button="link"
+                              />
+                            </td>
+                            <td>
+                              <Button
+                                className="stripe__card-link-text"
+                                navigate={'/' + transaction.channel_name + ':' + transaction.source_claim_id}
+                                label={
+                                  transaction.channel_claim_id === transaction.source_claim_id
+                                    ? 'Channel Page'
+                                    : 'File Page'
+                                }
+                                button="link"
+                              />
+                            </td>
+                            <td>${transaction.tipped_amount / 100}</td>
+                            <td>{transaction.private_tip ? 'Yes' : 'No'}</td>
+                          </tr>
+                        ))}
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            }
+          />
         )}
       </Page>
     );

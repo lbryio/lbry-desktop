@@ -26,9 +26,7 @@ function FileWatchLaterLink(props: Props) {
   function handleWatchLater(e) {
     e.preventDefault();
     doToast({
-      message: __('Item %action% Watch Later', {
-        action: hasClaimInWatchLater ? __('removed from') : __('added to'),
-      }),
+      message: hasClaimInWatchLater ? __('Item removed from Watch Later') : __('Item added to Watch Later'),
       linkText: !hasClaimInWatchLater && __('See All'),
       linkTarget: !hasClaimInWatchLater && '/list/watchlater',
     });

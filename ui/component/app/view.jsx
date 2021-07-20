@@ -16,6 +16,7 @@ import usePrevious from 'effects/use-previous';
 import REWARDS from 'rewards';
 import usePersistedState from 'effects/use-persisted-state';
 import Spinner from 'component/spinner';
+import LANGUAGES from 'constants/languages';
 // @if TARGET='app'
 import useZoom from 'effects/use-zoom';
 import useHistoryNav from 'effects/use-history-nav';
@@ -176,6 +177,7 @@ function App(props: Props) {
   const shouldMigrateLanguage = LANGUAGE_MIGRATIONS[language];
   const hasActiveChannelClaim = activeChannelClaim !== undefined;
   const isPersonalized = !IS_WEB || hasVerifiedEmail;
+  const renderFiledrop = !IS_WEB || isAuthenticated;
 
   let uri;
   try {
@@ -291,6 +293,10 @@ function App(props: Props) {
   useEffect(() => {
     if (!languages.includes(language)) {
       setLanguage(language);
+
+      if (document && document.documentElement && LANGUAGES[language].length >= 3) {
+        document.documentElement.dir = LANGUAGES[language][2];
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [language, languages]);
@@ -433,7 +439,7 @@ function App(props: Props) {
           <Router />
           <React.Suspense fallback={null}>
             <ModalRouter />
-            <FileDrop />
+            {renderFiledrop && <FileDrop />}
           </React.Suspense>
           <FileRenderFloating />
           <React.Suspense fallback={null}>

@@ -40,6 +40,7 @@ const SUPPORTED_LANGUAGES = {
   kn: LANGUAGES.kn[1],
   uk: LANGUAGES.uk[1],
   vi: LANGUAGES.vi[1],
+  ar: LANGUAGES.ar[1],
 };
 
 // Properties: language code (e.g. 'ja')

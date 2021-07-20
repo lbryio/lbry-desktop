@@ -72,34 +72,35 @@ function CommentsReplies(props: Props) {
             />
           </div>
         )}
-        {fetchedReplies && displayedComments && isExpanded && (
+        {isExpanded && (
           <div>
             <div className="comment__replies">
               <Button className="comment__threadline" aria-label="Hide Replies" onClick={() => setExpanded(false)} />
 
               <ul className="comments--replies">
-                {displayedComments.map((comment) => {
-                  return (
-                    <Comment
-                      threadDepth={threadDepth}
-                      uri={uri}
-                      authorUri={comment.channel_url}
-                      author={comment.channel_name}
-                      claimId={comment.claim_id}
-                      commentId={comment.comment_id}
-                      key={comment.comment_id}
-                      message={comment.comment}
-                      timePosted={comment.timestamp * 1000}
-                      claimIsMine={claimIsMine}
-                      commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}
-                      linkedCommentId={linkedCommentId}
-                      commentingEnabled={commentingEnabled}
-                      supportAmount={comment.support_amount}
-                      numDirectReplies={comment.replies}
-                    />
-                  );
-                })}
-                {totalReplies < numDirectReplies && (
+                {displayedComments &&
+                  displayedComments.map((comment) => {
+                    return (
+                      <Comment
+                        threadDepth={threadDepth}
+                        uri={uri}
+                        authorUri={comment.channel_url}
+                        author={comment.channel_name}
+                        claimId={comment.claim_id}
+                        commentId={comment.comment_id}
+                        key={comment.comment_id}
+                        message={comment.comment}
+                        timePosted={comment.timestamp * 1000}
+                        claimIsMine={claimIsMine}
+                        commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}
+                        linkedCommentId={linkedCommentId}
+                        commentingEnabled={commentingEnabled}
+                        supportAmount={comment.support_amount}
+                        numDirectReplies={comment.replies}
+                      />
+                    );
+                  })}
+                {!isFetchingByParentId[parentId] && totalReplies < numDirectReplies && (
                   <li className="comment comment--reply">
                     <div className="comment__content">
                       <div className="comment__thumbnail-wrapper">

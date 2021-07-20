@@ -21,8 +21,11 @@ import HelpLink from 'component/common/help-link';
 import ClaimSupportButton from 'component/claimSupportButton';
 import ChannelStakedIndicator from 'component/channelStakedIndicator';
 import ClaimMenuList from 'component/claimMenuList';
+import OptimizedImage from 'component/optimizedImage';
 import Yrbl from 'component/yrbl';
 import I18nMessage from 'component/i18nMessage';
+// $FlowFixMe cannot resolve ...
+import PlaceholderTx from 'static/img/placeholderTx.gif';
 
 export const PAGE_VIEW_QUERY = `view`;
 const CONTENT_PAGE = 'content';
@@ -217,7 +220,8 @@ function ChannelPage(props: Props) {
           {/* TODO: add channel collections <ClaimCollectionAddButton uri={uri} fileAction /> */}
           <ClaimMenuList uri={claim.permanent_url} channelUri={claim.permanent_url} inline isChannelPage />
         </div>
-        {cover && <img className={classnames('channel-cover__custom')} src={cover} />}
+        {cover && <img className={classnames('channel-cover__custom')} src={PlaceholderTx} />}
+        {cover && <OptimizedImage className={classnames('channel-cover__custom')} src={cover} objectFit="cover" />}
         <div className="channel__primary-info">
           <ChannelThumbnail className="channel__thumbnail--channel-page" uri={uri} allowGifs hideStakedIndicator />
           <h1 className="channel__title">

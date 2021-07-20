@@ -21,6 +21,7 @@ type Props = {
   headerAltControls: Node,
   loading: boolean,
   type: string,
+  activeUri?: string,
   empty?: string,
   defaultSort?: boolean,
   onScrollBottom?: (any) => void,
@@ -50,6 +51,7 @@ type Props = {
 
 export default function ClaimList(props: Props) {
   const {
+    activeUri,
     uris,
     headerAltControls,
     loading,
@@ -190,6 +192,7 @@ export default function ClaimList(props: Props) {
               <ClaimPreview
                 uri={uri}
                 type={type}
+                active={activeUri && uri === activeUri}
                 hideMenu={hideMenu}
                 includeSupportAction={includeSupportAction}
                 showUnresolvedClaim={showUnresolvedClaims}

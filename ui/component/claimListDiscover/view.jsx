@@ -1,11 +1,11 @@
 // @flow
-import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
+import { ENABLE_NO_SOURCE_CLAIMS, SIMPLE_SITE } from 'config';
 import type { Node } from 'react';
 import * as CS from 'constants/claim_search';
 import React from 'react';
 import usePersistedState from 'effects/use-persisted-state';
 import { withRouter } from 'react-router';
-import { createNormalizedClaimSearchKey, MATURE_TAGS } from 'lbry-redux';
+import { createNormalizedClaimSearchKey, MATURE_TAGS, splitBySeparator } from 'lbry-redux';
 import Button from 'component/button';
 import moment from 'moment';
 import ClaimList from 'component/claimList';
@@ -72,6 +72,8 @@ type Props = {
   liveLivestreamsFirst?: boolean,
   livestreamMap?: { [string]: any },
   hasSource?: boolean,
+  limitClaimsPerChannel?: number,
+  releaseTime?: string,
   showNoSourceClaims?: boolean,
   isChannel?: boolean,
   empty?: string,
@@ -104,8 +106,8 @@ function ClaimListDiscover(props: Props) {
     claimType,
     pageSize,
     defaultClaimType,
-    streamType,
-    defaultStreamType,
+    streamType = SIMPLE_SITE ? CS.FILE_VIDEO : undefined,
+    defaultStreamType = SIMPLE_SITE ? CS.FILE_VIDEO : undefined, // add param for DEFAULT_STREAM_TYPE
     freshness,
     defaultFreshness = CS.FRESH_WEEK,
     renderProperties,
@@ -124,6 +126,8 @@ function ClaimListDiscover(props: Props) {
     forceShowReposts = false,
     languageSetting,
     searchInLanguage,
+    limitClaimsPerChannel,
+    releaseTime,
     scrollAnchor,
     showHiddenByUser = false,
     liveLivestreamsFirst,
@@ -147,7 +151,9 @@ function ClaimListDiscover(props: Props) {
     (urlParams.get(CS.TAGS_KEY) !== null && urlParams.get(CS.TAGS_KEY)) ||
     (defaultTags && getParamFromTags(defaultTags));
   const freshnessParam = freshness || urlParams.get(CS.FRESH_KEY) || defaultFreshness;
-  const mutedAndBlockedChannelIds = Array.from(new Set(mutedUris.concat(blockedUris).map((uri) => uri.split('#')[1])));
+  const mutedAndBlockedChannelIds = Array.from(
+    new Set(mutedUris.concat(blockedUris).map((uri) => splitBySeparator(uri)[1]))
+  );
 
   const langParam = urlParams.get(CS.LANGUAGE_KEY) || null;
   const languageParams = searchInLanguage
@@ -170,12 +176,12 @@ function ClaimListDiscover(props: Props) {
   const durationParam = urlParams.get(CS.DURATION_KEY) || null;
   const channelIdsInUrl = urlParams.get(CS.CHANNEL_IDS_KEY);
   const channelIdsParam = channelIdsInUrl ? channelIdsInUrl.split(',') : channelIds;
-  const feeAmountParam = urlParams.get('fee_amount') || feeAmount;
+  const feeAmountParam = urlParams.get('fee_amount') || feeAmount || SIMPLE_SITE ? CS.FEE_AMOUNT_ONLY_FREE : undefined;
   const originalPageSize = pageSize || CS.PAGE_SIZE;
   const dynamicPageSize = isLargeScreen ? Math.ceil(originalPageSize * (3 / 2)) : originalPageSize;
   const historyAction = history.action;
 
-  let orderParam = orderBy || urlParams.get(CS.ORDER_BY_KEY) || defaultOrderBy;
+  let orderParam = orderBy || urlParams.get(CS.ORDER_BY_KEY) || defaultOrderBy || orderParamEntry;
 
   if (!orderParam) {
     if (historyAction === 'POP') {
@@ -219,6 +225,7 @@ function ClaimListDiscover(props: Props) {
     fee_amount?: string,
     has_source?: boolean,
     has_no_source?: boolean,
+    limit_claims_per_channel?: number,
   } = {
     page_size: dynamicPageSize,
     page,
@@ -239,6 +246,10 @@ function ClaimListDiscover(props: Props) {
 
   if (hasSource || (!ENABLE_NO_SOURCE_CLAIMS && (!claimType || claimType === CS.CLAIM_STREAM))) {
     options.has_source = true;
+  }
+
+  if (limitClaimsPerChannel) {
+    options.limit_claims_per_channel = limitClaimsPerChannel;
   }
 
   if (feeAmountParam && claimType !== CS.CLAIM_CHANNEL) {
@@ -269,8 +280,10 @@ function ClaimListDiscover(props: Props) {
     // SDK chokes on reposted_claim_id of null or false, needs to not be present if no value
     options.reposted_claim_id = repostedClaimId;
   }
-
-  if (claimType !== CS.CLAIM_CHANNEL) {
+  // IF release time, set it, else set fallback release times using the hack below.
+  if (releaseTime) {
+    options.release_time = releaseTime;
+  } else if (claimType !== CS.CLAIM_CHANNEL) {
     if (orderParam === CS.ORDER_BY_TOP && freshnessParam !== CS.FRESH_ALL) {
       options.release_time = `>${Math.floor(moment().subtract(1, freshnessParam).startOf('hour').unix())}`;
     } else if (orderParam === CS.ORDER_BY_NEW || orderParam === CS.ORDER_BY_TRENDING) {
@@ -348,8 +361,24 @@ function ClaimListDiscover(props: Props) {
 
   const hasMatureTags = tagsParam && tagsParam.split(',').some((t) => MATURE_TAGS.includes(t));
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
-  const claimSearchResult = claimSearchByQuery[claimSearchCacheQuery];
+  let claimSearchResult = claimSearchByQuery[claimSearchCacheQuery];
   const claimSearchResultLastPageReached = claimSearchByQueryLastPageReached[claimSearchCacheQuery];
+
+  // uncomment to fix an item on a page
+  //   const fixUri = 'lbry://@corbettreport#0/lbryodysee#5';
+  //   if (
+  //     orderParam === CS.ORDER_BY_NEW &&
+  //     claimSearchResult &&
+  //     claimSearchResult.length > 2 &&
+  //     window.location.pathname === '/$/rabbithole'
+  //   ) {
+  //     if (claimSearchResult.indexOf(fixUri) !== -1) {
+  //       claimSearchResult.splice(claimSearchResult.indexOf(fixUri), 1);
+  //     } else {
+  //       claimSearchResult.pop();
+  //     }
+  //     claimSearchResult.splice(2, 0, fixUri);
+  //   }
 
   const [prevOptions, setPrevOptions] = React.useState(null);
 
@@ -474,7 +503,7 @@ function ClaimListDiscover(props: Props) {
       claimType={claimType}
       streamType={streamType}
       defaultStreamType={defaultStreamType}
-      feeAmount={feeAmount}
+      feeAmount={SIMPLE_SITE ? undefined : feeAmount} // ENABLE_PAID_CONTENT_DISCOVER or something
       orderBy={orderBy}
       defaultOrderBy={defaultOrderBy}
       hideAdvancedFilter={hideAdvancedFilter}

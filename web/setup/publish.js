@@ -1,6 +1,6 @@
 // @flow
 /*
-  https://api.lbry.tv/api/v1/proxy currently expects publish to consist
+  https://api.na-backend.odysee.com/api/v1/proxy currently expects publish to consist
    of a multipart/form-data POST request with:
     - 'file' binary
     - 'json_payload' collection of publish params to be passed to the server's sdk.

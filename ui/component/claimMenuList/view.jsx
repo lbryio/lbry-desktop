@@ -7,7 +7,7 @@ import React from 'react';
 import classnames from 'classnames';
 import { Menu, MenuButton, MenuList, MenuItem } from '@reach/menu-button';
 import Icon from 'component/common/icon';
-import { generateShareUrl, generateRssUrl } from 'util/url';
+import { generateShareUrl, generateRssUrl, generateLbryContentUrl } from 'util/url';
 import { useHistory } from 'react-router';
 import { buildURI, parseURI, COLLECTIONS_CONSTS } from 'lbry-redux';
 
@@ -107,8 +107,9 @@ function ClaimMenuList(props: Props) {
     return null;
   }
 
-  const shareUrl: string = generateShareUrl(SHARE_DOMAIN, uri);
-  const rssUrl: string = isChannel ? generateRssUrl(URL, claim) : '';
+  const lbryUrl: string = generateLbryContentUrl(claim.canonical_url, claim.permanent_url);
+  const shareUrl: string = generateShareUrl(SHARE_DOMAIN, lbryUrl);
+  const rssUrl: string = isChannel ? generateRssUrl(SHARE_DOMAIN, claim) : '';
   const isCollectionClaim = claim && claim.value_type === 'collection';
   // $FlowFixMe
   const isPlayable =
@@ -233,11 +234,9 @@ function ClaimMenuList(props: Props) {
                   className="comment__menu-option"
                   onSelect={() => {
                     doToast({
-                      message: __('Item %action% Watch Later', {
-                        action: hasClaimInWatchLater
-                          ? __('removed from --[substring for "Item %action% Watch Later"]--')
-                          : __('added to --[substring for "Item %action% Watch Later"]--'),
-                      }),
+                      message: hasClaimInWatchLater
+                        ? __('Item removed from Watch Later')
+                        : __('Item added to Watch Later'),
                     });
                     doCollectionEdit(COLLECTIONS_CONSTS.WATCH_LATER_ID, {
                       claims: [contentClaim],
@@ -258,9 +257,9 @@ function ClaimMenuList(props: Props) {
                   className="comment__menu-option"
                   onSelect={() => {
                     doToast({
-                      message: __(`Item %action% ${lastCollectionName}`, {
-                        action: hasClaimInCustom ? __('removed from') : __('added to'),
-                      }),
+                      message: hasClaimInCustom
+                        ? __('Item removed from %lastCollectionName%', { lastCollectionName })
+                        : __('Item added to %lastCollectionName%', { lastCollectionName }),
                     });
                     doCollectionEdit(COLLECTIONS_CONSTS.FAVORITES_ID, {
                       claims: [contentClaim],
@@ -271,7 +270,9 @@ function ClaimMenuList(props: Props) {
                 >
                   <div className="menu__link">
                     <Icon aria-hidden icon={hasClaimInCustom ? ICONS.DELETE : ICONS.STAR} />
-                    {hasClaimInCustom ? __(`In ${lastCollectionName}`) : __(`${lastCollectionName}`)}
+                    {hasClaimInCustom
+                      ? __('In %lastCollectionName%', { lastCollectionName })
+                      : __(`${lastCollectionName}`)}
                   </div>
                 </MenuItem>
               )}
@@ -411,7 +412,7 @@ function ClaimMenuList(props: Props) {
 
         <MenuItem className="comment__menu-option" onSelect={handleCopyLink}>
           <div className="menu__link">
-            <Icon aria-hidden icon={ICONS.SHARE} />
+            <Icon aria-hidden icon={ICONS.COPY_LINK} />
             {__('Copy Link')}
           </div>
         </MenuItem>

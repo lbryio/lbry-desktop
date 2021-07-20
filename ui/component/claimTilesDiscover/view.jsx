@@ -3,7 +3,7 @@ import { ENABLE_NO_SOURCE_CLAIMS, SIMPLE_SITE } from 'config';
 import * as CS from 'constants/claim_search';
 import type { Node } from 'react';
 import React from 'react';
-import { createNormalizedClaimSearchKey, MATURE_TAGS } from 'lbry-redux';
+import { createNormalizedClaimSearchKey, MATURE_TAGS, splitBySeparator } from 'lbry-redux';
 import ClaimPreviewTile from 'component/claimPreviewTile';
 import { useHistory } from 'react-router';
 import { getLivestreamOnlyOptions } from 'util/search';
@@ -115,6 +115,7 @@ type Props = {
   liveLivestreamsFirst?: boolean,
   livestreamMap?: { [string]: any },
   pin?: boolean,
+  pinUrls?: Array<string>,
   showNoSourceClaims?: boolean,
 };
 
@@ -146,7 +147,8 @@ function ClaimTilesDiscover(props: Props) {
     mutedUris,
     liveLivestreamsFirst,
     livestreamMap,
-    // pin, // let's pin from /web folder
+    pin,
+    pinUrls,
     prefixUris,
     showNoSourceClaims,
   } = props;
@@ -155,7 +157,9 @@ function ClaimTilesDiscover(props: Props) {
   const urlParams = new URLSearchParams(location.search);
   const feeAmountInUrl = urlParams.get('fee_amount');
   const feeAmountParam = feeAmountInUrl || feeAmount;
-  const mutedAndBlockedChannelIds = Array.from(new Set(mutedUris.concat(blockedUris).map((uri) => uri.split('#')[1])));
+  const mutedAndBlockedChannelIds = Array.from(
+    new Set(mutedUris.concat(blockedUris).map((uri) => splitBySeparator(uri)[1]))
+  );
   const liveUris = [];
 
   const [prevUris, setPrevUris] = React.useState([]);
@@ -286,10 +290,24 @@ function ClaimTilesDiscover(props: Props) {
     return undefined;
   };
 
+  const modifiedUris = uris ? uris.slice() : [];
+  const fixUris = pinUrls || ['lbry://@AlisonMorrow#6/LBRY#8'];
+
+  if (pin && modifiedUris && modifiedUris.length > 2 && window.location.pathname === '/') {
+    fixUris.forEach((fixUri) => {
+      if (modifiedUris.indexOf(fixUri) !== -1) {
+        modifiedUris.splice(modifiedUris.indexOf(fixUri), 1);
+      } else {
+        modifiedUris.pop();
+      }
+    });
+    modifiedUris.splice(2, 0, ...fixUris);
+  }
+
   return (
     <ul className="claim-grid">
-      {uris && uris.length
-        ? uris.map((uri, index) => (
+      {modifiedUris && modifiedUris.length
+        ? modifiedUris.map((uri, index) => (
             <ClaimPreviewTile key={uri} uri={uri} properties={renderProperties} live={resolveLive(index)} />
           ))
         : new Array(pageSize)

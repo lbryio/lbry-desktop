@@ -46,6 +46,7 @@ export default function LivestreamComments(props: Props) {
     superChatsTotalAmount,
     myChannels,
   } = props;
+
   const commentsRef = React.createRef();
   const [scrollBottom, setScrollBottom] = React.useState(true);
   const [viewMode, setViewMode] = React.useState(VIEW_MODE_CHAT);
@@ -158,7 +159,7 @@ export default function LivestreamComments(props: Props) {
           </div>
         )}
         <div ref={commentsRef} className="livestream__comments-wrapper">
-          {viewMode === VIEW_MODE_CHAT && superChatsTotalAmount > 0 && (
+          {viewMode === VIEW_MODE_CHAT && superChatsTotalAmount > 0 && superChats && (
             <div className="livestream-superchats__wrapper">
               <div className="livestream-superchats__inner">
                 {superChats.map((superChat: Comment) => (
@@ -174,6 +175,7 @@ export default function LivestreamComments(props: Props) {
                           size={10}
                           className="livestream-superchat__amount-large"
                           amount={superChat.support_amount}
+                          isFiat={superChat.is_fiat}
                         />
                       </div>
                     </div>
@@ -193,6 +195,7 @@ export default function LivestreamComments(props: Props) {
                   commentId={comment.comment_id}
                   message={comment.comment}
                   supportAmount={comment.support_amount}
+                  isFiat={comment.is_fiat}
                   commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}
                 />
               ))}

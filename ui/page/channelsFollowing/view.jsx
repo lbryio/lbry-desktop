@@ -10,6 +10,7 @@ import Page from 'component/page';
 import Button from 'component/button';
 import Icon from 'component/common/icon';
 import useGetLivestreams from 'effects/use-get-livestreams';
+import { splitBySeparator } from 'lbry-redux';
 
 type Props = {
   subscribedChannels: Array<Subscription>,
@@ -36,7 +37,7 @@ function ChannelsFollowingPage(props: Props) {
           </span>
         }
         defaultOrderBy={CS.ORDER_BY_NEW}
-        channelIds={subscribedChannels.map((sub) => sub.uri.split('#')[1])}
+        channelIds={subscribedChannels.map((sub) => splitBySeparator(sub.uri)[1])}
         meta={
           <Button
             icon={ICONS.SEARCH}

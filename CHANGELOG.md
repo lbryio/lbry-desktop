@@ -1,8 +1,25 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
-
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+
+## [Unreleased for Desktop]
+
+### Added
+- Show currently active playing item on playlist _community pr!_ ([#6453](https://github.com/lbryio/lbry-desktop/pull/6453))
+- Add watch later to hover action for last used playlist on popup _community pr!_ ([#6274](https://github.com/lbryio/lbry-desktop/pull/6274))
+
+### Changed
+- Use Canonical Url for copy link ([#6500](https://github.com/lbryio/lbry-desktop/pull/6500))
+- Use better icon for copy link ([#6485](https://github.com/lbryio/lbry-desktop/pull/6485))
+- Comments load paginated ([#6390](https://github.com/lbryio/lbry-desktop/pull/6390))
+
+### Fixed
+- App now supports '#' and ':' for claimId separator ([#6496](https://github.com/lbryio/lbry-desktop/pull/6496))
+- Fix "exact match" being applied to Recommended ([#6460](https://github.com/lbryio/lbry-desktop/pull/6460))
+- Fix upload button on creator analytics _community pr!_ ([#6458](https://github.com/lbryio/lbry-desktop/pull/6458))
+- Prevent sidebar shortcut activation on textarea _community pr!_ ([#6454](https://github.com/lbryio/lbry-desktop/pull/6454))
+
 ## [0.51.1] - [2021-06-26]
 
 ### Added

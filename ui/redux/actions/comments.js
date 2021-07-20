@@ -3,7 +3,15 @@ import * as ACTIONS from 'constants/action_types';
 import * as REACTION_TYPES from 'constants/reactions';
 import * as PAGES from 'constants/pages';
 import { SORT_BY, BLOCK_LEVEL } from 'constants/comment';
-import { Lbry, parseURI, buildURI, selectClaimsById, selectClaimsByUri, selectMyChannelClaims } from 'lbry-redux';
+import {
+  Lbry,
+  parseURI,
+  buildURI,
+  selectClaimsById,
+  selectClaimsByUri,
+  selectMyChannelClaims,
+  isURIEqual,
+} from 'lbry-redux';
 import { doToast, doSeeNotifications } from 'redux/actions/notifications';
 import {
   makeSelectMyReactionsForComment,
@@ -198,7 +206,7 @@ export function doSuperChatList(uri: string) {
 }
 
 export function doCommentReactList(commentIds: Array<string>) {
-  return (dispatch: Dispatch, getState: GetState) => {
+  return async (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const activeChannelClaim = selectActiveChannelClaim(state);
 
@@ -206,24 +214,32 @@ export function doCommentReactList(commentIds: Array<string>) {
       type: ACTIONS.COMMENT_REACTION_LIST_STARTED,
     });
 
-    const params: CommentReactListParams = {
+    const params: ReactionListParams = {
       comment_ids: commentIds.join(','),
     };
 
     if (activeChannelClaim) {
-      params['channel_name'] = activeChannelClaim.name;
-      params['channel_id'] = activeChannelClaim.claim_id;
+      const signatureData = await channelSignName(activeChannelClaim.claim_id, activeChannelClaim.name);
+      if (!signatureData) {
+        return dispatch(doToast({ isError: true, message: __('Unable to verify your channel. Please try again.') }));
+      }
+
+      params.channel_name = activeChannelClaim.name;
+      params.channel_id = activeChannelClaim.claim_id;
+      params.signature = signatureData.signature;
+      params.signing_ts = signatureData.signing_ts;
     }
 
-    return Lbry.comment_react_list(params)
-      .then((result: CommentReactListResponse) => {
+    return Comments.reaction_list(params)
+      .then((result: ReactionListResponse) => {
         const { my_reactions: myReactions, others_reactions: othersReactions } = result;
         dispatch({
           type: ACTIONS.COMMENT_REACTION_LIST_COMPLETED,
           data: {
-            myReactions: myReactions || {},
+            myReactions,
             othersReactions,
             channelId: activeChannelClaim ? activeChannelClaim.claim_id : undefined,
+            commentIds,
           },
         });
       })
@@ -238,7 +254,7 @@ export function doCommentReactList(commentIds: Array<string>) {
 }
 
 export function doCommentReact(commentId: string, type: string) {
-  return (dispatch: Dispatch, getState: GetState) => {
+  return async (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const activeChannelClaim = selectActiveChannelClaim(state);
     const pendingReacts = selectPendingCommentReacts(state);
@@ -266,11 +282,19 @@ export function doCommentReact(commentId: string, type: string) {
     const reactKey = `${commentId}:${activeChannelClaim.claim_id}`;
     const myReacts = makeSelectMyReactionsForComment(reactKey)(state);
     const othersReacts = makeSelectOthersReactionsForComment(reactKey)(state);
-    const params: CommentReactParams = {
+
+    const signatureData = await channelSignName(activeChannelClaim.claim_id, activeChannelClaim.name);
+    if (!signatureData) {
+      return dispatch(doToast({ isError: true, message: __('Unable to verify your channel. Please try again.') }));
+    }
+
+    const params: ReactionReactParams = {
       comment_ids: commentId,
       channel_name: activeChannelClaim.name,
       channel_id: activeChannelClaim.claim_id,
-      react_type: type,
+      signature: signatureData.signature,
+      signing_ts: signatureData.signing_ts,
+      type: type,
     };
 
     if (myReacts.includes(type)) {
@@ -285,6 +309,7 @@ export function doCommentReact(commentId: string, type: string) {
         }
       }
     }
+
     dispatch({
       type: ACTIONS.COMMENT_REACT_STARTED,
       data: commentId + type,
@@ -304,8 +329,8 @@ export function doCommentReact(commentId: string, type: string) {
       },
     });
 
-    Lbry.comment_react(params)
-      .then((result: CommentReactListResponse) => {
+    Comments.reaction_react(params)
+      .then((result: ReactionReactResponse) => {
         dispatch({
           type: ACTIONS.COMMENT_REACT_COMPLETED,
           data: commentId + type,
@@ -335,16 +360,32 @@ export function doCommentReact(commentId: string, type: string) {
   };
 }
 
+/**
+ *
+ * @param comment
+ * @param claim_id - File claim id
+ * @param parent_id - What is this?
+ * @param uri
+ * @param livestream
+ * @param {string} [txid] Optional transaction id
+ * @param {string} [payment_intent_id] Optional transaction id
+ * @param {string} [environment] Optional environment for Stripe (test|live)
+ * @returns {(function(Dispatch, GetState): Promise<undefined|void|*>)|*}
+ */
 export function doCommentCreate(
   comment: string = '',
   claim_id: string = '',
   parent_id?: string,
   uri: string,
   livestream?: boolean = false,
-  txid?: string
+  txid?: string,
+  payment_intent_id?: string,
+  environment?: string
 ) {
   return async (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
+
+    // get active channel that will receive comment and optional tip
     const activeChannelClaim = selectActiveChannelClaim(state);
 
     if (!activeChannelClaim) {
@@ -366,6 +407,7 @@ export function doCommentCreate(
       } catch (e) {}
     }
 
+    // send a notification
     if (parent_id) {
       const notification = makeSelectNotificationForCommentId(parent_id)(state);
       if (notification && !notification.is_seen) {
@@ -377,6 +419,8 @@ export function doCommentCreate(
       return dispatch(doToast({ isError: true, message: __('Unable to verify your channel. Please try again.') }));
     }
 
+    // Comments is a function which helps make calls to the backend
+    // these params passed in POST call.
     return Comments.comment_create({
       comment: comment,
       claim_id: claim_id,
@@ -385,9 +429,12 @@ export function doCommentCreate(
       parent_id: parent_id,
       signature: signatureData.signature,
       signing_ts: signatureData.signing_ts,
-      ...(txid ? { support_tx_id: txid } : {}),
+      ...(txid ? { support_tx_id: txid } : {}), // add transaction id if it exists
+      ...(payment_intent_id ? { payment_intent_id } : {}), // add payment_intent_id if it exists
+      ...(environment ? { environment } : {}), // add environment for stripe if it exists
     })
       .then((result: CommentCreateResponse) => {
+        console.log(result);
         dispatch({
           type: ACTIONS.COMMENT_CREATE_COMPLETED,
           data: {
@@ -400,6 +447,7 @@ export function doCommentCreate(
         return result;
       })
       .catch((error) => {
+        console.log(error);
         dispatch({
           type: ACTIONS.COMMENT_CREATE_FAILED,
           data: error,
@@ -454,7 +502,7 @@ export function doCommentCreate(
 }
 
 export function doCommentPin(commentId: string, claimId: string, remove: boolean) {
-  return (dispatch: Dispatch, getState: GetState) => {
+  return async (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const activeChannel = selectActiveChannelClaim(state);
 
@@ -463,16 +511,25 @@ export function doCommentPin(commentId: string, claimId: string, remove: boolean
       return;
     }
 
+    const signedCommentId = await channelSignData(activeChannel.claim_id, commentId);
+    if (!signedCommentId) {
+      return dispatch(doToast({ isError: true, message: __('Unable to verify your channel. Please try again.') }));
+    }
+
     dispatch({
       type: ACTIONS.COMMENT_PIN_STARTED,
     });
 
-    return Lbry.comment_pin({
+    const params: CommentPinParams = {
       comment_id: commentId,
-      channel_name: activeChannel.name,
       channel_id: activeChannel.claim_id,
-      ...(remove ? { remove: true } : {}),
-    })
+      channel_name: activeChannel.name,
+      remove: remove,
+      signature: signedCommentId.signature,
+      signing_ts: signedCommentId.signing_ts,
+    };
+
+    return Comments.comment_pin(params)
       .then((result: CommentPinResponse) => {
         dispatch({
           type: ACTIONS.COMMENT_PIN_COMPLETED,
@@ -569,15 +626,30 @@ export function doCommentUpdate(comment_id: string, comment: string) {
   if (comment === '') {
     return doCommentAbandon(comment_id);
   } else {
-    return (dispatch: Dispatch) => {
+    return async (dispatch: Dispatch, getState: GetState) => {
+      const state = getState();
+
+      const activeChannelClaim = selectActiveChannelClaim(state);
+      if (!activeChannelClaim) {
+        return dispatch(doToast({ isError: true, message: __('No active channel selected.') }));
+      }
+
+      const signedComment = await channelSignData(activeChannelClaim.claim_id, comment);
+      if (!signedComment) {
+        return dispatch(doToast({ isError: true, message: __('Unable to verify your channel. Please try again.') }));
+      }
+
       dispatch({
         type: ACTIONS.COMMENT_UPDATE_STARTED,
       });
-      return Lbry.comment_update({
+
+      return Comments.comment_edit({
         comment_id: comment_id,
         comment: comment,
+        signature: signedComment.signature,
+        signing_ts: signedComment.signing_ts,
       })
-        .then((result: CommentUpdateResponse) => {
+        .then((result: CommentEditResponse) => {
           if (result != null) {
             dispatch({
               type: ACTIONS.COMMENT_UPDATE_COMPLETED,
@@ -625,6 +697,19 @@ async function channelSignName(channelClaimId: string, channelName: string) {
 
     signedObject['claim_id'] = channelClaimId;
     signedObject['name'] = channelName;
+  } catch (e) {}
+
+  return signedObject;
+}
+
+async function channelSignData(channelClaimId: string, data: string) {
+  let signedObject;
+
+  try {
+    signedObject = await Lbry.channel_sign({
+      channel_id: channelClaimId,
+      hexdata: toHex(data),
+    });
   } catch (e) {}
 
   return signedObject;
@@ -935,7 +1020,7 @@ export function doFetchModBlockedList() {
                           claimId: blockedChannel.blocked_channel_id,
                         });
 
-                        if (!blockedList.find((blockedChannel) => blockedChannel.channelUri === channelUri)) {
+                        if (!blockedList.find((blockedChannel) => isURIEqual(blockedChannel.channelUri, channelUri))) {
                           blockedList.push({ channelUri, blockedAt: blockedChannel.blocked_at });
                         }
 

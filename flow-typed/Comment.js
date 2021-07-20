@@ -14,6 +14,7 @@ declare type Comment = {
   is_pinned: boolean,
   support_amount: number,
   replies: number, // number of direct replies (i.e. excluding nested replies).
+  is_fiat?: boolean,
 };
 
 declare type PerChannelSettings = {
@@ -71,12 +72,33 @@ declare type CommentReactParams = {
   remove?: boolean,
 };
 
-declare type CommentReactListParams = {
-  comment_ids?: string,
+declare type ReactionReactParams = {
+  comment_ids: string,
+  signature?: string,
+  signing_ts?: string,
+  remove?: boolean,
+  clear_types?: string,
+  type: string,
+  channel_id: string,
+  channel_name: string,
+};
+
+declare type ReactionReactResponse = {
+  Reactions: { [string]: { [string]: number} },
+};
+
+declare type ReactionListParams = {
+  comment_ids: string, // CSV of IDs
   channel_id?: string,
   channel_name?: string,
-  wallet_id?: string,
-  react_types?: string,
+  signature?: string,
+  signing_ts?: string,
+  types?: string,
+};
+
+declare type ReactionListResponse = {
+  my_reactions: Array<MyReactions>,
+  others_reactions: Array<OthersReactions>,
 };
 
 declare type CommentListParams = {
@@ -112,6 +134,28 @@ declare type CommentByIdResponse = {
   items: Comment,
   ancestors: Array<Comment>,
 }
+
+declare type CommentPinParams = {
+  comment_id: string,
+  channel_id: string,
+  channel_name: string,
+  remove?: boolean,
+  signature: string,
+  signing_ts: string,
+}
+
+declare type CommentPinResponse = {
+  items: Comment, // "items" is an inherited typo to match SDK. Will be "item" in a new version.
+}
+
+declare type CommentEditParams = {
+  comment: string,
+  comment_id: string,
+  signature: string,
+  signing_ts: string,
+}
+
+declare type CommentEditResponse = Comment
 
 declare type CommentAbandonParams = {
   comment_id: string,

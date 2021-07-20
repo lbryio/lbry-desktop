@@ -20,6 +20,8 @@ import { useGetAds } from 'effects/use-get-ads';
 import Button from 'component/button';
 import I18nMessage from 'component/i18nMessage';
 import { useHistory } from 'react-router';
+import { getAllIds } from 'util/buildHomepage';
+import type { HomepageCat } from 'util/buildHomepage';
 
 const PLAY_TIMEOUT_ERROR = 'play_timeout_error';
 const PLAY_TIMEOUT_LIMIT = 2000;
@@ -48,15 +50,7 @@ type Props = {
   setVideoPlaybackRate: (number) => void,
   authenticated: boolean,
   userId: number,
-  homepageData: {
-    PRIMARY_CONTENT_CHANNEL_IDS?: Array<string>,
-    ENLIGHTENMENT_CHANNEL_IDS?: Array<string>,
-    GAMING_CHANNEL_IDS?: Array<string>,
-    SCIENCE_CHANNEL_IDS?: Array<string>,
-    TECHNOLOGY_CHANNEL_IDS?: Array<string>,
-    COMMUNITY_CHANNEL_IDS?: Array<string>,
-    FINCANCE_CHANNEL_IDS?: Array<string>,
-  },
+  homepageData?: { [string]: HomepageCat },
 };
 
 /*
@@ -91,24 +85,8 @@ function VideoViewer(props: Props) {
     authenticated,
     userId,
   } = props;
-  const {
-    PRIMARY_CONTENT_CHANNEL_IDS = [],
-    ENLIGHTENMENT_CHANNEL_IDS = [],
-    GAMING_CHANNEL_IDS = [],
-    SCIENCE_CHANNEL_IDS = [],
-    TECHNOLOGY_CHANNEL_IDS = [],
-    COMMUNITY_CHANNEL_IDS = [],
-    FINCANCE_CHANNEL_IDS = [],
-  } = homepageData;
-  const adApprovedChannelIds = [
-    ...PRIMARY_CONTENT_CHANNEL_IDS,
-    ...ENLIGHTENMENT_CHANNEL_IDS,
-    ...GAMING_CHANNEL_IDS,
-    ...SCIENCE_CHANNEL_IDS,
-    ...TECHNOLOGY_CHANNEL_IDS,
-    ...COMMUNITY_CHANNEL_IDS,
-    ...FINCANCE_CHANNEL_IDS,
-  ];
+
+  const adApprovedChannelIds = homepageData ? getAllIds(homepageData) : [];
   const claimId = claim && claim.claim_id;
   const channelClaimId = claim && claim.signing_channel && claim.signing_channel.claim_id;
   const isAudio = contentType.includes('audio');

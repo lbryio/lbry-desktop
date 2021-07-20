@@ -8,7 +8,7 @@ const config = {
   WEBPACK_WEB_PORT: process.env.WEBPACK_WEB_PORT,
   WEBPACK_ELECTRON_PORT: process.env.WEBPACK_ELECTRON_PORT,
   WEB_SERVER_PORT: process.env.WEB_SERVER_PORT,
-  LBRY_WEB_API: process.env.LBRY_WEB_API, //api.lbry.tv',
+  LBRY_WEB_API: process.env.LBRY_WEB_API, //api.na-backend.odysee.com',
   LBRY_API_URL: process.env.LBRY_API_URL, //api.lbry.com',
   LBRY_WEB_STREAMING_API: process.env.LBRY_WEB_STREAMING_API, //cdn.lbryplayer.xyz',
   LBRY_WEB_BUFFER_API: process.env.LBRY_WEB_BUFFER_API,
@@ -22,10 +22,17 @@ const config = {
   SITE_NAME: process.env.SITE_NAME,
   SITE_DESCRIPTION: process.env.SITE_DESCRIPTION,
   SITE_HELP_EMAIL: process.env.SITE_HELP_EMAIL,
+  // LOGO
   LOGO_TITLE: process.env.LOGO_TITLE,
+  FAVICON: process.env.FAVICON,
+  LOGO_URL: process.env.LOGO_URL,
+  LOGO_TEXT_LIGHT_URL: process.env.LOGO_TEXT_LIGHT_URL,
+  LOGO_TEXT_DARK_URL: process.env.LOGO_TEXT_DARK_URL,
+  // OG
   OG_TITLE_SUFFIX: process.env.OG_TITLE_SUFFIX,
   OG_HOMEPAGE_TITLE: process.env.OG_HOMEPAGE_TITLE,
   OG_IMAGE_URL: process.env.OG_IMAGE_URL,
+  // MASCOT
   YRBL_HAPPY_IMG_URL: process.env.YRBL_HAPPY_IMG_URL,
   YRBL_SAD_IMG_URL: process.env.YRBL_SAD_IMG_URL,
   LOGIN_IMG_URL: process.env.LOGIN_IMG_URL,
@@ -33,6 +40,8 @@ const config = {
   DEFAULT_LANGUAGE: process.env.DEFAULT_LANGUAGE,
   AUTO_FOLLOW_CHANNELS: process.env.AUTO_FOLLOW_CHANNELS,
   UNSYNCED_SETTINGS: process.env.UNSYNCED_SETTINGS,
+
+  // ENABLE FEATURES
   ENABLE_COMMENT_REACTIONS: process.env.ENABLE_COMMENT_REACTIONS === 'true',
   ENABLE_FILE_REACTIONS: process.env.ENABLE_FILE_REACTIONS === 'true',
   ENABLE_CREATOR_REACTIONS: process.env.ENABLE_CREATOR_REACTIONS === 'true',
@@ -53,6 +62,7 @@ const config = {
   ENABLE_UI_NOTIFICATIONS: process.env.ENABLE_UI_NOTIFICATIONS === 'true',
   ENABLE_MATURE: process.env.ENABLE_MATURE === 'true',
   CUSTOM_HOMEPAGE: process.env.CUSTOM_HOMEPAGE === 'true',
+  SHOW_TAGS_INTRO: process.env.SHOW_TAGS_INTRO === 'true',
 };
 
 config.URL_LOCAL = `http://localhost:${config.WEB_SERVER_PORT}`;

@@ -626,7 +626,6 @@ export function doGetAndPopulatePreferences() {
     function successCb(savedPreferences) {
       const successState = getState();
       const daemonSettings = selectDaemonSettings(successState);
-
       if (savedPreferences !== null) {
         dispatch(doPopulateSharedUserState(savedPreferences));
         // @if TARGET='app'
@@ -653,7 +652,7 @@ export function doGetAndPopulatePreferences() {
       return true;
     }
 
-    function failCb() {
+    function failCb(er) {
       dispatch(
         doToast({
           isError: true,
@@ -663,6 +662,7 @@ export function doGetAndPopulatePreferences() {
 
       dispatch({
         type: ACTIONS.SYNC_FATAL_ERROR,
+        error: er,
       });
 
       return false;
@@ -681,6 +681,8 @@ export function doHandleSyncComplete(error, hasNewData) {
         // we just got sync data, better update our channels
         dispatch(doFetchChannelListMine());
       }
+    } else {
+      console.error('Error in doHandleSyncComplete', error);
     }
   };
 }

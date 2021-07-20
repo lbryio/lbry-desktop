@@ -10,13 +10,15 @@ import ChannelThumbnail from 'component/channelThumbnail';
 import SubscribeButton from 'component/subscribeButton';
 import useGetThumbnail from 'effects/use-get-thumbnail';
 import { formatLbryUrlForWeb } from 'util/url';
-import { parseURI, COLLECTIONS_CONSTS } from 'lbry-redux';
+import { parseURI, COLLECTIONS_CONSTS, isURIEqual } from 'lbry-redux';
 import PreviewOverlayProperties from 'component/previewOverlayProperties';
 import FileDownloadLink from 'component/fileDownloadLink';
 import FileWatchLaterLink from 'component/fileWatchLaterLink';
 import ClaimRepostAuthor from 'component/claimRepostAuthor';
 import ClaimMenuList from 'component/claimMenuList';
 import CollectionPreviewOverlay from 'component/collectionPreviewOverlay';
+// $FlowFixMe cannot resolve ...
+import PlaceholderTx from 'static/img/placeholderTx.gif';
 
 type Props = {
   uri: string,
@@ -39,7 +41,6 @@ type Props = {
   }>,
   blockedChannelUris: Array<string>,
   getFile: (string) => void,
-  placeholder: boolean,
   streamingUrl: string,
   isMature: boolean,
   showMature: boolean,
@@ -175,12 +176,12 @@ function ClaimPreviewTile(props: Props) {
 
   // block stream claims
   if (claim && !shouldHide && !showHiddenByUser && blockedChannelUris.length && signingChannel) {
-    shouldHide = blockedChannelUris.some((blockedUri) => blockedUri === signingChannel.permanent_url);
+    shouldHide = blockedChannelUris.some((blockedUri) => isURIEqual(blockedUri, signingChannel.permanent_url));
   }
   // block channel claims if we can't control for them in claim search
   // e.g. fetchRecommendedSubscriptions
-  if (claim && isChannel && !shouldHide && !showHiddenByUser && blockedChannelUris.length) {
-    shouldHide = blockedChannelUris.some((blockedUri) => blockedUri === claim.permanent_url);
+  if (claim && isChannel && !shouldHide && !showHiddenByUser && blockedChannelUris.length && signingChannel) {
+    shouldHide = blockedChannelUris.some((blockedUri) => isURIEqual(blockedUri, signingChannel.permanent_url));
   }
 
   if (shouldHide || (isLivestream && !showNoSourceClaims)) {
@@ -190,7 +191,9 @@ function ClaimPreviewTile(props: Props) {
   if (placeholder || (!claim && isResolvingUri)) {
     return (
       <li className={classnames('claim-preview--tile', {})}>
-        <div className="placeholder media__thumb" />
+        <div className="placeholder media__thumb">
+          <img src={PlaceholderTx} alt="Placeholder" />
+        </div>
         <div className="placeholder__wrapper">
           <div className="placeholder claim-tile__title" />
           <div className="placeholder claim-tile__info" />
@@ -255,10 +258,8 @@ function ClaimPreviewTile(props: Props) {
             )}
           </h2>
         </NavLink>
-        {/* CHECK CLAIM MENU LIST PARAMS (IS REPOST?) */}
         <ClaimMenuList uri={uri} collectionId={listId} channelUri={channelUri} isRepost={isRepost} />
       </div>
-
       <div>
         <div className="claim-tile__info">
           {isChannel ? (

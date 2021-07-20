@@ -2,8 +2,7 @@
 import * as ACTIONS from 'constants/action_types';
 import { handleActions } from 'util/redux-utils';
 import { BLOCK_LEVEL } from 'constants/comment';
-
-const IS_DEV = process.env.NODE_ENV !== 'production';
+import { isURIEqual } from 'lbry-redux';
 
 const defaultState: CommentsState = {
   commentById: {}, // commentId -> Comment
@@ -183,12 +182,15 @@ export default handleActions(
     },
 
     [ACTIONS.COMMENT_REACTION_LIST_COMPLETED]: (state: CommentsState, action: any): CommentsState => {
-      const { myReactions, othersReactions, channelId } = action.data;
+      const { myReactions, othersReactions, channelId, commentIds } = action.data;
       const myReacts = Object.assign({}, state.myReactsByCommentId);
       const othersReacts = Object.assign({}, state.othersReactsByCommentId);
 
-      if (myReactions) {
-        Object.entries(myReactions).forEach(([commentId, reactions]) => {
+      const myReactionsEntries = myReactions ? Object.entries(myReactions) : [];
+      const othersReactionsEntries = othersReactions ? Object.entries(othersReactions) : [];
+
+      if (myReactionsEntries.length > 0) {
+        myReactionsEntries.forEach(([commentId, reactions]) => {
           const key = channelId ? `${commentId}:${channelId}` : commentId;
           myReacts[key] = Object.entries(reactions).reduce((acc, [name, count]) => {
             if (count === 1) {
@@ -197,12 +199,22 @@ export default handleActions(
             return acc;
           }, []);
         });
+      } else {
+        commentIds.forEach((commentId) => {
+          const key = channelId ? `${commentId}:${channelId}` : commentId;
+          myReacts[key] = [];
+        });
       }
 
-      if (othersReactions) {
-        Object.entries(othersReactions).forEach(([commentId, reactions]) => {
+      if (othersReactionsEntries.length > 0) {
+        othersReactionsEntries.forEach(([commentId, reactions]) => {
           const key = channelId ? `${commentId}:${channelId}` : commentId;
           othersReacts[key] = reactions;
+        });
+      } else {
+        commentIds.forEach((commentId) => {
+          const key = channelId ? `${commentId}:${channelId}` : commentId;
+          othersReacts[key] = {};
         });
       }
 
@@ -276,6 +288,15 @@ export default handleActions(
       const totalRepliesByParentId = Object.assign({}, state.totalRepliesByParentId);
       const isLoadingByParentId = Object.assign({}, state.isLoadingByParentId);
 
+      if (!parentId) {
+        totalCommentsById[claimId] = totalItems;
+        topLevelTotalCommentsById[claimId] = totalFilteredItems;
+        topLevelTotalPagesById[claimId] = totalPages;
+      } else {
+        totalRepliesByParentId[parentId] = totalFilteredItems;
+        isLoadingByParentId[parentId] = false;
+      }
+
       const commonUpdateAction = (comment, commentById, commentIds, index) => {
         // map the comment_ids to the new comments
         commentById[comment.comment_id] = comment;
@@ -288,46 +309,19 @@ export default handleActions(
         // sort comments by their timestamp
         const commentIds = Array(comments.length);
 
-        // totalCommentsById[claimId] = totalItems;
-        // --> currently, this value is only correct when done via a top-level query.
-        // Until this is fixed, I'm moving it downwards to **
-
         // --- Top-level comments ---
         if (!parentId) {
-          totalCommentsById[claimId] = totalItems; // **
-
-          topLevelTotalCommentsById[claimId] = totalFilteredItems;
-          topLevelTotalPagesById[claimId] = totalPages;
-
-          if (!topLevelCommentsById[claimId]) {
-            topLevelCommentsById[claimId] = [];
-          }
-
-          const topLevelCommentIds = topLevelCommentsById[claimId];
-
           for (let i = 0; i < comments.length; ++i) {
             const comment = comments[i];
             commonUpdateAction(comment, commentById, commentIds, i);
-
-            if (IS_DEV && comment['parent_id']) console.error('Invalid top-level comment:', comment); // eslint-disable-line
-
-            if (!topLevelCommentIds.includes(comment.comment_id)) {
-              topLevelCommentIds.push(comment.comment_id);
-            }
+            pushToArrayInObject(topLevelCommentsById, claimId, comment.comment_id);
           }
         }
         // --- Replies ---
         else {
-          totalRepliesByParentId[parentId] = totalFilteredItems;
-          isLoadingByParentId[parentId] = false;
-
           for (let i = 0; i < comments.length; ++i) {
             const comment = comments[i];
             commonUpdateAction(comment, commentById, commentIds, i);
-
-            if (IS_DEV && !comment['parent_id']) console.error('Missing parent_id:', comment); // eslint-disable-line
-            if (IS_DEV && comment.parent_id !== parentId) console.error('Black sheep in the family?:', comment); // eslint-disable-line
-
             pushToArrayInObject(repliesByParentId, parentId, comment.comment_id);
           }
         }
@@ -806,7 +800,7 @@ export default handleActions(
       for (const commentId in commentById) {
         const comment = commentById[commentId];
 
-        if (blockedUri === comment.channel_url) {
+        if (isURIEqual(blockedUri, comment.channel_url)) {
           delete commentById[comment.comment_id];
         }
       }

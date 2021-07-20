@@ -4,6 +4,7 @@ import {
   makeSelectTopLevelCommentsForUri,
   makeSelectTopLevelTotalPagesForUri,
   selectIsFetchingComments,
+  selectIsFetchingReacts,
   makeSelectTotalCommentsCountForUri,
   selectOthersReactsById,
   makeSelectCommentsDisabledForUri,
@@ -12,10 +13,11 @@ import {
 } from 'redux/selectors/comments';
 import { doCommentReset, doCommentList, doCommentById, doCommentReactList } from 'redux/actions/comments';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
-import { selectActiveChannelId } from 'redux/selectors/app';
+import { selectActiveChannelClaim } from 'redux/selectors/app';
 import CommentsList from './view';
 
 const select = (state, props) => {
+  const activeChannelClaim = selectActiveChannelClaim(state);
   return {
     myChannels: selectMyChannelClaims(state),
     allCommentIds: makeSelectCommentIdsForUri(props.uri)(state),
@@ -24,12 +26,13 @@ const select = (state, props) => {
     totalComments: makeSelectTotalCommentsCountForUri(props.uri)(state),
     claimIsMine: makeSelectClaimIsMine(props.uri)(state),
     isFetchingComments: selectIsFetchingComments(state),
+    isFetchingReacts: selectIsFetchingReacts(state),
     commentingEnabled: IS_WEB ? Boolean(selectUserVerifiedEmail(state)) : true,
     commentsDisabledBySettings: makeSelectCommentsDisabledForUri(props.uri)(state),
     fetchingChannels: selectFetchingMyChannels(state),
     myReactsByCommentId: selectMyReactionsByCommentId(state),
     othersReactsById: selectOthersReactsById(state),
-    activeChannelId: selectActiveChannelId(state),
+    activeChannelId: activeChannelClaim && activeChannelClaim.claim_id,
   };
 };
 
