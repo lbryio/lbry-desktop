@@ -4,10 +4,11 @@ import { makeSelectClaimIsMine, makeSelectClaimForUri } from 'lbry-redux';
 import { doToast } from 'redux/actions/notifications';
 import { makeSelectMyReactionsForComment, makeSelectOthersReactionsForComment } from 'redux/selectors/comments';
 import { doCommentReact } from 'redux/actions/comments';
-import { selectActiveChannelId } from 'redux/selectors/app';
+import { selectActiveChannelClaim } from 'redux/selectors/app';
 
 const select = (state, props) => {
-  const activeChannelId = selectActiveChannelId(state);
+  const activeChannelClaim = selectActiveChannelClaim(state);
+  const activeChannelId = activeChannelClaim && activeChannelClaim.claim_id;
   const reactionKey = activeChannelId ? `${props.commentId}:${activeChannelId}` : props.commentId;
 
   return {
