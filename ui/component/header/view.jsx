@@ -1,5 +1,5 @@
 // @flow
-import { LOGO_TITLE, ENABLE_NO_SOURCE_CLAIMS, CHANNEL_STAKED_LEVEL_LIVESTREAM } from 'config';
+import { LOGO_TITLE, ENABLE_NO_SOURCE_CLAIMS, CHANNEL_STAKED_LEVEL_LIVESTREAM, ENABLE_UI_NOTIFICATIONS } from 'config';
 import * as ICONS from 'constants/icons';
 import { SETTINGS } from 'lbry-redux';
 import * as PAGES from 'constants/pages';
@@ -87,8 +87,8 @@ const Header = (props: Props) => {
     sidebarOpen,
     setSidebarOpen,
     isAbsoluteSideNavHidden,
-    user,
     hideCancel,
+    user,
     activeChannelClaim,
     activeChannelStakedLevel,
   } = props;
@@ -100,7 +100,7 @@ const Header = (props: Props) => {
   const isPwdResetPage = history.location.pathname.includes(PAGES.AUTH_PASSWORD_RESET);
   const hasBackout = Boolean(backout);
   const { backLabel, backNavDefault, title: backTitle, simpleTitle: simpleBackTitle } = backout || {};
-  const notificationsEnabled = (user && user.experimental_ui) || false;
+  const notificationsEnabled = ENABLE_UI_NOTIFICATIONS || (user && user.experimental_ui);
   const livestreamEnabled = Boolean(
     ENABLE_NO_SOURCE_CLAIMS &&
       user &&
@@ -438,7 +438,12 @@ function HeaderMenuButtons(props: HeaderMenuButtonProps) {
               <Icon aria-hidden icon={ICONS.CHANNEL} />
               {__('New Channel')}
             </MenuItem>
-
+            {/* @if TARGET='web' */}
+            <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.YOUTUBE_SYNC}`)}>
+              <Icon aria-hidden icon={ICONS.YOUTUBE} />
+              {__('Sync YouTube Channel')}
+            </MenuItem>
+            {/* @endif */}
             {livestreamEnabled && (
               <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.LIVESTREAM}`)}>
                 <Icon aria-hidden icon={ICONS.VIDEO} />
