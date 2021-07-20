@@ -206,14 +206,13 @@ function ClaimPreviewTile(props: Props) {
 
   return (
     <li
-      role="link"
       onClick={handleClick}
       className={classnames('card claim-preview--tile', {
         'claim-preview__wrapper--channel': isChannel,
         'claim-preview__live': live,
       })}
     >
-      <NavLink aria-hidden tabIndex={-1} {...navLinkProps}>
+      <NavLink {...navLinkProps} role="none" tabIndex={-1} aria-hidden>
         <FileThumbnail thumbnail={thumbnailUrl} allowGifs>
           {!isChannel && (
             <React.Fragment>
