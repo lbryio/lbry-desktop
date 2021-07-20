@@ -6,6 +6,7 @@ import Icon from 'component/common/icon';
 import NotificationBubble from 'component/notificationBubble';
 import Button from 'component/button';
 import { useHistory } from 'react-router';
+import { ENABLE_UI_NOTIFICATIONS } from 'config';
 
 type Props = {
   unseenCount: number,
@@ -19,8 +20,9 @@ export default function NotificationHeaderButton(props: Props) {
     // notifications,
     // fetching,
     doSeeAllNotifications,
-    // user,
+    user,
   } = props;
+  const notificationsEnabled = ENABLE_UI_NOTIFICATIONS || (user && user.experimental_ui);
   const { push } = useHistory();
 
   function handleMenuClick() {
@@ -29,6 +31,10 @@ export default function NotificationHeaderButton(props: Props) {
     }
 
     push(`/$/${PAGES.NOTIFICATIONS}`);
+  }
+
+  if (!notificationsEnabled) {
+    return null;
   }
 
   return (
