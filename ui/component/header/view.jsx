@@ -1,5 +1,5 @@
 // @flow
-import { ENABLE_NO_SOURCE_CLAIMS, CHANNEL_STAKED_LEVEL_LIVESTREAM } from 'config';
+import { LOGO_TITLE, ENABLE_NO_SOURCE_CLAIMS, CHANNEL_STAKED_LEVEL_LIVESTREAM, ENABLE_UI_NOTIFICATIONS } from 'config';
 import * as ICONS from 'constants/icons';
 import { SETTINGS } from 'lbry-redux';
 import * as PAGES from 'constants/pages';
@@ -102,7 +102,7 @@ const Header = (props: Props) => {
   const isPwdResetPage = history.location.pathname.includes(PAGES.AUTH_PASSWORD_RESET);
   const hasBackout = Boolean(backout);
   const { backLabel, backNavDefault, title: backTitle, simpleTitle: simpleBackTitle } = backout || {};
-  //   const notificationsEnabled = (user && user.experimental_ui) || false;
+  const notificationsEnabled = ENABLE_UI_NOTIFICATIONS || (user && user.experimental_ui);
   const livestreamEnabled = Boolean(
     ENABLE_NO_SOURCE_CLAIMS &&
       user &&
@@ -248,7 +248,7 @@ const Header = (props: Props) => {
                     icon={ICONS.MENU}
                     onClick={() => setSidebarOpen(!sidebarOpen)}
                   >
-                    {isAbsoluteSideNavHidden && isMobile && <NotificationBubble />}
+                    {isAbsoluteSideNavHidden && isMobile && notificationsEnabled && <NotificationBubble />}
                   </Button>
                 </span>
               )}
@@ -285,7 +285,7 @@ const Header = (props: Props) => {
 
                   <HeaderMenuButtons
                     authenticated={authenticated}
-                    notificationsEnabled
+                    notificationsEnabled={notificationsEnabled}
                     history={history}
                     handleThemeToggle={handleThemeToggle}
                     currentTheme={currentTheme}
