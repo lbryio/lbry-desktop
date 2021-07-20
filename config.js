@@ -8,7 +8,7 @@ const config = {
   WEBPACK_WEB_PORT: process.env.WEBPACK_WEB_PORT,
   WEBPACK_ELECTRON_PORT: process.env.WEBPACK_ELECTRON_PORT,
   WEB_SERVER_PORT: process.env.WEB_SERVER_PORT,
-  LBRY_WEB_API: process.env.LBRY_WEB_API, //api.lbry.tv',
+  LBRY_WEB_API: process.env.LBRY_WEB_API, //api.na-backend.odysee.com',
   LBRY_API_URL: process.env.LBRY_API_URL, //api.lbry.com',
   LBRY_WEB_STREAMING_API: process.env.LBRY_WEB_STREAMING_API, //cdn.lbryplayer.xyz',
   LBRY_WEB_BUFFER_API: process.env.LBRY_WEB_BUFFER_API,
