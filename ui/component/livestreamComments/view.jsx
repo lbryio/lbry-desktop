@@ -55,6 +55,9 @@ export default function LivestreamComments(props: Props) {
   const commentsLength = comments && comments.length;
   const commentsToDisplay = viewMode === VIEW_MODE_CHAT ? comments : superChats;
 
+  const discussionElement = document.querySelector('.livestream__comments');
+  const commentElement = document.querySelector('.livestream-comment');
+
   // todo: implement comment_list --mine in SDK so redux can grab with selectCommentIsMine
   function isMyComment(channelId: string) {
     if (myChannels != null && channelId != null) {
@@ -81,19 +84,16 @@ export default function LivestreamComments(props: Props) {
     };
   }, [claimId, uri, doCommentList, doSuperChatList, doCommentSocketConnect, doCommentSocketDisconnect]);
 
-  React.useEffect(() => {
-    const discussionElement = document.querySelector('.livestream__comments');
-    const commentElement = document.querySelector('.livestream-comment');
+  const handleScroll = React.useCallback(() => {
+    if (discussionElement) {
+      const negativeCommentHeight = commentElement && -1 * commentElement.offsetHeight;
+      const isAtRecent = negativeCommentHeight && discussionElement.scrollTop >= negativeCommentHeight;
 
-    function handleScroll() {
-      if (discussionElement) {
-        const negativeCommentHeight = commentElement && -1 * commentElement.offsetHeight;
-        const isAtRecent = negativeCommentHeight && discussionElement.scrollTop >= negativeCommentHeight;
-
-        setScrollBottom(isAtRecent);
-      }
+      setScrollBottom(isAtRecent);
     }
+  }, [commentElement, discussionElement]);
 
+  React.useEffect(() => {
     if (discussionElement) {
       discussionElement.addEventListener('scroll', handleScroll);
 
@@ -113,15 +113,17 @@ export default function LivestreamComments(props: Props) {
 
       return () => discussionElement.removeEventListener('scroll', handleScroll);
     }
-  }, [commentsLength, performedInitialScroll, setPerformedInitialScroll, setScrollBottom]);
+  }, [commentsLength, discussionElement, handleScroll, performedInitialScroll, setPerformedInitialScroll]);
 
   if (!claim) {
     return null;
   }
 
   function scrollBack() {
-    const element = document.querySelector('.livestream__comments');
-    if (element) element.scrollTop = 0;
+    if (discussionElement) {
+      discussionElement.scrollTop = 0;
+      setScrollBottom(true);
+    }
   }
 
   return (
@@ -209,7 +211,7 @@ export default function LivestreamComments(props: Props) {
               button="alt"
               className="livestream__comments-scroll__down"
               label={__('Recent Comments')}
-              onClick={() => scrollBack()}
+              onClick={scrollBack}
             />
           )}
 
