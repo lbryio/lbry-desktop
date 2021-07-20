@@ -291,7 +291,7 @@ function ClaimTilesDiscover(props: Props) {
   };
 
   const modifiedUris = uris ? uris.slice() : [];
-  const fixUris = pinUrls || ['lbry://@EmperorLemon#e/the-wizard-of-oz-and-the-dark-side-of#3'];
+  const fixUris = pinUrls || ['lbry://@Odysee#8/Does-Google-Own-Odysee#4'];
 
   if (pin && modifiedUris && modifiedUris.length > 2 && window.location.pathname === '/') {
     fixUris.forEach((fixUri) => {
