@@ -8,7 +8,6 @@ import {
   selectMyChannelClaims,
   makeSelectClaimIsStreamPlaceholder,
   SETTINGS,
-  doClearPublish,
 } from 'lbry-redux';
 import { selectFfmpegStatus, makeSelectClientSetting } from 'redux/selectors/settings';
 import { doPublishDesktop } from 'redux/actions/publish';
@@ -33,7 +32,6 @@ const select = (state, props) => {
 
 const perform = (dispatch) => ({
   publish: (filePath, preview) => dispatch(doPublishDesktop(filePath, preview)),
-  clearPublish: () => dispatch(doClearPublish()),
   closeModal: () => dispatch(doHideModal()),
   setEnablePublishPreview: (value) => dispatch(doSetClientSetting(SETTINGS.ENABLE_PUBLISH_PREVIEW, value)),
 });
