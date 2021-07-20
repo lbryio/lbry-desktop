@@ -639,7 +639,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       // do we need to check if explicitly redirected
       // or is checking extension only a safer method
       if (response && response.redirected && response.url && response.url.endsWith('m3u8')) {
-        finalType = 'application/x-mpegURL';
+        finalType = 'application/vnd.apple.mpegurl';
         finalSource = response.url;
       }
 
