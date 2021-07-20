@@ -180,7 +180,17 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   const isCollection = claim && claim.value_type === 'collection';
   const isChannelUri = isValid ? parseURI(uri).isChannel : false;
   const signingChannel = claim && claim.signing_channel;
-  const channelTitle = signingChannel && (signingChannel.value.title || signingChannel.name);
+
+  // Get channel title ( use name as fallback )
+  let channelTitle = null;
+  if (signingChannel) {
+    const { value, name } = signingChannel;
+    if (value && value.title) {
+      channelTitle = value.title;
+    } else {
+      channelTitle = name;
+    }
+  }
 
   // Aria-label value for claim preview
   let ariaLabelData = title;
@@ -375,7 +385,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                 {pending ? (
                   <ClaimPreviewTitle uri={uri} />
                 ) : (
-                  <NavLink aria-label={ariaLabelData} aria-current={active && 'page'} {...navLinkProps}>
+                  <NavLink aria-label={ariaLabelData} aria-current={active ? 'page' : null} {...navLinkProps}>
                     <ClaimPreviewTitle uri={uri} />
                   </NavLink>
                 )}
