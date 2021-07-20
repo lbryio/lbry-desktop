@@ -1,0 +1,425 @@
+$cover-z-index: 0;
+$metadata-z-index: 1;
+
+.channel-cover {
+  position: relative;
+  background-image: linear-gradient(to right, #637ad2, #318794 80%);
+  display: flex;
+  align-items: flex-end;
+  box-sizing: content-box;
+  color: #fff;
+}
+
+.channel-cover__custom {
+  z-index: $cover-z-index;
+  align-self: flex-start;
+  position: absolute;
+  object-fit: cover;
+}
+
+.channel-cover,
+.channel-cover__custom {
+  min-height: var(--cover-photo-height);
+  height: 100%;
+  width: 100%;
+  border-top-left-radius: var(--card-radius);
+  border-top-right-radius: var(--card-radius);
+  border: 1px sold var(--color-border);
+  border-bottom: none;
+
+  @media (max-width: $breakpoint-small) {
+    // Yikes
+    // I, Sean Yesmunt, take full responsibility for this monster
+    min-height: calc(var(--cover-photo-height) + 2 * var(--spacing-xl) + var(--spacing-m));
+  }
+}
+
+.channel-cover__custom--waiting {
+  background-color: var(--color-gray-5);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+
+.channel-cover__gradient {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+
+  &:after {
+    position: absolute;
+    bottom: 0;
+    opacity: 1;
+    content: '';
+    height: 100%;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background: linear-gradient(0deg, #0d0d0d 0, transparent 65%);
+  }
+}
+
+.channel-thumbnail {
+  display: flex;
+  position: relative;
+  height: 5rem;
+  width: 5rem;
+  background-size: cover;
+  margin-right: var(--spacing-m);
+}
+
+.channel-thumbnail--resolving {
+  background-color: var(--color-gray-3);
+}
+
+.channel-thumbnail--small {
+  height: 3rem;
+  width: 3rem;
+}
+
+.channel-thumbnail--xsmall {
+  height: 2.1rem;
+  width: 2.1rem;
+  margin-right: var(--spacing-xs);
+}
+
+.chanel-thumbnail--waiting {
+  background-color: var(--color-gray-5);
+  border-radius: var(--border-radius);
+  padding-top: 4rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.channel__thumbnail--channel-page {
+  position: absolute;
+  height: var(--channel-thumbnail-width);
+  width: var(--channel-thumbnail-width);
+  left: var(--spacing-m);
+  top: 4rem;
+  margin-top: var(--spacing-l);
+  box-shadow: var(--card-box-shadow);
+
+  @media (max-width: $breakpoint-small) {
+    top: 0;
+    margin-top: var(--spacing-m);
+  }
+}
+
+.channel-thumbnail__custom {
+  width: 100%;
+  object-fit: cover;
+  font-size: 1px; // To hide the alt text on firefox;
+}
+
+.channel-thumbnail__default {
+  width: 80%;
+  height: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  align-self: flex-end;
+}
+
+.channel-thumbnail,
+.channel-thumbnail__custom {
+  border-radius: var(--card-radius);
+}
+
+.channel-thumbnail__default--0 {
+  background-color: #748ffc;
+}
+
+.channel-thumbnail__default--1 {
+  background-color: #ffa855;
+}
+
+.channel-thumbnail__default--2 {
+  background-color: #339af0;
+}
+
+.channel-thumbnail__default--3 {
+  background-color: #ec8383;
+}
+
+.channel-thumbnail__default--4 {
+  background-color: #ccc;
+}
+
+.channel__primary-info {
+  // Ensure the profile pic/title sit ontop of the default cover background
+  z-index: $metadata-z-index;
+  // Jump over the thumbnail photo because it is absolutely positioned
+  // Then add normal page spacing, _then_ add the actual padding
+  padding-left: calc(var(--channel-thumbnail-width) + var(--spacing-xl));
+  padding-right: var(--spacing-m);
+  padding-bottom: var(--spacing-m);
+  margin-top: var(--spacing-xl);
+  min-width: 0;
+  width: 100%;
+
+  @media (max-width: $breakpoint-small) {
+    padding-left: var(--spacing-m);
+    margin-top: calc(var(--channel-thumbnail-width) + var(--spacing-l));
+  }
+}
+
+.channel__title {
+  display: inline;
+  margin-right: var(--spacing-s);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: xx-large;
+  font-weight: var(--font-weight-bold);
+
+  // Quick hack to get this to work
+  // We should have a generic style for "header with button next to it"
+  .button {
+    margin-left: var(--spacing-xs);
+  }
+
+  @media (max-width: $breakpoint-small) {
+    padding-top: var(--spacing-xl);
+  }
+}
+
+.channel__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  .button {
+    height: auto;
+  }
+}
+
+.channel__quick-actions {
+  display: flex;
+  flex-direction: row;
+  margin-left: var(--spacing-m);
+  position: absolute;
+  top: 0;
+  right: var(--spacing-m);
+  margin-top: var(--spacing-m);
+  z-index: $metadata-z-index;
+  flex-wrap: wrap;
+  font-size: var(--font-base);
+
+  > .button,
+  > .button-group .button {
+    padding: 0 var(--spacing-s);
+  }
+
+  > .button,
+  > .button-group {
+    &:not(:last-child) {
+      margin-right: var(--spacing-m);
+    }
+  }
+
+  .button-group .button {
+    &:not(:last-child) {
+      margin-right: 0;
+    }
+  }
+
+  @media (max-width: $breakpoint-small) {
+    flex-direction: column;
+
+    > .button,
+    > .button-group {
+      margin-right: 0;
+      margin-bottom: var(--spacing-xs);
+      margin-left: auto;
+
+      // Needed for specificity above
+      &:not(:last-child) {
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+.channel__edit-thumb {
+  position: absolute;
+  top: 0;
+  left: var(--spacing-l);
+  margin-top: calc(var(--spacing-m) * 7);
+  z-index: $metadata-z-index;
+
+  > * {
+    padding: 0 var(--spacing-xs);
+
+    &:not(:last-child) {
+      margin-right: var(--spacing-m);
+    }
+  }
+
+  @media (max-width: $breakpoint-small) {
+    margin-top: 0;
+
+    .button {
+      margin-top: var(--spacing-l);
+    }
+  }
+}
+
+.channel-name--inline {
+  margin-left: var(--spacing-xs);
+}
+
+.menu__list.channel__list {
+  margin-top: var(--spacing-xs);
+  margin-left: 0;
+  padding: 0;
+  border-radius: var(--border-radius);
+  background: transparent;
+  max-height: 15rem;
+  overflow-y: scroll;
+
+  [role='menuitem'] {
+    margin: 0;
+
+    &[data-selected] {
+      background: transparent;
+      .channel__list-item,
+      .channel-staked__wrapper {
+        background-color: var(--color-card-background-highlighted);
+      }
+    }
+
+    &:first-child {
+      .channel__list-item {
+        border-top: 1px solid var(--color-border);
+        border-top-left-radius: var(--border-radius);
+        border-top-right-radius: var(--border-radius);
+      }
+    }
+
+    &:last-child {
+      .channel__list-item {
+        border-bottom-left-radius: var(--border-radius);
+        border-bottom-right-radius: var(--border-radius);
+      }
+    }
+
+    .channel__list-item {
+      padding-right: calc(var(--spacing-xl) + var(--spacing-s) * 2);
+      border-left: 1px solid var(--color-border);
+      border-right: 1px solid var(--color-border);
+    }
+  }
+}
+
+.channel__list-item {
+  display: flex;
+  align-items: center;
+  background-color: var(--color-card-background);
+  padding: var(--spacing-s);
+  border-bottom: 1px solid var(--color-border);
+  overflow: hidden;
+
+  .channel-thumbnail {
+    height: 2rem;
+    width: 2rem;
+  }
+
+  .icon {
+    color: var(--color-menu-icon);
+  }
+
+  .icon__wrapper {
+    padding: 0;
+    height: 2rem;
+    width: 2rem;
+    margin-right: var(--spacing-m);
+    border-radius: var(--border-radius);
+  }
+
+  &:hover {
+    background-color: var(--color-card-background-highlighted);
+  }
+}
+
+.channel__list-item--selected {
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+
+  .icon--ChevronDown {
+    margin-left: var(--spacing-l);
+  }
+}
+
+.channel__list-text {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+.channel__selector {
+  margin-bottom: var(--spacing-m);
+
+  @media (min-width: $breakpoint-small) {
+    margin-bottom: var(--spacing-l);
+  }
+}
+
+.channel-staked__tooltip {
+  display: flex;
+  align-items: center;
+  line-height: 1rem;
+}
+
+.channel-staked__tooltip-text {
+  margin-left: var(--spacing-xs);
+  font-size: var(--font-xsmall);
+}
+
+.channel-staked__wrapper {
+  display: flex;
+  position: absolute;
+  padding: 0.2rem;
+  bottom: -0.75rem;
+  left: -0.8rem;
+  background-color: var(--color-card-background);
+  border-radius: 50%;
+}
+
+.channel-staked__wrapper--large {
+  position: relative;
+  background-color: transparent;
+  display: inline-block;
+  bottom: auto;
+  left: auto;
+  top: var(--spacing-xs);
+  margin-left: var(--spacing-s);
+  padding: 0;
+}
+
+.channel-staked__wrapper--inline {
+  position: relative;
+  background-color: transparent;
+  display: inline-block;
+  bottom: auto;
+  left: auto;
+  top: var(--spacing-xs);
+  padding: 0;
+}
+
+.channel-staked__indicator {
+  margin-left: 1px;
+  z-index: 3;
+  fill: var(--color-gray-3);
+}
+
+.channel-staked__indicator--controlling {
+  fill: #00eaff;
+}
+
+.channel-staked__amount {
+  display: inline-block;
+  font-size: var(--font-xxsmall);
+  margin-left: var(--spacing-s);
+
+  .credit-amount {
+    color: var(--color-gray-3);
+  }
+}
