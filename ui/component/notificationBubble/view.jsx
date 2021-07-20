@@ -1,16 +1,19 @@
 // @flow
 import React from 'react';
 import classnames from 'classnames';
+import { ENABLE_UI_NOTIFICATIONS } from 'config';
 
 type Props = {
   unseenCount: number,
   inline: boolean,
+  user: ?User,
 };
 
 export default function NotificationHeaderButton(props: Props) {
-  const { unseenCount, inline = false } = props;
+  const { unseenCount, inline = false, user } = props;
+  const notificationsEnabled = ENABLE_UI_NOTIFICATIONS || (user && user.experimental_ui);
 
-  if (unseenCount === 0) {
+  if (unseenCount === 0 || !notificationsEnabled) {
     return null;
   }
 
