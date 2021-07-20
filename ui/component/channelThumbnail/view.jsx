@@ -27,6 +27,10 @@ type Props = {
   showDelayedMessage?: boolean,
   noLazyLoad?: boolean,
   hideStakedIndicator?: boolean,
+  xsmall?: boolean,
+  noOptimization?: boolean,
+  setThumbError: (boolean) => void,
+  thumbError: boolean,
 };
 
 function ChannelThumbnail(props: Props) {
@@ -45,12 +49,12 @@ function ChannelThumbnail(props: Props) {
     showDelayedMessage = false,
     noLazyLoad,
     hideStakedIndicator = false,
+    setThumbError,
   } = props;
-  const [thumbError, setThumbError] = React.useState(false);
   const shouldResolve = claim === undefined;
   const thumbnail = rawThumbnail && rawThumbnail.trim().replace(/^http:\/\//i, 'https://');
   const thumbnailPreview = rawThumbnailPreview && rawThumbnailPreview.trim().replace(/^http:\/\//i, 'https://');
-  const channelThumbnail = thumbnail || thumbnailPreview;
+  const channelThumbnail = thumbnailPreview || thumbnail;
   const isGif = channelThumbnail && channelThumbnail.endsWith('gif');
   const showThumb = (!obscure && !!thumbnail) || thumbnailPreview;
   const thumbnailRef = React.useRef(null);
@@ -98,7 +102,7 @@ function ChannelThumbnail(props: Props) {
   let url = channelThumbnail;
   // @if TARGET='web'
   // Pass image urls through a compression proxy, except for GIFs.
-  if (thumbnail && !(isGif && allowGifs)) {
+  if (!thumbnailPreview && thumbnail && !(isGif && allowGifs)) {
     url = getThumbnailCdnUrl({ thumbnail, width: thumbnailSize, height: thumbnailSize, quality: 85 });
   }
   // @endif
@@ -112,35 +116,19 @@ function ChannelThumbnail(props: Props) {
         'channel-thumbnail--resolving': isResolving,
       })}
     >
-      {!showThumb && (
+      {showDelayedMessage ? (
+        <div className="channel-thumbnail--waiting">{__('This will be visible in a few minutes.')}</div>
+        ) : (
         <img
           ref={thumbnailRef}
           alt={__('Channel profile picture')}
-          className="channel-thumbnail__default"
-          src={!thumbError && url ? url : Gerbil}
+          className={!url ? 'channel-thumbnail__default' : 'channel-thumbnail__custom'}
+          src={url || Gerbil}
           width={thumbnailSize}
           height={thumbnailSize}
           loading={noLazyLoad ? undefined : 'lazy'}
-          onError={() => setThumbError(true)} // if thumb fails (including due to https replace, show gerbil.
+          onError={() => setThumbError(true)}
         />
-      )}
-      {showThumb && (
-        <>
-          {showDelayedMessage && thumbError ? (
-            <div className="chanel-thumbnail--waiting">{__('This will be visible in a few minutes.')}</div>
-          ) : (
-            <img
-              ref={thumbnailRef}
-              alt={__('Channel profile picture')}
-              className="channel-thumbnail__custom"
-              src={!thumbError && url ? url : Gerbil}
-              width={thumbnailSize}
-              height={thumbnailSize}
-              loading={noLazyLoad ? undefined : 'lazy'}
-              onError={() => setThumbError(true)} // if thumb fails (including due to https replace, show gerbil.
-            />
-          )}
-        </>
       )}
       {!hideStakedIndicator && <ChannelStakedIndicator uri={uri} claim={claim} />}
     </div>
