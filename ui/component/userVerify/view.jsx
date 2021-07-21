@@ -12,7 +12,7 @@ import LbcSymbol from 'component/common/lbc-symbol';
 type Props = {
   errorMessage: ?string,
   isPending: boolean,
-  verifyUserIdentity: string => void,
+  verifyUserIdentity: (string) => void,
   verifyPhone: () => void,
   fetchUser: () => void,
   skipLink?: string,
@@ -74,7 +74,7 @@ class UserVerify extends React.PureComponent<Props> {
             icon={ICONS.PHONE}
             title={__('Verify phone number')}
             subtitle={__(
-              'You will receive an SMS text message confirming your phone number is valid. Does not work for Canada and possibly other regions.'
+              'You will receive an SMS text message confirming your phone number is valid. May not be available in all regions.'
             )}
             actions={
               <Fragment>
