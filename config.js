@@ -25,9 +25,10 @@ const config = {
   // LOGO
   LOGO_TITLE: process.env.LOGO_TITLE,
   FAVICON: process.env.FAVICON,
-  LOGO_URL: process.env.LOGO_URL,
-  LOGO_TEXT_LIGHT_URL: process.env.LOGO_TEXT_LIGHT_URL,
-  LOGO_TEXT_DARK_URL: process.env.LOGO_TEXT_DARK_URL,
+  LOGO: process.env.LOGO,
+  LOGO_TEXT_LIGHT: process.env.LOGO_TEXT_LIGHT,
+  LOGO_TEXT_DARK: process.env.LOGO_TEXT_DARK,
+  AVATAR_DEFAULT: process.env.AVATAR_DEFAULT,
   // OG
   OG_TITLE_SUFFIX: process.env.OG_TITLE_SUFFIX,
   OG_HOMEPAGE_TITLE: process.env.OG_HOMEPAGE_TITLE,

@@ -15,6 +15,7 @@ import { useIsMobile } from 'effects/use-screensize';
 import NotificationBubble from 'component/notificationBubble';
 import NotificationHeaderButton from 'component/notificationHeaderButton';
 import ChannelThumbnail from 'component/channelThumbnail';
+import Logo from 'component/logo';
 // @if TARGET='app'
 import { remote } from 'electron';
 import { IS_MAC } from 'component/app/view';
@@ -258,7 +259,6 @@ const Header = (props: Props) => {
                 // @if TARGET='web'
                 label={LOGO_TITLE} // eslint-disable-line
                 // @endif
-                icon={ICONS.LBRY}
                 onClick={() => {
                   if (history.location.pathname === '/') window.location.reload();
                 }}
@@ -268,8 +268,9 @@ const Header = (props: Props) => {
                 }}
                 // @endif
                 {...homeButtonNavigationProps}
-              />
-
+              >
+                <Logo />
+              </Button>
               {!authHeader && (
                 <div className="header__center">
                   {/* @if TARGET='app' */}
