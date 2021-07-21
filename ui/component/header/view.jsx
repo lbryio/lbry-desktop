@@ -15,6 +15,7 @@ import { useIsMobile } from 'effects/use-screensize';
 import NotificationBubble from 'component/notificationBubble';
 import NotificationHeaderButton from 'component/notificationHeaderButton';
 import ChannelThumbnail from 'component/channelThumbnail';
+import SkipNavigationButton from 'component/skipNavigationButton';
 // @if TARGET='app'
 import { remote } from 'electron';
 import { IS_MAC } from 'component/app/view';
@@ -62,26 +63,6 @@ type Props = {
   hideCancel: boolean,
   activeChannelClaim: ?ChannelClaim,
   activeChannelStakedLevel: number,
-};
-
-// Allow screen reader users ( or keyboard navigation )
-// to jump to main content
-const SkipNavigationButton = () => {
-  const skipNavigation = (e) => {
-    // Match any focusable element
-    const focusableElementQuery = `
-      #main-content [tabindex]:not([tabindex="-1"]):not(:disabled),
-      #main-content a:not([aria-hidden]):not([tabindex="-1"]):not(:disabled),
-      #main-content button:not([aria-hidden]):not([tabindex="-1"]):not(:disabled)
-    `;
-    // Find first focusable element
-    const element = document.querySelector(focusableElementQuery);
-    // Trigger focus to skip navigation
-    if (element && element.focus) {
-      element.focus();
-    }
-  };
-  return <Button className={'skip-button'} onClick={skipNavigation} label={__('Skip Navigation')} button={'link'} />;
 };
 
 const Header = (props: Props) => {
