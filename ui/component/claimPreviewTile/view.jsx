@@ -102,11 +102,10 @@ function ClaimPreviewTile(props: Props) {
     onClick: (e) => e.stopPropagation(),
   };
 
-  let isChannel;
   let isValid = false;
   if (uri) {
     try {
-      ({ isChannel } = parseURI(uri));
+      parseURI(uri);
       isValid = true;
     } catch (e) {
       isValid = false;
@@ -114,6 +113,7 @@ function ClaimPreviewTile(props: Props) {
   }
 
   const signingChannel = claim && claim.signing_channel;
+  const isChannel = claim && claim.value_type === 'channel';
   const channelUri = !isChannel ? signingChannel && signingChannel.permanent_url : claim && claim.permanent_url;
 
   function handleClick(e) {
