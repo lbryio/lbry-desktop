@@ -612,7 +612,7 @@ function PublishFile(props: Props) {
           {/* @if TARGET='app' */}
           {showFileUpload && (
             <FileSelector
-              label={__('Video file')}
+              label={__('File')}
               disabled={disabled}
               currentPath={currentFile}
               onFileChosen={handleFileChange}
