@@ -176,7 +176,7 @@ function ClaimListDiscover(props: Props) {
   const durationParam = urlParams.get(CS.DURATION_KEY) || null;
   const channelIdsInUrl = urlParams.get(CS.CHANNEL_IDS_KEY);
   const channelIdsParam = channelIdsInUrl ? channelIdsInUrl.split(',') : channelIds;
-  const feeAmountParam = urlParams.get('fee_amount') || feeAmount || SIMPLE_SITE ? CS.FEE_AMOUNT_ONLY_FREE : undefined;
+  const feeAmountParam = urlParams.get('fee_amount') || feeAmount;
   const originalPageSize = pageSize || CS.PAGE_SIZE;
   const dynamicPageSize = isLargeScreen ? Math.ceil(originalPageSize * (3 / 2)) : originalPageSize;
   const historyAction = history.action;
@@ -503,7 +503,7 @@ function ClaimListDiscover(props: Props) {
       claimType={claimType}
       streamType={streamType}
       defaultStreamType={defaultStreamType}
-      feeAmount={SIMPLE_SITE ? undefined : feeAmount} // ENABLE_PAID_CONTENT_DISCOVER or something
+      feeAmount={feeAmount} // ENABLE_PAID_CONTENT_DISCOVER or something
       orderBy={orderBy}
       defaultOrderBy={defaultOrderBy}
       hideAdvancedFilter={hideAdvancedFilter}
