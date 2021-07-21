@@ -1,5 +1,6 @@
 // @flow
 import * as ICONS from 'constants/icons';
+import * as MODALS from 'constants/modal_types';
 import React from 'react';
 import { MenuList, MenuItem } from '@reach/menu-button';
 import ChannelThumbnail from 'component/channelThumbnail';
@@ -12,7 +13,6 @@ type Props = {
   authorUri: string, // full LBRY Channel URI: lbry://@channel#123...
   commentId: string, // sha256 digest identifying the comment
   commentIsMine: boolean, // if this comment was signed by an owned channel
-  deleteComment: (string, ?string) => void,
   isPinned: boolean,
   pinComment: (string, string, boolean) => Promise<any>,
   muteChannel: (string) => void,
@@ -28,6 +28,8 @@ type Props = {
   disableEdit?: boolean,
   disableRemove?: boolean,
   moderationDelegatorsById: { [string]: { global: boolean, delegators: { name: string, claimId: string } } },
+  openModal: (id: string, {}) => void,
+  supportAmount?: any,
 };
 
 function CommentMenuList(props: Props) {
@@ -36,7 +38,6 @@ function CommentMenuList(props: Props) {
     authorUri,
     commentIsMine,
     commentId,
-    deleteComment,
     muteChannel,
     pinComment,
     clearPlayingUri,
@@ -53,6 +54,8 @@ function CommentMenuList(props: Props) {
     disableEdit,
     disableRemove,
     moderationDelegatorsById,
+    openModal,
+    supportAmount,
   } = props;
 
   const contentChannelClaim = !claim
@@ -80,7 +83,7 @@ function CommentMenuList(props: Props) {
     if (playingUri && playingUri.source === 'comment') {
       clearPlayingUri();
     }
-    deleteComment(commentId, commentIsMine ? undefined : contentChannelPermanentUrl);
+    openModal(MODALS.CONFIRM_REMOVE_COMMENT, { commentId, commentIsMine, contentChannelPermanentUrl, supportAmount });
   }
 
   function handleCommentBlock() {

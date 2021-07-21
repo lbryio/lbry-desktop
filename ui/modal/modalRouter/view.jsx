@@ -30,6 +30,7 @@ const ModalPublish = lazyImport(() => import('modal/modalPublish' /* webpackChun
 const ModalPublishPreview = lazyImport(() => import('modal/modalPublishPreview' /* webpackChunkName: "modalPublishPreview" */));
 const ModalRemoveBtcSwapAddress = lazyImport(() => import('modal/modalRemoveBtcSwapAddress' /* webpackChunkName: "modalRemoveBtcSwapAddress" */));
 const ModalRemoveCard = lazyImport(() => import('modal/modalRemoveCard' /* webpackChunkName: "modalRemoveCard" */));
+const ModalRemoveComment = lazyImport(() => import('modal/modalRemoveComment' /* webpackChunkName: "modalRemoveComment" */));
 const ModalRemoveFile = lazyImport(() => import('modal/modalRemoveFile' /* webpackChunkName: "modalRemoveFile" */));
 const ModalRevokeClaim = lazyImport(() => import('modal/modalRevokeClaim' /* webpackChunkName: "modalRevokeClaim" */));
 const ModalRewardCode = lazyImport(() => import('modal/modalRewardCode' /* webpackChunkName: "modalRewardCode" */));
@@ -154,6 +155,8 @@ function ModalRouter(props: Props) {
         return ModalDeleteCollection;
       case MODALS.CONFIRM_REMOVE_CARD:
         return ModalRemoveCard;
+      case MODALS.CONFIRM_REMOVE_COMMENT:
+        return ModalRemoveComment;
       default:
         return null;
     }
