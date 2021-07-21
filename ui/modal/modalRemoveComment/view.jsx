@@ -24,7 +24,7 @@ function ModalRemoveComment(props: Props) {
           <React.Fragment>
             <p>{__('Are you sure you want to remove this comment?')}</p>
             {Boolean(supportAmount) && (
-              <p className="help error__text"> {__('This comment has a support, the transaction cannot be undone.')}</p>
+              <p className="help error__text"> {__('This comment has a tip associated with it which cannot be reverted.')}</p>
             )}
           </React.Fragment>
         }
