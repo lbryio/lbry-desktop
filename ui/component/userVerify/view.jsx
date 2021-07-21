@@ -60,7 +60,7 @@ class UserVerify extends React.PureComponent<Props> {
                 SITE_NAME,
               }}
             >
-              Verified accounts are eligible to earn LBRY Credits for views, watching and reposting videos, sharing
+              Verified accounts are eligible to earn LBRY Credits for views, watching and reposting content, sharing
               invite links etc. Verifying also helps us keep the %SITE_NAME% community safe too! %Refresh% or %Skip%.
             </I18nMessage>
           </p>
