@@ -141,6 +141,7 @@ function ClaimListDiscover(props: Props) {
   const { search } = location;
   const [page, setPage] = React.useState(1);
   const [forceRefresh, setForceRefresh] = React.useState();
+  const [finalUris, setFinalUris] = React.useState([]);
   const isLargeScreen = useIsLargeScreen();
   const [orderParamEntry, setOrderParamEntry] = usePersistedState(`entry-${location.pathname}`, CS.ORDER_BY_TRENDING);
   const [orderParamUser, setOrderParamUser] = usePersistedState(`orderUser-${location.pathname}`, CS.ORDER_BY_TRENDING);
@@ -360,9 +361,10 @@ function ClaimListDiscover(props: Props) {
   }
 
   const hasMatureTags = tagsParam && tagsParam.split(',').some((t) => MATURE_TAGS.includes(t));
-  const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
-  let claimSearchResult = claimSearchByQuery[claimSearchCacheQuery];
-  const claimSearchResultLastPageReached = claimSearchByQueryLastPageReached[claimSearchCacheQuery];
+
+  const mainSearchKey = createNormalizedClaimSearchKey(options);
+  let claimSearchResult = claimSearchByQuery[mainSearchKey];
+  const claimSearchResultLastPageReached = claimSearchByQueryLastPageReached[mainSearchKey];
 
   // uncomment to fix an item on a page
   //   const fixUri = 'lbry://@corbettreport#0/lbryodysee#5';
@@ -379,6 +381,11 @@ function ClaimListDiscover(props: Props) {
   //     }
   //     claimSearchResult.splice(2, 0, fixUri);
   //   }
+
+  const livestreamSearchKey = liveLivestreamsFirst
+    ? createNormalizedClaimSearchKey(getLivestreamOnlyOptions(options))
+    : undefined;
+  const livestreamSearchResult = livestreamSearchKey && claimSearchByQuery[livestreamSearchKey];
 
   const [prevOptions, setPrevOptions] = React.useState(null);
 
@@ -482,6 +489,17 @@ function ClaimListDiscover(props: Props) {
     }
   }
 
+  function urisEqual(prev: Array<string>, next: Array<string>) {
+    if (!prev || !next) {
+      // From 'ClaimList', "null" and "undefined" have special meaning,
+      // so we can't just compare array length here.
+      //   - null = "timed out"
+      //   - undefined = "no result".
+      return prev === next;
+    }
+    return prev.length === next.length && prev.every((value, index) => value === next[index]);
+  }
+
   React.useEffect(() => {
     if (shouldPerformSearch) {
       const searchOptions = JSON.parse(optionsStringForEffect);
@@ -492,6 +510,21 @@ function ClaimListDiscover(props: Props) {
       }
     }
   }, [doClaimSearch, shouldPerformSearch, optionsStringForEffect, forceRefresh]);
+
+  // Resolve 'finalUri'
+  React.useEffect(() => {
+    if (uris) {
+      if (!urisEqual(uris, finalUris)) {
+        setFinalUris(uris);
+      }
+    } else {
+      // Wait until all queries are done before updating the uris to avoid layout shifts.
+      const pending = claimSearchResult === undefined || (liveLivestreamsFirst && livestreamSearchResult === undefined);
+      if (!pending && !urisEqual(claimSearchResult, finalUris)) {
+        setFinalUris(claimSearchResult);
+      }
+    }
+  }, [uris, claimSearchResult, finalUris, setFinalUris, liveLivestreamsFirst, livestreamSearchResult]);
 
   const headerToUse = header || (
     <ClaimListHeader
@@ -529,9 +562,9 @@ function ClaimListDiscover(props: Props) {
           )}
           <ClaimList
             tileLayout
-            id={claimSearchCacheQuery}
+            id={mainSearchKey}
             loading={loading}
-            uris={uris || claimSearchResult}
+            uris={finalUris}
             onScrollBottom={handleScrollBottom}
             page={page}
             pageSize={dynamicPageSize}
@@ -563,10 +596,10 @@ function ClaimListDiscover(props: Props) {
             </div>
           )}
           <ClaimList
-            id={claimSearchCacheQuery}
+            id={mainSearchKey}
             type={type}
             loading={loading}
-            uris={uris || claimSearchResult}
+            uris={finalUris}
             onScrollBottom={handleScrollBottom}
             page={page}
             pageSize={dynamicPageSize}
