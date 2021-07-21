@@ -105,6 +105,10 @@
   aspect-ratio: 16 / 9;
 }
 
+.file-render--post-container {
+  min-height: 30vh;
+}
+
 .file-render__header {
   display: flex;
   justify-content: space-between;
