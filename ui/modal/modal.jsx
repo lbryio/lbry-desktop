@@ -14,8 +14,8 @@ type ModalProps = {
   abortButtonLabel?: string,
   confirmButtonDisabled?: boolean,
   abortButtonDisabled?: boolean,
-  onConfirmed?: any => any,
-  onAborted?: any => any,
+  onConfirmed?: (any) => any,
+  onAborted?: (any) => any,
   className?: string,
   children?: React.Node,
   extraContent?: React.Node,
@@ -52,7 +52,13 @@ export function Modal(props: ModalProps) {
     >
       {title && <h1 className="card__title card__title--deprecated">{title}</h1>}
       {type === 'card' && (
-        <Button iconSize={isMobile ? 24 : undefined} button="close" icon={ICONS.REMOVE} onClick={onAborted} />
+        <Button
+          iconSize={isMobile ? 24 : undefined}
+          button="close"
+          aria-label={__('Close')}
+          icon={ICONS.REMOVE}
+          onClick={onAborted}
+        />
       )}
       {children}
       {type === 'custom' || type === 'card' ? null : ( // custom modals define their own buttons

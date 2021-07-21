@@ -109,6 +109,7 @@ function Page(props: Props) {
           />
         )}
         <main
+          id={'main-content'}
           className={classnames(MAIN_CLASS, className, {
             'main--full-width': fullWidthPage,
             'main--auth-page': authPage,

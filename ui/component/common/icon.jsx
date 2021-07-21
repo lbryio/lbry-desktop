@@ -73,6 +73,7 @@ class IconComponent extends React.PureComponent<Props> {
         size={size || (sectionIcon ? 20 : 16)}
         className={classnames(`icon icon--${icon}`, className, { 'color-override': iconColor })}
         color={color}
+        aria-hidden
         {...rest}
       />
     );

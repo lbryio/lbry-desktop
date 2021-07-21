@@ -44,10 +44,25 @@
 }
 
 .menu__button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100%;
+  padding: 0.3rem;
+
+  .icon {
+    stroke: var(--color-menu);
+  }
+
+  .comment__menu-icon--hovering {
+  }
+
+  &:focus,
   &:hover {
+    opacity: 1;
+    background-color: var(--color-button-alt-bg);
     .icon {
-      border-radius: var(--border-radius);
-      background-color: var(--color-card-background-highlighted);
+      stroke: var(--color-menu-hovering);
     }
   }
 }

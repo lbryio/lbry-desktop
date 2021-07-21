@@ -218,14 +218,6 @@ $contentMaxWidth: 60rem;
   .icon {
     stroke: var(--color-text-help);
   }
-
-  button {
-    border-radius: var(--border-radius);
-
-    &:focus {
-      @include linkFocus;
-    }
-  }
 }
 
 .notification__filter {

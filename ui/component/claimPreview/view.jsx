@@ -27,6 +27,7 @@ import ClaimPreviewHidden from './claim-preview-no-mature';
 import ClaimPreviewNoContent from './claim-preview-no-content';
 import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import Button from 'component/button';
+import DateTime from 'component/dateTime';
 import * as ICONS from 'constants/icons';
 
 const AbandonedChannelPreview = lazyImport(() =>
@@ -85,6 +86,8 @@ type Props = {
   collectionUris: Array<Collection>,
   collectionIndex?: number,
   disableNavigation?: boolean,
+  mediaDuration?: string,
+  date?: any,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -99,8 +102,11 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     // claim properties
     // is the claim consider nsfw?
     nsfw,
+    date,
+    title,
     claimIsMine,
     streamingUrl,
+    mediaDuration,
     // user properties
     channelIsBlocked,
     hasVisitedUri,
@@ -174,6 +180,33 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   const isCollection = claim && claim.value_type === 'collection';
   const isChannelUri = isValid ? parseURI(uri).isChannel : false;
   const signingChannel = claim && claim.signing_channel;
+
+  // Get channel title ( use name as fallback )
+  let channelTitle = null;
+  if (signingChannel) {
+    const { value, name } = signingChannel;
+    if (value && value.title) {
+      channelTitle = value.title;
+    } else {
+      channelTitle = name;
+    }
+  }
+
+  // Aria-label value for claim preview
+  let ariaLabelData = title;
+
+  if (!isChannelUri && channelTitle) {
+    ariaLabelData += ' ' + __('by %channelTitle%', { channelTitle });
+  }
+
+  if (date) {
+    ariaLabelData += ' ' + DateTime.getTimeAgoStr(date);
+  }
+
+  if (mediaDuration) {
+    ariaLabelData += ', ' + mediaDuration;
+  }
+
   let navigateUrl = formatLbryUrlForWeb((claim && claim.canonical_url) || uri || '/');
   if (collectionId) {
     const collectionParams = new URLSearchParams();
@@ -313,18 +346,18 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
           })}
         >
           {isChannelUri && claim ? (
-            <UriIndicator uri={uri} link>
+            <UriIndicator focusable={false} uri={uri} link>
               <ChannelThumbnail uri={uri} small={type === 'inline'} />
             </UriIndicator>
           ) : (
             <>
               {!pending ? (
-                <NavLink {...navLinkProps}>
+                <NavLink aria-hidden tabIndex={-1} {...navLinkProps}>
                   <FileThumbnail thumbnail={thumbnailUrl}>
                     {/* @if TARGET='app' */}
                     {claim && !isCollection && (
                       <div className="claim-preview__hover-actions">
-                        <FileDownloadLink uri={canonicalUrl} hideOpenButton hideDownloadStatus />
+                        <FileDownloadLink focusable={false} uri={canonicalUrl} hideOpenButton hideDownloadStatus />
                       </div>
                     )}
                     {/* @endif */}
@@ -335,7 +368,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                     )}
                     {isPlayable && (
                       <div className="claim-preview__hover-actions">
-                        <FileWatchLaterLink uri={uri} />
+                        <FileWatchLaterLink focusable={false} uri={uri} />
                       </div>
                     )}
                   </FileThumbnail>
@@ -352,7 +385,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                 {pending ? (
                   <ClaimPreviewTitle uri={uri} />
                 ) : (
-                  <NavLink aria-current={active && 'page'} {...navLinkProps}>
+                  <NavLink aria-label={ariaLabelData} aria-current={active ? 'page' : null} {...navLinkProps}>
                     <ClaimPreviewTitle uri={uri} />
                   </NavLink>
                 )}

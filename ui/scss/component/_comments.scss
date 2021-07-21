@@ -263,14 +263,6 @@ $thumbnailWidthSmall: 1rem;
 .comment__menu {
   align-self: flex-end;
   line-height: 1;
-
-  button {
-    border-radius: var(--border-radius);
-
-    &:focus {
-      @include linkFocus;
-    }
-  }
 }
 
 .comment__char-count {
@@ -293,14 +285,6 @@ $thumbnailWidthSmall: 1rem;
   .menu__link {
     padding: 0;
   }
-}
-
-.comment__menu-icon--hovering {
-  stroke: var(--color-comment-menu-hovering);
-}
-
-.comment__menu-icon {
-  stroke: var(--color-comment-menu);
 }
 
 .comment__menu-list {
