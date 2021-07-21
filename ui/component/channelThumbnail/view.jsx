@@ -7,7 +7,6 @@ import FreezeframeWrapper from 'component/fileThumbnail/FreezeframeWrapper';
 import ChannelStakedIndicator from 'component/channelStakedIndicator';
 import OptimizedImage from 'component/optimizedImage';
 import { AVATAR_DEFAULT } from 'config';
-import ThumbnailBrokenImage from 'component/selectThumbnail/thumbnail-broken.png';
 
 type Props = {
   thumbnail: ?string,
@@ -46,17 +45,15 @@ function ChannelThumbnail(props: Props) {
     showDelayedMessage = false,
     noLazyLoad,
     hideStakedIndicator = false,
-    noOptimization,
     setThumbError,
-    thumbError,
   } = props;
   const shouldResolve = claim === undefined;
   const thumbnail = rawThumbnail && rawThumbnail.trim().replace(/^http:\/\//i, 'https://');
   const thumbnailPreview = rawThumbnailPreview && rawThumbnailPreview.trim().replace(/^http:\/\//i, 'https://');
-  const channelThumbnail = thumbnailPreview || thumbnail;
+  const defaultAvater = AVATAR_DEFAULT || Gerbil;
+  const channelThumbnail = thumbnailPreview || thumbnail || defaultAvater;
   const isGif = channelThumbnail && channelThumbnail.endsWith('gif');
   const showThumb = (!obscure && !!thumbnail) || thumbnailPreview;
-  const defaultAvater = AVATAR_DEFAULT || Gerbil;
 
   // Generate a random color class based on the first letter of the channel name
   const { channelName } = parseURI(uri);
@@ -83,15 +80,6 @@ function ChannelThumbnail(props: Props) {
     );
   }
 
-  let thumbnailSrc;
-  if (!channelThumbnail) {
-    thumbnailSrc = defaultAvater;
-  } else if (thumbError) {
-    thumbnailSrc = ThumbnailBrokenImage;
-  } else {
-    thumbnailSrc = channelThumbnail;
-  }
-
   return (
     <div
       className={classnames('channel-thumbnail', className, {
@@ -107,7 +95,7 @@ function ChannelThumbnail(props: Props) {
         <OptimizedImage
           alt={__('Channel profile picture')}
           className={!channelThumbnail ? 'channel-thumbnail__default' : 'channel-thumbnail__custom'}
-          src={thumbnailSrc}
+          src={channelThumbnail}
           loading={noLazyLoad ? undefined : 'lazy'}
           onError={() => setThumbError(true)}
         />

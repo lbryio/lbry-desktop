@@ -23,6 +23,7 @@ import WalletSpendableBalanceHelp from 'component/walletSpendableBalanceHelp';
 import { SIMPLE_SITE } from 'config';
 import { sortLanguageMap } from 'util/default-languages';
 import ThumbnailBrokenImage from 'component/selectThumbnail/thumbnail-broken.png';
+import Gerbil from 'component/channelThumbnail/gerbil.png';
 
 const LANG_NONE = 'none';
 
@@ -83,8 +84,6 @@ function ChannelForm(props: Props) {
     openModal,
     disabled,
   } = props;
-  const currentThumbnail = thumbnailUrl;
-  const currentCover = coverUrl;
   const [nameError, setNameError] = React.useState(undefined);
   const [bidError, setBidError] = React.useState('');
   const [isUpload, setIsUpload] = React.useState({ cover: false, thumbnail: false });
@@ -179,13 +178,13 @@ function ChannelForm(props: Props) {
   }
 
   function handleThumbnailChange(thumbnailUrl: string, uploadSelected: boolean) {
-    setParams({ ...params, thumbnailUrl: (thumbnailUrl || currentThumbnail) });
+    setParams({ ...params, thumbnailUrl });
     setIsUpload({ ...isUpload, thumbnail: uploadSelected });
     setThumbError(false);
   }
 
   function handleCoverChange(coverUrl: string, uploadSelected: boolean) {
-    setParams({ ...params, coverUrl: (coverUrl || currentCover) });
+    setParams({ ...params, coverUrl });
     setIsUpload({ ...isUpload, cover: uploadSelected });
     setCoverError(false);
   }
@@ -231,11 +230,15 @@ function ChannelForm(props: Props) {
     clearChannelErrors();
   }, [clearChannelErrors]);
 
-  let coverSrc;
-  if (coverError) {
-    coverSrc = ThumbnailBrokenImage;
+  const coverSrc = coverError ? ThumbnailBrokenImage : params.coverUrl;
+
+  let thumbnailPreview;
+  if (!params.thumbnailUrl) {
+    thumbnailPreview = Gerbil;
+  } else if (thumbError) {
+    thumbnailPreview = ThumbnailBrokenImage;
   } else {
-    coverSrc = params.coverUrl;
+    thumbnailPreview = params.thumbnailUrl;
   }
 
   // TODO clear and bail after submit
@@ -292,7 +295,7 @@ function ChannelForm(props: Props) {
             <ChannelThumbnail
               className="channel__thumbnail--channel-page"
               uri={uri}
-              thumbnailPreview={params.thumbnailUrl}
+              thumbnailPreview={thumbnailPreview}
               allowGifs
               showDelayedMessage={isUpload.thumbnail}
               setThumbError={(v) => setThumbError(v)}
