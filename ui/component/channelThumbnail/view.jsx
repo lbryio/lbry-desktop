@@ -6,6 +6,7 @@ import Gerbil from './gerbil.png';
 import FreezeframeWrapper from 'component/fileThumbnail/FreezeframeWrapper';
 import ChannelStakedIndicator from 'component/channelStakedIndicator';
 import OptimizedImage from 'component/optimizedImage';
+import { AVATAR_DEFAULT } from 'config';
 
 type Props = {
   thumbnail: ?string,
@@ -48,6 +49,7 @@ function ChannelThumbnail(props: Props) {
   const channelThumbnail = thumbnail || thumbnailPreview;
   const isGif = channelThumbnail && channelThumbnail.endsWith('gif');
   const showThumb = (!obscure && !!thumbnail) || thumbnailPreview;
+  const defaultAvater = AVATAR_DEFAULT || Gerbil;
 
   // Generate a random color class based on the first letter of the channel name
   const { channelName } = parseURI(uri);
@@ -86,7 +88,7 @@ function ChannelThumbnail(props: Props) {
         <OptimizedImage
           alt={__('Channel profile picture')}
           className="channel-thumbnail__default"
-          src={!thumbError && channelThumbnail ? channelThumbnail : Gerbil}
+          src={!thumbError && channelThumbnail ? channelThumbnail : defaultAvater}
           loading={noLazyLoad ? undefined : 'lazy'}
           onError={() => setThumbError(true)} // if thumb fails (including due to https replace, show gerbil.
         />
@@ -99,7 +101,7 @@ function ChannelThumbnail(props: Props) {
             <OptimizedImage
               alt={__('Channel profile picture')}
               className="channel-thumbnail__custom"
-              src={!thumbError && channelThumbnail ? channelThumbnail : Gerbil}
+              src={!thumbError && channelThumbnail ? channelThumbnail : defaultAvater}
               loading={noLazyLoad ? undefined : 'lazy'}
               onError={() => setThumbError(true)} // if thumb fails (including due to https replace, show gerbil.
             />
