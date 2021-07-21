@@ -73,7 +73,9 @@ class UserVerify extends React.PureComponent<Props> {
           <Card
             icon={ICONS.PHONE}
             title={__('Verify phone number')}
-            subtitle={__('You will receive an SMS text message confirming your phone number is valid.')}
+            subtitle={__(
+              'You will receive an SMS text message confirming your phone number is valid. May not be available in all regions.'
+            )}
             actions={
               <Fragment>
                 <Button
