@@ -156,7 +156,7 @@ function ClaimTilesDiscover(props: Props) {
   const { location } = useHistory();
   const urlParams = new URLSearchParams(location.search);
   const feeAmountInUrl = urlParams.get('fee_amount');
-  const feeAmountParam = feeAmountInUrl || feeAmount || CS.FEE_AMOUNT_ONLY_FREE;
+  const feeAmountParam = feeAmountInUrl || feeAmount;
   const mutedAndBlockedChannelIds = Array.from(
     new Set(mutedUris.concat(blockedUris).map((uri) => splitBySeparator(uri)[1]))
   );
