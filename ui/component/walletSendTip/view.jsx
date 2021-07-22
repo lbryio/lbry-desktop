@@ -574,7 +574,7 @@ function WalletSendTip(props: Props) {
                     disabled={
                       fetchingChannels ||
                       isPending ||
-                      (tipError && activeTab !== TAB_FIAT) ||
+                      tipError ||
                       !tipAmount ||
                       (activeTab === TAB_FIAT && (!hasCardSaved || !canReceiveFiatTip))
                     }
