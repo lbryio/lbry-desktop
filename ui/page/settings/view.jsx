@@ -1,6 +1,6 @@
 // @flow
 import * as PAGES from 'constants/pages';
-// import * as MODALS from 'constants/modal_types';
+import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import { SETTINGS } from 'lbry-redux';
@@ -15,9 +15,10 @@ import Card from 'component/common/card';
 import SettingAccountPassword from 'component/settingAccountPassword';
 import classnames from 'classnames';
 import { getPasswordFromCookie } from 'util/saved-passwords';
+import { SIMPLE_SITE } from 'config';
 // $FlowFixMe
 import homepages from 'homepages';
-// import { Lbryio } from 'lbryinc';
+import { Lbryio } from 'lbryinc';
 import Yrbl from 'component/yrbl';
 
 type Price = {
@@ -171,7 +172,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
     const {
       daemonSettings,
       allowAnalytics,
-      //   showNsfw,
+      showNsfw,
       isAuthenticated,
       currentTheme,
       themes,
@@ -184,13 +185,13 @@ class SettingsPage extends React.PureComponent<Props, State> {
       setClientSetting,
       toggle3PAnalytics,
       floatingPlayer,
-      //   hideReposts,
+      hideReposts,
       clearPlayingUri,
       darkModeTimes,
       clearCache,
+      openModal,
       myChannelUrls,
       user,
-      //   openModal,
     } = this.props;
     const { storedPassword } = this.state;
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
@@ -208,39 +209,41 @@ class SettingsPage extends React.PureComponent<Props, State> {
         className="card-stack"
       >
         {/* @if TARGET='web' */}
-        {user && user.fiat_enabled  && <Card
-          title={__('Bank Accounts')}
-          subtitle={__('Connect a bank account to receive tips and compensation in your local currency')}
-          actions={
-            <div className="section__actions">
-              <Button
-                button="secondary"
-                label={__('Manage')}
-                icon={ICONS.SETTINGS}
-                navigate={`/$/${PAGES.SETTINGS_STRIPE_ACCOUNT}`}
-              />
-            </div>
-          }
-        />}
+        {user && user.fiat_enabled && (
+          <Card
+            title={__('Bank Accounts')}
+            subtitle={__('Connect a bank account to receive tips and compensation in your local currency')}
+            actions={
+              <div className="section__actions">
+                <Button
+                  button="secondary"
+                  label={__('Manage')}
+                  icon={ICONS.SETTINGS}
+                  navigate={`/$/${PAGES.SETTINGS_STRIPE_ACCOUNT}`}
+                />
+              </div>
+            }
+          />
+        )}
         {/* @endif */}
 
         {/* @if TARGET='web' */}
-        {isAuthenticated &&
-        <Card
-          title={__('Payment Methods')}
-          subtitle={__('Add a credit card to tip creators in their local currency')}
-          actions={
-            <div className="section__actions">
-              <Button
-                button="secondary"
-                label={__('Manage')}
-                icon={ICONS.SETTINGS}
-                navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`}
-              />
-            </div>
-          }
-        />
-        }
+        {isAuthenticated && (
+          <Card
+            title={__('Payment Methods')}
+            subtitle={__('Add a credit card to tip creators in their local currency')}
+            actions={
+              <div className="section__actions">
+                <Button
+                  button="secondary"
+                  label={__('Manage')}
+                  icon={ICONS.SETTINGS}
+                  navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`}
+                />
+              </div>
+            }
+          />
+        )}
         {/* @endif */}
 
         <Card title={__('Language')} actions={<SettingLanguage />} />
@@ -395,46 +398,53 @@ class SettingsPage extends React.PureComponent<Props, State> {
                       'Autoplay video and audio files when navigating to a file, as well as the next related item when a file finishes playing.'
                     )}
                   />
+                  {!SIMPLE_SITE && (
+                    <>
+                      <FormField
+                        type="checkbox"
+                        name="hide_reposts"
+                        onChange={(e) => {
+                          if (isAuthenticated) {
+                            let param = e.target.checked ? { add: 'noreposts' } : { remove: 'noreposts' };
+                            Lbryio.call('user_tag', 'edit', param);
+                          }
 
-                  {/* <FormField
-                    type="checkbox"
-                    name="hide_reposts"
-                    onChange={(e) => {
-                      if (isAuthenticated) {
-                        let param = e.target.checked ? { add: 'noreposts' } : { remove: 'noreposts' };
-                        Lbryio.call('user_tag', 'edit', param);
-                      }
+                          setClientSetting(SETTINGS.HIDE_REPOSTS, !hideReposts);
+                        }}
+                        checked={hideReposts}
+                        label={__('Hide reposts')}
+                        helper={__(
+                          'You will not see reposts by people you follow or receive email notifying about them.'
+                        )}
+                      />
 
-                      setClientSetting(SETTINGS.HIDE_REPOSTS, !hideReposts);
-                    }}
-                    checked={hideReposts}
-                    label={__('Hide reposts')}
-                    helper={__('You will not see reposts by people you follow or receive email notifying about them.')}
-                  /> */}
+                      {/*
+                        <FormField
+                          type="checkbox"
+                          name="show_anonymous"
+                          onChange={() => setClientSetting(SETTINGS.SHOW_ANONYMOUS, !showAnonymous)}
+                          checked={showAnonymous}
+                          label={__('Show anonymous content')}
+                          helper={__('Anonymous content is published without a channel.')}
+                        />
+                      */}
 
-                  {/* <FormField
-                    type="checkbox"
-                    name="show_anonymous"
-                    onChange={() => setClientSetting(SETTINGS.SHOW_ANONYMOUS, !showAnonymous)}
-                    checked={showAnonymous}
-                    label={__('Show anonymous content')}
-                    helper={__('Anonymous content is published without a channel.')}
-                  /> */}
-
-                  {/* <FormField
-                    type="checkbox"
-                    name="show_nsfw"
-                    onChange={() =>
-                      !IS_WEB || showNsfw
-                        ? setClientSetting(SETTINGS.SHOW_MATURE, !showNsfw)
-                        : openModal(MODALS.CONFIRM_AGE)
-                    }
-                    checked={showNsfw}
-                    label={__('Show mature content')}
-                    helper={__(
-                      'Mature content may include nudity, intense sexuality, profanity, or other adult content. By displaying mature content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  '
-                    )}
-                  /> */}
+                      <FormField
+                        type="checkbox"
+                        name="show_nsfw"
+                        onChange={() =>
+                          !IS_WEB || showNsfw
+                            ? setClientSetting(SETTINGS.SHOW_MATURE, !showNsfw)
+                            : openModal(MODALS.CONFIRM_AGE)
+                        }
+                        checked={showNsfw}
+                        label={__('Show mature content')}
+                        helper={__(
+                          'Mature content may include nudity, intense sexuality, profanity, or other adult content. By displaying mature content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  '
+                        )}
+                      />
+                    </>
+                  )}
                 </React.Fragment>
               }
             />
