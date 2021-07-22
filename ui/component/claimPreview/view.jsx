@@ -2,11 +2,12 @@
 import type { Node } from 'react';
 import React, { useEffect, forwardRef } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
+import { isEmpty } from 'util/object';
 import { lazyImport } from 'util/lazyImport';
 import classnames from 'classnames';
 import { parseURI, COLLECTIONS_CONSTS, isURIEqual } from 'lbry-redux';
 import { formatLbryUrlForWeb } from 'util/url';
-import { isEmpty } from 'util/object';
+import { formatClaimPreviewTitle } from 'util/formatAriaLabel';
 import FileThumbnail from 'component/fileThumbnail';
 import UriIndicator from 'component/uriIndicator';
 import PreviewOverlayProperties from 'component/previewOverlayProperties';
@@ -27,7 +28,6 @@ import ClaimPreviewHidden from './claim-preview-no-mature';
 import ClaimPreviewNoContent from './claim-preview-no-content';
 import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import Button from 'component/button';
-import DateTime from 'component/dateTime';
 import * as ICONS from 'constants/icons';
 
 const AbandonedChannelPreview = lazyImport(() =>
@@ -194,33 +194,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   }
 
   // Aria-label value for claim preview
-  let ariaDate = date ? DateTime.getTimeAgoStr(date) : null;
-  let ariaLabelData = title;
-
-  if (!isChannelUri && channelTitle) {
-    if (mediaDuration) {
-      if (ariaDate) {
-        ariaLabelData += ariaLabelData = __('%title% by %channelTitle% %ariaDate%, %mediaDuration%', {
-          title,
-          channelTitle,
-          ariaDate,
-          mediaDuration,
-        });
-      } else {
-        ariaLabelData += ariaLabelData = __('%title% by %channelTitle%, %mediaDuration%', {
-          title,
-          channelTitle,
-          mediaDuration,
-        });
-      }
-    } else {
-      if (ariaDate) {
-        ariaLabelData += ariaLabelData = __('%title% by %channelTitle% %ariaDate%', { title, channelTitle, ariaDate });
-      } else {
-        ariaLabelData += ariaLabelData = __('%title% by %channelTitle%', { title, channelTitle });
-      }
-    }
-  }
+  let ariaLabelData = isChannelUri ? title : formatClaimPreviewTitle(title, channelTitle, date, mediaDuration);
 
   let navigateUrl = formatLbryUrlForWeb((claim && claim.canonical_url) || uri || '/');
   if (listId) {

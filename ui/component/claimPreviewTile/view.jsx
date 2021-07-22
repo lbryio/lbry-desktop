@@ -10,6 +10,7 @@ import ChannelThumbnail from 'component/channelThumbnail';
 import SubscribeButton from 'component/subscribeButton';
 import useGetThumbnail from 'effects/use-get-thumbnail';
 import { formatLbryUrlForWeb } from 'util/url';
+import { formatClaimPreviewTitle } from 'util/formatAriaLabel';
 import { parseURI, COLLECTIONS_CONSTS, isURIEqual } from 'lbry-redux';
 import PreviewOverlayProperties from 'component/previewOverlayProperties';
 import FileDownloadLink from 'component/fileDownloadLink';
@@ -122,19 +123,7 @@ function ClaimPreviewTile(props: Props) {
   const channelTitle = signingChannel && (signingChannel.value.title || signingChannel.name);
 
   // Aria-label value for claim preview
-  let ariaLabelData = title;
-
-  if (!isChannel && channelTitle) {
-    ariaLabelData += ' ' + __('by %channelTitle%', { channelTitle });
-  }
-
-  if (date) {
-    ariaLabelData += ' ' + DateTime.getTimeAgoStr(date);
-  }
-
-  if (mediaDuration) {
-    ariaLabelData += ', ' + mediaDuration;
-  }
+  let ariaLabelData = isChannel ? title : formatClaimPreviewTitle(title, channelTitle, date, mediaDuration);
 
   function handleClick(e) {
     if (navigateUrl) {
