@@ -25,6 +25,8 @@ if (STRIPE_PUBLIC_KEY.indexOf('pk_live') > -1) {
 }
 
 const DEFAULT_TIP_AMOUNTS = [1, 5, 25, 100];
+const MINIMUM_FIAT_TIP = 1;
+const MAXIMUM_FIAT_TIP = 1000;
 
 const TAB_BOOST = 'TabBoost';
 const TAB_FIAT = 'TabFiat';
@@ -218,9 +220,9 @@ function WalletSendTip(props: Props) {
 
       if (!validTipInput) {
         tipError = __('Amount must have no more than 2 decimal places');
-      } else if (tipAmount < 1) {
+      } else if (tipAmount < MINIMUM_FIAT_TIP) {
         tipError = __('Amount must be at least one dollar');
-      } else if (tipAmount > 1000) {
+      } else if (tipAmount > MAXIMUM_FIAT_TIP) {
         tipError = __('Amount cannot be over 1000 dollars');
       }
     }
