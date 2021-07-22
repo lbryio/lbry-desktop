@@ -3,17 +3,19 @@ import * as ACTIONS from 'constants/action_types';
 import { handleActions } from 'util/redux-utils';
 import { SEARCH_OPTIONS, SEARCH_PAGE_SIZE } from 'constants/search';
 import { createNormalizedSearchKey } from 'util/search';
+import { LIGHTHOUSE_DEFAULT_TYPES } from 'config';
+const defaultSearchTypes = LIGHTHOUSE_DEFAULT_TYPES && LIGHTHOUSE_DEFAULT_TYPES.split(',');
 
 const defaultState: SearchState = {
   // $FlowFixMe
   options: {
     [SEARCH_OPTIONS.RESULT_COUNT]: SEARCH_PAGE_SIZE,
     [SEARCH_OPTIONS.CLAIM_TYPE]: SEARCH_OPTIONS.INCLUDE_FILES_AND_CHANNELS,
-    [SEARCH_OPTIONS.MEDIA_AUDIO]: true,
-    [SEARCH_OPTIONS.MEDIA_VIDEO]: true,
-    [SEARCH_OPTIONS.MEDIA_TEXT]: true,
-    [SEARCH_OPTIONS.MEDIA_IMAGE]: true,
-    [SEARCH_OPTIONS.MEDIA_APPLICATION]: true,
+    [SEARCH_OPTIONS.MEDIA_AUDIO]: defaultSearchTypes.includes(SEARCH_OPTIONS.MEDIA_AUDIO),
+    [SEARCH_OPTIONS.MEDIA_VIDEO]: defaultSearchTypes.includes(SEARCH_OPTIONS.MEDIA_VIDEO),
+    [SEARCH_OPTIONS.MEDIA_TEXT]: defaultSearchTypes.includes(SEARCH_OPTIONS.MEDIA_TEXT),
+    [SEARCH_OPTIONS.MEDIA_IMAGE]: defaultSearchTypes.includes(SEARCH_OPTIONS.MEDIA_IMAGE),
+    [SEARCH_OPTIONS.MEDIA_APPLICATION]: defaultSearchTypes.includes(SEARCH_OPTIONS.MEDIA_APPLICATION),
   },
   urisByQuery: {},
   hasReachedMaxResultsLength: {},

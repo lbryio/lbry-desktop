@@ -64,6 +64,7 @@ const config = {
   CUSTOM_HOMEPAGE: process.env.CUSTOM_HOMEPAGE === 'true',
   SHOW_TAGS_INTRO: process.env.SHOW_TAGS_INTRO === 'true',
   AVATAR_DEFAULT: process.env.AVATAR_DEFAULT,
+  LIGHTHOUSE_DEFAULT_TYPES: process.env.LIGHTHOUSE_DEFAULT_TYPES,
 };
 
 config.URL_LOCAL = `http://localhost:${config.WEB_SERVER_PORT}`;
