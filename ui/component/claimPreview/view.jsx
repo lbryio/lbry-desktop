@@ -150,12 +150,14 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     collectionUris,
     disableNavigation,
   } = props;
-  const isRepost = claim && claim.repost_channel_url;
+  const isCollection = claim && claim.value_type === 'collection';
+  const collectionClaimId = isCollection && claim && claim.claim_id;
+  const listId = collectionId || collectionClaimId;
   const WrapperElement = wrapperElement || 'li';
   const shouldFetch =
     claim === undefined || (claim !== null && claim.value_type === 'channel' && isEmpty(claim.meta) && !pending);
   const abandoned = !isResolvingUri && !claim;
-  const isMyCollection = collectionId && (isCollectionMine || collectionId.includes('-'));
+  const isMyCollection = listId && (isCollectionMine || listId.includes('-'));
   const shouldHideActions = hideActions || isMyCollection || type === 'small' || type === 'tooltip';
   const canonicalUrl = claim && claim.canonical_url;
   const lastCollectionIndex = collectionUris ? collectionUris.length - 1 : 0;
@@ -177,7 +179,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     claim.value.stream_type &&
     // $FlowFixMe
     (claim.value.stream_type === 'audio' || claim.value.stream_type === 'video');
-  const isCollection = claim && claim.value_type === 'collection';
   const isChannelUri = isValid ? parseURI(uri).isChannel : false;
   const signingChannel = claim && claim.signing_channel;
 
@@ -208,12 +209,11 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   }
 
   let navigateUrl = formatLbryUrlForWeb((claim && claim.canonical_url) || uri || '/');
-  if (collectionId) {
+  if (listId) {
     const collectionParams = new URLSearchParams();
-    collectionParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, collectionId);
+    collectionParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, listId);
     navigateUrl = navigateUrl + `?` + collectionParams.toString();
   }
-  const channelUri = !isChannelUri ? signingChannel && signingChannel.permanent_url : claim && claim.permanent_url;
   const navLinkProps = {
     to: navigateUrl,
     onClick: (e) => e.stopPropagation(),
@@ -398,7 +398,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                 {!pending && (
                   <>
                     {renderActions && claim && renderActions(claim)}
-                    {Boolean(isMyCollection && collectionId) && (
+                    {Boolean(isMyCollection && listId) && (
                       <>
                         <div className="collection-preview__edit-buttons">
                           <div className="collection-preview__edit-group">
@@ -412,7 +412,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                                 e.stopPropagation();
                                 if (editCollection) {
                                   // $FlowFixMe
-                                  editCollection(collectionId, {
+                                  editCollection(listId, {
                                     order: { from: collectionIndex, to: Number(collectionIndex) - 1 },
                                   });
                                 }
@@ -428,7 +428,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                                 e.stopPropagation();
                                 if (editCollection) {
                                   // $FlowFixMe
-                                  editCollection(collectionId, {
+                                  editCollection(listId, {
                                     order: { from: collectionIndex, to: Number(collectionIndex + 1) },
                                   });
                                 }
@@ -443,7 +443,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                                 e.preventDefault();
                                 e.stopPropagation();
                                 // $FlowFixMe
-                                if (editCollection) editCollection(collectionId, { claims: [claim], remove: true });
+                                if (editCollection) editCollection(listId, { claims: [claim], remove: true });
                               }}
                             />
                           </div>
@@ -485,7 +485,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
           </div>
         </div>
         {!hideMenu && (
-          <ClaimMenuList uri={uri} collectionId={collectionId} channelUri={channelUri} isRepost={isRepost} />
+          <ClaimMenuList uri={uri} collectionId={listId} />
         )}
       </>
     </WrapperElement>

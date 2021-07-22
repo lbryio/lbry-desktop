@@ -12,8 +12,10 @@ type Props = {
   uri: string,
   claim: StreamClaim,
   claimIsMine: boolean,
+  doResolveUri: (string) => void,
   closeModal: () => void,
-  deleteFile: (string, boolean, boolean) => void,
+  deleteFile: (string, boolean, boolean, boolean) => void,
+  doGoBack: boolean,
   title: string,
   fileInfo?: {
     outpoint: ?string,
@@ -22,9 +24,15 @@ type Props = {
 };
 
 function ModalRemoveFile(props: Props) {
-  const { uri, claimIsMine, closeModal, deleteFile, title, claim, isAbandoning } = props;
+  const { uri, claimIsMine, doResolveUri, closeModal, deleteFile, doGoBack = true, title, claim, isAbandoning } = props;
   const [deleteChecked, setDeleteChecked] = usePersistedState('modal-remove-file:delete', true);
   const [abandonChecked, setAbandonChecked] = usePersistedState('modal-remove-file:abandon', true);
+
+  React.useEffect(() => {
+    if (uri) {
+      doResolveUri(uri);
+    }
+  }, [uri, doResolveUri]);
 
   return (
     <Modal isOpen contentLabel={__('Confirm File Remove')} type="card" onAborted={closeModal}>
@@ -52,9 +60,7 @@ function ModalRemoveFile(props: Props) {
                 <FormField
                   name="claim_abandon"
                   label={
-                    <I18nMessage
-                      tokens={{ lbc: <LbcSymbol prefix={__('reclaim %amount%', { amount: claim.amount })} /> }}
-                    >
+                    <I18nMessage tokens={{ lbc: <LbcSymbol postfix={claim.amount} /> }}>
                       Remove from blockchain (%lbc%)
                     </I18nMessage>
                   }
@@ -87,7 +93,7 @@ function ModalRemoveFile(props: Props) {
                 button="primary"
                 label={isAbandoning ? __('Removing...') : __('OK')}
                 disabled={isAbandoning || !(deleteChecked || abandonChecked)}
-                onClick={() => deleteFile(uri, deleteChecked, claimIsMine ? abandonChecked : false)}
+                onClick={() => deleteFile(uri, deleteChecked, claimIsMine ? abandonChecked : false, doGoBack)}
               />
               <Button button="link" label={__('Cancel')} onClick={closeModal} />
             </div>

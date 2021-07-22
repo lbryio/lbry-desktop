@@ -1,3 +1,4 @@
+const { generateDownloadUrl } = require('../../ui/util/web');
 const { URL, SITE_NAME, LBRY_WEB_API } = require('../../config.js');
 const { Lbry } = require('lbry-redux');
 const Feed = require('feed').Feed;
@@ -44,12 +45,37 @@ async function getClaimsFromChannel(claimId, count) {
 
 async function getFeed(channelClaim, feedLink) {
   const replaceLineFeeds = (str) => str.replace(/(?:\r\n|\r|\n)/g, '<br />');
+
   const fmtDescription = (description) => replaceLineFeeds(description);
+
   const sanitizeThumbsUrl = (url) => {
     if (typeof url === 'string' && url.startsWith('https://')) {
       return encodeURI(url).replace(/&/g, '%26');
     }
     return '';
+  };
+
+  const getEnclosure = (claim) => {
+    const value = claim.value;
+    if (!value || !value.stream_type || !value.source || !value.source.media_type) {
+      return undefined;
+    }
+
+    switch (value.stream_type) {
+      case 'video':
+      case 'audio':
+      case 'image':
+      case 'document':
+      case 'software':
+        return {
+          url: encodeURI(generateDownloadUrl(claim.name, claim.claim_id)),
+          type: value.source.media_type,
+          length: value.source.size || 0, // Per spec, 0 is a valid fallback.
+        };
+
+      default:
+        return undefined;
+    }
   };
 
   const value = channelClaim.value;
@@ -78,14 +104,18 @@ async function getFeed(channelClaim, feedLink) {
     const meta = c.meta;
     const value = c.value;
 
+    const title = value && value.title ? value.title : c.name;
+    const thumbnailUrl = value && value.thumbnail ? value.thumbnail.url : '';
+    const thumbnailHtml = thumbnailUrl ? `<p><img src="${thumbnailUrl}" alt="thumbnail" title="${title}" /></p>` : '';
+
     feed.addItem({
       id: c.claim_id,
       guid: encodeURI(URL + '/' + c.name + ':' + c.claim_id),
       title: value && value.title ? value.title : c.name,
-      description: fmtDescription(value && value.description ? value.description : ''),
-      image: sanitizeThumbsUrl(value && value.thumbnail ? value.thumbnail.url : ''),
+      description: thumbnailHtml + fmtDescription(value && value.description ? value.description : ''),
       link: encodeURI(URL + '/' + c.name + ':' + c.claim_id),
       date: new Date(meta ? meta.creation_timestamp * 1000 : null),
+      enclosure: getEnclosure(c),
     });
   });
 

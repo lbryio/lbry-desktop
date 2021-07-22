@@ -24,6 +24,8 @@ import { makeSelectNotificationForCommentId } from 'redux/selectors/notification
 import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { toHex } from 'util/hex';
 import Comments from 'comments';
+import { selectPrefsReady } from 'redux/selectors/sync';
+import { doAlertWaitingForSync } from 'redux/actions/app';
 
 const isDev = process.env.NODE_ENV !== 'production';
 
@@ -726,8 +728,22 @@ function doCommentModToggleBlock(
 ) {
   return async (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
-
+    const ready = selectPrefsReady(state);
     let blockerChannelClaims = selectMyChannelClaims(state);
+
+    if (!ready) {
+      return dispatch(doAlertWaitingForSync());
+    }
+
+    if (!blockerChannelClaims) {
+      return dispatch(
+        doToast({
+          message: __('Create a channel to change this setting.'),
+          isError: false,
+        })
+      );
+    }
+
     if (blockerIds.length === 0) {
       // Specific blockers not provided, so find one based on block-level.
       switch (blockLevel) {
