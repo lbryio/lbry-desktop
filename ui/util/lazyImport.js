@@ -25,8 +25,7 @@ export const lazyImport = (componentImport) =>
         if (localStorageAvailable) {
           window.localStorage.setItem('page-has-been-force-refreshed', 'true');
         }
-        // -- Disable the auto-reload behavior for now to confirm "#6636 Slow embed" issue
-        // return window.location.reload();
+        return window.location.reload();
       }
 
       // If it still didn't work, then relay the error.
