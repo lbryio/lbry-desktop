@@ -145,12 +145,12 @@ function HomePage(props: Props) {
       {/* @if TARGET='web' */}
       {SIMPLE_SITE && <Meme />}
       {/* @endif */}
-      {rowData.map(({ title, route, link, icon, help, pinUrls, options = {} }, index) => {
+      {rowData.map(({ title, route, link, icon, help, pinnedUrls: pinUrls, options = {} }, index) => {
         // add pins here
         return getRowElements(title, route, link, icon, help, options, index, pinUrls);
       })}
       {/* @if TARGET='web' */}
-        <Pixel type={'retargeting'} />
+      <Pixel type={'retargeting'} />
       {/* @endif */}
     </Page>
   );
