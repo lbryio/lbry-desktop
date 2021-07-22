@@ -163,7 +163,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
         // if it's beamer's error indicating the account is not linked yet
         if (error.message.indexOf(errorString) > -1) {
           // get stripe link and set it on the frontend
-          getAndSetAccountLink();
+          getAndSetAccountLink(true);
         } else {
           // not an error from Beamer, throw it
           throw new Error(error);
