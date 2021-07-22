@@ -11,6 +11,7 @@ import Plastic from 'react-plastic';
 import Button from 'component/button';
 import * as ICONS from 'constants/icons';
 import * as MODALS from 'constants/modal_types';
+import * as PAGES from 'constants/pages';
 
 let stripeEnvironment = 'test';
 // if the key contains pk_live it's a live key
@@ -418,71 +419,17 @@ class SettingsStripeCard extends React.Component<Props, State> {
                   />
                 </>
               }
+              actions={
+                <Button
+                  button="primary"
+                  label={__('View Transactions')}
+                  icon={ICONS.SETTINGS}
+                  navigate={`/$/${PAGES.WALLET}?tab=payment-history`}
+                />
+              }
             />
             <br />
-
-            {/* if a user has no transactions yet */}
-            {(!customerTransactions || customerTransactions.length === 0) && (
-              <Card
-                title={__('Tip History')}
-                subtitle={__('You have not sent any tips yet. When you do they will appear here. ')}
-              />
-            )}
           </div>
-        )}
-
-        {/* customer already has transactions */}
-        {customerTransactions && customerTransactions.length > 0 && (
-          <Card
-            title={__('Tip History')}
-            body={
-              <>
-                <div className="table__wrapper">
-                  <table className="table table--transactions">
-                    <thead>
-                      <tr>
-                        <th className="date-header">{__('Date')}</th>
-                        <th>{<>{__('Receiving Channel Name')}</>}</th>
-                        <th>{__('Tip Location')}</th>
-                        <th>{__('Amount (USD)')} </th>
-                        <th>{__('Anonymous')}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {customerTransactions &&
-                        customerTransactions.reverse().map((transaction) => (
-                          <tr key={transaction.name + transaction.created_at}>
-                            <td>{moment(transaction.created_at).format('LLL')}</td>
-                            <td>
-                              <Button
-                                className="stripe__card-link-text"
-                                navigate={'/' + transaction.channel_name + ':' + transaction.channel_claim_id}
-                                label={transaction.channel_name}
-                                button="link"
-                              />
-                            </td>
-                            <td>
-                              <Button
-                                className="stripe__card-link-text"
-                                navigate={'/' + transaction.channel_name + ':' + transaction.source_claim_id}
-                                label={
-                                  transaction.channel_claim_id === transaction.source_claim_id
-                                    ? 'Channel Page'
-                                    : 'File Page'
-                                }
-                                button="link"
-                              />
-                            </td>
-                            <td>${transaction.tipped_amount / 100}</td>
-                            <td>{transaction.private_tip ? 'Yes' : 'No'}</td>
-                          </tr>
-                        ))}
-                    </tbody>
-                  </table>
-                </div>
-              </>
-            }
-          />
         )}
       </Page>
     );
