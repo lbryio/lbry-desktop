@@ -164,3 +164,4 @@ export const TIME = 'time';
 export const GLOBE = 'globe';
 export const RSS = 'rss';
 export const STAR = 'star';
+export const MUSIC = 'MusicCategory';
