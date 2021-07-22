@@ -34,7 +34,7 @@ type Props = {
   uri: string,
   onTipErrorChange: (string) => void,
   activeTab: string,
-  shouldDisableReviewButton: (boolean) => void
+  shouldDisableReviewButton: (boolean) => void,
 };
 
 function WalletTipAmountSelector(props: Props) {
@@ -46,7 +46,7 @@ function WalletTipAmountSelector(props: Props) {
   const [hasCardSaved, setHasSavedCard] = usePersistedState('comment-support:hasCardSaved', false);
 
   // if it's fiat but there's no card saved OR the creator can't receive fiat tips
-  const shouldDisableFiatSelectors = (activeTab === TAB_FIAT && (!hasCardSaved || !canReceiveFiatTip));
+  const shouldDisableFiatSelectors = activeTab === TAB_FIAT && (!hasCardSaved || !canReceiveFiatTip);
 
   /**
    * whether tip amount selection/review functionality should be disabled
@@ -120,7 +120,8 @@ function WalletTipAmountSelector(props: Props) {
     // setHasSavedCard(false);
     // setCanReceiveFiatTip(true);
 
-    let regexp, tipError;
+    let regexp,
+      tipError = '';
 
     if (amount === 0) {
       tipError = __('Amount must be a positive number');
