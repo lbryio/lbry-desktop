@@ -38,9 +38,13 @@ export const getSearchQueryString = (query: string, options: any = {}) => {
   const encodedQuery = encodeURIComponent(query);
   const queryParams = [
     options.exact && !isSurroundedByQuotes(encodedQuery) ? `s="${encodedQuery}"` : `s=${encodedQuery}`,
+    `free_only=true`,
     `size=${options.size || DEFAULT_SEARCH_SIZE}`,
     `from=${options.from || DEFAULT_SEARCH_RESULT_FROM}`,
+    // `mediaType=${SEARCH_OPTIONS.MEDIA_VIDEO}`,
+    // `claimType=${SEARCH_OPTIONS.INCLUDE_FILES}`,
   ];
+
   const { isBackgroundSearch } = options;
   const includeUserOptions = typeof isBackgroundSearch === 'undefined' ? false : !isBackgroundSearch;
 
