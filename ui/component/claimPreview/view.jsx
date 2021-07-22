@@ -194,18 +194,32 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   }
 
   // Aria-label value for claim preview
+  let ariaDate = date ? DateTime.getTimeAgoStr(date) : null;
   let ariaLabelData = title;
 
   if (!isChannelUri && channelTitle) {
-    ariaLabelData += ' ' + __('by %channelTitle%', { channelTitle });
-  }
-
-  if (date) {
-    ariaLabelData += ' ' + DateTime.getTimeAgoStr(date);
-  }
-
-  if (mediaDuration) {
-    ariaLabelData += ', ' + mediaDuration;
+    if (mediaDuration) {
+      if (ariaDate) {
+        ariaLabelData += ariaLabelData = __('%title% by %channelTitle% %ariaDate%, %mediaDuration%', {
+          title,
+          channelTitle,
+          ariaDate,
+          mediaDuration,
+        });
+      } else {
+        ariaLabelData += ariaLabelData = __('%title% by %channelTitle%, %mediaDuration%', {
+          title,
+          channelTitle,
+          mediaDuration,
+        });
+      }
+    } else {
+      if (ariaDate) {
+        ariaLabelData += ariaLabelData = __('%title% by %channelTitle% %ariaDate%', { title, channelTitle, ariaDate });
+      } else {
+        ariaLabelData += ariaLabelData = __('%title% by %channelTitle%', { title, channelTitle });
+      }
+    }
   }
 
   let navigateUrl = formatLbryUrlForWeb((claim && claim.canonical_url) || uri || '/');
@@ -484,9 +498,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
             )}
           </div>
         </div>
-        {!hideMenu && (
-          <ClaimMenuList uri={uri} collectionId={listId} />
-        )}
+        {!hideMenu && <ClaimMenuList uri={uri} collectionId={listId} />}
       </>
     </WrapperElement>
   );

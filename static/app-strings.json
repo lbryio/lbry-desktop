@@ -2056,8 +2056,9 @@
   "added to": "added to",
   "removed from": "removed from",
   "Skip Navigation": "Skip Navigation",
-  "by %channelTitle%": "by %channelTitle%",
   "Reset": "Reset",
   "Reset to original (previous) publish date": "Reset to original (previous) publish date",
+  "%title% by %channelTitle% %ariaDate%": "%title% by %channelTitle% %ariaDate%",
+  "%title% by %channelTitle% %ariaDate%, %mediaDuration%": "%title% by %channelTitle% %ariaDate%, %mediaDuration%",
   "--end--": "--end--"
 }
