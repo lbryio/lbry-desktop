@@ -18,9 +18,11 @@ export default function LivestreamLink(props: Props) {
   const [livestreamClaim, setLivestreamClaim] = React.useState(false);
   const [isLivestreaming, setIsLivestreaming] = React.useState(false);
   const livestreamChannelId = (channelClaim && channelClaim.claim_id) || ''; // TODO: fail in a safer way, probably
+  const isChannelEmpty = !channelClaim || !channelClaim.meta || !channelClaim.meta.claims_in_channel;
 
   React.useEffect(() => {
-    if (livestreamChannelId) {
+    // Don't search empty channels
+    if (livestreamChannelId && !isChannelEmpty) {
       Lbry.claim_search({
         channel_ids: [livestreamChannelId],
         has_no_source: true,
@@ -35,7 +37,7 @@ export default function LivestreamLink(props: Props) {
         })
         .catch(() => {});
     }
-  }, [livestreamChannelId]);
+  }, [livestreamChannelId, isChannelEmpty]);
 
   React.useEffect(() => {
     function fetchIsStreaming() {
@@ -53,17 +55,23 @@ export default function LivestreamLink(props: Props) {
     }
 
     let interval;
-    if (livestreamChannelId) {
+    // Only call livestream api if channel has livestream claims
+    if (livestreamChannelId && livestreamClaim) {
       if (!interval) fetchIsStreaming();
       interval = setInterval(fetchIsStreaming, 10 * 1000);
     }
-
+    // Prevent any more api calls on update
+    if (!livestreamChannelId || !livestreamClaim) {
+      if (interval) {
+        clearInterval(interval);
+      }
+    }
     return () => {
       if (interval) {
         clearInterval(interval);
       }
     };
-  }, [livestreamChannelId]);
+  }, [livestreamChannelId, livestreamClaim]);
 
   if (!livestreamClaim || !isLivestreaming) {
     return null;
