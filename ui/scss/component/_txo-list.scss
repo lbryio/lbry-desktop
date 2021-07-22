@@ -1,0 +1,12 @@
+.txo__radios {
+  display: flex;
+  flex-direction: row;
+}
+
+.txo__export {
+  display: none;
+
+  @media (min-width: $breakpoint-small) {
+    display: block;
+  }
+}
