@@ -106,6 +106,7 @@ export const getHomepageRowForCat = (cat: HomepageCat) => {
     route: cat.name ? `/$/${cat.name}` : undefined,
     icon: cat.icon || '', // some default
     title: cat.label,
+    pinnedUrls: cat.pinnedUrls,
     options: {
       claimType: cat.claimType || 'stream',
       channelIds: cat.channelIds,
