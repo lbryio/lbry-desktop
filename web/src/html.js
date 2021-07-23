@@ -140,6 +140,7 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
 
   let head = '';
 
+  head += `${addFavicon()}`;
   head += '<meta charset="utf8"/>';
   head += `<title>${title}</title>`;
   head += `<meta name="description" content="${cleanDescription}"/>`;
