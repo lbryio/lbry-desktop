@@ -2053,5 +2053,9 @@
   "Commenting...": "Commenting...",
   "Reset": "Reset",
   "Reset to original (previous) publish date": "Reset to original (previous) publish date",
+  "Show reply": "Show reply",
+  "Show %count% replies": "Show %count% replies",
+  "Open in Desktop": "Open in Desktop",
+  "Open in Web": "Open in Web",
   "--end--": "--end--"
 }

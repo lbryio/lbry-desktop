@@ -226,6 +226,14 @@ function ClaimMenuList(props: Props) {
     push(`/$/${PAGES.REPORT_CONTENT}?claimId=${contentClaim && contentClaim.claim_id}`);
   }
 
+  function handleOpenInWeb() {
+    window.open(shareUrl);
+  }
+
+  function handleOpenInDesktop() {
+    window.open(claim.permanent_url);
+  }
+
   return (
     <Menu>
       <MenuButton
@@ -399,6 +407,13 @@ function ClaimMenuList(props: Props) {
             </div>
           </MenuItem>
         )}
+
+        <MenuItem className="comment__menu-option" onSelect={IS_WEB ? handleOpenInDesktop : handleOpenInWeb}>
+          <div className="menu__link">
+            <Icon aria-hidden icon={IS_WEB ? ICONS.DESKTOP : ICONS.WEB} />
+            {IS_WEB ? __('Open in Desktop') : __('Open in Web')}
+          </div>
+        </MenuItem>
 
         <MenuItem className="comment__menu-option" onSelect={handleCopyLink}>
           <div className="menu__link">
