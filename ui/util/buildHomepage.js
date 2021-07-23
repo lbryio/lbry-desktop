@@ -337,6 +337,9 @@ export function GetLinksData(
     rowData.push(LATEST_FROM_LBRY);
     if (!showPersonalizedChannels) rowData.push(TOP_CHANNELS);
   }
-  (Object.values(all): any).map((row) => rowData.push(getHomepageRowForCat(row)));
+  // TODO: provide better method for exempting from homepage
+  (Object.values(all): any)
+    .filter((row) => !(isHomepage && row.name === 'news'))
+    .map((row) => rowData.push(getHomepageRowForCat(row)));
   return rowData;
 }
