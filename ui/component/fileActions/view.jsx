@@ -1,5 +1,5 @@
 // @flow
-import { SITE_NAME, ENABLE_FILE_REACTIONS } from 'config';
+import { URL, SHARE_DOMAIN_URL, SITE_NAME, ENABLE_FILE_REACTIONS } from 'config';
 import * as PAGES from 'constants/pages';
 import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
@@ -16,6 +16,9 @@ import FileReactions from 'component/fileReactions';
 import { Menu, MenuButton, MenuList, MenuItem } from '@reach/menu-button';
 import Icon from 'component/common/icon';
 import { webDownloadClaim } from 'util/downloadClaim';
+import { generateShareUrl, generateLbryContentUrl } from 'util/url';
+
+const SHARE_DOMAIN = SHARE_DOMAIN_URL || URL;
 
 type Props = {
   uri: string,
@@ -67,6 +70,8 @@ function FileActions(props: Props) {
   const { signing_channel: signingChannel } = claim;
   const channelName = signingChannel && signingChannel.name;
   const fileName = claim && claim.value && claim.value.source && claim.value.source.name;
+  const lbryUrl = generateLbryContentUrl(claim.canonical_url, claim.permanent_url);
+  const shareUrl = generateShareUrl(SHARE_DOMAIN, lbryUrl);
 
   // We want to use the short form uri for editing
   // This is what the user is used to seeing, they don't care about the claim id
@@ -111,6 +116,14 @@ function FileActions(props: Props) {
     } else {
       push(`/$/${PAGES.REPOST_NEW}?from=${encodeURIComponent(uri)}&redirect=${pathname}`);
     }
+  }
+
+  function handleOpenInWeb() {
+    window.open(shareUrl);
+  }
+
+  function handleOpenInDesktop() {
+    window.open(claim.permanent_url);
   }
 
   const lhsSection = (
@@ -188,6 +201,12 @@ function FileActions(props: Props) {
               </MenuItem>
             )}
             {/* @endif */}
+            <MenuItem className="comment__menu-option" onSelect={IS_WEB ? handleOpenInDesktop : handleOpenInWeb}>
+              <div className="menu__link">
+                <Icon aria-hidden icon={IS_WEB ? ICONS.DESKTOP : ICONS.WEB} />
+                {IS_WEB ? __('Open in Desktop') : __('Open in Web')}
+              </div>
+            </MenuItem>
             {!claimIsMine && (
               <MenuItem
                 className="comment__menu-option"
