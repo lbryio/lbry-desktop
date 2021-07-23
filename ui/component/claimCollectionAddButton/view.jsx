@@ -11,10 +11,11 @@ type Props = {
   fileAction?: boolean,
   type?: boolean,
   claim: Claim,
+  isSaved: boolean,
 };
 
 export default function CollectionAddButton(props: Props) {
-  const { doOpenModal, uri, fileAction, type = 'playlist', claim } = props;
+  const { doOpenModal, uri, fileAction, type = 'playlist', claim, isSaved } = props;
 
   // $FlowFixMe
   const streamType = (claim && claim.value && claim.value.stream_type) || '';
@@ -24,10 +25,14 @@ export default function CollectionAddButton(props: Props) {
   return (
     <Button
       button={fileAction ? undefined : 'alt'}
-      className={classnames({ 'button--file-action': fileAction })}
-      icon={fileAction ? ICONS.ADD : ICONS.LIBRARY}
+      className={classnames({
+        'button--file-action': fileAction,
+        'button--file-action-active': fileAction && isSaved,
+      })}
+      icon={fileAction ? (!isSaved ? ICONS.ADD : ICONS.STACK) : ICONS.LIBRARY}
       iconSize={fileAction ? 22 : undefined}
-      label={uri ? __('Save') : __('New List')}
+      iconColor={isSaved && 'green'}
+      label={uri ? (!isSaved ? __('Save') : __('Saved')) : __('New List')}
       requiresAuth={IS_WEB}
       title={__('Add this claim to a list')}
       onClick={(e) => {
