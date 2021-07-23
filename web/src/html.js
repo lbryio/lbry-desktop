@@ -8,6 +8,7 @@ const {
   OG_IMAGE_URL,
   SITE_DESCRIPTION,
   SITE_NAME,
+  FAVICON,
 } = require('../../config.js');
 const { generateEmbedUrl, generateStreamUrl, generateDirectUrl } = require('../../ui/util/web');
 const PAGES = require('../../ui/constants/pages');
@@ -82,20 +83,31 @@ function buildOgMetadata(overrideOptions = {}) {
 function conditionallyAddPWA() {
   let head = '';
   if (DOMAIN === 'odysee.com') {
-    head +=  '<link rel="manifest" href="./public/pwa/manifest.json"/>';
+    head += '<link rel="manifest" href="./public/pwa/manifest.json"/>';
     head += '<link rel="apple-touch-icon" sizes="180x180" href="./public/pwa/icon-180.png">';
     head += '<script src="./serviceWorker.js"></script>';
   }
   return head;
 }
 
+function addFavicon() {
+  let head = '';
+  head += `<link rel="icon" type="image/png" href="${FAVICON || './public/favicon.png'}" />`;
+  return head;
+}
+
 function buildHead() {
-  const head = '<!-- VARIABLE_HEAD_BEGIN -->' + conditionallyAddPWA() + buildOgMetadata() + '<!-- VARIABLE_HEAD_END -->';
+  const head =
+    '<!-- VARIABLE_HEAD_BEGIN -->' +
+    addFavicon() +
+    conditionallyAddPWA() +
+    buildOgMetadata() +
+    '<!-- VARIABLE_HEAD_END -->';
   return head;
 }
 
 function buildBasicOgMetadata() {
-  const head = '<!-- VARIABLE_HEAD_BEGIN -->' + buildOgMetadata() + '<!-- VARIABLE_HEAD_END -->';
+  const head = '<!-- VARIABLE_HEAD_BEGIN -->' + addFavicon() + buildOgMetadata() + '<!-- VARIABLE_HEAD_END -->';
   return head;
 }
 
@@ -128,6 +140,7 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
 
   let head = '';
 
+  head += `${addFavicon()}`;
   head += '<meta charset="utf8"/>';
   head += `<title>${title}</title>`;
   head += `<meta name="description" content="${cleanDescription}"/>`;
