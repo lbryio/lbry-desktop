@@ -87,7 +87,7 @@ function ChannelPage(props: Props) {
   } = useHistory();
   const [viewBlockedChannel, setViewBlockedChannel] = React.useState(false);
   const urlParams = new URLSearchParams(search);
-  const currentView = urlParams.get(PAGE_VIEW_QUERY) || undefined;
+  const currentView = urlParams.get(PAGE_VIEW_QUERY) || PAGE.CONTENT;
   const [discussionWasMounted, setDiscussionWasMounted] = React.useState(false);
   const editing = urlParams.get(PAGE_VIEW_QUERY) === PAGE.EDIT;
   const { channelName } = parseURI(uri);
@@ -288,21 +288,25 @@ function ChannelPage(props: Props) {
           </TabList>
           <TabPanels>
             <TabPanel>
-              <ChannelContent
-                uri={uri}
-                channelIsBlackListed={channelIsBlackListed}
-                viewHiddenChannels
-                empty={<section className="main--empty">{__('No Content Found')}</section>}
-              />
+              {currentView === PAGE.CONTENT && (
+                <ChannelContent
+                  uri={uri}
+                  channelIsBlackListed={channelIsBlackListed}
+                  viewHiddenChannels
+                  empty={<section className="main--empty">{__('No Content Found')}</section>}
+                />
+              )}
             </TabPanel>
             <TabPanel>
-              <ChannelContent
-                claimType={'collection'}
-                uri={uri}
-                channelIsBlackListed={channelIsBlackListed}
-                viewHiddenChannels
-                empty={collectionEmpty}
-              />
+              {currentView === PAGE.LISTS && (
+                <ChannelContent
+                  claimType={'collection'}
+                  uri={uri}
+                  channelIsBlackListed={channelIsBlackListed}
+                  viewHiddenChannels
+                  empty={collectionEmpty}
+                />
+              )}
             </TabPanel>
             <TabPanel>
               <ChannelAbout uri={uri} />
