@@ -1,0 +1,15 @@
+.expanding-details__header {
+  background-color: var(--color-card-background);
+  position: relative;
+  overflow: hidden;
+  padding-left: var(--spacing-s);
+}
+
+.expanding-details {
+  border: 1px solid var(--color-border);
+}
+
+.expanding-details__body {
+  border-radius: var(--card-radius);
+  padding: 0 var(--spacing-s);
+}
