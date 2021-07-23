@@ -26,6 +26,7 @@ export default function LivestreamLink(props: Props) {
       Lbry.claim_search({
         channel_ids: [livestreamChannelId],
         page: 1,
+        page_size: 1,
         no_totals: true,
         has_no_source: true,
         claim_type: ['stream'],
