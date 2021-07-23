@@ -316,6 +316,8 @@ function CommentList(props: Props) {
                     isPinned={comment.is_pinned}
                     supportAmount={comment.support_amount}
                     numDirectReplies={comment.replies}
+                    isModerator={comment.is_moderator}
+                    isGlobalMod={comment.is_global_mod}
                     isFiat={comment.is_fiat}
                   />
                 );

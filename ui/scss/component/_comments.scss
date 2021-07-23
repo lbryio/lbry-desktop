@@ -224,6 +224,28 @@ $thumbnailWidthSmall: 1rem;
   }
 }
 
+.comment__badge {
+  padding-right: var(--spacing-xxs);
+
+  .icon {
+    margin-bottom: -3px;
+  }
+}
+
+.comment__badge--global-mod {
+  .st0 {
+    // @see: ICONS.BADGE_MOD
+    fill: #fe7500;
+  }
+}
+
+.comment__badge--mod {
+  .st0 {
+    // @see: ICONS.BADGE_MOD
+    fill: #ff3850;
+  }
+}
+
 .comment__message {
   word-break: break-word;
   max-width: 35rem;

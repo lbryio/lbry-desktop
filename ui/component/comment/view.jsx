@@ -10,6 +10,7 @@ import DateTime from 'component/dateTime';
 import Button from 'component/button';
 import Expandable from 'component/expandable';
 import MarkdownPreview from 'component/common/markdown-preview';
+import Tooltip from 'component/common/tooltip';
 import ChannelThumbnail from 'component/channelThumbnail';
 import { Menu, MenuButton } from '@reach/menu-button';
 import Icon from 'component/common/icon';
@@ -59,7 +60,9 @@ type Props = {
   stakedLevel: number,
   supportAmount: number,
   numDirectReplies: number,
-  isFiat: boolean
+  isModerator: boolean,
+  isGlobalMod: boolean,
+  isFiat: boolean,
 };
 
 const LENGTH_TO_COLLAPSE = 300;
@@ -92,6 +95,8 @@ function Comment(props: Props) {
     stakedLevel,
     supportAmount,
     numDirectReplies,
+    isModerator,
+    isGlobalMod,
     isFiat,
   } = props;
 
@@ -225,6 +230,22 @@ function Comment(props: Props) {
         <div className="comment__body-container">
           <div className="comment__meta">
             <div className="comment__meta-information">
+              {isGlobalMod && (
+                <Tooltip label={__('Admin')}>
+                  <span className="comment__badge comment__badge--global-mod">
+                    <Icon icon={ICONS.BADGE_MOD} size={20} />
+                  </span>
+                </Tooltip>
+              )}
+
+              {isModerator && (
+                <Tooltip label={__('Moderator')}>
+                  <span className="comment__badge comment__badge--mod">
+                    <Icon icon={ICONS.BADGE_MOD} size={20} />
+                  </span>
+                </Tooltip>
+              )}
+
               {!author ? (
                 <span className="comment__author">{__('Anonymous')}</span>
               ) : (

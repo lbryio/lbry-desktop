@@ -3,6 +3,7 @@ import * as ICONS from 'constants/icons';
 import React from 'react';
 import { parseURI } from 'lbry-redux';
 import MarkdownPreview from 'component/common/markdown-preview';
+import Tooltip from 'component/common/tooltip';
 import ChannelThumbnail from 'component/channelThumbnail';
 import { Menu, MenuButton } from '@reach/menu-button';
 import Icon from 'component/common/icon';
@@ -20,6 +21,8 @@ type Props = {
   commentIsMine: boolean,
   stakedLevel: number,
   supportAmount: number,
+  isModerator: boolean,
+  isGlobalMod: boolean,
   isFiat: boolean,
   isPinned: boolean,
 };
@@ -34,6 +37,8 @@ function LivestreamComment(props: Props) {
     commentId,
     stakedLevel,
     supportAmount,
+    isModerator,
+    isGlobalMod,
     isFiat,
     isPinned,
   } = props;
@@ -59,6 +64,22 @@ function LivestreamComment(props: Props) {
       <div className="livestream-comment__body">
         {supportAmount > 0 && <ChannelThumbnail uri={authorUri} xsmall />}
         <div className="livestream-comment__info">
+          {isGlobalMod && (
+            <Tooltip label={__('Admin')}>
+              <span className="comment__badge comment__badge--global-mod">
+                <Icon icon={ICONS.BADGE_MOD} size={16} />
+              </span>
+            </Tooltip>
+          )}
+
+          {isModerator && (
+            <Tooltip label={__('Moderator')}>
+              <span className="comment__badge comment__badge--mod">
+                <Icon icon={ICONS.BADGE_MOD} size={16} />
+              </span>
+            </Tooltip>
+          )}
+
           <Button
             className={classnames('button--uri-indicator comment__author', {
               'comment__author--creator': commentByOwnerOfContent,

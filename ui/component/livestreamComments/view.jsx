@@ -252,6 +252,8 @@ export default function LivestreamComments(props: Props) {
                 commentId={pinnedComment.comment_id}
                 message={pinnedComment.comment}
                 supportAmount={pinnedComment.support_amount}
+                isModerator={pinnedComment.is_moderator}
+                isGlobalMod={pinnedComment.is_global_mod}
                 isFiat={pinnedComment.is_fiat}
                 isPinned={pinnedComment.is_pinned}
                 commentIsMine={pinnedComment.channel_id && isMyComment(pinnedComment.channel_id)}
@@ -271,6 +273,8 @@ export default function LivestreamComments(props: Props) {
                     commentId={comment.comment_id}
                     message={comment.comment}
                     supportAmount={comment.support_amount}
+                    isModerator={comment.is_moderator}
+                    isGlobalMod={comment.is_global_mod}
                     isFiat={comment.is_fiat}
                     commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}
                   />
@@ -286,6 +290,8 @@ export default function LivestreamComments(props: Props) {
                     commentId={comment.comment_id}
                     message={comment.comment}
                     supportAmount={comment.support_amount}
+                    isModerator={comment.is_moderator}
+                    isGlobalMod={comment.is_global_mod}
                     isFiat={comment.is_fiat}
                     commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}
                   />

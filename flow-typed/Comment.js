@@ -14,6 +14,9 @@ declare type Comment = {
   is_pinned: boolean,
   support_amount: number,
   replies: number, // number of direct replies (i.e. excluding nested replies).
+  is_moderator: boolean,
+  is_creator: boolean,
+  is_global_mod: boolean,
   is_fiat?: boolean,
 };
 
