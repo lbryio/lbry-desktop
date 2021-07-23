@@ -107,7 +107,7 @@ function buildHead() {
 }
 
 function buildBasicOgMetadata() {
-  const head = '<!-- VARIABLE_HEAD_BEGIN -->' + buildOgMetadata() + '<!-- VARIABLE_HEAD_END -->';
+  const head = '<!-- VARIABLE_HEAD_BEGIN -->' + addFavicon() + buildOgMetadata() + '<!-- VARIABLE_HEAD_END -->';
   return head;
 }
 
