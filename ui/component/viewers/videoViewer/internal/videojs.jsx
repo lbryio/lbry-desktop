@@ -497,7 +497,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   }
 
   function detectFileType() {
-    console.log(`Detecting file type via pre-fetch...`);
     return new Promise(async (res, rej) => {
       try {
         const response = await fetch(source, { method: 'HEAD', cache: 'no-store' });
@@ -514,8 +513,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
           finalSource = response.url;
         }
 
-        console.log(`File type is: ${finalType}`);
-
         // Modify video source in options
         videoJsOptions.sources = [
           {
@@ -526,7 +523,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
         return res(videoJsOptions);
       } catch (error) {
-        console.error(`Failed to pre-fetch video!`);
         return rej(error);
       }
     });

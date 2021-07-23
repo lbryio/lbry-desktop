@@ -436,7 +436,6 @@ export function doCommentCreate(
       ...(environment ? { environment } : {}), // add environment for stripe if it exists
     })
       .then((result: CommentCreateResponse) => {
-        console.log(result);
         dispatch({
           type: ACTIONS.COMMENT_CREATE_COMPLETED,
           data: {
@@ -449,7 +448,6 @@ export function doCommentCreate(
         return result;
       })
       .catch((error) => {
-        console.log(error);
         dispatch({
           type: ACTIONS.COMMENT_CREATE_FAILED,
           data: error,
