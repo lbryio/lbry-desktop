@@ -986,6 +986,11 @@ export default handleActions(
       fetchingSettings: false,
     }),
     [ACTIONS.COMMENT_FETCH_SETTINGS_COMPLETED]: (state: CommentsState, action: any) => {
+      // TODO: This is incorrect, as it could make 'settingsByChannelId' store
+      // only 1 channel with other channel's data purged. It works for now
+      // because the GUI only shows 1 channel's setting at a time, and *always*
+      // re-fetches to get latest data before displaying. Either rename this to
+      // 'activeChannelCreatorSettings', or append the new data properly.
       return {
         ...state,
         settingsByChannelId: action.data,

@@ -1390,7 +1390,9 @@ export const doFetchCreatorSettings = (channelClaimIds: Array<string> = []) => {
           const channelId = channelSignatures[i].claim_id;
           settingsByChannelId[channelId] = settings[i];
 
-          settingsByChannelId[channelId].words = settingsByChannelId[channelId].words.split(',');
+          if (settings[i].words) {
+            settingsByChannelId[channelId].words = settings[i].words.split(',');
+          }
 
           delete settingsByChannelId[channelId].channel_name;
           delete settingsByChannelId[channelId].channel_id;
