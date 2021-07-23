@@ -28,11 +28,15 @@ import I18nMessage from 'component/i18nMessage';
 import PlaceholderTx from 'static/img/placeholderTx.gif';
 
 export const PAGE_VIEW_QUERY = `view`;
-const CONTENT_PAGE = 'content';
-const LISTS_PAGE = 'lists';
-const ABOUT_PAGE = `about`;
 export const DISCUSSION_PAGE = `discussion`;
-const EDIT_PAGE = 'edit';
+
+const PAGE = {
+  CONTENT: 'content',
+  LISTS: 'lists',
+  ABOUT: 'about',
+  DISCUSSION: DISCUSSION_PAGE,
+  EDIT: 'edit',
+};
 
 type Props = {
   uri: string,
@@ -85,7 +89,7 @@ function ChannelPage(props: Props) {
   const urlParams = new URLSearchParams(search);
   const currentView = urlParams.get(PAGE_VIEW_QUERY) || undefined;
   const [discussionWasMounted, setDiscussionWasMounted] = React.useState(false);
-  const editing = urlParams.get(PAGE_VIEW_QUERY) === EDIT_PAGE;
+  const editing = urlParams.get(PAGE_VIEW_QUERY) === PAGE.EDIT;
   const { channelName } = parseURI(uri);
   const { permanent_url: permanentUrl } = claim;
   const claimId = claim.claim_id;
@@ -143,16 +147,16 @@ function ChannelPage(props: Props) {
   // would alter the Tab label's role attribute, which should stay role="tab" to work with keyboards/screen readers.
   let tabIndex;
   switch (currentView) {
-    case CONTENT_PAGE:
+    case PAGE.CONTENT:
       tabIndex = 0;
       break;
-    case LISTS_PAGE:
+    case PAGE.LISTS:
       tabIndex = 1;
       break;
-    case ABOUT_PAGE:
+    case PAGE.ABOUT:
       tabIndex = 2;
       break;
-    case DISCUSSION_PAGE:
+    case PAGE.DISCUSSION:
       tabIndex = 3;
       break;
     default:
@@ -165,20 +169,20 @@ function ChannelPage(props: Props) {
     let search = '?';
 
     if (newTabIndex === 0) {
-      search += `${PAGE_VIEW_QUERY}=${CONTENT_PAGE}`;
+      search += `${PAGE_VIEW_QUERY}=${PAGE.CONTENT}`;
     } else if (newTabIndex === 1) {
-      search += `${PAGE_VIEW_QUERY}=${LISTS_PAGE}`;
+      search += `${PAGE_VIEW_QUERY}=${PAGE.LISTS}`;
     } else if (newTabIndex === 2) {
-      search += `${PAGE_VIEW_QUERY}=${ABOUT_PAGE}`;
+      search += `${PAGE_VIEW_QUERY}=${PAGE.ABOUT}`;
     } else {
-      search += `${PAGE_VIEW_QUERY}=${DISCUSSION_PAGE}`;
+      search += `${PAGE_VIEW_QUERY}=${PAGE.DISCUSSION}`;
     }
 
     push(`${url}${search}`);
   }
 
   React.useEffect(() => {
-    if (currentView === DISCUSSION_PAGE) {
+    if (currentView === PAGE.DISCUSSION) {
       setDiscussionWasMounted(true);
     }
   }, [currentView]);
@@ -241,7 +245,7 @@ function ChannelPage(props: Props) {
                   <Button
                     button="alt"
                     title={__('Edit')}
-                    onClick={() => push(`?${PAGE_VIEW_QUERY}=${EDIT_PAGE}`)}
+                    onClick={() => push(`?${PAGE_VIEW_QUERY}=${PAGE.EDIT}`)}
                     icon={ICONS.EDIT}
                     iconSize={18}
                     disabled={pending}
@@ -304,7 +308,7 @@ function ChannelPage(props: Props) {
               <ChannelAbout uri={uri} />
             </TabPanel>
             <TabPanel>
-              {(discussionWasMounted || currentView === DISCUSSION_PAGE) && <ChannelDiscussion uri={uri} />}
+              {(discussionWasMounted || currentView === PAGE.DISCUSSION) && <ChannelDiscussion uri={uri} />}
             </TabPanel>
           </TabPanels>
         </Tabs>
