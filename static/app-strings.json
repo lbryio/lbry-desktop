@@ -2061,5 +2061,6 @@
   "%title% by %channelTitle%": "%title% by %channelTitle%",
   "%title% by %channelTitle% %ariaDate%": "%title% by %channelTitle% %ariaDate%",
   "%title% by %channelTitle% %ariaDate%, %mediaDuration%": "%title% by %channelTitle% %ariaDate%, %mediaDuration%",
+  "Search for something...": "Search for something...",
   "--end--": "--end--"
 }
