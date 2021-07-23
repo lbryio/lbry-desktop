@@ -1,8 +1,12 @@
 import React from 'react';
 import Button from 'component/button';
 import I18nMessage from 'component/i18nMessage';
+import { SIMPLE_SITE } from 'config';
 
 export default function Footer() {
+  if (!SIMPLE_SITE) {
+    return null;
+  }
   return (
     <footer className="footer">
       <span className="footer__section-title">
