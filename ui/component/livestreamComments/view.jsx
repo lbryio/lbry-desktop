@@ -24,6 +24,7 @@ type Props = {
   superChats: Array<Comment>,
   superChatsReversed: Array,
   superChatsTotalAmount: number,
+  superChatsFiatAmount: number,
   myChannels: ?Array<ChannelClaim>,
 };
 
@@ -48,7 +49,42 @@ export default function LivestreamComments(props: Props) {
     superChats, // superchats organized by tip amount
   } = props;
 
-  let { superChatsReversed } = props;
+  let { superChatsReversed, superChatsFiatAmount } = props;
+
+  superChatsFiatAmount = 0;
+
+  if(superChats){
+    console.log(superChats);
+
+    let fiatAmount = 0;
+    for(const superChat of superChats){
+      if(superChat.is_fiat){
+        fiatAmount = fiatAmount + superChat.support_amount;
+      }
+    }
+
+    superChatsFiatAmount = fiatAmount;
+
+  }
+
+  // TODO: why doesn't this work?
+  React.useEffect(() => {
+    if(superChats){
+      console.log(superChats);
+
+      // let fiatAmount = 0;
+      // for(const superChat of superChats){
+      //   if(superChat.is_fiat){
+      //     fiatAmount = fiatAmount + superChat.support_amount;
+      //   }
+      // }
+      //
+      // console.log(fiatAmount);
+      //
+      // superChatsFiatAmount = fiatAmount.toString();
+    }
+  }, [superChats]);
+
 
   if (superChats) {
     const clonedSuperchats = JSON.parse(JSON.stringify(superChats));
@@ -172,7 +208,7 @@ export default function LivestreamComments(props: Props) {
               label={
                 <>
                   <CreditAmount amount={superChatsTotalAmount} size={8} /> /
-                  <CreditAmount amount={superChatsTotalAmount} size={8} isFiat={true} /> {' '}{__('Tipped')}
+                  <CreditAmount amount={superChatsFiatAmount} size={8} isFiat={true} /> {' '}{__('Tipped')}
                 </>
               }
               onClick={function() {
