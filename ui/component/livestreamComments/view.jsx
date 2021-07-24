@@ -22,6 +22,7 @@ type Props = {
   fetchingComments: boolean,
   doSuperChatList: (string) => void,
   superChats: Array<Comment>,
+  superChatsReversed: Array,
   superChatsTotalAmount: number,
   myChannels: ?Array<ChannelClaim>,
 };
@@ -38,14 +39,29 @@ export default function LivestreamComments(props: Props) {
     embed,
     doCommentSocketConnect,
     doCommentSocketDisconnect,
-    comments,
+    comments, // superchats in chronological format
     doCommentList,
     fetchingComments,
     doSuperChatList,
-    superChats,
     superChatsTotalAmount,
     myChannels,
+    superChats, // superchats organized by tip amount
   } = props;
+
+  let { superChatsReversed } = props;
+
+  if (superChats) {
+    const clonedSuperchats = JSON.parse(JSON.stringify(superChats));
+
+    // sort by fiat first then by support amount
+    superChatsReversed = clonedSuperchats.sort(function(a,b) {
+        if (a.is_fiat === b.is_fiat) {
+          return b.support_amount - a.support_amount;
+        } else {
+          return (a.is_fiat === b.is_fiat) ? 0 : a.is_fiat ? -1 : 1;
+        }
+      }).reverse();
+  }
 
   const commentsRef = React.createRef();
   const [scrollBottom, setScrollBottom] = React.useState(true);
@@ -71,6 +87,7 @@ export default function LivestreamComments(props: Props) {
   }
 
   React.useEffect(() => {
+
     if (claimId) {
       doCommentList(uri, '', 1, 75);
       doSuperChatList(uri);
@@ -132,6 +149,8 @@ export default function LivestreamComments(props: Props) {
         <div className="livestream-discussion__title">{__('Live discussion')}</div>
         {superChatsTotalAmount > 0 && (
           <div className="recommended-content__toggles">
+
+            {/* the superchats in chronological order button */}
             <Button
               className={classnames('button-toggle', {
                 'button-toggle--active': viewMode === VIEW_MODE_CHAT,
@@ -140,13 +159,15 @@ export default function LivestreamComments(props: Props) {
               onClick={() => setViewMode(VIEW_MODE_CHAT)}
             />
 
+            {/* the list by tip amount value button */}
             <Button
               className={classnames('button-toggle', {
                 'button-toggle--active': viewMode === VIEW_MODE_SUPER_CHAT,
               })}
               label={
                 <>
-                  <CreditAmount amount={superChatsTotalAmount} size={8} /> {__('Tipped')}
+                  <CreditAmount amount={superChatsTotalAmount} size={8} /> /
+                  <CreditAmount amount={superChatsTotalAmount} size={8} isFiat={true} /> {' '}{__('Tipped')}
                 </>
               }
               onClick={() => setViewMode(VIEW_MODE_SUPER_CHAT)}
@@ -187,9 +208,10 @@ export default function LivestreamComments(props: Props) {
             </div>
           )}
 
+          {/* top to bottom comment display */}
           {!fetchingComments && comments.length > 0 ? (
             <div className="livestream__comments">
-              {commentsToDisplay.map((comment) => (
+              {viewMode === VIEW_MODE_CHAT && commentsToDisplay.map((comment) => (
                 <LivestreamComment
                   key={comment.comment_id}
                   uri={uri}
@@ -201,6 +223,20 @@ export default function LivestreamComments(props: Props) {
                   commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}
                 />
               ))}
+
+              {viewMode === VIEW_MODE_SUPER_CHAT && superChatsReversed && superChatsReversed.map((comment) => (
+                <LivestreamComment
+                  key={comment.comment_id}
+                  uri={uri}
+                  authorUri={comment.channel_url}
+                  commentId={comment.comment_id}
+                  message={comment.comment}
+                  supportAmount={comment.support_amount}
+                  isFiat={comment.is_fiat}
+                  commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}
+                />
+              ))}
+
             </div>
           ) : (
             <div className="main--empty" style={{ flex: 1 }} />
