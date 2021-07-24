@@ -156,10 +156,15 @@ export default function LivestreamComments(props: Props) {
                 'button-toggle--active': viewMode === VIEW_MODE_CHAT,
               })}
               label={__('Chat')}
-              onClick={() => setViewMode(VIEW_MODE_CHAT)}
+              onClick={function() {
+                setViewMode(VIEW_MODE_CHAT);
+                const livestreamCommentsDiv = document.getElementsByClassName('livestream__comments')[0]
+                const divHeight = livestreamCommentsDiv.scrollHeight;
+                livestreamCommentsDiv.scrollTop = divHeight;
+              }}
             />
 
-            {/* the list by tip amount value button */}
+            {/* the button to show superchats listed by most to least support amount */}
             <Button
               className={classnames('button-toggle', {
                 'button-toggle--active': viewMode === VIEW_MODE_SUPER_CHAT,
@@ -170,7 +175,12 @@ export default function LivestreamComments(props: Props) {
                   <CreditAmount amount={superChatsTotalAmount} size={8} isFiat={true} /> {' '}{__('Tipped')}
                 </>
               }
-              onClick={() => setViewMode(VIEW_MODE_SUPER_CHAT)}
+              onClick={function() {
+                setViewMode(VIEW_MODE_SUPER_CHAT);
+                const livestreamCommentsDiv = document.getElementsByClassName('livestream__comments')[0]
+                const divHeight = livestreamCommentsDiv.scrollHeight;
+                livestreamCommentsDiv.scrollTop = divHeight * -1;
+              }}
             />
           </div>
         )}
@@ -236,7 +246,6 @@ export default function LivestreamComments(props: Props) {
                   commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}
                 />
               ))}
-
             </div>
           ) : (
             <div className="main--empty" style={{ flex: 1 }} />
