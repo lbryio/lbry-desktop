@@ -1,5 +1,5 @@
 // @flow
-import { LOGO_TITLE, ENABLE_NO_SOURCE_CLAIMS, CHANNEL_STAKED_LEVEL_LIVESTREAM, ENABLE_UI_NOTIFICATIONS } from 'config';
+import { ENABLE_NO_SOURCE_CLAIMS, CHANNEL_STAKED_LEVEL_LIVESTREAM, ENABLE_UI_NOTIFICATIONS } from 'config';
 import * as ICONS from 'constants/icons';
 import { SETTINGS } from 'lbry-redux';
 import * as PAGES from 'constants/pages';
@@ -255,9 +255,6 @@ const Header = (props: Props) => {
                 className="header__navigation-item header__navigation-item--lbry"
                 // @if TARGET='app'
                 label={'LBRY'}
-                // @endif
-                // @if TARGET='web'
-                label={LOGO_TITLE} // eslint-disable-line
                 // @endif
                 onClick={() => {
                   if (history.location.pathname === '/') window.location.reload();
