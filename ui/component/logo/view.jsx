@@ -15,8 +15,8 @@ export default function Logo(props: Props) {
   const isMobile = useIsMobile();
   const defaultWithLabel = (
     <>
-      <label>{LOGO_TITLE}</label>
       <Icon icon={ICONS.LBRY} />
+      <div className={'button__label'}>{LOGO_TITLE}</div>
     </>
   );
 
