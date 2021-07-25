@@ -131,7 +131,7 @@ export function CommentCreate(props: Props) {
       return;
     }
 
-    // if comment post didn't work, but tip was already made, try again to create comment
+    // if comment post didn't work, but tip was already made, try againt o create comment
     if (commentFailure && tipAmount === successTip.tipAmount) {
       handleCreateComment(successTip.txid);
       return;
@@ -161,6 +161,8 @@ export function CommentCreate(props: Props) {
       tipChannelName = claim.name;
     }
 
+    console.log(activeChannelClaim);
+
     setIsSubmitting(true);
 
     if (activeTab === TAB_LBC) {
@@ -178,7 +180,7 @@ export function CommentCreate(props: Props) {
           doToast({
             message: __("You sent %tipAmount% LBRY Credits as a tip to %tipChannelName%, I'm sure they appreciate it!", {
               tipAmount: tipAmount, // force show decimal places
-              tipChannelName,
+              tipChannelName
             }),
           });
 
@@ -190,14 +192,15 @@ export function CommentCreate(props: Props) {
         }
       );
     } else {
+
       const sourceClaimId = claim.claim_id;
       const roundedAmount = Math.round(tipAmount * 100) / 100;
 
       Lbryio.call(
         'customer',
         'tip',
-        { // round to deal with floating point precision
-          amount: Math.round(100 * roundedAmount), // convert from dollars to cents
+        {
+          amount: 100 * roundedAmount, // convert from dollars to cents
           creator_channel_name: tipChannelName, // creator_channel_name
           creator_channel_claim_id: channelClaimId,
           tipper_channel_name: activeChannelName,
@@ -341,12 +344,7 @@ export function CommentCreate(props: Props) {
             }
             onClick={handleSupportComment}
           />
-          <Button
-            disabled={isSubmitting}
-            button="link"
-            label={__('Cancel')}
-            onClick={() => setIsReviewingSupportComment(false)}
-          />
+          <Button button="link" label={__('Cancel')} onClick={() => setIsReviewingSupportComment(false)} />
         </div>
       </div>
     );
