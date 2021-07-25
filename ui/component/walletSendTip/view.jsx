@@ -362,7 +362,7 @@ function WalletSendTip(props: Props) {
   return (
     <Form onSubmit={handleSubmit}>
       {/* if there is no LBC balance, show user frontend to get credits */}
-      {noBalance ? (
+      {1 == 2 ? (
         <Card
           title={<I18nMessage tokens={{ lbc: <LbcSymbol size={22} /> }}>Supporting content requires %lbc%</I18nMessage>}
           subtitle={
@@ -479,8 +479,10 @@ function WalletSendTip(props: Props) {
                   <Button button="link" label={__('Cancel')} onClick={() => setIsConfirming(false)} />
                 </div>
               </>
-            ) : (
-              <>
+              // only show the prompt to earn more if its lbc or boost tab and no balance
+              // otherwise you can show the full prompt
+            ) : (!((activeTab === TAB_LBC || activeTab === TAB_BOOST) && noBalance)
+              ? <>
                 <div className="section">
                   <ChannelSelector />
                 </div>
@@ -591,7 +593,28 @@ function WalletSendTip(props: Props) {
                 ) : (
                   <div className="help">{__('The payment will be made from your saved card')}</div>
                 )}
-              </>
+              </> : <>
+                  <Card
+                    title={<I18nMessage tokens={{ lbc: <LbcSymbol size={22} /> }}>Supporting content requires %lbc%</I18nMessage>}
+                    subtitle={
+                      <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>
+                        With %lbc%, you can send tips to your favorite creators, or help boost their content for more people to
+                        see.
+                      </I18nMessage>
+                    }
+                    actions={
+                      <div className="section__actions">
+                        <Button
+                          icon={ICONS.REWARDS}
+                          button="primary"
+                          label={__('Earn Rewards')}
+                          navigate={`/$/${PAGES.REWARDS}`}
+                        />
+                        <Button icon={ICONS.BUY} button="secondary" label={__('Buy/Swap Credits')} navigate={`/$/${PAGES.BUY}`} />
+                        <Button button="link" label={__('Nevermind')} onClick={closeModal} />
+                      </div>
+                    }
+                /></>
             )
           }
         />
