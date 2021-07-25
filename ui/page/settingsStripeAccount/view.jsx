@@ -31,6 +31,7 @@ if (isDev) {
 type Props = {
   source: string,
   user: User,
+  doOpenModal: (string, {}) => void,
 };
 
 type State = {
@@ -67,6 +68,8 @@ class StripeAccountConnection extends React.Component<Props, State> {
 
   componentDidMount() {
     const { user } = this.props;
+
+    let doToast = this.props.doToast;
 
     // $FlowFixMe
     this.experimentalUiEnabled = user && user.experimental_ui;
@@ -165,9 +168,13 @@ class StripeAccountConnection extends React.Component<Props, State> {
           // get stripe link and set it on the frontend
           getAndSetAccountLink(true);
         } else {
+          // probably an error from stripe
+          var displayString = 'There was an error getting your account setup, please let support know';
+          doToast({ message: displayString, isError: true });
           // not an error from Beamer, throw it
           throw new Error(error);
         }
+
       });
   }
 
