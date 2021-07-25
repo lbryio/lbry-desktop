@@ -32,7 +32,6 @@ type Props = {
   source: string,
   user: User,
   doOpenModal: (string, {}) => void,
-  doToast: ({ message: string }) => void,
 };
 
 type State = {
@@ -131,8 +130,10 @@ class StripeAccountConnection extends React.Component<Props, State> {
           ).then((accountListResponse: any) => {
             // TODO type this
             that.setState({
-              accountTransactions: accountListResponse.reverse(),
+              accountTransactions: accountListResponse,
             });
+
+            console.log(accountListResponse);
           });
         }
 
@@ -168,11 +169,12 @@ class StripeAccountConnection extends React.Component<Props, State> {
           getAndSetAccountLink(true);
         } else {
           // probably an error from stripe
-          const displayString = __('There was an error getting your account setup, please try again later');
+          var displayString = 'There was an error getting your account setup, please let support know';
           doToast({ message: displayString, isError: true });
           // not an error from Beamer, throw it
           throw new Error(error);
         }
+
       });
   }
 
@@ -301,7 +303,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
                       </thead>
                       <tbody>
                         {accountTransactions &&
-                          accountTransactions.map((transaction) => (
+                          accountTransactions.reverse().map((transaction) => (
                             <tr key={transaction.name + transaction.created_at}>
                               <td>{moment(transaction.created_at).format('LLL')}</td>
                               <td>
