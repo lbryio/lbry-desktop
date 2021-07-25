@@ -314,7 +314,18 @@ function WalletSendTip(props: Props) {
   }
 
   function handleCustomPriceChange(event: SyntheticInputEvent<*>) {
-    const tipAmount = parseFloat(event.target.value);
+    let tipAmount = parseFloat(event.target.value);
+
+    // allow maximum two decimalds
+    if (activeTab === TAB_FIAT) {
+      tipAmount = Math.round(tipAmount * 100) / 100;
+    }
+
+    // TODO: add limit to 4 digits
+    // can also do setTipError('Maximum 1000') that way
+    if(tipAmount.length > 5 && tipAmount > 1000){
+      tipAmount.length = 4
+    }
 
     setCustomTipAmount(tipAmount);
   }
