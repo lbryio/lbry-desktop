@@ -44,27 +44,27 @@ export default function LivestreamComments(props: Props) {
     doCommentList,
     fetchingComments,
     doSuperChatList,
-    superChatsTotalAmount,
     myChannels,
     superChats, // superchats organized by tip amount
   } = props;
 
-  let { superChatsReversed, superChatsFiatAmount } = props;
+  let { superChatsReversed, superChatsFiatAmount, superChatsTotalAmount } = props;
 
-  superChatsFiatAmount = 0;
-
+  // sum total amounts for fiat tips and lbc tips
   if(superChats){
-    console.log(superChats);
 
     let fiatAmount = 0;
+    let LBCAmount = 0;
     for(const superChat of superChats){
       if(superChat.is_fiat){
         fiatAmount = fiatAmount + superChat.support_amount;
+      } else {
+        LBCAmount = LBCAmount + superChat.support_amount;
       }
     }
 
     superChatsFiatAmount = fiatAmount;
-
+    superChatsTotalAmount = LBCAmount;
   }
 
   // TODO: why doesn't this work?
