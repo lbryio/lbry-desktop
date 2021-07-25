@@ -5,6 +5,7 @@ import { FormField, FormFieldPrice } from 'component/common/form';
 import Button from 'component/button';
 import I18nMessage from 'component/i18nMessage';
 import Page from 'component/page';
+import SettingCommentsServer from 'component/settingCommentsServer';
 import SettingWalletServer from 'component/settingWalletServer';
 import SettingAutoLaunch from 'component/settingAutoLaunch';
 import SettingClosingBehavior from 'component/settingClosingBehavior';
@@ -506,6 +507,10 @@ class SettingsAdvancedPage extends React.PureComponent<Props, State> {
                 }
               />
             )}
+
+            {/* @if TARGET='app' */}
+            <Card title={__('Comments server')} actions={<SettingCommentsServer />} />
+            {/* @endif */}
 
             <Card title={__('Upload settings')} actions={<PublishSettings />} />
 

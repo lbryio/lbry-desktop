@@ -28,6 +28,7 @@ import { selectPrefsReady } from 'redux/selectors/sync';
 import { doAlertWaitingForSync } from 'redux/actions/app';
 
 const isDev = process.env.NODE_ENV !== 'production';
+const FETCH_API_FAILED_TO_FETCH = 'Failed to fetch';
 
 const COMMENTRON_MSG_REMAP = {
   // <-- Commentron msg --> : <-- App msg -->
@@ -111,20 +112,32 @@ export function doCommentList(
         return result;
       })
       .catch((error) => {
-        if (error.message === 'comments are disabled by the creator') {
-          dispatch({
-            type: ACTIONS.COMMENT_LIST_COMPLETED,
-            data: {
-              authorClaimId: authorChannelClaim ? authorChannelClaim.claim_id : undefined,
-              disabled: true,
-            },
-          });
-        } else {
-          devToast(dispatch, `doCommentList: ${error.message}`);
-          dispatch({
-            type: ACTIONS.COMMENT_LIST_FAILED,
-            data: error,
-          });
+        switch (error.message) {
+          case 'comments are disabled by the creator':
+            dispatch({
+              type: ACTIONS.COMMENT_LIST_COMPLETED,
+              data: {
+                authorClaimId: authorChannelClaim ? authorChannelClaim.claim_id : undefined,
+                disabled: true,
+              },
+            });
+            break;
+
+          case FETCH_API_FAILED_TO_FETCH:
+            dispatch(
+              doToast({
+                isError: true,
+                message: Comments.isCustomServer
+                  ? __('Failed to fetch comments. Verify custom server settings.')
+                  : __('Failed to fetch comments.'),
+              })
+            );
+            dispatch({ type: ACTIONS.COMMENT_LIST_FAILED, data: error });
+            break;
+
+          default:
+            dispatch(doToast({ isError: true, message: `${error.message}` }));
+            dispatch({ type: ACTIONS.COMMENT_LIST_FAILED, data: error });
         }
       });
   };
@@ -261,7 +274,6 @@ export function doCommentReactList(commentIds: Array<string>) {
         });
       })
       .catch((error) => {
-        devToast(dispatch, `doCommentReactList: ${error.message}`);
         dispatch({
           type: ACTIONS.COMMENT_REACTION_LIST_FAILED,
           data: error,
