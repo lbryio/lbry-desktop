@@ -4,6 +4,7 @@ import * as ICONS from 'constants/icons';
 import { LOGO_TITLE, LOGO, LOGO_TEXT_LIGHT, LOGO_TEXT_DARK } from 'config';
 import Icon from 'component/common/icon';
 import { useIsMobile } from 'effects/use-screensize';
+import OptimizedImage from 'component/optimizedImage';
 
 type Props = {
   type: string,
@@ -21,12 +22,12 @@ export default function Logo(props: Props) {
   );
 
   if (type === 'small' || (isMobile && type !== 'embed')) {
-    return LOGO ? <img className="header__odysee" src={LOGO} /> : <Icon icon={ICONS.LBRY} />;
+    return LOGO ? <OptimizedImage src={LOGO} /> : <Icon icon={ICONS.LBRY} />;
   } else if (type === 'embed') {
     if (LOGO_TEXT_LIGHT) {
       return (
         <>
-          <img src={LOGO_TEXT_LIGHT} className="header__odysee" />
+          <OptimizedImage src={LOGO_TEXT_LIGHT} />
         </>
       );
     } else {
@@ -36,7 +37,7 @@ export default function Logo(props: Props) {
     if (LOGO_TEXT_LIGHT && LOGO_TEXT_DARK) {
       return (
         <>
-          <img src={currentTheme === 'light' ? LOGO_TEXT_DARK : LOGO_TEXT_LIGHT} className="header__odysee" />
+          <OptimizedImage src={currentTheme === 'light' ? LOGO_TEXT_DARK : LOGO_TEXT_LIGHT} />
         </>
       );
     } else {
