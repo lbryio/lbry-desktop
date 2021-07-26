@@ -321,41 +321,22 @@ function WalletSendTip(props: Props) {
 
   function handleCustomPriceChange(event: SyntheticInputEvent<*>) {
 
-    console.log(event.target.value);
-
     let tipAmountAsString = event.target.value;
 
     let tipAmount = parseFloat(tipAmountAsString);
 
+    const howManyDecimals = countDecimals(tipAmountAsString);
+
     // allow maximum two decimals
     if (activeTab === TAB_FIAT) {
-
-      console.log(tipAmount);
-
-      console.log(Number.isNaN(tipAmount))
 
       if (Number.isNaN(tipAmount)) {
         setCustomTipAmount('');
       }
 
-
-      const howManyDecimals = countDecimals(tipAmountAsString);
-
-      console.log('how many decimals');
-      console.log(howManyDecimals)
-
       if (howManyDecimals > 2) {
         tipAmount = Math.floor(tipAmount * 100) / 100;
-        // setTipError('Value can only have two decimal places');
       }
-      // else {
-      //   tipAmount = ((tipAmount * 100) / 100).toFixed(2);
-      // }
-
-
-      // console.log(howManyDecimals);
-
-      console.log(tipAmount);
 
       const howManyDigits = Math.trunc(tipAmount).toString().length;
 
@@ -368,6 +349,11 @@ function WalletSendTip(props: Props) {
         setCustomTipAmount(tipAmount);
       }
     } else {
+      if (howManyDecimals > 9) {
+          tipAmount = Number(tipAmount.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]);
+
+        setTipError('Please only use up to 8 decimals')
+      }
       setCustomTipAmount(tipAmount);
     }
   }
@@ -601,7 +587,6 @@ function WalletSendTip(props: Props) {
                     <FormField
                       autoFocus
                       name="tip-input"
-                      className="send__tip_input"
                       label={
                         <React.Fragment>
                           {__('Custom support amount')}{' '}
