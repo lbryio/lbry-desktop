@@ -375,6 +375,8 @@
   "Got it": "Got it",
   "View your channels": "View your channels",
   "Unfollow": "Unfollow",
+  "Follow @%channelName%": "Follow @%channelName%",
+  "Unfollow @%channelName%": "Unfollow @%channelName%",
   "These LBRY Credits remain yours. It is a deposit to reserve the name and can be undone at any time.": "These LBRY Credits remain yours. It is a deposit to reserve the name and can be undone at any time.",
   "Create channel": "Create channel",
   "Uh oh. The flux in our Retro Encabulator must be out of whack. Try refreshing to fix it.": "Uh oh. The flux in our Retro Encabulator must be out of whack. Try refreshing to fix it.",

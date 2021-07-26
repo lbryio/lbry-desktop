@@ -98,10 +98,13 @@ function ClaimMenuList(props: Props) {
   const isChannel = !incognitoClaim && !contentSigningChannel;
   const { channelName } = parseURI(contentChannelUri);
   const showDelete = claimIsMine || (fileInfo && (fileInfo.written_bytes > 0 || fileInfo.blobs_completed > 0));
-  const subscriptionLabel = __('%action%' + '%user%', {
-    action: isSubscribed ? __('Unfollow') : __('Follow'),
-    user: repostedClaim ? __(' @' + channelName) : '',
-  });
+  const subscriptionLabel = repostedClaim
+    ? isSubscribed
+      ? __('Unfollow @%channelName%', { channelName })
+      : __('Follow @%channelName%', { channelName })
+    : isSubscribed
+    ? __('Unfollow')
+    : __('Follow');
   const lastCollectionName = 'Favorites';
   const lastCollectionId = COLLECTIONS_CONSTS.FAVORITES_ID;
 
