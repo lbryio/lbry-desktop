@@ -157,7 +157,6 @@ if (!gotSingleInstanceLock) {
     // Send the url to the app to navigate first, then focus
     if (rendererWindow) {
       // External uri (last item on argv):
-      // Required to work on dev mode
       const EXTERNAL_URI = argv[argv.length ? (argv.length-1) : 0]
       // Handle protocol requests for windows and linux
       const platforms = (process.platform === 'win32' || process.platform === 'linux')
