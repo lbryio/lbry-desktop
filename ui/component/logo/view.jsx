@@ -17,7 +17,12 @@ export default function Logo(props: Props) {
   const defaultWithLabel = (
     <>
       <Icon icon={ICONS.LBRY} />
+      {/* @if TARGET='app' */}
+      <div className={'button__label'}>{'LBRY'}</div>
+      {/* @endif */}
+      {/* @if TARGET='web' */}
       <div className={'button__label'}>{LOGO_TITLE}</div>
+      {/* @endif */}
     </>
   );
 
