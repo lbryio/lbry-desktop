@@ -24,6 +24,8 @@ const config = {
   SITE_NAME: process.env.SITE_NAME,
   SITE_DESCRIPTION: process.env.SITE_DESCRIPTION,
   SITE_HELP_EMAIL: process.env.SITE_HELP_EMAIL,
+  // SOCIAL MEDIA
+  TWITTER_ACCOUNT: process.env.TWITTER_ACCOUNT,
   // LOGO
   LOGO_TITLE: process.env.LOGO_TITLE,
   FAVICON: process.env.FAVICON,
@@ -70,7 +72,7 @@ const config = {
   BRANDED_SITE: process.env.BRANDED_SITE,
 };
 
-config.URL_LOCAL = `http://localhost:${config.WEB_SERVER_PORT}`;
 config.URL_DEV = `http://localhost:${config.WEBPACK_WEB_PORT}`;
+config.URL_LOCAL = `http://localhost:${config.WEB_SERVER_PORT}`;
 
 module.exports = config;

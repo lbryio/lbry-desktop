@@ -9,16 +9,13 @@ import { useIsMobile } from 'effects/use-screensize';
 import { FormField } from 'component/common/form';
 import { hmsToSeconds, secondsToHms } from 'util/time';
 import { generateLbryContentUrl, generateLbryWebUrl, generateEncodedLbryURL, generateShareUrl } from 'util/url';
-import { URL, SHARE_DOMAIN_URL } from 'config';
+import { URL, TWITTER_ACCOUNT, SHARE_DOMAIN_URL } from 'config';
 
 const SHARE_DOMAIN = SHARE_DOMAIN_URL || URL;
 const IOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
 const SUPPORTS_SHARE_API = typeof navigator.share !== 'undefined';
-const IS_ODYSEE = SHARE_DOMAIN === 'https://odysee.com';
 
 // Twitter share
-const TWITTER_LBRY = 'LBRYcom';
-const TWITTER_ODYSEE = 'OdyseeTeam';
 const TWITTER_INTENT_API = 'https://twitter.com/intent/tweet?';
 
 type Props = {
@@ -77,10 +74,15 @@ function SocialShare(props: Props) {
   // Tweet params
   let tweetIntentParams = {
     url: shareUrl,
-    via: IS_ODYSEE ? TWITTER_ODYSEE : TWITTER_LBRY,
     text: title || claim.name,
     hashtags: 'LBRY',
   };
+
+  if (TWITTER_ACCOUNT) {
+    // $FlowFixMe
+    tweetIntentParams.via = TWITTER_ACCOUNT;
+  }
+
   // Generate twitter web intent url
   const tweetIntent = TWITTER_INTENT_API + new URLSearchParams(tweetIntentParams).toString();
 
