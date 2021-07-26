@@ -1,0 +1,23 @@
+.status-bar {
+  background-color: #505050;
+  border: solid 1px #707070;
+  border-bottom-color: #505050;
+  border-left-color: #505050;
+  color: #e0e0e0;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  font-size: var(--font-small);
+  padding-top: 2px;
+  padding-left: var(--spacing-xs);
+  padding-right: var(--spacing-xs);
+  border-top-right-radius: var(--spacing-xs);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  transition-delay: 400ms;
+
+  &.visible {
+    opacity: 1;
+    transition-delay: 0s;
+  }
+}
