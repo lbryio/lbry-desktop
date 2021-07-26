@@ -136,6 +136,7 @@ function ChannelContent(props: Props) {
       {!channelIsMine && claimsInChannel > 0 && <HiddenNsfwClaims uri={uri} />}
 
       <ClaimListDiscover
+        hasSource
         defaultFreshness={CS.FRESH_ALL}
         showHiddenByUser={viewHiddenChannels}
         forceShowReposts
