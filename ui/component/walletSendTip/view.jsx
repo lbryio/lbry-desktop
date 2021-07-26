@@ -313,21 +313,63 @@ function WalletSendTip(props: Props) {
     }
   }
 
+  var countDecimals = function(value) {
+    var text = value.toString();
+    var index = text.indexOf('.');
+    return (text.length - index - 1);
+  }
+
   function handleCustomPriceChange(event: SyntheticInputEvent<*>) {
-    let tipAmount = parseFloat(event.target.value);
 
-    // allow maximum two decimalds
+    console.log(event.target.value);
+
+    let tipAmountAsString = event.target.value;
+
+    let tipAmount = parseFloat(tipAmountAsString);
+
+    // allow maximum two decimals
     if (activeTab === TAB_FIAT) {
-      tipAmount = Math.round(tipAmount * 100) / 100;
-    }
 
-    // TODO: add limit to 4 digits
-    // can also do setTipError('Maximum 1000') that way
-    if(tipAmount.length > 5 && tipAmount > 1000){
-      tipAmount.length = 4
-    }
+      console.log(tipAmount);
 
-    setCustomTipAmount(tipAmount);
+      console.log(Number.isNaN(tipAmount))
+
+      if (Number.isNaN(tipAmount)) {
+        setCustomTipAmount('');
+      }
+
+
+      const howManyDecimals = countDecimals(tipAmountAsString);
+
+      console.log('how many decimals');
+      console.log(howManyDecimals)
+
+      if (howManyDecimals > 2) {
+        tipAmount = Math.floor(tipAmount * 100) / 100;
+        // setTipError('Value can only have two decimal places');
+      }
+      // else {
+      //   tipAmount = ((tipAmount * 100) / 100).toFixed(2);
+      // }
+
+
+      // console.log(howManyDecimals);
+
+      console.log(tipAmount);
+
+      const howManyDigits = Math.trunc(tipAmount).toString().length;
+
+      if (howManyDigits > 4 && tipAmount !== 1000) {
+        setTipError('Value must be below 1000 dollars');
+      } else if (tipAmount > 1000) {
+        setTipError('Value must be below 1000 dollars');
+        setCustomTipAmount(tipAmount);
+      } else {
+        setCustomTipAmount(tipAmount);
+      }
+    } else {
+      setCustomTipAmount(tipAmount);
+    }
   }
 
   function buildButtonText() {
