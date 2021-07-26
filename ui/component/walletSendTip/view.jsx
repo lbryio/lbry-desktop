@@ -360,9 +360,9 @@ function WalletSendTip(props: Props) {
       const howManyDigits = Math.trunc(tipAmount).toString().length;
 
       if (howManyDigits > 4 && tipAmount !== 1000) {
-        setTipError('Value must be below 1000 dollars');
+        setTipError('Amount cannot be over 1000 dollars');
       } else if (tipAmount > 1000) {
-        setTipError('Value must be below 1000 dollars');
+        setTipError('Amount cannot be over 1000 dollars');
         setCustomTipAmount(tipAmount);
       } else {
         setCustomTipAmount(tipAmount);
@@ -384,8 +384,14 @@ function WalletSendTip(props: Props) {
       return false;
     }
 
+    function convertToTwoDecimals(number){
+      return (Math.round(number * 100) / 100).toFixed(2);
+    }
+
+    const amountToShow = activeTab === TAB_FIAT ? convertToTwoDecimals(tipAmount) : tipAmount;
+
     // if it's a valid number display it, otherwise do an empty string
-    const displayAmount = !isNan(tipAmount) ? tipAmount : '';
+    const displayAmount = !isNan(tipAmount) ? amountToShow : '';
 
     if (activeTab === TAB_BOOST) {
       return (claimIsMine ?  __('Boost Your %claimTypeText%', {claimTypeText}) : __('Boost This %claimTypeText%', {claimTypeText}));
@@ -517,7 +523,7 @@ function WalletSendTip(props: Props) {
                     </div>
                     <div className="confirm__label">{setConfirmLabel()}</div>
                     <div className="confirm__value">
-                      {activeTab === TAB_FIAT ? <p>$ {tipAmount}</p> : <LbcSymbol postfix={tipAmount} size={22} />}
+                      {activeTab === TAB_FIAT ? <p>$ {(Math.round(tipAmount * 100) / 100).toFixed(2)}</p> : <LbcSymbol postfix={tipAmount} size={22} />}
                     </div>
                   </div>
                 </div>
