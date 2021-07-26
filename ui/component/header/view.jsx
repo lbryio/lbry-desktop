@@ -253,9 +253,6 @@ const Header = (props: Props) => {
               )}
               <Button
                 className="header__navigation-item header__navigation-item--lbry"
-                // @if TARGET='app'
-                label={'LBRY'}
-                // @endif
                 onClick={() => {
                   if (history.location.pathname === '/') window.location.reload();
                 }}
