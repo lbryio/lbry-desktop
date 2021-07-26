@@ -38,17 +38,19 @@ export default function LivestreamLayout(props: Props) {
 
         {Boolean(chatDisabled) && (
           <div className="help--notice">
-            {__('%channel% has disabled chat for this stream. Enjoy the stream!', {
-              channel: channelName || __('This channel'),
-            })}
+            {channelName
+              ? __('%channelName% has disabled chat for this stream. Enjoy the stream!', { channelName })
+              : __('This channel has disabled chat for this stream. Enjoy the stream!')}
           </div>
         )}
 
         {!isLive && (
           <div className="help--notice">
-            {__("%channel% isn't live right now, but the chat is! Check back later to watch the stream.", {
-              channel: channelName || __('This channel'),
-            })}
+            {channelName
+              ? __("%channelName% isn't live right now, but the chat is! Check back later to watch the stream.", {
+                  channelName,
+                })
+              : __("This channel isn't live right now, but the chat is! Check back later to watch the stream.")}
           </div>
         )}
 
