@@ -601,6 +601,7 @@ function WalletSendTip(props: Props) {
                     <FormField
                       autoFocus
                       name="tip-input"
+                      className="send__tip_input"
                       label={
                         <React.Fragment>
                           {__('Custom support amount')}{' '}
@@ -620,6 +621,9 @@ function WalletSendTip(props: Props) {
                       min="0"
                       step="any"
                       type="number"
+                      style={{
+                        width: activeTab === TAB_FIAT ? '99px' : '160px',
+                      }}
                       placeholder="1.23"
                       value={customTipAmount}
                       onChange={(event) => handleCustomPriceChange(event)}
