@@ -15,7 +15,6 @@ type Props = {
   doResolveUri: (string) => void,
   closeModal: () => void,
   deleteFile: (string, boolean, boolean, boolean) => void,
-  doGoBack: boolean,
   title: string,
   fileInfo?: {
     outpoint: ?string,
@@ -24,7 +23,7 @@ type Props = {
 };
 
 function ModalRemoveFile(props: Props) {
-  const { uri, claimIsMine, doResolveUri, closeModal, deleteFile, doGoBack = true, title, claim, isAbandoning } = props;
+  const { uri, claimIsMine, doResolveUri, closeModal, deleteFile, title, claim, isAbandoning } = props;
   const [deleteChecked, setDeleteChecked] = usePersistedState('modal-remove-file:delete', true);
   const [abandonChecked, setAbandonChecked] = usePersistedState('modal-remove-file:abandon', true);
 
@@ -33,6 +32,11 @@ function ModalRemoveFile(props: Props) {
       doResolveUri(uri);
     }
   }, [uri, doResolveUri]);
+
+  let disabled = isAbandoning || !(deleteChecked || abandonChecked);
+  // @if TARGET='web'
+  disabled = isAbandoning || !abandonChecked;
+  // @endif
 
   return (
     <Modal isOpen contentLabel={__('Confirm File Remove')} type="card" onAborted={closeModal}>
@@ -68,12 +72,12 @@ function ModalRemoveFile(props: Props) {
                   checked={abandonChecked}
                   onChange={() => setAbandonChecked(!abandonChecked)}
                 />
-                {abandonChecked === true && (
+                {abandonChecked && (
                   <p className="help error__text">{__('This action is permanent and cannot be undone')}</p>
                 )}
 
                 {/* @if TARGET='app' */}
-                {abandonChecked === false && deleteChecked && (
+                {!abandonChecked && deleteChecked && (
                   <p className="help">{__('This file will be removed from your Library and Downloads folder.')}</p>
                 )}
                 {!deleteChecked && (
@@ -92,8 +96,8 @@ function ModalRemoveFile(props: Props) {
               <Button
                 button="primary"
                 label={isAbandoning ? __('Removing...') : __('OK')}
-                disabled={isAbandoning || !(deleteChecked || abandonChecked)}
-                onClick={() => deleteFile(uri, deleteChecked, claimIsMine ? abandonChecked : false, doGoBack)}
+                disabled={disabled}
+                onClick={() => deleteFile(uri, deleteChecked, claimIsMine ? abandonChecked : false)}
               />
               <Button button="link" label={__('Cancel')} onClick={closeModal} />
             </div>

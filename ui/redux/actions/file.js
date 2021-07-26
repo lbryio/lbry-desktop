@@ -53,7 +53,7 @@ export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim, cb) {
   };
 }
 
-export function doDeleteFileAndMaybeGoBack(uri, deleteFromComputer, abandonClaim, doGoBack) {
+export function doDeleteFileAndMaybeGoBack(uri, deleteFromComputer, abandonClaim, doGoBack = true) {
   return (dispatch, getState) => {
     const state = getState();
     const playingUri = selectPlayingUri(state);
@@ -62,21 +62,15 @@ export function doDeleteFileAndMaybeGoBack(uri, deleteFromComputer, abandonClaim
     const claimOutpoint = `${txid}:${nout}`;
     const actions = [];
 
-    if (!abandonClaim) {
-      actions.push(doHideModal());
-    }
-
     actions.push(
       doDeleteFile(outpoint || claimOutpoint, deleteFromComputer, abandonClaim, (abandonState) => {
         if (abandonState === ABANDON_STATES.DONE) {
-          if (abandonClaim) {
-            if (doGoBack) {
-              dispatch(goBack());
-            }
-            dispatch(doHideModal());
+          if (doGoBack) {
+            dispatch(goBack());
           }
         }
-      })
+      }),
+      doHideModal(),
     );
 
     if (playingUri && playingUri.uri === uri) {

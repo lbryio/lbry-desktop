@@ -20,8 +20,8 @@ const select = (state, props) => ({
 const perform = dispatch => ({
   closeModal: () => dispatch(doHideModal()),
   doResolveUri: (uri) => dispatch(doResolveUri(uri)),
-  deleteFile: (uri, deleteFromComputer, abandonClaim, doGoBack) => {
-    dispatch(doDeleteFileAndMaybeGoBack(uri, deleteFromComputer, abandonClaim, doGoBack));
+  deleteFile: (uri, deleteFromComputer, abandonClaim) => {
+    dispatch(doDeleteFileAndMaybeGoBack(uri, deleteFromComputer, abandonClaim, false));
   },
 });
 

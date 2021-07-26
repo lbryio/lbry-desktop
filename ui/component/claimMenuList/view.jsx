@@ -189,7 +189,7 @@ function ClaimMenuList(props: Props) {
     if (!repostedClaim && !isChannel) {
       openModal(MODALS.CONFIRM_FILE_REMOVE, { uri, doGoBack: false });
     } else {
-      openModal(MODALS.CONFIRM_CLAIM_REVOKE, { claim, cb: isChannel && (() => replace(`/$/${PAGES.CHANNELS}`)) });
+      openModal(MODALS.CONFIRM_CLAIM_REVOKE, { claim });
     }
   }
 
