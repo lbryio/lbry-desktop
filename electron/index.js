@@ -4,7 +4,7 @@
 import '@babel/polyfill';
 import SemVer from 'semver';
 import https from 'https';
-import { app, dialog, ipcMain, session, shell, protocol } from 'electron';
+import { app, dialog, ipcMain, session, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import { Lbry } from 'lbry-redux';
 import LbryFirstInstance from './LbryFirstInstance';
@@ -179,7 +179,7 @@ if (!gotSingleInstanceLock) {
             .replace('/#', '#')
             .replace('/?', '?');
         }
-        
+
         rendererWindow.webContents.send('open-uri-requested', URI);
       }
 
