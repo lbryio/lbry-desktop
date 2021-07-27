@@ -297,7 +297,8 @@ function WalletSendTip(props: Props) {
             .catch(function(error) {
               var displayError = 'Sorry, there was an error in processing your payment!';
 
-              if (error.message !== 'payment intent failed to confirm') {
+              // if it's not an error we're expecting then show it to frontend
+              if (error.message && error.message !== 'payment intent failed to confirm') {
                 displayError = error.message;
               }
 
