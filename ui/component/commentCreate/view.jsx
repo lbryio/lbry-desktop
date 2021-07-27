@@ -198,8 +198,8 @@ export function CommentCreate(props: Props) {
       Lbryio.call(
         'customer',
         'tip',
-        {
-          amount: 100 * roundedAmount, // convert from dollars to cents
+        { // round to deal with floating point precision
+          amount: Math.round(100 * roundedAmount), // convert from dollars to cents
           creator_channel_name: tipChannelName, // creator_channel_name
           creator_channel_claim_id: channelClaimId,
           tipper_channel_name: activeChannelName,
