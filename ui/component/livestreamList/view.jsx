@@ -1,6 +1,6 @@
 // @flow
 import * as ICONS from 'constants/icons';
-import { BITWAVE_LIVE_API } from 'constants/livestream';
+import { LIVESTREAM_LIVE_API } from 'constants/livestream';
 import React from 'react';
 import Icon from 'component/common/icon';
 import Spinner from 'component/spinner';
@@ -14,7 +14,7 @@ export default function LivestreamList() {
 
   React.useEffect(() => {
     function checkCurrentLivestreams() {
-      fetch(BITWAVE_LIVE_API)
+      fetch(LIVESTREAM_LIVE_API)
         .then((res) => res.json())
         .then((res) => {
           setLoading(false);

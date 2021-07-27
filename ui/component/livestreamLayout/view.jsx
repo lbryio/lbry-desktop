@@ -1,5 +1,5 @@
 // @flow
-import { BITWAVE_EMBED_URL } from 'constants/livestream';
+import { LIVESTREAM_EMBED_URL } from 'constants/livestream';
 import React from 'react';
 import FileTitleSection from 'component/fileTitleSection';
 import LivestreamComments from 'component/livestreamComments';
@@ -29,7 +29,7 @@ export default function LivestreamLayout(props: Props) {
         <div className="file-render file-render--video livestream">
           <div className="file-viewer">
             <iframe
-              src={`${BITWAVE_EMBED_URL}/${channelClaimId}?skin=odysee&autoplay=1`}
+              src={`${LIVESTREAM_EMBED_URL}/${channelClaimId}?skin=odysee&autoplay=1`}
               scrolling="no"
               allowFullScreen
             />

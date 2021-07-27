@@ -28,7 +28,7 @@ import * as PUBLISH_MODES from 'constants/publish_types';
 import { useHistory } from 'react-router';
 import Spinner from 'component/spinner';
 import { toHex } from 'util/hex';
-import { BITWAVE_REPLAY_API } from 'constants/livestream';
+import { LIVESTREAM_REPLAY_API } from 'constants/livestream';
 
 // @if TARGET='app'
 import fs from 'fs';
@@ -274,7 +274,7 @@ function PublishForm(props: Props) {
   // move this to lbryinc OR to a file under ui, and/or provide a standardized livestreaming config.
   function fetchLivestreams(channelId, signature, timestamp) {
     setCheckingLivestreams(true);
-    fetch(`${BITWAVE_REPLAY_API}/${channelId}?signature=${signature || ''}&signing_ts=${timestamp || ''}`) // claimChannelId
+    fetch(`${LIVESTREAM_REPLAY_API}/${channelId}?signature=${signature || ''}&signing_ts=${timestamp || ''}`) // claimChannelId
       .then((res) => res.json())
       .then((res) => {
         if (!res || !res.data) {

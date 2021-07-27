@@ -16,6 +16,7 @@ import CopyableText from 'component/copyableText';
 import Card from 'component/common/card';
 import ClaimList from 'component/claimList';
 import usePersistedState from 'effects/use-persisted-state';
+import { LIVESTREAM_RTMP_URL } from 'constants/livestream';
 
 type Props = {
   channels: Array<ChannelClaim>,
@@ -182,7 +183,7 @@ export default function LivestreamSetupPage(props: Props) {
                       primaryButton
                       name="stream-server"
                       label={__('Stream server')}
-                      copyable="rtmp://stream.odysee.com/live"
+                      copyable={LIVESTREAM_RTMP_URL}
                       snackMessage={__('Copied')}
                     />
                     <CopyableText

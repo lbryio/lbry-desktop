@@ -1,5 +1,5 @@
 // @flow
-import { BITWAVE_LIVE_API } from 'constants/livestream';
+import { LIVESTREAM_LIVE_API } from 'constants/livestream';
 import * as CS from 'constants/claim_search';
 import React from 'react';
 import Card from 'component/common/card';
@@ -39,8 +39,8 @@ export default function LivestreamLink(props: Props) {
 
   React.useEffect(() => {
     function fetchIsStreaming() {
-      // $FlowFixMe Bitwave's API can handle garbage
-      fetch(`${BITWAVE_LIVE_API}/${livestreamChannelId}`)
+      // $FlowFixMe livestream API can handle garbage
+      fetch(`${LIVESTREAM_LIVE_API}/${livestreamChannelId}`)
         .then((res) => res.json())
         .then((res) => {
           if (res && res.success && res.data && res.data.live) {
