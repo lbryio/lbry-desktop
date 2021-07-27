@@ -130,7 +130,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
           ).then((accountListResponse: any) => {
             // TODO type this
             that.setState({
-              accountTransactions: accountListResponse,
+              accountTransactions: accountListResponse.reverse(),
             });
 
             console.log(accountListResponse);
@@ -303,7 +303,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
                       </thead>
                       <tbody>
                         {accountTransactions &&
-                          accountTransactions.reverse().map((transaction) => (
+                          accountTransactions.map((transaction) => (
                             <tr key={transaction.name + transaction.created_at}>
                               <td>{moment(transaction.created_at).format('LLL')}</td>
                               <td>
