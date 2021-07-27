@@ -1,0 +1,51 @@
+.form-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+
+  &:not(.form-row--padded):not(:last-of-type) {
+    margin-bottom: var(--spacing-m);
+  }
+
+  .form-field {
+    &:not(:first-of-type) {
+      padding-left: var(--spacing-m);
+    }
+
+    &.form-field--stretch {
+      width: 100%;
+
+      input {
+        max-width: 400px;
+        width: 100%;
+      }
+    }
+  }
+
+  button + input,
+  input + button {
+    margin-left: var(--spacing-m);
+  }
+}
+
+.form-row--centered {
+  justify-content: center;
+}
+
+.form-row--padded {
+  // Ignore the class name, margin allows these to collapse with other items
+  margin-top: var(--spacing-l);
+  margin-bottom: var(--spacing-l);
+}
+
+.form-row--right {
+  justify-content: flex-end;
+}
+
+.form-row--stretch {
+  flex: 1;
+}
+
+.form-row--vertically-centered {
+  align-items: center;
+}
