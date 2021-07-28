@@ -13,6 +13,7 @@ import {
   makeSelectFileNameForUri,
   normalizeURI,
   selectMyActiveClaims,
+  selectClaimIdsByUri,
 } from 'lbry-redux';
 import { makeSelectRecommendedContentForUri } from 'redux/selectors/search';
 import { selectMutedChannels } from 'redux/selectors/blocked';
@@ -247,19 +248,37 @@ export const makeSelectInsufficientCreditsForUri = (uri: string) =>
   );
 
 export const makeSelectSigningIsMine = (rawUri: string) => {
-    let uri;
+  let uri;
+  try {
+    uri = normalizeURI(rawUri);
+  } catch (e) {}
+
+  return createSelector(selectClaimsByUri, selectMyActiveClaims, (claims, myClaims) => {
     try {
-      uri = normalizeURI(rawUri);
-    } catch (e) { }
+      parseURI(uri);
+    } catch (e) {
+      return false;
+    }
+    const signingChannel = claims && claims[uri] && (claims[uri].signing_channel || claims[uri]);
 
-    return createSelector(selectClaimsByUri, selectMyActiveClaims, (claims, myClaims) => {
-      try {
-        parseURI(uri);
-      } catch (e) {
-        return false;
-      }
-      const signingChannel = claims && claims[uri] && (claims[uri].signing_channel || claims[uri]);
+    return signingChannel && myClaims.has(signingChannel.claim_id);
+  });
+};
 
-      return signingChannel && myClaims.has(signingChannel.claim_id);
-    });
-  };
+export const makeSelectRecommendationId = (claimId: string) =>
+  createSelector(selectState, (state) => state.recommendationId[claimId]);
+
+export const makeSelectRecommendationParentId = (claimId: string) =>
+  createSelector(selectState, (state) => state.recommendationParentId[claimId]);
+
+export const makeSelectRecommendedClaimIds = (claimId: string) =>
+  createSelector(selectState, selectClaimIdsByUri, (state, claimIdsByUri) => {
+    const recommendationUrls = state.recommendationUrls[claimId];
+    if (recommendationUrls) {
+      return recommendationUrls.map((url) => claimIdsByUri[url]);
+    }
+    return undefined;
+  });
+
+export const makeSelectRecommendationClicks = (claimId: string) =>
+  createSelector(selectState, (state) => state.recommendationClicks[claimId]);
