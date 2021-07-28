@@ -70,16 +70,12 @@ const WalletBalance = (props: Props) => {
   }, [doFetchUtxoCounts, balance, detailsExpanded]);
 
   return (
-    <Card
-      title={<><Icon size="18" icon={ICONS.FINANCE} />313 USD</>}
+    <>{1 == 1 && <Card
+      title={<><Icon size="18" icon={ICONS.FINANCE} />{accountDetails && accountDetails.total_received_unpaid/100} USD</>}
       subtitle={
-        totalLocked > 0 ? (
           <I18nMessage>
             This is your remaining balance that can still be withdrawn to your bank account
           </I18nMessage>
-        ) : (
-          <span>{__('Your total balance.')}</span>
-        )
       }
       actions={
         <>
@@ -88,7 +84,7 @@ const WalletBalance = (props: Props) => {
           </h2>
 
           <h2 className="section__title--small">
-            $100 Withdrawn
+            ${accountDetails && accountDetails.total_paid_out/100 }  Withdrawn
             <Button
               button="link"
               label={detailsExpanded ? __('View less') : __('View more')}
@@ -96,6 +92,8 @@ const WalletBalance = (props: Props) => {
               onClick={() => setDetailsExpanded(!detailsExpanded)}
             />
           </h2>
+
+          {/* view more section */}
           {detailsExpanded && (
             <div className="section__subtitle">
               <dl>
@@ -136,49 +134,14 @@ const WalletBalance = (props: Props) => {
               </dl>
             </div>
           )}
-
-          {/* @if TARGET='app' */}
-          {hasSynced ? (
-            <p className="section help">
-              {__('A backup of your wallet is synced with lbry.tv.')}
-              <HelpLink href="https://lbry.com/faq/account-sync" />
-            </p>
-          ) : (
-            <p className="help--warning">
-              {__('Your wallet is not currently synced with lbry.tv. You are in control of backing up your wallet.')}
-              <HelpLink navigate={`/$/${PAGES.BACKUP}`} />
-            </p>
-          )}
-          {/* @endif */}
+          
           <div className="section__actions">
             <Button button="primary" label={__('Receive Payout')} icon={ICONS.SEND} navigate={`/$/${PAGES.SEND}`} />
             <Button button="secondary" label={__('Account Configuration')} icon={ICONS.SETTINGS} navigate={`/$/${PAGES.SEND}`} />
           </div>
-          {(otherCount > WALLET_CONSOLIDATE_UTXOS || consolidateIsPending || consolidatingUtxos) && (
-            <p className="help">
-              <I18nMessage
-                tokens={{
-                  now: (
-                    <Button
-                      button="link"
-                      onClick={() => doUtxoConsolidate()}
-                      disabled={operationPending}
-                      label={
-                        consolidateIsPending || consolidatingUtxos ? __('Consolidating...') : __('Consolidate Now')
-                      }
-                    />
-                  ),
-                  help: <HelpLink href="https://lbry.com/faq/transaction-types" />,
-                }}
-              >
-                Your wallet has a lot of change lying around. Consolidating will speed up your transactions. This could
-                take some time. %now%%help%
-              </I18nMessage>
-            </p>
-          )}
         </>
       }
-    />
+    />}</>
   );
 };
 
