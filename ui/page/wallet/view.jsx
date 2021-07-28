@@ -111,7 +111,7 @@ const WalletPage = (props: Props) => {
           <div className="fiat-transactions" style={{display: 'none'}}>
             <WalletFiatBalance accountDetails={accountStatusResponse} />
             <div style={{paddingTop: '20px'}}></div>
-            <WalletFiatTransactions />
+            {/*<WalletFiatTransactions />*/}
           </div>
         </>
       )}
