@@ -3,6 +3,7 @@ import React from 'react';
 import { withRouter } from 'react-router';
 import WalletBalance from 'component/walletBalance';
 import WalletFiatBalance from 'component/walletFiatBalance';
+import WalletFiatTransactions from 'component/walletFiatTransactions';
 import TxoList from 'component/txoList';
 import Page from 'component/page';
 import Spinner from 'component/spinner';
@@ -83,6 +84,8 @@ const WalletPage = (props: Props) => {
         <>
           <div className="fiat-transactions" style={{display: 'none'}}>
             <WalletFiatBalance />
+            <div style={{paddingTop: '20px'}}></div>
+            <WalletFiatTransactions />
           </div>
         </>
       )}
