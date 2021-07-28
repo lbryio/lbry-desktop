@@ -2,6 +2,7 @@
 import React from 'react';
 import { withRouter } from 'react-router';
 import WalletBalance from 'component/walletBalance';
+import WalletFiatBalance from 'component/WalletFiatBalance';
 import TxoList from 'component/txoList';
 import Page from 'component/page';
 import Spinner from 'component/spinner';
@@ -18,32 +19,27 @@ const WalletPage = (props: Props) => {
 
   const tab = new URLSearchParams(props.location.search).get('tab');
 
-  React.useEffect(()=>{
-    if(tab === 'currency'){
+  React.useEffect(() => {
+    // if (tab === 'currency') {
+    if (1 === 1) {
       document.getElementsByClassName('lbc-transactions')[0].style.display = 'none';
       document.getElementsByClassName('fiat-transactions')[0].style.display = 'inline';
 
       document.getElementsByClassName('lbc-tab-switcher')[0].style.textDecoration = 'none';
       document.getElementsByClassName('fiat-tab-switcher')[0].style.textDecoration = 'underline';
     }
-  },[])
-
+  }, []);
 
   const { location, totalBalance } = props;
   const { search } = location;
   const showIntro = totalBalance === 0;
   const loading = totalBalance === undefined;
 
-  const TAB_LBC_TRANSACTIONS = 'TabLBCTransactions';
-  const TAB_FIAT_TRANSACTIONS = 'TabFiatTransactions';
-
-  const [activeTab, setActiveTab] = React.useState(TAB_LBC_TRANSACTIONS);
-
   return (
     <Page>
       {/* tabs to switch between fiat and lbc */}
       <h2 className="lbc-tab-switcher"
-        style={{display: 'inline-block', paddingBottom: '16px', marginRight: '14px', textUnderlineOffset: '4px', textDecoration: 'underline', fontSize: '18px'}}
+        style={{display: 'inline-block', paddingBottom: '16px', marginRight: '14px', textUnderlineOffset: '4px', textDecoration: 'underline', fontSize: '18px', marginLeft: '3px'}}
         onClick={() => {
           document.getElementsByClassName('lbc-transactions')[0].style.display = 'inline';
           document.getElementsByClassName('fiat-transactions')[0].style.display = 'none';
@@ -60,9 +56,8 @@ const WalletPage = (props: Props) => {
 
           document.getElementsByClassName('lbc-tab-switcher')[0].style.textDecoration = 'none';
           document.getElementsByClassName('fiat-tab-switcher')[0].style.textDecoration = 'underline';
-
         }}
-      >Fiat Transactions</h2>
+      >USD Transactions</h2>
       <div className="lbc-transactions">
         {/* if the transactions are loading */}
         { loading && (
@@ -87,7 +82,7 @@ const WalletPage = (props: Props) => {
       {(
         <>
           <div className="fiat-transactions" style={{display: 'none'}}>
-            <h2>Here's your fiat transactions</h2>
+            <WalletFiatBalance />
           </div>
         </>
       )}
