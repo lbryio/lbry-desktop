@@ -11,6 +11,7 @@ import Icon from 'component/common/icon';
 import LbcSymbol from 'component/common/lbc-symbol';
 import I18nMessage from 'component/i18nMessage';
 import { formatNumberWithCommas } from 'util/number';
+import { Lbryio } from 'lbryinc';
 
 type Props = {
   balance: number,
@@ -28,6 +29,7 @@ type Props = {
   massClaimingTips: boolean,
   massClaimIsPending: boolean,
   utxoCounts: { [string]: number },
+  accountDetails: any,
 };
 
 export const WALLET_CONSOLIDATE_UTXOS = 400;
@@ -50,6 +52,8 @@ const WalletBalance = (props: Props) => {
     utxoCounts,
   } = props;
   const [detailsExpanded, setDetailsExpanded] = React.useState(false);
+  const [accountStatusResponse, setAccountStatusResponse] = React.useState();
+
 
   const { other: otherCount = 0 } = utxoCounts || {};
 
@@ -62,6 +66,29 @@ const WalletBalance = (props: Props) => {
       doFetchUtxoCounts();
     }
   }, [doFetchUtxoCounts, balance, detailsExpanded]);
+
+  var environment = 'test';
+
+  function getAccountStatus(){
+    return Lbryio.call(
+      'account',
+      'status',
+      {
+        environment
+      },
+      'post'
+    );
+  }
+
+  React.useEffect(() => {
+    (async function(){
+      const response = await getAccountStatus();
+
+      setAccountStatusResponse(response);
+
+      console.log(response);
+    })();
+  }, []);
 
   return (
     <Card
@@ -80,7 +107,8 @@ const WalletBalance = (props: Props) => {
       }
       actions={
         <>
-          <h4>Hello!</h4>
+          {accountStatusResponse && accountStatusResponse.charges_enabled && <h2>Charges Enabled: True</h2>}
+          {accountStatusResponse && <h2>Total Received Tips: ${accountStatusResponse.total_tipped / 100}</h2>}
           <p>Hello</p>
         </>
       }
