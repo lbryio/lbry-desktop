@@ -8,6 +8,7 @@ import TxoList from 'component/txoList';
 import Page from 'component/page';
 import Spinner from 'component/spinner';
 import YrblWalletEmpty from 'component/yrblWalletEmpty';
+import { Lbryio } from 'lbryinc';
 
 type Props = {
   history: { action: string, push: (string) => void, replace: (string) => void },
@@ -18,7 +19,32 @@ type Props = {
 const WalletPage = (props: Props) => {
   console.log(props);
 
+  var environment = 'test';
+
   const tab = new URLSearchParams(props.location.search).get('tab');
+
+  const [accountStatusResponse, setAccountStatusResponse] = React.useState();
+
+  function getAccountStatus(){
+    return Lbryio.call(
+      'account',
+      'status',
+      {
+        environment
+      },
+      'post'
+    );
+  }
+
+  React.useEffect(() => {
+    (async function(){
+      const response = await getAccountStatus();
+
+      setAccountStatusResponse(response);
+
+      console.log(response);
+    })();
+  }, []);
 
   React.useEffect(() => {
     // if (tab === 'currency') {
@@ -83,7 +109,7 @@ const WalletPage = (props: Props) => {
       {(
         <>
           <div className="fiat-transactions" style={{display: 'none'}}>
-            <WalletFiatBalance />
+            <WalletFiatBalance accountDetails={accountStatusResponse} />
             <div style={{paddingTop: '20px'}}></div>
             <WalletFiatTransactions />
           </div>
