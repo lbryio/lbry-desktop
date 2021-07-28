@@ -6,6 +6,7 @@ import classnames from 'classnames';
 import Button from 'component/button';
 import { formatNumberWithCommas } from 'util/number';
 import NudgeFloating from 'component/nudgeFloating';
+import { SIMPLE_SITE } from 'config';
 
 type Props = {
   claim: StreamClaim,
@@ -31,9 +32,16 @@ function FileReactions(props: Props) {
     dislikeCount,
     livestream,
   } = props;
+
   const claimId = claim && claim.claim_id;
   const channel = claim && claim.signing_channel && claim.signing_channel.name;
   const isCollection = claim && claim.value_type === 'collection'; // hack because nudge gets cut off by card on cols.
+  const likeIcon = SIMPLE_SITE ? (myReaction === REACTION_TYPES.LIKE ? ICONS.FIRE_ACTIVE : ICONS.FIRE) : ICONS.UPVOTE;
+  const dislikeIcon = SIMPLE_SITE
+    ? myReaction === REACTION_TYPES.DISLIKE
+      ? ICONS.SLIME_ACTIVE
+      : ICONS.SLIME
+    : ICONS.DOWNVOTE;
   React.useEffect(() => {
     function fetchReactions() {
       doFetchReactions(claimId);
@@ -71,7 +79,7 @@ function FileReactions(props: Props) {
         className={classnames('button--file-action', { 'button--fire': myReaction === REACTION_TYPES.LIKE })}
         label={
           <>
-            {myReaction === REACTION_TYPES.LIKE && (
+            {myReaction === REACTION_TYPES.LIKE && SIMPLE_SITE && (
               <>
                 <div className="button__fire-glow" />
                 <div className="button__fire-particle1" />
@@ -86,7 +94,7 @@ function FileReactions(props: Props) {
           </>
         }
         iconSize={18}
-        icon={myReaction === REACTION_TYPES.LIKE ? ICONS.FIRE_ACTIVE : ICONS.FIRE}
+        icon={likeIcon}
         onClick={() => doReactionLike(uri)}
       />
       <Button
@@ -96,7 +104,7 @@ function FileReactions(props: Props) {
         className={classnames('button--file-action', { 'button--slime': myReaction === REACTION_TYPES.DISLIKE })}
         label={
           <>
-            {myReaction === REACTION_TYPES.DISLIKE && (
+            {myReaction === REACTION_TYPES.DISLIKE && SIMPLE_SITE && (
               <>
                 <div className="button__slime-stain" />
                 <div className="button__slime-drop1" />
@@ -107,7 +115,7 @@ function FileReactions(props: Props) {
           </>
         }
         iconSize={18}
-        icon={myReaction === REACTION_TYPES.DISLIKE ? ICONS.SLIME_ACTIVE : ICONS.SLIME}
+        icon={dislikeIcon}
         onClick={() => doReactionDislike(uri)}
       />
     </>
