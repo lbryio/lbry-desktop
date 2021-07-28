@@ -1,6 +1,12 @@
 // Created by xander on 6/21/2021
 import videojs from 'video.js';
-import { v4 as uuidV4 } from 'uuid';
+import {
+  makeSelectRecommendationId,
+  makeSelectRecommendationParentId,
+  makeSelectRecommendedClaimIds,
+  makeSelectRecommendationClicks,
+} from 'redux/selectors/content';
+
 const VERSION = '0.0.1';
 
 const recsysEndpoint = 'https://clickstream.odysee.com/log/video/view';
@@ -17,23 +23,28 @@ const RecsysData = {
 };
 
 function createRecsys(claimId, userId, events, loadedAt, isEmbed) {
-  // TODO: use a UUID generator
-  const uuid = uuidV4();
   const pageLoadedAt = loadedAt;
   const pageExitedAt = Date.now();
-  return {
-    uuid: uuid,
-    parentUuid: null,
-    uid: userId,
-    claimId: claimId,
-    pageLoadedAt: pageLoadedAt,
-    pageExitedAt: pageExitedAt,
-    recsysId: recsysId,
-    recClaimIds: null,
-    recClickedVideoIdx: null,
-    events: events,
-    isEmbed: isEmbed,
-  };
+
+  if (window.store) {
+    const state = window.store.getState();
+
+    return {
+      uuid: makeSelectRecommendationId(claimId)(state),
+      parentUuid: makeSelectRecommendationParentId(claimId)(state),
+      uid: userId,
+      claimId: claimId,
+      pageLoadedAt: pageLoadedAt,
+      pageExitedAt: pageExitedAt,
+      recsysId: recsysId,
+      recClaimIds: makeSelectRecommendedClaimIds(claimId)(state),
+      recClickedVideoIdx: makeSelectRecommendationClicks(claimId)(state),
+      events: events,
+      isEmbed: isEmbed,
+    };
+  }
+
+  return undefined;
 }
 
 function newRecsysEvent(eventType, offset, arg) {
@@ -130,7 +141,10 @@ class RecsysPlugin extends Component {
       this.loadedAt,
       false
     );
-    sendRecsysEvents(event);
+
+    if (event) {
+      sendRecsysEvents(event);
+    }
   }
 
   onPlay(event) {
@@ -226,7 +240,7 @@ const onPlayerReady = (player, options) => {
  * @function plugin
  * @param    {Object} [options={}]
  */
-const plugin = function(options) {
+const plugin = function (options) {
   this.ready(() => {
     onPlayerReady(this, videojs.mergeOptions(defaults, options));
   });

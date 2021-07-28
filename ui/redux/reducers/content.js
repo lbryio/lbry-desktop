@@ -7,6 +7,10 @@ const defaultState = {
   channelClaimCounts: {},
   positions: {},
   history: [],
+  recommendationId: {}, // { "claimId": "recommendationId" }
+  recommendationParentId: {}, // { "claimId": "referrerId" }
+  recommendationUrls: {}, // { "claimId": [lbryUrls...] }
+  recommendationClicks: {}, // { "claimId": [clicked indices...] }
 };
 
 reducers[ACTIONS.SET_PRIMARY_URI] = (state, action) =>
@@ -73,7 +77,7 @@ reducers[ACTIONS.SET_CONTENT_LAST_VIEWED] = (state, action) => {
   const { uri, lastViewed } = action.data;
   const { history } = state;
   const historyObj = { uri, lastViewed };
-  const index = history.findIndex(i => i.uri === uri);
+  const index = history.findIndex((i) => i.uri === uri);
   const newHistory =
     index === -1
       ? [historyObj].concat(history)
@@ -84,7 +88,7 @@ reducers[ACTIONS.SET_CONTENT_LAST_VIEWED] = (state, action) => {
 reducers[ACTIONS.CLEAR_CONTENT_HISTORY_URI] = (state, action) => {
   const { uri } = action.data;
   const { history } = state;
-  const index = history.findIndex(i => i.uri === uri);
+  const index = history.findIndex((i) => i.uri === uri);
   return index === -1
     ? state
     : {
@@ -93,7 +97,44 @@ reducers[ACTIONS.CLEAR_CONTENT_HISTORY_URI] = (state, action) => {
       };
 };
 
-reducers[ACTIONS.CLEAR_CONTENT_HISTORY_ALL] = state => ({ ...state, history: [] });
+reducers[ACTIONS.CLEAR_CONTENT_HISTORY_ALL] = (state) => ({ ...state, history: [] });
+
+reducers[ACTIONS.RECOMMENDATION_UPDATED] = (state, action) => {
+  const { claimId, urls, id, parentId } = action.data;
+  const recommendationId = Object.assign({}, state.recommendationId);
+  const recommendationParentId = Object.assign({}, state.recommendationParentId);
+  const recommendationUrls = Object.assign({}, state.recommendationUrls);
+  const recommendationClicks = Object.assign({}, state.recommendationClicks);
+
+  if (urls && urls.length > 0) {
+    recommendationId[claimId] = id;
+    recommendationParentId[claimId] = parentId;
+    recommendationUrls[claimId] = urls;
+    recommendationClicks[claimId] = [];
+  } else {
+    delete recommendationId[claimId];
+    delete recommendationParentId[claimId];
+    delete recommendationUrls[claimId];
+    delete recommendationClicks[claimId];
+  }
+
+  return { ...state, recommendationId, recommendationParentId, recommendationUrls, recommendationClicks };
+};
+
+reducers[ACTIONS.RECOMMENDATION_CLICKED] = (state, action) => {
+  const { claimId, index } = action.data;
+  const recommendationClicks = Object.assign({}, state.recommendationClicks);
+
+  if (state.recommendationUrls[claimId] && index >= 0 && index < state.recommendationUrls[claimId].length) {
+    if (recommendationClicks[claimId]) {
+      recommendationClicks[claimId].push(index);
+    } else {
+      recommendationClicks[claimId] = [index];
+    }
+  }
+
+  return { ...state, recommendationClicks };
+};
 
 // reducers[LBRY_REDUX_ACTIONS.PURCHASE_URI_FAILED] = (state, action) => {
 //   return {

@@ -43,7 +43,7 @@ export function doUpdateLoadStatus(uri: string, outpoint: string) {
       full_status: true,
       page: 1,
       page_size: 1,
-    }).then(result => {
+    }).then((result) => {
       const { items: fileInfos } = result;
       const fileInfo = fileInfos[0];
       if (!fileInfo || fileInfo.written_bytes === 0) {
@@ -261,3 +261,21 @@ export function doClearContentHistoryAll() {
     dispatch({ type: ACTIONS.CLEAR_CONTENT_HISTORY_ALL });
   };
 }
+
+export const doRecommendationUpdate = (claimId: string, urls: Array<string>, id: string, parentId: string) => (
+  dispatch: Dispatch
+) => {
+  dispatch({
+    type: ACTIONS.RECOMMENDATION_UPDATED,
+    data: { claimId, urls, id, parentId },
+  });
+};
+
+export const doRecommendationClicked = (claimId: string, index: number) => (dispatch: Dispatch) => {
+  if (index !== undefined && index !== null) {
+    dispatch({
+      type: ACTIONS.RECOMMENDATION_CLICKED,
+      data: { claimId, index },
+    });
+  }
+};
