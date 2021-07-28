@@ -2,7 +2,7 @@
 import React from 'react';
 import { withRouter } from 'react-router';
 import WalletBalance from 'component/walletBalance';
-import WalletFiatBalance from 'component/WalletFiatBalance';
+import WalletFiatBalance from 'component/walletFiatBalance';
 import TxoList from 'component/txoList';
 import Page from 'component/page';
 import Spinner from 'component/spinner';

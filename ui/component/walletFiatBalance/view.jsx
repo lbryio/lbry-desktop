@@ -78,12 +78,11 @@ const WalletBalance = (props: Props) => {
       actions={
         <>
           <h2 className="section__title--small">
-            <Icon size="12" icon={ICONS.FINANCE} />
-            413 Received Total
+            $413 Received Total
           </h2>
 
           <h2 className="section__title--small">
-            $100 Already Withdrawn!!!!
+            $100 Withdrawn
             <Button
               button="link"
               label={detailsExpanded ? __('View less') : __('View more')}
