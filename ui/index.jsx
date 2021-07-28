@@ -43,7 +43,15 @@ import 'scss/third-party.scss';
 // Import our app styles
 // If a style is not necessary for the initial page load, it should be removed from `all.scss`
 // and loaded dynamically in the component that consumes it
+// @if BRANDED_SITE='odysee'
+import '../web/scss/all.scss';
+// @endif
+// @if BRANDED_SITE='lbrytv'
+import '../web/scss/lbrytv.scss';
+// @endif
+// @if TARGET='app'
 import 'scss/all.scss';
+// @endif
 
 // @if TARGET='web'
 // These overrides can't live in web/ because they need to use the same instance of `Lbry`

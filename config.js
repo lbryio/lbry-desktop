@@ -41,7 +41,7 @@ const config = {
   DEFAULT_LANGUAGE: process.env.DEFAULT_LANGUAGE,
   AUTO_FOLLOW_CHANNELS: process.env.AUTO_FOLLOW_CHANNELS,
   UNSYNCED_SETTINGS: process.env.UNSYNCED_SETTINGS,
-  AVATAR_DEFAULT: process.env.AVATAR_DEFAULT,
+  // AVATAR_DEFAULT: process.env.AVATAR_DEFAULT,
 
   // ENABLE FEATURES
   ENABLE_COMMENT_REACTIONS: process.env.ENABLE_COMMENT_REACTIONS === 'true',
@@ -66,6 +66,7 @@ const config = {
   CUSTOM_HOMEPAGE: process.env.CUSTOM_HOMEPAGE === 'true',
   SHOW_TAGS_INTRO: process.env.SHOW_TAGS_INTRO === 'true',
   LIGHTHOUSE_DEFAULT_TYPES: process.env.LIGHTHOUSE_DEFAULT_TYPES,
+  BRANDED_SITE: process.env.BRANDED_SITE,
 };
 
 config.URL_LOCAL = `http://localhost:${config.WEB_SERVER_PORT}`;
