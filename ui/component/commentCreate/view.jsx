@@ -43,8 +43,7 @@ type Props = {
   activeChannel: string,
   activeChannelClaim: ?ChannelClaim,
   bottom: boolean,
-  onSubmit: (string, string) => void,
-  livestream: boolean,
+  livestream?: boolean,
   embed?: boolean,
   toast: (string) => void,
   claimIsMine: boolean,
@@ -66,11 +65,9 @@ export function CommentCreate(props: Props) {
     isReply,
     parentId,
     activeChannelClaim,
-    onSubmit,
     bottom,
     livestream,
     embed,
-    toast,
     claimIsMine,
     sendTip,
     doToast,
@@ -153,8 +150,6 @@ export function CommentCreate(props: Props) {
 
     const activeChannelName = activeChannelClaim && activeChannelClaim.name;
     const activeChannelId = activeChannelClaim && activeChannelClaim.claim_id;
-
-    console.log(activeChannelClaim);
 
     setIsSubmitting(true);
 
@@ -262,10 +257,6 @@ export function CommentCreate(props: Props) {
           setIsReviewingSupportComment(false);
           setIsSupportComment(false);
           setCommentFailure(false);
-
-          if (onSubmit) {
-            onSubmit(commentValue, activeChannelClaim.name);
-          }
 
           if (onDoneReplying) {
             onDoneReplying();
