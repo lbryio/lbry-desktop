@@ -134,10 +134,10 @@ const WalletBalance = (props: Props) => {
               </dl>
             </div>
           )}
-          
+
           <div className="section__actions">
-            <Button button="primary" label={__('Receive Payout')} icon={ICONS.SEND} navigate={`/$/${PAGES.SEND}`} />
-            <Button button="secondary" label={__('Account Configuration')} icon={ICONS.SETTINGS} navigate={`/$/${PAGES.SEND}`} />
+            <Button button="primary" label={__('Receive Payout')} icon={ICONS.SEND}  />
+            <Button button="secondary" label={__('Account Configuration')} icon={ICONS.SETTINGS} navigate={`/$/${PAGES.SETTINGS_STRIPE_ACCOUNT}`} />
           </div>
         </>
       }

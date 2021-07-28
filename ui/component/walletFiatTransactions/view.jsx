@@ -12,6 +12,7 @@ import LbcSymbol from 'component/common/lbc-symbol';
 import I18nMessage from 'component/i18nMessage';
 import { formatNumberWithCommas } from 'util/number';
 import { Lbryio } from 'lbryinc';
+import moment from 'moment';
 
 type Props = {
   balance: number,
@@ -30,6 +31,7 @@ type Props = {
   massClaimIsPending: boolean,
   utxoCounts: { [string]: number },
   accountDetails: any,
+  transactions: any,
 };
 
 export const WALLET_CONSOLIDATE_UTXOS = 400;
@@ -51,6 +53,9 @@ const WalletBalance = (props: Props) => {
     massClaimIsPending,
     utxoCounts,
   } = props;
+
+  const accountTransactions = props.transactions;
+
   const [detailsExpanded, setDetailsExpanded] = React.useState(false);
   const [accountStatusResponse, setAccountStatusResponse] = React.useState();
 
@@ -92,19 +97,58 @@ const WalletBalance = (props: Props) => {
 
   return (
     <Card
-      title={<><Icon size="18" icon={ICONS.FINANCE} />313 USD</>}
-      subtitle={
-        totalLocked > 0 ? (
-          <I18nMessage>
-            This is your remaining balance that can still be withdrawn to your bank account
-          </I18nMessage>
-        ) : (
-          <span>{__('Your total balance.')}</span>
-        )
-      }
-      body={
-        <h1>Hello!</h1>
-      }
+      title={'Tip History'}
+      body={accountTransactions && accountTransactions.length > 0 && (
+          <>
+            <div className="table__wrapper">
+              <table className="table table--transactions">
+                <thead>
+                <tr>
+                  <th className="date-header">{__('Date')}</th>
+                  <th>{<>{__('Receiving Channel Name')}</>}</th>
+                  <th>{__('Tip Location')}</th>
+                  <th>{__('Amount (USD)')} </th>
+                  <th>{__('Processing Fee')}</th>
+                  <th>{__('Odysee Fee')}</th>
+                  <th>{__('Received Amount')}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {accountTransactions &&
+                accountTransactions.map((transaction) => (
+                  <tr key={transaction.name + transaction.created_at}>
+                    <td>{moment(transaction.created_at).format('LLL')}</td>
+                    <td>
+                      <Button
+                        className="stripe__card-link-text"
+                        navigate={'/' + transaction.channel_name + ':' + transaction.channel_claim_id}
+                        label={transaction.channel_name}
+                        button="link"
+                      />
+                    </td>
+                    <td>
+                      <Button
+                        className="stripe__card-link-text"
+                        navigate={'/' + transaction.channel_name + ':' + transaction.source_claim_id}
+                        label={
+                          transaction.channel_claim_id === transaction.source_claim_id
+                            ? 'Channel Page'
+                            : 'File Page'
+                        }
+                        button="link"
+                      />
+                    </td>
+                    <td>${transaction.tipped_amount / 100}</td>
+                    <td>${transaction.transaction_fee / 100}</td>
+                    <td>${transaction.application_fee / 100}</td>
+                    <td>${transaction.received_amount / 100}</td>
+                  </tr>
+                ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+      )}
       actions={
         <>
           {accountStatusResponse && accountStatusResponse.charges_enabled && <h2>Charges Enabled: True</h2>}

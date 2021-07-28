@@ -19,18 +19,30 @@ type Props = {
 const WalletPage = (props: Props) => {
   console.log(props);
 
-  var environment = 'test';
+  var stripeEnvironment = 'test';
 
   const tab = new URLSearchParams(props.location.search).get('tab');
 
   const [accountStatusResponse, setAccountStatusResponse] = React.useState();
+  const [accountTransactionResponse, setAccountTransactionResponse] = React.useState();
 
   function getAccountStatus(){
     return Lbryio.call(
       'account',
       'status',
       {
-        environment
+        environment: stripeEnvironment,
+      },
+      'post'
+    );
+  }
+
+  function getAccountTransactionsa(){
+    return Lbryio.call(
+      'account',
+      'list',
+      {
+        environment: stripeEnvironment,
       },
       'post'
     );
@@ -38,11 +50,33 @@ const WalletPage = (props: Props) => {
 
   React.useEffect(() => {
     (async function(){
-      const response = await getAccountStatus();
+      try {
+        const response = await getAccountStatus();
 
-      setAccountStatusResponse(response);
+        console.log('account status');
 
-      console.log(response);
+        console.log(response);
+
+        setAccountStatusResponse(response);
+
+        // TODO: some weird naming clash
+        const getAccountTransactions = await getAccountTransactionsa();
+
+        console.log('transactions');
+
+        setAccountTransactionResponse(getAccountTransactions)
+
+        console.log(getAccountTransactions);
+
+      } catch (err){
+
+
+
+
+
+      }
+
+
     })();
   }, []);
 
@@ -111,7 +145,7 @@ const WalletPage = (props: Props) => {
           <div className="fiat-transactions" style={{display: 'none'}}>
             <WalletFiatBalance accountDetails={accountStatusResponse} />
             <div style={{paddingTop: '20px'}}></div>
-            {/*<WalletFiatTransactions />*/}
+            <WalletFiatTransactions transactions={accountTransactionResponse}/>
           </div>
         </>
       )}
