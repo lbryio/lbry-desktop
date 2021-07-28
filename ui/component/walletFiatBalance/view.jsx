@@ -28,6 +28,7 @@ type Props = {
   massClaimingTips: boolean,
   massClaimIsPending: boolean,
   utxoCounts: { [string]: number },
+  accountDetails: any,
 };
 
 export const WALLET_CONSOLIDATE_UTXOS = 400;
@@ -48,7 +49,12 @@ const WalletBalance = (props: Props) => {
     massClaimingTips,
     massClaimIsPending,
     utxoCounts,
+    accountDetails,
   } = props;
+
+  console.log('account details');
+  console.log(accountDetails);
+
   const [detailsExpanded, setDetailsExpanded] = React.useState(false);
 
   const { other: otherCount = 0 } = utxoCounts || {};
@@ -78,7 +84,7 @@ const WalletBalance = (props: Props) => {
       actions={
         <>
           <h2 className="section__title--small">
-            $413 Received Total
+            ${accountDetails && accountDetails.total_tipped / 100 } Received Total
           </h2>
 
           <h2 className="section__title--small">
