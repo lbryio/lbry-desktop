@@ -17,6 +17,7 @@ import ChannelThumbnail from 'component/channelThumbnail';
 import UriIndicator from 'component/uriIndicator';
 import Empty from 'component/common/empty';
 import { Lbryio } from 'lbryinc';
+import { getChannelIdFromClaim } from 'util/claim';
 
 let stripeEnvironment = 'test';
 // if the key contains pk_live it's a live key
@@ -32,7 +33,6 @@ type Props = {
   uri: string,
   claim: StreamClaim,
   createComment: (string, string, string, ?string, ?string, ?string) => Promise<any>,
-  commentsDisabledBySettings: boolean,
   channels: ?Array<ChannelClaim>,
   onDoneReplying?: () => void,
   onCancelReplying?: () => void,
@@ -50,12 +50,13 @@ type Props = {
   sendTip: ({}, (any) => void, (any) => void) => void,
   doToast: ({ message: string }) => void,
   disabled: boolean,
+  doFetchCreatorSettings: (channelId: string) => void,
+  settingsByChannelId: { [channelId: string]: PerChannelSettings },
 };
 
 export function CommentCreate(props: Props) {
   const {
     createComment,
-    commentsDisabledBySettings,
     claim,
     channels,
     onDoneReplying,
@@ -71,6 +72,8 @@ export function CommentCreate(props: Props) {
     claimIsMine,
     sendTip,
     doToast,
+    doFetchCreatorSettings,
+    settingsByChannelId,
   } = props;
   const buttonRef: ElementRef<any> = React.useRef();
   const {
@@ -92,6 +95,8 @@ export function CommentCreate(props: Props) {
   const [tipError, setTipError] = React.useState();
   const disabled = isSubmitting || !activeChannelClaim || !commentValue.length;
   const [shouldDisableReviewButton, setShouldDisableReviewButton] = React.useState();
+  const channelId = getChannelIdFromClaim(claim);
+  const channelSettings = channelId ? settingsByChannelId[channelId] : undefined;
 
   function handleCommentChange(event) {
     let commentValue;
@@ -275,7 +280,13 @@ export function CommentCreate(props: Props) {
     setAdvancedEditor(!advancedEditor);
   }
 
-  if (commentsDisabledBySettings) {
+  React.useEffect(() => {
+    if (!channelSettings && channelId) {
+      doFetchCreatorSettings(channelId);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (channelSettings && !channelSettings.comments_enabled) {
     return <Empty padded text={__('This channel has disabled comments on their page.')} />;
   }
 

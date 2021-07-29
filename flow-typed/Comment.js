@@ -58,7 +58,6 @@ declare type CommentsState = {
   blockingByUri: {},
   unBlockingByUri: {},
   togglingForDelegatorMap: {[string]: Array<string>}, // {"blockedUri": ["delegatorUri1", ""delegatorUri2", ...]}
-  commentsDisabledChannelIds: Array<string>,
   settingsByChannelId: { [string]: PerChannelSettings }, // ChannelID -> settings
   fetchingSettings: boolean,
   fetchingBlockedWords: boolean,
@@ -222,10 +221,20 @@ declare type ModerationAmIParams = {
 };
 
 declare type SettingsParams = {
-  channel_name: string,
+  channel_name?: string,
   channel_id: string,
-  signature: string,
-  signing_ts: string,
+  signature?: string,
+  signing_ts?: string,
+};
+
+declare type SettingsResponse = {
+  words?: string,
+  comments_enabled: boolean,
+  min_tip_amount_comment: number,
+  min_tip_amount_super_chat: number,
+  slow_mode_min_gap: number,
+  curse_jar_amount: number,
+  filters_enabled?: boolean,
 };
 
 declare type UpdateSettingsParams = {

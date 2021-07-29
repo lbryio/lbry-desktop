@@ -30,7 +30,7 @@ type Props = {
   commentModAddDelegate: (string, string, ChannelClaim) => void,
   commentModRemoveDelegate: (string, string, ChannelClaim) => void,
   commentModListDelegates: (ChannelClaim) => void,
-  fetchCreatorSettings: (Array<string>) => void,
+  fetchCreatorSettings: (channelId: string) => void,
   updateCreatorSettings: (ChannelClaim, PerChannelSettings) => void,
   doToast: ({ message: string }) => void,
 };
@@ -61,21 +61,16 @@ export default function SettingsCreatorPage(props: Props) {
   const [slowModeMinGap, setSlowModeMinGap] = React.useState(0);
   const [lastUpdated, setLastUpdated] = React.useState(1);
 
-  function settingsToStates(settings: PerChannelSettings) {
-    if (settings.comments_enabled !== undefined) {
-      setCommentsEnabled(settings.comments_enabled);
-    }
-    if (settings.min_tip_amount_comment !== undefined) {
-      setMinTipAmountComment(settings.min_tip_amount_comment);
-    }
-    if (settings.min_tip_amount_super_chat !== undefined) {
-      setMinTipAmountSuperChat(settings.min_tip_amount_super_chat);
-    }
-    if (settings.slow_mode_min_gap !== undefined) {
-      setSlowModeMinGap(settings.slow_mode_min_gap);
-    }
-    if (settings.words) {
-      const tagArray = Array.from(new Set(settings.words));
+  /**
+   * Updates corresponding GUI states with the given PerChannelSettings values.
+   *
+   * @param settings
+   * @param fullSync If true, update all states and consider 'undefined' settings as "cleared/false";
+   *                 if false, only update defined settings.
+   */
+  function settingsToStates(settings: PerChannelSettings, fullSync: boolean) {
+    const doSetMutedWordTags = (words: Array<string>) => {
+      const tagArray = Array.from(new Set(words));
       setMutedWordTags(
         tagArray
           .filter((t) => t !== '')
@@ -83,11 +78,35 @@ export default function SettingsCreatorPage(props: Props) {
             return { name: x };
           })
       );
+    };
+
+    if (fullSync) {
+      setCommentsEnabled(settings.comments_enabled || false);
+      setMinTipAmountComment(settings.min_tip_amount_comment || 0);
+      setMinTipAmountSuperChat(settings.min_tip_amount_super_chat || 0);
+      setSlowModeMinGap(settings.slow_mode_min_gap || 0);
+      doSetMutedWordTags(settings.words || []);
+    } else {
+      if (settings.comments_enabled !== undefined) {
+        setCommentsEnabled(settings.comments_enabled);
+      }
+      if (settings.min_tip_amount_comment !== undefined) {
+        setMinTipAmountComment(settings.min_tip_amount_comment);
+      }
+      if (settings.min_tip_amount_super_chat !== undefined) {
+        setMinTipAmountSuperChat(settings.min_tip_amount_super_chat);
+      }
+      if (settings.slow_mode_min_gap !== undefined) {
+        setSlowModeMinGap(settings.slow_mode_min_gap);
+      }
+      if (settings.words) {
+        doSetMutedWordTags(settings.words);
+      }
     }
   }
 
   function setSettings(newSettings: PerChannelSettings) {
-    settingsToStates(newSettings);
+    settingsToStates(newSettings, false);
     updateCreatorSettings(activeChannelClaim, newSettings);
     setLastUpdated(Date.now());
   }
@@ -213,15 +232,15 @@ export default function SettingsCreatorPage(props: Props) {
 
     if (activeChannelClaim && settingsByChannelId && settingsByChannelId[activeChannelClaim.claim_id]) {
       const channelSettings = settingsByChannelId[activeChannelClaim.claim_id];
-      settingsToStates(channelSettings);
+      settingsToStates(channelSettings, true);
     }
   }, [activeChannelClaim, settingsByChannelId, lastUpdated]);
 
-  // Re-sync list, mainly to correct any invalid settings.
+  // Re-sync list on first idle time; mainly to correct any invalid settings.
   React.useEffect(() => {
     if (lastUpdated && activeChannelClaim) {
       const timer = setTimeout(() => {
-        fetchCreatorSettings([activeChannelClaim.claim_id]);
+        fetchCreatorSettings(activeChannelClaim.claim_id);
       }, DEBOUNCE_REFRESH_MS);
       return () => clearTimeout(timer);
     }

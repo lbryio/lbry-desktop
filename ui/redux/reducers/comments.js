@@ -4,6 +4,8 @@ import { handleActions } from 'util/redux-utils';
 import { BLOCK_LEVEL } from 'constants/comment';
 import { isURIEqual } from 'lbry-redux';
 
+const BTC_SATOSHIS = 100000000;
+
 const defaultState: CommentsState = {
   commentById: {}, // commentId -> Comment
   byId: {}, // ClaimID -> list of fetched comment IDs.
@@ -41,7 +43,6 @@ const defaultState: CommentsState = {
   blockingByUri: {},
   unBlockingByUri: {},
   togglingForDelegatorMap: {},
-  commentsDisabledChannelIds: [],
   settingsByChannelId: {}, // ChannelId -> PerChannelSettings
   fetchingSettings: false,
   fetchingBlockedWords: false,
@@ -251,32 +252,8 @@ export default handleActions(
         claimId,
         uri,
         disabled,
-        authorClaimId,
+        commenterClaimId,
       } = action.data;
-      const commentsDisabledChannelIds = [...state.commentsDisabledChannelIds];
-
-      if (disabled) {
-        if (!commentsDisabledChannelIds.includes(authorClaimId)) {
-          commentsDisabledChannelIds.push(authorClaimId);
-        }
-
-        const isLoadingByParentId = Object.assign({}, state.isLoadingByParentId);
-        if (parentId) {
-          isLoadingByParentId[parentId] = false;
-        }
-
-        return {
-          ...state,
-          commentsDisabledChannelIds,
-          isLoading: false,
-          isLoadingByParentId,
-        };
-      } else {
-        const index = commentsDisabledChannelIds.indexOf(authorClaimId);
-        if (index > -1) {
-          commentsDisabledChannelIds.splice(index, 1);
-        }
-      }
 
       const commentById = Object.assign({}, state.commentById);
       const byId = Object.assign({}, state.byId);
@@ -289,50 +266,61 @@ export default handleActions(
       const pinnedCommentsById = Object.assign({}, state.pinnedCommentsById);
       const totalRepliesByParentId = Object.assign({}, state.totalRepliesByParentId);
       const isLoadingByParentId = Object.assign({}, state.isLoadingByParentId);
+      const settingsByChannelId = Object.assign({}, state.settingsByChannelId);
 
-      if (!parentId) {
-        totalCommentsById[claimId] = totalItems;
-        topLevelTotalCommentsById[claimId] = totalFilteredItems;
-        topLevelTotalPagesById[claimId] = totalPages;
-      } else {
-        totalRepliesByParentId[parentId] = totalFilteredItems;
+      settingsByChannelId[commenterClaimId] = {
+        ...(settingsByChannelId[commenterClaimId] || {}),
+        comments_enabled: !disabled,
+      };
+
+      if (parentId) {
         isLoadingByParentId[parentId] = false;
       }
 
-      const commonUpdateAction = (comment, commentById, commentIds, index) => {
-        // map the comment_ids to the new comments
-        commentById[comment.comment_id] = comment;
-        commentIds[index] = comment.comment_id;
-      };
+      if (!disabled) {
+        if (parentId) {
+          totalRepliesByParentId[parentId] = totalFilteredItems;
+        } else {
+          totalCommentsById[claimId] = totalItems;
+          topLevelTotalCommentsById[claimId] = totalFilteredItems;
+          topLevelTotalPagesById[claimId] = totalPages;
+        }
 
-      if (comments) {
-        // we use an Array to preserve order of listing
-        // in reality this doesn't matter and we can just
-        // sort comments by their timestamp
-        const commentIds = Array(comments.length);
+        const commonUpdateAction = (comment, commentById, commentIds, index) => {
+          // map the comment_ids to the new comments
+          commentById[comment.comment_id] = comment;
+          commentIds[index] = comment.comment_id;
+        };
 
-        // --- Top-level comments ---
-        if (!parentId) {
-          for (let i = 0; i < comments.length; ++i) {
-            const comment = comments[i];
-            commonUpdateAction(comment, commentById, commentIds, i);
-            pushToArrayInObject(topLevelCommentsById, claimId, comment.comment_id);
-            if (comment.is_pinned) {
-              pushToArrayInObject(pinnedCommentsById, claimId, comment.comment_id);
+        if (comments) {
+          // we use an Array to preserve order of listing
+          // in reality this doesn't matter and we can just
+          // sort comments by their timestamp
+          const commentIds = Array(comments.length);
+
+          // --- Top-level comments ---
+          if (!parentId) {
+            for (let i = 0; i < comments.length; ++i) {
+              const comment = comments[i];
+              commonUpdateAction(comment, commentById, commentIds, i);
+              pushToArrayInObject(topLevelCommentsById, claimId, comment.comment_id);
+              if (comment.is_pinned) {
+                pushToArrayInObject(pinnedCommentsById, claimId, comment.comment_id);
+              }
             }
           }
-        }
-        // --- Replies ---
-        else {
-          for (let i = 0; i < comments.length; ++i) {
-            const comment = comments[i];
-            commonUpdateAction(comment, commentById, commentIds, i);
-            pushToArrayInObject(repliesByParentId, parentId, comment.comment_id);
+          // --- Replies ---
+          else {
+            for (let i = 0; i < comments.length; ++i) {
+              const comment = comments[i];
+              commonUpdateAction(comment, commentById, commentIds, i);
+              pushToArrayInObject(repliesByParentId, parentId, comment.comment_id);
+            }
           }
-        }
 
-        byId[claimId] ? byId[claimId].push(...commentIds) : (byId[claimId] = commentIds);
-        commentsByUri[uri] = claimId;
+          byId[claimId] ? byId[claimId].push(...commentIds) : (byId[claimId] = commentIds);
+          commentsByUri[uri] = claimId;
+        }
       }
 
       return {
@@ -347,9 +335,9 @@ export default handleActions(
         byId,
         commentById,
         commentsByUri,
-        commentsDisabledChannelIds,
         isLoading: false,
         isLoadingByParentId,
+        settingsByChannelId,
       };
     },
 
@@ -1018,23 +1006,27 @@ export default handleActions(
       fetchingSettings: false,
     }),
     [ACTIONS.COMMENT_FETCH_SETTINGS_COMPLETED]: (state: CommentsState, action: any) => {
-      // TODO: This is incorrect, as it could make 'settingsByChannelId' store
-      // only 1 channel with other channel's data purged. It works for now
-      // because the GUI only shows 1 channel's setting at a time, and *always*
-      // re-fetches to get latest data before displaying. Either rename this to
-      // 'activeChannelCreatorSettings', or append the new data properly.
-      const settingsByChannelId = Object.assign({}, action.data);
-      const BTC_SATOSHIS = 100000000;
+      const { channelId, settings, partialUpdate } = action.data;
+      const settingsByChannelId = Object.assign({}, state.settingsByChannelId);
 
-      const channelIds = Object.keys(settingsByChannelId);
-      channelIds.forEach((ci) => {
-        if (settingsByChannelId[ci].min_tip_amount_comment) {
-          settingsByChannelId[ci].min_tip_amount_comment /= BTC_SATOSHIS;
+      if (partialUpdate) {
+        settingsByChannelId[channelId] = {
+          // The existing may contain additional Creator Settings (e.g. 'words')
+          ...(settingsByChannelId[channelId] || {}),
+          // Spread new settings.
+          ...settings,
+        };
+      } else {
+        settingsByChannelId[channelId] = settings;
+        if (settings.words) {
+          settingsByChannelId[channelId].words = settings.words.split(',');
         }
-        if (settingsByChannelId[ci].min_tip_amount_super_chat) {
-          settingsByChannelId[ci].min_tip_amount_super_chat /= BTC_SATOSHIS;
-        }
-      });
+      }
+
+      // Both partial and full update will always include these,
+      // so safe to always re-compute without accidentally double-converting.
+      settingsByChannelId[channelId].min_tip_amount_comment /= BTC_SATOSHIS;
+      settingsByChannelId[channelId].min_tip_amount_super_chat /= BTC_SATOSHIS;
 
       return {
         ...state,

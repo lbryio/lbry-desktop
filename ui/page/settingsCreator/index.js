@@ -29,7 +29,7 @@ const select = (state) => ({
 const perform = (dispatch) => ({
   commentBlockWords: (channelClaim, words) => dispatch(doCommentBlockWords(channelClaim, words)),
   commentUnblockWords: (channelClaim, words) => dispatch(doCommentUnblockWords(channelClaim, words)),
-  fetchCreatorSettings: (channelClaimIds) => dispatch(doFetchCreatorSettings(channelClaimIds)),
+  fetchCreatorSettings: (channelClaimId) => dispatch(doFetchCreatorSettings(channelClaimId)),
   updateCreatorSettings: (channelClaim, settings) => dispatch(doUpdateCreatorSettings(channelClaim, settings)),
   commentModAddDelegate: (modChanId, modChanName, creatorChannelClaim) =>
     dispatch(doCommentModAddDelegate(modChanId, modChanName, creatorChannelClaim)),

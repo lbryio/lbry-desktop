@@ -14,6 +14,7 @@ import { ENABLE_COMMENT_REACTIONS } from 'config';
 import Empty from 'component/common/empty';
 import debounce from 'util/debounce';
 import { useIsMobile } from 'effects/use-screensize';
+import { getChannelIdFromClaim } from 'util/claim';
 
 const DEBOUNCE_SCROLL_HANDLER_MS = 200;
 
@@ -29,12 +30,12 @@ type Props = {
   allCommentIds: any,
   topLevelComments: Array<Comment>,
   topLevelTotalPages: number,
-  commentsDisabledBySettings: boolean,
   fetchTopLevelComments: (string, number, number, number) => void,
   fetchComment: (string) => void,
   fetchReacts: (Array<string>) => Promise<any>,
   resetComments: (string) => void,
   uri: string,
+  claim: ?Claim,
   claimIsMine: boolean,
   myChannels: ?Array<ChannelClaim>,
   isFetchingComments: boolean,
@@ -45,6 +46,7 @@ type Props = {
   myReactsByCommentId: ?{ [string]: Array<string> }, // "CommentId:MyChannelId" -> reaction array (note the ID concatenation)
   othersReactsById: ?{ [string]: { [REACTION_TYPES.LIKE | REACTION_TYPES.DISLIKE]: number } },
   activeChannelId: ?string,
+  settingsByChannelId: { [channelId: string]: PerChannelSettings },
 };
 
 function CommentList(props: Props) {
@@ -57,7 +59,7 @@ function CommentList(props: Props) {
     uri,
     topLevelComments,
     topLevelTotalPages,
-    commentsDisabledBySettings,
+    claim,
     claimIsMine,
     myChannels,
     isFetchingComments,
@@ -68,6 +70,7 @@ function CommentList(props: Props) {
     myReactsByCommentId,
     othersReactsById,
     activeChannelId,
+    settingsByChannelId,
   } = props;
 
   const commentRef = React.useRef();
@@ -78,6 +81,8 @@ function CommentList(props: Props) {
   const isMobile = useIsMobile();
   const [expandedComments, setExpandedComments] = React.useState(!isMobile);
   const totalFetchedComments = allCommentIds ? allCommentIds.length : 0;
+  const channelId = getChannelIdFromClaim(claim);
+  const channelSettings = channelId ? settingsByChannelId[channelId] : undefined;
 
   // Display comments immediately if not fetching reactions
   // If not, wait to show comments until reactions are fetched
@@ -279,7 +284,7 @@ function CommentList(props: Props) {
         <>
           <CommentCreate uri={uri} />
 
-          {!commentsDisabledBySettings && !isFetchingComments && hasNoComments && (
+          {channelSettings && channelSettings.comments_enabled && !isFetchingComments && hasNoComments && (
             <Empty padded text={__('That was pretty deep. What do you think?')} />
           )}
 
