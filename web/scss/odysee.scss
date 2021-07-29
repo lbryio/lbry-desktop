@@ -1,10 +1,10 @@
 @charset "utf-8";
 
-@import 'init/reset';
-@import 'init/vars';
-@import 'init/mixins';
-@import 'init/gui';
-@import 'init/base-theme';
+@import 'themes/odysee/init/reset';
+@import 'themes/odysee/init/vars';
+@import 'themes/odysee/init/mixins';
+@import 'themes/odysee/init/gui';
+@import 'themes/odysee/init/base-theme';
 
 @import 'themes/odysee/light.scss';
 @import 'themes/odysee/dark.scss';
