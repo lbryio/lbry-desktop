@@ -157,7 +157,7 @@ const WalletPage = (props: Props) => {
     if (1 === 2) {
       focusAccountHistoryTab();
     // } else if (tab === 'payment-history'){
-    } else if (1 === 1){
+    } else if (1 === 2){
       focusPaymentHistoryTab();
     }
   }, []);
