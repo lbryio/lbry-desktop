@@ -13,30 +13,11 @@ import I18nMessage from 'component/i18nMessage';
 import { formatNumberWithCommas } from 'util/number';
 
 type Props = {
-  balance: number,
-  totalBalance: number,
-  claimsBalance: number,
-  supportsBalance: number,
-  tipsBalance: number,
-  doOpenModal: (string) => void,
-  hasSynced: boolean,
-  doFetchUtxoCounts: () => void,
-  doUtxoConsolidate: () => void,
-  fetchingUtxoCounts: boolean,
-  consolidatingUtxos: boolean,
-  consolidateIsPending: boolean,
-  massClaimingTips: boolean,
-  massClaimIsPending: boolean,
-  utxoCounts: { [string]: number },
   accountDetails: any,
 };
 
 const WalletBalance = (props: Props) => {
   const {
-    claimsBalance,
-    supportsBalance,
-    tipsBalance,
-    doOpenModal,
     accountDetails,
   } = props;
 
@@ -79,16 +60,14 @@ const WalletBalance = (props: Props) => {
                 </dt>
                 <dd>
                   <span className="dd__text">
-                    {Boolean(tipsBalance) && (
+                    {Boolean(1) && (
                       <Button
                         button="link"
                         className="dd__button"
-                        disabled={operationPending}
                         icon={ICONS.UNLOCK}
-                        onClick={() => doOpenModal(MODALS.MASS_TIP_UNLOCK)}
                       />
                     )}
-                    <CreditAmount amount={tipsBalance} precision={4} />
+                    <CreditAmount amount={1} precision={4} />
                   </span>
                 </dd>
 
@@ -97,7 +76,7 @@ const WalletBalance = (props: Props) => {
                   <span className="help--dt">({__('Delete or edit past content to spend')})</span>
                 </dt>
                 <dd>
-                  <CreditAmount amount={claimsBalance} precision={4} />
+                  <CreditAmount amount={1} precision={4} />
                 </dd>
 
                 <dt>
@@ -105,7 +84,7 @@ const WalletBalance = (props: Props) => {
                   <span className="help--dt">({__('Delete supports to spend')})</span>
                 </dt>
                 <dd>
-                  <CreditAmount amount={supportsBalance} precision={4} />
+                  <CreditAmount amount={1} precision={4} />
                 </dd>
               </dl>
             </div>
