@@ -64,6 +64,9 @@ const WalletBalance = (props: Props) => {
 
   const [detailsExpanded, setDetailsExpanded] = React.useState(false);
   const [accountStatusResponse, setAccountStatusResponse] = React.useState();
+  const [paymentHistoryTransactions, setPaymentHistoryTransactions] = React.useState();
+
+  const [lastFour, setLastFour] = React.useState();
 
 
   const { other: otherCount = 0 } = utxoCounts || {};
@@ -91,13 +94,40 @@ const WalletBalance = (props: Props) => {
     );
   }
 
+  function getPaymentHistory() {
+    return Lbryio.call(
+    'customer',
+    'list',
+    {
+      environment,
+    },
+    'post'
+  )};
+
+  function getCustomerStatus(){
+    return Lbryio.call(
+      'customer',
+      'status',
+      {
+        environment,
+      },
+      'post'
+    )
+  }
+
   React.useEffect(() => {
 
 
     (async function(){
-      const response = await getAccountStatus();
+      let response = await getPaymentHistory();
 
-      setAccountStatusResponse(response);
+      const customerStatusResponse = await getCustomerStatus();
+
+      setLastFour(customerStatusResponse.PaymentMethods[0].card.last4);
+
+      if (response.length > 10) response.length = 10;
+
+      setPaymentHistoryTransactions(response);
 
       console.log(response);
     })();
@@ -105,59 +135,56 @@ const WalletBalance = (props: Props) => {
 
   return (
     <Card
-      title={'Tip History'}
-      body={1 == 1 && (
-          <>
-            <div className="table__wrapper">
-              <table className="table table--transactions">
-                <thead>
-                <tr>
-                  <th className="date-header">{__('Date')}</th>
-                  <th>{<>{__('Receiving Channel Name')}</>}</th>
-                  <th>{__('Tip Location')}</th>
-                  <th>{__('Amount (USD)')} </th>
-                  <th>{__('Processing Fee')}</th>
-                  <th>{__('Odysee Fee')}</th>
-                  <th>{__('Received Amount')}</th>
+      title={__('Payment History')}
+      body={
+        <>
+          <div className="table__wrapper">
+            <table className="table table--transactions">
+              <thead>
+              <tr>
+                <th className="date-header">{__('Date')}</th>
+                <th>{<>{__('Receiving Channel Name')}</>}</th>
+                <th>{__('Tip Location')}</th>
+                <th>{__('Amount (USD)')} </th>
+                <th>{__('Card Last 4')}</th>
+                <th>{__('Anonymous')}</th>
+              </tr>
+              </thead>
+              <tbody>
+              {paymentHistoryTransactions &&
+              paymentHistoryTransactions.reverse().map((transaction) => (
+                <tr key={transaction.name + transaction.created_at}>
+                  <td>{moment(transaction.created_at).format('LLL')}</td>
+                  <td>
+                    <Button
+                      className="stripe__card-link-text"
+                      navigate={'/' + transaction.channel_name + ':' + transaction.channel_claim_id}
+                      label={transaction.channel_name}
+                      button="link"
+                    />
+                  </td>
+                  <td>
+                    <Button
+                      className="stripe__card-link-text"
+                      navigate={'/' + transaction.channel_name + ':' + transaction.source_claim_id}
+                      label={
+                        transaction.channel_claim_id === transaction.source_claim_id
+                          ? 'Channel Page'
+                          : 'File Page'
+                      }
+                      button="link"
+                    />
+                  </td>
+                  <td>${transaction.tipped_amount / 100}</td>
+                  <td>{lastFour}</td>
+                  <td>{transaction.private_tip ? 'Yes' : 'No'}</td>
                 </tr>
-                </thead>
-                <tbody>
-                {accountTransactions &&
-                accountTransactions.map((transaction) => (
-                  <tr key={transaction.name + transaction.created_at}>
-                    <td>{moment(transaction.created_at).format('LLL')}</td>
-                    <td>
-                      <Button
-                        className="stripe__card-link-text"
-                        navigate={'/' + transaction.channel_name + ':' + transaction.channel_claim_id}
-                        label={transaction.channel_name}
-                        button="link"
-                      />
-                    </td>
-                    <td>
-                      <Button
-                        className="stripe__card-link-text"
-                        navigate={'/' + transaction.channel_name + ':' + transaction.source_claim_id}
-                        label={
-                          transaction.channel_claim_id === transaction.source_claim_id
-                            ? 'Channel Page'
-                            : 'File Page'
-                        }
-                        button="link"
-                      />
-                    </td>
-                    <td>${transaction.tipped_amount / 100}</td>
-                    <td>${transaction.transaction_fee / 100}</td>
-                    <td>${transaction.application_fee / 100}</td>
-                    <td>${transaction.received_amount / 100}</td>
-                  </tr>
-                ))}
-                </tbody>
-              </table>
-              {!accountTransactions && <p style={{textAlign:"center", marginTop: '20px', fontSize: '13px', color: 'rgb(171, 171, 171)'}}>No Transactions</p>}
-            </div>
-          </>
-      )}
+              ))}
+              </tbody>
+            </table>
+          </div>
+        </>
+      }
     />
   );
 };
