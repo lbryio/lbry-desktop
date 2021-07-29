@@ -7,14 +7,14 @@ export function formatClaimPreviewTitle(title, channelTitle, date, mediaDuration
 
   if (mediaDuration) {
     if (ariaDate) {
-      ariaLabelData += ariaLabelData = __('%title% by %channelTitle% %ariaDate%, %mediaDuration%', {
+      ariaLabelData = __('%title% by %channelTitle% %ariaDate%, %mediaDuration%', {
         title,
         channelTitle,
         ariaDate,
         mediaDuration,
       });
     } else {
-      ariaLabelData += ariaLabelData = __('%title% by %channelTitle%, %mediaDuration%', {
+      ariaLabelData = __('%title% by %channelTitle%, %mediaDuration%', {
         title,
         channelTitle,
         mediaDuration,
@@ -22,9 +22,9 @@ export function formatClaimPreviewTitle(title, channelTitle, date, mediaDuration
     }
   } else {
     if (ariaDate) {
-      ariaLabelData += ariaLabelData = __('%title% by %channelTitle% %ariaDate%', { title, channelTitle, ariaDate });
+      ariaLabelData = __('%title% by %channelTitle% %ariaDate%', { title, channelTitle, ariaDate });
     } else {
-      ariaLabelData += ariaLabelData = __('%title% by %channelTitle%', { title, channelTitle });
+      ariaLabelData = __('%title% by %channelTitle%', { title, channelTitle });
     }
   }
 
