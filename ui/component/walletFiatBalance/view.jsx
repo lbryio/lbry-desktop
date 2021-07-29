@@ -31,24 +31,12 @@ type Props = {
   accountDetails: any,
 };
 
-export const WALLET_CONSOLIDATE_UTXOS = 400;
-const LARGE_WALLET_BALANCE = 100;
-
 const WalletBalance = (props: Props) => {
   const {
-    balance,
     claimsBalance,
     supportsBalance,
     tipsBalance,
     doOpenModal,
-    hasSynced,
-    doUtxoConsolidate,
-    doFetchUtxoCounts,
-    consolidatingUtxos,
-    consolidateIsPending,
-    massClaimingTips,
-    massClaimIsPending,
-    utxoCounts,
     accountDetails,
   } = props;
 
