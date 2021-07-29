@@ -9,7 +9,7 @@ export const PAGE_PARAM = 'page';
 export const PAGE_SIZE_PARAM = 'page_size';
 
 export const INVALID_NAME_ERROR =
-  __('LBRY names cannot contain spaces or reserved symbols') + ' ' + '(?$#@;:/"<>%{}|^~[]`)';
+  __('LBRY names cannot contain spaces or reserved symbols') + ' ' + '(?$#@;:/\\="<>%{}|^~[]`)';
 
 export const FORCE_CONTENT_TYPE_PLAYER = [
   'video/quicktime',
