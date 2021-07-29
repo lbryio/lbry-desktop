@@ -1,0 +1,755 @@
+.file-page {
+  .file-page__video-container + .card,
+  .file-render + .card,
+  .content__cover + .card,
+  .card + .file-render,
+  .card + .file-page__video-container,
+  .card + .content__cover {
+    margin-top: var(--spacing-m);
+  }
+
+  .card + .file-render {
+    margin-top: var(--spacing-m);
+  }
+
+  .file-page__md {
+    .file-viewer--document {
+      margin-top: var(--spacing-l);
+
+      @media (min-width: $breakpoint-small) {
+        margin-top: var(--spacing-xl);
+      }
+
+      .button {
+        display: inline;
+
+        .button__content {
+          display: inline;
+        }
+      }
+
+      .claim-link {
+        .button {
+          display: block;
+
+          .button__content {
+            display: block;
+          }
+        }
+      }
+    }
+
+    .media__actions {
+      justify-content: center;
+    }
+
+    .file-page__secondary-content {
+      display: flex;
+      flex-direction: column;
+      padding: 0 var(--spacing-m);
+    }
+  }
+
+  > * {
+    width: 100%;
+  }
+
+  @media (max-width: $breakpoint-medium) {
+    flex-direction: column;
+  }
+}
+
+.file-render {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: hidden;
+  max-height: var(--inline-player-max-height);
+}
+
+.file-render--video {
+  background-color: black;
+
+  &:after {
+    content: '';
+    position: absolute;
+    background-color: black;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    animation: fadeInFromBlack 2s ease;
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+@keyframes fadeInFromBlack {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.file-render--embed {
+  border-radius: 0;
+  position: fixed;
+  max-height: none;
+}
+
+.file-render--img-container {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+.file-render--post-container {
+  min-height: 30vh;
+}
+
+.file-render__header {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.file-viewer {
+  width: 100%;
+  height: 100%;
+
+  iframe,
+  webview,
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    max-height: var(--inline-player-max-height);
+  }
+  video {
+    cursor: pointer;
+  }
+  .video-js.vjs-user-inactive.vjs-playing {
+    video {
+      cursor: none;
+    }
+  }
+}
+
+.file-render__viewer--comic {
+  position: relative;
+  overflow: hidden;
+  .comic-viewer {
+    width: 100%;
+    height: calc(100vh - var(--header-height) - var(--spacing-m) * 2);
+    max-height: var(--inline-player-max-height);
+  }
+}
+
+.file-viewer--iframe {
+  display: flex; /*this eliminates extra height from whitespace, if someone edits this with a better technique, tell Jeremy*/
+  /*
+  ideally iframes would dynamiclly grow, see <IframeReact> for a start at this
+  for now, since we don't know size, let's make as large as we can without being larger than available area
+  */
+  iframe {
+    height: calc(100vh - var(--header-height) - var(--spacing-m) * 2);
+  }
+}
+
+.file-render__viewer--three {
+  position: relative;
+  overflow: hidden;
+
+  .three-viewer {
+    height: calc(100vh - var(--header-height) - var(--spacing-m) * 2);
+    max-height: var(--inline-player-max-height);
+  }
+}
+
+.file-viewer__overlay {
+  position: absolute;
+  left: auto;
+  right: auto;
+  height: 100%;
+  width: 100%;
+  z-index: 2;
+  color: var(--color-white);
+  font-size: var(--font-body); /* put back font size from videojs change*/
+
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-l);
+
+  @media (max-width: $breakpoint-small) {
+    font-size: var(--font-small);
+  }
+
+  .button--uri-indicator,
+  .button--link {
+    color: var(--color-white);
+  }
+}
+
+.content__viewer--floating {
+  .file-viewer__overlay-title,
+  .file-viewer__overlay-secondary {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+}
+@media (max-width: $breakpoint-small) {
+  .file-viewer__overlay-title,
+  .file-viewer__overlay-secondary {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+}
+
+.file-viewer__overlay-title {
+  text-align: center;
+  font-size: var(--font-large);
+  margin-bottom: var(--spacing-m);
+}
+.file-viewer__overlay-secondary {
+  color: var(--color-text-subtitle);
+  margin-bottom: var(--spacing-m);
+}
+.file-viewer__overlay-actions {
+  .button + .button {
+    margin-left: var(--spacing-m);
+  }
+}
+
+.file-viewer__overlay-logo {
+  height: 3.5rem;
+  width: 12rem;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    filter: drop-shadow(1px 2px 10px var(--color-gray-3));
+  }
+
+  @media (max-width: $breakpoint-small) {
+    margin-right: var(--spacing-m);
+    width: 2.5rem;
+
+    .button__label {
+      display: none;
+    }
+  }
+}
+
+.file-viewer__overlay-logo--videoend {
+  height: 3.5rem;
+  width: 12rem;
+}
+
+.file-viewer--is-playing:not(:hover) .file-viewer__embedded-header {
+  display: none;
+}
+
+.file-viewer__embedded-header {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  top: 0;
+  opacity: 1;
+  z-index: 2;
+  height: 4rem;
+  padding-left: var(--spacing-m);
+  padding-right: var(--spacing-s);
+  font-size: var(--font-large);
+  overflow-x: hidden;
+  overflow-y: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
+
+  .button {
+    color: var(--color-white);
+    z-index: 2;
+
+    .button__label {
+      white-space: nowrap;
+    }
+
+    &:hover {
+      color: var(--color-white);
+    }
+  }
+
+  .credit-amount,
+  .icon--Key {
+    margin-right: var(--spacing-m);
+  }
+
+  @media (min-width: $breakpoint-small) {
+    padding: 0 var(--spacing-l);
+  }
+}
+
+.file-viewer__embedded-gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  background: linear-gradient(#000000, #00000000 70%);
+  height: 75px;
+  z-index: 1;
+}
+
+.file-viewer__embedded-title {
+  max-width: 75%;
+  z-index: 2;
+}
+
+.file-viewer__embedded-info {
+  display: flex;
+  align-items: center;
+  font-size: var(--font-small);
+  margin-left: var(--spacing-m);
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+
+  & > *:not(:last-child) {
+    margin-right: var(--spacing-s);
+  }
+}
+
+.file-render__content {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  max-width: 100vw;
+}
+
+//
+// Custom viewers live below here
+// These either have custom class names that can't be changed or have styles that need to be overridden
+//
+
+// Code-viewer
+.CodeMirror {
+  @extend .file-render__content;
+
+  .cm-invalidchar {
+    display: none;
+  }
+
+  .CodeMirror .CodeMirror-lines {
+    // is there really a .CodeMirror inside a .CodeMirror?
+    padding: var(--spacing-s) 0;
+  }
+
+  .CodeMirror-code {
+    @include font-sans;
+    letter-spacing: 0.1rem;
+  }
+
+  .CodeMirror-gutters {
+    background-color: var(--color-gray-1);
+    border-right: 1px solid var(--color-gray-4);
+    padding-right: var(--spacing-m);
+  }
+
+  .CodeMirror-line {
+    padding-left: var(--spacing-m);
+  }
+
+  .CodeMirror-linenumber {
+    color: var(--color-gray-5);
+  }
+}
+
+// ****************************************************************************
+// Video
+// ****************************************************************************
+
+.video-js-parent {
+  height: 100%;
+  width: 100%;
+}
+
+// By default no video js play button
+.vjs-big-play-button {
+  display: none;
+}
+
+.video-js {
+  height: 100%;
+  width: 100%;
+
+  .vjs-modal-dialog .vjs-modal-dialog-content {
+    position: relative;
+    padding-top: 5rem;
+    // Make sure no videojs message interferes with overlaying buttons
+    pointer-events: none;
+  }
+
+  .vjs-control-bar {
+    // background-color: rgba(0, 0, 0, 0.8);
+
+    .vjs-remaining-time {
+      display: none;
+    }
+
+    .vjs-current-time,
+    .vjs-time-divider,
+    .vjs-duration {
+      display: flex;
+    }
+  }
+
+  .vjs-picture-in-picture-control {
+    display: none;
+  }
+}
+
+// ****************************************************************************
+// Video::Overlays
+// ****************************************************************************
+
+.video-js {
+  .vjs-overlay-playrate,
+  .vjs-overlay-seeked {
+    background-color: rgba(0, 0, 0, 0.5);
+    font-size: var(--font-large);
+    width: auto;
+    padding: 10px 30px;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+
+    animation: fadeOutAnimation ease-in 0.6s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes fadeOutAnimation {
+    0% {
+      opacity: 1;
+      visibility: visible;
+    }
+    100% {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+}
+
+// ****************************************************************************
+// Video - Mobile UI
+// ****************************************************************************
+
+.video-js.vjs-mobile-ui {
+  .vjs-control-bar {
+    background-color: transparent;
+  }
+
+  .vjs-touch-overlay:not(.show-play-toggle) {
+    .vjs-control-bar {
+      // Sync the controlBar's visibility with the overlay's
+      display: none;
+    }
+  }
+
+  .vjs-touch-overlay {
+    &.show-play-toggle,
+    &.skip {
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    // Override the original's 'display: block' to avoid the big play button
+    // from being squished to the side:
+    position: absolute;
+  }
+}
+
+video::-internal-media-controls-overlay-cast-button {
+  // Push the cast button above vjs-touch-overlay:
+  z-index: 3;
+
+  // Move it to the upper-right since it will clash with "tap to unmute":
+  left: unset;
+  right: 8px;
+}
+
+.video-js.video-js.vjs-user-inactive {
+  video::-internal-media-controls-overlay-cast-button {
+    // (1) Android-Chrome's original Cast button behavior:
+    // - If video is playing, fade out the button.
+    // - If video is paused and video is tapped, display the button and stay on.
+    // (2) We then injected another behavior:
+    // - Display the button when '.vjs-touch-overlay' is displayed. However,
+    // the 'controlslist' attribute hack that was used to do this results in the
+    // button staying displayed without a fade-out timer.
+    // (3) Ideally, we should sync the '.vjs-touch-overlay' visibility with the
+    // cast button, similar to how to controlBar's visibility is synced above.
+    // But I have no idea how to grab the sibling '.show-play-toggle' into the
+    // css logic.
+    // (4) So, this is the best that I can come up with: Whenever user is idle,
+    // the button goes away. The only downside I know is the scenario of
+    // "overlay is up and video is paused, but button goes away due to idle".
+    // The user just needs to re-tap any empty space on the overlay to get the
+    // Cast button again.
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
+}
+
+// ****************************************************************************
+// Layout and control visibility
+// ****************************************************************************
+
+.video-js.vjs-fullscreen,
+.video-js:not(.vjs-fullscreen) {
+  // --- Unhide desired components per layout ---
+  &.vjs-layout-x-small {
+    .vjs-playback-rate {
+      display: flex !important;
+    }
+  }
+
+  &.vjs-layout-small {
+    .vjs-current-time,
+    .vjs-time-divider,
+    .vjs-duration,
+    .vjs-playback-rate {
+      display: flex !important;
+    }
+  }
+
+  // --- Adjust spacing ---
+  .vjs-current-time {
+    padding-right: 0;
+  }
+
+  .vjs-duration {
+    padding-left: 0;
+  }
+
+  .vjs-playback-rate .vjs-playback-rate-value {
+    // Reduce the gigantic font a bit. Default was 1.5em.
+    font-size: 1.25em;
+    line-height: 2.5;
+  }
+
+  .vjs-playback-rate .vjs-menu {
+    // Extend the width to prevent a potential scrollbar from blocking the text.
+    width: 8em;
+    left: -2em;
+  }
+}
+
+.video-js.vjs-fullscreen {
+  .vjs-button--theater-mode {
+    display: none;
+  }
+}
+
+// ****************************************************************************
+// Tap-to-unmute
+// ****************************************************************************
+
+.video-js--tap-to-unmute {
+  visibility: hidden; // Start off as hidden.
+  z-index: 2;
+  position: absolute;
+  top: var(--spacing-xs);
+  left: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-m); // Make it comfy for touch.
+  color: var(--color-gray-1);
+  background: black;
+  border: 1px solid var(--color-gray-4);
+  opacity: 0.9;
+
+  &:hover {
+    opacity: 1;
+    color: var(--color-white);
+  }
+}
+
+// ****************************************************************************
+// ****************************************************************************
+
+.video-js:hover {
+  .vjs-big-play-button {
+    background-color: var(--color-primary);
+  }
+}
+
+.file-render {
+  .video-js {
+    /*display: flex;*/
+    /*align-items: center;*/
+    /*justify-content: center;*/
+  }
+
+  .vjs-big-play-button {
+    @extend .button--icon;
+    @extend .button--play;
+    border: none;
+    /*position: static;*/
+    z-index: 2;
+
+    .vjs-icon-placeholder {
+      display: none;
+    }
+  }
+
+  .vjs-menu-item-text,
+  .vjs-icon-placeholder {
+    text-transform: capitalize;
+  }
+}
+
+// ****************************************************************************
+// ****************************************************************************
+
+.file-render--embed {
+  // on embeds, do not inject our colors until interaction
+  .video-js:hover {
+    .vjs-big-play-button {
+      background-color: var(--color-primary);
+    }
+  }
+
+  .vjs-paused {
+    .vjs-big-play-button {
+      display: block;
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+  }
+
+  .vjs-ended {
+    .vjs-big-play-button {
+      display: none;
+    }
+  }
+
+  .video-js--tap-to-unmute {
+    margin-top: var(--spacing-xl);
+    margin-left: var(--spacing-s);
+
+    @media (min-width: $breakpoint-small) {
+      margin-left: calc(var(--spacing-m) + var(--spacing-s));
+    }
+  }
+
+  .file-viewer {
+    iframe,
+    webview,
+    img {
+      max-height: none;
+    }
+  }
+}
+
+.file-viewer--ended-embed .vjs-big-play-button {
+  display: none !important; // yes this is dumb, but this was broken and the above CSS was overriding
+}
+
+// ****************************************************************************
+// Autoplay Countdown
+// ****************************************************************************
+
+.autoplay-countdown {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.autoplay-countdown__timer {
+  width: 100%;
+  text-align: center;
+  font-size: var(--font-small);
+}
+.autoplay-countdown__counter {
+  margin-top: var(--spacing-m);
+}
+
+.autoplay-countdown__button {
+  /* Border size and color */
+  border: 3px solid transparent;
+  /* Creates a circle */
+  border-radius: 50%;
+  /* Circle size */
+  display: inline-block;
+  height: 86px;
+  width: 86px;
+  /* Use transform to rotate to adjust where opening appears */
+  transition: border 1s;
+  transform: rotate(45deg);
+  .button {
+    background-color: transparent;
+    transform: rotate(-45deg);
+    &:hover {
+      background-color: var(--color-primary);
+    }
+  }
+}
+.autoplay-countdown__button--4 {
+  border-top-color: #fff;
+}
+.autoplay-countdown__button--3 {
+  border-top-color: #fff;
+  border-right-color: #fff;
+}
+.autoplay-countdown__button--2 {
+  border-top-color: #fff;
+  border-right-color: #fff;
+  border-bottom-color: #fff;
+}
+.autoplay-countdown__button--1 {
+  border-color: #fff;
+}
+
+// ****************************************************************************
+// ****************************************************************************
+
+.file__viewdate {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  margin-bottom: var(--spacing-s);
+
+  > :first-child {
+    margin-bottom: var(--spacing-s);
+  }
+
+  @media (max-width: $breakpoint-medium) {
+    flex-direction: row;
+    justify-content: start;
+
+    > :first-child {
+      margin-bottom: 0;
+      margin-right: 1rem;
+    }
+  }
+}
+
+.file-page__image {
+  img {
+    cursor: pointer;
+  }
+}
