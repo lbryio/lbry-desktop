@@ -83,23 +83,15 @@ const WalletBalance = (props: Props) => {
 
         const customerStatusResponse = await getCustomerStatus();
 
-        let totalTippedAmount = 0;
-
-        for(const transaction of response){
-          totalTippedAmount = totalTippedAmount + transaction.tipped_amount
-        }
-
-        setTotalTippedAmount(totalTippedAmount / 100);
-
         setLastFour(customerStatusResponse.PaymentMethods[0].card.last4);
 
-        if (response.length > 10) response.length = 10;
+        if (response && response.length > 10) response.length = 10;
 
         setPaymentHistoryTransactions(response);
 
         const subscriptions  = [...response];
 
-        if(subscriptions.length > 2){
+        if(subscriptions && subscriptions.length > 2){
           subscriptions.length = 2
           setSubscriptions([])
         } else {
@@ -109,7 +101,7 @@ const WalletBalance = (props: Props) => {
         console.log(response);
 
     })();
-  }, []);
+  }, [accountTransactions]);
 
   return (
     <>
@@ -117,7 +109,6 @@ const WalletBalance = (props: Props) => {
         title={__('Payment History')}
         body={
           <>
-            <h2>{totalTippedAmount}</h2>
             <div className="table__wrapper">
               <table className="table table--transactions">
                 <thead>
