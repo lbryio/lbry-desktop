@@ -32,30 +32,22 @@ type Props = {
   utxoCounts: { [string]: number },
   accountDetails: any,
   transactions: any,
+  totalTippedAmount: number,
 };
-
-export const WALLET_CONSOLIDATE_UTXOS = 400;
-const LARGE_WALLET_BALANCE = 100;
 
 const WalletBalance = (props: Props) => {
   const {
-    balance,
-    claimsBalance,
-    supportsBalance,
-    tipsBalance,
-    doOpenModal,
-    hasSynced,
-    doUtxoConsolidate,
-    doFetchUtxoCounts,
-    consolidatingUtxos,
-    consolidateIsPending,
-    massClaimingTips,
-    massClaimIsPending,
-    utxoCounts,
+
   } = props;
 
   // receive transactions from parent component
   let accountTransactions = props.transactions;
+
+  // let totalTippedAmount = props.totalTippedAmount;
+
+  // totalTippedAmount = 0;
+
+
 
   // reverse so most recent payments come first
   if(accountTransactions){
@@ -66,6 +58,7 @@ const WalletBalance = (props: Props) => {
   const [accountStatusResponse, setAccountStatusResponse] = React.useState();
   const [paymentHistoryTransactions, setPaymentHistoryTransactions] = React.useState();
   const [subscriptions, setSubscriptions] = React.useState();
+  const [totalTippedAmount, setTotalTippedAmount] = React.useState(0);
 
 
   const [lastFour, setLastFour] = React.useState();
@@ -99,6 +92,14 @@ const WalletBalance = (props: Props) => {
 
       const customerStatusResponse = await getCustomerStatus();
 
+      let totalTippedAmount = 0;
+
+      for(const transaction of response){
+        totalTippedAmount = totalTippedAmount + transaction.tipped_amount
+      }
+
+      setTotalTippedAmount(totalTippedAmount / 100);
+
       setLastFour(customerStatusResponse.PaymentMethods[0].card.last4);
 
       if (response.length > 10) response.length = 10;
@@ -124,6 +125,7 @@ const WalletBalance = (props: Props) => {
         title={__('Payment History')}
         body={
           <>
+            <h2>{totalTippedAmount}</h2>
             <div className="table__wrapper">
               <table className="table table--transactions">
                 <thead>
