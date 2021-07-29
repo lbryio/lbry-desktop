@@ -64,7 +64,7 @@ const WalletBalance = (props: Props) => {
           </h2>
 
           <div className="section__actions">
-            <Button button="secondary" label={__('Manage Cards')} icon={ICONS.SETTINGS} navigate={`/$/${PAGES.SETTINGS_STRIPE_ACCOUNT}`} />
+            <Button button="secondary" label={__('Manage Cards')} icon={ICONS.SETTINGS} navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} />
           </div>
         </>
       }
