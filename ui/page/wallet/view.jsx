@@ -108,7 +108,7 @@ const WalletPage = (props: Props) => {
           document.getElementsByClassName('lbc-tab-switcher')[0].style.textDecoration = 'underline';
           document.getElementsByClassName('fiat-tab-switcher')[0].style.textDecoration = 'none';
         }}
-      >LBC Transactions</h2>
+      >LBC Wallet</h2>
       <h2 className="fiat-tab-switcher"
         style={{display: 'inline-block', textUnderlineOffset: '4px', fontSize: '18px'}}
         onClick={() => {
@@ -118,7 +118,7 @@ const WalletPage = (props: Props) => {
           document.getElementsByClassName('lbc-tab-switcher')[0].style.textDecoration = 'none';
           document.getElementsByClassName('fiat-tab-switcher')[0].style.textDecoration = 'underline';
         }}
-      >USD Transactions</h2>
+      >Account History</h2>
       <div className="lbc-transactions">
         {/* if the transactions are loading */}
         { loading && (
