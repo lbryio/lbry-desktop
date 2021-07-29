@@ -1,5 +1,5 @@
 // @flow
-import { LOGO_TITLE, ENABLE_NO_SOURCE_CLAIMS, CHANNEL_STAKED_LEVEL_LIVESTREAM, ENABLE_UI_NOTIFICATIONS } from 'config';
+import { ENABLE_NO_SOURCE_CLAIMS, CHANNEL_STAKED_LEVEL_LIVESTREAM, ENABLE_UI_NOTIFICATIONS } from 'config';
 import * as ICONS from 'constants/icons';
 import { SETTINGS } from 'lbry-redux';
 import * as PAGES from 'constants/pages';
@@ -16,6 +16,7 @@ import NotificationBubble from 'component/notificationBubble';
 import NotificationHeaderButton from 'component/notificationHeaderButton';
 import ChannelThumbnail from 'component/channelThumbnail';
 import SkipNavigationButton from 'component/skipNavigationButton';
+import Logo from 'component/logo';
 // @if TARGET='app'
 import { remote } from 'electron';
 import { IS_MAC } from 'component/app/view';
@@ -254,15 +255,8 @@ const Header = (props: Props) => {
                 </span>
               )}
               <Button
-                className="header__navigation-item header__navigation-item--lbry"
-                // @if TARGET='app'
                 aria-label={__('Home')}
-                label={'LBRY'}
-                // @endif
-                // @if TARGET='web'
-                label={LOGO_TITLE} // eslint-disable-line
-                // @endif
-                icon={ICONS.LBRY}
+                className="header__navigation-item header__navigation-item--lbry"
                 onClick={() => {
                   if (history.location.pathname === '/') window.location.reload();
                 }}
@@ -272,8 +266,9 @@ const Header = (props: Props) => {
                 }}
                 // @endif
                 {...homeButtonNavigationProps}
-              />
-
+              >
+                <Logo />
+              </Button>
               {!authHeader && (
                 <div className="header__center">
                   {/* @if TARGET='app' */}

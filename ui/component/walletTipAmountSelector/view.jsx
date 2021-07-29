@@ -34,7 +34,7 @@ type Props = {
   uri: string,
   onTipErrorChange: (string) => void,
   activeTab: string,
-  shouldDisableReviewButton: (boolean) => void
+  shouldDisableReviewButton: (boolean) => void,
 };
 
 function WalletTipAmountSelector(props: Props) {
@@ -46,7 +46,7 @@ function WalletTipAmountSelector(props: Props) {
   const [hasCardSaved, setHasSavedCard] = usePersistedState('comment-support:hasCardSaved', false);
 
   // if it's fiat but there's no card saved OR the creator can't receive fiat tips
-  const shouldDisableFiatSelectors = (activeTab === TAB_FIAT && (!hasCardSaved || !canReceiveFiatTip));
+  const shouldDisableFiatSelectors = activeTab === TAB_FIAT && (!hasCardSaved || !canReceiveFiatTip);
 
   /**
    * whether tip amount selection/review functionality should be disabled
@@ -120,9 +120,8 @@ function WalletTipAmountSelector(props: Props) {
     // setHasSavedCard(false);
     // setCanReceiveFiatTip(true);
 
-    const regexp = RegExp(/^(\d*([.]\d{0,8})?)$/);
-    const validTipInput = regexp.test(String(amount));
-    let tipError = '';
+    let regexp,
+      tipError = '';
 
     if (amount === 0) {
       tipError = __('Amount must be a positive number');
@@ -132,6 +131,9 @@ function WalletTipAmountSelector(props: Props) {
 
     // if it's not fiat, aka it's boost or lbc tip
     else if (activeTab !== TAB_FIAT) {
+      regexp = RegExp(/^(\d*([.]\d{0,8})?)$/);
+      const validTipInput = regexp.test(String(amount));
+
       if (!validTipInput) {
         tipError = __('Amount must have no more than 8 decimal places');
       } else if (amount === balance) {
@@ -143,7 +145,12 @@ function WalletTipAmountSelector(props: Props) {
       }
       //  if tip fiat tab
     } else {
-      if (amount < 1) {
+      regexp = RegExp(/^(\d*([.]\d{0,2})?)$/);
+      const validTipInput = regexp.test(String(amount));
+
+      if (!validTipInput) {
+        tipError = __('Amount must have no more than 2 decimal places');
+      } else if (amount < 1) {
         tipError = __('Amount must be at least one dollar');
       } else if (amount > 1000) {
         tipError = __('Amount cannot be over 1000 dollars');
@@ -154,8 +161,10 @@ function WalletTipAmountSelector(props: Props) {
     onTipErrorChange(tipError);
   }, [amount, balance, setTipError, activeTab]);
 
+  // parse number as float and sets it in the parent component
   function handleCustomPriceChange(amount: number) {
     const tipAmount = parseFloat(amount);
+
     onChange(tipAmount);
   }
 
@@ -229,6 +238,7 @@ function WalletTipAmountSelector(props: Props) {
         </>
       )}
 
+      {/* custom number input form */}
       {useCustomTip && (
         <div className="comment__tip-input">
           <FormField

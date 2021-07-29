@@ -77,7 +77,6 @@
   justify-content: center;
   align-items: center;
   border-radius: var(--border-radius);
-  color: var(--color-text);
   position: relative;
   font-weight: var(--font-weight-bold);
 
@@ -151,6 +150,7 @@
   align-items: center;
   margin-left: var(--spacing-m);
   margin-right: var(--spacing-m);
+  color: var(--color-text);
   // move to lbry theme?
   .lbry-icon {
     height: var(--height-button);

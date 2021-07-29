@@ -1,5 +1,5 @@
 // @flow
-import { BITWAVE_LIVE_API } from 'constants/livestream';
+import { LIVESTREAM_LIVE_API } from 'constants/livestream';
 import React from 'react';
 import Page from 'component/page';
 import LivestreamLayout from 'component/livestreamLayout';
@@ -56,8 +56,9 @@ export default function LivestreamPage(props: Props) {
   React.useEffect(() => {
     let interval;
     function checkIsLive() {
-      // $FlowFixMe Bitwave's API can handle garbage
-      fetch(`${BITWAVE_LIVE_API}/${livestreamChannelId}`)
+      // TODO: duplicate code below
+      // $FlowFixMe livestream API can handle garbage
+      fetch(`${LIVESTREAM_LIVE_API}/${livestreamChannelId}`)
         .then((res) => res.json())
         .then((res) => {
           if (!res || !res.data) {
@@ -105,7 +106,7 @@ export default function LivestreamPage(props: Props) {
 
   React.useEffect(() => {
     // Set playing uri to null so the popout player doesnt start playing the dummy claim if a user navigates back
-    // This can be removed when we start using the app video player, not a bitwave iframe
+    // This can be removed when we start using the app video player, not a LIVESTREAM iframe
     doSetPlayingUri({ uri: null });
   }, [doSetPlayingUri]);
 

@@ -25,6 +25,8 @@ if (STRIPE_PUBLIC_KEY.indexOf('pk_live') > -1) {
 }
 
 const DEFAULT_TIP_AMOUNTS = [1, 5, 25, 100];
+const MINIMUM_FIAT_TIP = 1;
+const MAXIMUM_FIAT_TIP = 1000;
 
 const TAB_BOOST = 'TabBoost';
 const TAB_FIAT = 'TabFiat';
@@ -186,8 +188,7 @@ function WalletSendTip(props: Props) {
 
   React.useEffect(() => {
     // Regex for number up to 8 decimal places
-    const regexp = RegExp(/^(\d*([.]\d{0,8})?)$/);
-    const validTipInput = regexp.test(String(tipAmount));
+    let regexp;
     let tipError;
 
     if (tipAmount === 0) {
@@ -198,7 +199,12 @@ function WalletSendTip(props: Props) {
 
     // if it's not fiat, aka it's boost or lbc tip
     else if (activeTab !== TAB_FIAT) {
+      regexp = RegExp(/^(\d*([.]\d{0,8})?)$/);
+      const validTipInput = regexp.test(String(tipAmount));
+
       if (!validTipInput) {
+        tipError = __('Amount must have no more than 8 decimal places');
+      } else if (!validTipInput) {
         tipError = __('Amount must have no more than 8 decimal places');
       } else if (tipAmount === balance) {
         tipError = __('Please decrease the amount to account for transaction fees');
@@ -209,9 +215,14 @@ function WalletSendTip(props: Props) {
       }
     //  if tip fiat tab
     } else {
-      if (tipAmount < 1) {
+      regexp = RegExp(/^(\d*([.]\d{0,2})?)$/);
+      const validTipInput = regexp.test(String(tipAmount));
+
+      if (!validTipInput) {
+        tipError = __('Amount must have no more than 2 decimal places');
+      } else if (tipAmount < MINIMUM_FIAT_TIP) {
         tipError = __('Amount must be at least one dollar');
-      } else if (tipAmount > 1000) {
+      } else if (tipAmount > MAXIMUM_FIAT_TIP) {
         tipError = __('Amount cannot be over 1000 dollars');
       }
     }
@@ -544,7 +555,7 @@ function WalletSendTip(props: Props) {
                         </React.Fragment>
                       }
                       className="form-field--price-amount"
-                      error={tipError && activeTab !== TAB_FIAT}
+                      error={tipError}
                       min="0"
                       step="any"
                       type="number"
@@ -565,7 +576,7 @@ function WalletSendTip(props: Props) {
                     disabled={
                       fetchingChannels ||
                       isPending ||
-                      (tipError && activeTab !== TAB_FIAT) ||
+                      tipError ||
                       !tipAmount ||
                       (activeTab === TAB_FIAT && (!hasCardSaved || !canReceiveFiatTip))
                     }

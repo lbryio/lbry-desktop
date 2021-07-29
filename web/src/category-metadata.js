@@ -48,11 +48,11 @@ module.exports.CATEGORY_METADATA = {
     description: `Do you love B rated movies? We've got you covered on Odysee`,
     image: 'https://spee.ch/category-movies:2.jpg?quality=80&height=1200&width=630',
   },
-  // [PAGES.MUSIC]: {
-  //   title: 'Music',
-  //   description: 'All the music you love on Odysee',
-  //   image: 'https://spee.ch/category-music:8.jpg?quality=80&height=1200&width=630',
-  // },
+  [PAGES.MUSIC]: {
+    title: 'Music',
+    description: 'All the songs, reviews, covers, and how-tos you love on Odysee',
+    image: 'https://spee.ch/category-music:8.jpg?quality=80&height=1200&width=630',
+  },
   [PAGES.TECHNOLOGY]: {
     title: 'Tech',
     description: 'Hardware, software, startups, photography on Odysee',

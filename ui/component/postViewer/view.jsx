@@ -104,8 +104,10 @@ function PostViewer(props: Props) {
 
       <ClaimAuthor uri={uri} />
 
-      <FileRenderInitiator uri={uri} />
-      <FileRenderInline uri={uri} />
+      <div className="file-render--post-container">
+        <FileRenderInitiator uri={uri} />
+        <FileRenderInline uri={uri} />
+      </div>
       <FileActions uri={uri} />
     </div>
   );

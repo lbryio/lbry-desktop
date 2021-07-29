@@ -25,9 +25,10 @@ const config = {
   // LOGO
   LOGO_TITLE: process.env.LOGO_TITLE,
   FAVICON: process.env.FAVICON,
-  LOGO_URL: process.env.LOGO_URL,
-  LOGO_TEXT_LIGHT_URL: process.env.LOGO_TEXT_LIGHT_URL,
-  LOGO_TEXT_DARK_URL: process.env.LOGO_TEXT_DARK_URL,
+  LOGO: process.env.LOGO,
+  LOGO_TEXT_LIGHT: process.env.LOGO_TEXT_LIGHT,
+  LOGO_TEXT_DARK: process.env.LOGO_TEXT_DARK,
+  AVATAR_DEFAULT: process.env.AVATAR_DEFAULT,
   // OG
   OG_TITLE_SUFFIX: process.env.OG_TITLE_SUFFIX,
   OG_HOMEPAGE_TITLE: process.env.OG_HOMEPAGE_TITLE,
@@ -40,6 +41,7 @@ const config = {
   DEFAULT_LANGUAGE: process.env.DEFAULT_LANGUAGE,
   AUTO_FOLLOW_CHANNELS: process.env.AUTO_FOLLOW_CHANNELS,
   UNSYNCED_SETTINGS: process.env.UNSYNCED_SETTINGS,
+  AVATAR_DEFAULT: process.env.AVATAR_DEFAULT,
 
   // ENABLE FEATURES
   ENABLE_COMMENT_REACTIONS: process.env.ENABLE_COMMENT_REACTIONS === 'true',
@@ -63,6 +65,7 @@ const config = {
   ENABLE_MATURE: process.env.ENABLE_MATURE === 'true',
   CUSTOM_HOMEPAGE: process.env.CUSTOM_HOMEPAGE === 'true',
   SHOW_TAGS_INTRO: process.env.SHOW_TAGS_INTRO === 'true',
+  LIGHTHOUSE_DEFAULT_TYPES: process.env.LIGHTHOUSE_DEFAULT_TYPES,
 };
 
 config.URL_LOCAL = `http://localhost:${config.WEB_SERVER_PORT}`;
