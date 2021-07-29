@@ -3,7 +3,7 @@ import React from 'react';
 import { withRouter } from 'react-router';
 import WalletBalance from 'component/walletBalance';
 import WalletFiatBalance from 'component/walletFiatBalance';
-import WalletFiatBalance from 'component/walletFiatBalance';
+import WalletFiatPaymentBalance from 'component/walletFiatPaymentBalance';
 import WalletFiatAccountHistory from 'component/walletFiatAccountHistory';
 import WalletFiatPaymentHistory from 'component/walletFiatPaymentHistory';
 import TxoList from 'component/txoList';
@@ -186,7 +186,7 @@ const WalletPage = (props: Props) => {
 
       <>
         <div className="payment-history-tab" style={{display: 'none'}}>
-          <WalletFiatBalance accountDetails={accountStatusResponse} />
+          <WalletFiatPaymentBalance accountDetails={accountStatusResponse} />
           <div style={{paddingTop: '25px'}}></div>
           <WalletFiatPaymentHistory transactions={accountTransactionResponse}/>
         </div>

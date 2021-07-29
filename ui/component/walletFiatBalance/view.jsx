@@ -57,18 +57,6 @@ const WalletBalance = (props: Props) => {
 
   const [detailsExpanded, setDetailsExpanded] = React.useState(false);
 
-  const { other: otherCount = 0 } = utxoCounts || {};
-
-  const totalBalance = balance + tipsBalance + supportsBalance + claimsBalance;
-  const totalLocked = tipsBalance + claimsBalance + supportsBalance;
-  const operationPending = massClaimIsPending || massClaimingTips || consolidateIsPending || consolidatingUtxos;
-
-  React.useEffect(() => {
-    if (balance > LARGE_WALLET_BALANCE && detailsExpanded) {
-      doFetchUtxoCounts();
-    }
-  }, [doFetchUtxoCounts, balance, detailsExpanded]);
-
   return (
     <>{1 == 1 && <Card
       title={<><Icon size="18" icon={ICONS.FINANCE} />{accountDetails && accountDetails.total_received_unpaid/100} USD</>}

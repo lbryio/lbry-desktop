@@ -65,34 +65,12 @@ const WalletBalance = (props: Props) => {
   const [detailsExpanded, setDetailsExpanded] = React.useState(false);
   const [accountStatusResponse, setAccountStatusResponse] = React.useState();
   const [paymentHistoryTransactions, setPaymentHistoryTransactions] = React.useState();
+  const [subscriptions, setSubscriptions] = React.useState();
+
 
   const [lastFour, setLastFour] = React.useState();
 
-
-  const { other: otherCount = 0 } = utxoCounts || {};
-
-  const totalBalance = balance + tipsBalance + supportsBalance + claimsBalance;
-  const totalLocked = tipsBalance + claimsBalance + supportsBalance;
-  const operationPending = massClaimIsPending || massClaimingTips || consolidateIsPending || consolidatingUtxos;
-
-  React.useEffect(() => {
-    if (balance > LARGE_WALLET_BALANCE && detailsExpanded) {
-      doFetchUtxoCounts();
-    }
-  }, [doFetchUtxoCounts, balance, detailsExpanded]);
-
   var environment = 'test';
-
-  function getAccountStatus(){
-    return Lbryio.call(
-      'account',
-      'status',
-      {
-        environment
-      },
-      'post'
-    );
-  }
 
   function getPaymentHistory() {
     return Lbryio.call(
@@ -116,8 +94,6 @@ const WalletBalance = (props: Props) => {
   }
 
   React.useEffect(() => {
-
-
     (async function(){
       let response = await getPaymentHistory();
 
@@ -129,13 +105,76 @@ const WalletBalance = (props: Props) => {
 
       setPaymentHistoryTransactions(response);
 
+      const subscriptions  = [...response];
+
+      if(subscriptions.length > 2){
+        subscriptions.length = 2
+        setSubscriptions(subscriptions)
+      } else {
+        setSubscriptions([])
+      }
+
       console.log(response);
     })();
   }, []);
 
   return (
+    <>
+      <Card
+        title={__('Payment History')}
+        body={
+          <>
+            <div className="table__wrapper">
+              <table className="table table--transactions">
+                <thead>
+                <tr>
+                  <th className="date-header">{__('Date')}</th>
+                  <th>{<>{__('Receiving Channel Name')}</>}</th>
+                  <th>{__('Tip Location')}</th>
+                  <th>{__('Amount (USD)')} </th>
+                  <th>{__('Card Last 4')}</th>
+                  <th>{__('Anonymous')}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {paymentHistoryTransactions &&
+                paymentHistoryTransactions.reverse().map((transaction) => (
+                  <tr key={transaction.name + transaction.created_at}>
+                    <td>{moment(transaction.created_at).format('LLL')}</td>
+                    <td>
+                      <Button
+                        className="stripe__card-link-text"
+                        navigate={'/' + transaction.channel_name + ':' + transaction.channel_claim_id}
+                        label={transaction.channel_name}
+                        button="link"
+                      />
+                    </td>
+                    <td>
+                      <Button
+                        className="stripe__card-link-text"
+                        navigate={'/' + transaction.channel_name + ':' + transaction.source_claim_id}
+                        label={
+                          transaction.channel_claim_id === transaction.source_claim_id
+                            ? 'Channel Page'
+                            : 'File Page'
+                        }
+                        button="link"
+                      />
+                    </td>
+                    <td>${transaction.tipped_amount / 100}</td>
+                    <td>{lastFour}</td>
+                    <td>{transaction.private_tip ? 'Yes' : 'No'}</td>
+                  </tr>
+                ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        }
+      />
+
     <Card
-      title={__('Payment History')}
+      title={__('Subscriptions')}
       body={
         <>
           <div className="table__wrapper">
@@ -151,8 +190,8 @@ const WalletBalance = (props: Props) => {
               </tr>
               </thead>
               <tbody>
-              {paymentHistoryTransactions &&
-              paymentHistoryTransactions.reverse().map((transaction) => (
+              {subscriptions &&
+              subscriptions.reverse().map((transaction) => (
                 <tr key={transaction.name + transaction.created_at}>
                   <td>{moment(transaction.created_at).format('LLL')}</td>
                   <td>
@@ -186,6 +225,7 @@ const WalletBalance = (props: Props) => {
         </>
       }
     />
+  </>
   );
 };
 
