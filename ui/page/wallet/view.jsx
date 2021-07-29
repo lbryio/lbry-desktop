@@ -75,11 +75,30 @@ const WalletPage = (props: Props) => {
     );
   }
 
+
+  // calculate account transactions section
   React.useEffect(() => {
     (async function(){
       try {
         const response = await getAccountStatus();
 
+        setAccountStatusResponse(response);
+
+        // TODO: some weird naming clash hence getAccountTransactionsa
+        const getAccountTransactions = await getAccountTransactionsa();
+
+        setAccountTransactionResponse(getAccountTransactions)
+
+      } catch (err){
+        console.log(err);
+      }
+    })();
+  }, []);
+
+  // populate customer payment data
+  React.useEffect(() => {
+    (async function(){
+      try {
         // get card payments customer has made
         const customerTransactionResponse = await getPaymentHistory();
 
@@ -91,24 +110,7 @@ const WalletPage = (props: Props) => {
 
         setTotalTippedAmount(totalTippedAmount / 100);
 
-        console.log(customerTransactionResponse);
-
         setCustomerTransactions(customerTransactionResponse)
-
-        console.log('account status');
-
-        console.log(response);
-
-        setAccountStatusResponse(response);
-
-        // TODO: some weird naming clash hence getAccountTransactionsa
-        const getAccountTransactions = await getAccountTransactionsa();
-
-        console.log('transactions');
-
-        setAccountTransactionResponse(getAccountTransactions)
-
-        console.log(getAccountTransactions);
 
       } catch (err){
         console.log(err);
