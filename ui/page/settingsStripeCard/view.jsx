@@ -459,6 +459,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
                         <th>{<>{__('Receiving Channel Name')}</>}</th>
                         <th>{__('Tip Location')}</th>
                         <th>{__('Amount (USD)')} </th>
+                        <th>{__('Card Last 4')}</th>
                         <th>{__('Anonymous')}</th>
                       </tr>
                     </thead>
@@ -488,6 +489,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
                               />
                             </td>
                             <td>${transaction.tipped_amount / 100}</td>
+                            <td>{userCardDetails && userCardDetails.lastFour}</td>
                             <td>{transaction.private_tip ? 'Yes' : 'No'}</td>
                           </tr>
                         ))}
