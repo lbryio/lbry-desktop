@@ -35,7 +35,7 @@ import {
   doAuthTokenRefresh,
 } from 'util/saved-passwords';
 import { X_LBRY_AUTH_TOKEN } from 'constants/token';
-import { LBRY_WEB_API, DEFAULT_LANGUAGE, LBRY_API_URL } from 'config';
+import { LBRY_WEB_API, DEFAULT_LANGUAGE, LBRY_API_URL, LBRY_WEB_PUBLISH_API } from 'config';
 
 // Import 3rd-party styles before ours for the current way we are code-splitting.
 import 'scss/third-party.scss';
@@ -66,7 +66,7 @@ if (process.env.SDK_API_URL) {
 
 let sdkAPIHost = process.env.SDK_API_HOST || process.env.SDK_API_URL;
 // @if TARGET='web'
-sdkAPIHost = LBRY_WEB_API;
+sdkAPIHost = LBRY_WEB_PUBLISH_API || LBRY_WEB_API;
 // @endif
 
 export const SDK_API_PATH = `${sdkAPIHost}/api/v1`;
