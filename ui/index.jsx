@@ -69,12 +69,10 @@ if (process.env.SDK_API_URL) {
 }
 
 let sdkAPIHost = process.env.SDK_API_HOST || process.env.SDK_API_URL;
-// @if TARGET='web'
-sdkAPIHost = LBRY_WEB_PUBLISH_API || LBRY_WEB_API;
-// @endif
+sdkAPIHost = LBRY_WEB_API;
 
 export const SDK_API_PATH = `${sdkAPIHost}/api/v1`;
-const proxyURL = `${SDK_API_PATH}/proxy`;
+const proxyURL = LBRY_WEB_PUBLISH_API || `${SDK_API_PATH}/proxy`;
 
 Lbry.setDaemonConnectionString(proxyURL);
 
