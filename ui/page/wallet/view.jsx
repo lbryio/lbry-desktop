@@ -80,14 +80,44 @@ const WalletPage = (props: Props) => {
     })();
   }, []);
 
-  React.useEffect(() => {
-    // if (tab === 'currency') {
-    if (1 === 1) {
-      document.getElementsByClassName('lbc-transactions')[0].style.display = 'none';
-      document.getElementsByClassName('fiat-transactions')[0].style.display = 'inline';
+  function focusLBCTab(){
+    document.getElementsByClassName('lbc-transactions')[0].style.display = 'inline';
+    document.getElementsByClassName('fiat-transactions')[0].style.display = 'none';
+    document.getElementsByClassName('payment-history-tab')[0].style.display = 'none';
 
-      document.getElementsByClassName('lbc-tab-switcher')[0].style.textDecoration = 'none';
-      document.getElementsByClassName('fiat-tab-switcher')[0].style.textDecoration = 'underline';
+    document.getElementsByClassName('lbc-tab-switcher')[0].style.textDecoration = 'underline';
+    document.getElementsByClassName('fiat-tab-switcher')[0].style.textDecoration = 'none';
+    document.getElementsByClassName('fiat-payment-history-switcher')[0].style.textDecoration = 'none';
+
+  }
+
+  function focusAccountHistoryTab(){
+    document.getElementsByClassName('lbc-transactions')[0].style.display = 'none';
+    document.getElementsByClassName('payment-history-tab')[0].style.display = 'none';
+    document.getElementsByClassName('fiat-transactions')[0].style.display = 'inline';
+
+    document.getElementsByClassName('lbc-tab-switcher')[0].style.textDecoration = 'none';
+    document.getElementsByClassName('fiat-tab-switcher')[0].style.textDecoration = 'underline';
+    document.getElementsByClassName('fiat-payment-history-switcher')[0].style.textDecoration = 'none';
+
+  }
+
+  function focusPaymentHistoryTab(){
+    document.getElementsByClassName('lbc-transactions')[0].style.display = 'none';
+    document.getElementsByClassName('fiat-transactions')[0].style.display = 'none';
+    document.getElementsByClassName('payment-history-tab')[0].style.display = 'inline';
+
+    document.getElementsByClassName('lbc-tab-switcher')[0].style.textDecoration = 'none';
+    document.getElementsByClassName('fiat-tab-switcher')[0].style.textDecoration = 'none';
+    document.getElementsByClassName('fiat-payment-history-switcher')[0].style.textDecoration = 'underline';
+
+  }
+
+  // select the first tab
+  React.useEffect(() => {
+    // if (tab === 'account-history') {
+    if (1 === 1) {
+      focusAccountHistoryTab()
     }
   }, []);
 
@@ -102,23 +132,22 @@ const WalletPage = (props: Props) => {
       <h2 className="lbc-tab-switcher"
         style={{display: 'inline-block', paddingBottom: '16px', marginRight: '14px', textUnderlineOffset: '4px', textDecoration: 'underline', fontSize: '18px', marginLeft: '3px'}}
         onClick={() => {
-          document.getElementsByClassName('lbc-transactions')[0].style.display = 'inline';
-          document.getElementsByClassName('fiat-transactions')[0].style.display = 'none';
-
-          document.getElementsByClassName('lbc-tab-switcher')[0].style.textDecoration = 'underline';
-          document.getElementsByClassName('fiat-tab-switcher')[0].style.textDecoration = 'none';
+          focusLBCTab();
         }}
       >LBC Wallet</h2>
       <h2 className="fiat-tab-switcher"
-        style={{display: 'inline-block', textUnderlineOffset: '4px', fontSize: '18px'}}
+        style={{display: 'inline-block', textUnderlineOffset: '4px', fontSize: '18px', marginRight: '14px'}}
         onClick={() => {
-          document.getElementsByClassName('lbc-transactions')[0].style.display = 'none';
-          document.getElementsByClassName('fiat-transactions')[0].style.display = 'inline';
-
-          document.getElementsByClassName('lbc-tab-switcher')[0].style.textDecoration = 'none';
-          document.getElementsByClassName('fiat-tab-switcher')[0].style.textDecoration = 'underline';
+          focusAccountHistoryTab();
         }}
       >Account History</h2>
+
+      <h2 className="fiat-payment-history-switcher"
+        style={{display: 'inline-block', textUnderlineOffset: '4px', fontSize: '18px'}}
+        onClick={() => {
+            focusPaymentHistoryTab();
+          }}
+      >Payment History</h2>
       <div className="lbc-transactions">
         {/* if the transactions are loading */}
         { loading && (
@@ -149,6 +178,13 @@ const WalletPage = (props: Props) => {
           </div>
         </>
       )}
+
+      <>
+        <div className="payment-history-tab" style={{display: 'none'}}>
+          <h2>Card Transaction History</h2>
+        </div>
+      </>
+
     </Page>
   );
 };
