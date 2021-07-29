@@ -22,11 +22,34 @@ const WalletPage = (props: Props) => {
   console.log(props);
 
   var stripeEnvironment = 'test';
+  var environment = 'test';
 
   const tab = new URLSearchParams(props.location.search).get('tab');
 
   const [accountStatusResponse, setAccountStatusResponse] = React.useState();
   const [accountTransactionResponse, setAccountTransactionResponse] = React.useState();
+  const [customerTransactions, setCustomerTransactions] = React.useState();
+
+  function getPaymentHistory() {
+    return Lbryio.call(
+      'customer',
+      'list',
+      {
+        environment: stripeEnvironment,
+      },
+      'post'
+    )};
+
+  function getCustomerStatus(){
+    return Lbryio.call(
+      'customer',
+      'status',
+      {
+        environment: stripeEnvironment,
+      },
+      'post'
+    )
+  }
 
   function getAccountStatus(){
     return Lbryio.call(
@@ -55,13 +78,19 @@ const WalletPage = (props: Props) => {
       try {
         const response = await getAccountStatus();
 
+        const customerTransactionResponse = await getPaymentHistory();
+
+        console.log(customerTransactionResponse);
+
+        setCustomerTransactions(customerTransactionResponse)
+
         console.log('account status');
 
         console.log(response);
 
         setAccountStatusResponse(response);
 
-        // TODO: some weird naming clash
+        // TODO: some weird naming clash hence getAccountTransactionsa
         const getAccountTransactions = await getAccountTransactionsa();
 
         console.log('transactions');
@@ -72,13 +101,7 @@ const WalletPage = (props: Props) => {
 
       } catch (err){
 
-
-
-
-
       }
-
-
     })();
   }, []);
 
@@ -185,10 +208,11 @@ const WalletPage = (props: Props) => {
       )}
 
       <>
+        {/* fiat payment history for tips made by user */}
         <div className="payment-history-tab" style={{display: 'none'}}>
           <WalletFiatPaymentBalance accountDetails={accountStatusResponse} />
           <div style={{paddingTop: '25px'}}></div>
-          <WalletFiatPaymentHistory transactions={accountTransactionResponse}/>
+          <WalletFiatPaymentHistory transactions={customerTransactions}/>
         </div>
       </>
 
