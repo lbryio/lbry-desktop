@@ -54,7 +54,13 @@ const WalletBalance = (props: Props) => {
     utxoCounts,
   } = props;
 
-  const accountTransactions = props.transactions;
+  // receive transactions from parent component
+  let accountTransactions = props.transactions;
+
+  // reverse so most recent payments come first
+  if(accountTransactions){
+    accountTransactions = accountTransactions.reverse();
+  }
 
   const [detailsExpanded, setDetailsExpanded] = React.useState(false);
   const [accountStatusResponse, setAccountStatusResponse] = React.useState();
@@ -86,6 +92,8 @@ const WalletBalance = (props: Props) => {
   }
 
   React.useEffect(() => {
+
+
     (async function(){
       const response = await getAccountStatus();
 
