@@ -37,7 +37,7 @@ const WalletBalance = (props: Props) => {
       actions={
         <>
           <h2 className="section__title--small">
-            ${accountDetails && accountDetails.total_tipped / 100 || 0} Received Total
+            ${accountDetails && accountDetails.total_tipped / 100 || 0} Total Received Tips
           </h2>
 
           <h2 className="section__title--small">
@@ -55,8 +55,8 @@ const WalletBalance = (props: Props) => {
             <div className="section__subtitle">
               <dl>
                 <dt>
-                  <span className="dt__text">{__('...earned from others')}</span>
-                  <span className="help--dt">({__('Unlock to spend')})</span>
+                  <span className="dt__text">{__('Earned from uploads')}</span>
+                  {/*<span className="help--dt">({__('Earned from channel page')})</span>*/}
                 </dt>
                 <dd>
                   <span className="dd__text">
@@ -72,20 +72,20 @@ const WalletBalance = (props: Props) => {
                 </dd>
 
                 <dt>
-                  <span className="dt__text">{__('...on initial publishes')}</span>
-                  <span className="help--dt">({__('Delete or edit past content to spend')})</span>
+                  <span className="dt__text">{__('Earned from channel page')}</span>
+                  {/*<span className="help--dt">({__('Delete or edit past content to spend')})</span>*/}
                 </dt>
                 <dd>
                   <CreditAmount amount={1} precision={4} />
                 </dd>
 
-                <dt>
-                  <span className="dt__text">{__('...supporting content')}</span>
-                  <span className="help--dt">({__('Delete supports to spend')})</span>
-                </dt>
-                <dd>
-                  <CreditAmount amount={1} precision={4} />
-                </dd>
+                {/*<dt>*/}
+                {/*  <span className="dt__text">{__('...supporting content')}</span>*/}
+                {/*  <span className="help--dt">({__('Delete supports to spend')})</span>*/}
+                {/*</dt>*/}
+                {/*<dd>*/}
+                {/*  <CreditAmount amount={1} precision={4} />*/}
+                {/*</dd>*/}
               </dl>
             </div>
           )}

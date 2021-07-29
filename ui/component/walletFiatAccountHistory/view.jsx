@@ -47,6 +47,10 @@ const WalletBalance = (props: Props) => {
     accountTransactions = accountTransactions.reverse();
   }
 
+  if(accountTransactions && accountTransactions.length > 10 ){
+    accountTransactions.length = 10;
+  }
+
   const [detailsExpanded, setDetailsExpanded] = React.useState(false);
   const [accountStatusResponse, setAccountStatusResponse] = React.useState();
 
