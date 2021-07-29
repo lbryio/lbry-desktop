@@ -90,6 +90,7 @@ type Props = {
   doClaimSearch: ({}) => void,
   showNsfw: boolean,
   hideReposts: boolean,
+  forceShowReposts?: boolean,
   history: { action: string, push: (string) => void, replace: (string) => void },
   claimSearchByQuery: { [string]: Array<string> },
   fetchingClaimSearchByQuery: { [string]: boolean },
@@ -125,6 +126,7 @@ function ClaimTilesDiscover(props: Props) {
     claimsByUri,
     showNsfw,
     hideReposts,
+    forceShowReposts = false,
     // Below are options to pass that are forwarded to claim_search
     tags,
     channelIds,
@@ -186,6 +188,8 @@ function ClaimTilesDiscover(props: Props) {
     stream_types?: Array<string>,
     has_source?: boolean,
     has_no_source?: boolean,
+    reposted_claim_id?: string,
+    remove_duplicates?: boolean,
   } = {
     page_size: pageSize,
     claim_type: claimType || undefined,
@@ -199,6 +203,7 @@ function ClaimTilesDiscover(props: Props) {
     not_channel_ids: mutedAndBlockedChannelIds,
     order_by: orderBy || ['trending_group', 'trending_mixed'],
     stream_types: streamTypesParam,
+    remove_duplicates: true,
   };
 
   if (ENABLE_NO_SOURCE_CLAIMS && hasNoSource) {
@@ -220,7 +225,7 @@ function ClaimTilesDiscover(props: Props) {
   }
 
   // https://github.com/lbryio/lbry-desktop/issues/3774
-  if (hideReposts) {
+  if (hideReposts && !options.reposted_claim_id && !forceShowReposts) {
     if (Array.isArray(options.claim_type)) {
       options.claim_type = options.claim_type.filter((claimType) => claimType !== 'repost');
     } else {

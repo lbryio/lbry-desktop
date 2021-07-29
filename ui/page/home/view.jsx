@@ -57,6 +57,7 @@ function HomePage(props: Props) {
     const claimTiles = (
       <ClaimTilesDiscover
         {...options}
+        forceShowReposts
         liveLivestreamsFirst
         livestreamMap={livestreamMap}
         showNoSourceClaims={ENABLE_NO_SOURCE_CLAIMS}
