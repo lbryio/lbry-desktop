@@ -207,7 +207,7 @@ const WalletBalance = (props: Props) => {
               ))}
               </tbody>
             </table>
-            {(!subscriptions || subscriptions.length === 0) && <p style={{textAlign:"center", marginTop: '20px', fontSize: '13px', color: 'rgb(171, 171, 171)'}}>No Subscriptions</p>}
+            {(!subscriptions || subscriptions.length === 0) && <p style={{textAlign:"center", marginTop: '22px', fontSize: '13px', color: 'rgb(171, 171, 171)'}}>No Subscriptions</p>}
           </div>
         </>
       }
