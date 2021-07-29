@@ -19,6 +19,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix "exact match" being applied to Recommended ([#6460](https://github.com/lbryio/lbry-desktop/pull/6460))
 - Fix upload button on creator analytics _community pr!_ ([#6458](https://github.com/lbryio/lbry-desktop/pull/6458))
 - Prevent sidebar shortcut activation on textarea _community pr!_ ([#6454](https://github.com/lbryio/lbry-desktop/pull/6454))
+- Added \ and = to reserved symbol warning _community pr!_ ([#6733](https://github.com/lbryio/lbry-desktop/pull/6733))
+
 
 ## [0.51.1] - [2021-06-26]
 
