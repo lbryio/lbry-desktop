@@ -98,7 +98,7 @@ const WalletBalance = (props: Props) => {
   return (
     <Card
       title={'Tip History'}
-      body={accountTransactions && accountTransactions.length > 0 && (
+      body={1 == 1 && (
           <>
             <div className="table__wrapper">
               <table className="table table--transactions">
@@ -146,16 +146,10 @@ const WalletBalance = (props: Props) => {
                 ))}
                 </tbody>
               </table>
+              {!accountTransactions && <p style={{textAlign:"center", marginTop: '20px', fontSize: '13px', color: 'rgb(171, 171, 171)'}}>No Transactions</p>}
             </div>
           </>
       )}
-      actions={
-        <>
-          {accountStatusResponse && accountStatusResponse.charges_enabled && <h2>Charges Enabled: True</h2>}
-          {accountStatusResponse && <h2>Total Received Tips: ${accountStatusResponse.total_tipped / 100}</h2>}
-          <p>Hello</p>
-        </>
-      }
     />
   );
 };
