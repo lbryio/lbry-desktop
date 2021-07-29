@@ -53,7 +53,11 @@ function FileThumbnail(props: Props) {
   const thumbnailUrl = url ? url.replace(/'/g, "\\'") : '';
 
   if (hasResolvedClaim || thumbnailUrl) {
-    return <Thumb thumb={thumbnailUrl}>{children}</Thumb>;
+    return (
+      <Thumb thumb={thumbnailUrl} className={className}>
+        {children}
+      </Thumb>
+    );
   }
   return (
     <div
