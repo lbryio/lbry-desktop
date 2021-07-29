@@ -28,7 +28,7 @@ const WalletBalance = (props: Props) => {
 
   return (
     <>{1 == 1 && <Card
-      title={<><Icon size="18" icon={ICONS.FINANCE} />{accountDetails && accountDetails.total_received_unpaid/100} USD</>}
+      title={<><Icon size="18" icon={ICONS.FINANCE} />{accountDetails && accountDetails.total_received_unpaid/100} || 0 USD</>}
       subtitle={
           <I18nMessage>
             This is your remaining balance that can still be withdrawn to your bank account
@@ -37,11 +37,11 @@ const WalletBalance = (props: Props) => {
       actions={
         <>
           <h2 className="section__title--small">
-            ${accountDetails && accountDetails.total_tipped / 100 } Received Total
+            ${accountDetails && accountDetails.total_tipped / 100 || 0} Received Total
           </h2>
 
           <h2 className="section__title--small">
-            ${accountDetails && accountDetails.total_paid_out/100 }  Withdrawn
+            ${accountDetails && accountDetails.total_paid_out/100 || 0}  Withdrawn
             <Button
               button="link"
               label={detailsExpanded ? __('View less') : __('View more')}
