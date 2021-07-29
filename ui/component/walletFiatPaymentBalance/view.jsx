@@ -13,68 +13,33 @@ import I18nMessage from 'component/i18nMessage';
 import { formatNumberWithCommas } from 'util/number';
 
 type Props = {
-  balance: number,
-  totalBalance: number,
-  claimsBalance: number,
-  supportsBalance: number,
-  tipsBalance: number,
-  doOpenModal: (string) => void,
-  hasSynced: boolean,
-  doFetchUtxoCounts: () => void,
-  doUtxoConsolidate: () => void,
-  fetchingUtxoCounts: boolean,
-  consolidatingUtxos: boolean,
-  consolidateIsPending: boolean,
-  massClaimingTips: boolean,
-  massClaimIsPending: boolean,
-  utxoCounts: { [string]: number },
+  totalTippedAmount: number,
   accountDetails: any,
 };
 
-export const WALLET_CONSOLIDATE_UTXOS = 400;
-const LARGE_WALLET_BALANCE = 100;
+
 
 const WalletBalance = (props: Props) => {
   const {
-    balance,
-    claimsBalance,
-    supportsBalance,
-    tipsBalance,
-    doOpenModal,
-    hasSynced,
-    doUtxoConsolidate,
-    doFetchUtxoCounts,
-    consolidatingUtxos,
-    consolidateIsPending,
-    massClaimingTips,
-    massClaimIsPending,
-    utxoCounts,
     accountDetails,
+    totalTippedAmount,
   } = props;
-
-  console.log('account details');
-  console.log(accountDetails);
 
   const [detailsExpanded, setDetailsExpanded] = React.useState(false);
 
-  const { other: otherCount = 0 } = utxoCounts || {};
 
-  const totalBalance = balance + tipsBalance + supportsBalance + claimsBalance;
-  const totalLocked = tipsBalance + claimsBalance + supportsBalance;
-  const operationPending = massClaimIsPending || massClaimingTips || consolidateIsPending || consolidatingUtxos;
+  console.log('total tipped amount')
+  console.log(totalTippedAmount)
 
-  React.useEffect(() => {
-    if (balance > LARGE_WALLET_BALANCE && detailsExpanded) {
-      doFetchUtxoCounts();
-    }
-  }, [doFetchUtxoCounts, balance, detailsExpanded]);
+  // console.log('account details');
+  // console.log(accountDetails);
 
   return (
     <>{1 == 1 && <Card
-      title={<><Icon size="18" icon={ICONS.FINANCE} />{accountDetails && accountDetails.total_received_unpaid/100} USD</>}
+      title={<><Icon size="18" icon={ICONS.FINANCE} />{totalTippedAmount} USD</>}
       subtitle={
           <I18nMessage>
-            This is your remaining balance that can still be withdrawn to your bank account
+            The total amount you have tipped to different creators
           </I18nMessage>
       }
       actions={
