@@ -15,21 +15,6 @@ import { Lbryio } from 'lbryinc';
 import moment from 'moment';
 
 type Props = {
-  balance: number,
-  totalBalance: number,
-  claimsBalance: number,
-  supportsBalance: number,
-  tipsBalance: number,
-  doOpenModal: (string) => void,
-  hasSynced: boolean,
-  doFetchUtxoCounts: () => void,
-  doUtxoConsolidate: () => void,
-  fetchingUtxoCounts: boolean,
-  consolidatingUtxos: boolean,
-  consolidateIsPending: boolean,
-  massClaimingTips: boolean,
-  massClaimIsPending: boolean,
-  utxoCounts: { [string]: number },
   accountDetails: any,
   transactions: any,
 };
