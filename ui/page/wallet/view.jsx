@@ -168,25 +168,29 @@ const WalletPage = (props: Props) => {
   return (
     <Page>
       {/* tabs to switch between fiat and lbc */}
+      {/* lbc button */}
       <h2 className="lbc-tab-switcher"
         style={{display: 'inline-block', paddingBottom: '16px', marginRight: '14px', textUnderlineOffset: '4px', textDecoration: 'underline', fontSize: '18px', marginLeft: '3px'}}
         onClick={() => {
           focusLBCTab();
         }}
       >LBC Wallet</h2>
+      {/* account history button */}
       <h2 className="fiat-tab-switcher"
         style={{display: 'inline-block', textUnderlineOffset: '4px', fontSize: '18px', marginRight: '14px'}}
         onClick={() => {
           focusAccountHistoryTab();
         }}
       >Account History</h2>
-
+      {/* payment history button */}
       <h2 className="fiat-payment-history-switcher"
         style={{display: 'inline-block', textUnderlineOffset: '4px', fontSize: '18px'}}
         onClick={() => {
             focusPaymentHistoryTab();
           }}
       >Payment History</h2>
+
+      {/* lbc wallet section */}
       <div className="lbc-transactions">
         {/* if the transactions are loading */}
         { loading && (
@@ -208,24 +212,20 @@ const WalletPage = (props: Props) => {
           </>
         )}
       </div>
-      {(
-        <>
-          <div className="fiat-transactions" style={{display: 'none'}}>
-            <WalletFiatBalance accountDetails={accountStatusResponse} />
-            <div style={{paddingTop: '25px'}}></div>
-            <WalletFiatAccountHistory transactions={accountTransactionResponse}/>
-          </div>
-        </>
-      )}
 
-      <>
-        {/* fiat payment history for tips made by user */}
-        <div className="payment-history-tab" style={{display: 'none'}}>
-          <WalletFiatPaymentBalance totalTippedAmount={totalTippedAmount} accountDetails={accountStatusResponse} />
+      {/* account received transactions section */}
+      <div className="fiat-transactions" style={{display: 'none'}}>
+          <WalletFiatBalance accountDetails={accountStatusResponse} />
           <div style={{paddingTop: '25px'}}></div>
-          <WalletFiatPaymentHistory transactions={customerTransactions}/>
-        </div>
-      </>
+          <WalletFiatAccountHistory transactions={accountTransactionResponse}/>
+      </div>
+
+      {/* fiat payment history for tips made by user */}
+      <div className="payment-history-tab" style={{display: 'none'}}>
+        <WalletFiatPaymentBalance totalTippedAmount={totalTippedAmount} accountDetails={accountStatusResponse} />
+        <div style={{paddingTop: '25px'}}></div>
+        <WalletFiatPaymentHistory transactions={customerTransactions}/>
+      </div>
 
     </Page>
   );
