@@ -109,7 +109,7 @@ const WalletBalance = (props: Props) => {
 
       if(subscriptions.length > 2){
         subscriptions.length = 2
-        setSubscriptions(subscriptions)
+        setSubscriptions([])
       } else {
         setSubscriptions([])
       }
@@ -168,6 +168,7 @@ const WalletBalance = (props: Props) => {
                 ))}
                 </tbody>
               </table>
+              {(!paymentHistoryTransactions || paymentHistoryTransactions.length === 0) && <p style={{textAlign:"center", marginTop: '20px', fontSize: '13px', color: 'rgb(171, 171, 171)'}}>No Transactions</p>}
             </div>
           </>
         }
@@ -221,6 +222,7 @@ const WalletBalance = (props: Props) => {
               ))}
               </tbody>
             </table>
+            {(!subscriptions || subscriptions.length === 0) && <p style={{textAlign:"center", marginTop: '20px', fontSize: '13px', color: 'rgb(171, 171, 171)'}}>No Subscriptions</p>}
           </div>
         </>
       }
