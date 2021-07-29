@@ -45,17 +45,17 @@ const WalletBalance = (props: Props) => {
       actions={
         <>
           <h2 className="section__title--small">
-            ${accountDetails && accountDetails.total_tipped / 100 || 0 } Received Total
+            ${totalTippedAmount} Total Paid Out
           </h2>
 
           <h2 className="section__title--small">
-            ${accountDetails && accountDetails.total_paid_out/100 || 0 }  Withdrawn
-            <Button
-              button="link"
-              label={detailsExpanded ? __('View less') : __('View more')}
-              iconRight={detailsExpanded ? ICONS.UP : ICONS.DOWN}
-              onClick={() => setDetailsExpanded(!detailsExpanded)}
-            />
+            {'totalCreatorsSupported'} Creators Supported
+            {/*<Button*/}
+            {/*  button="link"*/}
+            {/*  label={detailsExpanded ? __('View less') : __('View more')}*/}
+            {/*  iconRight={detailsExpanded ? ICONS.UP : ICONS.DOWN}*/}
+            {/*  onClick={() => setDetailsExpanded(!detailsExpanded)}*/}
+            {/*/>*/}
           </h2>
 
           {/* view more section */}
@@ -100,8 +100,8 @@ const WalletBalance = (props: Props) => {
           )}
 
           <div className="section__actions">
-            <Button button="primary" label={__('Receive Payout')} icon={ICONS.SEND}  />
-            <Button button="secondary" label={__('Account Configuration')} icon={ICONS.SETTINGS} navigate={`/$/${PAGES.SETTINGS_STRIPE_ACCOUNT}`} />
+            {/*<Button button="primary" label={__('Receive Payout')} icon={ICONS.SEND}  />*/}
+            <Button button="secondary" label={__('Manage Cards')} icon={ICONS.SETTINGS} navigate={`/$/${PAGES.SETTINGS_STRIPE_ACCOUNT}`} />
           </div>
         </>
       }
