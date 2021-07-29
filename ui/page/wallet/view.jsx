@@ -224,7 +224,7 @@ const WalletPage = (props: Props) => {
 
       {/* fiat payment history for tips made by user */}
       <div className="payment-history-tab" style={{display: 'none'}}>
-        <WalletFiatPaymentBalance totalTippedAmount={totalTippedAmount} accountDetails={accountStatusResponse} />
+        <WalletFiatPaymentBalance transactions={customerTransactions} totalTippedAmount={totalTippedAmount} accountDetails={accountStatusResponse} />
         <div style={{paddingTop: '25px'}}></div>
         <WalletFiatPaymentHistory transactions={customerTransactions}/>
       </div>

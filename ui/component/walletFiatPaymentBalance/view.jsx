@@ -15,6 +15,7 @@ import { formatNumberWithCommas } from 'util/number';
 type Props = {
   totalTippedAmount: number,
   accountDetails: any,
+  transactions: any,
 };
 
 
@@ -23,16 +24,26 @@ const WalletBalance = (props: Props) => {
   const {
     accountDetails,
     totalTippedAmount,
+    transactions,
   } = props;
 
   const [detailsExpanded, setDetailsExpanded] = React.useState(false);
+  const [totalCreatorsSupported, setTotalCreatorsSupported] = React.useState(false);
 
+  // calculate how many unique users tipped
+  React.useEffect(() => {
+    if(transactions){
+      let channelNames = []
 
-  console.log('total tipped amount')
-  console.log(totalTippedAmount)
+      for(const transaction of transactions){
+        channelNames.push(transaction.channel_name)
+        console.log(transaction.channel_name);
+      }
 
-  // console.log('account details');
-  // console.log(accountDetails);
+      let unique = [...new Set(channelNames)];
+      setTotalCreatorsSupported(unique.length);
+    }
+  }, [transactions]);
 
   return (
     <>{1 == 1 && <Card
@@ -45,62 +56,14 @@ const WalletBalance = (props: Props) => {
       actions={
         <>
           <h2 className="section__title--small">
-            ${totalTippedAmount} Total Paid Out
+            {transactions && transactions.length} Total Tips
           </h2>
 
           <h2 className="section__title--small">
-            {'totalCreatorsSupported'} Creators Supported
-            {/*<Button*/}
-            {/*  button="link"*/}
-            {/*  label={detailsExpanded ? __('View less') : __('View more')}*/}
-            {/*  iconRight={detailsExpanded ? ICONS.UP : ICONS.DOWN}*/}
-            {/*  onClick={() => setDetailsExpanded(!detailsExpanded)}*/}
-            {/*/>*/}
+            {totalCreatorsSupported || 0} Creators Supported
           </h2>
 
-          {/* view more section */}
-          {detailsExpanded && (
-            <div className="section__subtitle">
-              <dl>
-                <dt>
-                  <span className="dt__text">{__('...earned from others')}</span>
-                  <span className="help--dt">({__('Unlock to spend')})</span>
-                </dt>
-                <dd>
-                  <span className="dd__text">
-                    {Boolean(1) && (
-                      <Button
-                        button="link"
-                        className="dd__button"
-                        icon={ICONS.UNLOCK}
-                        onClick={() => doOpenModal(MODALS.MASS_TIP_UNLOCK)}
-                      />
-                    )}
-                    <CreditAmount amount={1} precision={4} />
-                  </span>
-                </dd>
-
-                <dt>
-                  <span className="dt__text">{__('...on initial publishes')}</span>
-                  <span className="help--dt">({__('Delete or edit past content to spend')})</span>
-                </dt>
-                <dd>
-                  <CreditAmount amount={1} precision={4} />
-                </dd>
-
-                <dt>
-                  <span className="dt__text">{__('...supporting content')}</span>
-                  <span className="help--dt">({__('Delete supports to spend')})</span>
-                </dt>
-                <dd>
-                  <CreditAmount amount={1} precision={4} />
-                </dd>
-              </dl>
-            </div>
-          )}
-
           <div className="section__actions">
-            {/*<Button button="primary" label={__('Receive Payout')} icon={ICONS.SEND}  />*/}
             <Button button="secondary" label={__('Manage Cards')} icon={ICONS.SETTINGS} navigate={`/$/${PAGES.SETTINGS_STRIPE_ACCOUNT}`} />
           </div>
         </>
