@@ -15,21 +15,6 @@ import { Lbryio } from 'lbryinc';
 import moment from 'moment';
 
 type Props = {
-  balance: number,
-  totalBalance: number,
-  claimsBalance: number,
-  supportsBalance: number,
-  tipsBalance: number,
-  doOpenModal: (string) => void,
-  hasSynced: boolean,
-  doFetchUtxoCounts: () => void,
-  doUtxoConsolidate: () => void,
-  fetchingUtxoCounts: boolean,
-  consolidatingUtxos: boolean,
-  consolidateIsPending: boolean,
-  massClaimingTips: boolean,
-  massClaimIsPending: boolean,
-  utxoCounts: { [string]: number },
   accountDetails: any,
   transactions: any,
   totalTippedAmount: number,
@@ -42,6 +27,9 @@ const WalletBalance = (props: Props) => {
 
   // receive transactions from parent component
   let accountTransactions = props.transactions;
+
+  console.log('heres transactions')
+  console.log(accountTransactions);
 
   // let totalTippedAmount = props.totalTippedAmount;
 
@@ -88,34 +76,38 @@ const WalletBalance = (props: Props) => {
 
   React.useEffect(() => {
     (async function(){
-      let response = await getPaymentHistory();
+        let response = accountTransactions;
 
-      const customerStatusResponse = await getCustomerStatus();
+        console.log('payment transactions');
+        console.log(response);
 
-      let totalTippedAmount = 0;
+        const customerStatusResponse = await getCustomerStatus();
 
-      for(const transaction of response){
-        totalTippedAmount = totalTippedAmount + transaction.tipped_amount
-      }
+        let totalTippedAmount = 0;
 
-      setTotalTippedAmount(totalTippedAmount / 100);
+        for(const transaction of response){
+          totalTippedAmount = totalTippedAmount + transaction.tipped_amount
+        }
 
-      setLastFour(customerStatusResponse.PaymentMethods[0].card.last4);
+        setTotalTippedAmount(totalTippedAmount / 100);
 
-      if (response.length > 10) response.length = 10;
+        setLastFour(customerStatusResponse.PaymentMethods[0].card.last4);
 
-      setPaymentHistoryTransactions(response);
+        if (response.length > 10) response.length = 10;
 
-      const subscriptions  = [...response];
+        setPaymentHistoryTransactions(response);
 
-      if(subscriptions.length > 2){
-        subscriptions.length = 2
-        setSubscriptions([])
-      } else {
-        setSubscriptions([])
-      }
+        const subscriptions  = [...response];
 
-      console.log(response);
+        if(subscriptions.length > 2){
+          subscriptions.length = 2
+          setSubscriptions([])
+        } else {
+          setSubscriptions([])
+        }
+
+        console.log(response);
+
     })();
   }, []);
 
@@ -139,8 +131,8 @@ const WalletBalance = (props: Props) => {
                 </tr>
                 </thead>
                 <tbody>
-                {paymentHistoryTransactions &&
-                paymentHistoryTransactions.reverse().map((transaction) => (
+                {accountTransactions &&
+                accountTransactions.map((transaction) => (
                   <tr key={transaction.name + transaction.created_at}>
                     <td>{moment(transaction.created_at).format('LLL')}</td>
                     <td>

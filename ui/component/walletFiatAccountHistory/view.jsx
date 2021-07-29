@@ -34,24 +34,9 @@ type Props = {
   transactions: any,
 };
 
-export const WALLET_CONSOLIDATE_UTXOS = 400;
-const LARGE_WALLET_BALANCE = 100;
-
 const WalletBalance = (props: Props) => {
   const {
-    balance,
-    claimsBalance,
-    supportsBalance,
-    tipsBalance,
-    doOpenModal,
-    hasSynced,
-    doUtxoConsolidate,
-    doFetchUtxoCounts,
-    consolidatingUtxos,
-    consolidateIsPending,
-    massClaimingTips,
-    massClaimIsPending,
-    utxoCounts,
+
   } = props;
 
   // receive transactions from parent component
@@ -64,19 +49,6 @@ const WalletBalance = (props: Props) => {
 
   const [detailsExpanded, setDetailsExpanded] = React.useState(false);
   const [accountStatusResponse, setAccountStatusResponse] = React.useState();
-
-
-  const { other: otherCount = 0 } = utxoCounts || {};
-
-  const totalBalance = balance + tipsBalance + supportsBalance + claimsBalance;
-  const totalLocked = tipsBalance + claimsBalance + supportsBalance;
-  const operationPending = massClaimIsPending || massClaimingTips || consolidateIsPending || consolidatingUtxos;
-
-  React.useEffect(() => {
-    if (balance > LARGE_WALLET_BALANCE && detailsExpanded) {
-      doFetchUtxoCounts();
-    }
-  }, [doFetchUtxoCounts, balance, detailsExpanded]);
 
   var environment = 'test';
 
