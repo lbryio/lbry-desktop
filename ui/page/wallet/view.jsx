@@ -3,7 +3,8 @@ import React from 'react';
 import { withRouter } from 'react-router';
 import WalletBalance from 'component/walletBalance';
 import WalletFiatBalance from 'component/walletFiatBalance';
-import WalletFiatTransactions from 'component/walletFiatTransactions';
+import WalletFiatAccountHistory from 'component/walletFiatAccountHistory';
+import WalletFiatPaymentHistory from 'component/walletFiatPaymentHistory';
 import TxoList from 'component/txoList';
 import Page from 'component/page';
 import Spinner from 'component/spinner';
@@ -116,8 +117,11 @@ const WalletPage = (props: Props) => {
   // select the first tab
   React.useEffect(() => {
     // if (tab === 'account-history') {
-    if (1 === 1) {
-      focusAccountHistoryTab()
+    if (1 === 2) {
+      focusAccountHistoryTab();
+    // } else if (tab === 'payment-history'){
+    } else if (1 === 1){
+      focusPaymentHistoryTab();
     }
   }, []);
 
@@ -174,14 +178,14 @@ const WalletPage = (props: Props) => {
           <div className="fiat-transactions" style={{display: 'none'}}>
             <WalletFiatBalance accountDetails={accountStatusResponse} />
             <div style={{paddingTop: '20px'}}></div>
-            <WalletFiatTransactions transactions={accountTransactionResponse}/>
+            <WalletFiatAccountHistory transactions={accountTransactionResponse}/>
           </div>
         </>
       )}
 
       <>
         <div className="payment-history-tab" style={{display: 'none'}}>
-          <h2>Card Transaction History</h2>
+          <WalletFiatPaymentHistory transactions={accountTransactionResponse}/>
         </div>
       </>
 
