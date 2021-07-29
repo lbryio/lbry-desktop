@@ -153,7 +153,7 @@ const WalletBalance = (props: Props) => {
                 ))}
                 </tbody>
               </table>
-              {(!paymentHistoryTransactions || paymentHistoryTransactions.length === 0) && <p style={{textAlign:"center", marginTop: '20px', fontSize: '13px', color: 'rgb(171, 171, 171)'}}>No Transactions</p>}
+              {(!accountTransactions || accountTransactions.length === 0) && <p style={{textAlign:"center", marginTop: '20px', fontSize: '13px', color: 'rgb(171, 171, 171)'}}>No Transactions</p>}
             </div>
           </>
         }
