@@ -29,6 +29,8 @@ const WalletPage = (props: Props) => {
   const [accountStatusResponse, setAccountStatusResponse] = React.useState();
   const [accountTransactionResponse, setAccountTransactionResponse] = React.useState();
   const [customerTransactions, setCustomerTransactions] = React.useState();
+  const [totalTippedAmount, setTotalTippedAmount] = React.useState(0);
+
 
   function getPaymentHistory() {
     return Lbryio.call(
@@ -78,7 +80,16 @@ const WalletPage = (props: Props) => {
       try {
         const response = await getAccountStatus();
 
+        // get card payments customer has made
         const customerTransactionResponse = await getPaymentHistory();
+
+        let totalTippedAmount = 0;
+
+        for(const transaction of customerTransactionResponse){
+          totalTippedAmount = totalTippedAmount + transaction.tipped_amount
+        }
+
+        setTotalTippedAmount(totalTippedAmount / 100);
 
         console.log(customerTransactionResponse);
 
@@ -100,7 +111,7 @@ const WalletPage = (props: Props) => {
         console.log(getAccountTransactions);
 
       } catch (err){
-
+        console.log(err);
       }
     })();
   }, []);
@@ -210,7 +221,7 @@ const WalletPage = (props: Props) => {
       <>
         {/* fiat payment history for tips made by user */}
         <div className="payment-history-tab" style={{display: 'none'}}>
-          <WalletFiatPaymentBalance accountDetails={accountStatusResponse} />
+          <WalletFiatPaymentBalance totalTippedAmount={totalTippedAmount} accountDetails={accountStatusResponse} />
           <div style={{paddingTop: '25px'}}></div>
           <WalletFiatPaymentHistory transactions={customerTransactions}/>
         </div>
