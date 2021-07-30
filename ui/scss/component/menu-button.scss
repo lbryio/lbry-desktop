@@ -51,10 +51,7 @@
   padding: 0.3rem;
 
   .icon {
-    stroke: var(--color-menu);
-  }
-
-  .comment__menu-icon--hovering {
+    stroke: var(--color-menu-icon);
   }
 
   &:focus,
@@ -62,7 +59,7 @@
     opacity: 1;
     background-color: var(--color-button-alt-bg);
     .icon {
-      stroke: var(--color-menu-hovering);
+      stroke: var(--color-menu-icon-active);
     }
   }
 }
