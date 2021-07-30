@@ -209,7 +209,7 @@ if (!gotSingleInstanceLock) {
       if (details.method === 'POST' && details.requestHeaders['Content-Type'] === 'application/json-rpc') {
         delete details.requestHeaders['Origin'];
       }
-      callback({ cancel: false, requestHeaders: details.requestHeaders, });
+      callback({ cancel: false, requestHeaders: details.requestHeaders });
     });
   });
 }
