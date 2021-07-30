@@ -8,13 +8,14 @@ import { COLLECTIONS_CONSTS } from 'lbry-redux';
 type Props = {
   uri: string,
   claim: StreamClaim,
+  focusable: boolean,
   hasClaimInWatchLater: boolean,
   doToast: ({ message: string }) => void,
   doCollectionEdit: (string, any) => void,
 };
 
 function FileWatchLaterLink(props: Props) {
-  const { claim, hasClaimInWatchLater, doToast, doCollectionEdit } = props;
+  const { claim, hasClaimInWatchLater, doToast, doCollectionEdit, focusable = true } = props;
   const buttonRef = useRef();
   let isHovering = useHover(buttonRef);
 
@@ -51,6 +52,8 @@ function FileWatchLaterLink(props: Props) {
         (isHovering ? ICONS.COMPLETED : ICONS.TIME)
       }
       onClick={(e) => handleWatchLater(e)}
+      aria-hidden={!focusable}
+      tabIndex={focusable ? 0 : -1}
     />
   );
 }

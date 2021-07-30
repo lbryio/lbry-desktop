@@ -10,6 +10,7 @@ import ChannelThumbnail from 'component/channelThumbnail';
 import SubscribeButton from 'component/subscribeButton';
 import useGetThumbnail from 'effects/use-get-thumbnail';
 import { formatLbryUrlForWeb } from 'util/url';
+import { formatClaimPreviewTitle } from 'util/formatAriaLabel';
 import { parseURI, COLLECTIONS_CONSTS, isURIEqual } from 'lbry-redux';
 import PreviewOverlayProperties from 'component/previewOverlayProperties';
 import FileDownloadLink from 'component/fileDownloadLink';
@@ -22,7 +23,9 @@ import PlaceholderTx from 'static/img/placeholderTx.gif';
 
 type Props = {
   uri: string,
+  date?: any,
   claim: ?Claim,
+  mediaDuration?: string,
   resolveUri: (string) => void,
   isResolvingUri: boolean,
   history: { push: (string) => void },
@@ -54,6 +57,7 @@ function ClaimPreviewTile(props: Props) {
   const {
     history,
     uri,
+    date,
     isResolvingUri,
     thumbnail,
     title,
@@ -73,6 +77,7 @@ function ClaimPreviewTile(props: Props) {
     showNoSourceClaims,
     isLivestream,
     collectionId,
+    mediaDuration,
   } = props;
   const isRepost = claim && claim.repost_channel_url;
   const isCollection = claim && claim.value_type === 'collection';
@@ -115,6 +120,10 @@ function ClaimPreviewTile(props: Props) {
   const signingChannel = claim && claim.signing_channel;
   const isChannel = claim && claim.value_type === 'channel';
   const channelUri = !isChannel ? signingChannel && signingChannel.permanent_url : claim && claim.permanent_url;
+  const channelTitle = signingChannel && (signingChannel.value.title || signingChannel.name);
+
+  // Aria-label value for claim preview
+  let ariaLabelData = isChannel ? title : formatClaimPreviewTitle(title, channelTitle, date, mediaDuration);
 
   function handleClick(e) {
     if (navigateUrl) {
@@ -189,28 +198,27 @@ function ClaimPreviewTile(props: Props) {
 
   return (
     <li
-      role="link"
       onClick={handleClick}
       className={classnames('card claim-preview--tile', {
         'claim-preview__wrapper--channel': isChannel,
         'claim-preview__live': live,
       })}
     >
-      <NavLink {...navLinkProps}>
+      <NavLink {...navLinkProps} role="none" tabIndex={-1} aria-hidden>
         <FileThumbnail thumbnail={thumbnailUrl} allowGifs>
           {!isChannel && (
             <React.Fragment>
               {/* @if TARGET='app' */}
               {isStream && (
                 <div className="claim-preview__hover-actions">
-                  <FileDownloadLink uri={canonicalUrl} hideOpenButton />
+                  <FileDownloadLink focusable={false} uri={canonicalUrl} hideOpenButton />
                 </div>
               )}
               {/* @endif */}
 
               {isPlayable && (
                 <div className="claim-preview__hover-actions">
-                  <FileWatchLaterLink uri={uri} />
+                  <FileWatchLaterLink focusable={false} uri={uri} />
                 </div>
               )}
 
@@ -228,17 +236,19 @@ function ClaimPreviewTile(props: Props) {
           )}
         </FileThumbnail>
       </NavLink>
-      <NavLink {...navLinkProps}>
-        <h2 className="claim-tile__title">
-          <TruncatedText text={title || (claim && claim.name)} lines={isChannel ? 1 : 2} />
-          {isChannel && (
-            <div className="claim-tile__about">
-              <UriIndicator uri={uri} />
-            </div>
-          )}
-          <ClaimMenuList uri={uri} collectionId={listId} />
-        </h2>
-      </NavLink>
+      <div className="claim-tile__header">
+        <NavLink aria-label={ariaLabelData} {...navLinkProps}>
+          <h2 className="claim-tile__title">
+            <TruncatedText text={title || (claim && claim.name)} lines={isChannel ? 1 : 2} />
+            {isChannel && (
+              <div className="claim-tile__about">
+                <UriIndicator uri={uri} />
+              </div>
+            )}
+          </h2>
+        </NavLink>
+        <ClaimMenuList uri={uri} collectionId={listId} channelUri={channelUri} />
+      </div>
       <div>
         <div className="claim-tile__info">
           {isChannel ? (
@@ -247,7 +257,7 @@ function ClaimPreviewTile(props: Props) {
             </div>
           ) : (
             <React.Fragment>
-              <UriIndicator uri={uri} link hideAnonymous>
+              <UriIndicator focusable={false} uri={uri} link hideAnonymous>
                 <ChannelThumbnail uri={channelUri} xsmall />
               </UriIndicator>
 

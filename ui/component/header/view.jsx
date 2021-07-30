@@ -15,6 +15,7 @@ import { useIsMobile } from 'effects/use-screensize';
 import NotificationBubble from 'component/notificationBubble';
 import NotificationHeaderButton from 'component/notificationHeaderButton';
 import ChannelThumbnail from 'component/channelThumbnail';
+import SkipNavigationButton from 'component/skipNavigationButton';
 import Logo from 'component/logo';
 // @if TARGET='app'
 import { remote } from 'electron';
@@ -235,6 +236,7 @@ const Header = (props: Props) => {
         ) : (
           <>
             <div className="header__navigation">
+              <SkipNavigationButton />
               {!authHeader && (
                 <span style={{ position: 'relative' }}>
                   <Button
@@ -245,6 +247,7 @@ const Header = (props: Props) => {
                     }
                     className="header__navigation-item menu__title header__navigation-item--icon"
                     icon={ICONS.MENU}
+                    aria-expanded={sidebarOpen}
                     onClick={() => setSidebarOpen(!sidebarOpen)}
                   >
                     {isAbsoluteSideNavHidden && isMobile && notificationsEnabled && <NotificationBubble />}
@@ -252,6 +255,7 @@ const Header = (props: Props) => {
                 </span>
               )}
               <Button
+                aria-label={__('Home')}
                 className="header__navigation-item header__navigation-item--lbry"
                 onClick={() => {
                   if (history.location.pathname === '/') window.location.reload();

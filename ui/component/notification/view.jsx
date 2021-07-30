@@ -193,7 +193,7 @@ export default function Notification(props: Props) {
 
         <div className="notification__menu">
           <Menu>
-            <MenuButton onClick={(e) => e.stopPropagation()}>
+            <MenuButton className={'menu__button notification__menu-button'} onClick={(e) => e.stopPropagation()}>
               <Icon size={18} icon={ICONS.MORE_VERTICAL} />
             </MenuButton>
             <MenuList className="menu__list">

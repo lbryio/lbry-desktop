@@ -7,9 +7,14 @@ import {
   makeSelectClaimForUri,
   makeSelectClaimIsMine,
 } from 'lbry-redux';
+import {
+  selectPlayingUri,
+} from 'redux/selectors/content';
 
 const select = (state, props) => {
-  const claim = makeSelectClaimForUri(props.uri)(state);
+  const playingUri = selectPlayingUri(state);
+  const playingUrl = playingUri && playingUri.uri;
+  const claim = makeSelectClaimForUri(playingUrl)(state);
   const url = claim && claim.permanent_url;
 
   return {

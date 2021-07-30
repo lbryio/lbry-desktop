@@ -8,11 +8,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 - Show currently active playing item on playlist _community pr!_ ([#6453](https://github.com/lbryio/lbry-desktop/pull/6453))
 - Add watch later to hover action for last used playlist on popup _community pr!_ ([#6274](https://github.com/lbryio/lbry-desktop/pull/6274))
+- Open in desktop (web feature) _community pr!_ ([#6667](https://github.com/lbryio/lbry-desktop/pull/6667))
 
 ### Changed
 - Use Canonical Url for copy link ([#6500](https://github.com/lbryio/lbry-desktop/pull/6500))
 - Use better icon for copy link ([#6485](https://github.com/lbryio/lbry-desktop/pull/6485))
 - Comments load paginated ([#6390](https://github.com/lbryio/lbry-desktop/pull/6390))
+- Update lighthouse search api _community pr!_ ([#6731](https://github.com/lbryio/lbry-desktop/pull/6731))
+- Improve twitter share _community pr!_ ([#6690](https://github.com/lbryio/lbry-desktop/pull/6690))
 
 ### Fixed
 - App now supports '#' and ':' for claimId separator ([#6496](https://github.com/lbryio/lbry-desktop/pull/6496))
@@ -20,7 +23,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix upload button on creator analytics _community pr!_ ([#6458](https://github.com/lbryio/lbry-desktop/pull/6458))
 - Prevent sidebar shortcut activation on textarea _community pr!_ ([#6454](https://github.com/lbryio/lbry-desktop/pull/6454))
 - Added \ and = to reserved symbol warning _community pr!_ ([#6733](https://github.com/lbryio/lbry-desktop/pull/6733))
-
+- Improve accessibility and some minor css fixes _community pr!_ ([#6470](https:/github.com/lbryio/lbry-desktop/pull/6470))
+- Fix drag / drop publish issues for web users _community pr!_ ([#6466](https://github.com/lbryio/lbry-desktop/pull/6466))
+- Fix yarn copyenv on windows _community pr!_ ([#6702](https://github.com/lbryio/lbry-desktop/pull/6702))
+- Fix unnecessary livestream api calls in channel page _community pr!_ ([#6652](https://github.com/lbryio/lbry-desktop/pull/6652))
 
 ## [0.51.1] - [2021-06-26]
 

@@ -24,6 +24,7 @@ import ClaimMenuList from 'component/claimMenuList';
 import OptimizedImage from 'component/optimizedImage';
 import Yrbl from 'component/yrbl';
 import I18nMessage from 'component/i18nMessage';
+import TruncatedText from 'component/common/truncated-text';
 // $FlowFixMe cannot resolve ...
 import PlaceholderTx from 'static/img/placeholderTx.gif';
 
@@ -229,7 +230,9 @@ function ChannelPage(props: Props) {
         <div className="channel__primary-info">
           <ChannelThumbnail className="channel__thumbnail--channel-page" uri={uri} allowGifs hideStakedIndicator />
           <h1 className="channel__title">
-            {title || '@' + channelName}
+            <TruncatedText lines={2} showTooltip>
+              {title || '@' + channelName}
+            </TruncatedText>
             <ChannelStakedIndicator uri={uri} large />
           </h1>
           <div className="channel__meta">

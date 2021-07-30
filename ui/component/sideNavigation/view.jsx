@@ -331,6 +331,7 @@ function SideNavigation(props: Props) {
     >
       {!isOnFilePage && (
         <nav
+          aria-label={'Sidebar'}
           className={classnames('navigation', {
             'navigation--micro': microNavigation,
             // @if TARGET='app'
