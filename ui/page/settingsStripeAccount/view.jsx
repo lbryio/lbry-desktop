@@ -228,25 +228,11 @@ class StripeAccountConnection extends React.Component<Props, State> {
                     <div>
                       <div>
                         <h3>{__('Congratulations! Your account has been connected with Odysee.')}</h3>
-                        {unpaidBalance > 0 ? (
-                          <div>
-                            <br />
-                            <h3>
-                              {__('Your pending account balance is $%balance% USD.', { balance: unpaidBalance / 100 })}
-                            </h3>
-                          </div>
-                        ) : (
-                          <div>
-                            <br />
-                            <h3>
-                              {__('Your account balance is $0 USD. When you receive a tip you will see it here.')}
-                            </h3>
-                          </div>
-                        )}
                       </div>
                     </div>
                   </div>
                 )}
+                {/* TODO: hopefully we won't be using this anymore and can remove it */}
                 {accountNotConfirmedButReceivedTips && (
                   <div className="card__body-actions">
                     <div>
@@ -279,64 +265,6 @@ class StripeAccountConnection extends React.Component<Props, State> {
             }
           />
           <br />
-
-          {/* customer already has transactions */}
-          {accountTransactions && accountTransactions.length > 0 && (
-            <Card
-              title={__('Tip History')}
-              body={
-                <>
-                  <div className="table__wrapper">
-                    <table className="table table--transactions">
-                      <thead>
-                        <tr>
-                          <th className="date-header">{__('Date')}</th>
-                          <th>{<>{__('Receiving Channel Name')}</>}</th>
-                          <th>{__('Tip Location')}</th>
-                          <th>{__('Amount (USD)')} </th>
-                          <th>{__('Processing Fee')}</th>
-                          <th>{__('Odysee Fee')}</th>
-                          <th>{__('Received Amount')}</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {accountTransactions &&
-                          accountTransactions.map((transaction) => (
-                            <tr key={transaction.name + transaction.created_at}>
-                              <td>{moment(transaction.created_at).format('LLL')}</td>
-                              <td>
-                                <Button
-                                  className="stripe__card-link-text"
-                                  navigate={'/' + transaction.channel_name + ':' + transaction.channel_claim_id}
-                                  label={transaction.channel_name}
-                                  button="link"
-                                />
-                              </td>
-                              <td>
-                                <Button
-                                  className="stripe__card-link-text"
-                                  navigate={'/' + transaction.channel_name + ':' + transaction.source_claim_id}
-                                  label={
-                                    transaction.channel_claim_id === transaction.source_claim_id
-                                      ? 'Channel Page'
-                                      : 'File Page'
-                                  }
-                                  button="link"
-                                />
-                              </td>
-                              <td>${transaction.tipped_amount / 100}</td>
-                              <td>${transaction.transaction_fee / 100}</td>
-                              <td>${transaction.application_fee / 100}</td>
-                              <td>${transaction.received_amount / 100}</td>
-                            </tr>
-                          ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </>
-              }
-            />
-          )}
         </Page>
       );
     } else {
