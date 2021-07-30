@@ -153,11 +153,11 @@ const WalletPage = (props: Props) => {
 
   // select the first tab
   React.useEffect(() => {
-    // if (tab === 'account-history') {
-    if (1 === 2) {
+    if (tab === 'account-history') {
+    // if (1 === 2) {
       focusAccountHistoryTab();
-    // } else if (tab === 'payment-history'){
-    } else if (1 === 2){
+    } else if (tab === 'payment-history'){
+    // } else if (1 === 2){
       focusPaymentHistoryTab();
     }
   }, []);
