@@ -9,6 +9,7 @@ import { Menu, MenuButton, MenuList, MenuItem } from '@reach/menu-button';
 import Icon from 'component/common/icon';
 import { generateShareUrl, generateRssUrl, generateLbryContentUrl } from 'util/url';
 import { useHistory } from 'react-router';
+import { useIsMobile } from 'effects/use-screensize';
 import { buildURI, parseURI, COLLECTIONS_CONSTS } from 'lbry-redux';
 
 const SHARE_DOMAIN = SHARE_DOMAIN_URL || URL;
@@ -94,6 +95,7 @@ function ClaimMenuList(props: Props) {
     editedCollection,
     isAuthenticated,
   } = props;
+  const isMobile = useIsMobile();
   const incognitoClaim = contentChannelUri && !contentChannelUri.includes('@');
   const isChannel = !incognitoClaim && !contentSigningChannel;
   const { channelName } = parseURI(contentChannelUri);
@@ -230,7 +232,7 @@ function ClaimMenuList(props: Props) {
   }
 
   function handleOpenInDesktop() {
-    window.open(claim.permanent_url);
+    window.open(claim.permanent_url, '_top');
   }
 
   return (
@@ -407,7 +409,7 @@ function ClaimMenuList(props: Props) {
           </MenuItem>
         )}
 
-        {IS_WEB && (
+        {IS_WEB && !isMobile && (
           <MenuItem className="comment__menu-option" onSelect={handleOpenInDesktop}>
             <div className="menu__link">
               <Icon aria-hidden icon={ICONS.DESKTOP} />

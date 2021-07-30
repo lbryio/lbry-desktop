@@ -114,7 +114,7 @@ function FileActions(props: Props) {
   }
 
   function handleOpenInDesktop() {
-    window.open(claim.permanent_url);
+    window.open(claim.permanent_url, '_top');
   }
 
   const lhsSection = (
@@ -192,7 +192,7 @@ function FileActions(props: Props) {
               </MenuItem>
             )}
             {/* @endif */}
-            {IS_WEB && (
+            {IS_WEB && !isMobile && (
               <MenuItem className="comment__menu-option" onSelect={handleOpenInDesktop}>
                 <div className="menu__link">
                   <Icon aria-hidden icon={ICONS.DESKTOP} />
