@@ -159,6 +159,8 @@ const WalletPage = (props: Props) => {
     } else if (tab === 'payment-history'){
     // } else if (1 === 2){
       focusPaymentHistoryTab();
+    } else {
+      focusLBCTab()
     }
   }, []);
 
@@ -172,7 +174,7 @@ const WalletPage = (props: Props) => {
       {/* tabs to switch between fiat and lbc */}
       {/* lbc button */}
       <h2 className="lbc-tab-switcher"
-        style={{display: 'inline-block', paddingBottom: '16px', marginRight: '14px', textUnderlineOffset: '4px', textDecoration: 'underline', fontSize: '18px', marginLeft: '3px'}}
+        style={{display: 'inline-block', paddingBottom: '16px', marginRight: '14px', textUnderlineOffset: '4px', fontSize: '18px', marginLeft: '3px'}}
         onClick={() => {
           focusLBCTab();
         }}
