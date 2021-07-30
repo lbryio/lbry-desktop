@@ -2064,12 +2064,10 @@
   "Skip Navigation": "Skip Navigation",
   "Reset": "Reset",
   "Reset to original (previous) publish date": "Reset to original (previous) publish date",
-  "Show reply": "Show reply",
-  "Show %count% replies": "Show %count% replies",
-  "Open in Desktop": "Open in Desktop",
   "%title% by %channelTitle%": "%title% by %channelTitle%",
   "%title% by %channelTitle% %ariaDate%": "%title% by %channelTitle% %ariaDate%",
   "%title% by %channelTitle% %ariaDate%, %mediaDuration%": "%title% by %channelTitle% %ariaDate%, %mediaDuration%",
   "Search for something...": "Search for something...",
+  "Open in Desktop": "Open in Desktop",
   "--end--": "--end--"
 }

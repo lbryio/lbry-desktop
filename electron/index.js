@@ -45,13 +45,12 @@ let daemon;
 let lbryFirst;
 
 const appState = {};
-
-const PROTOCOL = 'lbry'
+const PROTOCOL = 'lbry';
 
 if (isDev && process.platform === 'win32') {
   // Setting this is required to get this working in dev mode.
   app.setAsDefaultProtocolClient(PROTOCOL, process.execPath, [
-    path.resolve(process.argv[1])
+    path.resolve(process.argv[1]),
   ]);
 } else {
   app.setAsDefaultProtocolClient(PROTOCOL);
@@ -157,11 +156,11 @@ if (!gotSingleInstanceLock) {
     // Send the url to the app to navigate first, then focus
     if (rendererWindow) {
       // External uri (last item on argv):
-      const EXTERNAL_URI = argv[argv.length ? (argv.length-1) : 0]
+      const EXTERNAL_URI = (argv.length) ? argv[argv.length - 1] : '';
       // Handle protocol requests for windows and linux
-      const platforms = (process.platform === 'win32' || process.platform === 'linux')
+      const platforms = (process.platform === 'win32' || process.platform === 'linux');
       // Is LBRY protocol
-      const isProtocolURI = String(EXTERNAL_URI).startsWith(PROTOCOL)
+      const isProtocolURI = String(EXTERNAL_URI).startsWith(PROTOCOL + '://');
       // External protocol requested:
       if (platforms  && isProtocolURI) {
         let URI = EXTERNAL_URI;
@@ -210,7 +209,7 @@ if (!gotSingleInstanceLock) {
       if (details.method === 'POST' && details.requestHeaders['Content-Type'] === 'application/json-rpc') {
         delete details.requestHeaders['Origin'];
       }
-      callback({ cancel: false, requestHeaders: details.requestHeaders });
+      callback({ cancel: false, requestHeaders: details.requestHeaders, });
     });
   });
 }
