@@ -23,10 +23,11 @@ type Props = {
     claim_code: string,
   },
   user: User,
+  disabled: boolean,
 };
 
 const RewardTile = (props: Props) => {
-  const { reward, openRewardCodeModal, openSetReferrerModal, user } = props;
+  const { reward, openRewardCodeModal, openSetReferrerModal, user, disabled = false } = props;
   const referrerSet = user && user.invited_by_id;
   const claimed = !!reward.transaction_id;
   const customActionsRewards = [rewards.TYPE_REFERRAL, rewards.TYPE_REFEREE];
@@ -38,18 +39,25 @@ const RewardTile = (props: Props) => {
       actions={
         <div className="section__actions">
           {reward.reward_type === rewards.TYPE_GENERATED_CODE && (
-            <Button button="primary" onClick={openRewardCodeModal} label={__('Enter Code')} />
+            <Button button="primary" onClick={openRewardCodeModal} label={__('Enter Code')} disabled={disabled} />
           )}
           {reward.reward_type === rewards.TYPE_REFERRAL && (
-            <Button button="primary" navigate="/$/invite" label={__('Go To Invites')} />
+            <Button
+              button="primary"
+              navigate="/$/invite"
+              label={__('Go To Invites')}
+              aria-hidden={disabled}
+              tabIndex={disabled ? -1 : 0}
+            />
           )}
           {reward.reward_type === rewards.TYPE_REFEREE && (
             <>
-              {referrerSet && <RewardLink button reward_type={reward.reward_type} />}
+              {referrerSet && <RewardLink button reward_type={reward.reward_type} disabled={disabled} />}
               <Button
                 button={referrerSet ? 'link' : 'primary'}
                 onClick={openSetReferrerModal}
                 label={referrerSet ? __('Change Inviter') : __('Set Inviter')}
+                disabled={disabled}
               />
             </>
           )}
@@ -59,7 +67,7 @@ const RewardTile = (props: Props) => {
                 <Icon icon={ICONS.COMPLETED} /> {__('Reward claimed.')}
               </span>
             ) : (
-              <RewardLink button claim_code={reward.claim_code} />
+              <RewardLink button claim_code={reward.claim_code} disabled={disabled} />
             ))}
         </div>
       }

@@ -1,5 +1,6 @@
 $cover-z-index: 0;
 $metadata-z-index: 1;
+$actions-z-index: 2;
 
 .channel-cover {
   position: relative;
@@ -200,7 +201,7 @@ $metadata-z-index: 1;
   top: 0;
   right: var(--spacing-m);
   margin-top: var(--spacing-m);
-  z-index: $metadata-z-index;
+  z-index: $actions-z-index;
   flex-wrap: wrap;
   font-size: var(--font-base);
 

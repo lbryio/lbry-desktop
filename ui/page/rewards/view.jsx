@@ -102,6 +102,8 @@ class RewardsPage extends PureComponent<Props> {
   }
 
   renderCustomRewardCode() {
+    const { user } = this.props;
+    const isNotEligible = !user || !user.primary_email || !user.has_verified_email || !user.is_reward_approved;
     return (
       <RewardTile
         key={REWARD_TYPES.TYPE_GENERATED_CODE}
@@ -110,6 +112,7 @@ class RewardsPage extends PureComponent<Props> {
           reward_title: __('Custom Code'),
           reward_description: __('Are you a supermodel or rockstar that received a custom reward code? Claim it here.'),
         }}
+        disabled={isNotEligible}
       />
     );
   }
@@ -155,12 +158,13 @@ class RewardsPage extends PureComponent<Props> {
 
     return (
       <div
+        aria-hidden={isNotEligible}
         className={classnames('card__list', {
           'card--disabled': isNotEligible,
         })}
       >
         {rewards.map((reward) => (
-          <RewardTile key={reward.claim_code} reward={reward} />
+          <RewardTile disabled={isNotEligible} key={reward.claim_code} reward={reward} />
         ))}
         {this.renderCustomRewardCode()}
       </div>

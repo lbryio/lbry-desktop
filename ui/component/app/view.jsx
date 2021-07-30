@@ -286,6 +286,11 @@ function App(props: Props) {
   }, [hasMyChannels, hasNoChannels, hasActiveChannelClaim, setActiveChannelIfNotSet, setIncognito]);
 
   useEffect(() => {
+    // $FlowFixMe
+    document.documentElement.setAttribute('lang', language);
+  }, [language]);
+
+  useEffect(() => {
     if (!languages.includes(language)) {
       setLanguage(language);
 

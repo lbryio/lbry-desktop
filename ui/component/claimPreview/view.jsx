@@ -2,11 +2,12 @@
 import type { Node } from 'react';
 import React, { useEffect, forwardRef } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
+import { isEmpty } from 'util/object';
 import { lazyImport } from 'util/lazyImport';
 import classnames from 'classnames';
 import { parseURI, COLLECTIONS_CONSTS, isURIEqual } from 'lbry-redux';
 import { formatLbryUrlForWeb } from 'util/url';
-import { isEmpty } from 'util/object';
+import { formatClaimPreviewTitle } from 'util/formatAriaLabel';
 import FileThumbnail from 'component/fileThumbnail';
 import UriIndicator from 'component/uriIndicator';
 import PreviewOverlayProperties from 'component/previewOverlayProperties';
@@ -85,6 +86,8 @@ type Props = {
   collectionUris: Array<Collection>,
   collectionIndex?: number,
   disableNavigation?: boolean,
+  mediaDuration?: string,
+  date?: any,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -99,8 +102,11 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     // claim properties
     // is the claim consider nsfw?
     nsfw,
+    date,
+    title,
     claimIsMine,
     streamingUrl,
+    mediaDuration,
     // user properties
     channelIsBlocked,
     hasVisitedUri,
@@ -175,6 +181,21 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     (claim.value.stream_type === 'audio' || claim.value.stream_type === 'video');
   const isChannelUri = isValid ? parseURI(uri).isChannel : false;
   const signingChannel = claim && claim.signing_channel;
+
+  // Get channel title ( use name as fallback )
+  let channelTitle = null;
+  if (signingChannel) {
+    const { value, name } = signingChannel;
+    if (value && value.title) {
+      channelTitle = value.title;
+    } else {
+      channelTitle = name;
+    }
+  }
+
+  // Aria-label value for claim preview
+  let ariaLabelData = isChannelUri ? title : formatClaimPreviewTitle(title, channelTitle, date, mediaDuration);
+
   let navigateUrl = formatLbryUrlForWeb((claim && claim.canonical_url) || uri || '/');
   if (listId) {
     const collectionParams = new URLSearchParams();
@@ -313,18 +334,18 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
           })}
         >
           {isChannelUri && claim ? (
-            <UriIndicator uri={uri} link>
+            <UriIndicator focusable={false} uri={uri} link>
               <ChannelThumbnail uri={uri} small={type === 'inline'} />
             </UriIndicator>
           ) : (
             <>
               {!pending ? (
-                <NavLink {...navLinkProps}>
+                <NavLink aria-hidden tabIndex={-1} {...navLinkProps}>
                   <FileThumbnail thumbnail={thumbnailUrl}>
                     {/* @if TARGET='app' */}
                     {claim && !isCollection && (
                       <div className="claim-preview__hover-actions">
-                        <FileDownloadLink uri={canonicalUrl} hideOpenButton hideDownloadStatus />
+                        <FileDownloadLink focusable={false} uri={canonicalUrl} hideOpenButton hideDownloadStatus />
                       </div>
                     )}
                     {/* @endif */}
@@ -335,7 +356,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                     )}
                     {isPlayable && (
                       <div className="claim-preview__hover-actions">
-                        <FileWatchLaterLink uri={uri} />
+                        <FileWatchLaterLink focusable={false} uri={uri} />
                       </div>
                     )}
                   </FileThumbnail>
@@ -352,7 +373,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                 {pending ? (
                   <ClaimPreviewTitle uri={uri} />
                 ) : (
-                  <NavLink aria-current={active && 'page'} {...navLinkProps}>
+                  <NavLink aria-label={ariaLabelData} aria-current={active ? 'page' : null} {...navLinkProps}>
                     <ClaimPreviewTitle uri={uri} />
                   </NavLink>
                 )}
@@ -451,9 +472,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
             )}
           </div>
         </div>
-        {!hideMenu && (
-          <ClaimMenuList uri={uri} collectionId={listId} />
-        )}
+        {!hideMenu && <ClaimMenuList uri={uri} collectionId={listId} />}
       </>
     </WrapperElement>
   );
