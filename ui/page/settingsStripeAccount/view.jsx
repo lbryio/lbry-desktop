@@ -1,9 +1,11 @@
 // @flow
 import * as ICONS from 'constants/icons';
+import * as PAGES from 'constants/pages';
 import React from 'react';
 import Button from 'component/button';
 import Card from 'component/common/card';
 import Page from 'component/page';
+
 import { Lbryio } from 'lbryinc';
 import { URL, WEBPACK_WEB_PORT, STRIPE_PUBLIC_KEY } from 'config';
 import moment from 'moment';
@@ -264,6 +266,14 @@ class StripeAccountConnection extends React.Component<Props, State> {
                   </div>
                 )}
               </div>
+            }
+            actions={
+              <Button
+                button="primary"
+                label={__('View Transactions')}
+                icon={ICONS.SETTINGS}
+                navigate={`/$/${PAGES.WALLET}?tab=account-history`}
+              />
             }
           />
           <br />
