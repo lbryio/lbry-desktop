@@ -11,6 +11,8 @@ import Plastic from 'react-plastic';
 import Button from 'component/button';
 import * as ICONS from 'constants/icons';
 import * as MODALS from 'constants/modal_types';
+import * as PAGES from 'constants/pages';
+
 
 let stripeEnvironment = 'test';
 // if the key contains pk_live it's a live key
@@ -431,6 +433,14 @@ class SettingsStripeCard extends React.Component<Props, State> {
                     }}
                   />
                 </>
+              }
+              actions={
+                <Button
+                  button="primary"
+                  label={__('View Transactions')}
+                  icon={ICONS.SETTINGS}
+                  navigate={`/$/${PAGES.WALLET}?tab=payment-history`}
+                />
               }
             />
             <br />
