@@ -35,7 +35,7 @@ import {
   doAuthTokenRefresh,
 } from 'util/saved-passwords';
 import { X_LBRY_AUTH_TOKEN } from 'constants/token';
-import { LBRY_WEB_API, DEFAULT_LANGUAGE, LBRY_API_URL } from 'config';
+import { LBRY_WEB_API, DEFAULT_LANGUAGE, LBRY_API_URL, LBRY_WEB_PUBLISH_API } from 'config';
 
 // Import 3rd-party styles before ours for the current way we are code-splitting.
 import 'scss/third-party.scss';
@@ -43,8 +43,12 @@ import 'scss/third-party.scss';
 // Import our app styles
 // If a style is not necessary for the initial page load, it should be removed from `all.scss`
 // and loaded dynamically in the component that consumes it
+// @if TARGET='app'
 import 'scss/all.scss';
-
+// @endif
+// @if TARGET='web'
+import 'web/theme';
+// @endif
 // @if TARGET='web'
 // These overrides can't live in web/ because they need to use the same instance of `Lbry`
 import apiPublishCallViaWeb from 'web/setup/publish';
@@ -65,12 +69,11 @@ if (process.env.SDK_API_URL) {
 }
 
 let sdkAPIHost = process.env.SDK_API_HOST || process.env.SDK_API_URL;
-// @if TARGET='web'
 sdkAPIHost = LBRY_WEB_API;
-// @endif
 
 export const SDK_API_PATH = `${sdkAPIHost}/api/v1`;
 const proxyURL = `${SDK_API_PATH}/proxy`;
+const publishURL = LBRY_WEB_PUBLISH_API; // || `${SDK_API_PATH}/proxy`;
 
 Lbry.setDaemonConnectionString(proxyURL);
 
@@ -80,7 +83,7 @@ Lbry.setOverride(
     new Promise((resolve, reject) => {
       apiPublishCallViaWeb(
         apiCall,
-        proxyURL,
+        publishURL,
         Lbry.getApiRequestHeaders() && Object.keys(Lbry.getApiRequestHeaders()).includes(X_LBRY_AUTH_TOKEN)
           ? Lbry.getApiRequestHeaders()[X_LBRY_AUTH_TOKEN]
           : '',

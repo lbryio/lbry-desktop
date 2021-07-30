@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-
+import formatMediaDuration from 'util/formatMediaDuration';
 type Props = {
   claim: ?StreamClaim,
   className?: string,
@@ -9,19 +9,11 @@ type Props = {
 function VideoDuration(props: Props) {
   const { claim, className } = props;
 
-  const video = claim && claim.value && (claim.value.video || claim.value.audio);
+  const media = claim && claim.value && (claim.value.video || claim.value.audio);
   let duration;
-  if (video && video.duration) {
+  if (media && media.duration) {
     // $FlowFixMe
-    let date = new Date(null);
-    date.setSeconds(video.duration);
-    let timeString = date.toISOString().substr(11, 8);
-
-    if (timeString.startsWith('00:')) {
-      timeString = timeString.substr(3);
-    }
-
-    duration = timeString;
+    duration = formatMediaDuration(media.duration);
   }
 
   return duration ? <span className={className}>{duration}</span> : null;

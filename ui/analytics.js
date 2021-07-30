@@ -12,7 +12,7 @@ import { generateInitialUrl } from 'util/url';
 import { MATOMO_ID, MATOMO_URL, LBRY_WEB_BUFFER_API } from 'config';
 
 const isProduction = process.env.NODE_ENV === 'production';
-const devInternalApis = process.env.LBRY_API_URL;
+const devInternalApis = process.env.LBRY_API_URL && process.env.LBRY_API_URL.includes('dev');
 
 export const SHARE_INTERNAL = 'shareInternal';
 const SHARE_THIRD_PARTY = 'shareThirdParty';

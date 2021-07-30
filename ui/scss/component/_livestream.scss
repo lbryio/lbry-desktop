@@ -318,7 +318,7 @@ $discussion-header__height: 3rem;
   padding-bottom: var(--spacing-xxs);
   .markdown-preview {
     p {
-      word-break: break-all;
+      word-break: break-word;
     }
   }
 }

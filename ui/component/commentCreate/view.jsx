@@ -42,7 +42,9 @@ type Props = {
   isReply: boolean,
   activeChannel: string,
   activeChannelClaim: ?ChannelClaim,
+  bottom: boolean,
   livestream?: boolean,
+  embed?: boolean,
   toast: (string) => void,
   claimIsMine: boolean,
   sendTip: ({}, (any) => void, (any) => void) => void,
@@ -63,13 +65,14 @@ export function CommentCreate(props: Props) {
     isReply,
     parentId,
     activeChannelClaim,
+    bottom,
     livestream,
+    embed,
     claimIsMine,
     sendTip,
     doToast,
   } = props;
-  const buttonref: ElementRef<any> = React.useRef();
-
+  const buttonRef: ElementRef<any> = React.useRef();
   const {
     push,
     location: { pathname },
@@ -85,11 +88,8 @@ export function CommentCreate(props: Props) {
   const [advancedEditor, setAdvancedEditor] = usePersistedState('comment-editor-mode', false);
   const hasChannels = channels && channels.length;
   const charCount = commentValue.length;
-
   const [activeTab, setActiveTab] = React.useState('');
-
   const [tipError, setTipError] = React.useState();
-
   const disabled = isSubmitting || !activeChannelClaim || !commentValue.length;
   const [shouldDisableReviewButton, setShouldDisableReviewButton] = React.useState();
 
@@ -106,9 +106,9 @@ export function CommentCreate(props: Props) {
 
   function altEnterListener(e: SyntheticKeyboardEvent<*>) {
     const KEYCODE_ENTER = 13;
-    if ((e.ctrlKey || e.metaKey) && e.keyCode === KEYCODE_ENTER) {
+    if ((livestream || e.ctrlKey || e.metaKey) && e.keyCode === KEYCODE_ENTER) {
       e.preventDefault();
-      buttonref.current.click();
+      buttonRef.current.click();
     }
   }
 
@@ -147,8 +147,6 @@ export function CommentCreate(props: Props) {
     const activeChannelName = activeChannelClaim && activeChannelClaim.name;
     const activeChannelId = activeChannelClaim && activeChannelClaim.claim_id;
 
-    console.log(activeChannelClaim);
-
     setIsSubmitting(true);
 
     if (activeTab === TAB_LBC) {
@@ -184,8 +182,7 @@ export function CommentCreate(props: Props) {
       }
 
       const sourceClaimId = claim.claim_id;
-
-      var roundedAmount = Math.round(tipAmount * 100) / 100;
+      const roundedAmount = Math.round(tipAmount * 100) / 100;
 
       Lbryio.call(
         'customer',
@@ -204,8 +201,6 @@ export function CommentCreate(props: Props) {
         'post'
       )
         .then((customerTipResponse) => {
-          console.log(customerTipResponse);
-
           const paymentIntendId = customerTipResponse.payment_intent_id;
 
           handleCreateComment(null, paymentIntendId, stripeEnvironment);
@@ -225,14 +220,14 @@ export function CommentCreate(props: Props) {
 
           // handleCreateComment(null);
         })
-        .catch(function (error) {
-          var displayError = 'Sorry, there was an error in processing your payment!';
-
-          if (error.message !== 'payment intent failed to confirm') {
-            displayError = error.message;
-          }
-
-          doToast({ message: displayError, isError: true });
+        .catch((error) => {
+          doToast({
+            message:
+              error.message !== 'payment intent failed to confirm'
+                ? error.message
+                : 'Sorry, there was an error in processing your payment!',
+            isError: true,
+          });
         });
     }
   }
@@ -261,7 +256,7 @@ export function CommentCreate(props: Props) {
           }
         }
       })
-      .catch((e) => {
+      .catch(() => {
         setIsSubmitting(false);
         setCommentFailure(true);
       });
@@ -280,6 +275,11 @@ export function CommentCreate(props: Props) {
       <div
         role="button"
         onClick={() => {
+          if (embed) {
+            window.open(`https://odysee.com/$/${PAGES.AUTH}?redirect=/$/${PAGES.LIVESTREAM}`);
+            return;
+          }
+
           const pathPlusRedirect = `/$/${PAGES.CHANNEL_NEW}?redirect=${pathname}`;
           if (livestream) {
             window.open(pathPlusRedirect);
@@ -306,7 +306,7 @@ export function CommentCreate(props: Props) {
       <div className="comment__create">
         <div className="comment__sc-preview">
           <CreditAmount
-            className="comment__scpreview-amount"
+            className="comment__sc-preview-amount"
             isFiat={activeTab === TAB_FIAT}
             amount={tipAmount}
             size={activeTab === TAB_LBC ? 18 : 2}
@@ -344,6 +344,7 @@ export function CommentCreate(props: Props) {
       className={classnames('comment__create', {
         'comment__create--reply': isReply,
         'comment__create--nested-reply': isNested,
+        'comment__create--bottom': bottom,
       })}
     >
       <FormField
@@ -398,7 +399,7 @@ export function CommentCreate(props: Props) {
         ) : (
           <>
             <Button
-              ref={buttonref}
+              ref={buttonRef}
               button="primary"
               disabled={disabled}
               type="submit"

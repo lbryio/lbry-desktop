@@ -28,7 +28,7 @@ import * as PUBLISH_MODES from 'constants/publish_types';
 import { useHistory } from 'react-router';
 import Spinner from 'component/spinner';
 import { toHex } from 'util/hex';
-import { BITWAVE_REPLAY_API } from 'constants/livestream';
+import { LIVESTREAM_REPLAY_API } from 'constants/livestream';
 
 // @if TARGET='app'
 import fs from 'fs';
@@ -182,9 +182,9 @@ function PublishForm(props: Props) {
     }
   } else {
     if (editingURI) {
-      customSubtitle = __('Update your video');
+      customSubtitle = __('Update your content');
     } else {
-      customSubtitle = __('Upload that unlabeled video you found behind the TV in 1991');
+      customSubtitle = __('Upload that unlabeled video or cassette you found behind the TV in 1991');
     }
   }
 
@@ -274,7 +274,7 @@ function PublishForm(props: Props) {
   // move this to lbryinc OR to a file under ui, and/or provide a standardized livestreaming config.
   function fetchLivestreams(channelId, signature, timestamp) {
     setCheckingLivestreams(true);
-    fetch(`${BITWAVE_REPLAY_API}/${channelId}?signature=${signature || ''}&signing_ts=${timestamp || ''}`) // claimChannelId
+    fetch(`${LIVESTREAM_REPLAY_API}/${channelId}?signature=${signature || ''}&signing_ts=${timestamp || ''}`) // claimChannelId
       .then((res) => res.json())
       .then((res) => {
         if (!res || !res.data) {
@@ -566,6 +566,7 @@ function PublishForm(props: Props) {
               <Button
                 key={String(modeName)}
                 icon={modeName}
+                iconSize={18}
                 label={__(MODE_TO_I18N_STR[String(modeName)] || '---')}
                 button="alt"
                 onClick={() => {

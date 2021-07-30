@@ -1,5 +1,5 @@
 // @flow
-import { SHOW_ADS, ENABLE_NO_SOURCE_CLAIMS, SIMPLE_SITE } from 'config';
+import { SHOW_ADS, SIMPLE_SITE } from 'config';
 import * as CS from 'constants/claim_search';
 import * as ICONS from 'constants/icons';
 import React, { Fragment } from 'react';
@@ -136,7 +136,7 @@ function ChannelContent(props: Props) {
       {!channelIsMine && claimsInChannel > 0 && <HiddenNsfwClaims uri={uri} />}
 
       <ClaimListDiscover
-        showNoSourceClaims={ENABLE_NO_SOURCE_CLAIMS}
+        hasSource
         defaultFreshness={CS.FRESH_ALL}
         showHiddenByUser={viewHiddenChannels}
         forceShowReposts

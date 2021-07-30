@@ -1,4 +1,4 @@
-const { WEBPACK_WEB_PORT, LBRY_WEB_API } = require('../config.js');
+const { WEBPACK_WEB_PORT, LBRY_WEB_API, BRANDED_SITE } = require('../config.js');
 const path = require('path');
 const fs = require('fs');
 const merge = require('webpack-merge');
@@ -153,6 +153,7 @@ const webConfig = {
         exclude: /node_modules/,
         options: {
           TARGET: 'web',
+          BRANDED_SITE: BRANDED_SITE,
           ppOptions: {
             type: 'js',
           },

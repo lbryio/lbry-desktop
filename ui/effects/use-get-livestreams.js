@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { BITWAVE_LIVE_API } from 'constants/livestream';
+import { LIVESTREAM_LIVE_API } from 'constants/livestream';
 
 /**
  * Gets latest livestream info list. Returns null (instead of a blank object)
@@ -16,7 +16,7 @@ export default function useGetLivestreams(minViewers: number = 0, refreshMs: num
 
   React.useEffect(() => {
     function checkCurrentLivestreams() {
-      fetch(BITWAVE_LIVE_API)
+      fetch(LIVESTREAM_LIVE_API)
         .then((res) => res.json())
         .then((res) => {
           setLoading(false);

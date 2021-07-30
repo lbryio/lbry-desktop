@@ -436,7 +436,6 @@ export function doCommentCreate(
       ...(environment ? { environment } : {}), // add environment for stripe if it exists
     })
       .then((result: CommentCreateResponse) => {
-        console.log(result);
         dispatch({
           type: ACTIONS.COMMENT_CREATE_COMPLETED,
           data: {
@@ -449,7 +448,6 @@ export function doCommentCreate(
         return result;
       })
       .catch((error) => {
-        console.log(error);
         dispatch({
           type: ACTIONS.COMMENT_CREATE_FAILED,
           data: error,
@@ -471,6 +469,9 @@ export function doCommentCreate(
               break;
             case 'comments are disabled by the creator':
               toastMessage = __('Unable to comment. The content owner has disabled comments.');
+              break;
+            case 'duplicate comment!':
+              toastMessage = __('Please do not spam.');
               break;
             default:
               const BLOCKED_WORDS_ERR_MSG = 'the comment contents are blocked by';
@@ -1390,7 +1391,9 @@ export const doFetchCreatorSettings = (channelClaimIds: Array<string> = []) => {
           const channelId = channelSignatures[i].claim_id;
           settingsByChannelId[channelId] = settings[i];
 
-          settingsByChannelId[channelId].words = settingsByChannelId[channelId].words.split(',');
+          if (settings[i].words) {
+            settingsByChannelId[channelId].words = settings[i].words.split(',');
+          }
 
           delete settingsByChannelId[channelId].channel_name;
           delete settingsByChannelId[channelId].channel_id;

@@ -1,5 +1,5 @@
 const { generateDownloadUrl } = require('../../ui/util/web');
-const { URL, SITE_NAME, LBRY_WEB_API } = require('../../config.js');
+const { URL, SITE_NAME, LBRY_WEB_API, FAVICON } = require('../../config.js');
 const { Lbry } = require('lbry-redux');
 const Feed = require('feed').Feed;
 
@@ -82,7 +82,7 @@ async function getFeed(channelClaim, feedLink) {
   const title = value ? value.title : channelClaim.name;
 
   const options = {
-    favicon: URL + '/public/favicon.png',
+    favicon: FAVICON || URL + '/public/favicon.png',
     generator: SITE_NAME + ' RSS Feed',
     title: title + ' on ' + SITE_NAME,
     description: fmtDescription(value && value.description ? value.description : ''),

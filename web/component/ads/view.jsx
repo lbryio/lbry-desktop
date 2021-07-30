@@ -82,7 +82,7 @@ function Ads(props: Props) {
 
   const videoAd = (
     <div className="ads__claim-item">
-      <div id="62d1eb10-e362-4873-99ed-c64a4052b43b" />
+      <div id="62d1eb10-e362-4873-99ed-c64a4052b43b" className="ads__injected-video" />
       <div
         className={classnames('ads__claim-text', {
           'ads__claim-text--small': small,

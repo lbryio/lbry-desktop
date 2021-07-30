@@ -9,6 +9,7 @@ const config = {
   WEBPACK_ELECTRON_PORT: process.env.WEBPACK_ELECTRON_PORT,
   WEB_SERVER_PORT: process.env.WEB_SERVER_PORT,
   LBRY_WEB_API: process.env.LBRY_WEB_API, //api.na-backend.odysee.com',
+  LBRY_WEB_PUBLISH_API: process.env.LBRY_WEB_PUBLISH_API,
   LBRY_API_URL: process.env.LBRY_API_URL, //api.lbry.com',
   LBRY_WEB_STREAMING_API: process.env.LBRY_WEB_STREAMING_API, //cdn.lbryplayer.xyz',
   LBRY_WEB_BUFFER_API: process.env.LBRY_WEB_BUFFER_API,
@@ -25,9 +26,10 @@ const config = {
   // LOGO
   LOGO_TITLE: process.env.LOGO_TITLE,
   FAVICON: process.env.FAVICON,
-  LOGO_URL: process.env.LOGO_URL,
-  LOGO_TEXT_LIGHT_URL: process.env.LOGO_TEXT_LIGHT_URL,
-  LOGO_TEXT_DARK_URL: process.env.LOGO_TEXT_DARK_URL,
+  LOGO: process.env.LOGO,
+  LOGO_TEXT_LIGHT: process.env.LOGO_TEXT_LIGHT,
+  LOGO_TEXT_DARK: process.env.LOGO_TEXT_DARK,
+  AVATAR_DEFAULT: process.env.AVATAR_DEFAULT,
   // OG
   OG_TITLE_SUFFIX: process.env.OG_TITLE_SUFFIX,
   OG_HOMEPAGE_TITLE: process.env.OG_HOMEPAGE_TITLE,
@@ -63,7 +65,8 @@ const config = {
   ENABLE_MATURE: process.env.ENABLE_MATURE === 'true',
   CUSTOM_HOMEPAGE: process.env.CUSTOM_HOMEPAGE === 'true',
   SHOW_TAGS_INTRO: process.env.SHOW_TAGS_INTRO === 'true',
-  AVATAR_DEFAULT: process.env.AVATAR_DEFAULT,
+  LIGHTHOUSE_DEFAULT_TYPES: process.env.LIGHTHOUSE_DEFAULT_TYPES,
+  BRANDED_SITE: process.env.BRANDED_SITE,
 };
 
 config.URL_LOCAL = `http://localhost:${config.WEB_SERVER_PORT}`;

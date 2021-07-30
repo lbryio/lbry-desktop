@@ -380,7 +380,7 @@ export default function SettingsCreatorPage(props: Props) {
                 )}
                 <TagsSearch
                   label={__('Moderators')}
-                  labelAddNew={__('Add moderators')}
+                  labelAddNew={__('Add moderator')}
                   onRemove={removeModerator}
                   onSelect={addModerator}
                   tagsPassedIn={moderatorTags}

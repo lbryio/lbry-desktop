@@ -23,7 +23,7 @@ type Props = {
     index: number,
     length: number,
     location: { pathname: string },
-    push: string => void,
+    push: (string) => void,
   },
 };
 
@@ -43,7 +43,7 @@ function FileDrop(props: Props) {
   const navigationTimer = React.useRef(null);
 
   // Gets respective icon given a mimetype
-  const getFileIcon = type => {
+  const getFileIcon = (type) => {
     // Not all files have a type
     if (!type) return ICONS.FILE;
     // Detect common types
@@ -77,10 +77,13 @@ function FileDrop(props: Props) {
   }, [navigateToPublish]);
 
   // Handle file selection
-  const handleFileSelected = React.useCallback((selectedFile) => {
-    updatePublishForm({ filePath: selectedFile });
-    hideDropArea();
-  }, [updatePublishForm, hideDropArea]);
+  const handleFileSelected = React.useCallback(
+    (selectedFile) => {
+      updatePublishForm({ filePath: selectedFile });
+      hideDropArea();
+    },
+    [updatePublishForm, hideDropArea]
+  );
 
   // Clear timers when unmounted
   React.useEffect(() => {
@@ -114,12 +117,12 @@ function FileDrop(props: Props) {
   React.useEffect(() => {
     if (dropData && !files.length && (!modal || modal.id !== MODALS.FILE_SELECTION)) {
       getTree(dropData)
-        .then(entries => {
+        .then((entries) => {
           if (entries && entries.length) {
             setFiles(entries);
           }
         })
-        .catch(error => {
+        .catch((error) => {
           setError(error || true);
         });
     }
@@ -146,7 +149,7 @@ function FileDrop(props: Props) {
   const show = files.length === 1 || (!target && drag && (!modal || modal.id !== MODALS.FILE_SELECTION));
 
   return (
-    <div className={classnames('file-drop', show && 'file-drop--show')}>
+    <div aria-hidden={!show} className={classnames('file-drop', show && 'file-drop--show')}>
       <div className={classnames('card', 'file-drop__area')}>
         <Icon size={64} icon={icon} className={'main-icon'} />
         <p>{target ? target.name : __(`Drop here to publish!`)} </p>
