@@ -3,6 +3,7 @@ import * as ICONS from 'constants/icons';
 import React from 'react';
 import classnames from 'classnames';
 import { icons } from './icon-custom';
+import { DOMAIN } from 'config';
 
 // It would be nice to standardize this somehow
 // These are copied from `scss/vars`, can they both come from the same source?
@@ -38,6 +39,8 @@ class IconComponent extends React.PureComponent<Props> {
 
   getIconColor = (color: string) => {
     switch (color) {
+      case 'primary':
+        return DOMAIN === 'odysee.com' ? RED_COLOR : GREEN_COLOR;
       case 'red':
         return RED_COLOR;
       case 'green':
