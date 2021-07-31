@@ -120,7 +120,7 @@ function ClaimPreviewTile(props: Props) {
   const signingChannel = claim && claim.signing_channel;
   const isChannel = claim && claim.value_type === 'channel';
   const channelUri = !isChannel ? signingChannel && signingChannel.permanent_url : claim && claim.permanent_url;
-  const channelTitle = signingChannel && (signingChannel.value.title || signingChannel.name);
+  const channelTitle = signingChannel && ((signingChannel.value && signingChannel.value.title) || signingChannel.name);
 
   // Aria-label value for claim preview
   let ariaLabelData = isChannel ? title : formatClaimPreviewTitle(title, channelTitle, date, mediaDuration);
