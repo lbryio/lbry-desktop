@@ -56,6 +56,7 @@ type Props = {
   claimId: ?string,
   userId: ?number,
   allowPreRoll: ?boolean,
+  shareTelemetry: boolean,
 };
 
 // type VideoJSOptions = {
@@ -193,6 +194,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     claimId,
     userId,
     // allowPreRoll,
+    shareTelemetry,
   } = props;
 
   const [reload, setReload] = useState('initial');
@@ -564,11 +566,12 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       });
 
       // Add recsys plugin
-      // TODO: Add an if(odysee.com) around this function to only use recsys on odysee
-      player.recsys({
-        videoId: claimId,
-        userId: userId,
-      });
+      if (shareTelemetry) {
+        player.recsys({
+          videoId: claimId,
+          userId: userId,
+        });
+      }
 
       // set playsinline for mobile
       // TODO: make this better
