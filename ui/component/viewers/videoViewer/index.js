@@ -7,7 +7,7 @@ import { makeSelectContentPositionForUri } from 'redux/selectors/content';
 import VideoViewer from './view';
 import { withRouter } from 'react-router';
 import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
-import { makeSelectClientSetting, selectHomepageData } from 'redux/selectors/settings';
+import { selectDaemonSettings, makeSelectClientSetting, selectHomepageData } from 'redux/selectors/settings';
 import { toggleVideoTheaterMode, doSetClientSetting } from 'redux/actions/settings';
 import { selectUserVerifiedEmail, selectUser } from 'redux/selectors/user';
 
@@ -31,6 +31,7 @@ const select = (state, props) => {
     homepageData: selectHomepageData(state),
     authenticated: selectUserVerifiedEmail(state),
     userId: userId,
+    shareTelemetry: IS_WEB || selectDaemonSettings(state).share_usage_data,
   };
 };
 
