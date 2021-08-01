@@ -9,11 +9,14 @@ import { useIsMobile } from 'effects/use-screensize';
 import { FormField } from 'component/common/form';
 import { hmsToSeconds, secondsToHms } from 'util/time';
 import { generateLbryContentUrl, generateLbryWebUrl, generateEncodedLbryURL, generateShareUrl } from 'util/url';
-import { URL, SHARE_DOMAIN_URL } from 'config';
+import { URL, TWITTER_ACCOUNT, SHARE_DOMAIN_URL } from 'config';
 
 const SHARE_DOMAIN = SHARE_DOMAIN_URL || URL;
 const IOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
 const SUPPORTS_SHARE_API = typeof navigator.share !== 'undefined';
+
+// Twitter share
+const TWITTER_INTENT_API = 'https://twitter.com/intent/tweet?';
 
 type Props = {
   claim: StreamClaim,
@@ -68,6 +71,21 @@ function SocialShare(props: Props) {
   );
   const downloadUrl = `${generateDownloadUrl(name, claimId)}`;
 
+  // Tweet params
+  let tweetIntentParams = {
+    url: shareUrl,
+    text: title || claim.name,
+    hashtags: 'LBRY',
+  };
+
+  if (TWITTER_ACCOUNT) {
+    // $FlowFixMe
+    tweetIntentParams.via = TWITTER_ACCOUNT;
+  }
+
+  // Generate twitter web intent url
+  const tweetIntent = TWITTER_INTENT_API + new URLSearchParams(tweetIntentParams).toString();
+
   function handleWebShareClick() {
     if (navigator.share) {
       navigator.share({
@@ -115,7 +133,7 @@ function SocialShare(props: Props) {
           iconSize={24}
           icon={ICONS.TWITTER}
           title={__('Share on Twitter')}
-          href={`https://twitter.com/intent/tweet?text=${encodedLbryURL}`}
+          href={tweetIntent}
         />
         <Button
           className="share"

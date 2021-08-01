@@ -5,7 +5,7 @@ import { buildURI, doResolveUris, batchActions, isURIValid, makeSelectClaimForUr
 import { makeSelectSearchUris, selectSearchValue } from 'redux/selectors/search';
 import handleFetchResponse from 'util/handle-fetch';
 import { getSearchQueryString } from 'util/query-params';
-import { SIMPLE_SITE } from 'config';
+import { SIMPLE_SITE, SEARCH_SERVER_API } from 'config';
 
 type Dispatch = (action: any) => any;
 type GetState = () => { search: SearchState };
@@ -19,7 +19,7 @@ type SearchOptions = {
 };
 
 let lighthouse = {
-  CONNECTION_STRING: 'https://lighthouse.lbry.com/search',
+  CONNECTION_STRING: SEARCH_SERVER_API,
   search: (queryString: string) => fetch(`${lighthouse.CONNECTION_STRING}?${queryString}`).then(handleFetchResponse),
 };
 

@@ -26,12 +26,12 @@ export default function Logo(props: Props) {
   );
 
   if (type === 'small' || (isMobile && type !== 'embed')) {
-    return LOGO ? <img src={LOGO} /> : <Icon icon={ICONS.LBRY} />;
+    return LOGO ? <img className={'header__navigation-logo'} src={LOGO} /> : <Icon icon={ICONS.LBRY} />;
   } else if (type === 'embed') {
     if (LOGO_TEXT_LIGHT) {
       return (
         <>
-          <img src={LOGO_TEXT_LIGHT} />
+          <img className={'header__navigation-logo'} src={LOGO_TEXT_LIGHT} />
         </>
       );
     } else {
@@ -41,7 +41,10 @@ export default function Logo(props: Props) {
     if (LOGO_TEXT_LIGHT && LOGO_TEXT_DARK) {
       return (
         <>
-          <img src={currentTheme === 'light' ? LOGO_TEXT_DARK : LOGO_TEXT_LIGHT} />
+          <img
+            className={'header__navigation-logo'}
+            src={currentTheme === 'light' ? LOGO_TEXT_DARK : LOGO_TEXT_LIGHT}
+          />
         </>
       );
     } else {

@@ -9,13 +9,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Show currently active playing item on playlist _community pr!_ ([#6453](https://github.com/lbryio/lbry-desktop/pull/6453))
 - Add watch later to hover action for last used playlist on popup _community pr!_ ([#6274](https://github.com/lbryio/lbry-desktop/pull/6274))
 - Open in desktop (web feature) _community pr!_ ([#6667](https://github.com/lbryio/lbry-desktop/pull/6667))
+- Add confirmation on comment removal  _community pr!_ ([#6563](https://github.com/lbryio/lbry-desktop/pull/6563))
 
 ### Changed
 - Use Canonical Url for copy link ([#6500](https://github.com/lbryio/lbry-desktop/pull/6500))
 - Use better icon for copy link ([#6485](https://github.com/lbryio/lbry-desktop/pull/6485))
 - Comments load paginated ([#6390](https://github.com/lbryio/lbry-desktop/pull/6390))
-- Update lighthouse search api _community pr!_ ([#6731](https://github.com/lbryio/lbry-desktop/pull/6731))
 - Improve twitter share _community pr!_ ([#6690](https://github.com/lbryio/lbry-desktop/pull/6690))
+- Update lighthouse search api _community pr!_ ([#6731](https://github.com/lbryio/lbry-desktop/pull/6731))
+- Update sockety api _community pr!_ ([#6747](https://github.com/lbryio/lbry-desktop/pull/6747))
 
 ### Fixed
 - App now supports '#' and ':' for claimId separator ([#6496](https://github.com/lbryio/lbry-desktop/pull/6496))

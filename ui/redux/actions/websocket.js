@@ -1,9 +1,10 @@
 import * as ACTIONS from 'constants/action_types';
 import { getAuthToken } from 'util/saved-passwords';
 import { doNotificationList } from 'redux/actions/notifications';
+import { SOCKETY_SERVER_API } from 'config';
 
-const NOTIFICATION_WS_URL = 'wss://sockety.lbry.com/ws/internal?id=';
-const COMMENT_WS_URL = 'wss://sockety.lbry.com/ws/commentron?id=';
+const NOTIFICATION_WS_URL = `${SOCKETY_SERVER_API}/internal?id=`;
+const COMMENT_WS_URL = `${SOCKETY_SERVER_API}/commentron?id=`;
 
 let sockets = {};
 let closingSockets = {};
