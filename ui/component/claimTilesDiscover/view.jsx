@@ -159,6 +159,12 @@ function ClaimTilesDiscover(props: Props) {
     new Set(mutedUris.concat(blockedUris).map((uri) => splitBySeparator(uri)[1]))
   );
   const liveUris = [];
+  let streamTypesParam;
+  if (streamTypes) {
+    streamTypesParam = streamTypes;
+  } else if (SIMPLE_SITE && !hasNoSource && streamTypes !== null) {
+    streamTypesParam = [CS.FILE_VIDEO, CS.FILE_AUDIO];
+  }
 
   const [prevUris, setPrevUris] = React.useState([]);
 
@@ -192,8 +198,7 @@ function ClaimTilesDiscover(props: Props) {
     channel_ids: channelIds || [],
     not_channel_ids: mutedAndBlockedChannelIds,
     order_by: orderBy || ['trending_group', 'trending_mixed'],
-    stream_types:
-      streamTypes === null ? undefined : SIMPLE_SITE && !hasNoSource ? [CS.FILE_VIDEO, CS.FILE_AUDIO] : undefined,
+    stream_types: streamTypesParam,
   };
 
   if (ENABLE_NO_SOURCE_CLAIMS && hasNoSource) {
