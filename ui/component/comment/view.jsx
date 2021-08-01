@@ -270,6 +270,7 @@ function Comment(props: Props) {
                   authorUri={authorUri}
                   commentIsMine={commentIsMine}
                   handleEditComment={handleEditComment}
+                  supportAmount={supportAmount}
                 />
               </Menu>
             </div>
