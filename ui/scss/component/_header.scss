@@ -73,6 +73,8 @@
 
 .header__navigation-logo {
   height: var(--height-button);
+  max-width: -webkit-fit-content;
+  max-width: -moz-fit-content;
   max-width: fit-content;
 }
 
