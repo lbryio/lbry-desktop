@@ -669,12 +669,13 @@
 
 .claim-preview__hover-actions {
   display: none;
-  position: absolute;
+  position: relative;
+  float: right;
   top: var(--spacing-xxs);
   right: var(--spacing-xxs);
 
   & > * {
-    color: var(--color-black);
+    color: var(--color-text);
     background-color: var(--color-black);
     border-radius: var(--border-radius);
     padding: var(--spacing-xxs);
@@ -685,6 +686,7 @@
   }
 
   .button--file-action {
+    display: block;
     margin: 0 0;
     padding: var(--spacing-xxs) var(--spacing-xxs);
     height: unset;
