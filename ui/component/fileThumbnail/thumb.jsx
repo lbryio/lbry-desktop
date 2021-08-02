@@ -6,14 +6,16 @@ import useLazyLoading from 'effects/use-lazy-loading';
 
 type Props = {
   thumb: string,
+  fallback: ?string,
   children?: Node,
   className?: string,
 };
 
 const Thumb = (props: Props) => {
-  const { thumb, children, className } = props;
+  const { thumb, fallback, children, className } = props;
   const thumbnailRef = React.useRef(null);
-  useLazyLoading(thumbnailRef);
+
+  useLazyLoading(thumbnailRef, fallback || '');
 
   return (
     <div ref={thumbnailRef} data-background-image={thumb} className={classnames('media__thumb', className)}>
