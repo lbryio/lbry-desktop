@@ -1,13 +1,17 @@
 const { generateDownloadUrl } = require('../../ui/util/web');
-const { URL, SITE_NAME, LBRY_WEB_API, FAVICON } = require('../../config.js');
+const { URL, SITE_NAME, LBRY_WEB_API } = require('../../config.js');
 const { Lbry } = require('lbry-redux');
-const Feed = require('feed').Feed;
+const Rss = require('rss');
 
 const SDK_API_PATH = `${LBRY_WEB_API}/api/v1`;
 const proxyURL = `${SDK_API_PATH}/proxy`;
 Lbry.setDaemonConnectionString(proxyURL);
 
 const NUM_ENTRIES = 500;
+
+// ****************************************************************************
+// Fetch claim info
+// ****************************************************************************
 
 async function doClaimSearch(options) {
   let results;
@@ -19,15 +23,21 @@ async function doClaimSearch(options) {
 
 async function getChannelClaim(name, claimId) {
   let claim;
+  let error;
+
   try {
     const url = `lbry://${name}#${claimId}`;
     const response = await Lbry.resolve({ urls: [url] });
-
     if (response && response[url] && !response[url].error) {
       claim = response && response[url];
     }
   } catch {}
-  return claim || 'The RSS URL is invalid or is not associated with any channel.';
+
+  if (!claim) {
+    error = 'The RSS URL is invalid or is not associated with any channel.';
+  }
+
+  return { claim, error };
 }
 
 async function getClaimsFromChannel(claimId, count) {
@@ -43,89 +53,203 @@ async function getClaimsFromChannel(claimId, count) {
   return await doClaimSearch(options);
 }
 
-async function getFeed(channelClaim, feedLink) {
-  const replaceLineFeeds = (str) => str.replace(/(?:\r\n|\r|\n)/g, '<br />');
+// ****************************************************************************
+// Helpers
+// ****************************************************************************
 
-  const fmtDescription = (description) => replaceLineFeeds(description);
+const generateEnclosureForClaimContent = (claim) => {
+  const value = claim.value;
+  if (!value || !value.stream_type) {
+    return undefined;
+  }
 
-  const sanitizeThumbsUrl = (url) => {
-    if (typeof url === 'string' && url.startsWith('https://')) {
-      return encodeURI(url).replace(/&/g, '%26');
-    }
-    return '';
-  };
+  switch (value.stream_type) {
+    case 'video':
+    case 'audio':
+    case 'image':
+    case 'document':
+    case 'software':
+      return {
+        url: generateDownloadUrl(claim.name, claim.claim_id),
+        type: (value.source && value.source.media_type) || undefined,
+        size: (value.source && value.source.size) || 0, // Per spec, 0 is a valid fallback.
+      };
 
-  const getEnclosure = (claim) => {
-    const value = claim.value;
-    if (!value || !value.stream_type || !value.source || !value.source.media_type) {
+    default:
       return undefined;
+  }
+};
+
+const getLanguageValue = (claim) => {
+  if (claim && claim.value && claim.value.languages && claim.value.languages.length > 0) {
+    return claim.value.languages[0];
+  }
+  return 'en';
+};
+
+const replaceLineFeeds = (str) => str.replace(/(?:\r\n|\r|\n)/g, '<br />');
+
+const isEmailRoughlyValid = (email) => /^\S+@\S+$/.test(email);
+
+/**
+ * 'itunes:owner' is required by castfeedvalidator (w3c allows omission), and
+ * both name and email must be defined. The email must also be a "valid" one.
+ *
+ * Use a fallback email when the creator did not specify one. The email will not
+ * be shown to the user; it is just used for administrative purposes.
+ *
+ * @param claim
+ * @returns any
+ */
+const generateItunesOwnerElement = (claim) => {
+  let name = '---';
+  let email = 'no-reply@odysee.com';
+
+  if (claim && claim.value) {
+    name = claim.name;
+    if (isEmailRoughlyValid(claim.value.email)) {
+      email = claim.value.email;
     }
+  }
 
-    switch (value.stream_type) {
-      case 'video':
-      case 'audio':
-      case 'image':
-      case 'document':
-      case 'software':
-        return {
-          url: encodeURI(generateDownloadUrl(claim.name, claim.claim_id)),
-          type: value.source.media_type,
-          length: value.source.size || 0, // Per spec, 0 is a valid fallback.
-        };
+  return {
+    'itunes:owner': [{ 'itunes:name': name }, { 'itunes:email': email }],
+  };
+};
 
-      default:
-        return undefined;
+const generateItunesExplicitElement = (claim) => {
+  const tags = (claim && claim.value && claim.tags) || [];
+  return { 'itunes:explicit': tags.includes('mature') ? 'yes' : 'no' };
+};
+
+const getItunesCategory = (claim) => {
+  const itunesCategories = [
+    'Arts',
+    'Business',
+    'Comedy',
+    'Education',
+    'Fiction',
+    'Government',
+    'History',
+    'Health & Fitness',
+    'Kids & Family',
+    'Leisure',
+    'Music',
+    'News',
+    'Religion & Spirituality',
+    'Science',
+    'Society & Culture',
+    'Sports',
+    'Technology',
+    'True Crime',
+    'TV & Film',
+  ];
+
+  const tags = (claim && claim.value && claim.tags) || [];
+  for (let i = 0; i < tags.length; ++i) {
+    const tag = tags[i];
+    if (itunesCategories.includes(tag)) {
+      // "Note: Although you can specify more than one category and subcategory
+      // in your RSS feed, Apple Podcasts only recognizes the first category and
+      // subcategory."
+      // --> The only parse the first found tag.
+      return tag.replace('&', '&amp;');
     }
-  };
+  }
 
-  const value = channelClaim.value;
-  const title = value ? value.title : channelClaim.name;
+  // itunes will not accept any other categories, and the element is required
+  // to pass castfeedvalidator. So, fallback to 'Leisure' (closes to "General")
+  // if the creator did not specify a tag.
+  return 'Leisure';
+};
 
-  const options = {
-    favicon: FAVICON || URL + '/public/favicon.png',
-    generator: SITE_NAME + ' RSS Feed',
-    title: title + ' on ' + SITE_NAME,
-    description: fmtDescription(value && value.description ? value.description : ''),
-    link: encodeURI(`${URL}/${channelClaim.name}:${channelClaim.claim_id}`),
-    image: sanitizeThumbsUrl(value && value.thumbnail ? value.thumbnail.url : ''),
-    feedLinks: {
-      rss: encodeURI(feedLink),
-    },
-    author: {
-      name: encodeURI(channelClaim.name),
-      link: encodeURI(URL + '/' + channelClaim.name + ':' + channelClaim.claim_id),
-    },
-  };
+const generateItunesDurationElement = (claim) => {
+  let duration;
+  if (claim && claim.value) {
+    if (claim.value.video) {
+      duration = claim.value.video.duration;
+    } else if (claim.value.audio) {
+      duration = claim.value.audio.duration;
+    }
+  }
 
-  const feed = new Feed(options);
-  const latestClaims = await getClaimsFromChannel(channelClaim.claim_id, NUM_ENTRIES);
+  if (duration) {
+    return { 'itunes:duration': `${duration}` };
+  }
+};
 
-  latestClaims.forEach((c) => {
-    const meta = c.meta;
-    const value = c.value;
+const generateItunesImageElement = (claim) => {
+  const thumbnailUrl = (claim && claim.value && claim.value.thumbnail && claim.value.thumbnail.url) || '';
+  if (thumbnailUrl) {
+    return {
+      'itunes:image': { _attr: { href: thumbnailUrl } },
+    };
+  }
+};
 
-    const title = value && value.title ? value.title : c.name;
-    const thumbnailUrl = value && value.thumbnail ? value.thumbnail.url : '';
-    const thumbnailHtml = thumbnailUrl ? `<p><img src="${thumbnailUrl}" alt="thumbnail" title="${title}" /></p>` : '';
+const getFormattedDescription = (claim) => {
+  return replaceLineFeeds((claim && claim.value && claim.value.description) || '');
+};
 
-    feed.addItem({
-      id: c.claim_id,
-      guid: encodeURI(URL + '/' + c.name + ':' + c.claim_id),
-      title: value && value.title ? value.title : c.name,
-      description: thumbnailHtml + fmtDescription(value && value.description ? value.description : ''),
-      link: encodeURI(URL + '/' + c.name + ':' + c.claim_id),
-      date: new Date(meta ? meta.creation_timestamp * 1000 : null),
-      enclosure: getEnclosure(c),
+// ****************************************************************************
+// Generate
+// ****************************************************************************
+
+function generateFeed(feedLink, channelClaim, claimsInChannel) {
+  // --- Channel ---
+  const feed = new Rss({
+    title: ((channelClaim.value && channelClaim.value.title) || channelClaim.name) + ' on ' + SITE_NAME,
+    description: getFormattedDescription(channelClaim),
+    feed_url: feedLink,
+    site_url: URL,
+    image_url: (channelClaim.value && channelClaim.value.thumbnail && channelClaim.value.thumbnail.url) || undefined,
+    language: getLanguageValue(channelClaim),
+    custom_namespaces: { itunes: 'http://www.itunes.com/dtds/podcast-1.0.dtd' },
+    custom_elements: [
+      { 'itunes:author': channelClaim.name },
+      {
+        'itunes:category': [
+          {
+            _attr: {
+              text: getItunesCategory(channelClaim),
+            },
+          },
+        ],
+      },
+      generateItunesImageElement(channelClaim),
+      generateItunesOwnerElement(channelClaim),
+      generateItunesExplicitElement(channelClaim),
+    ],
+  });
+
+  // --- Content ---
+  claimsInChannel.forEach((c) => {
+    const title = (c.value && c.value.title) || c.name;
+    const thumbnailUrl = (c.value && c.value.thumbnail && c.value.thumbnail.url) || '';
+    const thumbnailHtml = thumbnailUrl
+      ? `<p><img src="${thumbnailUrl}" width="480" alt="thumbnail" title="${title}" /></p>`
+      : '';
+    const description = thumbnailHtml + getFormattedDescription(c);
+
+    feed.item({
+      title: title,
+      description: description,
+      url: `${URL}/${c.name}:${c.claim_id}`,
+      guid: undefined, // defaults to 'url'
+      author: undefined, // defaults feed author property
+      date: new Date(c.meta ? c.meta.creation_timestamp * 1000 : null),
+      enclosure: generateEnclosureForClaimContent(c),
+      custom_elements: [
+        { 'itunes:title': title },
+        { 'itunes:author': channelClaim.name },
+        generateItunesImageElement(c),
+        generateItunesDurationElement(c),
+        generateItunesExplicitElement(c),
+      ],
     });
   });
 
   return feed;
-}
-
-function postProcess(feed) {
-  // Handle 'Feed' creating an invalid MIME type when trying to guess
-  // from 'https://thumbnails.lbry.com/UCgQ8eREJzR1dO' style of URLs.
-  return feed.replace(/type="image\/\/.*"\/>/g, 'type="image/*"/>');
 }
 
 async function getRss(ctx) {
@@ -133,13 +257,14 @@ async function getRss(ctx) {
     return 'Invalid URL';
   }
 
-  const channelClaim = await getChannelClaim(ctx.params.claimName, ctx.params.claimId);
-  if (typeof channelClaim === 'string' || !channelClaim) {
-    return channelClaim;
+  const { claim: channelClaim, error } = await getChannelClaim(ctx.params.claimName, ctx.params.claimId);
+  if (error) {
+    return error;
   }
 
-  const feed = await getFeed(channelClaim, `${URL}${ctx.request.url}`);
-  return postProcess(feed.rss2());
+  const latestClaimsInChannel = await getClaimsFromChannel(channelClaim.claim_id, NUM_ENTRIES);
+  const feed = generateFeed(`${URL}${ctx.request.url}`, channelClaim, latestClaimsInChannel);
+  return feed.xml();
 }
 
 module.exports = { getRss };
