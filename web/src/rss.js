@@ -1,4 +1,4 @@
-const { generateDownloadUrl } = require('../../ui/util/web');
+const { generateStreamUrl } = require('../../ui/util/web');
 const { URL, SITE_NAME, LBRY_WEB_API } = require('../../config.js');
 const { Lbry } = require('lbry-redux');
 const Rss = require('rss');
@@ -70,7 +70,7 @@ const generateEnclosureForClaimContent = (claim) => {
     case 'document':
     case 'software':
       return {
-        url: generateDownloadUrl(claim.name, claim.claim_id),
+        url: generateStreamUrl(claim.name, claim.claim_id),
         type: (value.source && value.source.media_type) || undefined,
         size: (value.source && value.source.size) || 0, // Per spec, 0 is a valid fallback.
       };
