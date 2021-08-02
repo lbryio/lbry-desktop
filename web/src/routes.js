@@ -19,9 +19,11 @@ function getStreamUrl(ctx) {
 }
 
 const rssMiddleware = async (ctx) => {
-  const xml = await getRss(ctx);
-  ctx.set('Content-Type', 'application/rss+xml');
-  ctx.body = xml;
+  const rss = await getRss(ctx);
+  if (rss.startsWith('<?xml')) {
+    ctx.set('Content-Type', 'application/xml');
+  }
+  ctx.body = rss;
 };
 
 router.get(`/$/api/content/v1/get`, async (ctx) => {
