@@ -378,15 +378,16 @@ function ClaimMenuList(props: Props) {
                         </div>
                       </MenuItem>
                     )}
-                    {showDelete && (
-                      <MenuItem className="comment__menu-option" onSelect={handleDelete}>
-                        <div className="menu__link">
-                          <Icon aria-hidden icon={ICONS.DELETE} />
-                          {__('Delete')}
-                        </div>
-                      </MenuItem>
-                    )}
                   </>
+                )}
+
+                {showDelete && (
+                  <MenuItem className="comment__menu-option" onSelect={handleDelete}>
+                    <div className="menu__link">
+                      <Icon aria-hidden icon={ICONS.DELETE} />
+                      {__('Delete')}
+                    </div>
+                  </MenuItem>
                 )}
               </>
             )}

@@ -50,7 +50,7 @@ const select = (state, props) => {
     hasClaimInCustom: makeSelectCollectionForIdHasClaimUrl(COLLECTIONS_CONSTS.FAVORITES_ID, contentPermanentUri)(state),
     channelIsMuted: makeSelectChannelIsMuted(contentChannelUri)(state),
     channelIsBlocked: makeSelectChannelIsBlocked(contentChannelUri)(state),
-    fileInfo: makeSelectFileInfoForUri(props.uri)(state),
+    fileInfo: makeSelectFileInfoForUri(contentPermanentUri)(state),
     isSubscribed: makeSelectIsSubscribed(contentChannelUri, true)(state),
     channelIsAdminBlocked: makeSelectChannelIsAdminBlocked(props.uri)(state),
     isAdmin: selectHasAdminChannel(state),
