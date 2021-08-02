@@ -362,21 +362,19 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
               {!pending ? (
                 <NavLink aria-hidden tabIndex={-1} {...navLinkProps}>
                   <FileThumbnail thumbnail={thumbnailUrl}>
-                    {/* @if TARGET='app' */}
-                    {claim && !isCollection && (
-                      <div className="claim-preview__hover-actions">
+                    <div className="claim-preview__hover-actions">
+                      {isPlayable && (
+                        <FileWatchLaterLink focusable={false} uri={uri} />
+                      )}
+                      {/* @if TARGET='app' */}
+                      {claim && !isCollection && (
                         <FileDownloadLink focusable={false} uri={canonicalUrl} hideOpenButton hideDownloadStatus />
-                      </div>
-                    )}
-                    {/* @endif */}
+                      )}
+                      {/* @endif */}
+                    </div>
                     {!isLivestream && (
                       <div className="claim-preview__file-property-overlay">
                         <PreviewOverlayProperties uri={uri} small={type === 'small'} properties={liveProperty} />
-                      </div>
-                    )}
-                    {isPlayable && (
-                      <div className="claim-preview__hover-actions">
-                        <FileWatchLaterLink focusable={false} uri={uri} />
                       </div>
                     )}
                   </FileThumbnail>

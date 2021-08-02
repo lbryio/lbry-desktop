@@ -208,19 +208,16 @@ function ClaimPreviewTile(props: Props) {
         <FileThumbnail thumbnail={thumbnailUrl} allowGifs>
           {!isChannel && (
             <React.Fragment>
-              {/* @if TARGET='app' */}
-              {isStream && (
-                <div className="claim-preview__hover-actions">
-                  <FileDownloadLink focusable={false} uri={canonicalUrl} hideOpenButton />
-                </div>
-              )}
-              {/* @endif */}
-
-              {isPlayable && (
-                <div className="claim-preview__hover-actions">
+              <div className="claim-preview__hover-actions">
+                {isPlayable && (
                   <FileWatchLaterLink focusable={false} uri={uri} />
-                </div>
-              )}
+                )}
+                {/* @if TARGET='app' */}
+                {isStream && (
+                  <FileDownloadLink focusable={false} uri={canonicalUrl} hideOpenButton />
+                )}
+                {/* @endif */}
+              </div>
 
               <div className="claim-preview__file-property-overlay">
                 <PreviewOverlayProperties uri={uri} properties={liveProperty || properties} />
