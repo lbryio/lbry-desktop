@@ -4,6 +4,7 @@ import { getThumbnailCdnUrl } from 'util/thumbnail';
 import React from 'react';
 import FreezeframeWrapper from './FreezeframeWrapper';
 import Placeholder from './placeholder.png';
+import { MISSING_THUMB_DEFAULT } from 'config';
 import classnames from 'classnames';
 import Thumb from './thumb';
 
@@ -42,6 +43,8 @@ function FileThumbnail(props: Props) {
     );
   }
 
+  const fallback = MISSING_THUMB_DEFAULT ? getThumbnailCdnUrl({ thumbnail: MISSING_THUMB_DEFAULT }) : undefined;
+
   let url = thumbnail || (hasResolvedClaim ? Placeholder : '');
   // @if TARGET='web'
   // Pass image urls through a compression proxy
@@ -54,7 +57,7 @@ function FileThumbnail(props: Props) {
 
   if (hasResolvedClaim || thumbnailUrl) {
     return (
-      <Thumb thumb={thumbnailUrl} className={className}>
+      <Thumb thumb={thumbnailUrl} fallback={fallback} className={className}>
         {children}
       </Thumb>
     );
