@@ -283,10 +283,13 @@ function CommentList(props: Props) {
             <Empty padded text={__('That was pretty deep. What do you think?')} />
           )}
 
-          <ul className={classnames({
-              'comments': expandedComments,
+          <ul
+            className={classnames({
+              comments: expandedComments,
               'comments--contracted': !expandedComments,
-            })} ref={commentRef}>
+            })}
+            ref={commentRef}
+          >
             {topLevelComments &&
               displayedComments &&
               displayedComments.map((comment) => {
@@ -318,9 +321,9 @@ function CommentList(props: Props) {
             <div className="card__bottom-actions--comments">
               {moreBelow && (
                 <Button
-                  button="alt"
+                  button="link"
                   title={!expandedComments ? __('Expand Comments') : __('Load More')}
-                  label={!expandedComments ? __('Expand Comments') : __('Load More')}
+                  label={!expandedComments ? __('Expand') : __('More')}
                   onClick={() => {
                     if (!expandedComments) {
                       setExpandedComments(true);
@@ -332,9 +335,9 @@ function CommentList(props: Props) {
               )}
               {expandedComments && (
                 <Button
-                  button="alt"
+                  button="link"
                   title={__('Collapse Thread')}
-                  label={__('Collapse Thread')}
+                  label={__('Collapse')}
                   onClick={() => {
                     setExpandedComments(false);
                   }}
