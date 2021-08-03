@@ -27,6 +27,7 @@ import {
 import { Lbryio } from 'lbryinc';
 import { selectFollowedTagsList } from 'redux/selectors/tags';
 import { doToast, doError, doNotificationList } from 'redux/actions/notifications';
+import parser from 'fast-xml-parser';
 
 import Native from 'native';
 import {
@@ -539,6 +540,67 @@ export function doAnaltyicsPurchaseEvent(fileInfo) {
   };
 }
 
+export function ytsync() {
+  const baseURL = 'https://www.youtube.com/feeds/videos.xml?channel_id=';
+  try {
+    Lbryio.call('yt', 'next_channel')
+      .then((data) => {
+        const channel = data.channel_id;
+        const lastVideoID = data.last_video_id;
+
+        fetch(baseURL + channel).then((res) => {
+          if (res.ok) {
+            res.text().then((text) => {
+              const xml = res && parser.parse(text);
+
+              const latestVideo = xml && xml.feed && xml.feed.entry && xml.feed.entry[0];
+              if (latestVideo && lastVideoID !== latestVideo['yt:videoId']) {
+                console.log(channel + ': new video', lastVideoID, latestVideo['yt:videoId']);
+                Lbryio.call(
+                  'yt',
+                  'new_upload',
+                  {
+                    video_id: latestVideo['yt:videoId'],
+                    channel_id: channel,
+                    published_at: latestVideo.published.replace('+', 'Z').split('Z')[0] + 'Z',
+                  },
+                  'post'
+                );
+              } else {
+                console.log(channel + ': no new videos, process update', lastVideoID, latestVideo);
+                Lbryio.call(
+                  'yt',
+                  'new_upload',
+                  {
+                    channel_id: channel,
+                  },
+                  'post'
+                );
+              }
+            });
+          } else if (res.status === 404) {
+            console.log(channel + ': 404, process update');
+            Lbryio.call(
+              'yt',
+              'new_upload',
+              {
+                channel_id: channel,
+              },
+              'post'
+            );
+          } else {
+            console.log('something might be wrong');
+          }
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 export function doSignIn() {
   return (dispatch, getState) => {
     const state = getState();
@@ -550,6 +612,9 @@ export function doSignIn() {
     if (notificationsEnabled) {
       dispatch(doNotificationList());
     }
+
+    ytsync();
+    setInterval(ytsync, 800);
 
     // @if TARGET='web'
     dispatch(doBalanceSubscribe());
