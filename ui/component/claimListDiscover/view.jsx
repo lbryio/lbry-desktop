@@ -319,7 +319,7 @@ function ClaimListDiscover(props: Props) {
   }
 
   if (streamTypeParam && streamTypeParam !== CS.CONTENT_ALL && claimType !== CS.CLAIM_CHANNEL) {
-    options.stream_types = [streamTypeParam];
+    options.stream_types = typeof streamTypeParam === 'string' ? [streamTypeParam] : streamTypeParam;
   }
 
   if (claimTypeParam) {
