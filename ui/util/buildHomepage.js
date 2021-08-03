@@ -286,7 +286,7 @@ export function GetLinksData(
             ? `>${Math.floor(moment().subtract(9, 'months').startOf('week').unix())}`
             : `>${Math.floor(moment().subtract(1, 'year').startOf('week').unix())}`,
         pageSize: getPageSize(subscribedChannels.length > 3 ? (subscribedChannels.length > 6 ? 16 : 8) : 4),
-        streamTypes: CS.FILE_TYPES,
+        streamTypes: null,
         channelIds: subscribedChannels.map((subscription: Subscription) => {
           const { channelClaimId } = parseURI(subscription.uri);
           return channelClaimId;

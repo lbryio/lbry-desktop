@@ -23,13 +23,17 @@ const { getJsBundleId } = require('../bundle-id.js');
 const jsBundleId = getJsBundleId();
 
 function insertToHead(fullHtml, htmlToInsert) {
-  return fullHtml.replace(
-    /<!-- VARIABLE_HEAD_BEGIN -->.*<!-- VARIABLE_HEAD_END -->/s,
-    `
-      ${htmlToInsert || buildOgMetadata()}
-      <script src="/public/ui-${jsBundleId}.js" async></script>
-    `
-  );
+  const beginStr = '<!-- VARIABLE_HEAD_BEGIN -->';
+  const finalStr = '<!-- VARIABLE_HEAD_END -->';
+
+  const beginIndex = fullHtml.indexOf(beginStr);
+  const finalIndex = fullHtml.indexOf(finalStr);
+
+  if (beginIndex > -1 && finalIndex > -1 && finalIndex > beginIndex) {
+    return `${fullHtml.slice(0, beginIndex)}${
+      htmlToInsert || buildOgMetadata()
+    }<script src="/public/ui-${jsBundleId}.js" async></script>${fullHtml.slice(finalIndex + finalStr.length)}`;
+  }
 }
 
 function truncateDescription(description) {

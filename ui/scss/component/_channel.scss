@@ -165,7 +165,7 @@ $actions-z-index: 2;
 }
 
 .channel__title {
-  display: inline;
+  display: flex;
   margin-right: var(--spacing-s);
   overflow: hidden;
   text-overflow: ellipsis;

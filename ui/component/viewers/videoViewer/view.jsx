@@ -51,6 +51,7 @@ type Props = {
   authenticated: boolean,
   userId: number,
   homepageData?: { [string]: HomepageCat },
+  shareTelemetry: boolean,
 };
 
 /*
@@ -84,6 +85,7 @@ function VideoViewer(props: Props) {
     homepageData,
     authenticated,
     userId,
+    shareTelemetry,
   } = props;
 
   const adApprovedChannelIds = homepageData ? getAllIds(homepageData) : [];
@@ -319,6 +321,7 @@ function VideoViewer(props: Props) {
           claimId={claimId}
           userId={userId}
           allowPreRoll={!embedded && !authenticated}
+          shareTelemetry={shareTelemetry}
         />
       )}
     </div>

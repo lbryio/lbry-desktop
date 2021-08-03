@@ -125,9 +125,11 @@ function DiscoverPage(props: Props) {
         // Assume wild west page if no dynamicRouteProps
         // Not a very good solution, but just doing it for now
         // until we are sure this page will stay around
+        // TODO: find a better way to determine discover / wild west vs other modes release times
+        // for now including && !tags so that
         releaseTime={
           SIMPLE_SITE
-            ? !dynamicRouteProps && `>${Math.floor(moment().subtract(1, 'day').startOf('week').unix())}`
+            ? !dynamicRouteProps && !tags && `>${Math.floor(moment().subtract(1, 'day').startOf('week').unix())}`
             : undefined
         }
         feeAmount={SIMPLE_SITE ? !dynamicRouteProps && CS.FEE_AMOUNT_ANY : undefined}

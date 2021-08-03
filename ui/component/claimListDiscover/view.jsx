@@ -106,7 +106,7 @@ function ClaimListDiscover(props: Props) {
     claimType,
     pageSize,
     defaultClaimType,
-    streamType = SIMPLE_SITE ? CS.FILE_VIDEO : undefined,
+    streamType = SIMPLE_SITE ? [CS.FILE_VIDEO, CS.FILE_AUDIO] : undefined,
     defaultStreamType = SIMPLE_SITE ? CS.FILE_VIDEO : undefined, // add param for DEFAULT_STREAM_TYPE
     freshness,
     defaultFreshness = CS.FRESH_WEEK,
@@ -319,7 +319,7 @@ function ClaimListDiscover(props: Props) {
   }
 
   if (streamTypeParam && streamTypeParam !== CS.CONTENT_ALL && claimType !== CS.CLAIM_CHANNEL) {
-    options.stream_types = [streamTypeParam];
+    options.stream_types = typeof streamTypeParam === 'string' ? [streamTypeParam] : streamTypeParam;
   }
 
   if (claimTypeParam) {

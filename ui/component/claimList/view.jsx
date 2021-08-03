@@ -47,6 +47,7 @@ type Props = {
   searchOptions?: any,
   collectionId?: string,
   showNoSourceClaims?: boolean,
+  onClick?: (e: any, index?: number) => void,
 };
 
 export default function ClaimList(props: Props) {
@@ -55,6 +56,7 @@ export default function ClaimList(props: Props) {
     uris,
     headerAltControls,
     loading,
+    id,
     persistedStorageKey,
     empty,
     defaultSort,
@@ -80,6 +82,7 @@ export default function ClaimList(props: Props) {
     searchOptions,
     collectionId,
     showNoSourceClaims,
+    onClick,
   } = props;
 
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
@@ -105,6 +108,12 @@ export default function ClaimList(props: Props) {
 
   function handleSortChange() {
     setCurrentSort(currentSort === SORT_NEW ? SORT_OLD : SORT_NEW);
+  }
+
+  function handleClaimClicked(e, index) {
+    if (onClick) {
+      onClick(e, index);
+    }
   }
 
   useEffect(() => {
@@ -191,6 +200,8 @@ export default function ClaimList(props: Props) {
               {injectedItem && index === 4 && <li>{injectedItem}</li>}
               <ClaimPreview
                 uri={uri}
+                containerId={id}
+                indexInContainer={index}
                 type={type}
                 active={activeUri && uri === activeUri}
                 hideMenu={hideMenu}
@@ -209,6 +220,7 @@ export default function ClaimList(props: Props) {
                   return claim.name.length === 24 && !claim.name.includes(' ') && claim.value.author === 'Spee.ch';
                 }}
                 live={resolveLive(index)}
+                onClick={handleClaimClicked}
               />
             </React.Fragment>
           ))}
