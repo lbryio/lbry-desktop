@@ -424,7 +424,7 @@ function ClaimMenuList(props: Props) {
             </div>
           </MenuItem>
         )}
-        
+
         {!claimIsMine && !isMyCollection && (
           <MenuItem className="comment__menu-option" onSelect={handleReportContent}>
             <div className="menu__link">
