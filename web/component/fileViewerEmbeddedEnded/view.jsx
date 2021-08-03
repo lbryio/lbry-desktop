@@ -38,7 +38,7 @@ function FileViewerEmbeddedEnded(props: Props) {
     <div className="file-viewer__overlay">
       <div className="file-viewer__overlay-secondary">
         <Button className="file-viewer__overlay-logo" href={URL}>
-          <Logo type={'embed'} />
+          <Logo type={'embed-ended'} />
         </Button>
       </div>
       <div className="file-viewer__overlay-title">{prompt}</div>
