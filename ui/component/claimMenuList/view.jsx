@@ -394,6 +394,13 @@ function ClaimMenuList(props: Props) {
         )}
         <hr className="menu__separator" />
 
+        <MenuItem className="comment__menu-option" onSelect={handleCopyLink}>
+          <div className="menu__link">
+            <Icon aria-hidden icon={ICONS.COPY_LINK} />
+            {__('Copy Link')}
+          </div>
+        </MenuItem>
+
         {isChannelPage && IS_WEB && rssUrl && (
           <MenuItem className="comment__menu-option" onSelect={handleCopyRssLink}>
             <div className="menu__link">
@@ -402,13 +409,6 @@ function ClaimMenuList(props: Props) {
             </div>
           </MenuItem>
         )}
-
-        <MenuItem className="comment__menu-option" onSelect={handleCopyLink}>
-          <div className="menu__link">
-            <Icon aria-hidden icon={ICONS.SHARE} />
-            {__('Copy Link')}
-          </div>
-        </MenuItem>
 
         {!claimIsMine && !isMyCollection && (
           <MenuItem className="comment__menu-option" onSelect={handleReportContent}>
