@@ -209,6 +209,7 @@
   "Your comment": "Your comment",
   "Post --[button to submit something]--": "Post",
   "Post --[noun, markdown post tab button]--": "Post",
+  "Livestream --[noun, livestream tab button]--": "Livestream --[noun, livestream tab button]--",
   "Posting...": "Posting...",
   "Incompatible daemon": "Incompatible daemon",
   "Incompatible daemon running": "Incompatible daemon running",
@@ -2065,6 +2066,10 @@
   "Reset": "Reset",
   "Reset to original (previous) publish date": "Reset to original (previous) publish date",
   "Search for something...": "Search for something...",
-  "Show reply": "Show reply",
+  "Confirm Comment Deletion": "Confirm Comment Deletion",
+  "Remove Comment": "Remove Comment",
+  "Are you sure you want to remove this comment?": "Are you sure you want to remove this comment?",
+  "This comment has a tip associated with it which cannot be reverted.": "This comment has a tip associated with it which cannot be reverted.",
+  "Recent Comments": "Recent Comments",
   "--end--": "--end--"
 }
