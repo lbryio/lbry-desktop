@@ -1,0 +1,35 @@
+.item-list {
+  background-color: black; //white;
+  margin-bottom: var(--spacing-l);
+  padding: var(--spacing-l);
+
+  .card__actions {
+    margin-top: var(--spacing-m);
+    margin-left: var(--spacing-s);
+  }
+}
+
+.item-list__row {
+  align-items: center;
+  display: flex;
+  padding: var(--spacing-s);
+
+  fieldset-section {
+    margin-bottom: 0;
+  }
+}
+
+.item-list__element {
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &:not(:first-of-type) {
+    padding-left: var(--spacing-s);
+  }
+}
+
+.item-list__row:hover,
+.item-list__row--selected {
+  background-color: black; //black; //black, 0.1);
+}
