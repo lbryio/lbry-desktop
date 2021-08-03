@@ -31,7 +31,7 @@ export default function Logo(props: Props) {
     if (LOGO_TEXT_LIGHT) {
       return (
         <>
-          <img className={'file-viewer__overlay-logo--videoend'} src={LOGO_TEXT_LIGHT} />
+          <img className={'embed__overlay-logo'} src={LOGO_TEXT_LIGHT} />
         </>
       );
     } else {
@@ -41,7 +41,7 @@ export default function Logo(props: Props) {
     if (LOGO_TEXT_LIGHT) {
       return (
         <>
-          <img className={'file-viewer__overlay-logo--videoend'} src={LOGO_TEXT_LIGHT} />
+          <img className={'embed__overlay-logo'} src={LOGO_TEXT_LIGHT} />
         </>
       );
     } else {
