@@ -45,9 +45,15 @@ let daemon;
 let lbryFirst;
 
 const appState = {};
+const PROTOCOL = 'lbry';
 
-if (process.platform !== 'linux') {
-  app.setAsDefaultProtocolClient('lbry');
+if (isDev && process.platform === 'win32') {
+  // Setting this is required to get this working in dev mode.
+  app.setAsDefaultProtocolClient(PROTOCOL, process.execPath, [
+    path.resolve(process.argv[1]),
+  ]);
+} else {
+  app.setAsDefaultProtocolClient(PROTOCOL);
 }
 
 app.name = 'LBRY';
@@ -149,9 +155,15 @@ if (!gotSingleInstanceLock) {
   app.on('second-instance', (event, argv) => {
     // Send the url to the app to navigate first, then focus
     if (rendererWindow) {
-      if ((process.platform === 'win32' || process.platform === 'linux') && String(argv[1]).startsWith('lbry')) {
-        let URI = argv[1];
-
+      // External uri (last item on argv):
+      const EXTERNAL_URI = (argv.length) ? argv[argv.length - 1] : '';
+      // Handle protocol requests for windows and linux
+      const platforms = (process.platform === 'win32' || process.platform === 'linux');
+      // Is LBRY protocol
+      const isProtocolURI = String(EXTERNAL_URI).startsWith(PROTOCOL + '://');
+      // External protocol requested:
+      if (platforms  && isProtocolURI) {
+        let URI = EXTERNAL_URI;
         // Keep only command line / deep linked arguments
         // Windows normalizes URIs when they're passed in from other apps. On Windows, this tries to
         // restore the original URI that was typed.
