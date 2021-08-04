@@ -322,9 +322,9 @@ const makeSelectFilteredComments = (comments: Array<Comment>) =>
     }
   );
 
-export const makeSelectTotalRepliesForParentId = (parentId: string) =>
+export const makeSelectTotalReplyPagesForParentId = (parentId: string) =>
   createSelector(selectState, (state) => {
-    return state.totalRepliesByParentId[parentId] || 0;
+    return state.repliesTotalPagesByParentId[parentId] || 0;
   });
 
 export const makeSelectTotalCommentsCountForUri = (uri: string) =>

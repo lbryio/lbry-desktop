@@ -9,7 +9,7 @@ const defaultState: CommentsState = {
   byId: {}, // ClaimID -> list of fetched comment IDs.
   totalCommentsById: {}, // ClaimId -> ultimate total (including replies) in commentron.
   repliesByParentId: {}, // ParentCommentID -> list of fetched replies.
-  totalRepliesByParentId: {}, // ParentCommentID -> total replies in commentron.
+  repliesTotalPagesByParentId: {}, // ParentCommentID -> total number of reply pages for a parentId in commentron.
   topLevelCommentsById: {}, // ClaimID -> list of fetched top level comments.
   topLevelTotalPagesById: {}, // ClaimID -> total number of top-level pages in commentron. Based on COMMENT_PAGE_SIZE_TOP_LEVEL.
   topLevelTotalCommentsById: {}, // ClaimID -> total top level comments in commentron.
@@ -79,7 +79,6 @@ export default handleActions(
       const totalCommentsById = Object.assign({}, state.totalCommentsById);
       const topLevelCommentsById = Object.assign({}, state.topLevelCommentsById); // was byId {ClaimId -> [commentIds...]}
       const repliesByParentId = Object.assign({}, state.repliesByParentId); // {ParentCommentID -> [commentIds...] } list of reply comments
-      const totalRepliesByParentId = Object.assign({}, state.totalRepliesByParentId);
       const commentsByUri = Object.assign({}, state.commentsByUri);
       const comments = byId[claimId] || [];
       const newCommentIds = comments.slice();
@@ -104,12 +103,6 @@ export default handleActions(
             repliesByParentId[comment.parent_id].unshift(comment.comment_id);
           }
 
-          if (!totalRepliesByParentId[comment.parent_id]) {
-            totalRepliesByParentId[comment.parent_id] = 1;
-          } else {
-            totalRepliesByParentId[comment.parent_id] += 1;
-          }
-
           // Update the parent's "replies" value
           if (commentById[comment.parent_id]) {
             commentById[comment.parent_id].replies = (commentById[comment.parent_id].replies || 0) + 1;
@@ -128,7 +121,6 @@ export default handleActions(
         ...state,
         topLevelCommentsById,
         repliesByParentId,
-        totalRepliesByParentId,
         commentById,
         byId,
         totalCommentsById,
@@ -262,7 +254,7 @@ export default handleActions(
       const repliesByParentId = Object.assign({}, state.repliesByParentId);
       const totalCommentsById = Object.assign({}, state.totalCommentsById);
       const pinnedCommentsById = Object.assign({}, state.pinnedCommentsById);
-      const totalRepliesByParentId = Object.assign({}, state.totalRepliesByParentId);
+      const repliesTotalPagesByParentId = Object.assign({}, state.repliesTotalPagesByParentId);
       const isLoadingByParentId = Object.assign({}, state.isLoadingByParentId);
       const settingsByChannelId = Object.assign({}, state.settingsByChannelId);
 
@@ -277,7 +269,7 @@ export default handleActions(
 
       if (!disabled) {
         if (parentId) {
-          totalRepliesByParentId[parentId] = totalFilteredItems;
+          repliesTotalPagesByParentId[parentId] = totalPages;
         } else {
           totalCommentsById[claimId] = totalItems;
           topLevelTotalCommentsById[claimId] = totalFilteredItems;
@@ -330,7 +322,7 @@ export default handleActions(
         repliesByParentId,
         totalCommentsById,
         pinnedCommentsById,
-        totalRepliesByParentId,
+        repliesTotalPagesByParentId,
         byId,
         commentById,
         commentsByUri,
@@ -548,7 +540,6 @@ export default handleActions(
       const commentById = Object.assign({}, state.commentById);
       const byId = Object.assign({}, state.byId);
       const repliesByParentId = Object.assign({}, state.repliesByParentId); // {ParentCommentID -> [commentIds...] } list of reply comments
-      const totalRepliesByParentId = Object.assign({}, state.totalRepliesByParentId);
       const totalCommentsById = Object.assign({}, state.totalCommentsById);
 
       const comment = commentById[comment_id];
@@ -571,10 +562,6 @@ export default handleActions(
           if (commentById[comment.parent_id]) {
             commentById[comment.parent_id].replies = Math.max(0, (commentById[comment.parent_id].replies || 0) - 1);
           }
-
-          if (totalRepliesByParentId[comment.parent_id]) {
-            totalRepliesByParentId[comment.parent_id] = Math.max(0, totalRepliesByParentId[comment.parent_id] - 1);
-          }
         }
       }
 
@@ -590,7 +577,6 @@ export default handleActions(
         byId,
         totalCommentsById,
         repliesByParentId,
-        totalRepliesByParentId,
         isLoading: false,
       };
     },
