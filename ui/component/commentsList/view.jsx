@@ -319,7 +319,7 @@ function CommentList(props: Props) {
 
           {isMobile && (
             <div className="card__bottom-actions--comments">
-              {moreBelow && (
+              {(!expandedComments || moreBelow) && (
                 <Button
                   button="link"
                   title={!expandedComments ? __('Expand Comments') : __('Load More')}
