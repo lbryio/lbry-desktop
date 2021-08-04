@@ -438,3 +438,9 @@ $thumbnailWidthSmall: 1rem;
 .comment--blocked {
   opacity: 0.5;
 }
+
+.comment--min-amount-notice {
+  .icon {
+    margin-bottom: -3px; // TODO fix few instances of these (find "-2px")
+  }
+}
