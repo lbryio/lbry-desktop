@@ -366,6 +366,8 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                       {isPlayable && (
                         <FileWatchLaterLink focusable={false} uri={uri} />
                       )}
+                    </div>
+                    <div className="claim-preview__hover-actions">
                       {/* @if TARGET='app' */}
                       {claim && !isCollection && (
                         <FileDownloadLink focusable={false} uri={canonicalUrl} hideOpenButton hideDownloadStatus />

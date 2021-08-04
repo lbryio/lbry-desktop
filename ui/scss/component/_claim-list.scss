@@ -672,7 +672,7 @@
   position: relative;
   float: right;
   top: var(--spacing-xxs);
-  right: var(--spacing-xxs);
+  margin-right: var(--spacing-xxs);
 
   & > * {
     color: var(--color-text);
