@@ -8,7 +8,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 - Show currently active playing item on playlist _community pr!_ ([#6453](https://github.com/lbryio/lbry-desktop/pull/6453))
 - Add watch later to hover action for last used playlist on popup _community pr!_ ([#6274](https://github.com/lbryio/lbry-desktop/pull/6274))
-- Open in desktop (web feature) _community pr!_ ([#6667](https://github.com/lbryio/lbry-desktop/pull/6667))
 - Add confirmation on comment removal  _community pr!_ ([#6563](https://github.com/lbryio/lbry-desktop/pull/6563))
 - Show on content page if a file is part of a playlist already  _community pr!_([#6393](https://github.com/lbryio/lbry-desktop/pull/6393))
 
@@ -29,6 +28,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix drag / drop publish issues for web users _community pr!_ ([#6466](https://github.com/lbryio/lbry-desktop/pull/6466))
 - Fix yarn copyenv on windows _community pr!_ ([#6702](https://github.com/lbryio/lbry-desktop/pull/6702))
 - Fix unnecessary livestream api calls in channel page _community pr!_ ([#6652](https://github.com/lbryio/lbry-desktop/pull/6652))
+- Fix desktop app fails to resolve deep links _community pr!_ ([#6779](https://github.com/lbryio/lbry-desktop/pull/6779))
 
 ## [0.51.1] - [2021-06-26]
 
