@@ -25,16 +25,6 @@ type Price = {
 
 type SetDaemonSettingArg = boolean | string | number;
 
-type DarkModeTimes = {
-  from: { hour: string, min: string, formattedTime: string },
-  to: { hour: string, min: string, formattedTime: string },
-};
-
-type OptionTimes = {
-  fromTo: string,
-  time: string,
-};
-
 type DaemonSettings = {
   download_dir: string,
   share_usage_data: boolean,
@@ -51,16 +41,11 @@ type Props = {
   isAuthenticated: boolean,
   instantPurchaseEnabled: boolean,
   instantPurchaseMax: Price,
-  currentTheme: string,
-  themes: Array<string>,
-  automaticDarkModeEnabled: boolean,
   clock24h: boolean,
   autoplay: boolean,
   floatingPlayer: boolean,
   hideReposts: ?boolean,
   clearPlayingUri: () => void,
-  darkModeTimes: DarkModeTimes,
-  setDarkTime: (string, {}) => void,
   openModal: (string) => void,
   enterSettings: () => void,
   exitSettings: () => void,
@@ -69,14 +54,6 @@ type Props = {
 };
 
 class SettingsPage extends React.PureComponent<Props> {
-  constructor(props: Props) {
-    super(props);
-
-    (this: any).onThemeChange = this.onThemeChange.bind(this);
-    (this: any).onAutomaticDarkModeChange = this.onAutomaticDarkModeChange.bind(this);
-    (this: any).onChangeTime = this.onChangeTime.bind(this);
-  }
-
   componentDidMount() {
     const { enterSettings } = this.props;
     enterSettings();
@@ -87,40 +64,8 @@ class SettingsPage extends React.PureComponent<Props> {
     exitSettings();
   }
 
-  onThemeChange(event: SyntheticInputEvent<*>) {
-    const { value } = event.target;
-
-    if (value === 'dark') {
-      this.onAutomaticDarkModeChange(false);
-    }
-
-    this.props.setClientSetting(SETTINGS.THEME, value);
-  }
-
-  onAutomaticDarkModeChange(value: boolean) {
-    this.props.setClientSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED, value);
-  }
-
   onClock24hChange(value: boolean) {
     this.props.setClientSetting(SETTINGS.CLOCK_24H, value);
-  }
-
-  onChangeTime(event: SyntheticInputEvent<*>, options: OptionTimes) {
-    const { value } = event.target;
-
-    this.props.setDarkTime(value, options);
-  }
-
-  formatHour(time: string, clock24h: boolean) {
-    if (clock24h) {
-      return `${time}:00`;
-    }
-
-    const now = new Date(0, 0, 0, Number(time));
-
-    const hour = now.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit' });
-
-    return hour;
   }
 
   setDaemonSetting(name: string, value: ?SetDaemonSettingArg): void {
@@ -137,9 +82,6 @@ class SettingsPage extends React.PureComponent<Props> {
       allowAnalytics,
       showNsfw,
       isAuthenticated,
-      currentTheme,
-      themes,
-      automaticDarkModeEnabled,
       clock24h,
       autoplay,
       // autoDownload,
@@ -149,17 +91,13 @@ class SettingsPage extends React.PureComponent<Props> {
       floatingPlayer,
       hideReposts,
       clearPlayingUri,
-      darkModeTimes,
       openModal,
       myChannelUrls,
       user,
     } = this.props;
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
-    const startHours = ['18', '19', '20', '21'];
-    const endHours = ['5', '6', '7', '8'];
 
     const newStyle = true;
-
     return newStyle ? (
       <Page noFooter noSideNavigation backout={{ title: __('Settings'), backLabel: __('Done') }} className="card-stack">
         <SettingAppearance />
@@ -219,61 +157,6 @@ class SettingsPage extends React.PureComponent<Props> {
               title={__('Appearance')}
               actions={
                 <React.Fragment>
-                  <fieldset-section>
-                    <FormField
-                      name="theme_select"
-                      type="select"
-                      label={__('Theme')}
-                      onChange={this.onThemeChange}
-                      value={currentTheme}
-                      disabled={automaticDarkModeEnabled}
-                    >
-                      {themes.map((theme) => (
-                        <option key={theme} value={theme}>
-                          {theme === 'light' ? __('Light') : __('Dark')}
-                        </option>
-                      ))}
-                    </FormField>
-                  </fieldset-section>
-                  <fieldset-section>
-                    <FormField
-                      type="checkbox"
-                      name="automatic_dark_mode"
-                      onChange={() => this.onAutomaticDarkModeChange(!automaticDarkModeEnabled)}
-                      checked={automaticDarkModeEnabled}
-                      label={__('Automatic dark mode')}
-                    />
-                    {automaticDarkModeEnabled && (
-                      <fieldset-group class="fieldset-group--smushed">
-                        <FormField
-                          type="select"
-                          name="automatic_dark_mode_range_start"
-                          onChange={(value) => this.onChangeTime(value, { fromTo: 'from', time: 'hour' })}
-                          value={darkModeTimes.from.hour}
-                          label={__('From --[initial time]--')}
-                        >
-                          {startHours.map((time) => (
-                            <option key={time} value={time}>
-                              {this.formatHour(time, clock24h)}
-                            </option>
-                          ))}
-                        </FormField>
-                        <FormField
-                          type="select"
-                          name="automatic_dark_mode_range_end"
-                          label={__('To --[final time]--')}
-                          onChange={(value) => this.onChangeTime(value, { fromTo: 'to', time: 'hour' })}
-                          value={darkModeTimes.to.hour}
-                        >
-                          {endHours.map((time) => (
-                            <option key={time} value={time}>
-                              {this.formatHour(time, clock24h)}
-                            </option>
-                          ))}
-                        </FormField>
-                      </fieldset-group>
-                    )}
-                  </fieldset-section>
                   <fieldset-section>
                     <FormField
                       type="checkbox"
