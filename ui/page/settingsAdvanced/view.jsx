@@ -7,18 +7,12 @@ import I18nMessage from 'component/i18nMessage';
 import Page from 'component/page';
 import SettingCommentsServer from 'component/settingCommentsServer';
 import SettingWalletServer from 'component/settingWalletServer';
-import SettingAutoLaunch from 'component/settingAutoLaunch';
-import SettingClosingBehavior from 'component/settingClosingBehavior';
 import FileSelector from 'component/common/file-selector';
 import { SETTINGS } from 'lbry-redux';
 import Card from 'component/common/card';
 import { getPasswordFromCookie } from 'util/saved-passwords';
 import Spinner from 'component/spinner';
 import PublishSettings from 'component/publishSettings';
-
-// @if TARGET='app'
-const IS_MAC = process.platform === 'darwin';
-// @endif
 
 type Price = {
   currency: string,
@@ -513,12 +507,6 @@ class SettingsAdvancedPage extends React.PureComponent<Props, State> {
             {/* @endif */}
 
             <Card title={__('Upload settings')} actions={<PublishSettings />} />
-
-            {/* @if TARGET='app' */}
-            {/* Auto launch in a hidden state doesn't work on mac https://github.com/Teamwork/node-auto-launch/issues/81 */}
-            {!IS_MAC && <Card title={__('Startup preferences')} actions={<SettingAutoLaunch />} />}
-            <Card title={__('Closing preferences')} actions={<SettingClosingBehavior />} />
-            {/* @endif */}
           </div>
         )}
       </Page>

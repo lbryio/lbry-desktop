@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { doClearCache, doToggle3PAnalytics, doOpenModal } from 'redux/actions/app';
+import { doToggle3PAnalytics, doOpenModal } from 'redux/actions/app';
 import { selectAllowAnalytics } from 'redux/selectors/app';
 import {
   doSetDaemonSetting,
@@ -44,7 +44,6 @@ const perform = (dispatch) => ({
   setDaemonSetting: (key, value) => dispatch(doSetDaemonSetting(key, value)),
   clearDaemonSetting: (key) => dispatch(doClearDaemonSetting(key)),
   toggle3PAnalytics: (allow) => dispatch(doToggle3PAnalytics(allow)),
-  clearCache: () => dispatch(doClearCache()),
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
   clearPlayingUri: () => dispatch(doSetPlayingUri({ uri: null })),
   setDarkTime: (time, options) => dispatch(doSetDarkTime(time, options)),

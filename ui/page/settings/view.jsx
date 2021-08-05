@@ -9,6 +9,7 @@ import Button from 'component/button';
 import Page from 'component/page';
 import SettingAccount from 'component/settingAccount';
 import SettingLanguage from 'component/settingLanguage';
+import SettingSystem from 'component/settingSystem';
 import FileSelector from 'component/common/file-selector';
 import HomepageSelector from 'component/homepageSelector';
 import Card from 'component/common/card';
@@ -47,7 +48,6 @@ type Props = {
   clearDaemonSetting: (string) => void,
   setClientSetting: (string, SetDaemonSettingArg) => void,
   toggle3PAnalytics: (boolean) => void,
-  clearCache: () => Promise<any>,
   daemonSettings: DaemonSettings,
   allowAnalytics: boolean,
   showNsfw: boolean,
@@ -72,17 +72,9 @@ type Props = {
   user: User,
 };
 
-type State = {
-  clearingCache: boolean,
-};
-
-class SettingsPage extends React.PureComponent<Props, State> {
+class SettingsPage extends React.PureComponent<Props> {
   constructor(props: Props) {
     super(props);
-
-    this.state = {
-      clearingCache: false,
-    };
 
     (this: any).onThemeChange = this.onThemeChange.bind(this);
     (this: any).onAutomaticDarkModeChange = this.onAutomaticDarkModeChange.bind(this);
@@ -162,7 +154,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
       hideReposts,
       clearPlayingUri,
       darkModeTimes,
-      clearCache,
       openModal,
       myChannelUrls,
       user,
@@ -176,6 +167,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
     return newStyle ? (
       <Page noFooter noSideNavigation backout={{ title: __('Settings'), backLabel: __('Done') }} className="card-stack">
         <SettingAccount />
+        <SettingSystem />
       </Page>
     ) : (
       <Page
@@ -518,26 +510,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 />
               </>
             )}
-
-            <Card
-              title={__('Application cache')}
-              subtitle={
-                <p className="section__subtitle">
-                  {__(
-                    'This will clear the application cache, and might fix issues you are having. Your wallet will not be affected. '
-                  )}
-                </p>
-              }
-              actions={
-                <Button
-                  button="secondary"
-                  icon={ICONS.ALERT}
-                  label={this.state.clearingCache ? __('Clearing') : __('Clear Cache')}
-                  onClick={clearCache}
-                  disabled={this.state.clearingCache}
-                />
-              }
-            />
           </div>
         )}
       </Page>
