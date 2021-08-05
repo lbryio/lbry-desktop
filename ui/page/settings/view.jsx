@@ -8,15 +8,12 @@ import { FormField } from 'component/common/form';
 import Button from 'component/button';
 import Page from 'component/page';
 import SettingAccount from 'component/settingAccount';
-import SettingLanguage from 'component/settingLanguage';
+import SettingAppearance from 'component/settingAppearance';
 import SettingSystem from 'component/settingSystem';
 import FileSelector from 'component/common/file-selector';
-import HomepageSelector from 'component/homepageSelector';
 import Card from 'component/common/card';
 import classnames from 'classnames';
 import { SIMPLE_SITE } from 'config';
-// $FlowFixMe
-import homepages from 'homepages';
 import { Lbryio } from 'lbryinc';
 import Yrbl from 'component/yrbl';
 import { getStripeEnvironment } from 'util/stripe';
@@ -65,7 +62,6 @@ type Props = {
   darkModeTimes: DarkModeTimes,
   setDarkTime: (string, {}) => void,
   openModal: (string) => void,
-  language?: string,
   enterSettings: () => void,
   exitSettings: () => void,
   myChannelUrls: ?Array<string>,
@@ -166,6 +162,7 @@ class SettingsPage extends React.PureComponent<Props> {
 
     return newStyle ? (
       <Page noFooter noSideNavigation backout={{ title: __('Settings'), backLabel: __('Done') }} className="card-stack">
+        <SettingAppearance />
         <SettingAccount />
         <SettingSystem />
       </Page>
@@ -179,11 +176,6 @@ class SettingsPage extends React.PureComponent<Props> {
         }}
         className="card-stack"
       >
-        <Card title={__('Language')} actions={<SettingLanguage />} />
-        {homepages && Object.keys(homepages).length > 1 && (
-          <Card title={__('Homepage')} actions={<HomepageSelector />} />
-        )}
-
         {!isAuthenticated && IS_WEB && (
           <div className="main--empty">
             <Yrbl

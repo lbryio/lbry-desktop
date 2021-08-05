@@ -10,12 +10,7 @@ import {
   doExitSettingsPage,
 } from 'redux/actions/settings';
 import { doSetPlayingUri } from 'redux/actions/content';
-import {
-  makeSelectClientSetting,
-  selectDaemonSettings,
-  selectLanguage,
-  selectShowMatureContent,
-} from 'redux/selectors/settings';
+import { makeSelectClientSetting, selectDaemonSettings, selectShowMatureContent } from 'redux/selectors/settings';
 import { selectMyChannelUrls, SETTINGS } from 'lbry-redux';
 import SettingsPage from './view';
 import { selectUserVerifiedEmail, selectUser } from 'redux/selectors/user';
@@ -35,7 +30,6 @@ const select = (state) => ({
   floatingPlayer: makeSelectClientSetting(SETTINGS.FLOATING_PLAYER)(state),
   hideReposts: makeSelectClientSetting(SETTINGS.HIDE_REPOSTS)(state),
   darkModeTimes: makeSelectClientSetting(SETTINGS.DARK_MODE_TIMES)(state),
-  language: selectLanguage(state),
   myChannelUrls: selectMyChannelUrls(state),
   user: selectUser(state),
 });

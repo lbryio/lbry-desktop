@@ -8,7 +8,7 @@ import { getDefaultHomepageKey } from 'util/default-languages';
 
 type Props = {
   homepage: string,
-  setHomepage: string => void,
+  setHomepage: (string) => void,
 };
 
 function SelectHomepage(props: Props) {
@@ -22,22 +22,25 @@ function SelectHomepage(props: Props) {
     return null;
   }
   return (
-    <React.Fragment>
+    <div className="section__actions--between">
+      <div>
+        <p>{__('Homepage')}</p>
+        <p className="help">{__('Tailor your experience.')}</p>
+      </div>
+
       <FormField
         name="homepage_select"
         type="select"
-        label={__('Homepage')}
         onChange={handleSetHomepage}
         value={homepage || getDefaultHomepageKey()}
-        helper={__('Tailor your experience.')}
       >
-        {Object.keys(homepages).map(hp => (
+        {Object.keys(homepages).map((hp) => (
           <option key={'hp' + hp} value={hp}>
             {`${LANGUAGES[hp][1]}`}
           </option>
         ))}
       </FormField>
-    </React.Fragment>
+    </div>
   );
 }
 
