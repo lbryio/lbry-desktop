@@ -46,7 +46,7 @@ async function getClaimsFromChannel(claimId, count) {
     page_size: count,
     has_source: true,
     claim_type: 'stream',
-    order_by: ['creation_timestamp'],
+    order_by: ['release_time'],
     no_totals: true,
   };
 
@@ -70,7 +70,8 @@ const generateEnclosureForClaimContent = (claim) => {
     case 'document':
     case 'software':
       return {
-        url: generateStreamUrl(claim.name, claim.claim_id),
+        url:
+          generateStreamUrl(claim.name, claim.claim_id) + (value.source && value.source.media_type.split('/')[0]) || '',
         type: (value.source && value.source.media_type) || undefined,
         size: (value.source && value.source.size) || 0, // Per spec, 0 is a valid fallback.
       };
