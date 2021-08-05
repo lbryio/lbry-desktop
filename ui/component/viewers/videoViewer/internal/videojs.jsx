@@ -572,7 +572,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       });
 
       player.watchman({
-        reportRate: 15,
+        reportRate: 25,
         videoUrl: claimId,
         userId: userId,
         debug: true,

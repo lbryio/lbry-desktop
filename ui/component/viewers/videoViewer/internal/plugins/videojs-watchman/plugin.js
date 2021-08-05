@@ -2,7 +2,7 @@
 import videojs from 'video.js';
 const VERSION = '0.0.1';
 
-const watchmanEndpoint = 'https://watchman.na-backend.dev.odysee.com';
+const watchmanEndpoint = 'https://watchman.na-backend.odysee.com/reports/playback';
 
 let previousEventTime = Date.now();
 
@@ -35,7 +35,7 @@ function createWatchmanData(
 function sendWatchmanData(watchmanData) {
   const requestOptions = {
     method: 'POST',
-    headers: { 'Content-Type': 'text/plain' }, // application/json
+    headers: { 'Content-Type': 'application/json' }, // application/json
     body: JSON.stringify(watchmanData),
   };
 
@@ -43,9 +43,11 @@ function sendWatchmanData(watchmanData) {
     fetch(watchmanEndpoint, requestOptions)
       .then((response) => response.json())
       .then((data) => {
+        console.log('it worked')
         // Response data
       });
   } catch (error) {
+    console.log('was an error');
     // Response error
   }
 }
@@ -82,11 +84,19 @@ class WatchmanPlugin extends Component {
     player.on('tracking:firstplay', (event, data) => this.onTrackingFirstPlay(event, data));
     player.on('tracking:buffered', (event, data) => this.onTrackingBuffered(event, data));
 
+    // player.on('tracking:buffered', function(event, data){
+    //   console.log('here!');
+    //   console.log(event);
+    //   console.log(data);
+    // })
+
     // Event trigger to send recsys event
     player.on('dispose', (event) => this.onDispose(event));
   }
 
   sendWatchmanData() {
+    console.log('running once here');
+
     const processedData = this.bufferEventData.reduce(
       (accumulator, current) => {
         // Always update with the most current player x-powered-by header
@@ -158,6 +168,10 @@ class WatchmanPlugin extends Component {
   }
 
   onWatchmanInterval() {
+
+    console.log('player paused');
+    console.log(this.player.paused())
+
     // don't report while player is paused
     if (this.player.paused()) return;
 
@@ -166,7 +180,7 @@ class WatchmanPlugin extends Component {
       console.log('[watchman] interval', this.bufferEventData);
     }
 
-    this.sendWatchmanData();
+    // this.sendWatchmanData();
 
     // clear processed data
     this.bufferEventData = [];
