@@ -22,12 +22,7 @@ function SelectHomepage(props: Props) {
     return null;
   }
   return (
-    <div className="section__actions--between">
-      <div>
-        <p>{__('Homepage')}</p>
-        <p className="help">{__('Tailor your experience.')}</p>
-      </div>
-
+    <React.Fragment>
       <FormField
         name="homepage_select"
         type="select"
@@ -40,7 +35,7 @@ function SelectHomepage(props: Props) {
           </option>
         ))}
       </FormField>
-    </div>
+    </React.Fragment>
   );
 }
 
