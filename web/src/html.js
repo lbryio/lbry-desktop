@@ -9,11 +9,13 @@ const {
   SITE_DESCRIPTION,
   SITE_NAME,
   FAVICON,
+  LBRY_WEB_API,
 } = require('../../config.js');
+
+const { Lbry } = require('lbry-redux');
 const { generateEmbedUrl, generateStreamUrl, generateDirectUrl } = require('../../ui/util/web');
 const PAGES = require('../../ui/constants/pages');
 const { CATEGORY_METADATA } = require('./category-metadata');
-const { getClaim } = require('./chainquery');
 const { parseURI } = require('lbry-redux');
 const fs = require('fs');
 const path = require('path');
@@ -21,6 +23,9 @@ const moment = require('moment');
 const removeMd = require('remove-markdown');
 const { getJsBundleId } = require('../bundle-id.js');
 const jsBundleId = getJsBundleId();
+const SDK_API_PATH = `${LBRY_WEB_API}/api/v1`;
+const PROXY_URL = `${SDK_API_PATH}/proxy`;
+Lbry.setDaemonConnectionString(PROXY_URL);
 
 function insertToHead(fullHtml, htmlToInsert) {
   const beginStr = '<!-- VARIABLE_HEAD_BEGIN -->';
@@ -122,20 +127,33 @@ function buildBasicOgMetadata() {
 function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
   // Initial setup for claim based og metadata
   const { claimName } = parseURI(uri);
-  const claimTitle = escapeHtmlProperty(claim.title ? claim.title : claimName);
+  const { meta, value, signing_channel } = claim;
+  const fee = value && value.fee && (Number(value.fee.amount) || 0);
+  const tags = value && value.tags;
+  const media = value && (value.video || value.audio || value.image);
+  const source = value && value.source;
+  const channel = signing_channel && signing_channel.name;
+  const thumbnail = value && value.thumbnail && value.thumbnail.url;
+  const mediaType = source && source.media_type;
+  const mediaDuration = media && media.duration;
+  const creationTimestamp = meta && (meta.creation_timestamp || 0);
+  const claimTitle = escapeHtmlProperty((value && value.title) || claimName);
+
   const claimDescription =
-    claim.description && claim.description.length > 0
-      ? escapeHtmlProperty(truncateDescription(claim.description))
+    value && value.description && value.description.length > 0
+      ? escapeHtmlProperty(truncateDescription(value.description))
       : `View ${claimTitle} on ${SITE_NAME}`;
-  const claimLanguage = escapeHtmlProperty(claim.language) || 'en_US';
+
+  const claimLanguage =
+    value && value.languages && value.languages.length > 0 ? escapeHtmlProperty(value.languages[0]) : 'en_US';
 
   let imageThumbnail;
 
-  if (Number(claim.fee) <= 0 && claim.source_media_type && claim.source_media_type.startsWith('image/')) {
+  if (fee <= 0 && mediaType && mediaType.startsWith('image/')) {
     imageThumbnail = generateStreamUrl(claim.name, claim.claim_id);
   }
-  const claimThumbnail =
-    escapeHtmlProperty(claim.thumbnail_url) || imageThumbnail || OG_IMAGE_URL || `${URL}/public/v2-og.png`;
+
+  const claimThumbnail = escapeHtmlProperty(thumbnail) || imageThumbnail || OG_IMAGE_URL || `${URL}/public/v2-og.png`;
 
   // Allow for ovverriding default claim based og metadata
   const title = overrideOptions.title || claimTitle;
@@ -148,8 +166,9 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
   head += '<meta charset="utf8"/>';
   head += `<title>${title}</title>`;
   head += `<meta name="description" content="${cleanDescription}"/>`;
-  if (claim.tags) {
-    head += `<meta name="keywords" content="${claim.tags.toString()}"/>`;
+
+  if (tags && tags.length > 0) {
+    head += `<meta name="keywords" content="${tags.toString()}"/>`;
   }
 
   head += `<meta name="twitter:image" content="${claimThumbnail}"/>`;
@@ -165,33 +184,28 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
   head += `<meta name="twitter:url" content="${URL}/${claim.name}:${claim.claim_id}"/>`;
   head += `<link rel="canonical" content="${SITE_CANONICAL_URL || URL}/${claim.name}:${claim.claim_id}"/>`;
 
-  if (
-    claim.source_media_type &&
-    (claim.source_media_type.startsWith('video/') || claim.source_media_type.startsWith('audio/'))
-  ) {
+  if (mediaType && (mediaType.startsWith('video/') || mediaType.startsWith('audio/'))) {
     const videoUrl = generateEmbedUrl(claim.name, claim.claim_id);
     head += `<meta property="og:video" content="${videoUrl}" />`;
     head += `<meta property="og:video:secure_url" content="${videoUrl}" />`;
-    head += `<meta property="og:video:type" content="${claim.source_media_type}" />`;
-    if (claim.channel) {
-      head += `<meta name="og:video:series" content="${claim.channel}"/>`;
+    head += `<meta property="og:video:type" content="${mediaType}" />`;
+    if (channel) {
+      head += `<meta name="og:video:series" content="${channel}"/>`;
     }
     head += `<meta name="twitter:card" content="player"/>`;
     head += `<meta name="twitter:player" content="${videoUrl}" />`;
-    if (claim.release_time) {
-      var release = new Date(claim.release_time * 1000).toISOString();
+    if (creationTimestamp) {
+      var release = new Date(creationTimestamp * 1000).toISOString();
       head += `<meta property="og:video:release_date" content="${release}"/>`;
     }
-    if (claim.duration) {
-      head += `<meta property="og:video:duration" content="${claim.duration}"/>`;
-    } else if (claim.audio_duration) {
-      head += `<meta property="og:video:duration" content="${claim.audio_duration}"/>`;
+    if (mediaDuration) {
+      head += `<meta property="og:video:duration" content="${mediaDuration}"/>`;
     }
-    if (claim.frame_width && claim.frame_height) {
-      head += `<meta property="og:video:width" content="${claim.frame_width}"/>`;
-      head += `<meta property="og:video:height" content="${claim.frame_height}"/>`;
-      head += `<meta name="twitter:player:width" content="${claim.frame_width}">`;
-      head += `<meta name="twitter:player:height" content="${claim.frame_height}">`;
+    if (media && media.width && media.height) {
+      head += `<meta property="og:video:width" content="${media.width}"/>`;
+      head += `<meta property="og:video:height" content="${media.height}"/>`;
+      head += `<meta name="twitter:player:width" content="${media.width}">`;
+      head += `<meta name="twitter:player:height" content="${media.height}">`;
     }
   } else {
     head += `<meta name="twitter:card" content="summary_large_image"/>`;
@@ -200,19 +214,27 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
   return head;
 }
 
-function buildGoogleVideoMetadata(claimUri, claim) {
-  if (!claim.source_media_type || !claim.source_media_type.startsWith('video/')) {
+function buildGoogleVideoMetadata(uri, claim) {
+  const { claimName } = parseURI(uri);
+  const { meta, value } = claim;
+  const media = value && (value.video || value.audio || value.image);
+  const source = value && value.source;
+  const thumbnail = value && value.thumbnail && value.thumbnail.url;
+  const mediaType = source && source.media_type;
+  const mediaDuration = media && media.duration;
+  const creationTimestamp = meta && (meta.creation_timestamp || 0);
+  const claimTitle = escapeHtmlProperty((value && value.title) || claimName);
+
+  const claimDescription =
+    value && value.description && value.description.length > 0
+      ? escapeHtmlProperty(truncateDescription(value.description))
+      : `View ${claimTitle} on ${SITE_NAME}`;
+
+  if (!mediaType || !mediaType.startsWith('video/')) {
     return '';
   }
 
-  const { claimName } = parseURI(claimUri);
-  const claimTitle = escapeHtmlProperty(claim.title ? claim.title : claimName);
-  const claimDescription =
-    claim.description && claim.description.length > 0
-      ? escapeHtmlProperty(truncateDescription(claim.description))
-      : `View ${claimTitle} on ${SITE_NAME}`;
-  const claimThumbnail = escapeHtmlProperty(claim.thumbnail_url) || OG_IMAGE_URL || `${URL}/public/v2-og.png`;
-  const releaseTime = claim.release_time || 0;
+  const claimThumbnail = escapeHtmlProperty(thumbnail) || OG_IMAGE_URL || `${URL}/public/v2-og.png`;
 
   // https://developers.google.com/search/docs/data-types/video
   const googleVideoMetadata = {
@@ -222,9 +244,9 @@ function buildGoogleVideoMetadata(claimUri, claim) {
     name: `${claimTitle}`,
     description: `${removeMd(claimDescription)}`,
     thumbnailUrl: `${claimThumbnail}`,
-    uploadDate: `${new Date(releaseTime * 1000).toISOString()}`,
+    uploadDate: `${new Date(creationTimestamp * 1000).toISOString()}`,
     // --- Recommended ---
-    duration: claim.duration ? moment.duration(claim.duration * 1000).toISOString() : undefined,
+    duration: mediaDuration ? moment.duration(mediaDuration * 1000).toISOString() : undefined,
     contentUrl: generateDirectUrl(claim.name, claim.claim_id),
     embedUrl: generateEmbedUrl(claim.name, claim.claim_id),
   };
@@ -242,24 +264,25 @@ function buildGoogleVideoMetadata(claimUri, claim) {
   );
 }
 
-async function getClaimFromChainqueryOrRedirect(ctx, url, ignoreRedirect = false) {
+async function resolveClaimOrRedirect(ctx, url, ignoreRedirect = false) {
+  let claim;
   const { isChannel, streamName, channelName, channelClaimId, streamClaimId } = parseURI(url);
   const claimName = isChannel ? '@' + channelName : streamName;
   const claimId = isChannel ? channelClaimId : streamClaimId;
-
-  const rows = await getClaim(claimName, claimId, channelName, channelClaimId);
-  if (rows && rows.length) {
-    const claim = rows[0];
-
-    if (claim.reposted_name && claim.reposted_claim_id && !ignoreRedirect) {
-      ctx.redirect(`/${claim.reposted_name}:${claim.reposted_claim_id}`);
-      return;
+  try {
+    const url = `lbry://${claimName}:${claimId}`;
+    const response = await Lbry.resolve({ urls: [url] });
+    if (response && response[url] && !response[url].error) {
+      claim = response && response[url];
+      if (claim.reposted_claim) {
+        if (claim.reposted_claim.name && claim.reposted_claim.claim_id && !ignoreRedirect) {
+          ctx.redirect(`/${claim.reposted_claim.name}:${claim.reposted_claim.claim_id}`);
+          return;
+        }
+      }
     }
-
-    return claim;
-  }
-
-  return undefined;
+  } catch {}
+  return claim;
 }
 
 let html;
@@ -283,7 +306,7 @@ async function getHtml(ctx) {
 
     try {
       parseURI(inviteChannelUrl);
-      const claim = await getClaimFromChainqueryOrRedirect(ctx, inviteChannelUrl);
+      const claim = await resolveClaimOrRedirect(ctx, inviteChannelUrl);
       const invitePageMetadata = buildClaimOgMetadata(inviteChannelUrl, claim, {
         title: `Join ${claim.name} on ${SITE_NAME}`,
         description: `Join ${claim.name} on ${SITE_NAME}, a content wonderland owned by everyone (and no one).`,
@@ -303,7 +326,7 @@ async function getHtml(ctx) {
 
   if (requestPath.includes(embedPath)) {
     const claimUri = requestPath.replace(embedPath, '').replace(/:/g, '#');
-    const claim = await getClaimFromChainqueryOrRedirect(ctx, claimUri, true);
+    const claim = await resolveClaimOrRedirect(ctx, claimUri, true);
 
     if (claim) {
       const ogMetadata = buildClaimOgMetadata(claimUri, claim);
@@ -326,7 +349,7 @@ async function getHtml(ctx) {
 
   if (!requestPath.includes('$')) {
     const claimUri = requestPath.slice(1).replace(/:/g, '#');
-    const claim = await getClaimFromChainqueryOrRedirect(ctx, claimUri);
+    const claim = await resolveClaimOrRedirect(ctx, claimUri);
 
     if (claim) {
       const ogMetadata = buildClaimOgMetadata(claimUri, claim);
