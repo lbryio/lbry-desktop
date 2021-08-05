@@ -3,6 +3,7 @@ import {
   makeSelectPublishFormValue,
   selectIsStillEditing,
   selectMyClaimForUri,
+  selectTakeOverAmount,
   doUpdatePublishForm,
   doPrepareEdit,
 } from 'lbry-redux';
@@ -17,6 +18,7 @@ const select = (state) => ({
   myClaimForUri: selectMyClaimForUri(state),
   activeChannelClaim: selectActiveChannelClaim(state),
   incognito: selectIncognito(state),
+  amountNeededForTakeover: selectTakeOverAmount(state),
 });
 
 const perform = (dispatch) => ({
