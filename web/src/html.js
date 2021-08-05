@@ -217,7 +217,7 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
 function buildGoogleVideoMetadata(uri, claim) {
   const { claimName } = parseURI(uri);
   const { meta, value } = claim;
-  const media = value && (value.video || value.audio || value.image);
+  const media = value && value.video;
   const source = value && value.source;
   const thumbnail = value && value.thumbnail && value.thumbnail.url;
   const mediaType = source && source.media_type;
