@@ -464,7 +464,7 @@ function App(props: Props) {
             <YoutubeWelcome />
             {!SIMPLE_SITE && !shouldHideNag && <OpenInAppLink uri={uri} />}
             {!shouldHideNag && <NagContinueFirstRun />}
-            {!SIMPLE_SITE && fromLbrytvParam && !seenSunsestMessage && !shouldHideNag && (
+            {fromLbrytvParam && !seenSunsestMessage && !shouldHideNag && (
               <NagSunset email={hasVerifiedEmail} onClose={() => setSeenSunsetMessage(true)} />
             )}
             {(lbryTvApiStatus === STATUS_DEGRADED || lbryTvApiStatus === STATUS_FAILING) && !shouldHideNag && (
