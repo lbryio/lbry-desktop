@@ -140,7 +140,7 @@
     margin-right: var(--spacing-s);
   }
 
-  @media (max-width: $breakpoint-small) {
+  @media (max-width: $breakpoint-medium) {
     flex-wrap: wrap;
 
     > * {
@@ -201,5 +201,93 @@
   }
   .checkbox {
     margin-right: 10px;
+  }
+}
+
+.settings__row {
+  &:first-child,
+  &:only-child {
+    border-top: none;
+  }
+}
+
+.settings__row--title {
+  min-width: 100%;
+  align-self: flex-start;
+
+  @media (min-width: $breakpoint-small) {
+    min-width: 60%;
+    max-width: 60%;
+  }
+}
+
+.settings__row--subtitle {
+  @extend .section__subtitle;
+  font-size: var(--font-small);
+  margin-top: calc(var(--spacing-xxs) / 2);
+}
+
+.settings__row--value {
+  width: 100%;
+
+  fieldset-section:not(:only-child) {
+    margin-top: var(--spacing-s);
+  }
+
+  fieldset-section.radio {
+    margin-top: var(--spacing-s);
+  }
+
+  fieldset-group {
+    margin-top: var(--spacing-m);
+  }
+
+  .tags--remove {
+    margin-bottom: 0;
+  }
+
+  .tags__input-wrapper {
+    .tag__input {
+      height: unset;
+      max-width: unset;
+    }
+  }
+
+  .form-field--price-amount {
+    max-width: unset;
+  }
+
+  @media (min-width: $breakpoint-medium) {
+    width: 40%;
+    margin-left: var(--spacing-m);
+    padding-left: var(--spacing-m);
+
+    .button,
+    .checkbox {
+      &:only-child {
+        float: right;
+      }
+    }
+
+    input {
+      align-self: flex-end;
+    }
+  }
+}
+
+.settings__row--value--multirow {
+  @media (min-width: $breakpoint-medium) {
+    width: 80%;
+    margin-top: var(--spacing-l);
+
+    input {
+      align-self: flex-start;
+    }
+  }
+}
+
+.settings__row--value--vertical-separator {
+  @media (min-width: $breakpoint-medium) {
+    border-left: 1px solid var(--color-border);
   }
 }
