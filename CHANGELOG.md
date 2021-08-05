@@ -30,7 +30,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix unnecessary livestream api calls in channel page _community pr!_ ([#6652](https://github.com/lbryio/lbry-desktop/pull/6652))
 - Fix desktop app fails to resolve deep links _community pr!_ ([#6779](https://github.com/lbryio/lbry-desktop/pull/6779))
 - Added \ and = to reserved symbol warning _community pr!_ ([#6733](https://github.com/lbryio/lbry-desktop/pull/6733))
-
+- Don't break words in chat + fix text overflow past 3 dot menu _community pr!_ ([#6602](https://github.com/lbryio/lbry-desktop/pull/6602))
 
 ## [0.51.1] - [2021-06-26]
 
