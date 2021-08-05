@@ -7,14 +7,12 @@ import { SETTINGS } from 'lbry-redux';
 import { FormField } from 'component/common/form';
 import Button from 'component/button';
 import Page from 'component/page';
+import SettingAccount from 'component/settingAccount';
 import SettingLanguage from 'component/settingLanguage';
 import FileSelector from 'component/common/file-selector';
-import SyncToggle from 'component/syncToggle';
 import HomepageSelector from 'component/homepageSelector';
 import Card from 'component/common/card';
-import SettingAccountPassword from 'component/settingAccountPassword';
 import classnames from 'classnames';
-import { getPasswordFromCookie } from 'util/saved-passwords';
 import { SIMPLE_SITE } from 'config';
 // $FlowFixMe
 import homepages from 'homepages';
@@ -61,9 +59,6 @@ type Props = {
   automaticDarkModeEnabled: boolean,
   clock24h: boolean,
   autoplay: boolean,
-  updateWalletStatus: () => void,
-  walletEncrypted: boolean,
-  confirmForgetPassword: ({}) => void,
   floatingPlayer: boolean,
   hideReposts: ?boolean,
   clearPlayingUri: () => void,
@@ -79,7 +74,6 @@ type Props = {
 
 type State = {
   clearingCache: boolean,
-  storedPassword: boolean,
 };
 
 class SettingsPage extends React.PureComponent<Props, State> {
@@ -88,26 +82,15 @@ class SettingsPage extends React.PureComponent<Props, State> {
 
     this.state = {
       clearingCache: false,
-      storedPassword: false,
     };
 
     (this: any).onThemeChange = this.onThemeChange.bind(this);
     (this: any).onAutomaticDarkModeChange = this.onAutomaticDarkModeChange.bind(this);
     (this: any).onChangeTime = this.onChangeTime.bind(this);
-    (this: any).onConfirmForgetPassword = this.onConfirmForgetPassword.bind(this);
   }
 
   componentDidMount() {
-    const { isAuthenticated, enterSettings } = this.props;
-
-    if (isAuthenticated || !IS_WEB) {
-      this.props.updateWalletStatus();
-      getPasswordFromCookie().then((p) => {
-        if (typeof p === 'string') {
-          this.setState({ storedPassword: true });
-        }
-      });
-    }
+    const { enterSettings } = this.props;
     enterSettings();
   }
 
@@ -132,15 +115,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
 
   onClock24hChange(value: boolean) {
     this.props.setClientSetting(SETTINGS.CLOCK_24H, value);
-  }
-
-  onConfirmForgetPassword() {
-    const { confirmForgetPassword } = this.props;
-    confirmForgetPassword({
-      callback: () => {
-        this.setState({ storedPassword: false });
-      },
-    });
   }
 
   onChangeTime(event: SyntheticInputEvent<*>, options: OptionTimes) {
@@ -180,7 +154,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
       automaticDarkModeEnabled,
       clock24h,
       autoplay,
-      walletEncrypted,
       // autoDownload,
       setDaemonSetting,
       setClientSetting,
@@ -194,12 +167,17 @@ class SettingsPage extends React.PureComponent<Props, State> {
       myChannelUrls,
       user,
     } = this.props;
-    const { storedPassword } = this.state;
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
     const startHours = ['18', '19', '20', '21'];
     const endHours = ['5', '6', '7', '8'];
 
-    return (
+    const newStyle = true;
+
+    return newStyle ? (
+      <Page noFooter noSideNavigation backout={{ title: __('Settings'), backLabel: __('Done') }} className="card-stack">
+        <SettingAccount />
+      </Page>
+    ) : (
       <Page
         noFooter
         noSideNavigation
@@ -235,7 +213,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
           </section>
         ) : (
           <div className={classnames('card-stack', { 'card--disabled': IS_WEB && !isAuthenticated })}>
-            {isAuthenticated && <SettingAccountPassword />}
             {/* @if TARGET='app' */}
             <Card
               title={__('Download directory')}
@@ -251,15 +228,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   <p className="help">{__('LBRY downloads will be saved here.')}</p>
                 </React.Fragment>
               }
-            />
-            <Card
-              title={__('Sync')}
-              subtitle={
-                walletEncrypted && !storedPassword && storedPassword !== ''
-                  ? __("To enable Sync, close LBRY completely and check 'Remember Password' during wallet unlock.")
-                  : null
-              }
-              actions={<SyncToggle disabled={walletEncrypted && !storedPassword && storedPassword !== ''} />}
             />
             {/* @endif */}
 

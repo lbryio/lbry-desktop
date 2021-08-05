@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { doClearCache, doNotifyForgetPassword, doToggle3PAnalytics, doOpenModal } from 'redux/actions/app';
+import { doClearCache, doToggle3PAnalytics, doOpenModal } from 'redux/actions/app';
 import { selectAllowAnalytics } from 'redux/selectors/app';
 import {
   doSetDaemonSetting,
@@ -16,7 +16,7 @@ import {
   selectLanguage,
   selectShowMatureContent,
 } from 'redux/selectors/settings';
-import { doWalletStatus, selectMyChannelUrls, selectWalletIsEncrypted, SETTINGS } from 'lbry-redux';
+import { selectMyChannelUrls, SETTINGS } from 'lbry-redux';
 import SettingsPage from './view';
 import { selectUserVerifiedEmail, selectUser } from 'redux/selectors/user';
 
@@ -30,7 +30,6 @@ const select = (state) => ({
   automaticDarkModeEnabled: makeSelectClientSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED)(state),
   clock24h: makeSelectClientSetting(SETTINGS.CLOCK_24H)(state),
   autoplay: makeSelectClientSetting(SETTINGS.AUTOPLAY)(state),
-  walletEncrypted: selectWalletIsEncrypted(state),
   autoDownload: makeSelectClientSetting(SETTINGS.AUTO_DOWNLOAD)(state),
   hideBalance: makeSelectClientSetting(SETTINGS.HIDE_BALANCE)(state),
   floatingPlayer: makeSelectClientSetting(SETTINGS.FLOATING_PLAYER)(state),
@@ -47,8 +46,6 @@ const perform = (dispatch) => ({
   toggle3PAnalytics: (allow) => dispatch(doToggle3PAnalytics(allow)),
   clearCache: () => dispatch(doClearCache()),
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
-  updateWalletStatus: () => dispatch(doWalletStatus()),
-  confirmForgetPassword: (modalProps) => dispatch(doNotifyForgetPassword(modalProps)),
   clearPlayingUri: () => dispatch(doSetPlayingUri({ uri: null })),
   setDarkTime: (time, options) => dispatch(doSetDarkTime(time, options)),
   openModal: (id, params) => dispatch(doOpenModal(id, params)),

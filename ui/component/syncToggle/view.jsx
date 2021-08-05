@@ -6,10 +6,10 @@ import { withRouter } from 'react-router';
 import { FormField } from 'component/common/form';
 
 type Props = {
-  setSyncEnabled: boolean => void,
+  setSyncEnabled: (boolean) => void,
   syncEnabled: boolean,
   verifiedEmail: ?string,
-  history: { push: string => void },
+  history: { push: (string) => void },
   location: UrlLocation,
   getSyncError: ?string,
   disabled: boolean,
@@ -21,20 +21,24 @@ function SyncToggle(props: Props) {
 
   return (
     <div>
-      {!verifiedEmail ? (
+      <FormField
+        type="checkbox"
+        name="sync_toggle"
+        label={__('Sync your balance and preferences across devices.')}
+        checked={syncEnabled && verifiedEmail}
+        onChange={() => openModal(MODALS.SYNC_ENABLE, { mode: syncEnabled ? 'disable' : 'enable' })}
+        disabled={disabled || !verifiedEmail}
+        helper={
+          disabled
+            ? __("To enable Sync, close LBRY completely and check 'Remember Password' during wallet unlock.")
+            : null
+        }
+      />
+      {!verifiedEmail && (
         <div>
-          <Button requiresAuth button="primary" label={__('Add Email')} />
           <p className="help">{__('An email address is required to sync your account.')}</p>
+          <Button requiresAuth button="primary" label={__('Add Email')} />
         </div>
-      ) : (
-        <FormField
-          type="checkbox"
-          name="sync_toggle"
-          label={__('Sync your balance and preferences across devices.')}
-          checked={syncEnabled}
-          onChange={() => openModal(MODALS.SYNC_ENABLE, { mode: syncEnabled ? 'disable' : 'enable' })}
-          disabled={disabled}
-        />
       )}
     </div>
   );
