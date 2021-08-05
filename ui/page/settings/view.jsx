@@ -41,7 +41,6 @@ type Props = {
   isAuthenticated: boolean,
   instantPurchaseEnabled: boolean,
   instantPurchaseMax: Price,
-  clock24h: boolean,
   autoplay: boolean,
   floatingPlayer: boolean,
   hideReposts: ?boolean,
@@ -64,10 +63,6 @@ class SettingsPage extends React.PureComponent<Props> {
     exitSettings();
   }
 
-  onClock24hChange(value: boolean) {
-    this.props.setClientSetting(SETTINGS.CLOCK_24H, value);
-  }
-
   setDaemonSetting(name: string, value: ?SetDaemonSettingArg): void {
     this.props.setDaemonSetting(name, value);
   }
@@ -82,7 +77,6 @@ class SettingsPage extends React.PureComponent<Props> {
       allowAnalytics,
       showNsfw,
       isAuthenticated,
-      clock24h,
       autoplay,
       // autoDownload,
       setDaemonSetting,
@@ -152,23 +146,6 @@ class SettingsPage extends React.PureComponent<Props> {
               }
             />
             {/* @endif */}
-
-            <Card
-              title={__('Appearance')}
-              actions={
-                <React.Fragment>
-                  <fieldset-section>
-                    <FormField
-                      type="checkbox"
-                      name="clock24h"
-                      onChange={() => this.onClock24hChange(!clock24h)}
-                      checked={clock24h}
-                      label={__('24-hour clock')}
-                    />
-                  </fieldset-section>
-                </React.Fragment>
-              }
-            />
 
             <Card
               title={__('Content settings')}

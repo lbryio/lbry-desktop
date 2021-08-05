@@ -19,7 +19,6 @@ const select = (state) => ({
   allowAnalytics: selectAllowAnalytics(state),
   isAuthenticated: selectUserVerifiedEmail(state),
   showNsfw: selectShowMatureContent(state),
-  clock24h: makeSelectClientSetting(SETTINGS.CLOCK_24H)(state),
   autoplay: makeSelectClientSetting(SETTINGS.AUTOPLAY)(state),
   autoDownload: makeSelectClientSetting(SETTINGS.AUTO_DOWNLOAD)(state),
   hideBalance: makeSelectClientSetting(SETTINGS.HIDE_BALANCE)(state),
