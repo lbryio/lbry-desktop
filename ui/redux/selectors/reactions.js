@@ -54,11 +54,10 @@ export const makeSelectLikeCountForUri = (uri) =>
 
 export const makeSelectDislikeCountForUri = (uri) =>
   createSelector(makeSelectClaimForUri(uri), makeSelectReactionsForUri(uri), (claim, reactions) => {
-    const claimId = claim.claim_id;
-
-    if (!reactions || reactions.my_reactions === null || reactions.others_reactions === null) {
+    if (!claim || !reactions || reactions.my_reactions === null || reactions.others_reactions === null) {
       return 0;
     }
+    const claimId = claim.claim_id;
 
     let count = 0;
     if (reactions.others_reactions) {
