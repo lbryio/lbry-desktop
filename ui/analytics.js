@@ -100,13 +100,17 @@ function getDeviceType() {
 
 console.log('ANALYTICS RELOADED');
 
-var durationInSeconds = 30;
+var durationInSeconds = 10;
 var amountOfBufferEvents = 0;
 var amountOfBufferTimeInMS = 0;
 var videoType, userId, claimUrl, totalDurationInSeconds, currentVideoPosition, playerPoweredBy, timeAtBuffer;
 
+
 async function sendAndResetWatchmanData(){
-  console.log('running!')
+
+  // console.log('running!')
+  // console.log(player);
+
   var protocol;
   if (videoType === 'application/x-mpegURL'){
     protocol = 'hls';
@@ -114,9 +118,17 @@ async function sendAndResetWatchmanData(){
     protocol = 'stb';
   }
 
-  console.log('time at buffer');
-  console.log(timeAtBuffer);
-  console.log(totalDurationInSeconds);
+  if(!totalDurationInSeconds){
+    totalDurationInSeconds = player.currentTime();
+  }
+
+  if(!timeAtBuffer){
+    timeAtBuffer = player.duration();
+  }
+  //
+  // console.log('time at buffer');
+  // console.log(timeAtBuffer);
+  // console.log(totalDurationInSeconds);
 
   const objectToSend = {
     rebuf_count: amountOfBufferEvents,
@@ -127,16 +139,18 @@ async function sendAndResetWatchmanData(){
     protocol,
     player: playerPoweredBy,
     user_id: Number(userId),
-    position: timeAtBuffer,
+    position: Math.round(timeAtBuffer) ,
     rel_position: Math.round((timeAtBuffer / (totalDurationInSeconds * 1000)) * 100),
   }
+
+  console.log('About to send the data!');
 
   await sendWatchmanData(objectToSend);
 
   // TODO: send here
   amountOfBufferEvents = 0;
   amountOfBufferTimeInMS = 0;
-  videoType, userId, claimUrl, totalDurationInSeconds, currentVideoPosition, playerPoweredBy, timeAtBuffer = null;
+  timeAtBuffer = null;
 }
 
 var watchmanInterval;
@@ -151,20 +165,26 @@ function startWatchmanIntervalIfNotRunning() {
 }
 
 async function sendWatchmanData(body){
-  const response = await fetch('https://watchman.na-backend.odysee.com/reports/playback', {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
-  });
+  try {
+    const response = await fetch('https://watchman.na-backend.odysee.com/reports/playback', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
 
-  return response;
+    return response;
+  } catch (err){
+    console.log(err);
+  }
 }
 
 const analytics: Analytics = {
   videoBufferEvent: async (claim, data, player) => {
+
+    console.log('BUFFERING!');
 
     amountOfBufferEvents = amountOfBufferEvents + 1;
     amountOfBufferTimeInMS = amountOfBufferTimeInMS + data.bufferDuration;
@@ -177,12 +197,12 @@ const analytics: Analytics = {
 
     totalDurationInSeconds = data.duration;
 
-    console.log('RUNNING HERE');
-
-    console.log(claim);
-    console.log(data);
-    console.log(player);
-    console.log('done1234');
+    // console.log('RUNNING HERE');
+    //
+    // console.log(claim);
+    // console.log(data);
+    // console.log(player);
+    // console.log('done1234');
 
   },
   onDispose: () => {

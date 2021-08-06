@@ -241,12 +241,12 @@ function VideoViewer(props: Props) {
     // re-factoring.
     player.on('loadedmetadata', () => restorePlaybackRate(player));
     player.on('seeking', function(e, data){
-      console.log('here3')
-      console.log(this)
-      console.log(e)
-      console.log(data)
-      console.log(player)
-      console.log('here4')
+      // console.log('here3')
+      // console.log(this)
+      // console.log(e)
+      // console.log(data)
+      // console.log(player)
+      // console.log('here4')
       /*this.pause()*/
     });
 
@@ -256,14 +256,6 @@ function VideoViewer(props: Props) {
     player.on('play', onPlay);
     player.on('pause', (event) => onPause(event, player));
     player.on('dispose', (event) => onDispose(event, player));
-
-    player.on('dispose', function(event){
-
-
-
-      console.log('PLAYER DISPOSED OF');
-      console.log(event);
-    });
 
     player.on('error', () => {
       const error = player.error();
