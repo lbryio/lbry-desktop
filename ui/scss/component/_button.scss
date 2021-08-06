@@ -135,7 +135,7 @@
 .button--link {
   color: var(--color-link);
   transition: color 0.2s;
-  word-break: break-all;
+  word-break: break-word;
   font-weight: var(--font-weight-bold);
 
   &:hover {
