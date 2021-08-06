@@ -38,7 +38,6 @@ type Props = {
   openModal: (string) => void,
   enterSettings: () => void,
   exitSettings: () => void,
-  myChannelUrls: ?Array<string>,
 };
 
 class SettingsPage extends React.PureComponent<Props> {
@@ -68,7 +67,6 @@ class SettingsPage extends React.PureComponent<Props> {
       // autoDownload,
       setDaemonSetting,
       toggle3PAnalytics,
-      myChannelUrls,
     } = this.props;
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
 
@@ -170,50 +168,6 @@ class SettingsPage extends React.PureComponent<Props> {
 
             {(isAuthenticated || !IS_WEB) && (
               <>
-                <Card
-                  title={__('Notifications')}
-                  actions={
-                    <div className="section__actions">
-                      <Button
-                        button="secondary"
-                        label={__('Manage')}
-                        icon={ICONS.SETTINGS}
-                        navigate={`/$/${PAGES.SETTINGS_NOTIFICATIONS}`}
-                      />
-                    </div>
-                  }
-                />
-
-                <Card
-                  title={__('Blocked and muted channels')}
-                  actions={
-                    <div className="section__actions">
-                      <Button
-                        button="secondary"
-                        label={__('Manage')}
-                        icon={ICONS.SETTINGS}
-                        navigate={`/$/${PAGES.SETTINGS_BLOCKED_MUTED}`}
-                      />
-                    </div>
-                  }
-                />
-
-                {myChannelUrls && myChannelUrls.length > 0 && (
-                  <Card
-                    title={__('Creator settings')}
-                    actions={
-                      <div className="section__actions">
-                        <Button
-                          button="secondary"
-                          label={__('Manage')}
-                          icon={ICONS.SETTINGS}
-                          navigate={`/$/${PAGES.SETTINGS_CREATOR}`}
-                        />
-                      </div>
-                    }
-                  />
-                )}
-
                 <Card
                   title={__('Advanced settings')}
                   actions={

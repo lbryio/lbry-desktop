@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { SETTINGS } from 'lbry-redux';
+import { selectMyChannelUrls, SETTINGS } from 'lbry-redux';
 import { doOpenModal } from 'redux/actions/app';
 import { doSetPlayingUri } from 'redux/actions/content';
 import { doSetClientSetting } from 'redux/actions/settings';
@@ -13,6 +13,7 @@ const select = (state) => ({
   autoplay: makeSelectClientSetting(SETTINGS.AUTOPLAY)(state),
   hideReposts: makeSelectClientSetting(SETTINGS.HIDE_REPOSTS)(state),
   showNsfw: selectShowMatureContent(state),
+  myChannelUrls: selectMyChannelUrls(state),
 });
 
 const perform = (dispatch) => ({
