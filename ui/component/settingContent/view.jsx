@@ -15,6 +15,8 @@ const HELP_AUTOPLAY =
 const HELP_HIDE_REPOSTS = 'You will not see reposts by people you follow or receive email notifying about them.';
 const HELP_SHOW_MATURE =
   'Mature content may include nudity, intense sexuality, profanity, or other adult content. By displaying mature content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  ';
+const HELP_MAX_PURCHASE_PRICE =
+  'This will prevent you from purchasing any content over a certain cost, as a safety measure.';
 
 type Props = {
   isAuthenticated: boolean,
@@ -108,6 +110,12 @@ export default function SettingContent(props: Props) {
               </SettingsRow>
             </>
           )}
+
+          {/* @if TARGET='app' */}
+          <SettingsRow title={__('Max purchase price')} subtitle={__(HELP_MAX_PURCHASE_PRICE)} useVerticalSeparator>
+            <MaxPurchasePrice />
+          </SettingsRow>
+          {/* @endif */}
         </>
       }
     />

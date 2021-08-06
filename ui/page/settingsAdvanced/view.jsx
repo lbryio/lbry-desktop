@@ -48,7 +48,6 @@ type Props = {
   ffmpegStatus: { available: boolean, which: string },
   findingFFmpeg: boolean,
   findFFmpeg: () => void,
-  language?: string,
   syncEnabled: boolean,
   enterSettings: () => void,
   exitSettings: () => void,
@@ -68,9 +67,7 @@ class SettingsAdvancedPage extends React.PureComponent<Props, State> {
       storedPassword: false,
     };
 
-    (this: any).onKeyFeeChange = this.onKeyFeeChange.bind(this);
     (this: any).onMaxConnectionsChange = this.onMaxConnectionsChange.bind(this);
-    (this: any).onKeyFeeDisableChange = this.onKeyFeeDisableChange.bind(this);
     (this: any).onInstantPurchaseMaxChange = this.onInstantPurchaseMaxChange.bind(this);
     (this: any).onThemeChange = this.onThemeChange.bind(this);
     (this: any).onAutomaticDarkModeChange = this.onAutomaticDarkModeChange.bind(this);
@@ -112,17 +109,9 @@ class SettingsAdvancedPage extends React.PureComponent<Props, State> {
     this.findFFmpeg();
   }
 
-  onKeyFeeChange(newValue: Price) {
-    this.setDaemonSetting('max_key_fee', newValue);
-  }
-
   onMaxConnectionsChange(event: SyntheticInputEvent<*>) {
     const { value } = event.target;
     this.setDaemonSetting('max_connections_per_download', value);
-  }
-
-  onKeyFeeDisableChange(isDisabled: boolean) {
-    if (isDisabled) this.setDaemonSetting('max_key_fee');
   }
 
   onThemeChange(event: SyntheticInputEvent<*>) {
@@ -189,13 +178,10 @@ class SettingsAdvancedPage extends React.PureComponent<Props, State> {
       setClientSetting,
       hideBalance,
       findingFFmpeg,
-      language,
     } = this.props;
 
     const { storedPassword } = this.state;
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
-    const defaultMaxKeyFee = { currency: 'USD', amount: 50 };
-    const disableMaxKeyFee = !(daemonSettings && daemonSettings.max_key_fee);
     const connectionOptions = [1, 2, 4, 6, 10, 20];
     // @if TARGET='app'
     const { available: ffmpegAvailable, which: ffmpegPath } = ffmpegStatus;
@@ -246,47 +232,6 @@ class SettingsAdvancedPage extends React.PureComponent<Props, State> {
                       </React.Fragment>
                     }
                   />
-                </React.Fragment>
-              }
-            />
-
-            <Card
-              title={__('Max purchase price')}
-              actions={
-                <React.Fragment>
-                  <FormField
-                    type="radio"
-                    name="no_max_purchase_no_limit"
-                    checked={disableMaxKeyFee}
-                    label={__('No Limit')}
-                    onChange={() => {
-                      this.onKeyFeeDisableChange(true);
-                    }}
-                  />
-                  <FormField
-                    type="radio"
-                    name="max_purchase_limit"
-                    checked={!disableMaxKeyFee}
-                    onChange={() => {
-                      this.onKeyFeeDisableChange(false);
-                      this.onKeyFeeChange(defaultMaxKeyFee);
-                    }}
-                    label={__('Choose limit')}
-                  />
-
-                  {!disableMaxKeyFee && (
-                    <FormFieldPrice
-                      language={language}
-                      name="max_key_fee"
-                      min={0}
-                      onChange={this.onKeyFeeChange}
-                      price={daemonSettings.max_key_fee ? daemonSettings.max_key_fee : defaultMaxKeyFee}
-                    />
-                  )}
-
-                  <p className="help">
-                    {__('This will prevent you from purchasing any content over a certain cost, as a safety measure.')}
-                  </p>
                 </React.Fragment>
               }
             />
