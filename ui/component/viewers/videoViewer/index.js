@@ -43,7 +43,7 @@ const perform = (dispatch) => ({
   clearPosition: (uri) => dispatch(clearPosition(uri)),
   changeMute: (muted) => dispatch(doChangeMute(muted)),
   doAnalyticsView: (uri, timeToStart) => dispatch(doAnalyticsView(uri, timeToStart)),
-  doAnalyticsBuffer: (uri, bufferData, player) => dispatch(doAnalyticsBuffer(uri, bufferData, player)),
+  doAnalyticsBuffer: (uri, bufferData) => dispatch(doAnalyticsBuffer(uri, bufferData)),
   claimRewards: () => dispatch(doClaimEligiblePurchaseRewards()),
   toggleVideoTheaterMode: () => dispatch(toggleVideoTheaterMode()),
   setVideoPlaybackRate: (rate) => dispatch(doSetClientSetting(SETTINGS.VIDEO_PLAYBACK_RATE, rate)),

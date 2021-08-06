@@ -42,7 +42,7 @@ type Props = {
   autoplayIfEmbedded: boolean,
   desktopPlayStartTime?: number,
   doAnalyticsView: (string, number) => Promise<any>,
-  doAnalyticsBuffer: (string, any, any) => void,
+  doAnalyticsBuffer: (string, any) => void,
   claimRewards: () => void,
   savePosition: (string, number) => void,
   clearPosition: (string) => void,
@@ -127,16 +127,10 @@ function VideoViewer(props: Props) {
   }, [embedded, videoPlaybackRate]);
 
   function doTrackingBuffered(e: Event, data: any) {
-    // console.log('BUFFER');
-    // console.log(this);
-    // console.log('BUFFER');
-    // this.pause()
-    //
-    // doAnalyticsBuffer(uri, data);
 
     fetch(source, { method: 'HEAD', cache: 'no-store' }).then((response) => {
       data.playerPoweredBy = response.headers.get('x-powered-by');
-      doAnalyticsBuffer(uri, data, this);
+      doAnalyticsBuffer(uri, data);
     });
   }
 
@@ -155,7 +149,7 @@ function VideoViewer(props: Props) {
 
     fetch(source, { method: 'HEAD', cache: 'no-store' }).then((response) => {
       var playerPoweredBy = response.headers.get('x-powered-by');
-      analytics.videoStartEvent(claimId, timeToStart, playerPoweredBy, userId, claim && claim.canonical_url, player);
+      analytics.videoStartEvent(claimId, timeToStart, playerPoweredBy, userId);
     })
 
     doAnalyticsView(uri, timeToStart).then(() => {
@@ -249,21 +243,12 @@ function VideoViewer(props: Props) {
     // delay from the header-fetch. This is a temp change until the next
     // re-factoring.
     player.on('loadedmetadata', () => restorePlaybackRate(player));
-    player.on('seeking', function(e, data){
-      // console.log('here3')
-      // console.log(this)
-      // console.log(e)
-      // console.log(data)
-      // console.log(player)
-      // console.log('here4')
-      /*this.pause()*/
-    });
 
+    // used for tracking buffering for watchman
     player.on('tracking:buffered', doTrackingBuffered);
 
-    if(userId){
-      player.on('tracking:firstplay', doTrackingFirstPlay);
-    }
+    // first play tracking, used for initializing the watchman api
+    player.on('tracking:firstplay', doTrackingFirstPlay);
     player.on('ended', onEnded);
     player.on('play', onPlay);
     player.on('pause', (event) => onPause(event, player));

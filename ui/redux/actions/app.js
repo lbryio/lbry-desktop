@@ -490,7 +490,7 @@ export function doAnalyticsView(uri, timeToStart) {
   };
 }
 
-export function doAnalyticsBuffer(uri, bufferData, player) {
+export function doAnalyticsBuffer(uri, bufferData) {
   return (dispatch, getState) => {
     const state = getState();
     const claim = makeSelectClaimForUri(uri)(state);
@@ -514,7 +514,7 @@ export function doAnalyticsBuffer(uri, bufferData, player) {
         duration: fileDurationInSeconds,
         playerPoweredBy: bufferData.playerPoweredBy,
         readyState: bufferData.readyState,
-      }, player);
+      });
     }
   };
 }
