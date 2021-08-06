@@ -114,6 +114,10 @@ async function sendAndResetWatchmanData(){
     protocol = 'stb';
   }
 
+  console.log('time at buffer');
+  console.log(timeAtBuffer);
+  console.log(totalDurationInSeconds);
+
   const objectToSend = {
     rebuf_count: amountOfBufferEvents,
     rebuf_duration: amountOfBufferTimeInMS,
@@ -122,9 +126,9 @@ async function sendAndResetWatchmanData(){
     duration: durationInSeconds * 1000,
     protocol,
     player: playerPoweredBy,
-    user_id: userId,
+    user_id: Number(userId),
     position: timeAtBuffer,
-    rel_position: (timeAtBuffer / totalDurationInSeconds * 1000) * 100,
+    rel_position: Math.round((timeAtBuffer / (totalDurationInSeconds * 1000)) * 100),
   }
 
   await sendWatchmanData(objectToSend);
@@ -142,7 +146,7 @@ function stopWatchmanInterval() {
 }
 function startWatchmanIntervalIfNotRunning() {
   if (!watchmanInterval) {
-    watchmanInterval = setInterval(sendAndResetWatchmanData, 1000 * 30);
+    watchmanInterval = setInterval(sendAndResetWatchmanData, 1000 * durationInSeconds);
   }
 }
 
@@ -169,9 +173,9 @@ const analytics: Analytics = {
     claimUrl = claim.canonical_url;
     playerPoweredBy = data.playerPoweredBy;
 
-    timeAtBuffer = claim.timeatBuffer;
+    timeAtBuffer = data.timeAtBuffer;
 
-    totalDurationInSeconds = claim.duration;
+    totalDurationInSeconds = data.duration;
 
     console.log('RUNNING HERE');
 
