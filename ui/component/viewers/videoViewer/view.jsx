@@ -127,9 +127,9 @@ function VideoViewer(props: Props) {
   }, [embedded, videoPlaybackRate]);
 
   function doTrackingBuffered(e: Event, data: any) {
-    console.log('BUFFER');
-    console.log(this);
-    console.log('BUFFER');
+    // console.log('BUFFER');
+    // console.log(this);
+    // console.log('BUFFER');
     // this.pause()
     //
     // doAnalyticsBuffer(uri, data);

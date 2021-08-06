@@ -103,13 +103,10 @@ console.log('ANALYTICS RELOADED');
 var durationInSeconds = 10;
 var amountOfBufferEvents = 0;
 var amountOfBufferTimeInMS = 0;
-var videoType, userId, claimUrl, totalDurationInSeconds, currentVideoPosition, playerPoweredBy, timeAtBuffer;
+var videoType, userId, claimUrl, currentVideoPosition, playerPoweredBy, timeAtBuffer;
 
 
 async function sendAndResetWatchmanData(){
-
-  // console.log('running!')
-  // console.log(player);
 
   var protocol;
   if (videoType === 'application/x-mpegURL'){
@@ -118,36 +115,27 @@ async function sendAndResetWatchmanData(){
     protocol = 'stb';
   }
 
-  if(!totalDurationInSeconds){
-    totalDurationInSeconds = player.currentTime();
+  if(!timeAtBuffer){
+    timeAtBuffer = Math.round(player.currentTime()) * 1000;
   }
 
-  if(!timeAtBuffer){
-    timeAtBuffer = player.duration();
-  }
-  //
-  // console.log('time at buffer');
-  // console.log(timeAtBuffer);
-  // console.log(totalDurationInSeconds);
+  var totalDurationInSeconds = Math.round(player.duration());
 
   const objectToSend = {
     rebuf_count: amountOfBufferEvents,
     rebuf_duration: amountOfBufferTimeInMS,
     url: claimUrl,
     device: getDeviceType(),
-    duration: durationInSeconds * 1000,
+    duration: Math.round(durationInSeconds) * 1000,
     protocol,
     player: playerPoweredBy,
     user_id: Number(userId),
     position: Math.round(timeAtBuffer) ,
     rel_position: Math.round((timeAtBuffer / (totalDurationInSeconds * 1000)) * 100),
-  }
-
-  console.log('About to send the data!');
+  };
 
   await sendWatchmanData(objectToSend);
 
-  // TODO: send here
   amountOfBufferEvents = 0;
   amountOfBufferTimeInMS = 0;
   timeAtBuffer = null;
@@ -194,8 +182,6 @@ const analytics: Analytics = {
     playerPoweredBy = data.playerPoweredBy;
 
     timeAtBuffer = data.timeAtBuffer;
-
-    totalDurationInSeconds = data.duration;
 
     // console.log('RUNNING HERE');
     //
