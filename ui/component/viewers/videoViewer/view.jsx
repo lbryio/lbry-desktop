@@ -127,6 +127,13 @@ function VideoViewer(props: Props) {
   }, [embedded, videoPlaybackRate]);
 
   function doTrackingBuffered(e: Event, data: any) {
+    console.log('BUFFER');
+    console.log(this);
+    console.log('BUFFER');
+    this.pause()
+
+    // doAnalyticsBuffer(uri, data);
+
     fetch(source, { method: 'HEAD' }).then((response) => {
       data.playerPoweredBy = response.headers.get('x-powered-by');
       doAnalyticsBuffer(uri, data);
@@ -148,6 +155,8 @@ function VideoViewer(props: Props) {
   }
 
   const onEnded = React.useCallback(() => {
+    analytics.videoIsPlaying(false);
+
     if (adUrl) {
       setAdUrl(null);
       return;
@@ -167,15 +176,18 @@ function VideoViewer(props: Props) {
     setIsPlaying(true);
     setShowAutoplayCountdown(false);
     setIsEndededEmbed(false);
+    analytics.videoIsPlaying(true);
   }
 
   function onPause(event, player) {
     setIsPlaying(false);
     handlePosition(player);
+    analytics.videoIsPlaying(false);
   }
 
   function onDispose(event, player) {
     handlePosition(player);
+    analytics.videoIsPlaying(false);
   }
 
   function handlePosition(player) {
@@ -228,6 +240,15 @@ function VideoViewer(props: Props) {
     // delay from the header-fetch. This is a temp change until the next
     // re-factoring.
     player.on('loadedmetadata', () => restorePlaybackRate(player));
+    player.on('seeking', function(e, data){
+      console.log('here3')
+      console.log(this)
+      console.log(e)
+      console.log(data)
+      console.log(player)
+      console.log('here4')
+      /*this.pause()*/
+    });
 
     player.on('tracking:buffered', doTrackingBuffered);
     player.on('tracking:firstplay', doTrackingFirstPlay);
@@ -235,6 +256,15 @@ function VideoViewer(props: Props) {
     player.on('play', onPlay);
     player.on('pause', (event) => onPause(event, player));
     player.on('dispose', (event) => onDispose(event, player));
+
+    player.on('dispose', function(event){
+
+
+
+      console.log('PLAYER DISPOSED OF');
+      console.log(event);
+    });
+
     player.on('error', () => {
       const error = player.error();
       if (error) {

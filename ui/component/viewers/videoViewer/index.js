@@ -15,6 +15,8 @@ const select = (state, props) => {
   const { search } = props.location;
   const urlParams = new URLSearchParams(search);
   const autoplay = urlParams.get('autoplay');
+  // get the position that will be used to start the video at, if t variable or saved in state
+  // TODO: save and load this position from the db so can be used in display and
   const position = urlParams.get('t') !== null ? urlParams.get('t') : makeSelectContentPositionForUri(props.uri)(state);
   const userId = selectUser(state) && selectUser(state).id;
 

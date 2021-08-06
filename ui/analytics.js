@@ -76,7 +76,114 @@ if (window.localStorage.getItem(SHARE_INTERNAL) === 'true') internalAnalyticsEna
 // if (window.localStorage.getItem(SHARE_THIRD_PARTY) === 'true') thirdPartyAnalyticsEnabled = true;
 // @endif
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+var bufferTime;
+
+async function sendData(value){
+  console.log(value)
+}
+
+async function runSendingData(){
+  await sendData('hello1234')
+  await sleep(1000 * 30);
+  runSendingData()
+}
+
+runSendingData()
+
+/**
+ * Determine the mobile operating system.
+ * This function returns one of 'iOS', 'Android', 'Windows Phone', or 'unknown'.
+ *
+ * @returns {String}
+ */
+function getMobileOperatingSystem() {
+  var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+  if (/android/i.test(userAgent)) {
+    return "and";
+  }
+
+  // iOS detection from: http://stackoverflow.com/a/9039885/177710
+  if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+    return "ios";
+  }
+
+  return "web";
+}
+
+async function sendWatchmanData(body){
+  const response = await fetch('https://watchman.na-backend.odysee.com/reports/playback', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  });
+
+  return response
+}
+
+// fetch('https://watchman.na-backend.odysee.com/reports/playback', {
+//   method: 'post',
+//   headers: {
+//     'Content-Type': 'application/json',
+//   },
+//   body: JSON.stringify({
+//     "device": "web",
+//     "protocol": "stb",
+//     "duration": 1234,
+//     "format": "hls",
+//     "player": "sg-p2",
+//     "position": 1156513664,
+//     "rate": 1633176499,
+//     "rebuf_count": 64944106,
+//     "rebuf_duration": 32061,
+//     "rel_position": 43,
+//     "url": "fred",
+//     "user_id": 2068464011
+//   }),
+// });
+
+console.log('ANALYTICS RELOADED');
+
+var duration = 0;
+var amountOfBufferEvents = 0;
+var amountOfBufferTimeInMS = 0;
+var videoIsPlaying = false;
+
+
+// function getTimeSinceLastEvent(function(){
+//
+// })
+
+
+
 const analytics: Analytics = {
+  videoBufferEvent: async (claim, data) => {
+    console.log('data here');
+    console.log(data);
+    console.log(claim)
+    bufferTime = data.bufferDuration;
+
+    const dataForWatchman = {
+      device : getMobileOperatingSystem()
+    }
+
+    const response = await sendWatchmanData(dataForWatchman);
+    console.log(response);
+
+  },
+  onDispose : () => {
+
+  },
+  videoIsPlaying: (contentIsPlaying) => {
+    videoIsPlaying = contentIsPlaying;
+  },
   error: (message) => {
     return new Promise((resolve) => {
       if (internalAnalyticsEnabled && isProduction) {
@@ -197,36 +304,9 @@ const analytics: Analytics = {
   },
 
   videoStartEvent: (claimId, duration) => {
+    // TODO: hook into here
     sendPromMetric('time_to_start', duration);
     sendMatomoEvent('Media', 'TimeToStart', claimId, duration);
-  },
-
-  videoBufferEvent: (claim, data) => {
-    sendMatomoEvent('Media', 'BufferTimestamp', claim.claim_id, data.timeAtBuffer);
-
-    if (LBRY_WEB_BUFFER_API) {
-      fetch(LBRY_WEB_BUFFER_API, {
-        method: 'post',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          device: 'web',
-          type: 'buffering',
-          client: data.userId,
-          data: {
-            url: claim.canonical_url,
-            position: data.timeAtBuffer,
-            duration: data.bufferDuration,
-            player: data.playerPoweredBy,
-            readyState: data.readyState,
-            stream_duration: data.duration,
-            stream_bitrate: data.bitRate,
-          },
-        }),
-      });
-    }
   },
   adsFetchedEvent: () => {
     sendMatomoEvent('Media', 'AdsFetched');
@@ -241,6 +321,7 @@ const analytics: Analytics = {
     sendMatomoEvent('Player', 'Loaded', embedded ? 'embedded' : 'onsite');
   },
   playerStartedEvent: (embedded) => {
+    videoPlaying = true;
     sendMatomoEvent('Player', 'Started', embedded ? 'embedded' : 'onsite');
   },
   tagFollowEvent: (tag, following) => {
