@@ -136,8 +136,8 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
   const thumbnail = value && value.thumbnail && value.thumbnail.url;
   const mediaType = source && source.media_type;
   const mediaDuration = media && media.duration;
-  const creationTimestamp = meta && (meta.creation_timestamp || 0);
   const claimTitle = escapeHtmlProperty((value && value.title) || claimName);
+  const releaseTime = (value && value.release_time) || (meta && meta.creation_timestamp) || 0;
 
   const claimDescription =
     value && value.description && value.description.length > 0
@@ -194,8 +194,8 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
     }
     head += `<meta name="twitter:card" content="player"/>`;
     head += `<meta name="twitter:player" content="${videoUrl}" />`;
-    if (creationTimestamp) {
-      var release = new Date(creationTimestamp * 1000).toISOString();
+    if (releaseTime) {
+      var release = new Date(releaseTime * 1000).toISOString();
       head += `<meta property="og:video:release_date" content="${release}"/>`;
     }
     if (mediaDuration) {
@@ -222,8 +222,8 @@ function buildGoogleVideoMetadata(uri, claim) {
   const thumbnail = value && value.thumbnail && value.thumbnail.url;
   const mediaType = source && source.media_type;
   const mediaDuration = media && media.duration;
-  const creationTimestamp = meta && (meta.creation_timestamp || 0);
   const claimTitle = escapeHtmlProperty((value && value.title) || claimName);
+  const releaseTime = (value && value.release_time) || (meta && meta.creation_timestamp) || 0;
 
   const claimDescription =
     value && value.description && value.description.length > 0
@@ -244,7 +244,7 @@ function buildGoogleVideoMetadata(uri, claim) {
     name: `${claimTitle}`,
     description: `${removeMd(claimDescription)}`,
     thumbnailUrl: `${claimThumbnail}`,
-    uploadDate: `${new Date(creationTimestamp * 1000).toISOString()}`,
+    uploadDate: `${new Date(releaseTime * 1000).toISOString()}`,
     // --- Recommended ---
     duration: mediaDuration ? moment.duration(mediaDuration * 1000).toISOString() : undefined,
     contentUrl: generateDirectUrl(claim.name, claim.claim_id),
