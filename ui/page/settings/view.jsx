@@ -13,7 +13,6 @@ import FileSelector from 'component/common/file-selector';
 import Card from 'component/common/card';
 import classnames from 'classnames';
 import Yrbl from 'component/yrbl';
-import { getStripeEnvironment } from 'util/stripe';
 
 type Price = {
   currency: string,
@@ -40,7 +39,6 @@ type Props = {
   enterSettings: () => void,
   exitSettings: () => void,
   myChannelUrls: ?Array<string>,
-  user: User,
 };
 
 class SettingsPage extends React.PureComponent<Props> {
@@ -71,7 +69,6 @@ class SettingsPage extends React.PureComponent<Props> {
       setDaemonSetting,
       toggle3PAnalytics,
       myChannelUrls,
-      user,
     } = this.props;
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
 
@@ -169,44 +166,6 @@ class SettingsPage extends React.PureComponent<Props> {
                 </>
               }
             />
-            {/* @endif */}
-
-            {/* @if TARGET='web' */}
-            {user && getStripeEnvironment() && (
-              <Card
-                title={__('Bank Accounts')}
-                subtitle={__('Connect a bank account to receive tips and compensation in your local currency')}
-                actions={
-                  <div className="section__actions">
-                    <Button
-                      button="secondary"
-                      label={__('Manage')}
-                      icon={ICONS.SETTINGS}
-                      navigate={`/$/${PAGES.SETTINGS_STRIPE_ACCOUNT}`}
-                    />
-                  </div>
-                }
-              />
-            )}
-            {/* @endif */}
-
-            {/* @if TARGET='web' */}
-            {isAuthenticated && getStripeEnvironment() && (
-              <Card
-                title={__('Payment Methods')}
-                subtitle={__('Add a credit card to tip creators in their local currency')}
-                actions={
-                  <div className="section__actions">
-                    <Button
-                      button="secondary"
-                      label={__('Manage')}
-                      icon={ICONS.SETTINGS}
-                      navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`}
-                    />
-                  </div>
-                }
-              />
-            )}
             {/* @endif */}
 
             {(isAuthenticated || !IS_WEB) && (

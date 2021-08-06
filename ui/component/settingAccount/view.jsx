@@ -1,20 +1,26 @@
 // @flow
+import * as ICONS from 'constants/icons';
+import * as PAGES from 'constants/pages';
 import React from 'react';
+import Button from 'component/button';
 import Card from 'component/common/card';
 import SettingAccountPassword from 'component/settingAccountPassword';
+import SettingsRow from 'component/settingsRow';
 import SyncToggle from 'component/syncToggle';
 import { getPasswordFromCookie } from 'util/saved-passwords';
+import { getStripeEnvironment } from 'util/stripe';
 
 type Props = {
   // --- select ---
   isAuthenticated: boolean,
   walletEncrypted: boolean,
+  user: User,
   // --- perform ---
   doWalletStatus: () => void,
 };
 
 export default function SettingAccount(props: Props) {
-  const { isAuthenticated, walletEncrypted, doWalletStatus } = props;
+  const { isAuthenticated, walletEncrypted, user, doWalletStatus } = props;
   const [storedPassword, setStoredPassword] = React.useState(false);
 
   // Determine if password is stored.
@@ -47,6 +53,38 @@ export default function SettingAccount(props: Props) {
           <div className="card__main-actions">
             <SyncToggle disabled={walletEncrypted && !storedPassword && storedPassword !== ''} />
           </div>
+          {/* @endif */}
+
+          {/* @if TARGET='web' */}
+          {user && getStripeEnvironment() && (
+            <SettingsRow
+              title={__('Bank Accounts')}
+              subtitle={__('Connect a bank account to receive tips and compensation in your local currency')}
+            >
+              <Button
+                button="secondary"
+                label={__('Manage')}
+                icon={ICONS.SETTINGS}
+                navigate={`/$/${PAGES.SETTINGS_STRIPE_ACCOUNT}`}
+              />
+            </SettingsRow>
+          )}
+          {/* @endif */}
+
+          {/* @if TARGET='web' */}
+          {isAuthenticated && getStripeEnvironment() && (
+            <SettingsRow
+              title={__('Payment Methods')}
+              subtitle={__('Add a credit card to tip creators in their local currency')}
+            >
+              <Button
+                button="secondary"
+                label={__('Manage')}
+                icon={ICONS.SETTINGS}
+                navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`}
+              />
+            </SettingsRow>
+          )}
           {/* @endif */}
         </>
       }

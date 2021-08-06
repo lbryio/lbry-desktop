@@ -10,7 +10,7 @@ import {
 import { makeSelectClientSetting, selectDaemonSettings } from 'redux/selectors/settings';
 import { selectMyChannelUrls, SETTINGS } from 'lbry-redux';
 import SettingsPage from './view';
-import { selectUserVerifiedEmail, selectUser } from 'redux/selectors/user';
+import { selectUserVerifiedEmail } from 'redux/selectors/user';
 
 const select = (state) => ({
   daemonSettings: selectDaemonSettings(state),
@@ -19,7 +19,6 @@ const select = (state) => ({
   autoDownload: makeSelectClientSetting(SETTINGS.AUTO_DOWNLOAD)(state),
   hideBalance: makeSelectClientSetting(SETTINGS.HIDE_BALANCE)(state),
   myChannelUrls: selectMyChannelUrls(state),
-  user: selectUser(state),
 });
 
 const perform = (dispatch) => ({
