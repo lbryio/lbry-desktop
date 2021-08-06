@@ -3,7 +3,10 @@ const { URL, LBRY_WEB_STREAMING_API } = require('../../config');
 const CONTINENT_COOKIE = 'continent';
 
 function generateStreamUrl(claimName, claimId) {
-  return `${LBRY_WEB_STREAMING_API}/content/claims/${claimName}/${claimId}/stream`;
+  return `${LBRY_WEB_STREAMING_API}/content/claims/${encodeURIComponent(claimName)
+    .replace(/'/g, '%27')
+    .replace(/\(/g, '%28')
+    .replace(/\)/g, '%29')}/${claimId}/stream`;
 }
 
 function generateEmbedUrl(claimName, claimId, includeStartTime, startTime, referralLink) {
@@ -16,7 +19,10 @@ function generateEmbedUrl(claimName, claimId, includeStartTime, startTime, refer
     urlParams.append('r', referralLink);
   }
 
-  return `${URL}/$/embed/${encodeURIComponent(claimName).replace(/'/g, '%27')}/${claimId}?${urlParams.toString()}`;
+  return `${URL}/$/embed/${encodeURIComponent(claimName)
+    .replace(/'/g, '%27')
+    .replace(/\(/g, '%28')
+    .replace(/\)/g, '%29')}/${claimId}?${urlParams.toString()}`;
 }
 
 function generateDownloadUrl(claimName, claimId) {
