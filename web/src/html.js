@@ -325,7 +325,7 @@ async function getHtml(ctx) {
   }
 
   if (requestPath.includes(embedPath)) {
-    const claimUri = requestPath.replace(embedPath, '').replace(/:/g, '#');
+    const claimUri = requestPath.replace(embedPath, '').replace(/:/g, '#').replace('/', '#');
     const claim = await resolveClaimOrRedirect(ctx, claimUri, true);
 
     if (claim) {
