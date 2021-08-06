@@ -42,7 +42,7 @@ type Props = {
   autoplayIfEmbedded: boolean,
   desktopPlayStartTime?: number,
   doAnalyticsView: (string, number) => Promise<any>,
-  doAnalyticsBuffer: (string, any) => void,
+  doAnalyticsBuffer: (string, any, any) => void,
   claimRewards: () => void,
   savePosition: (string, number) => void,
   clearPosition: (string) => void,
@@ -130,13 +130,13 @@ function VideoViewer(props: Props) {
     console.log('BUFFER');
     console.log(this);
     console.log('BUFFER');
-    this.pause()
-
+    // this.pause()
+    //
     // doAnalyticsBuffer(uri, data);
 
     fetch(source, { method: 'HEAD' }).then((response) => {
       data.playerPoweredBy = response.headers.get('x-powered-by');
-      doAnalyticsBuffer(uri, data);
+      doAnalyticsBuffer(uri, data, this);
     });
   }
 

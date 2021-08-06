@@ -76,23 +76,6 @@ if (window.localStorage.getItem(SHARE_INTERNAL) === 'true') internalAnalyticsEna
 // if (window.localStorage.getItem(SHARE_THIRD_PARTY) === 'true') thirdPartyAnalyticsEnabled = true;
 // @endif
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-var bufferTime;
-
-async function sendData(value){
-  console.log(value)
-}
-
-async function runSendingData(){
-  await sendData('hello1234')
-  await sleep(1000 * 30);
-  runSendingData()
-}
-
-runSendingData()
 
 /**
  * Determine the mobile operating system.
@@ -100,7 +83,7 @@ runSendingData()
  *
  * @returns {String}
  */
-function getMobileOperatingSystem() {
+function getDeviceType() {
   var userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
   if (/android/i.test(userAgent)) {
@@ -115,74 +98,94 @@ function getMobileOperatingSystem() {
   return "web";
 }
 
+console.log('ANALYTICS RELOADED');
+
+var durationInSeconds = 30;
+var amountOfBufferEvents = 0;
+var amountOfBufferTimeInMS = 0;
+var videoType, userId, claimUrl, totalDurationInSeconds, currentVideoPosition, playerPoweredBy, timeAtBuffer;
+
+async function sendAndResetWatchmanData(){
+  console.log('running!')
+  var protocol;
+  if (videoType === 'application/x-mpegURL'){
+    protocol = 'hls';
+  } else {
+    protocol = 'stb';
+  }
+
+  const objectToSend = {
+    rebuf_count: amountOfBufferEvents,
+    rebuf_duration: amountOfBufferTimeInMS,
+    url: claimUrl,
+    device: getDeviceType(),
+    duration: durationInSeconds * 1000,
+    protocol,
+    player: playerPoweredBy,
+    user_id: userId,
+    position: timeAtBuffer,
+    rel_position: (timeAtBuffer / totalDurationInSeconds * 1000) * 100,
+  }
+
+  await sendWatchmanData(objectToSend);
+
+  // TODO: send here
+  amountOfBufferEvents = 0;
+  amountOfBufferTimeInMS = 0;
+  videoType, userId, claimUrl, totalDurationInSeconds, currentVideoPosition, playerPoweredBy, timeAtBuffer = null;
+}
+
+var watchmanInterval;
+function stopWatchmanInterval() {
+  clearInterval(watchmanInterval);
+  watchmanInterval = null;
+}
+function startWatchmanIntervalIfNotRunning() {
+  if (!watchmanInterval) {
+    watchmanInterval = setInterval(sendAndResetWatchmanData, 1000 * 30);
+  }
+}
+
 async function sendWatchmanData(body){
   const response = await fetch('https://watchman.na-backend.odysee.com/reports/playback', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(body)
+    body: JSON.stringify(body),
   });
 
-  return response
+  return response;
 }
 
-// fetch('https://watchman.na-backend.odysee.com/reports/playback', {
-//   method: 'post',
-//   headers: {
-//     'Content-Type': 'application/json',
-//   },
-//   body: JSON.stringify({
-//     "device": "web",
-//     "protocol": "stb",
-//     "duration": 1234,
-//     "format": "hls",
-//     "player": "sg-p2",
-//     "position": 1156513664,
-//     "rate": 1633176499,
-//     "rebuf_count": 64944106,
-//     "rebuf_duration": 32061,
-//     "rel_position": 43,
-//     "url": "fred",
-//     "user_id": 2068464011
-//   }),
-// });
-
-console.log('ANALYTICS RELOADED');
-
-var duration = 0;
-var amountOfBufferEvents = 0;
-var amountOfBufferTimeInMS = 0;
-var videoIsPlaying = false;
-
-
-// function getTimeSinceLastEvent(function(){
-//
-// })
-
-
-
 const analytics: Analytics = {
-  videoBufferEvent: async (claim, data) => {
-    console.log('data here');
+  videoBufferEvent: async (claim, data, player) => {
+
+    amountOfBufferEvents = amountOfBufferEvents + 1;
+    amountOfBufferTimeInMS = amountOfBufferTimeInMS + data.bufferDuration;
+
+    userId = data.userId;
+    claimUrl = claim.canonical_url;
+    playerPoweredBy = data.playerPoweredBy;
+
+    timeAtBuffer = claim.timeatBuffer;
+
+    totalDurationInSeconds = claim.duration;
+
+    console.log('RUNNING HERE');
+
+    console.log(claim);
     console.log(data);
-    console.log(claim)
-    bufferTime = data.bufferDuration;
-
-    const dataForWatchman = {
-      device : getMobileOperatingSystem()
-    }
-
-    const response = await sendWatchmanData(dataForWatchman);
-    console.log(response);
+    console.log(player);
+    console.log('done1234');
 
   },
-  onDispose : () => {
-
+  onDispose: () => {
+    stopWatchmanInterval();
   },
-  videoIsPlaying: (contentIsPlaying) => {
-    videoIsPlaying = contentIsPlaying;
+  videoIsPlaying: () => {
+    startWatchmanIntervalIfNotRunning();
   },
   error: (message) => {
     return new Promise((resolve) => {
@@ -321,7 +324,6 @@ const analytics: Analytics = {
     sendMatomoEvent('Player', 'Loaded', embedded ? 'embedded' : 'onsite');
   },
   playerStartedEvent: (embedded) => {
-    videoPlaying = true;
     sendMatomoEvent('Player', 'Started', embedded ? 'embedded' : 'onsite');
   },
   tagFollowEvent: (tag, following) => {

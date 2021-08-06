@@ -11,6 +11,9 @@ import { selectDaemonSettings, makeSelectClientSetting, selectHomepageData } fro
 import { toggleVideoTheaterMode, doSetClientSetting } from 'redux/actions/settings';
 import { selectUserVerifiedEmail, selectUser } from 'redux/selectors/user';
 
+console.log('hereasdfasdf')
+console.log(doAnalyticsBuffer)
+
 const select = (state, props) => {
   const { search } = props.location;
   const urlParams = new URLSearchParams(search);
@@ -43,7 +46,7 @@ const perform = (dispatch) => ({
   clearPosition: (uri) => dispatch(clearPosition(uri)),
   changeMute: (muted) => dispatch(doChangeMute(muted)),
   doAnalyticsView: (uri, timeToStart) => dispatch(doAnalyticsView(uri, timeToStart)),
-  doAnalyticsBuffer: (uri, bufferData) => dispatch(doAnalyticsBuffer(uri, bufferData)),
+  doAnalyticsBuffer: (uri, bufferData, player) => dispatch(doAnalyticsBuffer(uri, bufferData, player)),
   claimRewards: () => dispatch(doClaimEligiblePurchaseRewards()),
   toggleVideoTheaterMode: () => dispatch(toggleVideoTheaterMode()),
   setVideoPlaybackRate: (rate) => dispatch(doSetClientSetting(SETTINGS.VIDEO_PLAYBACK_RATE, rate)),
