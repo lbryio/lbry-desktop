@@ -104,7 +104,7 @@ var durationInSeconds = 10;
 var amountOfBufferEvents = 0;
 var amountOfBufferTimeInMS = 0;
 var videoType, userId, claimUrl, currentVideoPosition, playerPoweredBy, timeAtBuffer;
-
+var passedPlayer;
 
 async function sendAndResetWatchmanData(){
 
@@ -113,6 +113,16 @@ async function sendAndResetWatchmanData(){
     protocol = 'hls';
   } else {
     protocol = 'stb';
+  }
+
+  var playerToUse = player || passedPlayer;
+
+  if(!playerToUse){
+    return console.log('no player to use')
+  }
+
+  if(!userId){
+    return console.log('no user id')
   }
 
   if(!timeAtBuffer){
@@ -182,17 +192,11 @@ const analytics: Analytics = {
     playerPoweredBy = data.playerPoweredBy;
 
     timeAtBuffer = data.timeAtBuffer;
-
-    // console.log('RUNNING HERE');
-    //
-    // console.log(claim);
-    // console.log(data);
-    // console.log(player);
-    // console.log('done1234');
-
   },
+
   onDispose: () => {
     stopWatchmanInterval();
+    // TODO: clear data here
   },
   videoIsPlaying: () => {
     startWatchmanIntervalIfNotRunning();
@@ -316,8 +320,14 @@ const analytics: Analytics = {
     }
   },
 
-  videoStartEvent: (claimId, duration) => {
-    // TODO: hook into here
+  videoStartEvent: (claimId, duration, poweredBy, canonicalUrl, playerFromView, passedUserId) => {
+
+    userId = passedUserId
+
+    passedPlayer = playerFromView
+    playerPoweredBy = poweredBy;
+    claimUrl = canonicalUrl
+    // TODO: add claim url , userId
     sendPromMetric('time_to_start', duration);
     sendMatomoEvent('Media', 'TimeToStart', claimId, duration);
   },

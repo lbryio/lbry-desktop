@@ -141,6 +141,10 @@ function VideoViewer(props: Props) {
   }
 
   function doTrackingFirstPlay(e: Event, data: any) {
+
+    console.log('running here');
+    console.log(userId);
+
     let timeToStart = data.secondsToLoad;
 
     if (desktopPlayStartTime !== undefined) {
@@ -148,7 +152,13 @@ function VideoViewer(props: Props) {
       timeToStart += differenceToAdd;
     }
     analytics.playerStartedEvent(embedded);
-    analytics.videoStartEvent(claimId, timeToStart);
+    // TODO: add userId, claim URL,
+
+    fetch(source, { method: 'HEAD' }).then((response) => {
+      var playerPoweredBy = response.headers.get('x-powered-by');
+      analytics.videoStartEvent(claimId, timeToStart, playerPoweredBy, claim && claim.canonical_url, player, userId);
+    });
+
     doAnalyticsView(uri, timeToStart).then(() => {
       claimRewards();
     });
@@ -251,7 +261,10 @@ function VideoViewer(props: Props) {
     });
 
     player.on('tracking:buffered', doTrackingBuffered);
-    player.on('tracking:firstplay', doTrackingFirstPlay);
+
+    if(userId){
+      player.on('tracking:firstplay', doTrackingFirstPlay);
+    }
     player.on('ended', onEnded);
     player.on('play', onPlay);
     player.on('pause', (event) => onPause(event, player));
