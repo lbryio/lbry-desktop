@@ -139,7 +139,7 @@ async function sendAndResetWatchmanData(){
     duration: Math.round(durationInSeconds) * 1000,
     protocol,
     player: playerPoweredBy,
-    user_id: Number(userId),
+    user_id: userId.toString(),
     position: Math.round(timeAtBuffer) ,
     rel_position: Math.round((timeAtBuffer / (totalDurationInSeconds * 1000)) * 100),
   };
@@ -198,8 +198,13 @@ const analytics: Analytics = {
     stopWatchmanInterval();
     // TODO: clear data here
   },
-  videoIsPlaying: () => {
-    startWatchmanIntervalIfNotRunning();
+  videoIsPlaying: (isPlaying) => {
+    if(isPlaying){
+      startWatchmanIntervalIfNotRunning();
+    } else {
+      stopWatchmanInterval();
+    }
+
   },
   error: (message) => {
     return new Promise((resolve) => {
@@ -320,8 +325,9 @@ const analytics: Analytics = {
     }
   },
 
-  videoStartEvent: (claimId, duration, poweredBy, canonicalUrl, playerFromView, passedUserId) => {
+  videoStartEvent: (claimId, duration, poweredBy, passedUserId, canonicalUrl, playerFromView) => {
 
+    console.log('Video start');
     userId = passedUserId
 
     passedPlayer = playerFromView
