@@ -9,7 +9,7 @@ import Native from 'native';
 import ElectronCookies from '@exponent/electron-cookies';
 import { generateInitialUrl } from 'util/url';
 // @endif
-import { MATOMO_ID, MATOMO_URL, LBRY_WEB_BUFFER_API } from 'config';
+import { MATOMO_ID, MATOMO_URL } from 'config';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const devInternalApis = process.env.LBRY_API_URL && process.env.LBRY_API_URL.includes('dev');
@@ -76,7 +76,6 @@ if (window.localStorage.getItem(SHARE_INTERNAL) === 'true') internalAnalyticsEna
 // if (window.localStorage.getItem(SHARE_THIRD_PARTY) === 'true') thirdPartyAnalyticsEnabled = true;
 // @endif
 
-
 /**
  * Determine the mobile operating system.
  * This function returns one of 'iOS', 'Android', 'Windows Phone', or 'unknown'.
@@ -87,37 +86,36 @@ function getDeviceType() {
   var userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
   if (/android/i.test(userAgent)) {
-    return "and";
+    return 'and';
   }
 
   // iOS detection from: http://stackoverflow.com/a/9039885/177710
   if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-    return "ios";
+    return 'ios';
   }
 
-  return "web";
+  // default as web, this can be optimized
+  return 'web';
 }
 
 var durationInSeconds = 10;
 var amountOfBufferEvents = 0;
 var amountOfBufferTimeInMS = 0;
-var videoType, userId, claimUrl, playerPoweredBy, timeAtBuffer;
-var passedPlayer;
+var videoType, userId, claimUrl, playerPoweredBy, timeAtBuffer, videoPlayer;
 
-async function sendAndResetWatchmanData(){
-
+async function sendAndResetWatchmanData() {
   var protocol;
-  if (videoType === 'application/x-mpegURL'){
+  if (videoType === 'application/x-mpegURL') {
     protocol = 'hls';
   } else {
     protocol = 'stb';
   }
 
-  console.log(claimUrl)
+  console.log(claimUrl);
 
-  timeAtBuffer = Math.round(player.currentTime()) * 1000;
+  timeAtBuffer = Math.round(videoPlayer.currentTime()) * 1000;
 
-  var totalDurationInSeconds = Math.round(player.duration());
+  var totalDurationInSeconds = Math.round(videoPlayer.duration());
 
   const objectToSend = {
     rebuf_count: amountOfBufferEvents,
@@ -128,7 +126,7 @@ async function sendAndResetWatchmanData(){
     protocol,
     player: playerPoweredBy,
     user_id: userId.toString(),
-    position: Math.round(timeAtBuffer) ,
+    position: Math.round(timeAtBuffer),
     rel_position: Math.round((timeAtBuffer / (totalDurationInSeconds * 1000)) * 100),
   };
 
@@ -141,19 +139,19 @@ async function sendAndResetWatchmanData(){
 
 var watchmanInterval;
 function stopWatchmanInterval() {
-  console.log('turning off watchman interval')
+  console.log('turning off watchman interval');
   clearInterval(watchmanInterval);
   watchmanInterval = null;
 }
 function startWatchmanIntervalIfNotRunning() {
-  console.log('turning on watchman interval')
+  console.log('turning on watchman interval');
   if (!watchmanInterval) {
-    console.log('watchman interval turned back on')
+    console.log('watchman interval turned back on');
     watchmanInterval = setInterval(sendAndResetWatchmanData, 1000 * durationInSeconds);
   }
 }
 
-async function sendWatchmanData(body){
+async function sendWatchmanData(body) {
   try {
     const response = await fetch('https://watchman.na-backend.odysee.com/reports/playback', {
       method: 'POST',
@@ -165,14 +163,13 @@ async function sendWatchmanData(body){
     });
 
     return response;
-  } catch (err){
+  } catch (err) {
     console.log(err);
   }
 }
 
 const analytics: Analytics = {
-  videoBufferEvent: async (claim, data, player) => {
-
+  videoBufferEvent: async (claim, data) => {
     console.log('BUFFERING!');
 
     amountOfBufferEvents = amountOfBufferEvents + 1;
@@ -180,43 +177,37 @@ const analytics: Analytics = {
 
     timeAtBuffer = data.timeAtBuffer;
   },
-
   onDispose: () => {
     stopWatchmanInterval();
     // TODO: clear data here
   },
-  videoIsPlaying: (isPlaying, event) => {
-    console.log('event');
-    console.log(event);
-
-    console.log('is seeking');
-    console.log(player.seeking())
+  videoIsPlaying: (isPlaying, passedPlayer) => {
+    var playerToUse = videoPlayer || passedPlayer;
 
     // have to use this because videojs pauses/unpauses during seek
-    var playerIsSeeking = player.seeking();
+    var playerIsSeeking = playerToUse.seeking();
 
-    if(!playerIsSeeking){
-      if(isPlaying){
+    console.log('player is seeking');
+    console.log(playerIsSeeking);
+
+    if (!playerIsSeeking) {
+      if (isPlaying) {
         startWatchmanIntervalIfNotRunning();
       } else {
         stopWatchmanInterval();
       }
     }
-
-
   },
-  videoStartEvent: (claimId, duration, poweredBy, passedUserId, canonicalUrl, playerFromView) => {
-
+  videoStartEvent: (claimId, duration, poweredBy, passedUserId, canonicalUrl, passedPlayer) => {
     console.log('Video start');
-    userId = passedUserId
-    claimUrl = canonicalUrl
+    userId = passedUserId;
+    claimUrl = canonicalUrl;
     playerPoweredBy = poweredBy;
 
-    videoType = player.currentSource().type
+    videoType = passedPlayer.currentSource().type;
+    videoPlayer = passedPlayer;
 
     console.log(userId, canonicalUrl, playerPoweredBy);
-
-    passedPlayer = playerFromView
 
     // TODO: add claim url , userId
     sendPromMetric('time_to_start', duration);

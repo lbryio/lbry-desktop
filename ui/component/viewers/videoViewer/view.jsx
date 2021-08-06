@@ -127,7 +127,6 @@ function VideoViewer(props: Props) {
   }, [embedded, videoPlaybackRate]);
 
   function doTrackingBuffered(e: Event, data: any) {
-
     fetch(source, { method: 'HEAD', cache: 'no-store' }).then((response) => {
       data.playerPoweredBy = response.headers.get('x-powered-by');
       doAnalyticsBuffer(uri, data);
@@ -135,7 +134,6 @@ function VideoViewer(props: Props) {
   }
 
   function doTrackingFirstPlay(e: Event, data: any) {
-
     console.log('running here');
     console.log(userId);
 
@@ -149,8 +147,8 @@ function VideoViewer(props: Props) {
 
     fetch(source, { method: 'HEAD', cache: 'no-store' }).then((response) => {
       var playerPoweredBy = response.headers.get('x-powered-by');
-      analytics.videoStartEvent(claimId, timeToStart, playerPoweredBy, userId);
-    })
+      analytics.videoStartEvent(claimId, timeToStart, playerPoweredBy, userId, claim.canonical_url, this);
+    });
 
     doAnalyticsView(uri, timeToStart).then(() => {
       claimRewards();
@@ -179,18 +177,18 @@ function VideoViewer(props: Props) {
     setIsPlaying(true);
     setShowAutoplayCountdown(false);
     setIsEndededEmbed(false);
-    analytics.videoIsPlaying(true);
+    analytics.videoIsPlaying(true, player);
   }
 
   function onPause(event, player) {
     setIsPlaying(false);
     handlePosition(player);
-    analytics.videoIsPlaying(false);
+    analytics.videoIsPlaying(false, player);
   }
 
   function onDispose(event, player) {
     handlePosition(player);
-    analytics.videoIsPlaying(false);
+    analytics.videoIsPlaying(false, player);
   }
 
   function handlePosition(player) {
