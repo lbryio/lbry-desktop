@@ -2,7 +2,6 @@ import { connect } from 'react-redux';
 import { doClearCache, doNotifyEncryptWallet, doNotifyDecryptWallet, doNotifyForgetPassword } from 'redux/actions/app';
 import { selectAllowAnalytics } from 'redux/selectors/app';
 import {
-  doSetDaemonSetting,
   doClearDaemonSetting,
   doSetClientSetting,
   doFindFFmpeg,
@@ -33,7 +32,6 @@ const select = (state) => ({
 });
 
 const perform = (dispatch) => ({
-  setDaemonSetting: (key, value) => dispatch(doSetDaemonSetting(key, value)),
   clearDaemonSetting: (key) => dispatch(doClearDaemonSetting(key)),
   clearCache: () => dispatch(doClearCache()),
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),

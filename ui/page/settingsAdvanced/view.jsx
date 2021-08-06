@@ -32,7 +32,6 @@ type DaemonSettings = {
 };
 
 type Props = {
-  setDaemonSetting: (string, ?SetDaemonSettingArg) => void,
   clearDaemonSetting: (string) => void,
   setClientSetting: (string, SetDaemonSettingArg) => void,
   daemonSettings: DaemonSettings,
@@ -155,7 +154,7 @@ class SettingsAdvancedPage extends React.PureComponent<Props, State> {
   }
 
   setDaemonSetting(name: string, value: ?SetDaemonSettingArg): void {
-    this.props.setDaemonSetting(name, value);
+    // this.props.setDaemonSetting(name, value);
   }
 
   clearDaemonSetting(name: string): void {
@@ -174,7 +173,6 @@ class SettingsAdvancedPage extends React.PureComponent<Props, State> {
       instantPurchaseMax,
       isAuthenticated,
       walletEncrypted,
-      setDaemonSetting,
       setClientSetting,
       hideBalance,
       findingFFmpeg,
@@ -203,40 +201,6 @@ class SettingsAdvancedPage extends React.PureComponent<Props, State> {
           </section>
         ) : (
           <div>
-            {/* @if TARGET='app' */}
-            <Card
-              title={__('Network and data settings')}
-              actions={
-                <React.Fragment>
-                  <FormField
-                    type="checkbox"
-                    name="save_files"
-                    onChange={() => setDaemonSetting('save_files', !daemonSettings.save_files)}
-                    checked={daemonSettings.save_files}
-                    label={__('Save all viewed content to your downloads directory')}
-                    helper={__(
-                      'Paid content and some file types are saved by default. Changing this setting will not affect previously downloaded content.'
-                    )}
-                  />
-
-                  <FormField
-                    type="checkbox"
-                    name="save_blobs"
-                    onChange={() => setDaemonSetting('save_blobs', !daemonSettings.save_blobs)}
-                    checked={daemonSettings.save_blobs}
-                    label={__('Save hosting data to help the LBRY network')}
-                    helper={
-                      <React.Fragment>
-                        {__("If disabled, LBRY will be very sad and you won't be helping improve the network.")}{' '}
-                        <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/host-content" />.
-                      </React.Fragment>
-                    }
-                  />
-                </React.Fragment>
-              }
-            />
-            {/* @endif */}
-
             <Card
               title={__('Purchase and tip confirmations')}
               actions={
