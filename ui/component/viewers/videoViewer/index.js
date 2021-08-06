@@ -11,9 +11,6 @@ import { selectDaemonSettings, makeSelectClientSetting, selectHomepageData } fro
 import { toggleVideoTheaterMode, doSetClientSetting } from 'redux/actions/settings';
 import { selectUserVerifiedEmail, selectUser } from 'redux/selectors/user';
 
-console.log('hereasdfasdf')
-console.log(doAnalyticsBuffer)
-
 const select = (state, props) => {
   const { search } = props.location;
   const urlParams = new URLSearchParams(search);

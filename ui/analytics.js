@@ -98,12 +98,10 @@ function getDeviceType() {
   return "web";
 }
 
-console.log('ANALYTICS RELOADED');
-
 var durationInSeconds = 10;
 var amountOfBufferEvents = 0;
 var amountOfBufferTimeInMS = 0;
-var videoType, userId, claimUrl, currentVideoPosition, playerPoweredBy, timeAtBuffer;
+var videoType, userId, claimUrl, playerPoweredBy, timeAtBuffer;
 var passedPlayer;
 
 async function sendAndResetWatchmanData(){
@@ -115,7 +113,7 @@ async function sendAndResetWatchmanData(){
     protocol = 'stb';
   }
 
-  var playerToUse = player || passedPlayer;
+  console.log(claimUrl)
 
   timeAtBuffer = Math.round(player.currentTime()) * 1000;
 
@@ -143,11 +141,14 @@ async function sendAndResetWatchmanData(){
 
 var watchmanInterval;
 function stopWatchmanInterval() {
+  console.log('turning off watchman interval')
   clearInterval(watchmanInterval);
   watchmanInterval = null;
 }
 function startWatchmanIntervalIfNotRunning() {
+  console.log('turning on watchman interval')
   if (!watchmanInterval) {
+    console.log('watchman interval turned back on')
     watchmanInterval = setInterval(sendAndResetWatchmanData, 1000 * durationInSeconds);
   }
 }
@@ -184,12 +185,24 @@ const analytics: Analytics = {
     stopWatchmanInterval();
     // TODO: clear data here
   },
-  videoIsPlaying: (isPlaying) => {
-    if(isPlaying){
-      startWatchmanIntervalIfNotRunning();
-    } else {
-      stopWatchmanInterval();
+  videoIsPlaying: (isPlaying, event) => {
+    console.log('event');
+    console.log(event);
+
+    console.log('is seeking');
+    console.log(player.seeking())
+
+    // have to use this because videojs pauses/unpauses during seek
+    var playerIsSeeking = player.seeking();
+
+    if(!playerIsSeeking){
+      if(isPlaying){
+        startWatchmanIntervalIfNotRunning();
+      } else {
+        stopWatchmanInterval();
+      }
     }
+
 
   },
   videoStartEvent: (claimId, duration, poweredBy, passedUserId, canonicalUrl, playerFromView) => {
