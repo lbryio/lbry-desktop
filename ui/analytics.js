@@ -117,17 +117,7 @@ async function sendAndResetWatchmanData(){
 
   var playerToUse = player || passedPlayer;
 
-  if(!playerToUse){
-    return console.log('no player to use')
-  }
-
-  if(!userId){
-    return console.log('no user id')
-  }
-
-  if(!timeAtBuffer){
-    timeAtBuffer = Math.round(player.currentTime()) * 1000;
-  }
+  timeAtBuffer = Math.round(player.currentTime()) * 1000;
 
   var totalDurationInSeconds = Math.round(player.duration());
 
@@ -187,10 +177,6 @@ const analytics: Analytics = {
     amountOfBufferEvents = amountOfBufferEvents + 1;
     amountOfBufferTimeInMS = amountOfBufferTimeInMS + data.bufferDuration;
 
-    userId = data.userId;
-    claimUrl = claim.canonical_url;
-    playerPoweredBy = data.playerPoweredBy;
-
     timeAtBuffer = data.timeAtBuffer;
   },
 
@@ -205,6 +191,23 @@ const analytics: Analytics = {
       stopWatchmanInterval();
     }
 
+  },
+  videoStartEvent: (claimId, duration, poweredBy, passedUserId, canonicalUrl, playerFromView) => {
+
+    console.log('Video start');
+    userId = passedUserId
+    claimUrl = canonicalUrl
+    playerPoweredBy = poweredBy;
+
+    videoType = player.currentSource().type
+
+    console.log(userId, canonicalUrl, playerPoweredBy);
+
+    passedPlayer = playerFromView
+
+    // TODO: add claim url , userId
+    sendPromMetric('time_to_start', duration);
+    sendMatomoEvent('Media', 'TimeToStart', claimId, duration);
   },
   error: (message) => {
     return new Promise((resolve) => {
@@ -323,19 +326,6 @@ const analytics: Analytics = {
     if (internalAnalyticsEnabled && isProduction) {
       Lbryio.call('content_tags', 'sync', params);
     }
-  },
-
-  videoStartEvent: (claimId, duration, poweredBy, passedUserId, canonicalUrl, playerFromView) => {
-
-    console.log('Video start');
-    userId = passedUserId
-
-    passedPlayer = playerFromView
-    playerPoweredBy = poweredBy;
-    claimUrl = canonicalUrl
-    // TODO: add claim url , userId
-    sendPromMetric('time_to_start', duration);
-    sendMatomoEvent('Media', 'TimeToStart', claimId, duration);
   },
   adsFetchedEvent: () => {
     sendMatomoEvent('Media', 'AdsFetched');

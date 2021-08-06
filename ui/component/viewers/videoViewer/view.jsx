@@ -134,7 +134,7 @@ function VideoViewer(props: Props) {
     //
     // doAnalyticsBuffer(uri, data);
 
-    fetch(source, { method: 'HEAD' }).then((response) => {
+    fetch(source, { method: 'HEAD', cache: 'no-store' }).then((response) => {
       data.playerPoweredBy = response.headers.get('x-powered-by');
       doAnalyticsBuffer(uri, data, this);
     });
@@ -152,12 +152,11 @@ function VideoViewer(props: Props) {
       timeToStart += differenceToAdd;
     }
     analytics.playerStartedEvent(embedded);
-    // TODO: add userId, claim URL,
 
-    fetch(source, { method: 'HEAD' }).then((response) => {
+    fetch(source, { method: 'HEAD', cache: 'no-store' }).then((response) => {
       var playerPoweredBy = response.headers.get('x-powered-by');
       analytics.videoStartEvent(claimId, timeToStart, playerPoweredBy, userId, claim && claim.canonical_url, player);
-    });
+    })
 
     doAnalyticsView(uri, timeToStart).then(() => {
       claimRewards();
