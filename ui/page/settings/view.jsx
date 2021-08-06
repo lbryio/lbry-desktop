@@ -1,20 +1,17 @@
 // @flow
 import * as PAGES from 'constants/pages';
-import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
 import * as React from 'react';
-import { SETTINGS } from 'lbry-redux';
 import { FormField } from 'component/common/form';
 import Button from 'component/button';
 import Page from 'component/page';
 import SettingAccount from 'component/settingAccount';
 import SettingAppearance from 'component/settingAppearance';
+import SettingContent from 'component/settingContent';
 import SettingSystem from 'component/settingSystem';
 import FileSelector from 'component/common/file-selector';
 import Card from 'component/common/card';
 import classnames from 'classnames';
-import { SIMPLE_SITE } from 'config';
-import { Lbryio } from 'lbryinc';
 import Yrbl from 'component/yrbl';
 import { getStripeEnvironment } from 'util/stripe';
 
@@ -33,18 +30,12 @@ type DaemonSettings = {
 type Props = {
   setDaemonSetting: (string, ?SetDaemonSettingArg) => void,
   clearDaemonSetting: (string) => void,
-  setClientSetting: (string, SetDaemonSettingArg) => void,
   toggle3PAnalytics: (boolean) => void,
   daemonSettings: DaemonSettings,
   allowAnalytics: boolean,
-  showNsfw: boolean,
   isAuthenticated: boolean,
   instantPurchaseEnabled: boolean,
   instantPurchaseMax: Price,
-  autoplay: boolean,
-  floatingPlayer: boolean,
-  hideReposts: ?boolean,
-  clearPlayingUri: () => void,
   openModal: (string) => void,
   enterSettings: () => void,
   exitSettings: () => void,
@@ -75,17 +66,10 @@ class SettingsPage extends React.PureComponent<Props> {
     const {
       daemonSettings,
       allowAnalytics,
-      showNsfw,
       isAuthenticated,
-      autoplay,
       // autoDownload,
       setDaemonSetting,
-      setClientSetting,
       toggle3PAnalytics,
-      floatingPlayer,
-      hideReposts,
-      clearPlayingUri,
-      openModal,
       myChannelUrls,
       user,
     } = this.props;
@@ -96,6 +80,7 @@ class SettingsPage extends React.PureComponent<Props> {
       <Page noFooter noSideNavigation backout={{ title: __('Settings'), backLabel: __('Done') }} className="card-stack">
         <SettingAppearance />
         <SettingAccount />
+        <SettingContent />
         <SettingSystem />
       </Page>
     ) : (
@@ -146,83 +131,6 @@ class SettingsPage extends React.PureComponent<Props> {
               }
             />
             {/* @endif */}
-
-            <Card
-              title={__('Content settings')}
-              actions={
-                <React.Fragment>
-                  <FormField
-                    type="checkbox"
-                    name="floating_player"
-                    onChange={() => {
-                      setClientSetting(SETTINGS.FLOATING_PLAYER, !floatingPlayer);
-                      clearPlayingUri();
-                    }}
-                    checked={floatingPlayer}
-                    label={__('Floating video player')}
-                    helper={__('Keep content playing in the corner when navigating to a different page.')}
-                  />
-
-                  <FormField
-                    type="checkbox"
-                    name="autoplay"
-                    onChange={() => setClientSetting(SETTINGS.AUTOPLAY, !autoplay)}
-                    checked={autoplay}
-                    label={__('Autoplay media files')}
-                    helper={__(
-                      'Autoplay video and audio files when navigating to a file, as well as the next related item when a file finishes playing.'
-                    )}
-                  />
-                  {!SIMPLE_SITE && (
-                    <>
-                      <FormField
-                        type="checkbox"
-                        name="hide_reposts"
-                        onChange={(e) => {
-                          if (isAuthenticated) {
-                            let param = e.target.checked ? { add: 'noreposts' } : { remove: 'noreposts' };
-                            Lbryio.call('user_tag', 'edit', param);
-                          }
-
-                          setClientSetting(SETTINGS.HIDE_REPOSTS, !hideReposts);
-                        }}
-                        checked={hideReposts}
-                        label={__('Hide reposts')}
-                        helper={__(
-                          'You will not see reposts by people you follow or receive email notifying about them.'
-                        )}
-                      />
-
-                      {/*
-                        <FormField
-                          type="checkbox"
-                          name="show_anonymous"
-                          onChange={() => setClientSetting(SETTINGS.SHOW_ANONYMOUS, !showAnonymous)}
-                          checked={showAnonymous}
-                          label={__('Show anonymous content')}
-                          helper={__('Anonymous content is published without a channel.')}
-                        />
-                      */}
-
-                      <FormField
-                        type="checkbox"
-                        name="show_nsfw"
-                        onChange={() =>
-                          !IS_WEB || showNsfw
-                            ? setClientSetting(SETTINGS.SHOW_MATURE, !showNsfw)
-                            : openModal(MODALS.CONFIRM_AGE)
-                        }
-                        checked={showNsfw}
-                        label={__('Show mature content')}
-                        helper={__(
-                          'Mature content may include nudity, intense sexuality, profanity, or other adult content. By displaying mature content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  '
-                        )}
-                      />
-                    </>
-                  )}
-                </React.Fragment>
-              }
-            />
 
             {/* @if TARGET='app' */}
             <Card
