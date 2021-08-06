@@ -90,6 +90,8 @@ type Props = {
   isPostClaim: boolean,
   permanentUrl: ?string,
   remoteUrl: ?string,
+  isClaimingInitialRewards: boolean,
+  claimInitialRewards: () => void,
 };
 
 function PublishForm(props: Props) {
@@ -128,6 +130,8 @@ function PublishForm(props: Props) {
     isPostClaim,
     permanentUrl,
     remoteUrl,
+    isClaimingInitialRewards,
+    claimInitialRewards,
   } = props;
 
   const { replace, location } = useHistory();
@@ -264,6 +268,10 @@ function PublishForm(props: Props) {
   }, [activeChannelClaimStr, setSignedMessage]);
 
   useEffect(() => {
+    claimInitialRewards();
+  }, [claimInitialRewards]);
+
+  useEffect(() => {
     if (!modal) {
       setTimeout(() => {
         setPreviewing(false);
@@ -298,7 +306,10 @@ function PublishForm(props: Props) {
 
   const isLivestreamMode = mode === PUBLISH_MODES.LIVESTREAM;
   let submitLabel;
-  if (publishing) {
+
+  if (isClaimingInitialRewards) {
+    submitLabel = __('Claiming credits...');
+  } else if (publishing) {
     if (isStillEditing) {
       submitLabel = __('Saving...');
     } else if (isLivestreamMode) {
@@ -623,6 +634,7 @@ function PublishForm(props: Props) {
             onClick={handlePublish}
             label={submitLabel}
             disabled={
+              isClaimingInitialRewards ||
               formDisabled ||
               !formValid ||
               uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS ||

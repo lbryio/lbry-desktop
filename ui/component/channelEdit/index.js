@@ -17,6 +17,8 @@ import {
 } from 'lbry-redux';
 import { doOpenModal } from 'redux/actions/app';
 import { doUpdateBlockListForPublishedChannel } from 'redux/actions/comments';
+import { doClaimInitialRewards } from 'redux/actions/rewards';
+import { selectIsClaimingInitialRewards } from 'redux/selectors/rewards';
 import ChannelForm from './view';
 
 const select = (state, props) => ({
@@ -36,6 +38,7 @@ const select = (state, props) => ({
   createError: selectCreateChannelError(state),
   creatingChannel: selectCreatingChannel(state),
   balance: selectBalance(state),
+  isClaimingInitialRewards: selectIsClaimingInitialRewards(state),
 });
 
 const perform = (dispatch) => ({
@@ -50,6 +53,7 @@ const perform = (dispatch) => ({
     );
   },
   clearChannelErrors: () => dispatch(doClearChannelErrors()),
+  claimInitialRewards: () => dispatch(doClaimInitialRewards()),
 });
 
 export default connect(select, perform)(ChannelForm);
