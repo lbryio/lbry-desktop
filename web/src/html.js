@@ -16,7 +16,7 @@ const { Lbry } = require('lbry-redux');
 const { generateEmbedUrl, generateStreamUrl, generateDirectUrl } = require('../../ui/util/web');
 const PAGES = require('../../ui/constants/pages');
 const { CATEGORY_METADATA } = require('./category-metadata');
-const { parseURI, buildURI } = require('lbry-redux');
+const { parseURI, normalizeURI } = require('lbry-redux');
 const fs = require('fs');
 const path = require('path');
 const moment = require('moment');
@@ -43,6 +43,10 @@ function insertToHead(fullHtml, htmlToInsert) {
 
 function truncateDescription(description) {
   return description.length > 200 ? description.substr(0, 200) + '...' : description;
+}
+
+function normalizeClaimUrl(url) {
+  return normalizeURI(url.replace(/:/g, '#'));
 }
 
 function escapeHtmlProperty(property) {
@@ -266,18 +270,14 @@ function buildGoogleVideoMetadata(uri, claim) {
 
 async function resolveClaimOrRedirect(ctx, url, ignoreRedirect = false) {
   let claim;
-  const parsedURI = parseURI(url);
-
   try {
-    const url = buildURI(parsedURI);
     const response = await Lbry.resolve({ urls: [url] });
     if (response && response[url] && !response[url].error) {
       claim = response && response[url];
-      if (claim.reposted_claim) {
-        if (claim.reposted_claim.name && claim.reposted_claim.claim_id && !ignoreRedirect) {
-          ctx.redirect(`/${claim.reposted_claim.name}:${claim.reposted_claim.claim_id}`);
-          return;
-        }
+      const isRepost = claim.reposted_claim && claim.reposted_claim.name && claim.reposted_claim.claim_id;
+      if (isRepost && !ignoreRedirect) {
+        ctx.redirect(`/${claim.reposted_claim.name}:${claim.reposted_claim.claim_id}`);
+        return;
       }
     }
   } catch {}
@@ -300,11 +300,9 @@ async function getHtml(ctx) {
   const embedPath = `/$/${PAGES.EMBED}/`;
 
   if (requestPath.includes(invitePath)) {
-    const inviteChannel = requestPath.slice(invitePath.length).replace(/:/g, '#');
-    const inviteChannelUrl = `lbry://${inviteChannel}`;
-
     try {
-      parseURI(inviteChannelUrl);
+      const inviteChannel = requestPath.slice(invitePath.length);
+      const inviteChannelUrl = normalizeClaimUrl(inviteChannel);
       const claim = await resolveClaimOrRedirect(ctx, inviteChannelUrl);
       const invitePageMetadata = buildClaimOgMetadata(inviteChannelUrl, claim, {
         title: `Join ${claim.name} on ${SITE_NAME}`,
@@ -324,7 +322,7 @@ async function getHtml(ctx) {
   }
 
   if (requestPath.includes(embedPath)) {
-    const claimUri = requestPath.replace(embedPath, '').replace(/:/g, '#').replace('/', '#');
+    const claimUri = normalizeClaimUrl(requestPath.replace(embedPath, ''));
     const claim = await resolveClaimOrRedirect(ctx, claimUri, true);
 
     if (claim) {
@@ -347,7 +345,7 @@ async function getHtml(ctx) {
   }
 
   if (!requestPath.includes('$')) {
-    const claimUri = requestPath.slice(1).replace(/:/g, '#');
+    const claimUri = normalizeClaimUrl(requestPath.slice(1));
     const claim = await resolveClaimOrRedirect(ctx, claimUri);
 
     if (claim) {

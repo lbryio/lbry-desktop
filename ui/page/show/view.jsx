@@ -12,10 +12,13 @@ import Card from 'component/common/card';
 import { formatLbryUrlForWeb } from 'util/url';
 import { parseURI, COLLECTIONS_CONSTS } from 'lbry-redux';
 
-const AbandonedChannelPreview = lazyImport(() => import('component/abandonedChannelPreview' /* webpackChunkName: "abandonedChannelPreview" */));
+const AbandonedChannelPreview = lazyImport(() =>
+  import('component/abandonedChannelPreview' /* webpackChunkName: "abandonedChannelPreview" */)
+);
 const FilePage = lazyImport(() => import('page/file' /* webpackChunkName: "filePage" */));
 const LivestreamPage = lazyImport(() => import('page/livestream' /* webpackChunkName: "livestream" */));
 const Yrbl = lazyImport(() => import('component/yrbl' /* webpackChunkName: "yrbl" */));
+const isDev = process.env.NODE_ENV !== 'production';
 
 type Props = {
   isResolvingUri: boolean,
@@ -85,7 +88,8 @@ function ShowPage(props: Props) {
       const canonicalUrlPath = '/' + canonicalUrl.replace(/^lbry:\/\//, '').replace(/#/g, ':');
       // Only redirect if we are in lbry.tv land
       // replaceState will fail if on a different domain (like webcache.googleusercontent.com)
-      if (canonicalUrlPath !== window.location.pathname && DOMAIN === window.location.hostname) {
+      const hostname = isDev ? 'localhost' : DOMAIN;
+      if (canonicalUrlPath !== window.location.pathname && hostname === window.location.hostname) {
         const urlParams = new URLSearchParams(search);
         if (urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID)) {
           const listId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID) || '';
