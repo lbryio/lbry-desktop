@@ -18,6 +18,7 @@ type Price = {
 };
 
 type Props = {
+  // --- select ---
   isAuthenticated: boolean,
   floatingPlayer: boolean,
   autoplay: boolean,
@@ -26,6 +27,8 @@ type Props = {
   myChannelUrls: ?Array<string>,
   instantPurchaseEnabled: boolean,
   instantPurchaseMax: Price,
+  enablePublishPreview: boolean,
+  // --- perform ---
   setClientSetting: (string, boolean | string | number) => void,
   clearPlayingUri: () => void,
   openModal: (string) => void,
@@ -41,6 +44,7 @@ export default function SettingContent(props: Props) {
     myChannelUrls,
     instantPurchaseEnabled,
     instantPurchaseMax,
+    enablePublishPreview,
     setClientSetting,
     clearPlayingUri,
     openModal,
@@ -148,6 +152,16 @@ export default function SettingContent(props: Props) {
               )}
             </>
           )}
+
+          <SettingsRow title={__('Publish confirmation')} subtitle={__('Skip preview and confirmation')}>
+            <FormField
+              type="checkbox"
+              name="sync_toggle"
+              label={__('')}
+              checked={!enablePublishPreview}
+              onChange={() => setClientSetting(SETTINGS.ENABLE_PUBLISH_PREVIEW, !enablePublishPreview)}
+            />
+          </SettingsRow>
 
           {/* @if TARGET='app' */}
           <SettingsRow title={__('Max purchase price')} subtitle={__(HELP_MAX_PURCHASE_PRICE)} useVerticalSeparator>

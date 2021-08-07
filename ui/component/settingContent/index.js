@@ -16,6 +16,7 @@ const select = (state) => ({
   myChannelUrls: selectMyChannelUrls(state),
   instantPurchaseEnabled: makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED)(state),
   instantPurchaseMax: makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_MAX)(state),
+  enablePublishPreview: makeSelectClientSetting(SETTINGS.ENABLE_PUBLISH_PREVIEW)(state),
 });
 
 const perform = (dispatch) => ({

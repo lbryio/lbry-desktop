@@ -12,7 +12,6 @@ import { SETTINGS } from 'lbry-redux';
 import Card from 'component/common/card';
 import { getPasswordFromCookie } from 'util/saved-passwords';
 import Spinner from 'component/spinner';
-import PublishSettings from 'component/publishSettings';
 
 type Price = {
   currency: string,
@@ -360,8 +359,6 @@ class SettingsAdvancedPage extends React.PureComponent<Props, State> {
             {/* @if TARGET='app' */}
             <Card title={__('Comments server')} actions={<SettingCommentsServer />} />
             {/* @endif */}
-
-            <Card title={__('Upload settings')} actions={<PublishSettings />} />
           </div>
         )}
       </Page>
