@@ -16,7 +16,7 @@ const { Lbry } = require('lbry-redux');
 const { generateEmbedUrl, generateStreamUrl, generateDirectUrl } = require('../../ui/util/web');
 const PAGES = require('../../ui/constants/pages');
 const { CATEGORY_METADATA } = require('./category-metadata');
-const { parseURI } = require('lbry-redux');
+const { parseURI, buildURI } = require('lbry-redux');
 const fs = require('fs');
 const path = require('path');
 const moment = require('moment');
@@ -266,11 +266,10 @@ function buildGoogleVideoMetadata(uri, claim) {
 
 async function resolveClaimOrRedirect(ctx, url, ignoreRedirect = false) {
   let claim;
-  const { isChannel, streamName, channelName, channelClaimId, streamClaimId } = parseURI(url);
-  const claimName = isChannel ? '@' + channelName : streamName;
-  const claimId = isChannel ? channelClaimId : streamClaimId;
+  const parsedURI = parseURI(url);
+
   try {
-    const url = `lbry://${claimName}:${claimId}`;
+    const url = buildURI(parsedURI);
     const response = await Lbry.resolve({ urls: [url] });
     if (response && response[url] && !response[url].error) {
       claim = response && response[url];
