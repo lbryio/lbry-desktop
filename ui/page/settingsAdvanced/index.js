@@ -22,8 +22,6 @@ const select = (state) => ({
   daemonSettings: selectDaemonSettings(state),
   allowAnalytics: selectAllowAnalytics(state),
   isAuthenticated: selectUserVerifiedEmail(state),
-  instantPurchaseEnabled: makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED)(state),
-  instantPurchaseMax: makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_MAX)(state),
   walletEncrypted: selectWalletIsEncrypted(state),
   hideBalance: makeSelectClientSetting(SETTINGS.HIDE_BALANCE)(state),
   ffmpegStatus: selectFfmpegStatus(state),

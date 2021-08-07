@@ -8,9 +8,14 @@ import { SIMPLE_SITE } from 'config';
 import * as MODALS from 'constants/modal_types';
 import Button from 'component/button';
 import Card from 'component/common/card';
-import { FormField } from 'component/common/form';
+import { FormField, FormFieldPrice } from 'component/common/form';
 import MaxPurchasePrice from 'component/maxPurchasePrice';
 import SettingsRow from 'component/settingsRow';
+
+type Price = {
+  currency: string,
+  amount: number,
+};
 
 type Props = {
   isAuthenticated: boolean,
@@ -19,6 +24,8 @@ type Props = {
   hideReposts: ?boolean,
   showNsfw: boolean,
   myChannelUrls: ?Array<string>,
+  instantPurchaseEnabled: boolean,
+  instantPurchaseMax: Price,
   setClientSetting: (string, boolean | string | number) => void,
   clearPlayingUri: () => void,
   openModal: (string) => void,
@@ -32,6 +39,8 @@ export default function SettingContent(props: Props) {
     hideReposts,
     showNsfw,
     myChannelUrls,
+    instantPurchaseEnabled,
+    instantPurchaseMax,
     setClientSetting,
     clearPlayingUri,
     openModal,
@@ -145,6 +154,32 @@ export default function SettingContent(props: Props) {
             <MaxPurchasePrice />
           </SettingsRow>
           {/* @endif */}
+
+          <SettingsRow title={__('Purchase and tip confirmations')} useVerticalSeparator>
+            <FormField
+              type="radio"
+              name="confirm_all_purchases"
+              checked={!instantPurchaseEnabled}
+              label={__('Always confirm before purchasing content or tipping')}
+              onChange={() => setClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED, false)}
+            />
+            <FormField
+              type="radio"
+              name="instant_purchases"
+              checked={instantPurchaseEnabled}
+              label={__('Only confirm purchases or tips over a certain amount')}
+              helper={__(HELP_ONLY_CONFIRM_OVER_AMOUNT)}
+              onChange={() => setClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED, true)}
+            />
+            {instantPurchaseEnabled && (
+              <FormFieldPrice
+                name="confirmation_price"
+                min={0.1}
+                onChange={(newValue) => setClientSetting(SETTINGS.INSTANT_PURCHASE_MAX, newValue)}
+                price={instantPurchaseMax}
+              />
+            )}
+          </SettingsRow>
         </>
       }
     />
@@ -159,3 +194,5 @@ const HELP_SHOW_MATURE =
   'Mature content may include nudity, intense sexuality, profanity, or other adult content. By displaying mature content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  ';
 const HELP_MAX_PURCHASE_PRICE =
   'This will prevent you from purchasing any content over a certain cost, as a safety measure.';
+const HELP_ONLY_CONFIRM_OVER_AMOUNT = ''; // feel redundant. Disable for now.
+// const HELP_ONLY_CONFIRM_OVER_AMOUNT = "When this option is chosen, LBRY won't ask you to confirm purchases or tips below your chosen amount.";

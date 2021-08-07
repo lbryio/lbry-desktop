@@ -14,6 +14,8 @@ const select = (state) => ({
   hideReposts: makeSelectClientSetting(SETTINGS.HIDE_REPOSTS)(state),
   showNsfw: selectShowMatureContent(state),
   myChannelUrls: selectMyChannelUrls(state),
+  instantPurchaseEnabled: makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED)(state),
+  instantPurchaseMax: makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_MAX)(state),
 });
 
 const perform = (dispatch) => ({
