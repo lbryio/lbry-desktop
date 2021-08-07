@@ -6,7 +6,9 @@ import Card from 'component/common/card';
 import { FormField } from 'component/common/form';
 import SettingAutoLaunch from 'component/settingAutoLaunch';
 import SettingClosingBehavior from 'component/settingClosingBehavior';
+import SettingCommentsServer from 'component/settingCommentsServer';
 import SettingsRow from 'component/settingsRow';
+import SettingWalletServer from 'component/settingWalletServer';
 
 // @if TARGET='app'
 const IS_MAC = process.platform === 'darwin';
@@ -95,6 +97,48 @@ export default function SettingSystem(props: Props) {
           {/* @if TARGET='app' */}
           <SettingsRow title={__('Leave app running in notification area when the window is closed')}>
             <SettingClosingBehavior noLabels />
+          </SettingsRow>
+          {/* @endif */}
+
+          {/* @if TARGET='app' */}
+          <SettingsRow title={__('Experimental settings')} useVerticalSeparator>
+            {/* Disabling below until we get downloads to work with shared subscriptions code */}
+            {/*
+            <FormField
+              type="checkbox"
+              name="auto_download"
+              onChange={() => setClientSetting(SETTINGS.AUTO_DOWNLOAD, !autoDownload)}
+              checked={autoDownload}
+              label={__('Automatically download new content from my subscriptions')}
+              helper={__(
+                "The latest file from each of your subscriptions will be downloaded for quick access as soon as it's published."
+              )}
+            />
+            */}
+
+            <fieldset-section>
+              <FormField
+                name="max_connections"
+                type="select"
+                label={__('Max Connections')}
+                helper={__(
+                  'For users with good bandwidth, try a higher value to improve streaming and download speeds. Low bandwidth users may benefit from a lower setting. Default is 4.'
+                )}
+                min={1}
+                max={100}
+                onChange={(e) => setDaemonSetting('max_connections_per_download', e.target.value)}
+                value={daemonSettings.max_connections_per_download}
+              >
+                {[1, 2, 4, 6, 10, 20].map((connectionOption) => (
+                  <option key={connectionOption} value={connectionOption}>
+                    {connectionOption}
+                  </option>
+                ))}
+              </FormField>
+            </fieldset-section>
+
+            <SettingWalletServer />
+            <SettingCommentsServer />
           </SettingsRow>
           {/* @endif */}
 

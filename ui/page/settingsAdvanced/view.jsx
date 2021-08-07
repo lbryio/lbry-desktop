@@ -5,8 +5,6 @@ import { FormField } from 'component/common/form';
 import Button from 'component/button';
 import I18nMessage from 'component/i18nMessage';
 import Page from 'component/page';
-import SettingCommentsServer from 'component/settingCommentsServer';
-import SettingWalletServer from 'component/settingWalletServer';
 import FileSelector from 'component/common/file-selector';
 import { SETTINGS } from 'lbry-redux';
 import Card from 'component/common/card';
@@ -63,7 +61,6 @@ class SettingsAdvancedPage extends React.PureComponent<Props, State> {
       storedPassword: false,
     };
 
-    (this: any).onMaxConnectionsChange = this.onMaxConnectionsChange.bind(this);
     (this: any).onThemeChange = this.onThemeChange.bind(this);
     (this: any).onAutomaticDarkModeChange = this.onAutomaticDarkModeChange.bind(this);
     (this: any).onConfirmForgetPassword = this.onConfirmForgetPassword.bind(this);
@@ -102,11 +99,6 @@ class SettingsAdvancedPage extends React.PureComponent<Props, State> {
   onFFmpegFolder(path: string) {
     this.setDaemonSetting('ffmpeg_path', path);
     this.findFFmpeg();
-  }
-
-  onMaxConnectionsChange(event: SyntheticInputEvent<*>) {
-    const { value } = event.target;
-    this.setDaemonSetting('max_connections_per_download', value);
   }
 
   onThemeChange(event: SyntheticInputEvent<*>) {
@@ -166,7 +158,6 @@ class SettingsAdvancedPage extends React.PureComponent<Props, State> {
 
     const { storedPassword } = this.state;
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
-    const connectionOptions = [1, 2, 4, 6, 10, 20];
     // @if TARGET='app'
     const { available: ffmpegAvailable, which: ffmpegPath } = ffmpegStatus;
     // @endif
@@ -310,54 +301,6 @@ class SettingsAdvancedPage extends React.PureComponent<Props, State> {
                 </React.Fragment>
               }
             />
-            {/* @endif */}
-            {!IS_WEB && (
-              <Card
-                title={__('Experimental settings')}
-                actions={
-                  <React.Fragment>
-                    {/* @if TARGET='app' */}
-                    {/*
-                  Disabling below until we get downloads to work with shared subscriptions code
-                  <FormField
-                    type="checkbox"
-                    name="auto_download"
-                    onChange={() => setClientSetting(SETTINGS.AUTO_DOWNLOAD, !autoDownload)}
-                    checked={autoDownload}
-                    label={__('Automatically download new content from my subscriptions')}
-                    helper={__(
-                      "The latest file from each of your subscriptions will be downloaded for quick access as soon as it's published."
-                    )}
-                  /> */}
-                    <fieldset-section>
-                      <FormField
-                        name="max_connections"
-                        type="select"
-                        label={__('Max Connections')}
-                        helper={__(
-                          'For users with good bandwidth, try a higher value to improve streaming and download speeds. Low bandwidth users may benefit from a lower setting. Default is 4.'
-                        )}
-                        min={1}
-                        max={100}
-                        onChange={this.onMaxConnectionsChange}
-                        value={daemonSettings.max_connections_per_download}
-                      >
-                        {connectionOptions.map((connectionOption) => (
-                          <option key={connectionOption} value={connectionOption}>
-                            {connectionOption}
-                          </option>
-                        ))}
-                      </FormField>
-                    </fieldset-section>
-                    <SettingWalletServer />
-                    {/* @endif */}
-                  </React.Fragment>
-                }
-              />
-            )}
-
-            {/* @if TARGET='app' */}
-            <Card title={__('Comments server')} actions={<SettingCommentsServer />} />
             {/* @endif */}
           </div>
         )}
