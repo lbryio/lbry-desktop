@@ -322,7 +322,7 @@ async function getHtml(ctx) {
   }
 
   if (requestPath.includes(embedPath)) {
-    const claimUri = normalizeClaimUrl(requestPath.replace(embedPath, ''));
+    const claimUri = normalizeClaimUrl(requestPath.replace(embedPath, '').replace('/', '#'));
     const claim = await resolveClaimOrRedirect(ctx, claimUri, true);
 
     if (claim) {
