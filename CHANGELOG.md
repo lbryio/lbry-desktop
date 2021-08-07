@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Improve twitter share _community pr!_ ([#6690](https://github.com/lbryio/lbry-desktop/pull/6690))
 - Update lighthouse search api _community pr!_ ([#6731](https://github.com/lbryio/lbry-desktop/pull/6731))
 - Update sockety api _community pr!_ ([#6747](https://github.com/lbryio/lbry-desktop/pull/6747))
+- Use resolve for OG metadata instead of chainquery _community pr!_ ([#6787](https://github.com/lbryio/lbry-desktop/pull/6787))
 
 ### Fixed
 - App now supports '#' and ':' for claimId separator ([#6496](https://github.com/lbryio/lbry-desktop/pull/6496))
@@ -29,6 +30,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix yarn copyenv on windows _community pr!_ ([#6702](https://github.com/lbryio/lbry-desktop/pull/6702))
 - Fix unnecessary livestream api calls in channel page _community pr!_ ([#6652](https://github.com/lbryio/lbry-desktop/pull/6652))
 - Fix desktop app fails to resolve deep links _community pr!_ ([#6779](https://github.com/lbryio/lbry-desktop/pull/6779))
+- Fix wrong release date on GoogleVideo metadata _community pr!_ ([#6787](https://github.com/lbryio/lbry-desktop/pull/6787))
 - Fix markdown line breaking mid word _community pr!_ ([#6805](https://github.com/lbryio/lbry-desktop/pull/6805))
 - Added \ and = to reserved symbol warning _community pr!_ ([#6733](https://github.com/lbryio/lbry-desktop/pull/6733))
 - Don't break words in chat + fix text overflow past 3 dot menu _community pr!_ ([#6602](https://github.com/lbryio/lbry-desktop/pull/6602))
