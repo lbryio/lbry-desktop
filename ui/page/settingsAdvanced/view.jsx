@@ -5,11 +5,9 @@ import { FormField } from 'component/common/form';
 import Button from 'component/button';
 import I18nMessage from 'component/i18nMessage';
 import Page from 'component/page';
-import FileSelector from 'component/common/file-selector';
 import { SETTINGS } from 'lbry-redux';
 import Card from 'component/common/card';
 import { getPasswordFromCookie } from 'util/saved-passwords';
-import Spinner from 'component/spinner';
 
 type Price = {
   currency: string,
@@ -29,7 +27,6 @@ type DaemonSettings = {
 };
 
 type Props = {
-  clearDaemonSetting: (string) => void,
   setClientSetting: (string, SetDaemonSettingArg) => void,
   daemonSettings: DaemonSettings,
   isAuthenticated: boolean,
@@ -39,9 +36,6 @@ type Props = {
   walletEncrypted: boolean,
   hideBalance: boolean,
   confirmForgetPassword: ({}) => void,
-  ffmpegStatus: { available: boolean, which: string },
-  findingFFmpeg: boolean,
-  findFFmpeg: () => void,
   syncEnabled: boolean,
   enterSettings: () => void,
   exitSettings: () => void,
@@ -67,18 +61,7 @@ class SettingsAdvancedPage extends React.PureComponent<Props, State> {
   }
 
   componentDidMount() {
-    const { isAuthenticated, ffmpegStatus, daemonSettings, findFFmpeg, enterSettings } = this.props;
-
-    // @if TARGET='app'
-    const { available } = ffmpegStatus;
-    const { ffmpeg_path: ffmpegPath } = daemonSettings;
-    if (!available) {
-      if (ffmpegPath) {
-        this.clearDaemonSetting('ffmpeg_path');
-      }
-      findFFmpeg();
-    }
-    // @endif
+    const { isAuthenticated, enterSettings } = this.props;
 
     if (isAuthenticated || !IS_WEB) {
       this.props.updateWalletStatus();
@@ -94,11 +77,6 @@ class SettingsAdvancedPage extends React.PureComponent<Props, State> {
   componentWillUnmount() {
     const { exitSettings } = this.props;
     exitSettings();
-  }
-
-  onFFmpegFolder(path: string) {
-    this.setDaemonSetting('ffmpeg_path', path);
-    this.findFFmpeg();
   }
 
   onThemeChange(event: SyntheticInputEvent<*>) {
@@ -137,30 +115,11 @@ class SettingsAdvancedPage extends React.PureComponent<Props, State> {
     // this.props.setDaemonSetting(name, value);
   }
 
-  clearDaemonSetting(name: string): void {
-    this.props.clearDaemonSetting(name);
-  }
-
-  findFFmpeg(): void {
-    this.props.findFFmpeg();
-  }
-
   render() {
-    const {
-      daemonSettings,
-      ffmpegStatus,
-      isAuthenticated,
-      walletEncrypted,
-      setClientSetting,
-      hideBalance,
-      findingFFmpeg,
-    } = this.props;
+    const { daemonSettings, isAuthenticated, walletEncrypted, setClientSetting, hideBalance } = this.props;
 
     const { storedPassword } = this.state;
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
-    // @if TARGET='app'
-    const { available: ffmpegAvailable, which: ffmpegPath } = ffmpegStatus;
-    // @endif
 
     return (
       <Page
@@ -237,71 +196,6 @@ class SettingsAdvancedPage extends React.PureComponent<Props, State> {
                 }
               />
             )}
-
-            {/* @if TARGET='app' */}
-            <Card
-              title={
-                <span>
-                  {__('Automatic transcoding')}
-                  {findingFFmpeg && <Spinner type="small" />}
-                </span>
-              }
-              actions={
-                <React.Fragment>
-                  <FileSelector
-                    type="openDirectory"
-                    placeholder={__('A Folder containing FFmpeg')}
-                    currentPath={ffmpegPath || daemonSettings.ffmpeg_path}
-                    onFileChosen={(newDirectory: WebFile) => {
-                      // $FlowFixMe
-                      this.onFFmpegFolder(newDirectory.path);
-                    }}
-                    disabled={Boolean(ffmpegPath)}
-                  />
-                  <p className="help">
-                    {ffmpegAvailable ? (
-                      <I18nMessage
-                        tokens={{
-                          learn_more: (
-                            <Button
-                              button="link"
-                              label={__('Learn more')}
-                              href="https://lbry.com/faq/video-publishing-guide#automatic"
-                            />
-                          ),
-                        }}
-                      >
-                        FFmpeg is correctly configured. %learn_more%
-                      </I18nMessage>
-                    ) : (
-                      <I18nMessage
-                        tokens={{
-                          check_again: (
-                            <Button
-                              button="link"
-                              label={__('Check again')}
-                              onClick={() => this.findFFmpeg()}
-                              disabled={findingFFmpeg}
-                            />
-                          ),
-                          learn_more: (
-                            <Button
-                              button="link"
-                              label={__('Learn more')}
-                              href="https://lbry.com/faq/video-publishing-guide#automatic"
-                            />
-                          ),
-                        }}
-                      >
-                        FFmpeg could not be found. Navigate to it or Install, Then %check_again% or quit and restart the
-                        app. %learn_more%
-                      </I18nMessage>
-                    )}
-                  </p>
-                </React.Fragment>
-              }
-            />
-            {/* @endif */}
           </div>
         )}
       </Page>

@@ -4,11 +4,14 @@ import React from 'react';
 import Button from 'component/button';
 import Card from 'component/common/card';
 import { FormField } from 'component/common/form';
+import FileSelector from 'component/common/file-selector';
+import I18nMessage from 'component/i18nMessage';
 import SettingAutoLaunch from 'component/settingAutoLaunch';
 import SettingClosingBehavior from 'component/settingClosingBehavior';
 import SettingCommentsServer from 'component/settingCommentsServer';
 import SettingsRow from 'component/settingsRow';
 import SettingWalletServer from 'component/settingWalletServer';
+import Spinner from 'component/spinner';
 
 // @if TARGET='app'
 const IS_MAC = process.platform === 'darwin';
@@ -32,14 +35,45 @@ type DaemonSettings = {
 };
 
 type Props = {
+  // --- select ---
   daemonSettings: DaemonSettings,
+  ffmpegStatus: { available: boolean, which: string },
+  findingFFmpeg: boolean,
+  // --- perform ---
   setDaemonSetting: (string, ?SetDaemonSettingArg) => void,
+  clearDaemonSetting: (string) => void,
   clearCache: () => Promise<any>,
+  findFFmpeg: () => void,
 };
 
 export default function SettingSystem(props: Props) {
-  const { daemonSettings, setDaemonSetting, clearCache } = props;
+  const {
+    daemonSettings,
+    ffmpegStatus,
+    findingFFmpeg,
+    setDaemonSetting,
+    clearDaemonSetting,
+    clearCache,
+    findFFmpeg,
+  } = props;
   const [clearingCache, setClearingCache] = React.useState(false);
+
+  // @if TARGET='app'
+  const { available: ffmpegAvailable, which: ffmpegPath } = ffmpegStatus;
+  // @endif
+
+  React.useEffect(() => {
+    // @if TARGET='app'
+    const { available } = ffmpegStatus;
+    const { ffmpeg_path: ffmpegPath } = daemonSettings;
+    if (!available) {
+      if (ffmpegPath) {
+        clearDaemonSetting('ffmpeg_path');
+      }
+      findFFmpeg();
+    }
+    // @endif
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Card
@@ -97,6 +131,69 @@ export default function SettingSystem(props: Props) {
           {/* @if TARGET='app' */}
           <SettingsRow title={__('Leave app running in notification area when the window is closed')}>
             <SettingClosingBehavior noLabels />
+          </SettingsRow>
+          {/* @endif */}
+
+          {/* @if TARGET='app' */}
+          <SettingsRow
+            title={
+              <span>
+                {__('Automatic transcoding')}
+                {findingFFmpeg && <Spinner type="small" />}
+              </span>
+            }
+          >
+            <FileSelector
+              type="openDirectory"
+              placeholder={__('A Folder containing FFmpeg')}
+              currentPath={ffmpegPath || daemonSettings.ffmpeg_path}
+              onFileChosen={(newDirectory: WebFile) => {
+                // $FlowFixMe
+                setDaemonSetting('ffmpeg_path', newDirectory.path);
+                findFFmpeg();
+              }}
+              disabled={Boolean(ffmpegPath)}
+            />
+            <p className="help">
+              {ffmpegAvailable ? (
+                <I18nMessage
+                  tokens={{
+                    learn_more: (
+                      <Button
+                        button="link"
+                        label={__('Learn more')}
+                        href="https://lbry.com/faq/video-publishing-guide#automatic"
+                      />
+                    ),
+                  }}
+                >
+                  FFmpeg is correctly configured. %learn_more%
+                </I18nMessage>
+              ) : (
+                <I18nMessage
+                  tokens={{
+                    check_again: (
+                      <Button
+                        button="link"
+                        label={__('Check again')}
+                        onClick={() => findFFmpeg()}
+                        disabled={findingFFmpeg}
+                      />
+                    ),
+                    learn_more: (
+                      <Button
+                        button="link"
+                        label={__('Learn more')}
+                        href="https://lbry.com/faq/video-publishing-guide#automatic"
+                      />
+                    ),
+                  }}
+                >
+                  FFmpeg could not be found. Navigate to it or Install, Then %check_again% or quit and restart the app.
+                  %learn_more%
+                </I18nMessage>
+              )}
+            </p>
           </SettingsRow>
           {/* @endif */}
 
