@@ -2,7 +2,6 @@
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
 import * as React from 'react';
-import { FormField } from 'component/common/form';
 import Button from 'component/button';
 import Page from 'component/page';
 import SettingAccount from 'component/settingAccount';
@@ -18,18 +17,13 @@ type Price = {
   amount: number,
 };
 
-type SetDaemonSettingArg = boolean | string | number;
-
 type DaemonSettings = {
   download_dir: string,
   share_usage_data: boolean,
 };
 
 type Props = {
-  setDaemonSetting: (string, ?SetDaemonSettingArg) => void,
-  toggle3PAnalytics: (boolean) => void,
   daemonSettings: DaemonSettings,
-  allowAnalytics: boolean,
   isAuthenticated: boolean,
   instantPurchaseEnabled: boolean,
   instantPurchaseMax: Price,
@@ -49,18 +43,11 @@ class SettingsPage extends React.PureComponent<Props> {
     exitSettings();
   }
 
-  setDaemonSetting(name: string, value: ?SetDaemonSettingArg): void {
-    this.props.setDaemonSetting(name, value);
-  }
-
   render() {
     const {
       daemonSettings,
-      allowAnalytics,
       isAuthenticated,
       // autoDownload,
-      setDaemonSetting,
-      toggle3PAnalytics,
     } = this.props;
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
 
@@ -103,45 +90,6 @@ class SettingsPage extends React.PureComponent<Props> {
           </section>
         ) : (
           <div className={classnames('card-stack', { 'card--disabled': IS_WEB && !isAuthenticated })}>
-            {/* @if TARGET='app' */}
-            <Card
-              title={__('Share usage and diagnostic data')}
-              subtitle={
-                <React.Fragment>
-                  {__(
-                    `This is information like error logging, performance tracking, and usage statistics. It includes your IP address and basic system details, but no other identifying information (unless you sign in to lbry.tv)`
-                  )}{' '}
-                  <Button button="link" label={__('Learn more')} href="https://lbry.com/privacypolicy" />
-                </React.Fragment>
-              }
-              actions={
-                <>
-                  <FormField
-                    type="checkbox"
-                    name="share_internal"
-                    onChange={() => setDaemonSetting('share_usage_data', !daemonSettings.share_usage_data)}
-                    checked={daemonSettings.share_usage_data}
-                    label={<React.Fragment>{__('Allow the app to share data to LBRY.inc')}</React.Fragment>}
-                    helper={
-                      isAuthenticated
-                        ? __('Internal sharing is required while signed in.')
-                        : __('Internal sharing is required to participate in rewards programs.')
-                    }
-                    disabled={isAuthenticated && daemonSettings.share_usage_data}
-                  />
-                  <FormField
-                    type="checkbox"
-                    name="share_third_party"
-                    onChange={(e) => toggle3PAnalytics(e.target.checked)}
-                    checked={allowAnalytics}
-                    label={__('Allow the app to access third party analytics platforms')}
-                    helper={__('We use detailed analytics to improve all aspects of the LBRY experience.')}
-                  />
-                </>
-              }
-            />
-            {/* @endif */}
-
             {(isAuthenticated || !IS_WEB) && (
               <>
                 <Card

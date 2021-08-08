@@ -42,6 +42,7 @@ type Props = {
   findingFFmpeg: boolean,
   walletEncrypted: boolean,
   isAuthenticated: boolean,
+  allowAnalytics: boolean,
   // --- perform ---
   setDaemonSetting: (string, ?SetDaemonSettingArg) => void,
   clearDaemonSetting: (string) => void,
@@ -51,6 +52,7 @@ type Props = {
   decryptWallet: () => void,
   updateWalletStatus: () => void,
   confirmForgetPassword: ({}) => void,
+  toggle3PAnalytics: (boolean) => void,
 };
 
 export default function SettingSystem(props: Props) {
@@ -60,6 +62,7 @@ export default function SettingSystem(props: Props) {
     findingFFmpeg,
     walletEncrypted,
     isAuthenticated,
+    allowAnalytics,
     setDaemonSetting,
     clearDaemonSetting,
     clearCache,
@@ -68,6 +71,7 @@ export default function SettingSystem(props: Props) {
     decryptWallet,
     updateWalletStatus,
     confirmForgetPassword,
+    toggle3PAnalytics,
   } = props;
 
   const [clearingCache, setClearingCache] = React.useState(false);
@@ -162,6 +166,43 @@ export default function SettingSystem(props: Props) {
               name="save_blobs"
               onChange={() => setDaemonSetting('save_blobs', !daemonSettings.save_blobs)}
               checked={daemonSettings.save_blobs}
+            />
+          </SettingsRow>
+          {/* @endif */}
+
+          {/* @if TARGET='app' */}
+          <SettingsRow
+            title={__('Share usage and diagnostic data')}
+            subtitle={
+              <React.Fragment>
+                {__(
+                  `This is information like error logging, performance tracking, and usage statistics. It includes your IP address and basic system details, but no other identifying information (unless you sign in to lbry.tv)`
+                )}{' '}
+                <Button button="link" label={__('Learn more')} href="https://lbry.com/privacypolicy" />
+              </React.Fragment>
+            }
+            useVerticalSeparator
+          >
+            <FormField
+              type="checkbox"
+              name="share_internal"
+              onChange={() => setDaemonSetting('share_usage_data', !daemonSettings.share_usage_data)}
+              checked={daemonSettings.share_usage_data}
+              label={<React.Fragment>{__('Allow the app to share data to LBRY.inc')}</React.Fragment>}
+              helper={
+                isAuthenticated
+                  ? __('Internal sharing is required while signed in.')
+                  : __('Internal sharing is required to participate in rewards programs.')
+              }
+              disabled={isAuthenticated && daemonSettings.share_usage_data}
+            />
+            <FormField
+              type="checkbox"
+              name="share_third_party"
+              onChange={(e) => toggle3PAnalytics(e.target.checked)}
+              checked={allowAnalytics}
+              label={__('Allow the app to access third party analytics platforms')}
+              helper={__('We use detailed analytics to improve all aspects of the LBRY experience.')}
             />
           </SettingsRow>
           {/* @endif */}
