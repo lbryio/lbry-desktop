@@ -1,15 +1,24 @@
-## PR Checklist
+## Fixes
 
-<!-- For the checkbox formatting to work properly, make sure there are no spaces on either side of the "x" -->
+Issue Number:
 
-Please check all that apply to this PR using "x":
+<!-- Tip: 
+ - Add keywords to directly close the Issue when the PR is merged. 
+ - Skip the keyword if the Issue contains multiple items.
+ - https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword
+-->
 
-- [ ] I have checked that this PR is not a duplicate of an existing PR (open, closed or merged)
-- [ ] I added a line describing my change to CHANGELOG.md
-- [ ] I have checked that this PR does not introduce a breaking change
-- [ ] This PR introduces breaking changes and I have provided a detailed explanation below
+## What is the current behavior?
 
-## PR Type
+## What is the new behavior?
+
+## Other information
+
+<!-- If this PR contains a breaking change, please describe the impact and solution strategy for existing applications below. -->
+
+## PR Type & Checklist
+
+<details><summary>PR Type...</summary>
 
 What kind of change does this PR introduce?
 
@@ -20,14 +29,19 @@ What kind of change does this PR introduce?
 - [ ] Documentation changes
 - [ ] Other - Please describe:
 
-## Fixes
+</details>
 
-Issue Number:
+<!---------------------------------------------------------------------------->
 
-## What is the current behavior?
+<details><summary>PR Checklist...</summary>
 
-## What is the new behavior?
+<!-- For the checkbox formatting to work properly, make sure there are no spaces on either side of the "x" -->
 
-## Other information
+Please check all that apply to this PR using "x":
 
-<!-- If this PR contains a breaking change, please describe the impact and solution strategy for existing applications below. -->
+- [ ] I have checked that this PR is not a duplicate of an existing PR (open, closed or merged)
+- [ ] I added a line describing my change to CHANGELOG.md
+- [ ] I have checked that this PR does not introduce a breaking change
+- [ ] This PR introduces breaking changes and I have provided a detailed explanation below
+
+</details>
