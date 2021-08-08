@@ -6,6 +6,7 @@ import { SETTINGS } from 'lbry-redux';
 import { Lbryio } from 'lbryinc';
 import { SIMPLE_SITE } from 'config';
 import * as MODALS from 'constants/modal_types';
+import { SETTINGS_GRP } from 'constants/settings';
 import Button from 'component/button';
 import Card from 'component/common/card';
 import { FormField, FormFieldPrice } from 'component/common/form';
@@ -52,6 +53,7 @@ export default function SettingContent(props: Props) {
 
   return (
     <Card
+      id={SETTINGS_GRP.CONTENT}
       title={__('Content settings')}
       subtitle=""
       isBodyList

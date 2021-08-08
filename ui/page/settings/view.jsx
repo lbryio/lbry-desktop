@@ -8,6 +8,7 @@ import Page from 'component/page';
 import SettingAccount from 'component/settingAccount';
 import SettingAppearance from 'component/settingAppearance';
 import SettingContent from 'component/settingContent';
+import SettingsSideNavigation from 'component/settingsSideNavigation';
 import SettingSystem from 'component/settingSystem';
 import SettingUnauthenticated from 'component/settingUnauthenticated';
 import Yrbl from 'component/yrbl';
@@ -40,37 +41,52 @@ class SettingsPage extends React.PureComponent<Props> {
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
 
     return (
-      <Page noFooter noSideNavigation backout={{ title: __('Settings'), backLabel: __('Done') }} className="card-stack">
-        {!isAuthenticated && IS_WEB && (
-          <>
-            <SettingUnauthenticated />
-            <div className="main--empty">
-              <Yrbl
-                type="happy"
-                title={__('Sign up for full control')}
-                subtitle={__('Unlock new buttons that change things.')}
-                actions={
-                  <div className="section__actions">
-                    <Button button="primary" icon={ICONS.SIGN_UP} label={__('Sign Up')} navigate={`/$/${PAGES.AUTH}`} />
-                  </div>
-                }
-              />
-            </div>
-          </>
-        )}
+      <Page
+        noFooter
+        settingsPage
+        noSideNavigation
+        backout={{ title: __('Settings'), backLabel: __('Done') }}
+        className="card-stack"
+      >
+        <SettingsSideNavigation />
 
-        {!IS_WEB && noDaemonSettings ? (
-          <section className="card card--section">
-            <div className="card__title card__title--deprecated">{__('Failed to load settings.')}</div>
-          </section>
-        ) : (
-          <div className={classnames('card-stack', { 'card--disabled': IS_WEB && !isAuthenticated })}>
-            <SettingAppearance />
-            <SettingAccount />
-            <SettingContent />
-            <SettingSystem />
-          </div>
-        )}
+        <div>
+          {!isAuthenticated && IS_WEB && (
+            <>
+              <SettingUnauthenticated />
+              <div className="main--empty">
+                <Yrbl
+                  type="happy"
+                  title={__('Sign up for full control')}
+                  subtitle={__('Unlock new buttons that change things.')}
+                  actions={
+                    <div className="section__actions">
+                      <Button
+                        button="primary"
+                        icon={ICONS.SIGN_UP}
+                        label={__('Sign Up')}
+                        navigate={`/$/${PAGES.AUTH}`}
+                      />
+                    </div>
+                  }
+                />
+              </div>
+            </>
+          )}
+
+          {!IS_WEB && noDaemonSettings ? (
+            <section className="card card--section">
+              <div className="card__title card__title--deprecated">{__('Failed to load settings.')}</div>
+            </section>
+          ) : (
+            <div className={classnames('card-stack', { 'card--disabled': IS_WEB && !isAuthenticated })}>
+              <SettingAppearance />
+              <SettingAccount />
+              <SettingContent />
+              <SettingSystem />
+            </div>
+          )}
+        </div>
       </Page>
     );
   }

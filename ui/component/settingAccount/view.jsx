@@ -1,6 +1,7 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
+import { SETTINGS_GRP } from 'constants/settings';
 import React from 'react';
 import Button from 'component/button';
 import Card from 'component/common/card';
@@ -38,6 +39,7 @@ export default function SettingAccount(props: Props) {
 
   return (
     <Card
+      id={SETTINGS_GRP.ACCOUNT}
       title={__('Account')}
       subtitle=""
       isBodyList

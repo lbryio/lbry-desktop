@@ -1,5 +1,6 @@
 // @flow
 import { ALERT } from 'constants/icons';
+import { SETTINGS_GRP } from 'constants/settings';
 import React from 'react';
 import Button from 'component/button';
 import Card from 'component/common/card';
@@ -121,6 +122,7 @@ export default function SettingSystem(props: Props) {
 
   return (
     <Card
+      id={SETTINGS_GRP.SYSTEM}
       title={__('System')}
       subtitle=""
       isBodyList

@@ -221,6 +221,24 @@
   }
 }
 
+.main--settings-page {
+  width: 100%;
+  max-width: 70rem;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: var(--spacing-m);
+  padding: 0 var(--spacing-m);
+
+  .card__subtitle {
+    margin: 0 0 var(--spacing-s) 0;
+    font-size: var(--font-small);
+  }
+
+  .button--inverse {
+    color: var(--color-primary);
+  }
+}
+
 .main--markdown {
   flex-direction: column;
 }

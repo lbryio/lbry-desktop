@@ -1,4 +1,5 @@
 // @flow
+import { SETTINGS_GRP } from 'constants/settings';
 import React from 'react';
 import { SETTINGS } from 'lbry-redux';
 import Card from 'component/common/card';
@@ -24,6 +25,7 @@ export default function SettingAppearance(props: Props) {
 
   return (
     <Card
+      id={SETTINGS_GRP.APPEARANCE}
       title={__('Appearance')}
       subtitle=""
       isBodyList
