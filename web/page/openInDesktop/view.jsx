@@ -18,18 +18,29 @@ const OpenInDesktop = (props: Props) => {
   const { match } = props;
   const { params } = match;
   const [title, setTitle] = React.useState('Loading...');
+  const [claimUrl, setClaimUrl] = React.useState(null);
 
+  // Get claim url
   React.useEffect(() => {
     if (params) {
       try {
         const url = buildURI(params);
-        setTimeout(() => {
-          setTitle('Ready!');
-          window.open(url, '_top');
-        }, 1500);
+        if (url && claimUrl !== url) {
+          setClaimUrl(url);
+        }
       } catch {}
     }
-  }, [params]);
+  }, [params, claimUrl, setClaimUrl]);
+
+  // Open url on external application
+  React.useEffect(() => {
+    if (claimUrl) {
+      setTimeout(() => {
+        setTitle('Ready!');
+        window.open(claimUrl, '_top');
+      }, 1500);
+    }
+  }, [claimUrl]);
 
   return (
     <Page>
