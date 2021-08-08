@@ -2,11 +2,14 @@ import { connect } from 'react-redux';
 import { SETTINGS } from 'lbry-redux';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import SettingAppearance from './view';
 
 const select = (state) => ({
   clock24h: makeSelectClientSetting(SETTINGS.CLOCK_24H)(state),
   searchInLanguage: makeSelectClientSetting(SETTINGS.SEARCH_IN_LANGUAGE)(state),
+  isAuthenticated: selectUserVerifiedEmail(state),
+  hideBalance: makeSelectClientSetting(SETTINGS.HIDE_BALANCE)(state),
 });
 
 const perform = (dispatch) => ({

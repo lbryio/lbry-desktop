@@ -12,6 +12,7 @@ import SettingCommentsServer from 'component/settingCommentsServer';
 import SettingsRow from 'component/settingsRow';
 import SettingWalletServer from 'component/settingWalletServer';
 import Spinner from 'component/spinner';
+import { getPasswordFromCookie } from 'util/saved-passwords';
 
 // @if TARGET='app'
 const IS_MAC = process.platform === 'darwin';
@@ -39,11 +40,17 @@ type Props = {
   daemonSettings: DaemonSettings,
   ffmpegStatus: { available: boolean, which: string },
   findingFFmpeg: boolean,
+  walletEncrypted: boolean,
+  isAuthenticated: boolean,
   // --- perform ---
   setDaemonSetting: (string, ?SetDaemonSettingArg) => void,
   clearDaemonSetting: (string) => void,
   clearCache: () => Promise<any>,
   findFFmpeg: () => void,
+  encryptWallet: () => void,
+  decryptWallet: () => void,
+  updateWalletStatus: () => void,
+  confirmForgetPassword: ({}) => void,
 };
 
 export default function SettingSystem(props: Props) {
@@ -51,17 +58,38 @@ export default function SettingSystem(props: Props) {
     daemonSettings,
     ffmpegStatus,
     findingFFmpeg,
+    walletEncrypted,
+    isAuthenticated,
     setDaemonSetting,
     clearDaemonSetting,
     clearCache,
     findFFmpeg,
+    encryptWallet,
+    decryptWallet,
+    updateWalletStatus,
+    confirmForgetPassword,
   } = props;
+
   const [clearingCache, setClearingCache] = React.useState(false);
+  const [storedPassword, setStoredPassword] = React.useState(false);
 
   // @if TARGET='app'
   const { available: ffmpegAvailable, which: ffmpegPath } = ffmpegStatus;
   // @endif
 
+  function onChangeEncryptWallet() {
+    if (walletEncrypted) {
+      decryptWallet();
+    } else {
+      encryptWallet();
+    }
+  }
+
+  function onConfirmForgetPassword() {
+    confirmForgetPassword({ callback: () => setStoredPassword(false) });
+  }
+
+  // Update ffmpeg variables
   React.useEffect(() => {
     // @if TARGET='app'
     const { available } = ffmpegStatus;
@@ -73,6 +101,18 @@ export default function SettingSystem(props: Props) {
       findFFmpeg();
     }
     // @endif
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Update storedPassword state
+  React.useEffect(() => {
+    if (isAuthenticated || !IS_WEB) {
+      updateWalletStatus();
+      getPasswordFromCookie().then((p) => {
+        if (typeof p === 'string') {
+          setStoredPassword(true);
+        }
+      });
+    }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
@@ -194,6 +234,47 @@ export default function SettingSystem(props: Props) {
                 </I18nMessage>
               )}
             </p>
+          </SettingsRow>
+          {/* @endif */}
+
+          {/* @if TARGET='app' */}
+          <SettingsRow title={__('Wallet security')}>
+            <FormField
+              disabled
+              type="checkbox"
+              name="encrypt_wallet"
+              onChange={() => onChangeEncryptWallet()}
+              checked={walletEncrypted}
+              label={__('Encrypt my wallet with a custom password')}
+              helper={
+                <React.Fragment>
+                  <I18nMessage
+                    tokens={{
+                      learn_more: (
+                        <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/account-sync" />
+                      ),
+                    }}
+                  >
+                    Wallet encryption is currently unavailable until it's supported for synced accounts. It will be
+                    added back soon. %learn_more%.
+                  </I18nMessage>
+                  {/* {__('Secure your local wallet data with a custom password.')}{' '}
+                         <strong>{__('Lost passwords cannot be recovered.')} </strong>
+                         <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/wallet-encryption" />. */}
+                </React.Fragment>
+              }
+            />
+
+            {walletEncrypted && storedPassword && (
+              <FormField
+                type="checkbox"
+                name="save_password"
+                onChange={onConfirmForgetPassword}
+                checked={storedPassword}
+                label={__('Save Password')}
+                helper={<React.Fragment>{__('Automatically unlock your wallet on startup')}</React.Fragment>}
+              />
+            )}
           </SettingsRow>
           {/* @endif */}
 
