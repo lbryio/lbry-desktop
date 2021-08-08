@@ -110,7 +110,7 @@ const EmbedWrapperPage = (props: Props) => {
                 <div>
                   <h1>{__('Paid content cannot be embedded.')}</h1>
                   <div className="section__actions--centered">
-                    <Button label={__('Watch on lbry.tv')} button="primary" href={contentLink} />
+                    <Button label={__('Watch on Odysee')} button="primary" href={contentLink} />
                   </div>
                 </div>
               )}
