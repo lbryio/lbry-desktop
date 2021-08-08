@@ -5,6 +5,8 @@ import Yrbl from 'component/yrbl';
 import Button from 'component/button';
 const { buildURI } = require('lbry-redux');
 
+const DELAY_TIME = 1500;
+
 // Landing page for opening lbry urls on external applications.
 type Props = {
   match: {
@@ -38,7 +40,7 @@ const OpenInDesktop = (props: Props) => {
       setTimeout(() => {
         setTitle('Ready!');
         window.open(claimUrl, '_top');
-      }, 1500);
+      }, DELAY_TIME);
     }
   }, [claimUrl]);
 
