@@ -123,6 +123,18 @@ export default function SettingSystem(props: Props) {
       body={
         <>
           {/* @if TARGET='app' */}
+          <SettingsRow title={__('Download directory')} subtitle={__('LBRY downloads will be saved here.')}>
+            <FileSelector
+              type="openDirectory"
+              currentPath={daemonSettings.download_dir}
+              onFileChosen={(newDirectory: WebFile) => {
+                setDaemonSetting('download_dir', newDirectory.path);
+              }}
+            />
+          </SettingsRow>
+          {/* @endif */}
+
+          {/* @if TARGET='app' */}
           <SettingsRow
             title={__('Save all viewed content to your downloads directory')}
             subtitle={__(

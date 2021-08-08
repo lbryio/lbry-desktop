@@ -1,12 +1,7 @@
 import { connect } from 'react-redux';
 import { doToggle3PAnalytics } from 'redux/actions/app';
 import { selectAllowAnalytics } from 'redux/selectors/app';
-import {
-  doSetDaemonSetting,
-  doClearDaemonSetting,
-  doEnterSettingsPage,
-  doExitSettingsPage,
-} from 'redux/actions/settings';
+import { doSetDaemonSetting, doEnterSettingsPage, doExitSettingsPage } from 'redux/actions/settings';
 import { makeSelectClientSetting, selectDaemonSettings } from 'redux/selectors/settings';
 import { SETTINGS } from 'lbry-redux';
 import SettingsPage from './view';
@@ -22,7 +17,6 @@ const select = (state) => ({
 
 const perform = (dispatch) => ({
   setDaemonSetting: (key, value) => dispatch(doSetDaemonSetting(key, value)),
-  clearDaemonSetting: (key) => dispatch(doClearDaemonSetting(key)),
   toggle3PAnalytics: (allow) => dispatch(doToggle3PAnalytics(allow)),
   enterSettings: () => dispatch(doEnterSettingsPage()),
   exitSettings: () => dispatch(doExitSettingsPage()),

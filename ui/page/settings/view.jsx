@@ -9,7 +9,6 @@ import SettingAccount from 'component/settingAccount';
 import SettingAppearance from 'component/settingAppearance';
 import SettingContent from 'component/settingContent';
 import SettingSystem from 'component/settingSystem';
-import FileSelector from 'component/common/file-selector';
 import Card from 'component/common/card';
 import classnames from 'classnames';
 import Yrbl from 'component/yrbl';
@@ -28,7 +27,6 @@ type DaemonSettings = {
 
 type Props = {
   setDaemonSetting: (string, ?SetDaemonSettingArg) => void,
-  clearDaemonSetting: (string) => void,
   toggle3PAnalytics: (boolean) => void,
   daemonSettings: DaemonSettings,
   allowAnalytics: boolean,
@@ -53,10 +51,6 @@ class SettingsPage extends React.PureComponent<Props> {
 
   setDaemonSetting(name: string, value: ?SetDaemonSettingArg): void {
     this.props.setDaemonSetting(name, value);
-  }
-
-  clearDaemonSetting(name: string): void {
-    this.props.clearDaemonSetting(name);
   }
 
   render() {
@@ -109,24 +103,6 @@ class SettingsPage extends React.PureComponent<Props> {
           </section>
         ) : (
           <div className={classnames('card-stack', { 'card--disabled': IS_WEB && !isAuthenticated })}>
-            {/* @if TARGET='app' */}
-            <Card
-              title={__('Download directory')}
-              actions={
-                <React.Fragment>
-                  <FileSelector
-                    type="openDirectory"
-                    currentPath={daemonSettings.download_dir}
-                    onFileChosen={(newDirectory: WebFile) => {
-                      setDaemonSetting('download_dir', newDirectory.path);
-                    }}
-                  />
-                  <p className="help">{__('LBRY downloads will be saved here.')}</p>
-                </React.Fragment>
-              }
-            />
-            {/* @endif */}
-
             {/* @if TARGET='app' */}
             <Card
               title={__('Share usage and diagnostic data')}
