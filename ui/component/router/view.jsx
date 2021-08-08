@@ -18,6 +18,7 @@ const BackupPage = lazyImport(() => import('page/backup' /* webpackChunkName: "b
 
 // @if TARGET='web'
 const Code2257Page = lazyImport(() => import('web/page/code2257' /* webpackChunkName: "code2257" */));
+const OpenInDesktopPage = lazyImport(() => import('web/page/openInDesktop' /* webpackChunkName: "openInDesktop" */));
 // @endif
 
 // Chunk: "secondary"
@@ -69,7 +70,9 @@ const RewardsVerifyPage = lazyImport(() => import('page/rewardsVerify' /* webpac
 const SearchPage = lazyImport(() => import('page/search' /* webpackChunkName: "secondary" */));
 const SettingsAdvancedPage = lazyImport(() => import('page/settingsAdvanced' /* webpackChunkName: "secondary" */));
 const SettingsStripeCard = lazyImport(() => import('page/settingsStripeCard' /* webpackChunkName: "secondary" */));
-const SettingsStripeAccount = lazyImport(() => import('page/settingsStripeAccount' /* webpackChunkName: "secondary" */));
+const SettingsStripeAccount = lazyImport(() =>
+  import('page/settingsStripeAccount' /* webpackChunkName: "secondary" */)
+);
 const SettingsCreatorPage = lazyImport(() => import('page/settingsCreator' /* webpackChunkName: "secondary" */));
 const SettingsNotificationsPage = lazyImport(() =>
   import('page/settingsNotifications' /* webpackChunkName: "secondary" */)
@@ -271,6 +274,7 @@ function AppRouter(props: Props) {
         <Route path={`/$/${PAGES.BACKUP}`} exact component={BackupPage} />
         {/* @endif */}
         {/* @if TARGET='web' */}
+        <Route path={`/$/${PAGES.OPEN_IN_DESKTOP}/:claimName/:claimId`} exact component={OpenInDesktopPage} />
         <Route path={`/$/${PAGES.CODE_2257}`} exact component={Code2257Page} />
         {/* @endif */}
         <Route path={`/$/${PAGES.AUTH_VERIFY}`} exact component={SignInVerifyPage} />

@@ -229,6 +229,11 @@ function ClaimMenuList(props: Props) {
     push(`/$/${PAGES.REPORT_CONTENT}?claimId=${contentClaim && contentClaim.claim_id}`);
   }
 
+  function openInDesktop() {
+    // $FlowFixMe
+    window.open(`/$/${PAGES.OPEN_IN_DESKTOP}/${contentClaim.name}/${contentClaim.claim_id}`, '_blank');
+  }
+
   return (
     <Menu>
       <MenuButton
@@ -407,6 +412,15 @@ function ClaimMenuList(props: Props) {
             <div className="menu__link">
               <Icon aria-hidden icon={ICONS.RSS} />
               {__('Copy RSS URL')}
+            </div>
+          </MenuItem>
+        )}
+
+        {IS_WEB && (
+          <MenuItem className="comment__menu-option" onSelect={openInDesktop}>
+            <div className="menu__link">
+              <Icon aria-hidden icon={ICONS.DESKTOP} />
+              {__('Open in desktop')}
             </div>
           </MenuItem>
         )}
