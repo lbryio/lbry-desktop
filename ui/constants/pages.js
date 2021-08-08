@@ -41,7 +41,6 @@ exports.SETTINGS = 'settings';
 exports.SETTINGS_STRIPE_CARD = 'settings/card';
 exports.SETTINGS_STRIPE_ACCOUNT = 'settings/tip_account';
 exports.SETTINGS_NOTIFICATIONS = 'settings/notifications';
-exports.SETTINGS_ADVANCED = 'settings/advanced';
 exports.SETTINGS_BLOCKED_MUTED = 'settings/block_and_mute';
 exports.SETTINGS_CREATOR = 'settings/creator';
 exports.SHOW = 'show';

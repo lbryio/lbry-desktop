@@ -8,14 +8,7 @@ import SettingAccount from 'component/settingAccount';
 import SettingAppearance from 'component/settingAppearance';
 import SettingContent from 'component/settingContent';
 import SettingSystem from 'component/settingSystem';
-import Card from 'component/common/card';
-import classnames from 'classnames';
 import Yrbl from 'component/yrbl';
-
-type Price = {
-  currency: string,
-  amount: number,
-};
 
 type DaemonSettings = {
   download_dir: string,
@@ -25,9 +18,6 @@ type DaemonSettings = {
 type Props = {
   daemonSettings: DaemonSettings,
   isAuthenticated: boolean,
-  instantPurchaseEnabled: boolean,
-  instantPurchaseMax: Price,
-  openModal: (string) => void,
   enterSettings: () => void,
   exitSettings: () => void,
 };
@@ -44,11 +34,7 @@ class SettingsPage extends React.PureComponent<Props> {
   }
 
   render() {
-    const {
-      daemonSettings,
-      isAuthenticated,
-      // autoDownload,
-    } = this.props;
+    const { daemonSettings, isAuthenticated } = this.props;
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
 
     const newStyle = true;
@@ -88,27 +74,7 @@ class SettingsPage extends React.PureComponent<Props> {
           <section className="card card--section">
             <div className="card__title card__title--deprecated">{__('Failed to load settings.')}</div>
           </section>
-        ) : (
-          <div className={classnames('card-stack', { 'card--disabled': IS_WEB && !isAuthenticated })}>
-            {(isAuthenticated || !IS_WEB) && (
-              <>
-                <Card
-                  title={__('Advanced settings')}
-                  actions={
-                    <div className="section__actions">
-                      <Button
-                        button="secondary"
-                        label={__('Manage')}
-                        icon={ICONS.SETTINGS}
-                        navigate={`/$/${PAGES.SETTINGS_ADVANCED}`}
-                      />
-                    </div>
-                  }
-                />
-              </>
-            )}
-          </div>
-        )}
+        ) : null}
       </Page>
     );
   }
