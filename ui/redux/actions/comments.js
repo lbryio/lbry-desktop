@@ -1429,15 +1429,6 @@ export const doUpdateCreatorSettings = (channelClaim: ChannelClaim, settings: Pe
       return;
     }
 
-    const BTC_SATOSHIS = 100000000;
-
-    if (settings.min_tip_amount_comment !== undefined) {
-      settings.min_tip_amount_comment *= BTC_SATOSHIS;
-    }
-    if (settings.min_tip_amount_super_chat !== undefined) {
-      settings.min_tip_amount_super_chat *= BTC_SATOSHIS;
-    }
-
     return Comments.setting_update({
       channel_name: channelClaim.name,
       channel_id: channelClaim.claim_id,

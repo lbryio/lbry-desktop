@@ -4,8 +4,6 @@ import { handleActions } from 'util/redux-utils';
 import { BLOCK_LEVEL } from 'constants/comment';
 import { isURIEqual } from 'lbry-redux';
 
-const BTC_SATOSHIS = 100000000;
-
 const defaultState: CommentsState = {
   commentById: {}, // commentId -> Comment
   byId: {}, // ClaimID -> list of fetched comment IDs.
@@ -1022,11 +1020,6 @@ export default handleActions(
           settingsByChannelId[channelId].words = settings.words.split(',');
         }
       }
-
-      // Both partial and full update will always include these,
-      // so safe to always re-compute without accidentally double-converting.
-      settingsByChannelId[channelId].min_tip_amount_comment /= BTC_SATOSHIS;
-      settingsByChannelId[channelId].min_tip_amount_super_chat /= BTC_SATOSHIS;
 
       return {
         ...state,
