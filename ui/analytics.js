@@ -185,14 +185,17 @@ const analytics: Analytics = {
     var playerToUse = videoPlayer || passedPlayer;
 
     // have to use this because videojs pauses/unpauses during seek
-    var playerIsSeeking = playerToUse.seeking();
+    // sometimes the seeking function isn't populated yet so check for it as well
+    if(playerToUse && playerToUse.seeking){
+      var playerIsSeeking = playerToUse.seeking();
+    }
 
-    console.log('player is seeking');
-    console.log(playerIsSeeking);
-
+    // if player isn't seeking it's not a seeking caused start or pause
     if (!playerIsSeeking) {
+      // if it's a play signal, start tracking
       if (isPlaying) {
         startWatchmanIntervalIfNotRunning();
+        // if it's a stop signal, stop tracking
       } else {
         stopWatchmanInterval();
       }
