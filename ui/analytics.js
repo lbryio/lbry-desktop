@@ -98,10 +98,10 @@ function getDeviceType() {
   return 'web';
 }
 
-var durationInSeconds = 10;
-var amountOfBufferEvents = 0;
-var amountOfBufferTimeInMS = 0;
-var videoType, userId, claimUrl, playerPoweredBy, timeAtBuffer, videoPlayer;
+let durationInSeconds = 10;
+let amountOfBufferEvents = 0;
+let amountOfBufferTimeInMS = 0;
+let videoType, userId, claimUrl, playerPoweredBy, timeAtBuffer, videoPlayer;
 
 async function sendAndResetWatchmanData() {
   var protocol;
@@ -137,7 +137,7 @@ async function sendAndResetWatchmanData() {
   timeAtBuffer = null;
 }
 
-var watchmanInterval;
+let watchmanInterval;
 function stopWatchmanInterval() {
   console.log('turning off watchman interval');
   clearInterval(watchmanInterval);
@@ -179,13 +179,18 @@ const analytics: Analytics = {
   },
   onDispose: () => {
     stopWatchmanInterval();
-    // TODO: clear data here
   },
+  /**
+   * Detects whether video was started or paused, and adjusts interval accordingly
+   * @param {boolean} isPlaying - Whether video was started or paused
+   * @param {object} passedPlayer - VideoJS Player object
+   */
   videoIsPlaying: (isPlaying, passedPlayer) => {
+    let playerIsSeeking = false;
     // have to use this because videojs pauses/unpauses during seek
     // sometimes the seeking function isn't populated yet so check for it as well
     if (passedPlayer && passedPlayer.seeking) {
-      var playerIsSeeking = passedPlayer.seeking();
+      playerIsSeeking = passedPlayer.seeking();
     }
 
     // if player isn't seeking it's not a seeking caused start or pause
