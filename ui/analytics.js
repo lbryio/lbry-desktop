@@ -77,8 +77,8 @@ if (window.localStorage.getItem(SHARE_INTERNAL) === 'true') internalAnalyticsEna
 // @endif
 
 /**
- * Determine the mobile operating system.
- * This function returns one of 'iOS', 'Android', 'Windows Phone', or 'unknown'.
+ * Determine the mobile device type viewing the data
+ * This function returns one of 'and' (Android), 'ios', or 'web'.
  *
  * @returns {String}
  */
@@ -120,7 +120,7 @@ async function sendAndResetWatchmanData() {
   const objectToSend = {
     rebuf_count: amountOfBufferEvents,
     rebuf_duration: amountOfBufferTimeInMS,
-    url: claimUrl,
+    url: claimUrl.replace('lbry://', ''),
     device: getDeviceType(),
     duration: Math.round(durationInSeconds) * 1000,
     protocol,
@@ -182,12 +182,10 @@ const analytics: Analytics = {
     // TODO: clear data here
   },
   videoIsPlaying: (isPlaying, passedPlayer) => {
-    var playerToUse = videoPlayer || passedPlayer;
-
     // have to use this because videojs pauses/unpauses during seek
     // sometimes the seeking function isn't populated yet so check for it as well
-    if(playerToUse && playerToUse.seeking){
-      var playerIsSeeking = playerToUse.seeking();
+    if (passedPlayer && passedPlayer.seeking) {
+      var playerIsSeeking = passedPlayer.seeking();
     }
 
     // if player isn't seeking it's not a seeking caused start or pause
