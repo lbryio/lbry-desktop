@@ -37,6 +37,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix embed shows wrong OG metadata _community pr!_ ([#6815](https://github.com/lbryio/lbry-desktop/pull/6815))
 - Fix OG: "Unparsable data structure - Truncated Unicode character" _community pr!_ ([#6839](https://github.com/lbryio/lbry-desktop/pull/6839))
 - Fix Paid embed warning overlay redirection button now links to odysee _community pr!_ ([#6819](https://github.com/lbryio/lbry-desktop/pull/6819))
+- Fix comment section redirection to create channel _community pr!_ ([#6557](https://github.com/lbryio/lbry-desktop/pull/6557))
 
 ## [0.51.1] - [2021-06-26]
 
