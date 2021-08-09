@@ -23,6 +23,7 @@ type Props = {
   doSuperChatList: (string) => void,
   superChats: Array<Comment>,
   myChannels: ?Array<ChannelClaim>,
+  pinnedCommentsById: { [claimId: string]: Array<string> },
 };
 
 const VIEW_MODE_CHAT = 'view_chat';
@@ -43,6 +44,7 @@ export default function LivestreamComments(props: Props) {
     doSuperChatList,
     myChannels,
     superChats: superChatsByTipAmount,
+    pinnedCommentsById,
   } = props;
 
   let superChatsFiatAmount, superChatsTotalAmount;
@@ -57,6 +59,12 @@ export default function LivestreamComments(props: Props) {
 
   const discussionElement = document.querySelector('.livestream__comments');
   const commentElement = document.querySelector('.livestream-comment');
+
+  let pinnedComment;
+  const pinnedCommentIds = (claimId && pinnedCommentsById[claimId]) || [];
+  if (pinnedCommentIds.length > 0) {
+    pinnedComment = commentsByChronologicalOrder.find((c) => c.comment_id === pinnedCommentIds[0]);
+  }
 
   React.useEffect(() => {
     if (claimId) {
@@ -231,6 +239,22 @@ export default function LivestreamComments(props: Props) {
                   </Tooltip>
                 ))}
               </div>
+            </div>
+          )}
+
+          {pinnedComment && (
+            <div className="livestream-pinned__wrapper">
+              <LivestreamComment
+                key={pinnedComment.comment_id}
+                uri={uri}
+                authorUri={pinnedComment.channel_url}
+                commentId={pinnedComment.comment_id}
+                message={pinnedComment.comment}
+                supportAmount={pinnedComment.support_amount}
+                isFiat={pinnedComment.is_fiat}
+                isPinned={pinnedComment.is_pinned}
+                commentIsMine={pinnedComment.channel_id && isMyComment(pinnedComment.channel_id)}
+              />
             </div>
           )}
 

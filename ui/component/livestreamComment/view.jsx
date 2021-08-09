@@ -21,10 +21,22 @@ type Props = {
   stakedLevel: number,
   supportAmount: number,
   isFiat: boolean,
+  isPinned: boolean,
 };
 
 function LivestreamComment(props: Props) {
-  const { claim, uri, authorUri, message, commentIsMine, commentId, stakedLevel, supportAmount, isFiat } = props;
+  const {
+    claim,
+    uri,
+    authorUri,
+    message,
+    commentIsMine,
+    commentId,
+    stakedLevel,
+    supportAmount,
+    isFiat,
+    isPinned,
+  } = props;
   const [mouseIsHovering, setMouseHover] = React.useState(false);
   const commentByOwnerOfContent = claim && claim.signing_channel && claim.signing_channel.permanent_url === authorUri;
   const { claimName } = parseURI(authorUri);
@@ -57,6 +69,13 @@ function LivestreamComment(props: Props) {
             {claimName}
           </Button>
 
+          {isPinned && (
+            <span className="comment__pin">
+              <Icon icon={ICONS.PIN} size={14} />
+              {__('Pinned')}
+            </span>
+          )}
+
           <div className="livestream-comment__text">
             <MarkdownPreview content={message} promptLinks stakedLevel={stakedLevel} />
           </div>
@@ -78,6 +97,8 @@ function LivestreamComment(props: Props) {
             authorUri={authorUri}
             commentIsMine={commentIsMine}
             disableEdit
+            isTopLevel
+            isPinned={isPinned}
             disableRemove={supportAmount > 0}
           />
         </Menu>

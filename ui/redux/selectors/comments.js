@@ -17,6 +17,7 @@ export const selectCommentsDisabledChannelIds = createSelector(
   (state) => state.commentsDisabledChannelIds
 );
 export const selectOthersReactsById = createSelector(selectState, (state) => state.othersReactsByCommentId);
+export const selectPinnedCommentsById = createSelector(selectState, (state) => state.pinnedCommentsById);
 
 export const selectModerationBlockList = createSelector(selectState, (state) =>
   state.moderationBlockList ? state.moderationBlockList.reverse() : []

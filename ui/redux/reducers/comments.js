@@ -19,6 +19,7 @@ const defaultState: CommentsState = {
   commentsByUri: {}, // URI -> claimId
   linkedCommentAncestors: {}, // {"linkedCommentId": ["parentId", "grandParentId", ...]}
   superChatsByUri: {},
+  pinnedCommentsById: {}, // ClaimId -> array of pinned comment IDs
   isLoading: false,
   isLoadingByParentId: {},
   isCommenting: false,
@@ -285,6 +286,7 @@ export default handleActions(
       const commentsByUri = Object.assign({}, state.commentsByUri);
       const repliesByParentId = Object.assign({}, state.repliesByParentId);
       const totalCommentsById = Object.assign({}, state.totalCommentsById);
+      const pinnedCommentsById = Object.assign({}, state.pinnedCommentsById);
       const totalRepliesByParentId = Object.assign({}, state.totalRepliesByParentId);
       const isLoadingByParentId = Object.assign({}, state.isLoadingByParentId);
 
@@ -315,6 +317,9 @@ export default handleActions(
             const comment = comments[i];
             commonUpdateAction(comment, commentById, commentIds, i);
             pushToArrayInObject(topLevelCommentsById, claimId, comment.comment_id);
+            if (comment.is_pinned) {
+              pushToArrayInObject(pinnedCommentsById, claimId, comment.comment_id);
+            }
           }
         }
         // --- Replies ---
@@ -337,6 +342,7 @@ export default handleActions(
         topLevelTotalPagesById,
         repliesByParentId,
         totalCommentsById,
+        pinnedCommentsById,
         totalRepliesByParentId,
         byId,
         commentById,
@@ -621,11 +627,19 @@ export default handleActions(
       const { pinnedComment, claimId, unpin } = action.data;
       const commentById = Object.assign({}, state.commentById);
       const topLevelCommentsById = Object.assign({}, state.topLevelCommentsById);
+      const pinnedCommentsById = Object.assign({}, state.pinnedCommentsById);
 
       if (pinnedComment && topLevelCommentsById[claimId]) {
         const index = topLevelCommentsById[claimId].indexOf(pinnedComment.comment_id);
         if (index > -1) {
           topLevelCommentsById[claimId].splice(index, 1);
+
+          if (pinnedCommentsById[claimId]) {
+            // Remove here so that the 'unshift' below will be a unique entry.
+            pinnedCommentsById[claimId] = pinnedCommentsById[claimId].filter((x) => x !== pinnedComment.comment_id);
+          } else {
+            pinnedCommentsById[claimId] = [];
+          }
 
           if (unpin) {
             // Without the sort score, I have no idea where to put it. Just
@@ -634,9 +648,26 @@ export default handleActions(
             topLevelCommentsById[claimId].push(pinnedComment.comment_id);
           } else {
             topLevelCommentsById[claimId].unshift(pinnedComment.comment_id);
+            pinnedCommentsById[claimId].unshift(pinnedComment.comment_id);
           }
 
-          commentById[pinnedComment.comment_id] = pinnedComment;
+          if (commentById[pinnedComment.comment_id]) {
+            // Commentron's `comment.Pin` response places the creator's credentials
+            // in the 'channel_*' fields, which doesn't make sense. Maybe it is to
+            // show who signed/pinned it, but even if so, it shouldn't overload
+            // these variables which are already used by existing comment data structure.
+            // Ensure we don't override the existing/correct values, but fallback
+            // to whatever was given.
+            const { channel_id, channel_name, channel_url } = commentById[pinnedComment.comment_id];
+            commentById[pinnedComment.comment_id] = {
+              ...pinnedComment,
+              channel_id: channel_id || pinnedComment.channel_id,
+              channel_name: channel_name || pinnedComment.channel_name,
+              channel_url: channel_url || pinnedComment.channel_url,
+            };
+          } else {
+            commentById[pinnedComment.comment_id] = pinnedComment;
+          }
         }
       }
 
@@ -644,6 +675,7 @@ export default handleActions(
         ...state,
         commentById,
         topLevelCommentsById,
+        pinnedCommentsById,
       };
     },
 

@@ -38,6 +38,7 @@ declare type CommentsState = {
   topLevelTotalCommentsById: { [string]: number }, // ClaimID -> total top level comments in commentron.
   commentById: { [string]: Comment },
   linkedCommentAncestors: { [string]: Array<string> }, // {"linkedCommentId": ["parentId", "grandParentId", ...]}
+  pinnedCommentsById: {}, // ClaimId -> array of pinned comment IDs
   isLoading: boolean,
   isLoadingByParentId: { [string]: boolean },
   myComments: ?Set<string>,
