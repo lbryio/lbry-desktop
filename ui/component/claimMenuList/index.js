@@ -46,8 +46,14 @@ const select = (state, props) => {
     contentSigningChannel,
     contentChannelUri,
     claimIsMine: makeSelectSigningIsMine(props.uri)(state),
-    hasClaimInWatchLater: makeSelectCollectionForIdHasClaimUrl(COLLECTIONS_CONSTS.WATCH_LATER_ID, contentPermanentUri)(state),
-    hasClaimInCustom: makeSelectCollectionForIdHasClaimUrl(COLLECTIONS_CONSTS.FAVORITES_ID, contentPermanentUri)(state),
+    hasClaimInWatchLater: makeSelectCollectionForIdHasClaimUrl(
+      COLLECTIONS_CONSTS.WATCH_LATER_ID,
+      contentPermanentUri
+    )(state),
+    hasClaimInFavorites: makeSelectCollectionForIdHasClaimUrl(
+      COLLECTIONS_CONSTS.FAVORITES_ID,
+      contentPermanentUri
+    )(state),
     channelIsMuted: makeSelectChannelIsMuted(contentChannelUri)(state),
     channelIsBlocked: makeSelectChannelIsBlocked(contentChannelUri)(state),
     fileInfo: makeSelectFileInfoForUri(contentPermanentUri)(state),
@@ -78,8 +84,7 @@ const perform = (dispatch) => ({
   doChannelUnmute: (channelUri) => dispatch(doChannelUnmute(channelUri)),
   doCommentModBlock: (channelUri) => dispatch(doCommentModBlock(channelUri)),
   doCommentModUnBlock: (channelUri) => dispatch(doCommentModUnBlock(channelUri)),
-  doCommentModBlockAsAdmin: (commenterUri, blockerId) =>
-    dispatch(doCommentModBlockAsAdmin(commenterUri, blockerId)),
+  doCommentModBlockAsAdmin: (commenterUri, blockerId) => dispatch(doCommentModBlockAsAdmin(commenterUri, blockerId)),
   doCommentModUnBlockAsAdmin: (commenterUri, blockerId) =>
     dispatch(doCommentModUnBlockAsAdmin(commenterUri, blockerId)),
   doChannelSubscribe: (subscription) => dispatch(doChannelSubscribe(subscription)),

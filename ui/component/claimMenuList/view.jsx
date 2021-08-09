@@ -12,7 +12,7 @@ import { useHistory } from 'react-router';
 import { buildURI, parseURI, COLLECTIONS_CONSTS } from 'lbry-redux';
 
 const SHARE_DOMAIN = SHARE_DOMAIN_URL || URL;
-const PAGE_VIEW_QUERY = `view`;
+const PAGE_VIEW_QUERY = 'view';
 const EDIT_PAGE = 'edit';
 
 type SubscriptionArgs = {
@@ -42,7 +42,7 @@ type Props = {
   doCommentModUnBlockAsAdmin: (string, string) => void,
   doCollectionEdit: (string, any) => void,
   hasClaimInWatchLater: boolean,
-  hasClaimInCustom: boolean,
+  hasClaimInFavorites: boolean,
   claimInCollection: boolean,
   collectionId: string,
   isMyCollection: boolean,
@@ -80,7 +80,7 @@ function ClaimMenuList(props: Props) {
     doCommentModUnBlockAsAdmin,
     doCollectionEdit,
     hasClaimInWatchLater,
-    hasClaimInCustom,
+    hasClaimInFavorites,
     collectionId,
     isMyCollection,
     doToast,
@@ -105,8 +105,6 @@ function ClaimMenuList(props: Props) {
     : isSubscribed
     ? __('Unfollow')
     : __('Follow');
-  const lastCollectionName = 'Favorites';
-  const lastCollectionId = COLLECTIONS_CONSTS.FAVORITES_ID;
 
   const { push, replace } = useHistory();
   if (!claim) {
@@ -282,21 +280,23 @@ function ClaimMenuList(props: Props) {
                     {/* WATCH LATER */}
                     <MenuItem
                       className="comment__menu-option"
-                      onSelect={() => handleAdd(hasClaimInWatchLater, 'Watch Later', COLLECTIONS_CONSTS.WATCH_LATER_ID)}
+                      onSelect={() =>
+                        handleAdd(hasClaimInWatchLater, __('Watch Later'), COLLECTIONS_CONSTS.WATCH_LATER_ID)
+                      }
                     >
                       <div className="menu__link">
                         <Icon aria-hidden icon={hasClaimInWatchLater ? ICONS.DELETE : ICONS.TIME} />
                         {hasClaimInWatchLater ? __('In Watch Later') : __('Watch Later')}
                       </div>
                     </MenuItem>
-                    {/* CUSTOM LIST */}
+                    {/* FAVORITES LIST */}
                     <MenuItem
                       className="comment__menu-option"
-                      onSelect={() => handleAdd(hasClaimInCustom, lastCollectionName, lastCollectionId)}
+                      onSelect={() => handleAdd(hasClaimInFavorites, __('Favorites'), COLLECTIONS_CONSTS.FAVORITES_ID)}
                     >
                       <div className="menu__link">
-                        <Icon aria-hidden icon={hasClaimInCustom ? ICONS.DELETE : ICONS.STAR} />
-                        {hasClaimInCustom ? __(`In ${lastCollectionName}`) : __(`${lastCollectionName}`)}
+                        <Icon aria-hidden icon={hasClaimInFavorites ? ICONS.DELETE : ICONS.STAR} />
+                        {hasClaimInFavorites ? __('In Favorites') : __('Favorites')}
                       </div>
                     </MenuItem>
                     {/* CURRENTLY ONLY SUPPORT PLAYLISTS FOR PLAYABLE; LATER DIFFERENT TYPES */}
