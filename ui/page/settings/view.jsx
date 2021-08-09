@@ -39,8 +39,7 @@ class SettingsPage extends React.PureComponent<Props> {
     const { daemonSettings, isAuthenticated } = this.props;
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
 
-    const newStyle = true;
-    return newStyle ? (
+    return (
       <Page noFooter noSideNavigation backout={{ title: __('Settings'), backLabel: __('Done') }} className="card-stack">
         {!isAuthenticated && IS_WEB && (
           <>
@@ -60,28 +59,18 @@ class SettingsPage extends React.PureComponent<Props> {
           </>
         )}
 
-        <div className={classnames('card-stack', { 'card--disabled': IS_WEB && !isAuthenticated })}>
-          <SettingAppearance />
-          <SettingAccount />
-          <SettingContent />
-          <SettingSystem />
-        </div>
-      </Page>
-    ) : (
-      <Page
-        noFooter
-        noSideNavigation
-        backout={{
-          title: __('Settings'),
-          backLabel: __('Done'),
-        }}
-        className="card-stack"
-      >
         {!IS_WEB && noDaemonSettings ? (
           <section className="card card--section">
             <div className="card__title card__title--deprecated">{__('Failed to load settings.')}</div>
           </section>
-        ) : null}
+        ) : (
+          <div className={classnames('card-stack', { 'card--disabled': IS_WEB && !isAuthenticated })}>
+            <SettingAppearance />
+            <SettingAccount />
+            <SettingContent />
+            <SettingSystem />
+          </div>
+        )}
       </Page>
     );
   }
