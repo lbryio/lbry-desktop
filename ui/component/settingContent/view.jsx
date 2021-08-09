@@ -52,51 +52,53 @@ export default function SettingContent(props: Props) {
   } = props;
 
   return (
-    <Card
-      id={SETTINGS_GRP.CONTENT}
-      title={__('Content settings')}
-      subtitle=""
-      isBodyList
-      body={
-        <>
-          <SettingsRow title={__('Floating video player')} subtitle={__(HELP_FLOATING_PLAYER)}>
-            <FormField
-              type="checkbox"
-              name="floating_player"
-              onChange={() => {
-                setClientSetting(SETTINGS.FLOATING_PLAYER, !floatingPlayer);
-                clearPlayingUri();
-              }}
-              checked={floatingPlayer}
-            />
-          </SettingsRow>
+    <>
+      <div className="card__title-section">
+        <h2 className="card__title">{__('Content settings')}</h2>
+      </div>
+      <Card
+        id={SETTINGS_GRP.CONTENT}
+        isBodyList
+        body={
+          <>
+            <SettingsRow title={__('Floating video player')} subtitle={__(HELP_FLOATING_PLAYER)}>
+              <FormField
+                type="checkbox"
+                name="floating_player"
+                onChange={() => {
+                  setClientSetting(SETTINGS.FLOATING_PLAYER, !floatingPlayer);
+                  clearPlayingUri();
+                }}
+                checked={floatingPlayer}
+              />
+            </SettingsRow>
 
-          <SettingsRow title={__('Autoplay media files')} subtitle={__(HELP_AUTOPLAY)}>
-            <FormField
-              type="checkbox"
-              name="autoplay"
-              onChange={() => setClientSetting(SETTINGS.AUTOPLAY, !autoplay)}
-              checked={autoplay}
-            />
-          </SettingsRow>
+            <SettingsRow title={__('Autoplay media files')} subtitle={__(HELP_AUTOPLAY)}>
+              <FormField
+                type="checkbox"
+                name="autoplay"
+                onChange={() => setClientSetting(SETTINGS.AUTOPLAY, !autoplay)}
+                checked={autoplay}
+              />
+            </SettingsRow>
 
-          {!SIMPLE_SITE && (
-            <>
-              <SettingsRow title={__('Hide reposts')} subtitle={__(HELP_HIDE_REPOSTS)}>
-                <FormField
-                  type="checkbox"
-                  name="hide_reposts"
-                  onChange={(e) => {
-                    if (isAuthenticated) {
-                      let param = e.target.checked ? { add: 'noreposts' } : { remove: 'noreposts' };
-                      Lbryio.call('user_tag', 'edit', param);
-                    }
-                    setClientSetting(SETTINGS.HIDE_REPOSTS, !hideReposts);
-                  }}
-                />
-              </SettingsRow>
+            {!SIMPLE_SITE && (
+              <>
+                <SettingsRow title={__('Hide reposts')} subtitle={__(HELP_HIDE_REPOSTS)}>
+                  <FormField
+                    type="checkbox"
+                    name="hide_reposts"
+                    onChange={(e) => {
+                      if (isAuthenticated) {
+                        let param = e.target.checked ? { add: 'noreposts' } : { remove: 'noreposts' };
+                        Lbryio.call('user_tag', 'edit', param);
+                      }
+                      setClientSetting(SETTINGS.HIDE_REPOSTS, !hideReposts);
+                    }}
+                  />
+                </SettingsRow>
 
-              {/*
+                {/*
               <SettingsRow title={__('Show anonymous content')} subtitle={__('Anonymous content is published without a channel.')} >
                 <FormField
                   type="checkbox"
@@ -107,98 +109,99 @@ export default function SettingContent(props: Props) {
               </SettingsRow>
               */}
 
-              <SettingsRow title={__('Show mature content')} subtitle={__(HELP_SHOW_MATURE)}>
-                <FormField
-                  type="checkbox"
-                  name="show_nsfw"
-                  checked={showNsfw}
-                  onChange={() =>
-                    !IS_WEB || showNsfw
-                      ? setClientSetting(SETTINGS.SHOW_MATURE, !showNsfw)
-                      : openModal(MODALS.CONFIRM_AGE)
-                  }
-                />
-              </SettingsRow>
-            </>
-          )}
+                <SettingsRow title={__('Show mature content')} subtitle={__(HELP_SHOW_MATURE)}>
+                  <FormField
+                    type="checkbox"
+                    name="show_nsfw"
+                    checked={showNsfw}
+                    onChange={() =>
+                      !IS_WEB || showNsfw
+                        ? setClientSetting(SETTINGS.SHOW_MATURE, !showNsfw)
+                        : openModal(MODALS.CONFIRM_AGE)
+                    }
+                  />
+                </SettingsRow>
+              </>
+            )}
 
-          {(isAuthenticated || !IS_WEB) && (
-            <>
-              <SettingsRow title={__('Notifications')}>
-                <Button
-                  button="secondary"
-                  label={__('Manage')}
-                  icon={ICONS.SETTINGS}
-                  navigate={`/$/${PAGES.SETTINGS_NOTIFICATIONS}`}
-                />
-              </SettingsRow>
-
-              <SettingsRow title={__('Blocked and muted channels')}>
-                <Button
-                  button="secondary"
-                  label={__('Manage')}
-                  icon={ICONS.SETTINGS}
-                  navigate={`/$/${PAGES.SETTINGS_BLOCKED_MUTED}`}
-                />
-              </SettingsRow>
-
-              {myChannelUrls && myChannelUrls.length > 0 && (
-                <SettingsRow title={__('Creator settings')}>
+            {(isAuthenticated || !IS_WEB) && (
+              <>
+                <SettingsRow title={__('Notifications')}>
                   <Button
                     button="secondary"
                     label={__('Manage')}
                     icon={ICONS.SETTINGS}
-                    navigate={`/$/${PAGES.SETTINGS_CREATOR}`}
+                    navigate={`/$/${PAGES.SETTINGS_NOTIFICATIONS}`}
                   />
                 </SettingsRow>
-              )}
-            </>
-          )}
 
-          <SettingsRow title={__('Publish confirmation')} subtitle={__('Skip preview and confirmation')}>
-            <FormField
-              type="checkbox"
-              name="sync_toggle"
-              label={__('')}
-              checked={!enablePublishPreview}
-              onChange={() => setClientSetting(SETTINGS.ENABLE_PUBLISH_PREVIEW, !enablePublishPreview)}
-            />
-          </SettingsRow>
+                <SettingsRow title={__('Blocked and muted channels')}>
+                  <Button
+                    button="secondary"
+                    label={__('Manage')}
+                    icon={ICONS.SETTINGS}
+                    navigate={`/$/${PAGES.SETTINGS_BLOCKED_MUTED}`}
+                  />
+                </SettingsRow>
 
-          {/* @if TARGET='app' */}
-          <SettingsRow title={__('Max purchase price')} subtitle={__(HELP_MAX_PURCHASE_PRICE)} useVerticalSeparator>
-            <MaxPurchasePrice />
-          </SettingsRow>
-          {/* @endif */}
-
-          <SettingsRow title={__('Purchase and tip confirmations')} useVerticalSeparator>
-            <FormField
-              type="radio"
-              name="confirm_all_purchases"
-              checked={!instantPurchaseEnabled}
-              label={__('Always confirm before purchasing content or tipping')}
-              onChange={() => setClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED, false)}
-            />
-            <FormField
-              type="radio"
-              name="instant_purchases"
-              checked={instantPurchaseEnabled}
-              label={__('Only confirm purchases or tips over a certain amount')}
-              helper={__(HELP_ONLY_CONFIRM_OVER_AMOUNT)}
-              onChange={() => setClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED, true)}
-            />
-            {instantPurchaseEnabled && (
-              <FormFieldPrice
-                name="confirmation_price"
-                min={0.1}
-                onChange={(newValue) => setClientSetting(SETTINGS.INSTANT_PURCHASE_MAX, newValue)}
-                price={instantPurchaseMax}
-              />
+                {myChannelUrls && myChannelUrls.length > 0 && (
+                  <SettingsRow title={__('Creator settings')}>
+                    <Button
+                      button="secondary"
+                      label={__('Manage')}
+                      icon={ICONS.SETTINGS}
+                      navigate={`/$/${PAGES.SETTINGS_CREATOR}`}
+                    />
+                  </SettingsRow>
+                )}
+              </>
             )}
-          </SettingsRow>
-        </>
-      }
-    />
+
+            <SettingsRow title={__('Publish confirmation')} subtitle={__('Skip preview and confirmation')}>
+              <FormField
+                type="checkbox"
+                name="sync_toggle"
+                label={__('')}
+                checked={!enablePublishPreview}
+                onChange={() => setClientSetting(SETTINGS.ENABLE_PUBLISH_PREVIEW, !enablePublishPreview)}
+              />
+            </SettingsRow>
+
+            {/* @if TARGET='app' */}
+            <SettingsRow title={__('Max purchase price')} subtitle={__(HELP_MAX_PURCHASE_PRICE)} useVerticalSeparator>
+              <MaxPurchasePrice />
+            </SettingsRow>
+            {/* @endif */}
+
+            <SettingsRow title={__('Purchase and tip confirmations')} useVerticalSeparator>
+              <FormField
+                type="radio"
+                name="confirm_all_purchases"
+                checked={!instantPurchaseEnabled}
+                label={__('Always confirm before purchasing content or tipping')}
+                onChange={() => setClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED, false)}
+              />
+              <FormField
+                type="radio"
+                name="instant_purchases"
+                checked={instantPurchaseEnabled}
+                label={__('Only confirm purchases or tips over a certain amount')}
+                helper={__(HELP_ONLY_CONFIRM_OVER_AMOUNT)}
+                onChange={() => setClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED, true)}
+              />
+              {instantPurchaseEnabled && (
+                <FormFieldPrice
+                  name="confirmation_price"
+                  min={0.1}
+                  onChange={(newValue) => setClientSetting(SETTINGS.INSTANT_PURCHASE_MAX, newValue)}
+                  price={instantPurchaseMax}
+                />
+              )}
+            </SettingsRow>
+          </>
+        }
+      />
+    </>
   );
 }
 

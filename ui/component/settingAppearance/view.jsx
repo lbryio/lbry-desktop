@@ -24,62 +24,65 @@ export default function SettingAppearance(props: Props) {
   const { clock24h, searchInLanguage, isAuthenticated, hideBalance, setClientSetting, setSearchInLanguage } = props;
 
   return (
-    <Card
-      id={SETTINGS_GRP.APPEARANCE}
-      title={__('Appearance')}
-      subtitle=""
-      isBodyList
-      body={
-        <>
-          {homepages && Object.keys(homepages).length > 1 && (
-            <SettingsRow title={__('Homepage')} subtitle={__('Tailor your experience.')}>
-              <HomepageSelector />
+    <>
+      <div className="card__title-section">
+        <h2 className="card__title">{__('Appearance')}</h2>
+      </div>
+      <Card
+        id={SETTINGS_GRP.APPEARANCE}
+        isBodyList
+        body={
+          <>
+            {homepages && Object.keys(homepages).length > 1 && (
+              <SettingsRow title={__('Homepage')} subtitle={__('Tailor your experience.')}>
+                <HomepageSelector />
+              </SettingsRow>
+            )}
+
+            <SettingsRow title={__('Language')} subtitle={__(HELP.LANGUAGE)}>
+              <SettingLanguage />
             </SettingsRow>
-          )}
 
-          <SettingsRow title={__('Language')} subtitle={__(HELP.LANGUAGE)}>
-            <SettingLanguage />
-          </SettingsRow>
-
-          <SettingsRow title={__('Search only in the selected language by default')}>
-            <FormField
-              name="search-in-language"
-              type="checkbox"
-              checked={searchInLanguage}
-              onChange={() => setSearchInLanguage(!searchInLanguage)}
-            />
-          </SettingsRow>
-
-          <SettingsRow title={__('Theme')}>
-            <ThemeSelector />
-          </SettingsRow>
-
-          <SettingsRow title={__('24-hour clock')}>
-            <FormField
-              type="checkbox"
-              name="clock24h"
-              onChange={() => setClientSetting(SETTINGS.CLOCK_24H, !clock24h)}
-              checked={clock24h}
-            />
-          </SettingsRow>
-
-          {(isAuthenticated || !IS_WEB) && (
-            <SettingsRow title={__('Hide wallet balance in header')}>
+            <SettingsRow title={__('Search only in the selected language by default')}>
               <FormField
+                name="search-in-language"
                 type="checkbox"
-                name="hide_balance"
-                onChange={() => setClientSetting(SETTINGS.HIDE_BALANCE, !hideBalance)}
-                checked={hideBalance}
+                checked={searchInLanguage}
+                onChange={() => setSearchInLanguage(!searchInLanguage)}
               />
             </SettingsRow>
-          )}
-        </>
-      }
-    />
+
+            <SettingsRow title={__('Theme')}>
+              <ThemeSelector />
+            </SettingsRow>
+
+            <SettingsRow title={__('24-hour clock')}>
+              <FormField
+                type="checkbox"
+                name="clock24h"
+                onChange={() => setClientSetting(SETTINGS.CLOCK_24H, !clock24h)}
+                checked={clock24h}
+              />
+            </SettingsRow>
+
+            {(isAuthenticated || !IS_WEB) && (
+              <SettingsRow title={__('Hide wallet balance in header')}>
+                <FormField
+                  type="checkbox"
+                  name="hide_balance"
+                  onChange={() => setClientSetting(SETTINGS.HIDE_BALANCE, !hideBalance)}
+                  checked={hideBalance}
+                />
+              </SettingsRow>
+            )}
+          </>
+        }
+      />
+    </>
   );
 }
 
-// prettier-disable
+// prettier-ignore
 const HELP = {
   LANGUAGE: 'Multi-language support is brand new and incomplete. Switching your language may have unintended consequences, like glossolalia.',
 };
