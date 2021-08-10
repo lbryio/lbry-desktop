@@ -161,9 +161,13 @@ function stopWatchmanInterval() {
 // creates the setInterval that will run send to watchman on recurring basis
 function startWatchmanIntervalIfNotRunning() {
   if (!watchmanInterval) {
+    // instantiate the first time to calculate duration from
     lastSentTime = new Date();
 
-    watchmanInterval = setInterval(sendAndResetWatchmanData, 1000 * SEND_DATA_TO_WATCHMAN_INTERVAL);
+    // only set an interval if analytics are enabled and is prod
+    if (internalAnalyticsEnabled && isProduction) {
+      watchmanInterval = setInterval(sendAndResetWatchmanData, 1000 * SEND_DATA_TO_WATCHMAN_INTERVAL);
+    }
   }
 }
 
