@@ -133,8 +133,6 @@ class StripeAccountConnection extends React.Component<Props, State> {
             that.setState({
               accountTransactions: accountListResponse.reverse(),
             });
-
-            console.log(accountListResponse);
           });
         }
 
@@ -170,7 +168,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
           getAndSetAccountLink(true);
         } else {
           // probably an error from stripe
-          var displayString = 'There was an error getting your account setup, please let support know';
+          const displayString = 'There was an error getting your account setup, please let support know';
           doToast({ message: displayString, isError: true });
           // not an error from Beamer, throw it
           throw new Error(error);

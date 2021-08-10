@@ -181,8 +181,6 @@ class SettingsStripeCard extends React.Component<Props, State> {
               },
               'post'
             ).then((customerSetupResponse) => {
-              console.log(customerSetupResponse);
-
               clientSecret = customerSetupResponse.client_secret;
 
               // instantiate stripe elements
@@ -190,14 +188,12 @@ class SettingsStripeCard extends React.Component<Props, State> {
             });
             // 500 error from the backend being down
           } else if (error === 'internal_apis_down') {
-            var displayString = 'There was an error from the server, please let support know';
+            const displayString = 'There was an error from the server, please let support know';
             doToast({ message: displayString, isError: true });
           } else {
             // probably an error from stripe
-            var displayString = 'There was an error getting your card setup, please let support know';
+            const displayString = 'There was an error getting your card setup, please let support know';
             doToast({ message: displayString, isError: true });
-
-            console.log('Unseen before error');
           }
         });
     }, 250);
