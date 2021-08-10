@@ -19,6 +19,9 @@ if (STRIPE_PUBLIC_KEY.indexOf('pk_live') > -1) {
   stripeEnvironment = 'live';
 }
 
+const APIS_DOWN_ERROR_RESPONSE = 'There was an error from the server, please let support know';
+const CARD_SETUP_ERROR_RESPONSE = 'There was an error getting your card setup, please let support know';
+
 // eslint-disable-next-line flowtype/no-types-missing-file-annotation
 type Props = {
   disabled: boolean,
@@ -188,12 +191,10 @@ class SettingsStripeCard extends React.Component<Props, State> {
             });
             // 500 error from the backend being down
           } else if (error === 'internal_apis_down') {
-            const displayString = 'There was an error from the server, please let support know';
-            doToast({ message: displayString, isError: true });
+            doToast({ message: APIS_DOWN_ERROR_RESPONSE, isError: true });
           } else {
             // probably an error from stripe
-            const displayString = 'There was an error getting your card setup, please let support know';
-            doToast({ message: displayString, isError: true });
+            doToast({ message: CARD_SETUP_ERROR_RESPONSE, isError: true });
           }
         });
     }, 250);

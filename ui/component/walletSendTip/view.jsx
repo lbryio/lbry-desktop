@@ -621,7 +621,7 @@ function WalletSendTip(props: Props) {
               )}
             </>
               // if it's LBC and there is no balance, you can prompt to purchase LBC
-              : <>
+              :
                 <Card
                   title={<I18nMessage tokens={{ lbc: <LbcSymbol size={22} /> }}>Supporting content requires %lbc%</I18nMessage>}
                   subtitle={
@@ -642,7 +642,7 @@ function WalletSendTip(props: Props) {
                       <Button button="link" label={__('Nevermind')} onClick={closeModal} />
                     </div>
                   }
-              /></>
+              />
           )
         }
       />
