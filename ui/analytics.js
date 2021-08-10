@@ -53,7 +53,7 @@ type Analytics = {
       playerPoweredBy: string,
       readyState: number,
     }
-  ) => void,
+  ) => Promise<any>,
   adsFetchedEvent: () => void,
   adsReceivedEvent: (any) => void,
   adsErrorEvent: (any) => void,
@@ -177,7 +177,7 @@ async function sendWatchmanData(body) {
     const response = await fetch(WATCHMAN_BACKEND_ENDPOINT, {
       method: 'POST',
       headers: {
-        'Accept': 'application/json',
+        Accept: 'application/json',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
@@ -216,16 +216,15 @@ const analytics: Analytics = {
     if (!isPlaying && !playerIsSeeking) {
       sendAndResetWatchmanData();
       stopWatchmanInterval();
-    // if being told to pause, and seeking, send and restart interval
+      // if being told to pause, and seeking, send and restart interval
     } else if (!isPlaying && playerIsSeeking) {
       sendAndResetWatchmanData();
       stopWatchmanInterval();
       startWatchmanIntervalIfNotRunning();
-    // is being told to play, and seeking, don't do anything,
-    // assume it's been started already from pause
+      // is being told to play, and seeking, don't do anything,
+      // assume it's been started already from pause
     } else if (isPlaying && playerIsSeeking) {
-
-    // start but not a seek, assuming a start from paused content
+      // start but not a seek, assuming a start from paused content
     } else if (isPlaying && !playerIsSeeking) {
       startWatchmanIntervalIfNotRunning();
     }
