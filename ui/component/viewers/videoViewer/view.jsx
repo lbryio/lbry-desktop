@@ -134,7 +134,6 @@ function VideoViewer(props: Props) {
   }
 
   function doTrackingFirstPlay(e: Event, data: any) {
-
     let timeToStart = data.secondsToLoad;
 
     if (desktopPlayStartTime !== undefined) {

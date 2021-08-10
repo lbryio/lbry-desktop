@@ -40,7 +40,8 @@ type Analytics = {
   tagFollowEvent: (string, boolean, ?string) => void,
   playerLoadedEvent: (?boolean) => void,
   playerStartedEvent: (?boolean) => void,
-  videoStartEvent: (string, number) => void,
+  videoStartEvent: (string, number, string, number, string, any) => void,
+  videoIsPlaying: (boolean, any) => void,
   videoBufferEvent: (
     StreamClaim,
     {
@@ -109,11 +110,10 @@ let lastSentTime;
 // calculate data for backend, send them, and reset buffer data for next interval
 async function sendAndResetWatchmanData() {
   if (!userId) {
-    return 'Can only be used with a user id'
+    return 'Can only be used with a user id';
   }
 
   let timeSinceLastIntervalSend = new Date() - lastSentTime;
-  console.log(timeSinceLastIntervalSend);
   lastSentTime = new Date();
 
   let protocol;
