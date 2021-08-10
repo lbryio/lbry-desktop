@@ -8,6 +8,7 @@ import {
   makeSelectCollectionIsMine,
   COLLECTIONS_CONSTS,
   makeSelectEditedCollectionForId,
+  makeSelectClaimIsMine,
 } from 'lbry-redux';
 import { makeSelectChannelIsMuted } from 'redux/selectors/blocked';
 import { doChannelMute, doChannelUnmute } from 'redux/actions/blocked';
@@ -24,7 +25,6 @@ import {
   makeSelectChannelIsAdminBlocked,
 } from 'redux/selectors/comments';
 import { doToast } from 'redux/actions/notifications';
-import { makeSelectSigningIsMine } from 'redux/selectors/content';
 import { doChannelSubscribe, doChannelUnsubscribe } from 'redux/actions/subscriptions';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
@@ -45,7 +45,7 @@ const select = (state, props) => {
     contentClaim,
     contentSigningChannel,
     contentChannelUri,
-    claimIsMine: makeSelectSigningIsMine(props.uri)(state),
+    claimIsMine: makeSelectClaimIsMine(props.uri)(state),
     hasClaimInWatchLater: makeSelectCollectionForIdHasClaimUrl(
       COLLECTIONS_CONSTS.WATCH_LATER_ID,
       contentPermanentUri

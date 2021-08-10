@@ -11,8 +11,6 @@ import {
   parseURI,
   makeSelectContentTypeForUri,
   makeSelectFileNameForUri,
-  normalizeURI,
-  selectMyActiveClaims,
   selectClaimIdsByUri,
 } from 'lbry-redux';
 import { makeSelectRecommendedContentForUri } from 'redux/selectors/search';
@@ -246,24 +244,6 @@ export const makeSelectInsufficientCreditsForUri = (uri: string) =>
       return !isMine && costInfo && costInfo.cost > 0 && costInfo.cost > balance;
     }
   );
-
-export const makeSelectSigningIsMine = (rawUri: string) => {
-  let uri;
-  try {
-    uri = normalizeURI(rawUri);
-  } catch (e) {}
-
-  return createSelector(selectClaimsByUri, selectMyActiveClaims, (claims, myClaims) => {
-    try {
-      parseURI(uri);
-    } catch (e) {
-      return false;
-    }
-    const signingChannel = claims && claims[uri] && (claims[uri].signing_channel || claims[uri]);
-
-    return signingChannel && myClaims.has(signingChannel.claim_id);
-  });
-};
 
 export const makeSelectRecommendationId = (claimId: string) =>
   createSelector(selectState, (state) => state.recommendationId[claimId]);
