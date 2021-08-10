@@ -29,6 +29,21 @@ import { doAlertWaitingForSync } from 'redux/actions/app';
 
 const isDev = process.env.NODE_ENV !== 'production';
 
+const COMMENTRON_MSG_REMAP = {
+  // <-- Commentron msg --> : <-- App msg -->
+  'channel is blocked by publisher': 'Unable to comment. This channel has blocked you.',
+  'channel is not allowed to post comments': 'Unable to comment. Your channel has been blocked by an admin.',
+  'comments are disabled by the creator': 'Unable to comment. The content owner has disabled comments.',
+  'duplicate comment!': 'Please do not spam.',
+};
+
+const COMMENTRON_REGEX_MAP = {
+  // <-- App msg --> : <-- Regex of Commentron msg -->
+  'Your user name "%1%" is too close to the creator\'s user name "%2%" and may cause confusion. Please use another identity.': /^your user name (.*) is too close to the creator's user name (.*) and may cause confusion. Please use another identity.$/,
+  'Slow mode is on. Please wait up to %1% seconds before commenting again.': /^Slow mode is on. Please wait at most (.*) seconds before commenting again.$/,
+  'The comment contains contents that are blocked by %1%.': /^the comment contents are blocked by (.*)$/,
+};
+
 function devToast(dispatch, msg) {
   if (isDev) {
     console.error(msg); // eslint-disable-line
@@ -448,57 +463,40 @@ export function doCommentCreate(
         return result;
       })
       .catch((error) => {
-        dispatch({
-          type: ACTIONS.COMMENT_CREATE_FAILED,
-          data: error,
-        });
+        dispatch({ type: ACTIONS.COMMENT_CREATE_FAILED, data: error });
 
-        let toastMessage = __('Unable to create comment, please try again later.');
-        if (error && error.message === 'channel is blocked by publisher') {
-          toastMessage = __('Unable to comment. This channel has blocked you.');
-        }
+        let toastMessage;
 
-        if (error) {
-          // TODO: Use error codes when commentron implements it.
-          switch (error.message) {
-            case 'channel is blocked by publisher':
-              toastMessage = __('Unable to comment. This channel has blocked you.');
-              break;
-            case 'channel is not allowed to post comments':
-              toastMessage = __('Unable to comment. Your channel has been blocked by an admin.');
-              break;
-            case 'comments are disabled by the creator':
-              toastMessage = __('Unable to comment. The content owner has disabled comments.');
-              break;
-            case 'duplicate comment!':
-              toastMessage = __('Please do not spam.');
-              break;
-            default:
-              const BLOCKED_WORDS_ERR_MSG = 'the comment contents are blocked by';
-              const SLOW_MODE_PARTIAL_ERR_MSG = 'Slow mode is on. Please wait at most';
-
-              if (error.message.startsWith(BLOCKED_WORDS_ERR_MSG)) {
-                const channelName = error.message.substring(BLOCKED_WORDS_ERR_MSG.length);
-                toastMessage = __('The comment contains contents that are blocked by %author%', {
-                  author: channelName,
-                });
-              } else if (error.message.startsWith(SLOW_MODE_PARTIAL_ERR_MSG)) {
-                const value = error.message.replace(/\D/g, '');
-                toastMessage = __('Slow mode is on. Please wait up to %value% seconds before commenting again.', {
-                  value,
-                });
-              }
-              break;
+        for (const commentronMsg in COMMENTRON_MSG_REMAP) {
+          if (error.message === commentronMsg) {
+            toastMessage = __(COMMENTRON_MSG_REMAP[commentronMsg]);
+            break;
           }
         }
 
-        dispatch(
-          doToast({
-            message: toastMessage,
-            isError: true,
-          })
-        );
+        if (!toastMessage) {
+          for (const i18nStr in COMMENTRON_REGEX_MAP) {
+            const regex = COMMENTRON_REGEX_MAP[i18nStr];
+            const match = error.message.match(regex);
+            if (match) {
+              const subs = {};
+              for (let i = 1; i < match.length; ++i) {
+                subs[`${i}`] = match[i];
+              }
 
+              toastMessage = __(i18nStr, subs);
+              break;
+            }
+          }
+        }
+
+        if (!toastMessage) {
+          // Fallback to commentron original message. It will be in English
+          // only and most likely not capitalized correctly.
+          toastMessage = error.message;
+        }
+
+        dispatch(doToast({ message: toastMessage, isError: true }));
         return Promise.reject(error);
       });
   };

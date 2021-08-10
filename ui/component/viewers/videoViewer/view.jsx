@@ -127,7 +127,7 @@ function VideoViewer(props: Props) {
   }, [embedded, videoPlaybackRate]);
 
   function doTrackingBuffered(e: Event, data: any) {
-    fetch(source, { method: 'HEAD' }).then((response) => {
+    fetch(source, { method: 'HEAD', cache: 'no-store' }).then((response) => {
       data.playerPoweredBy = response.headers.get('x-powered-by');
       doAnalyticsBuffer(uri, data);
     });
@@ -141,13 +141,20 @@ function VideoViewer(props: Props) {
       timeToStart += differenceToAdd;
     }
     analytics.playerStartedEvent(embedded);
-    analytics.videoStartEvent(claimId, timeToStart);
+
+    fetch(source, { method: 'HEAD', cache: 'no-store' }).then((response) => {
+      let playerPoweredBy = response.headers.get('x-powered-by') || '';
+      analytics.videoStartEvent(claimId, timeToStart, playerPoweredBy, userId, claim.canonical_url, this);
+    });
+
     doAnalyticsView(uri, timeToStart).then(() => {
       claimRewards();
     });
   }
 
   const onEnded = React.useCallback(() => {
+    analytics.videoIsPlaying(false);
+
     if (adUrl) {
       setAdUrl(null);
       return;
@@ -167,15 +174,18 @@ function VideoViewer(props: Props) {
     setIsPlaying(true);
     setShowAutoplayCountdown(false);
     setIsEndededEmbed(false);
+    analytics.videoIsPlaying(true, player);
   }
 
   function onPause(event, player) {
     setIsPlaying(false);
     handlePosition(player);
+    analytics.videoIsPlaying(false, player);
   }
 
   function onDispose(event, player) {
     handlePosition(player);
+    analytics.videoIsPlaying(false, player);
   }
 
   function handlePosition(player) {
@@ -229,12 +239,16 @@ function VideoViewer(props: Props) {
     // re-factoring.
     player.on('loadedmetadata', () => restorePlaybackRate(player));
 
+    // used for tracking buffering for watchman
     player.on('tracking:buffered', doTrackingBuffered);
+
+    // first play tracking, used for initializing the watchman api
     player.on('tracking:firstplay', doTrackingFirstPlay);
     player.on('ended', onEnded);
     player.on('play', onPlay);
     player.on('pause', (event) => onPause(event, player));
     player.on('dispose', (event) => onDispose(event, player));
+
     player.on('error', () => {
       const error = player.error();
       if (error) {
