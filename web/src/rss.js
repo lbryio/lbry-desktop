@@ -226,7 +226,7 @@ function generateFeed(feedLink, channelClaim, claimsInChannel) {
     title: channelTitle + ' on ' + SITE_NAME,
     description: getFormattedDescription(channelClaim),
     feed_url: feedLink,
-    site_url: URL,
+    site_url: (channelClaim.value && channelClaim.value.website_url) || URL,
     image_url: (channelClaim.value && channelClaim.value.thumbnail && channelClaim.value.thumbnail.url) || undefined,
     language: getLanguageValue(channelClaim),
     custom_namespaces: { itunes: 'http://www.itunes.com/dtds/podcast-1.0.dtd' },
