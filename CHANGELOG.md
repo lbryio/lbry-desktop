@@ -36,6 +36,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Don't break words in chat + fix text overflow past 3 dot menu _community pr!_ ([#6602](https://github.com/lbryio/lbry-desktop/pull/6602))
 - Fix embed shows wrong OG metadata _community pr!_ ([#6815](https://github.com/lbryio/lbry-desktop/pull/6815))
 - Fix OG: "Unparsable data structure - Truncated Unicode character" _community pr!_ ([#6839](https://github.com/lbryio/lbry-desktop/pull/6839))
+- Fix Paid embed warning overlay redirection button now links to odysee _community pr!_ ([#6819](https://github.com/lbryio/lbry-desktop/pull/6819))
 
 ## [0.51.1] - [2021-06-26]
 
