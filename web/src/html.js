@@ -41,7 +41,7 @@ function insertToHead(fullHtml, htmlToInsert) {
   }
 }
 
-function truncateDescription(description, maxChars=200) {
+function truncateDescription(description, maxChars = 200) {
   // Get list of single-codepoint strings
   const chars = [...description];
   // Use slice array instead of substring to prevent breaking emojis
