@@ -5,13 +5,13 @@ import {
   doResolveUri,
   makeSelectClaimForUri,
   makeSelectIsAbandoningClaimForUri,
+  makeSelectClaimIsMine,
 } from 'lbry-redux';
 import { doHideModal } from 'redux/actions/app';
 import ModalRemoveFile from './view';
-import { makeSelectSigningIsMine } from 'redux/selectors/content';
 
 const select = (state, props) => ({
-  claimIsMine: makeSelectSigningIsMine(props.uri)(state),
+  claimIsMine: makeSelectClaimIsMine(props.uri)(state),
   title: makeSelectTitleForUri(props.uri)(state),
   claim: makeSelectClaimForUri(props.uri)(state),
   isAbandoning: makeSelectIsAbandoningClaimForUri(props.uri)(state),
