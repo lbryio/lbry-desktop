@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { doSetContentHistoryItem, doSetPrimaryUri } from 'redux/actions/content';
-import { withRouter } from 'react-router';
+import { withRouter } from 'react-router-dom';
 import {
   doFetchFileInfo,
   makeSelectFileInfoForUri,
