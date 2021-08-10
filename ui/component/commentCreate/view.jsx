@@ -131,7 +131,7 @@ export function CommentCreate(props: Props) {
       return;
     }
 
-    // if comment post didn't work, but tip was already made, try againt o create comment
+    // if comment post didn't work, but tip was already made, try again to create comment
     if (commentFailure && tipAmount === successTip.tipAmount) {
       handleCreateComment(successTip.txid);
       return;
@@ -160,8 +160,6 @@ export function CommentCreate(props: Props) {
       channelClaimId = claim.claim_id;
       tipChannelName = claim.name;
     }
-
-    console.log(activeChannelClaim);
 
     setIsSubmitting(true);
 

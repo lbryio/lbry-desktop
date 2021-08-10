@@ -141,6 +141,8 @@ function WalletSendTip(props: Props) {
         .then((accountCheckResponse) => {
           if (accountCheckResponse === true && canReceiveFiatTip !== true) {
             setCanReceiveFiatTip(true);
+          } else {
+            setCanReceiveFiatTip(false);
           }
         })
         .catch(function (error) {
@@ -332,6 +334,7 @@ function WalletSendTip(props: Props) {
         setCustomTipAmount('');
       }
 
+      // allow maximum of two decimal places
       if (howManyDecimals > 2) {
         tipAmount = Math.floor(tipAmount * 100) / 100;
       }
@@ -340,6 +343,7 @@ function WalletSendTip(props: Props) {
 
       if (howManyDigits > 4 && tipAmount !== 1000) {
         setTipError('Amount cannot be over 1000 dollars');
+        setCustomTipAmount(tipAmount);
       } else if (tipAmount > 1000) {
         setTipError('Amount cannot be over 1000 dollars');
         setCustomTipAmount(tipAmount);
@@ -576,7 +580,6 @@ function WalletSendTip(props: Props) {
                         )}
                       </React.Fragment>
                     }
-                    className="form-field--price-amount"
                     error={tipError}
                     min="0"
                     step="any"
