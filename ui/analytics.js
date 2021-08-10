@@ -9,13 +9,16 @@ import Native from 'native';
 import ElectronCookies from '@exponent/electron-cookies';
 import { generateInitialUrl } from 'util/url';
 // @endif
-import { MATOMO_ID, MATOMO_URL, LBRY_WEB_BUFFER_API } from 'config';
+import { MATOMO_ID, MATOMO_URL } from 'config';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const devInternalApis = process.env.LBRY_API_URL && process.env.LBRY_API_URL.includes('dev');
 
 export const SHARE_INTERNAL = 'shareInternal';
 const SHARE_THIRD_PARTY = 'shareThirdParty';
+
+const WATCHMAN_BACKEND_ENDPOINT = 'https://watchman.na-backend.odysee.com/reports/playback';
+const SEND_DATA_TO_WATCHMAN_INTERVAL = 10; // in seconds
 
 // @if TARGET='app'
 if (isProduction) {
@@ -37,7 +40,8 @@ type Analytics = {
   tagFollowEvent: (string, boolean, ?string) => void,
   playerLoadedEvent: (?boolean) => void,
   playerStartedEvent: (?boolean) => void,
-  videoStartEvent: (string, number) => void,
+  videoStartEvent: (string, number, string, number, string, any) => void,
+  videoIsPlaying: (boolean, any) => void,
   videoBufferEvent: (
     StreamClaim,
     {
@@ -49,7 +53,7 @@ type Analytics = {
       playerPoweredBy: string,
       readyState: number,
     }
-  ) => void,
+  ) => Promise<any>,
   adsFetchedEvent: () => void,
   adsReceivedEvent: (any) => void,
   adsErrorEvent: (any) => void,
@@ -76,7 +80,167 @@ if (window.localStorage.getItem(SHARE_INTERNAL) === 'true') internalAnalyticsEna
 // if (window.localStorage.getItem(SHARE_THIRD_PARTY) === 'true') thirdPartyAnalyticsEnabled = true;
 // @endif
 
+/**
+ * Determine the mobile device type viewing the data
+ * This function returns one of 'and' (Android), 'ios', or 'web'.
+ *
+ * @returns {String}
+ */
+function getDeviceType() {
+  var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+  if (/android/i.test(userAgent)) {
+    return 'and';
+  }
+
+  // iOS detection from: http://stackoverflow.com/a/9039885/177710
+  if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+    return 'ios';
+  }
+
+  // default as web, this can be optimized
+  return 'web';
+}
+// variables initialized for watchman
+let amountOfBufferEvents = 0;
+let amountOfBufferTimeInMS = 0;
+let videoType, userId, claimUrl, playerPoweredBy, videoPlayer;
+let lastSentTime;
+
+// calculate data for backend, send them, and reset buffer data for next interval
+async function sendAndResetWatchmanData() {
+  if (!userId) {
+    return 'Can only be used with a user id';
+  }
+
+  let timeSinceLastIntervalSend = new Date() - lastSentTime;
+  lastSentTime = new Date();
+
+  let protocol;
+  if (videoType === 'application/x-mpegURL') {
+    protocol = 'hls';
+  } else {
+    protocol = 'stb';
+  }
+
+  // current position in video in MS
+  const positionInVideo = Math.round(videoPlayer.currentTime()) * 1000;
+
+  // get the duration marking the time in the video for relative position calculation
+  const totalDurationInSeconds = Math.round(videoPlayer.duration());
+
+  // build object for watchman backend
+  const objectToSend = {
+    rebuf_count: amountOfBufferEvents,
+    rebuf_duration: amountOfBufferTimeInMS,
+    url: claimUrl.replace('lbry://', ''),
+    device: getDeviceType(),
+    duration: timeSinceLastIntervalSend,
+    protocol,
+    player: playerPoweredBy,
+    user_id: userId.toString(),
+    position: Math.round(positionInVideo),
+    rel_position: Math.round((positionInVideo / (totalDurationInSeconds * 1000)) * 100),
+  };
+
+  // post to watchman
+  await sendWatchmanData(objectToSend);
+
+  // reset buffer data
+  amountOfBufferEvents = 0;
+  amountOfBufferTimeInMS = 0;
+}
+
+let watchmanInterval;
+// clear watchman interval and mark it as null (when video paused)
+function stopWatchmanInterval() {
+  clearInterval(watchmanInterval);
+  watchmanInterval = null;
+}
+
+// creates the setInterval that will run send to watchman on recurring basis
+function startWatchmanIntervalIfNotRunning() {
+  if (!watchmanInterval) {
+    // instantiate the first time to calculate duration from
+    lastSentTime = new Date();
+
+    // only set an interval if analytics are enabled and is prod
+    if (internalAnalyticsEnabled && isProduction) {
+      watchmanInterval = setInterval(sendAndResetWatchmanData, 1000 * SEND_DATA_TO_WATCHMAN_INTERVAL);
+    }
+  }
+}
+
+// post data to the backend
+async function sendWatchmanData(body) {
+  try {
+    const response = await fetch(WATCHMAN_BACKEND_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+
+    return response;
+  } catch (err) {
+    console.log('ERROR FROM WATCHMAN BACKEND');
+    console.log(err);
+  }
+}
+
 const analytics: Analytics = {
+  // receive buffer events from tracking plugin and jklj
+  videoBufferEvent: async (claim, data) => {
+    amountOfBufferEvents = amountOfBufferEvents + 1;
+    amountOfBufferTimeInMS = amountOfBufferTimeInMS + data.bufferDuration;
+  },
+  onDispose: () => {
+    stopWatchmanInterval();
+  },
+  /**
+   * Is told whether video is being started or paused, and adjusts interval accordingly
+   * @param {boolean} isPlaying - Whether video was started or paused
+   * @param {object} passedPlayer - VideoJS Player object
+   */
+  videoIsPlaying: (isPlaying, passedPlayer) => {
+    let playerIsSeeking = false;
+    // have to use this because videojs pauses/unpauses during seek
+    // sometimes the seeking function isn't populated yet so check for it as well
+    if (passedPlayer && passedPlayer.seeking) {
+      playerIsSeeking = passedPlayer.seeking();
+    }
+
+    // if being paused, and not seeking, send existing data and stop interval
+    if (!isPlaying && !playerIsSeeking) {
+      sendAndResetWatchmanData();
+      stopWatchmanInterval();
+      // if being told to pause, and seeking, send and restart interval
+    } else if (!isPlaying && playerIsSeeking) {
+      sendAndResetWatchmanData();
+      stopWatchmanInterval();
+      startWatchmanIntervalIfNotRunning();
+      // is being told to play, and seeking, don't do anything,
+      // assume it's been started already from pause
+    } else if (isPlaying && playerIsSeeking) {
+      // start but not a seek, assuming a start from paused content
+    } else if (isPlaying && !playerIsSeeking) {
+      startWatchmanIntervalIfNotRunning();
+    }
+  },
+  videoStartEvent: (claimId, duration, poweredBy, passedUserId, canonicalUrl, passedPlayer) => {
+    // populate values for watchman when video starts
+    userId = passedUserId;
+    claimUrl = canonicalUrl;
+    playerPoweredBy = poweredBy;
+
+    videoType = passedPlayer.currentSource().type;
+    videoPlayer = passedPlayer;
+
+    sendPromMetric('time_to_start', duration);
+    sendMatomoEvent('Media', 'TimeToStart', claimId, duration);
+  },
   error: (message) => {
     return new Promise((resolve) => {
       if (internalAnalyticsEnabled && isProduction) {
@@ -193,39 +357,6 @@ const analytics: Analytics = {
   apiSyncTags: (params) => {
     if (internalAnalyticsEnabled && isProduction) {
       Lbryio.call('content_tags', 'sync', params);
-    }
-  },
-
-  videoStartEvent: (claimId, duration) => {
-    sendPromMetric('time_to_start', duration);
-    sendMatomoEvent('Media', 'TimeToStart', claimId, duration);
-  },
-
-  videoBufferEvent: (claim, data) => {
-    sendMatomoEvent('Media', 'BufferTimestamp', claim.claim_id, data.timeAtBuffer);
-
-    if (LBRY_WEB_BUFFER_API) {
-      fetch(LBRY_WEB_BUFFER_API, {
-        method: 'post',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          device: 'web',
-          type: 'buffering',
-          client: data.userId,
-          data: {
-            url: claim.canonical_url,
-            position: data.timeAtBuffer,
-            duration: data.bufferDuration,
-            player: data.playerPoweredBy,
-            readyState: data.readyState,
-            stream_duration: data.duration,
-            stream_bitrate: data.bitRate,
-          },
-        }),
-      });
     }
   },
   adsFetchedEvent: () => {
