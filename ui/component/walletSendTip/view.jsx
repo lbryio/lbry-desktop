@@ -317,10 +317,9 @@ function WalletSendTip(props: Props) {
     var text = value.toString();
     var index = text.indexOf('.');
     return (text.length - index - 1);
-  }
+  };
 
   function handleCustomPriceChange(event: SyntheticInputEvent<*>) {
-
     let tipAmountAsString = event.target.value;
 
     let tipAmount = parseFloat(tipAmountAsString);
@@ -329,7 +328,6 @@ function WalletSendTip(props: Props) {
 
     // allow maximum two decimals
     if (activeTab === TAB_FIAT) {
-
       if (Number.isNaN(tipAmount)) {
         setCustomTipAmount('');
       }
@@ -350,9 +348,9 @@ function WalletSendTip(props: Props) {
       }
     } else {
       if (howManyDecimals > 9) {
-          tipAmount = Number(tipAmount.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]);
+        tipAmount = Number(tipAmount.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]);
 
-        setTipError('Please only use up to 8 decimals')
+        setTipError('Please only use up to 8 decimals');
       }
       setCustomTipAmount(tipAmount);
     }
@@ -370,7 +368,7 @@ function WalletSendTip(props: Props) {
       return false;
     }
 
-    function convertToTwoDecimals(number){
+    function convertToTwoDecimals(number) {
       return (Math.round(number * 100) / 100).toFixed(2);
     }
 
@@ -407,7 +405,7 @@ function WalletSendTip(props: Props) {
   return (
     <Form onSubmit={handleSubmit}>
       {/* if there is no LBC balance, show user frontend to get credits */}
-      {1 == 2 ? (
+      {1 === 2 ? (
         <Card
           title={<I18nMessage tokens={{ lbc: <LbcSymbol size={22} /> }}>Supporting content requires %lbc%</I18nMessage>}
           subtitle={
