@@ -4,7 +4,6 @@ import StripeAccountConnection from './view';
 import { selectUser } from 'redux/selectors/user';
 import { doToast } from 'redux/actions/notifications';
 
-// function that receives state parameter and returns object of functions that accept  state
 const select = (state) => ({
   user: selectUser(state),
 });
