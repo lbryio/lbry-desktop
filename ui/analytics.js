@@ -181,7 +181,7 @@ const analytics: Analytics = {
     stopWatchmanInterval();
   },
   /**
-   * Detects whether video was started or paused, and adjusts interval accordingly
+   * Is told whether video is being started or paused, and adjusts interval accordingly
    * @param {boolean} isPlaying - Whether video was started or paused
    * @param {object} passedPlayer - VideoJS Player object
    */
@@ -193,16 +193,24 @@ const analytics: Analytics = {
       playerIsSeeking = passedPlayer.seeking();
     }
 
-    // if player isn't seeking it's not a seeking caused start or pause
-    if (!playerIsSeeking) {
-      // if it's a play signal, start tracking
-      if (isPlaying) {
-        startWatchmanIntervalIfNotRunning();
-        // if it's a stop signal, stop tracking
-      } else {
-        stopWatchmanInterval();
-      }
+    // if being paused, and not seeking, send existing data and stop interval
+    if (!isPlaying && !playerIsSeeking) {
+      sendAndResetWatchmanData();
+      stopWatchmanInterval();
+    // if being told to pause, and seeking, send and restart interval
+    } else if (!isPlaying && playerIsSeeking) {
+      sendAndResetWatchmanData();
+      stopWatchmanInterval();
+      startWatchmanIntervalIfNotRunning();
+    // is being told to play, and seeking, don't do anything,
+    // assume it's been started already from pause
+    } else if (isPlaying && playerIsSeeking) {
+
+    // start but not a seek, assuming a start from paused content
+    } else if (isPlaying && !playerIsSeeking) {
+      startWatchmanIntervalIfNotRunning();
     }
+
   },
   videoStartEvent: (claimId, duration, poweredBy, passedUserId, canonicalUrl, passedPlayer) => {
     console.log('Video start');
