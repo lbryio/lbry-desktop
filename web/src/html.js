@@ -41,8 +41,13 @@ function insertToHead(fullHtml, htmlToInsert) {
   }
 }
 
-function truncateDescription(description) {
-  return description.length > 200 ? description.substr(0, 200) + '...' : description;
+function truncateDescription(description, maxChars=200) {
+  // Get list of single-codepoint strings
+  const chars = [...description];
+  // Use slice array instead of substring to prevent breaking emojis
+  let truncated = chars.slice(0, maxChars).join('');
+  // Format truncated string
+  return (chars.length <= maxChars) ? truncated : truncated + "..." ;
 }
 
 function normalizeClaimUrl(url) {
