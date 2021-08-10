@@ -134,8 +134,6 @@ function VideoViewer(props: Props) {
   }
 
   function doTrackingFirstPlay(e: Event, data: any) {
-    console.log('running here');
-    console.log(userId);
 
     let timeToStart = data.secondsToLoad;
 

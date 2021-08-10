@@ -17,6 +17,9 @@ const devInternalApis = process.env.LBRY_API_URL && process.env.LBRY_API_URL.inc
 export const SHARE_INTERNAL = 'shareInternal';
 const SHARE_THIRD_PARTY = 'shareThirdParty';
 
+const WATCHMAN_BACKEND_ENDPOINT = 'https://watchman.na-backend.odysee.com/reports/playback';
+const SEND_DATA_TO_WATCHMAN_INTERVAL = 30; // in seconds
+
 // @if TARGET='app'
 if (isProduction) {
   ElectronCookies.enable({
@@ -97,63 +100,77 @@ function getDeviceType() {
   // default as web, this can be optimized
   return 'web';
 }
-
-let durationInSeconds = 10;
+// variables initialized for watchman
 let amountOfBufferEvents = 0;
 let amountOfBufferTimeInMS = 0;
-let videoType, userId, claimUrl, playerPoweredBy, timeAtBuffer, videoPlayer;
+let videoType, userId, claimUrl, playerPoweredBy, videoPlayer;
+let lastSentTime;
 
+// calculate data for backend, send them, and reset buffer data for next interval
 async function sendAndResetWatchmanData() {
-  var protocol;
+  if (!userId) {
+    return 'Can only be used with a user id'
+  }
+
+  let timeSinceLastIntervalSend = new Date() - lastSentTime;
+  console.log(timeSinceLastIntervalSend);
+  lastSentTime = new Date();
+
+  let protocol;
   if (videoType === 'application/x-mpegURL') {
     protocol = 'hls';
   } else {
     protocol = 'stb';
   }
 
-  console.log(claimUrl);
+  // current position in video in MS
+  const positionInVideo = Math.round(videoPlayer.currentTime()) * 1000;
 
-  timeAtBuffer = Math.round(videoPlayer.currentTime()) * 1000;
+  // get the duration marking the time in the video for relative position calculation
+  const totalDurationInSeconds = Math.round(videoPlayer.duration());
 
-  var totalDurationInSeconds = Math.round(videoPlayer.duration());
-
+  // build object for watchman backend
   const objectToSend = {
     rebuf_count: amountOfBufferEvents,
     rebuf_duration: amountOfBufferTimeInMS,
     url: claimUrl.replace('lbry://', ''),
     device: getDeviceType(),
-    duration: Math.round(durationInSeconds) * 1000,
+    duration: timeSinceLastIntervalSend,
     protocol,
     player: playerPoweredBy,
     user_id: userId.toString(),
-    position: Math.round(timeAtBuffer),
-    rel_position: Math.round((timeAtBuffer / (totalDurationInSeconds * 1000)) * 100),
+    position: Math.round(positionInVideo),
+    rel_position: Math.round((positionInVideo / (totalDurationInSeconds * 1000)) * 100),
   };
 
+  // post to watchman
   await sendWatchmanData(objectToSend);
 
+  // reset buffer data
   amountOfBufferEvents = 0;
   amountOfBufferTimeInMS = 0;
-  timeAtBuffer = null;
 }
 
 let watchmanInterval;
+// clear watchman interval and mark it as null (when video paused)
 function stopWatchmanInterval() {
-  console.log('turning off watchman interval');
   clearInterval(watchmanInterval);
   watchmanInterval = null;
 }
+
+// creates the setInterval that will run send to watchman on recurring basis
 function startWatchmanIntervalIfNotRunning() {
-  console.log('turning on watchman interval');
   if (!watchmanInterval) {
-    console.log('watchman interval turned back on');
-    watchmanInterval = setInterval(sendAndResetWatchmanData, 1000 * durationInSeconds);
+    lastSentTime = new Date();
+
+    watchmanInterval = setInterval(sendAndResetWatchmanData, 1000 * SEND_DATA_TO_WATCHMAN_INTERVAL);
   }
 }
 
+// post data to the backend
 async function sendWatchmanData(body) {
   try {
-    const response = await fetch('https://watchman.na-backend.odysee.com/reports/playback', {
+    const response = await fetch(WATCHMAN_BACKEND_ENDPOINT, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -164,18 +181,16 @@ async function sendWatchmanData(body) {
 
     return response;
   } catch (err) {
+    console.log('ERROR FROM WATCHMAN BACKEND');
     console.log(err);
   }
 }
 
 const analytics: Analytics = {
+  // receive buffer events from tracking plugin and jklj
   videoBufferEvent: async (claim, data) => {
-    console.log('BUFFERING!');
-
     amountOfBufferEvents = amountOfBufferEvents + 1;
     amountOfBufferTimeInMS = amountOfBufferTimeInMS + data.bufferDuration;
-
-    timeAtBuffer = data.timeAtBuffer;
   },
   onDispose: () => {
     stopWatchmanInterval();
@@ -210,10 +225,9 @@ const analytics: Analytics = {
     } else if (isPlaying && !playerIsSeeking) {
       startWatchmanIntervalIfNotRunning();
     }
-
   },
   videoStartEvent: (claimId, duration, poweredBy, passedUserId, canonicalUrl, passedPlayer) => {
-    console.log('Video start');
+    // populate values for watchman when video starts
     userId = passedUserId;
     claimUrl = canonicalUrl;
     playerPoweredBy = poweredBy;
@@ -221,9 +235,6 @@ const analytics: Analytics = {
     videoType = passedPlayer.currentSource().type;
     videoPlayer = passedPlayer;
 
-    console.log(userId, canonicalUrl, playerPoweredBy);
-
-    // TODO: add claim url , userId
     sendPromMetric('time_to_start', duration);
     sendMatomoEvent('Media', 'TimeToStart', claimId, duration);
   },
