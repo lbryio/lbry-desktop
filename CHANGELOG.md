@@ -35,6 +35,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added \ and = to reserved symbol warning _community pr!_ ([#6733](https://github.com/lbryio/lbry-desktop/pull/6733))
 - Don't break words in chat + fix text overflow past 3 dot menu _community pr!_ ([#6602](https://github.com/lbryio/lbry-desktop/pull/6602))
 - Fix embed shows wrong OG metadata _community pr!_ ([#6815](https://github.com/lbryio/lbry-desktop/pull/6815))
+- Fix OG: "Unparsable data structure - Truncated Unicode character" _community pr!_ ([#6839](https://github.com/lbryio/lbry-desktop/pull/6839))
 
 ## [0.51.1] - [2021-06-26]
 
