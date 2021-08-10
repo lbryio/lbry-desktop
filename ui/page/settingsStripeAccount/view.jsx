@@ -32,6 +32,7 @@ type Props = {
   source: string,
   user: User,
   doOpenModal: (string, {}) => void,
+  doToast: ({ message: string }) => void,
 };
 
 type State = {
@@ -174,7 +175,6 @@ class StripeAccountConnection extends React.Component<Props, State> {
           // not an error from Beamer, throw it
           throw new Error(error);
         }
-
       });
   }
 

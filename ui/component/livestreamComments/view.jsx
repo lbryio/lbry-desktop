@@ -22,7 +22,6 @@ type Props = {
   fetchingComments: boolean,
   doSuperChatList: (string) => void,
   superChats: Array<Comment>,
-  superChatsReversed: Array,
   superChatsTotalAmount: number,
   superChatsFiatAmount: number,
   myChannels: ?Array<ChannelClaim>,
@@ -48,7 +47,7 @@ export default function LivestreamComments(props: Props) {
     superChats, // superchats organized by tip amount
   } = props;
 
-  let { superChatsReversed, superChatsFiatAmount, superChatsTotalAmount } = props;
+  let { superChatsFiatAmount, superChatsTotalAmount } = props;
 
   const commentsRef = React.createRef();
   const [scrollBottom, setScrollBottom] = React.useState(true);
@@ -61,50 +60,7 @@ export default function LivestreamComments(props: Props) {
   const discussionElement = document.querySelector('.livestream__comments');
   const commentElement = document.querySelector('.livestream-comment');
 
-  // sum total amounts for fiat tips and lbc tips
-  if (superChats) {
-    let fiatAmount = 0;
-    let LBCAmount = 0;
-    for (const superChat of superChats) {
-      if (superChat.is_fiat) {
-        fiatAmount = fiatAmount + superChat.support_amount;
-      } else {
-        LBCAmount = LBCAmount + superChat.support_amount;
-      }
-    }
-
-    superChatsFiatAmount = fiatAmount;
-    superChatsTotalAmount = LBCAmount;
-  }
-
-  // array of superchats organized by fiat or not first, then support amount
-  if (superChats) {
-    const clonedSuperchats = JSON.parse(JSON.stringify(superChats));
-
-    // sort by fiat first then by support amount
-    superChatsReversed = clonedSuperchats.sort(function(a,b) {
-      if (a.is_fiat === b.is_fiat) {
-        return b.support_amount - a.support_amount;
-      } else {
-        return (a.is_fiat === b.is_fiat) ? 0 : a.is_fiat ? -1 : 1;
-      }
-    }).reverse();
-  }
-
-  // todo: implement comment_list --mine in SDK so redux can grab with selectCommentIsMine
-  function isMyComment(channelId: string) {
-    if (myChannels != null && channelId != null) {
-      for (let i = 0; i < myChannels.length; i++) {
-        if (myChannels[i].claim_id === channelId) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
   React.useEffect(() => {
-
     if (claimId) {
       doCommentList(uri, '', 1, 75);
       doSuperChatList(uri);
@@ -149,6 +105,51 @@ export default function LivestreamComments(props: Props) {
     }
   }, [commentsLength, discussionElement, handleScroll, performedInitialScroll, setPerformedInitialScroll]);
 
+  // sum total amounts for fiat tips and lbc tips
+  if (superChats) {
+    let fiatAmount = 0;
+    let LBCAmount = 0;
+    for (const superChat of superChats) {
+      if (superChat.is_fiat) {
+        fiatAmount = fiatAmount + superChat.support_amount;
+      } else {
+        LBCAmount = LBCAmount + superChat.support_amount;
+      }
+    }
+
+    superChatsFiatAmount = fiatAmount;
+    superChatsTotalAmount = LBCAmount;
+  }
+
+  let superChatsReversed;
+  // array of superchats organized by fiat or not first, then support amount
+  if (superChats) {
+    const clonedSuperchats = JSON.parse(JSON.stringify(superChats));
+
+    // sort by fiat first then by support amount
+    superChatsReversed = clonedSuperchats.sort(function(a, b) {
+      // if both are fiat, organize by support
+      if (a.is_fiat === b.is_fiat) {
+        return b.support_amount - a.support_amount;
+        // otherwise, if they are not both fiat, put the fiat transaction first
+      } else {
+        return (a.is_fiat === b.is_fiat) ? 0 : a.is_fiat ? -1 : 1;
+      }
+    }).reverse();
+  }
+
+  // todo: implement comment_list --mine in SDK so redux can grab with selectCommentIsMine
+  function isMyComment(channelId: string) {
+    if (myChannels != null && channelId != null) {
+      for (let i = 0; i < myChannels.length; i++) {
+        if (myChannels[i].claim_id === channelId) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   if (!claim) {
     return null;
   }
@@ -175,7 +176,7 @@ export default function LivestreamComments(props: Props) {
               label={__('Chat')}
               onClick={function() {
                 setViewMode(VIEW_MODE_CHAT);
-                const livestreamCommentsDiv = document.getElementsByClassName('livestream__comments')[0]
+                const livestreamCommentsDiv = document.getElementsByClassName('livestream__comments')[0];
                 const divHeight = livestreamCommentsDiv.scrollHeight;
                 livestreamCommentsDiv.scrollTop = divHeight;
               }}
@@ -189,12 +190,12 @@ export default function LivestreamComments(props: Props) {
               label={
                 <>
                   <CreditAmount amount={superChatsTotalAmount} size={8} /> /
-                  <CreditAmount amount={superChatsFiatAmount} size={8} isFiat={true} /> {' '}{__('Tipped')}
+                  <CreditAmount amount={superChatsFiatAmount} size={8} isFiat /> {' '}{__('Tipped')}
                 </>
               }
               onClick={function() {
                 setViewMode(VIEW_MODE_SUPER_CHAT);
-                const livestreamCommentsDiv = document.getElementsByClassName('livestream__comments')[0]
+                const livestreamCommentsDiv = document.getElementsByClassName('livestream__comments')[0];
                 const divHeight = livestreamCommentsDiv.scrollHeight;
                 livestreamCommentsDiv.scrollTop = divHeight * -1;
               }}

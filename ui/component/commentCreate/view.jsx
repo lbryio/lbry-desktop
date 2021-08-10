@@ -180,7 +180,7 @@ export function CommentCreate(props: Props) {
           doToast({
             message: __("You sent %tipAmount% LBRY Credits as a tip to %tipChannelName%, I'm sure they appreciate it!", {
               tipAmount: tipAmount, // force show decimal places
-              tipChannelName
+              tipChannelName,
             }),
           });
 
@@ -192,7 +192,6 @@ export function CommentCreate(props: Props) {
         }
       );
     } else {
-
       const sourceClaimId = claim.claim_id;
       const roundedAmount = Math.round(tipAmount * 100) / 100;
 
