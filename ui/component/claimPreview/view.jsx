@@ -202,10 +202,9 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   let ariaLabelData = isChannelUri ? title : formatClaimPreviewTitle(title, channelTitle, date, mediaDuration);
 
   let navigateUrl = formatLbryUrlForWeb((claim && claim.canonical_url) || uri || '/');
+  let navigateSearch = new URLSearchParams();
   if (listId) {
-    const collectionParams = new URLSearchParams();
-    collectionParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, listId);
-    navigateUrl = navigateUrl + `?` + collectionParams.toString();
+    navigateSearch.set(COLLECTIONS_CONSTS.COLLECTION_ID, listId);
   }
 
   const handleNavLinkClick = (e) => {
@@ -218,6 +217,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   const navLinkProps = {
     to: {
       pathname: navigateUrl,
+      search: navigateSearch.toString() ? '?' + navigateSearch.toString() : '',
       state: containerId ? { [CONTAINER_ID]: containerId } : undefined,
     },
     onClick: (e) => handleNavLinkClick(e),
@@ -273,6 +273,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     if (claim && !pending && !disableNavigation) {
       history.push({
         pathname: navigateUrl,
+        search: navigateSearch.toString() ? '?' + navigateSearch.toString() : '',
         state: containerId ? { [CONTAINER_ID]: containerId } : undefined,
       });
     }
@@ -363,9 +364,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                 <NavLink aria-hidden tabIndex={-1} {...navLinkProps}>
                   <FileThumbnail thumbnail={thumbnailUrl}>
                     <div className="claim-preview__hover-actions">
-                      {isPlayable && (
-                        <FileWatchLaterLink focusable={false} uri={uri} />
-                      )}
+                      {isPlayable && <FileWatchLaterLink focusable={false} uri={uri} />}
                     </div>
                     <div className="claim-preview__hover-actions">
                       {/* @if TARGET='app' */}
