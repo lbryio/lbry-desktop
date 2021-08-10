@@ -163,7 +163,7 @@ export default function LivestreamComments(props: Props) {
     <div className="card livestream__discussion">
       <div className="card__header--between livestream-discussion__header">
         <div className="livestream-discussion__title">{__('Live discussion')}</div>
-        {superChatsTotalAmount > 0 && (
+        {(superChatsTotalAmount || 0) > 0 && (
           <div className="recommended-content__toggles">
 
             {/* the superchats in chronological order button */}
@@ -187,8 +187,8 @@ export default function LivestreamComments(props: Props) {
               })}
               label={
                 <>
-                  <CreditAmount amount={superChatsTotalAmount} size={8} /> /
-                  <CreditAmount amount={superChatsFiatAmount} size={8} isFiat /> {' '}{__('Tipped')}
+                  <CreditAmount amount={superChatsTotalAmount || 0} size={8} /> /
+                  <CreditAmount amount={superChatsFiatAmount || 0} size={8} isFiat /> {' '}{__('Tipped')}
                 </>
               }
               onClick={function() {
@@ -208,7 +208,7 @@ export default function LivestreamComments(props: Props) {
           </div>
         )}
         <div ref={commentsRef} className="livestream__comments-wrapper">
-          {viewMode === VIEW_MODE_CHAT && superChatsTotalAmount > 0 && superChatsByTipAmount && (
+          {viewMode === VIEW_MODE_CHAT && superChatsByTipAmount && (superChatsTotalAmount || 0) > 0 && (
             <div className="livestream-superchats__wrapper">
               <div className="livestream-superchats__inner">
                 {superChatsByTipAmount.map((superChat: Comment) => (
