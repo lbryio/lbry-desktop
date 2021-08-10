@@ -22,8 +22,6 @@ type Props = {
   fetchingComments: boolean,
   doSuperChatList: (string) => void,
   superChats: Array<Comment>,
-  superChatsTotalAmount: number,
-  superChatsFiatAmount: number,
   myChannels: ?Array<ChannelClaim>,
 };
 
@@ -39,7 +37,7 @@ export default function LivestreamComments(props: Props) {
     embed,
     doCommentSocketConnect,
     doCommentSocketDisconnect,
-    comments, // superchats in chronological format
+    comments, // comments in chronological order (oldest first)
     doCommentList,
     fetchingComments,
     doSuperChatList,
@@ -47,7 +45,7 @@ export default function LivestreamComments(props: Props) {
     superChats, // superchats organized by tip amount
   } = props;
 
-  let { superChatsFiatAmount, superChatsTotalAmount } = props;
+  let superChatsFiatAmount, superChatsTotalAmount;
 
   const commentsRef = React.createRef();
   const [scrollBottom, setScrollBottom] = React.useState(true);
