@@ -18,7 +18,7 @@ export const SHARE_INTERNAL = 'shareInternal';
 const SHARE_THIRD_PARTY = 'shareThirdParty';
 
 const WATCHMAN_BACKEND_ENDPOINT = 'https://watchman.na-backend.odysee.com/reports/playback';
-const SEND_DATA_TO_WATCHMAN_INTERVAL = 30; // in seconds
+const SEND_DATA_TO_WATCHMAN_INTERVAL = 10; // in seconds
 
 // @if TARGET='app'
 if (isProduction) {
