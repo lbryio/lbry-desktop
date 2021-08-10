@@ -47,7 +47,7 @@ function truncateDescription(description, maxChars=200) {
   // Use slice array instead of substring to prevent breaking emojis
   let truncated = chars.slice(0, maxChars).join('');
   // Format truncated string
-  return (chars.length <= maxChars) ? truncated : truncated + "..." ;
+  return (chars.length > maxChars) ? truncated + '...' : truncated;
 }
 
 function normalizeClaimUrl(url) {
