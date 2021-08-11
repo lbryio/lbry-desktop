@@ -122,7 +122,7 @@ function WalletSendTip(props: Props) {
 
   // check if creator has an account saved
   React.useEffect(() => {
-    var tipInputElement = document.getElementById('tip-input');
+    const tipInputElement = document.getElementById('tip-input');
     if (tipInputElement) { tipInputElement.focus() }
   }, []);
 
@@ -171,7 +171,8 @@ function WalletSendTip(props: Props) {
   }
   const claimTypeText = setClaimTypeText();
 
-  let iconToUse, explainerText;
+  let iconToUse;
+  let explainerText = '';
   if (activeTab === TAB_BOOST) {
     iconToUse = ICONS.LBC;
     explainerText = __('This refundable boost will improve the discoverability of this %claimTypeText% while active.', {claimTypeText});
@@ -297,7 +298,7 @@ function WalletSendTip(props: Props) {
               });
             })
             .catch(function(error) {
-              var displayError = 'Sorry, there was an error in processing your payment!';
+              let displayError = 'Sorry, there was an error in processing your payment!';
 
               if (error.message !== 'payment intent failed to confirm') {
                 displayError = error.message;
@@ -315,9 +316,9 @@ function WalletSendTip(props: Props) {
     }
   }
 
-  var countDecimals = function(value) {
-    var text = value.toString();
-    var index = text.indexOf('.');
+  const countDecimals = function(value) {
+    const text = value.toString();
+    const index = text.indexOf('.');
     return (text.length - index - 1);
   };
 
@@ -328,7 +329,7 @@ function WalletSendTip(props: Props) {
 
     const howManyDecimals = countDecimals(tipAmountAsString);
 
-    // allow maximum two decimals
+    // fiat tip input
     if (activeTab === TAB_FIAT) {
       if (Number.isNaN(tipAmount)) {
         setCustomTipAmount('');
@@ -339,6 +340,7 @@ function WalletSendTip(props: Props) {
         tipAmount = Math.floor(tipAmount * 100) / 100;
       }
 
+      // remove decimals, and then get number of digits
       const howManyDigits = Math.trunc(tipAmount).toString().length;
 
       if (howManyDigits > 4 && tipAmount !== 1000) {
@@ -350,12 +352,15 @@ function WalletSendTip(props: Props) {
       } else {
         setCustomTipAmount(tipAmount);
       }
+      // LBC tip input
     } else {
-      if (howManyDecimals > 9) {
-        tipAmount = Number(tipAmount.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]);
-
-        setTipError('Please only use up to 8 decimals');
-      }
+      // TODO: this is a bit buggy, needs a touchup
+      // if (howManyDecimals > 9) {
+      //   // only allows up to 8 decimal places
+      //   tipAmount = Number(tipAmount.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]);
+      //
+      //   setTipError('Please only use up to 8 decimals');
+      // }
       setCustomTipAmount(tipAmount);
     }
   }
@@ -423,7 +428,7 @@ function WalletSendTip(props: Props) {
                   label={__('Tip')}
                   button="alt"
                   onClick={() => {
-                    var tipInputElement = document.getElementById('tip-input');
+                    const tipInputElement = document.getElementById('tip-input');
                     if (tipInputElement) { tipInputElement.focus() }
                     if (!isConfirming) {
                       setActiveTab(TAB_LBC);
@@ -439,7 +444,7 @@ function WalletSendTip(props: Props) {
                   label={__('Tip')}
                   button="alt"
                   onClick={() => {
-                    var tipInputElement = document.getElementById('tip-input');
+                    const tipInputElement = document.getElementById('tip-input');
                     if (tipInputElement) { tipInputElement.focus() }
                     if (!isConfirming) {
                       setActiveTab(TAB_FIAT);
@@ -455,7 +460,7 @@ function WalletSendTip(props: Props) {
                   label={__('Boost')}
                   button="alt"
                   onClick={() => {
-                    var tipInputElement = document.getElementById('tip-input');
+                    const tipInputElement = document.getElementById('tip-input');
                     if (tipInputElement) { tipInputElement.focus() }
                     if (!isConfirming) {
                       setActiveTab(TAB_BOOST);
