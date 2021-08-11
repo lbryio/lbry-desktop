@@ -168,7 +168,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
           getAndSetAccountLink(true);
         } else {
           // probably an error from stripe
-          const displayString = 'There was an error getting your account setup, please let support know';
+          const displayString = __('There was an error getting your account setup, please try again later');
           doToast({ message: displayString, isError: true });
           // not an error from Beamer, throw it
           throw new Error(error);
