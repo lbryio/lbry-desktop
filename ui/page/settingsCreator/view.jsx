@@ -344,15 +344,25 @@ export default function SettingsCreatorPage(props: Props) {
                   label={
                     <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>Minimum %lbc% tip amount for hyperchats</I18nMessage>
                   }
-                  helper={__(
-                    'Enabling a minimum amount to hyperchat will force all TIPPED comments to have this value in order to be shown. This still allows regular comments to be posted.'
-                  )}
+                  helper={
+                    <>
+                      {__(
+                        'Enabling a minimum amount to hyperchat will force all TIPPED comments to have this value in order to be shown. This still allows regular comments to be posted.'
+                      )}
+                      {minTipAmountComment !== 0 && (
+                        <p className="help--inline">
+                          <em>{__('(This settings is not applicable if all comments require a tip.)')}</em>
+                        </p>
+                      )}
+                    </>
+                  }
                   className="form-field--price-amount"
                   min={0}
                   step="any"
                   type="number"
                   placeholder="1"
                   value={minTipAmountSuperChat}
+                  disabled={minTipAmountComment !== 0}
                   onChange={(e) => setSettings({ min_tip_amount_super_chat: parseFloat(e.target.value) })}
                 />
               </>
