@@ -19,6 +19,9 @@ if (STRIPE_PUBLIC_KEY.indexOf('pk_live') > -1) {
   stripeEnvironment = 'live';
 }
 
+const APIS_DOWN_ERROR_RESPONSE = __('There was an error from the server, please try again later');
+const CARD_SETUP_ERROR_RESPONSE = __('There was an error getting your card setup, please try again later');
+
 // eslint-disable-next-line flowtype/no-types-missing-file-annotation
 type Props = {
   disabled: boolean,
@@ -56,8 +59,6 @@ class SettingsStripeCard extends React.Component<Props, State> {
 
   componentDidMount() {
     let that = this;
-
-    console.log(this.props);
 
     let doToast = this.props.doToast;
 
@@ -100,8 +101,6 @@ class SettingsStripeCard extends React.Component<Props, State> {
             let topOfDisplay = customer.email.split('@')[0];
             let bottomOfDisplay = '@' + customer.email.split('@')[1];
 
-            console.log(customerStatusResponse.Customer);
-
             let cardDetails = {
               brand: card.brand,
               expiryYear: card.exp_year,
@@ -133,8 +132,6 @@ class SettingsStripeCard extends React.Component<Props, State> {
               },
               'post'
             ).then((customerSetupResponse) => {
-              console.log(customerSetupResponse);
-
               clientSecret = customerSetupResponse.client_secret;
 
               // instantiate stripe elements
@@ -154,14 +151,10 @@ class SettingsStripeCard extends React.Component<Props, State> {
             that.setState({
               customerTransactions: customerTransactionsResponse,
             });
-
-            console.log(customerTransactionsResponse);
           });
           // if the status call fails, either an actual error or need to run setup first
         })
         .catch(function (error) {
-          console.log(error);
-
           // errorString passed from the API (with a 403 error)
           const errorString = 'user as customer is not setup yet';
 
@@ -181,18 +174,17 @@ class SettingsStripeCard extends React.Component<Props, State> {
               },
               'post'
             ).then((customerSetupResponse) => {
-              console.log(customerSetupResponse);
-
               clientSecret = customerSetupResponse.client_secret;
 
               // instantiate stripe elements
               setupStripe();
             });
+            // 500 error from the backend being down
           } else if (error === 'internal_apis_down') {
-            var displayString = 'There was an error from the server, please let support know';
-            doToast({ message: displayString, isError: true });
+            doToast({ message: APIS_DOWN_ERROR_RESPONSE, isError: true });
           } else {
-            console.log('Unseen before error');
+            // probably an error from stripe
+            doToast({ message: CARD_SETUP_ERROR_RESPONSE, isError: true });
           }
         });
     }, 250);
@@ -261,8 +253,6 @@ class SettingsStripeCard extends React.Component<Props, State> {
               })
               .then(function (result) {
                 if (result.error) {
-                  console.log(result);
-
                   changeLoadingState(false);
                   var displayError = document.getElementById('card-errors');
                   displayError.textContent = result.error.message;
@@ -345,8 +335,6 @@ class SettingsStripeCard extends React.Component<Props, State> {
                 paymentMethodId: customerStatusResponse.PaymentMethods[0].id,
               });
             });
-
-            console.log(result);
 
             changeLoadingState(false);
           });

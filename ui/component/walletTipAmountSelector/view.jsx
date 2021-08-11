@@ -263,7 +263,6 @@ function WalletTipAmountSelector(props: Props) {
               //   </div>
               // </>
             }
-            className="form-field--price-amount"
             error={tipError}
             min="0"
             step="any"

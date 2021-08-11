@@ -22,7 +22,6 @@ type Props = {
   fetchingComments: boolean,
   doSuperChatList: (string) => void,
   superChats: Array<Comment>,
-  superChatsTotalAmount: number,
   myChannels: ?Array<ChannelClaim>,
 };
 
@@ -38,37 +37,26 @@ export default function LivestreamComments(props: Props) {
     embed,
     doCommentSocketConnect,
     doCommentSocketDisconnect,
-    comments,
+    comments: commentsByChronologicalOrder,
     doCommentList,
     fetchingComments,
     doSuperChatList,
-    superChats,
-    superChatsTotalAmount,
     myChannels,
+    superChats: superChatsByTipAmount,
   } = props;
+
+  let superChatsFiatAmount, superChatsTotalAmount;
 
   const commentsRef = React.createRef();
   const [scrollBottom, setScrollBottom] = React.useState(true);
   const [viewMode, setViewMode] = React.useState(VIEW_MODE_CHAT);
   const [performedInitialScroll, setPerformedInitialScroll] = React.useState(false);
   const claimId = claim && claim.claim_id;
-  const commentsLength = comments && comments.length;
-  const commentsToDisplay = viewMode === VIEW_MODE_CHAT ? comments : superChats;
+  const commentsLength = commentsByChronologicalOrder && commentsByChronologicalOrder.length;
+  const commentsToDisplay = viewMode === VIEW_MODE_CHAT ? commentsByChronologicalOrder : superChatsByTipAmount;
 
   const discussionElement = document.querySelector('.livestream__comments');
   const commentElement = document.querySelector('.livestream-comment');
-
-  // todo: implement comment_list --mine in SDK so redux can grab with selectCommentIsMine
-  function isMyComment(channelId: string) {
-    if (myChannels != null && channelId != null) {
-      for (let i = 0; i < myChannels.length; i++) {
-        if (myChannels[i].claim_id === channelId) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
 
   React.useEffect(() => {
     if (claimId) {
@@ -115,6 +103,51 @@ export default function LivestreamComments(props: Props) {
     }
   }, [commentsLength, discussionElement, handleScroll, performedInitialScroll, setPerformedInitialScroll]);
 
+  // sum total amounts for fiat tips and lbc tips
+  if (superChatsByTipAmount) {
+    let fiatAmount = 0;
+    let LBCAmount = 0;
+    for (const superChat of superChatsByTipAmount) {
+      if (superChat.is_fiat) {
+        fiatAmount = fiatAmount + superChat.support_amount;
+      } else {
+        LBCAmount = LBCAmount + superChat.support_amount;
+      }
+    }
+
+    superChatsFiatAmount = fiatAmount;
+    superChatsTotalAmount = LBCAmount;
+  }
+
+  let superChatsReversed;
+  // array of superchats organized by fiat or not first, then support amount
+  if (superChatsByTipAmount) {
+    const clonedSuperchats = JSON.parse(JSON.stringify(superChatsByTipAmount));
+
+    // sort by fiat first then by support amount
+    superChatsReversed = clonedSuperchats.sort(function(a, b) {
+      // if both are fiat, organize by support
+      if (a.is_fiat === b.is_fiat) {
+        return b.support_amount - a.support_amount;
+        // otherwise, if they are not both fiat, put the fiat transaction first
+      } else {
+        return (a.is_fiat === b.is_fiat) ? 0 : a.is_fiat ? -1 : 1;
+      }
+    }).reverse();
+  }
+
+  // todo: implement comment_list --mine in SDK so redux can grab with selectCommentIsMine
+  function isMyComment(channelId: string) {
+    if (myChannels != null && channelId != null) {
+      for (let i = 0; i < myChannels.length; i++) {
+        if (myChannels[i].claim_id === channelId) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   if (!claim) {
     return null;
   }
@@ -130,41 +163,55 @@ export default function LivestreamComments(props: Props) {
     <div className="card livestream__discussion">
       <div className="card__header--between livestream-discussion__header">
         <div className="livestream-discussion__title">{__('Live discussion')}</div>
-        {superChatsTotalAmount > 0 && (
+        {(superChatsTotalAmount || 0) > 0 && (
           <div className="recommended-content__toggles">
+
+            {/* the superchats in chronological order button */}
             <Button
               className={classnames('button-toggle', {
                 'button-toggle--active': viewMode === VIEW_MODE_CHAT,
               })}
               label={__('Chat')}
-              onClick={() => setViewMode(VIEW_MODE_CHAT)}
+              onClick={function() {
+                setViewMode(VIEW_MODE_CHAT);
+                const livestreamCommentsDiv = document.getElementsByClassName('livestream__comments')[0];
+                const divHeight = livestreamCommentsDiv.scrollHeight;
+                livestreamCommentsDiv.scrollTop = divHeight;
+              }}
             />
 
+            {/* the button to show superchats listed by most to least support amount */}
             <Button
               className={classnames('button-toggle', {
                 'button-toggle--active': viewMode === VIEW_MODE_SUPER_CHAT,
               })}
               label={
                 <>
-                  <CreditAmount amount={superChatsTotalAmount} size={8} /> {__('Tipped')}
+                  <CreditAmount amount={superChatsTotalAmount || 0} size={8} /> /
+                  <CreditAmount amount={superChatsFiatAmount || 0} size={8} isFiat /> {' '}{__('Tipped')}
                 </>
               }
-              onClick={() => setViewMode(VIEW_MODE_SUPER_CHAT)}
+              onClick={function() {
+                setViewMode(VIEW_MODE_SUPER_CHAT);
+                const livestreamCommentsDiv = document.getElementsByClassName('livestream__comments')[0];
+                const divHeight = livestreamCommentsDiv.scrollHeight;
+                livestreamCommentsDiv.scrollTop = divHeight * -1;
+              }}
             />
           </div>
         )}
       </div>
       <>
-        {fetchingComments && !comments && (
+        {fetchingComments && !commentsByChronologicalOrder && (
           <div className="main--empty">
             <Spinner />
           </div>
         )}
         <div ref={commentsRef} className="livestream__comments-wrapper">
-          {viewMode === VIEW_MODE_CHAT && superChatsTotalAmount > 0 && superChats && (
+          {viewMode === VIEW_MODE_CHAT && superChatsByTipAmount && (superChatsTotalAmount || 0) > 0 && (
             <div className="livestream-superchats__wrapper">
               <div className="livestream-superchats__inner">
-                {superChats.map((superChat: Comment) => (
+                {superChatsByTipAmount.map((superChat: Comment) => (
                   <Tooltip key={superChat.comment_id} label={superChat.comment}>
                     <div className="livestream-superchat">
                       <div className="livestream-superchat__thumbnail">
@@ -187,9 +234,23 @@ export default function LivestreamComments(props: Props) {
             </div>
           )}
 
-          {!fetchingComments && comments.length > 0 ? (
+          {/* top to bottom comment display */}
+          {!fetchingComments && commentsByChronologicalOrder.length > 0 ? (
             <div className="livestream__comments">
-              {commentsToDisplay.map((comment) => (
+              {viewMode === VIEW_MODE_CHAT && commentsToDisplay.map((comment) => (
+                <LivestreamComment
+                  key={comment.comment_id}
+                  uri={uri}
+                  authorUri={comment.channel_url}
+                  commentId={comment.comment_id}
+                  message={comment.comment}
+                  supportAmount={comment.support_amount}
+                  isFiat={comment.is_fiat}
+                  commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}
+                />
+              ))}
+
+              {viewMode === VIEW_MODE_SUPER_CHAT && superChatsReversed && superChatsReversed.map((comment) => (
                 <LivestreamComment
                   key={comment.comment_id}
                   uri={uri}

@@ -131,6 +131,7 @@ export function CommentCreate(props: Props) {
       return;
     }
 
+    // if comment post didn't work, but tip was already made, try again to create comment
     if (commentFailure && tipAmount === successTip.tipAmount) {
       handleCreateComment(successTip.txid);
       return;
@@ -147,6 +148,19 @@ export function CommentCreate(props: Props) {
     const activeChannelName = activeChannelClaim && activeChannelClaim.name;
     const activeChannelId = activeChannelClaim && activeChannelClaim.claim_id;
 
+    // setup variables for tip API
+    let channelClaimId, tipChannelName;
+    // if there is a signing channel it's on a file
+    if (claim.signing_channel) {
+      channelClaimId = claim.signing_channel.claim_id;
+      tipChannelName = claim.signing_channel.name;
+
+      // otherwise it's on the channel page
+    } else {
+      channelClaimId = claim.claim_id;
+      tipChannelName = claim.name;
+    }
+
     setIsSubmitting(true);
 
     if (activeTab === TAB_LBC) {
@@ -160,6 +174,14 @@ export function CommentCreate(props: Props) {
           setTimeout(() => {
             handleCreateComment(txid);
           }, 1500);
+
+          doToast({
+            message: __("You sent %tipAmount% LBRY Credits as a tip to %tipChannelName%, I'm sure they appreciate it!", {
+              tipAmount: tipAmount, // force show decimal places
+              tipChannelName,
+            }),
+          });
+
           setSuccessTip({ txid, tipAmount });
         },
         () => {
@@ -168,27 +190,14 @@ export function CommentCreate(props: Props) {
         }
       );
     } else {
-      // setup variables for tip API
-      let channelClaimId, tipChannelName;
-      // if there is a signing channel it's on a file
-      if (claim.signing_channel) {
-        channelClaimId = claim.signing_channel.claim_id;
-        tipChannelName = claim.signing_channel.name;
-
-        // otherwise it's on the channel page
-      } else {
-        channelClaimId = claim.claim_id;
-        tipChannelName = claim.name;
-      }
-
       const sourceClaimId = claim.claim_id;
       const roundedAmount = Math.round(tipAmount * 100) / 100;
 
       Lbryio.call(
         'customer',
         'tip',
-        {
-          amount: 100 * roundedAmount, // convert from dollars to cents
+        { // round to deal with floating point precision
+          amount: Math.round(100 * roundedAmount), // convert from dollars to cents
           creator_channel_name: tipChannelName, // creator_channel_name
           creator_channel_claim_id: channelClaimId,
           tipper_channel_name: activeChannelName,
