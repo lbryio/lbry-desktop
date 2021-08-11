@@ -11,6 +11,7 @@ import LbcSymbol from 'component/common/lbc-symbol';
 import I18nMessage from 'component/i18nMessage';
 import { isNameValid, parseURI } from 'lbry-redux';
 import ClaimPreview from 'component/claimPreview';
+import debounce from 'util/debounce';
 import { getUriForSearchTerm } from 'util/search';
 
 const DEBOUNCE_REFRESH_MS = 1000;
@@ -18,6 +19,9 @@ const DEBOUNCE_REFRESH_MS = 1000;
 const LBC_MAX = 21000000;
 const LBC_MIN = 0;
 const LBC_STEP = 1.0;
+
+// ****************************************************************************
+// ****************************************************************************
 
 type Props = {
   activeChannelClaim: ChannelClaim,
@@ -56,10 +60,17 @@ export default function SettingsCreatorPage(props: Props) {
   const [moderatorSearchTerm, setModeratorSearchTerm] = React.useState('');
   const [moderatorSearchError, setModeratorSearchError] = React.useState('');
   const [moderatorSearchClaimUri, setModeratorSearchClaimUri] = React.useState('');
-  const [minTipAmountComment, setMinTipAmountComment] = React.useState(0);
-  const [minTipAmountSuperChat, setMinTipAmountSuperChat] = React.useState(0);
-  const [slowModeMinGap, setSlowModeMinGap] = React.useState(0);
+  const [minTip, setMinTip] = React.useState(0);
+  const [minSuper, setMinSuper] = React.useState(0);
+  const [slowModeMin, setSlowModeMin] = React.useState(0);
   const [lastUpdated, setLastUpdated] = React.useState(1);
+
+  const pushSlowModeMinDebounced = React.useMemo(() => debounce(pushSlowModeMin, 1000), []);
+  const pushMinTipDebounced = React.useMemo(() => debounce(pushMinTip, 1000), []);
+  const pushMinSuperDebounced = React.useMemo(() => debounce(pushMinSuper, 1000), []);
+
+  // **************************************************************************
+  // **************************************************************************
 
   /**
    * Updates corresponding GUI states with the given PerChannelSettings values.
@@ -82,22 +93,22 @@ export default function SettingsCreatorPage(props: Props) {
 
     if (fullSync) {
       setCommentsEnabled(settings.comments_enabled || false);
-      setMinTipAmountComment(settings.min_tip_amount_comment || 0);
-      setMinTipAmountSuperChat(settings.min_tip_amount_super_chat || 0);
-      setSlowModeMinGap(settings.slow_mode_min_gap || 0);
+      setMinTip(settings.min_tip_amount_comment || 0);
+      setMinSuper(settings.min_tip_amount_super_chat || 0);
+      setSlowModeMin(settings.slow_mode_min_gap || 0);
       doSetMutedWordTags(settings.words || []);
     } else {
       if (settings.comments_enabled !== undefined) {
         setCommentsEnabled(settings.comments_enabled);
       }
       if (settings.min_tip_amount_comment !== undefined) {
-        setMinTipAmountComment(settings.min_tip_amount_comment);
+        setMinTip(settings.min_tip_amount_comment);
       }
       if (settings.min_tip_amount_super_chat !== undefined) {
-        setMinTipAmountSuperChat(settings.min_tip_amount_super_chat);
+        setMinSuper(settings.min_tip_amount_super_chat);
       }
       if (settings.slow_mode_min_gap !== undefined) {
-        setSlowModeMinGap(settings.slow_mode_min_gap);
+        setSlowModeMin(settings.slow_mode_min_gap);
       }
       if (settings.words) {
         doSetMutedWordTags(settings.words);
@@ -109,6 +120,18 @@ export default function SettingsCreatorPage(props: Props) {
     settingsToStates(newSettings, false);
     updateCreatorSettings(activeChannelClaim, newSettings);
     setLastUpdated(Date.now());
+  }
+
+  function pushSlowModeMin(value: number, activeChannelClaim: ChannelClaim) {
+    updateCreatorSettings(activeChannelClaim, { slow_mode_min_gap: value });
+  }
+
+  function pushMinTip(value: number, activeChannelClaim: ChannelClaim) {
+    updateCreatorSettings(activeChannelClaim, { min_tip_amount_comment: value });
+  }
+
+  function pushMinSuper(value: number, activeChannelClaim: ChannelClaim) {
+    updateCreatorSettings(activeChannelClaim, { min_tip_amount_super_chat: value });
   }
 
   function addMutedWords(newTags: Array<Tag>) {
@@ -173,6 +196,9 @@ export default function SettingsCreatorPage(props: Props) {
       addModerator([{ name: claim.name + '#' + claim.claim_id }]);
     }
   }
+
+  // **************************************************************************
+  // **************************************************************************
 
   // 'moderatorSearchTerm' to 'moderatorSearchClaimUri'
   React.useEffect(() => {
@@ -246,6 +272,9 @@ export default function SettingsCreatorPage(props: Props) {
     }
   }, [lastUpdated, activeChannelClaim, fetchCreatorSettings]);
 
+  // **************************************************************************
+  // **************************************************************************
+
   const isBusy =
     !activeChannelClaim || !settingsByChannelId || settingsByChannelId[activeChannelClaim.claim_id] === undefined;
   const isDisabled =
@@ -293,8 +322,13 @@ export default function SettingsCreatorPage(props: Props) {
                   step={1}
                   type="number"
                   placeholder="1"
-                  value={slowModeMinGap}
-                  onChange={(e) => setSettings({ slow_mode_min_gap: parseInt(e.target.value) })}
+                  value={slowModeMin}
+                  onChange={(e) => {
+                    const value = parseInt(e.target.value);
+                    setSlowModeMin(value);
+                    pushSlowModeMinDebounced(value, activeChannelClaim);
+                  }}
+                  onBlur={() => setLastUpdated(Date.now())}
                 />
               </>
             }
@@ -335,9 +369,18 @@ export default function SettingsCreatorPage(props: Props) {
                   min={LBC_MIN}
                   step={LBC_STEP}
                   type="number"
-                  placeholder="3.14"
-                  value={minTipAmountComment}
-                  onChange={(e) => setSettings({ min_tip_amount_comment: parseFloat(e.target.value) })}
+                  placeholder="1"
+                  value={minTip}
+                  onChange={(e) => {
+                    const newMinTip = parseFloat(e.target.value);
+                    setMinTip(newMinTip);
+                    pushMinTipDebounced(newMinTip, activeChannelClaim);
+                    if (newMinTip !== 0 && minSuper !== 0) {
+                      setMinSuper(0);
+                      pushMinSuperDebounced(0, activeChannelClaim);
+                    }
+                  }}
+                  onBlur={() => setLastUpdated(Date.now())}
                 />
                 <FormField
                   name="min_tip_amount_super_chat"
@@ -349,7 +392,7 @@ export default function SettingsCreatorPage(props: Props) {
                       {__(
                         'Enabling a minimum amount to hyperchat will force all TIPPED comments to have this value in order to be shown. This still allows regular comments to be posted.'
                       )}
-                      {minTipAmountComment !== 0 && (
+                      {minTip !== 0 && (
                         <p className="help--inline">
                           <em>{__('(This settings is not applicable if all comments require a tip.)')}</em>
                         </p>
@@ -361,9 +404,14 @@ export default function SettingsCreatorPage(props: Props) {
                   step="any"
                   type="number"
                   placeholder="1"
-                  value={minTipAmountSuperChat}
-                  disabled={minTipAmountComment !== 0}
-                  onChange={(e) => setSettings({ min_tip_amount_super_chat: parseFloat(e.target.value) })}
+                  value={minSuper}
+                  disabled={minTip !== 0}
+                  onChange={(e) => {
+                    const newMinSuper = parseFloat(e.target.value);
+                    setMinSuper(newMinSuper);
+                    pushMinSuperDebounced(newMinSuper, activeChannelClaim);
+                  }}
+                  onBlur={() => setLastUpdated(Date.now())}
                 />
               </>
             }
