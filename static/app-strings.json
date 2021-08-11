@@ -2082,5 +2082,7 @@
   "Expand Comments": "Expand Comments",
   "Expand": "Expand",
   "Load More": "Load More",
+  "%channelSubCount% subscribers": "%channelSubCount% subscribers",
+  "%channelSubCount% subscriber": "%channelSubCount% subscriber",
   "--end--": "--end--"
 }
