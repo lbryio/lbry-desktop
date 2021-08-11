@@ -169,5 +169,6 @@ export const CONTENT = 'Content';
 export const STAR = 'star';
 export const MUSIC = 'MusicCategory';
 export const BADGE_MOD = 'BadgeMod';
+export const REPLAY = 'Replay';
 export const REPEAT = 'Repeat';
 export const SHUFFLE = 'Shuffle';

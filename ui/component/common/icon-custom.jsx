@@ -2401,6 +2401,12 @@ export const icons = {
       />
     </svg>
   ),
+  [ICONS.REPLAY]: buildIcon(
+    <g>
+      <polyline points="1 4 1 10 7 10" />
+      <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
+    </g>
+  ),
   [ICONS.REPEAT]: buildIcon(
     <g>
       <polyline points="17 1 21 5 17 9" />
