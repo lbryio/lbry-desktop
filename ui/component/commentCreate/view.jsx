@@ -332,7 +332,12 @@ export function CommentCreate(props: Props) {
             }
             onClick={handleSupportComment}
           />
-          <Button button="link" label={__('Cancel')} onClick={() => setIsReviewingSupportComment(false)} />
+          <Button
+            disabled={isSubmitting}
+            button="link"
+            label={__('Cancel')}
+            onClick={() => setIsReviewingSupportComment(false)}
+          />
         </div>
       </div>
     );
