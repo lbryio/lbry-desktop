@@ -28,6 +28,9 @@ function UserChannelFollowIntro(props: Props) {
     channelIds = PRIMARY_CONTENT.channelIds;
   }
   const followingCount = (subscribedChannels && subscribedChannels.length) || 0;
+  const followingCountIgnoringAutoFollows = (subscribedChannels || []).filter(
+    (channel) => !channelsToSubscribe.includes(channel.uri)
+  ).length;
 
   // subscribe to lbry
   useEffect(() => {
@@ -74,9 +77,13 @@ function UserChannelFollowIntro(props: Props) {
               <Nag
                 type="helpful"
                 message={
-                  followingCount === 1
-                    ? __('Nice! You are currently following %followingCount% creator', { followingCount })
-                    : __('Nice! You are currently following %followingCount% creators', { followingCount })
+                  followingCountIgnoringAutoFollows === 1
+                    ? __('Nice! You are currently following %followingCount% creator', {
+                        followingCount: followingCountIgnoringAutoFollows,
+                      })
+                    : __('Nice! You are currently following %followingCount% creators', {
+                        followingCount: followingCountIgnoringAutoFollows,
+                      })
                 }
                 actionText={__('Continue')}
                 onClick={onContinue}
