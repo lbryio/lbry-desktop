@@ -532,6 +532,15 @@ function PublishForm(props: Props) {
     }
   }, [autoSwitchMode, editingURI, fileMimeType, myClaimForUri, mode, setMode, setAutoSwitchMode]);
 
+  // When accessing to publishing, make sure to reset file input attributes
+  // since we can't restore from previous user selection (like we do
+  // with other properties such as name, title, etc.) for security reasons.
+  useEffect(() => {
+    if (mode === PUBLISH_MODES.FILE) {
+      updatePublishForm({ filePath: '', fileDur: 0, fileSize: 0 });
+    }
+  }, [mode, updatePublishForm]);
+
   if (publishing) {
     return (
       <div className="main--empty">
