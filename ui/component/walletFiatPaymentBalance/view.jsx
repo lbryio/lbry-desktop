@@ -50,7 +50,7 @@ const WalletBalance = (props: Props) => {
 
   return (
     <>{<Card
-      subtitle={ 1 == 2 && <h2>Hello</h2>
+      subtitle={1 === 2 && <h2>Hello</h2>
         // <Plastic
         //   type={userCardDetails.brand}
         //   name={userCardDetails.topOfDisplay + ' ' + userCardDetails.bottomOfDisplay}

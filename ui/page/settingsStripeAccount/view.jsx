@@ -48,6 +48,7 @@ type State = {
   unpaidBalance: number,
   pageTitle: string,
   accountTransactions: any, // define this type
+  stillRequiringVerification: boolean
 };
 
 class StripeAccountConnection extends React.Component<Props, State> {
@@ -64,6 +65,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
       stripeConnectionUrl: '',
       pageTitle: 'Add Payout Method',
       accountTransactions: [],
+      stillRequiringVerification: true,
       // alreadyUpdated: false,
     };
   }
@@ -141,9 +143,29 @@ class StripeAccountConnection extends React.Component<Props, State> {
         if (accountStatusResponse.charges_enabled) {
           // account has already been confirmed
 
-          that.setState({
+          console.log(accountStatusResponse);
+
+          const eventuallyDueInformation = accountStatusResponse.account_info.requirements.eventually_due;
+
+          const currentlyDueInformation = accountStatusResponse.account_info.requirements.currently_due;
+
+          let objectToUpdateState = {
             accountConfirmed: true,
-          });
+          };
+
+          if ((eventuallyDueInformation && eventuallyDueInformation.length) || (currentlyDueInformation && currentlyDueInformation)) {
+            objectToUpdateState.stillRequiringVerification = true;
+            getAndSetAccountLink(false);
+          }
+
+          console.log(objectToUpdateState);
+
+          that.setState(objectToUpdateState);
+
+          console.log(eventuallyDueInformation);
+
+          console.log(currentlyDueInformation);
+
           // user has not confirmed an account but have received payments
         } else if (accountStatusResponse.total_received_unpaid > 0) {
           that.setState({
@@ -185,6 +207,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
       unpaidBalance,
       accountNotConfirmedButReceivedTips,
       pageTitle,
+      stillRequiringVerification,
       // accountTransactions,
     } = this.state;
 
@@ -229,6 +252,8 @@ class StripeAccountConnection extends React.Component<Props, State> {
                     <div>
                       <div>
                         <h3>{__('Congratulations! Your account has been connected with Odysee.')}</h3>
+                        {stillRequiringVerification && <><h3 style={{marginTop: '10px'}}>Although your account is connected it still requires verification to begin receiving tips.</h3>
+                        <h3 style={{marginTop: '10px'}}>Please use the button below to complete your verification process and enable tipping for your account.</h3></> }
                       </div>
                     </div>
                   </div>
@@ -265,15 +290,15 @@ class StripeAccountConnection extends React.Component<Props, State> {
               </div>
             }
             actions={
-              <>{ 1 == 2 && <Button
+              <>{ stillRequiringVerification && <Button
                 button="primary"
-                label={__('View Transactions')}
+                label={__('Complete Verification')}
                 icon={ICONS.SETTINGS}
-                navigate={`/$/${PAGES.WALLET}?tab=account-history`}
+                navigate={stripeConnectionUrl}
                 style={{marginRight: '10px'}}
               /> }
               <Button
-                button="primary"
+                button="secondary"
                 label={__('View Transactions')}
                 icon={ICONS.SETTINGS}
                 navigate={`/$/${PAGES.WALLET}?tab=account-history`}
