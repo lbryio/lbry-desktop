@@ -21,8 +21,7 @@ type Props = {
 const WalletPage = (props: Props) => {
   console.log(props);
 
-  var stripeEnvironment = 'test';
-  var environment = 'test';
+  const stripeEnvironment = 'test';
 
   const tab = new URLSearchParams(props.location.search).get('tab');
 
@@ -30,7 +29,6 @@ const WalletPage = (props: Props) => {
   const [accountTransactionResponse, setAccountTransactionResponse] = React.useState();
   const [customerTransactions, setCustomerTransactions] = React.useState();
   const [totalTippedAmount, setTotalTippedAmount] = React.useState(0);
-
 
   function getPaymentHistory() {
     return Lbryio.call(
@@ -40,20 +38,20 @@ const WalletPage = (props: Props) => {
         environment: stripeEnvironment,
       },
       'post'
-    )};
+    ); };
 
-  function getCustomerStatus(){
-    return Lbryio.call(
-      'customer',
-      'status',
-      {
-        environment: stripeEnvironment,
-      },
-      'post'
-    )
-  }
+  // function getCustomerStatus() {
+  //   return Lbryio.call(
+  //     'customer',
+  //     'status',
+  //     {
+  //       environment: stripeEnvironment,
+  //     },
+  //     'post'
+  //   );
+  // }
 
-  function getAccountStatus(){
+  function getAccountStatus() {
     return Lbryio.call(
       'account',
       'status',
@@ -64,7 +62,7 @@ const WalletPage = (props: Props) => {
     );
   }
 
-  function getAccountTransactionsa(){
+  function getAccountTransactionsa() {
     return Lbryio.call(
       'account',
       'list',
@@ -75,10 +73,9 @@ const WalletPage = (props: Props) => {
     );
   }
 
-
   // calculate account transactions section
   React.useEffect(() => {
-    (async function(){
+    (async function() {
       try {
         const response = await getAccountStatus();
 
@@ -87,9 +84,8 @@ const WalletPage = (props: Props) => {
         // TODO: some weird naming clash hence getAccountTransactionsa
         const getAccountTransactions = await getAccountTransactionsa();
 
-        setAccountTransactionResponse(getAccountTransactions)
-
-      } catch (err){
+        setAccountTransactionResponse(getAccountTransactions);
+      } catch (err) {
         console.log(err);
       }
     })();
@@ -97,28 +93,27 @@ const WalletPage = (props: Props) => {
 
   // populate customer payment data
   React.useEffect(() => {
-    (async function(){
+    (async function() {
       try {
         // get card payments customer has made
         const customerTransactionResponse = await getPaymentHistory();
 
         let totalTippedAmount = 0;
 
-        for(const transaction of customerTransactionResponse){
-          totalTippedAmount = totalTippedAmount + transaction.tipped_amount
+        for (const transaction of customerTransactionResponse) {
+          totalTippedAmount = totalTippedAmount + transaction.tipped_amount;
         }
 
         setTotalTippedAmount(totalTippedAmount / 100);
 
-        setCustomerTransactions(customerTransactionResponse)
-
-      } catch (err){
+        setCustomerTransactions(customerTransactionResponse);
+      } catch (err) {
         console.log(err);
       }
     })();
   }, []);
 
-  function focusLBCTab(){
+  function focusLBCTab() {
     document.getElementsByClassName('lbc-transactions')[0].style.display = 'inline';
     document.getElementsByClassName('fiat-transactions')[0].style.display = 'none';
     document.getElementsByClassName('payment-history-tab')[0].style.display = 'none';
@@ -126,10 +121,9 @@ const WalletPage = (props: Props) => {
     document.getElementsByClassName('lbc-tab-switcher')[0].style.textDecoration = 'underline';
     document.getElementsByClassName('fiat-tab-switcher')[0].style.textDecoration = 'none';
     document.getElementsByClassName('fiat-payment-history-switcher')[0].style.textDecoration = 'none';
-
   }
 
-  function focusAccountHistoryTab(){
+  function focusAccountHistoryTab() {
     document.getElementsByClassName('lbc-transactions')[0].style.display = 'none';
     document.getElementsByClassName('payment-history-tab')[0].style.display = 'none';
     document.getElementsByClassName('fiat-transactions')[0].style.display = 'inline';
@@ -137,10 +131,9 @@ const WalletPage = (props: Props) => {
     document.getElementsByClassName('lbc-tab-switcher')[0].style.textDecoration = 'none';
     document.getElementsByClassName('fiat-tab-switcher')[0].style.textDecoration = 'underline';
     document.getElementsByClassName('fiat-payment-history-switcher')[0].style.textDecoration = 'none';
-
   }
 
-  function focusPaymentHistoryTab(){
+  function focusPaymentHistoryTab() {
     document.getElementsByClassName('lbc-transactions')[0].style.display = 'none';
     document.getElementsByClassName('fiat-transactions')[0].style.display = 'none';
     document.getElementsByClassName('payment-history-tab')[0].style.display = 'inline';
@@ -148,7 +141,6 @@ const WalletPage = (props: Props) => {
     document.getElementsByClassName('lbc-tab-switcher')[0].style.textDecoration = 'none';
     document.getElementsByClassName('fiat-tab-switcher')[0].style.textDecoration = 'none';
     document.getElementsByClassName('fiat-payment-history-switcher')[0].style.textDecoration = 'underline';
-
   }
 
   // select the first tab
@@ -156,11 +148,11 @@ const WalletPage = (props: Props) => {
     if (tab === 'account-history') {
     // if (1 === 2) {
       focusAccountHistoryTab();
-    } else if (tab === 'payment-history'){
+    } else if (tab === 'payment-history') {
     // } else if (1 === 2){
       focusPaymentHistoryTab();
     } else {
-      focusLBCTab()
+      focusLBCTab();
     }
   }, []);
 
@@ -220,15 +212,15 @@ const WalletPage = (props: Props) => {
       {/* account received transactions section */}
       <div className="fiat-transactions" style={{display: 'none'}}>
           <WalletFiatBalance accountDetails={accountStatusResponse} />
-          <div style={{paddingTop: '25px'}}></div>
-          <WalletFiatAccountHistory transactions={accountTransactionResponse}/>
+          <div style={{paddingTop: '25px'}} />
+          <WalletFiatAccountHistory transactions={accountTransactionResponse} />
       </div>
 
       {/* fiat payment history for tips made by user */}
       <div className="payment-history-tab" style={{display: 'none'}}>
         <WalletFiatPaymentBalance transactions={customerTransactions} totalTippedAmount={totalTippedAmount} accountDetails={accountStatusResponse} />
-        <div style={{paddingTop: '25px'}}></div>
-        <WalletFiatPaymentHistory transactions={customerTransactions}/>
+        <div style={{paddingTop: '25px'}} />
+        <WalletFiatPaymentHistory transactions={customerTransactions} />
       </div>
 
     </Page>

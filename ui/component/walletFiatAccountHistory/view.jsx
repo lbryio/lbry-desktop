@@ -1,16 +1,7 @@
 // @flow
-import * as ICONS from 'constants/icons';
-import * as MODALS from 'constants/modal_types';
-import * as PAGES from 'constants/pages';
 import React from 'react';
-import CreditAmount from 'component/common/credit-amount';
 import Button from 'component/button';
-import HelpLink from 'component/common/help-link';
 import Card from 'component/common/card';
-import Icon from 'component/common/icon';
-import LbcSymbol from 'component/common/lbc-symbol';
-import I18nMessage from 'component/i18nMessage';
-import { formatNumberWithCommas } from 'util/number';
 import { Lbryio } from 'lbryinc';
 import moment from 'moment';
 
@@ -20,43 +11,37 @@ type Props = {
 };
 
 const WalletBalance = (props: Props) => {
-  const {
-
-  } = props;
-
   // receive transactions from parent component
   let accountTransactions = props.transactions;
 
   // reverse so most recent payments come first
-  if(accountTransactions){
+  if (accountTransactions) {
     accountTransactions = accountTransactions.reverse();
   }
 
-  if(accountTransactions && accountTransactions.length > 10 ){
+  if (accountTransactions && accountTransactions.length > 10) {
     accountTransactions.length = 10;
   }
 
-  const [detailsExpanded, setDetailsExpanded] = React.useState(false);
+  // const [detailsExpanded, setDetailsExpanded] = React.useState(false);
   const [accountStatusResponse, setAccountStatusResponse] = React.useState();
   const [subscriptions, setSubscriptions] = React.useState([]);
 
   var environment = 'test';
 
-  function getAccountStatus(){
+  function getAccountStatus() {
     return Lbryio.call(
       'account',
       'status',
       {
-        environment
+        environment,
       },
       'post'
     );
   }
 
   React.useEffect(() => {
-
-
-    (async function(){
+    (async function() {
       const response = await getAccountStatus();
 
       setAccountStatusResponse(response);
@@ -68,7 +53,7 @@ const WalletBalance = (props: Props) => {
   return (
     <><Card
       title={'Tip History'}
-      body={1 == 1 && (
+      body={(
           <>
             <div className="table__wrapper">
               <table className="table table--transactions">
@@ -116,7 +101,7 @@ const WalletBalance = (props: Props) => {
                 ))}
                 </tbody>
               </table>
-              {!accountTransactions && <p style={{textAlign:"center", marginTop: '20px', fontSize: '13px', color: 'rgb(171, 171, 171)'}}>No Transactions</p>}
+              {!accountTransactions && <p style={{textAlign: 'center', marginTop: '20px', fontSize: '13px', color: 'rgb(171, 171, 171)'}}>No Transactions</p>}
             </div>
           </>
       )}
@@ -170,7 +155,7 @@ const WalletBalance = (props: Props) => {
             ))}
             </tbody>
           </table>
-          {(!subscriptions || subscriptions.length === 0) && <p style={{textAlign:"center", marginTop: '22px', fontSize: '13px', color: 'rgb(171, 171, 171)'}}>No Subscriptions</p>}
+          {(!subscriptions || subscriptions.length === 0) && <p style={{textAlign: 'center', marginTop: '22px', fontSize: '13px', color: 'rgb(171, 171, 171)'}}>No Subscriptions</p>}
         </div>
       </>
     }

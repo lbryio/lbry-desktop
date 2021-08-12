@@ -6,13 +6,11 @@ import Page from 'component/page';
 import Card from 'component/common/card';
 import { Lbryio } from 'lbryinc';
 import { STRIPE_PUBLIC_KEY } from 'config';
-import moment from 'moment';
 import Plastic from 'react-plastic';
 import Button from 'component/button';
 import * as ICONS from 'constants/icons';
 import * as MODALS from 'constants/modal_types';
 import * as PAGES from 'constants/pages';
-
 
 let stripeEnvironment = 'test';
 // if the key contains pk_live it's a live key
@@ -370,7 +368,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
 
     const { scriptFailedToLoad, openModal } = this.props;
 
-    const { currentFlowStage, customerTransactions, pageTitle, userCardDetails, paymentMethodId } = this.state;
+    const { currentFlowStage, pageTitle, userCardDetails, paymentMethodId } = this.state;
 
     return (
       <Page backout={{ title: pageTitle, backLabel: __('Done') }} noFooter noSideNavigation>

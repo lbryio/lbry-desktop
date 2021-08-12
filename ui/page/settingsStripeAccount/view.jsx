@@ -8,7 +8,6 @@ import Page from 'component/page';
 
 import { Lbryio } from 'lbryinc';
 import { URL, WEBPACK_WEB_PORT, STRIPE_PUBLIC_KEY } from 'config';
-import moment from 'moment';
 
 const isDev = process.env.NODE_ENV !== 'production';
 
@@ -186,7 +185,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
       unpaidBalance,
       accountNotConfirmedButReceivedTips,
       pageTitle,
-      accountTransactions,
+      // accountTransactions,
     } = this.state;
 
     const { user } = this.props;
