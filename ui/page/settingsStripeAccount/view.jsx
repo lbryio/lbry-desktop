@@ -295,7 +295,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
                 label={__('Complete Verification')}
                 icon={ICONS.SETTINGS}
                 navigate={stripeConnectionUrl}
-                style={{marginRight: '10px'}}
+                className="stripe__complete-verification-button"
               /> }
               <Button
                 button="secondary"
