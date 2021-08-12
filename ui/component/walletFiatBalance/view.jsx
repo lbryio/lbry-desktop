@@ -1,16 +1,12 @@
 // @flow
 import * as ICONS from 'constants/icons';
-import * as MODALS from 'constants/modal_types';
 import * as PAGES from 'constants/pages';
 import React from 'react';
 import CreditAmount from 'component/common/credit-amount';
 import Button from 'component/button';
-import HelpLink from 'component/common/help-link';
 import Card from 'component/common/card';
 import Icon from 'component/common/icon';
-import LbcSymbol from 'component/common/lbc-symbol';
 import I18nMessage from 'component/i18nMessage';
-import { formatNumberWithCommas } from 'util/number';
 
 type Props = {
   accountDetails: any,
@@ -27,8 +23,8 @@ const WalletBalance = (props: Props) => {
   const [detailsExpanded, setDetailsExpanded] = React.useState(false);
 
   return (
-    <>{1 == 1 && <Card
-      title={<><Icon size="18" icon={ICONS.FINANCE} />{accountDetails && accountDetails.total_received_unpaid/100 || 0} USD</>}
+    <>{<Card
+      title={<><Icon size="18" icon={ICONS.FINANCE} />{(accountDetails && (accountDetails.total_received_unpaid / 100)) || 0} USD</>}
       subtitle={
           <I18nMessage>
             This is your remaining balance that can still be withdrawn to your bank account
@@ -37,11 +33,11 @@ const WalletBalance = (props: Props) => {
       actions={
         <>
           <h2 className="section__title--small">
-            ${accountDetails && accountDetails.total_tipped / 100 || 0} Total Received Tips
+            ${(accountDetails && (accountDetails.total_tipped / 100)) || 0} Total Received Tips
           </h2>
 
           <h2 className="section__title--small">
-            ${accountDetails && accountDetails.total_paid_out/100 || 0}  Withdrawn
+            ${(accountDetails && (accountDetails.total_paid_out / 100)) || 0}  Withdrawn
             <Button
               button="link"
               label={detailsExpanded ? __('View less') : __('View more')}
@@ -56,7 +52,7 @@ const WalletBalance = (props: Props) => {
               <dl>
                 <dt>
                   <span className="dt__text">{__('Earned from uploads')}</span>
-                  {/*<span className="help--dt">({__('Earned from channel page')})</span>*/}
+                  {/* <span className="help--dt">({__('Earned from channel page')})</span> */}
                 </dt>
                 <dd>
                   <span className="dd__text">
@@ -73,19 +69,19 @@ const WalletBalance = (props: Props) => {
 
                 <dt>
                   <span className="dt__text">{__('Earned from channel page')}</span>
-                  {/*<span className="help--dt">({__('Delete or edit past content to spend')})</span>*/}
+                  {/* <span className="help--dt">({__('Delete or edit past content to spend')})</span> */}
                 </dt>
                 <dd>
                   <CreditAmount amount={1} precision={4} />
                 </dd>
 
-                {/*<dt>*/}
-                {/*  <span className="dt__text">{__('...supporting content')}</span>*/}
-                {/*  <span className="help--dt">({__('Delete supports to spend')})</span>*/}
-                {/*</dt>*/}
-                {/*<dd>*/}
-                {/*  <CreditAmount amount={1} precision={4} />*/}
-                {/*</dd>*/}
+                {/* <dt> */}
+                {/*  <span className="dt__text">{__('...supporting content')}</span> */}
+                {/*  <span className="help--dt">({__('Delete supports to spend')})</span> */}
+                {/* </dt> */}
+                {/* <dd> */}
+                {/*  <CreditAmount amount={1} precision={4} /> */}
+                {/* </dd> */}
               </dl>
             </div>
           )}

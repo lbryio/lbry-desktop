@@ -1,16 +1,7 @@
 // @flow
-import * as ICONS from 'constants/icons';
-import * as MODALS from 'constants/modal_types';
-import * as PAGES from 'constants/pages';
 import React from 'react';
-import CreditAmount from 'component/common/credit-amount';
 import Button from 'component/button';
-import HelpLink from 'component/common/help-link';
 import Card from 'component/common/card';
-import Icon from 'component/common/icon';
-import LbcSymbol from 'component/common/lbc-symbol';
-import I18nMessage from 'component/i18nMessage';
-import { formatNumberWithCommas } from 'util/number';
 import { Lbryio } from 'lbryinc';
 import moment from 'moment';
 
@@ -21,49 +12,43 @@ type Props = {
 };
 
 const WalletBalance = (props: Props) => {
-  const {
-
-  } = props;
-
   // receive transactions from parent component
   let accountTransactions = props.transactions;
 
-  console.log('heres transactions')
+  console.log('heres transactions');
   console.log(accountTransactions);
 
   // let totalTippedAmount = props.totalTippedAmount;
 
   // totalTippedAmount = 0;
 
-
-
   // reverse so most recent payments come first
-  if(accountTransactions){
+  if (accountTransactions) {
     accountTransactions = accountTransactions.reverse();
   }
 
-  const [detailsExpanded, setDetailsExpanded] = React.useState(false);
-  const [accountStatusResponse, setAccountStatusResponse] = React.useState();
+  // const [detailsExpanded, setDetailsExpanded] = React.useState(false);
+  // const [accountStatusResponse, setAccountStatusResponse] = React.useState();
+  // const [totalTippedAmount, setTotalTippedAmount] = React.useState(0);
+
   const [paymentHistoryTransactions, setPaymentHistoryTransactions] = React.useState();
   const [subscriptions, setSubscriptions] = React.useState();
-  const [totalTippedAmount, setTotalTippedAmount] = React.useState(0);
-
 
   const [lastFour, setLastFour] = React.useState();
 
   var environment = 'test';
 
-  function getPaymentHistory() {
-    return Lbryio.call(
-    'customer',
-    'list',
-    {
-      environment,
-    },
-    'post'
-  )};
+  // function getPaymentHistory() {
+  //   return Lbryio.call(
+  //   'customer',
+  //   'list',
+  //   {
+  //     environment,
+  //   },
+  //   'post'
+  // ); };
 
-  function getCustomerStatus(){
+  function getCustomerStatus() {
     return Lbryio.call(
       'customer',
       'status',
@@ -71,11 +56,11 @@ const WalletBalance = (props: Props) => {
         environment,
       },
       'post'
-    )
+    );
   }
 
   React.useEffect(() => {
-    (async function(){
+    (async function() {
         let response = accountTransactions;
 
         console.log('payment transactions');
@@ -91,15 +76,14 @@ const WalletBalance = (props: Props) => {
 
         const subscriptions  = [...response];
 
-        if(subscriptions && subscriptions.length > 2){
-          subscriptions.length = 2
-          setSubscriptions([])
+        if (subscriptions && subscriptions.length > 2) {
+          subscriptions.length = 2;
+          setSubscriptions([]);
         } else {
-          setSubscriptions([])
+          setSubscriptions([]);
         }
 
         console.log(response);
-
     })();
   }, [accountTransactions]);
 
@@ -153,7 +137,7 @@ const WalletBalance = (props: Props) => {
                 ))}
                 </tbody>
               </table>
-              {(!accountTransactions || accountTransactions.length === 0) && <p style={{textAlign:"center", marginTop: '20px', fontSize: '13px', color: 'rgb(171, 171, 171)'}}>No Transactions</p>}
+              {(!accountTransactions || accountTransactions.length === 0) && <p style={{textAlign: 'center', marginTop: '20px', fontSize: '13px', color: 'rgb(171, 171, 171)'}}>No Transactions</p>}
             </div>
           </>
         }
@@ -207,7 +191,7 @@ const WalletBalance = (props: Props) => {
               ))}
               </tbody>
             </table>
-            {(!subscriptions || subscriptions.length === 0) && <p style={{textAlign:"center", marginTop: '22px', fontSize: '13px', color: 'rgb(171, 171, 171)'}}>No Subscriptions</p>}
+            {(!subscriptions || subscriptions.length === 0) && <p style={{textAlign: 'center', marginTop: '22px', fontSize: '13px', color: 'rgb(171, 171, 171)'}}>No Subscriptions</p>}
           </div>
         </>
       }

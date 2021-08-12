@@ -1,16 +1,11 @@
 // @flow
 import * as ICONS from 'constants/icons';
-import * as MODALS from 'constants/modal_types';
 import * as PAGES from 'constants/pages';
 import React from 'react';
-import CreditAmount from 'component/common/credit-amount';
 import Button from 'component/button';
-import HelpLink from 'component/common/help-link';
 import Card from 'component/common/card';
 import Icon from 'component/common/icon';
-import LbcSymbol from 'component/common/lbc-symbol';
 import I18nMessage from 'component/i18nMessage';
-import { formatNumberWithCommas } from 'util/number';
 
 type Props = {
   totalTippedAmount: number,
@@ -18,25 +13,23 @@ type Props = {
   transactions: any,
 };
 
-
-
 const WalletBalance = (props: Props) => {
   const {
-    accountDetails,
+    // accountDetails,
     totalTippedAmount,
     transactions,
   } = props;
 
-  const [detailsExpanded, setDetailsExpanded] = React.useState(false);
+  // const [detailsExpanded, setDetailsExpanded] = React.useState(false);
   const [totalCreatorsSupported, setTotalCreatorsSupported] = React.useState(false);
 
   // calculate how many unique users tipped
   React.useEffect(() => {
-    if(transactions){
-      let channelNames = []
+    if (transactions) {
+      let channelNames = [];
 
-      for(const transaction of transactions){
-        channelNames.push(transaction.channel_name)
+      for (const transaction of transactions) {
+        channelNames.push(transaction.channel_name);
         console.log(transaction.channel_name);
       }
 
@@ -46,7 +39,7 @@ const WalletBalance = (props: Props) => {
   }, [transactions]);
 
   return (
-    <>{1 == 1 && <Card
+    <>{<Card
       title={<><Icon size="18" icon={ICONS.FINANCE} />{totalTippedAmount} USD</>}
       subtitle={
           <I18nMessage>
