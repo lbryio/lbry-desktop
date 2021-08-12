@@ -88,7 +88,7 @@ const WalletBalance = (props: Props) => {
                         label={
                           transaction.channel_claim_id === transaction.source_claim_id
                             ? 'Channel Page'
-                            : 'File Page'
+                            : 'Content Page'
                         }
                         button="link"
                       />
@@ -143,7 +143,7 @@ const WalletBalance = (props: Props) => {
                     label={
                       transaction.channel_claim_id === transaction.source_claim_id
                         ? 'Channel Page'
-                        : 'File Page'
+                        : 'Content Page'
                     }
                     button="link"
                   />

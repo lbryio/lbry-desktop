@@ -265,12 +265,19 @@ class StripeAccountConnection extends React.Component<Props, State> {
               </div>
             }
             actions={
+              <>{ 1 == 2 && <Button
+                button="primary"
+                label={__('View Transactions')}
+                icon={ICONS.SETTINGS}
+                navigate={`/$/${PAGES.WALLET}?tab=account-history`}
+                style={{marginRight: '10px'}}
+              /> }
               <Button
                 button="primary"
                 label={__('View Transactions')}
                 icon={ICONS.SETTINGS}
                 navigate={`/$/${PAGES.WALLET}?tab=account-history`}
-              />
+              /></>
             }
           />
           <br />

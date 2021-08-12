@@ -6,6 +6,7 @@ import Button from 'component/button';
 import Card from 'component/common/card';
 import Icon from 'component/common/icon';
 import I18nMessage from 'component/i18nMessage';
+import Plastic from 'react-plastic';
 
 type Props = {
   totalTippedAmount: number,
@@ -19,6 +20,15 @@ const WalletBalance = (props: Props) => {
     totalTippedAmount,
     transactions,
   } = props;
+
+  // let cardDetails = {
+  //   brand: card.brand,
+  //   expiryYear: card.exp_year,
+  //   expiryMonth: card.exp_month,
+  //   lastFour: card.last4,
+  //   topOfDisplay: topOfDisplay,
+  //   bottomOfDisplay: bottomOfDisplay,
+  // };
 
   // const [detailsExpanded, setDetailsExpanded] = React.useState(false);
   const [totalCreatorsSupported, setTotalCreatorsSupported] = React.useState(false);
@@ -40,16 +50,18 @@ const WalletBalance = (props: Props) => {
 
   return (
     <>{<Card
-      title={<><Icon size="18" icon={ICONS.FINANCE} />{totalTippedAmount} USD</>}
-      subtitle={
-          <I18nMessage>
-            The total amount you have tipped to different creators
-          </I18nMessage>
+      subtitle={ 1 == 2 && <h2>Hello</h2>
+        // <Plastic
+        //   type={userCardDetails.brand}
+        //   name={userCardDetails.topOfDisplay + ' ' + userCardDetails.bottomOfDisplay}
+        //   expiry={userCardDetails.expiryMonth + '/' + userCardDetails.expiryYear}
+        //   number={'____________' + userCardDetails.lastFour}
+        // />
       }
       actions={
         <>
           <h2 className="section__title--small">
-            {transactions && transactions.length} Total Tips
+            {(transactions && transactions.length) || 0} Total Tips
           </h2>
 
           <h2 className="section__title--small">
