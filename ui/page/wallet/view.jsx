@@ -170,7 +170,7 @@ const WalletPage = (props: Props) => {
         onClick={() => {
           focusLBCTab();
         }}
-      >LBC Wallet</h2>
+      >LBRY Credits</h2>
       {/* account history button */}
       <h2 className="fiat-tab-switcher"
         style={{display: 'inline-block', textUnderlineOffset: '4px', fontSize: '18px', marginRight: '14px'}}

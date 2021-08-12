@@ -108,7 +108,7 @@ const WalletBalance = (props: Props) => {
     />
 
   <Card
-    title={__('Subscriptions')}
+    title={__('Subscriptions (Coming Soon)')}
     body={
       <>
         <div className="table__wrapper">
