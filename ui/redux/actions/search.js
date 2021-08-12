@@ -61,13 +61,14 @@ export const doSearch = (rawQuery: string, searchOptions: SearchOptions) => (
 
   lighthouse
     .search(queryWithOptions)
-    .then((data: Array<{ name: string, claimId: string }>) => {
+    .then((data: { body: Array<{ name: string, claimId: string }>, poweredBy: string }) => {
+      const { body: result, poweredBy } = data;
       const uris = [];
       const actions = [];
 
-      data.forEach((result) => {
-        if (result) {
-          const { name, claimId } = result;
+      result.forEach((item) => {
+        if (item) {
+          const { name, claimId } = item;
           const urlObj: LbryUrlObj = {};
 
           if (name.startsWith('@')) {
@@ -94,6 +95,7 @@ export const doSearch = (rawQuery: string, searchOptions: SearchOptions) => (
           from: from,
           size: size,
           uris,
+          recsys: poweredBy,
         },
       });
       dispatch(batchActions(...actions));

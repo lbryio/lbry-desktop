@@ -17,7 +17,7 @@ const defaultState: SearchState = {
     [SEARCH_OPTIONS.MEDIA_IMAGE]: defaultSearchTypes.includes(SEARCH_OPTIONS.MEDIA_IMAGE),
     [SEARCH_OPTIONS.MEDIA_APPLICATION]: defaultSearchTypes.includes(SEARCH_OPTIONS.MEDIA_APPLICATION),
   },
-  urisByQuery: {},
+  resultsByQuery: {},
   hasReachedMaxResultsLength: {},
   searching: false,
 };
@@ -29,21 +29,23 @@ export default handleActions(
       searching: true,
     }),
     [ACTIONS.SEARCH_SUCCESS]: (state: SearchState, action: SearchSuccess): SearchState => {
-      const { query, uris, from, size } = action.data;
+      const { query, uris, from, size, recsys } = action.data;
       const normalizedQuery = createNormalizedSearchKey(query);
+      const urisForQuery = state.resultsByQuery[normalizedQuery] && state.resultsByQuery[normalizedQuery]['uris'];
 
       let newUris = uris;
-      if (from !== 0 && state.urisByQuery[normalizedQuery]) {
-        newUris = Array.from(new Set(state.urisByQuery[normalizedQuery].concat(uris)));
+      if (from !== 0 && urisForQuery) {
+        newUris = Array.from(new Set(urisForQuery.concat(uris)));
       }
 
       // The returned number of urls is less than the page size, so we're on the last page
       const noMoreResults = size && uris.length < size;
 
+      const results = { uris: newUris, recsys };
       return {
         ...state,
         searching: false,
-        urisByQuery: Object.assign({}, state.urisByQuery, { [normalizedQuery]: newUris }),
+        resultsByQuery: Object.assign({}, state.resultsByQuery, { [normalizedQuery]: results }),
         hasReachedMaxResultsLength: Object.assign({}, state.hasReachedMaxResultsLength, {
           [normalizedQuery]: noMoreResults,
         }),

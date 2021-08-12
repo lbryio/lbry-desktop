@@ -6,6 +6,7 @@ import {
   makeSelectRecommendedClaimIds,
   makeSelectRecommendationClicks,
 } from 'redux/selectors/content';
+import { makeSelectRecommendedRecsysIdForClaimId } from 'redux/selectors/search';
 
 const VERSION = '0.0.1';
 
@@ -36,7 +37,7 @@ function createRecsys(claimId, userId, events, loadedAt, isEmbed) {
       claimId: claimId,
       pageLoadedAt: pageLoadedAt,
       pageExitedAt: pageExitedAt,
-      recsysId: recsysId,
+      recsysId: makeSelectRecommendedRecsysIdForClaimId(claimId)(state) || recsysId,
       recClaimIds: makeSelectRecommendedClaimIds(claimId)(state),
       recClickedVideoIdx: makeSelectRecommendationClicks(claimId)(state),
       events: events,
