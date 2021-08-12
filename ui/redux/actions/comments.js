@@ -738,6 +738,7 @@ function doCommentModToggleBlock(
   creatorId: string,
   blockerIds: Array<string>, // [] = use all my channels
   blockLevel: string,
+  timeoutHours?: number,
   showLink: boolean = false
 ) {
   return async (dispatch: Dispatch, getState: GetState) => {
@@ -844,6 +845,7 @@ function doCommentModToggleBlock(
                 block_all: unblock ? undefined : blockLevel === BLOCK_LEVEL.ADMIN,
                 global_un_block: unblock ? blockLevel === BLOCK_LEVEL.ADMIN : undefined,
                 ...sharedModBlockParams,
+                time_out_hrs: unblock ? undefined : timeoutHours,
               })
             )
         )
@@ -920,12 +922,13 @@ function doCommentModToggleBlock(
  * Blocks the commenter for all channels that I own.
  *
  * @param commenterUri
+ * @param timeoutHours
  * @param showLink
  * @returns {function(Dispatch): *}
  */
-export function doCommentModBlock(commenterUri: string, showLink: boolean = true) {
+export function doCommentModBlock(commenterUri: string, timeoutHours?: number, showLink: boolean = true) {
   return (dispatch: Dispatch) => {
-    return dispatch(doCommentModToggleBlock(false, commenterUri, '', [], BLOCK_LEVEL.SELF, showLink));
+    return dispatch(doCommentModToggleBlock(false, commenterUri, '', [], BLOCK_LEVEL.SELF, timeoutHours, showLink));
   };
 }
 
@@ -934,11 +937,14 @@ export function doCommentModBlock(commenterUri: string, showLink: boolean = true
  *
  * @param commenterUri
  * @param blockerId
+ * @param timeoutHours
  * @returns {function(Dispatch): *}
  */
-export function doCommentModBlockAsAdmin(commenterUri: string, blockerId: string) {
+export function doCommentModBlockAsAdmin(commenterUri: string, blockerId: string, timeoutHours?: number) {
   return (dispatch: Dispatch) => {
-    return dispatch(doCommentModToggleBlock(false, commenterUri, '', blockerId ? [blockerId] : [], BLOCK_LEVEL.ADMIN));
+    return dispatch(
+      doCommentModToggleBlock(false, commenterUri, '', blockerId ? [blockerId] : [], BLOCK_LEVEL.ADMIN, timeoutHours)
+    );
   };
 }
 
@@ -949,12 +955,25 @@ export function doCommentModBlockAsAdmin(commenterUri: string, blockerId: string
  * @param commenterUri
  * @param creatorId
  * @param blockerId
+ * @param timeoutHours
  * @returns {function(Dispatch): *}
  */
-export function doCommentModBlockAsModerator(commenterUri: string, creatorId: string, blockerId: string) {
+export function doCommentModBlockAsModerator(
+  commenterUri: string,
+  creatorId: string,
+  blockerId: string,
+  timeoutHours?: number
+) {
   return (dispatch: Dispatch) => {
     return dispatch(
-      doCommentModToggleBlock(false, commenterUri, creatorId, blockerId ? [blockerId] : [], BLOCK_LEVEL.MODERATOR)
+      doCommentModToggleBlock(
+        false,
+        commenterUri,
+        creatorId,
+        blockerId ? [blockerId] : [],
+        BLOCK_LEVEL.MODERATOR,
+        timeoutHours
+      )
     );
   };
 }
@@ -968,7 +987,7 @@ export function doCommentModBlockAsModerator(commenterUri: string, creatorId: st
  */
 export function doCommentModUnBlock(commenterUri: string, showLink: boolean = true) {
   return (dispatch: Dispatch) => {
-    return dispatch(doCommentModToggleBlock(true, commenterUri, '', [], BLOCK_LEVEL.SELF, showLink));
+    return dispatch(doCommentModToggleBlock(true, commenterUri, '', [], BLOCK_LEVEL.SELF, undefined, showLink));
   };
 }
 

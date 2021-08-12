@@ -8,6 +8,7 @@ import Icon from 'component/common/icon';
 import { parseURI } from 'lbry-redux';
 
 type Props = {
+  uri: ?string,
   authorUri: string, // full LBRY Channel URI: lbry://@channel#123...
   commentId: string, // sha256 digest identifying the comment
   isTopLevel: boolean,
@@ -23,21 +24,18 @@ type Props = {
   contentChannelPermanentUrl: any,
   activeChannelClaim: ?ChannelClaim,
   playingUri: ?PlayingUri,
-  moderationDelegatorsById: { [string]: { global: boolean, delegators: { name: string, claimId: string } } },
   // --- perform ---
   openModal: (id: string, {}) => void,
   clearPlayingUri: () => void,
   muteChannel: (string) => void,
   pinComment: (string, string, boolean) => Promise<any>,
-  commentModBlock: (string) => void,
-  commentModBlockAsAdmin: (string, string) => void,
-  commentModBlockAsModerator: (string, string, string) => void,
   commentModAddDelegate: (string, string, ChannelClaim) => void,
   setQuickReply: (any) => void,
 };
 
 function CommentMenuList(props: Props) {
   const {
+    uri,
     claim,
     authorUri,
     commentIsMine,
@@ -50,35 +48,16 @@ function CommentMenuList(props: Props) {
     isTopLevel,
     isPinned,
     handleEditComment,
-    commentModBlock,
-    commentModBlockAsAdmin,
-    commentModBlockAsModerator,
     commentModAddDelegate,
     playingUri,
     disableEdit,
     disableRemove,
-    moderationDelegatorsById,
     openModal,
     supportAmount,
     setQuickReply,
   } = props;
 
-  const contentChannelClaim = !claim
-    ? null
-    : claim.value_type === 'channel'
-    ? claim
-    : claim.signing_channel && claim.is_channel_signature_valid
-    ? claim.signing_channel
-    : null;
-
-  const activeModeratorInfo = activeChannelClaim && moderationDelegatorsById[activeChannelClaim.claim_id];
   const activeChannelIsCreator = activeChannelClaim && activeChannelClaim.permanent_url === contentChannelPermanentUrl;
-  const activeChannelIsAdmin = activeChannelClaim && activeModeratorInfo && activeModeratorInfo.global;
-  const activeChannelIsModerator =
-    activeChannelClaim &&
-    contentChannelClaim &&
-    activeModeratorInfo &&
-    Object.values(activeModeratorInfo.delegators).includes(contentChannelClaim.claim_id);
 
   function handlePinComment(commentId, claimId, remove) {
     pinComment(commentId, claimId, remove);
@@ -98,7 +77,7 @@ function CommentMenuList(props: Props) {
   }
 
   function handleCommentBlock() {
-    commentModBlock(authorUri);
+    openModal(MODALS.BLOCK_CHANNEL, { contentUri: uri, commenterUri: authorUri });
   }
 
   function handleCommentMute() {
@@ -109,18 +88,6 @@ function CommentMenuList(props: Props) {
     if (activeChannelClaim && authorUri) {
       const { channelName, channelClaimId } = parseURI(authorUri);
       commentModAddDelegate(channelClaimId, channelName, activeChannelClaim);
-    }
-  }
-
-  function blockCommentAsModerator() {
-    if (activeChannelClaim && contentChannelClaim) {
-      commentModBlockAsModerator(authorUri, contentChannelClaim.claim_id, activeChannelClaim.claim_id);
-    }
-  }
-
-  function blockCommentAsAdmin() {
-    if (activeChannelClaim) {
-      commentModBlockAsAdmin(authorUri, activeChannelClaim.claim_id);
     }
   }
 
@@ -194,34 +161,6 @@ function CommentMenuList(props: Props) {
           {activeChannelIsCreator && (
             <span className="comment__menu-help">{__('Hide this channel for you only.')}</span>
           )}
-        </MenuItem>
-      )}
-
-      {!commentIsMine && (activeChannelIsAdmin || activeChannelIsModerator) && (
-        <div className="comment__menu-title">{__('Moderator tools')}</div>
-      )}
-
-      {!commentIsMine && activeChannelIsAdmin && (
-        <MenuItem className="comment__menu-option" onSelect={blockCommentAsAdmin}>
-          <div className="menu__link">
-            <Icon aria-hidden icon={ICONS.GLOBE} />
-            {__('Global Block')}
-          </div>
-          <span className="comment__menu-help">{__('Block this channel as global admin')}</span>
-        </MenuItem>
-      )}
-
-      {!commentIsMine && activeChannelIsModerator && (
-        <MenuItem className="comment__menu-option" onSelect={blockCommentAsModerator}>
-          <div className="menu__link">
-            <Icon aria-hidden icon={ICONS.BLOCK} />
-            {__('Moderator Block')}
-          </div>
-          <span className="comment__menu-help">
-            {__('Block this channel on behalf of %creator%', {
-              creator: contentChannelClaim ? contentChannelClaim.name : __('creator'),
-            })}
-          </span>
         </MenuItem>
       )}
 

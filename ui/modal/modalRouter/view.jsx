@@ -8,6 +8,7 @@ import LoadingBarOneOff from 'component/loadingBarOneOff';
 const ModalAffirmPurchase = lazyImport(() => import('modal/modalAffirmPurchase' /* webpackChunkName: "modalAffirmPurchase" */));
 const ModalAutoGenerateThumbnail = lazyImport(() => import('modal/modalAutoGenerateThumbnail' /* webpackChunkName: "modalAutoGenerateThumbnail" */));
 const ModalAutoUpdateDownloaded = lazyImport(() => import('modal/modalAutoUpdateDownloaded' /* webpackChunkName: "modalAutoUpdateDownloaded" */));
+const ModalBlockChannel = lazyImport(() => import('modal/modalBlockChannel' /* webpackChunkName: "modalBlockChannel" */));
 const ModalClaimCollectionAdd = lazyImport(() => import('modal/modalClaimCollectionAdd' /* webpackChunkName: "modalClaimCollectionAdd" */));
 const ModalCommentAcknowledgement = lazyImport(() => import('modal/modalCommentAcknowledgement' /* webpackChunkName: "modalCommentAcknowledgement" */));
 const ModalConfirmAge = lazyImport(() => import('modal/modalConfirmAge' /* webpackChunkName: "modalConfirmAge" */));
@@ -149,6 +150,8 @@ function ModalRouter(props: Props) {
         return ModalMassTipsUnlock;
       case MODALS.CONFIRM_REMOVE_BTC_SWAP_ADDRESS:
         return ModalRemoveBtcSwapAddress;
+      case MODALS.BLOCK_CHANNEL:
+        return ModalBlockChannel;
       case MODALS.COLLECTION_ADD:
         return ModalClaimCollectionAdd;
       case MODALS.COLLECTION_DELETE:

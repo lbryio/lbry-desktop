@@ -189,7 +189,43 @@ declare type SuperListResponse = {
   has_hidden_comments: boolean,
 };
 
-declare type ModerationBlockParams = {};
+declare type ModerationBlockParams = {
+  // Publisher, Moderator, or Commentron Admin
+  mod_channel_id: string,
+  mod_channel_name: string,
+  // Offender being blocked
+  blocked_channel_id: string,
+  blocked_channel_name: string,
+  // Creator that Moderator is delegated from. Used for delegated moderation
+  creator_channel_id?: string,
+  creator_channel_name?: string,
+  // Blocks identity from comment universally, requires Admin rights on commentron instance
+  block_all?: boolean,
+  time_out_hrs?: number,
+  // If true will delete all comments of the offender, requires Admin rights on commentron for universal delete
+  delete_all?: boolean,
+  // The usual signature stuff
+  signature: string,
+  signing_ts: string,
+};
+
+declare type ModerationBlockResponse = {
+  deleted_comment_ids: Array<string>,
+  banned_channel_id: string,
+  all_blocked: boolean,
+  banned_from: string,
+};
+
+declare type BlockedListArgs = {
+  // Publisher, Moderator or Commentron Admin
+  mod_channel_id: string,
+  mod_channel_name: string,
+  // Creator that Moderator is delegated from. Used for delegated moderation
+  creator_channel_id?: string,
+  creator_channel_name?: string,
+  signature: string,
+  signing_ts: string,
+};
 
 declare type ModerationAddDelegateParams = {
   mod_channel_id: string,

@@ -12,7 +12,7 @@ type Props = {
   isBlockingOrUnBlocking: boolean,
   isToggling: boolean,
   doCommentModUnBlock: (string, boolean) => void,
-  doCommentModBlock: (string, boolean) => void,
+  doCommentModBlock: (string, ?Number, boolean) => void,
   doCommentModUnBlockAsAdmin: (string, string) => void,
   doCommentModBlockAsAdmin: (string, string) => void,
   doCommentModUnBlockAsModerator: (string, string, string) => void,
@@ -42,7 +42,7 @@ function ChannelBlockButton(props: Props) {
         if (isBlocked) {
           doCommentModUnBlock(uri, false);
         } else {
-          doCommentModBlock(uri, false);
+          doCommentModBlock(uri, undefined, false);
         }
         break;
 
