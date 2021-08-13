@@ -133,15 +133,17 @@ export default function LivestreamComments(props: Props) {
     const clonedSuperchats = JSON.parse(JSON.stringify(superChatsByTipAmount));
 
     // sort by fiat first then by support amount
-    superChatsReversed = clonedSuperchats.sort(function(a, b) {
-      // if both are fiat, organize by support
-      if (a.is_fiat === b.is_fiat) {
-        return b.support_amount - a.support_amount;
-        // otherwise, if they are not both fiat, put the fiat transaction first
-      } else {
-        return (a.is_fiat === b.is_fiat) ? 0 : a.is_fiat ? -1 : 1;
-      }
-    }).reverse();
+    superChatsReversed = clonedSuperchats
+      .sort((a, b) => {
+        // if both are fiat, organize by support
+        if (a.is_fiat === b.is_fiat) {
+          return b.support_amount - a.support_amount;
+          // otherwise, if they are not both fiat, put the fiat transaction first
+        } else {
+          return a.is_fiat === b.is_fiat ? 0 : a.is_fiat ? -1 : 1;
+        }
+      })
+      .reverse();
   }
 
   // todo: implement comment_list --mine in SDK so redux can grab with selectCommentIsMine
@@ -173,14 +175,13 @@ export default function LivestreamComments(props: Props) {
         <div className="livestream-discussion__title">{__('Live discussion')}</div>
         {(superChatsTotalAmount || 0) > 0 && (
           <div className="recommended-content__toggles">
-
             {/* the superchats in chronological order button */}
             <Button
               className={classnames('button-toggle', {
                 'button-toggle--active': viewMode === VIEW_MODE_CHAT,
               })}
               label={__('Chat')}
-              onClick={function() {
+              onClick={() => {
                 setViewMode(VIEW_MODE_CHAT);
                 const livestreamCommentsDiv = document.getElementsByClassName('livestream__comments')[0];
                 const divHeight = livestreamCommentsDiv.scrollHeight;
@@ -196,10 +197,10 @@ export default function LivestreamComments(props: Props) {
               label={
                 <>
                   <CreditAmount amount={superChatsTotalAmount || 0} size={8} /> /
-                  <CreditAmount amount={superChatsFiatAmount || 0} size={8} isFiat /> {' '}{__('Tipped')}
+                  <CreditAmount amount={superChatsFiatAmount || 0} size={8} isFiat /> {__('Tipped')}
                 </>
               }
-              onClick={function() {
+              onClick={() => {
                 setViewMode(VIEW_MODE_SUPER_CHAT);
                 const livestreamCommentsDiv = document.getElementsByClassName('livestream__comments')[0];
                 const divHeight = livestreamCommentsDiv.scrollHeight;
@@ -261,31 +262,34 @@ export default function LivestreamComments(props: Props) {
           {/* top to bottom comment display */}
           {!fetchingComments && commentsByChronologicalOrder.length > 0 ? (
             <div className="livestream__comments">
-              {viewMode === VIEW_MODE_CHAT && commentsToDisplay.map((comment) => (
-                <LivestreamComment
-                  key={comment.comment_id}
-                  uri={uri}
-                  authorUri={comment.channel_url}
-                  commentId={comment.comment_id}
-                  message={comment.comment}
-                  supportAmount={comment.support_amount}
-                  isFiat={comment.is_fiat}
-                  commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}
-                />
-              ))}
+              {viewMode === VIEW_MODE_CHAT &&
+                commentsToDisplay.map((comment) => (
+                  <LivestreamComment
+                    key={comment.comment_id}
+                    uri={uri}
+                    authorUri={comment.channel_url}
+                    commentId={comment.comment_id}
+                    message={comment.comment}
+                    supportAmount={comment.support_amount}
+                    isFiat={comment.is_fiat}
+                    commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}
+                  />
+                ))}
 
-              {viewMode === VIEW_MODE_SUPER_CHAT && superChatsReversed && superChatsReversed.map((comment) => (
-                <LivestreamComment
-                  key={comment.comment_id}
-                  uri={uri}
-                  authorUri={comment.channel_url}
-                  commentId={comment.comment_id}
-                  message={comment.comment}
-                  supportAmount={comment.support_amount}
-                  isFiat={comment.is_fiat}
-                  commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}
-                />
-              ))}
+              {viewMode === VIEW_MODE_SUPER_CHAT &&
+                superChatsReversed &&
+                superChatsReversed.map((comment) => (
+                  <LivestreamComment
+                    key={comment.comment_id}
+                    uri={uri}
+                    authorUri={comment.channel_url}
+                    commentId={comment.comment_id}
+                    message={comment.comment}
+                    supportAmount={comment.support_amount}
+                    isFiat={comment.is_fiat}
+                    commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}
+                  />
+                ))}
             </div>
           ) : (
             <div className="main--empty" style={{ flex: 1 }} />
