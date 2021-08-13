@@ -36,7 +36,6 @@ const WalletBalance = (props: Props) => {
 
       for (const transaction of transactions) {
         channelNames.push(transaction.channel_name);
-        console.log(transaction.channel_name);
       }
 
       let unique = [...new Set(channelNames)];

@@ -45,7 +45,8 @@ type State = {
   accountNotConfirmedButReceivedTips: boolean,
   unpaidBalance: number,
   pageTitle: string,
-  stillRequiringVerification: boolean
+  stillRequiringVerification: boolean,
+  accountTransactions: any
 };
 
 class StripeAccountConnection extends React.Component<Props, State> {
@@ -62,6 +63,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
       stripeConnectionUrl: '',
       pageTitle: 'Add Payout Method',
       stillRequiringVerification: true,
+      accountTransactions: [],
     };
   }
 
@@ -139,6 +141,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
 
           let objectToUpdateState = {
             accountConfirmed: true,
+            stillRequiringVerification: false,
           };
 
           if ((eventuallyDueInformation && eventuallyDueInformation.length) || (currentlyDueInformation && currentlyDueInformation)) {
