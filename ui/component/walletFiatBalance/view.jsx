@@ -18,16 +18,16 @@ const WalletBalance = (props: Props) => {
 
   return (
     <>{<Card
-      title={<><Icon size={18} icon={ICONS.FINANCE} />{(accountDetails && (accountDetails.total_received_unpaid / 100)) || 0} USD</>}
-      subtitle={
+      title={<><Icon size={18} icon={ICONS.FINANCE} />{(accountDetails && ((accountDetails.total_received_unpaid - accountDetails.total_paid_out) / 100)) || 0} USD</>}
+      subtitle={accountDetails && accountDetails.total_received_unpaid > 0 &&
           <I18nMessage>
-            This is your remaining balance that can still be withdrawn to your bank account
+            This is your pending balance that will be automatically sent to your bank account
           </I18nMessage>
       }
       actions={
         <>
           <h2 className="section__title--small">
-            ${(accountDetails && (accountDetails.total_tipped / 100)) || 0} Total Received Tips
+            ${(accountDetails && (accountDetails.total_received_unpaid / 100)) || 0} Total Received Tips
           </h2>
 
           <h2 className="section__title--small">
