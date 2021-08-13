@@ -230,7 +230,6 @@ const WalletPage = (props: Props) => {
     </Page>
   );
   // @endif
-
 };
 
 export default WalletPage;

@@ -2,16 +2,7 @@
 import React from 'react';
 import Button from 'component/button';
 import Card from 'component/common/card';
-import { Lbryio } from 'lbryinc';
 import moment from 'moment';
-import { STRIPE_PUBLIC_KEY } from 'config';
-
-let stripeEnvironment = 'test';
-// if the key contains pk_live it's a live key
-// update the environment for the calls to the backend to indicate which environment to hit
-if (STRIPE_PUBLIC_KEY.indexOf('pk_live') > -1) {
-  stripeEnvironment = 'live';
-}
 
 type Props = {
   accountDetails: any,
@@ -33,29 +24,6 @@ const WalletBalance = (props: Props) => {
   if (accountTransactions && accountTransactions.length > 10) {
     accountTransactions.length = 10;
   }
-
-  // const [detailsExpanded, setDetailsExpanded] = React.useState(false);
-  const [accountStatusResponse, setAccountStatusResponse] = React.useState();
-  const [subscriptions, setSubscriptions] = React.useState([]);
-
-  function getAccountStatus() {
-    return Lbryio.call(
-      'account',
-      'status',
-      {
-        environment: stripeEnvironment,
-      },
-      'post'
-    );
-  }
-
-  React.useEffect(() => {
-    (async function() {
-      const response = await getAccountStatus();
-
-      setAccountStatusResponse(response);
-    })();
-  }, []);
 
   return (
     <><Card
