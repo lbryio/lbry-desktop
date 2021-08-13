@@ -20,14 +20,8 @@ type Props = {
 
 const WalletBalance = (props: Props) => {
   // receive transactions from parent component
-  const { transactions } = props;
+  const { transactions: accountTransactions } = props;
 
-  let accountTransactions;
-
-  // reverse so most recent payments come first
-  if (transactions && transactions.length) {
-    accountTransactions = transactions.reverse();
-  }
   // const [accountStatusResponse, setAccountStatusResponse] = React.useState();
 
   // const [subscriptions, setSubscriptions] = React.useState();
