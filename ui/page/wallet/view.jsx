@@ -138,7 +138,9 @@ const WalletPage = (props: Props) => {
     (async function() {
       try {
         // get card payments customer has made
-        const customerTransactionResponse = await getPaymentHistory();
+        let customerTransactionResponse = await getPaymentHistory();
+
+        customerTransactionResponse.reverse();
 
         setCustomerTransactions(customerTransactionResponse);
       } catch (err) {
