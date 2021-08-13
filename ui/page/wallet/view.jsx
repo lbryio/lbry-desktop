@@ -14,7 +14,6 @@ import YrblWalletEmpty from 'component/yrblWalletEmpty';
 import { Lbryio } from 'lbryinc';
 import { SIMPLE_SITE, STRIPE_PUBLIC_KEY } from 'config';
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
-import Card from 'component/common/card';
 import { PAGE_VIEW_QUERY } from '../channel/view';
 
 const TAB_QUERY = 'tab';
@@ -44,6 +43,7 @@ const WalletPage = (props: Props) => {
     push,
   } = useHistory();
 
+  // @if TARGET='web'
   const urlParams = new URLSearchParams(search);
 
   const currentView = urlParams.get(TAB_QUERY) || TABS.LBRY_CREDITS_TAB;
@@ -82,7 +82,6 @@ const WalletPage = (props: Props) => {
   const [accountStatusResponse, setAccountStatusResponse] = React.useState();
   const [accountTransactionResponse, setAccountTransactionResponse] = React.useState([]);
   const [customerTransactions, setCustomerTransactions] = React.useState([]);
-  const [totalTippedAmount, setTotalTippedAmount] = React.useState(0);
 
   function getPaymentHistory() {
     return Lbryio.call(
@@ -142,14 +141,6 @@ const WalletPage = (props: Props) => {
         // get card payments customer has made
         const customerTransactionResponse = await getPaymentHistory();
 
-        let totalTippedAmount = 0;
-
-        for (const transaction of customerTransactionResponse) {
-          totalTippedAmount = totalTippedAmount + transaction.tipped_amount;
-        }
-
-        setTotalTippedAmount(totalTippedAmount / 100);
-
         setCustomerTransactions(customerTransactionResponse);
       } catch (err) {
         console.log(err);
@@ -157,14 +148,15 @@ const WalletPage = (props: Props) => {
     })();
   }, []);
 
-  const { location, totalBalance } = props;
-  // const { search } = location;
+  // @endif
+
+  const { totalBalance } = props;
   const showIntro = totalBalance === 0;
   const loading = totalBalance === undefined;
 
+  // @if TARGET='web'
   return (
     <Page>
-
       <Tabs onChange={onTabChange} index={tabIndex}>
         <TabList className="tabs__list--collection-edit-page">
           <Tab>{__('LBRY Credits')}</Tab>
@@ -205,7 +197,7 @@ const WalletPage = (props: Props) => {
           </TabPanel>
           <TabPanel>
             <div className="section card-stack">
-              <WalletFiatPaymentBalance transactions={customerTransactions} totalTippedAmount={totalTippedAmount} accountDetails={accountStatusResponse} />
+              <WalletFiatPaymentBalance transactions={customerTransactions} accountDetails={accountStatusResponse} />
               <WalletFiatPaymentHistory transactions={customerTransactions} />
             </div>
           </TabPanel>
@@ -213,6 +205,32 @@ const WalletPage = (props: Props) => {
       </Tabs>
     </Page>
   );
+  // @endif
+  // @if TARGET='app'
+  // eslint-disable-next-line no-unreachable
+  return (
+    <Page>
+      {loading && (
+        <div className="main--empty">
+          <Spinner delayed />
+        </div>
+      )}
+      {!loading && (
+        <>
+          {showIntro ? (
+            <YrblWalletEmpty includeWalletLink />
+          ) : (
+            <div className="card-stack">
+              <WalletBalance />
+              <TxoList search={search} />
+            </div>
+          )}
+        </>
+      )}
+    </Page>
+  );
+  // @endif
+
 };
 
 export default WalletPage;
