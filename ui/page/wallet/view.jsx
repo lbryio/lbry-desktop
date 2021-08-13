@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { useHistory, withRouter } from 'react-router';
+import { useHistory } from 'react-router';
 import WalletBalance from 'component/walletBalance';
 import WalletFiatBalance from 'component/walletFiatBalance';
 import WalletFiatPaymentBalance from 'component/walletFiatPaymentBalance';
@@ -12,9 +12,8 @@ import * as PAGES from 'constants/pages';
 import Spinner from 'component/spinner';
 import YrblWalletEmpty from 'component/yrblWalletEmpty';
 import { Lbryio } from 'lbryinc';
-import { SIMPLE_SITE, STRIPE_PUBLIC_KEY } from 'config';
+import { STRIPE_PUBLIC_KEY } from 'config';
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
-import { PAGE_VIEW_QUERY } from '../channel/view';
 
 const TAB_QUERY = 'tab';
 
@@ -207,6 +206,7 @@ const WalletPage = (props: Props) => {
   );
   // @endif
   // @if TARGET='app'
+  // $FlowFixMe
   // eslint-disable-next-line no-unreachable
   return (
     <Page>

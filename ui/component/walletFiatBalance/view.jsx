@@ -2,7 +2,6 @@
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import React from 'react';
-import CreditAmount from 'component/common/credit-amount';
 import Button from 'component/button';
 import Card from 'component/common/card';
 import Icon from 'component/common/icon';
@@ -17,11 +16,9 @@ const WalletBalance = (props: Props) => {
     accountDetails,
   } = props;
 
-  const [detailsExpanded, setDetailsExpanded] = React.useState(false);
-
   return (
     <>{<Card
-      title={<><Icon size="18" icon={ICONS.FINANCE} />{(accountDetails && (accountDetails.total_received_unpaid / 100)) || 0} USD</>}
+      title={<><Icon size={18} icon={ICONS.FINANCE} />{(accountDetails && (accountDetails.total_received_unpaid / 100)) || 0} USD</>}
       subtitle={
           <I18nMessage>
             This is your remaining balance that can still be withdrawn to your bank account

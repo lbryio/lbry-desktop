@@ -360,7 +360,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
       <Page backout={{ title: pageTitle, backLabel: __('Done') }} noFooter noSideNavigation>
         <div>
           {scriptFailedToLoad && (
-            <div className="error__text">There was an error connecting to Stripe. Please try again later.</div>
+            <div className="error__text">{__('There was an error connecting to Stripe. Please try again later.')}</div>
           )}
         </div>
 

@@ -81,60 +81,6 @@ const WalletBalance = (props: Props) => {
           </>
       )}
     />
-
-  {/* <Card */}
-  {/*  title={__('Subscriptions (Coming Soon)')} */}
-  {/*  body={ */}
-  {/*    <> */}
-  {/*      <div className="table__wrapper"> */}
-  {/*        <table className="table table--transactions"> */}
-  {/*          <thead> */}
-  {/*          <tr> */}
-  {/*            <th className="date-header">{__('Date')}</th> */}
-  {/*            <th>{<>{__('Receiving Channel Name')}</>}</th> */}
-  {/*            <th>{__('Tip Location')}</th> */}
-  {/*            <th>{__('Amount (USD)')} </th> */}
-  {/*            <th>{__('Card Last 4')}</th> */}
-  {/*            <th>{__('Anonymous')}</th> */}
-  {/*          </tr> */}
-  {/*          </thead> */}
-  {/*          <tbody> */}
-  {/*          {subscriptions && */}
-  {/*          subscriptions.reverse().map((transaction) => ( */}
-  {/*            <tr key={transaction.name + transaction.created_at}> */}
-  {/*              <td>{moment(transaction.created_at).format('LLL')}</td> */}
-  {/*              <td> */}
-  {/*                <Button */}
-  {/*                  className="stripe__card-link-text" */}
-  {/*                  navigate={'/' + transaction.channel_name + ':' + transaction.channel_claim_id} */}
-  {/*                  label={transaction.channel_name} */}
-  {/*                  button="link" */}
-  {/*                /> */}
-  {/*              </td> */}
-  {/*              <td> */}
-  {/*                <Button */}
-  {/*                  className="stripe__card-link-text" */}
-  {/*                  navigate={'/' + transaction.channel_name + ':' + transaction.source_claim_id} */}
-  {/*                  label={ */}
-  {/*                    transaction.channel_claim_id === transaction.source_claim_id */}
-  {/*                      ? 'Channel Page' */}
-  {/*                      : 'Content Page' */}
-  {/*                  } */}
-  {/*                  button="link" */}
-  {/*                /> */}
-  {/*              </td> */}
-  {/*              <td>${transaction.tipped_amount / 100}</td> */}
-  {/*              <td>{lastFour}</td> */}
-  {/*              <td>{transaction.private_tip ? 'Yes' : 'No'}</td> */}
-  {/*            </tr> */}
-  {/*          ))} */}
-  {/*          </tbody> */}
-  {/*        </table> */}
-  {/*        {(!subscriptions || subscriptions.length === 0) && <p style={{textAlign: 'center', marginTop: '22px', fontSize: '13px', color: 'rgb(171, 171, 171)'}}>No Subscriptions</p>} */}
-  {/*      </div> */}
-  {/*    </> */}
-  {/*  } */}
-  {/* /> */}
   </>
   );
 };

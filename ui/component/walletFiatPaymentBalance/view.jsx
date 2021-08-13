@@ -4,9 +4,6 @@ import * as PAGES from 'constants/pages';
 import React from 'react';
 import Button from 'component/button';
 import Card from 'component/common/card';
-import Icon from 'component/common/icon';
-import I18nMessage from 'component/i18nMessage';
-import Plastic from 'react-plastic';
 
 type Props = {
   totalTippedAmount: number,
@@ -17,7 +14,6 @@ type Props = {
 const WalletBalance = (props: Props) => {
   const {
     // accountDetails,
-    totalTippedAmount,
     transactions,
   } = props;
 
