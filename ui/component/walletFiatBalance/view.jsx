@@ -17,9 +17,6 @@ const WalletBalance = (props: Props) => {
     accountDetails,
   } = props;
 
-  console.log('account details');
-  console.log(accountDetails);
-
   const [detailsExpanded, setDetailsExpanded] = React.useState(false);
 
   return (
