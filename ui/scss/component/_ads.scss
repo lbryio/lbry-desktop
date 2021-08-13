@@ -1,0 +1,114 @@
+.ads-wrapper {
+  @extend .navigation;
+  background-color: var(--color-ads-background);
+  padding-top: 0.5rem;
+  padding-right: 0.5rem;
+
+  p {
+    margin-left: 0.4rem; // The ads provider adds weird padding to their wrapper
+    font-size: var(--font-xsmall);
+    color: var(--color-ads-text);
+  }
+
+  .button--link {
+    color: var(--color-ads-link);
+  }
+}
+
+// Inline Video Ads
+.ads__claim-item {
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--spacing-m);
+  background-color: var(--color-ads-background);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+
+  > div,
+  ins {
+    width: 100%;
+    position: relative !important;
+    max-width: 30rem;
+    min-width: 15rem;
+  }
+
+  .ads__injected-video {
+    aspect-ratio: 16 / 9;
+  }
+
+  .avp-p-gui {
+    z-index: 1 !important;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    flex-direction: column;
+
+    > div {
+      width: 100%;
+    }
+  }
+}
+
+.ads__claim-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.ads__claim-text--small {
+  font-size: var(--font-small);
+}
+
+// Pre-roll ads
+.ads__video-nudge,
+.ads__video-notify {
+  position: absolute;
+  z-index: 3;
+}
+
+.ads__video-nudge {
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  font-weight: bold;
+  padding: var(--spacing-xs);
+}
+
+.ads__video-notify {
+  display: flex;
+  align-items: center;
+  right: 0;
+  top: 0;
+  background-color: black;
+  border-bottom-left-radius: var(--border-radius);
+  color: var(--color-white);
+  font-size: var(--font-small);
+  padding: var(--spacing-xs);
+}
+
+.ads__video-link.button--secondary {
+  font-size: var(--font-small);
+  padding: var(--spacing-xs);
+  height: 1.5rem;
+}
+
+.ads__video-close {
+  margin-left: var(--spacing-s);
+  border-radius: var(--border-radius);
+
+  .icon {
+    stroke: var(--color-white);
+
+    &:hover {
+      stroke: var(--color-black);
+      background-color: var(--color-white);
+    }
+  }
+}
+
+.exp-ui__logo {
+  display: none;
+}
