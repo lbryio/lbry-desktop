@@ -4,7 +4,7 @@ import Button from 'component/button';
 import Card from 'component/common/card';
 import { Lbryio } from 'lbryinc';
 import moment from 'moment';
-import { STRIPE_PUBLIC_KEY } from '../../../config';
+import { STRIPE_PUBLIC_KEY } from 'config';
 
 let stripeEnvironment = 'test';
 // if the key contains pk_live it's a live key
@@ -20,13 +20,16 @@ type Props = {
 
 const WalletBalance = (props: Props) => {
   // receive transactions from parent component
-  let accountTransactions = props.transactions;
+  const { transactions } = props;
+
+  let accountTransactions;
 
   // reverse so most recent payments come first
-  if (accountTransactions) {
-    accountTransactions = accountTransactions.reverse();
+  if (transactions && transactions.length) {
+    accountTransactions = transactions.reverse();
   }
 
+  // if there are more than 10 transactions, limit it to 10 for the frontend
   if (accountTransactions && accountTransactions.length > 10) {
     accountTransactions.length = 10;
   }
@@ -51,8 +54,6 @@ const WalletBalance = (props: Props) => {
       const response = await getAccountStatus();
 
       setAccountStatusResponse(response);
-
-      console.log(response);
     })();
   }, []);
 

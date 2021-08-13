@@ -50,14 +50,15 @@ const WalletBalance = (props: Props) => {
 
   return (
     <>{<Card
-      subtitle={1 === 2 && <h2>Hello</h2>
-        // <Plastic
-        //   type={userCardDetails.brand}
-        //   name={userCardDetails.topOfDisplay + ' ' + userCardDetails.bottomOfDisplay}
-        //   expiry={userCardDetails.expiryMonth + '/' + userCardDetails.expiryYear}
-        //   number={'____________' + userCardDetails.lastFour}
-        // />
-      }
+      // TODO: implement hasActiveCard and show the current card the user would charge to
+      // subtitle={hasActiveCard && <h2>Hello</h2>
+      //   // <Plastic
+      //   //   type={userCardDetails.brand}
+      //   //   name={userCardDetails.topOfDisplay + ' ' + userCardDetails.bottomOfDisplay}
+      //   //   expiry={userCardDetails.expiryMonth + '/' + userCardDetails.expiryYear}
+      //   //   number={'____________' + userCardDetails.lastFour}
+      //   // />
+      // }
       actions={
         <>
           <h2 className="section__title--small">

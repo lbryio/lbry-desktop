@@ -30,8 +30,8 @@ const WalletPage = (props: Props) => {
   const tab = new URLSearchParams(props.location.search).get('tab');
 
   const [accountStatusResponse, setAccountStatusResponse] = React.useState();
-  const [accountTransactionResponse, setAccountTransactionResponse] = React.useState();
-  const [customerTransactions, setCustomerTransactions] = React.useState();
+  const [accountTransactionResponse, setAccountTransactionResponse] = React.useState([]);
+  const [customerTransactions, setCustomerTransactions] = React.useState([]);
   const [totalTippedAmount, setTotalTippedAmount] = React.useState(0);
 
   function getPaymentHistory() {

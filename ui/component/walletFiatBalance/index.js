@@ -1,3 +1,3 @@
-import WalletBalance from './view';
+import WalletFiatBalance from './view';
 
-export default WalletBalance;
+export default WalletFiatBalance;

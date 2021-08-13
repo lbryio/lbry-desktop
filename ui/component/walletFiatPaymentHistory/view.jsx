@@ -4,88 +4,57 @@ import Button from 'component/button';
 import Card from 'component/common/card';
 import { Lbryio } from 'lbryinc';
 import moment from 'moment';
+import { STRIPE_PUBLIC_KEY } from 'config';
+
+let stripeEnvironment = 'test';
+// if the key contains pk_live it's a live key
+// update the environment for the calls to the backend to indicate which environment to hit
+if (STRIPE_PUBLIC_KEY.indexOf('pk_live') > -1) {
+  stripeEnvironment = 'live';
+}
 
 type Props = {
   accountDetails: any,
   transactions: any,
-  totalTippedAmount: number,
 };
 
 const WalletBalance = (props: Props) => {
   // receive transactions from parent component
-  let accountTransactions = props.transactions;
+  const { transactions } = props;
 
-  console.log('heres transactions');
-  console.log(accountTransactions);
-
-  // let totalTippedAmount = props.totalTippedAmount;
-
-  // totalTippedAmount = 0;
+  let accountTransactions;
 
   // reverse so most recent payments come first
-  if (accountTransactions) {
-    accountTransactions = accountTransactions.reverse();
+  if (transactions && transactions.length) {
+    accountTransactions = transactions.reverse();
   }
-
-  // const [detailsExpanded, setDetailsExpanded] = React.useState(false);
   // const [accountStatusResponse, setAccountStatusResponse] = React.useState();
-  // const [totalTippedAmount, setTotalTippedAmount] = React.useState(0);
 
-  const [paymentHistoryTransactions, setPaymentHistoryTransactions] = React.useState();
-  const [subscriptions, setSubscriptions] = React.useState();
+  // const [subscriptions, setSubscriptions] = React.useState();
 
   const [lastFour, setLastFour] = React.useState();
-
-  var environment = 'test';
-
-  // function getPaymentHistory() {
-  //   return Lbryio.call(
-  //   'customer',
-  //   'list',
-  //   {
-  //     environment,
-  //   },
-  //   'post'
-  // ); };
 
   function getCustomerStatus() {
     return Lbryio.call(
       'customer',
       'status',
       {
-        environment,
+        environment: stripeEnvironment,
       },
       'post'
     );
   }
 
+  // TODO: this is actually incorrect, last4 should be populated based on the transaction not the current customer details
   React.useEffect(() => {
     (async function() {
-        let response = accountTransactions;
-
-        console.log('payment transactions');
-        console.log(response);
-
         const customerStatusResponse = await getCustomerStatus();
 
-        setLastFour(customerStatusResponse.PaymentMethods[0].card.last4);
+        const lastFour = customerStatusResponse.PaymentMethods && customerStatusResponse.PaymentMethods.length && customerStatusResponse.PaymentMethods[0].card.last4;
 
-        if (response && response.length > 10) response.length = 10;
-
-        setPaymentHistoryTransactions(response);
-
-        const subscriptions  = [...response];
-
-        if (subscriptions && subscriptions.length > 2) {
-          subscriptions.length = 2;
-          setSubscriptions([]);
-        } else {
-          setSubscriptions([]);
-        }
-
-        console.log(response);
+        setLastFour(lastFour);
     })();
-  }, [accountTransactions]);
+  }, []);
 
   return (
     <>
