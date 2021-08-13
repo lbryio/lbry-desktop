@@ -1,4 +1,5 @@
 // @flow
+import { SITE_NAME } from 'config';
 import React, { useEffect } from 'react';
 import classnames from 'classnames';
 import FileRender from 'component/fileRender';
@@ -110,7 +111,7 @@ const EmbedWrapperPage = (props: Props) => {
                 <div>
                   <h1>{__('Paid content cannot be embedded.')}</h1>
                   <div className="section__actions--centered">
-                    <Button label={__('Watch on lbry.tv')} button="primary" href={contentLink} />
+                    <Button label={__('Watch on %SITE_NAME%', { SITE_NAME })} button="primary" href={contentLink} />
                   </div>
                 </div>
               )}
