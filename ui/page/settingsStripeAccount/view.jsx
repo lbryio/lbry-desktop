@@ -31,7 +31,6 @@ if (isDev) {
 
 type Props = {
   source: string,
-  user: User,
   doOpenModal: (string, {}) => void,
   doToast: ({ message: string }) => void,
 };
@@ -41,13 +40,11 @@ type State = {
   loading: boolean,
   content: ?string,
   stripeConnectionUrl: string,
-  // alreadyUpdated: boolean,
   accountConfirmed: boolean,
   accountPendingConfirmation: boolean,
   accountNotConfirmedButReceivedTips: boolean,
   unpaidBalance: number,
   pageTitle: string,
-  accountTransactions: any, // define this type
   stillRequiringVerification: boolean
 };
 
@@ -64,19 +61,12 @@ class StripeAccountConnection extends React.Component<Props, State> {
       unpaidBalance: 0,
       stripeConnectionUrl: '',
       pageTitle: 'Add Payout Method',
-      accountTransactions: [],
       stillRequiringVerification: true,
-      // alreadyUpdated: false,
     };
   }
 
   componentDidMount() {
-    const { user } = this.props;
-
     let doToast = this.props.doToast;
-
-    // $FlowFixMe
-    this.experimentalUiEnabled = user && user.experimental_ui;
 
     var that = this;
 
@@ -200,7 +190,6 @@ class StripeAccountConnection extends React.Component<Props, State> {
       accountNotConfirmedButReceivedTips,
       pageTitle,
       stillRequiringVerification,
-      // accountTransactions,
     } = this.state;
 
     return (

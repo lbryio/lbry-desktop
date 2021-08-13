@@ -42,18 +42,8 @@ const WalletPage = (props: Props) => {
         environment: stripeEnvironment,
       },
       'post'
-    ); };
-
-  // function getCustomerStatus() {
-  //   return Lbryio.call(
-  //     'customer',
-  //     'status',
-  //     {
-  //       environment: stripeEnvironment,
-  //     },
-  //     'post'
-  //   );
-  // }
+    );
+  }
 
   function getAccountStatus() {
     return Lbryio.call(
@@ -117,6 +107,7 @@ const WalletPage = (props: Props) => {
     })();
   }, []);
 
+  // TODO: use built in tabs functionality
   function focusLBCTab() {
     document.getElementsByClassName('lbc-transactions')[0].style.display = 'inline';
     document.getElementsByClassName('fiat-transactions')[0].style.display = 'none';
