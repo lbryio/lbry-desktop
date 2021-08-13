@@ -11,11 +11,17 @@ import LbcSymbol from 'component/common/lbc-symbol';
 import I18nMessage from 'component/i18nMessage';
 import { isNameValid, parseURI } from 'lbry-redux';
 import ClaimPreview from 'component/claimPreview';
+import debounce from 'util/debounce';
 import { getUriForSearchTerm } from 'util/search';
 
 const DEBOUNCE_REFRESH_MS = 1000;
 
-const FEATURE_IS_READY = false;
+const LBC_MAX = 21000000;
+const LBC_MIN = 0;
+const LBC_STEP = 1.0;
+
+// ****************************************************************************
+// ****************************************************************************
 
 type Props = {
   activeChannelClaim: ChannelClaim,
@@ -28,7 +34,7 @@ type Props = {
   commentModAddDelegate: (string, string, ChannelClaim) => void,
   commentModRemoveDelegate: (string, string, ChannelClaim) => void,
   commentModListDelegates: (ChannelClaim) => void,
-  fetchCreatorSettings: (Array<string>) => void,
+  fetchCreatorSettings: (channelId: string) => void,
   updateCreatorSettings: (ChannelClaim, PerChannelSettings) => void,
   doToast: ({ message: string }) => void,
 };
@@ -54,26 +60,28 @@ export default function SettingsCreatorPage(props: Props) {
   const [moderatorSearchTerm, setModeratorSearchTerm] = React.useState('');
   const [moderatorSearchError, setModeratorSearchError] = React.useState('');
   const [moderatorSearchClaimUri, setModeratorSearchClaimUri] = React.useState('');
-  const [minTipAmountComment, setMinTipAmountComment] = React.useState(0);
-  const [minTipAmountSuperChat, setMinTipAmountSuperChat] = React.useState(0);
-  const [slowModeMinGap, setSlowModeMinGap] = React.useState(0);
+  const [minTip, setMinTip] = React.useState(0);
+  const [minSuper, setMinSuper] = React.useState(0);
+  const [slowModeMin, setSlowModeMin] = React.useState(0);
   const [lastUpdated, setLastUpdated] = React.useState(1);
 
-  function settingsToStates(settings: PerChannelSettings) {
-    if (settings.comments_enabled !== undefined) {
-      setCommentsEnabled(settings.comments_enabled);
-    }
-    if (settings.min_tip_amount_comment !== undefined) {
-      setMinTipAmountComment(settings.min_tip_amount_comment);
-    }
-    if (settings.min_tip_amount_super_chat !== undefined) {
-      setMinTipAmountSuperChat(settings.min_tip_amount_super_chat);
-    }
-    if (settings.slow_mode_min_gap !== undefined) {
-      setSlowModeMinGap(settings.slow_mode_min_gap);
-    }
-    if (settings.words) {
-      const tagArray = Array.from(new Set(settings.words));
+  const pushSlowModeMinDebounced = React.useMemo(() => debounce(pushSlowModeMin, 1000), []);
+  const pushMinTipDebounced = React.useMemo(() => debounce(pushMinTip, 1000), []);
+  const pushMinSuperDebounced = React.useMemo(() => debounce(pushMinSuper, 1000), []);
+
+  // **************************************************************************
+  // **************************************************************************
+
+  /**
+   * Updates corresponding GUI states with the given PerChannelSettings values.
+   *
+   * @param settings
+   * @param fullSync If true, update all states and consider 'undefined' settings as "cleared/false";
+   *                 if false, only update defined settings.
+   */
+  function settingsToStates(settings: PerChannelSettings, fullSync: boolean) {
+    const doSetMutedWordTags = (words: Array<string>) => {
+      const tagArray = Array.from(new Set(words));
       setMutedWordTags(
         tagArray
           .filter((t) => t !== '')
@@ -81,13 +89,49 @@ export default function SettingsCreatorPage(props: Props) {
             return { name: x };
           })
       );
+    };
+
+    if (fullSync) {
+      setCommentsEnabled(settings.comments_enabled || false);
+      setMinTip(settings.min_tip_amount_comment || 0);
+      setMinSuper(settings.min_tip_amount_super_chat || 0);
+      setSlowModeMin(settings.slow_mode_min_gap || 0);
+      doSetMutedWordTags(settings.words || []);
+    } else {
+      if (settings.comments_enabled !== undefined) {
+        setCommentsEnabled(settings.comments_enabled);
+      }
+      if (settings.min_tip_amount_comment !== undefined) {
+        setMinTip(settings.min_tip_amount_comment);
+      }
+      if (settings.min_tip_amount_super_chat !== undefined) {
+        setMinSuper(settings.min_tip_amount_super_chat);
+      }
+      if (settings.slow_mode_min_gap !== undefined) {
+        setSlowModeMin(settings.slow_mode_min_gap);
+      }
+      if (settings.words) {
+        doSetMutedWordTags(settings.words);
+      }
     }
   }
 
   function setSettings(newSettings: PerChannelSettings) {
-    settingsToStates(newSettings);
+    settingsToStates(newSettings, false);
     updateCreatorSettings(activeChannelClaim, newSettings);
     setLastUpdated(Date.now());
+  }
+
+  function pushSlowModeMin(value: number, activeChannelClaim: ChannelClaim) {
+    updateCreatorSettings(activeChannelClaim, { slow_mode_min_gap: value });
+  }
+
+  function pushMinTip(value: number, activeChannelClaim: ChannelClaim) {
+    updateCreatorSettings(activeChannelClaim, { min_tip_amount_comment: value });
+  }
+
+  function pushMinSuper(value: number, activeChannelClaim: ChannelClaim) {
+    updateCreatorSettings(activeChannelClaim, { min_tip_amount_super_chat: value });
   }
 
   function addMutedWords(newTags: Array<Tag>) {
@@ -153,6 +197,9 @@ export default function SettingsCreatorPage(props: Props) {
     }
   }
 
+  // **************************************************************************
+  // **************************************************************************
+
   // 'moderatorSearchTerm' to 'moderatorSearchClaimUri'
   React.useEffect(() => {
     if (!moderatorSearchTerm) {
@@ -211,19 +258,22 @@ export default function SettingsCreatorPage(props: Props) {
 
     if (activeChannelClaim && settingsByChannelId && settingsByChannelId[activeChannelClaim.claim_id]) {
       const channelSettings = settingsByChannelId[activeChannelClaim.claim_id];
-      settingsToStates(channelSettings);
+      settingsToStates(channelSettings, true);
     }
   }, [activeChannelClaim, settingsByChannelId, lastUpdated]);
 
-  // Re-sync list, mainly to correct any invalid settings.
+  // Re-sync list on first idle time; mainly to correct any invalid settings.
   React.useEffect(() => {
     if (lastUpdated && activeChannelClaim) {
       const timer = setTimeout(() => {
-        fetchCreatorSettings([activeChannelClaim.claim_id]);
+        fetchCreatorSettings(activeChannelClaim.claim_id);
       }, DEBOUNCE_REFRESH_MS);
       return () => clearTimeout(timer);
     }
   }, [lastUpdated, activeChannelClaim, fetchCreatorSettings]);
+
+  // **************************************************************************
+  // **************************************************************************
 
   const isBusy =
     !activeChannelClaim || !settingsByChannelId || settingsByChannelId[activeChannelClaim.claim_id] === undefined;
@@ -272,8 +322,13 @@ export default function SettingsCreatorPage(props: Props) {
                   step={1}
                   type="number"
                   placeholder="1"
-                  value={slowModeMinGap}
-                  onChange={(e) => setSettings({ slow_mode_min_gap: parseInt(e.target.value) })}
+                  value={slowModeMin}
+                  onChange={(e) => {
+                    const value = parseInt(e.target.value);
+                    setSlowModeMin(value);
+                    pushSlowModeMinDebounced(value, activeChannelClaim);
+                  }}
+                  onBlur={() => setLastUpdated(Date.now())}
                 />
               </>
             }
@@ -297,47 +352,70 @@ export default function SettingsCreatorPage(props: Props) {
               </div>
             }
           />
-          {FEATURE_IS_READY && (
-            <Card
-              title={__('Tip')}
-              actions={
-                <>
-                  <FormField
-                    name="min_tip_amount_comment"
-                    label={
-                      <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>Minimum %lbc% tip amount for comments</I18nMessage>
+          <Card
+            title={__('Tip')}
+            actions={
+              <>
+                <FormField
+                  name="min_tip_amount_comment"
+                  label={
+                    <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>Minimum %lbc% tip amount for comments</I18nMessage>
+                  }
+                  helper={__(
+                    'Enabling a minimum amount to comment will force all comments, including livestreams, to have tips associated with them. This can help prevent spam.'
+                  )}
+                  className="form-field--price-amount"
+                  max={LBC_MAX}
+                  min={LBC_MIN}
+                  step={LBC_STEP}
+                  type="number"
+                  placeholder="1"
+                  value={minTip}
+                  onChange={(e) => {
+                    const newMinTip = parseFloat(e.target.value);
+                    setMinTip(newMinTip);
+                    pushMinTipDebounced(newMinTip, activeChannelClaim);
+                    if (newMinTip !== 0 && minSuper !== 0) {
+                      setMinSuper(0);
+                      pushMinSuperDebounced(0, activeChannelClaim);
                     }
-                    helper={__(
-                      'Enabling a minimum amount to comment will force all comments, including livestreams, to have tips associated with them. This can help prevent spam.'
-                    )}
-                    className="form-field--price-amount"
-                    min={0}
-                    step="any"
-                    type="number"
-                    placeholder="1"
-                    value={minTipAmountComment}
-                    onChange={(e) => setSettings({ min_tip_amount_comment: parseFloat(e.target.value) })}
-                  />
-                  <FormField
-                    name="min_tip_amount_super_chat"
-                    label={
-                      <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>Minimum %lbc% tip amount for hyperchats</I18nMessage>
-                    }
-                    helper={__(
-                      'Enabling a minimum amount to hyperchat will force all TIPPED comments to have this value in order to be shown. This still allows regular comments to be posted.'
-                    )}
-                    className="form-field--price-amount"
-                    min={0}
-                    step="any"
-                    type="number"
-                    placeholder="1"
-                    value={minTipAmountSuperChat}
-                    onChange={(e) => setSettings({ min_tip_amount_super_chat: parseFloat(e.target.value) })}
-                  />
-                </>
-              }
-            />
-          )}
+                  }}
+                  onBlur={() => setLastUpdated(Date.now())}
+                />
+                <FormField
+                  name="min_tip_amount_super_chat"
+                  label={
+                    <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>Minimum %lbc% tip amount for hyperchats</I18nMessage>
+                  }
+                  helper={
+                    <>
+                      {__(
+                        'Enabling a minimum amount to hyperchat will force all TIPPED comments to have this value in order to be shown. This still allows regular comments to be posted.'
+                      )}
+                      {minTip !== 0 && (
+                        <p className="help--inline">
+                          <em>{__('(This settings is not applicable if all comments require a tip.)')}</em>
+                        </p>
+                      )}
+                    </>
+                  }
+                  className="form-field--price-amount"
+                  min={0}
+                  step="any"
+                  type="number"
+                  placeholder="1"
+                  value={minSuper}
+                  disabled={minTip !== 0}
+                  onChange={(e) => {
+                    const newMinSuper = parseFloat(e.target.value);
+                    setMinSuper(newMinSuper);
+                    pushMinSuperDebounced(newMinSuper, activeChannelClaim);
+                  }}
+                  onBlur={() => setLastUpdated(Date.now())}
+                />
+              </>
+            }
+          />
           <Card
             title={__('Delegation')}
             className="card--enable-overflow"

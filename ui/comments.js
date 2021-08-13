@@ -34,6 +34,7 @@ const Comments = {
   setting_unblock_word: (params: BlockWordParams) => fetchCommentsApi('setting.UnBlockWord', params),
   setting_list_blocked_words: (params: SettingsParams) => fetchCommentsApi('setting.ListBlockedWords', params),
   setting_update: (params: UpdateSettingsParams) => fetchCommentsApi('setting.Update', params),
+  setting_get: (params: SettingsParams) => fetchCommentsApi('setting.Get', params),
   super_list: (params: SuperListParams) => fetchCommentsApi('comment.SuperChatList', params),
 };
 
