@@ -62,7 +62,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
       unpaidBalance: 0,
       stripeConnectionUrl: '',
       pageTitle: 'Add Payout Method',
-      stillRequiringVerification: true,
+      stillRequiringVerification: false,
       accountTransactions: [],
     };
   }
@@ -282,7 +282,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
               button="secondary"
               label={__('View Transactions')}
               icon={ICONS.SETTINGS}
-              navigate={`/$/${PAGES.WALLET}?tab=account-history`}
+              navigate={`/$/${PAGES.WALLET}?tab=fiat-payment-history`}
             /></>
           }
         />
