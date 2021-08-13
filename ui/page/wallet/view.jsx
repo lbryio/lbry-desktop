@@ -11,6 +11,14 @@ import Page from 'component/page';
 import Spinner from 'component/spinner';
 import YrblWalletEmpty from 'component/yrblWalletEmpty';
 import { Lbryio } from 'lbryinc';
+import { STRIPE_PUBLIC_KEY } from '../../../config';
+
+let stripeEnvironment = 'test';
+// if the key contains pk_live it's a live key
+// update the environment for the calls to the backend to indicate which environment to hit
+if (STRIPE_PUBLIC_KEY.indexOf('pk_live') > -1) {
+  stripeEnvironment = 'live';
+}
 
 type Props = {
   history: { action: string, push: (string) => void, replace: (string) => void },
@@ -19,10 +27,6 @@ type Props = {
 };
 
 const WalletPage = (props: Props) => {
-  console.log(props);
-
-  const stripeEnvironment = 'test';
-
   const tab = new URLSearchParams(props.location.search).get('tab');
 
   const [accountStatusResponse, setAccountStatusResponse] = React.useState();

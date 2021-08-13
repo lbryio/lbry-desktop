@@ -209,7 +209,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
         className="card-stack"
       >
         {/* @if TARGET='web' */}
-        {user && user.fiat_enabled && (
+        {user && (
           <Card
             title={__('Bank Accounts')}
             subtitle={__('Connect a bank account to receive tips and compensation in your local currency')}

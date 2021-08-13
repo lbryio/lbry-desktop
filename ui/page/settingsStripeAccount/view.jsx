@@ -143,8 +143,6 @@ class StripeAccountConnection extends React.Component<Props, State> {
         if (accountStatusResponse.charges_enabled) {
           // account has already been confirmed
 
-          console.log(accountStatusResponse);
-
           const eventuallyDueInformation = accountStatusResponse.account_info.requirements.eventually_due;
 
           const currentlyDueInformation = accountStatusResponse.account_info.requirements.currently_due;
@@ -158,13 +156,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
             getAndSetAccountLink(false);
           }
 
-          console.log(objectToUpdateState);
-
           that.setState(objectToUpdateState);
-
-          console.log(eventuallyDueInformation);
-
-          console.log(currentlyDueInformation);
 
           // user has not confirmed an account but have received payments
         } else if (accountStatusResponse.total_received_unpaid > 0) {
@@ -211,32 +203,69 @@ class StripeAccountConnection extends React.Component<Props, State> {
       // accountTransactions,
     } = this.state;
 
-    const { user } = this.props;
-
-    if (user.fiat_enabled) {
-      return (
-        <Page backout={{ title: pageTitle, backLabel: __('Done') }} noFooter noSideNavigation>
-          <Card
-            title={<div className="table__header-text">{__('Connect a bank account')}</div>}
-            isBodyList
-            body={
-              <div>
-                {/* show while waiting for account status */}
-                {!accountConfirmed && !accountPendingConfirmation && !accountNotConfirmedButReceivedTips && (
-                  <div className="card__body-actions">
+    return (
+      <Page backout={{ title: pageTitle, backLabel: __('Done') }} noFooter noSideNavigation>
+        <Card
+          title={<div className="table__header-text">{__('Connect a bank account')}</div>}
+          isBodyList
+          body={
+            <div>
+              {/* show while waiting for account status */}
+              {!accountConfirmed && !accountPendingConfirmation && !accountNotConfirmedButReceivedTips && (
+                <div className="card__body-actions">
+                  <div>
                     <div>
-                      <div>
-                        <h3>{__('Getting your bank account connection status...')}</h3>
-                      </div>
+                      <h3>{__('Getting your bank account connection status...')}</h3>
                     </div>
                   </div>
-                )}
-                {/* user has yet to complete their integration */}
-                {!accountConfirmed && accountPendingConfirmation && (
-                  <div className="card__body-actions">
+                </div>
+              )}
+              {/* user has yet to complete their integration */}
+              {!accountConfirmed && accountPendingConfirmation && (
+                <div className="card__body-actions">
+                  <div>
                     <div>
+                      <h3>{__('Connect your bank account to Odysee to receive donations directly from users')}</h3>
+                    </div>
+                    <div className="section__actions">
+                      <a href={stripeConnectionUrl}>
+                        <Button button="secondary" label={__('Connect your bank account')} icon={ICONS.FINANCE} />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              )}
+              {/* user has completed their integration */}
+              {accountConfirmed && (
+                <div className="card__body-actions">
+                  <div>
+                    <div>
+                      <h3>{__('Congratulations! Your account has been connected with Odysee.')}</h3>
+                      {stillRequiringVerification && <><h3 style={{marginTop: '10px'}}>Although your account is connected it still requires verification to begin receiving tips.</h3>
+                      <h3 style={{marginTop: '10px'}}>Please use the button below to complete your verification process and enable tipping for your account.</h3></> }
+                    </div>
+                  </div>
+                </div>
+              )}
+              {/* TODO: hopefully we won't be using this anymore and can remove it */}
+              {accountNotConfirmedButReceivedTips && (
+                <div className="card__body-actions">
+                  <div>
+                    <div>
+                      <h3>{__('Congratulations, you have already begun receiving tips on Odysee!')}</h3>
                       <div>
-                        <h3>{__('Connect your bank account to Odysee to receive donations directly from users')}</h3>
+                        <br />
+                        <h3>
+                          {__('Your pending account balance is $%balance% USD.', { balance: unpaidBalance / 100 })}
+                        </h3>
+                      </div>
+                      <br />
+                      <div>
+                        <h3>
+                          {__(
+                            'Connect your bank account to be able to cash your pending balance out to your account.'
+                          )}
+                        </h3>
                       </div>
                       <div className="section__actions">
                         <a href={stripeConnectionUrl}>
@@ -245,72 +274,29 @@ class StripeAccountConnection extends React.Component<Props, State> {
                       </div>
                     </div>
                   </div>
-                )}
-                {/* user has completed their integration */}
-                {accountConfirmed && (
-                  <div className="card__body-actions">
-                    <div>
-                      <div>
-                        <h3>{__('Congratulations! Your account has been connected with Odysee.')}</h3>
-                        {stillRequiringVerification && <><h3 style={{marginTop: '10px'}}>Although your account is connected it still requires verification to begin receiving tips.</h3>
-                        <h3 style={{marginTop: '10px'}}>Please use the button below to complete your verification process and enable tipping for your account.</h3></> }
-                      </div>
-                    </div>
-                  </div>
-                )}
-                {/* TODO: hopefully we won't be using this anymore and can remove it */}
-                {accountNotConfirmedButReceivedTips && (
-                  <div className="card__body-actions">
-                    <div>
-                      <div>
-                        <h3>{__('Congratulations, you have already begun receiving tips on Odysee!')}</h3>
-                        <div>
-                          <br />
-                          <h3>
-                            {__('Your pending account balance is $%balance% USD.', { balance: unpaidBalance / 100 })}
-                          </h3>
-                        </div>
-                        <br />
-                        <div>
-                          <h3>
-                            {__(
-                              'Connect your bank account to be able to cash your pending balance out to your account.'
-                            )}
-                          </h3>
-                        </div>
-                        <div className="section__actions">
-                          <a href={stripeConnectionUrl}>
-                            <Button button="secondary" label={__('Connect your bank account')} icon={ICONS.FINANCE} />
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            }
-            actions={
-              <>{ stillRequiringVerification && <Button
-                button="primary"
-                label={__('Complete Verification')}
-                icon={ICONS.SETTINGS}
-                navigate={stripeConnectionUrl}
-                className="stripe__complete-verification-button"
-              /> }
-              <Button
-                button="secondary"
-                label={__('View Transactions')}
-                icon={ICONS.SETTINGS}
-                navigate={`/$/${PAGES.WALLET}?tab=account-history`}
-              /></>
-            }
-          />
-          <br />
-        </Page>
-      );
-    } else {
-      return <></>; // probably null;
-    }
+                </div>
+              )}
+            </div>
+          }
+          actions={
+            <>{ stillRequiringVerification && <Button
+              button="primary"
+              label={__('Complete Verification')}
+              icon={ICONS.SETTINGS}
+              navigate={stripeConnectionUrl}
+              className="stripe__complete-verification-button"
+            /> }
+            <Button
+              button="secondary"
+              label={__('View Transactions')}
+              icon={ICONS.SETTINGS}
+              navigate={`/$/${PAGES.WALLET}?tab=account-history`}
+            /></>
+          }
+        />
+        <br />
+      </Page>
+    );
   }
 }
 
