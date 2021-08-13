@@ -28,7 +28,7 @@ import { useRect } from '@reach/rect';
 //   </TabPanels>
 // </Tabs>
 //
-// the base @reach/tabs components handle all the focus/accessibilty labels
+// the base @reach/tabs components handle all the focus/accessibility labels
 // We're just adding some styling
 
 type TabsProps = {

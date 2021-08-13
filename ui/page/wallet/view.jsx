@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { withRouter } from 'react-router';
+import { useHistory, withRouter } from 'react-router';
 import WalletBalance from 'component/walletBalance';
 import WalletFiatBalance from 'component/walletFiatBalance';
 import WalletFiatPaymentBalance from 'component/walletFiatPaymentBalance';
@@ -8,10 +8,22 @@ import WalletFiatAccountHistory from 'component/walletFiatAccountHistory';
 import WalletFiatPaymentHistory from 'component/walletFiatPaymentHistory';
 import TxoList from 'component/txoList';
 import Page from 'component/page';
+import * as PAGES from 'constants/pages';
 import Spinner from 'component/spinner';
 import YrblWalletEmpty from 'component/yrblWalletEmpty';
 import { Lbryio } from 'lbryinc';
-import { STRIPE_PUBLIC_KEY } from '../../../config';
+import { SIMPLE_SITE, STRIPE_PUBLIC_KEY } from 'config';
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
+import Card from 'component/common/card';
+import { PAGE_VIEW_QUERY } from '../channel/view';
+
+const TAB_QUERY = 'tab';
+
+const TABS = {
+  LBRY_CREDITS_TAB: 'credits',
+  ACCOUNT_HISTORY: 'fiat-account-history',
+  PAYMENT_HISTORY: 'fiat-payment-history',
+};
 
 let stripeEnvironment = 'test';
 // if the key contains pk_live it's a live key
@@ -27,7 +39,45 @@ type Props = {
 };
 
 const WalletPage = (props: Props) => {
-  const tab = new URLSearchParams(props.location.search).get('tab');
+  const {
+    location: { search },
+    push,
+  } = useHistory();
+
+  const urlParams = new URLSearchParams(search);
+
+  const currentView = urlParams.get(TAB_QUERY) || TABS.LBRY_CREDITS_TAB;
+
+  let tabIndex;
+  switch (currentView) {
+    case TABS.LBRY_CREDITS_TAB:
+      tabIndex = 0;
+      break;
+    case TABS.PAYMENT_HISTORY:
+      tabIndex = 1;
+      break;
+    case TABS.ACCOUNT_HISTORY:
+      tabIndex = 2;
+      break;
+    default:
+      tabIndex = 0;
+      break;
+  }
+
+  function onTabChange(newTabIndex) {
+    let url = `/$/${PAGES.WALLET}?`;
+
+    if (newTabIndex === 0) {
+      url += `${TAB_QUERY}=${TABS.LBRY_CREDITS_TAB}`;
+    } else if (newTabIndex === 1) {
+      url += `${TAB_QUERY}=${TABS.PAYMENT_HISTORY}`;
+    } else if (newTabIndex === 2) {
+      url += `${TAB_QUERY}=${TABS.ACCOUNT_HISTORY}`;
+    } else {
+      url += `${TAB_QUERY}=${TABS.LBRY_CREDITS_TAB}`;
+    }
+    push(url);
+  }
 
   const [accountStatusResponse, setAccountStatusResponse] = React.useState();
   const [accountTransactionResponse, setAccountTransactionResponse] = React.useState([]);
@@ -107,119 +157,74 @@ const WalletPage = (props: Props) => {
     })();
   }, []);
 
-  // TODO: use built in tabs functionality
-  function focusLBCTab() {
-    document.getElementsByClassName('lbc-transactions')[0].style.display = 'inline';
-    document.getElementsByClassName('fiat-transactions')[0].style.display = 'none';
-    document.getElementsByClassName('payment-history-tab')[0].style.display = 'none';
-
-    document.getElementsByClassName('lbc-tab-switcher')[0].style.textDecoration = 'underline';
-    document.getElementsByClassName('fiat-tab-switcher')[0].style.textDecoration = 'none';
-    document.getElementsByClassName('fiat-payment-history-switcher')[0].style.textDecoration = 'none';
-  }
-
-  function focusAccountHistoryTab() {
-    document.getElementsByClassName('lbc-transactions')[0].style.display = 'none';
-    document.getElementsByClassName('payment-history-tab')[0].style.display = 'none';
-    document.getElementsByClassName('fiat-transactions')[0].style.display = 'inline';
-
-    document.getElementsByClassName('lbc-tab-switcher')[0].style.textDecoration = 'none';
-    document.getElementsByClassName('fiat-tab-switcher')[0].style.textDecoration = 'underline';
-    document.getElementsByClassName('fiat-payment-history-switcher')[0].style.textDecoration = 'none';
-  }
-
-  function focusPaymentHistoryTab() {
-    document.getElementsByClassName('lbc-transactions')[0].style.display = 'none';
-    document.getElementsByClassName('fiat-transactions')[0].style.display = 'none';
-    document.getElementsByClassName('payment-history-tab')[0].style.display = 'inline';
-
-    document.getElementsByClassName('lbc-tab-switcher')[0].style.textDecoration = 'none';
-    document.getElementsByClassName('fiat-tab-switcher')[0].style.textDecoration = 'none';
-    document.getElementsByClassName('fiat-payment-history-switcher')[0].style.textDecoration = 'underline';
-  }
-
-  // select the first tab
-  React.useEffect(() => {
-    if (tab === 'account-history') {
-    // if (1 === 2) {
-      focusAccountHistoryTab();
-    } else if (tab === 'payment-history') {
-    // } else if (1 === 2){
-      focusPaymentHistoryTab();
-    } else {
-      focusLBCTab();
-    }
-  }, []);
-
   const { location, totalBalance } = props;
-  const { search } = location;
+  // const { search } = location;
   const showIntro = totalBalance === 0;
   const loading = totalBalance === undefined;
 
   return (
     <Page>
-      {/* tabs to switch between fiat and lbc */}
-      {/* lbc button */}
-      <h2 className="lbc-tab-switcher"
-        style={{display: 'inline-block', paddingBottom: '16px', marginRight: '14px', textUnderlineOffset: '4px', fontSize: '18px', marginLeft: '3px'}}
-        onClick={() => {
-          focusLBCTab();
-        }}
-      >LBRY Credits</h2>
-      {/* account history button */}
-      <h2 className="fiat-tab-switcher"
-        style={{display: 'inline-block', textUnderlineOffset: '4px', fontSize: '18px', marginRight: '14px'}}
-        onClick={() => {
-          focusAccountHistoryTab();
-        }}
-      >Account History</h2>
-      {/* payment history button */}
-      <h2 className="fiat-payment-history-switcher"
-        style={{display: 'inline-block', textUnderlineOffset: '4px', fontSize: '18px'}}
-        onClick={() => {
-            focusPaymentHistoryTab();
-          }}
-      >Payment History</h2>
 
-      {/* lbc wallet section */}
-      <div className="lbc-transactions">
-        {/* if the transactions are loading */}
-        { loading && (
-          <div className="main--empty">
-            <Spinner delayed />
-          </div>
-        )}
-        {/* when the transactions are finished loading */}
-        { !loading && (
-          <>
-            {showIntro ? (
-              <YrblWalletEmpty includeWalletLink />
-            ) : (
-              <div className="card-stack">
-                <WalletBalance />
-                <TxoList search={search} />
-              </div>
-            )}
-          </>
-        )}
-      </div>
-
-      {/* account received transactions section */}
-      <div className="fiat-transactions" style={{display: 'none'}}>
-          <WalletFiatBalance accountDetails={accountStatusResponse} />
-          <div style={{paddingTop: '25px'}} />
-          <WalletFiatAccountHistory transactions={accountTransactionResponse} />
-      </div>
-
-      {/* fiat payment history for tips made by user */}
-      <div className="payment-history-tab" style={{display: 'none'}}>
-        <WalletFiatPaymentBalance transactions={customerTransactions} totalTippedAmount={totalTippedAmount} accountDetails={accountStatusResponse} />
-        <div style={{paddingTop: '25px'}} />
-        <WalletFiatPaymentHistory transactions={customerTransactions} />
-      </div>
-
+      <Tabs onChange={onTabChange}>
+        <TabList className="tabs__list--collection-edit-page">
+          <Tab>{__('LBRY Credits')}</Tab>
+          <Tab>{__('Account History')}</Tab>
+          <Tab>{__('Payment History')}</Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel>
+            <Card
+              body={
+                <div className="lbc-transactions">
+                  {/* if the transactions are loading */}
+                  { loading && (
+                    <div className="main--empty">
+                      <Spinner delayed />
+                    </div>
+                  )}
+                  {/* when the transactions are finished loading */}
+                  { !loading && (
+                    <>
+                      {showIntro ? (
+                        <YrblWalletEmpty includeWalletLink />
+                      ) : (
+                        <div className="card-stack">
+                          <WalletBalance />
+                          <TxoList search={search} />
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+              }
+            />
+          </TabPanel>
+          <TabPanel>
+            <Card
+              body={
+                <div className="fiat-transactions">
+                  <WalletFiatBalance accountDetails={accountStatusResponse} />
+                  <div style={{paddingTop: '25px'}} />
+                  <WalletFiatAccountHistory transactions={accountTransactionResponse} />
+                </div>
+              }
+            />
+          </TabPanel>
+          <TabPanel>
+            <Card
+              body={
+                <div className="payment-history-tab">
+                  <WalletFiatPaymentBalance transactions={customerTransactions} totalTippedAmount={totalTippedAmount} accountDetails={accountStatusResponse} />
+                  <div style={{paddingTop: '25px'}} />
+                  <WalletFiatPaymentHistory transactions={customerTransactions} />
+                </div>
+              }
+            />
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
     </Page>
   );
 };
 
-export default withRouter(WalletPage);
+export default WalletPage;
