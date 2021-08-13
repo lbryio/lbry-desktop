@@ -175,8 +175,8 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     return (
       <span className="claim-preview__channel-sub-count">
         {channelSubCount === 1
-          ? __('%channelSubCount% subscriber', { channelSubCount })
-          : __('%channelSubCount% subscribers', { channelSubCount })}
+          ? __('%channelSubCount% Follower', { channelSubCount })
+          : __('%channelSubCount% Followers', { channelSubCount })}
       </span>
     );
   }, [channelSubCount]);
