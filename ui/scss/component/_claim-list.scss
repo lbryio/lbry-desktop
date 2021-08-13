@@ -685,7 +685,8 @@
     }
   }
 
-  .button--file-action {
+  .button--file-action,
+  .download-text {
     display: block;
     margin: 0 0;
     padding: var(--spacing-xxs) var(--spacing-xxs);
