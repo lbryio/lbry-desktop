@@ -165,7 +165,7 @@ const WalletPage = (props: Props) => {
   return (
     <Page>
 
-      <Tabs onChange={onTabChange}>
+      <Tabs onChange={onTabChange} index={tabIndex}>
         <TabList className="tabs__list--collection-edit-page">
           <Tab>{__('LBRY Credits')}</Tab>
           <Tab>{__('Account History')}</Tab>
@@ -173,53 +173,41 @@ const WalletPage = (props: Props) => {
         </TabList>
         <TabPanels>
           <TabPanel>
-            <Card
-              body={
-                <div className="lbc-transactions">
-                  {/* if the transactions are loading */}
-                  { loading && (
-                    <div className="main--empty">
-                      <Spinner delayed />
-                    </div>
-                  )}
-                  {/* when the transactions are finished loading */}
-                  { !loading && (
-                    <>
-                      {showIntro ? (
-                        <YrblWalletEmpty includeWalletLink />
-                      ) : (
-                        <div className="card-stack">
-                          <WalletBalance />
-                          <TxoList search={search} />
-                        </div>
-                      )}
-                    </>
-                  )}
-                </div>
-              }
-            />
+            <div className="section card-stack">
+              <div className="lbc-transactions">
+                {/* if the transactions are loading */}
+                { loading && (
+                  <div className="main--empty">
+                    <Spinner delayed />
+                  </div>
+                )}
+                {/* when the transactions are finished loading */}
+                { !loading && (
+                  <>
+                    {showIntro ? (
+                      <YrblWalletEmpty includeWalletLink />
+                    ) : (
+                      <div className="card-stack">
+                        <WalletBalance />
+                        <TxoList search={search} />
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            </div>
           </TabPanel>
           <TabPanel>
-            <Card
-              body={
-                <div className="fiat-transactions">
-                  <WalletFiatBalance accountDetails={accountStatusResponse} />
-                  <div style={{paddingTop: '25px'}} />
-                  <WalletFiatAccountHistory transactions={accountTransactionResponse} />
-                </div>
-              }
-            />
+            <div className="section card-stack">
+              <WalletFiatBalance accountDetails={accountStatusResponse} />
+              <WalletFiatAccountHistory transactions={accountTransactionResponse} />
+            </div>
           </TabPanel>
           <TabPanel>
-            <Card
-              body={
-                <div className="payment-history-tab">
-                  <WalletFiatPaymentBalance transactions={customerTransactions} totalTippedAmount={totalTippedAmount} accountDetails={accountStatusResponse} />
-                  <div style={{paddingTop: '25px'}} />
-                  <WalletFiatPaymentHistory transactions={customerTransactions} />
-                </div>
-              }
-            />
+            <div className="section card-stack">
+              <WalletFiatPaymentBalance transactions={customerTransactions} totalTippedAmount={totalTippedAmount} accountDetails={accountStatusResponse} />
+              <WalletFiatPaymentHistory transactions={customerTransactions} />
+            </div>
           </TabPanel>
         </TabPanels>
       </Tabs>
