@@ -2,7 +2,7 @@
 import * as ACTIONS from 'constants/action_types';
 import { SEARCH_OPTIONS } from 'constants/search';
 import { buildURI, doResolveUris, batchActions, isURIValid, makeSelectClaimForUri } from 'lbry-redux';
-import { makeSelectSearchUris, selectSearchValue } from 'redux/selectors/search';
+import { makeSelectSearchUrisForQuery, selectSearchValue } from 'redux/selectors/search';
 import handleFetchResponse from 'util/handle-fetch';
 import { getSearchQueryString } from 'util/query-params';
 import { SIMPLE_SITE, SEARCH_SERVER_API } from 'config';
@@ -48,7 +48,7 @@ export const doSearch = (rawQuery: string, searchOptions: SearchOptions) => (
   const from = searchOptions.from;
 
   // If we have already searched for something, we don't need to do anything
-  const urisForQuery = makeSelectSearchUris(queryWithOptions)(state);
+  const urisForQuery = makeSelectSearchUrisForQuery(queryWithOptions)(state);
   if (urisForQuery && !!urisForQuery.length) {
     if (!size || !from || from + size < urisForQuery.length) {
       return;

@@ -27,7 +27,7 @@ export const selectSearchOptions: (state: State) => SearchOptions = createSelect
 
 export const selectIsSearching: (state: State) => boolean = createSelector(selectState, (state) => state.searching);
 
-export const selectSearchUrisByQuery: (state: State) => { [string]: Array<string> } = createSelector(
+export const selectSearchResultByQuery: (state: State) => { [string]: Array<string> } = createSelector(
   selectState,
   (state) => state.resultsByQuery
 );
@@ -37,9 +37,9 @@ export const selectHasReachedMaxResultsLength: (state: State) => { [boolean]: Ar
   (state) => state.hasReachedMaxResultsLength
 );
 
-export const makeSelectSearchUris = (query: string): ((state: State) => Array<string>) =>
+export const makeSelectSearchUrisForQuery = (query: string): ((state: State) => Array<string>) =>
   // replace statement below is kind of ugly, and repeated in doSearch action
-  createSelector(selectSearchUrisByQuery, (byQuery) => {
+  createSelector(selectSearchResultByQuery, (byQuery) => {
     if (query) {
       query = query.replace(/^lbry:\/\//i, '').replace(/\//, ' ');
       const normalizedQuery = createNormalizedSearchKey(query);
@@ -61,7 +61,7 @@ export const makeSelectHasReachedMaxResultsLength = (query: string): ((state: St
 export const makeSelectRecommendedContentForUri = (uri: string) =>
   createSelector(
     makeSelectClaimForUri(uri),
-    selectSearchUrisByQuery,
+    selectSearchResultByQuery,
     makeSelectClaimIsNsfw(uri),
     (claim, searchUrisByQuery, isMature) => {
       let recommendedContent;
@@ -95,7 +95,7 @@ export const makeSelectRecommendedContentForUri = (uri: string) =>
   );
 
 export const makeSelectRecommendedRecsysIdForClaimId = (claimId: string) =>
-  createSelector(makeSelectClaimForClaimId(claimId), selectSearchUrisByQuery, (claim, searchUrisByQuery) => {
+  createSelector(makeSelectClaimForClaimId(claimId), selectSearchResultByQuery, (claim, searchUrisByQuery) => {
     // TODO: DRY this out.
     let poweredBy;
     if (claim) {
