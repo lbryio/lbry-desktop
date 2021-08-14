@@ -144,7 +144,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
             stillRequiringVerification: false,
           };
 
-          if ((eventuallyDueInformation && eventuallyDueInformation.length) || (currentlyDueInformation && currentlyDueInformation)) {
+          if ((eventuallyDueInformation && eventuallyDueInformation.length) || (currentlyDueInformation && currentlyDueInformation.length)) {
             objectToUpdateState.stillRequiringVerification = true;
             getAndSetAccountLink(false);
           }

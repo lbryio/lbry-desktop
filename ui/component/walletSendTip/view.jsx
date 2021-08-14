@@ -620,7 +620,7 @@ function WalletSendTip(props: Props) {
               {activeTab !== TAB_FIAT ? (
                 <WalletSpendableBalanceHelp />
               ) : !canReceiveFiatTip ? (
-                <div className="help">{__('Only select creators can receive tips at this time')}</div>
+                <div className="help">{__('Only creators that verify cash accounts can receive tips')}</div>
               ) : (
                 <div className="help">{__('The payment will be made from your saved card')}</div>
               )}
