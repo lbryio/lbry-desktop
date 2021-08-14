@@ -224,7 +224,7 @@ function WalletTipAmountSelector(props: Props) {
       {useCustomTip && activeTab === TAB_FIAT && hasCardSaved && !canReceiveFiatTip && (
         <>
           <div className="help">
-            <span className="help--spendable">Only select creators can receive tips at this time</span>
+            <span className="help--spendable">Only creators that verify cash accounts can receive tips</span>
           </div>
         </>
       )}
@@ -292,7 +292,7 @@ function WalletTipAmountSelector(props: Props) {
       {!useCustomTip && activeTab === TAB_FIAT && hasCardSaved && !canReceiveFiatTip && (
         <>
           <div className="help">
-            <span className="help--spendable">Only select creators can receive tips at this time</span>
+            <span className="help--spendable">Only creators that verify cash accounts can receive tips</span>
           </div>
         </>
       )}
