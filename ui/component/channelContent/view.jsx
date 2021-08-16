@@ -81,7 +81,7 @@ function ChannelContent(props: Props) {
               !showMature ? '&nsfw=false&size=50&from=0' : ''
             }`
           )
-          .then((results) => {
+          .then(({ body: results }) => {
             const urls = results.map(({ name, claimId }) => {
               return `lbry://${name}#${claimId}`;
             });
