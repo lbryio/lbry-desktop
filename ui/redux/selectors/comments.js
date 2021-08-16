@@ -13,7 +13,27 @@ export const selectIsFetchingCommentsByParentId = createSelector(selectState, (s
 export const selectIsPostingComment = createSelector(selectState, (state) => state.isCommenting);
 export const selectIsFetchingReacts = createSelector(selectState, (state) => state.isFetchingReacts);
 export const selectOthersReactsById = createSelector(selectState, (state) => state.othersReactsByCommentId);
+
 export const selectPinnedCommentsById = createSelector(selectState, (state) => state.pinnedCommentsById);
+export const makeSelectPinnedCommentsForUri = (uri: string) =>
+  createSelector(
+    selectCommentsByUri,
+    selectCommentsById,
+    selectPinnedCommentsById,
+    (byUri, byId, pinnedCommentsById) => {
+      const claimId = byUri[uri];
+      const pinnedCommentIds = pinnedCommentsById && pinnedCommentsById[claimId];
+      const pinnedComments = [];
+
+      if (pinnedCommentIds) {
+        pinnedCommentIds.forEach((commentId) => {
+          pinnedComments.push(byId[commentId]);
+        });
+      }
+
+      return pinnedComments;
+    }
+  );
 
 export const selectModerationBlockList = createSelector(selectState, (state) =>
   state.moderationBlockList ? state.moderationBlockList.reverse() : []

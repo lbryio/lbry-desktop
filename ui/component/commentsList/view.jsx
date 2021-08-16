@@ -28,6 +28,7 @@ function scaleToDevicePixelRatio(value) {
 
 type Props = {
   allCommentIds: any,
+  pinnedComments: Array<Comment>,
   topLevelComments: Array<Comment>,
   topLevelTotalPages: number,
   fetchTopLevelComments: (string, number, number, number) => void,
@@ -57,6 +58,7 @@ function CommentList(props: Props) {
     fetchReacts,
     resetComments,
     uri,
+    pinnedComments,
     topLevelComments,
     topLevelTotalPages,
     claim,
@@ -109,6 +111,34 @@ function CommentList(props: Props) {
       setSort(newSort);
       setPage(0); // Invalidate existing comments
     }
+  }
+
+  function getCommentElems(comments) {
+    return comments.map((comment) => {
+      return (
+        <CommentView
+          isTopLevel
+          threadDepth={3}
+          key={comment.comment_id}
+          uri={uri}
+          authorUri={comment.channel_url}
+          author={comment.channel_name}
+          claimId={comment.claim_id}
+          commentId={comment.comment_id}
+          message={comment.comment}
+          timePosted={comment.timestamp * 1000}
+          claimIsMine={claimIsMine}
+          commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}
+          linkedCommentId={linkedCommentId}
+          isPinned={comment.is_pinned}
+          supportAmount={comment.support_amount}
+          numDirectReplies={comment.replies}
+          isModerator={comment.is_moderator}
+          isGlobalMod={comment.is_global_mod}
+          isFiat={comment.is_fiat}
+        />
+      );
+    });
   }
 
   // Reset comments
@@ -223,8 +253,6 @@ function CommentList(props: Props) {
     topLevelTotalPages,
   ]);
 
-  const displayedComments = readyToDisplayComments ? topLevelComments : [];
-
   return (
     <Card
       title={
@@ -295,33 +323,8 @@ function CommentList(props: Props) {
             })}
             ref={commentRef}
           >
-            {topLevelComments &&
-              displayedComments &&
-              displayedComments.map((comment) => {
-                return (
-                  <CommentView
-                    isTopLevel
-                    threadDepth={3}
-                    key={comment.comment_id}
-                    uri={uri}
-                    authorUri={comment.channel_url}
-                    author={comment.channel_name}
-                    claimId={comment.claim_id}
-                    commentId={comment.comment_id}
-                    message={comment.comment}
-                    timePosted={comment.timestamp * 1000}
-                    claimIsMine={claimIsMine}
-                    commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}
-                    linkedCommentId={linkedCommentId}
-                    isPinned={comment.is_pinned}
-                    supportAmount={comment.support_amount}
-                    numDirectReplies={comment.replies}
-                    isModerator={comment.is_moderator}
-                    isGlobalMod={comment.is_global_mod}
-                    isFiat={comment.is_fiat}
-                  />
-                );
-              })}
+            {readyToDisplayComments && pinnedComments && getCommentElems(pinnedComments)}
+            {readyToDisplayComments && topLevelComments && getCommentElems(topLevelComments)}
           </ul>
 
           {isMobile && (
