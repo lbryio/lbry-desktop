@@ -28,7 +28,6 @@ type Props = {
 
 const VIEW_MODE_CHAT = 'view_chat';
 const VIEW_MODE_SUPER_CHAT = 'view_superchat';
-const COMMENT_SCROLL_OFFSET = 100;
 const COMMENT_SCROLL_TIMEOUT = 25;
 
 export default function LivestreamComments(props: Props) {
@@ -50,20 +49,24 @@ export default function LivestreamComments(props: Props) {
   let superChatsFiatAmount, superChatsTotalAmount;
 
   const commentsRef = React.createRef();
-  const [scrollBottom, setScrollBottom] = React.useState(true);
   const [viewMode, setViewMode] = React.useState(VIEW_MODE_CHAT);
-  const [performedInitialScroll, setPerformedInitialScroll] = React.useState(false);
+  const [scrollPos, setScrollPos] = React.useState(0);
   const claimId = claim && claim.claim_id;
   const commentsLength = commentsByChronologicalOrder && commentsByChronologicalOrder.length;
   const commentsToDisplay = viewMode === VIEW_MODE_CHAT ? commentsByChronologicalOrder : superChatsByTipAmount;
 
   const discussionElement = document.querySelector('.livestream__comments');
-  const commentElement = document.querySelector('.livestream-comment');
 
   let pinnedComment;
   const pinnedCommentIds = (claimId && pinnedCommentsById[claimId]) || [];
   if (pinnedCommentIds.length > 0) {
     pinnedComment = commentsByChronologicalOrder.find((c) => c.comment_id === pinnedCommentIds[0]);
+  }
+
+  function restoreScrollPos() {
+    if (discussionElement) {
+      discussionElement.scrollTop = 0;
+    }
   }
 
   React.useEffect(() => {
@@ -80,36 +83,39 @@ export default function LivestreamComments(props: Props) {
     };
   }, [claimId, uri, doCommentList, doSuperChatList, doCommentSocketConnect, doCommentSocketDisconnect]);
 
-  const handleScroll = React.useCallback(() => {
-    if (discussionElement) {
-      const negativeCommentHeight = commentElement && -1 * commentElement.offsetHeight;
-      const isAtRecent = negativeCommentHeight && discussionElement.scrollTop >= negativeCommentHeight;
-
-      setScrollBottom(isAtRecent);
-    }
-  }, [commentElement, discussionElement]);
-
+  // Register scroll handler (TODO: Should throttle/debounce)
   React.useEffect(() => {
-    if (discussionElement) {
-      discussionElement.addEventListener('scroll', handleScroll);
-
-      if (commentsLength > 0) {
-        // Only update comment scroll if the user hasn't scrolled up to view old comments
-        // If they have, do nothing
-        if (!performedInitialScroll) {
-          setTimeout(
-            () =>
-              (discussionElement.scrollTop =
-                discussionElement.scrollHeight - discussionElement.offsetHeight + COMMENT_SCROLL_OFFSET),
-            COMMENT_SCROLL_TIMEOUT
-          );
-          setPerformedInitialScroll(true);
+    function handleScroll() {
+      if (discussionElement) {
+        const scrollTop = discussionElement.scrollTop;
+        if (scrollTop !== scrollPos) {
+          setScrollPos(scrollTop);
         }
       }
+    }
 
+    if (discussionElement) {
+      discussionElement.addEventListener('scroll', handleScroll);
       return () => discussionElement.removeEventListener('scroll', handleScroll);
     }
-  }, [commentsLength, discussionElement, handleScroll, performedInitialScroll, setPerformedInitialScroll]);
+  }, [discussionElement, scrollPos]);
+
+  // Retain scrollPos=0 when receiving new messages.
+  React.useEffect(() => {
+    if (discussionElement && commentsLength > 0) {
+      // Only update comment scroll if the user hasn't scrolled up to view old comments
+      if (scrollPos >= 0) {
+        // +ve scrollPos: not scrolled (Usually, there'll be a few pixels beyond 0).
+        // -ve scrollPos: user scrolled.
+        const timer = setTimeout(() => {
+          // Use a timer here to ensure we reset after the new comment has been rendered.
+          discussionElement.scrollTop = 0;
+        }, COMMENT_SCROLL_TIMEOUT);
+        return () => clearTimeout(timer);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [commentsLength]); // (Just respond to 'commentsLength' updates and nothing else)
 
   // sum total amounts for fiat tips and lbc tips
   if (superChatsByTipAmount) {
@@ -162,13 +168,6 @@ export default function LivestreamComments(props: Props) {
     return null;
   }
 
-  function scrollBack() {
-    if (discussionElement) {
-      discussionElement.scrollTop = 0;
-      setScrollBottom(true);
-    }
-  }
-
   return (
     <div className="card livestream__discussion">
       <div className="card__header--between livestream-discussion__header">
@@ -184,8 +183,7 @@ export default function LivestreamComments(props: Props) {
               onClick={() => {
                 setViewMode(VIEW_MODE_CHAT);
                 const livestreamCommentsDiv = document.getElementsByClassName('livestream__comments')[0];
-                const divHeight = livestreamCommentsDiv.scrollHeight;
-                livestreamCommentsDiv.scrollTop = divHeight;
+                livestreamCommentsDiv.scrollTop = livestreamCommentsDiv.scrollHeight;
               }}
             />
 
@@ -301,17 +299,17 @@ export default function LivestreamComments(props: Props) {
             <div className="main--empty" style={{ flex: 1 }} />
           )}
 
-          {!scrollBottom && (
+          {scrollPos < 0 && (
             <Button
               button="alt"
               className="livestream__comments-scroll__down"
               label={__('Recent Comments')}
-              onClick={scrollBack}
+              onClick={restoreScrollPos}
             />
           )}
 
           <div className="livestream__comment-create">
-            <CommentCreate livestream bottom embed={embed} uri={uri} />
+            <CommentCreate livestream bottom embed={embed} uri={uri} onDoneReplying={restoreScrollPos} />
           </div>
         </div>
       </>
