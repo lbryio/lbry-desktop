@@ -141,7 +141,6 @@ function ClaimListDiscover(props: Props) {
   const { search } = location;
   const [page, setPage] = React.useState(1);
   const [forceRefresh, setForceRefresh] = React.useState();
-  const [finalUris, setFinalUris] = React.useState([]);
   const isLargeScreen = useIsLargeScreen();
   const [orderParamEntry, setOrderParamEntry] = usePersistedState(`entry-${location.pathname}`, CS.ORDER_BY_TRENDING);
   const [orderParamUser, setOrderParamUser] = usePersistedState(`orderUser-${location.pathname}`, CS.ORDER_BY_TRENDING);
@@ -387,6 +386,9 @@ function ClaimListDiscover(props: Props) {
     : undefined;
   const livestreamSearchResult = livestreamSearchKey && claimSearchByQuery[livestreamSearchKey];
 
+  const [finalUris, setFinalUris] = React.useState(
+    getFinalUrisInitialState(history.action === 'POP', claimSearchResult)
+  );
   const [prevOptions, setPrevOptions] = React.useState(null);
 
   if (!isJustScrollingToNewPage(prevOptions, options)) {
@@ -448,6 +450,10 @@ function ClaimListDiscover(props: Props) {
     </div>
   );
 
+  // **************************************************************************
+  // Helpers
+  // **************************************************************************
+
   // Returns true if the change in 'options' indicate that we are simply scrolling
   // down to a new page; false otherwise.
   function isJustScrollingToNewPage(prevOptions, options) {
@@ -499,6 +505,17 @@ function ClaimListDiscover(props: Props) {
     }
     return prev.length === next.length && prev.every((value, index) => value === next[index]);
   }
+
+  function getFinalUrisInitialState(isNavigatingBack, claimSearchResult) {
+    if (isNavigatingBack && claimSearchResult && claimSearchResult.length > 0) {
+      return claimSearchResult;
+    } else {
+      return [];
+    }
+  }
+
+  // **************************************************************************
+  // **************************************************************************
 
   React.useEffect(() => {
     if (shouldPerformSearch) {
