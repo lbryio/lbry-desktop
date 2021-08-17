@@ -25,7 +25,7 @@ export default function useLighthouse(
       let isSubscribed = true;
       lighthouse
         .search(throttledQuery)
-        .then((results) => {
+        .then(({ body: results }) => {
           if (isSubscribed) {
             setResults(
               results.map((result) => `lbry://${result.name}#${result.claimId}`).filter((uri) => isURIValid(uri))
