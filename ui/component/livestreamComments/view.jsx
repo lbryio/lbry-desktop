@@ -19,11 +19,11 @@ type Props = {
   doCommentSocketDisconnect: (string) => void,
   doCommentList: (string, string, number, number) => void,
   comments: Array<Comment>,
+  pinnedComments: Array<Comment>,
   fetchingComments: boolean,
   doSuperChatList: (string) => void,
   superChats: Array<Comment>,
   myChannels: ?Array<ChannelClaim>,
-  pinnedCommentsById: { [claimId: string]: Array<string> },
 };
 
 const VIEW_MODE_CHAT = 'view_chat';
@@ -38,12 +38,12 @@ export default function LivestreamComments(props: Props) {
     doCommentSocketConnect,
     doCommentSocketDisconnect,
     comments: commentsByChronologicalOrder,
+    pinnedComments,
     doCommentList,
     fetchingComments,
     doSuperChatList,
     myChannels,
     superChats: superChatsByTipAmount,
-    pinnedCommentsById,
   } = props;
 
   let superChatsFiatAmount, superChatsTotalAmount;
@@ -57,11 +57,7 @@ export default function LivestreamComments(props: Props) {
 
   const discussionElement = document.querySelector('.livestream__comments');
 
-  let pinnedComment;
-  const pinnedCommentIds = (claimId && pinnedCommentsById[claimId]) || [];
-  if (pinnedCommentIds.length > 0) {
-    pinnedComment = commentsByChronologicalOrder.find((c) => c.comment_id === pinnedCommentIds[0]);
-  }
+  const pinnedComment = pinnedComments.length > 0 ? pinnedComments[0] : null;
 
   function restoreScrollPos() {
     if (discussionElement) {

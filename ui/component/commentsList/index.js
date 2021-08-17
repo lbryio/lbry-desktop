@@ -15,6 +15,7 @@ import {
   selectMyReactionsByCommentId,
   makeSelectCommentIdsForUri,
   selectSettingsByChannelId,
+  makeSelectPinnedCommentsForUri,
 } from 'redux/selectors/comments';
 import { doCommentReset, doCommentList, doCommentById, doCommentReactList } from 'redux/actions/comments';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
@@ -25,6 +26,7 @@ const select = (state, props) => {
   return {
     myChannels: selectMyChannelClaims(state),
     allCommentIds: makeSelectCommentIdsForUri(props.uri)(state),
+    pinnedComments: makeSelectPinnedCommentsForUri(props.uri)(state),
     topLevelComments: makeSelectTopLevelCommentsForUri(props.uri)(state),
     topLevelTotalPages: makeSelectTopLevelTotalPagesForUri(props.uri)(state),
     totalComments: makeSelectTotalCommentsCountForUri(props.uri)(state),
