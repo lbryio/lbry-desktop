@@ -212,7 +212,7 @@ function WalletTipAmountSelector(props: Props) {
           <div className="help">
             <span className="help--spendable">
               <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card ')} button="link" /> To{' '}
-              {__(' Tip Creators')}
+              {__('Tip Creators')}
             </span>
           </div>
         </>
@@ -280,7 +280,7 @@ function WalletTipAmountSelector(props: Props) {
           <div className="help">
             <span className="help--spendable">
               <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card ')} button="link" /> To{' '}
-              {__(' Tip Creators')}
+              {__('Tip Creators')}
             </span>
           </div>
         </>
