@@ -1,6 +1,6 @@
 // @flow
 import type { ElementRef } from 'react';
-import { SIMPLE_SITE, STRIPE_PUBLIC_KEY } from 'config';
+import { SIMPLE_SITE } from 'config';
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
 import React from 'react';
@@ -21,12 +21,8 @@ import Empty from 'component/common/empty';
 import { getChannelIdFromClaim } from 'util/claim';
 import { Lbryio } from 'lbryinc';
 
-let stripeEnvironment = 'test';
-// if the key contains pk_live it's a live key
-// update the environment for the calls to the backend to indicate which environment to hit
-if (STRIPE_PUBLIC_KEY && STRIPE_PUBLIC_KEY.indexOf('pk_live') > -1) {
-  stripeEnvironment = 'live';
-}
+import { getStripeEnvironment } from 'util/stripe';
+let stripeEnvironment = getStripeEnvironment();
 
 const TAB_FIAT = 'TabFiat';
 const TAB_LBC = 'TabLBC';
@@ -534,7 +530,7 @@ export function CommentCreate(props: Props) {
               />
             )}
             {/* @if TARGET='web' */}
-            {!claimIsMine && (
+            {!claimIsMine && stripeEnvironment && (
               <Button
                 disabled={disabled}
                 button="alt"

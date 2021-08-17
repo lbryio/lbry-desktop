@@ -7,17 +7,12 @@ import Card from 'component/common/card';
 import Page from 'component/page';
 
 import { Lbryio } from 'lbryinc';
-import { URL, WEBPACK_WEB_PORT, STRIPE_PUBLIC_KEY } from 'config';
+import { URL, WEBPACK_WEB_PORT } from 'config';
+import { getStripeEnvironment } from 'util/stripe';
 
 const isDev = process.env.NODE_ENV !== 'production';
 
-let stripeEnvironment = 'test';
-// if the key contains pk_live it's a live key
-// update the environment for the calls to the backend to indicate which environment to hit
-if (STRIPE_PUBLIC_KEY.indexOf('pk_live') > -1) {
-  stripeEnvironment = 'live';
-}
-
+let stripeEnvironment = getStripeEnvironment();
 let successStripeRedirectUrl, failureStripeRedirectUrl;
 let successEndpoint = '/$/settings/tip_account';
 let failureEndpoint = '/$/settings/tip_account';
@@ -46,7 +41,7 @@ type State = {
   unpaidBalance: number,
   pageTitle: string,
   stillRequiringVerification: boolean,
-  accountTransactions: any
+  accountTransactions: any,
 };
 
 class StripeAccountConnection extends React.Component<Props, State> {
@@ -144,7 +139,10 @@ class StripeAccountConnection extends React.Component<Props, State> {
             stillRequiringVerification: false,
           };
 
-          if ((eventuallyDueInformation && eventuallyDueInformation.length) || (currentlyDueInformation && currentlyDueInformation.length)) {
+          if (
+            (eventuallyDueInformation && eventuallyDueInformation.length) ||
+            (currentlyDueInformation && currentlyDueInformation.length)
+          ) {
             objectToUpdateState.stillRequiringVerification = true;
             getAndSetAccountLink(false);
           }
@@ -233,8 +231,17 @@ class StripeAccountConnection extends React.Component<Props, State> {
                   <div>
                     <div>
                       <h3>{__('Congratulations! Your account has been connected with Odysee.')}</h3>
-                      {stillRequiringVerification && <><h3 style={{marginTop: '10px'}}>Although your account is connected it still requires verification to begin receiving tips.</h3>
-                      <h3 style={{marginTop: '10px'}}>Please use the button below to complete your verification process and enable tipping for your account.</h3></> }
+                      {stillRequiringVerification && (
+                        <>
+                          <h3 style={{ marginTop: '10px' }}>
+                            Although your account is connected it still requires verification to begin receiving tips.
+                          </h3>
+                          <h3 style={{ marginTop: '10px' }}>
+                            Please use the button below to complete your verification process and enable tipping for
+                            your account.
+                          </h3>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -254,9 +261,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
                       <br />
                       <div>
                         <h3>
-                          {__(
-                            'Connect your bank account to be able to cash your pending balance out to your account.'
-                          )}
+                          {__('Connect your bank account to be able to cash your pending balance out to your account.')}
                         </h3>
                       </div>
                       <div className="section__actions">
@@ -271,19 +276,23 @@ class StripeAccountConnection extends React.Component<Props, State> {
             </div>
           }
           actions={
-            <>{ stillRequiringVerification && <Button
-              button="primary"
-              label={__('Complete Verification')}
-              icon={ICONS.SETTINGS}
-              navigate={stripeConnectionUrl}
-              className="stripe__complete-verification-button"
-            /> }
-            <Button
-              button="secondary"
-              label={__('View Transactions')}
-              icon={ICONS.SETTINGS}
-              navigate={`/$/${PAGES.WALLET}?tab=fiat-payment-history`}
-            /></>
+            <>
+              {stillRequiringVerification && (
+                <Button
+                  button="primary"
+                  label={__('Complete Verification')}
+                  icon={ICONS.SETTINGS}
+                  navigate={stripeConnectionUrl}
+                  className="stripe__complete-verification-button"
+                />
+              )}
+              <Button
+                button="secondary"
+                label={__('View Transactions')}
+                icon={ICONS.SETTINGS}
+                navigate={`/$/${PAGES.WALLET}?tab=fiat-payment-history`}
+              />
+            </>
           }
         />
         <br />
