@@ -379,13 +379,13 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                     <div className="claim-preview__hover-actions">
                       {isPlayable && <FileWatchLaterLink focusable={false} uri={uri} />}
                     </div>
+                    {/* @if TARGET='app' */}
                     <div className="claim-preview__hover-actions">
-                      {/* @if TARGET='app' */}
                       {claim && !isCollection && (
                         <FileDownloadLink focusable={false} uri={canonicalUrl} hideOpenButton hideDownloadStatus />
                       )}
-                      {/* @endif */}
                     </div>
+                    {/* @endif */}
                     {!isLivestream && (
                       <div className="claim-preview__file-property-overlay">
                         <PreviewOverlayProperties uri={uri} small={type === 'small'} properties={liveProperty} />

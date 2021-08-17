@@ -17,7 +17,10 @@ type Props = {
 function FileWatchLaterLink(props: Props) {
   const { claim, hasClaimInWatchLater, doToast, doCollectionEdit, focusable = true } = props;
   const buttonRef = useRef();
+  console.log('ref');
+  console.log(buttonRef);
   let isHovering = useHover(buttonRef);
+  console.log(isHovering);
 
   if (!claim) {
     return null;
@@ -52,7 +55,6 @@ function FileWatchLaterLink(props: Props) {
         (isHovering ? ICONS.COMPLETED : ICONS.TIME)
       }
       onClick={(e) => handleWatchLater(e)}
-      aria-hidden={!focusable}
       tabIndex={focusable ? 0 : -1}
     />
   );
