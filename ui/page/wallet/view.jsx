@@ -159,77 +159,80 @@ const WalletPage = (props: Props) => {
 
   return (
     <>
-      {/* @if TARGET='web' */}
-      <Page>
-        <Tabs onChange={onTabChange} index={tabIndex}>
-          <TabList className="tabs__list--collection-edit-page">
-            <Tab>{__('LBRY Credits')}</Tab>
-            <Tab>{__('Account History')}</Tab>
-            <Tab>{__('Payment History')}</Tab>
-          </TabList>
-          <TabPanels>
-            <TabPanel>
-              <div className="section card-stack">
-                <div className="lbc-transactions">
-                  {/* if the transactions are loading */}
-                  {loading && (
-                    <div className="main--empty">
-                      <Spinner delayed />
-                    </div>
-                  )}
-                  {/* when the transactions are finished loading */}
-                  {!loading && (
-                    <>
-                      {showIntro ? (
-                        <YrblWalletEmpty includeWalletLink />
-                      ) : (
-                        <div className="card-stack">
-                          <WalletBalance />
-                          <TxoList search={search} />
-                        </div>
-                      )}
-                    </>
-                  )}
+      {stripeEnvironment && (
+        <Page>
+          <Tabs onChange={onTabChange} index={tabIndex}>
+            <TabList className="tabs__list--collection-edit-page">
+              <Tab>{__('LBRY Credits')}</Tab>
+              <Tab>{__('Account History')}</Tab>
+              <Tab>{__('Payment History')}</Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel>
+                <div className="section card-stack">
+                  <div className="lbc-transactions">
+                    {/* if the transactions are loading */}
+                    {loading && (
+                      <div className="main--empty">
+                        <Spinner delayed />
+                      </div>
+                    )}
+                    {/* when the transactions are finished loading */}
+                    {!loading && (
+                      <>
+                        {showIntro ? (
+                          <YrblWalletEmpty includeWalletLink />
+                        ) : (
+                          <div className="card-stack">
+                            <WalletBalance />
+                            <TxoList search={search} />
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </div>
                 </div>
-              </div>
-            </TabPanel>
-            <TabPanel>
-              <div className="section card-stack">
-                <WalletFiatBalance accountDetails={accountStatusResponse} />
-                <WalletFiatAccountHistory transactions={accountTransactionResponse} />
-              </div>
-            </TabPanel>
-            <TabPanel>
-              <div className="section card-stack">
-                <WalletFiatPaymentBalance transactions={customerTransactions} accountDetails={accountStatusResponse} />
-                <WalletFiatPaymentHistory transactions={customerTransactions} />
-              </div>
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
-      </Page>
-      {/* @endif */}
-      {/* @if TARGET='app' */}
-      <Page>
-        {loading && (
-          <div className="main--empty">
-            <Spinner delayed />
-          </div>
-        )}
-        {!loading && (
-          <>
-            {showIntro ? (
-              <YrblWalletEmpty includeWalletLink />
-            ) : (
-              <div className="card-stack">
-                <WalletBalance />
-                <TxoList search={search} />
-              </div>
-            )}
-          </>
-        )}
-      </Page>
-      {/* @endif */}
+              </TabPanel>
+              <TabPanel>
+                <div className="section card-stack">
+                  <WalletFiatBalance accountDetails={accountStatusResponse} />
+                  <WalletFiatAccountHistory transactions={accountTransactionResponse} />
+                </div>
+              </TabPanel>
+              <TabPanel>
+                <div className="section card-stack">
+                  <WalletFiatPaymentBalance
+                    transactions={customerTransactions}
+                    accountDetails={accountStatusResponse}
+                  />
+                  <WalletFiatPaymentHistory transactions={customerTransactions} />
+                </div>
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+        </Page>
+      )}
+      {!stripeEnvironment && (
+        <Page>
+          {loading && (
+            <div className="main--empty">
+              <Spinner delayed />
+            </div>
+          )}
+          {!loading && (
+            <>
+              {showIntro ? (
+                <YrblWalletEmpty includeWalletLink />
+              ) : (
+                <div className="card-stack">
+                  <WalletBalance />
+                  <TxoList search={search} />
+                </div>
+              )}
+            </>
+          )}
+        </Page>
+      )}
     </>
   );
 };
