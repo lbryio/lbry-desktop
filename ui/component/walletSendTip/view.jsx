@@ -176,13 +176,13 @@ function WalletSendTip(props: Props) {
     });
   } else if (activeTab === TAB_FIAT) {
     iconToUse = ICONS.FINANCE;
-    explainerText = __('Show this channel your appreciation by sending a donation in USD. ');
+    explainerText = __('Show this channel your appreciation by sending a donation in USD.');
     // if (!hasCardSaved) {
     //   explainerText += __('You must add a card to use this functionality.');
     // }
   } else if (activeTab === TAB_LBC) {
     iconToUse = ICONS.LBC;
-    explainerText = __('Show this channel your appreciation by sending a donation of Credits. ');
+    explainerText = __('Show this channel your appreciation by sending a donation of Credits.');
   }
 
   const isSupport = claimIsMine || activeTab === TAB_BOOST;
