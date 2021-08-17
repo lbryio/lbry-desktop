@@ -159,6 +159,7 @@ const WalletPage = (props: Props) => {
     <>
       {/* @if TARGET='web' */}
       <Page>
+        <WalletBalance />
         <Tabs onChange={onTabChange} index={tabIndex}>
           <TabList className="tabs__list--collection-edit-page">
             <Tab>{__('LBRY Credits')}</Tab>
@@ -182,7 +183,6 @@ const WalletPage = (props: Props) => {
                         <YrblWalletEmpty includeWalletLink />
                       ) : (
                         <div className="card-stack">
-                          <WalletBalance />
                           <TxoList search={search} />
                         </div>
                       )}
@@ -193,13 +193,11 @@ const WalletPage = (props: Props) => {
             </TabPanel>
             <TabPanel>
               <div className="section card-stack">
-                <WalletFiatBalance accountDetails={accountStatusResponse} />
                 <WalletFiatAccountHistory transactions={accountTransactionResponse} />
               </div>
             </TabPanel>
             <TabPanel>
               <div className="section card-stack">
-                <WalletFiatPaymentBalance transactions={customerTransactions} accountDetails={accountStatusResponse} />
                 <WalletFiatPaymentHistory transactions={customerTransactions} />
               </div>
             </TabPanel>
@@ -220,7 +218,6 @@ const WalletPage = (props: Props) => {
               <YrblWalletEmpty includeWalletLink />
             ) : (
               <div className="card-stack">
-                <WalletBalance />
                 <TxoList search={search} />
               </div>
             )}

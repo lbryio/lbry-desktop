@@ -10,6 +10,8 @@ import Card from 'component/common/card';
 import LbcSymbol from 'component/common/lbc-symbol';
 import I18nMessage from 'component/i18nMessage';
 import { formatNumberWithCommas } from 'util/number';
+import Icon from 'component/common/icon';
+
 
 type Props = {
   balance: number,
@@ -63,6 +65,7 @@ const WalletBalance = (props: Props) => {
   }, [doFetchUtxoCounts, balance, detailsExpanded]);
 
   return (
+    <div className={'columns'}>
     <Card
       title={<LbcSymbol postfix={formatNumberWithCommas(totalBalance)} isTitle />}
       subtitle={
@@ -181,6 +184,32 @@ const WalletBalance = (props: Props) => {
         </>
       }
     />
+
+      <Card
+        title={<><Icon size={18} icon={ICONS.FINANCE} />32 USD</>}
+        subtitle={32 &&
+        <I18nMessage>
+          This is your pending balance that will be automatically sent to your bank account
+        </I18nMessage>
+        }
+        actions={
+          <>
+            <h2 className="section__title--small">
+              $32 Total Received Tips
+            </h2>
+
+            <h2 className="section__title--small">
+              $0 Withdrawn
+            </h2>
+
+            <div className="section__actions">
+              <Button button="secondary" label={__('Manage Accounts')} icon={ICONS.SETTINGS} navigate={`/$/${PAGES.SETTINGS_STRIPE_ACCOUNT}`} />
+              <Button button="secondary" label={__('Manage Cards')} icon={ICONS.SETTINGS} navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} />
+            </div>
+          </>
+        }
+      />
+    </div>
   );
 };
 
