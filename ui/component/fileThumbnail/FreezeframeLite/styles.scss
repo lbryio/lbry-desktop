@@ -7,7 +7,7 @@ $transition-duration: 300ms;
 // Classnames must line up with classes in classes.js
 .ff-container {
   display: inline-block;
-  position: relative;
+  position: absolute;
 
   .ff-image {
     z-index: $base-zindex;

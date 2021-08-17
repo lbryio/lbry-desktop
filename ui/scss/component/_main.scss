@@ -136,9 +136,18 @@
   .file-page__recommended-collection {
     @extend .file-page__recommended;
     flex-direction: column;
+    overflow-wrap: break-word;
 
     .file-page__recommended-collection__row {
       display: block;
+
+      @media (min-width: $breakpoint-medium) {
+        max-width: 15rem;
+      }
+
+      @media (max-width: $breakpoint-medium) {
+        max-width: 50rem;
+      }
     }
   }
 
