@@ -57,6 +57,7 @@ type Props = {
   uri: string,
   disabled: boolean,
   isClaimingInitialRewards: boolean,
+  hasClaimedInitialRewards: boolean,
 };
 
 function ChannelForm(props: Props) {
@@ -85,6 +86,7 @@ function ChannelForm(props: Props) {
     openModal,
     disabled,
     isClaimingInitialRewards,
+    hasClaimedInitialRewards,
   } = props;
   const [nameError, setNameError] = React.useState(undefined);
   const [bidError, setBidError] = React.useState('');
@@ -240,8 +242,10 @@ function ChannelForm(props: Props) {
   }, [clearChannelErrors]);
 
   React.useEffect(() => {
-    claimInitialRewards();
-  }, [claimInitialRewards]);
+    if (!hasClaimedInitialRewards) {
+      claimInitialRewards();
+    }
+  }, [hasClaimedInitialRewards, claimInitialRewards]);
 
   // TODO clear and bail after submit
   return (

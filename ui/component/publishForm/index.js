@@ -19,7 +19,11 @@ import {
 import * as RENDER_MODES from 'constants/file_render_modes';
 import { doPublishDesktop } from 'redux/actions/publish';
 import { doClaimInitialRewards } from 'redux/actions/rewards';
-import { selectUnclaimedRewardValue, selectIsClaimingInitialRewards } from 'redux/selectors/rewards';
+import {
+  selectUnclaimedRewardValue,
+  selectIsClaimingInitialRewards,
+  selectHasClaimedInitialRewards,
+} from 'redux/selectors/rewards';
 import {
   selectModal,
   selectActiveChannelClaim,
@@ -61,6 +65,7 @@ const select = (state) => {
     incognito: selectIncognito(state),
     activeChannelStakedLevel: selectActiveChannelStakedLevel(state),
     isClaimingInitialRewards: selectIsClaimingInitialRewards(state),
+    hasClaimedInitialRewards: selectHasClaimedInitialRewards(state),
   };
 };
 

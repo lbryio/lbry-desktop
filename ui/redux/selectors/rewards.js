@@ -63,5 +63,12 @@ export const selectHasUnclaimedRefereeReward = createSelector(selectUnclaimedRew
 );
 
 export const selectIsClaimingInitialRewards = createSelector(selectClaimsPendingByType, (claimsPendingByType) => {
-  return claimsPendingByType[REWARDS.TYPE_NEW_USER] || claimsPendingByType[REWARDS.TYPE_CONFIRM_EMAIL];
+  return !!(claimsPendingByType[REWARDS.TYPE_NEW_USER] || claimsPendingByType[REWARDS.TYPE_CONFIRM_EMAIL]);
+});
+
+export const selectHasClaimedInitialRewards = createSelector(selectClaimedRewardsById, (claimedRewardsById) => {
+  const claims = Object.values(claimedRewardsById);
+  const newUserClaimed = !!claims.find((claim) => claim && claim.reward_type === REWARDS.TYPE_NEW_USER);
+  const confirmEmailClaimed = !!claims.find((claim) => claim && claim.reward_type === REWARDS.TYPE_CONFIRM_EMAIL);
+  return newUserClaimed && confirmEmailClaimed;
 });

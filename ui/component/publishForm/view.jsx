@@ -92,6 +92,7 @@ type Props = {
   remoteUrl: ?string,
   isClaimingInitialRewards: boolean,
   claimInitialRewards: () => void,
+  hasClaimedInitialRewards: boolean,
 };
 
 function PublishForm(props: Props) {
@@ -132,6 +133,7 @@ function PublishForm(props: Props) {
     remoteUrl,
     isClaimingInitialRewards,
     claimInitialRewards,
+    hasClaimedInitialRewards,
   } = props;
 
   const { replace, location } = useHistory();
@@ -268,8 +270,10 @@ function PublishForm(props: Props) {
   }, [activeChannelClaimStr, setSignedMessage]);
 
   useEffect(() => {
-    claimInitialRewards();
-  }, [claimInitialRewards]);
+    if (!hasClaimedInitialRewards) {
+      claimInitialRewards();
+    }
+  }, [hasClaimedInitialRewards, claimInitialRewards]);
 
   useEffect(() => {
     if (!modal) {

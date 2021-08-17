@@ -18,7 +18,7 @@ import {
 import { doOpenModal } from 'redux/actions/app';
 import { doUpdateBlockListForPublishedChannel } from 'redux/actions/comments';
 import { doClaimInitialRewards } from 'redux/actions/rewards';
-import { selectIsClaimingInitialRewards } from 'redux/selectors/rewards';
+import { selectIsClaimingInitialRewards, selectHasClaimedInitialRewards } from 'redux/selectors/rewards';
 import ChannelForm from './view';
 
 const select = (state, props) => ({
@@ -39,6 +39,7 @@ const select = (state, props) => ({
   creatingChannel: selectCreatingChannel(state),
   balance: selectBalance(state),
   isClaimingInitialRewards: selectIsClaimingInitialRewards(state),
+  hasClaimedInitialRewards: selectHasClaimedInitialRewards(state),
 });
 
 const perform = (dispatch) => ({
