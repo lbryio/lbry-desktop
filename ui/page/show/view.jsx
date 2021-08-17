@@ -1,5 +1,5 @@
 // @flow
-import { DOMAIN } from 'config';
+import { DOMAIN, ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import * as PAGES from 'constants/pages';
 import React, { useEffect } from 'react';
 import { lazyImport } from 'util/lazyImport';
@@ -199,7 +199,7 @@ function ShowPage(props: Props) {
           />
         </Page>
       );
-    } else if (isLivestream) {
+    } else if (isLivestream && ENABLE_NO_SOURCE_CLAIMS) {
       innerContent = <LivestreamPage uri={uri} />;
     } else {
       innerContent = <FilePage uri={uri} location={location} />;
