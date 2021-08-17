@@ -5,43 +5,19 @@ import Card from 'component/common/card';
 import Button from 'component/button';
 import * as ICONS from 'constants/icons';
 import { Lbryio } from 'lbryinc';
-import { STRIPE_PUBLIC_KEY } from 'config';
-
-let stripeEnvironment = 'test';
-// if the key contains pk_live it's a live key
-// update the environment for the calls to the backend to indicate which environment to hit
-if (STRIPE_PUBLIC_KEY.indexOf('pk_live') > -1) {
-  stripeEnvironment = 'live';
-}
+import { getStripeEnvironment } from 'util/stripe';
+let stripeEnvironment = getStripeEnvironment();
 
 type Props = {
   closeModal: () => void,
-  abandonTxo: (Txo, () => void) => void,
-  abandonClaim: (string, number, ?() => void) => void,
-  tx: Txo,
-  claim: GenericClaim,
-  cb: () => void,
-  doResolveUri: (string) => void,
-  uri: string,
   paymentMethodId: string,
-  setAsConfirmingCard: () => void,
+  setAsConfirmingCard: () => void, // ?
 };
 
-export default function ModalRevokeClaim(props: Props) {
-  var that = this;
-  console.log(that);
-
-  console.log(props);
-
-  const { closeModal, uri, paymentMethodId, setAsConfirmingCard } = props;
-
-  console.log(uri);
-
-  console.log(setAsConfirmingCard);
+export default function ModalRemoveCard(props: Props) {
+  const { closeModal, paymentMethodId } = props;
 
   function removeCard() {
-    console.log(paymentMethodId);
-
     Lbryio.call(
       'customer',
       'detach',
@@ -51,11 +27,9 @@ export default function ModalRevokeClaim(props: Props) {
       },
       'post'
     ).then((removeCardResponse) => {
-      console.log(removeCardResponse);
-
       // TODO: add toast here
       // closeModal();
-
+      // Is there a better way to handle this? Why reload?
       window.location.reload();
     });
   }
@@ -63,15 +37,14 @@ export default function ModalRevokeClaim(props: Props) {
   return (
     <Modal ariaHideApp={false} isOpen contentLabel={'hello'} type="card" onAborted={closeModal}>
       <Card
-        title={'Confirm Remove Card'}
-        // body={getMsgBody(type, isSupport, name)}
+        title={__('Confirm Remove Card')}
         actions={
           <div className="section__actions">
             <Button
               className="stripe__confirm-remove-card"
               button="secondary"
               icon={ICONS.DELETE}
-              label={'Remove Card'}
+              label={__('Remove Card')}
               onClick={removeCard}
             />
             <Button button="link" label={__('Cancel')} onClick={closeModal} />

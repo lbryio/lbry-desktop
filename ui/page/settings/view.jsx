@@ -20,6 +20,7 @@ import { SIMPLE_SITE } from 'config';
 import homepages from 'homepages';
 import { Lbryio } from 'lbryinc';
 import Yrbl from 'component/yrbl';
+import { getStripeEnvironment } from 'util/stripe';
 
 type Price = {
   currency: string,
@@ -451,7 +452,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
             {/* @endif */}
 
             {/* @if TARGET='web' */}
-            {user && (
+            {user && getStripeEnvironment() && (
               <Card
                 title={__('Bank Accounts')}
                 subtitle={__('Connect a bank account to receive tips and compensation in your local currency')}
@@ -470,7 +471,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
             {/* @endif */}
 
             {/* @if TARGET='web' */}
-            {isAuthenticated && (
+            {isAuthenticated && getStripeEnvironment() && (
               <Card
                 title={__('Payment Methods')}
                 subtitle={__('Add a credit card to tip creators in their local currency')}

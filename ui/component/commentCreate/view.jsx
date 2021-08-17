@@ -1,6 +1,6 @@
 // @flow
 import type { ElementRef } from 'react';
-import { SIMPLE_SITE, STRIPE_PUBLIC_KEY } from 'config';
+import { SIMPLE_SITE } from 'config';
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
 import React from 'react';
@@ -21,12 +21,8 @@ import Empty from 'component/common/empty';
 import { getChannelIdFromClaim } from 'util/claim';
 import { Lbryio } from 'lbryinc';
 
-let stripeEnvironment = 'test';
-// if the key contains pk_live it's a live key
-// update the environment for the calls to the backend to indicate which environment to hit
-if (STRIPE_PUBLIC_KEY.indexOf('pk_live') > -1) {
-  stripeEnvironment = 'live';
-}
+import { getStripeEnvironment } from 'util/stripe';
+let stripeEnvironment = getStripeEnvironment();
 
 const TAB_FIAT = 'TabFiat';
 const TAB_LBC = 'TabLBC';
@@ -245,10 +241,13 @@ export function CommentCreate(props: Props) {
           }, 1500);
 
           doToast({
-            message: __("You sent %tipAmount% LBRY Credits as a tip to %tipChannelName%, I'm sure they appreciate it!", {
-              tipAmount: tipAmount, // force show decimal places
-              tipChannelName,
-            }),
+            message: __(
+              "You sent %tipAmount% LBRY Credits as a tip to %tipChannelName%, I'm sure they appreciate it!",
+              {
+                tipAmount: tipAmount, // force show decimal places
+                tipChannelName,
+              }
+            ),
           });
 
           setSuccessTip({ txid, tipAmount });
@@ -265,7 +264,8 @@ export function CommentCreate(props: Props) {
       Lbryio.call(
         'customer',
         'tip',
-        { // round to deal with floating point precision
+        {
+          // round to deal with floating point precision
           amount: Math.round(100 * roundedAmount), // convert from dollars to cents
           creator_channel_name: tipChannelName, // creator_channel_name
           creator_channel_claim_id: channelClaimId,
@@ -387,12 +387,7 @@ export function CommentCreate(props: Props) {
           }
         }}
       >
-        <FormField
-          type="textarea"
-          name={'comment_signup_prompt'}
-          placeholder={__('Say something about this...')}
-          label={isFetchingChannels ? __('Comment') : undefined}
-        />
+        <FormField type="textarea" name={'comment_signup_prompt'} placeholder={__('Say something about this...')} />
         <div className="section__actions--no-margin">
           <Button disabled button="primary" label={__('Post --[button to submit something]--')} requiresAuth={IS_WEB} />
         </div>
@@ -534,7 +529,8 @@ export function CommentCreate(props: Props) {
                 }}
               />
             )}
-            {!claimIsMine && (
+            {/* @if TARGET='web' */}
+            {!claimIsMine && stripeEnvironment && (
               <Button
                 disabled={disabled}
                 button="alt"
@@ -546,6 +542,7 @@ export function CommentCreate(props: Props) {
                 }}
               />
             )}
+            {/* @endif */}
             {isReply && !minTip && (
               <Button
                 button="link"

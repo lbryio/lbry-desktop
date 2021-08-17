@@ -11,14 +11,8 @@ import classnames from 'classnames';
 import usePersistedState from 'effects/use-persisted-state';
 import WalletSpendableBalanceHelp from 'component/walletSpendableBalanceHelp';
 import { Lbryio } from 'lbryinc';
-import { STRIPE_PUBLIC_KEY } from 'config';
-
-let stripeEnvironment = 'test';
-// if the key contains pk_live it's a live key
-// update the environment for the calls to the backend to indicate which environment to hit
-if (STRIPE_PUBLIC_KEY.indexOf('pk_live') > -1) {
-  stripeEnvironment = 'live';
-}
+import { getStripeEnvironment } from 'util/stripe';
+let stripeEnvironment = getStripeEnvironment();
 
 const DEFAULT_TIP_AMOUNTS = [1, 5, 25, 100];
 
@@ -76,45 +70,49 @@ function WalletTipAmountSelector(props: Props) {
 
   // check if creator has a payment method saved
   React.useEffect(() => {
-    Lbryio.call(
-      'customer',
-      'status',
-      {
-        environment: stripeEnvironment,
-      },
-      'post'
-    ).then((customerStatusResponse) => {
-      const defaultPaymentMethodId =
-        customerStatusResponse.Customer &&
-        customerStatusResponse.Customer.invoice_settings &&
-        customerStatusResponse.Customer.invoice_settings.default_payment_method &&
-        customerStatusResponse.Customer.invoice_settings.default_payment_method.id;
+    if (stripeEnvironment) {
+      Lbryio.call(
+        'customer',
+        'status',
+        {
+          environment: stripeEnvironment,
+        },
+        'post'
+      ).then((customerStatusResponse) => {
+        const defaultPaymentMethodId =
+          customerStatusResponse.Customer &&
+          customerStatusResponse.Customer.invoice_settings &&
+          customerStatusResponse.Customer.invoice_settings.default_payment_method &&
+          customerStatusResponse.Customer.invoice_settings.default_payment_method.id;
 
-      setHasSavedCard(Boolean(defaultPaymentMethodId));
-    });
-  }, []);
+        setHasSavedCard(Boolean(defaultPaymentMethodId));
+      });
+    }
+  }, [stripeEnvironment]);
 
   //
   React.useEffect(() => {
-    Lbryio.call(
-      'account',
-      'check',
-      {
-        channel_claim_id: channelClaimId,
-        channel_name: tipChannelName,
-        environment: stripeEnvironment,
-      },
-      'post'
-    )
-      .then((accountCheckResponse) => {
-        if (accountCheckResponse === true && canReceiveFiatTip !== true) {
-          setCanReceiveFiatTip(true);
-        }
-      })
-      .catch(function (error) {
-        // console.log(error);
-      });
-  }, []);
+    if (stripeEnvironment) {
+      Lbryio.call(
+        'account',
+        'check',
+        {
+          channel_claim_id: channelClaimId,
+          channel_name: tipChannelName,
+          environment: stripeEnvironment,
+        },
+        'post'
+      )
+        .then((accountCheckResponse) => {
+          if (accountCheckResponse === true && canReceiveFiatTip !== true) {
+            setCanReceiveFiatTip(true);
+          }
+        })
+        .catch(function (error) {
+          // console.log(error);
+        });
+    }
+  }, [stripeEnvironment]);
 
   React.useEffect(() => {
     // setHasSavedCard(false);
@@ -214,7 +212,7 @@ function WalletTipAmountSelector(props: Props) {
           <div className="help">
             <span className="help--spendable">
               <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card ')} button="link" /> To{' '}
-              {__(' Tip Creators')}
+              {__('Tip Creators')}
             </span>
           </div>
         </>
@@ -282,7 +280,7 @@ function WalletTipAmountSelector(props: Props) {
           <div className="help">
             <span className="help--spendable">
               <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card ')} button="link" /> To{' '}
-              {__(' Tip Creators')}
+              {__('Tip Creators')}
             </span>
           </div>
         </>

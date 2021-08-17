@@ -15,14 +15,8 @@ import LbcSymbol from 'component/common/lbc-symbol';
 import { parseURI } from 'lbry-redux';
 import usePersistedState from 'effects/use-persisted-state';
 import WalletSpendableBalanceHelp from 'component/walletSpendableBalanceHelp';
-import { STRIPE_PUBLIC_KEY } from 'config';
-
-let stripeEnvironment = 'test';
-// if the key contains pk_live it's a live key
-// update the environment for the calls to the backend to indicate which environment to hit
-if (STRIPE_PUBLIC_KEY.indexOf('pk_live') > -1) {
-  stripeEnvironment = 'live';
-}
+import { getStripeEnvironment } from 'util/stripe';
+let stripeEnvironment = getStripeEnvironment();
 
 const DEFAULT_TIP_AMOUNTS = [1, 5, 25, 100];
 const MINIMUM_FIAT_TIP = 1;
@@ -100,7 +94,7 @@ function WalletSendTip(props: Props) {
 
   // check if creator has a payment method saved
   React.useEffect(() => {
-    if (channelClaimId && isAuthenticated) {
+    if (channelClaimId && isAuthenticated && stripeEnvironment) {
       Lbryio.call(
         'customer',
         'status',
@@ -118,16 +112,18 @@ function WalletSendTip(props: Props) {
         setHasSavedCard(Boolean(defaultPaymentMethodId));
       });
     }
-  }, [channelClaimId, isAuthenticated]);
+  }, [channelClaimId, isAuthenticated, stripeEnvironment]);
 
   // check if creator has an account saved
   React.useEffect(() => {
     const tipInputElement = document.getElementById('tip-input');
-    if (tipInputElement) { tipInputElement.focus() }
+    if (tipInputElement) {
+      tipInputElement.focus();
+    }
   }, []);
 
   React.useEffect(() => {
-    if (channelClaimId) {
+    if (channelClaimId && stripeEnvironment) {
       Lbryio.call(
         'account',
         'check',
@@ -149,14 +145,14 @@ function WalletSendTip(props: Props) {
           // console.log(error);
         });
     }
-  }, [channelClaimId]);
+  }, [channelClaimId, stripeEnvironment]);
 
   const noBalance = balance === 0;
   const tipAmount = useCustomTip ? customTipAmount : presetTipAmount;
 
   const [activeTab, setActiveTab] = React.useState(claimIsMine ? TAB_BOOST : TAB_LBC);
 
-  function setClaimTypeText() {
+  function getClaimTypeText() {
     if (claim.value_type === 'stream') {
       return __('Content');
     } else if (claim.value_type === 'channel') {
@@ -169,22 +165,24 @@ function WalletSendTip(props: Props) {
       return __('Claim');
     }
   }
-  const claimTypeText = setClaimTypeText();
+  const claimTypeText = getClaimTypeText();
 
   let iconToUse;
   let explainerText = '';
   if (activeTab === TAB_BOOST) {
     iconToUse = ICONS.LBC;
-    explainerText = __('This refundable boost will improve the discoverability of this %claimTypeText% while active.', {claimTypeText});
+    explainerText = __('This refundable boost will improve the discoverability of this %claimTypeText% while active.', {
+      claimTypeText,
+    });
   } else if (activeTab === TAB_FIAT) {
     iconToUse = ICONS.FINANCE;
-    explainerText = __('Show this channel your appreciation by sending a donation in USD. ');
+    explainerText = __('Show this channel your appreciation by sending a donation in USD.');
     // if (!hasCardSaved) {
     //   explainerText += __('You must add a card to use this functionality.');
     // }
   } else if (activeTab === TAB_LBC) {
     iconToUse = ICONS.LBC;
-    explainerText = __('Show this channel your appreciation by sending a donation of Credits. ');
+    explainerText = __('Show this channel your appreciation by sending a donation of Credits.');
   }
 
   const isSupport = claimIsMine || activeTab === TAB_BOOST;
@@ -216,7 +214,7 @@ function WalletSendTip(props: Props) {
       } else if (tipAmount < MINIMUM_PUBLISH_BID) {
         tipError = __('Amount must be higher');
       }
-    //  if tip fiat tab
+      //  if tip fiat tab
     } else {
       regexp = RegExp(/^(\d*([.]\d{0,2})?)$/);
       const validTipInput = regexp.test(String(tipAmount));
@@ -276,7 +274,8 @@ function WalletSendTip(props: Props) {
           Lbryio.call(
             'customer',
             'tip',
-            { // round to fix issues with floating point numbers
+            {
+              // round to fix issues with floating point numbers
               amount: Math.round(100 * tipAmount), // convert from dollars to cents
               creator_channel_name: tipChannelName, // creator_channel_name
               creator_channel_claim_id: channelClaimId,
@@ -297,7 +296,7 @@ function WalletSendTip(props: Props) {
                 }),
               });
             })
-            .catch(function(error) {
+            .catch(function (error) {
               let displayError = 'Sorry, there was an error in processing your payment!';
 
               if (error.message !== 'payment intent failed to confirm') {
@@ -316,10 +315,10 @@ function WalletSendTip(props: Props) {
     }
   }
 
-  const countDecimals = function(value) {
+  const countDecimals = function (value) {
     const text = value.toString();
     const index = text.indexOf('.');
-    return (text.length - index - 1);
+    return text.length - index - 1;
   };
 
   function handleCustomPriceChange(event: SyntheticInputEvent<*>) {
@@ -387,7 +386,9 @@ function WalletSendTip(props: Props) {
     const displayAmount = !isNan(tipAmount) ? amountToShow : '';
 
     if (activeTab === TAB_BOOST) {
-      return (claimIsMine ?  __('Boost Your %claimTypeText%', {claimTypeText}) : __('Boost This %claimTypeText%', {claimTypeText}));
+      return claimIsMine
+        ? __('Boost Your %claimTypeText%', { claimTypeText })
+        : __('Boost This %claimTypeText%', { claimTypeText });
     } else if (activeTab === TAB_FIAT) {
       return __('Send a $%displayAmount% Tip', { displayAmount });
     } else if (activeTab === TAB_LBC) {
@@ -416,7 +417,16 @@ function WalletSendTip(props: Props) {
       {/* if there is no LBC balance, show user frontend to get credits */}
       {/* if there is lbc, the main tip/boost gui with the 3 tabs at the top */}
       <Card
-        title={<LbcSymbol postfix={claimIsMine ? __('Boost Your %claimTypeText%', {claimTypeText}) : __('Support This %claimTypeText%', {claimTypeText})} size={22} />}
+        title={
+          <LbcSymbol
+            postfix={
+              claimIsMine
+                ? __('Boost Your %claimTypeText%', { claimTypeText })
+                : __('Support This %claimTypeText%', { claimTypeText })
+            }
+            size={22}
+          />
+        }
         subtitle={
           <React.Fragment>
             {!claimIsMine && (
@@ -429,7 +439,9 @@ function WalletSendTip(props: Props) {
                   button="alt"
                   onClick={() => {
                     const tipInputElement = document.getElementById('tip-input');
-                    if (tipInputElement) { tipInputElement.focus() }
+                    if (tipInputElement) {
+                      tipInputElement.focus();
+                    }
                     if (!isConfirming) {
                       setActiveTab(TAB_LBC);
                     }
@@ -438,20 +450,24 @@ function WalletSendTip(props: Props) {
                 />
                 {/* tip fiat tab button */}
                 {/* @if TARGET='web' */}
-                <Button
-                  key="tip-fiat"
-                  icon={ICONS.FINANCE}
-                  label={__('Tip')}
-                  button="alt"
-                  onClick={() => {
-                    const tipInputElement = document.getElementById('tip-input');
-                    if (tipInputElement) { tipInputElement.focus() }
-                    if (!isConfirming) {
-                      setActiveTab(TAB_FIAT);
-                    }
-                  }}
-                  className={classnames('button-toggle', { 'button-toggle--active': activeTab === TAB_FIAT })}
-                />
+                {stripeEnvironment && (
+                  <Button
+                    key="tip-fiat"
+                    icon={ICONS.FINANCE}
+                    label={__('Tip')}
+                    button="alt"
+                    onClick={() => {
+                      const tipInputElement = document.getElementById('tip-input');
+                      if (tipInputElement) {
+                        tipInputElement.focus();
+                      }
+                      if (!isConfirming) {
+                        setActiveTab(TAB_FIAT);
+                      }
+                    }}
+                    className={classnames('button-toggle', { 'button-toggle--active': activeTab === TAB_FIAT })}
+                  />
+                )}
                 {/* @endif */}
                 {/* tip LBC tab button */}
                 <Button
@@ -461,7 +477,9 @@ function WalletSendTip(props: Props) {
                   button="alt"
                   onClick={() => {
                     const tipInputElement = document.getElementById('tip-input');
-                    if (tipInputElement) { tipInputElement.focus() }
+                    if (tipInputElement) {
+                      tipInputElement.focus();
+                    }
                     if (!isConfirming) {
                       setActiveTab(TAB_BOOST);
                     }
@@ -493,33 +511,29 @@ function WalletSendTip(props: Props) {
                   </div>
                   <div className="confirm__label">{setConfirmLabel()}</div>
                   <div className="confirm__value">
-                    {activeTab === TAB_FIAT ? <p>$ {(Math.round(tipAmount * 100) / 100).toFixed(2)}</p> : <LbcSymbol postfix={tipAmount} size={22} />}
+                    {activeTab === TAB_FIAT ? (
+                      <p>$ {(Math.round(tipAmount * 100) / 100).toFixed(2)}</p>
+                    ) : (
+                      <LbcSymbol postfix={tipAmount} size={22} />
+                    )}
                   </div>
                 </div>
               </div>
               <div className="section__actions">
-                <Button
-                  autoFocus
-                  onClick={handleSubmit}
-                  button="primary"
-                  disabled={isPending}
-                  label={__('Confirm')}
-                />
+                <Button autoFocus onClick={handleSubmit} button="primary" disabled={isPending} label={__('Confirm')} />
                 <Button button="link" label={__('Cancel')} onClick={() => setIsConfirming(false)} />
               </div>
             </>
-            // only show the prompt to earn more if its lbc or boost tab and no balance
-            // otherwise you can show the full prompt
-          ) : (!((activeTab === TAB_LBC || activeTab === TAB_BOOST) && noBalance)
-            ? <>
+          ) : !((activeTab === TAB_LBC || activeTab === TAB_BOOST) && noBalance) ? (
+            <>
               <div className="section">
                 <ChannelSelector />
               </div>
 
               {activeTab === TAB_FIAT && !hasCardSaved && (
                 <h3 className="add-card-prompt">
-                  <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card')} button="link" />
-                  {' '}{__('To Tip Creators')}
+                  <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card')} button="link" />{' '}
+                  {__('To Tip Creators')}
                 </h3>
               )}
 
@@ -625,28 +639,36 @@ function WalletSendTip(props: Props) {
                 <div className="help">{__('The payment will be made from your saved card')}</div>
               )}
             </>
-              // if it's LBC and there is no balance, you can prompt to purchase LBC
-               : <Card
-                 title={<I18nMessage tokens={{ lbc: <LbcSymbol size={22} /> }}>Supporting content requires %lbc%</I18nMessage>}
-                 subtitle={
-                    <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>
-                      With %lbc%, you can send tips to your favorite creators, or help boost their content for more people to
-                      see.
-                    </I18nMessage>
-                  }
-                 actions={
-                    <div className="section__actions">
-                      <Button
-                        icon={ICONS.REWARDS}
-                        button="primary"
-                        label={__('Earn Rewards')}
-                        navigate={`/$/${PAGES.REWARDS}`}
-                      />
-                      <Button icon={ICONS.BUY} button="secondary" label={__('Buy/Swap Credits')} navigate={`/$/${PAGES.BUY}`} />
-                      <Button button="link" label={__('Nevermind')} onClick={closeModal} />
-                    </div>
-                  }
-              />
+          ) : (
+            // if it's LBC and there is no balance, you can prompt to purchase LBC
+            <Card
+              title={
+                <I18nMessage tokens={{ lbc: <LbcSymbol size={22} /> }}>Supporting content requires %lbc%</I18nMessage>
+              }
+              subtitle={
+                <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>
+                  With %lbc%, you can send tips to your favorite creators, or help boost their content for more people
+                  to see.
+                </I18nMessage>
+              }
+              actions={
+                <div className="section__actions">
+                  <Button
+                    icon={ICONS.REWARDS}
+                    button="primary"
+                    label={__('Earn Rewards')}
+                    navigate={`/$/${PAGES.REWARDS}`}
+                  />
+                  <Button
+                    icon={ICONS.BUY}
+                    button="secondary"
+                    label={__('Buy/Swap Credits')}
+                    navigate={`/$/${PAGES.BUY}`}
+                  />
+                  <Button button="link" label={__('Nevermind')} onClick={closeModal} />
+                </div>
+              }
+            />
           )
         }
       />

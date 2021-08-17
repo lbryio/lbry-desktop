@@ -4,14 +4,8 @@ import Button from 'component/button';
 import Card from 'component/common/card';
 import { Lbryio } from 'lbryinc';
 import moment from 'moment';
-import { STRIPE_PUBLIC_KEY } from 'config';
-
-let stripeEnvironment = 'test';
-// if the key contains pk_live it's a live key
-// update the environment for the calls to the backend to indicate which environment to hit
-if (STRIPE_PUBLIC_KEY.indexOf('pk_live') > -1) {
-  stripeEnvironment = 'live';
-}
+import { getStripeEnvironment } from 'util/stripe';
+let stripeEnvironment = getStripeEnvironment();
 
 type Props = {
   accountDetails: any,
@@ -41,12 +35,15 @@ const WalletBalance = (props: Props) => {
 
   // TODO: this is actually incorrect, last4 should be populated based on the transaction not the current customer details
   React.useEffect(() => {
-    (async function() {
-        const customerStatusResponse = await getCustomerStatus();
+    (async function () {
+      const customerStatusResponse = await getCustomerStatus();
 
-        const lastFour = customerStatusResponse.PaymentMethods && customerStatusResponse.PaymentMethods.length && customerStatusResponse.PaymentMethods[0].card.last4;
+      const lastFour =
+        customerStatusResponse.PaymentMethods &&
+        customerStatusResponse.PaymentMethods.length &&
+        customerStatusResponse.PaymentMethods[0].card.last4;
 
-        setLastFour(lastFour);
+      setLastFour(lastFour);
     })();
   }, []);
 
@@ -59,53 +56,57 @@ const WalletBalance = (props: Props) => {
             <div className="table__wrapper">
               <table className="table table--transactions">
                 <thead>
-                <tr>
-                  <th className="date-header">{__('Date')}</th>
-                  <th>{<>{__('Receiving Channel Name')}</>}</th>
-                  <th>{__('Tip Location')}</th>
-                  <th>{__('Amount (USD)')} </th>
-                  <th>{__('Card Last 4')}</th>
-                  <th>{__('Anonymous')}</th>
-                </tr>
+                  <tr>
+                    <th className="date-header">{__('Date')}</th>
+                    <th>{<>{__('Receiving Channel Name')}</>}</th>
+                    <th>{__('Tip Location')}</th>
+                    <th>{__('Amount (USD)')} </th>
+                    <th>{__('Card Last 4')}</th>
+                    <th>{__('Anonymous')}</th>
+                  </tr>
                 </thead>
                 <tbody>
-                {accountTransactions &&
-                accountTransactions.map((transaction) => (
-                  <tr key={transaction.name + transaction.created_at}>
-                    <td>{moment(transaction.created_at).format('LLL')}</td>
-                    <td>
-                      <Button
-                        className=""
-                        navigate={'/' + transaction.channel_name + ':' + transaction.channel_claim_id}
-                        label={transaction.channel_name}
-                        button="link"
-                      />
-                    </td>
-                    <td>
-                      <Button
-                        className=""
-                        navigate={'/' + transaction.channel_name + ':' + transaction.source_claim_id}
-                        label={
-                          transaction.channel_claim_id === transaction.source_claim_id
-                            ? 'Channel Page'
-                            : 'Content Page'
-                        }
-                        button="link"
-                      />
-                    </td>
-                    <td>${transaction.tipped_amount / 100}</td>
-                    <td>{lastFour}</td>
-                    <td>{transaction.private_tip ? 'Yes' : 'No'}</td>
-                  </tr>
-                ))}
+                  {accountTransactions &&
+                    accountTransactions.map((transaction) => (
+                      <tr key={transaction.name + transaction.created_at}>
+                        <td>{moment(transaction.created_at).format('LLL')}</td>
+                        <td>
+                          <Button
+                            className=""
+                            navigate={'/' + transaction.channel_name + ':' + transaction.channel_claim_id}
+                            label={transaction.channel_name}
+                            button="link"
+                          />
+                        </td>
+                        <td>
+                          <Button
+                            className=""
+                            navigate={'/' + transaction.channel_name + ':' + transaction.source_claim_id}
+                            label={
+                              transaction.channel_claim_id === transaction.source_claim_id
+                                ? 'Channel Page'
+                                : 'Content Page'
+                            }
+                            button="link"
+                          />
+                        </td>
+                        <td>${transaction.tipped_amount / 100}</td>
+                        <td>{lastFour}</td>
+                        <td>{transaction.private_tip ? 'Yes' : 'No'}</td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
-              {(!accountTransactions || accountTransactions.length === 0) && <p style={{textAlign: 'center', marginTop: '20px', fontSize: '13px', color: 'rgb(171, 171, 171)'}}>No Transactions</p>}
+              {(!accountTransactions || accountTransactions.length === 0) && (
+                <p style={{ textAlign: 'center', marginTop: '20px', fontSize: '13px', color: 'rgb(171, 171, 171)' }}>
+                  No Transactions
+                </p>
+              )}
             </div>
           </>
         }
       />
-  </>
+    </>
   );
 };
 

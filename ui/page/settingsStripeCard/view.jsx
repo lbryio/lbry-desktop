@@ -5,19 +5,14 @@ import React from 'react';
 import Page from 'component/page';
 import Card from 'component/common/card';
 import { Lbryio } from 'lbryinc';
-import { STRIPE_PUBLIC_KEY } from 'config';
 import Plastic from 'react-plastic';
 import Button from 'component/button';
 import * as ICONS from 'constants/icons';
 import * as MODALS from 'constants/modal_types';
 import * as PAGES from 'constants/pages';
-
-let stripeEnvironment = 'test';
-// if the key contains pk_live it's a live key
-// update the environment for the calls to the backend to indicate which environment to hit
-if (STRIPE_PUBLIC_KEY.indexOf('pk_live') > -1) {
-  stripeEnvironment = 'live';
-}
+import { STRIPE_PUBLIC_KEY } from 'config';
+import { getStripeEnvironment } from 'util/stripe';
+let stripeEnvironment = getStripeEnvironment();
 
 const APIS_DOWN_ERROR_RESPONSE = __('There was an error from the server, please try again later');
 const CARD_SETUP_ERROR_RESPONSE = __('There was an error getting your card setup, please try again later');
@@ -79,114 +74,116 @@ class SettingsStripeCard extends React.Component<Props, State> {
     // TODO: fix this, should be a cleaner way
     setTimeout(function () {
       // check if customer has card setup already
-      Lbryio.call(
-        'customer',
-        'status',
-        {
-          environment: stripeEnvironment,
-        },
-        'post'
-      )
-        .then((customerStatusResponse) => {
-          // user has a card saved if their defaultPaymentMethod has an id
-          const defaultPaymentMethod = customerStatusResponse.Customer.invoice_settings.default_payment_method;
-          let userHasAlreadySetupPayment = Boolean(defaultPaymentMethod && defaultPaymentMethod.id);
+      if (stripeEnvironment) {
+        Lbryio.call(
+          'customer',
+          'status',
+          {
+            environment: stripeEnvironment,
+          },
+          'post'
+        )
+          .then((customerStatusResponse) => {
+            // user has a card saved if their defaultPaymentMethod has an id
+            const defaultPaymentMethod = customerStatusResponse.Customer.invoice_settings.default_payment_method;
+            let userHasAlreadySetupPayment = Boolean(defaultPaymentMethod && defaultPaymentMethod.id);
 
-          // show different frontend if user already has card
-          if (userHasAlreadySetupPayment) {
-            let card = customerStatusResponse.PaymentMethods[0].card;
+            // show different frontend if user already has card
+            if (userHasAlreadySetupPayment) {
+              let card = customerStatusResponse.PaymentMethods[0].card;
 
-            let customer = customerStatusResponse.Customer;
+              let customer = customerStatusResponse.Customer;
 
-            let topOfDisplay = customer.email.split('@')[0];
-            let bottomOfDisplay = '@' + customer.email.split('@')[1];
+              let topOfDisplay = customer.email.split('@')[0];
+              let bottomOfDisplay = '@' + customer.email.split('@')[1];
 
-            let cardDetails = {
-              brand: card.brand,
-              expiryYear: card.exp_year,
-              expiryMonth: card.exp_month,
-              lastFour: card.last4,
-              topOfDisplay: topOfDisplay,
-              bottomOfDisplay: bottomOfDisplay,
-            };
+              let cardDetails = {
+                brand: card.brand,
+                expiryYear: card.exp_year,
+                expiryMonth: card.exp_month,
+                lastFour: card.last4,
+                topOfDisplay: topOfDisplay,
+                bottomOfDisplay: bottomOfDisplay,
+              };
 
-            that.setState({
-              currentFlowStage: 'cardConfirmed',
-              pageTitle: 'Tip History',
-              userCardDetails: cardDetails,
-              paymentMethodId: customerStatusResponse.PaymentMethods[0].id,
-            });
+              that.setState({
+                currentFlowStage: 'cardConfirmed',
+                pageTitle: 'Tip History',
+                userCardDetails: cardDetails,
+                paymentMethodId: customerStatusResponse.PaymentMethods[0].id,
+              });
 
-            // otherwise, prompt them to save a card
-          } else {
-            that.setState({
-              currentFlowStage: 'confirmingCard',
-            });
+              // otherwise, prompt them to save a card
+            } else {
+              that.setState({
+                currentFlowStage: 'confirmingCard',
+              });
 
-            // get a payment method secret for frontend
+              // get a payment method secret for frontend
+              Lbryio.call(
+                'customer',
+                'setup',
+                {
+                  environment: stripeEnvironment,
+                },
+                'post'
+              ).then((customerSetupResponse) => {
+                clientSecret = customerSetupResponse.client_secret;
+
+                // instantiate stripe elements
+                setupStripe();
+              });
+            }
+
+            // get customer transactions
             Lbryio.call(
               'customer',
-              'setup',
+              'list',
               {
                 environment: stripeEnvironment,
               },
               'post'
-            ).then((customerSetupResponse) => {
-              clientSecret = customerSetupResponse.client_secret;
-
-              // instantiate stripe elements
-              setupStripe();
+            ).then((customerTransactionsResponse) => {
+              that.setState({
+                customerTransactions: customerTransactionsResponse,
+              });
             });
-          }
+            // if the status call fails, either an actual error or need to run setup first
+          })
+          .catch(function (error) {
+            // errorString passed from the API (with a 403 error)
+            const errorString = 'user as customer is not setup yet';
 
-          // get customer transactions
-          Lbryio.call(
-            'customer',
-            'list',
-            {
-              environment: stripeEnvironment,
-            },
-            'post'
-          ).then((customerTransactionsResponse) => {
-            that.setState({
-              customerTransactions: customerTransactionsResponse,
-            });
+            // if it's beamer's error indicating the account is not linked yet
+            if (error.message && error.message.indexOf(errorString) > -1) {
+              // send them to save a card
+              that.setState({
+                currentFlowStage: 'confirmingCard',
+              });
+
+              // get a payment method secret for frontend
+              Lbryio.call(
+                'customer',
+                'setup',
+                {
+                  environment: stripeEnvironment,
+                },
+                'post'
+              ).then((customerSetupResponse) => {
+                clientSecret = customerSetupResponse.client_secret;
+
+                // instantiate stripe elements
+                setupStripe();
+              });
+              // 500 error from the backend being down
+            } else if (error === 'internal_apis_down') {
+              doToast({ message: APIS_DOWN_ERROR_RESPONSE, isError: true });
+            } else {
+              // probably an error from stripe
+              doToast({ message: CARD_SETUP_ERROR_RESPONSE, isError: true });
+            }
           });
-          // if the status call fails, either an actual error or need to run setup first
-        })
-        .catch(function (error) {
-          // errorString passed from the API (with a 403 error)
-          const errorString = 'user as customer is not setup yet';
-
-          // if it's beamer's error indicating the account is not linked yet
-          if (error.message && error.message.indexOf(errorString) > -1) {
-            // send them to save a card
-            that.setState({
-              currentFlowStage: 'confirmingCard',
-            });
-
-            // get a payment method secret for frontend
-            Lbryio.call(
-              'customer',
-              'setup',
-              {
-                environment: stripeEnvironment,
-              },
-              'post'
-            ).then((customerSetupResponse) => {
-              clientSecret = customerSetupResponse.client_secret;
-
-              // instantiate stripe elements
-              setupStripe();
-            });
-            // 500 error from the backend being down
-          } else if (error === 'internal_apis_down') {
-            doToast({ message: APIS_DOWN_ERROR_RESPONSE, isError: true });
-          } else {
-            // probably an error from stripe
-            doToast({ message: CARD_SETUP_ERROR_RESPONSE, isError: true });
-          }
-        });
+      }
     }, 250);
 
     function setupStripe() {
