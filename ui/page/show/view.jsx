@@ -91,11 +91,13 @@ function ShowPage(props: Props) {
       const hostname = isDev ? 'localhost' : DOMAIN;
       if (canonicalUrlPath !== window.location.pathname && hostname === window.location.hostname) {
         const urlParams = new URLSearchParams(search);
+        let replaceUrl = canonicalUrlPath;
         if (urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID)) {
           const listId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID) || '';
           urlParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, listId);
+          replaceUrl += `?${urlParams.toString()}`;
         }
-        history.replaceState(history.state, '', `${canonicalUrlPath}?${urlParams.toString()}`);
+        history.replaceState(history.state, '', replaceUrl);
       }
     }
     // @endif
@@ -106,7 +108,7 @@ function ShowPage(props: Props) {
     ) {
       resolveUri(uri);
     }
-  }, [resolveUri, isResolvingUri, canonicalUrl, uri, claimExists, haventFetchedYet, history, isMine, claimIsPending]);
+  }, [resolveUri, isResolvingUri, canonicalUrl, uri, claimExists, haventFetchedYet, isMine, claimIsPending, search]);
 
   // Don't navigate directly to repost urls
   // Always redirect to the actual content
