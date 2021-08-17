@@ -152,7 +152,7 @@ function WalletSendTip(props: Props) {
 
   const [activeTab, setActiveTab] = React.useState(claimIsMine ? TAB_BOOST : TAB_LBC);
 
-  function setClaimTypeText() {
+  function getClaimTypeText() {
     if (claim.value_type === 'stream') {
       return __('Content');
     } else if (claim.value_type === 'channel') {
@@ -165,7 +165,7 @@ function WalletSendTip(props: Props) {
       return __('Claim');
     }
   }
-  const claimTypeText = setClaimTypeText();
+  const claimTypeText = getClaimTypeText();
 
   let iconToUse;
   let explainerText = '';
