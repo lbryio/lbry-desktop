@@ -49,6 +49,11 @@ class CreditAmount extends React.PureComponent<Props> {
       isFiat,
     } = this.props;
     const minimumRenderableAmount = 10 ** (-1 * precision);
+
+    // return null, otherwise it will try and convert undefined to a string
+    if (amount === undefined) {
+      return null;
+    }
     const fullPrice = formatFullPrice(amount, 2);
     const isFree = parseFloat(amount) === 0;
 

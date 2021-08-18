@@ -12,6 +12,17 @@ import { toCapitalCase } from 'util/string';
 import classnames from 'classnames';
 import HelpLink from 'component/common/help-link';
 import FileExporter from 'component/common/file-exporter';
+import WalletFiatPaymentHistory from 'component/walletFiatPaymentHistory';
+import WalletFiatAccountHistory from 'component/walletFiatAccountHistory';
+import { STRIPE_PUBLIC_KEY } from '../../../config';
+import { Lbryio } from 'lbryinc';
+
+let stripeEnvironment = 'test';
+// if the key contains pk_live it's a live key
+// update the environment for the calls to the backend to indicate which environment to hit
+if (STRIPE_PUBLIC_KEY.indexOf('pk_live') > -1) {
+  stripeEnvironment = 'live';
+}
 
 type Props = {
   search: string,
@@ -30,6 +41,7 @@ type Props = {
 type Delta = {
   dkey: string,
   value: string,
+  tab: string
 };
 
 function TxoList(props: Props) {
@@ -45,12 +57,72 @@ function TxoList(props: Props) {
     transactionsFile,
   } = props;
 
+  const [accountTransactionResponse, setAccountTransactionResponse] = React.useState([]);
+  const [customerTransactions, setCustomerTransactions] = React.useState([]);
+
+  function getPaymentHistory() {
+    return Lbryio.call(
+      'customer',
+      'list',
+      {
+        environment: stripeEnvironment,
+      },
+      'post'
+    );
+  }
+
+  function getAccountTransactionsa() {
+    return Lbryio.call(
+      'account',
+      'list',
+      {
+        environment: stripeEnvironment,
+      },
+      'post'
+    );
+  }
+
+  // calculate account transactions section
+  React.useEffect(() => {
+    (async function() {
+      try {
+        const getAccountTransactions = await getAccountTransactionsa();
+
+        setAccountTransactionResponse(getAccountTransactions);
+      } catch (err) {
+        console.log(err);
+      }
+    })();
+  }, []);
+
+  // populate customer payment data
+  React.useEffect(() => {
+    (async function() {
+      try {
+        // get card payments customer has made
+        let customerTransactionResponse = await getPaymentHistory();
+        // console.log('amount of transactions');
+        // console.log(customerTransactionResponse.length);
+
+        if (customerTransactionResponse && customerTransactionResponse.length) {
+          customerTransactionResponse.reverse();
+        }
+
+        setCustomerTransactions(customerTransactionResponse);
+      } catch (err) {
+        console.log(err);
+      }
+    })();
+  }, []);
+
   const urlParams = new URLSearchParams(search);
   const page = urlParams.get(TXO.PAGE) || String(1);
   const pageSize = urlParams.get(TXO.PAGE_SIZE) || String(TXO.PAGE_SIZE_DEFAULT);
   const type = urlParams.get(TXO.TYPE) || TXO.ALL;
   const subtype = urlParams.get(TXO.SUB_TYPE);
   const active = urlParams.get(TXO.ACTIVE) || TXO.ALL;
+  const currency = urlParams.get('currency') || 'credits';
+  const fiatType = urlParams.get('fiatType') || 'incoming';
 
   const currentUrlParams = {
     page,
@@ -58,6 +130,8 @@ function TxoList(props: Props) {
     active,
     type,
     subtype,
+    currency,
+    fiatType,
   };
 
   const hideStatus =
@@ -119,8 +193,32 @@ function TxoList(props: Props) {
     history.push(url);
   }
 
+  // let currency = 'credits';
   function updateUrl(delta: Delta) {
     const newUrlParams = new URLSearchParams();
+
+    const existingCurrency = newUrlParams.get('currency') || 'credits';
+
+    const existingFiatType = newUrlParams.get('fiatType') || 'incoming';
+
+    console.log(existingFiatType);
+
+    console.log(newUrlParams);
+
+    // set tab name to account for wallet page tab
+    newUrlParams.set('tab', delta.tab);
+
+    // only update currency if it's being changed
+    if (delta.currency) {
+      newUrlParams.set('currency', delta.currency);
+    }
+
+    if (delta.fiatType) {
+      newUrlParams.set('fiatType', delta.fiatType);
+    } else {
+      newUrlParams.set('fiatType', existingFiatType);
+    }
+
     switch (delta.dkey) {
       case TXO.PAGE:
         if (currentUrlParams.type) {
@@ -179,6 +277,10 @@ function TxoList(props: Props) {
 
   const paramsString = JSON.stringify(params);
 
+  // tab used in the wallet section
+  // TODO: change the name of this eventually
+  const tab = 'fiat-payment-history';
+
   useEffect(() => {
     if (paramsString && updateTxoPageParams) {
       const params = JSON.parse(paramsString);
@@ -188,28 +290,54 @@ function TxoList(props: Props) {
 
   return (
     <Card
-      title={<div className="table__header-text">{__(`Transactions`)}</div>}
-      titleActions={
-        <div className="card__actions--inline">
-          {!isFetchingTransactions && transactionsFile === null && (
-            <label>{<span className="error__text">{__('Failed to process fetched data.')}</span>}</label>
-          )}
-          <div className="txo__export">
-            <FileExporter
-              data={transactionsFile}
-              label={__('Export')}
-              tooltip={__('Fetch transaction data for export')}
-              defaultFileName={'transactions-history.csv'}
-              onFetch={() => fetchTransactions()}
-              progressMsg={isFetchingTransactions ? __('Fetching data') : ''}
-            />
+      title={
+        <><div className="table__header-text" style={{width: '124px', display: 'inline-block'}}>{__(`Transactions`)}</div>
+          <div style={{display: 'inline-block'}}>
+            <fieldset-section>
+              <div className={'txo__radios'}>
+                <Button
+                  button="alt"
+                  onClick={(e) => handleChange({ currency: 'credits', tab })}
+                  className={classnames(`button-toggle`, {
+                    'button-toggle--active': currency === 'credits',
+                  })}
+                  label={__('Credits')}
+                />
+                <Button
+                  button="alt"
+                  onClick={(e) => handleChange({ currency: 'fiat', tab })}
+                  className={classnames(`button-toggle`, {
+                    'button-toggle--active': currency === 'fiat',
+                  })}
+                  label={__('USD')}
+                />
+              </div>
+            </fieldset-section>
           </div>
-          <Button button="alt" icon={ICONS.REFRESH} label={__('Refresh')} onClick={() => fetchTxoPage()} />
-        </div>
+        </>
+
+      }
+      titleActions={<></>
+        // <div className="card__actions--inline">
+        //   {!isFetchingTransactions && transactionsFile === null && (
+        //     <label>{<span className="error__text">{__('Failed to process fetched data.')}</span>}</label>
+        //   )}
+        //   <div className="txo__export">
+        //     <FileExporter
+        //       data={transactionsFile}
+        //       label={__('Export')}
+        //       tooltip={__('Fetch transaction data for export')}
+        //       defaultFileName={'transactions-history.csv'}
+        //       onFetch={() => fetchTransactions()}
+        //       progressMsg={isFetchingTransactions ? __('Fetching data') : ''}
+        //     />
+        //   </div>
+        //   <Button button="alt" icon={ICONS.REFRESH} label={__('Refresh')} onClick={() => fetchTxoPage()} />
+        // </div>
       }
       isBodyList
-      body={
-        <div>
+      body={currency === 'credits'
+        ? <div>
           <div className="card__body-actions">
             <div className="card__actions">
               <div>
@@ -223,7 +351,7 @@ function TxoList(props: Props) {
                     </>
                   }
                   value={type || 'all'}
-                  onChange={(e) => handleChange({ dkey: TXO.TYPE, value: e.target.value })}
+                  onChange={(e) => handleChange({ dkey: TXO.TYPE, value: e.target.value, tab })}
                 >
                   {Object.values(TXO.DROPDOWN_TYPES).map((v) => {
                     const stringV = String(v);
@@ -242,7 +370,7 @@ function TxoList(props: Props) {
                     name="subtype"
                     label={__('Payment Type')}
                     value={subtype || 'all'}
-                    onChange={(e) => handleChange({ dkey: TXO.SUB_TYPE, value: e.target.value })}
+                    onChange={(e) => handleChange({ dkey: TXO.SUB_TYPE, value: e.target.value, tab })}
                   >
                     {Object.values(TXO.DROPDOWN_SUBTYPES).map((v) => {
                       const stringV = String(v);
@@ -262,7 +390,7 @@ function TxoList(props: Props) {
                     <div className={'txo__radios'}>
                       <Button
                         button="alt"
-                        onClick={(e) => handleChange({ dkey: TXO.ACTIVE, value: 'active' })}
+                        onClick={(e) => handleChange({ dkey: TXO.ACTIVE, value: 'active', tab })}
                         className={classnames(`button-toggle`, {
                           'button-toggle--active': active === TXO.ACTIVE,
                         })}
@@ -270,7 +398,7 @@ function TxoList(props: Props) {
                       />
                       <Button
                         button="alt"
-                        onClick={(e) => handleChange({ dkey: TXO.ACTIVE, value: 'spent' })}
+                        onClick={(e) => handleChange({ dkey: TXO.ACTIVE, value: 'spent', tab })}
                         className={classnames(`button-toggle`, {
                           'button-toggle--active': active === 'spent',
                         })}
@@ -278,7 +406,7 @@ function TxoList(props: Props) {
                       />
                       <Button
                         button="alt"
-                        onClick={(e) => handleChange({ dkey: TXO.ACTIVE, value: 'all' })}
+                        onClick={(e) => handleChange({ dkey: TXO.ACTIVE, value: 'all', tab })}
                         className={classnames(`button-toggle`, {
                           'button-toggle--active': active === 'all',
                         })}
@@ -288,12 +416,69 @@ function TxoList(props: Props) {
                   </fieldset-section>
                 </div>
               )}
+              <div className="card__actions--inline" style={{marginLeft: '181px'}}>
+                {!isFetchingTransactions && transactionsFile === null && (
+                  <label>{<span className="error__text">{__('Failed to process fetched data.')}</span>}</label>
+                )}
+                <div className="txo__export">
+                  <FileExporter
+                    data={transactionsFile}
+                    label={__('Export')}
+                    tooltip={__('Fetch transaction data for export')}
+                    defaultFileName={'transactions-history.csv'}
+                    onFetch={() => fetchTransactions()}
+                    progressMsg={isFetchingTransactions ? __('Fetching data') : ''}
+                  />
+                </div>
+                <Button button="alt" icon={ICONS.REFRESH} label={__('Refresh')} onClick={() => fetchTxoPage()} />
+              </div>
             </div>
           </div>
+          {/* listing of the transactions */}
           <TransactionListTable txos={txoPage} />
           <Paginate totalPages={Math.ceil(txoItemCount / Number(pageSize))} />
         </div>
+        : <div>
+          {/* fiat section (buttons and transactions) */}
+          <div className="section card-stack">
+            <div className="card__body-actions">
+              <div className="card__actions">
+                {!hideStatus && (
+                  <div>
+                    <fieldset-section>
+                      <label>{__('Type')}</label>
+                      <div className={'txo__radios'}>
+                        <Button
+                          button="alt"
+                          onClick={(e) => handleChange({ tab, fiatType: 'incoming', currency: 'fiat' })}
+                          className={classnames(`button-toggle`, {
+                            'button-toggle--active': fiatType === 'incoming',
+                          })}
+                          label={__('Incoming')}
+                        />
+                        <Button
+                          button="alt"
+                          onClick={(e) => handleChange({ tab, fiatType: 'outgoing', currency: 'fiat' })}
+                          className={classnames(`button-toggle`, {
+                            'button-toggle--active': fiatType === 'outgoing',
+                          })}
+                          label={__('Outgoing')}
+                        />
+                      </div>
+                    </fieldset-section>
+                  </div>
+                )}
+              </div>
+            </div>
+            {/* listing of the transactions */}
+            { fiatType === 'incoming' && <WalletFiatAccountHistory transactions={accountTransactionResponse} /> }
+            { fiatType === 'outgoing' && <WalletFiatPaymentHistory transactions={customerTransactions} /> }
+            {/* TODO: have to finish pagination */}
+            {/* <Paginate totalPages={Math.ceil(txoItemCount / Number(pageSize))} /> */}
+          </div>
+        </div>
       }
+
     />
   );
 }
