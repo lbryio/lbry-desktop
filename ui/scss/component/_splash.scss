@@ -1,0 +1,51 @@
+.splash {
+  -webkit-app-region: drag;
+  width: 100vw;
+  height: 100vh;
+
+  align-items: center;
+  background-color: var(--color-background--splash);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.splash__details {
+  position: absolute;
+  line-height: 1;
+  font-weight: var(--font-weight-light);
+  color: #fff;
+  margin-top: 2rem;
+}
+
+.splash__title {
+  position: absolute;
+  font-size: 40px;
+  line-height: 1;
+  font-weight: var(--font-weight-bold);
+  color: #fff;
+  margin-top: -1rem;
+}
+
+.splash__animation-toggle {
+  position: fixed;
+  top: var(--spacing-l);
+  right: var(--spacing-l);
+  padding: var(--spacing-m);
+  border-color: #fff;
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.205);
+  font-size: var(--font-small);
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+    .icon {
+      stroke: #fff;
+    }
+  }
+}
+
+.doodle {
+  position: fixed;
+}
