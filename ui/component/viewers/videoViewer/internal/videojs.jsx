@@ -624,8 +624,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
       const player = playerRef.current;
       if (player) {
-        window.player = undefined;
         player.dispose();
+        window.player = undefined;
       }
     };
   }, [isAudio]);
@@ -663,22 +663,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       }
     });
   }, [source, reload]);
-
-  // Load IMA3 SDK for aniview
-  // @if TARGET='web'
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.src = `https://imasdk.googleapis.com/js/sdkloader/ima3.js`;
-    script.async = true;
-    // $FlowFixMe
-    document.body.appendChild(script);
-
-    return () => {
-      // $FlowFixMe
-      document.body.removeChild(script);
-    };
-  });
-  // @endif
 
   return (
     // $FlowFixMe
