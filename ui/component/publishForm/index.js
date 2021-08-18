@@ -18,7 +18,12 @@ import {
 } from 'lbry-redux';
 import * as RENDER_MODES from 'constants/file_render_modes';
 import { doPublishDesktop } from 'redux/actions/publish';
-import { selectUnclaimedRewardValue } from 'redux/selectors/rewards';
+import { doClaimInitialRewards } from 'redux/actions/rewards';
+import {
+  selectUnclaimedRewardValue,
+  selectIsClaimingInitialRewards,
+  selectHasClaimedInitialRewards,
+} from 'redux/selectors/rewards';
 import {
   selectModal,
   selectActiveChannelClaim,
@@ -27,8 +32,8 @@ import {
 } from 'redux/selectors/app';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { makeSelectFileRenderModeForUri } from 'redux/selectors/content';
-import PublishPage from './view';
 import { selectUser } from 'redux/selectors/user';
+import PublishPage from './view';
 
 const select = (state) => {
   const myClaimForUri = selectMyClaimForUri(state);
@@ -59,6 +64,8 @@ const select = (state) => {
     myChannels: selectMyChannelClaims(state),
     incognito: selectIncognito(state),
     activeChannelStakedLevel: selectActiveChannelStakedLevel(state),
+    isClaimingInitialRewards: selectIsClaimingInitialRewards(state),
+    hasClaimedInitialRewards: selectHasClaimedInitialRewards(state),
   };
 };
 
@@ -70,6 +77,7 @@ const perform = (dispatch) => ({
   prepareEdit: (claim, uri) => dispatch(doPrepareEdit(claim, uri)),
   resetThumbnailStatus: () => dispatch(doResetThumbnailStatus()),
   checkAvailability: (name) => dispatch(doCheckPublishNameAvailability(name)),
+  claimInitialRewards: () => dispatch(doClaimInitialRewards()),
 });
 
 export default connect(select, perform)(PublishPage);
