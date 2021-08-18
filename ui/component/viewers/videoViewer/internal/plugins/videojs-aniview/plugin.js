@@ -97,7 +97,7 @@ class AniviewPlugin extends Component {
   }
 }
 
-videojs.registerComponent('recsys', AniviewPlugin);
+videojs.registerComponent('aniview', AniviewPlugin);
 
 const onPlayerReady = (player, options) => {
   player.aniview = new AniviewPlugin(player, options);
