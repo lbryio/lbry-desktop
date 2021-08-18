@@ -42,6 +42,7 @@ $contentMaxWidth: 60rem;
   width: 100%;
   display: flex;
   padding: var(--spacing-m) 0;
+  justify-content: space-between;
 
   .channel-thumbnail {
     @include handleChannelGif(3rem);
@@ -60,6 +61,7 @@ $contentMaxWidth: 60rem;
 
 .notification__wrapper--unread {
   background-color: var(--color-card-background-highlighted);
+  justify-content: space-between;
 
   &:hover {
     background-color: var(--color-button-secondary-bg);
@@ -120,6 +122,7 @@ $contentMaxWidth: 60rem;
 }
 
 .notification__title {
+  position: relative;
   font-size: var(--font-small);
   color: var(--color-text);
   margin-bottom: var(--spacing-s);
@@ -135,6 +138,7 @@ $contentMaxWidth: 60rem;
 
 .notification__text {
   font-size: var(--font-body);
+  color: var(--color-text);
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
