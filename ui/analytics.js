@@ -169,7 +169,7 @@ function startWatchmanIntervalIfNotRunning() {
     lastSentTime = new Date();
 
     // only set an interval if analytics are enabled and is prod
-    if (internalAnalyticsEnabled && isProduction) {
+    if (isProduction && IS_WEB) {
       watchmanInterval = setInterval(sendAndResetWatchmanData, 1000 * SEND_DATA_TO_WATCHMAN_INTERVAL);
     }
   }
