@@ -87,10 +87,13 @@ if (window.localStorage.getItem(SHARE_INTERNAL) === 'true') internalAnalyticsEna
  * @returns {String}
  */
 function getDeviceType() {
-  var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+  if (!IS_WEB) {
+    return 'elt';
+  }
+  const userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
   if (/android/i.test(userAgent)) {
-    return 'and';
+    return 'adr';
   }
 
   // iOS detection from: http://stackoverflow.com/a/9039885/177710
