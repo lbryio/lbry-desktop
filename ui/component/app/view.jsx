@@ -5,7 +5,7 @@ import { lazyImport } from 'util/lazyImport';
 import classnames from 'classnames';
 import analytics from 'analytics';
 import { buildURI, parseURI } from 'lbry-redux';
-import { SIMPLE_SITE } from 'config';
+import { SIMPLE_SITE, ENABLE_PREROLL_ADS } from 'config';
 import Router from 'component/router/index';
 import ReactModal from 'react-modal';
 import { openContextMenu } from 'util/context-menu';
@@ -324,6 +324,23 @@ function App(props: Props) {
       analytics.rewardEligibleEvent();
     }
   }, [previousRewardApproved, isRewardApproved]);
+
+  // Load IMA3 SDK for aniview
+  // @if TARGET='web'
+  useEffect(() => {
+    if (ENABLE_PREROLL_ADS) {
+      const script = document.createElement('script');
+      script.src = `https://imasdk.googleapis.com/js/sdkloader/ima3.js`;
+      script.async = true;
+      // $FlowFixMe
+      document.body.appendChild(script);
+      return () => {
+        // $FlowFixMe
+        document.body.removeChild(script);
+      };
+    }
+  });
+  // @endif
 
   // @if TARGET='app'
   useEffect(() => {
