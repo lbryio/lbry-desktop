@@ -16,7 +16,6 @@ import usePersistedState from 'effects/use-persisted-state';
 import { ENABLE_MATURE } from 'config';
 
 type Props = {
-  claim: ?Claim,
   uri: string,
   title: string,
   nsfw: boolean,
@@ -25,6 +24,7 @@ type Props = {
   isLive?: boolean,
   viewers?: number,
   subCount: number,
+  channelClaimId?: string,
   fetchSubCount: (string) => void,
 };
 
@@ -36,18 +36,18 @@ function FileTitleSection(props: Props) {
     isNsfwBlocked,
     livestream = false,
     isLive = false,
-    claim,
     viewers,
     subCount,
+    channelClaimId,
     fetchSubCount,
   } = props;
   const [hasAcknowledgedSec, setHasAcknowledgedSec] = usePersistedState('sec-nag', false);
 
   React.useEffect(() => {
-    if (claim && claim.signing_channel) {
-      fetchSubCount(claim.signing_channel.claim_id);
+    if (channelClaimId) {
+      fetchSubCount(channelClaimId);
     }
-  }, [claim, fetchSubCount]);
+  }, [channelClaimId, fetchSubCount]);
 
   return (
     <>
