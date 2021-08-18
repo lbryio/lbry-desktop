@@ -159,14 +159,17 @@ const WalletPage = (props: Props) => {
     <>
       {/* @if TARGET='web' */}
       <Page>
-        <WalletBalance />
         <Tabs onChange={onTabChange} index={tabIndex}>
           <TabList className="tabs__list--collection-edit-page">
-            <Tab>{__('LBRY Credits')}</Tab>
-            <Tab>{__('Account History')}</Tab>
-            <Tab>{__('Payment History')}</Tab>
+            <Tab>{__('Balance')}</Tab>
+            <Tab>{__('Transactions')}</Tab>
+            <Tab>{__('Subscriptions')}</Tab>
+            <Tab>{__('Analytics')}</Tab>
           </TabList>
           <TabPanels>
+            <TabPanel>
+              <WalletBalance />
+            </TabPanel>
             <TabPanel>
               <div className="section card-stack">
                 <div className="lbc-transactions">
@@ -196,11 +199,11 @@ const WalletPage = (props: Props) => {
                 <WalletFiatAccountHistory transactions={accountTransactionResponse} />
               </div>
             </TabPanel>
-            <TabPanel>
-              <div className="section card-stack">
-                <WalletFiatPaymentHistory transactions={customerTransactions} />
-              </div>
-            </TabPanel>
+            {/*<TabPanel>*/}
+            {/*  <div className="section card-stack">*/}
+            {/*    <WalletFiatPaymentHistory transactions={customerTransactions} />*/}
+            {/*  </div>*/}
+            {/*</TabPanel>*/}
           </TabPanels>
         </Tabs>
       </Page>

@@ -30,6 +30,7 @@ type Props = {
 type Delta = {
   dkey: string,
   value: string,
+  tab: string
 };
 
 function TxoList(props: Props) {
@@ -51,6 +52,7 @@ function TxoList(props: Props) {
   const type = urlParams.get(TXO.TYPE) || TXO.ALL;
   const subtype = urlParams.get(TXO.SUB_TYPE);
   const active = urlParams.get(TXO.ACTIVE) || TXO.ALL;
+  const currency = urlParams.get('currency') || 'credits';
 
   const currentUrlParams = {
     page,
@@ -58,6 +60,7 @@ function TxoList(props: Props) {
     active,
     type,
     subtype,
+    currency
   };
 
   const hideStatus =
@@ -119,8 +122,17 @@ function TxoList(props: Props) {
     history.push(url);
   }
 
+  // let currency = 'credits';
   function updateUrl(delta: Delta) {
     const newUrlParams = new URLSearchParams();
+    // if (delta.currency) {
+    //   currency = delta.currency;
+    // }
+
+    // set tab name to account for wallet page tab
+    newUrlParams.set('tab', delta.tab);
+    newUrlParams.set('currency', delta.currency);
+
     switch (delta.dkey) {
       case TXO.PAGE:
         if (currentUrlParams.type) {
@@ -179,6 +191,10 @@ function TxoList(props: Props) {
 
   const paramsString = JSON.stringify(params);
 
+  // tab used in the wallet section
+  // TODO: change the name of this eventually
+  const tab = 'fiat-payment-history';
+
   useEffect(() => {
     if (paramsString && updateTxoPageParams) {
       const params = JSON.parse(paramsString);
@@ -195,17 +211,17 @@ function TxoList(props: Props) {
               <div className={'txo__radios'}>
                 <Button
                   button="alt"
-                  onClick={(e) => handleChange({ dkey: TXO.ACTIVE, value: 'active' })}
+                  onClick={(e) => handleChange({ currency: 'credits', tab })}
                   className={classnames(`button-toggle`, {
-                    'button-toggle--active': TXO.ACTIVE === TXO.ACTIVE,
+                    'button-toggle--active': currency === 'credits',
                   })}
-                  label={__('LBRY Credits')}
+                  label={__('Credits')}
                 />
                 <Button
                   button="alt"
-                  onClick={(e) => handleChange({ dkey: TXO.ACTIVE, value: 'spent' })}
+                  onClick={(e) => handleChange({ currency: 'fiat', tab })}
                   className={classnames(`button-toggle`, {
-                    'button-toggle--active': active === 'spent',
+                    'button-toggle--active': currency === 'fiat',
                   })}
                   label={__('USD')}
                 />
@@ -249,7 +265,7 @@ function TxoList(props: Props) {
                     </>
                   }
                   value={type || 'all'}
-                  onChange={(e) => handleChange({ dkey: TXO.TYPE, value: e.target.value })}
+                  onChange={(e) => handleChange({ dkey: TXO.TYPE, value: e.target.value, tab })}
                 >
                   {Object.values(TXO.DROPDOWN_TYPES).map((v) => {
                     const stringV = String(v);
@@ -268,7 +284,7 @@ function TxoList(props: Props) {
                     name="subtype"
                     label={__('Payment Type')}
                     value={subtype || 'all'}
-                    onChange={(e) => handleChange({ dkey: TXO.SUB_TYPE, value: e.target.value })}
+                    onChange={(e) => handleChange({ dkey: TXO.SUB_TYPE, value: e.target.value, tab })}
                   >
                     {Object.values(TXO.DROPDOWN_SUBTYPES).map((v) => {
                       const stringV = String(v);
@@ -288,7 +304,7 @@ function TxoList(props: Props) {
                     <div className={'txo__radios'}>
                       <Button
                         button="alt"
-                        onClick={(e) => handleChange({ dkey: TXO.ACTIVE, value: 'active' })}
+                        onClick={(e) => handleChange({ dkey: TXO.ACTIVE, value: 'active', tab })}
                         className={classnames(`button-toggle`, {
                           'button-toggle--active': active === TXO.ACTIVE,
                         })}
@@ -296,7 +312,7 @@ function TxoList(props: Props) {
                       />
                       <Button
                         button="alt"
-                        onClick={(e) => handleChange({ dkey: TXO.ACTIVE, value: 'spent' })}
+                        onClick={(e) => handleChange({ dkey: TXO.ACTIVE, value: 'spent', tab })}
                         className={classnames(`button-toggle`, {
                           'button-toggle--active': active === 'spent',
                         })}
@@ -304,7 +320,7 @@ function TxoList(props: Props) {
                       />
                       <Button
                         button="alt"
-                        onClick={(e) => handleChange({ dkey: TXO.ACTIVE, value: 'all' })}
+                        onClick={(e) => handleChange({ dkey: TXO.ACTIVE, value: 'all', tab })}
                         className={classnames(`button-toggle`, {
                           'button-toggle--active': active === 'all',
                         })}
