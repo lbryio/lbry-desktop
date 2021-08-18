@@ -87,19 +87,20 @@ if (window.localStorage.getItem(SHARE_INTERNAL) === 'true') internalAnalyticsEna
  * @returns {String}
  */
 function getDeviceType() {
-  if (!IS_WEB) {
-    return 'elt';
-  }
-  const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-
-  if (/android/i.test(userAgent)) {
-    return 'adr';
-  }
-
-  // iOS detection from: http://stackoverflow.com/a/9039885/177710
-  if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-    return 'ios';
-  }
+  // We may not care what the device is if it's in a web browser. Commenting out for now.
+  // if (!IS_WEB) {
+  //   return 'elt';
+  // }
+  // const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+  //
+  // if (/android/i.test(userAgent)) {
+  //   return 'adr';
+  // }
+  //
+  // // iOS detection from: http://stackoverflow.com/a/9039885/177710
+  // if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+  //   return 'ios';
+  // }
 
   // default as web, this can be optimized
   return 'web';
