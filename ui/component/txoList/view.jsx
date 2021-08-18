@@ -188,24 +188,50 @@ function TxoList(props: Props) {
 
   return (
     <Card
-      title={<div className="table__header-text">{__(`Transactions`)}</div>}
-      titleActions={
-        <div className="card__actions--inline">
-          {!isFetchingTransactions && transactionsFile === null && (
-            <label>{<span className="error__text">{__('Failed to process fetched data.')}</span>}</label>
-          )}
-          <div className="txo__export">
-            <FileExporter
-              data={transactionsFile}
-              label={__('Export')}
-              tooltip={__('Fetch transaction data for export')}
-              defaultFileName={'transactions-history.csv'}
-              onFetch={() => fetchTransactions()}
-              progressMsg={isFetchingTransactions ? __('Fetching data') : ''}
-            />
+      title={
+        <><div className="table__header-text" style={{width: '124px', display: 'inline-block'}}>{__(`Transactions`)}</div>
+          <div style={{display: 'inline-block'}}>
+            <fieldset-section>
+              <div className={'txo__radios'}>
+                <Button
+                  button="alt"
+                  onClick={(e) => handleChange({ dkey: TXO.ACTIVE, value: 'active' })}
+                  className={classnames(`button-toggle`, {
+                    'button-toggle--active': TXO.ACTIVE === TXO.ACTIVE,
+                  })}
+                  label={__('LBRY Credits')}
+                />
+                <Button
+                  button="alt"
+                  onClick={(e) => handleChange({ dkey: TXO.ACTIVE, value: 'spent' })}
+                  className={classnames(`button-toggle`, {
+                    'button-toggle--active': active === 'spent',
+                  })}
+                  label={__('USD')}
+                />
+              </div>
+            </fieldset-section>
           </div>
-          <Button button="alt" icon={ICONS.REFRESH} label={__('Refresh')} onClick={() => fetchTxoPage()} />
-        </div>
+        </>
+
+      }
+      titleActions={ <></>
+        // <div className="card__actions--inline">
+        //   {!isFetchingTransactions && transactionsFile === null && (
+        //     <label>{<span className="error__text">{__('Failed to process fetched data.')}</span>}</label>
+        //   )}
+        //   <div className="txo__export">
+        //     <FileExporter
+        //       data={transactionsFile}
+        //       label={__('Export')}
+        //       tooltip={__('Fetch transaction data for export')}
+        //       defaultFileName={'transactions-history.csv'}
+        //       onFetch={() => fetchTransactions()}
+        //       progressMsg={isFetchingTransactions ? __('Fetching data') : ''}
+        //     />
+        //   </div>
+        //   <Button button="alt" icon={ICONS.REFRESH} label={__('Refresh')} onClick={() => fetchTxoPage()} />
+        // </div>
       }
       isBodyList
       body={
@@ -288,8 +314,25 @@ function TxoList(props: Props) {
                   </fieldset-section>
                 </div>
               )}
+              <div className="card__actions--inline" style={{marginLeft: '200px'}}>
+                {!isFetchingTransactions && transactionsFile === null && (
+                  <label>{<span className="error__text">{__('Failed to process fetched data.')}</span>}</label>
+                )}
+                <div className="txo__export">
+                  <FileExporter
+                    data={transactionsFile}
+                    label={__('Export')}
+                    tooltip={__('Fetch transaction data for export')}
+                    defaultFileName={'transactions-history.csv'}
+                    onFetch={() => fetchTransactions()}
+                    progressMsg={isFetchingTransactions ? __('Fetching data') : ''}
+                  />
+                </div>
+                <Button button="alt" icon={ICONS.REFRESH} label={__('Refresh')} onClick={() => fetchTxoPage()} />
+              </div>
             </div>
           </div>
+          {/* listing of the transactions */}
           <TransactionListTable txos={txoPage} />
           <Paginate totalPages={Math.ceil(txoItemCount / Number(pageSize))} />
         </div>
