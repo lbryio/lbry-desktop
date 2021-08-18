@@ -110,6 +110,17 @@ export const doCommentSocketConnect = (uri, claimId) => (dispatch) => {
         data: { connected, claimId },
       });
     }
+    if (response.type === 'pinned') {
+      const pinnedComment = response.data.comment;
+      dispatch({
+        type: ACTIONS.COMMENT_PIN_COMPLETED,
+        data: {
+          pinnedComment: pinnedComment,
+          claimId,
+          unpin: !pinnedComment.is_pinned,
+        },
+      });
+    }
   });
 };
 

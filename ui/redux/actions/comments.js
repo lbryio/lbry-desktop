@@ -28,6 +28,7 @@ import { selectPrefsReady } from 'redux/selectors/sync';
 import { doAlertWaitingForSync } from 'redux/actions/app';
 
 const isDev = process.env.NODE_ENV !== 'production';
+const FETCH_API_FAILED_TO_FETCH = 'Failed to fetch';
 
 const COMMENTRON_MSG_REMAP = {
   // <-- Commentron msg --> : <-- App msg -->
@@ -103,7 +104,7 @@ export function doCommentList(
             totalFilteredItems: total_filtered_items,
             totalPages: total_pages,
             claimId: claimId,
-            authorClaimId: authorChannelClaim ? authorChannelClaim.claim_id : undefined,
+            commenterClaimId: authorChannelClaim ? authorChannelClaim.claim_id : undefined,
             uri: uri,
           },
         });
@@ -111,20 +112,32 @@ export function doCommentList(
         return result;
       })
       .catch((error) => {
-        if (error.message === 'comments are disabled by the creator') {
-          dispatch({
-            type: ACTIONS.COMMENT_LIST_COMPLETED,
-            data: {
-              authorClaimId: authorChannelClaim ? authorChannelClaim.claim_id : undefined,
-              disabled: true,
-            },
-          });
-        } else {
-          devToast(dispatch, `doCommentList: ${error.message}`);
-          dispatch({
-            type: ACTIONS.COMMENT_LIST_FAILED,
-            data: error,
-          });
+        switch (error.message) {
+          case 'comments are disabled by the creator':
+            dispatch({
+              type: ACTIONS.COMMENT_LIST_COMPLETED,
+              data: {
+                authorClaimId: authorChannelClaim ? authorChannelClaim.claim_id : undefined,
+                disabled: true,
+              },
+            });
+            break;
+
+          case FETCH_API_FAILED_TO_FETCH:
+            dispatch(
+              doToast({
+                isError: true,
+                message: Comments.isCustomServer
+                  ? __('Failed to fetch comments. Verify custom server settings.')
+                  : __('Failed to fetch comments.'),
+              })
+            );
+            dispatch({ type: ACTIONS.COMMENT_LIST_FAILED, data: error });
+            break;
+
+          default:
+            dispatch(doToast({ isError: true, message: `${error.message}` }));
+            dispatch({ type: ACTIONS.COMMENT_LIST_FAILED, data: error });
         }
       });
   };
@@ -261,7 +274,6 @@ export function doCommentReactList(commentIds: Array<string>) {
         });
       })
       .catch((error) => {
-        devToast(dispatch, `doCommentReactList: ${error.message}`);
         dispatch({
           type: ACTIONS.COMMENT_REACTION_LIST_FAILED,
           data: error,
@@ -1345,7 +1357,7 @@ export function doFetchCommentModAmIList(channelClaim: ChannelClaim) {
   };
 }
 
-export const doFetchCreatorSettings = (channelClaimIds: Array<string> = []) => {
+export const doFetchCreatorSettings = (channelId: string) => {
   return async (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const myChannels = selectMyChannelClaims(state);
@@ -1354,84 +1366,49 @@ export const doFetchCreatorSettings = (channelClaimIds: Array<string> = []) => {
       type: ACTIONS.COMMENT_FETCH_SETTINGS_STARTED,
     });
 
-    let channelSignatures = [];
+    let signedName;
+
     if (myChannels) {
-      for (const channelClaim of myChannels) {
-        if (channelClaimIds.length !== 0 && !channelClaimIds.includes(channelClaim.claim_id)) {
-          continue;
-        }
-
-        try {
-          const channelSignature = await Lbry.channel_sign({
-            channel_id: channelClaim.claim_id,
-            hexdata: toHex(channelClaim.name),
-          });
-
-          channelSignatures.push({ ...channelSignature, claim_id: channelClaim.claim_id, name: channelClaim.name });
-        } catch (e) {}
+      const index = myChannels.findIndex((myChannel) => myChannel.claim_id === channelId);
+      if (index > -1) {
+        signedName = await channelSignName(channelId, myChannels[index].name);
       }
     }
 
-    return Promise.all(
-      channelSignatures.map((signatureData) =>
-        Comments.setting_list({
-          channel_name: signatureData.name,
-          channel_id: signatureData.claim_id,
-          signature: signatureData.signature,
-          signing_ts: signatureData.signing_ts,
-        })
-      )
-    )
-      .then((settings) => {
-        const settingsByChannelId = {};
+    const cmd = signedName ? Comments.setting_list : Comments.setting_get;
 
-        for (let i = 0; i < channelSignatures.length; ++i) {
-          const channelId = channelSignatures[i].claim_id;
-          settingsByChannelId[channelId] = settings[i];
-
-          if (settings[i].words) {
-            settingsByChannelId[channelId].words = settings[i].words.split(',');
-          }
-
-          delete settingsByChannelId[channelId].channel_name;
-          delete settingsByChannelId[channelId].channel_id;
-          delete settingsByChannelId[channelId].signature;
-          delete settingsByChannelId[channelId].signing_ts;
-        }
-
+    return cmd({
+      channel_id: channelId,
+      channel_name: (signedName && signedName.name) || undefined,
+      signature: (signedName && signedName.signature) || undefined,
+      signing_ts: (signedName && signedName.signing_ts) || undefined,
+    })
+      .then((response: SettingsResponse) => {
         dispatch({
           type: ACTIONS.COMMENT_FETCH_SETTINGS_COMPLETED,
-          data: settingsByChannelId,
+          data: {
+            channelId: channelId,
+            settings: response,
+            partialUpdate: !signedName,
+          },
         });
       })
       .catch((err) => {
-        // TODO: Use error codes when available.
-        // TODO: The "validation is disallowed" thing ideally should just be a
-        //       success case that returns a null setting, instead of an error.
-        //       As we are using 'Promise.all', if one channel fails, everyone
-        //       fails. This forces us to remove the batch functionality of this
-        //       function. However, since this "validation is disallowed" thing
-        //       is potentially a temporary one to handle spammers, I retained
-        //       the batch functionality for now.
         if (err.message === 'validation is disallowed for non controlling channels') {
-          const settingsByChannelId = {};
-          for (let i = 0; i < channelSignatures.length; ++i) {
-            const channelId = channelSignatures[i].claim_id;
-            // 'undefined' means "fetching or have not fetched";
-            // 'null' means "feature not available for this channel";
-            settingsByChannelId[channelId] = null;
-          }
-
           dispatch({
             type: ACTIONS.COMMENT_FETCH_SETTINGS_COMPLETED,
-            data: settingsByChannelId,
+            data: {
+              channelId: channelId,
+              settings: null,
+              partialUpdate: !signedName,
+            },
           });
-          return;
+        } else {
+          devToast(dispatch, `Creator: ${err}`);
+          dispatch({
+            type: ACTIONS.COMMENT_FETCH_SETTINGS_FAILED,
+          });
         }
-
-        dispatch({
-          type: ACTIONS.COMMENT_FETCH_SETTINGS_FAILED,
-        });
       });
   };
 };
@@ -1442,22 +1419,13 @@ export const doFetchCreatorSettings = (channelClaimIds: Array<string> = []) => {
  *
  * @param channelClaim
  * @param settings
- * @returns {function(Dispatch, GetState): Promise<R>|Promise<unknown>|*}
+ * @returns {function(Dispatch, GetState): any}
  */
 export const doUpdateCreatorSettings = (channelClaim: ChannelClaim, settings: PerChannelSettings) => {
   return async (dispatch: Dispatch, getState: GetState) => {
-    let channelSignature: ?{
-      signature: string,
-      signing_ts: string,
-    };
-    try {
-      channelSignature = await Lbry.channel_sign({
-        channel_id: channelClaim.claim_id,
-        hexdata: toHex(channelClaim.name),
-      });
-    } catch (e) {}
-
+    const channelSignature = await channelSignName(channelClaim.claim_id, channelClaim.name);
     if (!channelSignature) {
+      devToast(dispatch, 'doUpdateCreatorSettings: failed to sign channel name');
       return;
     }
 
@@ -1468,12 +1436,7 @@ export const doUpdateCreatorSettings = (channelClaim: ChannelClaim, settings: Pe
       signing_ts: channelSignature.signing_ts,
       ...settings,
     }).catch((err) => {
-      dispatch(
-        doToast({
-          message: err.message,
-          isError: true,
-        })
-      );
+      dispatch(doToast({ message: err.message, isError: true }));
     });
   };
 };

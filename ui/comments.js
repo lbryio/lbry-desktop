@@ -4,6 +4,13 @@ import { COMMENT_SERVER_API } from 'config';
 const Comments = {
   url: COMMENT_SERVER_API,
   enabled: Boolean(COMMENT_SERVER_API),
+  isCustomServer: false,
+
+  setServerUrl: (customUrl: ?string) => {
+    Comments.url = customUrl === undefined ? COMMENT_SERVER_API : customUrl;
+    Comments.enabled = Boolean(Comments.url);
+    Comments.isCustomServer = Comments.url !== COMMENT_SERVER_API;
+  },
 
   moderation_block: (params: ModerationBlockParams) => fetchCommentsApi('moderation.Block', params),
   moderation_unblock: (params: ModerationBlockParams) => fetchCommentsApi('moderation.UnBlock', params),
@@ -27,12 +34,15 @@ const Comments = {
   setting_unblock_word: (params: BlockWordParams) => fetchCommentsApi('setting.UnBlockWord', params),
   setting_list_blocked_words: (params: SettingsParams) => fetchCommentsApi('setting.ListBlockedWords', params),
   setting_update: (params: UpdateSettingsParams) => fetchCommentsApi('setting.Update', params),
+  setting_get: (params: SettingsParams) => fetchCommentsApi('setting.Get', params),
   super_list: (params: SuperListParams) => fetchCommentsApi('comment.SuperChatList', params),
 };
 
 function fetchCommentsApi(method: string, params: {}) {
-  if (!Comments.enabled) {
-    return Promise.reject('Comments are not currently enabled'); // eslint-disable-line
+  if (!Comments.url) {
+    return Promise.reject(new Error('Commenting server is not set.'));
+  } else if (!Comments.enabled) {
+    return Promise.reject('Comments are not currently enabled.'); // eslint-disable-line
   }
 
   const url = `${Comments.url}?m=${method}`;

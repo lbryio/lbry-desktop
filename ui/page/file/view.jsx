@@ -12,7 +12,6 @@ import FileRenderDownload from 'component/fileRenderDownload';
 import RecommendedContent from 'component/recommendedContent';
 import CollectionContent from 'component/collectionContentSidebar';
 import CommentsList from 'component/commentsList';
-import { Redirect } from 'react-router';
 import Button from 'component/button';
 import I18nMessage from 'component/i18nMessage';
 import Empty from 'component/common/empty';
@@ -143,10 +142,6 @@ function FilePage(props: Props) {
         <FileTitleSection uri={uri} />
       </React.Fragment>
     );
-  }
-
-  if (!claimIsMine && isLivestream) {
-    return <Redirect to={`/$/${PAGES.LIVESTREAM}`} />;
   }
 
   if (obscureNsfw && isMature) {

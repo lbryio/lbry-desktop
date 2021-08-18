@@ -14,6 +14,7 @@ import { ENABLE_COMMENT_REACTIONS } from 'config';
 import Empty from 'component/common/empty';
 import debounce from 'util/debounce';
 import { useIsMobile } from 'effects/use-screensize';
+import { getChannelIdFromClaim } from 'util/claim';
 
 const DEBOUNCE_SCROLL_HANDLER_MS = 200;
 
@@ -27,14 +28,15 @@ function scaleToDevicePixelRatio(value) {
 
 type Props = {
   allCommentIds: any,
+  pinnedComments: Array<Comment>,
   topLevelComments: Array<Comment>,
   topLevelTotalPages: number,
-  commentsDisabledBySettings: boolean,
   fetchTopLevelComments: (string, number, number, number) => void,
   fetchComment: (string) => void,
   fetchReacts: (Array<string>) => Promise<any>,
   resetComments: (string) => void,
   uri: string,
+  claim: ?Claim,
   claimIsMine: boolean,
   myChannels: ?Array<ChannelClaim>,
   isFetchingComments: boolean,
@@ -45,6 +47,7 @@ type Props = {
   myReactsByCommentId: ?{ [string]: Array<string> }, // "CommentId:MyChannelId" -> reaction array (note the ID concatenation)
   othersReactsById: ?{ [string]: { [REACTION_TYPES.LIKE | REACTION_TYPES.DISLIKE]: number } },
   activeChannelId: ?string,
+  settingsByChannelId: { [channelId: string]: PerChannelSettings },
 };
 
 function CommentList(props: Props) {
@@ -55,9 +58,10 @@ function CommentList(props: Props) {
     fetchReacts,
     resetComments,
     uri,
+    pinnedComments,
     topLevelComments,
     topLevelTotalPages,
-    commentsDisabledBySettings,
+    claim,
     claimIsMine,
     myChannels,
     isFetchingComments,
@@ -68,6 +72,7 @@ function CommentList(props: Props) {
     myReactsByCommentId,
     othersReactsById,
     activeChannelId,
+    settingsByChannelId,
   } = props;
 
   const commentRef = React.useRef();
@@ -78,6 +83,8 @@ function CommentList(props: Props) {
   const isMobile = useIsMobile();
   const [expandedComments, setExpandedComments] = React.useState(!isMobile);
   const totalFetchedComments = allCommentIds ? allCommentIds.length : 0;
+  const channelId = getChannelIdFromClaim(claim);
+  const channelSettings = channelId ? settingsByChannelId[channelId] : undefined;
 
   // Display comments immediately if not fetching reactions
   // If not, wait to show comments until reactions are fetched
@@ -104,6 +111,34 @@ function CommentList(props: Props) {
       setSort(newSort);
       setPage(0); // Invalidate existing comments
     }
+  }
+
+  function getCommentElems(comments) {
+    return comments.map((comment) => {
+      return (
+        <CommentView
+          isTopLevel
+          threadDepth={3}
+          key={comment.comment_id}
+          uri={uri}
+          authorUri={comment.channel_url}
+          author={comment.channel_name}
+          claimId={comment.claim_id}
+          commentId={comment.comment_id}
+          message={comment.comment}
+          timePosted={comment.timestamp * 1000}
+          claimIsMine={claimIsMine}
+          commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}
+          linkedCommentId={linkedCommentId}
+          isPinned={comment.is_pinned}
+          supportAmount={comment.support_amount}
+          numDirectReplies={comment.replies}
+          isModerator={comment.is_moderator}
+          isGlobalMod={comment.is_global_mod}
+          isFiat={comment.is_fiat}
+        />
+      );
+    });
   }
 
   // Reset comments
@@ -218,8 +253,6 @@ function CommentList(props: Props) {
     topLevelTotalPages,
   ]);
 
-  const displayedComments = readyToDisplayComments ? topLevelComments : [];
-
   return (
     <Card
       title={
@@ -279,7 +312,7 @@ function CommentList(props: Props) {
         <>
           <CommentCreate uri={uri} />
 
-          {!commentsDisabledBySettings && !isFetchingComments && hasNoComments && (
+          {channelSettings && channelSettings.comments_enabled && !isFetchingComments && hasNoComments && (
             <Empty padded text={__('That was pretty deep. What do you think?')} />
           )}
 
@@ -290,31 +323,8 @@ function CommentList(props: Props) {
             })}
             ref={commentRef}
           >
-            {topLevelComments &&
-              displayedComments &&
-              displayedComments.map((comment) => {
-                return (
-                  <CommentView
-                    isTopLevel
-                    threadDepth={3}
-                    key={comment.comment_id}
-                    uri={uri}
-                    authorUri={comment.channel_url}
-                    author={comment.channel_name}
-                    claimId={comment.claim_id}
-                    commentId={comment.comment_id}
-                    message={comment.comment}
-                    timePosted={comment.timestamp * 1000}
-                    claimIsMine={claimIsMine}
-                    commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}
-                    linkedCommentId={linkedCommentId}
-                    isPinned={comment.is_pinned}
-                    supportAmount={comment.support_amount}
-                    numDirectReplies={comment.replies}
-                    isFiat={comment.is_fiat}
-                  />
-                );
-              })}
+            {readyToDisplayComments && pinnedComments && getCommentElems(pinnedComments)}
+            {readyToDisplayComments && topLevelComments && getCommentElems(topLevelComments)}
           </ul>
 
           {isMobile && (

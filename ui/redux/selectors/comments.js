@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 import { selectMutedChannels } from 'redux/selectors/blocked';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import { selectBlacklistedOutpointMap, selectFilteredOutpointMap } from 'lbryinc';
-import { selectClaimsById, isClaimNsfw, selectMyActiveClaims, makeSelectClaimForUri } from 'lbry-redux';
+import { selectClaimsById, isClaimNsfw, selectMyActiveClaims } from 'lbry-redux';
 
 const selectState = (state) => state.comments || {};
 
@@ -12,11 +12,28 @@ export const selectIsFetchingComments = createSelector(selectState, (state) => s
 export const selectIsFetchingCommentsByParentId = createSelector(selectState, (state) => state.isLoadingByParentId);
 export const selectIsPostingComment = createSelector(selectState, (state) => state.isCommenting);
 export const selectIsFetchingReacts = createSelector(selectState, (state) => state.isFetchingReacts);
-export const selectCommentsDisabledChannelIds = createSelector(
-  selectState,
-  (state) => state.commentsDisabledChannelIds
-);
 export const selectOthersReactsById = createSelector(selectState, (state) => state.othersReactsByCommentId);
+
+export const selectPinnedCommentsById = createSelector(selectState, (state) => state.pinnedCommentsById);
+export const makeSelectPinnedCommentsForUri = (uri: string) =>
+  createSelector(
+    selectCommentsByUri,
+    selectCommentsById,
+    selectPinnedCommentsById,
+    (byUri, byId, pinnedCommentsById) => {
+      const claimId = byUri[uri];
+      const pinnedCommentIds = pinnedCommentsById && pinnedCommentsById[claimId];
+      const pinnedComments = [];
+
+      if (pinnedCommentIds) {
+        pinnedCommentIds.forEach((commentId) => {
+          pinnedComments.push(byId[commentId]);
+        });
+      }
+
+      return pinnedComments;
+    }
+  );
 
 export const selectModerationBlockList = createSelector(selectState, (state) =>
   state.moderationBlockList ? state.moderationBlockList.reverse() : []
@@ -424,16 +441,4 @@ export const makeSelectSuperChatTotalAmountForUri = (uri: string) =>
     }
 
     return superChatData.totalAmount;
-  });
-
-export const makeSelectCommentsDisabledForUri = (uri: string) =>
-  createSelector(selectCommentsDisabledChannelIds, makeSelectClaimForUri(uri), (commentsDisabledChannelIds, claim) => {
-    const channelClaim = !claim
-      ? null
-      : claim.value_type === 'channel'
-      ? claim
-      : claim.signing_channel && claim.is_channel_signature_valid
-      ? claim.signing_channel
-      : null;
-    return channelClaim && channelClaim.claim_id && commentsDisabledChannelIds.includes(channelClaim.claim_id);
   });

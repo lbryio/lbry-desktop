@@ -223,6 +223,27 @@ $discussion-header__height: 3rem;
   }
 }
 
+.livestream-pinned__wrapper {
+  flex-shrink: 0;
+  position: relative;
+  padding: var(--spacing-s) var(--spacing-xs);
+  border-bottom: 1px solid var(--color-border);
+  font-size: var(--font-small);
+  background-color: var(--color-card-background-highlighted);
+  width: 100%;
+
+  .livestream-comment {
+    padding-top: var(--spacing-xs);
+    max-height: 6rem;
+    overflow-y: scroll;
+  }
+
+  @media (min-width: $breakpoint-small) {
+    padding: var(--spacing-xs);
+    width: var(--livestream-comments-width);
+  }
+}
+
 .livestream-superchat__amount-large {
   .credit-amount {
     display: flex;

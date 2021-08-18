@@ -1,5 +1,10 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimIsMine, selectFetchingMyChannels, selectMyChannelClaims } from 'lbry-redux';
+import {
+  makeSelectClaimForUri,
+  makeSelectClaimIsMine,
+  selectFetchingMyChannels,
+  selectMyChannelClaims,
+} from 'lbry-redux';
 import {
   makeSelectTopLevelCommentsForUri,
   makeSelectTopLevelTotalPagesForUri,
@@ -7,12 +12,12 @@ import {
   selectIsFetchingReacts,
   makeSelectTotalCommentsCountForUri,
   selectOthersReactsById,
-  makeSelectCommentsDisabledForUri,
   selectMyReactionsByCommentId,
   makeSelectCommentIdsForUri,
+  selectSettingsByChannelId,
+  makeSelectPinnedCommentsForUri,
 } from 'redux/selectors/comments';
 import { doCommentReset, doCommentList, doCommentById, doCommentReactList } from 'redux/actions/comments';
-import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
 import CommentsList from './view';
 
@@ -21,15 +26,16 @@ const select = (state, props) => {
   return {
     myChannels: selectMyChannelClaims(state),
     allCommentIds: makeSelectCommentIdsForUri(props.uri)(state),
+    pinnedComments: makeSelectPinnedCommentsForUri(props.uri)(state),
     topLevelComments: makeSelectTopLevelCommentsForUri(props.uri)(state),
     topLevelTotalPages: makeSelectTopLevelTotalPagesForUri(props.uri)(state),
     totalComments: makeSelectTotalCommentsCountForUri(props.uri)(state),
+    claim: makeSelectClaimForUri(props.uri)(state),
     claimIsMine: makeSelectClaimIsMine(props.uri)(state),
     isFetchingComments: selectIsFetchingComments(state),
     isFetchingReacts: selectIsFetchingReacts(state),
-    commentingEnabled: IS_WEB ? Boolean(selectUserVerifiedEmail(state)) : true,
-    commentsDisabledBySettings: makeSelectCommentsDisabledForUri(props.uri)(state),
     fetchingChannels: selectFetchingMyChannels(state),
+    settingsByChannelId: selectSettingsByChannelId(state),
     myReactsByCommentId: selectMyReactionsByCommentId(state),
     othersReactsById: selectOthersReactsById(state),
     activeChannelId: activeChannelClaim && activeChannelClaim.claim_id,

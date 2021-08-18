@@ -14,6 +14,9 @@ declare type Comment = {
   is_pinned: boolean,
   support_amount: number,
   replies: number, // number of direct replies (i.e. excluding nested replies).
+  is_moderator: boolean,
+  is_creator: boolean,
+  is_global_mod: boolean,
   is_fiat?: boolean,
 };
 
@@ -38,6 +41,7 @@ declare type CommentsState = {
   topLevelTotalCommentsById: { [string]: number }, // ClaimID -> total top level comments in commentron.
   commentById: { [string]: Comment },
   linkedCommentAncestors: { [string]: Array<string> }, // {"linkedCommentId": ["parentId", "grandParentId", ...]}
+  pinnedCommentsById: {}, // ClaimId -> array of pinned comment IDs
   isLoading: boolean,
   isLoadingByParentId: { [string]: boolean },
   myComments: ?Set<string>,
@@ -57,7 +61,6 @@ declare type CommentsState = {
   blockingByUri: {},
   unBlockingByUri: {},
   togglingForDelegatorMap: {[string]: Array<string>}, // {"blockedUri": ["delegatorUri1", ""delegatorUri2", ...]}
-  commentsDisabledChannelIds: Array<string>,
   settingsByChannelId: { [string]: PerChannelSettings }, // ChannelID -> settings
   fetchingSettings: boolean,
   fetchingBlockedWords: boolean,
@@ -221,10 +224,20 @@ declare type ModerationAmIParams = {
 };
 
 declare type SettingsParams = {
-  channel_name: string,
+  channel_name?: string,
   channel_id: string,
-  signature: string,
-  signing_ts: string,
+  signature?: string,
+  signing_ts?: string,
+};
+
+declare type SettingsResponse = {
+  words?: string,
+  comments_enabled: boolean,
+  min_tip_amount_comment: number,
+  min_tip_amount_super_chat: number,
+  slow_mode_min_gap: number,
+  curse_jar_amount: number,
+  filters_enabled?: boolean,
 };
 
 declare type UpdateSettingsParams = {

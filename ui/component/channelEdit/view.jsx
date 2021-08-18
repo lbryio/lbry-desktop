@@ -48,6 +48,7 @@ type Props = {
   createError: string,
   creatingChannel: boolean,
   clearChannelErrors: () => void,
+  claimInitialRewards: () => void,
   onDone: () => void,
   openModal: (
     id: string,
@@ -55,6 +56,8 @@ type Props = {
   ) => void,
   uri: string,
   disabled: boolean,
+  isClaimingInitialRewards: boolean,
+  hasClaimedInitialRewards: boolean,
 };
 
 function ChannelForm(props: Props) {
@@ -79,8 +82,11 @@ function ChannelForm(props: Props) {
     creatingChannel,
     createError,
     clearChannelErrors,
+    claimInitialRewards,
     openModal,
     disabled,
+    isClaimingInitialRewards,
+    hasClaimedInitialRewards,
   } = props;
   const [nameError, setNameError] = React.useState(undefined);
   const [bidError, setBidError] = React.useState('');
@@ -94,6 +100,22 @@ function ChannelForm(props: Props) {
   const languageParam = params.languages;
   const primaryLanguage = Array.isArray(languageParam) && languageParam.length && languageParam[0];
   const secondaryLanguage = Array.isArray(languageParam) && languageParam.length >= 2 && languageParam[1];
+  const submitLabel = React.useMemo(() => {
+    if (isClaimingInitialRewards) {
+      return __('Claiming credits...');
+    }
+    return creatingChannel || updatingChannel ? __('Submitting') : __('Submit');
+  }, [isClaimingInitialRewards, creatingChannel, updatingChannel]);
+  const submitDisabled = React.useMemo(() => {
+    return (
+      isClaimingInitialRewards ||
+      creatingChannel ||
+      updatingChannel ||
+      nameError ||
+      bidError ||
+      (isNewChannel && !params.name)
+    );
+  }, [isClaimingInitialRewards, creatingChannel, updatingChannel, nameError, bidError, isNewChannel, params]);
 
   function getChannelParams() {
     // fill this in with sdk data
@@ -218,6 +240,12 @@ function ChannelForm(props: Props) {
   React.useEffect(() => {
     clearChannelErrors();
   }, [clearChannelErrors]);
+
+  React.useEffect(() => {
+    if (!hasClaimedInitialRewards) {
+      claimInitialRewards();
+    }
+  }, [hasClaimedInitialRewards, claimInitialRewards]);
 
   // TODO clear and bail after submit
   return (
@@ -453,14 +481,7 @@ function ChannelForm(props: Props) {
           actions={
             <>
               <div className="section__actions">
-                <Button
-                  button="primary"
-                  disabled={
-                    creatingChannel || updatingChannel || nameError || bidError || (isNewChannel && !params.name)
-                  }
-                  label={creatingChannel || updatingChannel ? __('Submitting') : __('Submit')}
-                  onClick={handleSubmit}
-                />
+                <Button button="primary" disabled={submitDisabled} label={submitLabel} onClick={handleSubmit} />
                 <Button button="link" label={__('Cancel')} onClick={onDone} />
               </div>
               {errorMsg ? (

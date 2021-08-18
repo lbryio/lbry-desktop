@@ -97,6 +97,8 @@ function CommentsReplies(props: Props) {
                         commentingEnabled={commentingEnabled}
                         supportAmount={comment.support_amount}
                         numDirectReplies={comment.replies}
+                        isModerator={comment.is_moderator}
+                        isGlobalMod={comment.is_global_mod}
                       />
                     );
                   })}

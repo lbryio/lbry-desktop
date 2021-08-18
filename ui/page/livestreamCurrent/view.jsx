@@ -11,7 +11,7 @@ type Props = {
 
 export default function LivestreamCurrentPage(props: Props) {
   const { user } = props;
-  const canView = user && user.global_mod;
+  const canView = process.env.ENABLE_WIP_FEATURES || (user && user.global_mod);
 
   return (
     <Page>

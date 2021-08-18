@@ -3,7 +3,7 @@ import { withRouter } from 'react-router';
 import { doSearch } from 'redux/actions/search';
 import {
   selectIsSearching,
-  makeSelectSearchUris,
+  makeSelectSearchUrisForQuery,
   selectSearchOptions,
   makeSelectHasReachedMaxResultsLength,
 } from 'redux/selectors/search';
@@ -28,7 +28,7 @@ const select = (state, props) => {
   };
 
   const query = getSearchQueryString(urlQuery, searchOptions);
-  const uris = makeSelectSearchUris(query)(state);
+  const uris = makeSelectSearchUrisForQuery(query)(state);
   const hasReachedMaxResultsLength = makeSelectHasReachedMaxResultsLength(query)(state);
 
   return {

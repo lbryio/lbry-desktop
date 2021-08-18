@@ -15,6 +15,7 @@ import ClaimPreview from 'component/claimPreview';
 import { URL as SITE_URL, URL_LOCAL, URL_DEV } from 'config';
 import HelpLink from 'component/common/help-link';
 import WalletSpendableBalanceHelp from 'component/walletSpendableBalanceHelp';
+import BidHelpText from 'component/publishBid/bid-help-text';
 import Spinner from 'component/spinner';
 
 type Props = {
@@ -77,7 +78,6 @@ function RepostCreate(props: Props) {
 
   const [repostBid, setRepostBid] = React.useState(0.01);
   const [repostBidError, setRepostBidError] = React.useState(undefined);
-  const [takeoverAmount, setTakeoverAmount] = React.useState(0);
   const [enteredRepostName, setEnteredRepostName] = React.useState(defaultName);
   const [available, setAvailable] = React.useState(true);
   const [enteredContent, setEnteredContentUri] = React.useState(undefined);
@@ -189,10 +189,9 @@ function RepostCreate(props: Props) {
       : Number(passedRepostAmount) + 0.01;
 
     if (repostTakeoverAmount) {
-      setTakeoverAmount(Number(repostTakeoverAmount.toFixed(2)));
       setAutoRepostBid(repostTakeoverAmount);
     }
-  }, [setTakeoverAmount, enteredRepostAmount, passedRepostAmount]);
+  }, [enteredRepostAmount, passedRepostAmount]);
 
   // repost bid error
   React.useEffect(() => {
@@ -381,9 +380,11 @@ function RepostCreate(props: Props) {
                 error={repostBidError}
                 helper={
                   <>
-                    {__('Winning amount: %amount%', {
-                      amount: Number(takeoverAmount).toFixed(2),
-                    })}
+                    <BidHelpText
+                      uri={'lbry://' + enteredRepostName}
+                      amountNeededForTakeover={enteredRepostAmount}
+                      isResolvingUri={isResolvingEnteredRepost}
+                    />
                     <WalletSpendableBalanceHelp inline />
                   </>
                 }

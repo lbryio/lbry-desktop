@@ -6,13 +6,13 @@ import { doFetchInviteStatus } from 'redux/actions/user';
 import rewards from 'rewards';
 
 export function doRewardList() {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: ACTIONS.FETCH_REWARDS_STARTED,
     });
 
     Lbryio.call('reward', 'list', { multiple_rewards_per_type: true })
-      .then(userRewards => {
+      .then((userRewards) => {
         dispatch({
           type: ACTIONS.FETCH_REWARDS_COMPLETED,
           data: { userRewards },
@@ -35,7 +35,7 @@ export function doClaimRewardType(rewardType, options = {}) {
     const reward =
       rewardType === rewards.TYPE_REWARD_CODE || rewardType === rewards.TYPE_NEW_ANDROID
         ? { reward_type: rewards.TYPE_REWARD_CODE }
-        : unclaimedRewards.find(ur => ur.reward_type === rewardType);
+        : unclaimedRewards.find((ur) => ur.reward_type === rewardType);
 
     // Try to claim the email reward right away, even if we haven't called reward_list yet
     if (
@@ -74,7 +74,7 @@ export function doClaimRewardType(rewardType, options = {}) {
       data: { reward },
     });
 
-    const success = successReward => {
+    const success = (successReward) => {
       // Temporary timeout to ensure the sdk has the correct balance after claiming a reward
       setTimeout(() => {
         dispatch(doUpdateBalance()).then(() => {
@@ -99,7 +99,7 @@ export function doClaimRewardType(rewardType, options = {}) {
       }, 2000);
     };
 
-    const failure = error => {
+    const failure = (error) => {
       dispatch({
         type: ACTIONS.CLAIM_REWARD_FAILURE,
         data: {
@@ -121,6 +121,13 @@ export function doClaimRewardType(rewardType, options = {}) {
   };
 }
 
+export function doClaimInitialRewards() {
+  return (dispatch) => {
+    dispatch(doClaimRewardType(rewards.TYPE_NEW_USER));
+    dispatch(doClaimRewardType(rewards.TYPE_CONFIRM_EMAIL));
+  };
+}
+
 export function doClaimEligiblePurchaseRewards() {
   return (dispatch, getState) => {
     const state = getState();
@@ -131,10 +138,10 @@ export function doClaimEligiblePurchaseRewards() {
       return;
     }
 
-    if (unclaimedRewards.find(ur => ur.reward_type === rewards.TYPE_FIRST_STREAM)) {
+    if (unclaimedRewards.find((ur) => ur.reward_type === rewards.TYPE_FIRST_STREAM)) {
       dispatch(doClaimRewardType(rewards.TYPE_FIRST_STREAM));
     } else {
-      [rewards.TYPE_MANY_DOWNLOADS, rewards.TYPE_DAILY_VIEW].forEach(type => {
+      [rewards.TYPE_MANY_DOWNLOADS, rewards.TYPE_DAILY_VIEW].forEach((type) => {
         dispatch(doClaimRewardType(type, { failSilently: true }));
       });
     }
@@ -142,7 +149,7 @@ export function doClaimEligiblePurchaseRewards() {
 }
 
 export function doClaimRewardClearError(reward) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: ACTIONS.CLAIM_REWARD_CLEAR_ERROR,
       data: { reward },
@@ -151,8 +158,8 @@ export function doClaimRewardClearError(reward) {
 }
 
 export function doFetchRewardedContent() {
-  return dispatch => {
-    const success = nameToClaimId => {
+  return (dispatch) => {
+    const success = (nameToClaimId) => {
       dispatch({
         type: ACTIONS.FETCH_REWARD_CONTENT_COMPLETED,
         data: {

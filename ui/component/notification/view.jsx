@@ -16,6 +16,8 @@ import FileThumbnail from 'component/fileThumbnail';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import NotificationContentChannelMenu from 'component/notificationContentChannelMenu';
 import LbcMessage from 'component/common/lbc-message';
+import UriIndicator from 'component/uriIndicator';
+import { NavLink } from 'react-router-dom';
 
 type Props = {
   notification: WebNotification,
@@ -29,13 +31,12 @@ export default function Notification(props: Props) {
   const { notification, menuButton = false, doReadNotifications, doDeleteNotification } = props;
   const { push } = useHistory();
   const { notification_rule, notification_parameters, is_read, id } = notification;
+
   const isCommentNotification =
     notification_rule === RULE.COMMENT ||
     notification_rule === RULE.COMMENT_REPLY ||
     notification_rule === RULE.CREATOR_COMMENT;
   const commentText = isCommentNotification && notification_parameters.dynamic.comment;
-  const channelUrl =
-    (notification_rule === RULE.NEW_CONTENT && notification.notification_parameters.dynamic.channel_url) || '';
 
   let notificationTarget;
   switch (notification_rule) {
@@ -51,21 +52,14 @@ export default function Notification(props: Props) {
       notificationTarget = notification_parameters.device.target;
   }
 
-  let notificationLink = formatLbryUrlForWeb(notificationTarget);
-  let urlParams = new URLSearchParams();
-  if (isCommentNotification && notification_parameters.dynamic.hash) {
-    urlParams.append('lc', notification_parameters.dynamic.hash);
-  }
-
-  try {
-    const { isChannel } = parseURI(notificationTarget);
-    if (isChannel) {
-      urlParams.append(PAGE_VIEW_QUERY, DISCUSSION_PAGE);
-    }
-  } catch (e) {}
-
-  notificationLink += `?${urlParams.toString()}`;
-
+  const creatorIcon = (channelUrl) => {
+    return (
+      <UriIndicator uri={channelUrl} link>
+        <ChannelThumbnail small uri={channelUrl} />
+      </UriIndicator>
+    );
+  };
+  let channelUrl;
   let icon;
   switch (notification_rule) {
     case RULE.CREATOR_SUBSCRIBER:
@@ -73,16 +67,20 @@ export default function Notification(props: Props) {
       break;
     case RULE.COMMENT:
     case RULE.CREATOR_COMMENT:
-      icon = <ChannelThumbnail small uri={notification_parameters.dynamic.comment_author} />;
+      channelUrl = notification_parameters.dynamic.comment_author;
+      icon = creatorIcon(channelUrl);
       break;
     case RULE.COMMENT_REPLY:
-      icon = <ChannelThumbnail small uri={notification_parameters.dynamic.reply_author} />;
+      channelUrl = notification_parameters.dynamic.reply_author;
+      icon = creatorIcon(channelUrl);
       break;
     case RULE.NEW_CONTENT:
-      icon = <ChannelThumbnail small uri={notification_parameters.dynamic.channel_url} />;
+      channelUrl = notification_parameters.dynamic.channel_url;
+      icon = creatorIcon(channelUrl);
       break;
     case RULE.NEW_LIVESTREAM:
-      icon = <ChannelThumbnail small uri={notification_parameters.dynamic.channel_url} />;
+      channelUrl = notification_parameters.dynamic.channel_url;
+      icon = creatorIcon(channelUrl);
       break;
     case RULE.DAILY_WATCH_AVAILABLE:
     case RULE.DAILY_WATCH_REMIND:
@@ -97,12 +95,54 @@ export default function Notification(props: Props) {
       icon = <Icon icon={ICONS.NOTIFICATION} sectionIcon />;
   }
 
+  let notificationLink = formatLbryUrlForWeb(notificationTarget);
+  let urlParams = new URLSearchParams();
+  if (isCommentNotification && notification_parameters.dynamic.hash) {
+    urlParams.append('lc', notification_parameters.dynamic.hash);
+  }
+
+  let channelName = channelUrl && '@' + channelUrl.split('@')[1].split('#')[0];
+
+  const notificationTitle = notification_parameters.device.title;
+  const titleSplit = notificationTitle.split(' ');
+  let fullTitle = [' '];
+  let uriIndicator;
+  const title = titleSplit.map((message, index) => {
+    if (channelName === message) {
+      uriIndicator = <UriIndicator uri={channelUrl} link />;
+      fullTitle.push(' ');
+      const resultTitle = fullTitle;
+      fullTitle = [' '];
+
+      return [resultTitle.join(' '), uriIndicator];
+    } else {
+      fullTitle.push(message);
+
+      if (index === titleSplit.length - 1) {
+        return <LbcMessage>{fullTitle.join(' ')}</LbcMessage>;
+      }
+    }
+  });
+
+  try {
+    const { isChannel } = parseURI(notificationTarget);
+    if (isChannel) {
+      urlParams.append(PAGE_VIEW_QUERY, DISCUSSION_PAGE);
+    }
+  } catch (e) {}
+
+  notificationLink += `?${urlParams.toString()}`;
+  const navLinkProps = {
+    to: notificationLink,
+    onClick: (e) => e.stopPropagation(),
+  };
+
   function handleNotificationClick() {
     if (!is_read) {
       doReadNotifications([id]);
     }
 
-    if (notificationLink) {
+    if (menuButton && notificationLink) {
       push(notificationLink);
     }
   }
@@ -120,9 +160,11 @@ export default function Notification(props: Props) {
       )
     : notificationLink
     ? (props: { children: any }) => (
-        <a className="menu__link--notification" onClick={handleNotificationClick}>
-          {props.children}
-        </a>
+        <NavLink {...navLinkProps}>
+          <a className="menu__link--notification" onClick={handleNotificationClick}>
+            {props.children}
+          </a>
+        </NavLink>
       )
     : (props: { children: any }) => (
         <span
@@ -145,17 +187,11 @@ export default function Notification(props: Props) {
         <div className="notification__content-wrapper">
           <div className="notification__content">
             <div className="notification__text-wrapper">
-              {!isCommentNotification && (
-                <div className="notification__title">
-                  <LbcMessage>{notification_parameters.device.title}</LbcMessage>
-                </div>
-              )}
+              {!isCommentNotification && <div className="notification__title">{title}</div>}
 
               {isCommentNotification && commentText ? (
                 <>
-                  <div className="notification__title">
-                    <LbcMessage>{notification_parameters.device.title}</LbcMessage>
-                  </div>
+                  <div className="notification__title">{title}</div>
                   <div title={commentText} className="notification__text mobile-hidden">
                     {commentText}
                   </div>
@@ -193,7 +229,13 @@ export default function Notification(props: Props) {
 
         <div className="notification__menu">
           <Menu>
-            <MenuButton className={'menu__button notification__menu-button'} onClick={(e) => e.stopPropagation()}>
+            <MenuButton
+              className={'menu__button notification__menu-button'}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
+            >
               <Icon size={18} icon={ICONS.MORE_VERTICAL} />
             </MenuButton>
             <MenuList className="menu__list">

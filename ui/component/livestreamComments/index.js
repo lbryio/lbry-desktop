@@ -7,12 +7,14 @@ import {
   selectIsFetchingComments,
   makeSelectSuperChatsForUri,
   makeSelectSuperChatTotalAmountForUri,
+  makeSelectPinnedCommentsForUri,
 } from 'redux/selectors/comments';
 import LivestreamComments from './view';
 
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
   comments: makeSelectTopLevelCommentsForUri(props.uri)(state).slice(0, 75),
+  pinnedComments: makeSelectPinnedCommentsForUri(props.uri)(state),
   fetchingComments: selectIsFetchingComments(state),
   superChats: makeSelectSuperChatsForUri(props.uri)(state),
   superChatsTotalAmount: makeSelectSuperChatTotalAmountForUri(props.uri)(state),

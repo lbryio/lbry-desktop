@@ -15,14 +15,8 @@ import LbcSymbol from 'component/common/lbc-symbol';
 import { parseURI } from 'lbry-redux';
 import usePersistedState from 'effects/use-persisted-state';
 import WalletSpendableBalanceHelp from 'component/walletSpendableBalanceHelp';
-import { STRIPE_PUBLIC_KEY } from 'config';
-
-let stripeEnvironment = 'test';
-// if the key contains pk_live it's a live key
-// update the environment for the calls to the backend to indicate which environment to hit
-if (STRIPE_PUBLIC_KEY.indexOf('pk_live') > -1) {
-  stripeEnvironment = 'live';
-}
+import { getStripeEnvironment } from 'util/stripe';
+let stripeEnvironment = getStripeEnvironment();
 
 const DEFAULT_TIP_AMOUNTS = [1, 5, 25, 100];
 const MINIMUM_FIAT_TIP = 1;
@@ -100,7 +94,7 @@ function WalletSendTip(props: Props) {
 
   // check if creator has a payment method saved
   React.useEffect(() => {
-    if (channelClaimId && isAuthenticated) {
+    if (channelClaimId && isAuthenticated && stripeEnvironment) {
       Lbryio.call(
         'customer',
         'status',
@@ -118,16 +112,18 @@ function WalletSendTip(props: Props) {
         setHasSavedCard(Boolean(defaultPaymentMethodId));
       });
     }
-  }, [channelClaimId, isAuthenticated]);
+  }, [channelClaimId, isAuthenticated, stripeEnvironment]);
 
   // check if creator has an account saved
   React.useEffect(() => {
-    var tipInputElement = document.getElementById('tip-input');
-    if (tipInputElement) { tipInputElement.focus() }
+    const tipInputElement = document.getElementById('tip-input');
+    if (tipInputElement) {
+      tipInputElement.focus();
+    }
   }, []);
 
   React.useEffect(() => {
-    if (channelClaimId) {
+    if (channelClaimId && stripeEnvironment) {
       Lbryio.call(
         'account',
         'check',
@@ -141,20 +137,22 @@ function WalletSendTip(props: Props) {
         .then((accountCheckResponse) => {
           if (accountCheckResponse === true && canReceiveFiatTip !== true) {
             setCanReceiveFiatTip(true);
+          } else {
+            setCanReceiveFiatTip(false);
           }
         })
         .catch(function (error) {
           // console.log(error);
         });
     }
-  }, [channelClaimId]);
+  }, [channelClaimId, stripeEnvironment]);
 
   const noBalance = balance === 0;
   const tipAmount = useCustomTip ? customTipAmount : presetTipAmount;
 
   const [activeTab, setActiveTab] = React.useState(claimIsMine ? TAB_BOOST : TAB_LBC);
 
-  function setClaimTypeText() {
+  function getClaimTypeText() {
     if (claim.value_type === 'stream') {
       return __('Content');
     } else if (claim.value_type === 'channel') {
@@ -167,21 +165,24 @@ function WalletSendTip(props: Props) {
       return __('Claim');
     }
   }
-  const claimTypeText = setClaimTypeText();
+  const claimTypeText = getClaimTypeText();
 
-  let iconToUse, explainerText;
+  let iconToUse;
+  let explainerText = '';
   if (activeTab === TAB_BOOST) {
     iconToUse = ICONS.LBC;
-    explainerText = __('This refundable boost will improve the discoverability of this %claimTypeText% while active.', {claimTypeText});
+    explainerText = __('This refundable boost will improve the discoverability of this %claimTypeText% while active.', {
+      claimTypeText,
+    });
   } else if (activeTab === TAB_FIAT) {
     iconToUse = ICONS.FINANCE;
-    explainerText = __('Show this channel your appreciation by sending a donation in USD. ');
+    explainerText = __('Show this channel your appreciation by sending a donation in USD.');
     // if (!hasCardSaved) {
     //   explainerText += __('You must add a card to use this functionality.');
     // }
   } else if (activeTab === TAB_LBC) {
     iconToUse = ICONS.LBC;
-    explainerText = __('Show this channel your appreciation by sending a donation of Credits. ');
+    explainerText = __('Show this channel your appreciation by sending a donation of Credits.');
   }
 
   const isSupport = claimIsMine || activeTab === TAB_BOOST;
@@ -213,7 +214,7 @@ function WalletSendTip(props: Props) {
       } else if (tipAmount < MINIMUM_PUBLISH_BID) {
         tipError = __('Amount must be higher');
       }
-    //  if tip fiat tab
+      //  if tip fiat tab
     } else {
       regexp = RegExp(/^(\d*([.]\d{0,2})?)$/);
       const validTipInput = regexp.test(String(tipAmount));
@@ -274,7 +275,8 @@ function WalletSendTip(props: Props) {
             'customer',
             'tip',
             {
-              amount: 100 * tipAmount, // convert from dollars to cents
+              // round to fix issues with floating point numbers
+              amount: Math.round(100 * tipAmount), // convert from dollars to cents
               creator_channel_name: tipChannelName, // creator_channel_name
               creator_channel_claim_id: channelClaimId,
               tipper_channel_name: sendAnonymously ? '' : activeChannelName,
@@ -294,8 +296,8 @@ function WalletSendTip(props: Props) {
                 }),
               });
             })
-            .catch(function(error) {
-              var displayError = 'Sorry, there was an error in processing your payment!';
+            .catch(function (error) {
+              let displayError = 'Sorry, there was an error in processing your payment!';
 
               if (error.message !== 'payment intent failed to confirm') {
                 displayError = error.message;
@@ -313,10 +315,53 @@ function WalletSendTip(props: Props) {
     }
   }
 
-  function handleCustomPriceChange(event: SyntheticInputEvent<*>) {
-    const tipAmount = parseFloat(event.target.value);
+  const countDecimals = function (value) {
+    const text = value.toString();
+    const index = text.indexOf('.');
+    return text.length - index - 1;
+  };
 
-    setCustomTipAmount(tipAmount);
+  function handleCustomPriceChange(event: SyntheticInputEvent<*>) {
+    let tipAmountAsString = event.target.value;
+
+    let tipAmount = parseFloat(tipAmountAsString);
+
+    const howManyDecimals = countDecimals(tipAmountAsString);
+
+    // fiat tip input
+    if (activeTab === TAB_FIAT) {
+      if (Number.isNaN(tipAmount)) {
+        setCustomTipAmount('');
+      }
+
+      // allow maximum of two decimal places
+      if (howManyDecimals > 2) {
+        tipAmount = Math.floor(tipAmount * 100) / 100;
+      }
+
+      // remove decimals, and then get number of digits
+      const howManyDigits = Math.trunc(tipAmount).toString().length;
+
+      if (howManyDigits > 4 && tipAmount !== 1000) {
+        setTipError('Amount cannot be over 1000 dollars');
+        setCustomTipAmount(tipAmount);
+      } else if (tipAmount > 1000) {
+        setTipError('Amount cannot be over 1000 dollars');
+        setCustomTipAmount(tipAmount);
+      } else {
+        setCustomTipAmount(tipAmount);
+      }
+      // LBC tip input
+    } else {
+      // TODO: this is a bit buggy, needs a touchup
+      // if (howManyDecimals > 9) {
+      //   // only allows up to 8 decimal places
+      //   tipAmount = Number(tipAmount.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]);
+      //
+      //   setTipError('Please only use up to 8 decimals');
+      // }
+      setCustomTipAmount(tipAmount);
+    }
   }
 
   function buildButtonText() {
@@ -331,11 +376,19 @@ function WalletSendTip(props: Props) {
       return false;
     }
 
+    function convertToTwoDecimals(number) {
+      return (Math.round(number * 100) / 100).toFixed(2);
+    }
+
+    const amountToShow = activeTab === TAB_FIAT ? convertToTwoDecimals(tipAmount) : tipAmount;
+
     // if it's a valid number display it, otherwise do an empty string
-    const displayAmount = !isNan(tipAmount) ? tipAmount : '';
+    const displayAmount = !isNan(tipAmount) ? amountToShow : '';
 
     if (activeTab === TAB_BOOST) {
-      return (claimIsMine ?  __('Boost Your %claimTypeText%', {claimTypeText}) : __('Boost This %claimTypeText%', {claimTypeText}));
+      return claimIsMine
+        ? __('Boost Your %claimTypeText%', { claimTypeText })
+        : __('Boost This %claimTypeText%', { claimTypeText });
     } else if (activeTab === TAB_FIAT) {
       return __('Send a $%displayAmount% Tip', { displayAmount });
     } else if (activeTab === TAB_LBC) {
@@ -362,240 +415,263 @@ function WalletSendTip(props: Props) {
   return (
     <Form onSubmit={handleSubmit}>
       {/* if there is no LBC balance, show user frontend to get credits */}
-      {noBalance ? (
-        <Card
-          title={<I18nMessage tokens={{ lbc: <LbcSymbol size={22} /> }}>Supporting content requires %lbc%</I18nMessage>}
-          subtitle={
-            <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>
-              With %lbc%, you can send tips to your favorite creators, or help boost their content for more people to
-              see.
-            </I18nMessage>
-          }
-          actions={
-            <div className="section__actions">
-              <Button
-                icon={ICONS.REWARDS}
-                button="primary"
-                label={__('Earn Rewards')}
-                navigate={`/$/${PAGES.REWARDS}`}
-              />
-              <Button icon={ICONS.BUY} button="secondary" label={__('Buy/Swap Credits')} navigate={`/$/${PAGES.BUY}`} />
-              <Button button="link" label={__('Nevermind')} onClick={closeModal} />
-            </div>
-          }
-        />
-      ) : (
-        // if there is lbc, the main tip/boost gui with the 3 tabs at the top
-        <Card
-          title={<LbcSymbol postfix={claimIsMine ? __('Boost Your %claimTypeText%', {claimTypeText}) : __('Support This %claimTypeText%', {claimTypeText})} size={22} />}
-          subtitle={
-            <React.Fragment>
-              {!claimIsMine && (
-                <div className="section">
-                  {/* tip LBC tab button */}
-                  <Button
-                    key="tip"
-                    icon={ICONS.LBC}
-                    label={__('Tip')}
-                    button="alt"
-                    onClick={() => {
-                      var tipInputElement = document.getElementById('tip-input');
-                      if (tipInputElement) { tipInputElement.focus() }
-                      if (!isConfirming) {
-                        setActiveTab(TAB_LBC);
-                      }
-                    }}
-                    className={classnames('button-toggle', { 'button-toggle--active': activeTab === TAB_LBC })}
-                  />
-                  {/* tip fiat tab button */}
-                  {/* @if TARGET='web' */}
+      {/* if there is lbc, the main tip/boost gui with the 3 tabs at the top */}
+      <Card
+        title={
+          <LbcSymbol
+            postfix={
+              claimIsMine
+                ? __('Boost Your %claimTypeText%', { claimTypeText })
+                : __('Support This %claimTypeText%', { claimTypeText })
+            }
+            size={22}
+          />
+        }
+        subtitle={
+          <React.Fragment>
+            {!claimIsMine && (
+              <div className="section">
+                {/* tip LBC tab button */}
+                <Button
+                  key="tip"
+                  icon={ICONS.LBC}
+                  label={__('Tip')}
+                  button="alt"
+                  onClick={() => {
+                    const tipInputElement = document.getElementById('tip-input');
+                    if (tipInputElement) {
+                      tipInputElement.focus();
+                    }
+                    if (!isConfirming) {
+                      setActiveTab(TAB_LBC);
+                    }
+                  }}
+                  className={classnames('button-toggle', { 'button-toggle--active': activeTab === TAB_LBC })}
+                />
+                {/* tip fiat tab button */}
+                {/* @if TARGET='web' */}
+                {stripeEnvironment && (
                   <Button
                     key="tip-fiat"
                     icon={ICONS.FINANCE}
                     label={__('Tip')}
                     button="alt"
                     onClick={() => {
-                      var tipInputElement = document.getElementById('tip-input');
-                      if (tipInputElement) { tipInputElement.focus() }
+                      const tipInputElement = document.getElementById('tip-input');
+                      if (tipInputElement) {
+                        tipInputElement.focus();
+                      }
                       if (!isConfirming) {
                         setActiveTab(TAB_FIAT);
                       }
                     }}
                     className={classnames('button-toggle', { 'button-toggle--active': activeTab === TAB_FIAT })}
                   />
-                  {/* @endif */}
-                  {/* tip LBC tab button */}
+                )}
+                {/* @endif */}
+                {/* tip LBC tab button */}
+                <Button
+                  key="boost"
+                  icon={ICONS.TRENDING}
+                  label={__('Boost')}
+                  button="alt"
+                  onClick={() => {
+                    const tipInputElement = document.getElementById('tip-input');
+                    if (tipInputElement) {
+                      tipInputElement.focus();
+                    }
+                    if (!isConfirming) {
+                      setActiveTab(TAB_BOOST);
+                    }
+                  }}
+                  className={classnames('button-toggle', { 'button-toggle--active': activeTab === TAB_BOOST })}
+                />
+              </div>
+            )}
+
+            {/* short explainer under the button */}
+            <div className="section__subtitle">
+              {explainerText + ' '}
+              {/* {activeTab === TAB_FIAT && !hasCardSaved && <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add A Card')} button="link" />} */}
+              {<Button label={__('Learn more')} button="link" href="https://lbry.com/faq/tipping" />}
+            </div>
+          </React.Fragment>
+        }
+        actions={
+          // confirmation modal, allow  user to confirm or cancel transaction
+          isConfirming ? (
+            <>
+              <div className="section section--padded card--inline confirm__wrapper">
+                <div className="section">
+                  <div className="confirm__label">{__('To --[the tip recipient]--')}</div>
+                  <div className="confirm__value">{channelName || title}</div>
+                  <div className="confirm__label">{__('From --[the tip sender]--')}</div>
+                  <div className="confirm__value">
+                    {activeChannelClaim && !incognito ? activeChannelClaim.name : __('Anonymous')}
+                  </div>
+                  <div className="confirm__label">{setConfirmLabel()}</div>
+                  <div className="confirm__value">
+                    {activeTab === TAB_FIAT ? (
+                      <p>$ {(Math.round(tipAmount * 100) / 100).toFixed(2)}</p>
+                    ) : (
+                      <LbcSymbol postfix={tipAmount} size={22} />
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="section__actions">
+                <Button autoFocus onClick={handleSubmit} button="primary" disabled={isPending} label={__('Confirm')} />
+                <Button button="link" label={__('Cancel')} onClick={() => setIsConfirming(false)} />
+              </div>
+            </>
+          ) : !((activeTab === TAB_LBC || activeTab === TAB_BOOST) && noBalance) ? (
+            <>
+              <div className="section">
+                <ChannelSelector />
+              </div>
+
+              {activeTab === TAB_FIAT && !hasCardSaved && (
+                <h3 className="add-card-prompt">
+                  <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card')} button="link" />{' '}
+                  {__('To Tip Creators')}
+                </h3>
+              )}
+
+              {/* section to pick tip/boost amount */}
+              <div className="section">
+                {DEFAULT_TIP_AMOUNTS.map((amount) => (
                   <Button
-                    key="boost"
-                    icon={ICONS.TRENDING}
-                    label={__('Boost')}
+                    key={amount}
+                    disabled={shouldDisableAmountSelector(amount)}
                     button="alt"
+                    className={classnames('button-toggle button-toggle--expandformobile', {
+                      'button-toggle--active': tipAmount === amount && !useCustomTip,
+                      'button-toggle--disabled': amount > balance,
+                    })}
+                    label={amount}
+                    icon={iconToUse}
                     onClick={() => {
-                      var tipInputElement = document.getElementById('tip-input');
-                      if (tipInputElement) { tipInputElement.focus() }
-                      if (!isConfirming) {
-                        setActiveTab(TAB_BOOST);
-                      }
+                      setPresetTipAmount(amount);
+                      setUseCustomTip(false);
                     }}
-                    className={classnames('button-toggle', { 'button-toggle--active': activeTab === TAB_BOOST })}
+                  />
+                ))}
+
+                <Button
+                  button="alt"
+                  className={classnames('button-toggle button-toggle--expandformobile', {
+                    'button-toggle--active': useCustomTip, // set as active
+                  })}
+                  icon={iconToUse}
+                  label={__('Custom')}
+                  onClick={() => setUseCustomTip(true)}
+                  // disabled if it's receive fiat and there is no card or creator can't receive tips
+                  disabled={activeTab === TAB_FIAT && (!hasCardSaved || !canReceiveFiatTip)}
+                />
+
+                {DEFAULT_TIP_AMOUNTS.some((val) => val > balance) && activeTab !== TAB_FIAT && (
+                  <Button
+                    button="secondary"
+                    className="button-toggle-group-action"
+                    icon={ICONS.BUY}
+                    title={__('Buy or swap more LBRY Credits')}
+                    navigate={`/$/${PAGES.BUY}`}
+                  />
+                )}
+              </div>
+
+              {useCustomTip && (
+                <div className="section">
+                  <FormField
+                    autoFocus
+                    name="tip-input"
+                    label={
+                      <React.Fragment>
+                        {__('Custom support amount')}{' '}
+                        {activeTab !== TAB_FIAT ? (
+                          <I18nMessage
+                            tokens={{ lbc_balance: <CreditAmount precision={4} amount={balance} showLBC={false} /> }}
+                          >
+                            (%lbc_balance% Credits available)
+                          </I18nMessage>
+                        ) : (
+                          'in USD'
+                        )}
+                      </React.Fragment>
+                    }
+                    error={tipError}
+                    min="0"
+                    step="any"
+                    type="number"
+                    style={{
+                      width: activeTab === TAB_FIAT ? '99px' : '160px',
+                    }}
+                    placeholder="1.23"
+                    value={customTipAmount}
+                    onChange={(event) => handleCustomPriceChange(event)}
                   />
                 </div>
               )}
 
-              {/* short explainer under the button */}
-              <div className="section__subtitle">
-                {explainerText}
-                {/* {activeTab === TAB_FIAT && !hasCardSaved && <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add A Card')} button="link" />} */}
-                {<Button label={__('Learn more')} button="link" href="https://lbry.com/faq/tipping" />}
+              {/* send tip/boost button */}
+              <div className="section__actions">
+                <Button
+                  autoFocus
+                  icon={isSupport ? ICONS.TRENDING : ICONS.SUPPORT}
+                  button="primary"
+                  type="submit"
+                  disabled={
+                    fetchingChannels ||
+                    isPending ||
+                    tipError ||
+                    !tipAmount ||
+                    (activeTab === TAB_FIAT && (!hasCardSaved || !canReceiveFiatTip))
+                  }
+                  label={buildButtonText()}
+                />
+                {fetchingChannels && <span className="help">{__('Loading your channels...')}</span>}
               </div>
-            </React.Fragment>
-          }
-          actions={
-            // confirmation modal, allow  user to confirm or cancel transaction
-            isConfirming ? (
-              <>
-                <div className="section section--padded card--inline confirm__wrapper">
-                  <div className="section">
-                    <div className="confirm__label">{__('To --[the tip recipient]--')}</div>
-                    <div className="confirm__value">{channelName || title}</div>
-                    <div className="confirm__label">{__('From --[the tip sender]--')}</div>
-                    <div className="confirm__value">
-                      {activeChannelClaim && !incognito ? activeChannelClaim.name : __('Anonymous')}
-                    </div>
-                    <div className="confirm__label">{setConfirmLabel()}</div>
-                    <div className="confirm__value">
-                      {activeTab === TAB_FIAT ? <p>$ {tipAmount}</p> : <LbcSymbol postfix={tipAmount} size={22} />}
-                    </div>
-                  </div>
-                </div>
+              {activeTab !== TAB_FIAT ? (
+                <WalletSpendableBalanceHelp />
+              ) : !canReceiveFiatTip ? (
+                <div className="help">{__('Only creators that verify cash accounts can receive tips')}</div>
+              ) : (
+                <div className="help">{__('The payment will be made from your saved card')}</div>
+              )}
+            </>
+          ) : (
+            // if it's LBC and there is no balance, you can prompt to purchase LBC
+            <Card
+              title={
+                <I18nMessage tokens={{ lbc: <LbcSymbol size={22} /> }}>Supporting content requires %lbc%</I18nMessage>
+              }
+              subtitle={
+                <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>
+                  With %lbc%, you can send tips to your favorite creators, or help boost their content for more people
+                  to see.
+                </I18nMessage>
+              }
+              actions={
                 <div className="section__actions">
                   <Button
-                    autoFocus
-                    onClick={handleSubmit}
+                    icon={ICONS.REWARDS}
                     button="primary"
-                    disabled={isPending}
-                    label={__('Confirm')}
+                    label={__('Earn Rewards')}
+                    navigate={`/$/${PAGES.REWARDS}`}
                   />
-                  <Button button="link" label={__('Cancel')} onClick={() => setIsConfirming(false)} />
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="section">
-                  <ChannelSelector />
-                </div>
-
-                {activeTab === TAB_FIAT && !hasCardSaved && (
-                  <h3 className="add-card-prompt">
-                    <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card')} button="link" />
-                    {' '}{__('To Tip Creators')}
-                  </h3>
-                )}
-
-                {/* section to pick tip/boost amount */}
-                <div className="section">
-                  {DEFAULT_TIP_AMOUNTS.map((amount) => (
-                    <Button
-                      key={amount}
-                      disabled={shouldDisableAmountSelector(amount)}
-                      button="alt"
-                      className={classnames('button-toggle button-toggle--expandformobile', {
-                        'button-toggle--active': tipAmount === amount && !useCustomTip,
-                        'button-toggle--disabled': amount > balance,
-                      })}
-                      label={amount}
-                      icon={iconToUse}
-                      onClick={() => {
-                        setPresetTipAmount(amount);
-                        setUseCustomTip(false);
-                      }}
-                    />
-                  ))}
-
                   <Button
-                    button="alt"
-                    className={classnames('button-toggle button-toggle--expandformobile', {
-                      'button-toggle--active': useCustomTip, // set as active
-                    })}
-                    icon={iconToUse}
-                    label={__('Custom')}
-                    onClick={() => setUseCustomTip(true)}
-                    // disabled if it's receive fiat and there is no card or creator can't receive tips
-                    disabled={activeTab === TAB_FIAT && (!hasCardSaved || !canReceiveFiatTip)}
+                    icon={ICONS.BUY}
+                    button="secondary"
+                    label={__('Buy/Swap Credits')}
+                    navigate={`/$/${PAGES.BUY}`}
                   />
-
-                  {DEFAULT_TIP_AMOUNTS.some((val) => val > balance) && activeTab !== TAB_FIAT && (
-                    <Button
-                      button="secondary"
-                      className="button-toggle-group-action"
-                      icon={ICONS.BUY}
-                      title={__('Buy or swap more LBRY Credits')}
-                      navigate={`/$/${PAGES.BUY}`}
-                    />
-                  )}
+                  <Button button="link" label={__('Nevermind')} onClick={closeModal} />
                 </div>
-
-                {useCustomTip && (
-                  <div className="section">
-                    <FormField
-                      autoFocus
-                      name="tip-input"
-                      label={
-                        <React.Fragment>
-                          {__('Custom support amount')}{' '}
-                          {activeTab !== TAB_FIAT ? (
-                            <I18nMessage
-                              tokens={{ lbc_balance: <CreditAmount precision={4} amount={balance} showLBC={false} /> }}
-                            >
-                              (%lbc_balance% Credits available)
-                            </I18nMessage>
-                          ) : (
-                            'in USD'
-                          )}
-                        </React.Fragment>
-                      }
-                      className="form-field--price-amount"
-                      error={tipError}
-                      min="0"
-                      step="any"
-                      type="number"
-                      placeholder="1.23"
-                      value={customTipAmount}
-                      onChange={(event) => handleCustomPriceChange(event)}
-                    />
-                  </div>
-                )}
-
-                {/* send tip/boost button */}
-                <div className="section__actions">
-                  <Button
-                    autoFocus
-                    icon={isSupport ? ICONS.TRENDING : ICONS.SUPPORT}
-                    button="primary"
-                    type="submit"
-                    disabled={
-                      fetchingChannels ||
-                      isPending ||
-                      tipError ||
-                      !tipAmount ||
-                      (activeTab === TAB_FIAT && (!hasCardSaved || !canReceiveFiatTip))
-                    }
-                    label={buildButtonText()}
-                  />
-                  {fetchingChannels && <span className="help">{__('Loading your channels...')}</span>}
-                </div>
-                {activeTab !== TAB_FIAT ? (
-                  <WalletSpendableBalanceHelp />
-                ) : !canReceiveFiatTip ? (
-                  <div className="help">{__('Only select creators can receive tips at this time')}</div>
-                ) : (
-                  <div className="help">{__('The payment will be made from your saved card')}</div>
-                )}
-              </>
-            )
-          }
-        />
-      )}
+              }
+            />
+          )
+        }
+      />
     </Form>
   );
 }

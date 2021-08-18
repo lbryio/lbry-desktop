@@ -4,6 +4,7 @@ import { selectShowMatureContent } from 'redux/selectors/settings';
 import {
   parseURI,
   makeSelectClaimForUri,
+  makeSelectClaimForClaimId,
   makeSelectClaimIsNsfw,
   buildURI,
   isClaimNsfw,
@@ -26,9 +27,9 @@ export const selectSearchOptions: (state: State) => SearchOptions = createSelect
 
 export const selectIsSearching: (state: State) => boolean = createSelector(selectState, (state) => state.searching);
 
-export const selectSearchUrisByQuery: (state: State) => { [string]: Array<string> } = createSelector(
+export const selectSearchResultByQuery: (state: State) => { [string]: Array<string> } = createSelector(
   selectState,
-  (state) => state.urisByQuery
+  (state) => state.resultsByQuery
 );
 
 export const selectHasReachedMaxResultsLength: (state: State) => { [boolean]: Array<boolean> } = createSelector(
@@ -36,15 +37,15 @@ export const selectHasReachedMaxResultsLength: (state: State) => { [boolean]: Ar
   (state) => state.hasReachedMaxResultsLength
 );
 
-export const makeSelectSearchUris = (query: string): ((state: State) => Array<string>) =>
+export const makeSelectSearchUrisForQuery = (query: string): ((state: State) => Array<string>) =>
   // replace statement below is kind of ugly, and repeated in doSearch action
-  createSelector(selectSearchUrisByQuery, (byQuery) => {
+  createSelector(selectSearchResultByQuery, (byQuery) => {
     if (query) {
       query = query.replace(/^lbry:\/\//i, '').replace(/\//, ' ');
       const normalizedQuery = createNormalizedSearchKey(query);
-      return byQuery[normalizedQuery];
+      return byQuery[normalizedQuery] && byQuery[normalizedQuery]['uris'];
     }
-    return byQuery[query];
+    return byQuery[query] && byQuery[query]['uris'];
   });
 
 export const makeSelectHasReachedMaxResultsLength = (query: string): ((state: State) => boolean) =>
@@ -60,7 +61,7 @@ export const makeSelectHasReachedMaxResultsLength = (query: string): ((state: St
 export const makeSelectRecommendedContentForUri = (uri: string) =>
   createSelector(
     makeSelectClaimForUri(uri),
-    selectSearchUrisByQuery,
+    selectSearchResultByQuery,
     makeSelectClaimIsNsfw(uri),
     (claim, searchUrisByQuery, isMature) => {
       let recommendedContent;
@@ -84,15 +85,46 @@ export const makeSelectRecommendedContentForUri = (uri: string) =>
         const searchQuery = getSearchQueryString(title.replace(/\//, ' '), options);
         const normalizedSearchQuery = createNormalizedSearchKey(searchQuery);
 
-        let searchUris = searchUrisByQuery[normalizedSearchQuery];
-        if (searchUris) {
-          searchUris = searchUris.filter((searchUri) => searchUri !== currentUri);
-          recommendedContent = searchUris;
+        let searchResult = searchUrisByQuery[normalizedSearchQuery];
+        if (searchResult) {
+          recommendedContent = searchResult['uris'].filter((searchUri) => searchUri !== currentUri);
         }
       }
       return recommendedContent;
     }
   );
+
+export const makeSelectRecommendedRecsysIdForClaimId = (claimId: string) =>
+  createSelector(makeSelectClaimForClaimId(claimId), selectSearchResultByQuery, (claim, searchUrisByQuery) => {
+    // TODO: DRY this out.
+    let poweredBy;
+    if (claim) {
+      const isMature = isClaimNsfw(claim);
+      const { title } = claim.value;
+
+      if (!title) {
+        return;
+      }
+
+      const options: {
+        related_to?: string,
+        nsfw?: boolean,
+        isBackgroundSearch?: boolean,
+      } = { related_to: claim.claim_id, isBackgroundSearch: true };
+
+      options['nsfw'] = isMature;
+      const searchQuery = getSearchQueryString(title.replace(/\//, ' '), options);
+      const normalizedSearchQuery = createNormalizedSearchKey(searchQuery);
+
+      let searchResult = searchUrisByQuery[normalizedSearchQuery];
+      if (searchResult) {
+        poweredBy = searchResult.recsys;
+      } else {
+        return normalizedSearchQuery;
+      }
+    }
+    return poweredBy;
+  });
 
 export const makeSelectWinningUriForQuery = (query: string) => {
   const uriFromQuery = `lbry://${query}`;

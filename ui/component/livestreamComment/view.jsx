@@ -3,6 +3,7 @@ import * as ICONS from 'constants/icons';
 import React from 'react';
 import { parseURI } from 'lbry-redux';
 import MarkdownPreview from 'component/common/markdown-preview';
+import Tooltip from 'component/common/tooltip';
 import ChannelThumbnail from 'component/channelThumbnail';
 import { Menu, MenuButton } from '@reach/menu-button';
 import Icon from 'component/common/icon';
@@ -20,11 +21,27 @@ type Props = {
   commentIsMine: boolean,
   stakedLevel: number,
   supportAmount: number,
+  isModerator: boolean,
+  isGlobalMod: boolean,
   isFiat: boolean,
+  isPinned: boolean,
 };
 
 function LivestreamComment(props: Props) {
-  const { claim, uri, authorUri, message, commentIsMine, commentId, stakedLevel, supportAmount, isFiat } = props;
+  const {
+    claim,
+    uri,
+    authorUri,
+    message,
+    commentIsMine,
+    commentId,
+    stakedLevel,
+    supportAmount,
+    isModerator,
+    isGlobalMod,
+    isFiat,
+    isPinned,
+  } = props;
   const [mouseIsHovering, setMouseHover] = React.useState(false);
   const commentByOwnerOfContent = claim && claim.signing_channel && claim.signing_channel.permanent_url === authorUri;
   const { claimName } = parseURI(authorUri);
@@ -47,6 +64,22 @@ function LivestreamComment(props: Props) {
       <div className="livestream-comment__body">
         {supportAmount > 0 && <ChannelThumbnail uri={authorUri} xsmall />}
         <div className="livestream-comment__info">
+          {isGlobalMod && (
+            <Tooltip label={__('Admin')}>
+              <span className="comment__badge comment__badge--global-mod">
+                <Icon icon={ICONS.BADGE_MOD} size={16} />
+              </span>
+            </Tooltip>
+          )}
+
+          {isModerator && (
+            <Tooltip label={__('Moderator')}>
+              <span className="comment__badge comment__badge--mod">
+                <Icon icon={ICONS.BADGE_MOD} size={16} />
+              </span>
+            </Tooltip>
+          )}
+
           <Button
             className={classnames('button--uri-indicator comment__author', {
               'comment__author--creator': commentByOwnerOfContent,
@@ -56,6 +89,13 @@ function LivestreamComment(props: Props) {
           >
             {claimName}
           </Button>
+
+          {isPinned && (
+            <span className="comment__pin">
+              <Icon icon={ICONS.PIN} size={14} />
+              {__('Pinned')}
+            </span>
+          )}
 
           <div className="livestream-comment__text">
             <MarkdownPreview content={message} promptLinks stakedLevel={stakedLevel} />
@@ -78,6 +118,8 @@ function LivestreamComment(props: Props) {
             authorUri={authorUri}
             commentIsMine={commentIsMine}
             disableEdit
+            isTopLevel
+            isPinned={isPinned}
             disableRemove={supportAmount > 0}
           />
         </Menu>

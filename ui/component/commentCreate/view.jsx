@@ -1,11 +1,12 @@
 // @flow
 import type { ElementRef } from 'react';
-import { SIMPLE_SITE, STRIPE_PUBLIC_KEY } from 'config';
+import { SIMPLE_SITE } from 'config';
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
 import React from 'react';
 import classnames from 'classnames';
 import { FormField, Form } from 'component/common/form';
+import Icon from 'component/common/icon';
 import Button from 'component/button';
 import SelectChannel from 'component/selectChannel';
 import usePersistedState from 'effects/use-persisted-state';
@@ -14,16 +15,14 @@ import { useHistory } from 'react-router';
 import WalletTipAmountSelector from 'component/walletTipAmountSelector';
 import CreditAmount from 'component/common/credit-amount';
 import ChannelThumbnail from 'component/channelThumbnail';
+import I18nMessage from 'component/i18nMessage';
 import UriIndicator from 'component/uriIndicator';
 import Empty from 'component/common/empty';
+import { getChannelIdFromClaim } from 'util/claim';
 import { Lbryio } from 'lbryinc';
 
-let stripeEnvironment = 'test';
-// if the key contains pk_live it's a live key
-// update the environment for the calls to the backend to indicate which environment to hit
-if (STRIPE_PUBLIC_KEY.indexOf('pk_live') > -1) {
-  stripeEnvironment = 'live';
-}
+import { getStripeEnvironment } from 'util/stripe';
+let stripeEnvironment = getStripeEnvironment();
 
 const TAB_FIAT = 'TabFiat';
 const TAB_LBC = 'TabLBC';
@@ -32,7 +31,6 @@ type Props = {
   uri: string,
   claim: StreamClaim,
   createComment: (string, string, string, ?string, ?string, ?string) => Promise<any>,
-  commentsDisabledBySettings: boolean,
   channels: ?Array<ChannelClaim>,
   onDoneReplying?: () => void,
   onCancelReplying?: () => void,
@@ -49,13 +47,13 @@ type Props = {
   claimIsMine: boolean,
   sendTip: ({}, (any) => void, (any) => void) => void,
   doToast: ({ message: string }) => void,
-  disabled: boolean,
+  doFetchCreatorSettings: (channelId: string) => Promise<any>,
+  settingsByChannelId: { [channelId: string]: PerChannelSettings },
 };
 
 export function CommentCreate(props: Props) {
   const {
     createComment,
-    commentsDisabledBySettings,
     claim,
     channels,
     onDoneReplying,
@@ -71,6 +69,8 @@ export function CommentCreate(props: Props) {
     claimIsMine,
     sendTip,
     doToast,
+    doFetchCreatorSettings,
+    settingsByChannelId,
   } = props;
   const buttonRef: ElementRef<any> = React.useRef();
   const {
@@ -90,8 +90,42 @@ export function CommentCreate(props: Props) {
   const charCount = commentValue.length;
   const [activeTab, setActiveTab] = React.useState('');
   const [tipError, setTipError] = React.useState();
-  const disabled = isSubmitting || !activeChannelClaim || !commentValue.length;
+  const disabled = isSubmitting || isFetchingChannels || !commentValue.length;
   const [shouldDisableReviewButton, setShouldDisableReviewButton] = React.useState();
+  const channelId = getChannelIdFromClaim(claim);
+  const channelSettings = channelId ? settingsByChannelId[channelId] : undefined;
+  const minSuper = (channelSettings && channelSettings.min_tip_amount_super_chat) || 0;
+  const minTip = (channelSettings && channelSettings.min_tip_amount_comment) || 0;
+  const minAmount = minTip || minSuper || 0;
+  const minAmountMet = minAmount === 0 || tipAmount >= minAmount;
+
+  const minAmountRef = React.useRef(minAmount);
+  minAmountRef.current = minAmount;
+
+  const MinAmountNotice = minAmount ? (
+    <div className="help--notice comment--min-amount-notice">
+      <I18nMessage tokens={{ lbc: <CreditAmount noFormat amount={minAmount} /> }}>
+        {minTip ? 'Comment min: %lbc%' : minSuper ? 'HyperChat min: %lbc%' : ''}
+      </I18nMessage>
+      <Icon
+        customTooltipText={
+          minTip
+            ? __('This channel requires a minimum tip for each comment.')
+            : minSuper
+            ? __('This channel requires a minimum amount for HyperChats to be visible.')
+            : ''
+        }
+        className="icon--help"
+        icon={ICONS.HELP}
+        tooltip
+        size={16}
+      />
+    </div>
+  ) : null;
+
+  // **************************************************************************
+  // Functions
+  // **************************************************************************
 
   function handleCommentChange(event) {
     let commentValue;
@@ -131,11 +165,43 @@ export function CommentCreate(props: Props) {
       return;
     }
 
+    if (!channelId) {
+      doToast({
+        message: __('Unable to verify channel settings. Try refreshing the page.'),
+        isError: true,
+      });
+      return;
+    }
+
+    // if comment post didn't work, but tip was already made, try again to create comment
     if (commentFailure && tipAmount === successTip.tipAmount) {
       handleCreateComment(successTip.txid);
       return;
     } else {
       setSuccessTip({ txid: undefined, tipAmount: undefined });
+    }
+
+    // !! Beware of stale closure when editing the then-block, including doSubmitTip().
+    doFetchCreatorSettings(channelId).then(() => {
+      const lockedMinAmount = minAmount; // value during closure.
+      const currentMinAmount = minAmountRef.current; // value from latest doFetchCreatorSettings().
+
+      if (lockedMinAmount !== currentMinAmount) {
+        doToast({
+          message: __('The creator just updated the minimum setting. Please revise or double-check your tip amount.'),
+          isError: true,
+        });
+        setIsReviewingSupportComment(false);
+        return;
+      }
+
+      doSubmitTip();
+    });
+  }
+
+  function doSubmitTip() {
+    if (!activeChannelClaim) {
+      return;
     }
 
     const params = {
@@ -146,6 +212,19 @@ export function CommentCreate(props: Props) {
 
     const activeChannelName = activeChannelClaim && activeChannelClaim.name;
     const activeChannelId = activeChannelClaim && activeChannelClaim.claim_id;
+
+    // setup variables for tip API
+    let channelClaimId, tipChannelName;
+    // if there is a signing channel it's on a file
+    if (claim.signing_channel) {
+      channelClaimId = claim.signing_channel.claim_id;
+      tipChannelName = claim.signing_channel.name;
+
+      // otherwise it's on the channel page
+    } else {
+      channelClaimId = claim.claim_id;
+      tipChannelName = claim.name;
+    }
 
     setIsSubmitting(true);
 
@@ -160,6 +239,17 @@ export function CommentCreate(props: Props) {
           setTimeout(() => {
             handleCreateComment(txid);
           }, 1500);
+
+          doToast({
+            message: __(
+              "You sent %tipAmount% LBRY Credits as a tip to %tipChannelName%, I'm sure they appreciate it!",
+              {
+                tipAmount: tipAmount, // force show decimal places
+                tipChannelName,
+              }
+            ),
+          });
+
           setSuccessTip({ txid, tipAmount });
         },
         () => {
@@ -168,19 +258,6 @@ export function CommentCreate(props: Props) {
         }
       );
     } else {
-      // setup variables for tip API
-      let channelClaimId, tipChannelName;
-      // if there is a signing channel it's on a file
-      if (claim.signing_channel) {
-        channelClaimId = claim.signing_channel.claim_id;
-        tipChannelName = claim.signing_channel.name;
-
-        // otherwise it's on the channel page
-      } else {
-        channelClaimId = claim.claim_id;
-        tipChannelName = claim.name;
-      }
-
       const sourceClaimId = claim.claim_id;
       const roundedAmount = Math.round(tipAmount * 100) / 100;
 
@@ -188,7 +265,8 @@ export function CommentCreate(props: Props) {
         'customer',
         'tip',
         {
-          amount: 100 * roundedAmount, // convert from dollars to cents
+          // round to deal with floating point precision
+          amount: Math.round(100 * roundedAmount), // convert from dollars to cents
           creator_channel_name: tipChannelName, // creator_channel_name
           creator_channel_claim_id: channelClaimId,
           tipper_channel_name: activeChannelName,
@@ -259,6 +337,12 @@ export function CommentCreate(props: Props) {
       .catch(() => {
         setIsSubmitting(false);
         setCommentFailure(true);
+
+        if (channelId) {
+          // It could be that the creator added a minimum tip setting.
+          // Manually update for now until a websocket msg is available.
+          doFetchCreatorSettings(channelId);
+        }
       });
   }
 
@@ -266,11 +350,26 @@ export function CommentCreate(props: Props) {
     setAdvancedEditor(!advancedEditor);
   }
 
-  if (commentsDisabledBySettings) {
+  // **************************************************************************
+  // Effects
+  // **************************************************************************
+
+  // Fetch channel constraints if not already.
+  React.useEffect(() => {
+    if (!channelSettings && channelId) {
+      doFetchCreatorSettings(channelId);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // **************************************************************************
+  // Render
+  // **************************************************************************
+
+  if (channelSettings && !channelSettings.comments_enabled) {
     return <Empty padded text={__('This channel has disabled comments on their page.')} />;
   }
 
-  if (!hasChannels) {
+  if (!isFetchingChannels && !hasChannels) {
     return (
       <div
         role="button"
@@ -288,12 +387,7 @@ export function CommentCreate(props: Props) {
           }
         }}
       >
-        <FormField
-          type="textarea"
-          name={'comment_signup_prompt'}
-          placeholder={__('Say something about this...')}
-          label={isFetchingChannels ? __('Comment') : undefined}
-        />
+        <FormField type="textarea" name={'comment_signup_prompt'} placeholder={__('Say something about this...')} />
         <div className="section__actions--no-margin">
           <Button disabled button="primary" label={__('Post --[button to submit something]--')} requiresAuth={IS_WEB} />
         </div>
@@ -322,7 +416,7 @@ export function CommentCreate(props: Props) {
           <Button
             autoFocus
             button="primary"
-            disabled={disabled}
+            disabled={disabled || !minAmountMet}
             label={
               isSubmitting
                 ? __('Sending...')
@@ -338,6 +432,7 @@ export function CommentCreate(props: Props) {
             label={__('Cancel')}
             onClick={() => setIsReviewingSupportComment(false)}
           />
+          {MinAmountNotice}
         </div>
       </div>
     );
@@ -353,7 +448,7 @@ export function CommentCreate(props: Props) {
       })}
     >
       <FormField
-        disabled={!activeChannelClaim}
+        disabled={isFetchingChannels}
         type={SIMPLE_SITE ? 'textarea' : advancedEditor && !isReply ? 'markdown' : 'textarea'}
         name={isReply ? 'content_reply' : 'content_description'}
         label={
@@ -391,34 +486,37 @@ export function CommentCreate(props: Props) {
         {isSupportComment ? (
           <>
             <Button
-              disabled={disabled || tipError || shouldDisableReviewButton}
+              disabled={disabled || tipError || shouldDisableReviewButton || !minAmountMet}
               type="button"
               button="primary"
               icon={activeTab === TAB_LBC ? ICONS.LBC : ICONS.FINANCE}
               label={__('Review')}
               onClick={() => setIsReviewingSupportComment(true)}
+              requiresAuth={IS_WEB}
             />
 
             <Button disabled={disabled} button="link" label={__('Cancel')} onClick={() => setIsSupportComment(false)} />
           </>
         ) : (
           <>
-            <Button
-              ref={buttonRef}
-              button="primary"
-              disabled={disabled}
-              type="submit"
-              label={
-                isReply
-                  ? isSubmitting
-                    ? __('Replying...')
-                    : __('Reply')
-                  : isSubmitting
-                  ? __('Commenting...')
-                  : __('Comment --[button to submit something]--')
-              }
-              requiresAuth={IS_WEB}
-            />
+            {(!minTip || claimIsMine) && (
+              <Button
+                ref={buttonRef}
+                button="primary"
+                disabled={disabled}
+                type="submit"
+                label={
+                  isReply
+                    ? isSubmitting
+                      ? __('Replying...')
+                      : __('Reply')
+                    : isSubmitting
+                    ? __('Commenting...')
+                    : __('Comment --[button to submit something]--')
+                }
+                requiresAuth={IS_WEB}
+              />
+            )}
             {!claimIsMine && (
               <Button
                 disabled={disabled}
@@ -431,7 +529,8 @@ export function CommentCreate(props: Props) {
                 }}
               />
             )}
-            {!claimIsMine && (
+            {/* @if TARGET='web' */}
+            {!claimIsMine && stripeEnvironment && (
               <Button
                 disabled={disabled}
                 button="alt"
@@ -443,7 +542,8 @@ export function CommentCreate(props: Props) {
                 }}
               />
             )}
-            {isReply && (
+            {/* @endif */}
+            {isReply && !minTip && (
               <Button
                 button="link"
                 label={__('Cancel')}
@@ -456,6 +556,7 @@ export function CommentCreate(props: Props) {
             )}
           </>
         )}
+        {MinAmountNotice}
       </div>
     </Form>
   );

@@ -1,6 +1,6 @@
 {
   "name": "lbry",
-  "version": "0.51.2-rc.1",
+  "version": "0.51.2-rc.4",
   "description": "A browser for the LBRY network, a digital marketplace controlled by its users.",
   "keywords": [
     "lbry"
@@ -38,7 +38,7 @@
     "build:dir": "yarn build -- --dir -c.compression=store -c.mac.identity=null",
     "crossenv": "./node_modules/cross-env/dist/bin/cross-env",
     "lint": "eslint 'ui/**/*.{js,jsx}' && eslint 'web/**/*.{js,jsx}' && eslint 'electron/**/*.js' && flow",
-    "lint-fix": "eslint --fix 'ui/**/*.{js,jsx}' && eslint --fix 'web/**/*.{js,jsx}' && eslint --fix 'electron/**/*.js' && flow",
+    "lint-fix": "eslint --fix --quiet 'ui/**/*.{js,jsx}' && eslint --fix --quiet 'web/**/*.{js,jsx}' && eslint --fix --quiet 'electron/**/*.js'",
     "format": "prettier 'src/**/*.{js,jsx,scss,json}' --write",
     "flow-defs": "flow-typed install",
     "precommit": "lint-staged",
