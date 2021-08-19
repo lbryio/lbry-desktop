@@ -168,15 +168,17 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   const shouldHideActions = hideActions || isMyCollection || type === 'small' || type === 'tooltip';
   const canonicalUrl = claim && claim.canonical_url;
   const lastCollectionIndex = collectionUris ? collectionUris.length - 1 : 0;
+  
   const channelSubscribers = React.useMemo(() => {
     if (channelSubCount === undefined) {
       return <span />;
     }
+    const formattedSubCount = Number(channelSubCount).toLocaleString();
     return (
       <span className="claim-preview__channel-sub-count">
         {channelSubCount === 1
-          ? __('%channelSubCount% Follower', { channelSubCount })
-          : __('%channelSubCount% Followers', { channelSubCount })}
+          ? __('%channelSubCount% Follower', { formattedSubCount })
+          : __('%channelSubCount% Followers', { formattedSubCount })}
       </span>
     );
   }, [channelSubCount]);
