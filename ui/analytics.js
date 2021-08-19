@@ -103,6 +103,9 @@ function getDeviceType() {
   // }
 
   // default as web, this can be optimized
+  if (!IS_WEB) {
+    return 'dsk';
+  }
   return 'web';
 }
 // variables initialized for watchman
