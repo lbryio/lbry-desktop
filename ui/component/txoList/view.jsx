@@ -60,7 +60,7 @@ function TxoList(props: Props) {
     active,
     type,
     subtype,
-    currency
+    currency,
   };
 
   const hideStatus =
@@ -125,13 +125,14 @@ function TxoList(props: Props) {
   // let currency = 'credits';
   function updateUrl(delta: Delta) {
     const newUrlParams = new URLSearchParams();
-    // if (delta.currency) {
-    //   currency = delta.currency;
-    // }
 
     // set tab name to account for wallet page tab
     newUrlParams.set('tab', delta.tab);
-    newUrlParams.set('currency', delta.currency);
+
+    // only update currency if it's being changed
+    if (delta.currency) {
+      newUrlParams.set('currency', delta.currency);
+    }
 
     switch (delta.dkey) {
       case TXO.PAGE:
