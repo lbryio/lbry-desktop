@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import Button from 'component/button';
-import Card from 'component/common/card';
 import { Lbryio } from 'lbryinc';
 import moment from 'moment';
 import { STRIPE_PUBLIC_KEY } from 'config';
@@ -21,10 +20,6 @@ type Props = {
 const WalletBalance = (props: Props) => {
   // receive transactions from parent component
   const { transactions: accountTransactions } = props;
-
-  // const [accountStatusResponse, setAccountStatusResponse] = React.useState();
-
-  // const [subscriptions, setSubscriptions] = React.useState();
 
   const [lastFour, setLastFour] = React.useState();
 
@@ -55,6 +50,7 @@ const WalletBalance = (props: Props) => {
       <div className="section card-stack">
         <div className="table__wrapper">
           <table className="table table--transactions">
+            {/* table header */}
             <thead>
             <tr>
               <th className="date-header">{__('Date')}</th>
@@ -65,11 +61,14 @@ const WalletBalance = (props: Props) => {
               <th>{__('Anonymous')}</th>
             </tr>
             </thead>
+            {/* list data for transactions */}
             <tbody>
             {accountTransactions &&
             accountTransactions.map((transaction) => (
               <tr key={transaction.name + transaction.created_at}>
+                {/* date */}
                 <td>{moment(transaction.created_at).format('LLL')}</td>
+                {/* receiving channel name */}
                 <td>
                   <Button
                     className=""
@@ -78,6 +77,7 @@ const WalletBalance = (props: Props) => {
                     button="link"
                   />
                 </td>
+                {/* link to content or channel */}
                 <td>
                   <Button
                     className=""
@@ -90,8 +90,12 @@ const WalletBalance = (props: Props) => {
                     button="link"
                   />
                 </td>
+                {/* how much tipped */}
                 <td>${transaction.tipped_amount / 100}</td>
+                {/* TODO: this is incorrect need it per transactions not per user */}
+                {/* last four of credit card  */}
                 <td>{lastFour}</td>
+                {/* whether tip is anonymous or not */}
                 <td>{transaction.private_tip ? 'Yes' : 'No'}</td>
               </tr>
             ))}

@@ -2,10 +2,6 @@
 import React from 'react';
 import { useHistory } from 'react-router';
 import WalletBalance from 'component/walletBalance';
-import WalletFiatBalance from 'component/walletFiatBalance';
-import WalletFiatPaymentBalance from 'component/walletFiatPaymentBalance';
-import WalletFiatAccountHistory from 'component/walletFiatAccountHistory';
-import WalletFiatPaymentHistory from 'component/walletFiatPaymentHistory';
 import TxoList from 'component/txoList';
 import Page from 'component/page';
 import * as PAGES from 'constants/pages';
@@ -78,21 +74,6 @@ const WalletPage = (props: Props) => {
     push(url);
   }
 
-  const [accountStatusResponse, setAccountStatusResponse] = React.useState();
-  const [accountTransactionResponse, setAccountTransactionResponse] = React.useState([]);
-  const [customerTransactions, setCustomerTransactions] = React.useState([]);
-
-  function getPaymentHistory() {
-    return Lbryio.call(
-      'customer',
-      'list',
-      {
-        environment: stripeEnvironment,
-      },
-      'post'
-    );
-  }
-
   function getAccountStatus() {
     return Lbryio.call(
       'account',
@@ -103,32 +84,6 @@ const WalletPage = (props: Props) => {
       'post'
     );
   }
-
-  function getAccountTransactionsa() {
-    return Lbryio.call(
-      'account',
-      'list',
-      {
-        environment: stripeEnvironment,
-      },
-      'post'
-    );
-  }
-
-  // calculate account transactions section
-  React.useEffect(() => {
-    (async function() {
-      try {
-        const response = await getAccountStatus();
-
-        setAccountStatusResponse(response);
-      } catch (err) {
-        console.log(err);
-      }
-    })();
-  }, []);
-
-  // @endif
 
   const { totalBalance } = props;
   const showIntro = totalBalance === 0;
@@ -142,14 +97,13 @@ const WalletPage = (props: Props) => {
           <TabList className="tabs__list--collection-edit-page">
             <Tab>{__('Balance')}</Tab>
             <Tab>{__('Transactions')}</Tab>
-            {/*<Tab>{__('Subscriptions')}</Tab>*/}
-            {/*<Tab>{__('Analytics')}</Tab>*/}
           </TabList>
           <TabPanels>
             {/* balances for lbc and fiat */}
             <TabPanel>
               <WalletBalance />
             </TabPanel>
+            {/* transactions panel */}
             <TabPanel>
               <div className="section card-stack">
                 <div className="lbc-transactions">
@@ -174,17 +128,6 @@ const WalletPage = (props: Props) => {
                 </div>
               </div>
             </TabPanel>
-            {/*<TabPanel>*/}
-            {/*  <div className="section card-stack">*/}
-            {/*    <WalletFiatPaymentHistory transactions={customerTransactions} />*/}
-            {/*    <WalletFiatAccountHistory transactions={accountTransactionResponse} />*/}
-            {/*  </div>*/}
-            {/*</TabPanel>*/}
-            {/*<TabPanel>*/}
-            {/*  <div className="section card-stack">*/}
-            {/*    <h2> Coming soon! </h2>*/}
-            {/*  </div>*/}
-            {/*</TabPanel>*/}
           </TabPanels>
         </Tabs>
       </Page>

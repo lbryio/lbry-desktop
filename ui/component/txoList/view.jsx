@@ -104,7 +104,7 @@ function TxoList(props: Props) {
         // console.log('amount of transactions');
         // console.log(customerTransactionResponse.length);
 
-        if(customerTransactionResponse && customerTransactionResponse.length){
+        if (customerTransactionResponse && customerTransactionResponse.length) {
           customerTransactionResponse.reverse();
         }
 
@@ -317,7 +317,7 @@ function TxoList(props: Props) {
         </>
 
       }
-      titleActions={ <></>
+      titleActions={<></>
         // <div className="card__actions--inline">
         //   {!isFetchingTransactions && transactionsFile === null && (
         //     <label>{<span className="error__text">{__('Failed to process fetched data.')}</span>}</label>
@@ -336,8 +336,8 @@ function TxoList(props: Props) {
         // </div>
       }
       isBodyList
-      body={ currency === 'credits' ?
-        <div>
+      body={currency === 'credits'
+        ? <div>
           <div className="card__body-actions">
             <div className="card__actions">
               <div>
@@ -438,8 +438,8 @@ function TxoList(props: Props) {
           <TransactionListTable txos={txoPage} />
           <Paginate totalPages={Math.ceil(txoItemCount / Number(pageSize))} />
         </div>
-        // fiat section
         : <div>
+          {/* fiat section (buttons and transactions) */}
           <div className="section card-stack">
             <div className="card__body-actions">
               <div className="card__actions">
@@ -464,14 +464,6 @@ function TxoList(props: Props) {
                           })}
                           label={__('Outgoing')}
                         />
-                        {/*<Button*/}
-                        {/*  button="alt"*/}
-                        {/*  onClick={(e) => handleChange({ dkey: TXO.ACTIVE, value: 'all', tab, currency: 'fiat' })}*/}
-                        {/*  className={classnames(`button-toggle`, {*/}
-                        {/*    'button-toggle--active': active === 'all',*/}
-                        {/*  })}*/}
-                        {/*  label={__('Payouts')}*/}
-                        {/*/>*/}
                       </div>
                     </fieldset-section>
                   </div>
@@ -482,7 +474,7 @@ function TxoList(props: Props) {
             { fiatType === 'incoming' && <WalletFiatAccountHistory transactions={accountTransactionResponse} /> }
             { fiatType === 'outgoing' && <WalletFiatPaymentHistory transactions={customerTransactions} /> }
             {/* TODO: have to finish pagination */}
-            <Paginate totalPages={Math.ceil(txoItemCount / Number(pageSize))} />
+            {/* <Paginate totalPages={Math.ceil(txoItemCount / Number(pageSize))} /> */}
           </div>
         </div>
       }

@@ -12,7 +12,6 @@ import I18nMessage from 'component/i18nMessage';
 import { formatNumberWithCommas } from 'util/number';
 import Icon from 'component/common/icon';
 
-
 type Props = {
   balance: number,
   totalBalance: number,
