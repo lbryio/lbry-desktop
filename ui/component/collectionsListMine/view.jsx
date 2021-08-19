@@ -59,7 +59,7 @@ export default function CollectionsListMine(props: Props) {
       );
     });
   } else {
-    filteredCollections = collectionsToShow.slice(0, 24) || [];
+    filteredCollections = collectionsToShow || [];
   }
 
   const watchLater = builtinCollectionsList.find((list) => list.id === COLLECTIONS_CONSTS.WATCH_LATER_ID);
