@@ -71,7 +71,7 @@ function TxoList(props: Props) {
     );
   }
 
-  function getAccountTransactionsa() {
+  function getAccountTransactions() {
     return Lbryio.call(
       'account',
       'list',
@@ -86,9 +86,9 @@ function TxoList(props: Props) {
   React.useEffect(() => {
     (async function() {
       try {
-        const getAccountTransactions = await getAccountTransactionsa();
+        const accountTransactionResponse = await getAccountTransactions();
 
-        setAccountTransactionResponse(getAccountTransactions);
+        setAccountTransactionResponse(accountTransactionResponse);
       } catch (err) {
         console.log(err);
       }
@@ -197,13 +197,7 @@ function TxoList(props: Props) {
   function updateUrl(delta: Delta) {
     const newUrlParams = new URLSearchParams();
 
-    const existingCurrency = newUrlParams.get('currency') || 'credits';
-
     const existingFiatType = newUrlParams.get('fiatType') || 'incoming';
-
-    console.log(existingFiatType);
-
-    console.log(newUrlParams);
 
     // set tab name to account for wallet page tab
     newUrlParams.set('tab', delta.tab);
@@ -291,7 +285,7 @@ function TxoList(props: Props) {
   return (
     <Card
       title={
-        <><div className="table__header-text" style={{width: '124px', display: 'inline-block'}}>{__(`Transactions`)}</div>
+        <><div className="table__header-text">{__(`Transactions`)}</div>
           <div style={{display: 'inline-block'}}>
             <fieldset-section>
               <div className={'txo__radios'}>
@@ -316,24 +310,6 @@ function TxoList(props: Props) {
           </div>
         </>
 
-      }
-      titleActions={<></>
-        // <div className="card__actions--inline">
-        //   {!isFetchingTransactions && transactionsFile === null && (
-        //     <label>{<span className="error__text">{__('Failed to process fetched data.')}</span>}</label>
-        //   )}
-        //   <div className="txo__export">
-        //     <FileExporter
-        //       data={transactionsFile}
-        //       label={__('Export')}
-        //       tooltip={__('Fetch transaction data for export')}
-        //       defaultFileName={'transactions-history.csv'}
-        //       onFetch={() => fetchTransactions()}
-        //       progressMsg={isFetchingTransactions ? __('Fetching data') : ''}
-        //     />
-        //   </div>
-        //   <Button button="alt" icon={ICONS.REFRESH} label={__('Refresh')} onClick={() => fetchTxoPage()} />
-        // </div>
       }
       isBodyList
       body={currency === 'credits'
