@@ -164,7 +164,7 @@ const WalletPage = (props: Props) => {
             <Tab>{__('Balance')}</Tab>
             <Tab>{__('Transactions')}</Tab>
             <Tab>{__('Subscriptions')}</Tab>
-            <Tab>{__('Analytics')}</Tab>
+            {/*<Tab>{__('Analytics')}</Tab>*/}
           </TabList>
           <TabPanels>
             <TabPanel>
@@ -196,13 +196,7 @@ const WalletPage = (props: Props) => {
             </TabPanel>
             <TabPanel>
               <div className="section card-stack">
-                <WalletFiatPaymentHistory transactions={customerTransactions} />
-                <WalletFiatAccountHistory transactions={accountTransactionResponse} />
-              </div>
-            </TabPanel>
-            <TabPanel>
-              <div className="section card-stack">
-                <WalletFiatPaymentHistory transactions={customerTransactions} />
+                <h1> Coming soon! </h1>
               </div>
             </TabPanel>
           </TabPanels>

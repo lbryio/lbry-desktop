@@ -373,90 +373,92 @@ function TxoList(props: Props) {
         </div>
         // fiat section
         : <div>
-          <div className="card__body-actions">
-            <div className="card__actions">
-              {/*<div>*/}
-              {/*  <FormField*/}
-              {/*    type="select"*/}
-              {/*    name="type"*/}
-              {/*    label={*/}
-              {/*      <>*/}
-              {/*        {__('Type')}*/}
-              {/*        <HelpLink href="https://lbry.com/faq/transaction-types" />*/}
-              {/*      </>*/}
-              {/*    }*/}
-              {/*    value={type || 'all'}*/}
-              {/*    onChange={(e) => handleChange({ dkey: TXO.TYPE, value: e.target.value, tab, currency: 'fiat' })}*/}
-              {/*  >*/}
-              {/*    {Object.values(TXO.DROPDOWN_TYPES).map((v) => {*/}
-              {/*      const stringV = String(v);*/}
-              {/*      return (*/}
-              {/*        <option key={stringV} value={stringV}>*/}
-              {/*          {stringV && __(toCapitalCase(stringV))}*/}
-              {/*        </option>*/}
-              {/*      );*/}
-              {/*    })}*/}
-              {/*  </FormField>*/}
-              {/*</div>*/}
-              {(type === TXO.SENT || type === TXO.RECEIVED) && (
-                <div>
-                  <FormField
-                    type="select"
-                    name="subtype"
-                    label={__('Payment Type')}
-                    value={subtype || 'all'}
-                    onChange={(e) => handleChange({ dkey: TXO.SUB_TYPE, value: e.target.value, tab, currency: 'fiat' })}
-                  >
-                    {Object.values(TXO.DROPDOWN_SUBTYPES).map((v) => {
-                      const stringV = String(v);
-                      return (
-                        <option key={stringV} value={stringV}>
-                          {stringV && __(toCapitalCase(stringV))}
-                        </option>
-                      );
-                    })}
-                  </FormField>
-                </div>
-              )}
-              {!hideStatus && (
-                <div>
-                  <fieldset-section>
-                    <label>{__('Type')}</label>
-                    <div className={'txo__radios'}>
-                      <Button
-                        button="alt"
-                        onClick={(e) => handleChange({ tab, fiatType: 'incoming', currency: 'fiat' })}
-                        className={classnames(`button-toggle`, {
-                          'button-toggle--active': fiatType === 'incoming',
-                        })}
-                        label={__('Incoming')}
-                      />
-                      <Button
-                        button="alt"
-                        onClick={(e) => handleChange({ tab, fiatType: 'outgoing', currency: 'fiat' })}
-                        className={classnames(`button-toggle`, {
-                          'button-toggle--active': fiatType === 'outgoing',
-                        })}
-                        label={__('Outgoing')}
-                      />
-                      {/*<Button*/}
-                      {/*  button="alt"*/}
-                      {/*  onClick={(e) => handleChange({ dkey: TXO.ACTIVE, value: 'all', tab, currency: 'fiat' })}*/}
-                      {/*  className={classnames(`button-toggle`, {*/}
-                      {/*    'button-toggle--active': active === 'all',*/}
-                      {/*  })}*/}
-                      {/*  label={__('Payouts')}*/}
-                      {/*/>*/}
-                    </div>
-                  </fieldset-section>
-                </div>
-              )}
+          <div className="section card-stack">
+            <div className="card__body-actions">
+              <div className="card__actions">
+                {/*<div>*/}
+                {/*  <FormField*/}
+                {/*    type="select"*/}
+                {/*    name="type"*/}
+                {/*    label={*/}
+                {/*      <>*/}
+                {/*        {__('Type')}*/}
+                {/*        <HelpLink href="https://lbry.com/faq/transaction-types" />*/}
+                {/*      </>*/}
+                {/*    }*/}
+                {/*    value={type || 'all'}*/}
+                {/*    onChange={(e) => handleChange({ dkey: TXO.TYPE, value: e.target.value, tab, currency: 'fiat' })}*/}
+                {/*  >*/}
+                {/*    {Object.values(TXO.DROPDOWN_TYPES).map((v) => {*/}
+                {/*      const stringV = String(v);*/}
+                {/*      return (*/}
+                {/*        <option key={stringV} value={stringV}>*/}
+                {/*          {stringV && __(toCapitalCase(stringV))}*/}
+                {/*        </option>*/}
+                {/*      );*/}
+                {/*    })}*/}
+                {/*  </FormField>*/}
+                {/*</div>*/}
+                {(type === TXO.SENT || type === TXO.RECEIVED) && (
+                  <div>
+                    <FormField
+                      type="select"
+                      name="subtype"
+                      label={__('Payment Type')}
+                      value={subtype || 'all'}
+                      onChange={(e) => handleChange({ dkey: TXO.SUB_TYPE, value: e.target.value, tab, currency: 'fiat' })}
+                    >
+                      {Object.values(TXO.DROPDOWN_SUBTYPES).map((v) => {
+                        const stringV = String(v);
+                        return (
+                          <option key={stringV} value={stringV}>
+                            {stringV && __(toCapitalCase(stringV))}
+                          </option>
+                        );
+                      })}
+                    </FormField>
+                  </div>
+                )}
+                {!hideStatus && (
+                  <div>
+                    <fieldset-section>
+                      <label>{__('Type')}</label>
+                      <div className={'txo__radios'}>
+                        <Button
+                          button="alt"
+                          onClick={(e) => handleChange({ tab, fiatType: 'incoming', currency: 'fiat' })}
+                          className={classnames(`button-toggle`, {
+                            'button-toggle--active': fiatType === 'incoming',
+                          })}
+                          label={__('Incoming')}
+                        />
+                        <Button
+                          button="alt"
+                          onClick={(e) => handleChange({ tab, fiatType: 'outgoing', currency: 'fiat' })}
+                          className={classnames(`button-toggle`, {
+                            'button-toggle--active': fiatType === 'outgoing',
+                          })}
+                          label={__('Outgoing')}
+                        />
+                        {/*<Button*/}
+                        {/*  button="alt"*/}
+                        {/*  onClick={(e) => handleChange({ dkey: TXO.ACTIVE, value: 'all', tab, currency: 'fiat' })}*/}
+                        {/*  className={classnames(`button-toggle`, {*/}
+                        {/*    'button-toggle--active': active === 'all',*/}
+                        {/*  })}*/}
+                        {/*  label={__('Payouts')}*/}
+                        {/*/>*/}
+                      </div>
+                    </fieldset-section>
+                  </div>
+                )}
+              </div>
             </div>
+            {/* listing of the transactions */}
+            { fiatType === 'incoming' && <WalletFiatAccountHistory transactions={[]} /> }
+            { fiatType === 'outgoing' && <WalletFiatPaymentHistory transactions={[]} /> }
+            <Paginate totalPages={Math.ceil(txoItemCount / Number(pageSize))} />
           </div>
-          {/* listing of the transactions */}
-          { fiatType === 'incoming' && <WalletFiatAccountHistory transactions={[]} /> }
-          { fiatType === 'outgoing' && <WalletFiatPaymentHistory transactions={[]} /> }
-          <Paginate totalPages={Math.ceil(txoItemCount / Number(pageSize))} />
         </div>
       }
 
