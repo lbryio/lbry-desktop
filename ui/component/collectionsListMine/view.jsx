@@ -39,7 +39,7 @@ export default function CollectionsListMine(props: Props) {
   const [filterType, setFilterType] = React.useState(ALL);
   const [searchText, setSearchText] = React.useState('');
 
-  let collectionsToShow;
+  let collectionsToShow = [];
   if (filterType === ALL) {
     collectionsToShow = unpublishedCollectionsList.concat(publishedList);
   } else if (filterType === PRIVATE) {
@@ -59,13 +59,27 @@ export default function CollectionsListMine(props: Props) {
       );
     });
   } else {
-    filteredCollections = collectionsToShow || [];
+    filteredCollections = collectionsToShow.slice(0, 24) || [];
   }
 
   const watchLater = builtinCollectionsList.find((list) => list.id === COLLECTIONS_CONSTS.WATCH_LATER_ID);
   const favorites = builtinCollectionsList.find((list) => list.id === COLLECTIONS_CONSTS.FAVORITES_ID);
   const builtin = [watchLater, favorites];
+  function altEnterListener(e: SyntheticKeyboardEvent<*>) {
+    const KEYCODE_ESCAPE = 27;
+    if (e.keyCode === KEYCODE_ESCAPE) {
+      e.preventDefault();
+      setSearchText('');
+    }
+  }
 
+  function onTextareaFocus() {
+    window.addEventListener('keydown', altEnterListener);
+  }
+
+  function onTextareaBlur() {
+    window.removeEventListener('keydown', altEnterListener);
+  }
   return (
     <>
       {builtin.map((list: Collection) => {
@@ -120,7 +134,7 @@ export default function CollectionsListMine(props: Props) {
             )}
           </h1>
         </div>
-        <div className="section__header--actions section__actions--between">
+        <div className="section__header--actions">
           <div className="claim-search__wrapper">
             <div className="claim-search__menu-group">
               {COLLECTION_FILTERS.map((value) => (
@@ -139,6 +153,8 @@ export default function CollectionsListMine(props: Props) {
           <Form onSubmit={() => {}} className="wunderbar--inline">
             <Icon icon={ICONS.SEARCH} />
             <FormField
+              onFocus={onTextareaFocus}
+              onBlur={onTextareaBlur}
               className="wunderbar__input--inline"
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
@@ -160,15 +176,7 @@ export default function CollectionsListMine(props: Props) {
         )}
         {!hasCollections && (
           <div className="main--empty">
-            <Yrbl
-              type={'sad'}
-              title={__('You have no lists yet. Better start hoarding!')}
-              // actions={
-              //   <div className="section__actions">
-              //     <Button button="primary" label={__('View Content')} onClick={() => setViewBlockedChannel(true)} />
-              //   </div>
-              // }
-            />
+            <Yrbl type={'sad'} title={__('You have no lists yet. Better start hoarding!')} />
           </div>
         )}
       </div>
