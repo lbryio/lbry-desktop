@@ -12,6 +12,7 @@ import { toCapitalCase } from 'util/string';
 import classnames from 'classnames';
 import HelpLink from 'component/common/help-link';
 import FileExporter from 'component/common/file-exporter';
+import WalletFiatPaymentHistory from 'component/walletFiatPaymentHistory';
 
 type Props = {
   search: string,
@@ -125,6 +126,11 @@ function TxoList(props: Props) {
   // let currency = 'credits';
   function updateUrl(delta: Delta) {
     const newUrlParams = new URLSearchParams();
+
+    const existingCurrency = newUrlParams.get('currency') || 'credits';
+    console.log(existingCurrency);
+
+    console.log(newUrlParams);
 
     // set tab name to account for wallet page tab
     newUrlParams.set('tab', delta.tab);
@@ -331,7 +337,7 @@ function TxoList(props: Props) {
                   </fieldset-section>
                 </div>
               )}
-              <div className="card__actions--inline" style={{marginLeft: '200px'}}>
+              <div className="card__actions--inline" style={{marginLeft: '181px'}}>
                 {!isFetchingTransactions && transactionsFile === null && (
                   <label>{<span className="error__text">{__('Failed to process fetched data.')}</span>}</label>
                 )}
@@ -352,8 +358,9 @@ function TxoList(props: Props) {
           {/* listing of the transactions */}
           <TransactionListTable txos={txoPage} />
           <Paginate totalPages={Math.ceil(txoItemCount / Number(pageSize))} />
-        </div> :
-        <div>
+        </div>
+        // fiat section
+        : <div>
           <div className="card__body-actions">
             <div className="card__actions">
               <div>
@@ -367,7 +374,7 @@ function TxoList(props: Props) {
                     </>
                   }
                   value={type || 'all'}
-                  onChange={(e) => handleChange({ dkey: TXO.TYPE, value: e.target.value, tab })}
+                  onChange={(e) => handleChange({ dkey: TXO.TYPE, value: e.target.value, tab, currency: 'fiat' })}
                 >
                   {Object.values(TXO.DROPDOWN_TYPES).map((v) => {
                     const stringV = String(v);
@@ -386,7 +393,7 @@ function TxoList(props: Props) {
                     name="subtype"
                     label={__('Payment Type')}
                     value={subtype || 'all'}
-                    onChange={(e) => handleChange({ dkey: TXO.SUB_TYPE, value: e.target.value, tab })}
+                    onChange={(e) => handleChange({ dkey: TXO.SUB_TYPE, value: e.target.value, tab, currency: 'fiat' })}
                   >
                     {Object.values(TXO.DROPDOWN_SUBTYPES).map((v) => {
                       const stringV = String(v);
@@ -406,7 +413,7 @@ function TxoList(props: Props) {
                     <div className={'txo__radios'}>
                       <Button
                         button="alt"
-                        onClick={(e) => handleChange({ dkey: TXO.ACTIVE, value: 'active', tab })}
+                        onClick={(e) => handleChange({ dkey: TXO.ACTIVE, value: 'active', tab, currency: 'fiat' })}
                         className={classnames(`button-toggle`, {
                           'button-toggle--active': active === TXO.ACTIVE,
                         })}
@@ -414,7 +421,7 @@ function TxoList(props: Props) {
                       />
                       <Button
                         button="alt"
-                        onClick={(e) => handleChange({ dkey: TXO.ACTIVE, value: 'spent', tab })}
+                        onClick={(e) => handleChange({ dkey: TXO.ACTIVE, value: 'spent', tab, currency: 'fiat' })}
                         className={classnames(`button-toggle`, {
                           'button-toggle--active': active === 'spent',
                         })}
@@ -422,7 +429,7 @@ function TxoList(props: Props) {
                       />
                       <Button
                         button="alt"
-                        onClick={(e) => handleChange({ dkey: TXO.ACTIVE, value: 'all', tab })}
+                        onClick={(e) => handleChange({ dkey: TXO.ACTIVE, value: 'all', tab, currency: 'fiat' })}
                         className={classnames(`button-toggle`, {
                           'button-toggle--active': active === 'all',
                         })}
@@ -432,25 +439,10 @@ function TxoList(props: Props) {
                   </fieldset-section>
                 </div>
               )}
-              <div className="card__actions--inline" style={{marginLeft: '200px'}}>
-                {!isFetchingTransactions && transactionsFile === null && (
-                  <label>{<span className="error__text">{__('Failed to process fetched data.')}</span>}</label>
-                )}
-                <div className="txo__export">
-                  <FileExporter
-                    data={transactionsFile}
-                    label={__('Export')}
-                    tooltip={__('Fetch transaction data for export')}
-                    defaultFileName={'transactions-history.csv'}
-                    onFetch={() => fetchTransactions()}
-                    progressMsg={isFetchingTransactions ? __('Fetching data') : ''}
-                  />
-                </div>
-                <Button button="alt" icon={ICONS.REFRESH} label={__('Refresh')} onClick={() => fetchTxoPage()} />
-              </div>
             </div>
           </div>
           {/* listing of the transactions */}
+          <WalletFiatPaymentHistory transactions={[]} />
           <Paginate totalPages={Math.ceil(txoItemCount / Number(pageSize))} />
         </div>
       }
