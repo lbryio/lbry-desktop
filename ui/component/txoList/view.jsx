@@ -14,6 +14,15 @@ import HelpLink from 'component/common/help-link';
 import FileExporter from 'component/common/file-exporter';
 import WalletFiatPaymentHistory from 'component/walletFiatPaymentHistory';
 import WalletFiatAccountHistory from 'component/walletFiatAccountHistory';
+import { STRIPE_PUBLIC_KEY } from '../../../config';
+import { Lbryio } from 'lbryinc';
+
+let stripeEnvironment = 'test';
+// if the key contains pk_live it's a live key
+// update the environment for the calls to the backend to indicate which environment to hit
+if (STRIPE_PUBLIC_KEY.indexOf('pk_live') > -1) {
+  stripeEnvironment = 'live';
+}
 
 type Props = {
   search: string,
@@ -47,6 +56,62 @@ function TxoList(props: Props) {
     isFetchingTransactions,
     transactionsFile,
   } = props;
+
+  const [accountTransactionResponse, setAccountTransactionResponse] = React.useState([]);
+  const [customerTransactions, setCustomerTransactions] = React.useState([]);
+
+  function getPaymentHistory() {
+    return Lbryio.call(
+      'customer',
+      'list',
+      {
+        environment: stripeEnvironment,
+      },
+      'post'
+    );
+  }
+
+  function getAccountTransactionsa() {
+    return Lbryio.call(
+      'account',
+      'list',
+      {
+        environment: stripeEnvironment,
+      },
+      'post'
+    );
+  }
+
+  // calculate account transactions section
+  React.useEffect(() => {
+    (async function() {
+      try {
+        const getAccountTransactions = await getAccountTransactionsa();
+
+        setAccountTransactionResponse(getAccountTransactions);
+      } catch (err) {
+        console.log(err);
+      }
+    })();
+  }, []);
+
+  // populate customer payment data
+  React.useEffect(() => {
+    (async function() {
+      try {
+        // get card payments customer has made
+        let customerTransactionResponse = await getPaymentHistory();
+        // console.log('amount of transactions');
+        // console.log(customerTransactionResponse.length);
+
+        customerTransactionResponse.reverse();
+
+        setCustomerTransactions(customerTransactionResponse);
+      } catch (err) {
+        console.log(err);
+      }
+    })();
+  }, []);
 
   const urlParams = new URLSearchParams(search);
   const page = urlParams.get(TXO.PAGE) || String(1);
@@ -376,49 +441,6 @@ function TxoList(props: Props) {
           <div className="section card-stack">
             <div className="card__body-actions">
               <div className="card__actions">
-                {/*<div>*/}
-                {/*  <FormField*/}
-                {/*    type="select"*/}
-                {/*    name="type"*/}
-                {/*    label={*/}
-                {/*      <>*/}
-                {/*        {__('Type')}*/}
-                {/*        <HelpLink href="https://lbry.com/faq/transaction-types" />*/}
-                {/*      </>*/}
-                {/*    }*/}
-                {/*    value={type || 'all'}*/}
-                {/*    onChange={(e) => handleChange({ dkey: TXO.TYPE, value: e.target.value, tab, currency: 'fiat' })}*/}
-                {/*  >*/}
-                {/*    {Object.values(TXO.DROPDOWN_TYPES).map((v) => {*/}
-                {/*      const stringV = String(v);*/}
-                {/*      return (*/}
-                {/*        <option key={stringV} value={stringV}>*/}
-                {/*          {stringV && __(toCapitalCase(stringV))}*/}
-                {/*        </option>*/}
-                {/*      );*/}
-                {/*    })}*/}
-                {/*  </FormField>*/}
-                {/*</div>*/}
-                {(type === TXO.SENT || type === TXO.RECEIVED) && (
-                  <div>
-                    <FormField
-                      type="select"
-                      name="subtype"
-                      label={__('Payment Type')}
-                      value={subtype || 'all'}
-                      onChange={(e) => handleChange({ dkey: TXO.SUB_TYPE, value: e.target.value, tab, currency: 'fiat' })}
-                    >
-                      {Object.values(TXO.DROPDOWN_SUBTYPES).map((v) => {
-                        const stringV = String(v);
-                        return (
-                          <option key={stringV} value={stringV}>
-                            {stringV && __(toCapitalCase(stringV))}
-                          </option>
-                        );
-                      })}
-                    </FormField>
-                  </div>
-                )}
                 {!hideStatus && (
                   <div>
                     <fieldset-section>
@@ -455,8 +477,8 @@ function TxoList(props: Props) {
               </div>
             </div>
             {/* listing of the transactions */}
-            { fiatType === 'incoming' && <WalletFiatAccountHistory transactions={[]} /> }
-            { fiatType === 'outgoing' && <WalletFiatPaymentHistory transactions={[]} /> }
+            { fiatType === 'incoming' && <WalletFiatPaymentHistory transactions={accountTransactionResponse} /> }
+            { fiatType === 'outgoing' && <WalletFiatAccountHistory transactions={customerTransactions} /> }
             <Paginate totalPages={Math.ceil(txoItemCount / Number(pageSize))} />
           </div>
         </div>

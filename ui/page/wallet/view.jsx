@@ -196,7 +196,13 @@ const WalletPage = (props: Props) => {
             </TabPanel>
             <TabPanel>
               <div className="section card-stack">
-                <h1> Coming soon! </h1>
+                <WalletFiatPaymentHistory transactions={customerTransactions} />
+                <WalletFiatAccountHistory transactions={accountTransactionResponse} />
+              </div>
+            </TabPanel>
+            <TabPanel>
+              <div className="section card-stack">
+                <h2> Coming soon! </h2>
               </div>
             </TabPanel>
           </TabPanels>

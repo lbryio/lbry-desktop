@@ -22,6 +22,10 @@ const WalletBalance = (props: Props) => {
   // receive transactions from parent component
   const { transactions: accountTransactions } = props;
 
+  // console.log(accountTransactions.length);
+  // console.log('wallet transactions length');
+
+
   // const [accountStatusResponse, setAccountStatusResponse] = React.useState();
 
   // const [subscriptions, setSubscriptions] = React.useState();
