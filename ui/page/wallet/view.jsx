@@ -74,16 +74,7 @@ const WalletPage = (props: Props) => {
     push(url);
   }
 
-  function getAccountStatus() {
-    return Lbryio.call(
-      'account',
-      'status',
-      {
-        environment: stripeEnvironment,
-      },
-      'post'
-    );
-  }
+  // @endif
 
   const { totalBalance } = props;
   const showIntro = totalBalance === 0;
