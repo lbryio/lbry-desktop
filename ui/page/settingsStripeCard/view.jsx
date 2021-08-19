@@ -354,7 +354,13 @@ class SettingsStripeCard extends React.Component<Props, State> {
     const { currentFlowStage, pageTitle, userCardDetails, paymentMethodId } = this.state;
 
     return (
-      <Page backout={{ title: pageTitle, backLabel: __('Done') }} noFooter noSideNavigation>
+      <Page
+        noFooter
+        noSideNavigation
+        settingsPage
+        className="card-stack"
+        backout={{ title: pageTitle, backLabel: __('Back') }}
+      >
         <div>
           {scriptFailedToLoad && (
             <div className="error__text">{__('There was an error connecting to Stripe. Please try again later.')}</div>

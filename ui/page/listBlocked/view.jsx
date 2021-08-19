@@ -229,7 +229,12 @@ function ListBlocked(props: Props) {
   }, [stringifiedPersonalList, justPersonalBlocked, setLocalPersonalList]);
 
   return (
-    <Page>
+    <Page
+      noFooter
+      noSideNavigation
+      settingsPage
+      backout={{ title: __('Blocked and muted channels'), backLabel: __('Back') }}
+    >
       {fetchingModerationBlockList && (
         <div className="main--empty">
           <Spinner />
