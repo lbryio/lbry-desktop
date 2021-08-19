@@ -52,59 +52,60 @@ const WalletBalance = (props: Props) => {
 
   return (
     <>
-      <Card
-        title={__('Payment History')}
-        body={
-          <>
-            <div className="table__wrapper">
-              <table className="table table--transactions">
-                <thead>
-                <tr>
-                  <th className="date-header">{__('Date')}</th>
-                  <th>{<>{__('Receiving Channel Name')}</>}</th>
-                  <th>{__('Tip Location')}</th>
-                  <th>{__('Amount (USD)')} </th>
-                  <th>{__('Card Last 4')}</th>
-                  <th>{__('Anonymous')}</th>
-                </tr>
-                </thead>
-                <tbody>
-                {accountTransactions &&
-                accountTransactions.map((transaction) => (
-                  <tr key={transaction.name + transaction.created_at}>
-                    <td>{moment(transaction.created_at).format('LLL')}</td>
-                    <td>
-                      <Button
-                        className=""
-                        navigate={'/' + transaction.channel_name + ':' + transaction.channel_claim_id}
-                        label={transaction.channel_name}
-                        button="link"
-                      />
-                    </td>
-                    <td>
-                      <Button
-                        className=""
-                        navigate={'/' + transaction.channel_name + ':' + transaction.source_claim_id}
-                        label={
-                          transaction.channel_claim_id === transaction.source_claim_id
-                            ? 'Channel Page'
-                            : 'Content Page'
-                        }
-                        button="link"
-                      />
-                    </td>
-                    <td>${transaction.tipped_amount / 100}</td>
-                    <td>{lastFour}</td>
-                    <td>{transaction.private_tip ? 'Yes' : 'No'}</td>
+      <div className="section card-stack">
+        <Card
+          body={
+            <>
+              <div className="table__wrapper">
+                <table className="table table--transactions">
+                  <thead>
+                  <tr>
+                    <th className="date-header">{__('Date')}</th>
+                    <th>{<>{__('Receiving Channel Name')}</>}</th>
+                    <th>{__('Tip Location')}</th>
+                    <th>{__('Amount (USD)')} </th>
+                    <th>{__('Card Last 4')}</th>
+                    <th>{__('Anonymous')}</th>
                   </tr>
-                ))}
-                </tbody>
-              </table>
-              {(!accountTransactions || accountTransactions.length === 0) && <p style={{textAlign: 'center', marginTop: '20px', fontSize: '13px', color: 'rgb(171, 171, 171)'}}>No Transactions</p>}
-            </div>
-          </>
-        }
-      />
+                  </thead>
+                  <tbody>
+                  {accountTransactions &&
+                  accountTransactions.map((transaction) => (
+                    <tr key={transaction.name + transaction.created_at}>
+                      <td>{moment(transaction.created_at).format('LLL')}</td>
+                      <td>
+                        <Button
+                          className=""
+                          navigate={'/' + transaction.channel_name + ':' + transaction.channel_claim_id}
+                          label={transaction.channel_name}
+                          button="link"
+                        />
+                      </td>
+                      <td>
+                        <Button
+                          className=""
+                          navigate={'/' + transaction.channel_name + ':' + transaction.source_claim_id}
+                          label={
+                            transaction.channel_claim_id === transaction.source_claim_id
+                              ? 'Channel Page'
+                              : 'Content Page'
+                          }
+                          button="link"
+                        />
+                      </td>
+                      <td>${transaction.tipped_amount / 100}</td>
+                      <td>{lastFour}</td>
+                      <td>{transaction.private_tip ? 'Yes' : 'No'}</td>
+                    </tr>
+                  ))}
+                  </tbody>
+                </table>
+                {(!accountTransactions || accountTransactions.length === 0) && <p style={{textAlign: 'center', marginTop: '20px', fontSize: '13px', color: 'rgb(171, 171, 171)'}}>No Transactions</p>}
+              </div>
+            </>
+          }
+        />
+      </div>
   </>
   );
 };
