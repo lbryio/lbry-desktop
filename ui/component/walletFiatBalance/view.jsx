@@ -7,16 +7,10 @@ import Card from 'component/common/card';
 import Icon from 'component/common/icon';
 import I18nMessage from 'component/i18nMessage';
 import { Lbryio } from 'lbryinc';
-import { STRIPE_PUBLIC_KEY } from 'config';
+import { getStripeEnvironment } from 'util/stripe';
+let stripeEnvironment = getStripeEnvironment();
 
-let stripeEnvironment = 'test';
-// if the key contains pk_live it's a live key
-// update the environment for the calls to the backend to indicate which environment to hit
-if (STRIPE_PUBLIC_KEY.indexOf('pk_live') > -1) {
-  stripeEnvironment = 'live';
-}
-
-const WalletBalance = (props: Props) => {
+const WalletBalance = () => {
   const [accountStatusResponse, setAccountStatusResponse] = React.useState();
 
   function getAccountStatus() {
@@ -40,7 +34,6 @@ const WalletBalance = (props: Props) => {
         const response = await getAccountStatus();
 
         setAccountStatusResponse(response);
-
       } catch (err) {
         console.log(err);
       }

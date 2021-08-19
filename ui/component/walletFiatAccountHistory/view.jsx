@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import Button from 'component/button';
-import Card from 'component/common/card';
 import moment from 'moment';
 
 type Props = {

@@ -39,9 +39,11 @@ type Props = {
 };
 
 type Delta = {
-  dkey: string,
-  value: string,
-  tab: string
+  dkey?: string,
+  value?: string,
+  tab?: string,
+  currency?: string,
+  fiatType?: string
 };
 
 function TxoList(props: Props) {
@@ -197,10 +199,17 @@ function TxoList(props: Props) {
   function updateUrl(delta: Delta) {
     const newUrlParams = new URLSearchParams();
 
+    // fix for flow, maybe there is a better way?
+    if (!delta.value) {
+      delta.value = '';
+    }
+
     const existingFiatType = newUrlParams.get('fiatType') || 'incoming';
 
-    // set tab name to account for wallet page tab
-    newUrlParams.set('tab', delta.tab);
+    if (delta.tab) {
+      // set tab name to account for wallet page tab
+      newUrlParams.set('tab', delta.tab);
+    }
 
     // only update currency if it's being changed
     if (delta.currency) {

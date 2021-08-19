@@ -10,7 +10,6 @@ import Card from 'component/common/card';
 import LbcSymbol from 'component/common/lbc-symbol';
 import I18nMessage from 'component/i18nMessage';
 import { formatNumberWithCommas } from 'util/number';
-import Icon from 'component/common/icon';
 import WalletFiatBalance from 'component/walletFiatBalance';
 
 type Props = {

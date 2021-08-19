@@ -7,9 +7,7 @@ import Page from 'component/page';
 import * as PAGES from 'constants/pages';
 import Spinner from 'component/spinner';
 import YrblWalletEmpty from 'component/yrblWalletEmpty';
-import { Lbryio } from 'lbryinc';
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
-import { getStripeEnvironment } from 'util/stripe';
 
 const TAB_QUERY = 'tab';
 
@@ -18,8 +16,6 @@ const TABS = {
   ACCOUNT_HISTORY: 'fiat-account-history',
   PAYMENT_HISTORY: 'fiat-payment-history',
 };
-
-let stripeEnvironment = getStripeEnvironment();
 
 type Props = {
   history: { action: string, push: (string) => void, replace: (string) => void },
