@@ -128,18 +128,18 @@ export default function SettingContent(props: Props) {
               <>
                 <SettingsRow title={__('Notifications')}>
                   <Button
-                    button="secondary"
+                    button="inverse"
                     label={__('Manage')}
-                    icon={ICONS.SETTINGS}
+                    icon={ICONS.ARROW_RIGHT}
                     navigate={`/$/${PAGES.SETTINGS_NOTIFICATIONS}`}
                   />
                 </SettingsRow>
 
                 <SettingsRow title={__('Blocked and muted channels')}>
                   <Button
-                    button="secondary"
+                    button="inverse"
                     label={__('Manage')}
-                    icon={ICONS.SETTINGS}
+                    icon={ICONS.ARROW_RIGHT}
                     navigate={`/$/${PAGES.SETTINGS_BLOCKED_MUTED}`}
                   />
                 </SettingsRow>
@@ -147,9 +147,9 @@ export default function SettingContent(props: Props) {
                 {myChannelUrls && myChannelUrls.length > 0 && (
                   <SettingsRow title={__('Creator settings')}>
                     <Button
-                      button="secondary"
+                      button="inverse"
                       label={__('Manage')}
-                      icon={ICONS.SETTINGS}
+                      icon={ICONS.ARROW_RIGHT}
                       navigate={`/$/${PAGES.SETTINGS_CREATOR}`}
                     />
                   </SettingsRow>

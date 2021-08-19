@@ -66,9 +66,9 @@ export default function SettingAccount(props: Props) {
                 subtitle={__('Connect a bank account to receive tips and compensation in your local currency')}
               >
                 <Button
-                  button="secondary"
+                  button="inverse"
                   label={__('Manage')}
-                  icon={ICONS.SETTINGS}
+                  icon={ICONS.ARROW_RIGHT}
                   navigate={`/$/${PAGES.SETTINGS_STRIPE_ACCOUNT}`}
                 />
               </SettingsRow>
@@ -82,9 +82,9 @@ export default function SettingAccount(props: Props) {
                 subtitle={__('Add a credit card to tip creators in their local currency')}
               >
                 <Button
-                  button="secondary"
+                  button="inverse"
                   label={__('Manage')}
-                  icon={ICONS.SETTINGS}
+                  icon={ICONS.ARROW_RIGHT}
                   navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`}
                 />
               </SettingsRow>
