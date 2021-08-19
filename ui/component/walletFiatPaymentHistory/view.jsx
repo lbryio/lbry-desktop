@@ -22,10 +22,6 @@ const WalletBalance = (props: Props) => {
   // receive transactions from parent component
   const { transactions: accountTransactions } = props;
 
-  // console.log(accountTransactions.length);
-  // console.log('wallet transactions length');
-
-
   // const [accountStatusResponse, setAccountStatusResponse] = React.useState();
 
   // const [subscriptions, setSubscriptions] = React.useState();
@@ -101,6 +97,7 @@ const WalletBalance = (props: Props) => {
             ))}
             </tbody>
           </table>
+          {/* show some markup if there's no transactions */}
           {(!accountTransactions || accountTransactions.length === 0) && <p style={{textAlign: 'center', marginTop: '20px', fontSize: '13px', color: 'rgb(171, 171, 171)'}}>No Transactions</p>}
         </div>
       </div>

@@ -104,7 +104,9 @@ function TxoList(props: Props) {
         // console.log('amount of transactions');
         // console.log(customerTransactionResponse.length);
 
-        customerTransactionResponse.reverse();
+        if(customerTransactionResponse && customerTransactionResponse.length){
+          customerTransactionResponse.reverse();
+        }
 
         setCustomerTransactions(customerTransactionResponse);
       } catch (err) {
@@ -477,8 +479,9 @@ function TxoList(props: Props) {
               </div>
             </div>
             {/* listing of the transactions */}
-            { fiatType === 'incoming' && <WalletFiatPaymentHistory transactions={accountTransactionResponse} /> }
-            { fiatType === 'outgoing' && <WalletFiatAccountHistory transactions={customerTransactions} /> }
+            { fiatType === 'incoming' && <WalletFiatAccountHistory transactions={accountTransactionResponse} /> }
+            { fiatType === 'outgoing' && <WalletFiatPaymentHistory transactions={customerTransactions} /> }
+            {/* TODO: have to finish pagination */}
             <Paginate totalPages={Math.ceil(txoItemCount / Number(pageSize))} />
           </div>
         </div>

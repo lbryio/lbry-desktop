@@ -122,27 +122,6 @@ const WalletPage = (props: Props) => {
         const response = await getAccountStatus();
 
         setAccountStatusResponse(response);
-
-        // TODO: some weird naming clash hence getAccountTransactionsa
-        const getAccountTransactions = await getAccountTransactionsa();
-
-        setAccountTransactionResponse(getAccountTransactions);
-      } catch (err) {
-        console.log(err);
-      }
-    })();
-  }, []);
-
-  // populate customer payment data
-  React.useEffect(() => {
-    (async function() {
-      try {
-        // get card payments customer has made
-        let customerTransactionResponse = await getPaymentHistory();
-
-        customerTransactionResponse.reverse();
-
-        setCustomerTransactions(customerTransactionResponse);
       } catch (err) {
         console.log(err);
       }
@@ -163,10 +142,11 @@ const WalletPage = (props: Props) => {
           <TabList className="tabs__list--collection-edit-page">
             <Tab>{__('Balance')}</Tab>
             <Tab>{__('Transactions')}</Tab>
-            <Tab>{__('Subscriptions')}</Tab>
+            {/*<Tab>{__('Subscriptions')}</Tab>*/}
             {/*<Tab>{__('Analytics')}</Tab>*/}
           </TabList>
           <TabPanels>
+            {/* balances for lbc and fiat */}
             <TabPanel>
               <WalletBalance />
             </TabPanel>
@@ -194,17 +174,17 @@ const WalletPage = (props: Props) => {
                 </div>
               </div>
             </TabPanel>
-            <TabPanel>
-              <div className="section card-stack">
-                <WalletFiatPaymentHistory transactions={customerTransactions} />
-                <WalletFiatAccountHistory transactions={accountTransactionResponse} />
-              </div>
-            </TabPanel>
-            <TabPanel>
-              <div className="section card-stack">
-                <h2> Coming soon! </h2>
-              </div>
-            </TabPanel>
+            {/*<TabPanel>*/}
+            {/*  <div className="section card-stack">*/}
+            {/*    <WalletFiatPaymentHistory transactions={customerTransactions} />*/}
+            {/*    <WalletFiatAccountHistory transactions={accountTransactionResponse} />*/}
+            {/*  </div>*/}
+            {/*</TabPanel>*/}
+            {/*<TabPanel>*/}
+            {/*  <div className="section card-stack">*/}
+            {/*    <h2> Coming soon! </h2>*/}
+            {/*  </div>*/}
+            {/*</TabPanel>*/}
           </TabPanels>
         </Tabs>
       </Page>

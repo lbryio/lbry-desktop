@@ -21,9 +21,9 @@ const WalletBalance = (props: Props) => {
   }
 
   // if there are more than 10 transactions, limit it to 10 for the frontend
-  if (accountTransactions && accountTransactions.length > 10) {
-    accountTransactions.length = 10;
-  }
+  // if (accountTransactions && accountTransactions.length > 10) {
+  //   accountTransactions.length = 10;
+  // }
 
   return (
     <div className="table__wrapper">
