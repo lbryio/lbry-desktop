@@ -8,27 +8,60 @@ import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import Yrbl from 'component/yrbl';
+import classnames from 'classnames';
+import { FormField, Form } from 'component/common/form';
 
 type Props = {
   builtinCollections: CollectionGroup,
   publishedCollections: CollectionGroup,
-  publishedPlaylists: CollectionGroup,
+  publishedCollections: CollectionGroup,
   unpublishedCollections: CollectionGroup,
   // savedCollections: CollectionGroup,
 };
 
+const ALL = 'All';
+const PRIVATE = 'Private';
+const PUBLIC = 'Public';
+const COLLECTION_FILTER = [ALL, PRIVATE, PUBLIC];
+
 export default function CollectionsListMine(props: Props) {
   const {
     builtinCollections,
-    publishedPlaylists,
+    publishedCollections,
     unpublishedCollections,
     // savedCollections, these are resolved on startup from sync'd claimIds or urls
   } = props;
 
   const builtinCollectionsList = (Object.values(builtinCollections || {}): any);
   const unpublishedCollectionsList = (Object.keys(unpublishedCollections || {}): any);
-  const publishedList = (Object.keys(publishedPlaylists || {}): any);
+  const publishedList = (Object.keys(publishedCollections || {}): any);
   const hasCollections = unpublishedCollectionsList.length || publishedList.length;
+  const [filterType, setFilterType] = React.useState(ALL);
+  const [searchText, setSearchText] = React.useState('');
+
+  const collectionsToShow = [];
+  if (filterType === ALL) {
+    collectionsToShow.push(...unpublishedCollectionsList);
+    collectionsToShow.push(...publishedList);
+  } else if (filterType === PRIVATE) {
+    collectionsToShow.push(...unpublishedCollectionsList);
+  } else if (filterType === PUBLIC) {
+    collectionsToShow.push(...publishedList);
+  }
+
+  let filteredCollections;
+  if (searchText) {
+    filteredCollections = collectionsToShow.filter((id) => {
+      return (
+        (unpublishedCollections[id] &&
+          unpublishedCollections[id].name.toLocaleLowerCase().startsWith(searchText.toLocaleLowerCase())) ||
+        (publishedCollections[id] &&
+          publishedCollections[id].name.toLocaleLowerCase().startsWith(searchText.toLocaleLowerCase()))
+      );
+    });
+  } else {
+    filteredCollections = collectionsToShow;
+  }
 
   const watchLater = builtinCollectionsList.find((list) => list.id === COLLECTIONS_CONSTS.WATCH_LATER_ID);
   const favorites = builtinCollectionsList.find((list) => list.id === COLLECTIONS_CONSTS.FAVORITES_ID);
@@ -88,18 +121,40 @@ export default function CollectionsListMine(props: Props) {
             )}
           </h1>
         </div>
+        <div className="section__header--actions section__actions--between">
+          <div className="claim-search__wrapper">
+            <div className="claim-search__menu-group">
+              {COLLECTION_FILTER.map((value) => (
+                <Button
+                  label={__(value)}
+                  key={value}
+                  button="alt"
+                  onClick={() => setFilterType(value)}
+                  className={classnames('button-toggle', {
+                    'button-toggle--active': filterType === value,
+                  })}
+                />
+              ))}
+            </div>
+          </div>
+          <Form onSubmit={() => {}} className="wunderbar--inline">
+            <Icon icon={ICONS.SEARCH} />
+            <FormField
+              className="wunderbar__input--inline"
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              type="text"
+              placeholder={__('Search')}
+            />
+          </Form>
+        </div>
         {Boolean(hasCollections) && (
           <div>
             {/* TODO: fix above spacing hack */}
             <div className="claim-grid">
-              {unpublishedCollectionsList &&
-                unpublishedCollectionsList.length > 0 &&
-                unpublishedCollectionsList.map((key) => (
-                  <CollectionPreviewTile tileLayout collectionId={key} key={key} />
-                ))}
-              {publishedList &&
-                publishedList.length > 0 &&
-                publishedList.map((key) => <CollectionPreviewTile tileLayout collectionId={key} key={key} />)}
+              {filteredCollections &&
+                filteredCollections.length > 0 &&
+                filteredCollections.map((key) => <CollectionPreviewTile tileLayout collectionId={key} key={key} />)}
             </div>
           </div>
         )}
