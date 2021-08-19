@@ -2090,6 +2090,8 @@
   "Expand Comments": "Expand Comments",
   "Expand": "Expand",
   "Load More": "Load More",
+  "%channelSubCount% Followers": "%channelSubCount% Followers",
+  "%channelSubCount% Follower": "%channelSubCount% Follower",
   "Collection": "Collection",
   "%channelName% isn't live right now, but the chat is! Check back later to watch the stream.": "%channelName% isn't live right now, but the chat is! Check back later to watch the stream.",
   "Review": "Review",

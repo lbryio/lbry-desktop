@@ -23,11 +23,31 @@ type Props = {
   livestream?: boolean,
   isLive?: boolean,
   viewers?: number,
+  subCount: number,
+  channelClaimId?: string,
+  fetchSubCount: (string) => void,
 };
 
 function FileTitleSection(props: Props) {
-  const { title, uri, nsfw, isNsfwBlocked, livestream = false, isLive = false, viewers } = props;
+  const {
+    title,
+    uri,
+    nsfw,
+    isNsfwBlocked,
+    livestream = false,
+    isLive = false,
+    viewers,
+    subCount,
+    channelClaimId,
+    fetchSubCount,
+  } = props;
   const [hasAcknowledgedSec, setHasAcknowledgedSec] = usePersistedState('sec-nag', false);
+
+  React.useEffect(() => {
+    if (channelClaimId) {
+      fetchSubCount(channelClaimId);
+    }
+  }, [channelClaimId, fetchSubCount]);
 
   return (
     <>
@@ -108,7 +128,7 @@ function FileTitleSection(props: Props) {
             </div>
           ) : (
             <div className="section">
-              <ClaimAuthor uri={uri} />
+              <ClaimAuthor channelSubCount={subCount} uri={uri} />
               <FileDescription uri={uri} />
             </div>
           )

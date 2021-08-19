@@ -91,6 +91,7 @@ type Props = {
   date?: any,
   containerId?: string, // ID or name of the container (e.g. ClaimList, HOC, etc.) that this is in.
   indexInContainer?: number, // The index order of this component within 'containerId'.
+  channelSubCount?: number,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -154,6 +155,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     disableNavigation,
     containerId,
     indexInContainer,
+    channelSubCount,
   } = props;
   const isCollection = claim && claim.value_type === 'collection';
   const collectionClaimId = isCollection && claim && claim.claim_id;
@@ -166,6 +168,18 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   const shouldHideActions = hideActions || isMyCollection || type === 'small' || type === 'tooltip';
   const canonicalUrl = claim && claim.canonical_url;
   const lastCollectionIndex = collectionUris ? collectionUris.length - 1 : 0;
+  const channelSubscribers = React.useMemo(() => {
+    if (channelSubCount === undefined) {
+      return <span />;
+    }
+    return (
+      <span className="claim-preview__channel-sub-count">
+        {channelSubCount === 1
+          ? __('%channelSubCount% Follower', { channelSubCount })
+          : __('%channelSubCount% Followers', { channelSubCount })}
+      </span>
+    );
+  }, [channelSubCount]);
   let isValid = false;
   if (uri) {
     try {
@@ -399,6 +413,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
               </div>
               <ClaimPreviewSubtitle uri={uri} type={type} />
               {(pending || !!reflectingProgress) && <PublishPending uri={uri} />}
+              {channelSubscribers}
             </div>
             {type !== 'small' && (
               <div className="claim-preview__actions">

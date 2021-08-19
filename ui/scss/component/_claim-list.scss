@@ -276,6 +276,11 @@
   color: var(--color-text);
 }
 
+.claim-preview__channel-sub-count {
+  color: var(--color-text-subtitle);
+  font-size: var(--font-small);
+}
+
 .claim-preview__custom-properties {
   text-align: right;
   display: flex;
