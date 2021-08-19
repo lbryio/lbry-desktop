@@ -79,7 +79,7 @@ export default function SettingAccountPassword(props: Props) {
         {!hasPassword && <p className="help">{__('You do not currently have a password set.')}</p>}
       </div>
       <Button
-        button="primary"
+        button="secondary"
         label={hasPassword ? __('Update Your Password') : __('Add A Password')}
         onClick={() => setIsAddingPassword(true)}
       />
