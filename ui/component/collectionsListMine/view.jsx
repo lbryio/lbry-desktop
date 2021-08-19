@@ -8,48 +8,78 @@ import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import Yrbl from 'component/yrbl';
-import usePersistedState from 'effects/use-persisted-state';
-import Card from 'component/common/card';
 import classnames from 'classnames';
+import { FormField, Form } from 'component/common/form';
 
 type Props = {
   builtinCollections: CollectionGroup,
   publishedCollections: CollectionGroup,
-  publishedPlaylists: CollectionGroup,
+  publishedCollections: CollectionGroup,
   unpublishedCollections: CollectionGroup,
   // savedCollections: CollectionGroup,
 };
 
+const ALL = 'All';
+const PRIVATE = 'Private';
+const PUBLIC = 'Public';
+const COLLECTION_FILTERS = [ALL, PRIVATE, PUBLIC];
+
 export default function CollectionsListMine(props: Props) {
   const {
     builtinCollections,
-    publishedPlaylists,
+    publishedCollections,
     unpublishedCollections,
     // savedCollections, these are resolved on startup from sync'd claimIds or urls
   } = props;
 
   const builtinCollectionsList = (Object.values(builtinCollections || {}): any);
   const unpublishedCollectionsList = (Object.keys(unpublishedCollections || {}): any);
-  const publishedList = (Object.keys(publishedPlaylists || {}): any);
+  const publishedList = (Object.keys(publishedCollections || {}): any);
   const hasCollections = unpublishedCollectionsList.length || publishedList.length;
+  const [filterType, setFilterType] = React.useState(ALL);
+  const [searchText, setSearchText] = React.useState('');
+
+  let collectionsToShow = [];
+  if (filterType === ALL) {
+    collectionsToShow = unpublishedCollectionsList.concat(publishedList);
+  } else if (filterType === PRIVATE) {
+    collectionsToShow = unpublishedCollectionsList;
+  } else if (filterType === PUBLIC) {
+    collectionsToShow = publishedList;
+  }
+
+  let filteredCollections;
+  if (searchText && collectionsToShow) {
+    filteredCollections = collectionsToShow.filter((id) => {
+      return (
+        (unpublishedCollections[id] &&
+          unpublishedCollections[id].name.toLocaleLowerCase().includes(searchText.toLocaleLowerCase())) ||
+        (publishedCollections[id] &&
+          publishedCollections[id].name.toLocaleLowerCase().includes(searchText.toLocaleLowerCase()))
+      );
+    });
+  } else {
+    filteredCollections = collectionsToShow || [];
+  }
 
   const watchLater = builtinCollectionsList.find((list) => list.id === COLLECTIONS_CONSTS.WATCH_LATER_ID);
   const favorites = builtinCollectionsList.find((list) => list.id === COLLECTIONS_CONSTS.FAVORITES_ID);
   const builtin = [watchLater, favorites];
-  const [showHelp, setShowHelp] = usePersistedState('livestream-help-seen', true);
+  function escapeListener(e: SyntheticKeyboardEvent<*>) {
+    const KEYCODE_ESCAPE = 27;
+    if (e.keyCode === KEYCODE_ESCAPE) {
+      e.preventDefault();
+      setSearchText('');
+    }
+  }
 
-  const helpText = (
-    <div className="section__subtitle">
-      <p>{__(`Everyone starts with 2 private lists - Watch Later and Favorites.`)}</p>
-      <p>{__(`Add content to existing lists or new lists from content pages or content previews.`)}</p>
-      <p>
-        {__(
-          `By default, lists are private. You can edit them and later publish them from the Lists page or the Publish context menu on this page. Similar to uploads, small blockchain fees apply.`
-        )}
-      </p>
-    </div>
-  );
+  function onTextareaFocus() {
+    window.addEventListener('keydown', escapeListener);
+  }
 
+  function onTextareaBlur() {
+    window.removeEventListener('keydown', escapeListener);
+  }
   return (
     <>
       {builtin.map((list: Collection) => {
@@ -68,9 +98,14 @@ export default function CollectionsListMine(props: Props) {
                         <span className="claim-grid__title-span">
                           {__(`${list.name}`)}
                           <div className="claim-grid__title--empty">
-                            <Icon className="icon--margin-right"
-                              icon={(list.id === COLLECTIONS_CONSTS.WATCH_LATER_ID && ICONS.TIME) ||
-                                (list.id === COLLECTIONS_CONSTS.FAVORITES_ID && ICONS.STAR) || ICONS.STACK} />
+                            <Icon
+                              className="icon--margin-right"
+                              icon={
+                                (list.id === COLLECTIONS_CONSTS.WATCH_LATER_ID && ICONS.TIME) ||
+                                (list.id === COLLECTIONS_CONSTS.FAVORITES_ID && ICONS.STAR) ||
+                                ICONS.STACK
+                              }
+                            />
                             {itemUrls.length}
                           </div>
                         </span>
@@ -91,52 +126,57 @@ export default function CollectionsListMine(props: Props) {
         );
       })}
       <div className="claim-grid__wrapper">
-        <div className="claim-grid__header claim-grid__header--between section">
+        <div className="claim-grid__header section">
           <h1 className="claim-grid__title">
             {__('Playlists')}
             {!hasCollections && (
               <div className="claim-grid__title--empty">{__('(Empty) --[indicates empty playlist]--')}</div>
             )}
           </h1>
-          <Button button="link" onClick={() => setShowHelp(!showHelp)} label={__('How does this work?')} />
         </div>
-        {showHelp && (
-          <Card
-            titleActions={<Button button="close" icon={ICONS.REMOVE} onClick={() => setShowHelp(false)} />}
-            title={__('Introducing Lists')}
-            actions={helpText}
-          />
-        )}
+        <div className="section__header--actions">
+          <div className="claim-search__wrapper">
+            <div className="claim-search__menu-group">
+              {COLLECTION_FILTERS.map((value) => (
+                <Button
+                  label={__(value)}
+                  key={value}
+                  button="alt"
+                  onClick={() => setFilterType(value)}
+                  className={classnames('button-toggle', {
+                    'button-toggle--active': filterType === value,
+                  })}
+                />
+              ))}
+            </div>
+          </div>
+          <Form onSubmit={() => {}} className="wunderbar--inline">
+            <Icon icon={ICONS.SEARCH} />
+            <FormField
+              onFocus={onTextareaFocus}
+              onBlur={onTextareaBlur}
+              className="wunderbar__input--inline"
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              type="text"
+              placeholder={__('Search')}
+            />
+          </Form>
+        </div>
         {Boolean(hasCollections) && (
-          <div
-            className={classnames({
-              section: showHelp,
-            })}
-          >
+          <div>
             {/* TODO: fix above spacing hack */}
             <div className="claim-grid">
-              {unpublishedCollectionsList &&
-                unpublishedCollectionsList.length > 0 &&
-                unpublishedCollectionsList.map((key) => (
-                  <CollectionPreviewTile tileLayout collectionId={key} key={key} />
-                ))}
-              {publishedList &&
-                publishedList.length > 0 &&
-                publishedList.map((key) => <CollectionPreviewTile tileLayout collectionId={key} key={key} />)}
+              {filteredCollections &&
+                filteredCollections.length > 0 &&
+                filteredCollections.map((key) => <CollectionPreviewTile tileLayout collectionId={key} key={key} />)}
+              {!filteredCollections.length && <div className="empty main--empty">{__('No matching collections')}</div>}
             </div>
           </div>
         )}
         {!hasCollections && (
           <div className="main--empty">
-            <Yrbl
-              type={'sad'}
-              title={__('You have no lists yet. Better start hoarding!')}
-              // actions={
-              //   <div className="section__actions">
-              //     <Button button="primary" label={__('View Content')} onClick={() => setViewBlockedChannel(true)} />
-              //   </div>
-              // }
-            />
+            <Yrbl type={'sad'} title={__('You have no lists yet. Better start hoarding!')} />
           </div>
         )}
       </div>

@@ -9,7 +9,7 @@ import CollectionsListMine from './view';
 
 const select = (state) => ({
   builtinCollections: selectBuiltinCollections(state),
-  publishedPlaylists: selectMyPublishedPlaylistCollections(state),
+  publishedCollections: selectMyPublishedPlaylistCollections(state),
   unpublishedCollections: selectMyUnpublishedCollections(state),
   // savedCollections: selectSavedCollections(state),
 });
