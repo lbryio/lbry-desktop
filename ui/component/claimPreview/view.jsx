@@ -168,7 +168,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   const shouldHideActions = hideActions || isMyCollection || type === 'small' || type === 'tooltip';
   const canonicalUrl = claim && claim.canonical_url;
   const lastCollectionIndex = collectionUris ? collectionUris.length - 1 : 0;
-  
   const channelSubscribers = React.useMemo(() => {
     if (channelSubCount === undefined) {
       return <span />;
