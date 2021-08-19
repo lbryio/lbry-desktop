@@ -349,6 +349,7 @@ export default handleActions(
       const topLevelCommentsById = Object.assign({}, state.topLevelCommentsById); // was byId {ClaimId -> [commentIds...]}
       const topLevelTotalCommentsById = Object.assign({}, state.topLevelTotalCommentsById);
       const topLevelTotalPagesById = Object.assign({}, state.topLevelTotalPagesById);
+      const pinnedCommentsById = Object.assign({}, state.pinnedCommentsById);
       const repliesByParentId = Object.assign({}, state.repliesByParentId);
       const linkedCommentAncestors = Object.assign({}, state.linkedCommentAncestors);
 
@@ -362,7 +363,11 @@ export default handleActions(
         if (comment.parent_id) {
           pushToArrayInObject(repliesByParentId, parentId, comment.comment_id);
         } else {
-          pushToArrayInObject(topLevelCommentsById, claimId, comment.comment_id);
+          if (comment.is_pinned) {
+            pushToArrayInObject(pinnedCommentsById, claimId, comment.comment_id);
+          } else {
+            pushToArrayInObject(topLevelCommentsById, claimId, comment.comment_id);
+          }
         }
       };
 
@@ -380,6 +385,7 @@ export default handleActions(
         topLevelCommentsById,
         topLevelTotalCommentsById,
         topLevelTotalPagesById,
+        pinnedCommentsById,
         repliesByParentId,
         byId,
         commentById,
@@ -422,6 +428,7 @@ export default handleActions(
       const topLevelCommentsById = Object.assign({}, state.topLevelCommentsById); // was byId {ClaimId -> [commentIds...]}
       const topLevelTotalCommentsById = Object.assign({}, state.topLevelTotalCommentsById);
       const topLevelTotalPagesById = Object.assign({}, state.topLevelTotalPagesById);
+      const pinnedCommentsById = Object.assign({}, state.pinnedCommentsById);
       const myReacts = Object.assign({}, state.myReactsByCommentId);
       const othersReacts = Object.assign({}, state.othersReactsByCommentId);
 
@@ -446,6 +453,7 @@ export default handleActions(
       delete topLevelCommentsById[claimId];
       delete topLevelTotalCommentsById[claimId];
       delete topLevelTotalPagesById[claimId];
+      delete pinnedCommentsById[claimId];
 
       return {
         ...state,
@@ -454,6 +462,7 @@ export default handleActions(
         topLevelCommentsById,
         topLevelTotalCommentsById,
         topLevelTotalPagesById,
+        pinnedCommentsById,
         myReactsByCommentId: myReacts,
         othersReactsByCommentId: othersReacts,
       };
