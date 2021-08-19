@@ -61,7 +61,7 @@ export default function SettingContent(props: Props) {
         isBodyList
         body={
           <>
-            <SettingsRow title={__('Floating video player')} subtitle={__(HELP_FLOATING_PLAYER)}>
+            <SettingsRow title={__('Floating video player')} subtitle={__(HELP.FLOATING_PLAYER)}>
               <FormField
                 type="checkbox"
                 name="floating_player"
@@ -73,7 +73,7 @@ export default function SettingContent(props: Props) {
               />
             </SettingsRow>
 
-            <SettingsRow title={__('Autoplay media files')} subtitle={__(HELP_AUTOPLAY)}>
+            <SettingsRow title={__('Autoplay media files')} subtitle={__(HELP.AUTOPLAY)}>
               <FormField
                 type="checkbox"
                 name="autoplay"
@@ -84,7 +84,7 @@ export default function SettingContent(props: Props) {
 
             {!SIMPLE_SITE && (
               <>
-                <SettingsRow title={__('Hide reposts')} subtitle={__(HELP_HIDE_REPOSTS)}>
+                <SettingsRow title={__('Hide reposts')} subtitle={__(HELP.HIDE_REPOSTS)}>
                   <FormField
                     type="checkbox"
                     name="hide_reposts"
@@ -109,7 +109,7 @@ export default function SettingContent(props: Props) {
               </SettingsRow>
               */}
 
-                <SettingsRow title={__('Show mature content')} subtitle={__(HELP_SHOW_MATURE)}>
+                <SettingsRow title={__('Show mature content')} subtitle={__(HELP.SHOW_MATURE)}>
                   <FormField
                     type="checkbox"
                     name="show_nsfw"
@@ -168,7 +168,7 @@ export default function SettingContent(props: Props) {
             </SettingsRow>
 
             {/* @if TARGET='app' */}
-            <SettingsRow title={__('Max purchase price')} subtitle={__(HELP_MAX_PURCHASE_PRICE)} useVerticalSeparator>
+            <SettingsRow title={__('Max purchase price')} subtitle={__(HELP.MAX_PURCHASE_PRICE)} useVerticalSeparator>
               <MaxPurchasePrice />
             </SettingsRow>
             {/* @endif */}
@@ -186,7 +186,7 @@ export default function SettingContent(props: Props) {
                 name="instant_purchases"
                 checked={instantPurchaseEnabled}
                 label={__('Only confirm purchases or tips over a certain amount')}
-                helper={__(HELP_ONLY_CONFIRM_OVER_AMOUNT)}
+                helper={__(HELP.ONLY_CONFIRM_OVER_AMOUNT)}
                 onChange={() => setClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED, true)}
               />
               {instantPurchaseEnabled && (
@@ -205,13 +205,12 @@ export default function SettingContent(props: Props) {
   );
 }
 
-const HELP_FLOATING_PLAYER = 'Keep content playing in the corner when navigating to a different page.';
-const HELP_AUTOPLAY =
-  'Autoplay video and audio files when navigating to a file, as well as the next related item when a file finishes playing.';
-const HELP_HIDE_REPOSTS = 'You will not see reposts by people you follow or receive email notifying about them.';
-const HELP_SHOW_MATURE =
-  'Mature content may include nudity, intense sexuality, profanity, or other adult content. By displaying mature content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  ';
-const HELP_MAX_PURCHASE_PRICE =
-  'This will prevent you from purchasing any content over a certain cost, as a safety measure.';
-const HELP_ONLY_CONFIRM_OVER_AMOUNT = ''; // feel redundant. Disable for now.
-// const HELP_ONLY_CONFIRM_OVER_AMOUNT = "When this option is chosen, LBRY won't ask you to confirm purchases or tips below your chosen amount.";
+// prettier-ignore
+const HELP = {
+  FLOATING_PLAYER: 'Keep content playing in the corner when navigating to a different page.',
+  AUTOPLAY: 'Autoplay video and audio files when navigating to a file, as well as the next related item when a file finishes playing.',
+  HIDE_REPOSTS: 'You will not see reposts by people you follow or receive email notifying about them.',
+  SHOW_MATURE: 'Mature content may include nudity, intense sexuality, profanity, or other adult content. By displaying mature content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  ',
+  MAX_PURCHASE_PRICE: 'This will prevent you from purchasing any content over a certain cost, as a safety measure.',
+  ONLY_CONFIRM_OVER_AMOUNT: '', // [feel redundant. Disable for now] "When this option is chosen, LBRY won't ask you to confirm purchases or tips below your chosen amount.",
+};
