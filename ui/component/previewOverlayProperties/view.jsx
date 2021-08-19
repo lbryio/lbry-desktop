@@ -36,7 +36,7 @@ export default function PreviewOverlayProperties(props: Props) {
   } = props;
   const isCollection = claim && claim.value_type === 'collection';
   // $FlowFixMe
-  const claimLength = claim && claim.value.claims && claim.value.claims.length;
+  const claimLength = claim && claim.value && claim.value.claims && claim.value.claims.length;
 
   const claimCount = editedCollection ? editedCollection.items.length : claimLength;
   const isStream = claim && claim.value_type === 'stream';
