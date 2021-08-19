@@ -65,7 +65,7 @@ export default function CollectionsListMine(props: Props) {
   const watchLater = builtinCollectionsList.find((list) => list.id === COLLECTIONS_CONSTS.WATCH_LATER_ID);
   const favorites = builtinCollectionsList.find((list) => list.id === COLLECTIONS_CONSTS.FAVORITES_ID);
   const builtin = [watchLater, favorites];
-  function altEnterListener(e: SyntheticKeyboardEvent<*>) {
+  function escapeListener(e: SyntheticKeyboardEvent<*>) {
     const KEYCODE_ESCAPE = 27;
     if (e.keyCode === KEYCODE_ESCAPE) {
       e.preventDefault();
@@ -74,11 +74,11 @@ export default function CollectionsListMine(props: Props) {
   }
 
   function onTextareaFocus() {
-    window.addEventListener('keydown', altEnterListener);
+    window.addEventListener('keydown', escapeListener);
   }
 
   function onTextareaBlur() {
-    window.removeEventListener('keydown', altEnterListener);
+    window.removeEventListener('keydown', escapeListener);
   }
   return (
     <>
