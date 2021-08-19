@@ -22,7 +22,7 @@ type Props = {
 const ALL = 'All';
 const PRIVATE = 'Private';
 const PUBLIC = 'Public';
-const COLLECTION_FILTER = [ALL, PRIVATE, PUBLIC];
+const COLLECTION_FILTERS = [ALL, PRIVATE, PUBLIC];
 
 export default function CollectionsListMine(props: Props) {
   const {
@@ -39,28 +39,27 @@ export default function CollectionsListMine(props: Props) {
   const [filterType, setFilterType] = React.useState(ALL);
   const [searchText, setSearchText] = React.useState('');
 
-  const collectionsToShow = [];
+  let collectionsToShow;
   if (filterType === ALL) {
-    collectionsToShow.push(...unpublishedCollectionsList);
-    collectionsToShow.push(...publishedList);
+    collectionsToShow = unpublishedCollectionsList.concat(publishedList);
   } else if (filterType === PRIVATE) {
-    collectionsToShow.push(...unpublishedCollectionsList);
+    collectionsToShow = unpublishedCollectionsList;
   } else if (filterType === PUBLIC) {
-    collectionsToShow.push(...publishedList);
+    collectionsToShow = publishedList;
   }
 
   let filteredCollections;
-  if (searchText) {
+  if (searchText && collectionsToShow) {
     filteredCollections = collectionsToShow.filter((id) => {
       return (
         (unpublishedCollections[id] &&
-          unpublishedCollections[id].name.toLocaleLowerCase().startsWith(searchText.toLocaleLowerCase())) ||
+          unpublishedCollections[id].name.toLocaleLowerCase().includes(searchText.toLocaleLowerCase())) ||
         (publishedCollections[id] &&
-          publishedCollections[id].name.toLocaleLowerCase().startsWith(searchText.toLocaleLowerCase()))
+          publishedCollections[id].name.toLocaleLowerCase().includes(searchText.toLocaleLowerCase()))
       );
     });
   } else {
-    filteredCollections = collectionsToShow;
+    filteredCollections = collectionsToShow || [];
   }
 
   const watchLater = builtinCollectionsList.find((list) => list.id === COLLECTIONS_CONSTS.WATCH_LATER_ID);
@@ -124,7 +123,7 @@ export default function CollectionsListMine(props: Props) {
         <div className="section__header--actions section__actions--between">
           <div className="claim-search__wrapper">
             <div className="claim-search__menu-group">
-              {COLLECTION_FILTER.map((value) => (
+              {COLLECTION_FILTERS.map((value) => (
                 <Button
                   label={__(value)}
                   key={value}
@@ -155,6 +154,7 @@ export default function CollectionsListMine(props: Props) {
               {filteredCollections &&
                 filteredCollections.length > 0 &&
                 filteredCollections.map((key) => <CollectionPreviewTile tileLayout collectionId={key} key={key} />)}
+              {!filteredCollections.length && <div className="empty main--empty">{__('No matching collections')}</div>}
             </div>
           </div>
         )}
