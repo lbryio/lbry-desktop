@@ -4,6 +4,7 @@ import React, { Fragment } from 'react';
 import classnames from 'classnames';
 import { lazyImport } from 'util/lazyImport';
 import SideNavigation from 'component/sideNavigation';
+import SettingsSideNavigation from 'component/settingsSideNavigation';
 import Header from 'component/header';
 /* @if TARGET='app' */
 import StatusBar from 'component/common/status-bar';
@@ -78,6 +79,24 @@ function Page(props: Props) {
 
   const isAbsoluteSideNavHidden = (isOnFilePage || isMobile) && !sidebarOpen;
 
+  function getSideNavElem() {
+    if (!authPage) {
+      if (settingsPage) {
+        return <SettingsSideNavigation />;
+      } else if (!noSideNavigation) {
+        return (
+          <SideNavigation
+            sidebarOpen={sidebarOpen}
+            setSidebarOpen={setSidebarOpen}
+            isMediumScreen={isMediumScreen}
+            isOnFilePage={isOnFilePage}
+          />
+        );
+      }
+    }
+    return null;
+  }
+
   React.useEffect(() => {
     if (isOnFilePage || isMediumScreen) {
       setSidebarOpen(false);
@@ -102,14 +121,8 @@ function Page(props: Props) {
           'main-wrapper__inner--theater-mode': isOnFilePage && videoTheaterMode,
         })}
       >
-        {!authPage && !noSideNavigation && (
-          <SideNavigation
-            sidebarOpen={sidebarOpen}
-            setSidebarOpen={setSidebarOpen}
-            isMediumScreen={isMediumScreen}
-            isOnFilePage={isOnFilePage}
-          />
-        )}
+        {getSideNavElem()}
+
         <main
           id={'main-content'}
           className={classnames(MAIN_CLASS, className, {
