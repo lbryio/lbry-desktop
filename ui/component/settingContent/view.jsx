@@ -157,12 +157,12 @@ export default function SettingContent(props: Props) {
               </>
             )}
 
-            <SettingsRow title={__('Publish confirmation')} subtitle={__('Skip preview and confirmation')}>
+            <SettingsRow title={__('Publish confirmation')} subtitle={__(HELP.PUBLISH_PREVIEW)}>
               <FormField
                 type="checkbox"
                 name="sync_toggle"
                 label={__('')}
-                checked={!enablePublishPreview}
+                checked={enablePublishPreview}
                 onChange={() => setClientSetting(SETTINGS.ENABLE_PUBLISH_PREVIEW, !enablePublishPreview)}
               />
             </SettingsRow>
@@ -213,4 +213,5 @@ const HELP = {
   SHOW_MATURE: 'Mature content may include nudity, intense sexuality, profanity, or other adult content. By displaying mature content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  ',
   MAX_PURCHASE_PRICE: 'This will prevent you from purchasing any content over a certain cost, as a safety measure.',
   ONLY_CONFIRM_OVER_AMOUNT: '', // [feel redundant. Disable for now] "When this option is chosen, LBRY won't ask you to confirm purchases or tips below your chosen amount.",
+  PUBLISH_PREVIEW: 'Show preview and confirmation dialog before publishing content.',
 };

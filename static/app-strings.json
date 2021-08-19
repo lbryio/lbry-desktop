@@ -1421,6 +1421,7 @@
   "Est. transaction fee:": "Est. transaction fee:",
   "Publish confirmation": "Publish confirmation",
   "Skip preview and confirmation": "Skip preview and confirmation",
+  "Show preview and confirmation dialog before publishing content.": "Show preview and confirmation dialog before publishing content.",
   "Upload settings": "Upload settings",
   "Currently Uploading": "Currently Uploading",
   "Leave the app running until upload is complete": "Leave the app running until upload is complete",
