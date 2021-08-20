@@ -45,6 +45,10 @@ export const selectModeratorBlockList = createSelector(selectState, (state) =>
   state.moderatorBlockList ? state.moderatorBlockList.reverse() : []
 );
 
+export const selectPersonalTimeoutMap = createSelector(selectState, (state) => state.personalTimeoutMap);
+export const selectAdminTimeoutMap = createSelector(selectState, (state) => state.adminTimeoutMap);
+export const selectModeratorTimeoutMap = createSelector(selectState, (state) => state.moderatorTimeoutMap);
+
 export const selectModeratorBlockListDelegatorsMap = createSelector(
   selectState,
   (state) => state.moderatorBlockListDelegatorsMap

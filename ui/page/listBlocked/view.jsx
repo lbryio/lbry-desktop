@@ -3,6 +3,8 @@ import * as ICONS from 'constants/icons';
 import { BLOCK_LEVEL } from 'constants/comment';
 import React from 'react';
 import classnames from 'classnames';
+import moment from 'moment';
+import humanizeDuration from 'humanize-duration';
 import ClaimList from 'component/claimList';
 import ClaimPreview from 'component/claimPreview';
 import Page from 'component/page';
@@ -25,6 +27,9 @@ type Props = {
   personalBlockList: ?Array<string>,
   adminBlockList: ?Array<string>,
   moderatorBlockList: ?Array<string>,
+  personalTimeoutMap: { [uri: string]: { blockedAt: string, bannedFor: number, banRemaining: number } },
+  adminTimeoutMap: { [uri: string]: { blockedAt: string, bannedFor: number, banRemaining: number } },
+  moderatorTimeoutMap: { [uri: string]: { blockedAt: string, bannedFor: number, banRemaining: number } },
   moderatorBlockListDelegatorsMap: { [string]: Array<string> },
   fetchingModerationBlockList: boolean,
   fetchModBlockedList: () => void,
@@ -39,6 +44,9 @@ function ListBlocked(props: Props) {
     personalBlockList,
     adminBlockList,
     moderatorBlockList,
+    personalTimeoutMap,
+    adminTimeoutMap,
+    moderatorTimeoutMap,
     moderatorBlockListDelegatorsMap,
     fetchingModerationBlockList,
     fetchModBlockedList,
@@ -97,17 +105,45 @@ function ListBlocked(props: Props) {
   }
 
   function getButtons(view, uri) {
+    const getDurationStr = (durationNs) => {
+      const NANO_TO_MS = 1000000;
+      return humanizeDuration(durationNs / NANO_TO_MS, { round: true });
+    };
+
+    const getBanInfoElem = (timeoutInfo) => {
+      return (
+        <div>
+          <div className="help">
+            <blockquote>
+              {moment(timeoutInfo.blockedAt).format('MMMM Do, YYYY @ HH:mm')}
+              <br />
+              {getDurationStr(timeoutInfo.bannedFor)}{' '}
+              {__('(Remaining: %duration%) --[timeout ban duration]--', {
+                duration: getDurationStr(timeoutInfo.banRemaining),
+              })}
+            </blockquote>
+          </div>
+        </div>
+      );
+    };
+
     switch (view) {
       case VIEW.BLOCKED:
         return (
           <>
             <ChannelBlockButton uri={uri} />
             <ChannelMuteButton uri={uri} />
+            {personalTimeoutMap[uri] && getBanInfoElem(personalTimeoutMap[uri])}
           </>
         );
 
       case VIEW.ADMIN:
-        return <ChannelBlockButton uri={uri} blockLevel={BLOCK_LEVEL.ADMIN} />;
+        return (
+          <>
+            <ChannelBlockButton uri={uri} blockLevel={BLOCK_LEVEL.ADMIN} />
+            {adminTimeoutMap[uri] && getBanInfoElem(adminTimeoutMap[uri])}
+          </>
+        );
 
       case VIEW.MODERATOR:
         const delegatorUrisForBlockedUri = localModeratorListDelegatorsMap && localModeratorListDelegatorsMap[uri];
@@ -121,6 +157,7 @@ function ListBlocked(props: Props) {
                     <ClaimPreview uri={delegatorUri} hideMenu hideActions type="small" />
                   </ul>
                   <ChannelBlockButton uri={uri} blockLevel={BLOCK_LEVEL.MODERATOR} creatorUri={delegatorUri} />
+                  {moderatorTimeoutMap[uri] && getBanInfoElem(moderatorTimeoutMap[uri])}
                 </div>
               );
             })}

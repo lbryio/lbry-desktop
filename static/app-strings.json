@@ -1749,6 +1749,7 @@
   "Invalid duration.": "Invalid duration.",
   "Permanent": "Permanent",
   "Timeout --[time-based ban instead of permanent]--": "Timeout",
+  "(Remaining: %duration%) --[timeout ban duration]--": "(Remaining: %duration%)",
   "Create a channel to change this setting.": "Create a channel to change this setting.",
   "Invalid channel URL \"%url%\"": "Invalid channel URL \"%url%\"",
   "Delegation": "Delegation",

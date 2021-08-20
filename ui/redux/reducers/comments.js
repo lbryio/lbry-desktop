@@ -40,6 +40,9 @@ const defaultState: CommentsState = {
   fetchingModerationDelegators: false,
   blockingByUri: {},
   unBlockingByUri: {},
+  personalTimeoutMap: {},
+  adminTimeoutMap: {},
+  moderatorTimeoutMap: {},
   togglingForDelegatorMap: {},
   settingsByChannelId: {}, // ChannelId -> PerChannelSettings
   fetchingSettings: false,
@@ -671,14 +674,25 @@ export default handleActions(
       fetchingModerationBlockList: true,
     }),
     [ACTIONS.COMMENT_MODERATION_BLOCK_LIST_COMPLETED]: (state: CommentsState, action: any) => {
-      const { personalBlockList, adminBlockList, moderatorBlockList, moderatorBlockListDelegatorsMap } = action.data;
+      const {
+        personalBlockList,
+        adminBlockList,
+        moderatorBlockList,
+        moderatorBlockListDelegatorsMap,
+        personalTimeoutMap,
+        adminTimeoutMap,
+        moderatorTimeoutMap,
+      } = action.data;
 
       return {
         ...state,
         moderationBlockList: personalBlockList,
         adminBlockList: adminBlockList,
         moderatorBlockList: moderatorBlockList,
-        moderatorBlockListDelegatorsMap: moderatorBlockListDelegatorsMap,
+        moderatorBlockListDelegatorsMap,
+        personalTimeoutMap,
+        adminTimeoutMap,
+        moderatorTimeoutMap,
         fetchingModerationBlockList: false,
       };
     },

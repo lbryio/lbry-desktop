@@ -1054,13 +1054,20 @@ export function doFetchModBlockedList() {
             let moderatorBlockList = [];
             let moderatorBlockListDelegatorsMap = {};
 
+            // These should just be part of the block list above, but it is
+            // separated for now because there are too many clients that we need
+            // to update.
+            const personalTimeoutMap = {};
+            const adminTimeoutMap = {};
+            const moderatorTimeoutMap = {};
+
             const blockListsPerChannel = res.map((r) => r.value);
             blockListsPerChannel
               .sort((a, b) => {
                 return 1;
               })
               .forEach((channelBlockLists) => {
-                const storeList = (fetchedList, blockedList, blockedByMap) => {
+                const storeList = (fetchedList, blockedList, timeoutMap, blockedByMap) => {
                   if (fetchedList) {
                     fetchedList.forEach((blockedChannel) => {
                       if (blockedChannel.blocked_channel_name) {
@@ -1071,6 +1078,14 @@ export function doFetchModBlockedList() {
 
                         if (!blockedList.find((blockedChannel) => isURIEqual(blockedChannel.channelUri, channelUri))) {
                           blockedList.push({ channelUri, blockedAt: blockedChannel.blocked_at });
+
+                          if (blockedChannel.banned_for) {
+                            timeoutMap[channelUri] = {
+                              blockedAt: blockedChannel.blocked_at,
+                              bannedFor: blockedChannel.banned_for,
+                              banRemaining: blockedChannel.ban_remaining,
+                            };
+                          }
                         }
 
                         if (blockedByMap !== undefined) {
@@ -1096,9 +1111,14 @@ export function doFetchModBlockedList() {
                 const globally_blocked_channels = channelBlockLists && channelBlockLists.globally_blocked_channels;
                 const delegated_blocked_channels = channelBlockLists && channelBlockLists.delegated_blocked_channels;
 
-                storeList(blocked_channels, personalBlockList);
-                storeList(globally_blocked_channels, adminBlockList);
-                storeList(delegated_blocked_channels, moderatorBlockList, moderatorBlockListDelegatorsMap);
+                storeList(blocked_channels, personalBlockList, personalTimeoutMap);
+                storeList(globally_blocked_channels, adminBlockList, adminTimeoutMap);
+                storeList(
+                  delegated_blocked_channels,
+                  moderatorBlockList,
+                  moderatorTimeoutMap,
+                  moderatorBlockListDelegatorsMap
+                );
               });
 
             dispatch({
@@ -1123,6 +1143,9 @@ export function doFetchModBlockedList() {
                         .map((blockedChannel) => blockedChannel.channelUri)
                     : null,
                 moderatorBlockListDelegatorsMap: moderatorBlockListDelegatorsMap,
+                personalTimeoutMap,
+                adminTimeoutMap,
+                moderatorTimeoutMap,
               },
             });
           })

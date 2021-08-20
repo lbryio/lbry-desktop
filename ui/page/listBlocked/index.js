@@ -8,6 +8,9 @@ import {
   selectModeratorBlockListDelegatorsMap,
   selectFetchingModerationBlockList,
   selectModerationDelegatorsById,
+  selectAdminTimeoutMap,
+  selectModeratorTimeoutMap,
+  selectPersonalTimeoutMap,
 } from 'redux/selectors/comments';
 import { selectMyChannelClaims } from 'lbry-redux';
 import ListBlocked from './view';
@@ -17,6 +20,9 @@ const select = (state) => ({
   personalBlockList: selectModerationBlockList(state),
   adminBlockList: selectAdminBlockList(state),
   moderatorBlockList: selectModeratorBlockList(state),
+  personalTimeoutMap: selectPersonalTimeoutMap(state),
+  adminTimeoutMap: selectAdminTimeoutMap(state),
+  moderatorTimeoutMap: selectModeratorTimeoutMap(state),
   moderatorBlockListDelegatorsMap: selectModeratorBlockListDelegatorsMap(state),
   delegatorsById: selectModerationDelegatorsById(state),
   myChannelClaims: selectMyChannelClaims(state),
