@@ -59,6 +59,7 @@ type Props = {
   userId: ?number,
   // allowPreRoll: ?boolean,
   shareTelemetry: boolean,
+  replay: boolean,
 };
 
 // type VideoJSOptions = {
@@ -197,6 +198,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     userId,
     // allowPreRoll,
     shareTelemetry,
+    replay,
   } = props;
 
   const [reload, setReload] = useState('initial');
@@ -600,6 +602,13 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
     return vjs;
   }
+
+  useEffect(() => {
+    const player = playerRef.current;
+    if (replay && player) {
+      player.play();
+    }
+  }, [replay]);
 
   // This lifecycle hook is only called once (on mount), or when `isAudio` changes.
   useEffect(() => {

@@ -7,6 +7,8 @@ import { formatLbryUrlForWeb } from 'util/url';
 import { withRouter } from 'react-router';
 import debounce from 'util/debounce';
 import { COLLECTIONS_CONSTS } from 'lbry-redux';
+import * as ICONS from 'constants/icons';
+
 const DEBOUNCE_SCROLL_HANDLER_MS = 150;
 const CLASSNAME_AUTOPLAY_COUNTDOWN = 'autoplay-countdown';
 
@@ -19,6 +21,7 @@ type Props = {
   doPlayUri: (string) => void,
   modal: { id: string, modalProps: {} },
   collectionId?: string,
+  setReplay: (boolean) => void,
 };
 
 function AutoplayCountdown(props: Props) {
@@ -31,6 +34,7 @@ function AutoplayCountdown(props: Props) {
     history: { push },
     modal,
     collectionId,
+    setReplay,
   } = props;
   const nextTitle = nextRecommendedClaim && nextRecommendedClaim.value && nextRecommendedClaim.value.title;
 
@@ -142,6 +146,15 @@ function AutoplayCountdown(props: Props) {
               <Button label={__('Cancel')} button="link" onClick={() => setTimerCanceled(true)} />
             </div>
           )}
+          <Button
+            label={__('Replay?')}
+            button="link"
+            iconRight={ICONS.REPLAY}
+            onClick={() => {
+              setTimerCanceled(true);
+              setReplay(true);
+            }}
+          />
         </div>
       </div>
     </div>
