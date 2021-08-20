@@ -71,7 +71,7 @@ const WalletBalance = (props: Props) => {
         ))}
         </tbody>
       </table>
-      {!accountTransactions && <p style={{textAlign: 'center', marginTop: '20px', fontSize: '13px', color: 'rgb(171, 171, 171)'}}>No Transactions</p>}
+      {!accountTransactions && <p className="wallet__fiat-transactions">No Transactions</p>}
     </div>
 
   );

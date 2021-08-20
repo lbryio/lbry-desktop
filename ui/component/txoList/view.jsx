@@ -19,9 +19,13 @@ import { getStripeEnvironment } from 'util/stripe';
 let stripeEnvironment = getStripeEnvironment();
 
 // constants to be used in query params
-const Q_CURRENCY = 'currency';
-const Q_TAB = 'tab';
-const Q_FIAT_TYPE = 'fiatType';
+const QUERY_NAME_CURRENCY = 'currency';
+const QUERY_NAME_TAB = 'tab';
+const QUERY_NAME_FIAT_TYPE = 'fiatType';
+// TODO: this tab will be renamed
+const DEFAULT_CURRENCY_PARAM = 'credits';
+const DEFAULT_TAB_PARAM = 'fiat-payment-history';
+const DEFAULT_FIAT_TYPE_PARAM = 'incoming';
 
 type Props = {
   search: string,
@@ -122,12 +126,11 @@ function TxoList(props: Props) {
   const type = urlParams.get(TXO.TYPE) || TXO.ALL;
   const subtype = urlParams.get(TXO.SUB_TYPE);
   const active = urlParams.get(TXO.ACTIVE) || TXO.ALL;
-  const currency = urlParams.get(Q_CURRENCY) || 'credits';
-  const fiatType = urlParams.get(Q_FIAT_TYPE) || 'incoming';
-
+  const currency = urlParams.get(QUERY_NAME_CURRENCY) || DEFAULT_CURRENCY_PARAM;
+  const fiatType = urlParams.get(QUERY_NAME_FIAT_TYPE) || DEFAULT_FIAT_TYPE_PARAM;
   // tab used in the wallet section
   // TODO: need to change this eventually
-  const tab = urlParams.get(Q_TAB) || 'fiat-payment-history';
+  const tab = urlParams.get(QUERY_NAME_TAB) || DEFAULT_TAB_PARAM;
 
   const currentUrlParams = {
     page,
@@ -137,7 +140,7 @@ function TxoList(props: Props) {
     subtype,
     currency,
     fiatType,
-    tab
+    tab,
   };
 
   const hideStatus =
@@ -199,7 +202,7 @@ function TxoList(props: Props) {
     history.push(url);
   }
 
-  // let currency = 'credits';
+
   function updateUrl(delta: Delta) {
     const newUrlParams = new URLSearchParams();
 
@@ -208,22 +211,22 @@ function TxoList(props: Props) {
       delta.value = '';
     }
 
-    const existingFiatType = newUrlParams.get(Q_FIAT_TYPE) || 'incoming';
+    const existingFiatType = newUrlParams.get(QUERY_NAME_FIAT_TYPE) || DEFAULT_FIAT_TYPE_PARAM;
 
     if (delta.tab) {
       // set tab name to account for wallet page tab
-      newUrlParams.set(Q_TAB, delta.tab);
+      newUrlParams.set(QUERY_NAME_TAB, delta.tab);
     }
 
     // only update currency if it's being changed
     if (delta.currency) {
-      newUrlParams.set(Q_CURRENCY, delta.currency);
+      newUrlParams.set(QUERY_NAME_CURRENCY, delta.currency);
     }
 
     if (delta.fiatType) {
-      newUrlParams.set(Q_FIAT_TYPE, delta.fiatType);
+      newUrlParams.set(QUERY_NAME_FIAT_TYPE, delta.fiatType);
     } else {
-      newUrlParams.set(Q_FIAT_TYPE, existingFiatType);
+      newUrlParams.set(QUERY_NAME_FIAT_TYPE, existingFiatType);
     }
 
     switch (delta.dkey) {
@@ -425,7 +428,7 @@ function TxoList(props: Props) {
           <Paginate totalPages={Math.ceil(txoItemCount / Number(pageSize))} />
         </div>
         : <div>
-          {/* FIAT SECTION ( toggle buttons and transactions) */}
+        {/* FIAT SECTION ( toggle buttons and transactions) */}
           <div className="section card-stack">
             <div className="card__body-actions">
               <div className="card__actions">
@@ -433,6 +436,7 @@ function TxoList(props: Props) {
                   <fieldset-section>
                     <label>{__('Type')}</label>
                     <div className={'txo__radios'}>
+                      {/* incoming transactions button */}
                       <Button
                         button="alt"
                         onClick={(e) => handleChange({ tab, fiatType: 'incoming', currency: 'fiat' })}
@@ -441,6 +445,7 @@ function TxoList(props: Props) {
                         })}
                         label={__('Incoming')}
                       />
+                      {/* incoming transactions button */}
                       <Button
                         button="alt"
                         onClick={(e) => handleChange({ tab, fiatType: 'outgoing', currency: 'fiat' })}
