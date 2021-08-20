@@ -240,6 +240,11 @@
   }
 }
 
+.button--file-action--right {
+  @extend .button--file-action;
+  float: right;
+}
+
 .button--fire {
   color: var(--color-fire);
   position: relative;

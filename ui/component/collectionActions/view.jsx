@@ -15,7 +15,7 @@ import { ENABLE_FILE_REACTIONS } from 'config';
 type Props = {
   uri: string,
   claim: StreamClaim,
-  openModal: (id: string, { uri: string, claimIsMine?: boolean, isSupport?: boolean }) => void,
+  openModal: (id: string, {}) => void,
   myChannels: ?Array<ChannelClaim>,
   doToast: ({ message: string }) => void,
   claimIsPending: boolean,
@@ -24,6 +24,7 @@ type Props = {
   showInfo: boolean,
   setShowInfo: (boolean) => void,
   collectionHasEdits: boolean,
+  isBuiltin: boolean,
 };
 
 function CollectionActions(props: Props) {
@@ -37,6 +38,7 @@ function CollectionActions(props: Props) {
     showInfo,
     setShowInfo,
     collectionHasEdits,
+    isBuiltin,
   } = props;
   const { push } = useHistory();
   const isMobile = useIsMobile();
@@ -44,54 +46,66 @@ function CollectionActions(props: Props) {
   const webShareable = true; // collections have cost?
   const lhsSection = (
     <>
-      {ENABLE_FILE_REACTIONS && uri && <FileReactions uri={uri} />}
-      {uri && <ClaimSupportButton uri={uri} fileAction />}
-      {/* TODO Add ClaimRepostButton component */}
-      {uri && (
-        <Button
-          className="button--file-action"
-          icon={ICONS.SHARE}
-          label={__('Share')}
-          title={__('Share')}
-          onClick={() => openModal(MODALS.SOCIAL_SHARE, { uri, webShareable })}
-        />
+      {!isBuiltin && (
+        <>
+          {ENABLE_FILE_REACTIONS && uri && <FileReactions uri={uri} />}
+          {uri && <ClaimSupportButton uri={uri} fileAction />}
+          {/* TODO Add ClaimRepostButton component */}
+          {uri && (
+            <Button
+              className="button--file-action"
+              icon={ICONS.SHARE}
+              label={__('Share')}
+              title={__('Share')}
+              onClick={() => openModal(MODALS.SOCIAL_SHARE, { uri, webShareable })}
+            />
+          )}
+        </>
       )}
     </>
   );
 
   const rhsSection = (
     <>
-      {isMyCollection && (
-        <Button
-          title={uri ? __('Update') : __('Publish')}
-          label={uri ? __('Update') : __('Publish')}
-          className={classnames('button--file-action')}
-          onClick={() => push(`?${PAGE_VIEW_QUERY}=${EDIT_PAGE}`)}
-          icon={ICONS.PUBLISH}
-          iconColor={collectionHasEdits && 'red'}
-          iconSize={18}
-          disabled={claimIsPending}
-        />
-      )}
-      {isMyCollection && (
-        <Button
-          className={classnames('button--file-action')}
-          title={__('Delete List')}
-          onClick={() => openModal(MODALS.COLLECTION_DELETE, { uri, collectionId, redirect: `/$/${PAGES.LISTS}` })}
-          icon={ICONS.DELETE}
-          iconSize={18}
-          description={__('Delete List')}
-          disabled={claimIsPending}
-        />
-      )}
-      {!isMyCollection && (
-        <Button
-          title={__('Report content')}
-          className="button--file-action"
-          icon={ICONS.REPORT}
-          navigate={`/$/${PAGES.REPORT_CONTENT}?claimId=${claimId}`}
-        />
-      )}
+      {!isBuiltin &&
+        (isMyCollection ? (
+          <>
+            <Button
+              title={uri ? __('Update') : __('Publish')}
+              label={uri ? __('Update') : __('Publish')}
+              className={classnames('button--file-action')}
+              onClick={() => push(`?${PAGE_VIEW_QUERY}=${EDIT_PAGE}`)}
+              icon={ICONS.PUBLISH}
+              iconColor={collectionHasEdits && 'red'}
+              iconSize={18}
+              disabled={claimIsPending}
+            />
+            <Button
+              className={classnames('button--file-action')}
+              title={__('Delete List')}
+              onClick={() => openModal(MODALS.COLLECTION_DELETE, { uri, collectionId, redirect: `/$/${PAGES.LISTS}` })}
+              icon={ICONS.DELETE}
+              iconSize={18}
+              description={__('Delete List')}
+              disabled={claimIsPending}
+            />
+          </>
+        ) : (
+          <Button
+            title={__('Report content')}
+            className="button--file-action"
+            icon={ICONS.REPORT}
+            navigate={`/$/${PAGES.REPORT_CONTENT}?claimId=${claimId}`}
+          />
+        ))}
+      <Button
+        className={classnames('button--file-action')}
+        label={__('Copy List')}
+        title={__('Copy List')}
+        onClick={() => openModal(MODALS.COLLECTION_ADD, { collectionId })}
+        icon={ICONS.COPY}
+        iconSize={18}
+      />
     </>
   );
 
