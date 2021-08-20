@@ -175,9 +175,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     const formattedSubCount = Number(channelSubCount).toLocaleString();
     return (
       <span className="claim-preview__channel-sub-count">
-        {channelSubCount === 1
-          ? __('%formattedSubCount% Follower', { formattedSubCount })
-          : __('%formattedSubCount% Followers', { formattedSubCount })}
+        {channelSubCount === 1 ? __('1 Follower') : __('%formattedSubCount% Followers', { formattedSubCount })}
       </span>
     );
   }, [channelSubCount]);
