@@ -42,11 +42,8 @@ type Props = {
 };
 
 type Delta = {
-  dkey?: string,
-  value?: string,
-  tab?: string,
-  currency?: string,
-  fiatType?: string
+  changedParameterKey: string,
+  value: string,
 };
 
 function TxoList(props: Props) {
@@ -146,6 +143,7 @@ function TxoList(props: Props) {
   const hideStatus =
     type === TXO.SENT || (currentUrlParams.type === TXO.RECEIVED && currentUrlParams.subtype !== TXO.TIP);
 
+  // this is for sdk params
   const params = {};
   if (currentUrlParams.type) {
     if (currentUrlParams.type === TXO.ALL) {
@@ -202,34 +200,10 @@ function TxoList(props: Props) {
     history.push(url);
   }
 
-
   function updateUrl(delta: Delta) {
     const newUrlParams = new URLSearchParams();
 
-    // fix for flow, maybe there is a better way?
-    if (!delta.value) {
-      delta.value = '';
-    }
-
-    const existingFiatType = newUrlParams.get(QUERY_NAME_FIAT_TYPE) || DEFAULT_FIAT_TYPE_PARAM;
-
-    if (delta.tab) {
-      // set tab name to account for wallet page tab
-      newUrlParams.set(QUERY_NAME_TAB, delta.tab);
-    }
-
-    // only update currency if it's being changed
-    if (delta.currency) {
-      newUrlParams.set(QUERY_NAME_CURRENCY, delta.currency);
-    }
-
-    if (delta.fiatType) {
-      newUrlParams.set(QUERY_NAME_FIAT_TYPE, delta.fiatType);
-    } else {
-      newUrlParams.set(QUERY_NAME_FIAT_TYPE, existingFiatType);
-    }
-
-    switch (delta.dkey) {
+    switch (delta.changedParameterKey) {
       case TXO.PAGE:
         if (currentUrlParams.type) {
           newUrlParams.set(TXO.TYPE, currentUrlParams.type);
@@ -241,6 +215,8 @@ function TxoList(props: Props) {
           newUrlParams.set(TXO.ACTIVE, currentUrlParams.active);
         }
         newUrlParams.set(TXO.PAGE, delta.value);
+        newUrlParams.set(QUERY_NAME_TAB, currentUrlParams.tab);
+        newUrlParams.set(QUERY_NAME_CURRENCY, currentUrlParams.currency);
         break;
       case TXO.TYPE:
         newUrlParams.set(TXO.TYPE, delta.value);
@@ -259,6 +235,8 @@ function TxoList(props: Props) {
         }
         newUrlParams.set(TXO.PAGE, String(1));
         newUrlParams.set(TXO.PAGE_SIZE, currentUrlParams.pageSize);
+        newUrlParams.set(QUERY_NAME_TAB, currentUrlParams.tab);
+        newUrlParams.set(QUERY_NAME_CURRENCY, currentUrlParams.currency);
         break;
       case TXO.SUB_TYPE:
         if (currentUrlParams.type) {
@@ -268,6 +246,8 @@ function TxoList(props: Props) {
         newUrlParams.set(TXO.SUB_TYPE, delta.value);
         newUrlParams.set(TXO.PAGE, String(1));
         newUrlParams.set(TXO.PAGE_SIZE, currentUrlParams.pageSize);
+        newUrlParams.set(QUERY_NAME_TAB, currentUrlParams.tab);
+        newUrlParams.set(QUERY_NAME_CURRENCY, currentUrlParams.currency);
         break;
       case TXO.ACTIVE:
         if (currentUrlParams.type) {
@@ -279,6 +259,20 @@ function TxoList(props: Props) {
         newUrlParams.set(TXO.ACTIVE, delta.value);
         newUrlParams.set(TXO.PAGE, String(1));
         newUrlParams.set(TXO.PAGE_SIZE, currentUrlParams.pageSize);
+        newUrlParams.set(QUERY_NAME_TAB, currentUrlParams.tab);
+        newUrlParams.set(QUERY_NAME_CURRENCY, currentUrlParams.currency);
+        break;
+      // toggling the currency type (lbc/fiat)
+      case QUERY_NAME_CURRENCY:
+        newUrlParams.set(QUERY_NAME_CURRENCY, delta.value);
+        newUrlParams.set(QUERY_NAME_FIAT_TYPE, currentUrlParams.fiatType);
+        newUrlParams.set(QUERY_NAME_TAB, currentUrlParams.tab);
+        break;
+      // toggling the fiat type (incoming/outgoing)
+      case QUERY_NAME_FIAT_TYPE:
+        newUrlParams.set(QUERY_NAME_FIAT_TYPE, delta.value);
+        newUrlParams.set(QUERY_NAME_TAB, currentUrlParams.tab);
+        newUrlParams.set(QUERY_NAME_CURRENCY, currentUrlParams.currency);
         break;
     }
 
@@ -303,7 +297,7 @@ function TxoList(props: Props) {
               <div className={'txo__radios'}>
                 <Button
                   button="alt"
-                  onClick={(e) => handleChange({ currency: 'credits', tab })}
+                  onClick={(e) => handleChange({ changedParameterKey: QUERY_NAME_CURRENCY, value: 'credits' })}
                   className={classnames(`button-toggle`, {
                     'button-toggle--active': currency === 'credits',
                   })}
@@ -311,7 +305,7 @@ function TxoList(props: Props) {
                 />
                 <Button
                   button="alt"
-                  onClick={(e) => handleChange({ currency: 'fiat', tab })}
+                  onClick={(e) => handleChange({ changedParameterKey: QUERY_NAME_CURRENCY, value: 'fiat' })}
                   className={classnames(`button-toggle`, {
                     'button-toggle--active': currency === 'fiat',
                   })}
@@ -340,7 +334,7 @@ function TxoList(props: Props) {
                     </>
                   }
                   value={type || 'all'}
-                  onChange={(e) => handleChange({ dkey: TXO.TYPE, value: e.target.value, tab })}
+                  onChange={(e) => handleChange({ changedParameterKey: TXO.TYPE, value: e.target.value, tab })}
                 >
                   {Object.values(TXO.DROPDOWN_TYPES).map((v) => {
                     const stringV = String(v);
@@ -359,7 +353,7 @@ function TxoList(props: Props) {
                     name="subtype"
                     label={__('Payment Type')}
                     value={subtype || 'all'}
-                    onChange={(e) => handleChange({ dkey: TXO.SUB_TYPE, value: e.target.value, tab })}
+                    onChange={(e) => handleChange({ changedParameterKey: TXO.SUB_TYPE, value: e.target.value, tab })}
                   >
                     {Object.values(TXO.DROPDOWN_SUBTYPES).map((v) => {
                       const stringV = String(v);
@@ -379,7 +373,7 @@ function TxoList(props: Props) {
                     <div className={'txo__radios'}>
                       <Button
                         button="alt"
-                        onClick={(e) => handleChange({ dkey: TXO.ACTIVE, value: 'active', tab })}
+                        onClick={(e) => handleChange({ changedParameterKey: TXO.ACTIVE, value: 'active' })}
                         className={classnames(`button-toggle`, {
                           'button-toggle--active': active === TXO.ACTIVE,
                         })}
@@ -387,7 +381,7 @@ function TxoList(props: Props) {
                       />
                       <Button
                         button="alt"
-                        onClick={(e) => handleChange({ dkey: TXO.ACTIVE, value: 'spent', tab })}
+                        onClick={(e) => handleChange({ changedParameterKey: TXO.ACTIVE, value: 'spent' })}
                         className={classnames(`button-toggle`, {
                           'button-toggle--active': active === 'spent',
                         })}
@@ -395,7 +389,7 @@ function TxoList(props: Props) {
                       />
                       <Button
                         button="alt"
-                        onClick={(e) => handleChange({ dkey: TXO.ACTIVE, value: 'all', tab })}
+                        onClick={(e) => handleChange({ changedParameterKey: TXO.ACTIVE, value: 'all' })}
                         className={classnames(`button-toggle`, {
                           'button-toggle--active': active === 'all',
                         })}
@@ -405,6 +399,7 @@ function TxoList(props: Props) {
                   </fieldset-section>
                 </div>
               )}
+              {/* TODO: use card-between to display this properly */}
               <div className="card__actions--inline" style={{marginLeft: '181px'}}>
                 {!isFetchingTransactions && transactionsFile === null && (
                   <label>{<span className="error__text">{__('Failed to process fetched data.')}</span>}</label>
@@ -439,7 +434,7 @@ function TxoList(props: Props) {
                       {/* incoming transactions button */}
                       <Button
                         button="alt"
-                        onClick={(e) => handleChange({ tab, fiatType: 'incoming', currency: 'fiat' })}
+                        onClick={(e) => handleChange({ changedParameterKey: QUERY_NAME_FIAT_TYPE, value: 'incoming'})}
                         className={classnames(`button-toggle`, {
                           'button-toggle--active': fiatType === 'incoming',
                         })}
@@ -448,7 +443,7 @@ function TxoList(props: Props) {
                       {/* incoming transactions button */}
                       <Button
                         button="alt"
-                        onClick={(e) => handleChange({ tab, fiatType: 'outgoing', currency: 'fiat' })}
+                        onClick={(e) => handleChange({ changedParameterKey: QUERY_NAME_FIAT_TYPE, value: 'outgoing'})}
                         className={classnames(`button-toggle`, {
                           'button-toggle--active': fiatType === 'outgoing',
                         })}
