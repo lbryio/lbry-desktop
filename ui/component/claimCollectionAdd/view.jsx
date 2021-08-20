@@ -13,16 +13,33 @@ type Props = {
   published: any,
   unpublished: any,
   addCollection: (string, Array<string>, string) => void,
+  editCollection: (string, {}) => void,
   closeModal: () => void,
   uri: string,
+  collectionId: string,
+  doResolveUris: (Array<string>) => void,
+  items: Array<string>,
+  itemsClaims: Array<string>,
 };
 
 const ClaimCollectionAdd = (props: Props) => {
-  const { builtin, published, unpublished, addCollection, claim, closeModal, uri } = props;
+  const {
+    builtin,
+    published,
+    unpublished,
+    addCollection,
+    editCollection,
+    claim,
+    closeModal,
+    uri,
+    doResolveUris,
+    items,
+    itemsClaims,
+  } = props;
   const buttonref: ElementRef<any> = React.useRef();
   const permanentUrl = claim && claim.permanent_url;
   const isChannel = claim && claim.value_type === 'channel';
-
+  const [selectedCollections, setSelectedCollections] = React.useState([]);
   const [addNewCollection, setAddNewCollection] = React.useState(false);
   const [newCollectionName, setNewCollectionName] = React.useState('');
 
@@ -34,15 +51,30 @@ const ClaimCollectionAdd = (props: Props) => {
   //   claim.value.stream_type &&
   //   (claim.value.stream_type === 'audio' || claim.value.stream_type === 'video');
 
+  React.useEffect(() => {
+    if (items) {
+      doResolveUris(items);
+    }
+  }, [doResolveUris, items]);
+
   function handleNameInput(e) {
     const { value } = e.target;
     setNewCollectionName(value);
   }
 
   function handleAddCollection() {
-    addCollection(newCollectionName, [permanentUrl], isChannel ? 'collection' : 'playlist');
+    addCollection(newCollectionName, items || [permanentUrl], isChannel ? 'collection' : 'playlist');
+    if (items) setSelectedCollections([...selectedCollections, newCollectionName]);
     setNewCollectionName('');
     setAddNewCollection(false);
+  }
+
+  function handleEditCollection() {
+    if (selectedCollections) {
+      selectedCollections.map((id) => {
+        editCollection(id, { claims: itemsClaims, remove: false });
+      });
+    }
   }
 
   function altEnterListener(e: SyntheticKeyboardEvent<*>) {
@@ -71,7 +103,7 @@ const ClaimCollectionAdd = (props: Props) => {
       title={__('Add To...')}
       actions={
         <div className="card__body">
-          {uri && (
+          {(uri || items) && (
             <fieldset-section>
               <div className={'card__body-scrollable'}>
                 {(Object.values(builtin): any)
@@ -86,6 +118,9 @@ const ClaimCollectionAdd = (props: Props) => {
                         uri={permanentUrl}
                         key={id}
                         category={'builtin'}
+                        setSelectedCollections={setSelectedCollections}
+                        selectedCollections={selectedCollections}
+                        items={items}
                       />
                     );
                   })}
@@ -102,6 +137,9 @@ const ClaimCollectionAdd = (props: Props) => {
                           uri={permanentUrl}
                           key={id}
                           category={'unpublished'}
+                          setSelectedCollections={setSelectedCollections}
+                          selectedCollections={selectedCollections}
+                          items={items}
                         />
                       );
                     })}
@@ -116,6 +154,9 @@ const ClaimCollectionAdd = (props: Props) => {
                         uri={permanentUrl}
                         key={id}
                         category={'published'}
+                        setSelectedCollections={setSelectedCollections}
+                        selectedCollections={selectedCollections}
+                        items={items}
                       />
                     );
                   })}
@@ -158,7 +199,17 @@ const ClaimCollectionAdd = (props: Props) => {
             )}
           </fieldset-section>
           <div className="card__actions">
-            <Button button="secondary" label={__('Done')} disabled={addNewCollection} onClick={closeModal} />
+            <Button
+              button="secondary"
+              label={__('Done')}
+              disabled={addNewCollection}
+              onClick={() => {
+                if (items) {
+                  handleEditCollection();
+                }
+                closeModal();
+              }}
+            />
           </div>
         </div>
       }
