@@ -3,13 +3,14 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased for Desktop]
+## [0.51.1] - [2021-08-20]
 
 ### Added
 - Show currently active playing item on playlist _community pr!_ ([#6453](https://github.com/lbryio/lbry-desktop/pull/6453))
 - Add watch later to hover action for last used playlist on popup _community pr!_ ([#6274](https://github.com/lbryio/lbry-desktop/pull/6274))
 - Add confirmation on comment removal  _community pr!_ ([#6563](https://github.com/lbryio/lbry-desktop/pull/6563))
 - Show on content page if a file is part of a playlist already  _community pr!_([#6393](https://github.com/lbryio/lbry-desktop/pull/6393))
+- Add filtering to playlists ([#6905](https://github.com/lbryio/lbry-desktop/pull/6905))
 
 ### Changed
 - Use Canonical Url for copy link ([#6500](https://github.com/lbryio/lbry-desktop/pull/6500))
