@@ -201,7 +201,7 @@ declare type ModerationBlockParams = {
   creator_channel_name?: string,
   // Blocks identity from comment universally, requires Admin rights on commentron instance
   block_all?: boolean,
-  time_out_hrs?: number,
+  time_out?: number,
   // If true will delete all comments of the offender, requires Admin rights on commentron for universal delete
   delete_all?: boolean,
   // The usual signature stuff
