@@ -291,10 +291,12 @@ function TxoList(props: Props) {
   return (
     <Card
       title={
-        <><div className="table__header-text">{__(`Transactions`)}</div>
-          <div style={{display: 'inline-block'}}>
-            <fieldset-section>
-              <div className={'txo__radios'}>
+        <><div className="table__header-text" style={{display: 'inline'}}>{__(`Transactions`)}</div>
+          <div style={{ display: 'inline'}}>
+            <fieldset-section style={{ display: 'inline'}}>
+              {/* toggle between LBC and fiat buttons */}
+              <div className={'txo__radios'} style={{ display: 'inline'}}>
+                {/* toggle to LBC */}
                 <Button
                   button="alt"
                   onClick={(e) => handleChange({ changedParameterKey: QUERY_NAME_CURRENCY, value: 'credits' })}
@@ -303,6 +305,7 @@ function TxoList(props: Props) {
                   })}
                   label={__('Credits')}
                 />
+                {/* toggle to fiat */}
                 <Button
                   button="alt"
                   onClick={(e) => handleChange({ changedParameterKey: QUERY_NAME_CURRENCY, value: 'fiat' })}
@@ -322,40 +325,23 @@ function TxoList(props: Props) {
         ? <div>
           {/* LBC transactions section */}
           <div className="card__body-actions">
-            <div className="card__actions">
-              <div>
-                <FormField
-                  type="select"
-                  name="type"
-                  label={
-                    <>
-                      {__('Type')}
-                      <HelpLink href="https://lbry.com/faq/transaction-types" />
-                    </>
-                  }
-                  value={type || 'all'}
-                  onChange={(e) => handleChange({ changedParameterKey: TXO.TYPE, value: e.target.value, tab })}
-                >
-                  {Object.values(TXO.DROPDOWN_TYPES).map((v) => {
-                    const stringV = String(v);
-                    return (
-                      <option key={stringV} value={stringV}>
-                        {stringV && __(toCapitalCase(stringV))}
-                      </option>
-                    );
-                  })}
-                </FormField>
-              </div>
-              {(type === TXO.SENT || type === TXO.RECEIVED) && (
+            <div className="card__actions card__actions--between">
+              <div className="card__actions--inline">
                 <div>
+                  {/* LBC transaction type dropdown */}
                   <FormField
                     type="select"
-                    name="subtype"
-                    label={__('Payment Type')}
-                    value={subtype || 'all'}
-                    onChange={(e) => handleChange({ changedParameterKey: TXO.SUB_TYPE, value: e.target.value, tab })}
+                    name="type"
+                    label={
+                      <>
+                        {__('Type')}
+                        <HelpLink href="https://lbry.com/faq/transaction-types" />
+                      </>
+                    }
+                    value={type || 'all'}
+                    onChange={(e) => handleChange({ changedParameterKey: TXO.TYPE, value: e.target.value, tab })}
                   >
-                    {Object.values(TXO.DROPDOWN_SUBTYPES).map((v) => {
+                    {Object.values(TXO.DROPDOWN_TYPES).map((v) => {
                       const stringV = String(v);
                       return (
                         <option key={stringV} value={stringV}>
@@ -365,42 +351,66 @@ function TxoList(props: Props) {
                     })}
                   </FormField>
                 </div>
-              )}
-              {!hideStatus && (
-                <div>
-                  <fieldset-section>
-                    <label>{__('Status')}</label>
-                    <div className={'txo__radios'}>
-                      <Button
-                        button="alt"
-                        onClick={(e) => handleChange({ changedParameterKey: TXO.ACTIVE, value: 'active' })}
-                        className={classnames(`button-toggle`, {
-                          'button-toggle--active': active === TXO.ACTIVE,
-                        })}
-                        label={__('Active')}
-                      />
-                      <Button
-                        button="alt"
-                        onClick={(e) => handleChange({ changedParameterKey: TXO.ACTIVE, value: 'spent' })}
-                        className={classnames(`button-toggle`, {
-                          'button-toggle--active': active === 'spent',
-                        })}
-                        label={__('Historical')}
-                      />
-                      <Button
-                        button="alt"
-                        onClick={(e) => handleChange({ changedParameterKey: TXO.ACTIVE, value: 'all' })}
-                        className={classnames(`button-toggle`, {
-                          'button-toggle--active': active === 'all',
-                        })}
-                        label={__('All')}
-                      />
-                    </div>
-                  </fieldset-section>
-                </div>
-              )}
+                {(type === TXO.SENT || type === TXO.RECEIVED) && (
+                  <div>
+                    <FormField
+                      type="select"
+                      name="subtype"
+                      label={__('Payment Type')}
+                      value={subtype || 'all'}
+                      onChange={(e) => handleChange({ changedParameterKey: TXO.SUB_TYPE, value: e.target.value, tab })}
+                    >
+                      {Object.values(TXO.DROPDOWN_SUBTYPES).map((v) => {
+                        const stringV = String(v);
+                        return (
+                          <option key={stringV} value={stringV}>
+                            {stringV && __(toCapitalCase(stringV))}
+                          </option>
+                        );
+                      })}
+                    </FormField>
+                  </div>
+                )}
+                {!hideStatus && (
+                  <div>
+                    <fieldset-section>
+                      <label>{__('Status')}</label>
+                      <div className={'txo__radios'}>
+                        {/* active transactions button */}
+                        <Button
+                          button="alt"
+                          onClick={(e) => handleChange({ changedParameterKey: TXO.ACTIVE, value: 'active' })}
+                          className={classnames(`button-toggle`, {
+                            'button-toggle--active': active === TXO.ACTIVE,
+                          })}
+                          label={__('Active')}
+                        />
+                        {/* historical transactions button */}
+                        <Button
+                          button="alt"
+                          onClick={(e) => handleChange({ changedParameterKey: TXO.ACTIVE, value: 'spent' })}
+                          className={classnames(`button-toggle`, {
+                            'button-toggle--active': active === 'spent',
+                          })}
+                          label={__('Historical')}
+                        />
+                        {/* all transactions button */}
+                        <Button
+                          button="alt"
+                          onClick={(e) => handleChange({ changedParameterKey: TXO.ACTIVE, value: 'all' })}
+                          className={classnames(`button-toggle`, {
+                            'button-toggle--active': active === 'all',
+                          })}
+                          label={__('All')}
+                        />
+                      </div>
+                    </fieldset-section>
+                  </div>
+                )}
+              </div>
               {/* TODO: use card-between to display this properly */}
-              <div className="card__actions--inline" style={{marginLeft: '181px'}}>
+              {/* export and refresh buttons */}
+              <div className="card__actions--inline">
                 {!isFetchingTransactions && transactionsFile === null && (
                   <label>{<span className="error__text">{__('Failed to process fetched data.')}</span>}</label>
                 )}
