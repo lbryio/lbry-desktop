@@ -14,15 +14,14 @@ import HelpLink from 'component/common/help-link';
 import FileExporter from 'component/common/file-exporter';
 import WalletFiatPaymentHistory from 'component/walletFiatPaymentHistory';
 import WalletFiatAccountHistory from 'component/walletFiatAccountHistory';
-import { STRIPE_PUBLIC_KEY } from '../../../config';
 import { Lbryio } from 'lbryinc';
+import { getStripeEnvironment } from 'util/stripe';
+let stripeEnvironment = getStripeEnvironment();
 
-let stripeEnvironment = 'test';
-// if the key contains pk_live it's a live key
-// update the environment for the calls to the backend to indicate which environment to hit
-if (STRIPE_PUBLIC_KEY.indexOf('pk_live') > -1) {
-  stripeEnvironment = 'live';
-}
+// constants to be used in query params
+const Q_CURRENCY = 'currency';
+const Q_TAB = 'tab';
+const Q_FIAT_TYPE = 'fiatType';
 
 type Props = {
   search: string,
@@ -123,8 +122,12 @@ function TxoList(props: Props) {
   const type = urlParams.get(TXO.TYPE) || TXO.ALL;
   const subtype = urlParams.get(TXO.SUB_TYPE);
   const active = urlParams.get(TXO.ACTIVE) || TXO.ALL;
-  const currency = urlParams.get('currency') || 'credits';
-  const fiatType = urlParams.get('fiatType') || 'incoming';
+  const currency = urlParams.get(Q_CURRENCY) || 'credits';
+  const fiatType = urlParams.get(Q_FIAT_TYPE) || 'incoming';
+
+  // tab used in the wallet section
+  // TODO: need to change this eventually
+  const tab = urlParams.get(Q_TAB) || 'fiat-payment-history';
 
   const currentUrlParams = {
     page,
@@ -134,6 +137,7 @@ function TxoList(props: Props) {
     subtype,
     currency,
     fiatType,
+    tab
   };
 
   const hideStatus =
@@ -204,22 +208,22 @@ function TxoList(props: Props) {
       delta.value = '';
     }
 
-    const existingFiatType = newUrlParams.get('fiatType') || 'incoming';
+    const existingFiatType = newUrlParams.get(Q_FIAT_TYPE) || 'incoming';
 
     if (delta.tab) {
       // set tab name to account for wallet page tab
-      newUrlParams.set('tab', delta.tab);
+      newUrlParams.set(Q_TAB, delta.tab);
     }
 
     // only update currency if it's being changed
     if (delta.currency) {
-      newUrlParams.set('currency', delta.currency);
+      newUrlParams.set(Q_CURRENCY, delta.currency);
     }
 
     if (delta.fiatType) {
-      newUrlParams.set('fiatType', delta.fiatType);
+      newUrlParams.set(Q_FIAT_TYPE, delta.fiatType);
     } else {
-      newUrlParams.set('fiatType', existingFiatType);
+      newUrlParams.set(Q_FIAT_TYPE, existingFiatType);
     }
 
     switch (delta.dkey) {
@@ -280,10 +284,6 @@ function TxoList(props: Props) {
 
   const paramsString = JSON.stringify(params);
 
-  // tab used in the wallet section
-  // TODO: change the name of this eventually
-  const tab = 'fiat-payment-history';
-
   useEffect(() => {
     if (paramsString && updateTxoPageParams) {
       const params = JSON.parse(paramsString);
@@ -323,6 +323,7 @@ function TxoList(props: Props) {
       isBodyList
       body={currency === 'credits'
         ? <div>
+          {/* LBC transactions section */}
           <div className="card__body-actions">
             <div className="card__actions">
               <div>
@@ -419,40 +420,38 @@ function TxoList(props: Props) {
               </div>
             </div>
           </div>
-          {/* listing of the transactions */}
+          {/* listing of the lbc transactions */}
           <TransactionListTable txos={txoPage} />
           <Paginate totalPages={Math.ceil(txoItemCount / Number(pageSize))} />
         </div>
         : <div>
-          {/* fiat section (buttons and transactions) */}
+          {/* FIAT SECTION ( toggle buttons and transactions) */}
           <div className="section card-stack">
             <div className="card__body-actions">
               <div className="card__actions">
-                {!hideStatus && (
-                  <div>
-                    <fieldset-section>
-                      <label>{__('Type')}</label>
-                      <div className={'txo__radios'}>
-                        <Button
-                          button="alt"
-                          onClick={(e) => handleChange({ tab, fiatType: 'incoming', currency: 'fiat' })}
-                          className={classnames(`button-toggle`, {
-                            'button-toggle--active': fiatType === 'incoming',
-                          })}
-                          label={__('Incoming')}
-                        />
-                        <Button
-                          button="alt"
-                          onClick={(e) => handleChange({ tab, fiatType: 'outgoing', currency: 'fiat' })}
-                          className={classnames(`button-toggle`, {
-                            'button-toggle--active': fiatType === 'outgoing',
-                          })}
-                          label={__('Outgoing')}
-                        />
-                      </div>
-                    </fieldset-section>
-                  </div>
-                )}
+                <div>
+                  <fieldset-section>
+                    <label>{__('Type')}</label>
+                    <div className={'txo__radios'}>
+                      <Button
+                        button="alt"
+                        onClick={(e) => handleChange({ tab, fiatType: 'incoming', currency: 'fiat' })}
+                        className={classnames(`button-toggle`, {
+                          'button-toggle--active': fiatType === 'incoming',
+                        })}
+                        label={__('Incoming')}
+                      />
+                      <Button
+                        button="alt"
+                        onClick={(e) => handleChange({ tab, fiatType: 'outgoing', currency: 'fiat' })}
+                        className={classnames(`button-toggle`, {
+                          'button-toggle--active': fiatType === 'outgoing',
+                        })}
+                        label={__('Outgoing')}
+                      />
+                    </div>
+                  </fieldset-section>
+                </div>
               </div>
             </div>
             {/* listing of the transactions */}
