@@ -7,7 +7,7 @@ import React from 'react';
 import classnames from 'classnames';
 import { Menu, MenuButton, MenuList, MenuItem } from '@reach/menu-button';
 import Icon from 'component/common/icon';
-import { generateShareUrl, generateRssUrl, generateLbryContentUrl } from 'util/url';
+import { generateShareUrl, generateRssUrl, generateLbryContentUrl, formatLbryUrlForWeb } from 'util/url';
 import { useHistory } from 'react-router';
 import { buildURI, parseURI, COLLECTIONS_CONSTS } from 'lbry-redux';
 
@@ -56,6 +56,8 @@ type Props = {
   isChannelPage: boolean,
   editedCollection: Collection,
   isAuthenticated: boolean,
+  fetchCollectionItems: (string) => void,
+  resolvedList: boolean,
 };
 
 function ClaimMenuList(props: Props) {
@@ -93,6 +95,8 @@ function ClaimMenuList(props: Props) {
     isChannelPage = false,
     editedCollection,
     isAuthenticated,
+    fetchCollectionItems,
+    resolvedList,
   } = props;
   const incognitoClaim = contentChannelUri && !contentChannelUri.includes('@');
   const isChannel = !incognitoClaim && !contentSigningChannel;
@@ -107,6 +111,13 @@ function ClaimMenuList(props: Props) {
     : __('Follow');
 
   const { push, replace } = useHistory();
+
+  const fetchItems = React.useCallback(() => {
+    if (collectionId) {
+      fetchCollectionItems(collectionId);
+    }
+  }, [collectionId, fetchCollectionItems]);
+
   if (!claim) {
     return null;
   }
@@ -245,11 +256,17 @@ function ClaimMenuList(props: Props) {
               {/* COLLECTION OPERATIONS */}
               {collectionId && isCollectionClaim ? (
                 <>
-                  <MenuItem className="comment__menu-option" onSelect={() => push(`/$/${PAGES.LIST}/${collectionId}`)}>
-                    <div className="menu__link">
+                  <MenuItem
+                    className="comment__menu-option"
+                    onSelect={() => {
+                      if (!resolvedList) fetchItems();
+                      push(`/$/${PAGES.LIST}/${collectionId}`);
+                    }}
+                  >
+                    <a className="menu__link" href={`/$/${PAGES.LIST}/${collectionId}`}>
                       <Icon aria-hidden icon={ICONS.VIEW} />
                       {__('View List')}
-                    </div>
+                    </a>
                   </MenuItem>
                   {isMyCollection && (
                     <>

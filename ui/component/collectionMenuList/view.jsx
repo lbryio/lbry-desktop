@@ -35,10 +35,10 @@ function CollectionMenuList(props: Props) {
         {collectionId && collectionName && (
           <>
             <MenuItem className="comment__menu-option" onSelect={() => push(`/$/${PAGES.LIST}/${collectionId}`)}>
-              <div className="menu__link">
+              <a className="menu__link" href={`/$/${PAGES.LIST}/${collectionId}`}>
                 <Icon aria-hidden icon={ICONS.VIEW} />
                 {__('View List')}
-              </div>
+              </a>
             </MenuItem>
             <MenuItem
               className="comment__menu-option"
