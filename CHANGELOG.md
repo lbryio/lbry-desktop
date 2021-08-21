@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.51.1] - [2021-08-20]
+## [0.51.2] - [2021-08-20]
 
 ### Added
 - Show currently active playing item on playlist _community pr!_ ([#6453](https://github.com/lbryio/lbry-desktop/pull/6453))
