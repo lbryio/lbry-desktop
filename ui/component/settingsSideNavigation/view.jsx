@@ -25,25 +25,21 @@ type SideNavLink = {
 const SIDE_LINKS: Array<SideNavLink> = [
   {
     title: 'Appearance',
-    link: `/$/${PAGES.SETTINGS}#${SETTINGS_GRP.APPEARANCE}`,
     section: SETTINGS_GRP.APPEARANCE,
     icon: ICONS.APPEARANCE,
   },
   {
     title: 'Account',
-    link: `/$/${PAGES.SETTINGS}#${SETTINGS_GRP.ACCOUNT}`,
     section: SETTINGS_GRP.ACCOUNT,
     icon: ICONS.ACCOUNT,
   },
   {
     title: 'Content settings',
-    link: `/$/${PAGES.SETTINGS}#${SETTINGS_GRP.CONTENT}`,
     section: SETTINGS_GRP.CONTENT,
     icon: ICONS.CONTENT,
   },
   {
     title: 'System',
-    link: `/$/${PAGES.SETTINGS}#${SETTINGS_GRP.SYSTEM}`,
     section: SETTINGS_GRP.SYSTEM,
     icon: ICONS.SETTINGS,
   },
@@ -54,12 +50,7 @@ export default function SettingsSideNavigation() {
   const isMediumScreen = useIsMediumScreen();
   const isAbsolute = isMediumScreen;
   const microNavigation = !sidebarOpen || isMediumScreen;
-  const { location } = useHistory();
-
-  // This sidebar could be called from Settings or from a Settings Sub Page.
-  //  - "#" navigation = don't record to history, just scroll.
-  //  - "/" navigation = record sub-page navigation to history.
-  const scrollInstead = location.pathname === `/$/${PAGES.SETTINGS}`;
+  const { location, goBack } = useHistory();
 
   function scrollToSection(section: string) {
     const TOP_MARGIN_PX = 20;
@@ -67,6 +58,21 @@ export default function SettingsSideNavigation() {
     if (element) {
       window.scrollTo(0, element.offsetTop - TOP_MARGIN_PX);
     }
+  }
+
+  function getOnClickHandler(section) {
+    if (section) {
+      if (location.pathname === `/$/${PAGES.SETTINGS}`) {
+        return () => scrollToSection(section);
+      } else if (location.pathname.startsWith(`/$/${PAGES.SETTINGS}/`)) {
+        return () => {
+          goBack();
+          setTimeout(() => scrollToSection(section), 5);
+        };
+      }
+    }
+
+    return undefined;
   }
 
   if (isMediumScreen) {
@@ -97,16 +103,15 @@ export default function SettingsSideNavigation() {
           <ul className={classnames('navigation-links', { 'navigation-links--micro': !sidebarOpen })}>
             {SIDE_LINKS.map((linkProps) => {
               return (
-                <li key={linkProps.route || linkProps.link}>
+                <li key={linkProps.title}>
                   <Button
                     {...linkProps}
                     label={__(linkProps.title)}
                     title={__(linkProps.title)}
-                    navigate={scrollInstead ? undefined : linkProps.route || linkProps.link}
                     icon={linkProps.icon}
                     className={classnames('navigation-link', {})}
                     // $FlowFixMe
-                    onClick={scrollInstead && linkProps.section ? () => scrollToSection(linkProps.section) : undefined}
+                    onClick={getOnClickHandler(linkProps.section)}
                   />
                   {linkProps.extra && linkProps.extra}
                 </li>
@@ -131,18 +136,14 @@ export default function SettingsSideNavigation() {
                   // $FlowFixMe
                   const { link, route, ...passedProps } = linkProps;
                   return (
-                    <li key={route || link}>
+                    <li key={linkProps.title}>
                       <Button
                         {...passedProps}
-                        navigate={scrollInstead ? undefined : route || link}
                         label={__(linkProps.title)}
                         title={__(linkProps.title)}
                         icon={linkProps.icon}
                         className={classnames('navigation-link', {})}
-                        onClick={
-                          // $FlowFixMe
-                          scrollInstead && linkProps.section ? () => scrollToSection(linkProps.section) : undefined
-                        }
+                        onClick={getOnClickHandler(linkProps.section)}
                       />
                       {linkProps.extra && linkProps.extra}
                     </li>
