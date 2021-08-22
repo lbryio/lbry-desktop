@@ -16,17 +16,17 @@ export default function SettingAppearance(props: Props) {
       isBodyList
       body={
         <>
-          {/* --- Language --- */}
-          <div className="card__main-actions">
-            <SettingLanguage />
-          </div>
-
           {/* --- Homepage --- */}
           {homepages && Object.keys(homepages).length > 1 && (
             <div className="card__main-actions">
               <HomepageSelector />
             </div>
           )}
+
+          {/* --- Language --- */}
+          <div className="card__main-actions">
+            <SettingLanguage />
+          </div>
         </>
       }
     />
