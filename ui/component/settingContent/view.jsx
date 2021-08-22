@@ -168,12 +168,12 @@ export default function SettingContent(props: Props) {
             </SettingsRow>
 
             {/* @if TARGET='app' */}
-            <SettingsRow title={__('Max purchase price')} subtitle={__(HELP.MAX_PURCHASE_PRICE)} useVerticalSeparator>
+            <SettingsRow title={__('Max purchase price')} subtitle={__(HELP.MAX_PURCHASE_PRICE)} multirow>
               <MaxPurchasePrice />
             </SettingsRow>
             {/* @endif */}
 
-            <SettingsRow title={__('Purchase and tip confirmations')} useVerticalSeparator>
+            <SettingsRow title={__('Purchase and tip confirmations')} multirow>
               <FormField
                 type="radio"
                 name="confirm_all_purchases"

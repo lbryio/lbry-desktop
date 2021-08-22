@@ -185,7 +185,7 @@ export default function SettingSystem(props: Props) {
                   <Button button="link" label={__('Learn more')} href="https://lbry.com/privacypolicy" />
                 </React.Fragment>
               }
-              useVerticalSeparator
+              multirow
             >
               <FormField
                 type="checkbox"
@@ -295,48 +295,57 @@ export default function SettingSystem(props: Props) {
             {/* @endif */}
 
             {/* @if TARGET='app' */}
-            <SettingsRow title={__('Wallet security')}>
+            <SettingsRow
+              title={__('Encrypt my wallet with a custom password')}
+              subtitle={
+                <React.Fragment>
+                  <I18nMessage
+                    tokens={{
+                      learn_more: (
+                        <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/account-sync" />
+                      ),
+                    }}
+                  >
+                    Wallet encryption is currently unavailable until it's supported for synced accounts. It will be
+                    added back soon. %learn_more%.
+                  </I18nMessage>
+                  {/* {__('Secure your local wallet data with a custom password.')}{' '}
+                   <strong>{__('Lost passwords cannot be recovered.')} </strong>
+                   <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/wallet-encryption" />. */}
+                </React.Fragment>
+              }
+            >
               <FormField
                 disabled
                 type="checkbox"
                 name="encrypt_wallet"
                 onChange={() => onChangeEncryptWallet()}
                 checked={walletEncrypted}
-                label={__('Encrypt my wallet with a custom password')}
-                helper={
-                  <React.Fragment>
-                    <I18nMessage
-                      tokens={{
-                        learn_more: (
-                          <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/account-sync" />
-                        ),
-                      }}
-                    >
-                      Wallet encryption is currently unavailable until it's supported for synced accounts. It will be
-                      added back soon. %learn_more%.
-                    </I18nMessage>
-                    {/* {__('Secure your local wallet data with a custom password.')}{' '}
-                         <strong>{__('Lost passwords cannot be recovered.')} </strong>
-                         <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/wallet-encryption" />. */}
-                  </React.Fragment>
-                }
               />
+            </SettingsRow>
 
-              {walletEncrypted && storedPassword && (
+            {walletEncrypted && storedPassword && (
+              <SettingsRow
+                title={__('Save wallet password')}
+                subtitle={__('Automatically unlock your wallet on startup')}
+              >
                 <FormField
                   type="checkbox"
                   name="save_password"
                   onChange={onConfirmForgetPassword}
                   checked={storedPassword}
-                  label={__('Save Password')}
-                  helper={<React.Fragment>{__('Automatically unlock your wallet on startup')}</React.Fragment>}
                 />
-              )}
-            </SettingsRow>
+              </SettingsRow>
+            )}
             {/* @endif */}
 
             {/* @if TARGET='app' */}
-            <SettingsRow title={__('Experimental settings')} useVerticalSeparator>
+            <SettingsRow
+              title={__('Max connections')}
+              subtitle={__(
+                'For users with good bandwidth, try a higher value to improve streaming and download speeds. Low bandwidth users may benefit from a lower setting. Default is 4.'
+              )}
+            >
               {/* Disabling below until we get downloads to work with shared subscriptions code */}
               {/*
             <FormField
@@ -355,10 +364,6 @@ export default function SettingSystem(props: Props) {
                 <FormField
                   name="max_connections"
                   type="select"
-                  label={__('Max Connections')}
-                  helper={__(
-                    'For users with good bandwidth, try a higher value to improve streaming and download speeds. Low bandwidth users may benefit from a lower setting. Default is 4.'
-                  )}
                   min={1}
                   max={100}
                   onChange={(e) => setDaemonSetting('max_connections_per_download', e.target.value)}
@@ -371,8 +376,13 @@ export default function SettingSystem(props: Props) {
                   ))}
                 </FormField>
               </fieldset-section>
+            </SettingsRow>
 
+            <SettingsRow title={__('Wallet server')} multirow>
               <SettingWalletServer />
+            </SettingsRow>
+
+            <SettingsRow title={__('Comments server')} multirow>
               <SettingCommentsServer />
             </SettingsRow>
             {/* @endif */}
