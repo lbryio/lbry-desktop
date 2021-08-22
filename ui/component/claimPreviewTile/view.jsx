@@ -18,6 +18,7 @@ import FileWatchLaterLink from 'component/fileWatchLaterLink';
 import ClaimRepostAuthor from 'component/claimRepostAuthor';
 import ClaimMenuList from 'component/claimMenuList';
 import CollectionPreviewOverlay from 'component/collectionPreviewOverlay';
+import CollectionQuickUpdateButton from 'component/collectionQuickUpdateButton';
 // $FlowFixMe cannot resolve ...
 import PlaceholderTx from 'static/img/placeholderTx.gif';
 
@@ -209,18 +210,14 @@ function ClaimPreviewTile(props: Props) {
           {!isChannel && (
             <React.Fragment>
               <div className="claim-preview__hover-actions">
-                {isPlayable && (
-                  <FileWatchLaterLink focusable={false} uri={uri} />
-                )}
+                {isPlayable && <FileWatchLaterLink focusable={false} uri={uri} />}
               </div>
               <div className="claim-preview__hover-actions">
                 {/* @if TARGET='app' */}
-                {isStream && (
-                  <FileDownloadLink focusable={false} uri={canonicalUrl} hideOpenButton />
-                )}
+                {isStream && <FileDownloadLink focusable={false} uri={canonicalUrl} hideOpenButton />}
                 {/* @endif */}
               </div>
-
+              {isCollection && <CollectionQuickUpdateButton collectionId={listId} />}
               <div className="claim-preview__file-property-overlay">
                 <PreviewOverlayProperties uri={uri} properties={liveProperty || properties} />
               </div>

@@ -616,6 +616,33 @@
   }
 }
 
+.claim-preview__collection-property-overlay {
+  position: absolute;
+  top: var(--spacing-xxs);
+  right: var(--spacing-xxs);
+  background-color: var(--color-black);
+  border-radius: var(--border-radius);
+  opacity: 1;
+  z-index: 3;
+  .button--file-action {
+    display: block;
+    margin: 0 0;
+    padding: var(--spacing-xxs) var(--spacing-xxs);
+    height: unset;
+    &:hover {
+      .button__label {
+        display: inline;
+      }
+      opacity: 1;
+    }
+    button {
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+}
+
 .claim-preview__claim-property-overlay {
   position: absolute;
   bottom: var(--spacing-xxs);

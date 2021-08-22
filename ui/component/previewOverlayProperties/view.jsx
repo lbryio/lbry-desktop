@@ -45,7 +45,7 @@ export default function PreviewOverlayProperties(props: Props) {
   return (
     <div
       className={classnames('claim-preview__overlay-properties', {
-        '.claim-preview__overlay-properties--small': small,
+        'claim-preview__overlay-properties--small': small,
       })}
     >
       {typeof properties === 'function' ? (
@@ -53,15 +53,6 @@ export default function PreviewOverlayProperties(props: Props) {
       ) : (
         <>
           {!isStream && <ClaimType uri={uri} small={small} />}
-          {editedCollection && (
-            <Icon
-              customTooltipText={__('Unpublished Edits')}
-              tooltip
-              iconColor="red"
-              size={size}
-              icon={ICONS.PUBLISH}
-            />
-          )}
           {isCollection && claim && !iconOnly && <div>{claimCount}</div>}
           {!iconOnly && isStream && <VideoDuration uri={uri} />}
           {isStream && <FileType uri={uri} small={small} />}
