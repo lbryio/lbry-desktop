@@ -373,13 +373,19 @@ function Comment(props: Props) {
                           setPage(1);
                         }
                       }}
+                      icon={ICONS.DOWN}
                     />
                   </div>
                 )}
 
                 {numDirectReplies > 0 && showReplies && (
                   <div className="comment__actions">
-                    <Button label={__('Hide replies')} button="link" onClick={() => setShowReplies(false)} />
+                    <Button
+                      label={__('Hide replies')}
+                      button="link"
+                      onClick={() => setShowReplies(false)}
+                      icon={ICONS.UP}
+                    />
                   </div>
                 )}
 
