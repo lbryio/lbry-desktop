@@ -275,7 +275,8 @@ class StripeAccountConnection extends React.Component<Props, State> {
               )}
             </div>
           }
-          actions={
+          // only show additional buttons if its for additional verification or to show transaction page
+          actions={(stillRequiringVerification || accountConfirmed) &&
             <>
               {stillRequiringVerification && (
                 <Button
@@ -286,12 +287,14 @@ class StripeAccountConnection extends React.Component<Props, State> {
                   className="stripe__complete-verification-button"
                 />
               )}
-              <Button
-                button="secondary"
-                label={__('View Transactions')}
-                icon={ICONS.SETTINGS}
-                navigate={`/$/${PAGES.WALLET}?tab=fiat-payment-history`}
-              />
+              {accountConfirmed && (
+                <Button
+                  button="secondary"
+                  label={__('View Transactions')}
+                  icon={ICONS.SETTINGS}
+                  navigate={`/$/${PAGES.WALLET}?fiatType=incoming&tab=fiat-payment-history&currency=fiat`}
+                />
+              )}
             </>
           }
         />

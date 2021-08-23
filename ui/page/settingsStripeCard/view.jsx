@@ -420,7 +420,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
                   button="primary"
                   label={__('View Transactions')}
                   icon={ICONS.SETTINGS}
-                  navigate={`/$/${PAGES.WALLET}?tab=fiat-account-history`}
+                  navigate={`/$/${PAGES.WALLET}?fiatType=outgoing&tab=fiat-payment-history&currency=fiat`}
                 />
               }
             />

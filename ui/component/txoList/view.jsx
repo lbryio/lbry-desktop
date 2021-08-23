@@ -291,7 +291,7 @@ function TxoList(props: Props) {
   return (
     <Card
       title={
-        <><div className="table__header-text">{__(`Transactions`)}</div>
+        <><div className="table__header-text txo__table_header">{__(`Transactions`)}</div>
           <div className="txo__radios_container">
             <fieldset-section style={{display: 'inline'}} className="txo__radios_fieldset">
               {/* toggle between LBC and fiat buttons */}

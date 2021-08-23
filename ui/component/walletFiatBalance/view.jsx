@@ -62,7 +62,8 @@ const WalletBalance = () => {
           </h2>
 
           <div className="section__actions">
-            <Button button="secondary" label={__('Account Configuration')} icon={ICONS.SETTINGS} navigate={`/$/${PAGES.SETTINGS_STRIPE_ACCOUNT}`} />
+            <Button button="secondary" label={__('Bank Accounts')} icon={ICONS.SETTINGS} navigate={`/$/${PAGES.SETTINGS_STRIPE_ACCOUNT}`} />
+            <Button button="secondary" label={__('Payment Methods')} icon={ICONS.SETTINGS} navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} />
           </div>
         </>
       }
