@@ -48,6 +48,10 @@ const defaultState: CommentsState = {
   settingsByChannelId: {}, // ChannelId -> PerChannelSettings
   fetchingSettings: false,
   fetchingBlockedWords: false,
+  sblMine: undefined,
+  sblInvited: [],
+  fetchingSblMine: false,
+  fetchingSblInvited: false,
 };
 
 function pushToArrayInObject(obj, key, valueToPush) {
@@ -1072,6 +1076,45 @@ export default handleActions(
         fetchingBlockedWords: false,
       };
     },
+
+    [ACTIONS.COMMENT_SBL_FETCH_STARTED]: (state: CommentsState) => ({
+      ...state,
+      fetchingSblMine: true,
+    }),
+    [ACTIONS.COMMENT_SBL_FETCH_FAILED]: (state: CommentsState) => ({
+      ...state,
+      sblMine: null,
+      fetchingSblMine: false,
+    }),
+    [ACTIONS.COMMENT_SBL_FETCH_COMPLETED]: (state: CommentsState, action: any) => {
+      return {
+        ...state,
+        sblMine: action.data,
+        fetchingSblMine: false,
+      };
+    },
+
+    [ACTIONS.COMMENT_SBL_FETCH_INVITES_STARTED]: (state: CommentsState) => ({
+      ...state,
+      fetchingSblInvited: true,
+    }),
+    [ACTIONS.COMMENT_SBL_FETCH_INVITES_FAILED]: (state: CommentsState) => ({
+      ...state,
+      sblInvited: null,
+      fetchingSblInvited: false,
+    }),
+    [ACTIONS.COMMENT_SBL_FETCH_INVITES_COMPLETED]: (state: CommentsState, action: any) => {
+      return {
+        ...state,
+        sblInvited: action.data.invitations,
+        fetchingSblInvited: false,
+      };
+    },
+
+    [ACTIONS.COMMENT_SBL_DELETED]: (state: CommentsState) => ({
+      ...state,
+      sblMine: null,
+    }),
   },
   defaultState
 );

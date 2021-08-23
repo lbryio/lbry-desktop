@@ -6,6 +6,7 @@ import classnames from 'classnames';
 import moment from 'moment';
 import humanizeDuration from 'humanize-duration';
 import BlockList from 'component/blockList';
+import BlockListShared from 'component/blockListShared';
 import ClaimPreview from 'component/claimPreview';
 import Page from 'component/page';
 import Spinner from 'component/spinner';
@@ -17,6 +18,7 @@ import ChannelMuteButton from 'component/channelMuteButton';
 const VIEW = {
   BLOCKED: 'blocked',
   ADMIN: 'admin',
+  SHARED: 'shared',
   MODERATOR: 'moderator',
   MUTED: 'muted',
 };
@@ -266,19 +268,24 @@ function ListBlocked(props: Props) {
               {isAdmin && getViewElem(VIEW.ADMIN, 'Global', ICONS.BLOCK)}
               {isModerator && getViewElem(VIEW.MODERATOR, 'Moderator', ICONS.BLOCK)}
               {getViewElem(VIEW.MUTED, 'Muted', ICONS.MUTE)}
+              {getViewElem(VIEW.SHARED, 'Shared Blocklist', ICONS.SHARE)}
             </div>
             <div className="section__actions--inline">{getRefreshElem()}</div>
           </div>
 
-          <BlockList
-            key={viewMode}
-            uris={getList(viewMode)}
-            help={getHelpText(viewMode)}
-            titleEmptyList={getEmptyListTitle(viewMode)}
-            subtitle={getEmptyListSubtitle(viewMode)}
-            getActionButtons={getActionButtons}
-            className={viewMode === VIEW.MODERATOR ? 'block-list--moderator' : undefined}
-          />
+          {viewMode === VIEW.SHARED && <BlockListShared />}
+
+          {viewMode !== VIEW.SHARED && (
+            <BlockList
+              key={viewMode}
+              uris={getList(viewMode)}
+              help={getHelpText(viewMode)}
+              titleEmptyList={getEmptyListTitle(viewMode)}
+              subtitle={getEmptyListSubtitle(viewMode)}
+              getActionButtons={getActionButtons}
+              className={viewMode === VIEW.MODERATOR ? 'block-list--moderator' : undefined}
+            />
+          )}
         </>
       )}
     </Page>

@@ -275,3 +275,13 @@ td {
     }
   }
 }
+
+.table--no-row-lines {
+  tr {
+    &:not(:last-of-type) {
+      td {
+        border-bottom: none;
+      }
+    }
+  }
+}

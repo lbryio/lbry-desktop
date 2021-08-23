@@ -338,6 +338,11 @@
   max-width: 40rem;
 }
 
+.main--half-width {
+  @extend .main;
+  max-width: calc(var(--page-max-width) / 2);
+}
+
 .main--empty {
   align-self: center;
   display: flex;

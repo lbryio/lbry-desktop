@@ -20,6 +20,10 @@
   pointer-events: none;
 }
 
+.card--disable-interaction {
+  pointer-events: none;
+}
+
 .card--section {
   position: relative;
   padding: var(--spacing-m);

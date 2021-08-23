@@ -36,6 +36,12 @@ const Comments = {
   setting_update: (params: UpdateSettingsParams) => fetchCommentsApi('setting.Update', params),
   setting_get: (params: SettingsParams) => fetchCommentsApi('setting.Get', params),
   super_list: (params: SuperListParams) => fetchCommentsApi('comment.SuperChatList', params),
+  sbl_update: (params: SharedBlockedListUpdateArgs) => fetchCommentsApi('blockedlist.Update', params),
+  sbl_get: (params: SharedBlockedListGetArgs) => fetchCommentsApi('blockedlist.Get', params),
+  sbl_invite: (params: SharedBlockedListInviteArgs) => fetchCommentsApi('blockedlist.Invite', params),
+  sbl_list_invites: (params: CommentronAuth) => fetchCommentsApi('blockedlist.ListInvites', params),
+  sbl_accept: (params: SharedBlockedListInviteAcceptArgs) => fetchCommentsApi('blockedlist.Accept', params),
+  sbl_rescind: (params: SharedBlockedListRescindArgs) => fetchCommentsApi('blockedlist.Rescind', params),
 };
 
 function fetchCommentsApi(method: string, params: {}) {

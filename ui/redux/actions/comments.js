@@ -49,6 +49,8 @@ const ERR_MAP: CommentronErrorMap = {
   BLOCKED_BY_CREATOR: {
     commentron: 'channel is blocked by publisher',
     replacement: 'Unable to comment. This channel has blocked you.',
+    linkText: 'Appeal',
+    linkTarget: `/${PAGES.APPEAL_LIST_OFFENCES}`,
   },
   BLOCKED_BY_ADMIN: {
     commentron: 'channel is not allowed to post comments',
@@ -61,6 +63,12 @@ const ERR_MAP: CommentronErrorMap = {
   STOP_SPAMMING: {
     commentron: 'duplicate comment!',
     replacement: 'Please do not spam.',
+  },
+  TIMEOUT_BANNED: {
+    commentron: /^publisher (.*) has given you a temporary ban with (.*) remaining.$/,
+    replacement: '%1% has given you a temporary ban with %2% remaining.', // TODO: The duration is not localizable.
+    linkText: 'Appeal',
+    linkTarget: `/${PAGES.APPEAL_LIST_OFFENCES}`,
   },
 };
 
@@ -1621,6 +1629,248 @@ export const doFetchBlockedWords = () => {
         dispatch({
           type: ACTIONS.COMMENT_FETCH_BLOCKED_WORDS_FAILED,
         });
+      });
+  };
+};
+
+export const doSblUpdate = (channelClaim: ChannelClaim, params: SblUpdate, onComplete: (error: string) => void) => {
+  return async (dispatch: Dispatch) => {
+    const channelSignature = await channelSignName(channelClaim.claim_id, channelClaim.name);
+    if (!channelSignature) {
+      devToast(dispatch, 'doSblUpdate: failed to sign channel name');
+      return;
+    }
+
+    return Comments.sbl_update({
+      channel_name: channelClaim.name,
+      channel_id: channelClaim.claim_id,
+      signature: channelSignature.signature,
+      signing_ts: channelSignature.signing_ts,
+      ...params,
+    })
+      .then(() => {
+        if (onComplete) {
+          onComplete('');
+        }
+      })
+      .catch((err) => {
+        dispatch(doToast({ message: err.message, isError: true }));
+        if (onComplete) {
+          onComplete(err.message);
+        }
+      });
+  };
+};
+
+export const doSblDelete = (channelClaim: ChannelClaim) => {
+  return async (dispatch: Dispatch) => {
+    const channelSignature = await channelSignName(channelClaim.claim_id, channelClaim.name);
+    if (!channelSignature) {
+      devToast(dispatch, 'doSblDelete: failed to sign channel name');
+      return;
+    }
+
+    return Comments.sbl_update({
+      channel_name: channelClaim.name,
+      channel_id: channelClaim.claim_id,
+      signature: channelSignature.signature,
+      signing_ts: channelSignature.signing_ts,
+      remove: true,
+    })
+      .then((resp) => {
+        dispatch({
+          type: ACTIONS.COMMENT_SBL_DELETED,
+        });
+        dispatch(doToast({ message: __('Shared blocklist deleted.') }));
+      })
+      .catch((err) => {
+        dispatch(doToast({ message: err.message, isError: true }));
+      });
+  };
+};
+
+export const doSblGet = (channelClaim: ?ChannelClaim, params: SblGet) => {
+  return async (dispatch: Dispatch, getState: GetState) => {
+    let channelSignature;
+    if (channelClaim) {
+      channelSignature = await channelSignName(channelClaim.claim_id, channelClaim.name);
+      if (!channelSignature) {
+        devToast(dispatch, 'doSblGet: failed to sign channel name');
+        return;
+      }
+    }
+
+    dispatch({
+      type: ACTIONS.COMMENT_SBL_FETCH_STARTED,
+    });
+
+    const authParams =
+      channelClaim && channelSignature
+        ? {
+            channel_name: channelClaim.name,
+            channel_id: channelClaim.claim_id,
+            signature: channelSignature.signature,
+            signing_ts: channelSignature.signing_ts,
+          }
+        : {};
+
+    return Comments.sbl_get({ ...authParams, ...params })
+      .then((resp) => {
+        dispatch({
+          type: ACTIONS.COMMENT_SBL_FETCH_COMPLETED,
+          data: resp,
+        });
+      })
+      .catch((err) => {
+        if (err.message !== 'blocked list not found') {
+          dispatch(doToast({ message: err.message, isError: true }));
+        }
+
+        dispatch({
+          type: ACTIONS.COMMENT_SBL_FETCH_FAILED,
+        });
+      });
+  };
+};
+
+export const doSblInvite = (
+  channelClaim: ChannelClaim,
+  paramList: Array<SblInvite>,
+  onComplete: (error: string) => void
+) => {
+  return async (dispatch: Dispatch) => {
+    const channelSignature = await channelSignName(channelClaim.claim_id, channelClaim.name);
+    if (!channelSignature) {
+      devToast(dispatch, 'doSblInvite: failed to sign channel name');
+      return;
+    }
+
+    // $FlowFixMe
+    return Promise.allSettled(
+      paramList.map((params) => {
+        return Comments.sbl_invite({
+          channel_name: channelClaim.name,
+          channel_id: channelClaim.claim_id,
+          signature: channelSignature.signature,
+          signing_ts: channelSignature.signing_ts,
+          ...params,
+        });
+      })
+    )
+      .then((results) => {
+        const errors: Array<string> = [];
+        results.forEach((result) => {
+          if (result.status === 'rejected') {
+            errors.push(result.reason.message);
+          }
+        });
+        if (onComplete) {
+          onComplete(errors.join(' • '));
+        }
+      })
+      .catch((err) => {
+        dispatch(doToast({ message: err.message, isError: true }));
+        if (onComplete) {
+          onComplete(err.message);
+        }
+      });
+  };
+};
+
+export const doSblListInvites = (channelClaim: ChannelClaim) => {
+  return async (dispatch: Dispatch) => {
+    const channelSignature = await channelSignName(channelClaim.claim_id, channelClaim.name);
+    if (!channelSignature) {
+      devToast(dispatch, 'SBL Invite: failed to sign channel name');
+      return;
+    }
+
+    dispatch({
+      type: ACTIONS.COMMENT_SBL_FETCH_INVITES_STARTED,
+    });
+
+    return Comments.sbl_list_invites({
+      channel_name: channelClaim.name,
+      channel_id: channelClaim.claim_id,
+      signature: channelSignature.signature,
+      signing_ts: channelSignature.signing_ts,
+    })
+      .then((resp) => {
+        dispatch({
+          type: ACTIONS.COMMENT_SBL_FETCH_INVITES_COMPLETED,
+          data: resp,
+        });
+      })
+      .catch((err) => {
+        dispatch(doToast({ message: err.message, isError: true }));
+        dispatch({
+          type: ACTIONS.COMMENT_SBL_FETCH_INVITES_FAILED,
+        });
+      });
+  };
+};
+
+export const doSblAccept = (
+  channelClaim: ChannelClaim,
+  params: SblInviteAccept,
+  onComplete: (error: string) => void
+) => {
+  return async (dispatch: Dispatch) => {
+    const channelSignature = await channelSignName(channelClaim.claim_id, channelClaim.name);
+    if (!channelSignature) {
+      devToast(dispatch, 'doSblAccept: failed to sign channel name');
+      return;
+    }
+
+    return Comments.sbl_accept({
+      channel_name: channelClaim.name,
+      channel_id: channelClaim.claim_id,
+      signature: channelSignature.signature,
+      signing_ts: channelSignature.signing_ts,
+      ...params,
+    })
+      .then((resp) => {
+        if (onComplete) {
+          onComplete('');
+        }
+      })
+      .catch((err) => {
+        dispatch(doToast({ message: err.message, isError: true }));
+        if (onComplete) {
+          onComplete(err.message);
+        }
+      });
+  };
+};
+
+export const doSblRescind = (channelClaim: ChannelClaim, params: SblRescind, onComplete: (error: string) => void) => {
+  return async (dispatch: Dispatch) => {
+    const channelSignature = await channelSignName(channelClaim.claim_id, channelClaim.name);
+    if (!channelSignature) {
+      devToast(dispatch, 'doSblRescind: failed to sign channel name');
+      return;
+    }
+
+    return Comments.sbl_rescind({
+      channel_name: channelClaim.name,
+      channel_id: channelClaim.claim_id,
+      signature: channelSignature.signature,
+      signing_ts: channelSignature.signing_ts,
+      ...params,
+    })
+      .then((resp) => {
+        if (onComplete) {
+          onComplete('');
+        }
+        dispatch(
+          doToast({ message: __('Membership for %member% rescinded.', { member: params.invited_channel_name }) })
+        );
+      })
+      .catch((err) => {
+        dispatch(doToast({ message: err.message, isError: true }));
+        if (onComplete) {
+          onComplete(err.message);
+        }
       });
   };
 };

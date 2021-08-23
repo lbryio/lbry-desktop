@@ -20,6 +20,13 @@ declare type Comment = {
   is_fiat?: boolean,
 };
 
+declare type CommentronAuth = {
+  channel_name: string,
+  channel_id: string,
+  signature: string,
+  signing_ts: string,
+};
+
 declare type PerChannelSettings = {
   words?: Array<string>,
   comments_enabled?: boolean,
@@ -68,6 +75,10 @@ declare type CommentsState = {
   settingsByChannelId: { [string]: PerChannelSettings }, // ChannelID -> settings
   fetchingSettings: boolean,
   fetchingBlockedWords: boolean,
+  sblMine: any,
+  sblInvited: Array<any>,
+  fetchingSblMine: boolean,
+  fetchingSblInvited: boolean,
 };
 
 declare type CommentReactParams = {
@@ -298,3 +309,53 @@ declare type BlockWordParams = {
   signing_ts: string,
   words: string, // CSV list of containing words to block comment on content
 };
+
+declare type SblUpdate = {
+  name?: string, // A user friendly identifier for the owner/users.
+  category?: string, // The category of block list this is so others search
+  description?: string,
+  member_invite_enabled?: boolean, // Can members invite others contributors?
+  // Strikes are number of hours a user should be banned for if
+  // part of this blocked list. Strikes 1,2,3 are intended to be
+  // progressively higher. Strike 3 is the highest.
+  strike_one?: number,
+  strike_two?: number,
+  strike_three?: number,
+  invite_expiration?: number, // The number of hours until a sent invite expires.
+  // Curse jar allows automatic appeals. If they tip the owner of
+  // the shared blocked list their appeal is automatically accepted.
+  curse_jar_amount?: number,
+  remove?: boolean,
+};
+
+declare type SharedBlockedListUpdateArgs = CommentronAuth & SblUpdate;
+
+declare type SblGet = {
+  blocked_list_id?: number,
+  status: number, // @see: SBL_INVITE_STATUS
+};
+
+declare type SharedBlockedListGetArgs = ?CommentronAuth & SblGet;
+
+declare type SblInvite = {
+  blocked_list_id?: number,
+  invitee_channel_name: string,
+  invitee_channel_id: string,
+  message: string,
+};
+
+declare type SharedBlockedListInviteArgs = CommentronAuth & SblInvite;
+
+declare type SblInviteAccept = {
+  blocked_list_id: number,
+  accepted: boolean,
+};
+
+declare type SharedBlockedListInviteAcceptArgs = CommentronAuth & SblInviteAccept;
+
+declare type SblRescind = {
+  invited_channel_name: string,
+  invited_channel_id: string,
+};
+
+declare type SharedBlockedListRescindArgs = CommentronAuth & SblRescind;

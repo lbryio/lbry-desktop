@@ -19,3 +19,15 @@ export const BLOCK_LEVEL = {
 
 export const COMMENT_PAGE_SIZE_TOP_LEVEL = 10;
 export const COMMENT_PAGE_SIZE_REPLIES = 10;
+
+// ***************************************************************************
+// SBL: Shared Blocked List
+// ***************************************************************************
+
+export const SBL_INVITE_STATUS = {
+  ALL: 0,
+  PENDING: 1,
+  ACCEPTED: 2,
+  REJECTED: 3,
+  NONE: 4,
+};
