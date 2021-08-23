@@ -58,9 +58,7 @@ export default function SettingAccount(props: Props) {
             )}
 
             {/* @if TARGET='app' */}
-            <div className="card__main-actions">
-              <SyncToggle disabled={walletEncrypted && !storedPassword && storedPassword !== ''} />
-            </div>
+            <SyncToggle disabled={walletEncrypted && !storedPassword && storedPassword !== ''} />
             {/* @endif */}
 
             {/* @if TARGET='web' */}

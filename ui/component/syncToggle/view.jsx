@@ -2,6 +2,7 @@
 import * as MODALS from 'constants/modal_types';
 import React from 'react';
 import Button from 'component/button';
+import SettingsRow from 'component/settingsRow';
 import { withRouter } from 'react-router';
 import { FormField } from 'component/common/form';
 
@@ -20,11 +21,14 @@ function SyncToggle(props: Props) {
   const { verifiedEmail, openModal, syncEnabled, disabled } = props;
 
   return (
-    <div>
+    <SettingsRow
+      title={__('Sync')}
+      subtitle={disabled || !verifiedEmail ? '' : __('Sync your balance and preferences across devices.')}
+    >
       <FormField
         type="checkbox"
         name="sync_toggle"
-        label={__('Sync your balance and preferences across devices.')}
+        label={disabled || !verifiedEmail ? __('Sync your balance and preferences across devices.') : undefined}
         checked={syncEnabled && verifiedEmail}
         onChange={() => openModal(MODALS.SYNC_ENABLE, { mode: syncEnabled ? 'disable' : 'enable' })}
         disabled={disabled || !verifiedEmail}
@@ -40,7 +44,7 @@ function SyncToggle(props: Props) {
           <Button requiresAuth button="primary" label={__('Add Email')} />
         </div>
       )}
-    </div>
+    </SettingsRow>
   );
 }
 
