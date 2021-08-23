@@ -5,7 +5,6 @@ import { SETTINGS_GRP } from 'constants/settings';
 import React from 'react';
 import Button from 'component/button';
 import Card from 'component/common/card';
-import SettingAccountPassword from 'component/settingAccountPassword';
 import SettingsRow from 'component/settingsRow';
 import SyncToggle from 'component/syncToggle';
 import { getPasswordFromCookie } from 'util/saved-passwords';
@@ -48,9 +47,14 @@ export default function SettingAccount(props: Props) {
         body={
           <>
             {isAuthenticated && (
-              <div className="card__main-actions">
-                <SettingAccountPassword />
-              </div>
+              <SettingsRow title={__('Password')}>
+                <Button
+                  button="inverse"
+                  label={__('Manage')}
+                  icon={ICONS.ARROW_RIGHT}
+                  navigate={`/$/${PAGES.SETTINGS_UPDATE_PWD}`}
+                />
+              </SettingsRow>
             )}
 
             {/* @if TARGET='app' */}

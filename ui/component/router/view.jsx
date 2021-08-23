@@ -82,6 +82,7 @@ const TagsFollowingManagePage = lazyImport(() =>
 );
 const TagsFollowingPage = lazyImport(() => import('page/tagsFollowing' /* webpackChunkName: "secondary" */));
 const TopPage = lazyImport(() => import('page/top' /* webpackChunkName: "secondary" */));
+const UpdatePasswordPage = lazyImport(() => import('page/passwordUpdate' /* webpackChunkName: "passwordUpdate" */));
 const Welcome = lazyImport(() => import('page/welcome' /* webpackChunkName: "secondary" */));
 const YoutubeSyncPage = lazyImport(() => import('page/youtubeSync' /* webpackChunkName: "secondary" */));
 
@@ -294,6 +295,7 @@ function AppRouter(props: Props) {
         <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_NOTIFICATIONS}`} component={SettingsNotificationsPage} />
         <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} component={SettingsStripeCard} />
         <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_STRIPE_ACCOUNT}`} component={SettingsStripeAccount} />
+        <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_UPDATE_PWD}`} component={UpdatePasswordPage} />
         <PrivateRoute
           {...props}
           exact
