@@ -1,6 +1,6 @@
 // @flow
 import React, { useEffect, useRef, useState } from 'react';
-import { SIMPLE_SITE } from 'config';
+// import { SIMPLE_SITE } from 'config';
 import Button from 'component/button';
 import * as ICONS from 'constants/icons';
 import classnames from 'classnames';
@@ -14,7 +14,8 @@ import recsys from './plugins/videojs-recsys/plugin';
 import qualityLevels from 'videojs-contrib-quality-levels';
 import isUserTyping from 'util/detect-typing';
 // @if TARGET='web'
-import './plugins/videojs-aniview/plugin';
+// Disabled for now.
+// import './plugins/videojs-aniview/plugin';
 // @endif
 const isDev = process.env.NODE_ENV !== 'production';
 
@@ -56,7 +57,7 @@ type Props = {
   adUrl: ?string,
   claimId: ?string,
   userId: ?number,
-  allowPreRoll: ?boolean,
+  // allowPreRoll: ?boolean,
   shareTelemetry: boolean,
 };
 
@@ -194,7 +195,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     adUrl,
     claimId,
     userId,
-    allowPreRoll,
+    // allowPreRoll,
     shareTelemetry,
   } = props;
 
@@ -587,9 +588,10 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     // otherwise a race condition occurs if we place this in the onReady call back
     // allow if isDev because otherwise you'll never see ads when basing to master
     // @if TARGET='web'
-    if ((allowPreRoll && SIMPLE_SITE) || isDev) {
-      vjs.aniview();
-    }
+    // DISABLED FOR NOW
+    // if ((allowPreRoll && SIMPLE_SITE) || isDev) {
+    //   vjs.aniview();
+    // }
     // @endif
 
     // fixes #3498 (https://github.com/lbryio/lbry-desktop/issues/3498)
