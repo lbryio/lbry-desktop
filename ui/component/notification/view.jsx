@@ -160,7 +160,7 @@ export default function Notification(props: Props) {
       )
     : notificationLink
     ? (props: { children: any }) => (
-        <NavLink {...navLinkProps}>
+        <NavLink {...navLinkProps} className="menu__link--notification">
           <a className="menu__link--notification" onClick={handleNotificationClick}>
             {props.children}
           </a>
