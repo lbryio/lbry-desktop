@@ -38,6 +38,7 @@ type Props = {
   claimIsMine: boolean,
   commentsDisabled: boolean,
   isLivestream: boolean,
+  clearPosition: (string) => void,
 };
 
 function FilePage(props: Props) {
@@ -60,6 +61,7 @@ function FilePage(props: Props) {
     collection,
     collectionId,
     isLivestream,
+    clearPosition,
   } = props;
   const cost = costInfo ? costInfo.cost : null;
   const hasFileInfo = fileInfo !== undefined;
@@ -74,6 +76,10 @@ function FilePage(props: Props) {
     }
     // @endif
 
+    if (collectionId) {
+      clearPosition(uri);
+    }
+
     // See https://github.com/lbryio/lbry-desktop/pull/1563 for discussion
     fetchCostInfo(uri);
     setViewed(uri);
@@ -82,7 +88,7 @@ function FilePage(props: Props) {
     return () => {
       setPrimaryUri(null);
     };
-  }, [uri, hasFileInfo, fetchFileInfo, fetchCostInfo, setViewed, setPrimaryUri]);
+  }, [uri, hasFileInfo, fetchFileInfo, collectionId, clearPosition, fetchCostInfo, setViewed, setPrimaryUri]);
 
   function renderFilePageLayout() {
     if (RENDER_MODES.FLOATING_MODES.includes(renderMode)) {

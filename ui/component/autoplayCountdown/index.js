@@ -3,7 +3,7 @@ import { makeSelectClaimForUri, SETTINGS, COLLECTIONS_CONSTS, makeSelectNextUrlF
 import { withRouter } from 'react-router';
 import { makeSelectIsPlayerFloating, makeSelectNextUnplayedRecommended } from 'redux/selectors/content';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { doSetPlayingUri, doPlayUri } from 'redux/actions/content';
+import { doSetPlayingUri, doPlayUri, clearPosition } from 'redux/actions/content';
 import AutoplayCountdown from './view';
 import { selectModal } from 'redux/selectors/app';
 
@@ -38,5 +38,6 @@ export default withRouter(
   connect(select, {
     doSetPlayingUri,
     doPlayUri,
+    clearPosition,
   })(AutoplayCountdown)
 );

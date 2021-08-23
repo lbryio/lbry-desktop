@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { doSetContentHistoryItem, doSetPrimaryUri } from 'redux/actions/content';
+import { doSetContentHistoryItem, doSetPrimaryUri, clearPosition } from 'redux/actions/content';
 import { withRouter } from 'react-router-dom';
 import {
   doFetchFileInfo,
@@ -45,6 +45,7 @@ const perform = (dispatch) => ({
   fetchCostInfo: (uri) => dispatch(doFetchCostInfoForUri(uri)),
   setViewed: (uri) => dispatch(doSetContentHistoryItem(uri)),
   setPrimaryUri: (uri) => dispatch(doSetPrimaryUri(uri)),
+  clearPosition: (uri) => dispatch(clearPosition(uri)),
 });
 
 export default withRouter(connect(select, perform)(FilePage));
