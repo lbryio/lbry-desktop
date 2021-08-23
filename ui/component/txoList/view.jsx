@@ -90,6 +90,16 @@ function TxoList(props: Props) {
       try {
         const accountTransactionResponse = await getAccountTransactions();
 
+        // reverse so order is from most recent to latest
+        if (accountTransactionResponse && accountTransactionResponse.length) {
+          accountTransactionResponse.reverse();
+        }
+
+        // TODO: remove this once pagination is implemented
+        if (accountTransactionResponse && accountTransactionResponse.length && accountTransactionResponse.length > 25) {
+          accountTransactionResponse.length = 25;
+        }
+
         setAccountTransactionResponse(accountTransactionResponse);
       } catch (err) {
         console.log(err);
@@ -106,8 +116,14 @@ function TxoList(props: Props) {
         // console.log('amount of transactions');
         // console.log(customerTransactionResponse.length);
 
+        // reverse so order is from most recent to latest
         if (customerTransactionResponse && customerTransactionResponse.length) {
           customerTransactionResponse.reverse();
+        }
+
+        // TODO: remove this once pagination is implemented
+        if (customerTransactionResponse && customerTransactionResponse.length && customerTransactionResponse.length > 25) {
+          customerTransactionResponse.length = 25;
         }
 
         setCustomerTransactions(customerTransactionResponse);
@@ -265,8 +281,13 @@ function TxoList(props: Props) {
       // toggling the currency type (lbc/fiat)
       case QUERY_NAME_CURRENCY:
         newUrlParams.set(QUERY_NAME_CURRENCY, delta.value);
-        newUrlParams.set(QUERY_NAME_FIAT_TYPE, currentUrlParams.fiatType);
         newUrlParams.set(QUERY_NAME_TAB, currentUrlParams.tab);
+        // only set fiat type (incoming|outgoing) if fiat is being used
+        if (delta.value === 'credits') {
+          newUrlParams.delete(QUERY_NAME_FIAT_TYPE);
+        } else {
+          newUrlParams.set(QUERY_NAME_FIAT_TYPE, currentUrlParams.fiatType);
+        }
         break;
       // toggling the fiat type (incoming/outgoing)
       case QUERY_NAME_FIAT_TYPE:
