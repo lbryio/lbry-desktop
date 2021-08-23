@@ -194,7 +194,13 @@ class StripeAccountConnection extends React.Component<Props, State> {
     } = this.state;
 
     return (
-      <Page backout={{ title: pageTitle, backLabel: __('Done') }} noFooter noSideNavigation>
+      <Page
+        noFooter
+        noSideNavigation
+        settingsPage
+        className="card-stack"
+        backout={{ title: pageTitle, backLabel: __('Back') }}
+      >
         <Card
           title={<div className="table__header-text">{__('Connect a bank account')}</div>}
           isBodyList

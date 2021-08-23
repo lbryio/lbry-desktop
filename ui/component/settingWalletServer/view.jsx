@@ -24,7 +24,7 @@ type DaemonStatus = {
 
 type Props = {
   getDaemonStatus: () => void,
-  setCustomWalletServers: any => void,
+  setCustomWalletServers: (any) => void,
   clearWalletServers: () => void,
   customWalletServers: ServerConfig,
   saveServerConfig: (Array<ServerTuple>) => void,
@@ -115,7 +115,7 @@ function SettingWalletServer(props: Props) {
           name="default_wallet_servers"
           checked={!advancedMode}
           label={__('Use official lbry.tv wallet servers')}
-          onChange={e => {
+          onChange={(e) => {
             if (e.target.checked) {
               doClear();
             }
@@ -125,7 +125,7 @@ function SettingWalletServer(props: Props) {
           type="radio"
           name="custom_wallet_servers"
           checked={advancedMode}
-          onChange={e => {
+          onChange={(e) => {
             setAdvancedMode(e.target.checked);
             if (e.target.checked && customWalletServers.length) {
               setCustomWalletServers(stringifyServerParam(customWalletServers));
@@ -140,7 +140,7 @@ function SettingWalletServer(props: Props) {
             }}
           >
             Wallet servers are used to relay data to and from the LBRY blockchain. They also determine what content
-            shows in trending or is blocked. %learn_more%.
+            shows in trending or is blocked. %learn_more%
           </I18nMessage>
         </p>
 
@@ -150,7 +150,7 @@ function SettingWalletServer(props: Props) {
               serverConfig.map((entry, index) => {
                 const [host, port] = entry;
                 const available = activeWalletServers.some(
-                  s => s.host === entry[0] && String(s.port) === entry[1] && s.availability
+                  (s) => s.host === entry[0] && String(s.port) === entry[1] && s.availability
                 );
 
                 return (

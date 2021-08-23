@@ -1,12 +1,15 @@
 // @flow
+import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import Card from 'component/common/card';
 import TagsSearch from 'component/tagsSearch';
 import Page from 'component/page';
 import Button from 'component/button';
 import ChannelSelector from 'component/channelSelector';
+import SettingsRow from 'component/settingsRow';
 import Spinner from 'component/spinner';
 import { FormField } from 'component/common/form-components/form-field';
+import Icon from 'component/common/icon';
 import LbcSymbol from 'component/common/lbc-symbol';
 import I18nMessage from 'component/i18nMessage';
 import { isNameValid, parseURI } from 'lbry-redux';
@@ -284,194 +287,213 @@ export default function SettingsCreatorPage(props: Props) {
     <Page
       noFooter
       noSideNavigation
-      backout={{
-        title: __('Creator settings'),
-        backLabel: __('Done'),
-      }}
+      settingsPage
+      backout={{ title: __('Creator settings'), backLabel: __('Back') }}
       className="card-stack"
     >
-      <ChannelSelector hideAnon />
-      {isBusy && (
-        <div className="main--empty">
-          <Spinner />
-        </div>
-      )}
-      {isDisabled && (
-        <Card
-          title={__('Settings unavailable for this channel')}
-          subtitle={__("This channel isn't staking enough LBRY Credits to enable Creator Settings.")}
-        />
-      )}
-      {!isBusy && !isDisabled && (
-        <>
+      <div className="card-stack">
+        <ChannelSelector hideAnon />
+
+        {isBusy && (
+          <div className="main--empty">
+            <Spinner />
+          </div>
+        )}
+
+        {isDisabled && (
           <Card
-            title={__('General')}
-            actions={
-              <>
-                <FormField
-                  type="checkbox"
-                  name="comments_enabled"
-                  label={__('Enable comments for channel.')}
-                  checked={commentsEnabled}
-                  onChange={() => setSettings({ comments_enabled: !commentsEnabled })}
-                />
-                <FormField
-                  name="slow_mode_min_gap"
-                  label={__('Minimum time gap in seconds between comments (affects livestream chat as well).')}
-                  min={0}
-                  step={1}
-                  type="number"
-                  placeholder="1"
-                  value={slowModeMin}
-                  onChange={(e) => {
-                    const value = parseInt(e.target.value);
-                    setSlowModeMin(value);
-                    pushSlowModeMinDebounced(value, activeChannelClaim);
-                  }}
-                  onBlur={() => setLastUpdated(Date.now())}
-                />
-              </>
-            }
+            title={__('Settings unavailable for this channel')}
+            subtitle={__("This channel isn't staking enough LBRY Credits to enable Creator Settings.")}
           />
-          <Card
-            title={__('Filter')}
-            actions={
-              <div className="tag--blocked-words">
-                <TagsSearch
-                  label={__('Muted words')}
-                  labelAddNew={__('Add words')}
-                  labelSuggestions={__('Suggestions')}
-                  onRemove={removeMutedWord}
-                  onSelect={addMutedWords}
-                  disableAutoFocus
-                  tagsPassedIn={mutedWordTags}
-                  placeholder={__('Add words to block')}
-                  hideSuggestions
-                  disableControlTags
-                />
-              </div>
-            }
-          />
-          <Card
-            title={__('Tip')}
-            actions={
-              <>
-                <FormField
-                  name="min_tip_amount_comment"
-                  label={
-                    <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>Minimum %lbc% tip amount for comments</I18nMessage>
-                  }
-                  helper={__(
-                    'Enabling a minimum amount to comment will force all comments, including livestreams, to have tips associated with them. This can help prevent spam.'
-                  )}
-                  className="form-field--price-amount"
-                  max={LBC_MAX}
-                  min={LBC_MIN}
-                  step={LBC_STEP}
-                  type="number"
-                  placeholder="1"
-                  value={minTip}
-                  onChange={(e) => {
-                    const newMinTip = parseFloat(e.target.value);
-                    setMinTip(newMinTip);
-                    pushMinTipDebounced(newMinTip, activeChannelClaim);
-                    if (newMinTip !== 0 && minSuper !== 0) {
-                      setMinSuper(0);
-                      pushMinSuperDebounced(0, activeChannelClaim);
-                    }
-                  }}
-                  onBlur={() => setLastUpdated(Date.now())}
-                />
-                <FormField
-                  name="min_tip_amount_super_chat"
-                  label={
-                    <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>Minimum %lbc% tip amount for hyperchats</I18nMessage>
-                  }
-                  helper={
-                    <>
-                      {__(
-                        'Enabling a minimum amount to hyperchat will force all TIPPED comments to have this value in order to be shown. This still allows regular comments to be posted.'
-                      )}
-                      {minTip !== 0 && (
-                        <p className="help--inline">
-                          <em>{__('(This settings is not applicable if all comments require a tip.)')}</em>
-                        </p>
-                      )}
-                    </>
-                  }
-                  className="form-field--price-amount"
-                  min={0}
-                  step="any"
-                  type="number"
-                  placeholder="1"
-                  value={minSuper}
-                  disabled={minTip !== 0}
-                  onChange={(e) => {
-                    const newMinSuper = parseFloat(e.target.value);
-                    setMinSuper(newMinSuper);
-                    pushMinSuperDebounced(newMinSuper, activeChannelClaim);
-                  }}
-                  onBlur={() => setLastUpdated(Date.now())}
-                />
-              </>
-            }
-          />
-          <Card
-            title={__('Delegation')}
-            className="card--enable-overflow"
-            actions={
-              <div className="tag--blocked-words">
-                <FormField
-                  type="text"
-                  name="moderator_search"
-                  className="form-field--address"
-                  label={__('Add moderator')}
-                  placeholder={__('Enter a @username or URL')}
-                  helper={__('examples: @channel, @channel#3, https://odysee.com/@Odysee:8, lbry://@Odysee#8')}
-                  value={moderatorSearchTerm}
-                  onChange={(e) => setModeratorSearchTerm(e.target.value)}
-                  error={moderatorSearchError}
-                />
-                {moderatorSearchClaimUri && (
-                  <div className="section">
-                    <ClaimPreview
-                      key={moderatorSearchClaimUri}
-                      uri={moderatorSearchClaimUri}
-                      // type={'small'}
-                      // showNullPlaceholder
-                      hideMenu
-                      hideRepostLabel
-                      disableNavigation
-                      properties={''}
-                      renderActions={(claim) => {
-                        return (
-                          <Button
-                            requiresAuth
-                            button="primary"
-                            label={__('Add as moderator')}
-                            onClick={() => handleChannelSearchSelect(claim)}
-                          />
-                        );
-                      }}
+        )}
+
+        {!isBusy && !isDisabled && (
+          <>
+            <Card
+              isBodyList
+              body={
+                <>
+                  <SettingsRow title={__('Enable comments for channel.')}>
+                    <FormField
+                      type="checkbox"
+                      name="comments_enabled"
+                      checked={commentsEnabled}
+                      onChange={() => setSettings({ comments_enabled: !commentsEnabled })}
                     />
-                  </div>
-                )}
-                <TagsSearch
-                  label={__('Moderators')}
-                  labelAddNew={__('Add moderator')}
-                  onRemove={removeModerator}
-                  onSelect={addModerator}
-                  tagsPassedIn={moderatorTags}
-                  disableAutoFocus
-                  hideInputField
-                  hideSuggestions
-                  disableControlTags
-                />
-              </div>
-            }
-          />
-        </>
-      )}
+                  </SettingsRow>
+
+                  <SettingsRow title={__('Slow mode')} subtitle={__(HELP.SLOW_MODE)}>
+                    <FormField
+                      name="slow_mode_min_gap"
+                      min={0}
+                      step={1}
+                      type="number"
+                      placeholder="1"
+                      value={slowModeMin}
+                      onChange={(e) => {
+                        const value = parseInt(e.target.value);
+                        setSlowModeMin(value);
+                        pushSlowModeMinDebounced(value, activeChannelClaim);
+                      }}
+                      onBlur={() => setLastUpdated(Date.now())}
+                    />
+                  </SettingsRow>
+
+                  <SettingsRow
+                    title={
+                      <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>Minimum %lbc% tip amount for comments</I18nMessage>
+                    }
+                    subtitle={__(HELP.MIN_TIP)}
+                  >
+                    <FormField
+                      name="min_tip_amount_comment"
+                      className="form-field--price-amount"
+                      max={LBC_MAX}
+                      min={LBC_MIN}
+                      step={LBC_STEP}
+                      type="number"
+                      placeholder="1"
+                      value={minTip}
+                      onChange={(e) => {
+                        const newMinTip = parseFloat(e.target.value);
+                        setMinTip(newMinTip);
+                        pushMinTipDebounced(newMinTip, activeChannelClaim);
+                        if (newMinTip !== 0 && minSuper !== 0) {
+                          setMinSuper(0);
+                          pushMinSuperDebounced(0, activeChannelClaim);
+                        }
+                      }}
+                      onBlur={() => setLastUpdated(Date.now())}
+                    />
+                  </SettingsRow>
+
+                  <SettingsRow
+                    title={
+                      <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>Minimum %lbc% tip amount for hyperchats</I18nMessage>
+                    }
+                    subtitle={
+                      <>
+                        {__(HELP.MIN_SUPER)}
+                        {minTip !== 0 && (
+                          <p className="help--inline">
+                            <em>{__(HELP.MIN_SUPER_OFF)}</em>
+                          </p>
+                        )}
+                      </>
+                    }
+                  >
+                    <FormField
+                      name="min_tip_amount_super_chat"
+                      className="form-field--price-amount"
+                      min={0}
+                      step="any"
+                      type="number"
+                      placeholder="1"
+                      value={minSuper}
+                      disabled={minTip !== 0}
+                      onChange={(e) => {
+                        const newMinSuper = parseFloat(e.target.value);
+                        setMinSuper(newMinSuper);
+                        pushMinSuperDebounced(newMinSuper, activeChannelClaim);
+                      }}
+                      onBlur={() => setLastUpdated(Date.now())}
+                    />
+                  </SettingsRow>
+
+                  <SettingsRow title={__('Filter')} subtitle={__(HELP.BLOCKED_WORDS)} multirow>
+                    <div className="tag--blocked-words">
+                      <TagsSearch
+                        label={__('Muted words')}
+                        labelAddNew={__('Add words')}
+                        labelSuggestions={__('Suggestions')}
+                        onRemove={removeMutedWord}
+                        onSelect={addMutedWords}
+                        disableAutoFocus
+                        tagsPassedIn={mutedWordTags}
+                        placeholder={__('Add words to block')}
+                        hideSuggestions
+                        disableControlTags
+                      />
+                    </div>
+                  </SettingsRow>
+
+                  <SettingsRow title={__('Moderators')} subtitle={__(HELP.MODERATORS)} multirow>
+                    <div className="tag--blocked-words">
+                      <TagsSearch
+                        label={__('Moderators')}
+                        labelAddNew={__('Add moderator')}
+                        onRemove={removeModerator}
+                        onSelect={addModerator}
+                        tagsPassedIn={moderatorTags}
+                        disableAutoFocus
+                        hideInputField
+                        hideSuggestions
+                        disableControlTags
+                      />
+                      <FormField
+                        type="text"
+                        name="moderator_search"
+                        className="form-field--address"
+                        label={
+                          <>
+                            {__('Search channel')}
+                            <Icon
+                              customTooltipText={__(HELP.MODERATOR_SEARCH)}
+                              className="icon--help"
+                              icon={ICONS.HELP}
+                              tooltip
+                              size={16}
+                            />
+                          </>
+                        }
+                        placeholder={__('Enter a @username or URL')}
+                        value={moderatorSearchTerm}
+                        onChange={(e) => setModeratorSearchTerm(e.target.value)}
+                        error={moderatorSearchError}
+                      />
+                      {moderatorSearchClaimUri && (
+                        <div className="section">
+                          <ClaimPreview
+                            key={moderatorSearchClaimUri}
+                            uri={moderatorSearchClaimUri}
+                            // type={'small'}
+                            // showNullPlaceholder
+                            hideMenu
+                            hideRepostLabel
+                            disableNavigation
+                            properties={''}
+                            renderActions={(claim) => {
+                              return (
+                                <Button
+                                  requiresAuth
+                                  button="primary"
+                                  label={__('Add as moderator')}
+                                  onClick={() => handleChannelSearchSelect(claim)}
+                                />
+                              );
+                            }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </SettingsRow>
+                </>
+              }
+            />
+          </>
+        )}
+      </div>
     </Page>
   );
 }
+
+// prettier-ignore
+const HELP = {
+  SLOW_MODE: 'Minimum time gap in seconds between comments (affects livestream chat as well).',
+  MIN_TIP: 'Enabling a minimum amount to comment will force all comments, including livestreams, to have tips associated with them. This can help prevent spam.',
+  MIN_SUPER: 'Enabling a minimum amount to hyperchat will force all TIPPED comments to have this value in order to be shown. This still allows regular comments to be posted.',
+  MIN_SUPER_OFF: '(This settings is not applicable if all comments require a tip.)',
+  BLOCKED_WORDS: 'Comments and livestream chat containing these words will be blocked.',
+  MODERATORS: 'Moderators can block channels on your behalf. Blocked channels will appear in your "Blocked and Muted" list.',
+  MODERATOR_SEARCH: 'Enter a channel name or URL to add as a moderator.\nExamples:\n - @channel\n - @channel#3\n - https://odysee.com/@Odysee:8\n - lbry://@Odysee#8',
+};

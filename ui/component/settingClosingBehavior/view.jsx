@@ -5,22 +5,23 @@ import { FormField } from 'component/common/form';
 
 type Props = {
   toTrayWhenClosed: boolean,
-  setToTrayWhenClosed: boolean => void,
+  setToTrayWhenClosed: (boolean) => void,
+  noLabels?: boolean,
 };
 
 function SettingClosingBehavior(props: Props) {
-  const { toTrayWhenClosed, setToTrayWhenClosed } = props;
+  const { toTrayWhenClosed, setToTrayWhenClosed, noLabels } = props;
 
   return (
     <React.Fragment>
       <FormField
         type="checkbox"
         name="totraywhenclosed"
-        onChange={e => {
+        onChange={(e) => {
           setToTrayWhenClosed(e.target.checked);
         }}
         checked={toTrayWhenClosed}
-        label={__('Leave app running in notification area when the window is closed')}
+        label={noLabels ? '' : __('Leave app running in notification area when the window is closed')}
       />
     </React.Fragment>
   );

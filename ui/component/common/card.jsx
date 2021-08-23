@@ -10,6 +10,7 @@ type Props = {
   title?: string | Node,
   subtitle?: string | Node,
   titleActions?: string | Node,
+  id?: string,
   body?: string | Node,
   actions?: string | Node,
   icon?: string,
@@ -30,6 +31,7 @@ export default function Card(props: Props) {
     title,
     subtitle,
     titleActions,
+    id,
     body,
     actions,
     icon,
@@ -53,6 +55,7 @@ export default function Card(props: Props) {
       className={classnames(className, 'card', {
         'card__multi-pane': Boolean(secondPane),
       })}
+      id={id}
       onClick={(e) => {
         if (onClick) {
           onClick();

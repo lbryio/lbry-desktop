@@ -67,9 +67,10 @@ const RepostNew = lazyImport(() => import('page/repost' /* webpackChunkName: "se
 const RewardsPage = lazyImport(() => import('page/rewards' /* webpackChunkName: "secondary" */));
 const RewardsVerifyPage = lazyImport(() => import('page/rewardsVerify' /* webpackChunkName: "secondary" */));
 const SearchPage = lazyImport(() => import('page/search' /* webpackChunkName: "secondary" */));
-const SettingsAdvancedPage = lazyImport(() => import('page/settingsAdvanced' /* webpackChunkName: "secondary" */));
 const SettingsStripeCard = lazyImport(() => import('page/settingsStripeCard' /* webpackChunkName: "secondary" */));
-const SettingsStripeAccount = lazyImport(() => import('page/settingsStripeAccount' /* webpackChunkName: "secondary" */));
+const SettingsStripeAccount = lazyImport(() =>
+  import('page/settingsStripeAccount' /* webpackChunkName: "secondary" */)
+);
 const SettingsCreatorPage = lazyImport(() => import('page/settingsCreator' /* webpackChunkName: "secondary" */));
 const SettingsNotificationsPage = lazyImport(() =>
   import('page/settingsNotifications' /* webpackChunkName: "secondary" */)
@@ -81,6 +82,7 @@ const TagsFollowingManagePage = lazyImport(() =>
 );
 const TagsFollowingPage = lazyImport(() => import('page/tagsFollowing' /* webpackChunkName: "secondary" */));
 const TopPage = lazyImport(() => import('page/top' /* webpackChunkName: "secondary" */));
+const UpdatePasswordPage = lazyImport(() => import('page/passwordUpdate' /* webpackChunkName: "passwordUpdate" */));
 const Welcome = lazyImport(() => import('page/welcome' /* webpackChunkName: "secondary" */));
 const YoutubeSyncPage = lazyImport(() => import('page/youtubeSync' /* webpackChunkName: "secondary" */));
 
@@ -277,7 +279,6 @@ function AppRouter(props: Props) {
         <Route path={`/$/${PAGES.SEARCH}`} exact component={SearchPage} />
         <Route path={`/$/${PAGES.TOP}`} exact component={TopPage} />
         <Route path={`/$/${PAGES.SETTINGS}`} exact component={SettingsPage} />
-        <Route path={`/$/${PAGES.SETTINGS_ADVANCED}`} exact component={SettingsAdvancedPage} />
         <Route path={`/$/${PAGES.INVITE}/:referrer`} exact component={InvitedPage} />
         <Route path={`/$/${PAGES.CHECKOUT}`} exact component={CheckoutPage} />
         <Route path={`/$/${PAGES.REPORT_CONTENT}`} exact component={ReportContentPage} />
@@ -294,6 +295,7 @@ function AppRouter(props: Props) {
         <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_NOTIFICATIONS}`} component={SettingsNotificationsPage} />
         <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} component={SettingsStripeCard} />
         <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_STRIPE_ACCOUNT}`} component={SettingsStripeAccount} />
+        <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_UPDATE_PWD}`} component={UpdatePasswordPage} />
         <PrivateRoute
           {...props}
           exact
