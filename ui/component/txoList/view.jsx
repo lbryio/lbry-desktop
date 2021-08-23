@@ -291,11 +291,11 @@ function TxoList(props: Props) {
   return (
     <Card
       title={
-        <><div className="table__header-text" style={{display: 'inline'}}>{__(`Transactions`)}</div>
-          <div style={{ display: 'inline'}}>
-            <fieldset-section style={{ display: 'inline'}}>
+        <><div className="table__header-text">{__(`Transactions`)}</div>
+          <div className="txo__radios_container">
+            <fieldset-section style={{display: 'inline'}} className="txo__radios_fieldset">
               {/* toggle between LBC and fiat buttons */}
-              <div className={'txo__radios'} style={{ display: 'inline'}}>
+              <div className={'txo__radios'}>
                 {/* toggle to LBC */}
                 <Button
                   button="alt"
@@ -408,7 +408,6 @@ function TxoList(props: Props) {
                   </div>
                 )}
               </div>
-              {/* TODO: use card-between to display this properly */}
               {/* export and refresh buttons */}
               <div className="card__actions--inline">
                 {!isFetchingTransactions && transactionsFile === null && (
