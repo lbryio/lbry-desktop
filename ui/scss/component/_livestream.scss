@@ -1,4 +1,5 @@
 $discussion-header__height: 3rem;
+$recent-msg-button__height: 2rem;
 
 .livestream {
   flex: 1;
@@ -139,6 +140,19 @@ $discussion-header__height: 3rem;
   position: absolute;
   right: var(--spacing-xs);
   top: var(--spacing-xs);
+}
+
+.livestream__comments__scroll-to-recent {
+  margin-top: -$recent-msg-button__height;
+  align-self: center;
+  margin-bottom: var(--spacing-xs);
+  font-size: var(--font-xsmall);
+  padding: var(--spacing-xxs) var(--spacing-s);
+  opacity: 0.9;
+
+  &:hover {
+    opacity: 1;
+  }
 }
 
 .livestream__comment-create {

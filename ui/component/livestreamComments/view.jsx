@@ -9,6 +9,7 @@ import UriIndicator from 'component/uriIndicator';
 import CreditAmount from 'component/common/credit-amount';
 import ChannelThumbnail from 'component/channelThumbnail';
 import Tooltip from 'component/common/tooltip';
+import * as ICONS from 'constants/icons';
 
 type Props = {
   uri: string,
@@ -297,10 +298,11 @@ export default function LivestreamComments(props: Props) {
 
           {scrollPos < 0 && (
             <Button
-              button="alt"
-              className="livestream__comments-scroll__down"
+              button="secondary"
+              className="livestream__comments__scroll-to-recent"
               label={__('Recent Comments')}
               onClick={restoreScrollPos}
+              iconRight={ICONS.DOWN}
             />
           )}
 
