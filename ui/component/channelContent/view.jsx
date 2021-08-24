@@ -14,6 +14,8 @@ import { Form, FormField } from 'component/common/form';
 import { DEBOUNCE_WAIT_DURATION_MS } from 'constants/search';
 import { lighthouse } from 'redux/actions/search';
 
+const TYPES_TO_ALLOW_FILTER = ['stream', 'repost'];
+
 type Props = {
   uri: string,
   totalPages: number,
@@ -62,7 +64,11 @@ function ChannelContent(props: Props) {
   } = useHistory();
   const url = `${pathname}${search}`;
   const claimId = claim && claim.claim_id;
-  const showFilters = !claimType || claimType === 'stream';
+  const showFilters =
+    !claimType ||
+    (Array.isArray(claimType)
+      ? claimType.every((ct) => TYPES_TO_ALLOW_FILTER.includes(ct))
+      : TYPES_TO_ALLOW_FILTER.includes(claimType));
 
   function handleInputChange(e) {
     const { value } = e.target;
