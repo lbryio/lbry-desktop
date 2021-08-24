@@ -1,16 +1,25 @@
 // @flow
 import type { Player } from './videojs';
+import videojs from 'video.js';
+
+class TheaterModeButton extends videojs.getComponent('Button') {
+  constructor(player, options = {}) {
+    super(player, options);
+    this.addClass('vjs-button--theater-mode');
+    this.controlText('Theater Mode');
+  }
+}
 
 export function addTheaterModeButton(player: Player, toggleVideoTheaterMode: () => void) {
-  var myButton = player.controlBar.addChild('button', {
+  const controlBar = player.getChild('controlBar');
+
+  const theaterMode = new TheaterModeButton(player, {
+    name: 'TheaterModeButton',
     text: __('Theater mode'),
     clickHandler: () => {
       toggleVideoTheaterMode();
     },
   });
 
-  // $FlowFixMe
-  myButton.addClass('vjs-button--theater-mode');
-  // $FlowFixMe
-  myButton.setAttribute('title', __('Theater mode'));
+  controlBar.addChild(theaterMode);
 }

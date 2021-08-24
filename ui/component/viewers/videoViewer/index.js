@@ -33,6 +33,7 @@ const select = (state, props) => {
     authenticated: selectUserVerifiedEmail(state),
     userId: userId,
     shareTelemetry: IS_WEB || selectDaemonSettings(state).share_usage_data,
+    videoTheaterMode: makeSelectClientSetting(SETTINGS.VIDEO_THEATER_MODE)(state),
   };
 };
 
