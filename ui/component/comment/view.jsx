@@ -41,6 +41,7 @@ type Props = {
   commentIsMine: boolean, // if this comment was signed by an owned channel
   updateComment: (string, string) => void,
   fetchReplies: (string, string, number, number, number) => void,
+  totalReplyPages: number,
   commentModBlock: (string) => void,
   linkedCommentId?: string,
   linkedCommentAncestors: { [string]: Array<string> },
@@ -82,6 +83,7 @@ function Comment(props: Props) {
     commentId,
     updateComment,
     fetchReplies,
+    totalReplyPages,
     linkedCommentId,
     linkedCommentAncestors,
     commentingEnabled,
@@ -417,6 +419,7 @@ function Comment(props: Props) {
           linkedCommentId={linkedCommentId}
           numDirectReplies={numDirectReplies}
           onShowMore={() => setPage(page + 1)}
+          hasMore={page < totalReplyPages}
         />
       )}
     </li>

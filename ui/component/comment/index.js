@@ -10,7 +10,11 @@ import { makeSelectChannelIsMuted } from 'redux/selectors/blocked';
 import { doToast } from 'redux/actions/notifications';
 import { doSetPlayingUri } from 'redux/actions/content';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
-import { selectLinkedCommentAncestors, makeSelectOthersReactionsForComment } from 'redux/selectors/comments';
+import {
+  selectLinkedCommentAncestors,
+  makeSelectOthersReactionsForComment,
+  makeSelectTotalReplyPagesForParentId,
+} from 'redux/selectors/comments';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { selectPlayingUri } from 'redux/selectors/content';
 import Comment from './view';
@@ -31,6 +35,7 @@ const select = (state, props) => {
     playingUri: selectPlayingUri(state),
     stakedLevel: makeSelectStakedLevelForChannelUri(props.authorUri)(state),
     linkedCommentAncestors: selectLinkedCommentAncestors(state),
+    totalReplyPages: makeSelectTotalReplyPagesForParentId(props.commentId)(state),
   };
 };
 
