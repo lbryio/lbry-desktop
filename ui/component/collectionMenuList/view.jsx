@@ -42,6 +42,15 @@ function CollectionMenuList(props: Props) {
             </MenuItem>
             <MenuItem
               className="comment__menu-option"
+              onSelect={() => doOpenModal(MODALS.COLLECTION_ADD, { collectionId })}
+            >
+              <div className="menu__link">
+                <Icon aria-hidden icon={ICONS.COPY} />
+                {__('Copy List')}
+              </div>
+            </MenuItem>
+            <MenuItem
+              className="comment__menu-option"
               onSelect={() => push(`/$/${PAGES.LIST}/${collectionId}?view=edit`)}
             >
               <div className="menu__link">

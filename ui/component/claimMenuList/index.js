@@ -9,6 +9,8 @@ import {
   COLLECTIONS_CONSTS,
   makeSelectEditedCollectionForId,
   makeSelectClaimIsMine,
+  doFetchItemsInCollection,
+  makeSelectUrlsForCollectionId,
 } from 'lbry-redux';
 import { makeSelectChannelIsMuted } from 'redux/selectors/blocked';
 import { doChannelMute, doChannelUnmute } from 'redux/actions/blocked';
@@ -33,6 +35,8 @@ import fs from 'fs';
 
 const select = (state, props) => {
   const claim = makeSelectClaimForUri(props.uri, false)(state);
+  const collectionId = props.collectionId;
+  const resolvedList = makeSelectUrlsForCollectionId(collectionId)(state);
   const repostedClaim = claim && claim.reposted_claim;
   const contentClaim = repostedClaim || claim;
   const contentSigningChannel = contentClaim && contentClaim.signing_channel;
@@ -60,10 +64,11 @@ const select = (state, props) => {
     isSubscribed: makeSelectIsSubscribed(contentChannelUri, true)(state),
     channelIsAdminBlocked: makeSelectChannelIsAdminBlocked(props.uri)(state),
     isAdmin: selectHasAdminChannel(state),
-    claimInCollection: makeSelectCollectionForIdHasClaimUrl(props.collectionId, contentPermanentUri)(state),
-    isMyCollection: makeSelectCollectionIsMine(props.collectionId)(state),
-    editedCollection: makeSelectEditedCollectionForId(props.collectionId)(state),
+    claimInCollection: makeSelectCollectionForIdHasClaimUrl(collectionId, contentPermanentUri)(state),
+    isMyCollection: makeSelectCollectionIsMine(collectionId)(state),
+    editedCollection: makeSelectEditedCollectionForId(collectionId)(state),
     isAuthenticated: Boolean(selectUserVerifiedEmail(state)),
+    resolvedList,
   };
 };
 
@@ -90,6 +95,7 @@ const perform = (dispatch) => ({
   doChannelSubscribe: (subscription) => dispatch(doChannelSubscribe(subscription)),
   doChannelUnsubscribe: (subscription) => dispatch(doChannelUnsubscribe(subscription)),
   doCollectionEdit: (collection, props) => dispatch(doCollectionEdit(collection, props)),
+  fetchCollectionItems: (collectionId) => dispatch(doFetchItemsInCollection({ collectionId })),
 });
 
 export default connect(select, perform)(ClaimPreview);

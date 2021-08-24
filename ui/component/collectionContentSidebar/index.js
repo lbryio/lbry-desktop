@@ -7,9 +7,8 @@ import {
   makeSelectClaimForUri,
   makeSelectClaimIsMine,
 } from 'lbry-redux';
-import {
-  selectPlayingUri,
-} from 'redux/selectors/content';
+import { selectPlayingUri } from 'redux/selectors/content';
+import { doOpenModal } from 'redux/actions/app';
 
 const select = (state, props) => {
   const playingUri = selectPlayingUri(state);
@@ -26,4 +25,6 @@ const select = (state, props) => {
   };
 };
 
-export default connect(select)(CollectionContent);
+export default connect(select, {
+  doOpenModal,
+})(CollectionContent);

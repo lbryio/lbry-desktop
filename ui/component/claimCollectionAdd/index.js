@@ -19,9 +19,11 @@ const select = (state, props) => {
 
   if (collectionId) {
     items = makeSelectUrlsForCollectionId(collectionId)(state);
-    items.map((uri) => {
-      itemsClaims.push(makeSelectClaimForUri(uri)(state));
-    });
+    if (items) {
+      items.map((uri) => {
+        itemsClaims.push(makeSelectClaimForUri(uri)(state));
+      });
+    }
   }
 
   return {

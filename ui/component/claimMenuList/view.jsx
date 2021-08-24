@@ -56,6 +56,8 @@ type Props = {
   isChannelPage: boolean,
   editedCollection: Collection,
   isAuthenticated: boolean,
+  fetchCollectionItems: (string) => void,
+  resolvedList: boolean,
 };
 
 function ClaimMenuList(props: Props) {
@@ -93,6 +95,8 @@ function ClaimMenuList(props: Props) {
     isChannelPage = false,
     editedCollection,
     isAuthenticated,
+    fetchCollectionItems,
+    resolvedList,
   } = props;
   const incognitoClaim = contentChannelUri && !contentChannelUri.includes('@');
   const isChannel = !incognitoClaim && !contentSigningChannel;
@@ -105,6 +109,12 @@ function ClaimMenuList(props: Props) {
     : isSubscribed
     ? __('Unfollow')
     : __('Follow');
+
+  const fetchItems = React.useCallback(() => {
+    if (collectionId) {
+      fetchCollectionItems(collectionId);
+    }
+  }, [collectionId, fetchCollectionItems]);
 
   const { push, replace } = useHistory();
   if (!claim) {
@@ -249,6 +259,18 @@ function ClaimMenuList(props: Props) {
                     <div className="menu__link">
                       <Icon aria-hidden icon={ICONS.VIEW} />
                       {__('View List')}
+                    </div>
+                  </MenuItem>
+                  <MenuItem
+                    className="comment__menu-option"
+                    onSelect={() => {
+                      fetchItems();
+                      openModal(MODALS.COLLECTION_ADD, { collectionId });
+                    }}
+                  >
+                    <div className="menu__link">
+                      <Icon aria-hidden icon={ICONS.COPY} />
+                      {__('Copy List')}
                     </div>
                   </MenuItem>
                   {isMyCollection && (
