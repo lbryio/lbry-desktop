@@ -53,6 +53,7 @@ type Props = {
   isLivestream: boolean,
 };
 
+// preview image cards used in related video functionality
 function ClaimPreviewTile(props: Props) {
   const {
     history,

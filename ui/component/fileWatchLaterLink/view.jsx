@@ -17,10 +17,7 @@ type Props = {
 function FileWatchLaterLink(props: Props) {
   const { claim, hasClaimInWatchLater, doToast, doCollectionEdit, focusable = true } = props;
   const buttonRef = useRef();
-  console.log('ref');
-  console.log(buttonRef);
   let isHovering = useHover(buttonRef);
-  console.log(isHovering);
 
   if (!claim) {
     return null;
@@ -40,7 +37,10 @@ function FileWatchLaterLink(props: Props) {
     });
   }
 
+  // text that will show if you keep cursor over dic
   const title = hasClaimInWatchLater ? __('Remove from Watch Later') : __('Add to Watch Later');
+
+  // label that is shown after hover
   const label = !hasClaimInWatchLater ? __('Add') : __('Added');
 
   return (
