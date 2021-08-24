@@ -35,6 +35,7 @@ export const COMPLETE = 'Check';
 export const COMPLETED = 'CheckCircle';
 export const NOT_COMPLETED = 'Circle';
 export const SUBSCRIBE = 'Heart';
+export const SUBSCRIBED = 'HeartSolid';
 export const UNSUBSCRIBE = 'BrokenHeart';
 export const BELL = 'Bell';
 export const BELL_ON = 'BellOn';
