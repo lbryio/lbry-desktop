@@ -7,6 +7,7 @@ import {
   makeSelectStreamingUrlForUri,
   makeSelectClaimWasPurchased,
   SETTINGS,
+  COLLECTIONS_CONSTS,
 } from 'lbry-redux';
 import { makeSelectCostInfoForUri } from 'lbryinc';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
@@ -22,27 +23,34 @@ import {
 import FileRenderInitiator from './view';
 import { doAnaltyicsPurchaseEvent } from 'redux/actions/app';
 
-const select = (state, props) => ({
-  claimThumbnail: makeSelectThumbnailForUri(props.uri)(state),
-  fileInfo: makeSelectFileInfoForUri(props.uri)(state),
-  obscurePreview: makeSelectShouldObscurePreview(props.uri)(state),
-  isPlaying: makeSelectIsPlaying(props.uri)(state),
-  playingUri: selectPlayingUri(state),
-  insufficientCredits: makeSelectInsufficientCreditsForUri(props.uri)(state),
-  streamingUrl: makeSelectStreamingUrlForUri(props.uri)(state),
-  autoplay: makeSelectClientSetting(SETTINGS.AUTOPLAY)(state),
-  hasCostInfo: Boolean(makeSelectCostInfoForUri(props.uri)(state)),
-  costInfo: makeSelectCostInfoForUri(props.uri)(state),
-  renderMode: makeSelectFileRenderModeForUri(props.uri)(state),
-  claim: makeSelectClaimForUri(props.uri)(state),
-  claimWasPurchased: makeSelectClaimWasPurchased(props.uri)(state),
-  authenticated: selectUserVerifiedEmail(state),
-});
+const select = (state, props) => {
+  const { search } = props.location;
+  const urlParams = new URLSearchParams(search);
+  const collectionId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID);
+
+  return {
+    claimThumbnail: makeSelectThumbnailForUri(props.uri)(state),
+    fileInfo: makeSelectFileInfoForUri(props.uri)(state),
+    obscurePreview: makeSelectShouldObscurePreview(props.uri)(state),
+    isPlaying: makeSelectIsPlaying(props.uri)(state),
+    playingUri: selectPlayingUri(state),
+    insufficientCredits: makeSelectInsufficientCreditsForUri(props.uri)(state),
+    streamingUrl: makeSelectStreamingUrlForUri(props.uri)(state),
+    autoplay: makeSelectClientSetting(SETTINGS.AUTOPLAY)(state),
+    hasCostInfo: Boolean(makeSelectCostInfoForUri(props.uri)(state)),
+    costInfo: makeSelectCostInfoForUri(props.uri)(state),
+    renderMode: makeSelectFileRenderModeForUri(props.uri)(state),
+    claim: makeSelectClaimForUri(props.uri)(state),
+    claimWasPurchased: makeSelectClaimWasPurchased(props.uri)(state),
+    authenticated: selectUserVerifiedEmail(state),
+    collectionId,
+  };
+};
 
 const perform = (dispatch) => ({
-  play: (uri) => {
+  play: (uri, collectionId) => {
     dispatch(doSetPrimaryUri(uri));
-    dispatch(doSetPlayingUri({ uri }));
+    dispatch(doSetPlayingUri({ uri, collectionId }));
     dispatch(doPlayUri(uri, undefined, undefined, (fileInfo) => dispatch(doAnaltyicsPurchaseEvent(fileInfo))));
   },
 });

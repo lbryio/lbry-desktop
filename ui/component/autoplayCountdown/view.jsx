@@ -17,7 +17,7 @@ type Props = {
   nextRecommendedClaim: ?StreamClaim,
   nextRecommendedUri: string,
   isFloating: boolean,
-  doSetPlayingUri: ({ uri: ?string }) => void,
+  doSetPlayingUri: ({ uri: ?string, collectionId: ?string }) => void,
   doPlayUri: (string) => void,
   modal: { id: string, modalProps: {} },
   collectionId?: string,
@@ -58,19 +58,14 @@ function AutoplayCountdown(props: Props) {
   }
 
   const doNavigate = useCallback(() => {
-    if (!isFloating) {
-      if (navigateUrl) {
-        push(navigateUrl);
-        doSetPlayingUri({ uri: nextRecommendedUri });
-        doPlayUri(nextRecommendedUri);
-      }
-    } else {
-      if (nextRecommendedUri) {
-        doSetPlayingUri({ uri: nextRecommendedUri });
-        doPlayUri(nextRecommendedUri);
-      }
+    if (!isFloating && navigateUrl) {
+      push(navigateUrl);
     }
-  }, [navigateUrl, nextRecommendedUri, isFloating, doSetPlayingUri, doPlayUri, push]);
+    if (nextRecommendedUri) {
+      doSetPlayingUri({ uri: nextRecommendedUri, collectionId });
+      doPlayUri(nextRecommendedUri);
+    }
+  }, [isFloating, navigateUrl, nextRecommendedUri, push, doSetPlayingUri, collectionId, doPlayUri]);
 
   function shouldPauseAutoplay() {
     const elm = document.querySelector(`.${CLASSNAME_AUTOPLAY_COUNTDOWN}`);

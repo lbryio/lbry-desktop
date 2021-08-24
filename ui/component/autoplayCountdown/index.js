@@ -4,6 +4,7 @@ import { withRouter } from 'react-router';
 import {
   makeSelectIsPlayerFloating,
   makeSelectNextUnplayedRecommended,
+  selectPlayingUri,
 } from 'redux/selectors/content';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { doSetPlayingUri, doPlayUri } from 'redux/actions/content';
@@ -18,7 +19,8 @@ const select = (state, props) => {
   const { location } = props;
   const { search } = location;
   const urlParams = new URLSearchParams(search);
-  const collectionId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID);
+  const playingUri = selectPlayingUri(state);
+  const collectionId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID) || (playingUri && playingUri.collectionId);
 
   let nextRecommendedUri;
   if (collectionId) {

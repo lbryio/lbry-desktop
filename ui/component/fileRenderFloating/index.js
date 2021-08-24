@@ -22,6 +22,7 @@ const select = (state, props) => {
   const playingUri = selectPlayingUri(state);
   const primaryUri = selectPrimaryUri(state);
   const uri = playingUri && playingUri.uri;
+  const collectionId = playingUri && playingUri.collectionId;
 
   return {
     uri,
@@ -35,6 +36,7 @@ const select = (state, props) => {
     floatingPlayerEnabled: makeSelectClientSetting(SETTINGS.FLOATING_PLAYER)(state),
     renderMode: makeSelectFileRenderModeForUri(uri)(state),
     videoTheaterMode: makeSelectClientSetting(SETTINGS.VIDEO_THEATER_MODE)(state),
+    collectionId,
   };
 };
 
