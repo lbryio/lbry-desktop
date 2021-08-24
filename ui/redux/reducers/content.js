@@ -29,6 +29,14 @@ reducers[ACTIONS.SET_PLAYING_URI] = (state, action) =>
     },
   });
 
+reducers[ACTIONS.TOGGLE_LOOP_LIST] = (state, action) =>
+  Object.assign({}, state, {
+    loopList: {
+      collectionId: action.data.collectionId,
+      loop: action.data.loop,
+    },
+  });
+
 reducers[ACTIONS.SET_CONTENT_POSITION] = (state, action) => {
   const { claimId, outpoint, position } = action.data;
   return {
