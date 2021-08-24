@@ -88,26 +88,30 @@ function AutoplayCountdown(props: Props) {
 
   // Update countdown timer.
   React.useEffect(() => {
-    let interval;
-    if (!timerCanceled && nextRecommendedUri) {
-      if (isTimerPaused) {
-        clearInterval(interval);
-        setTimer(countdownTime);
-      } else {
-        interval = setInterval(() => {
-          const newTime = timer - 1;
-          if (newTime === 0) {
-            doNavigate();
-          } else {
-            setTimer(timer - 1);
-          }
-        }, 1000);
+    if (collectionId) {
+      doNavigate();
+    } else {
+      let interval;
+      if (!timerCanceled && nextRecommendedUri) {
+        if (isTimerPaused) {
+          clearInterval(interval);
+          setTimer(countdownTime);
+        } else {
+          interval = setInterval(() => {
+            const newTime = timer - 1;
+            if (newTime === 0) {
+              doNavigate();
+            } else {
+              setTimer(timer - 1);
+            }
+          }, 1000);
+        }
       }
+      return () => {
+        clearInterval(interval);
+      };
     }
-    return () => {
-      clearInterval(interval);
-    };
-  }, [timer, doNavigate, navigateUrl, push, timerCanceled, isTimerPaused, nextRecommendedUri]);
+  }, [timer, doNavigate, navigateUrl, push, timerCanceled, isTimerPaused, nextRecommendedUri, collectionId]);
 
   if (timerCanceled || !nextRecommendedUri) {
     return null;
