@@ -132,6 +132,24 @@
   }
 }
 
+.vjs-button--play-next.vjs-button {
+  @media (min-width: $breakpoint-medium) {
+    display: block;
+    order: 0;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='18' height='14' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' class='feather feather-skip-forward'%3e%3cpolygon points='5 4 15 12 5 20 5 4'%3e%3c/polygon%3e%3cline x1='19' y1='5' x2='19' y2='19'%3e%3c/line%3e%3c/svg%3e");
+  }
+
+  &:focus:not(:focus-visible) {
+    display: block;
+    order: 0;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='18' height='14' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' class='feather feather-skip-forward'%3e%3cpolygon points='5 4 15 12 5 20 5 4'%3e%3c/polygon%3e%3cline x1='19' y1='5' x2='19' y2='19'%3e%3c/line%3e%3c/svg%3e");
+  }
+}
+
 .button--link {
   color: var(--color-link);
   transition: color 0.2s;
