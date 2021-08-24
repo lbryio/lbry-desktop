@@ -11,7 +11,7 @@ import LbcSymbol from 'component/common/lbc-symbol';
 
 type Props = {
   errorMessage: ?string,
-  inviteNew: string => void,
+  inviteNew: (string) => void,
   isPending: boolean,
   referralLink: string,
   referralCode: string,
@@ -35,10 +35,10 @@ function InviteNew(props: Props) {
   const [referralSource, setReferralSource] = useState(referralCode);
 
   const handleReferralChange = React.useCallback(
-    code => {
+    (code) => {
       setReferralSource(code);
       // TODO: keep track of this in an array?
-      const matchingChannel = channels && channels.find(ch => ch.name === code);
+      const matchingChannel = channels && channels.find((ch) => ch.name === code);
       if (matchingChannel) {
         analytics.apiLogPublish(matchingChannel);
       }
@@ -68,80 +68,85 @@ function InviteNew(props: Props) {
   }, [topChannel, handleReferralChange]);
 
   function lookupUrlByClaimName(name, channels) {
-    const claim = channels.find(channel => channel.name === name);
+    const claim = channels.find((channel) => channel.name === name);
     return claim && claim.canonical_url ? claim.canonical_url.replace('lbry://', '') : name;
   }
 
   return (
     <div className={'columns'}>
-      <Card
-        title={__('Invites')}
-        subtitle={
-          <I18nMessage tokens={{ SITE_NAME, lbc: <LbcSymbol /> }}>
-            Earn %lbc% for inviting subscribers, followers, fans, friends, etc. to join and follow you on %SITE_NAME%.
-            You can use invites just like affiliate links.
-          </I18nMessage>
-        }
-        actions={
-          <React.Fragment>
-            <CopyableText label={__('Your invite link')} copyable={referral} />
-            {channels && channels.length > 0 && (
-              <FormField
-                type="select"
-                label={__('Customize link')}
-                value={referralSource}
-                onChange={e => handleReferralChange(e.target.value)}
-              >
-                {channels.map(channel => (
-                  <option key={channel.claim_id} value={channel.name}>
-                    {channel.name}
-                  </option>
-                ))}
-                <option value={referralCode}>{referralCode}</option>
-              </FormField>
-            )}
-          </React.Fragment>
-        }
-      />
-
-      <Card
-        title={__('Invite by email')}
-        subtitle={
-          <I18nMessage tokens={{ SITE_NAME, lbc: <LbcSymbol /> }}>
-            Invite someone you know by email and earn %lbc% when they join %SITE_NAME%.
-          </I18nMessage>
-        }
-        actions={
-          <React.Fragment>
-            <Form onSubmit={handleSubmit}>
-              <FormField
-                type="text"
-                label={__('Email')}
-                placeholder="youremail@example.org"
-                name="email"
-                value={email}
-                error={errorMessage}
-                inputButton={
-                  <Button button="secondary" type="submit" label={__('Invite')} disabled={isPending || !email} />
-                }
-                onChange={event => {
-                  handleEmailChanged(event);
-                }}
-              />
-              <p className="help">
-                <I18nMessage
-                  tokens={{
-                    rewards_link: <Button button="link" navigate="/$/rewards" label={__('rewards')} />,
-                    referral_faq_link: <Button button="link" label={__('FAQ')} href="https://lbry.com/faq/referrals" />,
-                  }}
+      <div className="column">
+        <Card
+          title={__('Invites')}
+          subtitle={
+            <I18nMessage tokens={{ SITE_NAME, lbc: <LbcSymbol /> }}>
+              Earn %lbc% for inviting subscribers, followers, fans, friends, etc. to join and follow you on %SITE_NAME%.
+              You can use invites just like affiliate links.
+            </I18nMessage>
+          }
+          actions={
+            <React.Fragment>
+              <CopyableText label={__('Your invite link')} copyable={referral} />
+              {channels && channels.length > 0 && (
+                <FormField
+                  type="select"
+                  label={__('Customize link')}
+                  value={referralSource}
+                  onChange={(e) => handleReferralChange(e.target.value)}
                 >
-                  Read our %referral_faq_link% to learn more about rewards.
-                </I18nMessage>
-              </p>
-            </Form>
-          </React.Fragment>
-        }
-      />
+                  {channels.map((channel) => (
+                    <option key={channel.claim_id} value={channel.name}>
+                      {channel.name}
+                    </option>
+                  ))}
+                  <option value={referralCode}>{referralCode}</option>
+                </FormField>
+              )}
+            </React.Fragment>
+          }
+        />
+      </div>
+      <div className="column">
+        <Card
+          title={__('Invite by email')}
+          subtitle={
+            <I18nMessage tokens={{ SITE_NAME, lbc: <LbcSymbol /> }}>
+              Invite someone you know by email and earn %lbc% when they join %SITE_NAME%.
+            </I18nMessage>
+          }
+          actions={
+            <React.Fragment>
+              <Form onSubmit={handleSubmit}>
+                <FormField
+                  type="text"
+                  label={__('Email')}
+                  placeholder="youremail@example.org"
+                  name="email"
+                  value={email}
+                  error={errorMessage}
+                  inputButton={
+                    <Button button="secondary" type="submit" label={__('Invite')} disabled={isPending || !email} />
+                  }
+                  onChange={(event) => {
+                    handleEmailChanged(event);
+                  }}
+                />
+                <p className="help">
+                  <I18nMessage
+                    tokens={{
+                      rewards_link: <Button button="link" navigate="/$/rewards" label={__('rewards')} />,
+                      referral_faq_link: (
+                        <Button button="link" label={__('FAQ')} href="https://lbry.com/faq/referrals" />
+                      ),
+                    }}
+                  >
+                    Read our %referral_faq_link% to learn more about rewards.
+                  </I18nMessage>
+                </p>
+              </Form>
+            </React.Fragment>
+          }
+        />
+      </div>
     </div>
   );
 }
