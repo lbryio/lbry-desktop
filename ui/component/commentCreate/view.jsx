@@ -495,7 +495,12 @@ export function CommentCreate(props: Props) {
               requiresAuth={IS_WEB}
             />
 
-            <Button disabled={disabled} button="link" label={__('Cancel')} onClick={() => setIsSupportComment(false)} />
+            <Button
+              disabled={isSubmitting}
+              button="link"
+              label={__('Cancel')}
+              onClick={() => setIsSupportComment(false)}
+            />
           </>
         ) : (
           <>
