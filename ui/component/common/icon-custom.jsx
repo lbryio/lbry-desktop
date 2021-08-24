@@ -201,6 +201,26 @@ export const icons = {
   [ICONS.SUBSCRIBE]: buildIcon(
     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
   ),
+  [ICONS.SUBSCRIBED]: (props: IconProps) => {
+    const { size = 24, color = 'currentColor', ...otherProps } = props;
+    return (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width={size}
+        height={size}
+        fill={color}
+        stroke={color}
+        strokeWidth="1"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        {...otherProps}
+      >
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+      </svg>
+    );
+  },
+
   [ICONS.UNSUBSCRIBE]: buildIcon(
     <path d="M 12,5.67 10.94,4.61 C 5.7533356,-0.57666427 -2.0266644,7.2033357 3.16,12.39 l 1.06,1.06 7.78,7.78 7.78,-7.78 1.06,-1.06 c 2.149101,-2.148092 2.149101,-5.6319078 0,-7.78 -2.148092,-2.1491008 -5.631908,-2.1491008 -7.78,0 L 9.4481298,8.2303201 15.320603,9.2419066 11.772427,13.723825" />
   ),
