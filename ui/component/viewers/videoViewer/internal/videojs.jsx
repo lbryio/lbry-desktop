@@ -104,6 +104,17 @@ const SMALL_J_KEYCODE = 74;
 const SMALL_K_KEYCODE = 75;
 const SMALL_L_KEYCODE = 76;
 
+const ZERO_KEYCODE = 48;
+const ONE_KEYCODE = 49;
+const TWO_KEYCODE = 50;
+const THREE_KEYCODE = 51;
+const FOUR_KEYCODE = 52;
+const FIVE_KEYCODE = 53;
+const SIX_KEYCODE = 54;
+const SEVEN_KEYCODE = 55;
+const EIGHT_KEYCODE = 56;
+const NINE_KEYCODE = 57;
+
 const FULLSCREEN_KEYCODE = SMALL_F_KEYCODE;
 const MUTE_KEYCODE = SMALL_M_KEYCODE;
 const THEATER_MODE_KEYCODE = SMALL_T_KEYCODE;
@@ -399,19 +410,37 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     if (e.keyCode === VOLUME_UP_KEYCODE) volumeUp();
     if (e.keyCode === VOLUME_DOWN_KEYCODE) volumeDown();
     if (e.keyCode === THEATER_MODE_KEYCODE) toggleTheaterMode();
-    if (e.keyCode === SEEK_FORWARD_KEYCODE) seekVideo(SEEK_STEP);
-    if (e.keyCode === SEEK_BACKWARD_KEYCODE) seekVideo(-SEEK_STEP);
-    if (e.keyCode === SEEK_FORWARD_KEYCODE_5) seekVideo(SEEK_STEP_5);
-    if (e.keyCode === SEEK_BACKWARD_KEYCODE_5) seekVideo(-SEEK_STEP_5);
+    if (e.keyCode === SEEK_FORWARD_KEYCODE) seekVideo(SEEK_STEP, false);
+    if (e.keyCode === SEEK_BACKWARD_KEYCODE) seekVideo(-SEEK_STEP, false);
+    if (e.keyCode === SEEK_FORWARD_KEYCODE_5) seekVideo(SEEK_STEP_5, false);
+    if (e.keyCode === SEEK_BACKWARD_KEYCODE_5) seekVideo(-SEEK_STEP_5, false);
+    if (e.keyCode === ZERO_KEYCODE) seekVideo(0, true);
+    if (e.keyCode === ONE_KEYCODE) seekVideo(1, true);
+    if (e.keyCode === TWO_KEYCODE) seekVideo(2, true);
+    if (e.keyCode === THREE_KEYCODE) seekVideo(3, true);
+    if (e.keyCode === FOUR_KEYCODE) seekVideo(4, true);
+    if (e.keyCode === FIVE_KEYCODE) seekVideo(5, true);
+    if (e.keyCode === SIX_KEYCODE) seekVideo(6, true);
+    if (e.keyCode === SEVEN_KEYCODE) seekVideo(7, true);
+    if (e.keyCode === EIGHT_KEYCODE) seekVideo(8, true);
+    if (e.keyCode === NINE_KEYCODE) seekVideo(9, true);
   }
 
-  function seekVideo(stepSize: number) {
+  function seekVideo(stepSize: number, numberedStep: boolean) {
     const player = playerRef.current;
     const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
     if (!videoNode || !player) return;
     const duration = videoNode.duration;
+    const numberedStepSize = duration / 10;
     const currentTime = videoNode.currentTime;
-    const newDuration = currentTime + stepSize;
+
+    let newDuration;
+    if (numberedStep) {
+      newDuration = numberedStepSize * stepSize;
+    } else {
+      newDuration = currentTime + stepSize;
+    }
+
     if (newDuration < 0) {
       videoNode.currentTime = 0;
     } else if (newDuration > duration) {
@@ -419,7 +448,10 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     } else {
       videoNode.currentTime = newDuration;
     }
-    OVERLAY.showSeekedOverlay(player, Math.abs(stepSize), stepSize > 0);
+
+    if (!numberedStep) {
+      OVERLAY.showSeekedOverlay(player, Math.abs(stepSize), stepSize > 0);
+    }
     player.userActive(true);
   }
 
