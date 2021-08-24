@@ -18,7 +18,7 @@ type Props = {
   loop: boolean,
   shuffle: boolean,
   doToggleLoopList: (string, boolean) => void,
-  doToggleShuffleList: (string, boolean) => void,
+  doToggleShuffleList: (string, string, boolean) => void,
   createUnpublishedCollection: (string, Array<any>, ?string) => void,
 };
 
@@ -57,7 +57,7 @@ export default function CollectionContent(props: Props) {
               icon={ICONS.SHUFFLE}
               iconColor={shuffle && 'blue'}
               className="button--file-action"
-              onClick={() => doToggleShuffleList(id, !shuffle)}
+              onClick={() => doToggleShuffleList(url, id, !shuffle)}
             />
           </span>
         </>

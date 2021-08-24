@@ -298,16 +298,24 @@ export function doToggleLoopList(collectionId: string, loop: boolean, hideToast:
   };
 }
 
-export function doToggleShuffleList(collectionId: string, shuffle: boolean, hideToast: boolean) {
+export function doToggleShuffleList(currentUri: string, collectionId: string, shuffle: boolean, hideToast: boolean) {
   return (dispatch: Dispatch, getState: () => any) => {
     if (shuffle) {
       const state = getState();
       const urls = makeSelectUrlsForCollectionId(collectionId)(state);
 
-      const newUrls = urls
+      let newUrls = urls
         .map((item) => ({ item, sort: Math.random() }))
         .sort((a, b) => a.sort - b.sort)
         .map(({ item }) => item);
+
+      // the currently playing URI should be first in list or else
+      // can get in strange position where it might be in the middle or last
+      // and the shuffled list ends before scrolling through all entries
+      if (currentUri && currentUri !== '') {
+        newUrls.splice(newUrls.indexOf(currentUri), 1);
+        newUrls.splice(0, 0, currentUri);
+      }
 
       dispatch({
         type: ACTIONS.TOGGLE_SHUFFLE_LIST,

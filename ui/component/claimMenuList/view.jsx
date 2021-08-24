@@ -58,6 +58,9 @@ type Props = {
   isAuthenticated: boolean,
   fetchCollectionItems: (string) => void,
   resolvedList: boolean,
+  playNextUri: string,
+  doSetPlayingUri: (string) => void,
+  doToggleShuffleList: (string) => void,
 };
 
 function ClaimMenuList(props: Props) {
@@ -97,7 +100,11 @@ function ClaimMenuList(props: Props) {
     isAuthenticated,
     fetchCollectionItems,
     resolvedList,
+    playNextUri,
+    doSetPlayingUri,
+    doToggleShuffleList,
   } = props;
+  const [doShuffle, setDoShuffle] = React.useState(false);
   const incognitoClaim = contentChannelUri && !contentChannelUri.includes('@');
   const isChannel = !incognitoClaim && !contentSigningChannel;
   const { channelName } = parseURI(contentChannelUri);
@@ -117,6 +124,20 @@ function ClaimMenuList(props: Props) {
       fetchCollectionItems(collectionId);
     }
   }, [collectionId, fetchCollectionItems]);
+
+  React.useEffect(() => {
+    if (resolvedList && doShuffle) {
+      doToggleShuffleList(collectionId);
+      if (playNextUri) {
+        const collectionParams = new URLSearchParams();
+        collectionParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, collectionId);
+        const navigateUrl = formatLbryUrlForWeb(playNextUri) + `?` + collectionParams.toString();
+        setDoShuffle(false);
+        doSetPlayingUri(playNextUri);
+        push(navigateUrl);
+      }
+    }
+  }, [playNextUri, doShuffle, resolvedList, doToggleShuffleList, collectionId, doSetPlayingUri, push]);
 
   if (!claim) {
     return null;
@@ -267,6 +288,18 @@ function ClaimMenuList(props: Props) {
                       <Icon aria-hidden icon={ICONS.VIEW} />
                       {__('View List')}
                     </a>
+                  </MenuItem>
+                  <MenuItem
+                    className="comment__menu-option"
+                    onSelect={() => {
+                      if (!resolvedList) fetchItems();
+                      setDoShuffle(true);
+                    }}
+                  >
+                    <div className="menu__link">
+                      <Icon aria-hidden icon={ICONS.SHUFFLE} />
+                      {__('Shuffle Play')}
+                    </div>
                   </MenuItem>
                   {isMyCollection && (
                     <>

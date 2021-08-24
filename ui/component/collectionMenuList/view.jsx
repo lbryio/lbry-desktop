@@ -7,18 +7,43 @@ import { Menu, MenuButton, MenuList, MenuItem } from '@reach/menu-button';
 import Icon from 'component/common/icon';
 import * as PAGES from 'constants/pages';
 import { useHistory } from 'react-router';
+import { formatLbryUrlForWeb } from 'util/url';
+import { COLLECTIONS_CONSTS } from 'lbry-redux';
 
 type Props = {
   inline?: boolean,
   doOpenModal: (string, {}) => void,
   collectionName?: string,
   collectionId: string,
+  playNextUri: string,
+  doSetPlayingUri: ({ uri: ?string }) => void,
+  doToggleShuffleList: (string, string, boolean, boolean) => void,
 };
 
 function CollectionMenuList(props: Props) {
-  const { inline = false, collectionId, collectionName, doOpenModal } = props;
+  const {
+    inline = false,
+    collectionId,
+    collectionName,
+    doOpenModal,
+    playNextUri,
+    doSetPlayingUri,
+    doToggleShuffleList,
+  } = props;
+  const [doShuffle, setDoShuffle] = React.useState(false);
 
   const { push } = useHistory();
+
+  React.useEffect(() => {
+    if (playNextUri && doShuffle) {
+      const collectionParams = new URLSearchParams();
+      collectionParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, collectionId);
+      const navigateUrl = formatLbryUrlForWeb(playNextUri) + `?` + collectionParams.toString();
+      setDoShuffle(false);
+      doSetPlayingUri({ uri: playNextUri });
+      push(navigateUrl);
+    }
+  }, [push, doSetPlayingUri, collectionId, playNextUri, doShuffle]);
 
   return (
     <Menu>
@@ -39,6 +64,18 @@ function CollectionMenuList(props: Props) {
                 <Icon aria-hidden icon={ICONS.VIEW} />
                 {__('View List')}
               </a>
+            </MenuItem>
+            <MenuItem
+              className="comment__menu-option"
+              onSelect={() => {
+                doToggleShuffleList('', collectionId, true, true);
+                setDoShuffle(true);
+              }}
+            >
+              <div className="menu__link">
+                <Icon aria-hidden icon={ICONS.SHUFFLE} />
+                {__('Shuffle Play')}
+              </div>
             </MenuItem>
             <MenuItem
               className="comment__menu-option"

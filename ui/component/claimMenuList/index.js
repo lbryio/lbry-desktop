@@ -30,6 +30,8 @@ import { doToast } from 'redux/actions/notifications';
 import { doChannelSubscribe, doChannelUnsubscribe } from 'redux/actions/subscriptions';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
+import { selectListShuffle } from 'redux/selectors/content';
+import { doSetPlayingUri, doToggleShuffleList } from 'redux/actions/content';
 import ClaimPreview from './view';
 import fs from 'fs';
 
@@ -42,6 +44,9 @@ const select = (state, props) => {
   const contentSigningChannel = contentClaim && contentClaim.signing_channel;
   const contentPermanentUri = contentClaim && contentClaim.permanent_url;
   const contentChannelUri = (contentSigningChannel && contentSigningChannel.permanent_url) || contentPermanentUri;
+  const shuffleList = selectListShuffle(state);
+  const shuffle = shuffleList && shuffleList.collectionId === collectionId && shuffleList.newUrls;
+  const playNextUri = shuffle && shuffle[0];
 
   return {
     claim,
@@ -69,6 +74,7 @@ const select = (state, props) => {
     editedCollection: makeSelectEditedCollectionForId(collectionId)(state),
     isAuthenticated: Boolean(selectUserVerifiedEmail(state)),
     resolvedList,
+    playNextUri,
   };
 };
 
@@ -96,6 +102,8 @@ const perform = (dispatch) => ({
   doChannelUnsubscribe: (subscription) => dispatch(doChannelUnsubscribe(subscription)),
   doCollectionEdit: (collection, props) => dispatch(doCollectionEdit(collection, props)),
   fetchCollectionItems: (collectionId) => dispatch(doFetchItemsInCollection({ collectionId })),
+  doSetPlayingUri: (uri) => dispatch(doSetPlayingUri({ uri })),
+  doToggleShuffleList: (collectionId) => dispatch(doToggleShuffleList(undefined, collectionId, true, true)),
 });
 
 export default connect(select, perform)(ClaimPreview);
