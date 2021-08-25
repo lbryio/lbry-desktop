@@ -91,10 +91,6 @@ $recent-msg-button__height: 2rem;
   .channel-name {
     font-size: var(--font-xsmall);
   }
-
-  &:last-of-type {
-    padding-top: var(--spacing-m);
-  }
 }
 
 .livestream-comment--superchat {
