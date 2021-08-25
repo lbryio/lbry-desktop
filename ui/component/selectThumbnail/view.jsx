@@ -93,9 +93,7 @@ class SelectThumbnail extends React.PureComponent<Props> {
                 style={{ display: 'none' }}
                 src={thumbnailSrc}
                 alt={__('Thumbnail Preview')}
-                onError={(e) => {
-                  updatePublishForm({ thumbnailError: true });
-                }}
+                onError={() => updatePublishForm({ thumbnailError: true })}
               />
             </div>
             <div className="column__item">
@@ -130,12 +128,7 @@ class SelectThumbnail extends React.PureComponent<Props> {
             )}
             {status === THUMBNAIL_STATUSES.COMPLETE && thumbnail && (
               <div className="column column--space-between">
-                <div
-                  className="column__item thumbnail-preview"
-                  // style={{ backgroundImage: `url(${thumbnail})` }}
-                >
-                  {__('This will be visible in a few minutes.')}
-                </div>
+                <div className="column__item thumbnail-preview" style={{ backgroundImage: `url(${thumbnail})` }} />
                 <div className="column__item">
                   <p>{__('Upload complete.')}</p>
                   <div className="section__actions">

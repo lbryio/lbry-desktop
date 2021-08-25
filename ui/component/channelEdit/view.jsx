@@ -22,6 +22,8 @@ import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 import WalletSpendableBalanceHelp from 'component/walletSpendableBalanceHelp';
 import { SIMPLE_SITE } from 'config';
 import { sortLanguageMap } from 'util/default-languages';
+import ThumbnailBrokenImage from 'component/selectThumbnail/thumbnail-broken.png';
+import Gerbil from 'component/channelThumbnail/gerbil.png';
 
 const LANG_NONE = 'none';
 
@@ -52,7 +54,7 @@ type Props = {
   onDone: () => void,
   openModal: (
     id: string,
-    { onUpdate: (string) => void, assetName: string, helpText: string, currentValue: string, title: string }
+    { onUpdate: (string, boolean) => void, assetName: string, helpText: string, currentValue: string, title: string }
   ) => void,
   uri: string,
   disabled: boolean,
@@ -90,7 +92,9 @@ function ChannelForm(props: Props) {
   } = props;
   const [nameError, setNameError] = React.useState(undefined);
   const [bidError, setBidError] = React.useState('');
+  const [isUpload, setIsUpload] = React.useState({ cover: false, thumbnail: false });
   const [coverError, setCoverError] = React.useState(false);
+  const [thumbError, setThumbError] = React.useState(false);
   const { claim_id: claimId } = claim || {};
   const [params, setParams]: [any, (any) => void] = React.useState(getChannelParams());
   const { channelName } = parseURI(uri);
@@ -112,10 +116,12 @@ function ChannelForm(props: Props) {
       creatingChannel ||
       updatingChannel ||
       nameError ||
+      thumbError ||
+      coverError ||
       bidError ||
       (isNewChannel && !params.name)
     );
-  }, [isClaimingInitialRewards, creatingChannel, updatingChannel, nameError, bidError, isNewChannel, params]);
+  }, [isClaimingInitialRewards, creatingChannel, updatingChannel, nameError, thumbError, coverError, bidError, isNewChannel, params.name]);
 
   function getChannelParams() {
     // fill this in with sdk data
@@ -195,12 +201,16 @@ function ChannelForm(props: Props) {
     setParams({ ...params, languages: langs });
   }
 
-  function handleThumbnailChange(thumbnailUrl: string) {
+  function handleThumbnailChange(thumbnailUrl: string, uploadSelected: boolean) {
     setParams({ ...params, thumbnailUrl });
+    setIsUpload({ ...isUpload, thumbnail: uploadSelected });
+    setThumbError(false);
   }
 
-  function handleCoverChange(coverUrl: string) {
+  function handleCoverChange(coverUrl: string, uploadSelected: boolean) {
     setParams({ ...params, coverUrl });
+    setIsUpload({ ...isUpload, cover: uploadSelected });
+    setCoverError(false);
   }
 
   function handleSubmit() {
@@ -225,6 +235,9 @@ function ChannelForm(props: Props) {
   if (errorMsg && errorMsg.includes(LIMIT_ERR_PARTIAL_MSG)) {
     errorMsg = __('Transaction limit reached. Try reducing the Description length.');
   }
+  if ((!isUpload.thumbnail && thumbError) || (!isUpload.cover && coverError)) {
+    errorMsg = __('Invalid %error_type%', { error_type: (thumbError && 'thumbnail') || (coverError && 'cover image') });
+  }
 
   React.useEffect(() => {
     let nameError;
@@ -247,6 +260,17 @@ function ChannelForm(props: Props) {
     }
   }, [hasClaimedInitialRewards, claimInitialRewards]);
 
+  const coverSrc = coverError ? ThumbnailBrokenImage : params.coverUrl;
+
+  let thumbnailPreview;
+  if (!params.thumbnailUrl) {
+    thumbnailPreview = Gerbil;
+  } else if (thumbError) {
+    thumbnailPreview = ThumbnailBrokenImage;
+  } else {
+    thumbnailPreview = params.thumbnailUrl;
+  }
+
   // TODO clear and bail after submit
   return (
     <>
@@ -258,7 +282,7 @@ function ChannelForm(props: Props) {
               title={__('Cover')}
               onClick={() =>
                 openModal(MODALS.IMAGE_UPLOAD, {
-                  onUpdate: (coverUrl) => handleCoverChange(coverUrl),
+                  onUpdate: (coverUrl, isUpload) => handleCoverChange(coverUrl, isUpload),
                   title: __('Edit Cover Image'),
                   helpText: __('(6.25:1)'),
                   assetName: __('Cover Image'),
@@ -270,11 +294,16 @@ function ChannelForm(props: Props) {
             />
           </div>
           {params.coverUrl &&
-            (coverError ? (
+            (coverError && isUpload.cover ? (
               <div className="channel-cover__custom--waiting">{__('This will be visible in a few minutes.')}</div>
             ) : (
-              <img className="channel-cover__custom" src={params.coverUrl} onError={() => setCoverError(true)} />
-            ))}
+              <img
+                className="channel-cover__custom"
+                src={coverSrc}
+                onError={() => setCoverError(true)}
+              />
+            )
+          )}
           <div className="channel__primary-info">
             <div className="channel__edit-thumb">
               <Button
@@ -282,7 +311,7 @@ function ChannelForm(props: Props) {
                 title={__('Edit')}
                 onClick={() =>
                   openModal(MODALS.IMAGE_UPLOAD, {
-                    onUpdate: (v) => handleThumbnailChange(v),
+                    onUpdate: (thumbnailUrl, isUpload) => handleThumbnailChange(thumbnailUrl, isUpload),
                     title: __('Edit Thumbnail Image'),
                     helpText: __('(1:1)'),
                     assetName: __('Thumbnail'),
@@ -296,9 +325,11 @@ function ChannelForm(props: Props) {
             <ChannelThumbnail
               className="channel__thumbnail--channel-page"
               uri={uri}
-              thumbnailPreview={params.thumbnailUrl}
+              thumbnailPreview={thumbnailPreview}
               allowGifs
-              showDelayedMessage
+              showDelayedMessage={isUpload.thumbnail}
+              setThumbError={(v) => setThumbError(v)}
+              thumbError={thumbError}
             />
             <h1 className="channel__title">
               {params.title || (channelName && '@' + channelName) || (params.name && '@' + params.name)}
