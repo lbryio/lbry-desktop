@@ -49,7 +49,7 @@ type Props = {
   source: string,
   sourceType: string,
   poster: ?string,
-  onPlayerReady: (Player) => void,
+  onPlayerReady: (Player, any) => void,
   isAudio: boolean,
   startMuted: boolean,
   autoplay: boolean,
@@ -61,6 +61,7 @@ type Props = {
   shareTelemetry: boolean,
   replay: boolean,
   videoTheaterMode: boolean,
+  setStartPlayPrevious: (boolean) => void,
   setStartPlayNext: (boolean) => void,
 };
 
@@ -106,6 +107,7 @@ const SMALL_J_KEYCODE = 74;
 const SMALL_K_KEYCODE = 75;
 const SMALL_L_KEYCODE = 76;
 
+const P_KEYCODE = 80;
 const N_KEYCODE = 78;
 
 const ZERO_KEYCODE = 48;
@@ -215,6 +217,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     shareTelemetry,
     replay,
     videoTheaterMode,
+    setStartPlayPrevious,
     setStartPlayNext,
   } = props;
 
@@ -404,6 +407,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     if (e.altKey || e.ctrlKey || e.metaKey || !e.shiftKey) return;
     if (e.keyCode === PERIOD_KEYCODE) changePlaybackSpeed(true);
     if (e.keyCode === COMMA_KEYCODE) changePlaybackSpeed(false);
+    if (e.keyCode === P_KEYCODE) setStartPlayPrevious(true);
     if (e.keyCode === N_KEYCODE) setStartPlayNext(true);
   }
 
@@ -619,7 +623,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       player.children_[0].setAttribute('playsinline', '');
 
       // I think this is a callback function
-      onPlayerReady(player);
+      const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
+      onPlayerReady(player, videoNode);
     });
 
     // pre-roll ads

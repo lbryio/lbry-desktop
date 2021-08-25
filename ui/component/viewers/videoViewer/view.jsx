@@ -17,6 +17,7 @@ import FileViewerEmbeddedTitle from 'component/fileViewerEmbeddedTitle';
 import LoadingScreen from 'component/common/loading-screen';
 import { addTheaterModeButton } from './internal/theater-mode';
 import { addPlayNextButton } from './internal/play-next';
+import { addPlayPreviousButton } from './internal/play-previous';
 import { useGetAds } from 'effects/use-get-ads';
 import Button from 'component/button';
 import I18nMessage from 'component/i18nMessage';
@@ -54,6 +55,7 @@ type Props = {
   doSetPlayingUri: (string, string) => void,
   doPlayUri: (string) => void,
   playNextUri: string,
+  playPreviousUri: string,
   authenticated: boolean,
   userId: number,
   homepageData?: { [string]: HomepageCat },
@@ -94,6 +96,7 @@ function VideoViewer(props: Props) {
     doSetPlayingUri,
     doPlayUri,
     playNextUri,
+    playPreviousUri,
     homepageData,
     authenticated,
     userId,
@@ -126,6 +129,21 @@ function VideoViewer(props: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const [replay, setReplay] = useState(false);
   const [startPlayNext, setStartPlayNext] = useState(false);
+  const [startPlayPrevious, setStartPlayPrevious] = useState(false);
+  const [videoNode, setVideoNode] = useState(false);
+
+  const getNavigateUrl = React.useCallback((playUri: string) => {
+    let navigateUrl;
+    if (playUri) {
+      navigateUrl = formatLbryUrlForWeb(playUri);
+      if (collectionId) {
+        const collectionParams = new URLSearchParams();
+        collectionParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, collectionId);
+        navigateUrl = navigateUrl + `?` + collectionParams.toString();
+      }
+    }
+    return navigateUrl;
+  }, [collectionId]);
 
   // force everything to recent when URI changes, can cause weird corner cases otherwise (e.g. navigate while autoplay is true)
   useEffect(() => {
@@ -144,18 +162,9 @@ function VideoViewer(props: Props) {
     };
   }, [embedded, videoPlaybackRate]);
 
-  let navigateUrl;
-  if (playNextUri) {
-    navigateUrl = formatLbryUrlForWeb(playNextUri);
-    if (collectionId) {
-      const collectionParams = new URLSearchParams();
-      collectionParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, collectionId);
-      navigateUrl = navigateUrl + `?` + collectionParams.toString();
-    }
-  }
-
   useEffect(() => {
     if (startPlayNext) {
+      const navigateUrl = getNavigateUrl(playNextUri);
       if (!isFloating && navigateUrl) {
         push(navigateUrl);
       }
@@ -165,7 +174,26 @@ function VideoViewer(props: Props) {
       }
       setStartPlayNext(false);
     }
-  }, [isFloating, navigateUrl, push, doSetPlayingUri, playNextUri, doPlayUri, startPlayNext, collectionId]);
+    if (videoNode) {
+      const currentTime = videoNode.currentTime;
+
+      if (startPlayPrevious) {
+        if (currentTime > 5) {
+          videoNode.currentTime = 0;
+        } else {
+          const navigateUrl = getNavigateUrl(playPreviousUri);
+          if (!isFloating && navigateUrl) {
+            push(navigateUrl);
+          }
+          if (playPreviousUri) {
+            doSetPlayingUri(playPreviousUri, collectionId);
+            doPlayUri(playPreviousUri);
+          }
+        }
+        setStartPlayPrevious(false);
+      }
+    }
+  }, [isFloating, push, doSetPlayingUri, playNextUri, doPlayUri, startPlayNext, collectionId, getNavigateUrl, videoNode, startPlayPrevious, playPreviousUri]);
 
   function doTrackingBuffered(e: Event, data: any) {
     fetch(source, { method: 'HEAD', cache: 'no-store' }).then((response) => {
@@ -245,13 +273,17 @@ function VideoViewer(props: Props) {
     playerReadyDependencyList.push(desktopPlayStartTime);
   }
 
-  const onPlayerReady = useCallback((player: Player) => {
+  const onPlayerReady = useCallback((player: Player, videoNode: any) => {
     if (!embedded) {
+      setVideoNode(videoNode);
       player.muted(muted);
       player.volume(volume);
       player.playbackRate(videoPlaybackRate);
       addTheaterModeButton(player, toggleVideoTheaterMode);
-      if (collectionId) addPlayNextButton(player, () => setStartPlayNext(true));
+      if (collectionId) {
+        addPlayNextButton(player, () => setStartPlayNext(true));
+        addPlayPreviousButton(player, () => setStartPlayPrevious(true));
+      }
     }
 
     const shouldPlay = !embedded || autoplayIfEmbedded;
@@ -382,6 +414,7 @@ function VideoViewer(props: Props) {
           replay={replay}
           videoTheaterMode={videoTheaterMode}
           setStartPlayNext={setStartPlayNext}
+          setStartPlayPrevious={setStartPlayPrevious}
         />
       )}
     </div>

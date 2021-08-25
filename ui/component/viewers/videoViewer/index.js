@@ -6,6 +6,7 @@ import {
   SETTINGS,
   COLLECTIONS_CONSTS,
   makeSelectNextUrlForCollectionAndUrl,
+  makeSelectPreviousUrlForCollectionAndUrl,
 } from 'lbry-redux';
 import { doChangeVolume, doChangeMute, doAnalyticsView, doAnalyticsBuffer } from 'redux/actions/app';
 import { selectVolume, selectMute } from 'redux/selectors/app';
@@ -33,8 +34,10 @@ const select = (state, props) => {
   const collectionId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID) || (playingUri && playingUri.collectionId);
 
   let playNextUri;
+  let playPreviousUri;
   if (collectionId) {
     playNextUri = makeSelectNextUrlForCollectionAndUrl(collectionId, props.uri)(state);
+    playPreviousUri = makeSelectPreviousUrlForCollectionAndUrl(collectionId, props.uri)(state);
   }
 
   return {
@@ -55,6 +58,7 @@ const select = (state, props) => {
     isFloating: makeSelectIsPlayerFloating(props.location)(state),
     collectionId,
     playNextUri,
+    playPreviousUri,
   };
 };
 
