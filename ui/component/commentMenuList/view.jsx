@@ -189,7 +189,7 @@ function CommentMenuList(props: Props) {
         </MenuItem>
       )}
 
-      {(activeChannelIsAdmin || activeChannelIsModerator) && (
+      {!commentIsMine && (activeChannelIsAdmin || activeChannelIsModerator) && (
         <div className="comment__menu-title">{__('Moderator tools')}</div>
       )}
 
