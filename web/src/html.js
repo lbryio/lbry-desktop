@@ -47,7 +47,7 @@ function truncateDescription(description, maxChars = 200) {
   // Use slice array instead of substring to prevent breaking emojis
   let truncated = chars.slice(0, maxChars).join('');
   // Format truncated string
-  return (chars.length > maxChars) ? truncated + '...' : truncated;
+  return chars.length > maxChars ? truncated + '...' : truncated;
 }
 
 function normalizeClaimUrl(url) {
@@ -83,6 +83,7 @@ function buildOgMetadata(overrideOptions = {}) {
     `<meta property="og:site_name" content="${SITE_NAME || SITE_TITLE}"/>\n` +
     `<meta property="og:description" content="${cleanDescription}" />\n` +
     `<meta property="og:image" content="${image || OG_IMAGE_URL || `${URL}/public/v2-og.png`}" />\n` +
+    `<meta property="og:type" content="website"/>\n` +
     '<meta name="twitter:card" content="summary_large_image"/>\n' +
     `<meta name="twitter:title" content="${
       (title && title + ' ' + OG_TITLE_SUFFIX) || OG_HOMEPAGE_TITLE || SITE_TITLE
@@ -191,6 +192,7 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
   // below should be canonical_url, but not provided by chainquery yet
   head += `<meta property="og:url" content="${URL}/${claim.name}:${claim.claim_id}"/>`;
   head += `<meta name="twitter:url" content="${URL}/${claim.name}:${claim.claim_id}"/>`;
+  head += `<meta property="fb:app_id" content="1673146449633983" />`;
   head += `<link rel="canonical" content="${SITE_CANONICAL_URL || URL}/${claim.name}:${claim.claim_id}"/>`;
 
   if (mediaType && (mediaType.startsWith('video/') || mediaType.startsWith('audio/'))) {
