@@ -37,7 +37,7 @@ function FileWatchLaterLink(props: Props) {
     });
   }
 
-  // text that will show if you keep cursor over dic
+  // text that will show if you keep cursor over button
   const title = hasClaimInWatchLater ? __('Remove from Watch Later') : __('Add to Watch Later');
 
   // label that is shown after hover
