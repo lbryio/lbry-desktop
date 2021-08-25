@@ -61,6 +61,7 @@ type Props = {
   shareTelemetry: boolean,
   replay: boolean,
   videoTheaterMode: boolean,
+  setStartPlayNext: (boolean) => void,
 };
 
 // type VideoJSOptions = {
@@ -104,6 +105,8 @@ const PERIOD_KEYCODE = 190;
 const SMALL_J_KEYCODE = 74;
 const SMALL_K_KEYCODE = 75;
 const SMALL_L_KEYCODE = 76;
+
+const N_KEYCODE = 78;
 
 const ZERO_KEYCODE = 48;
 const ONE_KEYCODE = 49;
@@ -212,6 +215,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     shareTelemetry,
     replay,
     videoTheaterMode,
+    setStartPlayNext,
   } = props;
 
   const [reload, setReload] = useState('initial');
@@ -399,6 +403,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     if (e.altKey || e.ctrlKey || e.metaKey || !e.shiftKey) return;
     if (e.keyCode === PERIOD_KEYCODE) changePlaybackSpeed(true);
     if (e.keyCode === COMMA_KEYCODE) changePlaybackSpeed(false);
+    if (e.keyCode === N_KEYCODE) setStartPlayNext(true);
   }
 
   function handleSingleKeyActions(e: KeyboardEvent) {

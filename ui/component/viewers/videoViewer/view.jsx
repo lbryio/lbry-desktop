@@ -16,12 +16,15 @@ import FileViewerEmbeddedEnded from 'web/component/fileViewerEmbeddedEnded';
 import FileViewerEmbeddedTitle from 'component/fileViewerEmbeddedTitle';
 import LoadingScreen from 'component/common/loading-screen';
 import { addTheaterModeButton } from './internal/theater-mode';
+import { addPlayNextButton } from './internal/play-next';
 import { useGetAds } from 'effects/use-get-ads';
 import Button from 'component/button';
 import I18nMessage from 'component/i18nMessage';
 import { useHistory } from 'react-router';
 import { getAllIds } from 'util/buildHomepage';
 import type { HomepageCat } from 'util/buildHomepage';
+import { formatLbryUrlForWeb } from 'util/url';
+import { COLLECTIONS_CONSTS } from 'lbry-redux';
 
 const PLAY_TIMEOUT_ERROR = 'play_timeout_error';
 const PLAY_TIMEOUT_LIMIT = 2000;
@@ -48,11 +51,16 @@ type Props = {
   clearPosition: (string) => void,
   toggleVideoTheaterMode: () => void,
   setVideoPlaybackRate: (number) => void,
+  doSetPlayingUri: (string, string) => void,
+  doPlayUri: (string) => void,
+  playNextUri: string,
   authenticated: boolean,
   userId: number,
   homepageData?: { [string]: HomepageCat },
   shareTelemetry: boolean,
   videoTheaterMode: boolean,
+  collectionId: string,
+  isFloating: boolean,
 };
 
 /*
@@ -83,11 +91,16 @@ function VideoViewer(props: Props) {
     desktopPlayStartTime,
     toggleVideoTheaterMode,
     setVideoPlaybackRate,
+    doSetPlayingUri,
+    doPlayUri,
+    playNextUri,
     homepageData,
     authenticated,
     userId,
     shareTelemetry,
     videoTheaterMode,
+    collectionId,
+    isFloating,
   } = props;
 
   const adApprovedChannelIds = homepageData ? getAllIds(homepageData) : [];
@@ -97,6 +110,7 @@ function VideoViewer(props: Props) {
   const forcePlayer = FORCE_CONTENT_TYPE_PLAYER.includes(contentType);
   const {
     location: { pathname },
+    push,
   } = useHistory();
   const [isPlaying, setIsPlaying] = useState(false);
   const [showAutoplayCountdown, setShowAutoplayCountdown] = useState(false);
@@ -111,6 +125,7 @@ function VideoViewer(props: Props) {
   breaks because some browsers (e.g. Firefox) block autoplay but leave the player.play Promise pending */
   const [isLoading, setIsLoading] = useState(false);
   const [replay, setReplay] = useState(false);
+  const [startPlayNext, setStartPlayNext] = useState(false);
 
   // force everything to recent when URI changes, can cause weird corner cases otherwise (e.g. navigate while autoplay is true)
   useEffect(() => {
@@ -128,6 +143,29 @@ function VideoViewer(props: Props) {
       videoPlaybackRate: videoPlaybackRate,
     };
   }, [embedded, videoPlaybackRate]);
+
+  let navigateUrl;
+  if (playNextUri) {
+    navigateUrl = formatLbryUrlForWeb(playNextUri);
+    if (collectionId) {
+      const collectionParams = new URLSearchParams();
+      collectionParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, collectionId);
+      navigateUrl = navigateUrl + `?` + collectionParams.toString();
+    }
+  }
+
+  useEffect(() => {
+    if (startPlayNext) {
+      if (!isFloating && navigateUrl) {
+        push(navigateUrl);
+      }
+      if (playNextUri) {
+        doSetPlayingUri(playNextUri, collectionId);
+        doPlayUri(playNextUri);
+      }
+      setStartPlayNext(false);
+    }
+  }, [isFloating, navigateUrl, push, doSetPlayingUri, playNextUri, doPlayUri, startPlayNext, collectionId]);
 
   function doTrackingBuffered(e: Event, data: any) {
     fetch(source, { method: 'HEAD', cache: 'no-store' }).then((response) => {
@@ -213,6 +251,7 @@ function VideoViewer(props: Props) {
       player.volume(volume);
       player.playbackRate(videoPlaybackRate);
       addTheaterModeButton(player, toggleVideoTheaterMode);
+      if (collectionId) addPlayNextButton(player, () => setStartPlayNext(true));
     }
 
     const shouldPlay = !embedded || autoplayIfEmbedded;
@@ -342,6 +381,7 @@ function VideoViewer(props: Props) {
           shareTelemetry={shareTelemetry}
           replay={replay}
           videoTheaterMode={videoTheaterMode}
+          setStartPlayNext={setStartPlayNext}
         />
       )}
     </div>
