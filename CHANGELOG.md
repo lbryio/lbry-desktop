@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Update sockety api _community pr!_ ([#6747](https://github.com/lbryio/lbry-desktop/pull/6747))
 - Use resolve for OG metadata instead of chainquery _community pr!_ ([#6787](https://github.com/lbryio/lbry-desktop/pull/6787))
 - Improved clickability of notification links _community pr!_ ([#6711](https://github.com/lbryio/lbry-desktop/pull/6711))
+- Changing the supported language from Filipino to Tagalog _community pr!_ ([#6951](https://github.com/lbryio/lbry-desktop/pull/6951))
 
 ### Fixed
 - App now supports '#' and ':' for claimId separator ([#6496](https://github.com/lbryio/lbry-desktop/pull/6496))
