@@ -53,6 +53,7 @@ type Props = {
   isLivestream: boolean,
 };
 
+// preview image cards used in related video functionality
 function ClaimPreviewTile(props: Props) {
   const {
     history,
@@ -213,18 +214,19 @@ function ClaimPreviewTile(props: Props) {
                   <FileWatchLaterLink focusable={false} uri={uri} />
                 )}
               </div>
+              {/* @if TARGET='app' */}
               <div className="claim-preview__hover-actions">
-                {/* @if TARGET='app' */}
                 {isStream && (
                   <FileDownloadLink focusable={false} uri={canonicalUrl} hideOpenButton />
                 )}
-                {/* @endif */}
               </div>
+              {/* @endif */}
 
               <div className="claim-preview__file-property-overlay">
                 <PreviewOverlayProperties uri={uri} properties={liveProperty || properties} />
               </div>
             </React.Fragment>
+
           )}
           {isCollection && (
             <React.Fragment>

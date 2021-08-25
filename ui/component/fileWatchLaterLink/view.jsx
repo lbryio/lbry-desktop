@@ -37,7 +37,10 @@ function FileWatchLaterLink(props: Props) {
     });
   }
 
+  // text that will show if you keep cursor over button
   const title = hasClaimInWatchLater ? __('Remove from Watch Later') : __('Add to Watch Later');
+
+  // label that is shown after hover
   const label = !hasClaimInWatchLater ? __('Add') : __('Added');
 
   return (
@@ -52,7 +55,6 @@ function FileWatchLaterLink(props: Props) {
         (isHovering ? ICONS.COMPLETED : ICONS.TIME)
       }
       onClick={(e) => handleWatchLater(e)}
-      aria-hidden={!focusable}
       tabIndex={focusable ? 0 : -1}
     />
   );

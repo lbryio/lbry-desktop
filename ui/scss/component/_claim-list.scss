@@ -130,6 +130,7 @@
     @include handleChannelGif(6rem);
   }
 
+  // show watch later button and duration divs when hovered
   &:hover {
     .claim-preview__hover-actions {
       display: block;
@@ -604,8 +605,13 @@
   background-color: var(--color-black);
   padding: 0.3rem;
   border-radius: var(--border-radius);
-  opacity: 0.7;
   z-index: 2;
+  opacity: 0.7;
+
+  // show full opacity for touch devices
+  @media (pointer: fine), (pointer: coarse) {
+    opacity: 0.85;
+  }
 
   .file-properties {
     color: var(--color-white);
@@ -645,6 +651,7 @@
   overflow: hidden;
 }
 
+// show duration and watch later button when hovered
 .claim-preview--tile {
   &:hover {
     .claim-preview__hover-actions {
@@ -672,8 +679,19 @@
   margin-bottom: 0;
 }
 
+// div that displays watch later button
 .claim-preview__hover-actions {
-  display: none;
+
+  // if the user is using a mouse
+  @media (pointer: fine){
+    display: none;
+  }
+
+  // if the user doesn't have a pointer (mouse etc) hide watch later button
+  @media (pointer: none), (pointer:coarse) {
+    display: none !important;
+  }
+
   position: relative;
   float: right;
   top: var(--spacing-xxs);
@@ -697,12 +715,14 @@
     padding: var(--spacing-xxs) var(--spacing-xxs);
     height: unset;
 
+    // label (with 'Add' text) hidden by default
     .button__label {
       color: var(--color-text);
       font-size: var(--font-small);
       display: none;
     }
 
+    // show the additional watch later text (Add) when hovered
     &:hover {
       .button__label {
         display: inline;
