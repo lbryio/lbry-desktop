@@ -8,28 +8,31 @@ import Icon from 'component/common/icon';
 import { parseURI } from 'lbry-redux';
 
 type Props = {
-  claim: ?Claim,
-  clearPlayingUri: () => void,
   authorUri: string, // full LBRY Channel URI: lbry://@channel#123...
   commentId: string, // sha256 digest identifying the comment
-  commentIsMine: boolean, // if this comment was signed by an owned channel
+  isTopLevel: boolean,
   isPinned: boolean,
-  pinComment: (string, string, boolean) => Promise<any>,
-  muteChannel: (string) => void,
+  commentIsMine: boolean, // if this comment was signed by an owned channel
+  disableEdit?: boolean,
+  disableRemove?: boolean,
+  supportAmount?: any,
   handleEditComment: () => void,
+  // --- select ---
+  claim: ?Claim,
+  claimIsMine: boolean,
   contentChannelPermanentUrl: any,
   activeChannelClaim: ?ChannelClaim,
-  isTopLevel: boolean,
+  playingUri: ?PlayingUri,
+  moderationDelegatorsById: { [string]: { global: boolean, delegators: { name: string, claimId: string } } },
+  // --- perform ---
+  openModal: (id: string, {}) => void,
+  clearPlayingUri: () => void,
+  muteChannel: (string) => void,
+  pinComment: (string, string, boolean) => Promise<any>,
   commentModBlock: (string) => void,
   commentModBlockAsAdmin: (string, string) => void,
   commentModBlockAsModerator: (string, string, string) => void,
   commentModAddDelegate: (string, string, ChannelClaim) => void,
-  playingUri: ?PlayingUri,
-  disableEdit?: boolean,
-  disableRemove?: boolean,
-  moderationDelegatorsById: { [string]: { global: boolean, delegators: { name: string, claimId: string } } },
-  openModal: (id: string, {}) => void,
-  supportAmount?: any,
 };
 
 function CommentMenuList(props: Props) {
@@ -186,7 +189,7 @@ function CommentMenuList(props: Props) {
         </MenuItem>
       )}
 
-      {(activeChannelIsAdmin || activeChannelIsModerator) && (
+      {!commentIsMine && (activeChannelIsAdmin || activeChannelIsModerator) && (
         <div className="comment__menu-title">{__('Moderator tools')}</div>
       )}
 
