@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
 
 import * as PAGES from 'constants/pages';
+import { PAGE_TITLE } from 'constants/pageTitles';
 import { lazyImport } from 'util/lazyImport';
 import { LINKED_COMMENT_QUERY_PARAM } from 'constants/comment';
 import { parseURI, isURIValid } from 'lbry-redux';
@@ -187,6 +188,11 @@ function AppRouter(props: Props) {
   }, [hasNavigated, uri, hasUnclaimedRefereeReward, setReferrer, isAuthenticated]);
 
   useEffect(() => {
+    const getDefaultTitle = (pathname: string) => {
+      const title = pathname.startsWith('/$/') ? PAGE_TITLE[pathname.substring(3)] : '';
+      return __(title) || (IS_WEB ? SITE_TITLE : 'LBRY');
+    };
+
     if (uri) {
       const { channelName, streamName } = parseURI(uri);
 
@@ -197,19 +203,16 @@ function AppRouter(props: Props) {
       } else if (channelName) {
         document.title = channelName;
       } else {
-        document.title = IS_WEB ? SITE_TITLE : 'LBRY';
+        document.title = getDefaultTitle(pathname);
       }
     } else {
-      document.title = IS_WEB ? SITE_TITLE : 'LBRY';
+      document.title = getDefaultTitle(pathname);
     }
 
     // @if TARGET='app'
     entries[entryIndex].title = document.title;
     // @endif
-    return () => {
-      document.title = IS_WEB ? SITE_TITLE : 'LBRY';
-    };
-  }, [entries, entryIndex, title, uri]);
+  }, [pathname, entries, entryIndex, title, uri]);
 
   useEffect(() => {
     if (!hasLinkedCommentInUrl) {
