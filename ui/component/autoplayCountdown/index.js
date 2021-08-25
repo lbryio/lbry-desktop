@@ -1,7 +1,10 @@
 import { connect } from 'react-redux';
 import { makeSelectClaimForUri, SETTINGS, COLLECTIONS_CONSTS, makeSelectNextUrlForCollectionAndUrl } from 'lbry-redux';
 import { withRouter } from 'react-router';
-import { makeSelectIsPlayerFloating, makeSelectNextUnplayedRecommended, selectListLoop } from 'redux/selectors/content';
+import {
+  makeSelectIsPlayerFloating,
+  makeSelectNextUnplayedRecommended,
+} from 'redux/selectors/content';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { doSetPlayingUri, doPlayUri } from 'redux/actions/content';
 import AutoplayCountdown from './view';
@@ -16,12 +19,10 @@ const select = (state, props) => {
   const { search } = location;
   const urlParams = new URLSearchParams(search);
   const collectionId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID);
-  const loopList = selectListLoop(state);
-  const loop = loopList && loopList.collectionId === collectionId && loopList.loop;
 
   let nextRecommendedUri;
   if (collectionId) {
-    nextRecommendedUri = makeSelectNextUrlForCollectionAndUrl(collectionId, props.uri, loop)(state);
+    nextRecommendedUri = makeSelectNextUrlForCollectionAndUrl(collectionId, props.uri)(state);
   } else {
     nextRecommendedUri = makeSelectNextUnplayedRecommended(props.uri)(state);
   }

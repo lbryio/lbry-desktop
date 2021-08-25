@@ -16,12 +16,14 @@ type Props = {
   collectionName: string,
   collection: any,
   loop: boolean,
+  shuffle: boolean,
   doToggleLoopList: (string, boolean) => void,
+  doToggleShuffleList: (string, boolean) => void,
   createUnpublishedCollection: (string, Array<any>, ?string) => void,
 };
 
 export default function CollectionContent(props: Props) {
-  const { collectionUrls, collectionName, id, url, loop, doToggleLoopList } = props;
+  const { collectionUrls, collectionName, id, url, loop, shuffle, doToggleLoopList, doToggleShuffleList } = props;
 
   return (
     <Card
@@ -48,6 +50,14 @@ export default function CollectionContent(props: Props) {
               iconColor={loop && 'blue'}
               className="button--file-action"
               onClick={() => doToggleLoopList(id, !loop)}
+            />
+            <Button
+              button="alt"
+              title="Shuffle"
+              icon={ICONS.SHUFFLE}
+              iconColor={shuffle && 'blue'}
+              className="button--file-action"
+              onClick={() => doToggleShuffleList(id, !shuffle)}
             />
           </span>
         </>
