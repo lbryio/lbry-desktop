@@ -19,6 +19,7 @@ type Props = {
   doPlayUri: (string) => void,
   modal: { id: string, modalProps: {} },
   collectionId?: string,
+  clearPosition: (string) => void,
 };
 
 function AutoplayCountdown(props: Props) {
@@ -31,6 +32,7 @@ function AutoplayCountdown(props: Props) {
     history: { push },
     modal,
     collectionId,
+    clearPosition,
   } = props;
   const nextTitle = nextRecommendedClaim && nextRecommendedClaim.value && nextRecommendedClaim.value.title;
 
@@ -53,20 +55,29 @@ function AutoplayCountdown(props: Props) {
     }
   }
 
+  const doPlay = useCallback(
+    (uri) => {
+      if (collectionId) {
+        clearPosition(uri);
+      }
+      doSetPlayingUri({ uri });
+      doPlayUri(uri);
+    },
+    [clearPosition, doSetPlayingUri, doPlayUri]
+  );
+
   const doNavigate = useCallback(() => {
     if (!isFloating) {
       if (navigateUrl) {
         push(navigateUrl);
-        doSetPlayingUri({ uri: nextRecommendedUri });
-        doPlayUri(nextRecommendedUri);
+        doPlay(nextRecommendedUri);
       }
     } else {
       if (nextRecommendedUri) {
-        doSetPlayingUri({ uri: nextRecommendedUri });
-        doPlayUri(nextRecommendedUri);
+        doPlay(nextRecommendedUri);
       }
     }
-  }, [navigateUrl, nextRecommendedUri, isFloating, doSetPlayingUri, doPlayUri, push]);
+  }, [navigateUrl, nextRecommendedUri, isFloating, doPlay, push]);
 
   function shouldPauseAutoplay() {
     const elm = document.querySelector(`.${CLASSNAME_AUTOPLAY_COUNTDOWN}`);
