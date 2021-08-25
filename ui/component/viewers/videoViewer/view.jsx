@@ -16,6 +16,7 @@ import FileViewerEmbeddedEnded from 'web/component/fileViewerEmbeddedEnded';
 import FileViewerEmbeddedTitle from 'component/fileViewerEmbeddedTitle';
 import LoadingScreen from 'component/common/loading-screen';
 import { addTheaterModeButton } from './internal/theater-mode';
+import { addAutoplayNextButton } from './internal/autoplay-next';
 import { addPlayNextButton } from './internal/play-next';
 import { addPlayPreviousButton } from './internal/play-previous';
 import { useGetAds } from 'effects/use-get-ads';
@@ -51,6 +52,7 @@ type Props = {
   savePosition: (string, number) => void,
   clearPosition: (string) => void,
   toggleVideoTheaterMode: () => void,
+  toggleAutoplayNext: () => void,
   setVideoPlaybackRate: (number) => void,
   doSetPlayingUri: (string, string) => void,
   doPlayUri: (string) => void,
@@ -92,6 +94,7 @@ function VideoViewer(props: Props) {
     clearPosition,
     desktopPlayStartTime,
     toggleVideoTheaterMode,
+    toggleAutoplayNext,
     setVideoPlaybackRate,
     doSetPlayingUri,
     doPlayUri,
@@ -116,6 +119,7 @@ function VideoViewer(props: Props) {
     push,
   } = useHistory();
   const [isPlaying, setIsPlaying] = useState(false);
+  const [ended, setEnded] = useState(false);
   const [showAutoplayCountdown, setShowAutoplayCountdown] = useState(false);
   const [isEndededEmbed, setIsEndededEmbed] = useState(false);
   const vjsCallbackDataRef: any = React.useRef();
@@ -132,18 +136,21 @@ function VideoViewer(props: Props) {
   const [startPlayPrevious, setStartPlayPrevious] = useState(false);
   const [videoNode, setVideoNode] = useState(false);
 
-  const getNavigateUrl = React.useCallback((playUri: string) => {
-    let navigateUrl;
-    if (playUri) {
-      navigateUrl = formatLbryUrlForWeb(playUri);
-      if (collectionId) {
-        const collectionParams = new URLSearchParams();
-        collectionParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, collectionId);
-        navigateUrl = navigateUrl + `?` + collectionParams.toString();
+  const getNavigateUrl = React.useCallback(
+    (playUri: string) => {
+      let navigateUrl;
+      if (playUri) {
+        navigateUrl = formatLbryUrlForWeb(playUri);
+        if (collectionId) {
+          const collectionParams = new URLSearchParams();
+          collectionParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, collectionId);
+          navigateUrl = navigateUrl + `?` + collectionParams.toString();
+        }
       }
-    }
-    return navigateUrl;
-  }, [collectionId]);
+      return navigateUrl;
+    },
+    [collectionId]
+  );
 
   // force everything to recent when URI changes, can cause weird corner cases otherwise (e.g. navigate while autoplay is true)
   useEffect(() => {
@@ -193,7 +200,19 @@ function VideoViewer(props: Props) {
         setStartPlayPrevious(false);
       }
     }
-  }, [isFloating, push, doSetPlayingUri, playNextUri, doPlayUri, startPlayNext, collectionId, getNavigateUrl, videoNode, startPlayPrevious, playPreviousUri]);
+  }, [
+    isFloating,
+    push,
+    doSetPlayingUri,
+    playNextUri,
+    doPlayUri,
+    startPlayNext,
+    collectionId,
+    getNavigateUrl,
+    videoNode,
+    startPlayPrevious,
+    playPreviousUri,
+  ]);
 
   function doTrackingBuffered(e: Event, data: any) {
     fetch(source, { method: 'HEAD', cache: 'no-store' }).then((response) => {
@@ -221,22 +240,34 @@ function VideoViewer(props: Props) {
     });
   }
 
-  const onEnded = React.useCallback(() => {
-    analytics.videoIsPlaying(false);
+  React.useEffect(() => {
+    if (ended) {
+      analytics.videoIsPlaying(false);
 
-    if (adUrl) {
-      setAdUrl(null);
-      return;
+      if (adUrl) {
+        setAdUrl(null);
+        return;
+      }
+
+      if (embedded) {
+        setIsEndededEmbed(true);
+      } else if (autoplaySetting) {
+        setShowAutoplayCountdown(true);
+      }
+
+      clearPosition(uri);
     }
-
-    if (embedded) {
-      setIsEndededEmbed(true);
-    } else if (autoplaySetting) {
-      setShowAutoplayCountdown(true);
-    }
-
-    clearPosition(uri);
-  }, [embedded, setIsEndededEmbed, autoplaySetting, setShowAutoplayCountdown, adUrl, setAdUrl, clearPosition, uri]);
+  }, [
+    embedded,
+    setIsEndededEmbed,
+    autoplaySetting,
+    setShowAutoplayCountdown,
+    adUrl,
+    setAdUrl,
+    clearPosition,
+    uri,
+    ended,
+  ]);
 
   function onPlay(player) {
     setIsLoading(false);
@@ -283,6 +314,8 @@ function VideoViewer(props: Props) {
       if (collectionId) {
         addPlayNextButton(player, () => setStartPlayNext(true));
         addPlayPreviousButton(player, () => setStartPlayPrevious(true));
+      } else {
+        addAutoplayNextButton(player, toggleAutoplayNext, autoplaySetting);
       }
     }
 
@@ -319,7 +352,7 @@ function VideoViewer(props: Props) {
 
     // first play tracking, used for initializing the watchman api
     player.on('tracking:firstplay', doTrackingFirstPlay);
-    player.on('ended', onEnded);
+    player.on('ended', () => setEnded(true));
     player.on('play', onPlay);
     player.on('pause', (event) => onPause(event, player));
     player.on('dispose', (event) => onDispose(event, player));
@@ -407,6 +440,7 @@ function VideoViewer(props: Props) {
           startMuted={autoplayIfEmbedded}
           toggleVideoTheaterMode={toggleVideoTheaterMode}
           autoplay={!embedded || autoplayIfEmbedded}
+          autoplaySetting={autoplaySetting}
           claimId={claimId}
           userId={userId}
           allowPreRoll={!embedded && !authenticated}

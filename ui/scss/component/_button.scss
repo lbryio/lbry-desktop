@@ -132,6 +132,42 @@
   }
 }
 
+.vjs-button--autoplay-next.vjs-button {
+  @media (min-width: $breakpoint-medium) {
+    display: block;
+    order: 1;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-toggle-left'%3e%3crect x='1' y='5' width='22' height='14' rx='7' ry='7'%3e%3c/rect%3e%3ccircle cx='8' cy='12' r='3'%3e%3c/circle%3e%3c/svg%3e");
+  }
+
+  &:focus:not(:focus-visible) {
+    // Need to repeat these styles because of video.js weirdness
+    // see: https://github.com/lbryio/lbry-desktop/pull/5549#discussion_r580406932
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-toggle-left'%3e%3crect x='1' y='5' width='22' height='14' rx='7' ry='7'%3e%3c/rect%3e%3ccircle cx='8' cy='12' r='3'%3e%3c/circle%3e%3c/svg%3e");
+  }
+}
+
+.vjs-button--autoplay-next--active.vjs-button {
+  @media (min-width: $breakpoint-medium) {
+    display: block;
+    order: 1;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-toggle-right'%3e%3crect x='1' y='5' width='22' height='14' rx='7' ry='7'%3e%3c/rect%3e%3ccircle cx='16' cy='12' r='3'%3e%3c/circle%3e%3c/svg%3e");
+  }
+
+  &:focus:not(:focus-visible) {
+    // Need to repeat these styles because of video.js weirdness
+    // see: https://github.com/lbryio/lbry-desktop/pull/5549#discussion_r580406932
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-toggle-right'%3e%3crect x='1' y='5' width='22' height='14' rx='7' ry='7'%3e%3c/rect%3e%3ccircle cx='16' cy='12' r='3'%3e%3c/circle%3e%3c/svg%3e");
+  }
+}
+
 .vjs-button--play-previous.vjs-button {
   @media (min-width: $breakpoint-medium) {
     display: block;
