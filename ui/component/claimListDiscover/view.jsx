@@ -30,6 +30,9 @@ type Props = {
   hideReposts: boolean,
   history: { action: string, push: (string) => void, replace: (string) => void },
   location: { search: string, pathname: string },
+  claimsByUri: {
+    [string]: string,
+  },
   claimSearchByQuery: {
     [string]: Array<string>,
   },
@@ -77,11 +80,13 @@ type Props = {
   showNoSourceClaims?: boolean,
   isChannel?: boolean,
   empty?: string,
+  primaryUri?: string,
 };
 
 function ClaimListDiscover(props: Props) {
   const {
     doClaimSearch,
+    claimsByUri,
     claimSearchByQuery,
     showHeader = true,
     type,
@@ -136,6 +141,7 @@ function ClaimListDiscover(props: Props) {
     isChannel = false,
     showNoSourceClaims,
     empty,
+    primaryUri,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
   const { search } = location;
@@ -391,6 +397,19 @@ function ClaimListDiscover(props: Props) {
   );
   const [prevOptions, setPrevOptions] = React.useState(null);
 
+  const finalUrisWithoutCurrentUri = React.useMemo(() => {
+    if (!finalUris || !primaryUri) {
+      return finalUris;
+    }
+
+    const primaryUriClaimId = claimsByUri[primaryUri];
+    
+    return finalUris.filter((uri) => {
+      const uriClaimId = claimsByUri[uri];
+      return primaryUriClaimId !== uriClaimId;
+    });
+  }, [claimsByUri, finalUris, primaryUri]);
+
   if (!isJustScrollingToNewPage(prevOptions, options)) {
     // --- New search, or search options changed.
     setPrevOptions(options);
@@ -581,7 +600,7 @@ function ClaimListDiscover(props: Props) {
             tileLayout
             id={mainSearchKey}
             loading={loading}
-            uris={finalUris}
+            uris={finalUrisWithoutCurrentUri}
             onScrollBottom={handleScrollBottom}
             page={page}
             pageSize={dynamicPageSize}
@@ -616,7 +635,7 @@ function ClaimListDiscover(props: Props) {
             id={mainSearchKey}
             type={type}
             loading={loading}
-            uris={finalUris}
+            uris={finalUrisWithoutCurrentUri}
             onScrollBottom={handleScrollBottom}
             page={page}
             pageSize={dynamicPageSize}
