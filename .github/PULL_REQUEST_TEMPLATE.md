@@ -16,9 +16,11 @@ Issue Number:
 
 <!-- If this PR contains a breaking change, please describe the impact and solution strategy for existing applications below. -->
 
-## PR Type & Checklist
+## PR Checklist
 
-<details><summary>PR Type...</summary>
+<!-- For the checkbox formatting to work properly, make sure there are no spaces on either side of the "x" -->
+
+<details><summary>Toggle...</summary>
 
 What kind of change does this PR introduce?
 
@@ -28,14 +30,6 @@ What kind of change does this PR introduce?
 - [ ] Refactoring (no functional changes)
 - [ ] Documentation changes
 - [ ] Other - Please describe:
-
-</details>
-
-<!---------------------------------------------------------------------------->
-
-<details><summary>PR Checklist...</summary>
-
-<!-- For the checkbox formatting to work properly, make sure there are no spaces on either side of the "x" -->
 
 Please check all that apply to this PR using "x":
 
