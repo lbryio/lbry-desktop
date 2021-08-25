@@ -234,6 +234,7 @@ $recent-msg-button__height: 2rem;
 }
 
 .livestream-pinned__wrapper {
+  display: flex;
   flex-shrink: 0;
   position: relative;
   padding: var(--spacing-s) var(--spacing-xs);
@@ -243,9 +244,16 @@ $recent-msg-button__height: 2rem;
   width: 100%;
 
   .livestream-comment {
+    width: 100%;
     padding-top: var(--spacing-xs);
     max-height: 6rem;
     overflow-y: scroll;
+  }
+
+  .close-button {
+    border-left: 1px solid var(--color-border);
+    padding: 0 calc(var(--spacing-m) - var(--spacing-xs)) 0 var(--spacing-m);
+    color: var(--color-text-subtitle);
   }
 
   @media (min-width: $breakpoint-small) {

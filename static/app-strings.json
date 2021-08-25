@@ -2087,6 +2087,7 @@
   "Remove Comment": "Remove Comment",
   "Are you sure you want to remove this comment?": "Are you sure you want to remove this comment?",
   "This comment has a tip associated with it which cannot be reverted.": "This comment has a tip associated with it which cannot be reverted.",
+  "Dismiss pinned comment": "Dismiss pinned comment",
   "Recent Comments": "Recent Comments",
   "%title% by %channelTitle%": "%title% by %channelTitle%",
   "%title% by %channelTitle% %ariaDate%": "%title% by %channelTitle% %ariaDate%",

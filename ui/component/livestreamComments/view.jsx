@@ -52,6 +52,7 @@ export default function LivestreamComments(props: Props) {
   const commentsRef = React.createRef();
   const [viewMode, setViewMode] = React.useState(VIEW_MODE_CHAT);
   const [scrollPos, setScrollPos] = React.useState(0);
+  const [showPinned, setShowPinned] = React.useState(true);
   const claimId = claim && claim.claim_id;
   const commentsLength = commentsByChronologicalOrder && commentsByChronologicalOrder.length;
   const commentsToDisplay = viewMode === VIEW_MODE_CHAT ? commentsByChronologicalOrder : superChatsByTipAmount;
@@ -238,7 +239,7 @@ export default function LivestreamComments(props: Props) {
             </div>
           )}
 
-          {pinnedComment && viewMode === VIEW_MODE_CHAT && (
+          {pinnedComment && showPinned && viewMode === VIEW_MODE_CHAT && (
             <div className="livestream-pinned__wrapper">
               <LivestreamComment
                 key={pinnedComment.comment_id}
@@ -252,6 +253,13 @@ export default function LivestreamComments(props: Props) {
                 isFiat={pinnedComment.is_fiat}
                 isPinned={pinnedComment.is_pinned}
                 commentIsMine={pinnedComment.channel_id && isMyComment(pinnedComment.channel_id)}
+              />
+              <Button
+                title={__('Dismiss pinned comment')}
+                button="inverse"
+                className="close-button"
+                onClick={() => setShowPinned(false)}
+                icon={ICONS.REMOVE}
               />
             </div>
           )}
