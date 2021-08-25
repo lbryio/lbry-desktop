@@ -238,7 +238,7 @@ export default function LivestreamComments(props: Props) {
             </div>
           )}
 
-          {pinnedComment && (
+          {pinnedComment && viewMode === VIEW_MODE_CHAT && (
             <div className="livestream-pinned__wrapper">
               <LivestreamComment
                 key={pinnedComment.comment_id}
@@ -296,7 +296,7 @@ export default function LivestreamComments(props: Props) {
             <div className="main--empty" style={{ flex: 1 }} />
           )}
 
-          {scrollPos < 0 && (
+          {scrollPos < 0 && viewMode === VIEW_MODE_CHAT && (
             <Button
               button="secondary"
               className="livestream__comments__scroll-to-recent"
