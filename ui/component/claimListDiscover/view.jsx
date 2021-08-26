@@ -72,7 +72,6 @@ type Props = {
   liveLivestreamsFirst?: boolean,
   livestreamMap?: { [string]: any },
   hasSource?: boolean,
-  hasNoSource?: boolean,
   limitClaimsPerChannel?: number,
   releaseTime?: string,
   showNoSourceClaims?: boolean,
@@ -134,7 +133,6 @@ function ClaimListDiscover(props: Props) {
     liveLivestreamsFirst,
     livestreamMap,
     hasSource,
-    hasNoSource,
     isChannel = false,
     showNoSourceClaims,
     empty,
@@ -246,10 +244,7 @@ function ClaimListDiscover(props: Props) {
         : CS.ORDER_BY_TOP_VALUE, // Sort by top
   };
 
-  if (ENABLE_NO_SOURCE_CLAIMS && hasNoSource) {
-    options.has_no_source = true;
-    options.claim_type = ['stream'];
-  } else if (hasSource || (!ENABLE_NO_SOURCE_CLAIMS && (!claimType || claimType === 'stream'))) {
+  if (hasSource || (!ENABLE_NO_SOURCE_CLAIMS && (!claimType || claimType === CS.CLAIM_STREAM))) {
     options.has_source = true;
   }
 
@@ -633,7 +628,7 @@ function ClaimListDiscover(props: Props) {
             liveLivestreamsFirst={liveLivestreamsFirst}
             livestreamMap={livestreamMap}
             searchOptions={options}
-            showNoSourceClaims={hasNoSource || showNoSourceClaims}
+            showNoSourceClaims={showNoSourceClaims}
             empty={empty}
           />
           {loading &&
