@@ -188,7 +188,7 @@ function ClaimTilesDiscover(props: Props) {
     has_no_source?: boolean,
   } = {
     page_size: pageSize,
-    claim_type: claimType || undefined,
+    claim_type: claimType || ['stream', 'repost', 'channel'],
     // no_totals makes it so the sdk doesn't have to calculate total number pages for pagination
     // it's faster, but we will need to remove it if we start using total_pages
     no_totals: true,
