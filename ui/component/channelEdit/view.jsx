@@ -108,7 +108,7 @@ function ChannelForm(props: Props) {
     if (isClaimingInitialRewards) {
       return __('Claiming credits...');
     }
-    return creatingChannel || updatingChannel ? __('Submitting') : __('Submit');
+    return creatingChannel || updatingChannel ? __('Submitting...') : __('Submit');
   }, [isClaimingInitialRewards, creatingChannel, updatingChannel]);
   const submitDisabled = React.useMemo(() => {
     return (
@@ -121,7 +121,17 @@ function ChannelForm(props: Props) {
       bidError ||
       (isNewChannel && !params.name)
     );
-  }, [isClaimingInitialRewards, creatingChannel, updatingChannel, nameError, thumbError, coverError, bidError, isNewChannel, params.name]);
+  }, [
+    isClaimingInitialRewards,
+    creatingChannel,
+    updatingChannel,
+    nameError,
+    thumbError,
+    coverError,
+    bidError,
+    isNewChannel,
+    params.name,
+  ]);
 
   function getChannelParams() {
     // fill this in with sdk data
@@ -297,13 +307,8 @@ function ChannelForm(props: Props) {
             (coverError && isUpload.cover ? (
               <div className="channel-cover__custom--waiting">{__('This will be visible in a few minutes.')}</div>
             ) : (
-              <img
-                className="channel-cover__custom"
-                src={coverSrc}
-                onError={() => setCoverError(true)}
-              />
-            )
-          )}
+              <img className="channel-cover__custom" src={coverSrc} onError={() => setCoverError(true)} />
+            ))}
           <div className="channel__primary-info">
             <div className="channel__edit-thumb">
               <Button
@@ -328,8 +333,8 @@ function ChannelForm(props: Props) {
               thumbnailPreview={thumbnailPreview}
               allowGifs
               showDelayedMessage={isUpload.thumbnail}
-              setThumbError={(v) => setThumbError(v)}
-              thumbError={thumbError}
+              setThumbUploadError={setThumbError}
+              thumbUploadError={thumbError}
             />
             <h1 className="channel__title">
               {params.title || (channelName && '@' + channelName) || (params.name && '@' + params.name)}

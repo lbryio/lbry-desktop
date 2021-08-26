@@ -20,18 +20,26 @@ type Props = {
   fetchingChannels: boolean,
   youtubeChannels: ?Array<any>,
   doSetActiveChannel: (string) => void,
+  pendingChannels: Array<string>,
 };
 
 export default function ChannelsPage(props: Props) {
-  const { channels, channelUrls, fetchChannelListMine, fetchingChannels, youtubeChannels, doSetActiveChannel } = props;
+  const {
+    channelUrls,
+    fetchChannelListMine,
+    fetchingChannels,
+    youtubeChannels,
+    doSetActiveChannel,
+    pendingChannels,
+  } = props;
   const [rewardData, setRewardData] = React.useState();
   const hasYoutubeChannels = youtubeChannels && Boolean(youtubeChannels.length);
-  const hasPendingChannels = channels && channels.some((channel) => channel.confirmations < 0);
+
   const { push } = useHistory();
 
   useEffect(() => {
     fetchChannelListMine();
-  }, [fetchChannelListMine, hasPendingChannels]);
+  }, [fetchChannelListMine]);
 
   useEffect(() => {
     Lbryio.call('user_rewards', 'view_rate').then((data) => setRewardData(data));
@@ -86,7 +94,7 @@ export default function ChannelsPage(props: Props) {
                   return data.channel_claim_id === claim.claim_id;
                 });
 
-              if (channelRewardData) {
+              if (channelRewardData && !pendingChannels.includes(claim.permanent_url)) {
                 return (
                   <span className="claim-preview__custom-properties">
                     <span className="help--inline">

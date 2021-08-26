@@ -4,17 +4,30 @@ import {
   selectMyChannelUrls,
   doFetchChannelListMine,
   selectFetchingMyChannels,
+  makeSelectClaimIsPending,
 } from 'lbry-redux';
 import { doSetActiveChannel } from 'redux/actions/app';
 import { selectYoutubeChannels } from 'redux/selectors/user';
 import ChannelsPage from './view';
 
-const select = (state) => ({
-  channelUrls: selectMyChannelUrls(state),
-  channels: selectMyChannelClaims(state),
-  fetchingChannels: selectFetchingMyChannels(state),
-  youtubeChannels: selectYoutubeChannels(state),
-});
+const select = (state) => {
+  const channelUrls = selectMyChannelUrls(state);
+  let pendingChannels = [];
+  if (channelUrls) {
+    channelUrls.map((channelUrl) => {
+      const isPendingUrl = makeSelectClaimIsPending(channelUrl)(state);
+      if (isPendingUrl) pendingChannels.push(channelUrl);
+    });
+  }
+
+  return {
+    channelUrls,
+    channels: selectMyChannelClaims(state),
+    fetchingChannels: selectFetchingMyChannels(state),
+    youtubeChannels: selectYoutubeChannels(state),
+    pendingChannels,
+  };
+};
 
 const perform = (dispatch) => ({
   fetchChannelListMine: () => dispatch(doFetchChannelListMine()),

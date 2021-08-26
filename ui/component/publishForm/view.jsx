@@ -224,6 +224,7 @@ function PublishForm(props: Props) {
     (activeChannelClaim && activeChannelClaim.claim_id);
 
   const nameEdited = isStillEditing && name !== prevName;
+  const thumbnailUploaded = uploadThumbnailStatus === THUMBNAIL_STATUSES.COMPLETE && thumbnail;
 
   const waitingForFile = waitForFile && !remoteUrl && !filePath;
   // If they are editing, they don't need a new file chosen
@@ -235,7 +236,7 @@ function PublishForm(props: Props) {
     thumbnail &&
     !bidError &&
     !emptyPostError &&
-    !thumbnailError &&
+    !(thumbnailError && !thumbnailUploaded) &&
     !(uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS);
 
   const isOverwritingExistingClaim = !editingURI && myClaimForUri;
