@@ -25,8 +25,8 @@ type Props = {
   hideStakedIndicator?: boolean,
   xsmall?: boolean,
   noOptimization?: boolean,
-  setThumbError: (boolean) => void,
-  thumbError: boolean,
+  setThumbUploadError: (boolean) => void,
+  ThumbUploadError: boolean,
 };
 
 function ChannelThumbnail(props: Props) {
@@ -45,13 +45,15 @@ function ChannelThumbnail(props: Props) {
     showDelayedMessage = false,
     noLazyLoad,
     hideStakedIndicator = false,
-    setThumbError,
+    setThumbUploadError,
+    ThumbUploadError,
   } = props;
+  const [thumbLoadError, setThumbLoadError] = React.useState(ThumbUploadError);
   const shouldResolve = claim === undefined;
   const thumbnail = rawThumbnail && rawThumbnail.trim().replace(/^http:\/\//i, 'https://');
   const thumbnailPreview = rawThumbnailPreview && rawThumbnailPreview.trim().replace(/^http:\/\//i, 'https://');
-  const defaultAvater = AVATAR_DEFAULT || Gerbil;
-  const channelThumbnail = thumbnailPreview || thumbnail || defaultAvater;
+  const defaultAvatar = AVATAR_DEFAULT || Gerbil;
+  const channelThumbnail = thumbnailPreview || thumbnail || defaultAvatar;
   const isGif = channelThumbnail && channelThumbnail.endsWith('gif');
   const showThumb = (!obscure && !!thumbnail) || thumbnailPreview;
 
@@ -91,13 +93,19 @@ function ChannelThumbnail(props: Props) {
     >
       {showDelayedMessage ? (
         <div className="channel-thumbnail--waiting">{__('This will be visible in a few minutes.')}</div>
-        ) : (
+      ) : (
         <OptimizedImage
           alt={__('Channel profile picture')}
           className={!channelThumbnail ? 'channel-thumbnail__default' : 'channel-thumbnail__custom'}
-          src={channelThumbnail}
+          src={(!thumbLoadError && channelThumbnail) || defaultAvatar}
           loading={noLazyLoad ? undefined : 'lazy'}
-          onError={() => setThumbError(true)}
+          onError={() => {
+            if (setThumbUploadError) {
+              setThumbUploadError(true);
+            } else {
+              setThumbLoadError(true);
+            }
+          }}
         />
       )}
       {!hideStakedIndicator && <ChannelStakedIndicator uri={uri} claim={claim} />}
