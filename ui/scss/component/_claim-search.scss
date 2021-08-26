@@ -1,0 +1,111 @@
+.claim-search__wrapper {
+  width: 100%;
+
+  @media (min-width: $breakpoint-small) {
+    width: auto;
+  }
+}
+
+.claim-search__menus {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  padding: var(--spacing-m);
+  padding-bottom: var(--spacing-s);
+  margin-top: var(--spacing-m);
+  margin-bottom: var(--spacing-m);
+  color: var(--color-text-subtitle);
+  align-items: flex-start;
+
+  @media (min-width: $breakpoint-small) {
+    flex-direction: row;
+  }
+}
+
+.claim-search__dropdown {
+  padding: 0 var(--spacing-m);
+  padding-right: var(--spacing-l);
+  font-size: var(--font-body);
+  background-color: var(--color-card-background);
+}
+
+.claim-search__dropdown--selected {
+  background-color: var(--color-input-bg-selected);
+}
+
+.claim-search__input-container {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--font-body);
+  width: 100%;
+
+  &:not(:first-of-type) {
+    margin-top: var(--spacing-s);
+  }
+
+  @media (min-width: $breakpoint-small) {
+    width: auto;
+
+    &:not(:first-of-type) {
+      margin-top: 0;
+      padding-left: var(--spacing-m);
+    }
+  }
+}
+
+.claim-search__filter-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+}
+
+.claim-search__input-special {
+  font-weight: var(--font-weight-bold);
+}
+
+.claim-search__extra {
+  display: flex;
+  align-items: center;
+}
+
+.claim-search__top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  @media (min-width: $breakpoint-small) {
+    justify-content: flex-start;
+  }
+}
+
+.claim-search__top > div {
+  @media (max-width: $breakpoint-small) {
+    margin-bottom: var(--spacing-xxs);
+  }
+}
+
+.claim-search__menu-group {
+  display: flex;
+  flex-wrap: nowrap;
+  margin-right: var(--spacing-s);
+}
+
+.claim-search__menu-group--between {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  width: 100%;
+
+  &:last-of-type {
+    .button-toggle:last-of-type {
+      margin-right: 0;
+    }
+  }
+}
+
+.claim-search__tags-link {
+  margin-left: var(--spacing-s);
+}
