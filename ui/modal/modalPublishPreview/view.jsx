@@ -83,6 +83,22 @@ const ModalPublishPreview = (props: Props) => {
     remoteFile,
   } = props;
 
+  const maxCharsBeforeOverflow = 128;
+
+  const formattedTitle = React.useMemo(() => {
+    if (title && title.length > maxCharsBeforeOverflow) {
+      return title.slice(0, maxCharsBeforeOverflow).trim() + '...';
+    }
+    return title;
+  }, [title]);
+
+  const formattedUri = React.useMemo(() => {
+    if (uri && uri.length > maxCharsBeforeOverflow) {
+      return uri.slice(0, maxCharsBeforeOverflow).trim() + '...';
+    }
+    return uri;
+  }, [uri]);
+
   const livestream =
     (uri && isLivestreamClaim) ||
     //   $FlowFixMe
@@ -227,10 +243,10 @@ const ModalPublishPreview = (props: Props) => {
                     {!livestream && !isMarkdownPost && createRow(__('File'), getFilePathName(filePath))}
                     {livestream && remoteFile && createRow(__('Replay'), __('Remote File Selected'))}
                     {isOptimizeAvail && createRow(__('Transcode'), optimize ? __('Yes') : __('No'))}
-                    {createRow(__('Title'), title)}
+                    {createRow(__('Title'), formattedTitle)}
                     {createRow(__('Description'), descriptionValue)}
                     {createRow(__('Channel'), channelValue(channel))}
-                    {createRow(__('URL'), uri)}
+                    {createRow(__('URL'), formattedUri)}
                     {createRow(__('Deposit'), depositValue)}
                     {createRow(__('Price'), priceValue)}
                     {createRow(__('Language'), language)}
