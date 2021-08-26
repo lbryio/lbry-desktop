@@ -203,7 +203,6 @@ function ClaimTilesDiscover(props: Props) {
 
   if (ENABLE_NO_SOURCE_CLAIMS && hasNoSource) {
     options.has_no_source = true;
-    options.claim_type = ['stream'];
   } else if (hasSource || (!ENABLE_NO_SOURCE_CLAIMS && (!claimType || claimType === 'stream'))) {
     options.has_source = true;
   }
