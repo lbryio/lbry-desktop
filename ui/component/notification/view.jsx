@@ -191,7 +191,7 @@ export default function Notification(props: Props) {
               {isCommentNotification && commentText ? (
                 <>
                   <div className="notification__title">{title}</div>
-                  <div title={commentText} className="notification__text mobile-hidden">
+                  <div title={commentText} className="notification__text">
                     {commentText}
                   </div>
                 </>

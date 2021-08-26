@@ -18,13 +18,14 @@ $contentMaxWidth: 60rem;
   .comment__create,
   .comment__content {
     margin: var(--spacing-m);
+    margin-bottom: 0;
   }
 }
 
 .notification__icon {
   display: flex;
   align-items: flex-start;
-  margin-top: var(--spacing-xs);
+  margin: auto;
 
   .icon__wrapper {
     width: 1rem;
@@ -41,6 +42,10 @@ $contentMaxWidth: 60rem;
   @media (min-width: $breakpoint-small) {
     align-items: center;
     margin-left: var(--spacing-m);
+  }
+
+  @media (max-width: $breakpoint-medium) {
+    margin-top: var(--spacing-xxs);
   }
 }
 
@@ -63,6 +68,16 @@ $contentMaxWidth: 60rem;
 
   @media (max-width: $breakpoint-small) {
     padding: var(--spacing-s);
+  }
+
+  .comment__creator-like {
+    height: 0.8rem;
+    width: 0.8rem;
+    margin-left: 3px;
+    z-index: 3;
+    position: absolute;
+    top: 0.4rem;
+    left: 0.4rem;
   }
 }
 
@@ -174,22 +189,21 @@ $contentMaxWidth: 60rem;
   margin: var(--spacing-m);
   margin-bottom: 0;
 
+  @media (min-width: $breakpoint-small) {
+    margin-left: 5rem;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    margin-left: 3rem;
+  }
+
+
   > *:not(:last-of-type) {
     margin-right: var(--spacing-m);
   }
 
   .button__label {
     margin-left: var(--spacing-xs);
-  }
-
-  .comment__creator-like {
-    height: 0.8rem;
-    width: 0.8rem;
-    margin-left: 3px;
-    z-index: 3;
-    position: absolute;
-    top: 0.4rem;
-    left: 0.4rem;
   }
 }
 
