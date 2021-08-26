@@ -35,6 +35,7 @@ function PublishFormErrors(props: Props) {
   // If there is an error it will be presented as an inline error as well
 
   const isUploadingThumbnail = uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS;
+  const thumbnailUploaded = uploadThumbnailStatus === THUMBNAIL_STATUSES.COMPLETE && thumbnail;
 
   return (
     <div className="error__text">
@@ -48,7 +49,7 @@ function PublishFormErrors(props: Props) {
       {!isUploadingThumbnail && !thumbnail && (
         <div>{__('A thumbnail is required. Please upload or provide an image URL above.')}</div>
       )}
-      {thumbnailError && <div>{__('Thumbnail is invalid.')}</div>}
+      {thumbnailError && !thumbnailUploaded && <div>{__('Thumbnail is invalid.')}</div>}
       {editingURI && !isStillEditing && !filePath && (
         <div>{__('Please reselect a file after changing the LBRY URL')}</div>
       )}

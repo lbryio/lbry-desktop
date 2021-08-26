@@ -68,13 +68,13 @@ class SelectThumbnail extends React.PureComponent<Props> {
       isSupportedVideo = actualFilePath.type.split('/')[0] === 'video';
     }
 
-    let thumbnailSrc;
+    let thumbnailInputSrc;
     if (!thumbnail) {
-      thumbnailSrc = ThumbnailMissingImage;
+      thumbnailInputSrc = ThumbnailMissingImage;
     } else if (thumbnailError) {
-      thumbnailSrc = ThumbnailBrokenImage;
+      thumbnailInputSrc = ThumbnailBrokenImage;
     } else {
-      thumbnailSrc = thumbnail;
+      thumbnailInputSrc = thumbnail;
     }
 
     /*
@@ -88,10 +88,10 @@ class SelectThumbnail extends React.PureComponent<Props> {
       <div>
         {status === THUMBNAIL_STATUSES.API_DOWN || status === THUMBNAIL_STATUSES.MANUAL ? (
           <div className="column">
-            <div className="column__item thumbnail-preview" style={{ backgroundImage: `url(${thumbnailSrc})` }}>
+            <div className="column__item thumbnail-preview" style={{ backgroundImage: `url(${thumbnailInputSrc})` }}>
               <img
                 style={{ display: 'none' }}
-                src={thumbnailSrc}
+                src={thumbnailInputSrc}
                 alt={__('Thumbnail Preview')}
                 onError={() => updatePublishForm({ thumbnailError: true })}
               />
@@ -128,7 +128,16 @@ class SelectThumbnail extends React.PureComponent<Props> {
             )}
             {status === THUMBNAIL_STATUSES.COMPLETE && thumbnail && (
               <div className="column column--space-between">
-                <div className="column__item thumbnail-preview" style={{ backgroundImage: `url(${thumbnail})` }} />
+                <div className="column__item thumbnail-preview" style={{ backgroundImage: `url(${thumbnail})` }}>
+                  {(thumbnailError !== false) && __('This will be visible in a few minutes.')}
+                  <img
+                    style={{ display: 'none' }}
+                    src={thumbnail}
+                    alt={__('Thumbnail Preview')}
+                    onError={() => updatePublishForm({ thumbnailError: true })}
+                    onLoad={() => updatePublishForm({ thumbnailError: false })}
+                  />
+                </div>
                 <div className="column__item">
                   <p>{__('Upload complete.')}</p>
                   <div className="section__actions">
