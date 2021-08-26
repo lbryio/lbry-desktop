@@ -19,6 +19,8 @@ import isUserTyping from 'util/detect-typing';
 // @endif
 const isDev = process.env.NODE_ENV !== 'production';
 
+process.on('unhandledRejection', console.log)
+
 export type Player = {
   on: (string, (any) => void) => void,
   one: (string, (any) => void) => void,
@@ -84,11 +86,12 @@ const VIDEO_JS_OPTIONS = {
   controls: true,
   html5: {
     vhs: {
-      overrideNative: !videojs.browser.IS_ANY_SAFARI,
+      overrideNative: !videojs.browser.IS_ANY_SAFARI, // don't override on safari
     },
   },
 };
 
+// keys to bind to for keyboard shortcuts
 const SPACE_BAR_KEYCODE = 32;
 const SMALL_F_KEYCODE = 70;
 const SMALL_M_KEYCODE = 77;
@@ -493,6 +496,10 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     wrapper.setAttribute('data-vjs-player', 'true');
     const el = document.createElement(isAudio ? 'audio' : 'video');
     el.className = 'video-js vjs-big-play-centered ';
+    if (IS_IOS) {
+      el.classList.add('vjs-show-big-play-button-on-pause');
+    }
+
     wrapper.appendChild(el);
 
     container.appendChild(wrapper);
