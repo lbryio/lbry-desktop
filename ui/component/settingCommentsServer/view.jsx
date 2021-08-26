@@ -15,16 +15,18 @@ type Props = {
 
 function SettingCommentsServer(props: Props) {
   const { customServerEnabled, customServerUrl, setCustomServerEnabled, setCustomServerUrl } = props;
-  const [customUrl, setCustomUrl] = React.useState(customServerUrl);
+  const [url, setUrl] = React.useState(customServerUrl);
 
   React.useEffect(() => {
     const timer = setTimeout(() => {
-      setCustomServerUrl(customUrl);
-      Comments.url = customUrl;
+      Comments.setServerUrl(customServerEnabled ? url : undefined);
+      if (url !== customServerUrl) {
+        setCustomServerUrl(url);
+      }
     }, DEBOUNCE_TEXT_INPUT_MS);
 
     return () => clearTimeout(timer);
-  }, [customUrl, setCustomServerUrl]);
+  }, [url, customServerUrl, customServerEnabled, setCustomServerUrl]);
 
   return (
     <React.Fragment>
@@ -57,8 +59,8 @@ function SettingCommentsServer(props: Props) {
             <FormField
               type="text"
               placeholder="https://comment.mysite.com"
-              value={customUrl}
-              onChange={(e) => setCustomUrl(e.target.value)}
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
             />
           </div>
         )}
