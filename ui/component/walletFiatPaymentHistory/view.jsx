@@ -80,7 +80,7 @@ const WalletBalance = (props: Props) => {
                         className=""
                         navigate={'/' + transaction.channel_name + ':' + transaction.source_claim_id}
                         label={
-                          transaction.channel_claim_id === transaction.source_claim_id ? 'Channel Page' : 'Content Page'
+                          transaction.channel_claim_id === transaction.source_claim_id ? __('Channel Page') : __('Content Page')
                         }
                         button="link"
                       />

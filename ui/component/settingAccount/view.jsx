@@ -65,7 +65,7 @@ export default function SettingAccount(props: Props) {
             {user && getStripeEnvironment() && (
               <SettingsRow
                 title={__('Bank Accounts')}
-                subtitle={__('Connect a bank account to receive tips and compensation in your local currency')}
+                subtitle={__('Connect a bank account to receive tips and compensation in your local currency.')}
               >
                 <Button
                   button="inverse"
@@ -81,7 +81,7 @@ export default function SettingAccount(props: Props) {
             {isAuthenticated && getStripeEnvironment() && (
               <SettingsRow
                 title={__('Payment Methods')}
-                subtitle={__('Add a credit card to tip creators in their local currency')}
+                subtitle={__('Add a credit card to tip creators in their local currency.')}
               >
                 <Button
                   button="inverse"

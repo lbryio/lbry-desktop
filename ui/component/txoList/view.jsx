@@ -329,7 +329,7 @@ function TxoList(props: Props) {
                   className={classnames(`button-toggle`, {
                     'button-toggle--active': currency === 'credits',
                   })}
-                  label={__('Credits')}
+                  label={__('Credits --[transactions tab]--')}
                 />
                 {/* toggle to fiat */}
                 <Button
@@ -338,7 +338,7 @@ function TxoList(props: Props) {
                   className={classnames(`button-toggle`, {
                     'button-toggle--active': currency === 'fiat',
                   })}
-                  label={__('USD')}
+                  label={__('USD --[transactions tab]--')}
                 />
               </div>
             </fieldset-section>
@@ -436,7 +436,6 @@ function TxoList(props: Props) {
                     </div>
                   )}
                 </div>
-
                 {/* export and refresh buttons */}
                 <div className="card__actions--inline">
                   {!isFetchingTransactions && transactionsFile === null && (

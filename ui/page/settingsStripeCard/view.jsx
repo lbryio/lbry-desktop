@@ -359,7 +359,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
         noSideNavigation
         settingsPage
         className="card-stack"
-        backout={{ title: pageTitle, backLabel: __('Back') }}
+        backout={{ title: __(pageTitle), backLabel: __('Back') }}
       >
         <div>
           {scriptFailedToLoad && (
@@ -385,7 +385,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
                 <div className="sr-field-error" id="card-errors" role="alert" />
                 <button className="linkButton" id="submit">
                   <div className="stripe__spinner hidden" id="stripe-spinner" />
-                  <span id="button-text">Add Card</span>
+                  <span id="button-text">{__('Add Card')}</span>
                 </button>
               </div>
             </div>

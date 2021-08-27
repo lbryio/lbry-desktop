@@ -56,20 +56,20 @@ const WalletBalance = () => {
           subtitle={
             accountStatusResponse && accountStatusResponse.total_received_unpaid > 0 ? (
               <I18nMessage>
-                This is your pending balance that will be automatically sent to your bank account
+                This is your pending balance that will be automatically sent to your bank account.
               </I18nMessage>
             ) : (
-              <I18nMessage>When you begin to receive tips your balance will be updated here</I18nMessage>
+              <I18nMessage>When you begin to receive tips your balance will be updated here.</I18nMessage>
             )
           }
           actions={
             <>
               <h2 className="section__title--small">
-                ${(accountStatusResponse && accountStatusResponse.total_received_unpaid / 100) || 0} Total Received Tips
+                ${(accountStatusResponse && accountStatusResponse.total_received_unpaid / 100) || 0} {__('Total Received Tips')}
               </h2>
 
               <h2 className="section__title--small">
-                ${(accountStatusResponse && accountStatusResponse.total_paid_out / 100) || 0} Withdrawn
+                ${(accountStatusResponse && accountStatusResponse.total_paid_out / 100) || 0} {__('Withdrawn')}
               </h2>
 
               <div className="section__actions">
