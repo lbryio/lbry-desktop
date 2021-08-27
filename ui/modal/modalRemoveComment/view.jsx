@@ -11,10 +11,19 @@ type Props = {
   closeModal: () => void,
   deleteComment: (string, ?string) => void,
   supportAmount?: any,
+  setQuickReply: (any) => void,
 };
 
 function ModalRemoveComment(props: Props) {
-  const { commentId, commentIsMine, contentChannelPermanentUrl, closeModal, deleteComment, supportAmount } = props;
+  const {
+    commentId,
+    commentIsMine,
+    contentChannelPermanentUrl,
+    closeModal,
+    deleteComment,
+    supportAmount,
+    setQuickReply,
+  } = props;
 
   return (
     <Modal isOpen contentLabel={__('Confirm Comment Deletion')} type="card" onAborted={closeModal}>
@@ -24,7 +33,9 @@ function ModalRemoveComment(props: Props) {
           <React.Fragment>
             <p>{__('Are you sure you want to remove this comment?')}</p>
             {Boolean(supportAmount) && (
-              <p className="help error__text"> {__('This comment has a tip associated with it which cannot be reverted.')}</p>
+              <p className="help error__text">
+                {__('This comment has a tip associated with it which cannot be reverted.')}
+              </p>
             )}
           </React.Fragment>
         }
@@ -35,8 +46,9 @@ function ModalRemoveComment(props: Props) {
                 button="primary"
                 label={__('Remove')}
                 onClick={() => {
-                  deleteComment(commentId, commentIsMine ? undefined : contentChannelPermanentUrl);
                   closeModal();
+                  deleteComment(commentId, commentIsMine ? undefined : contentChannelPermanentUrl);
+                  if (setQuickReply) setQuickReply(undefined);
                 }}
               />
               <Button button="link" label={__('Cancel')} onClick={closeModal} />

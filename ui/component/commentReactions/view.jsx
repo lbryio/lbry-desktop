@@ -19,10 +19,21 @@ type Props = {
   activeChannelId: ?string,
   claim: ?ChannelClaim,
   doToast: ({ message: string }) => void,
+  hideCreatorLike: boolean,
 };
 
 export default function CommentReactions(props: Props) {
-  const { myReacts, othersReacts, commentId, react, claimIsMine, claim, activeChannelId, doToast } = props;
+  const {
+    myReacts,
+    othersReacts,
+    commentId,
+    react,
+    claimIsMine,
+    claim,
+    activeChannelId,
+    doToast,
+    hideCreatorLike,
+  } = props;
   const {
     push,
     location: { pathname },
@@ -48,7 +59,7 @@ export default function CommentReactions(props: Props) {
     }
     return count;
   };
-
+  const shouldHide = !canCreatorReact && hideCreatorLike;
   const creatorLiked = getCountForReact(REACTION_TYPES.CREATOR_LIKE) > 0;
   const likeIcon = SIMPLE_SITE
     ? myReacts.includes(REACTION_TYPES.LIKE)
@@ -105,9 +116,8 @@ export default function CommentReactions(props: Props) {
         label={<span className="comment__reaction-count">{getCountForReact(REACTION_TYPES.DISLIKE)}</span>}
       />
 
-      {ENABLE_CREATOR_REACTIONS && (canCreatorReact || creatorLiked) && (
+      {!shouldHide && ENABLE_CREATOR_REACTIONS && (canCreatorReact || creatorLiked) && (
         <Button
-          iconOnly
           disabled={!canCreatorReact || !claimIsMine}
           requiresAuth={IS_WEB}
           title={claimIsMine ? __('You loved this') : __('Creator loved this')}

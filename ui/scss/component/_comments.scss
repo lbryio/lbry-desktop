@@ -249,6 +249,7 @@ $thumbnailWidthSmall: 1rem;
 .comment__message {
   word-break: break-word;
   max-width: 35rem;
+  color: var(--color-text);
 
   ul li,
   ol li {
@@ -298,6 +299,7 @@ $thumbnailWidthSmall: 1rem;
 
 .comment__char-count {
   font-size: var(--font-xsmall);
+  color: var(--color-text);
 }
 
 .comment__char-count-mde {

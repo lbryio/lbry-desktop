@@ -64,6 +64,9 @@ type Props = {
   isModerator: boolean,
   isGlobalMod: boolean,
   isFiat: boolean,
+  supportDisabled: boolean,
+  setQuickReply: (any) => void,
+  quickReply: any,
 };
 
 const LENGTH_TO_COLLAPSE = 300;
@@ -100,6 +103,9 @@ function Comment(props: Props) {
     isModerator,
     isGlobalMod,
     isFiat,
+    supportDisabled,
+    setQuickReply,
+    quickReply,
   } = props;
 
   const {
@@ -185,6 +191,7 @@ function Comment(props: Props) {
 
   function handleSubmit() {
     updateComment(commentId, editedMessage);
+    if (setQuickReply) setQuickReply({ ...quickReply, comment_id: commentId, comment: editedMessage });
     setEditing(false);
   }
 
@@ -294,6 +301,7 @@ function Comment(props: Props) {
                   commentIsMine={commentIsMine}
                   handleEditComment={handleEditComment}
                   supportAmount={supportAmount}
+                  setQuickReply={setQuickReply}
                 />
               </Menu>
             </div>
@@ -403,6 +411,7 @@ function Comment(props: Props) {
                     onCancelReplying={() => {
                       setReplying(false);
                     }}
+                    supportDisabled={supportDisabled}
                   />
                 )}
               </>
