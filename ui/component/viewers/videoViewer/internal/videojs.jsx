@@ -59,6 +59,7 @@ type Props = {
   userId: ?number,
   // allowPreRoll: ?boolean,
   shareTelemetry: boolean,
+  showAutoplayCountdown: boolean
 };
 
 // type VideoJSOptions = {
@@ -198,6 +199,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     userId,
     // allowPreRoll,
     shareTelemetry,
+    showAutoplayCountdown,
   } = props;
 
   const [reload, setReload] = useState('initial');
@@ -560,10 +562,11 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       player.on('error', onError);
       player.on('ended', onEnded);
 
-      // on ios, center the play button when paused
-      player.on('pause', function() {
-        if (IS_IOS) {
-          const playBT = document.getElementsByClassName('vjs-big-play-button')[0];
+      // on ios, show a play button when paused
+      if (IS_IOS) {
+        const playBT = document.getElementsByClassName('vjs-big-play-button')[0];
+
+        player.on('pause', function() {
           const videoDiv = player.children_[0];
           const controlBar = document.getElementsByClassName('vjs-control-bar')[0];
           const leftWidth = ((videoDiv.offsetWidth - playBT.offsetWidth) / 2) + 'px';
@@ -573,8 +576,14 @@ export default React.memo<Props>(function VideoJs(props: Props) {
           playBT.style.top = topHeight;
           playBT.style.left = leftWidth;
           playBT.style.margin = 0;
-        }
-      });
+        });
+
+        player.on('ended', function() {
+          if (showAutoplayCountdown) {
+            playBT.style.display = 'none';
+          }
+        });
+      }
 
       // Replace volume bar with custom LBRY volume bar
       LbryVolumeBarClass.replaceExisting(player);
