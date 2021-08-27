@@ -41,33 +41,56 @@ const WalletBalance = () => {
   }, [stripeEnvironment]);
 
   return (
-    <>{<Card
-      title={<><Icon size={18} icon={ICONS.FINANCE} />{(accountStatusResponse && ((accountStatusResponse.total_received_unpaid - accountStatusResponse.total_paid_out) / 100)) || 0} USD</>}
-      subtitle={accountStatusResponse && accountStatusResponse.total_received_unpaid > 0 ? (
-          <I18nMessage>
-            This is your pending balance that will be automatically sent to your bank account
-          </I18nMessage>) : (
-        <I18nMessage>
-          When you begin to receive tips your balance will be updated here
-        </I18nMessage>)
-      }
-      actions={
-        <>
-          <h2 className="section__title--small">
-            ${(accountStatusResponse && (accountStatusResponse.total_received_unpaid / 100)) || 0} Total Received Tips
-          </h2>
+    <>
+      {
+        <Card
+          title={
+            <>
+              <Icon size={18} icon={ICONS.FINANCE} />
+              {(accountStatusResponse &&
+                (accountStatusResponse.total_received_unpaid - accountStatusResponse.total_paid_out) / 100) ||
+                0}{' '}
+              USD
+            </>
+          }
+          subtitle={
+            accountStatusResponse && accountStatusResponse.total_received_unpaid > 0 ? (
+              <I18nMessage>
+                This is your pending balance that will be automatically sent to your bank account
+              </I18nMessage>
+            ) : (
+              <I18nMessage>When you begin to receive tips your balance will be updated here</I18nMessage>
+            )
+          }
+          actions={
+            <>
+              <h2 className="section__title--small">
+                ${(accountStatusResponse && accountStatusResponse.total_received_unpaid / 100) || 0} Total Received Tips
+              </h2>
 
-          <h2 className="section__title--small">
-            ${(accountStatusResponse && (accountStatusResponse.total_paid_out / 100)) || 0}  Withdrawn
-          </h2>
+              <h2 className="section__title--small">
+                ${(accountStatusResponse && accountStatusResponse.total_paid_out / 100) || 0} Withdrawn
+              </h2>
 
-          <div className="section__actions">
-            <Button button="secondary" label={__('Bank Accounts')} icon={ICONS.SETTINGS} navigate={`/$/${PAGES.SETTINGS_STRIPE_ACCOUNT}`} />
-            <Button button="secondary" label={__('Payment Methods')} icon={ICONS.SETTINGS} navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} />
-          </div>
-        </>
+              <div className="section__actions">
+                <Button
+                  button="secondary"
+                  label={__('Bank Accounts')}
+                  icon={ICONS.SETTINGS}
+                  navigate={`/$/${PAGES.SETTINGS_STRIPE_ACCOUNT}`}
+                />
+                <Button
+                  button="secondary"
+                  label={__('Payment Methods')}
+                  icon={ICONS.SETTINGS}
+                  navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`}
+                />
+              </div>
+            </>
+          }
+        />
       }
-    />}</>
+    </>
   );
 };
 
