@@ -336,6 +336,7 @@ function VideoViewer(props: Props) {
           userId={userId}
           allowPreRoll={!embedded && !authenticated}
           shareTelemetry={shareTelemetry}
+          showAutoplayCountdown={autoplaySetting}
         />
       )}
     </div>
