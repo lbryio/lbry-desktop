@@ -12,8 +12,6 @@ import Card from 'component/common/card';
 import ErrorText from 'component/common/error-text';
 import Nag from 'component/common/nag';
 import classnames from 'classnames';
-import OdyseeLogoWithWhiteText from 'component/header/odysee_white.png';
-import OdyseeLogoWithText from 'component/header/odysee.png';
 import LoginGraphic from 'component/loginGraphic';
 
 type Props = {
@@ -29,7 +27,6 @@ type Props = {
   clearEmailEntry: () => void,
   interestedInYoutubSync: boolean,
   doToggleInterestedInYoutubeSync: () => void,
-  currentTheme: string,
 };
 
 function UserEmailNew(props: Props) {
@@ -44,7 +41,6 @@ function UserEmailNew(props: Props) {
     emailExists,
     interestedInYoutubSync,
     doToggleInterestedInYoutubeSync,
-    currentTheme,
   } = props;
   const { share_usage_data: shareUsageData } = daemonSettings;
   const { push, location } = useHistory();
@@ -190,39 +186,9 @@ function UserEmailNew(props: Props) {
             </Form>
           </div>
         }
-        nag={
-          <>
-            {IS_WEB && DOMAIN === 'lbry.tv' && (
-              <Nag
-                relative
-                message={
-                  <I18nMessage
-                    tokens={{
-                      odysee: (
-                        <Button button="link" label={__('odysee.com')} href="https://odysee.com?src=lbrytv-retired" />
-                      ),
-                    }}
-                  >
-                    {__(
-                      'lbry.tv is being retired in favor of %odysee% and new sign ups are disabled. Sign up on %odysee% instead'
-                    )}
-                  </I18nMessage>
-                }
-              />
-            )}
-            {errorMessage && <Nag type="error" relative message={<ErrorText>{errorMessage}</ErrorText>} />}
-          </>
-        }
+        nag={<>{errorMessage && <Nag type="error" relative message={<ErrorText>{errorMessage}</ErrorText>} />}</>}
         secondPane={SIMPLE_SITE && <LoginGraphic />}
       />
-
-      {IS_WEB && DOMAIN === 'lbry.tv' && (
-        <div className="signup__odysee-logo">
-          <Button href="https://odysee.com?src=lbrytv-retired">
-            <img src={currentTheme === 'light' ? OdyseeLogoWithText : OdyseeLogoWithWhiteText} />
-          </Button>
-        </div>
-      )}
     </div>
   );
 }

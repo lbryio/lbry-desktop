@@ -18,7 +18,6 @@ const select = (state) => ({
   daemonSettings: selectDaemonSettings(state),
   emailExists: selectEmailAlreadyExists(state),
   user: selectUser(state),
-  currentTheme: makeSelectClientSetting(SETTINGS.THEME)(state),
 });
 
 const perform = (dispatch) => ({
