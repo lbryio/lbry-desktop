@@ -72,6 +72,7 @@ type Props = {
   liveLivestreamsFirst?: boolean,
   livestreamMap?: { [string]: any },
   hasSource?: boolean,
+  hasNoSource?: boolean,
   limitClaimsPerChannel?: number,
   releaseTime?: string,
   showNoSourceClaims?: boolean,
@@ -133,6 +134,7 @@ function ClaimListDiscover(props: Props) {
     liveLivestreamsFirst,
     livestreamMap,
     hasSource,
+    hasNoSource,
     isChannel = false,
     showNoSourceClaims,
     empty,
@@ -230,7 +232,7 @@ function ClaimListDiscover(props: Props) {
     page_size: dynamicPageSize,
     page,
     name,
-    claim_type: claimType || undefined,
+    claim_type: claimType || ['stream', 'repost', 'channel'],
     // no_totals makes it so the sdk doesn't have to calculate total number pages for pagination
     // it's faster, but we will need to remove it if we start using total_pages
     no_totals: true,
@@ -244,7 +246,9 @@ function ClaimListDiscover(props: Props) {
         : CS.ORDER_BY_TOP_VALUE, // Sort by top
   };
 
-  if (hasSource || (!ENABLE_NO_SOURCE_CLAIMS && (!claimType || claimType === CS.CLAIM_STREAM))) {
+  if (ENABLE_NO_SOURCE_CLAIMS && hasNoSource) {
+    options.has_no_source = true;
+  } else if (hasSource || (!ENABLE_NO_SOURCE_CLAIMS && (!claimType || claimType === 'stream'))) {
     options.has_source = true;
   }
 
@@ -628,13 +632,20 @@ function ClaimListDiscover(props: Props) {
             liveLivestreamsFirst={liveLivestreamsFirst}
             livestreamMap={livestreamMap}
             searchOptions={options}
-            showNoSourceClaims={showNoSourceClaims}
+            showNoSourceClaims={hasNoSource || showNoSourceClaims}
             empty={empty}
           />
           {loading &&
             new Array(dynamicPageSize)
               .fill(1)
-              .map((x, i) => <ClaimPreview key={i} placeholder="loading" type={type} />)}
+              .map((x, i) => (
+                <ClaimPreview
+                  showNoSourceClaims={hasNoSource || showNoSourceClaims}
+                  key={i}
+                  placeholder="loading"
+                  type={type}
+                />
+              ))}
         </div>
       )}
     </React.Fragment>

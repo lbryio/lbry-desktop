@@ -34,6 +34,9 @@ export function getLivestreamOnlyOptions(options: any) {
   delete newOptions.has_source;
   delete newOptions.stream_types;
   newOptions.has_no_source = true;
+  newOptions.claim_type = ['stream'];
+  newOptions.page_size = 50;
+  newOptions.order_by = ['release_time'];
   return newOptions;
 }
 
