@@ -19,8 +19,6 @@ import isUserTyping from 'util/detect-typing';
 // @endif
 const isDev = process.env.NODE_ENV !== 'production';
 
-process.on('unhandledRejection', console.log)
-
 export type Player = {
   on: (string, (any) => void) => void,
   one: (string, (any) => void) => void,
@@ -496,6 +494,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     wrapper.setAttribute('data-vjs-player', 'true');
     const el = document.createElement(isAudio ? 'audio' : 'video');
     el.className = 'video-js vjs-big-play-centered ';
+
+    // show large play button when paused on ios
     if (IS_IOS) {
       el.classList.add('vjs-show-big-play-button-on-pause');
     }
@@ -559,6 +559,22 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       player.on('volumechange', onVolumeChange);
       player.on('error', onError);
       player.on('ended', onEnded);
+
+      // on ios, center the play button when paused
+      player.on('pause', function() {
+        if (IS_IOS) {
+          const playBT = document.getElementsByClassName('vjs-big-play-button')[0];
+          const videoDiv = player.children_[0];
+          const controlBar = document.getElementsByClassName('vjs-control-bar')[0];
+          const leftWidth = ((videoDiv.offsetWidth - playBT.offsetWidth) / 2) + 'px';
+          const availableHeight = videoDiv.offsetHeight - controlBar.offsetHeight;
+          const topHeight = (((availableHeight - playBT.offsetHeight) / 2) + 3) + 'px';
+
+          playBT.style.top = topHeight;
+          playBT.style.left = leftWidth;
+          playBT.style.margin = 0;
+        }
+      });
 
       // Replace volume bar with custom LBRY volume bar
       LbryVolumeBarClass.replaceExisting(player);
