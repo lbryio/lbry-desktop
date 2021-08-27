@@ -51,6 +51,8 @@ type Props = {
   doFetchCreatorSettings: (channelId: string) => Promise<any>,
   settingsByChannelId: { [channelId: string]: PerChannelSettings },
   setQuickReply: (any) => void,
+  fetchComment: (commentId: string) => Promise<any>,
+  shouldFetchComment: boolean,
 };
 
 export function CommentCreate(props: Props) {
@@ -75,6 +77,8 @@ export function CommentCreate(props: Props) {
     settingsByChannelId,
     supportDisabled,
     setQuickReply,
+    fetchComment,
+    shouldFetchComment,
   } = props;
   const buttonRef: ElementRef<any> = React.useRef();
   const {
@@ -94,7 +98,8 @@ export function CommentCreate(props: Props) {
   const charCount = commentValue.length;
   const [activeTab, setActiveTab] = React.useState('');
   const [tipError, setTipError] = React.useState();
-  const disabled = isSubmitting || isFetchingChannels || !commentValue.length;
+  const [deletedComment, setDeletedComment] = React.useState(false);
+  const disabled = deletedComment || isSubmitting || isFetchingChannels || !commentValue.length;
   const [shouldDisableReviewButton, setShouldDisableReviewButton] = React.useState();
   const channelId = getChannelIdFromClaim(claim);
   const channelSettings = channelId ? settingsByChannelId[channelId] : undefined;
@@ -102,6 +107,15 @@ export function CommentCreate(props: Props) {
   const minTip = (channelSettings && channelSettings.min_tip_amount_comment) || 0;
   const minAmount = minTip || minSuper || 0;
   const minAmountMet = minAmount === 0 || tipAmount >= minAmount;
+
+  // Fetch top-level comments to identify if it has been deleted and can reply to it
+  React.useEffect(() => {
+    if (shouldFetchComment && fetchComment) {
+      fetchComment(parentId).then((result) => {
+        setDeletedComment(String(result).includes('Error'));
+      });
+    }
+  }, [fetchComment, shouldFetchComment, parentId]);
 
   const minAmountRef = React.useRef(minAmount);
   minAmountRef.current = minAmount;
@@ -568,6 +582,7 @@ export function CommentCreate(props: Props) {
             )}
           </>
         )}
+        {deletedComment && <div className="error__text">{__('This comment has been deleted.')}</div>}
         {MinAmountNotice}
       </div>
     </Form>

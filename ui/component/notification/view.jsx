@@ -283,6 +283,7 @@ export default function Notification(props: Props) {
               onCancelReplying={() => setReplying(false)}
               setQuickReply={setQuickReply}
               supportDisabled
+              shouldFetchComment
             />
           )}
 
