@@ -18,6 +18,9 @@ import NotificationContentChannelMenu from 'component/notificationContentChannel
 import LbcMessage from 'component/common/lbc-message';
 import UriIndicator from 'component/uriIndicator';
 import { NavLink } from 'react-router-dom';
+import CommentReactions from 'component/commentReactions';
+import CommentCreate from 'component/commentCreate';
+import CommentsReplies from 'component/commentsReplies';
 
 type Props = {
   notification: WebNotification,
@@ -31,6 +34,8 @@ export default function Notification(props: Props) {
   const { notification, menuButton = false, doReadNotifications, doDeleteNotification } = props;
   const { push } = useHistory();
   const { notification_rule, notification_parameters, is_read, id } = notification;
+  const [isReplying, setReplying] = React.useState(false);
+  const [quickReply, setQuickReply] = React.useState();
 
   const isCommentNotification =
     notification_rule === RULE.COMMENT ||
@@ -119,7 +124,8 @@ export default function Notification(props: Props) {
       fullTitle.push(message);
 
       if (index === titleSplit.length - 1) {
-        return <LbcMessage>{fullTitle.join(' ')}</LbcMessage>;
+        const result = fullTitle.join(' ');
+        return <LbcMessage key={result}>{result}</LbcMessage>;
       }
     }
   });
@@ -147,11 +153,6 @@ export default function Notification(props: Props) {
     }
   }
 
-  function handleReadNotification(e) {
-    e.stopPropagation();
-    doReadNotifications([id]);
-  }
-
   const Wrapper = menuButton
     ? (props: { children: any }) => (
         <MenuItem className="menu__link--notification" onSelect={handleNotificationClick}>
@@ -160,10 +161,8 @@ export default function Notification(props: Props) {
       )
     : notificationLink
     ? (props: { children: any }) => (
-        <NavLink {...navLinkProps}>
-          <a className="menu__link--notification" onClick={handleNotificationClick}>
-            {props.children}
-          </a>
+        <NavLink {...navLinkProps} className="menu__link--notification" onClick={handleNotificationClick}>
+          {props.children}
         </NavLink>
       )
     : (props: { children: any }) => (
@@ -176,12 +175,12 @@ export default function Notification(props: Props) {
       );
 
   return (
-    <Wrapper>
-      <div
-        className={classnames('notification__wrapper', {
-          'notification__wrapper--unread': !is_read,
-        })}
-      >
+    <div
+      className={classnames('notification__wrapper', {
+        'notification__wrapper--unread': !is_read,
+      })}
+    >
+      <Wrapper>
         <div className="notification__icon">{icon}</div>
 
         <div className="notification__content-wrapper">
@@ -192,7 +191,7 @@ export default function Notification(props: Props) {
               {isCommentNotification && commentText ? (
                 <>
                   <div className="notification__title">{title}</div>
-                  <div title={commentText} className="notification__text mobile-hidden">
+                  <div title={commentText} className="notification__text">
                     {commentText}
                   </div>
                 </>
@@ -220,7 +219,15 @@ export default function Notification(props: Props) {
           </div>
 
           <div className="notification__extra">
-            {!is_read && <Button className="notification__mark-seen" onClick={handleReadNotification} />}
+            {!is_read && (
+              <Button
+                className="notification__mark-seen"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  doReadNotifications([id]);
+                }}
+              />
+            )}
             <div className="notification__time">
               <DateTime timeAgo date={notification.active_at} />
             </div>
@@ -249,7 +256,47 @@ export default function Notification(props: Props) {
             </MenuList>
           </Menu>
         </div>
-      </div>
-    </Wrapper>
+      </Wrapper>
+
+      {isCommentNotification && (
+        <div>
+          <div className="notification__reactions">
+            <Button
+              label={__('Reply')}
+              className="comment__action"
+              onClick={() => setReplying(!isReplying)}
+              icon={ICONS.REPLY}
+            />
+            <CommentReactions
+              uri={notificationTarget}
+              commentId={notification_parameters.dynamic.hash}
+              hideCreatorLike
+            />
+          </div>
+
+          {isReplying && (
+            <CommentCreate
+              isReply
+              uri={notificationTarget}
+              parentId={notification_parameters.dynamic.hash}
+              onDoneReplying={() => setReplying(false)}
+              onCancelReplying={() => setReplying(false)}
+              setQuickReply={setQuickReply}
+              supportDisabled
+              shouldFetchComment
+            />
+          )}
+
+          {quickReply && (
+            <CommentsReplies
+              uri={notificationTarget}
+              parentId={notification_parameters.dynamic.hash}
+              numDirectReplies={1}
+              supportDisabled
+            />
+          )}
+        </div>
+      )}
+    </div>
   );
 }

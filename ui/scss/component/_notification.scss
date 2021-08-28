@@ -7,18 +7,25 @@ $contentMaxWidth: 60rem;
 }
 
 .notification_list {
-  > * {
-    border-bottom: 1px solid var(--color-border);
+  .notification__wrapper {
+    border-top: 1px solid var(--color-border);
 
-    &:last-of-type {
-      border-bottom: none;
+    &:first-of-type {
+      border-top: none;
     }
+  }
+
+  .comment__create,
+  .comment__content {
+    margin: var(--spacing-m);
+    margin-bottom: 0;
   }
 }
 
 .notification__icon {
   display: flex;
   align-items: flex-start;
+  margin: auto;
 
   .icon__wrapper {
     width: 1rem;
@@ -36,6 +43,10 @@ $contentMaxWidth: 60rem;
     align-items: center;
     margin-left: var(--spacing-m);
   }
+
+  @media (max-width: $breakpoint-medium) {
+    margin-top: var(--spacing-xxs);
+  }
 }
 
 .notification__wrapper {
@@ -43,6 +54,7 @@ $contentMaxWidth: 60rem;
   display: flex;
   padding: var(--spacing-m) 0;
   justify-content: space-between;
+  flex-direction: column;
 
   .channel-thumbnail {
     @include handleChannelGif(3rem);
@@ -56,6 +68,16 @@ $contentMaxWidth: 60rem;
 
   @media (max-width: $breakpoint-small) {
     padding: var(--spacing-s);
+  }
+
+  .comment__creator-like {
+    height: 0.8rem;
+    width: 0.8rem;
+    margin-left: 3px;
+    z-index: 3;
+    position: absolute;
+    top: 0.4rem;
+    left: 0.4rem;
   }
 }
 
@@ -159,6 +181,28 @@ $contentMaxWidth: 60rem;
   @media (min-width: $breakpoint-small) {
     margin-left: var(--spacing-s);
     margin-top: 0;
+  }
+}
+
+.notification__reactions {
+  display: flex;
+  margin: var(--spacing-m);
+  margin-bottom: 0;
+
+  @media (min-width: $breakpoint-small) {
+    margin-left: 5rem;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    margin-left: 3rem;
+  }
+
+  > *:not(:last-of-type) {
+    margin-right: var(--spacing-m);
+  }
+
+  .button__label {
+    margin-left: var(--spacing-xs);
   }
 }
 

@@ -10,6 +10,7 @@ import usePersistedState from 'effects/use-persisted-state';
 import Yrbl from 'component/yrbl';
 import * as NOTIFICATIONS from 'constants/notifications';
 import useFetched from 'effects/use-fetched';
+import { RULE } from 'constants/notifications';
 
 type Props = {
   notifications: Array<Notification>,
@@ -21,6 +22,8 @@ type Props = {
   doSeeAllNotifications: () => void,
   doReadNotifications: () => void,
   doNotificationList: (?Array<string>) => void,
+  activeChannel: ?ChannelClaim,
+  doCommentReactList: (Array<string>) => Promise<any>,
 };
 
 export default function NotificationsPage(props: Props) {
@@ -34,11 +37,40 @@ export default function NotificationsPage(props: Props) {
     doReadNotifications,
     doNotificationList,
     notificationCategories,
+    activeChannel,
+    doCommentReactList,
   } = props;
   const initialFetchDone = useFetched(fetching);
   const [name, setName] = usePersistedState('notifications--rule', NOTIFICATIONS.NOTIFICATION_NAME_ALL);
   const isFiltered = name !== NOTIFICATIONS.NOTIFICATION_NAME_ALL;
   const list = isFiltered ? notificationsFiltered : notifications;
+
+  // Fetch reacts
+  React.useEffect(() => {
+    if (initialFetchDone && activeChannel) {
+      let idsForReactionFetch = [];
+      list.map((notification) => {
+        const { notification_rule, notification_parameters } = notification;
+        const isComment =
+          notification_rule === RULE.COMMENT ||
+          notification_rule === RULE.COMMENT_REPLY ||
+          notification_rule === RULE.CREATOR_COMMENT;
+        const commentId =
+          isComment &&
+          notification_parameters &&
+          notification_parameters.dynamic &&
+          notification_parameters.dynamic.hash;
+
+        if (commentId) {
+          idsForReactionFetch.push(commentId);
+        }
+      });
+
+      if (idsForReactionFetch.length !== 0) {
+        doCommentReactList(idsForReactionFetch);
+      }
+    }
+  }, [initialFetchDone, doCommentReactList, list, activeChannel]);
 
   React.useEffect(() => {
     if (unseenCount > 0 || unreadCount > 0) {
@@ -106,7 +138,7 @@ export default function NotificationsPage(props: Props) {
       {list && list.length > 0 && !(isFiltered && fetching) ? (
         <div className="card">
           <div className="notification_list">
-            {list.map((notification, index) => {
+            {list.map((notification) => {
               return <Notification key={notification.id} notification={notification} />;
             })}
           </div>
@@ -117,11 +149,9 @@ export default function NotificationsPage(props: Props) {
             <Yrbl
               title={__('No notifications')}
               subtitle={
-                <p>
-                  {isFiltered
-                    ? __('Try selecting another filter.')
-                    : __("You don't have any notifications yet, but they will be here when you do!")}
-                </p>
+                isFiltered
+                  ? __('Try selecting another filter.')
+                  : __("You don't have any notifications yet, but they will be here when you do!")
               }
               actions={
                 <div className="section__actions">

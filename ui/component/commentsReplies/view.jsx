@@ -18,6 +18,7 @@ type Props = {
   isFetchingByParentId: { [string]: boolean },
   onShowMore?: () => void,
   hasMore: boolean,
+  supportDisabled: boolean,
 };
 
 function CommentsReplies(props: Props) {
@@ -34,6 +35,7 @@ function CommentsReplies(props: Props) {
     isFetchingByParentId,
     onShowMore,
     hasMore,
+    supportDisabled,
   } = props;
 
   const [isExpanded, setExpanded] = React.useState(true);
@@ -98,6 +100,7 @@ function CommentsReplies(props: Props) {
                         numDirectReplies={comment.replies}
                         isModerator={comment.is_moderator}
                         isGlobalMod={comment.is_global_mod}
+                        supportDisabled={supportDisabled}
                       />
                     );
                   })}

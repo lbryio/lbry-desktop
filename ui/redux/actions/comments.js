@@ -170,6 +170,8 @@ export function doCommentById(commentId: string, toastIfNotFound: boolean = true
         } else {
           devToast(dispatch, error.message);
         }
+
+        return error;
       });
   };
 }

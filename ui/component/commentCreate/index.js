@@ -7,7 +7,7 @@ import {
   doSendTip,
 } from 'lbry-redux';
 import { doOpenModal, doSetActiveChannel } from 'redux/actions/app';
-import { doCommentCreate, doFetchCreatorSettings } from 'redux/actions/comments';
+import { doCommentCreate, doFetchCreatorSettings, doCommentById } from 'redux/actions/comments';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { selectSettingsByChannelId } from 'redux/selectors/comments';
@@ -43,6 +43,7 @@ const perform = (dispatch, ownProps) => ({
   sendTip: (params, callback, errorCallback) => dispatch(doSendTip(params, false, callback, errorCallback, false)),
   doToast: (options) => dispatch(doToast(options)),
   doFetchCreatorSettings: (channelClaimId) => dispatch(doFetchCreatorSettings(channelClaimId)),
+  fetchComment: (commentId) => dispatch(doCommentById(commentId, false)),
 });
 
 export default connect(select, perform)(CommentCreate);

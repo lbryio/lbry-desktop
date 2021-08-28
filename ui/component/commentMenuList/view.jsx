@@ -33,6 +33,7 @@ type Props = {
   commentModBlockAsAdmin: (string, string) => void,
   commentModBlockAsModerator: (string, string, string) => void,
   commentModAddDelegate: (string, string, ChannelClaim) => void,
+  setQuickReply: (any) => void,
 };
 
 function CommentMenuList(props: Props) {
@@ -59,6 +60,7 @@ function CommentMenuList(props: Props) {
     moderationDelegatorsById,
     openModal,
     supportAmount,
+    setQuickReply,
   } = props;
 
   const contentChannelClaim = !claim
@@ -86,7 +88,13 @@ function CommentMenuList(props: Props) {
     if (playingUri && playingUri.source === 'comment') {
       clearPlayingUri();
     }
-    openModal(MODALS.CONFIRM_REMOVE_COMMENT, { commentId, commentIsMine, contentChannelPermanentUrl, supportAmount });
+    openModal(MODALS.CONFIRM_REMOVE_COMMENT, {
+      commentId,
+      commentIsMine,
+      contentChannelPermanentUrl,
+      supportAmount,
+      setQuickReply,
+    });
   }
 
   function handleCommentBlock() {
