@@ -59,7 +59,7 @@ type Props = {
   userId: ?number,
   // allowPreRoll: ?boolean,
   shareTelemetry: boolean,
-  showAutoplayCountdown: boolean
+  showAutoplayCountdown: boolean,
 };
 
 // type VideoJSOptions = {
@@ -566,19 +566,19 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       if (IS_IOS) {
         const playBT = document.getElementsByClassName('vjs-big-play-button')[0];
 
-        player.on('pause', function() {
+        player.on('pause', function () {
           const videoDiv = player.children_[0];
           const controlBar = document.getElementsByClassName('vjs-control-bar')[0];
-          const leftWidth = ((videoDiv.offsetWidth - playBT.offsetWidth) / 2) + 'px';
+          const leftWidth = (videoDiv.offsetWidth - playBT.offsetWidth) / 2 + 'px';
           const availableHeight = videoDiv.offsetHeight - controlBar.offsetHeight;
-          const topHeight = (((availableHeight - playBT.offsetHeight) / 2) + 3) + 'px';
+          const topHeight = (availableHeight - playBT.offsetHeight) / 2 + 3 + 'px';
 
           playBT.style.top = topHeight;
           playBT.style.left = leftWidth;
-          playBT.style.margin = 0;
+          playBT.style.margin = '0';
         });
 
-        player.on('ended', function() {
+        player.on('ended', function () {
           if (showAutoplayCountdown) {
             playBT.style.display = 'none';
           }
