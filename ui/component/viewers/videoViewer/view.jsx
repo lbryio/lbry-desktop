@@ -59,6 +59,7 @@ type Props = {
   doSetPlayingUri: (string, string) => void,
   collectionId: string,
   nextRecommendedUri: string,
+  videoTheaterMode: boolean,
 };
 
 /*
@@ -98,6 +99,7 @@ function VideoViewer(props: Props) {
     doSetPlayingUri,
     collectionId,
     nextRecommendedUri,
+    videoTheaterMode,
   } = props;
   const permanentUrl = claim && claim.permanent_url;
   const adApprovedChannelIds = homepageData ? getAllIds(homepageData) : [];
@@ -171,10 +173,8 @@ function VideoViewer(props: Props) {
     (uri) => {
       if (collectionId) {
         clearPosition(uri);
-        doSetPlayingUri(uri, collectionId);
-      } else {
-        doSetPlayingUri(uri);
       }
+      doSetPlayingUri(uri, collectionId);
       doPlayUri(uri);
     },
     [collectionId, doSetPlayingUri, doPlayUri, clearPosition]
@@ -400,6 +400,7 @@ function VideoViewer(props: Props) {
           allowPreRoll={!embedded && !authenticated}
           shareTelemetry={shareTelemetry}
           replay={replay}
+          videoTheaterMode={videoTheaterMode}
         />
       )}
     </div>

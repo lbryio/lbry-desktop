@@ -58,6 +58,7 @@ const select = (state, props) => {
     isFloating: makeSelectIsPlayerFloating(props.location)(state),
     collectionId,
     nextRecommendedUri,
+    videoTheaterMode: makeSelectClientSetting(SETTINGS.VIDEO_THEATER_MODE)(state),
   };
 };
 
