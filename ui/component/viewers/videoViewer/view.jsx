@@ -212,19 +212,49 @@ function VideoViewer(props: Props) {
     }
 
     const shouldPlay = !embedded || autoplayIfEmbedded;
+
+    console.log('should play');
+    console.log(shouldPlay);
+
+    let tryingToPlay = false;
+
+    // TODO: this is causing issues with videos starting randomly
     // https://blog.videojs.com/autoplay-best-practices-with-video-js/#Programmatic-Autoplay-and-Success-Failure-Detection
     if (shouldPlay) {
+      // tryingToPlay = true;
+      //
+      // try {
+      //   if(!tryingToPlay){
+      //     console.log('trying to start playing');
+      //     player.play();
+      //   } else {
+      //     console.log('already starting playing');
+      //   }
+      // } catch (err){
+      //   console.log('player error');
+      //   console.log(err);
+      // }
+
       const playPromise = player.play();
       const timeoutPromise = new Promise((resolve, reject) =>
         setTimeout(() => reject(PLAY_TIMEOUT_ERROR), PLAY_TIMEOUT_LIMIT)
       );
 
       Promise.race([playPromise, timeoutPromise]).catch((error) => {
+        console.log('promise error');
+        console.log(error);
+        console.log('promise error');
         if (typeof error === 'object' && error.name && error.name === 'NotAllowedError') {
+          console.log('running here!')
           if (player.autoplay() && !player.muted()) {
-            // player.muted(true);
+            player.muted(true);
             // another version had player.play()
+            player.play()
           }
+        } else {
+          console.log('other block conditional');
+          player.muted(true);
+          player.play()
         }
         setIsLoading(false);
         setIsPlaying(false);
@@ -289,7 +319,7 @@ function VideoViewer(props: Props) {
       {isEndededEmbed && <FileViewerEmbeddedEnded uri={uri} />}
       {embedded && !isEndededEmbed && <FileViewerEmbeddedTitle uri={uri} />}
       {/* disable this loading behavior because it breaks when player.play() promise hangs */}
-      {isLoading && <LoadingScreen status={__('Loading')} />}
+      {/*{isLoading && <LoadingScreen status={__('Loading')} />}*/}
 
       {!isFetchingAd && adUrl && (
         <>

@@ -85,7 +85,7 @@ const VIDEO_JS_OPTIONS = {
   controls: true,
   html5: {
     vhs: {
-      overrideNative: !videojs.browser.IS_ANY_SAFARI, // don't override on safari
+      overrideNative: true, // don't override on safari
     },
   },
 };
@@ -120,6 +120,7 @@ const SEEK_BACKWARD_KEYCODE_5 = ARROW_LEFT_KEYCODE;
 const SEEK_STEP_5 = 5;
 const SEEK_STEP = 10; // time to seek in seconds
 
+// register videojs plugins
 if (!Object.keys(videojs.getPlugins()).includes('eventTracking')) {
   videojs.registerPlugin('eventTracking', eventTracking);
 }
@@ -220,11 +221,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       eventTracking: true,
       overlay: OVERLAY.OVERLAY_DATA,
     },
-    // fixes problem of errant CC button showing up on iOS
-    // the true fix here is to fix the m3u8 file, see: https://github.com/lbryio/lbry-desktop/pull/6315
-    controlBar: {
-      subsCapsButton: false,
-    },
   };
 
   const tapToUnmuteRef = useRef();
@@ -299,29 +295,29 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     // as the listener to update static texts.
     const player = playerRef.current;
     if (player) {
-      const controlBar = player.getChild('controlBar');
+      // const controlBar = player.getChild('controlBar');
       switch (e.type) {
         case 'play':
-          controlBar.getChild('PlayToggle').controlText(__('Pause (space)'));
+          // controlBar.getChild('PlayToggle').controlText(__('Pause (space)'));
           break;
         case 'pause':
-          controlBar.getChild('PlayToggle').controlText(__('Play (space)'));
+          // controlBar.getChild('PlayToggle').controlText(__('Play (space)'));
           break;
         case 'volumechange':
-          controlBar
-            .getChild('VolumePanel')
-            .getChild('MuteToggle')
-            .controlText(player.muted() || player.volume() === 0 ? __('Unmute (m)') : __('Mute (m)'));
+          // controlBar
+          //   .getChild('VolumePanel')
+          //   .getChild('MuteToggle')
+          //   .controlText(player.muted() || player.volume() === 0 ? __('Unmute (m)') : __('Mute (m)'));
           break;
         case 'fullscreenchange':
-          controlBar
-            .getChild('FullscreenToggle')
-            .controlText(player.isFullscreen() ? __('Exit Fullscreen (f)') : __('Fullscreen (f)'));
+          // controlBar
+          //   .getChild('FullscreenToggle')
+          //   .controlText(player.isFullscreen() ? __('Exit Fullscreen (f)') : __('Fullscreen (f)'));
           break;
         case 'loadstart':
           // --- Do everything ---
-          controlBar.getChild('PlaybackRateMenuButton').controlText(__('Playback Rate (<, >)'));
-          controlBar.getChild('QualityButton').controlText(__('Quality'));
+          // controlBar.getChild('PlaybackRateMenuButton').controlText(__('Playback Rate (<, >)'));
+          // controlBar.getChild('QualityButton').controlText(__('Quality'));
           resolveCtrlText({ type: 'play' });
           resolveCtrlText({ type: 'pause' });
           resolveCtrlText({ type: 'volumechange' });
@@ -332,7 +328,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
           // (2) We'll have to get 'makeSelectClientSetting(SETTINGS.VIDEO_THEATER_MODE)'
           // as a prop here so we can say "Theater mode|Default mode" instead of
           // "Toggle Theater mode".
-          controlBar.getChild('Button').controlText(__('Toggle Theater mode (t)'));
+          // controlBar.getChild('Button').controlText(__('Toggle Theater mode (t)'));
           break;
         default:
           if (isDev) throw Error('Unexpected: ' + e.type);
@@ -360,6 +356,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   }
 
   function onError() {
+    console.log('error!');
     const player = playerRef.current;
     showTapButton(TAP.RETRY);
 
@@ -571,7 +568,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
           const controlBar = document.getElementsByClassName('vjs-control-bar')[0];
           const leftWidth = ((videoDiv.offsetWidth - playBT.offsetWidth) / 2) + 'px';
           const availableHeight = videoDiv.offsetHeight - controlBar.offsetHeight;
-          const topHeight = (((availableHeight - playBT.offsetHeight) / 2) + 3) + 'px';
+          const topHeight = (((availableHeight - playBT.offsetHeight) / 2) + 11) + 'px';
 
           playBT.style.top = topHeight;
           playBT.style.left = leftWidth;
