@@ -245,6 +245,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
     switch (tapButton) {
       case TAP.NONE:
+        document.getElementsByClassName('video-js--tap-to-unmute')[0].style.visibility = 'hidden';
         setButtonVisibility(tapToUnmuteRef, false);
         setButtonVisibility(tapToRetryRef, false);
         break;
@@ -340,8 +341,10 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     }
   }
 
+
   function onInitialPlay() {
     const player = playerRef.current;
+    // show the unmute button if the video is muted
     if (player && (player.muted() || player.volume() === 0)) {
       // The css starts as "hidden". We make it visible here without
       // re-rendering the whole thing.
