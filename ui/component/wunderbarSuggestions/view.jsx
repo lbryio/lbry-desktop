@@ -228,12 +228,19 @@ export default function WunderBarSuggestions(props: Props) {
     function handleKeyDown(event) {
       const { ctrlKey, metaKey, keyCode } = event;
 
+      if (keyCode === K_KEY_CODE && ctrlKey) {
+        inputRef.current.focus();
+        inputRef.current.select();
+        return;
+      }
+      
       if (!inputRef.current) {
         return;
       }
 
       if (inputRef.current === document.activeElement && keyCode === ESC_KEY_CODE) {
-        inputRef.current.blur();
+        inputRef.current.value = "";
+        inputRef.current.focus();
       }
 
       // @if TARGET='app'
