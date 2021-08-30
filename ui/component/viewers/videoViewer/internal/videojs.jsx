@@ -221,6 +221,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       eventTracking: true,
       overlay: OVERLAY.OVERLAY_DATA,
     },
+    // bigPlayButton: false,
   };
 
   const tapToUnmuteRef = useRef();
@@ -497,7 +498,13 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     const wrapper = document.createElement('div');
     wrapper.setAttribute('data-vjs-player', 'true');
     const el = document.createElement(isAudio ? 'audio' : 'video');
-    el.className = 'video-js vjs-big-play-centered ';
+    el.className = 'video-js';
+
+    if(!IS_IOS){
+      el.classList.add('vjs-big-play-centered');
+    }
+
+    // el.className = 'vjs-big-play-centered ';
 
     // show large play button when paused on ios
     // if (IS_IOS) {

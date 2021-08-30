@@ -109,6 +109,11 @@ function VideoViewer(props: Props) {
   breaks because some browsers (e.g. Firefox) block autoplay but leave the player.play Promise pending */
   const [isLoading, setIsLoading] = useState(false);
 
+  const IS_IOS =
+    (/iPad|iPhone|iPod/.test(navigator.platform) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) &&
+    !window.MSStream;
+
   // force everything to recent when URI changes, can cause weird corner cases otherwise (e.g. navigate while autoplay is true)
   useEffect(() => {
     if (uri && previousUri && uri !== previousUri) {
@@ -247,16 +252,22 @@ function VideoViewer(props: Props) {
         if (typeof error === 'object' && error.name && error.name === 'NotAllowedError') {
           console.log('running here!');
           if (player.autoplay() && !player.muted()) {
-            document.getElementsByClassName('video-js--tap-to-unmute')[0].style.visibility = 'visible';
-            player.muted(true);
+            if(IS_IOS){
+              document.getElementsByClassName('video-js--tap-to-unmute')[0].style.visibility = 'visible';
+              player.muted(true);
+            }
+
             // another version had player.play()
             player.play();
           }
         } else {
           console.log('other block conditional');
-          player.muted(true);
+          if(IS_IOS){
+            document.getElementsByClassName('video-js--tap-to-unmute')[0].style.visibility = 'visible';
+            player.muted(true);
+          }
+
           player.play();
-          document.getElementsByClassName('video-js--tap-to-unmute')[0].style.visibility = 'visible';
         }
         setIsLoading(false);
         setIsPlaying(false);
