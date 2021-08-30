@@ -66,7 +66,7 @@ function escapeHtmlProperty(property) {
 }
 
 function getCategoryMeta(path) {
-  const page = Object.keys(CATEGORY_METADATA).find((x) => path.endsWith(x) || path.endsWith(`${x}/`));
+  const page = Object.keys(CATEGORY_METADATA).find((x) => path === `/$/${x}` || path === `/$/${x}/`);
   return CATEGORY_METADATA[page];
 }
 
