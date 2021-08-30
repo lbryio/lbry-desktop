@@ -160,7 +160,8 @@ export function doCommentById(commentId: string, toastIfNotFound: boolean = true
         return result;
       })
       .catch((error) => {
-        if (error.message === 'sql: no rows in result set' && toastIfNotFound) {
+        const ID_NOT_FOUND_REGEX = /^comment for id (.*) could not be found$/;
+        if (ID_NOT_FOUND_REGEX.test(error.message) && toastIfNotFound) {
           dispatch(
             doToast({
               isError: true,
