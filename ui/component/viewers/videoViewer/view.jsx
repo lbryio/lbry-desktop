@@ -247,6 +247,7 @@ function VideoViewer(props: Props) {
         if (typeof error === 'object' && error.name && error.name === 'NotAllowedError') {
           console.log('running here!')
           if (player.autoplay() && !player.muted()) {
+            document.getElementsByClassName('video-js--tap-to-unmute')[0].style.visibility = 'visible';
             player.muted(true);
             // another version had player.play()
             player.play()
@@ -255,6 +256,7 @@ function VideoViewer(props: Props) {
           console.log('other block conditional');
           player.muted(true);
           player.play()
+          document.getElementsByClassName('video-js--tap-to-unmute')[0].style.visibility = 'visible';
         }
         setIsLoading(false);
         setIsPlaying(false);

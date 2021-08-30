@@ -262,10 +262,13 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     }
   }
 
+  // unmute video when player hits "Tap to unmute button"
   function unmuteAndHideHint() {
     const player = playerRef.current;
     if (player) {
+      // unmute the video
       player.muted(false);
+      // turn the volume all the way up if it's at 0
       if (player.volume() === 0) {
         player.volume(1.0);
       }
