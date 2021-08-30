@@ -28,6 +28,7 @@ const SEARCH_PREFIX = `$/${PAGES.SEARCH}q=`;
 const INVALID_URL_ERROR = "Invalid LBRY URL entered. Only A-Z, a-z, 0-9, and '-' allowed.";
 const TAG_SEARCH_PREFIX = 'tag:';
 
+const K_KEY_CODE = 75;
 const L_KEY_CODE = 76;
 const ESC_KEY_CODE = 27;
 
