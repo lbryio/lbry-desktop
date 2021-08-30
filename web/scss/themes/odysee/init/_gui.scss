@@ -514,4 +514,8 @@ textarea {
     font-size: 1.2rem;
     margin-bottom: var(--spacing-l);
   }
+
+  > .button {
+    white-space: initial;
+  }
 }
