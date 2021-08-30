@@ -500,9 +500,9 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     el.className = 'video-js vjs-big-play-centered ';
 
     // show large play button when paused on ios
-    if (IS_IOS) {
-      el.classList.add('vjs-show-big-play-button-on-pause');
-    }
+    // if (IS_IOS) {
+    //   el.classList.add('vjs-show-big-play-button-on-pause');
+    // }
 
     wrapper.appendChild(el);
 
