@@ -500,10 +500,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     const el = document.createElement(isAudio ? 'audio' : 'video');
     el.className = 'video-js';
 
-    if(!IS_IOS){
-      el.classList.add('vjs-big-play-centered');
-    }
-
     // el.className = 'vjs-big-play-centered ';
 
     // show large play button when paused on ios
@@ -555,6 +551,13 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     if (!el) return;
 
     const vjs = videojs(el, videoJsOptions, () => {
+
+      const isNotAndroidOrIos = !videojs.browser.IS_ANDROID && !videojs.browser.is_IOS;
+
+      if(isNotAndroidOrIos){
+        el.classList.add('vjs-big-play-centered');
+      }
+
       const player = playerRef.current;
 
       const playBT = document.getElementsByClassName('vjs-big-play-button')[0];
@@ -573,6 +576,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       player.on('volumechange', onVolumeChange);
       player.on('error', onError);
       player.on('ended', onEnded);
+
       // player.on('loadstart', function(){
       //   console.log('LOADED HERE');
       //
