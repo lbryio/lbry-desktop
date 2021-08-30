@@ -14,6 +14,7 @@ import {
   makeSelectContentPositionForUri,
   makeSelectIsPlayerFloating,
   makeSelectNextUnplayedRecommended,
+  selectPlayingUri,
 } from 'redux/selectors/content';
 import VideoViewer from './view';
 import { withRouter } from 'react-router';
@@ -30,7 +31,8 @@ const select = (state, props) => {
   // TODO: eventually this should be received from DB and not local state (https://github.com/lbryio/lbry-desktop/issues/6796)
   const position = urlParams.get('t') !== null ? urlParams.get('t') : makeSelectContentPositionForUri(uri)(state);
   const userId = selectUser(state) && selectUser(state).id;
-  const collectionId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID);
+  const playingUri = selectPlayingUri(state);
+  const collectionId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID) || (playingUri && playingUri.collectionId);
 
   let nextRecommendedUri;
   if (collectionId && uri) {
@@ -70,7 +72,7 @@ const perform = (dispatch) => ({
   toggleVideoTheaterMode: () => dispatch(toggleVideoTheaterMode()),
   setVideoPlaybackRate: (rate) => dispatch(doSetClientSetting(SETTINGS.VIDEO_PLAYBACK_RATE, rate)),
   doPlayUri: (uri) => dispatch(doPlayUri(uri)),
-  doSetPlayingUri: (uri) => dispatch(doSetPlayingUri({ uri })),
+  doSetPlayingUri: (uri, collectionId) => dispatch(doSetPlayingUri({ uri, collectionId })),
 });
 
 export default withRouter(connect(select, perform)(VideoViewer));

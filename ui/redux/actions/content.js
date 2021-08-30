@@ -112,16 +112,18 @@ export function doSetPlayingUri({
   source,
   pathname,
   commentId,
+  collectionId,
 }: {
   uri: ?string,
   source?: string,
   commentId?: string,
   pathname: string,
+  collectionId: string,
 }) {
   return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.SET_PLAYING_URI,
-      data: { uri, source, pathname, commentId },
+      data: { uri, source, pathname, commentId, collectionId },
     });
   };
 }

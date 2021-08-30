@@ -25,6 +25,7 @@ reducers[ACTIONS.SET_PLAYING_URI] = (state, action) =>
       source: action.data.source,
       pathname: action.data.pathname,
       commentId: action.data.commentId,
+      collectionId: action.data.collectionId,
       primaryUri: state.primaryUri,
     },
   });

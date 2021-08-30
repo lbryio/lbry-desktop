@@ -56,7 +56,7 @@ type Props = {
   shareTelemetry: boolean,
   isFloating: boolean,
   doPlayUri: (string) => void,
-  doSetPlayingUri: (string) => void,
+  doSetPlayingUri: (string, string) => void,
   collectionId: string,
   nextRecommendedUri: string,
 };
@@ -171,8 +171,10 @@ function VideoViewer(props: Props) {
     (uri) => {
       if (collectionId) {
         clearPosition(uri);
+        doSetPlayingUri(uri, collectionId);
+      } else {
+        doSetPlayingUri(uri);
       }
-      doSetPlayingUri(uri);
       doPlayUri(uri);
     },
     [collectionId, doSetPlayingUri, doPlayUri, clearPosition]
