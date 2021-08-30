@@ -37,6 +37,14 @@ reducers[ACTIONS.TOGGLE_LOOP_LIST] = (state, action) =>
     },
   });
 
+reducers[ACTIONS.TOGGLE_SHUFFLE_LIST] = (state, action) =>
+  Object.assign({}, state, {
+    shuffleList: {
+      collectionId: action.data.collectionId,
+      newUrls: action.data.newUrls,
+    },
+  });
+
 reducers[ACTIONS.SET_CONTENT_POSITION] = (state, action) => {
   const { claimId, outpoint, position } = action.data;
   return {

@@ -17,6 +17,7 @@ import {
   makeSelectClaimIsMine,
   makeSelectClaimWasPurchased,
   doToast,
+  makeSelectUrlsForCollectionId,
 } from 'lbry-redux';
 import { makeSelectCostInfoForUri, Lbryio } from 'lbryinc';
 import { makeSelectClientSetting, selectosNotificationsEnabled, selectDaemonSettings } from 'redux/selectors/settings';
@@ -293,6 +294,37 @@ export function doToggleLoopList(collectionId: string, loop: boolean, hideToast:
           message: __('Loop is on.'),
         })
       );
+    }
+  };
+}
+
+export function doToggleShuffleList(collectionId: string, shuffle: boolean, hideToast: boolean) {
+  return (dispatch: Dispatch, getState: () => any) => {
+    if (shuffle) {
+      const state = getState();
+      const urls = makeSelectUrlsForCollectionId(collectionId)(state);
+
+      const newUrls = urls
+        .map((item) => ({ item, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ item }) => item);
+
+      dispatch({
+        type: ACTIONS.TOGGLE_SHUFFLE_LIST,
+        data: { collectionId, newUrls },
+      });
+      if (!hideToast) {
+        dispatch(
+          doToast({
+            message: __('Shuffle is on.'),
+          })
+        );
+      }
+    } else {
+      dispatch({
+        type: ACTIONS.TOGGLE_SHUFFLE_LIST,
+        data: { collectionId, newUrls: false },
+      });
     }
   };
 }
