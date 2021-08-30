@@ -14,7 +14,7 @@ import {
 } from 'lbry-redux';
 import { makeSelectCostInfoForUri, doFetchCostInfoForUri } from 'lbryinc';
 import { selectShowMatureContent, makeSelectClientSetting } from 'redux/selectors/settings';
-import { makeSelectFileRenderModeForUri } from 'redux/selectors/content';
+import { makeSelectFileRenderModeForUri, makeSelectContentPositionForUri } from 'redux/selectors/content';
 import { DISABLE_COMMENTS_TAG } from 'constants/tags';
 
 import FilePage from './view';
@@ -37,6 +37,7 @@ const select = (state, props) => {
     isLivestream: makeSelectClaimIsStreamPlaceholder(props.uri)(state),
     collection: makeSelectCollectionForId(collectionId)(state),
     collectionId,
+    position: makeSelectContentPositionForUri(props.uri)(state),
   };
 };
 

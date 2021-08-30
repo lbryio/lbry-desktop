@@ -39,6 +39,7 @@ type Props = {
   commentsDisabled: boolean,
   isLivestream: boolean,
   clearPosition: (string) => void,
+  position: number,
 };
 
 function FilePage(props: Props) {
@@ -62,10 +63,19 @@ function FilePage(props: Props) {
     collectionId,
     isLivestream,
     clearPosition,
+    position,
   } = props;
   const cost = costInfo ? costInfo.cost : null;
   const hasFileInfo = fileInfo !== undefined;
   const isMarkdown = renderMode === RENDER_MODES.MARKDOWN;
+  const videoPlayedEnoughToResetPosition = React.useMemo(() => {
+    const durationInSecs =
+      fileInfo && fileInfo.metadata && fileInfo.metadata.video ? fileInfo.metadata.video.duration : 0;
+    const isVideoTooShort = durationInSecs <= 10;
+    const almostFinishedPlaying = position / durationInSecs >= 0.9;
+
+    return isVideoTooShort || almostFinishedPlaying;
+  }, [fileInfo, position]);
 
   React.useEffect(() => {
     // always refresh file info when entering file page to see if we have the file
@@ -80,6 +90,10 @@ function FilePage(props: Props) {
       clearPosition(uri);
     }
 
+    if (fileInfo && videoPlayedEnoughToResetPosition) {
+      clearPosition(uri);
+    }
+
     // See https://github.com/lbryio/lbry-desktop/pull/1563 for discussion
     fetchCostInfo(uri);
     setViewed(uri);
@@ -88,7 +102,18 @@ function FilePage(props: Props) {
     return () => {
       setPrimaryUri(null);
     };
-  }, [uri, hasFileInfo, fetchFileInfo, collectionId, clearPosition, fetchCostInfo, setViewed, setPrimaryUri]);
+  }, [
+    uri,
+    hasFileInfo,
+    fileInfo,
+    videoPlayedEnoughToResetPosition,
+    fetchFileInfo,
+    collectionId,
+    clearPosition,
+    fetchCostInfo,
+    setViewed,
+    setPrimaryUri,
+  ]);
 
   function renderFilePageLayout() {
     if (RENDER_MODES.FLOATING_MODES.includes(renderMode)) {
