@@ -275,6 +275,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         player.volume(1.0);
       }
     }
+    // hide "Tap to unmute" button
     showTapButton(TAP.NONE);
   }
 
@@ -552,17 +553,21 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
     const vjs = videojs(el, videoJsOptions, () => {
 
-      const isNotAndroidOrIos = !videojs.browser.IS_ANDROID && !videojs.browser.is_IOS;
+      const player = playerRef.current;
 
-      if(isNotAndroidOrIos){
+      const isNotAndroidOrIos = !videojs.browser.IS_ANDROID && !videojs.browser.IS_IOS;
+
+      if (isNotAndroidOrIos) {
         el.classList.add('vjs-big-play-centered');
 
         const playBT = document.getElementsByClassName('vjs-big-play-button')[0];
         playBT.style.display = 'none';
+      } else {
+        // console.log('hiding button');
+        // player.bigPlayButton.hide()
+        // const playBT = document.getElementsByClassName('vjs-big-play-button')[0];
+        // playBT.remove()
       }
-
-      const player = playerRef.current;
-
 
       // this seems like a weird thing to have to check for here
       if (!player) return;
@@ -577,46 +582,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       player.on('volumechange', onVolumeChange);
       player.on('error', onError);
       player.on('ended', onEnded);
-
-      // player.on('loadstart', function(){
-      //   console.log('LOADED HERE');
-      //
-      //   const playBT = document.getElementsByClassName('vjs-big-play-button')[0];
-      //   const videoDiv = player.children_[0];
-      //   const controlBar = document.getElementsByClassName('vjs-control-bar')[0];
-      //   const leftWidth = ((videoDiv.offsetWidth - playBT.offsetWidth) / 2) + 'px';
-      //   const availableHeight = videoDiv.offsetHeight - controlBar.offsetHeight;
-      //   const topHeight = (((availableHeight - playBT.offsetHeight) / 2) + 11) + 'px';
-      //
-      //   playBT.style.top = topHeight;
-      //   playBT.style.left = leftWidth;
-      //   playBT.style.margin = 0;
-      // })
-
-      // on ios, show a play button when paused
-      // if (IS_IOS) {
-      //   const playBT = document.getElementsByClassName('vjs-big-play-button')[0];
-      //
-      //   player.on('pause', function() {
-      //     playBT.style.removeProperty('display');
-      //
-      //     const videoDiv = player.children_[0];
-      //     const controlBar = document.getElementsByClassName('vjs-control-bar')[0];
-      //     const leftWidth = ((videoDiv.offsetWidth - playBT.offsetWidth) / 2) + 'px';
-      //     const availableHeight = videoDiv.offsetHeight - controlBar.offsetHeight;
-      //     const topHeight = (((availableHeight - playBT.offsetHeight) / 2) + 11) + 'px';
-      //
-      //     playBT.style.top = topHeight;
-      //     playBT.style.left = leftWidth;
-      //     playBT.style.margin = 0;
-      //   });
-      //
-      //   player.on('ended', function() {
-      //     if (showAutoplayCountdown) {
-      //       playBT.style.display = 'none';
-      //     }
-      //   });
-      // }
 
       // Replace volume bar with custom LBRY volume bar
       LbryVolumeBarClass.replaceExisting(player);
