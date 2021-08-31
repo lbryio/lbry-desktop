@@ -331,6 +331,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
           controlBar
             .getChild('TheaterModeButton')
             .controlText(videoTheaterMode ? __('Default Mode (t)') : __('Theater Mode (t)'));
+          controlBar.getChild('PlayNextButton').controlText(__('Play Next (SHIFT+N)'));
           break;
         default:
           if (isDev) throw Error('Unexpected: ' + e.type);
