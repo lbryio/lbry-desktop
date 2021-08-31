@@ -228,20 +228,26 @@ export default function WunderBarSuggestions(props: Props) {
   React.useEffect(() => {
     function handleKeyDown(event) {
       const { ctrlKey, metaKey, keyCode } = event;
+      
+      if (!inputRef.current) {
+        return;
+      }
 
       if (keyCode === K_KEY_CODE && ctrlKey) {
         inputRef.current.focus();
         inputRef.current.select();
         return;
       }
-      
-      if (!inputRef.current) {
-        return;
-      }
 
       if (inputRef.current === document.activeElement && keyCode === ESC_KEY_CODE) {
-        inputRef.current.value = "";
-        inputRef.current.focus();
+        // If the user presses escape and the text has already been cleared then blur the widget
+        if (inputRef.current.value === '') {
+          inputRef.current.blur();
+        } else {
+          // Remove the current text
+          inputRef.current.value = '';
+          inputRef.current.focus();
+        }
       }
 
       // @if TARGET='app'
