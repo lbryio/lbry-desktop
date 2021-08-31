@@ -124,9 +124,14 @@ export default function CollectionPage(props: Props) {
       titleActions={titleActions}
       subtitle={subTitle}
       body={
-        !isBuiltin && (
-          <CollectionActions uri={uri} collectionId={collectionId} setShowInfo={setShowInfo} showInfo={showInfo} />
-        )
+        <CollectionActions
+          uri={uri}
+          collectionId={collectionId}
+          setShowInfo={setShowInfo}
+          showInfo={showInfo}
+          isBuiltin={isBuiltin}
+          collectionUrls={collectionUrls}
+        />
       }
       actions={
         showInfo &&

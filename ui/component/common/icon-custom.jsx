@@ -2439,6 +2439,7 @@ export const icons = {
       />
     </svg>
   ),
+  [ICONS.PLAY]: buildIcon(<polygon points="5 3 19 12 5 21 5 3" />),
   [ICONS.REPLAY]: buildIcon(
     <g>
       <polyline points="1 4 1 10 7 10" />
