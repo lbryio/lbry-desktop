@@ -228,7 +228,7 @@ export default function WunderBarSuggestions(props: Props) {
   React.useEffect(() => {
     function handleKeyDown(event) {
       const { ctrlKey, metaKey, keyCode } = event;
-      
+
       if (!inputRef.current) {
         return;
       }
