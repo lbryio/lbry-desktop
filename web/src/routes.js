@@ -61,6 +61,10 @@ router.get(`/$/stream/:claimName/:claimId`, async (ctx) => {
   ctx.redirect(streamUrl);
 });
 
+router.get(`/$/activate`, async (ctx) => {
+  ctx.redirect(`https://sso.odysee.com/auth/realms/Users/device`);
+});
+
 router.get(`/$/rss/:claimName/:claimId`, rssMiddleware);
 router.get(`/$/rss/:claimName::claimId`, rssMiddleware);
 
