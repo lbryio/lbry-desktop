@@ -3,6 +3,7 @@ import type { ElementRef } from 'react';
 import { SIMPLE_SITE } from 'config';
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
+import * as KEYCODES from 'constants/keycodes';
 import React from 'react';
 import classnames from 'classnames';
 import { FormField, Form } from 'component/common/form';
@@ -157,8 +158,7 @@ export function CommentCreate(props: Props) {
   }
 
   function altEnterListener(e: SyntheticKeyboardEvent<*>) {
-    const KEYCODE_ENTER = 13;
-    if ((livestream || e.ctrlKey || e.metaKey) && e.keyCode === KEYCODE_ENTER) {
+    if ((livestream || e.ctrlKey || e.metaKey) && e.keyCode === KEYCODES.ENTER) {
       e.preventDefault();
       buttonRef.current.click();
     }

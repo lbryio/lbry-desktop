@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 // import { SIMPLE_SITE } from 'config';
 import Button from 'component/button';
 import * as ICONS from 'constants/icons';
+import * as KEYCODES from 'constants/keycodes';
 import classnames from 'classnames';
 import videojs from 'video.js';
 import 'video.js/dist/alt/video-js-cdn.min.css';
@@ -94,35 +95,6 @@ const VIDEO_JS_OPTIONS = {
     },
   },
 };
-
-const SPACE_BAR_KEYCODE = 32;
-const SMALL_F_KEYCODE = 70;
-const SMALL_M_KEYCODE = 77;
-const SMALL_T_KEYCODE = 84;
-const ARROW_LEFT_KEYCODE = 37;
-const ARROW_UP_KEYCODE = 38;
-const ARROW_RIGHT_KEYCODE = 39;
-const ARROW_DOWN_KEYCODE = 40;
-const COMMA_KEYCODE = 188;
-const PERIOD_KEYCODE = 190;
-const SMALL_J_KEYCODE = 74;
-const SMALL_K_KEYCODE = 75;
-const SMALL_L_KEYCODE = 76;
-
-const P_KEYCODE = 80;
-const N_KEYCODE = 78;
-
-const FULLSCREEN_KEYCODE = SMALL_F_KEYCODE;
-const MUTE_KEYCODE = SMALL_M_KEYCODE;
-const THEATER_MODE_KEYCODE = SMALL_T_KEYCODE;
-
-const VOLUME_UP_KEYCODE = ARROW_UP_KEYCODE;
-const VOLUME_DOWN_KEYCODE = ARROW_DOWN_KEYCODE;
-
-const SEEK_FORWARD_KEYCODE = SMALL_L_KEYCODE;
-const SEEK_BACKWARD_KEYCODE = SMALL_J_KEYCODE;
-const SEEK_FORWARD_KEYCODE_5 = ARROW_RIGHT_KEYCODE;
-const SEEK_BACKWARD_KEYCODE_5 = ARROW_LEFT_KEYCODE;
 
 const SEEK_STEP_5 = 5;
 const SEEK_STEP = 10; // time to seek in seconds
@@ -408,24 +380,24 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
   function handleShiftKeyActions(e: KeyboardEvent) {
     if (e.altKey || e.ctrlKey || e.metaKey || !e.shiftKey) return;
-    if (e.keyCode === PERIOD_KEYCODE) changePlaybackSpeed(true);
-    if (e.keyCode === COMMA_KEYCODE) changePlaybackSpeed(false);
-    if (e.keyCode === N_KEYCODE) playNext();
-    if (e.keyCode === P_KEYCODE) playPrevious();
+    if (e.keyCode === KEYCODES.PERIOD) changePlaybackSpeed(true);
+    if (e.keyCode === KEYCODES.COMMA) changePlaybackSpeed(false);
+    if (e.keyCode === KEYCODES.N) playNext();
+    if (e.keyCode === KEYCODES.P) playPrevious();
   }
 
   function handleSingleKeyActions(e: KeyboardEvent) {
     if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
-    if (e.keyCode === SPACE_BAR_KEYCODE || e.keyCode === SMALL_K_KEYCODE) togglePlay();
-    if (e.keyCode === FULLSCREEN_KEYCODE) toggleFullscreen();
-    if (e.keyCode === MUTE_KEYCODE) toggleMute();
-    if (e.keyCode === VOLUME_UP_KEYCODE) volumeUp();
-    if (e.keyCode === VOLUME_DOWN_KEYCODE) volumeDown();
-    if (e.keyCode === THEATER_MODE_KEYCODE) toggleTheaterMode();
-    if (e.keyCode === SEEK_FORWARD_KEYCODE) seekVideo(SEEK_STEP);
-    if (e.keyCode === SEEK_BACKWARD_KEYCODE) seekVideo(-SEEK_STEP);
-    if (e.keyCode === SEEK_FORWARD_KEYCODE_5) seekVideo(SEEK_STEP_5);
-    if (e.keyCode === SEEK_BACKWARD_KEYCODE_5) seekVideo(-SEEK_STEP_5);
+    if (e.keyCode === KEYCODES.SPACEBAR || e.keyCode === KEYCODES.K) togglePlay();
+    if (e.keyCode === KEYCODES.F) toggleFullscreen();
+    if (e.keyCode === KEYCODES.M) toggleMute();
+    if (e.keyCode === KEYCODES.UP) volumeUp();
+    if (e.keyCode === KEYCODES.DOWN) volumeDown();
+    if (e.keyCode === KEYCODES.T) toggleTheaterMode();
+    if (e.keyCode === KEYCODES.L) seekVideo(SEEK_STEP);
+    if (e.keyCode === KEYCODES.J) seekVideo(-SEEK_STEP);
+    if (e.keyCode === KEYCODES.RIGHT) seekVideo(SEEK_STEP_5);
+    if (e.keyCode === KEYCODES.LEFT) seekVideo(-SEEK_STEP_5);
   }
 
   function seekVideo(stepSize: number) {

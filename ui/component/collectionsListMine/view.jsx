@@ -7,13 +7,14 @@ import { COLLECTIONS_CONSTS } from 'lbry-redux';
 import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
+import * as KEYCODES from 'constants/keycodes';
+
 import Yrbl from 'component/yrbl';
 import classnames from 'classnames';
 import { FormField, Form } from 'component/common/form';
 
 type Props = {
   builtinCollections: CollectionGroup,
-  publishedCollections: CollectionGroup,
   publishedCollections: CollectionGroup,
   unpublishedCollections: CollectionGroup,
   // savedCollections: CollectionGroup,
@@ -66,8 +67,7 @@ export default function CollectionsListMine(props: Props) {
   const favorites = builtinCollectionsList.find((list) => list.id === COLLECTIONS_CONSTS.FAVORITES_ID);
   const builtin = [watchLater, favorites];
   function escapeListener(e: SyntheticKeyboardEvent<*>) {
-    const KEYCODE_ESCAPE = 27;
-    if (e.keyCode === KEYCODE_ESCAPE) {
+    if (e.keyCode === KEYCODES.ESCAPE) {
       e.preventDefault();
       setSearchText('');
     }

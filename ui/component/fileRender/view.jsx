@@ -4,6 +4,7 @@ import React from 'react';
 import { lazyImport } from 'util/lazyImport';
 import classnames from 'classnames';
 import * as RENDER_MODES from 'constants/file_render_modes';
+import * as KEYCODES from 'constants/keycodes';
 import VideoViewer from 'component/viewers/videoViewer';
 import { withRouter } from 'react-router-dom';
 import fs from 'fs';
@@ -57,7 +58,7 @@ class FileRender extends React.PureComponent<Props> {
   }
 
   escapeListener(e: SyntheticKeyboardEvent<*>) {
-    if (e.keyCode === 27) {
+    if (e.keyCode === KEYCODES.ESCAPE) {
       e.preventDefault();
 
       this.exitFullscreen();

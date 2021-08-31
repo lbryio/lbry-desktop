@@ -2,6 +2,7 @@
 import type { Node } from 'react';
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
+import * as KEYCODES from 'constants/keycodes';
 import React from 'react';
 import Button from 'component/button';
 import classnames from 'classnames';
@@ -14,9 +15,6 @@ import { SIMPLE_SITE, DOMAIN, ENABLE_UI_NOTIFICATIONS } from 'config';
 // @if TARGET='app'
 import { IS_MAC } from 'component/app/view';
 // @endif
-
-const ESCAPE_KEY_CODE = 27;
-const BACKSLASH_KEY_CODE = 220;
 
 const HOME = {
   title: 'Home',
@@ -265,9 +263,9 @@ function SideNavigation(props: Props) {
 
   React.useEffect(() => {
     function handleKeydown(e: SyntheticKeyboardEvent<*>) {
-      if (e.keyCode === ESCAPE_KEY_CODE && isAbsolute) {
+      if (e.keyCode === KEYCODES.ESCAPE && isAbsolute) {
         setSidebarOpen(false);
-      } else if (e.keyCode === BACKSLASH_KEY_CODE) {
+      } else if (e.keyCode === KEYCODES.BACKSLASH) {
         const hasActiveInput = document.querySelector('input:focus, textarea:focus');
         if (!hasActiveInput) {
           setSidebarOpen(!sidebarOpen);

@@ -7,14 +7,13 @@ import React, { useEffect, useCallback } from 'react';
 import classnames from 'classnames';
 import * as PAGES from 'constants/pages';
 import * as RENDER_MODES from 'constants/file_render_modes';
+import * as KEYCODES from 'constants/keycodes';
 import Button from 'component/button';
 import isUserTyping from 'util/detect-typing';
 import { getThumbnailCdnUrl } from 'util/thumbnail';
 import Nag from 'component/common/nag';
 // $FlowFixMe cannot resolve ...
 import FileRenderPlaceholder from 'static/img/fileRenderPlaceholder.png';
-
-const SPACE_BAR_KEYCODE = 32;
 
 type Props = {
   play: (string, string) => void,
@@ -120,7 +119,7 @@ export default function FileRenderInitiator(props: Props) {
     // This is just for beginning to download a file
     // Play/Pause/Fullscreen will be handled by the respective viewers because not every file type should behave the same
     function handleKeyDown(e: KeyboardEvent) {
-      if (!isUserTyping() && e.keyCode === SPACE_BAR_KEYCODE) {
+      if (!isUserTyping() && e.keyCode === KEYCODES.SPACEBAR) {
         e.preventDefault();
 
         if (!isPlaying || fileStatus === 'stopped') {

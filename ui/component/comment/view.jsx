@@ -1,6 +1,7 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
+import * as KEYCODES from 'constants/keycodes';
 import { COMMENT_HIGHLIGHTED } from 'constants/classnames';
 import { SORT_BY, COMMENT_PAGE_SIZE_REPLIES } from 'constants/comment';
 import { FF_MAX_CHARS_IN_COMMENT } from 'constants/form-field';
@@ -71,7 +72,6 @@ type Props = {
 };
 
 const LENGTH_TO_COLLAPSE = 300;
-const ESCAPE_KEY = 27;
 
 function Comment(props: Props) {
   const {
@@ -157,7 +157,7 @@ function Comment(props: Props) {
 
       // a user will try and press the escape key to cancel editing their comment
       const handleEscape = (event) => {
-        if (event.keyCode === ESCAPE_KEY) {
+        if (event.keyCode === KEYCODES.ESCAPE) {
           setEditing(false);
         }
       };

@@ -5,6 +5,7 @@ import Button from 'component/button';
 import Card from 'component/common/card';
 import { FormField } from 'component/common/form';
 import * as ICONS from 'constants/icons';
+import * as KEYCODES from 'constants/keycodes';
 import CollectionSelectItem from 'component/collectionSelectItem';
 
 type Props = {
@@ -46,8 +47,7 @@ const ClaimCollectionAdd = (props: Props) => {
   }
 
   function altEnterListener(e: SyntheticKeyboardEvent<*>) {
-    const KEYCODE_ENTER = 13;
-    if (e.keyCode === KEYCODE_ENTER) {
+    if (e.keyCode === KEYCODES.ENTER) {
       e.preventDefault();
       buttonref.current.click();
     }
