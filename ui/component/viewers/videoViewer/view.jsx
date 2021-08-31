@@ -16,6 +16,7 @@ import FileViewerEmbeddedEnded from 'web/component/fileViewerEmbeddedEnded';
 import FileViewerEmbeddedTitle from 'component/fileViewerEmbeddedTitle';
 import LoadingScreen from 'component/common/loading-screen';
 import { addTheaterModeButton } from './internal/theater-mode';
+import { addPlayNextButton } from './internal/play-next';
 import { useGetAds } from 'effects/use-get-ads';
 import Button from 'component/button';
 import I18nMessage from 'component/i18nMessage';
@@ -265,6 +266,7 @@ function VideoViewer(props: Props) {
       player.volume(volume);
       player.playbackRate(videoPlaybackRate);
       addTheaterModeButton(player, toggleVideoTheaterMode);
+      if (collectionId) addPlayNextButton(player, () => setDoNavigate(true));
     }
 
     const shouldPlay = !embedded || autoplayIfEmbedded;
@@ -401,6 +403,7 @@ function VideoViewer(props: Props) {
           shareTelemetry={shareTelemetry}
           replay={replay}
           videoTheaterMode={videoTheaterMode}
+          playNext={() => setDoNavigate(true)}
         />
       )}
     </div>
