@@ -1,54 +1,20 @@
 // Created by xander on 6/21/2021
 import videojs from 'video.js';
-import {
-  makeSelectRecommendationId,
-  makeSelectRecommendationParentId,
-  makeSelectRecommendedClaimIds,
-  makeSelectRecommendationClicks,
-} from 'redux/selectors/content';
-import { makeSelectRecommendedRecsysIdForClaimId } from 'redux/selectors/search';
 
+import RecSys from 'recsys';
 const VERSION = '0.0.1';
 
-const recsysEndpoint = 'https://clickstream.odysee.com/log/video/view';
-const recsysId = 'lighthouse-v0';
-
 /* RecSys */
-const RecsysData = {
+const PlayerEvent = {
   event: {
-    start: 0,
+    start: 0, // event types
     stop: 1,
     scrub: 2,
     speed: 3,
   },
 };
 
-function createRecsys(claimId, userId, events, loadedAt, isEmbed) {
-  const pageLoadedAt = loadedAt;
-  const pageExitedAt = Date.now();
-
-  if (window.store) {
-    const state = window.store.getState();
-
-    return {
-      uuid: makeSelectRecommendationId(claimId)(state),
-      parentUuid: makeSelectRecommendationParentId(claimId)(state),
-      uid: userId,
-      claimId: claimId,
-      pageLoadedAt: pageLoadedAt,
-      pageExitedAt: pageExitedAt,
-      recsysId: makeSelectRecommendedRecsysIdForClaimId(claimId)(state) || recsysId,
-      recClaimIds: makeSelectRecommendedClaimIds(claimId)(state),
-      recClickedVideoIdx: makeSelectRecommendationClicks(claimId)(state),
-      events: events,
-      isEmbed: isEmbed,
-    };
-  }
-
-  return undefined;
-}
-
-function newRecsysEvent(eventType, offset, arg) {
+function newRecsysPlayerEvent(eventType, offset, arg) {
   if (arg) {
     return {
       event: eventType,
@@ -63,30 +29,11 @@ function newRecsysEvent(eventType, offset, arg) {
   }
 }
 
-function sendRecsysEvents(recsys) {
-  const requestOptions = {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain' }, // application/json
-    body: JSON.stringify(recsys),
-  };
-
-  try {
-    fetch(recsysEndpoint, requestOptions)
-      .then((response) => response.json())
-      .then((data) => {
-        // console.log(`Recsys response data:`, data);
-      });
-  } catch (error) {
-    // console.error(`Recsys Error`, error);
-  }
-}
-
 const defaults = {
-  endpoint: recsysEndpoint,
-  recsysId: recsysId,
   videoId: null,
   userId: 0,
   debug: false,
+  embedded: false,
 };
 
 const Component = videojs.getComponent('Component');
@@ -98,16 +45,13 @@ class RecsysPlugin extends Component {
 
     // Plugin started
     if (options.debug) {
-      this.log(`Created recsys plugin for: videoId:${options.videoId}, userId:${options.userId}`);
+      this.log(`Created recsys plugin for: videoId:${options.videoId}`);
     }
 
     // To help with debugging, we'll add a global vjs object with the video js player
     window.vjs = player;
 
     this.player = player;
-
-    this.recsysEvents = [];
-    this.loadedAt = Date.now();
     this.lastTimeUpdate = null;
     this.currentTimeUpdate = null;
     this.inPause = false;
@@ -124,57 +68,37 @@ class RecsysPlugin extends Component {
     player.on('dispose', (event) => this.onDispose(event));
   }
 
-  addRecsysEvent(recsysEvent) {
-    // For now, don't do client-side preprocessing. I think there
-    // are browser inconsistencies and preprocessing loses too much info.
-    this.recsysEvents.push(recsysEvent);
-  }
-
-  getRecsysEvents() {
-    return this.recsysEvents;
-  }
-
-  sendRecsysEvents() {
-    const event = createRecsys(
-      this.options_.videoId,
-      this.options_.userId,
-      this.getRecsysEvents(),
-      this.loadedAt,
-      false
-    );
-
-    if (event) {
-      sendRecsysEvents(event);
-    }
-  }
-
   onPlay(event) {
-    const recsysEvent = newRecsysEvent(RecsysData.event.start, this.player.currentTime());
+    const recsysEvent = newRecsysPlayerEvent(PlayerEvent.event.start, this.player.currentTime());
     this.log('onPlay', recsysEvent);
-    this.addRecsysEvent(recsysEvent);
+    RecSys.onRecsysPlayerEvent(this.options_.videoId, recsysEvent, this.options_.embedded);
 
     this.inPause = false;
     this.lastTimeUpdate = recsysEvent.offset;
   }
 
   onPause(event) {
-    const recsysEvent = newRecsysEvent(RecsysData.event.stop, this.player.currentTime());
+    const recsysEvent = newRecsysPlayerEvent(PlayerEvent.event.stop, this.player.currentTime());
     this.log('onPause', recsysEvent);
-    this.addRecsysEvent(recsysEvent);
+    RecSys.onRecsysPlayerEvent(this.options_.videoId, recsysEvent);
 
     this.inPause = true;
   }
 
   onEnded(event) {
-    const recsysEvent = newRecsysEvent(RecsysData.event.stop, this.player.currentTime());
+    const recsysEvent = newRecsysPlayerEvent(PlayerEvent.event.stop, this.player.currentTime());
     this.log('onEnded', recsysEvent);
-    this.addRecsysEvent(recsysEvent);
+    RecSys.onRecsysPlayerEvent(this.options_.videoId, recsysEvent);
   }
 
   onRateChange(event) {
-    const recsysEvent = newRecsysEvent(RecsysData.event.speed, this.player.currentTime(), this.player.playbackRate());
+    const recsysEvent = newRecsysPlayerEvent(
+      PlayerEvent.event.speed,
+      this.player.currentTime(),
+      this.player.playbackRate()
+    );
     this.log('onRateChange', recsysEvent);
-    this.addRecsysEvent(recsysEvent);
+    RecSys.onRecsysPlayerEvent(this.options_.videoId, recsysEvent);
   }
 
   onTimeUpdate(event) {
@@ -212,19 +136,19 @@ class RecsysPlugin extends Component {
 
     if (fromTime !== curTime) {
       // This removes duplicates that aren't useful.
-      const recsysEvent = newRecsysEvent(RecsysData.event.scrub, fromTime, curTime);
+      const recsysEvent = newRecsysPlayerEvent(PlayerEvent.event.scrub, fromTime, curTime);
       this.log('onSeeked', recsysEvent);
-      this.addRecsysEvent(recsysEvent);
+      RecSys.onRecsysPlayerEvent(this.options_.videoId, recsysEvent);
     }
   }
 
   onDispose(event) {
-    this.sendRecsysEvents();
+    RecSys.onPlayerDispose(this.options_.videoId, this.options_.embedded);
   }
 
   log(...args) {
     if (this.options_.debug) {
-      // console.log(`Recsys Debug:`, JSON.stringify(args));
+      console.log(`Recsys Player Debug:`, JSON.stringify(args));
     }
   }
 }

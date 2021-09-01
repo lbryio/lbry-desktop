@@ -98,7 +98,7 @@ export const makeSelectRecommendedRecsysIdForClaimId = (claimId: string) =>
   createSelector(makeSelectClaimForClaimId(claimId), selectSearchResultByQuery, (claim, searchUrisByQuery) => {
     // TODO: DRY this out.
     let poweredBy;
-    if (claim) {
+    if (claim && claimId) {
       const isMature = isClaimNsfw(claim);
       const { title } = claim.value;
 
@@ -204,3 +204,8 @@ export const makeSelectIsResolvingWinningUri = (query: string = '') => {
     }
   );
 };
+
+export const makeSelectUrlForClaimId = (claimId: string) =>
+  createSelector(
+    makeSelectClaimForClaimId(claimId), (claim) => claim ? claim.canonical_url || claim.permanent_url : null
+  );

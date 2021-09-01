@@ -29,7 +29,6 @@ import ClaimPreviewNoContent from './claim-preview-no-content';
 import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import Button from 'component/button';
 import * as ICONS from 'constants/icons';
-import { CONTAINER_ID } from 'constants/navigation';
 
 const AbandonedChannelPreview = lazyImport(() =>
   import('component/abandonedChannelPreview' /* webpackChunkName: "abandonedChannelPreview" */)
@@ -67,7 +66,7 @@ type Props = {
   actions: boolean | Node | string | number,
   properties: boolean | Node | string | number | ((Claim) => Node),
   empty?: Node,
-  onClick?: (e: any, index?: number) => any,
+  onClick?: (e: any, claim?: ?Claim, index?: number) => any,
   streamingUrl: ?string,
   getFile: (string) => void,
   customShouldHide?: (Claim) => boolean,
@@ -90,7 +89,6 @@ type Props = {
   disableNavigation?: boolean,
   mediaDuration?: string,
   date?: any,
-  containerId?: string, // ID or name of the container (e.g. ClaimList, HOC, etc.) that this is in.
   indexInContainer?: number, // The index order of this component within 'containerId'.
   channelSubCount?: number,
 };
@@ -154,7 +152,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     isCollectionMine,
     collectionUris,
     disableNavigation,
-    containerId,
     indexInContainer,
     channelSubCount,
   } = props;
@@ -223,7 +220,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
 
   const handleNavLinkClick = (e) => {
     if (onClick) {
-      onClick(e, indexInContainer);
+      onClick(e, claim, indexInContainer); // not sure indexInContainer is used for anything.
     }
     e.stopPropagation();
   };
@@ -232,10 +229,9 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     to: {
       pathname: navigateUrl,
       search: navigateSearch.toString() ? '?' + navigateSearch.toString() : '',
-      state: containerId ? { [CONTAINER_ID]: containerId } : undefined,
     },
-    onClick: (e) => handleNavLinkClick(e),
-    onAuxClick: (e) => handleNavLinkClick(e),
+    onClick: handleNavLinkClick,
+    onAuxClick: handleNavLinkClick,
   };
 
   // do not block abandoned and nsfw claims if showUserBlocked is passed
@@ -281,14 +277,13 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
 
   function handleOnClick(e) {
     if (onClick) {
-      onClick(e, indexInContainer);
+      onClick(e, claim, indexInContainer);
     }
 
     if (claim && !pending && !disableNavigation) {
       history.push({
         pathname: navigateUrl,
         search: navigateSearch.toString() ? '?' + navigateSearch.toString() : '',
-        state: containerId ? { [CONTAINER_ID]: containerId } : undefined,
       });
     }
   }

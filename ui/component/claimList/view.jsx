@@ -27,7 +27,6 @@ type Props = {
   onScrollBottom?: (any) => void,
   page?: number,
   pageSize?: number,
-  id?: string,
   // If using the default header, this is a unique ID needed to persist the state of the filter setting
   persistedStorageKey?: string,
   showHiddenByUser: boolean,
@@ -47,7 +46,7 @@ type Props = {
   searchOptions?: any,
   collectionId?: string,
   showNoSourceClaims?: boolean,
-  onClick?: (e: any, index?: number) => void,
+  onClick?: (e: any, claim?: ?Claim, index?: number) => void,
 };
 
 export default function ClaimList(props: Props) {
@@ -56,7 +55,6 @@ export default function ClaimList(props: Props) {
     uris,
     headerAltControls,
     loading,
-    id,
     persistedStorageKey,
     empty,
     defaultSort,
@@ -110,9 +108,9 @@ export default function ClaimList(props: Props) {
     setCurrentSort(currentSort === SORT_NEW ? SORT_OLD : SORT_NEW);
   }
 
-  function handleClaimClicked(e, index) {
+  function handleClaimClicked(e, claim, index) {
     if (onClick) {
-      onClick(e, index);
+      onClick(e, claim, index);
     }
   }
 
@@ -200,7 +198,6 @@ export default function ClaimList(props: Props) {
               {injectedItem && index === 4 && <li>{injectedItem}</li>}
               <ClaimPreview
                 uri={uri}
-                containerId={id}
                 indexInContainer={index}
                 type={type}
                 active={activeUri && uri === activeUri}
@@ -220,7 +217,7 @@ export default function ClaimList(props: Props) {
                   return claim.name.length === 24 && !claim.name.includes(' ') && claim.value.author === 'Spee.ch';
                 }}
                 live={resolveLive(index)}
-                onClick={handleClaimClicked}
+                onClick={(e, claim, index) => handleClaimClicked(e, claim, index)}
               />
             </React.Fragment>
           ))}

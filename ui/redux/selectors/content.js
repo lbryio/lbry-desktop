@@ -3,7 +3,6 @@ import { createSelector } from 'reselect';
 import {
   makeSelectClaimForUri,
   selectClaimsByUri,
-  makeSelectClaimsInChannelForCurrentPageState,
   makeSelectClaimIsNsfw,
   makeSelectClaimIsMine,
   makeSelectMediaTypeForUri,
@@ -11,7 +10,6 @@ import {
   parseURI,
   makeSelectContentTypeForUri,
   makeSelectFileNameForUri,
-  selectClaimIdsByUri,
 } from 'lbry-redux';
 import { makeSelectRecommendedContentForUri } from 'redux/selectors/search';
 import { selectMutedChannels } from 'redux/selectors/blocked';
@@ -155,18 +153,6 @@ export const selectRecentHistory = createSelector(selectHistory, (history) => {
   return history.slice(0, RECENT_HISTORY_AMOUNT);
 });
 
-export const makeSelectCategoryListUris = (uris: ?Array<string>, channel: string) =>
-  createSelector(makeSelectClaimsInChannelForCurrentPageState(channel), (channelClaims) => {
-    if (uris) return uris;
-
-    if (channelClaims) {
-      const CATEGORY_LIST_SIZE = 10;
-      return channelClaims.slice(0, CATEGORY_LIST_SIZE).map(({ name, claim_id: claimId }) => `${name}#${claimId}`);
-    }
-
-    return null;
-  });
-
 export const makeSelectShouldObscurePreview = (uri: string) =>
   createSelector(selectShowMatureContent, makeSelectClaimIsNsfw(uri), (showMatureContent, isClaimMature) => {
     return isClaimMature && !showMatureContent;
@@ -247,21 +233,3 @@ export const makeSelectInsufficientCreditsForUri = (uri: string) =>
       return !isMine && costInfo && costInfo.cost > 0 && costInfo.cost > balance;
     }
   );
-
-export const makeSelectRecommendationId = (claimId: string) =>
-  createSelector(selectState, (state) => state.recommendationId[claimId]);
-
-export const makeSelectRecommendationParentId = (claimId: string) =>
-  createSelector(selectState, (state) => state.recommendationParentId[claimId]);
-
-export const makeSelectRecommendedClaimIds = (claimId: string) =>
-  createSelector(selectState, selectClaimIdsByUri, (state, claimIdsByUri) => {
-    const recommendationUrls = state.recommendationUrls[claimId];
-    if (recommendationUrls) {
-      return recommendationUrls.map((url) => claimIdsByUri[url]);
-    }
-    return undefined;
-  });
-
-export const makeSelectRecommendationClicks = (claimId: string) =>
-  createSelector(selectState, (state) => state.recommendationClicks[claimId]);
