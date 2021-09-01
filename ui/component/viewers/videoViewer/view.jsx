@@ -121,6 +121,7 @@ function VideoViewer(props: Props) {
   /* isLoading was designed to show loading screen on first play press, rather than completely black screen, but
   breaks because some browsers (e.g. Firefox) block autoplay but leave the player.play Promise pending */
   const [isLoading, setIsLoading] = useState(false);
+  const [replay, setReplay] = useState(false);
 
   // force everything to recent when URI changes, can cause weird corner cases otherwise (e.g. navigate while autoplay is true)
   useEffect(() => {
@@ -218,6 +219,7 @@ function VideoViewer(props: Props) {
     setIsPlaying(true);
     setShowAutoplayCountdown(false);
     setIsEndededEmbed(false);
+    setReplay(false);
     analytics.videoIsPlaying(true, player);
   }
 
@@ -329,7 +331,14 @@ function VideoViewer(props: Props) {
       })}
       onContextMenu={stopContextMenu}
     >
-      {showAutoplayCountdown && <AutoplayCountdown nextRecommendedUri={nextRecommendedUri} doNavigate={doNavigate} />}
+      {showAutoplayCountdown && (
+        <AutoplayCountdown
+          uri={uri}
+          nextRecommendedUri={nextRecommendedUri}
+          doNavigate={doNavigate}
+          doReplay={() => setReplay(true)}
+        />
+      )}
       {isEndededEmbed && <FileViewerEmbeddedEnded uri={uri} />}
       {embedded && !isEndededEmbed && <FileViewerEmbeddedTitle uri={uri} />}
       {/* disable this loading behavior because it breaks when player.play() promise hangs */}
@@ -380,6 +389,7 @@ function VideoViewer(props: Props) {
           userId={userId}
           allowPreRoll={!embedded && !authenticated}
           shareTelemetry={shareTelemetry}
+          replay={replay}
         />
       )}
     </div>

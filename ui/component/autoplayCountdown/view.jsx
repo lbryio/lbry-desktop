@@ -5,6 +5,8 @@ import UriIndicator from 'component/uriIndicator';
 import I18nMessage from 'component/i18nMessage';
 import { withRouter } from 'react-router';
 import debounce from 'util/debounce';
+import * as ICONS from 'constants/icons';
+
 const DEBOUNCE_SCROLL_HANDLER_MS = 150;
 const CLASSNAME_AUTOPLAY_COUNTDOWN = 'autoplay-countdown';
 
@@ -14,6 +16,7 @@ type Props = {
   nextRecommendedUri: string,
   modal: { id: string, modalProps: {} },
   doNavigate: () => void,
+  doReplay: () => void,
 };
 
 function AutoplayCountdown(props: Props) {
@@ -23,6 +26,7 @@ function AutoplayCountdown(props: Props) {
     history: { push },
     modal,
     doNavigate,
+    doReplay,
   } = props;
   const nextTitle = nextRecommendedClaim && nextRecommendedClaim.value && nextRecommendedClaim.value.title;
 
@@ -105,6 +109,15 @@ function AutoplayCountdown(props: Props) {
               <Button label={__('Cancel')} button="link" onClick={() => setTimerCanceled(true)} />
             </div>
           )}
+          <Button
+            label={__('Replay?')}
+            button="link"
+            iconRight={ICONS.REPLAY}
+            onClick={() => {
+              setTimerCanceled(true);
+              doReplay();
+            }}
+          />
         </div>
       </div>
     </div>
