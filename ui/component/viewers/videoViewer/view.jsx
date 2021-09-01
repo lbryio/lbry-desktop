@@ -99,7 +99,7 @@ function VideoViewer(props: Props) {
     collectionId,
     nextRecommendedUri,
   } = props;
-
+  const permanentUrl = claim && claim.permanent_url;
   const adApprovedChannelIds = homepageData ? getAllIds(homepageData) : [];
   const claimId = claim && claim.claim_id;
   const channelClaimId = claim && claim.signing_channel && claim.signing_channel.claim_id;
@@ -109,6 +109,7 @@ function VideoViewer(props: Props) {
     push,
     location: { pathname },
   } = useHistory();
+  const [doNavigate, setDoNavigate] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [showAutoplayCountdown, setShowAutoplayCountdown] = useState(false);
   const [isEndededEmbed, setIsEndededEmbed] = useState(false);
@@ -177,23 +178,30 @@ function VideoViewer(props: Props) {
     [collectionId, doSetPlayingUri, doPlayUri, clearPosition]
   );
 
-  const doNavigate = useCallback(() => {
-    let navigateUrl;
-    if (nextRecommendedUri) {
-      navigateUrl = formatLbryUrlForWeb(nextRecommendedUri);
-      if (collectionId) {
-        const collectionParams = new URLSearchParams();
-        collectionParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, collectionId);
-        navigateUrl = navigateUrl + `?` + collectionParams.toString();
+  useEffect(() => {
+    if (doNavigate && permanentUrl && nextRecommendedUri) {
+      if (permanentUrl !== nextRecommendedUri) {
+        let navigateUrl;
+        if (nextRecommendedUri) {
+          navigateUrl = formatLbryUrlForWeb(nextRecommendedUri);
+          if (collectionId) {
+            const collectionParams = new URLSearchParams();
+            collectionParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, collectionId);
+            navigateUrl = navigateUrl + `?` + collectionParams.toString();
+          }
+        }
+        if (!isFloating && navigateUrl) {
+          push(navigateUrl);
+        }
+        if (nextRecommendedUri) {
+          doPlay(nextRecommendedUri);
+        }
+      } else {
+        setReplay(true);
       }
+      setDoNavigate(false);
     }
-    if (!isFloating && navigateUrl) {
-      push(navigateUrl);
-    }
-    if (nextRecommendedUri) {
-      doPlay(nextRecommendedUri);
-    }
-  }, [nextRecommendedUri, isFloating, collectionId, push, doPlay]);
+  }, [permanentUrl, nextRecommendedUri, isFloating, collectionId, push, doPlay, doNavigate]);
 
   const onEnded = React.useCallback(() => {
     analytics.videoIsPlaying(false);
@@ -208,11 +216,11 @@ function VideoViewer(props: Props) {
     } else if (!collectionId && autoplaySetting) {
       setShowAutoplayCountdown(true);
     } else if (collectionId) {
-      doNavigate();
+      setDoNavigate(true);
     }
 
     clearPosition(uri);
-  }, [adUrl, embedded, collectionId, autoplaySetting, clearPosition, uri, setAdUrl, doNavigate]);
+  }, [adUrl, embedded, collectionId, autoplaySetting, clearPosition, uri, setAdUrl]);
 
   function onPlay(player) {
     setIsLoading(false);
@@ -335,7 +343,7 @@ function VideoViewer(props: Props) {
         <AutoplayCountdown
           uri={uri}
           nextRecommendedUri={nextRecommendedUri}
-          doNavigate={doNavigate}
+          doNavigate={() => setDoNavigate(true)}
           doReplay={() => setReplay(true)}
         />
       )}

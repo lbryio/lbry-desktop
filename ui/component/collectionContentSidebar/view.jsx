@@ -15,23 +15,42 @@ type Props = {
   collectionUrls: Array<Claim>,
   collectionName: string,
   collection: any,
+  loop: boolean,
+  doToggleLoopList: (string, boolean) => void,
   createUnpublishedCollection: (string, Array<any>, ?string) => void,
 };
 
 export default function CollectionContent(props: Props) {
-  const { collectionUrls, collectionName, id, url } = props;
+  const { collectionUrls, collectionName, id, url, loop, doToggleLoopList } = props;
+
   return (
     <Card
       isBodyList
-      className="file-page__recommended"
+      className="file-page__recommended-collection"
       title={
-        <span>
-          <Icon
-            icon={(id === COLLECTIONS_CONSTS.WATCH_LATER_ID && ICONS.TIME) ||
-              (id === COLLECTIONS_CONSTS.FAVORITES_ID && ICONS.STAR) || ICONS.STACK}
-            className="icon--margin-right" />
-          {collectionName}
-        </span>
+        <>
+          <span className="file-page__recommended-collection__row">
+            <Icon
+              icon={
+                (id === COLLECTIONS_CONSTS.WATCH_LATER_ID && ICONS.TIME) ||
+                (id === COLLECTIONS_CONSTS.FAVORITES_ID && ICONS.STAR) ||
+                ICONS.STACK
+              }
+              className="icon--margin-right"
+            />
+            {collectionName}
+          </span>
+          <span className="file-page__recommended-collection__row">
+            <Button
+              button="alt"
+              title="Loop"
+              icon={ICONS.REPEAT}
+              iconColor={loop && 'blue'}
+              className="button--file-action"
+              onClick={() => doToggleLoopList(id, !loop)}
+            />
+          </span>
+        </>
       }
       titleActions={
         <div className="card__title-actions--link">

@@ -133,6 +133,15 @@
     }
   }
 
+  .file-page__recommended-collection {
+    @extend .file-page__recommended;
+    flex-direction: column;
+
+    .file-page__recommended-collection__row {
+      display: block;
+    }
+  }
+
   @media (max-width: $breakpoint-medium) {
     flex-direction: column;
     > :first-child {

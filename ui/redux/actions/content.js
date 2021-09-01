@@ -16,6 +16,7 @@ import {
   makeSelectClaimForUri,
   makeSelectClaimIsMine,
   makeSelectClaimWasPurchased,
+  doToast,
 } from 'lbry-redux';
 import { makeSelectCostInfoForUri, Lbryio } from 'lbryinc';
 import { makeSelectClientSetting, selectosNotificationsEnabled, selectDaemonSettings } from 'redux/selectors/settings';
@@ -279,3 +280,19 @@ export const doRecommendationClicked = (claimId: string, index: number) => (disp
     });
   }
 };
+
+export function doToggleLoopList(collectionId: string, loop: boolean, hideToast: boolean) {
+  return (dispatch: Dispatch) => {
+    dispatch({
+      type: ACTIONS.TOGGLE_LOOP_LIST,
+      data: { collectionId, loop },
+    });
+    if (loop && !hideToast) {
+      dispatch(
+        doToast({
+          message: __('Loop is on.'),
+        })
+      );
+    }
+  };
+}
