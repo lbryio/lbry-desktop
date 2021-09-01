@@ -1815,6 +1815,11 @@
   dependencies:
     "@types/yargs-parser" "*"
 
+"@ungap/from-entries@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@ungap/from-entries/-/from-entries-0.2.1.tgz#7e86196b8b2e99d73106a8f25c2a068326346354"
+  integrity sha512-CAqefTFAfnUPwYqsWHXpOxHaq1Zo5UQ3m9Zm2p09LggGe57rqHoBn3c++xcoomzXKynAUuiBMDUCQvKMnXjUpA==
+
 "@videojs/http-streaming@2.2.4":
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/@videojs/http-streaming/-/http-streaming-2.2.4.tgz#c71bb63dbc4749e35193c4c334430bd8ce728ec0"
@@ -10129,10 +10134,11 @@ lazy-val@^1.0.4:
     yargs "^13.2.2"
     zstd-codec "^0.1.1"
 
-lbry-redux@lbryio/lbry-redux#e4d0662100a5f4b28bb1bf3cbc1e51b2eebab5b6:
+lbry-redux@lbryio/lbry-redux#dc264ec50ca3208d940521bdac0b61352d913c95:
   version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/e4d0662100a5f4b28bb1bf3cbc1e51b2eebab5b6"
+  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/dc264ec50ca3208d940521bdac0b61352d913c95"
   dependencies:
+    "@ungap/from-entries" "^0.2.1"
     proxy-polyfill "0.1.6"
     reselect "^3.0.0"
     uuid "^8.3.1"
