@@ -1,9 +1,20 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimForUri, makeSelectFileInfoForUri, makeSelectThumbnailForUri, SETTINGS } from 'lbry-redux';
+import {
+  makeSelectClaimForUri,
+  makeSelectFileInfoForUri,
+  makeSelectThumbnailForUri,
+  SETTINGS,
+  COLLECTIONS_CONSTS,
+  makeSelectNextUrlForCollectionAndUrl,
+} from 'lbry-redux';
 import { doChangeVolume, doChangeMute, doAnalyticsView, doAnalyticsBuffer } from 'redux/actions/app';
 import { selectVolume, selectMute } from 'redux/selectors/app';
-import { savePosition, clearPosition } from 'redux/actions/content';
-import { makeSelectContentPositionForUri } from 'redux/selectors/content';
+import { savePosition, clearPosition, doPlayUri, doSetPlayingUri } from 'redux/actions/content';
+import {
+  makeSelectContentPositionForUri,
+  makeSelectIsPlayerFloating,
+  makeSelectNextUnplayedRecommended,
+} from 'redux/selectors/content';
 import VideoViewer from './view';
 import { withRouter } from 'react-router';
 import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
@@ -15,9 +26,18 @@ const select = (state, props) => {
   const { search } = props.location;
   const urlParams = new URLSearchParams(search);
   const autoplay = urlParams.get('autoplay');
+  const uri = props.uri;
   // TODO: eventually this should be received from DB and not local state (https://github.com/lbryio/lbry-desktop/issues/6796)
-  const position = urlParams.get('t') !== null ? urlParams.get('t') : makeSelectContentPositionForUri(props.uri)(state);
+  const position = urlParams.get('t') !== null ? urlParams.get('t') : makeSelectContentPositionForUri(uri)(state);
   const userId = selectUser(state) && selectUser(state).id;
+  const collectionId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID);
+
+  let nextRecommendedUri;
+  if (collectionId && uri) {
+    nextRecommendedUri = makeSelectNextUrlForCollectionAndUrl(collectionId, uri)(state);
+  } else {
+    nextRecommendedUri = makeSelectNextUnplayedRecommended(uri)(state);
+  }
 
   return {
     autoplayIfEmbedded: Boolean(autoplay),
@@ -26,13 +46,16 @@ const select = (state, props) => {
     muted: selectMute(state),
     videoPlaybackRate: makeSelectClientSetting(SETTINGS.VIDEO_PLAYBACK_RATE)(state),
     position: position,
-    hasFileInfo: Boolean(makeSelectFileInfoForUri(props.uri)(state)),
-    thumbnail: makeSelectThumbnailForUri(props.uri)(state),
-    claim: makeSelectClaimForUri(props.uri)(state),
+    hasFileInfo: Boolean(makeSelectFileInfoForUri(uri)(state)),
+    thumbnail: makeSelectThumbnailForUri(uri)(state),
+    claim: makeSelectClaimForUri(uri)(state),
     homepageData: selectHomepageData(state),
     authenticated: selectUserVerifiedEmail(state),
     userId: userId,
     shareTelemetry: IS_WEB || selectDaemonSettings(state).share_usage_data,
+    isFloating: makeSelectIsPlayerFloating(props.location)(state),
+    collectionId,
+    nextRecommendedUri,
   };
 };
 
@@ -46,6 +69,8 @@ const perform = (dispatch) => ({
   claimRewards: () => dispatch(doClaimEligiblePurchaseRewards()),
   toggleVideoTheaterMode: () => dispatch(toggleVideoTheaterMode()),
   setVideoPlaybackRate: (rate) => dispatch(doSetClientSetting(SETTINGS.VIDEO_PLAYBACK_RATE, rate)),
+  doPlayUri: (uri) => dispatch(doPlayUri(uri)),
+  doSetPlayingUri: (uri) => dispatch(doSetPlayingUri({ uri })),
 });
 
 export default withRouter(connect(select, perform)(VideoViewer));

@@ -1,12 +1,10 @@
 // @flow
-import React, { useCallback } from 'react';
+import React from 'react';
 import Button from 'component/button';
 import UriIndicator from 'component/uriIndicator';
 import I18nMessage from 'component/i18nMessage';
-import { formatLbryUrlForWeb } from 'util/url';
 import { withRouter } from 'react-router';
 import debounce from 'util/debounce';
-import { COLLECTIONS_CONSTS } from 'lbry-redux';
 const DEBOUNCE_SCROLL_HANDLER_MS = 150;
 const CLASSNAME_AUTOPLAY_COUNTDOWN = 'autoplay-countdown';
 
@@ -14,25 +12,17 @@ type Props = {
   history: { push: (string) => void },
   nextRecommendedClaim: ?StreamClaim,
   nextRecommendedUri: string,
-  isFloating: boolean,
-  doSetPlayingUri: ({ uri: ?string }) => void,
-  doPlayUri: (string) => void,
   modal: { id: string, modalProps: {} },
-  collectionId?: string,
-  clearPosition: (string) => void,
+  doNavigate: () => void,
 };
 
 function AutoplayCountdown(props: Props) {
   const {
     nextRecommendedUri,
     nextRecommendedClaim,
-    doSetPlayingUri,
-    doPlayUri,
-    isFloating,
     history: { push },
     modal,
-    collectionId,
-    clearPosition,
+    doNavigate,
   } = props;
   const nextTitle = nextRecommendedClaim && nextRecommendedClaim.value && nextRecommendedClaim.value.title;
 
@@ -44,40 +34,6 @@ function AutoplayCountdown(props: Props) {
   const [timerPaused, setTimerPaused] = React.useState(false);
   const anyModalPresent = modal !== undefined && modal !== null;
   const isTimerPaused = timerPaused || anyModalPresent;
-
-  let navigateUrl;
-  if (nextTitle) {
-    navigateUrl = formatLbryUrlForWeb(nextRecommendedUri);
-    if (collectionId) {
-      const collectionParams = new URLSearchParams();
-      collectionParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, collectionId);
-      navigateUrl = navigateUrl + `?` + collectionParams.toString();
-    }
-  }
-
-  const doPlay = useCallback(
-    (uri) => {
-      if (collectionId) {
-        clearPosition(uri);
-      }
-      doSetPlayingUri({ uri });
-      doPlayUri(uri);
-    },
-    [clearPosition, doSetPlayingUri, doPlayUri]
-  );
-
-  const doNavigate = useCallback(() => {
-    if (!isFloating) {
-      if (navigateUrl) {
-        push(navigateUrl);
-        doPlay(nextRecommendedUri);
-      }
-    } else {
-      if (nextRecommendedUri) {
-        doPlay(nextRecommendedUri);
-      }
-    }
-  }, [navigateUrl, nextRecommendedUri, isFloating, doPlay, push]);
 
   function shouldPauseAutoplay() {
     const elm = document.querySelector(`.${CLASSNAME_AUTOPLAY_COUNTDOWN}`);
@@ -118,7 +74,7 @@ function AutoplayCountdown(props: Props) {
     return () => {
       clearInterval(interval);
     };
-  }, [timer, doNavigate, navigateUrl, push, timerCanceled, isTimerPaused, nextRecommendedUri]);
+  }, [timer, doNavigate, push, timerCanceled, isTimerPaused, nextRecommendedUri]);
 
   if (timerCanceled || !nextRecommendedUri) {
     return null;

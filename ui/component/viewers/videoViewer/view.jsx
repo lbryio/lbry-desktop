@@ -22,6 +22,8 @@ import I18nMessage from 'component/i18nMessage';
 import { useHistory } from 'react-router';
 import { getAllIds } from 'util/buildHomepage';
 import type { HomepageCat } from 'util/buildHomepage';
+import { formatLbryUrlForWeb } from 'util/url';
+import { COLLECTIONS_CONSTS } from 'lbry-redux';
 
 const PLAY_TIMEOUT_ERROR = 'play_timeout_error';
 const PLAY_TIMEOUT_LIMIT = 2000;
@@ -52,6 +54,11 @@ type Props = {
   userId: number,
   homepageData?: { [string]: HomepageCat },
   shareTelemetry: boolean,
+  isFloating: boolean,
+  doPlayUri: (string) => void,
+  doSetPlayingUri: (string) => void,
+  collectionId: string,
+  nextRecommendedUri: string,
 };
 
 /*
@@ -86,6 +93,11 @@ function VideoViewer(props: Props) {
     authenticated,
     userId,
     shareTelemetry,
+    isFloating,
+    doPlayUri,
+    doSetPlayingUri,
+    collectionId,
+    nextRecommendedUri,
   } = props;
 
   const adApprovedChannelIds = homepageData ? getAllIds(homepageData) : [];
@@ -94,6 +106,7 @@ function VideoViewer(props: Props) {
   const isAudio = contentType.includes('audio');
   const forcePlayer = FORCE_CONTENT_TYPE_PLAYER.includes(contentType);
   const {
+    push,
     location: { pathname },
   } = useHistory();
   const [isPlaying, setIsPlaying] = useState(false);
@@ -152,6 +165,35 @@ function VideoViewer(props: Props) {
     });
   }
 
+  const doPlay = useCallback(
+    (uri) => {
+      if (collectionId) {
+        clearPosition(uri);
+      }
+      doSetPlayingUri(uri);
+      doPlayUri(uri);
+    },
+    [collectionId, doSetPlayingUri, doPlayUri, clearPosition]
+  );
+
+  const doNavigate = useCallback(() => {
+    let navigateUrl;
+    if (nextRecommendedUri) {
+      navigateUrl = formatLbryUrlForWeb(nextRecommendedUri);
+      if (collectionId) {
+        const collectionParams = new URLSearchParams();
+        collectionParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, collectionId);
+        navigateUrl = navigateUrl + `?` + collectionParams.toString();
+      }
+    }
+    if (!isFloating && navigateUrl) {
+      push(navigateUrl);
+    }
+    if (nextRecommendedUri) {
+      doPlay(nextRecommendedUri);
+    }
+  }, [nextRecommendedUri, isFloating, collectionId, push, doPlay]);
+
   const onEnded = React.useCallback(() => {
     analytics.videoIsPlaying(false);
 
@@ -162,12 +204,14 @@ function VideoViewer(props: Props) {
 
     if (embedded) {
       setIsEndededEmbed(true);
-    } else if (autoplaySetting) {
+    } else if (!collectionId && autoplaySetting) {
       setShowAutoplayCountdown(true);
+    } else if (collectionId) {
+      doNavigate();
     }
 
     clearPosition(uri);
-  }, [embedded, setIsEndededEmbed, autoplaySetting, setShowAutoplayCountdown, adUrl, setAdUrl, clearPosition, uri]);
+  }, [adUrl, embedded, collectionId, autoplaySetting, clearPosition, uri, setAdUrl, doNavigate]);
 
   function onPlay(player) {
     setIsLoading(false);
@@ -285,7 +329,7 @@ function VideoViewer(props: Props) {
       })}
       onContextMenu={stopContextMenu}
     >
-      {showAutoplayCountdown && <AutoplayCountdown uri={uri} />}
+      {showAutoplayCountdown && <AutoplayCountdown nextRecommendedUri={nextRecommendedUri} doNavigate={doNavigate} />}
       {isEndededEmbed && <FileViewerEmbeddedEnded uri={uri} />}
       {embedded && !isEndededEmbed && <FileViewerEmbeddedTitle uri={uri} />}
       {/* disable this loading behavior because it breaks when player.play() promise hangs */}
