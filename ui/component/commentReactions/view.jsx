@@ -17,9 +17,11 @@ type Props = {
   pendingCommentReacts: Array<string>,
   claimIsMine: boolean,
   activeChannelId: ?string,
+  uri: string,
   claim: ?ChannelClaim,
   doToast: ({ message: string }) => void,
   hideCreatorLike: boolean,
+  resolve: (string) => void,
 };
 
 export default function CommentReactions(props: Props) {
@@ -29,15 +31,24 @@ export default function CommentReactions(props: Props) {
     commentId,
     react,
     claimIsMine,
+    uri,
     claim,
     activeChannelId,
     doToast,
     hideCreatorLike,
+    resolve,
   } = props;
   const {
     push,
     location: { pathname },
   } = useHistory();
+
+  React.useEffect(() => {
+    if (!claim) {
+      resolve(uri);
+    }
+  }, [claim, resolve, uri]);
+
   const canCreatorReact =
     claim &&
     claimIsMine &&

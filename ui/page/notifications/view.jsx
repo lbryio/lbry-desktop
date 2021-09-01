@@ -47,7 +47,7 @@ export default function NotificationsPage(props: Props) {
 
   // Fetch reacts
   React.useEffect(() => {
-    if (initialFetchDone && activeChannel) {
+    if ((!fetching || initialFetchDone) && activeChannel) {
       let idsForReactionFetch = [];
       list.map((notification) => {
         const { notification_rule, notification_parameters } = notification;
@@ -70,7 +70,7 @@ export default function NotificationsPage(props: Props) {
         doCommentReactList(idsForReactionFetch);
       }
     }
-  }, [initialFetchDone, doCommentReactList, list, activeChannel]);
+  }, [doCommentReactList, list, activeChannel, fetching, initialFetchDone]);
 
   React.useEffect(() => {
     if (unseenCount > 0 || unreadCount > 0) {
