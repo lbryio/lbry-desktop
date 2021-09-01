@@ -10,6 +10,7 @@ import {
 import { makeSelectCostInfoForUri } from 'lbryinc';
 import { doToast } from 'redux/actions/notifications';
 import { doOpenModal } from 'redux/actions/app';
+import { selectListShuffle } from 'redux/selectors/content';
 import { doPlayUri, doSetPlayingUri, doToggleShuffleList, doToggleLoopList } from 'redux/actions/content';
 import CollectionActions from './view';
 
@@ -26,6 +27,11 @@ const select = (state, props) => {
       }
     });
   }
+  const collectionId = props.collectionId;
+  const shuffleList = selectListShuffle(state);
+  const shuffle = shuffleList && shuffleList.collectionId === collectionId && shuffleList.newUrls;
+  const playNextUri = shuffle && shuffle[0];
+  const playNextClaim = makeSelectClaimForUri(playNextUri)(state);
 
   return {
     claim: makeSelectClaimForUri(props.uri)(state),
@@ -33,9 +39,11 @@ const select = (state, props) => {
     costInfo: makeSelectCostInfoForUri(props.uri)(state),
     myChannels: selectMyChannelClaims(state),
     claimIsPending: makeSelectClaimIsPending(props.uri)(state),
-    isMyCollection: makeSelectCollectionIsMine(props.collectionId)(state),
-    collectionHasEdits: Boolean(makeSelectEditedCollectionForId(props.collectionId)(state)),
+    isMyCollection: makeSelectCollectionIsMine(collectionId)(state),
+    collectionHasEdits: Boolean(makeSelectEditedCollectionForId(collectionId)(state)),
     firstItem,
+    playNextUri,
+    playNextClaim,
   };
 };
 

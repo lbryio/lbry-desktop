@@ -29,6 +29,8 @@ type Props = {
   isBuiltin: boolean,
   doToggleShuffleList: (string, boolean) => void,
   doToggleLoopList: (string, boolean) => void,
+  playNextUri: string,
+  playNextClaim: StreamClaim,
   doPlayUri: (string) => void,
   doSetPlayingUri: (string) => void,
   firstItem: string,
@@ -48,10 +50,13 @@ function CollectionActions(props: Props) {
     isBuiltin,
     doToggleShuffleList,
     doToggleLoopList,
+    playNextUri,
+    playNextClaim,
     doPlayUri,
     doSetPlayingUri,
     firstItem,
   } = props;
+  const [doShuffle, setDoShuffle] = React.useState(false);
   const { push } = useHistory();
   const isMobile = useIsMobile();
   const claimId = claim && claim.claim_id;
@@ -69,6 +74,13 @@ function CollectionActions(props: Props) {
     [collectionId, push, doSetPlayingUri, doPlayUri]
   );
 
+  React.useEffect(() => {
+    if (playNextClaim && doShuffle) {
+      setDoShuffle(false);
+      doPlay(playNextUri);
+    }
+  }, [doPlay, doShuffle, playNextClaim, playNextUri]);
+
   const lhsSection = (
     <>
       <Button
@@ -80,6 +92,16 @@ function CollectionActions(props: Props) {
           doToggleShuffleList(collectionId, false);
           doToggleLoopList(collectionId, false);
           doPlay(firstItem);
+        }}
+      />
+      <Button
+        className="button--file-action"
+        icon={ICONS.SHUFFLE}
+        label={__('Shuffle Play')}
+        title={__('Shuffle Play')}
+        onClick={() => {
+          doToggleShuffleList(collectionId, true);
+          setDoShuffle(true);
         }}
       />
       {!isBuiltin && (
