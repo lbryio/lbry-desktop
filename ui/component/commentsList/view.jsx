@@ -1,6 +1,7 @@
 // @flow
 import * as REACTION_TYPES from 'constants/reactions';
 import * as ICONS from 'constants/icons';
+import { COMMENT_HIGHLIGHTED } from 'constants/classnames';
 import { COMMENT_PAGE_SIZE_TOP_LEVEL, SORT_BY } from 'constants/comment';
 import React, { useEffect } from 'react';
 import classnames from 'classnames';
@@ -17,6 +18,9 @@ import { useIsMobile } from 'effects/use-screensize';
 import { getChannelIdFromClaim } from 'util/claim';
 
 const DEBOUNCE_SCROLL_HANDLER_MS = 200;
+
+// "3" due to 2 separate fetches needed + 1 buffer just in case.
+const MAX_LINKED_COMMENT_SCROLL_ATTEMPTS = 3;
 
 function scaleToDevicePixelRatio(value) {
   const devicePixelRatio = window.devicePixelRatio || 1.0;
@@ -75,11 +79,13 @@ function CommentList(props: Props) {
     settingsByChannelId,
   } = props;
 
-  const commentRef = React.useRef();
   const spinnerRef = React.useRef();
   const DEFAULT_SORT = ENABLE_COMMENT_REACTIONS ? SORT_BY.POPULARITY : SORT_BY.NEWEST;
   const [sort, setSort] = usePersistedState('comment-sort-by', DEFAULT_SORT);
   const [page, setPage] = React.useState(0);
+  const [lcScrollAttempts, setLcScrollAttempts] = React.useState(
+    linkedCommentId ? 0 : MAX_LINKED_COMMENT_SCROLL_ATTEMPTS
+  );
   const isMobile = useIsMobile();
   const [expandedComments, setExpandedComments] = React.useState(!isMobile);
   const totalFetchedComments = allCommentIds ? allCommentIds.length : 0;
@@ -196,11 +202,19 @@ function CommentList(props: Props) {
 
   // Scroll to linked-comment
   useEffect(() => {
-    if (readyToDisplayComments && linkedCommentId && commentRef && commentRef.current) {
-      commentRef.current.scrollIntoView({ block: 'start' });
-      window.scrollBy(0, -125);
+    if (lcScrollAttempts < MAX_LINKED_COMMENT_SCROLL_ATTEMPTS && readyToDisplayComments && !isFetchingComments) {
+      const elems = document.getElementsByClassName(COMMENT_HIGHLIGHTED);
+      if (elems.length > 0) {
+        setLcScrollAttempts(MAX_LINKED_COMMENT_SCROLL_ATTEMPTS);
+        const linkedComment = elems[0];
+        linkedComment.scrollIntoView({ block: 'start' });
+        window.scrollBy(0, -125);
+      } else {
+        setLcScrollAttempts(lcScrollAttempts + 1);
+      }
     }
-  }, [readyToDisplayComments, linkedCommentId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [readyToDisplayComments, isFetchingComments]); // We just want to respond to these, nothing else.
 
   // Infinite scroll
   useEffect(() => {
@@ -321,7 +335,6 @@ function CommentList(props: Props) {
               comments: expandedComments,
               'comments--contracted': !expandedComments,
             })}
-            ref={commentRef}
           >
             {readyToDisplayComments && pinnedComments && getCommentElems(pinnedComments)}
             {readyToDisplayComments && topLevelComments && getCommentElems(topLevelComments)}

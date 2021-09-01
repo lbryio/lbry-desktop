@@ -1,6 +1,7 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
+import { COMMENT_HIGHLIGHTED } from 'constants/classnames';
 import { SORT_BY, COMMENT_PAGE_SIZE_REPLIES } from 'constants/comment';
 import { FF_MAX_CHARS_IN_COMMENT } from 'constants/form-field';
 import { SITE_NAME, SIMPLE_SITE, ENABLE_COMMENT_REACTIONS } from 'config';
@@ -220,7 +221,7 @@ function Comment(props: Props) {
     >
       <div
         className={classnames('comment__content', {
-          'comment--highlighted': linkedCommentId && linkedCommentId === commentId,
+          [COMMENT_HIGHLIGHTED]: linkedCommentId && linkedCommentId === commentId,
           'comment--slimed': slimedToDeath && !displayDeadComment,
         })}
       >
