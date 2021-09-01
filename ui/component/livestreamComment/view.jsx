@@ -42,7 +42,7 @@ function LivestreamComment(props: Props) {
     isFiat,
     isPinned,
   } = props;
-  const [mouseIsHovering, setMouseHover] = React.useState(false);
+
   const commentByOwnerOfContent = claim && claim.signing_channel && claim.signing_channel.permanent_url === authorUri;
   const { claimName } = parseURI(authorUri);
 
@@ -51,8 +51,6 @@ function LivestreamComment(props: Props) {
       className={classnames('livestream-comment', {
         'livestream-comment--superchat': supportAmount > 0,
       })}
-      onMouseOver={() => setMouseHover(true)}
-      onMouseOut={() => setMouseHover(false)}
     >
       {supportAmount > 0 && (
         <div className="super-chat livestream-superchat__banner">
@@ -106,11 +104,7 @@ function LivestreamComment(props: Props) {
       <div className="livestream-comment__menu">
         <Menu>
           <MenuButton className="menu__button">
-            <Icon
-              size={18}
-              className={mouseIsHovering ? 'comment__menu-icon--hovering' : 'comment__menu-icon'}
-              icon={ICONS.MORE_VERTICAL}
-            />
+            <Icon size={18} icon={ICONS.MORE_VERTICAL} />
           </MenuButton>
           <CommentMenuList
             uri={uri}

@@ -118,8 +118,6 @@ function Comment(props: Props) {
   const [isEditing, setEditing] = useState(false);
   const [editedMessage, setCommentValue] = useState(message);
   const [charCount, setCharCount] = useState(editedMessage.length);
-  // used for controlling the visibility of the menu icon
-  const [mouseIsHovering, setMouseHover] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
   const [page, setPage] = useState(0);
   const [advancedEditor] = usePersistedState('comment-editor-mode', false);
@@ -219,8 +217,6 @@ function Comment(props: Props) {
         'comment--superchat': supportAmount > 0,
       })}
       id={commentId}
-      onMouseOver={() => setMouseHover(true)}
-      onMouseOut={() => setMouseHover(false)}
     >
       <div
         className={classnames('comment__content', {
@@ -286,11 +282,7 @@ function Comment(props: Props) {
             <div className="comment__menu">
               <Menu>
                 <MenuButton className="menu__button">
-                  <Icon
-                    size={18}
-                    className={mouseIsHovering ? 'comment__menu-icon--hovering' : 'comment__menu-icon'}
-                    icon={ICONS.MORE_VERTICAL}
-                  />
+                  <Icon size={18} icon={ICONS.MORE_VERTICAL} />
                 </MenuButton>
                 <CommentMenuList
                   uri={uri}
