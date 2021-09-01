@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import Comment from './view';
-import { makeSelectClaimIsMine, makeSelectClaimForUri } from 'lbry-redux';
+import { makeSelectClaimIsMine, makeSelectClaimForUri, doResolveUri } from 'lbry-redux';
 import { doToast } from 'redux/actions/notifications';
 import { makeSelectMyReactionsForComment, makeSelectOthersReactionsForComment } from 'redux/selectors/comments';
 import { doCommentReact } from 'redux/actions/comments';
@@ -21,6 +21,7 @@ const select = (state, props) => {
 };
 
 const perform = (dispatch) => ({
+  resolve: (uri) => dispatch(doResolveUri(uri)),
   react: (commentId, type) => dispatch(doCommentReact(commentId, type)),
   doToast: (params) => dispatch(doToast(params)),
 });
