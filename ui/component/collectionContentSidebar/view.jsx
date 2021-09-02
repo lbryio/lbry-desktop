@@ -15,23 +15,52 @@ type Props = {
   collectionUrls: Array<Claim>,
   collectionName: string,
   collection: any,
+  loop: boolean,
+  shuffle: boolean,
+  doToggleLoopList: (string, boolean) => void,
+  doToggleShuffleList: (string, string, boolean) => void,
   createUnpublishedCollection: (string, Array<any>, ?string) => void,
 };
 
 export default function CollectionContent(props: Props) {
-  const { collectionUrls, collectionName, id, url } = props;
+  const { collectionUrls, collectionName, id, url, loop, shuffle, doToggleLoopList, doToggleShuffleList } = props;
+
   return (
     <Card
       isBodyList
-      className="file-page__recommended"
+      className="file-page__recommended-collection"
       title={
-        <span>
-          <Icon
-            icon={(id === COLLECTIONS_CONSTS.WATCH_LATER_ID && ICONS.TIME) ||
-              (id === COLLECTIONS_CONSTS.FAVORITES_ID && ICONS.STAR) || ICONS.STACK}
-            className="icon--margin-right" />
-          {collectionName}
-        </span>
+        <>
+          <span className="file-page__recommended-collection__row">
+            <Icon
+              icon={
+                (id === COLLECTIONS_CONSTS.WATCH_LATER_ID && ICONS.TIME) ||
+                (id === COLLECTIONS_CONSTS.FAVORITES_ID && ICONS.STAR) ||
+                ICONS.STACK
+              }
+              className="icon--margin-right"
+            />
+            {collectionName}
+          </span>
+          <span className="file-page__recommended-collection__row">
+            <Button
+              button="alt"
+              title="Loop"
+              icon={ICONS.REPEAT}
+              iconColor={loop && 'blue'}
+              className="button--file-action"
+              onClick={() => doToggleLoopList(id, !loop)}
+            />
+            <Button
+              button="alt"
+              title="Shuffle"
+              icon={ICONS.SHUFFLE}
+              iconColor={shuffle && 'blue'}
+              className="button--file-action"
+              onClick={() => doToggleShuffleList(url, id, !shuffle)}
+            />
+          </span>
+        </>
       }
       titleActions={
         <div className="card__title-actions--link">

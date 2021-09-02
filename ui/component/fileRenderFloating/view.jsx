@@ -14,7 +14,7 @@ import { onFullscreenChange } from 'util/full-screen';
 import { useIsMobile } from 'effects/use-screensize';
 import debounce from 'util/debounce';
 import { useHistory } from 'react-router';
-import { isURIEqual } from 'lbry-redux';
+import { isURIEqual, COLLECTIONS_CONSTS } from 'lbry-redux';
 
 const IS_DESKTOP_MAC = typeof process === 'object' ? process.platform === 'darwin' : false;
 const DEBOUNCE_WINDOW_RESIZE_HANDLER_MS = 60;
@@ -34,6 +34,7 @@ type Props = {
   primaryUri: ?string,
   videoTheaterMode: boolean,
   doFetchRecommendedContent: (string, boolean) => void,
+  collectionId: string,
 };
 
 export default function FileRenderFloating(props: Props) {
@@ -51,6 +52,7 @@ export default function FileRenderFloating(props: Props) {
     primaryUri,
     videoTheaterMode,
     doFetchRecommendedContent,
+    collectionId,
   } = props;
   const {
     location: { pathname },
@@ -68,6 +70,13 @@ export default function FileRenderFloating(props: Props) {
     x: 0,
     y: 0,
   });
+
+  let navigateUrl;
+  if (collectionId) {
+    const collectionParams = new URLSearchParams();
+    collectionParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, collectionId);
+    navigateUrl = uri + `?` + collectionParams.toString();
+  }
 
   const playingUriSource = playingUri && playingUri.source;
   const isPlayable = RENDER_MODES.FLOATING_MODES.includes(renderMode);
@@ -303,7 +312,12 @@ export default function FileRenderFloating(props: Props) {
           {isFloating && (
             <div className="draggable content__info">
               <div className="claim-preview__title" title={title || uri}>
-                <Button label={title || uri} navigate={uri} button="link" className="content__floating-link" />
+                <Button
+                  label={title || uri}
+                  navigate={navigateUrl || uri}
+                  button="link"
+                  className="content__floating-link"
+                />
               </div>
               <UriIndicator link uri={uri} />
             </div>

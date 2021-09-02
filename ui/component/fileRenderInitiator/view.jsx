@@ -17,7 +17,7 @@ import FileRenderPlaceholder from 'static/img/fileRenderPlaceholder.png';
 const SPACE_BAR_KEYCODE = 32;
 
 type Props = {
-  play: (string) => void,
+  play: (string, string) => void,
   isLoading: boolean,
   isPlaying: boolean,
   fileInfo: FileListItem,
@@ -36,6 +36,7 @@ type Props = {
   claimWasPurchased: boolean,
   authenticated: boolean,
   videoTheaterMode: boolean,
+  collectionId: string,
 };
 
 export default function FileRenderInitiator(props: Props) {
@@ -55,6 +56,7 @@ export default function FileRenderInitiator(props: Props) {
     claimWasPurchased,
     authenticated,
     videoTheaterMode,
+    collectionId,
   } = props;
 
   // force autoplay if a timestamp is present
@@ -109,9 +111,9 @@ export default function FileRenderInitiator(props: Props) {
         e.stopPropagation();
       }
 
-      play(uri);
+      play(uri, collectionId);
     },
-    [play, uri]
+    [play, uri, collectionId]
   );
 
   useEffect(() => {

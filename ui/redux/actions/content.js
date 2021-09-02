@@ -16,6 +16,8 @@ import {
   makeSelectClaimForUri,
   makeSelectClaimIsMine,
   makeSelectClaimWasPurchased,
+  doToast,
+  makeSelectUrlsForCollectionId,
 } from 'lbry-redux';
 import { makeSelectCostInfoForUri, Lbryio } from 'lbryinc';
 import { makeSelectClientSetting, selectosNotificationsEnabled, selectDaemonSettings } from 'redux/selectors/settings';
@@ -110,16 +112,18 @@ export function doSetPlayingUri({
   source,
   pathname,
   commentId,
+  collectionId,
 }: {
   uri: ?string,
   source?: string,
   commentId?: string,
   pathname: string,
+  collectionId: string,
 }) {
   return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.SET_PLAYING_URI,
-      data: { uri, source, pathname, commentId },
+      data: { uri, source, pathname, commentId, collectionId },
     });
   };
 }
@@ -279,3 +283,58 @@ export const doRecommendationClicked = (claimId: string, index: number) => (disp
     });
   }
 };
+
+export function doToggleLoopList(collectionId: string, loop: boolean, hideToast: boolean) {
+  return (dispatch: Dispatch) => {
+    dispatch({
+      type: ACTIONS.TOGGLE_LOOP_LIST,
+      data: { collectionId, loop },
+    });
+    if (loop && !hideToast) {
+      dispatch(
+        doToast({
+          message: __('Loop is on.'),
+        })
+      );
+    }
+  };
+}
+
+export function doToggleShuffleList(currentUri: string, collectionId: string, shuffle: boolean, hideToast: boolean) {
+  return (dispatch: Dispatch, getState: () => any) => {
+    if (shuffle) {
+      const state = getState();
+      const urls = makeSelectUrlsForCollectionId(collectionId)(state);
+
+      let newUrls = urls
+        .map((item) => ({ item, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ item }) => item);
+
+      // the currently playing URI should be first in list or else
+      // can get in strange position where it might be in the middle or last
+      // and the shuffled list ends before scrolling through all entries
+      if (currentUri && currentUri !== '') {
+        newUrls.splice(newUrls.indexOf(currentUri), 1);
+        newUrls.splice(0, 0, currentUri);
+      }
+
+      dispatch({
+        type: ACTIONS.TOGGLE_SHUFFLE_LIST,
+        data: { collectionId, newUrls },
+      });
+      if (!hideToast) {
+        dispatch(
+          doToast({
+            message: __('Shuffle is on.'),
+          })
+        );
+      }
+    } else {
+      dispatch({
+        type: ACTIONS.TOGGLE_SHUFFLE_LIST,
+        data: { collectionId, newUrls: false },
+      });
+    }
+  };
+}

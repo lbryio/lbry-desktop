@@ -11,7 +11,8 @@ import SettingContent from './view';
 const select = (state) => ({
   isAuthenticated: selectUserVerifiedEmail(state),
   floatingPlayer: makeSelectClientSetting(SETTINGS.FLOATING_PLAYER)(state),
-  autoplay: makeSelectClientSetting(SETTINGS.AUTOPLAY)(state),
+  autoplayMedia: makeSelectClientSetting(SETTINGS.AUTOPLAY_MEDIA)(state),
+  autoplayNext: makeSelectClientSetting(SETTINGS.AUTOPLAY_NEXT)(state),
   hideReposts: makeSelectClientSetting(SETTINGS.HIDE_REPOSTS)(state),
   showNsfw: selectShowMatureContent(state),
   myChannelUrls: selectMyChannelUrls(state),

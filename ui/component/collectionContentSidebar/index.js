@@ -7,15 +7,18 @@ import {
   makeSelectClaimForUri,
   makeSelectClaimIsMine,
 } from 'lbry-redux';
-import {
-  selectPlayingUri,
-} from 'redux/selectors/content';
+import { selectPlayingUri, selectListLoop, selectListShuffle } from 'redux/selectors/content';
+import { doToggleLoopList, doToggleShuffleList } from 'redux/actions/content';
 
 const select = (state, props) => {
   const playingUri = selectPlayingUri(state);
   const playingUrl = playingUri && playingUri.uri;
   const claim = makeSelectClaimForUri(playingUrl)(state);
   const url = claim && claim.permanent_url;
+  const loopList = selectListLoop(state);
+  const loop = loopList && loopList.collectionId === props.id && loopList.loop;
+  const shuffleList = selectListShuffle(state);
+  const shuffle = shuffleList && shuffleList.collectionId === props.id && shuffleList.newUrls;
 
   return {
     url,
@@ -23,7 +26,12 @@ const select = (state, props) => {
     collectionUrls: makeSelectUrlsForCollectionId(props.id)(state),
     collectionName: makeSelectNameForCollectionId(props.id)(state),
     isMine: makeSelectClaimIsMine(url)(state),
+    loop,
+    shuffle,
   };
 };
 
-export default connect(select)(CollectionContent);
+export default connect(select, {
+  doToggleLoopList,
+  doToggleShuffleList,
+})(CollectionContent);

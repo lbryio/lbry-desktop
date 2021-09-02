@@ -7,7 +7,7 @@ import React from 'react';
 import classnames from 'classnames';
 import { Menu, MenuButton, MenuList, MenuItem } from '@reach/menu-button';
 import Icon from 'component/common/icon';
-import { generateShareUrl, generateRssUrl, generateLbryContentUrl } from 'util/url';
+import { generateShareUrl, generateRssUrl, generateLbryContentUrl, formatLbryUrlForWeb } from 'util/url';
 import { useHistory } from 'react-router';
 import { buildURI, parseURI, COLLECTIONS_CONSTS } from 'lbry-redux';
 
@@ -56,6 +56,11 @@ type Props = {
   isChannelPage: boolean,
   editedCollection: Collection,
   isAuthenticated: boolean,
+  playNextUri: string,
+  resolvedList: boolean,
+  fetchCollectionItems: (string) => void,
+  doSetPlayingUri: (string) => void,
+  doToggleShuffleList: (string) => void,
 };
 
 function ClaimMenuList(props: Props) {
@@ -93,7 +98,13 @@ function ClaimMenuList(props: Props) {
     isChannelPage = false,
     editedCollection,
     isAuthenticated,
+    playNextUri,
+    resolvedList,
+    fetchCollectionItems,
+    doSetPlayingUri,
+    doToggleShuffleList,
   } = props;
+  const [doShuffle, setDoShuffle] = React.useState(false);
   const incognitoClaim = contentChannelUri && !contentChannelUri.includes('@');
   const isChannel = !incognitoClaim && !contentSigningChannel;
   const { channelName } = parseURI(contentChannelUri);
@@ -107,6 +118,27 @@ function ClaimMenuList(props: Props) {
     : __('Follow');
 
   const { push, replace } = useHistory();
+
+  const fetchItems = React.useCallback(() => {
+    if (collectionId) {
+      fetchCollectionItems(collectionId);
+    }
+  }, [collectionId, fetchCollectionItems]);
+
+  React.useEffect(() => {
+    if (doShuffle && resolvedList) {
+      doToggleShuffleList(collectionId);
+      if (playNextUri) {
+        const collectionParams = new URLSearchParams();
+        collectionParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, collectionId);
+        const navigateUrl = formatLbryUrlForWeb(playNextUri) + `?` + collectionParams.toString();
+        setDoShuffle(false);
+        doSetPlayingUri(playNextUri);
+        push(navigateUrl);
+      }
+    }
+  }, [collectionId, doSetPlayingUri, doShuffle, doToggleShuffleList, playNextUri, push, resolvedList]);
+
   if (!claim) {
     return null;
   }
@@ -246,9 +278,21 @@ function ClaimMenuList(props: Props) {
               {collectionId && isCollectionClaim ? (
                 <>
                   <MenuItem className="comment__menu-option" onSelect={() => push(`/$/${PAGES.LIST}/${collectionId}`)}>
-                    <div className="menu__link">
+                    <a className="menu__link" href={`/$/${PAGES.LIST}/${collectionId}`}>
                       <Icon aria-hidden icon={ICONS.VIEW} />
                       {__('View List')}
+                    </a>
+                  </MenuItem>
+                  <MenuItem
+                    className="comment__menu-option"
+                    onSelect={() => {
+                      if (!resolvedList) fetchItems();
+                      setDoShuffle(true);
+                    }}
+                  >
+                    <div className="menu__link">
+                      <Icon aria-hidden icon={ICONS.SHUFFLE} />
+                      {__('Shuffle Play')}
                     </div>
                   </MenuItem>
                   {isMyCollection && (

@@ -12,6 +12,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Show on content page if a file is part of a playlist already  _community pr!_([#6393](https://github.com/lbryio/lbry-desktop/pull/6393))
 - Add filtering to playlists ([#6905](https://github.com/lbryio/lbry-desktop/pull/6905))
 - Added direct replying to notifications _community pr!_ ([#6935](https://github.com/lbryio/lbry-desktop/pull/6935))
+- Added "Replay" option on autoplay countdown ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
+- Added "Loop" option on Lists ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
+- Added "Shuffle" option on Lists ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
+- Added Play Next/Previous buttons (with shortcuts SHIFT+N/SHIFT+P) ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
+- Added separate control for autoplay next on video player ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
 
 ### Changed
 - Use Canonical Url for copy link ([#6500](https://github.com/lbryio/lbry-desktop/pull/6500))
@@ -23,6 +28,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Use resolve for OG metadata instead of chainquery _community pr!_ ([#6787](https://github.com/lbryio/lbry-desktop/pull/6787))
 - Improved clickability of notification links _community pr!_ ([#6711](https://github.com/lbryio/lbry-desktop/pull/6711))
 - Changing the supported language from Filipino to Tagalog _community pr!_ ([#6951](https://github.com/lbryio/lbry-desktop/pull/6951))
+- Don't show countdown to next item in list ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
+- Changed "View List" popup option to link, so can be opened on a new tab ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
 
 ### Fixed
 - App now supports '#' and ':' for claimId separator ([#6496](https://github.com/lbryio/lbry-desktop/pull/6496))
@@ -42,6 +49,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix OG: "Unparsable data structure - Truncated Unicode character" _community pr!_ ([#6839](https://github.com/lbryio/lbry-desktop/pull/6839))
 - Fix Paid embed warning overlay redirection button now links to odysee _community pr!_ ([#6819](https://github.com/lbryio/lbry-desktop/pull/6819))
 - Fix comment section redirection to create channel _community pr!_ ([#6557](https://github.com/lbryio/lbry-desktop/pull/6557))
+- Clicking on the title of a floating player will take you back to the list ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
 
 ## [0.51.1] - [2021-06-26]
 

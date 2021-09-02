@@ -25,7 +25,24 @@ reducers[ACTIONS.SET_PLAYING_URI] = (state, action) =>
       source: action.data.source,
       pathname: action.data.pathname,
       commentId: action.data.commentId,
+      collectionId: action.data.collectionId,
       primaryUri: state.primaryUri,
+    },
+  });
+
+reducers[ACTIONS.TOGGLE_LOOP_LIST] = (state, action) =>
+  Object.assign({}, state, {
+    loopList: {
+      collectionId: action.data.collectionId,
+      loop: action.data.loop,
+    },
+  });
+
+reducers[ACTIONS.TOGGLE_SHUFFLE_LIST] = (state, action) =>
+  Object.assign({}, state, {
+    shuffleList: {
+      collectionId: action.data.collectionId,
+      newUrls: action.data.newUrls,
     },
   });
 

@@ -9,6 +9,8 @@ import {
   COLLECTIONS_CONSTS,
   makeSelectEditedCollectionForId,
   makeSelectClaimIsMine,
+  doFetchItemsInCollection,
+  makeSelectUrlsForCollectionId,
 } from 'lbry-redux';
 import { makeSelectChannelIsMuted } from 'redux/selectors/blocked';
 import { doChannelMute, doChannelUnmute } from 'redux/actions/blocked';
@@ -28,16 +30,23 @@ import { doToast } from 'redux/actions/notifications';
 import { doChannelSubscribe, doChannelUnsubscribe } from 'redux/actions/subscriptions';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
+import { selectListShuffle } from 'redux/selectors/content';
+import { doSetPlayingUri, doToggleShuffleList } from 'redux/actions/content';
 import ClaimPreview from './view';
 import fs from 'fs';
 
 const select = (state, props) => {
   const claim = makeSelectClaimForUri(props.uri, false)(state);
+  const collectionId = props.collectionId;
+  const resolvedList = makeSelectUrlsForCollectionId(collectionId)(state);
   const repostedClaim = claim && claim.reposted_claim;
   const contentClaim = repostedClaim || claim;
   const contentSigningChannel = contentClaim && contentClaim.signing_channel;
   const contentPermanentUri = contentClaim && contentClaim.permanent_url;
   const contentChannelUri = (contentSigningChannel && contentSigningChannel.permanent_url) || contentPermanentUri;
+  const shuffleList = selectListShuffle(state);
+  const shuffle = shuffleList && shuffleList.collectionId === collectionId && shuffleList.newUrls;
+  const playNextUri = shuffle && shuffle[0];
 
   return {
     claim,
@@ -60,10 +69,12 @@ const select = (state, props) => {
     isSubscribed: makeSelectIsSubscribed(contentChannelUri, true)(state),
     channelIsAdminBlocked: makeSelectChannelIsAdminBlocked(props.uri)(state),
     isAdmin: selectHasAdminChannel(state),
-    claimInCollection: makeSelectCollectionForIdHasClaimUrl(props.collectionId, contentPermanentUri)(state),
-    isMyCollection: makeSelectCollectionIsMine(props.collectionId)(state),
-    editedCollection: makeSelectEditedCollectionForId(props.collectionId)(state),
+    claimInCollection: makeSelectCollectionForIdHasClaimUrl(collectionId, contentPermanentUri)(state),
+    isMyCollection: makeSelectCollectionIsMine(collectionId)(state),
+    editedCollection: makeSelectEditedCollectionForId(collectionId)(state),
     isAuthenticated: Boolean(selectUserVerifiedEmail(state)),
+    resolvedList,
+    playNextUri,
   };
 };
 
@@ -90,6 +101,9 @@ const perform = (dispatch) => ({
   doChannelSubscribe: (subscription) => dispatch(doChannelSubscribe(subscription)),
   doChannelUnsubscribe: (subscription) => dispatch(doChannelUnsubscribe(subscription)),
   doCollectionEdit: (collection, props) => dispatch(doCollectionEdit(collection, props)),
+  fetchCollectionItems: (collectionId) => dispatch(doFetchItemsInCollection({ collectionId })),
+  doSetPlayingUri: (uri) => dispatch(doSetPlayingUri({ uri })),
+  doToggleShuffleList: (collectionId) => dispatch(doToggleShuffleList(undefined, collectionId, true, true)),
 });
 
 export default connect(select, perform)(ClaimPreview);

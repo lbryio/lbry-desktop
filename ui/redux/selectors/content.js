@@ -29,6 +29,9 @@ export const selectState = (state: any) => state.content || {};
 export const selectPlayingUri = createSelector(selectState, (state) => state.playingUri);
 export const selectPrimaryUri = createSelector(selectState, (state) => state.primaryUri);
 
+export const selectListLoop = createSelector(selectState, (state) => state.loopList);
+export const selectListShuffle = createSelector(selectState, (state) => state.shuffleList);
+
 export const makeSelectIsPlaying = (uri: string) =>
   createSelector(selectPrimaryUri, (primaryUri) => primaryUri === uri);
 

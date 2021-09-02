@@ -70,13 +70,12 @@ export default function CollectionPage(props: Props) {
 
   const urlsReady =
     collectionUrls && (totalItems === undefined || (totalItems && totalItems === collectionUrls.length));
-  const shouldFetch = !claim && !collection;
 
   React.useEffect(() => {
-    if (collectionId && !urlsReady && !didTryResolve && shouldFetch) {
+    if (collectionId && !urlsReady && !didTryResolve && !collection) {
       fetchCollectionItems(collectionId, () => setDidTryResolve(true));
     }
-  }, [collectionId, urlsReady, didTryResolve, shouldFetch, setDidTryResolve, fetchCollectionItems]);
+  }, [collectionId, urlsReady, didTryResolve, setDidTryResolve, fetchCollectionItems, collection]);
 
   const pending = (
     <div className="help card__title--help">
@@ -112,18 +111,27 @@ export default function CollectionPage(props: Props) {
       title={
         <span>
           <Icon
-            icon={(collectionId === COLLECTIONS_CONSTS.WATCH_LATER_ID && ICONS.TIME) ||
-              (collectionId === COLLECTIONS_CONSTS.FAVORITES_ID && ICONS.STAR) || ICONS.STACK}
-            className="icon--margin-right" />
+            icon={
+              (collectionId === COLLECTIONS_CONSTS.WATCH_LATER_ID && ICONS.TIME) ||
+              (collectionId === COLLECTIONS_CONSTS.FAVORITES_ID && ICONS.STAR) ||
+              ICONS.STACK
+            }
+            className="icon--margin-right"
+          />
           {claim ? claim.value.title || claim.name : collection && collection.name}
         </span>
       }
       titleActions={titleActions}
       subtitle={subTitle}
       body={
-        !isBuiltin && (
-          <CollectionActions uri={uri} collectionId={collectionId} setShowInfo={setShowInfo} showInfo={showInfo} />
-        )
+        <CollectionActions
+          uri={uri}
+          collectionId={collectionId}
+          setShowInfo={setShowInfo}
+          showInfo={showInfo}
+          isBuiltin={isBuiltin}
+          collectionUrls={collectionUrls}
+        />
       }
       actions={
         showInfo &&

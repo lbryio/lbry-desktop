@@ -36,7 +36,7 @@ function ModalRemoveCollection(props: Props) {
             </React.Fragment>
           ) : (
             <I18nMessage tokens={{ title: <cite>{uri && title ? `"${title}"` : `"${collectionName}"`}</cite> }}>
-              Are you sure you'd like to remove "%title%"?
+              Are you sure you'd like to remove %title%?
             </I18nMessage>
           )
         }

@@ -132,6 +132,71 @@
   }
 }
 
+.vjs-button--play-next.vjs-button,
+.vjs-button--play-previous.vjs-button,
+.vjs-button--autoplay-next.vjs-button {
+  display: block;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  &:focus:not(:focus-visible) {
+    display: block;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+}
+
+.vjs-button--play-next.vjs-button {
+  order: 0;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='18' height='14' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' class='feather feather-skip-forward'%3e%3cpolygon points='5 4 15 12 5 20 5 4'%3e%3c/polygon%3e%3cline x1='19' y1='5' x2='19' y2='19'%3e%3c/line%3e%3c/svg%3e");
+
+  &:focus:not(:focus-visible) {
+    order: 0;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='18' height='14' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' class='feather feather-skip-forward'%3e%3cpolygon points='5 4 15 12 5 20 5 4'%3e%3c/polygon%3e%3cline x1='19' y1='5' x2='19' y2='19'%3e%3c/line%3e%3c/svg%3e");
+  }
+}
+
+.vjs-button--play-previous.vjs-button {
+  order: 0;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='18' height='14' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' class='feather feather-skip-back'%3e%3cpolygon points='19 20 9 12 19 4 19 20'%3e%3c/polygon%3e%3cline x1='5' y1='19' x2='5' y2='5'%3e%3c/line%3e%3c/svg%3e");
+
+  &:focus:not(:focus-visible) {
+    order: 0;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='18' height='14' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' class='feather feather-skip-back'%3e%3cpolygon points='19 20 9 12 19 4 19 20'%3e%3c/polygon%3e%3cline x1='5' y1='19' x2='5' y2='5'%3e%3c/line%3e%3c/svg%3e");
+  }
+}
+
+.vjs-button--autoplay-next.vjs-button {
+  margin: auto;
+  order: 1;
+  width: 24px;
+  height: 14px;
+  border-radius: var(--border-radius);
+  background: var(--color-gray-4);
+  transition: background 0.2s;
+}
+
+.vjs-button--autoplay-next.vjs-button[aria-checked=true] {
+  background: var(--color-primary);
+}
+
+.vjs-button--autoplay-next.vjs-button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 14px;
+  width: 14px;
+  background: var(--color-white);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+  border-radius: var(--border-radius);
+  transition: transform 0.2s;
+}
+
+.vjs-button--autoplay-next.vjs-button[aria-checked=true]::after {
+  transform: translateX(12px);
+}
+
 .button--link {
   color: var(--color-link);
   transition: color 0.2s;

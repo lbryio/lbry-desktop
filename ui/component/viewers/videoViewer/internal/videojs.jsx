@@ -49,16 +49,21 @@ type Props = {
   source: string,
   sourceType: string,
   poster: ?string,
-  onPlayerReady: (Player) => void,
+  onPlayerReady: (Player, any) => void,
   isAudio: boolean,
   startMuted: boolean,
   autoplay: boolean,
+  autoplaySetting: boolean,
   toggleVideoTheaterMode: () => void,
   adUrl: ?string,
   claimId: ?string,
   userId: ?number,
   // allowPreRoll: ?boolean,
   shareTelemetry: boolean,
+  replay: boolean,
+  videoTheaterMode: boolean,
+  playNext: () => void,
+  playPrevious: () => void,
 };
 
 // type VideoJSOptions = {
@@ -102,6 +107,9 @@ const PERIOD_KEYCODE = 190;
 const SMALL_J_KEYCODE = 74;
 const SMALL_K_KEYCODE = 75;
 const SMALL_L_KEYCODE = 76;
+
+const P_KEYCODE = 80;
+const N_KEYCODE = 78;
 
 const FULLSCREEN_KEYCODE = SMALL_F_KEYCODE;
 const MUTE_KEYCODE = SMALL_M_KEYCODE;
@@ -185,6 +193,7 @@ properties for this component should be kept to ONLY those that if changed shoul
 export default React.memo<Props>(function VideoJs(props: Props) {
   const {
     autoplay,
+    autoplaySetting,
     startMuted,
     source,
     sourceType,
@@ -197,6 +206,10 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     userId,
     // allowPreRoll,
     shareTelemetry,
+    replay,
+    videoTheaterMode,
+    playNext,
+    playPrevious,
   } = props;
 
   const [reload, setReload] = useState('initial');
@@ -298,43 +311,41 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     if (player) {
       try {
         const controlBar = player.getChild('controlBar');
-        switch (e.type) {
-          case 'play':
-            controlBar.getChild('PlayToggle').controlText(__('Pause (space)'));
-            break;
-          case 'pause':
-            controlBar.getChild('PlayToggle').controlText(__('Play (space)'));
-            break;
-          case 'volumechange':
-            controlBar
-              .getChild('VolumePanel')
-              .getChild('MuteToggle')
-              .controlText(player.muted() || player.volume() === 0 ? __('Unmute (m)') : __('Mute (m)'));
-            break;
-          case 'fullscreenchange':
-            controlBar
-              .getChild('FullscreenToggle')
-              .controlText(player.isFullscreen() ? __('Exit Fullscreen (f)') : __('Fullscreen (f)'));
-            break;
-          case 'loadstart':
-            // --- Do everything ---
-            controlBar.getChild('PlaybackRateMenuButton').controlText(__('Playback Rate (<, >)'));
-            controlBar.getChild('QualityButton').controlText(__('Quality'));
-            resolveCtrlText({ type: 'play' });
-            resolveCtrlText({ type: 'pause' });
-            resolveCtrlText({ type: 'volumechange' });
-            resolveCtrlText({ type: 'fullscreenchange' });
-            // (1) The 'Theater mode' button should probably be changed to a class
-            // so that we can use getChild() with a specific name. There might be
-            // clashes if we add a new button in the future.
-            // (2) We'll have to get 'makeSelectClientSetting(SETTINGS.VIDEO_THEATER_MODE)'
-            // as a prop here so we can say "Theater mode|Default mode" instead of
-            // "Toggle Theater mode".
-            controlBar.getChild('Button').controlText(__('Toggle Theater mode (t)'));
-            break;
-          default:
-            if (isDev) throw Error('Unexpected: ' + e.type);
-            break;
+      switch (e.type) {
+        case 'play':
+          controlBar.getChild('PlayToggle').controlText(__('Pause (space)'));
+          break;
+        case 'pause':
+          controlBar.getChild('PlayToggle').controlText(__('Play (space)'));
+          break;
+        case 'volumechange':
+          controlBar
+            .getChild('VolumePanel')
+            .getChild('MuteToggle')
+            .controlText(player.muted() || player.volume() === 0 ? __('Unmute (m)') : __('Mute (m)'));
+          break;
+        case 'fullscreenchange':
+          controlBar
+            .getChild('FullscreenToggle')
+            .controlText(player.isFullscreen() ? __('Exit Fullscreen (f)') : __('Fullscreen (f)'));
+          break;
+        case 'loadstart':
+          // --- Do everything ---
+          controlBar.getChild('PlaybackRateMenuButton').controlText(__('Playback Rate (<, >)'));
+          controlBar.getChild('QualityButton').controlText(__('Quality'));
+          resolveCtrlText({ type: 'play' });
+          resolveCtrlText({ type: 'pause' });
+          resolveCtrlText({ type: 'volumechange' });
+          resolveCtrlText({ type: 'fullscreenchange' });
+          controlBar
+            .getChild('TheaterModeButton')
+            .controlText(videoTheaterMode ? __('Default Mode (t)') : __('Theater Mode (t)'));
+          controlBar.getChild('PlayNextButton').controlText(__('Play Next (SHIFT+N)'));
+          controlBar.getChild('PlayPreviousButton').controlText(__('Play Previous (SHIFT+P)'));
+          break;
+        default:
+          if (isDev) throw Error('Unexpected: ' + e.type);
+          break;
         }
       } catch {
         // Just fail silently. It'll just be due to hidden ctrls, and if it is
@@ -392,6 +403,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     if (e.altKey || e.ctrlKey || e.metaKey || !e.shiftKey) return;
     if (e.keyCode === PERIOD_KEYCODE) changePlaybackSpeed(true);
     if (e.keyCode === COMMA_KEYCODE) changePlaybackSpeed(false);
+    if (e.keyCode === N_KEYCODE) playNext();
+    if (e.keyCode === P_KEYCODE) playPrevious();
   }
 
   function handleSingleKeyActions(e: KeyboardEvent) {
@@ -585,7 +598,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       player.children_[0].setAttribute('playsinline', '');
 
       // I think this is a callback function
-      onPlayerReady(player);
+      const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
+      onPlayerReady(player, videoNode);
     });
 
     // pre-roll ads
@@ -606,7 +620,41 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     return vjs;
   }
 
-  // This lifecycle hook is only called once (on mount), or when `isAudio` changes.
+  useEffect(() => {
+    const player = playerRef.current;
+    if (replay && player) {
+      player.play();
+    }
+  }, [replay]);
+
+  useEffect(() => {
+    const player = playerRef.current;
+    if (player) {
+      const controlBar = player.getChild('controlBar');
+      controlBar
+        .getChild('TheaterModeButton')
+        .controlText(videoTheaterMode ? __('Default Mode (t)') : __('Theater Mode (t)'));
+    }
+  }, [videoTheaterMode]);
+
+  useEffect(() => {
+    const player = playerRef.current;
+    if (player) {
+      const touchOverlay = player.getChild('TouchOverlay');
+      const controlBar = player.getChild('controlBar') || touchOverlay.getChild('controlBar');
+      const autoplayButton = controlBar.getChild('AutoplayNextButton');
+
+      if (autoplayButton) {
+        const title = autoplaySetting ? 'Autoplay Next On' : 'Autoplay Next Off';
+
+        autoplayButton.controlText(title);
+        autoplayButton.setAttribute('aria-label', title);
+        autoplayButton.setAttribute('aria-checked', autoplaySetting);
+      }
+    }
+  }, [autoplaySetting]);
+
+  // This lifecycle hook is only called once (on mount), or when `isAudio` or `source` changes.
   useEffect(() => {
     const vjsElement = createVideoPlayerDOM(containerRef.current);
 
@@ -635,7 +683,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         window.player = undefined;
       }
     };
-  }, [isAudio]);
+  }, [isAudio, source]);
 
   // Update video player and reload when source URL changes
   useEffect(() => {

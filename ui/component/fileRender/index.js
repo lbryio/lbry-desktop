@@ -12,7 +12,7 @@ import { makeSelectFileRenderModeForUri, makeSelectFileExtensionForUri } from 'r
 import FileRender from './view';
 
 const select = (state, props) => {
-  const autoplay = props.embedded ? false : makeSelectClientSetting(SETTINGS.AUTOPLAY)(state);
+  const autoplay = props.embedded ? false : makeSelectClientSetting(SETTINGS.AUTOPLAY_MEDIA)(state);
   return {
     currentTheme: makeSelectClientSetting(SETTINGS.THEME)(state),
     claim: makeSelectClaimForUri(props.uri)(state),
