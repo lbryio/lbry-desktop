@@ -16,6 +16,7 @@ import FileViewerEmbeddedEnded from 'web/component/fileViewerEmbeddedEnded';
 import FileViewerEmbeddedTitle from 'component/fileViewerEmbeddedTitle';
 import LoadingScreen from 'component/common/loading-screen';
 import { addTheaterModeButton } from './internal/theater-mode';
+import { addAutoplayNextButton } from './internal/autoplay-next';
 import { addPlayNextButton } from './internal/play-next';
 import { addPlayPreviousButton } from './internal/play-previous';
 import { useGetAds } from 'effects/use-get-ads';
@@ -42,7 +43,8 @@ type Props = {
   videoPlaybackRate: number,
   volume: number,
   uri: string,
-  autoplaySetting: boolean,
+  autoplayMedia: boolean,
+  autoplayNext: boolean,
   autoplayIfEmbedded: boolean,
   desktopPlayStartTime?: number,
   doAnalyticsView: (string, number) => Promise<any>,
@@ -51,6 +53,7 @@ type Props = {
   savePosition: (string, number) => void,
   clearPosition: (string) => void,
   toggleVideoTheaterMode: () => void,
+  toggleAutoplayNext: () => void,
   setVideoPlaybackRate: (number) => void,
   authenticated: boolean,
   userId: number,
@@ -83,7 +86,8 @@ function VideoViewer(props: Props) {
     uri,
     muted,
     volume,
-    autoplaySetting,
+    autoplayMedia,
+    autoplayNext,
     autoplayIfEmbedded,
     doAnalyticsView,
     doAnalyticsBuffer,
@@ -92,6 +96,7 @@ function VideoViewer(props: Props) {
     clearPosition,
     desktopPlayStartTime,
     toggleVideoTheaterMode,
+    toggleAutoplayNext,
     setVideoPlaybackRate,
     homepageData,
     authenticated,
@@ -118,6 +123,7 @@ function VideoViewer(props: Props) {
   const [doNavigate, setDoNavigate] = useState(false);
   const [playNextUrl, setPlayNextUrl] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [ended, setEnded] = useState(false);
   const [showAutoplayCountdown, setShowAutoplayCountdown] = useState(false);
   const [isEndededEmbed, setIsEndededEmbed] = useState(false);
   const vjsCallbackDataRef: any = React.useRef();
@@ -214,30 +220,47 @@ function VideoViewer(props: Props) {
           setDoNavigate(false);
         }
       }
+      if (!ended) setDoNavigate(false);
+      setEnded(false);
       setPlayNextUrl(true);
     }
-  }, [doNavigate, doPlay, nextRecommendedUri, permanentUrl, playNextUrl, previousListUri, videoNode]);
+  }, [doNavigate, doPlay, ended, nextRecommendedUri, permanentUrl, playNextUrl, previousListUri, videoNode]);
 
-  const onEnded = React.useCallback(() => {
-    analytics.videoIsPlaying(false);
+  React.useEffect(() => {
+    if (ended) {
+      analytics.videoIsPlaying(false);
 
-    if (adUrl) {
-      setAdUrl(null);
-      return;
+      if (adUrl) {
+        setAdUrl(null);
+        return;
+      }
+
+      if (embedded) {
+        setIsEndededEmbed(true);
+      } else if (!collectionId && autoplayNext) {
+        setShowAutoplayCountdown(true);
+      } else if (collectionId) {
+        setDoNavigate(true);
+      }
+
+      clearPosition(uri);
     }
-
-    if (embedded) {
-      setIsEndededEmbed(true);
-    } else if (!collectionId && autoplaySetting) {
-      setShowAutoplayCountdown(true);
-    } else if (collectionId) {
-      setDoNavigate(true);
-    }
-
-    clearPosition(uri);
-  }, [adUrl, embedded, collectionId, autoplaySetting, clearPosition, uri, setAdUrl]);
+  }, [
+    embedded,
+    setIsEndededEmbed,
+    autoplayMedia,
+    setShowAutoplayCountdown,
+    adUrl,
+    setAdUrl,
+    clearPosition,
+    uri,
+    ended,
+    collectionId,
+    autoplayNext,
+  ]);
 
   function onPlay(player) {
+    setEnded(false);
     setIsLoading(false);
     setIsPlaying(true);
     setShowAutoplayCountdown(false);
@@ -293,6 +316,8 @@ function VideoViewer(props: Props) {
       if (collectionId) {
         addPlayNextButton(player, doPlayNext);
         addPlayPreviousButton(player, doPlayPrevious);
+      } else {
+        addAutoplayNextButton(player, toggleAutoplayNext, autoplayNext);
       }
     }
 
@@ -329,7 +354,7 @@ function VideoViewer(props: Props) {
 
     // first play tracking, used for initializing the watchman api
     player.on('tracking:firstplay', doTrackingFirstPlay);
-    player.on('ended', onEnded);
+    player.on('ended', () => setEnded(true));
     player.on('play', onPlay);
     player.on('pause', (event) => onPause(event, player));
     player.on('dispose', (event) => onDispose(event, player));
@@ -424,6 +449,7 @@ function VideoViewer(props: Props) {
           startMuted={autoplayIfEmbedded}
           toggleVideoTheaterMode={toggleVideoTheaterMode}
           autoplay={!embedded || autoplayIfEmbedded}
+          autoplaySetting={autoplayNext}
           claimId={claimId}
           userId={userId}
           allowPreRoll={!embedded && !authenticated}

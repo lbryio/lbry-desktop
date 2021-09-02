@@ -18,8 +18,8 @@ export const IS_MAC = process.platform === 'darwin';
 const UPDATE_IS_NIGHT_INTERVAL = 5 * 60 * 1000;
 
 export function doFetchDaemonSettings() {
-  return dispatch => {
-    Lbry.settings_get().then(settings => {
+  return (dispatch) => {
+    Lbry.settings_get().then((settings) => {
       analytics.toggleInternal(settings.share_usage_data);
       dispatch({
         type: ACTIONS.DAEMON_SETTINGS_RECEIVED,
@@ -32,11 +32,11 @@ export function doFetchDaemonSettings() {
 }
 
 export function doFindFFmpeg() {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: LOCAL_ACTIONS.FINDING_FFMPEG_STARTED,
     });
-    return Lbry.ffmpeg_find().then(done => {
+    return Lbry.ffmpeg_find().then((done) => {
       dispatch(doGetDaemonStatus());
       dispatch({
         type: LOCAL_ACTIONS.FINDING_FFMPEG_COMPLETED,
@@ -46,8 +46,8 @@ export function doFindFFmpeg() {
 }
 
 export function doGetDaemonStatus() {
-  return dispatch => {
-    return Lbry.status().then(status => {
+  return (dispatch) => {
+    return Lbry.status().then((status) => {
       dispatch({
         type: ACTIONS.DAEMON_STATUS_RECEIVED,
         data: {
@@ -72,7 +72,7 @@ export function doClearDaemonSetting(key) {
       key,
     };
     // not if syncLocked
-    Lbry.settings_clear(clearKey).then(defaultSettings => {
+    Lbry.settings_clear(clearKey).then((defaultSettings) => {
       if (SDK_SYNC_KEYS.includes(key)) {
         dispatch({
           type: ACTIONS.SHARED_PREFERENCE_SET,
@@ -83,7 +83,7 @@ export function doClearDaemonSetting(key) {
         dispatch(doWalletReconnect());
       }
     });
-    Lbry.settings_get().then(settings => {
+    Lbry.settings_get().then((settings) => {
       analytics.toggleInternal(settings.share_usage_data);
       dispatch({
         type: ACTIONS.DAEMON_SETTINGS_RECEIVED,
@@ -108,7 +108,7 @@ export function doSetDaemonSetting(key, value, doNotDispatch = false) {
       key,
       value: !value && value !== false ? null : value,
     };
-    Lbry.settings_set(newSettings).then(newSetting => {
+    Lbry.settings_set(newSettings).then((newSetting) => {
       if (SDK_SYNC_KEYS.includes(key) && !doNotDispatch) {
         dispatch({
           type: ACTIONS.SHARED_PREFERENCE_SET,
@@ -121,7 +121,7 @@ export function doSetDaemonSetting(key, value, doNotDispatch = false) {
         // todo: add sdk reloadsettings() (or it happens automagically?)
       }
     });
-    Lbry.settings_get().then(settings => {
+    Lbry.settings_get().then((settings) => {
       analytics.toggleInternal(settings.share_usage_data);
       dispatch({
         type: ACTIONS.DAEMON_SETTINGS_RECEIVED,
@@ -170,7 +170,7 @@ export function doUpdateIsNight() {
 }
 
 export function doUpdateIsNightAsync() {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(doUpdateIsNight());
 
     setInterval(() => dispatch(doUpdateIsNight()), UPDATE_IS_NIGHT_INTERVAL);
@@ -201,8 +201,8 @@ export function doSetDarkTime(value, options) {
 
 export function doGetWalletSyncPreference() {
   const SYNC_KEY = 'enable-sync';
-  return dispatch => {
-    return Lbry.preference_get({ key: SYNC_KEY }).then(result => {
+  return (dispatch) => {
+    return Lbry.preference_get({ key: SYNC_KEY }).then((result) => {
       const enabled = result && result[SYNC_KEY];
       if (enabled !== null) {
         dispatch(doSetClientSetting(SETTINGS.ENABLE_SYNC, enabled));
@@ -214,8 +214,8 @@ export function doGetWalletSyncPreference() {
 
 export function doSetWalletSyncPreference(pref) {
   const SYNC_KEY = 'enable-sync';
-  return dispatch => {
-    return Lbry.preference_set({ key: SYNC_KEY, value: pref }).then(result => {
+  return (dispatch) => {
+    return Lbry.preference_set({ key: SYNC_KEY, value: pref }).then((result) => {
       const enabled = result && result[SYNC_KEY];
       if (enabled !== null) {
         dispatch(doSetClientSetting(SETTINGS.ENABLE_SYNC, enabled));
@@ -226,7 +226,7 @@ export function doSetWalletSyncPreference(pref) {
 }
 
 export function doPushSettingsToPrefs() {
-  return dispatch => {
+  return (dispatch) => {
     return new Promise((resolve, reject) => {
       dispatch({
         type: LOCAL_ACTIONS.SYNC_CLIENT_SETTINGS,
@@ -274,8 +274,8 @@ export function doFetchLanguage(language) {
     if (settings.language !== language || (settings.loadedLanguages && !settings.loadedLanguages.includes(language))) {
       // this should match the behavior/logic in index-web.html
       fetch('https://lbry.com/i18n/get/lbry-desktop/app-strings/' + language + '.json')
-        .then(r => r.json())
-        .then(j => {
+        .then((r) => r.json())
+        .then((j) => {
           window.i18n_messages[language] = j;
           dispatch({
             type: LOCAL_ACTIONS.DOWNLOAD_LANGUAGE_SUCCESS,
@@ -284,7 +284,7 @@ export function doFetchLanguage(language) {
             },
           });
         })
-        .catch(e => {
+        .catch((e) => {
           dispatch({
             type: LOCAL_ACTIONS.DOWNLOAD_LANGUAGE_FAILURE,
           });
@@ -324,8 +324,8 @@ export function doSetLanguage(language) {
     ) {
       // this should match the behavior/logic in index-web.html
       fetch('https://lbry.com/i18n/get/lbry-desktop/app-strings/' + language + '.json')
-        .then(r => r.json())
-        .then(j => {
+        .then((r) => r.json())
+        .then((j) => {
           window.i18n_messages[language] = j;
           dispatch({
             type: LOCAL_ACTIONS.DOWNLOAD_LANGUAGE_SUCCESS,
@@ -344,7 +344,7 @@ export function doSetLanguage(language) {
             });
           }
         })
-        .catch(e => {
+        .catch((e) => {
           window.localStorage.setItem(SETTINGS.LANGUAGE, DEFAULT_LANGUAGE);
           dispatch(doSetClientSetting(SETTINGS.LANGUAGE, DEFAULT_LANGUAGE));
           const languageName = SUPPORTED_LANGUAGES[language] ? SUPPORTED_LANGUAGES[language] : language;
@@ -369,7 +369,7 @@ export function doSetAutoLaunch(value) {
     }
 
     if (value === undefined) {
-      launcher.isEnabled().then(isEnabled => {
+      launcher.isEnabled().then((isEnabled) => {
         if (isEnabled) {
           if (!autoLaunch) {
             launcher.disable().then(() => {
@@ -385,7 +385,7 @@ export function doSetAutoLaunch(value) {
         }
       });
     } else if (value === true) {
-      launcher.isEnabled().then(function(isEnabled) {
+      launcher.isEnabled().then(function (isEnabled) {
         if (!isEnabled) {
           launcher.enable().then(() => {
             dispatch(doSetClientSetting(SETTINGS.AUTO_LAUNCH, true));
@@ -396,7 +396,7 @@ export function doSetAutoLaunch(value) {
       });
     } else {
       // value = false
-      launcher.isEnabled().then(function(isEnabled) {
+      launcher.isEnabled().then(function (isEnabled) {
         if (isEnabled) {
           launcher.disable().then(() => {
             dispatch(doSetClientSetting(SETTINGS.AUTO_LAUNCH, false));
@@ -410,7 +410,7 @@ export function doSetAutoLaunch(value) {
 }
 
 export function doSetAppToTrayWhenClosed(value) {
-  return dispatch => {
+  return (dispatch) => {
     window.localStorage.setItem(SETTINGS.TO_TRAY_WHEN_CLOSED, value);
     dispatch(doSetClientSetting(SETTINGS.TO_TRAY_WHEN_CLOSED, value));
   };
@@ -422,5 +422,14 @@ export function toggleVideoTheaterMode() {
     const videoTheaterMode = makeSelectClientSetting(SETTINGS.VIDEO_THEATER_MODE)(state);
 
     dispatch(doSetClientSetting(SETTINGS.VIDEO_THEATER_MODE, !videoTheaterMode));
+  };
+}
+
+export function toggleAutoplayNext() {
+  return (dispatch, getState) => {
+    const state = getState();
+    const autoplayNext = makeSelectClientSetting(SETTINGS.AUTOPLAY_NEXT)(state);
+
+    dispatch(doSetClientSetting(SETTINGS.AUTOPLAY_NEXT, !autoplayNext));
   };
 }

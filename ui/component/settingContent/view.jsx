@@ -22,7 +22,8 @@ type Props = {
   // --- select ---
   isAuthenticated: boolean,
   floatingPlayer: boolean,
-  autoplay: boolean,
+  autoplayMedia: boolean,
+  autoplayNext: boolean,
   hideReposts: ?boolean,
   showNsfw: boolean,
   myChannelUrls: ?Array<string>,
@@ -39,7 +40,8 @@ export default function SettingContent(props: Props) {
   const {
     isAuthenticated,
     floatingPlayer,
-    autoplay,
+    autoplayMedia,
+    autoplayNext,
     hideReposts,
     showNsfw,
     myChannelUrls,
@@ -73,12 +75,21 @@ export default function SettingContent(props: Props) {
               />
             </SettingsRow>
 
-            <SettingsRow title={__('Autoplay media files')} subtitle={__(HELP.AUTOPLAY)}>
+            <SettingsRow title={__('Autoplay media files')} subtitle={__(HELP.AUTOPLAY_MEDIA)}>
               <FormField
                 type="checkbox"
-                name="autoplay"
-                onChange={() => setClientSetting(SETTINGS.AUTOPLAY, !autoplay)}
-                checked={autoplay}
+                name="autoplay media"
+                onChange={() => setClientSetting(SETTINGS.AUTOPLAY_MEDIA, !autoplayMedia)}
+                checked={autoplayMedia}
+              />
+            </SettingsRow>
+
+            <SettingsRow title={__('Autoplay next recommended content')} subtitle={__(HELP.AUTOPLAY_NEXT)}>
+              <FormField
+                type="checkbox"
+                name="autoplay next"
+                onChange={() => setClientSetting(SETTINGS.AUTOPLAY_NEXT, !autoplayNext)}
+                checked={autoplayNext}
               />
             </SettingsRow>
 
@@ -208,7 +219,8 @@ export default function SettingContent(props: Props) {
 // prettier-ignore
 const HELP = {
   FLOATING_PLAYER: 'Keep content playing in the corner when navigating to a different page.',
-  AUTOPLAY: 'Autoplay video and audio files when navigating to a file, as well as the next related item when a file finishes playing.',
+  AUTOPLAY_MEDIA: 'Autoplay video and audio files when navigating to a file.',
+  AUTOPLAY_NEXT: 'Autoplay video and audio files as the next related item when a file finishes playing.',
   HIDE_REPOSTS: 'You will not see reposts by people you follow or receive email notifying about them.',
   SHOW_MATURE: 'Mature content may include nudity, intense sexuality, profanity, or other adult content. By displaying mature content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  ',
   MAX_PURCHASE_PRICE: 'This will prevent you from purchasing any content over a certain cost, as a safety measure.',

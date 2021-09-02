@@ -69,7 +69,7 @@ const defaultState = {
 
     // Content
     [SETTINGS.SHOW_MATURE]: false,
-    [SETTINGS.AUTOPLAY]: true,
+    [SETTINGS.AUTOPLAY_MEDIA]: true,
     [SETTINGS.AUTOPLAY_NEXT]: true,
     [SETTINGS.FLOATING_PLAYER]: true,
     [SETTINGS.AUTO_DOWNLOAD]: true,

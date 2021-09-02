@@ -21,7 +21,7 @@ import VideoViewer from './view';
 import { withRouter } from 'react-router';
 import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
 import { selectDaemonSettings, makeSelectClientSetting, selectHomepageData } from 'redux/selectors/settings';
-import { toggleVideoTheaterMode, doSetClientSetting } from 'redux/actions/settings';
+import { toggleVideoTheaterMode, toggleAutoplayNext, doSetClientSetting } from 'redux/actions/settings';
 import { selectUserVerifiedEmail, selectUser } from 'redux/selectors/user';
 
 const select = (state, props) => {
@@ -46,7 +46,8 @@ const select = (state, props) => {
 
   return {
     autoplayIfEmbedded: Boolean(autoplay),
-    autoplaySetting: Boolean(makeSelectClientSetting(SETTINGS.AUTOPLAY)(state)),
+    autoplayMedia: Boolean(makeSelectClientSetting(SETTINGS.AUTOPLAY_MEDIA)(state)),
+    autoplayNext: Boolean(makeSelectClientSetting(SETTINGS.AUTOPLAY_NEXT)(state)),
     volume: selectVolume(state),
     muted: selectMute(state),
     videoPlaybackRate: makeSelectClientSetting(SETTINGS.VIDEO_PLAYBACK_RATE)(state),
@@ -75,6 +76,7 @@ const perform = (dispatch) => ({
   doAnalyticsBuffer: (uri, bufferData) => dispatch(doAnalyticsBuffer(uri, bufferData)),
   claimRewards: () => dispatch(doClaimEligiblePurchaseRewards()),
   toggleVideoTheaterMode: () => dispatch(toggleVideoTheaterMode()),
+  toggleAutoplayNext: () => dispatch(toggleAutoplayNext()),
   setVideoPlaybackRate: (rate) => dispatch(doSetClientSetting(SETTINGS.VIDEO_PLAYBACK_RATE, rate)),
   doPlayUri: (uri) => dispatch(doPlayUri(uri)),
   doSetPlayingUri: (uri, collectionId) => dispatch(doSetPlayingUri({ uri, collectionId })),
