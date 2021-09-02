@@ -49,7 +49,7 @@ type Props = {
   source: string,
   sourceType: string,
   poster: ?string,
-  onPlayerReady: (Player) => void,
+  onPlayerReady: (Player, any) => void,
   isAudio: boolean,
   startMuted: boolean,
   autoplay: boolean,
@@ -62,6 +62,7 @@ type Props = {
   replay: boolean,
   videoTheaterMode: boolean,
   playNext: () => void,
+  playPrevious: () => void,
 };
 
 // type VideoJSOptions = {
@@ -106,6 +107,7 @@ const SMALL_J_KEYCODE = 74;
 const SMALL_K_KEYCODE = 75;
 const SMALL_L_KEYCODE = 76;
 
+const P_KEYCODE = 80;
 const N_KEYCODE = 78;
 
 const FULLSCREEN_KEYCODE = SMALL_F_KEYCODE;
@@ -205,6 +207,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     replay,
     videoTheaterMode,
     playNext,
+    playPrevious,
   } = props;
 
   const [reload, setReload] = useState('initial');
@@ -399,6 +402,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     if (e.keyCode === PERIOD_KEYCODE) changePlaybackSpeed(true);
     if (e.keyCode === COMMA_KEYCODE) changePlaybackSpeed(false);
     if (e.keyCode === N_KEYCODE) playNext();
+    if (e.keyCode === P_KEYCODE) playPrevious();
   }
 
   function handleSingleKeyActions(e: KeyboardEvent) {
@@ -592,7 +596,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       player.children_[0].setAttribute('playsinline', '');
 
       // I think this is a callback function
-      onPlayerReady(player);
+      const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
+      onPlayerReady(player, videoNode);
     });
 
     // pre-roll ads

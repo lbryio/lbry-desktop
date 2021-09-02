@@ -6,6 +6,7 @@ import {
   SETTINGS,
   COLLECTIONS_CONSTS,
   makeSelectNextUrlForCollectionAndUrl,
+  makeSelectPreviousUrlForCollectionAndUrl,
 } from 'lbry-redux';
 import { doChangeVolume, doChangeMute, doAnalyticsView, doAnalyticsBuffer } from 'redux/actions/app';
 import { selectVolume, selectMute } from 'redux/selectors/app';
@@ -35,8 +36,10 @@ const select = (state, props) => {
   const collectionId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID) || (playingUri && playingUri.collectionId);
 
   let nextRecommendedUri;
-  if (collectionId && uri) {
+  let previousListUri;
+  if (collectionId) {
     nextRecommendedUri = makeSelectNextUrlForCollectionAndUrl(collectionId, uri)(state);
+    previousListUri = makeSelectPreviousUrlForCollectionAndUrl(collectionId, uri)(state);
   } else {
     nextRecommendedUri = makeSelectNextUnplayedRecommended(uri)(state);
   }
@@ -58,6 +61,7 @@ const select = (state, props) => {
     isFloating: makeSelectIsPlayerFloating(props.location)(state),
     collectionId,
     nextRecommendedUri,
+    previousListUri,
     videoTheaterMode: makeSelectClientSetting(SETTINGS.VIDEO_THEATER_MODE)(state),
   };
 };
