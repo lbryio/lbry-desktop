@@ -125,7 +125,7 @@ function VideoViewer(props: Props) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [ended, setEnded] = useState(false);
   const [showAutoplayCountdown, setShowAutoplayCountdown] = useState(false);
-  const [isEndededEmbed, setIsEndededEmbed] = useState(false);
+  const [isEndedEmbed, setIsEndedEmbed] = useState(false);
   const vjsCallbackDataRef: any = React.useRef();
   const previousUri = usePrevious(uri);
   const embedded = useContext(EmbedContext);
@@ -142,7 +142,7 @@ function VideoViewer(props: Props) {
   useEffect(() => {
     if (uri && previousUri && uri !== previousUri) {
       setShowAutoplayCountdown(false);
-      setIsEndededEmbed(false);
+      setIsEndedEmbed(false);
       setIsLoading(false);
     }
   }, [uri, previousUri]);
@@ -236,7 +236,7 @@ function VideoViewer(props: Props) {
       }
 
       if (embedded) {
-        setIsEndededEmbed(true);
+        setIsEndedEmbed(true);
       } else if (!collectionId && autoplayNext) {
         setShowAutoplayCountdown(true);
       } else if (collectionId) {
@@ -247,7 +247,7 @@ function VideoViewer(props: Props) {
     }
   }, [
     embedded,
-    setIsEndededEmbed,
+    setIsEndedEmbed,
     autoplayMedia,
     setShowAutoplayCountdown,
     adUrl,
@@ -264,7 +264,7 @@ function VideoViewer(props: Props) {
     setIsLoading(false);
     setIsPlaying(true);
     setShowAutoplayCountdown(false);
-    setIsEndededEmbed(false);
+    setIsEndedEmbed(false);
     setReplay(false);
     setDoNavigate(false);
     analytics.videoIsPlaying(true, player);
@@ -391,7 +391,7 @@ function VideoViewer(props: Props) {
     <div
       className={classnames('file-viewer', {
         'file-viewer--is-playing': isPlaying,
-        'file-viewer--ended-embed': isEndededEmbed,
+        'file-viewer--ended-embed': isEndedEmbed,
       })}
       onContextMenu={stopContextMenu}
     >
@@ -403,8 +403,8 @@ function VideoViewer(props: Props) {
           doReplay={() => setReplay(true)}
         />
       )}
-      {isEndededEmbed && <FileViewerEmbeddedEnded uri={uri} />}
-      {embedded && !isEndededEmbed && <FileViewerEmbeddedTitle uri={uri} />}
+      {isEndedEmbed && <FileViewerEmbeddedEnded uri={uri} />}
+      {embedded && !isEndedEmbed && <FileViewerEmbeddedTitle uri={uri} />}
       {/* disable this loading behavior because it breaks when player.play() promise hangs */}
       {isLoading && <LoadingScreen status={__('Loading')} />}
 
@@ -458,6 +458,7 @@ function VideoViewer(props: Props) {
           videoTheaterMode={videoTheaterMode}
           playNext={doPlayNext}
           playPrevious={doPlayPrevious}
+          embedded={embedded}
         />
       )}
     </div>

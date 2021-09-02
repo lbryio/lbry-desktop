@@ -54,6 +54,7 @@ type Props = {
   startMuted: boolean,
   autoplay: boolean,
   autoplaySetting: boolean,
+  embedded: boolean,
   toggleVideoTheaterMode: () => void,
   adUrl: ?string,
   claimId: ?string,
@@ -194,6 +195,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   const {
     autoplay,
     autoplaySetting,
+    embedded,
     startMuted,
     source,
     sourceType,
@@ -590,6 +592,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         player.recsys({
           videoId: claimId,
           userId: userId,
+          embedded: embedded,
         });
       }
 

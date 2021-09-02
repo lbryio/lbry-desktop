@@ -583,7 +583,6 @@ function ClaimListDiscover(props: Props) {
           )}
           <ClaimList
             tileLayout
-            id={mainSearchKey}
             loading={loading}
             uris={finalUris}
             onScrollBottom={handleScrollBottom}
@@ -617,7 +616,6 @@ function ClaimListDiscover(props: Props) {
             </div>
           )}
           <ClaimList
-            id={mainSearchKey}
             type={type}
             loading={loading}
             uris={finalUris}

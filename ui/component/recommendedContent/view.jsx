@@ -1,8 +1,6 @@
 // @flow
 import { SHOW_ADS } from 'config';
 import React from 'react';
-import { useHistory } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
 import ClaimList from 'component/claimList';
 import ClaimListDiscover from 'component/claimListDiscover';
 import Ads from 'web/component/ads';
@@ -10,14 +8,14 @@ import Card from 'component/common/card';
 import { useIsMobile, useIsMediumScreen } from 'effects/use-screensize';
 import Button from 'component/button';
 import classnames from 'classnames';
-import { CONTAINER_ID } from 'constants/navigation';
+import RecSys from 'recsys';
 
 const VIEW_ALL_RELATED = 'view_all_related';
 const VIEW_MORE_FROM = 'view_more_from';
 
 type Props = {
   uri: string,
-  recommendedContent: Array<string>,
+  recommendedContentUris: Array<string>,
   nextRecommendedUri: string,
   isSearching: boolean,
   doFetchRecommendedContent: (string, boolean) => void,
@@ -25,7 +23,7 @@ type Props = {
   isAuthenticated: boolean,
   claim: ?StreamClaim,
   doRecommendationUpdate: (claimId: string, urls: Array<string>, id: string, parentId: string) => void,
-  doRecommendationClicked: (claimId: string, index: number) => void,
+  claimId: string,
 };
 
 export default React.memo<Props>(function RecommendedContent(props: Props) {
@@ -33,23 +31,20 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
     uri,
     doFetchRecommendedContent,
     mature,
-    recommendedContent,
+    recommendedContentUris,
     nextRecommendedUri,
     isSearching,
     isAuthenticated,
     claim,
-    doRecommendationUpdate,
-    doRecommendationClicked,
+    claimId,
   } = props;
   const [viewMode, setViewMode] = React.useState(VIEW_ALL_RELATED);
-  const [recommendationId, setRecommendationId] = React.useState('');
   const [recommendationUrls, setRecommendationUrls] = React.useState();
-  const history = useHistory();
   const signingChannel = claim && claim.signing_channel;
   const channelName = signingChannel ? signingChannel.name : null;
   const isMobile = useIsMobile();
   const isMedium = useIsMediumScreen();
-
+  const { onRecsLoaded: onRecommendationsLoaded, onClickedRecommended: onRecommendationClicked } = RecSys;
   React.useEffect(() => {
     function moveAutoplayNextItemToTop(recommendedContent) {
       let newList = recommendedContent;
@@ -72,33 +67,27 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
       }
     }
 
-    const newRecommendationUrls = moveAutoplayNextItemToTop(recommendedContent);
+    const newRecommendationUrls = moveAutoplayNextItemToTop(recommendedContentUris);
 
     if (claim && !listEq(recommendationUrls, newRecommendationUrls)) {
-      const parentId = (history.location.state && history.location.state[CONTAINER_ID]) || '';
-      const id = uuidv4();
-      setRecommendationId(id);
       setRecommendationUrls(newRecommendationUrls);
-
-      doRecommendationUpdate(claim.claim_id, newRecommendationUrls, id, parentId);
     }
-  }, [
-    recommendedContent,
-    nextRecommendedUri,
-    recommendationUrls,
-    setRecommendationUrls,
-    claim,
-    doRecommendationUpdate,
-    history.location.state,
-  ]);
+  }, [recommendedContentUris, nextRecommendedUri, recommendationUrls, setRecommendationUrls, claim]);
 
   React.useEffect(() => {
     doFetchRecommendedContent(uri, mature);
   }, [uri, mature, doFetchRecommendedContent]);
 
-  function handleRecommendationClicked(e: any, index: number) {
+  React.useEffect(() => {
+    // Right now we only want to record the recs if they actually saw them.
+    if (recommendationUrls && recommendationUrls.length && nextRecommendedUri && viewMode === VIEW_ALL_RELATED) {
+      onRecommendationsLoaded(claimId, recommendationUrls);
+    }
+  }, [recommendationUrls, onRecommendationsLoaded, claimId, nextRecommendedUri, viewMode]);
+
+  function handleRecommendationClicked(e, clickedClaim, index: number) {
     if (claim) {
-      doRecommendationClicked(claim.claim_id, index);
+      onRecommendationClicked(claim.claim_id, clickedClaim.claim_id);
     }
   }
 
@@ -133,7 +122,6 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
         <div>
           {viewMode === VIEW_ALL_RELATED && (
             <ClaimList
-              id={recommendationId}
               type="small"
               loading={isSearching}
               uris={recommendationUrls}
@@ -177,8 +165,8 @@ function areEqual(prevProps: Props, nextProps: Props) {
     a.isAuthenticated !== b.isAuthenticated ||
     a.isSearching !== b.isSearching ||
     a.mature !== b.mature ||
-    (a.recommendedContent && !b.recommendedContent) ||
-    (!a.recommendedContent && b.recommendedContent) ||
+    (a.recommendedContentUris && !b.recommendedContentUris) ||
+    (!a.recommendedContentUris && b.recommendedContentUris) ||
     (a.claim && !b.claim) ||
     (!a.claim && b.claim)
   ) {
@@ -189,14 +177,14 @@ function areEqual(prevProps: Props, nextProps: Props) {
     return false;
   }
 
-  if (a.recommendedContent && b.recommendedContent) {
-    if (a.recommendedContent.length !== b.recommendedContent.length) {
+  if (a.recommendedContentUris && b.recommendedContentUris) {
+    if (a.recommendedContentUris.length !== b.recommendedContentUris.length) {
       return false;
     }
 
-    let i = a.recommendedContent.length;
+    let i = a.recommendedContentUris.length;
     while (i--) {
-      if (a.recommendedContent[i] !== b.recommendedContent[i]) {
+      if (a.recommendedContentUris[i] !== b.recommendedContentUris[i]) {
         return false;
       }
     }

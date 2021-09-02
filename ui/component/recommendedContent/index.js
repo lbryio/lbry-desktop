@@ -7,14 +7,19 @@ import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { makeSelectNextUnplayedRecommended } from 'redux/selectors/content';
 import RecommendedContent from './view';
 
-const select = (state, props) => ({
-  mature: makeSelectClaimIsNsfw(props.uri)(state),
-  recommendedContent: makeSelectRecommendedContentForUri(props.uri)(state),
-  nextRecommendedUri: makeSelectNextUnplayedRecommended(props.uri)(state),
-  isSearching: selectIsSearching(state),
-  isAuthenticated: selectUserVerifiedEmail(state),
-  claim: makeSelectClaimForUri(props.uri)(state),
-});
+const select = (state, props) => {
+  const claim = makeSelectClaimForUri(props.uri)(state);
+  const { claim_id: claimId } = claim;
+  return {
+    mature: makeSelectClaimIsNsfw(props.uri)(state),
+    recommendedContentUris: makeSelectRecommendedContentForUri(props.uri)(state),
+    nextRecommendedUri: makeSelectNextUnplayedRecommended(props.uri)(state),
+    isSearching: selectIsSearching(state),
+    isAuthenticated: selectUserVerifiedEmail(state),
+    claim,
+    claimId,
+  };
+};
 
 const perform = (dispatch) => ({
   doFetchRecommendedContent: (uri, mature) => dispatch(doFetchRecommendedContent(uri, mature)),
