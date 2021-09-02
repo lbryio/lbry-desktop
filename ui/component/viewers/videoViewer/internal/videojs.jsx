@@ -499,14 +499,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     const wrapper = document.createElement('div');
     wrapper.setAttribute('data-vjs-player', 'true');
     const el = document.createElement(isAudio ? 'audio' : 'video');
-    el.className = 'video-js';
-
-    // el.className = 'vjs-big-play-centered ';
-
-    // show large play button when paused on ios
-    // if (IS_IOS) {
-    //   el.classList.add('vjs-show-big-play-button-on-pause');
-    // }
+    el.className = 'video-js vjs-big-play-centered';
 
     wrapper.appendChild(el);
 
@@ -552,22 +545,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     if (!el) return;
 
     const vjs = videojs(el, videoJsOptions, () => {
-
       const player = playerRef.current;
-
-      const isNotAndroidOrIos = !videojs.browser.IS_ANDROID && !videojs.browser.IS_IOS;
-
-      if (isNotAndroidOrIos) {
-        el.classList.add('vjs-big-play-centered');
-
-        const playBT = document.getElementsByClassName('vjs-big-play-button')[0];
-        playBT.style.display = 'none';
-      } else {
-        // console.log('hiding button');
-        // player.bigPlayButton.hide()
-        // const playBT = document.getElementsByClassName('vjs-big-play-button')[0];
-        // playBT.remove()
-      }
 
       // this seems like a weird thing to have to check for here
       if (!player) return;
@@ -655,10 +633,11 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       window.removeEventListener('keydown', handleKeyDown);
 
       const player = playerRef.current;
-      if (player) {
-        player.dispose();
-        window.player = undefined;
-      }
+      player.pause()
+      player.dispose();
+      window.oldPlayer = window.player;
+      window.player = undefined;
+
     };
   }, [isAudio]);
 
@@ -695,6 +674,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       }
     });
   }, [source, reload]);
+
+  console.log('RUNNING HERE VIDEOJS!');
 
   return (
     // $FlowFixMe

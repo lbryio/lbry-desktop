@@ -114,6 +114,8 @@ function VideoViewer(props: Props) {
       (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) &&
     !window.MSStream;
 
+  console.log("RUNNING HERE PARENT VIEW.")
+
   // force everything to recent when URI changes, can cause weird corner cases otherwise (e.g. navigate while autoplay is true)
   useEffect(() => {
     if (uri && previousUri && uri !== previousUri) {
@@ -208,7 +210,17 @@ function VideoViewer(props: Props) {
     playerReadyDependencyList.push(desktopPlayStartTime);
   }
 
+  let alreadyRunning = false;
+
   const onPlayerReady = useCallback((player: Player) => {
+    console.log('already running');
+    console.log(alreadyRunning)
+    console.log(new Date())
+    alreadyRunning = true;
+
+
+    console.log("PLAYER READY CALLBACK")
+
     if (!embedded) {
       player.muted(muted);
       player.volume(volume);
@@ -218,60 +230,51 @@ function VideoViewer(props: Props) {
 
     const shouldPlay = !embedded || autoplayIfEmbedded;
 
-    console.log('should play');
-    console.log(shouldPlay);
-
-    let tryingToPlay = false;
+    // console.log('should play');
+    // console.log(shouldPlay);
 
     // TODO: this is causing issues with videos starting randomly
     // https://blog.videojs.com/autoplay-best-practices-with-video-js/#Programmatic-Autoplay-and-Success-Failure-Detection
     if (shouldPlay) {
-      // tryingToPlay = true;
-      //
-      // try {
-      //   if(!tryingToPlay){
-      //     console.log('trying to start playing');
-      //     player.play();
-      //   } else {
-      //     console.log('already starting playing');
-      //   }
-      // } catch (err){
-      //   console.log('player error');
-      //   console.log(err);
-      // }
+      console.log('starting video!');
 
-      const playPromise = player.play();
-      const timeoutPromise = new Promise((resolve, reject) =>
-        setTimeout(() => reject(PLAY_TIMEOUT_ERROR), PLAY_TIMEOUT_LIMIT)
-      );
+      (async function() {
+        try {
+          console.log('is playing already');
+          console.log(isPlaying);
+          console.log('player');
+          console.log(player);
+          // console.log('is paused!');
+          // console.log(player.paused());
 
-      Promise.race([playPromise, timeoutPromise]).catch((error) => {
-        console.log('promise error');
-        console.log(error);
-        console.log('promise error');
-        if (typeof error === 'object' && error.name && error.name === 'NotAllowedError') {
-          console.log('running here!');
-          if (player.autoplay() && !player.muted()) {
-            if(IS_IOS){
+          const isAlreadyPlaying = isPlaying;
+          setIsPlaying(true);
+
+          if (!isAlreadyPlaying) {
+            console.log('STARTING PLAYER')
+            const playerResponse = player.play();
+            const isPaused = player.paused();
+            // console.log(playerResponse)
+            // await new Promise(resolve => setTimeout(resolve, 2000));
+            // console.log(playerResponse);
+            if (IS_IOS && isPaused) {
               document.getElementsByClassName('video-js--tap-to-unmute')[0].style.visibility = 'visible';
               player.muted(true);
+              const iosResponse = player.play();
+
+              await new Promise(resolve => setTimeout(resolve, 2000));
+              console.log(iosResponse);
             }
-
-            // another version had player.play()
-            player.play();
+          } else {
+            console.log('ALREADY HAVE PLAYER, DISPOSING!!')
+            player.dispose()
           }
-        } else {
-          console.log('other block conditional');
-          if(IS_IOS){
-            document.getElementsByClassName('video-js--tap-to-unmute')[0].style.visibility = 'visible';
-            player.muted(true);
-          }
+          console.log('\n\n')
 
-          player.play();
+        } catch (err) {
+          console.log(err);
         }
-        setIsLoading(false);
-        setIsPlaying(false);
-      });
+      })();
     }
 
     setIsLoading(shouldPlay); // if we are here outside of an embed, we're playing
@@ -304,6 +307,7 @@ function VideoViewer(props: Props) {
         changeMute(player.muted());
       }
     });
+
     player.on('ratechange', () => {
       const HAVE_NOTHING = 0; // https://docs.videojs.com/player#readyState
       if (player && player.readyState() !== HAVE_NOTHING) {
