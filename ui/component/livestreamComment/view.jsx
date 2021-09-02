@@ -78,6 +78,14 @@ function LivestreamComment(props: Props) {
             </Tooltip>
           )}
 
+          {commentByOwnerOfContent && (
+            <Tooltip label={__('Streamer')}>
+              <span className="comment__badge">
+                <Icon icon={ICONS.BADGE_STREAMER} size={16} />
+              </span>
+            </Tooltip>
+          )}
+
           <Button
             className={classnames('button--uri-indicator comment__author', {
               'comment__author--creator': commentByOwnerOfContent,
