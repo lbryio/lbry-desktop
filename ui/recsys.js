@@ -130,9 +130,6 @@ const recsys = {
       IS_WEB || (window && window.store && selectDaemonSettings(window.store.getState()).share_usage_data);
 
     if (recsys.entries[claimId] && shareTelemetry) {
-      if (isTentative) {
-        recsys.entries[claimId]['tentative'] = true;
-      }
       const data = JSON.stringify(recsys.entries[claimId]);
       try {
         navigator.sendBeacon(recsysEndpoint, data);
