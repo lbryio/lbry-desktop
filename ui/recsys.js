@@ -24,7 +24,7 @@ const getClaimIdsFromUris = (uris) => {
 
 const recsys = {
   entries: {},
-  debug: true,
+  debug: false,
   /**
    * Provides for creating, updating, and sending Clickstream data object Entries.
    * Entries are Created either when recommendedContent loads, or when recommendedContent is clicked.
