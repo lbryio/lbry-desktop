@@ -1,0 +1,290 @@
+.wunderbar__wrapper {
+  flex: 1;
+  max-width: 30rem;
+  margin-left: var(--spacing-s);
+  margin-right: var(--spacing-s);
+}
+
+.wunderbar__wrapper--mobile {
+  margin: 0;
+  border-bottom: 1px solid var(--color-border);
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  .wunderbar {
+    flex: 1;
+  }
+
+  .wunderbar__input {
+    font-size: 16px; // https://stackoverflow.com/questions/2989263/disable-auto-zoom-in-input-text-tag-safari-on-iphone
+    background-color: transparent;
+    color: var(--color-text);
+    border-radius: 0;
+    margin-right: var(--spacing-l);
+
+    &:focus {
+      box-shadow: none;
+    }
+  }
+}
+
+.wunderbar {
+  cursor: text;
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+  font-size: var(--font-small);
+  height: var(--height-input);
+  padding-left: var(--spacing-s);
+
+  > .icon {
+    top: 0;
+    left: var(--spacing-m);
+    height: 100%;
+    position: absolute;
+    z-index: 1;
+    stroke: var(--color-input-placeholder);
+  }
+
+  @media (min-width: $breakpoint-small) {
+    padding: 0;
+  }
+}
+
+.wunderbar--inline {
+  @extend .wunderbar;
+  flex: 0;
+  margin-right: 0;
+
+  fieldset-section {
+    width: 15rem;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    margin: var(--spacing-xxs) 0;
+  }
+}
+
+.wunderbar__input {
+  width: 100%;
+  align-items: center;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  height: var(--height-input);
+  border-radius: var(--height-input);
+  background-color: var(--color-input-bg);
+  color: var(--color-input);
+  border: none;
+  padding-right: var(--spacing-s);
+  padding-left: 2.5rem;
+  transition: all 0.2s;
+  -webkit-app-region: no-drag;
+
+  &:focus {
+    border-radius: var(--border-radius);
+  }
+}
+
+.wunderbar__input--inline {
+  @extend .wunderbar__input;
+  @media (max-width: $breakpoint-small) {
+    position: absolute;
+    top: 0;
+  }
+}
+
+.wunderbar__suggestions {
+  z-index: 3;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(var(--header-height) - (var(--height-input)) + 3px);
+  @extend .card;
+  box-shadow: var(--card-box-shadow);
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+  border-top: none;
+  padding-top: var(--spacing-xs);
+  margin: 0 var(--spacing-s);
+}
+
+.wunderbar__suggestions--mobile {
+  top: calc(var(--header-height) - var(--spacing-xs));
+  margin-top: var(--spacing-m);
+  padding: 0;
+  overflow: visible;
+}
+
+.wunderbar__top-claim {
+  margin-bottom: var(--spacing-m);
+}
+
+.wunderbar__label {
+  margin-bottom: var(--spacing-xs);
+  margin-left: var(--spacing-m);
+}
+
+.wunderbar__top-separator {
+  margin: var(--spacing-s) 0;
+  width: 100%;
+}
+
+.wunderbar__suggestion {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-s) 0;
+  margin-left: var(--spacing-m);
+
+  .media__thumb {
+    flex-shrink: 0;
+    $width: 5rem;
+    @include handleClaimListGifThumbnail($width);
+    width: $width;
+    height: calc(#{$width} * (9 / 16));
+    margin-right: var(--spacing-s);
+  }
+
+  @media (min-width: $breakpoint-small) {
+    margin-left: var(--spacing-s);
+  }
+}
+
+.wunderbar__suggestion--channel {
+  .channel-thumbnail {
+    @include handleChannelGif(calc(5rem * 9 / 16));
+    margin-right: var(--spacing-xs);
+
+    @media (min-width: $breakpoint-small) {
+      @include handleChannelGif(calc(5rem * 9 / 16));
+      margin-right: var(--spacing-s);
+    }
+  }
+}
+
+.wunderbar__suggestion-label {
+  font-size: var(--font-small);
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.wunderbar__suggestion-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wunderbar__suggestion-name {
+  @extend .help;
+  margin-top: 0;
+}
+
+.wunderbar__more-results {
+  margin-top: var(--spacing-xs);
+  margin-left: var(--spacing-s);
+  margin-bottom: var(--spacing-l);
+
+  .button {
+    padding: var(--spacing-s);
+  }
+
+  @media (min-width: $breakpoint-small) {
+    margin-bottom: var(--spacing-xs);
+  }
+}
+
+.wunderbar__placeholder-suggestion {
+  margin-bottom: var(--spacing-s);
+
+  @media (min-width: $breakpoint-small) {
+    padding-left: 0;
+  }
+}
+
+.wunderbar__placeholder-label {
+  width: 30%;
+  height: 1rem;
+  margin-top: var(--spacing-xs);
+  @include placeholder;
+}
+
+.wunderbar__placeholder-thumbnail {
+  width: 3rem;
+  height: 3rem;
+
+  @include placeholder;
+}
+.wunderbar__placeholder-info {
+  width: 50%;
+  height: 3rem;
+  margin-left: var(--spacing-s);
+  @include placeholder;
+}
+
+.wunderbar__mobile-search {
+  @extend .button--alt;
+  @extend .header__navigation-item--icon;
+  padding: var(--spacing-xs);
+  margin-right: var(--spacing-m);
+
+  .button__label {
+    color: var(--color-input-placeholder);
+    opacity: 0.4;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    &:focus {
+      box-shadow: none;
+    }
+  }
+}
+
+.wunderbar__tag-search {
+  .tag {
+    display: flex;
+    align-items: center;
+    height: 1.2rem;
+    margin-left: var(--spacing-xxs);
+
+    &:hover {
+      background-color: var(--color-tag-bg);
+      color: var(--color-tag);
+    }
+  }
+}
+
+.wunderbar__bottom-links {
+  display: flex;
+  align-items: center;
+
+  :first-child {
+    flex: 1;
+  }
+}
+
+[data-reach-combobox-option] {
+  padding: 0;
+  border-radius: var(--border-radius);
+
+  &:hover {
+    background-color: var(--color-menu-background--active);
+  }
+
+  @media (min-width: $breakpoint-small) {
+    margin-left: var(--spacing-xs);
+    margin-right: var(--spacing-xs);
+  }
+}
+
+[data-reach-combobox-option][data-highlighted] {
+  background-color: var(--color-menu-background--active);
+}
+
+[data-reach-combobox-option][aria-selected='true'] {
+  &:hover {
+    background-color: var(--color-menu-background--active);
+  }
+}
