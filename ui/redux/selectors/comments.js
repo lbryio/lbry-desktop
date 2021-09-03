@@ -324,11 +324,13 @@ const makeSelectFilteredComments = (comments: Array<Comment>, claimId?: string) 
             if (claimId) {
               const claimIdIsMine = myClaims && myClaims.size > 0 && myClaims.has(claimId);
               if (!claimIdIsMine) {
-                return !(
+                if (
                   personalBlockList.includes(comment.channel_url) ||
                   adminBlockList.includes(comment.channel_url) ||
                   moderatorBlockList.includes(comment.channel_url)
-                );
+                ) {
+                  return false;
+                }
               }
             }
 
