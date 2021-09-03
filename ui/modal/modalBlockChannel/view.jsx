@@ -72,7 +72,7 @@ export default function ModalBlockChannel(props: Props) {
   const [timeoutSec, setTimeoutSec] = React.useState(-1);
 
   const isPersonalTheOnlyTab = !activeChannelIsModerator && !activeChannelIsAdmin;
-  const isTimeoutAvail = contentClaim && contentClaim.is_my_output;
+  const isTimeoutAvail = (contentClaim && contentClaim.is_my_output) || activeChannelIsModerator;
   const blockButtonDisabled = blockType === BLOCK.TIMEOUT && timeoutSec < 1;
 
   // **************************************************************************
