@@ -110,7 +110,7 @@ const recsys = {
           uid: userId, // selectUser
           claimId: claimId,
           pageLoadedAt: Date.now(),
-          recsysId: makeSelectRecommendedRecsysIdForClaimId(claimId)(state) || recsysId,
+          recsysId: null,
           recClaimIds: [],
           recClickedVideoIdx: [],
           events: [],
