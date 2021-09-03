@@ -71,20 +71,25 @@ export default function ModalBlockChannel(props: Props) {
   const [timeoutInputErr, setTimeoutInputErr] = React.useState('');
   const [timeoutSec, setTimeoutSec] = React.useState(-1);
 
-  const personalIsTheOnlyTab = !activeChannelIsModerator && !activeChannelIsAdmin;
+  const isPersonalTheOnlyTab = !activeChannelIsModerator && !activeChannelIsAdmin;
+  const isTimeoutAvail = contentClaim && contentClaim.is_my_output;
   const blockButtonDisabled = blockType === BLOCK.TIMEOUT && timeoutSec < 1;
 
   // **************************************************************************
   // **************************************************************************
 
-  // Check 'tab' validity on mount.
+  // Check settings validity on mount.
   React.useEffect(() => {
     if (
-      personalIsTheOnlyTab ||
+      isPersonalTheOnlyTab ||
       (tab === TAB.MODERATOR && !activeChannelIsModerator) ||
       (tab === TAB.ADMIN && !activeChannelIsAdmin)
     ) {
       setTab(TAB.PERSONAL);
+    }
+
+    if (!isTimeoutAvail && blockType === BLOCK.TIMEOUT) {
+      setBlockType(BLOCK.PERMANENT);
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -154,13 +159,14 @@ export default function ModalBlockChannel(props: Props) {
     }
   }
 
-  function getBlockTypeElem(value, label) {
+  function getBlockTypeElem(value, label, disabled = false, disabledLabel = '') {
     return (
       <FormField
         type="radio"
         name={value}
         key={value}
-        label={__(label)}
+        label={disabled && disabledLabel ? __(disabledLabel) : __(label)}
+        disabled={disabled}
         checked={blockType === value}
         onChange={() => setBlockType(value)}
       />
@@ -239,6 +245,13 @@ export default function ModalBlockChannel(props: Props) {
   // **************************************************************************
   // **************************************************************************
 
+  if (isPersonalTheOnlyTab && !isTimeoutAvail) {
+    // There's only 1 option. Just execute it and don't show the modal.
+    commentModBlock(commenterUri);
+    closeModal();
+    return null;
+  }
+
   return (
     <Modal isOpen type="card" onAborted={closeModal}>
       <Card
@@ -246,7 +259,7 @@ export default function ModalBlockChannel(props: Props) {
         subtitle={getCommenterPreview(commenterUri)}
         actions={
           <>
-            {!personalIsTheOnlyTab && (
+            {!isPersonalTheOnlyTab && (
               <div className="section__actions">
                 <div className="section">
                   <label>{__('Block list')}</label>
@@ -265,7 +278,12 @@ export default function ModalBlockChannel(props: Props) {
               <div className="block-modal--values">
                 <fieldset>
                   {getBlockTypeElem(BLOCK.PERMANENT, 'Permanent')}
-                  {getBlockTypeElem(BLOCK.TIMEOUT, 'Timeout --[time-based ban instead of permanent]--')}
+                  {getBlockTypeElem(
+                    BLOCK.TIMEOUT,
+                    'Timeout --[time-based ban instead of permanent]--',
+                    !isTimeoutAvail,
+                    'Timeout (only available on content that you own)'
+                  )}
                 </fieldset>
                 {blockType === BLOCK.TIMEOUT && getTimeoutDurationElem()}
               </div>
