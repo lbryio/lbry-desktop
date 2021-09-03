@@ -214,7 +214,7 @@ export const makeSelectCommentsForUri = (uri: string) =>
     (state, byClaimId, byUri) => {
       const claimId = byUri[uri];
       const comments = byClaimId && byClaimId[claimId];
-      return makeSelectFilteredComments(comments)(state);
+      return makeSelectFilteredComments(comments, claimId)(state);
     }
   );
 
@@ -226,7 +226,7 @@ export const makeSelectTopLevelCommentsForUri = (uri: string) =>
     (state, byClaimId, byUri) => {
       const claimId = byUri[uri];
       const comments = byClaimId && byClaimId[claimId];
-      return makeSelectFilteredComments(comments)(state);
+      return makeSelectFilteredComments(comments, claimId)(state);
     }
   );
 
@@ -262,7 +262,13 @@ export const makeSelectRepliesForParentId = (id: string) =>
     }
   );
 
-const makeSelectFilteredComments = (comments: Array<Comment>) =>
+/**
+ * makeSelectFilteredComments
+ *
+ * @param comments List of comments to filter.
+ * @param claimId The claim that `comments` reside in.
+ */
+const makeSelectFilteredComments = (comments: Array<Comment>, claimId?: string) =>
   createSelector(
     selectClaimsById,
     selectMyActiveClaims,
@@ -315,12 +321,18 @@ const makeSelectFilteredComments = (comments: Array<Comment>) =>
               }
             }
 
-            return !(
-              mutedChannels.includes(comment.channel_url) ||
-              personalBlockList.includes(comment.channel_url) ||
-              adminBlockList.includes(comment.channel_url) ||
-              moderatorBlockList.includes(comment.channel_url)
-            );
+            if (claimId) {
+              const claimIdIsMine = myClaims && myClaims.size > 0 && myClaims.has(claimId);
+              if (!claimIdIsMine) {
+                return !(
+                  personalBlockList.includes(comment.channel_url) ||
+                  adminBlockList.includes(comment.channel_url) ||
+                  moderatorBlockList.includes(comment.channel_url)
+                );
+              }
+            }
+
+            return !mutedChannels.includes(comment.channel_url);
           })
         : [];
     }
