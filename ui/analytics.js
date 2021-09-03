@@ -120,6 +120,10 @@ async function sendAndResetWatchmanData() {
     return 'Can only be used with a user id';
   }
 
+  if (!videoPlayer) {
+    return 'Video player not initialized';
+  }
+
   let timeSinceLastIntervalSend = new Date() - lastSentTime;
   lastSentTime = new Date();
 
