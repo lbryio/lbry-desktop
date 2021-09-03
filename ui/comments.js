@@ -14,7 +14,7 @@ const Comments = {
 
   moderation_block: (params: ModerationBlockParams) => fetchCommentsApi('moderation.Block', params),
   moderation_unblock: (params: ModerationBlockParams) => fetchCommentsApi('moderation.UnBlock', params),
-  moderation_block_list: (params: ModerationBlockParams) => fetchCommentsApi('moderation.BlockedList', params),
+  moderation_block_list: (params: BlockedListArgs) => fetchCommentsApi('moderation.BlockedList', params),
   moderation_add_delegate: (params: ModerationAddDelegateParams) => fetchCommentsApi('moderation.AddDelegate', params),
   moderation_remove_delegate: (params: ModerationRemoveDelegateParams) =>
     fetchCommentsApi('moderation.RemoveDelegate', params),

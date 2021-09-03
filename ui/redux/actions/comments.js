@@ -738,6 +738,7 @@ function doCommentModToggleBlock(
   creatorId: string,
   blockerIds: Array<string>, // [] = use all my channels
   blockLevel: string,
+  timeoutSec?: number,
   showLink: boolean = false
 ) {
   return async (dispatch: Dispatch, getState: GetState) => {
@@ -844,6 +845,7 @@ function doCommentModToggleBlock(
                 block_all: unblock ? undefined : blockLevel === BLOCK_LEVEL.ADMIN,
                 global_un_block: unblock ? blockLevel === BLOCK_LEVEL.ADMIN : undefined,
                 ...sharedModBlockParams,
+                time_out: unblock ? undefined : timeoutSec,
               })
             )
         )
@@ -920,12 +922,13 @@ function doCommentModToggleBlock(
  * Blocks the commenter for all channels that I own.
  *
  * @param commenterUri
+ * @param timeoutHours
  * @param showLink
  * @returns {function(Dispatch): *}
  */
-export function doCommentModBlock(commenterUri: string, showLink: boolean = true) {
+export function doCommentModBlock(commenterUri: string, timeoutHours?: number, showLink: boolean = true) {
   return (dispatch: Dispatch) => {
-    return dispatch(doCommentModToggleBlock(false, commenterUri, '', [], BLOCK_LEVEL.SELF, showLink));
+    return dispatch(doCommentModToggleBlock(false, commenterUri, '', [], BLOCK_LEVEL.SELF, timeoutHours, showLink));
   };
 }
 
@@ -934,11 +937,14 @@ export function doCommentModBlock(commenterUri: string, showLink: boolean = true
  *
  * @param commenterUri
  * @param blockerId
+ * @param timeoutHours
  * @returns {function(Dispatch): *}
  */
-export function doCommentModBlockAsAdmin(commenterUri: string, blockerId: string) {
+export function doCommentModBlockAsAdmin(commenterUri: string, blockerId: string, timeoutHours?: number) {
   return (dispatch: Dispatch) => {
-    return dispatch(doCommentModToggleBlock(false, commenterUri, '', blockerId ? [blockerId] : [], BLOCK_LEVEL.ADMIN));
+    return dispatch(
+      doCommentModToggleBlock(false, commenterUri, '', blockerId ? [blockerId] : [], BLOCK_LEVEL.ADMIN, timeoutHours)
+    );
   };
 }
 
@@ -949,12 +955,25 @@ export function doCommentModBlockAsAdmin(commenterUri: string, blockerId: string
  * @param commenterUri
  * @param creatorId
  * @param blockerId
+ * @param timeoutHours
  * @returns {function(Dispatch): *}
  */
-export function doCommentModBlockAsModerator(commenterUri: string, creatorId: string, blockerId: string) {
+export function doCommentModBlockAsModerator(
+  commenterUri: string,
+  creatorId: string,
+  blockerId: string,
+  timeoutHours?: number
+) {
   return (dispatch: Dispatch) => {
     return dispatch(
-      doCommentModToggleBlock(false, commenterUri, creatorId, blockerId ? [blockerId] : [], BLOCK_LEVEL.MODERATOR)
+      doCommentModToggleBlock(
+        false,
+        commenterUri,
+        creatorId,
+        blockerId ? [blockerId] : [],
+        BLOCK_LEVEL.MODERATOR,
+        timeoutHours
+      )
     );
   };
 }
@@ -968,7 +987,7 @@ export function doCommentModBlockAsModerator(commenterUri: string, creatorId: st
  */
 export function doCommentModUnBlock(commenterUri: string, showLink: boolean = true) {
   return (dispatch: Dispatch) => {
-    return dispatch(doCommentModToggleBlock(true, commenterUri, '', [], BLOCK_LEVEL.SELF, showLink));
+    return dispatch(doCommentModToggleBlock(true, commenterUri, '', [], BLOCK_LEVEL.SELF, undefined, showLink));
   };
 }
 
@@ -1035,13 +1054,20 @@ export function doFetchModBlockedList() {
             let moderatorBlockList = [];
             let moderatorBlockListDelegatorsMap = {};
 
+            // These should just be part of the block list above, but it is
+            // separated for now because there are too many clients that we need
+            // to update.
+            const personalTimeoutMap = {};
+            const adminTimeoutMap = {};
+            const moderatorTimeoutMap = {};
+
             const blockListsPerChannel = res.map((r) => r.value);
             blockListsPerChannel
               .sort((a, b) => {
                 return 1;
               })
               .forEach((channelBlockLists) => {
-                const storeList = (fetchedList, blockedList, blockedByMap) => {
+                const storeList = (fetchedList, blockedList, timeoutMap, blockedByMap) => {
                   if (fetchedList) {
                     fetchedList.forEach((blockedChannel) => {
                       if (blockedChannel.blocked_channel_name) {
@@ -1052,6 +1078,14 @@ export function doFetchModBlockedList() {
 
                         if (!blockedList.find((blockedChannel) => isURIEqual(blockedChannel.channelUri, channelUri))) {
                           blockedList.push({ channelUri, blockedAt: blockedChannel.blocked_at });
+
+                          if (blockedChannel.banned_for) {
+                            timeoutMap[channelUri] = {
+                              blockedAt: blockedChannel.blocked_at,
+                              bannedFor: blockedChannel.banned_for,
+                              banRemaining: blockedChannel.ban_remaining,
+                            };
+                          }
                         }
 
                         if (blockedByMap !== undefined) {
@@ -1077,9 +1111,14 @@ export function doFetchModBlockedList() {
                 const globally_blocked_channels = channelBlockLists && channelBlockLists.globally_blocked_channels;
                 const delegated_blocked_channels = channelBlockLists && channelBlockLists.delegated_blocked_channels;
 
-                storeList(blocked_channels, personalBlockList);
-                storeList(globally_blocked_channels, adminBlockList);
-                storeList(delegated_blocked_channels, moderatorBlockList, moderatorBlockListDelegatorsMap);
+                storeList(blocked_channels, personalBlockList, personalTimeoutMap);
+                storeList(globally_blocked_channels, adminBlockList, adminTimeoutMap);
+                storeList(
+                  delegated_blocked_channels,
+                  moderatorBlockList,
+                  moderatorTimeoutMap,
+                  moderatorBlockListDelegatorsMap
+                );
               });
 
             dispatch({
@@ -1104,6 +1143,9 @@ export function doFetchModBlockedList() {
                         .map((blockedChannel) => blockedChannel.channelUri)
                     : null,
                 moderatorBlockListDelegatorsMap: moderatorBlockListDelegatorsMap,
+                personalTimeoutMap,
+                adminTimeoutMap,
+                moderatorTimeoutMap,
               },
             });
           })

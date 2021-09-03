@@ -60,6 +60,9 @@ declare type CommentsState = {
   fetchingModerationDelegators: boolean,
   blockingByUri: {},
   unBlockingByUri: {},
+  personalTimeoutMap: { [uri: string]: { blockedAt: string, bannedFor: number, banRemaining: number } },
+  adminTimeoutMap: { [uri: string]: { blockedAt: string, bannedFor: number, banRemaining: number } },
+  moderatorTimeoutMap: { [uri: string]: { blockedAt: string, bannedFor: number, banRemaining: number } },
   togglingForDelegatorMap: {[string]: Array<string>}, // {"blockedUri": ["delegatorUri1", ""delegatorUri2", ...]}
   settingsByChannelId: { [string]: PerChannelSettings }, // ChannelID -> settings
   fetchingSettings: boolean,
@@ -189,7 +192,43 @@ declare type SuperListResponse = {
   has_hidden_comments: boolean,
 };
 
-declare type ModerationBlockParams = {};
+declare type ModerationBlockParams = {
+  // Publisher, Moderator, or Commentron Admin
+  mod_channel_id: string,
+  mod_channel_name: string,
+  // Offender being blocked
+  blocked_channel_id: string,
+  blocked_channel_name: string,
+  // Creator that Moderator is delegated from. Used for delegated moderation
+  creator_channel_id?: string,
+  creator_channel_name?: string,
+  // Blocks identity from comment universally, requires Admin rights on commentron instance
+  block_all?: boolean,
+  time_out?: number,
+  // If true will delete all comments of the offender, requires Admin rights on commentron for universal delete
+  delete_all?: boolean,
+  // The usual signature stuff
+  signature: string,
+  signing_ts: string,
+};
+
+declare type ModerationBlockResponse = {
+  deleted_comment_ids: Array<string>,
+  banned_channel_id: string,
+  all_blocked: boolean,
+  banned_from: string,
+};
+
+declare type BlockedListArgs = {
+  // Publisher, Moderator or Commentron Admin
+  mod_channel_id: string,
+  mod_channel_name: string,
+  // Creator that Moderator is delegated from. Used for delegated moderation
+  creator_channel_id?: string,
+  creator_channel_name?: string,
+  signature: string,
+  signing_ts: string,
+};
 
 declare type ModerationAddDelegateParams = {
   mod_channel_id: string,
