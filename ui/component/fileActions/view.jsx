@@ -99,6 +99,7 @@ function FileActions(props: Props) {
   React.useEffect(() => {
     if (downloadClicked && streamingUrl) {
       webDownloadClaim(streamingUrl, fileName);
+      setDownloadClicked(false);
     }
   }, [downloadClicked, streamingUrl, fileName]);
   // @endif
