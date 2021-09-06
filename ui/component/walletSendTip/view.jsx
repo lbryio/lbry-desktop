@@ -22,6 +22,8 @@ const DEFAULT_TIP_AMOUNTS = [1, 5, 25, 100];
 const MINIMUM_FIAT_TIP = 1;
 const MAXIMUM_FIAT_TIP = 1000;
 
+const DEFAULT_TIP_ERROR = __('Sorry, there was an error in processing your payment!');
+
 const TAB_BOOST = 'TabBoost';
 const TAB_FIAT = 'TabFiat';
 const TAB_LBC = 'TabLBC';
@@ -297,10 +299,12 @@ function WalletSendTip(props: Props) {
               });
             })
             .catch(function (error) {
-              let displayError = 'Sorry, there was an error in processing your payment!';
-
-              if (error.message !== 'payment intent failed to confirm') {
+              // show error message from Stripe if one exists (being passed from backend by Beamer's API currently)
+              let displayError;
+              if (error.message) {
                 displayError = error.message;
+              } else {
+                displayError = DEFAULT_TIP_ERROR;
               }
 
               doToast({ message: displayError, isError: true });
