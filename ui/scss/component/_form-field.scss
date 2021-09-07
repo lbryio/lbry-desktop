@@ -483,6 +483,12 @@ fieldset-section {
       padding-right: var(--spacing-l);
     }
   }
+
+  label {
+    .icon--help {
+      vertical-align: middle;
+    }
+  }
 }
 
 #automatic_dark_mode_range_start,
