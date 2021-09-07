@@ -432,5 +432,11 @@ export function toggleAutoplayNext() {
     const autoplayNext = makeSelectClientSetting(SETTINGS.AUTOPLAY_NEXT)(state);
 
     dispatch(doSetClientSetting(SETTINGS.AUTOPLAY_NEXT, !autoplayNext, ready));
+
+    dispatch(
+      doToast({
+        message: autoplayNext ? __('Autoplay Next is off.') : __('Autoplay Next is on.'),
+      })
+    );
   };
 }

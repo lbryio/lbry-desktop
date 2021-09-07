@@ -290,10 +290,10 @@ export function doToggleLoopList(collectionId: string, loop: boolean, hideToast:
       type: ACTIONS.TOGGLE_LOOP_LIST,
       data: { collectionId, loop },
     });
-    if (loop && !hideToast) {
+    if (!hideToast) {
       dispatch(
         doToast({
-          message: __('Loop is on.'),
+          message: loop ? __('Loop is on.') : __('Loop is off.'),
         })
       );
     }
@@ -323,18 +323,18 @@ export function doToggleShuffleList(currentUri: string, collectionId: string, sh
         type: ACTIONS.TOGGLE_SHUFFLE_LIST,
         data: { collectionId, newUrls },
       });
-      if (!hideToast) {
-        dispatch(
-          doToast({
-            message: __('Shuffle is on.'),
-          })
-        );
-      }
     } else {
       dispatch({
         type: ACTIONS.TOGGLE_SHUFFLE_LIST,
         data: { collectionId, newUrls: false },
       });
+    }
+    if (!hideToast) {
+      dispatch(
+        doToast({
+          message: shuffle ? __('Shuffle is on.') : __('Shuffle is off.'),
+        })
+      );
     }
   };
 }
