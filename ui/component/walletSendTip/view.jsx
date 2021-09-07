@@ -83,8 +83,15 @@ function WalletSendTip(props: Props) {
   const [tipError, setTipError] = React.useState();
 
   // denote which tab to show on the frontend
-  const [activeTab, setActiveTab] = React.useState(TAB_BOOST);
+  const [activeTab, setActiveTab] = usePersistedState(TAB_BOOST);
 
+  // force to boost tab if it's someone's own upload
+  React.useEffect(() => {
+    if (claimIsMine) {
+      setActiveTab(TAB_BOOST);
+    }
+  }, []);
+  
   // alphanumeric claim id
   const { claim_id: claimId } = claim;
 
@@ -94,7 +101,7 @@ function WalletSendTip(props: Props) {
   const activeChannelName = activeChannelClaim && activeChannelClaim.name;
   const activeChannelId = activeChannelClaim && activeChannelClaim.claim_id;
 
-  // setup variables for tip API
+  // setup variables for backend tip API
   let channelClaimId, tipChannelName;
   // if there is a signing channel it's on a file
   if (claim.signing_channel) {
