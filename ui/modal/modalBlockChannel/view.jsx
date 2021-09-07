@@ -1,14 +1,12 @@
 // @flow
 import React from 'react';
 import classnames from 'classnames';
-import parseDuration from 'parse-duration';
 import Button from 'component/button';
 import ChannelThumbnail from 'component/channelThumbnail';
 import ClaimPreview from 'component/claimPreview';
 import Card from 'component/common/card';
 import { FormField } from 'component/common/form';
-import Icon from 'component/common/icon';
-import * as ICONS from 'constants/icons';
+import FormFieldDuration from 'component/formFieldDuration';
 import usePersistedState from 'effects/use-persisted-state';
 import { Modal } from 'modal/modal';
 import { getChannelFromClaim } from 'util/claim';
@@ -76,7 +74,6 @@ export default function ModalBlockChannel(props: Props) {
   const [tab, setTab] = usePersistedState('ModalBlockChannel:tab', TAB.PERSONAL);
   const [blockType, setBlockType] = usePersistedState('ModalBlockChannel:blockType', BLOCK.PERMANENT);
   const [timeoutInput, setTimeoutInput] = usePersistedState('ModalBlockChannel:timeoutInput', '10m');
-  const [timeoutInputErr, setTimeoutInputErr] = React.useState('');
   const [timeoutSec, setTimeoutSec] = React.useState(-1);
 
   const isPersonalTheOnlyTab = !activeChannelIsModerator && !activeChannelIsAdmin;
@@ -100,45 +97,6 @@ export default function ModalBlockChannel(props: Props) {
       setBlockType(BLOCK.PERMANENT);
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // 'timeoutInput' to 'timeoutSec' conversion.
-  React.useEffect(() => {
-    const handleInvalidInput = (errMsg: string) => {
-      if (timeoutSec !== -1) {
-        setTimeoutSec(-1);
-      }
-      if (timeoutInputErr !== errMsg) {
-        setTimeoutInputErr(errMsg);
-      }
-    };
-
-    const handleValidInput = (seconds) => {
-      if (seconds !== timeoutSec) {
-        setTimeoutSec(seconds);
-      }
-      if (timeoutInputErr) {
-        setTimeoutInputErr('');
-      }
-    };
-
-    if (!timeoutInput) {
-      handleValidInput(-1); // Reset
-      return;
-    }
-
-    const ONE_HUNDRED_YEARS_IN_SECONDS = 3154000000;
-    const seconds = parseDuration(timeoutInput, 's');
-
-    if (Number.isInteger(seconds) && seconds > 0) {
-      if (seconds > ONE_HUNDRED_YEARS_IN_SECONDS) {
-        handleInvalidInput(__('Wow, banned for more than 100 years?'));
-      } else {
-        handleValidInput(seconds);
-      }
-    } else {
-      handleInvalidInput(__('Invalid duration.'));
-    }
-  }, [timeoutInput, timeoutInputErr, timeoutSec]);
 
   // **************************************************************************
   // **************************************************************************
@@ -187,27 +145,12 @@ export default function ModalBlockChannel(props: Props) {
   }
 
   function getTimeoutDurationElem() {
-    const examples = '\n- 30s\n- 10m\n- 1h\n- 2d\n- 3mo\n- 1y';
     return (
-      <FormField
+      <FormFieldDuration
         name="time_out"
-        label={
-          <>
-            {__('Duration')}
-            <Icon
-              customTooltipText={__('Enter the timeout duration. Examples: %examples%', { examples })}
-              className="icon--help"
-              icon={ICONS.HELP}
-              tooltip
-              size={16}
-            />
-          </>
-        }
-        type="text"
-        placeholder="30s, 10m, 1h, 2d, 3mo, 1y"
         value={timeoutInput}
         onChange={(e) => setTimeoutInput(e.target.value)}
-        error={timeoutInputErr}
+        onResolve={(valueInSeconds) => setTimeoutSec(valueInSeconds)}
       />
     );
   }
