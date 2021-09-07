@@ -309,49 +309,54 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     // on top of just 'loadstart'.
     // - videojs changes the MuteToggle text at 'loadstart', so this was chosen
     // as the listener to update static texts.
+
+    const setLabel = (controlBar, childName, label) => {
+      const c = controlBar.getChild(childName);
+      if (c) {
+        c.controlText(label);
+      }
+    };
+
     const player = playerRef.current;
     if (player) {
-      try {
-        const controlBar = player.getChild('controlBar');
+      const ctrlBar = player.getChild('controlBar');
       switch (e.type) {
         case 'play':
-          controlBar.getChild('PlayToggle').controlText(__('Pause (space)'));
+          setLabel(ctrlBar, 'PlayToggle', __('Pause (space)'));
           break;
         case 'pause':
-          controlBar.getChild('PlayToggle').controlText(__('Play (space)'));
+          setLabel(ctrlBar, 'PlayToggle', __('Play (space)'));
           break;
         case 'volumechange':
-          controlBar
+          ctrlBar
             .getChild('VolumePanel')
             .getChild('MuteToggle')
             .controlText(player.muted() || player.volume() === 0 ? __('Unmute (m)') : __('Mute (m)'));
           break;
         case 'fullscreenchange':
-          controlBar
-            .getChild('FullscreenToggle')
-            .controlText(player.isFullscreen() ? __('Exit Fullscreen (f)') : __('Fullscreen (f)'));
+          setLabel(
+            ctrlBar,
+            'FullscreenToggle',
+            player.isFullscreen() ? __('Exit Fullscreen (f)') : __('Fullscreen (f)')
+          );
           break;
         case 'loadstart':
           // --- Do everything ---
-          controlBar.getChild('PlaybackRateMenuButton').controlText(__('Playback Rate (<, >)'));
-          controlBar.getChild('QualityButton').controlText(__('Quality'));
+          setLabel(ctrlBar, 'PlaybackRateMenuButton', __('Playback Rate (<, >)'));
+          setLabel(ctrlBar, 'QualityButton', __('Quality'));
+          setLabel(ctrlBar, 'PlayNextButton', __('Play Next (SHIFT+N)'));
+          setLabel(ctrlBar, 'PlayPreviousButton', __('Play Previous (SHIFT+P)'));
+          setLabel(ctrlBar, 'TheaterModeButton', videoTheaterMode ? __('Default Mode (t)') : __('Theater Mode (t)'));
+          setLabel(ctrlBar, 'AutoplayNextButton', autoplaySetting ? __('Autoplay Next On') : __('Autoplay Next Off'));
+
           resolveCtrlText({ type: 'play' });
           resolveCtrlText({ type: 'pause' });
           resolveCtrlText({ type: 'volumechange' });
           resolveCtrlText({ type: 'fullscreenchange' });
-          controlBar
-            .getChild('TheaterModeButton')
-            .controlText(videoTheaterMode ? __('Default Mode (t)') : __('Theater Mode (t)'));
-          controlBar.getChild('PlayNextButton').controlText(__('Play Next (SHIFT+N)'));
-          controlBar.getChild('PlayPreviousButton').controlText(__('Play Previous (SHIFT+P)'));
           break;
         default:
           if (isDev) throw Error('Unexpected: ' + e.type);
           break;
-        }
-      } catch {
-        // Just fail silently. It'll just be due to hidden ctrls, and if it is
-        // due to control hierarchy change, we'll notice that in the GUI.
       }
     }
   }
@@ -648,7 +653,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       const autoplayButton = controlBar.getChild('AutoplayNextButton');
 
       if (autoplayButton) {
-        const title = autoplaySetting ? 'Autoplay Next On' : 'Autoplay Next Off';
+        const title = autoplaySetting ? __('Autoplay Next On') : __('Autoplay Next Off');
 
         autoplayButton.controlText(title);
         autoplayButton.setAttribute('aria-label', title);

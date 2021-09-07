@@ -118,12 +118,12 @@ export default function ModalBlockChannel(props: Props) {
 
     if (Number.isInteger(seconds) && seconds > 0) {
       if (seconds > ONE_HUNDRED_YEARS_IN_SECONDS) {
-        setInvalid('Wow, banned for more than 100 years?');
+        setInvalid(__('Wow, banned for more than 100 years?'));
       } else {
         setValid(seconds);
       }
     } else {
-      setInvalid('Invalid duration.');
+      setInvalid(__('Invalid duration.'));
     }
   }, [timeoutInput, timeoutInputErr, timeoutSec]);
 
