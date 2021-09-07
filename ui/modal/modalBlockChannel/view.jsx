@@ -95,16 +95,16 @@ export default function ModalBlockChannel(props: Props) {
 
   // 'timeoutInput' to 'timeoutSec' conversion.
   React.useEffect(() => {
-    const setInvalid = (errMsg: string) => {
+    const handleInvalidInput = (errMsg: string) => {
       if (timeoutSec !== -1) {
         setTimeoutSec(-1);
       }
-      if (!timeoutInputErr) {
+      if (timeoutInputErr !== errMsg) {
         setTimeoutInputErr(errMsg);
       }
     };
 
-    const setValid = (seconds) => {
+    const handleValidInput = (seconds) => {
       if (seconds !== timeoutSec) {
         setTimeoutSec(seconds);
       }
@@ -113,17 +113,22 @@ export default function ModalBlockChannel(props: Props) {
       }
     };
 
+    if (!timeoutInput) {
+      handleValidInput(-1); // Reset
+      return;
+    }
+
     const ONE_HUNDRED_YEARS_IN_SECONDS = 3154000000;
     const seconds = parseDuration(timeoutInput, 's');
 
     if (Number.isInteger(seconds) && seconds > 0) {
       if (seconds > ONE_HUNDRED_YEARS_IN_SECONDS) {
-        setInvalid(__('Wow, banned for more than 100 years?'));
+        handleInvalidInput(__('Wow, banned for more than 100 years?'));
       } else {
-        setValid(seconds);
+        handleValidInput(seconds);
       }
     } else {
-      setInvalid(__('Invalid duration.'));
+      handleInvalidInput(__('Invalid duration.'));
     }
   }, [timeoutInput, timeoutInputErr, timeoutSec]);
 
