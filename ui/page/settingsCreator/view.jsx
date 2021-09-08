@@ -400,23 +400,6 @@ export default function SettingsCreatorPage(props: Props) {
                     />
                   </SettingsRow>
 
-                  <SettingsRow title={__('Filter')} subtitle={__(HELP.BLOCKED_WORDS)} multirow>
-                    <div className="tag--blocked-words">
-                      <TagsSearch
-                        label={__('Muted words')}
-                        labelAddNew={__('Add words')}
-                        labelSuggestions={__('Suggestions')}
-                        onRemove={removeMutedWord}
-                        onSelect={addMutedWords}
-                        disableAutoFocus
-                        tagsPassedIn={mutedWordTags}
-                        placeholder={__('Add words to block')}
-                        hideSuggestions
-                        disableControlTags
-                      />
-                    </div>
-                  </SettingsRow>
-
                   <SettingsRow title={__('Moderators')} subtitle={__(HELP.MODERATORS)} multirow>
                     <div className="tag--blocked-words">
                       <TagsSearch
@@ -475,6 +458,23 @@ export default function SettingsCreatorPage(props: Props) {
                           />
                         </div>
                       )}
+                    </div>
+                  </SettingsRow>
+
+                  <SettingsRow title={__('Filter')} subtitle={__(HELP.BLOCKED_WORDS)} multirow>
+                    <div className="tag--blocked-words">
+                      <TagsSearch
+                        label={__('Muted words')}
+                        labelAddNew={__('Add words')}
+                        labelSuggestions={__('Suggestions')}
+                        onRemove={removeMutedWord}
+                        onSelect={addMutedWords}
+                        disableAutoFocus
+                        tagsPassedIn={mutedWordTags}
+                        placeholder={__('Add words to block')}
+                        hideSuggestions
+                        disableControlTags
+                      />
                     </div>
                   </SettingsRow>
                 </>
