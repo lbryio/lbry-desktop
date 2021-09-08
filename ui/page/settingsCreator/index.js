@@ -16,7 +16,6 @@ import {
   selectFetchingBlockedWords,
   selectModerationDelegatesById,
 } from 'redux/selectors/comments';
-import { doToast } from 'redux/actions/notifications';
 
 const select = (state) => ({
   activeChannelClaim: selectActiveChannelClaim(state),
@@ -36,7 +35,6 @@ const perform = (dispatch) => ({
   commentModRemoveDelegate: (modChanId, modChanName, creatorChannelClaim) =>
     dispatch(doCommentModRemoveDelegate(modChanId, modChanName, creatorChannelClaim)),
   commentModListDelegates: (creatorChannelClaim) => dispatch(doCommentModListDelegates(creatorChannelClaim)),
-  doToast: (options) => dispatch(doToast(options)),
 });
 
 export default connect(select, perform)(SettingsCreatorPage);

@@ -137,3 +137,40 @@
     max-width: 15rem;
   }
 }
+
+.search__channel {
+  margin-bottom: var(--spacing-l);
+
+  fieldset-section {
+    margin-top: 0;
+  }
+}
+
+.search__channel--popup {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.search__channel--popup-results {
+  position: absolute;
+  z-index: 99;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #21252980;
+  color: white;
+
+  .claim-preview__title {
+    color: #eff1f4;
+  }
+
+  .button--uri-indicator,
+  .media__subtitle {
+    color: #d8dde1;
+  }
+
+  .icon--help {
+    vertical-align: middle;
+  }
+}

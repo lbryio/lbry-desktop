@@ -230,20 +230,12 @@
 .settings__row--value {
   width: 100%;
 
-  fieldset-section:not(:only-child) {
-    margin-top: var(--spacing-s);
-  }
-
   fieldset-section.radio {
     margin-top: var(--spacing-s);
   }
 
   fieldset-group {
     margin-top: var(--spacing-m);
-  }
-
-  .tags--remove {
-    margin-bottom: 0;
   }
 
   .tags__input-wrapper {

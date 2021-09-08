@@ -1,21 +1,17 @@
 // @flow
-import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import Card from 'component/common/card';
 import TagsSearch from 'component/tagsSearch';
 import Page from 'component/page';
-import Button from 'component/button';
 import ChannelSelector from 'component/channelSelector';
+import SearchChannelField from 'component/searchChannelField';
 import SettingsRow from 'component/settingsRow';
 import Spinner from 'component/spinner';
 import { FormField } from 'component/common/form-components/form-field';
-import Icon from 'component/common/icon';
 import LbcSymbol from 'component/common/lbc-symbol';
 import I18nMessage from 'component/i18nMessage';
-import { isNameValid, parseURI } from 'lbry-redux';
-import ClaimPreview from 'component/claimPreview';
+import { parseURI } from 'lbry-redux';
 import debounce from 'util/debounce';
-import { getUriForSearchTerm } from 'util/search';
 
 const DEBOUNCE_REFRESH_MS = 1000;
 
@@ -54,23 +50,19 @@ export default function SettingsCreatorPage(props: Props) {
     commentModListDelegates,
     fetchCreatorSettings,
     updateCreatorSettings,
-    doToast,
   } = props;
 
   const [commentsEnabled, setCommentsEnabled] = React.useState(true);
   const [mutedWordTags, setMutedWordTags] = React.useState([]);
-  const [moderatorTags, setModeratorTags] = React.useState([]);
-  const [moderatorSearchTerm, setModeratorSearchTerm] = React.useState('');
-  const [moderatorSearchError, setModeratorSearchError] = React.useState('');
-  const [moderatorSearchClaimUri, setModeratorSearchClaimUri] = React.useState('');
+  const [moderatorUris, setModeratorUris] = React.useState([]);
   const [minTip, setMinTip] = React.useState(0);
   const [minSuper, setMinSuper] = React.useState(0);
   const [slowModeMin, setSlowModeMin] = React.useState(0);
   const [lastUpdated, setLastUpdated] = React.useState(1);
 
-  const pushSlowModeMinDebounced = React.useMemo(() => debounce(pushSlowModeMin, 1000), []);
-  const pushMinTipDebounced = React.useMemo(() => debounce(pushMinTip, 1000), []);
-  const pushMinSuperDebounced = React.useMemo(() => debounce(pushMinSuper, 1000), []);
+  const pushSlowModeMinDebounced = React.useMemo(() => debounce(pushSlowModeMin, 1000), []); // eslint-disable-line react-hooks/exhaustive-deps
+  const pushMinTipDebounced = React.useMemo(() => debounce(pushMinTip, 1000), []); // eslint-disable-line react-hooks/exhaustive-deps
+  const pushMinSuperDebounced = React.useMemo(() => debounce(pushMinSuper, 1000), []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // **************************************************************************
   // **************************************************************************
@@ -79,8 +71,8 @@ export default function SettingsCreatorPage(props: Props) {
    * Updates corresponding GUI states with the given PerChannelSettings values.
    *
    * @param settings
-   * @param fullSync If true, update all states and consider 'undefined' settings as "cleared/false";
-   *                 if false, only update defined settings.
+   * @param fullSync If true, update all states and consider 'undefined'
+   *   settings as "cleared/false"; if false, only update defined settings.
    */
   function settingsToStates(settings: PerChannelSettings, fullSync: boolean) {
     const doSetMutedWordTags = (words: Array<string>) => {
@@ -137,6 +129,31 @@ export default function SettingsCreatorPage(props: Props) {
     updateCreatorSettings(activeChannelClaim, { min_tip_amount_super_chat: value });
   }
 
+  function parseModUri(uri) {
+    try {
+      return parseURI(uri);
+    } catch (e) {}
+    return undefined;
+  }
+
+  function handleModeratorAdded(channelUri: string) {
+    setModeratorUris([...moderatorUris, channelUri]);
+    const parsedUri = parseModUri(channelUri);
+    if (parsedUri && parsedUri.claimId && parsedUri.claimName) {
+      commentModAddDelegate(parsedUri.claimId, parsedUri.claimName, activeChannelClaim);
+      setLastUpdated(Date.now());
+    }
+  }
+
+  function handleModeratorRemoved(channelUri: string) {
+    setModeratorUris(moderatorUris.filter((x) => x !== channelUri));
+    const parsedUri = parseModUri(channelUri);
+    if (parsedUri && parsedUri.claimId && parsedUri.claimName) {
+      commentModRemoveDelegate(parsedUri.claimId, parsedUri.claimName, activeChannelClaim);
+      setLastUpdated(Date.now());
+    }
+  }
+
   function addMutedWords(newTags: Array<Tag>) {
     const validatedNewTags = [];
     newTags.forEach((newTag) => {
@@ -162,73 +179,8 @@ export default function SettingsCreatorPage(props: Props) {
     setLastUpdated(Date.now());
   }
 
-  function addModerator(newTags: Array<Tag>) {
-    // Ignoring multiple entries for now, although <TagsSearch> supports it.
-    let modUri;
-    try {
-      modUri = parseURI(newTags[0].name);
-    } catch (e) {}
-
-    if (modUri && modUri.isChannel && modUri.claimName && modUri.claimId) {
-      if (!moderatorTags.some((modTag) => modTag.name === newTags[0].name)) {
-        setModeratorTags([...moderatorTags, newTags[0]]);
-        commentModAddDelegate(modUri.claimId, modUri.claimName, activeChannelClaim);
-        setLastUpdated(Date.now());
-      }
-    } else {
-      doToast({ message: __('Invalid channel URL "%url%"', { url: newTags[0].name }), isError: true });
-    }
-  }
-
-  function removeModerator(tagToRemove: Tag) {
-    let modUri;
-    try {
-      modUri = parseURI(tagToRemove.name);
-    } catch (e) {}
-
-    if (modUri && modUri.isChannel && modUri.claimName && modUri.claimId) {
-      const newModeratorTags = moderatorTags.slice().filter((t) => t.name !== tagToRemove.name);
-      setModeratorTags(newModeratorTags);
-      commentModRemoveDelegate(modUri.claimId, modUri.claimName, activeChannelClaim);
-      setLastUpdated(Date.now());
-    }
-  }
-
-  function handleChannelSearchSelect(claim) {
-    if (claim && claim.name && claim.claim_id) {
-      addModerator([{ name: claim.name + '#' + claim.claim_id }]);
-    }
-  }
-
   // **************************************************************************
   // **************************************************************************
-
-  // 'moderatorSearchTerm' to 'moderatorSearchClaimUri'
-  React.useEffect(() => {
-    if (!moderatorSearchTerm) {
-      setModeratorSearchError('');
-      setModeratorSearchClaimUri('');
-    } else {
-      const [searchUri, error] = getUriForSearchTerm(moderatorSearchTerm);
-      setModeratorSearchError(error ? __('Something not quite right..') : '');
-
-      try {
-        const { streamName, channelName, isChannel } = parseURI(searchUri);
-
-        if (!isChannel && streamName && isNameValid(streamName)) {
-          setModeratorSearchError(__('Not a channel (prefix with "@", or enter the channel URL)'));
-          setModeratorSearchClaimUri('');
-        } else if (isChannel && channelName && isNameValid(channelName)) {
-          setModeratorSearchClaimUri(searchUri);
-        }
-      } catch (e) {
-        if (moderatorSearchTerm !== '@') {
-          setModeratorSearchError('');
-        }
-        setModeratorSearchClaimUri('');
-      }
-    }
-  }, [moderatorSearchTerm, setModeratorSearchError]);
 
   // Update local moderator states with data from API.
   React.useEffect(() => {
@@ -239,15 +191,9 @@ export default function SettingsCreatorPage(props: Props) {
     if (activeChannelClaim) {
       const delegates = moderationDelegatesById[activeChannelClaim.claim_id];
       if (delegates) {
-        setModeratorTags(
-          delegates.map((d) => {
-            return {
-              name: d.channelName + '#' + d.channelId,
-            };
-          })
-        );
+        setModeratorUris(delegates.map((d) => `${d.channelName}#${d.channelId}`));
       } else {
-        setModeratorTags([]);
+        setModeratorUris([]);
       }
     }
   }, [activeChannelClaim, moderationDelegatesById]);
@@ -400,6 +346,17 @@ export default function SettingsCreatorPage(props: Props) {
                     />
                   </SettingsRow>
 
+                  <SettingsRow title={__('Moderators')} subtitle={__(HELP.MODERATORS)} multirow>
+                    <SearchChannelField
+                      label={__('Moderators')}
+                      labelAddNew={__('Add moderator')}
+                      labelFoundAction={__('Add')}
+                      values={moderatorUris}
+                      onAdd={handleModeratorAdded}
+                      onRemove={handleModeratorRemoved}
+                    />
+                  </SettingsRow>
+
                   <SettingsRow title={__('Filter')} subtitle={__(HELP.BLOCKED_WORDS)} multirow>
                     <div className="tag--blocked-words">
                       <TagsSearch
@@ -414,67 +371,6 @@ export default function SettingsCreatorPage(props: Props) {
                         hideSuggestions
                         disableControlTags
                       />
-                    </div>
-                  </SettingsRow>
-
-                  <SettingsRow title={__('Moderators')} subtitle={__(HELP.MODERATORS)} multirow>
-                    <div className="tag--blocked-words">
-                      <TagsSearch
-                        label={__('Moderators')}
-                        labelAddNew={__('Add moderator')}
-                        onRemove={removeModerator}
-                        onSelect={addModerator}
-                        tagsPassedIn={moderatorTags}
-                        disableAutoFocus
-                        hideInputField
-                        hideSuggestions
-                        disableControlTags
-                      />
-                      <FormField
-                        type="text"
-                        name="moderator_search"
-                        className="form-field--address"
-                        label={
-                          <>
-                            {__('Search channel')}
-                            <Icon
-                              customTooltipText={__(HELP.MODERATOR_SEARCH)}
-                              className="icon--help"
-                              icon={ICONS.HELP}
-                              tooltip
-                              size={16}
-                            />
-                          </>
-                        }
-                        placeholder={__('Enter a @username or URL')}
-                        value={moderatorSearchTerm}
-                        onChange={(e) => setModeratorSearchTerm(e.target.value)}
-                        error={moderatorSearchError}
-                      />
-                      {moderatorSearchClaimUri && (
-                        <div className="section">
-                          <ClaimPreview
-                            key={moderatorSearchClaimUri}
-                            uri={moderatorSearchClaimUri}
-                            // type={'small'}
-                            // showNullPlaceholder
-                            hideMenu
-                            hideRepostLabel
-                            disableNavigation
-                            properties={''}
-                            renderActions={(claim) => {
-                              return (
-                                <Button
-                                  requiresAuth
-                                  button="primary"
-                                  label={__('Add as moderator')}
-                                  onClick={() => handleChannelSearchSelect(claim)}
-                                />
-                              );
-                            }}
-                          />
-                        </div>
-                      )}
                     </div>
                   </SettingsRow>
                 </>
