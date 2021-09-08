@@ -7,7 +7,7 @@ import { doOpenModal } from 'redux/actions/app';
 import { doSetPlayingUri } from 'redux/actions/content';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { selectPlayingUri } from 'redux/selectors/content';
-
+import { selectModerationDelegatorsById } from 'redux/selectors/comments';
 import CommentMenuList from './view';
 
 const select = (state, props) => ({
@@ -16,6 +16,7 @@ const select = (state, props) => ({
   contentChannelPermanentUrl: makeSelectChannelPermUrlForClaimUri(props.uri)(state),
   activeChannelClaim: selectActiveChannelClaim(state),
   playingUri: selectPlayingUri(state),
+  moderationDelegatorsById: selectModerationDelegatorsById(state),
 });
 
 const perform = (dispatch) => ({

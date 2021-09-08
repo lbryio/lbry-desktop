@@ -11,6 +11,7 @@ import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
 import usePersistedState from 'effects/use-persisted-state';
 import { Modal } from 'modal/modal';
+import { getChannelFromClaim } from 'util/claim';
 
 const TAB = {
   PERSONAL: 'personal',
@@ -49,14 +50,7 @@ export default function ModalBlockChannel(props: Props) {
     commentModBlockAsModerator,
   } = props;
 
-  const contentChannelClaim = !contentClaim
-    ? null
-    : contentClaim.value_type === 'channel'
-    ? contentClaim
-    : contentClaim.signing_channel && contentClaim.is_channel_signature_valid
-    ? contentClaim.signing_channel
-    : null;
-
+  const contentChannelClaim = getChannelFromClaim(contentClaim);
   const activeModeratorInfo = activeChannelClaim && moderationDelegatorsById[activeChannelClaim.claim_id];
   const activeChannelIsAdmin = activeChannelClaim && activeModeratorInfo && activeModeratorInfo.global;
   const activeChannelIsModerator =
