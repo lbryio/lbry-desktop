@@ -55,6 +55,8 @@ export default function LivestreamComments(props: Props) {
   const [showPinned, setShowPinned] = React.useState(true);
   const claimId = claim && claim.claim_id;
   const commentsLength = commentsByChronologicalOrder && commentsByChronologicalOrder.length;
+
+  // which kind of superchat to display, either
   const commentsToDisplay = viewMode === VIEW_MODE_CHAT ? commentsByChronologicalOrder : superChatsByTipAmount;
 
   const discussionElement = document.querySelector('.livestream__comments');
@@ -136,19 +138,11 @@ export default function LivestreamComments(props: Props) {
   if (superChatsByTipAmount) {
     const clonedSuperchats = JSON.parse(JSON.stringify(superChatsByTipAmount));
 
-    // sort by fiat first then by support amount
+    // for top to bottom display, oldest superchat on top most recent on bottom
     superChatsReversed = clonedSuperchats
       .sort((a, b) => {
-        // if both are fiat, organize by support
-        if (a.is_fiat === b.is_fiat) {
-          return b.support_amount - a.support_amount;
-          // otherwise, if they are not both fiat, put the fiat transaction first
-        } else {
-          return a.is_fiat === b.is_fiat ? 0 : a.is_fiat ? -1 : 1;
-        }
-      })
-      .reverse();
-  }
+        return b.timestamp - a.timestamp;
+      }); }
 
   // todo: implement comment_list --mine in SDK so redux can grab with selectCommentIsMine
   function isMyComment(channelId: string) {
@@ -283,6 +277,7 @@ export default function LivestreamComments(props: Props) {
                   />
                 ))}
 
+              {/* listing comments on top of eachother */}
               {viewMode === VIEW_MODE_SUPER_CHAT &&
                 superChatsReversed &&
                 superChatsReversed.map((comment) => (
