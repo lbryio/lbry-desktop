@@ -6,6 +6,7 @@ import { MenuList, MenuItem } from '@reach/menu-button';
 import ChannelThumbnail from 'component/channelThumbnail';
 import Icon from 'component/common/icon';
 import { parseURI } from 'lbry-redux';
+import { getChannelFromClaim } from 'util/claim';
 
 type Props = {
   uri: ?string,
@@ -24,6 +25,7 @@ type Props = {
   contentChannelPermanentUrl: any,
   activeChannelClaim: ?ChannelClaim,
   playingUri: ?PlayingUri,
+  moderationDelegatorsById: { [string]: { global: boolean, delegators: { name: string, claimId: string } } },
   // --- perform ---
   openModal: (id: string, {}) => void,
   clearPlayingUri: () => void,
@@ -50,6 +52,7 @@ function CommentMenuList(props: Props) {
     handleEditComment,
     commentModAddDelegate,
     playingUri,
+    moderationDelegatorsById,
     disableEdit,
     disableRemove,
     openModal,
@@ -57,7 +60,15 @@ function CommentMenuList(props: Props) {
     setQuickReply,
   } = props;
 
+  const contentChannelClaim = getChannelFromClaim(claim);
+  const activeModeratorInfo = activeChannelClaim && moderationDelegatorsById[activeChannelClaim.claim_id];
   const activeChannelIsCreator = activeChannelClaim && activeChannelClaim.permanent_url === contentChannelPermanentUrl;
+  const activeChannelIsAdmin = activeChannelClaim && activeModeratorInfo && activeModeratorInfo.global;
+  const activeChannelIsModerator =
+    activeChannelClaim &&
+    contentChannelClaim &&
+    activeModeratorInfo &&
+    Object.values(activeModeratorInfo.delegators).includes(contentChannelClaim.claim_id);
 
   function handlePinComment(commentId, claimId, remove) {
     pinComment(commentId, claimId, remove);
@@ -89,6 +100,59 @@ function CommentMenuList(props: Props) {
       const { channelName, channelClaimId } = parseURI(authorUri);
       commentModAddDelegate(channelClaimId, channelName, activeChannelClaim);
     }
+  }
+
+  function getBlockOptionElem() {
+    const isPersonalBlockTheOnlyOption = !activeChannelIsModerator && !activeChannelIsAdmin;
+    const isTimeoutBlockAvailable = (claim && claim.is_my_output) || activeChannelIsModerator;
+    const personalPermanentBlockOnly = isPersonalBlockTheOnlyOption && !isTimeoutBlockAvailable;
+
+    function getSubtitle() {
+      if (personalPermanentBlockOnly) {
+        return {
+          line1: __('Prevent this channel from interacting with you.'),
+          line2: null,
+        };
+      } else {
+        if (activeChannelIsModerator && activeChannelIsAdmin) {
+          return {
+            line1: __('Personal | Moderator | Admin'),
+            line2: __('Choose a permanent or temporary ban.'),
+          };
+        } else if (activeChannelIsModerator && !activeChannelIsAdmin) {
+          return {
+            line1: __('Personal | Moderator'),
+            line2: __('Choose a permanent or temporary ban.'),
+          };
+        } else if (!activeChannelIsModerator && activeChannelIsAdmin) {
+          return {
+            line1: __('Personal | Admin'),
+            line2: __('Choose a permanent or temporary ban.'),
+          };
+        } else {
+          return {
+            line1: null,
+            line2: __('Choose a permanent or temporary ban.'),
+          };
+        }
+      }
+    }
+
+    const subtitle = getSubtitle();
+    return (
+      <>
+        <div className="menu__link">
+          <Icon aria-hidden icon={ICONS.BLOCK} />
+          {__('Block')}
+        </div>
+        {subtitle.line1 && <span className="comment__menu-help">{subtitle.line1}</span>}
+        {subtitle.line2 && (
+          <span className="comment__menu-help">
+            {subtitle.line2} {!personalPermanentBlockOnly && <Icon aria-hidden icon={ICONS.EXTERNAL} />}
+          </span>
+        )}
+      </>
+    );
   }
 
   return (
@@ -142,13 +206,7 @@ function CommentMenuList(props: Props) {
 
       {!commentIsMine && (
         <MenuItem className="comment__menu-option" onSelect={handleCommentBlock}>
-          <div className="menu__link">
-            <Icon aria-hidden icon={ICONS.BLOCK} />
-            {__('Block')}
-          </div>
-          {activeChannelIsCreator && (
-            <span className="comment__menu-help">{__('Prevent this channel from interacting with you.')}</span>
-          )}
+          {getBlockOptionElem()}
         </MenuItem>
       )}
 

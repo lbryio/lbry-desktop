@@ -353,6 +353,10 @@ $thumbnailWidthSmall: 1rem;
   padding-left: calc(18px + var(--spacing-s));
   max-width: 15rem;
   white-space: pre-line;
+
+  .icon {
+    vertical-align: top;
+  }
 }
 
 .comment__actions {

@@ -9,3 +9,13 @@ export function getChannelIdFromClaim(claim: ?Claim) {
     }
   }
 }
+
+export function getChannelFromClaim(claim: ?Claim) {
+  return !claim
+    ? null
+    : claim.value_type === 'channel'
+    ? claim
+    : claim.signing_channel && claim.is_channel_signature_valid
+    ? claim.signing_channel
+    : null;
+}
