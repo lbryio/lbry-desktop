@@ -6,6 +6,7 @@ import {
   SETTINGS,
   selectClaimsByUri,
 } from 'lbry-redux';
+import { doFetchViewCount } from 'lbryinc';
 import { doToggleTagFollowDesktop } from 'redux/actions/tags';
 import { makeSelectClientSetting, selectShowMatureContent } from 'redux/selectors/settings';
 import { selectModerationBlockList } from 'redux/selectors/comments';
@@ -25,6 +26,7 @@ const select = (state) => ({
 const perform = {
   doClaimSearch,
   doToggleTagFollowDesktop,
+  doFetchViewCount,
 };
 
 export default connect(select, perform)(ClaimListDiscover);

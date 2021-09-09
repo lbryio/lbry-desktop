@@ -598,6 +598,18 @@
   font-size: var(--font-body);
 }
 
+.claim-tile__about--counts {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.view_count {
+  &::after {
+    content: '•';
+    margin: 0 var(--spacing-xxs);
+  }
+}
+
 .claim-preview__file-property-overlay {
   position: absolute;
   bottom: var(--spacing-xxs);
@@ -681,14 +693,13 @@
 
 // div that displays watch later button
 .claim-preview__hover-actions {
-
   // if the user is using a mouse
-  @media (pointer: fine){
+  @media (pointer: fine) {
     display: none;
   }
 
   // if the user doesn't have a pointer (mouse etc) hide watch later button
-  @media (pointer: none), (pointer:coarse) {
+  @media (pointer: none), (pointer: coarse) {
     display: none !important;
   }
 

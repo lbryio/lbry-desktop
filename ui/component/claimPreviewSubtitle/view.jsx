@@ -4,6 +4,7 @@ import React from 'react';
 import UriIndicator from 'component/uriIndicator';
 import DateTime from 'component/dateTime';
 import Button from 'component/button';
+import FileViewCountInline from 'component/fileViewCountInline';
 import { parseURI } from 'lbry-redux';
 
 type Props = {
@@ -37,7 +38,14 @@ function ClaimPreviewSubtitle(props: Props) {
                 `${claimsInChannel} ${claimsInChannel === 1 ? __('upload') : __('uploads')}`}
 
               {!isChannel &&
-                (isLivestream && ENABLE_NO_SOURCE_CLAIMS ? __('Livestream') : <DateTime timeAgo uri={uri} />)}
+                (isLivestream && ENABLE_NO_SOURCE_CLAIMS ? (
+                  __('Livestream')
+                ) : (
+                  <>
+                    <FileViewCountInline uri={uri} isLivestream={isLivestream} />
+                    <DateTime timeAgo uri={uri} />
+                  </>
+                ))}
             </>
           )}
         </React.Fragment>

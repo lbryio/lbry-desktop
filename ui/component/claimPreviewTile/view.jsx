@@ -7,6 +7,7 @@ import UriIndicator from 'component/uriIndicator';
 import TruncatedText from 'component/common/truncated-text';
 import DateTime from 'component/dateTime';
 import ChannelThumbnail from 'component/channelThumbnail';
+import FileViewCountInline from 'component/fileViewCountInline';
 import SubscribeButton from 'component/subscribeButton';
 import useGetThumbnail from 'effects/use-get-thumbnail';
 import { formatLbryUrlForWeb } from 'util/url';
@@ -210,15 +211,11 @@ function ClaimPreviewTile(props: Props) {
           {!isChannel && (
             <React.Fragment>
               <div className="claim-preview__hover-actions">
-                {isPlayable && (
-                  <FileWatchLaterLink focusable={false} uri={uri} />
-                )}
+                {isPlayable && <FileWatchLaterLink focusable={false} uri={uri} />}
               </div>
               {/* @if TARGET='app' */}
               <div className="claim-preview__hover-actions">
-                {isStream && (
-                  <FileDownloadLink focusable={false} uri={canonicalUrl} hideOpenButton />
-                )}
+                {isStream && <FileDownloadLink focusable={false} uri={canonicalUrl} hideOpenButton />}
               </div>
               {/* @endif */}
 
@@ -226,7 +223,6 @@ function ClaimPreviewTile(props: Props) {
                 <PreviewOverlayProperties uri={uri} properties={liveProperty || properties} />
               </div>
             </React.Fragment>
-
           )}
           {isCollection && (
             <React.Fragment>
@@ -264,7 +260,10 @@ function ClaimPreviewTile(props: Props) {
 
               <div className="claim-tile__about">
                 <UriIndicator uri={uri} link />
-                <DateTime timeAgo uri={uri} />
+                <div className="claim-tile__about--counts">
+                  <FileViewCountInline uri={uri} isLivestream={isLivestream} />
+                  <DateTime timeAgo uri={uri} />
+                </div>
               </div>
             </React.Fragment>
           )}

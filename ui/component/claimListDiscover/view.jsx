@@ -28,6 +28,7 @@ type Props = {
   meta?: Node,
   showNsfw: boolean,
   hideReposts: boolean,
+  fetchViewCount?: boolean,
   history: { action: string, push: (string) => void, replace: (string) => void },
   location: { search: string, pathname: string },
   claimSearchByQuery: {
@@ -78,6 +79,8 @@ type Props = {
   showNoSourceClaims?: boolean,
   isChannel?: boolean,
   empty?: string,
+  claimsByUri: { [string]: any },
+  doFetchViewCount: (claimIdCsv: string) => void,
 };
 
 function ClaimListDiscover(props: Props) {
@@ -94,6 +97,7 @@ function ClaimListDiscover(props: Props) {
     channelIds,
     showNsfw,
     hideReposts,
+    fetchViewCount,
     history,
     location,
     mutedUris,
@@ -138,6 +142,8 @@ function ClaimListDiscover(props: Props) {
     isChannel = false,
     showNoSourceClaims,
     empty,
+    claimsByUri,
+    doFetchViewCount,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
   const { search } = location;
@@ -518,6 +524,16 @@ function ClaimListDiscover(props: Props) {
     }
   }
 
+  function fetchViewCountForUris(uris) {
+    const claimIds = [];
+    uris.forEach((uri) => {
+      if (claimsByUri[uri]) {
+        claimIds.push(claimsByUri[uri].claim_id);
+      }
+    });
+    doFetchViewCount(claimIds.join(','));
+  }
+
   // **************************************************************************
   // **************************************************************************
 
@@ -546,6 +562,12 @@ function ClaimListDiscover(props: Props) {
       }
     }
   }, [uris, claimSearchResult, finalUris, setFinalUris, liveLivestreamsFirst, livestreamSearchResult]);
+
+  React.useEffect(() => {
+    if (fetchViewCount) {
+      fetchViewCountForUris(finalUris);
+    }
+  }, [finalUris]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const headerToUse = header || (
     <ClaimListHeader

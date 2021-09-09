@@ -92,6 +92,7 @@ type Props = {
   livestreamMap?: { [string]: any },
   showNoSourceClaims?: boolean,
   renderProperties?: (Claim) => ?Node,
+  fetchViewCount?: boolean,
   // claim search options are below
   tags: Array<string>,
   claimIds?: Array<string>,
@@ -117,6 +118,7 @@ type Props = {
   blockedUris: Array<string>,
   // --- perform ---
   doClaimSearch: ({}) => void,
+  doFetchViewCount: (claimIdCsv: string) => void,
 };
 
 function ClaimTilesDiscover(props: Props) {
@@ -126,6 +128,7 @@ function ClaimTilesDiscover(props: Props) {
     claimsByUri,
     showNsfw,
     hideReposts,
+    fetchViewCount,
     // Below are options to pass that are forwarded to claim_search
     tags,
     channelIds,
@@ -150,6 +153,7 @@ function ClaimTilesDiscover(props: Props) {
     pinUrls,
     prefixUris,
     showNoSourceClaims,
+    doFetchViewCount,
   } = props;
 
   const { location } = useHistory();
@@ -294,6 +298,16 @@ function ClaimTilesDiscover(props: Props) {
     return undefined;
   }
 
+  function fetchViewCountForUris(uris) {
+    const claimIds = [];
+    uris.forEach((uri) => {
+      if (claimsByUri[uri]) {
+        claimIds.push(claimsByUri[uri].claim_id);
+      }
+    });
+    doFetchViewCount(claimIds.join(','));
+  }
+
   // **************************************************************************
   // **************************************************************************
 
@@ -310,9 +324,14 @@ function ClaimTilesDiscover(props: Props) {
 
   React.useEffect(() => {
     if (JSON.stringify(prevUris) !== JSON.stringify(uris) && !shouldPerformSearch) {
+      // Stash new results for next render cycle:
       setPrevUris(uris);
+      // Fetch view count:
+      if (fetchViewCount) {
+        fetchViewCountForUris(uris);
+      }
     }
-  }, [shouldPerformSearch, prevUris, uris]);
+  }, [shouldPerformSearch, prevUris, uris]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // **************************************************************************
   // **************************************************************************
