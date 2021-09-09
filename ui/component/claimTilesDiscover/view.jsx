@@ -86,18 +86,14 @@ export function prioritizeActiveLivestreams(
 
 type Props = {
   prefixUris?: Array<string>,
+  pinUrls?: Array<string>,
   uris: Array<string>,
-  doClaimSearch: ({}) => void,
-  showNsfw: boolean,
-  hideReposts: boolean,
-  history: { action: string, push: (string) => void, replace: (string) => void },
-  claimSearchByQuery: { [string]: Array<string> },
-  fetchingClaimSearchByQuery: { [string]: boolean },
-  claimsByUri: { [string]: any },
+  liveLivestreamsFirst?: boolean,
+  livestreamMap?: { [string]: any },
+  showNoSourceClaims?: boolean,
+  renderProperties?: (Claim) => ?Node,
   // claim search options are below
   tags: Array<string>,
-  blockedUris: Array<string>,
-  mutedUris: Array<string>,
   claimIds?: Array<string>,
   channelIds?: Array<string>,
   pageSize: number,
@@ -111,11 +107,16 @@ type Props = {
   limitClaimsPerChannel?: number,
   hasSource?: boolean,
   hasNoSource?: boolean,
-  renderProperties?: (Claim) => ?Node,
-  liveLivestreamsFirst?: boolean,
-  livestreamMap?: { [string]: any },
-  pinUrls?: Array<string>,
-  showNoSourceClaims?: boolean,
+  // --- select ---
+  claimSearchByQuery: { [string]: Array<string> },
+  claimsByUri: { [string]: any },
+  fetchingClaimSearchByQuery: { [string]: boolean },
+  showNsfw: boolean,
+  hideReposts: boolean,
+  mutedUris: Array<string>,
+  blockedUris: Array<string>,
+  // --- perform ---
+  doClaimSearch: ({}) => void,
 };
 
 function ClaimTilesDiscover(props: Props) {
@@ -269,6 +270,33 @@ function ClaimTilesDiscover(props: Props) {
     }
   }
 
+  const modifiedUris = uris ? uris.slice() : [];
+  const fixUris = pinUrls || [];
+
+  if (pinUrls && modifiedUris && modifiedUris.length > 2 && window.location.pathname === '/') {
+    fixUris.forEach((fixUri) => {
+      if (modifiedUris.indexOf(fixUri) !== -1) {
+        modifiedUris.splice(modifiedUris.indexOf(fixUri), 1);
+      } else {
+        modifiedUris.pop();
+      }
+    });
+    modifiedUris.splice(2, 0, ...fixUris);
+  }
+
+  // **************************************************************************
+  // **************************************************************************
+
+  function resolveLive(index) {
+    if (liveLivestreamsFirst && livestreamMap && index < liveUris.length) {
+      return true;
+    }
+    return undefined;
+  }
+
+  // **************************************************************************
+  // **************************************************************************
+
   React.useEffect(() => {
     if (shouldPerformSearch) {
       const searchOptions = JSON.parse(optionsStringForEffect);
@@ -286,26 +314,8 @@ function ClaimTilesDiscover(props: Props) {
     }
   }, [shouldPerformSearch, prevUris, uris]);
 
-  const resolveLive = (index) => {
-    if (liveLivestreamsFirst && livestreamMap && index < liveUris.length) {
-      return true;
-    }
-    return undefined;
-  };
-
-  const modifiedUris = uris ? uris.slice() : [];
-  const fixUris = pinUrls || [];
-
-  if (pinUrls && modifiedUris && modifiedUris.length > 2 && window.location.pathname === '/') {
-    fixUris.forEach((fixUri) => {
-      if (modifiedUris.indexOf(fixUri) !== -1) {
-        modifiedUris.splice(modifiedUris.indexOf(fixUri), 1);
-      } else {
-        modifiedUris.pop();
-      }
-    });
-    modifiedUris.splice(2, 0, ...fixUris);
-  }
+  // **************************************************************************
+  // **************************************************************************
 
   return (
     <ul className="claim-grid">
