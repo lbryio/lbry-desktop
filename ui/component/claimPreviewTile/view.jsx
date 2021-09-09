@@ -10,9 +10,9 @@ import ChannelThumbnail from 'component/channelThumbnail';
 import FileViewCountInline from 'component/fileViewCountInline';
 import SubscribeButton from 'component/subscribeButton';
 import useGetThumbnail from 'effects/use-get-thumbnail';
-import { formatLbryUrlForWeb } from 'util/url';
+import { formatLbryUrlForWeb, generateListSearchUrlParams } from 'util/url';
 import { formatClaimPreviewTitle } from 'util/formatAriaLabel';
-import { parseURI, COLLECTIONS_CONSTS, isURIEqual } from 'lbry-redux';
+import { parseURI, isURIEqual } from 'lbry-redux';
 import PreviewOverlayProperties from 'component/previewOverlayProperties';
 import FileDownloadLink from 'component/fileDownloadLink';
 import FileWatchLaterLink from 'component/fileWatchLaterLink';
@@ -98,13 +98,9 @@ function ClaimPreviewTile(props: Props) {
   const thumbnailUrl = useGetThumbnail(uri, claim, streamingUrl, getFile, placeholder) || thumbnail;
   const canonicalUrl = claim && claim.canonical_url;
   const permanentUrl = claim && claim.permanent_url;
-  let navigateUrl = formatLbryUrlForWeb(canonicalUrl || uri || '/');
   const listId = collectionId || collectionClaimId;
-  if (listId) {
-    const collectionParams = new URLSearchParams();
-    collectionParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, listId);
-    navigateUrl = navigateUrl + `?` + collectionParams.toString();
-  }
+  const navigateUrl =
+    formatLbryUrlForWeb(canonicalUrl || uri || '/') + (listId ? generateListSearchUrlParams(listId) : '');
   const navLinkProps = {
     to: navigateUrl,
     onClick: (e) => e.stopPropagation(),

@@ -22,7 +22,7 @@ type Props = {
   fileInfo: FileListItem,
   uri: string,
   history: { push: (string) => void },
-  location: { search: ?string, pathname: string },
+  location: { search: ?string, pathname: string, href: string, state: { forceAutoplay: boolean } },
   obscurePreview: boolean,
   insufficientCredits: boolean,
   claimThumbnail?: string,
@@ -58,14 +58,10 @@ export default function FileRenderInitiator(props: Props) {
     collectionId,
   } = props;
 
-  // force autoplay if a timestamp is present
-  let autoplay = props.autoplay;
-  // get current url
-  const url = window.location.href;
-  // check if there is a time parameter, if so force autoplay
-  if (url.indexOf('t=') > -1) {
-    autoplay = true;
-  }
+  // check if there is a time or autoplay parameter, if so force autoplay
+  const urlTimeParam = location && location.href && location.href.indexOf('t=') > -1;
+  const forceAutoplayParam = location && location.state && location.state.forceAutoplay;
+  const autoplay = forceAutoplayParam || urlTimeParam || props.autoplay;
 
   const cost = costInfo && costInfo.cost;
   const isFree = hasCostInfo && cost === 0;
@@ -75,7 +71,7 @@ export default function FileRenderInitiator(props: Props) {
   const [thumbnail, setThumbnail] = React.useState(FileRenderPlaceholder);
   const containerRef = React.useRef<any>();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (claimThumbnail) {
       setTimeout(() => {
         let newThumbnail = claimThumbnail;
@@ -96,7 +92,7 @@ export default function FileRenderInitiator(props: Props) {
         }
       }, 200);
     }
-  }, [claimThumbnail]);
+  }, [claimThumbnail, thumbnail]);
 
   function doAuthRedirect() {
     history.push(`/$/${PAGES.AUTH}?redirect=${encodeURIComponent(location.pathname)}`);
@@ -138,11 +134,12 @@ export default function FileRenderInitiator(props: Props) {
     const videoOnPage = document.querySelector('video');
     if (
       (isFree || claimWasPurchased) &&
-      ((autoplay && !videoOnPage && isPlayable) || RENDER_MODES.AUTO_RENDER_MODES.includes(renderMode))
+      ((autoplay && (!videoOnPage || forceAutoplayParam) && isPlayable) ||
+        RENDER_MODES.AUTO_RENDER_MODES.includes(renderMode))
     ) {
       viewFile();
     }
-  }, [autoplay, viewFile, isFree, renderMode, isPlayable, claimWasPurchased]);
+  }, [autoplay, viewFile, isFree, renderMode, isPlayable, claimWasPurchased, forceAutoplayParam]);
 
   /*
   once content is playing, let the appropriate <FileRender> take care of it...

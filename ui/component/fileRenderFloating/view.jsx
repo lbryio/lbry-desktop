@@ -11,10 +11,11 @@ import usePersistedState from 'effects/use-persisted-state';
 import { PRIMARY_PLAYER_WRAPPER_CLASS } from 'page/file/view';
 import Draggable from 'react-draggable';
 import { onFullscreenChange } from 'util/full-screen';
+import { generateListSearchUrlParams } from 'util/url';
 import { useIsMobile } from 'effects/use-screensize';
 import debounce from 'util/debounce';
 import { useHistory } from 'react-router';
-import { isURIEqual, COLLECTIONS_CONSTS } from 'lbry-redux';
+import { isURIEqual } from 'lbry-redux';
 
 const IS_DESKTOP_MAC = typeof process === 'object' ? process.platform === 'darwin' : false;
 const DEBOUNCE_WINDOW_RESIZE_HANDLER_MS = 60;
@@ -54,9 +55,8 @@ export default function FileRenderFloating(props: Props) {
     doFetchRecommendedContent,
     collectionId,
   } = props;
-  const {
-    location: { pathname },
-  } = useHistory();
+  const { location } = useHistory();
+  const hideFloatingPlayer = location.state && location.state.hideFloatingPlayer;
   const isMobile = useIsMobile();
   const mainFilePlaying = playingUri && isURIEqual(playingUri.uri, primaryUri);
   const [fileViewerRect, setFileViewerRect] = useState();
@@ -71,12 +71,7 @@ export default function FileRenderFloating(props: Props) {
     y: 0,
   });
 
-  let navigateUrl;
-  if (collectionId) {
-    const collectionParams = new URLSearchParams();
-    collectionParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, collectionId);
-    navigateUrl = uri + `?` + collectionParams.toString();
-  }
+  const navigateUrl = uri + (collectionId ? generateListSearchUrlParams(collectionId) : '');
 
   const playingUriSource = playingUri && playingUri.source;
   const isPlayable = RENDER_MODES.FLOATING_MODES.includes(renderMode);
@@ -102,7 +97,7 @@ export default function FileRenderFloating(props: Props) {
     }
   }
 
-  function clampToScreen(pos) {
+  const clampToScreen = React.useCallback((pos) => {
     const ESTIMATED_SCROLL_BAR_PX = 50;
     const FLOATING_PLAYER_CLASS = 'content__viewer--floating';
     const fpPlayerElem = document.querySelector(`.${FLOATING_PLAYER_CLASS}`);
@@ -115,7 +110,7 @@ export default function FileRenderFloating(props: Props) {
         pos.y = getScreenHeight() - fpPlayerElem.getBoundingClientRect().height;
       }
     }
-  }
+  }, []);
 
   // Updated 'relativePos' based on persisted 'position':
   const stringifiedPosition = JSON.stringify(position);
@@ -139,7 +134,7 @@ export default function FileRenderFloating(props: Props) {
         setPosition({ x: pos.x, y: pos.y });
       }
     }
-  }, [isFloating, stringifiedPosition]);
+  }, [clampToScreen, isFloating, position.x, position.y, setPosition, stringifiedPosition]);
 
   // Listen to main-window resizing and adjust the fp position accordingly:
   useEffect(() => {
@@ -157,9 +152,9 @@ export default function FileRenderFloating(props: Props) {
 
     // 'relativePos' is needed in the dependency list to avoid stale closure.
     // Otherwise, this could just be changed to a one-time effect.
-  }, [relativePos]);
+  }, [clampToScreen, relativePos.x, relativePos.y, setPosition]);
 
-  function handleResize() {
+  const handleResize = React.useCallback(() => {
     const element = mainFilePlaying
       ? document.querySelector(`.${PRIMARY_PLAYER_WRAPPER_CLASS}`)
       : document.querySelector(`.${INLINE_PLAYER_WRAPPER_CLASS}`);
@@ -184,13 +179,13 @@ export default function FileRenderFloating(props: Props) {
 
     // $FlowFixMe
     setFileViewerRect({ ...objectRect, windowOffset: window.pageYOffset });
-  }
+  }, [mainFilePlaying]);
 
   useEffect(() => {
     if (streamingUrl) {
       handleResize();
     }
-  }, [streamingUrl, pathname, playingUriSource, isFloating, mainFilePlaying]);
+  }, [handleResize, streamingUrl]);
 
   useEffect(() => {
     handleResize();
@@ -201,7 +196,7 @@ export default function FileRenderFloating(props: Props) {
       window.removeEventListener('resize', handleResize);
       onFullscreenChange(window, 'remove', handleResize);
     };
-  }, [setFileViewerRect, isFloating, playingUriSource, mainFilePlaying, videoTheaterMode]);
+  }, [handleResize]);
 
   useEffect(() => {
     // @if TARGET='app'
@@ -219,9 +214,9 @@ export default function FileRenderFloating(props: Props) {
     if (isFloating) {
       doFetchRecommendedContent(uri, mature);
     }
-  }, [uri, mature, isFloating]);
+  }, [doFetchRecommendedContent, isFloating, mature, uri]);
 
-  if (!isPlayable || !uri || (isFloating && (isMobile || !floatingPlayerEnabled))) {
+  if (!isPlayable || !uri || (isFloating && (isMobile || !floatingPlayerEnabled || hideFloatingPlayer))) {
     return null;
   }
 
@@ -312,12 +307,7 @@ export default function FileRenderFloating(props: Props) {
           {isFloating && (
             <div className="draggable content__info">
               <div className="claim-preview__title" title={title || uri}>
-                <Button
-                  label={title || uri}
-                  navigate={navigateUrl || uri}
-                  button="link"
-                  className="content__floating-link"
-                />
+                <Button label={title || uri} navigate={navigateUrl} button="link" className="content__floating-link" />
               </div>
               <UriIndicator link uri={uri} />
             </div>

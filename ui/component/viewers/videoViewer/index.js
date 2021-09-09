@@ -8,7 +8,13 @@ import {
   makeSelectNextUrlForCollectionAndUrl,
   makeSelectPreviousUrlForCollectionAndUrl,
 } from 'lbry-redux';
-import { doChangeVolume, doChangeMute, doAnalyticsView, doAnalyticsBuffer } from 'redux/actions/app';
+import {
+  doChangeVolume,
+  doChangeMute,
+  doAnalyticsView,
+  doAnalyticsBuffer,
+  doAnaltyicsPurchaseEvent,
+} from 'redux/actions/app';
 import { selectVolume, selectMute } from 'redux/selectors/app';
 import { savePosition, clearPosition, doPlayUri, doSetPlayingUri } from 'redux/actions/content';
 import {
@@ -78,8 +84,13 @@ const perform = (dispatch) => ({
   toggleVideoTheaterMode: () => dispatch(toggleVideoTheaterMode()),
   toggleAutoplayNext: () => dispatch(toggleAutoplayNext()),
   setVideoPlaybackRate: (rate) => dispatch(doSetClientSetting(SETTINGS.VIDEO_PLAYBACK_RATE, rate)),
-  doPlayUri: (uri) => dispatch(doPlayUri(uri)),
-  doSetPlayingUri: (uri, collectionId) => dispatch(doSetPlayingUri({ uri, collectionId })),
+  doPlayUri: (uri, collectionId) =>
+    dispatch(
+      doPlayUri(uri, false, false, (fileInfo) => {
+        dispatch(doAnaltyicsPurchaseEvent(fileInfo));
+        dispatch(doSetPlayingUri({ uri, collectionId }));
+      })
+    ),
 });
 
 export default withRouter(connect(select, perform)(VideoViewer));

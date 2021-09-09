@@ -31,14 +31,13 @@ import { doChannelSubscribe, doChannelUnsubscribe } from 'redux/actions/subscrip
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectListShuffle } from 'redux/selectors/content';
-import { doSetPlayingUri, doToggleShuffleList } from 'redux/actions/content';
+import { doToggleLoopList, doToggleShuffleList } from 'redux/actions/content';
 import ClaimPreview from './view';
 import fs from 'fs';
 
 const select = (state, props) => {
   const claim = makeSelectClaimForUri(props.uri, false)(state);
   const collectionId = props.collectionId;
-  const resolvedList = makeSelectUrlsForCollectionId(collectionId)(state);
   const repostedClaim = claim && claim.reposted_claim;
   const contentClaim = repostedClaim || claim;
   const contentSigningChannel = contentClaim && contentClaim.signing_channel;
@@ -73,7 +72,7 @@ const select = (state, props) => {
     isMyCollection: makeSelectCollectionIsMine(collectionId)(state),
     editedCollection: makeSelectEditedCollectionForId(collectionId)(state),
     isAuthenticated: Boolean(selectUserVerifiedEmail(state)),
-    resolvedList,
+    resolvedList: makeSelectUrlsForCollectionId(collectionId)(state),
     playNextUri,
   };
 };
@@ -102,8 +101,10 @@ const perform = (dispatch) => ({
   doChannelUnsubscribe: (subscription) => dispatch(doChannelUnsubscribe(subscription)),
   doCollectionEdit: (collection, props) => dispatch(doCollectionEdit(collection, props)),
   fetchCollectionItems: (collectionId) => dispatch(doFetchItemsInCollection({ collectionId })),
-  doSetPlayingUri: (uri) => dispatch(doSetPlayingUri({ uri })),
-  doToggleShuffleList: (collectionId) => dispatch(doToggleShuffleList(undefined, collectionId, true, true)),
+  doToggleShuffleList: (collectionId) => {
+    dispatch(doToggleLoopList(collectionId, false, true));
+    dispatch(doToggleShuffleList(undefined, collectionId, true, true));
+  },
 });
 
 export default connect(select, perform)(ClaimPreview);

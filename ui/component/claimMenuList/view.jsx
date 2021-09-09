@@ -7,7 +7,13 @@ import React from 'react';
 import classnames from 'classnames';
 import { Menu, MenuButton, MenuList, MenuItem } from '@reach/menu-button';
 import Icon from 'component/common/icon';
-import { generateShareUrl, generateRssUrl, generateLbryContentUrl, formatLbryUrlForWeb } from 'util/url';
+import {
+  generateShareUrl,
+  generateRssUrl,
+  generateLbryContentUrl,
+  formatLbryUrlForWeb,
+  generateListSearchUrlParams,
+} from 'util/url';
 import { useHistory } from 'react-router';
 import { buildURI, parseURI, COLLECTIONS_CONSTS } from 'lbry-redux';
 
@@ -59,7 +65,6 @@ type Props = {
   playNextUri: string,
   resolvedList: boolean,
   fetchCollectionItems: (string) => void,
-  doSetPlayingUri: (string) => void,
   doToggleShuffleList: (string) => void,
 };
 
@@ -101,7 +106,6 @@ function ClaimMenuList(props: Props) {
     playNextUri,
     resolvedList,
     fetchCollectionItems,
-    doSetPlayingUri,
     doToggleShuffleList,
   } = props;
   const [doShuffle, setDoShuffle] = React.useState(false);
@@ -129,15 +133,15 @@ function ClaimMenuList(props: Props) {
     if (doShuffle && resolvedList) {
       doToggleShuffleList(collectionId);
       if (playNextUri) {
-        const collectionParams = new URLSearchParams();
-        collectionParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, collectionId);
-        const navigateUrl = formatLbryUrlForWeb(playNextUri) + `?` + collectionParams.toString();
-        setDoShuffle(false);
-        doSetPlayingUri(playNextUri);
-        push(navigateUrl);
+        const navigateUrl = formatLbryUrlForWeb(playNextUri);
+        push({
+          pathname: navigateUrl,
+          search: generateListSearchUrlParams(collectionId),
+          state: { collectionId, forceAutoplay: true },
+        });
       }
     }
-  }, [collectionId, doSetPlayingUri, doShuffle, doToggleShuffleList, playNextUri, push, resolvedList]);
+  }, [collectionId, doShuffle, doToggleShuffleList, playNextUri, push, resolvedList]);
 
   if (!claim) {
     return null;
