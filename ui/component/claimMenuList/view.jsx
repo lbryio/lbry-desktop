@@ -263,6 +263,7 @@ function ClaimMenuList(props: Props) {
     push(`/$/${PAGES.REPORT_CONTENT}?claimId=${contentClaim && contentClaim.claim_id}`);
   }
 
+  const shouldShow = !IS_WEB || (IS_WEB && isAuthenticated);
   return (
     <Menu>
       <MenuButton
@@ -275,94 +276,93 @@ function ClaimMenuList(props: Props) {
         <Icon size={20} icon={ICONS.MORE_VERTICAL} />
       </MenuButton>
       <MenuList className="menu__list">
-        {(!IS_WEB || (IS_WEB && isAuthenticated)) && (
-          <>
+        <>
+          {/* COLLECTION OPERATIONS */}
+          {collectionId && isCollectionClaim ? (
             <>
-              {/* COLLECTION OPERATIONS */}
-              {collectionId && isCollectionClaim ? (
+              <MenuItem className="comment__menu-option" onSelect={() => push(`/$/${PAGES.LIST}/${collectionId}`)}>
+                <a className="menu__link" href={`/$/${PAGES.LIST}/${collectionId}`}>
+                  <Icon aria-hidden icon={ICONS.VIEW} />
+                  {__('View List')}
+                </a>
+              </MenuItem>
+              <MenuItem
+                className="comment__menu-option"
+                onSelect={() => {
+                  if (!resolvedList) fetchItems();
+                  setDoShuffle(true);
+                }}
+              >
+                <div className="menu__link">
+                  <Icon aria-hidden icon={ICONS.SHUFFLE} />
+                  {__('Shuffle Play')}
+                </div>
+              </MenuItem>
+              {isMyCollection && (
                 <>
-                  <MenuItem className="comment__menu-option" onSelect={() => push(`/$/${PAGES.LIST}/${collectionId}`)}>
-                    <a className="menu__link" href={`/$/${PAGES.LIST}/${collectionId}`}>
-                      <Icon aria-hidden icon={ICONS.VIEW} />
-                      {__('View List')}
-                    </a>
+                  <MenuItem
+                    className="comment__menu-option"
+                    onSelect={() => push(`/$/${PAGES.LIST}/${collectionId}?view=edit`)}
+                  >
+                    <div className="menu__link">
+                      <Icon aria-hidden iconColor={'red'} icon={ICONS.PUBLISH} />
+                      {editedCollection ? __('Publish') : __('Edit List')}
+                    </div>
                   </MenuItem>
                   <MenuItem
                     className="comment__menu-option"
-                    onSelect={() => {
-                      if (!resolvedList) fetchItems();
-                      setDoShuffle(true);
-                    }}
+                    onSelect={() => openModal(MODALS.COLLECTION_DELETE, { collectionId })}
                   >
                     <div className="menu__link">
-                      <Icon aria-hidden icon={ICONS.SHUFFLE} />
-                      {__('Shuffle Play')}
+                      <Icon aria-hidden icon={ICONS.DELETE} />
+                      {__('Delete List')}
                     </div>
                   </MenuItem>
-                  {isMyCollection && (
-                    <>
-                      <MenuItem
-                        className="comment__menu-option"
-                        onSelect={() => push(`/$/${PAGES.LIST}/${collectionId}?view=edit`)}
-                      >
-                        <div className="menu__link">
-                          <Icon aria-hidden iconColor={'red'} icon={ICONS.PUBLISH} />
-                          {editedCollection ? __('Publish') : __('Edit List')}
-                        </div>
-                      </MenuItem>
-                      <MenuItem
-                        className="comment__menu-option"
-                        onSelect={() => openModal(MODALS.COLLECTION_DELETE, { collectionId })}
-                      >
-                        <div className="menu__link">
-                          <Icon aria-hidden icon={ICONS.DELETE} />
-                          {__('Delete List')}
-                        </div>
-                      </MenuItem>
-                    </>
-                  )}
                 </>
-              ) : (
-                isPlayable && (
-                  <>
-                    {/* WATCH LATER */}
-                    <MenuItem
-                      className="comment__menu-option"
-                      onSelect={() =>
-                        handleAdd(hasClaimInWatchLater, __('Watch Later'), COLLECTIONS_CONSTS.WATCH_LATER_ID)
-                      }
-                    >
-                      <div className="menu__link">
-                        <Icon aria-hidden icon={hasClaimInWatchLater ? ICONS.DELETE : ICONS.TIME} />
-                        {hasClaimInWatchLater ? __('In Watch Later') : __('Watch Later')}
-                      </div>
-                    </MenuItem>
-                    {/* FAVORITES LIST */}
-                    <MenuItem
-                      className="comment__menu-option"
-                      onSelect={() => handleAdd(hasClaimInFavorites, __('Favorites'), COLLECTIONS_CONSTS.FAVORITES_ID)}
-                    >
-                      <div className="menu__link">
-                        <Icon aria-hidden icon={hasClaimInFavorites ? ICONS.DELETE : ICONS.STAR} />
-                        {hasClaimInFavorites ? __('In Favorites') : __('Favorites')}
-                      </div>
-                    </MenuItem>
-                    {/* CURRENTLY ONLY SUPPORT PLAYLISTS FOR PLAYABLE; LATER DIFFERENT TYPES */}
-                    <MenuItem
-                      className="comment__menu-option"
-                      onSelect={() => openModal(MODALS.COLLECTION_ADD, { uri, type: 'playlist' })}
-                    >
-                      <div className="menu__link">
-                        <Icon aria-hidden icon={ICONS.STACK} />
-                        {__('Add to Lists')}
-                      </div>
-                    </MenuItem>
-                    <hr className="menu__separator" />
-                  </>
-                )
               )}
             </>
+          ) : (
+            shouldShow &&
+            isPlayable && (
+              <>
+                {/* WATCH LATER */}
+                <MenuItem
+                  className="comment__menu-option"
+                  onSelect={() => handleAdd(hasClaimInWatchLater, __('Watch Later'), COLLECTIONS_CONSTS.WATCH_LATER_ID)}
+                >
+                  <div className="menu__link">
+                    <Icon aria-hidden icon={hasClaimInWatchLater ? ICONS.DELETE : ICONS.TIME} />
+                    {hasClaimInWatchLater ? __('In Watch Later') : __('Watch Later')}
+                  </div>
+                </MenuItem>
+                {/* FAVORITES LIST */}
+                <MenuItem
+                  className="comment__menu-option"
+                  onSelect={() => handleAdd(hasClaimInFavorites, __('Favorites'), COLLECTIONS_CONSTS.FAVORITES_ID)}
+                >
+                  <div className="menu__link">
+                    <Icon aria-hidden icon={hasClaimInFavorites ? ICONS.DELETE : ICONS.STAR} />
+                    {hasClaimInFavorites ? __('In Favorites') : __('Favorites')}
+                  </div>
+                </MenuItem>
+                {/* CURRENTLY ONLY SUPPORT PLAYLISTS FOR PLAYABLE; LATER DIFFERENT TYPES */}
+                <MenuItem
+                  className="comment__menu-option"
+                  onSelect={() => openModal(MODALS.COLLECTION_ADD, { uri, type: 'playlist' })}
+                >
+                  <div className="menu__link">
+                    <Icon aria-hidden icon={ICONS.STACK} />
+                    {__('Add to Lists')}
+                  </div>
+                </MenuItem>
+                <hr className="menu__separator" />
+              </>
+            )
+          )}
+        </>
 
+        {shouldShow && (
+          <>
             {!isChannelPage && (
               <>
                 <MenuItem className="comment__menu-option" onSelect={handleSupport}>
@@ -439,9 +439,9 @@ function ClaimMenuList(props: Props) {
                 )}
               </>
             )}
+            <hr className="menu__separator" />
           </>
         )}
-        <hr className="menu__separator" />
 
         <MenuItem className="comment__menu-option" onSelect={handleCopyLink}>
           <div className="menu__link">
