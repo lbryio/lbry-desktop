@@ -83,15 +83,21 @@ function WalletSendTip(props: Props) {
   const [tipError, setTipError] = React.useState();
 
   // denote which tab to show on the frontend
-  const [activeTab, setActiveTab] = usePersistedState(TAB_BOOST);
+  const [activeTab, setActiveTab] = usePersistedState(TAB_LBC);
 
-  // force to boost tab if it's someone's own upload
+  // handle default active tab
   React.useEffect(() => {
+    // force to boost tab if it's someone's own upload
     if (claimIsMine) {
       setActiveTab(TAB_BOOST);
+    } else {
+      // or set LBC tip as the default if none is set yet
+      if (!activeTab || activeTab === 'undefined') {
+        setActiveTab(TAB_LBC);
+      }
     }
   }, []);
-  
+
   // alphanumeric claim id
   const { claim_id: claimId } = claim;
 
@@ -564,6 +570,7 @@ function WalletSendTip(props: Props) {
                 <ChannelSelector />
               </div>
 
+              {/* prompt to save a card */}
               {activeTab === TAB_FIAT && !hasCardSaved && (
                 <h3 className="add-card-prompt">
                   <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card')} button="link" />{' '}
