@@ -181,9 +181,8 @@ function VideoViewer(props: Props) {
   const doPlay = useCallback(
     (playUri) => {
       setDoNavigate(false);
-      const navigateUrl = formatLbryUrlForWeb(playUri);
-      if (collectionId) clearPosition(playUri);
       if (!isFloating) {
+        const navigateUrl = formatLbryUrlForWeb(playUri);
         push({
           pathname: navigateUrl,
           search: collectionId && generateListSearchUrlParams(collectionId),
@@ -193,14 +192,17 @@ function VideoViewer(props: Props) {
         doPlayUri(playUri, collectionId);
       }
     },
-    [clearPosition, collectionId, doPlayUri, isFloating, push]
+    [collectionId, doPlayUri, isFloating, push]
   );
 
   useEffect(() => {
     if (doNavigate) {
       if (playNextUrl) {
         if (permanentUrl !== nextRecommendedUri) {
-          if (nextRecommendedUri) doPlay(nextRecommendedUri);
+          if (nextRecommendedUri) {
+            if (collectionId) clearPosition(permanentUrl);
+            doPlay(nextRecommendedUri);
+          }
         } else {
           setReplay(true);
         }
@@ -220,7 +222,18 @@ function VideoViewer(props: Props) {
       setEnded(false);
       setPlayNextUrl(true);
     }
-  }, [doNavigate, doPlay, ended, nextRecommendedUri, permanentUrl, playNextUrl, previousListUri, videoNode]);
+  }, [
+    clearPosition,
+    collectionId,
+    doNavigate,
+    doPlay,
+    ended,
+    nextRecommendedUri,
+    permanentUrl,
+    playNextUrl,
+    previousListUri,
+    videoNode,
+  ]);
 
   React.useEffect(() => {
     if (ended) {
@@ -294,12 +307,12 @@ function VideoViewer(props: Props) {
 
   const doPlayNext = () => {
     setPlayNextUrl(true);
-    setDoNavigate(true);
+    setEnded(true);
   };
 
   const doPlayPrevious = () => {
     setPlayNextUrl(false);
-    setDoNavigate(true);
+    setEnded(true);
   };
 
   const onPlayerReady = useCallback((player: Player, videoNode: any) => {

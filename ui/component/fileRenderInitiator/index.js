@@ -37,7 +37,6 @@ const select = (state, props) => {
     insufficientCredits: makeSelectInsufficientCreditsForUri(props.uri)(state),
     streamingUrl: makeSelectStreamingUrlForUri(props.uri)(state),
     autoplay: makeSelectClientSetting(SETTINGS.AUTOPLAY_MEDIA)(state),
-    hasCostInfo: Boolean(makeSelectCostInfoForUri(props.uri)(state)),
     costInfo: makeSelectCostInfoForUri(props.uri)(state),
     renderMode: makeSelectFileRenderModeForUri(props.uri)(state),
     claim: makeSelectClaimForUri(props.uri)(state),

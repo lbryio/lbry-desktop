@@ -27,7 +27,6 @@ type Props = {
   insufficientCredits: boolean,
   claimThumbnail?: string,
   autoplay: boolean,
-  hasCostInfo: boolean,
   costInfo: any,
   inline: boolean,
   renderMode: string,
@@ -50,7 +49,6 @@ export default function FileRenderInitiator(props: Props) {
     location,
     claimThumbnail,
     renderMode,
-    hasCostInfo,
     costInfo,
     claimWasPurchased,
     authenticated,
@@ -63,8 +61,8 @@ export default function FileRenderInitiator(props: Props) {
   const forceAutoplayParam = location && location.state && location.state.forceAutoplay;
   const autoplay = forceAutoplayParam || urlTimeParam || props.autoplay;
 
-  const cost = costInfo && costInfo.cost;
-  const isFree = hasCostInfo && cost === 0;
+  const isFree = costInfo && costInfo.cost === 0;
+  const canViewFile = isFree || claimWasPurchased;
   const fileStatus = fileInfo && fileInfo.status;
   const isPlayable = RENDER_MODES.FLOATING_MODES.includes(renderMode);
   const isText = RENDER_MODES.TEXT_MODES.includes(renderMode);
@@ -133,20 +131,20 @@ export default function FileRenderInitiator(props: Props) {
   useEffect(() => {
     const videoOnPage = document.querySelector('video');
     if (
-      (isFree || claimWasPurchased) &&
+      (canViewFile || forceAutoplayParam) &&
       ((autoplay && (!videoOnPage || forceAutoplayParam) && isPlayable) ||
         RENDER_MODES.AUTO_RENDER_MODES.includes(renderMode))
     ) {
       viewFile();
     }
-  }, [autoplay, viewFile, isFree, renderMode, isPlayable, claimWasPurchased, forceAutoplayParam]);
+  }, [autoplay, canViewFile, forceAutoplayParam, isPlayable, renderMode, viewFile]);
 
   /*
   once content is playing, let the appropriate <FileRender> take care of it...
   but for playables, always render so area can be used to fill with floating player
    */
   if (isPlaying && !isPlayable) {
-    if (isFree || claimWasPurchased) {
+    if (canViewFile && !collectionId) {
       return null;
     }
   }

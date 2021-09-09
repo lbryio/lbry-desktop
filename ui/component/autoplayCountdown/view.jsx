@@ -15,8 +15,11 @@ type Props = {
   nextRecommendedClaim: ?StreamClaim,
   nextRecommendedUri: string,
   modal: { id: string, modalProps: {} },
+  skipPaid: boolean,
   doNavigate: () => void,
   doReplay: () => void,
+  doPrevious: () => void,
+  onCanceled: () => void,
 };
 
 function AutoplayCountdown(props: Props) {
@@ -25,8 +28,11 @@ function AutoplayCountdown(props: Props) {
     nextRecommendedClaim,
     history: { push },
     modal,
+    skipPaid,
     doNavigate,
     doReplay,
+    doPrevious,
+    onCanceled,
   } = props;
   const nextTitle = nextRecommendedClaim && nextRecommendedClaim.value && nextRecommendedClaim.value.title;
 
@@ -68,6 +74,7 @@ function AutoplayCountdown(props: Props) {
         interval = setInterval(() => {
           const newTime = timer - 1;
           if (newTime === 0) {
+            if (skipPaid) setTimer(countdownTime);
             doNavigate();
           } else {
             setTimer(timer - 1);
@@ -78,7 +85,7 @@ function AutoplayCountdown(props: Props) {
     return () => {
       clearInterval(interval);
     };
-  }, [timer, doNavigate, push, timerCanceled, isTimerPaused, nextRecommendedUri]);
+  }, [timer, doNavigate, push, timerCanceled, isTimerPaused, nextRecommendedUri, skipPaid]);
 
   if (timerCanceled || !nextRecommendedUri) {
     return null;
@@ -105,19 +112,41 @@ function AutoplayCountdown(props: Props) {
           )}
           {!isTimerPaused && (
             <div className="file-viewer__overlay-secondary autoplay-countdown__counter">
-              {__('Playing in %seconds_left% seconds...', { seconds_left: timer })}{' '}
-              <Button label={__('Cancel')} button="link" onClick={() => setTimerCanceled(true)} />
+              {__('Playing %message% in %seconds_left% seconds...', {
+                message: skipPaid ? __('next free content') : __(''),
+                seconds_left: timer,
+              })}{' '}
+              <Button
+                label={__('Cancel')}
+                button="link"
+                onClick={() => {
+                  setTimerCanceled(true);
+                  if (onCanceled) onCanceled();
+                }}
+              />
             </div>
           )}
-          <Button
-            label={__('Replay?')}
-            button="link"
-            iconRight={ICONS.REPLAY}
-            onClick={() => {
-              setTimerCanceled(true);
-              doReplay();
-            }}
-          />
+          {skipPaid && doPrevious && (
+            <div>
+              <Button
+                label={__('Play Previous')}
+                button="link"
+                icon={ICONS.PLAY_PREVIOUS}
+                onClick={() => doPrevious()}
+              />
+            </div>
+          )}
+          <div>
+            <Button
+              label={skipPaid ? __('Purchase?') : __('Replay?')}
+              button="link"
+              iconRight={skipPaid ? ICONS.WALLET : ICONS.REPLAY}
+              onClick={() => {
+                setTimerCanceled(true);
+                doReplay();
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>

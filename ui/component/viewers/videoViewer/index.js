@@ -86,10 +86,16 @@ const perform = (dispatch) => ({
   setVideoPlaybackRate: (rate) => dispatch(doSetClientSetting(SETTINGS.VIDEO_PLAYBACK_RATE, rate)),
   doPlayUri: (uri, collectionId) =>
     dispatch(
-      doPlayUri(uri, false, false, (fileInfo) => {
-        dispatch(doAnaltyicsPurchaseEvent(fileInfo));
-        dispatch(doSetPlayingUri({ uri, collectionId }));
-      })
+      doPlayUri(
+        uri,
+        false,
+        false,
+        (fileInfo) => {
+          dispatch(doAnaltyicsPurchaseEvent(fileInfo));
+        },
+        true
+      ),
+      dispatch(doSetPlayingUri({ uri, collectionId }))
     ),
 });
 

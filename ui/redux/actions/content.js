@@ -148,7 +148,8 @@ export function doPlayUri(
   uri: string,
   skipCostCheck: boolean = false,
   saveFileOverride: boolean = false,
-  cb?: () => void
+  cb?: () => void,
+  hideFailModal: boolean = false
 ) {
   return (dispatch: Dispatch, getState: () => any) => {
     const state = getState();
@@ -183,7 +184,7 @@ export function doPlayUri(
         !claimWasPurchased &&
         (!instantPurchaseMax || !instantPurchaseEnabled || cost > instantPurchaseMax)
       ) {
-        dispatch(doOpenModal(MODALS.AFFIRM_PURCHASE, { uri }));
+        if (!hideFailModal) dispatch(doOpenModal(MODALS.AFFIRM_PURCHASE, { uri }));
       } else {
         beginGetFile();
       }
