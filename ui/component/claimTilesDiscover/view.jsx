@@ -300,12 +300,18 @@ function ClaimTilesDiscover(props: Props) {
 
   function fetchViewCountForUris(uris) {
     const claimIds = [];
-    uris.forEach((uri) => {
-      if (claimsByUri[uri]) {
-        claimIds.push(claimsByUri[uri].claim_id);
-      }
-    });
-    doFetchViewCount(claimIds.join(','));
+
+    if (uris) {
+      uris.forEach((uri) => {
+        if (claimsByUri[uri]) {
+          claimIds.push(claimsByUri[uri].claim_id);
+        }
+      });
+    }
+
+    if (claimIds.length > 0) {
+      doFetchViewCount(claimIds.join(','));
+    }
   }
 
   // **************************************************************************
