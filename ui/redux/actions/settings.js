@@ -428,8 +428,9 @@ export function toggleVideoTheaterMode() {
 export function toggleAutoplayNext() {
   return (dispatch, getState) => {
     const state = getState();
+    const ready = selectPrefsReady(state);
     const autoplayNext = makeSelectClientSetting(SETTINGS.AUTOPLAY_NEXT)(state);
 
-    dispatch(doSetClientSetting(SETTINGS.AUTOPLAY_NEXT, !autoplayNext));
+    dispatch(doSetClientSetting(SETTINGS.AUTOPLAY_NEXT, !autoplayNext, ready));
   };
 }
