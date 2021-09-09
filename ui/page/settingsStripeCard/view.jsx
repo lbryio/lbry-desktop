@@ -361,12 +361,14 @@ class SettingsStripeCard extends React.Component<Props, State> {
         className="card-stack"
         backout={{ title: __(pageTitle), backLabel: __('Back') }}
       >
+        {/* if Stripe javascript didn't load */}
         <div>
           {scriptFailedToLoad && (
             <div className="error__text">{__('There was an error connecting to Stripe. Please try again later.')}</div>
           )}
         </div>
 
+        {/* initial markup to show while getting information */}
         {currentFlowStage === 'loading' && (
           <div className="headerCard toConfirmCard">
             <Card title={__('Connect your card with Odysee')} subtitle={__('Getting your card connection status...')} />
@@ -407,7 +409,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
                   />
                   <br />
                   <Button
-                    button="secondary"
+                    button="primary"
                     label={__('Remove Card')}
                     icon={ICONS.DELETE}
                     onClick={(e) => {
@@ -419,15 +421,14 @@ class SettingsStripeCard extends React.Component<Props, State> {
                       });
                     }}
                   />
+                  <Button
+                    button="secondary"
+                    label={__('View Transactions')}
+                    icon={ICONS.SETTINGS}
+                    navigate={`/$/${PAGES.WALLET}?fiatType=outgoing&tab=fiat-payment-history&currency=fiat`}
+                    style={{marginLeft: '10px'}}
+                  />
                 </>
-              }
-              actions={
-                <Button
-                  button="primary"
-                  label={__('View Transactions')}
-                  icon={ICONS.SETTINGS}
-                  navigate={`/$/${PAGES.WALLET}?fiatType=outgoing&tab=fiat-payment-history&currency=fiat`}
-                />
               }
             />
             <br />

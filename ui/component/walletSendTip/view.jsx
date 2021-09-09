@@ -22,6 +22,8 @@ const DEFAULT_TIP_AMOUNTS = [1, 5, 25, 100];
 const MINIMUM_FIAT_TIP = 1;
 const MAXIMUM_FIAT_TIP = 1000;
 
+const DEFAULT_TIP_ERROR = __('Sorry, there was an error in processing your payment!');
+
 const TAB_BOOST = 'TabBoost';
 const TAB_FIAT = 'TabFiat';
 const TAB_LBC = 'TabLBC';
@@ -64,20 +66,48 @@ function WalletSendTip(props: Props) {
     doToast,
     isAuthenticated,
   } = props;
+
+  /** REACT STATE **/
   const [presetTipAmount, setPresetTipAmount] = usePersistedState('comment-support:presetTip', DEFAULT_TIP_AMOUNTS[0]);
   const [customTipAmount, setCustomTipAmount] = usePersistedState('comment-support:customTip', 1.0);
   const [useCustomTip, setUseCustomTip] = usePersistedState('comment-support:useCustomTip', false);
-  const [tipError, setTipError] = React.useState();
   const [isConfirming, setIsConfirming] = React.useState(false);
+
+  // only allow certain creators to receive tips
+  const [canReceiveFiatTip, setCanReceiveFiatTip] = React.useState(); // dont persist because it needs to be calc'd per creator
+
+  // show things conditionally based on if a user has a card already
+  const [hasCardSaved, setHasSavedCard] = usePersistedState('comment-support:hasCardSaved', false);
+
+  // show the tip error on the frontend
+  const [tipError, setTipError] = React.useState();
+
+  // denote which tab to show on the frontend
+  const [activeTab, setActiveTab] = usePersistedState(TAB_BOOST);
+
+  // handle default active tab
+  React.useEffect(() => {
+    // force to boost tab if it's someone's own upload
+    if (claimIsMine) {
+      setActiveTab(TAB_BOOST);
+    } else {
+      // or set LBC tip as the default if none is set yet
+      if (!activeTab || activeTab === 'undefined') {
+        setActiveTab(TAB_LBC);
+      }
+    }
+  }, []);
+
+  // alphanumeric claim id
   const { claim_id: claimId } = claim;
+
+  // channel name used in url
   const { channelName } = parseURI(uri);
+
   const activeChannelName = activeChannelClaim && activeChannelClaim.name;
   const activeChannelId = activeChannelClaim && activeChannelClaim.claim_id;
 
-  const [canReceiveFiatTip, setCanReceiveFiatTip] = React.useState(); // dont persist because it needs to be calc'd per creator
-  const [hasCardSaved, setHasSavedCard] = usePersistedState('comment-support:hasCardSaved', false);
-
-  // setup variables for tip API
+  // setup variables for backend tip API
   let channelClaimId, tipChannelName;
   // if there is a signing channel it's on a file
   if (claim.signing_channel) {
@@ -114,7 +144,7 @@ function WalletSendTip(props: Props) {
     }
   }, [channelClaimId, isAuthenticated, stripeEnvironment]);
 
-  // check if creator has an account saved
+  // focus tip element if it exists
   React.useEffect(() => {
     const tipInputElement = document.getElementById('tip-input');
     if (tipInputElement) {
@@ -122,6 +152,7 @@ function WalletSendTip(props: Props) {
     }
   }, []);
 
+  // check if user can receive tips
   React.useEffect(() => {
     if (channelClaimId && stripeEnvironment) {
       Lbryio.call(
@@ -147,11 +178,13 @@ function WalletSendTip(props: Props) {
     }
   }, [channelClaimId, stripeEnvironment]);
 
+  // if user has no balance, used to show conditional frontend
   const noBalance = balance === 0;
+
+  // the tip amount, based on if a preset or custom tip amount is being used
   const tipAmount = useCustomTip ? customTipAmount : presetTipAmount;
 
-  const [activeTab, setActiveTab] = React.useState(TAB_BOOST);
-
+  // get type of claim (stream/channel/repost/collection) for display on frontend
   function getClaimTypeText() {
     if (claim.value_type === 'stream') {
       return __('Content');
@@ -167,6 +200,7 @@ function WalletSendTip(props: Props) {
   }
   const claimTypeText = getClaimTypeText();
 
+  // icon to use or explainer text to show per tab
   let iconToUse;
   let explainerText = '';
   if (activeTab === TAB_BOOST) {
@@ -231,7 +265,7 @@ function WalletSendTip(props: Props) {
     setTipError(tipError);
   }, [tipAmount, balance, setTipError, activeTab]);
 
-  //
+  // make call to the backend to send lbc or fiat
   function sendSupportOrConfirm(instantTipMaxAmount = null) {
     // send a tip
     if (!isConfirming && (!instantTipMaxAmount || !instantTipEnabled || tipAmount > instantTipMaxAmount)) {
@@ -271,6 +305,7 @@ function WalletSendTip(props: Props) {
         } else if (isConfirming) {
           let sendAnonymously = !activeChannelClaim || incognito;
 
+          // hit backend to send tip
           Lbryio.call(
             'customer',
             'tip',
@@ -297,10 +332,12 @@ function WalletSendTip(props: Props) {
               });
             })
             .catch(function (error) {
-              let displayError = 'Sorry, there was an error in processing your payment!';
-
-              if (error.message !== 'payment intent failed to confirm') {
+              // show error message from Stripe if one exists (being passed from backend by Beamer's API currently)
+              let displayError;
+              if (error.message) {
                 displayError = error.message;
+              } else {
+                displayError = DEFAULT_TIP_ERROR;
               }
 
               doToast({ message: displayError, isError: true });
@@ -385,6 +422,7 @@ function WalletSendTip(props: Props) {
     // if it's a valid number display it, otherwise do an empty string
     const displayAmount = !isNan(tipAmount) ? amountToShow : '';
 
+    // build button text based on tab
     if (activeTab === TAB_BOOST) {
       return claimIsMine
         ? __('Boost Your %claimTypeText%', { claimTypeText })
@@ -396,12 +434,14 @@ function WalletSendTip(props: Props) {
     }
   }
 
+  // dont allow user to click send button
   function shouldDisableAmountSelector(amount) {
     return (
       (amount > balance && activeTab !== TAB_FIAT) || (activeTab === TAB_FIAT && (!hasCardSaved || !canReceiveFiatTip))
     );
   }
 
+  // showed on confirm page above amount
   function setConfirmLabel() {
     if (activeTab === TAB_LBC) {
       return __('Tipping Credit');
@@ -530,6 +570,7 @@ function WalletSendTip(props: Props) {
                 <ChannelSelector />
               </div>
 
+              {/* prompt to save a card */}
               {activeTab === TAB_FIAT && !hasCardSaved && (
                 <h3 className="add-card-prompt">
                   <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card')} button="link" />{' '}
