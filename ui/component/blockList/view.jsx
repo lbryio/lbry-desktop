@@ -3,7 +3,10 @@ import React from 'react';
 import classnames from 'classnames';
 import Button from 'component/button';
 import ClaimList from 'component/claimList';
+import Paginate from 'component/common/paginate';
 import Yrbl from 'component/yrbl';
+
+const PAGE_SIZE = 10;
 
 type Props = {
   uris: Array<string>,
@@ -22,6 +25,15 @@ export default function BlockList(props: Props) {
   const stringifiedList = JSON.stringify(list);
   const hasLocalList = localList && localList.length > 0;
   const justBlocked = list && localList && localList.length < list.length;
+
+  const [page, setPage] = React.useState(1);
+
+  let totalPages = 0;
+  let paginatedLocalList;
+  if (localList) {
+    paginatedLocalList = localList.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+    totalPages = Math.ceil(localList.length / PAGE_SIZE);
+  }
 
   // **************************************************************************
   // **************************************************************************
@@ -52,7 +64,7 @@ export default function BlockList(props: Props) {
   // **************************************************************************
   // **************************************************************************
 
-  if (localList === undefined) {
+  if (paginatedLocalList === undefined) {
     return null;
   }
 
@@ -76,8 +88,15 @@ export default function BlockList(props: Props) {
     <>
       <div className="help--notice">{help}</div>
       <div className={classnames('block-list', className)}>
-        <ClaimList uris={localList} showUnresolvedClaims showHiddenByUser hideMenu renderActions={getRenderActions()} />
+        <ClaimList
+          uris={paginatedLocalList}
+          showUnresolvedClaims
+          showHiddenByUser
+          hideMenu
+          renderActions={getRenderActions()}
+        />
       </div>
+      <Paginate totalPages={totalPages} disableHistory onPageChange={(p) => setPage(p)} />
     </>
   );
 }
