@@ -133,11 +133,14 @@ function ListBlocked(props: Props) {
             {delegatorUrisForBlockedUri.map((delegatorUri) => {
               return (
                 <div className="block-list--delegator" key={delegatorUri}>
-                  <ul className="section content__non-clickable">
-                    <ClaimPreview uri={delegatorUri} hideMenu hideActions type="small" />
+                  <label>{__('Blocked on behalf of:')}</label>
+                  <ul className="section">
+                    <div className="content__non-clickable">
+                      <ClaimPreview uri={delegatorUri} hideMenu hideActions type="inline" properties={false} />
+                      {moderatorTimeoutMap[uri] && getBanInfoElem(moderatorTimeoutMap[uri])}
+                    </div>
+                    <ChannelBlockButton uri={uri} blockLevel={BLOCK_LEVEL.MODERATOR} creatorUri={delegatorUri} />
                   </ul>
-                  <ChannelBlockButton uri={uri} blockLevel={BLOCK_LEVEL.MODERATOR} creatorUri={delegatorUri} />
-                  {moderatorTimeoutMap[uri] && getBanInfoElem(moderatorTimeoutMap[uri])}
                 </div>
               );
             })}
