@@ -109,6 +109,12 @@ function VideoViewer(props: Props) {
     videoTheaterMode,
     isMarkdownOrComment,
   } = props;
+
+  const IS_IOS =
+    (/iPad|iPhone|iPod/.test(navigator.platform) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) &&
+    !window.MSStream;
+
   const permanentUrl = claim && claim.permanent_url;
   const adApprovedChannelIds = homepageData ? getAllIds(homepageData) : [];
   const claimId = claim && claim.claim_id;
@@ -367,6 +373,13 @@ function VideoViewer(props: Props) {
           if (player.autoplay() && !player.muted()) {
             // player.muted(true);
             // another version had player.play()
+          }
+        } else {
+          const isPaused = player.paused();
+          if (IS_IOS && isPaused) {
+            document.getElementsByClassName('video-js--tap-to-unmute')[0].style.visibility = 'visible';
+            player.muted(true);
+            const iosResponse = player.play();
           }
         }
         setIsLoading(false);
