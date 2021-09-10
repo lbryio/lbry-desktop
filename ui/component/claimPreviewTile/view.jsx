@@ -97,6 +97,7 @@ function ClaimPreviewTile(props: Props) {
   const shouldFetch = claim === undefined;
   const thumbnailUrl = useGetThumbnail(uri, claim, streamingUrl, getFile, placeholder) || thumbnail;
   const canonicalUrl = claim && claim.canonical_url;
+  const permanentUrl = claim && claim.permanent_url;
   let navigateUrl = formatLbryUrlForWeb(canonicalUrl || uri || '/');
   const listId = collectionId || collectionClaimId;
   if (listId) {
@@ -123,6 +124,7 @@ function ClaimPreviewTile(props: Props) {
   const isChannel = claim && claim.value_type === 'channel';
   const channelUri = !isChannel ? signingChannel && signingChannel.permanent_url : claim && claim.permanent_url;
   const channelTitle = signingChannel && ((signingChannel.value && signingChannel.value.title) || signingChannel.name);
+  const repostedChannelUri = isRepost && isChannel ? permanentUrl || canonicalUrl : undefined;
 
   // Aria-label value for claim preview
   let ariaLabelData = isChannel ? title : formatClaimPreviewTitle(title, channelTitle, date, mediaDuration);
@@ -250,7 +252,7 @@ function ClaimPreviewTile(props: Props) {
         <div className="claim-tile__info">
           {isChannel ? (
             <div className="claim-tile__about--channel">
-              <SubscribeButton uri={uri} />
+              <SubscribeButton uri={repostedChannelUri || uri} />
             </div>
           ) : (
             <React.Fragment>

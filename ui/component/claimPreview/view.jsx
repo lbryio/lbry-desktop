@@ -195,8 +195,12 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     claim.value.stream_type &&
     // $FlowFixMe
     (claim.value.stream_type === 'audio' || claim.value.stream_type === 'video');
-  const isChannelUri = isValid ? parseURI(uri).isChannel : false;
+  const isChannelUri = claim ? claim.value_type === 'channel' : false;
   const signingChannel = claim && claim.signing_channel;
+  const repostedChannelUri =
+    claim && claim.repost_channel_url && claim.value_type === 'channel'
+      ? claim.permanent_url || claim.canonical_url
+      : undefined;
 
   // Get channel title ( use name as fallback )
   let channelTitle = null;
@@ -478,7 +482,9 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                         )}
 
                         {isChannelUri && !channelIsBlocked && !claimIsMine && (
-                          <SubscribeButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
+                          <SubscribeButton
+                            uri={repostedChannelUri || (uri.startsWith('lbry://') ? uri : `lbry://${uri}`)}
+                          />
                         )}
 
                         {includeSupportAction && <ClaimSupportButton uri={uri} />}
