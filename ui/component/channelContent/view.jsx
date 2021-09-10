@@ -146,7 +146,7 @@ function ChannelContent(props: Props) {
         defaultFreshness={CS.FRESH_ALL}
         showHiddenByUser={viewHiddenChannels}
         forceShowReposts
-        // fetchViewCount
+        fetchViewCount
         hideFilters={!showFilters}
         hideAdvancedFilter={!showFilters}
         tileLayout={tileLayout}
