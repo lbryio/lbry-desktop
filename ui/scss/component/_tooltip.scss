@@ -1,0 +1,8 @@
+[data-reach-tooltip] {
+  border-radius: var(--border-radius);
+  background-color: var(--color-tooltip-bg);
+  color: var(--color-tooltip-text);
+  border: none;
+  padding: var(--spacing-s);
+  overflow: hidden;
+}
