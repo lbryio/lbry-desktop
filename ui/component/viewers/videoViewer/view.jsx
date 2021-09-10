@@ -25,8 +25,7 @@ import I18nMessage from 'component/i18nMessage';
 import { useHistory } from 'react-router';
 import { getAllIds } from 'util/buildHomepage';
 import type { HomepageCat } from 'util/buildHomepage';
-import { formatLbryUrlForWeb } from 'util/url';
-import { COLLECTIONS_CONSTS } from 'lbry-redux';
+import { formatLbryUrlForWeb, generateListSearchUrlParams } from 'util/url';
 
 const PLAY_TIMEOUT_ERROR = 'play_timeout_error';
 const PLAY_TIMEOUT_LIMIT = 2000;
@@ -60,8 +59,7 @@ type Props = {
   homepageData?: { [string]: HomepageCat },
   shareTelemetry: boolean,
   isFloating: boolean,
-  doPlayUri: (string) => void,
-  doSetPlayingUri: (string, string) => void,
+  doPlayUri: (string, string) => void,
   collectionId: string,
   nextRecommendedUri: string,
   previousListUri: string,
@@ -104,7 +102,6 @@ function VideoViewer(props: Props) {
     shareTelemetry,
     isFloating,
     doPlayUri,
-    doSetPlayingUri,
     collectionId,
     nextRecommendedUri,
     previousListUri,
@@ -183,28 +180,29 @@ function VideoViewer(props: Props) {
 
   const doPlay = useCallback(
     (playUri) => {
-      let navigateUrl = formatLbryUrlForWeb(playUri);
-      if (collectionId) {
-        const collectionParams = new URLSearchParams();
-        collectionParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, collectionId);
-        navigateUrl = navigateUrl + `?` + collectionParams.toString();
-        clearPosition(playUri);
-      }
-      if (!isFloating) {
-        push(navigateUrl);
-      }
-      doPlayUri(playUri);
-      doSetPlayingUri(playUri, collectionId);
       setDoNavigate(false);
+      if (!isFloating) {
+        const navigateUrl = formatLbryUrlForWeb(playUri);
+        push({
+          pathname: navigateUrl,
+          search: collectionId && generateListSearchUrlParams(collectionId),
+          state: { collectionId, forceAutoplay: true, hideFloatingPlayer: true },
+        });
+      } else {
+        doPlayUri(playUri, collectionId);
+      }
     },
-    [clearPosition, collectionId, doPlayUri, doSetPlayingUri, isFloating, push]
+    [collectionId, doPlayUri, isFloating, push]
   );
 
   useEffect(() => {
     if (doNavigate) {
       if (playNextUrl) {
         if (permanentUrl !== nextRecommendedUri) {
-          if (nextRecommendedUri) doPlay(nextRecommendedUri);
+          if (nextRecommendedUri) {
+            if (collectionId) clearPosition(permanentUrl);
+            doPlay(nextRecommendedUri);
+          }
         } else {
           setReplay(true);
         }
@@ -224,7 +222,18 @@ function VideoViewer(props: Props) {
       setEnded(false);
       setPlayNextUrl(true);
     }
-  }, [doNavigate, doPlay, ended, nextRecommendedUri, permanentUrl, playNextUrl, previousListUri, videoNode]);
+  }, [
+    clearPosition,
+    collectionId,
+    doNavigate,
+    doPlay,
+    ended,
+    nextRecommendedUri,
+    permanentUrl,
+    playNextUrl,
+    previousListUri,
+    videoNode,
+  ]);
 
   React.useEffect(() => {
     if (ended) {
@@ -298,12 +307,12 @@ function VideoViewer(props: Props) {
 
   const doPlayNext = () => {
     setPlayNextUrl(true);
-    setDoNavigate(true);
+    setEnded(true);
   };
 
   const doPlayPrevious = () => {
     setPlayNextUrl(false);
-    setDoNavigate(true);
+    setEnded(true);
   };
 
   const onPlayerReady = useCallback((player: Player, videoNode: any) => {
@@ -397,7 +406,6 @@ function VideoViewer(props: Props) {
     >
       {showAutoplayCountdown && (
         <AutoplayCountdown
-          uri={uri}
           nextRecommendedUri={nextRecommendedUri}
           doNavigate={() => setDoNavigate(true)}
           doReplay={() => setReplay(true)}

@@ -7,8 +7,7 @@ import { Menu, MenuButton, MenuList, MenuItem } from '@reach/menu-button';
 import Icon from 'component/common/icon';
 import * as PAGES from 'constants/pages';
 import { useHistory } from 'react-router';
-import { formatLbryUrlForWeb } from 'util/url';
-import { COLLECTIONS_CONSTS } from 'lbry-redux';
+import { formatLbryUrlForWeb, generateListSearchUrlParams } from 'util/url';
 
 type Props = {
   inline?: boolean,
@@ -16,34 +15,26 @@ type Props = {
   collectionName?: string,
   collectionId: string,
   playNextUri: string,
-  doSetPlayingUri: ({ uri: ?string }) => void,
-  doToggleShuffleList: (string, string, boolean, boolean) => void,
+  doToggleShuffleList: (string) => void,
 };
 
 function CollectionMenuList(props: Props) {
-  const {
-    inline = false,
-    collectionId,
-    collectionName,
-    doOpenModal,
-    playNextUri,
-    doSetPlayingUri,
-    doToggleShuffleList,
-  } = props;
+  const { inline = false, collectionId, collectionName, doOpenModal, playNextUri, doToggleShuffleList } = props;
   const [doShuffle, setDoShuffle] = React.useState(false);
 
   const { push } = useHistory();
 
   React.useEffect(() => {
     if (playNextUri && doShuffle) {
-      const collectionParams = new URLSearchParams();
-      collectionParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, collectionId);
-      const navigateUrl = formatLbryUrlForWeb(playNextUri) + `?` + collectionParams.toString();
       setDoShuffle(false);
-      doSetPlayingUri({ uri: playNextUri });
-      push(navigateUrl);
+      const navigateUrl = formatLbryUrlForWeb(playNextUri);
+      push({
+        pathname: navigateUrl,
+        search: generateListSearchUrlParams(collectionId),
+        state: { forceAutoplay: true },
+      });
     }
-  }, [push, doSetPlayingUri, collectionId, playNextUri, doShuffle]);
+  }, [collectionId, doShuffle, playNextUri, push]);
 
   return (
     <Menu>
@@ -68,7 +59,7 @@ function CollectionMenuList(props: Props) {
             <MenuItem
               className="comment__menu-option"
               onSelect={() => {
-                doToggleShuffleList('', collectionId, true, true);
+                doToggleShuffleList(collectionId);
                 setDoShuffle(true);
               }}
             >

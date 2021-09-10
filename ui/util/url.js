@@ -156,3 +156,9 @@ export const generateRssUrl = (domain, channelClaim) => {
   const url = `${domain}/$/rss/${channelClaim.canonical_url.replace('lbry://', '').replace('#', ':')}`;
   return url;
 };
+
+export const generateListSearchUrlParams = (collectionId) => {
+  const urlParams = new URLSearchParams();
+  urlParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, collectionId);
+  return `?` + urlParams.toString();
+};

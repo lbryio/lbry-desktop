@@ -45,6 +45,7 @@ export const WEB = 'Globe';
 export const SHARE = 'Share2';
 export const EXTERNAL = 'ExternalLink';
 export const PLAY = 'Play';
+export const PLAY_PREVIOUS = 'Play Previous';
 export const FACEBOOK = 'Facebook';
 export const TWITTER = 'Twitter';
 export const TELEGRAM = 'Telegram';

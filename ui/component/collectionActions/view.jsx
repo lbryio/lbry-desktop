@@ -11,15 +11,12 @@ import { useHistory } from 'react-router';
 import { EDIT_PAGE, PAGE_VIEW_QUERY } from 'page/collection/view';
 import classnames from 'classnames';
 import { ENABLE_FILE_REACTIONS } from 'config';
-import { COLLECTIONS_CONSTS } from 'lbry-redux';
-import { formatLbryUrlForWeb } from 'util/url';
+import { formatLbryUrlForWeb, generateListSearchUrlParams } from 'util/url';
 
 type Props = {
   uri: string,
   claim: StreamClaim,
-  openModal: (id: string, { uri: string, claimIsMine?: boolean, isSupport?: boolean }) => void,
-  myChannels: ?Array<ChannelClaim>,
-  doToast: ({ message: string }) => void,
+  openModal: (id: string, {}) => void,
   claimIsPending: boolean,
   isMyCollection: boolean,
   collectionId: string,
@@ -28,11 +25,7 @@ type Props = {
   collectionHasEdits: boolean,
   isBuiltin: boolean,
   doToggleShuffleList: (string, boolean) => void,
-  doToggleLoopList: (string, boolean) => void,
   playNextUri: string,
-  playNextClaim: StreamClaim,
-  doPlayUri: (string) => void,
-  doSetPlayingUri: (string) => void,
   firstItem: string,
 };
 
@@ -49,11 +42,7 @@ function CollectionActions(props: Props) {
     collectionHasEdits,
     isBuiltin,
     doToggleShuffleList,
-    doToggleLoopList,
     playNextUri,
-    playNextClaim,
-    doPlayUri,
-    doSetPlayingUri,
     firstItem,
   } = props;
   const [doShuffle, setDoShuffle] = React.useState(false);
@@ -63,23 +52,23 @@ function CollectionActions(props: Props) {
   const webShareable = true; // collections have cost?
 
   const doPlay = React.useCallback(
-    (uri) => {
-      const collectionParams = new URLSearchParams();
-      collectionParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, collectionId);
-      const navigateUrl = formatLbryUrlForWeb(uri) + `?` + collectionParams.toString();
-      push(navigateUrl);
-      doSetPlayingUri(uri);
-      doPlayUri(uri);
+    (playUri) => {
+      const navigateUrl = formatLbryUrlForWeb(playUri);
+      push({
+        pathname: navigateUrl,
+        search: generateListSearchUrlParams(collectionId),
+        state: { forceAutoplay: true },
+      });
     },
-    [collectionId, push, doSetPlayingUri, doPlayUri]
+    [collectionId, push]
   );
 
   React.useEffect(() => {
-    if (playNextClaim && doShuffle) {
+    if (playNextUri && doShuffle) {
       setDoShuffle(false);
       doPlay(playNextUri);
     }
-  }, [doPlay, doShuffle, playNextClaim, playNextUri]);
+  }, [doPlay, doShuffle, playNextUri]);
 
   const lhsSection = (
     <>
@@ -90,7 +79,6 @@ function CollectionActions(props: Props) {
         title={__('Play')}
         onClick={() => {
           doToggleShuffleList(collectionId, false);
-          doToggleLoopList(collectionId, false);
           doPlay(firstItem);
         }}
       />

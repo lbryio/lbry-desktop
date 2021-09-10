@@ -11,10 +11,12 @@ import usePersistedState from 'effects/use-persisted-state';
 import { PRIMARY_PLAYER_WRAPPER_CLASS } from 'page/file/view';
 import Draggable from 'react-draggable';
 import { onFullscreenChange } from 'util/full-screen';
+import { generateListSearchUrlParams, formatLbryUrlForWeb } from 'util/url';
 import { useIsMobile } from 'effects/use-screensize';
 import debounce from 'util/debounce';
 import { useHistory } from 'react-router';
-import { isURIEqual, COLLECTIONS_CONSTS } from 'lbry-redux';
+import { isURIEqual } from 'lbry-redux';
+import AutoplayCountdown from 'component/autoplayCountdown';
 
 const IS_DESKTOP_MAC = typeof process === 'object' ? process.platform === 'darwin' : false;
 const DEBOUNCE_WINDOW_RESIZE_HANDLER_MS = 60;
@@ -34,7 +36,12 @@ type Props = {
   primaryUri: ?string,
   videoTheaterMode: boolean,
   doFetchRecommendedContent: (string, boolean) => void,
+  doPlayUri: (string, string, boolean) => void,
   collectionId: string,
+  costInfo: any,
+  claimWasPurchased: boolean,
+  nextListUri: string,
+  previousListUri: string,
 };
 
 export default function FileRenderFloating(props: Props) {
@@ -52,16 +59,23 @@ export default function FileRenderFloating(props: Props) {
     primaryUri,
     videoTheaterMode,
     doFetchRecommendedContent,
+    doPlayUri,
     collectionId,
+    costInfo,
+    claimWasPurchased,
+    nextListUri,
+    previousListUri,
   } = props;
-  const {
-    location: { pathname },
-  } = useHistory();
+  const { location, push } = useHistory();
+  const hideFloatingPlayer = location.state && location.state.hideFloatingPlayer;
   const isMobile = useIsMobile();
   const mainFilePlaying = playingUri && isURIEqual(playingUri.uri, primaryUri);
   const [fileViewerRect, setFileViewerRect] = useState();
   const [desktopPlayStartTime, setDesktopPlayStartTime] = useState();
   const [wasDragging, setWasDragging] = useState(false);
+  const [doNavigate, setDoNavigate] = useState(false);
+  const [playNextUrl, setPlayNextUrl] = useState(true);
+  const [countdownCanceled, setCountdownCanceled] = useState(false);
   const [position, setPosition] = usePersistedState('floating-file-viewer:position', {
     x: -25,
     y: window.innerHeight - 400,
@@ -71,13 +85,10 @@ export default function FileRenderFloating(props: Props) {
     y: 0,
   });
 
-  let navigateUrl;
-  if (collectionId) {
-    const collectionParams = new URLSearchParams();
-    collectionParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, collectionId);
-    navigateUrl = uri + `?` + collectionParams.toString();
-  }
+  const navigateUrl = uri + (collectionId ? generateListSearchUrlParams(collectionId) : '');
 
+  const isFree = costInfo && costInfo.cost === 0;
+  const canViewFile = isFree || claimWasPurchased;
   const playingUriSource = playingUri && playingUri.source;
   const isPlayable = RENDER_MODES.FLOATING_MODES.includes(renderMode);
   const isReadyToPlay = isPlayable && (streamingUrl || (fileInfo && fileInfo.completed));
@@ -102,7 +113,7 @@ export default function FileRenderFloating(props: Props) {
     }
   }
 
-  function clampToScreen(pos) {
+  const clampToScreen = React.useCallback((pos) => {
     const ESTIMATED_SCROLL_BAR_PX = 50;
     const FLOATING_PLAYER_CLASS = 'content__viewer--floating';
     const fpPlayerElem = document.querySelector(`.${FLOATING_PLAYER_CLASS}`);
@@ -115,7 +126,7 @@ export default function FileRenderFloating(props: Props) {
         pos.y = getScreenHeight() - fpPlayerElem.getBoundingClientRect().height;
       }
     }
-  }
+  }, []);
 
   // Updated 'relativePos' based on persisted 'position':
   const stringifiedPosition = JSON.stringify(position);
@@ -139,7 +150,7 @@ export default function FileRenderFloating(props: Props) {
         setPosition({ x: pos.x, y: pos.y });
       }
     }
-  }, [isFloating, stringifiedPosition]);
+  }, [clampToScreen, isFloating, position.x, position.y, setPosition, stringifiedPosition]);
 
   // Listen to main-window resizing and adjust the fp position accordingly:
   useEffect(() => {
@@ -157,9 +168,9 @@ export default function FileRenderFloating(props: Props) {
 
     // 'relativePos' is needed in the dependency list to avoid stale closure.
     // Otherwise, this could just be changed to a one-time effect.
-  }, [relativePos]);
+  }, [clampToScreen, relativePos.x, relativePos.y, setPosition]);
 
-  function handleResize() {
+  const handleResize = React.useCallback(() => {
     const element = mainFilePlaying
       ? document.querySelector(`.${PRIMARY_PLAYER_WRAPPER_CLASS}`)
       : document.querySelector(`.${INLINE_PLAYER_WRAPPER_CLASS}`);
@@ -184,13 +195,14 @@ export default function FileRenderFloating(props: Props) {
 
     // $FlowFixMe
     setFileViewerRect({ ...objectRect, windowOffset: window.pageYOffset });
-  }
+  }, [mainFilePlaying]);
 
   useEffect(() => {
     if (streamingUrl) {
       handleResize();
+      setCountdownCanceled(false);
     }
-  }, [streamingUrl, pathname, playingUriSource, isFloating, mainFilePlaying]);
+  }, [handleResize, streamingUrl, videoTheaterMode]);
 
   useEffect(() => {
     handleResize();
@@ -201,7 +213,7 @@ export default function FileRenderFloating(props: Props) {
       window.removeEventListener('resize', handleResize);
       onFullscreenChange(window, 'remove', handleResize);
     };
-  }, [setFileViewerRect, isFloating, playingUriSource, mainFilePlaying, videoTheaterMode]);
+  }, [handleResize]);
 
   useEffect(() => {
     // @if TARGET='app'
@@ -219,9 +231,42 @@ export default function FileRenderFloating(props: Props) {
     if (isFloating) {
       doFetchRecommendedContent(uri, mature);
     }
-  }, [uri, mature, isFloating]);
+  }, [doFetchRecommendedContent, isFloating, mature, uri]);
 
-  if (!isPlayable || !uri || (isFloating && (isMobile || !floatingPlayerEnabled))) {
+  const doPlay = React.useCallback(
+    (playUri) => {
+      setDoNavigate(false);
+      if (!isFloating) {
+        const navigateUrl = formatLbryUrlForWeb(playUri);
+        push({
+          pathname: navigateUrl,
+          search: collectionId && generateListSearchUrlParams(collectionId),
+          state: { collectionId, forceAutoplay: true, hideFloatingPlayer: true },
+        });
+      } else {
+        doPlayUri(playUri, collectionId, true);
+      }
+    },
+    [collectionId, doPlayUri, isFloating, push]
+  );
+
+  useEffect(() => {
+    if (!doNavigate) return;
+
+    if (playNextUrl && nextListUri) {
+      doPlay(nextListUri);
+    } else if (previousListUri) {
+      doPlay(previousListUri);
+    }
+    setPlayNextUrl(true);
+  }, [doNavigate, doPlay, nextListUri, playNextUrl, previousListUri]);
+
+  if (
+    !isPlayable ||
+    !uri ||
+    (isFloating && (isMobile || !floatingPlayerEnabled || hideFloatingPlayer)) ||
+    (collectionId && !isFloating && ((!canViewFile && !nextListUri) || countdownCanceled))
+  ) {
     return null;
   }
 
@@ -307,17 +352,30 @@ export default function FileRenderFloating(props: Props) {
               // @endif
             />
           ) : (
-            <LoadingScreen status={loadingMessage} />
+            <>
+              {collectionId && !canViewFile ? (
+                <div className="content__loading">
+                  <AutoplayCountdown
+                    nextRecommendedUri={nextListUri}
+                    doNavigate={() => setDoNavigate(true)}
+                    doReplay={() => doPlayUri(uri, collectionId, false)}
+                    doPrevious={() => {
+                      setPlayNextUrl(false);
+                      setDoNavigate(true);
+                    }}
+                    onCanceled={() => setCountdownCanceled(true)}
+                    skipPaid
+                  />
+                </div>
+              ) : (
+                <LoadingScreen status={loadingMessage} />
+              )}
+            </>
           )}
           {isFloating && (
             <div className="draggable content__info">
               <div className="claim-preview__title" title={title || uri}>
-                <Button
-                  label={title || uri}
-                  navigate={navigateUrl || uri}
-                  button="link"
-                  className="content__floating-link"
-                />
+                <Button label={title || uri} navigate={navigateUrl} button="link" className="content__floating-link" />
               </div>
               <UriIndicator link uri={uri} />
             </div>

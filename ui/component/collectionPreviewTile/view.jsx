@@ -7,8 +7,7 @@ import TruncatedText from 'component/common/truncated-text';
 import CollectionCount from './collectionCount';
 import CollectionPrivate from './collectionPrivate';
 import CollectionMenuList from 'component/collectionMenuList';
-import { formatLbryUrlForWeb } from 'util/url';
-import { COLLECTIONS_CONSTS } from 'lbry-redux';
+import { formatLbryUrlForWeb, generateListSearchUrlParams } from 'util/url';
 import FileThumbnail from 'component/fileThumbnail';
 
 type Props = {
@@ -62,16 +61,12 @@ function CollectionPreviewTile(props: Props) {
     if (collectionId && hasClaim && resolveCollectionItems) {
       resolveCollectionItems({ collectionId, page_size: 5 });
     }
-  }, [collectionId, hasClaim]);
+  }, [collectionId, hasClaim, resolveCollectionItems]);
 
   // const signingChannel = claim && claim.signing_channel;
 
-  let navigateUrl = formatLbryUrlForWeb(collectionItemUrls[0] || '/');
-  if (collectionId) {
-    const collectionParams = new URLSearchParams();
-    collectionParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, collectionId);
-    navigateUrl = navigateUrl + `?` + collectionParams.toString();
-  }
+  const navigateUrl =
+    formatLbryUrlForWeb(collectionItemUrls[0] || '/') + (collectionId ? generateListSearchUrlParams(collectionId) : '');
 
   function handleClick(e) {
     if (navigateUrl) {

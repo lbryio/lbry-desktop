@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
-import { doCollectionEdit, makeSelectNameForCollectionId, doCollectionDelete } from 'lbry-redux';
+import { makeSelectNameForCollectionId } from 'lbry-redux';
 import { doOpenModal } from 'redux/actions/app';
 import { selectListShuffle } from 'redux/selectors/content';
-import { doSetPlayingUri, doToggleShuffleList } from 'redux/actions/content';
+import { doToggleLoopList, doToggleShuffleList } from 'redux/actions/content';
 import CollectionMenuList from './view';
 
 const select = (state, props) => {
@@ -17,10 +17,12 @@ const select = (state, props) => {
   };
 };
 
-export default connect(select, {
-  doCollectionEdit,
-  doOpenModal,
-  doCollectionDelete,
-  doSetPlayingUri,
-  doToggleShuffleList,
-})(CollectionMenuList);
+const perform = (dispatch) => ({
+  openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
+  doToggleShuffleList: (collectionId) => {
+    dispatch(doToggleLoopList(collectionId, false, true));
+    dispatch(doToggleShuffleList(undefined, collectionId, true, true));
+  },
+});
+
+export default connect(select, perform)(CollectionMenuList);
