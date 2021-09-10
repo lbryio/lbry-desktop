@@ -1,0 +1,102 @@
+{
+  "appId": "io.lbry.LBRY",
+  "productName": "LBRY",
+  "directories": {
+    "output": "dist/electron"
+  },
+  "files": [
+    {
+      "from": "dist/electron/webpack",
+      "to": "./"
+    },
+    {
+      "from": "dist/electron/static",
+      "to": "./"
+    }
+  ],
+  "extraResources": [
+    {
+      "from": "./static/daemon/",
+      "to": "static/daemon/",
+      "filter": ["**/*"]
+    },
+    {
+      "from": "./static/lbry-first/",
+      "to": "static/lbry-first/",
+      "filter": ["**/*"]
+    },
+    {
+      "from": "./static/img",
+      "to": "static/img",
+      "filter": ["**/*"]
+    },
+    {
+      "from": "./static/font",
+      "to": "static/font",
+      "filter": ["**/*"]
+    }
+  ],
+  "publish": [
+    {
+      "provider": "github"
+    }
+  ],
+  "mac": {
+    "category": "public.app-category.entertainment"
+  },
+  "dmg": {
+    "iconSize": 128,
+    "contents": [
+      {
+        "x": 115,
+        "y": 164
+      },
+      {
+        "x": 387,
+        "y": 164,
+        "type": "link",
+        "path": "/Applications"
+      }
+    ],
+    "window": {
+      "x": 200,
+      "y": 200,
+      "width": 500,
+      "height": 300
+    },
+    "background": "./build/background.png"
+  },
+  "protocols": [
+    {
+      "name": "LBRY URI",
+      "schemes": ["lbry"],
+      "role": "Viewer"
+    }
+  ],
+  "linux": {
+    "target": ["AppImage", "deb"],
+    "executableName": "lbry",
+    "category": "AudioVideo;Video",
+    "desktop": {
+      "MimeType": "x-scheme-handler/lbry"
+    }
+  },
+  "deb": {
+    "depends": ["gconf2", "gconf-service", "libnotify4", "libappindicator1", "libxtst6", "libnss3"]
+  },
+  "nsis": {
+    "perMachine": true,
+    "createDesktopShortcut": "always",
+    "differentialPackage": true
+  },
+  "win": {
+    "target": [
+      {
+        "target": "nsis",
+        "arch": ["x64"]
+      }
+    ]
+  },
+  "artifactName": "${productName}_${version}.${ext}",
+  "afterSign": "./build/afterSignHook.js"
+}
