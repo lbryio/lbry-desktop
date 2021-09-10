@@ -15,6 +15,33 @@
   .button--secondary {
     margin-top: var(--spacing-xxs);
   }
+
+  .claim-preview__wrapper {
+    border-bottom: none !important;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .claim-preview--inline {
+    .channel-thumbnail {
+      @include handleChannelGif(3rem);
+    }
+  }
+
+  .claim-preview__title {
+    font-size: var(--font-small);
+  }
+
+  .channel-name {
+    font-size: var(--font-xsmall);
+  }
+
+  .section {
+    margin-left: var(--spacing-m);
+  }
+
+  label {
+    font-style: italic;
+  }
 }
 
 .block-modal--values {

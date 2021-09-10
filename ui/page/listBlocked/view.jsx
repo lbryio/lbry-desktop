@@ -5,7 +5,7 @@ import React from 'react';
 import classnames from 'classnames';
 import moment from 'moment';
 import humanizeDuration from 'humanize-duration';
-import ClaimList from 'component/claimList';
+import BlockList from 'component/blockList';
 import ClaimPreview from 'component/claimPreview';
 import Page from 'component/page';
 import Spinner from 'component/spinner';
@@ -13,7 +13,6 @@ import Button from 'component/button';
 import usePersistedState from 'effects/use-persisted-state';
 import ChannelBlockButton from 'component/channelBlockButton';
 import ChannelMuteButton from 'component/channelMuteButton';
-import Yrbl from 'component/yrbl';
 
 const VIEW = {
   BLOCKED: 'blocked',
@@ -47,7 +46,7 @@ function ListBlocked(props: Props) {
     personalTimeoutMap,
     adminTimeoutMap,
     moderatorTimeoutMap,
-    moderatorBlockListDelegatorsMap,
+    moderatorBlockListDelegatorsMap: delegatorsMap,
     fetchingModerationBlockList,
     fetchModBlockedList,
     fetchModAmIList,
@@ -56,55 +55,36 @@ function ListBlocked(props: Props) {
   } = props;
   const [viewMode, setViewMode] = usePersistedState('blocked-muted:display', VIEW.BLOCKED);
 
-  // Keep a local list to allow for undoing actions in this component
-  const [localPersonalList, setLocalPersonalList] = React.useState(undefined);
-  const [localAdminList, setLocalAdminList] = React.useState(undefined);
-  const [localModeratorList, setLocalModeratorList] = React.useState(undefined);
-  const [localModeratorListDelegatorsMap, setLocalModeratorListDelegatorsMap] = React.useState(undefined);
-  const [localMutedList, setLocalMutedList] = React.useState(undefined);
+  const [localDelegatorsMap, setLocalDelegatorsMap] = React.useState(undefined);
 
-  const hasLocalMuteList = localMutedList && localMutedList.length > 0;
-  const hasLocalPersonalList = localPersonalList && localPersonalList.length > 0;
-
-  const stringifiedMutedList = JSON.stringify(mutedUris);
-  const stringifiedPersonalList = JSON.stringify(personalBlockList);
-  const stringifiedAdminList = JSON.stringify(adminBlockList);
-  const stringifiedModeratorList = JSON.stringify(moderatorBlockList);
-  const stringifiedModeratorListDelegatorsMap = JSON.stringify(moderatorBlockListDelegatorsMap);
-
-  const stringifiedLocalAdminList = JSON.stringify(localAdminList);
-  const stringifiedLocalModeratorList = JSON.stringify(localModeratorList);
-  const stringifiedLocalModeratorListDelegatorsMap = JSON.stringify(localModeratorListDelegatorsMap);
-
-  const justMuted = localMutedList && mutedUris && localMutedList.length < mutedUris.length;
-  const justPersonalBlocked =
-    localPersonalList && personalBlockList && localPersonalList.length < personalBlockList.length;
+  const stringifiedDelegatorsMap = JSON.stringify(delegatorsMap);
+  const stringifiedLocalDelegatorsMap = JSON.stringify(localDelegatorsMap);
 
   const isAdmin =
     myChannelClaims && myChannelClaims.some((c) => delegatorsById[c.claim_id] && delegatorsById[c.claim_id].global);
+
   const isModerator =
     myChannelClaims &&
     myChannelClaims.some(
       (c) => delegatorsById[c.claim_id] && Object.keys(delegatorsById[c.claim_id].delegators).length > 0
     );
 
-  const listForView = getLocalList(viewMode);
-  const showUris = listForView && listForView.length > 0;
+  // **************************************************************************
 
-  function getLocalList(view) {
+  function getList(view) {
     switch (view) {
       case VIEW.BLOCKED:
-        return localPersonalList;
+        return personalBlockList;
       case VIEW.ADMIN:
-        return localAdminList;
+        return adminBlockList;
       case VIEW.MODERATOR:
-        return localModeratorList;
+        return moderatorBlockList;
       case VIEW.MUTED:
-        return localMutedList;
+        return mutedUris;
     }
   }
 
-  function getButtons(view, uri) {
+  function getActionButtons(uri) {
     const getDurationStr = (durationNs) => {
       const NANO_TO_MS = 1000000;
       return humanizeDuration(durationNs / NANO_TO_MS, { round: true });
@@ -127,7 +107,7 @@ function ListBlocked(props: Props) {
       );
     };
 
-    switch (view) {
+    switch (viewMode) {
       case VIEW.BLOCKED:
         return (
           <>
@@ -146,18 +126,21 @@ function ListBlocked(props: Props) {
         );
 
       case VIEW.MODERATOR:
-        const delegatorUrisForBlockedUri = localModeratorListDelegatorsMap && localModeratorListDelegatorsMap[uri];
+        const delegatorUrisForBlockedUri = localDelegatorsMap && localDelegatorsMap[uri];
         if (!delegatorUrisForBlockedUri) return null;
         return (
           <>
             {delegatorUrisForBlockedUri.map((delegatorUri) => {
               return (
                 <div className="block-list--delegator" key={delegatorUri}>
-                  <ul className="section content__non-clickable">
-                    <ClaimPreview uri={delegatorUri} hideMenu hideActions type="small" />
+                  <label>{__('Blocked on behalf of:')}</label>
+                  <ul className="section">
+                    <div className="content__non-clickable">
+                      <ClaimPreview uri={delegatorUri} hideMenu hideActions type="inline" properties={false} />
+                      {moderatorTimeoutMap[uri] && getBanInfoElem(moderatorTimeoutMap[uri])}
+                    </div>
+                    <ChannelBlockButton uri={uri} blockLevel={BLOCK_LEVEL.MODERATOR} creatorUri={delegatorUri} />
                   </ul>
-                  <ChannelBlockButton uri={uri} blockLevel={BLOCK_LEVEL.MODERATOR} creatorUri={delegatorUri} />
-                  {moderatorTimeoutMap[uri] && getBanInfoElem(moderatorTimeoutMap[uri])}
                 </div>
               );
             })}
@@ -218,52 +201,43 @@ function ListBlocked(props: Props) {
     return source && (!local || local.length < source.length);
   }
 
-  React.useEffect(() => {
-    const jsonMutedChannels = stringifiedMutedList && JSON.parse(stringifiedMutedList);
-    if (!hasLocalMuteList && jsonMutedChannels && jsonMutedChannels.length > 0) {
-      setLocalMutedList(jsonMutedChannels);
-    }
-  }, [stringifiedMutedList, hasLocalMuteList]);
+  function getViewElem(view, label, icon) {
+    return (
+      <Button
+        icon={icon}
+        button="alt"
+        label={__(label)}
+        className={classnames(`button-toggle`, {
+          'button-toggle--active': viewMode === view,
+        })}
+        onClick={() => setViewMode(view)}
+      />
+    );
+  }
+
+  function getRefreshElem() {
+    return (
+      <Button
+        icon={ICONS.REFRESH}
+        button="alt"
+        label={__('Refresh')}
+        onClick={() => {
+          fetchModBlockedList();
+          fetchModAmIList();
+        }}
+      />
+    );
+  }
+
+  // **************************************************************************
 
   React.useEffect(() => {
-    const jsonBlockedChannels = stringifiedPersonalList && JSON.parse(stringifiedPersonalList);
-    if (!hasLocalPersonalList && jsonBlockedChannels && jsonBlockedChannels.length > 0) {
-      setLocalPersonalList(jsonBlockedChannels);
+    if (stringifiedDelegatorsMap && isSourceListLarger(stringifiedDelegatorsMap, stringifiedLocalDelegatorsMap)) {
+      setLocalDelegatorsMap(JSON.parse(stringifiedDelegatorsMap));
     }
-  }, [stringifiedPersonalList, hasLocalPersonalList]);
+  }, [stringifiedDelegatorsMap, stringifiedLocalDelegatorsMap]);
 
-  React.useEffect(() => {
-    if (stringifiedAdminList && isSourceListLarger(stringifiedAdminList, stringifiedLocalAdminList)) {
-      setLocalAdminList(JSON.parse(stringifiedAdminList));
-    }
-  }, [stringifiedAdminList, stringifiedLocalAdminList]);
-
-  React.useEffect(() => {
-    if (stringifiedModeratorList && isSourceListLarger(stringifiedModeratorList, stringifiedLocalModeratorList)) {
-      setLocalModeratorList(JSON.parse(stringifiedModeratorList));
-    }
-  }, [stringifiedModeratorList, stringifiedLocalModeratorList]);
-
-  React.useEffect(() => {
-    if (
-      stringifiedModeratorListDelegatorsMap &&
-      isSourceListLarger(stringifiedModeratorListDelegatorsMap, stringifiedLocalModeratorListDelegatorsMap)
-    ) {
-      setLocalModeratorListDelegatorsMap(JSON.parse(stringifiedModeratorListDelegatorsMap));
-    }
-  }, [stringifiedModeratorListDelegatorsMap, stringifiedLocalModeratorListDelegatorsMap]);
-
-  React.useEffect(() => {
-    if (justMuted && stringifiedMutedList) {
-      setLocalMutedList(JSON.parse(stringifiedMutedList));
-    }
-  }, [stringifiedMutedList, justMuted, setLocalMutedList]);
-
-  React.useEffect(() => {
-    if (justPersonalBlocked && stringifiedPersonalList) {
-      setLocalPersonalList(JSON.parse(stringifiedPersonalList));
-    }
-  }, [stringifiedPersonalList, justPersonalBlocked, setLocalPersonalList]);
+  // **************************************************************************
 
   return (
     <Page
@@ -282,87 +256,23 @@ function ListBlocked(props: Props) {
         <>
           <div className="section__header--actions">
             <div className="section__actions--inline">
-              <Button
-                icon={ICONS.BLOCK}
-                button="alt"
-                label={__('Blocked')}
-                className={classnames(`button-toggle`, {
-                  'button-toggle--active': viewMode === VIEW.BLOCKED,
-                })}
-                onClick={() => setViewMode(VIEW.BLOCKED)}
-              />
-              {isAdmin && (
-                <Button
-                  icon={ICONS.BLOCK}
-                  button="alt"
-                  label={__('Global')}
-                  className={classnames(`button-toggle`, {
-                    'button-toggle--active': viewMode === VIEW.ADMIN,
-                  })}
-                  onClick={() => setViewMode(VIEW.ADMIN)}
-                />
-              )}
-              {isModerator && (
-                <Button
-                  icon={ICONS.BLOCK}
-                  button="alt"
-                  label={__('Moderator')}
-                  className={classnames(`button-toggle`, {
-                    'button-toggle--active': viewMode === VIEW.MODERATOR,
-                  })}
-                  onClick={() => setViewMode(VIEW.MODERATOR)}
-                />
-              )}
-              <Button
-                icon={ICONS.MUTE}
-                button="alt"
-                label={__('Muted')}
-                className={classnames(`button-toggle`, {
-                  'button-toggle--active': viewMode === VIEW.MUTED,
-                })}
-                onClick={() => setViewMode(VIEW.MUTED)}
-              />
+              {getViewElem(VIEW.BLOCKED, 'Blocked', ICONS.BLOCK)}
+              {isAdmin && getViewElem(VIEW.ADMIN, 'Global', ICONS.BLOCK)}
+              {isModerator && getViewElem(VIEW.MODERATOR, 'Moderator', ICONS.BLOCK)}
+              {getViewElem(VIEW.MUTED, 'Muted', ICONS.MUTE)}
             </div>
-            <div className="section__actions--inline">
-              <Button
-                icon={ICONS.REFRESH}
-                button="alt"
-                label={__('Refresh')}
-                onClick={() => {
-                  fetchModBlockedList();
-                  fetchModAmIList();
-                }}
-              />
-            </div>
+            <div className="section__actions--inline">{getRefreshElem()}</div>
           </div>
 
-          {showUris && <div className="help--notice">{getHelpText(viewMode)}</div>}
-
-          {showUris ? (
-            <div className={viewMode === VIEW.MODERATOR ? 'block-list--moderator' : 'block-list'}>
-              <ClaimList
-                uris={getLocalList(viewMode)}
-                showUnresolvedClaims
-                showHiddenByUser
-                hideMenu
-                renderActions={(claim) => {
-                  return <div className="section__actions">{getButtons(viewMode, claim.permanent_url)}</div>;
-                }}
-              />
-            </div>
-          ) : (
-            <div className="main--empty">
-              <Yrbl
-                title={getEmptyListTitle(viewMode)}
-                subtitle={getEmptyListSubtitle(viewMode)}
-                actions={
-                  <div className="section__actions">
-                    <Button button="primary" label={__('Go Home')} navigate="/" />
-                  </div>
-                }
-              />
-            </div>
-          )}
+          <BlockList
+            key={viewMode}
+            uris={getList(viewMode)}
+            help={getHelpText(viewMode)}
+            titleEmptyList={getEmptyListTitle(viewMode)}
+            subtitle={getEmptyListSubtitle(viewMode)}
+            getActionButtons={getActionButtons}
+            className={viewMode === VIEW.MODERATOR ? 'block-list--moderator' : undefined}
+          />
         </>
       )}
     </Page>
