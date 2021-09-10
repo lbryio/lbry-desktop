@@ -283,10 +283,10 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     // as the listener to update static texts.
 
     const setLabel = (controlBar, childName, label) => {
-      const c = controlBar.getChild(childName);
-      if (c) {
-        c.controlText(label);
-      }
+      // const c = controlBar.getChild(childName);
+      // if (c) {
+      //   c.controlText(label);
+      // }
     };
 
     const player = playerRef.current;

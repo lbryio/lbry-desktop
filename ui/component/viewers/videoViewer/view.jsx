@@ -341,13 +341,31 @@ function VideoViewer(props: Props) {
             // player.muted(true);
             // another version had player.play()
           }
+          console.log('running here!')
         } else {
+          console.log('running here123')
           const isPaused = player.paused();
+
+          console.log('is paused');
+          console.log(isPaused)
           if (IS_IOS && isPaused) {
             document.getElementsByClassName('video-js--tap-to-unmute')[0].style.visibility = 'visible';
             player.muted(true);
             const iosResponse = player.play();
+            console.log(iosResponse)
           }
+          setTimeout(function(){
+            console.log('running here124')
+            const isPaused = player.paused();
+            console.log('is paused');
+            console.log(isPaused)
+            if (IS_IOS && isPaused) {
+              document.getElementsByClassName('video-js--tap-to-unmute')[0].style.visibility = 'visible';
+              player.muted(true);
+              const iosResponse = player.play();
+              console.log(iosResponse)
+            }
+          }, 1000)
         }
         setIsLoading(false);
         setIsPlaying(false);
