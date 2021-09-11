@@ -50,6 +50,14 @@ function AutoplayCountdown(props: Props) {
     return elm && elm.getBoundingClientRect().top < 0;
   }
 
+  function getMsgPlayingNext() {
+    if (skipPaid) {
+      return __('Playing next free content in %seconds_left% seconds...', { seconds_left: timer });
+    } else {
+      return __('Playing in %seconds_left% seconds...', { seconds_left: timer });
+    }
+  }
+
   // Update 'setTimerPaused'.
   React.useEffect(() => {
     // Ensure correct 'setTimerPaused' on initial render.
@@ -112,10 +120,7 @@ function AutoplayCountdown(props: Props) {
           )}
           {!isTimerPaused && (
             <div className="file-viewer__overlay-secondary autoplay-countdown__counter">
-              {__('Playing %message% in %seconds_left% seconds...', {
-                message: skipPaid ? __('next free content') : __(''),
-                seconds_left: timer,
-              })}{' '}
+              {getMsgPlayingNext()}{' '}
               <Button
                 label={__('Cancel')}
                 button="link"
