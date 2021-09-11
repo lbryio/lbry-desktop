@@ -45,7 +45,7 @@ export default function CollectionContent(props: Props) {
           <span className="file-page__recommended-collection__row">
             <Button
               button="alt"
-              title="Loop"
+              title={__('Loop')}
               icon={ICONS.REPEAT}
               iconColor={loop && 'blue'}
               className="button--file-action"
@@ -53,7 +53,7 @@ export default function CollectionContent(props: Props) {
             />
             <Button
               button="alt"
-              title="Shuffle"
+              title={__('Shuffle')}
               icon={ICONS.SHUFFLE}
               iconColor={shuffle && 'blue'}
               className="button--file-action"
