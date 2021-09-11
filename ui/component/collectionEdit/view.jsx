@@ -117,6 +117,28 @@ function CollectionForm(props: Props) {
     setParams({ ...params, ...paramObj });
   }
 
+  // TODO remove this or better decide whether app should delete languages[2+]
+  // This was added because a previous update setting was duplicating language codes
+  function dedupeLanguages(languages) {
+    if (languages.length <= 1) {
+      return languages;
+    } else if (languages.length === 2) {
+      if (languages[0] !== languages[1]) {
+        return languages;
+      } else {
+        return [languages[0]];
+      }
+    } else if (languages.length > 2) {
+      const newLangs = [];
+      languages.forEach((l) => {
+        if (!newLangs.includes(l)) {
+          newLangs.push(l);
+        }
+      });
+      return newLangs;
+    }
+  }
+
   function getCollectionParams() {
     const collectionParams: {
       thumbnail_url?: string,
@@ -134,7 +156,7 @@ function CollectionForm(props: Props) {
       thumbnail_url: thumbnailUrl,
       description,
       bid: String(amount || 0.001),
-      languages: languages || [],
+      languages: languages ? dedupeLanguages(languages) : [],
       locations: locations || [],
       tags: tags
         ? tags.map((tag) => {
@@ -175,6 +197,9 @@ function CollectionForm(props: Props) {
         langs = [];
       } else {
         langs[0] = code;
+        if (langs[0] === langs[1]) {
+          langs.length = 1;
+        }
       }
     } else {
       if (code === LANG_NONE || code === langs[0]) {
