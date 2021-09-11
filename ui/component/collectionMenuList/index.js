@@ -18,7 +18,7 @@ const select = (state, props) => {
 };
 
 const perform = (dispatch) => ({
-  openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
+  doOpenModal: (modal, props) => dispatch(doOpenModal(modal, props)),
   doToggleShuffleList: (collectionId) => {
     dispatch(doToggleLoopList(collectionId, false, true));
     dispatch(doToggleShuffleList(undefined, collectionId, true, true));
