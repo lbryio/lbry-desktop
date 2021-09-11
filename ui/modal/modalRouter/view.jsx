@@ -23,6 +23,7 @@ const ModalClaimCollectionAdd = lazyImport(() =>
 const ModalCommentAcknowledgement = lazyImport(() =>
   import('modal/modalCommentAcknowledgement' /* webpackChunkName: "modalCommentAcknowledgement" */)
 );
+const ModalConfirm = lazyImport(() => import('modal/modalConfirm' /* webpackChunkName: "modalConfirm" */));
 const ModalConfirmAge = lazyImport(() => import('modal/modalConfirmAge' /* webpackChunkName: "modalConfirmAge" */));
 const ModalConfirmThumbnailUpload = lazyImport(() =>
   import('modal/modalConfirmThumbnailUpload' /* webpackChunkName: "modalConfirmThumbnailUpload" */)
@@ -62,9 +63,6 @@ const ModalPhoneCollection = lazyImport(() =>
 const ModalPublish = lazyImport(() => import('modal/modalPublish' /* webpackChunkName: "modalPublish" */));
 const ModalPublishPreview = lazyImport(() =>
   import('modal/modalPublishPreview' /* webpackChunkName: "modalPublishPreview" */)
-);
-const ModalRemoveBtcSwapAddress = lazyImport(() =>
-  import('modal/modalRemoveBtcSwapAddress' /* webpackChunkName: "modalRemoveBtcSwapAddress" */)
 );
 const ModalRemoveCard = lazyImport(() => import('modal/modalRemoveCard' /* webpackChunkName: "modalRemoveCard" */));
 const ModalRemoveComment = lazyImport(() =>
@@ -124,6 +122,8 @@ function ModalRouter(props: Props) {
 
   function getModal(id) {
     switch (id) {
+      case MODALS.CONFIRM:
+        return ModalConfirm;
       case MODALS.UPGRADE:
         return ModalUpgrade;
       case MODALS.DOWNLOADING:
@@ -198,8 +198,6 @@ function ModalRouter(props: Props) {
         return ModalViewImage;
       case MODALS.MASS_TIP_UNLOCK:
         return ModalMassTipsUnlock;
-      case MODALS.CONFIRM_REMOVE_BTC_SWAP_ADDRESS:
-        return ModalRemoveBtcSwapAddress;
       case MODALS.BLOCK_CHANNEL:
         return ModalBlockChannel;
       case MODALS.COLLECTION_ADD:

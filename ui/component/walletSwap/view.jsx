@@ -59,6 +59,7 @@ type Props = {
   isAuthenticated: boolean,
   doToast: ({ message: string }) => void,
   addCoinSwap: (CoinSwapInfo) => void,
+  removeCoinSwap: (string) => void,
   getNewAddress: () => void,
   checkAddressIsMine: (string) => void,
   openModal: (string, {}) => void,
@@ -72,6 +73,7 @@ function WalletSwap(props: Props) {
     coinSwaps,
     isAuthenticated,
     addCoinSwap,
+    removeCoinSwap,
     getNewAddress,
     checkAddressIsMine,
     openModal,
@@ -103,9 +105,15 @@ function WalletSwap(props: Props) {
     setSwap(null);
   }
 
-  function removeCoinSwap(chargeCode) {
-    openModal(MODALS.CONFIRM_REMOVE_BTC_SWAP_ADDRESS, {
-      chargeCode: chargeCode,
+  function handleRemoveSwap(chargeCode) {
+    openModal(MODALS.CONFIRM, {
+      title: __('Remove Swap'),
+      subtitle: <I18nMessage tokens={{ address: <em>{`${chargeCode}`}</em> }}>Remove %address%?</I18nMessage>,
+      body: <p className="help--warning">{__('This process cannot be reversed.')}</p>,
+      onConfirm: (closeModal) => {
+        removeCoinSwap(chargeCode);
+        closeModal();
+      },
     });
   }
 
@@ -657,7 +665,7 @@ function WalletSwap(props: Props) {
                             button="link"
                             icon={ICONS.REMOVE}
                             title={__('Remove swap')}
-                            onClick={() => removeCoinSwap(x.chargeCode)}
+                            onClick={() => handleRemoveSwap(x.chargeCode)}
                           />
                         </td>
                       </tr>
