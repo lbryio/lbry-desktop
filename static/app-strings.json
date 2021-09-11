@@ -157,7 +157,7 @@
   "Autoplay media files": "Autoplay media files",
   "Autoplay video and audio files when navigating to a file.": "Autoplay video and audio files when navigating to a file.",
   "Autoplay next recommended content": "Autoplay next recommended content",
-  "Autoplay video and audio files as the next related item when a file finishes playing.": "Autoplay video and audio files as the next related item when a file finishes playing.",
+  "Autoplay the next related item when a file (video or audio) finishes playing.": "Autoplay the next related item when a file (video or audio) finishes playing.",
   "Clear application cache": "Clear application cache",
   "Clear Cache": "Clear Cache",
   "This might fix issues that you are having. Your wallet will not be affected.": "This might fix issues that you are having. Your wallet will not be affected.",
