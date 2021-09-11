@@ -10,18 +10,16 @@ const PAGINATE_PARAM = 'page';
 type Props = {
   totalPages: number,
   location: { search: string },
-  history: { push: (string) => void },
-  onPageChange?: (number) => void,
-  disableHistory?: boolean, // Disables the use of '&page=' param and history stack.
+  history: { push: string => void },
+  onPageChange?: number => void,
 };
 
 function Paginate(props: Props) {
-  const { totalPages = 1, location, history, onPageChange, disableHistory } = props;
+  const { totalPages = 1, location, history, onPageChange } = props;
   const { search } = location;
   const [textValue, setTextValue] = React.useState('');
   const urlParams = new URLSearchParams(search);
-  const initialPage = disableHistory ? 1 : Number(urlParams.get(PAGINATE_PARAM)) || 1;
-  const [currentPage, setCurrentPage] = React.useState(initialPage);
+  const currentPage = Number(urlParams.get(PAGINATE_PARAM)) || 1;
   const isMobile = useIsMobile();
 
   function handleChangePage(newPageNumber: number) {
@@ -30,13 +28,9 @@ function Paginate(props: Props) {
     }
 
     if (currentPage !== newPageNumber) {
-      setCurrentPage(newPageNumber);
-
-      if (!disableHistory) {
-        const params = new URLSearchParams(search);
-        params.set(PAGINATE_PARAM, newPageNumber.toString());
-        history.push('?' + params.toString());
-      }
+      const params = new URLSearchParams(search);
+      params.set(PAGINATE_PARAM, newPageNumber.toString());
+      history.push('?' + params.toString());
     }
   }
 
@@ -64,7 +58,7 @@ function Paginate(props: Props) {
             nextClassName="pagination__item pagination__item--next"
             breakClassName="pagination__item pagination__item--break"
             marginPagesDisplayed={2}
-            onPageChange={(e) => handleChangePage(e.selected + 1)}
+            onPageChange={e => handleChangePage(e.selected + 1)}
             forcePage={currentPage - 1}
             initialPage={currentPage - 1}
             containerClassName="pagination"
@@ -73,7 +67,7 @@ function Paginate(props: Props) {
         {!isMobile && (
           <FormField
             value={textValue}
-            onChange={(e) => setTextValue(e.target.value)}
+            onChange={e => setTextValue(e.target.value)}
             className="paginate-channel"
             label={__('Go to page:')}
             type="text"

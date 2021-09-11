@@ -56,7 +56,6 @@
     "express": "^4.17.1",
     "humanize-duration": "^3.27.0",
     "if-env": "^1.0.4",
-    "match-sorter": "^6.3.0",
     "parse-duration": "^1.0.0",
     "react-datetime-picker": "^3.2.1",
     "react-plastic": "^1.1.1",
