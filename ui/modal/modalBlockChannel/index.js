@@ -15,11 +15,9 @@ const select = (state, props) => ({
 
 const perform = (dispatch) => ({
   closeModal: () => dispatch(doHideModal()),
-  commentModBlock: (commenterUri, timeoutHours) => dispatch(doCommentModBlock(commenterUri, timeoutHours)),
-  commentModBlockAsAdmin: (commenterUri, blockerId, timeoutHours) =>
-    dispatch(doCommentModBlockAsAdmin(commenterUri, blockerId, timeoutHours)),
-  commentModBlockAsModerator: (commenterUri, creatorId, blockerId, timeoutHours) =>
-    dispatch(doCommentModBlockAsModerator(commenterUri, creatorId, blockerId, timeoutHours)),
+  commentModBlock: (a, b) => dispatch(doCommentModBlock(a, b)),
+  commentModBlockAsAdmin: (a, b, c) => dispatch(doCommentModBlockAsAdmin(a, b, c)),
+  commentModBlockAsModerator: (a, b, c, d) => dispatch(doCommentModBlockAsModerator(a, b, c, d)),
 });
 
 export default connect(select, perform)(ModalBlockChannel);

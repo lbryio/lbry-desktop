@@ -33,9 +33,14 @@ type Props = {
   moderationDelegatorsById: { [string]: { global: boolean, delegators: { name: string, claimId: string } } },
   // --- perform ---
   closeModal: () => void,
-  commentModBlock: (string, ?number) => void,
-  commentModBlockAsAdmin: (string, string, ?number) => void,
-  commentModBlockAsModerator: (string, string, string, ?number) => void,
+  commentModBlock: (commenterUri: string, timeoutSec: ?number) => void,
+  commentModBlockAsAdmin: (commenterUri: string, blockerId: string, timeoutSec: ?number) => void,
+  commentModBlockAsModerator: (
+    commenterUri: string,
+    creatorUri: string,
+    blockerId: string,
+    timeoutSec: ?number
+  ) => void,
 };
 
 export default function ModalBlockChannel(props: Props) {
@@ -227,7 +232,12 @@ export default function ModalBlockChannel(props: Props) {
 
       case TAB.MODERATOR:
         if (activeChannelClaim && contentChannelClaim) {
-          commentModBlockAsModerator(commenterUri, contentChannelClaim.claim_id, activeChannelClaim.claim_id, duration);
+          commentModBlockAsModerator(
+            commenterUri,
+            contentChannelClaim.permanent_url,
+            activeChannelClaim.claim_id,
+            duration
+          );
         }
         break;
 

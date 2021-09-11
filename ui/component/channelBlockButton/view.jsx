@@ -2,7 +2,6 @@
 import React from 'react';
 import Button from 'component/button';
 import { BLOCK_LEVEL } from 'constants/comment';
-import { parseURI } from 'lbry-redux';
 
 type Props = {
   uri: string,
@@ -48,11 +47,10 @@ function ChannelBlockButton(props: Props) {
 
       case BLOCK_LEVEL.MODERATOR:
         if (creatorUri) {
-          const { channelClaimId } = parseURI(creatorUri);
           if (isBlocked) {
-            doCommentModUnBlockAsModerator(uri, channelClaimId, '');
+            doCommentModUnBlockAsModerator(uri, creatorUri, '');
           } else {
-            doCommentModBlockAsModerator(uri, channelClaimId, '');
+            doCommentModBlockAsModerator(uri, creatorUri, '');
           }
         }
         break;
