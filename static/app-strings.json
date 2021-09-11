@@ -1917,6 +1917,7 @@
   "e.g. John Doe": "e.g. John Doe",
   "e.g. john@example.com": "e.g. john@example.com",
   "e.g. satoshi@example.com": "e.g. satoshi@example.com",
+  "e.g. odysee": "e.g. odysee",
   "Your channel": "Your channel",
   "Set to \"Anonymous\" if you do not want to associate your channel in this report.": "Set to \"Anonymous\" if you do not want to associate your channel in this report.",
   "Send report?": "Send report?",
@@ -2168,7 +2169,5 @@
   "Content Page": "Content Page",
   "Card Last 4": "Card Last 4",
   "Search blocked channel name": "Search blocked channel name",
-  "e.g. odysee": "e.g. odysee",
-  "No results found": "No results found",
   "--end--": "--end--"
 }

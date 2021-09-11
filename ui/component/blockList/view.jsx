@@ -47,8 +47,9 @@ export default function BlockList(props: Props) {
   const hasLocalList = localList && localList.length > 0;
   const justBlocked = list && localList && localList.length < list.length;
 
-  const [searchList, setSearchList] = React.useState(null); // null: not searching; []: no results;
   const [page, setPage] = React.useState(1);
+  const [searchList, setSearchList] = React.useState(null); // null: not searching; []: no results;
+  const isShowingSearchResults = searchList !== null;
 
   let totalPages = 0;
   let paginatedLocalList;
@@ -134,7 +135,7 @@ export default function BlockList(props: Props) {
           renderActions={getRenderActions()}
         />
       </div>
-      <Paginate totalPages={totalPages} disableHistory onPageChange={(p) => setPage(p)} />
+      {!isShowingSearchResults && <Paginate totalPages={totalPages} disableHistory onPageChange={(p) => setPage(p)} />}
     </>
   );
 }
@@ -182,7 +183,7 @@ function SearchList(props: LsbProps) {
                 ))}
               </ComboboxList>
             ) : (
-              <span style={{ display: 'block', margin: 8 }}>{__('No results found')}</span>
+              <span style={{ display: 'block', margin: 8 }}>{__('No results')}</span>
             )}
           </ComboboxPopover>
         )}
