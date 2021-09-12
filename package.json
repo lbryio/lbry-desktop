@@ -48,6 +48,7 @@
     "postinstall:warning": "echo '\n\nWARNING\n\nNot all node modules were installed because NODE_ENV is set to \"production\".\nThis should only be set after installing dependencies with \"yarn\". The app will not work.\n\n'"
   },
   "dependencies": {
+    "@react-keycloak/web": "^3.4.0",
     "auto-launch": "^5.0.5",
     "electron-dl": "^1.11.0",
     "electron-log": "^2.2.12",
@@ -55,6 +56,7 @@
     "electron-updater": "^4.2.4",
     "express": "^4.17.1",
     "if-env": "^1.0.4",
+    "keycloak-js": "^15.0.2",
     "react-datetime-picker": "^3.2.1",
     "react-plastic": "^1.1.1",
     "react-top-loading-bar": "^2.0.1",
@@ -152,8 +154,8 @@
     "imagesloaded": "^4.1.4",
     "json-loader": "^0.5.4",
     "lbry-format": "https://github.com/lbryio/lbry-format.git",
-    "lbry-redux": "lbryio/lbry-redux#e4d0662100a5f4b28bb1bf3cbc1e51b2eebab5b6",
-    "lbryinc": "lbryio/lbryinc#8f9a58bfc8312a65614fd7327661cdcc502c4e59",
+    "lbry-redux": "lbryio/lbry-redux#372e559caee6af2b2d927e5d42419a71c3d15b57",
+    "lbryinc": "lbryio/lbryinc#67493fbfb522ac566bcd638c2fce3cf3712c87a7",
     "lint-staged": "^7.0.2",
     "localforage": "^1.7.1",
     "lodash-es": "^4.17.14",

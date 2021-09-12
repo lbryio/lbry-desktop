@@ -29,6 +29,8 @@ import {
   STATUS_FAILING,
   STATUS_DOWN,
 } from 'web/effects/use-degraded-performance';
+import { useKeycloak } from '@react-keycloak/web';
+
 // @endif
 import LANGUAGE_MIGRATIONS from 'constants/language-migrations';
 
@@ -156,6 +158,7 @@ function App(props: Props) {
   const isRewardApproved = user && user.is_reward_approved;
   const previousHasVerifiedEmail = usePrevious(hasVerifiedEmail);
   const previousRewardApproved = usePrevious(isRewardApproved);
+  const { authenticated } = useKeycloak();
   // @if TARGET='web'
   const [showAnalyticsNag, setShowAnalyticsNag] = usePersistedState('analytics-nag', true);
   const [lbryTvApiStatus, setLbryTvApiStatus] = useState(STATUS_OK);
@@ -174,6 +177,7 @@ function App(props: Props) {
   const fromLbrytvParam = urlParams.get('sunset');
   const sanitizedReferrerParam = rawReferrerParam && rawReferrerParam.replace(':', '#');
   const shouldHideNag = pathname.startsWith(`/$/${PAGES.EMBED}`) || pathname.startsWith(`/$/${PAGES.AUTH_VERIFY}`);
+  // KC
   const userId = user && user.id;
   const useCustomScrollbar = !IS_MAC;
   const hasMyChannels = myChannelUrls && myChannelUrls.length > 0;
@@ -194,7 +198,13 @@ function App(props: Props) {
     setShowAnalyticsNag(false);
   }
 
+  useEffect(() => {
+    if (authenticated) {
+      console.log('IS KC AUTHED');
+    }
+  }, [authenticated]);
   // @endif
+  // TODO KC HOWTO SETUSER
   useEffect(() => {
     if (userId) {
       analytics.setUser(userId);
@@ -317,30 +327,13 @@ function App(props: Props) {
     if (previousHasVerifiedEmail === false && hasVerifiedEmail) {
       analytics.emailVerifiedEvent();
     }
-  }, [previousHasVerifiedEmail, hasVerifiedEmail, signIn]);
+  }, [previousHasVerifiedEmail, hasVerifiedEmail]);
 
   useEffect(() => {
     if (previousRewardApproved === false && isRewardApproved) {
       analytics.rewardEligibleEvent();
     }
   }, [previousRewardApproved, isRewardApproved]);
-
-  // Load IMA3 SDK for aniview
-  // @if TARGET='web'
-  useEffect(() => {
-    if (ENABLE_PREROLL_ADS) {
-      const script = document.createElement('script');
-      script.src = `https://imasdk.googleapis.com/js/sdkloader/ima3.js`;
-      script.async = true;
-      // $FlowFixMe
-      document.body.appendChild(script);
-      return () => {
-        // $FlowFixMe
-        document.body.removeChild(script);
-      };
-    }
-  });
-  // @endif
 
   // @if TARGET='app'
   useEffect(() => {
@@ -375,12 +368,14 @@ function App(props: Props) {
   // We know someone is logging in or not when we get their user object
   // We'll use this to determine when it's time to pull preferences
   // This will no longer work if desktop users no longer get a user object from lbryinc
+  // KC TODO KEYCLOAK
   useEffect(() => {
     if (user) {
       setReadyForPrefs(true);
     }
   }, [user, setReadyForPrefs]);
 
+  // TODO KEYCLOAK ISAUTHENTICATED
   useEffect(() => {
     if (syncError && isAuthenticated && !pathname.includes(PAGES.AUTH_WALLET_PASSWORD) && !currentModal) {
       history.push(`/$/${PAGES.AUTH_WALLET_PASSWORD}?redirect=${pathname}`);

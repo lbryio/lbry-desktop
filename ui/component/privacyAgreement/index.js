@@ -20,7 +20,7 @@ const perform = dispatch => ({
   setShareDataThirdParty: share => dispatch(doToggle3PAnalytics(share)),
   signOut: () => dispatch(doSignOut()),
   authenticateIfSharingData: () =>
-    dispatch(doAuthenticate(appVersion, undefined, undefined, true, undefined, undefined, DOMAIN)),
+    dispatch(doAuthenticate(appVersion, undefined, undefined, true)),
 });
 
 export default connect(select, perform)(PrivacyAgreement);

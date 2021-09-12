@@ -24,7 +24,7 @@ const defaultState = {
   invitees: undefined,
   referralLink: undefined,
   referralCode: undefined,
-  user: undefined,
+  user: { has_verified_email: false },
   accessToken: undefined,
   youtubeChannelImportPending: false,
   youtubeChannelImportErrorMessage: '',
@@ -32,6 +32,7 @@ const defaultState = {
   referrerSetError: '',
 };
 
+// does this do anything with user?
 reducers[ACTIONS.AUTHENTICATION_STARTED] = state =>
   Object.assign({}, state, {
     authenticationIsPending: true,
@@ -39,19 +40,25 @@ reducers[ACTIONS.AUTHENTICATION_STARTED] = state =>
     accessToken: defaultState.accessToken,
   });
 
-reducers[ACTIONS.AUTHENTICATION_SUCCESS] = (state, action) =>
-  Object.assign({}, state, {
+reducers[ACTIONS.AUTHENTICATION_SUCCESS] = (state, action) => {
+
+  const newUserState = Object.assign({}, state, {
     authenticationIsPending: false,
     userIsPending: false,
-    accessToken: action.data.accessToken,
-    user: action.data.user,
   });
+  if (action.data && action.data.user) {
+    newUserState.user = action.data.user;
+  }
+  if (action.data && action.data.accessToken) {
+    newUserState.accessToken = action.data.accessToken;
+  }
+  return newUserState;
+}
 
 reducers[ACTIONS.AUTHENTICATION_FAILURE] = state =>
   Object.assign({}, state, {
     authenticationIsPending: false,
     userIsPending: false,
-    user: null,
   });
 
 reducers[ACTIONS.USER_FETCH_STARTED] = state =>
