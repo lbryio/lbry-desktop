@@ -56,7 +56,11 @@ export default function SettingsSideNavigation() {
     const TOP_MARGIN_PX = 20;
     const element = document.getElementById(section);
     if (element) {
-      window.scrollTo(0, element.offsetTop - TOP_MARGIN_PX);
+      window.scrollTo({
+        top: element.offsetTop - TOP_MARGIN_PX,
+        left: 0,
+        behavior: 'smooth',
+      });
     }
   }
 
