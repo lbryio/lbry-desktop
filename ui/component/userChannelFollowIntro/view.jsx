@@ -25,7 +25,7 @@ function UserChannelFollowIntro(props: Props) {
   const { PRIMARY_CONTENT } = homepageData;
   let channelIds;
   if (PRIMARY_CONTENT && CUSTOM_HOMEPAGE) {
-    channelIds = PRIMARY_CONTENT.ids;
+    channelIds = PRIMARY_CONTENT.channelIds;
   }
   const followingCount = (subscribedChannels && subscribedChannels.length) || 0;
   const followingCountIgnoringAutoFollows = (subscribedChannels || []).filter(
