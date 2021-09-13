@@ -3,6 +3,8 @@ import React from 'react';
 import { Modal } from 'modal/modal';
 import LastReleaseChanges from 'component/lastReleaseChanges';
 
+const IS_MAC = navigator.userAgent.indexOf('Mac OS X') !== -1;
+
 type Props = {
   downloadUpgrade: () => void,
   skipUpgrade: () => void,
@@ -14,6 +16,7 @@ class ModalUpgrade extends React.PureComponent<Props> {
 
     return (
       <Modal
+        className={IS_MAC ? '' : 'main-wrapper--scrollbar'}
         isOpen
         contentLabel={__('Upgrade available')}
         title={__('LBRY leveled up')}
