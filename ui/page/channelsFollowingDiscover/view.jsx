@@ -31,7 +31,7 @@ function ChannelsFollowingDiscover(props: Props) {
   const { PRIMARY_CONTENT } = homepageData;
   let channelIds;
   if (PRIMARY_CONTENT && CUSTOM_HOMEPAGE) {
-    channelIds = PRIMARY_CONTENT.ids;
+    channelIds = PRIMARY_CONTENT.channelIds;
   }
   let rowData: Array<ChannelsFollowingItem> = [];
   const notChannels = subscribedChannels
