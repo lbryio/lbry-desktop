@@ -10,6 +10,13 @@ import ElectronCookies from '@exponent/electron-cookies';
 import { generateInitialUrl } from 'util/url';
 // @endif
 import { MATOMO_ID, MATOMO_URL } from 'config';
+import getConnectionSpeed from 'util/detect-user-bandwidth';
+
+let downloadSpeed;
+getConnectionSpeed(function(speedInMbps){
+  downloadSpeed = speedInMbps;
+  console.log(downloadSpeed);
+});
 
 const isProduction = process.env.NODE_ENV === 'production';
 const devInternalApis = process.env.LBRY_API_URL && process.env.LBRY_API_URL.includes('dev');
@@ -202,8 +209,10 @@ async function sendWatchmanData(body) {
 }
 
 const analytics: Analytics = {
-  // receive buffer events from tracking plugin and jklj
+  // receive buffer events from tracking plugin and save buffer amounts and times for backend call
   videoBufferEvent: async (claim, data) => {
+    console.log('running here!');
+    console.log(data);
     amountOfBufferEvents = amountOfBufferEvents + 1;
     amountOfBufferTimeInMS = amountOfBufferTimeInMS + data.bufferDuration;
   },
