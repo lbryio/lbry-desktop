@@ -16,8 +16,7 @@ import Nag from 'component/common/nag';
 import FileRenderPlaceholder from 'static/img/fileRenderPlaceholder.png';
 
 type Props = {
-  play: (string, string) => void,
-  isLoading: boolean,
+  play: (string, string, boolean) => void,
   isPlaying: boolean,
   fileInfo: FileListItem,
   uri: string,
@@ -104,9 +103,9 @@ export default function FileRenderInitiator(props: Props) {
         e.stopPropagation();
       }
 
-      play(uri, collectionId);
+      play(uri, collectionId, isPlayable);
     },
-    [play, uri, collectionId]
+    [play, uri, isPlayable, collectionId]
   );
 
   useEffect(() => {

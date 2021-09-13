@@ -42,7 +42,6 @@ type Props = {
   videoPlaybackRate: number,
   volume: number,
   uri: string,
-  autoplayMedia: boolean,
   autoplayNext: boolean,
   autoplayIfEmbedded: boolean,
   desktopPlayStartTime?: number,
@@ -64,6 +63,7 @@ type Props = {
   nextRecommendedUri: string,
   previousListUri: string,
   videoTheaterMode: boolean,
+  isMarkdownOrComment: boolean,
 };
 
 /*
@@ -84,7 +84,6 @@ function VideoViewer(props: Props) {
     uri,
     muted,
     volume,
-    autoplayMedia,
     autoplayNext,
     autoplayIfEmbedded,
     doAnalyticsView,
@@ -106,6 +105,7 @@ function VideoViewer(props: Props) {
     nextRecommendedUri,
     previousListUri,
     videoTheaterMode,
+    isMarkdownOrComment,
   } = props;
   const permanentUrl = claim && claim.permanent_url;
   const adApprovedChannelIds = homepageData ? getAllIds(homepageData) : [];
@@ -196,32 +196,32 @@ function VideoViewer(props: Props) {
   );
 
   useEffect(() => {
-    if (doNavigate) {
-      if (playNextUrl) {
-        if (permanentUrl !== nextRecommendedUri) {
-          if (nextRecommendedUri) {
-            if (collectionId) clearPosition(permanentUrl);
-            doPlay(nextRecommendedUri);
-          }
-        } else {
-          setReplay(true);
+    if (!doNavigate) return;
+
+    if (playNextUrl) {
+      if (permanentUrl !== nextRecommendedUri) {
+        if (nextRecommendedUri) {
+          if (collectionId) clearPosition(permanentUrl);
+          doPlay(nextRecommendedUri);
         }
       } else {
-        if (videoNode) {
-          const currentTime = videoNode.currentTime;
-
-          if (currentTime <= 5) {
-            if (previousListUri && permanentUrl !== previousListUri) doPlay(previousListUri);
-          } else {
-            videoNode.currentTime = 0;
-          }
-          setDoNavigate(false);
-        }
+        setReplay(true);
       }
-      if (!ended) setDoNavigate(false);
-      setEnded(false);
-      setPlayNextUrl(true);
+    } else {
+      if (videoNode) {
+        const currentTime = videoNode.currentTime;
+
+        if (currentTime <= 5) {
+          if (previousListUri && permanentUrl !== previousListUri) doPlay(previousListUri);
+        } else {
+          videoNode.currentTime = 0;
+        }
+        setDoNavigate(false);
+      }
     }
+    if (!ended) setDoNavigate(false);
+    setEnded(false);
+    setPlayNextUrl(true);
   }, [
     clearPosition,
     collectionId,
@@ -236,37 +236,25 @@ function VideoViewer(props: Props) {
   ]);
 
   React.useEffect(() => {
-    if (ended) {
-      analytics.videoIsPlaying(false);
+    if (!ended) return;
 
-      if (adUrl) {
-        setAdUrl(null);
-        return;
-      }
+    analytics.videoIsPlaying(false);
 
-      if (embedded) {
-        setIsEndedEmbed(true);
-      } else if (!collectionId && autoplayNext) {
-        setShowAutoplayCountdown(true);
-      } else if (collectionId) {
-        setDoNavigate(true);
-      }
-
-      clearPosition(uri);
+    if (adUrl) {
+      setAdUrl(null);
+      return;
     }
-  }, [
-    embedded,
-    setIsEndedEmbed,
-    autoplayMedia,
-    setShowAutoplayCountdown,
-    adUrl,
-    setAdUrl,
-    clearPosition,
-    uri,
-    ended,
-    collectionId,
-    autoplayNext,
-  ]);
+
+    if (embedded) {
+      setIsEndedEmbed(true);
+    } else if (!collectionId && autoplayNext) {
+      setShowAutoplayCountdown(true);
+    } else if (collectionId) {
+      setDoNavigate(true);
+    }
+
+    clearPosition(uri);
+  }, [adUrl, autoplayNext, clearPosition, collectionId, embedded, ended, setAdUrl, uri]);
 
   function onPlay(player) {
     setEnded(false);
@@ -321,12 +309,14 @@ function VideoViewer(props: Props) {
       player.muted(muted);
       player.volume(volume);
       player.playbackRate(videoPlaybackRate);
-      addTheaterModeButton(player, toggleVideoTheaterMode);
-      if (collectionId) {
-        addPlayNextButton(player, doPlayNext);
-        addPlayPreviousButton(player, doPlayPrevious);
-      } else {
-        addAutoplayNextButton(player, toggleAutoplayNext, autoplayNext);
+      if (!isMarkdownOrComment) {
+        addTheaterModeButton(player, toggleVideoTheaterMode);
+        if (collectionId) {
+          addPlayNextButton(player, doPlayNext);
+          addPlayPreviousButton(player, doPlayPrevious);
+        } else {
+          addAutoplayNextButton(player, toggleAutoplayNext, autoplayNext);
+        }
       }
     }
 

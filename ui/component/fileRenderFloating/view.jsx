@@ -69,7 +69,7 @@ export default function FileRenderFloating(props: Props) {
   const { location, push } = useHistory();
   const hideFloatingPlayer = location.state && location.state.hideFloatingPlayer;
   const isMobile = useIsMobile();
-  const mainFilePlaying = playingUri && isURIEqual(playingUri.uri, primaryUri);
+  const mainFilePlaying = !isFloating && isURIEqual(uri, primaryUri);
   const [fileViewerRect, setFileViewerRect] = useState();
   const [desktopPlayStartTime, setDesktopPlayStartTime] = useState();
   const [wasDragging, setWasDragging] = useState(false);
@@ -85,7 +85,8 @@ export default function FileRenderFloating(props: Props) {
     y: 0,
   });
 
-  const navigateUrl = uri + (collectionId ? generateListSearchUrlParams(collectionId) : '');
+  const navigateUrl =
+    playingUri && playingUri.primaryUri + (collectionId ? generateListSearchUrlParams(collectionId) : '');
 
   const isFree = costInfo && costInfo.cost === 0;
   const canViewFile = isFree || claimWasPurchased;
@@ -154,7 +155,7 @@ export default function FileRenderFloating(props: Props) {
 
   // Listen to main-window resizing and adjust the fp position accordingly:
   useEffect(() => {
-    const handleMainWindowResize = debounce((e) => {
+    const handleMainWindowResize = debounce(() => {
       let newPos = {
         x: Math.round(relativePos.x * getScreenWidth()),
         y: Math.round(relativePos.y * getScreenHeight()),
@@ -175,13 +176,11 @@ export default function FileRenderFloating(props: Props) {
       ? document.querySelector(`.${PRIMARY_PLAYER_WRAPPER_CLASS}`)
       : document.querySelector(`.${INLINE_PLAYER_WRAPPER_CLASS}`);
 
-    if (!element) {
-      return;
-    }
+    if (!element) return;
 
     const rect = element.getBoundingClientRect();
 
-    // getBoundingCLientRect returns a DomRect, not an object
+    // getBoundingClientRect returns a DomRect, not an object
     const objectRect = {
       top: rect.top,
       right: rect.right,
@@ -198,11 +197,11 @@ export default function FileRenderFloating(props: Props) {
   }, [mainFilePlaying]);
 
   useEffect(() => {
-    if (streamingUrl) {
+    if (playingUri && playingUri.primaryUri) {
       handleResize();
       setCountdownCanceled(false);
     }
-  }, [handleResize, streamingUrl, videoTheaterMode]);
+  }, [handleResize, playingUri, videoTheaterMode]);
 
   useEffect(() => {
     handleResize();
@@ -270,7 +269,7 @@ export default function FileRenderFloating(props: Props) {
     return null;
   }
 
-  function handleDragStart(e, ui) {
+  function handleDragStart() {
     // Not really necessary, but reset just in case 'handleStop' didn't fire.
     setWasDragging(false);
   }
@@ -286,7 +285,7 @@ export default function FileRenderFloating(props: Props) {
     });
   }
 
-  function handleDragStop(e, ui) {
+  function handleDragStop(e) {
     if (wasDragging) {
       e.stopPropagation();
       setWasDragging(false);

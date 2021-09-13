@@ -4,7 +4,6 @@ import {
   makeSelectFileInfoForUri,
   makeSelectThumbnailForUri,
   makeSelectClaimForUri,
-  makeSelectStreamingUrlForUri,
   makeSelectClaimWasPurchased,
   SETTINGS,
   COLLECTIONS_CONSTS,
@@ -16,7 +15,6 @@ import { withRouter } from 'react-router';
 import {
   makeSelectIsPlaying,
   makeSelectShouldObscurePreview,
-  selectPlayingUri,
   makeSelectInsufficientCreditsForUri,
   makeSelectFileRenderModeForUri,
 } from 'redux/selectors/content';
@@ -33,9 +31,7 @@ const select = (state, props) => {
     fileInfo: makeSelectFileInfoForUri(props.uri)(state),
     obscurePreview: makeSelectShouldObscurePreview(props.uri)(state),
     isPlaying: makeSelectIsPlaying(props.uri)(state),
-    playingUri: selectPlayingUri(state),
     insufficientCredits: makeSelectInsufficientCreditsForUri(props.uri)(state),
-    streamingUrl: makeSelectStreamingUrlForUri(props.uri)(state),
     autoplay: makeSelectClientSetting(SETTINGS.AUTOPLAY_MEDIA)(state),
     costInfo: makeSelectCostInfoForUri(props.uri)(state),
     renderMode: makeSelectFileRenderModeForUri(props.uri)(state),
@@ -47,9 +43,9 @@ const select = (state, props) => {
 };
 
 const perform = (dispatch) => ({
-  play: (uri, collectionId) => {
+  play: (uri, collectionId, isPlayable) => {
     dispatch(doSetPrimaryUri(uri));
-    dispatch(doSetPlayingUri({ uri, collectionId }));
+    if (isPlayable) dispatch(doSetPlayingUri({ uri, collectionId }));
     dispatch(doPlayUri(uri, undefined, undefined, (fileInfo) => dispatch(doAnaltyicsPurchaseEvent(fileInfo))));
   },
 });

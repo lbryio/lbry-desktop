@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import {
   makeSelectClaimForUri,
-  makeSelectFileInfoForUri,
   makeSelectThumbnailForUri,
   SETTINGS,
   COLLECTIONS_CONSTS,
@@ -40,6 +39,7 @@ const select = (state, props) => {
   const userId = selectUser(state) && selectUser(state).id;
   const playingUri = selectPlayingUri(state);
   const collectionId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID) || (playingUri && playingUri.collectionId);
+  const isMarkdownOrComment = playingUri && (playingUri.source === 'markdown' || playingUri.source === 'comment');
 
   let nextRecommendedUri;
   let previousListUri;
@@ -51,24 +51,23 @@ const select = (state, props) => {
   }
 
   return {
+    position,
+    userId,
+    collectionId,
+    nextRecommendedUri,
+    previousListUri,
+    isMarkdownOrComment,
     autoplayIfEmbedded: Boolean(autoplay),
-    autoplayMedia: Boolean(makeSelectClientSetting(SETTINGS.AUTOPLAY_MEDIA)(state)),
-    autoplayNext: Boolean(makeSelectClientSetting(SETTINGS.AUTOPLAY_NEXT)(state)),
+    autoplayNext: makeSelectClientSetting(SETTINGS.AUTOPLAY_NEXT)(state),
     volume: selectVolume(state),
     muted: selectMute(state),
     videoPlaybackRate: makeSelectClientSetting(SETTINGS.VIDEO_PLAYBACK_RATE)(state),
-    position: position,
-    hasFileInfo: Boolean(makeSelectFileInfoForUri(uri)(state)),
     thumbnail: makeSelectThumbnailForUri(uri)(state),
     claim: makeSelectClaimForUri(uri)(state),
     homepageData: selectHomepageData(state),
     authenticated: selectUserVerifiedEmail(state),
-    userId: userId,
     shareTelemetry: IS_WEB || selectDaemonSettings(state).share_usage_data,
     isFloating: makeSelectIsPlayerFloating(props.location)(state),
-    collectionId,
-    nextRecommendedUri,
-    previousListUri,
     videoTheaterMode: makeSelectClientSetting(SETTINGS.VIDEO_THEATER_MODE)(state),
   };
 };

@@ -34,14 +34,14 @@ export const makeSelectIsPlaying = (uri: string) =>
   createSelector(selectPrimaryUri, (primaryUri) => primaryUri === uri);
 
 export const makeSelectIsPlayerFloating = (location: UrlLocation) =>
-  createSelector(selectPrimaryUri, selectPlayingUri, selectClaimsByUri, (primaryUri, playingUri, claimsByUri) => {
+  createSelector(selectPrimaryUri, selectPlayingUri, (primaryUri, playingUri) => {
     const isInlineSecondaryPlayer =
       playingUri &&
       playingUri.uri !== primaryUri &&
       location.pathname === playingUri.pathname &&
       (playingUri.source === 'comment' || playingUri.source === 'markdown');
 
-    if ((playingUri && playingUri.uri === primaryUri) || isInlineSecondaryPlayer) {
+    if ((playingUri && playingUri.primaryUri === primaryUri) || isInlineSecondaryPlayer) {
       return false;
     }
 
