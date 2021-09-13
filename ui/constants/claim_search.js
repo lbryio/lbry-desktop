@@ -1,7 +1,8 @@
 export const PAGE_SIZE = 20;
 
 export const FRESH_KEY = 'fresh';
-export const ORDER_BY_KEY = 'order';
+export const ORDER_BY_KEY = 'order'; // Trending, Top, New
+export const SORT_BY_KEY = 'sort'; // Newest vs Oldest First
 export const DURATION_KEY = 'duration';
 export const LANGUAGE_KEY = 'language';
 export const TAGS_KEY = 't';
@@ -38,6 +39,14 @@ export const DURATION_SHORT = 'short';
 export const DURATION_LONG = 'long';
 export const DURATION_ALL = 'all';
 export const DURATION_TYPES = [DURATION_ALL, DURATION_SHORT, DURATION_LONG];
+
+export const SORT_BY = {
+  // key: Enumeration; can be anything as long as unique. Also used as URLParam.
+  // opt: Value to use for 'claim_search' options; for this case, it is the prefix to 'order_by'.
+  // str: Customer-facing string representation.
+  NEWEST: { key: 'new', opt: '', str: 'Newest first' },
+  OLDEST: { key: 'old', opt: '^', str: 'Oldest first' },
+};
 
 export const FILE_VIDEO = 'video';
 export const FILE_AUDIO = 'audio';

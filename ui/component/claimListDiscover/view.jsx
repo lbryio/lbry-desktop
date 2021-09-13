@@ -38,8 +38,9 @@ type Props = {
   showNoSourceClaims?: boolean,
   tileLayout: boolean,
 
-  orderBy?: Array<string>,
+  orderBy?: Array<string>, // Trending, New, Top
   defaultOrderBy?: string,
+  sortBy?: Array<string>, // Newest First, Oldest First
   freshness?: string,
   defaultFreshness?: string,
 
@@ -115,6 +116,7 @@ function ClaimListDiscover(props: Props) {
     blockedUris,
     hiddenNsfwMessage,
     defaultOrderBy,
+    sortBy,
     orderBy,
     headerLabel,
     header,
@@ -170,6 +172,7 @@ function ClaimListDiscover(props: Props) {
     (urlParams.get(CS.TAGS_KEY) !== null && urlParams.get(CS.TAGS_KEY)) ||
     (defaultTags && getParamFromTags(defaultTags));
   const freshnessParam = freshness || urlParams.get(CS.FRESH_KEY) || defaultFreshness;
+  const sortByParam = sortBy || urlParams.get(CS.SORT_BY_KEY) || CS.SORT_BY.NEWEST.key;
   const mutedAndBlockedChannelIds = Array.from(
     new Set(mutedUris.concat(blockedUris).map((uri) => splitBySeparator(uri)[1]))
   );
@@ -255,12 +258,7 @@ function ClaimListDiscover(props: Props) {
     no_totals: true,
     not_channel_ids: isChannel ? undefined : mutedAndBlockedChannelIds,
     not_tags: !showNsfw ? MATURE_TAGS : [],
-    order_by:
-      orderParam === CS.ORDER_BY_TRENDING
-        ? CS.ORDER_BY_TRENDING_VALUE
-        : orderParam === CS.ORDER_BY_NEW
-        ? CS.ORDER_BY_NEW_VALUE
-        : CS.ORDER_BY_TOP_VALUE, // Sort by top
+    order_by: resolveOrderByOption(orderParam, sortByParam),
   };
 
   if (ENABLE_NO_SOURCE_CLAIMS && hasNoSource) {
@@ -549,6 +547,21 @@ function ClaimListDiscover(props: Props) {
     if (claimIds.length > 0) {
       doFetchViewCount(claimIds.join(','));
     }
+  }
+
+  function resolveOrderByOption(orderBy: string | Array<string>, sortBy: string | Array<string>) {
+    const order_by =
+      orderBy === CS.ORDER_BY_TRENDING
+        ? CS.ORDER_BY_TRENDING_VALUE
+        : orderBy === CS.ORDER_BY_NEW
+        ? CS.ORDER_BY_NEW_VALUE
+        : CS.ORDER_BY_TOP_VALUE;
+
+    if (orderBy === CS.ORDER_BY_NEW && sortBy === CS.SORT_BY.OLDEST.key) {
+      return order_by.map((x) => `${CS.SORT_BY.OLDEST.opt}${x}`);
+    }
+
+    return order_by;
   }
 
   // **************************************************************************

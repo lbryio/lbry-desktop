@@ -20,6 +20,7 @@ type Props = {
   streamType?: string | Array<string>,
   defaultStreamType?: string | Array<string>,
   feeAmount: string,
+  sortBy?: string,
   orderBy?: Array<string>,
   defaultOrderBy?: string,
   hideAdvancedFilter: boolean,
@@ -44,6 +45,7 @@ function ClaimListHeader(props: Props) {
     streamType,
     defaultStreamType,
     feeAmount,
+    sortBy,
     orderBy,
     defaultOrderBy,
     hideAdvancedFilter,
@@ -70,6 +72,7 @@ function ClaimListHeader(props: Props) {
     streamType || (CS.FILE_TYPES.includes(contentTypeParam) && contentTypeParam) || defaultStreamType || null;
   const durationParam = urlParams.get(CS.DURATION_KEY) || null;
   const languageParam = urlParams.get(CS.LANGUAGE_KEY) || null;
+  const sortByParam = sortBy || urlParams.get(CS.SORT_BY_KEY) || null;
   const channelIdsInUrl = urlParams.get(CS.CHANNEL_IDS_KEY);
   const channelIdsParam = channelIdsInUrl ? channelIdsInUrl.split(',') : channelIds;
   const feeAmountParam = urlParams.get('fee_amount') || feeAmount || CS.FEE_AMOUNT_ANY;
@@ -151,6 +154,13 @@ function ClaimListHeader(props: Props) {
     switch (delta.key) {
       case CS.ORDER_BY_KEY:
         newUrlParams.set(CS.ORDER_BY_KEY, delta.value);
+        break;
+      case CS.SORT_BY_KEY:
+        if (delta.value === CS.SORT_BY.NEWEST.key) {
+          newUrlParams.delete(CS.SORT_BY_KEY);
+        } else {
+          newUrlParams.set(CS.SORT_BY_KEY, delta.value);
+        }
         break;
       case CS.FRESH_KEY:
         if (delta.value === defaultFreshness || delta.value === CS.FRESH_DEFAULT) {
@@ -447,6 +457,32 @@ function ClaimListHeader(props: Props) {
                   ))}
                 </FormField>
               </div>
+
+              {/* SORT FIELD */}
+              {orderParam === CS.ORDER_BY_NEW && (
+                <div className={'claim-search__input-container'}>
+                  <FormField
+                    className={classnames('claim-search__dropdown', {
+                      'claim-search__dropdown--selected': sortByParam,
+                    })}
+                    label={__('Sort By')}
+                    type="select"
+                    name="sort_by"
+                    value={sortByParam || CS.SORT_BY.NEWEST.key}
+                    onChange={(e) => handleChange({ key: CS.SORT_BY_KEY, value: e.target.value })}
+                  >
+                    {Object.entries(CS.SORT_BY).map(([key, value]) => {
+                      return (
+                        // $FlowFixMe https://github.com/facebook/flow/issues/2221
+                        <option key={value.key} value={value.key}>
+                          {/* $FlowFixMe */}
+                          {__(value.str)}
+                        </option>
+                      );
+                    })}
+                  </FormField>
+                </div>
+              )}
 
               {channelIdsInUrl && (
                 <div className={'claim-search__input-container'}>
