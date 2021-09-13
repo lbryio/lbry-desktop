@@ -35,20 +35,22 @@ function SettingLanguage(props: Props) {
 
   return (
     <React.Fragment>
-      {previousLanguage && <Spinner type="small" />}
+      {!previousLanguage && (
+        <FormField
+          name="language_select"
+          type="select"
+          onChange={onLanguageChange}
+          value={language || getDefaultLanguage()}
+        >
+          {sortLanguageMap(SUPPORTED_LANGUAGES).map(([langKey, langName]) => (
+            <option key={langKey} value={langKey}>
+              {langName}
+            </option>
+          ))}
+        </FormField>
+      )}
 
-      <FormField
-        name="language_select"
-        type="select"
-        onChange={onLanguageChange}
-        value={language || getDefaultLanguage()}
-      >
-        {sortLanguageMap(SUPPORTED_LANGUAGES).map(([langKey, langName]) => (
-          <option key={langKey} value={langKey}>
-            {langName}
-          </option>
-        ))}
-      </FormField>
+      {previousLanguage && <Spinner type="small" />}
     </React.Fragment>
   );
 }
