@@ -12,12 +12,12 @@ type Props = {
   uri: string,
   thumbnail: string,
   claim: ?Claim,
-  doResolveUri: string => void,
-  doFetchCostInfoForUri: string => void,
+  doResolveUri: (string) => void,
+  doFetchCostInfoForUri: (string) => void,
   costInfo: ?{ cost: number },
   floatingPlayerEnabled: boolean,
   doPlayUri: (string, ?boolean, ?boolean, (GetResponse) => void) => void,
-  doAnaltyicsPurchaseEvent: GetResponse => void,
+  doAnaltyicsPurchaseEvent: (GetResponse) => void,
   parentCommentId?: string,
   isMarkdownPost: boolean,
   doSetPlayingUri: ({}) => void,
@@ -69,8 +69,8 @@ export default function EmbedPlayButton(props: Props) {
       const formattedUrl = formatLbryUrlForWeb(uri);
       push(formattedUrl);
     } else {
-      doPlayUri(uri, undefined, undefined, fileInfo => {
-        let playingOptions: PlayingUri = { uri, pathname };
+      doPlayUri(uri, undefined, undefined, (fileInfo) => {
+        let playingOptions = { uri, pathname, source: undefined, commentId: undefined };
         if (parentCommentId) {
           playingOptions.source = 'comment';
           playingOptions.commentId = parentCommentId;
