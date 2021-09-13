@@ -10,9 +10,9 @@ import ChannelSelector from 'component/channelSelector';
 import ClaimList from 'component/claimList';
 import Card from 'component/common/card';
 import LbcSymbol from 'component/common/lbc-symbol';
-import ThumbnailPicker from 'component/thumbnailPicker';
+import SelectThumbnail from 'component/selectThumbnail';
 import { useHistory } from 'react-router-dom';
-import { isNameValid, regexInvalidURI } from 'lbry-redux';
+import { isNameValid, regexInvalidURI, THUMBNAIL_STATUSES } from 'lbry-redux';
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
 import { FormField } from 'component/common/form';
 import { handleBidChange } from 'util/publish';
@@ -21,6 +21,7 @@ import { INVALID_NAME_ERROR } from 'constants/claim';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 import * as PAGES from 'constants/pages';
 import analytics from 'analytics';
+
 const LANG_NONE = 'none';
 const MAX_TAG_SELECT = 5;
 
@@ -39,23 +40,18 @@ type Props = {
   tags: Array<string>,
   locations: Array<string>,
   languages: Array<string>,
-
   collectionId: string,
   collection: Collection,
   collectionClaimIds: Array<string>,
   collectionUrls: Array<string>,
-  publishCollectionUpdate: (CollectionUpdateParams) => Promise<any>,
   updatingCollection: boolean,
   updateError: string,
-  publishCollection: (CollectionPublishParams, string) => Promise<any>,
   createError: string,
   creatingCollection: boolean,
+  publishCollectionUpdate: (CollectionUpdateParams) => Promise<any>,
+  publishCollection: (CollectionPublishParams, string) => Promise<any>,
   clearCollectionErrors: () => void,
   onDone: (string) => void,
-  openModal: (
-    id: string,
-    { onUpdate: (string) => void, assetName: string, helpText: string, currentValue: string, title: string }
-  ) => void,
 };
 
 function CollectionForm(props: Props) {
@@ -72,11 +68,8 @@ function CollectionForm(props: Props) {
     locations,
     languages = [],
     // rest
-    onDone,
-    publishCollectionUpdate,
     updateError,
     updatingCollection,
-    publishCollection,
     creatingCollection,
     createError,
     disabled,
@@ -86,7 +79,10 @@ function CollectionForm(props: Props) {
     collection,
     collectionUrls,
     collectionClaimIds,
+    publishCollectionUpdate,
+    publishCollection,
     clearCollectionErrors,
+    onDone,
   } = props;
   const activeChannelName = activeChannelClaim && activeChannelClaim.name;
   let prefix = IS_WEB ? `${DOMAIN}/` : 'lbry://';
@@ -107,6 +103,11 @@ function CollectionForm(props: Props) {
   const secondaryLanguage = Array.isArray(languageParam) && languageParam.length >= 2 && languageParam[1];
 
   const collectionClaimIdsString = JSON.stringify(collectionClaimIds);
+  const itemError = !params.claims.length ? __('Cannot publish empty list') : '';
+  const thumbnailError =
+    (params.thumbnail_error && params.thumbnail_status !== THUMBNAIL_STATUSES.COMPLETE && __('Invalid thumbnail')) ||
+    (params.thumbnail_status === THUMBNAIL_STATUSES.IN_PROGRESS && __('Please wait for thumbnail to finish uploading'));
+  const submitError = nameError || bidError || itemError || updateError || createError || thumbnailError;
 
   function parseName(newName) {
     let INVALID_URI_CHARS = new RegExp(regexInvalidURI, 'gu');
@@ -142,6 +143,8 @@ function CollectionForm(props: Props) {
   function getCollectionParams() {
     const collectionParams: {
       thumbnail_url?: string,
+      thumbnail_error?: boolean,
+      thumbnail_status?: string,
       name?: string,
       description?: string,
       title?: string,
@@ -154,7 +157,9 @@ function CollectionForm(props: Props) {
       claims: ?Array<string>,
     } = {
       thumbnail_url: thumbnailUrl,
+      name: parseName(collectionName),
       description,
+      title: claim ? title : collectionName,
       bid: String(amount || 0.001),
       languages: languages ? dedupeLanguages(languages) : [],
       locations: locations || [],
@@ -163,31 +168,13 @@ function CollectionForm(props: Props) {
             return { name: tag };
           })
         : [],
+      claim_id: String(claim && claim.claim_id),
+      channel_id: String(activeChannelId && parseName(collectionName)),
       claims: collectionClaimIds,
     };
-    collectionParams['name'] = parseName(collectionName);
-
-    if (activeChannelId) {
-      collectionParams['channel_id'] = activeChannelId;
-    }
-
-    if (!claim) {
-      collectionParams['title'] = collectionName;
-    }
-
-    if (claim) {
-      collectionParams['claim_id'] = claim.claim_id;
-      collectionParams['title'] = title;
-    }
 
     return collectionParams;
   }
-
-  React.useEffect(() => {
-    const collectionClaimIds = JSON.parse(collectionClaimIdsString);
-    setParams({ ...params, claims: collectionClaimIds });
-    clearCollectionErrors();
-  }, [collectionClaimIdsString, setParams]);
 
   function handleLanguageChange(index, code) {
     let langs = [...languageParam];
@@ -211,10 +198,6 @@ function CollectionForm(props: Props) {
     setParams({ ...params, languages: langs });
   }
 
-  function handleThumbnailChange(thumbnailUrl: string) {
-    setParams({ ...params, thumbnail_url: thumbnailUrl });
-  }
-
   function handleSubmit() {
     if (uri) {
       publishCollectionUpdate(params).then((pendingClaim) => {
@@ -236,6 +219,12 @@ function CollectionForm(props: Props) {
   }
 
   React.useEffect(() => {
+    const collectionClaimIds = JSON.parse(collectionClaimIdsString);
+    setParams({ ...params, claims: collectionClaimIds });
+    clearCollectionErrors();
+  }, [collectionClaimIdsString, setParams]);
+
+  React.useEffect(() => {
     let nameError;
     if (!name && name !== undefined) {
       nameError = __('A name is required for your url');
@@ -247,17 +236,14 @@ function CollectionForm(props: Props) {
   }, [name]);
 
   React.useEffect(() => {
-    if (incognito) {
+    if (incognito && params.channel_id) {
       const newParams = Object.assign({}, params);
       delete newParams.channel_id;
       setParams(newParams);
-    } else if (activeChannelId) {
+    } else if (activeChannelId && params.channel_id !== activeChannelId) {
       setParams({ ...params, channel_id: activeChannelId });
     }
-  }, [activeChannelId, incognito, setParams]);
-
-  const itemError = !params.claims.length ? __('Cannot publish empty list') : '';
-  const submitError = nameError || bidError || itemError || updateError || createError;
+  }, [activeChannelId, incognito, params, setParams]);
 
   return (
     <>
@@ -277,11 +263,6 @@ function CollectionForm(props: Props) {
                 <Card
                   body={
                     <>
-                      <fieldset-group className="fieldset-group--smushed fieldset-group--disabled-prefix">
-                        <fieldset-section>
-                          <label htmlFor="channel_name">{__('Channel')}</label>
-                        </fieldset-section>
-                      </fieldset-group>
                       <fieldset-group class="fieldset-group--smushed fieldset-group--disabled-prefix">
                         <fieldset-section>
                           <label htmlFor="channel_name">{__('Name')}</label>
@@ -311,11 +292,15 @@ function CollectionForm(props: Props) {
                         value={params.title}
                         onChange={(e) => setParams({ ...params, title: e.target.value })}
                       />
-                      <ThumbnailPicker
-                        inline
-                        thumbnailParam={params.thumbnail_url}
-                        updateThumbnailParam={handleThumbnailChange}
-                      />
+                      <fieldset-section>
+                        <SelectThumbnail
+                          thumbnailParam={params.thumbnail_url}
+                          thumbnailParamError={params.thumbnail_error}
+                          thumbnailParamStatus={params.thumbnail_status}
+                          updateThumbnailParams={setParam}
+                          publishForm={false}
+                        />
+                      </fieldset-section>
                       <FormField
                         type="markdown"
                         name="content_description2"
@@ -436,7 +421,14 @@ function CollectionForm(props: Props) {
               <div className="section__actions">
                 <Button
                   button="primary"
-                  disabled={creatingCollection || updatingCollection || nameError || bidError || !params.claims.length}
+                  disabled={
+                    creatingCollection ||
+                    updatingCollection ||
+                    nameError ||
+                    bidError ||
+                    thumbnailError ||
+                    !params.claims.length
+                  }
                   label={creatingCollection || updatingCollection ? __('Submitting') : __('Submit')}
                   onClick={handleSubmit}
                 />

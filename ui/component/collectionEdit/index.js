@@ -17,7 +17,6 @@ import {
   makeSelectClaimIdsForCollectionId,
   ACTIONS as LBRY_REDUX_ACTIONS,
 } from 'lbry-redux';
-import { doOpenModal } from 'redux/actions/app';
 
 import CollectionForm from './view';
 import { selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
@@ -44,7 +43,6 @@ const select = (state, props) => ({
 });
 
 const perform = (dispatch) => ({
-  openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
   publishCollectionUpdate: (params) => dispatch(doCollectionPublishUpdate(params)),
   publishCollection: (params, collectionId) => dispatch(doCollectionPublish(params, collectionId)),
   clearCollectionErrors: () => dispatch({ type: LBRY_REDUX_ACTIONS.CLEAR_COLLECTION_ERRORS }),
