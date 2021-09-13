@@ -142,6 +142,7 @@
 
   .media__thumb {
     flex-shrink: 0;
+    overflow: hidden;
     $width: 5rem;
     @include handleClaimListGifThumbnail($width);
     width: $width;
