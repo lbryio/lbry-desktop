@@ -1,5 +1,4 @@
 // @flow
-import { SIMPLE_SITE } from 'config';
 import * as CS from 'constants/claim_search';
 import * as ICONS from 'constants/icons';
 import type { Node } from 'react';
@@ -240,7 +239,7 @@ function ClaimListHeader(props: Props) {
             </div>
           )}
           <div className="claim-search__menu-group">
-            {!hideAdvancedFilter && !SIMPLE_SITE && (
+            {!hideAdvancedFilter && (
               <Button
                 button="alt"
                 aria-label={__('More')}
@@ -266,7 +265,7 @@ function ClaimListHeader(props: Props) {
             )}
           </div>
         </div>
-        {expanded && !SIMPLE_SITE && (
+        {expanded && (
           <>
             <div className={classnames(`card claim-search__menus`)}>
               {/* FRESHNESS FIELD */}
