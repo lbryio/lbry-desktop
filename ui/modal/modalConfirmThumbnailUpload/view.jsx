@@ -4,17 +4,18 @@ import { Modal } from 'modal/modal';
 import { DOMAIN } from 'config';
 
 type Props = {
-  upload: WebFile => void,
   file: WebFile,
+  upload: (WebFile, (string) => void) => void,
+  cb: (string) => void,
   closeModal: () => void,
   updatePublishForm: ({}) => void,
 };
 
 class ModalConfirmThumbnailUpload extends React.PureComponent<Props> {
   upload() {
-    const { upload, updatePublishForm, closeModal, file } = this.props;
+    const { upload, updatePublishForm, cb, closeModal, file } = this.props;
     if (file) {
-      upload(file);
+      upload(file, cb);
       updatePublishForm({ thumbnailPath: file.path });
       closeModal();
     }

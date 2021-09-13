@@ -51,6 +51,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix comment section redirection to create channel _community pr!_ ([#6557](https://github.com/lbryio/lbry-desktop/pull/6557))
 - Clicking on the title of a floating player will take you back to the list ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
 - Fix floating player stopping on markdown or image files ([#7073](https://github.com/lbryio/lbry-desktop/pull/7073))
+- Fix list thumbnail upload ([#7074](https://github.com/lbryio/lbry-desktop/pull/7074))
 
 ## [0.51.1] - [2021-06-26]
 
