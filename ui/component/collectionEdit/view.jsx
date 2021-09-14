@@ -52,6 +52,8 @@ type Props = {
   publishCollection: (CollectionPublishParams, string) => Promise<any>,
   clearCollectionErrors: () => void,
   onDone: (string) => void,
+  setActiveChannel: (string) => void,
+  setIncognito: (boolean) => void,
 };
 
 function CollectionForm(props: Props) {
@@ -82,6 +84,8 @@ function CollectionForm(props: Props) {
     publishCollectionUpdate,
     publishCollection,
     clearCollectionErrors,
+    setActiveChannel,
+    setIncognito,
     onDone,
   } = props;
   const activeChannelName = activeChannelClaim && activeChannelClaim.name;
@@ -91,22 +95,23 @@ function CollectionForm(props: Props) {
   }
   const activeChannelId = activeChannelClaim && activeChannelClaim.claim_id;
   const collectionName = (claim && claim.name) || (collection && collection.name);
-
+  const collectionChannel = claim && claim.signing_channel ? claim.signing_channel.claim_id : undefined;
+  const hasClaim = !!claim;
+  const [initialized, setInitialized] = React.useState(false);
   const [nameError, setNameError] = React.useState(undefined);
   const [bidError, setBidError] = React.useState('');
   const [thumbStatus, setThumbStatus] = React.useState('');
   const [thumbError, setThumbError] = React.useState('');
-  const [params, setParams]: [any, (any) => void] = React.useState(getCollectionParams());
+  const [params, setParams]: [any, (any) => void] = React.useState({});
   const name = params.name;
   const isNewCollection = !uri;
   const { replace } = useHistory();
-  const languageParam = params.languages;
+  const languageParam = params.languages || [];
   const primaryLanguage = Array.isArray(languageParam) && languageParam.length && languageParam[0];
   const secondaryLanguage = Array.isArray(languageParam) && languageParam.length >= 2 && languageParam[1];
-
+  const hasClaims = params.claims && params.claims.length;
   const collectionClaimIdsString = JSON.stringify(collectionClaimIds);
-  const itemError =
-    params && (!params.claims || (params.claims && !params.claims.length)) ? __('Cannot publish empty list') : '';
+  const itemError = !hasClaims ? __('Cannot publish empty list') : '';
   const thumbnailError =
     (thumbError && thumbStatus !== THUMBNAIL_STATUSES.COMPLETE && __('Invalid thumbnail')) ||
     (thumbStatus === THUMBNAIL_STATUSES.IN_PROGRESS && __('Please wait for thumbnail to finish uploading'));
@@ -179,8 +184,8 @@ function CollectionForm(props: Props) {
             return { name: tag };
           })
         : [],
-      claim_id: String(claim && claim.claim_id),
-      channel_id: String(activeChannelId && parseName(collectionName)),
+      claim_id: claim ? claim.claim_id : undefined,
+      channel_id: claim ? collectionChannel : activeChannelId || undefined,
       claims: collectionClaimIds,
     };
 
@@ -247,15 +252,34 @@ function CollectionForm(props: Props) {
   }, [name]);
 
   React.useEffect(() => {
-    if (incognito && params.channel_id) {
-      const newParams = Object.assign({}, params);
-      delete newParams.channel_id;
-      setParams(newParams);
-    } else if (activeChannelId && params.channel_id !== activeChannelId) {
-      setParams({ ...params, channel_id: activeChannelId });
+    if (collectionChannel) {
+      setActiveChannel(collectionChannel);
+      setIncognito(false);
+      setInitialized(true);
     }
-  }, [activeChannelId, incognito, params, setParams]);
+  }, [setInitialized, setActiveChannel, collectionChannel, setIncognito]);
 
+  React.useEffect(() => {
+    if (activeChannelId && initialized) {
+      setParam({ channel_id: collectionChannel });
+    }
+  }, [activeChannelId, initialized]);
+
+  React.useEffect(() => {
+    if (incognito) {
+      setParam({ channel_id: undefined });
+    } else {
+      setParam({ channel_id: activeChannelId });
+    }
+  }, [activeChannelId, incognito]);
+
+  React.useEffect(() => {
+    if (!uri || (uri && hasClaim)) {
+      setParams(getCollectionParams());
+    }
+  }, [uri, hasClaim]);
+
+  console.log('params', params);
   return (
     <>
       <div className={classnames('main--contained', { 'card--disabled': disabled })}>
@@ -309,7 +333,6 @@ function CollectionForm(props: Props) {
                           thumbnailParamError={thumbError}
                           thumbnailParamStatus={thumbStatus}
                           updateThumbnailParams={handleUpdateThumbnail}
-                          publishForm={false}
                         />
                       </fieldset-section>
                       <FormField
@@ -433,12 +456,7 @@ function CollectionForm(props: Props) {
                 <Button
                   button="primary"
                   disabled={
-                    creatingCollection ||
-                    updatingCollection ||
-                    nameError ||
-                    bidError ||
-                    thumbnailError ||
-                    !params.claims.length
+                    creatingCollection || updatingCollection || nameError || bidError || thumbnailError || !hasClaims
                   }
                   label={creatingCollection || updatingCollection ? __('Submitting') : __('Submit')}
                   onClick={handleSubmit}

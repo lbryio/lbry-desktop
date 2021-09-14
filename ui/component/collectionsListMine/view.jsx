@@ -18,6 +18,7 @@ type Props = {
   publishedCollections: CollectionGroup,
   unpublishedCollections: CollectionGroup,
   // savedCollections: CollectionGroup,
+  fetchingCollections: boolean,
 };
 
 const ALL = 'All';
@@ -31,6 +32,7 @@ export default function CollectionsListMine(props: Props) {
     publishedCollections,
     unpublishedCollections,
     // savedCollections, these are resolved on startup from sync'd claimIds or urls
+    fetchingCollections,
   } = props;
 
   const builtinCollectionsList = (Object.values(builtinCollections || {}): any);
@@ -129,7 +131,10 @@ export default function CollectionsListMine(props: Props) {
         <div className="claim-grid__header section">
           <h1 className="claim-grid__title">
             {__('Playlists')}
-            {!hasCollections && (
+            {!hasCollections && !fetchingCollections && (
+              <div className="claim-grid__title--empty">{__('(Empty) --[indicates empty playlist]--')}</div>
+            )}
+            {!hasCollections && fetchingCollections && (
               <div className="claim-grid__title--empty">{__('(Empty) --[indicates empty playlist]--')}</div>
             )}
           </h1>
@@ -174,9 +179,14 @@ export default function CollectionsListMine(props: Props) {
             </div>
           </div>
         )}
-        {!hasCollections && (
+        {!hasCollections && !fetchingCollections && (
           <div className="main--empty">
             <Yrbl type={'sad'} title={__('You have no lists yet. Better start hoarding!')} />
+          </div>
+        )}
+        {!hasCollections && fetchingCollections && (
+          <div className="main--empty">
+            <h2 className="main--empty empty">{__('Loading...')}</h2>
           </div>
         )}
       </div>
