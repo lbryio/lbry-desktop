@@ -64,7 +64,11 @@ export default function WunderBarSuggestions(props: Props) {
     customSelectAction,
   } = props;
   const inputRef: ElementRef<any> = React.useRef();
-  const isFocused = inputRef && inputRef.current && inputRef.current === document.activeElement;
+  const viewResultsRef: ElementRef<any> = React.useRef();
+  const exploreTagRef: ElementRef<any> = React.useRef();
+
+  const isRefFocused = (ref) => ref && ref.current && ref.current === document.activeElement;
+  const isFocused = isRefFocused(inputRef) || isRefFocused(viewResultsRef) || isRefFocused(exploreTagRef);
 
   const {
     push,
@@ -324,10 +328,10 @@ export default function WunderBarSuggestions(props: Props) {
                 {!noBottomLinks && (
                   <div className="wunderbar__bottom-links">
                     <ComboboxOption value={term} className="wunderbar__more-results">
-                      <Button button="link" label={__('View All Results')} />
+                      <Button ref={viewResultsRef} button="link" label={__('View All Results')} />
                     </ComboboxOption>
                     <ComboboxOption value={`${TAG_SEARCH_PREFIX}${term}`} className="wunderbar__more-results">
-                      <Button className="wunderbar__tag-search" button="link">
+                      <Button ref={exploreTagRef} className="wunderbar__tag-search" button="link">
                         {__('Explore')}
                         <div className="tag">{term.split(' ').join('')}</div>
                       </Button>
