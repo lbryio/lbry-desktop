@@ -45,10 +45,10 @@ select {
 
 select {
   background-image: var(--select-toggle-background);
-  background-position: 99% center;
+  background-position: right var(--spacing-s) center;
   background-repeat: no-repeat;
   background-size: 1rem;
-  padding-right: var(--spacing-l);
+  padding-right: 2.25rem;
   padding-left: var(--spacing-s);
   font-weight: bold;
 }

@@ -19,6 +19,8 @@
 
 .claim-list__dropdown {
   padding: 0 var(--spacing-m);
+  padding-right: 2.75rem;
+  background-position: right var(--spacing-m) center;
 
   @media (max-width: $breakpoint-small) {
     margin-left: 0;
