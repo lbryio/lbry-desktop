@@ -264,6 +264,17 @@
   :first-child {
     flex: 1;
   }
+
+  .wunderbar__more-results {
+    margin-top: 0;
+    margin-left: var(--spacing-xxs);
+    margin-bottom: 0;
+
+    @media (min-width: $breakpoint-small) {
+      margin-top: var(--spacing-xxs);
+      margin-bottom: 0;
+    }
+  }
 }
 
 [data-reach-combobox-option] {

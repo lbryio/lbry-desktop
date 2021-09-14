@@ -321,16 +321,6 @@ export default function WunderBarSuggestions(props: Props) {
               className={classnames('wunderbar__suggestions', { 'wunderbar__suggestions--mobile': isMobile })}
             >
               <ComboboxList>
-                {uriFromQueryIsValid && !noTopSuggestion ? <WunderbarTopSuggestion query={nameFromQuery} /> : null}
-
-                <div className="wunderbar__label">{__('Search Results')}</div>
-
-                {showPlaceholder && term.length > LIGHTHOUSE_MIN_CHARACTERS ? <Spinner type="small" /> : null}
-
-                {!showPlaceholder && results
-                  ? results.slice(0, isMobile ? 20 : 5).map((uri) => <WunderbarSuggestion key={uri} uri={uri} />)
-                  : null}
-
                 {!noBottomLinks && (
                   <div className="wunderbar__bottom-links">
                     <ComboboxOption value={term} className="wunderbar__more-results">
@@ -344,6 +334,18 @@ export default function WunderBarSuggestions(props: Props) {
                     </ComboboxOption>
                   </div>
                 )}
+
+                <hr className="wunderbar__top-separator" />
+
+                {uriFromQueryIsValid && !noTopSuggestion ? <WunderbarTopSuggestion query={nameFromQuery} /> : null}
+
+                <div className="wunderbar__label">{__('Search Results')}</div>
+
+                {showPlaceholder && term.length > LIGHTHOUSE_MIN_CHARACTERS ? <Spinner type="small" /> : null}
+
+                {!showPlaceholder && results
+                  ? results.slice(0, isMobile ? 20 : 5).map((uri) => <WunderbarSuggestion key={uri} uri={uri} />)
+                  : null}
               </ComboboxList>
             </ComboboxPopover>
           )}
