@@ -94,6 +94,8 @@ function CollectionForm(props: Props) {
 
   const [nameError, setNameError] = React.useState(undefined);
   const [bidError, setBidError] = React.useState('');
+  const [thumbStatus, setThumbStatus] = React.useState('');
+  const [thumbError, setThumbError] = React.useState('');
   const [params, setParams]: [any, (any) => void] = React.useState(getCollectionParams());
   const name = params.name;
   const isNewCollection = !uri;
@@ -103,10 +105,11 @@ function CollectionForm(props: Props) {
   const secondaryLanguage = Array.isArray(languageParam) && languageParam.length >= 2 && languageParam[1];
 
   const collectionClaimIdsString = JSON.stringify(collectionClaimIds);
-  const itemError = !params.claims.length ? __('Cannot publish empty list') : '';
+  const itemError =
+    params && (!params.claims || (params.claims && !params.claims.length)) ? __('Cannot publish empty list') : '';
   const thumbnailError =
-    (params.thumbnail_error && params.thumbnail_status !== THUMBNAIL_STATUSES.COMPLETE && __('Invalid thumbnail')) ||
-    (params.thumbnail_status === THUMBNAIL_STATUSES.IN_PROGRESS && __('Please wait for thumbnail to finish uploading'));
+    (thumbError && thumbStatus !== THUMBNAIL_STATUSES.COMPLETE && __('Invalid thumbnail')) ||
+    (thumbStatus === THUMBNAIL_STATUSES.IN_PROGRESS && __('Please wait for thumbnail to finish uploading'));
   const submitError = nameError || bidError || itemError || updateError || createError || thumbnailError;
 
   function parseName(newName) {
@@ -140,11 +143,19 @@ function CollectionForm(props: Props) {
     }
   }
 
+  function handleUpdateThumbnail(update: { [string]: string }) {
+    if (update.thumbnail_url) {
+      setParam(update);
+    } else if (update.thumbnail_status) {
+      setThumbStatus(update.thumbnail_status);
+    } else {
+      setThumbError(update.thumbnail_error);
+    }
+  }
+
   function getCollectionParams() {
     const collectionParams: {
       thumbnail_url?: string,
-      thumbnail_error?: boolean,
-      thumbnail_status?: string,
       name?: string,
       description?: string,
       title?: string,
@@ -295,9 +306,9 @@ function CollectionForm(props: Props) {
                       <fieldset-section>
                         <SelectThumbnail
                           thumbnailParam={params.thumbnail_url}
-                          thumbnailParamError={params.thumbnail_error}
-                          thumbnailParamStatus={params.thumbnail_status}
-                          updateThumbnailParams={setParam}
+                          thumbnailParamError={thumbError}
+                          thumbnailParamStatus={thumbStatus}
+                          updateThumbnailParams={handleUpdateThumbnail}
                           publishForm={false}
                         />
                       </fieldset-section>
