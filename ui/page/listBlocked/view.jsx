@@ -160,26 +160,30 @@ function ListBlocked(props: Props) {
   function getHelpText(view) {
     switch (view) {
       case VIEW.BLOCKED:
-        return "Blocked channels will be invisible to you in the app. They will not be able to comment on your content, nor reply to your comments left on other channels' content.";
+        return __(
+          "Blocked channels will be invisible to you in the app. They will not be able to comment on your content, nor reply to your comments left on other channels' content."
+        );
       case VIEW.ADMIN:
-        return 'This is the global block list.';
+        return __('This is the global block list.');
       case VIEW.MODERATOR:
-        return 'List of channels that you have blocked as a moderator, along with the list of delegators.';
+        return __('List of channels that you have blocked as a moderator, along with the list of delegators.');
       case VIEW.MUTED:
-        return 'Muted channels will be invisible to you in the app. They will not know they are muted and can still interact with you and your content.';
+        return __(
+          'Muted channels will be invisible to you in the app. They will not know they are muted and can still interact with you and your content.'
+        );
     }
   }
 
   function getEmptyListTitle(view) {
     switch (view) {
       case VIEW.BLOCKED:
-        return 'You do not have any blocked channels';
+        return __('You do not have any blocked channels');
       case VIEW.MUTED:
-        return 'You do not have any muted channels';
+        return __('You do not have any muted channels');
       case VIEW.ADMIN:
-        return 'You do not have any globally-blocked channels';
+        return __('You do not have any globally-blocked channels');
       case VIEW.MODERATOR:
-        return 'You do not have any blocked channels as a moderator';
+        return __('You do not have any blocked channels as a moderator');
     }
   }
 

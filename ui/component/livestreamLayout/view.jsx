@@ -39,7 +39,7 @@ export default function LivestreamLayout(props: Props) {
         {Boolean(chatDisabled) && (
           <div className="help--notice">
             {channelName
-              ? __('%channelName% has disabled chat for this stream. Enjoy the stream!', { channelName })
+              ? __('%channel% has disabled chat for this stream. Enjoy the stream!', { channel: channelName })
               : __('This channel has disabled chat for this stream. Enjoy the stream!')}
           </div>
         )}
