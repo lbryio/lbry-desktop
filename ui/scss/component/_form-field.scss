@@ -48,7 +48,7 @@ select {
   background-position: right var(--spacing-s) center;
   background-repeat: no-repeat;
   background-size: 1rem;
-  padding-right: 2.25rem;
+  padding-right: var(--spacing-xl);
   padding-left: var(--spacing-s);
   font-weight: bold;
 }
