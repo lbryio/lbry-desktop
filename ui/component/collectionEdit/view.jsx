@@ -126,6 +126,10 @@ function CollectionForm(props: Props) {
     setParams({ ...params, ...paramObj });
   }
 
+  function updateParams(paramsObj) {
+    setParams({ ...params, ...paramsObj });
+  }
+
   // TODO remove this or better decide whether app should delete languages[2+]
   // This was added because a previous update setting was duplicating language codes
   function dedupeLanguages(languages) {
@@ -251,31 +255,34 @@ function CollectionForm(props: Props) {
     setNameError(nameError);
   }, [name]);
 
+  // on mount, if we get a collectionChannel, set it.
   React.useEffect(() => {
-    if (collectionChannel) {
-      setActiveChannel(collectionChannel);
-      setIncognito(false);
+    if (hasClaim && !initialized) {
+      if (collectionChannel) {
+        setActiveChannel(collectionChannel);
+        setIncognito(false);
+      } else if (!collectionChannel && hasClaim) {
+        setIncognito(true);
+      }
       setInitialized(true);
     }
-  }, [setInitialized, setActiveChannel, collectionChannel, setIncognito]);
+  }, [setInitialized, setActiveChannel, collectionChannel, setIncognito, hasClaim, incognito, initialized]);
 
+  // every time activechannel or incognito changes, set it.
   React.useEffect(() => {
-    if (activeChannelId && initialized) {
-      setParam({ channel_id: collectionChannel });
+    if (initialized) {
+      if (activeChannelId && !incognito) {
+        setParam({ channel_id: collectionChannel });
+      } else if (incognito) {
+        setParam({ channel_id: undefined });
+      }
     }
-  }, [activeChannelId, initialized]);
+  }, [activeChannelId, incognito, initialized]);
 
-  React.useEffect(() => {
-    if (incognito) {
-      setParam({ channel_id: undefined });
-    } else {
-      setParam({ channel_id: activeChannelId });
-    }
-  }, [activeChannelId, incognito]);
-
+  // setup initial params after we're sure if it's published or not
   React.useEffect(() => {
     if (!uri || (uri && hasClaim)) {
-      setParams(getCollectionParams());
+      updateParams(getCollectionParams());
     }
   }, [uri, hasClaim]);
 
