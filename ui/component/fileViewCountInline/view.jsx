@@ -7,15 +7,11 @@ type Props = {
   // --- select ---
   claim: ?StreamClaim,
   viewCount: string,
-  lang: ?string,
 };
 
 export default function FileViewCountInline(props: Props) {
-  const { isLivestream, claim, viewCount, lang } = props;
-  const formattedViewCount = Number(viewCount).toLocaleString(lang || 'en', {
-    compactDisplay: 'short',
-    notation: 'compact',
-  });
+  const { isLivestream, claim, viewCount } = props;
+  const formattedViewCount = Number(viewCount).toLocaleString();
 
   if (!viewCount || (claim && claim.repost_url) || isLivestream) {
     // (1) Currently, makeSelectViewCountForUri doesn't differentiate between
