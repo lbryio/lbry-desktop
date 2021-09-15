@@ -20,6 +20,7 @@ import {
 
 import CollectionForm from './view';
 import { selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
+import { doSetActiveChannel, doSetIncognito } from 'redux/actions/app';
 
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
@@ -46,6 +47,8 @@ const perform = (dispatch) => ({
   publishCollectionUpdate: (params) => dispatch(doCollectionPublishUpdate(params)),
   publishCollection: (params, collectionId) => dispatch(doCollectionPublish(params, collectionId)),
   clearCollectionErrors: () => dispatch({ type: LBRY_REDUX_ACTIONS.CLEAR_COLLECTION_ERRORS }),
+  setActiveChannel: (claimId) => dispatch(doSetActiveChannel(claimId)),
+  setIncognito: (incognito) => dispatch(doSetIncognito(incognito)),
 });
 
 export default connect(select, perform)(CollectionForm);

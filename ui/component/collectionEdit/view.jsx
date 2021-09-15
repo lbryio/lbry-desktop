@@ -52,6 +52,8 @@ type Props = {
   publishCollection: (CollectionPublishParams, string) => Promise<any>,
   clearCollectionErrors: () => void,
   onDone: (string) => void,
+  setActiveChannel: (string) => void,
+  setIncognito: (boolean) => void,
 };
 
 function CollectionForm(props: Props) {
@@ -82,6 +84,8 @@ function CollectionForm(props: Props) {
     publishCollectionUpdate,
     publishCollection,
     clearCollectionErrors,
+    setActiveChannel,
+    setIncognito,
     onDone,
   } = props;
   const activeChannelName = activeChannelClaim && activeChannelClaim.name;
@@ -91,22 +95,26 @@ function CollectionForm(props: Props) {
   }
   const activeChannelId = activeChannelClaim && activeChannelClaim.claim_id;
   const collectionName = (claim && claim.name) || (collection && collection.name);
-
+  const collectionChannel = claim && claim.signing_channel ? claim.signing_channel.claim_id : undefined;
+  const hasClaim = !!claim;
+  const [initialized, setInitialized] = React.useState(false);
   const [nameError, setNameError] = React.useState(undefined);
   const [bidError, setBidError] = React.useState('');
-  const [params, setParams]: [any, (any) => void] = React.useState(getCollectionParams());
+  const [thumbStatus, setThumbStatus] = React.useState('');
+  const [thumbError, setThumbError] = React.useState('');
+  const [params, setParams]: [any, (any) => void] = React.useState({});
   const name = params.name;
   const isNewCollection = !uri;
   const { replace } = useHistory();
-  const languageParam = params.languages;
+  const languageParam = params.languages || [];
   const primaryLanguage = Array.isArray(languageParam) && languageParam.length && languageParam[0];
   const secondaryLanguage = Array.isArray(languageParam) && languageParam.length >= 2 && languageParam[1];
-
+  const hasClaims = params.claims && params.claims.length;
   const collectionClaimIdsString = JSON.stringify(collectionClaimIds);
-  const itemError = !params.claims.length ? __('Cannot publish empty list') : '';
+  const itemError = !hasClaims ? __('Cannot publish empty list') : '';
   const thumbnailError =
-    (params.thumbnail_error && params.thumbnail_status !== THUMBNAIL_STATUSES.COMPLETE && __('Invalid thumbnail')) ||
-    (params.thumbnail_status === THUMBNAIL_STATUSES.IN_PROGRESS && __('Please wait for thumbnail to finish uploading'));
+    (thumbError && thumbStatus !== THUMBNAIL_STATUSES.COMPLETE && __('Invalid thumbnail')) ||
+    (thumbStatus === THUMBNAIL_STATUSES.IN_PROGRESS && __('Please wait for thumbnail to finish uploading'));
   const submitError = nameError || bidError || itemError || updateError || createError || thumbnailError;
 
   function parseName(newName) {
@@ -116,6 +124,10 @@ function CollectionForm(props: Props) {
 
   function setParam(paramObj) {
     setParams({ ...params, ...paramObj });
+  }
+
+  function updateParams(paramsObj) {
+    setParams({ ...params, ...paramsObj });
   }
 
   // TODO remove this or better decide whether app should delete languages[2+]
@@ -140,11 +152,19 @@ function CollectionForm(props: Props) {
     }
   }
 
+  function handleUpdateThumbnail(update: { [string]: string }) {
+    if (update.thumbnail_url) {
+      setParam(update);
+    } else if (update.thumbnail_status) {
+      setThumbStatus(update.thumbnail_status);
+    } else {
+      setThumbError(update.thumbnail_error);
+    }
+  }
+
   function getCollectionParams() {
     const collectionParams: {
       thumbnail_url?: string,
-      thumbnail_error?: boolean,
-      thumbnail_status?: string,
       name?: string,
       description?: string,
       title?: string,
@@ -168,8 +188,8 @@ function CollectionForm(props: Props) {
             return { name: tag };
           })
         : [],
-      claim_id: String(claim && claim.claim_id),
-      channel_id: String(activeChannelId && parseName(collectionName)),
+      claim_id: claim ? claim.claim_id : undefined,
+      channel_id: claim ? collectionChannel : activeChannelId || undefined,
       claims: collectionClaimIds,
     };
 
@@ -235,16 +255,38 @@ function CollectionForm(props: Props) {
     setNameError(nameError);
   }, [name]);
 
+  // on mount, if we get a collectionChannel, set it.
   React.useEffect(() => {
-    if (incognito && params.channel_id) {
-      const newParams = Object.assign({}, params);
-      delete newParams.channel_id;
-      setParams(newParams);
-    } else if (activeChannelId && params.channel_id !== activeChannelId) {
-      setParams({ ...params, channel_id: activeChannelId });
+    if (hasClaim && !initialized) {
+      if (collectionChannel) {
+        setActiveChannel(collectionChannel);
+        setIncognito(false);
+      } else if (!collectionChannel && hasClaim) {
+        setIncognito(true);
+      }
+      setInitialized(true);
     }
-  }, [activeChannelId, incognito, params, setParams]);
+  }, [setInitialized, setActiveChannel, collectionChannel, setIncognito, hasClaim, incognito, initialized]);
 
+  // every time activechannel or incognito changes, set it.
+  React.useEffect(() => {
+    if (initialized) {
+      if (activeChannelId) {
+        setParam({ channel_id: activeChannelId });
+      } else if (incognito) {
+        setParam({ channel_id: undefined });
+      }
+    }
+  }, [activeChannelId, incognito, initialized]);
+
+  // setup initial params after we're sure if it's published or not
+  React.useEffect(() => {
+    if (!uri || (uri && hasClaim)) {
+      updateParams(getCollectionParams());
+    }
+  }, [uri, hasClaim]);
+
+  console.log('params', params);
   return (
     <>
       <div className={classnames('main--contained', { 'card--disabled': disabled })}>
@@ -295,10 +337,9 @@ function CollectionForm(props: Props) {
                       <fieldset-section>
                         <SelectThumbnail
                           thumbnailParam={params.thumbnail_url}
-                          thumbnailParamError={params.thumbnail_error}
-                          thumbnailParamStatus={params.thumbnail_status}
-                          updateThumbnailParams={setParam}
-                          publishForm={false}
+                          thumbnailParamError={thumbError}
+                          thumbnailParamStatus={thumbStatus}
+                          updateThumbnailParams={handleUpdateThumbnail}
                         />
                       </fieldset-section>
                       <FormField
@@ -422,12 +463,7 @@ function CollectionForm(props: Props) {
                 <Button
                   button="primary"
                   disabled={
-                    creatingCollection ||
-                    updatingCollection ||
-                    nameError ||
-                    bidError ||
-                    thumbnailError ||
-                    !params.claims.length
+                    creatingCollection || updatingCollection || nameError || bidError || thumbnailError || !hasClaims
                   }
                   label={creatingCollection || updatingCollection ? __('Submitting') : __('Submit')}
                   onClick={handleSubmit}
