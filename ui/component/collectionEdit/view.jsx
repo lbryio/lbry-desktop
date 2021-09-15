@@ -271,8 +271,8 @@ function CollectionForm(props: Props) {
   // every time activechannel or incognito changes, set it.
   React.useEffect(() => {
     if (initialized) {
-      if (activeChannelId && !incognito) {
-        setParam({ channel_id: collectionChannel });
+      if (activeChannelId) {
+        setParam({ channel_id: activeChannelId });
       } else if (incognito) {
         setParam({ channel_id: undefined });
       }
