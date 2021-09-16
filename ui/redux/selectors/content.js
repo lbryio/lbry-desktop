@@ -7,13 +7,10 @@ import {
   makeSelectClaimIsMine,
   makeSelectMediaTypeForUri,
   selectBalance,
-  parseURI,
   makeSelectContentTypeForUri,
   makeSelectFileNameForUri,
 } from 'lbry-redux';
-import { makeSelectRecommendedContentForUri } from 'redux/selectors/search';
-import { selectMutedChannels } from 'redux/selectors/blocked';
-import { selectAllCostInfoByUri, makeSelectCostInfoForUri } from 'lbryinc';
+import { makeSelectCostInfoForUri } from 'lbryinc';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import * as RENDER_MODES from 'constants/file_render_modes';
 import path from 'path';
@@ -77,78 +74,6 @@ export const makeSelectHistoryForUri = (uri: string) =>
 
 export const makeSelectHasVisitedUri = (uri: string) =>
   createSelector(makeSelectHistoryForUri(uri), (history) => Boolean(history));
-
-export const makeSelectNextUnplayedRecommended = (uri: string) =>
-  createSelector(
-    makeSelectRecommendedContentForUri(uri),
-    selectHistory,
-    selectClaimsByUri,
-    selectAllCostInfoByUri,
-    selectMutedChannels,
-    (
-      recommendedForUri: Array<string>,
-      history: Array<{ uri: string }>,
-      claimsByUri: { [string]: ?Claim },
-      costInfoByUri: { [string]: { cost: 0 | string } },
-      blockedChannels: Array<string>
-    ) => {
-      if (recommendedForUri) {
-        // Make sure we don't autoplay paid content, channels, or content from blocked channels
-        for (let i = 0; i < recommendedForUri.length; i++) {
-          const recommendedUri = recommendedForUri[i];
-          const claim = claimsByUri[recommendedUri];
-
-          if (!claim) {
-            continue;
-          }
-
-          const { isChannel } = parseURI(recommendedUri);
-          if (isChannel) {
-            continue;
-          }
-
-          const costInfo = costInfoByUri[recommendedUri];
-          if (!costInfo || costInfo.cost !== 0) {
-            continue;
-          }
-
-          // We already check if it's a channel above
-          // $FlowFixMe
-          const isVideo = claim.value && claim.value.stream_type === 'video';
-          // $FlowFixMe
-          const isAudio = claim.value && claim.value.stream_type === 'audio';
-          if (!isVideo && !isAudio) {
-            continue;
-          }
-
-          const channel = claim && claim.signing_channel;
-          if (channel && blockedChannels.some((blockedUri) => blockedUri === channel.permanent_url)) {
-            continue;
-          }
-
-          const recommendedUriInfo = parseURI(recommendedUri);
-          const recommendedUriShort = recommendedUriInfo.claimName + '#' + recommendedUriInfo.claimId.substring(0, 1);
-
-          if (claimsByUri[uri] && claimsByUri[uri].claim_id === recommendedUriInfo.claimId) {
-            // Skip myself (same claim ID)
-            continue;
-          }
-
-          if (
-            !history.some((h) => {
-              const directMatch = h.uri === recommendedForUri[i];
-              const shortUriMatch = h.uri.includes(recommendedUriShort);
-              const idMatch = claimsByUri[h.uri] && claimsByUri[h.uri].claim_id === recommendedUriInfo.claimId;
-
-              return directMatch || shortUriMatch || idMatch;
-            })
-          ) {
-            return recommendedForUri[i];
-          }
-        }
-      }
-    }
-  );
 
 export const selectRecentHistory = createSelector(selectHistory, (history) => {
   return history.slice(0, RECENT_HISTORY_AMOUNT);
