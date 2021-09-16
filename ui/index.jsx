@@ -108,11 +108,9 @@ if (process.env.SEARCH_API_URL) {
 }
 
 // TODO KEYCLOAK
-getTokens.then(tokens => {
-  if (tokens.auth_token) {
-    doAuthTokenRefresh();
-  }
-});
+if (getTokens().auth_token) {
+  doAuthTokenRefresh();
+}
 
 // We need to override Lbryio for getting/setting the authToken
 // We interact with ipcRenderer to get the auth key from a users keyring

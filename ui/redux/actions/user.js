@@ -130,7 +130,7 @@ export function doAuthenticate(
     });
     try {
       await checkAuthBusy();
-      const user = await Lbryio.authenticate(DOMAIN, getDefaultLanguage());
+      const user = await Lbryio.fetchUser(DOMAIN, getDefaultLanguage());
       console.log('USER', user);
       if (sessionStorageAvailable) window.sessionStorage.removeItem(AUTH_IN_PROGRESS);
       // put this back , accessToken: tokens.access_token
@@ -165,7 +165,7 @@ export function doUserFetch() {
         type: ACTIONS.USER_FETCH_STARTED,
       });
 
-      Lbryio.getCurrentUser()
+      Lbryio.fetchCurrentUser()
         .then((user) => {
           dispatch({
             type: ACTIONS.USER_FETCH_SUCCESS,
@@ -186,7 +186,7 @@ export function doUserFetch() {
 export function doUserCheckEmailVerified() {
   // This will happen in the background so we don't need loading booleans
   return (dispatch) => {
-    Lbryio.getCurrentUser().then((user) => {
+    Lbryio.fetchCurrentUser().then((user) => {
       if (user.has_verified_email) {
         dispatch(doRewardList());
 
