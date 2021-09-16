@@ -90,8 +90,6 @@ function ClaimTilesDiscover(props: Props) {
     streamTypesParam = [CS.FILE_VIDEO, CS.FILE_AUDIO];
   }
 
-  const [prevUris, setPrevUris] = React.useState([]);
-
   const options: {
     page_size: number,
     no_totals: boolean,
@@ -165,52 +163,27 @@ function ClaimTilesDiscover(props: Props) {
   }
 
   const searchKey = createNormalizedClaimSearchKey(options);
-  const isLoading = fetchingClaimSearchByQuery[searchKey];
-
-  let uris = (prefixUris || []).concat(claimSearchByQuery[searchKey] || []);
+  const fetchingClaimSearch = fetchingClaimSearchByQuery[searchKey];
+  const claimSearchUris = claimSearchByQuery[searchKey] || [];
 
   // Don't use the query from createNormalizedClaimSearchKey for the effect since that doesn't include page & release_time
   const optionsStringForEffect = JSON.stringify(options);
-  const shouldPerformSearch = !isLoading && uris.length === 0;
+  const shouldPerformSearch = !fetchingClaimSearch && claimSearchUris.length === 0;
 
-  if (prefixUris === undefined && claimSearchByQuery[searchKey] === undefined) {
-    // This is a new query and we don't have results yet ...
-    if (prevUris.length !== 0) {
-      // ... but we have previous results. Use it until new results are here.
-      uris = prevUris;
-    }
-  }
+  const uris = (prefixUris || []).concat(claimSearchUris);
 
-  const modifiedUris = uris ? uris.slice() : [];
-  const fixUris = pinUrls || [];
-
-  if (pinUrls && modifiedUris && modifiedUris.length > 2 && window.location.pathname === '/') {
-    fixUris.forEach((fixUri) => {
-      if (modifiedUris.indexOf(fixUri) !== -1) {
-        modifiedUris.splice(modifiedUris.indexOf(fixUri), 1);
+  if (pinUrls && uris && uris.length > 2 && window.location.pathname === '/') {
+    pinUrls.forEach((pin) => {
+      if (uris.indexOf(pin) !== -1) {
+        uris.splice(uris.indexOf(pin), 1);
       } else {
-        modifiedUris.pop();
+        uris.pop();
       }
     });
-    modifiedUris.splice(2, 0, ...fixUris);
+    uris.splice(2, 0, ...pinUrls);
   }
 
-  function fetchViewCountForUris(uris) {
-    const claimIds = [];
-
-    if (uris) {
-      uris.forEach((uri) => {
-        if (claimsByUri[uri]) {
-          claimIds.push(claimsByUri[uri].claim_id);
-        }
-      });
-    }
-
-    if (claimIds.length > 0) {
-      doFetchViewCount(claimIds.join(','));
-    }
-  }
-
+  // Run `doClaimSearch`
   React.useEffect(() => {
     if (shouldPerformSearch) {
       const searchOptions = JSON.parse(optionsStringForEffect);
@@ -218,24 +191,34 @@ function ClaimTilesDiscover(props: Props) {
     }
   }, [doClaimSearch, shouldPerformSearch, optionsStringForEffect]);
 
+  // Fetch view count for uris
   React.useEffect(() => {
-    if (JSON.stringify(prevUris) !== JSON.stringify(uris) && !shouldPerformSearch) {
-      // Stash new results for next render cycle:
-      setPrevUris(uris);
-      // Fetch view count:
-      if (fetchViewCount) {
-        fetchViewCountForUris(uris);
+    if (fetchViewCount && uris && uris.length > 0) {
+      const claimIds = [];
+
+      uris.forEach((uri) => {
+        if (claimsByUri[uri]) {
+          claimIds.push(claimsByUri[uri].claim_id);
+        }
+      });
+
+      if (claimIds.length > 0) {
+        // TODO: this is a rough port. Need to only do this when necessary.
+        const TODO = true;
+        if (!TODO) {
+          doFetchViewCount(claimIds.join(','));
+        }
       }
     }
-  }, [shouldPerformSearch, prevUris, uris]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [uris, fetchViewCount]);
 
   // **************************************************************************
   // **************************************************************************
 
   return (
     <ul className="claim-grid">
-      {modifiedUris && modifiedUris.length
-        ? modifiedUris.map((uri) => (
+      {uris && uris.length
+        ? uris.map((uri) => (
             <ClaimPreviewTile
               showNoSourceClaims={hasNoSource || showNoSourceClaims}
               key={uri}
