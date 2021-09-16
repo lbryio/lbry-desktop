@@ -24,6 +24,19 @@ type SearchOptions = {
   has_no_source?: boolean,
 };
 
+function urisEqual(prev: ?Array<string>, next: ?Array<string>) {
+  if (!prev || !next) {
+    // ClaimList: "null" and "undefined" have special meaning,
+    // so we can't just compare array length here.
+    //   - null = "timed out"
+    //   - undefined = "no result".
+    return prev === next;
+  }
+
+  // $FlowFixMe - already checked for null above.
+  return prev.length === next.length && prev.every((value, index) => value === next[index]);
+}
+
 // ****************************************************************************
 // ClaimTilesDiscover
 // ****************************************************************************
@@ -152,4 +165,74 @@ function ClaimTilesDiscover(props: Props) {
   );
 }
 
-export default ClaimTilesDiscover;
+export default React.memo<Props>(ClaimTilesDiscover, areEqual);
+
+function debug_trace(val) {
+  if (process.env.DEBUG_TRACE) console.log(`Render due to: ${val}`);
+}
+
+function areEqual(prev: Props, next: Props) {
+  const prevOptions: SearchOptions = prev.options;
+  const nextOptions: SearchOptions = next.options;
+
+  const prevSearchKey = createNormalizedClaimSearchKey(prevOptions);
+  const nextSearchKey = createNormalizedClaimSearchKey(nextOptions);
+
+  // "Pause" render when fetching to solve the layout-shift problem in #5979
+  // (previous solution used a stashed copy of the rendered uris while fetching
+  // to make it stay still).
+  // This version works as long as we are not doing anything during a fetch,
+  // such as showing a spinner.
+  const nextCsFetch = next.fetchingClaimSearchByQuery[nextSearchKey];
+  if (nextCsFetch) {
+    return true;
+  }
+
+  // --- Deep-compare ---
+  if (prev.claimSearchByQuery[prevSearchKey] !== next.claimSearchByQuery[nextSearchKey]) {
+    debug_trace('claimSearchByQuery');
+    return false;
+  }
+
+  if (prev.fetchingClaimSearchByQuery[prevSearchKey] !== next.fetchingClaimSearchByQuery[nextSearchKey]) {
+    debug_trace('fetchingClaimSearchByQuery');
+    return false;
+  }
+
+  const ARRAY_KEYS = ['prefixUris', 'channelIds', 'mutedUris', 'blockedUris'];
+
+  for (let i = 0; i < ARRAY_KEYS.length; ++i) {
+    const key = ARRAY_KEYS[i];
+    if (!urisEqual(prev[key], next[key])) {
+      debug_trace(`${key}`);
+      return false;
+    }
+  }
+
+  // --- Default the rest(*) to shallow-compare ---
+  // (*) including new props introduced in the future, in case developer forgets
+  // to update this function. Better to render more than miss an important one.
+  const KEYS_TO_IGNORE = [
+    ...ARRAY_KEYS,
+    'claimSearchByQuery',
+    'fetchingClaimSearchByQuery',
+    'location',
+    'history',
+    'match',
+    'claimsByUri',
+    'options',
+    'doClaimSearch',
+    'doToggleTagFollowDesktop',
+  ];
+
+  const propKeys = Object.keys(next);
+  for (let i = 0; i < propKeys.length; ++i) {
+    const pk = propKeys[i];
+    if (!KEYS_TO_IGNORE.includes(pk) && prev[pk] !== next[pk]) {
+      debug_trace(`${pk}`);
+      return false;
+    }
+  }
+
+  return true;
+}
