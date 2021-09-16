@@ -9,7 +9,6 @@ import ClaimListDiscover from 'component/claimListDiscover';
 import Page from 'component/page';
 import Button from 'component/button';
 import Icon from 'component/common/icon';
-import useGetLivestreams from 'effects/use-get-livestreams';
 import { splitBySeparator } from 'lbry-redux';
 
 type Props = {
@@ -20,7 +19,6 @@ type Props = {
 function ChannelsFollowingPage(props: Props) {
   const { subscribedChannels, tileLayout } = props;
   const hasSubsribedChannels = subscribedChannels.length > 0;
-  const { livestreamMap } = useGetLivestreams();
 
   return !hasSubsribedChannels ? (
     <ChannelsFollowingDiscoverPage />
@@ -46,8 +44,6 @@ function ChannelsFollowingPage(props: Props) {
             navigate={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`}
           />
         }
-        liveLivestreamsFirst
-        livestreamMap={livestreamMap}
         showNoSourceClaims={ENABLE_NO_SOURCE_CLAIMS}
         hasSource
       />
