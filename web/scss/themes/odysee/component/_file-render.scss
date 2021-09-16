@@ -230,7 +230,8 @@
 }
 
 .file-viewer__overlay-logo {
-  height: 3.5rem;
+  height: 2rem;
+  max-height: 2rem; //embed logo height?
   width: 12rem;
   display: flex;
   align-items: center;

@@ -9,10 +9,11 @@ import Logo from 'component/logo';
 type Props = {
   uri: string,
   isAuthenticated: boolean,
+  preferEmbed: boolean,
 };
 
 function FileViewerEmbeddedEnded(props: Props) {
-  const { uri, isAuthenticated } = props;
+  const { uri, isAuthenticated, preferEmbed } = props;
 
   const prompts = isAuthenticated
     ? {
@@ -37,21 +38,28 @@ function FileViewerEmbeddedEnded(props: Props) {
   return (
     <div className="file-viewer__overlay">
       <div className="file-viewer__overlay-secondary">
-        <Button className="file-viewer__overlay-logo" href={URL}>
+        <Button className="file-viewer__overlay-logo" href={URL} disabled={preferEmbed}>
           <Logo type={'embed'} />
         </Button>
       </div>
-      <div className="file-viewer__overlay-title file-viewer_embed-ended-title">{prompt}</div>
-      <div className="file-viewer__overlay-actions">
-        <Button label={__('Rewatch or Discuss')} button="primary" href={lbrytvLink} />
-        {!isAuthenticated && (
-          <Button
-            label={__('Join %SITE_NAME%', { SITE_NAME })}
-            button="secondary"
-            href={`${URL}/$/signup?src=embed_signup`}
-          />
-        )}
-      </div>
+      {!preferEmbed && (
+        <>
+          <div className="file-viewer__overlay-title file-viewer_embed-ended-title">{prompt}</div>
+          <div className="file-viewer__overlay-actions">
+            { /* add button to replay? */ }
+            <>
+              <Button label={__('Rewatch or Discuss')} button="primary" href={lbrytvLink} />
+              {!isAuthenticated && (
+                <Button
+                  label={__('Join %SITE_NAME%', { SITE_NAME })}
+                  button="secondary"
+                  href={`${URL}/$/signup?src=embed_signup`}
+                />
+              )}
+            </>
+          </div>
+        </>
+      )}
     </div>
   );
 }
