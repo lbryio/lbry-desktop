@@ -1,4 +1,4 @@
-const { DOMAIN } = require('../../config.js');
+const { DOMAIN } = require('config.js');
 const AUTH_TOKEN = 'auth_token';
 const SAVED_PASSWORD = 'saved_password';
 const DEPRECATED_SAVED_PASSWORD = 'saved-password';
@@ -59,7 +59,7 @@ function deleteCookie(name) {
 }
 
 function setSavedPassword(value, saveToDisk) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     const password = value === undefined || value === null ? '' : value;
     sessionPassword = password;
 
@@ -74,17 +74,17 @@ function setSavedPassword(value, saveToDisk) {
 }
 
 function getSavedPassword() {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     if (sessionPassword) {
       resolve(sessionPassword);
     }
 
-    return getPasswordFromCookie().then(p => resolve(p));
+    return getPasswordFromCookie().then((p) => resolve(p));
   });
 }
 
 function getPasswordFromCookie() {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     let password;
     password = getCookie(SAVED_PASSWORD);
     resolve(password);
@@ -92,7 +92,7 @@ function getPasswordFromCookie() {
 }
 
 function deleteSavedPassword() {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     deleteCookie(SAVED_PASSWORD);
     resolve();
   });
@@ -102,19 +102,24 @@ function getAuthToken() {
   return getCookie(AUTH_TOKEN);
 }
 
+// will take oidc token getter
+function getTokens() {
+  return { auth_token: getAuthToken(), access_token: null };
+}
+
 function setAuthToken(value) {
   return setCookie(AUTH_TOKEN, value, 365);
 }
 
 function deleteAuthToken() {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     deleteCookie(AUTH_TOKEN);
     resolve();
   });
 }
 
 function doSignOutCleanup() {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     deleteAuthToken();
     deleteSavedPassword();
     resolve();
@@ -122,10 +127,10 @@ function doSignOutCleanup() {
 }
 
 function doAuthTokenRefresh() {
-  const authToken = getAuthToken();
+  const { auth_token: authToken } = getAuthToken();
   if (authToken) {
     deleteAuthToken();
-    setAuthToken(authToken);
+    setCookie(AUTH_TOKEN, authToken, 365);
   }
 }
 
@@ -147,6 +152,7 @@ module.exports = {
   deleteSavedPassword,
   getAuthToken,
   setAuthToken,
+  getTokens,
   deleteAuthToken,
   doSignOutCleanup,
   doAuthTokenRefresh,

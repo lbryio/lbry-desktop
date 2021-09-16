@@ -6,7 +6,7 @@ import { ipcRenderer, remote } from 'electron';
 import path from 'path';
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
-import { DOMAIN, SIMPLE_SITE } from 'config';
+import { SIMPLE_SITE } from 'config';
 import {
   Lbry,
   doBalanceSubscribe,
@@ -353,18 +353,19 @@ export function doAlertWaitingForSync() {
   };
 }
 
-export function doDaemonReady() {
+export function doLbryReady() {
   return (dispatch, getState) => {
     const state = getState();
 
     // TODO: call doFetchDaemonSettings, then get usage data, and call doAuthenticate once they are loaded into the store
     const shareUsageData = IS_WEB || window.localStorage.getItem(SHARE_INTERNAL) === 'true';
-
+    /**
+     * doAuthenticate -> Lbryio.authenticate, then update redux with auth token.
+     *  authenticate: Use auth token to get or create user.getCurrentUser. return user
+     */
     dispatch(
       doAuthenticate(
         appVersion,
-        undefined,
-        undefined,
         shareUsageData,
         (status) => {
           const trendingAlgorithm =
@@ -377,8 +378,7 @@ export function doDaemonReady() {
             analytics.trendingAlgorithmEvent(trendingAlgorithm);
           }
         },
-        undefined,
-        DOMAIN
+        undefined
       )
     );
     dispatch({ type: ACTIONS.DAEMON_READY });
