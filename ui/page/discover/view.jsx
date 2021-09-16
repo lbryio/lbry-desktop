@@ -15,7 +15,6 @@ import Icon from 'component/common/icon';
 import Ads from 'web/component/ads';
 import LbcSymbol from 'component/common/lbc-symbol';
 import I18nMessage from 'component/i18nMessage';
-import useGetLivestreams from 'effects/use-get-livestreams';
 import moment from 'moment';
 
 type Props = {
@@ -45,7 +44,6 @@ function DiscoverPage(props: Props) {
   const buttonRef = useRef();
   const isHovering = useHover(buttonRef);
   const isMobile = useIsMobile();
-  const { livestreamMap } = useGetLivestreams();
 
   const urlParams = new URLSearchParams(search);
   const claimType = urlParams.get('claim_type');
@@ -172,8 +170,6 @@ function DiscoverPage(props: Props) {
             )
           )
         }
-        liveLivestreamsFirst
-        livestreamMap={livestreamMap}
         hasSource
         showNoSourceClaims={ENABLE_NO_SOURCE_CLAIMS}
       />

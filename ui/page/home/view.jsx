@@ -9,7 +9,6 @@ import ClaimTilesDiscover from 'component/claimTilesDiscover';
 import ClaimPreviewTile from 'component/claimPreviewTile';
 import Icon from 'component/common/icon';
 import WaitUntilOnPage from 'component/common/wait-until-on-page';
-import useGetLivestreams from 'effects/use-get-livestreams';
 import { GetLinksData } from 'util/buildHomepage';
 
 // @if TARGET='web'
@@ -30,7 +29,6 @@ function HomePage(props: Props) {
   const showPersonalizedChannels = (authenticated || !IS_WEB) && subscribedChannels && subscribedChannels.length > 0;
   const showPersonalizedTags = (authenticated || !IS_WEB) && followedTags && followedTags.length > 0;
   const showIndividualTags = showPersonalizedTags && followedTags.length < 5;
-  const { livestreamMap } = useGetLivestreams();
 
   const rowData: Array<RowDataItem> = GetLinksData(
     homepageData,
@@ -53,14 +51,7 @@ function HomePage(props: Props) {
       </ul>
     );
     const claimTiles = (
-      <ClaimTilesDiscover
-        {...options}
-        liveLivestreamsFirst
-        livestreamMap={livestreamMap}
-        showNoSourceClaims={ENABLE_NO_SOURCE_CLAIMS}
-        hasSource
-        pinUrls={pinUrls}
-      />
+      <ClaimTilesDiscover {...options} showNoSourceClaims={ENABLE_NO_SOURCE_CLAIMS} hasSource pinUrls={pinUrls} />
     );
 
     return (

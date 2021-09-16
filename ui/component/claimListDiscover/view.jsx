@@ -14,7 +14,6 @@ import ClaimPreviewTile from 'component/claimPreviewTile';
 import I18nMessage from 'component/i18nMessage';
 import ClaimListHeader from 'component/claimListHeader';
 import { useIsLargeScreen } from 'effects/use-screensize';
-import { getLivestreamOnlyOptions } from 'util/search';
 
 type Props = {
   uris: Array<string>,
@@ -31,7 +30,6 @@ type Props = {
   includeSupportAction?: boolean,
   infiniteScroll?: Boolean,
   isChannel?: boolean,
-  liveLivestreamsFirst?: boolean,
   personalView: boolean,
   showHeader: boolean,
   showHiddenByUser?: boolean,
@@ -64,7 +62,6 @@ type Props = {
   channelIds?: Array<string>,
   claimIds?: Array<string>,
   subscribedChannels: Array<Subscription>,
-  livestreamMap?: { [string]: any },
 
   header?: Node,
   headerLabel?: string | Node,
@@ -148,8 +145,6 @@ function ClaimListDiscover(props: Props) {
     releaseTime,
     scrollAnchor,
     showHiddenByUser = false,
-    liveLivestreamsFirst,
-    livestreamMap,
     hasSource,
     hasNoSource,
     isChannel = false,
@@ -400,11 +395,6 @@ function ClaimListDiscover(props: Props) {
   //     claimSearchResult.splice(2, 0, fixUri);
   //   }
 
-  const livestreamSearchKey = liveLivestreamsFirst
-    ? createNormalizedClaimSearchKey(getLivestreamOnlyOptions(options))
-    : undefined;
-  const livestreamSearchResult = livestreamSearchKey && claimSearchByQuery[livestreamSearchKey];
-
   const [finalUris, setFinalUris] = React.useState(
     getFinalUrisInitialState(history.action === 'POP', claimSearchResult)
   );
@@ -571,10 +561,6 @@ function ClaimListDiscover(props: Props) {
     if (shouldPerformSearch) {
       const searchOptions = JSON.parse(optionsStringForEffect);
       doClaimSearch(searchOptions);
-
-      if (liveLivestreamsFirst && options.page === 1) {
-        doClaimSearch(getLivestreamOnlyOptions(searchOptions));
-      }
     }
   }, [doClaimSearch, shouldPerformSearch, optionsStringForEffect, forceRefresh]);
 
@@ -586,12 +572,12 @@ function ClaimListDiscover(props: Props) {
       }
     } else {
       // Wait until all queries are done before updating the uris to avoid layout shifts.
-      const pending = claimSearchResult === undefined || (liveLivestreamsFirst && livestreamSearchResult === undefined);
+      const pending = claimSearchResult === undefined;
       if (!pending && !urisEqual(claimSearchResult, finalUris)) {
         setFinalUris(claimSearchResult);
       }
     }
-  }, [uris, claimSearchResult, finalUris, setFinalUris, liveLivestreamsFirst, livestreamSearchResult]);
+  }, [uris, claimSearchResult, finalUris, setFinalUris]);
 
   React.useEffect(() => {
     if (fetchViewCount) {
@@ -645,8 +631,6 @@ function ClaimListDiscover(props: Props) {
             includeSupportAction={includeSupportAction}
             injectedItem={injectedItem}
             showHiddenByUser={showHiddenByUser}
-            liveLivestreamsFirst={liveLivestreamsFirst}
-            livestreamMap={livestreamMap}
             searchOptions={options}
             showNoSourceClaims={showNoSourceClaims}
             empty={empty}
@@ -679,8 +663,6 @@ function ClaimListDiscover(props: Props) {
             includeSupportAction={includeSupportAction}
             injectedItem={injectedItem}
             showHiddenByUser={showHiddenByUser}
-            liveLivestreamsFirst={liveLivestreamsFirst}
-            livestreamMap={livestreamMap}
             searchOptions={options}
             showNoSourceClaims={hasNoSource || showNoSourceClaims}
             empty={empty}
