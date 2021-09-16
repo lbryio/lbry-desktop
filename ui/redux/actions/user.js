@@ -112,10 +112,8 @@ function checkAuthBusy() {
  * @param callInstall
  * @returns {Function}
  *
- * Does Lbryio.authenticate, i.e. call Authenticate() then update redux with auth token.
- * Authenticate does getAuthToken then getCurrentUser, and if !user, call userNew and return the user
- * telling redux the auth token is probably dumb. we will
- * keycloak = useKeycloak(), keycloak.token whenever we want that
+ * Lbryio.fetchUser:
+ * getTokens then getCurrentUser, and if !user, call userNew and return the user
  *
  */
 export function doAuthenticate(

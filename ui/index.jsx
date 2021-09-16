@@ -116,7 +116,6 @@ if (getTokens().auth_token) {
 // We interact with ipcRenderer to get the auth key from a users keyring
 // We keep a local variable for authToken because `ipcRenderer.send` does not
 // contain a response, so there is no way to know when it's been set
-// let authToken; // deleting
 Lbryio.setOverride('setAuthToken', (authToken) => {
   setAuthToken(authToken); // set the cookie to auth_token=
   return authToken;
@@ -268,7 +267,7 @@ function AppWrapper() {
         app.store.dispatch(doFetchLanguage(DEFAULT_LANGUAGE));
       }
       app.store.dispatch(doUpdateIsNightAsync());
-      app.store.dispatch(doLbryReady()); //
+      app.store.dispatch(doLbryReady()); // get tokens, users, startup stuff
       app.store.dispatch(doBlackListedOutpointsSubscribe());
       app.store.dispatch(doFilteredOutpointsSubscribe());
 
