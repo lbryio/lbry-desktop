@@ -18,11 +18,9 @@ type Props = {
   recommendedContentUris: Array<string>,
   nextRecommendedUri: string,
   isSearching: boolean,
-  doFetchRecommendedContent: (string, boolean) => void,
-  mature: boolean,
+  doFetchRecommendedContent: (string) => void,
   isAuthenticated: boolean,
   claim: ?StreamClaim,
-  doRecommendationUpdate: (claimId: string, urls: Array<string>, id: string, parentId: string) => void,
   claimId: string,
 };
 
@@ -30,7 +28,6 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
   const {
     uri,
     doFetchRecommendedContent,
-    mature,
     recommendedContentUris,
     nextRecommendedUri,
     isSearching,
@@ -39,53 +36,29 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
     claimId,
   } = props;
   const [viewMode, setViewMode] = React.useState(VIEW_ALL_RELATED);
-  const [recommendationUrls, setRecommendationUrls] = React.useState();
   const signingChannel = claim && claim.signing_channel;
   const channelName = signingChannel ? signingChannel.name : null;
   const isMobile = useIsMobile();
   const isMedium = useIsMediumScreen();
   const { onRecsLoaded: onRecommendationsLoaded, onClickedRecommended: onRecommendationClicked } = RecSys;
-  React.useEffect(() => {
-    function moveAutoplayNextItemToTop(recommendedContent) {
-      let newList = recommendedContent;
-      if (newList) {
-        const index = newList.indexOf(nextRecommendedUri);
-        if (index > 0) {
-          const a = newList[0];
-          newList[0] = nextRecommendedUri;
-          newList[index] = a;
-        }
-      }
-      return newList;
-    }
-
-    function listEq(prev, next) {
-      if (prev && next) {
-        return prev.length === next.length && prev.every((value, index) => value === next[index]);
-      } else {
-        return prev === next;
-      }
-    }
-
-    const newRecommendationUrls = moveAutoplayNextItemToTop(recommendedContentUris);
-
-    if (claim && !listEq(recommendationUrls, newRecommendationUrls)) {
-      setRecommendationUrls(newRecommendationUrls);
-    }
-  }, [recommendedContentUris, nextRecommendedUri, recommendationUrls, setRecommendationUrls, claim]);
 
   React.useEffect(() => {
-    doFetchRecommendedContent(uri, mature);
-  }, [uri, mature, doFetchRecommendedContent]);
+    doFetchRecommendedContent(uri);
+  }, [uri, doFetchRecommendedContent]);
 
   React.useEffect(() => {
     // Right now we only want to record the recs if they actually saw them.
-    if (recommendationUrls && recommendationUrls.length && nextRecommendedUri && viewMode === VIEW_ALL_RELATED) {
-      onRecommendationsLoaded(claimId, recommendationUrls);
+    if (
+      recommendedContentUris &&
+      recommendedContentUris.length &&
+      nextRecommendedUri &&
+      viewMode === VIEW_ALL_RELATED
+    ) {
+      onRecommendationsLoaded(claimId, recommendedContentUris);
     }
-  }, [recommendationUrls, onRecommendationsLoaded, claimId, nextRecommendedUri, viewMode]);
+  }, [recommendedContentUris, onRecommendationsLoaded, claimId, nextRecommendedUri, viewMode]);
 
-  function handleRecommendationClicked(e, clickedClaim, index: number) {
+  function handleRecommendationClicked(e, clickedClaim) {
     if (claim) {
       onRecommendationClicked(claim.claim_id, clickedClaim.claim_id);
     }
@@ -124,7 +97,7 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
             <ClaimList
               type="small"
               loading={isSearching}
-              uris={recommendationUrls}
+              uris={recommendedContentUris}
               hideMenu={isMobile}
               injectedItem={SHOW_ADS && IS_WEB && !isAuthenticated && <Ads small type={'video'} />}
               empty={__('No related content found')}
@@ -164,7 +137,6 @@ function areEqual(prevProps: Props, nextProps: Props) {
     a.nextRecommendedUri !== b.nextRecommendedUri ||
     a.isAuthenticated !== b.isAuthenticated ||
     a.isSearching !== b.isSearching ||
-    a.mature !== b.mature ||
     (a.recommendedContentUris && !b.recommendedContentUris) ||
     (!a.recommendedContentUris && b.recommendedContentUris) ||
     (a.claim && !b.claim) ||

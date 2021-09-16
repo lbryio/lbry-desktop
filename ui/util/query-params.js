@@ -1,6 +1,5 @@
 // @flow
 import { SEARCH_OPTIONS } from 'constants/search';
-import { SIMPLE_SITE } from 'config';
 
 const DEFAULT_SEARCH_RESULT_FROM = 0;
 const DEFAULT_SEARCH_SIZE = 20;
@@ -33,7 +32,6 @@ export function updateQueryParam(uri: string, key: string, value: string) {
 }
 
 export const getSearchQueryString = (query: string, options: any = {}) => {
-  const FORCE_FREE_ONLY = SIMPLE_SITE;
   const isSurroundedByQuotes = (str) => str[0] === '"' && str[str.length - 1] === '"';
   const encodedQuery = encodeURIComponent(query);
   const queryParams = [
@@ -81,23 +79,17 @@ export const getSearchQueryString = (query: string, options: any = {}) => {
   const additionalOptions = {};
   const { related_to } = options;
   const { nsfw } = options;
+  const { free_only } = options;
 
-  if (related_to) additionalOptions['related_to'] = related_to;
-  if (nsfw === false) additionalOptions['nsfw'] = false;
+  if (related_to) additionalOptions[SEARCH_OPTIONS.RELATED_TO] = related_to;
+  if (free_only) additionalOptions[SEARCH_OPTIONS.PRICE_FILTER_FREE] = true;
+  if (nsfw === false) additionalOptions[SEARCH_OPTIONS.INCLUDE_MATURE] = false;
 
   if (additionalOptions) {
     Object.keys(additionalOptions).forEach((key) => {
       const option = additionalOptions[key];
       queryParams.push(`${key}=${option}`);
     });
-  }
-
-  if (FORCE_FREE_ONLY) {
-    const index = queryParams.findIndex((q) => q.startsWith('free_only'));
-    if (index > -1) {
-      queryParams.splice(index, 1);
-    }
-    queryParams.push(`free_only=true`);
   }
 
   return queryParams.join('&');
