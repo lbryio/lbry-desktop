@@ -116,6 +116,12 @@ function ClaimTilesDiscover(props: Props) {
     uris.splice(2, 0, ...pinUrls);
   }
 
+  if (uris.length > 0 && uris.length < pageSize && shouldPerformSearch) {
+    // prefixUri and pinUrls might already be present while waiting for the
+    // remaining claim_search results. Fill the space to prevent layout shifts.
+    uris.push(...Array(pageSize - uris.length).fill(''));
+  }
+
   // Run `doClaimSearch`
   React.useEffect(() => {
     if (shouldPerformSearch) {
@@ -130,7 +136,7 @@ function ClaimTilesDiscover(props: Props) {
       const claimIds = [];
 
       uris.forEach((uri) => {
-        if (claimsByUri[uri]) {
+        if (uri && claimsByUri[uri]) {
           claimIds.push(claimsByUri[uri].claim_id);
         }
       });
@@ -148,14 +154,20 @@ function ClaimTilesDiscover(props: Props) {
   return (
     <ul className="claim-grid">
       {uris && uris.length
-        ? uris.map((uri) => (
-            <ClaimPreviewTile
-              showNoSourceClaims={hasNoSource || showNoSourceClaims}
-              key={uri}
-              uri={uri}
-              properties={renderProperties}
-            />
-          ))
+        ? uris.map((uri, i) => {
+            if (uri) {
+              return (
+                <ClaimPreviewTile
+                  showNoSourceClaims={hasNoSource || showNoSourceClaims}
+                  key={uri}
+                  uri={uri}
+                  properties={renderProperties}
+                />
+              );
+            } else {
+              return <ClaimPreviewTile showNoSourceClaims={hasNoSource || showNoSourceClaims} key={i} placeholder />;
+            }
+          })
         : new Array(pageSize)
             .fill(1)
             .map((x, i) => (
