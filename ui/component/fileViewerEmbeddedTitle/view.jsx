@@ -31,9 +31,7 @@ function FileViewerEmbeddedTitle(props: Props) {
       <div className="file-viewer__embedded-gradient" />
       {preferEmbed ? (
         <div className="file-viewer__embedded-title ">
-          <span dir="auto" className="button__label">
-            {title}
-          </span>
+          <span dir="auto">{title}</span>
         </div>
       ) : (
         <Button
