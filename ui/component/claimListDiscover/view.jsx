@@ -376,9 +376,9 @@ function ClaimListDiscover(props: Props) {
 
   const hasMatureTags = tagsParam && tagsParam.split(',').some((t) => MATURE_TAGS.includes(t));
 
-  const mainSearchKey = createNormalizedClaimSearchKey(options);
-  let claimSearchResult = claimSearchByQuery[mainSearchKey];
-  const claimSearchResultLastPageReached = claimSearchByQueryLastPageReached[mainSearchKey];
+  const searchKey = createNormalizedClaimSearchKey(options);
+  const claimSearchResult = claimSearchByQuery[searchKey];
+  const claimSearchResultLastPageReached = claimSearchByQueryLastPageReached[searchKey];
 
   // uncomment to fix an item on a page
   //   const fixUri = 'lbry://@corbettreport#0/lbryodysee#5';
@@ -396,9 +396,6 @@ function ClaimListDiscover(props: Props) {
   //     claimSearchResult.splice(2, 0, fixUri);
   //   }
 
-  const [finalUris, setFinalUris] = React.useState(
-    getFinalUrisInitialState(history.action === 'POP', claimSearchResult)
-  );
   const [prevOptions, setPrevOptions] = React.useState(null);
 
   if (!isJustScrollingToNewPage(prevOptions, options)) {
@@ -460,6 +457,8 @@ function ClaimListDiscover(props: Props) {
     </div>
   );
 
+  const renderUris = uris || claimSearchResult;
+
   // **************************************************************************
   // Helpers
   // **************************************************************************
@@ -505,25 +504,6 @@ function ClaimListDiscover(props: Props) {
     }
   }
 
-  function urisEqual(prev: Array<string>, next: Array<string>) {
-    if (!prev || !next) {
-      // From 'ClaimList', "null" and "undefined" have special meaning,
-      // so we can't just compare array length here.
-      //   - null = "timed out"
-      //   - undefined = "no result".
-      return prev === next;
-    }
-    return prev.length === next.length && prev.every((value, index) => value === next[index]);
-  }
-
-  function getFinalUrisInitialState(isNavigatingBack, claimSearchResult) {
-    if (isNavigatingBack && claimSearchResult && claimSearchResult.length > 0) {
-      return claimSearchResult;
-    } else {
-      return [];
-    }
-  }
-
   function resolveOrderByOption(orderBy: string | Array<string>, sortBy: string | Array<string>) {
     const order_by =
       orderBy === CS.ORDER_BY_TRENDING
@@ -542,7 +522,7 @@ function ClaimListDiscover(props: Props) {
   // **************************************************************************
   // **************************************************************************
 
-  useFetchViewCount(fetchViewCount, finalUris, claimsByUri, doFetchViewCount);
+  useFetchViewCount(fetchViewCount, renderUris, claimsByUri, doFetchViewCount);
 
   React.useEffect(() => {
     if (shouldPerformSearch) {
@@ -550,21 +530,6 @@ function ClaimListDiscover(props: Props) {
       doClaimSearch(searchOptions);
     }
   }, [doClaimSearch, shouldPerformSearch, optionsStringForEffect, forceRefresh]);
-
-  // Resolve 'finalUri'
-  React.useEffect(() => {
-    if (uris) {
-      if (!urisEqual(uris, finalUris)) {
-        setFinalUris(uris);
-      }
-    } else {
-      // Wait until all queries are done before updating the uris to avoid layout shifts.
-      const pending = claimSearchResult === undefined;
-      if (!pending && !urisEqual(claimSearchResult, finalUris)) {
-        setFinalUris(claimSearchResult);
-      }
-    }
-  }, [uris, claimSearchResult, finalUris, setFinalUris]);
 
   const headerToUse = header || (
     <ClaimListHeader
@@ -603,7 +568,7 @@ function ClaimListDiscover(props: Props) {
           <ClaimList
             tileLayout
             loading={loading}
-            uris={finalUris}
+            uris={renderUris}
             onScrollBottom={handleScrollBottom}
             page={page}
             pageSize={dynamicPageSize}
@@ -635,7 +600,7 @@ function ClaimListDiscover(props: Props) {
           <ClaimList
             type={type}
             loading={loading}
-            uris={finalUris}
+            uris={renderUris}
             onScrollBottom={handleScrollBottom}
             page={page}
             pageSize={dynamicPageSize}
