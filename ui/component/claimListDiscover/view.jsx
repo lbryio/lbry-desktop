@@ -18,6 +18,7 @@ import { useIsLargeScreen } from 'effects/use-screensize';
 
 type Props = {
   uris: Array<string>,
+  prefixUris?: Array<string>,
   name?: string,
   type: string,
   pageSize?: number,
@@ -135,6 +136,7 @@ function ClaimListDiscover(props: Props) {
     injectedItem,
     feeAmount,
     uris,
+    prefixUris,
     tileLayout,
     hideFilters = false,
     claimIds,
@@ -569,6 +571,7 @@ function ClaimListDiscover(props: Props) {
             tileLayout
             loading={loading}
             uris={renderUris}
+            prefixUris={prefixUris}
             onScrollBottom={handleScrollBottom}
             page={page}
             pageSize={dynamicPageSize}
@@ -601,6 +604,7 @@ function ClaimListDiscover(props: Props) {
             type={type}
             loading={loading}
             uris={renderUris}
+            prefixUris={prefixUris}
             onScrollBottom={handleScrollBottom}
             page={page}
             pageSize={dynamicPageSize}

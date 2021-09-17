@@ -16,6 +16,7 @@ const SORT_OLD = 'old';
 
 type Props = {
   uris: Array<string>,
+  prefixUris?: Array<string>,
   header: Node | boolean,
   headerAltControls: Node,
   loading: boolean,
@@ -49,6 +50,7 @@ export default function ClaimList(props: Props) {
   const {
     activeUri,
     uris,
+    prefixUris,
     headerAltControls,
     loading,
     persistedStorageKey,
@@ -75,10 +77,15 @@ export default function ClaimList(props: Props) {
   } = props;
 
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
+
+  // Exclude prefix uris in these results variables. We don't want to show
+  // anything if the search failed or timed out.
   const timedOut = uris === null;
   const urisLength = (uris && uris.length) || 0;
 
-  const sortedUris = (urisLength > 0 && (currentSort === SORT_NEW ? uris : uris.slice().reverse())) || [];
+  const tileUris = (prefixUris || []).concat(uris);
+  const sortedUris = (urisLength > 0 && (currentSort === SORT_NEW ? tileUris : tileUris.slice().reverse())) || [];
+
   const noResultMsg = searchInLanguage
     ? __('No results. Contents may be hidden by the Language filter.')
     : __('No results');
@@ -117,7 +124,7 @@ export default function ClaimList(props: Props) {
   return tileLayout && !header ? (
     <section className="claim-grid">
       {urisLength > 0 &&
-        uris.map((uri) => (
+        tileUris.map((uri) => (
           <ClaimPreviewTile
             key={uri}
             uri={uri}
