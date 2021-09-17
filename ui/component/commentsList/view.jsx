@@ -14,7 +14,7 @@ import usePersistedState from 'effects/use-persisted-state';
 import { ENABLE_COMMENT_REACTIONS } from 'config';
 import Empty from 'component/common/empty';
 import debounce from 'util/debounce';
-import { useIsMobile } from 'effects/use-screensize';
+import { useIsMobile, useIsMediumScreen } from 'effects/use-screensize';
 import { getChannelIdFromClaim } from 'util/claim';
 
 const DEBOUNCE_SCROLL_HANDLER_MS = 200;
@@ -87,7 +87,8 @@ function CommentList(props: Props) {
     linkedCommentId ? 0 : MAX_LINKED_COMMENT_SCROLL_ATTEMPTS
   );
   const isMobile = useIsMobile();
-  const [expandedComments, setExpandedComments] = React.useState(!isMobile);
+  const isMediumScreen = useIsMediumScreen();
+  const [expandedComments, setExpandedComments] = React.useState(!isMobile && !isMediumScreen);
   const totalFetchedComments = allCommentIds ? allCommentIds.length : 0;
   const channelId = getChannelIdFromClaim(claim);
   const channelSettings = channelId ? settingsByChannelId[channelId] : undefined;
@@ -243,7 +244,7 @@ function CommentList(props: Props) {
     }
 
     const handleCommentScroll = debounce(() => {
-      if (!isMobile && shouldFetchNextPage(page, topLevelTotalPages, window, document)) {
+      if (!isMobile && !isMediumScreen && shouldFetchNextPage(page, topLevelTotalPages, window, document)) {
         setPage(page + 1);
       }
     }, DEBOUNCE_SCROLL_HANDLER_MS);
@@ -258,6 +259,7 @@ function CommentList(props: Props) {
     }
   }, [
     isMobile,
+    isMediumScreen,
     page,
     moreBelow,
     spinnerRef,
@@ -266,6 +268,13 @@ function CommentList(props: Props) {
     topLevelComments.length,
     topLevelTotalPages,
   ]);
+
+  // Expand comments
+  useEffect(() => {
+    if (!isMobile && !isMediumScreen && !expandedComments) {
+      setExpandedComments(true);
+    }
+  }, [isMobile, isMediumScreen, expandedComments]);
 
   return (
     <Card
@@ -340,7 +349,7 @@ function CommentList(props: Props) {
             {readyToDisplayComments && topLevelComments && getCommentElems(topLevelComments)}
           </ul>
 
-          {isMobile && (
+          {(isMobile || isMediumScreen) && (
             <div className="card__bottom-actions--comments">
               {(!expandedComments || moreBelow) && (
                 <Button
@@ -369,7 +378,7 @@ function CommentList(props: Props) {
             </div>
           )}
 
-          {(isFetchingComments || (!isMobile && moreBelow)) && (
+          {(isFetchingComments || (!isMobile && !isMediumScreen && moreBelow)) && (
             <div className="main--empty" ref={spinnerRef}>
               <Spinner type="small" />
             </div>
