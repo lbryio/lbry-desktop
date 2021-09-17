@@ -16,6 +16,7 @@ import Ads from 'web/component/ads';
 import LbcSymbol from 'component/common/lbc-symbol';
 import I18nMessage from 'component/i18nMessage';
 import moment from 'moment';
+import { getLivestreamUris } from 'util/livestream';
 
 type Props = {
   location: { search: string },
@@ -27,6 +28,8 @@ type Props = {
   isAuthenticated: boolean,
   dynamicRouteProps: RowDataItem,
   tileLayout: boolean,
+  activeLivestreams: ?LivestreamInfo,
+  doFetchActiveLivestreams: () => void,
 };
 
 function DiscoverPage(props: Props) {
@@ -39,6 +42,8 @@ function DiscoverPage(props: Props) {
     doResolveUri,
     isAuthenticated,
     tileLayout,
+    activeLivestreams,
+    doFetchActiveLivestreams,
     dynamicRouteProps,
   } = props;
   const buttonRef = useRef();
@@ -56,6 +61,8 @@ function DiscoverPage(props: Props) {
   // Eventually allow more than one tag on this page
   // Restricting to one to make follow/unfollow simpler
   const tag = (tags && tags[0]) || null;
+  const channelIds =
+    (dynamicRouteProps && dynamicRouteProps.options && dynamicRouteProps.options.channelIds) || undefined;
 
   const isFollowing = followedTags.map(({ name }) => name).includes(tag);
   let label = isFollowing ? __('Following --[button label indicating a channel has been followed]--') : __('Follow');
@@ -104,9 +111,14 @@ function DiscoverPage(props: Props) {
     );
   }
 
+  React.useEffect(() => {
+    doFetchActiveLivestreams();
+  }, []);
+
   return (
     <Page noFooter fullWidthPage={tileLayout}>
       <ClaimListDiscover
+        prefixUris={getLivestreamUris(activeLivestreams, channelIds)}
         hideAdvancedFilter={SIMPLE_SITE}
         hideFilters={SIMPLE_SITE ? !dynamicRouteProps : undefined}
         header={repostedUri ? <span /> : undefined}
@@ -131,9 +143,7 @@ function DiscoverPage(props: Props) {
             : undefined
         }
         feeAmount={SIMPLE_SITE ? !dynamicRouteProps && CS.FEE_AMOUNT_ANY : undefined}
-        channelIds={
-          (dynamicRouteProps && dynamicRouteProps.options && dynamicRouteProps.options.channelIds) || undefined
-        }
+        channelIds={channelIds}
         limitClaimsPerChannel={
           SIMPLE_SITE
             ? (dynamicRouteProps && dynamicRouteProps.options && dynamicRouteProps.options.limitClaimsPerChannel) ||

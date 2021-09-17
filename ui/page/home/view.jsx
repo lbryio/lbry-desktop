@@ -10,6 +10,7 @@ import ClaimPreviewTile from 'component/claimPreviewTile';
 import Icon from 'component/common/icon';
 import WaitUntilOnPage from 'component/common/wait-until-on-page';
 import { GetLinksData } from 'util/buildHomepage';
+import { getLivestreamUris } from 'util/livestream';
 
 // @if TARGET='web'
 import Pixel from 'web/component/pixel';
@@ -22,10 +23,20 @@ type Props = {
   subscribedChannels: Array<Subscription>,
   showNsfw: boolean,
   homepageData: any,
+  activeLivestreams: any,
+  doFetchActiveLivestreams: () => void,
 };
 
 function HomePage(props: Props) {
-  const { followedTags, subscribedChannels, authenticated, showNsfw, homepageData } = props;
+  const {
+    followedTags,
+    subscribedChannels,
+    authenticated,
+    showNsfw,
+    homepageData,
+    activeLivestreams,
+    doFetchActiveLivestreams,
+  } = props;
   const showPersonalizedChannels = (authenticated || !IS_WEB) && subscribedChannels && subscribedChannels.length > 0;
   const showPersonalizedTags = (authenticated || !IS_WEB) && followedTags && followedTags.length > 0;
   const showIndividualTags = showPersonalizedTags && followedTags.length < 5;
@@ -50,8 +61,15 @@ function HomePage(props: Props) {
         ))}
       </ul>
     );
+
     const claimTiles = (
-      <ClaimTilesDiscover {...options} showNoSourceClaims={ENABLE_NO_SOURCE_CLAIMS} hasSource pinUrls={pinUrls} />
+      <ClaimTilesDiscover
+        {...options}
+        showNoSourceClaims={ENABLE_NO_SOURCE_CLAIMS}
+        hasSource
+        prefixUris={getLivestreamUris(activeLivestreams, options.channelIds)}
+        pinUrls={pinUrls}
+      />
     );
 
     return (
@@ -85,6 +103,10 @@ function HomePage(props: Props) {
       </div>
     );
   }
+
+  React.useEffect(() => {
+    doFetchActiveLivestreams();
+  }, []);
 
   return (
     <Page fullWidthPage>

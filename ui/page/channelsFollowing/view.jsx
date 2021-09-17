@@ -10,21 +10,31 @@ import Page from 'component/page';
 import Button from 'component/button';
 import Icon from 'component/common/icon';
 import { splitBySeparator } from 'lbry-redux';
+import { getLivestreamUris } from 'util/livestream';
 
 type Props = {
   subscribedChannels: Array<Subscription>,
   tileLayout: boolean,
+  activeLivestreams: ?LivestreamInfo,
+  doFetchActiveLivestreams: () => void,
 };
 
 function ChannelsFollowingPage(props: Props) {
-  const { subscribedChannels, tileLayout } = props;
+  const { subscribedChannels, tileLayout, activeLivestreams, doFetchActiveLivestreams } = props;
+
   const hasSubsribedChannels = subscribedChannels.length > 0;
+  const channelIds = subscribedChannels.map((sub) => splitBySeparator(sub.uri)[1]);
+
+  React.useEffect(() => {
+    doFetchActiveLivestreams();
+  }, []);
 
   return !hasSubsribedChannels ? (
     <ChannelsFollowingDiscoverPage />
   ) : (
     <Page noFooter fullWidthPage={tileLayout}>
       <ClaimListDiscover
+        prefixUris={getLivestreamUris(activeLivestreams, channelIds)}
         hideAdvancedFilter={SIMPLE_SITE}
         streamType={SIMPLE_SITE ? CS.CONTENT_ALL : undefined}
         tileLayout={tileLayout}
@@ -35,7 +45,7 @@ function ChannelsFollowingPage(props: Props) {
           </span>
         }
         defaultOrderBy={CS.ORDER_BY_NEW}
-        channelIds={subscribedChannels.map((sub) => splitBySeparator(sub.uri)[1])}
+        channelIds={channelIds}
         meta={
           <Button
             icon={ICONS.SEARCH}
