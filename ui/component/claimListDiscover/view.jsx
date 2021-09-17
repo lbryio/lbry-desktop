@@ -13,6 +13,7 @@ import ClaimPreview from 'component/claimPreview';
 import ClaimPreviewTile from 'component/claimPreviewTile';
 import I18nMessage from 'component/i18nMessage';
 import ClaimListHeader from 'component/claimListHeader';
+import useFetchViewCount from 'effects/use-fetch-view-count';
 import { useIsLargeScreen } from 'effects/use-screensize';
 
 type Props = {
@@ -523,22 +524,6 @@ function ClaimListDiscover(props: Props) {
     }
   }
 
-  function fetchViewCountForUris(uris) {
-    const claimIds = [];
-
-    if (uris) {
-      uris.forEach((uri) => {
-        if (claimsByUri[uri]) {
-          claimIds.push(claimsByUri[uri].claim_id);
-        }
-      });
-    }
-
-    if (claimIds.length > 0) {
-      doFetchViewCount(claimIds.join(','));
-    }
-  }
-
   function resolveOrderByOption(orderBy: string | Array<string>, sortBy: string | Array<string>) {
     const order_by =
       orderBy === CS.ORDER_BY_TRENDING
@@ -556,6 +541,8 @@ function ClaimListDiscover(props: Props) {
 
   // **************************************************************************
   // **************************************************************************
+
+  useFetchViewCount(fetchViewCount, finalUris, claimsByUri, doFetchViewCount);
 
   React.useEffect(() => {
     if (shouldPerformSearch) {
@@ -578,12 +565,6 @@ function ClaimListDiscover(props: Props) {
       }
     }
   }, [uris, claimSearchResult, finalUris, setFinalUris]);
-
-  React.useEffect(() => {
-    if (fetchViewCount) {
-      fetchViewCountForUris(finalUris);
-    }
-  }, [finalUris]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const headerToUse = header || (
     <ClaimListHeader

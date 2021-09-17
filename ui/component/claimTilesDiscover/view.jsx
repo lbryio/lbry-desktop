@@ -3,6 +3,7 @@ import type { Node } from 'react';
 import React from 'react';
 import { createNormalizedClaimSearchKey } from 'lbry-redux';
 import ClaimPreviewTile from 'component/claimPreviewTile';
+import useFetchViewCount from 'effects/use-fetch-view-count';
 
 type SearchOptions = {
   page_size: number,
@@ -122,6 +123,8 @@ function ClaimTilesDiscover(props: Props) {
     uris.push(...Array(pageSize - uris.length).fill(''));
   }
 
+  useFetchViewCount(fetchViewCount, uris, claimsByUri, doFetchViewCount);
+
   // Run `doClaimSearch`
   React.useEffect(() => {
     if (shouldPerformSearch) {
@@ -129,27 +132,6 @@ function ClaimTilesDiscover(props: Props) {
       doClaimSearch(searchOptions);
     }
   }, [doClaimSearch, shouldPerformSearch, optionsStringForEffect]);
-
-  // Fetch view count for uris
-  React.useEffect(() => {
-    if (fetchViewCount && uris && uris.length > 0) {
-      const claimIds = [];
-
-      uris.forEach((uri) => {
-        if (uri && claimsByUri[uri]) {
-          claimIds.push(claimsByUri[uri].claim_id);
-        }
-      });
-
-      if (claimIds.length > 0) {
-        // TODO: this is a rough port. Need to only do this when necessary.
-        const TODO = true;
-        if (!TODO) {
-          doFetchViewCount(claimIds.join(','));
-        }
-      }
-    }
-  }, [uris, fetchViewCount]);
 
   return (
     <ul className="claim-grid">
