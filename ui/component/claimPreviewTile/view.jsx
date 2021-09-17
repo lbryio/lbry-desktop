@@ -48,10 +48,10 @@ type Props = {
   showMature: boolean,
   showHiddenByUser?: boolean,
   properties?: (Claim) => void,
-  live?: boolean,
   collectionId?: string,
   showNoSourceClaims?: boolean,
   isLivestream: boolean,
+  isLivestreamActive: boolean,
 };
 
 // preview image cards used in related video functionality
@@ -75,9 +75,9 @@ function ClaimPreviewTile(props: Props) {
     showMature,
     showHiddenByUser,
     properties,
-    live,
     showNoSourceClaims,
     isLivestream,
+    isLivestreamActive,
     collectionId,
     mediaDuration,
   } = props;
@@ -192,7 +192,7 @@ function ClaimPreviewTile(props: Props) {
   }
 
   let liveProperty = null;
-  if (live === true) {
+  if (isLivestreamActive === true) {
     liveProperty = (claim) => <>LIVE</>;
   }
 
@@ -201,7 +201,7 @@ function ClaimPreviewTile(props: Props) {
       onClick={handleClick}
       className={classnames('card claim-preview--tile', {
         'claim-preview__wrapper--channel': isChannel,
-        'claim-preview__live': live,
+        'claim-preview__live': isLivestreamActive,
       })}
     >
       <NavLink {...navLinkProps} role="none" tabIndex={-1} aria-hidden>
