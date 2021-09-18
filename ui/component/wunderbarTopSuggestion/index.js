@@ -1,7 +1,14 @@
 import { connect } from 'react-redux';
-import { doResolveUris, makeSelectClaimForUri, makeSelectIsUriResolving, parseURI } from 'lbry-redux';
+import {
+  doResolveUris,
+  makeSelectClaimForUri,
+  makeSelectIsUriResolving,
+  makeSelectTagInClaimOrChannelForUri,
+  parseURI,
+} from 'lbry-redux';
 import { makeSelectWinningUriForQuery } from 'redux/selectors/search';
 import WunderbarTopSuggestion from './view';
+import { PREFERENCE_EMBED } from 'constants/tags';
 
 const select = (state, props) => {
   const uriFromQuery = `lbry://${props.query}`;
@@ -16,11 +23,12 @@ const select = (state, props) => {
     }
   } catch (e) {}
 
-  const resolvingUris = uris.some(uri => makeSelectIsUriResolving(uri)(state));
+  const resolvingUris = uris.some((uri) => makeSelectIsUriResolving(uri)(state));
   const winningUri = makeSelectWinningUriForQuery(props.query)(state);
   const winningClaim = winningUri ? makeSelectClaimForUri(winningUri)(state) : undefined;
+  const preferEmbed = makeSelectTagInClaimOrChannelForUri(winningUri, PREFERENCE_EMBED)(state);
 
-  return { resolvingUris, winningUri, winningClaim, uris };
+  return { resolvingUris, winningUri, winningClaim, uris, preferEmbed };
 };
 
 export default connect(select, {

@@ -14,8 +14,10 @@ export const DEFAULT_FOLLOWED_TAGS = [
 ];
 
 export const DISABLE_COMMENTS_TAG = 'disable-comments';
+export const DISABLE_SUPPORT_TAG = 'disable-support';
+export const PREFERENCE_EMBED = 'preference-embed';
 
-export const UTILITY_TAGS = [DISABLE_COMMENTS_TAG];
+export const UTILITY_TAGS = [DISABLE_COMMENTS_TAG, DISABLE_SUPPORT_TAG, PREFERENCE_EMBED];
 
 export const MATURE_TAGS = [
   'porn',

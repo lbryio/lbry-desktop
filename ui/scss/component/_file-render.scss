@@ -301,6 +301,10 @@
 .file-viewer__embedded-title {
   max-width: 75%;
   z-index: 2;
+  display: flex;
+  align-items: center;
+  padding-left: var(--spacing-s);
+  color: white;
 }
 
 .file-viewer__embedded-info {

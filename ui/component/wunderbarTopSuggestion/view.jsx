@@ -8,10 +8,11 @@ type Props = {
   doResolveUris: (Array<string>) => void,
   uris: Array<string>,
   resolvingUris: boolean,
+  preferEmbed: boolean,
 };
 
 export default function WunderbarTopSuggestion(props: Props) {
-  const { uris, resolvingUris, winningUri, doResolveUris } = props;
+  const { uris, resolvingUris, winningUri, doResolveUris, preferEmbed } = props;
 
   const stringifiedUris = JSON.stringify(uris);
   React.useEffect(() => {
@@ -38,7 +39,7 @@ export default function WunderbarTopSuggestion(props: Props) {
     );
   }
 
-  if (!winningUri) {
+  if (!winningUri || preferEmbed) {
     return null;
   }
 

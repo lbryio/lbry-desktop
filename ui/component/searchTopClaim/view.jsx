@@ -17,12 +17,13 @@ type Props = {
   winningUri: ?string,
   doResolveUris: (Array<string>) => void,
   hideLink?: boolean,
-  setChannelActive: boolean => void,
-  beginPublish: string => void,
+  setChannelActive: (boolean) => void,
+  beginPublish: (string) => void,
   pendingIds: Array<string>,
   isResolvingWinningUri: boolean,
   winningClaim: ?Claim,
   isSearching: boolean,
+  preferEmbed: boolean,
 };
 
 export default function SearchTopClaim(props: Props) {
@@ -36,6 +37,7 @@ export default function SearchTopClaim(props: Props) {
     beginPublish,
     isResolvingWinningUri,
     isSearching,
+    preferEmbed,
   } = props;
   const uriFromQuery = `lbry://${query}`;
   const { push } = useHistory();
@@ -88,17 +90,19 @@ export default function SearchTopClaim(props: Props) {
       )}
       {winningUri && winningClaim && (
         <div className="card">
-          <ClaimPreview
-            hideRepostLabel
-            showNullPlaceholder
-            uri={winningUri}
-            properties={claim => (
-              <span className="claim-preview__custom-properties">
-                <ClaimRepostAuthor short uri={winningUri} />
-                <ClaimEffectiveAmount uri={winningUri} />
-              </span>
-            )}
-          />
+          {preferEmbed && (
+            <ClaimPreview
+              hideRepostLabel
+              showNullPlaceholder
+              uri={winningUri}
+              properties={(claim) => (
+                <span className="claim-preview__custom-properties">
+                  <ClaimRepostAuthor short uri={winningUri} />
+                  <ClaimEffectiveAmount uri={winningUri} />
+                </span>
+              )}
+            />
+          )}
         </div>
       )}
       {!winningUri && (isSearching || isResolvingWinningUri) && (
