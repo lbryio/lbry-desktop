@@ -1956,3 +1956,13 @@ This release includes a breaking change that will reset many of your settings. T
 - Use local file for publishing
 - Use local file and html5 for video playback
 - Misc changes needed to make UI compatible with electron.
+
+## [Stream Key Button] - 2021-09-18
+
+### Added
+
+- Stream Key button
+
+### Fixed
+
+- Stream Key is now hidden.
