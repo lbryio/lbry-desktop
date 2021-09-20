@@ -190,13 +190,18 @@
 
   .file-page__recommended {
     width: 25rem;
+
+    @media (max-width: $breakpoint-medium) {
+      width: 100%;
+    }
   }
 
   .file-page__secondary-content {
     padding: 0 var(--spacing-s);
+    flex-direction: row;
 
-    @media (min-width: $breakpoint-medium) {
-      flex-direction: row;
+    @media (max-width: $breakpoint-medium) {
+      flex-direction: column;
     }
   }
 }
