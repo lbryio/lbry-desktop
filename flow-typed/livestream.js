@@ -26,6 +26,8 @@ declare type LivestreamState = {
   viewersById: {},
   fetchingActiveLivestreams: boolean,
   activeLivestreams: ?LivestreamInfo,
+  activeLivestreamsLastFetchedDate: number,
+  activeLivestreamsLastFetchedOptions: {},
 }
 
 declare type LivestreamInfo = {
