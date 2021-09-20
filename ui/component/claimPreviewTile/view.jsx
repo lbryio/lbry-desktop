@@ -276,4 +276,34 @@ function ClaimPreviewTile(props: Props) {
   );
 }
 
-export default withRouter(ClaimPreviewTile);
+export default React.memo<Props>(withRouter(ClaimPreviewTile), areEqual);
+
+const BLOCKLIST_KEYS = ['blackListedOutpoints', 'filteredOutpoints', 'blockedChannelUris'];
+const HANDLED_KEYS = [...BLOCKLIST_KEYS, 'date'];
+
+function areEqual(prev: Props, next: Props) {
+  for (let i = 0; i < BLOCKLIST_KEYS.length; ++i) {
+    const key = BLOCKLIST_KEYS[i];
+    const a = prev[key];
+    const b = next[key];
+
+    if (((!a || !b) && a !== b) || (a && b && a.length !== b.length)) {
+      // The arrays are huge, so just compare the length instead of each entry.
+      return false;
+    }
+  }
+
+  if (Number(prev.date) !== Number(next.date)) {
+    return false;
+  }
+
+  const propKeys = Object.keys(next);
+  for (let i = 0; i < propKeys.length; ++i) {
+    const pk = propKeys[i];
+    if (!HANDLED_KEYS.includes(pk) && prev[pk] !== next[pk]) {
+      return false;
+    }
+  }
+
+  return true;
+}
