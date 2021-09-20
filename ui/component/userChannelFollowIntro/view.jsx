@@ -59,6 +59,7 @@ function UserChannelFollowIntro(props: Props) {
           <div className="section__body">
             <ClaimListDiscover
               hideFilters={SIMPLE_SITE}
+              hideAdvancedFilter={SIMPLE_SITE}
               meta={
                 <Button
                   button={subscribedChannels.length < 1 ? 'alt' : 'primary'}
