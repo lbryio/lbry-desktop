@@ -24,7 +24,12 @@ export default function FileViewCountInline(props: Props) {
     formattedViewCount = Number(viewCount).toLocaleString();
   }
 
-  if (!viewCount || (claim && claim.repost_url) || isLivestream) {
+  // Limit the view-count visibility to Channel Pages for now. I believe we'll
+  // eventually show it everywhere, so this band-aid would be the easiest to
+  // clean up (only one place edit/remove).
+  const isChannelPage = window.location.pathname.startsWith('/@');
+
+  if (!viewCount || (claim && claim.repost_url) || isLivestream || !isChannelPage) {
     // (1) Currently, makeSelectViewCountForUri doesn't differentiate between
     // un-fetched view-count vs zero view-count. But since it's probably not
     // ideal to highlight that a view has 0 count, let's just not show anything.
