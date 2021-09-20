@@ -7,6 +7,7 @@ const defaultState: LivestreamState = {
   viewersById: {},
   fetchingActiveLivestreams: false,
   activeLivestreams: null,
+  lastFetchedActiveLivestreams: 0,
 };
 
 export default handleActions(
@@ -45,8 +46,13 @@ export default handleActions(
       return { ...state, fetchingActiveLivestreams: false };
     },
     [ACTIONS.FETCH_ACTIVE_LIVESTREAMS_COMPLETED]: (state: LivestreamState, action: any) => {
-      const activeLivestreams: LivestreamInfo = action.data;
-      return { ...state, fetchingActiveLivestreams: false, activeLivestreams };
+      const { activeLivestreams, lastFetchedActiveLivestreams } = action.data;
+      return {
+        ...state,
+        fetchingActiveLivestreams: false,
+        activeLivestreams,
+        lastFetchedActiveLivestreams,
+      };
     },
   },
   defaultState

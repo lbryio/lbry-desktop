@@ -33,19 +33,26 @@ export const doFetchNoSourceClaims = (channelId: string) => async (dispatch: Dis
   }
 };
 
-export const doFetchActiveLivestreams = () => {
-  return async (dispatch: Dispatch) => {
-    dispatch({
-      type: ACTIONS.FETCH_ACTIVE_LIVESTREAMS_STARTED,
-    });
+const FETCH_ACTIVE_LIVESTREAMS_MIN_INTERVAL_MS = 5 * 60 * 1000;
+
+export const doFetchActiveLivestreams = (forceFetch: boolean) => {
+  return async (dispatch: Dispatch, getState: GetState) => {
+    const state = getState();
+    const now = Date.now();
+    const timeDelta = now - state.livestream.lastFetchedActiveLivestreams;
+
+    if (!forceFetch && timeDelta < FETCH_ACTIVE_LIVESTREAMS_MIN_INTERVAL_MS) {
+      dispatch({ type: ACTIONS.FETCH_ACTIVE_LIVESTREAMS_SKIPPED });
+      return;
+    }
+
+    dispatch({ type: ACTIONS.FETCH_ACTIVE_LIVESTREAMS_STARTED });
 
     fetch(LIVESTREAM_LIVE_API)
       .then((res) => res.json())
       .then((res) => {
         if (!res.data) {
-          dispatch({
-            type: ACTIONS.FETCH_ACTIVE_LIVESTREAMS_FAILED,
-          });
+          dispatch({ type: ACTIONS.FETCH_ACTIVE_LIVESTREAMS_FAILED });
           return;
         }
 
@@ -88,19 +95,18 @@ export const doFetchActiveLivestreams = () => {
 
             dispatch({
               type: ACTIONS.FETCH_ACTIVE_LIVESTREAMS_COMPLETED,
-              data: activeLivestreams,
+              data: {
+                activeLivestreams,
+                lastFetchedActiveLivestreams: now,
+              },
             });
           })
           .catch(() => {
-            dispatch({
-              type: ACTIONS.FETCH_ACTIVE_LIVESTREAMS_FAILED,
-            });
+            dispatch({ type: ACTIONS.FETCH_ACTIVE_LIVESTREAMS_FAILED });
           });
       })
       .catch((err) => {
-        dispatch({
-          type: ACTIONS.FETCH_ACTIVE_LIVESTREAMS_FAILED,
-        });
+        dispatch({ type: ACTIONS.FETCH_ACTIVE_LIVESTREAMS_FAILED });
       });
   };
 };
