@@ -64,6 +64,7 @@ type Props = {
   previousListUri: string,
   videoTheaterMode: boolean,
   isMarkdownOrComment: boolean,
+  preferEmbed: boolean,
 };
 
 /*
@@ -106,6 +107,7 @@ function VideoViewer(props: Props) {
     previousListUri,
     videoTheaterMode,
     isMarkdownOrComment,
+    preferEmbed,
   } = props;
   const permanentUrl = claim && claim.permanent_url;
   const adApprovedChannelIds = homepageData ? getAllIds(homepageData) : [];
@@ -353,7 +355,9 @@ function VideoViewer(props: Props) {
 
     // first play tracking, used for initializing the watchman api
     player.on('tracking:firstplay', doTrackingFirstPlay);
-    player.on('ended', () => setEnded(true));
+    player.on('ended', () => {
+      if (!preferEmbed) setEnded(true);
+    });
     player.on('play', onPlay);
     player.on('pause', (event) => onPause(event, player));
     player.on('dispose', (event) => onDispose(event, player));
