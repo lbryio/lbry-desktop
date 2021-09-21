@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import Button from 'component/button';
+import * as ICONS from 'constants/icons';
 import { formatLbryUrlForWeb } from 'util/url';
 import { withRouter } from 'react-router';
 import { URL, SITE_NAME } from 'config';
@@ -34,6 +35,7 @@ function FileViewerEmbeddedEnded(props: Props) {
   // $FlowFixMe
   const prompt = prompts[promptKey];
   const lbrytvLink = `${URL}${formatLbryUrlForWeb(uri)}?src=${promptKey}`;
+  const showReplay = Boolean(window.player);
 
   return (
     <div className="file-viewer__overlay">
@@ -44,11 +46,22 @@ function FileViewerEmbeddedEnded(props: Props) {
       </div>
       {!preferEmbed && (
         <>
-          <div className="file-viewer__overlay-title file-viewer_embed-ended-title">{prompt}</div>
+          <div className="file-viewer__overlay-title file-viewer_embed-ended-title">
+            <p>{prompt}</p>
+          </div>
           <div className="file-viewer__overlay-actions">
-            { /* add button to replay? */ }
             <>
-              <Button label={__('Rewatch or Discuss')} button="primary" href={lbrytvLink} />
+              {showReplay && (
+                <Button
+                  title={__('Replay')}
+                  button="link"
+                  iconRight={ICONS.REPLAY}
+                  onClick={() => {
+                    if (window.player) window.player.play();
+                  }}
+                />
+              )}
+              <Button label={__('Discuss')} iconRight={ICONS.EXTERNAL} button="primary" href={lbrytvLink} />
               {!isAuthenticated && (
                 <Button
                   label={__('Join %SITE_NAME%', { SITE_NAME })}
