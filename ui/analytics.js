@@ -12,9 +12,9 @@ import { generateInitialUrl } from 'util/url';
 import { MATOMO_ID, MATOMO_URL } from 'config';
 import getConnectionSpeed from 'util/detect-user-bandwidth';
 
-let userDownloadBandwidth;
+let userDownloadBandwidthInBitsPerSecond;
 async function getUserBandwidth() {
-  userDownloadBandwidth = await getConnectionSpeed();
+  userDownloadBandwidthInBitsPerSecond = await getConnectionSpeed();
 }
 
 getUserBandwidth();
@@ -120,7 +120,7 @@ function getDeviceType() {
 // variables initialized for watchman
 let amountOfBufferEvents = 0;
 let amountOfBufferTimeInMS = 0;
-let videoType, userId, claimUrl, playerPoweredBy, videoPlayer;
+let videoType, userId, claimUrl, playerPoweredBy, videoPlayer, bitrateAsBitsPerSecond;
 let lastSentTime;
 
 // calculate data for backend, send them, and reset buffer data for next interval
@@ -161,6 +161,8 @@ async function sendAndResetWatchmanData() {
     user_id: userId.toString(),
     position: Math.round(positionInVideo),
     rel_position: Math.round((positionInVideo / (totalDurationInSeconds * 1000)) * 100),
+    ...(userDownloadBandwidthInBitsPerSecond && {bandwidth: userDownloadBandwidthInBitsPerSecond}), // add bandwidth if populated
+    ...(bitrateAsBitsPerSecond && {bitrate: bitrateAsBitsPerSecond}), // add bitrate if video (audio doesn't work)
   };
 
   // post to watchman
@@ -213,8 +215,6 @@ async function sendWatchmanData(body) {
 const analytics: Analytics = {
   // receive buffer events from tracking plugin and save buffer amounts and times for backend call
   videoBufferEvent: async (claim, data) => {
-    console.log('running here!');
-    console.log(data);
     amountOfBufferEvents = amountOfBufferEvents + 1;
     amountOfBufferTimeInMS = amountOfBufferTimeInMS + data.bufferDuration;
   },
@@ -251,7 +251,7 @@ const analytics: Analytics = {
       startWatchmanIntervalIfNotRunning();
     }
   },
-  videoStartEvent: (claimId, duration, poweredBy, passedUserId, canonicalUrl, passedPlayer) => {
+  videoStartEvent: (claimId, duration, poweredBy, passedUserId, canonicalUrl, passedPlayer, videoBitrate) => {
     // populate values for watchman when video starts
     userId = passedUserId;
     claimUrl = canonicalUrl;
@@ -259,6 +259,7 @@ const analytics: Analytics = {
 
     videoType = passedPlayer.currentSource().type;
     videoPlayer = passedPlayer;
+    bitrateAsBitsPerSecond = videoBitrate;
 
     sendPromMetric('time_to_start', duration);
     sendMatomoEvent('Media', 'TimeToStart', claimId, duration);
