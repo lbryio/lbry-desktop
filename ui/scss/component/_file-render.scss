@@ -196,7 +196,11 @@
 }
 
 .file-viewer_embed-ended-title {
-  white-space: pre-wrap;
+  max-width: 100%;
+  p {
+    font-size: 6vh;
+    white-space: pre-wrap;
+  }
 }
 
 .content__viewer--floating {
