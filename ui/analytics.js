@@ -12,11 +12,13 @@ import { generateInitialUrl } from 'util/url';
 import { MATOMO_ID, MATOMO_URL } from 'config';
 import getConnectionSpeed from 'util/detect-user-bandwidth';
 
-let downloadSpeed;
-getConnectionSpeed(function(speedInMbps){
-  downloadSpeed = speedInMbps;
-  console.log(downloadSpeed);
-});
+let userDownloadBandwidth;
+async function getUserBandwidth() {
+  userDownloadBandwidth = await getConnectionSpeed();
+}
+
+getUserBandwidth();
+setInterval(getUserBandwidth, 1000 * 30);
 
 const isProduction = process.env.NODE_ENV === 'production';
 const devInternalApis = process.env.LBRY_API_URL && process.env.LBRY_API_URL.includes('dev');
