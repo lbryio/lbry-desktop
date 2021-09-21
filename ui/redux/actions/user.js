@@ -131,20 +131,24 @@ export function doAuthenticate(
       const user = await Lbryio.fetchUser(DOMAIN, getDefaultLanguage());
       console.log('USER', user);
       if (sessionStorageAvailable) window.sessionStorage.removeItem(AUTH_IN_PROGRESS);
-      // put this back , accessToken: tokens.access_token
-      Lbryio.getTokens().then((tokens) => {
-        dispatch({
-          type: ACTIONS.AUTHENTICATION_SUCCESS,
-          data: { user, accessToken: tokens.auth_token }, // rename 'accessToken' = auth_token
-        });
-        if (shareUsageData) {
-          dispatch(doRewardList());
-          dispatch(doFetchInviteStatus(false));
-          if (callInstall) {
-            doInstallNew(appVersion, callbackForUsersWhoAreSharingData, DOMAIN);
+      // put this back: accessToken: tokens.access_token
+      if (user.error) {
+        throw new Error(user.error.message);
+      } else {
+        Lbryio.getTokens().then((tokens) => {
+          dispatch({
+            type: ACTIONS.AUTHENTICATION_SUCCESS,
+            data: { user, accessToken: tokens.auth_token }, // rename 'accessToken' = authToken
+          });
+          if (shareUsageData) {
+            dispatch(doRewardList());
+            dispatch(doFetchInviteStatus(false));
+            if (callInstall) {
+              doInstallNew(appVersion, callbackForUsersWhoAreSharingData, DOMAIN);
+            }
           }
-        }
-      });
+        });
+      }
     } catch (error) {
       if (sessionStorageAvailable) window.sessionStorage.removeItem(AUTH_IN_PROGRESS);
 
