@@ -21,6 +21,7 @@ import { doAlertWaitingForSync } from 'redux/actions/app';
 
 const isDev = process.env.NODE_ENV !== 'production';
 const FETCH_API_FAILED_TO_FETCH = 'Failed to fetch';
+const PROMISE_FULFILLED = 'fulfilled';
 
 declare type CommentronErrorMap = {
   [string]: {
@@ -1377,9 +1378,7 @@ export function doFetchCommentModAmIList(channelClaim: ChannelClaim) {
     const state = getState();
     const myChannels = selectMyChannelClaims(state);
 
-    dispatch({
-      type: ACTIONS.COMMENT_MODERATION_AM_I_LIST_STARTED,
-    });
+    dispatch({ type: ACTIONS.COMMENT_MODERATION_AM_I_LIST_STARTED });
 
     let channelSignatures = [];
 
@@ -1399,13 +1398,13 @@ export function doFetchCommentModAmIList(channelClaim: ChannelClaim) {
               })
             )
         )
-          .then((res) => {
+          .then((results) => {
             const delegatorsById = {};
 
-            channelSignatures.forEach((chanSig, index) => {
-              if (chanSig && res[index]) {
-                const value = res[index].value;
-                delegatorsById[chanSig.claim_id] = {
+            results.forEach((result, index) => {
+              if (result.status === PROMISE_FULFILLED) {
+                const value = result.value;
+                delegatorsById[value.channel_id] = {
                   global: value ? value.type === 'Global' : false,
                   delegators: value && value.authorized_channels ? value.authorized_channels : {},
                 };
@@ -1418,15 +1417,12 @@ export function doFetchCommentModAmIList(channelClaim: ChannelClaim) {
             });
           })
           .catch((err) => {
-            dispatch({
-              type: ACTIONS.COMMENT_MODERATION_AM_I_LIST_FAILED,
-            });
+            devToast(dispatch, `AmI: ${err}`);
+            dispatch({ type: ACTIONS.COMMENT_MODERATION_AM_I_LIST_FAILED });
           });
       })
       .catch(() => {
-        dispatch({
-          type: ACTIONS.COMMENT_MODERATION_AM_I_LIST_FAILED,
-        });
+        dispatch({ type: ACTIONS.COMMENT_MODERATION_AM_I_LIST_FAILED });
       });
   };
 }
