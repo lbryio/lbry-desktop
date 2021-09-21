@@ -6,7 +6,6 @@ import {
   COLLECTIONS_CONSTS,
   makeSelectNextUrlForCollectionAndUrl,
   makeSelectPreviousUrlForCollectionAndUrl,
-  makeSelectTagInClaimOrChannelForUri,
 } from 'lbry-redux';
 import {
   doChangeVolume,
@@ -25,7 +24,6 @@ import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
 import { selectDaemonSettings, makeSelectClientSetting, selectHomepageData } from 'redux/selectors/settings';
 import { toggleVideoTheaterMode, toggleAutoplayNext, doSetClientSetting } from 'redux/actions/settings';
 import { selectUserVerifiedEmail, selectUser } from 'redux/selectors/user';
-import { PREFERENCE_EMBED } from 'constants/tags';
 
 const select = (state, props) => {
   const { search } = props.location;
@@ -56,7 +54,6 @@ const select = (state, props) => {
     nextRecommendedUri,
     previousListUri,
     isMarkdownOrComment,
-    preferEmbed: makeSelectTagInClaimOrChannelForUri(props.uri, PREFERENCE_EMBED)(state),
     autoplayIfEmbedded: Boolean(autoplay),
     autoplayNext: makeSelectClientSetting(SETTINGS.AUTOPLAY_NEXT)(state),
     volume: selectVolume(state),
