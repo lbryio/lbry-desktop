@@ -46,7 +46,9 @@ function FileViewerEmbeddedEnded(props: Props) {
       </div>
       {!preferEmbed && (
         <>
-          <div className="file-viewer__overlay-title file-viewer_embed-ended-title">{prompt}</div>
+          <div className="file-viewer__overlay-title file-viewer_embed-ended-title">
+            <p>{prompt}</p>
+          </div>
           <div className="file-viewer__overlay-actions">
             <>
               {showReplay && (
