@@ -14,9 +14,7 @@ async function measureConnectionSpeed() {
   const duration = (endTime - startTime) / 1000;
   const bitsLoaded = downloadSize * 8;
   const speedBps = (bitsLoaded / duration).toFixed(2);
-  const speedKbps = (speedBps / 1024).toFixed(2);
-  const speedMbps = (speedKbps / 1024).toFixed(2);
-  return speedMbps;
+  return Math.round(Number(speedBps));
 }
 
 module.exports = measureConnectionSpeed;
