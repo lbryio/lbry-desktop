@@ -231,6 +231,10 @@
   .button + .button {
     margin-left: var(--spacing-m);
   }
+
+  .button--link {
+    vertical-align: middle;
+  }
 }
 
 .file-viewer__overlay-logo {
