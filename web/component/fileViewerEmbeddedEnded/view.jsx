@@ -44,23 +44,25 @@ function FileViewerEmbeddedEnded(props: Props) {
           <Logo type={'embed'} />
         </Button>
       </div>
-      {!preferEmbed && (
+
+      <div className="file-viewer__overlay-title file-viewer_embed-ended-title">
+        <p>{prompt}</p>
+      </div>
+      <div className="file-viewer__overlay-actions">
         <>
-          <div className="file-viewer__overlay-title file-viewer_embed-ended-title">
-            <p>{prompt}</p>
-          </div>
-          <div className="file-viewer__overlay-actions">
+          {showReplay && (
+            <Button
+              title={__('Replay')}
+              button="link"
+              label={preferEmbed ? __('Replay') : undefined}
+              iconRight={ICONS.REPLAY}
+              onClick={() => {
+                if (window.player) window.player.play();
+              }}
+            />
+          )}
+          {!preferEmbed && (
             <>
-              {showReplay && (
-                <Button
-                  title={__('Replay')}
-                  button="link"
-                  iconRight={ICONS.REPLAY}
-                  onClick={() => {
-                    if (window.player) window.player.play();
-                  }}
-                />
-              )}
               <Button label={__('Discuss')} iconRight={ICONS.EXTERNAL} button="primary" href={lbrytvLink} />
               {!isAuthenticated && (
                 <Button
@@ -70,9 +72,9 @@ function FileViewerEmbeddedEnded(props: Props) {
                 />
               )}
             </>
-          </div>
+          )}
         </>
-      )}
+      </div>
     </div>
   );
 }
