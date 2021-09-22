@@ -556,13 +556,23 @@
 .claim-tile__info {
   display: flex;
   margin-top: var(--spacing-s);
-  padding: var(--spacing-s);
   border-top: 1px solid var(--color-border);
   color: var(--color-subtitle);
+  padding: var(--spacing-s);
+
+  // accommodating for large view counts on channel overview
+  @media (min-width: $breakpoint-large) {
+    padding: var(--spacing-s) 4px;
+  }
 
   .channel-thumbnail {
     @include handleChannelGif(2.1rem);
     margin-right: var(--spacing-s);
+
+    // accommodating for large view counts on channel overview
+    @media (min-width: $breakpoint-large) {
+      margin-right: 4px;
+    }
   }
 }
 
@@ -608,7 +618,13 @@
 .view_count {
   &::after {
     content: '•';
-    margin: 0 var(--spacing-xxs);
+    margin: 0 4px;
+  }
+
+  @media (min-width: $breakpoint-large) {
+    &::after {
+      margin: 0 2.5px;
+    }
   }
 }
 

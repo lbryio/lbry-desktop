@@ -15,6 +15,7 @@ export default function FileViewCountInline(props: Props) {
   let formattedViewCount;
 
   try {
+    // SI notation that changes 1234 to 1.2K, look up Intl.NumberFormat() for docs
     formattedViewCount = Number(viewCount).toLocaleString(lang || 'en', {
       compactDisplay: 'short',
       notation: 'compact',
