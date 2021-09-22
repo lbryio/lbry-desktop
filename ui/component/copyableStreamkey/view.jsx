@@ -12,10 +12,11 @@ type Props = {
   primaryButton?: boolean,
   name?: string,
   onCopy?: (string) => string,
+  enableMask?: boolean,
 };
 
 export default function CopyableText(props: Props) {
-  const { copyable, doToast, snackMessage, label, primaryButton = false, name, onCopy } = props;
+  const { copyable, doToast, snackMessage, label, primaryButton = false, name, onCopy, enableMask = true } = props;
 
   const input = useRef();
 
@@ -39,9 +40,18 @@ export default function CopyableText(props: Props) {
     }
   }
 
+  function enableMaskType() {
+    if (enableMask === true) {
+      return 'password';
+    }
+    if (enableMask === false) {
+      return 'text';
+    }
+  }
+
   return (
     <FormField
-      type="password"
+      type={enableMaskType()}
       className="form-field--copyable"
       readOnly
       name={name}
