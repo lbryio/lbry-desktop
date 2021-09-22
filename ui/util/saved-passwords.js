@@ -6,6 +6,7 @@ const domain =
   typeof window === 'object' && window.location.hostname.includes('localhost') ? window.location.hostname : DOMAIN;
 const isProduction = process.env.NODE_ENV === 'production';
 const maxExpiration = 2147483647;
+const { default: keycloak } = require('util/keycloak');
 let sessionPassword;
 
 function setCookie(name, value, expirationDaysOnWeb) {
@@ -103,8 +104,12 @@ function getAuthToken() {
 }
 
 // will take oidc token getter
+// function getTokens() {
+//   return { auth_token: getAuthToken(), access_token: null };
+// }
+
 function getTokens() {
-  return { auth_token: getAuthToken(), access_token: null };
+  return { auth_token: getAuthToken(), access_token: keycloak.token };
 }
 
 function setAuthToken(value) {

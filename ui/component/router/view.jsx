@@ -10,8 +10,9 @@ import { parseURI, isURIValid } from 'lbry-redux';
 import { SITE_TITLE, WELCOME_VERSION, SIMPLE_SITE } from 'config';
 import LoadingBarOneOff from 'component/loadingBarOneOff';
 import { GetLinksData } from 'util/buildHomepage';
-
+import { useKeycloak } from '@react-keycloak/web';
 import HomePage from 'page/home';
+import Login from 'component/auth/login';
 
 // @if TARGET='app'
 const BackupPage = lazyImport(() => import('page/backup' /* webpackChunkName: "backup" */));
@@ -22,7 +23,7 @@ const Code2257Page = lazyImport(() => import('web/page/code2257' /* webpackChunk
 // @endif
 
 // Chunk: "secondary"
-const SignInPage = lazyImport(() => import('page/signIn' /* webpackChunkName: "secondary" */));
+// const SignInPage = lazyImport(() => import('page/signIn' /* webpackChunkName: "secondary" */));
 const SignInWalletPasswordPage = lazyImport(() =>
   import('page/signInWalletPassword' /* webpackChunkName: "secondary" */)
 );
@@ -86,7 +87,6 @@ const TopPage = lazyImport(() => import('page/top' /* webpackChunkName: "seconda
 const UpdatePasswordPage = lazyImport(() => import('page/passwordUpdate' /* webpackChunkName: "passwordUpdate" */));
 const Welcome = lazyImport(() => import('page/welcome' /* webpackChunkName: "secondary" */));
 const YoutubeSyncPage = lazyImport(() => import('page/youtubeSync' /* webpackChunkName: "secondary" */));
-
 // Tell the browser we are handling scroll restoration
 if ('scrollRestoration' in history) {
   history.scrollRestoration = 'manual';
@@ -128,14 +128,20 @@ function PrivateRoute(props: PrivateRouteProps) {
   const { component: Component, isAuthenticated, ...rest } = props;
   const urlSearchParams = new URLSearchParams(props.location.search);
   const redirectUrl = urlSearchParams.get('redirect');
+  const { keycloak } = useKeycloak();
   return (
     <Route
       {...rest}
       render={(props) =>
-        isAuthenticated || !IS_WEB ? (
+        (isAuthenticated || (keycloak && keycloak.authenticated)) || !IS_WEB ? (
           <Component {...props} />
         ) : (
-          <Redirect to={`/$/${PAGES.AUTH}?redirect=${redirectUrl || props.location.pathname}`} />
+          <Redirect
+            to={{
+              pathname: `/$/${PAGES.AUTH}?redirect=${redirectUrl || props.location.pathname}`,
+              state: { from: props.location },
+            }}
+          />
         )
       }
     />
@@ -264,10 +270,10 @@ function AppRouter(props: Props) {
           />
         ))}
 
-        <Route path={`/$/${PAGES.AUTH_SIGNIN}`} exact component={SignInPage} />
+        <Route path={`/$/${PAGES.AUTH_SIGNIN}`} exact component={Login} />
         <Route path={`/$/${PAGES.AUTH_PASSWORD_RESET}`} exact component={PasswordResetPage} />
         <Route path={`/$/${PAGES.AUTH_PASSWORD_SET}`} exact component={PasswordSetPage} />
-        <Route path={`/$/${PAGES.AUTH}`} exact component={SignUpPage} />
+        <Route path={`/$/${PAGES.AUTH}`} exact component={Login} />
         <Route path={`/$/${PAGES.AUTH}/*`} exact component={SignUpPage} />
         <Route path={`/$/${PAGES.WELCOME}`} exact component={Welcome} />
 

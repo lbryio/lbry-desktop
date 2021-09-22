@@ -28,7 +28,16 @@ import { formatLbryUrlForWeb, formatInAppUrl } from 'util/url';
 import { PersistGate } from 'redux-persist/integration/react';
 import analytics from 'analytics';
 import { doToast } from 'redux/actions/notifications';
-import { getAuthToken, setAuthToken, doAuthTokenRefresh, deleteAuthToken, getTokens } from 'util/saved-passwords';
+import { ReactKeycloakProvider } from '@react-keycloak/web';
+import keycloak from 'util/keycloak';
+
+import {
+  getAuthToken,
+  setAuthToken,
+  doAuthTokenRefresh,
+  getTokens,
+  deleteAuthToken,
+} from 'util/saved-passwords';
 import { X_LBRY_AUTH_TOKEN } from 'constants/token';
 import { LBRY_WEB_API, DEFAULT_LANGUAGE, LBRY_API_URL, LBRY_WEB_PUBLISH_API } from 'config';
 
@@ -231,6 +240,7 @@ function AppWrapper() {
   // Splash screen and sdk setup not needed on web
   const [readyToLaunch, setReadyToLaunch] = useState(IS_WEB);
   const [persistDone, setPersistDone] = useState(false);
+  const [keycloakReady, setKeycloakReady] = useState(false);
 
   useEffect(() => {
     // @if TARGET='app'
@@ -261,13 +271,18 @@ function AppWrapper() {
     }
   }, [persistDone]);
 
+  /**
+   * We have assured we have the latest browser persist,
+   * that daemon has started up,
+   * and we have checked with keycloak for a token
+   */
   useEffect(() => {
-    if (readyToLaunch && persistDone) {
+    if (readyToLaunch && persistDone && keycloakReady) {
       if (DEFAULT_LANGUAGE) {
         app.store.dispatch(doFetchLanguage(DEFAULT_LANGUAGE));
       }
       app.store.dispatch(doUpdateIsNightAsync());
-      app.store.dispatch(doLbryReady()); // get tokens, users, startup stuff
+      app.store.dispatch(doLbryReady());
       app.store.dispatch(doBlackListedOutpointsSubscribe());
       app.store.dispatch(doFilteredOutpointsSubscribe());
 
@@ -275,7 +290,18 @@ function AppWrapper() {
       const timeToStart = appReadyTime - startTime;
       analytics.readyEvent(timeToStart);
     }
-  }, [readyToLaunch, persistDone]);
+  }, [readyToLaunch, persistDone, keycloakReady]);
+
+  useEffect(() => {
+    console.log('keycl', keycloak.token);
+  }, [keycloak])
+
+  const eventLogger = (event, error) => {
+    console.log('onKeycloakEvent', event, error, keycloak);
+    if (event === 'onReady') {
+      setKeycloakReady(true);
+    }
+  };
 
   return (
     <Provider store={store}>
@@ -286,12 +312,22 @@ function AppWrapper() {
       >
         <Fragment>
           {readyToLaunch ? (
-            <ConnectedRouter history={history}>
-              <ErrorBoundary>
-                <App />
-                <SnackBar />
-              </ErrorBoundary>
-            </ConnectedRouter>
+            <ReactKeycloakProvider
+              authClient={keycloak}
+              onEvent={eventLogger}
+              initOptions={
+                { onLoad: 'check-sso',
+                  silentCheckSsoFallback: false,
+                  redirectUri: 'http://localhost:9090/'}
+              } // from npmjs docs for @react-keycloak/web
+            >
+              <ConnectedRouter history={history}>
+                <ErrorBoundary>
+                  <App />
+                  <SnackBar />
+                </ErrorBoundary>
+              </ConnectedRouter>
+            </ReactKeycloakProvider>
           ) : (
             <Fragment>
               <SplashScreen onReadyToLaunch={() => setReadyToLaunch(true)} />
