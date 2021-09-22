@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased for Desktop]
 
+### Fixed
+- Stream Key is now hidden. ([#7127](https://github.com/lbryio/lbry-desktop/pull/7127))
+
+## [0.51.3] - [2021-9-18]
+
 ### Added
 - Added direct replying to notifications _community pr!_ ([#6935](https://github.com/lbryio/lbry-desktop/pull/6935))
 - Added "Replay" option on autoplay countdown ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
@@ -1956,13 +1961,3 @@ This release includes a breaking change that will reset many of your settings. T
 - Use local file for publishing
 - Use local file and html5 for video playback
 - Misc changes needed to make UI compatible with electron.
-
-## [Stream Key Button] - 2021-09-18
-
-### Added
-
-- Stream Key button
-
-### Fixed
-
-- Stream Key is now hidden.
