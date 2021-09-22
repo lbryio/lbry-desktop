@@ -106,7 +106,11 @@ export default function Notification(props: Props) {
     urlParams.append('lc', notification_parameters.dynamic.hash);
   }
 
-  let channelName = channelUrl && '@' + channelUrl.split('@')[1].split('#')[0];
+  let channelName;
+  try {
+    const { claimName } = parseURI(channelUrl);
+    channelName = claimName;
+  } catch (e) {}
 
   const notificationTitle = notification_parameters.device.title;
   const titleSplit = notificationTitle.split(' ');
