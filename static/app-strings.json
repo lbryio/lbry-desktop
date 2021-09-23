@@ -51,7 +51,6 @@
   "Description of your content": "Description of your content",
   "Price": "Price",
   "Free": "Free",
-  "Learn more": "Learn more",
   "Name": "Name",
   "Deposit": "Deposit",
   "Language": "Language",
@@ -541,6 +540,7 @@
   "Create a new account or sign in.": "Create a new account or sign in.",
   "Terms of Service": "Terms of Service",
   "Learn More": "Learn More",
+  "Learn more": "Learn more",
   "Community": "Community",
   "Resources": "Resources",
   "Policies": "Policies",
@@ -2173,5 +2173,6 @@
   "Card Last 4": "Card Last 4",
   "Search blocked channel name": "Search blocked channel name",
   "Discuss": "Discuss",
+  "lbry.tv has been retired. You have been magically transported to Odysee.com. %more%": "lbry.tv has been retired. You have been magically transported to Odysee.com. %more%",
   "--end--": "--end--"
 }

@@ -24,10 +24,10 @@ export default function NagSunset(props: Props) {
       message={
         <I18nMessage
           tokens={{
-            more: <Button button={'link'} label={__('more')} href="https://odysee.com/@lbry:3f/retirement" />,
+            more: <Button button={'link'} label={__('Learn more')} href="https://odysee.com/@lbry:3f/retirement" />,
           }}
         >
-          lbry.tv has been retired (%more%). You have been magically transported to Odysee.com
+          lbry.tv has been retired. You have been magically transported to Odysee.com. %more%
         </I18nMessage>
       }
       actionText={__('Sign In')}
