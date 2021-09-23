@@ -22,7 +22,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Clicking on the title of a floating player will take you back to the list ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
 - Fix floating player stopping on markdown or image files ([#7073](https://github.com/lbryio/lbry-desktop/pull/7073))
 - Fix list thumbnail upload ([#7074](https://github.com/lbryio/lbry-desktop/pull/7074))
-- Stream Key is now hidden. ([#7127](https://github.com/lbryio/lbry-desktop/pull/7127))
 
 ## [0.51.2] - [2021-08-20]
 
