@@ -459,3 +459,9 @@ $recent-msg-button__height: 2rem;
     }
   }
 }
+
+.livestream-list--view-more {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: var(--spacing-m);
+}
