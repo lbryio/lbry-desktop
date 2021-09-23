@@ -47,6 +47,7 @@ export default function CopyableStreamkey(props: Props) {
     if (topRef[1].type === 'password') {
       topRef[1].type = 'text';
       topRef[0].innerText = 'Hide';
+      return;
     }
     if (topRef[1].type === 'text') {
       topRef[1].type = 'password';
