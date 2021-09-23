@@ -2,45 +2,39 @@
 import * as ICONS from 'constants/icons';
 import { FormField } from 'component/common/form';
 import Button from 'component/button';
-import React, { useRef } from 'react';
+import React, { useRef, Fragment } from 'react';
 
 type Props = {
   copyable: string,
   snackMessage: ?string,
   doToast: ({ message: string }) => void,
-  label?: string,
   primaryButton?: boolean,
   name?: string,
   onCopy?: (string) => string,
   enableMask?: boolean,
 };
 
-export default function CopyableText(props: Props) {
-  const { copyable, doToast, snackMessage, label, primaryButton = false, name, onCopy, enableMask = true } = props;
+export default function CopyableStreamkey(props: Props) {
+  const { copyable, doToast, snackMessage, primaryButton = false, name, onCopy, enableMask = true } = props;
 
   const input = useRef();
 
   function copyToClipboard() {
     const topRef = input.current;
-    if (topRef && topRef.input && topRef.input.current) {
-      topRef.input.current.select();
+    if (topRef[1].type === 'password') {
+      navigator.clipboard.writeText(topRef[1].defaultValue);
+    }
+    if (topRef[1].type === 'text') {
+      topRef[1].select();
       if (onCopy) {
-        onCopy(topRef.input.current);
+        onCopy(topRef[1]);
       }
     }
 
     document.execCommand('copy');
   }
 
-  function onFocus() {
-    // We have to go a layer deep since the input is inside the form component
-    const topRef = input.current;
-    if (topRef && topRef.input && topRef.input.current) {
-      topRef.input.current.select();
-    }
-  }
-
-  function enableMaskType() {
+  function checkMaskType() {
     if (enableMask === true) {
       return 'password';
     }
@@ -48,29 +42,51 @@ export default function CopyableText(props: Props) {
       return 'text';
     }
   }
+  function showStreamkeyFunc() {
+    const topRef = input.current;
+    if (topRef[1].type === 'password') {
+      topRef[1].type = 'text';
+      topRef[0].innerText = 'Hide';
+    }
+    if (topRef[1].type === 'text') {
+      topRef[1].type = 'password';
+      topRef[0].innerText = 'Show';
+    }
+  }
 
   return (
-    <FormField
-      type={enableMaskType()}
-      className="form-field--copyable"
-      readOnly
-      name={name}
-      label={label}
-      value={copyable || ''}
-      ref={input}
-      onFocus={onFocus}
-      inputButton={
-        <Button
-          button={primaryButton ? 'primary' : 'secondary'}
-          icon={ICONS.COPY}
-          onClick={() => {
-            copyToClipboard();
-            doToast({
-              message: snackMessage || __('Text copied'),
-            });
-          }}
+    <Fragment>
+      <form ref={input}>
+        <div>
+          <label name="livestream-key">Stream key</label>{' '}
+          <Button
+            className="button--link"
+            label={__('Show')}
+            onClick={() => {
+              showStreamkeyFunc();
+            }}
+          />
+        </div>
+        <FormField
+          type={checkMaskType()}
+          className="form-field--copyable-streamkey"
+          readOnly
+          name={name}
+          value={copyable || ''}
+          inputButton={
+            <Button
+              button={primaryButton ? 'primary' : 'secondary'}
+              icon={ICONS.COPY}
+              onClick={() => {
+                copyToClipboard();
+                doToast({
+                  message: snackMessage || __('Text copied'),
+                });
+              }}
+            />
+          }
         />
-      }
-    />
+      </form>
+    </Fragment>
   );
 }
