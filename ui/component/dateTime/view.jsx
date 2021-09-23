@@ -104,11 +104,11 @@ class DateTime extends React.Component<Props, State> {
         return null;
       }
 
-      return <span title={moment(date).format(`MMMM Do, YYYY ${clockFormat}`)}>{DateTime.getTimeAgoStr(date)}</span>;
+      return <span className="date_time" title={moment(date).format(`MMMM Do, YYYY ${clockFormat}`)}>{DateTime.getTimeAgoStr(date)}</span>;
     }
 
     return (
-      <span>
+      <span className="date_time">
         {date && show === DateTime.SHOW_DATE && moment(date).format('MMMM Do, YYYY')}
         {date && show === DateTime.SHOW_TIME && moment(date).format(clockFormat)}
         {!date && '...'}

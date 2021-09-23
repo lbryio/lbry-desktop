@@ -1,0 +1,38 @@
+@import '../init/vars';
+
+.claim-tile__info {
+  // accommodating for large view counts on channel overview
+  @media (min-width: $breakpoint-large) {
+    padding: var(--spacing-s) 4px !important;
+  }
+
+  .date_time {
+    font-size: 11px;
+  }
+
+  .channel-thumbnail {
+    // accommodating for large view counts on channel overview
+    @media (min-width: $breakpoint-large) {
+      margin-right: 4px !important;
+    }
+  }
+}
+
+.view_count {
+  &::after {
+    content: '•';
+    margin: 0 4px;
+  }
+
+  font-size: 11px;
+
+  @media (min-width: $breakpoint-large) {
+    &::after {
+      margin: 0 2.5px;
+    }
+  }
+}
+
+.claim-tile__about {
+  font-size: 11px;
+}

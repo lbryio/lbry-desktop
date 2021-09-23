@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+// import '../../scss/component/_view_count.scss';
 
 type Props = {
   uri: string,
@@ -21,7 +22,6 @@ export default function FileViewCountInline(props: Props) {
       notation: 'compact',
     });
   } catch (err) {
-    // No soup for you!
     formattedViewCount = Number(viewCount).toLocaleString();
   }
 
@@ -30,6 +30,7 @@ export default function FileViewCountInline(props: Props) {
   // clean up (only one place edit/remove).
   const isChannelPage = window.location.pathname.startsWith('/@');
 
+  // dont show if no view count, if it's a repost, a livestream or isn't a channel page
   if (!viewCount || (claim && claim.repost_url) || isLivestream || !isChannelPage) {
     // (1) Currently, makeSelectViewCountForUri doesn't differentiate between
     // un-fetched view-count vs zero view-count. But since it's probably not
@@ -37,6 +38,8 @@ export default function FileViewCountInline(props: Props) {
     // (2) No idea how to get the repost source's claim ID from the repost claim,
     // so hiding it for now.
     return null;
+  } else {
+    require('../../scss/component/_view_count.scss');
   }
 
   return (
