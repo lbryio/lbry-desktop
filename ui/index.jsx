@@ -31,16 +31,9 @@ import { doToast } from 'redux/actions/notifications';
 import { ReactKeycloakProvider } from '@react-keycloak/web';
 import keycloak from 'util/keycloak';
 
-import {
-  getAuthToken,
-  setAuthToken,
-  doAuthTokenRefresh,
-  getTokens,
-  deleteAuthToken,
-} from 'util/saved-passwords';
+import { getAuthToken, setAuthToken, doAuthTokenRefresh, getTokens, deleteAuthToken } from 'util/saved-passwords';
 import { X_LBRY_AUTH_TOKEN } from 'constants/token';
-import { LBRY_WEB_API, DEFAULT_LANGUAGE, LBRY_API_URL, LBRY_WEB_PUBLISH_API } from 'config';
-
+import { LBRY_WEB_API, DEFAULT_LANGUAGE, LBRY_API_URL, LBRY_WEB_PUBLISH_API, URL as SITE_URL } from 'config';
 // Import 3rd-party styles before ours for the current way we are code-splitting.
 import 'scss/third-party.scss';
 
@@ -294,7 +287,7 @@ function AppWrapper() {
 
   useEffect(() => {
     console.log('keycl', keycloak.token);
-  }, [keycloak])
+  }, [keycloak]);
 
   const eventLogger = (event, error) => {
     console.log('onKeycloakEvent', event, error, keycloak);
@@ -315,11 +308,7 @@ function AppWrapper() {
             <ReactKeycloakProvider
               authClient={keycloak}
               onEvent={eventLogger}
-              initOptions={
-                { onLoad: 'check-sso',
-                  silentCheckSsoFallback: false,
-                  redirectUri: 'http://localhost:9090/'}
-              } // from npmjs docs for @react-keycloak/web
+              initOptions={{ onLoad: 'check-sso', silentCheckSsoFallback: false, redirectUri: `${SITE_URL}/` }} // from npmjs docs for @react-keycloak/web
             >
               <ConnectedRouter history={history}>
                 <ErrorBoundary>
