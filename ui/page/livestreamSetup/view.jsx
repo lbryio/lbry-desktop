@@ -13,6 +13,7 @@ import { Lbry } from 'lbry-redux';
 import { toHex } from 'util/hex';
 import { FormField } from 'component/common/form';
 import CopyableText from 'component/copyableText';
+import CopyableStreamkey from 'component/copyableStreamkey';
 import Card from 'component/common/card';
 import ClaimList from 'component/claimList';
 import usePersistedState from 'effects/use-persisted-state';
@@ -186,7 +187,7 @@ export default function LivestreamSetupPage(props: Props) {
                       copyable={LIVESTREAM_RTMP_URL}
                       snackMessage={__('Copied')}
                     />
-                    <CopyableText
+                    <CopyableStreamkey
                       primaryButton
                       name="livestream-key"
                       label={__('Stream key')}
