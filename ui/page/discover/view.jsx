@@ -8,7 +8,7 @@ import Page from 'component/page';
 import ClaimListDiscover from 'component/claimListDiscover';
 import Button from 'component/button';
 import useHover from 'effects/use-hover';
-import { useIsMobile } from 'effects/use-screensize';
+import { useIsMobile, useIsLargeScreen } from 'effects/use-screensize';
 import analytics from 'analytics';
 import HiddenNsfw from 'component/common/hidden-nsfw';
 import Icon from 'component/common/icon';
@@ -18,7 +18,7 @@ import I18nMessage from 'component/i18nMessage';
 import moment from 'moment';
 import { getLivestreamUris } from 'util/livestream';
 
-const INITIAL_LIVESTREAM_TILE_LIMIT = 8;
+const DEFAULT_LIVESTREAM_TILE_LIMIT = 8;
 
 type Props = {
   location: { search: string },
@@ -51,6 +51,7 @@ function DiscoverPage(props: Props) {
   const buttonRef = useRef();
   const isHovering = useHover(buttonRef);
   const isMobile = useIsMobile();
+  const isLargeScreen = useIsLargeScreen();
 
   const urlParams = new URLSearchParams(search);
   const claimType = urlParams.get('claim_type');
@@ -72,9 +73,11 @@ function DiscoverPage(props: Props) {
     label = __('Unfollow');
   }
 
+  const initialLivestreamTileLimit = getPageSize(DEFAULT_LIVESTREAM_TILE_LIMIT);
+
   const [showViewMoreLivestreams, setShowViewMoreLivestreams] = React.useState(!dynamicRouteProps);
   const livestreamUris = getLivestreamUris(activeLivestreams, channelIds);
-  const useDualList = showViewMoreLivestreams && livestreamUris.length > INITIAL_LIVESTREAM_TILE_LIMIT;
+  const useDualList = showViewMoreLivestreams && livestreamUris.length > initialLivestreamTileLimit;
 
   function getElemMeta() {
     return !dynamicRouteProps ? (
@@ -104,6 +107,10 @@ function DiscoverPage(props: Props) {
         />
       )
     );
+  }
+
+  function getPageSize(originalSize) {
+    return isLargeScreen ? originalSize * (3 / 2) : originalSize;
   }
 
   React.useEffect(() => {
@@ -160,7 +167,7 @@ function DiscoverPage(props: Props) {
       {useDualList && (
         <>
           <ClaimListDiscover
-            uris={livestreamUris.slice(0, INITIAL_LIVESTREAM_TILE_LIMIT)}
+            uris={livestreamUris.slice(0, initialLivestreamTileLimit)}
             headerLabel={headerLabel}
             header={repostedUri ? <span /> : undefined}
             tileLayout={repostedUri ? false : tileLayout}
