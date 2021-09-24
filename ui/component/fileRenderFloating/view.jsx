@@ -31,6 +31,7 @@ type Props = {
   title: ?string,
   floatingPlayerEnabled: boolean,
   closeFloatingPlayer: () => void,
+  clearSecondarySource: (string) => void,
   renderMode: string,
   playingUri: ?PlayingUri,
   primaryUri: ?string,
@@ -53,6 +54,7 @@ export default function FileRenderFloating(props: Props) {
     title,
     isFloating,
     closeFloatingPlayer,
+    clearSecondarySource,
     floatingPlayerEnabled,
     renderMode,
     playingUri,
@@ -68,8 +70,11 @@ export default function FileRenderFloating(props: Props) {
   } = props;
   const { location, push } = useHistory();
   const hideFloatingPlayer = location.state && location.state.hideFloatingPlayer;
+  const playingUriSource = playingUri && playingUri.source;
+  const isComment = playingUriSource === 'comment';
   const isMobile = useIsMobile();
   const mainFilePlaying = !isFloating && isURIEqual(uri, primaryUri);
+
   const [fileViewerRect, setFileViewerRect] = useState();
   const [desktopPlayStartTime, setDesktopPlayStartTime] = useState();
   const [wasDragging, setWasDragging] = useState(false);
@@ -86,11 +91,11 @@ export default function FileRenderFloating(props: Props) {
   });
 
   const navigateUrl =
-    playingUri && playingUri.primaryUri + (collectionId ? generateListSearchUrlParams(collectionId) : '');
+    playingUri &&
+    (playingUri.primaryUri || playingUri.uri) + (collectionId ? generateListSearchUrlParams(collectionId) : '');
 
   const isFree = costInfo && costInfo.cost === 0;
   const canViewFile = isFree || claimWasPurchased;
-  const playingUriSource = playingUri && playingUri.source;
   const isPlayable = RENDER_MODES.FLOATING_MODES.includes(renderMode);
   const isReadyToPlay = isPlayable && (streamingUrl || (fileInfo && fileInfo.completed));
   const loadingMessage =
@@ -145,13 +150,28 @@ export default function FileRenderFloating(props: Props) {
     const jsonPosition = JSON.parse(stringifiedPosition);
 
     if (isFloating) {
+      // When the player begins floating, remove the comment source
+      // so that it doesn't try to resize again in case of going back
+      // to the origin's comment section and fail to position correctly
+      if (isComment && playingUri) clearSecondarySource(playingUri.uri);
+
       let pos = { x: jsonPosition.x, y: jsonPosition.y };
       clampToScreen(pos);
       if (pos.x !== position.x || pos.y !== position.y) {
         setPosition({ x: pos.x, y: pos.y });
       }
     }
-  }, [clampToScreen, isFloating, position.x, position.y, setPosition, stringifiedPosition]);
+  }, [
+    clampToScreen,
+    clearSecondarySource,
+    isComment,
+    isFloating,
+    playingUri,
+    position.x,
+    position.y,
+    setPosition,
+    stringifiedPosition,
+  ]);
 
   // Listen to main-window resizing and adjust the fp position accordingly:
   useEffect(() => {
@@ -197,7 +217,7 @@ export default function FileRenderFloating(props: Props) {
   }, [mainFilePlaying]);
 
   useEffect(() => {
-    if (playingUri && playingUri.primaryUri) {
+    if (playingUri && (playingUri.primaryUri || playingUri.uri)) {
       handleResize();
       setCountdownCanceled(false);
     }
@@ -312,7 +332,7 @@ export default function FileRenderFloating(props: Props) {
         className={classnames('content__viewer', {
           'content__viewer--floating': isFloating,
           'content__viewer--inline': !isFloating,
-          'content__viewer--secondary': playingUriSource === 'comment',
+          'content__viewer--secondary': isComment,
           'content__viewer--theater-mode': !isFloating && videoTheaterMode,
         })}
         style={
