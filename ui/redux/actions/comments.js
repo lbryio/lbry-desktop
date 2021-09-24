@@ -1055,6 +1055,10 @@ export function doFetchModBlockedList() {
   return async (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const myChannels = selectMyChannelClaims(state);
+    if (!myChannels) {
+      dispatch({ type: ACTIONS.COMMENT_MODERATION_BLOCK_LIST_FAILED });
+      return;
+    }
 
     dispatch({
       type: ACTIONS.COMMENT_MODERATION_BLOCK_LIST_STARTED,
@@ -1377,6 +1381,10 @@ export function doFetchCommentModAmIList(channelClaim: ChannelClaim) {
   return async (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const myChannels = selectMyChannelClaims(state);
+    if (!myChannels) {
+      dispatch({ type: ACTIONS.COMMENT_MODERATION_AM_I_LIST_FAILED });
+      return;
+    }
 
     dispatch({ type: ACTIONS.COMMENT_MODERATION_AM_I_LIST_STARTED });
 
