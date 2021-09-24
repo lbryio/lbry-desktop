@@ -1,19 +1,19 @@
 @import '../init/vars';
 
-.claim-tile__info {
+.contains_view_count {
   // accommodating for large view counts on channel overview
   @media (min-width: $breakpoint-large) {
     padding: var(--spacing-s) 4px !important;
   }
 
   .date_time {
-    font-size: 11px;
+    font-size: 11px !important;
   }
 
   .channel-thumbnail {
     // accommodating for large view counts on channel overview
     @media (min-width: $breakpoint-large) {
-      margin-right: 4px !important;
+      margin-right: 7px !important;
     }
   }
 }
@@ -31,8 +31,4 @@
       margin: 0 2.5px;
     }
   }
-}
-
-.claim-tile__about {
-  font-size: 11px;
 }
