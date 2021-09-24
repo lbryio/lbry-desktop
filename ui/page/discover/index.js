@@ -1,6 +1,8 @@
 import * as CS from 'constants/claim_search';
 import { connect } from 'react-redux';
 import { makeSelectClaimForUri, doResolveUri, SETTINGS } from 'lbry-redux';
+import { doFetchActiveLivestreams } from 'redux/actions/livestream';
+import { selectActiveLivestreams } from 'redux/selectors/livestream';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectFollowedTags } from 'redux/selectors/tags';
 import { doToggleTagFollowDesktop } from 'redux/actions/tags';
@@ -18,10 +20,12 @@ const select = (state, props) => {
     repostedClaim: repostedUri ? makeSelectClaimForUri(repostedUri)(state) : null,
     isAuthenticated: selectUserVerifiedEmail(state),
     tileLayout: makeSelectClientSetting(SETTINGS.TILE_LAYOUT)(state),
+    activeLivestreams: selectActiveLivestreams(state),
   };
 };
 
 export default connect(select, {
   doToggleTagFollowDesktop,
   doResolveUri,
+  doFetchActiveLivestreams,
 })(Tags);

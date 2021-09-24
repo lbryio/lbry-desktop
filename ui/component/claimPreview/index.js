@@ -20,6 +20,7 @@ import {
 } from 'lbry-redux';
 import { selectMutedChannels, makeSelectChannelIsMuted } from 'redux/selectors/blocked';
 import { selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
+import { makeSelectIsActiveLivestream } from 'redux/selectors/livestream';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import { makeSelectHasVisitedUri } from 'redux/selectors/content';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
@@ -56,6 +57,7 @@ const select = (state, props) => {
     streamingUrl: props.uri && makeSelectStreamingUrlForUri(props.uri)(state),
     wasPurchased: props.uri && makeSelectClaimWasPurchased(props.uri)(state),
     isLivestream: makeSelectClaimIsStreamPlaceholder(props.uri)(state),
+    isLivestreamActive: makeSelectIsActiveLivestream(props.uri)(state),
     isCollectionMine: makeSelectCollectionIsMine(props.collectionId)(state),
     collectionUris: makeSelectUrlsForCollectionId(props.collectionId)(state),
     collectionIndex: makeSelectIndexForUrlInCollection(props.uri, props.collectionId)(state),

@@ -5,6 +5,10 @@ import { handleActions } from 'util/redux-utils';
 const defaultState: LivestreamState = {
   fetchingById: {},
   viewersById: {},
+  fetchingActiveLivestreams: false,
+  activeLivestreams: null,
+  activeLivestreamsLastFetchedDate: 0,
+  activeLivestreamsLastFetchedOptions: {},
 };
 
 export default handleActions(
@@ -35,6 +39,22 @@ export default handleActions(
       const newViewersById = Object.assign({}, state.viewersById);
       newViewersById[claimId] = connected;
       return { ...state, viewersById: newViewersById };
+    },
+    [ACTIONS.FETCH_ACTIVE_LIVESTREAMS_STARTED]: (state: LivestreamState) => {
+      return { ...state, fetchingActiveLivestreams: true };
+    },
+    [ACTIONS.FETCH_ACTIVE_LIVESTREAMS_FAILED]: (state: LivestreamState) => {
+      return { ...state, fetchingActiveLivestreams: false };
+    },
+    [ACTIONS.FETCH_ACTIVE_LIVESTREAMS_COMPLETED]: (state: LivestreamState, action: any) => {
+      const { activeLivestreams, activeLivestreamsLastFetchedDate, activeLivestreamsLastFetchedOptions } = action.data;
+      return {
+        ...state,
+        fetchingActiveLivestreams: false,
+        activeLivestreams,
+        activeLivestreamsLastFetchedDate,
+        activeLivestreamsLastFetchedOptions,
+      };
     },
   },
   defaultState
