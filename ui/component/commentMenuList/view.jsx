@@ -171,16 +171,16 @@ function CommentMenuList(props: Props) {
         </MenuItem>
       )}
 
-      {activeChannelIsCreator && (
+      {activeChannelIsCreator && activeChannelClaim && activeChannelClaim.permanent_url !== authorUri && (
         <MenuItem className="comment__menu-option" onSelect={assignAsModerator}>
           <div className="menu__link">
             <Icon aria-hidden icon={ICONS.ADD} />
             {__('Add as moderator')}
           </div>
           <span className="comment__menu-help">
-            {__('Assign this user to moderate %channel%', {
-              channel: activeChannelClaim ? activeChannelClaim.name : __('your channel'),
-            })}
+            {activeChannelClaim
+              ? __('Assign this user to moderate %channel%.', { channel: activeChannelClaim.name })
+              : __('Assign this user to moderate your channel.')}
           </span>
         </MenuItem>
       )}
