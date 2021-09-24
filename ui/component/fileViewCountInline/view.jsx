@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-// import '../../scss/component/_view_count.scss';
+import '../../scss/component/_view_count.scss';
 
 type Props = {
   uri: string,
@@ -38,8 +38,6 @@ export default function FileViewCountInline(props: Props) {
     // (2) No idea how to get the repost source's claim ID from the repost claim,
     // so hiding it for now.
     return null;
-  } else {
-    require('../../scss/component/_view_count.scss');
   }
 
   return (

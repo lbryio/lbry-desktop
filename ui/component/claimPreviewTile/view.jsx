@@ -180,6 +180,10 @@ function ClaimPreviewTile(props: Props) {
     return null;
   }
 
+  const isChannelPage = window.location.pathname.startsWith('/@');
+
+  const shouldShowViewCount = !(!viewCount || (claim && claim.repost_url) || isLivestream || !isChannelPage);
+
   if (placeholder || (!claim && isResolvingUri)) {
     return (
       <li className={classnames('claim-preview--tile', {})}>
@@ -188,7 +192,9 @@ function ClaimPreviewTile(props: Props) {
         </div>
         <div className="placeholder__wrapper">
           <div className="placeholder claim-tile__title" />
-          <div className="placeholder claim-tile__info" />
+          <div className={classnames('claim-tile__info placeholder', {
+            'contains_view_count': shouldShowViewCount,
+          })} />
         </div>
       </li>
     );
@@ -198,10 +204,6 @@ function ClaimPreviewTile(props: Props) {
   if (isLivestreamActive === true) {
     liveProperty = (claim) => <>LIVE</>;
   }
-
-  const isChannelPage = window.location.pathname.startsWith('/@');
-
-  const shouldShowViewCount = !(!viewCount || (claim && claim.repost_url) || isLivestream || !isChannelPage);
 
   return (
     <li
