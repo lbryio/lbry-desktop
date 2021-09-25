@@ -20,15 +20,20 @@ import * as CS from 'constants/claim_search';
 import ClaimListDiscover from './view';
 
 const select = (state, props) => {
+  const showNsfw = selectShowMatureContent(state);
+  const hideReposts = makeSelectClientSetting(SETTINGS.HIDE_REPOSTS)(state);
+  const mutedUris = selectMutedChannels(state);
+  const blockedUris = selectModerationBlockList(state);
+
   return {
     claimSearchByQuery: selectClaimSearchByQuery(state),
     claimsByUri: selectClaimsByUri(state),
     fetchingClaimSearchByQuery: selectFetchingClaimSearchByQuery(state),
-    showNsfw: selectShowMatureContent(state),
-    hideReposts: makeSelectClientSetting(SETTINGS.HIDE_REPOSTS)(state),
-    mutedUris: selectMutedChannels(state),
-    blockedUris: selectModerationBlockList(state),
-    options: resolveSearchOptions({ pageSize: 8, ...props }),
+    showNsfw,
+    hideReposts,
+    mutedUris,
+    blockedUris,
+    options: resolveSearchOptions({ showNsfw, hideReposts, mutedUris, blockedUris, pageSize: 8, ...props }),
   };
 };
 
@@ -45,14 +50,16 @@ export default withRouter(connect(select, perform)(ClaimListDiscover));
 
 function resolveSearchOptions(props) {
   const {
+    showNsfw,
+    hideReposts,
+    mutedUris,
+    blockedUris,
+    location,
     pageSize,
     claimType,
     tags,
-    showNsfw,
     languages,
     channelIds,
-    mutedUris,
-    blockedUris,
     orderBy,
     streamTypes,
     hasNoSource,
@@ -60,10 +67,8 @@ function resolveSearchOptions(props) {
     releaseTime,
     feeAmount,
     limitClaimsPerChannel,
-    hideReposts,
     timestamp,
     claimIds,
-    location,
   } = props;
 
   const mutedAndBlockedChannelIds = Array.from(
