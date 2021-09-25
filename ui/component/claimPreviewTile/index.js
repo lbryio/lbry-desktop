@@ -13,7 +13,6 @@ import {
 } from 'lbry-redux';
 import { selectMutedChannels } from 'redux/selectors/blocked';
 import { selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
-import { makeSelectIsActiveLivestream } from 'redux/selectors/livestream';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import ClaimPreviewTile from './view';
 import formatMediaDuration from 'util/formatMediaDuration';
@@ -37,7 +36,6 @@ const select = (state, props) => {
     showMature: selectShowMatureContent(state),
     isMature: makeSelectClaimIsNsfw(props.uri)(state),
     isLivestream: makeSelectClaimIsStreamPlaceholder(props.uri)(state),
-    isLivestreamActive: makeSelectIsActiveLivestream(props.uri)(state),
   };
 };
 

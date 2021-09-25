@@ -80,7 +80,7 @@ type Props = {
   repostUrl?: string,
   hideMenu?: boolean,
   isLivestream?: boolean,
-  isLivestreamActive: boolean,
+  live?: boolean,
   collectionId?: string,
   editCollection: (string, CollectionEditParams) => void,
   isCollectionMine: boolean,
@@ -145,7 +145,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     hideMenu = false,
     // repostUrl,
     isLivestream, // need both? CHECK
-    isLivestreamActive,
+    live,
     collectionId,
     collectionIndex,
     editCollection,
@@ -336,7 +336,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   }
 
   let liveProperty = null;
-  if (isLivestreamActive === true) {
+  if (live === true) {
     liveProperty = (claim) => <>LIVE</>;
   }
 
@@ -349,7 +349,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
         'claim-preview__wrapper--channel': isChannelUri && type !== 'inline',
         'claim-preview__wrapper--inline': type === 'inline',
         'claim-preview__wrapper--small': type === 'small',
-        'claim-preview__live': isLivestreamActive,
+        'claim-preview__live': live,
         'claim-preview__active': active,
       })}
     >
@@ -386,7 +386,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                       )}
                     </div>
                     {/* @endif */}
-                    {(!isLivestream || isLivestreamActive) && (
+                    {!isLivestream && (
                       <div className="claim-preview__file-property-overlay">
                         <PreviewOverlayProperties uri={uri} small={type === 'small'} properties={liveProperty} />
                       </div>

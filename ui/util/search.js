@@ -22,6 +22,25 @@ export function createNormalizedSearchKey(query: string) {
 }
 
 /**
+ * Returns the "livestream only" version of the given 'options'.
+ *
+ * Currently, the 'has_source' attribute is being used to identify livestreams.
+ *
+ * @param options
+ * @returns {*}
+ */
+export function getLivestreamOnlyOptions(options: any) {
+  const newOptions = Object.assign({}, options);
+  delete newOptions.has_source;
+  delete newOptions.stream_types;
+  newOptions.has_no_source = true;
+  newOptions.claim_type = ['stream'];
+  newOptions.page_size = 50;
+  newOptions.order_by = ['release_time'];
+  return newOptions;
+}
+
+/**
  * getUriForSearchTerm
  * @param term
  * @returns {string[]|*[]|(string|string)[]}

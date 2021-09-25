@@ -40,23 +40,3 @@ export const makeSelectPendingLivestreamsForChannelId = (channelId: string) =>
         claim.signing_channel.claim_id === channelId
     );
   });
-
-export const selectActiveLivestreams = createSelector(selectState, (state) => state.activeLivestreams);
-
-export const makeSelectIsActiveLivestream = (uri: string) =>
-  createSelector(selectState, (state) => {
-    const activeLivestreamValues = (state.activeLivestreams && Object.values(state.activeLivestreams)) || [];
-    // $FlowFixMe
-    return Boolean(activeLivestreamValues.find((v) => v.latestClaimUri === uri));
-  });
-
-export const makeSelectActiveLivestreamUris = (uri: string) =>
-  createSelector(selectState, (state) => {
-    const activeLivestreamValues = (state.activeLivestreams && Object.values(state.activeLivestreams)) || [];
-    const uris = [];
-    activeLivestreamValues.forEach((v) => {
-      // $FlowFixMe
-      if (v.latestClaimUri) uris.push(v.latestClaimUri);
-    });
-    return uris;
-  });
