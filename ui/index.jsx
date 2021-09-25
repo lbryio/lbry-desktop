@@ -295,6 +295,7 @@ function AppWrapper() {
       setKeycloakReady(true);
     }
   };
+  const isDev = process.env.NODE_ENV !== 'production';
 
   return (
     <Provider store={store}>
@@ -304,11 +305,15 @@ function AppWrapper() {
         loading={<div className="main--launching" />}
       >
         <Fragment>
-          {readyToLaunch ? (
+          {readyToLaunch && keycloakReady ? (
             <ReactKeycloakProvider
               authClient={keycloak}
               onEvent={eventLogger}
-              initOptions={{ onLoad: 'check-sso', silentCheckSsoFallback: false, redirectUri: `${SITE_URL}/` }} // from npmjs docs for @react-keycloak/web
+              initOptions={{
+                onLoad: 'check-sso',
+                silentCheckSsoFallback: false,
+                redirectUri: isDev ? `http://localhost:9090/` : `${SITE_URL}/`,
+              }} // from npmjs docs for @react-keycloak/web
             >
               <ConnectedRouter history={history}>
                 <ErrorBoundary>
