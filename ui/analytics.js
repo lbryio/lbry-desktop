@@ -17,8 +17,8 @@ async function getUserBandwidth() {
   userDownloadBandwidthInBitsPerSecond = await getConnectionSpeed();
 }
 
-getUserBandwidth();
-setInterval(getUserBandwidth, 1000 * 30);
+// get user bandwidth every minute, starting after an initial one minute wait
+setInterval(getUserBandwidth, 1000 * 60);
 
 const isProduction = process.env.NODE_ENV === 'production';
 const devInternalApis = process.env.LBRY_API_URL && process.env.LBRY_API_URL.includes('dev');
@@ -136,6 +136,7 @@ async function sendAndResetWatchmanData() {
   let timeSinceLastIntervalSend = new Date() - lastSentTime;
   lastSentTime = new Date();
 
+  // TODO: hook into here to calculate bandwidth
   let protocol;
   if (videoType === 'application/x-mpegURL') {
     protocol = 'hls';
