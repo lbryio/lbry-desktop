@@ -136,10 +136,11 @@ async function sendAndResetWatchmanData() {
   let timeSinceLastIntervalSend = new Date() - lastSentTime;
   lastSentTime = new Date();
 
-  // TODO: hook into here to calculate bandwidth
   let protocol;
   if (videoType === 'application/x-mpegURL') {
     protocol = 'hls';
+    // get bandwidth if it exists from the texttrack (so it's accurate if user changes quality)
+    bitrateAsBitsPerSecond = videoPlayer.textTracks?.().tracks_[0]?.activeCues[0]?.value?.bandwidth;
   } else {
     protocol = 'stb';
   }
