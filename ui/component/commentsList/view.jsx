@@ -151,10 +151,13 @@ function CommentList(props: Props) {
   // Reset comments
   useEffect(() => {
     if (page === 0) {
-      resetComments(uri);
+      if (claim) {
+        resetComments(claim.claim_id);
+      }
       setPage(1);
     }
-  }, [page, uri, resetComments]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, uri, resetComments]); // 'claim' is derived from 'uri'
 
   // Fetch top-level comments
   useEffect(() => {

@@ -238,17 +238,10 @@ export function doCommentById(commentId: string, toastIfNotFound: boolean = true
   };
 }
 
-export function doCommentReset(uri: string) {
-  return (dispatch: Dispatch, getState: GetState) => {
-    const state = getState();
-    const claim = selectClaimsByUri(state)[uri];
-    const claimId = claim ? claim.claim_id : null;
-
+export function doCommentReset(claimId: string) {
+  return (dispatch: Dispatch) => {
     if (!claimId) {
-      dispatch({
-        type: ACTIONS.COMMENT_LIST_FAILED,
-        data: 'unable to find claim for uri',
-      });
+      console.error(`Failed to reset comments`); //eslint-disable-line
       return;
     }
 
