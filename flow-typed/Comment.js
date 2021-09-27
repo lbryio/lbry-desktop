@@ -111,7 +111,7 @@ declare type ReactionListResponse = {
 declare type CommentListParams = {
   page: number,             // pagination: which page of results
   page_size: number,        // pagination: nr of comments to show in a page (max 200)
-  claim_id: string,         // claim id of claim being commented on
+  claim_id?: string,        // claim id of claim being commented on
   channel_name?: string,    // signing channel name of claim (enables 'commentsEnabled' check)
   channel_id?: string,      // signing channel claim id of claim (enables 'commentsEnabled' check)
   author_claim_id?: string, // filters comments to just this author
