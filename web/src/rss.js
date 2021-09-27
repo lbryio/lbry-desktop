@@ -81,7 +81,7 @@ const generateEnclosureForClaimContent = (claim) => {
 
     case 'audio':
       return {
-        url: generateStreamUrl(claim.name, claim.claim_id) + (fileExt || '.mp3'),
+        url: generateStreamUrl(claim.name, claim.claim_id) + ((fileExt === '.mpga' ? '.mp3' : fileExt) || '.mp3'),
         type: (value.source && value.source.media_type) || 'audio/mpeg',
         size: (value.source && value.source.size) || 0, // Per spec, 0 is a valid fallback.
       };
