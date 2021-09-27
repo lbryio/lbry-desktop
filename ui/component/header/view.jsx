@@ -3,7 +3,7 @@ import { ENABLE_NO_SOURCE_CLAIMS, CHANNEL_STAKED_LEVEL_LIVESTREAM, ENABLE_UI_NOT
 import * as ICONS from 'constants/icons';
 import { SETTINGS } from 'lbry-redux';
 import * as PAGES from 'constants/pages';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { withRouter } from 'react-router';
 import classnames from 'classnames';
 import Button from 'component/button';
@@ -16,6 +16,8 @@ import NotificationBubble from 'component/notificationBubble';
 import NotificationHeaderButton from 'component/notificationHeaderButton';
 import ChannelThumbnail from 'component/channelThumbnail';
 import SkipNavigationButton from 'component/skipNavigationButton';
+import keycloak from 'util/keycloak';
+
 import Logo from 'component/logo';
 // @if TARGET='app'
 import { remote } from 'electron';
@@ -169,17 +171,21 @@ const Header = (props: Props) => {
       setClientSetting(SETTINGS.THEME, 'dark', true);
     }
   }
+  const login = useCallback(() => {
+    keycloak && keycloak.login().then((x) => console.log('cb', x));
+  }, [keycloak]);
 
   const loginButtons = (
     <div className="header__auth-buttons">
       <Button
-        navigate={`/$/${PAGES.AUTH_SIGNIN}`}
+        // navigate={`/$/${PAGES.AUTH_SIGNIN}`}
         button="link"
         label={__('Log In')}
         className="mobile-hidden"
         disabled={user === null}
+        onClick={login}
       />
-      <Button navigate={`/$/${PAGES.AUTH}`} button="primary" label={__('Sign Up')} disabled={user === null} />
+      {/*<Button navigate={`/$/${PAGES.AUTH}`} button="primary" label={__('Sign Up')} disabled={user === null} />*/}
     </div>
   );
 

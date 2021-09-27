@@ -6,7 +6,7 @@ import { ipcRenderer, remote } from 'electron';
 import path from 'path';
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
-import { DOMAIN, SIMPLE_SITE } from 'config';
+import { SIMPLE_SITE } from 'config';
 import {
   Lbry,
   doBalanceSubscribe,
@@ -353,7 +353,7 @@ export function doAlertWaitingForSync() {
   };
 }
 
-export function doDaemonReady() {
+export function doLbryReady() {
   return (dispatch, getState) => {
     const state = getState();
 
@@ -363,8 +363,6 @@ export function doDaemonReady() {
     dispatch(
       doAuthenticate(
         appVersion,
-        undefined,
-        undefined,
         shareUsageData,
         (status) => {
           const trendingAlgorithm =
@@ -377,8 +375,7 @@ export function doDaemonReady() {
             analytics.trendingAlgorithmEvent(trendingAlgorithm);
           }
         },
-        undefined,
-        DOMAIN
+        undefined
       )
     );
     dispatch({ type: ACTIONS.DAEMON_READY });

@@ -1,4 +1,3 @@
-import { DOMAIN } from 'config';
 import { connect } from 'react-redux';
 import { doSetDaemonSetting } from 'redux/actions/settings';
 import { doSetWelcomeVersion, doToggle3PAnalytics, doSignOut } from 'redux/actions/app';
@@ -10,17 +9,16 @@ import { version as appVersion } from 'package.json';
 
 import PrivacyAgreement from './view';
 
-const select = state => ({
+const select = (state) => ({
   authenticated: selectUserVerifiedEmail(state),
 });
 
-const perform = dispatch => ({
-  setWelcomeVersion: version => dispatch(doSetWelcomeVersion(version || WELCOME_VERSION)),
-  setShareDataInternal: share => dispatch(doSetDaemonSetting(DAEMON_SETTINGS.SHARE_USAGE_DATA, share)),
-  setShareDataThirdParty: share => dispatch(doToggle3PAnalytics(share)),
+const perform = (dispatch) => ({
+  setWelcomeVersion: (version) => dispatch(doSetWelcomeVersion(version || WELCOME_VERSION)),
+  setShareDataInternal: (share) => dispatch(doSetDaemonSetting(DAEMON_SETTINGS.SHARE_USAGE_DATA, share)),
+  setShareDataThirdParty: (share) => dispatch(doToggle3PAnalytics(share)),
   signOut: () => dispatch(doSignOut()),
-  authenticateIfSharingData: () =>
-    dispatch(doAuthenticate(appVersion, undefined, undefined, true, undefined, undefined, DOMAIN)),
+  authenticateIfSharingData: () => dispatch(doAuthenticate(appVersion, undefined, undefined, true)), // appVersion, shareData?, shareCallback, callInstall
 });
 
 export default connect(select, perform)(PrivacyAgreement);

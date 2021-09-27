@@ -317,7 +317,7 @@ function App(props: Props) {
     if (previousHasVerifiedEmail === false && hasVerifiedEmail) {
       analytics.emailVerifiedEvent();
     }
-  }, [previousHasVerifiedEmail, hasVerifiedEmail, signIn]);
+  }, [previousHasVerifiedEmail, hasVerifiedEmail]);
 
   useEffect(() => {
     if (previousRewardApproved === false && isRewardApproved) {

@@ -3495,9 +3495,10 @@ balanced-match@^1.0.0:
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
   integrity sha1-ibTRmasr7kneFk6gK4nORi1xt2c=
 
-base64-js@^1.0.2:
+base64-js@1.3.1, base64-js@^1.0.2:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/base64-js/-/base64-js-1.3.1.tgz#58ece8cb75dd07e71ed08c736abc5fac4dbf8df1"
+  integrity sha512-mLQ4i2QO1ytvGWFWmcngKO//JXAQueZvwEKtjgQFM4jIK0kU+ytMfplL8j+n5mspOfjHwoAg+9yhb7BwAHm36g==
 
 base@^0.11.1:
   version "0.11.2"
@@ -8297,6 +8298,7 @@ hoek@4.x.x:
 hoist-non-react-statics@^3.1.0, hoist-non-react-statics@^3.3.0:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-3.3.2.tgz#ece0acaf71d62c2969c2ec59feff42a4b1a85b45"
+  integrity sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==
   dependencies:
     react-is "^16.7.0"
 
@@ -9822,6 +9824,11 @@ js-base64@^2.1.9:
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.6.4.tgz#f4e686c5de1ea1f867dbcad3d46d969428df98c4"
   integrity sha512-pZe//GGmwJndub7ZghVHz7vjb2LgC1m8B07Au3eYqeqv9emhESByMXxaEgkUkEqJe87oBbSniGYoQNIBklc7IQ==
 
+js-sha256@0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/js-sha256/-/js-sha256-0.9.0.tgz#0b89ac166583e91ef9123644bd3c5334ce9d0966"
+  integrity sha512-sga3MHh9sgQN2+pJ9VYZ+1LPwXOxuBJBA5nrR5/ofPfuiJBE2hnjsaN8se8JznOmGLN2p49Pe5U/ttafcs/apA==
+
 js-tokens@^3.0.0, js-tokens@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-3.0.2.tgz#9866df395102130e38f7f996bceb65443209c25b"
@@ -10062,6 +10069,14 @@ jszip@~2.5.0:
   dependencies:
     pako "~0.2.5"
 
+keycloak-js@^15.0.2:
+  version "15.0.2"
+  resolved "https://registry.yarnpkg.com/keycloak-js/-/keycloak-js-15.0.2.tgz#9d12dd8860953a267b9b18f351ad2e76b8e94a9c"
+  integrity sha512-dv2a4NcPSH3AzGWG3ZtB+VrHpuQLdFBYXtQBj/+oBzm6XNwnVAMdL6LIC0OzCLQpn3rKTQJtNSATAGhbKJgewQ==
+  dependencies:
+    base64-js "1.3.1"
+    js-sha256 "0.9.0"
+
 keycode@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/keycode/-/keycode-2.2.0.tgz#3d0af56dc7b8b8e5cba8d0a97f107204eec22b04"
@@ -10148,9 +10163,9 @@ lbry-redux@lbryio/lbry-redux#32b578707116d45f5b51b7ab523d200e75668676:
     reselect "^3.0.0"
     uuid "^8.3.1"
 
-lbryinc@lbryio/lbryinc#0b4e41ef90d6347819dd3453f2f9398a5c1b4f36:
+lbryinc@lbryio/lbryinc#f133a7ed62c1f2202f98e785e923a7d841504d0d:
   version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbryinc/tar.gz/0b4e41ef90d6347819dd3453f2f9398a5c1b4f36"
+  resolved "https://codeload.github.com/lbryio/lbryinc/tar.gz/f133a7ed62c1f2202f98e785e923a7d841504d0d"
   dependencies:
     reselect "^3.0.0"
 

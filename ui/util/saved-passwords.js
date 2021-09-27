@@ -1,4 +1,4 @@
-const { DOMAIN } = require('../../config.js');
+const { DOMAIN } = require('config.js');
 const AUTH_TOKEN = 'auth_token';
 const SAVED_PASSWORD = 'saved_password';
 const DEPRECATED_SAVED_PASSWORD = 'saved-password';
@@ -6,6 +6,7 @@ const domain =
   typeof window === 'object' && window.location.hostname.includes('localhost') ? window.location.hostname : DOMAIN;
 const isProduction = process.env.NODE_ENV === 'production';
 const maxExpiration = 2147483647;
+const { default: keycloak } = require('util/keycloak');
 let sessionPassword;
 
 function setCookie(name, value, expirationDaysOnWeb) {
@@ -59,7 +60,7 @@ function deleteCookie(name) {
 }
 
 function setSavedPassword(value, saveToDisk) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     const password = value === undefined || value === null ? '' : value;
     sessionPassword = password;
 
@@ -74,17 +75,17 @@ function setSavedPassword(value, saveToDisk) {
 }
 
 function getSavedPassword() {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     if (sessionPassword) {
       resolve(sessionPassword);
     }
 
-    return getPasswordFromCookie().then(p => resolve(p));
+    return getPasswordFromCookie().then((p) => resolve(p));
   });
 }
 
 function getPasswordFromCookie() {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     let password;
     password = getCookie(SAVED_PASSWORD);
     resolve(password);
@@ -92,7 +93,7 @@ function getPasswordFromCookie() {
 }
 
 function deleteSavedPassword() {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     deleteCookie(SAVED_PASSWORD);
     resolve();
   });
@@ -102,19 +103,28 @@ function getAuthToken() {
   return getCookie(AUTH_TOKEN);
 }
 
+// will take oidc token getter
+// function getTokens() {
+//   return { auth_token: getAuthToken(), access_token: null };
+// }
+
+function getTokens() {
+  return { auth_token: getAuthToken(), access_token: keycloak.token };
+}
+
 function setAuthToken(value) {
   return setCookie(AUTH_TOKEN, value, 365);
 }
 
 function deleteAuthToken() {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     deleteCookie(AUTH_TOKEN);
     resolve();
   });
 }
 
 function doSignOutCleanup() {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     deleteAuthToken();
     deleteSavedPassword();
     resolve();
@@ -122,10 +132,10 @@ function doSignOutCleanup() {
 }
 
 function doAuthTokenRefresh() {
-  const authToken = getAuthToken();
+  const { auth_token: authToken } = getAuthToken();
   if (authToken) {
     deleteAuthToken();
-    setAuthToken(authToken);
+    setCookie(AUTH_TOKEN, authToken, 365);
   }
 }
 
@@ -147,6 +157,7 @@ module.exports = {
   deleteSavedPassword,
   getAuthToken,
   setAuthToken,
+  getTokens,
   deleteAuthToken,
   doSignOutCleanup,
   doAuthTokenRefresh,
