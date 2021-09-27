@@ -43,12 +43,15 @@ module.name_mapper='^web\/page\(.*\)$' -> '<PROJECT_ROOT>/web/page\1'
 module.name_mapper='^homepage\(.*\)$' -> '<PROJECT_ROOT>/ui/util/homepage\1'
 module.name_mapper='^scss\/component\(.*\)$' -> '<PROJECT_ROOT>/ui/scss/component/\1'
 
+esproposal.optional_chaining=enable
+
 ; Extensions
 module.file_ext=.js
 module.file_ext=.jsx
 module.file_ext=.json
 module.file_ext=.css
 module.file_ext=.scss
+
 
 
 [strict]
