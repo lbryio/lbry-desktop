@@ -48,7 +48,7 @@ const perform = (dispatch) => ({
   fetchTopLevelComments: (uri, page, pageSize, sortBy) => dispatch(doCommentList(uri, '', page, pageSize, sortBy)),
   fetchComment: (commentId) => dispatch(doCommentById(commentId)),
   fetchReacts: (commentIds) => dispatch(doCommentReactList(commentIds)),
-  resetComments: (uri) => dispatch(doCommentReset(uri)),
+  resetComments: (claimId) => dispatch(doCommentReset(claimId)),
 });
 
 export default connect(select, perform)(CommentsList);
