@@ -127,7 +127,6 @@ export function doCommentList(
         type: ACTIONS.COMMENT_LIST_FAILED,
         data: 'unable to find claim for uri',
       });
-
       return;
     }
 
@@ -139,7 +138,7 @@ export function doCommentList(
     });
 
     // Adding 'channel_id' and 'channel_name' enables "CreatorSettings > commentsEnabled".
-    const authorChannelClaim = claim.value_type === 'channel' ? claim : claim.signing_channel;
+    const creatorChannelClaim = claim.value_type === 'channel' ? claim : claim.signing_channel;
 
     return Comments.comment_list({
       page,
@@ -147,8 +146,8 @@ export function doCommentList(
       page_size: pageSize,
       parent_id: parentId || undefined,
       top_level: !parentId,
-      channel_id: authorChannelClaim ? authorChannelClaim.claim_id : undefined,
-      channel_name: authorChannelClaim ? authorChannelClaim.name : undefined,
+      channel_id: creatorChannelClaim ? creatorChannelClaim.claim_id : undefined,
+      channel_name: creatorChannelClaim ? creatorChannelClaim.name : undefined,
       sort_by: sortBy,
     })
       .then((result: CommentListResponse) => {
@@ -162,7 +161,7 @@ export function doCommentList(
             totalFilteredItems: total_filtered_items,
             totalPages: total_pages,
             claimId: claimId,
-            commenterClaimId: authorChannelClaim ? authorChannelClaim.claim_id : undefined,
+            creatorClaimId: creatorChannelClaim ? creatorChannelClaim.claim_id : undefined,
             uri: uri,
           },
         });
@@ -175,7 +174,7 @@ export function doCommentList(
             dispatch({
               type: ACTIONS.COMMENT_LIST_COMPLETED,
               data: {
-                authorClaimId: authorChannelClaim ? authorChannelClaim.claim_id : undefined,
+                creatorClaimId: creatorChannelClaim ? creatorChannelClaim.claim_id : undefined,
                 disabled: true,
               },
             });
