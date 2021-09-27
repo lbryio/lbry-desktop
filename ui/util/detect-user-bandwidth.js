@@ -1,5 +1,5 @@
-const imageAddr = 'https://upload.wikimedia.org/wikipedia/commons/a/a6/Brandenburger_Tor_abends.jpg';
-const downloadSize = 2707459; // this must match with the image above
+const imageAddr = 'https://upload.wikimedia.org/wikipedia/commons/b/b9/Pizigani_1367_Chart_1MB.jpg';
+const downloadSize = 1093957; // this must match with the image above
 
 let startTime, endTime;
 async function measureConnectionSpeed() {
