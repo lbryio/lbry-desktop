@@ -259,22 +259,25 @@ function AppWrapper() {
   }, []);
 
   function initKeycloak() {
-    console.dir(keycloak)
-    keycloak.init(
-      { onLoad: 'check-sso',
+    console.dir(keycloak);
+    keycloak
+      .init({
+        onLoad: 'check-sso',
         silentCheckSsoFallback: false,
-        didInit: true,
-        redirectUri: isDev ? 'http://localhost:9090/' : `${SITE_URL}/`}
-    ).then(function(authenticated) {
-      setKeycloakReady(true);
-      console.log('INIT: ', authenticated ? 'Authenticated' : 'Not Authenticated');
-    }).catch(function() {
-      console.log('INIT: FAILED');
-    });
+        silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
+        redirectUri: isDev ? 'http://localhost:9090/' : `${SITE_URL}/`,
+      })
+      .then(function (authenticated) {
+        setKeycloakReady(true);
+        console.log('INIT: ', authenticated ? 'Authenticated' : 'Not Authenticated');
+      })
+      .catch(function () {
+        console.log('INIT: FAILED');
+      });
   }
 
   useEffect(() => {
-    console.log('KCR RENDER', keycloakReady)
+    console.log('KCR RENDER', keycloakReady);
     if (!keycloakReady) {
       initKeycloak();
     }
@@ -294,7 +297,8 @@ function AppWrapper() {
    * and we have checked with keycloak for a token
    */
   useEffect(() => {
-    if (readyToLaunch && persistDone && keycloakReady) { // keycloak ready
+    if (readyToLaunch && persistDone && keycloakReady) {
+      // keycloak ready
       if (DEFAULT_LANGUAGE) {
         app.store.dispatch(doFetchLanguage(DEFAULT_LANGUAGE));
       }
