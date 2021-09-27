@@ -48,7 +48,6 @@ type Props = {
   showMature: boolean,
   showHiddenByUser?: boolean,
   properties?: (Claim) => void,
-  live?: boolean,
   collectionId?: string,
   showNoSourceClaims?: boolean,
   isLivestream: boolean,

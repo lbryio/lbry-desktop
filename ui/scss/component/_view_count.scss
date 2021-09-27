@@ -3,17 +3,17 @@
 .contains_view_count {
   // accommodating for large view counts on channel overview
   @media (min-width: $breakpoint-large) {
-    padding: var(--spacing-s) 4px !important;
-  }
+    padding: var(--spacing-s) 4px;
 
-  .date_time {
-    font-size: 11px !important;
+    .date_time {
+      font-size: 11px;
+    }
   }
 
   .channel-thumbnail {
     // accommodating for large view counts on channel overview
     @media (min-width: $breakpoint-large) {
-      margin-right: 7px !important;
+      margin-right: 7px;
     }
   }
 }
@@ -24,11 +24,11 @@
     margin: 0 4px;
   }
 
-  font-size: 11px;
-
   @media (min-width: $breakpoint-large) {
     &::after {
       margin: 0 2.5px;
     }
+
+    font-size: 11px;
   }
 }
