@@ -454,6 +454,10 @@ fieldset-group {
   margin-bottom: var(--spacing-s);
 }
 
+.form-field__textarea-info:empty {
+  display: none;
+}
+
 .form-field__quick-emojis {
   > *:not(:last-child) {
     margin-right: var(--spacing-s);
