@@ -4,6 +4,7 @@ import React from 'react';
 import { createNormalizedClaimSearchKey } from 'lbry-redux';
 import ClaimPreviewTile from 'component/claimPreviewTile';
 import useFetchViewCount from 'effects/use-fetch-view-count';
+import usePrevious from 'effects/use-previous';
 
 type SearchOptions = {
   page_size: number,
@@ -99,6 +100,7 @@ function ClaimTilesDiscover(props: Props) {
   const searchKey = createNormalizedClaimSearchKey(options);
   const fetchingClaimSearch = fetchingClaimSearchByQuery[searchKey];
   const claimSearchUris = claimSearchByQuery[searchKey] || [];
+  const isUnfetchedClaimSearch = claimSearchByQuery[searchKey] === undefined;
 
   // Don't use the query from createNormalizedClaimSearchKey for the effect since that doesn't include page & release_time
   const optionsStringForEffect = JSON.stringify(options);
@@ -123,6 +125,8 @@ function ClaimTilesDiscover(props: Props) {
     uris.push(...Array(pageSize - uris.length).fill(''));
   }
 
+  const prevUris = usePrevious(uris);
+
   useFetchViewCount(fetchViewCount, uris, claimsByUri, doFetchViewCount);
 
   // Run `doClaimSearch`
@@ -133,10 +137,13 @@ function ClaimTilesDiscover(props: Props) {
     }
   }, [doClaimSearch, shouldPerformSearch, optionsStringForEffect]);
 
+  // Show previous results while we fetch to avoid blinkies and poor CLS.
+  const finalUris = isUnfetchedClaimSearch && prevUris ? prevUris : uris;
+
   return (
     <ul className="claim-grid">
-      {uris && uris.length
-        ? uris.map((uri, i) => {
+      {finalUris && finalUris.length
+        ? finalUris.map((uri, i) => {
             if (uri) {
               return (
                 <ClaimPreviewTile
@@ -172,29 +179,18 @@ function areEqual(prev: Props, next: Props) {
   const prevSearchKey = createNormalizedClaimSearchKey(prevOptions);
   const nextSearchKey = createNormalizedClaimSearchKey(nextOptions);
 
-  // "Pause" render when fetching to solve the layout-shift problem in #5979
-  // (previous solution used a stashed copy of the rendered uris while fetching
-  // to make it stay still).
-  // This version works as long as we are not doing anything during a fetch,
-  // such as showing a spinner.
-  const nextCsFetch = next.fetchingClaimSearchByQuery[nextSearchKey];
-  if (nextCsFetch) {
-    return true;
+  if (prevSearchKey !== nextSearchKey) {
+    debug_trace('search key');
+    return false;
   }
 
   // --- Deep-compare ---
-  if (prev.claimSearchByQuery[prevSearchKey] !== next.claimSearchByQuery[nextSearchKey]) {
+  if (!urisEqual(prev.claimSearchByQuery[prevSearchKey], next.claimSearchByQuery[nextSearchKey])) {
     debug_trace('claimSearchByQuery');
     return false;
   }
 
-  if (prev.fetchingClaimSearchByQuery[prevSearchKey] !== next.fetchingClaimSearchByQuery[nextSearchKey]) {
-    debug_trace('fetchingClaimSearchByQuery');
-    return false;
-  }
-
   const ARRAY_KEYS = ['prefixUris', 'channelIds', 'mutedUris', 'blockedUris'];
-
   for (let i = 0; i < ARRAY_KEYS.length; ++i) {
     const key = ARRAY_KEYS[i];
     if (!urisEqual(prev[key], next[key])) {
@@ -209,12 +205,12 @@ function areEqual(prev: Props, next: Props) {
   const KEYS_TO_IGNORE = [
     ...ARRAY_KEYS,
     'claimSearchByQuery',
-    'fetchingClaimSearchByQuery',
+    'fetchingClaimSearchByQuery', // We are showing previous results while fetching.
+    'options', // Covered by search-key comparison.
     'location',
     'history',
     'match',
     'claimsByUri',
-    'options',
     'doClaimSearch',
     'doToggleTagFollowDesktop',
   ];

@@ -73,7 +73,7 @@ function resolveSearchOptions(props) {
 
   const mutedAndBlockedChannelIds = Array.from(
     new Set((mutedUris || []).concat(blockedUris || []).map((uri) => splitBySeparator(uri)[1]))
-  );
+  ).sort();
 
   const urlParams = new URLSearchParams(location.search);
   const feeAmountInUrl = urlParams.get('fee_amount');
