@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import 'scss/component/_view_count.scss';
 
 type Props = {
   uri: string,
@@ -15,12 +16,12 @@ export default function FileViewCountInline(props: Props) {
   let formattedViewCount;
 
   try {
+    // SI notation that changes 1234 to 1.2K, look up Intl.NumberFormat() for docs
     formattedViewCount = Number(viewCount).toLocaleString(lang || 'en', {
       compactDisplay: 'short',
       notation: 'compact',
     });
   } catch (err) {
-    // No soup for you!
     formattedViewCount = Number(viewCount).toLocaleString();
   }
 
@@ -29,6 +30,7 @@ export default function FileViewCountInline(props: Props) {
   // clean up (only one place edit/remove).
   const isChannelPage = window.location.pathname.startsWith('/@');
 
+  // dont show if no view count, if it's a repost, a livestream or isn't a channel page
   if (!viewCount || (claim && claim.repost_url) || isLivestream || !isChannelPage) {
     // (1) Currently, makeSelectViewCountForUri doesn't differentiate between
     // un-fetched view-count vs zero view-count. But since it's probably not
