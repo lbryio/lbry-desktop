@@ -22,10 +22,14 @@ const channelsToSubscribe = AUTO_FOLLOW_CHANNELS.trim()
 
 function UserChannelFollowIntro(props: Props) {
   const { subscribedChannels, channelSubscribe, onContinue, homepageData, prefsReady } = props;
-  const { PRIMARY_CONTENT } = homepageData;
+  const { PRIMARY_CONTENT, LATEST } = homepageData;
   let channelIds;
-  if (PRIMARY_CONTENT && CUSTOM_HOMEPAGE) {
-    channelIds = PRIMARY_CONTENT.channelIds;
+  if (CUSTOM_HOMEPAGE) {
+    if (LATEST) {
+      channelIds = LATEST.channelIds;
+    } else if (PRIMARY_CONTENT) {
+      channelIds = PRIMARY_CONTENT.channelIds;
+    }
   }
   const followingCount = (subscribedChannels && subscribedChannels.length) || 0;
   const followingCountIgnoringAutoFollows = (subscribedChannels || []).filter(
