@@ -72,8 +72,6 @@ type Props = {
   fetchingClaimSearchByQuery: { [string]: boolean },
   showNsfw: boolean,
   hideReposts: boolean,
-  mutedUris: Array<string>,
-  blockedUris: Array<string>,
   options: SearchOptions,
   // --- perform ---
   doClaimSearch: ({}) => void,
@@ -190,7 +188,7 @@ function areEqual(prev: Props, next: Props) {
     return false;
   }
 
-  const ARRAY_KEYS = ['prefixUris', 'channelIds', 'mutedUris', 'blockedUris'];
+  const ARRAY_KEYS = ['prefixUris', 'channelIds'];
   for (let i = 0; i < ARRAY_KEYS.length; ++i) {
     const key = ARRAY_KEYS[i];
     if (!urisEqual(prev[key], next[key])) {

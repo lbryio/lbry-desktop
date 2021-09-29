@@ -6,14 +6,12 @@ import {
   selectFetchingClaimSearchByQuery,
   SETTINGS,
   selectClaimsByUri,
-  splitBySeparator,
   MATURE_TAGS,
 } from 'lbry-redux';
 import { doFetchViewCount } from 'lbryinc';
 import { doToggleTagFollowDesktop } from 'redux/actions/tags';
 import { makeSelectClientSetting, selectShowMatureContent } from 'redux/selectors/settings';
-import { selectModerationBlockList } from 'redux/selectors/comments';
-import { selectMutedChannels } from 'redux/selectors/blocked';
+import { selectMutedAndBlockedChannelIds } from 'redux/selectors/blocked';
 import { ENABLE_NO_SOURCE_CLAIMS, SIMPLE_SITE } from 'config';
 import * as CS from 'constants/claim_search';
 
@@ -22,8 +20,7 @@ import ClaimListDiscover from './view';
 const select = (state, props) => {
   const showNsfw = selectShowMatureContent(state);
   const hideReposts = makeSelectClientSetting(SETTINGS.HIDE_REPOSTS)(state);
-  const mutedUris = selectMutedChannels(state);
-  const blockedUris = selectModerationBlockList(state);
+  const mutedAndBlockedChannelIds = selectMutedAndBlockedChannelIds(state);
 
   return {
     claimSearchByQuery: selectClaimSearchByQuery(state),
@@ -31,9 +28,7 @@ const select = (state, props) => {
     fetchingClaimSearchByQuery: selectFetchingClaimSearchByQuery(state),
     showNsfw,
     hideReposts,
-    mutedUris,
-    blockedUris,
-    options: resolveSearchOptions({ showNsfw, hideReposts, mutedUris, blockedUris, pageSize: 8, ...props }),
+    options: resolveSearchOptions({ showNsfw, hideReposts, mutedAndBlockedChannelIds, pageSize: 8, ...props }),
   };
 };
 
@@ -52,8 +47,7 @@ function resolveSearchOptions(props) {
   const {
     showNsfw,
     hideReposts,
-    mutedUris,
-    blockedUris,
+    mutedAndBlockedChannelIds,
     location,
     pageSize,
     claimType,
@@ -70,10 +64,6 @@ function resolveSearchOptions(props) {
     timestamp,
     claimIds,
   } = props;
-
-  const mutedAndBlockedChannelIds = Array.from(
-    new Set((mutedUris || []).concat(blockedUris || []).map((uri) => splitBySeparator(uri)[1]))
-  ).sort();
 
   const urlParams = new URLSearchParams(location.search);
   const feeAmountInUrl = urlParams.get('fee_amount');
