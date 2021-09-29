@@ -41,5 +41,6 @@ module.name_mapper='^web\/component\(.*\)$' -> '<PROJECT_ROOT>/web/component\1'
 module.name_mapper='^web\/effects\(.*\)$' -> '<PROJECT_ROOT>/web/effects\1'
 module.name_mapper='^web\/page\(.*\)$' -> '<PROJECT_ROOT>/web/page\1'
 module.name_mapper='^homepage\(.*\)$' -> '<PROJECT_ROOT>/ui/util/homepage\1'
+module.name_mapper='^scss\(.*\)$' -> '<PROJECT_ROOT>/ui/scss\1'
 
 [strict]

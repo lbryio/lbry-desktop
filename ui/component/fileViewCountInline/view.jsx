@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import '../../scss/component/_view_count.scss';
+import 'scss/component/_view_count.scss';
 
 type Props = {
   uri: string,
