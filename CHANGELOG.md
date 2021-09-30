@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added "Shuffle" option on Lists ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
 - Added Play Next/Previous buttons (with shortcuts SHIFT+N/SHIFT+P) ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
 - Added separate control for autoplay next on video player ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
+- Added Channel Mention selection ability while creating a comment ([#7151](https://github.com/lbryio/lbry-desktop/pull/7151))
 
 ### Changed
 - Changing the supported language from Filipino to Tagalog _community pr!_ ([#6951](https://github.com/lbryio/lbry-desktop/pull/6951))

@@ -34,6 +34,12 @@ $thumbnailWidthSmall: 1rem;
 
 .comment__create {
   font-size: var(--font-small);
+  position: relative;
+
+  fieldset-section,
+  .form-field--SimpleMDE {
+    margin-top: 0;
+  }
 }
 
 .comment__create--reply {
@@ -78,6 +84,10 @@ $thumbnailWidthSmall: 1rem;
       }
     }
   }
+}
+
+.content_comment {
+  position: relative;
 }
 
 .comment__thumbnail-wrapper {
