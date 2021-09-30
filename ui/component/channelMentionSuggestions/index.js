@@ -10,7 +10,7 @@ const select = (state, props) => {
   const subscriptionUris = selectSubscriptions(state).map(({ uri }) => uri);
   const topLevelComments = makeSelectTopLevelCommentsForUri(props.uri)(state);
 
-  let commentorUris = [];
+  const commentorUris = [];
   topLevelComments.map(({ channel_url }) => !commentorUris.includes(channel_url) && commentorUris.push(channel_url));
 
   const getUnresolved = (uris) =>

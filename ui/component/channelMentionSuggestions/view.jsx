@@ -1,7 +1,7 @@
 // @flow
 import { Combobox, ComboboxInput, ComboboxPopover, ComboboxList } from '@reach/combobox';
 import { Form } from 'component/common/form';
-import { parseURI } from 'lbry-redux';
+import { parseURI, regexInvalidURI } from 'lbry-redux';
 import { SEARCH_OPTIONS } from 'constants/search';
 import * as KEYCODES from 'constants/keycodes';
 import ChannelMentionSuggestion from 'component/channelMentionSuggestion';
@@ -46,10 +46,10 @@ export default function ChannelMentionSuggestions(props: Props) {
   const comboboxListRef: ElementRef<any> = React.useRef();
   const [debouncedTerm, setDebouncedTerm] = React.useState('');
 
-  const isRefFocused = (ref) => ref && ref.current && ref.current === document.activeElement;
+  const isRefFocused = (ref) => ref && ref.current === document.activeElement;
 
-  let subscriptionUris = props.subscriptionUris.filter((uri) => uri !== creatorUri);
-  let commentorUris = props.commentorUris.filter((uri) => uri !== creatorUri && !subscriptionUris.includes(uri));
+  const subscriptionUris = props.subscriptionUris.filter((uri) => uri !== creatorUri);
+  const commentorUris = props.commentorUris.filter((uri) => uri !== creatorUri && !subscriptionUris.includes(uri));
 
   const termToMatch = mentionTerm && mentionTerm.replace('@', '').toLowerCase();
   const allShownUris = [creatorUri, ...subscriptionUris, ...commentorUris];
@@ -74,6 +74,8 @@ export default function ChannelMentionSuggestions(props: Props) {
   const isTyping = debouncedTerm !== mentionTerm;
   const showPlaceholder = isTyping || loading;
 
+  const isUriFromTermValid = !regexInvalidURI.test(mentionTerm.substring(1));
+
   const handleSelect = React.useCallback(
     (value, key) => {
       if (customSelectAction) {
@@ -95,12 +97,12 @@ export default function ChannelMentionSuggestions(props: Props) {
   React.useEffect(() => {
     if (!inputRef) return;
 
-    if (mentionTerm) {
+    if (mentionTerm && isUriFromTermValid) {
       inputRef.current.classList.add('textarea-mention');
     } else {
       inputRef.current.classList.remove('textarea-mention');
     }
-  }, [inputRef, mentionTerm]);
+  }, [inputRef, isUriFromTermValid, mentionTerm]);
 
   React.useEffect(() => {
     if (!inputRef || !comboboxInputRef || !mentionTerm) return;
@@ -155,7 +157,7 @@ export default function ChannelMentionSuggestions(props: Props) {
   React.useEffect(() => {
     if (isTyping) return;
 
-    let urisToResolve = [];
+    const urisToResolve = [];
     subscriptionUris.map(
       (uri) =>
         hasMinLength &&
@@ -189,7 +191,7 @@ export default function ChannelMentionSuggestions(props: Props) {
     <Form onSubmit={() => handleSelect(mentionTerm)}>
       <Combobox className="channel-mention" onSelect={handleSelect}>
         <ComboboxInput ref={comboboxInputRef} className="channel-mention__input--none" value={mentionTerm} />
-        {mentionTerm && (
+        {mentionTerm && isUriFromTermValid && (
           <ComboboxPopover portal={false} className="channel-mention__suggestions">
             <ComboboxList ref={comboboxListRef}>
               {creatorUri &&
