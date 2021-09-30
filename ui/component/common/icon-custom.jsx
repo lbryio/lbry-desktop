@@ -2469,7 +2469,7 @@ export const icons = {
       <line x1="4" y1="4" x2="9" y2="9" />
     </g>
   ),
-  [ICONS.PRIMARY_CONTENT]: buildIcon(
+  [ICONS.HOLD_PHONE]: buildIcon(
     <g>
       <path d="M12 17.491L1.5 17.491" />
       <path d="M8,19.241H8a.25.25,0,0,1,.25.25h0a.25.25,0,0,1-.25.25H8a.25.25,0,0,1-.25-.25h0a.25.25,0,0,1,.25-.25" />
