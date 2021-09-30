@@ -359,6 +359,10 @@ $recent-msg-button__height: 2rem;
     p {
       word-break: break-word;
     }
+
+    .channel-name {
+      font-size: var(--font-small);
+    }
   }
 }
 
