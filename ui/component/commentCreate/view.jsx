@@ -111,9 +111,13 @@ export function CommentCreate(props: Props) {
     commentValue.indexOf('@', selectionIndex) === selectionIndex
       ? commentValue.indexOf('@', selectionIndex)
       : commentValue.lastIndexOf('@', selectionIndex);
+  const modifierIndex = commentValue.indexOf(':', selectedMentionIndex);
+  const spaceIndex = commentValue.indexOf(' ', selectedMentionIndex);
   const mentionLengthIndex =
-    commentValue.indexOf(' ', selectedMentionIndex) >= 0
-      ? commentValue.indexOf(' ', selectedMentionIndex)
+    modifierIndex >= 0 && (spaceIndex === -1 || modifierIndex < spaceIndex)
+      ? modifierIndex
+      : spaceIndex >= 0 && (modifierIndex === -1 || spaceIndex < modifierIndex)
+      ? spaceIndex
       : commentValue.length;
   const channelMention =
     selectedMentionIndex >= 0 && selectionIndex <= mentionLengthIndex
