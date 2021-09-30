@@ -12,10 +12,17 @@ type Props = {
   pendingCollection?: Collection,
   claim: ?Claim,
   collectionItemUrls: Array<string>,
+  fetchCollectionItems: (string) => void,
 };
 
 function CollectionPreviewOverlay(props: Props) {
-  const { collectionItemUrls } = props;
+  const { collectionId, collectionItemUrls, fetchCollectionItems } = props;
+
+  React.useEffect(() => {
+    if (!collectionItemUrls) {
+      fetchCollectionItems(collectionId);
+    }
+  }, [collectionId, collectionItemUrls, fetchCollectionItems]);
 
   if (collectionItemUrls && collectionItemUrls.length > 0) {
     return (
