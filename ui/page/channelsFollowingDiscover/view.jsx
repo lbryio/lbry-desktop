@@ -28,10 +28,14 @@ type ChannelsFollowingItem = {
 
 function ChannelsFollowingDiscover(props: Props) {
   const { followedTags, subscribedChannels, blockedChannels, homepageData } = props;
-  const { PRIMARY_CONTENT } = homepageData;
+  const { PRIMARY_CONTENT, LATEST } = homepageData;
   let channelIds;
-  if (PRIMARY_CONTENT && CUSTOM_HOMEPAGE) {
-    channelIds = PRIMARY_CONTENT.channelIds;
+  if (CUSTOM_HOMEPAGE) {
+    if (LATEST) {
+      channelIds = LATEST.channelIds;
+    } else if (PRIMARY_CONTENT) {
+      channelIds = PRIMARY_CONTENT.channelIds;
+    }
   }
   let rowData: Array<ChannelsFollowingItem> = [];
   const notChannels = subscribedChannels

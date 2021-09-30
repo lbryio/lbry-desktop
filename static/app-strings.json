@@ -783,6 +783,7 @@
   "There was an error reposting this claim. Please try again later.": "There was an error reposting this claim. Please try again later.",
   "Claim ID": "Claim ID",
   "Official YouTube Creator": "Official YouTube Creator",
+  "YouTube Sync": "YouTube Sync",
   "Last checked %time_ago%": "Last checked %time_ago%",
   "Install Now": "Install Now",
   "Invite Link": "Invite Link",
@@ -1400,8 +1401,8 @@
   "Gaming": "Gaming",
   "Game": "Game",
   "Nice People": "Nice People",
-  "Tech": "Tech",
   "Lab": "Lab",
+  "Tech": "Tech",
   "Technology": "Technology",
   "Movies": "Movies",
   "News": "News",
@@ -2178,5 +2179,6 @@
   "Search blocked channel name": "Search blocked channel name",
   "Discuss": "Discuss",
   "lbry.tv has been retired. You have been magically transported to Odysee.com. %more%": "lbry.tv has been retired. You have been magically transported to Odysee.com. %more%",
+  "Show more livestreams": "Show more livestreams",
   "--end--": "--end--"
 }
