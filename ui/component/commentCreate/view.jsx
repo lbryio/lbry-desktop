@@ -28,6 +28,7 @@ let stripeEnvironment = getStripeEnvironment();
 
 const TAB_FIAT = 'TabFiat';
 const TAB_LBC = 'TabLBC';
+const MENTION_DEBOUNCE_MS = 100;
 
 type Props = {
   uri: string,
@@ -103,6 +104,7 @@ export function CommentCreate(props: Props) {
   const [activeTab, setActiveTab] = React.useState('');
   const [tipError, setTipError] = React.useState();
   const [deletedComment, setDeletedComment] = React.useState(false);
+  const [pauseQuickSend, setPauseQuickSend] = React.useState(false);
   const [shouldDisableReviewButton, setShouldDisableReviewButton] = React.useState();
 
   const selectedMentionIndex =
@@ -123,7 +125,7 @@ export function CommentCreate(props: Props) {
   const channelUri = signingChannel && signingChannel.permanent_url;
   const hasChannels = channels && channels.length;
   const charCount = commentValue ? commentValue.length : 0;
-  const disabled = deletedComment || isSubmitting || isFetchingChannels || !commentValue.length;
+  const disabled = deletedComment || isSubmitting || isFetchingChannels || !commentValue.length || pauseQuickSend;
   const channelId = getChannelIdFromClaim(claim);
   const channelSettings = channelId ? settingsByChannelId[channelId] : undefined;
   const minSuper = (channelSettings && channelSettings.min_tip_amount_super_chat) || 0;
@@ -170,7 +172,7 @@ export function CommentCreate(props: Props) {
     setCommentValue(commentValue);
   }
 
-  function handleSelectMention(mentionValue) {
+  function handleSelectMention(mentionValue, key) {
     let newMentionValue = mentionValue.replace('lbry://', '');
     if (newMentionValue.includes('#')) {
       const fullId = newMentionValue.substring(newMentionValue.indexOf('#') + 1, newMentionValue.length);
@@ -179,6 +181,7 @@ export function CommentCreate(props: Props) {
         .replace('#', ':');
     }
 
+    if (livestream && key !== KEYCODES.TAB) setPauseQuickSend(true);
     setCommentValue(
       commentValue.substring(0, selectedMentionIndex) +
         `${newMentionValue}` +
@@ -415,6 +418,18 @@ export function CommentCreate(props: Props) {
       });
     }
   }, [fetchComment, shouldFetchComment, parentId]);
+
+  // Debounce for disabling the submit button when mentioning a user with Enter
+  // so that the comment isn't sent at the same time
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      if (pauseQuickSend) {
+        setPauseQuickSend(false);
+      }
+    }, MENTION_DEBOUNCE_MS);
+
+    return () => clearTimeout(timer);
+  }, [pauseQuickSend]);
 
   // **************************************************************************
   // Render

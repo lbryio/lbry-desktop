@@ -26,7 +26,7 @@ type Props = {
   subscriptionUris: Array<string>,
   unresolvedSubscriptions: Array<string>,
   doResolveUris: (Array<string>) => void,
-  customSelectAction?: (string) => void,
+  customSelectAction?: (string, number) => void,
 };
 
 export default function ChannelMentionSuggestions(props: Props) {
@@ -75,14 +75,13 @@ export default function ChannelMentionSuggestions(props: Props) {
   const showPlaceholder = isTyping || loading;
 
   const handleSelect = React.useCallback(
-    (value) => {
+    (value, key) => {
       if (customSelectAction) {
         // Give them full results, as our resolved one might truncate the claimId.
-        customSelectAction(value || (results && results.find((r) => r.startsWith(value))) || '');
+        customSelectAction(value || (results && results.find((r) => r.startsWith(value))) || '', Number(key));
       }
-      if (inputRef && inputRef.current) inputRef.current.focus();
     },
-    [customSelectAction, inputRef, results]
+    [customSelectAction, results]
   );
 
   React.useEffect(() => {
@@ -124,11 +123,11 @@ export default function ChannelMentionSuggestions(props: Props) {
           const activeValue = activeElement && activeElement.getAttribute('value');
 
           if (activeValue) {
-            handleSelect(activeValue);
+            handleSelect(activeValue, keyCode);
           } else if (possibleMatches.length) {
-            handleSelect(possibleMatches[0]);
+            handleSelect(possibleMatches[0], keyCode);
           } else if (results) {
-            handleSelect(mentionTerm);
+            handleSelect(mentionTerm, keyCode);
           }
         }
         if (isRefFocused(comboboxInputRef)) inputRef.current.focus();
