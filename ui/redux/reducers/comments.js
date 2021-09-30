@@ -349,9 +349,7 @@ export default handleActions(
       const linkedCommentAncestors = Object.assign({}, state.linkedCommentAncestors);
 
       const updateStore = (comment, commentById, byId, repliesByParentId, topLevelCommentsById) => {
-        // 'comment.ByID' doesn't populate 'replies'. We should have at least 1
-        // at the moment, and the correct value will populated by 'comment.List'.
-        commentById[comment.comment_id] = { ...comment, replies: 1 };
+        commentById[comment.comment_id] = comment;
         byId[claimId] ? byId[claimId].unshift(comment.comment_id) : (byId[claimId] = [comment.comment_id]);
 
         const parentId = comment.parent_id;
