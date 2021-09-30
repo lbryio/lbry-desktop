@@ -86,7 +86,7 @@ export function CommentCreate(props: Props) {
   } = props;
   const formFieldRef: ElementRef<any> = React.useRef();
   const formFieldInputRef = formFieldRef && formFieldRef.current && formFieldRef.current.input;
-  const selectionIndex = formFieldInputRef && formFieldInputRef.current.selectionStart;
+  const selectionIndex = formFieldInputRef && formFieldInputRef.current && formFieldInputRef.current.selectionStart;
   const buttonRef: ElementRef<any> = React.useRef();
   const {
     push,
@@ -178,12 +178,7 @@ export function CommentCreate(props: Props) {
 
   function handleSelectMention(mentionValue, key) {
     let newMentionValue = mentionValue.replace('lbry://', '');
-    if (newMentionValue.includes('#')) {
-      const fullId = newMentionValue.substring(newMentionValue.indexOf('#') + 1, newMentionValue.length);
-      newMentionValue = newMentionValue
-        .substring(0, newMentionValue.indexOf('#') + (fullId.length > 2 ? 2 : newMentionValue.length))
-        .replace('#', ':');
-    }
+    if (newMentionValue.includes('#')) newMentionValue = newMentionValue.replace('#', ':');
 
     if (livestream && key !== KEYCODES.TAB) setPauseQuickSend(true);
     setCommentValue(

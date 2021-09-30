@@ -19,12 +19,15 @@ type Props = {
   mentionTerm: string,
   noTopSuggestion?: boolean,
   showMature: boolean,
-  creatorUri: string,
   isLivestream: boolean,
+  creatorUri: string,
   commentorUris: Array<string>,
-  unresolvedCommentors: Array<string>,
   subscriptionUris: Array<string>,
+  unresolvedCommentors: Array<string>,
   unresolvedSubscriptions: Array<string>,
+  canonicalCreator: string,
+  canonicalCommentors: Array<string>,
+  canonicalSubscriptions: Array<string>,
   doResolveUris: (Array<string>) => void,
   customSelectAction?: (string, number) => void,
 };
@@ -33,6 +36,7 @@ export default function ChannelMentionSuggestions(props: Props) {
   const {
     unresolvedCommentors,
     unresolvedSubscriptions,
+    canonicalCreator,
     isLivestream,
     creatorUri,
     inputRef,
@@ -44,27 +48,31 @@ export default function ChannelMentionSuggestions(props: Props) {
   } = props;
   const comboboxInputRef: ElementRef<any> = React.useRef();
   const comboboxListRef: ElementRef<any> = React.useRef();
-  const [debouncedTerm, setDebouncedTerm] = React.useState('');
+
   const mainEl = document.querySelector('.channel-mention__suggestions');
+
+  const [debouncedTerm, setDebouncedTerm] = React.useState('');
+  const [mostSupported, setMostSupported] = React.useState('');
+  const [canonicalResults, setCanonicalResults] = React.useState([]);
 
   const isRefFocused = (ref) => ref && ref.current === document.activeElement;
 
   const subscriptionUris = props.subscriptionUris.filter((uri) => uri !== creatorUri);
+  const canonicalSubscriptions = props.canonicalSubscriptions.filter((uri) => uri !== canonicalCreator);
   const commentorUris = props.commentorUris.filter((uri) => uri !== creatorUri && !subscriptionUris.includes(uri));
+  const canonicalCommentors = props.canonicalCommentors.filter(
+    (uri) => uri !== canonicalCreator && !canonicalSubscriptions.includes(uri)
+  );
 
   const termToMatch = mentionTerm && mentionTerm.replace('@', '').toLowerCase();
   const allShownUris = [creatorUri, ...subscriptionUris, ...commentorUris];
+  const allShownCanonical = [canonicalCreator, ...canonicalSubscriptions, ...canonicalCommentors];
   const possibleMatches = allShownUris.filter((uri) => {
     try {
       const { channelName } = parseURI(uri);
       return channelName.toLowerCase().includes(termToMatch);
     } catch (e) {}
   });
-  const hasSubscriptionsResolved =
-    subscriptionUris &&
-    !subscriptionUris.every((uri) => unresolvedSubscriptions && unresolvedSubscriptions.includes(uri));
-  const hasCommentorsShown =
-    commentorUris.length > 0 && commentorUris.some((uri) => possibleMatches && possibleMatches.includes(uri));
 
   const searchSize = 5;
   const additionalOptions = { isBackgroundSearch: false, [SEARCH_OPTIONS.CLAIM_TYPE]: SEARCH_OPTIONS.INCLUDE_CHANNELS };
@@ -93,7 +101,7 @@ export default function ChannelMentionSuggestions(props: Props) {
     }, INPUT_DEBOUNCE_MS);
 
     return () => clearTimeout(timer);
-  }, [isTyping, mentionTerm, hasMinLength, possibleMatches.length]);
+  }, [hasMinLength, isTyping, mentionTerm]);
 
   React.useEffect(() => {
     if (!mainEl) return;
@@ -140,7 +148,9 @@ export default function ChannelMentionSuggestions(props: Props) {
           if (activeValue) {
             handleSelect(activeValue, keyCode);
           } else if (possibleMatches.length) {
-            handleSelect(possibleMatches[0], keyCode);
+            // $FlowFixMe
+            const suggest = allShownCanonical.find((matchUri) => possibleMatches.find((uri) => uri.includes(matchUri)));
+            if (suggest) handleSelect(suggest, keyCode);
           } else if (results) {
             handleSelect(mentionTerm, keyCode);
           }
@@ -155,16 +165,25 @@ export default function ChannelMentionSuggestions(props: Props) {
     window.addEventListener('keydown', handleKeyDown);
 
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [handleSelect, inputRef, mentionTerm, possibleMatches, results]);
+  }, [allShownCanonical, handleSelect, inputRef, mentionTerm, possibleMatches, results]);
 
   React.useEffect(() => {
     if (!stringifiedResults) return;
 
     const arrayResults = JSON.parse(stringifiedResults);
-    if (arrayResults && arrayResults.length > 0) doResolveUris(arrayResults);
+    if (arrayResults && arrayResults.length > 0) {
+      // $FlowFixMe
+      doResolveUris(arrayResults).then((response) => {
+        try {
+          // $FlowFixMe
+          const canonical_urls = Object.values(response).map(({ canonical_url }) => canonical_url);
+          setCanonicalResults(canonical_urls);
+        } catch (e) {}
+      });
+    }
   }, [doResolveUris, stringifiedResults]);
 
-  // Only resolve commentors on Livestreams if actually mentioning/looking for it
+  // Only resolve commentors on Livestreams when actually mentioning/looking for it
   React.useEffect(() => {
     if (isLivestream && unresolvedCommentors && mentionTerm) doResolveUris(unresolvedCommentors);
   }, [doResolveUris, isLivestream, mentionTerm, unresolvedCommentors]);
@@ -185,12 +204,23 @@ export default function ChannelMentionSuggestions(props: Props) {
     if (urisToResolve.length > 0) doResolveUris(urisToResolve);
   }, [doResolveUris, hasMinLength, isTyping, possibleMatches, subscriptionUris, unresolvedSubscriptions]);
 
-  const suggestionsRow = (label: string, suggestions: Array<string>, hasSuggestionsBelow: boolean) => {
-    if (mentionTerm !== '@' && suggestions !== results) {
+  const suggestionsRow = (
+    label: string,
+    suggestions: Array<string>,
+    canonical: Array<string>,
+    hasSuggestionsBelow: boolean
+  ) => {
+    if (mentionTerm.length > 1 && suggestions !== results) {
       suggestions = suggestions.filter((uri) => possibleMatches.includes(uri));
     } else if (suggestions === results) {
-      suggestions = suggestions.filter((uri) => !allShownUris.includes(uri));
+      suggestions = suggestions
+        .filter((uri) => !allShownUris.includes(uri))
+        .filter((uri) => !uri.includes(mostSupported));
     }
+    // $FlowFixMe
+    suggestions = suggestions
+      .map((matchUri) => canonical.find((uri) => matchUri.includes(uri)))
+      .filter((uri) => Boolean(uri));
 
     return !suggestions.length ? null : (
       <>
@@ -214,20 +244,36 @@ export default function ChannelMentionSuggestions(props: Props) {
                 suggestionsRow(
                   __('Creator'),
                   [creatorUri],
-                  hasSubscriptionsResolved || hasCommentorsShown || !showPlaceholder
+                  [canonicalCreator],
+                  canonicalSubscriptions.length > 0 || commentorUris.length > 0 || !showPlaceholder
                 )}
-              {hasSubscriptionsResolved &&
-                suggestionsRow(__('Following'), subscriptionUris, hasCommentorsShown || !showPlaceholder)}
-              {commentorUris.length > 0 && suggestionsRow(__('From comments'), commentorUris, !showPlaceholder)}
+              {canonicalSubscriptions.length > 0 &&
+                suggestionsRow(
+                  __('Following'),
+                  subscriptionUris,
+                  canonicalSubscriptions,
+                  commentorUris.length > 0 || !showPlaceholder
+                )}
+              {commentorUris.length > 0 &&
+                suggestionsRow(__('From comments'), commentorUris, canonicalCommentors, !showPlaceholder)}
 
-              {showPlaceholder
-                ? hasMinLength && <Spinner type="small" />
-                : results && (
+              {hasMinLength &&
+                (showPlaceholder ? (
+                  <Spinner type="small" />
+                ) : (
+                  results && (
                     <>
-                      {!noTopSuggestion && <ChannelMentionTopSuggestion query={debouncedTerm} />}
-                      {suggestionsRow(__('From search'), results, false)}
+                      {!noTopSuggestion && (
+                        <ChannelMentionTopSuggestion
+                          query={debouncedTerm}
+                          shownUris={allShownCanonical}
+                          setMostSupported={(winningUri) => setMostSupported(winningUri)}
+                        />
+                      )}
+                      {suggestionsRow(__('From search'), results, canonicalResults, false)}
                     </>
-                  )}
+                  )
+                ))}
             </ComboboxList>
           </ComboboxPopover>
         )}

@@ -7,15 +7,21 @@ type Props = {
   uriFromQuery: string,
   winningUri: string,
   isResolvingUri: boolean,
+  shownUris: Array<string>,
+  setMostSupported: (string) => void,
   doResolveUri: (string) => void,
 };
 
 export default function ChannelMentionTopSuggestion(props: Props) {
-  const { uriFromQuery, winningUri, isResolvingUri, doResolveUri } = props;
+  const { uriFromQuery, winningUri, isResolvingUri, shownUris, setMostSupported, doResolveUri } = props;
 
   React.useEffect(() => {
     if (uriFromQuery) doResolveUri(uriFromQuery);
   }, [doResolveUri, uriFromQuery]);
+
+  React.useEffect(() => {
+    if (winningUri) setMostSupported(winningUri);
+  }, [setMostSupported, winningUri]);
 
   if (isResolvingUri) {
     return (
@@ -31,7 +37,7 @@ export default function ChannelMentionTopSuggestion(props: Props) {
     );
   }
 
-  return !winningUri ? null : (
+  return !winningUri || shownUris.includes(winningUri) ? null : (
     <>
       <div className="channel-mention__label">
         <LbcSymbol prefix={__('Most Supported')} />
