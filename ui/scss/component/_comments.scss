@@ -40,6 +40,10 @@ $thumbnailWidthSmall: 1rem;
   .form-field--SimpleMDE {
     margin-top: 0;
   }
+
+  .form-field__two-column {
+    column-count: 2;
+  }
 }
 
 .comment__create--reply {

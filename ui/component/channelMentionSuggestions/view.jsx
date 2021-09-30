@@ -45,6 +45,7 @@ export default function ChannelMentionSuggestions(props: Props) {
   const comboboxInputRef: ElementRef<any> = React.useRef();
   const comboboxListRef: ElementRef<any> = React.useRef();
   const [debouncedTerm, setDebouncedTerm] = React.useState('');
+  const mainEl = document.querySelector('.channel-mention__suggestions');
 
   const isRefFocused = (ref) => ref && ref.current === document.activeElement;
 
@@ -95,14 +96,25 @@ export default function ChannelMentionSuggestions(props: Props) {
   }, [isTyping, mentionTerm, hasMinLength, possibleMatches.length]);
 
   React.useEffect(() => {
-    if (!inputRef) return;
+    if (!mainEl) return;
+    const header = document.querySelector('.header__navigation');
 
-    if (mentionTerm && isUriFromTermValid) {
-      inputRef.current.classList.add('textarea-mention');
-    } else {
-      inputRef.current.classList.remove('textarea-mention');
+    function handleReflow() {
+      const boxAtTopOfPage = header && mainEl.getBoundingClientRect().top <= header.offsetHeight;
+      const boxAtBottomOfPage = mainEl.getBoundingClientRect().bottom >= window.innerHeight;
+
+      if (boxAtTopOfPage) {
+        mainEl.setAttribute('flow-bottom', '');
+      }
+      if (mainEl.getAttribute('flow-bottom') !== null && boxAtBottomOfPage) {
+        mainEl.removeAttribute('flow-bottom');
+      }
     }
-  }, [inputRef, isUriFromTermValid, mentionTerm]);
+    handleReflow();
+
+    window.addEventListener('scroll', handleReflow);
+    return () => window.removeEventListener('scroll', handleReflow);
+  }, [mainEl]);
 
   React.useEffect(() => {
     if (!inputRef || !comboboxInputRef || !mentionTerm) return;
@@ -117,6 +129,7 @@ export default function ChannelMentionSuggestions(props: Props) {
           const selectedItem = selectedId && document.querySelector(`li[id="${selectedId}"]`);
           if (selectedItem) selectedItem.scrollIntoView({ block: 'nearest', inline: 'nearest' });
         } else {
+          // $FlowFixMe
           comboboxInputRef.current.focus();
         }
       } else {
@@ -132,7 +145,10 @@ export default function ChannelMentionSuggestions(props: Props) {
             handleSelect(mentionTerm, keyCode);
           }
         }
-        if (isRefFocused(comboboxInputRef)) inputRef.current.focus();
+        if (isRefFocused(comboboxInputRef)) {
+          // $FlowFixMe
+          inputRef.current.focus();
+        }
       }
     }
 

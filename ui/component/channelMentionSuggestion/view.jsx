@@ -22,8 +22,8 @@ export default function ChannelMentionSuggestion(props: Props) {
         <div className="channel-mention__suggestion">
           <ChannelThumbnail xsmall uri={uri} />
           <span className="channel-mention__suggestion-label">
-            <div className="channel-mention__suggestion-name">{claim.name}</div>
             <div className="channel-mention__suggestion-title">{(claim.value && claim.value.title) || claim.name}</div>
+            <div className="channel-mention__suggestion-name">{claim.name}</div>
           </span>
         </div>
       )}
