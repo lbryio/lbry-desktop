@@ -213,14 +213,16 @@ export default function ChannelMentionSuggestions(props: Props) {
     if (mentionTerm.length > 1 && suggestions !== results) {
       suggestions = suggestions.filter((uri) => possibleMatches.includes(uri));
     } else if (suggestions === results) {
-      suggestions = suggestions
-        .filter((uri) => !allShownUris.includes(uri))
-        .filter((uri) => !uri.includes(mostSupported));
+      suggestions = suggestions.filter((uri) => !allShownUris.includes(uri));
     }
     // $FlowFixMe
     suggestions = suggestions
       .map((matchUri) => canonical.find((uri) => matchUri.includes(uri)))
       .filter((uri) => Boolean(uri));
+
+    if (canonical === canonicalResults) {
+      suggestions = suggestions.filter((uri) => uri !== mostSupported);
+    }
 
     return !suggestions.length ? null : (
       <>
