@@ -278,6 +278,7 @@ function CommentList(props: Props) {
 
   return (
     <Card
+      className="card--enable-overflow"
       title={
         totalComments > 0
           ? totalComments === 1
