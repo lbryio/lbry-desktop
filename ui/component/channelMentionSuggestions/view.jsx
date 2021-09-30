@@ -119,7 +119,7 @@ export default function ChannelMentionSuggestions(props: Props) {
           comboboxInputRef.current.focus();
         }
       } else {
-        if (keyCode === KEYCODES.TAB) {
+        if ((isRefFocused(comboboxInputRef) || isRefFocused(inputRef)) && keyCode === KEYCODES.TAB) {
           event.preventDefault();
           const activeValue = activeElement && activeElement.getAttribute('value');
 
@@ -131,7 +131,7 @@ export default function ChannelMentionSuggestions(props: Props) {
             handleSelect(mentionTerm);
           }
         }
-        inputRef.current.focus();
+        if (isRefFocused(comboboxInputRef)) inputRef.current.focus();
       }
     }
 
@@ -186,7 +186,7 @@ export default function ChannelMentionSuggestions(props: Props) {
     );
   };
 
-  return (
+  return isRefFocused(inputRef) || isRefFocused(comboboxInputRef) ? (
     <Form onSubmit={() => handleSelect(mentionTerm)}>
       <Combobox className="channel-mention" onSelect={handleSelect}>
         <ComboboxInput ref={comboboxInputRef} className="channel-mention__input--none" value={mentionTerm} />
@@ -216,5 +216,5 @@ export default function ChannelMentionSuggestions(props: Props) {
         )}
       </Combobox>
     </Form>
-  );
+  ) : null;
 }
