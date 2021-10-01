@@ -28,6 +28,12 @@ function DownloadProgress(props: Props) {
   //       writtenBytes={100000}
   //       totalBytes={500000}
   //       addedOn={1632388934}
+  //       directory={''}
+  //       stopDownload={props.stopDownload}
+  //       outpoint={'asdfasdfsa'}
+  //       sd_hash={'asdfsadfsadfsd'}
+  //       isCancel
+  //       handleCancel={handleCancel}
   //     />
   //   </div>
   // );
@@ -63,7 +69,7 @@ function DownloadProgress(props: Props) {
           releaseTime = new Date(parseInt(item.metadata.release_time) * 1000).toISOString().split('T')[0];
         }
         return (
-          <>
+          <div key={item.sd_hash}>
             {index !== 0 && <hr className="download--divider" />}
             <DownloadState
               fileName={item.suggested_file_name}
@@ -79,7 +85,7 @@ function DownloadProgress(props: Props) {
               isCancel={cancelHash[item.sd_hash]}
               handleCancel={handleCancel}
             />
-          </>
+          </div>
         );
       })}
     </div>
@@ -182,7 +188,7 @@ function DownloadState({
       <p className="download-count-time">{text}</p>
       {isCancel && (
         <div className="download-cancel">
-          <p>Do you cancel download this file?</p>
+          <p>Do you want to cancel download this file?</p>
           <div className="download-cancel-confirm">
             <button type="button" className="download-cancel-ok" onClick={processStopDownload}>
               Yes

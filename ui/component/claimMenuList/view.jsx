@@ -263,6 +263,10 @@ function ClaimMenuList(props: Props) {
     push(`/$/${PAGES.REPORT_CONTENT}?claimId=${contentClaim && contentClaim.claim_id}`);
   }
 
+  function handleDownload() {
+    console.log('handleDownload', fileInfo, props);
+  }
+
   const shouldShow = !IS_WEB || (IS_WEB && isAuthenticated);
   return (
     <Menu>
@@ -467,6 +471,20 @@ function ClaimMenuList(props: Props) {
             </div>
           </MenuItem>
         )}
+        {/* <hr className="menu__separator" />
+        <MenuItem className="comment__menu-option" onSelect={handleDownload}>
+          <div className="menu__link">
+            <Icon aria-hidden icon={ICONS.DOWNLOAD} />
+            {__('Download')}
+          </div>
+        </MenuItem>
+
+        <MenuItem className="comment__menu-option" onSelect={() => console.log('download')}>
+          <div className="menu__link-disable">
+            <Icon aria-hidden icon={ICONS.DOWNLOAD} />
+            {__('Downloading')}
+          </div>
+        </MenuItem> */}
       </MenuList>
     </Menu>
   );

@@ -60,7 +60,6 @@
   font-size: 12px;
   margin-left: auto;
   font-style: italic;
-  color: blue;
 }
 .download--state-bar {
   display: flex;
@@ -88,7 +87,7 @@
 }
 .download-count-time {
   font-size: 11px;
-  color: gray;
+  // color: gray;
 }
 .download--divider {
   border-top: 1px solid #bbb;
@@ -123,12 +122,12 @@
 }
 .download-cancel-ok {
   border: none;
-  color: blue;
+  // color: rgb(4, 120, 87);
   background-color: transparent;
-  font-size: 14px;
+  font-size: 13px;
 }
 .download-cancel-ok:hover {
-  color: #1ca5d2;
+  color: rgb(4, 120, 87);
 }
 .download__container {
   position: fixed;

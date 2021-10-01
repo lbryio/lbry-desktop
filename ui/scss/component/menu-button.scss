@@ -117,6 +117,11 @@
   font-size: var(--font-small);
   padding-top: 0;
 }
+.menu__link-disable {
+  @extend .menu__link;
+  color: var(--color-text-subtitle)!important;
+}
+
 
 .menu__link--notification {
   width: 100%;
