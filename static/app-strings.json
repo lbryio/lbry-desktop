@@ -1756,12 +1756,8 @@
   "Moderator": "Moderator",
   "Global Unblock Channel": "Global Unblock Channel",
   "Global Block Channel": "Global Block Channel",
-  "Moderator tools": "Moderator tools",
-  "Global Block": "Global Block",
-  "Block this channel as global admin": "Block this channel as global admin",
-  "Moderator Block": "Moderator Block",
-  "Block this channel on behalf of %creator%": "Block this channel on behalf of %creator%",
-  "creator": "creator",
+  "Block this channel on behalf of %creator%.": "Block this channel on behalf of %creator%.",
+  "Block this channel on behalf of the creator.": "Block this channel on behalf of the creator.",
   "Enter the timeout duration. Examples: %examples%": "Enter the timeout duration. Examples: %examples%",
   "Wow, banned for more than 100 years?": "Wow, banned for more than 100 years?",
   "Invalid duration.": "Invalid duration.",
@@ -2180,5 +2176,8 @@
   "Discuss": "Discuss",
   "lbry.tv has been retired. You have been magically transported to Odysee.com. %more%": "lbry.tv has been retired. You have been magically transported to Odysee.com. %more%",
   "Show more livestreams": "Show more livestreams",
+  "Creator": "Creator",
+  "From comments": "From comments",
+  "From search": "From search",
   "--end--": "--end--"
 }
