@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { doResolveUri, makeSelectClaimForUri, makeSelectIsUriResolving } from 'lbry-redux';
 import { doSetPlayingUri } from 'redux/actions/content';
+import { punctuationMarks } from 'util/remark-lbry';
 import { selectBlackListedOutpoints } from 'lbryinc';
 import { selectPlayingUri } from 'redux/selectors/content';
 import ClaimLink from './view';
@@ -11,7 +12,7 @@ const select = (state, props) => {
 
   function getValidClaim(testUri) {
     claim = makeSelectClaimForUri(testUri)(state);
-    if (claim === null) {
+    if (claim === null && punctuationMarks.includes(testUri.charAt(testUri.length - 1))) {
       getValidClaim(testUri.substring(0, testUri.length - 1));
     } else {
       uri = testUri;
