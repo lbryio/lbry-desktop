@@ -70,6 +70,7 @@ type Props = {
   streamingUrl: ?string,
   getFile: (string) => void,
   customShouldHide?: (Claim) => boolean,
+  searchParams?: { [string]: string },
   showUnresolvedClaim?: boolean,
   showNullPlaceholder?: boolean,
   includeSupportAction?: boolean,
@@ -125,6 +126,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     // modifiers
     active,
     customShouldHide,
+    searchParams,
     showNullPlaceholder,
     // value from show mature content user setting
     // true if the user doesn't wanna see nsfw content
@@ -220,6 +222,11 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   let navigateSearch = new URLSearchParams();
   if (listId) {
     navigateSearch.set(COLLECTIONS_CONSTS.COLLECTION_ID, listId);
+  }
+  if (searchParams) {
+    Object.keys(searchParams).forEach((key) => {
+      navigateSearch.set(key, searchParams[key]);
+    });
   }
 
   const handleNavLinkClick = (e) => {
