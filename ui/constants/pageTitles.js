@@ -52,6 +52,7 @@ export const PAGE_TITLE = {
   [PAGES.SETTINGS_STRIPE_ACCOUNT]: 'Bank Accounts',
   [PAGES.SETTINGS_STRIPE_CARD]: 'Payment Methods',
   [PAGES.SETTINGS_UPDATE_PWD]: 'Update password',
+  [PAGES.SETTINGS_OWN_COMMENTS]: 'Your comments',
   [PAGES.SWAP]: 'Swap Credits',
   [PAGES.TAGS_FOLLOWING]: 'Tags',
   [PAGES.TAGS_FOLLOWING_MANAGE]: 'Manage tags',

@@ -46,6 +46,7 @@ exports.SETTINGS_NOTIFICATIONS = 'settings/notifications';
 exports.SETTINGS_BLOCKED_MUTED = 'settings/block_and_mute';
 exports.SETTINGS_CREATOR = 'settings/creator';
 exports.SETTINGS_UPDATE_PWD = 'settings/update_password';
+exports.SETTINGS_OWN_COMMENTS = 'settings/ownComments';
 exports.SHOW = 'show';
 exports.ACCOUNT = 'account';
 exports.SEARCH = 'search';
