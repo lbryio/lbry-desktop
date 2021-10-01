@@ -140,6 +140,7 @@ async function sendAndResetWatchmanData() {
   if (videoType === 'application/x-mpegURL') {
     protocol = 'hls';
     // get bandwidth if it exists from the texttrack (so it's accurate if user changes quality)
+    // $FlowFixMe
     bitrateAsBitsPerSecond = videoPlayer.textTracks?.().tracks_[0]?.activeCues[0]?.value?.bandwidth;
   } else {
     protocol = 'stb';
