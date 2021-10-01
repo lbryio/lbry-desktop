@@ -43,6 +43,7 @@ declare type CommentsState = {
   linkedCommentAncestors: { [string]: Array<string> }, // {"linkedCommentId": ["parentId", "grandParentId", ...]}
   pinnedCommentsById: {}, // ClaimId -> array of pinned comment IDs
   isLoading: boolean,
+  isLoadingById: boolean,
   isLoadingByParentId: { [string]: boolean },
   myComments: ?Set<string>,
   isFetchingReacts: boolean,

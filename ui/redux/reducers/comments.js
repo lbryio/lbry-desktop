@@ -21,6 +21,7 @@ const defaultState: CommentsState = {
   superChatsByUri: {},
   pinnedCommentsById: {}, // ClaimId -> array of pinned comment IDs
   isLoading: false,
+  isLoadingById: false,
   isLoadingByParentId: {},
   isCommenting: false,
   myComments: undefined,
@@ -335,6 +336,8 @@ export default handleActions(
       };
     },
 
+    [ACTIONS.COMMENT_BY_ID_STARTED]: (state) => ({ ...state, isLoadingById: true }),
+
     [ACTIONS.COMMENT_BY_ID_COMPLETED]: (state: CommentsState, action: any) => {
       const { comment, ancestors } = action.data;
       const claimId = comment.claim_id;
@@ -375,6 +378,7 @@ export default handleActions(
 
       return {
         ...state,
+        isLoadingById: false,
         topLevelCommentsById,
         topLevelTotalCommentsById,
         topLevelTotalPagesById,

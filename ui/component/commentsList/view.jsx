@@ -14,13 +14,11 @@ import usePersistedState from 'effects/use-persisted-state';
 import { ENABLE_COMMENT_REACTIONS } from 'config';
 import Empty from 'component/common/empty';
 import debounce from 'util/debounce';
+import useFetched from 'effects/use-fetched';
 import { useIsMobile, useIsMediumScreen } from 'effects/use-screensize';
 import { getChannelIdFromClaim } from 'util/claim';
 
 const DEBOUNCE_SCROLL_HANDLER_MS = 200;
-
-// "3" due to 2 separate fetches needed + 1 buffer just in case.
-const MAX_LINKED_COMMENT_SCROLL_ATTEMPTS = 3;
 
 function scaleToDevicePixelRatio(value) {
   const devicePixelRatio = window.devicePixelRatio || 1.0;
@@ -44,6 +42,7 @@ type Props = {
   claimIsMine: boolean,
   myChannels: ?Array<ChannelClaim>,
   isFetchingComments: boolean,
+  isFetchingCommentsById: boolean,
   isFetchingReacts: boolean,
   linkedCommentId?: string,
   totalComments: number,
@@ -69,6 +68,7 @@ function CommentList(props: Props) {
     claimIsMine,
     myChannels,
     isFetchingComments,
+    isFetchingCommentsById,
     isFetchingReacts,
     linkedCommentId,
     totalComments,
@@ -83,15 +83,15 @@ function CommentList(props: Props) {
   const DEFAULT_SORT = ENABLE_COMMENT_REACTIONS ? SORT_BY.POPULARITY : SORT_BY.NEWEST;
   const [sort, setSort] = usePersistedState('comment-sort-by', DEFAULT_SORT);
   const [page, setPage] = React.useState(0);
-  const [lcScrollAttempts, setLcScrollAttempts] = React.useState(
-    linkedCommentId ? 0 : MAX_LINKED_COMMENT_SCROLL_ATTEMPTS
-  );
   const isMobile = useIsMobile();
   const isMediumScreen = useIsMediumScreen();
   const [expandedComments, setExpandedComments] = React.useState(!isMobile && !isMediumScreen);
   const totalFetchedComments = allCommentIds ? allCommentIds.length : 0;
   const channelId = getChannelIdFromClaim(claim);
   const channelSettings = channelId ? settingsByChannelId[channelId] : undefined;
+  const fetchedCommentsOnce = useFetched(isFetchingComments);
+  const fetchedReactsOnce = useFetched(isFetchingReacts);
+  const fetchedLinkedComment = useFetched(isFetchingCommentsById);
 
   // Display comments immediately if not fetching reactions
   // If not, wait to show comments until reactions are fetched
@@ -203,19 +203,19 @@ function CommentList(props: Props) {
 
   // Scroll to linked-comment
   useEffect(() => {
-    if (lcScrollAttempts < MAX_LINKED_COMMENT_SCROLL_ATTEMPTS && readyToDisplayComments && !isFetchingComments) {
+    if (fetchedLinkedComment && fetchedCommentsOnce && fetchedReactsOnce) {
       const elems = document.getElementsByClassName(COMMENT_HIGHLIGHTED);
       if (elems.length > 0) {
-        setLcScrollAttempts(MAX_LINKED_COMMENT_SCROLL_ATTEMPTS);
+        const ROUGH_HEADER_HEIGHT = 125; // @see: --header-height
         const linkedComment = elems[0];
-        linkedComment.scrollIntoView({ block: 'start' });
-        window.scrollBy(0, -125);
-      } else {
-        setLcScrollAttempts(lcScrollAttempts + 1);
+        window.scrollTo({
+          top: linkedComment.getBoundingClientRect().top + window.scrollY - ROUGH_HEADER_HEIGHT,
+          left: 0,
+          behavior: 'smooth',
+        });
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [readyToDisplayComments, isFetchingComments]); // We just want to respond to these, nothing else.
+  }, [fetchedLinkedComment, fetchedCommentsOnce, fetchedReactsOnce]);
 
   // Infinite scroll
   useEffect(() => {

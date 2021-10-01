@@ -203,6 +203,10 @@ export function doCommentList(
 
 export function doCommentById(commentId: string, toastIfNotFound: boolean = true) {
   return (dispatch: Dispatch, getState: GetState) => {
+    dispatch({
+      type: ACTIONS.COMMENT_BY_ID_STARTED,
+    });
+
     return Comments.comment_by_id({ comment_id: commentId, with_ancestors: true })
       .then((result: CommentByIdResponse) => {
         const { item, items, ancestors } = result;
