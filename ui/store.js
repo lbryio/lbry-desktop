@@ -194,7 +194,7 @@ const populateAuthTokenHeader = () => {
       }
       const tokens = getTokens();
       if (tokens.access_token) {
-        Lbry.setApiHeader('Authorization', 'Bearer ' + tokens.access_token);
+        Lbry.setApiHeader('Authorization', `Bearer ${tokens.access_token}`);
       } else {
         Lbry.setApiHeader(X_LBRY_AUTH_TOKEN, tokens.auth_token);
       }
