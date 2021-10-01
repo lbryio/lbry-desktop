@@ -78,6 +78,7 @@ function buildOgMetadata(overrideOptions = {}) {
   const cleanDescription = removeMd(description || SITE_DESCRIPTION);
   const head =
     `<title>${SITE_TITLE}</title>\n` +
+    `<meta property="description" content="${cleanDescription}" />\n` +
     `<meta property="og:url" content="${URL}" />\n` +
     `<meta property="og:title" content="${title || OG_HOMEPAGE_TITLE || SITE_TITLE}" />\n` +
     `<meta property="og:site_name" content="${SITE_NAME || SITE_TITLE}"/>\n` +
