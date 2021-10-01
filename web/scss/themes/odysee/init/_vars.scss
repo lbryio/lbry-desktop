@@ -1,0 +1,108 @@
+// Both of these should probably die and become variables as well
+$spacing-vertical: 2rem;
+$spacing-width: 36px;
+
+$breakpoint-xxsmall: 450px;
+$breakpoint-xsmall: 600px;
+$breakpoint-small: 900px;
+$breakpoint-medium: 1150px;
+$breakpoint-large: 1600px;
+
+:root {
+  --border-radius: 10px;
+  --height-input: 2.5rem;
+  --height-button: 2.5rem;
+  --height-checkbox: 24px;
+  --height-radio: 24px;
+  --height-badge: 24px;
+
+  // Spacing
+  --spacing-xxs: calc(2rem / 5);
+  --spacing-xs: calc(2rem / 4);
+  --spacing-s: calc(2rem / 3);
+  --spacing-m: calc(2rem / 2);
+  --spacing-l: 2rem;
+  --spacing-xl: 3rem;
+
+  // Aspect ratio
+  --aspect-ratio-bluray: 41.6666666667%; // 12:5
+  --aspect-ratio-panavision: 36.3636363636%; // 11:4
+  --aspect-ratio-sd: 75%; // 4:3
+  --aspect-ratio-standard: 56.25%; // 16:9
+
+  // Type
+  --font-mono: 'Fira Code';
+  --font-sans: Inter;
+  --font-serif: Georgia;
+  --font-weight-base: 400;
+  --font-weight-light: 300;
+  --font-weight-bold: 700;
+  --font-base: 14px;
+  --font-body: 1rem;
+  --font-xxsmall: 0.65rem;
+  --font-xsmall: 0.7344rem;
+  --font-small: 0.8571rem;
+  --font-large: 1.3rem;
+  --font-title: 1.71rem;
+  --font-heading: 2.94rem;
+
+  // Width & spacing
+  --page-max-width: 1280px;
+  --page-max-width--filepage: 1700px;
+  --mac-titlebar-height: 24px;
+  --mobile: 600px;
+  --side-nav-width: 230px;
+  --side-nav-width--micro: 125px;
+
+  --spacing-main-padding: var(--spacing-xl);
+  --floating-viewer-width: 32rem;
+  --floating-viewer-height: 18rem; // 32 * 9/16
+  --floating-viewer-info-height: 5rem;
+  --floating-viewer-container-height: calc(var(--floating-viewer-height) + var(--floating-viewer-info-height));
+  --option-select-width: 8rem;
+
+  // Text
+  --text-max-width: 660px;
+  --text-link-padding: 4px;
+
+  // Tabs
+  --tab-indicator-size: 0.5rem;
+
+  // Header
+  // This is tied to the floating player so it knows where to attach to
+  // ui/component/fileRenderFloating/view.jsx
+  --header-height: 80px;
+
+  // Inline Player
+  --inline-player-max-height: calc(100vh - var(--header-height) - var(--spacing-l) * 2);
+
+  // Card
+  --card-radius: var(--border-radius);
+  --card-max-width: 1000px;
+  --card-box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+  // Modal
+  --modal-width: 550px;
+
+  // Animation :)
+  --animation-duration: 0.2s;
+  --animation-style: ease-in-out;
+
+  // Image
+  --thumbnail-preview-height: 100px;
+  --thumbnail-preview-width: 177px;
+  --cover-photo-height: 210px;
+  --channel-thumbnail-width: 10rem;
+  --channel-thumbnail-width--small: 4rem;
+  --file-list-thumbnail-width: 10rem;
+
+  --tag-height: 1.5rem;
+
+  --livestream-comments-width: 30rem;
+}
+
+@media (max-width: $breakpoint-small) {
+  :root {
+    --font-body: 0.8rem;
+  }
+}
