@@ -26,6 +26,21 @@ function handlePunctuation(value) {
   return punctuationIndex ? value.substring(0, punctuationIndex) : value;
 }
 
+function handlePunctuation(value) {
+  const modifierIndex =
+    (value.indexOf(':') >= 0 && value.indexOf(':')) || (value.indexOf('#') >= 0 && value.indexOf('#'));
+
+  let punctuationIndex;
+  punctuationMarks.some((p) => {
+    if (modifierIndex) {
+      punctuationIndex = value.indexOf(p, modifierIndex + 1) >= 0 && value.indexOf(p, modifierIndex + 1);
+    }
+    return punctuationIndex;
+  });
+
+  return punctuationIndex ? value.substring(0, punctuationIndex) : value;
+}
+
 // Find channel mention
 function locateMention(value, fromIndex) {
   const index = value.indexOf(mentionToken, fromIndex);

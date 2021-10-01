@@ -187,7 +187,7 @@ function ClaimPreviewTile(props: Props) {
           <div className="placeholder claim-tile__title" />
           <div
             className={classnames('claim-tile__info placeholder', {
-              contains_view_count: shouldShowViewCount,
+              'contains_view_count': shouldShowViewCount,
             })}
           />
         </div>
@@ -247,7 +247,7 @@ function ClaimPreviewTile(props: Props) {
       <div>
         <div
           className={classnames('claim-tile__info', {
-            contains_view_count: shouldShowViewCount,
+            'contains_view_count': shouldShowViewCount,
           })}
         >
           {isChannel ? (

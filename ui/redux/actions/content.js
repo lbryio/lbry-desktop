@@ -14,29 +14,30 @@ import {
 } from 'redux/selectors/file_info';
 import { makeSelectUrlsForCollectionId } from 'redux/selectors/collections';
 import { doToast } from 'redux/actions/notifications';
-import { doPurchaseUri } from 'redux/actions/file';
+import { doPurchaseUri, doDeleteFile } from 'redux/actions/file';
 import Lbry from 'lbry';
 import * as SETTINGS from 'constants/settings';
 import { makeSelectCostInfoForUri, Lbryio } from 'lbryinc';
 import { makeSelectClientSetting, selectosNotificationsEnabled, selectDaemonSettings } from 'redux/selectors/settings';
 
 const DOWNLOAD_POLL_INTERVAL = 1000;
+var timeOutHash = {};
 
-export function doUpdateLoadStatus(uri: string, outpoint: string) {
+export function doUpdateLoadStatus(uri: any, outpoint: string) {
   // Updates the loading status for a uri as it's downloading
   // Calls file_list and checks the written_bytes value to see if the number has increased
   // Not needed on web as users aren't actually downloading the file
   // @if TARGET='app'
   return (dispatch: Dispatch, getState: GetState) => {
     const setNextStatusUpdate = () =>
-      setTimeout(() => {
+      (timeOutHash[outpoint] = setTimeout(() => {
         // We need to check if outpoint still exists first because user are able to delete file (outpoint) while downloading.
         // If a file is already deleted, no point to still try update load status
         const byOutpoint = selectFileInfosByOutpoint(getState());
         if (byOutpoint[outpoint]) {
           dispatch(doUpdateLoadStatus(uri, outpoint));
         }
-      }, DOWNLOAD_POLL_INTERVAL);
+      }, DOWNLOAD_POLL_INTERVAL));
 
     Lbry.file_list({
       outpoint,
@@ -94,6 +95,25 @@ export function doUpdateLoadStatus(uri: string, outpoint: string) {
     });
   };
   // @endif
+}
+
+export function doContinueDownloading(outpoint: string, force: boolean) {
+  return (dispatch: Dispatch) => {
+    if (!timeOutHash[outpoint] || force) {
+      dispatch(doUpdateLoadStatus(null, outpoint));
+    }
+  };
+}
+
+export function doStopDownload(outpoint: string) {
+  return (dispatch: Dispatch) => {
+    if (timeOutHash[outpoint]) {
+      clearInterval(timeOutHash[outpoint]);
+      timeOutHash[outpoint] = undefined;
+    }
+
+    dispatch(doDeleteFile(outpoint, false, false, null));
+  };
 }
 
 export function doSetPrimaryUri(uri: ?string) {

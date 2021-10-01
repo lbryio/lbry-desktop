@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import SideNavigation from 'component/sideNavigation';
 import SettingsSideNavigation from 'component/settingsSideNavigation';
 import Header from 'component/header';
+import DownloadProgress from 'component/downloadProgress';
 /* @if TARGET='app' */
 import StatusBar from 'component/common/status-bar';
 /* @endif */
