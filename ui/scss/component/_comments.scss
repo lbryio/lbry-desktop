@@ -200,6 +200,9 @@ $thumbnailWidthSmall: 1rem;
 }
 
 .comment__body-container {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
   flex: 1;
   margin-left: var(--spacing-xs);
 
