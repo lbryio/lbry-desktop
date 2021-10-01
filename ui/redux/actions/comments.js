@@ -212,7 +212,7 @@ export function doCommentListOwn(
   channelId: string,
   page: number = 1,
   pageSize: number = 99999,
-  sortBy: number = SORT_BY.NEWEST
+  sortBy: number = SORT_BY.NEWEST_NO_PINS
 ) {
   return async (dispatch: Dispatch, getState: GetState) => {
     const state = getState();

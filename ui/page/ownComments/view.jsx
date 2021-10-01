@@ -8,7 +8,7 @@ import Card from 'component/common/card';
 import Empty from 'component/common/empty';
 import Page from 'component/page';
 import Spinner from 'component/spinner';
-import { SORT_BY, COMMENT_PAGE_SIZE_TOP_LEVEL } from 'constants/comment';
+import { COMMENT_PAGE_SIZE_TOP_LEVEL } from 'constants/comment';
 import * as ICONS from 'constants/icons';
 import useFetched from 'effects/use-fetched';
 import debounce from 'util/debounce';
@@ -29,7 +29,7 @@ type Props = {
   isFetchingComments: boolean,
   claimsById: any,
   doCommentReset: (claimId: string) => void,
-  doCommentListOwn: (channelId: string, page: number, pageSize: number, sortBy: number) => void,
+  doCommentListOwn: (channelId: string, page: number, pageSize: number) => void,
 };
 
 export default function OwnComments(props: Props) {
@@ -117,7 +117,7 @@ export default function OwnComments(props: Props) {
   // Fetch own comments
   React.useEffect(() => {
     if (page !== 0 && activeChannelId) {
-      doCommentListOwn(activeChannelId, page, COMMENT_PAGE_SIZE_TOP_LEVEL, SORT_BY.NEWEST);
+      doCommentListOwn(activeChannelId, page, COMMENT_PAGE_SIZE_TOP_LEVEL);
     }
   }, [page]); // eslint-disable-line react-hooks/exhaustive-deps
 

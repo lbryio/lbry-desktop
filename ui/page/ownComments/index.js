@@ -27,7 +27,7 @@ const select = (state) => {
 
 const perform = (dispatch) => ({
   doCommentReset: (a) => dispatch(doCommentReset(a)),
-  doCommentListOwn: (a, b, c, d) => dispatch(doCommentListOwn(a, b, c, d)),
+  doCommentListOwn: (a, b, c) => dispatch(doCommentListOwn(a, b, c)),
 });
 
 export default connect(select, perform)(OwnComments);
