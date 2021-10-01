@@ -5,6 +5,7 @@ const merge = require('webpack-merge');
 const baseConfig = require('../webpack.base.config.js');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const WriteFilePlugin = require('write-file-webpack-plugin');
+const FileManagerPlugin = require('filemanager-webpack-plugin');
 const { DefinePlugin, ProvidePlugin } = require('webpack');
 const SentryWebpackPlugin = require('@sentry/webpack-plugin');
 const { getJsBundleId } = require('./bundle-id.js');
@@ -62,10 +63,6 @@ const copyWebpackCommands = [
     from: `${WEB_STATIC_ROOT}/pwa/`,
     to: `${DIST_ROOT}/public/pwa/`,
   },
-  {
-    from: `${WEB_STATIC_ROOT}/pwa/serviceWorker.js`,
-    to: `${DIST_ROOT}/`,
-  },
 ];
 
 const CUSTOM_OG_PATH = `${CUSTOM_ROOT}/v2-og.png`;
@@ -108,6 +105,21 @@ let plugins = [
   new ProvidePlugin({
     __: ['i18n.js', '__'],
   }),
+  new FileManagerPlugin({
+    events: {
+      onEnd: [
+        { delete: [`${DIST_ROOT}/sw.js`] },
+        {
+          move: [
+            {
+              source: `${DIST_ROOT}/public/sw.js`,
+              destination: `${DIST_ROOT}/sw.js`,
+            },
+          ],
+        },
+      ],
+    },
+  }),
 ];
 
 if (isProduction && hasSentryToken) {
@@ -125,12 +137,14 @@ const webConfig = {
   target: 'web',
   entry: {
     [`ui-${jsBundleId}`]: '../ui/index.jsx',
+    [`sw`]: './src/serviceWorker.js',
   },
   output: {
     filename: '[name].js',
     path: path.join(__dirname, 'dist/public/'),
     publicPath: '/public/',
     chunkFilename: '[name]-[chunkhash].js',
+    globalObject: 'this',
   },
   devServer: {
     port: WEBPACK_WEB_PORT,

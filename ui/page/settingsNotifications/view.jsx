@@ -13,11 +13,38 @@ import { Redirect } from 'react-router-dom';
 import Yrbl from 'component/yrbl';
 import Button from 'component/button';
 import { SETTINGS } from 'lbry-redux';
+import useBrowserNotifications from 'web/effects/use-browser-notifications';
 
 type Props = {
   osNotificationsEnabled: boolean,
   isAuthenticated: boolean,
   setClientSetting: (string, boolean) => void,
+};
+
+const BrowserNotificationSettings = () => {
+  const { supported, enabled, toggleEnabled } = useBrowserNotifications();
+
+  if (!supported) return null;
+
+  return (
+    <>
+      <div>
+        <h2 className="card__title">{__('Push notifications')}</h2>
+        <div className="card__subtitle">{__('Configure push notifications.')}</div>
+      </div>
+      <Card
+        isBodyList
+        body={
+          <SettingsRow
+            title={__('Get notifications in this browser')}
+            subtitle={__("Get notified when an upload or channel is confirmed even if you're not on the site.")}
+          >
+            <FormField type="checkbox" name="browserNotification" onChange={toggleEnabled} checked={enabled} />
+          </SettingsRow>
+        }
+      />
+    </>
+  );
 };
 
 export default function NotificationSettingsPage(props: Props) {
@@ -142,6 +169,10 @@ export default function NotificationSettingsPage(props: Props) {
               </SettingsRow>
             }
           />
+          {/* @endif */}
+
+          {/* @if TARGET='web' */}
+          <BrowserNotificationSettings />
           {/* @endif */}
 
           {enabledEmails && enabledEmails.length > 0 && (

@@ -102,9 +102,13 @@ function buildOgMetadata(overrideOptions = {}) {
 function conditionallyAddPWA() {
   let head = '';
   if (DOMAIN === 'odysee.com') {
-    head += '<link rel="manifest" href="./public/pwa/manifest.json"/>';
-    head += '<link rel="apple-touch-icon" sizes="180x180" href="./public/pwa/icon-180.png">';
-    head += '<script src="./serviceWorker.js"></script>';
+    head += '<link rel="manifest" href="/public/pwa/manifest.json"/>';
+    head += '<link rel="apple-touch-icon" sizes="180x180" href="/public/pwa/icon-180.png">';
+    head += `<script>
+      window.addEventListener('load', function() {
+        if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js")}
+      });
+    </script>`;
   }
   return head;
 }
