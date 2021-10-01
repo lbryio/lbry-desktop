@@ -1,7 +1,8 @@
 // @flow
 
 import { isNameValid, isURIValid, normalizeURI, parseURI } from 'lbry-redux';
-import { URL as SITE_URL, URL_LOCAL, URL_DEV } from 'config';
+import { URL as SITE_URL, URL_LOCAL, URL_DEV, SIMPLE_SITE } from 'config';
+import { SEARCH_OPTIONS } from 'constants/search';
 
 export function createNormalizedSearchKey(query: string) {
   const FROM = '&from=';
@@ -86,4 +87,20 @@ export function getUriForSearchTerm(term: string) {
       return [term, 'error'];
     }
   }
+}
+
+export function getRecommendationSearchOptions(matureEnabled: boolean, claimIsMature: boolean, claimId: string) {
+  const options = { size: 20, nsfw: matureEnabled, isBackgroundSearch: true };
+
+  if (SIMPLE_SITE) {
+    options[SEARCH_OPTIONS.CLAIM_TYPE] = SEARCH_OPTIONS.INCLUDE_FILES;
+    options[SEARCH_OPTIONS.MEDIA_VIDEO] = true;
+    options[SEARCH_OPTIONS.PRICE_FILTER_FREE] = true;
+  }
+
+  if (matureEnabled || !claimIsMature) {
+    options[SEARCH_OPTIONS.RELATED_TO] = claimId;
+  }
+
+  return options;
 }

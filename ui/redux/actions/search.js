@@ -1,6 +1,5 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
-import { SEARCH_OPTIONS } from 'constants/search';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import {
   buildURI,
@@ -13,7 +12,8 @@ import {
 import { makeSelectSearchUrisForQuery, selectSearchValue } from 'redux/selectors/search';
 import handleFetchResponse from 'util/handle-fetch';
 import { getSearchQueryString } from 'util/query-params';
-import { SIMPLE_SITE, SEARCH_SERVER_API } from 'config';
+import { getRecommendationSearchOptions } from 'util/search';
+import { SEARCH_SERVER_API } from 'config';
 
 type Dispatch = (action: any) => any;
 type GetState = () => { search: SearchState };
@@ -140,17 +140,7 @@ export const doFetchRecommendedContent = (uri: string) => (dispatch: Dispatch, g
   const claimIsMature = makeSelectClaimIsNsfw(uri)(state);
 
   if (claim && claim.value && claim.claim_id) {
-    const options: SearchOptions = { size: 20, nsfw: matureEnabled, isBackgroundSearch: true };
-
-    if (SIMPLE_SITE) {
-      options[SEARCH_OPTIONS.CLAIM_TYPE] = SEARCH_OPTIONS.INCLUDE_FILES;
-      options[SEARCH_OPTIONS.MEDIA_VIDEO] = true;
-      options[SEARCH_OPTIONS.PRICE_FILTER_FREE] = true;
-    }
-    if (matureEnabled || !claimIsMature) {
-      options[SEARCH_OPTIONS.RELATED_TO] = claim.claim_id;
-    }
-
+    const options: SearchOptions = getRecommendationSearchOptions(matureEnabled, claimIsMature, claim.claim_id);
     const { title } = claim.value;
 
     if (title && options) {

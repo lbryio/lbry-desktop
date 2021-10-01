@@ -13,7 +13,7 @@ import {
   makeSelectIsUriResolving,
 } from 'lbry-redux';
 import { createSelector } from 'reselect';
-import { createNormalizedSearchKey } from 'util/search';
+import { createNormalizedSearchKey, getRecommendationSearchOptions } from 'util/search';
 import { selectMutedChannels } from 'redux/selectors/blocked';
 import { selectHistory } from 'redux/selectors/content';
 import { selectAllCostInfoByUri } from 'lbryinc';
@@ -155,36 +155,34 @@ export const makeSelectRecommendedContentForUri = (uri: string) =>
   );
 
 export const makeSelectRecommendedRecsysIdForClaimId = (claimId: string) =>
-  createSelector(makeSelectClaimForClaimId(claimId), selectSearchResultByQuery, (claim, searchUrisByQuery) => {
-    // TODO: DRY this out.
-    let poweredBy;
-    if (claim && claimId) {
-      const isMature = isClaimNsfw(claim);
-      const { title } = claim.value;
+  createSelector(
+    makeSelectClaimForClaimId(claimId),
+    selectShowMatureContent,
+    selectSearchResultByQuery,
+    (claim, matureEnabled, searchUrisByQuery) => {
+      // TODO: DRY this out.
+      let poweredBy;
+      if (claim && claimId) {
+        const isMature = isClaimNsfw(claim);
+        const { title } = claim.value;
+        if (!title) {
+          return;
+        }
 
-      if (!title) {
-        return;
+        const options = getRecommendationSearchOptions(matureEnabled, isMature, claimId);
+        const searchQuery = getSearchQueryString(title.replace(/\//, ' '), options);
+        const normalizedSearchQuery = createNormalizedSearchKey(searchQuery);
+
+        const searchResult = searchUrisByQuery[normalizedSearchQuery];
+        if (searchResult) {
+          poweredBy = searchResult.recsys;
+        } else {
+          return normalizedSearchQuery;
+        }
       }
-
-      const options: {
-        related_to?: string,
-        nsfw?: boolean,
-        isBackgroundSearch?: boolean,
-      } = { related_to: claim.claim_id, isBackgroundSearch: true };
-
-      options['nsfw'] = isMature;
-      const searchQuery = getSearchQueryString(title.replace(/\//, ' '), options);
-      const normalizedSearchQuery = createNormalizedSearchKey(searchQuery);
-
-      let searchResult = searchUrisByQuery[normalizedSearchQuery];
-      if (searchResult) {
-        poweredBy = searchResult.recsys;
-      } else {
-        return normalizedSearchQuery;
-      }
+      return poweredBy;
     }
-    return poweredBy;
-  });
+  );
 
 export const makeSelectWinningUriForQuery = (query: string) => {
   const uriFromQuery = `lbry://${query}`;
