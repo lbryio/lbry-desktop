@@ -1,0 +1,160 @@
+.download--header {
+  padding: 15px;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  background-color: #f2f2f2;
+  border-radius: 10px;
+  border: 1px solid #c5c4c3;
+}
+.download--top-close-button {
+  position: absolute;
+  top: 7px;
+  right: 15px;
+  font-size: 35px;
+  background-color: transparent;
+  width: 15px;
+  height: 15px;
+  div {
+    height: 2px;
+    width: 13px;
+    background-color: #979696;
+    border-radius: 3px;
+  }
+}
+.download--state-container {
+  margin-top: 10px;
+  padding-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.download--file-name {
+  margin: 0;
+  font-weight: 800;
+  font-size: 13px;
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin-right: 10px;
+}
+.download--file-name-link {
+  margin: 0;
+  font-weight: 800;
+  font-size: 13px;
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin-right: 10px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.download--release-Time {
+  margin: 0;
+  font-weight: 800;
+  font-size: 12px;
+  margin-left: auto;
+  font-style: italic;
+  color: blue;
+}
+.download--state-bar {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  margin-bottom: 2px;
+}
+.download--bar-container {
+  width: 100%;
+  background-color: gray;
+  height: 6px;
+  border-radius: 10px;
+}
+.download--bar-content {
+  border-radius: 10px;
+  height: 100%;
+  background-color: #ff9933;
+}
+.download--close-button {
+  flex-shrink: 0;
+  margin-left: auto;
+  font-size: 20px;
+  cursor: pointer;
+}
+.download-count-time {
+  font-size: 11px;
+  color: gray;
+}
+.download--divider {
+  border-top: 1px solid #bbb;
+  margin-left: -15px;
+  width: 110%;
+}
+.download-cancel {
+  margin-top: 7px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.download-cancel p {
+  margin: 0;
+  color: black;
+  font-size: 12px;
+  margin: 0;
+  white-space: nowrap;
+  width: 285px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.download-cancel b {
+  font-size: 13px;
+}
+.download-cancel-confirm {
+  width: 90px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.download-cancel-ok {
+  border: none;
+  color: blue;
+  background-color: transparent;
+  font-size: 14px;
+}
+.download-cancel-ok:hover {
+  color: #1ca5d2;
+}
+.download__container {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  width: 400px;
+  height: 300px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 5px grey;
+  background-color: white;
+  transition: width 2s;
+}
+.download__toggle-button {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  border: none;
+  background: white;
+  color: #4f4f4fbf;
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+  box-shadow: 2px 2px 4px grey;
+}
+.download_close_modal {
+  float: right;
+  margin-right: 10px;
+  font-size: 25px;
+}
