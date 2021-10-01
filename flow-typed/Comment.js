@@ -118,7 +118,7 @@ declare type CommentListParams = {
   parent_id?: string,       // filters comments to those under this thread
   top_level?: boolean,      // filters to only top level comments
   hidden?: boolean,         // if true, will show hidden comments as well
-  sort_by?: number,         // NEWEST=0, OLDEST=1, CONTROVERSY=2, POPULARITY=3,
+  sort_by?: number,         // @see: ui/constants/comments.js::SORT_BY
 };
 
 declare type CommentListResponse = {
