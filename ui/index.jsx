@@ -234,7 +234,6 @@ function AppWrapper() {
   const [persistDone, setPersistDone] = useState(false);
   const [keycloakReady, setKeycloakReady] = useState(false);
 
-  // init?
   useEffect(() => {
     // @if TARGET='app'
     moment.locale(remote.app.getLocale());
@@ -282,8 +281,6 @@ function AppWrapper() {
       initKeycloak();
     }
   }, [keycloakReady]);
-
-  // initKeycloak();
 
   useEffect(() => {
     if (persistDone) {

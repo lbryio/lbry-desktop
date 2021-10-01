@@ -22,8 +22,6 @@ const BackupPage = lazyImport(() => import('page/backup' /* webpackChunkName: "b
 const Code2257Page = lazyImport(() => import('web/page/code2257' /* webpackChunkName: "code2257" */));
 // @endif
 
-console.log('keycloak', keycloak)
-
 // Chunk: "secondary"
 const SignInPage = lazyImport(() => import('page/signIn' /* webpackChunkName: "secondary" */));
 const SignInWalletPasswordPage = lazyImport(() =>
@@ -130,7 +128,6 @@ function PrivateRoute(props: PrivateRouteProps) {
   const { component: Component, isAuthenticated, ...rest } = props;
   const urlSearchParams = new URLSearchParams(props.location.search);
   const redirectUrl = urlSearchParams.get('redirect');
-  // const { keycloak } = useKeycloak();
   return (
     <Route
       {...rest}

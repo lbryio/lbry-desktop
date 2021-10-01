@@ -25,7 +25,7 @@ const defaultState = {
   referralLink: undefined,
   referralCode: undefined,
   user: { has_verified_email: false },
-  accessToken: undefined, // rename this
+  accessToken: undefined, // rename this to authToken if keeping.
   youtubeChannelImportPending: false,
   youtubeChannelImportErrorMessage: '',
   referrerSetIsPending: false,
