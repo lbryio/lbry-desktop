@@ -3,7 +3,7 @@ import visit from 'unist-util-visit';
 
 const protocol = 'lbry://';
 const uriRegex = /(lbry:\/\/)[^\s"]*[^)]/g;
-const punctuationMarks = [',', '.', '!', '?', ':', ';', '-', ']', ')', '}'];
+export const punctuationMarks = [',', '.', '!', '?', ':', ';', '-', ']', ')', '}'];
 
 const mentionToken = '@';
 // const mentionTokenCode = 64; // @
