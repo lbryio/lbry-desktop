@@ -18,7 +18,10 @@ export default function LivestreamLink(props: Props) {
   const [livestreamClaim, setLivestreamClaim] = React.useState(false);
   const [isLivestreaming, setIsLivestreaming] = React.useState(false);
   const livestreamChannelId = (channelClaim && channelClaim.claim_id) || ''; // TODO: fail in a safer way, probably
-  const isChannelEmpty = !channelClaim || !channelClaim.meta || !channelClaim.meta.claims_in_channel;
+  // TODO: pput this back when hubs claims_in_channel are fixed
+  const isChannelEmpty = !channelClaim || !channelClaim.meta;
+  // ||
+  // !channelClaim.meta.claims_in_channel;
 
   React.useEffect(() => {
     // Don't search empty channels
