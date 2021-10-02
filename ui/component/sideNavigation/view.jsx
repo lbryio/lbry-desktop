@@ -75,7 +75,8 @@ function SideNavigation(props: Props) {
     followedTags,
   } = props;
 
-  const EXTRA_SIDEBAR_LINKS = GetLinksData(homepageData);
+  const EXTRA_SIDEBAR_LINKS = GetLinksData(homepageData).map(({ pinnedUrls, ...theRest }) => theRest);
+
   const FULL_LINKS: Array<SideNavLink> = [
     {
       title: 'Your Tags',
