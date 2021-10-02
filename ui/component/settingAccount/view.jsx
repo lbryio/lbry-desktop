@@ -15,13 +15,12 @@ type Props = {
   isAuthenticated: boolean,
   walletEncrypted: boolean,
   user: User,
-  myChannels: ?Array<ChannelClaim>,
   // --- perform ---
   doWalletStatus: () => void,
 };
 
 export default function SettingAccount(props: Props) {
-  const { isAuthenticated, walletEncrypted, user, myChannels, doWalletStatus } = props;
+  const { isAuthenticated, walletEncrypted, user, doWalletStatus } = props;
   const [storedPassword, setStoredPassword] = React.useState(false);
 
   // Determine if password is stored.
@@ -93,17 +92,6 @@ export default function SettingAccount(props: Props) {
               </SettingsRow>
             )}
             {/* @endif */}
-
-            {myChannels && (
-              <SettingsRow title={__('Comments')} subtitle={__('View your past comments.')}>
-                <Button
-                  button="inverse"
-                  label={__('Manage')}
-                  icon={ICONS.ARROW_RIGHT}
-                  navigate={`/$/${PAGES.SETTINGS_OWN_COMMENTS}`}
-                />
-              </SettingsRow>
-            )}
           </>
         }
       />

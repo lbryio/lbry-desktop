@@ -3,15 +3,7 @@ import * as ACTIONS from 'constants/action_types';
 import * as REACTION_TYPES from 'constants/reactions';
 import * as PAGES from 'constants/pages';
 import { SORT_BY, BLOCK_LEVEL } from 'constants/comment';
-import {
-  Lbry,
-  parseURI,
-  buildURI,
-  selectClaimsByUri,
-  selectMyChannelClaims,
-  isURIEqual,
-  doClaimSearch,
-} from 'lbry-redux';
+import { Lbry, parseURI, buildURI, selectClaimsByUri, selectMyChannelClaims, isURIEqual } from 'lbry-redux';
 import { doToast, doSeeNotifications } from 'redux/actions/notifications';
 import {
   makeSelectMyReactionsForComment,
@@ -135,6 +127,7 @@ export function doCommentList(
         type: ACTIONS.COMMENT_LIST_FAILED,
         data: 'unable to find claim for uri',
       });
+
       return;
     }
 
@@ -146,7 +139,7 @@ export function doCommentList(
     });
 
     // Adding 'channel_id' and 'channel_name' enables "CreatorSettings > commentsEnabled".
-    const creatorChannelClaim = claim.value_type === 'channel' ? claim : claim.signing_channel;
+    const authorChannelClaim = claim.value_type === 'channel' ? claim : claim.signing_channel;
 
     return Comments.comment_list({
       page,
@@ -154,8 +147,8 @@ export function doCommentList(
       page_size: pageSize,
       parent_id: parentId || undefined,
       top_level: !parentId,
-      channel_id: creatorChannelClaim ? creatorChannelClaim.claim_id : undefined,
-      channel_name: creatorChannelClaim ? creatorChannelClaim.name : undefined,
+      channel_id: authorChannelClaim ? authorChannelClaim.claim_id : undefined,
+      channel_name: authorChannelClaim ? authorChannelClaim.name : undefined,
       sort_by: sortBy,
     })
       .then((result: CommentListResponse) => {
@@ -169,7 +162,7 @@ export function doCommentList(
             totalFilteredItems: total_filtered_items,
             totalPages: total_pages,
             claimId: claimId,
-            creatorClaimId: creatorChannelClaim ? creatorChannelClaim.claim_id : undefined,
+            commenterClaimId: authorChannelClaim ? authorChannelClaim.claim_id : undefined,
             uri: uri,
           },
         });
@@ -182,7 +175,7 @@ export function doCommentList(
             dispatch({
               type: ACTIONS.COMMENT_LIST_COMPLETED,
               data: {
-                creatorClaimId: creatorChannelClaim ? creatorChannelClaim.claim_id : undefined,
+                authorClaimId: authorChannelClaim ? authorChannelClaim.claim_id : undefined,
                 disabled: true,
               },
             });
@@ -197,103 +190,6 @@ export function doCommentList(
                   : __('Failed to fetch comments.'),
               })
             );
-            dispatch({ type: ACTIONS.COMMENT_LIST_FAILED, data: error });
-            break;
-
-          default:
-            dispatch(doToast({ isError: true, message: `${error.message}` }));
-            dispatch({ type: ACTIONS.COMMENT_LIST_FAILED, data: error });
-        }
-      });
-  };
-}
-
-export function doCommentListOwn(
-  channelId: string,
-  page: number = 1,
-  pageSize: number = 99999,
-  sortBy: number = SORT_BY.NEWEST_NO_PINS
-) {
-  return async (dispatch: Dispatch, getState: GetState) => {
-    const state = getState();
-    const myChannelClaims = selectMyChannelClaims(state);
-    if (!myChannelClaims) {
-      console.error('Failed to fetch channel list.'); // eslint-disable-line
-      return;
-    }
-
-    const channelClaim = myChannelClaims.find((x) => x.claim_id === channelId);
-    if (!channelClaim) {
-      console.error('You do not own this channel.'); // eslint-disable-line
-      return;
-    }
-
-    const channelSignature = await channelSignName(channelClaim.claim_id, channelClaim.name);
-    if (!channelSignature) {
-      console.error('Failed to sign channel name.'); // eslint-disable-line
-      return;
-    }
-
-    dispatch({
-      type: ACTIONS.COMMENT_LIST_STARTED,
-      data: {},
-    });
-
-    return Comments.comment_list({
-      page,
-      page_size: pageSize,
-      sort_by: sortBy,
-      author_claim_id: channelId,
-      requestor_channel_name: channelClaim.name,
-      requestor_channel_id: channelClaim.claim_id,
-      signature: channelSignature.signature,
-      signing_ts: channelSignature.signing_ts,
-    })
-      .then((result: CommentListResponse) => {
-        const { items: comments, total_items, total_filtered_items, total_pages } = result;
-
-        if (!comments) {
-          dispatch({ type: ACTIONS.COMMENT_LIST_FAILED, data: 'No more comments.' });
-          return;
-        }
-
-        dispatch(
-          doClaimSearch({
-            page: 1,
-            page_size: 20,
-            no_totals: true,
-            claim_ids: comments.map((c) => c.claim_id),
-          })
-        )
-          .then((result) => {
-            dispatch({
-              type: ACTIONS.COMMENT_LIST_COMPLETED,
-              data: {
-                comments,
-                totalItems: total_items,
-                totalFilteredItems: total_filtered_items,
-                totalPages: total_pages,
-                uri: channelClaim.canonical_url, // hijack "Discussion Page"
-                claimId: channelClaim.claim_id, // hijack "Discussion Page"
-              },
-            });
-          })
-          .catch((err) => {
-            dispatch({ type: ACTIONS.COMMENT_LIST_FAILED, data: err });
-          });
-      })
-      .catch((error) => {
-        switch (error.message) {
-          case FETCH_API_FAILED_TO_FETCH:
-            dispatch(
-              doToast({
-                isError: true,
-                message: Comments.isCustomServer
-                  ? __('Failed to fetch comments. Verify custom server settings.')
-                  : __('Failed to fetch comments.'),
-              })
-            );
-            dispatch(doToast({ isError: true, message: `${error.message}` }));
             dispatch({ type: ACTIONS.COMMENT_LIST_FAILED, data: error });
             break;
 
@@ -343,10 +239,17 @@ export function doCommentById(commentId: string, toastIfNotFound: boolean = true
   };
 }
 
-export function doCommentReset(claimId: string) {
-  return (dispatch: Dispatch) => {
+export function doCommentReset(uri: string) {
+  return (dispatch: Dispatch, getState: GetState) => {
+    const state = getState();
+    const claim = selectClaimsByUri(state)[uri];
+    const claimId = claim ? claim.claim_id : null;
+
     if (!claimId) {
-      console.error(`Failed to reset comments`); //eslint-disable-line
+      dispatch({
+        type: ACTIONS.COMMENT_LIST_FAILED,
+        data: 'unable to find claim for uri',
+      });
       return;
     }
 

@@ -52,7 +52,6 @@ type Props = {
   doToast: ({ message: string }) => void,
   isTopLevel?: boolean,
   threadDepth: number,
-  hideActions?: boolean,
   isPinned: boolean,
   othersReacts: ?{
     like: number,
@@ -96,7 +95,6 @@ function Comment(props: Props) {
     doToast,
     isTopLevel,
     threadDepth,
-    hideActions,
     isPinned,
     othersReacts,
     playingUri,
@@ -350,20 +348,18 @@ function Comment(props: Props) {
                   )}
                 </div>
 
-                {!hideActions && (
-                  <div className="comment__actions">
-                    {threadDepth !== 0 && (
-                      <Button
-                        requiresAuth={IS_WEB}
-                        label={commentingEnabled ? __('Reply') : __('Log in to reply')}
-                        className="comment__action"
-                        onClick={handleCommentReply}
-                        icon={ICONS.REPLY}
-                      />
-                    )}
-                    {ENABLE_COMMENT_REACTIONS && <CommentReactions uri={uri} commentId={commentId} />}
-                  </div>
-                )}
+                <div className="comment__actions">
+                  {threadDepth !== 0 && (
+                    <Button
+                      requiresAuth={IS_WEB}
+                      label={commentingEnabled ? __('Reply') : __('Log in to reply')}
+                      className="comment__action"
+                      onClick={handleCommentReply}
+                      icon={ICONS.REPLY}
+                    />
+                  )}
+                  {ENABLE_COMMENT_REACTIONS && <CommentReactions uri={uri} commentId={commentId} />}
+                </div>
 
                 {numDirectReplies > 0 && !showReplies && (
                   <div className="comment__actions">

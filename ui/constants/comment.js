@@ -9,7 +9,6 @@ export const SORT_BY = {
   OLDEST: 1,
   CONTROVERSY: 2,
   POPULARITY: 3,
-  NEWEST_NO_PINS: 4,
 };
 
 export const BLOCK_LEVEL = {

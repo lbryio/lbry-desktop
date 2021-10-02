@@ -111,14 +111,14 @@ declare type ReactionListResponse = {
 declare type CommentListParams = {
   page: number,             // pagination: which page of results
   page_size: number,        // pagination: nr of comments to show in a page (max 200)
-  claim_id?: string,        // claim id of claim being commented on
+  claim_id: string,         // claim id of claim being commented on
   channel_name?: string,    // signing channel name of claim (enables 'commentsEnabled' check)
   channel_id?: string,      // signing channel claim id of claim (enables 'commentsEnabled' check)
   author_claim_id?: string, // filters comments to just this author
   parent_id?: string,       // filters comments to those under this thread
   top_level?: boolean,      // filters to only top level comments
   hidden?: boolean,         // if true, will show hidden comments as well
-  sort_by?: number,         // @see: ui/constants/comments.js::SORT_BY
+  sort_by?: number,         // NEWEST=0, OLDEST=1, CONTROVERSY=2, POPULARITY=3,
 };
 
 declare type CommentListResponse = {
