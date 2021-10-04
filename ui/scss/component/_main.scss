@@ -207,17 +207,43 @@
 }
 
 .main--livestream {
-  width: calc(100vw - var(--spacing-xs) * 2);
-  margin: var(--spacing-xs);
+  @extend .main--file-page;
+  margin: 0;
+  padding: 0;
+  max-width: none;
 
-  @media (min-width: $breakpoint-medium) {
-    margin: var(--spacing-m);
-    margin-right: calc(var(--livestream-comments-width) + var(--spacing-m));
-    width: calc(100vw - var(--livestream-comments-width) - var(--spacing-m) * 2);
+  .card-stack {
+    margin-top: var(--spacing-m);
+    margin-bottom: var(--spacing-m);
+
+    @media (min-width: $breakpoint-large + 300px) {
+      max-width: calc(var(--page-max-width--filepage) / 1.25);
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @media (min-width: $breakpoint-medium) and (max-width: $breakpoint-large + 300px) {
+      max-width: calc(100vw - var(--livestream-comments-width) - var(--spacing-m) * 3);
+      margin-left: var(--spacing-m);
+      margin-right: var(--spacing-m);
+    }
+
+    @media (max-width: $breakpoint-medium) {
+      max-width: none;
+    }
   }
 
-  @media (min-width: $breakpoint-large) {
-    margin-right: calc(10vw + var(--livestream-comments-width) + var(--spacing-m));
+  .main__right-side {
+    width: var(--livestream-comments-width);
+
+    @media (max-width: $breakpoint-medium) {
+      width: 100%;
+      margin-bottom: var(--spacing-m);
+    }
+  }
+
+  @media (max-width: $breakpoint-medium) {
+    padding: 0 var(--spacing-m);
   }
 }
 
