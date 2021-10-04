@@ -1,22 +1,22 @@
 // @flow
-import * as REACTION_TYPES from 'constants/reactions';
-import * as ICONS from 'constants/icons';
 import { COMMENT_HIGHLIGHTED } from 'constants/classnames';
 import { COMMENT_PAGE_SIZE_TOP_LEVEL, SORT_BY } from 'constants/comment';
-import React, { useEffect } from 'react';
-import classnames from 'classnames';
-import CommentView from 'component/comment';
-import Spinner from 'component/spinner';
+import { ENABLE_COMMENT_REACTIONS } from 'config';
+import { getChannelIdFromClaim } from 'util/claim';
+import { useIsMobile, useIsMediumScreen } from 'effects/use-screensize';
+import * as ICONS from 'constants/icons';
+import * as REACTION_TYPES from 'constants/reactions';
 import Button from 'component/button';
 import Card from 'component/common/card';
+import classnames from 'classnames';
 import CommentCreate from 'component/commentCreate';
-import usePersistedState from 'effects/use-persisted-state';
-import { ENABLE_COMMENT_REACTIONS } from 'config';
-import Empty from 'component/common/empty';
+import CommentView from 'component/comment';
 import debounce from 'util/debounce';
+import Empty from 'component/common/empty';
+import React, { useEffect } from 'react';
+import Spinner from 'component/spinner';
 import useFetched from 'effects/use-fetched';
-import { useIsMobile, useIsMediumScreen } from 'effects/use-screensize';
-import { getChannelIdFromClaim } from 'util/claim';
+import usePersistedState from 'effects/use-persisted-state';
 
 const DEBOUNCE_SCROLL_HANDLER_MS = 200;
 
@@ -33,10 +33,6 @@ type Props = {
   pinnedComments: Array<Comment>,
   topLevelComments: Array<Comment>,
   topLevelTotalPages: number,
-  fetchTopLevelComments: (string, number, number, number) => void,
-  fetchComment: (string) => void,
-  fetchReacts: (Array<string>) => Promise<any>,
-  resetComments: (string) => void,
   uri: string,
   claim: ?Claim,
   claimIsMine: boolean,
@@ -51,15 +47,15 @@ type Props = {
   othersReactsById: ?{ [string]: { [REACTION_TYPES.LIKE | REACTION_TYPES.DISLIKE]: number } },
   activeChannelId: ?string,
   settingsByChannelId: { [channelId: string]: PerChannelSettings },
+  fetchReacts: (Array<string>) => Promise<any>,
+  fetchTopLevelComments: (string, number, number, number) => void,
+  fetchComment: (string) => void,
+  resetComments: (string) => void,
 };
 
 function CommentList(props: Props) {
   const {
     allCommentIds,
-    fetchTopLevelComments,
-    fetchComment,
-    fetchReacts,
-    resetComments,
     uri,
     pinnedComments,
     topLevelComments,
@@ -77,21 +73,26 @@ function CommentList(props: Props) {
     othersReactsById,
     activeChannelId,
     settingsByChannelId,
+    fetchReacts,
+    fetchTopLevelComments,
+    fetchComment,
+    resetComments,
   } = props;
 
+  const isMobile = useIsMobile();
+  const isMediumScreen = useIsMediumScreen();
   const spinnerRef = React.useRef();
   const DEFAULT_SORT = ENABLE_COMMENT_REACTIONS ? SORT_BY.POPULARITY : SORT_BY.NEWEST;
   const [sort, setSort] = usePersistedState('comment-sort-by', DEFAULT_SORT);
   const [page, setPage] = React.useState(0);
-  const isMobile = useIsMobile();
-  const isMediumScreen = useIsMediumScreen();
+  const fetchedCommentsOnce = useFetched(isFetchingComments);
+  const fetchedReactsOnce = useFetched(isFetchingReacts);
+  const fetchedLinkedComment = useFetched(isFetchingCommentsById);
   const [expandedComments, setExpandedComments] = React.useState(!isMobile && !isMediumScreen);
   const totalFetchedComments = allCommentIds ? allCommentIds.length : 0;
   const channelId = getChannelIdFromClaim(claim);
   const channelSettings = channelId ? settingsByChannelId[channelId] : undefined;
-  const fetchedCommentsOnce = useFetched(isFetchingComments);
-  const fetchedReactsOnce = useFetched(isFetchingReacts);
-  const fetchedLinkedComment = useFetched(isFetchingCommentsById);
+  const moreBelow = page < topLevelTotalPages;
 
   // Display comments immediately if not fetching reactions
   // If not, wait to show comments until reactions are fetched
@@ -99,53 +100,11 @@ function CommentList(props: Props) {
     Boolean(othersReactsById) || !ENABLE_COMMENT_REACTIONS
   );
 
-  const hasNoComments = !totalComments;
-  const moreBelow = page < topLevelTotalPages;
-
-  const isMyComment = (channelId: string): boolean => {
-    if (myChannels != null && channelId != null) {
-      for (let i = 0; i < myChannels.length; i++) {
-        if (myChannels[i].claim_id === channelId) {
-          return true;
-        }
-      }
-    }
-    return false;
-  };
-
   function changeSort(newSort) {
     if (sort !== newSort) {
       setSort(newSort);
       setPage(0); // Invalidate existing comments
     }
-  }
-
-  function getCommentElems(comments) {
-    return comments.map((comment) => {
-      return (
-        <CommentView
-          isTopLevel
-          threadDepth={3}
-          key={comment.comment_id}
-          uri={uri}
-          authorUri={comment.channel_url}
-          author={comment.channel_name}
-          claimId={comment.claim_id}
-          commentId={comment.comment_id}
-          message={comment.comment}
-          timePosted={comment.timestamp * 1000}
-          claimIsMine={claimIsMine}
-          commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}
-          linkedCommentId={linkedCommentId}
-          isPinned={comment.is_pinned}
-          supportAmount={comment.support_amount}
-          numDirectReplies={comment.replies}
-          isModerator={comment.is_moderator}
-          isGlobalMod={comment.is_global_mod}
-          isFiat={comment.is_fiat}
-        />
-      );
-    });
   }
 
   // Reset comments
@@ -168,7 +127,7 @@ function CommentList(props: Props) {
 
       fetchTopLevelComments(uri, page, COMMENT_PAGE_SIZE_TOP_LEVEL, sort);
     }
-  }, [fetchTopLevelComments, uri, page, resetComments, sort, linkedCommentId, fetchComment]);
+  }, [fetchComment, fetchTopLevelComments, linkedCommentId, page, sort, uri]);
 
   // Fetch reacts
   useEffect(() => {
@@ -193,15 +152,14 @@ function CommentList(props: Props) {
       }
     }
   }, [
-    totalFetchedComments,
-    allCommentIds,
-    othersReactsById,
-    myReactsByCommentId,
-    fetchReacts,
-    uri,
     activeChannelId,
+    allCommentIds,
+    fetchReacts,
     fetchingChannels,
     isFetchingReacts,
+    myReactsByCommentId,
+    othersReactsById,
+    totalFetchedComments,
   ]);
 
   // Scroll to linked-comment
@@ -223,9 +181,7 @@ function CommentList(props: Props) {
   // Infinite scroll
   useEffect(() => {
     function shouldFetchNextPage(page, topLevelTotalPages, window, document, yPrefetchPx = 1000) {
-      if (!spinnerRef || !spinnerRef.current) {
-        return false;
-      }
+      if (!spinnerRef || !spinnerRef.current) return false;
 
       const rect = spinnerRef.current.getBoundingClientRect(); // $FlowFixMe
       const windowH = window.innerHeight || document.documentElement.clientHeight; // $FlowFixMe
@@ -260,86 +216,76 @@ function CommentList(props: Props) {
         return () => window.removeEventListener('scroll', handleCommentScroll);
       }
     }
-  }, [
-    isMobile,
-    isMediumScreen,
-    page,
-    moreBelow,
-    spinnerRef,
-    isFetchingComments,
-    readyToDisplayComments,
-    topLevelComments.length,
-    topLevelTotalPages,
-  ]);
+  }, [isFetchingComments, isMediumScreen, isMobile, moreBelow, page, readyToDisplayComments, topLevelTotalPages]);
 
-  // Expand comments
-  useEffect(() => {
-    if (!isMobile && !isMediumScreen && !expandedComments) {
-      setExpandedComments(true);
-    }
-  }, [isMobile, isMediumScreen, expandedComments]);
+  const getCommentElems = (comments) => {
+    return comments.map((comment) => (
+      <CommentView
+        isTopLevel
+        threadDepth={3}
+        key={comment.comment_id}
+        uri={uri}
+        authorUri={comment.channel_url}
+        author={comment.channel_name}
+        claimId={comment.claim_id}
+        commentId={comment.comment_id}
+        message={comment.comment}
+        timePosted={comment.timestamp * 1000}
+        claimIsMine={claimIsMine}
+        commentIsMine={
+          comment.channel_id && myChannels && myChannels.some(({ claim_id }) => claim_id === comment.channel_id)
+        }
+        linkedCommentId={linkedCommentId}
+        isPinned={comment.is_pinned}
+        supportAmount={comment.support_amount}
+        numDirectReplies={comment.replies}
+        isModerator={comment.is_moderator}
+        isGlobalMod={comment.is_global_mod}
+        isFiat={comment.is_fiat}
+      />
+    ));
+  };
+
+  const sortButton = (label, icon, sortOption) => {
+    return (
+      <Button
+        button="alt"
+        label={label}
+        icon={icon}
+        iconSize={18}
+        onClick={() => changeSort(sortOption)}
+        className={classnames(`button-toggle`, {
+          'button-toggle--active': sort === sortOption,
+        })}
+      />
+    );
+  };
 
   return (
     <Card
       className="card--enable-overflow"
       title={
-        totalComments > 0
-          ? totalComments === 1
-            ? __('1 comment')
-            : __('%total_comments% comments', { total_comments: totalComments })
-          : __('Leave a comment')
+        (totalComments === 0 && __('Leave a comment')) ||
+        (totalComments === 1 && __('1 comment')) ||
+        __('%totalComments% comments', { totalComments })
       }
       titleActions={
         <>
           {totalComments > 1 && ENABLE_COMMENT_REACTIONS && (
             <span className="comment__sort">
-              <Button
-                button="alt"
-                label={__('Best')}
-                icon={ICONS.BEST}
-                iconSize={18}
-                onClick={() => changeSort(SORT_BY.POPULARITY)}
-                className={classnames(`button-toggle`, {
-                  'button-toggle--active': sort === SORT_BY.POPULARITY,
-                })}
-              />
-              <Button
-                button="alt"
-                label={__('Controversial')}
-                icon={ICONS.CONTROVERSIAL}
-                iconSize={18}
-                onClick={() => changeSort(SORT_BY.CONTROVERSY)}
-                className={classnames(`button-toggle`, {
-                  'button-toggle--active': sort === SORT_BY.CONTROVERSY,
-                })}
-              />
-              <Button
-                button="alt"
-                label={__('New')}
-                icon={ICONS.NEW}
-                iconSize={18}
-                onClick={() => changeSort(SORT_BY.NEWEST)}
-                className={classnames(`button-toggle`, {
-                  'button-toggle--active': sort === SORT_BY.NEWEST,
-                })}
-              />
+              {sortButton(__('Best'), ICONS.BEST, SORT_BY.POPULARITY)}
+              {sortButton(__('Controversial'), ICONS.CONTROVERSIAL, SORT_BY.CONTROVERSY)}
+              {sortButton(__('New'), ICONS.NEW, SORT_BY.NEWEST)}
             </span>
           )}
-          <Button
-            button="alt"
-            icon={ICONS.REFRESH}
-            title={__('Refresh')}
-            onClick={() => {
-              setPage(0);
-            }}
-          />
+          <Button button="alt" icon={ICONS.REFRESH} title={__('Refresh')} onClick={() => setPage(0)} />
         </>
       }
       actions={
         <>
           <CommentCreate uri={uri} />
 
-          {channelSettings && channelSettings.comments_enabled && !isFetchingComments && hasNoComments && (
+          {channelSettings && channelSettings.comments_enabled && !isFetchingComments && !totalComments && (
             <Empty padded text={__('That was pretty deep. What do you think?')} />
           )}
 
@@ -358,25 +304,17 @@ function CommentList(props: Props) {
               {(!expandedComments || moreBelow) && (
                 <Button
                   button="link"
-                  title={!expandedComments ? __('Expand Comments') : __('Load More')}
+                  title={!expandedComments ? __('Expand') : __('More')}
                   label={!expandedComments ? __('Expand') : __('More')}
-                  onClick={() => {
-                    if (!expandedComments) {
-                      setExpandedComments(true);
-                    } else {
-                      setPage(page + 1);
-                    }
-                  }}
+                  onClick={() => (!expandedComments ? setExpandedComments(true) : setPage(page + 1))}
                 />
               )}
               {expandedComments && (
                 <Button
                   button="link"
-                  title={__('Collapse Thread')}
+                  title={__('Collapse')}
                   label={__('Collapse')}
-                  onClick={() => {
-                    setExpandedComments(false);
-                  }}
+                  onClick={() => setExpandedComments(false)}
                 />
               )}
             </div>
