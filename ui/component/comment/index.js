@@ -19,24 +19,30 @@ import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { selectPlayingUri } from 'redux/selectors/content';
 import Comment from './view';
 
-const select = (state, props) => {
-  const activeChannelClaim = selectActiveChannelClaim(state);
+const makeMapStateToProps = (originalState, originalProps) => {
+  const activeChannelClaim = selectActiveChannelClaim(originalState);
   const activeChannelId = activeChannelClaim && activeChannelClaim.claim_id;
-  const reactionKey = activeChannelId ? `${props.commentId}:${activeChannelId}` : props.commentId;
+  const reactionKey = activeChannelId ? `${originalProps.commentId}:${activeChannelId}` : originalProps.commentId;
+  const selectOthersReactionsForComment = makeSelectOthersReactionsForComment(reactionKey);
 
-  return {
-    claim: makeSelectClaimForUri(props.uri)(state),
-    thumbnail: props.authorUri && makeSelectThumbnailForUri(props.authorUri)(state),
-    channelIsBlocked: props.authorUri && makeSelectChannelIsMuted(props.authorUri)(state),
-    commentingEnabled: IS_WEB ? Boolean(selectUserVerifiedEmail(state)) : true,
-    othersReacts: makeSelectOthersReactionsForComment(reactionKey)(state),
-    activeChannelClaim,
-    myChannels: selectMyChannelClaims(state),
-    playingUri: selectPlayingUri(state),
-    stakedLevel: makeSelectStakedLevelForChannelUri(props.authorUri)(state),
-    linkedCommentAncestors: selectLinkedCommentAncestors(state),
-    totalReplyPages: makeSelectTotalReplyPagesForParentId(props.commentId)(state),
+  const select = (state, props) => {
+    const othersReacts = selectOthersReactionsForComment(state);
+
+    return {
+      claim: makeSelectClaimForUri(props.uri)(state),
+      thumbnail: props.authorUri && makeSelectThumbnailForUri(props.authorUri)(state),
+      channelIsBlocked: props.authorUri && makeSelectChannelIsMuted(props.authorUri)(state),
+      commentingEnabled: IS_WEB ? Boolean(selectUserVerifiedEmail(state)) : true,
+      othersReacts,
+      activeChannelClaim,
+      myChannels: selectMyChannelClaims(state),
+      playingUri: selectPlayingUri(state),
+      stakedLevel: makeSelectStakedLevelForChannelUri(props.authorUri)(state),
+      linkedCommentAncestors: selectLinkedCommentAncestors(state),
+      totalReplyPages: makeSelectTotalReplyPagesForParentId(props.commentId)(state),
+    };
   };
+  return select;
 };
 
 const perform = (dispatch) => ({
@@ -47,4 +53,4 @@ const perform = (dispatch) => ({
   doToast: (options) => dispatch(doToast(options)),
 });
 
-export default connect(select, perform)(Comment);
+export default connect(makeMapStateToProps, perform)(Comment);
