@@ -48,6 +48,7 @@ type Props = {
   activeChannelId: ?string,
   settingsByChannelId: { [channelId: string]: PerChannelSettings },
   fetchReacts: (Array<string>) => Promise<any>,
+  commentsAreExpanded?: boolean,
   fetchTopLevelComments: (string, number, number, number) => void,
   fetchComment: (string) => void,
   resetComments: (string) => void,
@@ -74,6 +75,7 @@ function CommentList(props: Props) {
     activeChannelId,
     settingsByChannelId,
     fetchReacts,
+    commentsAreExpanded,
     fetchTopLevelComments,
     fetchComment,
     resetComments,
@@ -88,7 +90,8 @@ function CommentList(props: Props) {
   const fetchedCommentsOnce = useFetched(isFetchingComments);
   const fetchedReactsOnce = useFetched(isFetchingReacts);
   const fetchedLinkedComment = useFetched(isFetchingCommentsById);
-  const [expandedComments, setExpandedComments] = React.useState(!isMobile && !isMediumScreen);
+  const hasDefaultExpansion = commentsAreExpanded || (!isMobile && !isMediumScreen);
+  const [expandedComments, setExpandedComments] = React.useState(hasDefaultExpansion);
   const totalFetchedComments = allCommentIds ? allCommentIds.length : 0;
   const channelId = getChannelIdFromClaim(claim);
   const channelSettings = channelId ? settingsByChannelId[channelId] : undefined;
@@ -203,7 +206,7 @@ function CommentList(props: Props) {
     }
 
     const handleCommentScroll = debounce(() => {
-      if (!isMobile && !isMediumScreen && shouldFetchNextPage(page, topLevelTotalPages, window, document)) {
+      if (hasDefaultExpansion && shouldFetchNextPage(page, topLevelTotalPages, window, document)) {
         setPage(page + 1);
       }
     }, DEBOUNCE_SCROLL_HANDLER_MS);
@@ -216,7 +219,7 @@ function CommentList(props: Props) {
         return () => window.removeEventListener('scroll', handleCommentScroll);
       }
     }
-  }, [isFetchingComments, isMediumScreen, isMobile, moreBelow, page, readyToDisplayComments, topLevelTotalPages]);
+  }, [hasDefaultExpansion, isFetchingComments, moreBelow, page, readyToDisplayComments, topLevelTotalPages]);
 
   const getCommentElems = (comments) => {
     return comments.map((comment) => (
@@ -299,7 +302,7 @@ function CommentList(props: Props) {
             {readyToDisplayComments && topLevelComments && getCommentElems(topLevelComments)}
           </ul>
 
-          {(isMobile || isMediumScreen) && (
+          {!hasDefaultExpansion && (
             <div className="card__bottom-actions--comments">
               {(!expandedComments || moreBelow) && (
                 <Button
@@ -320,7 +323,7 @@ function CommentList(props: Props) {
             </div>
           )}
 
-          {(isFetchingComments || (!isMobile && !isMediumScreen && moreBelow)) && (
+          {(isFetchingComments || (hasDefaultExpansion && moreBelow)) && (
             <div className="main--empty" ref={spinnerRef}>
               <Spinner type="small" />
             </div>
