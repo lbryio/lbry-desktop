@@ -1,12 +1,14 @@
 // @flow
+import { getChannelFromClaim } from 'util/claim';
+import { MenuList, MenuItem } from '@reach/menu-button';
+import { parseURI } from 'lbry-redux';
+import { URL } from 'config';
+import { useHistory } from 'react-router';
 import * as ICONS from 'constants/icons';
 import * as MODALS from 'constants/modal_types';
-import React from 'react';
-import { MenuList, MenuItem } from '@reach/menu-button';
 import ChannelThumbnail from 'component/channelThumbnail';
 import Icon from 'component/common/icon';
-import { parseURI } from 'lbry-redux';
-import { getChannelFromClaim } from 'util/claim';
+import React from 'react';
 
 type Props = {
   uri: ?string,
@@ -18,7 +20,6 @@ type Props = {
   disableEdit?: boolean,
   disableRemove?: boolean,
   supportAmount?: any,
-  handleEditComment: () => void,
   // --- select ---
   claim: ?Claim,
   claimIsMine: boolean,
@@ -27,6 +28,8 @@ type Props = {
   playingUri: ?PlayingUri,
   moderationDelegatorsById: { [string]: { global: boolean, delegators: { name: string, claimId: string } } },
   // --- perform ---
+  doToast: ({ message: string }) => void,
+  handleEditComment: () => void,
   openModal: (id: string, {}) => void,
   clearPlayingUri: () => void,
   muteChannel: (string) => void,
@@ -42,23 +45,28 @@ function CommentMenuList(props: Props) {
     authorUri,
     commentIsMine,
     commentId,
-    muteChannel,
-    pinComment,
-    clearPlayingUri,
     activeChannelClaim,
     contentChannelPermanentUrl,
     isTopLevel,
     isPinned,
-    handleEditComment,
-    commentModAddDelegate,
     playingUri,
     moderationDelegatorsById,
     disableEdit,
     disableRemove,
-    openModal,
     supportAmount,
+    doToast,
+    handleEditComment,
+    openModal,
+    clearPlayingUri,
+    muteChannel,
+    pinComment,
+    commentModAddDelegate,
     setQuickReply,
   } = props;
+
+  const {
+    location: { pathname, search },
+  } = useHistory();
 
   const contentChannelClaim = getChannelFromClaim(claim);
   const activeModeratorInfo = activeChannelClaim && moderationDelegatorsById[activeChannelClaim.claim_id];
@@ -69,10 +77,6 @@ function CommentMenuList(props: Props) {
     contentChannelClaim &&
     activeModeratorInfo &&
     Object.values(activeModeratorInfo.delegators).includes(contentChannelClaim.claim_id);
-
-  function handlePinComment(commentId, claimId, remove) {
-    pinComment(commentId, claimId, remove);
-  }
 
   function handleDeleteComment() {
     if (playingUri && playingUri.source === 'comment') {
@@ -85,14 +89,6 @@ function CommentMenuList(props: Props) {
       supportAmount,
       setQuickReply,
     });
-  }
-
-  function handleCommentBlock() {
-    openModal(MODALS.BLOCK_CHANNEL, { contentUri: uri, commenterUri: authorUri });
-  }
-
-  function handleCommentMute() {
-    muteChannel(authorUri);
   }
 
   function assignAsModerator() {
@@ -155,6 +151,15 @@ function CommentMenuList(props: Props) {
     );
   }
 
+  function handleCopyCommentLink() {
+    const urlParams = new URLSearchParams(search);
+    urlParams.delete('lc');
+    urlParams.append('lc', commentId);
+    navigator.clipboard
+      .writeText(`${URL}${pathname}?${urlParams.toString()}`)
+      .then(() => doToast({ message: __('Link copied.') }));
+  }
+
   return (
     <MenuList className="menu__list">
       {activeChannelIsCreator && <div className="comment__menu-title">{__('Creator tools')}</div>}
@@ -162,7 +167,7 @@ function CommentMenuList(props: Props) {
       {activeChannelIsCreator && isTopLevel && (
         <MenuItem
           className="comment__menu-option menu__link"
-          onSelect={() => handlePinComment(commentId, claim ? claim.claim_id : '', isPinned)}
+          onSelect={() => pinComment(commentId, claim ? claim.claim_id : '', isPinned)}
         >
           <span className={'button__content'}>
             <Icon aria-hidden icon={ICONS.PIN} className={'icon'} />
@@ -205,20 +210,31 @@ function CommentMenuList(props: Props) {
         )}
 
       {!commentIsMine && (
-        <MenuItem className="comment__menu-option" onSelect={handleCommentBlock}>
-          {getBlockOptionElem()}
-        </MenuItem>
+        <>
+          <MenuItem
+            className="comment__menu-option"
+            onSelect={() => openModal(MODALS.BLOCK_CHANNEL, { contentUri: uri, commenterUri: authorUri })}
+          >
+            {getBlockOptionElem()}
+          </MenuItem>
+          <MenuItem className="comment__menu-option" onSelect={() => muteChannel(authorUri)}>
+            <div className="menu__link">
+              <Icon aria-hidden icon={ICONS.MUTE} />
+              {__('Mute')}
+            </div>
+            {activeChannelIsCreator && (
+              <span className="comment__menu-help">{__('Hide this channel for you only.')}</span>
+            )}
+          </MenuItem>
+        </>
       )}
 
-      {!commentIsMine && (
-        <MenuItem className="comment__menu-option" onSelect={handleCommentMute}>
+      {IS_WEB && (
+        <MenuItem className="comment__menu-option" onSelect={handleCopyCommentLink}>
           <div className="menu__link">
-            <Icon aria-hidden icon={ICONS.MUTE} />
-            {__('Mute')}
+            <Icon aria-hidden icon={ICONS.COPY_LINK} />
+            {__('Copy Link')}
           </div>
-          {activeChannelIsCreator && (
-            <span className="comment__menu-help">{__('Hide this channel for you only.')}</span>
-          )}
         </MenuItem>
       )}
 
