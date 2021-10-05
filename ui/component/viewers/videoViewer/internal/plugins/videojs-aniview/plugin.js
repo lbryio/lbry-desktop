@@ -26,27 +26,27 @@ const VERSION = '0.0.1';
 * */
 
 // TEST PRE-ROLL WITH THIS TAG:
-const macroUrl = 'https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/ad_rule_samples&ciu_szs=300x250&ad_rule=1&impl=s&gdfp_req=1&env=vp&output=vmap&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ar%3Dpreonly&cmsid=496&vid=short_onecue&correlator=';
+// const macroUrl = 'https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/ad_rule_samples&ciu_szs=300x250&ad_rule=1&impl=s&gdfp_req=1&env=vp&output=vmap&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ar%3Dpreonly&cmsid=496&vid=short_onecue&correlator=';
 
 // Modified to work with IMA
-// const macroUrl =
-//   `https://vast.aniview.com/api/adserver61/vast/` +
-//   `?AV_PUBLISHERID=60afcbc58cfdb065440d2426` +
-//   `&AV_CHANNELID=60b354389c7adb506d0bd9a4` +
-//   `&AV_URL=[URL]` +
-//   `&cb=[CACHEBUSTING]` +
-//   `&AV_WIDTH=[WIDTH]` +
-//   `&AV_HEIGHT=[HEIGHT]` +
-//   // `&AV_SCHAIN=[SCHAIN_MACRO]` +
-//   // `&AV_CCPA=[CCPA_MACRO]` +
-//   // `&AV_GDPR=[GDPR_MACRO]` +
-//   // `&AV_CONSENT=[CONSENT_MACRO]` +
-//   `&skip=true` +
-//   `&skiptimer=5` +
-//   `&logo=true` +
-//   `&usevslot=true` +
-//   `&vastretry=5` +
-//   `&hidecontrols=false`;
+const macroUrl =
+  `https://vast.aniview.com/api/adserver61/vast/` +
+  `?AV_PUBLISHERID=60afcbc58cfdb065440d2426` +
+  `&AV_CHANNELID=60b354389c7adb506d0bd9a4` +
+  `&AV_URL=[URL]` +
+  `&cb=[CACHEBUSTING]` +
+  `&AV_WIDTH=[WIDTH]` +
+  `&AV_HEIGHT=[HEIGHT]` +
+  // `&AV_SCHAIN=[SCHAIN_MACRO]` +
+  // `&AV_CCPA=[CCPA_MACRO]` +
+  // `&AV_GDPR=[GDPR_MACRO]` +
+  // `&AV_CONSENT=[CONSENT_MACRO]` +
+  `&skip=true` +
+  `&skiptimer=5` +
+  `&logo=true` +
+  `&usevslot=true` +
+  `&vastretry=5` +
+  `&hidecontrols=false`;
 
 const defaults = {
   adTagUrl: macroUrl,
