@@ -53,6 +53,7 @@ type Props = {
   streamType?: string | Array<string>,
   defaultStreamType?: string | Array<string>,
 
+  searchText?: string,
   empty?: string,
   feeAmount?: string,
   releaseTime?: string,
@@ -122,6 +123,7 @@ function ClaimListDiscover(props: Props) {
     name,
     claimType,
     pageSize,
+    searchText,
     defaultClaimType,
     streamType = SIMPLE_SITE ? [CS.FILE_VIDEO, CS.FILE_AUDIO] : undefined,
     defaultStreamType = SIMPLE_SITE ? CS.FILE_VIDEO : undefined, // add param for DEFAULT_STREAM_TYPE
@@ -279,6 +281,10 @@ function ClaimListDiscover(props: Props) {
 
   if (channelIdsParam) {
     options.channel_ids = channelIdsParam;
+  }
+
+  if (searchText) {
+    options.text = searchText;
   }
 
   if (tagsParam) {

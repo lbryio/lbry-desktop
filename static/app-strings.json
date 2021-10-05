@@ -2180,5 +2180,13 @@
   "Creator": "Creator",
   "From comments": "From comments",
   "From search": "From search",
+  "Manage tags": "Manage tags",
+  "Enter the full channel name or URL to search.\n\nExamples:\n - @channel\n - @channel#3\n - https://odysee.com/@Odysee:8\n - lbry://@Odysee#8": "Enter the full channel name or URL to search.\n\nExamples:\n - @channel\n - @channel#3\n - https://odysee.com/@Odysee:8\n - lbry://@Odysee#8",
+  "Trending for #Btc": "Trending for #Btc",
+  "Block and muted channels": "Block and muted channels",
+  "Claiming credits...": "Claiming credits...",
+  "Strict": "Strict",
+  "MatchCount": "MatchCount",
+  "Word Count": "Word Count",
   "--end--": "--end--"
 }
