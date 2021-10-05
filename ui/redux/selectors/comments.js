@@ -36,8 +36,11 @@ export const makeSelectPinnedCommentsForUri = (uri: string) =>
     }
   );
 
-export const selectModerationBlockList = createSelector(selectState, (state) =>
-  state.moderationBlockList ? state.moderationBlockList.reverse() : []
+export const selectModerationBlockList = createSelector(
+  (state) => selectState(state).moderationBlockList,
+  (moderationBlockList) => {
+    return moderationBlockList ? moderationBlockList.reverse() : [];
+  }
 );
 export const selectAdminBlockList = createSelector(selectState, (state) =>
   state.adminBlockList ? state.adminBlockList.reverse() : []
