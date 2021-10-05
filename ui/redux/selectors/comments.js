@@ -5,6 +5,8 @@ import { selectShowMatureContent } from 'redux/selectors/settings';
 import { selectBlacklistedOutpointMap, selectFilteredOutpointMap } from 'lbryinc';
 import { selectClaimsById, isClaimNsfw, selectMyActiveClaims } from 'lbry-redux';
 
+type State = { comments: CommentsState };
+
 const selectState = (state) => state.comments || {};
 
 export const selectCommentsById = createSelector(selectState, (state) => state.commentById || {});
@@ -13,7 +15,7 @@ export const selectIsFetchingCommentsById = createSelector(selectState, (state) 
 export const selectIsFetchingCommentsByParentId = createSelector(selectState, (state) => state.isLoadingByParentId);
 export const selectIsPostingComment = createSelector(selectState, (state) => state.isCommenting);
 export const selectIsFetchingReacts = createSelector(selectState, (state) => state.isFetchingReacts);
-export const selectOthersReactsById = createSelector(selectState, (state) => state.othersReactsByCommentId);
+export const selectOthersReactsById = (state: State) => state.comments.othersReactsByCommentId;
 
 export const selectPinnedCommentsById = createSelector(selectState, (state) => state.pinnedCommentsById);
 export const makeSelectPinnedCommentsForUri = (uri: string) =>
@@ -191,12 +193,12 @@ export const makeSelectMyReactionsForComment = (commentIdChannelId: string) =>
   });
 
 export const makeSelectOthersReactionsForComment = (commentId: string) =>
-  createSelector(selectState, (state) => {
-    if (!state.othersReactsByCommentId) {
+  createSelector(selectOthersReactsById, (othersReactsByCommentId) => {
+    if (!othersReactsByCommentId) {
       return {};
     }
 
-    return state.othersReactsByCommentId[commentId] || {};
+    return othersReactsByCommentId[commentId] || {};
   });
 
 export const selectPendingCommentReacts = createSelector(selectState, (state) => state.pendingCommentReactions);
