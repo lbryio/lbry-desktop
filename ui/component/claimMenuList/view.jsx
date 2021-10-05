@@ -263,10 +263,6 @@ function ClaimMenuList(props: Props) {
     push(`/$/${PAGES.REPORT_CONTENT}?claimId=${contentClaim && contentClaim.claim_id}`);
   }
 
-  function handleDownload() {
-    console.log('handleDownload', fileInfo, props);
-  }
-
   const shouldShow = !IS_WEB || (IS_WEB && isAuthenticated);
   return (
     <Menu>
