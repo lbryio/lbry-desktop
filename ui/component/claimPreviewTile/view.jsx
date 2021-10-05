@@ -48,13 +48,14 @@ type Props = {
   showMature: boolean,
   showHiddenByUser?: boolean,
   properties?: (Claim) => void,
-  live?: boolean,
   collectionId?: string,
   showNoSourceClaims?: boolean,
   isLivestream: boolean,
+  viewCount: string,
+  isLivestreamActive: boolean,
 };
 
-// preview image cards used in related video functionality
+// preview image cards used in related video functionality, channel overview page and homepage
 function ClaimPreviewTile(props: Props) {
   const {
     history,
@@ -75,11 +76,12 @@ function ClaimPreviewTile(props: Props) {
     showMature,
     showHiddenByUser,
     properties,
-    live,
     showNoSourceClaims,
     isLivestream,
+    isLivestreamActive,
     collectionId,
     mediaDuration,
+    viewCount,
   } = props;
   const isRepost = claim && claim.repost_channel_url;
   const isCollection = claim && claim.value_type === 'collection';
@@ -177,6 +179,10 @@ function ClaimPreviewTile(props: Props) {
     return null;
   }
 
+  const isChannelPage = window.location.pathname.startsWith('/@');
+
+  const shouldShowViewCount = !(!viewCount || (claim && claim.repost_url) || isLivestream || !isChannelPage);
+
   if (placeholder || (!claim && isResolvingUri)) {
     return (
       <li className={classnames('claim-preview--tile', {})}>
@@ -185,14 +191,18 @@ function ClaimPreviewTile(props: Props) {
         </div>
         <div className="placeholder__wrapper">
           <div className="placeholder claim-tile__title" />
-          <div className="placeholder claim-tile__info" />
+          <div
+            className={classnames('claim-tile__info placeholder', {
+              contains_view_count: shouldShowViewCount,
+            })}
+          />
         </div>
       </li>
     );
   }
 
   let liveProperty = null;
-  if (live === true) {
+  if (isLivestreamActive === true) {
     liveProperty = (claim) => <>LIVE</>;
   }
 
@@ -201,7 +211,7 @@ function ClaimPreviewTile(props: Props) {
       onClick={handleClick}
       className={classnames('card claim-preview--tile', {
         'claim-preview__wrapper--channel': isChannel,
-        'claim-preview__live': live,
+        'claim-preview__live': isLivestreamActive,
       })}
     >
       <NavLink {...navLinkProps} role="none" tabIndex={-1} aria-hidden>
@@ -245,7 +255,11 @@ function ClaimPreviewTile(props: Props) {
         <ClaimMenuList uri={uri} collectionId={listId} channelUri={channelUri} />
       </div>
       <div>
-        <div className="claim-tile__info">
+        <div
+          className={classnames('claim-tile__info', {
+            contains_view_count: shouldShowViewCount,
+          })}
+        >
           {isChannel ? (
             <div className="claim-tile__about--channel">
               <SubscribeButton uri={repostedChannelUri || uri} />

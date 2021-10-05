@@ -1,4 +1,4 @@
-.download--header {
+.download-progress__header {
   padding: 15px;
   position: fixed;
   bottom: 0;
@@ -6,11 +6,11 @@
   width: 400px;
   display: flex;
   flex-direction: column;
-  background-color: #f2f2f2;
+  background-color: var(--color-header-background); //var(--color-gray-9):dark-mode
   border-radius: 10px;
-  border: 1px solid #c5c4c3;
+  border: 1px solid var(--color-gray-3);
 }
-.download--top-close-button {
+.download-progress__top-close-button {
   position: absolute;
   top: 7px;
   right: 15px;
@@ -21,18 +21,18 @@
   div {
     height: 2px;
     width: 13px;
-    background-color: #979696;
+    background-color: var(--color-gray-4);
     border-radius: 3px;
   }
 }
-.download--state-container {
+.download-progress__state-container {
   margin-top: 10px;
   padding-bottom: 10px;
   display: flex;
   flex-direction: column;
   width: 100%;
 }
-.download--file-name {
+.download-progress__state-filename {
   margin: 0;
   font-weight: 800;
   font-size: 13px;
@@ -41,8 +41,11 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   margin-right: 10px;
+  span.button__label {
+    color: var(--color-text);
+  }
 }
-.download--file-name-link {
+.download-progress__state-filename-link {
   margin: 0;
   font-weight: 800;
   font-size: 13px;
@@ -54,56 +57,55 @@
   text-decoration: underline;
   cursor: pointer;
 }
-.download--release-Time {
+.download-progress__release-time {
   margin: 0;
   font-weight: 800;
   font-size: 12px;
   margin-left: auto;
   font-style: italic;
 }
-.download--state-bar {
+.download-progress__state-bar {
   display: flex;
   flex-direction: row;
   width: 100%;
   align-items: center;
   margin-bottom: 2px;
 }
-.download--bar-container {
+.download-progress__bar-container {
   width: 100%;
-  background-color: gray;
+  background-color: var(--color-gray-5);
   height: 6px;
   border-radius: 10px;
 }
-.download--bar-content {
+.download-progress__bar-content {
   border-radius: 10px;
   height: 100%;
-  background-color: #ff9933;
+  background-color: var(--color-primary);
 }
-.download--close-button {
+.download-progress__close-button {
   flex-shrink: 0;
   margin-left: auto;
   font-size: 20px;
   cursor: pointer;
 }
-.download-count-time {
+.download-progress__count-time {
   font-size: 11px;
-  // color: gray;
+  letter-spacing: -0.6px;
 }
-.download--divider {
-  border-top: 1px solid #bbb;
+.download-progress__divider {
+  border-top: 1px solid var(--color-gray-6);
   margin-left: -15px;
   width: 110%;
 }
-.download-cancel {
+.download-progress__cancel {
   margin-top: 7px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 }
-.download-cancel p {
+.download-progress__cancel p {
   margin: 0;
-  color: black;
   font-size: 12px;
   margin: 0;
   white-space: nowrap;
@@ -111,23 +113,23 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.download-cancel b {
+.download-progress__cancel b {
   font-size: 13px;
 }
-.download-cancel-confirm {
+.download-progress__cancel-confirm {
   width: 90px;
   display: flex;
   justify-content: space-around;
   align-items: center;
 }
-.download-cancel-ok {
+.download-progress__cancel-ok {
   border: none;
-  // color: rgb(4, 120, 87);
   background-color: transparent;
   font-size: 13px;
+  color: var(--color-text);
 }
-.download-cancel-ok:hover {
-  color: rgb(4, 120, 87);
+.download-progress__cancel-ok:hover {
+  color: var(--color-primary);
 }
 .download__container {
   position: fixed;
@@ -136,21 +138,24 @@
   width: 400px;
   height: 300px;
   border-radius: 10px;
-  box-shadow: 2px 2px 5px grey;
-  background-color: white;
+  box-shadow: 2px 2px 5px var(--color-gray-4);
+  background-color: var(--color-white);
   transition: width 2s;
 }
-.download__toggle-button {
+.download-progress__toggle-button {
   position: fixed;
   bottom: 10px;
   right: 10px;
   border: none;
-  background: white;
-  color: #4f4f4fbf;
-  width: 60px;
-  height: 60px;
-  border-radius: 30px;
-  box-shadow: 2px 2px 4px grey;
+  background: var(--color-white);
+  color: var(--color-gray-6);
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  box-shadow: 0px 5px 4px var(--color-gray-4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .download_close_modal {
   float: right;

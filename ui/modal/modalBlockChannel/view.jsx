@@ -153,9 +153,9 @@ export default function ModalBlockChannel(props: Props) {
       case TAB.MODERATOR:
         return (
           <p className="help">
-            {__('Block this channel on behalf of %creator%', {
-              creator: contentChannelClaim ? contentChannelClaim.name : __('creator'),
-            })}
+            {contentChannelClaim
+              ? __('Block this channel on behalf of %creator%.', { creator: contentChannelClaim.name })
+              : __('Block this channel on behalf of the creator.')}
           </p>
         );
       case TAB.ADMIN:

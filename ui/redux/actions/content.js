@@ -5,6 +5,7 @@ import * as MODALS from 'constants/modal_types';
 import { ipcRenderer } from 'electron';
 // @endif
 import { doOpenModal } from 'redux/actions/app';
+import { doDeleteFile } from 'redux/actions/file';
 import {
   Lbry,
   SETTINGS,
@@ -25,12 +26,11 @@ import { makeSelectClientSetting, selectosNotificationsEnabled, selectDaemonSett
 const DOWNLOAD_POLL_INTERVAL = 1000;
 var timeOutHash = {};
 
-export function doUpdateLoadStatus(uri: string, outpoint: string) {
+export function doUpdateLoadStatus(uri: any, outpoint: string) {
   // Updates the loading status for a uri as it's downloading
   // Calls file_list and checks the written_bytes value to see if the number has increased
   // Not needed on web as users aren't actually downloading the file
   // @if TARGET='app'
-
   return (dispatch: Dispatch, getState: GetState) => {
     const setNextStatusUpdate = () =>
       (timeOutHash[outpoint] = setTimeout(() => {
@@ -100,22 +100,21 @@ export function doUpdateLoadStatus(uri: string, outpoint: string) {
   // @endif
 }
 
-export function doStopDownload(outpoint: string, sd_hash: string) {
+export function doUpdateDownloadingStatus(outpoint: string) {
+  return (dispatch: Dispatch) => {
+    if (!timeOutHash[outpoint]) {
+      dispatch(doUpdateLoadStatus(null, outpoint));
+    }
+  };
+}
+
+export function doStopDownload(outpoint: string) {
   return (dispatch: Dispatch) => {
     if (timeOutHash[outpoint]) {
       clearInterval(timeOutHash[outpoint]);
       timeOutHash[outpoint] = undefined;
     }
-    Lbry.file_delete({
-      sd_hash,
-    });
-
-    dispatch({
-      type: ACTIONS.FILE_DELETE,
-      data: {
-        outpoint,
-      },
-    });
+    dispatch(doDeleteFile(outpoint, false, false, null));
   };
 }
 

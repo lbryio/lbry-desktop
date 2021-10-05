@@ -6,8 +6,8 @@ import { lazyImport } from 'util/lazyImport';
 import SideNavigation from 'component/sideNavigation';
 import SettingsSideNavigation from 'component/settingsSideNavigation';
 import Header from 'component/header';
-import DownloadProgress from '../downloadProgress';
 /* @if TARGET='app' */
+import DownloadProgress from '../downloadProgress';
 import StatusBar from 'component/common/status-bar';
 /* @endif */
 import usePersistedState from 'effects/use-persisted-state';
@@ -103,7 +103,7 @@ function Page(props: Props) {
       setSidebarOpen(false);
     }
     // TODO: make sure setState callback for usePersistedState uses useCallback to it doesn't cause effect to re-run
-  }, [isOnFilePage, isMediumScreen]);
+  }, [isOnFilePage, isMediumScreen, setSidebarOpen]);
 
   return (
     <Fragment>
@@ -151,7 +151,9 @@ function Page(props: Props) {
         </React.Suspense>
       )}
       {/* @endif */}
+      {/* @if TARGET='app' */}
       <DownloadProgress />
+      {/* @endif */}
     </Fragment>
   );
 }

@@ -220,7 +220,7 @@ function FilePage(props: Props) {
       {!collection && !isMarkdown && !videoTheaterMode && <RecommendedContent uri={uri} />}
       {isMarkdown && (
         <div className="file-page__post-comments">
-          <CommentsList uri={uri} linkedCommentId={linkedCommentId} />
+          <CommentsList uri={uri} linkedCommentId={linkedCommentId} commentsAreExpanded />
         </div>
       )}
     </Page>

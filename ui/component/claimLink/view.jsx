@@ -1,14 +1,15 @@
 // @flow
-import * as React from 'react';
-import classnames from 'classnames';
-import EmbedPlayButton from 'component/embedPlayButton';
-import Button from 'component/button';
-import UriIndicator from 'component/uriIndicator';
 import { INLINE_PLAYER_WRAPPER_CLASS } from 'component/fileRenderFloating/view';
 import { SIMPLE_SITE } from 'config';
+import * as React from 'react';
+import Button from 'component/button';
+import classnames from 'classnames';
+import EmbedPlayButton from 'component/embedPlayButton';
+import UriIndicator from 'component/uriIndicator';
 
 type Props = {
   uri: string,
+  fullUri: string,
   claim: StreamClaim,
   children: React.Node,
   description: ?string,
@@ -68,6 +69,7 @@ class ClaimLink extends React.Component<Props> {
   render() {
     const {
       uri,
+      fullUri,
       claim,
       children,
       isResolvingUri,
@@ -92,7 +94,10 @@ class ClaimLink extends React.Component<Props> {
     const isChannel = valueType === 'channel';
 
     return isChannel ? (
-      <UriIndicator uri={uri} link />
+      <>
+        <UriIndicator uri={uri} link />
+        <span>{fullUri.length > uri.length ? fullUri.substring(uri.length, fullUri.length) : ''}</span>
+      </>
     ) : allowPreview ? (
       <div className={classnames('claim-link')}>
         <div

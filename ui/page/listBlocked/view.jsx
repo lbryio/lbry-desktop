@@ -221,15 +221,17 @@ function ListBlocked(props: Props) {
 
   function getRefreshElem() {
     return (
-      <Button
-        icon={ICONS.REFRESH}
-        button="alt"
-        label={__('Refresh')}
-        onClick={() => {
-          fetchModBlockedList();
-          fetchModAmIList();
-        }}
-      />
+      myChannelClaims && (
+        <Button
+          icon={ICONS.REFRESH}
+          button="alt"
+          label={__('Refresh')}
+          onClick={() => {
+            fetchModBlockedList();
+            fetchModAmIList();
+          }}
+        />
+      )
     );
   }
 

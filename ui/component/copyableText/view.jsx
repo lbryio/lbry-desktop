@@ -12,23 +12,38 @@ type Props = {
   primaryButton?: boolean,
   name?: string,
   onCopy?: (string) => string,
+  enableInputMask?: boolean,
 };
 
 export default function CopyableText(props: Props) {
-  const { copyable, doToast, snackMessage, label, primaryButton = false, name, onCopy } = props;
+  const { copyable, doToast, snackMessage, label, primaryButton = false, name, onCopy, enableInputMask } = props;
+  const [maskInput, setMaskInput] = React.useState(enableInputMask);
 
   const input = useRef();
 
-  function copyToClipboard() {
-    const topRef = input.current;
-    if (topRef && topRef.input && topRef.input.current) {
-      topRef.input.current.select();
-      if (onCopy) {
-        onCopy(topRef.input.current);
+  function handleCopyText() {
+    if (enableInputMask) {
+      navigator.clipboard
+        .writeText(copyable)
+        .then(() => {
+          doToast({ message: snackMessage || __('Text copied') });
+        })
+        .catch(() => {
+          doToast({ message: __('Failed to copy.'), isError: true });
+        });
+    } else {
+      const topRef = input.current;
+      if (topRef && topRef.input && topRef.input.current) {
+        topRef.input.current.select();
+        if (onCopy) {
+          // Allow clients to change the selection before making the copy.
+          onCopy(topRef.input.current);
+        }
       }
-    }
 
-    document.execCommand('copy');
+      document.execCommand('copy');
+      doToast({ message: snackMessage || __('Text copied') });
+    }
   }
 
   function onFocus() {
@@ -41,7 +56,7 @@ export default function CopyableText(props: Props) {
 
   return (
     <FormField
-      type="text"
+      type={maskInput ? 'password' : 'text'}
       className="form-field--copyable"
       readOnly
       name={name}
@@ -50,16 +65,12 @@ export default function CopyableText(props: Props) {
       ref={input}
       onFocus={onFocus}
       inputButton={
-        <Button
-          button={primaryButton ? 'primary' : 'secondary'}
-          icon={ICONS.COPY}
-          onClick={() => {
-            copyToClipboard();
-            doToast({
-              message: snackMessage || __('Text copied'),
-            });
-          }}
-        />
+        <Button button={primaryButton ? 'primary' : 'secondary'} icon={ICONS.COPY} onClick={handleCopyText} />
+      }
+      helper={
+        enableInputMask && (
+          <Button button="link" onClick={() => setMaskInput(!maskInput)} label={maskInput ? __('Show') : __('Hide')} />
+        )
       }
     />
   );

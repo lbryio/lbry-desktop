@@ -9,6 +9,7 @@
   position: absolute;
   z-index: 2;
   font-size: var(--font-body);
+  max-width: calc(100% - var(--height-button) - var(--spacing-xs));
 }
 
 [data-reach-menu-list] {
@@ -73,8 +74,6 @@
 .menu__list {
   box-shadow: var(--card-box-shadow);
   animation: menu-animate-in var(--animation-duration) var(--animation-style);
-  border-bottom-left-radius: var(--border-radius);
-  border-bottom-right-radius: var(--border-radius);
 
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius);
@@ -113,15 +112,18 @@
 
 .menu__link-help {
   @extend .menu__link;
+  display: block;
   color: var(--color-text-help);
   font-size: var(--font-small);
   padding-top: 0;
+  white-space: normal;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
 }
 .menu__link-disable {
   @extend .menu__link;
-  color: var(--color-text-subtitle)!important;
+  color: var(--color-text-subtitle) !important;
 }
-
 
 .menu__link--notification {
   width: 100%;

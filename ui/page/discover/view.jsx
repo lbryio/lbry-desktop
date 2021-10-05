@@ -8,15 +8,17 @@ import Page from 'component/page';
 import ClaimListDiscover from 'component/claimListDiscover';
 import Button from 'component/button';
 import useHover from 'effects/use-hover';
-import { useIsMobile } from 'effects/use-screensize';
+import { useIsMobile, useIsLargeScreen } from 'effects/use-screensize';
 import analytics from 'analytics';
 import HiddenNsfw from 'component/common/hidden-nsfw';
 import Icon from 'component/common/icon';
 import Ads from 'web/component/ads';
 import LbcSymbol from 'component/common/lbc-symbol';
 import I18nMessage from 'component/i18nMessage';
-import useGetLivestreams from 'effects/use-get-livestreams';
 import moment from 'moment';
+import { getLivestreamUris } from 'util/livestream';
+
+const DEFAULT_LIVESTREAM_TILE_LIMIT = 8;
 
 type Props = {
   location: { search: string },
@@ -28,6 +30,8 @@ type Props = {
   isAuthenticated: boolean,
   dynamicRouteProps: RowDataItem,
   tileLayout: boolean,
+  activeLivestreams: ?LivestreamInfo,
+  doFetchActiveLivestreams: (orderBy?: Array<string>, pageSize?: number, forceFetch?: boolean) => void,
 };
 
 function DiscoverPage(props: Props) {
@@ -40,12 +44,14 @@ function DiscoverPage(props: Props) {
     doResolveUri,
     isAuthenticated,
     tileLayout,
+    activeLivestreams,
+    doFetchActiveLivestreams,
     dynamicRouteProps,
   } = props;
   const buttonRef = useRef();
   const isHovering = useHover(buttonRef);
   const isMobile = useIsMobile();
-  const { livestreamMap } = useGetLivestreams();
+  const isLargeScreen = useIsLargeScreen();
 
   const urlParams = new URLSearchParams(search);
   const claimType = urlParams.get('claim_type');
@@ -58,11 +64,53 @@ function DiscoverPage(props: Props) {
   // Eventually allow more than one tag on this page
   // Restricting to one to make follow/unfollow simpler
   const tag = (tags && tags[0]) || null;
+  const channelIds =
+    (dynamicRouteProps && dynamicRouteProps.options && dynamicRouteProps.options.channelIds) || undefined;
 
   const isFollowing = followedTags.map(({ name }) => name).includes(tag);
   let label = isFollowing ? __('Following --[button label indicating a channel has been followed]--') : __('Follow');
   if (isHovering && isFollowing) {
     label = __('Unfollow');
+  }
+
+  const initialLivestreamTileLimit = getPageSize(DEFAULT_LIVESTREAM_TILE_LIMIT);
+
+  const [showViewMoreLivestreams, setShowViewMoreLivestreams] = React.useState(!dynamicRouteProps);
+  const livestreamUris = getLivestreamUris(activeLivestreams, channelIds);
+  const useDualList = showViewMoreLivestreams && livestreamUris.length > initialLivestreamTileLimit;
+
+  function getElemMeta() {
+    return !dynamicRouteProps ? (
+      <a
+        className="help"
+        href="https://lbry.com/faq/trending"
+        title={__('Learn more about LBRY Credits on %DOMAIN%', { DOMAIN })}
+      >
+        <I18nMessage
+          tokens={{
+            lbc: <LbcSymbol />,
+          }}
+        >
+          Results boosted by %lbc%
+        </I18nMessage>
+      </a>
+    ) : (
+      tag && !isMobile && (
+        <Button
+          ref={buttonRef}
+          button="alt"
+          icon={ICONS.SUBSCRIBE}
+          iconColor="red"
+          onClick={handleFollowClick}
+          requiresAuth={IS_WEB}
+          label={label}
+        />
+      )
+    );
+  }
+
+  function getPageSize(originalSize) {
+    return isLargeScreen ? originalSize * (3 / 2) : originalSize;
   }
 
   React.useEffect(() => {
@@ -106,16 +154,53 @@ function DiscoverPage(props: Props) {
     );
   }
 
+  React.useEffect(() => {
+    if (showViewMoreLivestreams) {
+      doFetchActiveLivestreams(CS.ORDER_BY_TRENDING_VALUE);
+    } else {
+      doFetchActiveLivestreams();
+    }
+  }, []);
+
   return (
     <Page noFooter fullWidthPage={tileLayout}>
+      {useDualList && (
+        <>
+          <ClaimListDiscover
+            uris={livestreamUris.slice(0, initialLivestreamTileLimit)}
+            headerLabel={headerLabel}
+            header={repostedUri ? <span /> : undefined}
+            tileLayout={repostedUri ? false : tileLayout}
+            hideAdvancedFilter
+            hideFilters
+            infiniteScroll={false}
+            showNoSourceClaims={ENABLE_NO_SOURCE_CLAIMS}
+            meta={getElemMeta()}
+          />
+          <div className="livestream-list--view-more">
+            <Button
+              label={__('Show more livestreams')}
+              button="link"
+              iconRight={ICONS.ARROW_RIGHT}
+              className="claim-grid__title--secondary"
+              onClick={() => {
+                doFetchActiveLivestreams();
+                setShowViewMoreLivestreams(false);
+              }}
+            />
+          </div>
+        </>
+      )}
+
       <ClaimListDiscover
+        prefixUris={useDualList ? undefined : livestreamUris}
         hideAdvancedFilter={SIMPLE_SITE}
         hideFilters={SIMPLE_SITE ? !dynamicRouteProps : undefined}
-        header={repostedUri ? <span /> : undefined}
+        header={useDualList ? <span /> : repostedUri ? <span /> : undefined}
         tileLayout={repostedUri ? false : tileLayout}
         defaultOrderBy={SIMPLE_SITE ? (dynamicRouteProps ? undefined : CS.ORDER_BY_TRENDING) : undefined}
         claimType={claimType ? [claimType] : undefined}
-        headerLabel={headerLabel}
+        headerLabel={!useDualList && headerLabel}
         tags={tags}
         hiddenNsfwMessage={<HiddenNsfw type="page" />}
         repostedClaimId={repostedClaim ? repostedClaim.claim_id : null}
@@ -133,47 +218,14 @@ function DiscoverPage(props: Props) {
             : undefined
         }
         feeAmount={SIMPLE_SITE ? !dynamicRouteProps && CS.FEE_AMOUNT_ANY : undefined}
-        channelIds={
-          (dynamicRouteProps && dynamicRouteProps.options && dynamicRouteProps.options.channelIds) || undefined
-        }
+        channelIds={channelIds}
         limitClaimsPerChannel={
           SIMPLE_SITE
             ? (dynamicRouteProps && dynamicRouteProps.options && dynamicRouteProps.options.limitClaimsPerChannel) ||
               undefined
             : 3
         }
-        meta={
-          !dynamicRouteProps ? (
-            <a
-              className="help"
-              href="https://lbry.com/faq/trending"
-              title={__('Learn more about LBRY Credits on %DOMAIN%', { DOMAIN })}
-            >
-              <I18nMessage
-                tokens={{
-                  lbc: <LbcSymbol />,
-                }}
-              >
-                Results boosted by %lbc%
-              </I18nMessage>
-            </a>
-          ) : (
-            tag &&
-            !isMobile && (
-              <Button
-                ref={buttonRef}
-                button="alt"
-                icon={ICONS.SUBSCRIBE}
-                iconColor="red"
-                onClick={handleFollowClick}
-                requiresAuth={IS_WEB}
-                label={label}
-              />
-            )
-          )
-        }
-        liveLivestreamsFirst
-        livestreamMap={livestreamMap}
+        meta={!useDualList && getElemMeta()}
         hasSource
         showNoSourceClaims={ENABLE_NO_SOURCE_CLAIMS}
       />

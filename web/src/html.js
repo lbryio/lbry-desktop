@@ -74,11 +74,12 @@ function getCategoryMeta(path) {
 // Normal metadata with option to override certain values
 //
 function buildOgMetadata(overrideOptions = {}) {
-  const { title, description, image } = overrideOptions;
+  const { title, description, image, path } = overrideOptions;
   const cleanDescription = removeMd(description || SITE_DESCRIPTION);
   const head =
     `<title>${SITE_TITLE}</title>\n` +
-    `<meta property="og:url" content="${URL}" />\n` +
+    `<meta name="description" content="${cleanDescription}" />\n` +
+    `<meta property="og:url" content="${path ? `${URL}${path}` : URL}" />\n` +
     `<meta property="og:title" content="${title || OG_HOMEPAGE_TITLE || SITE_TITLE}" />\n` +
     `<meta property="og:site_name" content="${SITE_NAME || SITE_TITLE}"/>\n` +
     `<meta property="og:description" content="${cleanDescription}" />\n` +
@@ -90,7 +91,6 @@ function buildOgMetadata(overrideOptions = {}) {
     }" />\n` +
     `<meta name="twitter:description" content="${cleanDescription}" />\n` +
     `<meta name="twitter:image" content="${image || OG_IMAGE_URL || `${URL}/public/v2-og.png`}"/>\n` +
-    `<meta name="twitter:url" content="${URL}" />\n` +
     '<meta property="fb:app_id" content="1673146449633983" />\n' +
     `<link rel="canonical" content="${SITE_CANONICAL_URL || URL}"/>` +
     `<link rel="search" type="application/opensearchdescription+xml" title="${
@@ -347,6 +347,7 @@ async function getHtml(ctx) {
       title: categoryMeta.title,
       description: categoryMeta.description,
       image: categoryMeta.image,
+      path: requestPath,
     });
     return insertToHead(html, categoryPageMetadata);
   }

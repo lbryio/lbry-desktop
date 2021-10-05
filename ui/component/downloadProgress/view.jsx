@@ -1,67 +1,52 @@
 // @flow
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { shell } from 'electron';
-import Icon from 'component/common/icon';
+import Button from 'component/button';
 import * as ICONS from 'constants/icons';
+import { buildURI } from 'lbry-redux';
+import { formatBytes } from 'util/format-bytes';
+import usePersistedState from 'effects/use-persisted-state';
 
 type Props = {
-  downloadList: any,
-  stopDownload: (outpoint: string, sd_hash: string) => void,
+  downloadList: any[],
+  stopDownload: (outpoint: string) => void,
+  updateDownloadingStatus: (outpoint: string) => void,
 };
 
-function DownloadProgress(props: Props) {
-  const [isShow, setIsShow] = useState(true);
+function DownloadProgress({ downloadList, stopDownload, updateDownloadingStatus }: Props) {
+  const [isShow, setIsShow] = usePersistedState('download-progress', true);
   const [cancelHash] = useState({});
+  const [checkDownloadingHash] = useState({});
 
   const handleCancel = (hash, value) => {
     cancelHash[hash] = value;
   };
-  // return (
-  //   <div className="download--header">
-  //     <button className="download--top-close-button" onClick={() => setIsShow(false)}>
-  //       <div />
-  //     </button>
-  //     <DownloadState
-  //       fileName="being-offended-is-a-bad-trait.mp4"
-  //       title="Being offended is a bad trait"
-  //       releaseTime={'9/27/2021'}
-  //       writtenBytes={100000}
-  //       totalBytes={500000}
-  //       addedOn={1632388934}
-  //       directory={''}
-  //       stopDownload={props.stopDownload}
-  //       outpoint={'asdfasdfsa'}
-  //       sd_hash={'asdfsadfsadfsd'}
-  //       isCancel
-  //       handleCancel={handleCancel}
-  //     />
-  //   </div>
-  // );
-
-  // console.log('DownloadProgress', props.downloadList);
-  if (!props.downloadList) return null;
-
-  const downloadList = [];
-  Object.keys(props.downloadList).map((key) => {
-    const item = props.downloadList[key];
-    if (item.status === 'running') downloadList.push(item);
-  });
 
   if (downloadList.length === 0) return null;
 
+  downloadList.map((item) => {
+    if (item && !checkDownloadingHash[item.outpoint]) {
+      updateDownloadingStatus(item.outpoint);
+      checkDownloadingHash[item.outpoint] = true;
+    }
+  });
+
   if (!isShow) {
     return (
-      <button onClick={() => setIsShow(true)} className="download__toggle-button">
-        <Icon icon={ICONS.DOWNLOAD} size={40} />
-      </button>
+      <Button
+        iconSize={40}
+        icon={ICONS.DOWNLOAD}
+        className="download-progress__toggle-button"
+        onClick={() => setIsShow(true)}
+      />
     );
   }
 
   return (
-    <div className="download--header">
-      <button className="download--top-close-button" onClick={() => setIsShow(false)}>
+    <div className="download-progress__header">
+      <Button className="download-progress__top-close-button" onClick={() => setIsShow(false)}>
         <div />
-      </button>
+      </Button>
 
       {downloadList.map((item, index) => {
         let releaseTime = '';
@@ -69,9 +54,9 @@ function DownloadProgress(props: Props) {
           releaseTime = new Date(parseInt(item.metadata.release_time) * 1000).toISOString().split('T')[0];
         }
         return (
-          <div key={item.sd_hash}>
-            {index !== 0 && <hr className="download--divider" />}
-            <DownloadState
+          <div key={item.outpoint}>
+            {index !== 0 && <hr className="download-progress__divider" />}
+            <DownloadProgressItem
               fileName={item.suggested_file_name}
               title={item.metadata.title}
               releaseTime={releaseTime}
@@ -79,10 +64,11 @@ function DownloadProgress(props: Props) {
               totalBytes={item.total_bytes}
               addedOn={item.added_on}
               directory={item.download_directory}
-              stopDownload={props.stopDownload}
+              stopDownload={stopDownload}
               outpoint={item.outpoint}
-              sd_hash={item.sd_hash}
-              isCancel={cancelHash[item.sd_hash]}
+              isCancel={cancelHash[item.outpoint]}
+              claimID={item.claim_id}
+              claimName={item.claim_name}
               handleCancel={handleCancel}
             />
           </div>
@@ -92,7 +78,7 @@ function DownloadProgress(props: Props) {
   );
 }
 
-type DownloadStateProps = {
+type DownloadProgressItemProps = {
   fileName: string,
   writtenBytes: number,
   totalBytes: number,
@@ -101,13 +87,14 @@ type DownloadStateProps = {
   releaseTime: string,
   directory: string,
   outpoint: string,
-  sd_hash: string,
   isCancel: boolean,
-  stopDownload: (outpoint: string, sd_hash: string) => void,
+  claimID: string,
+  claimName: string,
+  stopDownload: (outpoint: string) => void,
   handleCancel: (hash: string, value: boolean) => void,
 };
 
-function DownloadState({
+function DownloadProgressItem({
   fileName,
   writtenBytes,
   totalBytes,
@@ -116,86 +103,95 @@ function DownloadState({
   releaseTime,
   directory,
   outpoint,
-  sd_hash,
   isCancel,
+  claimID,
+  claimName,
   stopDownload,
   handleCancel,
-}: DownloadStateProps) {
+}: DownloadProgressItemProps) {
   const processStopDownload = () => {
-    handleCancel(sd_hash, false);
-    stopDownload(outpoint, sd_hash);
+    handleCancel(outpoint, false);
+    stopDownload(outpoint);
   };
 
-  const percent = ((writtenBytes / totalBytes) * 100).toFixed(0);
+  const [percent, setPercent] = useState(0);
+  const [progressText, setProgressText] = useState('');
 
-  const sizeTypeText = ['Bytes', 'KB', 'MB', 'GB'];
-  const getSizeType = (size) => Math.floor(Math.log(size) / Math.log(1024));
-  const convertSizeUnit = (size, sizeType) => {
-    const unitSize = size / Math.pow(1024, sizeType);
-    if (unitSize > 100) return unitSize.toFixed(0);
-    if (unitSize > 10) return unitSize.toFixed(1);
-    return unitSize.toFixed(2);
-  };
+  useEffect(() => {
+    const updatePercent = ((writtenBytes / totalBytes) * 100).toFixed(0);
+    setPercent(updatePercent);
+
+    let updateText = '';
+    const downloadSpeed = Math.ceil(writtenBytes / (Date.now() / 1000 - addedOn));
+    const remainingSecond = Math.ceil((totalBytes - writtenBytes) / downloadSpeed);
+    const remainingMinutes = Math.floor(remainingSecond / 60);
+
+    if (remainingMinutes > 0) {
+      updateText += __('%remainingMinutes% minutes %remainSecond% seconds remaining', {
+        remainingMinutes: remainingMinutes,
+        remainSecond: remainingSecond - 60 * remainingMinutes,
+      });
+    } else {
+      updateText += __('%remainSecond% seconds remaining', { remainSecond: remainingSecond - 60 * remainingMinutes });
+    }
+    updateText += ' -- ';
+
+    updateText += __('%written% of %total%', {
+      written: formatBytes(writtenBytes),
+      total: formatBytes(totalBytes),
+    });
+    updateText += ' ';
+
+    updateText += __('(%speed%/sec)', {
+      speed: formatBytes(downloadSpeed),
+    });
+
+    setProgressText(updateText);
+  }, [writtenBytes, totalBytes, addedOn]);
+
   const openDownloadFolder = () => {
     shell.openPath(directory);
   };
 
-  let text = '';
-
-  const downloadSpeed = Math.ceil(writtenBytes / (Date.now() / 1000 - addedOn));
-  const remainingSecond = Math.ceil((totalBytes - writtenBytes) / downloadSpeed);
-  const remainingMinutes = Math.floor(remainingSecond / 60);
-
-  if (remainingMinutes > 0) text += `${remainingMinutes} minutes `;
-
-  text += `${remainingSecond - 60 * remainingMinutes} seconds remaining`;
-  text += ' -- ';
-
-  let sizeType = getSizeType(totalBytes);
-  text += ` ${convertSizeUnit(writtenBytes, sizeType)} of ${convertSizeUnit(totalBytes, sizeType)} ${
-    sizeTypeText[sizeType]
-  }`;
-
-  sizeType = getSizeType(downloadSpeed);
-  text += ` (${convertSizeUnit(downloadSpeed, sizeType)} ${sizeTypeText[sizeType]}/sec)`;
-
   return (
-    <div className="download--state-container">
-      <div className="download--state-bar">
-        <p className="download--file-name">{title}</p>
+    <div className=" download-progress__state-container">
+      <div className="download-progress__state-bar">
+        <Button
+          label={title}
+          className="download-progress__state-filename"
+          navigate={buildURI({ claimName, claimID })}
+        />
         <div
-          className="download--close-button"
+          className="download-progress__close-button"
           onClick={() => {
-            handleCancel(sd_hash, true);
+            handleCancel(outpoint, true);
           }}
         >
           &times;
         </div>
       </div>
-      <div className="download--state-bar">
-        <a className="download--file-name-link" onClick={openDownloadFolder}>
+      <div className="download-progress__state-bar">
+        <a className="download-progress__state-filename-link" onClick={openDownloadFolder}>
           {fileName}
         </a>
-        <p className="download--release-Time">{releaseTime}</p>
+        <p className="download-progress__release-time">{releaseTime}</p>
       </div>
-
-      <div className="download--state-bar">
-        <div className="download--bar-container">
-          <div className="download--bar-content" style={{ width: `${percent}%` }} />
+      <div className="download-progress__state-bar">
+        <div className="download-progress__bar-container">
+          <div className="download-progress__bar-content" style={{ width: `${percent}%` }} />
         </div>
       </div>
-
-      <p className="download-count-time">{text}</p>
+      <p className="download-progress__count-time">{progressText}</p>
       {isCancel && (
-        <div className="download-cancel">
-          <p>Do you want to cancel download this file?</p>
-          <div className="download-cancel-confirm">
-            <button type="button" className="download-cancel-ok" onClick={processStopDownload}>
-              Yes
-            </button>
-            <button type="button" className="download-cancel-ok" onClick={() => handleCancel(sd_hash, false)}>
-              No
-            </button>
+        <div className="download-progress__cancel">
+          <p>{__('Do you cancel download this file?')}</p>
+          <div className="download-progress__cancel-confirm">
+            <Button label={__('Yes')} className="download-progress__cancel-ok" onClick={processStopDownload} />
+            <Button
+              label={__('No')}
+              className="download-progress__cancel-ok"
+              onClick={() => handleCancel(outpoint, false)}
+            />
           </div>
         </div>
       )}

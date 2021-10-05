@@ -21,6 +21,7 @@ const defaultState: CommentsState = {
   superChatsByUri: {},
   pinnedCommentsById: {}, // ClaimId -> array of pinned comment IDs
   isLoading: false,
+  isLoadingById: false,
   isLoadingByParentId: {},
   isCommenting: false,
   myComments: undefined,
@@ -245,7 +246,7 @@ export default handleActions(
         claimId,
         uri,
         disabled,
-        commenterClaimId,
+        creatorClaimId,
       } = action.data;
 
       const commentById = Object.assign({}, state.commentById);
@@ -261,8 +262,8 @@ export default handleActions(
       const isLoadingByParentId = Object.assign({}, state.isLoadingByParentId);
       const settingsByChannelId = Object.assign({}, state.settingsByChannelId);
 
-      settingsByChannelId[commenterClaimId] = {
-        ...(settingsByChannelId[commenterClaimId] || {}),
+      settingsByChannelId[creatorClaimId] = {
+        ...(settingsByChannelId[creatorClaimId] || {}),
         comments_enabled: !disabled,
       };
 
@@ -335,6 +336,8 @@ export default handleActions(
       };
     },
 
+    [ACTIONS.COMMENT_BY_ID_STARTED]: (state) => ({ ...state, isLoadingById: true }),
+
     [ACTIONS.COMMENT_BY_ID_COMPLETED]: (state: CommentsState, action: any) => {
       const { comment, ancestors } = action.data;
       const claimId = comment.claim_id;
@@ -349,9 +352,7 @@ export default handleActions(
       const linkedCommentAncestors = Object.assign({}, state.linkedCommentAncestors);
 
       const updateStore = (comment, commentById, byId, repliesByParentId, topLevelCommentsById) => {
-        // 'comment.ByID' doesn't populate 'replies'. We should have at least 1
-        // at the moment, and the correct value will populated by 'comment.List'.
-        commentById[comment.comment_id] = { ...comment, replies: 1 };
+        commentById[comment.comment_id] = comment;
         byId[claimId] ? byId[claimId].unshift(comment.comment_id) : (byId[claimId] = [comment.comment_id]);
 
         const parentId = comment.parent_id;
@@ -377,6 +378,7 @@ export default handleActions(
 
       return {
         ...state,
+        isLoadingById: false,
         topLevelCommentsById,
         topLevelTotalCommentsById,
         topLevelTotalPagesById,

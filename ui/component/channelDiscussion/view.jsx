@@ -17,7 +17,7 @@ function ChannelDiscussion(props: Props) {
   }
   return (
     <section className="section">
-      <CommentsList uri={uri} linkedCommentId={linkedCommentId} />
+      <CommentsList uri={uri} linkedCommentId={linkedCommentId} commentsAreExpanded />
     </section>
   );
 }
