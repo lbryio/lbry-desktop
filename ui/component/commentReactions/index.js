@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import Comment from './view';
+import CommentReactions from './view';
 import { makeSelectClaimIsMine, makeSelectClaimForUri, doResolveUri } from 'lbry-redux';
 import { doToast } from 'redux/actions/notifications';
 import { makeSelectMyReactionsForComment, makeSelectOthersReactionsForComment } from 'redux/selectors/comments';
@@ -15,7 +15,7 @@ const select = (state, props) => {
     claim: makeSelectClaimForUri(props.uri)(state),
     claimIsMine: makeSelectClaimIsMine(props.uri)(state),
     myReacts: makeSelectMyReactionsForComment(reactionKey)(state),
-    othersReacts: makeSelectOthersReactionsForComment(reactionKey)(state),
+    othersReacts: props.othersReacts || makeSelectOthersReactionsForComment(reactionKey)(state),
     activeChannelId,
   };
 };
@@ -26,4 +26,4 @@ const perform = (dispatch) => ({
   doToast: (params) => dispatch(doToast(params)),
 });
 
-export default connect(select, perform)(Comment);
+export default connect(select, perform)(CommentReactions);
