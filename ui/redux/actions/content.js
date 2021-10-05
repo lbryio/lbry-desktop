@@ -10,7 +10,6 @@ import {
   SETTINGS,
   makeSelectFileInfoForUri,
   selectFileInfosByOutpoint,
-  doPurchaseUri,
   makeSelectUriIsStreamable,
   selectDownloadingByOutpoint,
   makeSelectClaimForUri,
@@ -19,6 +18,7 @@ import {
   doToast,
   makeSelectUrlsForCollectionId,
 } from 'lbry-redux';
+import { doPurchaseUri } from 'redux/actions/file';
 import { makeSelectCostInfoForUri, Lbryio } from 'lbryinc';
 import { makeSelectClientSetting, selectosNotificationsEnabled, selectDaemonSettings } from 'redux/selectors/settings';
 
@@ -117,8 +117,8 @@ export function doSetPlayingUri({
   uri: ?string,
   source?: string,
   commentId?: string,
-  pathname: string,
-  collectionId: string,
+  pathname?: string,
+  collectionId?: string,
 }) {
   return (dispatch: Dispatch) => {
     dispatch({
@@ -140,7 +140,7 @@ export function doPurchaseUriWrapper(uri: string, cost: number, saveFile: boolea
       }
     }
 
-    dispatch(doPurchaseUri(uri, { costInfo: cost }, saveFile, onSuccess));
+    dispatch(doPurchaseUri(uri, { cost }, saveFile, onSuccess));
   };
 }
 
