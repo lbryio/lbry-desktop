@@ -6,7 +6,6 @@ import {
   makeSelectClaimIsMine,
   makeSelectClaimIsPending,
   makeSelectClaimIsNsfw,
-  doFileGet,
   makeSelectReflectingClaimForUri,
   makeSelectClaimWasPurchased,
   makeSelectStreamingUrlForUri,
@@ -25,7 +24,7 @@ import { selectShowMatureContent } from 'redux/selectors/settings';
 import { makeSelectHasVisitedUri } from 'redux/selectors/content';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
 import { selectModerationBlockList } from 'redux/selectors/comments';
-
+import { doFileGet } from 'redux/actions/file';
 import ClaimPreview from './view';
 import formatMediaDuration from 'util/formatMediaDuration';
 
