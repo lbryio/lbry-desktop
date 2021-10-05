@@ -30,6 +30,14 @@ export default handleActions(
     ) => {
       const { blocked } = action.data;
       const sanitizedBlocked = blocked && blocked.filter((e) => typeof e === 'string');
+
+      const next = sanitizedBlocked;
+      const prev = state.blockedChannels;
+
+      if (next && prev && prev.length === next.length && prev.every((value, index) => value === next[index])) {
+        return state;
+      }
+
       return {
         ...state,
         blockedChannels: sanitizedBlocked && sanitizedBlocked.length ? sanitizedBlocked : state.blockedChannels,
