@@ -16,7 +16,7 @@ import qualityLevels from 'videojs-contrib-quality-levels';
 import isUserTyping from 'util/detect-typing';
 // @if TARGET='web'
 // Disabled for now.
-// import './plugins/videojs-aniview/plugin';
+import './plugins/videojs-aniview/plugin';
 // @endif
 const isDev = process.env.NODE_ENV !== 'production';
 
@@ -580,6 +580,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       // I think this is a callback function
       const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
       onPlayerReady(player, videoNode);
+
+      vjs.aniview();
     });
 
     // pre-roll ads

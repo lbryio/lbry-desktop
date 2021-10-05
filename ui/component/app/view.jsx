@@ -327,19 +327,17 @@ function App(props: Props) {
 
   // Load IMA3 SDK for aniview: DISABLED FOR NOW
   // @if TARGET='web'
-  // useEffect(() => {
-  //   if (ENABLE_PREROLL_ADS) {
-  //     const script = document.createElement('script');
-  //     script.src = `https://imasdk.googleapis.com/js/sdkloader/ima3.js`;
-  //     script.async = true;
-  //     // $FlowFixMe
-  //     document.body.appendChild(script);
-  //     return () => {
-  //       // $FlowFixMe
-  //       document.body.removeChild(script);
-  //     };
-  //   }
-  // });
+  useEffect(() => {
+      const script = document.createElement('script');
+      script.src = `https://imasdk.googleapis.com/js/sdkloader/ima3.js`;
+      script.async = true;
+      // $FlowFixMe
+      document.body.appendChild(script);
+      return () => {
+        // $FlowFixMe
+        document.body.removeChild(script);
+      };
+  });
   // @endif
 
   // @if TARGET='app'
