@@ -10,15 +10,15 @@ import ElectronCookies from '@exponent/electron-cookies';
 import { generateInitialUrl } from 'util/url';
 // @endif
 import { MATOMO_ID, MATOMO_URL } from 'config';
-import getConnectionSpeed from 'util/detect-user-bandwidth';
+// import getConnectionSpeed from 'util/detect-user-bandwidth';
 
-let userDownloadBandwidthInBitsPerSecond;
-async function getUserBandwidth() {
-  userDownloadBandwidthInBitsPerSecond = await getConnectionSpeed();
-}
+// let userDownloadBandwidthInBitsPerSecond;
+// async function getUserBandwidth() {
+//   userDownloadBandwidthInBitsPerSecond = await getConnectionSpeed();
+// }
 
 // get user bandwidth every minute, starting after an initial one minute wait
-setInterval(getUserBandwidth, 1000 * 60);
+// setInterval(getUserBandwidth, 1000 * 60);
 
 const isProduction = process.env.NODE_ENV === 'production';
 const devInternalApis = process.env.LBRY_API_URL && process.env.LBRY_API_URL.includes('dev');
@@ -164,7 +164,7 @@ async function sendAndResetWatchmanData() {
     user_id: userId.toString(),
     position: Math.round(positionInVideo),
     rel_position: Math.round((positionInVideo / (totalDurationInSeconds * 1000)) * 100),
-    ...(userDownloadBandwidthInBitsPerSecond && {bandwidth: userDownloadBandwidthInBitsPerSecond}), // add bandwidth if populated
+    // ...(userDownloadBandwidthInBitsPerSecond && {bandwidth: userDownloadBandwidthInBitsPerSecond}), // add bandwidth if populated
     ...(bitrateAsBitsPerSecond && {bitrate: bitrateAsBitsPerSecond}), // add bitrate if video (audio doesn't work)
   };
 
