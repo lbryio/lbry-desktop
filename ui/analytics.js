@@ -164,8 +164,9 @@ async function sendAndResetWatchmanData() {
     user_id: userId.toString(),
     position: Math.round(positionInVideo),
     rel_position: Math.round((positionInVideo / (totalDurationInSeconds * 1000)) * 100),
+    bitrate: bitrateAsBitsPerSecond,
+    bandwidth: undefined,
     // ...(userDownloadBandwidthInBitsPerSecond && {bandwidth: userDownloadBandwidthInBitsPerSecond}), // add bandwidth if populated
-    ...(bitrateAsBitsPerSecond && {bitrate: bitrateAsBitsPerSecond}), // add bitrate if video (audio doesn't work)
   };
 
   // post to watchman
