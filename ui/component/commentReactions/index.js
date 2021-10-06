@@ -3,7 +3,7 @@ import Comment from './view';
 import { makeSelectClaimIsMine, makeSelectClaimForUri } from 'redux/selectors/claims';
 import { doResolveUri } from 'redux/actions/claims';
 import { doToast } from 'redux/actions/notifications';
-import { makeSelectMyReactionsForComment, makeSelectOthersReactionsForComment } from 'redux/selectors/comments';
+import { selectMyReactsForComment, selectOthersReactsForComment } from 'redux/selectors/comments';
 import { doCommentReact } from 'redux/actions/comments';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
 
@@ -15,8 +15,8 @@ const select = (state, props) => {
   return {
     claim: makeSelectClaimForUri(props.uri)(state),
     claimIsMine: makeSelectClaimIsMine(props.uri)(state),
-    myReacts: makeSelectMyReactionsForComment(reactionKey)(state),
-    othersReacts: makeSelectOthersReactionsForComment(reactionKey)(state),
+    myReacts: selectMyReactsForComment(state, reactionKey),
+    othersReacts: selectOthersReactsForComment(state, reactionKey),
     activeChannelId,
   };
 };

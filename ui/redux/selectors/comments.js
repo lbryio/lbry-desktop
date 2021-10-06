@@ -6,6 +6,8 @@ import { selectBlacklistedOutpointMap, selectFilteredOutpointMap } from 'lbryinc
 import { selectClaimsById, selectMyActiveClaims } from 'redux/selectors/claims';
 import { isClaimNsfw } from 'util/claim';
 
+type State = { comments: CommentsState };
+
 const selectState = (state) => state.comments || {};
 
 export const selectCommentsById = createSelector(selectState, (state) => state.commentById || {});
@@ -13,7 +15,17 @@ export const selectIsFetchingComments = createSelector(selectState, (state) => s
 export const selectIsFetchingCommentsById = createSelector(selectState, (state) => state.isLoadingById);
 export const selectIsFetchingCommentsByParentId = createSelector(selectState, (state) => state.isLoadingByParentId);
 export const selectIsFetchingReacts = createSelector(selectState, (state) => state.isFetchingReacts);
-export const selectOthersReactsById = createSelector(selectState, (state) => state.othersReactsByCommentId);
+
+export const selectMyReacts = (state: State) => state.comments.myReactsByCommentId;
+export const selectMyReactsForComment = (state: State, commentIdChannelId: string) => {
+  // @commentIdChannelId: Format = 'commentId:MyChannelId'
+  return state.comments.myReactsByCommentId && state.comments.myReactsByCommentId[commentIdChannelId];
+};
+
+export const selectOthersReacts = (state: State) => state.comments.othersReactsByCommentId;
+export const selectOthersReactsForComment = (state: State, id: string) => {
+  return state.comments.othersReactsByCommentId && state.comments.othersReactsByCommentId[id];
+};
 
 export const selectPinnedCommentsById = createSelector(selectState, (state) => state.pinnedCommentsById);
 export const makeSelectPinnedCommentsForUri = (uri: string) =>
@@ -175,31 +187,6 @@ export const makeSelectCommentIdsForUri = (uri: string) =>
   createSelector(selectState, selectCommentsByUri, selectClaimsById, (state, byUri) => {
     const claimId = byUri[uri];
     return state.byId[claimId];
-  });
-
-export const selectMyReactionsByCommentId = createSelector(selectState, (state) => state.myReactsByCommentId);
-
-/**
- * makeSelectMyReactionsForComment
- *
- * @param commentIdChannelId Format = "commentId:MyChannelId".
- */
-export const makeSelectMyReactionsForComment = (commentIdChannelId: string) =>
-  createSelector(selectState, (state) => {
-    if (!state.myReactsByCommentId) {
-      return [];
-    }
-
-    return state.myReactsByCommentId[commentIdChannelId] || [];
-  });
-
-export const makeSelectOthersReactionsForComment = (commentId: string) =>
-  createSelector(selectState, (state) => {
-    if (!state.othersReactsByCommentId) {
-      return {};
-    }
-
-    return state.othersReactsByCommentId[commentId] || {};
   });
 
 export const selectPendingCommentReacts = createSelector(selectState, (state) => state.pendingCommentReactions);
