@@ -12,8 +12,8 @@ import {
   selectIsFetchingCommentsById,
   selectIsFetchingReacts,
   makeSelectTotalCommentsCountForUri,
-  selectOthersReactsById,
-  selectMyReactionsByCommentId,
+  selectOthersReacts,
+  selectMyReacts,
   makeSelectCommentIdsForUri,
   selectSettingsByChannelId,
   makeSelectPinnedCommentsForUri,
@@ -38,8 +38,8 @@ const select = (state, props) => {
     isFetchingReacts: selectIsFetchingReacts(state),
     fetchingChannels: selectFetchingMyChannels(state),
     settingsByChannelId: selectSettingsByChannelId(state),
-    myReactsByCommentId: selectMyReactionsByCommentId(state),
-    othersReactsById: selectOthersReactsById(state),
+    myReactsByCommentId: selectMyReacts(state),
+    othersReactsById: selectOthersReacts(state),
     activeChannelId: activeChannelClaim && activeChannelClaim.claim_id,
   };
 };

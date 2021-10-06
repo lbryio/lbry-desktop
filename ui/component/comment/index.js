@@ -12,7 +12,7 @@ import { doSetPlayingUri } from 'redux/actions/content';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import {
   selectLinkedCommentAncestors,
-  makeSelectOthersReactionsForComment,
+  selectOthersReactsForComment,
   makeSelectTotalReplyPagesForParentId,
 } from 'redux/selectors/comments';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
@@ -29,7 +29,7 @@ const select = (state, props) => {
     thumbnail: props.authorUri && makeSelectThumbnailForUri(props.authorUri)(state),
     channelIsBlocked: props.authorUri && makeSelectChannelIsMuted(props.authorUri)(state),
     commentingEnabled: IS_WEB ? Boolean(selectUserVerifiedEmail(state)) : true,
-    othersReacts: makeSelectOthersReactionsForComment(reactionKey)(state),
+    othersReacts: selectOthersReactsForComment(state, reactionKey),
     activeChannelClaim,
     myChannels: selectMyChannelClaims(state),
     playingUri: selectPlayingUri(state),
