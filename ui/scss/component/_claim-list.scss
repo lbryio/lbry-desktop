@@ -720,6 +720,7 @@
     margin: 0 0;
     padding: var(--spacing-xxs) var(--spacing-xxs);
     height: unset;
+    background-color: var(--color-header-background);
 
     // label (with 'Add' text) hidden by default
     .button__label {

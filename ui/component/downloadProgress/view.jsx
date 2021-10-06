@@ -154,7 +154,7 @@ function DownloadProgressItem({
   };
 
   return (
-    <div className=" download-progress__state-container">
+    <div className="download-progress__state-container">
       <div className="download-progress__state-bar">
         <Button
           label={title}

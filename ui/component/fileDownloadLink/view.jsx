@@ -73,17 +73,9 @@ function FileDownloadLink(props: Props) {
 
     if (fileInfo && fileInfo.written_bytes > 0) {
       const progress = (fileInfo.written_bytes / fileInfo.total_bytes) * 100;
-      return (
-        <span className="download-text" style={{ backgroundColor: '#FFF' }}>
-          {__('%percent%% downloaded', { percent: progress.toFixed(0) })}
-        </span>
-      );
+      return <span className="download-text">{__('%percent%% downloaded', { percent: progress.toFixed(0) })}</span>;
     } else {
-      return (
-        <span className="download-text" style={{ backgroundColor: '#FFF' }}>
-          {__('Connecting...')}
-        </span>
-      );
+      return <span className="download-text">{__('Connecting...')}</span>;
     }
   }
   // @endif
