@@ -46,11 +46,6 @@ const copyWebpackCommands = [
     force: true,
   },
   {
-    from: `${STATIC_ROOT}/sitemap.txt`,
-    to: `${DIST_ROOT}/sitemap.txt`,
-    force: true,
-  },
-  {
     from: `${STATIC_ROOT}/img/favicon.png`,
     to: `${DIST_ROOT}/public/favicon.png`,
     force: true,
