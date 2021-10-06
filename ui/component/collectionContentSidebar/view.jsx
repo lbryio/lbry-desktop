@@ -65,7 +65,7 @@ export default function CollectionContent(props: Props) {
       titleActions={
         <div className="card__title-actions--link">
           {/* TODO: BUTTON TO SAVE COLLECTION - Probably save/copy modal */}
-          <Button label={'View List'} button="link" navigate={`/$/${PAGES.LIST}/${id}`} />
+          <Button label={__('View List')} button="link" navigate={`/$/${PAGES.LIST}/${id}`} />
         </div>
       }
       body={
