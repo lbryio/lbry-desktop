@@ -10,6 +10,8 @@ const {
   SITE_NAME,
   FAVICON,
   LBRY_WEB_API,
+  THUMBNAIL_CDN_URL,
+  THUMBNAIL_QUALITY,
 } = require('../../config.js');
 
 const { Lbry } = require('lbry-redux');
@@ -26,6 +28,27 @@ const jsBundleId = getJsBundleId();
 const SDK_API_PATH = `${LBRY_WEB_API}/api/v1`;
 const PROXY_URL = `${SDK_API_PATH}/proxy`;
 Lbry.setDaemonConnectionString(PROXY_URL);
+
+function getThumbnailCdnUrl(url) {
+  if (!THUMBNAIL_CDN_URL || !url) {
+    return url;
+  }
+
+  const width = 630;
+  const height = 1200;
+
+  if (url && !url.includes('https://spee.ch')) {
+    return `${THUMBNAIL_CDN_URL}s:${width}:${height}/quality:${THUMBNAIL_QUALITY}/plain/${url}`;
+  }
+
+  if (url && url.includes('https://spee.ch') && !url.includes('?quality=')) {
+    return `${url}?quality=${THUMBNAIL_QUALITY}&height=${height}&width=${width}`;
+  }
+
+  if (url && url.includes('https://spee.ch')) {
+    return url;
+  }
+}
 
 function insertToHead(fullHtml, htmlToInsert) {
   const beginStr = '<!-- VARIABLE_HEAD_BEGIN -->';
@@ -143,7 +166,7 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
   const media = value && (value.video || value.audio || value.image);
   const source = value && value.source;
   const channel = signing_channel && signing_channel.name;
-  const thumbnail = value && value.thumbnail && value.thumbnail.url;
+  let thumbnail = value && value.thumbnail && value.thumbnail.url && getThumbnailCdnUrl(value.thumbnail.url);
   const mediaType = source && source.media_type;
   const mediaDuration = media && media.duration;
   const claimTitle = escapeHtmlProperty((value && value.title) || claimName);
@@ -230,7 +253,7 @@ function buildGoogleVideoMetadata(uri, claim) {
   const { meta, value } = claim;
   const media = value && value.video;
   const source = value && value.source;
-  const thumbnail = value && value.thumbnail && value.thumbnail.url;
+  let thumbnail = value && value.thumbnail && value.thumbnail.url && getThumbnailCdnUrl(value.thumbnail.url);
   const mediaType = source && source.media_type;
   const mediaDuration = media && media.duration;
   const claimTitle = escapeHtmlProperty((value && value.title) || claimName);
