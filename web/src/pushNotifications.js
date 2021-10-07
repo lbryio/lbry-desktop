@@ -1,36 +1,70 @@
 // @flow
 
-import { urlBase64ToUint8Array } from '../src/util';
+import { Lbryio } from 'lbryinc';
+import { initializeApp } from 'firebase/app';
+import { getMessaging, getToken, deleteToken, isSupported } from 'firebase/messaging';
+import {
+  FIREBASE_API_KEY,
+  FIREBASE_AUTH_DOMAIN,
+  FIREBASE_PROJECT_ID,
+  FIREBASE_STORAGE_BUCKET,
+  FIREBASE_MESSAGING_SENDER_ID,
+  FIREBASE_APP_ID,
+  FIREBASE_MEASUREMENT_ID,
+  FIREBASE_VAPID_KEY,
+} from 'config';
 
-export const pushSupported: boolean =
-  'serviceWorker' in navigator && 'Notification' in window && 'PushManager' in window;
+const firebaseConfig = {
+  apiKey: FIREBASE_API_KEY,
+  authDomain: FIREBASE_AUTH_DOMAIN,
+  projectId: FIREBASE_PROJECT_ID,
+  storageBucket: FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
+  appId: FIREBASE_APP_ID,
+  measurementId: FIREBASE_MEASUREMENT_ID,
+};
 
-let sw;
-// $FlowIssue[incompatible-type]
-navigator.serviceWorker.ready.then((registration) => {
-  sw = registration;
-});
+const vapidKey = FIREBASE_VAPID_KEY;
 
-export const pushSubscribe = async (): Promise<PushSubscription> => {
-  const subscription = await sw.pushManager.subscribe({
-    userVisibleOnly: true,
-    applicationServerKey: urlBase64ToUint8Array(
-      'BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U'
-    ),
-  });
-  return subscription;
+const app = initializeApp(firebaseConfig);
+const messaging = getMessaging(app);
+
+export const pushSupported: boolean = isSupported();
+
+export const pushSubscribe = async (): Promise<boolean> => {
+  try {
+    const swRegistration: ServiceWorkerRegistration = await navigator.serviceWorker.ready;
+    const fcmToken = await getToken(messaging, { serviceWorkerRegistration: swRegistration, vapidKey });
+    // @TODO: remove after testing is complete.
+    console.info('created token: ', fcmToken);
+    await Lbryio.call('cfm', 'add', {
+      token: fcmToken,
+      type: 'web',
+      name: navigator.userAgent,
+    });
+    return true;
+  } catch (err) {
+    return false;
+  }
 };
 
 export const pushUnsubscribe = async (): Promise<boolean> => {
-  const currentSubscription = await sw.pushManager.getSubscription();
-  if (!currentSubscription) return true;
-  const unsubscribe = await currentSubscription.unsubscribe();
-  return unsubscribe;
+  const swRegistration: ServiceWorkerRegistration = await navigator.serviceWorker.ready;
+  const fcmToken = await getToken(messaging, { serviceWorkerRegistration: swRegistration, vapidKey });
+  if (!fcmToken) return true;
+
+  try {
+    await deleteToken(messaging);
+    await Lbryio.call('cfm', 'remove', { token_id: fcmToken });
+    return true;
+  } catch (err) {
+    return false;
+  }
 };
 
 export const pushIsSubscribed = async (): Promise<boolean> => {
-  const currentSubscription = await sw.pushManager.getSubscription();
-  return currentSubscription !== null;
+  const swRegistration: ServiceWorkerRegistration = await navigator.serviceWorker.ready;
+  return (await swRegistration.pushManager.getSubscription()) !== null;
 };
 
 export const pushCreateNotification = async (data: Object) => {

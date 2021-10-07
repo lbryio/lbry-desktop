@@ -1,10 +1,10 @@
 // @flow
 
 import { useEffect, useState, useMemo } from 'react';
-import { pushSupported, pushSubscribe, pushUnsubscribe, pushIsSubscribed } from '../src/pushNotifications';
+import { pushSupported, pushSubscribe, pushUnsubscribe, pushIsSubscribed } from 'web/src/pushNotifications';
 
 export default () => {
-  const [granted, setGranted] = useState(window.Notification.permission === 'granted');
+  const [permission, setPermission] = useState(window.Notification.permission);
   const [subscribed, setSubscribed] = useState(false);
   const [enabled, setEnabled] = useState(false);
 
@@ -14,18 +14,12 @@ export default () => {
     });
   }, []);
 
-  useMemo(() => setEnabled(granted && subscribed), [granted, subscribed]);
-
-  const requestPermission = async (): Promise<boolean> => {
-    const permission = await window.Notification.requestPermission();
-    const permissionGranted = permission === 'granted';
-    setGranted(permissionGranted);
-    return permissionGranted;
-  };
+  useMemo(() => setEnabled(permission === 'granted' && subscribed), [permission, subscribed]);
 
   const subscribe = async () => {
     if (await pushSubscribe()) {
       setSubscribed(true);
+      setPermission(window.Notification.permission);
     }
   };
 
@@ -35,19 +29,14 @@ export default () => {
     }
   };
 
-  const toggleEnabled = async () => {
-    if (!enabled) {
-      if (await requestPermission()) {
-        subscribe();
-      }
-    } else {
-      unsubscribe();
-    }
+  const handleToggle = async () => {
+    return !enabled ? subscribe() : unsubscribe();
   };
 
   return {
-    supported: pushSupported,
+    pushSupported,
     enabled,
-    toggleEnabled,
+    permission,
+    handleToggle,
   };
 };
