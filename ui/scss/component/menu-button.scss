@@ -120,6 +120,7 @@
   text-overflow: ellipsis;
   overflow-x: hidden;
 }
+
 .menu__link-disable {
   @extend .menu__link;
   color: var(--color-text-subtitle) !important;

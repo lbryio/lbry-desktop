@@ -5,7 +5,6 @@ import * as MODALS from 'constants/modal_types';
 import { ipcRenderer } from 'electron';
 // @endif
 import { doOpenModal } from 'redux/actions/app';
-import { doDeleteFile } from 'redux/actions/file';
 import {
   Lbry,
   SETTINGS,
@@ -19,7 +18,7 @@ import {
   doToast,
   makeSelectUrlsForCollectionId,
 } from 'lbry-redux';
-import { doPurchaseUri } from 'redux/actions/file';
+import { doPurchaseUri, doDeleteFile } from 'redux/actions/file';
 import { makeSelectCostInfoForUri, Lbryio } from 'lbryinc';
 import { makeSelectClientSetting, selectosNotificationsEnabled, selectDaemonSettings } from 'redux/selectors/settings';
 

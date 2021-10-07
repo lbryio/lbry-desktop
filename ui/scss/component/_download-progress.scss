@@ -9,6 +9,7 @@
   background-color: var(--color-header-background); //var(--color-gray-9):dark-mode
   border-radius: 10px;
   border: 1px solid var(--color-gray-3);
+  z-index: 9999;
 }
 .download-progress__top-close-button {
   position: absolute;
