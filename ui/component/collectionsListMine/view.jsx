@@ -175,7 +175,7 @@ export default function CollectionsListMine(props: Props) {
               {filteredCollections &&
                 filteredCollections.length > 0 &&
                 filteredCollections.map((key) => <CollectionPreviewTile tileLayout collectionId={key} key={key} />)}
-              {!filteredCollections.length && <div className="empty main--empty">{__('No matching collections')}</div>}
+              {!filteredCollections.length && <div className="empty main--empty">{__('No matching playlists')}</div>}
             </div>
           </div>
         )}

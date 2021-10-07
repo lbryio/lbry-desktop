@@ -10,6 +10,15 @@ import ElectronCookies from '@exponent/electron-cookies';
 import { generateInitialUrl } from 'util/url';
 // @endif
 import { MATOMO_ID, MATOMO_URL } from 'config';
+// import getConnectionSpeed from 'util/detect-user-bandwidth';
+
+// let userDownloadBandwidthInBitsPerSecond;
+// async function getUserBandwidth() {
+//   userDownloadBandwidthInBitsPerSecond = await getConnectionSpeed();
+// }
+
+// get user bandwidth every minute, starting after an initial one minute wait
+// setInterval(getUserBandwidth, 1000 * 60);
 
 const isProduction = process.env.NODE_ENV === 'production';
 const devInternalApis = process.env.LBRY_API_URL && process.env.LBRY_API_URL.includes('dev');
@@ -40,7 +49,7 @@ type Analytics = {
   tagFollowEvent: (string, boolean, ?string) => void,
   playerLoadedEvent: (?boolean) => void,
   playerStartedEvent: (?boolean) => void,
-  videoStartEvent: (string, number, string, number, string, any) => void,
+  videoStartEvent: (string, number, string, number, string, any, number) => void,
   videoIsPlaying: (boolean, any) => void,
   videoBufferEvent: (
     StreamClaim,
@@ -111,7 +120,7 @@ function getDeviceType() {
 // variables initialized for watchman
 let amountOfBufferEvents = 0;
 let amountOfBufferTimeInMS = 0;
-let videoType, userId, claimUrl, playerPoweredBy, videoPlayer;
+let videoType, userId, claimUrl, playerPoweredBy, videoPlayer, bitrateAsBitsPerSecond;
 let lastSentTime;
 
 // calculate data for backend, send them, and reset buffer data for next interval
@@ -130,6 +139,9 @@ async function sendAndResetWatchmanData() {
   let protocol;
   if (videoType === 'application/x-mpegURL') {
     protocol = 'hls';
+    // get bandwidth if it exists from the texttrack (so it's accurate if user changes quality)
+    // $FlowFixMe
+    bitrateAsBitsPerSecond = videoPlayer.textTracks?.().tracks_[0]?.activeCues[0]?.value?.bandwidth;
   } else {
     protocol = 'stb';
   }
@@ -152,6 +164,9 @@ async function sendAndResetWatchmanData() {
     user_id: userId.toString(),
     position: Math.round(positionInVideo),
     rel_position: Math.round((positionInVideo / (totalDurationInSeconds * 1000)) * 100),
+    bitrate: bitrateAsBitsPerSecond,
+    bandwidth: undefined,
+    // ...(userDownloadBandwidthInBitsPerSecond && {bandwidth: userDownloadBandwidthInBitsPerSecond}), // add bandwidth if populated
   };
 
   // post to watchman
@@ -202,7 +217,7 @@ async function sendWatchmanData(body) {
 }
 
 const analytics: Analytics = {
-  // receive buffer events from tracking plugin and jklj
+  // receive buffer events from tracking plugin and save buffer amounts and times for backend call
   videoBufferEvent: async (claim, data) => {
     amountOfBufferEvents = amountOfBufferEvents + 1;
     amountOfBufferTimeInMS = amountOfBufferTimeInMS + data.bufferDuration;
@@ -240,7 +255,7 @@ const analytics: Analytics = {
       startWatchmanIntervalIfNotRunning();
     }
   },
-  videoStartEvent: (claimId, duration, poweredBy, passedUserId, canonicalUrl, passedPlayer) => {
+  videoStartEvent: (claimId, duration, poweredBy, passedUserId, canonicalUrl, passedPlayer, videoBitrate) => {
     // populate values for watchman when video starts
     userId = passedUserId;
     claimUrl = canonicalUrl;
@@ -248,6 +263,7 @@ const analytics: Analytics = {
 
     videoType = passedPlayer.currentSource().type;
     videoPlayer = passedPlayer;
+    bitrateAsBitsPerSecond = videoBitrate;
 
     sendPromMetric('time_to_start', duration);
     sendMatomoEvent('Media', 'TimeToStart', claimId, duration);

@@ -5,7 +5,6 @@ import {
   makeSelectIsUriResolving,
   makeSelectThumbnailForUri,
   makeSelectTitleForUri,
-  doFileGet,
   makeSelectChannelForClaimUri,
   makeSelectClaimIsNsfw,
   makeSelectClaimIsStreamPlaceholder,
@@ -14,6 +13,7 @@ import {
 import { selectMutedChannels } from 'redux/selectors/blocked';
 import { makeSelectViewCountForUri, selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
 import { makeSelectIsActiveLivestream } from 'redux/selectors/livestream';
+import { doFileGet } from 'redux/actions/file';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import ClaimPreviewTile from './view';
 import formatMediaDuration from 'util/formatMediaDuration';

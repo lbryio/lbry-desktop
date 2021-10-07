@@ -1638,6 +1638,7 @@
   "This link leads to an external website.": "This link leads to an external website.",
   "No Content Found": "No Content Found",
   "No Lists Found": "No Lists Found",
+  "No matching playlists": "No matching playlists",
   "You have no lists! Create one from any playable content.": "You have no lists! Create one from any playable content.",
   "Pick": "Pick",
   "You have unpublished lists! %pick% one and publish it!": "You have unpublished lists! %pick% one and publish it!",
@@ -2058,6 +2059,8 @@
   "MyAwesomeList": "MyAwesomeList",
   "My Awesome List": "My Awesome List",
   "This list has no items.": "This list has no items.",
+  "1 item": "1 item",
+  "%collectionCount% items": "%collectionCount% items",
   "Select File": "Select File",
   "File Selected": "File Selected",
   "Url": "Url",
@@ -2190,5 +2193,6 @@
   "Creator": "Creator",
   "From comments": "From comments",
   "From search": "From search",
+  "Manage tags": "Manage tags",
   "--end--": "--end--"
 }

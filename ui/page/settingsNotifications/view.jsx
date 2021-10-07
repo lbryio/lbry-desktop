@@ -32,28 +32,30 @@ export default function NotificationSettingsPage(props: Props) {
   const lbryIoParams = verificationToken ? { auth_token: verificationToken } : undefined;
 
   React.useEffect(() => {
-    Lbryio.call('tag', 'list', lbryIoParams)
-      .then(setTags)
-      .catch((e) => {
-        setError(true);
-      });
+    if (isAuthenticated) {
+      Lbryio.call('tag', 'list', lbryIoParams)
+        .then(setTags)
+        .catch((e) => {
+          setError(true);
+        });
 
-    Lbryio.call('user_email', 'status', lbryIoParams)
-      .then((res) => {
-        const enabledEmails =
-          res.emails &&
-          Object.keys(res.emails).reduce((acc, email) => {
-            const isEnabled = res.emails[email];
-            return [...acc, { email, isEnabled }];
-          }, []);
+      Lbryio.call('user_email', 'status', lbryIoParams)
+        .then((res) => {
+          const enabledEmails =
+            res.emails &&
+            Object.keys(res.emails).reduce((acc, email) => {
+              const isEnabled = res.emails[email];
+              return [...acc, { email, isEnabled }];
+            }, []);
 
-        setTagMap(res.tags);
-        setEnabledEmails(enabledEmails);
-      })
-      .catch((e) => {
-        setError(true);
-      });
-  }, []);
+          setTagMap(res.tags);
+          setEnabledEmails(enabledEmails);
+        })
+        .catch((e) => {
+          setError(true);
+        });
+    }
+  }, [isAuthenticated]);
 
   function handleChangeTag(name, newIsEnabled) {
     const tagParams = newIsEnabled ? { add: name } : { remove: name };
