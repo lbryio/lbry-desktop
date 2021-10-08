@@ -27,10 +27,10 @@ type Props = {
 const BrowserNotificationsBlocked = () => {
   return (
     <div className="notificationsBlocked">
-      <Icon className="notificationsBlocked-icon" color="#E50054" icon={ICONS.ALERT} size={58} />
+      <Icon className="notificationsBlocked__icon" color="#E50054" icon={ICONS.ALERT} size={58} />
       <div>
         <span>{__('Heads up: browser notifications are currently blocked in this browser.')}</span>
-        <span className={'notificationsBlocked-subText'}>
+        <span className={'notificationsBlocked__subText'}>
           {__('To enable push notifications please configure your browser to allow notifications on odysee.com.')}
         </span>
       </div>
