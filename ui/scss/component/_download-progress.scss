@@ -89,6 +89,12 @@
   font-size: 20px;
   cursor: pointer;
 }
+.download-progress__playing-button {
+  flex-shrink: 0;
+  margin-left: auto;
+  width: 25px;
+  height: 25px;
+}
 .download-progress__count-time {
   font-size: 11px;
   letter-spacing: -0.6px;
@@ -148,7 +154,7 @@
   bottom: 10px;
   right: 10px;
   border: none;
-  background: var(--color-white);
+  background: var(--color-header-background);
   color: var(--color-gray-6);
   width: 50px;
   height: 50px;
@@ -162,4 +168,30 @@
   float: right;
   margin-right: 10px;
   font-size: 25px;
+}
+.download-progress__current-downloading {
+  position: fixed;
+  bottom: 25px;
+  right: 15px;
+  border: none;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  animation-name: downloadcount;
+  animation-duration: 1.3s;
+  animation-iteration-count: infinite;
+}
+@keyframes downloadcount {
+  0% {
+    transform: translateY(-10px);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+  100% {
+    transform: translateY(-10px);
+  }
 }

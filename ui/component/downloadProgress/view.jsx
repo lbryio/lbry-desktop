@@ -5,40 +5,108 @@ import Button from 'component/button';
 import * as ICONS from 'constants/icons';
 import { buildURI } from 'lbry-redux';
 import { formatBytes } from 'util/format-bytes';
+import { areEqual, removeItem } from 'util/array';
+import loadingIcon from '../../../static/img/white_loading.gif';
+import darkLoadingIcon from '../../../static/img/dark_loading.gif';
 import usePersistedState from 'effects/use-persisted-state';
 
 type Props = {
-  downloadList: any[],
+  byOutpoint: any,
+  primary: any,
+  playing: any,
+  currentTheme: string,
   stopDownload: (outpoint: string) => void,
-  updateDownloadingStatus: (outpoint: string) => void,
+  doContinueDownloading: (outpoint: string, force: boolean) => void,
+  download: (uri: string) => void,
 };
 
-function DownloadProgress({ downloadList, stopDownload, updateDownloadingStatus }: Props) {
+function DownloadProgress({ byOutpoint, primary, playing, currentTheme, stopDownload, doContinueDownloading }: Props) {
   const [isShow, setIsShow] = usePersistedState('download-progress', true);
+  const [downloading, setDownloading] = usePersistedState('download-progress-downloading', []);
   const [cancelHash] = useState({});
-  const [checkDownloadingHash] = useState({});
+  const [initDownloadingHash] = useState({});
+  const [prevPlaying, setPrevPlaying] = useState({});
+  const [prevPrimary, setPrevPrimary] = useState({});
 
   const handleCancel = (hash, value) => {
     cancelHash[hash] = value;
   };
 
-  if (downloadList.length === 0) return null;
+  useEffect(() => {}, []);
 
-  downloadList.map((item) => {
-    if (item && !checkDownloadingHash[item.outpoint]) {
-      updateDownloadingStatus(item.outpoint);
-      checkDownloadingHash[item.outpoint] = true;
+  const handleStopDownload = (outpoint) => {
+    const updated = [...downloading];
+    removeItem(updated, outpoint);
+    setDownloading(updated);
+    stopDownload(outpoint);
+  };
+
+  const runningByOutpoint = {};
+  const updateDownloading = [...downloading];
+
+  for (const key in byOutpoint) {
+    const item = byOutpoint[key];
+    if (item && item.status === 'running') runningByOutpoint[item.outpoint] = item;
+  }
+
+  Object.keys(runningByOutpoint)
+    .filter((outpoint) => downloading.indexOf(outpoint) === -1)
+    .map((outpoint) => {
+      if (primary.outpoint !== outpoint && playing.outpoint !== outpoint) {
+        updateDownloading.push(outpoint);
+      }
+    });
+
+  downloading
+    .filter((outpoint) => (byOutpoint[outpoint] && byOutpoint[outpoint].status !== 'running') || !byOutpoint[outpoint])
+    .map((outpoint) => {
+      removeItem(updateDownloading, outpoint);
+    });
+  if (!areEqual(downloading, updateDownloading)) setDownloading(updateDownloading);
+
+  if (updateDownloading.length === 0) return null;
+
+  if (playing.outpoint !== prevPlaying.outpoint) {
+    if (downloading.includes(prevPlaying.outpoint)) {
+      setTimeout(() => {
+        doContinueDownloading(prevPlaying.outpoint, true);
+      }, 1000);
+    }
+    setPrevPlaying(playing);
+  }
+
+  if (primary.outpoint !== prevPrimary.outpoint) {
+    if (downloading.includes(prevPrimary.outpoint)) {
+      setTimeout(() => {
+        doContinueDownloading(prevPrimary.outpoint, true);
+      }, 1000);
+    }
+    setPrevPrimary(primary);
+  }
+
+  updateDownloading.map((outpoint) => {
+    if (!initDownloadingHash[outpoint]) {
+      initDownloadingHash[outpoint] = true;
+      doContinueDownloading(outpoint, false);
     }
   });
 
   if (!isShow) {
     return (
-      <Button
-        iconSize={40}
-        icon={ICONS.DOWNLOAD}
-        className="download-progress__toggle-button"
-        onClick={() => setIsShow(true)}
-      />
+      <>
+        <Button
+          iconSize={40}
+          icon={ICONS.DOWNLOAD}
+          className="download-progress__toggle-button"
+          onClick={() => setIsShow(true)}
+        >
+          <div className="download-progress__current-downloading">
+            <span className="notification__bubble">
+              <span className="notification__count">{updateDownloading.length}</span>
+            </span>
+          </div>
+        </Button>
+      </>
     );
   }
 
@@ -48,10 +116,15 @@ function DownloadProgress({ downloadList, stopDownload, updateDownloadingStatus 
         <div />
       </Button>
 
-      {downloadList.map((item, index) => {
+      {updateDownloading.map((outpoint, index) => {
+        const item = runningByOutpoint[outpoint];
         let releaseTime = '';
+        let isPlaying = false;
         if (item.metadata && item.metadata.release_time) {
           releaseTime = new Date(parseInt(item.metadata.release_time) * 1000).toISOString().split('T')[0];
+        }
+        if (outpoint === primary.outpoint || outpoint === playing.outpoint) {
+          isPlaying = true;
         }
         return (
           <div key={item.outpoint}>
@@ -64,12 +137,14 @@ function DownloadProgress({ downloadList, stopDownload, updateDownloadingStatus 
               totalBytes={item.total_bytes}
               addedOn={item.added_on}
               directory={item.download_directory}
-              stopDownload={stopDownload}
+              stopDownload={handleStopDownload}
               outpoint={item.outpoint}
               isCancel={cancelHash[item.outpoint]}
               claimID={item.claim_id}
+              playing={isPlaying}
               claimName={item.claim_name}
               handleCancel={handleCancel}
+              currentTheme={currentTheme}
             />
           </div>
         );
@@ -90,6 +165,8 @@ type DownloadProgressItemProps = {
   isCancel: boolean,
   claimID: string,
   claimName: string,
+  playing: boolean,
+  currentTheme: string,
   stopDownload: (outpoint: string) => void,
   handleCancel: (hash: string, value: boolean) => void,
 };
@@ -106,6 +183,8 @@ function DownloadProgressItem({
   isCancel,
   claimID,
   claimName,
+  playing,
+  currentTheme,
   stopDownload,
   handleCancel,
 }: DownloadProgressItemProps) {
@@ -152,7 +231,6 @@ function DownloadProgressItem({
   const openDownloadFolder = () => {
     shell.openPath(directory);
   };
-
   return (
     <div className="download-progress__state-container">
       <div className="download-progress__state-bar">
@@ -161,14 +239,22 @@ function DownloadProgressItem({
           className="download-progress__state-filename"
           navigate={buildURI({ claimName, claimID })}
         />
-        <div
-          className="download-progress__close-button"
-          onClick={() => {
-            handleCancel(outpoint, true);
-          }}
-        >
-          &times;
-        </div>
+        {playing ? (
+          currentTheme === 'light' ? (
+            <img src={loadingIcon} className="download-progress__playing-button" />
+          ) : (
+            <img src={darkLoadingIcon} className="download-progress__playing-button" />
+          )
+        ) : (
+          <div
+            className="download-progress__close-button"
+            onClick={() => {
+              handleCancel(outpoint, true);
+            }}
+          >
+            &times;
+          </div>
+        )}
       </div>
       <div className="download-progress__state-bar">
         <a className="download-progress__state-filename-link" onClick={openDownloadFolder}>

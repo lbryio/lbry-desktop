@@ -54,6 +54,7 @@ export function doUpdateLoadStatus(uri: any, outpoint: string) {
         setNextStatusUpdate();
       } else if (fileInfo.completed) {
         // TODO this isn't going to get called if they reload the client before
+
         // the download finished
         dispatch({
           type: ACTIONS.DOWNLOADING_COMPLETED,
@@ -99,9 +100,9 @@ export function doUpdateLoadStatus(uri: any, outpoint: string) {
   // @endif
 }
 
-export function doUpdateDownloadingStatus(outpoint: string) {
+export function doContinueDownloading(outpoint: string, force: boolean) {
   return (dispatch: Dispatch) => {
-    if (!timeOutHash[outpoint]) {
+    if (!timeOutHash[outpoint] || force) {
       dispatch(doUpdateLoadStatus(null, outpoint));
     }
   };
@@ -113,6 +114,7 @@ export function doStopDownload(outpoint: string) {
       clearInterval(timeOutHash[outpoint]);
       timeOutHash[outpoint] = undefined;
     }
+
     dispatch(doDeleteFile(outpoint, false, false, null));
   };
 }
