@@ -36,9 +36,9 @@ function getThumbnailCdnUrl(url) {
 
   const width = 630;
   const height = 1200;
-
-  if (url && !url.includes('https://spee.ch')) {
-    return `${THUMBNAIL_CDN_URL}s:${width}:${height}/quality:${THUMBNAIL_QUALITY}/plain/${url}`;
+  
+  if (url && url.includes('https://twitter-card')) {
+    return url;
   }
 
   if (url && url.includes('https://spee.ch') && !url.includes('?quality=')) {
