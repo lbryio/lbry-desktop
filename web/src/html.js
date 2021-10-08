@@ -36,7 +36,7 @@ function getThumbnailCdnUrl(url) {
 
   const width = 630;
   const height = 1200;
-  
+
   if (url && url.includes('https://twitter-card')) {
     return url;
   }
@@ -46,6 +46,10 @@ function getThumbnailCdnUrl(url) {
   }
 
   if (url && url.includes('https://spee.ch')) {
+    return url;
+  }
+
+  if (url) {
     return url;
   }
 }
