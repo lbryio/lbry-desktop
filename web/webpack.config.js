@@ -52,6 +52,11 @@ const copyWebpackCommands = [
     force: true,
   },
   {
+    from: `${STATIC_ROOT}/img/favicon-spaceman.png`,
+    to: `${DIST_ROOT}/public/favicon-spaceman.png`,
+    force: true,
+  },
+  {
     from: `${STATIC_ROOT}/img/v2-og.png`,
     to: `${DIST_ROOT}/public/v2-og.png`,
   },
@@ -141,7 +146,7 @@ const webConfig = {
         test: /\.jsx?$/,
         options: {
           presets: ['@babel/env', '@babel/react', '@babel/flow'],
-          plugins: ['@babel/plugin-proposal-object-rest-spread', '@babel/plugin-proposal-class-properties'],
+          plugins: ['@babel/plugin-proposal-optional-chaining', '@babel/plugin-proposal-object-rest-spread', '@babel/plugin-proposal-class-properties'],
         },
       },
       {

@@ -9,6 +9,7 @@ import {
   makeSelectTopLevelCommentsForUri,
   makeSelectTopLevelTotalPagesForUri,
   selectIsFetchingComments,
+  selectIsFetchingCommentsById,
   selectIsFetchingReacts,
   makeSelectTotalCommentsCountForUri,
   selectOthersReactsById,
@@ -33,6 +34,7 @@ const select = (state, props) => {
     claim: makeSelectClaimForUri(props.uri)(state),
     claimIsMine: makeSelectClaimIsMine(props.uri)(state),
     isFetchingComments: selectIsFetchingComments(state),
+    isFetchingCommentsById: selectIsFetchingCommentsById(state),
     isFetchingReacts: selectIsFetchingReacts(state),
     fetchingChannels: selectFetchingMyChannels(state),
     settingsByChannelId: selectSettingsByChannelId(state),
@@ -46,7 +48,7 @@ const perform = (dispatch) => ({
   fetchTopLevelComments: (uri, page, pageSize, sortBy) => dispatch(doCommentList(uri, '', page, pageSize, sortBy)),
   fetchComment: (commentId) => dispatch(doCommentById(commentId)),
   fetchReacts: (commentIds) => dispatch(doCommentReactList(commentIds)),
-  resetComments: (uri) => dispatch(doCommentReset(uri)),
+  resetComments: (claimId) => dispatch(doCommentReset(claimId)),
 });
 
 export default connect(select, perform)(CommentsList);

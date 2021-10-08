@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import Button from 'component/button';
+import * as ICONS from 'constants/icons';
 import { formatLbryUrlForWeb } from 'util/url';
 import { withRouter } from 'react-router';
 import { URL, SITE_NAME } from 'config';
@@ -9,10 +10,11 @@ import Logo from 'component/logo';
 type Props = {
   uri: string,
   isAuthenticated: boolean,
+  preferEmbed: boolean,
 };
 
 function FileViewerEmbeddedEnded(props: Props) {
-  const { uri, isAuthenticated } = props;
+  const { uri, isAuthenticated, preferEmbed } = props;
 
   const prompts = isAuthenticated
     ? {
@@ -33,24 +35,45 @@ function FileViewerEmbeddedEnded(props: Props) {
   // $FlowFixMe
   const prompt = prompts[promptKey];
   const lbrytvLink = `${URL}${formatLbryUrlForWeb(uri)}?src=${promptKey}`;
+  const showReplay = Boolean(window.player);
 
   return (
     <div className="file-viewer__overlay">
       <div className="file-viewer__overlay-secondary">
-        <Button className="file-viewer__overlay-logo" href={URL}>
-          <Logo type={'embed-ended'} />
+        <Button className="file-viewer__overlay-logo" href={URL} disabled={preferEmbed}>
+          <Logo type={'embed'} />
         </Button>
       </div>
-      <div className="file-viewer__overlay-title">{prompt}</div>
+
+      <div className="file-viewer__overlay-title file-viewer_embed-ended-title">
+        <p>{prompt}</p>
+      </div>
       <div className="file-viewer__overlay-actions">
-        <Button label={__('Rewatch or Discuss')} button="primary" href={lbrytvLink} />
-        {!isAuthenticated && (
-          <Button
-            label={__('Join %SITE_NAME%', { SITE_NAME })}
-            button="secondary"
-            href={`${URL}/$/signup?src=embed_signup`}
-          />
-        )}
+        <>
+          {showReplay && (
+            <Button
+              title={__('Replay')}
+              button="link"
+              label={preferEmbed ? __('Replay') : undefined}
+              iconRight={ICONS.REPLAY}
+              onClick={() => {
+                if (window.player) window.player.play();
+              }}
+            />
+          )}
+          {!preferEmbed && (
+            <>
+              <Button label={__('Discuss')} iconRight={ICONS.EXTERNAL} button="primary" href={lbrytvLink} />
+              {!isAuthenticated && (
+                <Button
+                  label={__('Join %SITE_NAME%', { SITE_NAME })}
+                  button="secondary"
+                  href={`${URL}/$/signup?src=embed_signup`}
+                />
+              )}
+            </>
+          )}
+        </>
       </div>
     </div>
   );

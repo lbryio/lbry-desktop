@@ -1,6 +1,7 @@
 // Customer-facing title for a page.
 //
 // Primarily used for the browser tab and history title.
+// Ensure new strings are added to 'app-string.json' for localization.
 
 import * as PAGES from 'constants/pages';
 
@@ -9,14 +10,16 @@ export const PAGE_TITLE = {
   [PAGES.BIG_HITS]: 'Big Hits',
   [PAGES.DISCOVER]: 'Wild West',
   // [PAGES.ENLIGHTENMENT] = 'Enlightenment',
-  [PAGES.FINANCE]: 'Finance',
+  [PAGES.FINANCE]: 'Finance 2.0',
   [PAGES.GAMING]: 'Gaming',
   [PAGES.GENERAL]: 'Cheese',
   [PAGES.LAB]: 'Lab',
   [PAGES.MOVIES]: 'Movies',
   [PAGES.MUSIC]: 'Music',
   [PAGES.NEWS]: 'News & Politics',
-  // [PAGES.RABBIT_HOLE] = 'The Rabbit Hole';
+  // [PAGES.RABBIT_HOLE]: 'The Rabbit Hole';
+  [PAGES.TECH]: 'Tech',
+  [PAGES.UNIVERSE]: 'The Universe',
   [PAGES.WILD_WEST]: 'Wild West',
 
   // --- Everything else in alphabetical order ---
@@ -46,9 +49,10 @@ export const PAGE_TITLE = {
   [PAGES.SETTINGS_BLOCKED_MUTED]: 'Block and muted channels',
   [PAGES.SETTINGS_CREATOR]: 'Creator settings',
   [PAGES.SETTINGS_NOTIFICATIONS]: 'Manage notifications',
-  [PAGES.SETTINGS_STRIPE_ACCOUNT]: 'settings/tip_account',
-  [PAGES.SETTINGS_STRIPE_CARD]: 'settings/card',
+  [PAGES.SETTINGS_STRIPE_ACCOUNT]: 'Bank Accounts',
+  [PAGES.SETTINGS_STRIPE_CARD]: 'Payment Methods',
   [PAGES.SETTINGS_UPDATE_PWD]: 'Update password',
+  [PAGES.SETTINGS_OWN_COMMENTS]: 'Your comments',
   [PAGES.SWAP]: 'Swap Credits',
   [PAGES.TAGS_FOLLOWING]: 'Tags',
   [PAGES.TAGS_FOLLOWING_MANAGE]: 'Manage tags',
@@ -56,4 +60,5 @@ export const PAGE_TITLE = {
   [PAGES.UPLOADS]: 'Your uploads',
   [PAGES.WALLET]: 'Wallet',
   [PAGES.WELCOME]: 'Welcome',
+  [PAGES.YOUTUBE_SYNC]: 'YouTube Sync',
 };

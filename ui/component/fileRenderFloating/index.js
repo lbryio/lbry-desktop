@@ -65,6 +65,7 @@ const perform = (dispatch) => ({
       ),
       dispatch(doSetPlayingUri({ uri, collectionId }))
     ),
+  clearSecondarySource: (uri) => dispatch(doSetPlayingUri({ uri })),
 });
 
 export default withRouter(connect(select, perform)(FileRenderFloating));

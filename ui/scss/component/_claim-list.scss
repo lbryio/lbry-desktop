@@ -19,6 +19,8 @@
 
 .claim-list__dropdown {
   padding: 0 var(--spacing-m);
+  padding-right: var(--spacing-xl);
+  background-position: right var(--spacing-m) center;
 
   @media (max-width: $breakpoint-small) {
     margin-left: 0;
@@ -554,9 +556,9 @@
 .claim-tile__info {
   display: flex;
   margin-top: var(--spacing-s);
-  padding: var(--spacing-s);
   border-top: 1px solid var(--color-border);
   color: var(--color-subtitle);
+  padding: var(--spacing-s);
 
   .channel-thumbnail {
     @include handleChannelGif(2.1rem);
@@ -601,13 +603,6 @@
 .claim-tile__about--counts {
   display: flex;
   flex-wrap: wrap;
-}
-
-.view_count {
-  &::after {
-    content: '•';
-    margin: 0 var(--spacing-xxs);
-  }
 }
 
 .claim-preview__file-property-overlay {

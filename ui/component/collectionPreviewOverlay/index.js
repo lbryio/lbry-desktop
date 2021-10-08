@@ -7,6 +7,7 @@ import {
   makeSelectNameForCollectionId,
   makeSelectPendingCollectionForId,
   makeSelectCountForCollectionId,
+  doFetchItemsInCollection,
 } from 'lbry-redux';
 import CollectionPreviewOverlay from './view';
 
@@ -27,4 +28,8 @@ const select = (state, props) => {
   };
 };
 
-export default connect(select)(CollectionPreviewOverlay);
+const perform = (dispatch) => ({
+  fetchCollectionItems: (claimId) => dispatch(doFetchItemsInCollection({ collectionId: claimId })), // if collection not resolved, resolve it
+});
+
+export default connect(select, perform)(CollectionPreviewOverlay);

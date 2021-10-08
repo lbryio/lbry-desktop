@@ -26,9 +26,10 @@
 
 .claim-search__dropdown {
   padding: 0 var(--spacing-m);
-  padding-right: var(--spacing-l);
+  padding-right: var(--spacing-xl);
   font-size: var(--font-body);
   background-color: var(--color-card-background);
+  background-position: right var(--spacing-m) center;
 }
 
 .claim-search__dropdown--selected {

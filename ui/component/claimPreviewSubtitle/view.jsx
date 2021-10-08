@@ -16,6 +16,7 @@ type Props = {
   isLivestream: boolean,
 };
 
+// previews used in channel overview and homepage (and other places?)
 function ClaimPreviewSubtitle(props: Props) {
   const { pending, uri, claim, type, beginPublish, isLivestream } = props;
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;

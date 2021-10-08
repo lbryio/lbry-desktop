@@ -47,8 +47,6 @@
 }
 
 .snack-bar__message {
-  overflow: hidden;
-  text-overflow: ellipsis;
   align-items: center;
   display: flex;
   flex-direction: row;
@@ -63,4 +61,9 @@
     margin-right: var(--spacing-m);
     min-width: 1rem;
   }
+}
+.snack-bar__messageText {
+  min-width: 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }

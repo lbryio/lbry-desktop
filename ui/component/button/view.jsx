@@ -154,6 +154,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
         title={title}
         onClick={onClick}
         aria-label={ariaLabel}
+        disabled={disabled} // is there a reason this wasn't here before?
       >
         {content}
       </a>

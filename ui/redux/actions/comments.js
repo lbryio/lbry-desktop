@@ -3,7 +3,15 @@ import * as ACTIONS from 'constants/action_types';
 import * as REACTION_TYPES from 'constants/reactions';
 import * as PAGES from 'constants/pages';
 import { SORT_BY, BLOCK_LEVEL } from 'constants/comment';
-import { Lbry, parseURI, buildURI, selectClaimsByUri, selectMyChannelClaims, isURIEqual } from 'lbry-redux';
+import {
+  Lbry,
+  parseURI,
+  buildURI,
+  selectClaimsByUri,
+  selectMyChannelClaims,
+  isURIEqual,
+  doClaimSearch,
+} from 'lbry-redux';
 import { doToast, doSeeNotifications } from 'redux/actions/notifications';
 import {
   makeSelectMyReactionsForComment,
@@ -21,20 +29,47 @@ import { doAlertWaitingForSync } from 'redux/actions/app';
 
 const isDev = process.env.NODE_ENV !== 'production';
 const FETCH_API_FAILED_TO_FETCH = 'Failed to fetch';
+const PROMISE_FULFILLED = 'fulfilled';
 
-const COMMENTRON_MSG_REMAP = {
-  // <-- Commentron msg --> : <-- App msg -->
-  'channel is blocked by publisher': 'Unable to comment. This channel has blocked you.',
-  'channel is not allowed to post comments': 'Unable to comment. Your channel has been blocked by an admin.',
-  'comments are disabled by the creator': 'Unable to comment. The content owner has disabled comments.',
-  'duplicate comment!': 'Please do not spam.',
+declare type CommentronErrorMap = {
+  [string]: {
+    commentron: string | RegExp,
+    replacement: string,
+    linkText?: string,
+    linkTarget?: string,
+  },
 };
 
-const COMMENTRON_REGEX_MAP = {
-  // <-- App msg --> : <-- Regex of Commentron msg -->
-  'Your user name "%1%" is too close to the creator\'s user name "%2%" and may cause confusion. Please use another identity.': /^your user name (.*) is too close to the creator's user name (.*) and may cause confusion. Please use another identity.$/,
-  'Slow mode is on. Please wait up to %1% seconds before commenting again.': /^Slow mode is on. Please wait at most (.*) seconds before commenting again.$/,
-  'The comment contains contents that are blocked by %1%.': /^the comment contents are blocked by (.*)$/,
+// prettier-ignore
+const ERR_MAP: CommentronErrorMap = {
+  SIMILAR_NAME: {
+    commentron: /^your user name (.*) is too close to the creator's user name (.*) and may cause confusion. Please use another identity.$/,
+    replacement: 'Your user name "%1%" is too close to the creator\'s user name "%2%" and may cause confusion. Please use another identity.',
+  },
+  SLOW_MODE_IS_ON: {
+    commentron: /^Slow mode is on. Please wait at most (.*) seconds before commenting again.$/,
+    replacement: 'Slow mode is on. Please wait up to %1% seconds before commenting again.',
+  },
+  HAS_MUTED_WORDS: {
+    commentron: /^the comment contents are blocked by (.*)$/,
+    replacement: 'The comment contains contents that are blocked by %1%.',
+  },
+  BLOCKED_BY_CREATOR: {
+    commentron: 'channel is blocked by publisher',
+    replacement: 'Unable to comment. This channel has blocked you.',
+  },
+  BLOCKED_BY_ADMIN: {
+    commentron: 'channel is not allowed to post comments',
+    replacement: 'Unable to comment. Your channel has been blocked by an admin.',
+  },
+  CREATOR_DISABLED: {
+    commentron: 'comments are disabled by the creator',
+    replacement: 'Unable to comment. The content owner has disabled comments.',
+  },
+  STOP_SPAMMING: {
+    commentron: 'duplicate comment!',
+    replacement: 'Please do not spam.',
+  },
 };
 
 function devToast(dispatch, msg) {
@@ -42,6 +77,45 @@ function devToast(dispatch, msg) {
     console.error(msg); // eslint-disable-line
     dispatch(doToast({ isError: true, message: `DEV: ${msg}` }));
   }
+}
+
+function resolveCommentronError(commentronMsg: string) {
+  for (const key in ERR_MAP) {
+    // noinspection JSUnfilteredForInLoop
+    const data = ERR_MAP[key];
+    if (typeof data.commentron === 'string') {
+      if (data.commentron === commentronMsg) {
+        return {
+          message: __(data.replacement),
+          linkText: data.linkText ? __(data.linkText) : undefined,
+          linkTarget: data.linkTarget,
+          isError: true,
+        };
+      }
+    } else {
+      const match = commentronMsg.match(data.commentron);
+      if (match) {
+        const subs = {};
+        for (let i = 1; i < match.length; ++i) {
+          subs[`${i}`] = match[i];
+        }
+
+        return {
+          message: __(data.replacement, subs),
+          linkText: data.linkText ? __(data.linkText) : undefined,
+          linkTarget: data.linkTarget,
+          isError: true,
+        };
+      }
+    }
+  }
+
+  return {
+    // Fallback to commentron original message. It will be in English
+    // only and most likely not capitalized correctly.
+    message: commentronMsg,
+    isError: true,
+  };
 }
 
 export function doCommentList(
@@ -61,7 +135,6 @@ export function doCommentList(
         type: ACTIONS.COMMENT_LIST_FAILED,
         data: 'unable to find claim for uri',
       });
-
       return;
     }
 
@@ -73,7 +146,7 @@ export function doCommentList(
     });
 
     // Adding 'channel_id' and 'channel_name' enables "CreatorSettings > commentsEnabled".
-    const authorChannelClaim = claim.value_type === 'channel' ? claim : claim.signing_channel;
+    const creatorChannelClaim = claim.value_type === 'channel' ? claim : claim.signing_channel;
 
     return Comments.comment_list({
       page,
@@ -81,8 +154,8 @@ export function doCommentList(
       page_size: pageSize,
       parent_id: parentId || undefined,
       top_level: !parentId,
-      channel_id: authorChannelClaim ? authorChannelClaim.claim_id : undefined,
-      channel_name: authorChannelClaim ? authorChannelClaim.name : undefined,
+      channel_id: creatorChannelClaim ? creatorChannelClaim.claim_id : undefined,
+      channel_name: creatorChannelClaim ? creatorChannelClaim.name : undefined,
       sort_by: sortBy,
     })
       .then((result: CommentListResponse) => {
@@ -96,7 +169,7 @@ export function doCommentList(
             totalFilteredItems: total_filtered_items,
             totalPages: total_pages,
             claimId: claimId,
-            commenterClaimId: authorChannelClaim ? authorChannelClaim.claim_id : undefined,
+            creatorClaimId: creatorChannelClaim ? creatorChannelClaim.claim_id : undefined,
             uri: uri,
           },
         });
@@ -109,7 +182,7 @@ export function doCommentList(
             dispatch({
               type: ACTIONS.COMMENT_LIST_COMPLETED,
               data: {
-                authorClaimId: authorChannelClaim ? authorChannelClaim.claim_id : undefined,
+                creatorClaimId: creatorChannelClaim ? creatorChannelClaim.claim_id : undefined,
                 disabled: true,
               },
             });
@@ -135,8 +208,109 @@ export function doCommentList(
   };
 }
 
+export function doCommentListOwn(
+  channelId: string,
+  page: number = 1,
+  pageSize: number = 99999,
+  sortBy: number = SORT_BY.NEWEST_NO_PINS
+) {
+  return async (dispatch: Dispatch, getState: GetState) => {
+    const state = getState();
+    const myChannelClaims = selectMyChannelClaims(state);
+    if (!myChannelClaims) {
+      console.error('Failed to fetch channel list.'); // eslint-disable-line
+      return;
+    }
+
+    const channelClaim = myChannelClaims.find((x) => x.claim_id === channelId);
+    if (!channelClaim) {
+      console.error('You do not own this channel.'); // eslint-disable-line
+      return;
+    }
+
+    const channelSignature = await channelSignName(channelClaim.claim_id, channelClaim.name);
+    if (!channelSignature) {
+      console.error('Failed to sign channel name.'); // eslint-disable-line
+      return;
+    }
+
+    dispatch({
+      type: ACTIONS.COMMENT_LIST_STARTED,
+      data: {},
+    });
+
+    return Comments.comment_list({
+      page,
+      page_size: pageSize,
+      sort_by: sortBy,
+      author_claim_id: channelId,
+      requestor_channel_name: channelClaim.name,
+      requestor_channel_id: channelClaim.claim_id,
+      signature: channelSignature.signature,
+      signing_ts: channelSignature.signing_ts,
+    })
+      .then((result: CommentListResponse) => {
+        const { items: comments, total_items, total_filtered_items, total_pages } = result;
+
+        if (!comments) {
+          dispatch({ type: ACTIONS.COMMENT_LIST_FAILED, data: 'No more comments.' });
+          return;
+        }
+
+        dispatch(
+          doClaimSearch({
+            page: 1,
+            page_size: 20,
+            no_totals: true,
+            claim_ids: comments.map((c) => c.claim_id),
+          })
+        )
+          .then((result) => {
+            dispatch({
+              type: ACTIONS.COMMENT_LIST_COMPLETED,
+              data: {
+                comments,
+                totalItems: total_items,
+                totalFilteredItems: total_filtered_items,
+                totalPages: total_pages,
+                uri: channelClaim.canonical_url, // hijack "Discussion Page"
+                claimId: channelClaim.claim_id, // hijack "Discussion Page"
+              },
+            });
+          })
+          .catch((err) => {
+            dispatch({ type: ACTIONS.COMMENT_LIST_FAILED, data: err });
+          });
+      })
+      .catch((error) => {
+        switch (error.message) {
+          case FETCH_API_FAILED_TO_FETCH:
+            dispatch(
+              doToast({
+                isError: true,
+                message: Comments.isCustomServer
+                  ? __('Failed to fetch comments. Verify custom server settings.')
+                  : __('Failed to fetch comments.'),
+              })
+            );
+            dispatch(doToast({ isError: true, message: `${error.message}` }));
+            dispatch({ type: ACTIONS.COMMENT_LIST_FAILED, data: error });
+            break;
+
+          default:
+            dispatch(doToast({ isError: true, message: `${error.message}` }));
+            dispatch({ type: ACTIONS.COMMENT_LIST_FAILED, data: error });
+        }
+      });
+  };
+}
+
 export function doCommentById(commentId: string, toastIfNotFound: boolean = true) {
   return (dispatch: Dispatch, getState: GetState) => {
+    dispatch({
+      type: ACTIONS.COMMENT_BY_ID_STARTED,
+    });
+
     return Comments.comment_by_id({ comment_id: commentId, with_ancestors: true })
       .then((result: CommentByIdResponse) => {
         const { item, items, ancestors } = result;
@@ -169,17 +343,10 @@ export function doCommentById(commentId: string, toastIfNotFound: boolean = true
   };
 }
 
-export function doCommentReset(uri: string) {
-  return (dispatch: Dispatch, getState: GetState) => {
-    const state = getState();
-    const claim = selectClaimsByUri(state)[uri];
-    const claimId = claim ? claim.claim_id : null;
-
+export function doCommentReset(claimId: string) {
+  return (dispatch: Dispatch) => {
     if (!claimId) {
-      dispatch({
-        type: ACTIONS.COMMENT_LIST_FAILED,
-        data: 'unable to find claim for uri',
-      });
+      console.error(`Failed to reset comments`); //eslint-disable-line
       return;
     }
 
@@ -471,39 +638,7 @@ export function doCommentCreate(
       })
       .catch((error) => {
         dispatch({ type: ACTIONS.COMMENT_CREATE_FAILED, data: error });
-
-        let toastMessage;
-
-        for (const commentronMsg in COMMENTRON_MSG_REMAP) {
-          if (error.message === commentronMsg) {
-            toastMessage = __(COMMENTRON_MSG_REMAP[commentronMsg]);
-            break;
-          }
-        }
-
-        if (!toastMessage) {
-          for (const i18nStr in COMMENTRON_REGEX_MAP) {
-            const regex = COMMENTRON_REGEX_MAP[i18nStr];
-            const match = error.message.match(regex);
-            if (match) {
-              const subs = {};
-              for (let i = 1; i < match.length; ++i) {
-                subs[`${i}`] = match[i];
-              }
-
-              toastMessage = __(i18nStr, subs);
-              break;
-            }
-          }
-        }
-
-        if (!toastMessage) {
-          // Fallback to commentron original message. It will be in English
-          // only and most likely not capitalized correctly.
-          toastMessage = error.message;
-        }
-
-        dispatch(doToast({ message: toastMessage, isError: true }));
+        dispatch(doToast(resolveCommentronError(error.message)));
         return Promise.reject(error);
       });
   };
@@ -1021,6 +1156,10 @@ export function doFetchModBlockedList() {
   return async (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const myChannels = selectMyChannelClaims(state);
+    if (!myChannels) {
+      dispatch({ type: ACTIONS.COMMENT_MODERATION_BLOCK_LIST_FAILED });
+      return;
+    }
 
     dispatch({
       type: ACTIONS.COMMENT_MODERATION_BLOCK_LIST_STARTED,
@@ -1343,10 +1482,12 @@ export function doFetchCommentModAmIList(channelClaim: ChannelClaim) {
   return async (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const myChannels = selectMyChannelClaims(state);
+    if (!myChannels) {
+      dispatch({ type: ACTIONS.COMMENT_MODERATION_AM_I_LIST_FAILED });
+      return;
+    }
 
-    dispatch({
-      type: ACTIONS.COMMENT_MODERATION_AM_I_LIST_STARTED,
-    });
+    dispatch({ type: ACTIONS.COMMENT_MODERATION_AM_I_LIST_STARTED });
 
     let channelSignatures = [];
 
@@ -1366,13 +1507,13 @@ export function doFetchCommentModAmIList(channelClaim: ChannelClaim) {
               })
             )
         )
-          .then((res) => {
+          .then((results) => {
             const delegatorsById = {};
 
-            channelSignatures.forEach((chanSig, index) => {
-              if (chanSig && res[index]) {
-                const value = res[index].value;
-                delegatorsById[chanSig.claim_id] = {
+            results.forEach((result, index) => {
+              if (result.status === PROMISE_FULFILLED) {
+                const value = result.value;
+                delegatorsById[value.channel_id] = {
                   global: value ? value.type === 'Global' : false,
                   delegators: value && value.authorized_channels ? value.authorized_channels : {},
                 };
@@ -1385,15 +1526,12 @@ export function doFetchCommentModAmIList(channelClaim: ChannelClaim) {
             });
           })
           .catch((err) => {
-            dispatch({
-              type: ACTIONS.COMMENT_MODERATION_AM_I_LIST_FAILED,
-            });
+            devToast(dispatch, `AmI: ${err}`);
+            dispatch({ type: ACTIONS.COMMENT_MODERATION_AM_I_LIST_FAILED });
           });
       })
       .catch(() => {
-        dispatch({
-          type: ACTIONS.COMMENT_MODERATION_AM_I_LIST_FAILED,
-        });
+        dispatch({ type: ACTIONS.COMMENT_MODERATION_AM_I_LIST_FAILED });
       });
   };
 }

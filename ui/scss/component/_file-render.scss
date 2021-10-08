@@ -195,6 +195,14 @@
   }
 }
 
+.file-viewer_embed-ended-title {
+  max-width: 100%;
+  p {
+    font-size: 6vh;
+    white-space: pre-wrap;
+  }
+}
+
 .content__viewer--floating {
   .file-viewer__overlay-title,
   .file-viewer__overlay-secondary {
@@ -226,6 +234,10 @@
 .file-viewer__overlay-actions {
   .button + .button {
     margin-left: var(--spacing-m);
+  }
+
+  .button--link {
+    vertical-align: middle;
   }
 }
 
@@ -297,6 +309,10 @@
 .file-viewer__embedded-title {
   max-width: 75%;
   z-index: 2;
+  display: flex;
+  align-items: center;
+  padding-left: var(--spacing-s);
+  color: white;
 }
 
 .file-viewer__embedded-info {

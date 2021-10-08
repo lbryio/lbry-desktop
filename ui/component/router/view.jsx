@@ -59,6 +59,7 @@ const ListBlockedPage = lazyImport(() => import('page/listBlocked' /* webpackChu
 const ListsPage = lazyImport(() => import('page/lists' /* webpackChunkName: "secondary" */));
 const LiveStreamSetupPage = lazyImport(() => import('page/livestreamSetup' /* webpackChunkName: "secondary" */));
 const LivestreamCurrentPage = lazyImport(() => import('page/livestreamCurrent' /* webpackChunkName: "secondary" */));
+const OwnComments = lazyImport(() => import('page/ownComments' /* webpackChunkName: "ownComments" */));
 const PasswordResetPage = lazyImport(() => import('page/passwordReset' /* webpackChunkName: "secondary" */));
 const PasswordSetPage = lazyImport(() => import('page/passwordSet' /* webpackChunkName: "secondary" */));
 const PublishPage = lazyImport(() => import('page/publish' /* webpackChunkName: "secondary" */));
@@ -329,6 +330,7 @@ function AppRouter(props: Props) {
         <PrivateRoute {...props} path={`/$/${PAGES.SWAP}`} component={SwapPage} />
         <PrivateRoute {...props} path={`/$/${PAGES.NOTIFICATIONS}`} component={NotificationsPage} />
         <PrivateRoute {...props} path={`/$/${PAGES.AUTH_WALLET_PASSWORD}`} component={SignInWalletPasswordPage} />
+        <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_OWN_COMMENTS}`} component={OwnComments} />
 
         <Route path={`/$/${PAGES.EMBED}/:claimName`} exact component={EmbedWrapperPage} />
         <Route path={`/$/${PAGES.EMBED}/:claimName/:claimId`} exact component={EmbedWrapperPage} />

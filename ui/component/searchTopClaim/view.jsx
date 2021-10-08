@@ -17,8 +17,8 @@ type Props = {
   winningUri: ?string,
   doResolveUris: (Array<string>) => void,
   hideLink?: boolean,
-  setChannelActive: boolean => void,
-  beginPublish: string => void,
+  setChannelActive: (boolean) => void,
+  beginPublish: (string) => void,
   pendingIds: Array<string>,
   isResolvingWinningUri: boolean,
   winningClaim: ?Claim,
@@ -92,7 +92,7 @@ export default function SearchTopClaim(props: Props) {
             hideRepostLabel
             showNullPlaceholder
             uri={winningUri}
-            properties={claim => (
+            properties={(claim) => (
               <span className="claim-preview__custom-properties">
                 <ClaimRepostAuthor short uri={winningUri} />
                 <ClaimEffectiveAmount uri={winningUri} />

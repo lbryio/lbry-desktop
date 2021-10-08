@@ -1,83 +1,42 @@
 // @flow
-import { ENABLE_NO_SOURCE_CLAIMS, SIMPLE_SITE } from 'config';
-import * as CS from 'constants/claim_search';
 import type { Node } from 'react';
 import React from 'react';
-import { createNormalizedClaimSearchKey, MATURE_TAGS, splitBySeparator } from 'lbry-redux';
+import { createNormalizedClaimSearchKey } from 'lbry-redux';
 import ClaimPreviewTile from 'component/claimPreviewTile';
-import { useHistory } from 'react-router';
-import { getLivestreamOnlyOptions } from 'util/search';
+import useFetchViewCount from 'effects/use-fetch-view-count';
+import usePrevious from 'effects/use-previous';
 
-/**
- * Updates 'uris' by adding and/or moving active livestreams to the front of
- * list.
- * 'liveUris' is also updated with any entries that were moved to the
- * front, for convenience.
- *
- * @param uris [Ref]
- * @param liveUris [Ref]
- * @param livestreamMap
- * @param claimsByUri
- * @param claimSearchByQuery
- * @param options
- */
-export function prioritizeActiveLivestreams(
-  uris: Array<string>,
-  liveUris: Array<string>,
-  livestreamMap: { [string]: any },
-  claimsByUri: { [string]: any },
-  claimSearchByQuery: { [string]: Array<string> },
-  options: any
-) {
-  if (!livestreamMap || !uris) return;
+type SearchOptions = {
+  page_size: number,
+  no_totals: boolean,
+  any_tags: Array<string>,
+  channel_ids: Array<string>,
+  claim_ids?: Array<string>,
+  not_channel_ids: Array<string>,
+  not_tags: Array<string>,
+  order_by: Array<string>,
+  languages?: Array<string>,
+  release_time?: string,
+  claim_type?: string | Array<string>,
+  timestamp?: string,
+  fee_amount?: string,
+  limit_claims_per_channel?: number,
+  stream_types?: Array<string>,
+  has_source?: boolean,
+  has_no_source?: boolean,
+};
 
-  const claimIsLive = (claim, liveChannelIds) => {
-    // This function relies on:
-    // 1. Only 1 actual livestream per channel (i.e. all other livestream-claims
-    //    for that channel actually point to the same source).
-    // 2. 'liveChannelIds' needs to be pruned after being accounted for,
-    //    otherwise all livestream-claims will be "live" (we'll only take the
-    //    latest one as "live" ).
-    return (
-      claim &&
-      claim.value_type === 'stream' &&
-      claim.value.source === undefined &&
-      claim.signing_channel &&
-      liveChannelIds.includes(claim.signing_channel.claim_id)
-    );
-  };
-
-  let liveChannelIds = Object.keys(livestreamMap);
-
-  // 1. Collect active livestreams from the primary search to put in front.
-  uris.forEach((uri) => {
-    const claim = claimsByUri[uri];
-    if (claimIsLive(claim, liveChannelIds)) {
-      liveUris.push(uri);
-      // This live channel has been accounted for, so remove it.
-      liveChannelIds.splice(liveChannelIds.indexOf(claim.signing_channel.claim_id), 1);
-    }
-  });
-
-  // 2. Now, repeat on the secondary search.
-  if (options) {
-    const livestreamsOnlySearchCacheQuery = createNormalizedClaimSearchKey(getLivestreamOnlyOptions(options));
-    const livestreamsOnlyUris = claimSearchByQuery[livestreamsOnlySearchCacheQuery];
-    if (livestreamsOnlyUris) {
-      livestreamsOnlyUris.forEach((uri) => {
-        const claim = claimsByUri[uri];
-        if (!uris.includes(uri) && claimIsLive(claim, liveChannelIds)) {
-          liveUris.push(uri);
-          // This live channel has been accounted for, so remove it.
-          liveChannelIds.splice(liveChannelIds.indexOf(claim.signing_channel.claim_id), 1);
-        }
-      });
-    }
+function urisEqual(prev: ?Array<string>, next: ?Array<string>) {
+  if (!prev || !next) {
+    // ClaimList: "null" and "undefined" have special meaning,
+    // so we can't just compare array length here.
+    //   - null = "timed out"
+    //   - undefined = "no result".
+    return prev === next;
   }
 
-  // 3. Finalize uris by putting live livestreams in front.
-  const newUris = liveUris.concat(uris.filter((uri) => !liveUris.includes(uri)));
-  uris.splice(0, uris.length, ...newUris);
+  // $FlowFixMe - already checked for null above.
+  return prev.length === next.length && prev.every((value, index) => value === next[index]);
 }
 
 // ****************************************************************************
@@ -88,8 +47,6 @@ type Props = {
   prefixUris?: Array<string>,
   pinUrls?: Array<string>,
   uris: Array<string>,
-  liveLivestreamsFirst?: boolean,
-  livestreamMap?: { [string]: any },
   showNoSourceClaims?: boolean,
   renderProperties?: (Claim) => ?Node,
   fetchViewCount?: boolean,
@@ -109,13 +66,13 @@ type Props = {
   hasSource?: boolean,
   hasNoSource?: boolean,
   // --- select ---
+  location: { search: string },
   claimSearchByQuery: { [string]: Array<string> },
   claimsByUri: { [string]: any },
   fetchingClaimSearchByQuery: { [string]: boolean },
   showNsfw: boolean,
   hideReposts: boolean,
-  mutedUris: Array<string>,
-  blockedUris: Array<string>,
+  options: SearchOptions,
   // --- perform ---
   doClaimSearch: ({}) => void,
   doFetchViewCount: (claimIdCsv: string) => void,
@@ -126,234 +83,78 @@ function ClaimTilesDiscover(props: Props) {
     doClaimSearch,
     claimSearchByQuery,
     claimsByUri,
-    showNsfw,
-    hideReposts,
     fetchViewCount,
-    // Below are options to pass that are forwarded to claim_search
-    tags,
-    channelIds,
-    claimIds,
-    orderBy,
-    pageSize = 8,
-    releaseTime,
-    languages,
-    claimType,
-    streamTypes,
-    timestamp,
-    feeAmount,
-    limitClaimsPerChannel,
     fetchingClaimSearchByQuery,
-    hasSource,
     hasNoSource,
     renderProperties,
-    blockedUris,
-    mutedUris,
-    liveLivestreamsFirst,
-    livestreamMap,
     pinUrls,
     prefixUris,
     showNoSourceClaims,
     doFetchViewCount,
+    pageSize = 8,
+    options,
   } = props;
 
-  const { location } = useHistory();
-  const urlParams = new URLSearchParams(location.search);
-  const feeAmountInUrl = urlParams.get('fee_amount');
-  const feeAmountParam = feeAmountInUrl || feeAmount;
-  const mutedAndBlockedChannelIds = Array.from(
-    new Set(mutedUris.concat(blockedUris).map((uri) => splitBySeparator(uri)[1]))
-  );
-  const liveUris = [];
-  let streamTypesParam;
-  if (streamTypes) {
-    streamTypesParam = streamTypes;
-  } else if (SIMPLE_SITE && !hasNoSource && streamTypes !== null) {
-    streamTypesParam = [CS.FILE_VIDEO, CS.FILE_AUDIO];
-  }
-
-  const [prevUris, setPrevUris] = React.useState([]);
-
-  const options: {
-    page_size: number,
-    no_totals: boolean,
-    any_tags: Array<string>,
-    channel_ids: Array<string>,
-    claim_ids?: Array<string>,
-    not_channel_ids: Array<string>,
-    not_tags: Array<string>,
-    order_by: Array<string>,
-    languages?: Array<string>,
-    release_time?: string,
-    claim_type?: string | Array<string>,
-    timestamp?: string,
-    fee_amount?: string,
-    limit_claims_per_channel?: number,
-    stream_types?: Array<string>,
-    has_source?: boolean,
-    has_no_source?: boolean,
-  } = {
-    page_size: pageSize,
-    claim_type: claimType || ['stream', 'repost', 'channel'],
-    // no_totals makes it so the sdk doesn't have to calculate total number pages for pagination
-    // it's faster, but we will need to remove it if we start using total_pages
-    no_totals: true,
-    any_tags: tags || [],
-    not_tags: !showNsfw ? MATURE_TAGS : [],
-    any_languages: languages,
-    channel_ids: channelIds || [],
-    not_channel_ids: mutedAndBlockedChannelIds,
-    order_by: orderBy || ['trending_group', 'trending_mixed'],
-    stream_types: streamTypesParam,
-  };
-
-  if (ENABLE_NO_SOURCE_CLAIMS && hasNoSource) {
-    options.has_no_source = true;
-  } else if (hasSource || (!ENABLE_NO_SOURCE_CLAIMS && (!claimType || claimType === 'stream'))) {
-    options.has_source = true;
-  }
-
-  if (releaseTime) {
-    options.release_time = releaseTime;
-  }
-
-  if (feeAmountParam) {
-    options.fee_amount = feeAmountParam;
-  }
-
-  if (limitClaimsPerChannel) {
-    options.limit_claims_per_channel = limitClaimsPerChannel;
-  }
-
-  // https://github.com/lbryio/lbry-desktop/issues/3774
-  if (hideReposts) {
-    if (Array.isArray(options.claim_type)) {
-      options.claim_type = options.claim_type.filter((claimType) => claimType !== 'repost');
-    } else {
-      options.claim_type = ['stream', 'channel'];
-    }
-  }
-
-  if (claimType) {
-    options.claim_type = claimType;
-  }
-
-  if (timestamp) {
-    options.timestamp = timestamp;
-  }
-
-  if (claimIds) {
-    options.claim_ids = claimIds;
-  }
-
-  const mainSearchKey = createNormalizedClaimSearchKey(options);
-  const livestreamSearchKey = liveLivestreamsFirst
-    ? createNormalizedClaimSearchKey(getLivestreamOnlyOptions(options))
-    : undefined;
-
-  let uris = (prefixUris || []).concat(claimSearchByQuery[mainSearchKey] || []);
-
-  const isLoading = fetchingClaimSearchByQuery[mainSearchKey];
-
-  if (liveLivestreamsFirst && livestreamMap && !isLoading) {
-    prioritizeActiveLivestreams(uris, liveUris, livestreamMap, claimsByUri, claimSearchByQuery, options);
-  }
+  const searchKey = createNormalizedClaimSearchKey(options);
+  const fetchingClaimSearch = fetchingClaimSearchByQuery[searchKey];
+  const claimSearchUris = claimSearchByQuery[searchKey] || [];
+  const isUnfetchedClaimSearch = claimSearchByQuery[searchKey] === undefined;
 
   // Don't use the query from createNormalizedClaimSearchKey for the effect since that doesn't include page & release_time
   const optionsStringForEffect = JSON.stringify(options);
-  const shouldPerformSearch = !isLoading && uris.length === 0;
+  const shouldPerformSearch = !fetchingClaimSearch && claimSearchUris.length === 0;
 
-  if (
-    prefixUris === undefined &&
-    (claimSearchByQuery[mainSearchKey] === undefined ||
-      (livestreamSearchKey && claimSearchByQuery[livestreamSearchKey] === undefined))
-  ) {
-    // This is a new query and we don't have results yet ...
-    if (prevUris.length !== 0) {
-      // ... but we have previous results. Use it until new results are here.
-      uris = prevUris;
-    }
-  }
+  const uris = (prefixUris || []).concat(claimSearchUris);
 
-  const modifiedUris = uris ? uris.slice() : [];
-  const fixUris = pinUrls || [];
-
-  if (pinUrls && modifiedUris && modifiedUris.length > 2 && window.location.pathname === '/') {
-    fixUris.forEach((fixUri) => {
-      if (modifiedUris.indexOf(fixUri) !== -1) {
-        modifiedUris.splice(modifiedUris.indexOf(fixUri), 1);
+  if (pinUrls && uris && uris.length > 2 && window.location.pathname === '/') {
+    pinUrls.forEach((pin) => {
+      if (uris.indexOf(pin) !== -1) {
+        uris.splice(uris.indexOf(pin), 1);
       } else {
-        modifiedUris.pop();
+        uris.pop();
       }
     });
-    modifiedUris.splice(2, 0, ...fixUris);
+    uris.splice(2, 0, ...pinUrls);
   }
 
-  // **************************************************************************
-  // **************************************************************************
-
-  function resolveLive(index) {
-    if (liveLivestreamsFirst && livestreamMap && index < liveUris.length) {
-      return true;
-    }
-    return undefined;
+  if (uris.length > 0 && uris.length < pageSize && shouldPerformSearch) {
+    // prefixUri and pinUrls might already be present while waiting for the
+    // remaining claim_search results. Fill the space to prevent layout shifts.
+    uris.push(...Array(pageSize - uris.length).fill(''));
   }
 
-  function fetchViewCountForUris(uris) {
-    const claimIds = [];
+  const prevUris = usePrevious(uris);
 
-    if (uris) {
-      uris.forEach((uri) => {
-        if (claimsByUri[uri]) {
-          claimIds.push(claimsByUri[uri].claim_id);
-        }
-      });
-    }
+  useFetchViewCount(fetchViewCount, uris, claimsByUri, doFetchViewCount);
 
-    if (claimIds.length > 0) {
-      doFetchViewCount(claimIds.join(','));
-    }
-  }
-
-  // **************************************************************************
-  // **************************************************************************
-
+  // Run `doClaimSearch`
   React.useEffect(() => {
     if (shouldPerformSearch) {
       const searchOptions = JSON.parse(optionsStringForEffect);
       doClaimSearch(searchOptions);
-
-      if (liveLivestreamsFirst) {
-        doClaimSearch(getLivestreamOnlyOptions(searchOptions));
-      }
     }
-  }, [doClaimSearch, shouldPerformSearch, optionsStringForEffect, liveLivestreamsFirst]);
+  }, [doClaimSearch, shouldPerformSearch, optionsStringForEffect]);
 
-  React.useEffect(() => {
-    if (JSON.stringify(prevUris) !== JSON.stringify(uris) && !shouldPerformSearch) {
-      // Stash new results for next render cycle:
-      setPrevUris(uris);
-      // Fetch view count:
-      if (fetchViewCount) {
-        fetchViewCountForUris(uris);
-      }
-    }
-  }, [shouldPerformSearch, prevUris, uris]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // **************************************************************************
-  // **************************************************************************
+  // Show previous results while we fetch to avoid blinkies and poor CLS.
+  const finalUris = isUnfetchedClaimSearch && prevUris ? prevUris : uris;
 
   return (
     <ul className="claim-grid">
-      {modifiedUris && modifiedUris.length
-        ? modifiedUris.map((uri, index) => (
-            <ClaimPreviewTile
-              showNoSourceClaims={hasNoSource || showNoSourceClaims}
-              key={uri}
-              uri={uri}
-              properties={renderProperties}
-              live={resolveLive(index)}
-            />
-          ))
+      {finalUris && finalUris.length
+        ? finalUris.map((uri, i) => {
+            if (uri) {
+              return (
+                <ClaimPreviewTile
+                  showNoSourceClaims={hasNoSource || showNoSourceClaims}
+                  key={uri}
+                  uri={uri}
+                  properties={renderProperties}
+                />
+              );
+            } else {
+              return <ClaimPreviewTile showNoSourceClaims={hasNoSource || showNoSourceClaims} key={i} placeholder />;
+            }
+          })
         : new Array(pageSize)
             .fill(1)
             .map((x, i) => (
@@ -362,4 +163,64 @@ function ClaimTilesDiscover(props: Props) {
     </ul>
   );
 }
-export default ClaimTilesDiscover;
+
+export default React.memo<Props>(ClaimTilesDiscover, areEqual);
+
+function debug_trace(val) {
+  if (process.env.DEBUG_TRACE) console.log(`Render due to: ${val}`);
+}
+
+function areEqual(prev: Props, next: Props) {
+  const prevOptions: SearchOptions = prev.options;
+  const nextOptions: SearchOptions = next.options;
+
+  const prevSearchKey = createNormalizedClaimSearchKey(prevOptions);
+  const nextSearchKey = createNormalizedClaimSearchKey(nextOptions);
+
+  if (prevSearchKey !== nextSearchKey) {
+    debug_trace('search key');
+    return false;
+  }
+
+  // --- Deep-compare ---
+  if (!urisEqual(prev.claimSearchByQuery[prevSearchKey], next.claimSearchByQuery[nextSearchKey])) {
+    debug_trace('claimSearchByQuery');
+    return false;
+  }
+
+  const ARRAY_KEYS = ['prefixUris', 'channelIds'];
+  for (let i = 0; i < ARRAY_KEYS.length; ++i) {
+    const key = ARRAY_KEYS[i];
+    if (!urisEqual(prev[key], next[key])) {
+      debug_trace(`${key}`);
+      return false;
+    }
+  }
+
+  // --- Default the rest(*) to shallow-compare ---
+  // (*) including new props introduced in the future, in case developer forgets
+  // to update this function. Better to render more than miss an important one.
+  const KEYS_TO_IGNORE = [
+    ...ARRAY_KEYS,
+    'claimSearchByQuery',
+    'fetchingClaimSearchByQuery', // We are showing previous results while fetching.
+    'options', // Covered by search-key comparison.
+    'location',
+    'history',
+    'match',
+    'claimsByUri',
+    'doClaimSearch',
+    'doToggleTagFollowDesktop',
+  ];
+
+  const propKeys = Object.keys(next);
+  for (let i = 0; i < propKeys.length; ++i) {
+    const pk = propKeys[i];
+    if (!KEYS_TO_IGNORE.includes(pk) && prev[pk] !== next[pk]) {
+      debug_trace(`${pk}`);
+      return false;
+    }
+  }
+
+  return true;
+}

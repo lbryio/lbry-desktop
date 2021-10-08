@@ -9,6 +9,7 @@ const selectState = (state) => state.comments || {};
 
 export const selectCommentsById = createSelector(selectState, (state) => state.commentById || {});
 export const selectIsFetchingComments = createSelector(selectState, (state) => state.isLoading);
+export const selectIsFetchingCommentsById = createSelector(selectState, (state) => state.isLoadingById);
 export const selectIsFetchingCommentsByParentId = createSelector(selectState, (state) => state.isLoadingByParentId);
 export const selectIsPostingComment = createSelector(selectState, (state) => state.isCommenting);
 export const selectIsFetchingReacts = createSelector(selectState, (state) => state.isFetchingReacts);

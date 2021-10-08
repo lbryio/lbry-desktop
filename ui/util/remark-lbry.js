@@ -3,6 +3,7 @@ import visit from 'unist-util-visit';
 
 const protocol = 'lbry://';
 const uriRegex = /(lbry:\/\/)[^\s"]*[^)]/g;
+export const punctuationMarks = [',', '.', '!', '?', ':', ';', '-', ']', ')', '}'];
 
 const mentionToken = '@';
 // const mentionTokenCode = 64; // @
@@ -10,9 +11,24 @@ const mentionRegex = /@[^\s()"]*/gm;
 
 const invalidRegex = /[-_.+=?!@#$%^&*:;,{}<>\w/\\]/;
 
+function handlePunctuation(value) {
+  const modifierIndex =
+    (value.indexOf(':') >= 0 && value.indexOf(':')) || (value.indexOf('#') >= 0 && value.indexOf('#'));
+
+  let punctuationIndex;
+  punctuationMarks.some((p) => {
+    if (modifierIndex) {
+      punctuationIndex = value.indexOf(p, modifierIndex + 1) >= 0 && value.indexOf(p, modifierIndex + 1);
+    }
+    return punctuationIndex;
+  });
+
+  return punctuationIndex ? value.substring(0, punctuationIndex) : value;
+}
+
 // Find channel mention
 function locateMention(value, fromIndex) {
-  var index = value.indexOf(mentionToken, fromIndex);
+  const index = value.indexOf(mentionToken, fromIndex);
 
   // Skip invalid mention
   if (index > 0 && invalidRegex.test(value.charAt(index - 1))) {
@@ -45,21 +61,22 @@ const createURI = (text, uri, embed = false) => ({
   children: [{ type: 'text', value: text }],
 });
 
-const validateURI = (match, eat, self) => {
+const validateURI = (match, eat) => {
   if (match) {
     try {
       const text = match[0];
-      const uri = parseURI(text);
+      const newText = handlePunctuation(text);
+      const uri = parseURI(newText);
       const isValid = uri && uri.claimName;
       const isChannel = uri.isChannel && uri.path === uri.claimName;
 
       if (isValid) {
         // Create channel link
         if (isChannel) {
-          return eat(text)(createURI(uri.claimName, text, false));
+          return eat(newText)(createURI(uri.claimName, newText, false));
         }
         // Create claim link
-        return eat(text)(createURI(text, text, true));
+        return eat(newText)(createURI(newText, newText, true));
       }
     } catch (err) {
       // Silent errors: console.error(err)
@@ -128,7 +145,7 @@ const visitor = (node, index, parent) => {
 };
 
 // transform
-const transform = tree => {
+const transform = (tree) => {
   visit(tree, ['link'], visitor);
 };
 

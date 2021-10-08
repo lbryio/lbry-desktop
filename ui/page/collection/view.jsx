@@ -102,7 +102,9 @@ export default function CollectionPage(props: Props) {
 
   const subTitle = (
     <div>
-      <span className="collection__subtitle">{collectionCount} items</span>
+      <span className="collection__subtitle">
+        {collectionCount === 1 ? __('1 item') : __('%collectionCount% items', { collectionCount })}
+      </span>
       {uri && <ClaimAuthor uri={uri} />}
     </div>
   );

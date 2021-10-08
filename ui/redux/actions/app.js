@@ -505,6 +505,7 @@ export function doAnalyticsBuffer(uri, bufferData) {
     const fileSizeInBits = fileSize * 8;
     const bitRate = parseInt(fileSizeInBits / fileDurationInSeconds);
     const userId = user && user.id.toString();
+    // if there's a logged in user, send buffer event data to watchman
     if (userId) {
       analytics.videoBufferEvent(claim, {
         timeAtBuffer,

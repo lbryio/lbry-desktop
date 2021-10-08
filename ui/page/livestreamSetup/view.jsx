@@ -184,14 +184,15 @@ export default function LivestreamSetupPage(props: Props) {
                       name="stream-server"
                       label={__('Stream server')}
                       copyable={LIVESTREAM_RTMP_URL}
-                      snackMessage={__('Copied')}
+                      snackMessage={__('Copied stream server URL.')}
                     />
                     <CopyableText
                       primaryButton
+                      enableInputMask
                       name="livestream-key"
                       label={__('Stream key')}
                       copyable={streamKey}
-                      snackMessage={__('Copied')}
+                      snackMessage={__('Copied stream key.')}
                     />
                   </>
                 }

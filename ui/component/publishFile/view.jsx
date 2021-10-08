@@ -449,7 +449,12 @@ function PublishFile(props: Props) {
           {publishing && <Spinner type={'small'} />}
           {inProgress && (
             <div>
-              <Button button="close" label={__('New')} icon={ICONS.REFRESH} onClick={clearPublish} />
+              <Button
+                button="close"
+                label={__('New --[clears Publish Form]--')}
+                icon={ICONS.REFRESH}
+                onClick={clearPublish}
+              />
             </div>
           )}
         </div>

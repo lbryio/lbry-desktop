@@ -168,9 +168,17 @@ function VideoViewer(props: Props) {
     }
     analytics.playerStartedEvent(embedded);
 
+    // convert bytes to bits, and then divide by seconds
+    const contentInBits = Number(claim.value.source.size) * 8;
+    const durationInSeconds = claim.value.video && claim.value.video.duration;
+    let bitrateAsBitsPerSecond;
+    if (durationInSeconds) {
+      bitrateAsBitsPerSecond = Math.round(contentInBits / durationInSeconds);
+    }
+
     fetch(source, { method: 'HEAD', cache: 'no-store' }).then((response) => {
       let playerPoweredBy = response.headers.get('x-powered-by') || '';
-      analytics.videoStartEvent(claimId, timeToStart, playerPoweredBy, userId, claim.canonical_url, this);
+      analytics.videoStartEvent(claimId, timeToStart, playerPoweredBy, userId, claim.canonical_url, this, bitrateAsBitsPerSecond);
     });
 
     doAnalyticsView(uri, timeToStart).then(() => {

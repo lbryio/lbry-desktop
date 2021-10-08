@@ -27,8 +27,6 @@ $recent-msg-button__height: 2rem;
 
 .livestream__discussion {
   width: 100%;
-  margin-top: var(--spacing-m);
-  margin-bottom: var(--spacing-s);
 
   @media (min-width: $breakpoint-medium) {
     margin: 0;
@@ -359,6 +357,10 @@ $recent-msg-button__height: 2rem;
     p {
       word-break: break-word;
     }
+
+    .channel-name {
+      font-size: var(--font-small);
+    }
   }
 }
 
@@ -458,4 +460,10 @@ $recent-msg-button__height: 2rem;
       background-color: var(--color-input-bg-selected);
     }
   }
+}
+
+.livestream-list--view-more {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: var(--spacing-m);
 }

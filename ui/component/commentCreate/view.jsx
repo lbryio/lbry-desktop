@@ -1,40 +1,39 @@
 // @flow
-import type { ElementRef } from 'react';
-import { SIMPLE_SITE } from 'config';
-import * as PAGES from 'constants/pages';
-import * as ICONS from 'constants/icons';
-import * as KEYCODES from 'constants/keycodes';
-import React from 'react';
-import classnames from 'classnames';
-import { FormField, Form } from 'component/common/form';
-import Icon from 'component/common/icon';
-import Button from 'component/button';
-import SelectChannel from 'component/selectChannel';
-import usePersistedState from 'effects/use-persisted-state';
 import { FF_MAX_CHARS_IN_COMMENT, FF_MAX_CHARS_IN_LIVESTREAM_COMMENT } from 'constants/form-field';
-import { useHistory } from 'react-router';
-import WalletTipAmountSelector from 'component/walletTipAmountSelector';
-import CreditAmount from 'component/common/credit-amount';
-import ChannelThumbnail from 'component/channelThumbnail';
-import I18nMessage from 'component/i18nMessage';
-import UriIndicator from 'component/uriIndicator';
-import Empty from 'component/common/empty';
+import { FormField, Form } from 'component/common/form';
 import { getChannelIdFromClaim } from 'util/claim';
 import { Lbryio } from 'lbryinc';
+import { SIMPLE_SITE } from 'config';
+import { useHistory } from 'react-router';
+import * as ICONS from 'constants/icons';
+import * as KEYCODES from 'constants/keycodes';
+import * as PAGES from 'constants/pages';
+import Button from 'component/button';
+import ChannelMentionSuggestions from 'component/channelMentionSuggestions';
+import ChannelThumbnail from 'component/channelThumbnail';
+import classnames from 'classnames';
+import CreditAmount from 'component/common/credit-amount';
+import Empty from 'component/common/empty';
+import I18nMessage from 'component/i18nMessage';
+import Icon from 'component/common/icon';
+import React from 'react';
+import SelectChannel from 'component/selectChannel';
+import type { ElementRef } from 'react';
+import UriIndicator from 'component/uriIndicator';
+import usePersistedState from 'effects/use-persisted-state';
+import WalletTipAmountSelector from 'component/walletTipAmountSelector';
 
 import { getStripeEnvironment } from 'util/stripe';
 let stripeEnvironment = getStripeEnvironment();
 
 const TAB_FIAT = 'TabFiat';
 const TAB_LBC = 'TabLBC';
+const MENTION_DEBOUNCE_MS = 100;
 
 type Props = {
   uri: string,
   claim: StreamClaim,
-  createComment: (string, string, string, ?string, ?string, ?string) => Promise<any>,
   channels: ?Array<ChannelClaim>,
-  onDoneReplying?: () => void,
-  onCancelReplying?: () => void,
   isNested: boolean,
   isFetchingChannels: boolean,
   parentId: string,
@@ -44,25 +43,26 @@ type Props = {
   bottom: boolean,
   livestream?: boolean,
   embed?: boolean,
-  toast: (string) => void,
   claimIsMine: boolean,
-  sendTip: ({}, (any) => void, (any) => void) => void,
-  doToast: ({ message: string }) => void,
   supportDisabled: boolean,
-  doFetchCreatorSettings: (channelId: string) => Promise<any>,
   settingsByChannelId: { [channelId: string]: PerChannelSettings },
+  shouldFetchComment: boolean,
+  doToast: ({ message: string }) => void,
+  createComment: (string, string, string, ?string, ?string, ?string) => Promise<any>,
+  onDoneReplying?: () => void,
+  onCancelReplying?: () => void,
+  toast: (string) => void,
+  sendTip: ({}, (any) => void, (any) => void) => void,
+  doFetchCreatorSettings: (channelId: string) => Promise<any>,
   setQuickReply: (any) => void,
   fetchComment: (commentId: string) => Promise<any>,
-  shouldFetchComment: boolean,
 };
 
 export function CommentCreate(props: Props) {
   const {
-    createComment,
+    uri,
     claim,
     channels,
-    onDoneReplying,
-    onCancelReplying,
     isNested,
     isFetchingChannels,
     isReply,
@@ -72,51 +72,70 @@ export function CommentCreate(props: Props) {
     livestream,
     embed,
     claimIsMine,
-    sendTip,
-    doToast,
-    doFetchCreatorSettings,
     settingsByChannelId,
     supportDisabled,
+    shouldFetchComment,
+    doToast,
+    createComment,
+    onDoneReplying,
+    onCancelReplying,
+    sendTip,
+    doFetchCreatorSettings,
     setQuickReply,
     fetchComment,
-    shouldFetchComment,
   } = props;
+  const formFieldRef: ElementRef<any> = React.useRef();
+  const formFieldInputRef = formFieldRef && formFieldRef.current && formFieldRef.current.input;
+  const selectionIndex = formFieldInputRef && formFieldInputRef.current && formFieldInputRef.current.selectionStart;
   const buttonRef: ElementRef<any> = React.useRef();
   const {
     push,
     location: { pathname },
   } = useHistory();
+
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [commentFailure, setCommentFailure] = React.useState(false);
   const [successTip, setSuccessTip] = React.useState({ txid: undefined, tipAmount: undefined });
-  const claimId = claim && claim.claim_id;
   const [isSupportComment, setIsSupportComment] = React.useState();
   const [isReviewingSupportComment, setIsReviewingSupportComment] = React.useState();
   const [tipAmount, setTipAmount] = React.useState(1);
   const [commentValue, setCommentValue] = React.useState('');
   const [advancedEditor, setAdvancedEditor] = usePersistedState('comment-editor-mode', false);
-  const hasChannels = channels && channels.length;
-  const charCount = commentValue.length;
   const [activeTab, setActiveTab] = React.useState('');
   const [tipError, setTipError] = React.useState();
   const [deletedComment, setDeletedComment] = React.useState(false);
-  const disabled = deletedComment || isSubmitting || isFetchingChannels || !commentValue.length;
+  const [pauseQuickSend, setPauseQuickSend] = React.useState(false);
   const [shouldDisableReviewButton, setShouldDisableReviewButton] = React.useState();
+
+  const selectedMentionIndex =
+    commentValue.indexOf('@', selectionIndex) === selectionIndex
+      ? commentValue.indexOf('@', selectionIndex)
+      : commentValue.lastIndexOf('@', selectionIndex);
+  const modifierIndex = commentValue.indexOf(':', selectedMentionIndex);
+  const spaceIndex = commentValue.indexOf(' ', selectedMentionIndex);
+  const mentionLengthIndex =
+    modifierIndex >= 0 && (spaceIndex === -1 || modifierIndex < spaceIndex)
+      ? modifierIndex
+      : spaceIndex >= 0 && (modifierIndex === -1 || spaceIndex < modifierIndex)
+      ? spaceIndex
+      : commentValue.length;
+  const channelMention =
+    selectedMentionIndex >= 0 && selectionIndex <= mentionLengthIndex
+      ? commentValue.substring(selectedMentionIndex, mentionLengthIndex)
+      : '';
+
+  const claimId = claim && claim.claim_id;
+  const signingChannel = (claim && claim.signing_channel) || claim;
+  const channelUri = signingChannel && signingChannel.permanent_url;
+  const hasChannels = channels && channels.length;
+  const charCount = commentValue ? commentValue.length : 0;
+  const disabled = deletedComment || isSubmitting || isFetchingChannels || !commentValue.length || pauseQuickSend;
   const channelId = getChannelIdFromClaim(claim);
   const channelSettings = channelId ? settingsByChannelId[channelId] : undefined;
   const minSuper = (channelSettings && channelSettings.min_tip_amount_super_chat) || 0;
   const minTip = (channelSettings && channelSettings.min_tip_amount_comment) || 0;
   const minAmount = minTip || minSuper || 0;
   const minAmountMet = minAmount === 0 || tipAmount >= minAmount;
-
-  // Fetch top-level comments to identify if it has been deleted and can reply to it
-  React.useEffect(() => {
-    if (shouldFetchComment && fetchComment) {
-      fetchComment(parentId).then((result) => {
-        setDeletedComment(String(result).includes('Error'));
-      });
-    }
-  }, [fetchComment, shouldFetchComment, parentId]);
 
   const minAmountRef = React.useRef(minAmount);
   minAmountRef.current = minAmount;
@@ -155,6 +174,20 @@ export function CommentCreate(props: Props) {
     }
 
     setCommentValue(commentValue);
+  }
+
+  function handleSelectMention(mentionValue, key) {
+    let newMentionValue = mentionValue.replace('lbry://', '');
+    if (newMentionValue.includes('#')) newMentionValue = newMentionValue.replace('#', ':');
+
+    if (livestream && key !== KEYCODES.TAB) setPauseQuickSend(true);
+    setCommentValue(
+      commentValue.substring(0, selectedMentionIndex) +
+        `${newMentionValue}` +
+        (commentValue.length > mentionLengthIndex + 1
+          ? commentValue.substring(mentionLengthIndex, commentValue.length)
+          : ' ')
+    );
   }
 
   function altEnterListener(e: SyntheticKeyboardEvent<*>) {
@@ -365,10 +398,6 @@ export function CommentCreate(props: Props) {
       });
   }
 
-  function toggleEditorMode() {
-    setAdvancedEditor(!advancedEditor);
-  }
-
   // **************************************************************************
   // Effects
   // **************************************************************************
@@ -378,7 +407,28 @@ export function CommentCreate(props: Props) {
     if (!channelSettings && channelId) {
       doFetchCreatorSettings(channelId);
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [channelId, channelSettings, doFetchCreatorSettings]);
+
+  // Notifications: Fetch top-level comments to identify if it has been deleted and can reply to it
+  React.useEffect(() => {
+    if (shouldFetchComment && fetchComment) {
+      fetchComment(parentId).then((result) => {
+        setDeletedComment(String(result).includes('Error'));
+      });
+    }
+  }, [fetchComment, shouldFetchComment, parentId]);
+
+  // Debounce for disabling the submit button when mentioning a user with Enter
+  // so that the comment isn't sent at the same time
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      if (pauseQuickSend) {
+        setPauseQuickSend(false);
+      }
+    }, MENTION_DEBOUNCE_MS);
+
+    return () => clearTimeout(timer);
+  }, [pauseQuickSend]);
 
   // **************************************************************************
   // Render
@@ -466,10 +516,22 @@ export function CommentCreate(props: Props) {
         'comment__create--bottom': bottom,
       })}
     >
+      {!advancedEditor && (
+        <ChannelMentionSuggestions
+          uri={uri}
+          isLivestream={livestream}
+          inputRef={formFieldInputRef}
+          mentionTerm={channelMention}
+          creatorUri={channelUri}
+          customSelectAction={handleSelectMention}
+        />
+      )}
       <FormField
         disabled={isFetchingChannels}
         type={SIMPLE_SITE ? 'textarea' : advancedEditor && !isReply ? 'markdown' : 'textarea'}
         name={isReply ? 'content_reply' : 'content_description'}
+        ref={formFieldRef}
+        className={isReply ? 'content_reply' : 'content_comment'}
         label={
           <span className="comment-new__label-wrapper">
             {!livestream && (
@@ -481,7 +543,7 @@ export function CommentCreate(props: Props) {
         quickActionLabel={
           !SIMPLE_SITE && (isReply ? undefined : advancedEditor ? __('Simple Editor') : __('Advanced Editor'))
         }
-        quickActionHandler={!SIMPLE_SITE && toggleEditorMode}
+        quickActionHandler={() => !SIMPLE_SITE && setAdvancedEditor(!advancedEditor)}
         onFocus={onTextareaFocus}
         onBlur={onTextareaBlur}
         placeholder={__('Say something about this...')}

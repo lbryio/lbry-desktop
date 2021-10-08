@@ -70,6 +70,7 @@ type Props = {
   streamingUrl: ?string,
   getFile: (string) => void,
   customShouldHide?: (Claim) => boolean,
+  searchParams?: { [string]: string },
   showUnresolvedClaim?: boolean,
   showNullPlaceholder?: boolean,
   includeSupportAction?: boolean,
@@ -80,7 +81,7 @@ type Props = {
   repostUrl?: string,
   hideMenu?: boolean,
   isLivestream?: boolean,
-  live?: boolean,
+  isLivestreamActive: boolean,
   collectionId?: string,
   editCollection: (string, CollectionEditParams) => void,
   isCollectionMine: boolean,
@@ -125,6 +126,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     // modifiers
     active,
     customShouldHide,
+    searchParams,
     showNullPlaceholder,
     // value from show mature content user setting
     // true if the user doesn't wanna see nsfw content
@@ -145,7 +147,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     hideMenu = false,
     // repostUrl,
     isLivestream, // need both? CHECK
-    live,
+    isLivestreamActive,
     collectionId,
     collectionIndex,
     editCollection,
@@ -220,6 +222,11 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   let navigateSearch = new URLSearchParams();
   if (listId) {
     navigateSearch.set(COLLECTIONS_CONSTS.COLLECTION_ID, listId);
+  }
+  if (searchParams) {
+    Object.keys(searchParams).forEach((key) => {
+      navigateSearch.set(key, searchParams[key]);
+    });
   }
 
   const handleNavLinkClick = (e) => {
@@ -336,7 +343,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   }
 
   let liveProperty = null;
-  if (live === true) {
+  if (isLivestreamActive === true) {
     liveProperty = (claim) => <>LIVE</>;
   }
 
@@ -349,7 +356,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
         'claim-preview__wrapper--channel': isChannelUri && type !== 'inline',
         'claim-preview__wrapper--inline': type === 'inline',
         'claim-preview__wrapper--small': type === 'small',
-        'claim-preview__live': live,
+        'claim-preview__live': isLivestreamActive,
         'claim-preview__active': active,
       })}
     >
@@ -386,7 +393,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                       )}
                     </div>
                     {/* @endif */}
-                    {!isLivestream && (
+                    {(!isLivestream || isLivestreamActive) && (
                       <div className="claim-preview__file-property-overlay">
                         <PreviewOverlayProperties uri={uri} small={type === 'small'} properties={liveProperty} />
                       </div>

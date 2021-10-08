@@ -16,7 +16,6 @@ type Props = {
   thumbnail: ?string,
   formDisabled: boolean,
   uploadThumbnailStatus: string,
-  publishForm: boolean,
   thumbnailPath: ?string,
   thumbnailError: ?string,
   thumbnailParam: ?string,
@@ -34,7 +33,6 @@ function SelectThumbnail(props: Props) {
     fileInfos,
     myClaimForUri,
     formDisabled,
-    publishForm = true,
     uploadThumbnailStatus: status,
     openModal,
     updatePublishForm,
@@ -45,6 +43,7 @@ function SelectThumbnail(props: Props) {
     resetThumbnailStatus,
   } = props;
 
+  const publishForm = !updateThumbnailParams;
   const thumbnail = publishForm ? props.thumbnail : thumbnailParam;
   const thumbnailError = publishForm ? props.thumbnailError : props.thumbnailParamError;
 

@@ -1,11 +1,19 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
-import { SEARCH_OPTIONS } from 'constants/search';
-import { buildURI, doResolveUris, batchActions, isURIValid, makeSelectClaimForUri } from 'lbry-redux';
+import { selectShowMatureContent } from 'redux/selectors/settings';
+import {
+  buildURI,
+  doResolveUris,
+  batchActions,
+  isURIValid,
+  makeSelectClaimForUri,
+  makeSelectClaimIsNsfw,
+} from 'lbry-redux';
 import { makeSelectSearchUrisForQuery, selectSearchValue } from 'redux/selectors/search';
 import handleFetchResponse from 'util/handle-fetch';
 import { getSearchQueryString } from 'util/query-params';
-import { SIMPLE_SITE, SEARCH_SERVER_API } from 'config';
+import { getRecommendationSearchOptions } from 'util/search';
+import { SEARCH_SERVER_API } from 'config';
 
 type Dispatch = (action: any) => any;
 type GetState = () => { search: SearchState };
@@ -125,21 +133,16 @@ export const doUpdateSearchOptions = (newOptions: SearchOptions, additionalOptio
   }
 };
 
-export const doFetchRecommendedContent = (uri: string, mature: boolean) => (dispatch: Dispatch, getState: GetState) => {
+export const doFetchRecommendedContent = (uri: string) => (dispatch: Dispatch, getState: GetState) => {
   const state = getState();
   const claim = makeSelectClaimForUri(uri)(state);
+  const matureEnabled = selectShowMatureContent(state);
+  const claimIsMature = makeSelectClaimIsNsfw(uri)(state);
 
   if (claim && claim.value && claim.claim_id) {
-    const options: SearchOptions = { size: 20, related_to: claim.claim_id, isBackgroundSearch: true };
-    if (!mature) {
-      options['nsfw'] = false;
-    }
-
-    if (SIMPLE_SITE) {
-      options[SEARCH_OPTIONS.CLAIM_TYPE] = SEARCH_OPTIONS.INCLUDE_FILES;
-      options[SEARCH_OPTIONS.MEDIA_VIDEO] = true;
-    }
+    const options: SearchOptions = getRecommendationSearchOptions(matureEnabled, claimIsMature, claim.claim_id);
     const { title } = claim.value;
+
     if (title && options) {
       dispatch(doSearch(title, options));
     }

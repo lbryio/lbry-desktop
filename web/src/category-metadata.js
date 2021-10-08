@@ -53,6 +53,11 @@ module.exports.CATEGORY_METADATA = {
     description: 'All the songs, reviews, covers, and how-tos you love on Odysee',
     image: 'https://spee.ch/category-music:8.jpg?quality=80&height=1200&width=630',
   },
+  [PAGES.TECH]: {
+    title: 'Tech',
+    description: 'Hardware, software, startups, photography on Odysee',
+    image: '',
+  },
   [PAGES.TECHNOLOGY]: {
     title: 'Tech',
     description: 'Hardware, software, startups, photography on Odysee',
