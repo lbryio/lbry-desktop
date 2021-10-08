@@ -33,6 +33,8 @@ module.exports = {
 
   resolve: {
     alias: {
+      $web: WEB_PLATFORM_ROOT,
+      config: path.resolve(__dirname, '../config.js'),
       fs: `${WEB_PLATFORM_ROOT}/stubs/fs.js`,
     },
   },

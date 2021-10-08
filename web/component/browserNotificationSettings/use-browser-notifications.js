@@ -1,7 +1,6 @@
 // @flow
-
 import { useEffect, useState, useMemo } from 'react';
-import { pushSupported, pushSubscribe, pushUnsubscribe, pushIsSubscribed } from 'web/src/pushNotifications';
+import { pushSupported, pushSubscribe, pushUnsubscribe, pushIsSubscribed } from '$web/src/pushNotifications';
 
 export default () => {
   const [permission, setPermission] = useState(window.Notification.permission);

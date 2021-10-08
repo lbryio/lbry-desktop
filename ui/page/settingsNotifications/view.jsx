@@ -14,44 +14,12 @@ import Yrbl from 'component/yrbl';
 import Button from 'component/button';
 import { SETTINGS } from 'lbry-redux';
 
-import useBrowserNotifications from 'web/effects/use-browser-notifications';
-import 'scss/component/notifications-blocked.scss';
-import Icon from 'component/common/icon';
+import BrowserNotificationSettings from 'web/component/browserNotificationSettings/view';
 
 type Props = {
   osNotificationsEnabled: boolean,
   isAuthenticated: boolean,
   setClientSetting: (string, boolean) => void,
-};
-
-const BrowserNotificationsBlocked = () => {
-  return (
-    <div className="notificationsBlocked">
-      <Icon className="notificationsBlocked__icon" color="#E50054" icon={ICONS.ALERT} size={58} />
-      <div>
-        <span>{__('Heads up: browser notifications are currently blocked in this browser.')}</span>
-        <span className={'notificationsBlocked__subText'}>
-          {__('To enable push notifications please configure your browser to allow notifications on odysee.com.')}
-        </span>
-      </div>
-    </div>
-  );
-};
-
-const BrowserNotificationSettings = () => {
-  const { pushSupported, isEnabled, permission, handleToggle } = useBrowserNotifications();
-
-  if (!pushSupported) return null;
-  if (permission === 'denied') return <BrowserNotificationsBlocked />;
-
-  return (
-    <SettingsRow
-      title={__('Browser Notifications')}
-      subtitle={__("Receive push notifications in this browser, even when you're not on odysee.com")}
-    >
-      <FormField type="checkbox" name="browserNotification" onChange={handleToggle} checked={isEnabled} />
-    </SettingsRow>
-  );
 };
 
 export default function NotificationSettingsPage(props: Props) {
