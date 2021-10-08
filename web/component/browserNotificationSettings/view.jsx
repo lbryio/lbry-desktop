@@ -22,17 +22,17 @@ const BrowserNotificationsBlocked = () => {
 };
 
 const BrowserNotificationSettings = () => {
-  const { pushSupported, isEnabled, permission, handleToggle } = useBrowserNotifications();
+  const { pushSupported, pushEnabled, pushPermission, pushToggle } = useBrowserNotifications();
 
   if (!pushSupported) return null;
-  if (permission === 'denied') return <BrowserNotificationsBlocked />;
+  if (pushPermission === 'denied') return <BrowserNotificationsBlocked />;
 
   return (
     <SettingsRow
       title={__('Browser Notifications')}
       subtitle={__("Receive push notifications in this browser, even when you're not on odysee.com")}
     >
-      <FormField type="checkbox" name="browserNotification" onChange={handleToggle} checked={isEnabled} />
+      <FormField type="checkbox" name="browserNotification" onChange={pushToggle} checked={pushEnabled} />
     </SettingsRow>
   );
 };

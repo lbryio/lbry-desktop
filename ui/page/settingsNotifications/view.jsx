@@ -14,7 +14,7 @@ import Yrbl from 'component/yrbl';
 import Button from 'component/button';
 import { SETTINGS } from 'lbry-redux';
 
-import BrowserNotificationSettings from 'web/component/browserNotificationSettings/view';
+import BrowserNotificationSettings from '$web/component/browserNotificationSettings/view';
 
 type Props = {
   osNotificationsEnabled: boolean,

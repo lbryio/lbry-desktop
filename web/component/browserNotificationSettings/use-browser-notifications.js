@@ -3,9 +3,9 @@ import { useEffect, useState, useMemo } from 'react';
 import { pushSupported, pushSubscribe, pushUnsubscribe, pushIsSubscribed } from '$web/src/pushNotifications';
 
 export default () => {
-  const [permission, setPermission] = useState(window.Notification.permission);
+  const [pushPermission, setPushPermission] = useState(window.Notification.permission);
   const [subscribed, setSubscribed] = useState(false);
-  const [isEnabled, setIsEnabled] = useState(false);
+  const [pushEnabled, setPushEnabled] = useState(false);
 
   useEffect(() => {
     pushIsSubscribed().then((isSubscribed) => {
@@ -13,12 +13,12 @@ export default () => {
     });
   }, []);
 
-  useMemo(() => setIsEnabled(permission === 'granted' && subscribed), [permission, subscribed]);
+  useMemo(() => setPushEnabled(pushPermission === 'granted' && subscribed), [pushPermission, subscribed]);
 
   const subscribe = async () => {
     if (await pushSubscribe()) {
       setSubscribed(true);
-      setPermission(window.Notification.permission);
+      setPushPermission(window.Notification.permission);
     }
   };
 
@@ -28,14 +28,14 @@ export default () => {
     }
   };
 
-  const handleToggle = async () => {
-    return !isEnabled ? subscribe() : unsubscribe();
+  const pushToggle = async () => {
+    return !pushEnabled ? subscribe() : unsubscribe();
   };
 
   return {
     pushSupported,
-    isEnabled,
-    permission,
-    handleToggle,
+    pushEnabled,
+    pushPermission,
+    pushToggle,
   };
 };
