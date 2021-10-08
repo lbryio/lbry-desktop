@@ -6,7 +6,7 @@ import {
   makeSelectTitleForUri,
   makeSelectChannelForClaimUri,
   makeSelectClaimIsNsfw,
-  makeSelectDateForUri,
+  selectDateForUri,
 } from 'redux/selectors/claims';
 import { doFileGet } from 'redux/actions/file';
 import { doResolveUri } from 'redux/actions/claims';
@@ -24,7 +24,7 @@ const select = (state, props) => {
   return {
     claim,
     mediaDuration,
-    date: props.uri && makeSelectDateForUri(props.uri)(state),
+    date: props.uri && selectDateForUri(state, props.uri),
     channel: props.uri && makeSelectChannelForClaimUri(props.uri)(state),
     isResolvingUri: props.uri && makeSelectIsUriResolving(props.uri)(state),
     thumbnail: props.uri && makeSelectThumbnailForUri(props.uri)(state),
