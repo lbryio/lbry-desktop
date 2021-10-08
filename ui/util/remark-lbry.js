@@ -108,15 +108,15 @@ function tokenizeURI(eat, value, silent) {
 
 // Configure tokenizer for lbry urls
 tokenizeURI.locator = locateURI;
-tokenizeURI.notInList = true;
+tokenizeURI.notInList = false;
 tokenizeURI.notInLink = true;
-tokenizeURI.notInBlock = true;
+tokenizeURI.notInBlock = false;
 
 // Configure tokenizer for lbry channels
 tokenizeMention.locator = locateMention;
-tokenizeMention.notInList = true;
+tokenizeMention.notInList = false;
 tokenizeMention.notInLink = true;
-tokenizeMention.notInBlock = true;
+tokenizeMention.notInBlock = false;
 
 const visitor = (node, index, parent) => {
   if (node.type === 'link' && parent && parent.type === 'paragraph') {

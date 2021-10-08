@@ -108,9 +108,9 @@ function tokenizeTimestamp(eat, value, silent) {
 }
 
 tokenizeTimestamp.locator = locateTimestamp;
-tokenizeTimestamp.notInList = true; // Flag doesn't work? It'll always tokenizes in List and never in Bullet.
+tokenizeTimestamp.notInList = false; // Flag doesn't work? It'll always tokenizes in List and never in Bullet.
 tokenizeTimestamp.notInLink = true;
-tokenizeTimestamp.notInBlock = true;
+tokenizeTimestamp.notInBlock = false;
 
 export function inlineTimestamp() {
   const Parser = this.Parser;
