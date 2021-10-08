@@ -11,6 +11,7 @@ import classnames from 'classnames';
 import CommentMenuList from 'component/commentMenuList';
 import Button from 'component/button';
 import CreditAmount from 'component/common/credit-amount';
+import useHover from 'effects/use-hover';
 
 type Props = {
   uri: string,
@@ -43,14 +44,18 @@ function LivestreamComment(props: Props) {
     isPinned,
   } = props;
 
-  const commentByOwnerOfContent = claim && claim.signing_channel && claim.signing_channel.permanent_url === authorUri;
+  const commentRef = React.useRef();
+  const isHovering = useHover(commentRef);
+  const commentByContentOwner = claim && claim.signing_channel && claim.signing_channel.permanent_url === authorUri;
   const { claimName } = parseURI(authorUri);
 
   return (
     <li
       className={classnames('livestream-comment', {
         'livestream-comment--superchat': supportAmount > 0,
+        'livestream-comment--hover': isHovering,
       })}
+      ref={commentRef}
     >
       {supportAmount > 0 && (
         <div className="super-chat livestream-superchat__banner">
@@ -78,7 +83,7 @@ function LivestreamComment(props: Props) {
             </Tooltip>
           )}
 
-          {commentByOwnerOfContent && (
+          {commentByContentOwner && (
             <Tooltip label={__('Streamer')}>
               <span className="comment__badge">
                 <Icon icon={ICONS.BADGE_STREAMER} size={16} />
@@ -88,7 +93,7 @@ function LivestreamComment(props: Props) {
 
           <Button
             className={classnames('button--uri-indicator comment__author', {
-              'comment__author--creator': commentByOwnerOfContent,
+              'comment__author--creator': commentByContentOwner,
             })}
             target="_blank"
             navigate={authorUri}

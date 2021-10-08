@@ -124,6 +124,18 @@ $recent-msg-button__height: 2rem;
   }
 }
 
+.livestream-comment--hover {
+  background-color: var(--color-card-background-highlighted);
+}
+
+@media (min-width: $breakpoint-small) {
+  .livestream-comment:not(:hover) {
+    .menu__button:not(:focus):not([aria-expanded='true']) {
+      opacity: 0;
+    }
+  }
+}
+
 .livestream-comment__body {
   display: flex;
   flex-direction: column;
