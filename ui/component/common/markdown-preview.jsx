@@ -10,7 +10,7 @@ import remarkFrontMatter from 'remark-frontmatter';
 import reactRenderer from 'remark-react';
 import MarkdownLink from 'component/markdownLink';
 import defaultSchema from 'hast-util-sanitize/lib/github.json';
-import { formatedLinks, inlineLinks } from 'util/remark-lbry';
+import { formattedLinks, inlineLinks } from 'util/remark-lbry';
 import { formattedTimestamp, inlineTimestamp } from 'util/remark-timestamp';
 import ZoomableImage from 'component/zoomableImage';
 import { CHANNEL_STAKED_LEVEL_VIDEO_COMMENTS, SIMPLE_SITE } from 'config';
@@ -133,8 +133,9 @@ function isStakeEnoughForPreview(stakedLevel) {
 
 const MarkdownPreview = (props: MarkdownProps) => {
   const { content, strip, simpleLinks, noDataStore, className, parentCommentId, isMarkdownPost, stakedLevel } = props;
+
   const strippedContent = content
-    ? content.replace(REPLACE_REGEX, (iframeHtml, y, iframeSrc) => {
+    ? content.replace(REPLACE_REGEX, (iframeHtml) => {
         // Let the browser try to create an iframe to see if the markup is valid
         const outer = document.createElement('div');
         outer.innerHTML = iframeHtml;
@@ -151,6 +152,10 @@ const MarkdownPreview = (props: MarkdownProps) => {
         return iframeHtml;
       })
     : '';
+
+  const initialQuote = strippedContent.split(' ').find((word) => word.length > 0 || word.charAt(0) === '>');
+  let stripQuote;
+  if (initialQuote && initialQuote.charAt(0) === '>') stripQuote = true;
 
   const remarkOptions: Object = {
     sanitize: schema,
@@ -192,10 +197,22 @@ const MarkdownPreview = (props: MarkdownProps) => {
   };
 
   // Strip all content and just render text
-  if (strip) {
+  if (strip || stripQuote) {
     // Remove new lines and extra space
     remarkOptions.remarkReactComponents.p = SimpleText;
-    return (
+    return stripQuote ? (
+      <span dir="auto" className="markdown-preview">
+        <blockquote>
+          {
+            remark()
+              .use(remarkStrip)
+              .use(remarkFrontMatter, ['yaml'])
+              .use(reactRenderer, remarkOptions)
+              .processSync(content).contents
+          }
+        </blockquote>
+      </span>
+    ) : (
       <span dir="auto" className="markdown-preview">
         {
           remark()
@@ -215,7 +232,7 @@ const MarkdownPreview = (props: MarkdownProps) => {
           .use(remarkAttr, remarkAttrOpts)
           // Remark plugins for lbry urls
           // Note: The order is important
-          .use(formatedLinks)
+          .use(formattedLinks)
           .use(inlineLinks)
           .use(isMarkdownPost ? null : inlineTimestamp)
           .use(isMarkdownPost ? null : formattedTimestamp)
