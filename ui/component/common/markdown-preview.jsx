@@ -42,6 +42,7 @@ type MarkdownProps = {
   className?: string,
   parentCommentId?: string,
   isMarkdownPost?: boolean,
+  disableTimestamps?: boolean,
   stakedLevel?: number,
 };
 
@@ -132,7 +133,17 @@ function isStakeEnoughForPreview(stakedLevel) {
 // ****************************************************************************
 
 const MarkdownPreview = (props: MarkdownProps) => {
-  const { content, strip, simpleLinks, noDataStore, className, parentCommentId, isMarkdownPost, stakedLevel } = props;
+  const {
+    content,
+    strip,
+    simpleLinks,
+    noDataStore,
+    className,
+    parentCommentId,
+    isMarkdownPost,
+    disableTimestamps,
+    stakedLevel,
+  } = props;
   const strippedContent = content
     ? content.replace(REPLACE_REGEX, (iframeHtml, y, iframeSrc) => {
         // Let the browser try to create an iframe to see if the markup is valid
@@ -217,8 +228,8 @@ const MarkdownPreview = (props: MarkdownProps) => {
           // Note: The order is important
           .use(formatedLinks)
           .use(inlineLinks)
-          .use(isMarkdownPost ? null : inlineTimestamp)
-          .use(isMarkdownPost ? null : formattedTimestamp)
+          .use(disableTimestamps || isMarkdownPost ? null : inlineTimestamp)
+          .use(disableTimestamps || isMarkdownPost ? null : formattedTimestamp)
           // Emojis
           .use(remarkEmoji)
           // Render new lines without needing spaces.
