@@ -270,6 +270,11 @@ export const makeSelectTotalPagesInChannelSearch = (uri: string) =>
     return byChannel['pageCount'];
   });
 
+export const selectMetadataForUri = createCachedSelector(selectClaimForUri, (claim, uri) => {
+  const metadata = claim && claim.value;
+  return metadata || (claim === undefined ? undefined : null);
+})((state, uri) => uri);
+
 export const makeSelectMetadataForUri = (uri: string) =>
   createSelector(makeSelectClaimForUri(uri), (claim) => {
     const metadata = claim && claim.value;
@@ -536,6 +541,10 @@ export const makeSelectMyChannelPermUrlForName = (name: string) =>
     const matchingClaim = claims && claims.find((claim) => claim.name === name);
     return matchingClaim ? matchingClaim.permanent_url : null;
   });
+
+export const selectTagsForUri = createCachedSelector(selectMetadataForUri, (metadata: ?GenericMetadata) => {
+  return (metadata && metadata.tags) || [];
+})((state, uri) => uri);
 
 export const makeSelectTagsForUri = (uri: string) =>
   createSelector(makeSelectMetadataForUri(uri), (metadata: ?GenericMetadata) => {
