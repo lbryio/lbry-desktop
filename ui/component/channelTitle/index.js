@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimForUri, makeSelectTitleForUri } from 'lbry-redux';
+import { makeSelectClaimForUri, makeSelectTitleForUri } from 'redux/selectors/claims';
 import ChannelTitle from './view';
 
 const select = (state, props) => ({

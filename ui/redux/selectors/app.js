@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { selectClaimsById, selectMyChannelClaims, makeSelectStakedLevelForChannelUri } from 'lbry-redux';
+import { selectClaimsById, selectMyChannelClaims, makeSelectStakedLevelForChannelUri } from 'redux/selectors/claims';
 
 export const selectState = (state) => state.app || {};
 

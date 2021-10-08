@@ -1,12 +1,8 @@
 import { connect } from 'react-redux';
-import {
-  selectBalance,
-  selectIsStillEditing,
-  makeSelectPublishFormValue,
-  doUpdatePublishForm,
-  doClearPublish,
-  makeSelectClaimIsStreamPlaceholder,
-} from 'lbry-redux';
+import { selectBalance } from 'redux/selectors/wallet';
+import { selectIsStillEditing, makeSelectPublishFormValue } from 'redux/selectors/publish';
+import { doUpdatePublishForm, doClearPublish } from 'redux/actions/publish';
+import { makeSelectClaimIsStreamPlaceholder } from 'redux/selectors/claims';
 import { doToast } from 'redux/actions/notifications';
 import { selectFfmpegStatus } from 'redux/selectors/settings';
 import PublishPage from './view';

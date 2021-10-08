@@ -8,7 +8,7 @@ import {
 import { doFetchReactions, doReactionLike, doReactionDislike } from 'redux/actions/reactions';
 import { selectThemePath } from 'redux/selectors/settings';
 import FileViewCount from './view';
-import { makeSelectClaimForUri } from 'lbry-redux';
+import { makeSelectClaimForUri } from 'redux/selectors/claims';
 
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),

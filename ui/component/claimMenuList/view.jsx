@@ -3,6 +3,7 @@ import { URL, SHARE_DOMAIN_URL } from 'config';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import * as MODALS from 'constants/modal_types';
+import * as COLLECTIONS_CONSTS from 'constants/collections';
 import React from 'react';
 import classnames from 'classnames';
 import { Menu, MenuButton, MenuList, MenuItem } from '@reach/menu-button';
@@ -15,7 +16,7 @@ import {
   generateListSearchUrlParams,
 } from 'util/url';
 import { useHistory } from 'react-router';
-import { buildURI, parseURI, COLLECTIONS_CONSTS } from 'lbry-redux';
+import { buildURI, parseURI } from 'util/lbryURI';
 
 const SHARE_DOMAIN = SHARE_DOMAIN_URL || URL;
 const PAGE_VIEW_QUERY = 'view';

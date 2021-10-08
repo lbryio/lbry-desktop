@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimIsMine, selectMyChannelClaims } from 'lbry-redux';
+import { makeSelectClaimIsMine, selectMyChannelClaims } from 'redux/selectors/claims';
 import { selectIsFetchingCommentsByParentId, makeSelectRepliesForParentId } from 'redux/selectors/comments';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import CommentsReplies from './view';

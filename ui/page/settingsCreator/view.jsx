@@ -10,7 +10,7 @@ import Spinner from 'component/spinner';
 import { FormField } from 'component/common/form-components/form-field';
 import LbcSymbol from 'component/common/lbc-symbol';
 import I18nMessage from 'component/i18nMessage';
-import { parseURI } from 'lbry-redux';
+import { parseURI } from 'util/lbryURI';
 import debounce from 'util/debounce';
 
 const DEBOUNCE_REFRESH_MS = 1000;

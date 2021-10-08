@@ -25,7 +25,7 @@ declare type UpdatePublishFormData = {
   licenseType?: string,
   uri?: string,
   nsfw: boolean,
-  isMarkdownPost: boolean,
+  isMarkdownPost?: boolean,
 };
 
 declare type PublishParams = {

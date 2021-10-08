@@ -1,23 +1,23 @@
 import { connect } from 'react-redux';
 import {
-  doResolveUri,
-  selectPublishFormValues,
-  selectIsStillEditing,
-  selectMyClaimForUri,
-  selectIsResolvingPublishUris,
-  selectTakeOverAmount,
   doResetThumbnailStatus,
   doClearPublish,
   doUpdatePublishForm,
   doPrepareEdit,
-  doCheckPublishNameAvailability,
-  SETTINGS,
-  selectMyChannelClaims,
-  makeSelectClaimIsStreamPlaceholder,
+  doPublishDesktop,
+} from 'redux/actions/publish';
+import { doResolveUri, doCheckPublishNameAvailability } from 'redux/actions/claims';
+import {
+  selectTakeOverAmount,
+  selectPublishFormValues,
+  selectIsStillEditing,
   makeSelectPublishFormValue,
-} from 'lbry-redux';
+  selectIsResolvingPublishUris,
+  selectMyClaimForUri,
+} from 'redux/selectors/publish';
+import { selectMyChannelClaims, makeSelectClaimIsStreamPlaceholder } from 'redux/selectors/claims';
 import * as RENDER_MODES from 'constants/file_render_modes';
-import { doPublishDesktop } from 'redux/actions/publish';
+import * as SETTINGS from 'constants/settings';
 import { doClaimInitialRewards } from 'redux/actions/rewards';
 import {
   selectUnclaimedRewardValue,

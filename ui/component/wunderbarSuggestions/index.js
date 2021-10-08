@@ -4,7 +4,7 @@ import { selectLanguage, selectShowMatureContent } from 'redux/selectors/setting
 import { doToast } from 'redux/actions/notifications';
 import { doOpenModal, doHideModal } from 'redux/actions/app';
 import { withRouter } from 'react-router';
-import { doResolveUris } from 'lbry-redux';
+import { doResolveUris } from 'redux/actions/claims';
 import analytics from 'analytics';
 import Wunderbar from './view';
 

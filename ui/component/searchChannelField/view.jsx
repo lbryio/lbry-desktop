@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { isNameValid, parseURI } from 'lbry-redux';
+import { isNameValid, parseURI } from 'util/lbryURI';
 import Button from 'component/button';
 import ClaimPreview from 'component/claimPreview';
 import { FormField } from 'component/common/form-components/form-field';

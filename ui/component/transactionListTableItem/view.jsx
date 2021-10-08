@@ -8,7 +8,9 @@ import DateTime from 'component/dateTime';
 import Button from 'component/button';
 import Spinner from 'component/spinner';
 import { toCapitalCase } from 'util/string';
-import { buildURI, parseURI, TXO_LIST as TXO, ABANDON_STATES } from 'lbry-redux';
+import { buildURI, parseURI } from 'util/lbryURI';
+import * as TXO from 'constants/txo_list';
+import * as ABANDON_STATES from 'constants/abandon_states';
 import UriIndicator from 'component/uriIndicator';
 
 type Props = {

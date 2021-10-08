@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 import { spawn, execSync } from 'child_process';
-import { Lbry } from 'lbry-redux';
+import Lbry from 'lbry';
 
 export default class Daemon {
   static lbrynetPath =

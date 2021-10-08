@@ -6,7 +6,7 @@ import * as ICONS from 'constants/icons';
 import React from 'react';
 import classnames from 'classnames';
 import Icon from 'component/common/icon';
-import { isURIValid, normalizeURI, parseURI } from 'lbry-redux';
+import { isURIValid, normalizeURI, parseURI } from 'util/lbryURI';
 import { Combobox, ComboboxInput, ComboboxPopover, ComboboxList, ComboboxOption } from '@reach/combobox';
 // import '@reach/combobox/styles.css'; --> 'scss/third-party.scss'
 import useLighthouse from 'effects/use-lighthouse';

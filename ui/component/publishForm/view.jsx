@@ -10,7 +10,9 @@
 
 import { SITE_NAME, ENABLE_NO_SOURCE_CLAIMS, SIMPLE_SITE, CHANNEL_STAKED_LEVEL_LIVESTREAM } from 'config';
 import React, { useEffect, useState } from 'react';
-import { buildURI, isURIValid, isNameValid, THUMBNAIL_STATUSES, Lbry } from 'lbry-redux';
+import Lbry from 'lbry';
+import { buildURI, isURIValid, isNameValid } from 'util/lbryURI';
+import * as THUMBNAIL_STATUSES from 'constants/thumbnail_upload_statuses';
 import Button from 'component/button';
 import ChannelSelect from 'component/channelSelector';
 import classnames from 'classnames';
@@ -230,7 +232,7 @@ function PublishForm(props: Props) {
   // If they are editing, they don't need a new file chosen
   const formValidLessFile =
     name &&
-    isNameValid(name, false) &&
+    isNameValid(name) &&
     title &&
     bid &&
     thumbnail &&
@@ -381,7 +383,7 @@ function PublishForm(props: Props) {
       } catch (e) {}
     }
 
-    const isValid = isURIValid(uri);
+    const isValid = uri && isURIValid(uri);
     if (uri && isValid && checkAvailability && name) {
       resolveUri(uri);
       checkAvailability(name);

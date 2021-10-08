@@ -10,7 +10,7 @@ import Button from 'component/button';
 import ChannelThumbnail from 'component/channelThumbnail';
 import { formatLbryUrlForWeb } from 'util/url';
 import { useHistory } from 'react-router';
-import { parseURI } from 'lbry-redux';
+import { parseURI } from 'util/lbryURI';
 import { PAGE_VIEW_QUERY, DISCUSSION_PAGE } from 'page/channel/view';
 import FileThumbnail from 'component/fileThumbnail';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';

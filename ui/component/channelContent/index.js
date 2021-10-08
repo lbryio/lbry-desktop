@@ -6,9 +6,9 @@ import {
   makeSelectClaimIsMine,
   makeSelectTotalPagesInChannelSearch,
   makeSelectClaimForUri,
-  doResolveUris,
-  SETTINGS,
-} from 'lbry-redux';
+} from 'redux/selectors/claims';
+import { doResolveUris } from 'redux/actions/claims';
+import * as SETTINGS from 'constants/settings';
 import { makeSelectChannelIsMuted } from 'redux/selectors/blocked';
 import { withRouter } from 'react-router';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';

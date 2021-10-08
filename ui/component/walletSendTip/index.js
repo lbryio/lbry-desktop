@@ -1,14 +1,13 @@
 import { connect } from 'react-redux';
 import {
-  doSendTip,
   makeSelectTitleForUri,
   makeSelectClaimForUri,
-  selectIsSendingSupport,
-  selectBalance,
-  SETTINGS,
   makeSelectClaimIsMine,
   selectFetchingMyChannels,
-} from 'lbry-redux';
+} from 'redux/selectors/claims';
+import { selectBalance, selectIsSendingSupport } from 'redux/selectors/wallet';
+import { doSendTip } from 'redux/actions/wallet';
+import * as SETTINGS from 'constants/settings';
 import WalletSendTip from './view';
 import { doOpenModal, doHideModal } from 'redux/actions/app';
 import { withRouter } from 'react-router';
@@ -31,7 +30,7 @@ const select = (state, props) => ({
   isAuthenticated: Boolean(selectUserVerifiedEmail(state)),
 });
 
-const perform = dispatch => ({
+const perform = (dispatch) => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
   closeModal: () => dispatch(doHideModal()),
   sendSupport: (params, isSupport) => dispatch(doSendTip(params, isSupport)),

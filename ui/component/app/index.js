@@ -5,13 +5,9 @@ import { selectGetSyncErrorMessage, selectSyncFatalError } from 'redux/selectors
 import { doFetchAccessToken, doUserSetReferrer } from 'redux/actions/user';
 import { selectUser, selectAccessToken, selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectUnclaimedRewards } from 'redux/selectors/rewards';
-import {
-  doFetchChannelListMine,
-  doFetchCollectionListMine,
-  SETTINGS,
-  selectMyChannelUrls,
-  doResolveUris,
-} from 'lbry-redux';
+import { doFetchChannelListMine, doFetchCollectionListMine, doResolveUris } from 'redux/actions/claims';
+import { selectMyChannelUrls } from 'redux/selectors/claims';
+import * as SETTINGS from 'constants/settings';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import {
   makeSelectClientSetting,

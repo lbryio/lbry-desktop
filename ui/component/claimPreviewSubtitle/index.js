@@ -3,10 +3,9 @@ import { connect } from 'react-redux';
 import {
   makeSelectClaimForUri,
   makeSelectClaimIsPending,
-  doClearPublish,
-  doPrepareEdit,
   makeSelectClaimIsStreamPlaceholder,
-} from 'lbry-redux';
+} from 'redux/selectors/claims';
+import { doClearPublish, doPrepareEdit } from 'redux/actions/publish';
 import { push } from 'connected-react-router';
 import ClaimPreviewSubtitle from './view';
 

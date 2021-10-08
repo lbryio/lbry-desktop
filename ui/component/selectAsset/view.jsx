@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import FileSelector from 'component/common/file-selector';
-import { SPEECH_URLS } from 'lbry-redux';
+import * as SPEECH_URLS from 'constants/speech_urls';
 import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
 import Card from 'component/common/card';
@@ -119,7 +119,7 @@ function SelectAsset(props: Props) {
             button="primary"
             type="submit"
             label={__('Done')}
-            disabled={!useUrl && ((uploadStatus === SPEECH_UPLOADING) || !pathSelected || !fileSelected)}
+            disabled={!useUrl && (uploadStatus === SPEECH_UPLOADING || !pathSelected || !fileSelected)}
             onClick={() => doUploadAsset()}
           />
         )}

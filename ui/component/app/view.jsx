@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState, useLayoutEffect } from 'react';
 import { lazyImport } from 'util/lazyImport';
 import classnames from 'classnames';
 import analytics from 'analytics';
-import { buildURI, parseURI } from 'lbry-redux';
+import { buildURI, parseURI } from 'util/lbryURI';
 import { SIMPLE_SITE } from 'config';
 import Router from 'component/router/index';
 import ReactModal from 'react-modal';

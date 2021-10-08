@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimForUri } from 'lbry-redux';
+import { makeSelectClaimForUri } from 'redux/selectors/claims';
 import { makeSelectViewCountForUri } from 'lbryinc';
 import { selectLanguage } from 'redux/selectors/settings';
 import FileViewCountInline from './view';

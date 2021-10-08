@@ -7,7 +7,7 @@ import { SORT_BY, COMMENT_PAGE_SIZE_REPLIES } from 'constants/comment';
 import { FF_MAX_CHARS_IN_COMMENT } from 'constants/form-field';
 import { SITE_NAME, SIMPLE_SITE, ENABLE_COMMENT_REACTIONS } from 'config';
 import React, { useEffect, useState } from 'react';
-import { parseURI } from 'lbry-redux';
+import { parseURI } from 'util/lbryURI';
 import DateTime from 'component/dateTime';
 import Button from 'component/button';
 import Expandable from 'component/expandable';

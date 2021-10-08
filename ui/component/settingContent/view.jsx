@@ -2,7 +2,7 @@
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import React from 'react';
-import { SETTINGS } from 'lbry-redux';
+import * as SETTINGS from 'constants/settings';
 import { Lbryio } from 'lbryinc';
 import { SIMPLE_SITE } from 'config';
 import * as MODALS from 'constants/modal_types';

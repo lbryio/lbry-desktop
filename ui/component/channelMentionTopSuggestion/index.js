@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import { makeSelectIsUriResolving, doResolveUri } from 'lbry-redux';
+import { makeSelectIsUriResolving } from 'redux/selectors/claims';
+import { doResolveUri } from 'redux/actions/claims';
 import { makeSelectWinningUriForQuery } from 'redux/selectors/search';
 import ChannelMentionTopSuggestion from './view';
 

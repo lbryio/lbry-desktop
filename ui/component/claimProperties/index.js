@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimIsMine, makeSelectClaimForUri } from 'lbry-redux';
+import { makeSelectClaimIsMine, makeSelectClaimForUri } from 'redux/selectors/claims';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
 import ClaimProperties from './view';
 

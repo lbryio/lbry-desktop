@@ -4,9 +4,9 @@ import ClaimList from 'component/claimList';
 import Card from 'component/common/card';
 import Button from 'component/button';
 import * as PAGES from 'constants/pages';
+import * as COLLECTIONS_CONSTS from 'constants/collections';
 import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
-import { COLLECTIONS_CONSTS } from 'lbry-redux';
 
 type Props = {
   id: string,

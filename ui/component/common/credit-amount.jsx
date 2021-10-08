@@ -2,7 +2,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import LbcSymbol from 'component/common/lbc-symbol';
-import { formatCredits, formatFullPrice } from 'lbry-redux';
+import { formatCredits, formatFullPrice } from 'util/format-credits';
 
 type Props = {
   amount: number,
@@ -80,7 +80,7 @@ class CreditAmount extends React.PureComponent<Props> {
       if (showLBC && !isFiat) {
         amountText = <LbcSymbol postfix={amountText} size={size} />;
       } else if (showLBC && isFiat) {
-        amountText = <p style={{display: 'inline'}}> ${(Math.round(Number(amountText) * 100) / 100).toFixed(2)}</p>;
+        amountText = <p style={{ display: 'inline' }}> ${(Math.round(Number(amountText) * 100) / 100).toFixed(2)}</p>;
       }
 
       if (fee) {

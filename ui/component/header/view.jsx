@@ -1,7 +1,7 @@
 // @flow
 import { ENABLE_NO_SOURCE_CLAIMS, CHANNEL_STAKED_LEVEL_LIVESTREAM, ENABLE_UI_NOTIFICATIONS } from 'config';
 import * as ICONS from 'constants/icons';
-import { SETTINGS } from 'lbry-redux';
+import * as SETTINGS from 'constants/settings';
 import * as PAGES from 'constants/pages';
 import React from 'react';
 import { withRouter } from 'react-router';

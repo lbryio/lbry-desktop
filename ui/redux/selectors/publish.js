@@ -1,42 +1,54 @@
 import { createSelector } from 'reselect';
-import { parseURI, selectClaimsById, selectMyClaimsWithoutChannels, selectResolvingUris, buildURI } from 'lbry-redux';
+import { parseURI, buildURI } from 'util/lbryURI';
+import {
+  selectClaimsById,
+  selectMyClaimsWithoutChannels,
+  selectResolvingUris,
+  selectClaimsByUri,
+} from 'redux/selectors/claims';
 
-const selectState = state => state.publish || {};
+const selectState = (state) => state.publish || {};
+
+export const selectIsStillEditing = createSelector(selectState, (publishState) => {
+  const { editingURI, uri } = publishState;
+
+  if (!editingURI || !uri) {
+    return false;
+  }
+
+  const { isChannel: currentIsChannel, streamName: currentClaimName, channelName: currentContentName } = parseURI(uri);
+  const { isChannel: editIsChannel, streamName: editClaimName, channelName: editContentName } = parseURI(editingURI);
+
+  // Depending on the previous/current use of a channel, we need to compare different things
+  // ex: going from a channel to anonymous, the new uri won't return contentName, so we need to use claimName
+  const currentName = currentIsChannel ? currentContentName : currentClaimName;
+  const editName = editIsChannel ? editContentName : editClaimName;
+  return currentName === editName;
+});
 
 export const selectPublishFormValues = createSelector(
   selectState,
-  state => {
-    const { pendingPublish, ...formValues } = state;
-    return formValues;
-  }
-);
+  (state) => state.settings,
+  selectIsStillEditing,
+  (publishState, settingsState, isStillEditing) => {
+    const { languages, ...formValues } = publishState;
+    const language = languages && languages.length && languages[0];
+    const { clientSettings } = settingsState;
+    const { language: languageSet } = clientSettings;
 
-export const makeSelectPublishFormValue = item =>
-  createSelector(
-    selectState,
-    state => state[item]
-  );
-
-// Is the current uri the same as the uri they clicked "edit" on
-export const selectIsStillEditing = createSelector(
-  selectPublishFormValues,
-  publishState => {
-    const { editingURI, uri } = publishState;
-
-    if (!editingURI || !uri) {
-      return false;
+    let actualLanguage;
+    // Sets default if editing a claim with a set language
+    if (!language && isStillEditing && languageSet) {
+      actualLanguage = languageSet;
+    } else {
+      actualLanguage = language || languageSet || 'en';
     }
 
-    const { isChannel: currentIsChannel, claimName: currentClaimName, contentName: currentContentName } = parseURI(uri);
-    const { isChannel: editIsChannel, claimName: editClaimName, contentName: editContentName } = parseURI(editingURI);
-
-    // Depending on the previous/current use of a channel, we need to compare different things
-    // ex: going from a channel to anonymous, the new uri won't return contentName, so we need to use claimName
-    const currentName = currentIsChannel ? currentContentName : currentClaimName;
-    const editName = editIsChannel ? editContentName : editClaimName;
-    return currentName === editName;
+    return { ...formValues, language: actualLanguage };
   }
 );
+
+export const makeSelectPublishFormValue = (item) => createSelector(selectState, (state) => state[item]);
 
 export const selectMyClaimForUri = createSelector(
   selectPublishFormValues,
@@ -44,8 +56,8 @@ export const selectMyClaimForUri = createSelector(
   selectClaimsById,
   selectMyClaimsWithoutChannels,
   ({ editingURI, uri }, isStillEditing, claimsById, myClaims) => {
-    const { contentName, claimName } = parseURI(uri);
-    const { claimId: editClaimId } = parseURI(editingURI);
+    const { channelName: contentName, streamName: claimName } = parseURI(uri);
+    const { streamClaimId: editClaimId } = parseURI(editingURI);
 
     // If isStillEditing
     // They clicked "edit" from the file page
@@ -53,7 +65,7 @@ export const selectMyClaimForUri = createSelector(
     // Get the claim so they can edit without re-uploading a new file
     return isStillEditing
       ? claimsById[editClaimId]
-      : myClaims.find(claim =>
+      : myClaims.find((claim) =>
           !contentName ? claim.name === claimName : claim.name === contentName || claim.name === claimName
         );
   }
@@ -68,8 +80,8 @@ export const selectIsResolvingPublishUris = createSelector(
       const { isChannel } = parseURI(uri);
 
       let isResolvingShortUri;
-      if (isChannel) {
-        const shortUri = buildURI({ contentName: name });
+      if (isChannel && name) {
+        const shortUri = buildURI({ streamName: name });
         isResolvingShortUri = resolvingUris.includes(shortUri);
       }
 
@@ -77,5 +89,33 @@ export const selectIsResolvingPublishUris = createSelector(
     }
 
     return false;
+  }
+);
+
+export const selectTakeOverAmount = createSelector(
+  selectState,
+  selectMyClaimForUri,
+  selectClaimsByUri,
+  ({ name }, myClaimForUri, claimsByUri) => {
+    if (!name) {
+      return null;
+    }
+
+    // We only care about the winning claim for the short uri
+    const shortUri = buildURI({ streamName: name });
+    const claimForShortUri = claimsByUri[shortUri];
+
+    if (!myClaimForUri && claimForShortUri) {
+      return claimForShortUri.meta.effective_amount;
+    } else if (myClaimForUri && claimForShortUri) {
+      // https://github.com/lbryio/lbry/issues/1476
+      // We should check the current effective_amount on my claim to see how much additional lbc
+      // is needed to win the claim. Currently this is not possible during a takeover.
+      // With this, we could say something like, "You have x lbc in support, if you bid y additional LBC you will control the claim"
+      // For now just ignore supports. We will just show the winning claim's bid amount
+      return claimForShortUri.meta.effective_amount || claimForShortUri.amount;
+    }
+
+    return null;
   }
 );

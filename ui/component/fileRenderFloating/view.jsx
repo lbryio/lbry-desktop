@@ -15,7 +15,7 @@ import { generateListSearchUrlParams, formatLbryUrlForWeb } from 'util/url';
 import { useIsMobile } from 'effects/use-screensize';
 import debounce from 'util/debounce';
 import { useHistory } from 'react-router';
-import { isURIEqual } from 'lbry-redux';
+import { isURIEqual } from 'util/lbryURI';
 import AutoplayCountdown from 'component/autoplayCountdown';
 
 const IS_DESKTOP_MAC = typeof process === 'object' ? process.platform === 'darwin' : false;

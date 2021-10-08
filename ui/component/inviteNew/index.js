@@ -7,7 +7,8 @@ import {
   selectUserInviteReferralCode,
 } from 'redux/selectors/user';
 import { doUserInviteNew } from 'redux/actions/user';
-import { selectMyChannelClaims, selectFetchingMyChannels, doFetchChannelListMine } from 'lbry-redux';
+import { selectMyChannelClaims, selectFetchingMyChannels } from 'redux/selectors/claims';
+import { doFetchChannelListMine } from 'redux/actions/claims';
 import InviteNew from './view';
 
 const select = (state) => ({

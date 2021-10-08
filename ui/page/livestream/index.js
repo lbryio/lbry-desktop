@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import { doResolveUri, makeSelectTagInClaimOrChannelForUri, makeSelectClaimForUri } from 'lbry-redux';
+import { makeSelectTagInClaimOrChannelForUri, makeSelectClaimForUri } from 'redux/selectors/claims';
+import { doResolveUri } from 'redux/actions/claims';
 import { doSetPlayingUri } from 'redux/actions/content';
 import { doUserSetReferrer } from 'redux/actions/user';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';

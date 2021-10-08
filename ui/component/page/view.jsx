@@ -12,7 +12,7 @@ import StatusBar from 'component/common/status-bar';
 import usePersistedState from 'effects/use-persisted-state';
 import { useHistory } from 'react-router';
 import { useIsMobile, useIsMediumScreen } from 'effects/use-screensize';
-import { parseURI } from 'lbry-redux';
+import { parseURI } from 'util/lbryURI';
 
 const Footer = lazyImport(() => import('web/component/footer' /* webpackChunkName: "secondary" */));
 

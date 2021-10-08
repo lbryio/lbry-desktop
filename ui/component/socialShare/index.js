@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimForUri, makeSelectTitleForUri } from 'lbry-redux';
+import { makeSelectClaimForUri, makeSelectTitleForUri } from 'redux/selectors/claims';
 import SocialShare from './view';
 import { selectUserInviteReferralCode, selectUser } from 'redux/selectors/user';
 import { makeSelectContentPositionForUri } from 'redux/selectors/content';

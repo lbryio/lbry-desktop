@@ -1,6 +1,7 @@
 import * as ACTIONS from 'constants/action_types';
+import * as SETTINGS from 'constants/settings';
+import * as SHARED_PREFERENCES from 'constants/shared_preferences';
 import moment from 'moment';
-import { ACTIONS as LBRY_REDUX_ACTIONS, SETTINGS, SHARED_PREFERENCES } from 'lbry-redux';
 import { getSubsetFromKeysArray } from 'util/sync-settings';
 import { getDefaultLanguage } from 'util/default-languages';
 import { UNSYNCED_SETTINGS, SIMPLE_SITE } from 'config';
@@ -102,12 +103,12 @@ reducers[ACTIONS.FINDING_FFMPEG_COMPLETED] = (state) =>
     findingFFmpeg: false,
   });
 
-reducers[LBRY_REDUX_ACTIONS.DAEMON_SETTINGS_RECEIVED] = (state, action) =>
+reducers[ACTIONS.DAEMON_SETTINGS_RECEIVED] = (state, action) =>
   Object.assign({}, state, {
     daemonSettings: action.data.settings,
   });
 
-reducers[LBRY_REDUX_ACTIONS.DAEMON_STATUS_RECEIVED] = (state, action) =>
+reducers[ACTIONS.DAEMON_STATUS_RECEIVED] = (state, action) =>
   Object.assign({}, state, {
     daemonStatus: action.data.status,
   });
@@ -148,7 +149,7 @@ reducers[ACTIONS.DOWNLOAD_LANGUAGE_SUCCESS] = (state, action) => {
   }
 };
 
-reducers[LBRY_REDUX_ACTIONS.SHARED_PREFERENCE_SET] = (state, action) => {
+reducers[ACTIONS.SHARED_PREFERENCE_SET] = (state, action) => {
   const { key, value } = action.data;
   const sharedPreferences = Object.assign({}, state.sharedPreferences);
   sharedPreferences[key] = value;
@@ -166,7 +167,7 @@ reducers[ACTIONS.SYNC_CLIENT_SETTINGS] = (state) => {
   return Object.assign({}, state, { sharedPreferences: newSharedPreferences });
 };
 
-reducers[LBRY_REDUX_ACTIONS.USER_STATE_POPULATE] = (state, action) => {
+reducers[ACTIONS.USER_STATE_POPULATE] = (state, action) => {
   const { clientSettings: currentClientSettings } = state;
   const { settings: sharedPreferences } = action.data;
   const selectedSettings = sharedPreferences ? getSubsetFromKeysArray(sharedPreferences, clientSyncKeys) : {};
@@ -185,7 +186,7 @@ reducers[LBRY_REDUX_ACTIONS.USER_STATE_POPULATE] = (state, action) => {
   });
 };
 
-reducers[LBRY_REDUX_ACTIONS.SAVE_CUSTOM_WALLET_SERVERS] = (state, action) => {
+reducers[ACTIONS.SAVE_CUSTOM_WALLET_SERVERS] = (state, action) => {
   return Object.assign({}, state, { customWalletServers: action.data });
 };
 

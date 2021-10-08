@@ -1,7 +1,7 @@
 // @flow
 import type { Node } from 'react';
 import React from 'react';
-import { createNormalizedClaimSearchKey } from 'lbry-redux';
+import { createNormalizedClaimSearchKey } from 'util/claim';
 import ClaimPreviewTile from 'component/claimPreviewTile';
 import useFetchViewCount from 'effects/use-fetch-view-count';
 import usePrevious from 'effects/use-previous';

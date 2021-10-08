@@ -2,7 +2,8 @@ import { connect } from 'react-redux';
 import { doReportContent } from 'redux/actions/reportContent';
 import { selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
 import { selectIsReportingContent, selectReportContentError } from 'redux/selectors/reportContent';
-import { makeSelectClaimForClaimId, doClaimSearch } from 'lbry-redux';
+import { doClaimSearch } from 'redux/actions/claims';
+import { makeSelectClaimForClaimId } from 'redux/selectors/claims';
 import { withRouter } from 'react-router';
 import ReportContent from './view';
 

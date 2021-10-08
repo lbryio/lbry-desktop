@@ -1,5 +1,7 @@
 import { connect } from 'react-redux';
-import { makeSelectThumbnailForUri, doResolveUri, makeSelectClaimForUri, SETTINGS } from 'lbry-redux';
+import { makeSelectThumbnailForUri, makeSelectClaimForUri } from 'redux/selectors/claims';
+import { doResolveUri } from 'redux/actions/claims';
+import * as SETTINGS from 'constants/settings';
 import { doFetchCostInfoForUri, makeSelectCostInfoForUri } from 'lbryinc';
 import { doPlayUri, doSetPlayingUri } from 'redux/actions/content';
 import { doAnaltyicsPurchaseEvent } from 'redux/actions/app';

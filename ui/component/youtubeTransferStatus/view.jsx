@@ -7,7 +7,7 @@ import Button from 'component/button';
 import ClaimPreview from 'component/claimPreview';
 import Card from 'component/common/card';
 import { YOUTUBE_STATUSES } from 'lbryinc';
-import { buildURI } from 'lbry-redux';
+import { buildURI } from 'util/lbryURI';
 import Spinner from 'component/spinner';
 import Icon from 'component/common/icon';
 import I18nMessage from 'component/i18nMessage';

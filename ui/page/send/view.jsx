@@ -4,7 +4,7 @@ import Page from 'component/page';
 import LbcSymbol from 'component/common/lbc-symbol';
 import WalletSend from 'component/walletSend';
 import { URL as SITE_URL, URL_LOCAL, URL_DEV } from 'config';
-import { parseURI, isNameValid, isURIValid, normalizeURI } from 'lbry-redux';
+import { parseURI, isNameValid, isURIValid, normalizeURI } from 'util/lbryURI';
 
 type Props = {};
 
@@ -31,7 +31,7 @@ export default function SendPage(props: Props) {
     const isLbryUrl = value.startsWith('lbry://') && value !== 'lbry://';
     const error = '';
 
-    const addLbryIfNot = term => {
+    const addLbryIfNot = (term) => {
       return term.startsWith('lbry://') ? term : `lbry://${term}`;
     };
     if (wasCopiedFromWeb) {

@@ -1,6 +1,6 @@
 // @flow
 import { createSelector } from 'reselect';
-import { splitBySeparator } from 'lbry-redux';
+import { splitBySeparator } from 'util/lbryURI';
 
 const selectState = (state: { blocked: BlocklistState }) => state.blocked || {};
 

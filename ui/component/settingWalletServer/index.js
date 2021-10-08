@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import { DAEMON_SETTINGS, selectIsWalletReconnecting } from 'lbry-redux';
+import { selectIsWalletReconnecting } from 'redux/selectors/wallet';
+import * as DAEMON_SETTINGS from 'constants/daemon_settings';
 import {
   doSetDaemonSetting,
   doClearDaemonSetting,
@@ -9,21 +10,18 @@ import {
 import { selectSavedWalletServers, selectDaemonStatus, selectHasWalletServerPrefs } from 'redux/selectors/settings';
 import SettingWalletServer from './view';
 
-const select = state => ({
+const select = (state) => ({
   daemonStatus: selectDaemonStatus(state),
   customWalletServers: selectSavedWalletServers(state),
   hasWalletServerPrefs: selectHasWalletServerPrefs(state),
   walletReconnecting: selectIsWalletReconnecting(state),
 });
 
-const perform = dispatch => ({
-  setCustomWalletServers: value => dispatch(doSetDaemonSetting(DAEMON_SETTINGS.LBRYUM_SERVERS, value)),
+const perform = (dispatch) => ({
+  setCustomWalletServers: (value) => dispatch(doSetDaemonSetting(DAEMON_SETTINGS.LBRYUM_SERVERS, value)),
   clearWalletServers: () => dispatch(doClearDaemonSetting(DAEMON_SETTINGS.LBRYUM_SERVERS)),
   getDaemonStatus: () => dispatch(doGetDaemonStatus()),
-  saveServerConfig: servers => dispatch(doSaveCustomWalletServers(servers)),
+  saveServerConfig: (servers) => dispatch(doSaveCustomWalletServers(servers)),
 });
 
-export default connect(
-  select,
-  perform
-)(SettingWalletServer);
+export default connect(select, perform)(SettingWalletServer);

@@ -1,6 +1,8 @@
 import * as CS from 'constants/claim_search';
 import { connect } from 'react-redux';
-import { makeSelectClaimForUri, doResolveUri, SETTINGS } from 'lbry-redux';
+import { doResolveUri } from 'redux/actions/claims';
+import { makeSelectClaimForUri } from 'redux/selectors/claims';
+import * as SETTINGS from 'constants/settings';
 import { doFetchActiveLivestreams } from 'redux/actions/livestream';
 import { selectActiveLivestreams } from 'redux/selectors/livestream';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';

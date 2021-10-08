@@ -1,6 +1,6 @@
 import REWARD_TYPES from 'rewards';
 import { connect } from 'react-redux';
-import { selectBalance } from 'lbry-redux';
+import { selectBalance } from 'redux/selectors/wallet';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { doClaimRewardType } from 'redux/actions/rewards';
 import ChannelNew from './view';

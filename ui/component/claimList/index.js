@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import ClaimList from './view';
-import { SETTINGS } from 'lbry-redux';
+import * as SETTINGS from 'constants/settings';
+
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 
 const select = (state) => ({

@@ -10,7 +10,8 @@ import Page from 'component/page';
 import Button from 'component/button';
 import Card from 'component/common/card';
 import { formatLbryUrlForWeb } from 'util/url';
-import { parseURI, COLLECTIONS_CONSTS } from 'lbry-redux';
+import { parseURI } from 'util/lbryURI';
+import * as COLLECTIONS_CONSTS from 'constants/collections';
 
 const AbandonedChannelPreview = lazyImport(() =>
   import('component/abandonedChannelPreview' /* webpackChunkName: "abandonedChannelPreview" */)

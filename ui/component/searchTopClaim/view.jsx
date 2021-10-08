@@ -2,7 +2,7 @@
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import React from 'react';
-import { parseURI } from 'lbry-redux';
+import { parseURI } from 'util/lbryURI';
 import ClaimPreview from 'component/claimPreview';
 import Button from 'component/button';
 import ClaimEffectiveAmount from 'component/claimEffectiveAmount';

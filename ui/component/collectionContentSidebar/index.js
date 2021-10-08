@@ -1,12 +1,11 @@
 import { connect } from 'react-redux';
 import CollectionContent from './view';
+import { makeSelectClaimForUri, makeSelectClaimIsMine } from 'redux/selectors/claims';
 import {
   makeSelectUrlsForCollectionId,
   makeSelectNameForCollectionId,
   makeSelectCollectionForId,
-  makeSelectClaimForUri,
-  makeSelectClaimIsMine,
-} from 'lbry-redux';
+} from 'redux/selectors/collections';
 import { selectPlayingUri, selectListLoop, selectListShuffle } from 'redux/selectors/content';
 import { doToggleLoopList, doToggleShuffleList } from 'redux/actions/content';
 

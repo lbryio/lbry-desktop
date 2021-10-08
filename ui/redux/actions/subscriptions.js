@@ -3,7 +3,7 @@ import * as ACTIONS from 'constants/action_types';
 import REWARDS from 'rewards';
 import { Lbryio } from 'lbryinc';
 import { doClaimRewardType } from 'redux/actions/rewards';
-import { parseURI } from 'lbry-redux';
+import { parseURI } from 'util/lbryURI';
 import { doAlertWaitingForSync } from 'redux/actions/app';
 import { doToast } from 'redux/actions/notifications';
 
@@ -13,7 +13,11 @@ type SubscriptionArgs = {
   notificationsDisabled?: boolean,
 };
 
-export function doToggleSubscription(subscription: SubscriptionArgs, followToast: boolean, isSubscribed: boolean = false) {
+export function doToggleSubscription(
+  subscription: SubscriptionArgs,
+  followToast: boolean,
+  isSubscribed: boolean = false
+) {
   return async (dispatch: Dispatch, getState: GetState) => {
     const {
       settings: { daemonSettings },
@@ -59,9 +63,13 @@ export function doToggleSubscription(subscription: SubscriptionArgs, followToast
       }
     }
     if (followToast) {
-      dispatch(doToast({
-        message: __(!isSubscribed ? 'You followed %CHANNEL_NAME%!' : 'Unfollowed %CHANNEL_NAME%.', { CHANNEL_NAME: subscription.channelName }),
-      }));
+      dispatch(
+        doToast({
+          message: __(!isSubscribed ? 'You followed %CHANNEL_NAME%!' : 'Unfollowed %CHANNEL_NAME%.', {
+            CHANNEL_NAME: subscription.channelName,
+          }),
+        })
+      );
     }
   };
 }

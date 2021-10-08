@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectTitleForUri } from 'lbry-redux';
+import { makeSelectTitleForUri } from 'redux/selectors/claims';
 import FileTitleSection from './view';
 
 const select = (state, props) => ({

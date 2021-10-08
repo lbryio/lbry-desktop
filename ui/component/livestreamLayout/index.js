@@ -1,5 +1,9 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimForUri, makeSelectTagInClaimOrChannelForUri, makeSelectThumbnailForUri } from 'lbry-redux';
+import {
+  makeSelectClaimForUri,
+  makeSelectTagInClaimOrChannelForUri,
+  makeSelectThumbnailForUri,
+} from 'redux/selectors/claims';
 import LivestreamLayout from './view';
 import { DISABLE_COMMENTS_TAG } from 'constants/tags';
 

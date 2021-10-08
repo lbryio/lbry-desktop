@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import Button from 'component/button';
-import { buildURI } from 'lbry-redux';
+import { buildURI } from 'util/lbryURI';
 import I18nMessage from 'component/i18nMessage';
 
 type Props = {

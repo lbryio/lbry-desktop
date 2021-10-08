@@ -3331,20 +3331,6 @@ latest-version@^3.0.0:
   dependencies:
     package-json "^4.0.0"
 
-lbry-redux@lbryio/lbry-redux#508e8d36fd91106beb7d6b4edb9f726dae0e6264:
-  version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/508e8d36fd91106beb7d6b4edb9f726dae0e6264"
-  dependencies:
-    proxy-polyfill "0.1.6"
-    reselect "^3.0.0"
-    uuid "^8.3.1"
-
-lbryinc@lbryio/lbryinc#8f9a58bfc8312a65614fd7327661cdcc502c4e59:
-  version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbryinc/tar.gz/8f9a58bfc8312a65614fd7327661cdcc502c4e59"
-  dependencies:
-    reselect "^3.0.0"
-
 lcid@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/lcid/-/lcid-2.0.0.tgz#6ef5d2df60e52f82eb228a4c373e8d1f397253cf"
@@ -4290,11 +4276,6 @@ proxy-addr@~2.0.5:
     forwarded "~0.1.2"
     ipaddr.js "1.9.0"
 
-proxy-polyfill@0.1.6:
-  version "0.1.6"
-  resolved "https://registry.yarnpkg.com/proxy-polyfill/-/proxy-polyfill-0.1.6.tgz#ef41ec6c66f534db15db36c54493a62d184b364e"
-  integrity sha1-70HsbGb1NNsV2zbFRJOmLRhLNk4=
-
 prr@~1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/prr/-/prr-1.0.1.tgz#d3fc114ba06995a45ec6893f484ceb1d78f5f476"
@@ -4560,11 +4541,6 @@ requires-port@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/requires-port/-/requires-port-1.0.0.tgz#925d2601d39ac485e091cf0da5c6e694dc3dcaff"
   integrity sha1-kl0mAdOaxIXgkc8NpcbmlNw9yv8=
-
-reselect@^3.0.0:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/reselect/-/reselect-3.0.1.tgz#efdaa98ea7451324d092b2b2163a6a1d7a9a2147"
-  integrity sha1-79qpjqdFEyTQkrKyFjpqHXqaIUc=
 
 resolve-cwd@^2.0.0:
   version "2.0.0"
@@ -5415,11 +5391,6 @@ uuid@^8.3.0:
   version "8.3.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.0.tgz#ab738085ca22dc9a8c92725e459b1d507df5d6ea"
   integrity sha512-fX6Z5o4m6XsXBdli9g7DtWgAx+osMsRRZFKma1mIUsLCz6vRvv+pz5VNbyu9UEDzpMWulZfvpgb/cmDXVulYFQ==
-
-uuid@^8.3.1:
-  version "8.3.2"
-  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
-  integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
 
 vary@^1.1.2, vary@~1.1.2:
   version "1.1.2"

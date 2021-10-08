@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import {
-  doResolveUri,
   makeSelectClaimForUri,
   makeSelectIsUriResolving,
   makeSelectThumbnailForUri,
@@ -9,7 +8,9 @@ import {
   makeSelectClaimIsNsfw,
   makeSelectClaimIsStreamPlaceholder,
   makeSelectDateForUri,
-} from 'lbry-redux';
+} from 'redux/selectors/claims';
+import { doFileGet } from 'redux/actions/file';
+import { doResolveUri } from 'redux/actions/claims';
 import { selectMutedChannels } from 'redux/selectors/blocked';
 import { makeSelectViewCountForUri, selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
 import { makeSelectIsActiveLivestream } from 'redux/selectors/livestream';

@@ -8,7 +8,7 @@ import Card from 'component/common/card';
 import { useIsMobile, useIsMediumScreen } from 'effects/use-screensize';
 import Button from 'component/button';
 import classnames from 'classnames';
-import RecSys from 'recsys';
+import RecSys from 'extras/recsys/recsys';
 
 const VIEW_ALL_RELATED = 'view_all_related';
 const VIEW_MORE_FROM = 'view_more_from';

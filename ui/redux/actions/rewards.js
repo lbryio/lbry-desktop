@@ -1,5 +1,7 @@
 import { Lbryio } from 'lbryinc';
-import { ACTIONS, doToast, doUpdateBalance } from 'lbry-redux';
+import { doUpdateBalance } from 'redux/actions/wallet';
+import { doToast } from 'redux/actions/notifications';
+import * as ACTIONS from 'constants/action_types';
 import { selectUnclaimedRewards } from 'redux/selectors/rewards';
 import { selectUserIsRewardApproved } from 'redux/selectors/user';
 import { doFetchInviteStatus } from 'redux/actions/user';

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import fileViewerEmbeddedTitle from './view';
-import { makeSelectTagInClaimOrChannelForUri, makeSelectTitleForUri } from 'lbry-redux';
+import { makeSelectTagInClaimOrChannelForUri, makeSelectTitleForUri } from 'redux/selectors/claims';
 import { PREFERENCE_EMBED } from 'constants/tags';
 
 export default connect((state, props) => {

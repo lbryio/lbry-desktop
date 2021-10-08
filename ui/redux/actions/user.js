@@ -1,11 +1,9 @@
-import {
-  Lbry,
-  doFetchChannelListMine,
-  batchActions,
-  makeSelectClaimForUri,
-  isURIValid,
-  normalizeURI,
-} from 'lbry-redux';
+import Lbry from 'lbry';
+import { makeSelectClaimForUri } from 'redux/selectors/claims';
+import { doFetchChannelListMine } from 'redux/actions/claims';
+import { isURIValid, normalizeURI } from 'util/lbryURI';
+import { batchActions } from 'util/batch-actions';
+
 import * as ACTIONS from 'constants/action_types';
 import { doClaimRewardType, doRewardList } from 'redux/actions/rewards';
 import { selectEmailToVerify, selectPhoneToVerify, selectUserCountryCode, selectUser } from 'redux/selectors/user';
@@ -101,7 +99,7 @@ export function doInstallNewWithParams(
 
 function checkAuthBusy() {
   let time = Date.now();
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     (function waitForAuth() {
       try {
         sessionStorage.setItem('test', 'available');

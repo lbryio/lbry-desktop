@@ -2,7 +2,7 @@
 import * as ACTIONS from 'constants/action_types';
 import { handleActions } from 'util/redux-utils';
 import { BLOCK_LEVEL } from 'constants/comment';
-import { isURIEqual } from 'lbry-redux';
+import { isURIEqual } from 'util/lbryURI';
 
 const defaultState: CommentsState = {
   commentById: {}, // commentId -> Comment

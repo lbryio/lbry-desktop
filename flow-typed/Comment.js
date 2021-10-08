@@ -177,7 +177,7 @@ declare type CommentCreateParams = {
   claim_id: string,
   parent_id?: string,
   signature: string,
-  signing_ts: number,
+  signing_ts: string,
   support_tx_id?: string,
 };
 

@@ -1,5 +1,4 @@
-import { ACTIONS } from 'lbry-redux';
-
+import * as ACTIONS from 'constants/action_types';
 const reducers = {};
 const defaultState = {
   fetching: false,
@@ -10,7 +9,7 @@ const defaultState = {
   rewardedContentClaimIds: [],
 };
 
-reducers[ACTIONS.FETCH_REWARDS_STARTED] = state =>
+reducers[ACTIONS.FETCH_REWARDS_STARTED] = (state) =>
   Object.assign({}, state, {
     fetching: true,
   });
@@ -20,7 +19,7 @@ reducers[ACTIONS.FETCH_REWARDS_COMPLETED] = (state, action) => {
 
   const unclaimedRewards = [];
   const claimedRewards = {};
-  userRewards.forEach(reward => {
+  userRewards.forEach((reward) => {
     if (reward.transaction_id) {
       claimedRewards[reward.id] = reward;
     } else {
@@ -70,7 +69,7 @@ reducers[ACTIONS.CLAIM_REWARD_SUCCESS] = (state, action) => {
   const { reward } = action.data;
   const { unclaimedRewards } = state;
 
-  const index = unclaimedRewards.findIndex(ur => ur.claim_code === reward.claim_code);
+  const index = unclaimedRewards.findIndex((ur) => ur.claim_code === reward.claim_code);
   unclaimedRewards.splice(index, 1);
 
   const { claimedRewardsById } = state;

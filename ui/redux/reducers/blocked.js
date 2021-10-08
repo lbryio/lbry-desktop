@@ -1,6 +1,5 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
-import { ACTIONS as LBRY_REDUX_ACTIONS } from 'lbry-redux';
 import { handleActions } from 'util/redux-utils';
 
 const defaultState: BlocklistState = {
@@ -24,10 +23,7 @@ export default handleActions(
         blockedChannels: newBlockedChannels,
       };
     },
-    [LBRY_REDUX_ACTIONS.USER_STATE_POPULATE]: (
-      state: BlocklistState,
-      action: { data: { blocked: ?Array<string> } }
-    ) => {
+    [ACTIONS.USER_STATE_POPULATE]: (state: BlocklistState, action: { data: { blocked: ?Array<string> } }) => {
       const { blocked } = action.data;
       const sanitizedBlocked = blocked && blocked.filter((e) => typeof e === 'string');
       return {

@@ -3,15 +3,15 @@ import { doSetClientSetting } from 'redux/actions/settings';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { selectEmailToVerify, selectUser } from 'redux/selectors/user';
 import FirstRunEmailCollection from './view';
-import { SETTINGS } from 'lbry-redux';
+import * as SETTINGS from 'constants/settings';
 
-const select = state => ({
+const select = (state) => ({
   emailCollectionAcknowledged: makeSelectClientSetting(SETTINGS.EMAIL_COLLECTION_ACKNOWLEDGED)(state),
   email: selectEmailToVerify(state),
   user: selectUser(state),
 });
 
-const perform = dispatch => () => ({
+const perform = (dispatch) => () => ({
   acknowledgeEmail: () => {
     dispatch(doSetClientSetting(SETTINGS.EMAIL_COLLECTION_ACKNOWLEDGED, true));
   },
