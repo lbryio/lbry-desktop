@@ -32,8 +32,6 @@ function DownloadProgress({ byOutpoint, primary, playing, currentTheme, stopDown
     cancelHash[hash] = value;
   };
 
-  useEffect(() => {}, []);
-
   const handleStopDownload = (outpoint) => {
     const updated = [...downloading];
     removeItem(updated, outpoint);
@@ -42,7 +40,7 @@ function DownloadProgress({ byOutpoint, primary, playing, currentTheme, stopDown
   };
 
   const runningByOutpoint = {};
-  const updateDownloading = [...downloading];
+  const currentDownloading = [...downloading];
 
   for (const key in byOutpoint) {
     const item = byOutpoint[key];
@@ -53,18 +51,18 @@ function DownloadProgress({ byOutpoint, primary, playing, currentTheme, stopDown
     .filter((outpoint) => downloading.indexOf(outpoint) === -1)
     .map((outpoint) => {
       if (primary.outpoint !== outpoint && playing.outpoint !== outpoint) {
-        updateDownloading.push(outpoint);
+        currentDownloading.push(outpoint);
       }
     });
 
   downloading
     .filter((outpoint) => (byOutpoint[outpoint] && byOutpoint[outpoint].status !== 'running') || !byOutpoint[outpoint])
     .map((outpoint) => {
-      removeItem(updateDownloading, outpoint);
+      removeItem(currentDownloading, outpoint);
     });
-  if (!areEqual(downloading, updateDownloading)) setDownloading(updateDownloading);
+  if (!areEqual(downloading, currentDownloading)) setDownloading(currentDownloading);
 
-  if (updateDownloading.length === 0) return null;
+  if (currentDownloading.length === 0) return null;
 
   if (playing.outpoint !== prevPlaying.outpoint) {
     if (downloading.includes(prevPlaying.outpoint)) {
@@ -84,7 +82,7 @@ function DownloadProgress({ byOutpoint, primary, playing, currentTheme, stopDown
     setPrevPrimary(primary);
   }
 
-  updateDownloading.map((outpoint) => {
+  currentDownloading.map((outpoint) => {
     if (!initDownloadingHash[outpoint]) {
       initDownloadingHash[outpoint] = true;
       doContinueDownloading(outpoint, false);
@@ -102,7 +100,7 @@ function DownloadProgress({ byOutpoint, primary, playing, currentTheme, stopDown
         >
           <div className="download-progress__current-downloading">
             <span className="notification__bubble">
-              <span className="notification__count">{updateDownloading.length}</span>
+              <span className="notification__count">{currentDownloading.length}</span>
             </span>
           </div>
         </Button>
@@ -116,7 +114,7 @@ function DownloadProgress({ byOutpoint, primary, playing, currentTheme, stopDown
         <div />
       </Button>
 
-      {updateDownloading.map((outpoint, index) => {
+      {currentDownloading.map((outpoint, index) => {
         const item = runningByOutpoint[outpoint];
         let releaseTime = '';
         let isPlaying = false;

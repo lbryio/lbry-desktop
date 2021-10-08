@@ -7,8 +7,8 @@
   display: flex;
   flex-direction: column;
   background-color: var(--color-header-background); //var(--color-gray-9):dark-mode
-  border-radius: 10px;
-  border: 1px solid var(--color-gray-3);
+  border-radius: var(--border-radius);
+  // border: 1px solid var(--color-gray-3);
   z-index: 9999;
 }
 .download-progress__top-close-button {
@@ -23,7 +23,7 @@
     height: 2px;
     width: 13px;
     background-color: var(--color-gray-4);
-    border-radius: 3px;
+    border-radius: var(--border-radius);
   }
 }
 .download-progress__state-container {
@@ -76,10 +76,10 @@
   width: 100%;
   background-color: var(--color-gray-5);
   height: 6px;
-  border-radius: 10px;
+  border-radius: var(--border-radius);
 }
 .download-progress__bar-content {
-  border-radius: 10px;
+  border-radius: var(--border-radius);
   height: 100%;
   background-color: var(--color-primary);
 }
@@ -92,8 +92,8 @@
 .download-progress__playing-button {
   flex-shrink: 0;
   margin-left: auto;
-  width: 25px;
-  height: 25px;
+  width: 29.6px;
+  height: 29.6px;
 }
 .download-progress__count-time {
   font-size: 11px;
@@ -144,7 +144,7 @@
   right: 10px;
   width: 400px;
   height: 300px;
-  border-radius: 10px;
+  border-radius: var(--border-radius);
   box-shadow: 2px 2px 5px var(--color-gray-4);
   background-color: var(--color-white);
   transition: width 2s;
@@ -158,7 +158,7 @@
   color: var(--color-gray-6);
   width: 50px;
   height: 50px;
-  border-radius: 10px;
+  border-radius: var(--border-radius);
   box-shadow: 0px 5px 4px var(--color-gray-4);
   display: flex;
   justify-content: center;
@@ -183,6 +183,33 @@
   animation-name: downloadcount;
   animation-duration: 1.3s;
   animation-iteration-count: infinite;
+
+  .notification__bubble {
+    height: 1.5rem;
+    width: 1.5rem;
+    border-radius: 50%;
+    background-color: var(--color-editor-tag);
+    position: absolute;
+    top: -0.5rem;
+    right: -0.5rem;
+    color: white;
+    font-size: var(--font-small);
+    font-weight: bold;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .notification__bubble--small {
+    font-size: var(--font-xsmall);
+  }
+
+  .notification__bubble--inline {
+    @extend .notification__bubble;
+    top: 0.75rem;
+    right: 1rem;
+  }
 }
 @keyframes downloadcount {
   0% {
