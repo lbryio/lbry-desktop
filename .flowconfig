@@ -42,6 +42,7 @@ module.name_mapper='^web\/effects\(.*\)$' -> '<PROJECT_ROOT>/web/effects\1'
 module.name_mapper='^web\/page\(.*\)$' -> '<PROJECT_ROOT>/web/page\1'
 module.name_mapper='^homepage\(.*\)$' -> '<PROJECT_ROOT>/ui/util/homepage\1'
 module.name_mapper='^scss\/component\(.*\)$' -> '<PROJECT_ROOT>/ui/scss/component/\1'
+module.name_mapper='^web\(.*\)$' -> '<PROJECT_ROOT>/web\1'
 
 esproposal.optional_chaining=enable
 

@@ -6,7 +6,7 @@ import { pushSupported, pushSubscribe, pushUnsubscribe, pushIsSubscribed } from 
 export default () => {
   const [permission, setPermission] = useState(window.Notification.permission);
   const [subscribed, setSubscribed] = useState(false);
-  const [enabled, setEnabled] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(false);
 
   useEffect(() => {
     pushIsSubscribed().then((isSubscribed) => {
@@ -14,7 +14,7 @@ export default () => {
     });
   }, []);
 
-  useMemo(() => setEnabled(permission === 'granted' && subscribed), [permission, subscribed]);
+  useMemo(() => setIsEnabled(permission === 'granted' && subscribed), [permission, subscribed]);
 
   const subscribe = async () => {
     if (await pushSubscribe()) {
@@ -30,12 +30,12 @@ export default () => {
   };
 
   const handleToggle = async () => {
-    return !enabled ? subscribe() : unsubscribe();
+    return !isEnabled ? subscribe() : unsubscribe();
   };
 
   return {
     pushSupported,
-    enabled,
+    isEnabled,
     permission,
     handleToggle,
   };

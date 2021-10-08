@@ -33,7 +33,8 @@ export const pushSupported: boolean = isSupported();
 
 export const pushSubscribe = async (): Promise<boolean> => {
   try {
-    const swRegistration: ServiceWorkerRegistration = await navigator.serviceWorker.ready;
+    // $FlowIssue[incompatible-type]
+    const swRegistration = await navigator.serviceWorker.ready;
     const fcmToken = await getToken(messaging, { serviceWorkerRegistration: swRegistration, vapidKey });
     // @TODO: remove after testing is complete.
     console.info('created token: ', fcmToken);
@@ -49,13 +50,14 @@ export const pushSubscribe = async (): Promise<boolean> => {
 };
 
 export const pushUnsubscribe = async (): Promise<boolean> => {
-  const swRegistration: ServiceWorkerRegistration = await navigator.serviceWorker.ready;
+  // $FlowIssue[incompatible-type]
+  const swRegistration = await navigator.serviceWorker.ready;
   const fcmToken = await getToken(messaging, { serviceWorkerRegistration: swRegistration, vapidKey });
   if (!fcmToken) return true;
 
   try {
     await deleteToken(messaging);
-    await Lbryio.call('cfm', 'remove', { token_id: fcmToken });
+    await Lbryio.call('cfm', 'remove', { token: fcmToken });
     return true;
   } catch (err) {
     return false;
@@ -63,7 +65,8 @@ export const pushUnsubscribe = async (): Promise<boolean> => {
 };
 
 export const pushIsSubscribed = async (): Promise<boolean> => {
-  const swRegistration: ServiceWorkerRegistration = await navigator.serviceWorker.ready;
+  // $FlowIssue[incompatible-type]
+  const swRegistration = await navigator.serviceWorker.ready;
   return (await swRegistration.pushManager.getSubscription()) !== null;
 };
 
