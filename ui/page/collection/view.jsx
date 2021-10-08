@@ -11,7 +11,7 @@ import CollectionActions from 'component/collectionActions';
 import classnames from 'classnames';
 import ClaimAuthor from 'component/claimAuthor';
 import FileDescription from 'component/fileDescription';
-import { COLLECTIONS_CONSTS } from 'lbry-redux';
+import * as COLLECTIONS_CONSTS from 'constants/collections';
 import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
 import Spinner from 'component/spinner';

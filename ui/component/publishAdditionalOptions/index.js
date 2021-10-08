@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import { selectPublishFormValues, doUpdatePublishForm } from 'lbry-redux';
+import { selectPublishFormValues } from 'redux/selectors/publish';
+import { doUpdatePublishForm } from 'redux/actions/publish';
 import PublishAdditionalOptions from './view';
 import { selectUser, selectAccessToken } from 'redux/selectors/user';
 import { doFetchAccessToken } from 'redux/actions/user';

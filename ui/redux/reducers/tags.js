@@ -1,6 +1,6 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
-import { ACTIONS as LBRY_REDUX_ACTIONS, DEFAULT_KNOWN_TAGS, DEFAULT_FOLLOWED_TAGS } from 'lbry-redux';
+import { DEFAULT_KNOWN_TAGS, DEFAULT_FOLLOWED_TAGS } from 'constants/tags';
 import { handleActions } from 'util/redux-utils';
 
 function getDefaultKnownTags() {
@@ -62,7 +62,7 @@ export default handleActions(
         followedTags: newFollowedTags,
       };
     },
-    [LBRY_REDUX_ACTIONS.USER_STATE_POPULATE]: (state: TagState, action: { data: { tags: ?Array<string> } }) => {
+    [ACTIONS.USER_STATE_POPULATE]: (state: TagState, action: { data: { tags: ?Array<string> } }) => {
       const { tags } = action.data;
       if (Array.isArray(tags)) {
         return {

@@ -4,17 +4,15 @@ import {
   makeSelectThumbnailForUri,
   makeSelectCoverForUri,
   makeSelectMetadataItemForUri,
-  doUpdateChannel,
-  doCreateChannel,
   makeSelectAmountForUri,
   makeSelectClaimForUri,
   selectUpdateChannelError,
   selectUpdatingChannel,
   selectCreateChannelError,
   selectCreatingChannel,
-  selectBalance,
-  doClearChannelErrors,
-} from 'lbry-redux';
+} from 'redux/selectors/claims';
+import { selectBalance } from 'redux/selectors/wallet';
+import { doUpdateChannel, doCreateChannel, doClearChannelErrors } from 'redux/actions/claims';
 import { doOpenModal } from 'redux/actions/app';
 import { doUpdateBlockListForPublishedChannel } from 'redux/actions/comments';
 import { doClaimInitialRewards } from 'redux/actions/rewards';

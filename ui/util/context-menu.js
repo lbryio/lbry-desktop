@@ -1,5 +1,5 @@
 import { clipboard, remote, shell } from 'electron';
-import { convertToShareLink } from 'lbry-redux';
+import { convertToShareLink } from 'util/lbryURI';
 const isDev = process.env.NODE_ENV !== 'production';
 
 function injectDevelopmentTemplate(event, templates) {

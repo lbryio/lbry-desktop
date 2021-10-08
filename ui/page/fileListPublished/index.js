@@ -4,10 +4,9 @@ import {
   selectMyClaimsPage,
   selectMyClaimsPageItemCount,
   selectFetchingMyClaimsPageError,
-  doClearPublish,
-  doFetchClaimListMine,
-  doCheckPendingClaims,
-} from 'lbry-redux';
+} from 'redux/selectors/claims';
+import { doFetchClaimListMine, doCheckPendingClaims } from 'redux/actions/claims';
+import { doClearPublish } from 'redux/actions/publish';
 import { selectUploadCount } from 'lbryinc';
 import FileListPublished from './view';
 import { withRouter } from 'react-router';

@@ -3,7 +3,8 @@ import { createSelector } from 'reselect';
 import { selectMutedChannels } from 'redux/selectors/blocked';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import { selectBlacklistedOutpointMap, selectFilteredOutpointMap } from 'lbryinc';
-import { selectClaimsById, isClaimNsfw, selectMyActiveClaims } from 'lbry-redux';
+import { selectClaimsById, selectMyActiveClaims } from 'redux/selectors/claims';
+import { isClaimNsfw } from 'util/claim';
 
 const selectState = (state) => state.comments || {};
 
@@ -11,7 +12,6 @@ export const selectCommentsById = createSelector(selectState, (state) => state.c
 export const selectIsFetchingComments = createSelector(selectState, (state) => state.isLoading);
 export const selectIsFetchingCommentsById = createSelector(selectState, (state) => state.isLoadingById);
 export const selectIsFetchingCommentsByParentId = createSelector(selectState, (state) => state.isLoadingByParentId);
-export const selectIsPostingComment = createSelector(selectState, (state) => state.isCommenting);
 export const selectIsFetchingReacts = createSelector(selectState, (state) => state.isFetchingReacts);
 export const selectOthersReactsById = createSelector(selectState, (state) => state.othersReactsByCommentId);
 

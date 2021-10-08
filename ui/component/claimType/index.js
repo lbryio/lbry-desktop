@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimForUri, makeSelectClaimIsStreamPlaceholder } from 'lbry-redux';
+import { makeSelectClaimForUri, makeSelectClaimIsStreamPlaceholder } from 'redux/selectors/claims';
 import FileType from './view';
 
 const select = (state, props) => ({

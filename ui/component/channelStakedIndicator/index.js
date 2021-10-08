@@ -3,7 +3,7 @@ import {
   makeSelectClaimForUri,
   makeSelectStakedLevelForChannelUri,
   makeSelectTotalStakedAmountForChannelUri,
-} from 'lbry-redux';
+} from 'redux/selectors/claims';
 import ChannelStakedIndicator from './view';
 
 const select = (state, props) => ({

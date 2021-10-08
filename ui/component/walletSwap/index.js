@@ -6,7 +6,8 @@ import { doAddCoinSwap, doQueryCoinSwapStatus } from 'redux/actions/coinSwap';
 import { doToast } from 'redux/actions/notifications';
 import { selectCoinSwaps } from 'redux/selectors/coinSwap';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
-import { selectReceiveAddress, doGetNewAddress, doCheckAddressIsMine } from 'lbry-redux';
+import { doGetNewAddress, doCheckAddressIsMine } from 'redux/actions/wallet';
+import { selectReceiveAddress } from 'redux/selectors/wallet';
 
 const select = (state, props) => ({
   receiveAddress: selectReceiveAddress(state),

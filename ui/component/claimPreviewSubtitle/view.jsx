@@ -5,7 +5,7 @@ import UriIndicator from 'component/uriIndicator';
 import DateTime from 'component/dateTime';
 import Button from 'component/button';
 import FileViewCountInline from 'component/fileViewCountInline';
-import { parseURI } from 'lbry-redux';
+import { parseURI } from 'util/lbryURI';
 
 type Props = {
   uri: string,

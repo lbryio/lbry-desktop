@@ -3,12 +3,13 @@ import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectHasNavigated, selectScrollStartingPosition, selectWelcomeVersion } from 'redux/selectors/app';
 import { selectHomepageData } from 'redux/selectors/settings';
 import Router from './view';
-import { normalizeURI, makeSelectTitleForUri } from 'lbry-redux';
+import { normalizeURI } from 'util/lbryURI';
+import { makeSelectTitleForUri } from 'redux/selectors/claims';
 import { doSetHasNavigated } from 'redux/actions/app';
 import { doUserSetReferrer } from 'redux/actions/user';
 import { selectHasUnclaimedRefereeReward } from 'redux/selectors/rewards';
 
-const select = state => {
+const select = (state) => {
   const { pathname, hash } = state.router.location;
   const urlPath = pathname + hash;
   // Remove the leading "/" added by the browser
@@ -37,9 +38,9 @@ const select = state => {
   };
 };
 
-const perform = dispatch => ({
+const perform = (dispatch) => ({
   setHasNavigated: () => dispatch(doSetHasNavigated()),
-  setReferrer: referrer => dispatch(doUserSetReferrer(referrer)),
+  setReferrer: (referrer) => dispatch(doUserSetReferrer(referrer)),
 });
 
 export default connect(select, perform)(Router);

@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import { doUpdatePublishForm, makeSelectPublishFormValue } from 'lbry-redux';
+import { makeSelectPublishFormValue } from 'redux/selectors/publish';
+import { doUpdatePublishForm } from 'redux/actions/publish';
 import PublishReleaseDate from './view';
 
 const select = (state) => ({

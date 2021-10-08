@@ -1,7 +1,7 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import React from 'react';
-import { parseURI } from 'lbry-redux';
+import { parseURI } from 'util/lbryURI';
 import MarkdownPreview from 'component/common/markdown-preview';
 import Tooltip from 'component/common/tooltip';
 import ChannelThumbnail from 'component/channelThumbnail';

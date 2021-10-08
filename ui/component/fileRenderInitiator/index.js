@@ -1,13 +1,9 @@
 import { connect } from 'react-redux';
 import { doPlayUri, doSetPlayingUri, doSetPrimaryUri } from 'redux/actions/content';
-import {
-  makeSelectFileInfoForUri,
-  makeSelectThumbnailForUri,
-  makeSelectClaimForUri,
-  makeSelectClaimWasPurchased,
-  SETTINGS,
-  COLLECTIONS_CONSTS,
-} from 'lbry-redux';
+import { makeSelectThumbnailForUri, makeSelectClaimForUri, makeSelectClaimWasPurchased } from 'redux/selectors/claims';
+import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
+import * as SETTINGS from 'constants/settings';
+import * as COLLECTIONS_CONSTS from 'constants/collections';
 import { makeSelectCostInfoForUri } from 'lbryinc';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { makeSelectClientSetting } from 'redux/selectors/settings';

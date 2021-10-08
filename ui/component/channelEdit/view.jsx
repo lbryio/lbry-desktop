@@ -9,7 +9,7 @@ import TagsSearch from 'component/tagsSearch';
 import { FF_MAX_CHARS_IN_DESCRIPTION } from 'constants/form-field';
 import ErrorText from 'component/common/error-text';
 import ChannelThumbnail from 'component/channelThumbnail';
-import { isNameValid, parseURI } from 'lbry-redux';
+import { isNameValid, parseURI } from 'util/lbryURI';
 import ClaimAbandonButton from 'component/claimAbandonButton';
 import { useHistory } from 'react-router-dom';
 import { MINIMUM_PUBLISH_BID, INVALID_NAME_ERROR, ESTIMATED_FEE } from 'constants/claim';

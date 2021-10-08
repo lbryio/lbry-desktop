@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import { selectMyChannelClaims, selectFetchingMyChannels, doClearPublish } from 'lbry-redux';
+import { selectMyChannelClaims, selectFetchingMyChannels } from 'redux/selectors/claims';
+import { doClearPublish } from 'redux/actions/publish';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { doFetchNoSourceClaims } from 'redux/actions/livestream';
 import {

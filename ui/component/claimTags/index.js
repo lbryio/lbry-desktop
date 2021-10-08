@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectTagsForUri } from 'lbry-redux';
+import { makeSelectTagsForUri } from 'redux/selectors/claims';
 import { selectFollowedTags } from 'redux/selectors/tags';
 import ClaimTags from './view';
 

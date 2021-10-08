@@ -3,7 +3,7 @@ import React from 'react';
 import CollectionPreviewTile from 'component/collectionPreviewTile';
 import ClaimList from 'component/claimList';
 import Button from 'component/button';
-import { COLLECTIONS_CONSTS } from 'lbry-redux';
+import * as COLLECTIONS_CONSTS from 'constants/collections';
 import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';

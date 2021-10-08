@@ -1,13 +1,11 @@
 import { connect } from 'react-redux';
+import { makeSelectClaimIsMine, makeSelectClaimForUri, makeSelectClaimWasPurchased } from 'redux/selectors/claims';
 import {
   makeSelectFileInfoForUri,
   makeSelectDownloadingForUri,
   makeSelectLoadingForUri,
-  makeSelectClaimIsMine,
-  makeSelectClaimForUri,
-  makeSelectClaimWasPurchased,
   makeSelectStreamingUrlForUri,
-} from 'lbry-redux';
+} from 'redux/selectors/file_info';
 import { makeSelectCostInfoForUri } from 'lbryinc';
 import { doOpenModal, doAnalyticsView } from 'redux/actions/app';
 import { doSetPlayingUri, doPlayUri } from 'redux/actions/content';
@@ -24,10 +22,10 @@ const select = (state, props) => ({
   streamingUrl: makeSelectStreamingUrlForUri(props.uri)(state),
 });
 
-const perform = dispatch => ({
+const perform = (dispatch) => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
   pause: () => dispatch(doSetPlayingUri({ uri: null })),
-  download: uri => dispatch(doPlayUri(uri, false, true, () => dispatch(doAnalyticsView(uri)))),
+  download: (uri) => dispatch(doPlayUri(uri, false, true, () => dispatch(doAnalyticsView(uri)))),
 });
 
 export default connect(select, perform)(FileDownloadLink);

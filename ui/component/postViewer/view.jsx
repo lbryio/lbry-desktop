@@ -2,7 +2,7 @@
 import * as React from 'react';
 import * as ICONS from 'constants/icons';
 import * as MODALS from 'constants/modal_types';
-import { formatCredits } from 'lbry-redux';
+import { formatCredits } from 'util/format-credits';
 import FileDetails from 'component/fileDetails';
 import ClaimAuthor from 'component/claimAuthor';
 import FileTitle from 'component/fileTitle';

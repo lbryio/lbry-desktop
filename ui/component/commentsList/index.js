@@ -4,7 +4,7 @@ import {
   makeSelectClaimIsMine,
   selectFetchingMyChannels,
   selectMyChannelClaims,
-} from 'lbry-redux';
+} from 'redux/selectors/claims';
 import {
   makeSelectTopLevelCommentsForUri,
   makeSelectTopLevelTotalPagesForUri,

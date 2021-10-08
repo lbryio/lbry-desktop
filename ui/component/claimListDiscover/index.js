@@ -1,12 +1,12 @@
 import { connect } from 'react-redux';
 import {
-  doClaimSearch,
   selectClaimsByUri,
   selectClaimSearchByQuery,
   selectClaimSearchByQueryLastPageReached,
   selectFetchingClaimSearch,
-  SETTINGS,
-} from 'lbry-redux';
+} from 'redux/selectors/claims';
+import { doClaimSearch } from 'redux/actions/claims';
+import * as SETTINGS from 'constants/settings';
 import { selectFollowedTags } from 'redux/selectors/tags';
 import { selectMutedChannels } from 'redux/selectors/blocked';
 import { doToggleTagFollowDesktop } from 'redux/actions/tags';

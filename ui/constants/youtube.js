@@ -1,0 +1,11 @@
+export const YOUTUBE_SYNC_NOT_TRANSFERRED = 'not_transferred';
+export const YOUTUBE_SYNC_PENDING = 'pending';
+export const YOUTUBE_SYNC_PENDING_EMAIL = 'pendingemail';
+export const YOUTUBE_SYNC_PENDING_TRANSFER = 'pending_transfer';
+export const YOUTUBE_SYNC_COMPLETED_TRANSFER = 'completed_transfer';
+export const YOUTUBE_SYNC_QUEUED = 'queued';
+export const YOUTUBE_SYNC_SYNCING = 'syncing';
+export const YOUTUBE_SYNC_SYNCED = 'synced';
+export const YOUTUBE_SYNC_FAILED = 'failed';
+export const YOUTUBE_SYNC_PENDINGUPGRADE = 'pendingupgrade';
+export const YOUTUBE_SYNC_ABANDONDED = 'abandoned';

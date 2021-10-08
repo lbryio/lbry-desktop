@@ -1,12 +1,11 @@
 import { connect } from 'react-redux';
+import { makeSelectClaimForUri, makeSelectThumbnailForUri } from 'redux/selectors/claims';
 import {
-  makeSelectClaimForUri,
-  makeSelectThumbnailForUri,
-  SETTINGS,
-  COLLECTIONS_CONSTS,
   makeSelectNextUrlForCollectionAndUrl,
   makeSelectPreviousUrlForCollectionAndUrl,
-} from 'lbry-redux';
+} from 'redux/selectors/collections';
+import * as SETTINGS from 'constants/settings';
+import * as COLLECTIONS_CONSTS from 'constants/collections';
 import {
   doChangeVolume,
   doChangeMute,

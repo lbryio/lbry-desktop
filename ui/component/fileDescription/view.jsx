@@ -3,7 +3,7 @@ import * as ICONS from 'constants/icons';
 import * as MODALS from 'constants/modal_types';
 import React from 'react';
 import classnames from 'classnames';
-import { formatCredits } from 'lbry-redux';
+import { formatCredits } from 'util/format-credits';
 import MarkdownPreview from 'component/common/markdown-preview';
 import ClaimTags from 'component/claimTags';
 import Button from 'component/button';

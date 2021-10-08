@@ -2,7 +2,7 @@
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
 import * as CS from 'constants/claim_search';
-import { parseURI } from 'lbry-redux';
+import { parseURI } from 'util/lbryURI';
 import moment from 'moment';
 import { toCapitalCase } from 'util/string';
 import { useIsLargeScreen } from 'effects/use-screensize';

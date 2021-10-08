@@ -1,5 +1,6 @@
 // @flow
 import * as PAGES from 'constants/pages';
+import * as SETTINGS from 'constants/settings';
 import React from 'react';
 import classnames from 'classnames';
 import { useHistory } from 'react-router';
@@ -11,7 +12,6 @@ import UserTagFollowIntro from 'component/userTagFollowIntro';
 import YoutubeSync from 'page/youtubeSync';
 import { DEFAULT_BID_FOR_FIRST_CHANNEL } from 'component/userFirstChannel/view';
 import { YOUTUBE_STATUSES } from 'lbryinc';
-import { SETTINGS } from 'lbry-redux';
 import REWARDS from 'rewards';
 import UserVerify from 'component/userVerify';
 import Spinner from 'component/spinner';

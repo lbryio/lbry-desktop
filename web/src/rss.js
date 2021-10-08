@@ -1,6 +1,6 @@
 const { generateStreamUrl } = require('../../ui/util/web');
 const { URL, SITE_NAME, LBRY_WEB_API } = require('../../config.js');
-const { Lbry } = require('lbry-redux');
+const { lbryProxy: Lbry } = require('../lbry');
 const Rss = require('rss');
 const Mime = require('mime-types');
 

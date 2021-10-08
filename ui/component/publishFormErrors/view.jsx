@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
-import { THUMBNAIL_STATUSES, isNameValid } from 'lbry-redux';
+import * as THUMBNAIL_STATUSES from 'constants/thumbnail_upload_statuses';
+import { isNameValid } from 'util/lbryURI';
 import { INVALID_NAME_ERROR } from 'constants/claim';
 
 type Props = {

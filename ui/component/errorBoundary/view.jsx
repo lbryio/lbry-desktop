@@ -7,7 +7,7 @@ import { withRouter } from 'react-router';
 import analytics from 'analytics';
 import I18nMessage from 'component/i18nMessage';
 import Native from 'native';
-import { Lbry } from 'lbry-redux';
+import Lbry from 'lbry';
 
 type Props = {
   children: Node,

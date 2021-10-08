@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import { doResolveUri, makeSelectClaimForUri, makeSelectIsUriResolving } from 'lbry-redux';
+import { makeSelectClaimForUri, makeSelectIsUriResolving } from 'redux/selectors/claims';
+import { doResolveUri } from 'redux/actions/claims';
 import { doSetPlayingUri } from 'redux/actions/content';
 import { punctuationMarks } from 'util/remark-lbry';
 import { selectBlackListedOutpoints } from 'lbryinc';

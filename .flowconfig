@@ -7,13 +7,6 @@
 [include]
 
 [libs]
-./flow-typed
-node_modules/lbry-redux/flow-typed/
-node_modules/lbryinc/flow-typed/
-
-[untyped]
-.*/node_modules/lbry-redux
-.*/node_modules/lbryinc
 
 [lints]
 

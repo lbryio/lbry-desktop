@@ -12,7 +12,7 @@ import {
   selectModeratorTimeoutMap,
   selectPersonalTimeoutMap,
 } from 'redux/selectors/comments';
-import { selectMyChannelClaims } from 'lbry-redux';
+import { selectMyChannelClaims } from 'redux/selectors/claims';
 import ListBlocked from './view';
 
 const select = (state) => ({

@@ -3,7 +3,7 @@ import { SITE_NAME, WEB_PUBLISH_SIZE_LIMIT_GB, SIMPLE_SITE } from 'config';
 import type { Node } from 'react';
 import * as ICONS from 'constants/icons';
 import React, { useState, useEffect } from 'react';
-import { regexInvalidURI } from 'lbry-redux';
+import { regexInvalidURI } from 'util/lbryURI';
 import PostEditor from 'component/postEditor';
 import FileSelector from 'component/common/file-selector';
 import Button from 'component/button';

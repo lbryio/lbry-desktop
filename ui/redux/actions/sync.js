@@ -1,6 +1,9 @@
+// @flow
 import * as ACTIONS from 'constants/action_types';
+import * as SETTINGS from 'constants/settings';
 import { Lbryio } from 'lbryinc';
-import { SETTINGS, Lbry, doWalletEncrypt, doWalletDecrypt } from 'lbry-redux';
+import Lbry from 'lbry';
+import { doWalletEncrypt, doWalletDecrypt } from 'redux/actions/wallet';
 import { selectGetSyncIsPending, selectSetSyncIsPending, selectSyncIsLocked } from 'redux/selectors/sync';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { getSavedPassword, getAuthToken } from 'util/saved-passwords';
@@ -13,8 +16,8 @@ const SYNC_INTERVAL = 1000 * 60 * 5; // 5 minutes
 const NO_WALLET_ERROR = 'no wallet found for this user';
 const BAD_PASSWORD_ERROR_NAME = 'InvalidPasswordError';
 
-export function doSetDefaultAccount(success, failure) {
-  return (dispatch) => {
+export function doSetDefaultAccount(success: () => void, failure: (string) => void) {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.SET_DEFAULT_ACCOUNT,
     });
@@ -62,8 +65,8 @@ export function doSetDefaultAccount(success, failure) {
   };
 }
 
-export function doSetSync(oldHash, newHash, data) {
-  return (dispatch) => {
+export function doSetSync(oldHash: string, newHash: string, data: any) {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.SET_SYNC_STARTED,
     });
@@ -88,7 +91,10 @@ export function doSetSync(oldHash, newHash, data) {
   };
 }
 
-export const doGetSyncDesktop = (cb?, password) => (dispatch, getState) => {
+export const doGetSyncDesktop = (cb?: (any, any) => void, password?: string) => (
+  dispatch: Dispatch,
+  getState: GetState
+) => {
   const state = getState();
   const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
   const getSyncPending = selectGetSyncIsPending(state);
@@ -104,8 +110,8 @@ export const doGetSyncDesktop = (cb?, password) => (dispatch, getState) => {
   });
 };
 
-export function doSyncLoop(noInterval) {
-  return (dispatch, getState) => {
+export function doSyncLoop(noInterval?: boolean) {
+  return (dispatch: Dispatch, getState: GetState) => {
     if (!noInterval && syncTimer) clearInterval(syncTimer);
     const state = getState();
     const hasVerifiedEmail = selectUserVerifiedEmail(state);
@@ -129,14 +135,14 @@ export function doSyncLoop(noInterval) {
 }
 
 export function doSyncUnsubscribe() {
-  return (dispatch) => {
+  return () => {
     if (syncTimer) {
       clearInterval(syncTimer);
     }
   };
 }
 
-export function doGetSync(passedPassword, callback) {
+export function doGetSync(passedPassword?: string, callback?: (any, ?boolean) => void) {
   const password = passedPassword === null || passedPassword === undefined ? '' : passedPassword;
 
   function handleCallback(error, hasNewData) {
@@ -160,7 +166,7 @@ export function doGetSync(passedPassword, callback) {
   }
   // @endif
 
-  return (dispatch) => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.GET_SYNC_STARTED,
     });
@@ -183,8 +189,8 @@ export function doGetSync(passedPassword, callback) {
         data.unlockFailed = true;
         throw new Error();
       })
-      .then((hash) => Lbryio.call('sync', 'get', { hash }, 'post'))
-      .then((response) => {
+      .then((hash?: string) => Lbryio.call('sync', 'get', { hash }, 'post'))
+      .then((response: any) => {
         const syncHash = response.hash;
         data.syncHash = syncHash;
         data.syncData = response.data;
@@ -257,7 +263,7 @@ export function doGetSync(passedPassword, callback) {
           if (noWalletError) {
             Lbry.sync_apply({ password })
               .then(({ hash: walletHash, data: syncApplyData }) => {
-                dispatch(doSetSync('', walletHash, syncApplyData, password));
+                dispatch(doSetSync('', walletHash, syncApplyData));
                 handleCallback();
               })
               .catch((syncApplyError) => {
@@ -269,8 +275,8 @@ export function doGetSync(passedPassword, callback) {
   };
 }
 
-export function doSyncApply(syncHash, syncData, password) {
-  return (dispatch) => {
+export function doSyncApply(syncHash: string, syncData: any, password: string) {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.SYNC_APPLY_STARTED,
     });
@@ -298,7 +304,7 @@ export function doSyncApply(syncHash, syncData, password) {
 }
 
 export function doCheckSync() {
-  return (dispatch) => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.GET_SYNC_STARTED,
     });
@@ -326,15 +332,15 @@ export function doCheckSync() {
 }
 
 export function doResetSync() {
-  return (dispatch) =>
+  return (dispatch: Dispatch): Promise<any> =>
     new Promise((resolve) => {
       dispatch({ type: ACTIONS.SYNC_RESET });
       resolve();
     });
 }
 
-export function doSyncEncryptAndDecrypt(oldPassword, newPassword, encrypt) {
-  return (dispatch) => {
+export function doSyncEncryptAndDecrypt(oldPassword: string, newPassword: string, encrypt: boolean) {
+  return (dispatch: Dispatch) => {
     const data = {};
     return Lbry.sync_hash()
       .then((hash) => Lbryio.call('sync', 'get', { hash }, 'post'))
@@ -360,7 +366,7 @@ export function doSyncEncryptAndDecrypt(oldPassword, newPassword, encrypt) {
   };
 }
 
-export function doSetSyncLock(lock) {
+export function doSetSyncLock(lock: boolean) {
   return {
     type: ACTIONS.SET_SYNC_LOCK,
     data: lock,
@@ -371,5 +377,155 @@ export function doSetPrefsReady() {
   return {
     type: ACTIONS.SET_PREFS_READY,
     data: true,
+  };
+}
+
+type SharedData = {
+  version: '0.1',
+  value: {
+    subscriptions?: Array<string>,
+    following?: Array<{ uri: string, notificationsDisabled: boolean }>,
+    tags?: Array<string>,
+    blocked?: Array<string>,
+    coin_swap_codes?: Array<string>,
+    settings?: any,
+    app_welcome_version?: number,
+    sharing_3P?: boolean,
+    unpublishedCollections: CollectionGroup,
+    editedCollections: CollectionGroup,
+    builtinCollections: CollectionGroup,
+    savedCollections: Array<string>,
+  },
+};
+
+function extractUserState(rawObj: SharedData) {
+  if (rawObj && rawObj.version === '0.1' && rawObj.value) {
+    const {
+      subscriptions,
+      following,
+      tags,
+      blocked,
+      coin_swap_codes,
+      settings,
+      app_welcome_version,
+      sharing_3P,
+      unpublishedCollections,
+      editedCollections,
+      builtinCollections,
+      savedCollections,
+    } = rawObj.value;
+
+    return {
+      ...(subscriptions ? { subscriptions } : {}),
+      ...(following ? { following } : {}),
+      ...(tags ? { tags } : {}),
+      ...(blocked ? { blocked } : {}),
+      ...(coin_swap_codes ? { coin_swap_codes } : {}),
+      ...(settings ? { settings } : {}),
+      ...(app_welcome_version ? { app_welcome_version } : {}),
+      ...(sharing_3P ? { sharing_3P } : {}),
+      ...(unpublishedCollections ? { unpublishedCollections } : {}),
+      ...(editedCollections ? { editedCollections } : {}),
+      ...(builtinCollections ? { builtinCollections } : {}),
+      ...(savedCollections ? { savedCollections } : {}),
+    };
+  }
+
+  return {};
+}
+
+export function doPopulateSharedUserState(sharedSettings: any) {
+  return (dispatch: Dispatch) => {
+    const {
+      subscriptions,
+      following,
+      tags,
+      blocked,
+      coin_swap_codes,
+      settings,
+      app_welcome_version,
+      sharing_3P,
+      unpublishedCollections,
+      editedCollections,
+      builtinCollections,
+      savedCollections,
+    } = extractUserState(sharedSettings);
+    dispatch({
+      type: ACTIONS.USER_STATE_POPULATE,
+      data: {
+        subscriptions,
+        following,
+        tags,
+        blocked,
+        coinSwapCodes: coin_swap_codes,
+        settings,
+        welcomeVersion: app_welcome_version,
+        allowAnalytics: sharing_3P,
+        unpublishedCollections,
+        editedCollections,
+        builtinCollections,
+        savedCollections,
+      },
+    });
+  };
+}
+
+export function doPreferenceSet(key: string, value: any, version: string, success: Function, fail: Function) {
+  return (dispatch: Dispatch) => {
+    const preference = {
+      type: typeof value,
+      version,
+      value,
+    };
+
+    const options = {
+      key,
+      value: JSON.stringify(preference),
+    };
+
+    Lbry.preference_set(options)
+      .then(() => {
+        if (success) {
+          success(preference);
+        }
+      })
+      .catch((err) => {
+        dispatch({
+          type: ACTIONS.SYNC_FATAL_ERROR,
+          error: err,
+        });
+
+        if (fail) {
+          fail();
+        }
+      });
+  };
+}
+
+export function doPreferenceGet(key: string, success: Function, fail?: Function) {
+  return (dispatch: Dispatch) => {
+    const options = {
+      key,
+    };
+
+    return Lbry.preference_get(options)
+      .then((result) => {
+        if (result) {
+          const preference = result[key];
+          return success(preference);
+        }
+
+        return success(null);
+      })
+      .catch((err) => {
+        dispatch({
+          type: ACTIONS.SYNC_FATAL_ERROR,
+          error: err,
+        });
+
+        if (fail) {
+          fail(err);
+        }
+      });
   };
 }

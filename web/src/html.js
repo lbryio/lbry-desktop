@@ -12,11 +12,11 @@ const {
   LBRY_WEB_API,
 } = require('../../config.js');
 
-const { Lbry } = require('lbry-redux');
+const { lbryProxy: Lbry } = require('../lbry');
 const { generateEmbedUrl, generateStreamUrl, generateDirectUrl } = require('../../ui/util/web');
 const PAGES = require('../../ui/constants/pages');
 const { CATEGORY_METADATA } = require('./category-metadata');
-const { parseURI, normalizeURI } = require('lbry-redux');
+const { parseURI, normalizeURI } = require('./lbryURI');
 const fs = require('fs');
 const path = require('path');
 const moment = require('moment');

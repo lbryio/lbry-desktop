@@ -1,16 +1,16 @@
 import { connect } from 'react-redux';
+
+import { doPurchaseList } from 'redux/actions/claims';
+import { selectMyPurchases, selectIsFetchingMyPurchases } from 'redux/selectors/claims';
+import { selectDownloadUrlsCount, selectIsFetchingFileList } from 'redux/selectors/file_info';
+
 import {
-  selectDownloadUrlsCount,
-  selectIsFetchingFileList,
-  selectMyPurchases,
-  selectIsFetchingMyPurchases,
-  doPurchaseList,
   selectBuiltinCollections,
   selectMyPublishedMixedCollections,
   selectMyPublishedPlaylistCollections,
   selectMyUnpublishedCollections, // should probably distinguish types
   // selectSavedCollections, // TODO: implement saving and copying collections
-} from 'lbry-redux';
+} from 'redux/selectors/collections';
 
 import ListsPage from './view';
 

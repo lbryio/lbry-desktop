@@ -2,7 +2,7 @@
 import { DOMAIN } from 'config';
 import { INVALID_NAME_ERROR } from 'constants/claim';
 import React, { useState, useEffect } from 'react';
-import { isNameValid } from 'lbry-redux';
+import { isNameValid } from 'util/lbryURI';
 import { FormField } from 'component/common/form';
 import NameHelpText from './name-help-text';
 
@@ -55,7 +55,7 @@ function PublishName(props: Props) {
     let nameError;
     if (!name) {
       nameError = __('A name is required');
-    } else if (!isNameValid(name, false)) {
+    } else if (!isNameValid(name)) {
       nameError = INVALID_NAME_ERROR;
     }
 

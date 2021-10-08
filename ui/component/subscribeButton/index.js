@@ -5,7 +5,7 @@ import {
   selectFirstRunCompleted,
   makeSelectNotificationsDisabled,
 } from 'redux/selectors/subscriptions';
-import { makeSelectPermanentUrlForUri } from 'lbry-redux';
+import { makeSelectPermanentUrlForUri } from 'redux/selectors/claims';
 import { selectUser } from 'redux/selectors/user';
 import { doToast } from 'redux/actions/notifications';
 import SubscribeButton from './view';

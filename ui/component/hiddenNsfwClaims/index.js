@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import { makeSelectNsfwCountFromUris, makeSelectOmittedCountForChannel, parseURI } from 'lbry-redux';
+import { makeSelectNsfwCountFromUris, makeSelectOmittedCountForChannel } from 'redux/selectors/claims';
+import { parseURI } from 'util/lbryURI';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import HiddenNsfwClaims from './view';
 
@@ -24,7 +25,4 @@ const select = (state, props) => {
 
 const perform = () => ({});
 
-export default connect(
-  select,
-  perform
-)(HiddenNsfwClaims);
+export default connect(select, perform)(HiddenNsfwClaims);

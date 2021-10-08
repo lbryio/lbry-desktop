@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectStakedLevelForChannelUri, makeSelectClaimForUri } from 'lbry-redux';
+import { makeSelectStakedLevelForChannelUri, makeSelectClaimForUri } from 'redux/selectors/claims';
 import LivestreamComment from './view';
 
 const select = (state, props) => ({

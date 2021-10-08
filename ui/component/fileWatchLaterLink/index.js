@@ -1,10 +1,8 @@
 import { connect } from 'react-redux';
-import {
-  makeSelectClaimForUri,
-  COLLECTIONS_CONSTS,
-  makeSelectCollectionForIdHasClaimUrl,
-  doCollectionEdit,
-} from 'lbry-redux';
+import { doCollectionEdit } from 'redux/actions/collections';
+import { makeSelectCollectionForIdHasClaimUrl } from 'redux/selectors/collections';
+import { makeSelectClaimForUri } from 'redux/selectors/claims';
+import * as COLLECTIONS_CONSTS from 'constants/collections';
 import FileWatchLaterLink from './view';
 import { doToast } from 'redux/actions/notifications';
 
@@ -18,7 +16,7 @@ const select = (state, props) => {
   };
 };
 
-const perform = dispatch => ({
+const perform = (dispatch) => ({
   doToast: (props) => dispatch(doToast(props)),
   doCollectionEdit: (collection, props) => dispatch(doCollectionEdit(collection, props)),
 });

@@ -2,7 +2,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import ChannelThumbnail from 'component/channelThumbnail';
-import { parseURI } from 'lbry-redux';
+import { parseURI } from 'util/lbryURI';
 import ChannelBlockButton from 'component/channelBlockButton';
 import ChannelMuteButton from 'component/channelMuteButton';
 import SubscribeButton from 'component/subscribeButton';

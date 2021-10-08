@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import {
-  doResolveUri,
   makeSelectClaimForUri,
   makeSelectIsUriResolving,
   makeSelectClaimIsMine,
@@ -8,15 +7,20 @@ import {
   makeSelectClaimIsNsfw,
   makeSelectReflectingClaimForUri,
   makeSelectClaimWasPurchased,
-  makeSelectStreamingUrlForUri,
   makeSelectClaimIsStreamPlaceholder,
-  makeSelectCollectionIsMine,
-  doCollectionEdit,
-  makeSelectUrlsForCollectionId,
-  makeSelectIndexForUrlInCollection,
   makeSelectTitleForUri,
   makeSelectDateForUri,
-} from 'lbry-redux';
+} from 'redux/selectors/claims';
+import { makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
+import {
+  makeSelectCollectionIsMine,
+  makeSelectUrlsForCollectionId,
+  makeSelectIndexForUrlInCollection,
+} from 'redux/selectors/collections';
+
+import { doResolveUri } from 'redux/actions/claims';
+import { doCollectionEdit } from 'redux/actions/collections';
+import { doFileGet } from 'redux/actions/file';
 import { selectMutedChannels, makeSelectChannelIsMuted } from 'redux/selectors/blocked';
 import { selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
 import { makeSelectIsActiveLivestream } from 'redux/selectors/livestream';

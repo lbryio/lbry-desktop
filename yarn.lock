@@ -10173,21 +10173,6 @@ lazy-val@^1.0.4:
     yargs "^13.2.2"
     zstd-codec "^0.1.1"
 
-lbry-redux@lbryio/lbry-redux#32b578707116d45f5b51b7ab523d200e75668676:
-  version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/32b578707116d45f5b51b7ab523d200e75668676"
-  dependencies:
-    "@ungap/from-entries" "^0.2.1"
-    proxy-polyfill "0.1.6"
-    reselect "^3.0.0"
-    uuid "^8.3.1"
-
-lbryinc@lbryio/lbryinc#0b4e41ef90d6347819dd3453f2f9398a5c1b4f36:
-  version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbryinc/tar.gz/0b4e41ef90d6347819dd3453f2f9398a5c1b4f36"
-  dependencies:
-    reselect "^3.0.0"
-
 lcid@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/lcid/-/lcid-1.0.0.tgz#308accafa0bc483a3867b4b6f2b9506251d1b835"
@@ -13077,6 +13062,7 @@ proxy-from-env@^1.0.0:
 proxy-polyfill@0.1.6:
   version "0.1.6"
   resolved "https://registry.yarnpkg.com/proxy-polyfill/-/proxy-polyfill-0.1.6.tgz#ef41ec6c66f534db15db36c54493a62d184b364e"
+  integrity sha1-70HsbGb1NNsV2zbFRJOmLRhLNk4=
 
 prr@~1.0.1:
   version "1.0.1"
@@ -14226,10 +14212,6 @@ requires-port@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/requires-port/-/requires-port-1.0.0.tgz#925d2601d39ac485e091cf0da5c6e694dc3dcaff"
   integrity sha1-kl0mAdOaxIXgkc8NpcbmlNw9yv8=
-
-reselect@^3.0.0:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/reselect/-/reselect-3.0.1.tgz#efdaa98ea7451324d092b2b2163a6a1d7a9a2147"
 
 reselect@^4.0.0:
   version "4.0.0"
@@ -16513,7 +16495,7 @@ uuid@^3.0.1, uuid@^3.1.0, uuid@^3.3.2, uuid@^3.4.0:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
 
-uuid@^8.3.1, uuid@^8.3.2:
+uuid@^8.3.2:
   version "8.3.2"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
   integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==

@@ -1,5 +1,7 @@
 import { connect } from 'react-redux';
-import { doWalletStatus, selectMyChannelClaims, selectWalletIsEncrypted } from 'lbry-redux';
+import { selectMyChannelClaims } from 'redux/selectors/claims';
+import { selectWalletIsEncrypted } from 'redux/selectors/wallet';
+import { doWalletStatus } from 'redux/actions/wallet';
 import { selectUser, selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectLanguage } from 'redux/selectors/settings';
 

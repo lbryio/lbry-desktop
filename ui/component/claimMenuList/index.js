@@ -1,17 +1,15 @@
 import { connect } from 'react-redux';
+import { makeSelectClaimForUri, makeSelectClaimIsMine } from 'redux/selectors/claims';
+import { doCollectionEdit, doFetchItemsInCollection } from 'redux/actions/collections';
+import { doPrepareEdit } from 'redux/actions/publish';
 import {
-  doCollectionEdit,
-  makeSelectClaimForUri,
-  makeSelectFileInfoForUri,
-  doPrepareEdit,
   makeSelectCollectionForIdHasClaimUrl,
   makeSelectCollectionIsMine,
-  COLLECTIONS_CONSTS,
   makeSelectEditedCollectionForId,
-  makeSelectClaimIsMine,
-  doFetchItemsInCollection,
   makeSelectUrlsForCollectionId,
-} from 'lbry-redux';
+} from 'redux/selectors/collections';
+import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
+import * as COLLECTIONS_CONSTS from 'constants/collections';
 import { makeSelectChannelIsMuted } from 'redux/selectors/blocked';
 import { doChannelMute, doChannelUnmute } from 'redux/actions/blocked';
 import { doSetActiveChannel, doSetIncognito, doOpenModal } from 'redux/actions/app';

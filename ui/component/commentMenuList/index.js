@@ -4,7 +4,11 @@ import { doCommentPin, doCommentModAddDelegate } from 'redux/actions/comments';
 import { doOpenModal } from 'redux/actions/app';
 import { doSetPlayingUri } from 'redux/actions/content';
 import { doToast } from 'redux/actions/notifications';
-import { makeSelectChannelPermUrlForClaimUri, makeSelectClaimIsMine, makeSelectClaimForUri } from 'lbry-redux';
+import {
+  makeSelectChannelPermUrlForClaimUri,
+  makeSelectClaimIsMine,
+  makeSelectClaimForUri,
+} from 'redux/selectors/claims';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { selectModerationDelegatorsById } from 'redux/selectors/comments';
 import { selectPlayingUri } from 'redux/selectors/content';

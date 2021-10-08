@@ -12,7 +12,7 @@ import Card from 'component/common/card';
 import classnames from 'classnames';
 import ChannelSelector from 'component/channelSelector';
 import LbcSymbol from 'component/common/lbc-symbol';
-import { parseURI } from 'lbry-redux';
+import { parseURI } from 'util/lbryURI';
 import usePersistedState from 'effects/use-persisted-state';
 import WalletSpendableBalanceHelp from 'component/walletSpendableBalanceHelp';
 import { getStripeEnvironment } from 'util/stripe';
@@ -36,7 +36,7 @@ type Props = {
   claim: StreamClaim,
   isPending: boolean,
   isSupport: boolean,
-  sendSupport: (SupportParams, boolean) => void, // function that comes from lbry-redux
+  sendSupport: (SupportParams, boolean) => void,
   closeModal: () => void,
   balance: number,
   fetchingChannels: boolean,

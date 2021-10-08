@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimForUri, selectMyChannelClaims } from 'lbry-redux';
+import { makeSelectClaimForUri, selectMyChannelClaims } from 'redux/selectors/claims';
 import { doCommentSocketConnect, doCommentSocketDisconnect } from 'redux/actions/websocket';
 import { doCommentList, doSuperChatList } from 'redux/actions/comments';
 import {

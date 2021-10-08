@@ -2,14 +2,14 @@
 import * as ICONS from 'constants/icons';
 import React from 'react';
 import { MenuItem } from '@reach/menu-button';
-import { parseURI } from 'lbry-redux';
+import { parseURI } from 'util/lbryURI';
 import Icon from 'component/common/icon';
 
 type Props = {
   uri: string,
   notificationsDisabled: boolean,
   doToast: ({ message: string }) => void,
-  doChannelSubscribe: Subscription => void,
+  doChannelSubscribe: (Subscription) => void,
 };
 
 export default function NotificationContentChannelMenu(props: Props) {

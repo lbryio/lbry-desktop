@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import { doResolveUri, makeSelectClaimForUri } from 'lbry-redux';
+import { doResolveUri } from 'redux/actions/claims';
+import { makeSelectClaimForUri } from 'redux/selectors/claims';
 import CardMedia from './view';
 
 const select = (state, props) => ({

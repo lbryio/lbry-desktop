@@ -1,6 +1,6 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
-import { doClaimSearch } from 'lbry-redux';
+import { doClaimSearch } from 'redux/actions/claims';
 import { LIVESTREAM_LIVE_API } from 'constants/livestream';
 
 export const doFetchNoSourceClaims = (channelId: string) => async (dispatch: Dispatch, getState: GetState) => {
@@ -79,6 +79,7 @@ export const doFetchActiveLivestreams = (
           // live. The UI usually just wants to report the latest claim, so we
           // query that store it in `latestClaimUri`.
           doClaimSearch({
+            page: 1,
             page_size: nextOptions.page_size,
             has_no_source: true,
             channel_ids: Object.keys(activeLivestreams),

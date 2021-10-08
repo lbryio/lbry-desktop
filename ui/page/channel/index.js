@@ -7,8 +7,8 @@ import {
   selectCurrentChannelPage,
   makeSelectClaimForUri,
   makeSelectClaimIsPending,
-  selectMyUnpublishedCollections,
-} from 'lbry-redux';
+} from 'redux/selectors/claims';
+import { selectMyUnpublishedCollections } from 'redux/selectors/collections';
 import { selectBlackListedOutpoints, doFetchSubCount, makeSelectSubCountForUri } from 'lbryinc';
 import { selectYoutubeChannels } from 'redux/selectors/user';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';

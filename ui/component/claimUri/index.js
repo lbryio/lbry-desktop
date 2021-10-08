@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectCanonicalUrlForUri } from 'lbry-redux';
+import { makeSelectCanonicalUrlForUri } from 'redux/selectors/claims';
 import { doToast } from 'redux/actions/notifications';
 import ClaimUri from './view';
 

@@ -1,7 +1,6 @@
 // @flow
 
 import * as ACTIONS from 'constants/action_types';
-import { ACTIONS as LBRY_REDUX_ACTIONS } from 'lbry-redux';
 import { remote } from 'electron';
 
 // @if TARGET='app'
@@ -112,7 +111,7 @@ reducers['@@router/LOCATION_CHANGE'] = (state, action) => {
   };
 };
 
-reducers[ACTIONS.DAEMON_READY] = state =>
+reducers[ACTIONS.DAEMON_READY] = (state) =>
   Object.assign({}, state, {
     daemonReady: true,
   });
@@ -122,29 +121,29 @@ reducers[ACTIONS.PASSWORD_SAVED] = (state, action) =>
     isPasswordSaved: action.data,
   });
 
-reducers[ACTIONS.DAEMON_VERSION_MATCH] = state =>
+reducers[ACTIONS.DAEMON_VERSION_MATCH] = (state) =>
   Object.assign({}, state, {
     daemonVersionMatched: true,
   });
 
-reducers[ACTIONS.DAEMON_VERSION_MISMATCH] = state =>
+reducers[ACTIONS.DAEMON_VERSION_MISMATCH] = (state) =>
   Object.assign({}, state, {
     daemonVersionMatched: false,
   });
 
-reducers[ACTIONS.UPGRADE_CANCELLED] = state =>
+reducers[ACTIONS.UPGRADE_CANCELLED] = (state) =>
   Object.assign({}, state, {
     downloadProgress: null,
     upgradeDownloadComplete: false,
     modal: null,
   });
 
-reducers[ACTIONS.AUTO_UPDATE_DOWNLOADED] = state =>
+reducers[ACTIONS.AUTO_UPDATE_DOWNLOADED] = (state) =>
   Object.assign({}, state, {
     autoUpdateDownloaded: true,
   });
 
-reducers[ACTIONS.AUTO_UPDATE_DECLINED] = state =>
+reducers[ACTIONS.AUTO_UPDATE_DECLINED] = (state) =>
   Object.assign({}, state, {
     autoUpdateDeclined: true,
   });
@@ -156,7 +155,7 @@ reducers[ACTIONS.UPGRADE_DOWNLOAD_COMPLETED] = (state, action) =>
     upgradeDownloadCompleted: true,
   });
 
-reducers[ACTIONS.UPGRADE_DOWNLOAD_STARTED] = state =>
+reducers[ACTIONS.UPGRADE_DOWNLOAD_STARTED] = (state) =>
   Object.assign({}, state, {
     upgradeDownloading: true,
   });
@@ -166,7 +165,7 @@ reducers[ACTIONS.CHANGE_MODALS_ALLOWED] = (state, action) =>
     modalsAllowed: action.data.modalsAllowed,
   });
 
-reducers[ACTIONS.SKIP_UPGRADE] = state => {
+reducers[ACTIONS.SKIP_UPGRADE] = (state) => {
   sessionStorage.setItem('upgradeSkipped', 'true');
 
   return Object.assign({}, state, {
@@ -174,12 +173,12 @@ reducers[ACTIONS.SKIP_UPGRADE] = state => {
   });
 };
 
-reducers[ACTIONS.MEDIA_PLAY] = state =>
+reducers[ACTIONS.MEDIA_PLAY] = (state) =>
   Object.assign({}, state, {
     modalsAllowed: false,
   });
 
-reducers[ACTIONS.MEDIA_PAUSE] = state =>
+reducers[ACTIONS.MEDIA_PAUSE] = (state) =>
   Object.assign({}, state, {
     modalsAllowed: true,
   });
@@ -214,7 +213,7 @@ reducers[ACTIONS.UPGRADE_DOWNLOAD_PROGRESSED] = (state, action) =>
     downloadProgress: action.data.percent,
   });
 
-reducers[ACTIONS.DOWNLOADING_COMPLETED] = state => {
+reducers[ACTIONS.DOWNLOADING_COMPLETED] = (state) => {
   const { badgeNumber } = state;
 
   // Don't update the badge number if the window is focused
@@ -227,7 +226,7 @@ reducers[ACTIONS.DOWNLOADING_COMPLETED] = state => {
   });
 };
 
-reducers[ACTIONS.WINDOW_FOCUSED] = state =>
+reducers[ACTIONS.WINDOW_FOCUSED] = (state) =>
   Object.assign({}, state, {
     badgeNumber: 0,
   });
@@ -242,18 +241,18 @@ reducers[ACTIONS.VOLUME_MUTED] = (state, action) =>
     muted: action.data.muted,
   });
 
-reducers[ACTIONS.HISTORY_NAVIGATE] = state =>
+reducers[ACTIONS.HISTORY_NAVIGATE] = (state) =>
   Object.assign({}, state, {
     modal: undefined,
     modalProps: {},
   });
 
-reducers[ACTIONS.CLEAR_UPGRADE_TIMER] = state =>
+reducers[ACTIONS.CLEAR_UPGRADE_TIMER] = (state) =>
   Object.assign({}, state, {
     checkUpgradeTimer: undefined,
   });
 
-reducers[ACTIONS.ADD_COMMENT] = state =>
+reducers[ACTIONS.ADD_COMMENT] = (state) =>
   Object.assign({}, state, {
     hasClickedComment: true,
   });
@@ -279,13 +278,13 @@ reducers[ACTIONS.SET_HAS_NAVIGATED] = (state, action) =>
     hasNavigated: action.data,
   });
 
-reducers[ACTIONS.HIDE_MODAL] = state =>
+reducers[ACTIONS.HIDE_MODAL] = (state) =>
   Object.assign({}, state, {
     modal: null,
     modalProps: null,
   });
 
-reducers[ACTIONS.TOGGLE_SEARCH_EXPANDED] = state =>
+reducers[ACTIONS.TOGGLE_SEARCH_EXPANDED] = (state) =>
   Object.assign({}, state, {
     searchOptionsExpanded: !state.searchOptionsExpanded,
   });
@@ -318,7 +317,7 @@ reducers[ACTIONS.SET_INCOGNITO] = (state, action) => {
   };
 };
 
-reducers[LBRY_REDUX_ACTIONS.USER_STATE_POPULATE] = (state, action) => {
+reducers[ACTIONS.USER_STATE_POPULATE] = (state, action) => {
   const { welcomeVersion, allowAnalytics } = action.data;
   return {
     ...state,
@@ -327,7 +326,7 @@ reducers[LBRY_REDUX_ACTIONS.USER_STATE_POPULATE] = (state, action) => {
   };
 };
 
-reducers[LBRY_REDUX_ACTIONS.PURCHASE_URI_FAILED] = (state, action) => {
+reducers[ACTIONS.PURCHASE_URI_FAILED] = (state, action) => {
   return {
     ...state,
     modal: null,

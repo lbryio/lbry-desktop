@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { parseURI } from 'lbry-redux';
+import { parseURI } from 'util/lbryURI';
 import classnames from 'classnames';
 import Gerbil from './gerbil.png';
 import FreezeframeWrapper from 'component/fileThumbnail/FreezeframeWrapper';

@@ -1,7 +1,8 @@
 // Can't use aliases here because we're doing exports/require
 
 const PAGES = require('../constants/pages');
-const { parseURI, buildURI, COLLECTIONS_CONSTS } = require('lbry-redux');
+const { parseURI, buildURI } = require('../util/lbryURI');
+const COLLECTIONS_CONSTS = require('../constants/collections');
 
 function encodeWithSpecialCharEncode(string) {
   // encodeURIComponent doesn't encode `'` and others

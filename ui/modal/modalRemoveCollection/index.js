@@ -2,10 +2,10 @@ import { connect } from 'react-redux';
 import {
   makeSelectClaimIsMine,
   makeSelectIsAbandoningClaimForUri,
-  doCollectionDelete,
   makeSelectClaimForClaimId,
-  makeSelectNameForCollectionId,
-} from 'lbry-redux';
+} from 'redux/selectors/claims';
+import { doCollectionDelete } from 'redux/actions/collections';
+import { makeSelectNameForCollectionId } from 'redux/selectors/collections';
 import { doHideModal } from 'redux/actions/app';
 import ModalRemoveCollection from './view';
 

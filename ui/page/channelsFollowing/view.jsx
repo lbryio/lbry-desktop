@@ -9,7 +9,7 @@ import ClaimListDiscover from 'component/claimListDiscover';
 import Page from 'component/page';
 import Button from 'component/button';
 import Icon from 'component/common/icon';
-import { splitBySeparator } from 'lbry-redux';
+import { splitBySeparator } from 'util/lbryURI';
 import { getLivestreamUris } from 'util/livestream';
 
 type Props = {

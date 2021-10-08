@@ -2,16 +2,16 @@ import { connect } from 'react-redux';
 import { doSetContentHistoryItem, doSetPrimaryUri, clearPosition } from 'redux/actions/content';
 import { withRouter } from 'react-router-dom';
 import {
-  doFetchFileInfo,
-  makeSelectFileInfoForUri,
   makeSelectMetadataForUri,
   makeSelectClaimIsNsfw,
-  SETTINGS,
   makeSelectTagInClaimOrChannelForUri,
   makeSelectClaimIsStreamPlaceholder,
-  makeSelectCollectionForId,
-  COLLECTIONS_CONSTS,
-} from 'lbry-redux';
+} from 'redux/selectors/claims';
+import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
+import { doFetchFileInfo } from 'redux/actions/file_info';
+import { makeSelectCollectionForId } from 'redux/selectors/collections';
+import * as COLLECTIONS_CONSTS from 'constants/collections';
+import * as SETTINGS from 'constants/settings';
 import { makeSelectCostInfoForUri, doFetchCostInfoForUri } from 'lbryinc';
 import { selectShowMatureContent, makeSelectClientSetting } from 'redux/selectors/settings';
 import { makeSelectFileRenderModeForUri, makeSelectContentPositionForUri } from 'redux/selectors/content';

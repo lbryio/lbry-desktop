@@ -7,7 +7,7 @@ import * as React from 'react';
 import { shell } from 'electron';
 import WalletBackup from 'component/walletBackup';
 // @endif
-import { Lbry } from 'lbry-redux';
+import Lbry from 'lbry';
 import Native from 'native';
 import Button from 'component/button';
 import Page from 'component/page';

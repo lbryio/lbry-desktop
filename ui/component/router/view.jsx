@@ -6,7 +6,7 @@ import * as PAGES from 'constants/pages';
 import { PAGE_TITLE } from 'constants/pageTitles';
 import { lazyImport } from 'util/lazyImport';
 import { LINKED_COMMENT_QUERY_PARAM } from 'constants/comment';
-import { parseURI, isURIValid } from 'lbry-redux';
+import { parseURI, isURIValid } from 'util/lbryURI';
 import { SITE_TITLE, WELCOME_VERSION, SIMPLE_SITE } from 'config';
 import LoadingBarOneOff from 'component/loadingBarOneOff';
 import { GetLinksData } from 'util/buildHomepage';

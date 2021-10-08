@@ -9,7 +9,8 @@ import thunk from 'redux-thunk';
 import { createMemoryHistory, createBrowserHistory } from 'history';
 import { routerMiddleware } from 'connected-react-router';
 import createRootReducer from './reducers';
-import { Lbry, buildSharedStateMiddleware, ACTIONS as LBRY_REDUX_ACTIONS } from 'lbry-redux';
+import Lbry from 'lbry';
+import { buildSharedStateMiddleware } from 'redux/middleware/shared-state';
 import { doSyncLoop } from 'redux/actions/sync';
 import { getAuthToken } from 'util/saved-passwords';
 import { generateInitialUrl } from 'util/url';
@@ -131,14 +132,14 @@ const triggerSharedStateActions = [
   ACTIONS.ADD_COIN_SWAP,
   ACTIONS.REMOVE_COIN_SWAP,
   ACTIONS.TOGGLE_TAG_FOLLOW,
-  LBRY_REDUX_ACTIONS.CREATE_CHANNEL_COMPLETED,
+  ACTIONS.CREATE_CHANNEL_COMPLETED,
   ACTIONS.SYNC_CLIENT_SETTINGS,
   // Disabled until we can overwrite preferences
-  LBRY_REDUX_ACTIONS.SHARED_PREFERENCE_SET,
-  LBRY_REDUX_ACTIONS.COLLECTION_EDIT,
-  LBRY_REDUX_ACTIONS.COLLECTION_DELETE,
-  LBRY_REDUX_ACTIONS.COLLECTION_NEW,
-  LBRY_REDUX_ACTIONS.COLLECTION_PENDING,
+  ACTIONS.SHARED_PREFERENCE_SET,
+  ACTIONS.COLLECTION_EDIT,
+  ACTIONS.COLLECTION_DELETE,
+  ACTIONS.COLLECTION_NEW,
+  ACTIONS.COLLECTION_PENDING,
   // MAYBE COLLECTOIN SAVE
   // ACTIONS.SET_WELCOME_VERSION,
   // ACTIONS.SET_ALLOW_ANALYTICS,

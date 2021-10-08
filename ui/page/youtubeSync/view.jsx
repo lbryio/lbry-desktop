@@ -9,7 +9,7 @@ import Card from 'component/common/card';
 import I18nMessage from 'component/i18nMessage';
 import { Form, FormField } from 'component/common/form';
 import { INVALID_NAME_ERROR } from 'constants/claim';
-import { isNameValid } from 'lbry-redux';
+import { isNameValid } from 'util/lbryURI';
 import { Lbryio } from 'lbryinc';
 import { useHistory } from 'react-router';
 import YoutubeTransferStatus from 'component/youtubeTransferStatus';

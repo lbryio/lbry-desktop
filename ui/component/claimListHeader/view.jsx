@@ -1,12 +1,12 @@
 // @flow
 import * as CS from 'constants/claim_search';
 import * as ICONS from 'constants/icons';
+import * as SETTINGS from 'constants/settings';
 import type { Node } from 'react';
 import classnames from 'classnames';
 import React from 'react';
 import usePersistedState from 'effects/use-persisted-state';
 import { useHistory } from 'react-router';
-import { SETTINGS } from 'lbry-redux';
 import { FormField } from 'component/common/form';
 import Button from 'component/button';
 import { toCapitalCase } from 'util/string';
