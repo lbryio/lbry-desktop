@@ -65,11 +65,22 @@ export default handleActions(
     [ACTIONS.USER_STATE_POPULATE]: (state: TagState, action: { data: { tags: ?Array<string> } }) => {
       const { tags } = action.data;
       if (Array.isArray(tags)) {
+        const next = tags && tags.filter((tag) => typeof tag === 'string');
+        const prev = state.followedTags;
+
+        if (next && prev && prev.length === next.length && prev.every((value, index) => value === next[index])) {
+          // No changes
+          return state;
+        }
+
+        // New state
         return {
           ...state,
-          followedTags: tags,
+          followedTags: next || [],
         };
       }
+
+      // Purge 'followedTags'
       return {
         ...state,
       };
