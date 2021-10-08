@@ -152,6 +152,7 @@ function VideoViewer(props: Props) {
     };
   }, [embedded, videoPlaybackRate]);
 
+  // TODO: analytics functionality
   function doTrackingBuffered(e: Event, data: any) {
     fetch(source, { method: 'HEAD', cache: 'no-store' }).then((response) => {
       data.playerPoweredBy = response.headers.get('x-powered-by');
@@ -159,21 +160,37 @@ function VideoViewer(props: Props) {
     });
   }
 
+  /**
+   * Analytics functionality that is run on first video start
+   * @param e - event from videojs (from the plugin?)
+   * @param data - only has secondsToLoad property
+   */
   function doTrackingFirstPlay(e: Event, data: any) {
-    let timeToStart = data.secondsToLoad;
+    // how long until the video starts
+    let timeToStartVideo = data.secondsToLoad;
 
-    if (desktopPlayStartTime !== undefined) {
-      const differenceToAdd = Date.now() - desktopPlayStartTime;
-      timeToStart += differenceToAdd;
+    // TODO: what's happening here briefly?
+    if (!IS_WEB) {
+      if (desktopPlayStartTime !== undefined) {
+        const differenceToAdd = Date.now() - desktopPlayStartTime;
+        timeToStartVideo += differenceToAdd;
+      }
     }
+
+    // send matomo event (embedded is boolean)
     analytics.playerStartedEvent(embedded);
 
+    // figure out what server the video is served from and then run start analytic event
     fetch(source, { method: 'HEAD', cache: 'no-store' }).then((response) => {
+      // server string such as 'eu-p6'
       let playerPoweredBy = response.headers.get('x-powered-by') || '';
-      analytics.videoStartEvent(claimId, timeToStart, playerPoweredBy, userId, claim.canonical_url, this);
+
+      // populates data for watchman, sends prom and matomo event
+      analytics.videoStartEvent(claimId, timeToStartVideo, playerPoweredBy, userId, claim.canonical_url, this);
     });
 
-    doAnalyticsView(uri, timeToStart).then(() => {
+    // hit backend to mark a view
+    doAnalyticsView(uri, timeToStartVideo).then(() => {
       claimRewards();
     });
   }
@@ -256,6 +273,7 @@ function VideoViewer(props: Props) {
     clearPosition(uri);
   }, [adUrl, autoplayNext, clearPosition, collectionId, embedded, ended, setAdUrl, uri]);
 
+  // MORE ON PLAY STUFF
   function onPlay(player) {
     setEnded(false);
     setIsLoading(false);

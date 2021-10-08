@@ -31,11 +31,14 @@ const VERSION = '0.0.1';
 // live channel
 // b354389c7adb506d0bd9a4
 
+// ford ad
+// 612fb75a42715a07645a614c
+
 // Modified to work with IMA
 const macroUrl =
   `https://vast.aniview.com/api/adserver61/vast/` +
   `?AV_PUBLISHERID=60afcbc58cfdb065440d2426` +
-  `&AV_CHANNELID=612fb75a42715a07645a614c` +
+  `&AV_CHANNELID=b354389c7adb506d0bd9a4` +
   `&AV_URL=[URL]` +
   `&cb=[CACHEBUSTING]` +
   `&AV_WIDTH=[WIDTH]` +
@@ -44,11 +47,11 @@ const macroUrl =
   // `&AV_CCPA=[CCPA_MACRO]` +
   // `&AV_GDPR=[GDPR_MACRO]` +
   // `&AV_CONSENT=[CONSENT_MACRO]` +
-  `&skip=true` +
-  `&skiptimer=5` +
+  `&skip=false` +
+  `&skiptimer=2` +
   `&logo=true` +
   `&usevslot=true` +
-  `&vastretry=5` +
+  `&vastretry=2` +
   `&hidecontrols=false`;
 
 const defaults = {
