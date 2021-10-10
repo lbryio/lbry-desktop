@@ -7,7 +7,7 @@ import CommentsReplies from './view';
 const select = (state, props) => ({
   fetchedReplies: makeSelectRepliesForParentId(props.parentId)(state),
   claimIsMine: makeSelectClaimIsMine(props.uri)(state),
-  commentingEnabled: IS_WEB ? Boolean(selectUserVerifiedEmail(state)) : true,
+  userCanComment: IS_WEB ? Boolean(selectUserVerifiedEmail(state)) : true,
   myChannels: selectMyChannelClaims(state),
   isFetchingByParentId: selectIsFetchingCommentsByParentId(state),
 });
