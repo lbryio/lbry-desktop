@@ -6,7 +6,8 @@ import React from 'react';
 import Spinner from 'component/spinner';
 
 type Props = {
-  fetchedReplies: Array<any>,
+  fetchedReplies: Array<Comment>,
+  resolvedReplies: Array<Comment>,
   uri: string,
   parentId: string,
   claimIsMine: boolean,
@@ -18,6 +19,7 @@ type Props = {
   isFetchingByParentId: { [string]: boolean },
   hasMore: boolean,
   supportDisabled: boolean,
+  doResolveUris: (Array<string>) => void,
   onShowMore?: () => void,
 };
 
@@ -26,6 +28,7 @@ function CommentsReplies(props: Props) {
     uri,
     parentId,
     fetchedReplies,
+    resolvedReplies,
     claimIsMine,
     myChannels,
     linkedCommentId,
@@ -35,10 +38,22 @@ function CommentsReplies(props: Props) {
     isFetchingByParentId,
     hasMore,
     supportDisabled,
+    doResolveUris,
     onShowMore,
   } = props;
 
   const [isExpanded, setExpanded] = React.useState(true);
+  const isResolvingReplies = fetchedReplies && resolvedReplies.length !== fetchedReplies.length;
+
+  // Batch resolve comment channel urls
+  React.useEffect(() => {
+    if (!fetchedReplies) return;
+
+    const urisToResolve = [];
+    fetchedReplies.map(({ channel_url }) => channel_url !== undefined && urisToResolve.push(channel_url));
+
+    if (urisToResolve.length > 0) doResolveUris(urisToResolve);
+  }, [fetchedReplies, doResolveUris]);
 
   return !numDirectReplies ? null : (
     <div className="comment__replies-container">
@@ -56,8 +71,9 @@ function CommentsReplies(props: Props) {
           <Button className="comment__threadline" aria-label="Hide Replies" onClick={() => setExpanded(false)} />
 
           <ul className="comments--replies">
-            {fetchedReplies &&
-              fetchedReplies.map((comment) => (
+            {!isResolvingReplies &&
+              resolvedReplies.length > 0 &&
+              resolvedReplies.map((comment) => (
                 <Comment
                   threadDepth={threadDepth}
                   uri={uri}
@@ -96,7 +112,7 @@ function CommentsReplies(props: Props) {
           />
         </div>
       )}
-      {isFetchingByParentId[parentId] && (
+      {(isFetchingByParentId[parentId] || isResolvingReplies) && (
         <div className="comment__replies-container">
           <div className="comment__actions--nested">
             <Spinner type="small" />
