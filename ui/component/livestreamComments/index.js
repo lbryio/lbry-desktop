@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimForUri, selectMyChannelClaims } from 'redux/selectors/claims';
+import { selectClaimForUri, selectMyChannelClaims } from 'redux/selectors/claims';
 import { doCommentSocketConnect, doCommentSocketDisconnect } from 'redux/actions/websocket';
 import { doCommentList, doSuperChatList } from 'redux/actions/comments';
 import {
@@ -14,7 +14,7 @@ import LivestreamComments from './view';
 const MAX_LIVESTREAM_COMMENTS = 75;
 
 const select = (state, props) => ({
-  claim: makeSelectClaimForUri(props.uri)(state),
+  claim: selectClaimForUri(state, props.uri),
   comments: selectTopLevelCommentsForUri(state, props.uri, MAX_LIVESTREAM_COMMENTS),
   pinnedComments: selectPinnedCommentsForUri(state, props.uri),
   fetchingComments: selectIsFetchingComments(state),
