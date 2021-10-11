@@ -71,7 +71,7 @@ const recsys = {
    * Called from recommendedContent component
    */
   onRecsLoaded: function (claimId, uris) {
-    if (window.store) {
+    if (window && window.store) {
       const state = window.store.getState();
       if (!recsys.entries[claimId]) {
         recsys.createRecsysEntry(claimId);
@@ -90,7 +90,7 @@ const recsys = {
    * @param: parentUuid: string (optional)
    */
   createRecsysEntry: function (claimId, parentUuid) {
-    if (window.store && claimId) {
+    if (window && window.store && claimId) {
       const state = window.store.getState();
       const { id: userId } = selectUser(state);
       if (parentUuid) {
@@ -170,7 +170,7 @@ const recsys = {
    * if so, send the Entry.
    */
   onPlayerDispose: function (claimId, isEmbedded) {
-    if (window.store) {
+    if (window && window.store) {
       const state = window.store.getState();
       const playingUri = selectPlayingUri(state);
       const primaryUri = selectPrimaryUri(state);
@@ -193,7 +193,7 @@ const recsys = {
   //  * more events until player is disposed. Don't send unless floatingPlayer playingUri
   //  */
   // onLeaveFilePage: function (primaryUri) {
-  //   if (window.store) {
+  //   if (window && window.store) {
   //     const state = window.store.getState();
   //     const claim = makeSelectClaimForUri(primaryUri)(state);
   //     const claimId = claim ? claim.claim_id : null;
@@ -219,7 +219,7 @@ const recsys = {
    * Send all claimIds that aren't currently playing.
    */
   onNavigate: function () {
-    if (window.store) {
+    if (window && window.store) {
       const state = window.store.getState();
       const playingUri = selectPlayingUri(state);
       const actualPlayingUri = playingUri && playingUri.uri;
