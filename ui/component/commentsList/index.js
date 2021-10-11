@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { doResolveUris } from 'redux/actions/claims';
 import {
   makeSelectClaimForUri,
   makeSelectClaimIsMine,
@@ -6,7 +7,7 @@ import {
   selectMyChannelClaims,
 } from 'redux/selectors/claims';
 import {
-  makeSelectTopLevelCommentsForUri,
+  selectTopLevelCommentsForUri,
   makeSelectTopLevelTotalPagesForUri,
   selectIsFetchingComments,
   selectIsFetchingCommentsById,
@@ -16,7 +17,7 @@ import {
   selectMyReacts,
   makeSelectCommentIdsForUri,
   selectSettingsByChannelId,
-  makeSelectPinnedCommentsForUri,
+  selectPinnedCommentsForUri,
 } from 'redux/selectors/comments';
 import { doCommentReset, doCommentList, doCommentById, doCommentReactList } from 'redux/actions/comments';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
@@ -24,11 +25,19 @@ import CommentsList from './view';
 
 const select = (state, props) => {
   const activeChannelClaim = selectActiveChannelClaim(state);
+  const topLevelComments = selectTopLevelCommentsForUri(state, props.uri);
+
+  const resolvedComments =
+    topLevelComments && topLevelComments.length > 0
+      ? topLevelComments.filter(({ channel_url }) => makeSelectClaimForUri(channel_url)(state) !== undefined)
+      : [];
+
   return {
+    topLevelComments,
+    resolvedComments,
     myChannels: selectMyChannelClaims(state),
     allCommentIds: makeSelectCommentIdsForUri(props.uri)(state),
-    pinnedComments: makeSelectPinnedCommentsForUri(props.uri)(state),
-    topLevelComments: makeSelectTopLevelCommentsForUri(props.uri)(state),
+    pinnedComments: selectPinnedCommentsForUri(state, props.uri),
     topLevelTotalPages: makeSelectTopLevelTotalPagesForUri(props.uri)(state),
     totalComments: makeSelectTotalCommentsCountForUri(props.uri)(state),
     claim: makeSelectClaimForUri(props.uri)(state),
@@ -49,6 +58,7 @@ const perform = (dispatch) => ({
   fetchComment: (commentId) => dispatch(doCommentById(commentId)),
   fetchReacts: (commentIds) => dispatch(doCommentReactList(commentIds)),
   resetComments: (claimId) => dispatch(doCommentReset(claimId)),
+  doResolveUris: (uris) => dispatch(doResolveUris(uris, true)),
 });
 
 export default connect(select, perform)(CommentsList);

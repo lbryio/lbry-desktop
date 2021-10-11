@@ -3,7 +3,7 @@ import { doCommentListOwn, doCommentReset } from 'redux/actions/comments';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
 import {
   selectIsFetchingComments,
-  makeSelectCommentsForUri,
+  selectCommentsForUri,
   makeSelectTotalCommentsCountForUri,
   makeSelectTopLevelTotalPagesForUri,
 } from 'redux/selectors/comments';
@@ -17,7 +17,7 @@ const select = (state) => {
 
   return {
     activeChannelClaim,
-    allComments: makeSelectCommentsForUri(uri)(state),
+    allComments: selectCommentsForUri(state, uri),
     totalComments: makeSelectTotalCommentsCountForUri(uri)(state),
     topLevelTotalPages: makeSelectTopLevelTotalPagesForUri(uri)(state),
     isFetchingComments: selectIsFetchingComments(state),
