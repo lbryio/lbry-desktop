@@ -539,6 +539,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       // this seems like a weird thing to have to check for here
       if (!player) return;
 
+      vjs.aniview();
+
       // Add various event listeners to player
       player.one('play', onInitialPlay);
       player.on('play', resolveCtrlText);
@@ -579,9 +581,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
       // I think this is a callback function
       const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
-      onPlayerReady(player, videoNode);
 
-      vjs.aniview();
+      onPlayerReady(player, videoNode);
     });
 
     // pre-roll ads

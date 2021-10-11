@@ -319,7 +319,6 @@ const analytics: Analytics = {
 
   apiLogView: (uri, outpoint, claimId, timeToStart) => {
     return new Promise((resolve, reject) => {
-
       if (internalAnalyticsEnabled && (isProduction || devInternalApis)) {
         const params: {
           uri: string,
