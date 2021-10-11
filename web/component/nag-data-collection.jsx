@@ -24,7 +24,7 @@ export default function NagDegradedPerformance(props: Props) {
                   <Button
                     button="link"
                     label={__('more --[value for "more_information"]--')}
-                    href="https://lbry.com/faq/privacy-and-data"
+                    href="https://odysee.com/$/privacypolicy"
                   />
                 ),
               }}
@@ -44,7 +44,7 @@ export default function NagDegradedPerformance(props: Props) {
                   <Button
                     button="link"
                     label={__('more --[value for "more_information"]--')}
-                    href="https://lbry.com/faq/privacy-and-data"
+                    href="https://odysee.com/$/privacypolicy"
                   />
                 ),
               }}

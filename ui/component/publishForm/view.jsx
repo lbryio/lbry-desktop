@@ -667,7 +667,7 @@ function PublishForm(props: Props) {
                 lbry_terms_of_service: (
                   <Button
                     button="link"
-                    href="https://www.lbry.com/termsofservice"
+                    href="https://odysee.com/$/tos"
                     label={__('%site_name% Terms of Service', { site_name: SITE_NAME })}
                   />
                 ),

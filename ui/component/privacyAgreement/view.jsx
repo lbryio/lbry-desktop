@@ -14,11 +14,11 @@ const LIMITED = 'limited';
 const NONE = 'none';
 
 type Props = {
-  setWelcomeVersion: number => void,
+  setWelcomeVersion: (number) => void,
   signOut: () => void,
-  setShareDataInternal: boolean => void,
-  setShareDataThirdParty: boolean => void,
-  history: { replace: string => void },
+  setShareDataInternal: (boolean) => void,
+  setShareDataThirdParty: (boolean) => void,
+  history: { replace: (string) => void },
   authenticated: boolean,
   authenticateIfSharingData: () => void,
 };
@@ -88,7 +88,7 @@ function PrivacyAgreement(props: Props) {
             helper={__(`Sending information to third parties (e.g. Google Analytics or Mixpanel) allows us to use detailed
                 analytical reports to improve all aspects of LBRY.`)}
             checked={share === FREE}
-            onChange={e => setShare(FREE)}
+            onChange={(e) => setShare(FREE)}
           />
           <FormField
             name={'shareWithLBRY'}
@@ -103,7 +103,7 @@ function PrivacyAgreement(props: Props) {
               `Sharing information with LBRY, Inc. allows us to report to publishers how their content is doing, as
                 well as track basic usage and performance. This is the minimum required to earn rewards from LBRY, Inc.`
             )}
-            onChange={e => setShare(LIMITED)}
+            onChange={(e) => setShare(LIMITED)}
           />
           <FormField
             disabled={authenticated}
@@ -118,7 +118,7 @@ function PrivacyAgreement(props: Props) {
             helper={__(`No information will be sent directly to LBRY, Inc. or third-parties about your usage. Note that as
                 peer-to-peer software, your IP address and potentially other system information can be sent to other
                 users, though this information is not stored permanently.`)}
-            onChange={e => setShare(NONE)}
+            onChange={(e) => setShare(NONE)}
           />
           {authenticated && (
             <div className="card--inline section--padded">
@@ -139,9 +139,7 @@ function PrivacyAgreement(props: Props) {
           <p className="section__subtitle">
             <I18nMessage
               tokens={{
-                terms: (
-                  <Button button="link" href="https://www.lbry.com/termsofservice" label={__('Terms of Service')} />
-                ),
+                terms: <Button button="link" href="https://odysee.com/$/tos" label={__('Terms of Service')} />,
               }}
             >
               Do you agree to the %terms%?
@@ -153,14 +151,14 @@ function PrivacyAgreement(props: Props) {
               type="radio"
               label={'Yes'}
               checked={agree === true}
-              onChange={e => setAgree(e.target.checked)}
+              onChange={(e) => setAgree(e.target.checked)}
             />
             <FormField
               name={'disagreeButton'}
               type="radio"
               checked={agree === false}
               label={__('No')}
-              onChange={e => setAgree(!e.target.checked)}
+              onChange={(e) => setAgree(!e.target.checked)}
             />
           </fieldset>
         </div>
