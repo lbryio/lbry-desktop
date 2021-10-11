@@ -10,11 +10,11 @@ type State = { comments: CommentsState };
 
 const selectState = (state) => state.comments || {};
 
-export const selectCommentsById = createSelector(selectState, (state) => state.commentById || {});
-export const selectIsFetchingComments = createSelector(selectState, (state) => state.isLoading);
-export const selectIsFetchingCommentsById = createSelector(selectState, (state) => state.isLoadingById);
-export const selectIsFetchingCommentsByParentId = createSelector(selectState, (state) => state.isLoadingByParentId);
-export const selectIsFetchingReacts = createSelector(selectState, (state) => state.isFetchingReacts);
+export const selectCommentsById = (state: State) => selectState(state).commentById || {};
+export const selectIsFetchingComments = (state: State) => selectState(state).isLoading;
+export const selectIsFetchingCommentsById = (state: State) => selectState(state).isLoadingById;
+export const selectIsFetchingCommentsByParentId = (state: State) => selectState(state).isLoadingByParentId;
+export const selectIsFetchingReacts = (state: State) => selectState(state).isFetchingReacts;
 
 export const selectMyReacts = (state: State) => state.comments.myReactsByCommentId;
 export const selectMyReactsForComment = (state: State, commentIdChannelId: string) => {
@@ -27,7 +27,7 @@ export const selectOthersReactsForComment = (state: State, id: string) => {
   return state.comments.othersReactsByCommentId && state.comments.othersReactsByCommentId[id];
 };
 
-export const selectPinnedCommentsById = createSelector(selectState, (state) => state.pinnedCommentsById);
+export const selectPinnedCommentsById = (state: State) => selectState(state).pinnedCommentsById;
 export const makeSelectPinnedCommentsForUri = (uri: string) =>
   createSelector(
     selectCommentsByUri,
@@ -61,35 +61,19 @@ export const selectModeratorBlockList = createSelector(selectState, (state) =>
   state.moderatorBlockList ? state.moderatorBlockList.reverse() : []
 );
 
-export const selectPersonalTimeoutMap = createSelector(selectState, (state) => state.personalTimeoutMap);
-export const selectAdminTimeoutMap = createSelector(selectState, (state) => state.adminTimeoutMap);
-export const selectModeratorTimeoutMap = createSelector(selectState, (state) => state.moderatorTimeoutMap);
-
-export const selectModeratorBlockListDelegatorsMap = createSelector(
-  selectState,
-  (state) => state.moderatorBlockListDelegatorsMap
-);
-
-export const selectTogglingForDelegatorMap = createSelector(selectState, (state) => state.togglingForDelegatorMap);
-
-export const selectBlockingByUri = createSelector(selectState, (state) => state.blockingByUri);
-export const selectUnBlockingByUri = createSelector(selectState, (state) => state.unBlockingByUri);
-export const selectFetchingModerationBlockList = createSelector(
-  selectState,
-  (state) => state.fetchingModerationBlockList
-);
-
-export const selectModerationDelegatesById = createSelector(selectState, (state) => state.moderationDelegatesById);
-export const selectIsFetchingModerationDelegates = createSelector(
-  selectState,
-  (state) => state.fetchingModerationDelegates
-);
-
-export const selectModerationDelegatorsById = createSelector(selectState, (state) => state.moderationDelegatorsById);
-export const selectIsFetchingModerationDelegators = createSelector(
-  selectState,
-  (state) => state.fetchingModerationDelegators
-);
+export const selectPersonalTimeoutMap = (state: State) => selectState(state).personalTimeoutMap;
+export const selectAdminTimeoutMap = (state: State) => selectState(state).adminTimeoutMap;
+export const selectModeratorTimeoutMap = (state: State) => selectState(state).moderatorTimeoutMap;
+export const selectModeratorBlockListDelegatorsMap = (state: State) =>
+  selectState(state).moderatorBlockListDelegatorsMap;
+export const selectTogglingForDelegatorMap = (state: State) => selectState(state).togglingForDelegatorMap;
+export const selectBlockingByUri = (state: State) => selectState(state).blockingByUri;
+export const selectUnBlockingByUri = (state: State) => selectState(state).unBlockingByUri;
+export const selectFetchingModerationBlockList = (state: State) => selectState(state).fetchingModerationBlockList;
+export const selectModerationDelegatesById = (state: State) => selectState(state).moderationDelegatesById;
+export const selectIsFetchingModerationDelegates = (state: State) => selectState(state).fetchingModerationDelegates;
+export const selectModerationDelegatorsById = (state: State) => selectState(state).moderationDelegatorsById;
+export const selectIsFetchingModerationDelegators = (state: State) => selectState(state).fetchingModerationDelegators;
 
 export const selectHasAdminChannel = createSelector(selectState, (state) => {
   const myChannelIds = Object.keys(state.moderationDelegatorsById);
@@ -122,7 +106,7 @@ export const selectCommentsByClaimId = createSelector(selectState, selectComment
   return comments;
 });
 
-export const selectSuperchatsByUri = createSelector(selectState, (state) => state.superChatsByUri);
+export const selectSuperchatsByUri = (state: State) => selectState(state).superChatsByUri;
 
 export const selectTopLevelCommentsByClaimId = createSelector(selectState, selectCommentsById, (state, byId) => {
   const byClaimId = state.topLevelCommentsById || {};
@@ -181,7 +165,7 @@ export const selectCommentsByUri = createSelector(selectState, (state) => {
   return comments;
 });
 
-export const selectLinkedCommentAncestors = createSelector(selectState, (state) => state.linkedCommentAncestors);
+export const selectLinkedCommentAncestors = (state: State) => selectState(state).linkedCommentAncestors;
 
 export const makeSelectCommentIdsForUri = (uri: string) =>
   createSelector(selectState, selectCommentsByUri, selectClaimsById, (state, byUri) => {
@@ -189,13 +173,10 @@ export const makeSelectCommentIdsForUri = (uri: string) =>
     return state.byId[claimId];
   });
 
-export const selectPendingCommentReacts = createSelector(selectState, (state) => state.pendingCommentReactions);
-
-export const selectSettingsByChannelId = createSelector(selectState, (state) => state.settingsByChannelId);
-
-export const selectFetchingCreatorSettings = createSelector(selectState, (state) => state.fetchingSettings);
-
-export const selectFetchingBlockedWords = createSelector(selectState, (state) => state.fetchingBlockedWords);
+export const selectPendingCommentReacts = (state: State) => selectState(state).pendingCommentReactions;
+export const selectSettingsByChannelId = (state: State) => selectState(state).settingsByChannelId;
+export const selectFetchingCreatorSettings = (state: State) => selectState(state).fetchingSettings;
+export const selectFetchingBlockedWords = (state: State) => selectState(state).fetchingBlockedWords;
 
 export const makeSelectCommentsForUri = (uri: string) =>
   createSelector(
