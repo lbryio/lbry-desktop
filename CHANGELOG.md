@@ -26,6 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Stream Key is now hidden _community pr!_ ([#7127](https://github.com/lbryio/lbry-desktop/pull/7127))
 - Fix playlist preview thumbnail ([#7178](https://github.com/lbryio/lbry-desktop/pull/7178)
 - Fixed “Your Account” popup on mobile ([#7172](https://github.com/lbryio/lbry-desktop/pull/7172))
+- Fix disable-support for comments ([#7245](https://github.com/lbryio/lbry-desktop/pull/7245))
 
 ## [0.51.2] - [2021-08-20]
 
