@@ -7,7 +7,7 @@ import {
   selectMyChannelClaims,
 } from 'redux/selectors/claims';
 import {
-  makeSelectTopLevelCommentsForUri,
+  selectTopLevelCommentsForUri,
   makeSelectTopLevelTotalPagesForUri,
   selectIsFetchingComments,
   selectIsFetchingCommentsById,
@@ -17,7 +17,7 @@ import {
   selectMyReacts,
   makeSelectCommentIdsForUri,
   selectSettingsByChannelId,
-  makeSelectPinnedCommentsForUri,
+  selectPinnedCommentsForUri,
 } from 'redux/selectors/comments';
 import { doCommentReset, doCommentList, doCommentById, doCommentReactList } from 'redux/actions/comments';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
@@ -25,7 +25,7 @@ import CommentsList from './view';
 
 const select = (state, props) => {
   const activeChannelClaim = selectActiveChannelClaim(state);
-  const topLevelComments = makeSelectTopLevelCommentsForUri(props.uri)(state);
+  const topLevelComments = selectTopLevelCommentsForUri(state, props.uri);
 
   const resolvedComments =
     topLevelComments && topLevelComments.length > 0
@@ -37,7 +37,7 @@ const select = (state, props) => {
     resolvedComments,
     myChannels: selectMyChannelClaims(state),
     allCommentIds: makeSelectCommentIdsForUri(props.uri)(state),
-    pinnedComments: makeSelectPinnedCommentsForUri(props.uri)(state),
+    pinnedComments: selectPinnedCommentsForUri(state, props.uri),
     topLevelTotalPages: makeSelectTopLevelTotalPagesForUri(props.uri)(state),
     totalComments: makeSelectTotalCommentsCountForUri(props.uri)(state),
     claim: makeSelectClaimForUri(props.uri)(state),

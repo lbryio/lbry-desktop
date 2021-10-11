@@ -4,12 +4,12 @@ import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import { withRouter } from 'react-router';
 import { makeSelectClaimForUri } from 'redux/selectors/claims';
 import { doResolveUris } from 'redux/actions/claims';
-import { makeSelectTopLevelCommentsForUri } from 'redux/selectors/comments';
+import { selectTopLevelCommentsForUri } from 'redux/selectors/comments';
 import ChannelMentionSuggestions from './view';
 
 const select = (state, props) => {
   const subscriptionUris = selectSubscriptions(state).map(({ uri }) => uri);
-  const topLevelComments = makeSelectTopLevelCommentsForUri(props.uri)(state);
+  const topLevelComments = selectTopLevelCommentsForUri(state, props.uri);
 
   const commentorUris = [];
   // Avoid repeated commentors
