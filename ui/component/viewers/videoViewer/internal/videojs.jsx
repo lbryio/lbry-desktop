@@ -77,6 +77,20 @@ type Props = {
 //   muted?: boolean,
 // };
 
+function hitsTwentyPercent() {
+  // from 0 - 999
+  var rand = Math.floor(Math.random() * (1000 + 1));
+
+  console.log(rand);
+  console.log('rand');
+
+  if (rand > 799) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 const videoPlaybackRates = [0.25, 0.5, 0.75, 1, 1.1, 1.25, 1.5, 1.75, 2];
 
 const IS_IOS =
@@ -178,7 +192,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     adUrl,
     claimId,
     userId,
-    // allowPreRoll,
+    allowPreRoll,
     shareTelemetry,
     replay,
     videoTheaterMode,
@@ -539,7 +553,10 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       // this seems like a weird thing to have to check for here
       if (!player) return;
 
-      vjs.aniview();
+      if (allowPreRoll && hitsTwentyPercent()) {
+        vjs.aniview();
+      }
+
 
       // Add various event listeners to player
       player.one('play', onInitialPlay);

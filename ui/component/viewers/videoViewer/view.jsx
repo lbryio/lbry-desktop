@@ -454,29 +454,27 @@ function VideoViewer(props: Props) {
         </>
       )}
 
-      {!isFetchingAd && (
-        <VideoJs
-          adUrl={adUrl}
-          source={adUrl || source}
-          sourceType={forcePlayer || adUrl ? 'video/mp4' : contentType}
-          isAudio={isAudio}
-          poster={isAudio || (embedded && !autoplayIfEmbedded) ? thumbnail : ''}
-          onPlayerReady={onPlayerReady}
-          startMuted={autoplayIfEmbedded}
-          toggleVideoTheaterMode={toggleVideoTheaterMode}
-          autoplay={!embedded || autoplayIfEmbedded}
-          autoplaySetting={autoplayNext}
-          claimId={claimId}
-          userId={userId}
-          allowPreRoll={!embedded && !authenticated}
-          shareTelemetry={shareTelemetry}
-          replay={replay}
-          videoTheaterMode={videoTheaterMode}
-          playNext={doPlayNext}
-          playPrevious={doPlayPrevious}
-          embedded={embedded}
-        />
-      )}
+      <VideoJs
+        adUrl={adUrl}
+        source={adUrl || source}
+        sourceType={forcePlayer || adUrl ? 'video/mp4' : contentType}
+        isAudio={isAudio}
+        poster={isAudio || (embedded && !autoplayIfEmbedded) ? thumbnail : ''}
+        onPlayerReady={onPlayerReady}
+        startMuted={autoplayIfEmbedded}
+        toggleVideoTheaterMode={toggleVideoTheaterMode}
+        autoplay={!embedded || autoplayIfEmbedded}
+        autoplaySetting={autoplayNext}
+        claimId={claimId}
+        userId={userId}
+        allowPreRoll={!embedded && !authenticated}
+        shareTelemetry={shareTelemetry}
+        replay={replay}
+        videoTheaterMode={videoTheaterMode}
+        playNext={doPlayNext}
+        playPrevious={doPlayPrevious}
+        embedded={embedded}
+      />
     </div>
   );
 }
