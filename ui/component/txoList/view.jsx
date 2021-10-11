@@ -96,8 +96,8 @@ function TxoList(props: Props) {
         }
 
         // TODO: remove this once pagination is implemented
-        if (accountTransactionResponse && accountTransactionResponse.length && accountTransactionResponse.length > 25) {
-          accountTransactionResponse.length = 25;
+        if (accountTransactionResponse && accountTransactionResponse.length && accountTransactionResponse.length > 100) {
+          accountTransactionResponse.length = 100;
         }
 
         setAccountTransactionResponse(accountTransactionResponse);
@@ -125,9 +125,9 @@ function TxoList(props: Props) {
         if (
           customerTransactionResponse &&
           customerTransactionResponse.length &&
-          customerTransactionResponse.length > 25
+          customerTransactionResponse.length > 100
         ) {
-          customerTransactionResponse.length = 25;
+          customerTransactionResponse.length = 100;
         }
 
         setCustomerTransactions(customerTransactionResponse);
