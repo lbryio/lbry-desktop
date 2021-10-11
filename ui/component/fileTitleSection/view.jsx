@@ -12,6 +12,7 @@ import Icon from 'component/common/icon';
 import I18nMessage from 'component/i18nMessage';
 import Button from 'component/button';
 import FileDescription from 'component/fileDescription';
+import usePersistedState from 'effects/use-persisted-state';
 import { ENABLE_MATURE } from 'config';
 
 type Props = {
@@ -40,6 +41,7 @@ function FileTitleSection(props: Props) {
     channelClaimId,
     fetchSubCount,
   } = props;
+  const [hasAcknowledgedSec, setHasAcknowledgedSec] = usePersistedState('sec-nag', false);
 
   React.useEffect(() => {
     if (channelClaimId) {
@@ -49,6 +51,16 @@ function FileTitleSection(props: Props) {
 
   return (
     <>
+      {!hasAcknowledgedSec && (
+        <div className="notice-message">
+          <Button button="close" icon={ICONS.REMOVE} onClick={() => setHasAcknowledgedSec(true)} />
+          <h1 className="section__title">{__('Help LBRY Save Crypto')}</h1>
+          <p className="section__subtitle">
+            {__('The US government is attempting to destroy the cryptocurrency industry. Can you help?')}{' '}
+            <Button label={__('Learn more and sign petition')} button="link" href="https://helplbrysavecrypto.com" />
+          </p>
+        </div>
+      )}
       <Card
         isPageTitle
         noTitleWrap

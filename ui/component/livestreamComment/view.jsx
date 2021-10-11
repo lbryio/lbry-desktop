@@ -104,7 +104,7 @@ function LivestreamComment(props: Props) {
           )}
 
           <div className="livestream-comment__text">
-            <MarkdownPreview content={message} promptLinks stakedLevel={stakedLevel} disableTimestamps />
+            <MarkdownPreview content={message} promptLinks stakedLevel={stakedLevel} />
           </div>
         </div>
       </div>

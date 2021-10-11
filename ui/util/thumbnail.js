@@ -1,5 +1,9 @@
 // @flow
-import { THUMBNAIL_CDN_URL, THUMBNAIL_HEIGHT, THUMBNAIL_WIDTH, THUMBNAIL_QUALITY } from 'config';
+import { THUMBNAIL_CDN_URL } from 'config';
+
+const THUMBNAIL_HEIGHT = 220;
+const THUMBNAIL_WIDTH = 390;
+const THUMBNAIL_QUALITY = 85;
 
 type Props = {
   thumbnail: ?string,
@@ -19,11 +23,7 @@ export function getThumbnailCdnUrl(props: Props) {
     return `${THUMBNAIL_CDN_URL}s:${width}:${height}/quality:${quality}/plain/${thumbnail}`;
   }
 
-  if (thumbnail && thumbnail.includes('https://spee.ch') && !thumbnail.includes('?quality=')) {
-    return `${thumbnail}?quality=${quality}&height=${height}&width=${width}`;
-  }
-
   if (thumbnail && thumbnail.includes('https://spee.ch')) {
-    return thumbnail;
+    return `${thumbnail}?quality=${quality}&height=${height}&width=${width}`;
   }
 }

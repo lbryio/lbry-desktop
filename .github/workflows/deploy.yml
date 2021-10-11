@@ -1,0 +1,100 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: Borales/actions-yarn@v2.3.0
+      - run: yarn lint
+
+  build:
+    needs: ['lint']
+    name: 'build'
+    strategy:
+      matrix:
+        node-version: [14.x]
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - uses: maxim-lobanov/setup-xcode@v1
+        if: startsWith(runner.os, 'mac')
+        with:
+          xcode-version: '10.3.0'
+
+      - name: Download blockchain headers
+        run: |
+          mkdir -p ./static/daemon
+          curl -o ./static/daemon/headers https://headers.lbry.io/blockchain_headers_latest
+          ls ./static/daemon
+
+      - name: Build
+        run: |
+          yarn global add cross-env
+          yarn
+          yarn build
+          node ./build/afterSignHook.js
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          NOTARIZATION_USERNAME: ${{ secrets.NOTARIZATION_USERNAME }}
+          NOTARIZATION_PASSWORD: ${{ secrets.NOTARIZATION_PASSWORD }}
+          WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+          WIN_CSC_LINK: https://s3.amazonaws.com/files.lbry.io/cert/win-csc-2020-2021-08.p12
+          CSC_LINK: https://s3.amazonaws.com/files.lbry.io/cert/osx-csc-2021-2022.p12
+
+          # UI
+          MATOMO_URL: https://analytics.lbry.com/
+          MATOMO_ID: 4
+          WELCOME_VERSION: 1.0
+          DOMAIN: lbry.tv
+          URL: https://lbry.tv
+          SHARE_DOMAIN_URL: https://open.lbry.com
+          SITE_TITLE: lbry.tv
+          SITE_NAME: lbry.tv
+          SHOW_ADS: false
+          YRBL_HAPPY_IMG_URL: https://cdn.lbryplayer.xyz/api/v3/streams/free/yrbl-happy/7aa50a7e5adaf48691935d55e45d697547392929/839d9a
+          YRBL_SAD_IMG_URL: https://cdn.lbryplayer.xyz/api/v3/streams/free/yrbl-sad/c2d9649633d974e5ffb503925e1f17d951f1bd0f/f262dd
+          ENABLE_COMMENT_REACTIONS: true
+          ENABLE_NO_SOURCE_CLAIMS: false
+
+          DEFAULT_LANGUAGE: en
+          KNOWN_APP_DOMAINS: lbry.tv,lbry.lat,odysee.com
+          CHANNEL_STAKED_LEVEL_VIDEO_COMMENTS: 0
+
+      - uses: actions/upload-artifact@v2
+        if: |
+          startsWith(runner.os, 'linux')
+        with:
+          name: Linux
+          path: ./dist/electron/*.*
+
+      - uses: actions/upload-artifact@v2
+        if: |
+          startsWith(runner.os, 'mac')
+        with:
+          name: macOS
+          path: ./dist/electron/*.*
+
+      - uses: actions/upload-artifact@v2
+        if: |
+          github.event.pull_request.head.repo.full_name == github.repository
+        with:
+          name: Windows
+          path: ./dist/electron/*.*

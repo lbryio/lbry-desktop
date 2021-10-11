@@ -177,7 +177,7 @@ function UserEmailNew(props: Props) {
               <p className="help--card-actions">
                 <I18nMessage
                   tokens={{
-                    terms: <Button button="link" href="https://odysee.com/$/tos" label={__('terms')} />,
+                    terms: <Button button="link" href="https://www.lbry.com/termsofservice" label={__('terms')} />,
                   }}
                 >
                   By creating an account, you agree to our %terms% and confirm you're over the age of 13.

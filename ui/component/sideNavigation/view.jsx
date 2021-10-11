@@ -299,7 +299,10 @@ function SideNavigation(props: Props) {
   const helpLinks = (
     <ul className="navigation__tertiary navigation-links--small">
       <li className="navigation-link">
-        <Button label={__('FAQ and Support')} href="https://odysee.com/@OdyseeHelp:b" />
+        <Button label={__('About --[link title in Sidebar or Footer]--')} href="https://lbry.com/about" />
+      </li>
+      <li className="navigation-link">
+        <Button label={__('FAQ')} href="https://odysee.com/@OdyseeHelp:b" />
       </li>
       {SIMPLE_SITE && ( // GUIDELINES_URL?
         <li className="navigation-link">
@@ -307,10 +310,13 @@ function SideNavigation(props: Props) {
         </li>
       )}
       <li className="navigation-link">
-        <Button label={__('Terms')} href="https://odysee.com/$/tos" />
+        <Button label={__('Support --[used in footer; general help/support]--')} href="https://lbry.com/support" />
       </li>
       <li className="navigation-link">
-        <Button label={__('Privacy Policy')} href="https://odysee.com/$/privacypolicy" />
+        <Button label={__('Terms')} href="https://lbry.com/termsofservice" />
+      </li>
+      <li className="navigation-link">
+        <Button label={__('Privacy Policy')} href="https://lbry.com/privacy" />
       </li>
     </ul>
   );

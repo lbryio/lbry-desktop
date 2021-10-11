@@ -1,7 +1,11 @@
+<img width="40%" src="https://miro.medium.com/max/5198/1*bTVuL2THG_0mpwmE-n7Ezg.png" />
 
-# Odysee Frontend - Odysee.com
+# LBRY App - https://lbry.tv
 
-This repo contains the UI and front end code that powers Odysee.com.
+This repo contains the UI code that powers the official LBRY desktop app, as well as lbry.tv. The LBRY app is a graphical browser for the decentralized content marketplace provided by the
+[LBRY](https://lbry.com) protocol. It is essentially the
+[lbry daemon](https://github.com/lbryio/lbry) bundled with a UI using
+[Electron](https://electron.atom.io/).
 
  <a href="https://github.com/lbryio/lbry-desktop/blob/master/LICENSE" title="MIT licensed">
    <img alt="npm" src="https://img.shields.io/dub/l/vibe-d.svg?style=flat">
@@ -25,6 +29,7 @@ This repo contains the UI and front end code that powers Odysee.com.
   </a>
 </h2>
 
+![App GIF](https://spee.ch/ba/lbry-joule.gif)
 
 ## Table of Contents
 
@@ -165,6 +170,9 @@ This project is MIT licensed. For the full license, see [LICENSE](LICENSE).
 
 ## Security
 
-We take security seriously. Please contact security@odysee.com regarding any security issues. Our PGP key is [here](https://lbry.com/faq/pgp-key) if you need it. Previous versions up to v0.50.2 were signed by [Sean Yesmunt](https://keybase.io/seanyesmunt/key.asc).
+We take security seriously. Please contact security@lbry.com regarding any security issues. Our PGP key is [here](https://lbry.com/faq/pgp-key) if you need it. Previous versions up to v0.50.2 were signed by [Sean Yesmunt](https://keybase.io/seanyesmunt/key.asc).
 New Releases are signed by [Jessop Breth](https://keybase.io/jessopb/key.asc).
 
+## Contact
+
+The primary contact for this project is [@jessopb](https://github.com/jessopb).

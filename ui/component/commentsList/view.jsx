@@ -32,7 +32,6 @@ type Props = {
   allCommentIds: any,
   pinnedComments: Array<Comment>,
   topLevelComments: Array<Comment>,
-  resolvedComments: Array<Comment>,
   topLevelTotalPages: number,
   uri: string,
   claim: ?Claim,
@@ -48,9 +47,8 @@ type Props = {
   othersReactsById: ?{ [string]: { [REACTION_TYPES.LIKE | REACTION_TYPES.DISLIKE]: number } },
   activeChannelId: ?string,
   settingsByChannelId: { [channelId: string]: PerChannelSettings },
-  commentsAreExpanded?: boolean,
   fetchReacts: (Array<string>) => Promise<any>,
-  doResolveUris: (Array<string>) => void,
+  commentsAreExpanded?: boolean,
   fetchTopLevelComments: (string, number, number, number) => void,
   fetchComment: (string) => void,
   resetComments: (string) => void,
@@ -62,7 +60,6 @@ function CommentList(props: Props) {
     uri,
     pinnedComments,
     topLevelComments,
-    resolvedComments,
     topLevelTotalPages,
     claim,
     claimIsMine,
@@ -77,9 +74,8 @@ function CommentList(props: Props) {
     othersReactsById,
     activeChannelId,
     settingsByChannelId,
-    commentsAreExpanded,
     fetchReacts,
-    doResolveUris,
+    commentsAreExpanded,
     fetchTopLevelComments,
     fetchComment,
     resetComments,
@@ -225,16 +221,8 @@ function CommentList(props: Props) {
     }
   }, [hasDefaultExpansion, isFetchingComments, moreBelow, page, readyToDisplayComments, topLevelTotalPages]);
 
-  // Batch resolve comment channel urls
-  useEffect(() => {
-    const urisToResolve = [];
-    topLevelComments.map(({ channel_url }) => channel_url !== undefined && urisToResolve.push(channel_url));
-
-    if (urisToResolve.length > 0) doResolveUris(urisToResolve);
-  }, [topLevelComments, doResolveUris]);
-
-  const getCommentElems = (comments) =>
-    comments.map((comment) => (
+  const getCommentElems = (comments) => {
+    return comments.map((comment) => (
       <CommentView
         isTopLevel
         threadDepth={3}
@@ -259,19 +247,22 @@ function CommentList(props: Props) {
         isFiat={comment.is_fiat}
       />
     ));
+  };
 
-  const sortButton = (label, icon, sortOption) => (
-    <Button
-      button="alt"
-      label={label}
-      icon={icon}
-      iconSize={18}
-      onClick={() => changeSort(sortOption)}
-      className={classnames(`button-toggle`, {
-        'button-toggle--active': sort === sortOption,
-      })}
-    />
-  );
+  const sortButton = (label, icon, sortOption) => {
+    return (
+      <Button
+        button="alt"
+        label={label}
+        icon={icon}
+        iconSize={18}
+        onClick={() => changeSort(sortOption)}
+        className={classnames(`button-toggle`, {
+          'button-toggle--active': sort === sortOption,
+        })}
+      />
+    );
+  };
 
   return (
     <Card
@@ -308,7 +299,7 @@ function CommentList(props: Props) {
             })}
           >
             {readyToDisplayComments && pinnedComments && getCommentElems(pinnedComments)}
-            {readyToDisplayComments && resolvedComments && getCommentElems(resolvedComments)}
+            {readyToDisplayComments && topLevelComments && getCommentElems(topLevelComments)}
           </ul>
 
           {!hasDefaultExpansion && (

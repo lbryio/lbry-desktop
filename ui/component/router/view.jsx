@@ -19,9 +19,6 @@ const BackupPage = lazyImport(() => import('page/backup' /* webpackChunkName: "b
 
 // @if TARGET='web'
 const Code2257Page = lazyImport(() => import('web/page/code2257' /* webpackChunkName: "code2257" */));
-const PrivacyPolicyPage = lazyImport(() => import('web/page/privacypolicy' /* webpackChunkName: "privacypolicy" */));
-const TOSPage = lazyImport(() => import('web/page/tos' /* webpackChunkName: "tos" */));
-const YouTubeTOSPage = lazyImport(() => import('web/page/youtubetos' /* webpackChunkName: "youtubetos" */));
 // @endif
 
 // Chunk: "secondary"
@@ -281,9 +278,6 @@ function AppRouter(props: Props) {
         {/* @endif */}
         {/* @if TARGET='web' */}
         <Route path={`/$/${PAGES.CODE_2257}`} exact component={Code2257Page} />
-        <Route path={`/$/${PAGES.PRIVACY_POLICY}`} exact component={PrivacyPolicyPage} />
-        <Route path={`/$/${PAGES.TOS}`} exact component={TOSPage} />
-        <Route path={`/$/${PAGES.YOUTUBE_TOS}`} exact component={YouTubeTOSPage} />
         {/* @endif */}
         <Route path={`/$/${PAGES.AUTH_VERIFY}`} exact component={SignInVerifyPage} />
         <Route path={`/$/${PAGES.SEARCH}`} exact component={SearchPage} />

@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import {
-  doResolveUris,
   makeSelectClaimForUri,
   makeSelectClaimIsMine,
   selectFetchingMyChannels,
@@ -25,21 +24,11 @@ import CommentsList from './view';
 
 const select = (state, props) => {
   const activeChannelClaim = selectActiveChannelClaim(state);
-  const topLevelComments = makeSelectTopLevelCommentsForUri(props.uri)(state);
-  const resolvedComments = [];
-
-  if (topLevelComments.length > 0) {
-    topLevelComments.map(
-      (comment) => Boolean(makeSelectClaimForUri(comment.channel_url)(state)) && resolvedComments.push(comment)
-    );
-  }
-
   return {
-    topLevelComments,
-    resolvedComments,
     myChannels: selectMyChannelClaims(state),
     allCommentIds: makeSelectCommentIdsForUri(props.uri)(state),
     pinnedComments: makeSelectPinnedCommentsForUri(props.uri)(state),
+    topLevelComments: makeSelectTopLevelCommentsForUri(props.uri)(state),
     topLevelTotalPages: makeSelectTopLevelTotalPagesForUri(props.uri)(state),
     totalComments: makeSelectTotalCommentsCountForUri(props.uri)(state),
     claim: makeSelectClaimForUri(props.uri)(state),
@@ -60,7 +49,6 @@ const perform = (dispatch) => ({
   fetchComment: (commentId) => dispatch(doCommentById(commentId)),
   fetchReacts: (commentIds) => dispatch(doCommentReactList(commentIds)),
   resetComments: (claimId) => dispatch(doCommentReset(claimId)),
-  doResolveUris: (uris) => dispatch(doResolveUris(uris, true)),
 });
 
 export default connect(select, perform)(CommentsList);

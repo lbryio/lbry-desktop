@@ -200,9 +200,7 @@ class HelpPage extends React.PureComponent<Props, State> {
           subtitle={
             <I18nMessage
               tokens={{
-                support_link: (
-                  <Button button="link" label={__('support')} href="https://odysee.com/@OdyseeHelp:b?view=about" />
-                ),
+                support_link: <Button button="link" label={__('support')} href="https://lbry.com/faq/support" />,
               }}
             >
               Did something go wrong? Have a look in your log file, or send it to %support_link%.

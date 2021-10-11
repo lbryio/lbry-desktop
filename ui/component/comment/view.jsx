@@ -117,18 +117,12 @@ function Comment(props: Props) {
     location: { pathname, search },
   } = useHistory();
 
-  const isInLinkedCommentChain =
-    linkedCommentId &&
-    linkedCommentAncestors[linkedCommentId] &&
-    linkedCommentAncestors[linkedCommentId].includes(commentId);
-  const showRepliesOnMount = isInLinkedCommentChain || AUTO_EXPAND_ALL_REPLIES;
-
   const [isReplying, setReplying] = React.useState(false);
   const [isEditing, setEditing] = useState(false);
   const [editedMessage, setCommentValue] = useState(message);
   const [charCount, setCharCount] = useState(editedMessage.length);
-  const [showReplies, setShowReplies] = useState(showRepliesOnMount);
-  const [page, setPage] = useState(showRepliesOnMount ? 1 : 0);
+  const [showReplies, setShowReplies] = useState(false);
+  const [page, setPage] = useState(0);
   const [advancedEditor] = usePersistedState('comment-editor-mode', false);
   const [displayDeadComment, setDisplayDeadComment] = React.useState(false);
   const hasChannels = myChannels && myChannels.length > 0;
@@ -145,6 +139,19 @@ function Comment(props: Props) {
       channelOwnerOfContent = channelName;
     }
   } catch (e) {}
+
+  // Auto-expand (limited to linked-comments for now, but can be for all)
+  useEffect(() => {
+    const isInLinkedCommentChain =
+      linkedCommentId &&
+      linkedCommentAncestors[linkedCommentId] &&
+      linkedCommentAncestors[linkedCommentId].includes(commentId);
+
+    if (isInLinkedCommentChain || AUTO_EXPAND_ALL_REPLIES) {
+      setShowReplies(true);
+      setPage(1);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (isEditing) {

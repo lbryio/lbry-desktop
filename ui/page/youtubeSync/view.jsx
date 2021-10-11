@@ -162,7 +162,7 @@ export default function YoutubeSync(props: Props) {
                     <I18nMessage
                       tokens={{
                         terms: (
-                          <Button button="link" label={__('these terms')} href="https://odysee.com/$/youtubetos" />
+                          <Button button="link" label={__('these terms')} href="https://lbry.com/faq/youtube-terms" />
                         ),
                         faq: (
                           <Button
