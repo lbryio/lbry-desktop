@@ -60,7 +60,8 @@ type Props = {
   adUrl: ?string,
   claimId: ?string,
   userId: ?number,
-  // allowPreRoll: ?boolean,
+  allowPreRoll: ?boolean,
+  internalFeatureEnabled: ?boolean,
   shareTelemetry: boolean,
   replay: boolean,
   videoTheaterMode: boolean,
@@ -193,6 +194,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     claimId,
     userId,
     allowPreRoll,
+    internalFeatureEnabled,
     shareTelemetry,
     replay,
     videoTheaterMode,
@@ -553,10 +555,13 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       // this seems like a weird thing to have to check for here
       if (!player) return;
 
-      if (allowPreRoll && hitsTwentyPercent()) {
+      // always have ads on if internal feature is on,
+      // otherwise if not authed, roll for 20% to see an ad
+      const shouldShowAnAd = internalFeatureEnabled || (allowPreRoll && hitsTwentyPercent());
+
+      if (shouldShowAnAd) {
         vjs.aniview();
       }
-
 
       // Add various event listeners to player
       player.one('play', onInitialPlay);

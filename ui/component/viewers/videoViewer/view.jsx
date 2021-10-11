@@ -55,6 +55,7 @@ type Props = {
   setVideoPlaybackRate: (number) => void,
   authenticated: boolean,
   userId: number,
+  internalFeature: boolean,
   homepageData?: { [string]: HomepageCat },
   shareTelemetry: boolean,
   isFloating: boolean,
@@ -98,6 +99,7 @@ function VideoViewer(props: Props) {
     homepageData,
     authenticated,
     userId,
+    internalFeature,
     shareTelemetry,
     isFloating,
     doPlayUri,
@@ -467,7 +469,8 @@ function VideoViewer(props: Props) {
         autoplaySetting={autoplayNext}
         claimId={claimId}
         userId={userId}
-        allowPreRoll={!authenticated}
+        allowPreRoll={!authenticated} // used to not include embeds, removed for now
+        internalFeatureEnabled={internalFeature}
         shareTelemetry={shareTelemetry}
         replay={replay}
         videoTheaterMode={videoTheaterMode}
