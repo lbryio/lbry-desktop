@@ -467,7 +467,7 @@ function VideoViewer(props: Props) {
         autoplaySetting={autoplayNext}
         claimId={claimId}
         userId={userId}
-        allowPreRoll={!embedded && !authenticated}
+        allowPreRoll={!authenticated}
         shareTelemetry={shareTelemetry}
         replay={replay}
         videoTheaterMode={videoTheaterMode}
