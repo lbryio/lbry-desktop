@@ -599,10 +599,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
       if (shouldShowAnAd && browserIsChrome) {
         player.ima({adTagUrl: macroUrl});
-
-        player.ima.on('adend', function(event){
-          console.log('AD ENDED')
-        })
       }
 
       player.on('loadstart', function(event){
