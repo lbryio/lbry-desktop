@@ -85,11 +85,21 @@ function hitsTwentyPercent() {
   console.log(rand);
   console.log('rand');
 
+  setTimeout(function(){
+    console.log('play here');
+    player.play()
+  }, 1000)
+
+  return true
+
+
   if (rand > 799) {
     return true;
   } else {
     return false;
   }
+
+
 }
 
 const videoPlaybackRates = [0.25, 0.5, 0.75, 1, 1.1, 1.25, 1.5, 1.75, 2];
