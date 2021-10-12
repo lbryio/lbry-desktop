@@ -6,6 +6,8 @@ import * as ICONS from 'constants/icons';
 import * as KEYCODES from 'constants/keycodes';
 import classnames from 'classnames';
 import videojs from 'video.js';
+import 'videojs-contrib-ads';
+import 'videojs-ima';
 import 'video.js/dist/alt/video-js-cdn.min.css';
 import eventTracking from 'videojs-event-tracking';
 import * as OVERLAY from './overlays';
@@ -85,10 +87,10 @@ function hitsTwentyPercent() {
   console.log(rand);
   console.log('rand');
 
-  setTimeout(function(){
-    console.log('play here');
-    player.play()
-  }, 1000)
+  // setTimeout(function(){
+  //   console.log('play here');
+  //   player.play()
+  // }, 1000)
 
   return true
 
@@ -565,13 +567,49 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       // this seems like a weird thing to have to check for here
       if (!player) return;
 
+      // Modified to work with IMA
+      const macroUrl =
+        `https://vast.aniview.com/api/adserver61/vast/` +
+        `?AV_PUBLISHERID=60afcbc58cfdb065440d2426` +
+        `&AV_CHANNELID=612fb75a42715a07645a614c` +
+        `&AV_URL=[URL]` +
+        `&cb=[CACHEBUSTING]` +
+        `&AV_WIDTH=[WIDTH]` +
+        `&AV_HEIGHT=[HEIGHT]` +
+        // `&AV_SCHAIN=[SCHAIN_MACRO]` +
+        // `&AV_CCPA=[CCPA_MACRO]` +
+        // `&AV_GDPR=[GDPR_MACRO]` +
+        // `&AV_CONSENT=[CONSENT_MACRO]` +
+        `&skip=true` +
+        `&skiptimer=5` +
+        `&logo=true` +
+        `&usevslot=true` +
+        `&vastretry=2` +
+        `&hidecontrols=false`;
+
       // always have ads on if internal feature is on,
       // otherwise if not authed, roll for 20% to see an ad
       const shouldShowAnAd = internalFeatureEnabled || (allowPreRoll && hitsTwentyPercent());
 
-      if (shouldShowAnAd) {
-        vjs.aniview();
+      console.log('BROWSER');
+      console.log(videojs.browser);
+
+      const browserIsChrome = videojs.browser.IS_CHROME;
+      console.log(browserIsChrome)
+
+      if (shouldShowAnAd && browserIsChrome) {
+        player.ima({adTagUrl: macroUrl});
+
+        player.ima.on('adend', function(event){
+          console.log('AD ENDED')
+        })
       }
+
+      player.on('loadstart', function(event){
+        console.log('RUNNING HERE!');
+        player.play();
+      })
+
 
       // Add various event listeners to player
       player.one('play', onInitialPlay);

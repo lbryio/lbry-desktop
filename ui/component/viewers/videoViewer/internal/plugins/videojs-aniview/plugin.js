@@ -69,37 +69,90 @@ class AniviewPlugin extends Component {
     // Plugin started
     if (options.debug) this.log(`Created aniview plugin.`);
 
-    // To help with debugging, we'll add a global vjs object with the video js player
-    window.aniview = player;
+    if (!this.ads) {
+      console.error("ima-player error: contrib-ads must be registered on player.")
+      return;
+    }
 
-    this.player = player;
+    console.log('this ads');
+
+    console.log(this.ads);
+
+    this.ads(); // initialize videojs-contrib-ads
 
     // request ads whenever there's new video content
-    player.on('contentchanged', () => {
-      // in a real plugin, you might fetch your ad inventory here
+    player.on('contentchanged', function() {
+      // in a real plugin, you might fetch new ad inventory here
       player.trigger('adsready');
     });
 
-    // Plugin event listeners
-    player.on('readyforpreroll', (event) => this.onReadyForPreroll(event));
-  }
+    player.on('readyforpreroll', function() {
+      player.ads.startLinearAdMode();
+      // play your linear ad content
+      // in this example, we use a static mp4
+      player.src('kitteh.mp4');
 
-  onReadyForPreroll(event) {
-    // send event when ad is playing to remove loading spinner
-    this.player.one('adplaying', () => {
-      this.player.trigger('ads-ad-started');
+      // send event when ad is playing to remove loading spinner
+      player.one('adplaying', function() {
+        player.trigger('ads-ad-started');
+      });
+
+      // resume content when all your linear ads have finished
+      player.one('adended', function() {
+
+        player.ads.endLinearAdMode();
+      });
     });
 
-    // resume content when all your linear ads have finished
-    this.player.one('adended', () => {
-      this.player.ads.endLinearAdMode();
-    });
-  }
+    // in a real plugin, you might fetch ad inventory here
+    player.trigger('adsready');
 
-  log(...args) {
-    if (this.options_.debug) {
-      console.log(`Aniview Debug:`, JSON.stringify(args));
-    }
+    //   window.player.ads();
+    //
+    //   // To help with debugging, we'll add a global vjs object with the video js player
+    //   window.aniview = player;
+    //
+    //   this.player = player;
+    //
+    //   setTimeout(function(){
+    //
+    //   })
+    //
+    //   // request ads whenever there's new video content
+    //   window.player.on('contentchanged', () => {
+    //     console.log('CONTENT CHANGED');
+    //     // in a real plugin, you might fetch your ad inventory here
+    //     player.trigger('adsready');
+    //   });
+    //
+    //   // Plugin event listeners
+    //   window.player.on('readyforpreroll', (event) => this.onReadyForPreroll(event));
+    //
+    //   window.player.on('readyforpreroll', function(event){
+    //     console.log('ready for preroll');
+    //   })
+    // }
+    //
+    // onReadyForPreroll(event) {
+    //   // send event when ad is playing to remove loading spinner
+    //   window.player.on('adstart', () => {
+    //     console.log('ad playing');
+    //     this.player.trigger('ads-ad-started');
+    //   });
+    //
+    //   // resume content when all your linear ads have finished
+    //   window.player.on('adend', () => {
+    //     console.log('ad ended');
+    //     window.player.play()
+    //     this.player.ads.endLinearAdMode();
+    //   });
+    // }
+    //
+    // log(...args) {
+    //   if (this.options_.debug) {
+    //     console.log(`Aniview Debug:`, JSON.stringify(args));
+    //   }
+    // }
   }
 }
 

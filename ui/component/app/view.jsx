@@ -325,7 +325,7 @@ function App(props: Props) {
     }
   }, [previousRewardApproved, isRewardApproved]);
 
-  // Load IMA3 SDK for aniview: DISABLED FOR NOW
+  // Load IMA3 SDK for aniview
   // @if TARGET='web'
   useEffect(() => {
       const script = document.createElement('script');
