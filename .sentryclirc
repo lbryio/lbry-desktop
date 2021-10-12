@@ -1,0 +1,4 @@
+[defaults]
+url = https://sentry.lbry.tech/
+org = lbry
+project = lbry-desktop-web
