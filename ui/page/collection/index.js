@@ -23,7 +23,7 @@ import {
 import {
   doFetchItemsInCollection,
   doCollectionDelete,
-  doCollectionEdit
+  doCollectionEdit,
 } from 'redux/actions/collections';
 import { selectUser } from 'redux/selectors/user';
 
