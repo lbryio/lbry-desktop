@@ -363,6 +363,11 @@
   }
 }
 
+.claim-upload__progress--label {
+  font-size: var(--font-small);
+  color: var(--color-text-subtitle);
+}
+
 .claim-upload__progress--outer {
   width: 100%;
 }
@@ -855,5 +860,19 @@
 
   & > * {
     margin-top: var(--spacing-s);
+  }
+}
+
+.web-upload-item.claim-preview {
+  @media (max-width: $breakpoint-small) {
+    display: block;
+
+    .media__thumb {
+      margin-bottom: var(--spacing-s);
+    }
+
+    .claim-preview-metadata {
+      display: block;
+    }
   }
 }

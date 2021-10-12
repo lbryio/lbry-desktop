@@ -76,3 +76,12 @@ declare type DeletePurchasedUri = {
     uri: string,
   },
 };
+
+declare type FileUploadItem = {
+  params: UpdatePublishFormData,
+  file: File,
+  fileFingerprint: string,
+  progress: string,
+  status?: string,
+  tusUploader?: any,
+};

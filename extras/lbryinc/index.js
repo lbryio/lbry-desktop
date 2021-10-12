@@ -27,7 +27,7 @@ export {
   doResetSync,
   doSyncEncryptAndDecrypt,
 } from 'redux/actions/sync';
-export { doUpdateUploadProgress } from './redux/actions/web';
+export { doUpdateUploadAdd, doUpdateUploadProgress, doUpdateUploadRemove } from './redux/actions/web';
 
 // reducers
 export { authReducer } from './redux/reducers/auth';

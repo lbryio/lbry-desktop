@@ -1,12 +1,30 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
 
-export const doUpdateUploadProgress = (
-  progress: string,
+export function doUpdateUploadAdd(file: File, params: { [key: string]: any }, tusUploader: any) {
+  return (dispatch: Dispatch, getState: GetState) => {
+    dispatch({
+      type: ACTIONS.UPDATE_UPLOAD_ADD,
+      data: { file, params, tusUploader },
+    });
+  };
+}
+
+export const doUpdateUploadProgress = (props: {
   params: { [key: string]: any },
-  xhr: any
-) => (dispatch: Dispatch) =>
+  progress?: string,
+  status?: string,
+}) => (dispatch: Dispatch) =>
   dispatch({
     type: ACTIONS.UPDATE_UPLOAD_PROGRESS,
-    data: { progress, params, xhr },
+    data: props,
   });
+
+export function doUpdateUploadRemove(params: { [key: string]: any }) {
+  return (dispatch: Dispatch, getState: GetState) => {
+    dispatch({
+      type: ACTIONS.UPDATE_UPLOAD_REMOVE,
+      data: { params },
+    });
+  };
+}
