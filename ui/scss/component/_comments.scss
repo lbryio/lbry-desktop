@@ -268,9 +268,12 @@ $thumbnailWidthSmall: 1rem;
   max-width: 35rem;
   color: var(--color-text);
 
-  ul li,
-  ol li {
-    list-style-position: inside;
+  ul li {
+    list-style-type: disc;
+
+    ul li {
+      list-style-type: circle;
+    }
   }
 
   p {

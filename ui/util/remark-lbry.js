@@ -12,13 +12,19 @@ const mentionRegex = /@[^\s()"]*/gm;
 const invalidRegex = /[-_.+=?!@#$%^&*:;,{}<>\w/\\]/;
 
 function handlePunctuation(value) {
-  const modifierIndex =
-    (value.indexOf(':') >= 0 && value.indexOf(':')) || (value.indexOf('#') >= 0 && value.indexOf('#'));
+  const protocolIndex = value.indexOf('lbry://') === 0 ? protocol.length - 1 : 0;
+  const channelModifierIndex =
+    (value.indexOf(':', protocolIndex) >= 0 && value.indexOf(':', protocolIndex)) ||
+    (value.indexOf('#', protocolIndex) >= 0 && value.indexOf('#', protocolIndex));
+  const claimModifierIndex =
+    (value.indexOf(':', channelModifierIndex + 1) >= 0 && value.indexOf(':', channelModifierIndex + 1)) ||
+    (value.indexOf('#', channelModifierIndex + 1) >= 0 && value.indexOf('#', channelModifierIndex + 1)) ||
+    channelModifierIndex;
 
   let punctuationIndex;
   punctuationMarks.some((p) => {
-    if (modifierIndex) {
-      punctuationIndex = value.indexOf(p, modifierIndex + 1) >= 0 && value.indexOf(p, modifierIndex + 1);
+    if (claimModifierIndex) {
+      punctuationIndex = value.indexOf(p, claimModifierIndex + 1) >= 0 && value.indexOf(p, claimModifierIndex + 1);
     }
     return punctuationIndex;
   });
@@ -108,15 +114,15 @@ function tokenizeURI(eat, value, silent) {
 
 // Configure tokenizer for lbry urls
 tokenizeURI.locator = locateURI;
-tokenizeURI.notInList = true;
+tokenizeURI.notInList = false;
 tokenizeURI.notInLink = true;
-tokenizeURI.notInBlock = true;
+tokenizeURI.notInBlock = false;
 
 // Configure tokenizer for lbry channels
 tokenizeMention.locator = locateMention;
-tokenizeMention.notInList = true;
+tokenizeMention.notInList = false;
 tokenizeMention.notInLink = true;
-tokenizeMention.notInBlock = true;
+tokenizeMention.notInBlock = false;
 
 const visitor = (node, index, parent) => {
   if (node.type === 'link' && parent && parent.type === 'paragraph') {
@@ -149,7 +155,7 @@ const transform = (tree) => {
   visit(tree, ['link'], visitor);
 };
 
-export const formatedLinks = () => transform;
+export const formattedLinks = () => transform;
 
 // Main module
 export function inlineLinks() {

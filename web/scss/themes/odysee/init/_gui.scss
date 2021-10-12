@@ -60,12 +60,8 @@ ol {
     position: relative;
     list-style-position: outside;
     margin: var(--spacing-xs) 0;
-    margin-left: var(--spacing-s);
     margin-bottom: 0;
-
-    @media (min-width: $breakpoint-small) {
-      margin-left: var(--spacing-xl);
-    }
+    margin-left: var(--spacing-xl);
   }
 }
 

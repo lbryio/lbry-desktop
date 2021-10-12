@@ -119,10 +119,11 @@ function LivestreamComment(props: Props) {
             commentId={commentId}
             authorUri={authorUri}
             commentIsMine={commentIsMine}
-            disableEdit
-            isTopLevel
             isPinned={isPinned}
             disableRemove={supportAmount > 0}
+            isTopLevel
+            disableEdit
+            isLiveComment
           />
         </Menu>
       </div>

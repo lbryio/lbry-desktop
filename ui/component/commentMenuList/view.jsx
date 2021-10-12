@@ -20,6 +20,7 @@ type Props = {
   disableEdit?: boolean,
   disableRemove?: boolean,
   supportAmount?: any,
+  isLiveComment: boolean,
   // --- select ---
   claim: ?Claim,
   claimIsMine: boolean,
@@ -54,6 +55,7 @@ function CommentMenuList(props: Props) {
     disableEdit,
     disableRemove,
     supportAmount,
+    isLiveComment,
     doToast,
     handleEditComment,
     openModal,
@@ -229,7 +231,7 @@ function CommentMenuList(props: Props) {
         </>
       )}
 
-      {IS_WEB && (
+      {IS_WEB && !isLiveComment && (
         <MenuItem className="comment__menu-option" onSelect={handleCopyCommentLink}>
           <div className="menu__link">
             <Icon aria-hidden icon={ICONS.COPY_LINK} />
