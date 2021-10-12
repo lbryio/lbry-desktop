@@ -4,6 +4,7 @@ import {
   makeSelectClaimIsMine,
   selectMyChannelClaims,
   selectFetchingMyChannels,
+  makeSelectTagInClaimOrChannelForUri,
 } from 'redux/selectors/claims';
 import { doSendTip } from 'redux/actions/wallet';
 import { doCommentCreate, doFetchCreatorSettings, doCommentById } from 'redux/actions/comments';
