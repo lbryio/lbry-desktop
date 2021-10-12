@@ -12,7 +12,7 @@ import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { selectSettingsByChannelId } from 'redux/selectors/comments';
 import { CommentCreate } from './view';
 import { doToast } from 'redux/actions/notifications';
-import { DISABLE_SUPPORT_TAG } from 'constants/tags'
+import { DISABLE_SUPPORT_TAG } from 'constants/tags';
 
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
