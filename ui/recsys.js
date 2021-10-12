@@ -92,7 +92,8 @@ const recsys = {
   createRecsysEntry: function (claimId, parentUuid) {
     if (window && window.store && claimId) {
       const state = window.store.getState();
-      const { id: userId } = selectUser(state);
+      const user = selectUser(state);
+      const userId = user ? user.id : null;
       if (parentUuid) {
         // Make a stub entry that will be filled out on page load
         recsys.entries[claimId] = {
