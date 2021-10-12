@@ -10,8 +10,7 @@ const {
   SITE_NAME,
   FAVICON,
   LBRY_WEB_API,
-  THUMBNAIL_CDN_URL,
-  THUMBNAIL_QUALITY,
+  THUMBNAIL_CARDS_CDN_URL,
 } = require('../../config.js');
 
 const { Lbry } = require('lbry-redux');
@@ -30,27 +29,11 @@ const PROXY_URL = `${SDK_API_PATH}/proxy`;
 Lbry.setDaemonConnectionString(PROXY_URL);
 
 function getThumbnailCdnUrl(url) {
-  if (!THUMBNAIL_CDN_URL || !url) {
+  if (!THUMBNAIL_CARDS_CDN_URL || !url) {
     return url;
   }
-
-  const width = 630;
-  const height = 1200;
-
-  if (url && url.includes('https://twitter-card')) {
-    return url;
-  }
-
-  if (url && url.includes('https://spee.ch') && !url.includes('?quality=')) {
-    return `${url}?quality=${THUMBNAIL_QUALITY}&height=${height}&width=${width}`;
-  }
-
-  if (url && url.includes('https://spee.ch')) {
-    return url;
-  }
-
   if (url) {
-    return url;
+    return `${THUMBNAIL_CARDS_CDN_URL}${btoa(url)}.jpg`;
   }
 }
 
@@ -110,14 +93,18 @@ function buildOgMetadata(overrideOptions = {}) {
     `<meta property="og:title" content="${title || OG_HOMEPAGE_TITLE || SITE_TITLE}" />\n` +
     `<meta property="og:site_name" content="${SITE_NAME || SITE_TITLE}"/>\n` +
     `<meta property="og:description" content="${cleanDescription}" />\n` +
-    `<meta property="og:image" content="${image || OG_IMAGE_URL || `${URL}/public/v2-og.png`}" />\n` +
+    `<meta property="og:image" content="${
+      getThumbnailCdnUrl(image) || getThumbnailCdnUrl(OG_IMAGE_URL) || `${URL}/public/v2-og.png`
+    }" />\n` +
     `<meta property="og:type" content="website"/>\n` +
     '<meta name="twitter:card" content="summary_large_image"/>\n' +
     `<meta name="twitter:title" content="${
       (title && title + ' ' + OG_TITLE_SUFFIX) || OG_HOMEPAGE_TITLE || SITE_TITLE
     }" />\n` +
     `<meta name="twitter:description" content="${cleanDescription}" />\n` +
-    `<meta name="twitter:image" content="${image || OG_IMAGE_URL || `${URL}/public/v2-og.png`}"/>\n` +
+    `<meta name="twitter:image" content="${
+      getThumbnailCdnUrl(image) || getThumbnailCdnUrl(OG_IMAGE_URL) || `${URL}/public/v2-og.png`
+    }"/>\n` +
     '<meta property="fb:app_id" content="1673146449633983" />\n' +
     `<link rel="canonical" content="${SITE_CANONICAL_URL || URL}"/>` +
     `<link rel="search" type="application/opensearchdescription+xml" title="${
@@ -190,7 +177,11 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
     imageThumbnail = generateStreamUrl(claim.name, claim.claim_id);
   }
 
-  const claimThumbnail = escapeHtmlProperty(thumbnail) || imageThumbnail || OG_IMAGE_URL || `${URL}/public/v2-og.png`;
+  const claimThumbnail =
+    escapeHtmlProperty(thumbnail) ||
+    getThumbnailCdnUrl(imageThumbnail) ||
+    getThumbnailCdnUrl(OG_IMAGE_URL) ||
+    `${URL}/public/v2-og.png`;
 
   // Allow for ovverriding default claim based og metadata
   const title = overrideOptions.title || claimTitle;
@@ -272,7 +263,7 @@ function buildGoogleVideoMetadata(uri, claim) {
     return '';
   }
 
-  const claimThumbnail = escapeHtmlProperty(thumbnail) || OG_IMAGE_URL || `${URL}/public/v2-og.png`;
+  const claimThumbnail = escapeHtmlProperty(thumbnail) || getThumbnailCdnUrl(OG_IMAGE_URL) || `${URL}/public/v2-og.png`;
 
   // https://developers.google.com/search/docs/data-types/video
   const googleVideoMetadata = {
