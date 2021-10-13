@@ -605,7 +605,7 @@ export function doFetchCollectionListMine(page: number = 1, pageSize: number = 9
 
 export function doClaimSearch(
   options: {
-    page_size: number,
+    page_size?: number,
     page: number,
     no_totals?: boolean,
     any_tags?: Array<string>,

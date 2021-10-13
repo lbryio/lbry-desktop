@@ -5,7 +5,7 @@ import { NavLink, withRouter } from 'react-router-dom';
 import { isEmpty } from 'util/object';
 import { lazyImport } from 'util/lazyImport';
 import classnames from 'classnames';
-import { parseURI, isURIEqual } from 'util/lbryURI';
+import { isURIEqual, isURIValid } from 'util/lbryURI';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
 import { formatLbryUrlForWeb } from 'util/url';
 import { formatClaimPreviewTitle } from 'util/formatAriaLabel';
@@ -180,15 +180,8 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
       </span>
     );
   }, [channelSubCount]);
-  let isValid = false;
-  if (uri) {
-    try {
-      parseURI(uri);
-      isValid = true;
-    } catch (e) {
-      isValid = false;
-    }
-  }
+  const isValid = uri && isURIValid(uri);
+
   // $FlowFixMe
   const isPlayable =
     claim &&

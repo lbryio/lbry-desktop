@@ -14,8 +14,9 @@ type Props = {
 
 export default function NotificationContentChannelMenu(props: Props) {
   const { uri, notificationsDisabled, doToast, doChannelSubscribe } = props;
-  const { claimName } = parseURI(uri);
-
+  let claimName;
+  const { claimName: name } = parseURI(uri);
+  claimName = name || '';
   function handleClick() {
     doChannelSubscribe({
       uri,

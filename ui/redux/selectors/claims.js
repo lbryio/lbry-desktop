@@ -1,5 +1,5 @@
 // @flow
-import { normalizeURI, parseURI } from 'util/lbryURI';
+import { normalizeURI, parseURI, isURIValid } from 'util/lbryURI';
 import { selectSupportsByOutpoint } from 'redux/selectors/wallet';
 import { createSelector } from 'reselect';
 import { isClaimNsfw, filterClaims } from 'util/claim';
@@ -76,11 +76,7 @@ export const makeSelectClaimForClaimId = (claimId: string) => createSelector(sel
 
 export const makeSelectClaimForUri = (uri: string, returnRepost: boolean = true) =>
   createSelector(selectClaimIdsByUri, selectClaimsById, (byUri, byId) => {
-    let validUri;
-    try {
-      parseURI(uri);
-      validUri = true;
-    } catch (e) {}
+    const validUri = isURIValid(uri);
 
     if (validUri && byUri) {
       const claimId = uri && byUri[normalizeURI(uri)];
@@ -154,9 +150,7 @@ export const makeSelectClaimIsMine = (rawUri: string) => {
   } catch (e) {}
 
   return createSelector(selectClaimsByUri, selectMyActiveClaims, (claims, myClaims) => {
-    try {
-      parseURI(uri);
-    } catch (e) {
+    if (!isURIValid(uri)) {
       return false;
     }
 
