@@ -32,6 +32,11 @@ function getThumbnailCdnUrl(url) {
   if (!THUMBNAIL_CARDS_CDN_URL || !url) {
     return url;
   }
+
+  if (url && url.includes('https://twitter-card')) {
+    return url;
+  }
+
   if (url) {
     const encodedURL = Buffer.from(url).toString('base64');
     return `${THUMBNAIL_CARDS_CDN_URL}${encodedURL}.jpg`;
