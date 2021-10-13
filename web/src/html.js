@@ -33,7 +33,8 @@ function getThumbnailCdnUrl(url) {
     return url;
   }
   if (url) {
-    return `${THUMBNAIL_CARDS_CDN_URL}${btoa(url)}.jpg`;
+    const encodedURL = Buffer.from(url).toString('base64');
+    return `${THUMBNAIL_CARDS_CDN_URL}${encodedURL}.jpg`;
   }
 }
 
