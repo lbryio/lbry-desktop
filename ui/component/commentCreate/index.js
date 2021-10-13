@@ -5,12 +5,14 @@ import {
   selectMyChannelClaims,
   selectFetchingMyChannels,
   doSendTip,
+  makeSelectTagInClaimOrChannelForUri,
 } from 'lbry-redux';
 import { doCommentCreate, doFetchCreatorSettings, doCommentById } from 'redux/actions/comments';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { selectSettingsByChannelId } from 'redux/selectors/comments';
 import { CommentCreate } from './view';
 import { doToast } from 'redux/actions/notifications';
+import { DISABLE_SUPPORT_TAG } from 'constants/tags';
 
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
@@ -19,6 +21,7 @@ const select = (state, props) => ({
   activeChannelClaim: selectActiveChannelClaim(state),
   claimIsMine: makeSelectClaimIsMine(props.uri)(state),
   settingsByChannelId: selectSettingsByChannelId(state),
+  supportDisabled: makeSelectTagInClaimOrChannelForUri(props.uri, DISABLE_SUPPORT_TAG)(state),
 });
 
 const perform = (dispatch, ownProps) => ({
