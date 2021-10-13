@@ -67,6 +67,8 @@ export const IS_MAC = navigator.userAgent.indexOf('Mac OS X') !== -1;
 const MOUSE_BACK_BTN = 3;
 const MOUSE_FORWARD_BTN = 4;
 
+const imaLibraryPath = 'https://imasdk.googleapis.com/js/sdkloader/ima3.js';
+
 type Props = {
   language: string,
   languages: Array<string>,
@@ -325,21 +327,19 @@ function App(props: Props) {
     }
   }, [previousRewardApproved, isRewardApproved]);
 
-  // Load IMA3 SDK for aniview: DISABLED FOR NOW
+  // Load IMA3 SDK for aniview
   // @if TARGET='web'
-  // useEffect(() => {
-  //   if (ENABLE_PREROLL_ADS) {
-  //     const script = document.createElement('script');
-  //     script.src = `https://imasdk.googleapis.com/js/sdkloader/ima3.js`;
-  //     script.async = true;
-  //     // $FlowFixMe
-  //     document.body.appendChild(script);
-  //     return () => {
-  //       // $FlowFixMe
-  //       document.body.removeChild(script);
-  //     };
-  //   }
-  // });
+  useEffect(() => {
+      const script = document.createElement('script');
+      script.src = imaLibraryPath;
+      script.async = true;
+      // $FlowFixMe
+      document.body.appendChild(script);
+      return () => {
+        // $FlowFixMe
+        document.body.removeChild(script);
+      };
+  });
   // @endif
 
   // @if TARGET='app'

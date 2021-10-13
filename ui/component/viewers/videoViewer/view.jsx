@@ -55,6 +55,7 @@ type Props = {
   setVideoPlaybackRate: (number) => void,
   authenticated: boolean,
   userId: number,
+  internalFeature: boolean,
   homepageData?: { [string]: HomepageCat },
   shareTelemetry: boolean,
   isFloating: boolean,
@@ -98,6 +99,7 @@ function VideoViewer(props: Props) {
     homepageData,
     authenticated,
     userId,
+    internalFeature,
     shareTelemetry,
     isFloating,
     doPlayUri,
@@ -152,6 +154,7 @@ function VideoViewer(props: Props) {
     };
   }, [embedded, videoPlaybackRate]);
 
+  // TODO: analytics functionality
   function doTrackingBuffered(e: Event, data: any) {
     fetch(source, { method: 'HEAD', cache: 'no-store' }).then((response) => {
       data.playerPoweredBy = response.headers.get('x-powered-by');
@@ -159,13 +162,24 @@ function VideoViewer(props: Props) {
     });
   }
 
+  /**
+   * Analytics functionality that is run on first video start
+   * @param e - event from videojs (from the plugin?)
+   * @param data - only has secondsToLoad property
+   */
   function doTrackingFirstPlay(e: Event, data: any) {
-    let timeToStart = data.secondsToLoad;
+    // how long until the video starts
+    let timeToStartVideo = data.secondsToLoad;
 
-    if (desktopPlayStartTime !== undefined) {
-      const differenceToAdd = Date.now() - desktopPlayStartTime;
-      timeToStart += differenceToAdd;
+    // TODO: what's happening here briefly?
+    if (!IS_WEB) {
+      if (desktopPlayStartTime !== undefined) {
+        const differenceToAdd = Date.now() - desktopPlayStartTime;
+        timeToStartVideo += differenceToAdd;
+      }
     }
+
+    // send matomo event (embedded is boolean)
     analytics.playerStartedEvent(embedded);
 
     // convert bytes to bits, and then divide by seconds
@@ -175,13 +189,16 @@ function VideoViewer(props: Props) {
     if (durationInSeconds) {
       bitrateAsBitsPerSecond = Math.round(contentInBits / durationInSeconds);
     }
-
+// figure out what server the video is served from and then run start analytic event
     fetch(source, { method: 'HEAD', cache: 'no-store' }).then((response) => {
+      // server string such as 'eu-p6'
       let playerPoweredBy = response.headers.get('x-powered-by') || '';
-      analytics.videoStartEvent(claimId, timeToStart, playerPoweredBy, userId, claim.canonical_url, this, bitrateAsBitsPerSecond);
+      // populates data for watchman, sends prom and matomo event
+      analytics.videoStartEvent(claimId, timeToStartVideo, playerPoweredBy, userId, claim.canonical_url, this, bitrateAsBitsPerSecond);
     });
 
-    doAnalyticsView(uri, timeToStart).then(() => {
+    // hit backend to mark a view
+    doAnalyticsView(uri, timeToStartVideo).then(() => {
       claimRewards();
     });
   }
@@ -264,6 +281,7 @@ function VideoViewer(props: Props) {
     clearPosition(uri);
   }, [adUrl, autoplayNext, clearPosition, collectionId, embedded, ended, setAdUrl, uri]);
 
+  // MORE ON PLAY STUFF
   function onPlay(player) {
     setEnded(false);
     setIsLoading(false);
@@ -444,29 +462,28 @@ function VideoViewer(props: Props) {
         </>
       )}
 
-      {!isFetchingAd && (
-        <VideoJs
-          adUrl={adUrl}
-          source={adUrl || source}
-          sourceType={forcePlayer || adUrl ? 'video/mp4' : contentType}
-          isAudio={isAudio}
-          poster={isAudio || (embedded && !autoplayIfEmbedded) ? thumbnail : ''}
-          onPlayerReady={onPlayerReady}
-          startMuted={autoplayIfEmbedded}
-          toggleVideoTheaterMode={toggleVideoTheaterMode}
-          autoplay={!embedded || autoplayIfEmbedded}
-          autoplaySetting={autoplayNext}
-          claimId={claimId}
-          userId={userId}
-          allowPreRoll={!embedded && !authenticated}
-          shareTelemetry={shareTelemetry}
-          replay={replay}
-          videoTheaterMode={videoTheaterMode}
-          playNext={doPlayNext}
-          playPrevious={doPlayPrevious}
-          embedded={embedded}
-        />
-      )}
+      <VideoJs
+        adUrl={adUrl}
+        source={adUrl || source}
+        sourceType={forcePlayer || adUrl ? 'video/mp4' : contentType}
+        isAudio={isAudio}
+        poster={isAudio || (embedded && !autoplayIfEmbedded) ? thumbnail : ''}
+        onPlayerReady={onPlayerReady}
+        startMuted={autoplayIfEmbedded}
+        toggleVideoTheaterMode={toggleVideoTheaterMode}
+        autoplay={!embedded || autoplayIfEmbedded}
+        autoplaySetting={autoplayNext}
+        claimId={claimId}
+        userId={userId}
+        allowPreRoll={!authenticated} // used to not include embeds, removed for now
+        internalFeatureEnabled={internalFeature}
+        shareTelemetry={shareTelemetry}
+        replay={replay}
+        videoTheaterMode={videoTheaterMode}
+        playNext={doPlayNext}
+        playPrevious={doPlayPrevious}
+        embedded={embedded}
+      />
     </div>
   );
 }

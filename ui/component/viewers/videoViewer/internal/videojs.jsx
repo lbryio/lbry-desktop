@@ -6,6 +6,8 @@ import * as ICONS from 'constants/icons';
 import * as KEYCODES from 'constants/keycodes';
 import classnames from 'classnames';
 import videojs from 'video.js';
+import 'videojs-contrib-ads';
+import 'videojs-ima';
 import 'video.js/dist/alt/video-js-cdn.min.css';
 import eventTracking from 'videojs-event-tracking';
 import * as OVERLAY from './overlays';
@@ -14,10 +16,6 @@ import hlsQualitySelector from './plugins/videojs-hls-quality-selector/plugin';
 import recsys from './plugins/videojs-recsys/plugin';
 import qualityLevels from 'videojs-contrib-quality-levels';
 import isUserTyping from 'util/detect-typing';
-// @if TARGET='web'
-// Disabled for now.
-// import './plugins/videojs-aniview/plugin';
-// @endif
 const isDev = process.env.NODE_ENV !== 'production';
 
 export type Player = {
@@ -60,7 +58,8 @@ type Props = {
   adUrl: ?string,
   claimId: ?string,
   userId: ?number,
-  // allowPreRoll: ?boolean,
+  allowPreRoll: ?boolean,
+  internalFeatureEnabled: ?boolean,
   shareTelemetry: boolean,
   replay: boolean,
   videoTheaterMode: boolean,
@@ -76,6 +75,18 @@ type Props = {
 //   poster?: string,
 //   muted?: boolean,
 // };
+
+function hitsFiftyPercent() {
+  // from 0 - 999
+  const rand = Math.floor(Math.random() * (1000 + 1));
+
+  // 499 is 50% chance of running
+  if (rand > 499) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
 const videoPlaybackRates = [0.25, 0.5, 0.75, 1, 1.1, 1.25, 1.5, 1.75, 2];
 
@@ -178,7 +189,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     adUrl,
     claimId,
     userId,
-    // allowPreRoll,
+    allowPreRoll,
+    internalFeatureEnabled, // for people on the team to test new features internally
     shareTelemetry,
     replay,
     videoTheaterMode,
@@ -539,6 +551,54 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       // this seems like a weird thing to have to check for here
       if (!player) return;
 
+      // live channel
+      // b354389c7adb506d0bd9a4
+
+      // ford ad
+      // 612fb75a42715a07645a614c
+
+      // Modified to work with IMA
+      const macroUrl =
+        `https://vast.aniview.com/api/adserver61/vast/` +
+        `?AV_PUBLISHERID=60afcbc58cfdb065440d2426` +
+        `&AV_CHANNELID=b354389c7adb506d0bd9a4` +
+        `&AV_URL=[URL]` +
+        `&cb=[CACHEBUSTING]` +
+        `&AV_WIDTH=[WIDTH]` +
+        `&AV_HEIGHT=[HEIGHT]` +
+        // `&AV_SCHAIN=[SCHAIN_MACRO]` +
+        // `&AV_CCPA=[CCPA_MACRO]` +
+        // `&AV_GDPR=[GDPR_MACRO]` +
+        // `&AV_CONSENT=[CONSENT_MACRO]` +
+        `&skip=true` +
+        `&skiptimer=5` +
+        `&logo=true` +
+        `&usevslot=true` +
+        `&vastretry=2` +
+        `&hidecontrols=false`;
+
+      // always have ads on if internal feature is on,
+      // otherwise if not authed, roll for 20% to see an ad
+      const shouldShowAnAd = internalFeatureEnabled || (allowPreRoll && hitsFiftyPercent());
+
+      // only run on chrome (brave included) and don't run on mobile for time being
+      const browserIsChrome = videojs.browser.IS_CHROME;
+      const IS_IOS = videojs.browser.IS_IOS;
+      const IS_ANDROID = videojs.browser.IS_ANDROID;
+      const IS_MOBILE = IS_IOS || IS_ANDROID;
+
+      if (shouldShowAnAd && browserIsChrome && !IS_MOBILE) {
+        // fire up ima integration via module
+        player.ima({adTagUrl: macroUrl});
+      }
+
+      // kick player in the butt, sometimes it doesn't always autoplay when it should
+      player.on('loadstart', function(event) {
+        if (autoplay) {
+          player.play();
+        }
+      });
+
       // Add various event listeners to player
       player.one('play', onInitialPlay);
       player.on('play', resolveCtrlText);
@@ -579,19 +639,9 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
       // I think this is a callback function
       const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
+
       onPlayerReady(player, videoNode);
     });
-
-    // pre-roll ads
-    // This must be initialized earlier than everything else
-    // otherwise a race condition occurs if we place this in the onReady call back
-    // allow if isDev because otherwise you'll never see ads when basing to master
-    // @if TARGET='web'
-    // DISABLED FOR NOW
-    // if ((allowPreRoll && SIMPLE_SITE) || isDev) {
-    //   vjs.aniview();
-    // }
-    // @endif
 
     // fixes #3498 (https://github.com/lbryio/lbry-desktop/issues/3498)
     // summary: on firefox the focus would stick to the fullscreen button which caused buggy behavior with spacebar

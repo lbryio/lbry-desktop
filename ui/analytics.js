@@ -255,7 +255,7 @@ const analytics: Analytics = {
       startWatchmanIntervalIfNotRunning();
     }
   },
-  videoStartEvent: (claimId, duration, poweredBy, passedUserId, canonicalUrl, passedPlayer, videoBitrate) => {
+  videoStartEvent: (claimId, timeToStartVideo, poweredBy, passedUserId, canonicalUrl, passedPlayer, videoBitrate) => {
     // populate values for watchman when video starts
     userId = passedUserId;
     claimUrl = canonicalUrl;
@@ -265,8 +265,8 @@ const analytics: Analytics = {
     videoPlayer = passedPlayer;
     bitrateAsBitsPerSecond = videoBitrate;
 
-    sendPromMetric('time_to_start', duration);
-    sendMatomoEvent('Media', 'TimeToStart', claimId, duration);
+    sendPromMetric('time_to_start', timeToStartVideo);
+    sendMatomoEvent('Media', 'TimeToStart', claimId, timeToStartVideo);
   },
   error: (message) => {
     return new Promise((resolve) => {

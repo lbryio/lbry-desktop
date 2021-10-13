@@ -30,9 +30,11 @@ const select = (state, props) => {
   const urlParams = new URLSearchParams(search);
   const autoplay = urlParams.get('autoplay');
   const uri = props.uri;
+
   // TODO: eventually this should be received from DB and not local state (https://github.com/lbryio/lbry-desktop/issues/6796)
   const position = urlParams.get('t') !== null ? urlParams.get('t') : makeSelectContentPositionForUri(uri)(state);
   const userId = selectUser(state) && selectUser(state).id;
+  const internalFeature = selectUser(state) && selectUser(state).internal_feature;
   const playingUri = selectPlayingUri(state);
   const collectionId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID) || (playingUri && playingUri.collectionId);
   const isMarkdownOrComment = playingUri && (playingUri.source === 'markdown' || playingUri.source === 'comment');
@@ -50,6 +52,7 @@ const select = (state, props) => {
   return {
     position,
     userId,
+    internalFeature,
     collectionId,
     nextRecommendedUri,
     previousListUri,
