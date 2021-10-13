@@ -552,7 +552,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       if (!player) return;
 
       // live channel
-      // 60b353fb362cd028bf584aa9
+      // 60b354389c7adb506d0bd9a4
 
       // ford ad
       // 612fb75a42715a07645a614c
@@ -561,7 +561,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       const macroUrl =
         `https://vast.aniview.com/api/adserver61/vast/` +
         `?AV_PUBLISHERID=60afcbc58cfdb065440d2426` +
-        `&AV_CHANNELID=60b353fb362cd028bf584aa9` +
+        `&AV_CHANNELID=60b354389c7adb506d0bd9a4` +
         `&AV_URL=[URL]` +
         `&cb=[CACHEBUSTING]` +
         `&AV_WIDTH=[WIDTH]` +
