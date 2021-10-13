@@ -8,6 +8,7 @@ import usePrevious from 'effects/use-previous';
 
 type SearchOptions = {
   page_size: number,
+  page: number,
   no_totals: boolean,
   any_tags: Array<string>,
   channel_ids: Array<string>,

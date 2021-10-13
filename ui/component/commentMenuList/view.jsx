@@ -94,7 +94,7 @@ function CommentMenuList(props: Props) {
   function assignAsModerator() {
     if (activeChannelClaim && authorUri) {
       const { channelName, channelClaimId } = parseURI(authorUri);
-      commentModAddDelegate(channelClaimId, channelName, activeChannelClaim);
+      if (channelName && channelClaimId) commentModAddDelegate(channelClaimId, channelName, activeChannelClaim);
     }
   }
 
