@@ -36,7 +36,7 @@ type Props = {
   claimIsMine: boolean,
   claimIsPending: boolean,
   isLivestream: boolean,
-  beginPublish: (string) => void,
+  beginPublish: (?string) => void,
   collectionId: string,
   collection: Collection,
   collectionUrls: Array<string>,
@@ -157,7 +157,7 @@ function ShowPage(props: Props) {
                     />
                     <Button
                       button="secondary"
-                      onClick={() => push(`/$/${PAGES.REPOST_NEW}?to=${contentName}`)}
+                      onClick={() => push(`/$/${PAGES.REPOST_NEW}${contentName ? `to=${contentName}` : ''}`)}
                       label={__('Repost Something')}
                     />
                   </div>

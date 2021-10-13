@@ -40,12 +40,19 @@ function UserChannelFollowIntro(props: Props) {
   useEffect(() => {
     if (channelsToSubscribe && channelsToSubscribe.length && prefsReady) {
       const delayedChannelSubscribe = () => {
-        channelsToSubscribe.forEach((c) =>
-          channelSubscribe({
-            channelName: parseURI(c).claimName,
-            uri: c,
-          })
-        );
+        channelsToSubscribe.forEach((c) => {
+          let claimName;
+          try {
+            const { claimName: name } = parseURI(c);
+            claimName = name;
+          } catch (e) {}
+          if (claimName) {
+            channelSubscribe({
+              channelName: claimName,
+              uri: c,
+            });
+          }
+        });
       };
       setTimeout(delayedChannelSubscribe, 1000);
     }
