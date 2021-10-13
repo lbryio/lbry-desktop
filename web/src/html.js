@@ -33,7 +33,7 @@ function getThumbnailCdnUrl(url) {
     return url;
   }
 
-  if (url && url.includes('https://twitter-card')) {
+  if (url && (url.includes('https://twitter-card') || url.includes('https://cards.odysee.com'))) {
     return url;
   }
 
@@ -206,6 +206,8 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
   }
 
   head += `<meta name="twitter:image" content="${claimThumbnail}"/>`;
+  head += `<meta name="twitter:player:image" content="${claimThumbnail}"/>`;
+  head += `<meta name="twitter:site" content="@OdyseeTeam"/>`;
   head += `<meta property="og:description" content="${cleanDescription}"/>`;
   head += `<meta property="og:image" content="${claimThumbnail}"/>`;
   head += `<meta property="og:locale" content="${claimLanguage}"/>`;
