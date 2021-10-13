@@ -1,7 +1,7 @@
 // @flow
 import { Lbryio } from 'lbryinc';
+import ReactGA from 'react-ga';
 import * as Sentry from '@sentry/browser';
-import MatomoTracker from '@datapunt/matomo-tracker-js';
 import { history } from './store';
 import { SDK_API_PATH } from './index';
 // @if TARGET='app'
@@ -9,7 +9,6 @@ import Native from 'native';
 import ElectronCookies from '@exponent/electron-cookies';
 import { generateInitialUrl } from 'util/url';
 // @endif
-import { MATOMO_ID, MATOMO_URL } from 'config';
 // import getConnectionSpeed from 'util/detect-user-bandwidth';
 
 // let userDownloadBandwidthInBitsPerSecond;
@@ -22,6 +21,10 @@ import { MATOMO_ID, MATOMO_URL } from 'config';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const devInternalApis = process.env.LBRY_API_URL && process.env.LBRY_API_URL.includes('dev');
+const LBRY_TV_MINUS_PIRATE_BAY_UA_ID = 'UA-60403362-16';
+const LBRY_TV_UA_ID = 'UA-60403362-12';
+const DESKTOP_UA_ID = 'UA-60403362-13';
+const SECOND_TRACKER_NAME = 'tracker2';
 
 export const SHARE_INTERNAL = 'shareInternal';
 const SHARE_THIRD_PARTY = 'shareThirdParty';
@@ -266,7 +269,7 @@ const analytics: Analytics = {
     bitrateAsBitsPerSecond = videoBitrate;
 
     sendPromMetric('time_to_start', timeToStartVideo);
-    sendMatomoEvent('Media', 'TimeToStart', claimId, timeToStartVideo);
+    sendGaEvent('Media', 'TimeToStart', claimId, timeToStartVideo);
   },
   error: (message) => {
     return new Promise((resolve) => {
@@ -294,25 +297,18 @@ const analytics: Analytics = {
   },
   pageView: (path, search) => {
     if (internalAnalyticsEnabled) {
-      const params: { href: string, customDimensions?: Array<{ id: number, value: ?string }> } = { href: `${path}` };
-      const dimensions = [];
-      const searchParams = search && new URLSearchParams(search);
-
-      if (searchParams && searchParams.get('src')) {
-        dimensions.push({ id: 1, value: searchParams.get('src') });
-      }
-      if (dimensions.length) {
-        params['customDimensions'] = dimensions;
-      }
-      MatomoInstance.trackPageView(params);
+      ReactGA.pageview(path, [SECOND_TRACKER_NAME]);
     }
   },
   setUser: (userId) => {
     if (internalAnalyticsEnabled && userId) {
-      window._paq.push(['setUserId', String(userId)]);
+      ReactGA.set({
+        userId,
+      });
+
       // @if TARGET='app'
       Native.getAppVersionInfo().then(({ localVersion }) => {
-        sendMatomoEvent('Version', 'Desktop-Version', localVersion);
+        sendGaEvent('Version', 'Desktop-Version', localVersion);
       });
       // @endif
     }
@@ -387,56 +383,78 @@ const analytics: Analytics = {
     }
   },
   adsFetchedEvent: () => {
-    sendMatomoEvent('Media', 'AdsFetched');
+    sendGaEvent('Media', 'AdsFetched');
   },
   adsReceivedEvent: (response) => {
-    sendMatomoEvent('Media', 'AdsReceived', JSON.stringify(response));
+    sendGaEvent('Media', 'AdsReceived', JSON.stringify(response));
   },
   adsErrorEvent: (response) => {
-    sendMatomoEvent('Media', 'AdsError', JSON.stringify(response));
+    sendGaEvent('Media', 'AdsError', JSON.stringify(response));
   },
   playerLoadedEvent: (embedded) => {
-    sendMatomoEvent('Player', 'Loaded', embedded ? 'embedded' : 'onsite');
+    sendGaEvent('Player', 'Loaded', embedded ? 'embedded' : 'onsite');
   },
   playerStartedEvent: (embedded) => {
-    sendMatomoEvent('Player', 'Started', embedded ? 'embedded' : 'onsite');
+    sendGaEvent('Player', 'Started', embedded ? 'embedded' : 'onsite');
   },
   tagFollowEvent: (tag, following) => {
-    sendMatomoEvent('Tag', following ? 'Tag-Follow' : 'Tag-Unfollow', tag);
+    sendGaEvent('Tag', following ? 'Tag-Follow' : 'Tag-Unfollow', tag);
   },
   channelBlockEvent: (uri, blocked, location) => {
-    sendMatomoEvent(blocked ? 'Channel-Hidden' : 'Channel-Unhidden', uri);
+    sendGaEvent(blocked ? 'Channel-Hidden' : 'Channel-Unhidden', uri);
   },
   emailProvidedEvent: () => {
-    sendMatomoEvent('Engagement', 'Email-Provided');
+    sendGaEvent('Engagement', 'Email-Provided');
   },
   emailVerifiedEvent: () => {
-    sendMatomoEvent('Engagement', 'Email-Verified');
+    sendGaEvent('Engagement', 'Email-Verified');
   },
   rewardEligibleEvent: () => {
-    sendMatomoEvent('Engagement', 'Reward-Eligible');
+    sendGaEvent('Engagement', 'Reward-Eligible');
   },
   openUrlEvent: (url: string) => {
-    sendMatomoEvent('Engagement', 'Open-Url', url);
+    sendGaEvent('Engagement', 'Open-Url', url);
   },
   trendingAlgorithmEvent: (trendingAlgorithm: string) => {
-    sendMatomoEvent('Engagement', 'Trending-Algorithm', trendingAlgorithm);
+    sendGaEvent('Engagement', 'Trending-Algorithm', trendingAlgorithm);
   },
   startupEvent: () => {
-    sendMatomoEvent('Startup', 'Startup');
+    sendGaEvent('Startup', 'Startup');
   },
   readyEvent: (timeToReady: number) => {
-    sendMatomoEvent('Startup', 'App-Ready', 'Time', timeToReady);
+    sendGaEvent('Startup', 'App-Ready');
+    sendGaTimingEvent('Startup', 'App-Ready', timeToReady);
   },
   purchaseEvent: (purchaseInt: number) => {
-    sendMatomoEvent('Purchase', 'Purchase-Complete', 'someLabel', purchaseInt);
+    sendGaEvent('Purchase', 'Purchase-Complete', undefined, purchaseInt);
   },
 };
 
-function sendMatomoEvent(category, action, name, value) {
-  if (internalAnalyticsEnabled) {
-    const event = { category, action, name, value };
-    MatomoInstance.trackEvent(event);
+function sendGaEvent(category, action, label, value) {
+  if (internalAnalyticsEnabled && isProduction) {
+    ReactGA.event(
+      {
+        category,
+        action,
+        ...(label ? { label } : {}),
+        ...(value ? { value } : {}),
+      },
+      [SECOND_TRACKER_NAME]
+    );
+  }
+}
+
+function sendGaTimingEvent(category: string, action: string, timeInMs: number, label?: string) {
+  if (internalAnalyticsEnabled && isProduction) {
+    ReactGA.timing(
+      {
+        category,
+        variable: action,
+        value: timeInMs,
+        ...(label ? { label } : {}),
+      },
+      [SECOND_TRACKER_NAME]
+    );
   }
 }
 
@@ -449,14 +467,37 @@ function sendPromMetric(name: string, value?: number) {
   }
 }
 
-const MatomoInstance = new MatomoTracker({
-  urlBase: MATOMO_URL,
-  siteId: MATOMO_ID, // optional, default value: `1`
-  // heartBeat: { // optional, enabled by default
-  //   active: true, // optional, default value: true
-  //   seconds: 10 // optional, default value: `15
-  // },
-  // linkTracking: false // optional, default value: true
+let gaTrackers = [];
+
+if (!IS_WEB) {
+  gaTrackers.push({
+    trackingId: DESKTOP_UA_ID,
+  });
+} else {
+  gaTrackers.push({
+    trackingId: LBRY_TV_UA_ID,
+  });
+
+  const { search } = window.location;
+  const urlParams = new URLSearchParams(search);
+  const isPirateBayUser = urlParams.get('utm_source') === 'PB';
+
+  if (!isPirateBayUser) {
+    gaTrackers.push({
+      trackingId: LBRY_TV_MINUS_PIRATE_BAY_UA_ID,
+      gaOptions: {
+        name: SECOND_TRACKER_NAME,
+      },
+    });
+  }
+}
+
+ReactGA.initialize(gaTrackers, {
+  testMode: process.env.NODE_ENV !== 'production',
+  cookieDomain: 'auto',
+  siteSpeedSampleRate: 100,
+  // un-comment to see events as they are sent to google
+  // debug: true,
 });
 
 // Manually call the first page view
@@ -466,6 +507,8 @@ analytics.pageView(window.location.pathname + window.location.search, window.loc
 // @endif
 
 // @if TARGET='app'
+ReactGA.set({ checkProtocolTask: null });
+ReactGA.set({ location: 'https://odysee.com' });
 analytics.pageView(
   window.location.pathname.split('.html')[1] + window.location.search || generateInitialUrl(window.location.hash)
 );

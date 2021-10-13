@@ -3,8 +3,6 @@
 require('dotenv-defaults').config({ silent: false });
 
 const config = {
-  MATOMO_URL: process.env.MATOMO_URL,
-  MATOMO_ID: process.env.MATOMO_ID,
   WEBPACK_WEB_PORT: process.env.WEBPACK_WEB_PORT,
   WEBPACK_ELECTRON_PORT: process.env.WEBPACK_ELECTRON_PORT,
   WEB_SERVER_PORT: process.env.WEB_SERVER_PORT,
