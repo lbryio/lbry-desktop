@@ -121,7 +121,7 @@ function handleClaimAction(state: State, action: any): State {
   let newResolvingUrls = new Set(state.resolvingUris);
   let myClaimIds = new Set(state.myClaims);
 
-  Object.entries(resolveInfo).forEach(([url, resolveResponse]: [string, ResolveResponse]) => {
+  Object.entries(resolveInfo).forEach(([url, resolveResponse]) => {
     // $FlowFixMe
     const { claimsInChannel, stream, channel: channelFromResolve, collection } = resolveResponse;
     const channel = channelFromResolve || (stream && stream.signing_channel);

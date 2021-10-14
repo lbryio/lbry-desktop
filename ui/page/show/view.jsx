@@ -157,7 +157,7 @@ function ShowPage(props: Props) {
                     />
                     <Button
                       button="secondary"
-                      onClick={() => push(`/$/${PAGES.REPOST_NEW}${contentName ? `to=${contentName}` : ''}`)}
+                      onClick={() => push(`/$/${PAGES.REPOST_NEW}${contentName ? `?to=${contentName}` : ''}`)}
                       label={__('Repost Something')}
                     />
                   </div>

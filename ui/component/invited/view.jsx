@@ -57,11 +57,18 @@ function Invited(props: Props) {
 
   // always follow if it's a channel
   useEffect(() => {
-    if (fullUri && !isSubscribed) {
-      channelSubscribe({
-        channelName: parseURI(fullUri).claimName,
-        uri: fullUri,
-      });
+    if (fullUri && !isSubscribed && fullUri) {
+      let channelName;
+      try {
+        const { claimName } = parseURI(fullUri);
+        channelName = claimName;
+      } catch (e) {}
+      if (channelName) {
+        channelSubscribe({
+          channelName: channelName,
+          uri: fullUri,
+        });
+      }
     }
   }, [fullUri, isSubscribed, channelSubscribe]);
 

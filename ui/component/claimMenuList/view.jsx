@@ -175,12 +175,13 @@ function ClaimMenuList(props: Props) {
 
   function handleFollow() {
     const subscriptionHandler = isSubscribed ? doChannelUnsubscribe : doChannelSubscribe;
-
-    subscriptionHandler({
-      channelName: '@' + channelName,
-      uri: contentChannelUri,
-      notificationsDisabled: true,
-    });
+    if (channelName) {
+      subscriptionHandler({
+        channelName: '@' + channelName,
+        uri: contentChannelUri,
+        notificationsDisabled: true,
+      });
+    }
   }
 
   function handleToggleMute() {
@@ -203,7 +204,7 @@ function ClaimMenuList(props: Props) {
     if (!isChannel) {
       const signingChannelName = contentSigningChannel && contentSigningChannel.name;
 
-      const uriObject: { streamName: string, streamClaimId: string, channelName?: string } = {
+      const uriObject: LbryUrlObj = {
         streamName: claim.name,
         streamClaimId: claim.claim_id,
       };

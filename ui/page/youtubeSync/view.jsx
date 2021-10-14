@@ -82,7 +82,7 @@ export default function YoutubeSync(props: Props) {
   function handleChannelChange(e) {
     const { value } = e.target;
     setChannel(value);
-    if (!isNameValid(value, 'false')) {
+    if (!isNameValid(value)) {
       setNameError(INVALID_NAME_ERROR);
     } else {
       setNameError();

@@ -115,7 +115,7 @@ type Props = {
   welcomeVersion: number,
   hasNavigated: boolean,
   setHasNavigated: () => void,
-  setReferrer: (string) => void,
+  setReferrer: (?string) => void,
   hasUnclaimedRefereeReward: boolean,
   homepageData: any,
 };

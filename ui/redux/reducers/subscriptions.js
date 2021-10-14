@@ -99,10 +99,9 @@ export default handleActions(
       } else {
         const parsedSubscriptions = subscriptions.map((uri) => {
           const { channelName } = parseURI(uri);
-
           return {
             uri,
-            channelName: `@${channelName}`,
+            channelName: channelName ? `@${channelName}` : '',
           };
         });
         newSubscriptions = parsedSubscriptions;

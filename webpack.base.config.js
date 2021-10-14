@@ -79,6 +79,7 @@ let baseConfig = {
       homepages: process.env.CUSTOM_HOMEPAGE === 'true' ? path.resolve(__dirname, 'custom/homepages/v2/index.js') : ('homepages/index.js'),
       memes: process.env.CUSTOM_HOMEPAGE === 'true' ? path.resolve(__dirname, 'custom/homepages/meme/index.js') : path.resolve(__dirname, 'homepages/meme/index.js'),
       lbryinc: 'extras/lbryinc',
+      recsys: 'extras/recsys',
       // Build optimizations for 'redux-persist-transform-filter'
       'redux-persist-transform-filter': 'redux-persist-transform-filter/index.js',
       'lodash.get': 'lodash-es/get',

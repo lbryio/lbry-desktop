@@ -45,8 +45,18 @@ export default function SubscribeButton(props: Props) {
   const uiNotificationsEnabled = (user && user.experimental_ui) || ENABLE_UI_NOTIFICATIONS;
 
   const { channelName: rawChannelName } = parseURI(uri);
-  const { channelName } = parseURI(permanentUrl);
-  const claimName = '@' + channelName;
+
+  let channelName;
+
+  if (permanentUrl) {
+    try {
+      const { channelName: name } = parseURI(permanentUrl);
+      if (name) {
+        channelName = name;
+      }
+    } catch (e) {}
+  }
+  const claimName = channelName && '@' + channelName;
 
   const subscriptionHandler = isSubscribed ? doChannelUnsubscribe : doChannelSubscribe;
   const subscriptionLabel = isSubscribed
@@ -86,7 +96,7 @@ export default function SubscribeButton(props: Props) {
     );
   }
 
-  return permanentUrl ? (
+  return permanentUrl && claimName ? (
     <div className="button-group">
       <Button
         ref={buttonRef}

@@ -55,7 +55,7 @@ reducers[ACTIONS.UPDATE_UPLOAD_PROGRESS] = (state: TvState, action) => {
   return { ...state, currentUploads };
 };
 
-export function webReducer(state = defaultState, action) {
+export function webReducer(state: TvState = defaultState, action: any) {
   const handler = reducers[action.type];
   if (handler) return handler(state, action);
   return state;

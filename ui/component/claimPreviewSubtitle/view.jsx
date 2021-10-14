@@ -12,7 +12,7 @@ type Props = {
   claim: ?Claim,
   pending?: boolean,
   type: string,
-  beginPublish: (string) => void,
+  beginPublish: (?string) => void,
   isLivestream: boolean,
 };
 

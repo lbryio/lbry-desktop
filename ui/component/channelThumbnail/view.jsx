@@ -10,7 +10,7 @@ import { AVATAR_DEFAULT } from 'config';
 
 type Props = {
   thumbnail: ?string,
-  uri: ?string,
+  uri: string,
   className?: string,
   thumbnailPreview: ?string,
   obscure?: boolean,

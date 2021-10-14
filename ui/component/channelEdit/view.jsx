@@ -253,7 +253,7 @@ function ChannelForm(props: Props) {
     let nameError;
     if (!name && name !== undefined) {
       nameError = __('A name is required for your url');
-    } else if (!isNameValid(name, false)) {
+    } else if (!isNameValid(name)) {
       nameError = INVALID_NAME_ERROR;
     }
 
