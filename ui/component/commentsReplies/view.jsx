@@ -43,8 +43,10 @@ function CommentsReplies(props: Props) {
   } = props;
 
   const [isExpanded, setExpanded] = React.useState(true);
+  const [commentsToDisplay, setCommentsToDisplay] = React.useState(fetchedReplies);
   const isResolvingReplies = fetchedReplies && resolvedReplies.length !== fetchedReplies.length;
   const alreadyResolved = !isResolvingReplies && resolvedReplies.length !== 0;
+  const canDisplayComments = commentsToDisplay && commentsToDisplay.length === fetchedReplies.length;
 
   // Batch resolve comment channel urls
   React.useEffect(() => {
@@ -55,6 +57,12 @@ function CommentsReplies(props: Props) {
 
     if (urisToResolve.length > 0) doResolveUris(urisToResolve);
   }, [alreadyResolved, doResolveUris, fetchedReplies]);
+
+  // Wait to only display topLevelComments after resolved or else
+  // other components will try to resolve again, like channelThumbnail
+  React.useEffect(() => {
+    if (!isResolvingReplies) setCommentsToDisplay(fetchedReplies);
+  }, [isResolvingReplies, fetchedReplies]);
 
   return !numDirectReplies ? null : (
     <div className="comment__replies-container">
@@ -73,8 +81,9 @@ function CommentsReplies(props: Props) {
 
           <ul className="comments--replies">
             {!isResolvingReplies &&
-              resolvedReplies.length > 0 &&
-              resolvedReplies.map((comment) => (
+              commentsToDisplay &&
+              commentsToDisplay.length > 0 &&
+              commentsToDisplay.map((comment) => (
                 <Comment
                   threadDepth={threadDepth}
                   uri={uri}
@@ -113,7 +122,7 @@ function CommentsReplies(props: Props) {
           />
         </div>
       )}
-      {(isFetchingByParentId[parentId] || isResolvingReplies) && (
+      {(isFetchingByParentId[parentId] || isResolvingReplies || !canDisplayComments) && (
         <div className="comment__replies-container">
           <div className="comment__actions--nested">
             <Spinner type="small" />
