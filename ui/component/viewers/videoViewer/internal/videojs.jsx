@@ -589,7 +589,12 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
       if (shouldShowAnAd && browserIsChrome && !IS_MOBILE) {
         // fire up ima integration via module
-        player.ima({adTagUrl: macroUrl});
+        player.ima({
+          adTagUrl: macroUrl,
+          vpaidMode: 2, // 2 = INSECURE
+          // // $FlowFixMe
+          // vpaidMode: google.ima.ImaSdkSettings.VpaidMode.INSECURE,
+        });
       }
 
       // kick player in the butt, sometimes it doesn't always autoplay when it should
