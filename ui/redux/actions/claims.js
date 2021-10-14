@@ -948,7 +948,6 @@ export function doPurchaseList(page: number = 1, pageSize: number = PAGE_SIZE) {
     });
 
     const success = (result: PurchaseListResponse) => {
-      console.log('PL RESULT', result);
       return dispatch({
         type: ACTIONS.PURCHASE_LIST_COMPLETED,
         data: {
