@@ -100,6 +100,8 @@ function CommentList(props: Props) {
   const channelId = getChannelIdFromClaim(claim);
   const channelSettings = channelId ? settingsByChannelId[channelId] : undefined;
   const moreBelow = page < topLevelTotalPages;
+  const isResolvingComments = topLevelComments && resolvedComments.length !== topLevelComments.length;
+  const alreadyResolved = !isResolvingComments && resolvedComments.length !== 0;
 
   // Display comments immediately if not fetching reactions
   // If not, wait to show comments until reactions are fetched
@@ -227,11 +229,13 @@ function CommentList(props: Props) {
 
   // Batch resolve comment channel urls
   useEffect(() => {
+    if (!topLevelComments || alreadyResolved) return;
+
     const urisToResolve = [];
     topLevelComments.map(({ channel_url }) => channel_url !== undefined && urisToResolve.push(channel_url));
 
     if (urisToResolve.length > 0) doResolveUris(urisToResolve);
-  }, [topLevelComments, doResolveUris]);
+  }, [alreadyResolved, doResolveUris, topLevelComments]);
 
   const getCommentElems = (comments) =>
     comments.map((comment) => (

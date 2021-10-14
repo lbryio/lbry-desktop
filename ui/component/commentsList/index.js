@@ -26,13 +26,11 @@ import CommentsList from './view';
 const select = (state, props) => {
   const activeChannelClaim = selectActiveChannelClaim(state);
   const topLevelComments = makeSelectTopLevelCommentsForUri(props.uri)(state);
-  const resolvedComments = [];
 
-  if (topLevelComments.length > 0) {
-    topLevelComments.map(
-      (comment) => Boolean(makeSelectClaimForUri(comment.channel_url)(state)) && resolvedComments.push(comment)
-    );
-  }
+  const resolvedComments =
+    topLevelComments && topLevelComments.length > 0
+      ? topLevelComments.filter(({ channel_url }) => makeSelectClaimForUri(channel_url)(state) !== undefined)
+      : [];
 
   return {
     topLevelComments,

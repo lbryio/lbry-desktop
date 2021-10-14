@@ -44,16 +44,17 @@ function CommentsReplies(props: Props) {
 
   const [isExpanded, setExpanded] = React.useState(true);
   const isResolvingReplies = fetchedReplies && resolvedReplies.length !== fetchedReplies.length;
+  const alreadyResolved = !isResolvingReplies && resolvedReplies.length !== 0;
 
   // Batch resolve comment channel urls
   React.useEffect(() => {
-    if (!fetchedReplies) return;
+    if (!fetchedReplies || alreadyResolved) return;
 
     const urisToResolve = [];
     fetchedReplies.map(({ channel_url }) => channel_url !== undefined && urisToResolve.push(channel_url));
 
     if (urisToResolve.length > 0) doResolveUris(urisToResolve);
-  }, [fetchedReplies, doResolveUris]);
+  }, [alreadyResolved, doResolveUris, fetchedReplies]);
 
   return !numDirectReplies ? null : (
     <div className="comment__replies-container">

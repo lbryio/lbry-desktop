@@ -6,13 +6,10 @@ import CommentsReplies from './view';
 
 const select = (state, props) => {
   const fetchedReplies = makeSelectRepliesForParentId(props.parentId)(state);
-  const resolvedReplies = [];
-
-  if (fetchedReplies && fetchedReplies.length > 0) {
-    fetchedReplies.map(
-      (comment) => Boolean(makeSelectClaimForUri(comment.channel_url)(state)) && resolvedReplies.push(comment)
-    );
-  }
+  const resolvedReplies =
+    fetchedReplies && fetchedReplies.length > 0
+      ? fetchedReplies.filter(({ channel_url }) => makeSelectClaimForUri(channel_url)(state) !== undefined)
+      : [];
 
   return {
     fetchedReplies,
