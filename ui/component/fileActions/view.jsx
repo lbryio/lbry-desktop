@@ -74,7 +74,7 @@ function FileActions(props: Props) {
   // We will select the claim id before they publish
   let editUri;
   if (claimIsMine) {
-    const uriObject: { streamName: string, streamClaimId: string, channelName?: string } = {
+    const uriObject: LbryUrlObj = {
       streamName: claim.name,
       streamClaimId: claim.claim_id,
     };

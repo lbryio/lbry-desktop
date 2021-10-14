@@ -107,10 +107,12 @@ export default function Notification(props: Props) {
   }
 
   let channelName;
-  try {
-    const { claimName } = parseURI(channelUrl);
-    channelName = claimName;
-  } catch (e) {}
+  if (channelUrl) {
+    try {
+      const { claimName } = parseURI(channelUrl);
+      channelName = claimName;
+    } catch (e) {}
+  }
 
   const notificationTitle = notification_parameters.device.title;
   const titleSplit = notificationTitle.split(' ');

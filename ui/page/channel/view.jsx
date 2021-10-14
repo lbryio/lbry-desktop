@@ -231,7 +231,7 @@ function ChannelPage(props: Props) {
           <ChannelThumbnail className="channel__thumbnail--channel-page" uri={uri} allowGifs hideStakedIndicator />
           <h1 className="channel__title">
             <TruncatedText lines={2} showTooltip>
-              {title || '@' + channelName}
+              {title || (channelName && '@' + channelName)}
             </TruncatedText>
             <ChannelStakedIndicator uri={uri} large />
           </h1>

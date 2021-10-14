@@ -1,4 +1,5 @@
-// @flow
+// Disabled flow in this copy. This copy is for uncompiled web server ES5 require()s.
+
 const isProduction = process.env.NODE_ENV === 'production';
 const channelNameMinLength = 1;
 const claimIdMaxLength = 40;

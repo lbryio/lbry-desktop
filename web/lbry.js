@@ -1,4 +1,4 @@
-// @flow
+// Disabled flow in this copy. This copy is for uncompiled web server ES5 require()s.
 require('proxy-polyfill');
 
 const CHECK_DAEMON_STARTED_TRY_NUMBER = 200;

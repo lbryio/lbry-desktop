@@ -73,7 +73,7 @@ export default function FileRenderFloating(props: Props) {
   const playingUriSource = playingUri && playingUri.source;
   const isComment = playingUriSource === 'comment';
   const isMobile = useIsMobile();
-  const mainFilePlaying = !isFloating && isURIEqual(uri, primaryUri);
+  const mainFilePlaying = !isFloating && primaryUri && isURIEqual(uri, primaryUri);
 
   const [fileViewerRect, setFileViewerRect] = useState();
   const [desktopPlayStartTime, setDesktopPlayStartTime] = useState();

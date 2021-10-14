@@ -18,7 +18,7 @@ type Props = {
   doResolveUris: (Array<string>) => void,
   hideLink?: boolean,
   setChannelActive: (boolean) => void,
-  beginPublish: (string) => void,
+  beginPublish: (?string) => void,
   pendingIds: Array<string>,
   isResolvingWinningUri: boolean,
   winningClaim: ?Claim,
@@ -44,8 +44,6 @@ export default function SearchTopClaim(props: Props) {
   let winningUriIsChannel;
   try {
     const { isChannel, streamName, channelName } = parseURI(uriFromQuery);
-    const { isChannel: winnerIsChannel } = parseURI(winningUri);
-    winningUriIsChannel = winnerIsChannel;
     if (!isChannel) {
       channelUriFromQuery = `lbry://@${query}`;
       name = streamName;
@@ -53,6 +51,13 @@ export default function SearchTopClaim(props: Props) {
       name = channelName;
     }
   } catch (e) {}
+
+  if (winningUri) {
+    try {
+      const { isChannel: winnerIsChannel } = parseURI(winningUri);
+      winningUriIsChannel = winnerIsChannel;
+    } catch (e) {}
+  }
 
   React.useEffect(() => {
     setChannelActive && winningUriIsChannel && setChannelActive(true);
@@ -111,7 +116,11 @@ export default function SearchTopClaim(props: Props) {
           <I18nMessage
             tokens={{
               repost: (
-                <Button button="link" onClick={() => push(`/$/${PAGES.REPOST_NEW}?to=${name}`)} label={__('Repost')} />
+                <Button
+                  button="link"
+                  onClick={() => push(`/$/${PAGES.REPOST_NEW}${name ? `?to=${name}` : ''}`)}
+                  label={__('Repost')}
+                />
               ),
               publish: (
                 <span>
