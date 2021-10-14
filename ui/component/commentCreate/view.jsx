@@ -407,7 +407,7 @@ export function CommentCreate(props: Props) {
     if (!channelSettings && channelId) {
       doFetchCreatorSettings(channelId);
     }
-  }, [channelId, channelSettings, doFetchCreatorSettings]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Notifications: Fetch top-level comments to identify if it has been deleted and can reply to it
   React.useEffect(() => {
