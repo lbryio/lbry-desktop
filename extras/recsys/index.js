@@ -1,3 +1,3 @@
 import Recsys from './recsys';
 
-export { Recsys };
+export default Recsys;
