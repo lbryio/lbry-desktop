@@ -53,7 +53,11 @@ class UriIndicator extends React.PureComponent<Props> {
     } = this.props;
 
     if (!claim) {
-      return <span className="empty">{isResolvingUri ? 'Validating...' : 'Unused'}</span>;
+      return (
+        <span className={classnames('empty', className)}>
+          {isResolvingUri || claim === undefined ? __('Validating...') : __('[Removed]')}
+        </span>
+      );
     }
 
     const isChannelClaim = claim.value_type === 'channel';
