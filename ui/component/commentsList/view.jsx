@@ -87,6 +87,7 @@ function CommentList(props: Props) {
 
   const isMobile = useIsMobile();
   const isMediumScreen = useIsMediumScreen();
+  const desktopView = !isMobile && !isMediumScreen;
   const spinnerRef = React.useRef();
   const DEFAULT_SORT = ENABLE_COMMENT_REACTIONS ? SORT_BY.POPULARITY : SORT_BY.NEWEST;
   const [sort, setSort] = usePersistedState('comment-sort-by', DEFAULT_SORT);
@@ -94,7 +95,7 @@ function CommentList(props: Props) {
   const fetchedCommentsOnce = useFetched(isFetchingComments);
   const fetchedReactsOnce = useFetched(isFetchingReacts);
   const fetchedLinkedComment = useFetched(isFetchingCommentsById);
-  const hasDefaultExpansion = commentsAreExpanded || (!isMobile && !isMediumScreen);
+  const hasDefaultExpansion = commentsAreExpanded || desktopView;
   const [expandedComments, setExpandedComments] = React.useState(hasDefaultExpansion);
   const totalFetchedComments = allCommentIds ? allCommentIds.length : 0;
   const channelId = getChannelIdFromClaim(claim);
@@ -307,8 +308,8 @@ function CommentList(props: Props) {
 
           <ul
             className={classnames({
-              comments: expandedComments,
-              'comments--contracted': !expandedComments,
+              comments: desktopView || expandedComments,
+              'comments--contracted': !desktopView && !expandedComments,
             })}
           >
             {readyToDisplayComments && pinnedComments && getCommentElems(pinnedComments)}
