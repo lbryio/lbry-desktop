@@ -71,7 +71,7 @@ function ShowPage(props: Props) {
   const claimExists = claim !== null && claim !== undefined;
   const haventFetchedYet = claim === undefined;
   const isMine = claim && claim.is_my_output;
-  const { contentName, isChannel } = parseURI(uri);
+  const { contentName, isChannel } = parseURI(uri); // deprecated contentName - use streamName and channelName
   const { push } = useHistory();
   const isCollection = claim && claim.value_type === 'collection';
   const resolvedCollection = collection && collection.id; // not null
