@@ -300,7 +300,7 @@ function CommentList(props: Props) {
       title={
         (totalComments === 0 && __('Leave a comment')) ||
         (totalComments === 1 && __('1 comment')) ||
-        __('%total_comments% comments', { totalComments })
+        __('%totalComments% comments', { totalComments })
       }
       titleActions={
         <>
