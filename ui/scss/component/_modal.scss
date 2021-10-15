@@ -1,0 +1,94 @@
+.ReactModal__Body--open {
+  #app {
+    @media (max-width: $breakpoint-small) {
+      height: 100vh;
+      overflow-y: hidden;
+    }
+  }
+
+  [data-reach-menu] {
+    z-index: 10000;
+  }
+}
+
+.modal-overlay {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  align-items: center;
+  background-color: var(--color-background-overlay);
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  z-index: 9999;
+}
+
+.modal {
+  @extend .card;
+  background-color: var(--color-modal-background);
+  line-height: 1.55;
+  min-width: 500px;
+  max-width: var(--modal-width);
+  overflow: auto;
+  padding: var(--spacing-l);
+  word-break: break-word;
+
+  &:focus {
+    box-shadow: none;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    min-width: auto;
+    margin-bottom: 0;
+    border-radius: 0;
+
+    .card {
+      box-shadow: none;
+      border: none;
+    }
+  }
+
+  .button--close {
+    z-index: 10000;
+    margin-top: var(--spacing-s);
+  }
+}
+
+.modal--card-internal {
+  padding: 0;
+  border: none;
+
+  .card {
+    margin: 0;
+    border: none;
+  }
+}
+
+.error-modal__content {
+  display: flex;
+  padding: 0 var(--spacing-m) var(--spacing-m) var(--spacing-m);
+}
+
+.error-modal {
+  max-width: none;
+  width: var(--modal-width);
+  white-space: pre-wrap;
+}
+
+.error-modal__error-list {
+  max-width: var(--modal-width);
+  max-height: 400px;
+  margin-top: var(--spacing-s);
+  padding: var(--spacing-s);
+
+  background-color: var(--color-error);
+  border-left: 2px solid var(--color-text-error);
+  color: var(--color-text-error);
+  list-style: none;
+  overflow-y: scroll;
+  white-space: pre-wrap;
+}
