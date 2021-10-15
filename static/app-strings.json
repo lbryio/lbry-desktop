@@ -2164,6 +2164,8 @@
   "Bank Accounts": "Bank Accounts",
   "Connect a bank account to receive tips and compensation in your local currency.": "Connect a bank account to receive tips and compensation in your local currency.",
   "Payment Methods": "Payment Methods",
+  "Total Received Tips": "Total Received Tips",
+  "Withdrawn": "Withdrawn",
   "Incoming": "Incoming",
   "Outgoing": "Outgoing",
   "Credits --[transactions tab]--": "Credits",

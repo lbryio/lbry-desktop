@@ -80,7 +80,9 @@ const WalletBalance = (props: Props) => {
                         className=""
                         navigate={'/' + transaction.channel_name + ':' + transaction.source_claim_id}
                         label={
-                          transaction.channel_claim_id === transaction.source_claim_id ? __('Channel Page') : __('Content Page')
+                          transaction.channel_claim_id === transaction.source_claim_id
+                            ? __('Channel Page')
+                            : __('Content Page')
                         }
                         button="link"
                       />
@@ -98,7 +100,7 @@ const WalletBalance = (props: Props) => {
           </table>
           {/* show some markup if there's no transactions */}
           {(!accountTransactions || accountTransactions.length === 0) && (
-            <p className="wallet__fiat-transactions">No Transactions</p>
+            <p className="wallet__fiat-transactions">{__('No Transactions')}</p>
           )}
         </div>
       </div>
