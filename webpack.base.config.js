@@ -69,7 +69,7 @@ let baseConfig = {
       },
     ],
   },
-  // Allows imports for all directories inside '/ui'
+  // Allows imports for all directories inside '/ui' :)
   resolve: {
     modules: [UI_ROOT, 'node_modules', __dirname],
     extensions: ['.js', '.jsx', '.json', '.scss'],
