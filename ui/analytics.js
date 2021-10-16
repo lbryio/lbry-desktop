@@ -4,11 +4,6 @@ import ReactGA from 'react-ga';
 import * as Sentry from '@sentry/browser';
 import { history } from './store';
 import { SDK_API_PATH } from './index';
-// @if TARGET='app'
-import Native from 'native';
-import ElectronCookies from '@exponent/electron-cookies';
-import { generateInitialUrl } from 'util/url';
-// @endif
 // import getConnectionSpeed from 'util/detect-user-bandwidth';
 
 // let userDownloadBandwidthInBitsPerSecond;
@@ -21,24 +16,12 @@ import { generateInitialUrl } from 'util/url';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const devInternalApis = process.env.LBRY_API_URL && process.env.LBRY_API_URL.includes('dev');
-const LBRY_TV_MINUS_PIRATE_BAY_UA_ID = 'UA-60403362-16';
-const LBRY_TV_UA_ID = 'UA-60403362-12';
-const DESKTOP_UA_ID = 'UA-60403362-13';
-const SECOND_TRACKER_NAME = 'tracker2';
+const ODYSEE_UA_ID = 'UA-60403362-12';
 
 export const SHARE_INTERNAL = 'shareInternal';
-const SHARE_THIRD_PARTY = 'shareThirdParty';
 
 const WATCHMAN_BACKEND_ENDPOINT = 'https://watchman.na-backend.odysee.com/reports/playback';
 const SEND_DATA_TO_WATCHMAN_INTERVAL = 10; // in seconds
-
-// @if TARGET='app'
-if (isProduction) {
-  ElectronCookies.enable({
-    origin: 'https://lbry.tv',
-  });
-}
-// @endif
 
 type Analytics = {
   error: (string) => Promise<any>,
@@ -87,10 +70,6 @@ type LogPublishParams = {
 
 let internalAnalyticsEnabled: boolean = IS_WEB || false;
 // let thirdPartyAnalyticsEnabled: boolean = IS_WEB || false;
-// @if TARGET='app'
-if (window.localStorage.getItem(SHARE_INTERNAL) === 'true') internalAnalyticsEnabled = true;
-// if (window.localStorage.getItem(SHARE_THIRD_PARTY) === 'true') thirdPartyAnalyticsEnabled = true;
-// @endif
 
 /**
  * Determine the mobile device type viewing the data
@@ -297,7 +276,7 @@ const analytics: Analytics = {
   },
   pageView: (path, search) => {
     if (internalAnalyticsEnabled) {
-      ReactGA.pageview(path, [SECOND_TRACKER_NAME]);
+      ReactGA.pageview(path);
     }
   },
   setUser: (userId) => {
@@ -305,28 +284,14 @@ const analytics: Analytics = {
       ReactGA.set({
         userId,
       });
-
-      // @if TARGET='app'
-      Native.getAppVersionInfo().then(({ localVersion }) => {
-        sendGaEvent('Version', 'Desktop-Version', localVersion);
-      });
-      // @endif
     }
   },
   toggleInternal: (enabled: boolean): void => {
-    // Always collect analytics on lbry.tv
-    // @if TARGET='app'
-    internalAnalyticsEnabled = enabled;
-    window.localStorage.setItem(SHARE_INTERNAL, enabled);
-    // @endif
+    // Always collect analytics on Odysee for now.
   },
 
   toggleThirdParty: (enabled: boolean): void => {
-    // Always collect analytics on lbry.tv
-    // @if TARGET='app'
-    // thirdPartyAnalyticsEnabled = enabled;
-    window.localStorage.setItem(SHARE_THIRD_PARTY, enabled);
-    // @endif
+    // Always collect analytics on Odysee for now.
   },
 
   apiLogView: (uri, outpoint, claimId, timeToStart) => {
@@ -432,29 +397,23 @@ const analytics: Analytics = {
 
 function sendGaEvent(category, action, label, value) {
   if (internalAnalyticsEnabled && isProduction) {
-    ReactGA.event(
-      {
-        category,
-        action,
-        ...(label ? { label } : {}),
-        ...(value ? { value } : {}),
-      },
-      [SECOND_TRACKER_NAME]
-    );
+    ReactGA.event({
+      category,
+      action,
+      ...(label ? { label } : {}),
+      ...(value ? { value } : {}),
+    });
   }
 }
 
 function sendGaTimingEvent(category: string, action: string, timeInMs: number, label?: string) {
   if (internalAnalyticsEnabled && isProduction) {
-    ReactGA.timing(
-      {
-        category,
-        variable: action,
-        value: timeInMs,
-        ...(label ? { label } : {}),
-      },
-      [SECOND_TRACKER_NAME]
-    );
+    ReactGA.timing({
+      category,
+      variable: action,
+      value: timeInMs,
+      ...(label ? { label } : {}),
+    });
   }
 }
 
@@ -467,30 +426,7 @@ function sendPromMetric(name: string, value?: number) {
   }
 }
 
-let gaTrackers = [];
-
-if (!IS_WEB) {
-  gaTrackers.push({
-    trackingId: DESKTOP_UA_ID,
-  });
-} else {
-  gaTrackers.push({
-    trackingId: LBRY_TV_UA_ID,
-  });
-
-  const { search } = window.location;
-  const urlParams = new URLSearchParams(search);
-  const isPirateBayUser = urlParams.get('utm_source') === 'PB';
-
-  if (!isPirateBayUser) {
-    gaTrackers.push({
-      trackingId: LBRY_TV_MINUS_PIRATE_BAY_UA_ID,
-      gaOptions: {
-        name: SECOND_TRACKER_NAME,
-      },
-    });
-  }
-}
+const gaTrackers = [{ trackingId: ODYSEE_UA_ID }];
 
 ReactGA.initialize(gaTrackers, {
   testMode: process.env.NODE_ENV !== 'production',
@@ -502,17 +438,7 @@ ReactGA.initialize(gaTrackers, {
 
 // Manually call the first page view
 // React Router doesn't include this on `history.listen`
-// @if TARGET='web'
 analytics.pageView(window.location.pathname + window.location.search, window.location.search);
-// @endif
-
-// @if TARGET='app'
-ReactGA.set({ checkProtocolTask: null });
-ReactGA.set({ location: 'https://odysee.com' });
-analytics.pageView(
-  window.location.pathname.split('.html')[1] + window.location.search || generateInitialUrl(window.location.hash)
-);
-// @endif;
 
 // Listen for url changes and report
 // This will include search queries
