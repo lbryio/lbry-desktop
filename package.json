@@ -60,7 +60,6 @@
     "match-sorter": "^6.3.0",
     "parse-duration": "^1.0.0",
     "react-datetime-picker": "^3.2.1",
-    "react-ga": "^3.3.0",
     "react-plastic": "^1.1.1",
     "react-top-loading-bar": "^2.0.1",
     "remove-markdown": "^0.3.0",

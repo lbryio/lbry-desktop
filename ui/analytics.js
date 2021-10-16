@@ -1,8 +1,6 @@
 // @flow
 import { Lbryio } from 'lbryinc';
-import ReactGA from 'react-ga';
 import * as Sentry from '@sentry/browser';
-import { history } from './store';
 import { SDK_API_PATH } from './index';
 // import getConnectionSpeed from 'util/detect-user-bandwidth';
 
@@ -16,7 +14,6 @@ import { SDK_API_PATH } from './index';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const devInternalApis = process.env.LBRY_API_URL && process.env.LBRY_API_URL.includes('dev');
-const ODYSEE_UA_ID = 'UA-60403362-12';
 
 export const SHARE_INTERNAL = 'shareInternal';
 
@@ -26,7 +23,6 @@ const SEND_DATA_TO_WATCHMAN_INTERVAL = 10; // in seconds
 type Analytics = {
   error: (string) => Promise<any>,
   sentryError: ({} | string, {}) => Promise<any>,
-  pageView: (string, ?string) => void,
   setUser: (Object) => void,
   toggleInternal: (boolean, ?boolean) => void,
   apiLogView: (string, string, string, ?number, ?() => void) => Promise<any>,
@@ -248,7 +244,7 @@ const analytics: Analytics = {
     bitrateAsBitsPerSecond = videoBitrate;
 
     sendPromMetric('time_to_start', timeToStartVideo);
-    sendGaEvent('Media', 'TimeToStart', claimId, timeToStartVideo);
+    sendGaEvent('video_time_to_start', { claim_id: claimId, time: timeToStartVideo });
   },
   error: (message) => {
     return new Promise((resolve) => {
@@ -274,16 +270,9 @@ const analytics: Analytics = {
       }
     });
   },
-  pageView: (path, search) => {
-    if (internalAnalyticsEnabled) {
-      ReactGA.pageview(path);
-    }
-  },
   setUser: (userId) => {
-    if (internalAnalyticsEnabled && userId) {
-      ReactGA.set({
-        userId,
-      });
+    if (internalAnalyticsEnabled && userId && window.gtag) {
+      window.gtag('set', { user_id: userId });
     }
   },
   toggleInternal: (enabled: boolean): void => {
@@ -348,72 +337,57 @@ const analytics: Analytics = {
     }
   },
   adsFetchedEvent: () => {
-    sendGaEvent('Media', 'AdsFetched');
+    sendGaEvent('ad_fetched');
   },
   adsReceivedEvent: (response) => {
-    sendGaEvent('Media', 'AdsReceived', JSON.stringify(response));
+    sendGaEvent('ad_received', { response: JSON.stringify(response) });
   },
   adsErrorEvent: (response) => {
-    sendGaEvent('Media', 'AdsError', JSON.stringify(response));
+    sendGaEvent('ad_error', { response: JSON.stringify(response) });
   },
   playerLoadedEvent: (embedded) => {
-    sendGaEvent('Player', 'Loaded', embedded ? 'embedded' : 'onsite');
+    sendGaEvent('player', { action: 'loaded', type: embedded ? 'embedded' : 'onsite' });
   },
   playerStartedEvent: (embedded) => {
-    sendGaEvent('Player', 'Started', embedded ? 'embedded' : 'onsite');
+    sendGaEvent('player', { action: 'started', type: embedded ? 'embedded' : 'onsite' });
   },
   tagFollowEvent: (tag, following) => {
-    sendGaEvent('Tag', following ? 'Tag-Follow' : 'Tag-Unfollow', tag);
+    sendGaEvent(following ? 'tag_follow' : 'tag_unfollow', { tag });
   },
   channelBlockEvent: (uri, blocked, location) => {
-    sendGaEvent(blocked ? 'Channel-Hidden' : 'Channel-Unhidden', uri);
+    sendGaEvent(blocked ? 'channel_hidden' : 'channel_unhidden', { uri });
   },
   emailProvidedEvent: () => {
-    sendGaEvent('Engagement', 'Email-Provided');
+    sendGaEvent('engagement', { type: 'email_provided' });
   },
   emailVerifiedEvent: () => {
-    sendGaEvent('Engagement', 'Email-Verified');
+    sendGaEvent('engagement', { type: 'email_verified' });
   },
   rewardEligibleEvent: () => {
-    sendGaEvent('Engagement', 'Reward-Eligible');
+    sendGaEvent('engagement', { type: 'reward_eligible' });
   },
   openUrlEvent: (url: string) => {
-    sendGaEvent('Engagement', 'Open-Url', url);
+    sendGaEvent('engagement', { type: 'open_url', url });
   },
   trendingAlgorithmEvent: (trendingAlgorithm: string) => {
-    sendGaEvent('Engagement', 'Trending-Algorithm', trendingAlgorithm);
+    sendGaEvent('engagement', { type: 'trending_algorithm', trending_algorithm: trendingAlgorithm });
   },
   startupEvent: () => {
-    sendGaEvent('Startup', 'Startup');
+    // TODO: This can be removed (use the automated 'session_start' instead).
+    // sendGaEvent('startup', 'startup');
   },
-  readyEvent: (timeToReady: number) => {
-    sendGaEvent('Startup', 'App-Ready');
-    sendGaTimingEvent('Startup', 'App-Ready', timeToReady);
+  readyEvent: (timeToReadyMs: number) => {
+    sendGaEvent('startup_app_ready', { time_to_ready_ms: timeToReadyMs });
   },
   purchaseEvent: (purchaseInt: number) => {
-    sendGaEvent('Purchase', 'Purchase-Complete', undefined, purchaseInt);
+    // https://developers.google.com/analytics/devguides/collection/ga4/reference/events#purchase
+    sendGaEvent('purchase', { value: purchaseInt });
   },
 };
 
-function sendGaEvent(category, action, label, value) {
-  if (internalAnalyticsEnabled && isProduction) {
-    ReactGA.event({
-      category,
-      action,
-      ...(label ? { label } : {}),
-      ...(value ? { value } : {}),
-    });
-  }
-}
-
-function sendGaTimingEvent(category: string, action: string, timeInMs: number, label?: string) {
-  if (internalAnalyticsEnabled && isProduction) {
-    ReactGA.timing({
-      category,
-      variable: action,
-      value: timeInMs,
-      ...(label ? { label } : {}),
-    });
+function sendGaEvent(event: string, params?: { [string]: string | number }) {
+  if (internalAnalyticsEnabled && isProduction && window.gtag) {
+    window.gtag('event', event, params);
   }
 }
 
@@ -426,27 +400,12 @@ function sendPromMetric(name: string, value?: number) {
   }
 }
 
-const gaTrackers = [{ trackingId: ODYSEE_UA_ID }];
-
-ReactGA.initialize(gaTrackers, {
-  testMode: process.env.NODE_ENV !== 'production',
-  cookieDomain: 'auto',
-  siteSpeedSampleRate: 100,
-  // un-comment to see events as they are sent to google
-  // debug: true,
-});
-
-// Manually call the first page view
-// React Router doesn't include this on `history.listen`
-analytics.pageView(window.location.pathname + window.location.search, window.location.search);
-
-// Listen for url changes and report
-// This will include search queries
-history.listen((location) => {
-  const { pathname, search } = location;
-
-  const page = `${pathname}${search}`;
-  analytics.pageView(page, search);
-});
+// Activate
+if (internalAnalyticsEnabled && isProduction && window.gtag) {
+  window.gtag('consent', 'update', {
+    ad_storage: 'granted',
+    analytics_storage: 'granted',
+  });
+}
 
 export default analytics;

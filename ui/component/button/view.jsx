@@ -5,7 +5,6 @@ import Icon from 'component/common/icon';
 import classnames from 'classnames';
 import { NavLink } from 'react-router-dom';
 import { formatLbryUrlForWeb } from 'util/url';
-import { OutboundLink } from 'react-ga';
 import * as PAGES from 'constants/pages';
 import useCombinedRefs from 'effects/use-combined-refs';
 
@@ -147,9 +146,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
   if (href || (navigate && navigate.startsWith('http'))) {
     // TODO: replace the below with an outbound link tracker for matomo
     return (
-      <OutboundLink
-        eventLabel="outboundClick"
-        to={href || navigate}
+      <a
         target="_blank"
         rel="noopener noreferrer"
         href={href || navigate}
@@ -158,10 +155,9 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
         onClick={onClick}
         aria-label={ariaLabel}
         disabled={disabled} // is there a reason this wasn't here before?
-        {...otherProps}
       >
         {content}
-      </OutboundLink>
+      </a>
     );
   }
 
