@@ -44,6 +44,7 @@ type Props = {
   collectionId?: string,
   showNoSourceClaims?: boolean,
   onClick?: (e: any, claim?: ?Claim, index?: number) => void,
+  noEmpty: boolean,
 };
 
 export default function ClaimList(props: Props) {
@@ -74,7 +75,10 @@ export default function ClaimList(props: Props) {
     collectionId,
     showNoSourceClaims,
     onClick,
+    noEmpty,
   } = props;
+
+  console.log('noempty', noEmpty);
 
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
 
@@ -134,7 +138,9 @@ export default function ClaimList(props: Props) {
             showNoSourceClaims={showNoSourceClaims}
           />
         ))}
-      {!timedOut && urisLength === 0 && !loading && <div className="empty main--empty">{empty || noResultMsg}</div>}
+      {!timedOut && urisLength === 0 && !loading && !noEmpty && (
+        <div className="empty main--empty">{empty || noResultMsg}</div>
+      )}
       {timedOut && timedOutMessage && <div className="empty main--empty">{timedOutMessage}</div>}
     </section>
   ) : (
@@ -208,7 +214,9 @@ export default function ClaimList(props: Props) {
         </ul>
       )}
 
-      {!timedOut && urisLength === 0 && !loading && <div className="empty empty--centered">{empty || noResultMsg}</div>}
+      {!timedOut && urisLength === 0 && !loading && !noEmpty && (
+        <div className="empty empty--centered">{empty || noResultMsg}</div>
+      )}
       {!loading && timedOut && timedOutMessage && <div className="empty empty--centered">{timedOutMessage}</div>}
     </section>
   );
