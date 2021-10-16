@@ -117,6 +117,7 @@ function Comment(props: Props) {
     location: { pathname, search },
   } = useHistory();
 
+  const isLinkedComment = linkedCommentId && linkedCommentId === commentId;
   const isInLinkedCommentChain =
     linkedCommentId &&
     linkedCommentAncestors[linkedCommentId] &&
@@ -205,6 +206,18 @@ function Comment(props: Props) {
     replace(`${pathname}?${urlParams.toString()}`);
   }
 
+  const linkedCommentRef = React.useCallback((node) => {
+    if (node !== null && window.pendingLinkedCommentScroll) {
+      const ROUGH_HEADER_HEIGHT = 125; // @see: --header-height
+      delete window.pendingLinkedCommentScroll;
+      window.scrollTo({
+        top: node.getBoundingClientRect().top + window.scrollY - ROUGH_HEADER_HEIGHT,
+        left: 0,
+        behavior: 'smooth',
+      });
+    }
+  }, []);
+
   return (
     <li
       className={classnames('comment', {
@@ -215,8 +228,9 @@ function Comment(props: Props) {
       id={commentId}
     >
       <div
+        ref={isLinkedComment ? linkedCommentRef : undefined}
         className={classnames('comment__content', {
-          [COMMENT_HIGHLIGHTED]: linkedCommentId && linkedCommentId === commentId,
+          [COMMENT_HIGHLIGHTED]: isLinkedComment,
           'comment--slimed': slimedToDeath && !displayDeadComment,
         })}
       >

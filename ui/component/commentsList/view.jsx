@@ -1,5 +1,4 @@
 // @flow
-import { COMMENT_HIGHLIGHTED } from 'constants/classnames';
 import { COMMENT_PAGE_SIZE_TOP_LEVEL, SORT_BY } from 'constants/comment';
 import { ENABLE_COMMENT_REACTIONS } from 'config';
 import { getChannelIdFromClaim } from 'util/claim';
@@ -15,7 +14,6 @@ import debounce from 'util/debounce';
 import Empty from 'component/common/empty';
 import React, { useEffect } from 'react';
 import Spinner from 'component/spinner';
-import useFetched from 'effects/use-fetched';
 import usePersistedState from 'effects/use-persisted-state';
 
 const DEBOUNCE_SCROLL_HANDLER_MS = 200;
@@ -68,7 +66,6 @@ function CommentList(props: Props) {
     claimIsMine,
     myChannels,
     isFetchingComments,
-    isFetchingCommentsById,
     isFetchingReacts,
     linkedCommentId,
     totalComments,
@@ -93,9 +90,6 @@ function CommentList(props: Props) {
   const [sort, setSort] = usePersistedState('comment-sort-by', DEFAULT_SORT);
   const [page, setPage] = React.useState(0);
   const [commentsToDisplay, setCommentsToDisplay] = React.useState(topLevelComments);
-  const fetchedCommentsOnce = useFetched(isFetchingComments);
-  const fetchedReactsOnce = useFetched(isFetchingReacts);
-  const fetchedLinkedComment = useFetched(isFetchingCommentsById);
   const hasDefaultExpansion = commentsAreExpanded || desktopView;
   const [expandedComments, setExpandedComments] = React.useState(hasDefaultExpansion);
   const totalFetchedComments = allCommentIds ? allCommentIds.length : 0;
@@ -176,19 +170,13 @@ function CommentList(props: Props) {
 
   // Scroll to linked-comment
   useEffect(() => {
-    if (fetchedLinkedComment && fetchedCommentsOnce && fetchedReactsOnce) {
-      const elems = document.getElementsByClassName(COMMENT_HIGHLIGHTED);
-      if (elems.length > 0) {
-        const ROUGH_HEADER_HEIGHT = 125; // @see: --header-height
-        const linkedComment = elems[0];
-        window.scrollTo({
-          top: linkedComment.getBoundingClientRect().top + window.scrollY - ROUGH_HEADER_HEIGHT,
-          left: 0,
-          behavior: 'smooth',
-        });
-      }
+    if (linkedCommentId) {
+      window.pendingLinkedCommentScroll = true;
+    } else {
+      delete window.pendingLinkedCommentScroll;
     }
-  }, [fetchedLinkedComment, fetchedCommentsOnce, fetchedReactsOnce]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Infinite scroll
   useEffect(() => {
