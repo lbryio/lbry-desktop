@@ -76,7 +76,7 @@ function ClaimListHeader(props: Props) {
   const channelIdsInUrl = urlParams.get(CS.CHANNEL_IDS_KEY);
   const channelIdsParam = channelIdsInUrl ? channelIdsInUrl.split(',') : channelIds;
   const feeAmountParam = urlParams.get('fee_amount') || feeAmount || CS.FEE_AMOUNT_ANY;
-  const showDuration = !(claimType && claimType === CS.CLAIM_CHANNEL && claimType === CS.CLAIM_COLLECTION);
+  const showDuration = !claimType || (claimType && claimType !== CS.CLAIM_CHANNEL && claimType !== CS.CLAIM_COLLECTION);
   const isFiltered = () =>
     Boolean(
       urlParams.get(CS.FRESH_KEY) ||
@@ -360,7 +360,7 @@ function ClaimListHeader(props: Props) {
               )}
 
               {/* LANGUAGE FIELD */}
-              {!claimType && (
+              {
                 <div
                   className={classnames('claim-search__input-container', {
                     'claim-search__input-container--selected': shouldHighlight,
@@ -394,7 +394,7 @@ function ClaimListHeader(props: Props) {
                     })}
                   </FormField>
                 </div>
-              )}
+              }
 
               {/* DURATIONS FIELD */}
               {showDuration && (
@@ -434,30 +434,31 @@ function ClaimListHeader(props: Props) {
               )}
 
               {/* PAID FIELD */}
-              <div className={'claim-search__input-container'}>
-                <FormField
-                  className={classnames('claim-search__dropdown', {
-                    'claim-search__dropdown--selected':
-                      feeAmountParam === CS.FEE_AMOUNT_ONLY_FREE || feeAmountParam === CS.FEE_AMOUNT_ONLY_PAID,
-                  })}
-                  label={__('Price')}
-                  type="select"
-                  name="paidcontent"
-                  value={feeAmountParam}
-                  onChange={(e) =>
-                    handleChange({
-                      key: CS.FEE_AMOUNT_KEY,
-                      value: e.target.value,
-                    })
-                  }
-                >
-                  <option value={CS.FEE_AMOUNT_ANY}>{__('Any')}</option>
-                  <option value={CS.FEE_AMOUNT_ONLY_FREE}>{__('Free')}</option>
-                  <option value={CS.FEE_AMOUNT_ONLY_PAID}>{__('Paid')}</option>
-                  ))}
-                </FormField>
-              </div>
-
+              {claimType !== CS.CLAIM_CHANNEL && (
+                <div className={'claim-search__input-container'}>
+                  <FormField
+                    className={classnames('claim-search__dropdown', {
+                      'claim-search__dropdown--selected':
+                        feeAmountParam === CS.FEE_AMOUNT_ONLY_FREE || feeAmountParam === CS.FEE_AMOUNT_ONLY_PAID,
+                    })}
+                    label={__('Price')}
+                    type="select"
+                    name="paidcontent"
+                    value={feeAmountParam}
+                    onChange={(e) =>
+                      handleChange({
+                        key: CS.FEE_AMOUNT_KEY,
+                        value: e.target.value,
+                      })
+                    }
+                  >
+                    <option value={CS.FEE_AMOUNT_ANY}>{__('Any')}</option>
+                    <option value={CS.FEE_AMOUNT_ONLY_FREE}>{__('Free')}</option>
+                    <option value={CS.FEE_AMOUNT_ONLY_PAID}>{__('Paid')}</option>
+                    ))}
+                  </FormField>
+                </div>
+              )}
               {/* SORT FIELD */}
               {orderParam === CS.ORDER_BY_NEW && (
                 <div className={'claim-search__input-container'}>
