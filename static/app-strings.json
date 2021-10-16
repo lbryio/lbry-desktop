@@ -2186,5 +2186,9 @@
   "Manage tags": "Manage tags",
   "No Reposts": "No Reposts",
   "You haven't reposted anything yet. Do it.": "You haven't reposted anything yet. Do it.",
+  "Claiming credits...": "Claiming credits...",
+  "%totalComments% comments": "%totalComments% comments",
+  "(%lbc_balance% available)": "(%lbc_balance% available)",
+  "Sending...": "Sending...",
   "--end--": "--end--"
 }
