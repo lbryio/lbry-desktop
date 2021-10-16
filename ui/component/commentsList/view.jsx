@@ -302,7 +302,7 @@ function CommentList(props: Props) {
             {readyToDisplayComments && topLevelComments && getCommentElems(topLevelComments)}
           </ul>
 
-          {!hasDefaultExpansion && (
+          {!hasDefaultExpansion && topLevelComments && Boolean(topLevelComments.length) && (
             <div className="card__bottom-actions--comments">
               {(!expandedComments || moreBelow) && (
                 <Button
