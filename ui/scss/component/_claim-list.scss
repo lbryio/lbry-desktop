@@ -297,6 +297,13 @@
   flex: 1;
 }
 
+.claim-preview-metadata-sub-upload {
+  position: relative;
+  //margin-left: 4px;
+  display: flex;
+  text-align: left;
+}
+
 .claim-preview-info {
   align-items: flex-start;
 }

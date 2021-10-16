@@ -14,12 +14,20 @@ type Props = {
   type: string,
   beginPublish: (string) => void,
   isLivestream: boolean,
+  fetchSubCount: (string) => void,
+  subCount: number,
 };
 
 // previews used in channel overview and homepage (and other places?)
 function ClaimPreviewSubtitle(props: Props) {
-  const { pending, uri, claim, type, beginPublish, isLivestream } = props;
+  const { pending, uri, claim, type, beginPublish, isLivestream, fetchSubCount, subCount } = props;
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
+
+  const claimId = (claim && claim.claim_id) || '0';
+  const formattedSubCount = Number(subCount).toLocaleString();
+  React.useEffect(() => {
+    fetchSubCount(claimId);
+  }, [uri, fetchSubCount, claimId]);
 
   let isChannel;
   let name;
@@ -34,9 +42,14 @@ function ClaimPreviewSubtitle(props: Props) {
           <UriIndicator uri={uri} link />{' '}
           {!pending && claim && (
             <>
-              {isChannel &&
-                type !== 'inline' &&
-                `${claimsInChannel} ${claimsInChannel === 1 ? __('upload') : __('uploads')}`}
+              {isChannel && type !== 'inline' && (
+                <>
+                  <span className="claim-preview-metadata-sub-upload">
+                    {formattedSubCount} {subCount !== 1 ? __('Followers') : __('Follower')}
+                    &nbsp;&bull; {claimsInChannel} {claimsInChannel === 1 ? __('upload') : __('uploads')}
+                  </span>
+                </>
+              )}
 
               {!isChannel &&
                 (isLivestream && ENABLE_NO_SOURCE_CLAIMS ? (
