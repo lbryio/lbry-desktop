@@ -171,6 +171,15 @@ function parseURIModifier(modSeperator: ?string, modValue: ?string) {
   return [claimId, claimSequence, bidPosition];
 }
 
+const errorHistory = [];
+
+function logErrorOnce(err: string) {
+  if (!errorHistory.includes(err)) {
+    errorHistory.push(err);
+    console.error(err);
+  }
+}
+
 /**
  * Takes an object in the same format returned by parse() and builds a URI.
  *
@@ -193,20 +202,18 @@ export function buildURI(UrlObj: LbryUrlObj, includeProto: boolean = true, proto
 
   if (!isProduction) {
     if (claimId) {
-      console.error(__("'claimId' should no longer be used. Use 'streamClaimId' or 'channelClaimId' instead"));
+      logErrorOnce("'claimId' should no longer be used. Use 'streamClaimId' or 'channelClaimId' instead");
     }
     if (claimName) {
-      console.error(__("'claimName' should no longer be used. Use 'streamClaimName' or 'channelClaimName' instead"));
+      logErrorOnce("'claimName' should no longer be used. Use 'streamClaimName' or 'channelClaimName' instead");
     }
     if (contentName) {
-      console.error(__("'contentName' should no longer be used. Use 'streamName' instead"));
+      logErrorOnce("'contentName' should no longer be used. Use 'streamName' instead");
     }
   }
 
   if (!claimName && !channelName && !streamName) {
-    console.error(
-      __("'claimName', 'channelName', and 'streamName' are all empty. One must be present to build a url.")
-    );
+    console.error("'claimName', 'channelName', and 'streamName' are all empty. One must be present to build a url.");
   }
 
   const formattedChannelName = channelName && (channelName.startsWith('@') ? channelName : `@${channelName}`);
