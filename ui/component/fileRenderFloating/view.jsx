@@ -15,7 +15,7 @@ import { generateListSearchUrlParams, formatLbryUrlForWeb } from 'util/url';
 import { useIsMobile } from 'effects/use-screensize';
 import debounce from 'util/debounce';
 import { useHistory } from 'react-router';
-import { isURIEqual } from 'lbry-redux';
+import { isURIEqual } from 'util/lbryURI';
 import AutoplayCountdown from 'component/autoplayCountdown';
 
 const IS_DESKTOP_MAC = typeof process === 'object' ? process.platform === 'darwin' : false;
@@ -73,7 +73,7 @@ export default function FileRenderFloating(props: Props) {
   const playingUriSource = playingUri && playingUri.source;
   const isComment = playingUriSource === 'comment';
   const isMobile = useIsMobile();
-  const mainFilePlaying = !isFloating && isURIEqual(uri, primaryUri);
+  const mainFilePlaying = !isFloating && primaryUri && isURIEqual(uri, primaryUri);
 
   const [fileViewerRect, setFileViewerRect] = useState();
   const [desktopPlayStartTime, setDesktopPlayStartTime] = useState();

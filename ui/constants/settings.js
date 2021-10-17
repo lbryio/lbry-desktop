@@ -27,6 +27,20 @@ export const ENABLE_SYNC = 'enable_sync';
 export const TO_TRAY_WHEN_CLOSED = 'to_tray_when_closed';
 export const ENABLE_PUBLISH_PREVIEW = 'enable-publish-preview';
 export const DESKTOP_WINDOW_ZOOM = 'desktop_window_zoom';
+export const SHOW_NSFW = 'showNsfw';
+export const FIRST_RUN_STARTED = 'first_run_started';
+export const FOLLOWING_ACKNOWLEDGED = 'following_acknowledged';
+export const TAGS_ACKNOWLEDGED = 'tags_acknowledged';
+export const REWARDS_ACKNOWLEDGED = 'rewards_acknowledged';
+export const SEARCH_IN_LANGUAGE = 'search_in_language';
+export const HOMEPAGE = 'homepage';
+export const HIDE_REPOSTS = 'hide_reposts';
+export const SUPPORT_OPTION = 'support_option';
+export const TILE_LAYOUT = 'tile_layout';
+export const VIDEO_THEATER_MODE = 'video_theater_mode';
+export const VIDEO_PLAYBACK_RATE = 'video_playback_rate';
+export const CUSTOM_COMMENTS_SERVER_ENABLED = 'custom_comments_server_enabled';
+export const CUSTOM_COMMENTS_SERVER_URL = 'custom_comments_server_url';
 
 export const SETTINGS_GRP = {
   APPEARANCE: 'appearance',

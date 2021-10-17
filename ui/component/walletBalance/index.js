@@ -6,19 +6,18 @@ import {
   selectTipsBalance,
   selectIsFetchingUtxoCounts,
   selectUtxoCounts,
-  doFetchUtxoCounts,
-  doUtxoConsolidate,
   selectIsConsolidatingUtxos,
   selectIsMassClaimingTips,
   selectPendingConsolidateTxid,
   selectPendingMassClaimTxid,
-} from 'lbry-redux';
+} from 'redux/selectors/wallet';
+import { doFetchUtxoCounts, doUtxoConsolidate } from 'redux/actions/wallet';
 import { doOpenModal } from 'redux/actions/app';
 import { selectSyncHash } from 'redux/selectors/sync';
 import { selectClaimedRewards } from 'redux/selectors/rewards';
 import WalletBalance from './view';
 
-const select = state => ({
+const select = (state) => ({
   balance: selectBalance(state),
   claimsBalance: selectClaimsBalance(state) || 0,
   supportsBalance: selectSupportsBalance(state) || 0,

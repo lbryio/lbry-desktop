@@ -1,6 +1,6 @@
 import * as REACTION_TYPES from 'constants/reactions';
 import { createSelector } from 'reselect';
-import { makeSelectClaimForUri } from 'lbry-redux';
+import { makeSelectClaimForUri } from 'redux/selectors/claims';
 
 const selectState = (state) => state.reactions || {};
 

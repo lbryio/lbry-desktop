@@ -1,6 +1,7 @@
 // @flow
 import * as MODALS from 'constants/modal_types';
-import { Lbry, THUMBNAIL_STATUSES } from 'lbry-redux';
+import * as THUMBNAIL_STATUSES from 'constants/thumbnail_upload_statuses';
+import Lbry from 'lbry';
 import { DOMAIN } from 'config';
 import * as React from 'react';
 import { FormField } from 'component/common/form';

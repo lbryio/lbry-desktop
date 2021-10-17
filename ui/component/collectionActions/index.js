@@ -1,10 +1,6 @@
 import { connect } from 'react-redux';
-import {
-  makeSelectClaimForUri,
-  makeSelectClaimIsPending,
-  makeSelectCollectionIsMine,
-  makeSelectEditedCollectionForId,
-} from 'lbry-redux';
+import { makeSelectClaimForUri, makeSelectClaimIsPending } from 'redux/selectors/claims';
+import { makeSelectCollectionIsMine, makeSelectEditedCollectionForId } from 'redux/selectors/collections';
 import { doOpenModal } from 'redux/actions/app';
 import { selectListShuffle } from 'redux/selectors/content';
 import { doToggleShuffleList, doToggleLoopList } from 'redux/actions/content';

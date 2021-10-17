@@ -12,13 +12,9 @@ import {
   selectUser,
   selectAccessToken,
 } from 'redux/selectors/user';
-import {
-  selectMyChannelClaims,
-  selectBalance,
-  selectFetchingMyChannels,
-  selectCreatingChannel,
-  SETTINGS,
-} from 'lbry-redux';
+import { selectMyChannelClaims, selectFetchingMyChannels, selectCreatingChannel } from 'redux/selectors/claims';
+import { selectBalance } from 'redux/selectors/wallet';
+import * as SETTINGS from 'constants/settings';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { selectInterestedInYoutubeSync } from 'redux/selectors/app';
 import { doToggleInterestedInYoutubeSync } from 'redux/actions/app';

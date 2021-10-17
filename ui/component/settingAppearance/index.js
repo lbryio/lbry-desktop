@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { SETTINGS } from 'lbry-redux';
+import * as SETTINGS from 'constants/settings';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { selectLanguage, makeSelectClientSetting } from 'redux/selectors/settings';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';

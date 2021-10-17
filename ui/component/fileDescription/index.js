@@ -3,9 +3,9 @@ import {
   makeSelectClaimForUri,
   makeSelectMetadataForUri,
   makeSelectTagsForUri,
-  makeSelectPendingAmountByUri,
   makeSelectClaimIsMine,
-} from 'lbry-redux';
+} from 'redux/selectors/claims';
+import { makeSelectPendingAmountByUri } from 'redux/selectors/wallet';
 import { doOpenModal } from 'redux/actions/app';
 import { selectUser } from 'redux/selectors/user';
 import FileDescription from './view';

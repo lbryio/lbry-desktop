@@ -1,10 +1,7 @@
 import { connect } from 'react-redux';
-import {
-  makeSelectFilePartlyDownloaded,
-  makeSelectClaimIsMine,
-  makeSelectClaimForUri,
-  makeSelectEditedCollectionForId,
-} from 'lbry-redux';
+import { makeSelectClaimIsMine, makeSelectClaimForUri } from 'redux/selectors/claims';
+import { makeSelectFilePartlyDownloaded } from 'redux/selectors/file_info';
+import { makeSelectEditedCollectionForId } from 'redux/selectors/collections';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
 import PreviewOverlayProperties from './view';
 

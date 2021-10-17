@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import { makeSelectMediaTypeForUri, makeSelectClaimIsStreamPlaceholder } from 'lbry-redux';
+import { makeSelectMediaTypeForUri } from 'redux/selectors/file_info';
+import { makeSelectClaimIsStreamPlaceholder } from 'redux/selectors/claims';
 import FileType from './view';
 
 const select = (state, props) => ({

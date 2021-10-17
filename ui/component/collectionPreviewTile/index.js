@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import {
-  doResolveUri,
   makeSelectIsUriResolving,
   makeSelectThumbnailForUri,
   makeSelectTitleForUri,
@@ -8,15 +7,17 @@ import {
   makeSelectClaimIsNsfw,
   makeSelectClaimIdForUri,
   makeSelectClaimForClaimId,
+} from 'redux/selectors/claims';
+import {
   makeSelectUrlsForCollectionId,
   makeSelectNameForCollectionId,
-  doLocalCollectionDelete,
-  doFetchItemsInCollection,
   makeSelectEditedCollectionForId,
   makeSelectPendingCollectionForId,
   makeSelectCountForCollectionId,
   makeSelectIsResolvingCollectionForId,
-} from 'lbry-redux';
+} from 'redux/selectors/collections';
+import { doFetchItemsInCollection, doCollectionDelete } from 'redux/actions/collections';
+import { doResolveUri } from 'redux/actions/claims';
 import { selectMutedChannels } from 'redux/selectors/blocked';
 import { selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
 import { selectShowMatureContent } from 'redux/selectors/settings';
@@ -52,7 +53,7 @@ const select = (state, props) => {
 const perform = (dispatch) => ({
   resolveUri: (uri) => dispatch(doResolveUri(uri)),
   resolveCollectionItems: (options) => doFetchItemsInCollection(options),
-  deleteCollection: (id) => dispatch(doLocalCollectionDelete(id)),
+  deleteCollection: (id) => dispatch(doCollectionDelete(id)),
 });
 
 export default connect(select, perform)(CollectionPreviewTile);

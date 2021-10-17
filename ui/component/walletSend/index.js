@@ -1,11 +1,12 @@
 import { connect } from 'react-redux';
-import { selectBalance, selectMyChannelClaims, makeSelectClaimForUri } from 'lbry-redux';
+import { selectBalance } from 'redux/selectors/wallet';
+import { selectMyChannelClaims, makeSelectClaimForUri } from 'redux/selectors/claims';
 import { doOpenModal } from 'redux/actions/app';
 import WalletSend from './view';
 import { withRouter } from 'react-router';
 import { selectToast } from 'redux/selectors/notifications';
 
-const perform = dispatch => ({
+const perform = (dispatch) => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
 });
 

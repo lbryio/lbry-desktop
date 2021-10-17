@@ -1,6 +1,5 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
-import { ACTIONS as LBRY_REDUX_ACTIONS } from 'lbry-redux';
 import { handleActions } from 'util/redux-utils';
 
 const SWAP_HISTORY_LENGTH_LIMIT = 10;
@@ -118,10 +117,7 @@ export default handleActions(
         coinSwaps: newCoinSwaps,
       };
     },
-    [LBRY_REDUX_ACTIONS.USER_STATE_POPULATE]: (
-      state: CoinSwapState,
-      action: { data: { coinSwapCodes: ?Array<string> } }
-    ) => {
+    [ACTIONS.USER_STATE_POPULATE]: (state: CoinSwapState, action: { data: { coinSwapCodes: ?Array<string> } }) => {
       const { coinSwapCodes } = action.data;
       const newCoinSwaps = [];
 

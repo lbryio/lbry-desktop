@@ -1,11 +1,11 @@
 import { connect } from 'react-redux';
 import {
-  doResolveUris,
   makeSelectClaimForUri,
   makeSelectIsUriResolving,
   makeSelectTagInClaimOrChannelForUri,
-  parseURI,
-} from 'lbry-redux';
+} from 'redux/selectors/claims';
+import { doResolveUris } from 'redux/actions/claims';
+import { parseURI } from 'util/lbryURI';
 import { makeSelectWinningUriForQuery } from 'redux/selectors/search';
 import WunderbarTopSuggestion from './view';
 import { PREFERENCE_EMBED } from 'constants/tags';

@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
-import { selectTotalBalance } from 'lbry-redux';
+import { selectTotalBalance } from 'redux/selectors/wallet';
 import { doOpenModal } from 'redux/actions/app';
 import Wallet from './view';
 
-const select = state => ({
+const select = (state) => ({
   totalBalance: selectTotalBalance(state),
 });
 

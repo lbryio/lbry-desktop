@@ -1,4 +1,4 @@
-import { SETTINGS } from 'lbry-redux';
+import * as SETTINGS from 'constants/settings';
 import { connect } from 'react-redux';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectGetSyncErrorMessage } from 'redux/selectors/sync';
@@ -7,15 +7,15 @@ import { doSetWalletSyncPreference } from 'redux/actions/settings';
 import { doOpenModal } from 'redux/actions/app';
 import SyncToggle from './view';
 
-const select = state => ({
+const select = (state) => ({
   syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
   verifiedEmail: selectUserVerifiedEmail(state),
   getSyncError: selectGetSyncErrorMessage(state),
   language: selectLanguage(state),
 });
 
-const perform = dispatch => ({
-  setSyncEnabled: value => dispatch(doSetWalletSyncPreference(value)),
+const perform = (dispatch) => ({
+  setSyncEnabled: (value) => dispatch(doSetWalletSyncPreference(value)),
   openModal: (id, props) => dispatch(doOpenModal(id, props)),
 });
 

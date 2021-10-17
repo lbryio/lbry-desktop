@@ -3,7 +3,7 @@ import { Lbryio } from 'lbryinc';
 import * as ACTIONS from 'constants/action_types';
 import * as REACTION_TYPES from 'constants/reactions';
 import { makeSelectMyReactionForUri } from 'redux/selectors/reactions';
-import { makeSelectClaimForUri } from 'lbry-redux';
+import { makeSelectClaimForUri } from 'redux/selectors/claims';
 
 export const doFetchReactions = (claimId: string) => (dispatch: Dispatch) => {
   dispatch({ type: ACTIONS.REACTIONS_LIST_STARTED });
@@ -12,7 +12,7 @@ export const doFetchReactions = (claimId: string) => (dispatch: Dispatch) => {
     .then((reactions: Array<number>) => {
       dispatch({ type: ACTIONS.REACTIONS_LIST_COMPLETED, data: { claimId, reactions } });
     })
-    .catch(error => {
+    .catch((error) => {
       dispatch({ type: ACTIONS.REACTIONS_LIST_FAILED, data: error });
     });
 };
@@ -38,7 +38,7 @@ export const doReactionLike = (uri: string) => (dispatch: Dispatch, getState: Ge
     .then(() => {
       dispatch({ type: ACTIONS.REACTIONS_LIKE_COMPLETED, data: { claimId, shouldRemove } });
     })
-    .catch(error => {
+    .catch((error) => {
       dispatch({ type: ACTIONS.REACTIONS_NEW_FAILED, data: error });
     });
 };
@@ -64,7 +64,7 @@ export const doReactionDislike = (uri: string) => (dispatch: Dispatch, getState:
     .then(() => {
       dispatch({ type: ACTIONS.REACTIONS_DISLIKE_COMPLETED, data: { claimId, shouldRemove } });
     })
-    .catch(error => {
+    .catch((error) => {
       dispatch({ type: ACTIONS.REACTIONS_NEW_FAILED, data: error });
     });
 };

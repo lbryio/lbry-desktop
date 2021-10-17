@@ -8,7 +8,7 @@ if (typeof global.fetch === 'object') {
   global.fetch = global.fetch.default;
 }
 
-const { Lbry } = require('lbry-redux');
+const Lbry = require('lbry');
 
 delete global.window;
 

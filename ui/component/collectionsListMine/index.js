@@ -4,8 +4,8 @@ import {
   selectMyPublishedPlaylistCollections,
   selectMyUnpublishedCollections, // should probably distinguish types
   // selectSavedCollections,
-  selectFetchingMyCollections,
-} from 'lbry-redux';
+} from 'redux/selectors/collections';
+import { selectFetchingMyCollections } from 'redux/selectors/claims';
 import CollectionsListMine from './view';
 
 const select = (state) => ({

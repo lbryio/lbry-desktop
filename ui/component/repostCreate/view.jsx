@@ -8,7 +8,8 @@ import Card from 'component/common/card';
 import Button from 'component/button';
 import ChannelSelector from 'component/channelSelector';
 import { FormField } from 'component/common/form';
-import { parseURI, isNameValid, creditsToString, isURIValid, normalizeURI } from 'lbry-redux';
+import { parseURI, isNameValid, isURIValid, normalizeURI } from 'util/lbryURI';
+import { creditsToString } from 'util/format-credits';
 import analytics from 'analytics';
 import LbcSymbol from 'component/common/lbc-symbol';
 import ClaimPreview from 'component/claimPreview';
@@ -164,7 +165,7 @@ function RepostCreate(props: Props) {
   let repostNameError;
   if (!enteredRepostName) {
     repostNameError = __('A name is required');
-  } else if (!isNameValid(enteredRepostName, false)) {
+  } else if (!isNameValid(enteredRepostName)) {
     repostNameError = INVALID_NAME_ERROR;
   } else if (!available) {
     repostNameError = __('You already have a claim with this name.');
@@ -177,7 +178,7 @@ function RepostCreate(props: Props) {
   }
 
   React.useEffect(() => {
-    if (enteredRepostName && isNameValid(enteredRepostName, false)) {
+    if (enteredRepostName && isNameValid(enteredRepostName)) {
       doCheckPublishNameAvailability(enteredRepostName).then((r) => setAvailable(r));
     }
   }, [enteredRepostName, doCheckPublishNameAvailability]);
@@ -261,14 +262,14 @@ function RepostCreate(props: Props) {
     } else if (entered) {
       try {
         const { claimName } = parseURI(entered);
-        return `/${claimName}`;
+        return claimName ? `/${claimName}` : '/';
       } catch (e) {
         return '/';
       }
     } else if (passed) {
       try {
         const { claimName } = parseURI(passed);
-        return `/${claimName}`;
+        return claimName ? `/${claimName}` : '/';
       } catch (e) {
         return '/';
       }

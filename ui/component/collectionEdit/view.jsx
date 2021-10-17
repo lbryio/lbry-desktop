@@ -12,7 +12,8 @@ import Card from 'component/common/card';
 import LbcSymbol from 'component/common/lbc-symbol';
 import SelectThumbnail from 'component/selectThumbnail';
 import { useHistory } from 'react-router-dom';
-import { isNameValid, regexInvalidURI, THUMBNAIL_STATUSES } from 'lbry-redux';
+import { isNameValid, regexInvalidURI } from 'util/lbryURI';
+import * as THUMBNAIL_STATUSES from 'constants/thumbnail_upload_statuses';
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
 import { FormField } from 'component/common/form';
 import { handleBidChange } from 'util/publish';
@@ -248,7 +249,7 @@ function CollectionForm(props: Props) {
     let nameError;
     if (!name && name !== undefined) {
       nameError = __('A name is required for your url');
-    } else if (!isNameValid(name, false)) {
+    } else if (!isNameValid(name)) {
       nameError = INVALID_NAME_ERROR;
     }
 

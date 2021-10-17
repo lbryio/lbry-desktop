@@ -1,6 +1,7 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
+import * as SETTINGS from 'constants/settings';
 import * as React from 'react';
 
 import Page from 'component/page';
@@ -12,7 +13,6 @@ import { useHistory } from 'react-router';
 import { Redirect } from 'react-router-dom';
 import Yrbl from 'component/yrbl';
 import Button from 'component/button';
-import { SETTINGS } from 'lbry-redux';
 
 type Props = {
   osNotificationsEnabled: boolean,

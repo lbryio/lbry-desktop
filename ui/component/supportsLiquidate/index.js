@@ -5,11 +5,11 @@ import {
   selectClaimsBalance,
   selectSupportsBalance,
   selectTipsBalance,
-  makeSelectMetadataForUri,
-  makeSelectClaimForUri,
-  doSupportAbandonForClaim,
   selectAbandonClaimSupportError,
-} from 'lbry-redux';
+} from 'redux/selectors/wallet';
+
+import { makeSelectMetadataForUri, makeSelectClaimForUri } from 'redux/selectors/claims';
+import { doSupportAbandonForClaim } from 'redux/actions/wallet';
 import SupportsLiquidate from './view';
 
 const select = (state, props) => ({
@@ -23,7 +23,7 @@ const select = (state, props) => ({
   abandonClaimError: selectAbandonClaimSupportError(state),
 });
 
-const perform = dispatch => ({
+const perform = (dispatch) => ({
   abandonSupportForClaim: (claimId, type, keep, preview) =>
     dispatch(doSupportAbandonForClaim(claimId, type, keep, preview)),
 });

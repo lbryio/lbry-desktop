@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { normalizeURI } from 'lbry-redux';
+import { normalizeURI } from 'util/lbryURI';
 import FilePrice from 'component/filePrice';
 import ClaimInsufficientCredits from 'component/claimInsufficientCredits';
 import FileSubtitle from 'component/fileSubtitle';

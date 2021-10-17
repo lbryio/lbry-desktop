@@ -1,14 +1,10 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
 import { selectShowMatureContent } from 'redux/selectors/settings';
-import {
-  buildURI,
-  doResolveUris,
-  batchActions,
-  isURIValid,
-  makeSelectClaimForUri,
-  makeSelectClaimIsNsfw,
-} from 'lbry-redux';
+import { makeSelectClaimForUri, makeSelectClaimIsNsfw } from 'redux/selectors/claims';
+import { doResolveUris } from 'redux/actions/claims';
+import { buildURI, isURIValid } from 'util/lbryURI';
+import { batchActions } from 'util/batch-actions';
 import { makeSelectSearchUrisForQuery, selectSearchValue } from 'redux/selectors/search';
 import handleFetchResponse from 'util/handle-fetch';
 import { getSearchQueryString } from 'util/query-params';

@@ -1,7 +1,7 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import React, { useRef } from 'react';
-import { parseURI } from 'lbry-redux';
+import { parseURI } from 'util/lbryURI';
 import Button from 'component/button';
 import useHover from 'effects/use-hover';
 import { useIsMobile } from 'effects/use-screensize';
@@ -45,8 +45,18 @@ export default function SubscribeButton(props: Props) {
   const uiNotificationsEnabled = (user && user.experimental_ui) || ENABLE_UI_NOTIFICATIONS;
 
   const { channelName: rawChannelName } = parseURI(uri);
-  const { channelName } = parseURI(permanentUrl);
-  const claimName = '@' + channelName;
+
+  let channelName;
+
+  if (permanentUrl) {
+    try {
+      const { channelName: name } = parseURI(permanentUrl);
+      if (name) {
+        channelName = name;
+      }
+    } catch (e) {}
+  }
+  const claimName = channelName && '@' + channelName;
 
   const subscriptionHandler = isSubscribed ? doChannelUnsubscribe : doChannelSubscribe;
   const subscriptionLabel = isSubscribed
@@ -72,18 +82,21 @@ export default function SubscribeButton(props: Props) {
           onClick={(e) => {
             e.stopPropagation();
 
-            subscriptionHandler({
-              channelName: '@' + rawChannelName,
-              uri: uri,
-              notificationsDisabled: true,
-            }, true);
+            subscriptionHandler(
+              {
+                channelName: '@' + rawChannelName,
+                uri: uri,
+                notificationsDisabled: true,
+              },
+              true
+            );
           }}
         />
       </div>
     );
   }
 
-  return permanentUrl ? (
+  return permanentUrl && claimName ? (
     <div className="button-group">
       <Button
         ref={buttonRef}
@@ -97,11 +110,14 @@ export default function SubscribeButton(props: Props) {
         onClick={(e) => {
           e.stopPropagation();
 
-          subscriptionHandler({
-            channelName: claimName,
-            uri: permanentUrl,
-            notificationsDisabled: true,
-          }, true);
+          subscriptionHandler(
+            {
+              channelName: claimName,
+              uri: permanentUrl,
+              notificationsDisabled: true,
+            },
+            true
+          );
         }}
       />
       {isSubscribed && uiNotificationsEnabled && (
@@ -112,14 +128,23 @@ export default function SubscribeButton(props: Props) {
           onClick={() => {
             const newNotificationsDisabled = !notificationsDisabled;
 
-            doChannelSubscribe({
-              channelName: claimName,
-              uri: permanentUrl,
-              notificationsDisabled: newNotificationsDisabled,
-            }, false);
+            doChannelSubscribe(
+              {
+                channelName: claimName,
+                uri: permanentUrl,
+                notificationsDisabled: newNotificationsDisabled,
+              },
+              false
+            );
 
-            doToast({ message: __(newNotificationsDisabled ? 'Notifications turned off for %channel%' : 'Notifications turned on for %channel%!',
-              { channel: claimName }) });
+            doToast({
+              message: __(
+                newNotificationsDisabled
+                  ? 'Notifications turned off for %channel%'
+                  : 'Notifications turned on for %channel%!',
+                { channel: claimName }
+              ),
+            });
           }}
         />
       )}

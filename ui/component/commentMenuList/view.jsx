@@ -1,7 +1,7 @@
 // @flow
 import { getChannelFromClaim } from 'util/claim';
 import { MenuList, MenuItem } from '@reach/menu-button';
-import { parseURI } from 'lbry-redux';
+import { parseURI } from 'util/lbryURI';
 import { URL } from 'config';
 import { useHistory } from 'react-router';
 import * as ICONS from 'constants/icons';
@@ -96,7 +96,7 @@ function CommentMenuList(props: Props) {
   function assignAsModerator() {
     if (activeChannelClaim && authorUri) {
       const { channelName, channelClaimId } = parseURI(authorUri);
-      commentModAddDelegate(channelClaimId, channelName, activeChannelClaim);
+      if (channelName && channelClaimId) commentModAddDelegate(channelClaimId, channelName, activeChannelClaim);
     }
   }
 

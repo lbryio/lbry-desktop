@@ -1,4 +1,6 @@
-import { SETTINGS, DAEMON_SETTINGS } from 'lbry-redux';
+import * as SETTINGS from 'constants/settings';
+import * as DAEMON_SETTINGS from 'constants/daemon_settings';
+
 import { createSelector } from 'reselect';
 import { ENABLE_MATURE } from 'config';
 import { getDefaultHomepageKey, getDefaultLanguage } from 'util/default-languages';

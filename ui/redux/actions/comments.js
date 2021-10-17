@@ -3,15 +3,10 @@ import * as ACTIONS from 'constants/action_types';
 import * as REACTION_TYPES from 'constants/reactions';
 import * as PAGES from 'constants/pages';
 import { SORT_BY, BLOCK_LEVEL } from 'constants/comment';
-import {
-  Lbry,
-  parseURI,
-  buildURI,
-  selectClaimsByUri,
-  selectMyChannelClaims,
-  isURIEqual,
-  doClaimSearch,
-} from 'lbry-redux';
+import Lbry from 'lbry';
+import { parseURI, buildURI, isURIEqual } from 'util/lbryURI';
+import { selectClaimsByUri, selectMyChannelClaims } from 'redux/selectors/claims';
+import { doClaimSearch } from 'redux/actions/claims';
 import { doToast, doSeeNotifications } from 'redux/actions/notifications';
 import {
   makeSelectMyReactionsForComment,
@@ -1321,17 +1316,18 @@ export const doUpdateBlockListForPublishedChannel = (channelClaim: ChannelClaim)
     return Promise.all(
       blockedUris.map((uri) => {
         const { channelName, channelClaimId } = parseURI(uri);
-
-        return Comments.moderation_block({
-          mod_channel_id: channelClaim.claim_id,
-          mod_channel_name: channelClaim.name,
-          // $FlowFixMe
-          signature: channelSignature.signature,
-          // $FlowFixMe
-          signing_ts: channelSignature.signing_ts,
-          blocked_channel_id: channelClaimId,
-          blocked_channel_name: channelName,
-        });
+        if (channelName && channelClaimId) {
+          return Comments.moderation_block({
+            mod_channel_id: channelClaim.claim_id,
+            mod_channel_name: channelClaim.name,
+            // $FlowFixMe
+            signature: channelSignature.signature,
+            // $FlowFixMe
+            signing_ts: channelSignature.signing_ts,
+            blocked_channel_id: channelClaimId,
+            blocked_channel_name: channelName,
+          });
+        }
       })
     );
   };

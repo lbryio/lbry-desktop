@@ -5,20 +5,18 @@ import * as MODALS from 'constants/modal_types';
 import { ipcRenderer } from 'electron';
 // @endif
 import { doOpenModal } from 'redux/actions/app';
+import { makeSelectClaimForUri, makeSelectClaimIsMine, makeSelectClaimWasPurchased } from 'redux/selectors/claims';
 import {
-  Lbry,
-  SETTINGS,
   makeSelectFileInfoForUri,
   selectFileInfosByOutpoint,
   makeSelectUriIsStreamable,
   selectDownloadingByOutpoint,
-  makeSelectClaimForUri,
-  makeSelectClaimIsMine,
-  makeSelectClaimWasPurchased,
-  doToast,
-  makeSelectUrlsForCollectionId,
-} from 'lbry-redux';
+} from 'redux/selectors/file_info';
+import { makeSelectUrlsForCollectionId } from 'redux/selectors/collections';
+import { doToast } from 'redux/actions/notifications';
 import { doPurchaseUri } from 'redux/actions/file';
+import Lbry from 'lbry';
+import * as SETTINGS from 'constants/settings';
 import { makeSelectCostInfoForUri, Lbryio } from 'lbryinc';
 import { makeSelectClientSetting, selectosNotificationsEnabled, selectDaemonSettings } from 'redux/selectors/settings';
 

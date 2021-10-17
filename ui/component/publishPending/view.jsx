@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import Lbry from 'lbry-redux';
+import Lbry from 'lbry';
 import Button from 'component/button';
 import Spinner from 'component/spinner';
 

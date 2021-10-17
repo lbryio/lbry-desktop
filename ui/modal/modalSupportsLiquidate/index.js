@@ -1,13 +1,13 @@
 import { connect } from 'react-redux';
 import { doHideModal } from 'redux/actions/app';
-import { selectTransactionItems } from 'lbry-redux';
+import { selectTransactionItems } from 'redux/selectors/wallet';
 import ModalSupportsLiquidate from './view';
 
-const select = state => ({
+const select = (state) => ({
   transactionItems: selectTransactionItems(state),
 });
 
-const perform = dispatch => ({
+const perform = (dispatch) => ({
   closeModal: () => dispatch(doHideModal()),
 });
 

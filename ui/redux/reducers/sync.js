@@ -1,5 +1,4 @@
 import * as ACTIONS from 'constants/action_types';
-import { ACTIONS as LBRY_REDUX_ACTIONS } from 'lbry-redux';
 
 const reducers = {};
 const defaultState = {
@@ -19,7 +18,7 @@ const defaultState = {
   fatalError: false,
 };
 
-reducers[LBRY_REDUX_ACTIONS.USER_STATE_POPULATE] = state => {
+reducers[ACTIONS.USER_STATE_POPULATE] = (state) => {
   const { syncReady } = state;
   if (!syncReady) {
     return Object.assign({}, state, {
@@ -32,7 +31,7 @@ reducers[LBRY_REDUX_ACTIONS.USER_STATE_POPULATE] = state => {
 
 reducers[ACTIONS.SET_PREFS_READY] = (state, action) => Object.assign({}, state, { prefsReady: action.data });
 
-reducers[ACTIONS.GET_SYNC_STARTED] = state =>
+reducers[ACTIONS.GET_SYNC_STARTED] = (state) =>
   Object.assign({}, state, {
     getSyncIsPending: true,
     getSyncErrorMessage: null,
@@ -59,7 +58,7 @@ reducers[ACTIONS.GET_SYNC_FAILED] = (state, action) =>
     getSyncErrorMessage: action.data.error,
   });
 
-reducers[ACTIONS.SET_SYNC_STARTED] = state =>
+reducers[ACTIONS.SET_SYNC_STARTED] = (state) =>
   Object.assign({}, state, {
     setSyncIsPending: true,
     setSyncErrorMessage: null,
@@ -79,14 +78,14 @@ reducers[ACTIONS.SET_SYNC_COMPLETED] = (state, action) =>
     syncHash: action.data.syncHash,
   });
 
-reducers[ACTIONS.SYNC_APPLY_STARTED] = state =>
+reducers[ACTIONS.SYNC_APPLY_STARTED] = (state) =>
   Object.assign({}, state, {
     syncApplyPasswordError: false,
     syncApplyIsPending: true,
     syncApplyErrorMessage: '',
   });
 
-reducers[ACTIONS.SYNC_APPLY_COMPLETED] = state =>
+reducers[ACTIONS.SYNC_APPLY_COMPLETED] = (state) =>
   Object.assign({}, state, {
     syncApplyIsPending: false,
     syncApplyErrorMessage: '',
@@ -98,12 +97,12 @@ reducers[ACTIONS.SYNC_APPLY_FAILED] = (state, action) =>
     syncApplyErrorMessage: action.data.error,
   });
 
-reducers[ACTIONS.SYNC_APPLY_BAD_PASSWORD] = state =>
+reducers[ACTIONS.SYNC_APPLY_BAD_PASSWORD] = (state) =>
   Object.assign({}, state, {
     syncApplyPasswordError: true,
   });
 
-reducers[LBRY_REDUX_ACTIONS.SYNC_FATAL_ERROR] = (state, action) => {
+reducers[ACTIONS.SYNC_FATAL_ERROR] = (state) => {
   return Object.assign({}, state, {
     fatalError: true,
   });

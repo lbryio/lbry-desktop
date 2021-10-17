@@ -4,7 +4,7 @@ import {
   makeSelectClaimForUri,
   makeSelectThumbnailForUri,
   selectMyChannelClaims,
-} from 'lbry-redux';
+} from 'redux/selectors/claims';
 import { doCommentUpdate, doCommentList } from 'redux/actions/comments';
 import { makeSelectChannelIsMuted } from 'redux/selectors/blocked';
 import { doToast } from 'redux/actions/notifications';

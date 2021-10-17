@@ -1,5 +1,5 @@
 import { webFrame } from 'electron';
-import { SETTINGS } from 'lbry-redux';
+import * as SETTINGS from 'constants/settings';
 const isDev = process.env.NODE_ENV !== 'production';
 
 export const ZOOM = {

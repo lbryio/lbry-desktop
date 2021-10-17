@@ -1,14 +1,13 @@
 import { connect } from 'react-redux';
 import {
   makeSelectClaimIsMine,
-  makeSelectFileInfoForUri,
   makeSelectClaimForUri,
-  doPrepareEdit,
   selectMyChannelClaims,
   makeSelectClaimIsStreamPlaceholder,
   makeSelectTagInClaimOrChannelForUri,
-  makeSelectStreamingUrlForUri,
-} from 'lbry-redux';
+} from 'redux/selectors/claims';
+import { makeSelectStreamingUrlForUri, makeSelectFileInfoForUri } from 'redux/selectors/file_info';
+import { doPrepareEdit } from 'redux/actions/publish';
 import { DISABLE_COMMENTS_TAG } from 'constants/tags';
 import { makeSelectCostInfoForUri } from 'lbryinc';
 import { doSetPlayingUri, doPlayUri } from 'redux/actions/content';

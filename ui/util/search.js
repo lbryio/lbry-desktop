@@ -1,6 +1,6 @@
 // @flow
 
-import { isNameValid, isURIValid, normalizeURI, parseURI } from 'lbry-redux';
+import { isNameValid, isURIValid, normalizeURI, parseURI } from 'util/lbryURI';
 import { URL as SITE_URL, URL_LOCAL, URL_DEV, SIMPLE_SITE } from 'config';
 import { SEARCH_OPTIONS } from 'constants/search';
 

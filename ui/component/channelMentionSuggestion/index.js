@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimForUri, makeSelectIsUriResolving } from 'lbry-redux';
+import { makeSelectClaimForUri, makeSelectIsUriResolving } from 'redux/selectors/claims';
 import ChannelMentionSuggestion from './view';
 
 const select = (state, props) => ({

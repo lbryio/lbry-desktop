@@ -2,7 +2,7 @@
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import React from 'react';
-import { parseURI } from 'lbry-redux';
+import { parseURI } from 'util/lbryURI';
 import { YOUTUBE_STATUSES } from 'lbryinc';
 import Page from 'component/page';
 import SubscribeButton from 'component/subscribeButton';
@@ -231,7 +231,7 @@ function ChannelPage(props: Props) {
           <ChannelThumbnail className="channel__thumbnail--channel-page" uri={uri} allowGifs hideStakedIndicator />
           <h1 className="channel__title">
             <TruncatedText lines={2} showTooltip>
-              {title || '@' + channelName}
+              {title || (channelName && '@' + channelName)}
             </TruncatedText>
             <ChannelStakedIndicator uri={uri} large />
           </h1>

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { selectBalance } from 'lbry-redux';
+import { selectBalance } from 'redux/selectors/wallet';
 import WalletTipAmountSelector from './view';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 

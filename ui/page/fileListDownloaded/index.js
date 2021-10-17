@@ -3,10 +3,12 @@ import {
   makeSelectSearchDownloadUrlsForPage,
   selectDownloadUrlsCount,
   selectIsFetchingFileList,
+} from 'redux/selectors/file_info';
+import {
   makeSelectMyPurchasesForPage,
   selectIsFetchingMyPurchases,
   selectMyPurchasesCount,
-} from 'lbry-redux';
+} from 'redux/selectors/claims';
 import FileListDownloaded from './view';
 import { withRouter } from 'react-router';
 

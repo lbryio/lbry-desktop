@@ -1,10 +1,7 @@
 import { connect } from 'react-redux';
-import {
-  doCollectionEdit,
-  makeSelectCollectionForId,
-  makeSelectClaimIsPending,
-  makeSelectCollectionForIdHasClaimUrl,
-} from 'lbry-redux';
+import { makeSelectCollectionForId, makeSelectCollectionForIdHasClaimUrl } from 'redux/selectors/collections';
+import { makeSelectClaimIsPending } from 'redux/selectors/claims';
+import { doCollectionEdit } from 'redux/actions/collections';
 import CollectionSelectItem from './view';
 
 const select = (state, props) => {

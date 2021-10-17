@@ -1,15 +1,16 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
+// import * as MATURE_TAGS from 'constants/ta';
 import React from 'react';
 import classnames from 'classnames';
-import { MATURE_TAGS } from 'lbry-redux';
+import { MATURE_TAGS } from 'constants/tags';
 import Button from 'component/button';
 
 type Props = {
   name: string,
   type?: string,
-  onClick?: any => any,
+  onClick?: (any) => any,
   disabled: boolean,
 };
 

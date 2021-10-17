@@ -2,12 +2,12 @@ import { connect } from 'react-redux';
 import ClaimCollectionAdd from './view';
 import { withRouter } from 'react-router';
 import {
-  makeSelectClaimForUri,
-  doLocalCollectionCreate,
   selectBuiltinCollections,
   selectMyPublishedCollections,
   selectMyUnpublishedCollections,
-} from 'lbry-redux';
+} from 'redux/selectors/collections';
+import { makeSelectClaimForUri } from 'redux/selectors/claims';
+import { doLocalCollectionCreate } from 'redux/actions/collections';
 
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),

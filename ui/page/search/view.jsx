@@ -1,7 +1,8 @@
 // @flow
 import { SIMPLE_SITE, SHOW_ADS } from 'config';
 import React, { useEffect } from 'react';
-import { Lbry, parseURI, isNameValid } from 'lbry-redux';
+import Lbry from 'lbry';
+import { parseURI, isNameValid } from 'util/lbryURI';
 import ClaimList from 'component/claimList';
 import Page from 'component/page';
 import SearchOptions from 'component/searchOptions';
@@ -33,7 +34,7 @@ export default function SearchPage(props: Props) {
   let isValid = true;
   try {
     ({ streamName } = parseURI(uriFromQuery));
-    if (!isNameValid(streamName)) {
+    if (!streamName || !isNameValid(streamName)) {
       isValid = false;
     }
   } catch (e) {

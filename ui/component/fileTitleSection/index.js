@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { doFetchSubCount, makeSelectSubCountForUri } from 'lbryinc';
-import { makeSelectTitleForUri, makeSelectClaimForUri } from 'lbry-redux';
+import { makeSelectTitleForUri, makeSelectClaimForUri } from 'redux/selectors/claims';
 import { makeSelectInsufficientCreditsForUri } from 'redux/selectors/content';
 import { makeSelectViewersForId } from 'redux/selectors/livestream';
 import FileTitleSection from './view';

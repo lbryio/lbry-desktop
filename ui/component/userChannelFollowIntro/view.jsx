@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import ClaimListDiscover from 'component/claimListDiscover';
 import * as CS from 'constants/claim_search';
 import Nag from 'component/common/nag';
-import { parseURI } from 'lbry-redux';
+import { parseURI } from 'util/lbryURI';
 import Button from 'component/button';
 import Card from 'component/common/card';
 import { AUTO_FOLLOW_CHANNELS, CUSTOM_HOMEPAGE, SIMPLE_SITE, SITE_NAME } from 'config';
@@ -40,12 +40,19 @@ function UserChannelFollowIntro(props: Props) {
   useEffect(() => {
     if (channelsToSubscribe && channelsToSubscribe.length && prefsReady) {
       const delayedChannelSubscribe = () => {
-        channelsToSubscribe.forEach((c) =>
-          channelSubscribe({
-            channelName: parseURI(c).claimName,
-            uri: c,
-          })
-        );
+        channelsToSubscribe.forEach((c) => {
+          let claimName;
+          try {
+            const { claimName: name } = parseURI(c);
+            claimName = name;
+          } catch (e) {}
+          if (claimName) {
+            channelSubscribe({
+              channelName: claimName,
+              uri: c,
+            });
+          }
+        });
       };
       setTimeout(delayedChannelSubscribe, 1000);
     }

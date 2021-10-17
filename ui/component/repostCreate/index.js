@@ -3,19 +3,22 @@ import { doHideModal } from 'redux/actions/app';
 import {
   makeSelectClaimForUri,
   makeSelectTitleForUri,
-  selectBalance,
   selectMyChannelClaims,
-  doRepost,
   selectRepostError,
   selectRepostLoading,
-  doClearRepostError,
   selectMyClaimsWithoutChannels,
-  doCheckPublishNameAvailability,
-  doCheckPendingClaims,
   makeSelectEffectiveAmountForUri,
   makeSelectIsUriResolving,
   selectFetchingMyChannels,
-} from 'lbry-redux';
+} from 'redux/selectors/claims';
+
+import { selectBalance } from 'redux/selectors/wallet';
+import {
+  doRepost,
+  doClearRepostError,
+  doCheckPublishNameAvailability,
+  doCheckPendingClaims,
+} from 'redux/actions/claims';
 import { doToast } from 'redux/actions/notifications';
 import { selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
 import RepostCreate from './view';

@@ -3,7 +3,7 @@ import * as ICONS from 'constants/icons';
 import React, { useRef } from 'react';
 import Button from 'component/button';
 import useHover from 'effects/use-hover';
-import { COLLECTIONS_CONSTS } from 'lbry-redux';
+import * as COLLECTIONS_CONSTS from 'constants/collections';
 
 type Props = {
   uri: string,

@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import { doWalletStatus, selectWalletIsEncrypted } from 'lbry-redux';
+import { doWalletStatus } from 'redux/actions/wallet';
+import { selectWalletIsEncrypted } from 'redux/selectors/wallet';
 import {
   doClearCache,
   doNotifyDecryptWallet,

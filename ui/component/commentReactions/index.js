@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import Comment from './view';
-import { makeSelectClaimIsMine, makeSelectClaimForUri, doResolveUri } from 'lbry-redux';
+import { makeSelectClaimIsMine, makeSelectClaimForUri } from 'redux/selectors/claims';
+import { doResolveUri } from 'redux/actions/claims';
 import { doToast } from 'redux/actions/notifications';
 import { makeSelectMyReactionsForComment, makeSelectOthersReactionsForComment } from 'redux/selectors/comments';
 import { doCommentReact } from 'redux/actions/comments';

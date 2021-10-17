@@ -10,7 +10,8 @@ import Page from 'component/page';
 import Button from 'component/button';
 import Card from 'component/common/card';
 import { formatLbryUrlForWeb } from 'util/url';
-import { parseURI, COLLECTIONS_CONSTS } from 'lbry-redux';
+import { parseURI } from 'util/lbryURI';
+import * as COLLECTIONS_CONSTS from 'constants/collections';
 
 const AbandonedChannelPreview = lazyImport(() =>
   import('component/abandonedChannelPreview' /* webpackChunkName: "abandonedChannelPreview" */)
@@ -35,7 +36,7 @@ type Props = {
   claimIsMine: boolean,
   claimIsPending: boolean,
   isLivestream: boolean,
-  beginPublish: (string) => void,
+  beginPublish: (?string) => void,
   collectionId: string,
   collection: Collection,
   collectionUrls: Array<string>,
@@ -70,7 +71,7 @@ function ShowPage(props: Props) {
   const claimExists = claim !== null && claim !== undefined;
   const haventFetchedYet = claim === undefined;
   const isMine = claim && claim.is_my_output;
-  const { contentName, isChannel } = parseURI(uri);
+  const { contentName, isChannel } = parseURI(uri); // deprecated contentName - use streamName and channelName
   const { push } = useHistory();
   const isCollection = claim && claim.value_type === 'collection';
   const resolvedCollection = collection && collection.id; // not null
@@ -156,7 +157,7 @@ function ShowPage(props: Props) {
                     />
                     <Button
                       button="secondary"
-                      onClick={() => push(`/$/${PAGES.REPOST_NEW}?to=${contentName}`)}
+                      onClick={() => push(`/$/${PAGES.REPOST_NEW}${contentName ? `?to=${contentName}` : ''}`)}
                       label={__('Repost Something')}
                     />
                   </div>

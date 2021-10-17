@@ -5,7 +5,9 @@ import * as CS from 'constants/claim_search';
 import React from 'react';
 import usePersistedState from 'effects/use-persisted-state';
 import { withRouter } from 'react-router';
-import { createNormalizedClaimSearchKey, MATURE_TAGS, splitBySeparator } from 'lbry-redux';
+import { MATURE_TAGS } from 'constants/tags';
+import { createNormalizedClaimSearchKey } from 'util/claim';
+import { splitBySeparator } from 'util/lbryURI';
 import Button from 'component/button';
 import moment from 'moment';
 import ClaimList from 'component/claimList';
@@ -450,7 +452,9 @@ function ClaimListDiscover(props: Props) {
       <p>
         <I18nMessage
           tokens={{
-            contact_support: <Button button="link" label={__('contact support')} href="https://odysee.com/@OdyseeHelp:b?view=about" />,
+            contact_support: (
+              <Button button="link" label={__('contact support')} href="https://odysee.com/@OdyseeHelp:b?view=about" />
+            ),
           }}
         >
           If you continue to have issues, please %contact_support%.

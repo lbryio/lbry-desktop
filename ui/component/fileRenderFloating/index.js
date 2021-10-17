@@ -1,14 +1,11 @@
 import { connect } from 'react-redux';
+import { makeSelectTitleForUri, makeSelectClaimIsNsfw, makeSelectClaimWasPurchased } from 'redux/selectors/claims';
+import { makeSelectFileInfoForUri, makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
 import {
-  makeSelectFileInfoForUri,
-  makeSelectTitleForUri,
-  makeSelectStreamingUrlForUri,
-  makeSelectClaimIsNsfw,
-  makeSelectClaimWasPurchased,
   makeSelectNextUrlForCollectionAndUrl,
   makeSelectPreviousUrlForCollectionAndUrl,
-  SETTINGS,
-} from 'lbry-redux';
+} from 'redux/selectors/collections';
+import * as SETTINGS from 'constants/settings';
 import {
   makeSelectIsPlayerFloating,
   selectPrimaryUri,

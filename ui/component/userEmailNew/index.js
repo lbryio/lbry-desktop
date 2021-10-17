@@ -6,7 +6,8 @@ import {
   selectEmailAlreadyExists,
   selectUser,
 } from 'redux/selectors/user';
-import { DAEMON_SETTINGS, SETTINGS } from 'lbry-redux';
+import * as SETTINGS from 'constants/settings';
+import * as DAEMON_SETTINGS from 'constants/daemon_settings';
 import { doSetWalletSyncPreference, doSetDaemonSetting } from 'redux/actions/settings';
 import { selectDaemonSettings, makeSelectClientSetting } from 'redux/selectors/settings';
 import UserEmailNew from './view';

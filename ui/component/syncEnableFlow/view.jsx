@@ -5,12 +5,12 @@ import { getSavedPassword } from 'util/saved-passwords';
 import Card from 'component/common/card';
 import { withRouter } from 'react-router';
 import Spinner from 'component/spinner';
-import { Lbry } from 'lbry-redux';
+import Lbry from 'lbry';
 import ErrorText from 'component/common/error-text';
 import I18nMessage from 'component/i18nMessage';
 
 type Props = {
-  setSyncEnabled: boolean => void,
+  setSyncEnabled: (boolean) => void,
   syncEnabled: boolean,
   getSyncError: ?string,
   getSyncPending: boolean,
@@ -90,13 +90,13 @@ function SyncEnableFlow(props: Props) {
     const altTags = altData.tags || [];
 
     if (altBlocklist.length) {
-      altBlocklist.forEach(el => mergedBlockListSet.add(el));
+      altBlocklist.forEach((el) => mergedBlockListSet.add(el));
     }
     if (altSubscriptions.length) {
-      altSubscriptions.forEach(el => mergedSubscriptionsSet.add(el));
+      altSubscriptions.forEach((el) => mergedSubscriptionsSet.add(el));
     }
     if (altTags.length) {
-      altTags.forEach(el => mergedTagsSet.add(el));
+      altTags.forEach((el) => mergedTagsSet.add(el));
     }
 
     baseData.blocked = Array.from(mergedBlockListSet);
@@ -110,7 +110,7 @@ function SyncEnableFlow(props: Props) {
     if (mode) {
       checkSync();
       if (mode === ENABLE_MODE) {
-        getSavedPassword().then(pw => {
+        getSavedPassword().then((pw) => {
           setPassword(pw);
           setStep(FETCH_FOR_ENABLE);
         });
@@ -127,7 +127,7 @@ function SyncEnableFlow(props: Props) {
           setStep(ERROR);
           setError(e && e.message ? e.message : e);
         } else {
-          Lbry.preference_get().then(result => {
+          Lbry.preference_get().then((result) => {
             const prefs = {};
             if (result[SHARED_KEY]) prefs[SHARED_KEY] = result[SHARED_KEY];
             if (result[LOCAL_KEY]) prefs[LOCAL_KEY] = result[LOCAL_KEY];
@@ -138,7 +138,7 @@ function SyncEnableFlow(props: Props) {
       });
     }
     if (step === FETCH_FOR_DISABLE) {
-      Lbry.preference_get().then(result => {
+      Lbry.preference_get().then((result) => {
         const prefs = {};
         if (result[SHARED_KEY]) prefs[SHARED_KEY] = result[SHARED_KEY];
         if (result[LOCAL_KEY]) prefs[LOCAL_KEY] = result[LOCAL_KEY];
