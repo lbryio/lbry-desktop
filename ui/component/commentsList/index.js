@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
+import { doResolveUris } from 'redux/actions/claims';
 import {
-  doResolveUris,
   makeSelectClaimForUri,
   makeSelectClaimIsMine,
   selectFetchingMyChannels,
