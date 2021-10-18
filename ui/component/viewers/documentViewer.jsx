@@ -5,7 +5,6 @@ import LoadingScreen from 'component/common/loading-screen';
 import MarkdownPreview from 'component/common/markdown-preview';
 import CodeViewer from 'component/viewers/codeViewer';
 import * as RENDER_MODES from 'constants/file_render_modes';
-import * as https from 'https';
 
 type Props = {
   theme: string,
@@ -35,7 +34,6 @@ class DocumentViewer extends React.PureComponent<Props, State> {
 
   componentDidMount() {
     const { source } = this.props;
-    // @if TARGET='app'
     if (source && source.file) {
       const stream = source.file('utf8');
 
@@ -53,24 +51,6 @@ class DocumentViewer extends React.PureComponent<Props, State> {
         this.setState({ error: true, loading: false });
       });
     }
-    // @endif
-    // @if TARGET='web'
-    if (source && source.stream) {
-      https.get(source.stream, (response) => {
-        if (response.statusCode === 200) {
-          let data = '';
-          response.on('data', (chunk) => {
-            data += chunk;
-          });
-          response.on('end', () => {
-            this.setState({ content: data, loading: false });
-          });
-        } else {
-          this.setState({ error: true, loading: false });
-        }
-      });
-    }
-    // @endif
   }
 
   renderDocument() {

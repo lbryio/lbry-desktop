@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import * as ICONS from 'constants/icons';
-import { LOGO_TITLE, LOGO, LOGO_TEXT_LIGHT, LOGO_TEXT_DARK } from 'config';
+import { LOGO, LOGO_TEXT_LIGHT, LOGO_TEXT_DARK } from 'config';
 import Icon from 'component/common/icon';
 import { useIsMobile } from 'effects/use-screensize';
 
@@ -18,9 +18,6 @@ export default function Logo(props: Props) {
       <Icon icon={ICONS.LBRY} />
       {/* @if TARGET='app' */}
       <div className={'button__label'}>{'LBRY'}</div>
-      {/* @endif */}
-      {/* @if TARGET='web' */}
-      <div className={'button__label'}>{LOGO_TITLE}</div>
       {/* @endif */}
     </>
   );

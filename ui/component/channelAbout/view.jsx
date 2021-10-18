@@ -1,11 +1,8 @@
 // @flow
-import { SIMPLE_SITE } from 'config';
 import React, { Fragment } from 'react';
 import MarkdownPreview from 'component/common/markdown-preview';
 import ClaimTags from 'component/claimTags';
 import CreditAmount from 'component/common/credit-amount';
-import Button from 'component/button';
-import * as PAGES from 'constants/pages';
 import DateTime from 'component/dateTime';
 import YoutubeBadge from 'component/youtubeBadge';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
@@ -101,15 +98,6 @@ function ChannelAbout(props: Props) {
               amount={parseFloat(claim.amount) + parseFloat(claim.meta.support_amount)}
               precision={8}
             />{' '}
-            {SIMPLE_SITE && (
-              <Button
-                button="link"
-                label={__('view other claims at lbry://%name%', {
-                  name: claim.name,
-                })}
-                navigate={`/$/${PAGES.TOP}?name=${claim.name}`}
-              />
-            )}
           </div>
 
           <YoutubeBadge channelClaimId={claimId} />

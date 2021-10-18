@@ -8,7 +8,7 @@
   File upload is carried out in the background by that function.
  */
 
-import { SITE_NAME, ENABLE_NO_SOURCE_CLAIMS, SIMPLE_SITE, CHANNEL_STAKED_LEVEL_LIVESTREAM } from 'config';
+import { SITE_NAME, ENABLE_NO_SOURCE_CLAIMS, CHANNEL_STAKED_LEVEL_LIVESTREAM } from 'config';
 import React, { useEffect, useState } from 'react';
 import Lbry from 'lbry';
 import { buildURI, isURIValid, isNameValid } from 'util/lbryURI';
@@ -167,7 +167,7 @@ function PublishForm(props: Props) {
   });
 
   const MODE_TO_I18N_STR = {
-    [PUBLISH_MODES.FILE]: SIMPLE_SITE ? 'Video/Audio' : 'File',
+    [PUBLISH_MODES.FILE]: 'File',
     [PUBLISH_MODES.POST]: 'Post --[noun, markdown post tab button]--',
     [PUBLISH_MODES.LIVESTREAM]: 'Livestream --[noun, livestream tab button]--',
   };
@@ -459,17 +459,6 @@ function PublishForm(props: Props) {
     replace({ search: newParams.toString() });
   }, [mode, _uploadType]);
 
-  // @if TARGET='web'
-  function createWebFile() {
-    if (fileText) {
-      const fileName = name || title;
-      if (fileName) {
-        return new File([fileText], `${fileName}.md`, { type: 'text/markdown' });
-      }
-    }
-  }
-  // @endif
-
   // @if TARGET='app'
   // Save file changes locally ( desktop )
   function saveFileChanges() {
@@ -507,10 +496,6 @@ function PublishForm(props: Props) {
       if (fileEdited || nameEdited) {
         // @if TARGET='app'
         outputFile = await saveFileChanges();
-        // @endif
-
-        // @if TARGET='web'
-        outputFile = createWebFile();
         // @endif
 
         // New content stored locally and is not empty
@@ -612,7 +597,7 @@ function PublishForm(props: Props) {
           {mode !== PUBLISH_MODES.POST && <PublishDescription disabled={formDisabled} />}
           <Card actions={<SelectThumbnail livestreamdData={livestreamData} />} />
           <TagsSelect
-            suggestMature={!SIMPLE_SITE}
+            suggestMature
             disableAutoFocus
             hideHeader
             label={__('Selected Tags')}

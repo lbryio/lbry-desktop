@@ -10,11 +10,8 @@ import Icon from 'component/common/icon';
 import NotificationBubble from 'component/notificationBubble';
 import I18nMessage from 'component/i18nMessage';
 import ChannelThumbnail from 'component/channelThumbnail';
-import { GetLinksData } from 'util/buildHomepage';
-import { SIMPLE_SITE, DOMAIN, ENABLE_UI_NOTIFICATIONS } from 'config';
-// @if TARGET='app'
+import { DOMAIN, ENABLE_UI_NOTIFICATIONS } from 'config';
 import { IS_MAC } from 'component/app/view';
-// @endif
 
 const HOME = {
   title: 'Home',
@@ -70,12 +67,9 @@ function SideNavigation(props: Props) {
     isMediumScreen,
     isOnFilePage,
     unseenCount,
-    homepageData,
     user,
     followedTags,
   } = props;
-
-  const EXTRA_SIDEBAR_LINKS = GetLinksData(homepageData).map(({ pinnedUrls, ...theRest }) => theRest);
 
   const FULL_LINKS: Array<SideNavLink> = [
     {
@@ -203,37 +197,13 @@ function SideNavigation(props: Props) {
 
   SIDE_LINKS.push(HOME);
   SIDE_LINKS.push(RECENT_FROM_FOLLOWING);
-  if (!SIMPLE_SITE) {
-    FULL_LINKS.push({
-      title: 'Lists',
-      link: `/$/${PAGES.LISTS}`,
-      icon: ICONS.STACK,
-      hideForUnauth: true,
-    });
-  }
-  if (!SIMPLE_SITE) {
-    SIDE_LINKS.push(...FULL_LINKS);
-  } else if (SIMPLE_SITE) {
-    SIDE_LINKS.push({
-      title: 'Lists',
-      link: `/$/${PAGES.LISTS}`,
-      icon: ICONS.STACK,
-      hideForUnauth: true,
-    });
-  }
-
-  if (SIMPLE_SITE && EXTRA_SIDEBAR_LINKS) {
-    // $FlowFixMe
-    SIDE_LINKS.push(...EXTRA_SIDEBAR_LINKS);
-
-    const WILD_WEST = {
-      title: 'Wild West',
-      link: `/$/${PAGES.WILD_WEST}`,
-      icon: ICONS.WILD_WEST,
-    };
-
-    SIDE_LINKS.push(WILD_WEST);
-  }
+  FULL_LINKS.push({
+    title: 'Lists',
+    link: `/$/${PAGES.LISTS}`,
+    icon: ICONS.STACK,
+    hideForUnauth: true,
+  });
+  SIDE_LINKS.push(...FULL_LINKS);
 
   const [pulseLibrary, setPulseLibrary] = React.useState(false);
   const isPersonalized = !IS_WEB || isAuthenticated;
@@ -304,11 +274,6 @@ function SideNavigation(props: Props) {
       <li className="navigation-link">
         <Button label={__('FAQ')} href="https://odysee.com/@OdyseeHelp:b" />
       </li>
-      {SIMPLE_SITE && ( // GUIDELINES_URL?
-        <li className="navigation-link">
-          <Button label={__('Community Guidelines')} href="https://odysee.com/@OdyseeHelp:b/Community-Guidelines:c" />
-        </li>
-      )}
       <li className="navigation-link">
         <Button label={__('Support --[used in footer; general help/support]--')} href="https://lbry.com/support" />
       </li>
@@ -384,7 +349,7 @@ function SideNavigation(props: Props) {
             {!isAuthenticated && sidebarOpen && unAuthNudge}
           </div>
 
-          {SIMPLE_SITE && sidebarOpen && helpLinks}
+          {sidebarOpen && helpLinks}
         </nav>
       )}
 
@@ -457,7 +422,6 @@ function SideNavigation(props: Props) {
                 </ul>
               )}
               {!isAuthenticated && unAuthNudge}
-              {SIMPLE_SITE && helpLinks}
             </div>
           </nav>
           <div

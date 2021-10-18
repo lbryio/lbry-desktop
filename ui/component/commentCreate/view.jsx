@@ -3,7 +3,6 @@ import { FF_MAX_CHARS_IN_COMMENT, FF_MAX_CHARS_IN_LIVESTREAM_COMMENT } from 'con
 import { FormField, Form } from 'component/common/form';
 import { getChannelIdFromClaim } from 'util/claim';
 import { Lbryio } from 'lbryinc';
-import { SIMPLE_SITE } from 'config';
 import { useHistory } from 'react-router';
 import * as ICONS from 'constants/icons';
 import * as KEYCODES from 'constants/keycodes';
@@ -170,7 +169,7 @@ export function CommentCreate(props: Props) {
     if (isReply) {
       commentValue = event.target.value;
     } else {
-      commentValue = !SIMPLE_SITE && advancedEditor ? event : event.target.value;
+      commentValue = advancedEditor ? event : event.target.value;
     }
 
     setCommentValue(commentValue);
@@ -528,7 +527,7 @@ export function CommentCreate(props: Props) {
       )}
       <FormField
         disabled={isFetchingChannels}
-        type={SIMPLE_SITE ? 'textarea' : advancedEditor && !isReply ? 'markdown' : 'textarea'}
+        type={'textarea'}
         name={isReply ? 'content_reply' : 'content_description'}
         ref={formFieldRef}
         className={isReply ? 'content_reply' : 'content_comment'}
@@ -540,10 +539,8 @@ export function CommentCreate(props: Props) {
             <SelectChannel tiny />
           </span>
         }
-        quickActionLabel={
-          !SIMPLE_SITE && (isReply ? undefined : advancedEditor ? __('Simple Editor') : __('Advanced Editor'))
-        }
-        quickActionHandler={() => !SIMPLE_SITE && setAdvancedEditor(!advancedEditor)}
+        quickActionLabel={isReply ? undefined : advancedEditor ? __('Simple Editor') : __('Advanced Editor')}
+        quickActionHandler={() => setAdvancedEditor(!advancedEditor)}
         onFocus={onTextareaFocus}
         onBlur={onTextareaBlur}
         placeholder={__('Say something about this...')}

@@ -37,12 +37,7 @@ class HtmlViewer extends React.PureComponent<Props, State> {
     return (
       <div className="file-viewer file-viewer--html file-viewer--iframe" onContextMenu={stopContextMenu}>
         {loading && <div className="placeholder--text-document" />}
-        {/* @if TARGET='app' */}
         <iframe ref={this.iframe} hidden={loading} sandbox="" title={__('File preview')} src={`file://${source}`} />
-        {/* @endif */}
-        {/* @if TARGET='web' */}
-        <iframe ref={this.iframe} hidden={loading} sandbox="" title={__('File preview')} src={source} />
-        {/* @endif */}
       </div>
     );
   }

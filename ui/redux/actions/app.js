@@ -9,7 +9,7 @@ import * as MODALS from 'constants/modal_types';
 import * as SETTINGS from 'constants/settings';
 import * as DAEMON_SETTINGS from 'constants/daemon_settings';
 import * as SHARED_PREFERENCES from 'constants/shared_preferences';
-import { DOMAIN, SIMPLE_SITE } from 'config';
+import { DOMAIN } from 'config';
 import Lbry from 'lbry';
 import { doFetchChannelListMine, doFetchCollectionListMine, doCheckPendingClaims } from 'redux/actions/claims';
 import { makeSelectClaimForUri, makeSelectClaimIsMine, selectMyChannelClaims } from 'redux/selectors/claims';
@@ -522,7 +522,7 @@ export function doAnalyticsTagSync() {
 }
 
 export function doAnaltyicsPurchaseEvent(fileInfo) {
-  return (dispatch) => {
+  return () => {
     let purchasePrice = fileInfo.purchase_receipt && fileInfo.purchase_receipt.amount;
     if (purchasePrice) {
       const purchaseInt = Number(Number(purchasePrice).toFixed(0));
@@ -535,7 +535,7 @@ export function doSignIn() {
   return (dispatch, getState) => {
     const state = getState();
     const user = selectUser(state);
-    const notificationsEnabled = SIMPLE_SITE || user.experimental_ui;
+    const notificationsEnabled = user.experimental_ui; // what is notifications?
 
     dispatch(doNotificationSocketConnect(notificationsEnabled));
 

@@ -4,7 +4,6 @@ import * as PAGES from 'constants/pages';
 import React from 'react';
 import * as SETTINGS from 'constants/settings';
 import { Lbryio } from 'lbryinc';
-import { SIMPLE_SITE } from 'config';
 import * as MODALS from 'constants/modal_types';
 import { SETTINGS_GRP } from 'constants/settings';
 import Button from 'component/button';
@@ -92,48 +91,31 @@ export default function SettingContent(props: Props) {
                 checked={autoplayNext}
               />
             </SettingsRow>
-
-            {!SIMPLE_SITE && (
-              <>
-                <SettingsRow title={__('Hide reposts')} subtitle={__(HELP.HIDE_REPOSTS)}>
-                  <FormField
-                    type="checkbox"
-                    name="hide_reposts"
-                    onChange={(e) => {
-                      if (isAuthenticated) {
-                        let param = e.target.checked ? { add: 'noreposts' } : { remove: 'noreposts' };
-                        Lbryio.call('user_tag', 'edit', param);
-                      }
-                      setClientSetting(SETTINGS.HIDE_REPOSTS, !hideReposts);
-                    }}
-                  />
-                </SettingsRow>
-
-                {/*
-              <SettingsRow title={__('Show anonymous content')} subtitle={__('Anonymous content is published without a channel.')} >
-                <FormField
-                  type="checkbox"
-                  name="show_anonymous"
-                  onChange={() => setClientSetting(SETTINGS.SHOW_ANONYMOUS, !showAnonymous)}
-                  checked={showAnonymous}
-                />
-              </SettingsRow>
-              */}
-
-                <SettingsRow title={__('Show mature content')} subtitle={__(HELP.SHOW_MATURE)}>
-                  <FormField
-                    type="checkbox"
-                    name="show_nsfw"
-                    checked={showNsfw}
-                    onChange={() =>
-                      !IS_WEB || showNsfw
-                        ? setClientSetting(SETTINGS.SHOW_MATURE, !showNsfw)
-                        : openModal(MODALS.CONFIRM_AGE)
-                    }
-                  />
-                </SettingsRow>
-              </>
-            )}
+            <SettingsRow title={__('Hide reposts')} subtitle={__(HELP.HIDE_REPOSTS)}>
+              <FormField
+                type="checkbox"
+                name="hide_reposts"
+                onChange={(e) => {
+                  if (isAuthenticated) {
+                    let param = e.target.checked ? { add: 'noreposts' } : { remove: 'noreposts' };
+                    Lbryio.call('user_tag', 'edit', param);
+                  }
+                  setClientSetting(SETTINGS.HIDE_REPOSTS, !hideReposts);
+                }}
+              />
+            </SettingsRow>
+            <SettingsRow title={__('Show mature content')} subtitle={__(HELP.SHOW_MATURE)}>
+              <FormField
+                type="checkbox"
+                name="show_nsfw"
+                checked={showNsfw}
+                onChange={() =>
+                  !IS_WEB || showNsfw
+                    ? setClientSetting(SETTINGS.SHOW_MATURE, !showNsfw)
+                    : openModal(MODALS.CONFIRM_AGE)
+                }
+              />
+            </SettingsRow>
 
             {(isAuthenticated || !IS_WEB) && (
               <>

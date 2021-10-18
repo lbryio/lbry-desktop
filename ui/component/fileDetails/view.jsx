@@ -1,5 +1,4 @@
 // @flow
-import { SIMPLE_SITE } from 'config';
 import React, { PureComponent } from 'react';
 import Button from 'component/button';
 import path from 'path';
@@ -49,46 +48,44 @@ class FileDetails extends PureComponent<Props> {
           <span>{claim.claim_id}</span>
         </div>
 
-        {!SIMPLE_SITE && (
-          <>
-            {languages && (
-              <div className="media__details">
-                <span>{__('Languages')}</span>
-                <span>{languages.join(' ')}</span>
-              </div>
-            )}
-
-            {mediaType && (
-              <div className="media__details">
-                <span>{__('Media Type')}</span>
-                <span>{mediaType}</span>
-              </div>
-            )}
-
+        <>
+          {languages && (
             <div className="media__details">
-              <span>{__('License')}</span>
-              <span>{license}</span>
+              <span>{__('Languages')}</span>
+              <span>{languages.join(' ')}</span>
             </div>
+          )}
 
-            {downloadPath && (
-              <div className="media__details">
-                <span>{__('Downloaded to')}</span>
-                <span>
-                  <Button
-                    button="link"
-                    className="button--download-link"
-                    onClick={() => {
-                      if (downloadPath) {
-                        openFolder(downloadPath);
-                      }
-                    }}
-                    label={downloadNote || downloadPath.replace(/(.{10})/g, '$1\u200b')}
-                  />
-                </span>
-              </div>
-            )}
-          </>
-        )}
+          {mediaType && (
+            <div className="media__details">
+              <span>{__('Media Type')}</span>
+              <span>{mediaType}</span>
+            </div>
+          )}
+
+          <div className="media__details">
+            <span>{__('License')}</span>
+            <span>{license}</span>
+          </div>
+
+          {downloadPath && (
+            <div className="media__details">
+              <span>{__('Downloaded to')}</span>
+              <span>
+                <Button
+                  button="link"
+                  className="button--download-link"
+                  onClick={() => {
+                    if (downloadPath) {
+                      openFolder(downloadPath);
+                    }
+                  }}
+                  label={downloadNote || downloadPath.replace(/(.{10})/g, '$1\u200b')}
+                />
+              </span>
+            </div>
+          )}
+        </>
 
         {fileSize && (
           <div className="media__details">

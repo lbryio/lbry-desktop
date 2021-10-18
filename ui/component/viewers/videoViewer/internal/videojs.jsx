@@ -1,6 +1,5 @@
 // @flow
 import React, { useEffect, useRef, useState } from 'react';
-// import { SIMPLE_SITE } from 'config';
 import Button from 'component/button';
 import * as ICONS from 'constants/icons';
 import * as KEYCODES from 'constants/keycodes';
@@ -14,10 +13,7 @@ import hlsQualitySelector from './plugins/videojs-hls-quality-selector/plugin';
 import recsys from './plugins/videojs-recsys/plugin';
 import qualityLevels from 'videojs-contrib-quality-levels';
 import isUserTyping from 'util/detect-typing';
-// @if TARGET='web'
-// Disabled for now.
-// import './plugins/videojs-aniview/plugin';
-// @endif
+
 const isDev = process.env.NODE_ENV !== 'production';
 
 export type Player = {
@@ -582,19 +578,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       onPlayerReady(player, videoNode);
     });
 
-    // pre-roll ads
-    // This must be initialized earlier than everything else
-    // otherwise a race condition occurs if we place this in the onReady call back
-    // allow if isDev because otherwise you'll never see ads when basing to master
-    // @if TARGET='web'
-    // DISABLED FOR NOW
-    // if ((allowPreRoll && SIMPLE_SITE) || isDev) {
-    //   vjs.aniview();
-    // }
-    // @endif
-
-    // fixes #3498 (https://github.com/lbryio/lbry-desktop/issues/3498)
-    // summary: on firefox the focus would stick to the fullscreen button which caused buggy behavior with spacebar
     vjs.on('fullscreenchange', () => document.activeElement && document.activeElement.blur());
 
     return vjs;

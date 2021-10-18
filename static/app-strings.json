@@ -2190,5 +2190,8 @@
   "%totalComments% comments": "%totalComments% comments",
   "(%lbc_balance% available)": "(%lbc_balance% available)",
   "Sending...": "Sending...",
+  "Trending for #Art": "Trending for #Art",
+  "Trending for #Btc": "Trending for #Btc",
+  "Trending for #Music": "Trending for #Music",
   "--end--": "--end--"
 }

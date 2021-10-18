@@ -1,9 +1,8 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import * as MODALS from 'constants/modal_types';
-import React, { useState } from 'react';
+import React from 'react';
 import Button from 'component/button';
-import { webDownloadClaim } from 'util/downloadClaim';
 
 type Props = {
   uri: string,
@@ -40,23 +39,9 @@ function FileDownloadLink(props: Props) {
     showLabel = false,
     hideOpenButton = false,
     hideDownloadStatus = false,
-    streamingUrl,
   } = props;
 
-  const [didClickDownloadButton, setDidClickDownloadButton] = useState(false);
-  const fileName = claim && claim.value && claim.value.source && claim.value.source.name;
-
-  // @if TARGET='web'
-  React.useEffect(() => {
-    if (didClickDownloadButton && streamingUrl) {
-      webDownloadClaim(streamingUrl, fileName);
-      setDidClickDownloadButton(false);
-    }
-  }, [streamingUrl, didClickDownloadButton, fileName]);
-  // @endif
-
   function handleDownload(e) {
-    setDidClickDownloadButton(true);
     e.preventDefault();
     download(uri);
   }

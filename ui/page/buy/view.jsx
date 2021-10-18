@@ -14,7 +14,6 @@ import Button from 'component/button';
 import Nag from 'component/common/nag';
 import I18nMessage from 'component/i18nMessage';
 import LbcSymbol from 'component/common/lbc-symbol';
-import { SIMPLE_SITE } from 'config';
 import classnames from 'classnames';
 import WalletSwap from 'component/walletSwap';
 
@@ -76,9 +75,7 @@ export default function BuyPage(props: Props) {
 
   React.useEffect(() => {
     if (MOONPAY_KEY && !url && receiveAddress) {
-      let url = SIMPLE_SITE
-        ? `https://buy.moonpay.io?apiKey=pk_live_xNFffrN5NWKy6fu0ggbV8VQIwRieRzy&colorCode=%23fa6165&currencyCode=lbc&showWalletAddressForm=true&walletAddress=${receiveAddress}`
-        : `https://buy.moonpay.io?apiKey=pk_live_xNFffrN5NWKy6fu0ggbV8VQIwRieRzy&colorCode=%23257761&currencyCode=lbc&showWalletAddressForm=true&walletAddress=${receiveAddress}`;
+      let url = `https://buy.moonpay.io?apiKey=pk_live_xNFffrN5NWKy6fu0ggbV8VQIwRieRzy&colorCode=%23257761&currencyCode=lbc&showWalletAddressForm=true&walletAddress=${receiveAddress}`;
 
       if (email) {
         url += `&email=${encodeURIComponent(email)}`;

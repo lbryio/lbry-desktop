@@ -13,7 +13,7 @@ import defaultSchema from 'hast-util-sanitize/lib/github.json';
 import { formatedLinks, inlineLinks } from 'util/remark-lbry';
 import { formattedTimestamp, inlineTimestamp } from 'util/remark-timestamp';
 import ZoomableImage from 'component/zoomableImage';
-import { CHANNEL_STAKED_LEVEL_VIDEO_COMMENTS, SIMPLE_SITE } from 'config';
+import { CHANNEL_STAKED_LEVEL_VIDEO_COMMENTS } from 'config';
 import Button from 'component/button';
 import * as ICONS from 'constants/icons';
 
@@ -171,16 +171,7 @@ const MarkdownPreview = (props: MarkdownProps) => {
       div: React.Fragment,
       img: isStakeEnoughForPreview(stakedLevel)
         ? ZoomableImage
-        : (imgProps) => (
-            <SimpleImageLink
-              src={imgProps.src}
-              alt={imgProps.alt}
-              title={imgProps.title}
-              helpText={
-                SIMPLE_SITE ? __("This channel isn't staking enough LBRY Credits for inline image previews.") : ''
-              }
-            />
-          ),
+        : (imgProps) => <SimpleImageLink src={imgProps.src} alt={imgProps.alt} title={imgProps.title} />,
     },
   };
 

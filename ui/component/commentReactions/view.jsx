@@ -1,5 +1,5 @@
 // @flow
-import { ENABLE_CREATOR_REACTIONS, SIMPLE_SITE } from 'config';
+import { ENABLE_CREATOR_REACTIONS } from 'config';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import * as REACTION_TYPES from 'constants/reactions';
@@ -72,16 +72,8 @@ export default function CommentReactions(props: Props) {
   };
   const shouldHide = !canCreatorReact && hideCreatorLike;
   const creatorLiked = getCountForReact(REACTION_TYPES.CREATOR_LIKE) > 0;
-  const likeIcon = SIMPLE_SITE
-    ? myReacts.includes(REACTION_TYPES.LIKE)
-      ? ICONS.FIRE_ACTIVE
-      : ICONS.FIRE
-    : ICONS.UPVOTE;
-  const dislikeIcon = SIMPLE_SITE
-    ? myReacts.includes(REACTION_TYPES.DISLIKE)
-      ? ICONS.SLIME_ACTIVE
-      : ICONS.SLIME
-    : ICONS.DOWNVOTE;
+  const likeIcon = ICONS.UPVOTE;
+  const dislikeIcon = ICONS.DOWNVOTE;
 
   function handleCommentLike() {
     if (activeChannelId) {
