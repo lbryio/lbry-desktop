@@ -16,7 +16,6 @@ import { useHistory } from 'react-router';
 import FileReactions from 'component/fileReactions';
 import { Menu, MenuButton, MenuList, MenuItem } from '@reach/menu-button';
 import Icon from 'component/common/icon';
-import { webDownloadClaim } from 'util/downloadClaim';
 
 type Props = {
   uri: string,
@@ -53,8 +52,6 @@ function FileActions(props: Props) {
     hideRepost,
     isLivestreamClaim,
     reactionsDisabled,
-    download,
-    streamingUrl,
   } = props;
   const {
     push,
@@ -67,7 +64,6 @@ function FileActions(props: Props) {
   const claimId = claim && claim.claim_id;
   const { signing_channel: signingChannel } = claim;
   const channelName = signingChannel && signingChannel.name;
-  const fileName = claim && claim.value && claim.value.source && claim.value.source.name;
 
   // We want to use the short form uri for editing
   // This is what the user is used to seeing, they don't care about the claim id
@@ -87,23 +83,6 @@ function FileActions(props: Props) {
 
   const urlParams = new URLSearchParams(search);
   const collectionId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID);
-
-  // @if TARGET='web'
-  const [downloadClicked, setDownloadClicked] = React.useState(false);
-
-  function handleWebDownload() {
-    // download() causes 'streamingUrl' to be populated.
-    download(uri);
-    setDownloadClicked(true);
-  }
-
-  React.useEffect(() => {
-    if (downloadClicked && streamingUrl) {
-      webDownloadClaim(streamingUrl, fileName);
-      setDownloadClicked(false);
-    }
-  }, [downloadClicked, streamingUrl, fileName]);
-  // @endif
 
   function handleRepostClick() {
     if (!hasChannels) {
@@ -180,16 +159,6 @@ function FileActions(props: Props) {
             <Icon size={20} icon={ICONS.MORE} />
           </MenuButton>
           <MenuList className="menu__list">
-            {/* @if TARGET='web' */}
-            {!isLivestreamClaim && (
-              <MenuItem className="comment__menu-option" onSelect={handleWebDownload}>
-                <div className="menu__link">
-                  <Icon aria-hidden icon={ICONS.DOWNLOAD} />
-                  {__('Download')}
-                </div>
-              </MenuItem>
-            )}
-            {/* @endif */}
             {!claimIsMine && (
               <MenuItem
                 className="comment__menu-option"

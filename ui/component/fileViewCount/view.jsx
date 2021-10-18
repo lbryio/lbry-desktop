@@ -1,5 +1,4 @@
 // @flow
-import { SIMPLE_SITE } from 'config';
 import React from 'react';
 import HelpLink from 'component/common/help-link';
 
@@ -16,7 +15,7 @@ type Props = {
 };
 
 function FileViewCount(props: Props) {
-  const { claim, uri, fetchViewCount, viewCount, livestream, activeViewers, isLive = false, doAnalyticsView } = props;
+  const { claim, uri, fetchViewCount, viewCount, livestream, activeViewers, doAnalyticsView } = props;
   const claimId = claim && claim.claim_id;
 
   React.useEffect(() => {
@@ -37,15 +36,10 @@ function FileViewCount(props: Props) {
 
   return (
     <span className="media__subtitle--centered">
-      {livestream &&
-        __('%viewer_count% currently %viewer_state%', {
-          viewer_count: activeViewers === undefined ? '...' : activeViewers,
-          viewer_state: isLive ? __('watching') : __('waiting'),
-        })}
       {!livestream &&
         activeViewers === undefined &&
         (viewCount !== 1 ? __('%view_count% views', { view_count: formattedViewCount }) : __('1 view'))}
-      {!SIMPLE_SITE && <HelpLink href="https://lbry.com/faq/views" />}
+      {<HelpLink href="https://lbry.com/faq/views" />}
     </span>
   );
 }

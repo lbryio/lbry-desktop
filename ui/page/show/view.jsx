@@ -1,5 +1,5 @@
 // @flow
-import { DOMAIN, ENABLE_NO_SOURCE_CLAIMS } from 'config';
+import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import * as PAGES from 'constants/pages';
 import React, { useEffect } from 'react';
 import { lazyImport } from 'util/lazyImport';
@@ -19,7 +19,6 @@ const AbandonedChannelPreview = lazyImport(() =>
 const FilePage = lazyImport(() => import('page/file' /* webpackChunkName: "filePage" */));
 const LivestreamPage = lazyImport(() => import('page/livestream' /* webpackChunkName: "livestream" */));
 const Yrbl = lazyImport(() => import('component/yrbl' /* webpackChunkName: "yrbl" */));
-const isDev = process.env.NODE_ENV !== 'production';
 
 type Props = {
   isResolvingUri: boolean,
@@ -84,25 +83,6 @@ function ShowPage(props: Props) {
   }, [isCollection, resolvedCollection, collectionId, fetchCollectionItems]);
 
   useEffect(() => {
-    // @if TARGET='web'
-    if (canonicalUrl) {
-      const canonicalUrlPath = '/' + canonicalUrl.replace(/^lbry:\/\//, '').replace(/#/g, ':');
-      // Only redirect if we are in lbry.tv land
-      // replaceState will fail if on a different domain (like webcache.googleusercontent.com)
-      const hostname = isDev ? 'localhost' : DOMAIN;
-      if (canonicalUrlPath !== window.location.pathname && hostname === window.location.hostname) {
-        const urlParams = new URLSearchParams(search);
-        let replaceUrl = canonicalUrlPath;
-        if (urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID)) {
-          const listId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID) || '';
-          urlParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, listId);
-          replaceUrl += `?${urlParams.toString()}`;
-        }
-        history.replaceState(history.state, '', replaceUrl);
-      }
-    }
-    // @endif
-
     if (
       (resolveUri && !isResolvingUri && uri && haventFetchedYet) ||
       (claimExists && !claimIsPending && (!canonicalUrl || isMine === undefined))

@@ -5,7 +5,7 @@ import * as KEYCODES from 'constants/keycodes';
 import { COMMENT_HIGHLIGHTED } from 'constants/classnames';
 import { SORT_BY, COMMENT_PAGE_SIZE_REPLIES } from 'constants/comment';
 import { FF_MAX_CHARS_IN_COMMENT } from 'constants/form-field';
-import { SITE_NAME, SIMPLE_SITE, ENABLE_COMMENT_REACTIONS } from 'config';
+import { SITE_NAME, ENABLE_COMMENT_REACTIONS } from 'config';
 import React, { useEffect, useState } from 'react';
 import { parseURI } from 'util/lbryURI';
 import DateTime from 'component/dateTime';
@@ -180,7 +180,7 @@ function Comment(props: Props) {
   }, [page, uri, commentId, fetchReplies]);
 
   function handleEditMessageChanged(event) {
-    setCommentValue(!SIMPLE_SITE && advancedEditor ? event : event.target.value);
+    setCommentValue(advancedEditor ? event : event.target.value);
   }
 
   function handleEditComment() {
@@ -306,7 +306,7 @@ function Comment(props: Props) {
               <Form onSubmit={handleSubmit}>
                 <FormField
                   className="comment__edit-input"
-                  type={!SIMPLE_SITE && advancedEditor ? 'markdown' : 'textarea'}
+                  type={advancedEditor ? 'markdown' : 'textarea'}
                   name="editing_comment"
                   value={editedMessage}
                   charCount={charCount}

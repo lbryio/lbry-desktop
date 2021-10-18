@@ -35,12 +35,6 @@ class ErrorBoundary extends React.Component<Props, State> {
   }
 
   componentDidCatch(error, errorInfo) {
-    // @if TARGET='web'
-    analytics.sentryError(error, errorInfo).then((sentryEventId) => {
-      this.setState({ sentryEventId });
-    });
-    // @endif
-
     // @if TARGET='app'
     let errorMessage = 'Uncaught error\n';
     Native.getAppVersionInfo().then(({ localVersion }) => {
@@ -105,9 +99,6 @@ class ErrorBoundary extends React.Component<Props, State> {
 
           {errorWasReported && (
             <div className="error__wrapper">
-              {/* @if TARGET='web' */}
-              <span className="error__text">{__('Error ID: %sentryEventId%', { sentryEventId })}</span>
-              {/* @endif */}
               {/* @if TARGET='app' */}
               <span className="error__text">{__('This error was reported and will be fixed.')}</span>
               {/* @endif */}

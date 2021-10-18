@@ -20,7 +20,6 @@ import analytics from 'analytics';
 import LbcSymbol from 'component/common/lbc-symbol';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 import WalletSpendableBalanceHelp from 'component/walletSpendableBalanceHelp';
-import { SIMPLE_SITE } from 'config';
 import { sortLanguageMap } from 'util/default-languages';
 import ThumbnailBrokenImage from 'component/selectThumbnail/thumbnail-broken.png';
 import Gerbil from 'component/channelThumbnail/gerbil.png';
@@ -424,7 +423,7 @@ function ChannelForm(props: Props) {
               <Card
                 body={
                   <TagsSearch
-                    suggestMature={!SIMPLE_SITE}
+                    suggestMature
                     disableAutoFocus
                     disableControlTags
                     limitSelect={MAX_TAG_SELECT}

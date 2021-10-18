@@ -6,7 +6,6 @@ import classnames from 'classnames';
 import Button from 'component/button';
 import { formatNumberWithCommas } from 'util/number';
 import NudgeFloating from 'component/nudgeFloating';
-import { SIMPLE_SITE } from 'config';
 
 type Props = {
   claim: StreamClaim,
@@ -36,12 +35,8 @@ function FileReactions(props: Props) {
   const claimId = claim && claim.claim_id;
   const channel = claim && claim.signing_channel && claim.signing_channel.name;
   const isCollection = claim && claim.value_type === 'collection'; // hack because nudge gets cut off by card on cols.
-  const likeIcon = SIMPLE_SITE ? (myReaction === REACTION_TYPES.LIKE ? ICONS.FIRE_ACTIVE : ICONS.FIRE) : ICONS.UPVOTE;
-  const dislikeIcon = SIMPLE_SITE
-    ? myReaction === REACTION_TYPES.DISLIKE
-      ? ICONS.SLIME_ACTIVE
-      : ICONS.SLIME
-    : ICONS.DOWNVOTE;
+  const likeIcon = ICONS.UPVOTE;
+  const dislikeIcon = ICONS.DOWNVOTE;
   React.useEffect(() => {
     function fetchReactions() {
       doFetchReactions(claimId);
@@ -74,25 +69,24 @@ function FileReactions(props: Props) {
 
       <Button
         title={__('I like this')}
-        requiresAuth={IS_WEB}
         authSrc="filereaction_like"
         className={classnames('button--file-action', {
-          'button--fire': SIMPLE_SITE && myReaction === REACTION_TYPES.LIKE,
-          'button--file-action-active': !SIMPLE_SITE && myReaction === REACTION_TYPES.LIKE,
+          'button--file-action-active': myReaction === REACTION_TYPES.LIKE,
         })}
         label={
           <>
-            {myReaction === REACTION_TYPES.LIKE && SIMPLE_SITE && (
-              <>
-                <div className="button__fire-glow" />
-                <div className="button__fire-particle1" />
-                <div className="button__fire-particle2" />
-                <div className="button__fire-particle3" />
-                <div className="button__fire-particle4" />
-                <div className="button__fire-particle5" />
-                <div className="button__fire-particle6" />
-              </>
-            )}
+            {/* Be nice to have animated Likes */}
+            {/* {myReaction === REACTION_TYPES.LIKE && SIMPLE_SITE && ( */}
+            {/*  <> */}
+            {/*    <div className="button__fire-glow" /> */}
+            {/*    <div className="button__fire-particle1" /> */}
+            {/*    <div className="button__fire-particle2" /> */}
+            {/*    <div className="button__fire-particle3" /> */}
+            {/*    <div className="button__fire-particle4" /> */}
+            {/*    <div className="button__fire-particle5" /> */}
+            {/*    <div className="button__fire-particle6" /> */}
+            {/*  </> */}
+            {/* )} */}
             {formatNumberWithCommas(likeCount, 0)}
           </>
         }
@@ -104,22 +98,8 @@ function FileReactions(props: Props) {
         requiresAuth={IS_WEB}
         authSrc={'filereaction_dislike'}
         title={__('I dislike this')}
-        className={classnames('button--file-action', {
-          'button--slime': SIMPLE_SITE && myReaction === REACTION_TYPES.DISLIKE,
-          'button--file-action-active': !SIMPLE_SITE && myReaction === REACTION_TYPES.DISLIKE,
-        })}
-        label={
-          <>
-            {myReaction === REACTION_TYPES.DISLIKE && SIMPLE_SITE && (
-              <>
-                <div className="button__slime-stain" />
-                <div className="button__slime-drop1" />
-                <div className="button__slime-drop2" />
-              </>
-            )}
-            {formatNumberWithCommas(dislikeCount, 0)}
-          </>
-        }
+        className={classnames('button--file-action', { 'button--file-action-active': myReaction === REACTION_TYPES.DISLIKE })}
+        label={<>{formatNumberWithCommas(dislikeCount, 0)}</>}
         iconSize={18}
         icon={dislikeIcon}
         onClick={() => doReactionDislike(uri)}

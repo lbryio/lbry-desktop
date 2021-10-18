@@ -8,7 +8,7 @@ import ClaimTilesDiscover from 'component/claimTilesDiscover';
 import ClaimListDiscover from 'component/claimListDiscover';
 import * as CS from 'constants/claim_search';
 import { toCapitalCase } from 'util/string';
-import { CUSTOM_HOMEPAGE, SIMPLE_SITE } from 'config';
+import { CUSTOM_HOMEPAGE } from 'config';
 
 const MORE_CHANNELS_ANCHOR = 'MoreChannels';
 
@@ -99,41 +99,37 @@ function ChannelsFollowingDiscover(props: Props) {
 
   return (
     <Page>
-      {!SIMPLE_SITE &&
-        rowDataWithGenericOptions.map(({ title, link, help, options = {} }) => (
-          <div key={title} className="claim-grid__wrapper">
-            <h1 className="section__actions">
-              {link ? (
-                <Button
-                  className="claim-grid__title"
-                  button="link"
-                  navigate={link}
-                  iconRight={ICONS.ARROW_RIGHT}
-                  label={__(title)}
-                />
-              ) : (
-                <span className="claim-grid__title">{__(title)}</span>
-              )}
-              {help}
-            </h1>
+      {rowDataWithGenericOptions.map(({ title, link, help, options = {} }) => (
+        <div key={title} className="claim-grid__wrapper">
+          <h1 className="section__actions">
+            {link ? (
+              <Button
+                className="claim-grid__title"
+                button="link"
+                navigate={link}
+                iconRight={ICONS.ARROW_RIGHT}
+                label={__(title) /* i18n this? */}
+              />
+            ) : (
+              <span className="claim-grid__title">{__(title)}</span>
+            )}
+            {help}
+          </h1>
 
-            <ClaimTilesDiscover {...options} />
-          </div>
-        ))}
-      {!SIMPLE_SITE && (
+          <ClaimTilesDiscover {...options} />
+        </div>
+      ))}
+      {
         <h1 id={MORE_CHANNELS_ANCHOR} className="claim-grid__title">
           {__('More Channels')}
         </h1>
-      )}
+      }
       <ClaimListDiscover
         defaultOrderBy={CS.ORDER_BY_TRENDING}
         defaultFreshness={CS.FRESH_ALL}
         claimType={CS.CLAIM_CHANNEL}
         claimIds={CUSTOM_HOMEPAGE && channelIds ? channelIds : undefined}
         scrollAnchor={MORE_CHANNELS_ANCHOR}
-        maxPages={SIMPLE_SITE ? 3 : undefined}
-        hideFilters={SIMPLE_SITE}
-        header={SIMPLE_SITE ? <h1 className="section__title">{__('Moon cheese is an acquired taste')}</h1> : undefined}
       />
     </Page>
   );

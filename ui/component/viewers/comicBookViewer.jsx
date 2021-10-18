@@ -3,13 +3,7 @@ import * as React from 'react';
 import Villain from 'villain-react';
 import LoadingScreen from 'component/common/loading-screen';
 
-// @if TARGET='web'
-import useStream from 'effects/use-stream';
-// @endif
-
-// @if TARGET='app'
 import useFileStream from 'effects/use-stream-file';
-// @endif
 
 // Import default styles for Villain
 import 'villain-react/dist/style.css';
@@ -33,13 +27,7 @@ const ComicBookViewer = (props: Props) => {
   const { source, theme } = props;
   let finalSource;
 
-  // @if TARGET='web'
-  finalSource = useStream(source.stream);
-  // @endif
-
-  // @if TARGET='app'
   finalSource = useFileStream(source.file);
-  // @endif
 
   // Villain options
   const opts = {

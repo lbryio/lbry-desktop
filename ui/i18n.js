@@ -31,7 +31,7 @@ function saveMessageDesktop(message) {
     knownMessages[message] = removeContextMetadata(message);
     knownMessages[END] = END;
 
-    fs.writeFile(messagesFilePath, JSON.stringify(knownMessages, null, 2) + '\n', 'utf-8', err => {
+    fs.writeFile(messagesFilePath, JSON.stringify(knownMessages, null, 2) + '\n', 'utf-8', (err) => {
       if (err) {
         throw err;
       }
@@ -44,14 +44,6 @@ function saveMessageDesktop(message) {
  I dislike the below code (and note that it ships all the way to the distributed app),
  but this seems better than silently having this limitation and future devs not knowing.
  */
-// @if TARGET='web'
-function saveMessageWeb(message) {
-  if (!isProduction && knownMessages === null) {
-    console.log('Note that i18n messages are not saved in web dev mode.'); // eslint-disable-line
-    knownMessages = {};
-  }
-}
-// @endif
 
 function removeContextMetadata(message) {
   // Example string entries with context-metadata:
@@ -87,7 +79,7 @@ export function __(message, tokens) {
     ? window.localStorage.getItem('language') || 'en'
     : window.navigator.language.slice(0, 2) || 'en';
   if (!isProduction) {
-    IS_WEB ? saveMessageWeb(message) : saveMessageDesktop(message);
+    saveMessageDesktop(message);
   }
 
   let translatedMessage = window.i18n_messages[language] ? window.i18n_messages[language][message] || message : message;
@@ -97,7 +89,7 @@ export function __(message, tokens) {
     return translatedMessage;
   }
 
-  return translatedMessage.replace(/%([^%]+)%/g, function($1, $2) {
+  return translatedMessage.replace(/%([^%]+)%/g, function ($1, $2) {
     return tokens.hasOwnProperty($2) ? tokens[$2] : $2;
   });
 }

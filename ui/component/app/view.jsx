@@ -4,8 +4,6 @@ import React, { useEffect, useRef, useState, useLayoutEffect } from 'react';
 import { lazyImport } from 'util/lazyImport';
 import classnames from 'classnames';
 import analytics from 'analytics';
-import { buildURI, parseURI } from 'util/lbryURI';
-import { SIMPLE_SITE } from 'config';
 import Router from 'component/router/index';
 import ReactModal from 'react-modal';
 import { openContextMenu } from 'util/context-menu';
@@ -15,45 +13,14 @@ import { withRouter } from 'react-router';
 import usePrevious from 'effects/use-previous';
 import REWARDS from 'rewards';
 import usePersistedState from 'effects/use-persisted-state';
-import Spinner from 'component/spinner';
 import LANGUAGES from 'constants/languages';
-// @if TARGET='app'
 import useZoom from 'effects/use-zoom';
 import useHistoryNav from 'effects/use-history-nav';
-// @endif
-// @if TARGET='web'
-import {
-  useDegradedPerformance,
-  STATUS_OK,
-  STATUS_DEGRADED,
-  STATUS_FAILING,
-  STATUS_DOWN,
-} from 'web/effects/use-degraded-performance';
-// @endif
 import LANGUAGE_MIGRATIONS from 'constants/language-migrations';
 
 const FileDrop = lazyImport(() => import('component/fileDrop' /* webpackChunkName: "secondary" */));
 const ModalRouter = lazyImport(() => import('modal/modalRouter' /* webpackChunkName: "secondary" */));
 const Nag = lazyImport(() => import('component/common/nag' /* webpackChunkName: "secondary" */));
-const NagContinueFirstRun = lazyImport(() =>
-  import('component/nagContinueFirstRun' /* webpackChunkName: "secondary" */)
-);
-const OpenInAppLink = lazyImport(() => import('web/component/openInAppLink' /* webpackChunkName: "secondary" */));
-
-// @if TARGET='web'
-const NagDataCollection = lazyImport(() =>
-  import('web/component/nag-data-collection' /* webpackChunkName: "secondary" */)
-);
-const NagDegradedPerformance = lazyImport(() =>
-  import('web/component/nag-degraded-performance' /* webpackChunkName: "secondary" */)
-);
-const NagNoUser = lazyImport(() => import('web/component/nag-no-user' /* webpackChunkName: "nag-no-user" */));
-const NagSunset = lazyImport(() => import('web/component/nag-sunset' /* webpackChunkName: "nag-no-user" */));
-const YoutubeWelcome = lazyImport(() =>
-  import('web/component/youtubeReferralWelcome' /* webpackChunkName: "secondary" */)
-);
-
-// @endif
 
 const SyncFatalError = lazyImport(() => import('component/syncFatalError' /* webpackChunkName: "syncFatalError" */));
 const Yrbl = lazyImport(() => import('component/yrbl' /* webpackChunkName: "yrbl" */));
@@ -156,45 +123,26 @@ function App(props: Props) {
   const isRewardApproved = user && user.is_reward_approved;
   const previousHasVerifiedEmail = usePrevious(hasVerifiedEmail);
   const previousRewardApproved = usePrevious(isRewardApproved);
-  // @if TARGET='web'
-  const [showAnalyticsNag, setShowAnalyticsNag] = usePersistedState('analytics-nag', true);
-  const [lbryTvApiStatus, setLbryTvApiStatus] = useState(STATUS_OK);
-  // @endif
-  const { pathname, hash, search } = props.location;
+  const { pathname, search } = props.location;
   const [upgradeNagClosed, setUpgradeNagClosed] = useState(false);
   const [resolvedSubscriptions, setResolvedSubscriptions] = useState(false);
   const [sidebarOpen] = usePersistedState('sidebar', true);
-  const [seenSunsestMessage, setSeenSunsetMessage] = usePersistedState('lbrytv-sunset', false);
   const showUpgradeButton =
     (autoUpdateDownloaded || (process.platform === 'linux' && isUpgradeAvailable)) && !upgradeNagClosed;
   // referral claiming
   const referredRewardAvailable = rewards && rewards.some((reward) => reward.reward_type === REWARDS.TYPE_REFEREE);
   const urlParams = new URLSearchParams(search);
   const rawReferrerParam = urlParams.get('r');
-  const fromLbrytvParam = urlParams.get('sunset');
   const sanitizedReferrerParam = rawReferrerParam && rawReferrerParam.replace(':', '#');
-  const shouldHideNag = pathname.startsWith(`/$/${PAGES.EMBED}`) || pathname.startsWith(`/$/${PAGES.AUTH_VERIFY}`);
   const userId = user && user.id;
   const useCustomScrollbar = !IS_MAC;
   const hasMyChannels = myChannelUrls && myChannelUrls.length > 0;
   const hasNoChannels = myChannelUrls && myChannelUrls.length === 0;
   const shouldMigrateLanguage = LANGUAGE_MIGRATIONS[language];
   const hasActiveChannelClaim = activeChannelClaim !== undefined;
-  const isPersonalized = !IS_WEB || hasVerifiedEmail;
-  const renderFiledrop = !IS_WEB || isAuthenticated;
+  const isPersonalized = hasVerifiedEmail;
+  const renderFiledrop = isAuthenticated;
 
-  let uri;
-  try {
-    const newpath = buildURI(parseURI(pathname.slice(1).replace(/:/g, '#')));
-    uri = newpath + hash;
-  } catch (e) {}
-
-  // @if TARGET='web'
-  function handleAnalyticsDismiss() {
-    setShowAnalyticsNag(false);
-  }
-
-  // @endif
   useEffect(() => {
     if (userId) {
       analytics.setUser(userId);
@@ -325,23 +273,6 @@ function App(props: Props) {
     }
   }, [previousRewardApproved, isRewardApproved]);
 
-  // Load IMA3 SDK for aniview: DISABLED FOR NOW
-  // @if TARGET='web'
-  // useEffect(() => {
-  //   if (ENABLE_PREROLL_ADS) {
-  //     const script = document.createElement('script');
-  //     script.src = `https://imasdk.googleapis.com/js/sdkloader/ima3.js`;
-  //     script.async = true;
-  //     // $FlowFixMe
-  //     document.body.appendChild(script);
-  //     return () => {
-  //       // $FlowFixMe
-  //       document.body.removeChild(script);
-  //     };
-  //   }
-  // });
-  // @endif
-
   // @if TARGET='app'
   useEffect(() => {
     if (updatePreferences && getWalletSyncPref && readyForPrefs) {
@@ -357,19 +288,10 @@ function App(props: Props) {
   // ready for sync syncs, however after signin when hasVerifiedEmail, that syncs too.
   useEffect(() => {
     // signInSyncPref is cleared after sharedState loop.
-    const syncLoopWithoutInterval = () => syncLoop(true);
     if (readyForSync && hasVerifiedEmail) {
       // In case we are syncing.
       syncLoop();
-      // @if TARGET='web'
-      window.addEventListener('focus', syncLoopWithoutInterval);
-      // @endif
     }
-    // @if TARGET='web'
-    return () => {
-      window.removeEventListener('focus', syncLoopWithoutInterval);
-    };
-    // @endif
   }, [readyForSync, hasVerifiedEmail, syncLoop]);
 
   // We know someone is logging in or not when we get their user object
@@ -407,31 +329,10 @@ function App(props: Props) {
     }
   }, [sidebarOpen, isPersonalized, resolvedSubscriptions, subscriptions, resolveUris, setResolvedSubscriptions]);
 
-  // @if TARGET='web'
-  useDegradedPerformance(setLbryTvApiStatus, user);
-  // @endif
-
-  // @if TARGET='web'
-  // Require an internal-api user on lbry.tv
-  // This also prevents the site from loading in the un-authed state while we wait for internal-apis to return for the first time
-  // It's not needed on desktop since there is no un-authed state
-  if (user === undefined) {
-    return (
-      <div className="main--empty">
-        <Spinner delayed />
-      </div>
-    );
-  }
-  // @endif
-
   if (syncFatalError) {
     return (
       <React.Suspense fallback={null}>
-        <SyncFatalError
-          // @if TARGET='web'
-          lbryTvApiStatus={lbryTvApiStatus}
-          // @endif
-        />
+        <SyncFatalError />
       </React.Suspense>
     );
   }
@@ -447,54 +348,26 @@ function App(props: Props) {
       ref={appRef}
       onContextMenu={IS_WEB ? undefined : (e) => openContextMenu(e)}
     >
-      {IS_WEB && lbryTvApiStatus === STATUS_DOWN ? (
-        <React.Suspense fallback={null}>
-          <Yrbl
-            className="main--empty"
-            title={__('lbry.tv is currently down')}
-            subtitle={__('My wheel broke, but the good news is that someone from LBRY is working on it.')}
+      <Router />
+      <React.Suspense fallback={null}>
+        <ModalRouter />
+        {renderFiledrop && <FileDrop />}
+      </React.Suspense>
+      <FileRenderFloating />
+      <React.Suspense fallback={null}>
+        {isEnhancedLayout && <Yrbl className="yrbl--enhanced" />}
+
+        {/* @if TARGET='app' */}
+        {showUpgradeButton && (
+          <Nag
+            message={__('An upgrade is available.')}
+            actionText={__('Install Now')}
+            onClick={requestDownloadUpgrade}
+            onClose={() => setUpgradeNagClosed(true)}
           />
-        </React.Suspense>
-      ) : (
-        <React.Fragment>
-          <Router />
-          <React.Suspense fallback={null}>
-            <ModalRouter />
-            {renderFiledrop && <FileDrop />}
-          </React.Suspense>
-          <FileRenderFloating />
-          <React.Suspense fallback={null}>
-            {isEnhancedLayout && <Yrbl className="yrbl--enhanced" />}
-
-            {/* @if TARGET='app' */}
-            {showUpgradeButton && (
-              <Nag
-                message={__('An upgrade is available.')}
-                actionText={__('Install Now')}
-                onClick={requestDownloadUpgrade}
-                onClose={() => setUpgradeNagClosed(true)}
-              />
-            )}
-            {/* @endif */}
-
-            {/* @if TARGET='web' */}
-            <YoutubeWelcome />
-            {!SIMPLE_SITE && !shouldHideNag && <OpenInAppLink uri={uri} />}
-            {!shouldHideNag && <NagContinueFirstRun />}
-            {fromLbrytvParam && !seenSunsestMessage && !shouldHideNag && (
-              <NagSunset email={hasVerifiedEmail} onClose={() => setSeenSunsetMessage(true)} />
-            )}
-            {(lbryTvApiStatus === STATUS_DEGRADED || lbryTvApiStatus === STATUS_FAILING) && !shouldHideNag && (
-              <NagDegradedPerformance onClose={() => setLbryTvApiStatus(STATUS_OK)} />
-            )}
-            {!SIMPLE_SITE && lbryTvApiStatus === STATUS_OK && showAnalyticsNag && !shouldHideNag && (
-              <NagDataCollection onClose={handleAnalyticsDismiss} />
-            )}
-            {user === null && <NagNoUser />}
-            {/* @endif */}
-          </React.Suspense>
-        </React.Fragment>
-      )}
+        )}
+        {/* @endif */}
+      </React.Suspense>
     </div>
   );
 }

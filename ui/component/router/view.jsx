@@ -7,7 +7,7 @@ import { PAGE_TITLE } from 'constants/pageTitles';
 import { lazyImport } from 'util/lazyImport';
 import { LINKED_COMMENT_QUERY_PARAM } from 'constants/comment';
 import { parseURI, isURIValid } from 'util/lbryURI';
-import { SITE_TITLE, WELCOME_VERSION, SIMPLE_SITE } from 'config';
+import { SITE_TITLE, WELCOME_VERSION } from 'config';
 import LoadingBarOneOff from 'component/loadingBarOneOff';
 import { GetLinksData } from 'util/buildHomepage';
 
@@ -15,10 +15,6 @@ import HomePage from 'page/home';
 
 // @if TARGET='app'
 const BackupPage = lazyImport(() => import('page/backup' /* webpackChunkName: "backup" */));
-// @endif
-
-// @if TARGET='web'
-const Code2257Page = lazyImport(() => import('web/page/code2257' /* webpackChunkName: "code2257" */));
 // @endif
 
 // Chunk: "secondary"
@@ -258,7 +254,6 @@ function AppRouter(props: Props) {
 
         <Route path={`/`} exact component={HomePage} />
         <Route path={`/$/${PAGES.DISCOVER}`} exact component={DiscoverPage} />
-        {SIMPLE_SITE && <Route path={`/$/${PAGES.WILD_WEST}`} exact component={DiscoverPage} />}
         {/* $FlowFixMe */}
         {dynamicRoutes.map((dynamicRouteProps: RowDataItem) => (
           <Route
@@ -278,9 +273,6 @@ function AppRouter(props: Props) {
         <Route path={`/$/${PAGES.HELP}`} exact component={HelpPage} />
         {/* @if TARGET='app' */}
         <Route path={`/$/${PAGES.BACKUP}`} exact component={BackupPage} />
-        {/* @endif */}
-        {/* @if TARGET='web' */}
-        <Route path={`/$/${PAGES.CODE_2257}`} exact component={Code2257Page} />
         {/* @endif */}
         <Route path={`/$/${PAGES.AUTH_VERIFY}`} exact component={SignInVerifyPage} />
         <Route path={`/$/${PAGES.SEARCH}`} exact component={SearchPage} />

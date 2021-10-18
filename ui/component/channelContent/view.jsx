@@ -1,5 +1,4 @@
 // @flow
-import { SHOW_ADS, SIMPLE_SITE } from 'config';
 import * as CS from 'constants/claim_search';
 import * as ICONS from 'constants/icons';
 import React, { Fragment } from 'react';
@@ -7,7 +6,6 @@ import HiddenNsfwClaims from 'component/hiddenNsfwClaims';
 import { useHistory } from 'react-router-dom';
 import Button from 'component/button';
 import ClaimListDiscover from 'component/claimListDiscover';
-import Ads from 'web/component/ads';
 import Icon from 'component/common/icon';
 import LivestreamLink from 'component/livestreamLink';
 import { Form, FormField } from 'component/common/form';
@@ -46,7 +44,6 @@ function ChannelContent(props: Props) {
     channelIsBlocked,
     channelIsBlackListed,
     claim,
-    isAuthenticated,
     defaultPageSize = CS.PAGE_SIZE,
     defaultInfiniteScroll = true,
     showMature,
@@ -152,14 +149,12 @@ function ChannelContent(props: Props) {
         hideAdvancedFilter={!showFilters}
         tileLayout={tileLayout}
         uris={searchResults}
-        streamType={SIMPLE_SITE ? CS.CONTENT_ALL : undefined}
         channelIds={[claimId]}
         claimType={claimType}
         feeAmount={CS.FEE_AMOUNT_ANY}
         defaultOrderBy={CS.ORDER_BY_NEW}
         pageSize={defaultPageSize}
         infiniteScroll={defaultInfiniteScroll}
-        injectedItem={SHOW_ADS && !isAuthenticated && IS_WEB && <Ads type="video" />}
         meta={
           showFilters && (
             <Form onSubmit={() => {}} className="wunderbar--inline">

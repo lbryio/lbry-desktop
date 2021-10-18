@@ -1,5 +1,5 @@
 // @flow
-import { SITE_NAME, SIMPLE_SITE } from 'config';
+import { SITE_NAME } from 'config';
 import * as PAGES from 'constants/pages';
 import React, { useState } from 'react';
 import { FormField, Form } from 'component/common/form';
@@ -10,7 +10,6 @@ import UserEmailVerify from 'component/userEmailVerify';
 import Card from 'component/common/card';
 import Nag from 'component/common/nag';
 import classnames from 'classnames';
-import LoginGraphic from 'component/loginGraphic';
 
 type Props = {
   user: ?User,
@@ -71,11 +70,7 @@ function UserEmailReturning(props: Props) {
   }
 
   return (
-    <div
-      className={classnames('main__sign-in', {
-        'main__sign-up--graphic': SIMPLE_SITE && !showEmailVerification,
-      })}
-    >
+    <div className={classnames('main__sign-in')}>
       {showEmailVerification ? (
         <UserEmailVerify />
       ) : (
@@ -142,7 +137,6 @@ function UserEmailReturning(props: Props) {
               )}
             </>
           }
-          secondPane={SIMPLE_SITE && <LoginGraphic />}
         />
       )}
     </div>

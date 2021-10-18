@@ -1,12 +1,10 @@
 // @flow
-import { SIMPLE_SITE, SHOW_ADS } from 'config';
 import React, { useEffect } from 'react';
 import Lbry from 'lbry';
 import { parseURI, isNameValid } from 'util/lbryURI';
 import ClaimList from 'component/claimList';
 import Page from 'component/page';
 import SearchOptions from 'component/searchOptions';
-import Ads from 'web/component/ads';
 import SearchTopClaim from 'component/searchTopClaim';
 import { formatLbryUrlForWeb } from 'util/url';
 import { useHistory } from 'react-router';
@@ -23,7 +21,7 @@ type Props = {
 };
 
 export default function SearchPage(props: Props) {
-  const { urlQuery, searchOptions, search, uris, isSearching, isAuthenticated, hasReachedMaxResultsLength } = props;
+  const { urlQuery, searchOptions, search, uris, isSearching, hasReachedMaxResultsLength } = props;
   const { push } = useHistory();
   const [from, setFrom] = React.useState(0);
 
@@ -90,16 +88,7 @@ export default function SearchPage(props: Props) {
               // needs to be unique to indicate when a fetch is needed.
               page={from + 1}
               pageSize={SEARCH_PAGE_SIZE}
-              header={
-                <SearchOptions
-                  simple={SIMPLE_SITE}
-                  additionalOptions={searchOptions}
-                  onSearchOptionsChanged={resetPage}
-                />
-              }
-              injectedItem={
-                SHOW_ADS && IS_WEB ? (SIMPLE_SITE ? false : !isAuthenticated && <Ads small type={'video'} />) : false
-              }
+              header={<SearchOptions additionalOptions={searchOptions} onSearchOptionsChanged={resetPage} />}
             />
 
             <div className="main--empty help">{__('These search results are provided by LBRY, Inc.')}</div>

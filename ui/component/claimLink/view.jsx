@@ -1,6 +1,5 @@
 // @flow
 import { INLINE_PLAYER_WRAPPER_CLASS } from 'component/fileRenderFloating/view';
-import { SIMPLE_SITE } from 'config';
 import * as React from 'react';
 import Button from 'component/button';
 import classnames from 'classnames';
@@ -110,13 +109,7 @@ class ClaimLink extends React.Component<Props> {
         <Button button="link" className="preview-link__url" label={uri} navigate={uri} />
       </div>
     ) : (
-      <Button
-        button="link"
-        title={SIMPLE_SITE ? __("This channel isn't staking enough LBRY Credits for link previews.") : children}
-        label={children}
-        className="button--external-link"
-        navigate={uri}
-      />
+      <Button button="link" title={children} label={children} className="button--external-link" navigate={uri} />
     );
   }
 }

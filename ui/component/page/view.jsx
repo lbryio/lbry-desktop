@@ -2,7 +2,6 @@
 import type { Node } from 'react';
 import React, { Fragment } from 'react';
 import classnames from 'classnames';
-import { lazyImport } from 'util/lazyImport';
 import SideNavigation from 'component/sideNavigation';
 import SettingsSideNavigation from 'component/settingsSideNavigation';
 import Header from 'component/header';
@@ -13,8 +12,6 @@ import usePersistedState from 'effects/use-persisted-state';
 import { useHistory } from 'react-router';
 import { useIsMobile, useIsMediumScreen } from 'effects/use-screensize';
 import { parseURI } from 'util/lbryURI';
-
-const Footer = lazyImport(() => import('web/component/footer' /* webpackChunkName: "secondary" */));
 
 export const MAIN_CLASS = 'main';
 type Props = {
@@ -51,7 +48,6 @@ function Page(props: Props) {
     authPage = false,
     fullWidthPage = false,
     noHeader = false,
-    noFooter = false,
     noSideNavigation = false,
     backout,
     videoTheaterMode,
@@ -143,13 +139,6 @@ function Page(props: Props) {
         <StatusBar />
         {/* @endif */}
       </div>
-      {/* @if TARGET='web' */}
-      {!noFooter && (
-        <React.Suspense fallback={null}>
-          <Footer />
-        </React.Suspense>
-      )}
-      {/* @endif */}
     </Fragment>
   );
 }

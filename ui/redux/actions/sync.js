@@ -6,10 +6,9 @@ import Lbry from 'lbry';
 import { doWalletEncrypt, doWalletDecrypt } from 'redux/actions/wallet';
 import { selectGetSyncIsPending, selectSetSyncIsPending, selectSyncIsLocked } from 'redux/selectors/sync';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { getSavedPassword, getAuthToken } from 'util/saved-passwords';
+import { getSavedPassword } from 'util/saved-passwords';
 import { doAnalyticsTagSync, doHandleSyncComplete } from 'redux/actions/app';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
-import { X_LBRY_AUTH_TOKEN } from 'constants/token';
 
 let syncTimer = null;
 const SYNC_INTERVAL = 1000 * 60 * 5; // 5 minutes
@@ -154,17 +153,6 @@ export function doGetSync(passedPassword?: string, callback?: (any, ?boolean) =>
       callback(error, hasNewData);
     }
   }
-
-  // @if TARGET='web'
-  const xAuth =
-    Lbry.getApiRequestHeaders() && Object.keys(Lbry.getApiRequestHeaders()).includes(X_LBRY_AUTH_TOKEN)
-      ? Lbry.getApiRequestHeaders()[X_LBRY_AUTH_TOKEN]
-      : '';
-  if (xAuth && xAuth !== getAuthToken()) {
-    window.location.reload();
-    return;
-  }
-  // @endif
 
   return (dispatch: Dispatch) => {
     dispatch({

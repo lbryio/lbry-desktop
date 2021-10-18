@@ -1,13 +1,10 @@
 import 'babel-polyfill';
-import * as Sentry from '@sentry/browser';
 import ErrorBoundary from 'component/errorBoundary';
 import App from 'component/app';
 import SnackBar from 'component/snackBar';
-// @if TARGET='app'
 import SplashScreen from 'component/splash';
 import * as ACTIONS from 'constants/action_types';
 import { changeZoomFactor } from 'util/zoomWindow';
-// @endif
 import { ipcRenderer, remote, shell } from 'electron';
 import moment from 'moment';
 import * as MODALS from 'constants/modal_types';
@@ -15,11 +12,10 @@ import React, { Fragment, useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { doDaemonReady, doAutoUpdate, doOpenModal, doHideModal, doToggle3PAnalytics } from 'redux/actions/app';
-import Lbry, { apiCall } from 'lbry';
 import { isURIValid } from 'util/lbryURI';
 import { setSearchApi } from 'redux/actions/search';
 import { doSetLanguage, doFetchLanguage, doUpdateIsNightAsync } from 'redux/actions/settings';
-import { Lbryio, doBlackListedOutpointsSubscribe, doFilteredOutpointsSubscribe, testTheThing } from 'lbryinc';
+import { Lbryio, doBlackListedOutpointsSubscribe, doFilteredOutpointsSubscribe } from 'lbryinc';
 import rewards from 'rewards';
 import { store, persistor, history } from 'store';
 import app from './app';
@@ -29,14 +25,8 @@ import { formatLbryUrlForWeb, formatInAppUrl } from 'util/url';
 import { PersistGate } from 'redux-persist/integration/react';
 import analytics from 'analytics';
 import { doToast } from 'redux/actions/notifications';
-import {
-  getAuthToken,
-  setAuthToken,
-  doDeprecatedPasswordMigrationMarch2020,
-  doAuthTokenRefresh,
-} from 'util/saved-passwords';
-import { X_LBRY_AUTH_TOKEN } from 'constants/token';
-import { LBRY_WEB_API, DEFAULT_LANGUAGE, LBRY_API_URL, LBRY_WEB_PUBLISH_API } from 'config';
+import { getAuthToken, setAuthToken, doAuthTokenRefresh } from 'util/saved-passwords';
+import { DEFAULT_LANGUAGE, LBRY_API_URL } from 'config';
 
 // Import 3rd-party styles before ours for the current way we are code-splitting.
 import 'scss/third-party.scss';
@@ -44,68 +34,13 @@ import 'scss/third-party.scss';
 // Import our app styles
 // If a style is not necessary for the initial page load, it should be removed from `all.scss`
 // and loaded dynamically in the component that consumes it
-// @if TARGET='app'
 import 'scss/all.scss';
-// @endif
-// @if TARGET='web'
-import 'web/theme';
-// @endif
-// @if TARGET='web'
-// These overrides can't live in web/ because they need to use the same instance of `Lbry`
-import apiPublishCallViaWeb from 'web/setup/publish';
-
-// Sentry error logging setup
-// Will only work if you have a SENTRY_AUTH_TOKEN env
-// We still add code in analytics.js to send the error to sentry manually
-// If it's caught by componentDidCatch in component/errorBoundary, it will not bubble up to this error reporter
-if (process.env.NODE_ENV === 'production') {
-  Sentry.init({
-    dsn: 'https://1f3c88e2e4b341328a638e138a60fb73@sentry.lbry.tech/2',
-    whitelistUrls: [/\/public\/ui.js/],
-  });
-}
-
-testTheThing();
-
-if (process.env.SDK_API_URL) {
-  console.warn('SDK_API_URL env var is deprecated. Use SDK_API_HOST instead'); // @eslint-disable-line
-}
-
-let sdkAPIHost = process.env.SDK_API_HOST || process.env.SDK_API_URL;
-sdkAPIHost = LBRY_WEB_API;
-
-export const SDK_API_PATH = `${sdkAPIHost}/api/v1`;
-const proxyURL = `${SDK_API_PATH}/proxy`;
-const publishURL = LBRY_WEB_PUBLISH_API; // || `${SDK_API_PATH}/proxy`;
-
-Lbry.setDaemonConnectionString(proxyURL);
-
-Lbry.setOverride(
-  'publish',
-  (params) =>
-    new Promise((resolve, reject) => {
-      apiPublishCallViaWeb(
-        apiCall,
-        publishURL,
-        Lbry.getApiRequestHeaders() && Object.keys(Lbry.getApiRequestHeaders()).includes(X_LBRY_AUTH_TOKEN)
-          ? Lbry.getApiRequestHeaders()[X_LBRY_AUTH_TOKEN]
-          : '',
-        'publish',
-        params,
-        resolve,
-        reject
-      );
-    })
-);
-// @endif
 
 const startTime = Date.now();
 analytics.startupEvent();
 
-// @if TARGET='app'
 const { autoUpdater } = remote.require('electron-updater');
 autoUpdater.logger = remote.require('electron-log');
-// @endif
 
 if (LBRY_API_URL) {
   Lbryio.setLocalApi(LBRY_API_URL);
@@ -115,10 +50,6 @@ if (process.env.SEARCH_API_URL) {
   setSearchApi(process.env.SEARCH_API_URL);
 }
 
-// Fix to make sure old users' cookies are set to the correct domain
-// This can be removed after March 11th, 2021
-// https://github.com/lbryio/lbry-desktop/pull/3830
-doDeprecatedPasswordMigrationMarch2020();
 doAuthTokenRefresh();
 
 // We need to override Lbryio for getting/setting the authToken
