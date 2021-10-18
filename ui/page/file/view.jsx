@@ -11,11 +11,11 @@ import FileRenderInline from 'component/fileRenderInline';
 import FileRenderDownload from 'component/fileRenderDownload';
 import RecommendedContent from 'component/recommendedContent';
 import CollectionContent from 'component/collectionContentSidebar';
-import CommentsList from 'component/commentsList';
 import Button from 'component/button';
 import I18nMessage from 'component/i18nMessage';
 import Empty from 'component/common/empty';
 
+const CommentsList = lazyImport(() => import('component/commentsList' /* webpackChunkName: "comments" */));
 const PostViewer = lazyImport(() => import('component/postViewer' /* webpackChunkName: "postViewer" */));
 
 export const PRIMARY_PLAYER_WRAPPER_CLASS = 'file-page__video-container';
@@ -209,7 +209,9 @@ function FilePage(props: Props) {
               )}
               {RENDER_MODES.FLOATING_MODES.includes(renderMode) && <FileTitleSection uri={uri} />}
               {commentsDisabled && <Empty text={__('The creator of this content has disabled comments.')} />}
-              {!commentsDisabled && <CommentsList uri={uri} linkedCommentId={linkedCommentId} />}
+              <React.Suspense fallback={null}>
+                {!commentsDisabled && <CommentsList uri={uri} linkedCommentId={linkedCommentId} />}
+              </React.Suspense>
             </div>
             {!collection && !isMarkdown && videoTheaterMode && <RecommendedContent uri={uri} />}
             {collection && !isMarkdown && videoTheaterMode && <CollectionContent id={collectionId} uri={uri} />}
@@ -220,7 +222,9 @@ function FilePage(props: Props) {
       {!collection && !isMarkdown && !videoTheaterMode && <RecommendedContent uri={uri} />}
       {isMarkdown && (
         <div className="file-page__post-comments">
-          <CommentsList uri={uri} linkedCommentId={linkedCommentId} commentsAreExpanded />
+          <React.Suspense fallback={null}>
+            <CommentsList uri={uri} linkedCommentId={linkedCommentId} commentsAreExpanded />
+          </React.Suspense>
         </div>
       )}
     </Page>

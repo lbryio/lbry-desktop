@@ -3,7 +3,6 @@ import React from 'react';
 import Button from 'component/button';
 import ChannelSelector from 'component/channelSelector';
 import ClaimPreview from 'component/claimPreview';
-import Comment from 'component/comment';
 import Card from 'component/common/card';
 import Empty from 'component/common/empty';
 import Page from 'component/page';
@@ -12,6 +11,9 @@ import { COMMENT_PAGE_SIZE_TOP_LEVEL } from 'constants/comment';
 import * as ICONS from 'constants/icons';
 import useFetched from 'effects/use-fetched';
 import debounce from 'util/debounce';
+import { lazyImport } from 'util/lazyImport';
+
+const Comment = lazyImport(() => import('component/comment' /* webpackChunkName: "comments" */));
 
 function scaleToDevicePixelRatio(value) {
   const devicePixelRatio = window.devicePixelRatio || 1.0;
@@ -77,21 +79,23 @@ export default function OwnComments(props: Props) {
               )}
               {!contentClaim && <Empty text={__('Content or channel was deleted.')} />}
             </div>
-            <Comment
-              isTopLevel
-              hideActions
-              authorUri={comment.channel_url}
-              author={comment.channel_name}
-              commentId={comment.comment_id}
-              message={comment.comment}
-              timePosted={comment.timestamp * 1000}
-              commentIsMine
-              supportAmount={comment.support_amount}
-              numDirectReplies={0} // Don't show replies here
-              isModerator={comment.is_moderator}
-              isGlobalMod={comment.is_global_mod}
-              isFiat={comment.is_fiat}
-            />
+            <React.Suspense fallback={null}>
+              <Comment
+                isTopLevel
+                hideActions
+                authorUri={comment.channel_url}
+                author={comment.channel_name}
+                commentId={comment.comment_id}
+                message={comment.comment}
+                timePosted={comment.timestamp * 1000}
+                commentIsMine
+                supportAmount={comment.support_amount}
+                numDirectReplies={0} // Don't show replies here
+                isModerator={comment.is_moderator}
+                isGlobalMod={comment.is_global_mod}
+                isFiat={comment.is_fiat}
+              />
+            </React.Suspense>
           </div>
         </div>
       );

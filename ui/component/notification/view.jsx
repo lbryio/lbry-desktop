@@ -1,4 +1,5 @@
 // @flow
+import { lazyImport } from 'util/lazyImport';
 import { formatLbryUrlForWeb } from 'util/url';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import { NavLink } from 'react-router-dom';
@@ -12,9 +13,6 @@ import * as PAGES from 'constants/pages';
 import Button from 'component/button';
 import ChannelThumbnail from 'component/channelThumbnail';
 import classnames from 'classnames';
-import CommentCreate from 'component/commentCreate';
-import CommentReactions from 'component/commentReactions';
-import CommentsReplies from 'component/commentsReplies';
 import DateTime from 'component/dateTime';
 import FileThumbnail from 'component/fileThumbnail';
 import Icon from 'component/common/icon';
@@ -23,6 +21,10 @@ import NotificationContentChannelMenu from 'component/notificationContentChannel
 import OptimizedImage from 'component/optimizedImage';
 import React from 'react';
 import UriIndicator from 'component/uriIndicator';
+
+const CommentCreate = lazyImport(() => import('component/commentCreate' /* webpackChunkName: "comments" */));
+const CommentReactions = lazyImport(() => import('component/commentReactions' /* webpackChunkName: "comments" */));
+const CommentsReplies = lazyImport(() => import('component/commentsReplies' /* webpackChunkName: "comments" */));
 
 type Props = {
   menuButton: boolean,
@@ -267,16 +269,18 @@ export default function Notification(props: Props) {
           </div>
 
           {isReplying && (
-            <CommentCreate
-              isReply
-              uri={notificationTarget}
-              parentId={notification_parameters.dynamic.hash}
-              onDoneReplying={() => setReplying(false)}
-              onCancelReplying={() => setReplying(false)}
-              setQuickReply={setQuickReply}
-              supportDisabled
-              shouldFetchComment
-            />
+            <React.Suspense fallback={null}>
+              <CommentCreate
+                isReply
+                uri={notificationTarget}
+                parentId={notification_parameters.dynamic.hash}
+                onDoneReplying={() => setReplying(false)}
+                onCancelReplying={() => setReplying(false)}
+                setQuickReply={setQuickReply}
+                supportDisabled
+                shouldFetchComment
+              />
+            </React.Suspense>
           )}
 
           {quickReply && (

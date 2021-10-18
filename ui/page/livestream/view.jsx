@@ -1,11 +1,13 @@
 // @flow
 import React from 'react';
+import { lazyImport } from 'util/lazyImport';
 import Page from 'component/page';
 import LivestreamLayout from 'component/livestreamLayout';
-import LivestreamComments from 'component/livestreamComments';
 import analytics from 'analytics';
 import Lbry from 'lbry';
 import watchLivestreamStatus from '$web/src/livestreaming/long-polling';
+
+const LivestreamComments = lazyImport(() => import('component/livestreamComments' /* webpackChunkName: "comments" */));
 
 type Props = {
   uri: string,
@@ -90,7 +92,13 @@ export default function LivestreamPage(props: Props) {
       noFooter
       livestream
       chatDisabled={chatDisabled}
-      rightSide={!chatDisabled && <LivestreamComments uri={uri} />}
+      rightSide={
+        !chatDisabled && (
+          <React.Suspense fallback={null}>
+            <LivestreamComments uri={uri} />
+          </React.Suspense>
+        )
+      }
     >
       <LivestreamLayout uri={uri} isLive={isLive} />
     </Page>

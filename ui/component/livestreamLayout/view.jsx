@@ -2,8 +2,10 @@
 import { LIVESTREAM_EMBED_URL } from 'constants/livestream';
 import React from 'react';
 import FileTitleSection from 'component/fileTitleSection';
-import LivestreamComments from 'component/livestreamComments';
 import { useIsMobile } from 'effects/use-screensize';
+import { lazyImport } from 'util/lazyImport';
+
+const LivestreamComments = lazyImport(() => import('component/livestreamComments' /* webpackChunkName: "comments" */));
 
 type Props = {
   uri: string,
@@ -54,7 +56,7 @@ export default function LivestreamLayout(props: Props) {
           </div>
         )}
 
-        {isMobile && <LivestreamComments uri={uri} />}
+        <React.Suspense fallback={null}>{isMobile && <LivestreamComments uri={uri} />}</React.Suspense>
 
         <FileTitleSection uri={uri} livestream isLive={isLive} />
       </div>

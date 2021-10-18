@@ -1,7 +1,9 @@
 // @flow
 import React from 'react';
-import CommentsList from 'component/commentsList';
 import Empty from 'component/common/empty';
+import { lazyImport } from 'util/lazyImport';
+
+const CommentsList = lazyImport(() => import('component/commentsList' /* webpackChunkName: "comments" */));
 
 type Props = {
   uri: string,
@@ -17,7 +19,9 @@ function ChannelDiscussion(props: Props) {
   }
   return (
     <section className="section">
-      <CommentsList uri={uri} linkedCommentId={linkedCommentId} commentsAreExpanded />
+      <React.Suspense fallback={null}>
+        <CommentsList uri={uri} linkedCommentId={linkedCommentId} commentsAreExpanded />
+      </React.Suspense>
     </section>
   );
 }
