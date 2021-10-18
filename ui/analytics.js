@@ -1,15 +1,7 @@
 // @flow
 import { Lbryio } from 'lbryinc';
 import * as Sentry from '@sentry/browser';
-import MatomoTracker from '@datapunt/matomo-tracker-js';
-import { history } from './store';
 import { SDK_API_PATH } from './index';
-// @if TARGET='app'
-import Native from 'native';
-import ElectronCookies from '@exponent/electron-cookies';
-import { generateInitialUrl } from 'util/url';
-// @endif
-import { MATOMO_ID, MATOMO_URL } from 'config';
 // import getConnectionSpeed from 'util/detect-user-bandwidth';
 
 // let userDownloadBandwidthInBitsPerSecond;
@@ -24,23 +16,13 @@ const isProduction = process.env.NODE_ENV === 'production';
 const devInternalApis = process.env.LBRY_API_URL && process.env.LBRY_API_URL.includes('dev');
 
 export const SHARE_INTERNAL = 'shareInternal';
-const SHARE_THIRD_PARTY = 'shareThirdParty';
 
 const WATCHMAN_BACKEND_ENDPOINT = 'https://watchman.na-backend.odysee.com/reports/playback';
 const SEND_DATA_TO_WATCHMAN_INTERVAL = 10; // in seconds
 
-// @if TARGET='app'
-if (isProduction) {
-  ElectronCookies.enable({
-    origin: 'https://lbry.tv',
-  });
-}
-// @endif
-
 type Analytics = {
   error: (string) => Promise<any>,
   sentryError: ({} | string, {}) => Promise<any>,
-  pageView: (string, ?string) => void,
   setUser: (Object) => void,
   toggleInternal: (boolean, ?boolean) => void,
   apiLogView: (string, string, string, ?number, ?() => void) => Promise<any>,
@@ -84,10 +66,6 @@ type LogPublishParams = {
 
 let internalAnalyticsEnabled: boolean = IS_WEB || false;
 // let thirdPartyAnalyticsEnabled: boolean = IS_WEB || false;
-// @if TARGET='app'
-if (window.localStorage.getItem(SHARE_INTERNAL) === 'true') internalAnalyticsEnabled = true;
-// if (window.localStorage.getItem(SHARE_THIRD_PARTY) === 'true') thirdPartyAnalyticsEnabled = true;
-// @endif
 
 /**
  * Determine the mobile device type viewing the data
@@ -266,7 +244,7 @@ const analytics: Analytics = {
     bitrateAsBitsPerSecond = videoBitrate;
 
     sendPromMetric('time_to_start', timeToStartVideo);
-    sendMatomoEvent('Media', 'TimeToStart', claimId, timeToStartVideo);
+    sendGaEvent('video_time_to_start', { claim_id: claimId, time: timeToStartVideo });
   },
   error: (message) => {
     return new Promise((resolve) => {
@@ -292,45 +270,17 @@ const analytics: Analytics = {
       }
     });
   },
-  pageView: (path, search) => {
-    if (internalAnalyticsEnabled) {
-      const params: { href: string, customDimensions?: Array<{ id: number, value: ?string }> } = { href: `${path}` };
-      const dimensions = [];
-      const searchParams = search && new URLSearchParams(search);
-
-      if (searchParams && searchParams.get('src')) {
-        dimensions.push({ id: 1, value: searchParams.get('src') });
-      }
-      if (dimensions.length) {
-        params['customDimensions'] = dimensions;
-      }
-      MatomoInstance.trackPageView(params);
-    }
-  },
   setUser: (userId) => {
-    if (internalAnalyticsEnabled && userId) {
-      window._paq.push(['setUserId', String(userId)]);
-      // @if TARGET='app'
-      Native.getAppVersionInfo().then(({ localVersion }) => {
-        sendMatomoEvent('Version', 'Desktop-Version', localVersion);
-      });
-      // @endif
+    if (internalAnalyticsEnabled && userId && window.gtag) {
+      window.gtag('set', { user_id: userId });
     }
   },
   toggleInternal: (enabled: boolean): void => {
-    // Always collect analytics on lbry.tv
-    // @if TARGET='app'
-    internalAnalyticsEnabled = enabled;
-    window.localStorage.setItem(SHARE_INTERNAL, enabled);
-    // @endif
+    // Always collect analytics on Odysee for now.
   },
 
   toggleThirdParty: (enabled: boolean): void => {
-    // Always collect analytics on lbry.tv
-    // @if TARGET='app'
-    // thirdPartyAnalyticsEnabled = enabled;
-    window.localStorage.setItem(SHARE_THIRD_PARTY, enabled);
-    // @endif
+    // Always collect analytics on Odysee for now.
   },
 
   apiLogView: (uri, outpoint, claimId, timeToStart) => {
@@ -387,56 +337,57 @@ const analytics: Analytics = {
     }
   },
   adsFetchedEvent: () => {
-    sendMatomoEvent('Media', 'AdsFetched');
+    sendGaEvent('ad_fetched');
   },
   adsReceivedEvent: (response) => {
-    sendMatomoEvent('Media', 'AdsReceived', JSON.stringify(response));
+    sendGaEvent('ad_received', { response: JSON.stringify(response) });
   },
   adsErrorEvent: (response) => {
-    sendMatomoEvent('Media', 'AdsError', JSON.stringify(response));
+    sendGaEvent('ad_error', { response: JSON.stringify(response) });
   },
   playerLoadedEvent: (embedded) => {
-    sendMatomoEvent('Player', 'Loaded', embedded ? 'embedded' : 'onsite');
+    sendGaEvent('player', { action: 'loaded', type: embedded ? 'embedded' : 'onsite' });
   },
   playerStartedEvent: (embedded) => {
-    sendMatomoEvent('Player', 'Started', embedded ? 'embedded' : 'onsite');
+    sendGaEvent('player', { action: 'started', type: embedded ? 'embedded' : 'onsite' });
   },
   tagFollowEvent: (tag, following) => {
-    sendMatomoEvent('Tag', following ? 'Tag-Follow' : 'Tag-Unfollow', tag);
+    sendGaEvent(following ? 'tag_follow' : 'tag_unfollow', { tag });
   },
   channelBlockEvent: (uri, blocked, location) => {
-    sendMatomoEvent(blocked ? 'Channel-Hidden' : 'Channel-Unhidden', uri);
+    sendGaEvent(blocked ? 'channel_hidden' : 'channel_unhidden', { uri });
   },
   emailProvidedEvent: () => {
-    sendMatomoEvent('Engagement', 'Email-Provided');
+    sendGaEvent('engagement', { type: 'email_provided' });
   },
   emailVerifiedEvent: () => {
-    sendMatomoEvent('Engagement', 'Email-Verified');
+    sendGaEvent('engagement', { type: 'email_verified' });
   },
   rewardEligibleEvent: () => {
-    sendMatomoEvent('Engagement', 'Reward-Eligible');
+    sendGaEvent('engagement', { type: 'reward_eligible' });
   },
   openUrlEvent: (url: string) => {
-    sendMatomoEvent('Engagement', 'Open-Url', url);
+    sendGaEvent('engagement', { type: 'open_url', url });
   },
   trendingAlgorithmEvent: (trendingAlgorithm: string) => {
-    sendMatomoEvent('Engagement', 'Trending-Algorithm', trendingAlgorithm);
+    sendGaEvent('engagement', { type: 'trending_algorithm', trending_algorithm: trendingAlgorithm });
   },
   startupEvent: () => {
-    sendMatomoEvent('Startup', 'Startup');
+    // TODO: This can be removed (use the automated 'session_start' instead).
+    // sendGaEvent('startup', 'startup');
   },
-  readyEvent: (timeToReady: number) => {
-    sendMatomoEvent('Startup', 'App-Ready', 'Time', timeToReady);
+  readyEvent: (timeToReadyMs: number) => {
+    sendGaEvent('startup_app_ready', { time_to_ready_ms: timeToReadyMs });
   },
   purchaseEvent: (purchaseInt: number) => {
-    sendMatomoEvent('Purchase', 'Purchase-Complete', 'someLabel', purchaseInt);
+    // https://developers.google.com/analytics/devguides/collection/ga4/reference/events#purchase
+    sendGaEvent('purchase', { value: purchaseInt });
   },
 };
 
-function sendMatomoEvent(category, action, name, value) {
-  if (internalAnalyticsEnabled) {
-    const event = { category, action, name, value };
-    MatomoInstance.trackEvent(event);
+function sendGaEvent(event: string, params?: { [string]: string | number }) {
+  if (internalAnalyticsEnabled && isProduction && window.gtag) {
+    window.gtag('event', event, params);
   }
 }
 
@@ -449,35 +400,12 @@ function sendPromMetric(name: string, value?: number) {
   }
 }
 
-const MatomoInstance = new MatomoTracker({
-  urlBase: MATOMO_URL,
-  siteId: MATOMO_ID, // optional, default value: `1`
-  // heartBeat: { // optional, enabled by default
-  //   active: true, // optional, default value: true
-  //   seconds: 10 // optional, default value: `15
-  // },
-  // linkTracking: false // optional, default value: true
-});
-
-// Manually call the first page view
-// React Router doesn't include this on `history.listen`
-// @if TARGET='web'
-analytics.pageView(window.location.pathname + window.location.search, window.location.search);
-// @endif
-
-// @if TARGET='app'
-analytics.pageView(
-  window.location.pathname.split('.html')[1] + window.location.search || generateInitialUrl(window.location.hash)
-);
-// @endif;
-
-// Listen for url changes and report
-// This will include search queries
-history.listen((location) => {
-  const { pathname, search } = location;
-
-  const page = `${pathname}${search}`;
-  analytics.pageView(page, search);
-});
+// Activate
+if (internalAnalyticsEnabled && isProduction && window.gtag) {
+  window.gtag('consent', 'update', {
+    ad_storage: 'granted',
+    analytics_storage: 'granted',
+  });
+}
 
 export default analytics;

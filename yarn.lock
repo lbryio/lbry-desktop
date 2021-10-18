@@ -1264,11 +1264,6 @@
     "@babel/helper-validator-identifier" "^7.14.9"
     to-fast-properties "^2.0.0"
 
-"@datapunt/matomo-tracker-js@^0.1.4":
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/@datapunt/matomo-tracker-js/-/matomo-tracker-js-0.1.4.tgz#1226f0964d2c062bf9392e9c2fd89838262b10df"
-  integrity sha512-bi8/guszgciSNLJQIFgph27AzkiCF1DmLBxtmJE3CsLxfc0aTgI2vMg3EFoLv13Mu8HLaCs27Z7vbttlD6jp5w==
-
 "@develar/schema-utils@~2.6.5":
   version "2.6.5"
   resolved "https://registry.yarnpkg.com/@develar/schema-utils/-/schema-utils-2.6.5.tgz#3ece22c5838402419a6e0425f85742b961d9b6c6"
