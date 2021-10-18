@@ -20,7 +20,7 @@
   },
   "main": "./dist/electron/main.js",
   "scripts": {
-    "analyze": "yarn compile && source-map-explorer --no-border-checks web/dist/public/ui*.js --html _analyzeResults.html",
+    "analyze": "yarn compile && source-map-explorer --no-border-checks web/dist/public/ui*.js --html web/dist/_analyzeResults.html",
     "compile:electron": "node --max_old_space_size=4096 ./node_modules/webpack/bin/webpack.js --config webpack.electron.config.js",
     "compile:web": "yarn copyenv && cd web && node --max_old_space_size=4096 ./node_modules/webpack/bin/webpack.js --config webpack.config.js",
     "compile": "cross-env NODE_ENV=production yarn compile:electron && cross-env NODE_ENV=production yarn compile:web",
