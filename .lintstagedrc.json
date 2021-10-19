@@ -1,0 +1,11 @@
+{
+  "linters": {
+    "ui/**/*.{js,jsx,scss,json}": ["prettier --write", "git add"],
+    "extras/**/*.{js,jsx,scss,json}": ["prettier --write", "git add"],
+    "web/**/*.{js,jsx,scss,json}": ["prettier --write", "git add"],
+    "ui/**/*.{js,jsx}": ["eslint", "flow focus-check --color always", "git add"],
+    "extras/**/*.{js,jsx}": ["eslint", "flow focus-check --color always", "git add"],
+    "web/**/*.{js,jsx}": ["eslint", "git add"]
+  },
+  "ignore": ["node_modules", "web/dist/**/*", "dist/**/*", "package-lock.json"]
+}
