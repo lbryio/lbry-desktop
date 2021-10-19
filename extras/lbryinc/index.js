@@ -5,10 +5,6 @@ import Lbryio from './lbryio';
 
 export { Lbryio };
 
-export function testTheThing() {
-  console.log('tested');
-}
-
 // constants
 export { LBRYINC_ACTIONS, YOUTUBE_STATUSES, ERRORS };
 
@@ -51,10 +47,7 @@ export {
   selectAllCostInfoByUri,
   selectFetchingCostInfo,
 } from './redux/selectors/cost_info';
-export {
-  selectBlackListedOutpoints,
-  selectBlacklistedOutpointMap,
-} from './redux/selectors/blacklist';
+export { selectBlackListedOutpoints, selectBlacklistedOutpointMap } from './redux/selectors/blacklist';
 export { selectFilteredOutpoints, selectFilteredOutpointMap } from './redux/selectors/filtered';
 // export {
 //   selectFeaturedUris,
@@ -62,11 +55,7 @@ export { selectFilteredOutpoints, selectFilteredOutpointMap } from './redux/sele
 //   selectTrendingUris,
 //   selectFetchingTrendingUris,
 // } from './redux/selectors/homepage';
-export {
-  selectViewCount,
-  makeSelectViewCountForUri,
-  makeSelectSubCountForUri,
-} from './redux/selectors/stats';
+export { selectViewCount, makeSelectViewCountForUri, makeSelectSubCountForUri } from './redux/selectors/stats';
 export {
   selectHasSyncedWallet,
   selectSyncData,
