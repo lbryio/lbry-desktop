@@ -15,7 +15,7 @@ import {
   selectIsResolvingPublishUris,
   selectMyClaimForUri,
 } from 'redux/selectors/publish';
-import { selectMyChannelClaims, makeSelectClaimIsStreamPlaceholder } from 'redux/selectors/claims';
+import { selectMyChannelClaims } from 'redux/selectors/claims';
 import * as RENDER_MODES from 'constants/file_render_modes';
 import * as SETTINGS from 'constants/settings';
 import { doClaimInitialRewards } from 'redux/actions/rewards';
@@ -45,7 +45,6 @@ const select = (state) => {
     user: selectUser(state),
     // The winning claim for a short lbry uri
     amountNeededForTakeover: selectTakeOverAmount(state),
-    isLivestreamClaim: makeSelectClaimIsStreamPlaceholder(permanentUrl)(state),
     isPostClaim,
     permanentUrl,
     // My previously published claims under this short lbry uri

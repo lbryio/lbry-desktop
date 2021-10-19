@@ -10,7 +10,6 @@ import { formatLbryUrlForWeb } from 'util/url';
 import { formatClaimPreviewTitle } from 'util/formatAriaLabel';
 import FileThumbnail from 'component/fileThumbnail';
 import UriIndicator from 'component/uriIndicator';
-import PreviewOverlayProperties from 'component/previewOverlayProperties';
 import ClaimTags from 'component/claimTags';
 import SubscribeButton from 'component/subscribeButton';
 import ChannelThumbnail from 'component/channelThumbnail';
@@ -26,7 +25,6 @@ import ClaimMenuList from 'component/claimMenuList';
 import ClaimPreviewLoading from './claim-preview-loading';
 import ClaimPreviewHidden from './claim-preview-no-mature';
 import ClaimPreviewNoContent from './claim-preview-no-content';
-import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import Button from 'component/button';
 import * as ICONS from 'constants/icons';
 
@@ -78,8 +76,6 @@ type Props = {
   hideRepostLabel?: boolean,
   repostUrl?: string,
   hideMenu?: boolean,
-  isLivestream?: boolean,
-  isLivestreamActive: boolean,
   collectionId?: string,
   editCollection: (string, CollectionEditParams) => void,
   isCollectionMine: boolean,
@@ -144,8 +140,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     renderActions,
     hideMenu = false,
     // repostUrl,
-    isLivestream, // need both? CHECK
-    isLivestreamActive,
     collectionId,
     collectionIndex,
     editCollection,
@@ -296,7 +290,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     }
   }, [isValid, uri, isResolvingUri, shouldFetch, resolveUri]);
 
-  if ((shouldHide && !showNullPlaceholder) || (isLivestream && !ENABLE_NO_SOURCE_CLAIMS)) {
+  if (shouldHide && !showNullPlaceholder) {
     return null;
   }
 
@@ -329,11 +323,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     return null;
   }
 
-  let liveProperty = null;
-  if (isLivestreamActive === true) {
-    liveProperty = (claim) => <>LIVE</>;
-  }
-
   return (
     <WrapperElement
       ref={ref}
@@ -343,7 +332,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
         'claim-preview__wrapper--channel': isChannelUri && type !== 'inline',
         'claim-preview__wrapper--inline': type === 'inline',
         'claim-preview__wrapper--small': type === 'small',
-        'claim-preview__live': isLivestreamActive,
         'claim-preview__active': active,
       })}
     >
@@ -380,11 +368,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                       )}
                     </div>
                     {/* @endif */}
-                    {(!isLivestream || isLivestreamActive) && (
-                      <div className="claim-preview__file-property-overlay">
-                        <PreviewOverlayProperties uri={uri} small={type === 'small'} properties={liveProperty} />
-                      </div>
-                    )}
                   </FileThumbnail>
                 </NavLink>
               ) : (

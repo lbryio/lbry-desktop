@@ -30,7 +30,6 @@ type Props = {
   doToast: ({ message: string }) => void,
   clearPlayingUri: () => void,
   hideRepost?: boolean,
-  isLivestreamClaim: boolean,
   reactionsDisabled: boolean,
   download: (string) => void,
   streamingUrl: ?string,
@@ -50,7 +49,6 @@ function FileActions(props: Props) {
     clearPlayingUri,
     doToast,
     hideRepost,
-    isLivestreamClaim,
     reactionsDisabled,
   } = props;
   const {
@@ -96,7 +94,7 @@ function FileActions(props: Props) {
 
   const lhsSection = (
     <>
-      {ENABLE_FILE_REACTIONS && !reactionsDisabled && <FileReactions uri={uri} livestream={isLivestreamClaim} />}
+      {ENABLE_FILE_REACTIONS && !reactionsDisabled && <FileReactions uri={uri} />}
       <ClaimSupportButton uri={uri} fileAction />
       <ClaimCollectionAddButton uri={uri} fileAction />
       {!hideRepost && (
@@ -124,14 +122,12 @@ function FileActions(props: Props) {
 
   const rhsSection = (
     <>
-      {/* @if TARGET='app' */}
       <FileDownloadLink uri={uri} />
-      {/* @endif */}
       {claimIsMine && (
         <Button
           className="button--file-action"
           icon={ICONS.EDIT}
-          label={isLivestreamClaim ? __('Update') : __('Edit')}
+          label={__('Edit')}
           navigate={`/$/${PAGES.UPLOAD}`}
           onClick={() => {
             prepareEdit(claim, editUri, fileInfo);
@@ -147,7 +143,7 @@ function FileActions(props: Props) {
           onClick={() => openModal(MODALS.CONFIRM_FILE_REMOVE, { uri })}
         />
       )}
-      {(!isLivestreamClaim || !claimIsMine) && (
+      {!claimIsMine && (
         <Menu>
           <MenuButton
             className="button--file-action"
@@ -159,17 +155,15 @@ function FileActions(props: Props) {
             <Icon size={20} icon={ICONS.MORE} />
           </MenuButton>
           <MenuList className="menu__list">
-            {!claimIsMine && (
-              <MenuItem
-                className="comment__menu-option"
-                onSelect={() => push(`/$/${PAGES.REPORT_CONTENT}?claimId=${claimId}`)}
-              >
-                <div className="menu__link">
-                  <Icon aria-hidden icon={ICONS.REPORT} />
-                  {__('Report content')}
-                </div>
-              </MenuItem>
-            )}
+            <MenuItem
+              className="comment__menu-option"
+              onSelect={() => push(`/$/${PAGES.REPORT_CONTENT}?claimId=${claimId}`)}
+            >
+              <div className="menu__link">
+                <Icon aria-hidden icon={ICONS.REPORT} />
+                {__('Report content')}
+              </div>
+            </MenuItem>
           </MenuList>
         </Menu>
       )}

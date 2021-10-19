@@ -9,7 +9,7 @@ import { doClearEmailEntry, doClearPasswordEntry } from 'redux/actions/user';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { doSignOut, doOpenModal } from 'redux/actions/app';
 import { makeSelectClientSetting, selectLanguage } from 'redux/selectors/settings';
-import { selectHasNavigated, selectActiveChannelClaim, selectActiveChannelStakedLevel } from 'redux/selectors/app';
+import { selectHasNavigated, selectActiveChannelClaim } from 'redux/selectors/app';
 import Header from './view';
 
 const select = (state) => ({
@@ -27,7 +27,6 @@ const select = (state) => ({
   hasNavigated: selectHasNavigated(state),
   user: selectUser(state),
   activeChannelClaim: selectActiveChannelClaim(state),
-  activeChannelStakedLevel: selectActiveChannelStakedLevel(state),
 });
 
 const perform = (dispatch) => ({

@@ -4,14 +4,8 @@ import * as ACTIONS from 'constants/action_types';
 import * as PAGES from 'constants/pages';
 import { batchActions } from 'util/batch-actions';
 import { doCheckPendingClaims } from 'redux/actions/claims';
-import {
-  makeSelectClaimForUri,
-  selectMyClaims,
-  selectMyChannelClaims,
-  // selectMyClaimsWithoutChannels,
-  selectReflectingById,
-} from 'redux/selectors/claims';
-import { makeSelectPublishFormValue, selectPublishFormValues, selectMyClaimForUri } from 'redux/selectors/publish';
+import { selectMyClaims, selectMyChannelClaims, selectReflectingById } from 'redux/selectors/claims';
+import { selectPublishFormValues, selectMyClaimForUri } from 'redux/selectors/publish';
 import { doError } from 'redux/actions/notifications';
 import { push } from 'connected-react-router';
 import analytics from 'analytics';
@@ -21,7 +15,6 @@ import { SPEECH_STATUS, SPEECH_PUBLISH } from 'constants/speech_urls';
 import * as THUMBNAIL_STATUSES from 'constants/thumbnail_upload_statuses';
 import { creditsToString } from 'util/format-credits';
 import Lbry from 'lbry';
-// import LbryFirst from 'extras/lbry-first/lbry-first';
 import { isClaimNsfw } from 'util/claim';
 
 export const NO_FILE = '---';
@@ -33,14 +26,6 @@ export const doPublishDesktop = (filePath: string, preview?: boolean) => (dispat
       })
     );
   };
-
-  const noFileParam = !filePath || filePath === NO_FILE;
-  const state = getState();
-  const editingUri = makeSelectPublishFormValue('editingURI')(state) || '';
-  const remoteUrl = makeSelectPublishFormValue('remoteFileUrl')(state);
-  const claim = makeSelectClaimForUri(editingUri)(state) || {};
-  const hasSourceFile = claim.value && claim.value.source;
-  const redirectToLivestream = noFileParam && !hasSourceFile && !remoteUrl;
 
   const publishSuccess = (successResponse, lbryFirstError) => {
     const state = getState();
@@ -87,14 +72,7 @@ export const doPublishDesktop = (filePath: string, preview?: boolean) => (dispat
       })
     );
     dispatch(doCheckPendingClaims());
-    // @if TARGET='app'
     dispatch(doCheckReflectingFiles());
-    // @endif
-    // @if TARGET='web'
-    if (redirectToLivestream) {
-      dispatch(push(`/$/${PAGES.LIVESTREAM}`));
-    }
-    // @endif
   };
 
   const publishFail = (error) => {
@@ -110,15 +88,6 @@ export const doPublishDesktop = (filePath: string, preview?: boolean) => (dispat
     dispatch(doPublish(publishSuccess, publishFail, publishPreview));
     return;
   }
-
-  // Redirect on web immediately because we have a file upload progress componenet
-  // on the publishes page. This doesn't exist on desktop so wait until we get a response
-  // from the SDK
-  // @if TARGET='web'
-  if (!redirectToLivestream) {
-    dispatch(push(`/$/${PAGES.UPLOADS}`));
-  }
-  // @endif
 
   dispatch(doPublish(publishSuccess, publishFail));
 };
@@ -381,12 +350,9 @@ export const doPublish = (success: Function, fail: Function, preview: Function) 
     title,
     contentIsFree,
     fee,
-    // uri,
     tags,
     // locations,
     optimize,
-    isLivestreamPublish,
-    remoteFileUrl,
   } = publishData;
 
   // Handle scenario where we have a claim that has the same name as a channel we are publishing with.
@@ -439,10 +405,6 @@ export const doPublish = (success: Function, fail: Function, preview: Function) 
   };
   // Temporary solution to keep the same publish flow with the new tags api
   // Eventually we will allow users to enter their own tags on publish
-  // `nsfw` will probably be removed
-  if (remoteFileUrl) {
-    publishPayload.remote_url = remoteFileUrl;
-  }
 
   if (publishingLicense) {
     publishPayload.license = publishingLicense;
@@ -490,7 +452,7 @@ export const doPublish = (success: Function, fail: Function, preview: Function) 
 
   // Only pass file on new uploads, not metadata only edits.
   // The sdk will figure it out
-  if (filePath && !isLivestreamPublish) publishPayload.file_path = filePath;
+  if (filePath) publishPayload.file_path = filePath;
 
   if (preview) {
     publishPayload.preview = true;
@@ -502,22 +464,7 @@ export const doPublish = (success: Function, fail: Function, preview: Function) 
   }
 
   return Lbry.publish(publishPayload).then((response: PublishResponse) => {
-    // TODO: Restore LbryFirst
-    // if (!useLBRYUploader) {
     return success(response);
-    // }
-
-    // $FlowFixMe
-    // publishPayload.permanent_url = response.outputs[0].permanent_url;
-    //
-    // return LbryFirst.upload(publishPayload)
-    //   .then(() => {
-    //     // Return original publish response so app treats it like a normal publish
-    //     return success(response);
-    //   })
-    //   .catch((error) => {
-    //     return success(response, error);
-    //   });
   }, fail);
 };
 

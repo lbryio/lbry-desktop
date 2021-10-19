@@ -16,7 +16,6 @@ type Props = {
   likeCount: number,
   dislikeCount: number,
   myReaction: ?string,
-  livestream?: boolean,
 };
 
 function FileReactions(props: Props) {
@@ -29,7 +28,6 @@ function FileReactions(props: Props) {
     myReaction,
     likeCount,
     dislikeCount,
-    livestream,
   } = props;
 
   const claimId = claim && claim.claim_id;
@@ -42,21 +40,10 @@ function FileReactions(props: Props) {
       doFetchReactions(claimId);
     }
 
-    let fetchInterval;
     if (claimId) {
       fetchReactions();
-
-      if (livestream) {
-        fetchInterval = setInterval(fetchReactions, 45000);
-      }
     }
-
-    return () => {
-      if (fetchInterval) {
-        clearInterval(fetchInterval);
-      }
-    };
-  }, [claimId, doFetchReactions, livestream]);
+  }, [claimId, doFetchReactions]);
 
   return (
     <>
@@ -98,7 +85,9 @@ function FileReactions(props: Props) {
         requiresAuth={IS_WEB}
         authSrc={'filereaction_dislike'}
         title={__('I dislike this')}
-        className={classnames('button--file-action', { 'button--file-action-active': myReaction === REACTION_TYPES.DISLIKE })}
+        className={classnames('button--file-action', {
+          'button--file-action-active': myReaction === REACTION_TYPES.DISLIKE,
+        })}
         label={<>{formatNumberWithCommas(dislikeCount, 0)}</>}
         iconSize={18}
         icon={dislikeIcon}

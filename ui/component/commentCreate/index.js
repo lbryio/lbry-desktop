@@ -26,18 +26,7 @@ const select = (state, props) => ({
 
 const perform = (dispatch, ownProps) => ({
   createComment: (comment, claimId, parentId, txid, payment_intent_id, environment) =>
-    dispatch(
-      doCommentCreate(
-        comment,
-        claimId,
-        parentId,
-        ownProps.uri,
-        ownProps.livestream,
-        txid,
-        payment_intent_id,
-        environment
-      )
-    ),
+    dispatch(doCommentCreate(comment, claimId, parentId, ownProps.uri, txid, payment_intent_id, environment)),
   sendTip: (params, callback, errorCallback) => dispatch(doSendTip(params, false, callback, errorCallback, false)),
   doToast: (options) => dispatch(doToast(options)),
   doFetchCreatorSettings: (channelClaimId) => dispatch(doFetchCreatorSettings(channelClaimId)),

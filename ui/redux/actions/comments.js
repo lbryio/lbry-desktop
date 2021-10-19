@@ -552,7 +552,6 @@ export function doCommentReact(commentId: string, type: string) {
  * @param claim_id - File claim id
  * @param parent_id - What is this?
  * @param uri
- * @param livestream
  * @param {string} [txid] Optional transaction id
  * @param {string} [payment_intent_id] Optional transaction id
  * @param {string} [environment] Optional environment for Stripe (test|live)
@@ -563,7 +562,6 @@ export function doCommentCreate(
   claim_id: string = '',
   parent_id?: string,
   uri: string,
-  livestream?: boolean = false,
   txid?: string,
   payment_intent_id?: string,
   environment?: string
@@ -624,7 +622,6 @@ export function doCommentCreate(
           type: ACTIONS.COMMENT_CREATE_COMPLETED,
           data: {
             uri,
-            livestream,
             comment: result,
             claimId: claim_id,
           },

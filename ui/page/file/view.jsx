@@ -1,5 +1,4 @@
 // @flow
-import * as PAGES from 'constants/pages';
 import * as React from 'react';
 import classnames from 'classnames';
 import Page from 'component/page';
@@ -11,8 +10,6 @@ import FileRenderDownload from 'component/fileRenderDownload';
 import RecommendedContent from 'component/recommendedContent';
 import CollectionContent from 'component/collectionContentSidebar';
 import CommentsList from 'component/commentsList';
-import Button from 'component/button';
-import I18nMessage from 'component/i18nMessage';
 import Empty from 'component/common/empty';
 
 import PostViewer from 'component/postViewer';
@@ -36,7 +33,6 @@ type Props = {
   videoTheaterMode: boolean,
   claimIsMine: boolean,
   commentsDisabled: boolean,
-  isLivestream: boolean,
   clearPosition: (string) => void,
   position: number,
 };
@@ -55,12 +51,9 @@ function FilePage(props: Props) {
     linkedCommentId,
     setPrimaryUri,
     videoTheaterMode,
-
-    claimIsMine,
     commentsDisabled,
     collection,
     collectionId,
-    isLivestream,
     clearPosition,
     position,
   } = props;
@@ -190,18 +183,6 @@ function FilePage(props: Props) {
         {!isMarkdown && (
           <div className="file-page__secondary-content">
             <div>
-              {claimIsMine && isLivestream && (
-                <div className="livestream__creator-message">
-                  <h4>{__('Only visible to you')}</h4>
-                  <I18nMessage>
-                    People who view this link will be redirected to your livestream. Make sure to use this for sharing
-                    so your title and thumbnail are displayed properly.
-                  </I18nMessage>
-                  <div className="section__actions">
-                    <Button button="primary" navigate={`/$/${PAGES.LIVESTREAM}`} label={__('View livestream')} />
-                  </div>
-                </div>
-              )}
               {RENDER_MODES.FLOATING_MODES.includes(renderMode) && <FileTitleSection uri={uri} />}
               {commentsDisabled && <Empty text={__('The creator of this content has disabled comments.')} />}
               {!commentsDisabled && <CommentsList uri={uri} linkedCommentId={linkedCommentId} />}

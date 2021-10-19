@@ -71,12 +71,7 @@ export default handleActions(
     }),
 
     [ACTIONS.COMMENT_CREATE_COMPLETED]: (state: CommentsState, action: any): CommentsState => {
-      const {
-        comment,
-        claimId,
-        uri,
-        livestream,
-      }: { comment: Comment, claimId: string, uri: string, livestream: boolean } = action.data;
+      const { comment, claimId, uri }: { comment: Comment, claimId: string, uri: string } = action.data;
 
       const commentById = Object.assign({}, state.commentById);
       const byId = Object.assign({}, state.byId);
@@ -87,37 +82,34 @@ export default handleActions(
       const comments = byId[claimId] || [];
       const newCommentIds = comments.slice();
 
-      // If it was created during a livestream, let the websocket handler perform the state update
-      if (!livestream) {
-        // add the comment by its ID
-        commentById[comment.comment_id] = comment;
+      // add the comment by its ID
+      commentById[comment.comment_id] = comment;
 
-        // push the comment_id to the top of ID list
-        newCommentIds.unshift(comment.comment_id);
-        byId[claimId] = newCommentIds;
+      // push the comment_id to the top of ID list
+      newCommentIds.unshift(comment.comment_id);
+      byId[claimId] = newCommentIds;
 
-        if (totalCommentsById[claimId]) {
-          totalCommentsById[claimId] += 1;
+      if (totalCommentsById[claimId]) {
+        totalCommentsById[claimId] += 1;
+      }
+
+      if (comment['parent_id']) {
+        if (!repliesByParentId[comment.parent_id]) {
+          repliesByParentId[comment.parent_id] = [comment.comment_id];
+        } else {
+          repliesByParentId[comment.parent_id].unshift(comment.comment_id);
         }
 
-        if (comment['parent_id']) {
-          if (!repliesByParentId[comment.parent_id]) {
-            repliesByParentId[comment.parent_id] = [comment.comment_id];
-          } else {
-            repliesByParentId[comment.parent_id].unshift(comment.comment_id);
-          }
-
-          // Update the parent's "replies" value
-          if (commentById[comment.parent_id]) {
-            commentById[comment.parent_id].replies = (commentById[comment.parent_id].replies || 0) + 1;
-          }
+        // Update the parent's "replies" value
+        if (commentById[comment.parent_id]) {
+          commentById[comment.parent_id].replies = (commentById[comment.parent_id].replies || 0) + 1;
+        }
+      } else {
+        if (!topLevelCommentsById[claimId]) {
+          commentsByUri[uri] = claimId;
+          topLevelCommentsById[claimId] = [comment.comment_id];
         } else {
-          if (!topLevelCommentsById[claimId]) {
-            commentsByUri[uri] = claimId;
-            topLevelCommentsById[claimId] = [comment.comment_id];
-          } else {
-            topLevelCommentsById[claimId].unshift(comment.comment_id);
-          }
+          topLevelCommentsById[claimId].unshift(comment.comment_id);
         }
       }
 

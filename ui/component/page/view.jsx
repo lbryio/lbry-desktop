@@ -28,7 +28,6 @@ type Props = {
   fullWidthPage: boolean,
   videoTheaterMode: boolean,
   isMarkdown?: boolean,
-  livestream?: boolean,
   chatDisabled: boolean,
   rightSide?: Node,
   backout: {
@@ -52,9 +51,7 @@ function Page(props: Props) {
     backout,
     videoTheaterMode,
     isMarkdown = false,
-    livestream,
     rightSide,
-    chatDisabled,
   } = props;
 
   const {
@@ -127,8 +124,7 @@ function Page(props: Props) {
             'main--file-page': filePage,
             'main--settings-page': settingsPage,
             'main--markdown': isMarkdown,
-            'main--theater-mode': isOnFilePage && videoTheaterMode && !livestream,
-            'main--livestream': livestream && !chatDisabled,
+            'main--theater-mode': isOnFilePage && videoTheaterMode,
           })}
         >
           {children}
