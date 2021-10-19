@@ -3,7 +3,6 @@ import type { Node } from 'react';
 import React, { useEffect, forwardRef } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import { isEmpty } from 'util/object';
-import { lazyImport } from 'util/lazyImport';
 import classnames from 'classnames';
 import { isURIEqual, isURIValid } from 'util/lbryURI';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
@@ -31,9 +30,7 @@ import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import Button from 'component/button';
 import * as ICONS from 'constants/icons';
 
-const AbandonedChannelPreview = lazyImport(() =>
-  import('component/abandonedChannelPreview' /* webpackChunkName: "abandonedChannelPreview" */)
-);
+import AbandonedChannelPreview from 'component/abandonedChannelPreview';
 
 // preview images used on the landing page and on the channel page
 type Props = {
@@ -326,11 +323,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   }
 
   if (!shouldFetch && showUnresolvedClaim && !isResolvingUri && isChannelUri && claim === null) {
-    return (
-      <React.Suspense fallback={null}>
-        <AbandonedChannelPreview uri={uri} type />
-      </React.Suspense>
-    );
+    return <AbandonedChannelPreview uri={uri} type />;
   }
   if (placeholder === 'publish' && !claim && uri.startsWith('lbry://@')) {
     return null;

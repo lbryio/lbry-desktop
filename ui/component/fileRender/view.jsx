@@ -1,7 +1,6 @@
 // @flow
 import { remote } from 'electron';
 import React from 'react';
-import { lazyImport } from 'util/lazyImport';
 import classnames from 'classnames';
 import * as RENDER_MODES from 'constants/file_render_modes';
 import * as KEYCODES from 'constants/keycodes';
@@ -12,17 +11,15 @@ import analytics from 'analytics';
 
 import DocumentViewer from 'component/viewers/documentViewer';
 
-// @if TARGET='app'
 // should match
 import DocxViewer from 'component/viewers/docxViewer';
 import ComicBookViewer from 'component/viewers/comicBookViewer';
 import ThreeViewer from 'component/viewers/threeViewer';
-// @endif
 
-const AppViewer = lazyImport(() => import('component/viewers/appViewer' /* webpackChunkName: "appViewer" */));
-const HtmlViewer = lazyImport(() => import('component/viewers/htmlViewer' /* webpackChunkName: "htmlViewer" */));
-const ImageViewer = lazyImport(() => import('component/viewers/imageViewer' /* webpackChunkName: "imageViewer" */));
-const PdfViewer = lazyImport(() => import('component/viewers/pdfViewer' /* webpackChunkName: "pdfViewer" */));
+import AppViewer from 'component/viewers/appViewer';
+import HtmlViewer from 'component/viewers/htmlViewer';
+import ImageViewer from 'component/viewers/imageViewer';
+import PdfViewer from 'component/viewers/pdfViewer';
 
 type Props = {
   uri: string,
@@ -96,17 +93,9 @@ class FileRender extends React.PureComponent<Props> {
           />
         );
       case RENDER_MODES.IMAGE:
-        return (
-          <React.Suspense fallback={null}>
-            <ImageViewer uri={uri} source={source} />
-          </React.Suspense>
-        );
+        return <ImageViewer uri={uri} source={source} />;
       case RENDER_MODES.HTML:
-        return (
-          <React.Suspense fallback={null}>
-            <HtmlViewer source={downloadPath || source} />
-          </React.Suspense>
-        );
+        return <HtmlViewer source={downloadPath || source} />;
       case RENDER_MODES.DOCUMENT:
       case RENDER_MODES.MARKDOWN:
         return (
@@ -126,11 +115,7 @@ class FileRender extends React.PureComponent<Props> {
       case RENDER_MODES.DOCX:
         return <DocxViewer source={downloadPath} />;
       case RENDER_MODES.PDF:
-        return (
-          <React.Suspense fallback={null}>
-            <PdfViewer source={downloadPath || source} />
-          </React.Suspense>
-        );
+        return <PdfViewer source={downloadPath || source} />;
       case RENDER_MODES.CAD:
         return (
           <ThreeViewer
@@ -154,11 +139,7 @@ class FileRender extends React.PureComponent<Props> {
           />
         );
       case RENDER_MODES.APPLICATION:
-        return (
-          <React.Suspense fallback={null}>
-            <AppViewer uri={uri} />
-          </React.Suspense>
-        );
+        return <AppViewer uri={uri} />;
     }
 
     return null;
