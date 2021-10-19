@@ -15,17 +15,10 @@ import LbcSymbol from 'component/common/lbc-symbol';
 import { parseURI } from 'util/lbryURI';
 import usePersistedState from 'effects/use-persisted-state';
 import WalletSpendableBalanceHelp from 'component/walletSpendableBalanceHelp';
-import { getStripeEnvironment } from 'util/stripe';
-let stripeEnvironment = getStripeEnvironment();
 
 const DEFAULT_TIP_AMOUNTS = [1, 5, 25, 100];
-const MINIMUM_FIAT_TIP = 1;
-const MAXIMUM_FIAT_TIP = 1000;
-
-const DEFAULT_TIP_ERROR = __('Sorry, there was an error in processing your payment!');
 
 const TAB_BOOST = 'TabBoost';
-const TAB_FIAT = 'TabFiat';
 const TAB_LBC = 'TabLBC';
 type SupportParams = { amount: number, claim_id: string, channel_id?: string };
 
@@ -63,8 +56,6 @@ function WalletSendTip(props: Props) {
     fetchingChannels,
     incognito,
     activeChannelClaim,
-    doToast,
-    isAuthenticated,
   } = props;
 
   /** REACT STATE **/
@@ -72,12 +63,6 @@ function WalletSendTip(props: Props) {
   const [customTipAmount, setCustomTipAmount] = usePersistedState('comment-support:customTip', 1.0);
   const [useCustomTip, setUseCustomTip] = usePersistedState('comment-support:useCustomTip', false);
   const [isConfirming, setIsConfirming] = React.useState(false);
-
-  // only allow certain creators to receive tips
-  const [canReceiveFiatTip, setCanReceiveFiatTip] = React.useState(); // dont persist because it needs to be calc'd per creator
-
-  // show things conditionally based on if a user has a card already
-  const [hasCardSaved, setHasSavedCard] = usePersistedState('comment-support:hasCardSaved', false);
 
   // show the tip error on the frontend
   const [tipError, setTipError] = React.useState();
@@ -104,46 +89,6 @@ function WalletSendTip(props: Props) {
   // channel name used in url
   const { channelName } = parseURI(uri);
 
-  const activeChannelName = activeChannelClaim && activeChannelClaim.name;
-  const activeChannelId = activeChannelClaim && activeChannelClaim.claim_id;
-
-  // setup variables for backend tip API
-  let channelClaimId, tipChannelName;
-  // if there is a signing channel it's on a file
-  if (claim.signing_channel) {
-    channelClaimId = claim.signing_channel.claim_id;
-    tipChannelName = claim.signing_channel.name;
-
-    // otherwise it's on the channel page
-  } else {
-    channelClaimId = claim.claim_id;
-    tipChannelName = claim.name;
-  }
-
-  const sourceClaimId = claim.claim_id;
-
-  // check if creator has a payment method saved
-  React.useEffect(() => {
-    if (channelClaimId && isAuthenticated && stripeEnvironment) {
-      Lbryio.call(
-        'customer',
-        'status',
-        {
-          environment: stripeEnvironment,
-        },
-        'post'
-      ).then((customerStatusResponse) => {
-        const defaultPaymentMethodId =
-          customerStatusResponse.Customer &&
-          customerStatusResponse.Customer.invoice_settings &&
-          customerStatusResponse.Customer.invoice_settings.default_payment_method &&
-          customerStatusResponse.Customer.invoice_settings.default_payment_method.id;
-
-        setHasSavedCard(Boolean(defaultPaymentMethodId));
-      });
-    }
-  }, [channelClaimId, isAuthenticated, stripeEnvironment]);
-
   // focus tip element if it exists
   React.useEffect(() => {
     const tipInputElement = document.getElementById('tip-input');
@@ -151,32 +96,6 @@ function WalletSendTip(props: Props) {
       tipInputElement.focus();
     }
   }, []);
-
-  // check if user can receive tips
-  React.useEffect(() => {
-    if (channelClaimId && stripeEnvironment) {
-      Lbryio.call(
-        'account',
-        'check',
-        {
-          channel_claim_id: channelClaimId,
-          channel_name: tipChannelName,
-          environment: stripeEnvironment,
-        },
-        'post'
-      )
-        .then((accountCheckResponse) => {
-          if (accountCheckResponse === true && canReceiveFiatTip !== true) {
-            setCanReceiveFiatTip(true);
-          } else {
-            setCanReceiveFiatTip(false);
-          }
-        })
-        .catch(function (error) {
-          // console.log(error);
-        });
-    }
-  }, [channelClaimId, stripeEnvironment]);
 
   // if user has no balance, used to show conditional frontend
   const noBalance = balance === 0;
@@ -208,12 +127,6 @@ function WalletSendTip(props: Props) {
     explainerText = __('This refundable boost will improve the discoverability of this %claimTypeText% while active.', {
       claimTypeText,
     });
-  } else if (activeTab === TAB_FIAT) {
-    iconToUse = ICONS.FINANCE;
-    explainerText = __('Show this channel your appreciation by sending a donation in USD.');
-    // if (!hasCardSaved) {
-    //   explainerText += __('You must add a card to use this functionality.');
-    // }
   } else if (activeTab === TAB_LBC) {
     iconToUse = ICONS.LBC;
     explainerText = __('Show this channel your appreciation by sending a donation of Credits.');
@@ -233,7 +146,7 @@ function WalletSendTip(props: Props) {
     }
 
     // if it's not fiat, aka it's boost or lbc tip
-    else if (activeTab !== TAB_FIAT) {
+    else {
       regexp = RegExp(/^(\d*([.]\d{0,8})?)$/);
       const validTipInput = regexp.test(String(tipAmount));
 
@@ -249,17 +162,6 @@ function WalletSendTip(props: Props) {
         tipError = __('Amount must be higher');
       }
       //  if tip fiat tab
-    } else {
-      regexp = RegExp(/^(\d*([.]\d{0,2})?)$/);
-      const validTipInput = regexp.test(String(tipAmount));
-
-      if (!validTipInput) {
-        tipError = __('Amount must have no more than 2 decimal places');
-      } else if (tipAmount < MINIMUM_FIAT_TIP) {
-        tipError = __('Amount must be at least one dollar');
-      } else if (tipAmount > MAXIMUM_FIAT_TIP) {
-        tipError = __('Amount cannot be over 1000 dollars');
-      }
     }
 
     setTipError(tipError);
@@ -289,7 +191,7 @@ function WalletSendTip(props: Props) {
   function handleSubmit() {
     if (tipAmount && claimId) {
       // send an instant tip (no need to go to an exchange first)
-      if (instantTipEnabled && activeTab !== TAB_FIAT) {
+      if (instantTipEnabled) {
         if (instantTipMax.currency === 'LBC') {
           sendSupportOrConfirm(instantTipMax.amount);
         } else {
@@ -299,106 +201,17 @@ function WalletSendTip(props: Props) {
           });
         }
         // sending fiat tip
-      } else if (activeTab === TAB_FIAT) {
-        if (!isConfirming) {
-          setIsConfirming(true);
-        } else if (isConfirming) {
-          let sendAnonymously = !activeChannelClaim || incognito;
-
-          // hit backend to send tip
-          Lbryio.call(
-            'customer',
-            'tip',
-            {
-              // round to fix issues with floating point numbers
-              amount: Math.round(100 * tipAmount), // convert from dollars to cents
-              creator_channel_name: tipChannelName, // creator_channel_name
-              creator_channel_claim_id: channelClaimId,
-              tipper_channel_name: sendAnonymously ? '' : activeChannelName,
-              tipper_channel_claim_id: sendAnonymously ? '' : activeChannelId,
-              currency: 'USD',
-              anonymous: sendAnonymously,
-              source_claim_id: sourceClaimId,
-              environment: stripeEnvironment,
-            },
-            'post'
-          )
-            .then((customerTipResponse) => {
-              doToast({
-                message: __("You sent $%amount% as a tip to %tipChannelName%, I'm sure they appreciate it!", {
-                  amount: tipAmount,
-                  tipChannelName,
-                }),
-              });
-            })
-            .catch(function (error) {
-              // show error message from Stripe if one exists (being passed from backend by Beamer's API currently)
-              let displayError;
-              if (error.message) {
-                displayError = error.message;
-              } else {
-                displayError = DEFAULT_TIP_ERROR;
-              }
-
-              doToast({ message: displayError, isError: true });
-            });
-
-          closeModal();
-        }
-        // if it's a boost (?)
       } else {
         sendSupportOrConfirm();
       }
     }
   }
 
-  const countDecimals = function (value) {
-    const text = value.toString();
-    const index = text.indexOf('.');
-    return text.length - index - 1;
-  };
-
   function handleCustomPriceChange(event: SyntheticInputEvent<*>) {
     let tipAmountAsString = event.target.value;
 
     let tipAmount = parseFloat(tipAmountAsString);
-
-    const howManyDecimals = countDecimals(tipAmountAsString);
-
-    // fiat tip input
-    if (activeTab === TAB_FIAT) {
-      if (Number.isNaN(tipAmount)) {
-        setCustomTipAmount('');
-      }
-
-      // allow maximum of two decimal places
-      if (howManyDecimals > 2) {
-        tipAmount = Math.floor(tipAmount * 100) / 100;
-      }
-
-      // remove decimals, and then get number of digits
-      const howManyDigits = Math.trunc(tipAmount).toString().length;
-
-      if (howManyDigits > 4 && tipAmount !== 1000) {
-        setTipError('Amount cannot be over 1000 dollars');
-        setCustomTipAmount(tipAmount);
-      } else if (tipAmount > 1000) {
-        setTipError('Amount cannot be over 1000 dollars');
-        setCustomTipAmount(tipAmount);
-      } else {
-        setCustomTipAmount(tipAmount);
-      }
-      // LBC tip input
-    } else {
-      // TODO: this is a bit buggy, needs a touchup
-      // if (howManyDecimals > 9) {
-      //   // only allows up to 8 decimal places
-      //   tipAmount = Number(tipAmount.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]);
-      //
-      //   setTipError('Please only use up to 8 decimals');
-      // }
-      setCustomTipAmount(tipAmount);
-    }
+    setCustomTipAmount(tipAmount);
   }
 
   function buildButtonText() {
@@ -407,28 +220,17 @@ function WalletSendTip(props: Props) {
       // testing for NaN ES5 style https://stackoverflow.com/a/35912757/3973137
       // also sometimes it's returned as a string
       // eslint-disable-next-line
-      if (tipAmount !== tipAmount || tipAmount === 'NaN') {
-        return true;
-      }
-      return false;
+      return tipAmount !== tipAmount || tipAmount === 'NaN';
     }
-
-    function convertToTwoDecimals(number) {
-      return (Math.round(number * 100) / 100).toFixed(2);
-    }
-
-    const amountToShow = activeTab === TAB_FIAT ? convertToTwoDecimals(tipAmount) : tipAmount;
 
     // if it's a valid number display it, otherwise do an empty string
-    const displayAmount = !isNan(tipAmount) ? amountToShow : '';
+    const displayAmount = !isNan(tipAmount) ? tipAmount : '';
 
     // build button text based on tab
     if (activeTab === TAB_BOOST) {
       return claimIsMine
         ? __('Boost Your %claimTypeText%', { claimTypeText })
         : __('Boost This %claimTypeText%', { claimTypeText });
-    } else if (activeTab === TAB_FIAT) {
-      return __('Send a $%displayAmount% Tip', { displayAmount });
     } else if (activeTab === TAB_LBC) {
       return __('Send a %displayAmount% Credit Tip', { displayAmount });
     }
@@ -436,17 +238,13 @@ function WalletSendTip(props: Props) {
 
   // dont allow user to click send button
   function shouldDisableAmountSelector(amount) {
-    return (
-      (amount > balance && activeTab !== TAB_FIAT) || (activeTab === TAB_FIAT && (!hasCardSaved || !canReceiveFiatTip))
-    );
+    return amount > balance;
   }
 
   // showed on confirm page above amount
   function setConfirmLabel() {
     if (activeTab === TAB_LBC) {
       return __('Tipping Credit');
-    } else if (activeTab === TAB_FIAT) {
-      return __('Tipping Fiat (USD)');
     } else if (activeTab === TAB_BOOST) {
       return __('Boosting');
     }
@@ -488,27 +286,6 @@ function WalletSendTip(props: Props) {
                   }}
                   className={classnames('button-toggle', { 'button-toggle--active': activeTab === TAB_LBC })}
                 />
-                {/* tip fiat tab button */}
-                {/* @if TARGET='web' */}
-                {stripeEnvironment && (
-                  <Button
-                    key="tip-fiat"
-                    icon={ICONS.FINANCE}
-                    label={__('Tip')}
-                    button="alt"
-                    onClick={() => {
-                      const tipInputElement = document.getElementById('tip-input');
-                      if (tipInputElement) {
-                        tipInputElement.focus();
-                      }
-                      if (!isConfirming) {
-                        setActiveTab(TAB_FIAT);
-                      }
-                    }}
-                    className={classnames('button-toggle', { 'button-toggle--active': activeTab === TAB_FIAT })}
-                  />
-                )}
-                {/* @endif */}
                 {/* tip LBC tab button */}
                 <Button
                   key="boost"
@@ -551,11 +328,7 @@ function WalletSendTip(props: Props) {
                   </div>
                   <div className="confirm__label">{setConfirmLabel()}</div>
                   <div className="confirm__value">
-                    {activeTab === TAB_FIAT ? (
-                      <p>$ {(Math.round(tipAmount * 100) / 100).toFixed(2)}</p>
-                    ) : (
-                      <LbcSymbol postfix={tipAmount} size={22} />
-                    )}
+                    <LbcSymbol postfix={tipAmount} size={22} />
                   </div>
                 </div>
               </div>
@@ -569,14 +342,6 @@ function WalletSendTip(props: Props) {
               <div className="section">
                 <ChannelSelector />
               </div>
-
-              {/* prompt to save a card */}
-              {activeTab === TAB_FIAT && !hasCardSaved && (
-                <h3 className="add-card-prompt">
-                  <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card')} button="link" />{' '}
-                  {__('To Tip Creators')}
-                </h3>
-              )}
 
               {/* section to pick tip/boost amount */}
               <div className="section">
@@ -607,10 +372,9 @@ function WalletSendTip(props: Props) {
                   label={__('Custom')}
                   onClick={() => setUseCustomTip(true)}
                   // disabled if it's receive fiat and there is no card or creator can't receive tips
-                  disabled={activeTab === TAB_FIAT && (!hasCardSaved || !canReceiveFiatTip)}
                 />
 
-                {DEFAULT_TIP_AMOUNTS.some((val) => val > balance) && activeTab !== TAB_FIAT && (
+                {DEFAULT_TIP_AMOUNTS.some((val) => val > balance) && (
                   <Button
                     button="secondary"
                     className="button-toggle-group-action"
@@ -629,15 +393,11 @@ function WalletSendTip(props: Props) {
                     label={
                       <React.Fragment>
                         {__('Custom support amount')}{' '}
-                        {activeTab !== TAB_FIAT ? (
-                          <I18nMessage
-                            tokens={{ lbc_balance: <CreditAmount precision={4} amount={balance} showLBC={false} /> }}
-                          >
-                            (%lbc_balance% Credits available)
-                          </I18nMessage>
-                        ) : (
-                          'in USD'
-                        )}
+                        <I18nMessage
+                          tokens={{ lbc_balance: <CreditAmount precision={4} amount={balance} showLBC={false} /> }}
+                        >
+                          (%lbc_balance% Credits available)
+                        </I18nMessage>
                       </React.Fragment>
                     }
                     error={tipError}
@@ -645,7 +405,7 @@ function WalletSendTip(props: Props) {
                     step="any"
                     type="number"
                     style={{
-                      width: activeTab === TAB_FIAT ? '99px' : '160px',
+                      width: '160px',
                     }}
                     placeholder="1.23"
                     value={customTipAmount}
@@ -661,24 +421,12 @@ function WalletSendTip(props: Props) {
                   icon={isSupport ? ICONS.TRENDING : ICONS.SUPPORT}
                   button="primary"
                   type="submit"
-                  disabled={
-                    fetchingChannels ||
-                    isPending ||
-                    tipError ||
-                    !tipAmount ||
-                    (activeTab === TAB_FIAT && (!hasCardSaved || !canReceiveFiatTip))
-                  }
+                  disabled={fetchingChannels || isPending || tipError || !tipAmount}
                   label={buildButtonText()}
                 />
                 {fetchingChannels && <span className="help">{__('Loading your channels...')}</span>}
               </div>
-              {activeTab !== TAB_FIAT ? (
-                <WalletSpendableBalanceHelp />
-              ) : !canReceiveFiatTip ? (
-                <div className="help">{__('Only creators that verify cash accounts can receive tips')}</div>
-              ) : (
-                <div className="help">{__('The payment will be made from your saved card')}</div>
-              )}
+              <WalletSpendableBalanceHelp />
             </>
           ) : (
             // if it's LBC and there is no balance, you can prompt to purchase LBC
