@@ -1,5 +1,7 @@
 import { connect } from 'react-redux';
-import { doResolveUris, doClearPublish, doPrepareEdit, selectPendingIds, makeSelectClaimForUri } from 'lbry-redux';
+import { doClearPublish, doPrepareEdit } from 'redux/actions/publish';
+import { doResolveUris } from 'redux/actions/claims';
+import { selectPendingIds, makeSelectClaimForUri } from 'redux/selectors/claims';
 import { makeSelectWinningUriForQuery, makeSelectIsResolvingWinningUri } from 'redux/selectors/search';
 import SearchTopClaim from './view';
 import { push } from 'connected-react-router';
@@ -16,13 +18,13 @@ const select = (state, props) => {
   };
 };
 
-const perform = dispatch => ({
-  beginPublish: name => {
+const perform = (dispatch) => ({
+  beginPublish: (name) => {
     dispatch(doClearPublish());
     dispatch(doPrepareEdit({ name }));
     dispatch(push(`/$/${PAGES.UPLOAD}`));
   },
-  doResolveUris: uris => dispatch(doResolveUris(uris)),
+  doResolveUris: (uris) => dispatch(doResolveUris(uris)),
 });
 
 export default connect(select, perform)(SearchTopClaim);

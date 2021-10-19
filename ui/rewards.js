@@ -1,4 +1,4 @@
-import { Lbry } from 'lbry-redux';
+import Lbry from 'lbry';
 import { doToast } from 'redux/actions/notifications';
 import { Lbryio } from 'lbryinc';
 
@@ -26,7 +26,7 @@ rewards.claimReward = (type, rewardParams) => {
       return;
     }
 
-    Lbryio.call('reward', 'claim', params, 'post').then(reward => {
+    Lbryio.call('reward', 'claim', params, 'post').then((reward) => {
       const message = reward.reward_notification || `You have claimed a ${reward.reward_amount} LBRY Credit reward.`;
 
       // Display global notice
@@ -46,7 +46,7 @@ rewards.claimReward = (type, rewardParams) => {
   }
 
   return new Promise((resolve, reject) => {
-    Lbry.address_unused().then(address => {
+    Lbry.address_unused().then((address) => {
       const params = {
         reward_type: type,
         wallet_address: address,
@@ -56,11 +56,11 @@ rewards.claimReward = (type, rewardParams) => {
       switch (type) {
         case rewards.TYPE_FIRST_CHANNEL:
           Lbry.channel_list({ page: 1, page_size: 10 })
-            .then(claims => {
+            .then((claims) => {
               const claim =
                 claims.items &&
                 claims.items.find(
-                  foundClaim =>
+                  (foundClaim) =>
                     foundClaim.name.length &&
                     foundClaim.name[0] === '@' &&
                     foundClaim.txid.length &&
@@ -78,11 +78,11 @@ rewards.claimReward = (type, rewardParams) => {
 
         case rewards.TYPE_FIRST_PUBLISH:
           Lbry.stream_list({ page: 1, page_size: 10 })
-            .then(claims => {
+            .then((claims) => {
               const claim =
                 claims.items &&
                 claims.items.find(
-                  foundClaim =>
+                  (foundClaim) =>
                     foundClaim.name.length &&
                     foundClaim.name[0] !== '@' &&
                     foundClaim.txid.length &&

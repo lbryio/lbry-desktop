@@ -1,9 +1,10 @@
 import { connect } from 'react-redux';
 import { doHideModal } from 'redux/actions/app';
-import { selectIsMassClaimingTips, doTipClaimMass, selectUtxoCounts, selectTipsBalance } from 'lbry-redux';
+import { doTipClaimMass } from 'redux/actions/wallet';
+import { selectIsMassClaimingTips, selectUtxoCounts, selectTipsBalance } from 'redux/selectors/wallet';
 import ModalSupportsLiquidate from './view';
 
-const select = state => ({
+const select = (state) => ({
   massClaimingTips: selectIsMassClaimingTips(state),
   utxoCounts: selectUtxoCounts(state),
   tipsBalance: selectTipsBalance(state) || 0,

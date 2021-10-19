@@ -1,13 +1,14 @@
 import { connect } from 'react-redux';
-import { doUpdatePublishForm, makeSelectPublishFormValue } from 'lbry-redux';
+import { makeSelectPublishFormValue } from 'redux/selectors/publish';
+import { doUpdatePublishForm } from 'redux/actions/publish';
 import PublishDescription from './view';
 
-const select = state => ({
+const select = (state) => ({
   description: makeSelectPublishFormValue('description')(state),
 });
 
-const perform = dispatch => ({
-  updatePublishForm: value => dispatch(doUpdatePublishForm(value)),
+const perform = (dispatch) => ({
+  updatePublishForm: (value) => dispatch(doUpdatePublishForm(value)),
 });
 
 export default connect(select, perform)(PublishDescription);

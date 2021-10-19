@@ -1,12 +1,11 @@
 import { SUGGESTED_FEATURED, SUGGESTED_TOP_SUBSCRIBED } from 'constants/subscriptions';
 import { createSelector } from 'reselect';
+import { parseURI, isURIEqual } from 'util/lbryURI';
 import {
   selectAllFetchingChannelClaims,
   makeSelectChannelForClaimUri,
-  parseURI,
   makeSelectClaimForUri,
-  isURIEqual,
-} from 'lbry-redux';
+} from 'redux/selectors/claims';
 import { swapKeyAndValue } from 'util/swap-json';
 
 // Returns the entire subscriptions state

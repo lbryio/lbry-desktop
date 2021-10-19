@@ -1,6 +1,10 @@
-import { Lbry, ACTIONS, SHARED_PREFERENCES, doWalletReconnect, SETTINGS, DAEMON_SETTINGS } from 'lbry-redux';
+import Lbry from 'lbry';
+import { doWalletReconnect } from 'redux/actions/wallet';
+import * as SETTINGS from 'constants/settings';
+import * as DAEMON_SETTINGS from 'constants/daemon_settings';
+import * as ACTIONS from 'constants/action_types';
+import * as SHARED_PREFERENCES from 'constants/shared_preferences';
 import { doToast } from 'redux/actions/notifications';
-import * as LOCAL_ACTIONS from 'constants/action_types';
 import analytics from 'analytics';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 import { launcher } from 'util/autoLaunch';
@@ -34,12 +38,12 @@ export function doFetchDaemonSettings() {
 export function doFindFFmpeg() {
   return (dispatch) => {
     dispatch({
-      type: LOCAL_ACTIONS.FINDING_FFMPEG_STARTED,
+      type: ACTIONS.FINDING_FFMPEG_STARTED,
     });
     return Lbry.ffmpeg_find().then((done) => {
       dispatch(doGetDaemonStatus());
       dispatch({
-        type: LOCAL_ACTIONS.FINDING_FFMPEG_COMPLETED,
+        type: ACTIONS.FINDING_FFMPEG_COMPLETED,
       });
     });
   };
@@ -229,7 +233,7 @@ export function doPushSettingsToPrefs() {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
       dispatch({
-        type: LOCAL_ACTIONS.SYNC_CLIENT_SETTINGS,
+        type: ACTIONS.SYNC_CLIENT_SETTINGS,
       });
       resolve();
     });
@@ -278,7 +282,7 @@ export function doFetchLanguage(language) {
         .then((j) => {
           window.i18n_messages[language] = j;
           dispatch({
-            type: LOCAL_ACTIONS.DOWNLOAD_LANGUAGE_SUCCESS,
+            type: ACTIONS.DOWNLOAD_LANGUAGE_SUCCESS,
             data: {
               language,
             },
@@ -286,7 +290,7 @@ export function doFetchLanguage(language) {
         })
         .catch((e) => {
           dispatch({
-            type: LOCAL_ACTIONS.DOWNLOAD_LANGUAGE_FAILURE,
+            type: ACTIONS.DOWNLOAD_LANGUAGE_FAILURE,
           });
         });
     }
@@ -328,7 +332,7 @@ export function doSetLanguage(language) {
         .then((j) => {
           window.i18n_messages[language] = j;
           dispatch({
-            type: LOCAL_ACTIONS.DOWNLOAD_LANGUAGE_SUCCESS,
+            type: ACTIONS.DOWNLOAD_LANGUAGE_SUCCESS,
             data: {
               language,
             },

@@ -1,14 +1,12 @@
 import { connect } from 'react-redux';
+import { makeSelectIsUriResolving, makeSelectClaimIdForUri, makeSelectClaimForClaimId } from 'redux/selectors/claims';
 import {
-  makeSelectIsUriResolving,
-  makeSelectClaimIdForUri,
-  makeSelectClaimForClaimId,
   makeSelectUrlsForCollectionId,
   makeSelectNameForCollectionId,
   makeSelectPendingCollectionForId,
   makeSelectCountForCollectionId,
-  doFetchItemsInCollection,
-} from 'lbry-redux';
+} from 'redux/selectors/collections';
+import { doFetchItemsInCollection } from 'redux/actions/collections';
 import CollectionPreviewOverlay from './view';
 
 const select = (state, props) => {

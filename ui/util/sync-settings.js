@@ -1,4 +1,4 @@
-import { DAEMON_SETTINGS } from 'lbry-redux';
+import * as DAEMON_SETTINGS from 'constants/daemon_settings';
 import isEqual from 'util/deep-equal';
 
 export function stringifyServerParam(configList) {
@@ -10,7 +10,7 @@ export function stringifyServerParam(configList) {
 
 export const getSubsetFromKeysArray = (obj, keys) =>
   Object.keys(obj)
-    .filter(i => keys.includes(i))
+    .filter((i) => keys.includes(i))
     .reduce((acc, key) => {
       acc[key] = obj[key];
       return acc;

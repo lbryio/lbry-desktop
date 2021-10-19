@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { SETTINGS } from 'lbry-redux';
+import * as SETTINGS from 'constants/settings';
 import { FormField } from 'component/common/form';
 
 type SetDaemonSettingArg = boolean | string | number;

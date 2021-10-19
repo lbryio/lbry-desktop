@@ -6,7 +6,8 @@ import * as ICONS from 'constants/icons';
 import React from 'react';
 import Button from 'component/button';
 import FileDownloadLink from 'component/fileDownloadLink';
-import { buildURI, COLLECTIONS_CONSTS } from 'lbry-redux';
+import { buildURI } from 'util/lbryURI';
+import * as COLLECTIONS_CONSTS from 'constants/collections';
 import * as RENDER_MODES from 'constants/file_render_modes';
 import { useIsMobile } from 'effects/use-screensize';
 import ClaimSupportButton from 'component/claimSupportButton';
@@ -73,7 +74,7 @@ function FileActions(props: Props) {
   // We will select the claim id before they publish
   let editUri;
   if (claimIsMine) {
-    const uriObject: { streamName: string, streamClaimId: string, channelName?: string } = {
+    const uriObject: LbryUrlObj = {
       streamName: claim.name,
       streamClaimId: claim.claim_id,
     };

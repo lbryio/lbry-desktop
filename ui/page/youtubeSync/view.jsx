@@ -9,7 +9,7 @@ import Card from 'component/common/card';
 import I18nMessage from 'component/i18nMessage';
 import { Form, FormField } from 'component/common/form';
 import { INVALID_NAME_ERROR } from 'constants/claim';
-import { isNameValid } from 'lbry-redux';
+import { isNameValid } from 'util/lbryURI';
 import { Lbryio } from 'lbryinc';
 import { useHistory } from 'react-router';
 import YoutubeTransferStatus from 'component/youtubeTransferStatus';
@@ -82,7 +82,7 @@ export default function YoutubeSync(props: Props) {
   function handleChannelChange(e) {
     const { value } = e.target;
     setChannel(value);
-    if (!isNameValid(value, 'false')) {
+    if (!isNameValid(value)) {
       setNameError(INVALID_NAME_ERROR);
     } else {
       setNameError();

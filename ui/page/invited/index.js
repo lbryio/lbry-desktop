@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import InvitedPage from './view';
-import { makeSelectPermanentUrlForUri } from 'lbry-redux';
+import { makeSelectPermanentUrlForUri } from 'redux/selectors/claims';
 import { withRouter } from 'react-router';
 
 const select = (state, props) => {
@@ -16,9 +16,4 @@ const select = (state, props) => {
 };
 const perform = () => ({});
 
-export default withRouter(
-  connect(
-    select,
-    perform
-  )(InvitedPage)
-);
+export default withRouter(connect(select, perform)(InvitedPage));

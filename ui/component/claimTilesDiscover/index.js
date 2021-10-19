@@ -1,13 +1,9 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import {
-  doClaimSearch,
-  selectClaimSearchByQuery,
-  selectFetchingClaimSearchByQuery,
-  SETTINGS,
-  selectClaimsByUri,
-  MATURE_TAGS,
-} from 'lbry-redux';
+import { selectClaimSearchByQuery, selectFetchingClaimSearchByQuery, selectClaimsByUri } from 'redux/selectors/claims';
+import { doClaimSearch } from 'redux/actions/claims';
+import * as SETTINGS from 'constants/settings';
+import { MATURE_TAGS } from 'constants/tags';
 import { doFetchViewCount } from 'lbryinc';
 import { doToggleTagFollowDesktop } from 'redux/actions/tags';
 import { makeSelectClientSetting, selectShowMatureContent } from 'redux/selectors/settings';

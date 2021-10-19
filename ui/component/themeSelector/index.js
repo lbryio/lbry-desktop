@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { SETTINGS } from 'lbry-redux';
+import * as SETTINGS from 'constants/settings';
 import { doSetClientSetting, doSetDarkTime } from 'redux/actions/settings';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import ThemeSelector from './view';

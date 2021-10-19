@@ -3,7 +3,7 @@ import type { Node } from 'react';
 import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
 import React from 'react';
-import { Lbry } from 'lbry-redux';
+import Lbry from 'lbry';
 import Button from 'component/button';
 import ModalWalletUnlock from 'modal/modalWalletUnlock';
 import ModalIncompatibleDaemon from 'modal/modalIncompatibleDaemon';

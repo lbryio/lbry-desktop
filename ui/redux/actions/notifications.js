@@ -8,7 +8,7 @@ import {
   selectNotificationsFiltered,
   selectNotificationCategories,
 } from 'redux/selectors/notifications';
-import { doResolveUris } from 'lbry-redux';
+import { doResolveUris } from 'redux/actions/claims';
 
 export function doToast(params: ToastParams) {
   if (!params) {

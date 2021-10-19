@@ -1,5 +1,5 @@
 // @flow
-import { regexAddress } from 'lbry-redux';
+import { regexAddress } from 'util/lbryURI';
 
 export default function validateSendTx(address: string) {
   const errors = {
@@ -13,4 +13,4 @@ export default function validateSendTx(address: string) {
   }
 
   return errors;
-};
+}

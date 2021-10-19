@@ -1,6 +1,6 @@
 // @flow
 import { createSelector } from 'reselect';
-import { selectMyClaims, selectPendingClaims } from 'lbry-redux';
+import { selectMyClaims, selectPendingClaims } from 'redux/selectors/claims';
 
 const selectState = (state) => state.livestream || {};
 

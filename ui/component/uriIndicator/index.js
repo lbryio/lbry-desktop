@@ -1,5 +1,7 @@
 import { connect } from 'react-redux';
-import { normalizeURI, doResolveUri, makeSelectIsUriResolving, makeSelectClaimForUri } from 'lbry-redux';
+import { normalizeURI } from 'util/lbryURI';
+import { doResolveUri } from 'redux/actions/claims';
+import { makeSelectIsUriResolving, makeSelectClaimForUri } from 'redux/selectors/claims';
 import UriIndicator from './view';
 
 const select = (state, props) => ({
@@ -8,11 +10,8 @@ const select = (state, props) => ({
   uri: normalizeURI(props.uri),
 });
 
-const perform = dispatch => ({
-  resolveUri: uri => dispatch(doResolveUri(uri)),
+const perform = (dispatch) => ({
+  resolveUri: (uri) => dispatch(doResolveUri(uri)),
 });
 
-export default connect(
-  select,
-  perform
-)(UriIndicator);
+export default connect(select, perform)(UriIndicator);

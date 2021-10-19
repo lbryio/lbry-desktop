@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 import Button from 'component/button';
 import ClaimPreview from 'component/claimPreview';
 import Card from 'component/common/card';
-import { buildURI, parseURI } from 'lbry-redux';
+import { buildURI, parseURI } from 'util/lbryURI';
 import { ERRORS } from 'lbryinc';
 import REWARDS from 'rewards';
 import { formatLbryUrlForWeb } from 'util/url';
@@ -15,11 +15,11 @@ import I18nMessage from 'component/i18nMessage';
 type Props = {
   user: any,
   claimReward: () => void,
-  setReferrer: string => void,
+  setReferrer: (string) => void,
   referrerSetPending: boolean,
   referrerSetError: string,
   channelSubscribe: (sub: Subscription) => void,
-  history: { push: string => void },
+  history: { push: (string) => void },
   rewards: Array<Reward>,
   referrer: string,
   fullUri: string,
@@ -52,16 +52,23 @@ function Invited(props: Props) {
     formatLbryUrlForWeb(buildURI({ channelName: referrerChannelName, channelClaimId: referrerChannelClaimId }));
   const rewardsApproved = user && user.is_reward_approved;
   const hasVerifiedEmail = user && user.has_verified_email;
-  const referredRewardAvailable = rewards && rewards.some(reward => reward.reward_type === REWARDS.TYPE_REFEREE);
+  const referredRewardAvailable = rewards && rewards.some((reward) => reward.reward_type === REWARDS.TYPE_REFEREE);
   const redirect = channelUri || `/`;
 
   // always follow if it's a channel
   useEffect(() => {
-    if (fullUri && !isSubscribed) {
-      channelSubscribe({
-        channelName: parseURI(fullUri).claimName,
-        uri: fullUri,
-      });
+    if (fullUri && !isSubscribed && fullUri) {
+      let channelName;
+      try {
+        const { claimName } = parseURI(fullUri);
+        channelName = claimName;
+      } catch (e) {}
+      if (channelName) {
+        channelSubscribe({
+          channelName: channelName,
+          uri: fullUri,
+        });
+      }
     }
   }, [fullUri, isSubscribed, channelSubscribe]);
 

@@ -2,7 +2,7 @@
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
 import * as CS from 'constants/claim_search';
-import { parseURI } from 'lbry-redux';
+import { parseURI } from 'util/lbryURI';
 import moment from 'moment';
 import { toCapitalCase } from 'util/string';
 import { useIsLargeScreen } from 'effects/use-screensize';
@@ -289,10 +289,11 @@ export function GetLinksData(
         streamTypes: null,
         channelIds: subscribedChannels.map((subscription: Subscription) => {
           const { channelClaimId } = parseURI(subscription.uri);
-          return channelClaimId;
+          if (channelClaimId) return channelClaimId;
         }),
       },
     };
+    // $FlowFixMe flow thinks this might not be Array<string>
     rowData.push(RECENT_FROM_FOLLOWING);
   }
   if (isHomepage && !CUSTOM_HOMEPAGE) {

@@ -2,10 +2,10 @@ import { connect } from 'react-redux';
 import {
   selectMyChannelClaims,
   selectMyChannelUrls,
-  doFetchChannelListMine,
   selectFetchingMyChannels,
   makeSelectClaimIsPending,
-} from 'lbry-redux';
+} from 'redux/selectors/claims';
+import { doFetchChannelListMine } from 'redux/actions/claims';
 import { doSetActiveChannel } from 'redux/actions/app';
 import { selectYoutubeChannels } from 'redux/selectors/user';
 import ChannelsPage from './view';

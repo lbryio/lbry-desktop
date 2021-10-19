@@ -1,9 +1,9 @@
 // @flow
 import * as ICONS from 'constants/icons';
+import * as COLLECTIONS_CONSTS from 'constants/collections';
 import React from 'react';
 import { FormField } from 'component/common/form';
 import Icon from 'component/common/icon';
-import { COLLECTIONS_CONSTS } from 'lbry-redux';
 
 type Props = {
   collection: Collection,
@@ -25,7 +25,10 @@ function CollectionSelectItem(props: Props) {
   let icon;
   switch (category) {
     case 'builtin':
-      icon = (id === COLLECTIONS_CONSTS.WATCH_LATER_ID && ICONS.TIME) || (id === COLLECTIONS_CONSTS.FAVORITES_ID && ICONS.STAR) || ICONS.STACK;
+      icon =
+        (id === COLLECTIONS_CONSTS.WATCH_LATER_ID && ICONS.TIME) ||
+        (id === COLLECTIONS_CONSTS.FAVORITES_ID && ICONS.STAR) ||
+        ICONS.STACK;
       break;
     case 'published':
       icon = ICONS.STACK;

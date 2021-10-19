@@ -1,10 +1,6 @@
 import { connect } from 'react-redux';
-import {
-  makeSelectClaimForUri,
-  makeSelectContentTypeForUri,
-  makeSelectMetadataForUri,
-  makeSelectFileInfoForUri,
-} from 'lbry-redux';
+import { makeSelectClaimForUri, makeSelectContentTypeForUri, makeSelectMetadataForUri } from 'redux/selectors/claims';
+import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
 import { selectUser } from 'redux/selectors/user';
 import { doOpenFileInFolder } from 'redux/actions/file';
 import FileDetails from './view';
@@ -17,8 +13,8 @@ const select = (state, props) => ({
   user: selectUser(state),
 });
 
-const perform = dispatch => ({
-  openFolder: path => dispatch(doOpenFileInFolder(path)),
+const perform = (dispatch) => ({
+  openFolder: (path) => dispatch(doOpenFileInFolder(path)),
 });
 
 export default connect(select, perform)(FileDetails);

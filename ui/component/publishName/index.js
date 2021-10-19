@@ -1,12 +1,11 @@
 import { connect } from 'react-redux';
+import { doUpdatePublishForm, doPrepareEdit } from 'redux/actions/publish';
 import {
   makeSelectPublishFormValue,
   selectIsStillEditing,
   selectMyClaimForUri,
   selectTakeOverAmount,
-  doUpdatePublishForm,
-  doPrepareEdit,
-} from 'lbry-redux';
+} from 'redux/selectors/publish';
 import { selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
 import { doSetActiveChannel } from 'redux/actions/app';
 import PublishPage from './view';

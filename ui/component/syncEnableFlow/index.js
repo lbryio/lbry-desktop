@@ -1,4 +1,4 @@
-import { SETTINGS } from 'lbry-redux';
+import * as SETTINGS from 'constants/settings';
 import { connect } from 'react-redux';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import {
@@ -13,7 +13,7 @@ import { doSetWalletSyncPreference } from 'redux/actions/settings';
 import SyncToggle from './view';
 import { doGetAndPopulatePreferences } from 'redux/actions/app';
 
-const select = state => ({
+const select = (state) => ({
   syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
   hasSyncedWallet: selectHasSyncedWallet(state),
   hasSyncChanged: selectHashChanged(state),
@@ -23,8 +23,8 @@ const select = state => ({
   language: selectLanguage(state),
 });
 
-const perform = dispatch => ({
-  setSyncEnabled: value => dispatch(doSetWalletSyncPreference(value)),
+const perform = (dispatch) => ({
+  setSyncEnabled: (value) => dispatch(doSetWalletSyncPreference(value)),
   checkSync: () => dispatch(doCheckSync()),
   getSync: (pw, cb) => dispatch(doGetSync(pw, cb)),
   updatePreferences: () => dispatch(doGetAndPopulatePreferences()),

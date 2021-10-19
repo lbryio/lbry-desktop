@@ -1,13 +1,12 @@
 import { connect } from 'react-redux';
+import { selectBalance } from 'redux/selectors/wallet';
 import {
   makeSelectPublishFormValue,
   selectMyClaimForUri,
   selectIsResolvingPublishUris,
   selectTakeOverAmount,
-  doUpdatePublishForm,
-  doPrepareEdit,
-  selectBalance,
-} from 'lbry-redux';
+} from 'redux/selectors/publish';
+import { doUpdatePublishForm, doPrepareEdit } from 'redux/actions/publish';
 import PublishPage from './view';
 
 const select = (state) => ({

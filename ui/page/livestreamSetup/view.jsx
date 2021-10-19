@@ -9,7 +9,7 @@ import Spinner from 'component/spinner';
 import Button from 'component/button';
 import ChannelSelector from 'component/channelSelector';
 import Yrbl from 'component/yrbl';
-import { Lbry } from 'lbry-redux';
+import Lbry from 'lbry';
 import { toHex } from 'util/hex';
 import { FormField } from 'component/common/form';
 import CopyableText from 'component/copyableText';

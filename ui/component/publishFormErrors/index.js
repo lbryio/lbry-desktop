@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectPublishFormValue, selectIsStillEditing } from 'lbry-redux';
+import { makeSelectPublishFormValue, selectIsStillEditing } from 'redux/selectors/publish';
 import PublishPage from './view';
 
 const select = (state) => ({

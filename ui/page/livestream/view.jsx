@@ -5,7 +5,7 @@ import Page from 'component/page';
 import LivestreamLayout from 'component/livestreamLayout';
 import LivestreamComments from 'component/livestreamComments';
 import analytics from 'analytics';
-import { Lbry } from 'lbry-redux';
+import Lbry from 'lbry';
 
 type Props = {
   uri: string,

@@ -1,27 +1,28 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
+import * as ABANDON_STATES from 'constants/abandon_states';
 // @if TARGET='app'
 import { shell } from 'electron';
 // @endif
-import {
-  Lbry,
-  batchActions,
-  doAbandonClaim,
-  makeSelectFileInfoForUri,
-  selectDownloadingByOutpoint,
-  makeSelectStreamingUrlForUri,
-  makeSelectClaimForUri,
-  selectBalance,
-  ABANDON_STATES,
-} from 'lbry-redux';
+import Lbry from 'lbry';
+import { makeSelectClaimForUri } from 'redux/selectors/claims';
+import { doAbandonClaim } from 'redux/actions/claims';
+import { batchActions } from 'util/batch-actions';
+
 import { doHideModal } from 'redux/actions/app';
 import { goBack } from 'connected-react-router';
 import { doSetPlayingUri } from 'redux/actions/content';
 import { selectPlayingUri } from 'redux/selectors/content';
 import { doToast } from 'redux/actions/notifications';
+import { selectBalance } from 'redux/selectors/wallet';
+import {
+  makeSelectFileInfoForUri,
+  selectDownloadingByOutpoint,
+  makeSelectStreamingUrlForUri,
+} from 'redux/selectors/file_info';
+
 type Dispatch = (action: any) => any;
 type GetState = () => { file: FileState };
-
 export function doOpenFileInFolder(path: string) {
   return () => {
     shell.showItemInFolder(path);

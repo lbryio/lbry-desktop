@@ -2,11 +2,11 @@ import { connect } from 'react-redux';
 import { doDeleteFileAndMaybeGoBack } from 'redux/actions/file';
 import {
   makeSelectTitleForUri,
-  doResolveUri,
   makeSelectClaimForUri,
   makeSelectIsAbandoningClaimForUri,
   makeSelectClaimIsMine,
-} from 'lbry-redux';
+} from 'redux/selectors/claims';
+import { doResolveUri } from 'redux/actions/claims';
 import { doHideModal } from 'redux/actions/app';
 import ModalRemoveFile from './view';
 
@@ -17,7 +17,7 @@ const select = (state, props) => ({
   isAbandoning: makeSelectIsAbandoningClaimForUri(props.uri)(state),
 });
 
-const perform = dispatch => ({
+const perform = (dispatch) => ({
   closeModal: () => dispatch(doHideModal()),
   doResolveUri: (uri) => dispatch(doResolveUri(uri)),
   deleteFile: (uri, deleteFromComputer, abandonClaim, doGoBack) => {

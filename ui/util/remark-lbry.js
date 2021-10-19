@@ -1,4 +1,4 @@
-import { parseURI } from 'lbry-redux';
+import { parseURI } from 'util/lbryURI';
 import visit from 'unist-util-visit';
 
 const protocol = 'lbry://';

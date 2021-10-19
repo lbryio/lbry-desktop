@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectNameForCollectionId } from 'lbry-redux';
+import { makeSelectNameForCollectionId } from 'redux/selectors/collections';
 import { doOpenModal } from 'redux/actions/app';
 import { selectListShuffle } from 'redux/selectors/content';
 import { doToggleLoopList, doToggleShuffleList } from 'redux/actions/content';

@@ -1,12 +1,7 @@
 import { connect } from 'react-redux';
-import {
-  makeSelectClaimForUri,
-  makeSelectThumbnailForUri,
-  makeSelectContentTypeForUri,
-  makeSelectDownloadPathForUri,
-  makeSelectStreamingUrlForUri,
-  SETTINGS,
-} from 'lbry-redux';
+import { makeSelectDownloadPathForUri, makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
+import { makeSelectClaimForUri, makeSelectThumbnailForUri, makeSelectContentTypeForUri } from 'redux/selectors/claims';
+import * as SETTINGS from 'constants/settings';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { makeSelectFileRenderModeForUri, makeSelectFileExtensionForUri } from 'redux/selectors/content';
 import FileRender from './view';

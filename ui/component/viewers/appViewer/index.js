@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimForUri, makeSelectContentTypeForUri } from 'lbry-redux';
+import { makeSelectClaimForUri, makeSelectContentTypeForUri } from 'redux/selectors/claims';
 import AppViewer from './view';
 
 const select = (state, props) => ({
@@ -7,9 +7,6 @@ const select = (state, props) => ({
   contentType: makeSelectContentTypeForUri(props.uri)(state),
 });
 
-const perform = dispatch => ({});
+const perform = (dispatch) => ({});
 
-export default connect(
-  select,
-  perform
-)(AppViewer);
+export default connect(select, perform)(AppViewer);

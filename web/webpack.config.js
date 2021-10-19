@@ -149,7 +149,11 @@ const webConfig = {
         test: /\.jsx?$/,
         options: {
           presets: ['@babel/env', '@babel/react', '@babel/flow'],
-          plugins: ['@babel/plugin-proposal-optional-chaining', '@babel/plugin-proposal-object-rest-spread', '@babel/plugin-proposal-class-properties'],
+          plugins: [
+            '@babel/plugin-proposal-optional-chaining',
+            '@babel/plugin-proposal-object-rest-spread',
+            '@babel/plugin-proposal-class-properties',
+          ],
         },
       },
       {
@@ -170,7 +174,7 @@ const webConfig = {
     modules: [UI_ROOT, __dirname],
 
     alias: {
-      lbryinc: 'lbryinc/dist/bundle.es.js',
+      // lbryinc: '../extras/lbryinc',
       electron: `${WEB_PLATFORM_ROOT}/stubs/electron.js`,
       fs: `${WEB_PLATFORM_ROOT}/stubs/fs.js`,
     },

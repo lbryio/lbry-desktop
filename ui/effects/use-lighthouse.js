@@ -2,7 +2,7 @@
 import React from 'react';
 import { lighthouse } from 'redux/actions/search';
 import { getSearchQueryString } from 'util/query-params';
-import { isURIValid } from 'lbry-redux';
+import { isURIValid } from 'util/lbryURI';
 import useThrottle from './use-throttle';
 
 export default function useLighthouse(

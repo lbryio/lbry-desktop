@@ -2,7 +2,8 @@ import { connect } from 'react-redux';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import { withRouter } from 'react-router';
-import { doResolveUris, makeSelectClaimForUri } from 'lbry-redux';
+import { makeSelectClaimForUri } from 'redux/selectors/claims';
+import { doResolveUris } from 'redux/actions/claims';
 import { makeSelectTopLevelCommentsForUri } from 'redux/selectors/comments';
 import ChannelMentionSuggestions from './view';
 

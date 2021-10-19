@@ -1,10 +1,7 @@
 import { connect } from 'react-redux';
-import {
-  selectIsStillEditing,
-  makeSelectPublishFormValue,
-  doUpdatePublishForm,
-  makeSelectStreamingUrlForUri,
-} from 'lbry-redux';
+import { doUpdatePublishForm } from 'redux/actions/publish';
+import { selectIsStillEditing, makeSelectPublishFormValue } from 'redux/selectors/publish';
+import { makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
 import { doPlayUri } from 'redux/actions/content';
 import PostEditor from './view';
 
@@ -15,9 +12,9 @@ const select = (state, props) => ({
   isStillEditing: selectIsStillEditing(state),
 });
 
-const perform = dispatch => ({
-  updatePublishForm: value => dispatch(doUpdatePublishForm(value)),
-  fetchStreamingUrl: uri => dispatch(doPlayUri(uri)),
+const perform = (dispatch) => ({
+  updatePublishForm: (value) => dispatch(doUpdatePublishForm(value)),
+  fetchStreamingUrl: (uri) => dispatch(doPlayUri(uri)),
 });
 
 export default connect(select, perform)(PostEditor);

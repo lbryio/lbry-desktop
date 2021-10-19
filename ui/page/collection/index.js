@@ -3,22 +3,24 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import CollectionPage from './view';
 import {
-  doFetchItemsInCollection,
-  makeSelectCollectionForId,
-  makeSelectUrlsForCollectionId,
-  makeSelectIsResolvingCollectionForId,
   makeSelectTitleForUri,
   makeSelectThumbnailForUri,
   makeSelectClaimIsMine,
   makeSelectClaimIsPending,
   makeSelectClaimForClaimId,
-  makeSelectCollectionIsMine,
-  doCollectionDelete,
-  doCollectionEdit,
   makeSelectChannelForClaimUri,
+} from 'redux/selectors/claims';
+
+import {
+  makeSelectCollectionForId,
+  makeSelectUrlsForCollectionId,
+  makeSelectIsResolvingCollectionForId,
+  makeSelectCollectionIsMine,
   makeSelectCountForCollectionId,
   makeSelectEditedCollectionForId,
-} from 'lbry-redux';
+} from 'redux/selectors/collections';
+
+import { doFetchItemsInCollection, doCollectionDelete, doCollectionEdit } from 'redux/actions/collections';
 import { selectUser } from 'redux/selectors/user';
 
 const select = (state, props) => {

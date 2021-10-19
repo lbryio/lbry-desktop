@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { doOpenModal } from 'redux/actions/app';
-import { makeSelectClaimForClaimId } from 'lbry-redux';
+import { makeSelectClaimForClaimId } from 'redux/selectors/claims';
 import TransactionListTableItem from './view';
 
 const select = (state, props) => {

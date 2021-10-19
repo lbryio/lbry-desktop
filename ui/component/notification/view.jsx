@@ -10,7 +10,7 @@ import Button from 'component/button';
 import ChannelThumbnail from 'component/channelThumbnail';
 import { formatLbryUrlForWeb } from 'util/url';
 import { useHistory } from 'react-router';
-import { parseURI } from 'lbry-redux';
+import { parseURI } from 'util/lbryURI';
 import { PAGE_VIEW_QUERY, DISCUSSION_PAGE } from 'page/channel/view';
 import FileThumbnail from 'component/fileThumbnail';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
@@ -107,10 +107,12 @@ export default function Notification(props: Props) {
   }
 
   let channelName;
-  try {
-    const { claimName } = parseURI(channelUrl);
-    channelName = claimName;
-  } catch (e) {}
+  if (channelUrl) {
+    try {
+      const { claimName } = parseURI(channelUrl);
+      channelName = claimName;
+    } catch (e) {}
+  }
 
   const notificationTitle = notification_parameters.device.title;
   const titleSplit = notificationTitle.split(' ');

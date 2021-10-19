@@ -1,6 +1,6 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
-import { parseURI, normalizeURI, isURIEqual, ACTIONS as LBRY_REDUX_ACTIONS } from 'lbry-redux';
+import { parseURI, normalizeURI, isURIEqual } from 'util/lbryURI';
 import { handleActions } from 'util/redux-utils';
 
 const defaultState: SubscriptionState = {
@@ -80,7 +80,7 @@ export default handleActions(
       ...state,
       viewMode: action.data,
     }),
-    [LBRY_REDUX_ACTIONS.USER_STATE_POPULATE]: (
+    [ACTIONS.USER_STATE_POPULATE]: (
       state: SubscriptionState,
       action: { data: { subscriptions: ?Array<string>, following: ?Array<Subscription> } }
     ) => {
@@ -99,10 +99,9 @@ export default handleActions(
       } else {
         const parsedSubscriptions = subscriptions.map((uri) => {
           const { channelName } = parseURI(uri);
-
           return {
             uri,
-            channelName: `@${channelName}`,
+            channelName: channelName ? `@${channelName}` : '',
           };
         });
         newSubscriptions = parsedSubscriptions;

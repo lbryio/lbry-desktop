@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import { makeSelectDateForUri, SETTINGS } from 'lbry-redux';
+import { makeSelectDateForUri } from 'redux/selectors/claims';
+import * as SETTINGS from 'constants/settings';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import DateTime from './view';
 

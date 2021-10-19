@@ -4,23 +4,24 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { PAGE_SIZE } from 'constants/claim';
 import {
-  doResolveUri,
   makeSelectClaimForUri,
   makeSelectIsUriResolving,
   makeSelectTotalPagesForChannel,
   makeSelectTitleForUri,
-  normalizeURI,
   makeSelectClaimIsMine,
   makeSelectClaimIsPending,
   makeSelectClaimIsStreamPlaceholder,
-  doClearPublish,
-  doPrepareEdit,
-  doFetchItemsInCollection,
+} from 'redux/selectors/claims';
+import {
   makeSelectCollectionForId,
   makeSelectUrlsForCollectionId,
   makeSelectIsResolvingCollectionForId,
-  COLLECTIONS_CONSTS,
-} from 'lbry-redux';
+} from 'redux/selectors/collections';
+import { doResolveUri } from 'redux/actions/claims';
+import { doClearPublish, doPrepareEdit } from 'redux/actions/publish';
+import { doFetchItemsInCollection } from 'redux/actions/collections';
+import { normalizeURI } from 'util/lbryURI';
+import * as COLLECTIONS_CONSTS from 'constants/collections';
 import { push } from 'connected-react-router';
 import { makeSelectChannelInSubscriptions } from 'redux/selectors/subscriptions';
 import { selectBlackListedOutpoints } from 'lbryinc';

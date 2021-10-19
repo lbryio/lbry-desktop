@@ -1,7 +1,7 @@
 // @flow
 import { SETTINGS_GRP } from 'constants/settings';
 import React from 'react';
-import { SETTINGS } from 'lbry-redux';
+import * as SETTINGS from 'constants/settings';
 import Card from 'component/common/card';
 import { FormField } from 'component/common/form';
 import HomepageSelector from 'component/homepageSelector';

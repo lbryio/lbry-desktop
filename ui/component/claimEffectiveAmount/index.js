@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimForUri } from 'lbry-redux';
+import { makeSelectClaimForUri } from 'redux/selectors/claims';
 import ClaimEffectiveAmount from './view';
 
 const select = (state, props) => ({

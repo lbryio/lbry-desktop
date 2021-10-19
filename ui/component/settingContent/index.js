@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import { selectMyChannelUrls, SETTINGS } from 'lbry-redux';
+import { selectMyChannelUrls } from 'redux/selectors/claims';
+import * as SETTINGS from 'constants/settings';
 import { doOpenModal } from 'redux/actions/app';
 import { doSetPlayingUri } from 'redux/actions/content';
 import { doSetClientSetting } from 'redux/actions/settings';

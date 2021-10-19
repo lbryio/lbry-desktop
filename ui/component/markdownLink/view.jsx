@@ -2,7 +2,7 @@
 import { KNOWN_APP_DOMAINS } from 'config';
 import * as ICONS from 'constants/icons';
 import * as React from 'react';
-import { isURIValid } from 'lbry-redux';
+import { isURIValid } from 'util/lbryURI';
 import Button from 'component/button';
 import ClaimLink from 'component/claimLink';
 

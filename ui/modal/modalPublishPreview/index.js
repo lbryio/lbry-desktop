@@ -1,14 +1,9 @@
 import { connect } from 'react-redux';
 import { doHideModal } from 'redux/actions/app';
 import ModalPublishPreview from './view';
-import {
-  makeSelectPublishFormValue,
-  selectPublishFormValues,
-  selectIsStillEditing,
-  selectMyChannelClaims,
-  makeSelectClaimIsStreamPlaceholder,
-  SETTINGS,
-} from 'lbry-redux';
+import { makeSelectPublishFormValue, selectPublishFormValues, selectIsStillEditing } from 'redux/selectors/publish';
+import { selectMyChannelClaims, makeSelectClaimIsStreamPlaceholder } from 'redux/selectors/claims';
+import * as SETTINGS from 'constants/settings';
 import { selectFfmpegStatus, makeSelectClientSetting } from 'redux/selectors/settings';
 import { doPublishDesktop } from 'redux/actions/publish';
 import { doSetClientSetting } from 'redux/actions/settings';

@@ -5,14 +5,14 @@ import UriIndicator from 'component/uriIndicator';
 import DateTime from 'component/dateTime';
 import Button from 'component/button';
 import FileViewCountInline from 'component/fileViewCountInline';
-import { parseURI } from 'lbry-redux';
+import { parseURI } from 'util/lbryURI';
 
 type Props = {
   uri: string,
   claim: ?Claim,
   pending?: boolean,
   type: string,
-  beginPublish: (string) => void,
+  beginPublish: (?string) => void,
   isLivestream: boolean,
   fetchSubCount: (string) => void,
   subCount: number,

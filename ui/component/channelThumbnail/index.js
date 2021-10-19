@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import { makeSelectThumbnailForUri, doResolveUri, makeSelectClaimForUri, makeSelectIsUriResolving } from 'lbry-redux';
+import { makeSelectThumbnailForUri, makeSelectClaimForUri, makeSelectIsUriResolving } from 'redux/selectors/claims';
+import { doResolveUri } from 'redux/actions/claims';
 import ChannelThumbnail from './view';
 
 const select = (state, props) => ({

@@ -1,6 +1,6 @@
 // @flow
 import React, { useState } from 'react';
-import { isNameValid } from 'lbry-redux';
+import { isNameValid } from 'util/lbryURI';
 import Button from 'component/button';
 import { Form, FormField } from 'component/common/form';
 import { INVALID_NAME_ERROR } from 'constants/claim';
@@ -34,7 +34,7 @@ function UserFirstChannel(props: Props) {
   const [nameError, setNameError] = useState(undefined);
 
   function handleCreateChannel() {
-    createChannel(`@${channel}`, DEFAULT_BID_FOR_FIRST_CHANNEL).then(channelClaim => {
+    createChannel(`@${channel}`, DEFAULT_BID_FOR_FIRST_CHANNEL).then((channelClaim) => {
       if (channelClaim) {
         analytics.apiLogPublish(channelClaim);
       }
@@ -44,7 +44,7 @@ function UserFirstChannel(props: Props) {
   function handleChannelChange(e) {
     const { value } = e.target;
     setChannel(value);
-    if (!isNameValid(value, false)) {
+    if (!isNameValid(value)) {
       setNameError(INVALID_NAME_ERROR);
     } else {
       setNameError();

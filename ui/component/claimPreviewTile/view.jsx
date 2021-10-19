@@ -12,7 +12,7 @@ import SubscribeButton from 'component/subscribeButton';
 import useGetThumbnail from 'effects/use-get-thumbnail';
 import { formatLbryUrlForWeb, generateListSearchUrlParams } from 'util/url';
 import { formatClaimPreviewTitle } from 'util/formatAriaLabel';
-import { parseURI, isURIEqual } from 'lbry-redux';
+import { parseURI, isURIEqual } from 'util/lbryURI';
 import PreviewOverlayProperties from 'component/previewOverlayProperties';
 import FileDownloadLink from 'component/fileDownloadLink';
 import FileWatchLaterLink from 'component/fileWatchLaterLink';
@@ -191,9 +191,11 @@ function ClaimPreviewTile(props: Props) {
         </div>
         <div className="placeholder__wrapper">
           <div className="placeholder claim-tile__title" />
-          <div className={classnames('claim-tile__info placeholder', {
-            'contains_view_count': shouldShowViewCount,
-          })} />
+          <div
+            className={classnames('claim-tile__info placeholder', {
+              contains_view_count: shouldShowViewCount,
+            })}
+          />
         </div>
       </li>
     );
@@ -253,9 +255,11 @@ function ClaimPreviewTile(props: Props) {
         <ClaimMenuList uri={uri} collectionId={listId} channelUri={channelUri} />
       </div>
       <div>
-        <div className={classnames('claim-tile__info', {
-          'contains_view_count': shouldShowViewCount,
-        })}>
+        <div
+          className={classnames('claim-tile__info', {
+            contains_view_count: shouldShowViewCount,
+          })}
+        >
           {isChannel ? (
             <div className="claim-tile__about--channel">
               <SubscribeButton uri={repostedChannelUri || uri} />

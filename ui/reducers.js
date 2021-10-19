@@ -1,7 +1,11 @@
 import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
-import { claimsReducer, fileInfoReducer, walletReducer, publishReducer, collectionsReducer } from 'lbry-redux';
-import { costInfoReducer, blacklistReducer, filteredReducer, homepageReducer, statsReducer, webReducer } from 'lbryinc';
+import { costInfoReducer, blacklistReducer, filteredReducer, statsReducer, webReducer } from 'lbryinc';
+import { claimsReducer } from 'redux/reducers/claims';
+import { fileInfoReducer } from 'redux/reducers/file_info';
+import { walletReducer } from 'redux/reducers/wallet';
+import { publishReducer } from 'redux/reducers/publish';
+import { collectionsReducer } from 'redux/reducers/collections';
 import appReducer from 'redux/reducers/app';
 import tagsReducer from 'redux/reducers/tags';
 import contentReducer from 'redux/reducers/content';
@@ -30,7 +34,6 @@ export default (history) =>
     content: contentReducer,
     costInfo: costInfoReducer,
     fileInfo: fileInfoReducer,
-    homepage: homepageReducer,
     livestream: livestreamReducer,
     notifications: notificationsReducer,
     publish: publishReducer,

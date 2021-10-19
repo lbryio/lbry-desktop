@@ -4,9 +4,9 @@ import {
   makeSelectClaimIsMine,
   selectMyChannelClaims,
   selectFetchingMyChannels,
-  doSendTip,
   makeSelectTagInClaimOrChannelForUri,
-} from 'lbry-redux';
+} from 'redux/selectors/claims';
+import { doSendTip } from 'redux/actions/wallet';
 import { doCommentCreate, doFetchCreatorSettings, doCommentById } from 'redux/actions/comments';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { selectSettingsByChannelId } from 'redux/selectors/comments';

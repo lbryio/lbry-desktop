@@ -3,10 +3,10 @@ import {
   makeSelectClaimForUri,
   makeSelectContentTypeForUri,
   makeSelectMetadataForUri,
-  makeSelectFileInfoForUri,
-  makeSelectPendingAmountByUri,
   makeSelectClaimIsMine,
-} from 'lbry-redux';
+} from 'redux/selectors/claims';
+import { makeSelectPendingAmountByUri } from 'redux/selectors/wallet';
+import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
 import { selectUser } from 'redux/selectors/user';
 import { doOpenModal } from 'redux/actions/app';
 
@@ -22,7 +22,7 @@ const select = (state, props) => ({
   claimIsMine: makeSelectClaimIsMine(props.uri)(state),
 });
 
-const perform = dispatch => ({
+const perform = (dispatch) => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
 });
 

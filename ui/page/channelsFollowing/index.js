@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { SETTINGS } from 'lbry-redux';
+import * as SETTINGS from 'constants/settings';
 import { doFetchActiveLivestreams } from 'redux/actions/livestream';
 import { selectActiveLivestreams } from 'redux/selectors/livestream';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';

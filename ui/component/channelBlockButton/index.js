@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimIdForUri } from 'lbry-redux';
+import { makeSelectClaimIdForUri } from 'redux/selectors/claims';
 import {
   doCommentModUnBlock,
   doCommentModBlock,

@@ -6,7 +6,7 @@ import { Modal } from 'modal/modal';
 import Card from 'component/common/card';
 import I18nMessage from 'component/i18nMessage';
 import Button from 'component/button';
-import { isURIEqual } from 'lbry-redux';
+import { isURIEqual } from 'util/lbryURI';
 
 // This number is tied to transitions in scss/purchase.scss
 const ANIMATION_LENGTH = 2500;

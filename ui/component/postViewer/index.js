@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimForUri, makeSelectClaimIsMine } from 'lbry-redux';
+import { makeSelectClaimForUri, makeSelectClaimIsMine } from 'redux/selectors/claims';
 import PostViewer from './view';
 import { doOpenModal } from 'redux/actions/app';
 

@@ -1,11 +1,11 @@
 import { connect } from 'react-redux';
+import { doResolveUris } from 'redux/actions/claims';
 import {
-  doResolveUris,
   makeSelectClaimForUri,
   makeSelectClaimIsMine,
   selectFetchingMyChannels,
   selectMyChannelClaims,
-} from 'lbry-redux';
+} from 'redux/selectors/claims';
 import {
   makeSelectTopLevelCommentsForUri,
   makeSelectTopLevelTotalPagesForUri,

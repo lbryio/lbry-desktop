@@ -3,20 +3,21 @@ import {
   makeSelectTitleForUri,
   makeSelectThumbnailForUri,
   makeSelectMetadataItemForUri,
-  doCollectionPublish,
-  doCollectionPublishUpdate,
   makeSelectAmountForUri,
   makeSelectClaimForUri,
   selectUpdateCollectionError,
   selectUpdatingCollection,
   selectCreateCollectionError,
-  selectBalance,
   selectCreatingCollection,
+} from 'redux/selectors/claims';
+import {
   makeSelectCollectionForId,
   makeSelectUrlsForCollectionId,
   makeSelectClaimIdsForCollectionId,
-  ACTIONS as LBRY_REDUX_ACTIONS,
-} from 'lbry-redux';
+} from 'redux/selectors/collections';
+import { doCollectionPublish, doCollectionPublishUpdate } from 'redux/actions/claims';
+import { selectBalance } from 'redux/selectors/wallet';
+import * as ACTIONS from 'constants/action_types';
 
 import CollectionForm from './view';
 import { selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
@@ -46,7 +47,7 @@ const select = (state, props) => ({
 const perform = (dispatch) => ({
   publishCollectionUpdate: (params) => dispatch(doCollectionPublishUpdate(params)),
   publishCollection: (params, collectionId) => dispatch(doCollectionPublish(params, collectionId)),
-  clearCollectionErrors: () => dispatch({ type: LBRY_REDUX_ACTIONS.CLEAR_COLLECTION_ERRORS }),
+  clearCollectionErrors: () => dispatch({ type: ACTIONS.CLEAR_COLLECTION_ERRORS }),
   setActiveChannel: (claimId) => dispatch(doSetActiveChannel(claimId)),
   setIncognito: (incognito) => dispatch(doSetIncognito(incognito)),
 });

@@ -2,7 +2,7 @@
 import * as ICONS from 'constants/icons';
 import React, { useEffect } from 'react';
 import { withRouter } from 'react-router';
-import { TXO_LIST as TXO } from 'lbry-redux';
+import * as TXO from 'constants/txo_list';
 import TransactionListTable from 'component/transactionListTable';
 import Paginate from 'component/common/paginate';
 import { FormField } from 'component/common/form-components/form-field';
@@ -96,7 +96,11 @@ function TxoList(props: Props) {
         }
 
         // TODO: remove this once pagination is implemented
-        if (accountTransactionResponse && accountTransactionResponse.length && accountTransactionResponse.length > 100) {
+        if (
+          accountTransactionResponse &&
+          accountTransactionResponse.length &&
+          accountTransactionResponse.length > 100
+        ) {
           accountTransactionResponse.length = 100;
         }
 

@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import { makeSelectFileInfoForUri, makeSelectStreamingUrlForUri, makeSelectClaimWasPurchased } from 'lbry-redux';
+import { makeSelectFileInfoForUri, makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
+import { makeSelectClaimWasPurchased } from 'redux/selectors/claims';
 import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
 import { makeSelectFileRenderModeForUri, selectPrimaryUri } from 'redux/selectors/content';
 import { withRouter } from 'react-router';

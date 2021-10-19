@@ -69,7 +69,7 @@ let baseConfig = {
       },
     ],
   },
-  // Allows imports for all directories inside '/ui'
+  // Allows imports for all directories inside '/ui' :)
   resolve: {
     modules: [UI_ROOT, 'node_modules', __dirname],
     extensions: ['.js', '.jsx', '.json', '.scss'],
@@ -78,7 +78,8 @@ let baseConfig = {
       homepage: 'util/homepage.js',
       homepages: process.env.CUSTOM_HOMEPAGE === 'true' ? path.resolve(__dirname, 'custom/homepages/v2/index.js') : ('homepages/index.js'),
       memes: process.env.CUSTOM_HOMEPAGE === 'true' ? path.resolve(__dirname, 'custom/homepages/meme/index.js') : path.resolve(__dirname, 'homepages/meme/index.js'),
-      lbryinc: 'lbryinc/dist/bundle.es.js',
+      lbryinc: 'extras/lbryinc',
+      recsys: 'extras/recsys',
       // Build optimizations for 'redux-persist-transform-filter'
       'redux-persist-transform-filter': 'redux-persist-transform-filter/index.js',
       'lodash.get': 'lodash-es/get',

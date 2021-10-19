@@ -1,5 +1,5 @@
 // @flow
-import { SETTINGS } from 'lbry-redux';
+import * as SETTINGS from 'constants/settings';
 import React from 'react';
 import { Modal } from 'modal/modal';
 import Card from 'component/common/card';

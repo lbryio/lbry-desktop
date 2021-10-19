@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import { doSendDraftTransaction, makeSelectClaimForUri, doSendTip } from 'lbry-redux';
+import { doSendDraftTransaction, doSendTip } from 'redux/actions/wallet';
+import { makeSelectClaimForUri } from 'redux/selectors/claims';
 import { doHideModal } from 'redux/actions/app';
 import ModalConfirmTransaction from './view';
 import { selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';

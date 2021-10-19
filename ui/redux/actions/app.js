@@ -6,25 +6,16 @@ import { ipcRenderer, remote } from 'electron';
 import path from 'path';
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
+import * as SETTINGS from 'constants/settings';
+import * as DAEMON_SETTINGS from 'constants/daemon_settings';
+import * as SHARED_PREFERENCES from 'constants/shared_preferences';
 import { DOMAIN, SIMPLE_SITE } from 'config';
-import {
-  Lbry,
-  doBalanceSubscribe,
-  doFetchFileInfos,
-  makeSelectClaimForUri,
-  makeSelectClaimIsMine,
-  doPopulateSharedUserState,
-  doFetchChannelListMine,
-  doFetchCollectionListMine,
-  doClearPublish,
-  doPreferenceGet,
-  doClearSupport,
-  SHARED_PREFERENCES,
-  DAEMON_SETTINGS,
-  SETTINGS,
-  selectMyChannelClaims,
-  doCheckPendingClaims,
-} from 'lbry-redux';
+import Lbry from 'lbry';
+import { doFetchChannelListMine, doFetchCollectionListMine, doCheckPendingClaims } from 'redux/actions/claims';
+import { makeSelectClaimForUri, makeSelectClaimIsMine, selectMyChannelClaims } from 'redux/selectors/claims';
+import { doFetchFileInfos } from 'redux/actions/file_info';
+import { doClearSupport, doBalanceSubscribe } from 'redux/actions/wallet';
+import { doClearPublish } from 'redux/actions/publish';
 import { Lbryio } from 'lbryinc';
 import { selectFollowedTagsList } from 'redux/selectors/tags';
 import { doToast, doError, doNotificationList } from 'redux/actions/notifications';
@@ -51,8 +42,7 @@ import {
 } from 'redux/selectors/app';
 import { selectDaemonSettings, makeSelectClientSetting } from 'redux/selectors/settings';
 import { selectUser, selectUserVerifiedEmail } from 'redux/selectors/user';
-// import { selectDaemonSettings } from 'redux/selectors/settings';
-import { doSyncLoop, doSetPrefsReady } from 'redux/actions/sync';
+import { doSyncLoop, doSetPrefsReady, doPreferenceGet, doPopulateSharedUserState } from 'redux/actions/sync';
 import { doAuthenticate } from 'redux/actions/user';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import analytics, { SHARE_INTERNAL } from 'analytics';

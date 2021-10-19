@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
-import { THUMBNAIL_STATUSES, isNameValid } from 'lbry-redux';
+import * as THUMBNAIL_STATUSES from 'constants/thumbnail_upload_statuses';
+import { isNameValid } from 'util/lbryURI';
 import { INVALID_NAME_ERROR } from 'constants/claim';
 
 type Props = {
@@ -42,7 +43,7 @@ function PublishFormErrors(props: Props) {
       {waitForFile && <div>{__('Choose a replay file, or select None')}</div>}
       {!title && <div>{__('A title is required')}</div>}
       {!name && <div>{__('A URL is required')}</div>}
-      {!isNameValid(name, false) && INVALID_NAME_ERROR}
+      {name && !isNameValid(name) && INVALID_NAME_ERROR}
       {!bid && <div>{__('A deposit amount is required')}</div>}
       {bidError && <div>{__('Please check your deposit amount.')}</div>}
       {isUploadingThumbnail && <div>{__('Please wait for thumbnail to finish uploading')}</div>}

@@ -7,7 +7,7 @@ import {
   makeSelectTotalCommentsCountForUri,
   makeSelectTopLevelTotalPagesForUri,
 } from 'redux/selectors/comments';
-import { selectClaimsById } from 'lbry-redux';
+import { selectClaimsById } from 'redux/selectors/claims';
 
 import OwnComments from './view';
 

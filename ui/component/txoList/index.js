@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { doOpenModal } from 'redux/actions/app';
+import { doFetchTxoPage, doFetchTransactions, doUpdateTxoPageParams } from 'redux/actions/wallet';
 import {
   selectIsFetchingTxos,
   selectIsFetchingTransactions,
@@ -8,10 +9,7 @@ import {
   selectTxoPage,
   selectTxoPageNumber,
   selectTxoItemCount,
-  doFetchTxoPage,
-  doFetchTransactions,
-  doUpdateTxoPageParams,
-} from 'lbry-redux';
+} from 'redux/selectors/wallet';
 import { withRouter } from 'react-router';
 import TxoList from './view';
 
