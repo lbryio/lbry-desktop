@@ -19,7 +19,7 @@ import Lbry, { apiCall } from 'lbry';
 import { isURIValid } from 'util/lbryURI';
 import { setSearchApi } from 'redux/actions/search';
 import { doSetLanguage, doFetchLanguage, doUpdateIsNightAsync } from 'redux/actions/settings';
-import { Lbryio, doBlackListedOutpointsSubscribe, doFilteredOutpointsSubscribe, testTheThing } from 'lbryinc';
+import { Lbryio, doBlackListedOutpointsSubscribe, doFilteredOutpointsSubscribe } from 'lbryinc';
 import rewards from 'rewards';
 import { store, persistor, history } from 'store';
 import app from './app';
@@ -64,8 +64,6 @@ if (process.env.NODE_ENV === 'production') {
     whitelistUrls: [/\/public\/ui.js/],
   });
 }
-
-testTheThing();
 
 if (process.env.SDK_API_URL) {
   console.warn('SDK_API_URL env var is deprecated. Use SDK_API_HOST instead'); // @eslint-disable-line
