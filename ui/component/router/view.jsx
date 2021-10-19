@@ -4,85 +4,75 @@ import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
 
 import * as PAGES from 'constants/pages';
 import { PAGE_TITLE } from 'constants/pageTitles';
-import { lazyImport } from 'util/lazyImport';
 import { LINKED_COMMENT_QUERY_PARAM } from 'constants/comment';
 import { parseURI, isURIValid } from 'util/lbryURI';
 import { SITE_TITLE, WELCOME_VERSION } from 'config';
-import LoadingBarOneOff from 'component/loadingBarOneOff';
 import { GetLinksData } from 'util/buildHomepage';
 
 import HomePage from 'page/home';
-
-// @if TARGET='app'
-const BackupPage = lazyImport(() => import('page/backup' /* webpackChunkName: "backup" */));
-// @endif
+import BackupPage from 'page/backup';
 
 // Chunk: "secondary"
-const SignInPage = lazyImport(() => import('page/signIn' /* webpackChunkName: "secondary" */));
-const SignInWalletPasswordPage = lazyImport(() =>
-  import('page/signInWalletPassword' /* webpackChunkName: "secondary" */)
-);
-const SignUpPage = lazyImport(() => import('page/signUp' /* webpackChunkName: "secondary" */));
-const SignInVerifyPage = lazyImport(() => import('page/signInVerify' /* webpackChunkName: "secondary" */));
+import SignInPage from 'page/signIn';
+import SignInWalletPasswordPage from 'page/signInWalletPassword';
+
+import SignUpPage from 'page/signUp';
+import SignInVerifyPage from 'page/signInVerify';
 
 // Chunk: "wallet/secondary"
-const BuyPage = lazyImport(() => import('page/buy' /* webpackChunkName: "secondary" */));
-const ReceivePage = lazyImport(() => import('page/receive' /* webpackChunkName: "secondary" */));
-const SendPage = lazyImport(() => import('page/send' /* webpackChunkName: "secondary" */));
-const SwapPage = lazyImport(() => import('page/swap' /* webpackChunkName: "secondary" */));
-const WalletPage = lazyImport(() => import('page/wallet' /* webpackChunkName: "secondary" */));
+import BuyPage from 'page/buy';
+import ReceivePage from 'page/receive';
+import SendPage from 'page/send';
+import SwapPage from 'page/swap';
+import WalletPage from 'page/wallet';
 
 // Chunk: none
-const NotificationsPage = lazyImport(() => import('page/notifications' /* webpackChunkName: "secondary" */));
-const CollectionPage = lazyImport(() => import('page/collection' /* webpackChunkName: "secondary" */));
-const ChannelNew = lazyImport(() => import('page/channelNew' /* webpackChunkName: "secondary" */));
-const ChannelsFollowingDiscoverPage = lazyImport(() =>
-  import('page/channelsFollowingDiscover' /* webpackChunkName: "secondary" */)
-);
-const ChannelsFollowingPage = lazyImport(() => import('page/channelsFollowing' /* webpackChunkName: "secondary" */));
-const ChannelsPage = lazyImport(() => import('page/channels' /* webpackChunkName: "secondary" */));
-const CheckoutPage = lazyImport(() => import('page/checkoutPage' /* webpackChunkName: "checkoutPage" */));
-const CreatorDashboard = lazyImport(() => import('page/creatorDashboard' /* webpackChunkName: "secondary" */));
-const DiscoverPage = lazyImport(() => import('page/discover' /* webpackChunkName: "secondary" */));
-const EmbedWrapperPage = lazyImport(() => import('page/embedWrapper' /* webpackChunkName: "secondary" */));
-const FileListPublished = lazyImport(() => import('page/fileListPublished' /* webpackChunkName: "secondary" */));
-const FourOhFourPage = lazyImport(() => import('page/fourOhFour' /* webpackChunkName: "fourOhFour" */));
-const HelpPage = lazyImport(() => import('page/help' /* webpackChunkName: "help" */));
-const InvitePage = lazyImport(() => import('page/invite' /* webpackChunkName: "secondary" */));
-const InvitedPage = lazyImport(() => import('page/invited' /* webpackChunkName: "secondary" */));
-const LibraryPage = lazyImport(() => import('page/library' /* webpackChunkName: "secondary" */));
-const ListBlockedPage = lazyImport(() => import('page/listBlocked' /* webpackChunkName: "secondary" */));
-const ListsPage = lazyImport(() => import('page/lists' /* webpackChunkName: "secondary" */));
-const LiveStreamSetupPage = lazyImport(() => import('page/livestreamSetup' /* webpackChunkName: "secondary" */));
-const LivestreamCurrentPage = lazyImport(() => import('page/livestreamCurrent' /* webpackChunkName: "secondary" */));
-const OwnComments = lazyImport(() => import('page/ownComments' /* webpackChunkName: "ownComments" */));
-const PasswordResetPage = lazyImport(() => import('page/passwordReset' /* webpackChunkName: "secondary" */));
-const PasswordSetPage = lazyImport(() => import('page/passwordSet' /* webpackChunkName: "secondary" */));
-const PublishPage = lazyImport(() => import('page/publish' /* webpackChunkName: "secondary" */));
-const ReportContentPage = lazyImport(() => import('page/reportContent' /* webpackChunkName: "secondary" */));
-const ReportPage = lazyImport(() => import('page/report' /* webpackChunkName: "secondary" */));
-const RepostNew = lazyImport(() => import('page/repost' /* webpackChunkName: "secondary" */));
-const RewardsPage = lazyImport(() => import('page/rewards' /* webpackChunkName: "secondary" */));
-const RewardsVerifyPage = lazyImport(() => import('page/rewardsVerify' /* webpackChunkName: "secondary" */));
-const SearchPage = lazyImport(() => import('page/search' /* webpackChunkName: "secondary" */));
-const SettingsStripeCard = lazyImport(() => import('page/settingsStripeCard' /* webpackChunkName: "secondary" */));
-const SettingsStripeAccount = lazyImport(() =>
-  import('page/settingsStripeAccount' /* webpackChunkName: "secondary" */)
-);
-const SettingsCreatorPage = lazyImport(() => import('page/settingsCreator' /* webpackChunkName: "secondary" */));
-const SettingsNotificationsPage = lazyImport(() =>
-  import('page/settingsNotifications' /* webpackChunkName: "secondary" */)
-);
-const SettingsPage = lazyImport(() => import('page/settings' /* webpackChunkName: "secondary" */));
-const ShowPage = lazyImport(() => import('page/show' /* webpackChunkName: "secondary" */));
-const TagsFollowingManagePage = lazyImport(() =>
-  import('page/tagsFollowingManage' /* webpackChunkName: "secondary" */)
-);
-const TagsFollowingPage = lazyImport(() => import('page/tagsFollowing' /* webpackChunkName: "secondary" */));
-const TopPage = lazyImport(() => import('page/top' /* webpackChunkName: "secondary" */));
-const UpdatePasswordPage = lazyImport(() => import('page/passwordUpdate' /* webpackChunkName: "passwordUpdate" */));
-const Welcome = lazyImport(() => import('page/welcome' /* webpackChunkName: "secondary" */));
-const YoutubeSyncPage = lazyImport(() => import('page/youtubeSync' /* webpackChunkName: "secondary" */));
+import NotificationsPage from 'page/notifications';
+import CollectionPage from 'page/collection';
+import ChannelNew from 'page/channelNew';
+import ChannelsFollowingDiscoverPage from 'page/channelsFollowingDiscover';
+
+import ChannelsFollowingPage from 'page/channelsFollowing';
+import ChannelsPage from 'page/channels';
+import CheckoutPage from 'page/checkoutPage';
+import CreatorDashboard from 'page/creatorDashboard';
+import DiscoverPage from 'page/discover';
+import EmbedWrapperPage from 'page/embedWrapper';
+import FileListPublished from 'page/fileListPublished';
+import FourOhFourPage from 'page/fourOhFour';
+import HelpPage from 'page/help';
+import InvitePage from 'page/invite';
+import InvitedPage from 'page/invited';
+import LibraryPage from 'page/library';
+import ListBlockedPage from 'page/listBlocked';
+import ListsPage from 'page/lists';
+import LiveStreamSetupPage from 'page/livestreamSetup';
+import LivestreamCurrentPage from 'page/livestreamCurrent';
+import OwnComments from 'page/ownComments';
+import PasswordResetPage from 'page/passwordReset';
+import PasswordSetPage from 'page/passwordSet';
+import PublishPage from 'page/publish';
+import ReportContentPage from 'page/reportContent';
+import ReportPage from 'page/report';
+import RepostNew from 'page/repost';
+import RewardsPage from 'page/rewards';
+import RewardsVerifyPage from 'page/rewardsVerify';
+import SearchPage from 'page/search';
+import SettingsStripeCard from 'page/settingsStripeCard';
+import SettingsStripeAccount from 'page/settingsStripeAccount';
+
+import SettingsCreatorPage from 'page/settingsCreator';
+import SettingsNotificationsPage from 'page/settingsNotifications';
+
+import SettingsPage from 'page/settings';
+import ShowPage from 'page/show';
+import TagsFollowingManagePage from 'page/tagsFollowingManage';
+
+import TagsFollowingPage from 'page/tagsFollowing';
+import TopPage from 'page/top';
+import UpdatePasswordPage from 'page/passwordUpdate';
+import Welcome from 'page/welcome';
+import YoutubeSyncPage from 'page/youtubeSync';
 
 // Tell the browser we are handling scroll restoration
 if ('scrollRestoration' in history) {
@@ -237,105 +227,103 @@ function AppRouter(props: Props) {
   }
 
   return (
-    <React.Suspense fallback={<LoadingBarOneOff />}>
-      <Switch>
-        {/* @if TARGET='app' */}
-        {welcomeVersion < WELCOME_VERSION && <Route path="/*" component={Welcome} />}
-        {/* @endif */}
-        <Redirect
-          from={`/$/${PAGES.DEPRECATED__CHANNELS_FOLLOWING_MANAGE}`}
-          to={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`}
+    <Switch>
+      {/* @if TARGET='app' */}
+      {welcomeVersion < WELCOME_VERSION && <Route path="/*" component={Welcome} />}
+      {/* @endif */}
+      <Redirect
+        from={`/$/${PAGES.DEPRECATED__CHANNELS_FOLLOWING_MANAGE}`}
+        to={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`}
+      />
+      <Redirect from={`/$/${PAGES.DEPRECATED__CHANNELS_FOLLOWING}`} to={`/$/${PAGES.CHANNELS_FOLLOWING}`} />
+      <Redirect from={`/$/${PAGES.DEPRECATED__TAGS_FOLLOWING}`} to={`/$/${PAGES.TAGS_FOLLOWING}`} />
+      <Redirect from={`/$/${PAGES.DEPRECATED__TAGS_FOLLOWING_MANAGE}`} to={`/$/${PAGES.TAGS_FOLLOWING_MANAGE}`} />
+      <Redirect from={`/$/${PAGES.DEPRECATED__PUBLISH}`} to={`/$/${PAGES.UPLOAD}`} />
+      <Redirect from={`/$/${PAGES.DEPRECATED__PUBLISHED}`} to={`/$/${PAGES.UPLOADS}`} />
+
+      <Route path={`/`} exact component={HomePage} />
+      <Route path={`/$/${PAGES.DISCOVER}`} exact component={DiscoverPage} />
+      {/* $FlowFixMe */}
+      {dynamicRoutes.map((dynamicRouteProps: RowDataItem) => (
+        <Route
+          key={dynamicRouteProps.route}
+          path={dynamicRouteProps.route}
+          component={(routerProps) => <DiscoverPage {...routerProps} dynamicRouteProps={dynamicRouteProps} />}
         />
-        <Redirect from={`/$/${PAGES.DEPRECATED__CHANNELS_FOLLOWING}`} to={`/$/${PAGES.CHANNELS_FOLLOWING}`} />
-        <Redirect from={`/$/${PAGES.DEPRECATED__TAGS_FOLLOWING}`} to={`/$/${PAGES.TAGS_FOLLOWING}`} />
-        <Redirect from={`/$/${PAGES.DEPRECATED__TAGS_FOLLOWING_MANAGE}`} to={`/$/${PAGES.TAGS_FOLLOWING_MANAGE}`} />
-        <Redirect from={`/$/${PAGES.DEPRECATED__PUBLISH}`} to={`/$/${PAGES.UPLOAD}`} />
-        <Redirect from={`/$/${PAGES.DEPRECATED__PUBLISHED}`} to={`/$/${PAGES.UPLOADS}`} />
+      ))}
 
-        <Route path={`/`} exact component={HomePage} />
-        <Route path={`/$/${PAGES.DISCOVER}`} exact component={DiscoverPage} />
-        {/* $FlowFixMe */}
-        {dynamicRoutes.map((dynamicRouteProps: RowDataItem) => (
-          <Route
-            key={dynamicRouteProps.route}
-            path={dynamicRouteProps.route}
-            component={(routerProps) => <DiscoverPage {...routerProps} dynamicRouteProps={dynamicRouteProps} />}
-          />
-        ))}
+      <Route path={`/$/${PAGES.AUTH_SIGNIN}`} exact component={SignInPage} />
+      <Route path={`/$/${PAGES.AUTH_PASSWORD_RESET}`} exact component={PasswordResetPage} />
+      <Route path={`/$/${PAGES.AUTH_PASSWORD_SET}`} exact component={PasswordSetPage} />
+      <Route path={`/$/${PAGES.AUTH}`} exact component={SignUpPage} />
+      <Route path={`/$/${PAGES.AUTH}/*`} exact component={SignUpPage} />
+      <Route path={`/$/${PAGES.WELCOME}`} exact component={Welcome} />
 
-        <Route path={`/$/${PAGES.AUTH_SIGNIN}`} exact component={SignInPage} />
-        <Route path={`/$/${PAGES.AUTH_PASSWORD_RESET}`} exact component={PasswordResetPage} />
-        <Route path={`/$/${PAGES.AUTH_PASSWORD_SET}`} exact component={PasswordSetPage} />
-        <Route path={`/$/${PAGES.AUTH}`} exact component={SignUpPage} />
-        <Route path={`/$/${PAGES.AUTH}/*`} exact component={SignUpPage} />
-        <Route path={`/$/${PAGES.WELCOME}`} exact component={Welcome} />
+      <Route path={`/$/${PAGES.HELP}`} exact component={HelpPage} />
+      {/* @if TARGET='app' */}
+      <Route path={`/$/${PAGES.BACKUP}`} exact component={BackupPage} />
+      {/* @endif */}
+      <Route path={`/$/${PAGES.AUTH_VERIFY}`} exact component={SignInVerifyPage} />
+      <Route path={`/$/${PAGES.SEARCH}`} exact component={SearchPage} />
+      <Route path={`/$/${PAGES.TOP}`} exact component={TopPage} />
+      <Route path={`/$/${PAGES.SETTINGS}`} exact component={SettingsPage} />
+      <Route path={`/$/${PAGES.INVITE}/:referrer`} exact component={InvitedPage} />
+      <Route path={`/$/${PAGES.CHECKOUT}`} exact component={CheckoutPage} />
+      <Route path={`/$/${PAGES.REPORT_CONTENT}`} exact component={ReportContentPage} />
+      <Route {...props} path={`/$/${PAGES.LIST}/:collectionId`} component={CollectionPage} />
 
-        <Route path={`/$/${PAGES.HELP}`} exact component={HelpPage} />
-        {/* @if TARGET='app' */}
-        <Route path={`/$/${PAGES.BACKUP}`} exact component={BackupPage} />
-        {/* @endif */}
-        <Route path={`/$/${PAGES.AUTH_VERIFY}`} exact component={SignInVerifyPage} />
-        <Route path={`/$/${PAGES.SEARCH}`} exact component={SearchPage} />
-        <Route path={`/$/${PAGES.TOP}`} exact component={TopPage} />
-        <Route path={`/$/${PAGES.SETTINGS}`} exact component={SettingsPage} />
-        <Route path={`/$/${PAGES.INVITE}/:referrer`} exact component={InvitedPage} />
-        <Route path={`/$/${PAGES.CHECKOUT}`} exact component={CheckoutPage} />
-        <Route path={`/$/${PAGES.REPORT_CONTENT}`} exact component={ReportContentPage} />
-        <Route {...props} path={`/$/${PAGES.LIST}/:collectionId`} component={CollectionPage} />
+      <PrivateRoute {...props} exact path={`/$/${PAGES.YOUTUBE_SYNC}`} component={YoutubeSyncPage} />
+      <PrivateRoute {...props} exact path={`/$/${PAGES.TAGS_FOLLOWING}`} component={TagsFollowingPage} />
+      <PrivateRoute
+        {...props}
+        exact
+        path={`/$/${PAGES.CHANNELS_FOLLOWING}`}
+        component={isAuthenticated || !IS_WEB ? ChannelsFollowingPage : DiscoverPage}
+      />
+      <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_NOTIFICATIONS}`} component={SettingsNotificationsPage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} component={SettingsStripeCard} />
+      <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_STRIPE_ACCOUNT}`} component={SettingsStripeAccount} />
+      <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_UPDATE_PWD}`} component={UpdatePasswordPage} />
+      <PrivateRoute
+        {...props}
+        exact
+        path={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`}
+        component={ChannelsFollowingDiscoverPage}
+      />
+      <PrivateRoute {...props} path={`/$/${PAGES.INVITE}`} component={InvitePage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.CHANNEL_NEW}`} component={ChannelNew} />
+      <PrivateRoute {...props} path={`/$/${PAGES.REPOST_NEW}`} component={RepostNew} />
+      <PrivateRoute {...props} path={`/$/${PAGES.UPLOADS}`} component={FileListPublished} />
+      <PrivateRoute {...props} path={`/$/${PAGES.CREATOR_DASHBOARD}`} component={CreatorDashboard} />
+      <PrivateRoute {...props} path={`/$/${PAGES.UPLOAD}`} component={PublishPage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.REPORT}`} component={ReportPage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.REWARDS}`} exact component={RewardsPage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.REWARDS_VERIFY}`} component={RewardsVerifyPage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.LIBRARY}`} component={LibraryPage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.LISTS}`} component={ListsPage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.TAGS_FOLLOWING_MANAGE}`} component={TagsFollowingManagePage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_BLOCKED_MUTED}`} component={ListBlockedPage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_CREATOR}`} component={SettingsCreatorPage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.WALLET}`} exact component={WalletPage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.CHANNELS}`} component={ChannelsPage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.LIVESTREAM}`} component={LiveStreamSetupPage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.LIVESTREAM_CURRENT}`} component={LivestreamCurrentPage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.BUY}`} component={BuyPage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.RECEIVE}`} component={ReceivePage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.SEND}`} component={SendPage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.SWAP}`} component={SwapPage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.NOTIFICATIONS}`} component={NotificationsPage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.AUTH_WALLET_PASSWORD}`} component={SignInWalletPasswordPage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_OWN_COMMENTS}`} component={OwnComments} />
 
-        <PrivateRoute {...props} exact path={`/$/${PAGES.YOUTUBE_SYNC}`} component={YoutubeSyncPage} />
-        <PrivateRoute {...props} exact path={`/$/${PAGES.TAGS_FOLLOWING}`} component={TagsFollowingPage} />
-        <PrivateRoute
-          {...props}
-          exact
-          path={`/$/${PAGES.CHANNELS_FOLLOWING}`}
-          component={isAuthenticated || !IS_WEB ? ChannelsFollowingPage : DiscoverPage}
-        />
-        <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_NOTIFICATIONS}`} component={SettingsNotificationsPage} />
-        <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} component={SettingsStripeCard} />
-        <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_STRIPE_ACCOUNT}`} component={SettingsStripeAccount} />
-        <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_UPDATE_PWD}`} component={UpdatePasswordPage} />
-        <PrivateRoute
-          {...props}
-          exact
-          path={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`}
-          component={ChannelsFollowingDiscoverPage}
-        />
-        <PrivateRoute {...props} path={`/$/${PAGES.INVITE}`} component={InvitePage} />
-        <PrivateRoute {...props} path={`/$/${PAGES.CHANNEL_NEW}`} component={ChannelNew} />
-        <PrivateRoute {...props} path={`/$/${PAGES.REPOST_NEW}`} component={RepostNew} />
-        <PrivateRoute {...props} path={`/$/${PAGES.UPLOADS}`} component={FileListPublished} />
-        <PrivateRoute {...props} path={`/$/${PAGES.CREATOR_DASHBOARD}`} component={CreatorDashboard} />
-        <PrivateRoute {...props} path={`/$/${PAGES.UPLOAD}`} component={PublishPage} />
-        <PrivateRoute {...props} path={`/$/${PAGES.REPORT}`} component={ReportPage} />
-        <PrivateRoute {...props} path={`/$/${PAGES.REWARDS}`} exact component={RewardsPage} />
-        <PrivateRoute {...props} path={`/$/${PAGES.REWARDS_VERIFY}`} component={RewardsVerifyPage} />
-        <PrivateRoute {...props} path={`/$/${PAGES.LIBRARY}`} component={LibraryPage} />
-        <PrivateRoute {...props} path={`/$/${PAGES.LISTS}`} component={ListsPage} />
-        <PrivateRoute {...props} path={`/$/${PAGES.TAGS_FOLLOWING_MANAGE}`} component={TagsFollowingManagePage} />
-        <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_BLOCKED_MUTED}`} component={ListBlockedPage} />
-        <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_CREATOR}`} component={SettingsCreatorPage} />
-        <PrivateRoute {...props} path={`/$/${PAGES.WALLET}`} exact component={WalletPage} />
-        <PrivateRoute {...props} path={`/$/${PAGES.CHANNELS}`} component={ChannelsPage} />
-        <PrivateRoute {...props} path={`/$/${PAGES.LIVESTREAM}`} component={LiveStreamSetupPage} />
-        <PrivateRoute {...props} path={`/$/${PAGES.LIVESTREAM_CURRENT}`} component={LivestreamCurrentPage} />
-        <PrivateRoute {...props} path={`/$/${PAGES.BUY}`} component={BuyPage} />
-        <PrivateRoute {...props} path={`/$/${PAGES.RECEIVE}`} component={ReceivePage} />
-        <PrivateRoute {...props} path={`/$/${PAGES.SEND}`} component={SendPage} />
-        <PrivateRoute {...props} path={`/$/${PAGES.SWAP}`} component={SwapPage} />
-        <PrivateRoute {...props} path={`/$/${PAGES.NOTIFICATIONS}`} component={NotificationsPage} />
-        <PrivateRoute {...props} path={`/$/${PAGES.AUTH_WALLET_PASSWORD}`} component={SignInWalletPasswordPage} />
-        <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_OWN_COMMENTS}`} component={OwnComments} />
+      <Route path={`/$/${PAGES.EMBED}/:claimName`} exact component={EmbedWrapperPage} />
+      <Route path={`/$/${PAGES.EMBED}/:claimName/:claimId`} exact component={EmbedWrapperPage} />
 
-        <Route path={`/$/${PAGES.EMBED}/:claimName`} exact component={EmbedWrapperPage} />
-        <Route path={`/$/${PAGES.EMBED}/:claimName/:claimId`} exact component={EmbedWrapperPage} />
-
-        {/* Below need to go at the end to make sure we don't match any of our pages first */}
-        <Route path="/:claimName" exact component={ShowPage} />
-        <Route path="/:claimName/:streamName" exact component={ShowPage} />
-        <Route path="/*" component={FourOhFourPage} />
-      </Switch>
-    </React.Suspense>
+      {/* Below need to go at the end to make sure we don't match any of our pages first */}
+      <Route path="/:claimName" exact component={ShowPage} />
+      <Route path="/:claimName/:streamName" exact component={ShowPage} />
+      <Route path="/*" component={FourOhFourPage} />
+    </Switch>
   );
 }
 

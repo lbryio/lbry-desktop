@@ -1,103 +1,75 @@
 // @flow
 import React from 'react';
 import { withRouter } from 'react-router';
-import { lazyImport } from 'util/lazyImport';
 import * as MODALS from 'constants/modal_types';
-import LoadingBarOneOff from 'component/loadingBarOneOff';
 
-const ModalAffirmPurchase = lazyImport(() =>
-  import('modal/modalAffirmPurchase' /* webpackChunkName: "modalAffirmPurchase" */)
-);
-const ModalAutoGenerateThumbnail = lazyImport(() =>
-  import('modal/modalAutoGenerateThumbnail' /* webpackChunkName: "modalAutoGenerateThumbnail" */)
-);
-const ModalAutoUpdateDownloaded = lazyImport(() =>
-  import('modal/modalAutoUpdateDownloaded' /* webpackChunkName: "modalAutoUpdateDownloaded" */)
-);
-const ModalBlockChannel = lazyImport(() =>
-  import('modal/modalBlockChannel' /* webpackChunkName: "modalBlockChannel" */)
-);
-const ModalClaimCollectionAdd = lazyImport(() =>
-  import('modal/modalClaimCollectionAdd' /* webpackChunkName: "modalClaimCollectionAdd" */)
-);
-const ModalCommentAcknowledgement = lazyImport(() =>
-  import('modal/modalCommentAcknowledgement' /* webpackChunkName: "modalCommentAcknowledgement" */)
-);
-const ModalConfirmAge = lazyImport(() => import('modal/modalConfirmAge' /* webpackChunkName: "modalConfirmAge" */));
-const ModalConfirmThumbnailUpload = lazyImport(() =>
-  import('modal/modalConfirmThumbnailUpload' /* webpackChunkName: "modalConfirmThumbnailUpload" */)
-);
-const ModalConfirmTransaction = lazyImport(() =>
-  import('modal/modalConfirmTransaction' /* webpackChunkName: "modalConfirmTransaction" */)
-);
-const ModalDeleteCollection = lazyImport(() =>
-  import('modal/modalRemoveCollection' /* webpackChunkName: "modalRemoveCollection" */)
-);
-const ModalDownloading = lazyImport(() => import('modal/modalDownloading' /* webpackChunkName: "modalDownloading" */));
-const ModalError = lazyImport(() => import('modal/modalError' /* webpackChunkName: "modalError" */));
-const ModalFileSelection = lazyImport(() =>
-  import('modal/modalFileSelection' /* webpackChunkName: "modalFileSelection" */)
-);
-const ModalFileTimeout = lazyImport(() => import('modal/modalFileTimeout' /* webpackChunkName: "modalFileTimeout" */));
-const ModalFirstReward = lazyImport(() => import('modal/modalFirstReward' /* webpackChunkName: "modalFirstReward" */));
-const ModalFirstSubscription = lazyImport(() =>
-  import('modal/modalFirstSubscription' /* webpackChunkName: "modalFirstSubscription" */)
-);
-const ModalImageUpload = lazyImport(() => import('modal/modalImageUpload' /* webpackChunkName: "modalImageUpload" */));
-const ModalMassTipsUnlock = lazyImport(() =>
-  import('modal/modalMassTipUnlock' /* webpackChunkName: "modalMassTipUnlock" */)
-);
-const ModalMobileSearch = lazyImport(() =>
-  import('modal/modalMobileSearch' /* webpackChunkName: "modalMobileSearch" */)
-);
-const ModalOpenExternalResource = lazyImport(() =>
-  import('modal/modalOpenExternalResource' /* webpackChunkName: "modalOpenExternalResource" */)
-);
-const ModalPasswordUnsave = lazyImport(() =>
-  import('modal/modalPasswordUnsave' /* webpackChunkName: "modalPasswordUnsave" */)
-);
-const ModalPhoneCollection = lazyImport(() =>
-  import('modal/modalPhoneCollection' /* webpackChunkName: "modalPhoneCollection" */)
-);
-const ModalPublish = lazyImport(() => import('modal/modalPublish' /* webpackChunkName: "modalPublish" */));
-const ModalPublishPreview = lazyImport(() =>
-  import('modal/modalPublishPreview' /* webpackChunkName: "modalPublishPreview" */)
-);
-const ModalRemoveBtcSwapAddress = lazyImport(() =>
-  import('modal/modalRemoveBtcSwapAddress' /* webpackChunkName: "modalRemoveBtcSwapAddress" */)
-);
-const ModalRemoveCard = lazyImport(() => import('modal/modalRemoveCard' /* webpackChunkName: "modalRemoveCard" */));
-const ModalRemoveComment = lazyImport(() =>
-  import('modal/modalRemoveComment' /* webpackChunkName: "modalRemoveComment" */)
-);
-const ModalRemoveFile = lazyImport(() => import('modal/modalRemoveFile' /* webpackChunkName: "modalRemoveFile" */));
-const ModalRevokeClaim = lazyImport(() => import('modal/modalRevokeClaim' /* webpackChunkName: "modalRevokeClaim" */));
-const ModalRewardCode = lazyImport(() => import('modal/modalRewardCode' /* webpackChunkName: "modalRewardCode" */));
-const ModalSendTip = lazyImport(() => import('modal/modalSendTip' /* webpackChunkName: "modalSendTip" */));
-const ModalSetReferrer = lazyImport(() => import('modal/modalSetReferrer' /* webpackChunkName: "modalSetReferrer" */));
-const ModalSignOut = lazyImport(() => import('modal/modalSignOut' /* webpackChunkName: "modalSignOut" */));
-const ModalSocialShare = lazyImport(() => import('modal/modalSocialShare' /* webpackChunkName: "modalSocialShare" */));
-const ModalSupportsLiquidate = lazyImport(() =>
-  import('modal/modalSupportsLiquidate' /* webpackChunkName: "modalSupportsLiquidate" */)
-);
-const ModalSyncEnable = lazyImport(() => import('modal/modalSyncEnable' /* webpackChunkName: "modalSyncEnable" */));
-const ModalTransactionFailed = lazyImport(() =>
-  import('modal/modalTransactionFailed' /* webpackChunkName: "modalTransactionFailed" */)
-);
-const ModalUpgrade = lazyImport(() => import('modal/modalUpgrade' /* webpackChunkName: "modalUpgrade" */));
-const ModalViewImage = lazyImport(() => import('modal/modalViewImage' /* webpackChunkName: "modalViewImage" */));
-const ModalWalletDecrypt = lazyImport(() =>
-  import('modal/modalWalletDecrypt' /* webpackChunkName: "modalWalletDecrypt" */)
-);
-const ModalWalletEncrypt = lazyImport(() =>
-  import('modal/modalWalletEncrypt' /* webpackChunkName: "modalWalletEncrypt" */)
-);
-const ModalWalletUnlock = lazyImport(() =>
-  import('modal/modalWalletUnlock' /* webpackChunkName: "modalWalletUnlock" */)
-);
-const ModalYoutubeWelcome = lazyImport(() =>
-  import('modal/modalYoutubeWelcome' /* webpackChunkName: "modalYoutubeWelcome" */)
-);
+import ModalAffirmPurchase from 'modal/modalAffirmPurchase';
+
+import ModalAutoGenerateThumbnail from 'modal/modalAutoGenerateThumbnail';
+
+import ModalAutoUpdateDownloaded from 'modal/modalAutoUpdateDownloaded';
+
+import ModalBlockChannel from 'modal/modalBlockChannel';
+
+import ModalClaimCollectionAdd from 'modal/modalClaimCollectionAdd';
+
+import ModalCommentAcknowledgement from 'modal/modalCommentAcknowledgement';
+
+import ModalConfirmAge from 'modal/modalConfirmAge';
+import ModalConfirmThumbnailUpload from 'modal/modalConfirmThumbnailUpload';
+
+import ModalConfirmTransaction from 'modal/modalConfirmTransaction';
+
+import ModalDeleteCollection from 'modal/modalRemoveCollection';
+
+import ModalDownloading from 'modal/modalDownloading';
+import ModalError from 'modal/modalError';
+import ModalFileSelection from 'modal/modalFileSelection';
+
+import ModalFileTimeout from 'modal/modalFileTimeout';
+import ModalFirstReward from 'modal/modalFirstReward';
+import ModalFirstSubscription from 'modal/modalFirstSubscription';
+
+import ModalImageUpload from 'modal/modalImageUpload';
+import ModalMassTipsUnlock from 'modal/modalMassTipUnlock';
+
+import ModalMobileSearch from 'modal/modalMobileSearch';
+
+import ModalOpenExternalResource from 'modal/modalOpenExternalResource';
+
+import ModalPasswordUnsave from 'modal/modalPasswordUnsave';
+
+import ModalPhoneCollection from 'modal/modalPhoneCollection';
+
+import ModalPublish from 'modal/modalPublish';
+import ModalPublishPreview from 'modal/modalPublishPreview';
+
+import ModalRemoveBtcSwapAddress from 'modal/modalRemoveBtcSwapAddress';
+
+import ModalRemoveCard from 'modal/modalRemoveCard';
+import ModalRemoveComment from 'modal/modalRemoveComment';
+
+import ModalRemoveFile from 'modal/modalRemoveFile';
+import ModalRevokeClaim from 'modal/modalRevokeClaim';
+import ModalRewardCode from 'modal/modalRewardCode';
+import ModalSendTip from 'modal/modalSendTip';
+import ModalSetReferrer from 'modal/modalSetReferrer';
+import ModalSignOut from 'modal/modalSignOut';
+import ModalSocialShare from 'modal/modalSocialShare';
+import ModalSupportsLiquidate from 'modal/modalSupportsLiquidate';
+
+import ModalSyncEnable from 'modal/modalSyncEnable';
+import ModalTransactionFailed from 'modal/modalTransactionFailed';
+
+import ModalUpgrade from 'modal/modalUpgrade';
+import ModalViewImage from 'modal/modalViewImage';
+import ModalWalletDecrypt from 'modal/modalWalletDecrypt';
+
+import ModalWalletEncrypt from 'modal/modalWalletEncrypt';
+
+import ModalWalletUnlock from 'modal/modalWalletUnlock';
+
+import ModalYoutubeWelcome from 'modal/modalYoutubeWelcome';
 
 type Props = {
   modal: { id: string, modalProps: {} },
@@ -222,11 +194,7 @@ function ModalRouter(props: Props) {
     return null;
   }
 
-  return (
-    <React.Suspense fallback={<LoadingBarOneOff />}>
-      <SelectedModal {...modalProps} />
-    </React.Suspense>
-  );
+  return <SelectedModal {...modalProps} />;
 }
 
 export default withRouter(ModalRouter);

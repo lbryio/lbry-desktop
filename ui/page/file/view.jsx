@@ -2,7 +2,6 @@
 import * as PAGES from 'constants/pages';
 import * as React from 'react';
 import classnames from 'classnames';
-import { lazyImport } from 'util/lazyImport';
 import Page from 'component/page';
 import * as RENDER_MODES from 'constants/file_render_modes';
 import FileTitleSection from 'component/fileTitleSection';
@@ -16,7 +15,7 @@ import Button from 'component/button';
 import I18nMessage from 'component/i18nMessage';
 import Empty from 'component/common/empty';
 
-const PostViewer = lazyImport(() => import('component/postViewer' /* webpackChunkName: "postViewer" */));
+import PostViewer from 'component/postViewer';
 
 export const PRIMARY_PLAYER_WRAPPER_CLASS = 'file-page__video-container';
 
@@ -137,11 +136,7 @@ function FilePage(props: Props) {
     }
 
     if (isMarkdown) {
-      return (
-        <React.Suspense fallback={null}>
-          <PostViewer uri={uri} />
-        </React.Suspense>
-      );
+      return <PostViewer uri={uri} />;
     }
 
     if (RENDER_MODES.TEXT_MODES.includes(renderMode)) {

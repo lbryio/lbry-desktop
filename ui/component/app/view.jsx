@@ -1,7 +1,6 @@
 // @flow
 import * as PAGES from 'constants/pages';
 import React, { useEffect, useRef, useState, useLayoutEffect } from 'react';
-import { lazyImport } from 'util/lazyImport';
 import classnames from 'classnames';
 import analytics from 'analytics';
 import Router from 'component/router/index';
@@ -18,12 +17,12 @@ import useZoom from 'effects/use-zoom';
 import useHistoryNav from 'effects/use-history-nav';
 import LANGUAGE_MIGRATIONS from 'constants/language-migrations';
 
-const FileDrop = lazyImport(() => import('component/fileDrop' /* webpackChunkName: "secondary" */));
-const ModalRouter = lazyImport(() => import('modal/modalRouter' /* webpackChunkName: "secondary" */));
-const Nag = lazyImport(() => import('component/common/nag' /* webpackChunkName: "secondary" */));
+import FileDrop from 'component/fileDrop';
+import ModalRouter from 'modal/modalRouter';
+import Nag from 'component/common/nag';
 
-const SyncFatalError = lazyImport(() => import('component/syncFatalError' /* webpackChunkName: "syncFatalError" */));
-const Yrbl = lazyImport(() => import('component/yrbl' /* webpackChunkName: "yrbl" */));
+import SyncFatalError from 'component/syncFatalError';
+import Yrbl from 'component/yrbl';
 
 // ****************************************************************************
 
@@ -330,44 +329,32 @@ function App(props: Props) {
   }, [sidebarOpen, isPersonalized, resolvedSubscriptions, subscriptions, resolveUris, setResolvedSubscriptions]);
 
   if (syncFatalError) {
-    return (
-      <React.Suspense fallback={null}>
-        <SyncFatalError />
-      </React.Suspense>
-    );
+    return <SyncFatalError />;
   }
 
   return (
     <div
       className={classnames(MAIN_WRAPPER_CLASS, {
-        // @if TARGET='app'
         [`${MAIN_WRAPPER_CLASS}--mac`]: IS_MAC,
-        // @endif
         [`${MAIN_WRAPPER_CLASS}--scrollbar`]: useCustomScrollbar,
       })}
       ref={appRef}
       onContextMenu={IS_WEB ? undefined : (e) => openContextMenu(e)}
     >
       <Router />
-      <React.Suspense fallback={null}>
-        <ModalRouter />
-        {renderFiledrop && <FileDrop />}
-      </React.Suspense>
+      <ModalRouter />
+      {renderFiledrop && <FileDrop />}
       <FileRenderFloating />
-      <React.Suspense fallback={null}>
-        {isEnhancedLayout && <Yrbl className="yrbl--enhanced" />}
+      {isEnhancedLayout && <Yrbl className="yrbl--enhanced" />}
 
-        {/* @if TARGET='app' */}
-        {showUpgradeButton && (
-          <Nag
-            message={__('An upgrade is available.')}
-            actionText={__('Install Now')}
-            onClick={requestDownloadUpgrade}
-            onClose={() => setUpgradeNagClosed(true)}
-          />
-        )}
-        {/* @endif */}
-      </React.Suspense>
+      {showUpgradeButton && (
+        <Nag
+          message={__('An upgrade is available.')}
+          actionText={__('Install Now')}
+          onClick={requestDownloadUpgrade}
+          onClose={() => setUpgradeNagClosed(true)}
+        />
+      )}
     </div>
   );
 }
