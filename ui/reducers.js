@@ -17,7 +17,6 @@ import userReducer from 'redux/reducers/user';
 import commentsReducer from 'redux/reducers/comments';
 import blockedReducer from 'redux/reducers/blocked';
 import coinSwapReducer from 'redux/reducers/coinSwap';
-import livestreamReducer from 'redux/reducers/livestream';
 import searchReducer from 'redux/reducers/search';
 import reactionsReducer from 'redux/reducers/reactions';
 import syncReducer from 'redux/reducers/sync';
@@ -34,7 +33,6 @@ export default (history) =>
     content: contentReducer,
     costInfo: costInfoReducer,
     fileInfo: fileInfoReducer,
-    livestream: livestreamReducer,
     notifications: notificationsReducer,
     publish: publishReducer,
     reactions: reactionsReducer,

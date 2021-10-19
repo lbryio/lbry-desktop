@@ -34,8 +34,6 @@ export const PAGE_TITLE = {
   [PAGES.HELP]: 'Help',
   [PAGES.INVITE]: 'Invite',
   [PAGES.LISTS]: 'Lists',
-  [PAGES.LIVESTREAM]: 'Go Live on Odysee',
-  [PAGES.LIVESTREAM_CURRENT]: 'Live (Experimental)',
   [PAGES.NOTIFICATIONS]: 'Notifications',
   [PAGES.RECEIVE]: 'Your address',
   [PAGES.REPORT]: 'Report an issue or request a feature',

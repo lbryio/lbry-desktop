@@ -103,13 +103,6 @@ export const doCommentSocketConnect = (uri, claimId) => (dispatch) => {
         data: { comment: newComment, claimId, uri },
       });
     }
-    if (response.type === 'viewers') {
-      const connected = response.data.connected;
-      dispatch({
-        type: ACTIONS.VIEWERS_RECEIVED,
-        data: { connected, claimId },
-      });
-    }
     if (response.type === 'pinned') {
       const pinnedComment = response.data.comment;
       dispatch({

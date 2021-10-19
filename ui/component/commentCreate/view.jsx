@@ -1,5 +1,5 @@
 // @flow
-import { FF_MAX_CHARS_IN_COMMENT, FF_MAX_CHARS_IN_LIVESTREAM_COMMENT } from 'constants/form-field';
+import { FF_MAX_CHARS_IN_COMMENT } from 'constants/form-field';
 import { FormField, Form } from 'component/common/form';
 import { getChannelIdFromClaim } from 'util/claim';
 import { Lbryio } from 'lbryinc';
@@ -40,7 +40,6 @@ type Props = {
   activeChannel: string,
   activeChannelClaim: ?ChannelClaim,
   bottom: boolean,
-  livestream?: boolean,
   embed?: boolean,
   claimIsMine: boolean,
   supportDisabled: boolean,
@@ -68,8 +67,6 @@ export function CommentCreate(props: Props) {
     parentId,
     activeChannelClaim,
     bottom,
-    livestream,
-    embed,
     claimIsMine,
     settingsByChannelId,
     supportDisabled,
@@ -179,7 +176,6 @@ export function CommentCreate(props: Props) {
     let newMentionValue = mentionValue.replace('lbry://', '');
     if (newMentionValue.includes('#')) newMentionValue = newMentionValue.replace('#', ':');
 
-    if (livestream && key !== KEYCODES.TAB) setPauseQuickSend(true);
     setCommentValue(
       commentValue.substring(0, selectedMentionIndex) +
         `${newMentionValue}` +
@@ -190,7 +186,7 @@ export function CommentCreate(props: Props) {
   }
 
   function altEnterListener(e: SyntheticKeyboardEvent<*>) {
-    if ((livestream || e.ctrlKey || e.metaKey) && e.keyCode === KEYCODES.ENTER) {
+    if ((e.ctrlKey || e.metaKey) && e.keyCode === KEYCODES.ENTER) {
       e.preventDefault();
       buttonRef.current.click();
     }
@@ -442,17 +438,8 @@ export function CommentCreate(props: Props) {
       <div
         role="button"
         onClick={() => {
-          if (embed) {
-            window.open(`https://odysee.com/$/${PAGES.AUTH}?redirect=/$/${PAGES.LIVESTREAM}`);
-            return;
-          }
-
           const pathPlusRedirect = `/$/${PAGES.CHANNEL_NEW}?redirect=${pathname}`;
-          if (livestream) {
-            window.open(pathPlusRedirect);
-          } else {
-            push(pathPlusRedirect);
-          }
+          push(pathPlusRedirect);
         }}
       >
         <FormField type="textarea" name={'comment_signup_prompt'} placeholder={__('Say something about this...')} />
@@ -518,7 +505,6 @@ export function CommentCreate(props: Props) {
       {!advancedEditor && (
         <ChannelMentionSuggestions
           uri={uri}
-          isLivestream={livestream}
           inputRef={formFieldInputRef}
           mentionTerm={channelMention}
           creatorUri={channelUri}
@@ -533,9 +519,7 @@ export function CommentCreate(props: Props) {
         className={isReply ? 'content_reply' : 'content_comment'}
         label={
           <span className="comment-new__label-wrapper">
-            {!livestream && (
-              <div className="comment-new__label">{isReply ? __('Replying as') + ' ' : __('Comment as') + ' '}</div>
-            )}
+            <div className="comment-new__label">{isReply ? __('Replying as') + ' ' : __('Comment as') + ' '}</div>
             <SelectChannel tiny />
           </span>
         }
@@ -548,7 +532,7 @@ export function CommentCreate(props: Props) {
         charCount={charCount}
         onChange={handleCommentChange}
         autoFocus={isReply}
-        textAreaMaxLength={livestream ? FF_MAX_CHARS_IN_LIVESTREAM_COMMENT : FF_MAX_CHARS_IN_COMMENT}
+        textAreaMaxLength={FF_MAX_CHARS_IN_COMMENT}
       />
       {isSupportComment && (
         <WalletTipAmountSelector

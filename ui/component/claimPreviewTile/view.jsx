@@ -49,10 +49,7 @@ type Props = {
   showHiddenByUser?: boolean,
   properties?: (Claim) => void,
   collectionId?: string,
-  showNoSourceClaims?: boolean,
-  isLivestream: boolean,
   viewCount: string,
-  isLivestreamActive: boolean,
 };
 
 // preview image cards used in related video functionality, channel overview page and homepage
@@ -76,9 +73,6 @@ function ClaimPreviewTile(props: Props) {
     showMature,
     showHiddenByUser,
     properties,
-    showNoSourceClaims,
-    isLivestream,
-    isLivestreamActive,
     collectionId,
     mediaDuration,
     viewCount,
@@ -175,13 +169,13 @@ function ClaimPreviewTile(props: Props) {
     shouldHide = blockedChannelUris.some((blockedUri) => isURIEqual(blockedUri, signingChannel.permanent_url));
   }
 
-  if (shouldHide || (isLivestream && !showNoSourceClaims)) {
+  if (shouldHide) {
     return null;
   }
 
   const isChannelPage = window.location.pathname.startsWith('/@');
 
-  const shouldShowViewCount = !(!viewCount || (claim && claim.repost_url) || isLivestream || !isChannelPage);
+  const shouldShowViewCount = !(!viewCount || (claim && claim.repost_url) || !isChannelPage);
 
   if (placeholder || (!claim && isResolvingUri)) {
     return (
@@ -202,16 +196,12 @@ function ClaimPreviewTile(props: Props) {
   }
 
   let liveProperty = null;
-  if (isLivestreamActive === true) {
-    liveProperty = (claim) => <>LIVE</>;
-  }
 
   return (
     <li
       onClick={handleClick}
       className={classnames('card claim-preview--tile', {
         'claim-preview__wrapper--channel': isChannel,
-        'claim-preview__live': isLivestreamActive,
       })}
     >
       <NavLink {...navLinkProps} role="none" tabIndex={-1} aria-hidden>
@@ -273,7 +263,7 @@ function ClaimPreviewTile(props: Props) {
               <div className="claim-tile__about">
                 <UriIndicator uri={uri} link />
                 <div className="claim-tile__about--counts">
-                  <FileViewCountInline uri={uri} isLivestream={isLivestream} />
+                  <FileViewCountInline uri={uri} />
                   <DateTime timeAgo uri={uri} />
                 </div>
               </div>

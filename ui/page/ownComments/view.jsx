@@ -57,7 +57,6 @@ export default function OwnComments(props: Props) {
     return comments.map((comment) => {
       const contentClaim = claimsById[comment.claim_id];
       const isChannel = contentClaim && contentClaim.value_type === 'channel';
-      const isLivestream = Boolean(contentClaim && contentClaim.value_type === 'stream' && !contentClaim.value.source);
 
       return (
         <div key={comment.comment_id} className="comments-own card__main-actions">
@@ -68,7 +67,6 @@ export default function OwnComments(props: Props) {
                   uri={contentClaim.canonical_url}
                   searchParams={{
                     ...(isChannel ? { view: 'discussion' } : {}),
-                    ...(isLivestream ? {} : { lc: comment.comment_id }),
                   }}
                   hideActions
                   hideMenu

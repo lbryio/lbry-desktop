@@ -1,5 +1,5 @@
 // @flow
-import { ENABLE_NO_SOURCE_CLAIMS, CHANNEL_STAKED_LEVEL_LIVESTREAM, ENABLE_UI_NOTIFICATIONS } from 'config';
+import { ENABLE_UI_NOTIFICATIONS } from 'config';
 import * as ICONS from 'constants/icons';
 import * as SETTINGS from 'constants/settings';
 import * as PAGES from 'constants/pages';
@@ -63,7 +63,6 @@ type Props = {
   isAbsoluteSideNavHidden: boolean,
   hideCancel: boolean,
   activeChannelClaim: ?ChannelClaim,
-  activeChannelStakedLevel: number,
 };
 
 const Header = (props: Props) => {
@@ -92,7 +91,6 @@ const Header = (props: Props) => {
     hideCancel,
     user,
     activeChannelClaim,
-    activeChannelStakedLevel,
   } = props;
   const isMobile = useIsMobile();
   // on the verify page don't let anyone escape other than by closing the tab to keep session data consistent
@@ -103,12 +101,6 @@ const Header = (props: Props) => {
   const hasBackout = Boolean(backout);
   const { backLabel, backNavDefault, title: backTitle, simpleTitle: simpleBackTitle } = backout || {};
   const notificationsEnabled = ENABLE_UI_NOTIFICATIONS || (user && user.experimental_ui);
-  const livestreamEnabled = Boolean(
-    ENABLE_NO_SOURCE_CLAIMS &&
-      user &&
-      !user.odysee_live_disabled &&
-      (activeChannelStakedLevel >= CHANNEL_STAKED_LEVEL_LIVESTREAM || user.odysee_live_enabled)
-  );
   const activeChannelUrl = activeChannelClaim && activeChannelClaim.permanent_url;
 
   // Sign out if they click the "x" when they are on the password prompt
@@ -288,7 +280,6 @@ const Header = (props: Props) => {
                     history={history}
                     handleThemeToggle={handleThemeToggle}
                     currentTheme={currentTheme}
-                    livestreamEnabled={livestreamEnabled}
                   />
                 </div>
               )}
@@ -405,11 +396,10 @@ type HeaderMenuButtonProps = {
   history: { push: (string) => void },
   handleThemeToggle: (string) => void,
   currentTheme: string,
-  livestreamEnabled: boolean,
 };
 
 function HeaderMenuButtons(props: HeaderMenuButtonProps) {
-  const { authenticated, notificationsEnabled, history, handleThemeToggle, currentTheme, livestreamEnabled } = props;
+  const { authenticated, notificationsEnabled, history, handleThemeToggle, currentTheme } = props;
 
   return (
     <div className="header__buttons">
@@ -437,18 +427,6 @@ function HeaderMenuButtons(props: HeaderMenuButtonProps) {
               <Icon aria-hidden icon={ICONS.CHANNEL} />
               {__('New Channel')}
             </MenuItem>
-            {/* @if TARGET='web' */}
-            <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.YOUTUBE_SYNC}`)}>
-              <Icon aria-hidden icon={ICONS.YOUTUBE} />
-              {__('Sync YouTube Channel')}
-            </MenuItem>
-            {/* @endif */}
-            {livestreamEnabled && (
-              <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.LIVESTREAM}`)}>
-                <Icon aria-hidden icon={ICONS.VIDEO} />
-                {__('Go Live')}
-              </MenuItem>
-            )}
           </MenuList>
         </Menu>
       )}

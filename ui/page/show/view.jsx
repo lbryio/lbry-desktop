@@ -1,5 +1,4 @@
 // @flow
-import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import * as PAGES from 'constants/pages';
 import React, { useEffect } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
@@ -14,7 +13,6 @@ import * as COLLECTIONS_CONSTS from 'constants/collections';
 
 import AbandonedChannelPreview from 'component/abandonedChannelPreview';
 import FilePage from 'page/file';
-import LivestreamPage from 'page/livestream';
 import Yrbl from 'component/yrbl';
 
 type Props = {
@@ -31,7 +29,6 @@ type Props = {
   title: string,
   claimIsMine: boolean,
   claimIsPending: boolean,
-  isLivestream: boolean,
   beginPublish: (?string) => void,
   collectionId: string,
   collection: Collection,
@@ -51,7 +48,6 @@ function ShowPage(props: Props) {
     claimIsMine,
     isSubscribed,
     claimIsPending,
-    isLivestream,
     beginPublish,
     fetchCollectionItems,
     collectionId,
@@ -175,8 +171,6 @@ function ShowPage(props: Props) {
           />
         </Page>
       );
-    } else if (isLivestream && ENABLE_NO_SOURCE_CLAIMS) {
-      innerContent = <LivestreamPage uri={uri} />;
     } else {
       innerContent = <FilePage uri={uri} location={location} />;
     }

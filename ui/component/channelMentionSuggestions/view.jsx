@@ -19,11 +19,9 @@ type Props = {
   mentionTerm: string,
   noTopSuggestion?: boolean,
   showMature: boolean,
-  isLivestream: boolean,
   creatorUri: string,
   commentorUris: Array<string>,
   subscriptionUris: Array<string>,
-  unresolvedCommentors: Array<string>,
   unresolvedSubscriptions: Array<string>,
   canonicalCreator: string,
   canonicalCommentors: Array<string>,
@@ -34,10 +32,8 @@ type Props = {
 
 export default function ChannelMentionSuggestions(props: Props) {
   const {
-    unresolvedCommentors,
     unresolvedSubscriptions,
     canonicalCreator,
-    isLivestream,
     creatorUri,
     inputRef,
     showMature,
@@ -183,11 +179,6 @@ export default function ChannelMentionSuggestions(props: Props) {
       });
     }
   }, [doResolveUris, stringifiedResults]);
-
-  // Only resolve commentors on Livestreams when actually mentioning/looking for it
-  React.useEffect(() => {
-    if (isLivestream && unresolvedCommentors && mentionTerm) doResolveUris(unresolvedCommentors);
-  }, [doResolveUris, isLivestream, mentionTerm, unresolvedCommentors]);
 
   // Only resolve the subscriptions that match the mention term, instead of all
   React.useEffect(() => {

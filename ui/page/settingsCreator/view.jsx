@@ -385,11 +385,11 @@ export default function SettingsCreatorPage(props: Props) {
 
 // prettier-ignore
 const HELP = {
-  SLOW_MODE: 'Minimum time gap in seconds between comments (affects livestream chat as well).',
-  MIN_TIP: 'Enabling a minimum amount to comment will force all comments, including livestreams, to have tips associated with them. This can help prevent spam.',
+  SLOW_MODE: 'Minimum time gap in seconds between comments.',
+  MIN_TIP: 'Enabling a minimum amount to comment will force all comments to have tips associated with them. This can help prevent spam.',
   MIN_SUPER: 'Enabling a minimum amount to hyperchat will force all TIPPED comments to have this value in order to be shown. This still allows regular comments to be posted.',
   MIN_SUPER_OFF: '(This settings is not applicable if all comments require a tip.)',
-  BLOCKED_WORDS: 'Comments and livestream chat containing these words will be blocked.',
+  BLOCKED_WORDS: 'Comments containing these words will be blocked.',
   MODERATORS: 'Moderators can block channels on your behalf. Blocked channels will appear in your "Blocked and Muted" list.',
   MODERATOR_SEARCH: 'Enter a channel name or URL to add as a moderator.\nExamples:\n - @channel\n - @channel#3\n - https://odysee.com/@Odysee:8\n - lbry://@Odysee#8',
 };

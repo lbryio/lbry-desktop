@@ -45,7 +45,6 @@ type Props = {
   myChannels: ?Array<ChannelClaim>,
   publishSuccess: boolean,
   publishing: boolean,
-  isLivestreamClaim: boolean,
   remoteFile: string,
 };
 
@@ -75,12 +74,9 @@ const ModalPublishPreview = (props: Props) => {
     setEnablePublishPreview,
     isStillEditing,
     myChannels,
-    publishSuccess,
     publishing,
     publish,
     closeModal,
-    isLivestreamClaim,
-    remoteFile,
   } = props;
 
   const maxCharsBeforeOverflow = 128;
@@ -99,20 +95,7 @@ const ModalPublishPreview = (props: Props) => {
     return uri;
   }, [uri]);
 
-  const livestream =
-    (uri && isLivestreamClaim) ||
-    //   $FlowFixMe
-    (previewResponse.outputs[0] && previewResponse.outputs[0].value && !previewResponse.outputs[0].value.source);
   // leave the confirm modal up if we're not going straight to upload/reflecting
-  // @if TARGET='web'
-  React.useEffect(() => {
-    if (publishing && !livestream) {
-      closeModal();
-    } else if (publishSuccess) {
-      closeModal();
-    }
-  }, [publishSuccess, publishing, livestream]);
-  // @endif
   function onConfirmed() {
     // Publish for real:
     publish(getFilePathName(filePath), false);
@@ -147,13 +130,7 @@ const ModalPublishPreview = (props: Props) => {
   const isOptimizeAvail = filePath && filePath !== '' && isVid && ffmpegStatus.available;
   let modalTitle;
   if (isStillEditing) {
-    if (livestream) {
-      modalTitle = __('Confirm Update');
-    } else {
-      modalTitle = __('Confirm Edit');
-    }
-  } else if (livestream) {
-    modalTitle = __('Create Livestream');
+    modalTitle = __('Confirm Edit');
   } else {
     modalTitle = __('Confirm Upload');
   }
@@ -162,16 +139,12 @@ const ModalPublishPreview = (props: Props) => {
   if (!publishing) {
     if (isStillEditing) {
       confirmBtnText = __('Save');
-    } else if (livestream) {
-      confirmBtnText = __('Create');
     } else {
       confirmBtnText = __('Upload');
     }
   } else {
     if (isStillEditing) {
       confirmBtnText = __('Saving');
-    } else if (livestream) {
-      confirmBtnText = __('Creating');
     } else {
       confirmBtnText = __('Uploading');
     }
@@ -240,8 +213,7 @@ const ModalPublishPreview = (props: Props) => {
               <div className="section">
                 <table className="table table--condensed table--publish-preview">
                   <tbody>
-                    {!livestream && !isMarkdownPost && createRow(__('File'), getFilePathName(filePath))}
-                    {livestream && remoteFile && createRow(__('Replay'), __('Remote File Selected'))}
+                    {!isMarkdownPost && createRow(__('File'), getFilePathName(filePath))}
                     {isOptimizeAvail && createRow(__('Transcode'), optimize ? __('Yes') : __('No'))}
                     {createRow(__('Title'), formattedTitle)}
                     {createRow(__('Description'), descriptionValue)}

@@ -46,8 +46,6 @@ import InvitedPage from 'page/invited';
 import LibraryPage from 'page/library';
 import ListBlockedPage from 'page/listBlocked';
 import ListsPage from 'page/lists';
-import LiveStreamSetupPage from 'page/livestreamSetup';
-import LivestreamCurrentPage from 'page/livestreamCurrent';
 import OwnComments from 'page/ownComments';
 import PasswordResetPage from 'page/passwordReset';
 import PasswordSetPage from 'page/passwordSet';
@@ -306,8 +304,6 @@ function AppRouter(props: Props) {
       <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_CREATOR}`} component={SettingsCreatorPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.WALLET}`} exact component={WalletPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.CHANNELS}`} component={ChannelsPage} />
-      <PrivateRoute {...props} path={`/$/${PAGES.LIVESTREAM}`} component={LiveStreamSetupPage} />
-      <PrivateRoute {...props} path={`/$/${PAGES.LIVESTREAM_CURRENT}`} component={LivestreamCurrentPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.BUY}`} component={BuyPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.RECEIVE}`} component={ReceivePage} />
       <PrivateRoute {...props} path={`/$/${PAGES.SEND}`} component={SendPage} />

@@ -37,6 +37,10 @@ export default function Notification(props: Props) {
   const [isReplying, setReplying] = React.useState(false);
   const [quickReply, setQuickReply] = React.useState();
 
+  const isIgnoredNotification = notification_rule === RULE.NEW_LIVESTREAM;
+  if (isIgnoredNotification) {
+    return null;
+  }
   const isCommentNotification =
     notification_rule === RULE.COMMENT ||
     notification_rule === RULE.COMMENT_REPLY ||
@@ -80,10 +84,6 @@ export default function Notification(props: Props) {
       icon = creatorIcon(channelUrl);
       break;
     case RULE.NEW_CONTENT:
-      channelUrl = notification_parameters.dynamic.channel_url;
-      icon = creatorIcon(channelUrl);
-      break;
-    case RULE.NEW_LIVESTREAM:
       channelUrl = notification_parameters.dynamic.channel_url;
       icon = creatorIcon(channelUrl);
       break;
