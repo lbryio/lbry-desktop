@@ -56,8 +56,6 @@ import RepostNew from 'page/repost';
 import RewardsPage from 'page/rewards';
 import RewardsVerifyPage from 'page/rewardsVerify';
 import SearchPage from 'page/search';
-import SettingsStripeCard from 'page/settingsStripeCard';
-import SettingsStripeAccount from 'page/settingsStripeAccount';
 
 import SettingsCreatorPage from 'page/settingsCreator';
 import SettingsNotificationsPage from 'page/settingsNotifications';
@@ -279,8 +277,6 @@ function AppRouter(props: Props) {
         component={isAuthenticated || !IS_WEB ? ChannelsFollowingPage : DiscoverPage}
       />
       <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_NOTIFICATIONS}`} component={SettingsNotificationsPage} />
-      <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} component={SettingsStripeCard} />
-      <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_STRIPE_ACCOUNT}`} component={SettingsStripeAccount} />
       <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_UPDATE_PWD}`} component={UpdatePasswordPage} />
       <PrivateRoute
         {...props}
