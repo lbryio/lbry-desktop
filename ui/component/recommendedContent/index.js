@@ -2,7 +2,6 @@ import { connect } from 'react-redux';
 import { makeSelectClaimForUri } from 'redux/selectors/claims';
 import { doFetchRecommendedContent } from 'redux/actions/search';
 import { makeSelectRecommendedContentForUri, selectIsSearching } from 'redux/selectors/search';
-import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import RecommendedContent from './view';
 
 const select = (state, props) => {
@@ -17,7 +16,6 @@ const select = (state, props) => {
     recommendedContentUris,
     nextRecommendedUri,
     isSearching: selectIsSearching(state),
-    isAuthenticated: selectUserVerifiedEmail(state),
   };
 };
 
