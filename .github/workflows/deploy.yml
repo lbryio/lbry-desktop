@@ -36,7 +36,7 @@ jobs:
       - uses: maxim-lobanov/setup-xcode@v1
         if: startsWith(runner.os, 'mac')
         with:
-          xcode-version: '11.4'
+          xcode-version: '13.0'
 
       - name: Download blockchain headers
         run: |
