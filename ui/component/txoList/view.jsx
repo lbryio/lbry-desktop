@@ -292,7 +292,7 @@ function TxoList(props: Props) {
                 <div className="txo__export">
                   <FileExporter
                     data={transactionsFile}
-                    label={__('Export')}
+                    label={__('Export All')}
                     tooltip={__('Fetch transaction data for export')}
                     defaultFileName={'transactions-history.csv'}
                     onFetch={() => fetchTransactions()}
