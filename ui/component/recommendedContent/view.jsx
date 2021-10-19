@@ -1,9 +1,7 @@
 // @flow
-import { SHOW_ADS } from 'config';
 import React from 'react';
 import ClaimList from 'component/claimList';
 import ClaimListDiscover from 'component/claimListDiscover';
-import Ads from 'web/component/ads';
 import Card from 'component/common/card';
 import { useIsMobile, useIsMediumScreen } from 'effects/use-screensize';
 import Button from 'component/button';
@@ -19,7 +17,6 @@ type Props = {
   nextRecommendedUri: string,
   isSearching: boolean,
   doFetchRecommendedContent: (string) => void,
-  isAuthenticated: boolean,
   claim: ?StreamClaim,
   claimId: string,
 };
@@ -31,7 +28,6 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
     recommendedContentUris,
     nextRecommendedUri,
     isSearching,
-    isAuthenticated,
     claim,
     claimId,
   } = props;
@@ -99,7 +95,6 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
               loading={isSearching}
               uris={recommendedContentUris}
               hideMenu={isMobile}
-              injectedItem={SHOW_ADS && IS_WEB && !isAuthenticated && <Ads small type={'video'} />}
               empty={__('No related content found')}
               onClick={handleRecommendationClicked}
             />
@@ -118,7 +113,6 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
               channelIds={[signingChannel.claim_id]}
               loading={isSearching}
               hideMenu={isMobile}
-              injectedItem={SHOW_ADS && IS_WEB && !isAuthenticated && <Ads small type={'video'} />}
               empty={__('No related content found')}
             />
           )}
@@ -135,7 +129,6 @@ function areEqual(prevProps: Props, nextProps: Props) {
   if (
     a.uri !== b.uri ||
     a.nextRecommendedUri !== b.nextRecommendedUri ||
-    a.isAuthenticated !== b.isAuthenticated ||
     a.isSearching !== b.isSearching ||
     (a.recommendedContentUris && !b.recommendedContentUris) ||
     (!a.recommendedContentUris && b.recommendedContentUris) ||

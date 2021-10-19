@@ -4,24 +4,11 @@ import React from 'react';
 import Button from 'component/button';
 import Yrbl from 'component/yrbl';
 import { SITE_HELP_EMAIL } from 'config';
-// @if TARGET='web'
-import { STATUS_DEGRADED, STATUS_FAILING, STATUS_DOWN } from 'web/effects/use-degraded-performance';
-// @endif
 
-type Props = {
-  lbryTvApiStatus: string,
-};
+type Props = {};
 
 export default function SyncFatalError(props: Props) {
-  const { lbryTvApiStatus } = props;
-
   let downTime = false;
-
-  // @if TARGET='web'
-  downTime =
-    IS_WEB &&
-    (lbryTvApiStatus === STATUS_DEGRADED || lbryTvApiStatus === STATUS_FAILING || lbryTvApiStatus === STATUS_DOWN);
-  // @endif
 
   return (
     <div className="main--empty">
