@@ -2,20 +2,22 @@
 import { normalizeURI, parseURI, isURIValid } from 'util/lbryURI';
 import { selectSupportsByOutpoint } from 'redux/selectors/wallet';
 import { createSelector } from 'reselect';
+import { createCachedSelector } from 're-reselect';
 import { isClaimNsfw, filterClaims } from 'util/claim';
 import * as CLAIM from 'constants/claim';
 
+type State = { claims: any };
+
 const selectState = (state) => state.claims || {};
 
-export const selectById = createSelector(selectState, (state) => state.byId || {});
-
-export const selectPendingClaimsById = createSelector(selectState, (state) => state.pendingById || {});
+export const selectById = (state: State) => selectState(state).byId || {};
+export const selectPendingClaimsById = (state: State) => selectState(state).pendingById || {};
 
 export const selectClaimsById = createSelector(selectById, selectPendingClaimsById, (byId, pendingById) => {
   return Object.assign(byId, pendingById); // do I need merged to keep metadata?
 });
 
-export const selectClaimIdsByUri = createSelector(selectState, (state) => state.claimsByUri || {});
+export const selectClaimIdsByUri = (state: State) => selectState(state).claimsByUri || {};
 
 export const selectCurrentChannelPage = createSelector(selectState, (state) => state.currentChannelPage || 1);
 
@@ -73,6 +75,43 @@ export const makeSelectClaimIdForUri = (uri: string) =>
 export const selectReflectingById = createSelector(selectState, (state) => state.reflectingById);
 
 export const makeSelectClaimForClaimId = (claimId: string) => createSelector(selectClaimsById, (byId) => byId[claimId]);
+
+export const selectClaimForUri = createCachedSelector(
+  selectClaimIdsByUri,
+  selectClaimsById,
+  (state, uri) => uri,
+  (state, uri, returnRepost = true) => returnRepost,
+  (byUri, byId, uri, returnRepost) => {
+    const validUri = isURIValid(uri);
+
+    if (validUri && byUri) {
+      const claimId = uri && byUri[normalizeURI(uri)];
+      const claim = byId[claimId];
+
+      // Make sure to return the claim as is so apps can check if it's been resolved before (null) or still needs to be resolved (undefined)
+      if (claimId === null) {
+        return null;
+      } else if (claimId === undefined) {
+        return undefined;
+      }
+
+      const repostedClaim = claim && claim.reposted_claim;
+      if (repostedClaim && returnRepost) {
+        const channelUrl =
+          claim.signing_channel && (claim.signing_channel.canonical_url || claim.signing_channel.permanent_url);
+
+        return {
+          ...repostedClaim,
+          repost_url: normalizeURI(uri),
+          repost_channel_url: channelUrl,
+          repost_bid_amount: claim && claim.meta && claim.meta.effective_amount,
+        };
+      } else {
+        return claim;
+      }
+    }
+  }
+)((state, uri, returnRepost = true) => `${uri}:${returnRepost ? '1' : '0'}`);
 
 export const makeSelectClaimForUri = (uri: string, returnRepost: boolean = true) =>
   createSelector(selectClaimIdsByUri, selectClaimsById, (byUri, byId) => {
@@ -231,6 +270,11 @@ export const makeSelectTotalPagesInChannelSearch = (uri: string) =>
     return byChannel['pageCount'];
   });
 
+export const selectMetadataForUri = createCachedSelector(selectClaimForUri, (claim, uri) => {
+  const metadata = claim && claim.value;
+  return metadata || (claim === undefined ? undefined : null);
+})((state, uri) => uri);
+
 export const makeSelectMetadataForUri = (uri: string) =>
   createSelector(makeSelectClaimForUri(uri), (claim) => {
     const metadata = claim && claim.value;
@@ -245,8 +289,9 @@ export const makeSelectMetadataItemForUri = (uri: string, key: string) =>
 export const makeSelectTitleForUri = (uri: string) =>
   createSelector(makeSelectMetadataForUri(uri), (metadata) => metadata && metadata.title);
 
-export const makeSelectDateForUri = (uri: string) =>
-  createSelector(makeSelectClaimForUri(uri), (claim) => {
+export const selectDateForUri = createCachedSelector(
+  selectClaimForUri, // input: (state, uri, ?returnRepost)
+  (claim) => {
     const timestamp =
       claim &&
       claim.value &&
@@ -260,7 +305,8 @@ export const makeSelectDateForUri = (uri: string) =>
     }
     const dateObj = new Date(timestamp);
     return dateObj;
-  });
+  }
+)((state, uri) => uri);
 
 export const makeSelectAmountForUri = (uri: string) =>
   createSelector(makeSelectClaimForUri(uri), (claim) => {
@@ -495,6 +541,10 @@ export const makeSelectMyChannelPermUrlForName = (name: string) =>
     const matchingClaim = claims && claims.find((claim) => claim.name === name);
     return matchingClaim ? matchingClaim.permanent_url : null;
   });
+
+export const selectTagsForUri = createCachedSelector(selectMetadataForUri, (metadata: ?GenericMetadata) => {
+  return (metadata && metadata.tags) || [];
+})((state, uri) => uri);
 
 export const makeSelectTagsForUri = (uri: string) =>
   createSelector(makeSelectMetadataForUri(uri), (metadata: ?GenericMetadata) => {

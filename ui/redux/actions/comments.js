@@ -9,8 +9,8 @@ import { selectClaimsByUri, selectMyChannelClaims } from 'redux/selectors/claims
 import { doClaimSearch } from 'redux/actions/claims';
 import { doToast, doSeeNotifications } from 'redux/actions/notifications';
 import {
-  makeSelectMyReactionsForComment,
-  makeSelectOthersReactionsForComment,
+  selectMyReactsForComment,
+  selectOthersReactsForComment,
   selectPendingCommentReacts,
   selectModerationBlockList,
   selectModerationDelegatorsById,
@@ -466,8 +466,8 @@ export function doCommentReact(commentId: string, type: string) {
     }
 
     const reactKey = `${commentId}:${activeChannelClaim.claim_id}`;
-    const myReacts = makeSelectMyReactionsForComment(reactKey)(state);
-    const othersReacts = makeSelectOthersReactionsForComment(reactKey)(state);
+    const myReacts = selectMyReactsForComment(state, reactKey) || [];
+    const othersReacts = selectOthersReactsForComment(state, reactKey) || {};
 
     const signatureData = await channelSignName(activeChannelClaim.claim_id, activeChannelClaim.name);
     if (!signatureData) {

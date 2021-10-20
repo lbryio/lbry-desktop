@@ -15,7 +15,6 @@ type Props = {
   supportsBalance: number,
   tipsBalance: number,
   claim: any,
-  metaData: any,
   handleClose: () => void,
   abandonSupportForClaim: (string, string, boolean | string, boolean) => any,
   abandonClaimError: ?string,
@@ -37,14 +36,14 @@ const SupportsLiquidate = (props: Props) => {
 
   useEffect(() => {
     if (claimId && abandonSupportForClaim) {
-      abandonSupportForClaim(claimId, type, false, true).then(r => {
+      abandonSupportForClaim(claimId, type, false, true).then((r) => {
         setPreviewBalance(r.total_input);
       });
     }
   }, [abandonSupportForClaim, claimId, type, setPreviewBalance]);
 
   function handleSubmit() {
-    abandonSupportForClaim(claimId, type, keep, false).then(r => {
+    abandonSupportForClaim(claimId, type, keep, false).then((r) => {
       if (r) {
         handleClose();
       }
@@ -141,7 +140,7 @@ const SupportsLiquidate = (props: Props) => {
                       step={0.01}
                       max={previewBalance}
                       value={Number(amount) >= 0 ? amount : previewBalance / 4} // by default, set it to 25% of available
-                      onChange={e => handleChange(e.target.value)}
+                      onChange={(e) => handleChange(e.target.value)}
                     />
                     <label className="range__label">
                       <span>0</span>
@@ -152,7 +151,7 @@ const SupportsLiquidate = (props: Props) => {
                       type="text"
                       value={amount >= 0 ? amount || '' : previewBalance && previewBalance / 4}
                       helper={message}
-                      onChange={e => handleChange(e.target.value)}
+                      onChange={(e) => handleChange(e.target.value)}
                     />
                   </Form>
                 )}

@@ -2,7 +2,6 @@ import { connect } from 'react-redux';
 import { doSetContentHistoryItem, doSetPrimaryUri, clearPosition } from 'redux/actions/content';
 import { withRouter } from 'react-router-dom';
 import {
-  makeSelectMetadataForUri,
   makeSelectClaimIsNsfw,
   makeSelectTagInClaimOrChannelForUri,
   makeSelectClaimIsStreamPlaceholder,
@@ -27,7 +26,6 @@ const select = (state, props) => {
   return {
     linkedCommentId: urlParams.get('lc'),
     costInfo: makeSelectCostInfoForUri(props.uri)(state),
-    metadata: makeSelectMetadataForUri(props.uri)(state),
     obscureNsfw: !selectShowMatureContent(state),
     isMature: makeSelectClaimIsNsfw(props.uri)(state),
     fileInfo: makeSelectFileInfoForUri(props.uri)(state),

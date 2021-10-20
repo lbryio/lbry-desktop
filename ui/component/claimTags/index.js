@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
-import { makeSelectTagsForUri } from 'redux/selectors/claims';
+import { selectTagsForUri } from 'redux/selectors/claims';
 import { selectFollowedTags } from 'redux/selectors/tags';
 import ClaimTags from './view';
 
 const select = (state, props) => ({
-  tags: makeSelectTagsForUri(props.uri)(state),
+  tags: selectTagsForUri(state, props.uri),
   followedTags: selectFollowedTags(state),
 });
 

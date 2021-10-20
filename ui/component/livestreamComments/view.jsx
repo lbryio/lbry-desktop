@@ -63,11 +63,11 @@ export default function LivestreamComments(props: Props) {
 
   const pinnedComment = pinnedComments.length > 0 ? pinnedComments[0] : null;
 
-  function restoreScrollPos() {
+  const restoreScrollPos = React.useCallback(() => {
     if (discussionElement) {
       discussionElement.scrollTop = 0;
     }
-  }
+  }, [discussionElement]);
 
   React.useEffect(() => {
     if (claimId) {
@@ -139,10 +139,10 @@ export default function LivestreamComments(props: Props) {
     const clonedSuperchats = JSON.parse(JSON.stringify(superChatsByTipAmount));
 
     // for top to bottom display, oldest superchat on top most recent on bottom
-    superChatsReversed = clonedSuperchats
-      .sort((a, b) => {
-        return b.timestamp - a.timestamp;
-      }); }
+    superChatsReversed = clonedSuperchats.sort((a, b) => {
+      return b.timestamp - a.timestamp;
+    });
+  }
 
   // todo: implement comment_list --mine in SDK so redux can grab with selectCommentIsMine
   function isMyComment(channelId: string) {

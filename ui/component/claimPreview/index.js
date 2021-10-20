@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import {
-  makeSelectClaimForUri,
+  selectClaimForUri,
   makeSelectIsUriResolving,
   makeSelectClaimIsMine,
   makeSelectClaimIsPending,
@@ -9,7 +9,7 @@ import {
   makeSelectClaimWasPurchased,
   makeSelectClaimIsStreamPlaceholder,
   makeSelectTitleForUri,
-  makeSelectDateForUri,
+  selectDateForUri,
 } from 'redux/selectors/claims';
 import { makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
 import {
@@ -32,14 +32,14 @@ import ClaimPreview from './view';
 import formatMediaDuration from 'util/formatMediaDuration';
 
 const select = (state, props) => {
-  const claim = props.uri && makeSelectClaimForUri(props.uri)(state);
+  const claim = props.uri && selectClaimForUri(state, props.uri);
   const media = claim && claim.value && (claim.value.video || claim.value.audio);
   const mediaDuration = media && media.duration && formatMediaDuration(media.duration, { screenReader: true });
 
   return {
     claim,
     mediaDuration,
-    date: props.uri && makeSelectDateForUri(props.uri)(state),
+    date: props.uri && selectDateForUri(state, props.uri),
     title: props.uri && makeSelectTitleForUri(props.uri)(state),
     pending: props.uri && makeSelectClaimIsPending(props.uri)(state),
     reflectingProgress: props.uri && makeSelectReflectingClaimForUri(props.uri)(state),
@@ -47,7 +47,6 @@ const select = (state, props) => {
     claimIsMine: props.uri && makeSelectClaimIsMine(props.uri)(state),
     isResolvingUri: props.uri && makeSelectIsUriResolving(props.uri)(state),
     isResolvingRepost: props.uri && makeSelectIsUriResolving(props.repostUrl)(state),
-    repostClaim: props.uri && makeSelectClaimForUri(props.uri)(state),
     nsfw: props.uri && makeSelectClaimIsNsfw(props.uri)(state),
     blackListedOutpoints: selectBlackListedOutpoints(state),
     filteredOutpoints: selectFilteredOutpoints(state),

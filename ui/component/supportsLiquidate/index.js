@@ -8,7 +8,7 @@ import {
   selectAbandonClaimSupportError,
 } from 'redux/selectors/wallet';
 
-import { makeSelectMetadataForUri, makeSelectClaimForUri } from 'redux/selectors/claims';
+import { makeSelectClaimForUri } from 'redux/selectors/claims';
 import { doSupportAbandonForClaim } from 'redux/actions/wallet';
 import SupportsLiquidate from './view';
 
@@ -19,7 +19,6 @@ const select = (state, props) => ({
   supportsBalance: selectSupportsBalance(state) || undefined,
   tipsBalance: selectTipsBalance(state) || undefined,
   claim: makeSelectClaimForUri(props.uri)(state),
-  metadata: makeSelectMetadataForUri(props.uri)(state),
   abandonClaimError: selectAbandonClaimSupportError(state),
 });
 

@@ -2,7 +2,6 @@ import { connect } from 'react-redux';
 import {
   makeSelectClaimForUri,
   makeSelectMetadataForUri,
-  makeSelectTagsForUri,
   makeSelectClaimIsMine,
 } from 'redux/selectors/claims';
 import { makeSelectPendingAmountByUri } from 'redux/selectors/wallet';
@@ -15,7 +14,6 @@ const select = (state, props) => ({
   claimIsMine: makeSelectClaimIsMine(props.uri)(state),
   metadata: makeSelectMetadataForUri(props.uri)(state),
   user: selectUser(state),
-  tags: makeSelectTagsForUri(props.uri)(state),
   pendingAmount: makeSelectPendingAmountByUri(props.uri)(state),
 });
 
