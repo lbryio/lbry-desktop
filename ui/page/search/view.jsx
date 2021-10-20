@@ -29,10 +29,15 @@ export default function SearchPage(props: Props) {
   const uriFromQuery = `lbry://${modifiedUrlQuery}`;
 
   let streamName;
+  let channelName;
   let isValid = true;
   try {
-    ({ streamName } = parseURI(uriFromQuery));
-    if (!streamName || !isNameValid(streamName)) {
+    ({ streamName, channelName } = parseURI(uriFromQuery));
+    if (
+      (!streamName && !channelName) ||
+      (streamName && !isNameValid(streamName)) ||
+      (channelName && !isNameValid(channelName))
+    ) {
       isValid = false;
     }
   } catch (e) {
