@@ -735,7 +735,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 - Channels page above Publishes which lists all your channels ([#2925](https://github.com/lbryio/lbry-desktop/pull/2925))
-- YouTube channel claiming and transfer ([#2925](https://github.com/lbryio/lbry-desktop/pull/2925)). See our [YouTube FAQ](https://lbry.com/faq/youtube) for more information.
+- YouTube channel claiming and transfer ([#2925](https://github.com/lbryio/lbry-desktop/pull/2925)). See our [YouTube FAQ](https://odysee.com/@OdyseeHelp:b/youtube-sync:b) for more information.
 - New user sign in flow now includes automatic redeeming of 1 LBC and channel creation ([#2925](https://github.com/lbryio/lbry-desktop/pull/2925))
 - Ability to save wallet encryption password ([#2925](https://github.com/lbryio/lbry-desktop/pull/2925))
 - Sync your balance (only for users with new wallets) and preferences (subscriptions and tags) between devices ([#2925](https://github.com/lbryio/lbry-desktop/pull/2925)). See our [FAQ for more information](https://lbry.com/faq/account-sync)
@@ -890,7 +890,7 @@ This release includes a breaking change that will reset many of your settings. T
 
 ### Added
 
-- New app design for better [content discovery](https://lbry.com/faq/trending) with infinite scroll ([#2477](https://github.com/lbryio/lbry-desktop/pull/2477))
+- New app design for better [content discovery](https://odysee.com/@OdyseeHelp:b/OdyseeBasics:c) with infinite scroll ([#2477](https://github.com/lbryio/lbry-desktop/pull/2477))
 - First implementation of comments ([#2510](https://github.com/lbryio/lbry-desktop/pull/2510))
 - Ability to edit channels with new metadata and tags ([#2584](https://github.com/lbryio/lbry-desktop/pull/2584))
 - Tagging content on publish page ([#2593](https://github.com/lbryio/lbry-desktop/pull/2593))

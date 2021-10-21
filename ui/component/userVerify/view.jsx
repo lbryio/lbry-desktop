@@ -53,7 +53,11 @@ class UserVerify extends React.PureComponent<Props> {
             <I18nMessage
               tokens={{
                 rewards_program: (
-                  <Button button="link" label={__('other rewards')} href="https://lbry.com/faq/rewards" />
+                  <Button
+                    button="link"
+                    label={__('other rewards')}
+                    href="https://odysee.com/@OdyseeHelp:b/rewards-verification:3"
+                  />
                 ),
                 Refresh: <Button onClick={() => fetchUser()} button="link" label={__('Refresh')} />,
                 Skip: <Button {...skipButtonProps} button="link" label={__('Skip')} />,
@@ -87,7 +91,12 @@ class UserVerify extends React.PureComponent<Props> {
                 />
                 <p className="help">
                   {__('Standard messaging rates apply. Having trouble?')}{' '}
-                  <Button button="link" href="https://lbry.com/faq/phone" label={__('Read more')} />.
+                  <Button
+                    button="link"
+                    href="https://odysee.com/@OdyseeHelp:b/rewards-verification:3"
+                    label={__('Read more')}
+                  />
+                  .
                 </p>
               </Fragment>
             }
@@ -113,7 +122,12 @@ class UserVerify extends React.PureComponent<Props> {
                 />
                 <p className="help">
                   {__('A $1 authorization may temporarily appear with your provider.')}{' '}
-                  <Button button="link" href="https://lbry.com/faq/identity-requirements" label={__('Read more')} />.
+                  <Button
+                    button="link"
+                    href="https://odysee.com/@OdyseeHelp:b/rewards-verification:3"
+                    label={__('Read more')}
+                  />
+                  .
                 </p>
               </Fragment>
             }

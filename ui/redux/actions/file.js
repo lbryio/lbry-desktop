@@ -159,7 +159,7 @@ export function doFileGet(uri: string, saveFile: boolean = true, onSuccess?: (Ge
 
         dispatch(
           doToast({
-            message: `Failed to view ${uri}, please try again. If this problem persists, visit https://lbry.com/faq/support for support.`,
+            message: `Failed to view ${uri}, please try again. If this problem persists, visit https://odysee.com/@OdyseeHelp:b?view=about for support.`,
             isError: true,
           })
         );

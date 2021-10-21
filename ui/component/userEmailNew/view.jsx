@@ -157,7 +157,7 @@ function UserEmailNew(props: Props) {
                   label={
                     <React.Fragment>
                       {__('Share usage data with LBRY inc.')}{' '}
-                      <Button button="link" href="https://lbry.com/faq/privacy-and-data" label={__('Learn More')} />
+                      <Button button="link" href="https://odysee.com/$/privacypolicy" label={__('Learn More')} />
                       {!localShareUsageData && <span className="error__text"> ({__('Required')})</span>}
                     </React.Fragment>
                   }

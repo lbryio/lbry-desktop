@@ -45,7 +45,7 @@ function FileViewCount(props: Props) {
       {!livestream &&
         activeViewers === undefined &&
         (viewCount !== 1 ? __('%view_count% views', { view_count: formattedViewCount }) : __('1 view'))}
-      {!SIMPLE_SITE && <HelpLink href="https://lbry.com/faq/views" />}
+      {!SIMPLE_SITE && <HelpLink href="https://odysee.com/@OdyseeHelp:b/OdyseeBasics:c" />}
     </span>
   );
 }

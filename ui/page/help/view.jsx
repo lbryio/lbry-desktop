@@ -147,14 +147,14 @@ class HelpPage extends React.PureComponent<Props, State> {
               ) : (
                 <>
                   <Button
-                    href="https://lbry.com/faq/lbry-basics"
-                    label={__('Read the App Basics FAQ')}
+                    href="https://odysee.com/@OdyseeHelp:b/OdyseeBasics:c"
+                    label={__('Read Odysee Basics FAQ')}
                     icon={ICONS.HELP}
                     button="secondary"
                   />
                   <Button
-                    href="https://lbry.com/faq"
-                    label={__('View all LBRY FAQs')}
+                    href="https://odysee.com/@OdyseeHelp:b"
+                    label={__('View all Odysee FAQs')}
                     icon={ICONS.HELP}
                     button="secondary"
                   />

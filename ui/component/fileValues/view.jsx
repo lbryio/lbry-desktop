@@ -52,7 +52,7 @@ class FileValues extends PureComponent<Props> {
           <tr>
             <td>
               {__('Supports and Tips')}
-              <HelpLink href="https://lbry.com/faq/tipping" />
+              <HelpLink href="https://odysee.com/@OdyseeHelp:b/Monetization-of-Content:3" />
             </td>
             <td>
               {claimIsMine && !pendingAmount && Boolean(supportsAmount) && (
@@ -80,7 +80,7 @@ class FileValues extends PureComponent<Props> {
             <td>
               <div>
                 {__('Total Staked Amount')}
-                <HelpLink href="https://lbry.com/faq/tipping" />
+                <HelpLink href="https://odysee.com/@OdyseeHelp:b/Monetization-of-Content:3" />
               </div>
             </td>
             <td>

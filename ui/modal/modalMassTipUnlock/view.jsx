@@ -45,7 +45,13 @@ export default function ModalSupportsLiquidate(props: Props) {
             <p>
               <I18nMessage
                 tokens={{
-                  learn_more: <Button button="link" label={__('Learn More')} href="https://lbry.com/faq/tipping" />,
+                  learn_more: (
+                    <Button
+                      button="link"
+                      label={__('Learn More')}
+                      href="https://odysee.com/@OdyseeHelp:b/Monetization-of-Content:3"
+                    />
+                  ),
                 }}
               >
                 It's usually only worth unlocking what you intend to use immediately. %learn_more%

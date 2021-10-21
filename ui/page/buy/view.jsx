@@ -97,7 +97,13 @@ export default function BuyPage(props: Props) {
   const subtitle = (
     <I18nMessage
       tokens={{
-        learn_more: <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/buy-lbc" />,
+        learn_more: (
+          <Button
+            button="link"
+            label={__('Learn more')}
+            href="https://odysee.com/@OdyseeHelp:b/BuyingSellingLBRYCredits:b"
+          />
+        ),
       }}
     >
       LBRY, Inc. partners with Moonpay to provide the option to purchase LBRY Credits. %learn_more%.

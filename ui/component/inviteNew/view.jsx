@@ -135,7 +135,11 @@ function InviteNew(props: Props) {
                     tokens={{
                       rewards_link: <Button button="link" navigate="/$/rewards" label={__('rewards')} />,
                       referral_faq_link: (
-                        <Button button="link" label={__('FAQ')} href="https://lbry.com/faq/referrals" />
+                        <Button
+                          button="link"
+                          label={__('FAQ')}
+                          href="https://odysee.com/@OdyseeHelp:b/rewards-verification:3"
+                        />
                       ),
                     }}
                   >

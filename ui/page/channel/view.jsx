@@ -238,7 +238,7 @@ function ChannelPage(props: Props) {
           <div className="channel__meta">
             <span>
               {formattedSubCount} {subCount !== 1 ? __('Followers') : __('Follower')}
-              <HelpLink href="https://lbry.com/faq/views" />
+              <HelpLink href="https://odysee.com/@OdyseeHelp:b/OdyseeBasics:c" />
             </span>
             {channelIsMine && (
               <>

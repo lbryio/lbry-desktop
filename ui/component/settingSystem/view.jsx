@@ -259,7 +259,7 @@ export default function SettingSystem(props: Props) {
                         <Button
                           button="link"
                           label={__('Learn more')}
-                          href="https://lbry.com/faq/video-publishing-guide#automatic"
+                          href="https://odysee.com/@OdyseeHelp:b/uploadguide:1"
                         />
                       ),
                     }}
@@ -281,7 +281,7 @@ export default function SettingSystem(props: Props) {
                         <Button
                           button="link"
                           label={__('Learn more')}
-                          href="https://lbry.com/faq/video-publishing-guide#automatic"
+                          href="https://odysee.com/@OdyseeHelp:b/uploadguide:1"
                         />
                       ),
                     }}

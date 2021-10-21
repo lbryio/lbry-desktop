@@ -11,7 +11,7 @@ type Props = {
   closeModal: () => void,
   error: ?string,
   rewardIsPending: boolean,
-  submitRewardCode: string => void,
+  submitRewardCode: (string) => void,
 };
 
 type State = {
@@ -48,7 +48,11 @@ class ModalRewardCode extends React.PureComponent<Props, State> {
               tokens={{
                 lbc: <LbcSymbol prefix={__('Redeem a custom reward code for')} />,
                 learn_more: (
-                  <Button button="link" href="https://lbry.com/faq/rewards#reward-code" label={__('Learn more')} />
+                  <Button
+                    button="link"
+                    href="https://odysee.com/@OdyseeHelp:b/rewards-verification:3#reward-code"
+                    label={__('Learn more')}
+                  />
                 ),
               }}
             >
@@ -74,7 +78,7 @@ class ModalRewardCode extends React.PureComponent<Props, State> {
                   placeholder="0123abc"
                   error={error}
                   value={rewardCode}
-                  onChange={e => this.setState({ rewardCode: e.target.value })}
+                  onChange={(e) => this.setState({ rewardCode: e.target.value })}
                 />
               </Form>
               <div className="card__actions">

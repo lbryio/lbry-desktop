@@ -168,7 +168,7 @@ export default function YoutubeSync(props: Props) {
                           <Button
                             button="link"
                             label={__('how the program works')}
-                            href="https://lbry.com/faq/youtube"
+                            href="https://odysee.com/@OdyseeHelp:b/youtube-sync:b"
                           />
                         ),
                         site_name: SITE_NAME,
@@ -197,7 +197,13 @@ export default function YoutubeSync(props: Props) {
                 <div className="help--card-actions">
                   <I18nMessage
                     tokens={{
-                      learn_more: <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/youtube" />,
+                      learn_more: (
+                        <Button
+                          button="link"
+                          label={__('Learn more')}
+                          href="https://odysee.com/@OdyseeHelp:b/youtube-sync:b"
+                        />
+                      ),
                     }}
                   >
                     This will verify you are an active YouTuber. Channel names cannot be changed once chosen, please be

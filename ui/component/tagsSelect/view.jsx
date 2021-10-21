@@ -11,7 +11,7 @@ import Card from 'component/common/card';
 type Props = {
   showClose?: boolean,
   followedTags: Array<Tag>,
-  doToggleTagFollowDesktop?: string => void,
+  doToggleTagFollowDesktop?: (string) => void,
   suggestMature: boolean,
   // Overrides
   // The default component is for following tags
@@ -20,7 +20,7 @@ type Props = {
   label?: string,
   tagsChosen?: Array<Tag>,
   onSelect?: (Array<Tag>) => void,
-  onRemove?: Tag => void,
+  onRemove?: (Tag) => void,
   placeholder?: string,
   disableAutoFocus?: boolean,
   hideHeader?: boolean,
@@ -52,7 +52,7 @@ export default function TagsSelect(props: Props) {
   const [hasClosed, setHasClosed] = usePersistedState('tag-select:has-closed', false);
   const tagsToDisplay = tagsChosen || followedTags;
   const tagCount = tagsToDisplay.length;
-  const hasMatureTag = tagsToDisplay.map(tag => tag.name).includes('mature');
+  const hasMatureTag = tagsToDisplay.map((tag) => tag.name).includes('mature');
 
   function handleClose() {
     setHasClosed(true);
@@ -64,7 +64,7 @@ export default function TagsSelect(props: Props) {
     } else if (doToggleTagFollowDesktop) {
       doToggleTagFollowDesktop(tag.name);
 
-      const wasFollowing = followedTags.map(tag => tag.name).includes(tag.name);
+      const wasFollowing = followedTags.map((tag) => tag.name).includes(tag.name);
       const nowFollowing = !wasFollowing;
       analytics.tagFollowEvent(tag.name, nowFollowing, 'tag-select');
     }
@@ -94,7 +94,7 @@ export default function TagsSelect(props: Props) {
           help !== false && (
             <span>
               {help || __("The tags you follow will change what's trending for you.")}{' '}
-              <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/trending" />.
+              <Button button="link" label={__('Learn more')} href="https://odysee.com/@OdyseeHelp:b/OdyseeBasics:c" />.
             </span>
           )
         }

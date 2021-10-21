@@ -76,7 +76,13 @@ class RewardsPage extends PureComponent<Props> {
               <p>
                 <I18nMessage
                   tokens={{
-                    rewards_faq: <Button button="link" label={__('Rewards FAQ')} href="https://odysee.com/@OdyseeHelp:b?view=about" />,
+                    rewards_faq: (
+                      <Button
+                        button="link"
+                        label={__('Rewards FAQ')}
+                        href="https://odysee.com/@OdyseeHelp:b/rewards-verification:3"
+                      />
+                    ),
                     help_email: SITE_HELP_EMAIL,
                     site_name: SITE_NAME,
                   }}

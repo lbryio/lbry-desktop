@@ -41,7 +41,11 @@ class RewardSummary extends React.Component<Props> {
               navigate="/$/rewards"
               label={hasRewards ? __('Claim Rewards') : __('View Rewards')}
             />
-            <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/rewards" />
+            <Button
+              button="link"
+              label={__('Learn more')}
+              href="https://odysee.com/@OdyseeHelp:b/rewards-verification:3"
+            />
           </React.Fragment>
         }
       />
