@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
-import { costInfoReducer, blacklistReducer, filteredReducer, statsReducer, webReducer } from 'lbryinc';
+import { costInfoReducer, blacklistReducer, filteredReducer, statsReducer } from 'lbryinc';
 import { claimsReducer } from 'redux/reducers/claims';
 import { fileInfoReducer } from 'redux/reducers/file_info';
 import { walletReducer } from 'redux/reducers/wallet';
@@ -48,6 +48,5 @@ export default (history) =>
     user: userReducer,
     wallet: walletReducer,
     sync: syncReducer,
-    web: webReducer,
     collections: collectionsReducer,
   });

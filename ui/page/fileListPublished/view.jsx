@@ -7,7 +7,6 @@ import ClaimList from 'component/claimList';
 import Page from 'component/page';
 import Paginate from 'component/common/paginate';
 import { PAGE_PARAM, PAGE_SIZE_PARAM } from 'constants/claim';
-import WebUploadList from 'component/webUploadList';
 import Spinner from 'component/spinner';
 import Yrbl from 'component/yrbl';
 import classnames from 'classnames';
@@ -17,7 +16,6 @@ const FILTER_UPLOADS = 'stream';
 const FILTER_REPOSTS = 'repost';
 
 type Props = {
-  uploadCount: number,
   checkPendingPublishes: () => void,
   clearPublish: () => void,
   fetchClaimListMine: (number, number, boolean, Array<string>) => void,
@@ -30,17 +28,7 @@ type Props = {
 };
 
 function FileListPublished(props: Props) {
-  const {
-    uploadCount,
-    checkPendingPublishes,
-    clearPublish,
-    fetchClaimListMine,
-    fetching,
-    urls,
-    urlTotal,
-    page,
-    pageSize,
-  } = props;
+  const { checkPendingPublishes, clearPublish, fetchClaimListMine, fetching, urls, urlTotal, page, pageSize } = props;
 
   const [filterBy, setFilterBy] = React.useState(FILTER_ALL);
   const params = {};
@@ -59,12 +47,11 @@ function FileListPublished(props: Props) {
       const params = JSON.parse(paramsString);
       fetchClaimListMine(params.page, params.page_size, true, filterBy.split(','));
     }
-  }, [uploadCount, paramsString, filterBy, fetchClaimListMine]);
+  }, [paramsString, filterBy, fetchClaimListMine]);
 
   return (
     <Page>
       <div className="card-stack">
-        <WebUploadList />
         {!!urls && (
           <>
             <ClaimList

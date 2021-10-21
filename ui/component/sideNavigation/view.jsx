@@ -272,7 +272,7 @@ function SideNavigation(props: Props) {
         <Button label={__('About --[link title in Sidebar or Footer]--')} href="https://lbry.com/about" />
       </li>
       <li className="navigation-link">
-        <Button label={__('FAQ')} href="https://odysee.com/@OdyseeHelp:b" />
+        <Button label={__('FAQ')} href="https://lbry.com/faq" />
       </li>
       <li className="navigation-link">
         <Button label={__('Support --[used in footer; general help/support]--')} href="https://lbry.com/support" />
