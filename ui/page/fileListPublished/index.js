@@ -7,7 +7,6 @@ import {
 } from 'redux/selectors/claims';
 import { doFetchClaimListMine, doCheckPendingClaims } from 'redux/actions/claims';
 import { doClearPublish } from 'redux/actions/publish';
-import { selectUploadCount } from 'lbryinc';
 import FileListPublished from './view';
 import { withRouter } from 'react-router';
 import { MY_CLAIMS_PAGE_SIZE, PAGE_PARAM, PAGE_SIZE_PARAM } from 'constants/claim';
@@ -25,7 +24,6 @@ const select = (state, props) => {
     urls: selectMyClaimsPage(state),
     urlTotal: selectMyClaimsPageItemCount(state),
     error: selectFetchingMyClaimsPageError(state),
-    uploadCount: selectUploadCount(state),
   };
 };
 
