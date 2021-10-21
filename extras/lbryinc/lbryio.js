@@ -1,6 +1,7 @@
 import * as ACTIONS from 'constants/action_types';
 import Lbry from 'lbry';
 import querystring from 'querystring';
+import analytics from 'analytics';
 
 const Lbryio = {
   enabled: true,
@@ -81,7 +82,10 @@ Lbryio.call = (resource, action, params = {}, method = 'get') => {
       url = `${Lbryio.CONNECTION_STRING}${resource}/${action}`;
     }
 
-    return makeRequest(url, options).then((response) => response.data);
+    return makeRequest(url, options).then((response) => {
+      sendCallAnalytics(resource, action, params);
+      return response.data;
+    });
   });
 };
 
@@ -232,5 +236,24 @@ Lbryio.overrides = {};
 Lbryio.setOverride = (methodName, newMethod) => {
   Lbryio.overrides[methodName] = newMethod;
 };
+
+function sendCallAnalytics(resource, action, params) {
+  switch (resource) {
+    case 'customer':
+      if (action === 'tip') {
+        analytics.reportEvent('spend_virtual_currency', {
+          // https://developers.google.com/analytics/devguides/collection/ga4/reference/events#spend_virtual_currency
+          value: params.amount,
+          virtual_currency_name: params.currency.toLowerCase(),
+          item_name: 'tip',
+        });
+      }
+      break;
+
+    default:
+      // Do nothing
+      break;
+  }
+}
 
 export default Lbryio;

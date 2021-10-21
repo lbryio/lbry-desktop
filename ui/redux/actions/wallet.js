@@ -347,9 +347,9 @@ export function doSendTip(params, isSupport, successCallback, errorCallback, sho
     const state = getState();
     const balance = selectBalance(state);
     const myClaims = selectMyClaimsRaw(state);
+    const supportOwnClaim = myClaims ? myClaims.find((claim) => claim.claim_id === params.claim_id) : false;
 
-    const shouldSupport =
-      isSupport || (myClaims ? myClaims.find((claim) => claim.claim_id === params.claim_id) : false);
+    const shouldSupport = isSupport || supportOwnClaim;
 
     if (balance - params.amount <= 0) {
       dispatch(
@@ -376,6 +376,10 @@ export function doSendTip(params, isSupport, successCallback, errorCallback, sho
 
       dispatch({
         type: ACTIONS.SUPPORT_TRANSACTION_COMPLETED,
+        data: {
+          amount: params.amount,
+          type: shouldSupport ? (supportOwnClaim ? 'support_own' : 'support_others') : 'tip',
+        },
       });
 
       if (successCallback) {
@@ -395,6 +399,7 @@ export function doSendTip(params, isSupport, successCallback, errorCallback, sho
         type: ACTIONS.SUPPORT_TRANSACTION_FAILED,
         data: {
           error: err,
+          type: shouldSupport ? (supportOwnClaim ? 'support_own' : 'support_others') : 'tip',
         },
       });
 
