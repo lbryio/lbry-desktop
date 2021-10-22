@@ -1,5 +1,5 @@
 // @flow
-import { SITE_NAME } from 'config';
+import { CLOUD_CONNECT_SITE_NAME } from 'config';
 import React from 'react';
 import { Modal } from 'modal/modal';
 import Button from 'component/button';
@@ -11,7 +11,7 @@ type Props = {
   accessToken: string,
   user: any,
   doAuth: () => void,
-  history: { push: string => void },
+  history: { push: (string) => void },
   location: UrlLocation,
 };
 
@@ -35,7 +35,7 @@ const ModalFirstSubscription = (props: Props) => {
             {__('Awesome! You just followed your first channel.')}{' '}
             {user && user.primary_email
               ? __('You will receive notifications related to new content.')
-              : __('Log in with %SITE_NAME% to receive notifications about new content.', { SITE_NAME })}
+              : __('Connect to %SITE_NAME% to receive notifications about new content.', { CLOUD_CONNECT_SITE_NAME })}
           </>
         }
         actions={

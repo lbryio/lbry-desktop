@@ -2198,5 +2198,9 @@
   "Default share url (%name%)": "Default share url (%name%)",
   "Custom share url": "Custom share url",
   "Share url": "Share url",
+  "Odysee Connect": "Odysee Connect",
+  "Log in to %CLOUD_CONNECT_SITE_NAME%": "Log in to %CLOUD_CONNECT_SITE_NAME%",
+  "Cloud Connect": "Cloud Connect",
+  "Connect your wallet to Odysee": "Connect your wallet to Odysee",
   "--end--": "--end--"
 }
