@@ -55,6 +55,8 @@ const defaultState = {
     [SETTINGS.DESKTOP_WINDOW_ZOOM]: 1,
     [SETTINGS.CUSTOM_COMMENTS_SERVER_ENABLED]: false,
     [SETTINGS.CUSTOM_COMMENTS_SERVER_URL]: '',
+    [SETTINGS.CUSTOM_SHARE_URL_ENABLED]: false,
+    [SETTINGS.CUSTOM_SHARE_URL]: '',
 
     [SETTINGS.DARK_MODE_TIMES]: {
       from: { hour: '21', min: '00', formattedTime: '21:00' },
