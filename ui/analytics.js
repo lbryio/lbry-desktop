@@ -1,7 +1,36 @@
 // @flow
 import { Lbryio } from 'lbryinc';
 import * as Sentry from '@sentry/browser';
+import * as RENDER_MODES from 'constants/file_render_modes';
 import { SDK_API_PATH } from './index';
+
+// --- GA ---
+// - Events: 500 max (cannot be deleted).
+// - Dimensions: 25 max (cannot be deleted, but can be "archived"). Usually
+//               tied to an event parameter for reporting purposes.
+//
+// Given the limitations above, we need to plan ahead before adding new Events
+// and Parameters.
+//
+// Events:
+// - Find a Recommended Event that is closest to what you need.
+//   https://support.google.com/analytics/answer/9267735?hl=en
+// - If doesn't exist, use a Custom Event.
+//
+// Parameters:
+// - Custom parameters don't appear in automated reports until they are tied to
+//   a Dimension.
+// - Add your entry to GA_DIMENSIONS below -- tt allows us to keep track so that
+//   we don't exceed the limit. Re-use existing parameters if possible.
+// - Register the Dimension in GA Console to make it visible in reports.
+
+export const GA_DIMENSIONS = {
+  TYPE: 'type',
+  ACTION: 'action',
+  VALUE: 'value',
+  DURATION_MS: 'duration_ms',
+};
+
 // import getConnectionSpeed from 'util/detect-user-bandwidth';
 
 // let userDownloadBandwidthInBitsPerSecond;
@@ -29,8 +58,8 @@ type Analytics = {
   apiLogPublish: (ChannelClaim | StreamClaim) => void,
   apiSyncTags: ({}) => void,
   tagFollowEvent: (string, boolean, ?string) => void,
-  playerLoadedEvent: (?boolean) => void,
-  playerStartedEvent: (?boolean) => void,
+  playerLoadedEvent: (string, ?boolean) => void,
+  playerVideoStartedEvent: (?boolean) => void,
   videoStartEvent: (string, number, string, number, string, any, number) => void,
   videoIsPlaying: (boolean, any) => void,
   videoBufferEvent: (
@@ -46,8 +75,6 @@ type Analytics = {
     }
   ) => Promise<any>,
   adsFetchedEvent: () => void,
-  adsReceivedEvent: (any) => void,
-  adsErrorEvent: (any) => void,
   emailProvidedEvent: () => void,
   emailVerifiedEvent: () => void,
   rewardEligibleEvent: () => void,
@@ -55,6 +82,7 @@ type Analytics = {
   purchaseEvent: (number) => void,
   readyEvent: (number) => void,
   openUrlEvent: (string) => void,
+  reportEvent: (string, any) => void,
 };
 
 type LogPublishParams = {
@@ -66,6 +94,8 @@ type LogPublishParams = {
 
 let internalAnalyticsEnabled: boolean = IS_WEB || false;
 // let thirdPartyAnalyticsEnabled: boolean = IS_WEB || false;
+
+const isGaAllowed = internalAnalyticsEnabled && isProduction;
 
 /**
  * Determine the mobile device type viewing the data
@@ -186,12 +216,8 @@ async function sendWatchmanData(body) {
       },
       body: JSON.stringify(body),
     });
-
     return response;
-  } catch (err) {
-    console.log('ERROR FROM WATCHMAN BACKEND');
-    console.log(err);
-  }
+  } catch (err) {}
 }
 
 const analytics: Analytics = {
@@ -244,7 +270,6 @@ const analytics: Analytics = {
     bitrateAsBitsPerSecond = videoBitrate;
 
     sendPromMetric('time_to_start', timeToStartVideo);
-    sendGaEvent('video_time_to_start', { claim_id: claimId, time: timeToStartVideo });
   },
   error: (message) => {
     return new Promise((resolve) => {
@@ -271,7 +296,7 @@ const analytics: Analytics = {
     });
   },
   setUser: (userId) => {
-    if (internalAnalyticsEnabled && userId && window.gtag) {
+    if (isGaAllowed && userId && window.gtag) {
       window.gtag('set', { user_id: userId });
     }
   },
@@ -339,54 +364,88 @@ const analytics: Analytics = {
   adsFetchedEvent: () => {
     sendGaEvent('ad_fetched');
   },
-  adsReceivedEvent: (response) => {
-    sendGaEvent('ad_received', { response: JSON.stringify(response) });
+  playerLoadedEvent: (renderMode, embedded) => {
+    const RENDER_MODE_TO_EVENT = (renderMode) => {
+      switch (renderMode) {
+        case RENDER_MODES.VIDEO:
+          return 'loaded_video';
+        case RENDER_MODES.AUDIO:
+          return 'loaded_audio';
+        case RENDER_MODES.MARKDOWN:
+          return 'loaded_markdown';
+        case RENDER_MODES.IMAGE:
+          return 'loaded_image';
+        default:
+          return 'loaded_misc';
+      }
+    };
+
+    sendGaEvent('player', {
+      [GA_DIMENSIONS.ACTION]: RENDER_MODE_TO_EVENT(renderMode),
+      [GA_DIMENSIONS.TYPE]: embedded ? 'embedded' : 'onsite',
+    });
   },
-  adsErrorEvent: (response) => {
-    sendGaEvent('ad_error', { response: JSON.stringify(response) });
-  },
-  playerLoadedEvent: (embedded) => {
-    sendGaEvent('player', { action: 'loaded', type: embedded ? 'embedded' : 'onsite' });
-  },
-  playerStartedEvent: (embedded) => {
-    sendGaEvent('player', { action: 'started', type: embedded ? 'embedded' : 'onsite' });
+  playerVideoStartedEvent: (embedded) => {
+    sendGaEvent('player', {
+      [GA_DIMENSIONS.ACTION]: 'started_video',
+      [GA_DIMENSIONS.TYPE]: embedded ? 'embedded' : 'onsite',
+    });
   },
   tagFollowEvent: (tag, following) => {
-    sendGaEvent(following ? 'tag_follow' : 'tag_unfollow', { tag });
-  },
-  channelBlockEvent: (uri, blocked, location) => {
-    sendGaEvent(blocked ? 'channel_hidden' : 'channel_unhidden', { uri });
+    sendGaEvent('tags', {
+      [GA_DIMENSIONS.ACTION]: following ? 'follow' : 'unfollow',
+      [GA_DIMENSIONS.VALUE]: tag,
+    });
   },
   emailProvidedEvent: () => {
-    sendGaEvent('engagement', { type: 'email_provided' });
+    sendGaEvent('engagement', {
+      [GA_DIMENSIONS.TYPE]: 'email_provided',
+    });
   },
   emailVerifiedEvent: () => {
-    sendGaEvent('engagement', { type: 'email_verified' });
+    sendGaEvent('engagement', {
+      [GA_DIMENSIONS.TYPE]: 'email_verified',
+    });
   },
   rewardEligibleEvent: () => {
-    sendGaEvent('engagement', { type: 'reward_eligible' });
+    sendGaEvent('engagement', {
+      [GA_DIMENSIONS.TYPE]: 'reward_eligible',
+    });
   },
   openUrlEvent: (url: string) => {
-    sendGaEvent('engagement', { type: 'open_url', url });
+    sendGaEvent('engagement', {
+      [GA_DIMENSIONS.TYPE]: 'open_url',
+      url,
+    });
   },
   trendingAlgorithmEvent: (trendingAlgorithm: string) => {
-    sendGaEvent('engagement', { type: 'trending_algorithm', trending_algorithm: trendingAlgorithm });
+    sendGaEvent('engagement', {
+      [GA_DIMENSIONS.TYPE]: 'trending_algorithm',
+      trending_algorithm: trendingAlgorithm,
+    });
   },
   startupEvent: () => {
     // TODO: This can be removed (use the automated 'session_start' instead).
-    // sendGaEvent('startup', 'startup');
+    // sendGaEvent('app_diagnostics', 'startup');
   },
   readyEvent: (timeToReadyMs: number) => {
-    sendGaEvent('startup_app_ready', { time_to_ready_ms: timeToReadyMs });
+    sendGaEvent('diag_app_ready', {
+      [GA_DIMENSIONS.DURATION_MS]: timeToReadyMs,
+    });
   },
   purchaseEvent: (purchaseInt: number) => {
-    // https://developers.google.com/analytics/devguides/collection/ga4/reference/events#purchase
-    sendGaEvent('purchase', { value: purchaseInt });
+    sendGaEvent('purchase', {
+      // https://developers.google.com/analytics/devguides/collection/ga4/reference/events#purchase
+      [GA_DIMENSIONS.VALUE]: purchaseInt,
+    });
+  },
+  reportEvent: (event: string, params?: { [string]: string | number }) => {
+    sendGaEvent(event, params);
   },
 };
 
 function sendGaEvent(event: string, params?: { [string]: string | number }) {
-  if (internalAnalyticsEnabled && isProduction && window.gtag) {
+  if (isGaAllowed && window.gtag) {
     window.gtag('event', event, params);
   }
 }
@@ -401,7 +460,7 @@ function sendPromMetric(name: string, value?: number) {
 }
 
 // Activate
-if (internalAnalyticsEnabled && isProduction && window.gtag) {
+if (isGaAllowed && window.gtag) {
   window.gtag('consent', 'update', {
     ad_storage: 'granted',
     analytics_storage: 'granted',

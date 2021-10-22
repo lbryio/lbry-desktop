@@ -24,6 +24,28 @@ import Lbry from 'lbry';
 // import LbryFirst from 'extras/lbry-first/lbry-first';
 import { isClaimNsfw } from 'util/claim';
 
+function resolveClaimTypeForAnalytics(claim) {
+  if (!claim) {
+    return 'undefined_claim';
+  }
+
+  switch (claim.value_type) {
+    case 'stream':
+      if (claim.value) {
+        if (!claim.value.source) {
+          return 'livestream';
+        } else {
+          return claim.value.stream_type;
+        }
+      } else {
+        return 'stream';
+      }
+    default:
+      // collection, channel, repost, undefined
+      return claim.value_type;
+  }
+}
+
 export const NO_FILE = '---';
 export const doPublishDesktop = (filePath: string, preview?: boolean) => (dispatch: Dispatch, getState: () => {}) => {
   const publishPreview = (previewResponse) => {
@@ -56,6 +78,9 @@ export const doPublishDesktop = (filePath: string, preview?: boolean) => (dispat
 
     actions.push({
       type: ACTIONS.PUBLISH_SUCCESS,
+      data: {
+        type: resolveClaimTypeForAnalytics(pendingClaim),
+      },
     });
 
     // We have to fake a temp claim until the new pending one is returned by claim_list_mine

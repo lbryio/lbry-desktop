@@ -48,9 +48,9 @@ class FileRender extends React.PureComponent<Props> {
   }
 
   componentDidMount() {
-    const { embedded } = this.props;
+    const { renderMode, embedded } = this.props;
     window.addEventListener('keydown', this.escapeListener, true);
-    analytics.playerLoadedEvent(embedded);
+    analytics.playerLoadedEvent(renderMode, embedded);
   }
 
   componentWillUnmount() {
@@ -60,9 +60,7 @@ class FileRender extends React.PureComponent<Props> {
   escapeListener(e: SyntheticKeyboardEvent<*>) {
     if (e.keyCode === KEYCODES.ESCAPE) {
       e.preventDefault();
-
       this.exitFullscreen();
-
       return false;
     }
   }

@@ -179,8 +179,7 @@ function VideoViewer(props: Props) {
       }
     }
 
-    // send matomo event (embedded is boolean)
-    analytics.playerStartedEvent(embedded);
+    analytics.playerVideoStartedEvent(embedded);
 
     // convert bytes to bits, and then divide by seconds
     const contentInBits = Number(claim.value.source.size) * 8;
@@ -189,12 +188,21 @@ function VideoViewer(props: Props) {
     if (durationInSeconds) {
       bitrateAsBitsPerSecond = Math.round(contentInBits / durationInSeconds);
     }
-// figure out what server the video is served from and then run start analytic event
+
+    // figure out what server the video is served from and then run start analytic event
     fetch(source, { method: 'HEAD', cache: 'no-store' }).then((response) => {
       // server string such as 'eu-p6'
       let playerPoweredBy = response.headers.get('x-powered-by') || '';
       // populates data for watchman, sends prom and matomo event
-      analytics.videoStartEvent(claimId, timeToStartVideo, playerPoweredBy, userId, claim.canonical_url, this, bitrateAsBitsPerSecond);
+      analytics.videoStartEvent(
+        claimId,
+        timeToStartVideo,
+        playerPoweredBy,
+        userId,
+        claim.canonical_url,
+        this,
+        bitrateAsBitsPerSecond
+      );
     });
 
     // hit backend to mark a view

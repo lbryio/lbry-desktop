@@ -10,6 +10,7 @@ import { createMemoryHistory, createBrowserHistory } from 'history';
 import { routerMiddleware } from 'connected-react-router';
 import createRootReducer from './reducers';
 import Lbry from 'lbry';
+import { createAnalyticsMiddleware } from 'redux/middleware/analytics';
 import { buildSharedStateMiddleware } from 'redux/middleware/shared-state';
 import { doSyncLoop } from 'redux/actions/sync';
 import { getAuthToken } from 'util/saved-passwords';
@@ -206,6 +207,8 @@ const sharedStateMiddleware = buildSharedStateMiddleware(triggerSharedStateActio
 const rootReducer = createRootReducer(history);
 const persistedReducer = persistReducer(persistOptions, rootReducer);
 const bulkThunk = createBulkThunkMiddleware();
+const analyticsMiddleware = createAnalyticsMiddleware();
+
 const middleware = [
   sharedStateMiddleware,
   // @if TARGET='web'
@@ -214,7 +217,9 @@ const middleware = [
   routerMiddleware(history),
   thunk,
   bulkThunk,
+  analyticsMiddleware,
 ];
+
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
   enableBatching(persistedReducer),
