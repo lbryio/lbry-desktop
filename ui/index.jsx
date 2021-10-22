@@ -262,14 +262,16 @@ function AppWrapper() {
 
   useEffect(() => {
     if (readyToLaunch && persistDone) {
-      if (DEFAULT_LANGUAGE) {
-        app.store.dispatch(doFetchLanguage(DEFAULT_LANGUAGE));
-      }
-
-      app.store.dispatch(doUpdateIsNightAsync());
       app.store.dispatch(doDaemonReady());
-      app.store.dispatch(doBlackListedOutpointsSubscribe());
-      app.store.dispatch(doFilteredOutpointsSubscribe());
+
+      setTimeout(() => {
+        if (DEFAULT_LANGUAGE) {
+          app.store.dispatch(doFetchLanguage(DEFAULT_LANGUAGE));
+        }
+        app.store.dispatch(doUpdateIsNightAsync());
+        app.store.dispatch(doBlackListedOutpointsSubscribe());
+        app.store.dispatch(doFilteredOutpointsSubscribe());
+      }, 25);
 
       analytics.startupEvent(Date.now());
     }
