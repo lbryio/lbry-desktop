@@ -60,6 +60,14 @@ function handleAnalyticsForAction(action: { type: string, data: any }) {
       });
       break;
 
+    case ACTIONS.AUTHENTICATION_STARTED:
+      analytics.eventStarted('diag_authentication', Date.now());
+      break;
+
+    case ACTIONS.AUTHENTICATION_SUCCESS:
+      analytics.eventCompleted('diag_authentication', Date.now());
+      break;
+
     default:
       // Do nothing
       break;

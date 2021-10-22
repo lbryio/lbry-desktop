@@ -28,7 +28,9 @@ export const GA_DIMENSIONS = {
   TYPE: 'type',
   ACTION: 'action',
   VALUE: 'value',
+  START_TIME_MS: 'start_time_ms',
   DURATION_MS: 'duration_ms',
+  END_TIME_MS: 'end_time_ms',
 };
 
 // import getConnectionSpeed from 'util/detect-user-bandwidth';
@@ -50,6 +52,8 @@ const WATCHMAN_BACKEND_ENDPOINT = 'https://watchman.na-backend.odysee.com/report
 const SEND_DATA_TO_WATCHMAN_INTERVAL = 10; // in seconds
 
 type Analytics = {
+  appStartTime: number,
+  eventStartTime: any,
   error: (string) => Promise<any>,
   sentryError: ({} | string, {}) => Promise<any>,
   setUser: (Object) => void,
@@ -78,9 +82,11 @@ type Analytics = {
   emailProvidedEvent: () => void,
   emailVerifiedEvent: () => void,
   rewardEligibleEvent: () => void,
-  startupEvent: () => void,
+  initAppStartTime: (startTime: number) => void,
+  startupEvent: (time: number) => void,
+  eventStarted: (name: string, time: number, id?: string) => void,
+  eventCompleted: (name: string, time: number, id?: string) => void,
   purchaseEvent: (number) => void,
-  readyEvent: (number) => void,
   openUrlEvent: (string) => void,
   reportEvent: (string, any) => void,
 };
@@ -221,6 +227,9 @@ async function sendWatchmanData(body) {
 }
 
 const analytics: Analytics = {
+  appStartTime: 0,
+  eventStartTime: {},
+
   // receive buffer events from tracking plugin and save buffer amounts and times for backend call
   videoBufferEvent: async (claim, data) => {
     amountOfBufferEvents = amountOfBufferEvents + 1;
@@ -424,14 +433,31 @@ const analytics: Analytics = {
       trending_algorithm: trendingAlgorithm,
     });
   },
-  startupEvent: () => {
-    // TODO: This can be removed (use the automated 'session_start' instead).
-    // sendGaEvent('app_diagnostics', 'startup');
+  initAppStartTime: (startTime: number) => {
+    analytics.appStartTime = startTime;
   },
-  readyEvent: (timeToReadyMs: number) => {
-    sendGaEvent('diag_app_ready', {
-      [GA_DIMENSIONS.DURATION_MS]: timeToReadyMs,
-    });
+  startupEvent: (time: number) => {
+    if (analytics.appStartTime !== 0) {
+      sendGaEvent('diag_app_ready', {
+        [GA_DIMENSIONS.DURATION_MS]: time - analytics.appStartTime,
+      });
+    }
+  },
+  eventStarted: (name: string, time: number, id?: string) => {
+    const key = id || name;
+    analytics.eventStartTime[key] = time;
+  },
+  eventCompleted: (name: string, time: number, id?: string) => {
+    const key = id || name;
+    if (analytics.eventStartTime[key]) {
+      sendGaEvent(name, {
+        [GA_DIMENSIONS.START_TIME_MS]: analytics.eventStartTime[key] - analytics.appStartTime,
+        [GA_DIMENSIONS.DURATION_MS]: time - analytics.eventStartTime[key],
+        [GA_DIMENSIONS.END_TIME_MS]: time - analytics.appStartTime,
+      });
+
+      delete analytics.eventStartTime[key];
+    }
   },
   purchaseEvent: (purchaseInt: number) => {
     sendGaEvent('purchase', {

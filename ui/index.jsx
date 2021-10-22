@@ -97,8 +97,7 @@ Lbry.setOverride(
 );
 // @endif
 
-const startTime = Date.now();
-analytics.startupEvent();
+analytics.initAppStartTime(Date.now());
 
 // @if TARGET='app'
 const { autoUpdater } = remote.require('electron-updater');
@@ -266,14 +265,13 @@ function AppWrapper() {
       if (DEFAULT_LANGUAGE) {
         app.store.dispatch(doFetchLanguage(DEFAULT_LANGUAGE));
       }
+
       app.store.dispatch(doUpdateIsNightAsync());
       app.store.dispatch(doDaemonReady());
       app.store.dispatch(doBlackListedOutpointsSubscribe());
       app.store.dispatch(doFilteredOutpointsSubscribe());
 
-      const appReadyTime = Date.now();
-      const timeToStart = appReadyTime - startTime;
-      analytics.readyEvent(timeToStart);
+      analytics.startupEvent(Date.now());
     }
   }, [readyToLaunch, persistDone]);
 
