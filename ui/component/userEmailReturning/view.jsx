@@ -1,5 +1,5 @@
 // @flow
-import { SITE_NAME } from 'config';
+import { CLOUD_CONNECT_SITE_NAME } from 'config';
 import * as PAGES from 'constants/pages';
 import React, { useState } from 'react';
 import { FormField, Form } from 'component/common/form';
@@ -75,7 +75,8 @@ function UserEmailReturning(props: Props) {
         <UserEmailVerify />
       ) : (
         <Card
-          title={__('Log in to %SITE_NAME%', { SITE_NAME })}
+          title={__('Cloud Connect')}
+          subtitle={__('Log in to %CLOUD_CONNECT_SITE_NAME%', { CLOUD_CONNECT_SITE_NAME })}
           actions={
             <div>
               <Form onSubmit={handleSubmit} className="section">

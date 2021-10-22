@@ -94,9 +94,9 @@ function UserEmailNew(props: Props) {
   return (
     <div className={classnames('main__sign-up')}>
       <Card
-        title={__('Join')}
+        title={__('Cloud Connect')}
         // @if TARGET='app'
-        subtitle={__('An account allows you to earn rewards and backup your data.')}
+        subtitle={__('Connect your wallet to Odysee')}
         // @endif
         actions={
           <div className={classnames({ 'card--disabled': DOMAIN === 'lbry.tv' && IS_WEB })}>
