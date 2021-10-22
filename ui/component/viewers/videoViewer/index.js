@@ -22,12 +22,11 @@ import { withRouter } from 'react-router';
 import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
 import { selectDaemonSettings, makeSelectClientSetting, selectHomepageData } from 'redux/selectors/settings';
 import { toggleVideoTheaterMode, toggleAutoplayNext, doSetClientSetting } from 'redux/actions/settings';
-import { selectUserVerifiedEmail, selectUser } from 'redux/selectors/user';
+import { selectUser } from 'redux/selectors/user';
 
 const select = (state, props) => {
   const { search } = props.location;
   const urlParams = new URLSearchParams(search);
-  const autoplay = urlParams.get('autoplay');
   const uri = props.uri;
   // TODO: eventually this should be received from DB and not local state (https://github.com/lbryio/lbry-desktop/issues/6796)
   const position = urlParams.get('t') !== null ? urlParams.get('t') : makeSelectContentPositionForUri(uri)(state);
@@ -53,7 +52,6 @@ const select = (state, props) => {
     nextRecommendedUri,
     previousListUri,
     isMarkdownOrComment,
-    autoplayIfEmbedded: Boolean(autoplay),
     autoplayNext: makeSelectClientSetting(SETTINGS.AUTOPLAY_NEXT)(state),
     volume: selectVolume(state),
     muted: selectMute(state),
@@ -61,7 +59,6 @@ const select = (state, props) => {
     thumbnail: makeSelectThumbnailForUri(uri)(state),
     claim: makeSelectClaimForUri(uri)(state),
     homepageData: selectHomepageData(state),
-    authenticated: selectUserVerifiedEmail(state),
     shareTelemetry: IS_WEB || selectDaemonSettings(state).share_usage_data,
     isFloating: makeSelectIsPlayerFloating(props.location)(state),
     videoTheaterMode: makeSelectClientSetting(SETTINGS.VIDEO_THEATER_MODE)(state),

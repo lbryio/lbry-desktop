@@ -24,7 +24,6 @@ import PdfViewer from 'component/viewers/pdfViewer';
 type Props = {
   uri: string,
   streamingUrl: string,
-  embedded?: boolean,
   contentType: string,
   claim: StreamClaim,
   currentTheme: string,
@@ -45,9 +44,8 @@ class FileRender extends React.PureComponent<Props> {
   }
 
   componentDidMount() {
-    const { embedded } = this.props;
     window.addEventListener('keydown', this.escapeListener, true);
-    analytics.playerLoadedEvent(embedded);
+    analytics.playerLoadedEvent();
   }
 
   componentWillUnmount() {
@@ -146,13 +144,12 @@ class FileRender extends React.PureComponent<Props> {
   }
 
   render() {
-    const { embedded, renderMode, className } = this.props;
+    const { renderMode, className } = this.props;
 
     return (
       <div
         className={classnames('file-render', className, {
-          'file-render--document': RENDER_MODES.TEXT_MODES.includes(renderMode) && !embedded,
-          'file-render--embed': embedded,
+          'file-render--document': RENDER_MODES.TEXT_MODES.includes(renderMode),
           'file-render--video': renderMode === RENDER_MODES.VIDEO || renderMode === RENDER_MODES.AUDIO,
         })}
       >

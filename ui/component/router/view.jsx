@@ -37,7 +37,6 @@ import ChannelsPage from 'page/channels';
 import CheckoutPage from 'page/checkoutPage';
 import CreatorDashboard from 'page/creatorDashboard';
 import DiscoverPage from 'page/discover';
-import EmbedWrapperPage from 'page/embedWrapper';
 import FileListPublished from 'page/fileListPublished';
 import FourOhFourPage from 'page/fourOhFour';
 import HelpPage from 'page/help';
@@ -307,9 +306,6 @@ function AppRouter(props: Props) {
       <PrivateRoute {...props} path={`/$/${PAGES.NOTIFICATIONS}`} component={NotificationsPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.AUTH_WALLET_PASSWORD}`} component={SignInWalletPasswordPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_OWN_COMMENTS}`} component={OwnComments} />
-
-      <Route path={`/$/${PAGES.EMBED}/:claimName`} exact component={EmbedWrapperPage} />
-      <Route path={`/$/${PAGES.EMBED}/:claimName/:claimId`} exact component={EmbedWrapperPage} />
 
       {/* Below need to go at the end to make sure we don't match any of our pages first */}
       <Route path="/:claimName" exact component={ShowPage} />
