@@ -1,5 +1,5 @@
 // @flow
-import * as ICONS from 'constants/icons';
+// import * as ICONS from 'constants/icons';
 import React from 'react';
 import Page from 'component/page';
 import Card from 'component/common/card';
@@ -15,8 +15,8 @@ import Nag from 'component/common/nag';
 import I18nMessage from 'component/i18nMessage';
 import LbcSymbol from 'component/common/lbc-symbol';
 import { SIMPLE_SITE } from 'config';
-import classnames from 'classnames';
-import WalletSwap from 'component/walletSwap';
+// import classnames from 'classnames';
+// import WalletSwap from 'component/walletSwap';
 
 const MOONPAY_KEY = process.env.MOONPAY_SECRET_KEY;
 const COUNTRIES = Array.from(
@@ -38,10 +38,10 @@ const COUNTRIES = Array.from(
   )
 );
 
-const TAB = {
+/* const TAB = {
   BUY: 'BUY',
   SWAP: 'SWAP',
-};
+}; */
 
 type Props = {
   receiveAddress: ?string,
@@ -55,7 +55,7 @@ type Props = {
 export default function BuyPage(props: Props) {
   const { receiveAddress, gettingNewAddress, doGetNewAddress, email, user, doUserSetCountry } = props;
   const initialCountry = (user && user.country) || '';
-  const [tab, setTab] = React.useState(TAB.BUY);
+  // const [tab, setTab] = React.useState(TAB.BUY);
   const [url, setUrl] = React.useState();
   const [country, setCountry] = React.useState(initialCountry);
   const [showPurchaseScreen, setShowPurchaseScreen] = React.useState(false);
@@ -116,10 +116,10 @@ export default function BuyPage(props: Props) {
       className="main--swap"
       backout={{
         backoutLabel: __('Done'),
-        title: <LbcSymbol prefix={__('Buy or Swap')} size={28} />,
+        title: <LbcSymbol prefix={__('Buy') /* or Swap') */} size={28} />,
       }}
     >
-      <div className="section">
+      {/* <div className="section">
         <Button
           key="tip"
           icon={ICONS.BUY}
@@ -136,11 +136,11 @@ export default function BuyPage(props: Props) {
           onClick={() => setTab(TAB.SWAP)}
           className={classnames('button-toggle', { 'button-toggle--active': tab === TAB.SWAP })}
         />
-      </div>
+      </div> */}
       <div className="section">
-        {tab === TAB.SWAP && <WalletSwap />}
-        {tab === TAB.BUY && (
-          <>
+        {/* tab === TAB.SWAP && <WalletSwap /> */}
+        {
+          /* tab === TAB.BUY && */ <>
             {!user && (
               <div className="main--empty">
                 <Spinner delayed />
@@ -230,7 +230,7 @@ export default function BuyPage(props: Props) {
               </>
             )}
           </>
-        )}
+        }
       </div>
     </Page>
   );
