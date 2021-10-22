@@ -1,29 +1,19 @@
 // @flow
-import { ENABLE_PREROLL_ADS } from 'config';
-import * as PAGES from 'constants/pages';
-import * as ICONS from 'constants/icons';
-import React, { useEffect, useState, useContext, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { stopContextMenu } from 'util/context-menu';
 import type { Player } from './internal/videojs';
 import VideoJs from './internal/videojs';
 import analytics from 'analytics';
-import { EmbedContext } from 'page/embedWrapper/view';
 import classnames from 'classnames';
 import { FORCE_CONTENT_TYPE_PLAYER } from 'constants/claim';
 import AutoplayCountdown from 'component/autoplayCountdown';
 import usePrevious from 'effects/use-previous';
-import FileViewerEmbeddedEnded from 'web/component/fileViewerEmbeddedEnded';
-import FileViewerEmbeddedTitle from 'component/fileViewerEmbeddedTitle';
 import LoadingScreen from 'component/common/loading-screen';
 import { addTheaterModeButton } from './internal/theater-mode';
 import { addAutoplayNextButton } from './internal/autoplay-next';
 import { addPlayNextButton } from './internal/play-next';
 import { addPlayPreviousButton } from './internal/play-previous';
-import { useGetAds } from 'effects/use-get-ads';
-import Button from 'component/button';
-import I18nMessage from 'component/i18nMessage';
 import { useHistory } from 'react-router';
-import { getAllIds } from 'util/buildHomepage';
 import type { HomepageCat } from 'util/buildHomepage';
 import { formatLbryUrlForWeb, generateListSearchUrlParams } from 'util/url';
 
@@ -43,7 +33,6 @@ type Props = {
   volume: number,
   uri: string,
   autoplayNext: boolean,
-  autoplayIfEmbedded: boolean,
   desktopPlayStartTime?: number,
   doAnalyticsView: (string, number) => Promise<any>,
   doAnalyticsBuffer: (string, any) => void,
@@ -85,7 +74,6 @@ function VideoViewer(props: Props) {
     muted,
     volume,
     autoplayNext,
-    autoplayIfEmbedded,
     doAnalyticsView,
     doAnalyticsBuffer,
     claimRewards,
@@ -95,8 +83,6 @@ function VideoViewer(props: Props) {
     toggleVideoTheaterMode,
     toggleAutoplayNext,
     setVideoPlaybackRate,
-    homepageData,
-    authenticated,
     userId,
     shareTelemetry,
     isFloating,
@@ -108,27 +94,17 @@ function VideoViewer(props: Props) {
     isMarkdownOrComment,
   } = props;
   const permanentUrl = claim && claim.permanent_url;
-  const adApprovedChannelIds = homepageData ? getAllIds(homepageData) : [];
   const claimId = claim && claim.claim_id;
-  const channelClaimId = claim && claim.signing_channel && claim.signing_channel.claim_id;
   const isAudio = contentType.includes('audio');
   const forcePlayer = FORCE_CONTENT_TYPE_PLAYER.includes(contentType);
-  const {
-    push,
-    location: { pathname },
-  } = useHistory();
+  const { push } = useHistory();
   const [doNavigate, setDoNavigate] = useState(false);
   const [playNextUrl, setPlayNextUrl] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
   const [ended, setEnded] = useState(false);
   const [showAutoplayCountdown, setShowAutoplayCountdown] = useState(false);
-  const [isEndedEmbed, setIsEndedEmbed] = useState(false);
   const vjsCallbackDataRef: any = React.useRef();
   const previousUri = usePrevious(uri);
-  const embedded = useContext(EmbedContext);
-  const approvedVideo = Boolean(channelClaimId) && adApprovedChannelIds.includes(channelClaimId);
-  const adsEnabled = ENABLE_PREROLL_ADS && !authenticated && !embedded && approvedVideo;
-  const [adUrl, setAdUrl, isFetchingAd] = useGetAds(approvedVideo, adsEnabled);
   /* isLoading was designed to show loading screen on first play press, rather than completely black screen, but
   breaks because some browsers (e.g. Firefox) block autoplay but leave the player.play Promise pending */
   const [isLoading, setIsLoading] = useState(false);
@@ -139,7 +115,6 @@ function VideoViewer(props: Props) {
   useEffect(() => {
     if (uri && previousUri && uri !== previousUri) {
       setShowAutoplayCountdown(false);
-      setIsEndedEmbed(false);
       setIsLoading(false);
     }
   }, [uri, previousUri]);
@@ -147,10 +122,9 @@ function VideoViewer(props: Props) {
   // Update vjsCallbackDataRef (ensures videojs callbacks are not using stale values):
   useEffect(() => {
     vjsCallbackDataRef.current = {
-      embedded: embedded,
       videoPlaybackRate: videoPlaybackRate,
     };
-  }, [embedded, videoPlaybackRate]);
+  }, [videoPlaybackRate]);
 
   function doTrackingBuffered(e: Event, data: any) {
     fetch(source, { method: 'HEAD', cache: 'no-store' }).then((response) => {
@@ -166,7 +140,7 @@ function VideoViewer(props: Props) {
       const differenceToAdd = Date.now() - desktopPlayStartTime;
       timeToStart += differenceToAdd;
     }
-    analytics.playerStartedEvent(embedded);
+    analytics.playerStartedEvent();
 
     // convert bytes to bits, and then divide by seconds
     const contentInBits = Number(claim.value.source.size) * 8;
@@ -178,7 +152,15 @@ function VideoViewer(props: Props) {
 
     fetch(source, { method: 'HEAD', cache: 'no-store' }).then((response) => {
       let playerPoweredBy = response.headers.get('x-powered-by') || '';
-      analytics.videoStartEvent(claimId, timeToStart, playerPoweredBy, userId, claim.canonical_url, this, bitrateAsBitsPerSecond);
+      analytics.videoStartEvent(
+        claimId,
+        timeToStart,
+        playerPoweredBy,
+        userId,
+        claim.canonical_url,
+        this,
+        bitrateAsBitsPerSecond
+      );
     });
 
     doAnalyticsView(uri, timeToStart).then(() => {
@@ -248,28 +230,20 @@ function VideoViewer(props: Props) {
 
     analytics.videoIsPlaying(false);
 
-    if (adUrl) {
-      setAdUrl(null);
-      return;
-    }
-
-    if (embedded) {
-      setIsEndedEmbed(true);
-    } else if (!collectionId && autoplayNext) {
+    if (!collectionId && autoplayNext) {
       setShowAutoplayCountdown(true);
     } else if (collectionId) {
       setDoNavigate(true);
     }
 
     clearPosition(uri);
-  }, [adUrl, autoplayNext, clearPosition, collectionId, embedded, ended, setAdUrl, uri]);
+  }, [autoplayNext, clearPosition, collectionId, ended, uri]);
 
   function onPlay(player) {
     setEnded(false);
     setIsLoading(false);
     setIsPlaying(true);
     setShowAutoplayCountdown(false);
-    setIsEndedEmbed(false);
     setReplay(false);
     setDoNavigate(false);
     analytics.videoIsPlaying(true, player);
@@ -296,7 +270,7 @@ function VideoViewer(props: Props) {
     }
   }
 
-  const playerReadyDependencyList = [uri, adUrl, embedded, autoplayIfEmbedded];
+  const playerReadyDependencyList = [uri];
   if (!IS_WEB) {
     playerReadyDependencyList.push(desktopPlayStartTime);
   }
@@ -312,43 +286,38 @@ function VideoViewer(props: Props) {
   };
 
   const onPlayerReady = useCallback((player: Player, videoNode: any) => {
-    if (!embedded) {
-      setVideoNode(videoNode);
-      player.muted(muted);
-      player.volume(volume);
-      player.playbackRate(videoPlaybackRate);
-      if (!isMarkdownOrComment) {
-        addTheaterModeButton(player, toggleVideoTheaterMode);
-        if (collectionId) {
-          addPlayNextButton(player, doPlayNext);
-          addPlayPreviousButton(player, doPlayPrevious);
-        } else {
-          addAutoplayNextButton(player, toggleAutoplayNext, autoplayNext);
-        }
+    setVideoNode(videoNode);
+    player.muted(muted);
+    player.volume(volume);
+    player.playbackRate(videoPlaybackRate);
+    if (!isMarkdownOrComment) {
+      addTheaterModeButton(player, toggleVideoTheaterMode);
+      if (collectionId) {
+        addPlayNextButton(player, doPlayNext);
+        addPlayPreviousButton(player, doPlayPrevious);
+      } else {
+        addAutoplayNextButton(player, toggleAutoplayNext, autoplayNext);
       }
     }
 
-    const shouldPlay = !embedded || autoplayIfEmbedded;
     // https://blog.videojs.com/autoplay-best-practices-with-video-js/#Programmatic-Autoplay-and-Success-Failure-Detection
-    if (shouldPlay) {
-      const playPromise = player.play();
-      const timeoutPromise = new Promise((resolve, reject) =>
-        setTimeout(() => reject(PLAY_TIMEOUT_ERROR), PLAY_TIMEOUT_LIMIT)
-      );
+    const playPromise = player.play();
+    const timeoutPromise = new Promise((resolve, reject) =>
+      setTimeout(() => reject(PLAY_TIMEOUT_ERROR), PLAY_TIMEOUT_LIMIT)
+    );
 
-      Promise.race([playPromise, timeoutPromise]).catch((error) => {
-        if (typeof error === 'object' && error.name && error.name === 'NotAllowedError') {
-          if (player.autoplay() && !player.muted()) {
-            // player.muted(true);
-            // another version had player.play()
-          }
+    Promise.race([playPromise, timeoutPromise]).catch((error) => {
+      if (typeof error === 'object' && error.name && error.name === 'NotAllowedError') {
+        if (player.autoplay() && !player.muted()) {
+          // player.muted(true);
+          // another version had player.play()
         }
-        setIsLoading(false);
-        setIsPlaying(false);
-      });
-    }
+      }
+      setIsLoading(false);
+      setIsPlaying(false);
+    });
 
-    setIsLoading(shouldPlay); // if we are here outside of an embed, we're playing
+    setIsLoading(true); // if we are here outside of an embed, we're playing
 
     // PR: #5535
     // Move the restoration to a later `loadedmetadata` phase to counter the
@@ -398,7 +367,6 @@ function VideoViewer(props: Props) {
     <div
       className={classnames('file-viewer', {
         'file-viewer--is-playing': isPlaying,
-        'file-viewer--ended-embed': isEndedEmbed,
       })}
       onContextMenu={stopContextMenu}
     >
@@ -409,64 +377,25 @@ function VideoViewer(props: Props) {
           doReplay={() => setReplay(true)}
         />
       )}
-      {isEndedEmbed && <FileViewerEmbeddedEnded uri={uri} />}
-      {embedded && !isEndedEmbed && <FileViewerEmbeddedTitle uri={uri} />}
       {/* disable this loading behavior because it breaks when player.play() promise hangs */}
       {isLoading && <LoadingScreen status={__('Loading')} />}
-
-      {!isFetchingAd && adUrl && (
-        <>
-          <span className="ads__video-notify">
-            {__('Advertisement')}{' '}
-            <Button
-              className="ads__video-close"
-              icon={ICONS.REMOVE}
-              title={__('Close')}
-              onClick={() => setAdUrl(null)}
-            />
-          </span>
-          <span className="ads__video-nudge">
-            <I18nMessage
-              tokens={{
-                sign_up: (
-                  <Button
-                    button="secondary"
-                    className="ads__video-link"
-                    label={__('Sign Up')}
-                    navigate={`/$/${PAGES.AUTH}?redirect=${pathname}&src=video-ad`}
-                  />
-                ),
-              }}
-            >
-              %sign_up% to turn ads off.
-            </I18nMessage>
-          </span>
-        </>
-      )}
-
-      {!isFetchingAd && (
-        <VideoJs
-          adUrl={adUrl}
-          source={adUrl || source}
-          sourceType={forcePlayer || adUrl ? 'video/mp4' : contentType}
-          isAudio={isAudio}
-          poster={isAudio || (embedded && !autoplayIfEmbedded) ? thumbnail : ''}
-          onPlayerReady={onPlayerReady}
-          startMuted={autoplayIfEmbedded}
-          toggleVideoTheaterMode={toggleVideoTheaterMode}
-          autoplay={!embedded || autoplayIfEmbedded}
-          autoplaySetting={autoplayNext}
-          claimId={claimId}
-          userId={userId}
-          allowPreRoll={!embedded && !authenticated}
-          shareTelemetry={shareTelemetry}
-          replay={replay}
-          videoTheaterMode={videoTheaterMode}
-          playNext={doPlayNext}
-          playPrevious={doPlayPrevious}
-          embedded={embedded}
-        />
-      )}
+      <VideoJs
+        source={source}
+        sourceType={forcePlayer ? 'video/mp4' : contentType}
+        isAudio={isAudio}
+        poster={isAudio ? thumbnail : ''}
+        onPlayerReady={onPlayerReady}
+        toggleVideoTheaterMode={toggleVideoTheaterMode}
+        autoplay
+        autoplaySetting={autoplayNext}
+        claimId={claimId}
+        userId={userId}
+        shareTelemetry={shareTelemetry}
+        replay={replay}
+        videoTheaterMode={videoTheaterMode}
+        playNext={doPlayNext}
+        playPrevious={doPlayPrevious}
+      />
     </div>
   );
 }

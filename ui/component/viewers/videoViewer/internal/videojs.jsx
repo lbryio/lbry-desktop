@@ -48,12 +48,9 @@ type Props = {
   poster: ?string,
   onPlayerReady: (Player, any) => void,
   isAudio: boolean,
-  startMuted: boolean,
   autoplay: boolean,
   autoplaySetting: boolean,
-  embedded: boolean,
   toggleVideoTheaterMode: () => void,
-  adUrl: ?string,
   claimId: ?string,
   userId: ?number,
   // allowPreRoll: ?boolean,
@@ -163,18 +160,14 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   const {
     autoplay,
     autoplaySetting,
-    embedded,
-    startMuted,
     source,
     sourceType,
     poster,
     isAudio,
     onPlayerReady,
     toggleVideoTheaterMode,
-    adUrl,
     claimId,
     userId,
-    // allowPreRoll,
     shareTelemetry,
     replay,
     videoTheaterMode,
@@ -188,7 +181,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   const videoJsOptions = {
     ...VIDEO_JS_OPTIONS,
     autoplay: autoplay,
-    muted: startMuted,
     sources: [
       {
         src: source,
@@ -361,10 +353,9 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   }
 
   const onEnded = React.useCallback(() => {
-    if (!adUrl) {
-      showTapButton(TAP.NONE);
-    }
-  }, [adUrl]);
+    // not sure if this is necessary - used to be dependent on !adUrl
+    showTapButton(TAP.NONE);
+  }, []);
 
   function handleKeyDown(e: KeyboardEvent) {
     const player = playerRef.current;
@@ -565,7 +556,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         player.recsys({
           videoId: claimId,
           userId: userId,
-          embedded: embedded,
         });
       }
 
