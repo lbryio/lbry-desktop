@@ -2195,5 +2195,8 @@
   "Trending for #Music": "Trending for #Music",
   "You sent %lbc% as a tip, Mahalo!": "You sent %lbc% as a tip, Mahalo!",
   "Export All": "Export All",
+  "Default share url (%name%)": "Default share url (%name%)",
+  "Custom share url": "Custom share url",
+  "Share url": "Share url",
   "--end--": "--end--"
 }

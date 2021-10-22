@@ -10,6 +10,7 @@ import I18nMessage from 'component/i18nMessage';
 import SettingAutoLaunch from 'component/settingAutoLaunch';
 import SettingClosingBehavior from 'component/settingClosingBehavior';
 import SettingCommentsServer from 'component/settingCommentsServer';
+import SettingShareUrl from 'component/settingShareUrl';
 import SettingsRow from 'component/settingsRow';
 import SettingWalletServer from 'component/settingWalletServer';
 import Spinner from 'component/spinner';
@@ -384,6 +385,9 @@ export default function SettingSystem(props: Props) {
 
             <SettingsRow title={__('Comments server')} multirow>
               <SettingCommentsServer />
+            </SettingsRow>
+            <SettingsRow title={__('Share url')} multirow>
+              <SettingShareUrl />
             </SettingsRow>
             {/* @endif */}
 

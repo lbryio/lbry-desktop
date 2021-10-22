@@ -26,10 +26,22 @@ type Props = {
   user: any,
   position: number,
   collectionId?: number,
+  customShareUrlEnabled: boolean,
+  customShareUrl: string,
 };
 
 function SocialShare(props: Props) {
-  const { claim, title, referralCode, user, webShareable, position, collectionId } = props;
+  const {
+    claim,
+    title,
+    referralCode,
+    user,
+    webShareable,
+    position,
+    collectionId,
+    customShareUrlEnabled,
+    customShareUrl,
+  } = props;
   const [showEmbed, setShowEmbed] = React.useState(false);
   const [includeCollectionId, setIncludeCollectionId] = React.useState(Boolean(collectionId)); // unless it *is* a collection?
   const [showClaimLinks, setShowClaimLinks] = React.useState(false);
@@ -37,6 +49,7 @@ function SocialShare(props: Props) {
   const [startTime, setStartTime]: [string, any] = React.useState(secondsToHms(position));
   const startTimeSeconds: number = hmsToSeconds(startTime);
   const isMobile = useIsMobile();
+  const shareDomain = customShareUrlEnabled && customShareUrl ? customShareUrl : SHARE_DOMAIN;
 
   if (!claim) {
     return null;
@@ -54,14 +67,14 @@ function SocialShare(props: Props) {
   const lbryWebUrl: string = generateLbryWebUrl(lbryUrl);
   const includedCollectionId = collectionId && includeCollectionId ? collectionId : null;
   const encodedLbryURL: string = generateEncodedLbryURL(
-    SHARE_DOMAIN,
+    shareDomain,
     lbryWebUrl,
     includeStartTime,
     startTimeSeconds,
     includedCollectionId
   );
   const shareUrl: string = generateShareUrl(
-    SHARE_DOMAIN,
+    shareDomain,
     lbryUrl,
     referralCode,
     rewardsApproved,
