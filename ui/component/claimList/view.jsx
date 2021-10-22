@@ -94,11 +94,21 @@ export default function ClaimList(props: Props) {
     setCurrentSort(currentSort === SORT_NEW ? SORT_OLD : SORT_NEW);
   }
 
-  function handleClaimClicked(e, claim, index) {
-    if (onClick) {
-      onClick(e, claim, index);
-    }
-  }
+  const handleClaimClicked = React.useCallback(
+    (e, claim, index) => {
+      if (onClick) {
+        onClick(e, claim, index);
+      }
+    },
+    [onClick]
+  );
+
+  const customShouldHide = React.useCallback((claim: StreamClaim) => {
+    // Hack to hide spee.ch thumbnail publishes
+    // If it meets these requirements, it was probably uploaded here:
+    // https://github.com/lbryio/lbry-redux/blob/master/src/redux/actions/publish.js#L74-L79
+    return claim.name.length === 24 && !claim.name.includes(' ') && claim.value.author === 'Spee.ch';
+  }, []);
 
   useEffect(() => {
     const handleScroll = debounce((e) => {
@@ -195,13 +205,8 @@ export default function ClaimList(props: Props) {
                 showHiddenByUser={showHiddenByUser}
                 collectionId={collectionId}
                 showNoSourceClaims={showNoSourceClaims}
-                customShouldHide={(claim: StreamClaim) => {
-                  // Hack to hide spee.ch thumbnail publishes
-                  // If it meets these requirements, it was probably uploaded here:
-                  // https://github.com/lbryio/lbry-redux/blob/master/src/redux/actions/publish.js#L74-L79
-                  return claim.name.length === 24 && !claim.name.includes(' ') && claim.value.author === 'Spee.ch';
-                }}
-                onClick={(e, claim, index) => handleClaimClicked(e, claim, index)}
+                customShouldHide={customShouldHide}
+                onClick={handleClaimClicked}
               />
             </React.Fragment>
           ))}
