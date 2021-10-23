@@ -14,7 +14,7 @@ export const selectState = (state) => state.fileInfo || {};
 
 export const selectFileInfosByOutpoint = createSelector(selectState, (state) => state.byOutpoint || {});
 
-export const selectIsFetchingFileList = createSelector(selectState, (state) => state.isFetchingFileList);
+export const selectIsFetchingFileList = (state) => selectState(state).isFetchingFileList;
 
 export const selectIsFetchingFileListDownloadedOrPublished = createSelector(
   selectIsFetchingFileList,
@@ -94,9 +94,8 @@ export const selectTotalDownloadProgress = createSelector(selectDownloadingFileI
 
 export const selectFileInfoErrors = createSelector(selectState, (state) => state.errors || {});
 
-export const selectFileListPublishedSort = createSelector(selectState, (state) => state.fileListPublishedSort);
-
-export const selectFileListDownloadedSort = createSelector(selectState, (state) => state.fileListDownloadedSort);
+export const selectFileListPublishedSort = (state) => selectState(state).fileListPublishedSort;
+export const selectFileListDownloadedSort = (state) => selectState(state).fileListDownloadedSort;
 
 export const selectDownloadedUris = createSelector(
   selectFileInfosDownloaded,

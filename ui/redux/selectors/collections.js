@@ -4,18 +4,16 @@ import { createSelector } from 'reselect';
 import { selectMyCollectionIds, makeSelectClaimForUri } from 'redux/selectors/claims';
 import { parseURI } from 'util/lbryURI';
 
-const selectState = (state: { collections: CollectionState }) => state.collections;
+type State = { collections: CollectionState };
 
-export const selectSavedCollectionIds = createSelector(selectState, (collectionState) => collectionState.saved);
+const selectState = (state: State) => state.collections;
 
-export const selectBuiltinCollections = createSelector(selectState, (state) => state.builtin);
-export const selectResolvedCollections = createSelector(selectState, (state) => state.resolved);
-
-export const selectMyUnpublishedCollections = createSelector(selectState, (state) => state.unpublished);
-
-export const selectMyEditedCollections = createSelector(selectState, (state) => state.edited);
-
-export const selectPendingCollections = createSelector(selectState, (state) => state.pending);
+export const selectSavedCollectionIds = (state: State) => selectState(state).saved;
+export const selectBuiltinCollections = (state: State) => selectState(state).builtin;
+export const selectResolvedCollections = (state: State) => selectState(state).resolved;
+export const selectMyUnpublishedCollections = (state: State) => selectState(state).unpublished;
+export const selectMyEditedCollections = (state: State) => selectState(state).edited;
+export const selectPendingCollections = (state: State) => selectState(state).pending;
 
 export const makeSelectEditedCollectionForId = (id: string) =>
   createSelector(selectMyEditedCollections, (eLists) => eLists[id]);

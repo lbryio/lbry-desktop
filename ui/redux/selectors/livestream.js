@@ -2,7 +2,9 @@
 import { createSelector } from 'reselect';
 import { selectMyClaims, selectPendingClaims } from 'redux/selectors/claims';
 
-const selectState = (state) => state.livestream || {};
+type State = { livestream: any };
+
+const selectState = (state: State) => state.livestream || {};
 
 // select non-pending claims without sources for given channel
 export const makeSelectLivestreamsForChannelId = (channelId: string) =>
@@ -20,8 +22,8 @@ export const makeSelectLivestreamsForChannelId = (channelId: string) =>
       .sort((a, b) => b.timestamp - a.timestamp); // newest first
   });
 
-export const selectFetchingLivestreams = createSelector(selectState, (state) => state.fetchingById);
-export const selectViewersById = createSelector(selectState, (state) => state.viewersById);
+export const selectFetchingLivestreams = (state: State) => selectState(state).fetchingById;
+export const selectViewersById = (state: State) => selectState(state).viewersById;
 
 export const makeSelectIsFetchingLivestreams = (channelId: string) =>
   createSelector(selectFetchingLivestreams, (fetchingLivestreams) => Boolean(fetchingLivestreams[channelId]));
@@ -41,7 +43,7 @@ export const makeSelectPendingLivestreamsForChannelId = (channelId: string) =>
     );
   });
 
-export const selectActiveLivestreams = createSelector(selectState, (state) => state.activeLivestreams);
+export const selectActiveLivestreams = (state: State) => selectState(state).activeLivestreams;
 
 export const makeSelectIsActiveLivestream = (uri: string) =>
   createSelector(selectState, (state) => {

@@ -4,9 +4,8 @@ import { makeSelectClaimForUri } from 'redux/selectors/claims';
 
 const selectState = (state) => state.reactions || {};
 
-export const selectReactionsById = createSelector(selectState, (state) => state.reactionsById);
-
-export const selectFetchingReactions = createSelector(selectState, (state) => state.fetchingReactions);
+export const selectReactionsById = (state) => selectState(state).reactionsById;
+export const selectFetchingReactions = (state) => selectState(state).fetchingReactions;
 
 export const makeSelectReactionsForUri = (uri) =>
   createSelector(makeSelectClaimForUri(uri), selectReactionsById, (claim, reactionsById) => {

@@ -3,9 +3,8 @@ import REWARDS from 'rewards';
 
 const selectState = (state) => state.rewards || {};
 
-export const selectUnclaimedRewardsByType = createSelector(selectState, (state) => state.unclaimedRewardsByType);
-
-export const selectClaimedRewardsById = createSelector(selectState, (state) => state.claimedRewardsById);
+export const selectUnclaimedRewardsByType = (state) => selectState(state).unclaimedRewardsByType;
+export const selectClaimedRewardsById = (state) => selectState(state).claimedRewardsById;
 
 export const selectClaimedRewards = createSelector(selectClaimedRewardsById, (byId) => Object.values(byId) || []);
 
@@ -17,22 +16,21 @@ export const selectClaimedRewardsByTransactionId = createSelector(selectClaimedR
   }, {})
 );
 
-export const selectUnclaimedRewards = createSelector(selectState, (state) => state.unclaimedRewards);
-
-export const selectFetchingRewards = createSelector(selectState, (state) => !!state.fetching);
+export const selectUnclaimedRewards = (state) => selectState(state).unclaimedRewards;
+export const selectFetchingRewards = (state) => !!selectState(state).fetching;
 
 export const selectUnclaimedRewardValue = createSelector(selectUnclaimedRewards, (rewards) =>
   rewards.reduce((sum, reward) => sum + reward.reward_amount, 0)
 );
 
-export const selectClaimsPendingByType = createSelector(selectState, (state) => state.claimPendingByType);
+export const selectClaimsPendingByType = (state) => selectState(state).claimPendingByType;
 
 const selectIsClaimRewardPending = (state, props) => selectClaimsPendingByType(state, props)[props.reward_type];
 
 export const makeSelectIsRewardClaimPending = () =>
   createSelector(selectIsClaimRewardPending, (isClaiming) => isClaiming);
 
-export const selectClaimErrorsByType = createSelector(selectState, (state) => state.claimErrorsByType);
+export const selectClaimErrorsByType = (state) => selectState(state).claimErrorsByType;
 
 const selectClaimRewardError = (state, props) => selectClaimErrorsByType(state, props)[props.reward_type];
 

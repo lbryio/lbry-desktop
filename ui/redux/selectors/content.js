@@ -18,13 +18,14 @@ import { FORCE_CONTENT_TYPE_PLAYER, FORCE_CONTENT_TYPE_COMIC } from 'constants/c
 const RECENT_HISTORY_AMOUNT = 10;
 const HISTORY_ITEMS_PER_PAGE = 50;
 
-export const selectState = (state: any) => state.content || {};
+type State = { content: any };
 
-export const selectPlayingUri = createSelector(selectState, (state) => state.playingUri);
-export const selectPrimaryUri = createSelector(selectState, (state) => state.primaryUri);
+export const selectState = (state: State) => state.content || {};
 
-export const selectListLoop = createSelector(selectState, (state) => state.loopList);
-export const selectListShuffle = createSelector(selectState, (state) => state.shuffleList);
+export const selectPlayingUri = (state: State) => selectState(state).playingUri;
+export const selectPrimaryUri = (state: State) => selectState(state).primaryUri;
+export const selectListLoop = (state: State) => selectState(state).loopList;
+export const selectListShuffle = (state: State) => selectState(state).shuffleList;
 
 export const makeSelectIsPlaying = (uri: string) =>
   createSelector(selectPrimaryUri, (primaryUri) => primaryUri === uri);

@@ -5,8 +5,7 @@ type State = { tags: TagState };
 
 const selectState = (state: State) => state.tags || {};
 
-export const selectKnownTagsByName = createSelector(selectState, (state: TagState): KnownTags => state.knownTags);
-
+export const selectKnownTagsByName = (state: State): KnownTags => selectState(state).knownTags;
 export const selectFollowedTagsList = (state: State) => selectState(state).followedTags;
 
 export const selectFollowedTags = createSelector(selectFollowedTagsList, (followedTags: Array<string>): Array<Tag> =>

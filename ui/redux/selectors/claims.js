@@ -8,7 +8,7 @@ import * as CLAIM from 'constants/claim';
 
 type State = { claims: any };
 
-const selectState = (state) => state.claims || {};
+const selectState = (state: State) => state.claims || {};
 
 export const selectById = (state: State) => selectState(state).byId || {};
 export const selectPendingClaimsById = (state: State) => selectState(state).pendingById || {};
@@ -18,16 +18,11 @@ export const selectClaimsById = createSelector(selectById, selectPendingClaimsBy
 });
 
 export const selectClaimIdsByUri = (state: State) => selectState(state).claimsByUri || {};
-
-export const selectCurrentChannelPage = createSelector(selectState, (state) => state.currentChannelPage || 1);
-
-export const selectCreatingChannel = createSelector(selectState, (state) => state.creatingChannel);
-
-export const selectCreateChannelError = createSelector(selectState, (state) => state.createChannelError);
-
-export const selectRepostLoading = createSelector(selectState, (state) => state.repostLoading);
-
-export const selectRepostError = createSelector(selectState, (state) => state.repostError);
+export const selectCurrentChannelPage = (state: State) => selectState(state).currentChannelPage || 1;
+export const selectCreatingChannel = (state: State) => selectState(state).creatingChannel;
+export const selectCreateChannelError = (state: State) => selectState(state).createChannelError;
+export const selectRepostLoading = (state: State) => selectState(state).repostLoading;
+export const selectRepostError = (state: State) => selectState(state).repostError;
 
 export const selectClaimsByUri = createSelector(selectClaimIdsByUri, selectClaimsById, (byUri, byId) => {
   const claims = {};
@@ -72,7 +67,7 @@ export const makeSelectClaimIdIsPending = (claimId: string) =>
 export const makeSelectClaimIdForUri = (uri: string) =>
   createSelector(selectClaimIdsByUri, (claimIds) => claimIds[uri]);
 
-export const selectReflectingById = createSelector(selectState, (state) => state.reflectingById);
+export const selectReflectingById = (state: State) => selectState(state).reflectingById;
 
 export const makeSelectClaimForClaimId = (claimId: string) => createSelector(selectClaimsById, (byId) => byId[claimId]);
 
@@ -201,15 +196,11 @@ export const makeSelectClaimIsMine = (rawUri: string) => {
   });
 };
 
-export const selectMyPurchases = createSelector(selectState, (state) => state.myPurchases);
-
-export const selectPurchaseUriSuccess = createSelector(selectState, (state) => state.purchaseUriSuccess);
-
-export const selectMyPurchasesCount = createSelector(selectState, (state) => state.myPurchasesPageTotalResults);
-
-export const selectIsFetchingMyPurchases = createSelector(selectState, (state) => state.fetchingMyPurchases);
-
-export const selectFetchingMyPurchasesError = createSelector(selectState, (state) => state.fetchingMyPurchasesError);
+export const selectMyPurchases = (state: State) => selectState(state).myPurchases;
+export const selectPurchaseUriSuccess = (state: State) => selectState(state).purchaseUriSuccess;
+export const selectMyPurchasesCount = (state: State) => selectState(state).myPurchasesPageTotalResults;
+export const selectIsFetchingMyPurchases = (state: State) => selectState(state).fetchingMyPurchases;
+export const selectFetchingMyPurchasesError = (state: State) => selectState(state).fetchingMyPurchasesError;
 
 export const makeSelectMyPurchasesForPage = (query: ?string, page: number = 1) =>
   createSelector(
@@ -338,7 +329,7 @@ export const makeSelectCoverForUri = (uri: string) =>
     return cover && cover.url ? cover.url.trim().replace(/^http:\/\//i, 'https://') : undefined;
   });
 
-export const selectIsFetchingClaimListMine = createSelector(selectState, (state) => state.isFetchingClaimListMine);
+export const selectIsFetchingClaimListMine = (state: State) => selectState(state).isFetchingClaimListMine;
 
 export const selectMyClaimsPage = createSelector(selectState, (state) => state.myClaimsPageResults || []);
 
@@ -349,12 +340,8 @@ export const selectMyClaimsPageNumber = createSelector(
   (state) => (state.txoPage && state.txoPage.page) || 1
 );
 
-export const selectMyClaimsPageItemCount = createSelector(selectState, (state) => state.myClaimsPageTotalResults || 1);
-
-export const selectFetchingMyClaimsPageError = createSelector(
-  selectState,
-  (state) => state.fetchingClaimListMinePageError
-);
+export const selectMyClaimsPageItemCount = (state: State) => selectState(state).myClaimsPageTotalResults || 1;
+export const selectFetchingMyClaimsPageError = (state: State) => selectState(state).fetchingClaimListMinePageError;
 
 export const selectMyClaims = createSelector(
   selectMyActiveClaims,
@@ -406,9 +393,8 @@ export const selectMyClaimsOutpoints = createSelector(selectMyClaims, (myClaims)
   return outpoints;
 });
 
-export const selectFetchingMyChannels = createSelector(selectState, (state) => state.fetchingMyChannels);
-
-export const selectFetchingMyCollections = createSelector(selectState, (state) => state.fetchingMyCollections);
+export const selectFetchingMyChannels = (state: State) => selectState(state).fetchingMyChannels;
+export const selectFetchingMyCollections = (state: State) => selectState(state).fetchingMyCollections;
 
 export const selectMyChannelClaims = createSelector(selectState, selectClaimsById, (state, byId) => {
   const ids = state.myChannelClaims;
@@ -431,16 +417,16 @@ export const selectMyChannelUrls = createSelector(selectMyChannelClaims, (claims
   claims ? claims.map((claim) => claim.canonical_url || claim.permanent_url) : undefined
 );
 
-export const selectMyCollectionIds = createSelector(selectState, (state) => state.myCollectionClaims);
+export const selectMyCollectionIds = (state: State) => selectState(state).myCollectionClaims;
 
 export const selectResolvingUris = createSelector(selectState, (state) => state.resolvingUris || []);
 
-export const selectChannelImportPending = createSelector(selectState, (state) => state.pendingChannelImport);
+export const selectChannelImportPending = (state: State) => selectState(state).pendingChannelImport;
 
 export const makeSelectIsUriResolving = (uri: string) =>
   createSelector(selectResolvingUris, (resolvingUris) => resolvingUris && resolvingUris.indexOf(uri) !== -1);
 
-export const selectPlayingUri = createSelector(selectState, (state) => state.playingUri);
+export const selectPlayingUri = (state: State) => selectState(state).playingUri;
 
 export const selectChannelClaimCounts = createSelector(selectState, (state) => state.channelClaimCounts || {});
 
@@ -595,9 +581,8 @@ export const makeSelectSupportsForUri = (uri: string) =>
     return total;
   });
 
-export const selectUpdatingChannel = createSelector(selectState, (state) => state.updatingChannel);
-
-export const selectUpdateChannelError = createSelector(selectState, (state) => state.updateChannelError);
+export const selectUpdatingChannel = (state: State) => selectState(state).updatingChannel;
+export const selectUpdateChannelError = (state: State) => selectState(state).updateChannelError;
 
 export const makeSelectReflectingClaimForUri = (uri: string) =>
   createSelector(selectClaimIdsByUri, selectReflectingById, (claimIdsByUri, reflectingById) => {
@@ -670,10 +655,7 @@ export const makeSelectStakedLevelForChannelUri = (uri: string) =>
     return level;
   });
 
-export const selectUpdatingCollection = createSelector(selectState, (state) => state.updatingCollection);
-
-export const selectUpdateCollectionError = createSelector(selectState, (state) => state.updateCollectionError);
-
-export const selectCreatingCollection = createSelector(selectState, (state) => state.creatingCollection);
-
-export const selectCreateCollectionError = createSelector(selectState, (state) => state.createCollectionError);
+export const selectUpdatingCollection = (state: State) => selectState(state).updatingCollection;
+export const selectUpdateCollectionError = (state: State) => selectState(state).updateCollectionError;
+export const selectCreatingCollection = (state: State) => selectState(state).creatingCollection;
+export const selectCreateCollectionError = (state: State) => selectState(state).createCollectionError;

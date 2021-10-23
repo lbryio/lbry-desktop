@@ -2,11 +2,9 @@ import { createSelector } from 'reselect';
 
 export const selectState = (state) => state.notifications || {};
 
-export const selectNotifications = createSelector(selectState, (state) => state.notifications);
-
-export const selectNotificationsFiltered = createSelector(selectState, (state) => state.notificationsFiltered);
-
-export const selectNotificationCategories = createSelector(selectState, (state) => state.notificationCategories);
+export const selectNotifications = (state) => selectState(state).notifications;
+export const selectNotificationsFiltered = (state) => selectState(state).notificationsFiltered;
+export const selectNotificationCategories = (state) => selectState(state).notificationCategories;
 
 export const makeSelectNotificationForCommentId = (id) =>
   createSelector(selectNotifications, (notifications) => {
@@ -21,7 +19,7 @@ export const makeSelectNotificationForCommentId = (id) =>
     return match;
   });
 
-export const selectIsFetchingNotifications = createSelector(selectState, (state) => state.fetchingNotifications);
+export const selectIsFetchingNotifications = (state) => selectState(state).fetchingNotifications;
 
 export const selectUnreadNotificationCount = createSelector(selectNotifications, (notifications) => {
   return notifications ? notifications.filter((notification) => !notification.is_read).length : 0;

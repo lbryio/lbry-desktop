@@ -8,17 +8,12 @@ const homepages = require('homepages');
 
 const selectState = (state) => state.settings || {};
 
-export const selectDaemonSettings = createSelector(selectState, (state) => state.daemonSettings);
-
-export const selectDaemonStatus = createSelector(selectState, (state) => state.daemonStatus);
-
+export const selectDaemonSettings = (state) => selectState(state).daemonSettings;
+export const selectDaemonStatus = (state) => selectState(state).daemonStatus;
 export const selectFfmpegStatus = createSelector(selectDaemonStatus, (status) => status.ffmpeg_status);
-
-export const selectFindingFFmpeg = createSelector(selectState, (state) => state.findingFFmpeg || false);
-
-export const selectClientSettings = createSelector(selectState, (state) => state.clientSettings || {});
-
-export const selectLoadedLanguages = createSelector(selectState, (state) => state.loadedLanguages || {});
+export const selectFindingFFmpeg = (state) => selectState(state).findingFFmpeg || false;
+export const selectClientSettings = (state) => selectState(state).clientSettings || {};
+export const selectLoadedLanguages = (state) => selectState(state).loadedLanguages || {};
 
 export const makeSelectClientSetting = (setting) =>
   createSelector(selectClientSettings, (settings) => (settings ? settings[setting] : undefined));
@@ -33,11 +28,9 @@ export const selectShowRepostedContent = makeSelectClientSetting(SETTINGS.HIDE_R
 
 export const selectTheme = makeSelectClientSetting(SETTINGS.THEME);
 export const selectAutomaticDarkModeEnabled = makeSelectClientSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED);
-export const selectIsNight = createSelector(selectState, (state) => state.isNight);
-
-export const selectSavedWalletServers = createSelector(selectState, (state) => state.customWalletServers);
-
-export const selectSharedPreferences = createSelector(selectState, (state) => state.sharedPreferences);
+export const selectIsNight = (state) => selectState(state).isNight;
+export const selectSavedWalletServers = (state) => selectState(state).customWalletServers;
+export const selectSharedPreferences = (state) => selectState(state).sharedPreferences;
 
 export const makeSelectSharedPreferencesForKey = (key) =>
   createSelector(selectSharedPreferences, (prefs) => (prefs ? prefs[key] : undefined));

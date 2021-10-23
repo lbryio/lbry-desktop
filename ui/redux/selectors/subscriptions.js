@@ -20,14 +20,14 @@ export const selectSubscriptions = createSelector(
 export const selectFollowing = createSelector(selectState, (state) => state.following && state.following);
 
 // Fetching list of users subscriptions
-export const selectIsFetchingSubscriptions = createSelector(selectState, (state) => state.loading);
+export const selectIsFetchingSubscriptions = (state) => selectState(state).loading;
 
 // The current view mode on the subscriptions page
-export const selectViewMode = createSelector(selectState, (state) => state.viewMode);
+export const selectViewMode = (state) => selectState(state).viewMode;
 
 // Suggested subscriptions from internal apis
-export const selectSuggested = createSelector(selectState, (state) => state.suggested);
-export const selectIsFetchingSuggested = createSelector(selectState, (state) => state.loadingSuggested);
+export const selectSuggested = (state) => selectState(state).suggested;
+export const selectIsFetchingSuggested = (state) => selectState(state).loadingSuggested;
 export const selectSuggestedChannels = createSelector(
   selectSubscriptions,
   selectSuggested,
@@ -80,8 +80,8 @@ export const selectSuggestedChannels = createSelector(
   }
 );
 
-export const selectFirstRunCompleted = createSelector(selectState, (state) => state.firstRunCompleted);
-export const selectshowSuggestedSubs = createSelector(selectState, (state) => state.showSuggestedSubs);
+export const selectFirstRunCompleted = (state) => selectState(state).firstRunCompleted;
+export const selectShowSuggestedSubs = (state) => selectState(state).showSuggestedSubs;
 
 // Fetching any claims that are a part of a users subscriptions
 export const selectSubscriptionsBeingFetched = createSelector(

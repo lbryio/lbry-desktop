@@ -7,20 +7,12 @@ export const selectState = (state) => state.wallet || {};
 
 export const selectWalletState = selectState;
 
-export const selectWalletIsEncrypted = createSelector(selectState, (state) => state.walletIsEncrypted);
-
-export const selectWalletEncryptPending = createSelector(selectState, (state) => state.walletEncryptPending);
-
-export const selectWalletEncryptSucceeded = createSelector(selectState, (state) => state.walletEncryptSucceded);
-
-export const selectPendingSupportTransactions = createSelector(
-  selectState,
-  (state) => state.pendingSupportTransactions
-);
-
-export const selectPendingOtherTransactions = createSelector(selectState, (state) => state.pendingTxos);
-
-export const selectAbandonClaimSupportError = createSelector(selectState, (state) => state.abandonClaimSupportError);
+export const selectWalletIsEncrypted = (state) => selectState(state).walletIsEncrypted;
+export const selectWalletEncryptPending = (state) => selectState(state).walletEncryptPending;
+export const selectWalletEncryptSucceeded = (state) => selectState(state).walletEncryptSucceded;
+export const selectPendingSupportTransactions = (state) => selectState(state).pendingSupportTransactions;
+export const selectPendingOtherTransactions = (state) => selectState(state).pendingTxos;
+export const selectAbandonClaimSupportError = (state) => selectState(state).abandonClaimSupportError;
 
 export const makeSelectPendingAmountByUri = (uri) =>
   createSelector(selectClaimIdsByUri, selectPendingSupportTransactions, (claimIdsByUri, pendingSupports) => {
@@ -30,37 +22,22 @@ export const makeSelectPendingAmountByUri = (uri) =>
     return pendingSupport ? pendingSupport.effective : undefined;
   });
 
-export const selectWalletEncryptResult = createSelector(selectState, (state) => state.walletEncryptResult);
-
-export const selectWalletDecryptPending = createSelector(selectState, (state) => state.walletDecryptPending);
-
-export const selectWalletDecryptSucceeded = createSelector(selectState, (state) => state.walletDecryptSucceded);
-
-export const selectWalletDecryptResult = createSelector(selectState, (state) => state.walletDecryptResult);
-
-export const selectWalletUnlockPending = createSelector(selectState, (state) => state.walletUnlockPending);
-
-export const selectWalletUnlockSucceeded = createSelector(selectState, (state) => state.walletUnlockSucceded);
-
-export const selectWalletUnlockResult = createSelector(selectState, (state) => state.walletUnlockResult);
-
-export const selectWalletLockPending = createSelector(selectState, (state) => state.walletLockPending);
-
-export const selectWalletLockSucceeded = createSelector(selectState, (state) => state.walletLockSucceded);
-
-export const selectWalletLockResult = createSelector(selectState, (state) => state.walletLockResult);
-
-export const selectBalance = createSelector(selectState, (state) => state.balance);
-
-export const selectTotalBalance = createSelector(selectState, (state) => state.totalBalance);
-
-export const selectReservedBalance = createSelector(selectState, (state) => state.reservedBalance);
-
-export const selectClaimsBalance = createSelector(selectState, (state) => state.claimsBalance);
-
-export const selectSupportsBalance = createSelector(selectState, (state) => state.supportsBalance);
-
-export const selectTipsBalance = createSelector(selectState, (state) => state.tipsBalance);
+export const selectWalletEncryptResult = (state) => selectState(state).walletEncryptResult;
+export const selectWalletDecryptPending = (state) => selectState(state).walletDecryptPending;
+export const selectWalletDecryptSucceeded = (state) => selectState(state).walletDecryptSucceded;
+export const selectWalletDecryptResult = (state) => selectState(state).walletDecryptResult;
+export const selectWalletUnlockPending = (state) => selectState(state).walletUnlockPending;
+export const selectWalletUnlockSucceeded = (state) => selectState(state).walletUnlockSucceded;
+export const selectWalletUnlockResult = (state) => selectState(state).walletUnlockResult;
+export const selectWalletLockPending = (state) => selectState(state).walletLockPending;
+export const selectWalletLockSucceeded = (state) => selectState(state).walletLockSucceded;
+export const selectWalletLockResult = (state) => selectState(state).walletLockResult;
+export const selectBalance = (state) => selectState(state).balance;
+export const selectTotalBalance = (state) => selectState(state).totalBalance;
+export const selectReservedBalance = (state) => selectState(state).reservedBalance;
+export const selectClaimsBalance = (state) => selectState(state).claimsBalance;
+export const selectSupportsBalance = (state) => selectState(state).supportsBalance;
+export const selectTipsBalance = (state) => selectState(state).tipsBalance;
 
 export const selectTransactionsById = createSelector(selectState, (state) => state.transactions || {});
 
@@ -177,7 +154,7 @@ export const selectHasTransactions = createSelector(
   (transactions) => transactions && transactions.length > 0
 );
 
-export const selectIsFetchingTransactions = createSelector(selectState, (state) => state.fetchingTransactions);
+export const selectIsFetchingTransactions = (state) => selectState(state).fetchingTransactions;
 
 /**
  * CSV of 'selectTransactionItems'.
@@ -197,12 +174,9 @@ export const selectTransactionsFile = createSelector(selectTransactionItems, (tr
   return parsed;
 });
 
-export const selectIsSendingSupport = createSelector(selectState, (state) => state.sendingSupport);
-
-export const selectReceiveAddress = createSelector(selectState, (state) => state.receiveAddress);
-
-export const selectGettingNewAddress = createSelector(selectState, (state) => state.gettingNewAddress);
-
+export const selectIsSendingSupport = (state) => selectState(state).sendingSupport;
+export const selectReceiveAddress = (state) => selectState(state).receiveAddress;
+export const selectGettingNewAddress = (state) => selectState(state).gettingNewAddress;
 export const selectDraftTransaction = createSelector(selectState, (state) => state.draftTransaction || {});
 
 export const selectDraftTransactionAmount = createSelector(selectDraftTransaction, (draft) => draft.amount);
@@ -211,9 +185,8 @@ export const selectDraftTransactionAddress = createSelector(selectDraftTransacti
 
 export const selectDraftTransactionError = createSelector(selectDraftTransaction, (draft) => draft.error);
 
-export const selectBlocks = createSelector(selectState, (state) => state.blocks);
-
-export const selectCurrentHeight = createSelector(selectState, (state) => state.latestBlock);
+export const selectBlocks = (state) => selectState(state).blocks;
+export const selectCurrentHeight = (state) => selectState(state).latestBlock;
 
 export const selectTransactionListFilter = createSelector(selectState, (state) => state.transactionListFilter || '');
 
@@ -227,7 +200,7 @@ export const selectFilteredTransactions = createSelector(
   }
 );
 
-export const selectTxoPageParams = createSelector(selectState, (state) => state.txoFetchParams);
+export const selectTxoPageParams = (state) => selectState(state).txoFetchParams;
 
 export const selectTxoPage = createSelector(selectState, (state) => (state.txoPage && state.txoPage.items) || []);
 
@@ -238,9 +211,8 @@ export const selectTxoItemCount = createSelector(
   (state) => (state.txoPage && state.txoPage.total_items) || 1
 );
 
-export const selectFetchingTxosError = createSelector(selectState, (state) => state.fetchingTxosError);
-
-export const selectIsFetchingTxos = createSelector(selectState, (state) => state.fetchingTxos);
+export const selectFetchingTxosError = (state) => selectState(state).fetchingTxosError;
+export const selectIsFetchingTxos = (state) => selectState(state).fetchingTxos;
 
 export const makeSelectFilteredTransactionsForPage = (page = 1) =>
   createSelector(selectFilteredTransactions, (filteredTransactions) => {
@@ -258,16 +230,10 @@ export const selectFilteredTransactionCount = createSelector(
   (filteredTransactions) => filteredTransactions.length
 );
 
-export const selectIsWalletReconnecting = createSelector(selectState, (state) => state.walletReconnecting);
-
-export const selectIsFetchingUtxoCounts = createSelector(selectState, (state) => state.fetchingUtxoCounts);
-
-export const selectIsConsolidatingUtxos = createSelector(selectState, (state) => state.consolidatingUtxos);
-
-export const selectIsMassClaimingTips = createSelector(selectState, (state) => state.massClaimingTips);
-
-export const selectPendingConsolidateTxid = createSelector(selectState, (state) => state.pendingConsolidateTxid);
-
-export const selectPendingMassClaimTxid = createSelector(selectState, (state) => state.pendingMassClaimTxid);
-
-export const selectUtxoCounts = createSelector(selectState, (state) => state.utxoCounts);
+export const selectIsWalletReconnecting = (state) => selectState(state).walletReconnecting;
+export const selectIsFetchingUtxoCounts = (state) => selectState(state).fetchingUtxoCounts;
+export const selectIsConsolidatingUtxos = (state) => selectState(state).consolidatingUtxos;
+export const selectIsMassClaimingTips = (state) => selectState(state).massClaimingTips;
+export const selectPendingConsolidateTxid = (state) => selectState(state).pendingConsolidateTxid;
+export const selectPendingMassClaimTxid = (state) => selectState(state).pendingMassClaimTxid;
+export const selectUtxoCounts = (state) => selectState(state).utxoCounts;

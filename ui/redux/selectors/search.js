@@ -23,24 +23,14 @@ type State = { search: SearchState };
 
 export const selectState = (state: State): SearchState => state.search;
 
-export const selectSearchValue: (state: State) => string = createSelector(selectState, (state) => state.searchQuery);
-
-export const selectSearchOptions: (state: State) => SearchOptions = createSelector(
-  selectState,
-  (state) => state.options
-);
-
-export const selectIsSearching: (state: State) => boolean = createSelector(selectState, (state) => state.searching);
-
-export const selectSearchResultByQuery: (state: State) => { [string]: Array<string> } = createSelector(
-  selectState,
-  (state) => state.resultsByQuery
-);
-
-export const selectHasReachedMaxResultsLength: (state: State) => { [boolean]: Array<boolean> } = createSelector(
-  selectState,
-  (state) => state.hasReachedMaxResultsLength
-);
+// $FlowFixMe - 'searchQuery' is never populated. Something lost in a merge?
+export const selectSearchValue: (state: State) => string = (state) => selectState(state).searchQuery;
+export const selectSearchOptions: (state: State) => SearchOptions = (state) => selectState(state).options;
+export const selectIsSearching: (state: State) => boolean = (state) => selectState(state).searching;
+export const selectSearchResultByQuery: (state: State) => { [string]: Array<string> } = (state) =>
+  selectState(state).resultsByQuery;
+export const selectHasReachedMaxResultsLength: (state: State) => { [boolean]: Array<boolean> } = (state) =>
+  selectState(state).hasReachedMaxResultsLength;
 
 export const makeSelectSearchUrisForQuery = (query: string): ((state: State) => Array<string>) =>
   createSelector(selectSearchResultByQuery, (byQuery) => {

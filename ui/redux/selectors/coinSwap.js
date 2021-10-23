@@ -1,8 +1,7 @@
 // @flow
-import { createSelector } from 'reselect';
 
-const selectState = (state) => state.coinSwap || {};
+type State = { coinSwap: CoinSwapState };
 
-export const selectCoinSwaps = createSelector(selectState, (state: CoinSwapState) => {
-  return state.coinSwaps;
-});
+const selectState = (state: State) => state.coinSwap || {};
+
+export const selectCoinSwaps = (state: State) => selectState(state).coinSwaps;
