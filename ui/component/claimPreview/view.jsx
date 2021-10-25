@@ -5,7 +5,7 @@ import { NavLink, withRouter } from 'react-router-dom';
 import { isEmpty } from 'util/object';
 import { lazyImport } from 'util/lazyImport';
 import classnames from 'classnames';
-import { isURIEqual, isURIValid } from 'util/lbryURI';
+import { isURIValid } from 'util/lbryURI';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
 import { formatLbryUrlForWeb } from 'util/url';
 import { formatClaimPreviewTitle } from 'util/formatAriaLabel';
@@ -52,18 +52,9 @@ type Props = {
   nsfw: boolean,
   placeholder: string,
   type: string,
+  banState: { blacklisted?: boolean, filtered?: boolean, muted?: boolean, blocked?: boolean },
   hasVisitedUri: boolean,
-  blackListedOutpoints: Array<{
-    txid: string,
-    nout: number,
-  }>,
-  filteredOutpoints: Array<{
-    txid: string,
-    nout: number,
-  }>,
-  mutedUris: Array<string>,
   blockedUris: Array<string>,
-  channelIsBlocked: boolean,
   actions: boolean | Node | string | number,
   properties: boolean | Node | string | number | ((Claim) => Node),
   empty?: Node,
@@ -113,7 +104,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     streamingUrl,
     mediaDuration,
     // user properties
-    channelIsBlocked,
     hasVisitedUri,
     // component
     history,
@@ -139,10 +129,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     properties,
     onClick,
     actions,
-    mutedUris,
-    blockedUris,
-    blackListedOutpoints,
-    filteredOutpoints,
+    banState,
     includeSupportAction,
     renderActions,
     hideMenu = false,
@@ -246,28 +233,13 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     ((abandoned && !showUnresolvedClaim) || (!claimIsMine && obscureNsfw && nsfw));
 
   // This will be replaced once blocking is done at the wallet server level
-  if (claim && !claimIsMine && !shouldHide && blackListedOutpoints) {
-    shouldHide = blackListedOutpoints.some(
-      (outpoint) =>
-        (signingChannel && outpoint.txid === signingChannel.txid && outpoint.nout === signingChannel.nout) ||
-        (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
-    );
+  if (!shouldHide && !claimIsMine && (banState.blacklisted || banState.filtered)) {
+    shouldHide = true;
   }
-  // We're checking to see if the stream outpoint
-  // or signing channel outpoint is in the filter list
-  if (claim && !claimIsMine && !shouldHide && filteredOutpoints) {
-    shouldHide = filteredOutpoints.some(
-      (outpoint) =>
-        (signingChannel && outpoint.txid === signingChannel.txid && outpoint.nout === signingChannel.nout) ||
-        (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
-    );
-  }
+
   // block stream claims
-  if (claim && !shouldHide && !showUserBlocked && mutedUris.length && signingChannel) {
-    shouldHide = mutedUris.some((blockedUri) => isURIEqual(blockedUri, signingChannel.permanent_url));
-  }
-  if (claim && !shouldHide && !showUserBlocked && blockedUris.length && signingChannel) {
-    shouldHide = blockedUris.some((blockedUri) => isURIEqual(blockedUri, signingChannel.permanent_url));
+  if (!shouldHide && !showUserBlocked && (banState.muted || banState.blocked)) {
+    shouldHide = true;
   }
 
   if (!shouldHide && customShouldHide && claim) {
@@ -482,7 +454,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                           </div>
                         )}
 
-                        {isChannelUri && !channelIsBlocked && !claimIsMine && (
+                        {isChannelUri && !banState.muted && !claimIsMine && (
                           <SubscribeButton
                             uri={repostedChannelUri || (uri.startsWith('lbry://') ? uri : `lbry://${uri}`)}
                           />

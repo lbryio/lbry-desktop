@@ -11,8 +11,7 @@ import {
 } from 'redux/selectors/claims';
 import { doFileGet } from 'redux/actions/file';
 import { doResolveUri } from 'redux/actions/claims';
-import { selectMutedChannels } from 'redux/selectors/blocked';
-import { makeSelectViewCountForUri, selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
+import { makeSelectViewCountForUri, selectBanStateForUri } from 'lbryinc';
 import { makeSelectIsActiveLivestream } from 'redux/selectors/livestream';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import ClaimPreviewTile from './view';
@@ -31,9 +30,7 @@ const select = (state, props) => {
     isResolvingUri: props.uri && makeSelectIsUriResolving(props.uri)(state),
     thumbnail: props.uri && makeSelectThumbnailForUri(props.uri)(state),
     title: props.uri && makeSelectTitleForUri(props.uri)(state),
-    blackListedOutpoints: selectBlackListedOutpoints(state),
-    filteredOutpoints: selectFilteredOutpoints(state),
-    blockedChannelUris: selectMutedChannels(state),
+    banState: selectBanStateForUri(state, props.uri),
     showMature: selectShowMatureContent(state),
     isMature: makeSelectClaimIsNsfw(props.uri)(state),
     isLivestream: makeSelectClaimIsStreamPlaceholder(props.uri)(state),

@@ -12,7 +12,7 @@ import SubscribeButton from 'component/subscribeButton';
 import useGetThumbnail from 'effects/use-get-thumbnail';
 import { formatLbryUrlForWeb, generateListSearchUrlParams } from 'util/url';
 import { formatClaimPreviewTitle } from 'util/formatAriaLabel';
-import { parseURI, isURIEqual } from 'util/lbryURI';
+import { parseURI } from 'util/lbryURI';
 import PreviewOverlayProperties from 'component/previewOverlayProperties';
 import FileDownloadLink from 'component/fileDownloadLink';
 import FileWatchLaterLink from 'component/fileWatchLaterLink';
@@ -33,15 +33,7 @@ type Props = {
   thumbnail: string,
   title: string,
   placeholder: boolean,
-  blackListedOutpoints: Array<{
-    txid: string,
-    nout: number,
-  }>,
-  filteredOutpoints: Array<{
-    txid: string,
-    nout: number,
-  }>,
-  blockedChannelUris: Array<string>,
+  banState: { blacklisted?: boolean, filtered?: boolean, muted?: boolean, blocked?: boolean },
   getFile: (string) => void,
   streamingUrl: string,
   isMature: boolean,
@@ -67,11 +59,9 @@ function ClaimPreviewTile(props: Props) {
     resolveUri,
     claim,
     placeholder,
-    blackListedOutpoints,
-    filteredOutpoints,
+    banState,
     getFile,
     streamingUrl,
-    blockedChannelUris,
     isMature,
     showMature,
     showHiddenByUser,
@@ -145,34 +135,9 @@ function ClaimPreviewTile(props: Props) {
     // Unfortunately needed until this is resolved
     // https://github.com/lbryio/lbry-sdk/issues/2785
     shouldHide = true;
-  }
-
-  // This will be replaced once blocking is done at the wallet server level
-  if (claim && !shouldHide && blackListedOutpoints) {
-    shouldHide = blackListedOutpoints.some(
-      (outpoint) =>
-        (signingChannel && outpoint.txid === signingChannel.txid && outpoint.nout === signingChannel.nout) ||
-        (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
-    );
-  }
-  // We're checking to see if the stream outpoint
-  // or signing channel outpoint is in the filter list
-  if (claim && !shouldHide && filteredOutpoints) {
-    shouldHide = filteredOutpoints.some(
-      (outpoint) =>
-        (signingChannel && outpoint.txid === signingChannel.txid && outpoint.nout === signingChannel.nout) ||
-        (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
-    );
-  }
-
-  // block stream claims
-  if (claim && !shouldHide && !showHiddenByUser && blockedChannelUris.length && signingChannel) {
-    shouldHide = blockedChannelUris.some((blockedUri) => isURIEqual(blockedUri, signingChannel.permanent_url));
-  }
-  // block channel claims if we can't control for them in claim search
-  // e.g. fetchRecommendedSubscriptions
-  if (claim && isChannel && !shouldHide && !showHiddenByUser && blockedChannelUris.length && signingChannel) {
-    shouldHide = blockedChannelUris.some((blockedUri) => isURIEqual(blockedUri, signingChannel.permanent_url));
+  } else {
+    shouldHide =
+      banState.blacklisted || banState.filtered || (!showHiddenByUser && (banState.muted || banState.blocked));
   }
 
   if (shouldHide || (isLivestream && !showNoSourceClaims)) {
@@ -290,34 +255,4 @@ function ClaimPreviewTile(props: Props) {
   );
 }
 
-export default React.memo<Props>(withRouter(ClaimPreviewTile), areEqual);
-
-const BLOCKLIST_KEYS = ['blackListedOutpoints', 'filteredOutpoints', 'blockedChannelUris'];
-const HANDLED_KEYS = [...BLOCKLIST_KEYS, 'date'];
-
-function areEqual(prev: Props, next: Props) {
-  for (let i = 0; i < BLOCKLIST_KEYS.length; ++i) {
-    const key = BLOCKLIST_KEYS[i];
-    const a = prev[key];
-    const b = next[key];
-
-    if (((!a || !b) && a !== b) || (a && b && a.length !== b.length)) {
-      // The arrays are huge, so just compare the length instead of each entry.
-      return false;
-    }
-  }
-
-  if (Number(prev.date) !== Number(next.date)) {
-    return false;
-  }
-
-  const propKeys = Object.keys(next);
-  for (let i = 0; i < propKeys.length; ++i) {
-    const pk = propKeys[i];
-    if (!HANDLED_KEYS.includes(pk) && prev[pk] !== next[pk]) {
-      return false;
-    }
-  }
-
-  return true;
-}
+export default withRouter(ClaimPreviewTile);

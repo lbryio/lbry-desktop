@@ -21,13 +21,11 @@ import {
 import { doResolveUri } from 'redux/actions/claims';
 import { doCollectionEdit } from 'redux/actions/collections';
 import { doFileGet } from 'redux/actions/file';
-import { selectMutedChannels, makeSelectChannelIsMuted } from 'redux/selectors/blocked';
-import { selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
+import { selectBanStateForUri } from 'lbryinc';
 import { makeSelectIsActiveLivestream } from 'redux/selectors/livestream';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import { makeSelectHasVisitedUri } from 'redux/selectors/content';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
-import { selectModerationBlockList } from 'redux/selectors/comments';
 import ClaimPreview from './view';
 import formatMediaDuration from 'util/formatMediaDuration';
 
@@ -48,12 +46,8 @@ const select = (state, props) => {
     isResolvingUri: props.uri && makeSelectIsUriResolving(props.uri)(state),
     isResolvingRepost: props.uri && makeSelectIsUriResolving(props.repostUrl)(state),
     nsfw: props.uri && makeSelectClaimIsNsfw(props.uri)(state),
-    blackListedOutpoints: selectBlackListedOutpoints(state),
-    filteredOutpoints: selectFilteredOutpoints(state),
-    mutedUris: selectMutedChannels(state),
-    blockedUris: selectModerationBlockList(state),
+    banState: selectBanStateForUri(state, props.uri),
     hasVisitedUri: props.uri && makeSelectHasVisitedUri(props.uri)(state),
-    channelIsBlocked: props.uri && makeSelectChannelIsMuted(props.uri)(state),
     isSubscribed: props.uri && makeSelectIsSubscribed(props.uri, true)(state),
     streamingUrl: props.uri && makeSelectStreamingUrlForUri(props.uri)(state),
     wasPurchased: props.uri && makeSelectClaimWasPurchased(props.uri)(state),
