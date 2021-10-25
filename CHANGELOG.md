@@ -23,6 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Styling cleanup for file reactions ([#7251](https://github.com/lbryio/lbry-desktop/pull/7251))
 - Change share url to odysee and allow custom share url in settings ([#7258](https://github.com/lbryio/lbry-desktop/pull/7258))
 - Change Sign in/up to Cloud Connect for Odysee ([#7260](https://github.com/lbryio/lbry-desktop/pull/7260))
+- Upgraded to lbrynet v0.103.0 ([#7265](https://github.com/lbryio/lbry-desktop/pull/7265))
 
 ### Fixed
 - Clicking on the title of a floating player will take you back to the list ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
