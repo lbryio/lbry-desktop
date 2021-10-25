@@ -106,7 +106,7 @@ export const selectClaimForUri = createCachedSelector(
       }
     }
   }
-)((state, uri, returnRepost = true) => `${uri}:${returnRepost ? '1' : '0'}`);
+)((state, uri, returnRepost = true) => `${String(uri)}:${returnRepost ? '1' : '0'}`);
 
 export const makeSelectClaimForUri = (uri: string, returnRepost: boolean = true) =>
   createSelector(selectClaimIdsByUri, selectClaimsById, (byUri, byId) => {
@@ -264,7 +264,7 @@ export const makeSelectTotalPagesInChannelSearch = (uri: string) =>
 export const selectMetadataForUri = createCachedSelector(selectClaimForUri, (claim, uri) => {
   const metadata = claim && claim.value;
   return metadata || (claim === undefined ? undefined : null);
-})((state, uri) => uri);
+})((state, uri) => String(uri));
 
 export const makeSelectMetadataForUri = (uri: string) =>
   createSelector(makeSelectClaimForUri(uri), (claim) => {
@@ -297,7 +297,7 @@ export const selectDateForUri = createCachedSelector(
     const dateObj = new Date(timestamp);
     return dateObj;
   }
-)((state, uri) => uri);
+)((state, uri) => String(uri));
 
 export const makeSelectAmountForUri = (uri: string) =>
   createSelector(makeSelectClaimForUri(uri), (claim) => {
@@ -530,7 +530,7 @@ export const makeSelectMyChannelPermUrlForName = (name: string) =>
 
 export const selectTagsForUri = createCachedSelector(selectMetadataForUri, (metadata: ?GenericMetadata) => {
   return (metadata && metadata.tags) || [];
-})((state, uri) => uri);
+})((state, uri) => String(uri));
 
 export const makeSelectTagsForUri = (uri: string) =>
   createSelector(makeSelectMetadataForUri(uri), (metadata: ?GenericMetadata) => {
