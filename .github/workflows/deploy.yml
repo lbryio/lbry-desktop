@@ -56,7 +56,7 @@ jobs:
           NOTARIZATION_PASSWORD: ${{ secrets.NOTARIZATION_PASSWORD }}
           WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
           CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
-          WIN_CSC_LINK: https://s3.amazonaws.com/files.lbry.io/cert/win-csc-2020-2021-08.p12
+          WIN_CSC_LINK: https://raw.githubusercontent.com/lbryio/lbry-desktop/master/build/win-csc-2021-2022-08.p12
           CSC_LINK: https://s3.amazonaws.com/files.lbry.io/cert/osx-csc-2021-2022.p12
 
           # UI
