@@ -14,7 +14,7 @@ import { useHistory } from 'react-router';
 import { useIsMobile, useIsMediumScreen } from 'effects/use-screensize';
 import { parseURI } from 'util/lbryURI';
 
-const Footer = lazyImport(() => import('web/component/footer' /* webpackChunkName: "secondary" */));
+const Footer = lazyImport(() => import('web/component/footer' /* webpackChunkName: "footer" */));
 
 export const MAIN_CLASS = 'main';
 type Props = {

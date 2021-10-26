@@ -24,72 +24,77 @@ const TOSPage = lazyImport(() => import('web/page/tos' /* webpackChunkName: "tos
 const YouTubeTOSPage = lazyImport(() => import('web/page/youtubetos' /* webpackChunkName: "youtubetos" */));
 // @endif
 
-// Chunk: "secondary"
-const SignInPage = lazyImport(() => import('page/signIn' /* webpackChunkName: "secondary" */));
+const SignInPage = lazyImport(() => import('page/signIn' /* webpackChunkName: "signIn" */));
 const SignInWalletPasswordPage = lazyImport(() =>
-  import('page/signInWalletPassword' /* webpackChunkName: "secondary" */)
+  import('page/signInWalletPassword' /* webpackChunkName: "signInWalletPassword" */)
 );
-const SignUpPage = lazyImport(() => import('page/signUp' /* webpackChunkName: "secondary" */));
-const SignInVerifyPage = lazyImport(() => import('page/signInVerify' /* webpackChunkName: "secondary" */));
+const SignUpPage = lazyImport(() => import('page/signUp' /* webpackChunkName: "signUp" */));
+const SignInVerifyPage = lazyImport(() => import('page/signInVerify' /* webpackChunkName: "signInVerify" */));
 
-// Chunk: "wallet/secondary"
-const BuyPage = lazyImport(() => import('page/buy' /* webpackChunkName: "secondary" */));
-const ReceivePage = lazyImport(() => import('page/receive' /* webpackChunkName: "secondary" */));
-const SendPage = lazyImport(() => import('page/send' /* webpackChunkName: "secondary" */));
-const SwapPage = lazyImport(() => import('page/swap' /* webpackChunkName: "secondary" */));
-const WalletPage = lazyImport(() => import('page/wallet' /* webpackChunkName: "secondary" */));
+const BuyPage = lazyImport(() => import('page/buy' /* webpackChunkName: "buy" */));
+const ReceivePage = lazyImport(() => import('page/receive' /* webpackChunkName: "receive" */));
+const SendPage = lazyImport(() => import('page/send' /* webpackChunkName: "send" */));
+const SwapPage = lazyImport(() => import('page/swap' /* webpackChunkName: "swap" */));
+const WalletPage = lazyImport(() => import('page/wallet' /* webpackChunkName: "wallet" */));
 
-// Chunk: none
-const NotificationsPage = lazyImport(() => import('page/notifications' /* webpackChunkName: "secondary" */));
-const CollectionPage = lazyImport(() => import('page/collection' /* webpackChunkName: "secondary" */));
-const ChannelNew = lazyImport(() => import('page/channelNew' /* webpackChunkName: "secondary" */));
+const NotificationsPage = lazyImport(() => import('page/notifications' /* webpackChunkName: "notifications" */));
+const CollectionPage = lazyImport(() => import('page/collection' /* webpackChunkName: "collection" */));
+const ChannelNew = lazyImport(() => import('page/channelNew' /* webpackChunkName: "channelNew" */));
 const ChannelsFollowingDiscoverPage = lazyImport(() =>
-  import('page/channelsFollowingDiscover' /* webpackChunkName: "secondary" */)
+  import('page/channelsFollowingDiscover' /* webpackChunkName: "channelsFollowingDiscover" */)
 );
-const ChannelsFollowingPage = lazyImport(() => import('page/channelsFollowing' /* webpackChunkName: "secondary" */));
-const ChannelsPage = lazyImport(() => import('page/channels' /* webpackChunkName: "secondary" */));
+const ChannelsFollowingPage = lazyImport(() =>
+  import('page/channelsFollowing' /* webpackChunkName: "channelsFollowing" */)
+);
+const ChannelsPage = lazyImport(() => import('page/channels' /* webpackChunkName: "channels" */));
 const CheckoutPage = lazyImport(() => import('page/checkoutPage' /* webpackChunkName: "checkoutPage" */));
-const CreatorDashboard = lazyImport(() => import('page/creatorDashboard' /* webpackChunkName: "secondary" */));
-const DiscoverPage = lazyImport(() => import('page/discover' /* webpackChunkName: "secondary" */));
-const EmbedWrapperPage = lazyImport(() => import('page/embedWrapper' /* webpackChunkName: "secondary" */));
-const FileListPublished = lazyImport(() => import('page/fileListPublished' /* webpackChunkName: "secondary" */));
+const CreatorDashboard = lazyImport(() => import('page/creatorDashboard' /* webpackChunkName: "creatorDashboard" */));
+const DiscoverPage = lazyImport(() => import('page/discover' /* webpackChunkName: "discover" */));
+const EmbedWrapperPage = lazyImport(() => import('page/embedWrapper' /* webpackChunkName: "embedWrapper" */));
+const FileListPublished = lazyImport(() =>
+  import('page/fileListPublished' /* webpackChunkName: "fileListPublished" */)
+);
 const FourOhFourPage = lazyImport(() => import('page/fourOhFour' /* webpackChunkName: "fourOhFour" */));
 const HelpPage = lazyImport(() => import('page/help' /* webpackChunkName: "help" */));
-const InvitePage = lazyImport(() => import('page/invite' /* webpackChunkName: "secondary" */));
-const InvitedPage = lazyImport(() => import('page/invited' /* webpackChunkName: "secondary" */));
-const LibraryPage = lazyImport(() => import('page/library' /* webpackChunkName: "secondary" */));
-const ListBlockedPage = lazyImport(() => import('page/listBlocked' /* webpackChunkName: "secondary" */));
-const ListsPage = lazyImport(() => import('page/lists' /* webpackChunkName: "secondary" */));
-const LiveStreamSetupPage = lazyImport(() => import('page/livestreamSetup' /* webpackChunkName: "secondary" */));
-const LivestreamCurrentPage = lazyImport(() => import('page/livestreamCurrent' /* webpackChunkName: "secondary" */));
+const InvitePage = lazyImport(() => import('page/invite' /* webpackChunkName: "invite" */));
+const InvitedPage = lazyImport(() => import('page/invited' /* webpackChunkName: "invited" */));
+const LibraryPage = lazyImport(() => import('page/library' /* webpackChunkName: "library" */));
+const ListBlockedPage = lazyImport(() => import('page/listBlocked' /* webpackChunkName: "listBlocked" */));
+const ListsPage = lazyImport(() => import('page/lists' /* webpackChunkName: "lists" */));
+const LiveStreamSetupPage = lazyImport(() => import('page/livestreamSetup' /* webpackChunkName: "livestreamSetup" */));
+const LivestreamCurrentPage = lazyImport(() =>
+  import('page/livestreamCurrent' /* webpackChunkName: "livestreamCurrent" */)
+);
 const OwnComments = lazyImport(() => import('page/ownComments' /* webpackChunkName: "ownComments" */));
-const PasswordResetPage = lazyImport(() => import('page/passwordReset' /* webpackChunkName: "secondary" */));
-const PasswordSetPage = lazyImport(() => import('page/passwordSet' /* webpackChunkName: "secondary" */));
-const PublishPage = lazyImport(() => import('page/publish' /* webpackChunkName: "secondary" */));
-const ReportContentPage = lazyImport(() => import('page/reportContent' /* webpackChunkName: "secondary" */));
-const ReportPage = lazyImport(() => import('page/report' /* webpackChunkName: "secondary" */));
-const RepostNew = lazyImport(() => import('page/repost' /* webpackChunkName: "secondary" */));
-const RewardsPage = lazyImport(() => import('page/rewards' /* webpackChunkName: "secondary" */));
-const RewardsVerifyPage = lazyImport(() => import('page/rewardsVerify' /* webpackChunkName: "secondary" */));
-const SearchPage = lazyImport(() => import('page/search' /* webpackChunkName: "secondary" */));
-const SettingsStripeCard = lazyImport(() => import('page/settingsStripeCard' /* webpackChunkName: "secondary" */));
+const PasswordResetPage = lazyImport(() => import('page/passwordReset' /* webpackChunkName: "passwordReset" */));
+const PasswordSetPage = lazyImport(() => import('page/passwordSet' /* webpackChunkName: "passwordSet" */));
+const PublishPage = lazyImport(() => import('page/publish' /* webpackChunkName: "publish" */));
+const ReportContentPage = lazyImport(() => import('page/reportContent' /* webpackChunkName: "reportContent" */));
+const ReportPage = lazyImport(() => import('page/report' /* webpackChunkName: "report" */));
+const RepostNew = lazyImport(() => import('page/repost' /* webpackChunkName: "repost" */));
+const RewardsPage = lazyImport(() => import('page/rewards' /* webpackChunkName: "rewards" */));
+const RewardsVerifyPage = lazyImport(() => import('page/rewardsVerify' /* webpackChunkName: "rewardsVerify" */));
+const SearchPage = lazyImport(() => import('page/search' /* webpackChunkName: "search" */));
+const SettingsStripeCard = lazyImport(() =>
+  import('page/settingsStripeCard' /* webpackChunkName: "settingsStripeCard" */)
+);
 const SettingsStripeAccount = lazyImport(() =>
-  import('page/settingsStripeAccount' /* webpackChunkName: "secondary" */)
+  import('page/settingsStripeAccount' /* webpackChunkName: "settingsStripeAccount" */)
 );
-const SettingsCreatorPage = lazyImport(() => import('page/settingsCreator' /* webpackChunkName: "secondary" */));
+const SettingsCreatorPage = lazyImport(() => import('page/settingsCreator' /* webpackChunkName: "settingsCreator" */));
 const SettingsNotificationsPage = lazyImport(() =>
-  import('page/settingsNotifications' /* webpackChunkName: "secondary" */)
+  import('page/settingsNotifications' /* webpackChunkName: "settingsNotifications" */)
 );
-const SettingsPage = lazyImport(() => import('page/settings' /* webpackChunkName: "secondary" */));
-const ShowPage = lazyImport(() => import('page/show' /* webpackChunkName: "secondary" */));
+const SettingsPage = lazyImport(() => import('page/settings' /* webpackChunkName: "settings" */));
+const ShowPage = lazyImport(() => import('page/show' /* webpackChunkName: "show" */));
 const TagsFollowingManagePage = lazyImport(() =>
-  import('page/tagsFollowingManage' /* webpackChunkName: "secondary" */)
+  import('page/tagsFollowingManage' /* webpackChunkName: "tagsFollowingManage" */)
 );
-const TagsFollowingPage = lazyImport(() => import('page/tagsFollowing' /* webpackChunkName: "secondary" */));
-const TopPage = lazyImport(() => import('page/top' /* webpackChunkName: "secondary" */));
+const TagsFollowingPage = lazyImport(() => import('page/tagsFollowing' /* webpackChunkName: "tagsFollowing" */));
+const TopPage = lazyImport(() => import('page/top' /* webpackChunkName: "top" */));
 const UpdatePasswordPage = lazyImport(() => import('page/passwordUpdate' /* webpackChunkName: "passwordUpdate" */));
-const Welcome = lazyImport(() => import('page/welcome' /* webpackChunkName: "secondary" */));
-const YoutubeSyncPage = lazyImport(() => import('page/youtubeSync' /* webpackChunkName: "secondary" */));
+const Welcome = lazyImport(() => import('page/welcome' /* webpackChunkName: "welcome" */));
+const YoutubeSyncPage = lazyImport(() => import('page/youtubeSync' /* webpackChunkName: "youtubeSync" */));
 
 // Tell the browser we are handling scroll restoration
 if ('scrollRestoration' in history) {

@@ -6,7 +6,7 @@ import { useIsMobile } from 'effects/use-screensize';
 
 const Button = lazyImport(() => import('component/button' /* webpackChunkName: "button" */));
 const Icon = lazyImport(() => import('component/common/icon' /* webpackChunkName: "icon" */));
-const WunderbarSuggestions = lazyImport(() => import('component/wunderbarSuggestions' /* webpackChunkName: "secondary" */));
+const WunderbarSuggestions = lazyImport(() => import('component/wunderbarSuggestions' /* webpackChunkName: "wb" */));
 
 type Props = {
   doOpenMobileSearch: (any) => void,

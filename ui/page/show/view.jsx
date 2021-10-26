@@ -9,6 +9,7 @@ import ChannelPage from 'page/channel';
 import Page from 'component/page';
 import Button from 'component/button';
 import Card from 'component/common/card';
+import Yrbl from 'component/yrbl';
 import { formatLbryUrlForWeb } from 'util/url';
 import { parseURI } from 'util/lbryURI';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
@@ -18,7 +19,6 @@ const AbandonedChannelPreview = lazyImport(() =>
 );
 const FilePage = lazyImport(() => import('page/file' /* webpackChunkName: "filePage" */));
 const LivestreamPage = lazyImport(() => import('page/livestream' /* webpackChunkName: "livestream" */));
-const Yrbl = lazyImport(() => import('component/yrbl' /* webpackChunkName: "yrbl" */));
 const isDev = process.env.NODE_ENV !== 'production';
 
 type Props = {

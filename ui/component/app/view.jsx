@@ -6,14 +6,16 @@ import classnames from 'classnames';
 import analytics from 'analytics';
 import { buildURI, parseURI } from 'util/lbryURI';
 import { SIMPLE_SITE } from 'config';
-import Nag from 'component/common/nag';
 import Router from 'component/router/index';
+import ModalRouter from 'modal/modalRouter';
 import ReactModal from 'react-modal';
 import { openContextMenu } from 'util/context-menu';
 import useKonamiListener from 'util/enhanced-layout';
+import Yrbl from 'component/yrbl';
 import FileRenderFloating from 'component/fileRenderFloating';
 import { withRouter } from 'react-router';
 import usePrevious from 'effects/use-previous';
+import Nag from 'component/common/nag';
 import REWARDS from 'rewards';
 import usePersistedState from 'effects/use-persisted-state';
 import Spinner from 'component/spinner';
@@ -23,8 +25,8 @@ import LANGUAGES from 'constants/languages';
 import useZoom from 'effects/use-zoom';
 import useHistoryNav from 'effects/use-history-nav';
 // @endif
-
 // @if TARGET='web'
+import YoutubeWelcome from 'web/component/youtubeReferralWelcome';
 import {
   useDegradedPerformance,
   STATUS_OK,
@@ -33,33 +35,22 @@ import {
   STATUS_DOWN,
 } from 'web/effects/use-degraded-performance';
 // @endif
-
 import LANGUAGE_MIGRATIONS from 'constants/language-migrations';
 
-const FileDrop = lazyImport(() => import('component/fileDrop' /* webpackChunkName: "secondary" */));
-const ModalRouter = lazyImport(() => import('modal/modalRouter' /* webpackChunkName: "secondary" */));
-const NagContinueFirstRun = lazyImport(() =>
-  import('component/nagContinueFirstRun' /* webpackChunkName: "secondary" */)
-);
-const OpenInAppLink = lazyImport(() => import('web/component/openInAppLink' /* webpackChunkName: "secondary" */));
+const FileDrop = lazyImport(() => import('component/fileDrop' /* webpackChunkName: "fileDrop" */));
+const NagContinueFirstRun = lazyImport(() => import('component/nagContinueFirstRun' /* webpackChunkName: "nagCFR" */));
+const OpenInAppLink = lazyImport(() => import('web/component/openInAppLink' /* webpackChunkName: "openInAppLink" */));
 
 // @if TARGET='web'
-const NagDataCollection = lazyImport(() =>
-  import('web/component/nag-data-collection' /* webpackChunkName: "secondary" */)
-);
+const NagDataCollection = lazyImport(() => import('web/component/nag-data-collection' /* webpackChunkName: "nagDC" */));
 const NagDegradedPerformance = lazyImport(() =>
-  import('web/component/nag-degraded-performance' /* webpackChunkName: "secondary" */)
+  import('web/component/nag-degraded-performance' /* webpackChunkName: "NagDegradedPerformance" */)
 );
 const NagNoUser = lazyImport(() => import('web/component/nag-no-user' /* webpackChunkName: "nag-no-user" */));
-const NagSunset = lazyImport(() => import('web/component/nag-sunset' /* webpackChunkName: "nag-no-user" */));
-const YoutubeWelcome = lazyImport(() =>
-  import('web/component/youtubeReferralWelcome' /* webpackChunkName: "secondary" */)
-);
-
+const NagSunset = lazyImport(() => import('web/component/nag-sunset' /* webpackChunkName: "nag-sunset" */));
 // @endif
 
 const SyncFatalError = lazyImport(() => import('component/syncFatalError' /* webpackChunkName: "syncFatalError" */));
-const Yrbl = lazyImport(() => import('component/yrbl' /* webpackChunkName: "yrbl" */));
 
 // ****************************************************************************
 
@@ -453,20 +444,16 @@ function App(props: Props) {
       onContextMenu={IS_WEB ? undefined : (e) => openContextMenu(e)}
     >
       {IS_WEB && lbryTvApiStatus === STATUS_DOWN ? (
-        <React.Suspense fallback={null}>
-          <Yrbl
-            className="main--empty"
-            title={__('lbry.tv is currently down')}
-            subtitle={__('My wheel broke, but the good news is that someone from LBRY is working on it.')}
-          />
-        </React.Suspense>
+        <Yrbl
+          className="main--empty"
+          title={__('lbry.tv is currently down')}
+          subtitle={__('My wheel broke, but the good news is that someone from LBRY is working on it.')}
+        />
       ) : (
         <React.Fragment>
           <Router />
-          <React.Suspense fallback={null}>
-            <ModalRouter />
-            {renderFiledrop && <FileDrop />}
-          </React.Suspense>
+          <ModalRouter />
+          <React.Suspense fallback={null}>{renderFiledrop && <FileDrop />}</React.Suspense>
           <FileRenderFloating />
           <React.Suspense fallback={null}>
             {isEnhancedLayout && <Yrbl className="yrbl--enhanced" />}
