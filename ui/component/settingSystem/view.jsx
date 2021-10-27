@@ -239,9 +239,9 @@ export default function SettingSystem(props: Props) {
 
               {limitSpace && (
                 <FormField
-                  name="blob_limit_mb"
+                  name="blob_limit_gb"
                   type="text"
-                  label={__(`Limit in GB`)}
+                  label={__(`Limit (GB)`)}
                   helper={__(
                     'Data over the limit will be deleted within 30 minutes. This will make the Yrbl cry a little bit.'
                   )}
