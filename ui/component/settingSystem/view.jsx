@@ -15,10 +15,13 @@ import SettingsRow from 'component/settingsRow';
 import SettingWalletServer from 'component/settingWalletServer';
 import Spinner from 'component/spinner';
 import { getPasswordFromCookie } from 'util/saved-passwords';
+import * as DAEMON_SETTINGS from 'constants/daemon_settings';
+import { formatBytes } from 'util/format-bytes';
 
 // @if TARGET='app'
 const IS_MAC = process.platform === 'darwin';
 // @endif
+const BYTES_PER_MB = 1048576;
 
 type Price = {
   currency: string,
@@ -35,6 +38,13 @@ type DaemonSettings = {
   save_files: boolean,
   save_blobs: boolean,
   ffmpeg_path: string,
+};
+
+type DaemonStatus = {
+  disk_space: {
+    running: boolean,
+    space_used: string,
+  },
 };
 
 type Props = {
@@ -55,6 +65,7 @@ type Props = {
   updateWalletStatus: () => void,
   confirmForgetPassword: ({}) => void,
   toggle3PAnalytics: (boolean) => void,
+  daemonStatus: DaemonStatus,
 };
 
 export default function SettingSystem(props: Props) {
@@ -74,11 +85,18 @@ export default function SettingSystem(props: Props) {
     updateWalletStatus,
     confirmForgetPassword,
     toggle3PAnalytics,
+    daemonStatus,
   } = props;
 
   const [clearingCache, setClearingCache] = React.useState(false);
   const [storedPassword, setStoredPassword] = React.useState(false);
-
+  const { disk_space } = daemonStatus;
+  const spaceUsed = Number(disk_space.space_used);
+  const blobLimitSetting = daemonSettings[DAEMON_SETTINGS.BLOB_STORAGE_LIMIT_MB];
+  const [blobSpaceLimitGB, setBlobSpaceLimit] = React.useState(blobLimitSetting ? blobLimitSetting / 1024 : 0);
+  // const debouncedBlobSpaceLimitGB = useDebounce(blobSpaceLimitGB || 0, 500);
+  const [limitSpace, setLimitSpace] = React.useState(Boolean(blobLimitSetting));
+  console.log('spaceUsed', spaceUsed, 'blobLimit', blobLimitSetting);
   // @if TARGET='app'
   const { available: ffmpegAvailable, which: ffmpegPath } = ffmpegStatus;
   // @endif
@@ -93,6 +111,31 @@ export default function SettingSystem(props: Props) {
 
   function onConfirmForgetPassword() {
     confirmForgetPassword({ callback: () => setStoredPassword(false) });
+  }
+
+  function updateBlobLimitField(gb) {
+    if (gb === 0) {
+      setBlobSpaceLimit(0);
+    } else if (!gb || !isNaN(gb)) {
+      setBlobSpaceLimit(gb);
+    }
+  }
+
+  function handleLimitSpace(value) {
+    setLimitSpace(value);
+    if (!value) {
+      setDaemonSetting(DAEMON_SETTINGS.BLOB_STORAGE_LIMIT_MB, String(0));
+    } else {
+      const spaceLimitMB = blobSpaceLimitGB * 1024;
+      setDaemonSetting(DAEMON_SETTINGS.BLOB_STORAGE_LIMIT_MB, String(spaceLimitMB));
+    }
+  }
+
+  function handleSetBlobSpaceLimit() {
+    const spaceLimitMB = blobSpaceLimitGB * 1024;
+    if (!isNaN(spaceLimitMB) && blobLimitSetting !== spaceLimitMB * 1024) {
+      setDaemonSetting(DAEMON_SETTINGS.BLOB_STORAGE_LIMIT_MB, String(spaceLimitMB));
+    }
   }
 
   // Update ffmpeg variables
@@ -158,20 +201,63 @@ export default function SettingSystem(props: Props) {
               />
             </SettingsRow>
             <SettingsRow
-              title={__('Save hosting data to help the LBRY network')}
+              title={__('Data Hosting')}
+              multirow
               subtitle={
                 <React.Fragment>
                   {__("If disabled, LBRY will be very sad and you won't be helping improve the network.")}{' '}
+                  {__('If you set a limit, playing videos may exceed your limit until cleanup runs every 30 minutes.')}{' '}
                   <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/host-content" />.
+                  <p className={'help'}>
+                    {`Using ${formatBytes(spaceUsed * BYTES_PER_MB)} of ${
+                      daemonSettings[DAEMON_SETTINGS.BLOB_STORAGE_LIMIT_MB]
+                        ? formatBytes(daemonSettings[DAEMON_SETTINGS.BLOB_STORAGE_LIMIT_MB] * BYTES_PER_MB)
+                        : 'Unlimited'
+                    }`}
+                  </p>
                 </React.Fragment>
               }
             >
-              <FormField
-                type="checkbox"
-                name="save_blobs"
-                onChange={() => setDaemonSetting('save_blobs', !daemonSettings.save_blobs)}
-                checked={daemonSettings.save_blobs}
-              />
+              <fieldset-section>
+                <FormField
+                  type="checkbox"
+                  name="save_blobs"
+                  onChange={() => setDaemonSetting('save_blobs', !daemonSettings.save_blobs)}
+                  checked={daemonSettings.save_blobs}
+                  label={__('Enable Data Hosting')}
+                />
+              </fieldset-section>
+              <fieldset-section>
+                <FormField
+                  type="checkbox"
+                  name="limit_space_used"
+                  onChange={() => handleLimitSpace(!limitSpace)}
+                  checked={limitSpace}
+                  label={__('Limit Space Used')}
+                />
+              </fieldset-section>
+
+              {limitSpace && (
+                <FormField
+                  name="blob_limit_mb"
+                  type="text"
+                  label={__(`Limit in GB`)}
+                  helper={__(
+                    'Data over the limit will be deleted within 30 minutes. This will make the Yrbl cry a little bit.'
+                  )}
+                  disabled={!daemonSettings.save_blobs}
+                  onChange={(e) => updateBlobLimitField(e.target.value)}
+                  value={blobSpaceLimitGB}
+                  inputButton={
+                    <Button
+                      disabled={isNaN(blobSpaceLimitGB)}
+                      button="primary"
+                      label={__('Apply')}
+                      onClick={handleSetBlobSpaceLimit}
+                    />
+                  }
+                />
+              )}
             </SettingsRow>
             {/* @endif */}
 
@@ -367,8 +453,8 @@ export default function SettingSystem(props: Props) {
                   type="select"
                   min={1}
                   max={100}
-                  onChange={(e) => setDaemonSetting('max_connections_per_download', e.target.value)}
-                  value={daemonSettings.max_connections_per_download}
+                  onChange={(e) => setDaemonSetting(DAEMON_SETTINGS.MAX_CONNECTIONS_PER_DOWNLOAD, e.target.value)}
+                  value={daemonSettings[DAEMON_SETTINGS.MAX_CONNECTIONS_PER_DOWNLOAD]}
                 >
                   {[1, 2, 4, 6, 10, 20].map((connectionOption) => (
                     <option key={connectionOption} value={connectionOption}>
