@@ -53,16 +53,21 @@ export const selectThemePath = createSelector(
 );
 
 export const selectHomepageCode = createSelector(makeSelectClientSetting(SETTINGS.HOMEPAGE), (setting) => {
-  return Object.keys(homepages).includes(setting) ? setting : getDefaultHomepageKey();
+  return homepages[setting] ? setting : getDefaultHomepageKey();
 });
 
 export const selectLanguage = createSelector(makeSelectClientSetting(SETTINGS.LANGUAGE), (setting) => {
   return setting || getDefaultLanguage();
 });
 
-export const selectHomepageData = (state) => {
-  const homepageCode = selectHomepageCode(state);
-  return window.odysee_homepages[homepageCode] || {};
-};
+export const selectHomepageData = createSelector(
+  // using homepage setting,
+  selectHomepageCode,
+  (homepageCode) => {
+    // homepages = { 'en': homepageFile, ... }
+    // mixin Homepages here
+    return homepages[homepageCode] || homepages['en'] || {};
+  }
+);
 
 export const selectosNotificationsEnabled = makeSelectClientSetting(SETTINGS.OS_NOTIFICATIONS_ENABLED);

@@ -14,7 +14,6 @@ import {
   selectLanguage,
   selectLoadedLanguages,
   selectThemePath,
-  selectHomepageCode,
 } from 'redux/selectors/settings';
 import {
   selectIsUpgradeAvailable,
@@ -23,7 +22,7 @@ import {
   selectActiveChannelClaim,
   selectIsReloadRequired,
 } from 'redux/selectors/app';
-import { doGetWalletSyncPreference, doSetLanguage, doSetHomepage } from 'redux/actions/settings';
+import { doGetWalletSyncPreference, doSetLanguage } from 'redux/actions/settings';
 import { doSyncLoop } from 'redux/actions/sync';
 import {
   doDownloadUpgradeRequested,
@@ -40,7 +39,6 @@ const select = (state) => ({
   accessToken: selectAccessToken(state),
   theme: selectThemePath(state),
   language: selectLanguage(state),
-  homepageCode: selectHomepageCode(state),
   syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
   languages: selectLoadedLanguages(state),
   autoUpdateDownloaded: selectAutoUpdateDownloaded(state),
@@ -62,7 +60,6 @@ const perform = (dispatch) => ({
   fetchChannelListMine: () => dispatch(doFetchChannelListMine()),
   fetchCollectionListMine: () => dispatch(doFetchCollectionListMine()),
   setLanguage: (language) => dispatch(doSetLanguage(language)),
-  doSetHomepage: (value) => dispatch(doSetHomepage(value)),
   signIn: () => dispatch(doSignIn()),
   requestDownloadUpgrade: () => dispatch(doDownloadUpgradeRequested()),
   updatePreferences: () => dispatch(doGetAndPopulatePreferences()),

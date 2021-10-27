@@ -10,14 +10,7 @@ export const getDefaultLanguage = () => {
 // If homepages has a key "zh-Hant" return that, otherwise return "zh", otherwise "en"
 export const getDefaultHomepageKey = () => {
   const language = getDefaultLanguage();
-  const keys = Object.keys(homepages);
-  if (keys.includes(language)) {
-    return language;
-  } else if (keys.includes(language.slice(0, 2))) {
-    return language.slice(0, 2);
-  } else {
-    return DEFAULT_LANG;
-  }
+  return (homepages[language] && language) || (homepages[language.slice(0, 2)] && language.slice(0, 2)) || DEFAULT_LANG;
 };
 
 /**

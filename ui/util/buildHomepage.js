@@ -77,11 +77,9 @@ export const getHomepageRowForCat = (cat: HomepageCat) => {
   }
 
   let urlParams = new URLSearchParams();
-
   if (cat.claimType) {
     urlParams.set(CS.CLAIM_TYPE, cat.claimType);
   }
-
   if (cat.channelIds) {
     urlParams.set(CS.CHANNEL_IDS_KEY, cat.channelIds.join(','));
   }
@@ -90,13 +88,11 @@ export const getHomepageRowForCat = (cat: HomepageCat) => {
 
   // can intend no limit, numerica auto limit, specific limit.
   let limitClaims;
-
   if (typeof cat.channelLimit === 'string' && cat.channelIds && cat.channelIds.length) {
     if (cat.channelLimit === 'auto') {
       limitClaims = getLimitPerChannel(cat.channelIds.length, isChannelType);
     } else if (cat.channelLimit) {
       const limitNumber = Number(cat.channelLimit);
-
       // eslint-disable-next-line
       if (limitNumber === limitNumber && limitNumber !== 0) {
         // because javascript and NaN !== NaN
@@ -297,11 +293,9 @@ export function GetLinksData(
         }),
       },
     };
-
     // $FlowFixMe flow thinks this might not be Array<string>
     rowData.push(RECENT_FROM_FOLLOWING);
   }
-
   if (isHomepage && !CUSTOM_HOMEPAGE) {
     if (followedTags) {
       const TRENDING_FOR_TAGS = {
@@ -316,7 +310,6 @@ export function GetLinksData(
           limitClaimsPerChannel: 2,
         },
       };
-
       followedTags.forEach((tag: Tag) => {
         const tagName = `#${toCapitalCase(tag.name)}`;
         individualTagDataItems.push({
@@ -329,11 +322,7 @@ export function GetLinksData(
           },
         });
       });
-
-      if (showPersonalizedTags && !showIndividualTags) {
-        rowData.push(TRENDING_FOR_TAGS);
-      }
-
+      if (showPersonalizedTags && !showIndividualTags) rowData.push(TRENDING_FOR_TAGS);
       if (showPersonalizedTags && showIndividualTags) {
         individualTagDataItems.forEach((item: RowDataItem) => {
           rowData.push(item);
@@ -341,7 +330,6 @@ export function GetLinksData(
       }
     }
   }
-
   if (!CUSTOM_HOMEPAGE) {
     if (!authenticated) {
       rowData.push(YOUTUBE_CREATOR_ROW);
@@ -350,7 +338,6 @@ export function GetLinksData(
     rowData.push(LATEST_FROM_LBRY);
     if (!showPersonalizedChannels) rowData.push(TOP_CHANNELS);
   }
-
   // TODO: provide better method for exempting from homepage
   (Object.values(all): any)
     .filter((row) => !(isHomepage && row.name === 'news'))

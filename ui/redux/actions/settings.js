@@ -14,7 +14,6 @@ import { doAlertWaitingForSync, doGetAndPopulatePreferences } from 'redux/action
 import { selectPrefsReady } from 'redux/selectors/sync';
 import { Lbryio } from 'lbryinc';
 import { getDefaultLanguage } from 'util/default-languages';
-import homepages from 'homepages';
 
 const { DEFAULT_LANGUAGE } = require('config');
 const { SDK_SYNC_KEYS } = SHARED_PREFERENCES;
@@ -299,22 +298,13 @@ export function doFetchLanguage(language) {
 }
 
 export function doSetHomepage(code) {
-  return async (dispatch, getState) => {
+  return (dispatch, getState) => {
     let languageCode;
     if (code === getDefaultLanguage()) {
       languageCode = null;
     } else {
       languageCode = code;
     }
-
-    const homepage = homepages[code || 'en'];
-    if (homepage && homepage.lazyLoad) {
-      const homepageData = await homepage.lazyLoad();
-      if (homepageData) {
-        window.odysee_homepages[code || 'en'] = homepageData.default;
-      }
-    }
-
     dispatch(doSetClientSetting(SETTINGS.HOMEPAGE, languageCode));
   };
 }

@@ -75,7 +75,6 @@ const imaLibraryPath = 'https://imasdk.googleapis.com/js/sdkloader/ima3.js';
 type Props = {
   language: string,
   languages: Array<string>,
-  homepageCode: string,
   theme: string,
   user: ?{ id: string, has_verified_email: boolean, is_reward_approved: boolean },
   location: { pathname: string, hash: string, search: string },
@@ -93,7 +92,6 @@ type Props = {
   requestDownloadUpgrade: () => void,
   onSignedIn: () => void,
   setLanguage: (string) => void,
-  doSetHomepage: (string) => void,
   isUpgradeAvailable: boolean,
   isReloadRequired: boolean,
   autoUpdateDownloaded: boolean,
@@ -137,9 +135,7 @@ function App(props: Props) {
     syncError,
     language,
     languages,
-    homepageCode,
     setLanguage,
-    doSetHomepage,
     updatePreferences,
     getWalletSyncPref,
     rewards,
@@ -315,11 +311,6 @@ function App(props: Props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [language, languages]);
-
-  // Fetch homepage for the first time
-  useEffect(() => {
-    doSetHomepage(homepageCode);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (shouldMigrateLanguage) {
