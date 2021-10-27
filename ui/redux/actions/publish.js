@@ -47,6 +47,147 @@ function resolveClaimTypeForAnalytics(claim) {
 }
 
 export const NO_FILE = '---';
+
+function resolvePublishPayload(publishData, myClaimForUri, myChannels, preview) {
+  const {
+    name,
+    bid,
+    filePath,
+    description,
+    language,
+    releaseTimeEdited,
+    // license,
+    licenseUrl,
+    useLBRYUploader,
+    licenseType,
+    otherLicenseDescription,
+    thumbnail,
+    channel,
+    title,
+    contentIsFree,
+    fee,
+    // uri,
+    tags,
+    // locations,
+    optimize,
+    isLivestreamPublish,
+    remoteFileUrl,
+  } = publishData;
+
+  // Handle scenario where we have a claim that has the same name as a channel we are publishing with.
+  const myClaimForUriEditing = myClaimForUri && myClaimForUri.name === name ? myClaimForUri : null;
+
+  let publishingLicense;
+  switch (licenseType) {
+    case COPYRIGHT:
+    case OTHER:
+      publishingLicense = otherLicenseDescription;
+      break;
+    default:
+      publishingLicense = licenseType;
+  }
+
+  // get the claim id from the channel name, we will use that instead
+  const namedChannelClaim = myChannels ? myChannels.find((myChannel) => myChannel.name === channel) : null;
+  const channelId = namedChannelClaim ? namedChannelClaim.claim_id : '';
+
+  const publishPayload: {
+    name: ?string,
+    bid: string,
+    description?: string,
+    channel_id?: string,
+    file_path?: string,
+    license_url?: string,
+    license?: string,
+    thumbnail_url?: string,
+    release_time?: number,
+    fee_currency?: string,
+    fee_amount?: string,
+    languages?: Array<string>,
+    tags: Array<string>,
+    locations?: Array<any>,
+    blocking: boolean,
+    optimize_file?: boolean,
+    preview?: boolean,
+    remote_url?: string,
+  } = {
+    name,
+    title,
+    description,
+    locations: [],
+    bid: creditsToString(bid),
+    languages: [language],
+    tags: tags && tags.map((tag) => tag.name),
+    thumbnail_url: thumbnail,
+    blocking: true,
+    preview: false,
+  };
+
+  // Temporary solution to keep the same publish flow with the new tags api
+  // Eventually we will allow users to enter their own tags on publish
+  // `nsfw` will probably be removed
+  if (remoteFileUrl) {
+    publishPayload.remote_url = remoteFileUrl;
+  }
+
+  if (publishingLicense) {
+    publishPayload.license = publishingLicense;
+  }
+
+  if (licenseUrl) {
+    publishPayload.license_url = licenseUrl;
+  }
+
+  if (thumbnail) {
+    publishPayload.thumbnail_url = thumbnail;
+  }
+
+  if (useLBRYUploader) {
+    publishPayload.tags.push('lbry-first');
+  }
+
+  // Set release time to curret date. On edits, keep original release/transaction time as release_time
+  if (releaseTimeEdited) {
+    publishPayload.release_time = releaseTimeEdited;
+  } else if (myClaimForUriEditing && myClaimForUriEditing.value.release_time) {
+    publishPayload.release_time = Number(myClaimForUri.value.release_time);
+  } else if (myClaimForUriEditing && myClaimForUriEditing.timestamp) {
+    publishPayload.release_time = Number(myClaimForUriEditing.timestamp);
+  } else {
+    publishPayload.release_time = Number(Math.round(Date.now() / 1000));
+  }
+
+  if (channelId) {
+    publishPayload.channel_id = channelId;
+  }
+
+  if (myClaimForUriEditing && myClaimForUriEditing.value && myClaimForUriEditing.value.locations) {
+    publishPayload.locations = myClaimForUriEditing.value.locations;
+  }
+
+  if (!contentIsFree && fee && fee.currency && Number(fee.amount) > 0) {
+    publishPayload.fee_currency = fee.currency;
+    publishPayload.fee_amount = creditsToString(fee.amount);
+  }
+
+  if (optimize) {
+    publishPayload.optimize_file = true;
+  }
+
+  // Only pass file on new uploads, not metadata only edits.
+  // The sdk will figure it out
+  if (filePath && !isLivestreamPublish) {
+    publishPayload.file_path = filePath;
+  }
+
+  if (preview) {
+    publishPayload.preview = true;
+    publishPayload.optimize_file = false;
+  }
+
+  return publishPayload;
+}
+
 export const doPublishDesktop = (filePath: string, preview?: boolean) => (dispatch: Dispatch, getState: () => {}) => {
   const publishPreview = (previewResponse) => {
     dispatch(
@@ -387,140 +528,9 @@ export const doPublish = (success: Function, fail: Function, preview: Function) 
   // const myClaims = selectMyClaimsWithoutChannels(state);
   // get redux publish form
   const publishData = selectPublishFormValues(state);
-
-  // destructure the data values
-  const {
-    name,
-    bid,
-    filePath,
-    description,
-    language,
-    releaseTimeEdited,
-    // license,
-    licenseUrl,
-    useLBRYUploader,
-    licenseType,
-    otherLicenseDescription,
-    thumbnail,
-    channel,
-    title,
-    contentIsFree,
-    fee,
-    // uri,
-    tags,
-    // locations,
-    optimize,
-    isLivestreamPublish,
-    remoteFileUrl,
-  } = publishData;
-
-  // Handle scenario where we have a claim that has the same name as a channel we are publishing with.
-  const myClaimForUriEditing = myClaimForUri && myClaimForUri.name === name ? myClaimForUri : null;
-
-  let publishingLicense;
-  switch (licenseType) {
-    case COPYRIGHT:
-    case OTHER:
-      publishingLicense = otherLicenseDescription;
-      break;
-    default:
-      publishingLicense = licenseType;
-  }
-
-  // get the claim id from the channel name, we will use that instead
-  const namedChannelClaim = myChannels ? myChannels.find((myChannel) => myChannel.name === channel) : null;
-  const channelId = namedChannelClaim ? namedChannelClaim.claim_id : '';
-
-  const publishPayload: {
-    name: ?string,
-    bid: string,
-    description?: string,
-    channel_id?: string,
-    file_path?: string,
-    license_url?: string,
-    license?: string,
-    thumbnail_url?: string,
-    release_time?: number,
-    fee_currency?: string,
-    fee_amount?: string,
-    languages?: Array<string>,
-    tags: Array<string>,
-    locations?: Array<any>,
-    blocking: boolean,
-    optimize_file?: boolean,
-    preview?: boolean,
-    remote_url?: string,
-  } = {
-    name,
-    title,
-    description,
-    locations: [],
-    bid: creditsToString(bid),
-    languages: [language],
-    tags: tags && tags.map((tag) => tag.name),
-    thumbnail_url: thumbnail,
-    blocking: true,
-    preview: false,
-  };
-  // Temporary solution to keep the same publish flow with the new tags api
-  // Eventually we will allow users to enter their own tags on publish
-  // `nsfw` will probably be removed
-  if (remoteFileUrl) {
-    publishPayload.remote_url = remoteFileUrl;
-  }
-
-  if (publishingLicense) {
-    publishPayload.license = publishingLicense;
-  }
-
-  if (licenseUrl) {
-    publishPayload.license_url = licenseUrl;
-  }
-
-  if (thumbnail) {
-    publishPayload.thumbnail_url = thumbnail;
-  }
-
-  if (useLBRYUploader) {
-    publishPayload.tags.push('lbry-first');
-  }
-
-  // Set release time to curret date. On edits, keep original release/transaction time as release_time
-  if (releaseTimeEdited) {
-    publishPayload.release_time = releaseTimeEdited;
-  } else if (myClaimForUriEditing && myClaimForUriEditing.value.release_time) {
-    publishPayload.release_time = Number(myClaimForUri.value.release_time);
-  } else if (myClaimForUriEditing && myClaimForUriEditing.timestamp) {
-    publishPayload.release_time = Number(myClaimForUriEditing.timestamp);
-  } else {
-    publishPayload.release_time = Number(Math.round(Date.now() / 1000));
-  }
-
-  if (channelId) {
-    publishPayload.channel_id = channelId;
-  }
-
-  if (myClaimForUriEditing && myClaimForUriEditing.value && myClaimForUriEditing.value.locations) {
-    publishPayload.locations = myClaimForUriEditing.value.locations;
-  }
-
-  if (!contentIsFree && fee && fee.currency && Number(fee.amount) > 0) {
-    publishPayload.fee_currency = fee.currency;
-    publishPayload.fee_amount = creditsToString(fee.amount);
-  }
-
-  if (optimize) {
-    publishPayload.optimize_file = true;
-  }
-
-  // Only pass file on new uploads, not metadata only edits.
-  // The sdk will figure it out
-  if (filePath && !isLivestreamPublish) publishPayload.file_path = filePath;
+  const publishPayload = resolvePublishPayload(publishData, myClaimForUri, myChannels, preview);
 
   if (preview) {
-    publishPayload.preview = true;
-    publishPayload.optimize_file = false;
-
     return Lbry.publish(publishPayload).then((previewResponse: PublishResponse) => {
       return preview(previewResponse);
     }, fail);
