@@ -13,6 +13,7 @@ import { useHistory } from 'react-router';
 import { Redirect } from 'react-router-dom';
 import Yrbl from 'component/yrbl';
 import Button from 'component/button';
+import BrowserNotificationSettings from '$web/component/browserNotificationSettings';
 
 type Props = {
   osNotificationsEnabled: boolean,
@@ -123,45 +124,22 @@ export default function NotificationSettingsPage(props: Props) {
         />
       ) : (
         <div className="card-stack">
-          {/* @if TARGET='app' */}
           <div>
-            <h2 className="card__title">{__('App notifications')}</h2>
-            <div className="card__subtitle">{__('Notification settings for the desktop app.')}</div>
+            <h2 className="card__title">{__('Notification Delivery')}</h2>
+            <div className="card__subtitle">{__("Choose how you'd like to receive your Odysee notifications.")}</div>
           </div>
           <Card
             isBodyList
             body={
-              <SettingsRow
-                title={__('Show Desktop Notifications')}
-                subtitle={__('Get notified when an upload or channel is confirmed.')}
-              >
-                <FormField
-                  type="checkbox"
-                  name="desktopNotification"
-                  onChange={() => setClientSetting(SETTINGS.OS_NOTIFICATIONS_ENABLED, !osNotificationsEnabled)}
-                  checked={osNotificationsEnabled}
-                />
-              </SettingsRow>
-            }
-          />
-          {/* @endif */}
-
-          {enabledEmails && enabledEmails.length > 0 && (
-            <>
-              <div>
-                <h2 className="card__title">
-                  {enabledEmails.length === 1 ? __('Your email') : __('Receiving addresses')}
-                </h2>
-                <div className="card__subtitle">
-                  {__('Uncheck your email below if you want to stop receiving messages.')}
-                </div>
-              </div>
-              <Card
-                isBodyList
-                body={
+              <>
+                {enabledEmails && enabledEmails.length > 0 && (
                   <>
                     {enabledEmails.map(({ email, isEnabled }) => (
-                      <SettingsRow key={email} subtitle={__(email)}>
+                      <SettingsRow
+                        key={email}
+                        title={__('Email Notifications')}
+                        subtitle={__(`Receive notifications to the email address: %email%`, { email })}
+                      >
                         <FormField
                           type="checkbox"
                           name={`active-email:${email}`}
@@ -172,18 +150,34 @@ export default function NotificationSettingsPage(props: Props) {
                       </SettingsRow>
                     ))}
                   </>
-                }
-              />
-            </>
-          )}
+                )}
+
+                {/* @if TARGET='web' */}
+                <BrowserNotificationSettings />
+                {/* @endif */}
+
+                {/* @if TARGET='app' */}
+                <SettingsRow
+                  title={__('Desktop Notifications')}
+                  subtitle={__('Get notified when an upload or channel is confirmed.')}
+                >
+                  <FormField
+                    type="checkbox"
+                    name="desktopNotification"
+                    onChange={() => setClientSetting(SETTINGS.OS_NOTIFICATIONS_ENABLED, !osNotificationsEnabled)}
+                    checked={osNotificationsEnabled}
+                  />
+                </SettingsRow>
+                {/* @endif */}
+              </>
+            }
+          />
 
           {tags && tags.length > 0 && (
             <>
               <div>
-                <h2 className="card__title">{__('Email preferences')}</h2>
-                <div className="card__subtitle">
-                  {__("Opt out of any topics you don't want to receive email about.")}
-                </div>
+                <h2 className="card__title">{__('Email Notification Topics')}</h2>
+                <div className="card__subtitle">{__('Choose which topics you’d like to be emailed about.')}</div>
               </div>
               <Card
                 isBodyList

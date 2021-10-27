@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const merge = require('webpack-merge');
 const baseConfig = require('../webpack.base.config.js');
+const serviceWorkerConfig = require('./webpack.sw.config.js');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const WriteFilePlugin = require('write-file-webpack-plugin');
 const { DefinePlugin, ProvidePlugin } = require('webpack');
@@ -66,10 +67,6 @@ const copyWebpackCommands = [
   {
     from: `${WEB_STATIC_ROOT}/pwa/`,
     to: `${DIST_ROOT}/public/pwa/`,
-  },
-  {
-    from: `${WEB_STATIC_ROOT}/pwa/serviceWorker.js`,
-    to: `${DIST_ROOT}/`,
   },
 ];
 
@@ -175,6 +172,8 @@ const webConfig = {
 
     alias: {
       // lbryinc: '../extras/lbryinc',
+      $web: WEB_PLATFORM_ROOT,
+      $ui: UI_ROOT,
       electron: `${WEB_PLATFORM_ROOT}/stubs/electron.js`,
       fs: `${WEB_PLATFORM_ROOT}/stubs/fs.js`,
     },
@@ -182,4 +181,4 @@ const webConfig = {
   plugins,
 };
 
-module.exports = merge(baseConfig, webConfig);
+module.exports = [merge(baseConfig, webConfig), serviceWorkerConfig];

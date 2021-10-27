@@ -1,0 +1,17 @@
+.notificationsBlocked {
+  display: flex;
+  align-items: center;
+  background-color: var(--color-placeholder-background);
+  padding: var(--spacing-m);
+}
+
+.notificationsBlocked__icon {
+  flex-shrink: 0;
+  margin-right: var(--spacing-m);
+}
+
+.notificationsBlocked__subText {
+  display: inline-block;
+  color: var(--color-text-subtitle);
+  font-size: var(--font-small);
+}

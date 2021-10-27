@@ -11,6 +11,7 @@ import Yrbl from 'component/yrbl';
 import * as NOTIFICATIONS from 'constants/notifications';
 import useFetched from 'effects/use-fetched';
 import { RULE } from 'constants/notifications';
+import BrowserNotificationBanner from '$web/component/browserNotificationBanner';
 
 type Props = {
   notifications: Array<Notification>,
@@ -108,6 +109,8 @@ export default function NotificationsPage(props: Props) {
 
   const notificationListElement = (
     <>
+      <BrowserNotificationBanner />
+
       <div className="claim-list__header">
         <h1 className="card__title">{__('Notifications')}</h1>
         <div className="claim-list__alt-controls--wrap">
@@ -135,6 +138,7 @@ export default function NotificationsPage(props: Props) {
           )}
         </div>
       </div>
+
       {list && list.length > 0 && !(isFiltered && fetching) ? (
         <div className="card">
           <div className="notification_list">

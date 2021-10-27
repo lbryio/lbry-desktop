@@ -6,6 +6,7 @@ import Button from 'component/button';
 import useHover from 'effects/use-hover';
 import { useIsMobile } from 'effects/use-screensize';
 import { ENABLE_UI_NOTIFICATIONS } from 'config';
+import useBrowserNotifications from '$web/component/browserNotificationSettings/use-browser-notifications';
 
 type SubscriptionArgs = {
   channelName: string,
@@ -58,7 +59,10 @@ export default function SubscribeButton(props: Props) {
   }
   const claimName = channelName && '@' + channelName;
 
+  const { pushSupported, pushEnabled, pushRequest } = useBrowserNotifications();
+
   const subscriptionHandler = isSubscribed ? doChannelUnsubscribe : doChannelSubscribe;
+
   const subscriptionLabel = isSubscribed
     ? __('Following --[button label indicating a channel has been followed]--')
     : __('Follow');
@@ -145,6 +149,10 @@ export default function SubscribeButton(props: Props) {
                 { channel: claimName }
               ),
             });
+
+            if (!newNotificationsDisabled && pushSupported && !pushEnabled) {
+              pushRequest();
+            }
           }}
         />
       )}
