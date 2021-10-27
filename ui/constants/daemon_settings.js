@@ -37,3 +37,4 @@ export const UDP_PORT = 'udp_port';
 export const USE_UPNP = 'use_upnp';
 export const WALLET_DIR = 'wallet_dir';
 export const WALLETS = 'wallets';
+export const BLOB_STORAGE_LIMIT_MB = 'blob_storage_limit';
