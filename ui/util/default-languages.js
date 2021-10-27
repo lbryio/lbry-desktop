@@ -13,7 +13,7 @@ export const getDefaultHomepageKey = () => {
   const keys = Object.keys(homepages);
   if (keys.includes(language)) {
     return language;
-  } else if (keys.include(language.slice(0, 2))) {
+  } else if (keys.includes(language.slice(0, 2))) {
     return language.slice(0, 2);
   } else {
     return DEFAULT_LANG;
