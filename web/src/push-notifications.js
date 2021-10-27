@@ -11,8 +11,12 @@ import { firebaseConfig, vapidKey } from '$web/src/firebase-config';
 import { addRegistration, removeRegistration, hasRegistration } from '$web/src/fcm-management';
 import { browserData } from '$web/src/ua';
 
-const app = initializeApp(firebaseConfig);
-const messaging = getMessaging(app);
+let messaging = null;
+
+if ('serviceWorker' in navigator) {
+  const app = initializeApp(firebaseConfig);
+  messaging = getMessaging(app);
+}
 
 const subscriptionMetaData = () => {
   const isMobile = window.navigator.userAgentData?.mobile || false;
