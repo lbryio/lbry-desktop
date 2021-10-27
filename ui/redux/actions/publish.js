@@ -6,6 +6,7 @@ import { batchActions } from 'util/batch-actions';
 import { doCheckPendingClaims } from 'redux/actions/claims';
 import {
   makeSelectClaimForUri,
+  selectMyActiveClaims,
   selectMyClaims,
   selectMyChannelClaims,
   // selectMyClaimsWithoutChannels,
@@ -289,6 +290,62 @@ export const doPublishDesktop = (filePath: string, preview?: boolean) => (dispat
   dispatch(doPublish(publishSuccess, publishFail));
 };
 
+export const doPublishResume = (publishPayload: any) => (dispatch: Dispatch, getState: () => {}) => {
+  const publishSuccess = (successResponse, lbryFirstError) => {
+    const state = getState();
+    const myClaimIds: Set<string> = selectMyActiveClaims(state);
+
+    const pendingClaim = successResponse.outputs[0];
+    const { permanent_url: url } = pendingClaim;
+
+    analytics.apiLogPublish(pendingClaim);
+
+    // We have to fake a temp claim until the new pending one is returned by claim_list_mine
+    // We can't rely on claim_list_mine because there might be some delay before the new claims are returned
+    // Doing this allows us to show the pending claim immediately, it will get overwritten by the real one
+    const isEdit = myClaimIds.has(pendingClaim.claim_id);
+
+    const actions = [];
+
+    actions.push({
+      type: ACTIONS.PUBLISH_SUCCESS,
+      data: {
+        type: resolveClaimTypeForAnalytics(pendingClaim),
+      },
+    });
+
+    actions.push({
+      type: ACTIONS.UPDATE_PENDING_CLAIMS,
+      data: {
+        claims: [pendingClaim],
+      },
+    });
+
+    dispatch(batchActions(...actions));
+
+    dispatch(
+      doOpenModal(MODALS.PUBLISH, {
+        uri: url,
+        isEdit,
+        lbryFirstError,
+      })
+    );
+
+    dispatch(doCheckPendingClaims());
+  };
+
+  const publishFail = (error) => {
+    const actions = [];
+    actions.push({
+      type: ACTIONS.PUBLISH_FAIL,
+    });
+    actions.push(doError(error.message));
+    dispatch(batchActions(...actions));
+  };
+
+  dispatch(doPublish(publishSuccess, publishFail, false, publishPayload));
+};
+
 export const doResetThumbnailStatus = () => (dispatch: Dispatch) => {
   dispatch({
     type: ACTIONS.UPDATE_PUBLISH_FORM,
@@ -514,7 +571,7 @@ export const doPrepareEdit = (claim: StreamClaim, uri: string, fileInfo: FileLis
   dispatch({ type: ACTIONS.DO_PREPARE_EDIT, data: publishData });
 };
 
-export const doPublish = (success: Function, fail: Function, preview: Function) => (
+export const doPublish = (success: Function, fail: Function, preview: Function, payload: any) => (
   dispatch: Dispatch,
   getState: () => {}
 ) => {
@@ -528,7 +585,8 @@ export const doPublish = (success: Function, fail: Function, preview: Function) 
   // const myClaims = selectMyClaimsWithoutChannels(state);
   // get redux publish form
   const publishData = selectPublishFormValues(state);
-  const publishPayload = resolvePublishPayload(publishData, myClaimForUri, myChannels, preview);
+
+  const publishPayload = payload || resolvePublishPayload(publishData, myClaimForUri, myChannels, preview);
 
   if (preview) {
     return Lbry.publish(publishPayload).then((previewResponse: PublishResponse) => {
