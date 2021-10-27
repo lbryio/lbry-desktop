@@ -12,10 +12,14 @@ import MarkdownLink from 'component/markdownLink';
 import defaultSchema from 'hast-util-sanitize/lib/github.json';
 import { formattedLinks, inlineLinks } from 'util/remark-lbry';
 import { formattedTimestamp, inlineTimestamp } from 'util/remark-timestamp';
+import { formattedEmote, inlineEmote } from 'util/remark-emote';
 import ZoomableImage from 'component/zoomableImage';
 import { CHANNEL_STAKED_LEVEL_VIDEO_COMMENTS, SIMPLE_SITE } from 'config';
 import Button from 'component/button';
 import * as ICONS from 'constants/icons';
+import OptimizedImage from 'component/optimizedImage';
+
+const RE_EMOTE = /:\+1:|:-1:|:[\w-]+:/;
 
 type SimpleTextProps = {
   children?: React.Node,
@@ -94,8 +98,13 @@ const SimpleLink = (props: SimpleLinkProps) => {
 
 const SimpleImageLink = (props: ImageLinkProps) => {
   const { src, title, alt, helpText } = props;
+
   if (!src) {
     return null;
+  }
+
+  if (title && RE_EMOTE.test(title) && src.includes('static.odycdn.com/emoticons')) {
+    return <OptimizedImage title={title} src={src} />;
   }
 
   return (
@@ -248,6 +257,8 @@ const MarkdownPreview = (props: MarkdownProps) => {
           .use(disableTimestamps || isMarkdownPost ? null : inlineTimestamp)
           .use(disableTimestamps || isMarkdownPost ? null : formattedTimestamp)
           // Emojis
+          .use(inlineEmote)
+          .use(formattedEmote)
           .use(remarkEmoji)
           // Render new lines without needing spaces.
           .use(remarkBreaks)
