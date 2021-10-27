@@ -149,7 +149,7 @@ const transform = (tree) => {
   visit(tree, ['link'], visitor);
 };
 
-export const formatedLinks = () => transform;
+export const formattedLinks = () => transform;
 
 // Main module
 export function inlineLinks() {

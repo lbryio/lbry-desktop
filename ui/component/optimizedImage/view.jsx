@@ -10,10 +10,11 @@ function scaleToDevicePixelRatio(value: number, window: any) {
 type Props = {
   src: string,
   objectFit?: string,
+  waitLoad?: boolean,
 };
 
 function OptimizedImage(props: Props) {
-  const { objectFit, src, ...imgProps } = props;
+  const { objectFit, src, waitLoad, ...imgProps } = props;
   const [optimizedSrc, setOptimizedSrc] = React.useState('');
   const ref = React.useRef<any>();
 
@@ -101,8 +102,12 @@ function OptimizedImage(props: Props) {
     <img
       ref={ref}
       {...imgProps}
+      style={{ visibility: waitLoad ? 'hidden' : 'visible' }}
       src={optimizedSrc}
-      onLoad={() => adjustOptimizationIfNeeded(ref.current, objectFit, src)}
+      onLoad={() => {
+        if (waitLoad) ref.current.style.visibility = 'visible';
+        adjustOptimizationIfNeeded(ref.current, objectFit, src);
+      }}
     />
   );
 }

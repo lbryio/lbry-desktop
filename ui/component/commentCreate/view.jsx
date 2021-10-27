@@ -1,5 +1,6 @@
 // @flow
 import { FF_MAX_CHARS_IN_COMMENT } from 'constants/form-field';
+import 'scss/component/_comment-create.scss';
 import { FormField, Form } from 'component/common/form';
 import { getChannelIdFromClaim } from 'util/claim';
 import { Lbryio } from 'lbryinc';
@@ -12,6 +13,7 @@ import ChannelMentionSuggestions from 'component/channelMentionSuggestions';
 import ChannelThumbnail from 'component/channelThumbnail';
 import classnames from 'classnames';
 import CreditAmount from 'component/common/credit-amount';
+import EmoteSelector from './emote-selector';
 import Empty from 'component/common/empty';
 import I18nMessage from 'component/i18nMessage';
 import Icon from 'component/common/icon';
@@ -102,6 +104,7 @@ export function CommentCreate(props: Props) {
   const [deletedComment, setDeletedComment] = React.useState(false);
   const [pauseQuickSend, setPauseQuickSend] = React.useState(false);
   const [shouldDisableReviewButton, setShouldDisableReviewButton] = React.useState();
+  const [showEmotes, setShowEmotes] = React.useState(false);
 
   const selectedMentionIndex =
     commentValue.indexOf('@', selectionIndex) === selectionIndex
@@ -197,12 +200,6 @@ export function CommentCreate(props: Props) {
 
   function onTextareaBlur() {
     window.removeEventListener('keydown', altEnterListener);
-  }
-
-  function handleSubmit() {
-    if (activeChannelClaim && commentValue.length) {
-      handleCreateComment();
-    }
   }
 
   function handleSupportComment() {
@@ -362,6 +359,7 @@ export function CommentCreate(props: Props) {
    * @param {string} [environment] Optional environment for Stripe (test|live)
    */
   function handleCreateComment(txid, payment_intent_id, environment) {
+    setShowEmotes(false);
     setIsSubmitting(true);
 
     createComment(commentValue, claimId, parentId, txid, payment_intent_id, environment)
@@ -494,13 +492,20 @@ export function CommentCreate(props: Props) {
 
   return (
     <Form
-      onSubmit={handleSubmit}
       className={classnames('comment__create', {
         'comment__create--reply': isReply,
         'comment__create--nested-reply': isNested,
         'comment__create--bottom': bottom,
       })}
     >
+      {showEmotes && (
+        <EmoteSelector
+          commentValue={commentValue}
+          setCommentValue={setCommentValue}
+          closeSelector={() => setShowEmotes(false)}
+        />
+      )}
+
       {!advancedEditor && (
         <ChannelMentionSuggestions
           uri={uri}
@@ -524,6 +529,7 @@ export function CommentCreate(props: Props) {
         }
         quickActionLabel={isReply ? undefined : advancedEditor ? __('Simple Editor') : __('Advanced Editor')}
         quickActionHandler={() => setAdvancedEditor(!advancedEditor)}
+        openEmoteMenu={() => setShowEmotes(!showEmotes)}
         onFocus={onTextareaFocus}
         onBlur={onTextareaBlur}
         placeholder={__('Say something about this...')}
@@ -579,6 +585,7 @@ export function CommentCreate(props: Props) {
                     ? __('Commenting...')
                     : __('Comment --[button to submit something]--')
                 }
+                onClick={() => activeChannelClaim && commentValue.length && handleCreateComment()}
               />
             )}
             {!supportDisabled && !claimIsMine && (

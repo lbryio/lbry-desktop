@@ -45,10 +45,10 @@ select {
 
 select {
   background-image: var(--select-toggle-background);
-  background-position: right var(--spacing-s) center;
+  background-position: 99% center;
   background-repeat: no-repeat;
   background-size: 1rem;
-  padding-right: var(--spacing-xl);
+  padding-right: var(--spacing-l);
   padding-left: var(--spacing-s);
   font-weight: bold;
 }
@@ -130,7 +130,7 @@ input-submit {
   & > *:nth-child(2) {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
-    border: 1px solid var(--color-input-border);
+    border: 1px solid var(--color-border);
   }
 }
 
@@ -313,16 +313,14 @@ fieldset-group {
       }
 
       &:nth-of-type(2) {
-        &:not(input.paginate-channel) {
-          // yuck
-          input,
-          select {
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-          }
-          label {
-            margin-left: var(--spacing-s);
-          }
+        input,
+        select {
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+        }
+
+        label {
+          margin-left: var(--spacing-s);
         }
       }
     }
@@ -330,12 +328,6 @@ fieldset-group {
     &.fieldgroup--paginate {
       padding-bottom: var(--spacing-l);
       margin-top: var(--spacing-l);
-      align-items: flex-end;
-      justify-content: center;
-    }
-
-    &.fieldgroup--paginate-top {
-      padding-bottom: var(--spacing-m);
       align-items: flex-end;
       justify-content: center;
     }
@@ -460,6 +452,12 @@ fieldset-group {
   margin-bottom: var(--spacing-s);
 }
 
+.form-field__quick-emojis {
+  > *:not(:last-child) {
+    margin-right: var(--spacing-s);
+  }
+}
+
 fieldset-section {
   .form-field__internal-option {
     margin-top: var(--spacing-s);
@@ -481,12 +479,6 @@ fieldset-section {
       max-height: 1.5rem !important;
       padding: 0 var(--spacing-xs);
       padding-right: var(--spacing-l);
-    }
-  }
-
-  label {
-    .icon--help {
-      vertical-align: middle;
     }
   }
 }
