@@ -1,34 +1,26 @@
 import React from 'react';
+import * as ACTIONS from 'constants/action_types';
 
-let localStorageAvailable;
-try {
-  localStorageAvailable = Boolean(window.localStorage);
-} catch (e) {
-  localStorageAvailable = false;
+const RETRY_DELAY_MS = 2000;
+const RETRY_ATTEMPTS = 2;
+
+function componentLoader(lazyComponent, attemptsLeft) {
+  return new Promise((resolve, reject) => {
+    lazyComponent()
+      .then(resolve)
+      .catch((error) => {
+        setTimeout(() => {
+          if (attemptsLeft === 1) {
+            window.store.dispatch({ type: ACTIONS.RELOAD_REQUIRED });
+            console.error(error.message); // Spew the error so users can report to us if reloading doesn't help.
+          } else {
+            componentLoader(lazyComponent, attemptsLeft - 1).then(resolve, reject);
+          }
+        }, RETRY_DELAY_MS);
+      });
+  });
 }
 
-export const lazyImport = (componentImport) =>
-  React.lazy(async () => {
-    const pageHasAlreadyBeenForceRefreshed = localStorageAvailable
-      ? JSON.parse(window.localStorage.getItem('page-has-been-force-refreshed') || 'false')
-      : false;
-
-    try {
-      const component = await componentImport();
-      if (localStorageAvailable) {
-        window.localStorage.setItem('page-has-been-force-refreshed', 'false');
-      }
-      return component;
-    } catch (error) {
-      if (!pageHasAlreadyBeenForceRefreshed) {
-        // It's highly likely that the user's session is old. Try reloading once.
-        if (localStorageAvailable) {
-          window.localStorage.setItem('page-has-been-force-refreshed', 'true');
-        }
-        return window.location.reload();
-      }
-
-      // If it still didn't work, then relay the error.
-      throw error;
-    }
-  });
+export function lazyImport(componentImport) {
+  return React.lazy(() => componentLoader(componentImport, RETRY_ATTEMPTS));
+}

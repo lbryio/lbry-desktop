@@ -34,6 +34,7 @@ export type AppState = {
   checkUpgradeTimer: ?number,
   isUpgradeAvailable: ?boolean,
   isUpgradeSkipped: ?boolean,
+  isReloadRequired: ?boolean,
   hasClickedComment: boolean,
   enhancedLayout: boolean,
   splashAnimationEnabled: boolean,
@@ -71,6 +72,7 @@ const defaultState: AppState = {
   checkUpgradeTimer: undefined,
   isUpgradeAvailable: undefined,
   isUpgradeSkipped: undefined,
+  isReloadRequired: undefined,
   enhancedLayout: false,
   splashAnimationEnabled: true,
   searchOptionsExpanded: false,
@@ -211,6 +213,11 @@ reducers[ACTIONS.CHECK_UPGRADE_SUBSCRIBE] = (state, action) =>
 reducers[ACTIONS.UPGRADE_DOWNLOAD_PROGRESSED] = (state, action) =>
   Object.assign({}, state, {
     downloadProgress: action.data.percent,
+  });
+
+reducers[ACTIONS.RELOAD_REQUIRED] = (state, action) =>
+  Object.assign({}, state, {
+    isReloadRequired: true,
   });
 
 reducers[ACTIONS.DOWNLOADING_COMPLETED] = (state) => {

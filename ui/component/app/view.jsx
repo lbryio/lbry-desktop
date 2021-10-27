@@ -6,6 +6,7 @@ import classnames from 'classnames';
 import analytics from 'analytics';
 import { buildURI, parseURI } from 'util/lbryURI';
 import { SIMPLE_SITE } from 'config';
+import Nag from 'component/common/nag';
 import Router from 'component/router/index';
 import ReactModal from 'react-modal';
 import { openContextMenu } from 'util/context-menu';
@@ -17,10 +18,12 @@ import REWARDS from 'rewards';
 import usePersistedState from 'effects/use-persisted-state';
 import Spinner from 'component/spinner';
 import LANGUAGES from 'constants/languages';
+
 // @if TARGET='app'
 import useZoom from 'effects/use-zoom';
 import useHistoryNav from 'effects/use-history-nav';
 // @endif
+
 // @if TARGET='web'
 import {
   useDegradedPerformance,
@@ -30,11 +33,11 @@ import {
   STATUS_DOWN,
 } from 'web/effects/use-degraded-performance';
 // @endif
+
 import LANGUAGE_MIGRATIONS from 'constants/language-migrations';
 
 const FileDrop = lazyImport(() => import('component/fileDrop' /* webpackChunkName: "secondary" */));
 const ModalRouter = lazyImport(() => import('modal/modalRouter' /* webpackChunkName: "secondary" */));
-const Nag = lazyImport(() => import('component/common/nag' /* webpackChunkName: "secondary" */));
 const NagContinueFirstRun = lazyImport(() =>
   import('component/nagContinueFirstRun' /* webpackChunkName: "secondary" */)
 );
@@ -92,6 +95,7 @@ type Props = {
   setLanguage: (string) => void,
   doSetHomepage: (string) => void,
   isUpgradeAvailable: boolean,
+  isReloadRequired: boolean,
   autoUpdateDownloaded: boolean,
   updatePreferences: () => Promise<any>,
   getWalletSyncPref: () => Promise<any>,
@@ -126,6 +130,7 @@ function App(props: Props) {
     signIn,
     autoUpdateDownloaded,
     isUpgradeAvailable,
+    isReloadRequired,
     requestDownloadUpgrade,
     uploadCount,
     history,
@@ -502,6 +507,14 @@ function App(props: Props) {
             {user === null && <NagNoUser />}
             {/* @endif */}
           </React.Suspense>
+
+          {isReloadRequired && (
+            <Nag
+              message={__('A new version of Odysee is available.')}
+              actionText={__('Refresh')}
+              onClick={() => window.location.reload()}
+            />
+          )}
         </React.Fragment>
       )}
     </div>

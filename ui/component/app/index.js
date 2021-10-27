@@ -21,6 +21,7 @@ import {
   selectAutoUpdateDownloaded,
   selectModal,
   selectActiveChannelClaim,
+  selectIsReloadRequired,
 } from 'redux/selectors/app';
 import { doGetWalletSyncPreference, doSetLanguage, doSetHomepage } from 'redux/actions/settings';
 import { doSyncLoop } from 'redux/actions/sync';
@@ -44,6 +45,7 @@ const select = (state) => ({
   languages: selectLoadedLanguages(state),
   autoUpdateDownloaded: selectAutoUpdateDownloaded(state),
   isUpgradeAvailable: selectIsUpgradeAvailable(state),
+  isReloadRequired: selectIsReloadRequired(state),
   syncError: selectGetSyncErrorMessage(state),
   uploadCount: selectUploadCount(state),
   rewards: selectUnclaimedRewards(state),
