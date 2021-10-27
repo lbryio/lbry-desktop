@@ -81,11 +81,17 @@
   // Menu size
   .vjs-playback-rate .vjs-menu .vjs-menu-content {
     width: 125%;
-    font-size: 10px;
+    font-size: 12px;
+
+    @media (max-width:652px)  {
+      font-size: 10px;
+    }
   }
 
   // Volume slider
   .vjs-volume-panel {
+    margin-right: -8px;
+
     &.vjs-control {
       transition: 0.2s;
     }
@@ -149,4 +155,103 @@
 
 .bottom-gradient {
   background-image: linear-gradient(to top, rgba(0, 0, 0, 0.4) 0%, transparent 72px);
+}
+
+[dir] .video-js .vjs-control {
+  font-size: 14px;
+
+  @media (max-width:813px)  {
+    font-size: 12px;
+  }
+}
+
+.vjs-control-bar {
+  height: 41px !important;
+  color: #dbd8d8;
+}
+
+.vjs-playback-rate {
+  margin-top: 3px;
+  font-size: 12px !important;
+
+  @media (max-width:813px)  {
+    margin-top: 3px !important;
+    font-size: 10px !important;
+  }
+}
+
+.vjs-quality-selector > .vjs-menu > .vjs-menu-content {
+  margin-bottom: 3px;
+}
+
+.vjs-hover {
+  opacity: 1;
+}
+
+[dir] .vjs-menu-button-popup .vjs-menu .vjs-menu-content {
+  background-color: rgba(43, 51, 63);
+}
+
+.vjs-quality-selector > .vjs-menu > .vjs-menu-content {
+  font-size: 12px;
+
+  @media (max-width:652px)  {
+    font-size: 10px;
+  }
+}
+
+.vjs-quality-selector > .vjs-menu {
+  height: 100%;
+}
+
+.vjs-layout-medium .vjs-menu-button-popup .vjs-menu .vjs-menu-content {
+  max-height: 19em;
+}
+
+.vjs-time-divider div span {
+  font-size: 18px;
+  color: #dbd8d8;
+  position: absolute;
+  top: 4px;
+
+  @media (max-width:813px)  {
+    top: 0px;
+  }
+}
+
+.vjs-play-control {
+  font-size: 17px !important;
+  margin-top: -6px !important;
+  margin-right: -14px !important;
+}
+
+.vjs-play-control .vjs-icon-placeholder {
+  margin-right: -5px;
+}
+
+.vjs-button--autoplay-next {
+  margin-top: 15px;
+}
+
+.vjs-fullscreen-control {
+  margin-top: 2px;
+}
+
+.vjs-slider-horizontal {
+  background-color: #474747 !important;
+}
+
+.vjs-mouse-display {
+  color: white !important;
+  background-color: lightgrey !important;
+  width: 8px !important;
+  margin-left: -5px !important;
+}
+
+.vjs_video_3_ima-ad-container {
+  display: none;
+}
+
+.ima-ad-container {
+  display: none;
 }
