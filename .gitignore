@@ -36,3 +36,4 @@ package-lock.json
 .env.ody
 .env.desktop
 .env.lbrytv
+analyzeResults*.html
