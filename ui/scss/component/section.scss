@@ -48,6 +48,11 @@
   flex-wrap: wrap;
 }
 
+.section__header-action-stack {
+  display: flex;
+  flex-direction: column;
+}
+
 .section__flex {
   display: flex;
   align-items: flex-start;

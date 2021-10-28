@@ -2216,5 +2216,8 @@
   "Enable Data Hosting": "Enable Data Hosting",
   "Data over the limit will be deleted within 30 minutes. This will make the Yrbl cry a little bit.": "Data over the limit will be deleted within 30 minutes. This will make the Yrbl cry a little bit.",
   "Choose %asset%": "Choose %asset%",
+  "Showing %filtered% results of %total%": "Showing %filtered% results of %total%",
+  "filtered": "filtered",
+  "View All Playlists": "View All Playlists",
   "--end--": "--end--"
 }
