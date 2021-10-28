@@ -8,15 +8,18 @@ const defaultState = {
   fetchingSubCount: false,
   subCountError: undefined,
   subCountById: {},
+  subCountLastFetchedById: {},
 };
 
 export const statsReducer = handleActions(
   {
-    [ACTIONS.FETCH_VIEW_COUNT_STARTED]: state => ({ ...state, fetchingViewCount: true }),
+    [ACTIONS.FETCH_VIEW_COUNT_STARTED]: (state) => ({ ...state, fetchingViewCount: true }),
+
     [ACTIONS.FETCH_VIEW_COUNT_FAILED]: (state, action) => ({
       ...state,
       viewCountError: action.data,
     }),
+
     [ACTIONS.FETCH_VIEW_COUNT_COMPLETED]: (state, action) => {
       const { claimIdCsv, viewCounts } = action.data;
 
@@ -35,20 +38,43 @@ export const statsReducer = handleActions(
         viewCountById,
       };
     },
-    [ACTIONS.FETCH_SUB_COUNT_STARTED]: state => ({ ...state, fetchingSubCount: true }),
+
+    [ACTIONS.FETCH_SUB_COUNT_STARTED]: (state) => ({ ...state, fetchingSubCount: true }),
+
     [ACTIONS.FETCH_SUB_COUNT_FAILED]: (state, action) => ({
       ...state,
       subCountError: action.data,
     }),
-    [ACTIONS.FETCH_SUB_COUNT_COMPLETED]: (state, action) => {
-      const { claimId, subCount } = action.data;
 
-      const subCountById = { ...state.subCountById, [claimId]: subCount };
-      return {
+    [ACTIONS.FETCH_SUB_COUNT_COMPLETED]: (state, action) => {
+      const { claimIdCsv, subCounts, fetchDate } = action.data;
+
+      const subCountById = Object.assign({}, state.subCountById);
+      const subCountLastFetchedById = Object.assign({}, state.subCountLastFetchedById);
+      const claimIds = claimIdCsv.split(',');
+      let dataChanged = false;
+
+      if (claimIds.length === subCounts.length) {
+        claimIds.forEach((claimId, index) => {
+          if (subCountById[claimId] !== subCounts[index]) {
+            subCountById[claimId] = subCounts[index];
+            dataChanged = true;
+          }
+          subCountLastFetchedById[claimId] = fetchDate;
+        });
+      }
+
+      const newState = {
         ...state,
         fetchingSubCount: false,
-        subCountById,
+        subCountLastFetchedById,
       };
+
+      if (dataChanged) {
+        newState.subCountById = subCountById;
+      }
+
+      return newState;
     },
   },
   defaultState
