@@ -1,7 +1,7 @@
 import * as PAGES from 'constants/pages';
 import { connect } from 'react-redux';
 import {
-  makeSelectClaimForUri,
+  selectClaimForUri,
   makeSelectClaimIsPending,
   makeSelectClaimIsStreamPlaceholder,
 } from 'redux/selectors/claims';
@@ -10,12 +10,17 @@ import { push } from 'connected-react-router';
 import ClaimPreviewSubtitle from './view';
 import { doFetchSubCount, makeSelectSubCountForUri } from 'lbryinc';
 
-const select = (state, props) => ({
-  claim: makeSelectClaimForUri(props.uri)(state),
-  pending: makeSelectClaimIsPending(props.uri)(state),
-  isLivestream: makeSelectClaimIsStreamPlaceholder(props.uri)(state),
-  subCount: makeSelectSubCountForUri(props.uri)(state),
-});
+const select = (state, props) => {
+  const claim = selectClaimForUri(state, props.uri);
+  const isChannel = claim && claim.value_type === 'channel';
+
+  return {
+    claim,
+    pending: makeSelectClaimIsPending(props.uri)(state),
+    isLivestream: makeSelectClaimIsStreamPlaceholder(props.uri)(state),
+    subCount: isChannel ? makeSelectSubCountForUri(props.uri)(state) : 0,
+  };
+};
 
 const perform = (dispatch) => ({
   beginPublish: (name) => {

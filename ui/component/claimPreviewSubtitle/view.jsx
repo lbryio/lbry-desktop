@@ -21,18 +21,21 @@ type Props = {
 // previews used in channel overview and homepage (and other places?)
 function ClaimPreviewSubtitle(props: Props) {
   const { pending, uri, claim, type, beginPublish, isLivestream, fetchSubCount, subCount } = props;
+  const isChannel = claim && claim.value_type === 'channel';
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
 
   const claimId = (claim && claim.claim_id) || '0';
   const formattedSubCount = Number(subCount).toLocaleString();
-  React.useEffect(() => {
-    fetchSubCount(claimId);
-  }, [uri, fetchSubCount, claimId]);
 
-  let isChannel;
+  React.useEffect(() => {
+    if (isChannel) {
+      fetchSubCount(claimId);
+    }
+  }, [isChannel, fetchSubCount, claimId]);
+
   let name;
   try {
-    ({ streamName: name, isChannel } = parseURI(uri));
+    ({ streamName: name } = parseURI(uri));
   } catch (e) {}
 
   return (
@@ -45,7 +48,7 @@ function ClaimPreviewSubtitle(props: Props) {
               {isChannel && type !== 'inline' && (
                 <>
                   <span className="claim-preview-metadata-sub-upload">
-                    {formattedSubCount} {subCount !== 1 ? __('Followers') : __('Follower')}
+                    {subCount === 1 ? __('1 Follower') : __('%formattedSubCount% Followers', { formattedSubCount })}
                     &nbsp;&bull; {claimsInChannel} {claimsInChannel === 1 ? __('upload') : __('uploads')}
                   </span>
                 </>
