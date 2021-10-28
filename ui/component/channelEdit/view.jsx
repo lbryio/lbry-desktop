@@ -114,23 +114,11 @@ function ChannelForm(props: Props) {
       isClaimingInitialRewards ||
       creatingChannel ||
       updatingChannel ||
-      nameError ||
-      thumbError ||
       coverError ||
       bidError ||
       (isNewChannel && !params.name)
     );
-  }, [
-    isClaimingInitialRewards,
-    creatingChannel,
-    updatingChannel,
-    nameError,
-    thumbError,
-    coverError,
-    bidError,
-    isNewChannel,
-    params.name,
-  ]);
+  }, [isClaimingInitialRewards, creatingChannel, updatingChannel, nameError, bidError, isNewChannel, params.name]);
 
   function getChannelParams() {
     // fill this in with sdk data
