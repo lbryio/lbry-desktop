@@ -103,7 +103,7 @@ $actions-z-index: 2;
 
   @media (max-width: $breakpoint-small) {
     top: 0;
-    margin-top: var(--spacing-m);
+    margin-top: var(--spacing-xl);
   }
 }
 
@@ -259,7 +259,7 @@ $actions-z-index: 2;
     margin-top: 0;
 
     .button {
-      margin-top: var(--spacing-l);
+      margin-top: var(--spacing-xxl);
     }
   }
 }
