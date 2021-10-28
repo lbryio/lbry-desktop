@@ -88,6 +88,13 @@ function hitsFiftyPercent() {
   }
 }
 
+// check if active (clicked) element is part of video div, used for keyboard shortcuts (volume etc)
+function activeElementIsPartOfVideoElement() {
+  const videoElementParent = document.getElementsByClassName('video-js-parent')[0];
+  const activeElement = document.activeElement;
+  return videoElementParent.contains(activeElement);
+}
+
 const videoPlaybackRates = [0.25, 0.5, 0.75, 1, 1.1, 1.25, 1.5, 1.75, 2];
 
 const IS_IOS =
@@ -403,8 +410,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     if (e.keyCode === KEYCODES.SPACEBAR || e.keyCode === KEYCODES.K) togglePlay();
     if (e.keyCode === KEYCODES.F) toggleFullscreen();
     if (e.keyCode === KEYCODES.M) toggleMute();
-    if (e.keyCode === KEYCODES.UP) volumeUp();
-    if (e.keyCode === KEYCODES.DOWN) volumeDown();
+    if (e.keyCode === KEYCODES.UP) volumeUp(e);
+    if (e.keyCode === KEYCODES.DOWN) volumeDown(e);
     if (e.keyCode === KEYCODES.T) toggleTheaterMode();
     if (e.keyCode === KEYCODES.L) seekVideo(SEEK_STEP);
     if (e.keyCode === KEYCODES.J) seekVideo(-SEEK_STEP);
@@ -477,17 +484,23 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     videoNode.paused ? videoNode.play() : videoNode.pause();
   }
 
-  function volumeUp() {
+  function volumeUp(event) {
+    // dont run if video element is not active element (otherwise runs when scrolling using keypad)
+    const videoElementIsActive = activeElementIsPartOfVideoElement();
     const player = playerRef.current;
-    if (!player) return;
+    if (!player || !videoElementIsActive) return;
+    event.preventDefault();
     player.volume(player.volume() + 0.05);
     OVERLAY.showVolumeverlay(player, Math.round(player.volume() * 100));
     player.userActive(true);
   }
 
-  function volumeDown() {
+  function volumeDown(event) {
+    // dont run if video element is not active element (otherwise runs when scrolling using keypad)
+    const videoElementIsActive = activeElementIsPartOfVideoElement();
     const player = playerRef.current;
-    if (!player) return;
+    if (!player || !videoElementIsActive) return;
+    event.preventDefault();
     player.volume(player.volume() - 0.05);
     OVERLAY.showVolumeverlay(player, Math.round(player.volume() * 100));
     player.userActive(true);
