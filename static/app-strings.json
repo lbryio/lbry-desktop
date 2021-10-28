@@ -2215,5 +2215,6 @@
   "If you set a limit, playing videos may exceed your limit until cleanup runs every 30 minutes.": "If you set a limit, playing videos may exceed your limit until cleanup runs every 30 minutes.",
   "Enable Data Hosting": "Enable Data Hosting",
   "Data over the limit will be deleted within 30 minutes. This will make the Yrbl cry a little bit.": "Data over the limit will be deleted within 30 minutes. This will make the Yrbl cry a little bit.",
+  "Choose %asset%": "Choose %asset%",
   "--end--": "--end--"
 }

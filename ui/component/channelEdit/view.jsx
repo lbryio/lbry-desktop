@@ -292,7 +292,9 @@ function ChannelForm(props: Props) {
           </div>
           {params.coverUrl &&
             (coverError && isUpload.cover ? (
-              <div className="channel-cover__custom--waiting">{__('This will be visible in a few minutes.')}</div>
+              <div className="channel-cover__custom--waiting">
+                <p>{__('Uploaded image will be visible in a few minutes.')}</p>
+              </div>
             ) : (
               <img className="channel-cover__custom" src={coverSrc} onError={() => setCoverError(true)} />
             ))}
