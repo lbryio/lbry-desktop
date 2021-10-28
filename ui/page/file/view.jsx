@@ -71,8 +71,8 @@ function FilePage(props: Props) {
   const videoPlayedEnoughToResetPosition = React.useMemo(() => {
     const durationInSecs =
       fileInfo && fileInfo.metadata && fileInfo.metadata.video ? fileInfo.metadata.video.duration : 0;
-    const isVideoTooShort = durationInSecs <= 10;
-    const almostFinishedPlaying = position / durationInSecs >= 0.9;
+    const isVideoTooShort = durationInSecs <= 45;
+    const almostFinishedPlaying = position / durationInSecs >= 0.8;
 
     return isVideoTooShort || almostFinishedPlaying;
   }, [fileInfo, position]);
