@@ -553,6 +553,7 @@ export function doCommentReact(commentId: string, type: string) {
  * @param parent_id - What is this?
  * @param uri
  * @param livestream
+ * @param sticker
  * @param {string} [txid] Optional transaction id
  * @param {string} [payment_intent_id] Optional transaction id
  * @param {string} [environment] Optional environment for Stripe (test|live)
@@ -566,7 +567,8 @@ export function doCommentCreate(
   livestream?: boolean = false,
   txid?: string,
   payment_intent_id?: string,
-  environment?: string
+  environment?: string,
+  sticker: boolean
 ) {
   return async (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
@@ -579,9 +581,7 @@ export function doCommentCreate(
       return;
     }
 
-    dispatch({
-      type: ACTIONS.COMMENT_CREATE_STARTED,
-    });
+    dispatch({ type: ACTIONS.COMMENT_CREATE_STARTED });
 
     let signatureData;
     if (activeChannelClaim) {
@@ -594,12 +594,8 @@ export function doCommentCreate(
     }
 
     // send a notification
-    if (parent_id) {
-      const notification = makeSelectNotificationForCommentId(parent_id)(state);
-      if (notification && !notification.is_seen) {
-        dispatch(doSeeNotifications([notification.id]));
-      }
-    }
+    const notification = parent_id && makeSelectNotificationForCommentId(parent_id)(state);
+    if (notification && !notification.is_seen) dispatch(doSeeNotifications([notification.id]));
 
     if (!signatureData) {
       return dispatch(doToast({ isError: true, message: __('Unable to verify your channel. Please try again.') }));
@@ -615,6 +611,7 @@ export function doCommentCreate(
       parent_id: parent_id,
       signature: signatureData.signature,
       signing_ts: signatureData.signing_ts,
+      sticker: sticker,
       ...(txid ? { support_tx_id: txid } : {}), // add transaction id if it exists
       ...(payment_intent_id ? { payment_intent_id } : {}), // add payment_intent_id if it exists
       ...(environment ? { environment } : {}), // add environment for stripe if it exists

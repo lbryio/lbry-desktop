@@ -10,6 +10,8 @@ import CreditAmount from 'component/common/credit-amount';
 import ChannelThumbnail from 'component/channelThumbnail';
 import Tooltip from 'component/common/tooltip';
 import * as ICONS from 'constants/icons';
+import OptimizedImage from 'component/optimizedImage';
+import { parseSticker } from 'util/comments';
 
 type Props = {
   uri: string,
@@ -47,7 +49,7 @@ export default function LivestreamComments(props: Props) {
     superChats: superChatsByTipAmount,
   } = props;
 
-  let superChatsFiatAmount, superChatsTotalAmount;
+  let superChatsFiatAmount, superChatsLBCAmount, superChatsTotalAmount, hasSuperChats;
 
   const commentsRef = React.createRef();
   const [viewMode, setViewMode] = React.useState(VIEW_MODE_CHAT);
@@ -58,6 +60,8 @@ export default function LivestreamComments(props: Props) {
 
   // which kind of superchat to display, either
   const commentsToDisplay = viewMode === VIEW_MODE_CHAT ? commentsByChronologicalOrder : superChatsByTipAmount;
+  const stickerSuperChats =
+    superChatsByTipAmount && superChatsByTipAmount.filter(({ comment }) => Boolean(parseSticker(comment)));
 
   const discussionElement = document.querySelector('.livestream__comments');
 
@@ -130,7 +134,9 @@ export default function LivestreamComments(props: Props) {
     }
 
     superChatsFiatAmount = fiatAmount;
-    superChatsTotalAmount = LBCAmount;
+    superChatsLBCAmount = LBCAmount;
+    superChatsTotalAmount = superChatsFiatAmount + superChatsLBCAmount;
+    hasSuperChats = (superChatsTotalAmount || 0) > 0;
   }
 
   let superChatsReversed;
@@ -160,11 +166,16 @@ export default function LivestreamComments(props: Props) {
     return null;
   }
 
+  function getStickerUrl(comment: string) {
+    const stickerFromComment = parseSticker(comment);
+    return stickerFromComment && stickerFromComment.url;
+  }
+
   return (
     <div className="card livestream__discussion">
       <div className="card__header--between livestream-discussion__header">
         <div className="livestream-discussion__title">{__('Live discussion')}</div>
-        {(superChatsTotalAmount || 0) > 0 && (
+        {hasSuperChats && (
           <div className="recommended-content__toggles">
             {/* the superchats in chronological order button */}
             <Button
@@ -186,7 +197,7 @@ export default function LivestreamComments(props: Props) {
               })}
               label={
                 <>
-                  <CreditAmount amount={superChatsTotalAmount || 0} size={8} /> /
+                  <CreditAmount amount={superChatsLBCAmount || 0} size={8} /> /
                   <CreditAmount amount={superChatsFiatAmount || 0} size={8} isFiat /> {__('Tipped')}
                 </>
               }
@@ -207,28 +218,48 @@ export default function LivestreamComments(props: Props) {
           </div>
         )}
         <div ref={commentsRef} className="livestream__comments-wrapper">
-          {viewMode === VIEW_MODE_CHAT && superChatsByTipAmount && (superChatsTotalAmount || 0) > 0 && (
+          {viewMode === VIEW_MODE_CHAT && superChatsByTipAmount && hasSuperChats && (
             <div className="livestream-superchats__wrapper">
               <div className="livestream-superchats__inner">
-                {superChatsByTipAmount.map((superChat: Comment) => (
-                  <Tooltip key={superChat.comment_id} label={superChat.comment}>
-                    <div className="livestream-superchat">
-                      <div className="livestream-superchat__thumbnail">
-                        <ChannelThumbnail uri={superChat.channel_url} xsmall />
-                      </div>
+                {superChatsByTipAmount.map((superChat: Comment) => {
+                  const isSticker = stickerSuperChats && stickerSuperChats.includes(superChat);
 
-                      <div className="livestream-superchat__info">
-                        <UriIndicator uri={superChat.channel_url} link />
-                        <CreditAmount
-                          size={10}
-                          className="livestream-superchat__amount-large"
-                          amount={superChat.support_amount}
-                          isFiat={superChat.is_fiat}
-                        />
+                  const SuperChatWrapper = !isSticker
+                    ? ({ children }) => <Tooltip label={superChat.comment}>{children}</Tooltip>
+                    : ({ children }) => <>{children}</>;
+
+                  return (
+                    <SuperChatWrapper key={superChat.comment_id}>
+                      <div className="livestream-superchat">
+                        <div className="livestream-superchat__thumbnail">
+                          <ChannelThumbnail uri={superChat.channel_url} xsmall />
+                        </div>
+
+                        <div
+                          className={classnames('livestream-superchat__info', {
+                            'livestream-superchat__info--sticker': isSticker,
+                            'livestream-superchat__info--not-sticker': stickerSuperChats && !isSticker,
+                          })}
+                        >
+                          <div className="livestream-superchat__info--user">
+                            <UriIndicator uri={superChat.channel_url} link />
+                            <CreditAmount
+                              size={10}
+                              className="livestream-superchat__amount-large"
+                              amount={superChat.support_amount}
+                              isFiat={superChat.is_fiat}
+                            />
+                          </div>
+                          {stickerSuperChats.includes(superChat) && getStickerUrl(superChat.comment) && (
+                            <div className="livestream-superchat__info--image">
+                              <OptimizedImage src={getStickerUrl(superChat.comment)} waitLoad />
+                            </div>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  </Tooltip>
-                ))}
+                    </SuperChatWrapper>
+                  );
+                })}
               </div>
             </div>
           )}

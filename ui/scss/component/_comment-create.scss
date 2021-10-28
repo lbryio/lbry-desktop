@@ -3,7 +3,11 @@
 $thumbnailWidth: 1.5rem;
 $thumbnailWidthSmall: 1rem;
 
-.comment__create {
+.content_comment {
+  position: relative;
+}
+
+.commentCreate {
   font-size: var(--font-small);
   position: relative;
 
@@ -19,16 +23,12 @@ $thumbnailWidthSmall: 1rem;
   }
 }
 
-.comment__create--reply {
+.commentCreate--reply {
   margin-top: var(--spacing-m);
   position: relative;
 }
 
-.content_comment {
-  position: relative;
-}
-
-.comment__create--nested-reply {
+.commentCreate--nestedReply {
   margin-top: var(--spacing-s);
   margin-left: calc((#{$thumbnailWidthSmall} + var(--spacing-xs)) * 2 + var(--spacing-m) + 4px);
 
@@ -37,17 +37,22 @@ $thumbnailWidthSmall: 1rem;
   }
 }
 
-.comment__create--bottom {
+.commentCreate--bottom {
   padding-bottom: 0;
 }
 
-.comment-new__label-wrapper {
+.commentCreate__labelWrapper {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: baseline;
   flex-wrap: wrap;
   width: 100%;
+
+  .commentCreate__label {
+    white-space: nowrap;
+    margin-right: var(--spacing-xs);
+  }
 
   @media (min-width: $breakpoint-small) {
     fieldset-section {
@@ -56,27 +61,50 @@ $thumbnailWidthSmall: 1rem;
   }
 }
 
-.comment-new__label {
-  white-space: nowrap;
-  margin-right: var(--spacing-xs);
-}
-
-.comment__sc-preview {
+.commentCreate__supportCommentPreview {
   display: flex;
   align-items: center;
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius);
   padding: var(--spacing-s);
   margin: var(--spacing-s) 0;
+
+  .commentCreate__supportCommentPreviewAmount {
+    margin-right: var(--spacing-m);
+    font-size: var(--font-large);
+  }
 }
 
-.comment__sc-preview-amount {
-  margin-right: var(--spacing-m);
-  font-size: var(--font-large);
-}
-
-.comment--min-amount-notice {
+.commentCreate__minAmountNotice {
   .icon {
     margin-bottom: -3px; // TODO fix few instances of these (find "-2px")
+  }
+}
+
+.commentCreate__stickerPreview {
+  @extend .commentCreate;
+  display: flex;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-s);
+  margin: var(--spacing-s) 0;
+  overflow: hidden;
+  width: 100%;
+  height: 10rem;
+
+  .commentCreate__stickerPreviewInfo {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .commentCreate__stickerPreviewImage {
+    width: 100%;
+    height: 100%;
+    margin-left: var(--spacing-m);
+  }
+
+  .filePrice {
+    height: 1.5rem;
+    width: 10rem;
   }
 }

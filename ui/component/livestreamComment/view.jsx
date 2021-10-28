@@ -11,6 +11,8 @@ import classnames from 'classnames';
 import CommentMenuList from 'component/commentMenuList';
 import Button from 'component/button';
 import CreditAmount from 'component/common/credit-amount';
+import OptimizedImage from 'component/optimizedImage';
+import { parseSticker } from 'util/comments';
 
 type Props = {
   uri: string,
@@ -45,11 +47,13 @@ function LivestreamComment(props: Props) {
 
   const commentByOwnerOfContent = claim && claim.signing_channel && claim.signing_channel.permanent_url === authorUri;
   const { claimName } = parseURI(authorUri);
+  const stickerFromMessage = parseSticker(message);
 
   return (
     <li
       className={classnames('livestream-comment', {
         'livestream-comment--superchat': supportAmount > 0,
+        'livestream-comment--sticker': Boolean(stickerFromMessage),
       })}
     >
       {supportAmount > 0 && (
@@ -60,8 +64,12 @@ function LivestreamComment(props: Props) {
       )}
 
       <div className="livestream-comment__body">
-        {supportAmount > 0 && <ChannelThumbnail uri={authorUri} xsmall />}
-        <div className="livestream-comment__info">
+        {(supportAmount > 0 || Boolean(stickerFromMessage)) && <ChannelThumbnail uri={authorUri} xsmall />}
+        <div
+          className={classnames('livestream-comment__info', {
+            'livestream-comment__info--sticker': Boolean(stickerFromMessage),
+          })}
+        >
           {isGlobalMod && (
             <Tooltip label={__('Admin')}>
               <span className="comment__badge comment__badge--global-mod">
@@ -103,9 +111,15 @@ function LivestreamComment(props: Props) {
             </span>
           )}
 
-          <div className="livestream-comment__text">
-            <MarkdownPreview content={message} promptLinks stakedLevel={stakedLevel} disableTimestamps />
-          </div>
+          {stickerFromMessage ? (
+            <div className="sticker__comment">
+              <OptimizedImage src={stickerFromMessage.url} waitLoad />
+            </div>
+          ) : (
+            <div className="livestream-comment__text">
+              <MarkdownPreview content={message} promptLinks stakedLevel={stakedLevel} disableTimestamps />
+            </div>
+          )}
         </div>
       </div>
 
