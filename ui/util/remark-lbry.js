@@ -7,9 +7,9 @@ export const punctuationMarks = [',', '.', '!', '?', ':', ';', '-', ']', ')', '}
 
 const mentionToken = '@';
 // const mentionTokenCode = 64; // @
-const mentionRegex = /@[^\s()"]*/gm;
 
 const invalidRegex = /[-_.+=?!@#$%^&*:;,{}<>\w/\\]/;
+const mentionRegex = /@[^\s()"-_.+=?!@$%^&*;,{}<>/\\]*/gm;
 
 function handlePunctuation(value) {
   const modifierIndex =
