@@ -1,6 +1,10 @@
 // @flow
-import * as REACTION_TYPES from 'constants/reactions';
 import { SORT_COMMENTS_NEW, SORT_COMMENTS_BEST, SORT_COMMENTS_CONTROVERSIAL } from 'constants/comment';
+import { FREE_GLOBAL_STICKERS, PAID_GLOBAL_STICKERS } from 'constants/stickers';
+import * as REACTION_TYPES from 'constants/reactions';
+
+const ALL_VALID_STICKERS = [...FREE_GLOBAL_STICKERS, ...PAID_GLOBAL_STICKERS];
+const stickerRegex = /(<stkr>:[A-Z0-9_]+:<stkr>)/;
 
 // Mostly taken from Reddit's sorting functions
 // https://github.com/reddit-archive/reddit/blob/master/r2/r2/lib/db/_sorts.pyx
@@ -87,4 +91,20 @@ export function sortComments(sortProps: SortProps): Array<Comment> {
 
     return 0;
   });
+}
+
+export const buildValidSticker = (sticker: string) => `<stkr>${sticker}<stkr>`;
+
+export function parseSticker(comment: string) {
+  const matchSticker = comment.match(stickerRegex);
+  const stickerValue = matchSticker && matchSticker[0];
+  const commentIsSticker = stickerValue && stickerValue.length === comment.length;
+
+  return (
+    commentIsSticker &&
+    ALL_VALID_STICKERS.find((sticker) => {
+      // $FlowFixMe
+      return sticker.name === stickerValue.replaceAll('<stkr>', '');
+    })
+  );
 }

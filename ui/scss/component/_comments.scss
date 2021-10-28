@@ -415,10 +415,6 @@ $thumbnailWidthSmall: 1rem;
   margin-right: var(--spacing-s);
 }
 
-.comment__tip-input {
-  margin: var(--spacing-s) 0;
-}
-
 .comment--blocked {
   opacity: 0.5;
 }
@@ -477,5 +473,16 @@ $thumbnailWidthSmall: 1rem;
       margin-top: 0;
       margin-left: var(--spacing-s);
     }
+  }
+}
+
+.sticker__comment {
+  margin-left: var(--spacing-m);
+  height: 6rem;
+  overflow: hidden;
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
   }
 }

@@ -26,6 +26,8 @@ import CommentCreate from 'component/commentCreate';
 import CommentMenuList from 'component/commentMenuList';
 import UriIndicator from 'component/uriIndicator';
 import CreditAmount from 'component/common/credit-amount';
+import OptimizedImage from 'component/optimizedImage';
+import { parseSticker } from 'util/comments';
 
 const AUTO_EXPAND_ALL_REPLIES = false;
 
@@ -130,6 +132,7 @@ function Comment(props: Props) {
   const totalLikesAndDislikes = likesCount + dislikesCount;
   const slimedToDeath = totalLikesAndDislikes >= 5 && dislikesCount / totalLikesAndDislikes > 0.8;
   const commentByOwnerOfContent = claim && claim.signing_channel && claim.signing_channel.permanent_url === authorUri;
+  const stickerFromMessage = parseSticker(message);
 
   let channelOwnerOfContent;
   try {
@@ -323,6 +326,10 @@ function Comment(props: Props) {
                   {slimedToDeath && !displayDeadComment ? (
                     <div onClick={() => setDisplayDeadComment(true)} className="comment__dead">
                       {__('This comment was slimed to death.')} <Icon icon={ICONS.SLIME_ACTIVE} />
+                    </div>
+                  ) : stickerFromMessage ? (
+                    <div className="sticker__comment">
+                      <OptimizedImage src={stickerFromMessage.url} waitLoad />
                     </div>
                   ) : editedMessage.length >= LENGTH_TO_COLLAPSE ? (
                     <Expandable>
