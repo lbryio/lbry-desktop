@@ -313,14 +313,16 @@ fieldset-group {
       }
 
       &:nth-of-type(2) {
-        input,
-        select {
-          border-top-left-radius: 0;
-          border-bottom-left-radius: 0;
-        }
-
-        label {
-          margin-left: var(--spacing-s);
+        &:not(input.paginate-channel) {
+          // yuck
+          input,
+          select {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+          }
+          label {
+            margin-left: var(--spacing-s);
+          }
         }
       }
     }
@@ -328,6 +330,12 @@ fieldset-group {
     &.fieldgroup--paginate {
       padding-bottom: var(--spacing-l);
       margin-top: var(--spacing-l);
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    &.fieldgroup--paginate-top {
+      padding-bottom: var(--spacing-m);
       align-items: flex-end;
       justify-content: center;
     }

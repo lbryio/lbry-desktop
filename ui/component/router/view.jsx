@@ -45,6 +45,7 @@ import InvitedPage from 'page/invited';
 import LibraryPage from 'page/library';
 import ListBlockedPage from 'page/listBlocked';
 import ListsPage from 'page/lists';
+import PlaylistsPage from 'page/playlists';
 import OwnComments from 'page/ownComments';
 import PasswordResetPage from 'page/passwordReset';
 import PasswordSetPage from 'page/passwordSet';
@@ -294,6 +295,7 @@ function AppRouter(props: Props) {
       <PrivateRoute {...props} path={`/$/${PAGES.REWARDS_VERIFY}`} component={RewardsVerifyPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.LIBRARY}`} component={LibraryPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.LISTS}`} component={ListsPage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.PLAYLISTS}`} component={PlaylistsPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.TAGS_FOLLOWING_MANAGE}`} component={TagsFollowingManagePage} />
       <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_BLOCKED_MUTED}`} component={ListBlockedPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_CREATOR}`} component={SettingsCreatorPage} />
