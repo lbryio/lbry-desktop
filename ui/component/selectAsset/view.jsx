@@ -118,7 +118,7 @@ function SelectAsset(props: Props) {
           <Button
             button="primary"
             type="submit"
-            label={__('Done')}
+            label={useUrl ? __('Done') : __('Upload')}
             disabled={!useUrl && (uploadStatus === SPEECH_UPLOADING || !pathSelected || !fileSelected)}
             onClick={() => doUploadAsset()}
           />
