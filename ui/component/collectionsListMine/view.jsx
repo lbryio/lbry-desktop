@@ -25,6 +25,7 @@ const ALL = 'All';
 const PRIVATE = 'Private';
 const PUBLIC = 'Public';
 const COLLECTION_FILTERS = [ALL, PRIVATE, PUBLIC];
+const COLLECTION_SHOW_COUNT = 24;
 
 export default function CollectionsListMine(props: Props) {
   const {
@@ -53,16 +54,18 @@ export default function CollectionsListMine(props: Props) {
 
   let filteredCollections;
   if (searchText && collectionsToShow) {
-    filteredCollections = collectionsToShow.filter((id) => {
-      return (
-        (unpublishedCollections[id] &&
-          unpublishedCollections[id].name.toLocaleLowerCase().includes(searchText.toLocaleLowerCase())) ||
-        (publishedCollections[id] &&
-          publishedCollections[id].name.toLocaleLowerCase().includes(searchText.toLocaleLowerCase()))
-      );
-    });
+    filteredCollections = collectionsToShow
+      .filter((id) => {
+        return (
+          (unpublishedCollections[id] &&
+            unpublishedCollections[id].name.toLocaleLowerCase().includes(searchText.toLocaleLowerCase())) ||
+          (publishedCollections[id] &&
+            publishedCollections[id].name.toLocaleLowerCase().includes(searchText.toLocaleLowerCase()))
+        );
+      })
+      .slice(0, COLLECTION_SHOW_COUNT);
   } else {
-    filteredCollections = collectionsToShow || [];
+    filteredCollections = collectionsToShow.slice(0, COLLECTION_SHOW_COUNT) || [];
   }
 
   const watchLater = builtinCollectionsList.find((list) => list.id === COLLECTIONS_CONSTS.WATCH_LATER_ID);
