@@ -1,0 +1,25 @@
+.empty__wrap {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: left;
+
+  @media (min-width: $breakpoint-small) {
+    flex-direction: row;
+  }
+}
+
+.empty__wrap--padded {
+  padding: var(--spacing-xl) 0;
+}
+
+.empty__text {
+  color: var(--color-text-empty);
+  font-style: italic;
+}
+
+.empty__content {
+  max-width: 400px;
+}
