@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { selectActiveChannelStakedLevel } from 'redux/selectors/app';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import { doClearPurchasedUriSuccess } from 'redux/actions/file';
 import { selectFollowedTags } from 'redux/selectors/tags';
@@ -19,6 +20,7 @@ const select = (state) => ({
   unseenCount: selectUnseenNotificationCount(state),
   user: selectUser(state),
   homepageData: selectHomepageData(state),
+  activeChannelStakedLevel: selectActiveChannelStakedLevel(state),
 });
 
 export default connect(select, {

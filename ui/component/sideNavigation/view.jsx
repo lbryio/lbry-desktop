@@ -11,7 +11,13 @@ import NotificationBubble from 'component/notificationBubble';
 import I18nMessage from 'component/i18nMessage';
 import ChannelThumbnail from 'component/channelThumbnail';
 import { GetLinksData } from 'util/buildHomepage';
-import { SIMPLE_SITE, DOMAIN, ENABLE_UI_NOTIFICATIONS } from 'config';
+import {
+  SIMPLE_SITE,
+  DOMAIN,
+  ENABLE_UI_NOTIFICATIONS,
+  ENABLE_NO_SOURCE_CLAIMS,
+  CHANNEL_STAKED_LEVEL_LIVESTREAM,
+} from 'config';
 // @if TARGET='app'
 import { IS_MAC } from 'component/app/view';
 // @endif
@@ -46,6 +52,7 @@ type Props = {
   doClearPurchasedUriSuccess: () => void,
   user: ?User,
   homepageData: any,
+  activeChannelStakedLevel: number,
 };
 
 type SideNavLink = {
@@ -73,6 +80,7 @@ function SideNavigation(props: Props) {
     homepageData,
     user,
     followedTags,
+    activeChannelStakedLevel,
   } = props;
 
   const EXTRA_SIDEBAR_LINKS = GetLinksData(homepageData).map(({ pinnedUrls, ...theRest }) => theRest);
@@ -235,6 +243,13 @@ function SideNavigation(props: Props) {
     SIDE_LINKS.push(WILD_WEST);
   }
 
+  const livestreamEnabled = Boolean(
+    ENABLE_NO_SOURCE_CLAIMS &&
+      user &&
+      !user.odysee_live_disabled &&
+      (activeChannelStakedLevel >= CHANNEL_STAKED_LEVEL_LIVESTREAM || user.odysee_live_enabled)
+  );
+
   const [pulseLibrary, setPulseLibrary] = React.useState(false);
   const isPersonalized = !IS_WEB || isAuthenticated;
   const isAbsolute = isOnFilePage || isMediumScreen;
@@ -392,6 +407,20 @@ function SideNavigation(props: Props) {
             })}
           >
             <div>
+              <ul className="navigation-links--absolute mobile-only">
+                {email && livestreamEnabled && (
+                  <li key={'Go Live'} className="mobile-only">
+                    <Button
+                      icon={ICONS.VIDEO}
+                      navigate={`/$/${PAGES.LIVESTREAM}`}
+                      label={__('Go Live')}
+                      title={__('Go Live')}
+                      className="navigation-link"
+                      activeClass="navigation-link--active"
+                    />
+                  </li>
+                )}
+              </ul>
               <ul className="navigation-links--absolute">
                 {SIDE_LINKS.map((linkProps) => {
                   //   $FlowFixMe
