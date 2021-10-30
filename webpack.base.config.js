@@ -10,6 +10,17 @@ const { ifProduction } = getIfUtils(NODE_ENV);
 const UI_ROOT = path.resolve(__dirname, 'ui/');
 const STATIC_ROOT = path.resolve(__dirname, 'static/');
 
+const optInPlugins = [];
+
+if (NODE_ENV !== 'development' && process.env.BUNDLE_ANALYZER_ENABLED) {
+  const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+  optInPlugins.push(new BundleAnalyzerPlugin({
+    analyzerMode: 'static',
+    openAnalyzer: false,
+    reportFilename: process.env.BUNDLE_ANALYZER_FILENAME || 'report.html',
+  }));
+}
+
 let baseConfig = {
   mode: ifProduction('production', 'development'),
   devtool: ifProduction('source-map', 'eval-cheap-module-source-map'),
@@ -110,6 +121,7 @@ let baseConfig = {
       silent: false, // hide any errors
       defaults: true, // load '.env.defaults' as the default values if empty.
     }),
+    ...optInPlugins,
   ],
 };
 module.exports = baseConfig;
