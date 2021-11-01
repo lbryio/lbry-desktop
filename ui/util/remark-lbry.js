@@ -9,7 +9,7 @@ const mentionToken = '@';
 // const mentionTokenCode = 64; // @
 
 const invalidRegex = /[-_.+=?!@#$%^&*:;,{}<>\w/\\]/;
-const mentionRegex = /@[^\s()"-_.+=?!@$%^&*;,{}<>/\\]*/gm;
+const mentionRegex = /@[^\s()"_.+=?!@$%^&*;,{}<>/\\]*/gm;
 
 function handlePunctuation(value) {
   const protocolIndex = value.indexOf('lbry://') === 0 ? protocol.length - 1 : 0;
