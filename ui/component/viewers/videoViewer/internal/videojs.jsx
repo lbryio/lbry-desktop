@@ -603,7 +603,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       // ford ad
       // 612fb75a42715a07645a614c
 
-      const macroUrl1 = 'https://gov.aniview.com/api/adserver/vast3/' +
+      const macroUrl1 =
+        'https://gov.aniview.com/api/adserver/vast3/' +
         '?AV_PUBLISHERID=60afcbc58cfdb065440d2426' +
         '&AV_CHANNELID=60b354389c7adb506d0bd9a4' +
         `&AV_URL=${encodeURIComponent(window.location.href)}` +
@@ -640,7 +641,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       }
 
       // kick player in the butt, sometimes it doesn't always autoplay when it should
-      player.on('loadstart', function(event) {
+      player.on('loadstart', function (event) {
         if (autoplay) {
           player.play();
         }

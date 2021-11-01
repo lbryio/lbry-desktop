@@ -83,7 +83,7 @@
     width: 125%;
     font-size: 12px;
 
-    @media (max-width:652px)  {
+    @media (max-width: 652px) {
       font-size: 10px;
     }
   }
@@ -160,7 +160,7 @@
 [dir] .video-js .vjs-control {
   font-size: 14px;
 
-  @media (max-width:813px)  {
+  @media (max-width: 813px) {
     font-size: 12px;
   }
 }
@@ -174,7 +174,7 @@
   margin-top: 3px;
   font-size: 12px !important;
 
-  @media (max-width:813px)  {
+  @media (max-width: 813px) {
     margin-top: 3px !important;
     font-size: 10px !important;
   }
@@ -195,7 +195,7 @@
 .vjs-quality-selector > .vjs-menu > .vjs-menu-content {
   font-size: 12px;
 
-  @media (max-width:652px)  {
+  @media (max-width: 652px) {
     font-size: 10px;
   }
 }
@@ -214,7 +214,7 @@
   position: absolute;
   top: 4px;
 
-  @media (max-width:813px)  {
+  @media (max-width: 813px) {
     top: 0px;
   }
 }
