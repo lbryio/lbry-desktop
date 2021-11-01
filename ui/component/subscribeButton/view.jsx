@@ -59,7 +59,7 @@ export default function SubscribeButton(props: Props) {
   }
   const claimName = channelName && '@' + channelName;
 
-  const { pushSupported, pushEnabled, pushRequest } = useBrowserNotifications();
+  const { pushSupported, pushEnabled, pushRequest, pushErrorModal } = useBrowserNotifications();
 
   const subscriptionHandler = isSubscribed ? doChannelUnsubscribe : doChannelSubscribe;
 
@@ -125,36 +125,39 @@ export default function SubscribeButton(props: Props) {
         }}
       />
       {isSubscribed && uiNotificationsEnabled && (
-        <Button
-          button="alt"
-          icon={notificationsDisabled ? ICONS.BELL : ICONS.BELL_ON}
-          aria-label={notificationsDisabled ? __('Turn on notifications') : __('Turn off notifications')}
-          onClick={() => {
-            const newNotificationsDisabled = !notificationsDisabled;
+        <>
+          <Button
+            button="alt"
+            icon={notificationsDisabled ? ICONS.BELL : ICONS.BELL_ON}
+            aria-label={notificationsDisabled ? __('Turn on notifications') : __('Turn off notifications')}
+            onClick={() => {
+              const newNotificationsDisabled = !notificationsDisabled;
 
-            doChannelSubscribe(
-              {
-                channelName: claimName,
-                uri: permanentUrl,
-                notificationsDisabled: newNotificationsDisabled,
-              },
-              false
-            );
+              doChannelSubscribe(
+                {
+                  channelName: claimName,
+                  uri: permanentUrl,
+                  notificationsDisabled: newNotificationsDisabled,
+                },
+                false
+              );
 
-            doToast({
-              message: __(
-                newNotificationsDisabled
-                  ? 'Notifications turned off for %channel%'
-                  : 'Notifications turned on for %channel%!',
-                { channel: claimName }
-              ),
-            });
+              doToast({
+                message: __(
+                  newNotificationsDisabled
+                    ? 'Notifications turned off for %channel%'
+                    : 'Notifications turned on for %channel%!',
+                  { channel: claimName }
+                ),
+              });
 
-            if (!newNotificationsDisabled && pushSupported && !pushEnabled) {
-              pushRequest();
-            }
-          }}
-        />
+              if (!newNotificationsDisabled && pushSupported && !pushEnabled) {
+                pushRequest();
+              }
+            }}
+          />
+          {pushErrorModal()}
+        </>
       )}
     </div>
   ) : null;

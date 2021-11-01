@@ -1,39 +1,47 @@
 // @flow
-import { useEffect, useState, useMemo } from 'react';
-import { pushSubscribe, pushUnsubscribe, pushIsSubscribed } from '$web/src/push-notifications';
-import { isSupported } from 'firebase/messaging';
+import React, { useEffect, useState, useMemo } from 'react';
+import pushNotifications from '$web/src/push-notifications';
+import { BrowserNotificationErrorModal } from '$web/component/browserNotificationHints';
 
 // @todo: Once we are on Redux 7 we should have proper hooks we can use here for store access.
 import { store } from '$ui/store';
 import { selectUser } from 'redux/selectors/user';
-import { doToast } from 'redux/actions/notifications';
 
 export default () => {
   const [pushPermission, setPushPermission] = useState(window.Notification?.permission);
   const [subscribed, setSubscribed] = useState(false);
   const [pushEnabled, setPushEnabled] = useState(false);
   const [pushSupported, setPushSupported] = useState(false);
+  const [encounteredError, setEncounteredError] = useState(false);
 
   const [user] = useState(selectUser(store.getState()));
 
   useEffect(() => {
-    pushIsSubscribed(user.id).then((isSubscribed: boolean) => setSubscribed(isSubscribed));
-    isSupported().then((supported: boolean) => setPushSupported(supported));
+    setPushSupported(pushNotifications.supported);
+    if (pushNotifications.supported) {
+      pushNotifications.subscribed(user.id).then((isSubscribed: boolean) => setSubscribed(isSubscribed));
+    }
   }, [user]);
 
   useMemo(() => setPushEnabled(pushPermission === 'granted' && subscribed), [pushPermission, subscribed]);
 
   const subscribe = async () => {
-    if (await pushSubscribe(user.id)) {
-      setSubscribed(true);
-      setPushPermission(window.Notification?.permission);
-    } else {
-      showError();
+    setEncounteredError(false);
+    try {
+      if (await pushNotifications.subscribe(user.id)) {
+        setSubscribed(true);
+        setPushPermission(window.Notification?.permission);
+        return true;
+      } else {
+        setEncounteredError(true);
+      }
+    } catch {
+      setEncounteredError(true);
     }
   };
 
   const unsubscribe = async () => {
-    if (await pushUnsubscribe(user.id)) {
+    if (await pushNotifications.unsubscribe(user.id)) {
       setSubscribed(false);
     }
   };
@@ -46,15 +54,8 @@ export default () => {
     return window.Notification?.permission !== 'granted' ? subscribe() : null;
   };
 
-  const showError = () => {
-    store.dispatch(
-      doToast({
-        isError: true,
-        message: __(
-          'There was an error enabling browser notifications. Please make sure your browser settings allow you to subscribe to notifications.'
-        ),
-      })
-    );
+  const pushErrorModal = () => {
+    return <>{encounteredError && <BrowserNotificationErrorModal doHideModal={() => setEncounteredError(false)} />}</>;
   };
 
   return {
@@ -63,5 +64,6 @@ export default () => {
     pushPermission,
     pushToggle,
     pushRequest,
+    pushErrorModal,
   };
 };

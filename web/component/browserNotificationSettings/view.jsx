@@ -1,39 +1,37 @@
 // @flow
-import React from 'react';
-import * as ICONS from 'constants/icons';
+import * as React from 'react';
 import SettingsRow from 'component/settingsRow';
 import { FormField } from 'component/common/form';
 import useBrowserNotifications from '$web/component/browserNotificationSettings/use-browser-notifications';
-import 'scss/component/notifications-blocked.scss';
-import Icon from 'component/common/icon';
-
-const BrowserNotificationsBlocked = () => {
-  return (
-    <div className="notificationsBlocked">
-      <Icon className="notificationsBlocked__icon" color="#E50054" icon={ICONS.ALERT} size={32} />
-      <div>
-        <span>{__('Heads up: browser notifications are currently blocked in this browser.')}</span>
-        <span className={'notificationsBlocked__subText'}>
-          {__('To enable push notifications please configure your browser to allow notifications on odysee.com.')}
-        </span>
-      </div>
-    </div>
-  );
-};
+import { BrowserNotificationHints, BrowserNotificationsBlocked } from '$web/component/browserNotificationHints';
 
 const BrowserNotificationSettings = () => {
-  const { pushSupported, pushEnabled, pushPermission, pushToggle } = useBrowserNotifications();
+  const { pushSupported, pushEnabled, pushPermission, pushToggle, pushErrorModal } = useBrowserNotifications();
 
-  if (!pushSupported) return null;
-  if (pushPermission === 'denied') return <BrowserNotificationsBlocked />;
+  const pushBlocked = pushPermission === 'denied';
+
+  const renderHints = () => (!pushSupported ? <BrowserNotificationHints /> : null);
+  const renderBlocked = () => (pushBlocked ? <BrowserNotificationsBlocked /> : null);
 
   return (
-    <SettingsRow
-      title={__('Browser Notifications')}
-      subtitle={__("Receive push notifications in this browser, even when you're not on odysee.com")}
-    >
-      <FormField type="checkbox" name="browserNotification" onChange={pushToggle} checked={pushEnabled} />
-    </SettingsRow>
+    <>
+      <SettingsRow
+        title={__('Browser Notifications')}
+        subtitle={__("Receive push notifications in this browser, even when you're not on odysee.com")}
+        disabled={!pushSupported || pushBlocked}
+      >
+        <FormField
+          type="checkbox"
+          name="browserNotification"
+          disabled={!pushSupported || pushBlocked}
+          onChange={pushToggle}
+          checked={pushEnabled}
+        />
+      </SettingsRow>
+      {renderHints()}
+      {renderBlocked()}
+      {pushErrorModal()}
+    </>
   );
 };
 

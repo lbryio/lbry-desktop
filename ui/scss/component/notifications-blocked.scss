@@ -15,3 +15,9 @@
   color: var(--color-text-subtitle);
   font-size: var(--font-small);
 }
+
+.notificationsBlocked__subTextList {
+  li {
+    margin-left: var(--spacing-m);
+  }
+}

@@ -8,15 +8,45 @@ import { Lbryio } from 'lbryinc';
 import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken, deleteToken } from 'firebase/messaging';
 import { firebaseConfig, vapidKey } from '$web/src/firebase-config';
-import { addRegistration, removeRegistration, hasRegistration } from '$web/src/fcm-management';
+import { addRegistration, removeRegistration, hasRegistration } from '$web/src/push-notifications/fcm-management';
 import { browserData } from '$web/src/ua';
+import { isPushSupported } from '$web/src/push-notifications/push-supported';
 
 let messaging = null;
+let pushSystem = null;
 
-if ('serviceWorker' in navigator) {
-  const app = initializeApp(firebaseConfig);
-  messaging = getMessaging(app);
-}
+(async () => {
+  const supported = await isPushSupported();
+  if (supported) {
+    const app = initializeApp(firebaseConfig);
+    messaging = getMessaging(app);
+    pushSystem = {
+      supported: true,
+      subscribe,
+      unsubscribe,
+      subscribed,
+      reconnect,
+      disconnect,
+      validate,
+    };
+  }
+})();
+
+// Proxy will forward to push system if it's supported.
+// $FlowIssue[incompatible-type]
+export default new Proxy(
+  {},
+  {
+    get(target, prop) {
+      if (pushSystem) {
+        return pushSystem[prop];
+      } else {
+        if (prop === 'supported') return false;
+        throw new Error('Push notifications are not supported in this browser environment.');
+      }
+    },
+  }
+);
 
 const subscriptionMetaData = () => {
   const isMobile = window.navigator.userAgentData?.mobile || false;
@@ -31,7 +61,7 @@ const getFcmToken = async (): Promise<string | void> => {
   return getToken(messaging, { serviceWorkerRegistration: swRegistration, vapidKey });
 };
 
-export const pushSubscribe = async (userId: number, permanent: boolean = true): Promise<boolean> => {
+const subscribe = async (userId: number, permanent: boolean = true): Promise<boolean> => {
   try {
     const fcmToken = await getFcmToken();
     if (!fcmToken) return false;
@@ -43,7 +73,7 @@ export const pushSubscribe = async (userId: number, permanent: boolean = true): 
   }
 };
 
-export const pushUnsubscribe = async (userId: number, permanent: boolean = true): Promise<boolean> => {
+const unsubscribe = async (userId: number, permanent: boolean = true): Promise<boolean> => {
   try {
     const fcmToken = await getFcmToken();
     if (!fcmToken) return false;
@@ -56,7 +86,7 @@ export const pushUnsubscribe = async (userId: number, permanent: boolean = true)
   }
 };
 
-export const pushIsSubscribed = async (userId: number): Promise<boolean> => {
+const subscribed = async (userId: number): Promise<boolean> => {
   const swRegistration = await navigator.serviceWorker?.ready;
   if (!swRegistration || !swRegistration.pushManager) return false;
   const browserSubscriptionExists = (await swRegistration.pushManager.getSubscription()) !== null;
@@ -64,17 +94,17 @@ export const pushIsSubscribed = async (userId: number): Promise<boolean> => {
   return browserSubscriptionExists && userRecordExists;
 };
 
-export const pushReconnect = async (userId: number): Promise<boolean> => {
-  if (hasRegistration(userId)) return pushSubscribe(userId, false);
+const reconnect = async (userId: number): Promise<boolean> => {
+  if (hasRegistration(userId)) return subscribe(userId, false);
   return false;
 };
 
-export const pushDisconnect = async (userId: number): Promise<boolean> => {
-  if (hasRegistration(userId)) return pushUnsubscribe(userId, false);
+const disconnect = async (userId: number): Promise<boolean> => {
+  if (hasRegistration(userId)) return unsubscribe(userId, false);
   return false;
 };
 
-export const pushValidate = async (userId: number) => {
+const validate = async (userId: number) => {
   if (!hasRegistration(userId)) return;
   window.requestIdleCallback(async () => {
     const serverTokens = await Lbryio.call('cfm', 'list');
@@ -82,7 +112,7 @@ export const pushValidate = async (userId: number) => {
     if (!fcmToken) return;
     const exists = serverTokens.find((item) => item.value === fcmToken);
     if (!exists) {
-      await pushSubscribe(userId, false);
+      await subscribe(userId, false);
     }
   });
 };

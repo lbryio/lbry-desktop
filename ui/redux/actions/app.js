@@ -19,7 +19,7 @@ import { doClearPublish } from 'redux/actions/publish';
 import { Lbryio } from 'lbryinc';
 import { selectFollowedTagsList } from 'redux/selectors/tags';
 import { doToast, doError, doNotificationList } from 'redux/actions/notifications';
-import { pushReconnect, pushDisconnect, pushValidate } from '$web/src/push-notifications';
+import pushNotifications from '$web/src/push-notifications';
 
 import Native from 'native';
 import {
@@ -537,8 +537,10 @@ export function doSignIn() {
     const state = getState();
     const user = selectUser(state);
 
-    pushReconnect(user.id);
-    pushValidate(user.id);
+    if (pushNotifications.supported) {
+      pushNotifications.reconnect(user.id);
+      pushNotifications.validate(user.id);
+    }
 
     const notificationsEnabled = SIMPLE_SITE || user.experimental_ui;
 
@@ -562,7 +564,9 @@ export function doSignOut() {
     const state = getState();
     const user = selectUser(state);
     try {
-      await pushDisconnect(user.id);
+      if (pushNotifications.supported) {
+        await pushNotifications.disconnect(user.id);
+      }
     } finally {
       Lbryio.call('user', 'signout')
         .then(doSignOutCleanup)

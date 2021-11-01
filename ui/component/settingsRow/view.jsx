@@ -7,16 +7,17 @@ type Props = {
   subtitle?: string,
   multirow?: boolean, // Displays the Value widget(s) below the Label instead of on the right.
   useVerticalSeparator?: boolean, // Show a separator line between Label and Value. Useful when there are multiple Values.
+  disabled?: boolean,
   children?: React$Node,
 };
 
 export default function SettingsRow(props: Props) {
-  const { title, subtitle, multirow, useVerticalSeparator, children } = props;
-
+  const { title, subtitle, multirow, useVerticalSeparator, disabled, children } = props;
   return (
     <div
       className={classnames('card__main-actions settings__row', {
         'section__actions--between': !multirow,
+        'opacity-40': disabled,
       })}
     >
       <div className="settings__row--title">
