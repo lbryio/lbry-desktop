@@ -77,10 +77,11 @@ export const selectClaimForUri = createCachedSelector(
   (state, uri) => uri,
   (state, uri, returnRepost = true) => returnRepost,
   (byUri, byId, uri, returnRepost) => {
-    const validUri = isURIValid(uri);
+    const validUri = isURIValid(uri, false);
 
     if (validUri && byUri) {
-      const claimId = uri && byUri[normalizeURI(uri)];
+      const normalizedUri = normalizeURI(uri);
+      const claimId = uri && byUri[normalizedUri];
       const claim = byId[claimId];
 
       // Make sure to return the claim as is so apps can check if it's been resolved before (null) or still needs to be resolved (undefined)
@@ -97,7 +98,7 @@ export const selectClaimForUri = createCachedSelector(
 
         return {
           ...repostedClaim,
-          repost_url: normalizeURI(uri),
+          repost_url: normalizedUri,
           repost_channel_url: channelUrl,
           repost_bid_amount: claim && claim.meta && claim.meta.effective_amount,
         };
@@ -108,12 +109,14 @@ export const selectClaimForUri = createCachedSelector(
   }
 )((state, uri, returnRepost = true) => `${String(uri)}:${returnRepost ? '1' : '0'}`);
 
+// Note: this is deprecated. Use "selectClaimForUri(state, uri)" instead.
 export const makeSelectClaimForUri = (uri: string, returnRepost: boolean = true) =>
   createSelector(selectClaimIdsByUri, selectClaimsById, (byUri, byId) => {
-    const validUri = isURIValid(uri);
+    const validUri = isURIValid(uri, false);
 
     if (validUri && byUri) {
-      const claimId = uri && byUri[normalizeURI(uri)];
+      const normalizedUri = normalizeURI(uri);
+      const claimId = uri && byUri[normalizedUri];
       const claim = byId[claimId];
 
       // Make sure to return the claim as is so apps can check if it's been resolved before (null) or still needs to be resolved (undefined)
@@ -130,7 +133,7 @@ export const makeSelectClaimForUri = (uri: string, returnRepost: boolean = true)
 
         return {
           ...repostedClaim,
-          repost_url: normalizeURI(uri),
+          repost_url: normalizedUri,
           repost_channel_url: channelUrl,
           repost_bid_amount: claim && claim.meta && claim.meta.effective_amount,
         };
@@ -184,7 +187,7 @@ export const makeSelectClaimIsMine = (rawUri: string) => {
   } catch (e) {}
 
   return createSelector(selectClaimsByUri, selectMyActiveClaims, (claims, myClaims) => {
-    if (!isURIValid(uri)) {
+    if (!isURIValid(uri, false)) {
       return false;
     }
 

@@ -167,7 +167,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
       </span>
     );
   }, [channelSubCount]);
-  const isValid = uri && isURIValid(uri);
+  const isValid = uri && isURIValid(uri, false);
 
   // $FlowFixMe
   const isPlayable =

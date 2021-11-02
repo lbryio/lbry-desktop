@@ -265,9 +265,9 @@ export function normalizeURI(URL: string) {
   });
 }
 
-export function isURIValid(URL: string): boolean {
+export function isURIValid(URL: string, normalize: boolean = true): boolean {
   try {
-    parseURI(normalizeURI(URL));
+    parseURI(normalize ? normalizeURI(URL) : URL);
   } catch (error) {
     return false;
   }
@@ -323,15 +323,7 @@ export function splitBySeparator(uri: string) {
 }
 
 export function isURIEqual(uriA: string, uriB: string) {
-  const parseA = parseURI(normalizeURI(uriA));
-  const parseB = parseURI(normalizeURI(uriB));
-  if (parseA.isChannel) {
-    if (parseB.isChannel && parseA.channelClaimId === parseB.channelClaimId) {
-      return true;
-    }
-  } else if (parseA.streamClaimId === parseB.streamClaimId) {
-    return true;
-  } else {
-    return false;
-  }
+  const a = uriA && uriA.replace(/:/g, '#');
+  const b = uriB && uriB.replace(/:/g, '#');
+  return a === b;
 }
