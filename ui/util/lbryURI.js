@@ -200,6 +200,7 @@ export function buildURI(UrlObj: LbryUrlObj, includeProto: boolean = true, proto
   } = UrlObj;
   const { claimId, claimName, contentName } = deprecatedParts;
 
+  // @ifndef IGNORE_BUILD_URI_WARNINGS
   if (!isProduction) {
     if (claimId) {
       logErrorOnce("'claimId' should no longer be used. Use 'streamClaimId' or 'channelClaimId' instead");
@@ -211,6 +212,7 @@ export function buildURI(UrlObj: LbryUrlObj, includeProto: boolean = true, proto
       logErrorOnce("'contentName' should no longer be used. Use 'streamName' instead");
     }
   }
+  // @endif
 
   if (!claimName && !channelName && !streamName) {
     console.error("'claimName', 'channelName', and 'streamName' are all empty. One must be present to build a url.");
