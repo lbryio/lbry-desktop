@@ -52,7 +52,7 @@ class ModalError extends React.PureComponent<Props> {
       <Modal isOpen contentLabel={__('Error')} title={__('Error')} className="error-modal" onConfirmed={closeModal}>
         <p>
           {__(
-            "We're sorry that LBRY has encountered an error. This has been reported and we will investigate the problem."
+            "We're sorry that Odysee has encountered an error. Please try again or reach out to hello@odysee.com with detailed information."
           )}
         </p>
         <ul className="error-modal__error-list ul--no-style">{errorInfoList}</ul>

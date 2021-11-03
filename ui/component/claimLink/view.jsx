@@ -112,7 +112,7 @@ class ClaimLink extends React.Component<Props> {
     ) : (
       <Button
         button="link"
-        title={SIMPLE_SITE ? __("This channel isn't staking enough LBRY Credits for link previews.") : children}
+        title={SIMPLE_SITE ? __("This channel isn't staking enough Credits for link previews.") : children}
         label={children}
         className="button--external-link"
         navigate={uri}

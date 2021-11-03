@@ -446,7 +446,7 @@ function App(props: Props) {
       {IS_WEB && lbryTvApiStatus === STATUS_DOWN ? (
         <Yrbl
           className="main--empty"
-          title={__('lbry.tv is currently down')}
+          title={__('odysee.com is currently down')}
           subtitle={__('My wheel broke, but the good news is that someone from LBRY is working on it.')}
         />
       ) : (

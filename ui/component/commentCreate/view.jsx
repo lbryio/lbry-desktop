@@ -268,13 +268,10 @@ export function CommentCreate(props: Props) {
           }, 1500);
 
           doToast({
-            message: __(
-              "You sent %tipAmount% LBRY Credits as a tip to %tipChannelName%, I'm sure they appreciate it!",
-              {
-                tipAmount: tipAmount, // force show decimal places
-                tipChannelName,
-              }
-            ),
+            message: __("You sent %tipAmount% Credits as a tip to %tipChannelName%, I'm sure they appreciate it!", {
+              tipAmount: tipAmount, // force show decimal places
+              tipChannelName,
+            }),
           });
 
           setSuccessTip({ txid, tipAmount });

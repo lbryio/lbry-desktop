@@ -89,9 +89,7 @@ class WalletSend extends React.PureComponent<Props> {
       <Card
         title={__('Send Credits')}
         subtitle={
-          <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>
-            Send LBRY Credits to your friends or favorite creators.
-          </I18nMessage>
+          <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>Send Credits to your friends or favorite creators.</I18nMessage>
         }
         actions={
           <Formik

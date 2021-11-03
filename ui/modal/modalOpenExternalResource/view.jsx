@@ -59,7 +59,7 @@ function ModalOpenExternalResource(props: Props) {
           (path && __('This file has been shared with you by other people.'))}
       </p>
       <blockquote>{uri || path}</blockquote>
-      <p>{__('LBRY Inc is not responsible for its content, click continue to proceed at your own risk.')}</p>
+      <p>{__('Odysee is not responsible for its content, click continue to proceed at your own risk.')}</p>
     </Modal>
   );
 }

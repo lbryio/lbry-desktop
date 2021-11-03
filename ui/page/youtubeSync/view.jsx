@@ -124,7 +124,7 @@ export default function YoutubeSync(props: Props) {
                       {nameError ? (
                         <span className="error__text">{nameError}</span>
                       ) : (
-                        __('Your %site_name% channel name', { site_name: IS_WEB ? SITE_NAME : 'LBRY' })
+                        __('Your %site_name% desired channel name', { site_name: IS_WEB ? SITE_NAME : 'LBRY' })
                       )}
                     </label>
                     <div className="form-field__prefix">@</div>
@@ -206,9 +206,8 @@ export default function YoutubeSync(props: Props) {
                       ),
                     }}
                   >
-                    This will verify you are an active YouTuber. Channel names cannot be changed once chosen, please be
-                    extra careful. Additional instructions will be emailed to you after you verify your email on the
-                    next page. %learn_more%.
+                    This will verify you are an active YouTuber with over 300 subscribers and original content. Channel
+                    names cannot be changed once chosen, please be extra careful. %learn_more%.
                   </I18nMessage>
                 </div>
               </Form>

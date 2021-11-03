@@ -84,8 +84,8 @@ export default function SearchTopClaim(props: Props) {
         <div className="claim-preview__actions--header">
           <a
             className="media__uri"
-            href="https://odysee.com/@OdyseeHelp:b/OdyseeBasics:c"
-            title={__('Learn more about LBRY Credits on %DOMAIN%', { DOMAIN })}
+            href="https://odysee.com/@OdyseeHelp:b/trending:50"
+            title={__('Learn more about Credits on %DOMAIN%', { DOMAIN })}
           >
             <LbcSymbol prefix={__('Most supported')} />
           </a>

@@ -174,7 +174,12 @@ class HelpPage extends React.PureComponent<Props, State> {
           }
           actions={
             <div className="section__actions">
-              <Button button="secondary" label={__('Join Our Chat')} icon={ICONS.CHAT} href="https://chat.lbry.com" />
+              <Button
+                button="secondary"
+                label={__('Join the Foundation Chat')}
+                icon={ICONS.CHAT}
+                href="https://chat.lbry.com"
+              />
               <Button button="secondary" label={__('Email Us')} icon={ICONS.WEB} href={`mailto:${SITE_HELP_EMAIL}`} />
             </div>
           }
@@ -184,7 +189,7 @@ class HelpPage extends React.PureComponent<Props, State> {
           title={__('Report a bug or suggest something')}
           subtitle={
             <React.Fragment>
-              {__('Did you find something wrong? Think LBRY could add something useful and cool?')}
+              {__('Did you find something wrong? Think Odysee could add something useful and cool?')}
             </React.Fragment>
           }
           actions={

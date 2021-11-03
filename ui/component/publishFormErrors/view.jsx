@@ -52,9 +52,7 @@ function PublishFormErrors(props: Props) {
       ) : (
         thumbnailError && !thumbnailUploaded && <div>{__('Thumbnail is invalid.')}</div>
       )}
-      {editingURI && !isStillEditing && !filePath && (
-        <div>{__('Please reselect a file after changing the LBRY URL')}</div>
-      )}
+      {editingURI && !isStillEditing && !filePath && <div>{__('Please reselect a file after changing the URL')}</div>}
     </div>
   );
 }

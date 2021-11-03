@@ -242,7 +242,7 @@ export default function LivestreamSetupPage(props: Props) {
                 className="livestream__publish-intro"
                 title={__('No livestream publishes found')}
                 subtitle={__(
-                  'You need to upload your livestream details before you can go live. If you already created one in this channel, it should appear soon.'
+                  'You need to upload your livestream details before you can go live. Please note: Replays must be published manually after your stream via the Update button on the livestream.'
                 )}
                 actions={
                   <div className="section__actions">

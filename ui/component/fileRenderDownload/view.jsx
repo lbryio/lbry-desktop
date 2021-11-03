@@ -21,7 +21,7 @@ export default function FileRenderDownload(props: Props) {
         subtitle={
           <p>
             {__(
-              'This content can be downloaded from lbry.tv, but not displayed. It will display in LBRY Desktop, an app for desktop computers.'
+              'This content can be downloaded from odysee.com, but not displayed. It will display in LBRY Desktop, an app for desktop computers.'
             )}
           </p>
         }

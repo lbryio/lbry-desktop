@@ -83,8 +83,8 @@ function DiscoverPage(props: Props) {
     return !dynamicRouteProps ? (
       <a
         className="help"
-        href="https://odysee.com/@OdyseeHelp:b/OdyseeBasics:c"
-        title={__('Learn more about LBRY Credits on %DOMAIN%', { DOMAIN })}
+        href="https://odysee.com/@OdyseeHelp:b/trending:50"
+        title={__('Learn more about Credits on %DOMAIN%', { DOMAIN })}
       >
         <I18nMessage
           tokens={{

@@ -29,7 +29,7 @@ export default function NagDegradedPerformance(props: Props) {
                 ),
               }}
             >
-              lbry.tv collects usage information for itself only (%more_information%).
+              odysee collects usage information for itself only (%more_information%).
             </I18nMessage>
           }
           actionText={__('OK')}
@@ -49,7 +49,7 @@ export default function NagDegradedPerformance(props: Props) {
                 ),
               }}
             >
-              lbry.tv collects usage information for itself only (%more_information%). Want control over this and more?
+              odysee collects usage information for itself only (%more_information%). Want control over this and more?
             </I18nMessage>
           }
           actionText={__('Get The App')}
