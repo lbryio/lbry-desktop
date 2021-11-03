@@ -1,0 +1,180 @@
+@import '../../../web/scss/themes/odysee/init/vars';
+
+$discussion-header__height: 3rem;
+$recent-msg-button__height: 2rem;
+
+.livestream__discussion {
+  width: 100%;
+
+  @media (min-width: $breakpoint-medium) {
+    margin: 0;
+    width: var(--livestreamComments-width);
+    height: calc(100vh - var(--header-height));
+    position: fixed;
+    right: 0;
+    top: var(--header-height);
+    bottom: 0;
+    border-radius: 0;
+    border-top: none;
+    border-bottom: none;
+    border-right: none;
+
+    .card__main-actions {
+      padding: 0;
+    }
+  }
+}
+
+.livestreamDiscussion__header {
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--spacing-s);
+  margin-bottom: 0;
+  align-items: center;
+
+  @media (min-width: $breakpoint-small) {
+    height: $discussion-header__height;
+    padding: 0 var(--spacing-s);
+    padding-right: 0;
+  }
+}
+
+.livestreamDiscussion__title {
+  padding: 0;
+}
+
+.livestreamComments__wrapper {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - var(--header-height) - #{$discussion-header__height});
+}
+
+.livestream__comments {
+  display: flex;
+  flex-direction: column-reverse;
+  font-size: var(--font-small);
+  overflow-y: scroll;
+  overflow-x: visible;
+  padding-top: var(--spacing-s);
+  width: 100%;
+}
+
+.livestreamComments__scrollToRecent {
+  margin-top: -$recent-msg-button__height;
+  align-self: center;
+  margin-bottom: var(--spacing-xs);
+  font-size: var(--font-xsmall);
+  padding: var(--spacing-xxs) var(--spacing-s);
+  opacity: 0.9;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.livestream__commentCreate {
+  padding: var(--spacing-s);
+  border-top: 1px solid var(--color-border);
+  margin-top: auto;
+}
+
+.livestreamSuperchats__wrapper {
+  flex-shrink: 0;
+  position: relative;
+  overflow-x: scroll;
+  padding: var(--spacing-s) var(--spacing-xs);
+  border-bottom: 1px solid var(--color-border);
+  font-size: var(--font-small);
+  background-color: var(--color-card-background);
+
+  @media (min-width: $breakpoint-small) {
+    padding: var(--spacing-xs);
+    width: var(--livestreamComments-width);
+  }
+}
+
+.livestreamPinned__wrapper {
+  display: flex;
+  flex-shrink: 0;
+  position: relative;
+  padding: var(--spacing-s) var(--spacing-xs);
+  border-bottom: 1px solid var(--color-border);
+  font-size: var(--font-small);
+  background-color: var(--color-card-background-highlighted);
+  width: 100%;
+
+  .livestreamComment {
+    width: 100%;
+    padding-top: var(--spacing-xs);
+    max-height: 6rem;
+    overflow-y: scroll;
+  }
+
+  .close-button {
+    border-left: 1px solid var(--color-border);
+    padding: 0 calc(var(--spacing-m) - var(--spacing-xs)) 0 var(--spacing-m);
+    color: var(--color-text-subtitle);
+  }
+
+  @media (min-width: $breakpoint-small) {
+    padding: var(--spacing-xs);
+    width: var(--livestreamComments-width);
+  }
+}
+
+.livestreamSuperchat__amount-large {
+  .credit-amount {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+  }
+}
+
+.livestreamSuperchats__inner {
+  display: flex;
+}
+
+.livestreamSuperchat__info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: var(--font-xsmall);
+}
+
+.livestreamSuperchat__info--sticker {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: row;
+  width: 8rem;
+  height: 3rem;
+
+  .livestreamSuperchat__info--image {
+    padding-left: var(--spacing-m);
+    width: 100%;
+    height: 100%;
+  }
+
+  .button {
+    margin-top: calc(var(--spacing-xxs) / 2);
+  }
+}
+
+.livestreamSuperchat__info--notSticker {
+  flex-direction: row;
+}
+
+.livestreamSuperchat__tooltip-amount {
+  margin-top: var(--spacing-xs);
+  margin-left: 0;
+  background-color: transparent;
+  padding: 0;
+}
+
+.livestream__superchat-comment {
+  margin-top: var(--spacing-s);
+  max-width: 5rem;
+  overflow-wrap: break-word;
+}
+
+.livestreamSuperchat__amount-large {
+  min-width: 2.5rem;
+}

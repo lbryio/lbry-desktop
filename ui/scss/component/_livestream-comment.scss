@@ -1,0 +1,130 @@
+@import '../../../web/scss/themes/odysee/init/vars';
+@import '../../scss/init/mixins';
+
+.livestreamComment {
+  list-style-type: none;
+  position: relative;
+
+  @media (min-width: $breakpoint-small) {
+    &:hover {
+      background-color: var(--color-card-background-highlighted);
+    }
+
+    &:not(:hover) {
+      .menu__button:not(:focus):not([aria-expanded='true']) {
+        opacity: 0;
+      }
+    }
+  }
+
+  .channel-name {
+    font-size: var(--font-xsmall);
+  }
+}
+
+.livestreamComment__info {
+  overflow: hidden;
+}
+
+.livestreamComment--superchat {
+  background-color: var(--color-card-background-highlighted);
+
+  + .livestreamComment--superchat {
+    margin-bottom: var(--spacing-xxs);
+  }
+
+  .livestreamComment__body {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: unset;
+    flex: unset;
+  }
+
+  .livestreamComment__info {
+    margin-top: calc(var(--spacing-xxs) / 2);
+  }
+
+  &::before {
+    position: absolute;
+    left: 0;
+    height: 100%;
+    max-height: 4rem;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    width: 5px;
+    background-color: var(--color-superchat);
+    content: '';
+  }
+}
+
+.livestreamComment__body {
+  display: flex;
+  align-items: flex-start;
+  margin-left: var(--spacing-s);
+  overflow: hidden;
+
+  .livestreamComment__info--sticker {
+    display: flex;
+    margin: var(--spacing-xxs) 0;
+  }
+
+  .channel-thumbnail {
+    @include handleChannelGif(2rem);
+    margin-top: var(--spacing-xxs);
+    flex-shrink: 0;
+  }
+}
+
+.livestreamComment__menu {
+  position: absolute;
+  right: var(--spacing-xs);
+  top: var(--spacing-xs);
+}
+
+.livestreamComment__superchatBanner {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  padding: 0.25rem var(--spacing-s);
+  display: inline-block;
+  position: relative;
+}
+
+// This is just a two small circles that overlap to make it look like
+// the banner and the left border are connected
+.livestreamComment__superchatBanner-corner {
+  height: calc(var(--border-radius) * 2);
+  width: calc(var(--border-radius) * 2);
+  border-radius: 50%;
+  position: absolute;
+  background-color: var(--color-superchat);
+  bottom: 0;
+  left: 0;
+  transform: translateX(0) translateY(50%);
+
+  &::after {
+    content: '';
+    height: calc(var(--border-radius) * 2);
+    width: calc(var(--border-radius) * 2);
+    border-top-left-radius: var(--border-radius);
+    background-color: var(--color-card-background);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    transform: translateX(25%) translateY(50%);
+  }
+}
+
+.livestreamComment__text {
+  padding-right: var(--spacing-xl);
+  padding-bottom: var(--spacing-xxs);
+
+  .markdown-preview {
+    p {
+      word-break: break-word;
+    }
+
+    .channel-name {
+      font-size: var(--font-small);
+    }
+  }
+}

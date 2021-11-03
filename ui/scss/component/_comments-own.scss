@@ -1,0 +1,59 @@
+@import '../../../web/scss/themes/odysee/init/vars';
+@import '../../scss/init/mixins';
+
+.comments--own {
+  .section__actions {
+    align-items: flex-start;
+  }
+
+  .comments--own__claim {
+    min-width: 100%;
+    max-width: 100%;
+
+    @media (min-width: $breakpoint-medium) {
+      min-width: 40%;
+      max-width: 40%;
+    }
+
+    .media__thumb {
+      flex-shrink: 0;
+      overflow: hidden;
+      $width: 5rem;
+      @include handleClaimListGifThumbnail($width);
+      width: $width;
+      height: calc(#{$width} * (9 / 16));
+      margin-right: var(--spacing-s);
+    }
+
+    .channel-thumbnail {
+      @include handleChannelGif(calc(5rem * 9 / 16));
+      margin-right: var(--spacing-xs);
+
+      @media (min-width: $breakpoint-small) {
+        @include handleChannelGif(calc(5rem * 9 / 16));
+        margin-right: var(--spacing-s);
+      }
+    }
+  }
+
+  .claim-preview__wrapper {
+    margin: 0 0;
+    padding: 0;
+
+    @media (min-width: $breakpoint-medium) {
+      margin: 0 var(--spacing-xs);
+    }
+  }
+
+  .comment {
+    margin-top: var(--spacing-s);
+    margin-left: 0;
+    padding-left: var(--spacing-m);
+    border-left: 4px solid var(--color-border);
+
+    @media (min-width: $breakpoint-medium) {
+      margin-top: 0;
+      margin-left: var(--spacing-s);
+    }
+  }
+}
