@@ -37,11 +37,11 @@ This repo contains the UI and front end code that powers Odysee.com.
 
 ## Usage
 
-Double click the installed application to interact with the LBRY network.
+Go to the website to interact on this frontend.
 
 ## Running from Source
 
-You can run the web version (lbry.tv), the electron app, or both at the same time.
+You can run the web version (odysee.com), via running onto your host machine, or go to the website itself.
 
 #### Prerequisites
 
@@ -49,15 +49,15 @@ You can run the web version (lbry.tv), the electron app, or both at the same tim
 - [Node.js](https://nodejs.org/en/download/) (v14 required)
 - [Yarn](https://yarnpkg.com/en/docs/install)
 
-1. Clone (or [fork](https://help.github.com/articles/fork-a-repo/)) this repository: `git clone https://github.com/lbryio/lbry-desktop`
-2. Change directory into the cloned repository: `cd lbry-desktop`
+1. Clone (or [fork](https://help.github.com/articles/fork-a-repo/)) this repository: `git clone https://github.com/OdyseeTeam/odysee-frontend`
+2. Change directory into the cloned repository: `cd odysee-frontend`
 3. Install the dependencies: `yarn`
 
 #### Run the web app for development
 
 `yarn dev:web`
 
-- This uses webpack-dev-server and includes hot-reloading. If you want to debug the [web server we use in production](https://github.com/lbryio/lbry-desktop/blob/master/web/index.js) you can run `yarn dev:web-server`. This starts a server at `localhost:1337` and does not include hot reloading.
+- This uses webpack-dev-server and includes hot-reloading. If you want to debug the [web server we use in production](https://github.com/OdyseeTeam/odysee-frontend/blob/master/web/index.js) you can run `yarn dev:web-server`. This starts a server at `localhost:1337` and does not include hot reloading.
 
 #### Customize the web app
 
