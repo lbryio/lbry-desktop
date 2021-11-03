@@ -235,7 +235,6 @@
   .claim-preview__actions {
     align-self: flex-end;
     margin-bottom: auto;
-    justify-content: flex-end;
     width: auto;
   }
 
@@ -245,10 +244,6 @@
     justify-content: space-between;
     flex-wrap: wrap;
     align-items: center;
-
-    .claim-preview__actions {
-      margin-left: var(--spacing-m);
-    }
   }
 
   @media (max-width: $breakpoint-xsmall) {
