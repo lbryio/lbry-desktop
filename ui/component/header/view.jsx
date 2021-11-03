@@ -5,11 +5,12 @@ import * as SETTINGS from 'constants/settings';
 import * as PAGES from 'constants/pages';
 import React from 'react';
 import { withRouter } from 'react-router';
+import { Link } from 'react-router-dom';
 import classnames from 'classnames';
 import Button from 'component/button';
 import WunderBar from 'component/wunderbar';
 import Icon from 'component/common/icon';
-import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
+import { Menu, MenuList, MenuButton, MenuItem, MenuLink } from '@reach/menu-button';
 import NavigationButton from 'component/navigationButton';
 import { useIsMobile } from 'effects/use-screensize';
 import NotificationBubble from 'component/notificationBubble';
@@ -324,26 +325,26 @@ const Header = (props: Props) => {
                       )}
                     </MenuButton>
                     <MenuList className="menu__list--header">
-                      <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.UPLOADS}`)}>
+                      <MenuLink className="menu__link" as={Link} to={`/$/${PAGES.UPLOADS}`}>
                         <Icon aria-hidden icon={ICONS.PUBLISH} />
                         {__('Uploads')}
-                      </MenuItem>
-                      <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.CHANNELS}`)}>
+                      </MenuLink>
+                      <MenuLink className="menu__link" as={Link} to={`/$/${PAGES.CHANNELS}`}>
                         <Icon aria-hidden icon={ICONS.CHANNEL} />
                         {__('Channels')}
-                      </MenuItem>
-                      <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.CREATOR_DASHBOARD}`)}>
+                      </MenuLink>
+                      <MenuLink className="menu__link" as={Link} to={`/$/${PAGES.CREATOR_DASHBOARD}`}>
                         <Icon aria-hidden icon={ICONS.ANALYTICS} />
                         {__('Creator Analytics')}
-                      </MenuItem>
-                      <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.REWARDS}`)}>
+                      </MenuLink>
+                      <MenuLink className="menu__link" as={Link} to={`/$/${PAGES.REWARDS}`}>
                         <Icon aria-hidden icon={ICONS.REWARDS} />
                         {__('Rewards')}
-                      </MenuItem>
-                      <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.INVITE}`)}>
+                      </MenuLink>
+                      <MenuLink className="menu__link" as={Link} to={`/$/${PAGES.INVITE}`}>
                         <Icon aria-hidden icon={ICONS.INVITE} />
                         {__('Invites')}
-                      </MenuItem>
+                      </MenuLink>
 
                       {authenticated ? (
                         <MenuItem onSelect={IS_WEB ? signOut : openSignOutModal}>
@@ -355,14 +356,14 @@ const Header = (props: Props) => {
                         </MenuItem>
                       ) : !IS_WEB ? (
                         <>
-                          <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.AUTH}`)}>
+                          <MenuLink className="menu__link" as={Link} to={`/$/${PAGES.AUTH}`}>
                             <Icon aria-hidden icon={ICONS.SIGN_UP} />
                             {__('Sign Up')}
-                          </MenuItem>
-                          <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.AUTH_SIGNIN}`)}>
+                          </MenuLink>
+                          <MenuLink className="menu__link" as={Link} to={`/$/${PAGES.AUTH_SIGNIN}`}>
                             <Icon aria-hidden icon={ICONS.SIGN_IN} />
                             {__('Sign In')}
-                          </MenuItem>
+                          </MenuLink>
                         </>
                       ) : null}
                     </MenuList>
@@ -409,7 +410,7 @@ type HeaderMenuButtonProps = {
 };
 
 function HeaderMenuButtons(props: HeaderMenuButtonProps) {
-  const { authenticated, notificationsEnabled, history, handleThemeToggle, currentTheme, livestreamEnabled } = props;
+  const { authenticated, notificationsEnabled, handleThemeToggle, currentTheme, livestreamEnabled } = props;
 
   return (
     <div className="header__buttons">
@@ -429,25 +430,25 @@ function HeaderMenuButtons(props: HeaderMenuButtonProps) {
           </MenuButton>
 
           <MenuList className="menu__list--header">
-            <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.UPLOAD}`)}>
+            <MenuLink className="menu__link" as={Link} to={`/$/${PAGES.UPLOAD}`}>
               <Icon aria-hidden icon={ICONS.PUBLISH} />
               {__('Upload')}
-            </MenuItem>
-            <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.CHANNEL_NEW}`)}>
+            </MenuLink>
+            <MenuLink className="menu__link" as={Link} to={`/$/${PAGES.CHANNEL_NEW}`}>
               <Icon aria-hidden icon={ICONS.CHANNEL} />
               {__('New Channel')}
-            </MenuItem>
+            </MenuLink>
             {/* @if TARGET='web' */}
-            <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.YOUTUBE_SYNC}`)}>
+            <MenuLink className="menu__link" as={Link} to={`/$/${PAGES.YOUTUBE_SYNC}`}>
               <Icon aria-hidden icon={ICONS.YOUTUBE} />
               {__('Sync YouTube Channel')}
-            </MenuItem>
+            </MenuLink>
             {/* @endif */}
             {livestreamEnabled && (
-              <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.LIVESTREAM}`)}>
+              <MenuLink className="menu__link" as={Link} to={`/$/${PAGES.LIVESTREAM}`}>
                 <Icon aria-hidden icon={ICONS.VIDEO} />
                 {__('Go Live')}
-              </MenuItem>
+              </MenuLink>
             )}
           </MenuList>
         </Menu>
@@ -469,14 +470,14 @@ function HeaderMenuButtons(props: HeaderMenuButtonProps) {
           <Icon size={18} icon={ICONS.SETTINGS} aria-hidden />
         </MenuButton>
         <MenuList className="menu__list--header">
-          <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.SETTINGS}`)}>
+          <MenuLink className="menu__link" as={Link} to={`/$/${PAGES.SETTINGS}`}>
             <Icon aria-hidden tooltip icon={ICONS.SETTINGS} />
             {__('Settings')}
-          </MenuItem>
-          <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.HELP}`)}>
+          </MenuLink>
+          <MenuLink className="menu__link" as={Link} to={`/$/${PAGES.HELP}`}>
             <Icon aria-hidden icon={ICONS.HELP} />
             {__('Help')}
-          </MenuItem>
+          </MenuLink>
           <MenuItem className="menu__link" onSelect={handleThemeToggle}>
             <Icon icon={currentTheme === 'light' ? ICONS.DARK : ICONS.LIGHT} />
             {currentTheme === 'light' ? __('Dark') : __('Light')}
