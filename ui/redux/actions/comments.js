@@ -758,67 +758,53 @@ export function doCommentAbandon(commentId: string, creatorChannelUri?: string) 
 
 export function doCommentUpdate(comment_id: string, comment: string) {
   // if they provided an empty string, they must have wanted to abandon
-  if (comment === '') {
-    return doCommentAbandon(comment_id);
-  } else {
-    return async (dispatch: Dispatch, getState: GetState) => {
-      const state = getState();
+  if (comment === '') return doCommentAbandon(comment_id);
 
-      const activeChannelClaim = selectActiveChannelClaim(state);
-      if (!activeChannelClaim) {
-        return dispatch(doToast({ isError: true, message: __('No active channel selected.') }));
-      }
+  return async (dispatch: Dispatch, getState: GetState) => {
+    const state = getState();
 
-      const signedComment = await channelSignData(activeChannelClaim.claim_id, comment);
-      if (!signedComment) {
-        return dispatch(doToast({ isError: true, message: __('Unable to verify your channel. Please try again.') }));
-      }
+    const activeChannelClaim = selectActiveChannelClaim(state);
+    if (!activeChannelClaim) {
+      return dispatch(doToast({ isError: true, message: __('No active channel selected.') }));
+    }
 
-      dispatch({
-        type: ACTIONS.COMMENT_UPDATE_STARTED,
-      });
+    const signedComment = await channelSignData(activeChannelClaim.claim_id, comment);
+    if (!signedComment) {
+      return dispatch(doToast({ isError: true, message: __('Unable to verify your channel. Please try again.') }));
+    }
 
-      return Comments.comment_edit({
-        comment_id: comment_id,
-        comment: comment,
-        signature: signedComment.signature,
-        signing_ts: signedComment.signing_ts,
-      })
-        .then((result: CommentEditResponse) => {
-          if (result != null) {
-            dispatch({
-              type: ACTIONS.COMMENT_UPDATE_COMPLETED,
-              data: {
-                comment: result,
-              },
-            });
-          } else {
-            // the result will return null
-            dispatch({
-              type: ACTIONS.COMMENT_UPDATE_FAILED,
-            });
-            dispatch(
-              doToast({
-                message: 'Your channel is still being setup, try again in a few moments.',
-                isError: true,
-              })
-            );
-          }
-        })
-        .catch((error) => {
-          dispatch({
-            type: ACTIONS.COMMENT_UPDATE_FAILED,
-            data: error,
-          });
+    dispatch({ type: ACTIONS.COMMENT_UPDATE_STARTED });
+
+    return Comments.comment_edit({
+      comment_id: comment_id,
+      comment: comment,
+      signature: signedComment.signature,
+      signing_ts: signedComment.signing_ts,
+    })
+      .then((result: CommentEditResponse) => {
+        if (result != null) {
+          dispatch({ type: ACTIONS.COMMENT_UPDATE_COMPLETED, data: { comment: result } });
+        } else {
+          // the result will return null
+          dispatch({ type: ACTIONS.COMMENT_UPDATE_FAILED });
           dispatch(
             doToast({
-              message: 'Unable to edit this comment, please try again later.',
+              message: 'Your channel is still being setup, try again in a few moments.',
               isError: true,
             })
           );
-        });
-    };
-  }
+        }
+      })
+      .catch((error) => {
+        dispatch({ type: ACTIONS.COMMENT_UPDATE_FAILED, data: error });
+        dispatch(
+          doToast({
+            message: 'Unable to edit this comment, please try again later.',
+            isError: true,
+          })
+        );
+      });
+  };
 }
 
 async function channelSignName(channelClaimId: string, channelName: string) {

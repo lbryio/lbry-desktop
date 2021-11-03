@@ -1,89 +1,81 @@
 // @flow
 import { LIVESTREAM_LIVE_API } from 'constants/livestream';
-import React from 'react';
-import Page from 'component/page';
-import LivestreamLayout from 'component/livestreamLayout';
-import LivestreamComments from 'component/livestreamComments';
 import analytics from 'analytics';
-import Lbry from 'lbry';
+import LivestreamComments from 'component/livestreamComments';
+import LivestreamLayout from 'component/livestreamLayout';
+import Page from 'component/page';
+import React from 'react';
+
+const STREAMING_POLL_INTERVAL_IN_MS = 10000;
+const LIVESTREAM_CLAIM_POLL_IN_MS = 60000;
 
 type Props = {
-  uri: string,
-  claim: StreamClaim,
-  doSetPlayingUri: ({ uri: ?string }) => void,
-  isAuthenticated: boolean,
-  doUserSetReferrer: (string) => void,
   channelClaim: ChannelClaim,
   chatDisabled: boolean,
+  claim: StreamClaim,
+  isAuthenticated: boolean,
+  uri: string,
+  clearPlayingUri: () => void,
+  doClaimSearch: (any, (ClaimSearchResponse) => void) => void,
+  setReferrer: (string) => void,
 };
 
 export default function LivestreamPage(props: Props) {
-  const { uri, claim, doSetPlayingUri, isAuthenticated, doUserSetReferrer, channelClaim, chatDisabled } = props;
+  const {
+    channelClaim,
+    chatDisabled,
+    claim,
+    isAuthenticated,
+    uri,
+    clearPlayingUri,
+    doClaimSearch,
+    setReferrer,
+  } = props;
+
   const [isLive, setIsLive] = React.useState(false);
-  const livestreamChannelId = channelClaim && channelClaim.signing_channel && channelClaim.signing_channel.claim_id;
   const [hasLivestreamClaim, setHasLivestreamClaim] = React.useState(false);
 
-  const STREAMING_POLL_INTERVAL_IN_MS = 10000;
-  const LIVESTREAM_CLAIM_POLL_IN_MS = 60000;
+  const livestreamChannelId = channelClaim && channelClaim.signing_channel && channelClaim.signing_channel.claim_id;
+  const stringifiedClaim = JSON.stringify(claim);
 
   React.useEffect(() => {
     let checkClaimsInterval;
+
     function checkHasLivestreamClaim() {
-      Lbry.claim_search({
-        channel_ids: [livestreamChannelId],
-        has_no_source: true,
-        claim_type: ['stream'],
-      })
-        .then((res) => {
-          if (res && res.items && res.items.length > 0) {
-            setHasLivestreamClaim(true);
-          }
-        })
-        .catch(() => {});
+      doClaimSearch({ channel_ids: [livestreamChannelId], has_no_source: true, claim_type: ['stream'] }, (data) =>
+        data && data.items && data.items.length > 0 ? setHasLivestreamClaim(true) : undefined
+      );
     }
+
     if (livestreamChannelId && !isLive) {
       if (!checkClaimsInterval) checkHasLivestreamClaim();
       checkClaimsInterval = setInterval(checkHasLivestreamClaim, LIVESTREAM_CLAIM_POLL_IN_MS);
 
-      return () => {
-        if (checkClaimsInterval) {
-          clearInterval(checkClaimsInterval);
-        }
-      };
+      return () => (checkClaimsInterval ? clearInterval(checkClaimsInterval) : undefined);
     }
-  }, [livestreamChannelId, isLive]);
+  }, [livestreamChannelId, isLive, doClaimSearch]);
 
   React.useEffect(() => {
     let interval;
+
     function checkIsLive() {
       // TODO: duplicate code below
       // $FlowFixMe livestream API can handle garbage
       fetch(`${LIVESTREAM_LIVE_API}/${livestreamChannelId}`)
         .then((res) => res.json())
-        .then((res) => {
-          if (!res || !res.data) {
-            setIsLive(false);
-            return;
-          }
-
-          if (res.data.hasOwnProperty('live')) {
-            setIsLive(res.data.live);
-          }
-        });
+        .then((res) =>
+          !res || !res.data ? setIsLive(false) : res.data.hasOwnProperty('live') && setIsLive(res.data.live)
+        );
     }
+
     if (livestreamChannelId && hasLivestreamClaim) {
       if (!interval) checkIsLive();
       interval = setInterval(checkIsLive, STREAMING_POLL_INTERVAL_IN_MS);
 
-      return () => {
-        if (interval) {
-          clearInterval(interval);
-        }
-      };
+      return () => (interval ? clearInterval(interval) : undefined);
     }
   }, [livestreamChannelId, hasLivestreamClaim]);
 
-  const stringifiedClaim = JSON.stringify(claim);
   React.useEffect(() => {
     if (uri && stringifiedClaim) {
       const jsonClaim = JSON.parse(stringifiedClaim);
@@ -97,18 +89,16 @@ export default function LivestreamPage(props: Props) {
 
       if (!isAuthenticated) {
         const uri = jsonClaim.signing_channel && jsonClaim.signing_channel.permanent_url;
-        if (uri) {
-          doUserSetReferrer(uri.replace('lbry://', ''));
-        }
+        if (uri) setReferrer(uri.replace('lbry://', ''));
       }
     }
-  }, [uri, stringifiedClaim, isAuthenticated]);
+  }, [uri, stringifiedClaim, isAuthenticated, setReferrer]);
 
   React.useEffect(() => {
     // Set playing uri to null so the popout player doesnt start playing the dummy claim if a user navigates back
     // This can be removed when we start using the app video player, not a LIVESTREAM iframe
-    doSetPlayingUri({ uri: null });
-  }, [doSetPlayingUri]);
+    clearPlayingUri();
+  }, [clearPlayingUri]);
 
   return (
     <Page

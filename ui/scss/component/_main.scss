@@ -223,7 +223,7 @@
     }
 
     @media (min-width: $breakpoint-medium) and (max-width: $breakpoint-large + 300px) {
-      max-width: calc(100vw - var(--livestream-comments-width) - var(--spacing-m) * 3);
+      max-width: calc(100vw - var(--livestreamComments-width) - var(--spacing-m) * 3);
       margin-left: var(--spacing-m);
       margin-right: var(--spacing-m);
     }
@@ -234,7 +234,7 @@
   }
 
   .main__right-side {
-    width: var(--livestream-comments-width);
+    width: var(--livestreamComments-width);
 
     @media (max-width: $breakpoint-medium) {
       width: 100%;

@@ -45,7 +45,9 @@ type Props = {
   channels: ?Array<ChannelClaim>,
   claim: StreamClaim,
   claimIsMine: boolean,
+  editedMessage?: string,
   embed?: boolean,
+  isEdit?: boolean,
   isFetchingChannels: boolean,
   isNested: boolean,
   isReply: boolean,
@@ -60,6 +62,7 @@ type Props = {
   doToast: ({ message: string }) => void,
   fetchComment: (commentId: string) => Promise<any>,
   onCancelReplying?: () => void,
+  onDoneEditing?: (editedMessage?: string) => void,
   onDoneReplying?: () => void,
   sendCashTip: (TipParams, UserParams, string, ?string, (any) => void) => string,
   sendTip: ({}, (any) => void, (any) => void) => void,
@@ -74,7 +77,9 @@ export function CommentCreate(props: Props) {
     channels,
     claim,
     claimIsMine,
+    editedMessage,
     embed,
+    isEdit,
     isFetchingChannels,
     isNested,
     isReply,
@@ -91,6 +96,7 @@ export function CommentCreate(props: Props) {
     onCancelReplying,
     onDoneReplying,
     sendCashTip,
+    onDoneEditing,
     sendTip,
     setQuickReply,
   } = props;
@@ -114,7 +120,7 @@ export function CommentCreate(props: Props) {
   const [selectedSticker, setSelectedSticker] = React.useState();
   const [tipAmount, setTipAmount] = React.useState(1);
   const [convertedAmount, setConvertedAmount] = React.useState();
-  const [commentValue, setCommentValue] = React.useState('');
+  const [commentValue, setCommentValue] = React.useState(editedMessage || '');
   const [advancedEditor, setAdvancedEditor] = usePersistedState('comment-editor-mode', false);
   const [stickerSelector, setStickerSelector] = React.useState();
   const [activeTab, setActiveTab] = React.useState('');
@@ -474,16 +480,18 @@ export function CommentCreate(props: Props) {
           <FormField
             disabled={isFetchingChannels}
             type={SIMPLE_SITE ? 'textarea' : advancedEditor && !isReply ? 'markdown' : 'textarea'}
-            name={isReply ? 'content_reply' : 'content_description'}
+            name={(isReply && 'content_reply') || (isEdit && 'editing_comment') || 'content_description'}
             ref={formFieldRef}
-            className={isReply ? 'content_reply' : 'content_comment'}
+            className={(isReply && 'content_reply') || (isEdit && 'commentEdit__input') || 'content_comment'}
             label={
-              <span className="commentCreate__labelWrapper">
-                {!livestream && (
-                  <div className="commentCreate__label">{isReply ? __('Replying as ') : __('Comment as ')}</div>
-                )}
-                <SelectChannel tiny />
-              </span>
+              !isEdit && (
+                <span className="commentCreate__labelWrapper">
+                  {!livestream && (
+                    <div className="commentCreate__label">{isReply ? __('Replying as ') : __('Comment as ')}</div>
+                  )}
+                  <SelectChannel tiny />
+                </span>
+              )
             }
             quickActionLabel={
               !SIMPLE_SITE && (isReply ? undefined : advancedEditor ? __('Simple Editor') : __('Advanced Editor'))
@@ -577,16 +585,17 @@ export function CommentCreate(props: Props) {
               disabled={disabled || stickerSelector}
               type="submit"
               label={
-                isReply
-                  ? isSubmitting
-                    ? __('Replying...')
-                    : __('Reply')
-                  : isSubmitting
-                  ? __('Commenting...')
-                  : __('Comment --[button to submit something]--')
+                (isEdit && __('Done')) ||
+                (isSubmitting
+                  ? (isReply && __('Replying...')) || __('Commenting...')
+                  : (isReply && __('Reply')) || __('Comment --[button to submit something]--'))
               }
               requiresAuth
-              onClick={() => activeChannelClaim && commentValue.length && handleCreateComment()}
+              onClick={() =>
+                activeChannelClaim &&
+                commentValue.length &&
+                (isEdit && editedMessage && onDoneEditing ? onDoneEditing() : handleCreateComment())
+              }
             />
           )
         )}
@@ -629,7 +638,8 @@ export function CommentCreate(props: Props) {
           isReviewingSupportComment ||
           stickerSelector ||
           isReviewingStickerComment ||
-          (isReply && !minTip)) && (
+          (isReply && !minTip) ||
+          isEdit) && (
           <Button
             disabled={isSupportComment && isSubmitting}
             button="link"
@@ -648,6 +658,8 @@ export function CommentCreate(props: Props) {
                 setStickerSelector(false);
               } else if (isReply && !minTip && onCancelReplying) {
                 onCancelReplying();
+              } else if (isEdit && onDoneEditing) {
+                onDoneEditing();
               }
             }}
           />

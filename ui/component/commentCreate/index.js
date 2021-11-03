@@ -21,7 +21,7 @@ const select = (state, props) => ({
   claimIsMine: makeSelectClaimIsMine(props.uri)(state),
   isFetchingChannels: selectFetchingMyChannels(state),
   settingsByChannelId: selectSettingsByChannelId(state),
-  supportDisabled: makeSelectTagInClaimOrChannelForUri(props.uri, DISABLE_SUPPORT_TAG)(state),
+  supportDisabled: props.supportDisabled || makeSelectTagInClaimOrChannelForUri(props.uri, DISABLE_SUPPORT_TAG)(state),
 });
 
 const perform = (dispatch, ownProps) => ({

@@ -24,6 +24,21 @@ import { doFetchItemsInCollections } from 'redux/actions/collections';
 let onChannelConfirmCallback;
 let checkPendingInterval;
 
+type ClaimSearchParams = {
+  page_size?: number,
+  page: number,
+  no_totals?: boolean,
+  any_tags?: Array<string>,
+  claim_ids?: Array<string>,
+  channel_ids?: Array<string>,
+  not_channel_ids?: Array<string>,
+  not_tags?: Array<string>,
+  order_by?: Array<string>,
+  release_time?: string,
+  has_source?: boolean,
+  has_no_souce?: boolean,
+};
+
 export function doResolveUris(
   uris: Array<string>,
   returnCachedClaims: boolean = false,
@@ -604,24 +619,8 @@ export function doFetchCollectionListMine(page: number = 1, pageSize: number = 9
 }
 
 export function doClaimSearch(
-  options: {
-    page_size?: number,
-    page: number,
-    no_totals?: boolean,
-    any_tags?: Array<string>,
-    claim_ids?: Array<string>,
-    channel_ids?: Array<string>,
-    not_channel_ids?: Array<string>,
-    not_tags?: Array<string>,
-    order_by?: Array<string>,
-    release_time?: string,
-    has_source?: boolean,
-    has_no_souce?: boolean,
-  } = {
-    no_totals: true,
-    page_size: 10,
-    page: 1,
-  }
+  options: ClaimSearchParams = { page_size: 10, page: 1, no_totals: true },
+  successCb?: (ClaimSearchResponse) => void
 ) {
   const query = createNormalizedClaimSearchKey(options);
   return async (dispatch: Dispatch) => {
@@ -648,6 +647,9 @@ export function doClaimSearch(
           pageSize: options.page_size,
         },
       });
+
+      if (successCb) successCb(data);
+
       return resolveInfo;
     };
 

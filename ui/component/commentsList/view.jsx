@@ -1,7 +1,9 @@
 // @flow
+import 'scss/component/_comments-list.scss';
 import { COMMENT_PAGE_SIZE_TOP_LEVEL, SORT_BY } from 'constants/comment';
 import { ENABLE_COMMENT_REACTIONS } from 'config';
 import { getChannelIdFromClaim } from 'util/claim';
+import { scaleToDevicePixelRatio } from 'util/scale';
 import { useIsMobile, useIsMediumScreen } from 'effects/use-screensize';
 import * as ICONS from 'constants/icons';
 import * as REACTION_TYPES from 'constants/reactions';
@@ -18,67 +20,57 @@ import usePersistedState from 'effects/use-persisted-state';
 
 const DEBOUNCE_SCROLL_HANDLER_MS = 200;
 
-function scaleToDevicePixelRatio(value) {
-  const devicePixelRatio = window.devicePixelRatio || 1.0;
-  if (devicePixelRatio < 1.0) {
-    return Math.ceil(value / devicePixelRatio);
-  }
-  return Math.ceil(value * devicePixelRatio);
-}
-
 type Props = {
+  activeChannelId: ?string,
   allCommentIds: any,
-  pinnedComments: Array<Comment>,
-  topLevelComments: Array<Comment>,
-  resolvedComments: Array<Comment>,
-  topLevelTotalPages: number,
-  uri: string,
   claim: ?Claim,
   claimIsMine: boolean,
-  myChannels: ?Array<ChannelClaim>,
+  commentsAreExpanded?: boolean,
+  fetchingChannels: boolean,
   isFetchingComments: boolean,
   isFetchingCommentsById: boolean,
   isFetchingReacts: boolean,
   linkedCommentId?: string,
-  totalComments: number,
-  fetchingChannels: boolean,
   myReactsByCommentId: ?{ [string]: Array<string> }, // "CommentId:MyChannelId" -> reaction array (note the ID concatenation)
   othersReactsById: ?{ [string]: { [REACTION_TYPES.LIKE | REACTION_TYPES.DISLIKE]: number } },
-  activeChannelId: ?string,
+  pinnedComments: Array<Comment>,
+  resolvedComments: Array<Comment>,
   settingsByChannelId: { [channelId: string]: PerChannelSettings },
-  commentsAreExpanded?: boolean,
-  fetchReacts: (Array<string>) => Promise<any>,
+  topLevelComments: Array<Comment>,
+  topLevelTotalPages: number,
+  totalComments: number,
+  uri: string,
   doResolveUris: (Array<string>) => void,
-  fetchTopLevelComments: (string, number, number, number) => void,
   fetchComment: (string) => void,
-  resetComments: (string) => void,
+  fetchReacts: (Array<string>) => Promise<any>,
+  fetchTopLevelComments: (number, number, string) => void,
+  resetComments: () => void,
 };
 
-function CommentList(props: Props) {
+function CommentsList(props: Props) {
   const {
+    activeChannelId,
     allCommentIds,
-    uri,
-    pinnedComments,
-    topLevelComments,
-    resolvedComments,
-    topLevelTotalPages,
     claim,
     claimIsMine,
-    myChannels,
+    commentsAreExpanded,
+    doResolveUris,
+    fetchingChannels,
+    fetchReacts,
     isFetchingComments,
     isFetchingReacts,
     linkedCommentId,
-    totalComments,
-    fetchingChannels,
     myReactsByCommentId,
     othersReactsById,
-    activeChannelId,
+    pinnedComments,
+    resolvedComments,
     settingsByChannelId,
-    commentsAreExpanded,
-    fetchReacts,
-    doResolveUris,
-    fetchTopLevelComments,
+    topLevelComments,
+    topLevelTotalPages,
+    totalComments,
+    uri,
     fetchComment,
+    fetchTopLevelComments,
     resetComments,
   } = props;
 
@@ -92,6 +84,7 @@ function CommentList(props: Props) {
   const [commentsToDisplay, setCommentsToDisplay] = React.useState(topLevelComments);
   const hasDefaultExpansion = commentsAreExpanded || desktopView;
   const [expandedComments, setExpandedComments] = React.useState(hasDefaultExpansion);
+
   const totalFetchedComments = allCommentIds ? allCommentIds.length : 0;
   const channelId = getChannelIdFromClaim(claim);
   const channelSettings = channelId ? settingsByChannelId[channelId] : undefined;
@@ -106,7 +99,7 @@ function CommentList(props: Props) {
     Boolean(othersReactsById) || !ENABLE_COMMENT_REACTIONS
   );
 
-  function changeSort(newSort) {
+  function changeSort(newSort: string) {
     if (sort !== newSort) {
       setSort(newSort);
       setPage(0); // Invalidate existing comments
@@ -116,9 +109,7 @@ function CommentList(props: Props) {
   // Reset comments
   useEffect(() => {
     if (page === 0) {
-      if (claim) {
-        resetComments(claim.claim_id);
-      }
+      if (claim) resetComments();
       setPage(1);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -131,7 +122,7 @@ function CommentList(props: Props) {
         fetchComment(linkedCommentId);
       }
 
-      fetchTopLevelComments(uri, page, COMMENT_PAGE_SIZE_TOP_LEVEL, sort);
+      fetchTopLevelComments(page, COMMENT_PAGE_SIZE_TOP_LEVEL, sort);
     }
   }, [fetchComment, fetchTopLevelComments, linkedCommentId, page, sort, uri]);
 
@@ -237,39 +228,25 @@ function CommentList(props: Props) {
     if (!topLevelComments || alreadyResolved) return;
 
     const urisToResolve = [];
-    topLevelComments.map(({ channel_url }) => channel_url !== undefined && urisToResolve.push(channel_url));
+    topLevelComments.forEach(({ channel_url }) => channel_url !== undefined && urisToResolve.push(channel_url));
 
     if (urisToResolve.length > 0) doResolveUris(urisToResolve);
   }, [alreadyResolved, doResolveUris, topLevelComments]);
 
-  const getCommentElems = (comments) =>
-    comments.map((comment) => (
+  const getCommentElems = (comments: Array<Comment>) =>
+    comments.map((comment: Comment) => (
       <CommentView
-        isTopLevel
-        threadDepth={3}
-        key={comment.comment_id}
-        uri={uri}
-        authorUri={comment.channel_url}
-        author={comment.channel_name}
-        claimId={comment.claim_id}
-        commentId={comment.comment_id}
-        message={comment.comment}
-        timePosted={comment.timestamp * 1000}
         claimIsMine={claimIsMine}
-        commentIsMine={
-          comment.channel_id && myChannels && myChannels.some(({ claim_id }) => claim_id === comment.channel_id)
-        }
+        comment={comment}
+        isTopLevel
+        key={comment.comment_id}
         linkedCommentId={linkedCommentId}
-        isPinned={comment.is_pinned}
-        supportAmount={comment.support_amount}
-        numDirectReplies={comment.replies}
-        isModerator={comment.is_moderator}
-        isGlobalMod={comment.is_global_mod}
-        isFiat={comment.is_fiat}
+        threadDepth={3}
+        uri={uri}
       />
     ));
 
-  const sortButton = (label, icon, sortOption) => (
+  const sortButton = (label: string, icon: string, sortOption: string) => (
     <Button
       button="alt"
       label={label}
@@ -311,8 +288,7 @@ function CommentList(props: Props) {
           )}
 
           <ul
-            className={classnames({
-              comments: desktopView || expandedComments,
+            className={classnames('comments', {
               'comments--contracted': !desktopView && !expandedComments,
             })}
           >
@@ -352,4 +328,4 @@ function CommentList(props: Props) {
   );
 }
 
-export default CommentList;
+export default CommentsList;

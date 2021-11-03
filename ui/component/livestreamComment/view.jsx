@@ -1,102 +1,87 @@
 // @flow
-import * as ICONS from 'constants/icons';
-import React from 'react';
-import { parseURI } from 'util/lbryURI';
-import MarkdownPreview from 'component/common/markdown-preview';
-import Tooltip from 'component/common/tooltip';
-import ChannelThumbnail from 'component/channelThumbnail';
+import 'scss/component/_livestream-comment.scss';
 import { Menu, MenuButton } from '@reach/menu-button';
-import Icon from 'component/common/icon';
+import { parseSticker } from 'util/comments';
+import { parseURI } from 'util/lbryURI';
+import * as ICONS from 'constants/icons';
+import Button from 'component/button';
+import ChannelThumbnail from 'component/channelThumbnail';
 import classnames from 'classnames';
 import CommentMenuList from 'component/commentMenuList';
-import Button from 'component/button';
 import CreditAmount from 'component/common/credit-amount';
+import Icon from 'component/common/icon';
+import MarkdownPreview from 'component/common/markdown-preview';
 import OptimizedImage from 'component/optimizedImage';
-import { parseSticker } from 'util/comments';
+import React from 'react';
+import Tooltip from 'component/common/tooltip';
 
 type Props = {
-  uri: string,
   claim: StreamClaim,
-  authorUri: string,
-  commentId: string,
-  message: string,
-  commentIsMine: boolean,
+  comment: Comment,
+  myChannels: ?Array<ChannelClaim>,
   stakedLevel: number,
-  supportAmount: number,
-  isModerator: boolean,
-  isGlobalMod: boolean,
-  isFiat: boolean,
-  isPinned: boolean,
+  uri: string,
 };
 
 function LivestreamComment(props: Props) {
-  const {
-    claim,
-    uri,
-    authorUri,
-    message,
-    commentIsMine,
-    commentId,
-    stakedLevel,
-    supportAmount,
-    isModerator,
-    isGlobalMod,
-    isFiat,
-    isPinned,
-  } = props;
+  const { claim, comment, myChannels, stakedLevel, uri } = props;
 
-  const commentByOwnerOfContent = claim && claim.signing_channel && claim.signing_channel.permanent_url === authorUri;
-  const { claimName } = parseURI(authorUri);
+  const {
+    channel_url: authorUri,
+    channel_id: authorId,
+    comment_id: commentId,
+    comment: message,
+    is_fiat: isFiat,
+    is_global_mod: isGlobalMod,
+    is_moderator: isModerator,
+    is_pinned: isPinned,
+    support_amount: supportAmount,
+  } = comment;
+  const commentIsMine = authorId && myChannels && myChannels.some(({ claim_id }) => claim_id === authorId);
+
+  const commentByContentOwner = claim && claim.signing_channel && claim.signing_channel.permanent_url === authorUri;
   const stickerFromMessage = parseSticker(message);
+  let claimName;
+  try {
+    authorUri && ({ claimName } = parseURI(authorUri));
+  } catch (e) {}
+
+  const commentBadge = (label: string, icon: string, className?: string) => (
+    <Tooltip label={label}>
+      <span className={classnames('comment__badge', { className })}>
+        <Icon icon={icon} size={16} />
+      </span>
+    </Tooltip>
+  );
 
   return (
     <li
-      className={classnames('livestream-comment', {
-        'livestream-comment--superchat': supportAmount > 0,
-        'livestream-comment--sticker': Boolean(stickerFromMessage),
+      className={classnames('livestreamComment', {
+        'livestreamComment--superchat': supportAmount > 0,
+        'livestreamComment--sticker': Boolean(stickerFromMessage),
       })}
     >
       {supportAmount > 0 && (
-        <div className="super-chat livestream-superchat__banner">
-          <div className="livestream-superchat__banner-corner" />
-          <CreditAmount isFiat={isFiat} amount={supportAmount} superChat className="livestream-superchat__amount" />
+        <div className="superChat livestreamComment__superchatBanner">
+          <div className="livestreamComment__superchatBanner-corner" />
+          <CreditAmount isFiat={isFiat} amount={supportAmount} superChat className="livestreamSuperchat__amount" />
         </div>
       )}
 
-      <div className="livestream-comment__body">
+      <div className="livestreamComment__body">
         {(supportAmount > 0 || Boolean(stickerFromMessage)) && <ChannelThumbnail uri={authorUri} xsmall />}
         <div
-          className={classnames('livestream-comment__info', {
-            'livestream-comment__info--sticker': Boolean(stickerFromMessage),
+          className={classnames('livestreamComment__info', {
+            'livestreamComment__info--sticker': Boolean(stickerFromMessage),
           })}
         >
-          {isGlobalMod && (
-            <Tooltip label={__('Admin')}>
-              <span className="comment__badge comment__badge--global-mod">
-                <Icon icon={ICONS.BADGE_MOD} size={16} />
-              </span>
-            </Tooltip>
-          )}
-
-          {isModerator && (
-            <Tooltip label={__('Moderator')}>
-              <span className="comment__badge comment__badge--mod">
-                <Icon icon={ICONS.BADGE_MOD} size={16} />
-              </span>
-            </Tooltip>
-          )}
-
-          {commentByOwnerOfContent && (
-            <Tooltip label={__('Streamer')}>
-              <span className="comment__badge">
-                <Icon icon={ICONS.BADGE_STREAMER} size={16} />
-              </span>
-            </Tooltip>
-          )}
+          {isGlobalMod && commentBadge(__('Admin'), ICONS.BADGE_MOD, 'comment__badge--globalMod')}
+          {isModerator && commentBadge(__('Moderator'), ICONS.BADGE_MOD, 'comment__badge--mod')}
+          {commentByContentOwner && commentBadge(__('Streamer'), ICONS.BADGE_STREAMER)}
 
           <Button
             className={classnames('button--uri-indicator comment__author', {
-              'comment__author--creator': commentByOwnerOfContent,
+              'comment__author--creator': commentByContentOwner,
             })}
             target="_blank"
             navigate={authorUri}
@@ -112,18 +97,18 @@ function LivestreamComment(props: Props) {
           )}
 
           {stickerFromMessage ? (
-            <div className="sticker__comment">
+            <div className="comment__message--sticker">
               <OptimizedImage src={stickerFromMessage.url} waitLoad />
             </div>
           ) : (
-            <div className="livestream-comment__text">
+            <div className="livestreamComment__text">
               <MarkdownPreview content={message} promptLinks stakedLevel={stakedLevel} disableTimestamps />
             </div>
           )}
         </div>
       </div>
 
-      <div className="livestream-comment__menu">
+      <div className="livestreamComment__menu">
         <Menu>
           <MenuButton className="menu__button">
             <Icon size={18} icon={ICONS.MORE_VERTICAL} />

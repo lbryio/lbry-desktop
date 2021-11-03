@@ -1,25 +1,20 @@
 // @flow
-import React from 'react';
+import 'scss/component/_comments-list.scss';
+import 'scss/component/_comments-own.scss';
+import { COMMENT_PAGE_SIZE_TOP_LEVEL } from 'constants/comment';
+import { scaleToDevicePixelRatio } from 'util/scale';
+import * as ICONS from 'constants/icons';
 import Button from 'component/button';
+import Card from 'component/common/card';
 import ChannelSelector from 'component/channelSelector';
 import ClaimPreview from 'component/claimPreview';
 import Comment from 'component/comment';
-import Card from 'component/common/card';
+import debounce from 'util/debounce';
 import Empty from 'component/common/empty';
 import Page from 'component/page';
+import React from 'react';
 import Spinner from 'component/spinner';
-import { COMMENT_PAGE_SIZE_TOP_LEVEL } from 'constants/comment';
-import * as ICONS from 'constants/icons';
 import useFetched from 'effects/use-fetched';
-import debounce from 'util/debounce';
-
-function scaleToDevicePixelRatio(value) {
-  const devicePixelRatio = window.devicePixelRatio || 1.0;
-  if (devicePixelRatio < 1.0) {
-    return Math.ceil(value / devicePixelRatio);
-  }
-  return Math.ceil(value * devicePixelRatio);
-}
 
 type Props = {
   activeChannelClaim: ?ChannelClaim,
@@ -42,6 +37,7 @@ export default function OwnComments(props: Props) {
     doCommentReset,
     doCommentListOwn,
   } = props;
+
   const spinnerRef = React.useRef();
   const [page, setPage] = React.useState(0);
   const [activeChannelId, setActiveChannelId] = React.useState('');
@@ -52,51 +48,6 @@ export default function OwnComments(props: Props) {
 
   const totalPages = Math.ceil(totalComments / COMMENT_PAGE_SIZE_TOP_LEVEL);
   const moreBelow = page < totalPages;
-
-  function getCommentsElem(comments) {
-    return comments.map((comment) => {
-      const contentClaim = claimsById[comment.claim_id];
-      const isChannel = contentClaim && contentClaim.value_type === 'channel';
-      const isLivestream = Boolean(contentClaim && contentClaim.value_type === 'stream' && !contentClaim.value.source);
-
-      return (
-        <div key={comment.comment_id} className="comments-own card__main-actions">
-          <div className="section__actions">
-            <div className="comments-own--claim">
-              {contentClaim && (
-                <ClaimPreview
-                  uri={contentClaim.canonical_url}
-                  searchParams={{
-                    ...(isChannel ? { view: 'discussion' } : {}),
-                    ...(isLivestream ? {} : { lc: comment.comment_id }),
-                  }}
-                  hideActions
-                  hideMenu
-                  properties={() => null}
-                />
-              )}
-              {!contentClaim && <Empty text={__('Content or channel was deleted.')} />}
-            </div>
-            <Comment
-              isTopLevel
-              hideActions
-              authorUri={comment.channel_url}
-              author={comment.channel_name}
-              commentId={comment.comment_id}
-              message={comment.comment}
-              timePosted={comment.timestamp * 1000}
-              commentIsMine
-              supportAmount={comment.support_amount}
-              numDirectReplies={0} // Don't show replies here
-              isModerator={comment.is_moderator}
-              isGlobalMod={comment.is_global_mod}
-              isFiat={comment.is_fiat}
-            />
-          </div>
-        </div>
-      );
-    });
-  }
 
   // Active channel changed
   React.useEffect(() => {
@@ -166,34 +117,49 @@ export default function OwnComments(props: Props) {
   // **************************************************************************
   // **************************************************************************
 
-  if (!activeChannelClaim) {
-    return null;
-  }
+  const getCommentsElem = (comments: Array<Comment>) =>
+    comments.map((comment: Comment) => {
+      const contentClaim = claimsById[comment.claim_id];
+      const isChannel = contentClaim && contentClaim.value_type === 'channel';
+      const isLivestream = Boolean(contentClaim && contentClaim.value_type === 'stream' && !contentClaim.value.source);
 
-  return (
+      return (
+        <div key={comment.comment_id} className="comments--own card__main-actions">
+          <div className="section__actions">
+            <div className="comments--own__claim">
+              {contentClaim && (
+                <ClaimPreview
+                  uri={contentClaim.canonical_url}
+                  searchParams={{
+                    ...(isChannel ? { view: 'discussion' } : {}),
+                    ...(isLivestream ? {} : { lc: comment.comment_id }),
+                  }}
+                  hideActions
+                  hideMenu
+                  properties={() => null}
+                />
+              )}
+              {!contentClaim && <Empty text={__('Content or channel was deleted.')} />}
+            </div>
+            {/* Don't show replies here */}
+            <Comment numDirectReplies={0} comment={comment} isTopLevel hideActions commentIsMine />
+          </div>
+        </div>
+      );
+    });
+
+  return !activeChannelClaim ? null : (
     <Page noFooter noSideNavigation settingsPage backout={{ title: __('Your comments'), backLabel: __('Back') }}>
       <ChannelSelector hideAnon />
       <Card
         isBodyList
         title={
-          totalComments > 0
-            ? totalComments === 1
-              ? __('1 comment')
-              : __('%total_comments% comments', { total_comments: totalComments })
-            : isFetchingComments
-            ? ''
-            : __('No comments')
+          (isFetchingComments && '') ||
+          (totalComments > 0 && __('No comments')) ||
+          (totalComments === 1 && __('1 comment')) ||
+          (totalComments > 1 && __('%total_comments% comments', { total_comments: totalComments }))
         }
-        titleActions={
-          <Button
-            button="alt"
-            icon={ICONS.REFRESH}
-            title={__('Refresh')}
-            onClick={() => {
-              setPage(0);
-            }}
-          />
-        }
+        titleActions={<Button button="alt" icon={ICONS.REFRESH} title={__('Refresh')} onClick={() => setPage(0)} />}
         body={
           <>
             {wasResetAndReady && <ul className="comments">{allComments && getCommentsElem(allComments)}</ul>}

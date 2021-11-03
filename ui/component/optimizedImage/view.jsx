@@ -1,11 +1,7 @@
 // @flow
-import React from 'react';
 import { getThumbnailCdnUrl } from 'util/thumbnail';
-
-function scaleToDevicePixelRatio(value: number, window: any) {
-  const devicePixelRatio = window.devicePixelRatio || 1.0;
-  return Math.ceil(value * devicePixelRatio);
-}
+import { scaleToDevicePixelRatio } from 'util/scale';
+import React from 'react';
 
 type Props = {
   src: string,
@@ -40,8 +36,8 @@ function OptimizedImage(props: Props) {
     let width = elem.parentElement.clientWidth;
     let height = elem.parentElement.clientHeight;
 
-    width = scaleToDevicePixelRatio(width, window);
-    height = scaleToDevicePixelRatio(height, window);
+    width = scaleToDevicePixelRatio(width);
+    height = scaleToDevicePixelRatio(height);
 
     // Round to next 100px for better caching
     width = Math.ceil(width / 100) * 100;

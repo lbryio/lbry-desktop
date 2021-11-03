@@ -1,4 +1,4 @@
-.super-chat {
+.superChat {
   border-radius: var(--border-radius);
   background: linear-gradient(to right, var(--color-superchat), var(--color-superchat-3));
   padding: 0.2rem var(--spacing-xs);
@@ -10,8 +10,8 @@
   }
 }
 
-.super-chat--light {
-  @extend .super-chat;
+.superChat--light {
+  @extend .superChat;
   background: linear-gradient(to right, var(--color-superchat__light), var(--color-superchat-3__light));
 
   .credit-amount {

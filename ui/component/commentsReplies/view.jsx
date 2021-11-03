@@ -1,4 +1,5 @@
 // @flow
+import 'scss/component/_comments.scss';
 import * as ICONS from 'constants/icons';
 import Button from 'component/button';
 import Comment from 'component/comment';
@@ -6,44 +7,43 @@ import React from 'react';
 import Spinner from 'component/spinner';
 
 type Props = {
-  fetchedReplies: Array<Comment>,
-  resolvedReplies: Array<Comment>,
-  uri: string,
-  parentId: string,
   claimIsMine: boolean,
-  myChannels: ?Array<ChannelClaim>,
-  linkedCommentId?: string,
-  userCanComment: boolean,
-  threadDepth: number,
-  numDirectReplies: number, // Total replies for parentId as reported by 'comment[replies]'. Includes blocked items.
-  isFetchingByParentId: { [string]: boolean },
+  fetchedReplies: Array<Comment>,
   hasMore: boolean,
+  isFetchingByParentId: { [string]: boolean },
+  linkedCommentId?: string,
+  numDirectReplies: number, // Total replies for parentId as reported by 'comment[replies]'. Includes blocked items.
+  parentId: string,
+  resolvedReplies: Array<Comment>,
   supportDisabled: boolean,
+  threadDepth: number,
+  uri: string,
+  userCanComment: boolean,
   doResolveUris: (Array<string>) => void,
   onShowMore?: () => void,
 };
 
 function CommentsReplies(props: Props) {
   const {
-    uri,
-    parentId,
-    fetchedReplies,
-    resolvedReplies,
     claimIsMine,
-    myChannels,
-    linkedCommentId,
-    userCanComment,
-    threadDepth,
-    numDirectReplies,
-    isFetchingByParentId,
+    fetchedReplies,
     hasMore,
+    isFetchingByParentId,
+    linkedCommentId,
+    numDirectReplies,
+    parentId,
+    resolvedReplies,
     supportDisabled,
+    threadDepth,
+    uri,
+    userCanComment,
     doResolveUris,
     onShowMore,
   } = props;
 
   const [isExpanded, setExpanded] = React.useState(true);
   const [commentsToDisplay, setCommentsToDisplay] = React.useState(fetchedReplies);
+
   const isResolvingReplies = fetchedReplies && resolvedReplies.length !== fetchedReplies.length;
   const alreadyResolved = !isResolvingReplies && resolvedReplies.length !== 0;
   const canDisplayComments = commentsToDisplay && commentsToDisplay.length === fetchedReplies.length;
@@ -53,7 +53,7 @@ function CommentsReplies(props: Props) {
     if (!fetchedReplies || alreadyResolved) return;
 
     const urisToResolve = [];
-    fetchedReplies.map(({ channel_url }) => channel_url !== undefined && urisToResolve.push(channel_url));
+    fetchedReplies.forEach(({ channel_url }) => channel_url !== undefined && urisToResolve.push(channel_url));
 
     if (urisToResolve.length > 0) doResolveUris(urisToResolve);
   }, [alreadyResolved, doResolveUris, fetchedReplies]);
@@ -65,7 +65,7 @@ function CommentsReplies(props: Props) {
   }, [isResolvingReplies, fetchedReplies]);
 
   return !numDirectReplies ? null : (
-    <div className="comment__replies-container">
+    <div className="commentReplies__container">
       {!isExpanded ? (
         <div className="comment__actions--nested">
           <Button
@@ -83,35 +83,22 @@ function CommentsReplies(props: Props) {
             {!isResolvingReplies &&
               commentsToDisplay &&
               commentsToDisplay.length > 0 &&
-              commentsToDisplay.map((comment) => (
+              commentsToDisplay.map((comment: Comment) => (
                 <Comment
+                  claimIsMine={claimIsMine}
+                  comment={comment}
+                  commentingEnabled={userCanComment}
+                  key={comment.comment_id}
+                  linkedCommentId={linkedCommentId}
+                  supportDisabled={supportDisabled}
                   threadDepth={threadDepth}
                   uri={uri}
-                  authorUri={comment.channel_url}
-                  author={comment.channel_name}
-                  claimId={comment.claim_id}
-                  commentId={comment.comment_id}
-                  key={comment.comment_id}
-                  message={comment.comment}
-                  timePosted={comment.timestamp * 1000}
-                  claimIsMine={claimIsMine}
-                  commentIsMine={
-                    comment.channel_id &&
-                    myChannels &&
-                    myChannels.some(({ claim_id }) => claim_id === comment.channel_id)
-                  }
-                  linkedCommentId={linkedCommentId}
-                  commentingEnabled={userCanComment}
-                  supportAmount={comment.support_amount}
-                  numDirectReplies={comment.replies}
-                  isModerator={comment.is_moderator}
-                  isGlobalMod={comment.is_global_mod}
-                  supportDisabled={supportDisabled}
                 />
               ))}
           </ul>
         </div>
       )}
+
       {isExpanded && fetchedReplies && hasMore && (
         <div className="comment__actions--nested">
           <Button
@@ -122,11 +109,10 @@ function CommentsReplies(props: Props) {
           />
         </div>
       )}
+
       {(isFetchingByParentId[parentId] || isResolvingReplies || !canDisplayComments) && (
-        <div className="comment__replies-container">
-          <div className="comment__actions--nested">
-            <Spinner type="small" />
-          </div>
+        <div className="comment__actions--nested">
+          <Spinner type="small" />
         </div>
       )}
     </div>

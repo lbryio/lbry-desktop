@@ -1,16 +1,9 @@
 // @flow
-import React from 'react';
+import { scaleToDevicePixelRatio } from 'util/scale';
 import debounce from 'util/debounce';
+import React from 'react';
 
 const DEBOUNCE_SCROLL_HANDLER_MS = 50;
-
-function scaleToDevicePixelRatio(value) {
-  const devicePixelRatio = window.devicePixelRatio || 1.0;
-  if (devicePixelRatio < 1.0) {
-    return Math.ceil(value / devicePixelRatio);
-  }
-  return Math.ceil(value * devicePixelRatio);
-}
 
 type Props = {
   children: any,

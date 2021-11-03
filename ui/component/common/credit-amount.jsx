@@ -92,8 +92,8 @@ class CreditAmount extends React.PureComponent<Props> {
       <span
         title={fullPrice}
         className={classnames(className, {
-          'super-chat': superChat,
-          'super-chat--light': superChatLight,
+          superChat: superChat,
+          'superChat--light': superChatLight,
         })}
       >
         <span className="credit-amount">{amountText}</span>

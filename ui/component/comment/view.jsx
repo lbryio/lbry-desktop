@@ -1,120 +1,100 @@
 // @flow
-import * as ICONS from 'constants/icons';
-import * as PAGES from 'constants/pages';
-import * as KEYCODES from 'constants/keycodes';
-import { COMMENT_HIGHLIGHTED } from 'constants/classnames';
-import { SORT_BY, COMMENT_PAGE_SIZE_REPLIES } from 'constants/comment';
-import { FF_MAX_CHARS_IN_COMMENT } from 'constants/form-field';
-import { SITE_NAME, SIMPLE_SITE, ENABLE_COMMENT_REACTIONS } from 'config';
-import React, { useEffect, useState } from 'react';
-import { parseURI } from 'util/lbryURI';
-import DateTime from 'component/dateTime';
-import Button from 'component/button';
-import Expandable from 'component/expandable';
-import MarkdownPreview from 'component/common/markdown-preview';
-import Tooltip from 'component/common/tooltip';
-import ChannelThumbnail from 'component/channelThumbnail';
+import 'scss/component/_comments.scss';
+import { ENABLE_COMMENT_REACTIONS } from 'config';
 import { Menu, MenuButton } from '@reach/menu-button';
-import Icon from 'component/common/icon';
-import { FormField, Form } from 'component/common/form';
-import classnames from 'classnames';
-import usePersistedState from 'effects/use-persisted-state';
-import CommentReactions from 'component/commentReactions';
-import CommentsReplies from 'component/commentsReplies';
+import { parseSticker } from 'util/comments';
+import { parseURI } from 'util/lbryURI';
+import { SORT_BY, COMMENT_PAGE_SIZE_REPLIES } from 'constants/comment';
 import { useHistory } from 'react-router';
+import * as ICONS from 'constants/icons';
+import Button from 'component/button';
+import ChannelThumbnail from 'component/channelThumbnail';
+import classnames from 'classnames';
 import CommentCreate from 'component/commentCreate';
 import CommentMenuList from 'component/commentMenuList';
-import UriIndicator from 'component/uriIndicator';
+import CommentReactions from 'component/commentReactions';
+import CommentsReplies from 'component/commentsReplies';
 import CreditAmount from 'component/common/credit-amount';
+import DateTime from 'component/dateTime';
+import Expandable from 'component/expandable';
+import Icon from 'component/common/icon';
+import MarkdownPreview from 'component/common/markdown-preview';
 import OptimizedImage from 'component/optimizedImage';
-import { parseSticker } from 'util/comments';
+import React, { useEffect, useState } from 'react';
+import Tooltip from 'component/common/tooltip';
+import UriIndicator from 'component/uriIndicator';
 
 const AUTO_EXPAND_ALL_REPLIES = false;
-
-type Props = {
-  clearPlayingUri: () => void,
-  uri: string,
-  claim: StreamClaim,
-  author: ?string, // LBRY Channel Name, e.g. @channel
-  authorUri: string, // full LBRY Channel URI: lbry://@channel#123...
-  commentId: string, // sha256 digest identifying the comment
-  message: string, // comment body
-  timePosted: number, // Comment timestamp
-  channelIsBlocked: boolean, // if the channel is blacklisted in the app
-  claimIsMine: boolean, // if you control the claim which this comment was posted on
-  commentIsMine: boolean, // if this comment was signed by an owned channel
-  updateComment: (string, string) => void,
-  fetchReplies: (string, string, number, number, number) => void,
-  totalReplyPages: number,
-  commentModBlock: (string) => void,
-  linkedCommentId?: string,
-  linkedCommentAncestors: { [string]: Array<string> },
-  myChannels: ?Array<ChannelClaim>,
-  commentingEnabled: boolean,
-  doToast: ({ message: string }) => void,
-  isTopLevel?: boolean,
-  threadDepth: number,
-  hideActions?: boolean,
-  isPinned: boolean,
-  othersReacts: ?{
-    like: number,
-    dislike: number,
-  },
-  commentIdentityChannel: any,
-  activeChannelClaim: ?ChannelClaim,
-  playingUri: ?PlayingUri,
-  stakedLevel: number,
-  supportAmount: number,
-  numDirectReplies: number,
-  isModerator: boolean,
-  isGlobalMod: boolean,
-  isFiat: boolean,
-  supportDisabled: boolean,
-  setQuickReply: (any) => void,
-  quickReply: any,
-};
-
 const LENGTH_TO_COLLAPSE = 300;
 
-function Comment(props: Props) {
+type Props = {
+  channelIsBlocked: boolean, // if the channel is blacklisted in the app
+  claim: StreamClaim,
+  claimIsMine: boolean, // if you control the claim which this comment was posted on
+  comment: Comment,
+  commentIdentityChannel: any,
+  hideActions?: boolean,
+  isTopLevel?: boolean,
+  linkedCommentAncestors: { [string]: Array<string> },
+  linkedCommentId?: string,
+  myChannels: ?Array<ChannelClaim>,
+  othersReacts: ?{ like: number, dislike: number },
+  playingUri: ?PlayingUri,
+  quickReply: any,
+  stakedLevel: number,
+  supportDisabled: boolean,
+  threadDepth: number,
+  totalReplyPages: number,
+  uri: string,
+  userCanComment: boolean,
+  clearPlayingUri: () => void,
+  commentModBlock: (string) => void,
+  fetchReplies: (number, number, string) => void,
+  setQuickReply: (any) => void,
+  updateComment: (string) => void,
+};
+
+function CommentView(props: Props) {
   const {
-    clearPlayingUri,
-    claim,
-    uri,
-    author,
-    authorUri,
-    timePosted,
-    message,
     channelIsBlocked,
-    commentIsMine,
-    commentId,
-    updateComment,
-    fetchReplies,
-    totalReplyPages,
-    linkedCommentId,
-    linkedCommentAncestors,
-    commentingEnabled,
-    myChannels,
-    doToast,
-    isTopLevel,
-    threadDepth,
+    claim,
+    comment,
     hideActions,
-    isPinned,
+    isTopLevel,
+    linkedCommentAncestors,
+    linkedCommentId,
+    myChannels,
     othersReacts,
     playingUri,
-    stakedLevel,
-    supportAmount,
-    numDirectReplies,
-    isModerator,
-    isGlobalMod,
-    isFiat,
-    supportDisabled,
-    setQuickReply,
     quickReply,
+    stakedLevel,
+    supportDisabled,
+    threadDepth,
+    totalReplyPages,
+    uri,
+    userCanComment,
+    clearPlayingUri,
+    fetchReplies,
+    setQuickReply,
+    updateComment,
   } = props;
 
   const {
-    push,
+    channel_id: authorId,
+    channel_url: authorUri,
+    comment_id: commentId,
+    comment: message,
+    is_fiat: isFiat,
+    is_global_mod: isGlobalMod,
+    is_moderator: isModerator,
+    is_pinned: isPinned,
+    replies: numDirectReplies,
+    support_amount: supportAmount,
+  } = comment;
+  const timePosted = comment.timestamp * 1000;
+  const commentIsMine = authorId && myChannels && myChannels.some(({ claim_id }) => claim_id === authorId);
+
+  const {
     replace,
     location: { pathname, search },
   } = useHistory();
@@ -129,78 +109,21 @@ function Comment(props: Props) {
   const [isReplying, setReplying] = React.useState(false);
   const [isEditing, setEditing] = useState(false);
   const [editedMessage, setCommentValue] = useState(message);
-  const [charCount, setCharCount] = useState(editedMessage.length);
   const [showReplies, setShowReplies] = useState(showRepliesOnMount);
   const [page, setPage] = useState(showRepliesOnMount ? 1 : 0);
-  const [advancedEditor] = usePersistedState('comment-editor-mode', false);
   const [displayDeadComment, setDisplayDeadComment] = React.useState(false);
-  const hasChannels = myChannels && myChannels.length > 0;
+
   const likesCount = (othersReacts && othersReacts.like) || 0;
   const dislikesCount = (othersReacts && othersReacts.dislike) || 0;
   const totalLikesAndDislikes = likesCount + dislikesCount;
   const slimedToDeath = totalLikesAndDislikes >= 5 && dislikesCount / totalLikesAndDislikes > 0.8;
-  const commentByOwnerOfContent = claim && claim.signing_channel && claim.signing_channel.permanent_url === authorUri;
+  const commentByContentOwner = claim && claim.signing_channel && claim.signing_channel.permanent_url === authorUri;
   const stickerFromMessage = parseSticker(message);
 
-  let channelOwnerOfContent;
+  let contentOwnerChannel;
   try {
-    const { channelName } = parseURI(uri);
-    if (channelName) {
-      channelOwnerOfContent = channelName;
-    }
+    ({ channelName: contentOwnerChannel } = parseURI(uri));
   } catch (e) {}
-
-  useEffect(() => {
-    if (isEditing) {
-      setCharCount(editedMessage.length);
-
-      // a user will try and press the escape key to cancel editing their comment
-      const handleEscape = (event) => {
-        if (event.keyCode === KEYCODES.ESCAPE) {
-          setEditing(false);
-        }
-      };
-
-      window.addEventListener('keydown', handleEscape);
-
-      // removes the listener so it doesn't cause problems elsewhere in the app
-      return () => {
-        window.removeEventListener('keydown', handleEscape);
-      };
-    }
-  }, [author, authorUri, editedMessage, isEditing, setEditing]);
-
-  useEffect(() => {
-    if (page > 0) {
-      fetchReplies(uri, commentId, page, COMMENT_PAGE_SIZE_REPLIES, SORT_BY.OLDEST);
-    }
-  }, [page, uri, commentId, fetchReplies]);
-
-  function handleEditMessageChanged(event) {
-    setCommentValue(!SIMPLE_SITE && advancedEditor ? event : event.target.value);
-  }
-
-  function handleEditComment() {
-    if (playingUri && playingUri.source === 'comment') {
-      clearPlayingUri();
-    }
-    setEditing(true);
-  }
-
-  function handleSubmit() {
-    updateComment(commentId, editedMessage);
-    if (setQuickReply) setQuickReply({ ...quickReply, comment_id: commentId, comment: editedMessage });
-    setEditing(false);
-  }
-
-  function handleCommentReply() {
-    if (!hasChannels) {
-      push(`/$/${PAGES.CHANNEL_NEW}?redirect=${pathname}`);
-      doToast({ message: __('A channel is required to comment on %SITE_NAME%', { SITE_NAME }) });
-    } else {
-      setReplying(!isReplying);
-    }
-  }
 
   function handleTimeClick() {
     const urlParams = new URLSearchParams(search);
@@ -221,10 +144,27 @@ function Comment(props: Props) {
     }
   }, []);
 
+  useEffect(() => {
+    if (page > 0) fetchReplies(page, COMMENT_PAGE_SIZE_REPLIES, SORT_BY.OLDEST);
+  }, [commentId, fetchReplies, page, uri]);
+
+  const commentBadge = (label: string, className: string, icon: string) => (
+    <Tooltip label={label}>
+      <span className={`comment__badge ${className}`}>
+        <Icon icon={icon} size={20} />
+      </span>
+    </Tooltip>
+  );
+
+  const MarkdownWrapper =
+    editedMessage.length >= LENGTH_TO_COLLAPSE
+      ? ({ children }) => <Expandable>{children}</Expandable>
+      : ({ children }) => children;
+
   return (
     <li
       className={classnames('comment', {
-        'comment--top-level': isTopLevel,
+        'comment--topLevel': isTopLevel,
         'comment--reply': !isTopLevel,
         'comment--superchat': supportAmount > 0,
       })}
@@ -233,48 +173,25 @@ function Comment(props: Props) {
       <div
         ref={isLinkedComment ? linkedCommentRef : undefined}
         className={classnames('comment__content', {
-          [COMMENT_HIGHLIGHTED]: isLinkedComment,
-          'comment--slimed': slimedToDeath && !displayDeadComment,
+          'comment__content--highlighted': isLinkedComment,
+          'comment__content--slimed': slimedToDeath && !displayDeadComment,
         })}
       >
-        <div className="comment__thumbnail-wrapper">
-          {authorUri ? (
-            <ChannelThumbnail uri={authorUri} obscure={channelIsBlocked} xsmall className="comment__author-thumbnail" />
-          ) : (
-            <ChannelThumbnail xsmall className="comment__author-thumbnail" />
-          )}
+        <div className="commentThumbnail__wrapper">
+          <ChannelThumbnail uri={authorUri} obscure={channelIsBlocked} xsmall className="commentAuthor__thumbnail" />
         </div>
 
-        <div className="comment__body-container">
+        <div className="commentBody__container">
           <div className="comment__meta">
-            <div className="comment__meta-information">
-              {isGlobalMod && (
-                <Tooltip label={__('Admin')}>
-                  <span className="comment__badge comment__badge--global-mod">
-                    <Icon icon={ICONS.BADGE_MOD} size={20} />
-                  </span>
-                </Tooltip>
-              )}
+            <div className="commentMeta__information">
+              {isModerator && commentBadge(__('Moderator'), 'commentBadge__mod', ICONS.BADGE_MOD)}
+              {isGlobalMod && commentBadge(__('Admin'), 'commentBadge__globalMod', ICONS.BADGE_MOD)}
 
-              {isModerator && (
-                <Tooltip label={__('Moderator')}>
-                  <span className="comment__badge comment__badge--mod">
-                    <Icon icon={ICONS.BADGE_MOD} size={20} />
-                  </span>
-                </Tooltip>
-              )}
-
-              {!author ? (
-                <span className="comment__author">{__('Anonymous')}</span>
-              ) : (
-                <UriIndicator
-                  className={classnames('comment__author', {
-                    'comment__author--creator': commentByOwnerOfContent,
-                  })}
-                  link
-                  uri={authorUri}
-                />
-              )}
+              <UriIndicator
+                uri={authorUri}
+                className={classnames('comment__author', { 'comment__author--creator': commentByContentOwner })}
+                link
+              />
               <Button
                 className="comment__time"
                 onClick={handleTimeClick}
@@ -286,8 +203,8 @@ function Comment(props: Props) {
               {isPinned && (
                 <span className="comment__pin">
                   <Icon icon={ICONS.PIN} size={14} />
-                  {channelOwnerOfContent
-                    ? __('Pinned by @%channel%', { channel: channelOwnerOfContent })
+                  {contentOwnerChannel
+                    ? __('Pinned by @%channel%', { channel: contentOwnerChannel })
                     : __('Pinned by creator')}
                 </span>
               )}
@@ -304,63 +221,57 @@ function Comment(props: Props) {
                   commentId={commentId}
                   authorUri={authorUri}
                   commentIsMine={commentIsMine}
-                  handleEditComment={handleEditComment}
+                  handleEditComment={() => {
+                    if (playingUri && playingUri.source === 'comment') clearPlayingUri();
+                    setEditing(true);
+                  }}
                   supportAmount={supportAmount}
                   setQuickReply={setQuickReply}
+                  disableEdit={Boolean(stickerFromMessage)}
                 />
               </Menu>
             </div>
           </div>
-          <div>
+          <div className="comment__body">
             {isEditing ? (
-              <Form onSubmit={handleSubmit}>
-                <FormField
-                  className="comment__edit-input"
-                  type={!SIMPLE_SITE && advancedEditor ? 'markdown' : 'textarea'}
-                  name="editing_comment"
-                  value={editedMessage}
-                  charCount={charCount}
-                  onChange={handleEditMessageChanged}
-                  textAreaMaxLength={FF_MAX_CHARS_IN_COMMENT}
-                />
-                <div className="section__actions section__actions--no-margin">
-                  <Button
-                    button="primary"
-                    type="submit"
-                    label={__('Done')}
-                    requiresAuth={IS_WEB}
-                    disabled={message === editedMessage}
-                  />
-                  <Button button="link" label={__('Cancel')} onClick={() => setEditing(false)} />
-                </div>
-              </Form>
+              <CommentCreate
+                isEdit
+                editedMessage={message}
+                onDoneEditing={(editedMessage) => {
+                  if (editedMessage) {
+                    updateComment(editedMessage);
+                    if (setQuickReply) setQuickReply({ ...quickReply, comment_id: commentId, comment: editedMessage });
+                    setCommentValue(editedMessage);
+                  }
+                  setEditing(false);
+                }}
+                supportDisabled
+              />
             ) : (
               <>
-                <div className="comment__message">
+                <div
+                  className={classnames('comment__message', {
+                    'comment__message--dead': slimedToDeath && !displayDeadComment,
+                    'comment__message--sticker': stickerFromMessage,
+                  })}
+                  onClick={() => slimedToDeath && setDisplayDeadComment(true)}
+                >
                   {slimedToDeath && !displayDeadComment ? (
-                    <div onClick={() => setDisplayDeadComment(true)} className="comment__dead">
-                      {__('This comment was slimed to death.')} <Icon icon={ICONS.SLIME_ACTIVE} />
-                    </div>
+                    <>
+                      {__('This comment was slimed to death.')}
+                      <Icon icon={ICONS.SLIME_ACTIVE} />
+                    </>
                   ) : stickerFromMessage ? (
-                    <div className="sticker__comment">
-                      <OptimizedImage src={stickerFromMessage.url} waitLoad />
-                    </div>
-                  ) : editedMessage.length >= LENGTH_TO_COLLAPSE ? (
-                    <Expandable>
+                    <OptimizedImage src={stickerFromMessage.url} waitLoad />
+                  ) : (
+                    <MarkdownWrapper>
                       <MarkdownPreview
                         content={message}
-                        promptLinks
                         parentCommentId={commentId}
                         stakedLevel={stakedLevel}
+                        promptLinks
                       />
-                    </Expandable>
-                  ) : (
-                    <MarkdownPreview
-                      content={message}
-                      promptLinks
-                      parentCommentId={commentId}
-                      stakedLevel={stakedLevel}
-                    />
+                    </MarkdownWrapper>
                   )}
                 </div>
 
@@ -368,10 +279,10 @@ function Comment(props: Props) {
                   <div className="comment__actions">
                     {threadDepth !== 0 && (
                       <Button
-                        requiresAuth={IS_WEB}
-                        label={commentingEnabled ? __('Reply') : __('Log in to reply')}
+                        requiresAuth
+                        label={userCanComment ? __('Reply') : __('Log in to reply')}
                         className="comment__action"
-                        onClick={handleCommentReply}
+                        onClick={() => setReplying(!isReplying)}
                         icon={ICONS.REPLY}
                       />
                     )}
@@ -379,36 +290,33 @@ function Comment(props: Props) {
                   </div>
                 )}
 
-                {numDirectReplies > 0 && !showReplies && (
-                  <div className="comment__actions">
-                    <Button
-                      label={
-                        numDirectReplies < 2
-                          ? __('Show reply')
-                          : __('Show %count% replies', { count: numDirectReplies })
-                      }
-                      button="link"
-                      onClick={() => {
-                        setShowReplies(true);
-                        if (page === 0) {
-                          setPage(1);
+                {numDirectReplies > 0 &&
+                  (!showReplies ? (
+                    <div className="comment__actions">
+                      <Button
+                        label={
+                          numDirectReplies < 2
+                            ? __('Show reply')
+                            : __('Show %count% replies', { count: numDirectReplies })
                         }
-                      }}
-                      icon={ICONS.DOWN}
-                    />
-                  </div>
-                )}
-
-                {numDirectReplies > 0 && showReplies && (
-                  <div className="comment__actions">
-                    <Button
-                      label={__('Hide replies')}
-                      button="link"
-                      onClick={() => setShowReplies(false)}
-                      icon={ICONS.UP}
-                    />
-                  </div>
-                )}
+                        button="link"
+                        onClick={() => {
+                          setShowReplies(true);
+                          if (page === 0) setPage(1);
+                        }}
+                        icon={ICONS.DOWN}
+                      />
+                    </div>
+                  ) : (
+                    <div className="comment__actions">
+                      <Button
+                        label={__('Hide replies')}
+                        button="link"
+                        onClick={() => setShowReplies(false)}
+                        icon={ICONS.UP}
+                      />
+                    </div>
+                  ))}
 
                 {isReplying && (
                   <CommentCreate
@@ -419,9 +327,7 @@ function Comment(props: Props) {
                       setShowReplies(true);
                       setReplying(false);
                     }}
-                    onCancelReplying={() => {
-                      setReplying(false);
-                    }}
+                    onCancelReplying={() => setReplying(false)}
                     supportDisabled={supportDisabled}
                   />
                 )}
@@ -446,4 +352,4 @@ function Comment(props: Props) {
   );
 }
 
-export default Comment;
+export default CommentView;

@@ -1,35 +1,15 @@
+@import '../../../web/scss/themes/odysee/init/vars';
+@import '../../scss/component/button';
+@import '../../scss/init/gui';
+@import '../../scss/init/mixins';
+
 $thumbnailWidth: 1.5rem;
 $thumbnailWidthSmall: 1rem;
-
-.comments {
-  list-style-type: none;
-  font-size: var(--font-small);
-  margin-top: var(--spacing-l);
-}
-
-.comments--contracted {
-  @extend .comments;
-  max-height: 5rem;
-  overflow: hidden;
-  -webkit-mask-image: -webkit-gradient(linear, left 30%, left bottom, from(rgba(0, 0, 0, 1)), to(rgba(0, 0, 0, 0)));
-  overflow-wrap: anywhere;
-}
 
 .comments--replies {
   list-style-type: none;
   margin-left: var(--spacing-s);
   flex: 1;
-}
-
-.comment__sort {
-  margin: var(--spacing-s) 0;
-  margin-right: var(--spacing-s);
-  display: block;
-
-  @media (min-width: $breakpoint-small) {
-    margin-top: 0;
-    display: inline;
-  }
 }
 
 .comment {
@@ -44,7 +24,7 @@ $thumbnailWidthSmall: 1rem;
     margin-top: var(--spacing-l);
   }
 
-  .comment__author-thumbnail {
+  .commentAuthor__thumbnail {
     @include handleChannelGif($thumbnailWidthSmall);
     margin-right: 0;
 
@@ -67,7 +47,7 @@ $thumbnailWidthSmall: 1rem;
   }
 }
 
-.comment__thumbnail-wrapper {
+.commentThumbnail__wrapper {
   flex: 0;
   margin-top: var(--spacing-xxs);
 }
@@ -77,7 +57,7 @@ $thumbnailWidthSmall: 1rem;
   flex-direction: row;
 }
 
-.comment__replies-container {
+.commentReplies__container {
   margin: 0;
 }
 
@@ -99,17 +79,17 @@ $thumbnailWidthSmall: 1rem;
   }
 }
 
-.comment--top-level {
+.comment--topLevel {
   &:not(:first-child) {
     margin-top: var(--spacing-l);
   }
 }
 
-.comment--slimed {
+.comment__content--slimed {
   opacity: 0.6;
 }
 
-.comment__edit-input {
+.commentBody__editInput {
   margin-top: var(--spacing-xxs);
 }
 
@@ -132,13 +112,13 @@ $thumbnailWidthSmall: 1rem;
   }
 }
 
-.comment--highlighted {
+.comment__content--highlighted {
   background: var(--color-comment-highlighted);
   box-shadow: 0 0 0 5px var(--color-comment-highlighted);
   border-radius: 4px;
 }
 
-.comment__body-container {
+.commentBody__container {
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -164,7 +144,7 @@ $thumbnailWidthSmall: 1rem;
   justify-content: space-between;
 }
 
-.comment__meta-information {
+.commentMeta__information {
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -188,14 +168,14 @@ $thumbnailWidthSmall: 1rem;
   }
 }
 
-.comment__badge--global-mod {
+.commentBadge__globalMod {
   .st0 {
     // @see: ICONS.BADGE_MOD
     fill: #fe7500;
   }
 }
 
-.comment__badge--mod {
+.commentBadge__mod {
   .st0 {
     // @see: ICONS.BADGE_MOD
     fill: #ff3850;
@@ -422,64 +402,7 @@ $thumbnailWidthSmall: 1rem;
   opacity: 0.5;
 }
 
-.comments-own {
-  .section__actions {
-    align-items: flex-start;
-  }
-
-  .comments-own--claim {
-    min-width: 100%;
-    max-width: 100%;
-
-    @media (min-width: $breakpoint-medium) {
-      min-width: 40%;
-      max-width: 40%;
-    }
-
-    .media__thumb {
-      flex-shrink: 0;
-      overflow: hidden;
-      $width: 5rem;
-      @include handleClaimListGifThumbnail($width);
-      width: $width;
-      height: calc(#{$width} * (9 / 16));
-      margin-right: var(--spacing-s);
-    }
-
-    .channel-thumbnail {
-      @include handleChannelGif(calc(5rem * 9 / 16));
-      margin-right: var(--spacing-xs);
-
-      @media (min-width: $breakpoint-small) {
-        @include handleChannelGif(calc(5rem * 9 / 16));
-        margin-right: var(--spacing-s);
-      }
-    }
-  }
-
-  .claim-preview__wrapper {
-    margin: 0 0;
-    padding: 0;
-
-    @media (min-width: $breakpoint-medium) {
-      margin: 0 var(--spacing-xs);
-    }
-  }
-
-  .comment {
-    margin-top: var(--spacing-s);
-    margin-left: 0;
-    padding-left: var(--spacing-m);
-    border-left: 4px solid var(--color-border);
-
-    @media (min-width: $breakpoint-medium) {
-      margin-top: 0;
-      margin-left: var(--spacing-s);
-    }
-  }
-}
-
-.sticker__comment {
+.comment__message--sticker {
   margin-left: var(--spacing-m);
   height: 6rem;
   overflow: hidden;

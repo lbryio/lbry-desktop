@@ -1,14 +1,13 @@
 import { connect } from 'react-redux';
-import { doCommentListOwn, doCommentReset } from 'redux/actions/comments';
-import { selectActiveChannelClaim } from 'redux/selectors/app';
 import {
   selectIsFetchingComments,
   selectCommentsForUri,
   makeSelectTotalCommentsCountForUri,
   makeSelectTopLevelTotalPagesForUri,
 } from 'redux/selectors/comments';
+import { doCommentListOwn, doCommentReset } from 'redux/actions/comments';
+import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { selectClaimsById } from 'redux/selectors/claims';
-
 import OwnComments from './view';
 
 const select = (state) => {
@@ -18,16 +17,16 @@ const select = (state) => {
   return {
     activeChannelClaim,
     allComments: selectCommentsForUri(state, uri),
-    totalComments: makeSelectTotalCommentsCountForUri(uri)(state),
-    topLevelTotalPages: makeSelectTopLevelTotalPagesForUri(uri)(state),
-    isFetchingComments: selectIsFetchingComments(state),
     claimsById: selectClaimsById(state),
+    isFetchingComments: selectIsFetchingComments(state),
+    topLevelTotalPages: makeSelectTopLevelTotalPagesForUri(uri)(state),
+    totalComments: makeSelectTotalCommentsCountForUri(uri)(state),
   };
 };
 
 const perform = (dispatch) => ({
-  doCommentReset: (a) => dispatch(doCommentReset(a)),
-  doCommentListOwn: (a, b, c) => dispatch(doCommentListOwn(a, b, c)),
+  doCommentListOwn: (channelId, page, pageSize) => dispatch(doCommentListOwn(channelId, page, pageSize)),
+  doCommentReset: (claimId) => dispatch(doCommentReset(claimId)),
 });
 
 export default connect(select, perform)(OwnComments);
