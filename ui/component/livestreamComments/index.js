@@ -5,8 +5,8 @@ import { doCommentList, doSuperChatList } from 'redux/actions/comments';
 import {
   selectTopLevelCommentsForUri,
   selectIsFetchingComments,
-  makeSelectSuperChatsForUri,
-  makeSelectSuperChatTotalAmountForUri,
+  selectSuperChatsForUri,
+  selectSuperChatTotalAmountForUri,
   selectPinnedCommentsForUri,
 } from 'redux/selectors/comments';
 import LivestreamComments from './view';
@@ -18,8 +18,8 @@ const select = (state, props) => ({
   comments: selectTopLevelCommentsForUri(state, props.uri, MAX_LIVESTREAM_COMMENTS),
   pinnedComments: selectPinnedCommentsForUri(state, props.uri),
   fetchingComments: selectIsFetchingComments(state),
-  superChats: makeSelectSuperChatsForUri(props.uri)(state),
-  superChatsTotalAmount: makeSelectSuperChatTotalAmountForUri(props.uri)(state),
+  superChats: selectSuperChatsForUri(state, props.uri),
+  superChatsTotalAmount: selectSuperChatTotalAmountForUri(state, props.uri),
   myChannels: selectMyChannelClaims(state),
 });
 
