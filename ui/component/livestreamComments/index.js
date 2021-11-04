@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { selectClaimForUri, selectMyChannelClaims } from 'redux/selectors/claims';
+import { selectClaimForUri, selectMyClaimIdsRaw } from 'redux/selectors/claims';
 import { doCommentSocketConnect, doCommentSocketDisconnect } from 'redux/actions/websocket';
 import { doCommentList, doSuperChatList } from 'redux/actions/comments';
 import {
@@ -20,7 +20,7 @@ const select = (state, props) => ({
   fetchingComments: selectIsFetchingComments(state),
   superChats: selectSuperChatsForUri(state, props.uri),
   superChatsTotalAmount: selectSuperChatTotalAmountForUri(state, props.uri),
-  myChannels: selectMyChannelClaims(state),
+  myChannelIds: selectMyClaimIdsRaw(state),
 });
 
 export default connect(select, {

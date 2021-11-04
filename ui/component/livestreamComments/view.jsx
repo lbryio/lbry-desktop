@@ -26,7 +26,7 @@ type Props = {
   fetchingComments: boolean,
   doSuperChatList: (string) => void,
   superChats: Array<Comment>,
-  myChannels: ?Array<ChannelClaim>,
+  myChannelIds: ?Array<string>,
 };
 
 const VIEW_MODE_CHAT = 'view_chat';
@@ -45,7 +45,7 @@ export default function LivestreamComments(props: Props) {
     doCommentList,
     fetchingComments,
     doSuperChatList,
-    myChannels,
+    myChannelIds,
     superChats: superChatsByTipAmount,
   } = props;
 
@@ -152,14 +152,7 @@ export default function LivestreamComments(props: Props) {
 
   // todo: implement comment_list --mine in SDK so redux can grab with selectCommentIsMine
   function isMyComment(channelId: string) {
-    if (myChannels != null && channelId != null) {
-      for (let i = 0; i < myChannels.length; i++) {
-        if (myChannels[i].claim_id === channelId) {
-          return true;
-        }
-      }
-    }
-    return false;
+    return myChannelIds ? myChannelIds.includes(channelId) : false;
   }
 
   if (!claim) {
