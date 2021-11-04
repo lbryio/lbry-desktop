@@ -16,6 +16,8 @@ import hlsQualitySelector from './plugins/videojs-hls-quality-selector/plugin';
 import recsys from './plugins/videojs-recsys/plugin';
 import qualityLevels from 'videojs-contrib-quality-levels';
 import isUserTyping from 'util/detect-typing';
+import runAds from './ads';
+
 const isDev = process.env.NODE_ENV !== 'production';
 
 export type Player = {
@@ -564,81 +566,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       // this seems like a weird thing to have to check for here
       if (!player) return;
 
-      // live channel
-      // 60b354389c7adb506d0bd9a4
-
-      // ford ad
-      // 612fb75a42715a07645a614c
-
-      // Modified to work with IMA
-      // const macroUrl =
-      //   `https://vast.aniview.com/api/adserver61/vast/` +
-      //   `?AV_PUBLISHERID=60afcbc58cfdb065440d2426` +
-      //   `&AV_CHANNELID=60b354389c7adb506d0bd9a4` +
-      //   `&AV_URL=[URL]` +
-      //   `&cb=[CACHEBUSTING]` +
-      //   `&AV_WIDTH=[WIDTH]` +
-      //   `&AV_HEIGHT=[HEIGHT]` +
-      //   // `&AV_SCHAIN=[SCHAIN_MACRO]` +
-      //   // `&AV_CCPA=[CCPA_MACRO]` +
-      //   // `&AV_GDPR=[GDPR_MACRO]` +
-      //   // `&AV_CONSENT=[CONSENT_MACRO]` +
-      //   `&skip=true` +
-      //   `&skiptimer=5` +
-      //   `&logo=true` +
-      //   `&usevslot=true` +
-      //   `&vastretry=2` +
-      //   `&hidecontrols=false`;
-
-      const timestamp = new Date().toISOString();
-
-      const videoElement = document.getElementsByClassName('vjs-tech')[0];
-
-      const height = videoElement.offsetHeight;
-      const width = videoElement.offsetWidth;
-
-      // live channel
-      // 60b354389c7adb506d0bd9a4
-
-      // ford ad
-      // 612fb75a42715a07645a614c
-
-      const macroUrl1 =
-        'https://gov.aniview.com/api/adserver/vast3/' +
-        '?AV_PUBLISHERID=60afcbc58cfdb065440d2426' +
-        '&AV_CHANNELID=60b354389c7adb506d0bd9a4' +
-        `&AV_URL=${encodeURIComponent(window.location.href)}` +
-        `&cb=${encodeURIComponent(timestamp)}` +
-        `&AV_WIDTH=${width}` +
-        `&AV_HEIGHT=${height}` +
-        // '&AV_SCHAIN=[SCHAIN_MACRO]' +
-        // '&AV_CCPA=[CCPA_MACRO]' +
-        // '&AV_GDPR=[GDPR_MACRO]' +
-        // '&AV_CONSENT=[CONSENT_MACRO]' +
-        `&skip=true` +
-        `&skiptimer=5` +
-        `&logo=true` +
-        `&usevslot=true` +
-        `&vastretry=2` +
-        `&hidecontrols=false`;
-
-      // always have ads on if internal feature is on,
-      // otherwise if not authed, roll for 20% to see an ad
-      const shouldShowAnAd = internalFeatureEnabled || (allowPreRoll && hitsFiftyPercent());
-
-      // only run on chrome (brave included) and don't run on mobile for time being
-      const browserIsChrome = videojs.browser.IS_CHROME;
-      const IS_IOS = videojs.browser.IS_IOS;
-      const IS_ANDROID = videojs.browser.IS_ANDROID;
-      const IS_MOBILE = IS_IOS || IS_ANDROID;
-
-      if (shouldShowAnAd && browserIsChrome && !IS_MOBILE) {
-        // fire up ima integration via module
-        player.ima({
-          adTagUrl: macroUrl1,
-          vpaidMode: 2,
-        });
-      }
+      runAds(internalFeatureEnabled, allowPreRoll, player);
 
       // kick player in the butt, sometimes it doesn't always autoplay when it should
       player.on('loadstart', function (event) {
