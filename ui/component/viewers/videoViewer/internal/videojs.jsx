@@ -6,8 +6,8 @@ import * as ICONS from 'constants/icons';
 import * as KEYCODES from 'constants/keycodes';
 import classnames from 'classnames';
 import videojs from 'video.js';
-import 'videojs-contrib-ads';
-import 'videojs-ima';
+import 'videojs-contrib-ads'; // must be loaded in this order
+import 'videojs-ima'; // loads directly after contrib-ads
 import 'video.js/dist/alt/video-js-cdn.min.css';
 import eventTracking from 'videojs-event-tracking';
 import * as OVERLAY from './overlays';

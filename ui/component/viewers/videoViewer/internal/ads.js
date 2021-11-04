@@ -12,27 +12,30 @@ function hitsFiftyPercent() {
   }
 }
 
+const adTags = {
+  ford: '612fb75a42715a07645a614c',
+  live: '60b354389c7adb506d0bd9a4',
+};
+
 // Modified to work with IMA
-// const vastMacroUrl =
-//   `https://vast.aniview.com/api/adserver61/vast/` +
-//   `?AV_PUBLISHERID=60afcbc58cfdb065440d2426` +
-//   `&AV_CHANNELID=60b354389c7adb506d0bd9a4` +
-//   `&AV_URL=[URL]` +
-//   `&cb=[CACHEBUSTING]` +
-//   `&AV_WIDTH=[WIDTH]` +
-//   `&AV_HEIGHT=[HEIGHT]` +
-//   // `&AV_SCHAIN=[SCHAIN_MACRO]` +
-//   // `&AV_CCPA=[CCPA_MACRO]` +
-//   // `&AV_GDPR=[GDPR_MACRO]` +
-//   // `&AV_CONSENT=[CONSENT_MACRO]` +
-//   `&skip=true` +
-//   `&skiptimer=5` +
-//   `&logo=true` +
-//   `&usevslot=true` +
-//   `&vastretry=2` +
-//   `&hidecontrols=false`;
-
-
+const vastMacroUrl =
+  `https://vast.aniview.com/api/adserver61/vast/` +
+  `?AV_PUBLISHERID=60afcbc58cfdb065440d2426` +
+  `&AV_CHANNELID=${adTags.ford}` +
+  `&AV_URL=[URL]` +
+  `&cb=[CACHEBUSTING]` +
+  `&AV_WIDTH=[WIDTH]` +
+  `&AV_HEIGHT=[HEIGHT]` +
+  // `&AV_SCHAIN=[SCHAIN_MACRO]` +
+  // `&AV_CCPA=[CCPA_MACRO]` +
+  // `&AV_GDPR=[GDPR_MACRO]` +
+  // `&AV_CONSENT=[CONSENT_MACRO]` +
+  `&skip=true` +
+  `&skiptimer=5` +
+  `&logo=true` +
+  `&usevslot=true` +
+  `&vastretry=2` +
+  `&hidecontrols=false`;
 
 // only run on chrome (brave included) and don't run on mobile for time being
 const browserIsChrome = videojs.browser.IS_CHROME;
@@ -58,11 +61,6 @@ function runAds(internalFeatureEnabled, allowPreRoll, player) {
   // height and width of player
   const height = videoElement.offsetHeight;
   const width = videoElement.offsetWidth;
-
-  const adTags = {
-    ford: '612fb75a42715a07645a614c',
-    live: '60b354389c7adb506d0bd9a4',
-  };
 
   const vpaidMacroUrl =
     'https://gov.aniview.com/api/adserver/vast3/' +
@@ -91,7 +89,7 @@ function runAds(internalFeatureEnabled, allowPreRoll, player) {
   if (shouldShowAnAd && browserIsChrome && !IS_MOBILE) {
     // fire up ima integration via module
     player.ima({
-      adTagUrl: vpaidMacroUrl,
+      adTagUrl: vastMacroUrl,
       vpaidMode: 2, // 2 maps to insecure
     });
   }
