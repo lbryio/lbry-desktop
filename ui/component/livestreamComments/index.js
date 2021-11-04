@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { doResolveUris } from 'redux/actions/claims';
 import { selectClaimForUri, selectMyClaimIdsRaw } from 'redux/selectors/claims';
 import { doCommentSocketConnect, doCommentSocketDisconnect } from 'redux/actions/websocket';
 import { doCommentList, doSuperChatList } from 'redux/actions/comments';
@@ -28,4 +29,5 @@ export default connect(select, {
   doCommentSocketDisconnect,
   doCommentList,
   doSuperChatList,
+  doResolveUris,
 })(LivestreamComments);
