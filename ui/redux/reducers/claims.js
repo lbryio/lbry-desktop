@@ -197,7 +197,7 @@ function handleClaimAction(state: State, action: any): State {
     claimsByUri: byUri,
     channelClaimCounts,
     resolvingUris: Array.from(newResolvingUrls),
-    myClaims: Array.from(myClaimIds),
+    ...(!state.myClaims || myClaimIds.size !== state.myClaims.length ? { myClaims: Array.from(myClaimIds) } : {}),
   });
 }
 
