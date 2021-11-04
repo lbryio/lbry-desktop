@@ -98,13 +98,8 @@ export const buildValidSticker = (sticker: string) => `<stkr>${sticker}<stkr>`;
 export function parseSticker(comment: string) {
   const matchSticker = comment.match(stickerRegex);
   const stickerValue = matchSticker && matchSticker[0];
+  const stickerName = stickerValue && stickerValue.replace(/<stkr>/g, '');
   const commentIsSticker = stickerValue && stickerValue.length === comment.length;
 
-  return (
-    commentIsSticker &&
-    ALL_VALID_STICKERS.find((sticker) => {
-      // $FlowFixMe
-      return sticker.name === stickerValue.replaceAll('<stkr>', '');
-    })
-  );
+  return commentIsSticker && ALL_VALID_STICKERS.find((sticker) => sticker.name === stickerName);
 }
