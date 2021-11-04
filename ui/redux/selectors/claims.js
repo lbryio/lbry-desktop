@@ -143,6 +143,9 @@ export const makeSelectClaimForUri = (uri: string, returnRepost: boolean = true)
     }
   });
 
+// Returns your claim IDs without handling pending and abandoned claims.
+export const selectMyClaimIdsRaw = (state: State) => selectState(state).myClaims;
+
 export const selectMyClaimsRaw = createSelector(selectState, selectClaimsById, (state, byId) => {
   const ids = state.myClaims;
   if (!ids) {
