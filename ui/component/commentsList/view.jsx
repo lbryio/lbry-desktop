@@ -35,7 +35,7 @@ type Props = {
   uri: string,
   claim: ?Claim,
   claimIsMine: boolean,
-  myChannels: ?Array<ChannelClaim>,
+  myChannelIds: ?Array<string>,
   isFetchingComments: boolean,
   isFetchingCommentsById: boolean,
   isFetchingReacts: boolean,
@@ -64,7 +64,7 @@ function CommentList(props: Props) {
     topLevelTotalPages,
     claim,
     claimIsMine,
-    myChannels,
+    myChannelIds,
     isFetchingComments,
     isFetchingReacts,
     linkedCommentId,
@@ -256,9 +256,7 @@ function CommentList(props: Props) {
         message={comment.comment}
         timePosted={comment.timestamp * 1000}
         claimIsMine={claimIsMine}
-        commentIsMine={
-          comment.channel_id && myChannels && myChannels.some(({ claim_id }) => claim_id === comment.channel_id)
-        }
+        commentIsMine={comment.channel_id && myChannelIds && myChannelIds.includes(comment.channel_id)}
         linkedCommentId={linkedCommentId}
         isPinned={comment.is_pinned}
         supportAmount={comment.support_amount}

@@ -4,7 +4,7 @@ import {
   makeSelectClaimForUri,
   makeSelectClaimIsMine,
   selectFetchingMyChannels,
-  selectMyChannelClaims,
+  selectMyClaimIdsRaw,
 } from 'redux/selectors/claims';
 import {
   selectTopLevelCommentsForUri,
@@ -35,7 +35,7 @@ const select = (state, props) => {
   return {
     topLevelComments,
     resolvedComments,
-    myChannels: selectMyChannelClaims(state),
+    myChannelIds: selectMyClaimIdsRaw(state),
     allCommentIds: makeSelectCommentIdsForUri(props.uri)(state),
     pinnedComments: selectPinnedCommentsForUri(state, props.uri),
     topLevelTotalPages: makeSelectTopLevelTotalPagesForUri(props.uri)(state),

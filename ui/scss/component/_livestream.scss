@@ -297,6 +297,11 @@ $recent-msg-button__height: 2rem;
 
 .livestream-superchats__inner {
   display: flex;
+
+  .close-button {
+    padding-left: var(--spacing-m);
+    padding-right: var(--spacing-l);
+  }
 }
 
 .livestream-superchat {

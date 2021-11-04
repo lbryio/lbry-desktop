@@ -26,12 +26,14 @@ type Props = {
   fetchingComments: boolean,
   doSuperChatList: (string) => void,
   superChats: Array<Comment>,
-  myChannels: ?Array<ChannelClaim>,
+  myChannelIds: ?Array<string>,
+  doResolveUris: (Array<string>, boolean) => void,
 };
 
 const VIEW_MODE_CHAT = 'view_chat';
 const VIEW_MODE_SUPER_CHAT = 'view_superchat';
 const COMMENT_SCROLL_TIMEOUT = 25;
+const LARGE_SUPER_CHAT_LIST_THRESHOLD = 20;
 
 export default function LivestreamComments(props: Props) {
   const {
@@ -45,8 +47,9 @@ export default function LivestreamComments(props: Props) {
     doCommentList,
     fetchingComments,
     doSuperChatList,
-    myChannels,
+    myChannelIds,
     superChats: superChatsByTipAmount,
+    doResolveUris,
   } = props;
 
   let superChatsFiatAmount, superChatsLBCAmount, superChatsTotalAmount, hasSuperChats;
@@ -55,10 +58,10 @@ export default function LivestreamComments(props: Props) {
   const [viewMode, setViewMode] = React.useState(VIEW_MODE_CHAT);
   const [scrollPos, setScrollPos] = React.useState(0);
   const [showPinned, setShowPinned] = React.useState(true);
+  const [resolvingSuperChat, setResolvingSuperChat] = React.useState(false);
   const claimId = claim && claim.claim_id;
   const commentsLength = commentsByChronologicalOrder && commentsByChronologicalOrder.length;
 
-  // which kind of superchat to display, either
   const commentsToDisplay = viewMode === VIEW_MODE_CHAT ? commentsByChronologicalOrder : superChatsByTipAmount;
   const stickerSuperChats =
     superChatsByTipAmount && superChatsByTipAmount.filter(({ comment }) => Boolean(parseSticker(comment)));
@@ -72,6 +75,26 @@ export default function LivestreamComments(props: Props) {
       discussionElement.scrollTop = 0;
     }
   }, [discussionElement]);
+
+  const superChatTopTen = React.useMemo(() => {
+    return superChatsByTipAmount ? superChatsByTipAmount.slice(0, 10) : superChatsByTipAmount;
+  }, [superChatsByTipAmount]);
+
+  const showMoreSuperChatsButton =
+    superChatTopTen && superChatsByTipAmount && superChatTopTen.length < superChatsByTipAmount.length;
+
+  function resolveSuperChat() {
+    if (superChatsByTipAmount && superChatsByTipAmount.length > 0) {
+      doResolveUris(
+        superChatsByTipAmount.map((comment) => comment.channel_url || '0'),
+        true
+      );
+
+      if (superChatsByTipAmount.length > LARGE_SUPER_CHAT_LIST_THRESHOLD) {
+        setResolvingSuperChat(true);
+      }
+    }
+  }
 
   React.useEffect(() => {
     if (claimId) {
@@ -121,6 +144,24 @@ export default function LivestreamComments(props: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [commentsLength]); // (Just respond to 'commentsLength' updates and nothing else)
 
+  // Stop spinner for resolving superchats
+  React.useEffect(() => {
+    if (resolvingSuperChat) {
+      // The real solution to the sluggishness is to fix the claim store/selectors
+      // and to paginate the long superchat list. This serves as a band-aid,
+      // showing a spinner while we batch-resolve. The duration is just a rough
+      // estimate -- the lag will handle the remaining time.
+      const timer = setTimeout(() => {
+        setResolvingSuperChat(false);
+        // Scroll to the top:
+        const livestreamCommentsDiv = document.getElementsByClassName('livestream__comments')[0];
+        const divHeight = livestreamCommentsDiv.scrollHeight;
+        livestreamCommentsDiv.scrollTop = divHeight * -1;
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [resolvingSuperChat]);
+
   // sum total amounts for fiat tips and lbc tips
   if (superChatsByTipAmount) {
     let fiatAmount = 0;
@@ -152,14 +193,7 @@ export default function LivestreamComments(props: Props) {
 
   // todo: implement comment_list --mine in SDK so redux can grab with selectCommentIsMine
   function isMyComment(channelId: string) {
-    if (myChannels != null && channelId != null) {
-      for (let i = 0; i < myChannels.length; i++) {
-        if (myChannels[i].claim_id === channelId) {
-          return true;
-        }
-      }
-    }
-    return false;
+    return myChannelIds ? myChannelIds.includes(channelId) : false;
   }
 
   if (!claim) {
@@ -202,10 +236,8 @@ export default function LivestreamComments(props: Props) {
                 </>
               }
               onClick={() => {
+                resolveSuperChat();
                 setViewMode(VIEW_MODE_SUPER_CHAT);
-                const livestreamCommentsDiv = document.getElementsByClassName('livestream__comments')[0];
-                const divHeight = livestreamCommentsDiv.scrollHeight;
-                livestreamCommentsDiv.scrollTop = divHeight * -1;
               }}
             />
           </div>
@@ -221,7 +253,7 @@ export default function LivestreamComments(props: Props) {
           {viewMode === VIEW_MODE_CHAT && superChatsByTipAmount && hasSuperChats && (
             <div className="livestream-superchats__wrapper">
               <div className="livestream-superchats__inner">
-                {superChatsByTipAmount.map((superChat: Comment) => {
+                {superChatTopTen.map((superChat: Comment) => {
                   const isSticker = stickerSuperChats && stickerSuperChats.includes(superChat);
 
                   const SuperChatWrapper = !isSticker
@@ -260,6 +292,18 @@ export default function LivestreamComments(props: Props) {
                     </SuperChatWrapper>
                   );
                 })}
+                {showMoreSuperChatsButton && (
+                  <Button
+                    title={__('Show More...')}
+                    button="inverse"
+                    className="close-button"
+                    onClick={() => {
+                      resolveSuperChat();
+                      setViewMode(VIEW_MODE_SUPER_CHAT);
+                    }}
+                    icon={ICONS.MORE}
+                  />
+                )}
               </div>
             </div>
           )}
@@ -308,8 +352,14 @@ export default function LivestreamComments(props: Props) {
                   />
                 ))}
 
-              {/* listing comments on top of eachother */}
+              {viewMode === VIEW_MODE_SUPER_CHAT && resolvingSuperChat && (
+                <div className="main--empty">
+                  <Spinner />
+                </div>
+              )}
+
               {viewMode === VIEW_MODE_SUPER_CHAT &&
+                !resolvingSuperChat &&
                 superChatsReversed &&
                 superChatsReversed.map((comment) => (
                   <LivestreamComment

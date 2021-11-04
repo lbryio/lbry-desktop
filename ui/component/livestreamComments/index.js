@@ -1,12 +1,13 @@
 import { connect } from 'react-redux';
-import { selectClaimForUri, selectMyChannelClaims } from 'redux/selectors/claims';
+import { doResolveUris } from 'redux/actions/claims';
+import { selectClaimForUri, selectMyClaimIdsRaw } from 'redux/selectors/claims';
 import { doCommentSocketConnect, doCommentSocketDisconnect } from 'redux/actions/websocket';
 import { doCommentList, doSuperChatList } from 'redux/actions/comments';
 import {
   selectTopLevelCommentsForUri,
   selectIsFetchingComments,
-  makeSelectSuperChatsForUri,
-  makeSelectSuperChatTotalAmountForUri,
+  selectSuperChatsForUri,
+  selectSuperChatTotalAmountForUri,
   selectPinnedCommentsForUri,
 } from 'redux/selectors/comments';
 import LivestreamComments from './view';
@@ -18,9 +19,9 @@ const select = (state, props) => ({
   comments: selectTopLevelCommentsForUri(state, props.uri, MAX_LIVESTREAM_COMMENTS),
   pinnedComments: selectPinnedCommentsForUri(state, props.uri),
   fetchingComments: selectIsFetchingComments(state),
-  superChats: makeSelectSuperChatsForUri(props.uri)(state),
-  superChatsTotalAmount: makeSelectSuperChatTotalAmountForUri(props.uri)(state),
-  myChannels: selectMyChannelClaims(state),
+  superChats: selectSuperChatsForUri(state, props.uri),
+  superChatsTotalAmount: selectSuperChatTotalAmountForUri(state, props.uri),
+  myChannelIds: selectMyClaimIdsRaw(state),
 });
 
 export default connect(select, {
@@ -28,4 +29,5 @@ export default connect(select, {
   doCommentSocketDisconnect,
   doCommentList,
   doSuperChatList,
+  doResolveUris,
 })(LivestreamComments);

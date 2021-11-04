@@ -4,7 +4,7 @@ import { createCachedSelector } from 're-reselect';
 import { selectMutedChannels } from 'redux/selectors/blocked';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import { selectBlacklistedOutpointMap, selectFilteredOutpointMap } from 'lbryinc';
-import { selectClaimsById, selectMyActiveClaims } from 'redux/selectors/claims';
+import { selectClaimsById, selectMyClaimIdsRaw } from 'redux/selectors/claims';
 import { isClaimNsfw } from 'util/claim';
 
 type State = { comments: CommentsState };
@@ -180,7 +180,7 @@ export const makeSelectCommentIdsForUri = (uri: string) =>
 
 const filterCommentsDepOnList = {
   claimsById: selectClaimsById,
-  myClaims: selectMyActiveClaims,
+  myClaimIds: selectMyClaimIdsRaw,
   mutedChannels: selectMutedChannels,
   personalBlockList: selectModerationBlockList,
   blacklistedMap: selectBlacklistedOutpointMap,
@@ -258,7 +258,7 @@ export const selectRepliesForParentId = createCachedSelector(
  *
  * @param comments List of comments to filter.
  * @param claimId The claim that `comments` reside in.
- * @oaram filterInputs Values returned by filterCommentsDepOnList.
+ * @param filterInputs Values returned by filterCommentsDepOnList.
  */
 const filterComments = (comments: Array<Comment>, claimId?: string, filterInputs: any) => {
   const filterProps = filterInputs.reduce(function (acc, cur, i) {
@@ -268,7 +268,7 @@ const filterComments = (comments: Array<Comment>, claimId?: string, filterInputs
 
   const {
     claimsById,
-    myClaims,
+    myClaimIds,
     mutedChannels,
     personalBlockList,
     blacklistedMap,
@@ -287,8 +287,8 @@ const filterComments = (comments: Array<Comment>, claimId?: string, filterInputs
 
         // Return comment if `channelClaim` doesn't exist so the component knows to resolve the author
         if (channelClaim) {
-          if (myClaims && myClaims.size > 0) {
-            const claimIsMine = channelClaim.is_my_output || myClaims.has(channelClaim.claim_id);
+          if (myClaimIds && myClaimIds.size > 0) {
+            const claimIsMine = channelClaim.is_my_output || myClaimIds.includes(channelClaim.claim_id);
             if (claimIsMine) {
               return true;
             }
@@ -308,7 +308,7 @@ const filterComments = (comments: Array<Comment>, claimId?: string, filterInputs
         }
 
         if (claimId) {
-          const claimIdIsMine = myClaims && myClaims.size > 0 && myClaims.has(claimId);
+          const claimIdIsMine = myClaimIds && myClaimIds.size > 0 && myClaimIds.includes(claimId);
           if (!claimIdIsMine) {
             if (personalBlockList.includes(comment.channel_url)) {
               return false;
@@ -368,25 +368,17 @@ export const makeSelectUriIsBlockingOrUnBlocking = (uri: string) =>
     return blockingByUri[uri] || unBlockingByUri[uri];
   });
 
-export const makeSelectSuperChatDataForUri = (uri: string) =>
-  createSelector(selectSuperchatsByUri, (byUri) => {
-    return byUri[uri];
-  });
+export const selectSuperChatDataForUri = (state: State, uri: string) => {
+  const byUri = selectSuperchatsByUri(state);
+  return byUri[uri];
+};
 
-export const makeSelectSuperChatsForUri = (uri: string) =>
-  createSelector(makeSelectSuperChatDataForUri(uri), (superChatData) => {
-    if (!superChatData) {
-      return undefined;
-    }
+export const selectSuperChatsForUri = (state: State, uri: string) => {
+  const superChatData = selectSuperChatDataForUri(state, uri);
+  return superChatData ? superChatData.comments : undefined;
+};
 
-    return superChatData.comments;
-  });
-
-export const makeSelectSuperChatTotalAmountForUri = (uri: string) =>
-  createSelector(makeSelectSuperChatDataForUri(uri), (superChatData) => {
-    if (!superChatData) {
-      return 0;
-    }
-
-    return superChatData.totalAmount;
-  });
+export const selectSuperChatTotalAmountForUri = (state: State, uri: string) => {
+  const superChatData = selectSuperChatDataForUri(state, uri);
+  return superChatData ? superChatData.totalAmount : 0;
+};
