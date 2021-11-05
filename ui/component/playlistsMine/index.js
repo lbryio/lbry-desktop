@@ -7,18 +7,9 @@ import {
 } from 'redux/selectors/collections';
 import { selectFetchingMyCollections } from 'redux/selectors/claims';
 import PlaylistsMine from './view';
-import { PAGE_PARAM, PAGE_SIZE_PARAM } from 'constants/claim';
-const COLLECTIONS_PAGE_SIZE = 12;
 
-const select = (state, props) => {
-  const { search } = props.location;
-  const urlParams = new URLSearchParams(search);
-  const page = Number(urlParams.get(PAGE_PARAM)) || '1';
-  const pageSize = Number(urlParams.get(PAGE_SIZE_PARAM)) || COLLECTIONS_PAGE_SIZE;
-
+const select = (state) => {
   return {
-    page,
-    pageSize,
     publishedCollections: selectMyPublishedPlaylistCollections(state),
     unpublishedCollections: selectMyUnpublishedCollections(state),
     // savedCollections: selectSavedCollections(state),
