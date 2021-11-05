@@ -47,7 +47,7 @@ export default function StickerSelector(props: Props) {
             className="button--file-action"
             onClick={() => onSelect(sticker)}
           >
-            <OptimizedImage src={sticker.url} waitLoad />
+            <OptimizedImage src={sticker.url} waitLoad loading="lazy" />
             {sticker.price && sticker.price > 0 && (
               <CreditAmount superChatLight amount={sticker.price} size={2} isFiat />
             )}

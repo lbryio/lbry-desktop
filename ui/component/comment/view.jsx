@@ -329,7 +329,7 @@ function Comment(props: Props) {
                     </div>
                   ) : stickerFromMessage ? (
                     <div className="sticker__comment">
-                      <OptimizedImage src={stickerFromMessage.url} waitLoad />
+                      <OptimizedImage src={stickerFromMessage.url} waitLoad loading="lazy" />
                     </div>
                   ) : editedMessage.length >= LENGTH_TO_COLLAPSE ? (
                     <Expandable>

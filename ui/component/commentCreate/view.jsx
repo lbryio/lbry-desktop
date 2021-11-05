@@ -26,6 +26,7 @@ import type { ElementRef } from 'react';
 import UriIndicator from 'component/uriIndicator';
 import usePersistedState from 'effects/use-persisted-state';
 import WalletTipAmountSelector from 'component/walletTipAmountSelector';
+import { Lbryio } from 'lbryinc';
 
 import { getStripeEnvironment } from 'util/stripe';
 const stripeEnvironment = getStripeEnvironment();
@@ -111,12 +112,14 @@ export function CommentCreate(props: Props) {
   const [commentValue, setCommentValue] = React.useState('');
   const [advancedEditor, setAdvancedEditor] = usePersistedState('comment-editor-mode', false);
   const [stickerSelector, setStickerSelector] = React.useState();
-  const [activeTab, setActiveTab] = React.useState('');
+  const [activeTab, setActiveTab] = React.useState();
   const [tipError, setTipError] = React.useState();
   const [deletedComment, setDeletedComment] = React.useState(false);
   const [pauseQuickSend, setPauseQuickSend] = React.useState(false);
   const [showEmotes, setShowEmotes] = React.useState(false);
   const [disableReviewButton, setDisableReviewButton] = React.useState();
+  const [exchangeRate, setExchangeRate] = React.useState();
+  const [canReceiveFiatTip, setCanReceiveFiatTip] = React.useState(undefined);
 
   const selectedMentionIndex =
     commentValue.indexOf('@', selectionIndex) === selectionIndex
@@ -145,6 +148,7 @@ export function CommentCreate(props: Props) {
   const minTip = (channelSettings && channelSettings.min_tip_amount_comment) || 0;
   const minAmount = minTip || minSuper || 0;
   const minAmountMet = minAmount === 0 || tipAmount >= minAmount;
+  const stickerPrice = selectedSticker && selectedSticker.price;
 
   const minAmountRef = React.useRef(minAmount);
   minAmountRef.current = minAmount;
@@ -320,7 +324,7 @@ export function CommentCreate(props: Props) {
         if (setQuickReply) setQuickReply(res);
 
         if (res && res.signature) {
-          setCommentValue('');
+          if (!stickerValue) setCommentValue('');
           setReviewingSupportComment(false);
           setIsSupportComment(false);
           setCommentFailure(false);
@@ -374,12 +378,45 @@ export function CommentCreate(props: Props) {
     return () => clearTimeout(timer);
   }, [pauseQuickSend]);
 
+  // Stickers: Get LBC-USD exchange rate if hasn't yet and selected a paid sticker
+  React.useEffect(() => {
+    if (stickerPrice && !exchangeRate) Lbryio.getExchangeRates().then(({ LBC_USD }) => setExchangeRate(LBC_USD));
+  }, [exchangeRate, stickerPrice]);
+
+  // Stickers: Check if creator has a tip account saved (on selector so that if a paid sticker is selected,
+  // it defaults to LBC tip instead of USD)
+  React.useEffect(() => {
+    if (!stripeEnvironment || !stickerSelector || canReceiveFiatTip !== undefined) return;
+
+    const channelClaimId = claim.signing_channel ? claim.signing_channel.claim_id : claim.claim_id;
+    const tipChannelName = claim.signing_channel ? claim.signing_channel.name : claim.name;
+
+    Lbryio.call(
+      'account',
+      'check',
+      {
+        channel_claim_id: channelClaimId,
+        channel_name: tipChannelName,
+        environment: stripeEnvironment,
+      },
+      'post'
+    )
+      .then((accountCheckResponse) => {
+        if (accountCheckResponse === true && canReceiveFiatTip !== true) {
+          setCanReceiveFiatTip(true);
+        } else {
+          setCanReceiveFiatTip(false);
+        }
+      })
+      .catch(() => {});
+  }, [canReceiveFiatTip, claim.claim_id, claim.name, claim.signing_channel, stickerSelector]);
+
   // **************************************************************************
   // Render
   // **************************************************************************
 
-  const getActionButton = (title: string, icon: string, handleClick: () => void) => (
-    <Button title={title} button="alt" icon={icon} onClick={handleClick} />
+  const getActionButton = (title: string, label?: string, icon: string, handleClick: () => void) => (
+    <Button title={title} label={label} button="alt" icon={icon} onClick={handleClick} />
   );
 
   if (channelSettings && !channelSettings.comments_enabled) {
@@ -405,6 +442,7 @@ export function CommentCreate(props: Props) {
 
   return (
     <Form
+      onSubmit={() => {}}
       className={classnames('commentCreate', {
         'commentCreate--reply': isReply,
         'commentCreate--nestedReply': isNested,
@@ -421,9 +459,15 @@ export function CommentCreate(props: Props) {
             <UriIndicator uri={activeChannelClaim.canonical_url} link />
           </div>
           <div className="commentCreate__stickerPreviewImage">
-            <OptimizedImage src={selectedSticker && selectedSticker.url} waitLoad />
+            <OptimizedImage src={selectedSticker && selectedSticker.url} waitLoad loading="lazy" />
           </div>
-          {selectedSticker.price && <FilePrice customPrice={selectedSticker.price} isFiat />}
+          {/* figure out lbc sticker prices */}
+          {selectedSticker.price && exchangeRate && (
+            <FilePrice
+              customPrices={{ priceFiat: selectedSticker.price, priceLBC: selectedSticker.price / exchangeRate }}
+              isFiat
+            />
+          )}
         </div>
       ) : isReviewingSupportComment && activeChannelClaim ? (
         <div className="commentCreate__supportCommentPreview">
@@ -483,14 +527,16 @@ export function CommentCreate(props: Props) {
           />
         </>
       )}
-      {(isSupportComment || (isReviewingStickerComment && selectedSticker && selectedSticker.price)) && (
+
+      {(isSupportComment || (isReviewingStickerComment && stickerPrice)) && (
         <WalletTipAmountSelector
           activeTab={activeTab}
           amount={tipAmount}
           claim={claim}
           convertedAmount={convertedAmount}
-          customTipAmount={selectedSticker && selectedSticker.price}
-          fiatConversion={selectedSticker && !!selectedSticker.price} // remove
+          customTipAmount={stickerPrice}
+          exchangeRate={exchangeRate}
+          fiatConversion={selectedSticker && !!selectedSticker.price} // REMOVE / figure out
           onChange={(amount) => setTipAmount(amount)}
           setConvertedAmount={setConvertedAmount}
           setDisableSubmitButton={setDisableReviewButton}
@@ -520,14 +566,7 @@ export function CommentCreate(props: Props) {
           <Button
             button="primary"
             label={__('Send')}
-            disabled={
-              (isSupportComment && (tipError || disableReviewButton)) ||
-              (selectedSticker &&
-                selectedSticker.price &&
-                (activeTab === TAB_FIAT
-                  ? tipAmount < selectedSticker.price
-                  : convertedAmount && convertedAmount < selectedSticker.price))
-            }
+            disabled={isSupportComment && (tipError || disableReviewButton)}
             onClick={() => {
               if (isSupportComment) {
                 handleSupportComment();
@@ -575,33 +614,38 @@ export function CommentCreate(props: Props) {
         {/** Stickers/Support Buttons **/}
         {!supportDisabled && !stickerSelector && (
           <>
-            {isReviewingStickerComment ? (
-              <Button
-                button="alt"
-                label={__('Different Sticker')}
-                onClick={() => {
-                  setReviewingStickerComment(false);
-                  setIsSupportComment(false);
-                  setStickerSelector(true);
-                }}
-              />
-            ) : (
-              getActionButton(__('Stickers'), ICONS.TAG, () => {
+            {getActionButton(
+              __('Stickers'),
+              isReviewingStickerComment ? __('Different Sticker') : undefined,
+              ICONS.STICKER,
+              () => {
+                if (isReviewingStickerComment) setReviewingStickerComment(false);
                 setIsSupportComment(false);
                 setStickerSelector(true);
-              })
+              }
             )}
-            {!claimIsMine &&
-              getActionButton(__('LBC'), ICONS.LBC, () => {
-                setIsSupportComment(true);
-                setActiveTab(TAB_LBC);
-              })}
-            {!claimIsMine &&
-              stripeEnvironment &&
-              getActionButton(__('Cash'), ICONS.FINANCE, () => {
-                setIsSupportComment(true);
-                setActiveTab(TAB_FIAT);
-              })}
+
+            {!claimIsMine && (
+              <>
+                {(!isSupportComment || activeTab !== TAB_LBC) &&
+                  getActionButton(__('LBC'), isSupportComment ? __('Switch to LBC') : undefined, ICONS.LBC, () => {
+                    setIsSupportComment(true);
+                    setActiveTab(TAB_LBC);
+                  })}
+
+                {stripeEnvironment &&
+                  (!isSupportComment || activeTab !== TAB_FIAT) &&
+                  getActionButton(
+                    __('Cash'),
+                    isSupportComment ? __('Switch to Cash') : undefined,
+                    ICONS.FINANCE,
+                    () => {
+                      setIsSupportComment(true);
+                      setActiveTab(TAB_FIAT);
+                    }
+                  )}
+              </>
+            )}
           </>
         )}
 
@@ -619,7 +663,7 @@ export function CommentCreate(props: Props) {
               if (isSupportComment || isReviewingSupportComment) {
                 if (!isReviewingSupportComment) setIsSupportComment(false);
                 setReviewingSupportComment(false);
-                if (selectedSticker && selectedSticker.price) {
+                if (stickerPrice) {
                   setReviewingStickerComment(false);
                   setStickerSelector(false);
                   setSelectedSticker(null);
