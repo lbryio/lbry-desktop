@@ -18,6 +18,9 @@ import qualityLevels from 'videojs-contrib-quality-levels';
 import isUserTyping from 'util/detect-typing';
 import runAds from './ads';
 import LbryVolumeBarClass from './lbry-volume-bar';
+import events from './videojs-events';
+
+const { handleKeyDown, curried_function } = events();
 
 const isDev = process.env.NODE_ENV !== 'production';
 
@@ -78,13 +81,6 @@ type Props = {
 //   poster?: string,
 //   muted?: boolean,
 // };
-
-// check if active (clicked) element is part of video div, used for keyboard shortcuts (volume etc)
-function activeElementIsPartOfVideoElement() {
-  const videoElementParent = document.getElementsByClassName('video-js-parent')[0];
-  const activeElement = document.activeElement;
-  return videoElementParent.contains(activeElement);
-}
 
 const videoPlaybackRates = [0.25, 0.5, 0.75, 1, 1.1, 1.25, 1.5, 1.75, 2];
 
@@ -156,6 +152,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   } = props;
 
   const [reload, setReload] = useState('initial');
+  // will later store the videojs player
   const playerRef = useRef();
   const containerRef = useRef();
   const videoJsOptions = {
@@ -339,13 +336,13 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     }
   }, [adUrl]);
 
-  function handleKeyDown(e: KeyboardEvent) {
-    const player = playerRef.current;
-    const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
-    if (!videoNode || !player || isUserTyping()) return;
-    handleSingleKeyActions(e);
-    handleShiftKeyActions(e);
-  }
+  // function handleKeyDown(e: KeyboardEvent) {
+  //   const player = playerRef.current;
+  //   const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
+  //   if (!videoNode || !player || isUserTyping()) return;
+  //   handleSingleKeyActions(e, playerRef);
+  //   handleShiftKeyActions(e);
+  // }
 
   function handleShiftKeyActions(e: KeyboardEvent) {
     if (e.altKey || e.ctrlKey || e.metaKey || !e.shiftKey) return;
@@ -353,20 +350,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     if (e.keyCode === KEYCODES.COMMA) changePlaybackSpeed(false);
     if (e.keyCode === KEYCODES.N) playNext();
     if (e.keyCode === KEYCODES.P) playPrevious();
-  }
-
-  function handleSingleKeyActions(e: KeyboardEvent) {
-    if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
-    if (e.keyCode === KEYCODES.SPACEBAR || e.keyCode === KEYCODES.K) togglePlay();
-    if (e.keyCode === KEYCODES.F) toggleFullscreen();
-    if (e.keyCode === KEYCODES.M) toggleMute();
-    if (e.keyCode === KEYCODES.UP) volumeUp(e);
-    if (e.keyCode === KEYCODES.DOWN) volumeDown(e);
-    if (e.keyCode === KEYCODES.T) toggleTheaterMode();
-    if (e.keyCode === KEYCODES.L) seekVideo(SEEK_STEP);
-    if (e.keyCode === KEYCODES.J) seekVideo(-SEEK_STEP);
-    if (e.keyCode === KEYCODES.RIGHT) seekVideo(SEEK_STEP_5);
-    if (e.keyCode === KEYCODES.LEFT) seekVideo(-SEEK_STEP_5);
   }
 
   function seekVideo(stepSize: number) {
@@ -432,28 +415,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
     if (!videoNode) return;
     videoNode.paused ? videoNode.play() : videoNode.pause();
-  }
-
-  function volumeUp(event) {
-    // dont run if video element is not active element (otherwise runs when scrolling using keypad)
-    const videoElementIsActive = activeElementIsPartOfVideoElement();
-    const player = playerRef.current;
-    if (!player || !videoElementIsActive) return;
-    event.preventDefault();
-    player.volume(player.volume() + 0.05);
-    OVERLAY.showVolumeverlay(player, Math.round(player.volume() * 100));
-    player.userActive(true);
-  }
-
-  function volumeDown(event) {
-    // dont run if video element is not active element (otherwise runs when scrolling using keypad)
-    const videoElementIsActive = activeElementIsPartOfVideoElement();
-    const player = playerRef.current;
-    if (!player || !videoElementIsActive) return;
-    event.preventDefault();
-    player.volume(player.volume() - 0.05);
-    OVERLAY.showVolumeverlay(player, Math.round(player.volume() * 100));
-    player.userActive(true);
   }
 
   // Create the video DOM element and wrapper
@@ -623,8 +584,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       // Set reference in component state
       playerRef.current = vjsPlayer;
 
-      // Add event listener for keyboard shortcuts
-      window.addEventListener('keydown', handleKeyDown);
+      window.addEventListener('keydown', curried_function(playerRef, containerRef));
     });
 
     // Cleanup
