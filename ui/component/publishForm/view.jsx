@@ -325,7 +325,7 @@ function PublishForm(props: Props) {
       submitLabel = __('Uploading...');
     }
   } else if (previewing) {
-    submitLabel = __('Preparing...');
+    submitLabel = <Spinner type="small" />;
   } else {
     if (isStillEditing) {
       submitLabel = __('Save');
