@@ -52,3 +52,12 @@ declare type PublishParams = {
   nsfw: boolean,
   tags: Array<Tag>,
 };
+
+declare type FileUploadItem = {
+  params: UpdatePublishFormData,
+  file: File,
+  fileFingerprint: string,
+  progress: string,
+  status?: string,
+  tusUploader?: any,
+};

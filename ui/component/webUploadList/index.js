@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
-import { selectCurrentUploads, selectUploadCount, doUpdateUploadRemove } from 'lbryinc';
 import { doOpenModal } from 'redux/actions/app';
-import { doPublishResume } from 'redux/actions/publish';
+import { doPublishResume, doUpdateUploadRemove } from 'redux/actions/publish';
+import { selectCurrentUploads, selectUploadCount } from 'redux/selectors/publish';
 import WebUploadList from './view';
 
 const select = (state) => ({

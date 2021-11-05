@@ -9,7 +9,7 @@
  */
 import * as tus from 'tus-js-client';
 import { X_LBRY_AUTH_TOKEN } from '../../ui/constants/token';
-import { doUpdateUploadAdd, doUpdateUploadProgress, doUpdateUploadRemove } from 'lbryinc';
+import { doUpdateUploadAdd, doUpdateUploadProgress, doUpdateUploadRemove } from '../../ui/redux/actions/publish';
 
 const UPLOAD_CHUNK_SIZE_BYTE = 100000000;
 
