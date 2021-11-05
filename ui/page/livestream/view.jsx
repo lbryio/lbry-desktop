@@ -1,11 +1,11 @@
 // @flow
-import { LIVESTREAM_LIVE_API } from 'constants/livestream';
 import React from 'react';
 import Page from 'component/page';
 import LivestreamLayout from 'component/livestreamLayout';
 import LivestreamComments from 'component/livestreamComments';
 import analytics from 'analytics';
 import Lbry from 'lbry';
+import watchLivestreamStatus from '$web/src/livestreaming/long-polling';
 
 type Props = {
   uri: string,
@@ -23,7 +23,6 @@ export default function LivestreamPage(props: Props) {
   const livestreamChannelId = channelClaim && channelClaim.signing_channel && channelClaim.signing_channel.claim_id;
   const [hasLivestreamClaim, setHasLivestreamClaim] = React.useState(false);
 
-  const STREAMING_POLL_INTERVAL_IN_MS = 10000;
   const LIVESTREAM_CLAIM_POLL_IN_MS = 60000;
 
   React.useEffect(() => {
@@ -54,34 +53,9 @@ export default function LivestreamPage(props: Props) {
   }, [livestreamChannelId, isLive]);
 
   React.useEffect(() => {
-    let interval;
-    function checkIsLive() {
-      // TODO: duplicate code below
-      // $FlowFixMe livestream API can handle garbage
-      fetch(`${LIVESTREAM_LIVE_API}/${livestreamChannelId}`)
-        .then((res) => res.json())
-        .then((res) => {
-          if (!res || !res.data) {
-            setIsLive(false);
-            return;
-          }
-
-          if (res.data.hasOwnProperty('live')) {
-            setIsLive(res.data.live);
-          }
-        });
-    }
-    if (livestreamChannelId && hasLivestreamClaim) {
-      if (!interval) checkIsLive();
-      interval = setInterval(checkIsLive, STREAMING_POLL_INTERVAL_IN_MS);
-
-      return () => {
-        if (interval) {
-          clearInterval(interval);
-        }
-      };
-    }
-  }, [livestreamChannelId, hasLivestreamClaim]);
+    if (!hasLivestreamClaim || !livestreamChannelId) return;
+    return watchLivestreamStatus(livestreamChannelId, (state) => setIsLive(state));
+  }, [livestreamChannelId, setIsLive, hasLivestreamClaim]);
 
   const stringifiedClaim = JSON.stringify(claim);
   React.useEffect(() => {
