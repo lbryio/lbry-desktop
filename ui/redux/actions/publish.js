@@ -689,11 +689,15 @@ export const doCheckReflectingFiles = () => (dispatch: Dispatch, getState: GetSt
   }
 };
 
-export function doUpdateUploadAdd(file: File | string, params: { [key: string]: any }, tusUploader: any) {
+export function doUpdateUploadAdd(
+  file: File | string,
+  params: { [key: string]: any },
+  uploader: TusUploader | XMLHttpRequest
+) {
   return (dispatch: Dispatch, getState: GetState) => {
     dispatch({
       type: ACTIONS.UPDATE_UPLOAD_ADD,
-      data: { file, params, tusUploader },
+      data: { file, params, uploader },
     });
   };
 }

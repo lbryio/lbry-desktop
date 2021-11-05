@@ -137,16 +137,17 @@ export const publishReducer = handleActions(
       };
     },
     [ACTIONS.UPDATE_UPLOAD_ADD]: (state: PublishState, action) => {
-      const { file, params, tusUploader } = action.data;
+      const { file, params, uploader } = action.data;
       const key = getKeyFromParam(params);
       const currentUploads = Object.assign({}, state.currentUploads);
 
       currentUploads[key] = {
         file,
-        fileFingerprint: serializeFileObj(file), // TODO: get hash instead?
+        fileFingerprint: file ? serializeFileObj(file) : undefined, // TODO: get hash instead?
         progress: '0',
         params,
-        tusUploader,
+        uploader,
+        resumable: !(uploader instanceof XMLHttpRequest),
       };
 
       return { ...state, currentUploads };
@@ -156,13 +157,17 @@ export const publishReducer = handleActions(
       const key = getKeyFromParam(params);
       const currentUploads = Object.assign({}, state.currentUploads);
 
+      if (!currentUploads[key]) {
+        return state;
+      }
+
       if (progress) {
         currentUploads[key].progress = progress;
         delete currentUploads[key].status;
       } else if (status) {
         currentUploads[key].status = status;
         if (status === 'error') {
-          delete currentUploads[key].tusUploader;
+          delete currentUploads[key].uploader;
         }
       }
 
@@ -184,7 +189,12 @@ export const publishReducer = handleActions(
         // Cleanup for 'publish::currentUploads'
         if (newPublish.currentUploads) {
           Object.keys(newPublish.currentUploads).forEach((key) => {
-            delete newPublish.currentUploads[key].tusUploader;
+            const params = newPublish.currentUploads[key].params;
+            if (!params || Object.keys(params).length === 0) {
+              delete newPublish.currentUploads[key];
+            } else {
+              delete newPublish.currentUploads[key].uploader;
+            }
           });
         }
 

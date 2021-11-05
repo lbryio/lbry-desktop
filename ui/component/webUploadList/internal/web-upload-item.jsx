@@ -15,7 +15,7 @@ type Props = {
 
 export default function WebUploadItem(props: Props) {
   const { uploadItem, doPublishResume, doUpdateUploadRemove, doOpenModal } = props;
-  const { params, file, fileFingerprint, progress, status, tusUploader } = uploadItem;
+  const { params, file, fileFingerprint, progress, status, resumable, uploader } = uploadItem;
 
   const [showFileSelector, setShowFileSelector] = useState(false);
 
@@ -40,8 +40,13 @@ export default function WebUploadItem(props: Props) {
       subtitle: __('Cancel and remove the selected upload?'),
       body: params.name ? <p className="empty">{`lbry://${params.name}`}</p> : undefined,
       onConfirm: (closeModal) => {
-        if (tusUploader) {
-          tusUploader.abort(true);
+        if (uploader) {
+          if (resumable) {
+            // $FlowFixMe - couldn't resolve to TusUploader manually.
+            uploader.abort(true); // TUS
+          } else {
+            uploader.abort(); // XHR
+          }
         }
         doUpdateUploadRemove(params);
         closeModal();
@@ -50,25 +55,39 @@ export default function WebUploadItem(props: Props) {
   }
 
   function resolveProgressStr() {
-    if (!tusUploader) {
+    if (!uploader) {
       return __('Stopped.');
-    } else if (status) {
-      switch (status) {
-        case 'retry':
-          return __('Retrying...');
-        case 'error':
-          return __('Failed.');
-        default:
-          return status;
+    }
+
+    if (resumable) {
+      if (status) {
+        switch (status) {
+          case 'retry':
+            return __('Retrying...');
+          case 'error':
+            return __('Failed.');
+          default:
+            return status;
+        }
+      } else {
+        const progressInt = parseInt(progress);
+        return progressInt === 100 ? __('Processing...') : __('Uploading...');
       }
     } else {
-      const progressInt = parseInt(progress);
-      return progressInt === 100 ? __('Processing...') : __('Uploading...');
+      return __('Uploading...');
     }
   }
 
   function getRetryButton() {
-    if (!tusUploader) {
+    if (!resumable) {
+      return null;
+    }
+
+    if (uploader) {
+      // Should still be uploading. Don't show.
+      return null;
+    } else {
+      // Refreshed or connection broken.
       const isFileActive = file instanceof File;
       return (
         <Button
@@ -84,8 +103,6 @@ export default function WebUploadItem(props: Props) {
           disabled={showFileSelector}
         />
       );
-    } else {
-      return null;
     }
   }
 

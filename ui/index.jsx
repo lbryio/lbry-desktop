@@ -35,7 +35,7 @@ import {
   doAuthTokenRefresh,
 } from 'util/saved-passwords';
 import { X_LBRY_AUTH_TOKEN } from 'constants/token';
-import { LBRY_WEB_API, DEFAULT_LANGUAGE, LBRY_API_URL, LBRY_WEB_PUBLISH_API } from 'config';
+import { LBRY_WEB_API, DEFAULT_LANGUAGE, LBRY_API_URL } from 'config';
 
 // Import 3rd-party styles before ours for the current way we are code-splitting.
 import 'scss/third-party.scss';
@@ -69,7 +69,6 @@ sdkAPIHost = LBRY_WEB_API;
 
 export const SDK_API_PATH = `${sdkAPIHost}/api/v1`;
 const proxyURL = `${SDK_API_PATH}/proxy`;
-const publishURL = LBRY_WEB_PUBLISH_API; // || `${SDK_API_PATH}/proxy`;
 
 Lbry.setDaemonConnectionString(proxyURL);
 
@@ -79,7 +78,6 @@ Lbry.setOverride(
     new Promise((resolve, reject) => {
       apiPublishCallViaWeb(
         apiCall,
-        publishURL,
         Lbry.getApiRequestHeaders() && Object.keys(Lbry.getApiRequestHeaders()).includes(X_LBRY_AUTH_TOKEN)
           ? Lbry.getApiRequestHeaders()[X_LBRY_AUTH_TOKEN]
           : '',

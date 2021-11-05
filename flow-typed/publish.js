@@ -53,11 +53,23 @@ declare type PublishParams = {
   tags: Array<Tag>,
 };
 
+declare type TusUploader = any;
+
+declare type FileUploadSdkParams = {
+  file_path: string,
+  name: ?string,
+  preview?: boolean,
+  remote_url?: string,
+  thumbnail_url?: string,
+  title?: string,
+};
+
 declare type FileUploadItem = {
-  params: UpdatePublishFormData,
+  params: FileUploadSdkParams,
   file: File,
   fileFingerprint: string,
   progress: string,
   status?: string,
-  tusUploader?: any,
+  uploader?: TusUploader | XMLHttpRequest,
+  resumable: boolean,
 };
