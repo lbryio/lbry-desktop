@@ -20,7 +20,8 @@ function Paginate(props: Props) {
   const { search } = location;
   const [textValue, setTextValue] = React.useState('');
   const urlParams = new URLSearchParams(search);
-  const initialPage = disableHistory ? 1 : Number(urlParams.get(PAGINATE_PARAM)) || 1;
+  const urlParamPage = Number(urlParams.get(PAGINATE_PARAM));
+  const initialPage = disableHistory ? 1 : urlParamPage || 1;
   const [currentPage, setCurrentPage] = React.useState(initialPage);
   const isMobile = useIsMobile();
 
@@ -46,6 +47,12 @@ function Paginate(props: Props) {
       handleChangePage(newPage);
     }
   }
+
+  React.useEffect(() => {
+    if (urlParamPage) {
+      setCurrentPage(urlParamPage);
+    }
+  }, [urlParamPage, setCurrentPage]);
 
   return (
     // Hide the paginate controls if we are loading or there is only one page
