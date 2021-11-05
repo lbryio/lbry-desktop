@@ -60,24 +60,34 @@ function WalletSendTip(props: Props) {
     doSendTip,
   } = props;
 
-  /** STATE **/
+  /** WHAT TAB TO SHOW **/
+  // set default tab to for new users based on if it's their claim or not
+  let defaultTabToShow;
+  if (claimIsMine) {
+    defaultTabToShow = TAB_BOOST;
+  } else {
+    defaultTabToShow = TAB_LBC;
+  }
 
+  // loads the default tab if nothing else is there yet
+  const [activeTab, setActiveTab] = usePersistedState(defaultTabToShow);
+
+  // if a broken default is set, set it to the proper default
+  if (activeTab !== TAB_BOOST && activeTab !== TAB_LBC && activeTab !== TAB_FIAT) {
+    // if the claim is the user's set it to boost
+    setActiveTab(defaultTabToShow);
+  }
+
+  // if the claim is yours but the active tab is not boost, change it to boost
+  if (claimIsMine && activeTab !== TAB_BOOST) {
+    setActiveTab(TAB_BOOST);
+  }
+
+  /** STATE **/
   const [tipAmount, setTipAmount] = usePersistedState('comment-support:customTip', 1.0);
   const [isOnConfirmationPage, setConfirmationPage] = React.useState(false);
   const [tipError, setTipError] = React.useState();
-  const [activeTab, setActiveTab] = usePersistedState();
   const [disableSubmitButton, setDisableSubmitButton] = React.useState();
-
-  // if not proper default is set, set the proper default
-  if (activeTab !== TAB_BOOST && activeTab !== TAB_LBC && activeTab !== TAB_FIAT) {
-    // if the claim is the user's set it to boost
-    if (claimIsMine) {
-      setActiveTab(TAB_BOOST);
-    } else {
-      // otherwise set it to tip lbc as default
-      setActiveTab(TAB_LBC);
-    }
-  }
 
   /** CONSTS **/
   const claimTypeText = getClaimTypeText();
