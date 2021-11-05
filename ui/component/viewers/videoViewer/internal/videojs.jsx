@@ -17,6 +17,7 @@ import recsys from './plugins/videojs-recsys/plugin';
 import qualityLevels from 'videojs-contrib-quality-levels';
 import isUserTyping from 'util/detect-typing';
 import runAds from './ads';
+import LbryVolumeBarClass from './lbry-volume-bar';
 
 const isDev = process.env.NODE_ENV !== 'production';
 
@@ -78,18 +79,6 @@ type Props = {
 //   muted?: boolean,
 // };
 
-function hitsFiftyPercent() {
-  // from 0 - 999
-  const rand = Math.floor(Math.random() * (1000 + 1));
-
-  // 499 is 50% chance of running
-  if (rand > 499) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
 // check if active (clicked) element is part of video div, used for keyboard shortcuts (volume etc)
 function activeElementIsPartOfVideoElement() {
   const videoElementParent = document.getElementsByClassName('video-js-parent')[0];
@@ -133,47 +122,6 @@ if (!Object.keys(videojs.getPlugins()).includes('qualityLevels')) {
 
 if (!Object.keys(videojs.getPlugins()).includes('recsys')) {
   videojs.registerPlugin('recsys', recsys);
-}
-
-// ****************************************************************************
-// LbryVolumeBarClass
-// ****************************************************************************
-
-const VIDEOJS_CONTROL_BAR_CLASS = 'ControlBar';
-const VIDEOJS_VOLUME_PANEL_CLASS = 'VolumePanel';
-const VIDEOJS_VOLUME_CONTROL_CLASS = 'VolumeControl';
-const VIDEOJS_VOLUME_BAR_CLASS = 'VolumeBar';
-
-class LbryVolumeBarClass extends videojs.getComponent(VIDEOJS_VOLUME_BAR_CLASS) {
-  constructor(player, options = {}) {
-    super(player, options);
-  }
-
-  static replaceExisting(player) {
-    try {
-      const volumeControl = player
-        .getChild(VIDEOJS_CONTROL_BAR_CLASS)
-        .getChild(VIDEOJS_VOLUME_PANEL_CLASS)
-        .getChild(VIDEOJS_VOLUME_CONTROL_CLASS);
-      const volumeBar = volumeControl.getChild(VIDEOJS_VOLUME_BAR_CLASS);
-      volumeControl.removeChild(volumeBar);
-      volumeControl.addChild(new LbryVolumeBarClass(player));
-    } catch (error) {
-      // In case it slips in 'Production', the original volume bar will be used and the site should still be working
-      // (just not exactly the way we want).
-      if (isDev) throw Error('\n\nvideojs.jsx: Volume Panel hierarchy changed?\n\n' + error);
-    }
-  }
-
-  handleMouseDown(event) {
-    super.handleMouseDown(event);
-    event.stopPropagation();
-  }
-
-  handleMouseMove(event) {
-    super.handleMouseMove(event);
-    event.stopPropagation();
-  }
 }
 
 // ****************************************************************************
