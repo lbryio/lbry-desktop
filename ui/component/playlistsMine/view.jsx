@@ -10,7 +10,6 @@ import Paginate from 'component/common/paginate';
 import Yrbl from 'component/yrbl';
 import classnames from 'classnames';
 import { FormField, Form } from 'component/common/form';
-import { PAGE_PARAM } from 'constants/claim';
 
 type Props = {
   publishedCollections: CollectionGroup,
@@ -20,12 +19,15 @@ type Props = {
   page: number,
   pageSize: number,
   history: { replace: (string) => void },
+  location: { search: string },
 };
 
 const ALL = 'All';
 const PRIVATE = 'Private';
 const PUBLIC = 'Public';
 const COLLECTION_FILTERS = [ALL, PRIVATE, PUBLIC];
+const FILTER_TYPE_PARAM = 'type';
+const PAGE_PARAM = 'page';
 
 export default function PlaylistsMine(props: Props) {
   const {
@@ -33,15 +35,20 @@ export default function PlaylistsMine(props: Props) {
     unpublishedCollections,
     // savedCollections, these are resolved on startup from sync'd claimIds or urls
     fetchingCollections,
-    page = 0,
-    pageSize,
     history,
+    location,
   } = props;
+
+  const { search } = location;
+  const urlParams = new URLSearchParams(search);
+  const page = Number(urlParams.get(PAGE_PARAM)) || 1;
+  const type = urlParams.get(FILTER_TYPE_PARAM) || ALL;
+  const pageSize = 12;
 
   const unpublishedCollectionsList = (Object.keys(unpublishedCollections || {}): any);
   const publishedList = (Object.keys(publishedCollections || {}): any);
   const hasCollections = unpublishedCollectionsList.length || publishedList.length;
-  const [filterType, setFilterType] = React.useState(ALL);
+  const [filterType, setFilterType] = React.useState(type);
   const [searchText, setSearchText] = React.useState('');
 
   let collectionsToShow = [];
@@ -88,8 +95,13 @@ export default function PlaylistsMine(props: Props) {
   }
 
   function handleFilterType(val) {
+    const newParams = new URLSearchParams();
+    if (val) {
+      newParams.set(FILTER_TYPE_PARAM, val);
+    }
+    newParams.set(PAGE_PARAM, '1');
+    history.replace(`?${newParams.toString()}`);
     setFilterType(val);
-    history.replace(`?${PAGE_PARAM}=1`);
   }
 
   return (

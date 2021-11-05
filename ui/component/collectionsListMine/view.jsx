@@ -43,6 +43,7 @@ export default function CollectionsListMine(props: Props) {
   const [filterType, setFilterType] = React.useState(ALL);
   const [searchText, setSearchText] = React.useState('');
 
+  const playlistPageUrl = `/$/${PAGES.PLAYLISTS}?type=${filterType}`;
   let collectionsToShow = [];
   if (filterType === ALL) {
     collectionsToShow = unpublishedCollectionsList.concat(publishedList);
@@ -140,7 +141,7 @@ export default function CollectionsListMine(props: Props) {
             <Button
               className="claim-grid__title"
               button="link"
-              navigate={`/$/${PAGES.PLAYLISTS}`}
+              navigate={playlistPageUrl}
               label={
                 <span className="claim-grid__title-span">
                   {__('Playlists')}
@@ -188,20 +189,22 @@ export default function CollectionsListMine(props: Props) {
               />
             </Form>
           </div>
-          {isTruncated && (
-            <p className="collection-grid__results-summary">
-              {__(`Showing %filtered% results of %total%`, {
-                filtered: filteredLength,
-                total: totalLength,
-              })}
-              {`${searchText ? ' (' + __('filtered') + ') ' : ' '}`}
-              <Button
-                button="link"
-                navigate={`/$/${PAGES.PLAYLISTS}`}
-                label={<span className="claim-grid__title-span">{__('View All Playlists')}</span>}
-              />
-            </p>
-          )}
+          <p className="collection-grid__results-summary">
+            {isTruncated && (
+              <>
+                {__(`Showing %filtered% results of %total%`, {
+                  filtered: filteredLength,
+                  total: totalLength,
+                })}
+                {`${searchText ? ' (' + __('filtered') + ') ' : ' '}`}
+              </>
+            )}
+            <Button
+              button="link"
+              navigate={playlistPageUrl}
+              label={<span className="claim-grid__title-span">{__('View All Playlists')}</span>}
+            />
+          </p>
         </div>
         {Boolean(hasCollections) && (
           <div>
