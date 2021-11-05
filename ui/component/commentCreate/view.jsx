@@ -117,7 +117,7 @@ export function CommentCreate(props: Props) {
   const [commentValue, setCommentValue] = React.useState('');
   const [advancedEditor, setAdvancedEditor] = usePersistedState('comment-editor-mode', false);
   const [stickerSelector, setStickerSelector] = React.useState();
-  const [activeTab, setActiveTab] = React.useState('');
+  const [activeTab, setActiveTab] = React.useState();
   const [tipError, setTipError] = React.useState();
   const [deletedComment, setDeletedComment] = React.useState(false);
   const [pauseQuickSend, setPauseQuickSend] = React.useState(false);

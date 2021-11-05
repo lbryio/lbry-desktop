@@ -65,11 +65,21 @@ function WalletSendTip(props: Props) {
   const [tipAmount, setTipAmount] = usePersistedState('comment-support:customTip', 1.0);
   const [isOnConfirmationPage, setConfirmationPage] = React.useState(false);
   const [tipError, setTipError] = React.useState();
-  const [activeTab, setActiveTab] = usePersistedState(TAB_BOOST);
+  const [activeTab, setActiveTab] = usePersistedState();
   const [disableSubmitButton, setDisableSubmitButton] = React.useState();
 
-  /** CONSTS **/
+  // if not proper default is set, set the proper default
+  if (activeTab !== TAB_BOOST && activeTab !== TAB_LBC && activeTab !== TAB_FIAT) {
+    // if the claim is the user's set it to boost
+    if (claimIsMine) {
+      setActiveTab(TAB_BOOST);
+    } else {
+      // otherwise set it to tip lbc as default
+      setActiveTab(TAB_LBC);
+    }
+  }
 
+  /** CONSTS **/
   const claimTypeText = getClaimTypeText();
   const isSupport = claimIsMine || activeTab === TAB_BOOST;
   const titleText = claimIsMine
