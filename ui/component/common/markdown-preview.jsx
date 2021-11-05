@@ -21,6 +21,10 @@ import OptimizedImage from 'component/optimizedImage';
 
 const RE_EMOTE = /:\+1:|:-1:|:[\w-]+:/;
 
+function isEmote(title, src) {
+  return title && RE_EMOTE.test(title) && src.includes('static.odycdn.com/emoticons');
+}
+
 type SimpleTextProps = {
   children?: React.Node,
 };
@@ -103,8 +107,8 @@ const SimpleImageLink = (props: ImageLinkProps) => {
     return null;
   }
 
-  if (title && RE_EMOTE.test(title) && src.includes('static.odycdn.com/emoticons')) {
-    return <OptimizedImage title={title} src={src} />;
+  if (isEmote(title, src)) {
+    return <OptimizedImage src={src} title={title} className="emote" waitLoad loading="lazy" />;
   }
 
   return (
@@ -194,18 +198,19 @@ const MarkdownPreview = (props: MarkdownProps) => {
           ),
       // Workaraund of remarkOptions.Fragment
       div: React.Fragment,
-      img: isStakeEnoughForPreview(stakedLevel)
-        ? ZoomableImage
-        : (imgProps) => (
-            <SimpleImageLink
-              src={imgProps.src}
-              alt={imgProps.alt}
-              title={imgProps.title}
-              helpText={
-                SIMPLE_SITE ? __("This channel isn't staking enough LBRY Credits for inline image previews.") : ''
-              }
-            />
-          ),
+      img: (imgProps) =>
+        isStakeEnoughForPreview(stakedLevel) && !isEmote(imgProps.title, imgProps.src) ? (
+          ZoomableImage
+        ) : (
+          <SimpleImageLink
+            src={imgProps.src}
+            alt={imgProps.alt}
+            title={imgProps.title}
+            helpText={
+              SIMPLE_SITE ? __("This channel isn't staking enough LBRY Credits for inline image previews.") : ''
+            }
+          />
+        ),
     },
   };
 

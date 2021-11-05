@@ -180,3 +180,4 @@ export const ARTISTS = 'Artists';
 export const MYSTERIES = 'Mysteries';
 export const TECHNOLOGY = 'Technology';
 export const EMOJI = 'Emoji';
+export const STICKER = 'Sticker';

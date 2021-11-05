@@ -16,7 +16,7 @@ type Props = {
   type?: string,
   uri: string,
   // below props are just passed to <CreditAmount />
-  customPrice: number,
+  customPrices?: { priceFiat: number, priceLBC: number },
   hideFree?: boolean, // hide the file price if it's free
   isFiat?: boolean,
   showLBC?: boolean,
@@ -50,10 +50,10 @@ class FilePrice extends React.PureComponent<Props> {
       claimWasPurchased,
       type,
       claimIsMine,
-      customPrice,
+      customPrices,
     } = this.props;
 
-    if (!customPrice && (claimIsMine || !costInfo || !costInfo.cost || (!costInfo.cost && hideFree))) return null;
+    if (!customPrices && (claimIsMine || !costInfo || !costInfo.cost || (!costInfo.cost && hideFree))) return null;
 
     const className = classnames(claimWasPurchased ? 'filePrice__key' : 'filePrice', {
       'filePrice--filepage': type === 'filepage',
@@ -66,7 +66,10 @@ class FilePrice extends React.PureComponent<Props> {
       </span>
     ) : (
       <CreditAmount
-        amount={costInfo ? costInfo.cost : customPrice}
+        amount={costInfo ? costInfo.cost : undefined}
+        customAmounts={
+          customPrices ? { amountFiat: customPrices.priceFiat, amountLBC: customPrices.priceLBC } : undefined
+        }
         className={className}
         isEstimate={!!costInfo && !costInfo.includesData}
         isFiat={isFiat}

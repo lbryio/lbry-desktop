@@ -117,7 +117,7 @@
   }
 
   // Image
-  img:not(.channel-thumbnail__custom) {
+  img:not(.channel-thumbnail__custom):not(.emote) {
     margin-bottom: var(--spacing-m);
     padding-top: var(--spacing-m);
     max-height: var(--inline-player-max-height);

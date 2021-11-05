@@ -64,7 +64,7 @@ function LivestreamComment(props: Props) {
       )}
 
       <div className="livestream-comment__body">
-        {(supportAmount > 0 || Boolean(stickerFromMessage)) && <ChannelThumbnail uri={authorUri} xsmall />}
+        {supportAmount > 0 && <ChannelThumbnail uri={authorUri} xsmall />}
         <div
           className={classnames('livestream-comment__info', {
             'livestream-comment__info--sticker': Boolean(stickerFromMessage),
@@ -113,7 +113,7 @@ function LivestreamComment(props: Props) {
 
           {stickerFromMessage ? (
             <div className="sticker__comment">
-              <OptimizedImage src={stickerFromMessage.url} waitLoad />
+              <OptimizedImage src={stickerFromMessage.url} waitLoad loading="lazy" />
             </div>
           ) : (
             <div className="livestream-comment__text">

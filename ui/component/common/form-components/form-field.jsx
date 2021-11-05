@@ -239,7 +239,7 @@ export class FormField extends React.PureComponent<Props> {
                 {...inputProps}
               />
               <div className="form-field__textarea-info">
-                {!noEmojis && (
+                {!noEmojis && openEmoteMenu && (
                   <Button
                     type="alt"
                     className="button--file-action"

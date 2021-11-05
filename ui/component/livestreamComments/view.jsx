@@ -284,7 +284,7 @@ export default function LivestreamComments(props: Props) {
                           </div>
                           {stickerSuperChats.includes(superChat) && getStickerUrl(superChat.comment) && (
                             <div className="livestream-superchat__info--image">
-                              <OptimizedImage src={getStickerUrl(superChat.comment)} waitLoad />
+                              <OptimizedImage src={getStickerUrl(superChat.comment)} waitLoad loading="lazy" />
                             </div>
                           )}
                         </div>

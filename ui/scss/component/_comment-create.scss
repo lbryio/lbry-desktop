@@ -106,5 +106,16 @@ $thumbnailWidthSmall: 1rem;
   .filePrice {
     height: 1.5rem;
     width: 10rem;
+
+    .credit-amount:not(:last-child) {
+      &::after {
+        margin-left: var(--spacing-xxs);
+        content: '/';
+      }
+    }
+
+    .credit-amount:not(:first-child) {
+      margin-left: var(--spacing-xxs);
+    }
   }
 }

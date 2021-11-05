@@ -1,4 +1,4 @@
-import { EMOTES_24px as EMOTES } from 'constants/emotes';
+import { EMOTES_48px as EMOTES } from 'constants/emotes';
 import visit from 'unist-util-visit';
 
 const EMOTE_NODE_TYPE = 'emote';
