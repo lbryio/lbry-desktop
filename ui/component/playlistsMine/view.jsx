@@ -10,6 +10,7 @@ import Paginate from 'component/common/paginate';
 import Yrbl from 'component/yrbl';
 import classnames from 'classnames';
 import { FormField, Form } from 'component/common/form';
+import { PAGE_PARAM } from 'constants/claim';
 
 type Props = {
   publishedCollections: CollectionGroup,
@@ -18,6 +19,7 @@ type Props = {
   fetchingCollections: boolean,
   page: number,
   pageSize: number,
+  history: { replace: (string) => void },
 };
 
 const ALL = 'All';
@@ -33,6 +35,7 @@ export default function PlaylistsMine(props: Props) {
     fetchingCollections,
     page = 0,
     pageSize,
+    history,
   } = props;
 
   const unpublishedCollectionsList = (Object.keys(unpublishedCollections || {}): any);
@@ -65,8 +68,9 @@ export default function PlaylistsMine(props: Props) {
   }
 
   const shouldPaginate = filteredCollections.length > pageSize;
-  const paginateStart = shouldPaginate ? (page - 1) * pageSize : 0;
-  const paginatedCollections = filteredCollections.slice(paginateStart, paginateStart + pageSize);
+  const paginateStartIndex = shouldPaginate ? (page - 1) * pageSize : 0;
+  const paginateEndIndex = paginateStartIndex + pageSize;
+  const paginatedCollections = filteredCollections.slice(paginateStartIndex, paginateEndIndex);
 
   function escapeListener(e: SyntheticKeyboardEvent<*>) {
     if (e.keyCode === KEYCODES.ESCAPE) {
@@ -81,6 +85,11 @@ export default function PlaylistsMine(props: Props) {
 
   function onTextareaBlur() {
     window.removeEventListener('keydown', escapeListener);
+  }
+
+  function handleFilterType(val) {
+    setFilterType(val);
+    history.replace(`?${PAGE_PARAM}=1`);
   }
 
   return (
@@ -105,7 +114,7 @@ export default function PlaylistsMine(props: Props) {
                   label={__(value)}
                   key={value}
                   button="alt"
-                  onClick={() => setFilterType(value)}
+                  onClick={() => handleFilterType(value)}
                   className={classnames('button-toggle', {
                     'button-toggle--active': filterType === value,
                   })}
