@@ -101,9 +101,6 @@ const VIDEO_JS_OPTIONS = {
   },
 };
 
-const SEEK_STEP_5 = 5;
-const SEEK_STEP = 10; // time to seek in seconds
-
 if (!Object.keys(videojs.getPlugins()).includes('eventTracking')) {
   videojs.registerPlugin('eventTracking', eventTracking);
 }
@@ -352,24 +349,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     if (e.keyCode === KEYCODES.P) playPrevious();
   }
 
-  function seekVideo(stepSize: number) {
-    const player = playerRef.current;
-    const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
-    if (!videoNode || !player) return;
-    const duration = videoNode.duration;
-    const currentTime = videoNode.currentTime;
-    const newDuration = currentTime + stepSize;
-    if (newDuration < 0) {
-      videoNode.currentTime = 0;
-    } else if (newDuration > duration) {
-      videoNode.currentTime = duration;
-    } else {
-      videoNode.currentTime = newDuration;
-    }
-    OVERLAY.showSeekedOverlay(player, Math.abs(stepSize), stepSize > 0);
-    player.userActive(true);
-  }
-
   function changePlaybackSpeed(shouldSpeedUp: boolean) {
     const player = playerRef.current;
     if (!player) return;
@@ -384,37 +363,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       player.userActive(true);
       player.playbackRate(nextRate);
     }
-  }
-
-  function toggleFullscreen() {
-    const player = playerRef.current;
-    if (!player) return;
-    if (!player.isFullscreen()) {
-      player.requestFullscreen();
-    } else {
-      player.exitFullscreen();
-    }
-  }
-
-  function toggleTheaterMode() {
-    const player = playerRef.current;
-    if (!player) return;
-    toggleVideoTheaterMode();
-    if (player.isFullscreen()) {
-      player.exitFullscreen();
-    }
-  }
-
-  function toggleMute() {
-    const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
-    if (!videoNode) return;
-    videoNode.muted = !videoNode.muted;
-  }
-
-  function togglePlay() {
-    const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
-    if (!videoNode) return;
-    videoNode.paused ? videoNode.play() : videoNode.pause();
   }
 
   // Create the video DOM element and wrapper
