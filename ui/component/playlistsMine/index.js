@@ -14,7 +14,7 @@ const select = (state, props) => {
   const { search } = props.location;
   const urlParams = new URLSearchParams(search);
   const page = Number(urlParams.get(PAGE_PARAM)) || '1';
-  const pageSize = urlParams.get(PAGE_SIZE_PARAM) || String(COLLECTIONS_PAGE_SIZE);
+  const pageSize = Number(urlParams.get(PAGE_SIZE_PARAM)) || COLLECTIONS_PAGE_SIZE;
 
   return {
     page,
