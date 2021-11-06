@@ -136,3 +136,9 @@
     }
   }
 }
+
+.collection-grid__results-summary {
+  padding: 0;
+  padding-bottom: var(--spacing-m);
+  color: var(--color-text-help);
+}

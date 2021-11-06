@@ -25,7 +25,7 @@ const ALL = 'All';
 const PRIVATE = 'Private';
 const PUBLIC = 'Public';
 const COLLECTION_FILTERS = [ALL, PRIVATE, PUBLIC];
-const COLLECTION_SHOW_COUNT = 24;
+const COLLECTION_SHOW_COUNT = 12;
 
 export default function CollectionsListMine(props: Props) {
   const {
@@ -43,6 +43,7 @@ export default function CollectionsListMine(props: Props) {
   const [filterType, setFilterType] = React.useState(ALL);
   const [searchText, setSearchText] = React.useState('');
 
+  const playlistPageUrl = `/$/${PAGES.PLAYLISTS}?type=${filterType}`;
   let collectionsToShow = [];
   if (filterType === ALL) {
     collectionsToShow = unpublishedCollectionsList.concat(publishedList);
@@ -67,6 +68,10 @@ export default function CollectionsListMine(props: Props) {
   } else {
     filteredCollections = collectionsToShow.slice(0, COLLECTION_SHOW_COUNT) || [];
   }
+
+  const totalLength = collectionsToShow ? collectionsToShow.length : 0;
+  const filteredLength = filteredCollections.length;
+  const isTruncated = totalLength > filteredLength;
 
   const watchLater = builtinCollectionsList.find((list) => list.id === COLLECTIONS_CONSTS.WATCH_LATER_ID);
   const favorites = builtinCollectionsList.find((list) => list.id === COLLECTIONS_CONSTS.FAVORITES_ID);
@@ -133,7 +138,19 @@ export default function CollectionsListMine(props: Props) {
       <div className="claim-grid__wrapper">
         <div className="claim-grid__header section">
           <h1 className="claim-grid__title">
-            {__('Playlists')}
+            <Button
+              className="claim-grid__title"
+              button="link"
+              navigate={playlistPageUrl}
+              label={
+                <span className="claim-grid__title-span">
+                  {__('Playlists')}
+                  <div className="claim-grid__title--empty">
+                    <Icon className="icon--margin-right" icon={ICONS.STACK} />
+                  </div>
+                </span>
+              }
+            />
             {!hasCollections && !fetchingCollections && (
               <div className="claim-grid__title--empty">{__('(Empty) --[indicates empty playlist]--')}</div>
             )}
@@ -142,38 +159,55 @@ export default function CollectionsListMine(props: Props) {
             )}
           </h1>
         </div>
-        <div className="section__header--actions">
-          <div className="claim-search__wrapper">
-            <div className="claim-search__menu-group">
-              {COLLECTION_FILTERS.map((value) => (
-                <Button
-                  label={__(value)}
-                  key={value}
-                  button="alt"
-                  onClick={() => setFilterType(value)}
-                  className={classnames('button-toggle', {
-                    'button-toggle--active': filterType === value,
-                  })}
-                />
-              ))}
+        <div className="section__header-action-stack">
+          <div className="section__header--actions">
+            <div className="claim-search__wrapper">
+              <div className="claim-search__menu-group">
+                {COLLECTION_FILTERS.map((value) => (
+                  <Button
+                    label={__(value)}
+                    key={value}
+                    button="alt"
+                    onClick={() => setFilterType(value)}
+                    className={classnames('button-toggle', {
+                      'button-toggle--active': filterType === value,
+                    })}
+                  />
+                ))}
+              </div>
             </div>
+            <Form onSubmit={() => {}} className="wunderbar--inline">
+              <Icon icon={ICONS.SEARCH} />
+              <FormField
+                onFocus={onTextareaFocus}
+                onBlur={onTextareaBlur}
+                className="wunderbar__input--inline"
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+                type="text"
+                placeholder={__('Search')}
+              />
+            </Form>
           </div>
-          <Form onSubmit={() => {}} className="wunderbar--inline">
-            <Icon icon={ICONS.SEARCH} />
-            <FormField
-              onFocus={onTextareaFocus}
-              onBlur={onTextareaBlur}
-              className="wunderbar__input--inline"
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-              type="text"
-              placeholder={__('Search')}
+          <p className="collection-grid__results-summary">
+            {isTruncated && (
+              <>
+                {__(`Showing %filtered% results of %total%`, {
+                  filtered: filteredLength,
+                  total: totalLength,
+                })}
+                {`${searchText ? ' (' + __('filtered') + ') ' : ' '}`}
+              </>
+            )}
+            <Button
+              button="link"
+              navigate={playlistPageUrl}
+              label={<span className="claim-grid__title-span">{__('View All Playlists')}</span>}
             />
-          </Form>
+          </p>
         </div>
         {Boolean(hasCollections) && (
           <div>
-            {/* TODO: fix above spacing hack */}
             <div className="claim-grid">
               {filteredCollections &&
                 filteredCollections.length > 0 &&

@@ -27,6 +27,7 @@ exports.HOME = 'home';
 exports.HELP = 'help';
 exports.LIBRARY = 'library';
 exports.LISTS = 'lists';
+exports.PLAYLISTS = 'playlists';
 exports.INVITE = 'invite';
 exports.DEPRECATED__PUBLISH = 'publish';
 exports.DEPRECATED__PUBLISHED = 'published';
