@@ -19,9 +19,6 @@ import LbryVolumeBarClass from './lbry-volume-bar';
 import keyboardShorcuts from './videojs-keyboard-shortcuts';
 import events from './videojs-events';
 
-const { curried_function } = keyboardShorcuts();
-const { initializeEvents } = events();
-
 export type Player = {
   on: (string, (any) => void) => void,
   one: (string, (any) => void) => void,
@@ -70,15 +67,6 @@ type Props = {
   playNext: () => void,
   playPrevious: () => void,
 };
-
-// type VideoJSOptions = {
-//   controls: boolean,
-//   preload: string,
-//   playbackRates: Array<number>,
-//   responsive: boolean,
-//   poster?: string,
-//   muted?: boolean,
-// };
 
 const videoPlaybackRates = [0.25, 0.5, 0.75, 1, 1.1, 1.25, 1.5, 1.75, 2];
 
@@ -134,7 +122,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     isAudio,
     onPlayerReady,
     toggleVideoTheaterMode,
-    adUrl,
+    adUrl, // TODO: this ad functionality isn't used, can be pulled out
     claimId,
     userId,
     allowPreRoll,
@@ -146,10 +134,23 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     playPrevious,
   } = props;
 
+  const { curried_function } = keyboardShorcuts({
+    toggleVideoTheaterMode,
+    playNext,
+    playPrevious,
+  });
+
+  // const { initializeEvents, unmuteAndHideHint, retryVideoAfterFailure } = events();
+
+
   const [reload, setReload] = useState('initial');
   // will later store the videojs player
   const playerRef = useRef();
   const containerRef = useRef();
+
+  const tapToUnmuteRef = useRef();
+  const tapToRetryRef = useRef();
+
   const videoJsOptions = {
     ...VIDEO_JS_OPTIONS,
     autoplay: autoplay,
@@ -232,7 +233,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
       runAds(internalFeatureEnabled, allowPreRoll, player);
 
-      initializeEvents(player);
+      // initializeEvents(player, tapToRetryRef, tapToUnmuteRef);
 
       // Replace volume bar with custom LBRY volume bar
       LbryVolumeBarClass.replaceExisting(player);
@@ -353,7 +354,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         button="link"
         icon={ICONS.VOLUME_MUTED}
         className="video-js--tap-to-unmute"
-        onClick={unmuteAndHideHint}
+        // onClick={unmuteAndHideHint}
         ref={tapToUnmuteRef}
       />
       <Button
@@ -361,7 +362,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         button="link"
         icon={ICONS.REFRESH}
         className="video-js--tap-to-unmute"
-        onClick={retryVideoAfterFailure}
+        // onClick={retryVideoAfterFailure}
         ref={tapToRetryRef}
       />
     </div>

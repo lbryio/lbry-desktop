@@ -64,16 +64,6 @@ function toggleFullscreen(playerRef) {
   }
 }
 
-function toggleTheaterMode(playerRef) {
-  const player = playerRef.current;
-  if (!player) return;
-  // TODO: have to fix this
-  toggleVideoTheaterMode();
-  if (player.isFullscreen()) {
-    player.exitFullscreen();
-  }
-}
-
 function toggleMute(containerRef) {
   const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
   if (!videoNode) return;
@@ -84,22 +74,6 @@ function togglePlay(containerRef) {
   const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
   if (!videoNode) return;
   videoNode.paused ? videoNode.play() : videoNode.pause();
-}
-
-// eslint-disable-next-line flowtype/no-types-missing-file-annotation
-function handleSingleKeyActions(e: KeyboardEvent, playerRef, containerRef) {
-
-  if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
-  if (e.keyCode === KEYCODES.SPACEBAR || e.keyCode === KEYCODES.K) togglePlay(containerRef);
-  if (e.keyCode === KEYCODES.F) toggleFullscreen(playerRef);
-  if (e.keyCode === KEYCODES.M) toggleMute(containerRef);
-  if (e.keyCode === KEYCODES.UP) volumeUp(e, playerRef);
-  if (e.keyCode === KEYCODES.DOWN) volumeDown(e, playerRef);
-  if (e.keyCode === KEYCODES.T) toggleTheaterMode(playerRef);
-  if (e.keyCode === KEYCODES.L) seekVideo(SEEK_STEP, playerRef, containerRef);
-  if (e.keyCode === KEYCODES.J) seekVideo(-SEEK_STEP, playerRef, containerRef);
-  if (e.keyCode === KEYCODES.RIGHT) seekVideo(SEEK_STEP_5, playerRef, containerRef);
-  if (e.keyCode === KEYCODES.LEFT) seekVideo(-SEEK_STEP_5, playerRef, containerRef);
 }
 
 function changePlaybackSpeed(shouldSpeedUp: boolean, playerRef) {
@@ -118,23 +92,48 @@ function changePlaybackSpeed(shouldSpeedUp: boolean, playerRef) {
   }
 }
 
-function handleShiftKeyActions(e: KeyboardEvent, playerRef) {
-  if (e.altKey || e.ctrlKey || e.metaKey || !e.shiftKey) return;
-  if (e.keyCode === KEYCODES.PERIOD) changePlaybackSpeed(true, playerRef);
-  if (e.keyCode === KEYCODES.COMMA) changePlaybackSpeed(false, playerRef);
-  if (e.keyCode === KEYCODES.N) playNext();
-  if (e.keyCode === KEYCODES.P) playPrevious();
-}
+export default ({ playNext, playPrevious, toggleVideoTheaterMode }) => {
+  function toggleTheaterMode(playerRef) {
+    const player = playerRef.current;
+    if (!player) return;
+    // TODO: have to fix this
+    toggleVideoTheaterMode();
+    if (player.isFullscreen()) {
+      player.exitFullscreen();
+    }
+  }
 
-function handleKeyDown(e: KeyboardEvent, playerRef, containerRef) {
-  const player = playerRef.current;
-  const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
-  if (!videoNode || !player || isUserTyping()) return;
-  handleSingleKeyActions(e, playerRef, containerRef);
-  handleShiftKeyActions(e, playerRef);
-}
+  function handleKeyDown(e: KeyboardEvent, playerRef, containerRef) {
+    const player = playerRef.current;
+    const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
+    if (!videoNode || !player || isUserTyping()) return;
+    handleSingleKeyActions(e, playerRef, containerRef);
+    handleShiftKeyActions(e, playerRef);
+  }
 
-export default () => {
+  function handleShiftKeyActions(e: KeyboardEvent, playerRef) {
+    if (e.altKey || e.ctrlKey || e.metaKey || !e.shiftKey) return;
+    if (e.keyCode === KEYCODES.PERIOD) changePlaybackSpeed(true, playerRef);
+    if (e.keyCode === KEYCODES.COMMA) changePlaybackSpeed(false, playerRef);
+    if (e.keyCode === KEYCODES.N) playNext();
+    if (e.keyCode === KEYCODES.P) playPrevious();
+  }
+
+  // eslint-disable-next-line flowtype/no-types-missing-file-annotation
+  function handleSingleKeyActions(e: KeyboardEvent, playerRef, containerRef) {
+
+    if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    if (e.keyCode === KEYCODES.SPACEBAR || e.keyCode === KEYCODES.K) togglePlay(containerRef);
+    if (e.keyCode === KEYCODES.F) toggleFullscreen(playerRef);
+    if (e.keyCode === KEYCODES.M) toggleMute(containerRef);
+    if (e.keyCode === KEYCODES.UP) volumeUp(e, playerRef);
+    if (e.keyCode === KEYCODES.DOWN) volumeDown(e, playerRef);
+    if (e.keyCode === KEYCODES.T) toggleTheaterMode(playerRef);
+    if (e.keyCode === KEYCODES.L) seekVideo(SEEK_STEP, playerRef, containerRef);
+    if (e.keyCode === KEYCODES.J) seekVideo(-SEEK_STEP, playerRef, containerRef);
+    if (e.keyCode === KEYCODES.RIGHT) seekVideo(SEEK_STEP_5, playerRef, containerRef);
+    if (e.keyCode === KEYCODES.LEFT) seekVideo(-SEEK_STEP_5, playerRef, containerRef);
+  }
 
   var curried_function = function(playerRef, containerRef) {
     return function curried_func(e) {
