@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { selectClaimsById, selectMyChannelClaims, makeSelectStakedLevelForChannelUri } from 'redux/selectors/claims';
+import { selectClaimWithId, selectMyChannelClaims, makeSelectStakedLevelForChannelUri } from 'redux/selectors/claims';
 
 export const selectState = (state) => state.app || {};
 
@@ -70,15 +70,13 @@ export const selectSplashAnimationEnabled = (state) => selectState(state).splash
 export const selectActiveChannelId = (state) => selectState(state).activeChannel;
 
 export const selectActiveChannelClaim = createSelector(
-  selectActiveChannelId,
-  selectClaimsById,
+  (state) => selectClaimWithId(state, selectActiveChannelId(state)), // i.e. 'byId[activeChannelId]' specifically, instead of just 'byId'.
   selectMyChannelClaims,
-  (activeChannelClaimId, claimsById, myChannelClaims) => {
-    if (!activeChannelClaimId || !claimsById || !myChannelClaims || !myChannelClaims.length) {
+  (activeChannelClaim, myChannelClaims) => {
+    if (!activeChannelClaim || !myChannelClaims || !myChannelClaims.length) {
       return undefined;
     }
 
-    const activeChannelClaim = claimsById[activeChannelClaimId];
     if (activeChannelClaim) {
       return activeChannelClaim;
     }

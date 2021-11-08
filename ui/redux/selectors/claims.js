@@ -419,14 +419,26 @@ export const selectFetchingMyCollections = (state: State) => selectState(state).
 
 export const selectMyChannelClaimIds = (state: State) => selectState(state).myChannelClaims;
 
-export const selectMyChannelClaims = createSelector(selectState, selectClaimsById, (state, byId) => {
-  const ids = state.myChannelClaims;
-  if (!ids) {
-    return ids;
+export const selectMyChannelClaims = createSelector(selectMyChannelClaimIds, (myChannelClaimIds) => {
+  if (!myChannelClaimIds) {
+    return myChannelClaimIds;
   }
 
+  if (!window || !window.store) {
+    return undefined;
+  }
+
+  // Note: Grabbing the store and running the selector this way is anti-pattern,
+  // but it is _needed_ and works only because we know for sure that 'byId[]'
+  // will be populated with the same claims as when 'myChannelClaimIds' is populated.
+  // If we put 'state' or 'byId' as the input selector, it essentially
+  // recalculates every time. Putting 'state' as input to createSelector() is
+  // always wrong from a memoization standpoint.
+  const state = window.store.getState();
+  const byId = selectClaimsById(state);
+
   const claims = [];
-  ids.forEach((id) => {
+  myChannelClaimIds.forEach((id) => {
     if (byId[id]) {
       // I'm not sure why this check is necessary, but it ought to be a quick fix for https://github.com/lbryio/lbry-desktop/issues/544
       claims.push(byId[id]);
