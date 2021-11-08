@@ -4,6 +4,10 @@
   top: var(--spacing-s);
 }
 
+.content__viewer--disable-click {
+  pointer-events: none;
+}
+
 .content__viewer--inline {
   max-height: var(--inline-player-max-height);
   border: none;
