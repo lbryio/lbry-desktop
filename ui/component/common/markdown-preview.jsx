@@ -1,28 +1,32 @@
 // @flow
-import * as React from 'react';
-import classnames from 'classnames';
-import remark from 'remark';
-import remarkAttr from 'remark-attr';
-import remarkStrip from 'strip-markdown';
-import remarkEmoji from 'remark-emoji';
-import remarkBreaks from 'remark-breaks';
-import remarkFrontMatter from 'remark-frontmatter';
-import reactRenderer from 'remark-react';
-import MarkdownLink from 'component/markdownLink';
-import defaultSchema from 'hast-util-sanitize/lib/github.json';
+import { CHANNEL_STAKED_LEVEL_VIDEO_COMMENTS, SIMPLE_SITE } from 'config';
+import { formattedEmote, inlineEmote } from 'util/remark-emote';
 import { formattedLinks, inlineLinks } from 'util/remark-lbry';
 import { formattedTimestamp, inlineTimestamp } from 'util/remark-timestamp';
-import { formattedEmote, inlineEmote } from 'util/remark-emote';
-import ZoomableImage from 'component/zoomableImage';
-import { CHANNEL_STAKED_LEVEL_VIDEO_COMMENTS, SIMPLE_SITE } from 'config';
-import Button from 'component/button';
 import * as ICONS from 'constants/icons';
+import * as React from 'react';
+import Button from 'component/button';
+import classnames from 'classnames';
+import defaultSchema from 'hast-util-sanitize/lib/github.json';
+import MarkdownLink from 'component/markdownLink';
 import OptimizedImage from 'component/optimizedImage';
+import reactRenderer from 'remark-react';
+import remark from 'remark';
+import remarkAttr from 'remark-attr';
+import remarkBreaks from 'remark-breaks';
+import remarkEmoji from 'remark-emoji';
+import remarkFrontMatter from 'remark-frontmatter';
+import remarkStrip from 'strip-markdown';
+import ZoomableImage from 'component/zoomableImage';
 
 const RE_EMOTE = /:\+1:|:-1:|:[\w-]+:/;
 
 function isEmote(title, src) {
   return title && RE_EMOTE.test(title) && src.includes('static.odycdn.com/emoticons');
+}
+
+function isStakeEnoughForPreview(stakedLevel) {
+  return !stakedLevel || stakedLevel >= CHANNEL_STAKED_LEVEL_VIDEO_COMMENTS;
 }
 
 type SimpleTextProps = {
@@ -138,13 +142,6 @@ const REPLACE_REGEX = /(<iframe\s+src=["'])(.*?(?=))(["']\s*><\/iframe>)/g;
 // ****************************************************************************
 // ****************************************************************************
 
-function isStakeEnoughForPreview(stakedLevel) {
-  return !stakedLevel || stakedLevel >= CHANNEL_STAKED_LEVEL_VIDEO_COMMENTS;
-}
-
-// ****************************************************************************
-// ****************************************************************************
-
 const MarkdownPreview = (props: MarkdownProps) => {
   const {
     content,
@@ -177,10 +174,6 @@ const MarkdownPreview = (props: MarkdownProps) => {
       })
     : '';
 
-  const initialQuote = strippedContent.split(' ').find((word) => word.length > 0 || word.charAt(0) === '>');
-  let stripQuote;
-  if (initialQuote && initialQuote.charAt(0) === '>') stripQuote = true;
-
   const remarkOptions: Object = {
     sanitize: schema,
     fragment: React.Fragment,
@@ -200,7 +193,7 @@ const MarkdownPreview = (props: MarkdownProps) => {
       div: React.Fragment,
       img: (imgProps) =>
         isStakeEnoughForPreview(stakedLevel) && !isEmote(imgProps.title, imgProps.src) ? (
-          ZoomableImage
+          <ZoomableImage {...imgProps} />
         ) : (
           <SimpleImageLink
             src={imgProps.src}
@@ -222,22 +215,10 @@ const MarkdownPreview = (props: MarkdownProps) => {
   };
 
   // Strip all content and just render text
-  if (strip || stripQuote) {
+  if (strip) {
     // Remove new lines and extra space
     remarkOptions.remarkReactComponents.p = SimpleText;
-    return stripQuote ? (
-      <span dir="auto" className="markdown-preview">
-        <blockquote>
-          {
-            remark()
-              .use(remarkStrip)
-              .use(remarkFrontMatter, ['yaml'])
-              .use(reactRenderer, remarkOptions)
-              .processSync(content).contents
-          }
-        </blockquote>
-      </span>
-    ) : (
+    return (
       <span dir="auto" className="markdown-preview">
         {
           remark()
