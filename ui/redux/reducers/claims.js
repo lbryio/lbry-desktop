@@ -111,6 +111,29 @@ const defaultState = {
   checkingReflecting: false,
 };
 
+// ****************************************************************************
+// Helpers
+// ****************************************************************************
+
+function isObjEmpty(object: any) {
+  return Object.keys(object).length === 0;
+}
+
+function resolveDelta(original: any, delta: any) {
+  if (isObjEmpty(delta)) {
+    // Don't invalidate references when there are no changes, so return original.
+    return original;
+  } else {
+    // When there are changes: create a new object, spread existing references,
+    // and overwrite specific items with new data.
+    return { ...original, ...delta };
+  }
+}
+
+// ****************************************************************************
+// handleClaimAction
+// ****************************************************************************
+
 function handleClaimAction(state: State, action: any): State {
   const { resolveInfo }: ClaimActionResolveInfo = action.data;
 
@@ -201,6 +224,10 @@ function handleClaimAction(state: State, action: any): State {
   });
 }
 
+// ****************************************************************************
+// Reducers
+// ****************************************************************************
+
 reducers[ACTIONS.RESOLVE_URIS_STARTED] = (state: State, action: any): State => {
   const { uris }: { uris: Array<string> } = action.data;
 
@@ -237,7 +264,8 @@ reducers[ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED] = (state: State, action: any):
 
   const byId = Object.assign({}, state.byId);
   const byUri = Object.assign({}, state.claimsByUri);
-  const pendingById = Object.assign({}, state.pendingById);
+  const pendingByIdDelta = {};
+
   let myClaimIds = new Set(state.myClaims);
   let urlsForCurrentPage = [];
 
@@ -245,8 +273,10 @@ reducers[ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED] = (state: State, action: any):
     const { permanent_url: permanentUri, claim_id: claimId, canonical_url: canonicalUri } = claim;
     if (claim.type && claim.type.match(/claim|update/)) {
       urlsForCurrentPage.push(permanentUri);
+
       if (claim.confirmations < 1) {
-        pendingById[claimId] = claim;
+        pendingByIdDelta[claimId] = claim;
+
         if (byId[claimId]) {
           byId[claimId] = mergeClaim(claim, byId[claimId]);
         } else {
@@ -255,6 +285,7 @@ reducers[ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED] = (state: State, action: any):
       } else {
         byId[claimId] = claim;
       }
+
       byUri[permanentUri] = claimId;
       byUri[canonicalUri] = claimId;
       myClaimIds.add(claimId);
@@ -265,7 +296,7 @@ reducers[ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED] = (state: State, action: any):
     isFetchingClaimListMine: false,
     myClaims: Array.from(myClaimIds),
     byId,
-    pendingById,
+    pendingById: resolveDelta(state.pendingById, pendingByIdDelta),
     claimsByUri: byUri,
     myClaimsPageResults: urlsForCurrentPage,
     myClaimsPageNumber: page,
@@ -279,7 +310,7 @@ reducers[ACTIONS.FETCH_CHANNEL_LIST_STARTED] = (state: State): State =>
 reducers[ACTIONS.FETCH_CHANNEL_LIST_COMPLETED] = (state: State, action: any): State => {
   const { claims }: { claims: Array<ChannelClaim> } = action.data;
   let myClaimIds = new Set(state.myClaims);
-  const pendingById = Object.assign({}, state.pendingById);
+  const pendingByIdDelta = {};
   let myChannelClaims;
   const byId = Object.assign({}, state.byId);
   const byUri = Object.assign({}, state.claimsByUri);
@@ -302,8 +333,10 @@ reducers[ACTIONS.FETCH_CHANNEL_LIST_COMPLETED] = (state: State, action: any): St
 
       // $FlowFixMe
       myChannelClaims.add(claimId);
+
       if (confirmations < 1) {
-        pendingById[claimId] = claim;
+        pendingByIdDelta[claimId] = claim;
+
         if (byId[claimId]) {
           byId[claimId] = mergeClaim(claim, byId[claimId]);
         } else {
@@ -312,13 +345,14 @@ reducers[ACTIONS.FETCH_CHANNEL_LIST_COMPLETED] = (state: State, action: any): St
       } else {
         byId[claimId] = claim;
       }
+
       myClaimIds.add(claimId);
     });
   }
 
   return Object.assign({}, state, {
     byId,
-    pendingById,
+    pendingById: resolveDelta(state.pendingById, pendingByIdDelta),
     claimsByUri: byUri,
     channelClaimCounts,
     fetchingMyChannels: false,
@@ -342,7 +376,7 @@ reducers[ACTIONS.FETCH_COLLECTION_LIST_COMPLETED] = (state: State, action: any):
   const { claims }: { claims: Array<CollectionClaim> } = action.data;
   const myClaims = state.myClaims || [];
   let myClaimIds = new Set(myClaims);
-  const pendingById = Object.assign({}, state.pendingById);
+  const pendingByIdDelta = {};
   let myCollectionClaimsSet = new Set([]);
   const byId = Object.assign({}, state.byId);
   const byUri = Object.assign({}, state.claimsByUri);
@@ -357,9 +391,11 @@ reducers[ACTIONS.FETCH_COLLECTION_LIST_COMPLETED] = (state: State, action: any):
 
       // $FlowFixMe
       myCollectionClaimsSet.add(claimId);
+
       // we don't want to overwrite a pending result with a resolve
       if (confirmations < 1) {
-        pendingById[claimId] = claim;
+        pendingByIdDelta[claimId] = claim;
+
         if (byId[claimId]) {
           byId[claimId] = mergeClaim(claim, byId[claimId]);
         } else {
@@ -368,6 +404,7 @@ reducers[ACTIONS.FETCH_COLLECTION_LIST_COMPLETED] = (state: State, action: any):
       } else {
         byId[claimId] = claim;
       }
+
       myClaimIds.add(claimId);
     });
   }
@@ -375,7 +412,7 @@ reducers[ACTIONS.FETCH_COLLECTION_LIST_COMPLETED] = (state: State, action: any):
   return {
     ...state,
     byId,
-    pendingById,
+    pendingById: resolveDelta(state.pendingById, pendingByIdDelta),
     claimsByUri: byUri,
     fetchingMyCollections: false,
     myCollectionClaims: Array.from(myCollectionClaimsSet),
