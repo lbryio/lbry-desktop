@@ -9,27 +9,28 @@ const TAP = {
   RETRY: 'RETRY',
 };
 
-export default ({ tapToUnmuteRef, tapToRetryRef, setReload, }) => {
+const setLabel = (controlBar, childName, label) => {
+  const c = controlBar.getChild(childName);
+  if (c) {
+    c.controlText(label);
+  }
+};
+
+export default ({ tapToUnmuteRef, tapToRetryRef, setReload, videoTheaterMode,
+                  playerRef, autoplaySetting}) => {
+  // Override the player's control text. We override to:
+  // 1. Add keyboard shortcut to the tool-tip.
+  // 2. Override videojs' i18n and use our own (don't want to have 2 systems).
+  //
+  // Notes:
+  // - For dynamic controls (e.g. play/pause), those unfortunately need to be
+  // updated again at their event-listener level (that's just the way videojs
+  // updates the text), hence the need to listen to 'play', 'pause' and 'volumechange'
+  // on top of just 'loadstart'.
+  // - videojs changes the MuteToggle text at 'loadstart', so this was chosen
+  // as the listener to update static texts.
+
   function resolveCtrlText(e) {
-    // Override the player's control text. We override to:
-    // 1. Add keyboard shortcut to the tool-tip.
-    // 2. Override videojs' i18n and use our own (don't want to have 2 systems).
-    //
-    // Notes:
-    // - For dynamic controls (e.g. play/pause), those unfortunately need to be
-    // updated again at their event-listener level (that's just the way videojs
-    // updates the text), hence the need to listen to 'play', 'pause' and 'volumechange'
-    // on top of just 'loadstart'.
-    // - videojs changes the MuteToggle text at 'loadstart', so this was chosen
-    // as the listener to update static texts.
-
-    const setLabel = (controlBar, childName, label) => {
-      const c = controlBar.getChild(childName);
-      if (c) {
-        c.controlText(label);
-      }
-    };
-
     const player = playerRef.current;
     if (player) {
       const ctrlBar = player.getChild('controlBar');
@@ -121,7 +122,7 @@ export default ({ tapToUnmuteRef, tapToRetryRef, setReload, }) => {
     }
   }, [videoTheaterMode]);
 
-
+  // when user clicks 'Unmute' button, turn audio on and hide unmute button
   function unmuteAndHideHint() {
     const player = playerRef.current;
     if (player) {
@@ -154,7 +155,7 @@ export default ({ tapToUnmuteRef, tapToRetryRef, setReload, }) => {
 
     switch (tapButton) {
       case TAP.NONE:
-        setButtonVisibility(/*tapToUnmuteRef*/, false);
+        setButtonVisibility(tapToUnmuteRef, false);
         setButtonVisibility(tapToRetryRef, false);
         break;
       case TAP.UNMUTE:
@@ -171,8 +172,9 @@ export default ({ tapToUnmuteRef, tapToRetryRef, setReload, }) => {
     }
   }
 
-
   useEffect(() => {
+    console.log('RUNNING HERE!')
+
     const player = playerRef.current;
     if (player) {
       const touchOverlay = player.getChild('TouchOverlay');
@@ -189,7 +191,6 @@ export default ({ tapToUnmuteRef, tapToRetryRef, setReload, }) => {
     }
   }, [autoplaySetting]);
 
-
   // Add various event listeners to player
   player.one('play', onInitialPlay);
   player.on('play', resolveCtrlText);
@@ -199,11 +200,10 @@ export default ({ tapToUnmuteRef, tapToRetryRef, setReload, }) => {
   player.on('volumechange', resolveCtrlText);
   player.on('volumechange', onVolumeChange);
   player.on('error', onError);
-  player.on('ended', onEnded);
-
+  // player.on('ended', onEnded);
 
   return {
-    detectFileType,
-    createVideoPlayerDOM,
+    retryVideoAfterFailure,
+    unmuteAndHideHint,
   };
 };

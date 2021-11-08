@@ -1,3 +1,4 @@
+// @flow
 export default ({ source, sourceType, videoJsOptions, isAudio }) => {
 
   function detectFileType() {

@@ -135,19 +135,17 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     playPrevious,
   } = props;
 
-  // initiate keyboard shortcuts
-  const { curried_function } = keyboardShorcuts({ toggleVideoTheaterMode, playNext, playPrevious });
-
-  const [reload, setReload] = useState('initial');
-
-  const { initializeEvents, unmuteAndHideHint, retryVideoAfterFailure } = events(videoTheaterMode, setReload, autoplaySetting);
-
   // will later store the videojs player
   const playerRef = useRef();
   const containerRef = useRef();
 
   const tapToUnmuteRef = useRef();
   const tapToRetryRef = useRef();
+
+  // initiate keyboard shortcuts
+  const { curried_function } = keyboardShorcuts({ toggleVideoTheaterMode, playNext, playPrevious });
+
+  const [reload, setReload] = useState('initial');
 
   const videoJsOptions = {
     ...VIDEO_JS_OPTIONS,
@@ -173,6 +171,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
   const { detectFileType, createVideoPlayerDOM } = functions({ source, sourceType, videoJsOptions, isAudio });
 
+  let unmuteAndHideHint, retryVideoAfterFailure;
   // Initialize video.js
   function initializeVideoPlayer(el) {
     if (!el) return;
@@ -185,7 +184,12 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
       runAds(internalFeatureEnabled, allowPreRoll, player);
 
-      initializeEvents({ player, tapToRetryRef, tapToUnmuteRef });
+      const videoJsEvents = events({ tapToUnmuteRef, tapToRetryRef, setReload, videoTheaterMode, playerRef, autoplaySetting, player });
+
+      unmuteAndHideHint = { events };
+      retryVideoAfterFailure = { events };
+
+      videoJsEvents.initializeEvents({ player, tapToRetryRef, tapToUnmuteRef });
 
       // Replace volume bar with custom LBRY volume bar
       LbryVolumeBarClass.replaceExisting(player);
