@@ -1,5 +1,5 @@
 // @flow
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
 
 const isDev = process.env.NODE_ENV !== 'production';
 
@@ -17,7 +17,8 @@ const setLabel = (controlBar, childName, label) => {
 };
 
 export default ({ tapToUnmuteRef, tapToRetryRef, setReload, videoTheaterMode,
-                  playerRef, autoplaySetting}) => {
+                  playerRef, autoplaySetting, player}) => {
+
   // Override the player's control text. We override to:
   // 1. Add keyboard shortcut to the tool-tip.
   // 2. Override videojs' i18n and use our own (don't want to have 2 systems).
@@ -112,15 +113,15 @@ export default ({ tapToUnmuteRef, tapToRetryRef, setReload, videoTheaterMode,
   //   }
   // }, [adUrl]);
 
-  useEffect(() => {
-    const player = playerRef.current;
-    if (player) {
-      const controlBar = player.getChild('controlBar');
-      controlBar
-        .getChild('TheaterModeButton')
-        .controlText(videoTheaterMode ? __('Default Mode (t)') : __('Theater Mode (t)'));
-    }
-  }, [videoTheaterMode]);
+  // useEffect(() => {
+  //   const player = playerRef.current;
+  //   if (player) {
+  //     const controlBar = player.getChild('controlBar');
+  //     controlBar
+  //       .getChild('TheaterModeButton')
+  //       .controlText(videoTheaterMode ? __('Default Mode (t)') : __('Theater Mode (t)'));
+  //   }
+  // }, [videoTheaterMode]);
 
   // when user clicks 'Unmute' button, turn audio on and hide unmute button
   function unmuteAndHideHint() {
@@ -172,24 +173,24 @@ export default ({ tapToUnmuteRef, tapToRetryRef, setReload, videoTheaterMode,
     }
   }
 
-  useEffect(() => {
-    console.log('RUNNING HERE!')
-
-    const player = playerRef.current;
-    if (player) {
-      const touchOverlay = player.getChild('TouchOverlay');
-      const controlBar = player.getChild('controlBar') || touchOverlay.getChild('controlBar');
-      const autoplayButton = controlBar.getChild('AutoplayNextButton');
-
-      if (autoplayButton) {
-        const title = autoplaySetting ? __('Autoplay Next On') : __('Autoplay Next Off');
-
-        autoplayButton.controlText(title);
-        autoplayButton.setAttribute('aria-label', title);
-        autoplayButton.setAttribute('aria-checked', autoplaySetting);
-      }
-    }
-  }, [autoplaySetting]);
+  // useEffect(() => {
+  //   console.log('RUNNING HERE!')
+  //
+  //   const player = playerRef.current;
+  //   if (player) {
+  //     const touchOverlay = player.getChild('TouchOverlay');
+  //     const controlBar = player.getChild('controlBar') || touchOverlay.getChild('controlBar');
+  //     const autoplayButton = controlBar.getChild('AutoplayNextButton');
+  //
+  //     if (autoplayButton) {
+  //       const title = autoplaySetting ? __('Autoplay Next On') : __('Autoplay Next Off');
+  //
+  //       autoplayButton.controlText(title);
+  //       autoplayButton.setAttribute('aria-label', title);
+  //       autoplayButton.setAttribute('aria-checked', autoplaySetting);
+  //     }
+  //   }
+  // }, [autoplaySetting]);
 
   // Add various event listeners to player
   player.one('play', onInitialPlay);

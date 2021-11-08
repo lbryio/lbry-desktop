@@ -186,10 +186,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
       const videoJsEvents = events({ tapToUnmuteRef, tapToRetryRef, setReload, videoTheaterMode, playerRef, autoplaySetting, player });
 
-      unmuteAndHideHint = { events };
-      retryVideoAfterFailure = { events };
-
-      videoJsEvents.initializeEvents({ player, tapToRetryRef, tapToUnmuteRef });
+      unmuteAndHideHint = videoJsEvents.unmuteAndHideHint;
+      retryVideoAfterFailure = videoJsEvents.retryVideoAfterFailure;
 
       // Replace volume bar with custom LBRY volume bar
       LbryVolumeBarClass.replaceExisting(player);
