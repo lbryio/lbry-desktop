@@ -36,6 +36,13 @@ const SLIME_WITH_FRAME = 'SLIME/PNG/slime_with_frame.png';
 const SPHAGETTI_BATH_WITH_FRAME = 'SPHAGETTI%20BATH/PNG/sphagetti%20bath_with_frame.png';
 const THUG_LIFE_WITH_BORDER = 'THUG%20LIFE/PNG/thug_life_with_border_clean.png';
 const WHUUT_WITH_FRAME = 'WHUUT/PNG/whuut_with-frame.png';
+const EGIRL = 'EGIRL/PNG/e-girl.png';
+const BULL_RIDE = 'BULL/PNG/bull-ride.png';
+const TRAP = 'TRAP/PNG/trap.png';
+const XMAS = 'SEASONAL/PNG/xmas.png';
+const ELIMINATED = 'ELIMINATED/PNG/eliminated.png';
+const TRASH = 'TRASH/PNG/trash.png';
+const BAN = 'BAN/PNG/ban.png';
 const COMET_TIP = 'TIPS/png/$%20comet%20tip%20with%20border.png';
 const BIG_LBC_TIP = 'TIPS/png/big_LBC_TIPV.png';
 const BIG_TIP = 'TIPS/png/with%20borderbig$tip.png';
@@ -62,7 +69,12 @@ export const FREE_GLOBAL_STICKERS = [
   buildSticker('HYPE', HYPE_BORDER),
   buildSticker('PANTS_1', PANTS_1_WITH_FRAME),
   buildSticker('PANTS_2', PANTS_2_WITH_FRAME),
+  buildSticker('XMAS', XMAS),
   buildSticker('PISS', PISS),
+  buildSticker('BULL_RIDE', BULL_RIDE),
+  buildSticker('ELIMINATED', ELIMINATED),
+  buildSticker('BAN', BAN),
+  buildSticker('EGIRL', EGIRL),
   buildSticker('PREGNANT_MAN_ASIA', PREGNANT_MAN_ASIA_WHITE_BORDER),
   buildSticker('PREGNANT_MAN_BLACK_HAIR', PREGNANT_MAN_BLACK_HAIR_WHITE_BORDER),
   buildSticker('PREGNANT_MAN_BLACK_SKIN', PREGNANT_MAN_BLACK_SKIN_WHITE_BORDER),
@@ -81,6 +93,8 @@ export const FREE_GLOBAL_STICKERS = [
   buildSticker('SLIME', SLIME_WITH_FRAME),
   buildSticker('SPHAGETTI_BATH', SPHAGETTI_BATH_WITH_FRAME),
   buildSticker('THUG_LIFE', THUG_LIFE_WITH_BORDER),
+  buildSticker('TRAP', TRAP),
+  buildSticker('TRASH', TRASH),
   buildSticker('WHUUT', WHUUT_WITH_FRAME),
 ];
 
@@ -88,10 +102,10 @@ export const PAID_GLOBAL_STICKERS = [
   buildSticker('TIP_HAND_FLIP', TIP_HAND_FLIP, 1),
   buildSticker('TIP_HAND_FLIP_COIN', TIP_HAND_FLIP_COIN, 1),
   buildSticker('TIP_HAND_FLIP_LBC', TIP_HAND_FLIP_LBC, 1),
-  buildSticker('COMET_TIP', COMET_TIP, 25),
+  buildSticker('COMET_TIP', COMET_TIP, 5),
+  buildSticker('SILVER_ODYSEE_COIN', SILVER_ODYSEE_COIN, 5),
   buildSticker('LBC_COMET_TIP', LBC_COMET_TIP, 25),
   buildSticker('SMALL_TIP', SMALL_TIP, 25),
-  buildSticker('SILVER_ODYSEE_COIN', SILVER_ODYSEE_COIN, 25),
   buildSticker('SMALL_LBC_TIP', SMALL_LBC_TIP, 25),
   buildSticker('BITE_TIP', BITE_TIP, 50),
   buildSticker('BITE_TIP_CLOSEUP', BITE_TIP_CLOSEUP, 50),
