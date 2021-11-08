@@ -18,6 +18,7 @@ import runAds from './ads';
 import LbryVolumeBarClass from './lbry-volume-bar';
 import keyboardShorcuts from './videojs-keyboard-shortcuts';
 import events from './videojs-events';
+import functions from './videojs-functions';
 
 export type Player = {
   on: (string, (any) => void) => void,
@@ -134,16 +135,13 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     playPrevious,
   } = props;
 
-  const { curried_function } = keyboardShorcuts({
-    toggleVideoTheaterMode,
-    playNext,
-    playPrevious,
-  });
-
-  // const { initializeEvents, unmuteAndHideHint, retryVideoAfterFailure } = events();
-
+  // initiate keyboard shortcuts
+  const { curried_function } = keyboardShorcuts({ toggleVideoTheaterMode, playNext, playPrevious });
 
   const [reload, setReload] = useState('initial');
+
+  const { initializeEvents, unmuteAndHideHint, retryVideoAfterFailure } = events(videoTheaterMode, setReload, autoplaySetting);
+
   // will later store the videojs player
   const playerRef = useRef();
   const containerRef = useRef();
@@ -173,53 +171,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     },
   };
 
-  // Create the video DOM element and wrapper
-  function createVideoPlayerDOM(container) {
-    if (!container) return;
-
-    // This seems like a poor way to generate the DOM for video.js
-    const wrapper = document.createElement('div');
-    wrapper.setAttribute('data-vjs-player', 'true');
-    const el = document.createElement(isAudio ? 'audio' : 'video');
-    el.className = 'video-js vjs-big-play-centered ';
-    wrapper.appendChild(el);
-
-    container.appendChild(wrapper);
-
-    return el;
-  }
-
-  function detectFileType() {
-    return new Promise(async (res, rej) => {
-      try {
-        const response = await fetch(source, { method: 'HEAD', cache: 'no-store' });
-
-        // Temp variables to hold results
-        let finalType = sourceType;
-        let finalSource = source;
-
-        // override type if we receive an .m3u8 (transcoded mp4)
-        // do we need to check if explicitly redirected
-        // or is checking extension only a safer method
-        if (response && response.redirected && response.url && response.url.endsWith('m3u8')) {
-          finalType = 'application/x-mpegURL';
-          finalSource = response.url;
-        }
-
-        // Modify video source in options
-        videoJsOptions.sources = [
-          {
-            src: finalSource,
-            type: finalType,
-          },
-        ];
-
-        return res(videoJsOptions);
-      } catch (error) {
-        return rej(error);
-      }
-    });
-  }
+  const { detectFileType, createVideoPlayerDOM } = functions({ source, sourceType, videoJsOptions, isAudio });
 
   // Initialize video.js
   function initializeVideoPlayer(el) {
@@ -233,7 +185,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
       runAds(internalFeatureEnabled, allowPreRoll, player);
 
-      // initializeEvents(player, tapToRetryRef, tapToUnmuteRef);
+      initializeEvents({ player, tapToRetryRef, tapToUnmuteRef });
 
       // Replace volume bar with custom LBRY volume bar
       LbryVolumeBarClass.replaceExisting(player);
@@ -259,7 +211,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       }
 
       // set playsinline for mobile
-      // TODO: make this better
       player.children_[0].setAttribute('playsinline', '');
 
       // I think this is a callback function
@@ -275,6 +226,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     return vjs;
   }
 
+  // todo: what does this do exactly?
   useEffect(() => {
     const player = playerRef.current;
     if (replay && player) {
@@ -282,6 +234,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     }
   }, [replay]);
 
+  /** instantiate videoJS and dispose of it when done with code **/
   // This lifecycle hook is only called once (on mount), or when `isAudio` or `source` changes.
   useEffect(() => {
     const vjsElement = createVideoPlayerDOM(containerRef.current);
@@ -354,7 +307,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         button="link"
         icon={ICONS.VOLUME_MUTED}
         className="video-js--tap-to-unmute"
-        // onClick={unmuteAndHideHint}
+        onClick={unmuteAndHideHint}
         ref={tapToUnmuteRef}
       />
       <Button
@@ -362,7 +315,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         button="link"
         icon={ICONS.REFRESH}
         className="video-js--tap-to-unmute"
-        // onClick={retryVideoAfterFailure}
+        onClick={retryVideoAfterFailure}
         ref={tapToRetryRef}
       />
     </div>
