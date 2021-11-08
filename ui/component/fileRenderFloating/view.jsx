@@ -295,10 +295,13 @@ export default function FileRenderFloating(props: Props) {
   }
 
   function handleDragMove(e, ui) {
-    setWasDragging(true);
     const { x, y } = position;
     const newX = x + ui.deltaX;
     const newY = y + ui.deltaY;
+    // Mark as dragging if the position changed and we were not dragging before.
+    if (!wasDragging && (newX !== x || newY !== y)) {
+      setWasDragging(true);
+    }
     setPosition({
       x: newX,
       y: newY,
@@ -307,7 +310,6 @@ export default function FileRenderFloating(props: Props) {
 
   function handleDragStop(e) {
     if (wasDragging) {
-      e.stopPropagation();
       setWasDragging(false);
       setRelativePos({
         x: position.x / getScreenWidth(),
@@ -334,6 +336,7 @@ export default function FileRenderFloating(props: Props) {
           'content__viewer--inline': !isFloating,
           'content__viewer--secondary': isComment,
           'content__viewer--theater-mode': !isFloating && videoTheaterMode,
+          'content__viewer--disable-click': wasDragging,
         })}
         style={
           !isFloating && fileViewerRect
