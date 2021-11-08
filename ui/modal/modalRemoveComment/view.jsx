@@ -6,27 +6,30 @@ import Card from 'component/common/card';
 
 type Props = {
   commentId: string, // sha256 digest identifying the comment
-  commentIsMine: boolean, // if this comment was signed by an owned channel
-  contentChannelPermanentUrl: any,
-  closeModal: () => void,
-  deleteComment: (string, ?string) => void,
+  deleterClaim: Claim,
+  deleterIsModOrAdmin?: boolean,
+  creatorClaim?: Claim,
   supportAmount?: any,
   setQuickReply: (any) => void,
+  // --- redux ---
+  doHideModal: () => void,
+  doCommentAbandon: (string, Claim, ?boolean, ?Claim) => void,
 };
 
 function ModalRemoveComment(props: Props) {
   const {
     commentId,
-    commentIsMine,
-    contentChannelPermanentUrl,
-    closeModal,
-    deleteComment,
+    deleterClaim,
+    deleterIsModOrAdmin,
+    creatorClaim,
     supportAmount,
     setQuickReply,
+    doHideModal,
+    doCommentAbandon,
   } = props;
 
   return (
-    <Modal isOpen contentLabel={__('Confirm Comment Deletion')} type="card" onAborted={closeModal}>
+    <Modal isOpen contentLabel={__('Confirm Comment Deletion')} type="card" onAborted={doHideModal}>
       <Card
         title={__('Remove Comment')}
         body={
@@ -46,12 +49,14 @@ function ModalRemoveComment(props: Props) {
                 button="primary"
                 label={__('Remove')}
                 onClick={() => {
-                  closeModal();
-                  deleteComment(commentId, commentIsMine ? undefined : contentChannelPermanentUrl);
-                  if (setQuickReply) setQuickReply(undefined);
+                  doHideModal();
+                  doCommentAbandon(commentId, deleterClaim, deleterIsModOrAdmin, creatorClaim);
+                  if (setQuickReply) {
+                    setQuickReply(undefined);
+                  }
                 }}
               />
-              <Button button="link" label={__('Cancel')} onClick={closeModal} />
+              <Button button="link" label={__('Cancel')} onClick={doHideModal} />
             </div>
           </>
         }

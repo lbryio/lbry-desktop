@@ -690,33 +690,40 @@ export function doCommentPin(commentId: string, claimId: string, remove: boolean
   };
 }
 
-export function doCommentAbandon(commentId: string, creatorChannelUri?: string) {
+/**
+ * Deletes a comment in Commentron.
+ *
+ * @param commentId The comment ID to delete.
+ * @param deleterClaim The channel-claim of the person doing the deletion. Defaults to the active channel if not provided.
+ * @param deleterIsModOrAdmin Is the deleter a mod or admin for the content?
+ * @param creatorClaim The channel-claim for the content where the comment resides. Not required if the deleter owns the comment (i.e. deleting own comment).
+ * @returns {function(Dispatch): *}
+ */
+export function doCommentAbandon(
+  commentId: string,
+  deleterClaim?: Claim,
+  deleterIsModOrAdmin?: boolean,
+  creatorClaim?: Claim
+) {
   return async (dispatch: Dispatch, getState: GetState) => {
-    const state = getState();
-    const claim = creatorChannelUri ? selectClaimsByUri(state)[creatorChannelUri] : undefined;
-    const creatorChannelId = claim ? claim.claim_id : null;
-    const creatorChannelName = claim ? claim.name : null;
-    const activeChannelClaim = selectActiveChannelClaim(state);
+    if (!deleterClaim) {
+      const state = getState();
+      deleterClaim = selectActiveChannelClaim(state);
+    }
 
     dispatch({
       type: ACTIONS.COMMENT_ABANDON_STARTED,
     });
 
-    let commentIdSignature;
-    if (activeChannelClaim) {
-      try {
-        commentIdSignature = await Lbry.channel_sign({
-          channel_id: activeChannelClaim.claim_id,
-          hexdata: toHex(commentId),
-        });
-      } catch (e) {}
-    }
+    const commentIdSignature = await channelSignData(deleterClaim.claim_id, commentId);
 
     return Comments.comment_abandon({
       comment_id: commentId,
-      ...(creatorChannelId ? { creator_channel_id: creatorChannelId } : {}),
-      ...(creatorChannelName ? { creator_channel_name: creatorChannelName } : {}),
+      creator_channel_id: creatorClaim ? creatorClaim.claim_id : undefined,
+      creator_channel_name: creatorClaim ? creatorClaim.name : undefined,
       ...(commentIdSignature || {}),
+      mod_channel_id: deleterClaim && deleterIsModOrAdmin ? deleterClaim.claim_id : undefined,
+      mod_channel_name: deleterClaim && deleterIsModOrAdmin ? deleterClaim.name : undefined,
     })
       .then((result: CommentAbandonResponse) => {
         // Comment may not be deleted if the signing channel can't be signed.

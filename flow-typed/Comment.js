@@ -169,8 +169,10 @@ declare type CommentAbandonParams = {
   comment_id: string,
   creator_channel_id?: string,
   creator_channel_name?: string,
-  channel_id?: string,
-  hexdata?: string,
+  signature?: string,
+  signing_ts?: string,
+  mod_channel_id?: string,
+  mod_channel_name?: string,
 };
 
 declare type CommentCreateParams = {

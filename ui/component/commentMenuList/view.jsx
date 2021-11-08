@@ -24,7 +24,6 @@ type Props = {
   // --- select ---
   claim: ?Claim,
   claimIsMine: boolean,
-  contentChannelPermanentUrl: any,
   activeChannelClaim: ?ChannelClaim,
   playingUri: ?PlayingUri,
   moderationDelegatorsById: { [string]: { global: boolean, delegators: { name: string, claimId: string } } },
@@ -47,7 +46,6 @@ function CommentMenuList(props: Props) {
     commentIsMine,
     commentId,
     activeChannelClaim,
-    contentChannelPermanentUrl,
     isTopLevel,
     isPinned,
     playingUri,
@@ -71,6 +69,8 @@ function CommentMenuList(props: Props) {
   } = useHistory();
 
   const contentChannelClaim = getChannelFromClaim(claim);
+  const contentChannelPermanentUrl = contentChannelClaim && contentChannelClaim.permanent_url;
+
   const activeModeratorInfo = activeChannelClaim && moderationDelegatorsById[activeChannelClaim.claim_id];
   const activeChannelIsCreator = activeChannelClaim && activeChannelClaim.permanent_url === contentChannelPermanentUrl;
   const activeChannelIsAdmin = activeChannelClaim && activeModeratorInfo && activeModeratorInfo.global;
@@ -84,10 +84,12 @@ function CommentMenuList(props: Props) {
     if (playingUri && playingUri.source === 'comment') {
       clearPlayingUri();
     }
+
     openModal(MODALS.CONFIRM_REMOVE_COMMENT, {
       commentId,
-      commentIsMine,
-      contentChannelPermanentUrl,
+      deleterClaim: activeChannelClaim,
+      deleterIsModOrAdmin: activeChannelIsAdmin || activeChannelIsModerator,
+      creatorClaim: commentIsMine ? undefined : contentChannelClaim,
       supportAmount,
       setQuickReply,
     });
@@ -201,7 +203,8 @@ function CommentMenuList(props: Props) {
 
       {!disableRemove &&
         activeChannelClaim &&
-        (activeChannelClaim.permanent_url === authorUri ||
+        (activeChannelIsModerator ||
+          activeChannelClaim.permanent_url === authorUri ||
           activeChannelClaim.permanent_url === contentChannelPermanentUrl) && (
           <MenuItem className="comment__menu-option" onSelect={handleDeleteComment}>
             <div className="menu__link">
