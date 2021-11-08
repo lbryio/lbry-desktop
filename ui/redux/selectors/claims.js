@@ -43,6 +43,21 @@ export const selectClaimsByUri = createSelector(selectClaimIdsByUri, selectClaim
   return claims;
 });
 
+/**
+ * Returns the claim with the specified ID. The claim could be undefined if does
+ * not exist or have not fetched. Take note of the second parameter, which means
+ * an inline function or helper would be required when used as an input to
+ * 'createSelector'.
+ *
+ * @param state
+ * @param claimId
+ * @returns {*}
+ */
+export const selectClaimWithId = (state: State, claimId: string) => {
+  const byId = selectClaimsById(state);
+  return byId[claimId];
+};
+
 export const selectAllClaimsByChannel = createSelector(selectState, (state) => state.paginatedClaimsByChannel || {});
 
 export const selectPendingIds = createSelector(selectState, (state) => Object.keys(state.pendingById) || []);
