@@ -173,7 +173,7 @@ textarea {
     margin-bottom: var(--spacing-l);
 
     &:first-child {
-      flex-basis: 1;
+      flex-basis: 1px;
       margin-right: 1.5rem;
     }
   }
@@ -267,10 +267,10 @@ textarea {
   margin-top: var(--spacing-s);
 
   &:not(:last-child) {
-    margin-bottom: var(--spacing-s);
+    margin-bottom: var(--spacing-m);
   }
 
-  .button--link ~ .button--link {
+  .button--link + .button--link {
     margin-left: var(--spacing-s);
   }
 
@@ -282,7 +282,6 @@ textarea {
 .help--warning {
   @extend .help;
   padding: var(--spacing-s);
-  color: var(--color-black);
   border-radius: var(--border-radius);
   background-color: var(--color-help-warning-bg);
   color: var(--color-help-warning-text);
@@ -497,5 +496,22 @@ textarea {
   img {
     margin-top: var(--spacing-xl);
     height: 4rem;
+  }
+}
+
+.home__meme {
+  text-align: center;
+  font-weight: bold;
+  line-height: 1;
+  font-size: 1rem;
+  margin-bottom: var(--spacing-m);
+
+  @media (min-width: $breakpoint-small) {
+    font-size: 1.2rem;
+    margin-bottom: var(--spacing-l);
+  }
+
+  > .button {
+    white-space: initial;
   }
 }

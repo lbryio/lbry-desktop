@@ -115,18 +115,20 @@
   --color-tag-bg-hover: var(--color-button-primary-bg);
 
   // Tags (words)
-  --color-tag-words: var(--color-gray-5);
-  --color-tag-words-bg: var(--color-button-alt-bg);
-  --color-tag-words-hover: var(--color-button-alt-text);
-  --color-tag-words-bg-hover: var(--color-button-alt-bg-hover);
+  --color-tag-words: var(--color-primary);
+  --color-tag-words-bg: var(--color-primary-alt);
+  --color-tag-words-hover: var(--color-primary);
+  --color-tag-words-bg-hover: var(--color-primary-alt-3);
 
   // Menu
   --color-menu-background: var(--color-header-background);
   --color-menu-background--active: var(--color-card-background-highlighted);
   --color-menu-icon: var(--color-navigation-link);
-  --color-menu-icon-active: var(--color-gray-6);
+  --color-menu-icon-active: var(--color-navigation-link);
 
   // Comments
+  --color-comment-menu: var(--color-gray-3);
+  --color-comment-menu-hovering: var(--color-gray-6);
   --color-comment-highlighted: #fff2d9;
   --color-comment-threadline: var(--color-gray-1);
   --color-comment-threadline-hover: var(--color-gray-4);

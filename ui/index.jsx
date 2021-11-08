@@ -44,12 +44,8 @@ import 'scss/third-party.scss';
 // Import our app styles
 // If a style is not necessary for the initial page load, it should be removed from `all.scss`
 // and loaded dynamically in the component that consumes it
-// @if TARGET='app'
 import 'scss/all.scss';
-// @endif
-// @if TARGET='web'
-import 'web/theme';
-// @endif
+
 // @if TARGET='web'
 // These overrides can't live in web/ because they need to use the same instance of `Lbry`
 import apiPublishCallViaWeb from 'web/setup/publish';
