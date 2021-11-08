@@ -4,7 +4,6 @@ import {
   makeSelectClaimForUri,
   selectThumbnailForUri,
   selectHasChannels,
-  selectMyChannelClaims,
 } from 'redux/selectors/claims';
 import { doCommentUpdate, doCommentList } from 'redux/actions/comments';
 import { makeSelectChannelIsMuted } from 'redux/selectors/blocked';
@@ -31,8 +30,7 @@ const select = (state, props) => {
     commentingEnabled: true,
     othersReacts: selectOthersReactsForComment(state, reactionKey),
     activeChannelClaim,
-    hasChannels: selectHasChannels(state), //
-    myChannels: selectMyChannelClaims(state),
+    hasChannels: selectHasChannels(state),
     playingUri: selectPlayingUri(state),
     stakedLevel: selectTotalStakedAmountForChannelUri(state, props.authorUri),
     linkedCommentAncestors: selectLinkedCommentAncestors(state),

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { selectMyChannelClaims } from 'redux/selectors/claims';
+import { selectHasChannels } from 'redux/selectors/claims';
 import { selectWalletIsEncrypted } from 'redux/selectors/wallet';
 import { doWalletStatus } from 'redux/actions/wallet';
 import { selectUser, selectUserVerifiedEmail } from 'redux/selectors/user';
@@ -11,7 +11,7 @@ const select = (state) => ({
   isAuthenticated: selectUserVerifiedEmail(state),
   walletEncrypted: selectWalletIsEncrypted(state),
   user: selectUser(state),
-  myChannels: selectMyChannelClaims(state),
+  hasChannels: selectHasChannels(state),
   language: selectLanguage(state),
 });
 

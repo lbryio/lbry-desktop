@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { selectBalance } from 'redux/selectors/wallet';
-import { selectMyChannelClaims, makeSelectClaimForUri } from 'redux/selectors/claims';
+import { makeSelectClaimForUri } from 'redux/selectors/claims';
 import { doOpenModal } from 'redux/actions/app';
 import WalletSend from './view';
 import { withRouter } from 'react-router';
@@ -12,7 +12,6 @@ const perform = (dispatch) => ({
 
 const select = (state, props) => ({
   balance: selectBalance(state),
-  channels: selectMyChannelClaims(state),
   contentClaim: makeSelectClaimForUri(props.contentUri)(state),
   snack: selectToast(state),
 });
