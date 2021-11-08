@@ -27,6 +27,7 @@ import CommentMenuList from 'component/commentMenuList';
 import UriIndicator from 'component/uriIndicator';
 import CreditAmount from 'component/common/credit-amount';
 import OptimizedImage from 'component/optimizedImage';
+import { getChannelFromClaim } from 'util/claim';
 import { parseSticker } from 'util/comments';
 
 const AUTO_EXPAND_ALL_REPLIES = false;
@@ -138,7 +139,8 @@ function Comment(props: Props) {
   const dislikesCount = (othersReacts && othersReacts.dislike) || 0;
   const totalLikesAndDislikes = likesCount + dislikesCount;
   const slimedToDeath = totalLikesAndDislikes >= 5 && dislikesCount / totalLikesAndDislikes > 0.8;
-  const commentByOwnerOfContent = claim && claim.signing_channel && claim.signing_channel.permanent_url === authorUri;
+  const contentChannelClaim = getChannelFromClaim(claim);
+  const commentByOwnerOfContent = contentChannelClaim && contentChannelClaim.permanent_url === authorUri;
   const stickerFromMessage = parseSticker(message);
 
   let channelOwnerOfContent;
