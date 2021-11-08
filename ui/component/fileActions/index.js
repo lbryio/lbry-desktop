@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import {
   makeSelectClaimIsMine,
   makeSelectClaimForUri,
-  selectMyChannelClaims,
+  selectHasChannels,
   makeSelectClaimIsStreamPlaceholder,
   makeSelectTagInClaimOrChannelForUri,
 } from 'redux/selectors/claims';
@@ -23,7 +23,7 @@ const select = (state, props) => ({
   fileInfo: makeSelectFileInfoForUri(props.uri)(state),
   renderMode: makeSelectFileRenderModeForUri(props.uri)(state),
   costInfo: makeSelectCostInfoForUri(props.uri)(state),
-  myChannels: selectMyChannelClaims(state),
+  hasChannels: selectHasChannels(state),
   isLivestreamClaim: makeSelectClaimIsStreamPlaceholder(props.uri)(state),
   reactionsDisabled: makeSelectTagInClaimOrChannelForUri(props.uri, DISABLE_COMMENTS_TAG)(state),
   streamingUrl: makeSelectStreamingUrlForUri(props.uri)(state),

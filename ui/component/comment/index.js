@@ -3,7 +3,7 @@ import {
   makeSelectStakedLevelForChannelUri,
   makeSelectClaimForUri,
   makeSelectThumbnailForUri,
-  selectMyChannelClaims,
+  selectHasChannels,
 } from 'redux/selectors/claims';
 import { doCommentUpdate, doCommentList } from 'redux/actions/comments';
 import { makeSelectChannelIsMuted } from 'redux/selectors/blocked';
@@ -31,7 +31,7 @@ const select = (state, props) => {
     commentingEnabled: IS_WEB ? Boolean(selectUserVerifiedEmail(state)) : true,
     othersReacts: selectOthersReactsForComment(state, reactionKey),
     activeChannelClaim,
-    myChannels: selectMyChannelClaims(state),
+    hasChannels: selectHasChannels(state),
     playingUri: selectPlayingUri(state),
     stakedLevel: makeSelectStakedLevelForChannelUri(props.authorUri)(state),
     linkedCommentAncestors: selectLinkedCommentAncestors(state),

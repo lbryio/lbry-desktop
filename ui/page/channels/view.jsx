@@ -14,7 +14,6 @@ import HelpLink from 'component/common/help-link';
 import { useHistory } from 'react-router';
 
 type Props = {
-  channels: Array<ChannelClaim>,
   channelUrls: Array<string>,
   fetchChannelListMine: () => void,
   fetchingChannels: boolean,

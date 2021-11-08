@@ -43,7 +43,7 @@ type Props = {
   activeChannel: string,
   activeChannelClaim: ?ChannelClaim,
   bottom: boolean,
-  channels: ?Array<ChannelClaim>,
+  hasChannels: boolean,
   claim: StreamClaim,
   claimIsMine: boolean,
   embed?: boolean,
@@ -72,7 +72,7 @@ export function CommentCreate(props: Props) {
   const {
     activeChannelClaim,
     bottom,
-    channels,
+    hasChannels,
     claim,
     claimIsMine,
     embed,
@@ -146,7 +146,6 @@ export function CommentCreate(props: Props) {
 
   const claimId = claim && claim.claim_id;
   const channelUri = claim && (claim.signing_channel ? claim.signing_channel.permanent_url : claim.permanent_url);
-  const hasChannels = channels && channels.length;
   const charCount = commentValue ? commentValue.length : 0;
   const disabled = deletedComment || isSubmitting || isFetchingChannels || !commentValue.length || pauseQuickSend;
   const channelId = getChannelIdFromClaim(claim);

@@ -49,7 +49,7 @@ type Props = {
   commentModBlock: (string) => void,
   linkedCommentId?: string,
   linkedCommentAncestors: { [string]: Array<string> },
-  myChannels: ?Array<ChannelClaim>,
+  hasChannels: boolean,
   commentingEnabled: boolean,
   doToast: ({ message: string }) => void,
   isTopLevel?: boolean,
@@ -94,7 +94,7 @@ function Comment(props: Props) {
     linkedCommentId,
     linkedCommentAncestors,
     commentingEnabled,
-    myChannels,
+    hasChannels,
     doToast,
     isTopLevel,
     threadDepth,
@@ -134,7 +134,6 @@ function Comment(props: Props) {
   const [page, setPage] = useState(showRepliesOnMount ? 1 : 0);
   const [advancedEditor] = usePersistedState('comment-editor-mode', false);
   const [displayDeadComment, setDisplayDeadComment] = React.useState(false);
-  const hasChannels = myChannels && myChannels.length > 0;
   const likesCount = (othersReacts && othersReacts.like) || 0;
   const dislikesCount = (othersReacts && othersReacts.dislike) || 0;
   const totalLikesAndDislikes = likesCount + dislikesCount;

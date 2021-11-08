@@ -34,7 +34,7 @@ type Props = {
   fetchModBlockedList: () => void,
   fetchModAmIList: () => void,
   delegatorsById: { [string]: { global: boolean, delegators: { name: string, claimId: string } } },
-  myChannelClaims: ?Array<ChannelClaim>,
+  myChannelClaimIds: ?Array<string>,
 };
 
 function ListBlocked(props: Props) {
@@ -51,7 +51,7 @@ function ListBlocked(props: Props) {
     fetchModBlockedList,
     fetchModAmIList,
     delegatorsById,
-    myChannelClaims,
+    myChannelClaimIds,
   } = props;
   const [viewMode, setViewMode] = usePersistedState('blocked-muted:display', VIEW.BLOCKED);
 
@@ -60,14 +60,11 @@ function ListBlocked(props: Props) {
   const stringifiedDelegatorsMap = JSON.stringify(delegatorsMap);
   const stringifiedLocalDelegatorsMap = JSON.stringify(localDelegatorsMap);
 
-  const isAdmin =
-    myChannelClaims && myChannelClaims.some((c) => delegatorsById[c.claim_id] && delegatorsById[c.claim_id].global);
+  const isAdmin = myChannelClaimIds && myChannelClaimIds.some((id) => delegatorsById[id] && delegatorsById[id].global);
 
   const isModerator =
-    myChannelClaims &&
-    myChannelClaims.some(
-      (c) => delegatorsById[c.claim_id] && Object.keys(delegatorsById[c.claim_id].delegators).length > 0
-    );
+    myChannelClaimIds &&
+    myChannelClaimIds.some((id) => delegatorsById[id] && Object.keys(delegatorsById[id].delegators).length > 0);
 
   // **************************************************************************
 
@@ -221,7 +218,7 @@ function ListBlocked(props: Props) {
 
   function getRefreshElem() {
     return (
-      myChannelClaims && (
+      myChannelClaimIds && (
         <Button
           icon={ICONS.REFRESH}
           button="alt"

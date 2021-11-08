@@ -3,7 +3,6 @@ import { doHideModal } from 'redux/actions/app';
 import {
   makeSelectClaimForUri,
   makeSelectTitleForUri,
-  selectMyChannelClaims,
   selectRepostError,
   selectRepostLoading,
   selectMyClaimsWithoutChannels,
@@ -24,7 +23,6 @@ import { selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
 import RepostCreate from './view';
 
 const select = (state, props) => ({
-  channels: selectMyChannelClaims(state),
   claim: makeSelectClaimForUri(props.uri)(state),
   passedRepostClaim: makeSelectClaimForUri(props.name, false)(state),
   passedRepostAmount: makeSelectEffectiveAmountForUri(props.name)(state),

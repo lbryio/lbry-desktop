@@ -11,7 +11,7 @@ type Props = {
   uri: string,
   parentId: string,
   claimIsMine: boolean,
-  myChannels: ?Array<ChannelClaim>,
+  myChannelIds: ?Array<string>,
   linkedCommentId?: string,
   userCanComment: boolean,
   threadDepth: number,
@@ -30,7 +30,7 @@ function CommentsReplies(props: Props) {
     fetchedReplies,
     resolvedReplies,
     claimIsMine,
-    myChannels,
+    myChannelIds,
     linkedCommentId,
     userCanComment,
     threadDepth,
@@ -95,11 +95,7 @@ function CommentsReplies(props: Props) {
                   message={comment.comment}
                   timePosted={comment.timestamp * 1000}
                   claimIsMine={claimIsMine}
-                  commentIsMine={
-                    comment.channel_id &&
-                    myChannels &&
-                    myChannels.some(({ claim_id }) => claim_id === comment.channel_id)
-                  }
+                  commentIsMine={comment.channel_id && myChannelIds && myChannelIds.includes(comment.channel_id)}
                   linkedCommentId={linkedCommentId}
                   commentingEnabled={userCanComment}
                   supportAmount={comment.support_amount}

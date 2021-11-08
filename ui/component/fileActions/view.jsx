@@ -27,7 +27,7 @@ type Props = {
   fileInfo: FileListItem,
   costInfo: ?{ cost: number },
   renderMode: string,
-  myChannels: ?Array<ChannelClaim>,
+  hasChannels: boolean,
   doToast: ({ message: string }) => void,
   clearPlayingUri: () => void,
   hideRepost?: boolean,
@@ -47,7 +47,7 @@ function FileActions(props: Props) {
     costInfo,
     renderMode,
     prepareEdit,
-    myChannels,
+    hasChannels,
     clearPlayingUri,
     doToast,
     hideRepost,
@@ -63,7 +63,6 @@ function FileActions(props: Props) {
   const isMobile = useIsMobile();
   const webShareable = costInfo && costInfo.cost === 0 && RENDER_MODES.WEB_SHAREABLE_MODES.includes(renderMode);
   const showDelete = claimIsMine || (fileInfo && (fileInfo.written_bytes > 0 || fileInfo.blobs_completed > 0));
-  const hasChannels = myChannels && myChannels.length > 0;
   const claimId = claim && claim.claim_id;
   const { signing_channel: signingChannel } = claim;
   const channelName = signingChannel && signingChannel.name;

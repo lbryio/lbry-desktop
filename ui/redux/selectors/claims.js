@@ -402,6 +402,8 @@ export const selectMyClaimsOutpoints = createSelector(selectMyClaims, (myClaims)
 export const selectFetchingMyChannels = (state: State) => selectState(state).fetchingMyChannels;
 export const selectFetchingMyCollections = (state: State) => selectState(state).fetchingMyCollections;
 
+export const selectMyChannelClaimIds = (state: State) => selectState(state).myChannelClaims;
+
 export const selectMyChannelClaims = createSelector(selectState, selectClaimsById, (state, byId) => {
   const ids = state.myChannelClaims;
   if (!ids) {
@@ -422,6 +424,11 @@ export const selectMyChannelClaims = createSelector(selectState, selectClaimsByI
 export const selectMyChannelUrls = createSelector(selectMyChannelClaims, (claims) =>
   claims ? claims.map((claim) => claim.canonical_url || claim.permanent_url) : undefined
 );
+
+export const selectHasChannels = (state: State) => {
+  const myChannelClaimIds = selectMyChannelClaimIds(state);
+  return myChannelClaimIds ? myChannelClaimIds.length > 0 : false;
+};
 
 export const selectMyCollectionIds = (state: State) => selectState(state).myCollectionClaims;
 

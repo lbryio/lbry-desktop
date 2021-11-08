@@ -9,14 +9,13 @@ import ChannelSelector from 'component/channelSelector';
 import Yrbl from 'component/yrbl';
 
 type Props = {
-  channels: Array<ChannelClaim>,
+  hasChannels: boolean,
   fetchingChannels: boolean,
   activeChannelClaim: ?ChannelClaim,
 };
 
 export default function CreatorDashboardPage(props: Props) {
-  const { channels, fetchingChannels, activeChannelClaim } = props;
-  const hasChannels = channels && channels.length > 0;
+  const { hasChannels, fetchingChannels, activeChannelClaim } = props;
 
   return (
     <Page>

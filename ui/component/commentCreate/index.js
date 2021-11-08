@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import {
   makeSelectClaimForUri,
   makeSelectClaimIsMine,
-  selectMyChannelClaims,
+  selectHasChannels,
   selectFetchingMyChannels,
   makeSelectTagInClaimOrChannelForUri,
 } from 'redux/selectors/claims';
@@ -16,7 +16,7 @@ import { selectSettingsByChannelId } from 'redux/selectors/comments';
 
 const select = (state, props) => ({
   activeChannelClaim: selectActiveChannelClaim(state),
-  channels: selectMyChannelClaims(state),
+  hasChannels: selectHasChannels(state),
   claim: makeSelectClaimForUri(props.uri)(state),
   claimIsMine: makeSelectClaimIsMine(props.uri)(state),
   isFetchingChannels: selectFetchingMyChannels(state),

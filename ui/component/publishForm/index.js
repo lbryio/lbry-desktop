@@ -15,7 +15,7 @@ import {
   selectIsResolvingPublishUris,
   selectMyClaimForUri,
 } from 'redux/selectors/publish';
-import { selectMyChannelClaims, makeSelectClaimIsStreamPlaceholder } from 'redux/selectors/claims';
+import { makeSelectClaimIsStreamPlaceholder } from 'redux/selectors/claims';
 import * as RENDER_MODES from 'constants/file_render_modes';
 import * as SETTINGS from 'constants/settings';
 import { doClaimInitialRewards } from 'redux/actions/rewards';
@@ -33,7 +33,7 @@ import {
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { makeSelectFileRenderModeForUri } from 'redux/selectors/content';
 import { selectUser } from 'redux/selectors/user';
-import PublishPage from './view';
+import PublishForm from './view';
 
 const select = (state) => {
   const myClaimForUri = selectMyClaimForUri(state);
@@ -61,7 +61,6 @@ const select = (state) => {
     modal: selectModal(state),
     enablePublishPreview: makeSelectClientSetting(SETTINGS.ENABLE_PUBLISH_PREVIEW)(state),
     activeChannelClaim: selectActiveChannelClaim(state),
-    myChannels: selectMyChannelClaims(state),
     incognito: selectIncognito(state),
     activeChannelStakedLevel: selectActiveChannelStakedLevel(state),
     isClaimingInitialRewards: selectIsClaimingInitialRewards(state),
@@ -80,4 +79,4 @@ const perform = (dispatch) => ({
   claimInitialRewards: () => dispatch(doClaimInitialRewards()),
 });
 
-export default connect(select, perform)(PublishPage);
+export default connect(select, perform)(PublishForm);

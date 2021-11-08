@@ -19,7 +19,7 @@ import usePersistedState from 'effects/use-persisted-state';
 import { LIVESTREAM_RTMP_URL } from 'constants/livestream';
 
 type Props = {
-  channels: Array<ChannelClaim>,
+  hasChannels: boolean,
   fetchingChannels: boolean,
   activeChannelClaim: ?ChannelClaim,
   pendingClaims: Array<Claim>,
@@ -34,7 +34,7 @@ type Props = {
 export default function LivestreamSetupPage(props: Props) {
   const LIVESTREAM_CLAIM_POLL_IN_MS = 60000;
   const {
-    channels,
+    hasChannels,
     fetchingChannels,
     activeChannelClaim,
     pendingClaims,
@@ -49,7 +49,6 @@ export default function LivestreamSetupPage(props: Props) {
   const [sigData, setSigData] = React.useState({ signature: undefined, signing_ts: undefined });
   const [showHelp, setShowHelp] = usePersistedState('livestream-help-seen', true);
 
-  const hasChannels = channels && channels.length > 0;
   const hasLivestreamClaims = Boolean(myLivestreamClaims.length || pendingClaims.length);
 
   function createStreamKey() {

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { selectMyChannelClaims, selectFetchingMyChannels } from 'redux/selectors/claims';
+import { selectHasChannels, selectFetchingMyChannels } from 'redux/selectors/claims';
 import { doClearPublish } from 'redux/actions/publish';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { doFetchNoSourceClaims } from 'redux/actions/livestream';
@@ -17,7 +17,7 @@ const select = (state) => {
   return {
     channelName,
     channelId,
-    channels: selectMyChannelClaims(state),
+    hasChannels: selectHasChannels(state),
     fetchingChannels: selectFetchingMyChannels(state),
     activeChannelClaim,
     myLivestreamClaims: makeSelectLivestreamsForChannelId(channelId)(state),
