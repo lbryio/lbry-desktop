@@ -21,9 +21,6 @@ import usePersistedState from 'effects/use-persisted-state';
 import Spinner from 'component/spinner';
 import LANGUAGES from 'constants/languages';
 
-// @if TARGET='app'
-import useHistoryNav from 'effects/use-history-nav';
-// @endif
 // @if TARGET='web'
 import YoutubeWelcome from 'web/component/youtubeReferralWelcome';
 import {
@@ -234,11 +231,6 @@ function App(props: Props) {
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, []);
-
-  // Enable 'Alt + Left/Right' for history navigation on Desktop.
-  // @if TARGET='app'
-  useHistoryNav(history);
-  // @endif
 
   useEffect(() => {
     if (referredRewardAvailable && sanitizedReferrerParam && isRewardApproved) {
