@@ -60,8 +60,11 @@ const generateLongPoll = (channelId: string) => {
   return pollers[channelId];
 };
 
-export default (channelId: string, cb: (boolean) => void) => {
+const watchLivestreamStatus = (channelId: ?string, cb: (boolean) => void) => {
+  if (!channelId || typeof cb !== 'function') return undefined;
   const poll = generateLongPoll(channelId);
   const subscriberIndex = poll.connect(cb);
   return () => poll.disconnect(subscriberIndex);
 };
+
+export default watchLivestreamStatus;

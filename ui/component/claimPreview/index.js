@@ -22,23 +22,21 @@ import { doResolveUri } from 'redux/actions/claims';
 import { doCollectionEdit } from 'redux/actions/collections';
 import { doFileGet } from 'redux/actions/file';
 import { selectBanStateForUri } from 'lbryinc';
+import { makeSelectIsActiveLivestream } from 'redux/selectors/livestream';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import { makeSelectHasVisitedUri } from 'redux/selectors/content';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
 import ClaimPreview from './view';
 import formatMediaDuration from 'util/formatMediaDuration';
-import { selectActiveChannelClaim } from 'redux/selectors/app';
 
 const select = (state, props) => {
   const claim = props.uri && selectClaimForUri(state, props.uri);
-  const { claim_id: channelId } = selectActiveChannelClaim(state) || {};
   const media = claim && claim.value && (claim.value.video || claim.value.audio);
   const mediaDuration = media && media.duration && formatMediaDuration(media.duration, { screenReader: true });
 
   return {
     claim,
     mediaDuration,
-    channelId,
     date: props.uri && selectDateForUri(state, props.uri),
     title: props.uri && makeSelectTitleForUri(props.uri)(state),
     pending: props.uri && makeSelectClaimIsPending(props.uri)(state),
@@ -54,6 +52,7 @@ const select = (state, props) => {
     streamingUrl: props.uri && makeSelectStreamingUrlForUri(props.uri)(state),
     wasPurchased: props.uri && makeSelectClaimWasPurchased(props.uri)(state),
     isLivestream: makeSelectClaimIsStreamPlaceholder(props.uri)(state),
+    isLivestreamActive: makeSelectIsActiveLivestream(props.uri)(state),
     isCollectionMine: makeSelectCollectionIsMine(props.collectionId)(state),
     collectionUris: makeSelectUrlsForCollectionId(props.collectionId)(state),
     collectionIndex: makeSelectIndexForUrlInCollection(props.uri, props.collectionId)(state),

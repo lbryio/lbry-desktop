@@ -1,6 +1,6 @@
 // @flow
 import type { Node } from 'react';
-import React, { useEffect, forwardRef, useState } from 'react';
+import React, { useEffect, forwardRef } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import { isEmpty } from 'util/object';
 import { lazyImport } from 'util/lazyImport';
@@ -31,7 +31,6 @@ import ClaimPreviewNoContent from './claim-preview-no-content';
 import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import Button from 'component/button';
 import * as ICONS from 'constants/icons';
-import watchLivestreamStatus from '$web/src/livestreaming/long-polling';
 
 const AbandonedChannelPreview = lazyImport(() =>
   import('component/abandonedChannelPreview' /* webpackChunkName: "abandonedChannelPreview" */)
@@ -41,7 +40,6 @@ const AbandonedChannelPreview = lazyImport(() =>
 type Props = {
   uri: string,
   claim: ?Claim,
-  channelId: string,
   active: boolean,
   obscureNsfw: boolean,
   showUserBlocked: boolean,
@@ -76,6 +74,7 @@ type Props = {
   repostUrl?: string,
   hideMenu?: boolean,
   isLivestream?: boolean,
+  isLivestreamActive: boolean,
   collectionId?: string,
   editCollection: (string, CollectionEditParams) => void,
   isCollectionMine: boolean,
@@ -93,7 +92,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     // core
     uri,
     claim,
-    channelId,
     isResolvingUri,
     // core actions
     getFile,
@@ -138,6 +136,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     hideMenu = false,
     // repostUrl,
     isLivestream,
+    isLivestreamActive,
     collectionId,
     collectionIndex,
     editCollection,
@@ -147,13 +146,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     indexInContainer,
     channelSubCount,
   } = props;
-
-  const [isLivestreamActive, setIsLivestreamActive] = useState(false);
-
-  useEffect(() => {
-    if (!isLivestream) return;
-    return watchLivestreamStatus(channelId, (state) => setIsLivestreamActive(state));
-  }, [channelId, setIsLivestreamActive, isLivestream]);
 
   const isCollection = claim && claim.value_type === 'collection';
   const collectionClaimId = isCollection && claim && claim.claim_id;
@@ -491,7 +483,8 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
           </div>
         </div>
 
-        {claim && isLivestream && isLivestreamActive && <ClaimPreviewReset uri={uri} />}
+        {/* Todo: check isLivestreamActive once we have that data consistently everywhere. */}
+        {claim && isLivestream && <ClaimPreviewReset uri={uri} />}
 
         {!hideMenu && <ClaimMenuList uri={uri} collectionId={listId} />}
       </>
