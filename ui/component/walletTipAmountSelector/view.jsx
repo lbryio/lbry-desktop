@@ -185,9 +185,9 @@ function WalletTipAmountSelector(props: Props) {
 
           if (validCustomTipInput) {
             setTipError(
-              __('Amount of $%input_amount% LBC in USB is lower than price of $%price_amount%', {
-                input_amount: convertToTwoDecimalsOrMore(convertedAmount, 4),
-                price_amount: convertToTwoDecimalsOrMore(customTipAmount),
+              __('Insufficient amount (%input_amount% Credits = %converted_amount% USD).', {
+                input_amount: amount,
+                converted_amount: convertToTwoDecimalsOrMore(convertedAmount, 4),
               })
             );
           } else {
