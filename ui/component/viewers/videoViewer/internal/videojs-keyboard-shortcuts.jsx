@@ -1,3 +1,4 @@
+// @flow
 import * as OVERLAY from './overlays';
 import * as KEYCODES from 'constants/keycodes';
 import isUserTyping from 'util/detect-typing';
@@ -121,7 +122,6 @@ export default ({ playNext, playPrevious, toggleVideoTheaterMode }) => {
 
   // eslint-disable-next-line flowtype/no-types-missing-file-annotation
   function handleSingleKeyActions(e: KeyboardEvent, playerRef, containerRef) {
-
     if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
     if (e.keyCode === KEYCODES.SPACEBAR || e.keyCode === KEYCODES.K) togglePlay(containerRef);
     if (e.keyCode === KEYCODES.F) toggleFullscreen(playerRef);

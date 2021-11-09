@@ -123,7 +123,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     isAudio,
     onPlayerReady,
     toggleVideoTheaterMode,
-    adUrl, // TODO: this ad functionality isn't used, can be pulled out
+    // adUrl, // TODO: this ad functionality isn't used, can be pulled out
     claimId,
     userId,
     allowPreRoll,
@@ -171,7 +171,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
   const { detectFileType, createVideoPlayerDOM } = functions({ source, sourceType, videoJsOptions, isAudio });
 
-  let unmuteAndHideHint, retryVideoAfterFailure;
+  const { unmuteAndHideHint, retryVideoAfterFailure, initializeEvents } = events({ tapToUnmuteRef, tapToRetryRef, setReload, videoTheaterMode, playerRef, autoplaySetting, replay });
+
   // Initialize video.js
   function initializeVideoPlayer(el) {
     if (!el) return;
@@ -184,10 +185,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
       runAds(internalFeatureEnabled, allowPreRoll, player);
 
-      const videoJsEvents = events({ tapToUnmuteRef, tapToRetryRef, setReload, videoTheaterMode, playerRef, autoplaySetting, player });
-
-      unmuteAndHideHint = videoJsEvents.unmuteAndHideHint;
-      retryVideoAfterFailure = videoJsEvents.retryVideoAfterFailure;
+      initializeEvents();
 
       // Replace volume bar with custom LBRY volume bar
       LbryVolumeBarClass.replaceExisting(player);
@@ -227,14 +225,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
     return vjs;
   }
-
-  // todo: what does this do exactly?
-  useEffect(() => {
-    const player = playerRef.current;
-    if (replay && player) {
-      player.play();
-    }
-  }, [replay]);
 
   /** instantiate videoJS and dispose of it when done with code **/
   // This lifecycle hook is only called once (on mount), or when `isAudio` or `source` changes.

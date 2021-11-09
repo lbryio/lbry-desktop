@@ -1,6 +1,5 @@
 // @flow
 export default ({ source, sourceType, videoJsOptions, isAudio }) => {
-
   function detectFileType() {
     return new Promise(async (res, rej) => {
       try {

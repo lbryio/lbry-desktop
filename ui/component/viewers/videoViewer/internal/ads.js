@@ -18,24 +18,24 @@ const adTags = {
 };
 
 // Modified to work with IMA
-const vastMacroUrl =
-  `https://vast.aniview.com/api/adserver61/vast/` +
-  `?AV_PUBLISHERID=60afcbc58cfdb065440d2426` +
-  `&AV_CHANNELID=${adTags.ford}` +
-  `&AV_URL=[URL]` +
-  `&cb=[CACHEBUSTING]` +
-  `&AV_WIDTH=[WIDTH]` +
-  `&AV_HEIGHT=[HEIGHT]` +
-  // `&AV_SCHAIN=[SCHAIN_MACRO]` +
-  // `&AV_CCPA=[CCPA_MACRO]` +
-  // `&AV_GDPR=[GDPR_MACRO]` +
-  // `&AV_CONSENT=[CONSENT_MACRO]` +
-  `&skip=true` +
-  `&skiptimer=5` +
-  `&logo=true` +
-  `&usevslot=true` +
-  `&vastretry=2` +
-  `&hidecontrols=false`;
+// const vastMacroUrl =
+//   `https://vast.aniview.com/api/adserver61/vast/` +
+//   `?AV_PUBLISHERID=60afcbc58cfdb065440d2426` +
+//   `&AV_CHANNELID=${adTags.ford}` +
+//   `&AV_URL=[URL]` +
+//   `&cb=[CACHEBUSTING]` +
+//   `&AV_WIDTH=[WIDTH]` +
+//   `&AV_HEIGHT=[HEIGHT]` +
+//   // `&AV_SCHAIN=[SCHAIN_MACRO]` +
+//   // `&AV_CCPA=[CCPA_MACRO]` +
+//   // `&AV_GDPR=[GDPR_MACRO]` +
+//   // `&AV_CONSENT=[CONSENT_MACRO]` +
+//   `&skip=true` +
+//   `&skiptimer=5` +
+//   `&logo=true` +
+//   `&usevslot=true` +
+//   `&vastretry=2` +
+//   `&hidecontrols=false`;
 
 // only run on chrome (brave included) and don't run on mobile for time being
 const browserIsChrome = videojs.browser.IS_CHROME;
@@ -52,7 +52,6 @@ const hitsAtFiftyPercentChance = hitsFiftyPercent();
  * @param player
  */
 function runAds(internalFeatureEnabled, allowPreRoll, player) {
-
   // current timestamp for vpaid
   const timestamp = new Date().toISOString();
 
@@ -89,7 +88,7 @@ function runAds(internalFeatureEnabled, allowPreRoll, player) {
   if (shouldShowAnAd && browserIsChrome && !IS_MOBILE) {
     // fire up ima integration via module
     player.ima({
-      adTagUrl: vastMacroUrl,
+      adTagUrl: vpaidMacroUrl,
       vpaidMode: 2, // 2 maps to insecure
     });
   }
