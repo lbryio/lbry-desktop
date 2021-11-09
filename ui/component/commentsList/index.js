@@ -15,7 +15,7 @@ import {
   makeSelectTotalCommentsCountForUri,
   selectOthersReacts,
   selectMyReacts,
-  makeSelectCommentIdsForUri,
+  selectCommentIdsForUri,
   selectSettingsByChannelId,
   selectPinnedCommentsForUri,
 } from 'redux/selectors/comments';
@@ -36,7 +36,7 @@ const select = (state, props) => {
     topLevelComments,
     resolvedComments,
     myChannelIds: selectMyClaimIdsRaw(state),
-    allCommentIds: makeSelectCommentIdsForUri(props.uri)(state),
+    allCommentIds: selectCommentIdsForUri(state, props.uri),
     pinnedComments: selectPinnedCommentsForUri(state, props.uri),
     topLevelTotalPages: makeSelectTopLevelTotalPagesForUri(props.uri)(state),
     totalComments: makeSelectTotalCommentsCountForUri(props.uri)(state),
