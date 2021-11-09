@@ -204,6 +204,7 @@ function CommentMenuList(props: Props) {
       {!disableRemove &&
         activeChannelClaim &&
         (activeChannelIsModerator ||
+          activeChannelIsAdmin ||
           activeChannelClaim.permanent_url === authorUri ||
           activeChannelClaim.permanent_url === contentChannelPermanentUrl) && (
           <MenuItem className="comment__menu-option" onSelect={handleDeleteComment}>
