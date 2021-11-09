@@ -50,13 +50,37 @@ const defaultState: CommentsState = {
   fetchingBlockedWords: false,
 };
 
-function pushToArrayInObject(obj, key, valueToPush) {
+// ****************************************************************************
+// Immutable helpers
+// ****************************************************************************
+
+function immPushToArrayInObject(obj, key, valueToPush) {
   if (!obj[key]) {
     obj[key] = [valueToPush];
   } else if (!obj[key].includes(valueToPush)) {
-    obj[key].push(valueToPush);
+    // Filter duplicates
+    obj[key] = obj[key].concat(valueToPush);
   }
 }
+
+function immConcatToArrayInObject(obj, key, arrayToMerge) {
+  if (obj[key]) {
+    obj[key] = obj[key].concat(arrayToMerge);
+  } else {
+    obj[key] = arrayToMerge;
+  }
+}
+
+function immPrefixArrayInObject(obj, key, valueToInsert) {
+  if (obj[key]) {
+    obj[key] = [valueToInsert, ...obj[key]];
+  } else {
+    obj[key] = [valueToInsert];
+  }
+}
+
+// ****************************************************************************
+// ****************************************************************************
 
 export default handleActions(
   {
@@ -298,9 +322,9 @@ export default handleActions(
               const comment = comments[i];
               commonUpdateAction(comment, commentById, commentIds, i);
               if (comment.is_pinned) {
-                pushToArrayInObject(pinnedCommentsById, claimId, comment.comment_id);
+                immPushToArrayInObject(pinnedCommentsById, claimId, comment.comment_id);
               } else {
-                pushToArrayInObject(topLevelCommentsById, claimId, comment.comment_id);
+                immPushToArrayInObject(topLevelCommentsById, claimId, comment.comment_id);
               }
             }
           }
@@ -309,11 +333,11 @@ export default handleActions(
             for (let i = 0; i < comments.length; ++i) {
               const comment = comments[i];
               commonUpdateAction(comment, commentById, commentIds, i);
-              pushToArrayInObject(repliesByParentId, parentId, comment.comment_id);
+              immPushToArrayInObject(repliesByParentId, parentId, comment.comment_id);
             }
           }
 
-          byId[claimId] ? byId[claimId].push(...commentIds) : (byId[claimId] = commentIds);
+          immConcatToArrayInObject(byId, claimId, commentIds);
           commentsByUri[uri] = claimId;
         }
       }
@@ -353,16 +377,16 @@ export default handleActions(
 
       const updateStore = (comment, commentById, byId, repliesByParentId, topLevelCommentsById) => {
         commentById[comment.comment_id] = comment;
-        byId[claimId] ? byId[claimId].unshift(comment.comment_id) : (byId[claimId] = [comment.comment_id]);
+        immPrefixArrayInObject(byId, claimId, comment.comment_id);
 
         const parentId = comment.parent_id;
         if (comment.parent_id) {
-          pushToArrayInObject(repliesByParentId, parentId, comment.comment_id);
+          immPushToArrayInObject(repliesByParentId, parentId, comment.comment_id);
         } else {
           if (comment.is_pinned) {
-            pushToArrayInObject(pinnedCommentsById, claimId, comment.comment_id);
+            immPushToArrayInObject(pinnedCommentsById, claimId, comment.comment_id);
           } else {
-            pushToArrayInObject(topLevelCommentsById, claimId, comment.comment_id);
+            immPushToArrayInObject(topLevelCommentsById, claimId, comment.comment_id);
           }
         }
       };
@@ -372,7 +396,7 @@ export default handleActions(
       if (ancestors) {
         ancestors.forEach((ancestor) => {
           updateStore(ancestor, commentById, byId, repliesByParentId, topLevelCommentsById);
-          pushToArrayInObject(linkedCommentAncestors, comment.comment_id, ancestor.comment_id);
+          immPushToArrayInObject(linkedCommentAncestors, comment.comment_id, ancestor.comment_id);
         });
       }
 
@@ -553,6 +577,8 @@ export default handleActions(
       const claimId = comment.claim_id;
       for (let i = 0; i < byId[claimId].length; i++) {
         if (byId[claimId][i] === comment_id) {
+          // immutable update
+          byId[claimId] = Array.from(byId[claimId]);
           byId[claimId].splice(i, 1);
           break;
         }
