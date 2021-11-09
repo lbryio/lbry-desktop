@@ -27,18 +27,24 @@ const BLOCK = {
 type Props = {
   contentUri: string,
   commenterUri: string,
-  // --- select ---
+  offendingCommentId?: string,
+  // --- redux ---
   activeChannelClaim: ?ChannelClaim,
   contentClaim: ?Claim,
   moderationDelegatorsById: { [string]: { global: boolean, delegators: { name: string, claimId: string } } },
-  // --- perform ---
-  closeModal: () => void,
-  commentModBlock: (commenterUri: string, timeoutSec: ?number) => void,
-  commentModBlockAsAdmin: (commenterUri: string, blockerId: string, timeoutSec: ?number) => void,
-  commentModBlockAsModerator: (
+  doHideModal: () => void,
+  doCommentModBlock: (commenterUri: string, offendingCommentId: ?string, timeoutSec: ?number) => void,
+  doCommentModBlockAsAdmin: (
     commenterUri: string,
+    offendingCommentId: ?string,
+    blockerId: ?string,
+    timeoutSec: ?number
+  ) => void,
+  doCommentModBlockAsModerator: (
+    commenterUri: string,
+    offendingCommentId: ?string,
     creatorUri: string,
-    blockerId: string,
+    blockerId: ?string,
     timeoutSec: ?number
   ) => void,
 };
@@ -46,13 +52,14 @@ type Props = {
 export default function ModalBlockChannel(props: Props) {
   const {
     commenterUri,
+    offendingCommentId,
     activeChannelClaim,
     contentClaim,
     moderationDelegatorsById,
-    closeModal,
-    commentModBlock,
-    commentModBlockAsAdmin,
-    commentModBlockAsModerator,
+    doHideModal,
+    doCommentModBlock,
+    doCommentModBlockAsAdmin,
+    doCommentModBlockAsModerator,
   } = props;
 
   const contentChannelClaim = getChannelFromClaim(contentClaim);
@@ -227,13 +234,14 @@ export default function ModalBlockChannel(props: Props) {
 
     switch (tab) {
       case TAB.PERSONAL:
-        commentModBlock(commenterUri, duration);
+        doCommentModBlock(commenterUri, offendingCommentId, duration);
         break;
 
       case TAB.MODERATOR:
         if (activeChannelClaim && contentChannelClaim) {
-          commentModBlockAsModerator(
+          doCommentModBlockAsModerator(
             commenterUri,
+            offendingCommentId,
             contentChannelClaim.permanent_url,
             activeChannelClaim.claim_id,
             duration
@@ -243,12 +251,12 @@ export default function ModalBlockChannel(props: Props) {
 
       case TAB.ADMIN:
         if (activeChannelClaim) {
-          commentModBlockAsAdmin(commenterUri, activeChannelClaim.claim_id, duration);
+          doCommentModBlockAsAdmin(commenterUri, offendingCommentId, activeChannelClaim.claim_id, duration);
         }
         break;
     }
 
-    closeModal();
+    doHideModal();
   }
 
   // **************************************************************************
@@ -256,13 +264,13 @@ export default function ModalBlockChannel(props: Props) {
 
   if (isPersonalTheOnlyTab && !isTimeoutAvail) {
     // There's only 1 option. Just execute it and don't show the modal.
-    commentModBlock(commenterUri);
-    closeModal();
+    doCommentModBlock(commenterUri, offendingCommentId);
+    doHideModal();
     return null;
   }
 
   return (
-    <Modal isOpen type="card" onAborted={closeModal}>
+    <Modal isOpen type="card" onAborted={doHideModal}>
       <Card
         title={__('Block Channel')}
         subtitle={getCommenterPreview(commenterUri)}
@@ -301,7 +309,7 @@ export default function ModalBlockChannel(props: Props) {
             <div className="block-modal--finalize">
               <div className="section__actions">
                 <Button button="primary" label={__('Block')} onClick={handleBlock} disabled={blockButtonDisabled} />
-                <Button button="link" label={__('Cancel')} onClick={closeModal} />
+                <Button button="link" label={__('Cancel')} onClick={doHideModal} />
                 {getActiveChannelElem()}
               </div>
             </div>

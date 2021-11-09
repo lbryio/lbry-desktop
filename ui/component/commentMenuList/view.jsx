@@ -197,7 +197,13 @@ function CommentMenuList(props: Props) {
         <>
           <MenuItem
             className="comment__menu-option"
-            onSelect={() => openModal(MODALS.BLOCK_CHANNEL, { contentUri: uri, commenterUri: authorUri })}
+            onSelect={() =>
+              openModal(MODALS.BLOCK_CHANNEL, {
+                contentUri: uri,
+                commenterUri: authorUri,
+                offendingCommentId: commentId,
+              })
+            }
           >
             {getBlockOptionElem()}
           </MenuItem>
