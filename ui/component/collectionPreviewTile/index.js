@@ -5,7 +5,7 @@ import {
   makeSelectTitleForUri,
   makeSelectChannelForClaimUri,
   makeSelectClaimIsNsfw,
-  makeSelectClaimIdForUri,
+  selectClaimIdForUri,
   makeSelectClaimForClaimId,
 } from 'redux/selectors/claims';
 import {
@@ -24,7 +24,7 @@ import { selectShowMatureContent } from 'redux/selectors/settings';
 import CollectionPreviewTile from './view';
 
 const select = (state, props) => {
-  const collectionId = props.collectionId || (props.uri && makeSelectClaimIdForUri(props.uri));
+  const collectionId = props.collectionId || (props.uri && selectClaimIdForUri(state, props.uri));
   const claim = props.collectionId && makeSelectClaimForClaimId(props.collectionId)(state);
   const collectionUri = props.uri || (claim && (claim.canonical_url || claim.permanent_url)) || null;
 

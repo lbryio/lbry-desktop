@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimIdForUri } from 'redux/selectors/claims';
+import { selectClaimIdForUri } from 'redux/selectors/claims';
 import {
   doCommentModUnBlock,
   doCommentModBlock,
@@ -43,7 +43,7 @@ const select = (state, props) => {
     isBlocked,
     isToggling,
     isBlockingOrUnBlocking: makeSelectUriIsBlockingOrUnBlocking(props.uri)(state),
-    creatorId: makeSelectClaimIdForUri(props.creatorUri)(state),
+    creatorId: selectClaimIdForUri(state, props.creatorUri),
   };
 };
 

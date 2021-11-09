@@ -79,8 +79,7 @@ export const makeSelectClaimIdIsPending = (claimId: string) =>
     return Boolean(pendingById[claimId]);
   });
 
-export const makeSelectClaimIdForUri = (uri: string) =>
-  createSelector(selectClaimIdsByUri, (claimIds) => claimIds[uri]);
+export const selectClaimIdForUri = (state: State, uri: string) => selectClaimIdsByUri(state)[uri];
 
 export const selectReflectingById = (state: State) => selectState(state).reflectingById;
 
