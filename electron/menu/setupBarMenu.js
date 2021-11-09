@@ -1,5 +1,4 @@
 import { app, Menu, shell } from 'electron';
-import { ZOOM } from 'util/zoomWindow';
 
 export default () => {
   const template = [
@@ -23,38 +22,6 @@ export default () => {
       label: 'View',
       submenu: [
         { role: 'reload' },
-        {
-          label: 'Zoom',
-          submenu: [
-            {
-              label: 'Zoom In',
-              accelerator: 'CmdOrCtrl+=',
-              click: (menuItem, browserWindow) => {
-                if (browserWindow) {
-                  browserWindow.webContents.send('zoom-window', ZOOM.INCREMENT);
-                }
-              },
-            },
-            {
-              label: 'Zoom Out',
-              accelerator: 'CmdOrCtrl+-',
-              click: (menuItem, browserWindow) => {
-                if (browserWindow) {
-                  browserWindow.webContents.send('zoom-window', ZOOM.DECREMENT);
-                }
-              },
-            },
-            {
-              label: 'Reset Zoom',
-              accelerator: 'CmdOrCtrl+0',
-              click: (menuItem, browserWindow) => {
-                if (browserWindow) {
-                  browserWindow.webContents.send('zoom-window', ZOOM.RESET);
-                }
-              },
-            },
-          ],
-        },
         {
           label: 'Developer',
           submenu: [{ role: 'forcereload' }, { role: 'toggledevtools' }],

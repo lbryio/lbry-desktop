@@ -6,7 +6,6 @@ import SnackBar from 'component/snackBar';
 // @if TARGET='app'
 import SplashScreen from 'component/splash';
 import * as ACTIONS from 'constants/action_types';
-import { changeZoomFactor } from 'util/zoomWindow';
 // @endif
 import { ipcRenderer, remote, shell } from 'electron';
 import moment from 'moment';
@@ -177,10 +176,6 @@ ipcRenderer.on('open-menu', (event, uri) => {
   if (uri && uri.startsWith('/help')) {
     app.store.dispatch(push('/$/help'));
   }
-});
-
-ipcRenderer.on('zoom-window', (event, action) => {
-  changeZoomFactor(action);
 });
 
 const { dock } = remote.app;

@@ -22,7 +22,6 @@ import Spinner from 'component/spinner';
 import LANGUAGES from 'constants/languages';
 
 // @if TARGET='app'
-import useZoom from 'effects/use-zoom';
 import useHistoryNav from 'effects/use-history-nav';
 // @endif
 // @if TARGET='web'
@@ -235,11 +234,6 @@ function App(props: Props) {
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, []);
-
-  // Enable ctrl +/- zooming on Desktop.
-  // @if TARGET='app'
-  useZoom();
-  // @endif
 
   // Enable 'Alt + Left/Right' for history navigation on Desktop.
   // @if TARGET='app'
