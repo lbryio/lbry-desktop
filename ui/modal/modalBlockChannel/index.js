@@ -13,11 +13,11 @@ const select = (state, props) => ({
   moderationDelegatorsById: selectModerationDelegatorsById(state),
 });
 
-const perform = (dispatch) => ({
-  closeModal: () => dispatch(doHideModal()),
-  commentModBlock: (a, b) => dispatch(doCommentModBlock(a, b)),
-  commentModBlockAsAdmin: (a, b, c) => dispatch(doCommentModBlockAsAdmin(a, b, c)),
-  commentModBlockAsModerator: (a, b, c, d) => dispatch(doCommentModBlockAsModerator(a, b, c, d)),
-});
+const perform = {
+  doHideModal,
+  doCommentModBlock,
+  doCommentModBlockAsAdmin,
+  doCommentModBlockAsModerator,
+};
 
 export default connect(select, perform)(ModalBlockChannel);

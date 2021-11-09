@@ -872,8 +872,9 @@ function doCommentModToggleBlock(
   creatorUri: string,
   blockerIds: Array<string>, // [] = use all my channels
   blockLevel: string,
-  timeoutSec?: number,
-  showLink: boolean = false
+  timeoutSec: ?number,
+  showLink: boolean = false,
+  offendingCommentId: ?string = undefined
 ) {
   return async (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
@@ -972,6 +973,7 @@ function doCommentModToggleBlock(
                 signing_ts: signatureData.signing_ts,
                 creator_channel_id: creatorUri ? creatorId : undefined,
                 creator_channel_name: creatorUri ? creatorName : undefined,
+                offending_comment_id: offendingCommentId && !unblock ? offendingCommentId : undefined,
                 block_all: unblock ? undefined : blockLevel === BLOCK_LEVEL.ADMIN,
                 global_un_block: unblock ? blockLevel === BLOCK_LEVEL.ADMIN : undefined,
                 ...sharedModBlockParams,
@@ -1051,14 +1053,26 @@ function doCommentModToggleBlock(
 /**
  * Blocks the commenter for all channels that I own.
  *
+ * Update: the above it not entirely true now. A blocked channel's comment won't
+ * appear for you anywhere since we now filter the comments at the app-side
+ * before showing it.
+ *
  * @param commenterUri
+ * @param offendingCommentId
  * @param timeoutSec
  * @param showLink
  * @returns {function(Dispatch): *}
  */
-export function doCommentModBlock(commenterUri: string, timeoutSec?: number, showLink: boolean = true) {
+export function doCommentModBlock(
+  commenterUri: string,
+  offendingCommentId: ?string,
+  timeoutSec: ?number,
+  showLink: boolean = true
+) {
   return (dispatch: Dispatch) => {
-    return dispatch(doCommentModToggleBlock(false, commenterUri, '', [], BLOCK_LEVEL.SELF, timeoutSec, showLink));
+    return dispatch(
+      doCommentModToggleBlock(false, commenterUri, '', [], BLOCK_LEVEL.SELF, timeoutSec, showLink, offendingCommentId)
+    );
   };
 }
 
@@ -1066,14 +1080,29 @@ export function doCommentModBlock(commenterUri: string, timeoutSec?: number, sho
  * Blocks the commenter using the given channel that has Global privileges.
  *
  * @param commenterUri
- * @param blockerId
+ * @param offendingCommentId
+ * @param blockerId Your specific channel ID to block with, or pass 'undefined' to block it for all of your channels.
  * @param timeoutSec
  * @returns {function(Dispatch): *}
  */
-export function doCommentModBlockAsAdmin(commenterUri: string, blockerId: string, timeoutSec?: number) {
+export function doCommentModBlockAsAdmin(
+  commenterUri: string,
+  offendingCommentId: ?string,
+  blockerId: ?string,
+  timeoutSec: ?number
+) {
   return (dispatch: Dispatch) => {
     return dispatch(
-      doCommentModToggleBlock(false, commenterUri, '', blockerId ? [blockerId] : [], BLOCK_LEVEL.ADMIN, timeoutSec)
+      doCommentModToggleBlock(
+        false,
+        commenterUri,
+        '',
+        blockerId ? [blockerId] : [],
+        BLOCK_LEVEL.ADMIN,
+        timeoutSec,
+        false,
+        offendingCommentId
+      )
     );
   };
 }
@@ -1083,16 +1112,18 @@ export function doCommentModBlockAsAdmin(commenterUri: string, blockerId: string
  * moderation rights by the creator.
  *
  * @param commenterUri
+ * @param offendingCommentId
  * @param creatorUri
- * @param blockerId
+ * @param blockerId Your specific channel ID to block with, or pass 'undefined' to block it for all of your channels.
  * @param timeoutSec
  * @returns {function(Dispatch): *}
  */
 export function doCommentModBlockAsModerator(
   commenterUri: string,
+  offendingCommentId: ?string,
   creatorUri: string,
-  blockerId: string,
-  timeoutSec?: number
+  blockerId: ?string,
+  timeoutSec: ?number
 ) {
   return (dispatch: Dispatch) => {
     return dispatch(
@@ -1102,7 +1133,9 @@ export function doCommentModBlockAsModerator(
         creatorUri,
         blockerId ? [blockerId] : [],
         BLOCK_LEVEL.MODERATOR,
-        timeoutSec
+        timeoutSec,
+        false,
+        offendingCommentId
       )
     );
   };

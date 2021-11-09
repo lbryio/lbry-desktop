@@ -92,7 +92,7 @@ const perform = (dispatch) => ({
   doChannelUnmute: (channelUri) => dispatch(doChannelUnmute(channelUri)),
   doCommentModBlock: (channelUri) => dispatch(doCommentModBlock(channelUri)),
   doCommentModUnBlock: (channelUri) => dispatch(doCommentModUnBlock(channelUri)),
-  doCommentModBlockAsAdmin: (commenterUri, blockerId) => dispatch(doCommentModBlockAsAdmin(commenterUri, blockerId)),
+  doCommentModBlockAsAdmin: (a, b, c) => dispatch(doCommentModBlockAsAdmin(a, b, c)),
   doCommentModUnBlockAsAdmin: (commenterUri, blockerId) =>
     dispatch(doCommentModUnBlockAsAdmin(commenterUri, blockerId)),
   doChannelSubscribe: (subscription) => dispatch(doChannelSubscribe(subscription)),

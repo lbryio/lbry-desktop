@@ -206,9 +206,11 @@ declare type ModerationBlockParams = {
   // Creator that Moderator is delegated from. Used for delegated moderation
   creator_channel_id?: string,
   creator_channel_name?: string,
+  // ID of comment to remove as part of this block
+  offending_comment_id?: string,
   // Blocks identity from comment universally, requires Admin rights on commentron instance
   block_all?: boolean,
-  time_out?: number,
+  time_out?: ?number,
   // If true will delete all comments of the offender, requires Admin rights on commentron for universal delete
   delete_all?: boolean,
   // The usual signature stuff

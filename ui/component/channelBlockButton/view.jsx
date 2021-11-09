@@ -11,11 +11,11 @@ type Props = {
   isBlockingOrUnBlocking: boolean,
   isToggling: boolean,
   doCommentModUnBlock: (string, boolean) => void,
-  doCommentModBlock: (string, ?Number, boolean) => void,
+  doCommentModBlock: (string, ?string, ?Number, boolean) => void,
   doCommentModUnBlockAsAdmin: (string, string) => void,
-  doCommentModBlockAsAdmin: (string, string) => void,
+  doCommentModBlockAsAdmin: (string, ?string, ?string) => void,
   doCommentModUnBlockAsModerator: (string, string, string) => void,
-  doCommentModBlockAsModerator: (string, string, string) => void,
+  doCommentModBlockAsModerator: (string, ?string, string, ?string) => void,
 };
 
 function ChannelBlockButton(props: Props) {
@@ -41,7 +41,7 @@ function ChannelBlockButton(props: Props) {
         if (isBlocked) {
           doCommentModUnBlock(uri, false);
         } else {
-          doCommentModBlock(uri, undefined, false);
+          doCommentModBlock(uri, undefined, undefined, false);
         }
         break;
 
@@ -50,7 +50,7 @@ function ChannelBlockButton(props: Props) {
           if (isBlocked) {
             doCommentModUnBlockAsModerator(uri, creatorUri, '');
           } else {
-            doCommentModBlockAsModerator(uri, creatorUri, '');
+            doCommentModBlockAsModerator(uri, undefined, creatorUri, undefined);
           }
         }
         break;
@@ -59,7 +59,7 @@ function ChannelBlockButton(props: Props) {
         if (isBlocked) {
           doCommentModUnBlockAsAdmin(uri, '');
         } else {
-          doCommentModBlockAsAdmin(uri, '');
+          doCommentModBlockAsAdmin(uri, undefined, undefined);
         }
         break;
     }

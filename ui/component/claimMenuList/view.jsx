@@ -45,7 +45,7 @@ type Props = {
   doChannelUnmute: (string) => void,
   doCommentModBlock: (string) => void,
   doCommentModUnBlock: (string) => void,
-  doCommentModBlockAsAdmin: (string, string) => void,
+  doCommentModBlockAsAdmin: (commenterUri: string, offendingCommentId: ?string, blockerId: ?string) => void,
   doCommentModUnBlockAsAdmin: (string, string) => void,
   doCollectionEdit: (string, any) => void,
   hasClaimInWatchLater: boolean,
@@ -237,7 +237,7 @@ function ClaimMenuList(props: Props) {
     if (channelIsAdminBlocked) {
       doCommentModUnBlockAsAdmin(contentChannelUri, '');
     } else {
-      doCommentModBlockAsAdmin(contentChannelUri, '');
+      doCommentModBlockAsAdmin(contentChannelUri, undefined, undefined);
     }
   }
 
