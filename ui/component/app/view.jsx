@@ -20,8 +20,6 @@ import REWARDS from 'rewards';
 import usePersistedState from 'effects/use-persisted-state';
 import Spinner from 'component/spinner';
 import LANGUAGES from 'constants/languages';
-
-// @if TARGET='web'
 import YoutubeWelcome from 'web/component/youtubeReferralWelcome';
 import {
   useDegradedPerformance,
@@ -30,22 +28,17 @@ import {
   STATUS_FAILING,
   STATUS_DOWN,
 } from 'web/effects/use-degraded-performance';
-// @endif
 import LANGUAGE_MIGRATIONS from 'constants/language-migrations';
 
 const FileDrop = lazyImport(() => import('component/fileDrop' /* webpackChunkName: "fileDrop" */));
 const NagContinueFirstRun = lazyImport(() => import('component/nagContinueFirstRun' /* webpackChunkName: "nagCFR" */));
 const OpenInAppLink = lazyImport(() => import('web/component/openInAppLink' /* webpackChunkName: "openInAppLink" */));
-
-// @if TARGET='web'
 const NagDataCollection = lazyImport(() => import('web/component/nag-data-collection' /* webpackChunkName: "nagDC" */));
 const NagDegradedPerformance = lazyImport(() =>
   import('web/component/nag-degraded-performance' /* webpackChunkName: "NagDegradedPerformance" */)
 );
 const NagNoUser = lazyImport(() => import('web/component/nag-no-user' /* webpackChunkName: "nag-no-user" */));
 const NagSunset = lazyImport(() => import('web/component/nag-sunset' /* webpackChunkName: "nag-sunset" */));
-// @endif
-
 const SyncFatalError = lazyImport(() => import('component/syncFatalError' /* webpackChunkName: "syncFatalError" */));
 
 // ****************************************************************************
@@ -150,10 +143,10 @@ function App(props: Props) {
   const isRewardApproved = user && user.is_reward_approved;
   const previousHasVerifiedEmail = usePrevious(hasVerifiedEmail);
   const previousRewardApproved = usePrevious(isRewardApproved);
-  // @if TARGET='web'
+
   const [showAnalyticsNag, setShowAnalyticsNag] = usePersistedState('analytics-nag', true);
   const [lbryTvApiStatus, setLbryTvApiStatus] = useState(STATUS_OK);
-  // @endif
+
   const { pathname, hash, search } = props.location;
   const [upgradeNagClosed, setUpgradeNagClosed] = useState(false);
   const [resolvedSubscriptions, setResolvedSubscriptions] = useState(false);
@@ -183,12 +176,10 @@ function App(props: Props) {
     uri = newpath + hash;
   } catch (e) {}
 
-  // @if TARGET='web'
   function handleAnalyticsDismiss() {
     setShowAnalyticsNag(false);
   }
 
-  // @endif
   useEffect(() => {
     if (userId) {
       analytics.setUser(userId);
@@ -310,7 +301,6 @@ function App(props: Props) {
   }, [previousRewardApproved, isRewardApproved]);
 
   // Load IMA3 SDK for aniview
-  // @if TARGET='web'
   useEffect(() => {
     const script = document.createElement('script');
     script.src = imaLibraryPath;
@@ -322,7 +312,6 @@ function App(props: Props) {
       document.body.removeChild(script);
     };
   }, []);
-  // @endif
 
   // @if TARGET='app'
   useEffect(() => {
@@ -343,15 +332,11 @@ function App(props: Props) {
     if (readyForSync && hasVerifiedEmail) {
       // In case we are syncing.
       syncLoop();
-      // @if TARGET='web'
       window.addEventListener('focus', syncLoopWithoutInterval);
-      // @endif
     }
-    // @if TARGET='web'
     return () => {
       window.removeEventListener('focus', syncLoopWithoutInterval);
     };
-    // @endif
   }, [readyForSync, hasVerifiedEmail, syncLoop]);
 
   // We know someone is logging in or not when we get their user object
@@ -389,11 +374,8 @@ function App(props: Props) {
     }
   }, [sidebarOpen, isPersonalized, resolvedSubscriptions, subscriptions, resolveUris, setResolvedSubscriptions]);
 
-  // @if TARGET='web'
   useDegradedPerformance(setLbryTvApiStatus, user);
-  // @endif
 
-  // @if TARGET='web'
   // Require an internal-api user on lbry.tv
   // This also prevents the site from loading in the un-authed state while we wait for internal-apis to return for the first time
   // It's not needed on desktop since there is no un-authed state
@@ -404,16 +386,11 @@ function App(props: Props) {
       </div>
     );
   }
-  // @endif
 
   if (syncFatalError) {
     return (
       <React.Suspense fallback={null}>
-        <SyncFatalError
-          // @if TARGET='web'
-          lbryTvApiStatus={lbryTvApiStatus}
-          // @endif
-        />
+        <SyncFatalError lbryTvApiStatus={lbryTvApiStatus} />
       </React.Suspense>
     );
   }
@@ -455,7 +432,6 @@ function App(props: Props) {
             )}
             {/* @endif */}
 
-            {/* @if TARGET='web' */}
             <YoutubeWelcome />
             {!SIMPLE_SITE && !shouldHideNag && <OpenInAppLink uri={uri} />}
             {!shouldHideNag && <NagContinueFirstRun />}
@@ -469,7 +445,6 @@ function App(props: Props) {
               <NagDataCollection onClose={handleAnalyticsDismiss} />
             )}
             {user === null && <NagNoUser />}
-            {/* @endif */}
           </React.Suspense>
 
           {isReloadRequired && (
