@@ -1,12 +1,9 @@
 // @flow
 import { handleActions } from 'util/redux-utils';
 import { buildURI } from 'util/lbryURI';
-import { serializeFileObj } from 'util/file';
 import * as ACTIONS from 'constants/action_types';
 import * as THUMBNAIL_STATUSES from 'constants/thumbnail_upload_statuses';
 import { CHANNEL_ANONYMOUS } from 'constants/claim';
-
-const getKeyFromParam = (params) => `${params.name}#${params.channel || 'anonymous'}`;
 
 type PublishState = {
   editingURI: ?string,
@@ -41,7 +38,6 @@ type PublishState = {
   tags: Array<string>,
   optimize: boolean,
   useLBRYUploader: boolean,
-  currentUploads: { [key: string]: FileUploadItem },
 };
 
 const defaultState: PublishState = {
@@ -82,7 +78,6 @@ const defaultState: PublishState = {
   publishError: undefined,
   optimize: false,
   useLBRYUploader: false,
-  currentUploads: {},
 };
 
 export const publishReducer = handleActions(
@@ -101,7 +96,6 @@ export const publishReducer = handleActions(
       bid: state.bid,
       optimize: state.optimize,
       language: state.language,
-      currentUploads: state.currentUploads,
     }),
     [ACTIONS.PUBLISH_START]: (state: PublishState): PublishState => ({
       ...state,
@@ -133,75 +127,7 @@ export const publishReducer = handleActions(
         ...publishData,
         editingURI: uri,
         uri: shortUri,
-        currentUploads: state.currentUploads,
       };
-    },
-    [ACTIONS.UPDATE_UPLOAD_ADD]: (state: PublishState, action) => {
-      const { file, params, uploader } = action.data;
-      const key = getKeyFromParam(params);
-      const currentUploads = Object.assign({}, state.currentUploads);
-
-      currentUploads[key] = {
-        file,
-        fileFingerprint: file ? serializeFileObj(file) : undefined, // TODO: get hash instead?
-        progress: '0',
-        params,
-        uploader,
-        resumable: !(uploader instanceof XMLHttpRequest),
-      };
-
-      return { ...state, currentUploads };
-    },
-    [ACTIONS.UPDATE_UPLOAD_PROGRESS]: (state: PublishState, action) => {
-      const { params, progress, status } = action.data;
-      const key = getKeyFromParam(params);
-      const currentUploads = Object.assign({}, state.currentUploads);
-
-      if (!currentUploads[key]) {
-        return state;
-      }
-
-      if (progress) {
-        currentUploads[key].progress = progress;
-        delete currentUploads[key].status;
-      } else if (status) {
-        currentUploads[key].status = status;
-        if (status === 'error') {
-          delete currentUploads[key].uploader;
-        }
-      }
-
-      return { ...state, currentUploads };
-    },
-    [ACTIONS.UPDATE_UPLOAD_REMOVE]: (state: PublishState, action) => {
-      const { params } = action.data;
-      const key = getKeyFromParam(params);
-      const currentUploads = Object.assign({}, state.currentUploads);
-
-      delete currentUploads[key];
-
-      return { ...state, currentUploads };
-    },
-    [ACTIONS.REHYDRATE]: (state: PublishState, action) => {
-      if (action && action.payload && action.payload.publish) {
-        const newPublish = { ...action.payload.publish };
-
-        // Cleanup for 'publish::currentUploads'
-        if (newPublish.currentUploads) {
-          Object.keys(newPublish.currentUploads).forEach((key) => {
-            const params = newPublish.currentUploads[key].params;
-            if (!params || Object.keys(params).length === 0) {
-              delete newPublish.currentUploads[key];
-            } else {
-              delete newPublish.currentUploads[key].uploader;
-            }
-          });
-        }
-
-        return newPublish;
-      }
-
-      return state;
     },
   },
   defaultState

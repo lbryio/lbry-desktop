@@ -1,18 +1,13 @@
 import { connect } from 'react-redux';
-import { doOpenModal } from 'redux/actions/app';
-import { doPublishResume, doUpdateUploadRemove } from 'redux/actions/publish';
-import { selectCurrentUploads, selectUploadCount } from 'redux/selectors/publish';
+import { selectCurrentUploads, selectUploadCount } from 'lbryinc';
 import WebUploadList from './view';
 
-const select = (state) => ({
+const select = state => ({
   currentUploads: selectCurrentUploads(state),
   uploadCount: selectUploadCount(state),
 });
 
-const perform = {
-  doPublishResume,
-  doUpdateUploadRemove,
-  doOpenModal,
-};
-
-export default connect(select, perform)(WebUploadList);
+export default connect(
+  select,
+  null
+)(WebUploadList);

@@ -68,7 +68,6 @@
     "rss": "^1.2.2",
     "source-map-explorer": "^2.5.2",
     "tempy": "^0.6.0",
-    "tus-js-client": "^2.3.0",
     "videojs-contrib-ads": "^6.9.0",
     "videojs-ima": "^1.11.0",
     "videojs-ima-player": "^0.5.6",

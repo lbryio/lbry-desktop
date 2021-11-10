@@ -3,16 +3,19 @@ import * as React from 'react';
 import Card from 'component/common/card';
 import WebUploadItem from './internal/web-upload-item';
 
+export type UploadItem = {
+  progess: string,
+  params: UpdatePublishFormData,
+  xhr?: { abort: () => void },
+};
+
 type Props = {
-  currentUploads: { [key: string]: FileUploadItem },
+  currentUploads: { [key: string]: UploadItem },
   uploadCount: number,
-  doPublishResume: (any) => void,
-  doUpdateUploadRemove: (any) => void,
-  doOpenModal: (string, {}) => void,
 };
 
 export default function WebUploadList(props: Props) {
-  const { currentUploads, uploadCount, doPublishResume, doUpdateUploadRemove, doOpenModal } = props;
+  const { currentUploads, uploadCount } = props;
 
   return (
     !!uploadCount && (
@@ -22,16 +25,8 @@ export default function WebUploadList(props: Props) {
         body={
           <section>
             {/* $FlowFixMe */}
-            {Object.values(currentUploads).map((uploadItem) => (
-              <WebUploadItem
-                // $FlowFixMe
-                key={`upload${uploadItem.params.name}`}
-                // $FlowFixMe
-                uploadItem={uploadItem}
-                doPublishResume={doPublishResume}
-                doUpdateUploadRemove={doUpdateUploadRemove}
-                doOpenModal={doOpenModal}
-              />
+            {Object.values(currentUploads).map(({ progress, params, xhr }) => (
+              <WebUploadItem key={`upload${params.name}`} progress={progress} params={params} xhr={xhr} />
             ))}
           </section>
         }
