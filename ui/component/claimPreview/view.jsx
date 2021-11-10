@@ -135,7 +135,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     renderActions,
     hideMenu = false,
     // repostUrl,
-    isLivestream, // need both? CHECK
+    isLivestream,
     isLivestreamActive,
     collectionId,
     collectionIndex,
@@ -146,6 +146,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     indexInContainer,
     channelSubCount,
   } = props;
+
   const isCollection = claim && claim.value_type === 'collection';
   const collectionClaimId = isCollection && claim && claim.claim_id;
   const listId = collectionId || collectionClaimId;
@@ -482,11 +483,8 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
           </div>
         </div>
 
-        {claimIsMine && isLivestream && (
-          <div className={'claim-preview__hints'}>
-            <ClaimPreviewReset />
-          </div>
-        )}
+        {/* Todo: check isLivestreamActive once we have that data consistently everywhere. */}
+        {claim && isLivestream && <ClaimPreviewReset uri={uri} />}
 
         {!hideMenu && <ClaimMenuList uri={uri} collectionId={listId} />}
       </>

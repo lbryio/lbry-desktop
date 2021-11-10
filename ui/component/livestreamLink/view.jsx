@@ -1,5 +1,4 @@
 // @flow
-import { LIVESTREAM_LIVE_API } from 'constants/livestream';
 import * as CS from 'constants/claim_search';
 import React from 'react';
 import Card from 'component/common/card';
@@ -7,6 +6,7 @@ import ClaimPreview from 'component/claimPreview';
 import Lbry from 'lbry';
 import { useHistory } from 'react-router';
 import { formatLbryUrlForWeb } from 'util/url';
+import watchLivestreamStatus from '$web/src/livestreaming/long-polling';
 
 type Props = {
   channelClaim: ChannelClaim,
@@ -47,38 +47,9 @@ export default function LivestreamLink(props: Props) {
   }, [livestreamChannelId, isChannelEmpty]);
 
   React.useEffect(() => {
-    function fetchIsStreaming() {
-      // $FlowFixMe livestream API can handle garbage
-      fetch(`${LIVESTREAM_LIVE_API}/${livestreamChannelId}`)
-        .then((res) => res.json())
-        .then((res) => {
-          if (res && res.success && res.data && res.data.live) {
-            setIsLivestreaming(true);
-          } else {
-            setIsLivestreaming(false);
-          }
-        })
-        .catch((e) => {});
-    }
-
-    let interval;
-    // Only call livestream api if channel has livestream claims
-    if (livestreamChannelId && livestreamClaim) {
-      if (!interval) fetchIsStreaming();
-      interval = setInterval(fetchIsStreaming, 10 * 1000);
-    }
-    // Prevent any more api calls on update
-    if (!livestreamChannelId || !livestreamClaim) {
-      if (interval) {
-        clearInterval(interval);
-      }
-    }
-    return () => {
-      if (interval) {
-        clearInterval(interval);
-      }
-    };
-  }, [livestreamChannelId, livestreamClaim]);
+    if (!livestreamClaim) return;
+    return watchLivestreamStatus(livestreamChannelId, (state) => setIsLivestreaming(state));
+  }, [livestreamChannelId, setIsLivestreaming, livestreamClaim]);
 
   if (!livestreamClaim || !isLivestreaming) {
     return null;
@@ -87,7 +58,7 @@ export default function LivestreamLink(props: Props) {
   // gonna pass the wrapper in so I don't have to rewrite the dmca/blocking logic in claimPreview.
   const element = (props: { children: any }) => (
     <Card
-      className="livestream__channel-link"
+      className="livestream__channel-link claim-preview__live"
       title={__('Live stream in progress')}
       onClick={() => {
         push(formatLbryUrlForWeb(livestreamClaim.canonical_url));
