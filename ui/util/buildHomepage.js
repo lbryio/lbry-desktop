@@ -72,8 +72,11 @@ export const getHomepageRowForCat = (cat: HomepageCat) => {
     case 'top':
       orderValue = CS.ORDER_BY_TOP_VALUE;
       break;
-    default:
+    case 'new':
       orderValue = CS.ORDER_BY_NEW_VALUE;
+      break;
+    default:
+      orderValue = CS.ORDER_BY_TRENDING_VALUE;
   }
 
   let urlParams = new URLSearchParams();
