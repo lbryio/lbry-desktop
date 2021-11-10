@@ -27,7 +27,6 @@ export {
   doResetSync,
   doSyncEncryptAndDecrypt,
 } from 'redux/actions/sync';
-export { doUpdateUploadProgress } from './redux/actions/web';
 
 // reducers
 export { authReducer } from './redux/reducers/auth';
@@ -37,7 +36,6 @@ export { filteredReducer } from './redux/reducers/filtered';
 // export { homepageReducer } from './redux/reducers/homepage';
 export { statsReducer } from './redux/reducers/stats';
 export { syncReducer } from './redux/reducers/sync';
-export { webReducer } from './redux/reducers/web';
 
 // selectors
 export { selectAuthToken, selectIsAuthenticating } from './redux/selectors/auth';
@@ -70,4 +68,3 @@ export {
   selectSyncApplyErrorMessage,
   selectSyncApplyPasswordError,
 } from './redux/selectors/sync';
-export { selectCurrentUploads, selectUploadCount } from './redux/selectors/web';

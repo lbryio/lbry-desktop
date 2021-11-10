@@ -1,6 +1,5 @@
 import { hot } from 'react-hot-loader/root';
 import { connect } from 'react-redux';
-import { selectUploadCount } from 'lbryinc';
 import { selectGetSyncErrorMessage, selectSyncFatalError } from 'redux/selectors/sync';
 import { doFetchAccessToken, doUserSetReferrer } from 'redux/actions/user';
 import { selectUser, selectAccessToken, selectUserVerifiedEmail } from 'redux/selectors/user';
@@ -22,6 +21,7 @@ import {
   selectActiveChannelClaim,
   selectIsReloadRequired,
 } from 'redux/selectors/app';
+import { selectUploadCount } from 'redux/selectors/publish';
 import { doGetWalletSyncPreference, doSetLanguage } from 'redux/actions/settings';
 import { doSyncLoop } from 'redux/actions/sync';
 import {
