@@ -120,6 +120,5 @@ This project is MIT licensed. For the full license, see [LICENSE](LICENSE).
 
 ## Security
 
-We take security seriously. Please contact security@odysee.com regarding any security issues. Our PGP key is [here](https://lbry.com/faq/pgp-key) if you need it. Previous versions up to v0.50.2 were signed by [Sean Yesmunt](https://keybase.io/seanyesmunt/key.asc).
-New Releases are signed by [Jessop Breth](https://keybase.io/jessopb/key.asc).
+For security issues, please reach out to security@odysee.com
 
