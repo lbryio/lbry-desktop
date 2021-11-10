@@ -11,7 +11,7 @@ export default () => {
   const [pushPermission, setPushPermission] = useState(window.Notification?.permission);
   const [subscribed, setSubscribed] = useState(false);
   const [pushEnabled, setPushEnabled] = useState(false);
-  const [pushSupported, setPushSupported] = useState(false);
+  const [pushSupported, setPushSupported] = useState(true);
   const [encounteredError, setEncounteredError] = useState(false);
 
   const [user] = useState(selectUser(store.getState()));

@@ -19,7 +19,7 @@ type Props = {
 
 export default function LivestreamPage(props: Props) {
   const { uri, claim, doSetPlayingUri, isAuthenticated, doUserSetReferrer, channelClaim, chatDisabled } = props;
-  const [isLive, setIsLive] = React.useState(false);
+  const [isLive, setIsLive] = React.useState(true);
   const livestreamChannelId = channelClaim && channelClaim.signing_channel && channelClaim.signing_channel.claim_id;
   const [hasLivestreamClaim, setHasLivestreamClaim] = React.useState(false);
 
