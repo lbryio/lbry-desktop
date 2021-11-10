@@ -5,7 +5,7 @@ import * as MODALS from 'constants/modal_types';
 import { ipcRenderer } from 'electron';
 // @endif
 import { doOpenModal } from 'redux/actions/app';
-import { makeSelectClaimForUri, makeSelectClaimIsMine, makeSelectClaimWasPurchased } from 'redux/selectors/claims';
+import { makeSelectClaimForUri, selectClaimIsMineForUri, makeSelectClaimWasPurchased } from 'redux/selectors/claims';
 import {
   makeSelectFileInfoForUri,
   selectFileInfosByOutpoint,
@@ -151,7 +151,7 @@ export function doPlayUri(
 ) {
   return (dispatch: Dispatch, getState: () => any) => {
     const state = getState();
-    const isMine = makeSelectClaimIsMine(uri)(state);
+    const isMine = selectClaimIsMineForUri(state, uri);
     const fileInfo = makeSelectFileInfoForUri(uri)(state);
     const uriIsStreamable = makeSelectUriIsStreamable(uri)(state);
     const downloadingByOutpoint = selectDownloadingByOutpoint(state);

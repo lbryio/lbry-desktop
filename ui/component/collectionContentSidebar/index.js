@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import CollectionContent from './view';
-import { makeSelectClaimForUri, makeSelectClaimIsMine } from 'redux/selectors/claims';
+import { makeSelectClaimForUri, selectClaimIsMineForUri } from 'redux/selectors/claims';
 import {
   makeSelectUrlsForCollectionId,
   makeSelectNameForCollectionId,
@@ -24,7 +24,7 @@ const select = (state, props) => {
     collection: makeSelectCollectionForId(props.id)(state),
     collectionUrls: makeSelectUrlsForCollectionId(props.id)(state),
     collectionName: makeSelectNameForCollectionId(props.id)(state),
-    isMine: makeSelectClaimIsMine(url)(state),
+    isMine: selectClaimIsMineForUri(state, url),
     loop,
     shuffle,
   };

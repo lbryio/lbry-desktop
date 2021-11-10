@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import {
   makeSelectTitleForUri,
   makeSelectClaimForUri,
-  makeSelectClaimIsMine,
+  selectClaimIsMineForUri,
   selectFetchingMyChannels,
 } from 'redux/selectors/claims';
 import { doHideModal } from 'redux/actions/app';
@@ -18,7 +18,7 @@ const select = (state, props) => ({
   activeChannelClaim: selectActiveChannelClaim(state),
   balance: selectBalance(state),
   claim: makeSelectClaimForUri(props.uri, false)(state),
-  claimIsMine: makeSelectClaimIsMine(props.uri)(state),
+  claimIsMine: selectClaimIsMineForUri(state, props.uri),
   fetchingChannels: selectFetchingMyChannels(state),
   incognito: selectIncognito(state),
   instantTipEnabled: makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED)(state),

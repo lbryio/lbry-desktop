@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import {
-  makeSelectClaimIsMine,
+  selectClaimIsMineForUri,
   makeSelectTitleForUri,
   makeSelectThumbnailForUri,
   makeSelectClaimForUri,
@@ -18,7 +18,7 @@ const select = (state, props) => {
     title: makeSelectTitleForUri(props.uri)(state),
     thumbnail: makeSelectThumbnailForUri(props.uri)(state),
     description: makeSelectMetadataItemForUri(props.uri, 'description')(state),
-    channelIsMine: makeSelectClaimIsMine(props.uri)(state),
+    channelIsMine: selectClaimIsMineForUri(state, props.uri),
     isResolvingUri: makeSelectIsUriResolving(props.uri)(state),
     blackListedOutpoints: selectBlackListedOutpoints(state),
   };

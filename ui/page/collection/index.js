@@ -5,7 +5,7 @@ import CollectionPage from './view';
 import {
   makeSelectTitleForUri,
   makeSelectThumbnailForUri,
-  makeSelectClaimIsMine,
+  selectClaimIsMineForUri,
   makeSelectClaimIsPending,
   makeSelectClaimForClaimId,
   makeSelectChannelForClaimUri,
@@ -40,7 +40,7 @@ const select = (state, props) => {
     isResolvingCollection: makeSelectIsResolvingCollectionForId(collectionId)(state),
     title: makeSelectTitleForUri(uri)(state),
     thumbnail: makeSelectThumbnailForUri(uri)(state),
-    isMyClaim: makeSelectClaimIsMine(uri)(state), // or collection is mine?
+    isMyClaim: selectClaimIsMineForUri(state, uri), // or collection is mine?
     isMyCollection: makeSelectCollectionIsMine(collectionId)(state),
     claimIsPending: makeSelectClaimIsPending(uri)(state),
     collectionHasEdits: Boolean(makeSelectEditedCollectionForId(collectionId)(state)),

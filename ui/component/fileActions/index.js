@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import {
-  makeSelectClaimIsMine,
+  selectClaimIsMineForUri,
   makeSelectClaimForUri,
   selectHasChannels,
   makeSelectClaimIsStreamPlaceholder,
@@ -19,7 +19,7 @@ import { makeSelectFileRenderModeForUri } from 'redux/selectors/content';
 
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
-  claimIsMine: makeSelectClaimIsMine(props.uri)(state),
+  claimIsMine: selectClaimIsMineForUri(state, props.uri),
   fileInfo: makeSelectFileInfoForUri(props.uri)(state),
   renderMode: makeSelectFileRenderModeForUri(props.uri)(state),
   costInfo: makeSelectCostInfoForUri(props.uri)(state),

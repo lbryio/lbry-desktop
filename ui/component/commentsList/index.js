@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { doResolveUris } from 'redux/actions/claims';
 import {
   makeSelectClaimForUri,
-  makeSelectClaimIsMine,
+  selectClaimIsMineForUri,
   selectFetchingMyChannels,
   selectMyClaimIdsRaw,
 } from 'redux/selectors/claims';
@@ -41,7 +41,7 @@ const select = (state, props) => {
     topLevelTotalPages: makeSelectTopLevelTotalPagesForUri(props.uri)(state),
     totalComments: makeSelectTotalCommentsCountForUri(props.uri)(state),
     claim: makeSelectClaimForUri(props.uri)(state),
-    claimIsMine: makeSelectClaimIsMine(props.uri)(state),
+    claimIsMine: selectClaimIsMineForUri(state, props.uri),
     isFetchingComments: selectIsFetchingComments(state),
     isFetchingCommentsById: selectIsFetchingCommentsById(state),
     isFetchingReacts: selectIsFetchingReacts(state),

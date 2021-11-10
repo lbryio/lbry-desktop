@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimIsMine, makeSelectClaimForUri, makeSelectClaimWasPurchased } from 'redux/selectors/claims';
+import { selectClaimIsMineForUri, makeSelectClaimForUri, makeSelectClaimWasPurchased } from 'redux/selectors/claims';
 import {
   makeSelectFileInfoForUri,
   makeSelectDownloadingForUri,
@@ -15,7 +15,7 @@ const select = (state, props) => ({
   fileInfo: makeSelectFileInfoForUri(props.uri)(state),
   downloading: makeSelectDownloadingForUri(props.uri)(state),
   loading: makeSelectLoadingForUri(props.uri)(state),
-  claimIsMine: makeSelectClaimIsMine(props.uri)(state),
+  claimIsMine: selectClaimIsMineForUri(state, props.uri),
   claim: makeSelectClaimForUri(props.uri)(state),
   costInfo: makeSelectCostInfoForUri(props.uri)(state),
   claimWasPurchased: makeSelectClaimWasPurchased(props.uri)(state),

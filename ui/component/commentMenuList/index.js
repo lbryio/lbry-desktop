@@ -4,7 +4,7 @@ import { doCommentPin, doCommentModAddDelegate } from 'redux/actions/comments';
 import { doOpenModal } from 'redux/actions/app';
 import { doSetPlayingUri } from 'redux/actions/content';
 import { doToast } from 'redux/actions/notifications';
-import { makeSelectClaimIsMine, makeSelectClaimForUri } from 'redux/selectors/claims';
+import { selectClaimIsMineForUri, makeSelectClaimForUri } from 'redux/selectors/claims';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { selectModerationDelegatorsById } from 'redux/selectors/comments';
 import { selectPlayingUri } from 'redux/selectors/content';
@@ -12,7 +12,7 @@ import CommentMenuList from './view';
 
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
-  claimIsMine: makeSelectClaimIsMine(props.uri)(state),
+  claimIsMine: selectClaimIsMineForUri(state, props.uri),
   activeChannelClaim: selectActiveChannelClaim(state),
   playingUri: selectPlayingUri(state),
   moderationDelegatorsById: selectModerationDelegatorsById(state),

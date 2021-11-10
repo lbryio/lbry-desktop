@@ -8,7 +8,7 @@ import {
   makeSelectIsUriResolving,
   makeSelectTotalPagesForChannel,
   makeSelectTitleForUri,
-  makeSelectClaimIsMine,
+  selectClaimIsMineForUri,
   makeSelectClaimIsPending,
   makeSelectClaimIsStreamPlaceholder,
 } from 'redux/selectors/claims';
@@ -77,7 +77,7 @@ const select = (state, props) => {
     totalPages: makeSelectTotalPagesForChannel(uri, PAGE_SIZE)(state),
     isSubscribed: makeSelectChannelInSubscriptions(uri)(state),
     title: makeSelectTitleForUri(uri)(state),
-    claimIsMine: makeSelectClaimIsMine(uri)(state),
+    claimIsMine: selectClaimIsMineForUri(state, uri),
     claimIsPending: makeSelectClaimIsPending(uri)(state),
     isLivestream: makeSelectClaimIsStreamPlaceholder(uri)(state),
     collection: makeSelectCollectionForId(collectionId)(state),

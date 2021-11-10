@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import {
-  makeSelectClaimIsMine,
+  selectClaimIsMineForUri,
   makeSelectIsAbandoningClaimForUri,
   makeSelectClaimForClaimId,
 } from 'redux/selectors/claims';
@@ -15,7 +15,7 @@ const select = (state, props) => {
   return {
     claim,
     uri,
-    claimIsMine: makeSelectClaimIsMine(uri)(state),
+    claimIsMine: selectClaimIsMineForUri(state, uri),
     isAbandoning: makeSelectIsAbandoningClaimForUri(uri)(state),
     collectionName: makeSelectNameForCollectionId(props.collectionId)(state),
   };

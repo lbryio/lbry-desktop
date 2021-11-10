@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import {
   makeSelectClaimForUri,
-  makeSelectClaimIsMine,
+  selectClaimIsMineForUri,
   selectHasChannels,
   selectFetchingMyChannels,
   makeSelectTagInClaimOrChannelForUri,
@@ -18,7 +18,7 @@ const select = (state, props) => ({
   activeChannelClaim: selectActiveChannelClaim(state),
   hasChannels: selectHasChannels(state),
   claim: makeSelectClaimForUri(props.uri)(state),
-  claimIsMine: makeSelectClaimIsMine(props.uri)(state),
+  claimIsMine: selectClaimIsMineForUri(state, props.uri),
   isFetchingChannels: selectFetchingMyChannels(state),
   settingsByChannelId: selectSettingsByChannelId(state),
   supportDisabled: makeSelectTagInClaimOrChannelForUri(props.uri, DISABLE_SUPPORT_TAG)(state),

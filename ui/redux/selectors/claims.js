@@ -199,6 +199,44 @@ export const selectMyActiveClaims = createSelector(
   }
 );
 
+// Helper for 'selectClaimIsMineForUri'.
+// Returns undefined string if unable to normalize or is not valid.
+const selectNormalizedAndVerifiedUri = createCachedSelector(
+  (state, rawUri) => rawUri,
+  (rawUri) => {
+    try {
+      const uri = normalizeURI(rawUri);
+      if (isURIValid(uri, false)) {
+        return uri;
+      }
+    } catch (e) {}
+
+    return undefined;
+  }
+)((state, rawUri) => String(rawUri));
+
+export const selectClaimIsMineForUri = (state: State, rawUri: string) => {
+  // Not memoizing this selector because:
+  // (1) The workload is somewhat lightweight.
+  // (2) Since it depends on 'selectClaimsByUri', memoization won't work anyway
+  // because the array is constantly invalidated.
+
+  const uri = selectNormalizedAndVerifiedUri(state, rawUri);
+  if (!uri) {
+    return false;
+  }
+
+  const claimsByUri = selectClaimsByUri(state);
+  const myActiveClaims = selectMyActiveClaims(state);
+
+  return (
+    claimsByUri &&
+    claimsByUri[uri] &&
+    (claimsByUri[uri].is_my_output || (claimsByUri[uri].claim_id && myActiveClaims.has(claimsByUri[uri].claim_id)))
+  );
+};
+
+// DEPRECATED - use selectClaimIsMineForUri instead.
 export const makeSelectClaimIsMine = (rawUri: string) => {
   let uri;
   try {

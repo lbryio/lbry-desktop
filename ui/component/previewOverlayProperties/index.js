@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimIsMine, makeSelectClaimForUri } from 'redux/selectors/claims';
+import { selectClaimIsMineForUri, makeSelectClaimForUri } from 'redux/selectors/claims';
 import { makeSelectFilePartlyDownloaded } from 'redux/selectors/file_info';
 import { makeSelectEditedCollectionForId } from 'redux/selectors/collections';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
@@ -13,7 +13,7 @@ const select = (state, props) => {
     editedCollection: makeSelectEditedCollectionForId(claimId)(state),
     downloaded: makeSelectFilePartlyDownloaded(props.uri)(state),
     isSubscribed: makeSelectIsSubscribed(props.uri)(state),
-    claimIsMine: makeSelectClaimIsMine(props.uri)(state),
+    claimIsMine: selectClaimIsMineForUri(state, props.uri),
   };
 };
 

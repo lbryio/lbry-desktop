@@ -4,14 +4,14 @@ import {
   makeSelectTitleForUri,
   makeSelectClaimForUri,
   makeSelectIsAbandoningClaimForUri,
-  makeSelectClaimIsMine,
+  selectClaimIsMineForUri,
 } from 'redux/selectors/claims';
 import { doResolveUri } from 'redux/actions/claims';
 import { doHideModal } from 'redux/actions/app';
 import ModalRemoveFile from './view';
 
 const select = (state, props) => ({
-  claimIsMine: makeSelectClaimIsMine(props.uri)(state),
+  claimIsMine: selectClaimIsMineForUri(state, props.uri),
   title: makeSelectTitleForUri(props.uri)(state),
   claim: makeSelectClaimForUri(props.uri)(state),
   isAbandoning: makeSelectIsAbandoningClaimForUri(props.uri)(state),

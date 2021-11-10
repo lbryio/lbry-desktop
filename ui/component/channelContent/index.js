@@ -3,7 +3,7 @@ import { PAGE_SIZE } from 'constants/claim';
 import {
   makeSelectClaimsInChannelForPage,
   makeSelectFetchingChannelClaims,
-  makeSelectClaimIsMine,
+  selectClaimIsMineForUri,
   makeSelectTotalPagesInChannelSearch,
   makeSelectClaimForUri,
 } from 'redux/selectors/claims';
@@ -24,7 +24,7 @@ const select = (state, props) => {
     pageOfClaimsInChannel: makeSelectClaimsInChannelForPage(props.uri, page)(state),
     fetching: makeSelectFetchingChannelClaims(props.uri)(state),
     totalPages: makeSelectTotalPagesInChannelSearch(props.uri, PAGE_SIZE)(state),
-    channelIsMine: makeSelectClaimIsMine(props.uri)(state),
+    channelIsMine: selectClaimIsMineForUri(state, props.uri),
     channelIsBlocked: makeSelectChannelIsMuted(props.uri)(state),
     claim: props.uri && makeSelectClaimForUri(props.uri)(state),
     isAuthenticated: selectUserVerifiedEmail(state),

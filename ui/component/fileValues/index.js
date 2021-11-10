@@ -3,7 +3,7 @@ import {
   makeSelectClaimForUri,
   makeSelectContentTypeForUri,
   makeSelectMetadataForUri,
-  makeSelectClaimIsMine,
+  selectClaimIsMineForUri,
 } from 'redux/selectors/claims';
 import { makeSelectPendingAmountByUri } from 'redux/selectors/wallet';
 import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
@@ -19,7 +19,7 @@ const select = (state, props) => ({
   metadata: makeSelectMetadataForUri(props.uri)(state),
   user: selectUser(state),
   pendingAmount: makeSelectPendingAmountByUri(props.uri)(state),
-  claimIsMine: makeSelectClaimIsMine(props.uri)(state),
+  claimIsMine: selectClaimIsMineForUri(state, props.uri),
 });
 
 const perform = (dispatch) => ({

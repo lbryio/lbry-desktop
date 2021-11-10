@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimForUri, makeSelectClaimIsMine } from 'redux/selectors/claims';
+import { makeSelectClaimForUri, selectClaimIsMineForUri } from 'redux/selectors/claims';
 import { doCollectionEdit, doFetchItemsInCollection } from 'redux/actions/collections';
 import { doPrepareEdit } from 'redux/actions/publish';
 import {
@@ -51,7 +51,7 @@ const select = (state, props) => {
     contentClaim,
     contentSigningChannel,
     contentChannelUri,
-    claimIsMine: makeSelectClaimIsMine(props.uri)(state),
+    claimIsMine: selectClaimIsMineForUri(state, props.uri),
     hasClaimInWatchLater: makeSelectCollectionForIdHasClaimUrl(
       COLLECTIONS_CONSTS.WATCH_LATER_ID,
       contentPermanentUri

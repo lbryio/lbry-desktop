@@ -12,7 +12,7 @@ import * as SHARED_PREFERENCES from 'constants/shared_preferences';
 import { DOMAIN, SIMPLE_SITE } from 'config';
 import Lbry from 'lbry';
 import { doFetchChannelListMine, doFetchCollectionListMine, doCheckPendingClaims } from 'redux/actions/claims';
-import { makeSelectClaimForUri, makeSelectClaimIsMine, selectMyChannelClaims } from 'redux/selectors/claims';
+import { makeSelectClaimForUri, selectClaimIsMineForUri, selectMyChannelClaims } from 'redux/selectors/claims';
 import { doFetchFileInfos } from 'redux/actions/file_info';
 import { doClearSupport, doBalanceSubscribe } from 'redux/actions/wallet';
 import { doClearPublish } from 'redux/actions/publish';
@@ -470,7 +470,7 @@ export function doAnalyticsView(uri, timeToStart) {
   return (dispatch, getState) => {
     const state = getState();
     const { txid, nout, claim_id: claimId } = makeSelectClaimForUri(uri)(state);
-    const claimIsMine = makeSelectClaimIsMine(uri)(state);
+    const claimIsMine = selectClaimIsMineForUri(state, uri);
     const outpoint = `${txid}:${nout}`;
 
     if (claimIsMine) {

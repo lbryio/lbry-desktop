@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
-import { makeSelectClaimIsMine } from 'redux/selectors/claims';
+import { selectClaimIsMineForUri } from 'redux/selectors/claims';
 import { doToast } from 'redux/actions/notifications';
 import ClaimPreviewReset from './view';
 
@@ -9,7 +9,7 @@ const select = (state, props) => {
   return {
     channelName,
     channelId,
-    claimIsMine: props.uri && makeSelectClaimIsMine(props.uri)(state),
+    claimIsMine: props.uri && selectClaimIsMineForUri(state, props.uri),
   };
 };
 
