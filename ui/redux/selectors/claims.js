@@ -177,7 +177,10 @@ export const selectMyClaimsRaw = createSelector(selectState, selectClaimsById, (
   return claims;
 });
 
-export const selectAbandoningIds = createSelector(selectState, (state) => Object.keys(state.abandoningById || {}));
+export const selectAbandoningById = (state: State) => selectState(state).abandoningById || {};
+export const selectAbandoningIds = createSelector(selectAbandoningById, (abandoningById) =>
+  Object.keys(abandoningById)
+);
 
 export const makeSelectAbandoningClaimById = (claimId: string) =>
   createSelector(selectAbandoningIds, (ids) => ids.includes(claimId));
@@ -189,13 +192,11 @@ export const makeSelectIsAbandoningClaimForUri = (uri: string) =>
   });
 
 export const selectMyActiveClaims = createSelector(
-  selectMyClaimsRaw,
+  selectMyClaimIdsRaw,
   selectAbandoningIds,
-  (claims, abandoningIds) =>
-    new Set(
-      claims &&
-        claims.map((claim) => claim.claim_id).filter((claimId) => Object.keys(abandoningIds).indexOf(claimId) === -1)
-    )
+  (myClaimIds, abandoningIds) => {
+    return new Set(myClaimIds && myClaimIds.filter((claimId) => !abandoningIds.includes(claimId)));
+  }
 );
 
 export const makeSelectClaimIsMine = (rawUri: string) => {
