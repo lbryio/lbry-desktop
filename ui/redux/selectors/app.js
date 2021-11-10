@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { selectClaimWithId, selectMyChannelClaims, makeSelectStakedLevelForChannelUri } from 'redux/selectors/claims';
+import { selectClaimWithId, selectMyChannelClaims, selectStakedLevelForChannelUri } from 'redux/selectors/claims';
 
 export const selectState = (state) => state.app || {};
 
@@ -97,18 +97,14 @@ export const selectActiveChannelClaim = createSelector(
   }
 );
 
-export const selectActiveChannelStakedLevel = createSelector(
-  (state) => state,
-  selectActiveChannelClaim,
-  (state, activeChannelClaim) => {
-    if (!activeChannelClaim) {
-      return 0;
-    }
-
-    const uri = activeChannelClaim.permanent_url;
-    const stakedLevel = makeSelectStakedLevelForChannelUri(uri)(state);
-    return stakedLevel;
+export const selectActiveChannelStakedLevel = (state) => {
+  const activeChannelClaim = selectActiveChannelClaim(state);
+  if (!activeChannelClaim) {
+    return 0;
   }
-);
+
+  const uri = activeChannelClaim.permanent_url;
+  return selectStakedLevelForChannelUri(state, uri);
+};
 
 export const selectIncognito = (state) => selectState(state).incognito;

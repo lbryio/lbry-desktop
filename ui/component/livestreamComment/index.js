@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
-import { makeSelectStakedLevelForChannelUri, selectClaimForUri } from 'redux/selectors/claims';
+import { selectStakedLevelForChannelUri, selectClaimForUri } from 'redux/selectors/claims';
 import LivestreamComment from './view';
 
 const select = (state, props) => ({
   claim: selectClaimForUri(state, props.uri),
-  stakedLevel: makeSelectStakedLevelForChannelUri(props.authorUri)(state),
+  stakedLevel: selectStakedLevelForChannelUri(state, props.authorUri),
 });
 
 export default connect(select)(LivestreamComment);

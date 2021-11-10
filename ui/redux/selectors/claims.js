@@ -704,34 +704,32 @@ export const makeSelectClaimIsStreamPlaceholder = (uri: string) =>
     return Boolean(claim.value_type === 'stream' && !claim.value.source);
   });
 
-export const makeSelectTotalStakedAmountForChannelUri = (uri: string) =>
-  createSelector(makeSelectClaimForUri(uri), (claim) => {
-    if (!claim || !claim.amount || !claim.meta || !claim.meta.support_amount) {
-      return 0;
-    }
+export const selectTotalStakedAmountForChannelUri = createCachedSelector(selectClaimForUri, (claim) => {
+  if (!claim || !claim.amount || !claim.meta || !claim.meta.support_amount) {
+    return 0;
+  }
 
-    return parseFloat(claim.amount) + parseFloat(claim.meta.support_amount) || 0;
-  });
+  return parseFloat(claim.amount) + parseFloat(claim.meta.support_amount) || 0;
+})((state, uri) => String(uri));
 
-export const makeSelectStakedLevelForChannelUri = (uri: string) =>
-  createSelector(makeSelectTotalStakedAmountForChannelUri(uri), (amount) => {
-    let level = 1;
-    switch (true) {
-      case amount >= CLAIM.LEVEL_2_STAKED_AMOUNT && amount < CLAIM.LEVEL_3_STAKED_AMOUNT:
-        level = 2;
-        break;
-      case amount >= CLAIM.LEVEL_3_STAKED_AMOUNT && amount < CLAIM.LEVEL_4_STAKED_AMOUNT:
-        level = 3;
-        break;
-      case amount >= CLAIM.LEVEL_4_STAKED_AMOUNT && amount < CLAIM.LEVEL_5_STAKED_AMOUNT:
-        level = 4;
-        break;
-      case amount >= CLAIM.LEVEL_5_STAKED_AMOUNT:
-        level = 5;
-        break;
-    }
-    return level;
-  });
+export const selectStakedLevelForChannelUri = createCachedSelector(selectTotalStakedAmountForChannelUri, (amount) => {
+  let level = 1;
+  switch (true) {
+    case amount >= CLAIM.LEVEL_2_STAKED_AMOUNT && amount < CLAIM.LEVEL_3_STAKED_AMOUNT:
+      level = 2;
+      break;
+    case amount >= CLAIM.LEVEL_3_STAKED_AMOUNT && amount < CLAIM.LEVEL_4_STAKED_AMOUNT:
+      level = 3;
+      break;
+    case amount >= CLAIM.LEVEL_4_STAKED_AMOUNT && amount < CLAIM.LEVEL_5_STAKED_AMOUNT:
+      level = 4;
+      break;
+    case amount >= CLAIM.LEVEL_5_STAKED_AMOUNT:
+      level = 5;
+      break;
+  }
+  return level;
+})((state, uri) => String(uri));
 
 export const selectUpdatingCollection = (state: State) => selectState(state).updatingCollection;
 export const selectUpdateCollectionError = (state: State) => selectState(state).updateCollectionError;
