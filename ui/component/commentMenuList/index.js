@@ -4,19 +4,22 @@ import { doCommentPin, doCommentModAddDelegate } from 'redux/actions/comments';
 import { doOpenModal } from 'redux/actions/app';
 import { doSetPlayingUri } from 'redux/actions/content';
 import { doToast } from 'redux/actions/notifications';
-import { selectClaimIsMineForUri, makeSelectClaimForUri } from 'redux/selectors/claims';
+import { selectClaimIsMine, selectClaimForUri } from 'redux/selectors/claims';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { selectModerationDelegatorsById } from 'redux/selectors/comments';
 import { selectPlayingUri } from 'redux/selectors/content';
 import CommentMenuList from './view';
 
-const select = (state, props) => ({
-  claim: makeSelectClaimForUri(props.uri)(state),
-  claimIsMine: selectClaimIsMineForUri(state, props.uri),
-  activeChannelClaim: selectActiveChannelClaim(state),
-  playingUri: selectPlayingUri(state),
-  moderationDelegatorsById: selectModerationDelegatorsById(state),
-});
+const select = (state, props) => {
+  const claim = selectClaimForUri(state, props.uri);
+  return {
+    claim,
+    claimIsMine: selectClaimIsMine(state, claim),
+    activeChannelClaim: selectActiveChannelClaim(state),
+    playingUri: selectPlayingUri(state),
+    moderationDelegatorsById: selectModerationDelegatorsById(state),
+  };
+};
 
 const perform = (dispatch) => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),

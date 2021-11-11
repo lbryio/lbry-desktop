@@ -1,11 +1,11 @@
 import { connect } from 'react-redux';
 import {
-  selectClaimIsMineForUri,
+  selectClaimIsMine,
   makeSelectTitleForUri,
   makeSelectThumbnailForUri,
   makeSelectCoverForUri,
   selectCurrentChannelPage,
-  makeSelectClaimForUri,
+  selectClaimForUri,
   makeSelectClaimIsPending,
 } from 'redux/selectors/claims';
 import { selectMyUnpublishedCollections } from 'redux/selectors/collections';
@@ -17,22 +17,26 @@ import { selectMutedChannels } from 'redux/selectors/blocked';
 import { doOpenModal } from 'redux/actions/app';
 import ChannelPage from './view';
 
-const select = (state, props) => ({
-  title: makeSelectTitleForUri(props.uri)(state),
-  thumbnail: makeSelectThumbnailForUri(props.uri)(state),
-  cover: makeSelectCoverForUri(props.uri)(state),
-  channelIsMine: selectClaimIsMineForUri(state, props.uri),
-  page: selectCurrentChannelPage(state),
-  claim: makeSelectClaimForUri(props.uri)(state),
-  isSubscribed: makeSelectIsSubscribed(props.uri, true)(state),
-  blackListedOutpoints: selectBlackListedOutpoints(state),
-  subCount: makeSelectSubCountForUri(props.uri)(state),
-  pending: makeSelectClaimIsPending(props.uri)(state),
-  youtubeChannels: selectYoutubeChannels(state),
-  blockedChannels: selectModerationBlockList(state),
-  mutedChannels: selectMutedChannels(state),
-  unpublishedCollections: selectMyUnpublishedCollections(state),
-});
+const select = (state, props) => {
+  const claim = selectClaimForUri(state, props.uri);
+
+  return {
+    title: makeSelectTitleForUri(props.uri)(state),
+    thumbnail: makeSelectThumbnailForUri(props.uri)(state),
+    cover: makeSelectCoverForUri(props.uri)(state),
+    channelIsMine: selectClaimIsMine(state, claim),
+    page: selectCurrentChannelPage(state),
+    claim,
+    isSubscribed: makeSelectIsSubscribed(props.uri, true)(state),
+    blackListedOutpoints: selectBlackListedOutpoints(state),
+    subCount: makeSelectSubCountForUri(props.uri)(state),
+    pending: makeSelectClaimIsPending(props.uri)(state),
+    youtubeChannels: selectYoutubeChannels(state),
+    blockedChannels: selectModerationBlockList(state),
+    mutedChannels: selectMutedChannels(state),
+    unpublishedCollections: selectMyUnpublishedCollections(state),
+  };
+};
 
 const perform = (dispatch) => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),

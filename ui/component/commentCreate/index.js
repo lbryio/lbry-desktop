@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import {
-  makeSelectClaimForUri,
-  selectClaimIsMineForUri,
+  selectClaimForUri,
+  selectClaimIsMine,
   selectHasChannels,
   selectFetchingMyChannels,
   makeSelectTagInClaimOrChannelForUri,
@@ -14,15 +14,18 @@ import { doToast } from 'redux/actions/notifications';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { selectSettingsByChannelId } from 'redux/selectors/comments';
 
-const select = (state, props) => ({
-  activeChannelClaim: selectActiveChannelClaim(state),
-  hasChannels: selectHasChannels(state),
-  claim: makeSelectClaimForUri(props.uri)(state),
-  claimIsMine: selectClaimIsMineForUri(state, props.uri),
-  isFetchingChannels: selectFetchingMyChannels(state),
-  settingsByChannelId: selectSettingsByChannelId(state),
-  supportDisabled: makeSelectTagInClaimOrChannelForUri(props.uri, DISABLE_SUPPORT_TAG)(state),
-});
+const select = (state, props) => {
+  const claim = selectClaimForUri(state, props.uri);
+  return {
+    activeChannelClaim: selectActiveChannelClaim(state),
+    hasChannels: selectHasChannels(state),
+    claim,
+    claimIsMine: selectClaimIsMine(state, claim),
+    isFetchingChannels: selectFetchingMyChannels(state),
+    settingsByChannelId: selectSettingsByChannelId(state),
+    supportDisabled: makeSelectTagInClaimOrChannelForUri(props.uri, DISABLE_SUPPORT_TAG)(state),
+  };
+};
 
 const perform = (dispatch, ownProps) => ({
   createComment: (comment, claimId, parentId, txid, payment_intent_id, environment, sticker) =>

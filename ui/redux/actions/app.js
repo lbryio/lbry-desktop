@@ -12,7 +12,7 @@ import * as SHARED_PREFERENCES from 'constants/shared_preferences';
 import { DOMAIN, SIMPLE_SITE } from 'config';
 import Lbry from 'lbry';
 import { doFetchChannelListMine, doFetchCollectionListMine, doCheckPendingClaims } from 'redux/actions/claims';
-import { makeSelectClaimForUri, selectClaimIsMineForUri, selectMyChannelClaims } from 'redux/selectors/claims';
+import { selectClaimForUri, selectClaimIsMineForUri, selectMyChannelClaims } from 'redux/selectors/claims';
 import { doFetchFileInfos } from 'redux/actions/file_info';
 import { doClearSupport, doBalanceSubscribe } from 'redux/actions/wallet';
 import { doClearPublish } from 'redux/actions/publish';
@@ -469,8 +469,9 @@ export function doToggleSearchExpanded() {
 export function doAnalyticsView(uri, timeToStart) {
   return (dispatch, getState) => {
     const state = getState();
-    const { txid, nout, claim_id: claimId } = makeSelectClaimForUri(uri)(state);
-    const claimIsMine = selectClaimIsMineForUri(state, uri);
+    const claim = selectClaimForUri(state, uri);
+    const { txid, nout, claim_id: claimId } = claim;
+    const claimIsMine = selectClaimIsMineForUri(state, claim);
     const outpoint = `${txid}:${nout}`;
 
     if (claimIsMine) {
@@ -484,7 +485,7 @@ export function doAnalyticsView(uri, timeToStart) {
 export function doAnalyticsBuffer(uri, bufferData) {
   return (dispatch, getState) => {
     const state = getState();
-    const claim = makeSelectClaimForUri(uri)(state);
+    const claim = selectClaimForUri(state, uri);
     const user = selectUser(state);
     const {
       value: { video, audio, source },

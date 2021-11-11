@@ -1,8 +1,9 @@
 import { connect } from 'react-redux';
 import { doResolveUris } from 'redux/actions/claims';
 import {
+  selectClaimForUri,
   makeSelectClaimForUri,
-  selectClaimIsMineForUri,
+  selectClaimIsMine,
   selectFetchingMyChannels,
   selectMyClaimIdsRaw,
 } from 'redux/selectors/claims';
@@ -24,6 +25,7 @@ import { selectActiveChannelClaim } from 'redux/selectors/app';
 import CommentsList from './view';
 
 const select = (state, props) => {
+  const claim = selectClaimForUri(state, props.uri);
   const activeChannelClaim = selectActiveChannelClaim(state);
   const topLevelComments = selectTopLevelCommentsForUri(state, props.uri);
 
@@ -40,8 +42,8 @@ const select = (state, props) => {
     pinnedComments: selectPinnedCommentsForUri(state, props.uri),
     topLevelTotalPages: makeSelectTopLevelTotalPagesForUri(props.uri)(state),
     totalComments: makeSelectTotalCommentsCountForUri(props.uri)(state),
-    claim: makeSelectClaimForUri(props.uri)(state),
-    claimIsMine: selectClaimIsMineForUri(state, props.uri),
+    claim,
+    claimIsMine: selectClaimIsMine(state, claim),
     isFetchingComments: selectIsFetchingComments(state),
     isFetchingCommentsById: selectIsFetchingCommentsById(state),
     isFetchingReacts: selectIsFetchingReacts(state),

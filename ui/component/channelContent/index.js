@@ -3,9 +3,9 @@ import { PAGE_SIZE } from 'constants/claim';
 import {
   makeSelectClaimsInChannelForPage,
   makeSelectFetchingChannelClaims,
-  selectClaimIsMineForUri,
+  selectClaimIsMine,
   makeSelectTotalPagesInChannelSearch,
-  makeSelectClaimForUri,
+  selectClaimForUri,
 } from 'redux/selectors/claims';
 import { doResolveUris } from 'redux/actions/claims';
 import * as SETTINGS from 'constants/settings';
@@ -20,13 +20,15 @@ const select = (state, props) => {
   const { search } = props.location;
   const urlParams = new URLSearchParams(search);
   const page = urlParams.get('page') || 0;
+  const claim = props.uri && selectClaimForUri(state, props.uri);
+
   return {
     pageOfClaimsInChannel: makeSelectClaimsInChannelForPage(props.uri, page)(state),
     fetching: makeSelectFetchingChannelClaims(props.uri)(state),
     totalPages: makeSelectTotalPagesInChannelSearch(props.uri, PAGE_SIZE)(state),
-    channelIsMine: selectClaimIsMineForUri(state, props.uri),
+    channelIsMine: selectClaimIsMine(state, claim),
     channelIsBlocked: makeSelectChannelIsMuted(props.uri)(state),
-    claim: props.uri && makeSelectClaimForUri(props.uri)(state),
+    claim,
     isAuthenticated: selectUserVerifiedEmail(state),
     showMature: selectShowMatureContent(state),
     tileLayout: makeSelectClientSetting(SETTINGS.TILE_LAYOUT)(state),

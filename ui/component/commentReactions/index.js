@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import Comment from './view';
-import { selectClaimIsMineForUri, makeSelectClaimForUri } from 'redux/selectors/claims';
+import { selectClaimIsMine, selectClaimForUri } from 'redux/selectors/claims';
 import { doResolveUri } from 'redux/actions/claims';
 import { doToast } from 'redux/actions/notifications';
 import { selectMyReactsForComment, selectOthersReactsForComment } from 'redux/selectors/comments';
@@ -11,10 +11,11 @@ const select = (state, props) => {
   const activeChannelClaim = selectActiveChannelClaim(state);
   const activeChannelId = activeChannelClaim && activeChannelClaim.claim_id;
   const reactionKey = activeChannelId ? `${props.commentId}:${activeChannelId}` : props.commentId;
+  const claim = selectClaimForUri(state, props.uri);
 
   return {
-    claim: makeSelectClaimForUri(props.uri)(state),
-    claimIsMine: selectClaimIsMineForUri(state, props.uri),
+    claim,
+    claimIsMine: selectClaimIsMine(state, claim),
     myReacts: selectMyReactsForComment(state, reactionKey),
     othersReacts: selectOthersReactsForComment(state, reactionKey),
     activeChannelId,

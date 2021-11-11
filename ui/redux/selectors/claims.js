@@ -214,6 +214,24 @@ const selectNormalizedAndVerifiedUri = createCachedSelector(
   }
 )((state, rawUri) => String(rawUri));
 
+export const selectClaimIsMine = (state: State, claim: ?Claim) => {
+  if (claim) {
+    // The original code seems to imply that 'is_my_output' could be false even
+    // when it is yours and there is a need to double-check with 'myActiveClaims'.
+    // I'm retaining that logic. Otherwise, we could have just return
+    // is_my_output directly when it is defined and skip the fallback.
+    if (claim.is_my_output) {
+      return true;
+    } else {
+      // 'is_my_output' is false or undefined.
+      const myActiveClaims = selectMyActiveClaims(state);
+      return claim.claim_id && myActiveClaims.has(claim.claim_id);
+    }
+  } else {
+    return false;
+  }
+};
+
 export const selectClaimIsMineForUri = (state: State, rawUri: string) => {
   // Not memoizing this selector because:
   // (1) The workload is somewhat lightweight.
@@ -226,13 +244,7 @@ export const selectClaimIsMineForUri = (state: State, rawUri: string) => {
   }
 
   const claimsByUri = selectClaimsByUri(state);
-  const myActiveClaims = selectMyActiveClaims(state);
-
-  return (
-    claimsByUri &&
-    claimsByUri[uri] &&
-    (claimsByUri[uri].is_my_output || (claimsByUri[uri].claim_id && myActiveClaims.has(claimsByUri[uri].claim_id)))
-  );
+  return selectClaimIsMine(state, claimsByUri && claimsByUri[uri]);
 };
 
 // DEPRECATED - use selectClaimIsMineForUri instead.
