@@ -19,11 +19,9 @@ export function makeResumableUploadRequest(
       reject(new Error('Publish: endpoint undefined'));
     }
 
-    // @if NODE_ENV!='production'
     if (params.remote_url) {
       reject(new Error('Publish: v2 does not support remote_url'));
     }
-    // @endif
 
     const jsonPayload = JSON.stringify({
       jsonrpc: '2.0',
@@ -35,7 +33,7 @@ export function makeResumableUploadRequest(
     const uploader = new tus.Upload(file, {
       endpoint: RESUMABLE_ENDPOINT,
       chunkSize: UPLOAD_CHUNK_SIZE_BYTE,
-      retryDelays: [0, 3000, 3000],
+      retryDelays: [0, 5000, 10000, 15000],
       parallelUploads: 1,
       removeFingerprintOnSuccess: true,
       headers: { [X_LBRY_AUTH_TOKEN]: token },
