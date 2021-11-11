@@ -8,7 +8,7 @@ import * as CLAIM from 'constants/claim';
 
 type State = { claims: any };
 
-const selectState = (state) => state.claims || {};
+const selectState = (state: State) => state.claims || {};
 
 export const selectById = (state: State) => selectState(state).byId || {};
 export const selectPendingClaimsById = (state: State) => selectState(state).pendingById || {};
@@ -18,16 +18,11 @@ export const selectClaimsById = createSelector(selectById, selectPendingClaimsBy
 });
 
 export const selectClaimIdsByUri = (state: State) => selectState(state).claimsByUri || {};
-
-export const selectCurrentChannelPage = createSelector(selectState, (state) => state.currentChannelPage || 1);
-
-export const selectCreatingChannel = createSelector(selectState, (state) => state.creatingChannel);
-
-export const selectCreateChannelError = createSelector(selectState, (state) => state.createChannelError);
-
-export const selectRepostLoading = createSelector(selectState, (state) => state.repostLoading);
-
-export const selectRepostError = createSelector(selectState, (state) => state.repostError);
+export const selectCurrentChannelPage = (state: State) => selectState(state).currentChannelPage || 1;
+export const selectCreatingChannel = (state: State) => selectState(state).creatingChannel;
+export const selectCreateChannelError = (state: State) => selectState(state).createChannelError;
+export const selectRepostLoading = (state: State) => selectState(state).repostLoading;
+export const selectRepostError = (state: State) => selectState(state).repostError;
 
 export const selectClaimsByUri = createSelector(selectClaimIdsByUri, selectClaimsById, (byUri, byId) => {
   const claims = {};
@@ -47,6 +42,21 @@ export const selectClaimsByUri = createSelector(selectClaimIdsByUri, selectClaim
 
   return claims;
 });
+
+/**
+ * Returns the claim with the specified ID. The claim could be undefined if does
+ * not exist or have not fetched. Take note of the second parameter, which means
+ * an inline function or helper would be required when used as an input to
+ * 'createSelector'.
+ *
+ * @param state
+ * @param claimId
+ * @returns {*}
+ */
+export const selectClaimWithId = (state: State, claimId: string) => {
+  const byId = selectClaimsById(state);
+  return byId[claimId];
+};
 
 export const selectAllClaimsByChannel = createSelector(selectState, (state) => state.paginatedClaimsByChannel || {});
 
@@ -69,10 +79,9 @@ export const makeSelectClaimIdIsPending = (claimId: string) =>
     return Boolean(pendingById[claimId]);
   });
 
-export const makeSelectClaimIdForUri = (uri: string) =>
-  createSelector(selectClaimIdsByUri, (claimIds) => claimIds[uri]);
+export const selectClaimIdForUri = (state: State, uri: string) => selectClaimIdsByUri(state)[uri];
 
-export const selectReflectingById = createSelector(selectState, (state) => state.reflectingById);
+export const selectReflectingById = (state: State) => selectState(state).reflectingById;
 
 export const makeSelectClaimForClaimId = (claimId: string) => createSelector(selectClaimsById, (byId) => byId[claimId]);
 
@@ -85,7 +94,8 @@ export const selectClaimForUri = createCachedSelector(
     const validUri = isURIValid(uri);
 
     if (validUri && byUri) {
-      const claimId = uri && byUri[normalizeURI(uri)];
+      const normalizedUri = normalizeURI(uri);
+      const claimId = uri && byUri[normalizedUri];
       const claim = byId[claimId];
 
       // Make sure to return the claim as is so apps can check if it's been resolved before (null) or still needs to be resolved (undefined)
@@ -102,7 +112,7 @@ export const selectClaimForUri = createCachedSelector(
 
         return {
           ...repostedClaim,
-          repost_url: normalizeURI(uri),
+          repost_url: normalizedUri,
           repost_channel_url: channelUrl,
           repost_bid_amount: claim && claim.meta && claim.meta.effective_amount,
         };
@@ -111,14 +121,16 @@ export const selectClaimForUri = createCachedSelector(
       }
     }
   }
-)((state, uri, returnRepost = true) => `${uri}:${returnRepost ? '1' : '0'}`);
+)((state, uri, returnRepost = true) => `${String(uri)}:${returnRepost ? '1' : '0'}`);
 
+// Note: this is deprecated. Use "selectClaimForUri(state, uri)" instead.
 export const makeSelectClaimForUri = (uri: string, returnRepost: boolean = true) =>
   createSelector(selectClaimIdsByUri, selectClaimsById, (byUri, byId) => {
     const validUri = isURIValid(uri);
 
     if (validUri && byUri) {
-      const claimId = uri && byUri[normalizeURI(uri)];
+      const normalizedUri = normalizeURI(uri);
+      const claimId = uri && byUri[normalizedUri];
       const claim = byId[claimId];
 
       // Make sure to return the claim as is so apps can check if it's been resolved before (null) or still needs to be resolved (undefined)
@@ -135,7 +147,7 @@ export const makeSelectClaimForUri = (uri: string, returnRepost: boolean = true)
 
         return {
           ...repostedClaim,
-          repost_url: normalizeURI(uri),
+          repost_url: normalizedUri,
           repost_channel_url: channelUrl,
           repost_bid_amount: claim && claim.meta && claim.meta.effective_amount,
         };
@@ -144,6 +156,9 @@ export const makeSelectClaimForUri = (uri: string, returnRepost: boolean = true)
       }
     }
   });
+
+// Returns your claim IDs without handling pending and abandoned claims.
+export const selectMyClaimIdsRaw = (state: State) => selectState(state).myClaims;
 
 export const selectMyClaimsRaw = createSelector(selectState, selectClaimsById, (state, byId) => {
   const ids = state.myClaims;
@@ -161,7 +176,10 @@ export const selectMyClaimsRaw = createSelector(selectState, selectClaimsById, (
   return claims;
 });
 
-export const selectAbandoningIds = createSelector(selectState, (state) => Object.keys(state.abandoningById || {}));
+export const selectAbandoningById = (state: State) => selectState(state).abandoningById || {};
+export const selectAbandoningIds = createSelector(selectAbandoningById, (abandoningById) =>
+  Object.keys(abandoningById)
+);
 
 export const makeSelectAbandoningClaimById = (claimId: string) =>
   createSelector(selectAbandoningIds, (ids) => ids.includes(claimId));
@@ -173,12 +191,63 @@ export const makeSelectIsAbandoningClaimForUri = (uri: string) =>
   });
 
 export const selectMyActiveClaims = createSelector(
-  selectMyClaimsRaw,
+  selectMyClaimIdsRaw,
   selectAbandoningIds,
-  (claims, abandoningIds) =>
-    new Set(claims && claims.map((claim) => claim.claim_id).filter((claimId) => !abandoningIds.includes(claimId)))
+  (myClaimIds, abandoningIds) => {
+    return new Set(myClaimIds && myClaimIds.filter((claimId) => !abandoningIds.includes(claimId)));
+  }
 );
 
+// Helper for 'selectClaimIsMineForUri'.
+// Returns undefined string if unable to normalize or is not valid.
+const selectNormalizedAndVerifiedUri = createCachedSelector(
+  (state, rawUri) => rawUri,
+  (rawUri) => {
+    try {
+      const uri = normalizeURI(rawUri);
+      if (isURIValid(uri)) {
+        return uri;
+      }
+    } catch (e) {}
+
+    return undefined;
+  }
+)((state, rawUri) => String(rawUri));
+
+export const selectClaimIsMine = (state: State, claim: ?Claim) => {
+  if (claim) {
+    // The original code seems to imply that 'is_my_output' could be false even
+    // when it is yours and there is a need to double-check with 'myActiveClaims'.
+    // I'm retaining that logic. Otherwise, we could have just return
+    // is_my_output directly when it is defined and skip the fallback.
+    if (claim.is_my_output) {
+      return true;
+    } else {
+      // 'is_my_output' is false or undefined.
+      const myActiveClaims = selectMyActiveClaims(state);
+      return claim.claim_id && myActiveClaims.has(claim.claim_id);
+    }
+  } else {
+    return false;
+  }
+};
+
+export const selectClaimIsMineForUri = (state: State, rawUri: string) => {
+  // Not memoizing this selector because:
+  // (1) The workload is somewhat lightweight.
+  // (2) Since it depends on 'selectClaimsByUri', memoization won't work anyway
+  // because the array is constantly invalidated.
+
+  const uri = selectNormalizedAndVerifiedUri(state, rawUri);
+  if (!uri) {
+    return false;
+  }
+
+  const claimsByUri = selectClaimsByUri(state);
+  return selectClaimIsMine(state, claimsByUri && claimsByUri[uri]);
+};
+
+// DEPRECATED - use selectClaimIsMineForUri instead.
 export const makeSelectClaimIsMine = (rawUri: string) => {
   let uri;
   try {
@@ -198,15 +267,11 @@ export const makeSelectClaimIsMine = (rawUri: string) => {
   });
 };
 
-export const selectMyPurchases = createSelector(selectState, (state) => state.myPurchases);
-
-export const selectPurchaseUriSuccess = createSelector(selectState, (state) => state.purchaseUriSuccess);
-
-export const selectMyPurchasesCount = createSelector(selectState, (state) => state.myPurchasesPageTotalResults);
-
-export const selectIsFetchingMyPurchases = createSelector(selectState, (state) => state.fetchingMyPurchases);
-
-export const selectFetchingMyPurchasesError = createSelector(selectState, (state) => state.fetchingMyPurchasesError);
+export const selectMyPurchases = (state: State) => selectState(state).myPurchases;
+export const selectPurchaseUriSuccess = (state: State) => selectState(state).purchaseUriSuccess;
+export const selectMyPurchasesCount = (state: State) => selectState(state).myPurchasesPageTotalResults;
+export const selectIsFetchingMyPurchases = (state: State) => selectState(state).fetchingMyPurchases;
+export const selectFetchingMyPurchasesError = (state: State) => selectState(state).fetchingMyPurchasesError;
 
 export const makeSelectMyPurchasesForPage = (query: ?string, page: number = 1) =>
   createSelector(
@@ -270,7 +335,7 @@ export const makeSelectTotalPagesInChannelSearch = (uri: string) =>
 export const selectMetadataForUri = createCachedSelector(selectClaimForUri, (claim, uri) => {
   const metadata = claim && claim.value;
   return metadata || (claim === undefined ? undefined : null);
-})((state, uri) => uri);
+})((state, uri) => String(uri));
 
 export const makeSelectMetadataForUri = (uri: string) =>
   createSelector(makeSelectClaimForUri(uri), (claim) => {
@@ -303,7 +368,7 @@ export const selectDateForUri = createCachedSelector(
     const dateObj = new Date(timestamp);
     return dateObj;
   }
-)((state, uri) => uri);
+)((state, uri) => String(uri));
 
 export const makeSelectAmountForUri = (uri: string) =>
   createSelector(makeSelectClaimForUri(uri), (claim) => {
@@ -335,7 +400,7 @@ export const makeSelectCoverForUri = (uri: string) =>
     return cover && cover.url ? cover.url.trim().replace(/^http:\/\//i, 'https://') : undefined;
   });
 
-export const selectIsFetchingClaimListMine = createSelector(selectState, (state) => state.isFetchingClaimListMine);
+export const selectIsFetchingClaimListMine = (state: State) => selectState(state).isFetchingClaimListMine;
 
 export const selectMyClaimsPage = createSelector(selectState, (state) => state.myClaimsPageResults || []);
 
@@ -346,12 +411,8 @@ export const selectMyClaimsPageNumber = createSelector(
   (state) => (state.txoPage && state.txoPage.page) || 1
 );
 
-export const selectMyClaimsPageItemCount = createSelector(selectState, (state) => state.myClaimsPageTotalResults || 1);
-
-export const selectFetchingMyClaimsPageError = createSelector(
-  selectState,
-  (state) => state.fetchingClaimListMinePageError
-);
+export const selectMyClaimsPageItemCount = (state: State) => selectState(state).myClaimsPageTotalResults || 1;
+export const selectFetchingMyClaimsPageError = (state: State) => selectState(state).fetchingClaimListMinePageError;
 
 export const selectMyClaims = createSelector(
   selectMyActiveClaims,
@@ -403,18 +464,31 @@ export const selectMyClaimsOutpoints = createSelector(selectMyClaims, (myClaims)
   return outpoints;
 });
 
-export const selectFetchingMyChannels = createSelector(selectState, (state) => state.fetchingMyChannels);
+export const selectFetchingMyChannels = (state: State) => selectState(state).fetchingMyChannels;
+export const selectFetchingMyCollections = (state: State) => selectState(state).fetchingMyCollections;
 
-export const selectFetchingMyCollections = createSelector(selectState, (state) => state.fetchingMyCollections);
+export const selectMyChannelClaimIds = (state: State) => selectState(state).myChannelClaims;
 
-export const selectMyChannelClaims = createSelector(selectState, selectClaimsById, (state, byId) => {
-  const ids = state.myChannelClaims;
-  if (!ids) {
-    return ids;
+export const selectMyChannelClaims = createSelector(selectMyChannelClaimIds, (myChannelClaimIds) => {
+  if (!myChannelClaimIds) {
+    return myChannelClaimIds;
   }
 
+  if (!window || !window.store) {
+    return undefined;
+  }
+
+  // Note: Grabbing the store and running the selector this way is anti-pattern,
+  // but it is _needed_ and works only because we know for sure that 'byId[]'
+  // will be populated with the same claims as when 'myChannelClaimIds' is populated.
+  // If we put 'state' or 'byId' as the input selector, it essentially
+  // recalculates every time. Putting 'state' as input to createSelector() is
+  // always wrong from a memoization standpoint.
+  const state = window.store.getState();
+  const byId = selectClaimsById(state);
+
   const claims = [];
-  ids.forEach((id) => {
+  myChannelClaimIds.forEach((id) => {
     if (byId[id]) {
       // I'm not sure why this check is necessary, but it ought to be a quick fix for https://github.com/lbryio/lbry-desktop/issues/544
       claims.push(byId[id]);
@@ -428,16 +502,21 @@ export const selectMyChannelUrls = createSelector(selectMyChannelClaims, (claims
   claims ? claims.map((claim) => claim.canonical_url || claim.permanent_url) : undefined
 );
 
-export const selectMyCollectionIds = createSelector(selectState, (state) => state.myCollectionClaims);
+export const selectHasChannels = (state: State) => {
+  const myChannelClaimIds = selectMyChannelClaimIds(state);
+  return myChannelClaimIds ? myChannelClaimIds.length > 0 : false;
+};
+
+export const selectMyCollectionIds = (state: State) => selectState(state).myCollectionClaims;
 
 export const selectResolvingUris = createSelector(selectState, (state) => state.resolvingUris || []);
 
-export const selectChannelImportPending = createSelector(selectState, (state) => state.pendingChannelImport);
+export const selectChannelImportPending = (state: State) => selectState(state).pendingChannelImport;
 
 export const makeSelectIsUriResolving = (uri: string) =>
   createSelector(selectResolvingUris, (resolvingUris) => resolvingUris && resolvingUris.indexOf(uri) !== -1);
 
-export const selectPlayingUri = createSelector(selectState, (state) => state.playingUri);
+export const selectPlayingUri = (state: State) => selectState(state).playingUri;
 
 export const selectChannelClaimCounts = createSelector(selectState, (state) => state.channelClaimCounts || {});
 
@@ -541,7 +620,7 @@ export const makeSelectMyChannelPermUrlForName = (name: string) =>
 
 export const selectTagsForUri = createCachedSelector(selectMetadataForUri, (metadata: ?GenericMetadata) => {
   return (metadata && metadata.tags) || [];
-})((state, uri) => uri);
+})((state, uri) => String(uri));
 
 export const makeSelectTagsForUri = (uri: string) =>
   createSelector(makeSelectMetadataForUri(uri), (metadata: ?GenericMetadata) => {
@@ -592,9 +671,8 @@ export const makeSelectSupportsForUri = (uri: string) =>
     return total;
   });
 
-export const selectUpdatingChannel = createSelector(selectState, (state) => state.updatingChannel);
-
-export const selectUpdateChannelError = createSelector(selectState, (state) => state.updateChannelError);
+export const selectUpdatingChannel = (state: State) => selectState(state).updatingChannel;
+export const selectUpdateChannelError = (state: State) => selectState(state).updateChannelError;
 
 export const makeSelectReflectingClaimForUri = (uri: string) =>
   createSelector(selectClaimIdsByUri, selectReflectingById, (claimIdsByUri, reflectingById) => {
@@ -638,39 +716,34 @@ export const makeSelectClaimIsStreamPlaceholder = (uri: string) =>
     return Boolean(claim.value_type === 'stream' && !claim.value.source);
   });
 
-export const makeSelectTotalStakedAmountForChannelUri = (uri: string) =>
-  createSelector(makeSelectClaimForUri(uri), (claim) => {
-    if (!claim || !claim.amount || !claim.meta || !claim.meta.support_amount) {
-      return 0;
-    }
+export const selectTotalStakedAmountForChannelUri = createCachedSelector(selectClaimForUri, (claim) => {
+  if (!claim || !claim.amount || !claim.meta || !claim.meta.support_amount) {
+    return 0;
+  }
 
-    return parseFloat(claim.amount) + parseFloat(claim.meta.support_amount) || 0;
-  });
+  return parseFloat(claim.amount) + parseFloat(claim.meta.support_amount) || 0;
+})((state, uri) => String(uri));
 
-export const makeSelectStakedLevelForChannelUri = (uri: string) =>
-  createSelector(makeSelectTotalStakedAmountForChannelUri(uri), (amount) => {
-    let level = 1;
-    switch (true) {
-      case amount >= CLAIM.LEVEL_2_STAKED_AMOUNT && amount < CLAIM.LEVEL_3_STAKED_AMOUNT:
-        level = 2;
-        break;
-      case amount >= CLAIM.LEVEL_3_STAKED_AMOUNT && amount < CLAIM.LEVEL_4_STAKED_AMOUNT:
-        level = 3;
-        break;
-      case amount >= CLAIM.LEVEL_4_STAKED_AMOUNT && amount < CLAIM.LEVEL_5_STAKED_AMOUNT:
-        level = 4;
-        break;
-      case amount >= CLAIM.LEVEL_5_STAKED_AMOUNT:
-        level = 5;
-        break;
-    }
-    return level;
-  });
+export const selectStakedLevelForChannelUri = createCachedSelector(selectTotalStakedAmountForChannelUri, (amount) => {
+  let level = 1;
+  switch (true) {
+    case amount >= CLAIM.LEVEL_2_STAKED_AMOUNT && amount < CLAIM.LEVEL_3_STAKED_AMOUNT:
+      level = 2;
+      break;
+    case amount >= CLAIM.LEVEL_3_STAKED_AMOUNT && amount < CLAIM.LEVEL_4_STAKED_AMOUNT:
+      level = 3;
+      break;
+    case amount >= CLAIM.LEVEL_4_STAKED_AMOUNT && amount < CLAIM.LEVEL_5_STAKED_AMOUNT:
+      level = 4;
+      break;
+    case amount >= CLAIM.LEVEL_5_STAKED_AMOUNT:
+      level = 5;
+      break;
+  }
+  return level;
+})((state, uri) => String(uri));
 
-export const selectUpdatingCollection = createSelector(selectState, (state) => state.updatingCollection);
-
-export const selectUpdateCollectionError = createSelector(selectState, (state) => state.updateCollectionError);
-
-export const selectCreatingCollection = createSelector(selectState, (state) => state.creatingCollection);
-
-export const selectCreateCollectionError = createSelector(selectState, (state) => state.createCollectionError);
+export const selectUpdatingCollection = (state: State) => selectState(state).updatingCollection;
+export const selectUpdateCollectionError = (state: State) => selectState(state).updateCollectionError;
+export const selectCreatingCollection = (state: State) => selectState(state).creatingCollection;
+export const selectCreateCollectionError = (state: State) => selectState(state).createCollectionError;

@@ -3,7 +3,7 @@ import { Lbryio } from 'lbryinc';
 import * as ACTIONS from 'constants/action_types';
 import * as REACTION_TYPES from 'constants/reactions';
 import { makeSelectMyReactionForUri } from 'redux/selectors/reactions';
-import { makeSelectClaimForUri } from 'redux/selectors/claims';
+import { selectClaimForUri } from 'redux/selectors/claims';
 
 export const doFetchReactions = (claimId: string) => (dispatch: Dispatch) => {
   dispatch({ type: ACTIONS.REACTIONS_LIST_STARTED });
@@ -20,7 +20,7 @@ export const doFetchReactions = (claimId: string) => (dispatch: Dispatch) => {
 export const doReactionLike = (uri: string) => (dispatch: Dispatch, getState: GetState) => {
   const state = getState();
   const myReaction = makeSelectMyReactionForUri(uri)(state);
-  const claim = makeSelectClaimForUri(uri)(state);
+  const claim = selectClaimForUri(state, uri);
   const claimId = claim.claim_id;
   const shouldRemove = myReaction === REACTION_TYPES.LIKE;
 
@@ -46,7 +46,7 @@ export const doReactionLike = (uri: string) => (dispatch: Dispatch, getState: Ge
 export const doReactionDislike = (uri: string) => (dispatch: Dispatch, getState: GetState) => {
   const state = getState();
   const myReaction = makeSelectMyReactionForUri(uri)(state);
-  const claim = makeSelectClaimForUri(uri)(state);
+  const claim = selectClaimForUri(state, uri);
   const claimId = claim.claim_id;
   const shouldRemove = myReaction === REACTION_TYPES.DISLIKE;
 

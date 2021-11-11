@@ -8,7 +8,7 @@ import Icon from 'component/common/icon';
 type Props = {
   showFullPrice: boolean,
   costInfo: ?{ includesData: boolean, cost: number },
-  fetchCostInfo: string => void,
+  doFetchCostInfoForUri: (string) => void,
   uri: string,
   fetching: boolean,
   claim: ?{},
@@ -35,10 +35,10 @@ class FilePrice extends React.PureComponent<Props> {
   }
 
   fetchCost = (props: Props) => {
-    const { costInfo, fetchCostInfo, uri, fetching, claim } = props;
+    const { costInfo, doFetchCostInfoForUri, uri, fetching, claim } = props;
 
     if (costInfo === undefined && !fetching && claim) {
-      fetchCostInfo(uri);
+      doFetchCostInfoForUri(uri);
     }
   };
 

@@ -1,7 +1,7 @@
 import * as CS from 'constants/claim_search';
 import { connect } from 'react-redux';
 import { doResolveUri } from 'redux/actions/claims';
-import { makeSelectClaimForUri } from 'redux/selectors/claims';
+import { selectClaimForUri } from 'redux/selectors/claims';
 import * as SETTINGS from 'constants/settings';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectFollowedTags } from 'redux/selectors/tags';
@@ -17,7 +17,7 @@ const select = (state, props) => {
   return {
     followedTags: selectFollowedTags(state),
     repostedUri: repostedUri,
-    repostedClaim: repostedUri ? makeSelectClaimForUri(repostedUri)(state) : null,
+    repostedClaim: repostedUri ? selectClaimForUri(state, repostedUri) : null,
     isAuthenticated: selectUserVerifiedEmail(state),
     tileLayout: makeSelectClientSetting(SETTINGS.TILE_LAYOUT)(state),
   };

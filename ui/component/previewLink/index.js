@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 import {
-  makeSelectClaimIsMine,
+  selectClaimIsMine,
   makeSelectTitleForUri,
   makeSelectThumbnailForUri,
-  makeSelectClaimForUri,
+  selectClaimForUri,
   makeSelectIsUriResolving,
   makeSelectMetadataItemForUri,
 } from 'redux/selectors/claims';
@@ -12,13 +12,15 @@ import { selectBlackListedOutpoints } from 'lbryinc';
 import PreviewLink from './view';
 
 const select = (state, props) => {
+  const claim = selectClaimForUri(state, props.uri);
+
   return {
     uri: props.uri,
-    claim: makeSelectClaimForUri(props.uri)(state),
+    claim,
     title: makeSelectTitleForUri(props.uri)(state),
     thumbnail: makeSelectThumbnailForUri(props.uri)(state),
     description: makeSelectMetadataItemForUri(props.uri, 'description')(state),
-    channelIsMine: makeSelectClaimIsMine(props.uri)(state),
+    channelIsMine: selectClaimIsMine(state, claim),
     isResolvingUri: makeSelectIsUriResolving(props.uri)(state),
     blackListedOutpoints: selectBlackListedOutpoints(state),
   };

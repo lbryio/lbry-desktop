@@ -50,9 +50,12 @@ export {
 export { selectFilteredOutpoints, selectFilteredOutpointMap } from './redux/selectors/filtered';
 export {
   selectViewCount,
-  makeSelectViewCountForUri,
-  makeSelectSubCountForUri,
+  selectViewCountForUri,
+  // makeSelectViewCountForUri, // deprecated
+  selectSubCountForUri,
+  // makeSelectSubCountForUri, // deprecated
 } from './redux/selectors/stats';
+export { selectBanStateForUri } from './redux/selectors/ban';
 export {
   selectHasSyncedWallet,
   selectSyncData,

@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { selectClaimsById, selectMyChannelClaims, makeSelectStakedLevelForChannelUri } from 'redux/selectors/claims';
+import { selectClaimsById, selectMyChannelClaims, selectTotalStakedAmountForChannelUri } from 'redux/selectors/claims';
 
 export const selectState = (state) => state.app || {};
 
@@ -127,7 +127,7 @@ export const selectActiveChannelStakedLevel = createSelector(
     }
 
     const uri = activeChannelClaim.permanent_url;
-    const stakedLevel = makeSelectStakedLevelForChannelUri(uri)(state);
+    const stakedLevel = selectTotalStakedAmountForChannelUri(state, uri)(state);
 
     return stakedLevel;
   }

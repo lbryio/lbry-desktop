@@ -1,12 +1,12 @@
 import { connect } from 'react-redux';
 import { doSendDraftTransaction, doSendTip } from 'redux/actions/wallet';
-import { makeSelectClaimForUri } from 'redux/selectors/claims';
+import { selectClaimForUri } from 'redux/selectors/claims';
 import { doHideModal } from 'redux/actions/app';
 import ModalConfirmTransaction from './view';
 import { selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
 
 const select = (state, props) => ({
-  claim: makeSelectClaimForUri(props.destination)(state),
+  claim: selectClaimForUri(state, props.destination)(state),
   activeChannelClaim: selectActiveChannelClaim(state),
   incognito: selectIncognito(state),
 });

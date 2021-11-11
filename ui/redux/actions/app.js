@@ -9,7 +9,7 @@ import * as SHARED_PREFERENCES from 'constants/shared_preferences';
 import { DOMAIN } from 'config';
 import Lbry from 'lbry';
 import { doFetchChannelListMine, doFetchCollectionListMine, doCheckPendingClaims } from 'redux/actions/claims';
-import { makeSelectClaimForUri, makeSelectClaimIsMine, selectMyChannelClaims } from 'redux/selectors/claims';
+import { selectClaimForUri, selectClaimIsMineForUri, selectMyChannelClaims } from 'redux/selectors/claims';
 import { doFetchFileInfos } from 'redux/actions/file_info';
 import { doClearSupport, doBalanceSubscribe } from 'redux/actions/wallet';
 import { doClearPublish } from 'redux/actions/publish';
@@ -434,8 +434,9 @@ export function doToggleSearchExpanded() {
 export function doAnalyticsView(uri, timeToStart) {
   return (dispatch, getState) => {
     const state = getState();
-    const { txid, nout, claim_id: claimId } = makeSelectClaimForUri(uri)(state);
-    const claimIsMine = makeSelectClaimIsMine(uri)(state);
+    const claim = selectClaimForUri(state, uri);
+    const { txid, nout, claim_id: claimId } = claim;
+    const claimIsMine = selectClaimIsMineForUri(state, claim);
     const outpoint = `${txid}:${nout}`;
 
     if (claimIsMine) {
@@ -449,13 +450,13 @@ export function doAnalyticsView(uri, timeToStart) {
 export function doAnalyticsBuffer(uri, bufferData) {
   return (dispatch, getState) => {
     const state = getState();
-    const claim = makeSelectClaimForUri(uri)(state);
+    const claim = selectClaimForUri(state, uri);
     const user = selectUser(state);
     const {
       value: { video, audio, source },
     } = claim;
-    const timeAtBuffer = parseInt(bufferData.currentTime * 1000);
-    const bufferDuration = parseInt(bufferData.secondsToLoad * 1000);
+    const timeAtBuffer = parseInt(bufferData.currentTime ? bufferData.currentTime * 1000 : 0);
+    const bufferDuration = parseInt(bufferData.secondsToLoad ? bufferData.secondsToLoad * 1000 : 0);
     const fileDurationInSeconds = (video && video.duration) || (audio && audio.duration);
     const fileSize = source.size; // size in bytes
     const fileSizeInBits = fileSize * 8;
@@ -501,7 +502,7 @@ export function doSignIn() {
   return (dispatch, getState) => {
     const state = getState();
     const user = selectUser(state);
-    const notificationsEnabled = user.experimental_ui; // what is notifications?
+    const notificationsEnabled = user.experimental_ui;
 
     dispatch(doNotificationSocketConnect(notificationsEnabled));
 
