@@ -46,7 +46,7 @@
   "dependencies": {
     "@ungap/from-entries": "^0.2.1",
     "auto-launch": "^5.0.5",
-    "electron-dl": "^1.11.0",
+    "electron-dl": "^3.2.0",
     "electron-log": "^2.2.12",
     "electron-notarize": "^1.0.0",
     "electron-updater": "^4.2.4",
@@ -123,7 +123,7 @@
     "dom-scroll-into-view": "^1.2.1",
     "dotenv-defaults": "^2.0.1",
     "dotenv-webpack": "^1.8.0",
-    "electron": "9.4.0",
+    "electron": "11.5.0",
     "electron-builder": "^22.9.1",
     "electron-devtools-installer": "^3.1.1",
     "electron-is-dev": "^0.3.0",

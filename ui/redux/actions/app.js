@@ -1,9 +1,6 @@
-// @if TARGET='app'
 import { execSync } from 'child_process';
 import isDev from 'electron-is-dev';
 import { ipcRenderer, remote } from 'electron';
-// @endif
-import path from 'path';
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
 import * as SETTINGS from 'constants/settings';
@@ -33,7 +30,6 @@ import {
   selectUpdateUrl,
   selectUpgradeDownloadItem,
   selectUpgradeDownloadPath,
-  selectUpgradeFilename,
   selectAutoUpdateDeclined,
   selectRemoteVersion,
   selectUpgradeTimer,
@@ -49,12 +45,6 @@ import analytics, { SHARE_INTERNAL } from 'analytics';
 import { doSignOutCleanup } from 'util/saved-passwords';
 import { doNotificationSocketConnect } from 'redux/actions/websocket';
 import { stringifyServerParam, shouldSetSetting } from 'util/sync-settings';
-
-// @if TARGET='app'
-const { autoUpdater } = remote.require('electron-updater');
-const { download } = remote.require('electron-dl');
-const Fs = remote.require('fs');
-// @endif
 
 const CHECK_UPGRADE_INTERVAL = 10 * 60 * 1000;
 
@@ -100,38 +90,14 @@ export function doStartUpgrade() {
 
 export function doDownloadUpgrade() {
   return (dispatch, getState) => {
-    // @if TARGET='app'
     const state = getState();
-    // Make a new directory within temp directory so the filename is guaranteed to be available
-    const dir = Fs.mkdtempSync(remote.app.getPath('temp') + path.sep);
-    const upgradeFilename = selectUpgradeFilename(state);
-
-    const options = {
-      onProgress: (p) => dispatch(doUpdateDownloadProgress(Math.round(p * 100))),
-      directory: dir,
-    };
-    download(remote.getCurrentWindow(), selectUpdateUrl(state), options).then((downloadItem) => {
-      /**
-       * TODO: get the download path directly from the download object. It should just be
-       * downloadItem.getSavePath(), but the copy on the main process is being garbage collected
-       * too soon.
-       */
-
-      dispatch({
-        type: ACTIONS.UPGRADE_DOWNLOAD_COMPLETED,
-        data: {
-          downloadItem,
-          path: path.join(dir, upgradeFilename),
-        },
-      });
-    });
-
+    const url = selectUpdateUrl(state);
+    ipcRenderer.send('download-upgrade', { url, options: {} });
     dispatch({
       type: ACTIONS.UPGRADE_DOWNLOAD_STARTED,
     });
     dispatch(doHideModal());
     dispatch(doOpenModal(MODALS.DOWNLOADING));
-    // @endif
   };
 }
 
@@ -222,7 +188,7 @@ export function doCheckUpgradeAvailable() {
       const autoUpdateDeclined = selectAutoUpdateDeclined(state);
 
       if (!autoUpdateDeclined && !isDev) {
-        autoUpdater.checkForUpdates();
+        ipcRenderer.send('check-for-updates');
       }
       return;
     }

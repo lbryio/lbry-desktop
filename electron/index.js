@@ -4,7 +4,7 @@
 import '@babel/polyfill';
 import SemVer from 'semver';
 import https from 'https';
-import { app, dialog, ipcMain, session, shell } from 'electron';
+import { app, dialog, ipcMain, session, shell, BrowserWindow } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import Lbry from 'lbry';
 import LbryFirstInstance from './LbryFirstInstance';
@@ -17,6 +17,7 @@ import startSandbox from './startSandbox';
 import installDevtools from './installDevtools';
 import fs from 'fs';
 import path from 'path';
+const { download } = require('electron-dl');
 const filePath = path.join(process.resourcesPath, 'static', 'upgradeDisabled');
 let upgradeDisabled;
 try {
@@ -283,6 +284,20 @@ app.on('before-quit', () => {
   appState.isQuitting = true;
 });
 
+ipcMain.on('download-upgrade', async (event, params) => {
+  const { url, options } = params;
+  const dir = fs.mkdtempSync(app.getPath('temp') + path.sep);
+  options.onProgress = function(p) {
+    rendererWindow.webContents.send('download-progress-update', p);
+  };
+  options.directory = dir;
+  options.onCompleted = function(c) {
+    rendererWindow.webContents.send('download-update-complete', c);
+  };
+  const win = BrowserWindow.getFocusedWindow();
+  await download(win, url, options).catch(e => console.log('e', e));
+});
+
 ipcMain.on('upgrade', (event, installerPath) => {
   app.on('quit', () => {
     console.log('Launching upgrade installer at', installerPath);
@@ -295,6 +310,10 @@ ipcMain.on('upgrade', (event, installerPath) => {
   console.log('The app will close and you will be prompted to install the latest version of LBRY.');
   console.log('After the install is complete, please reopen the app.');
   app.quit();
+});
+
+ipcMain.on('check-for-updates', () => {
+  autoUpdater.checkForUpdates();
 });
 
 autoUpdater.on('update-downloaded', () => {

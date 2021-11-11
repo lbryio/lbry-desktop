@@ -54,6 +54,7 @@ export default appState => {
       webSecurity: !isDev,
       plugins: true,
       nodeIntegration: true,
+      enableRemoteModule: true, // see about removing this
     },
   };
   const lbryProto = 'lbry://';
