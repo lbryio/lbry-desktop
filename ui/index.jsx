@@ -11,7 +11,14 @@ import * as MODALS from 'constants/modal_types';
 import React, { Fragment, useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { doDaemonReady, doAutoUpdate, doOpenModal, doHideModal, doToggle3PAnalytics } from 'redux/actions/app';
+import {
+  doDaemonReady,
+  doAutoUpdate,
+  doOpenModal,
+  doHideModal,
+  doToggle3PAnalytics,
+  doUpdateDownloadProgress,
+} from 'redux/actions/app';
 import { isURIValid } from 'util/lbryURI';
 import { setSearchApi } from 'redux/actions/search';
 import { doSetLanguage, doFetchLanguage, doUpdateIsNightAsync } from 'redux/actions/settings';
@@ -105,6 +112,19 @@ ipcRenderer.on('open-uri-requested', (event, url, newSession) => {
 
   // If nothing redirected before here the url must be messed up
   handleError();
+});
+
+ipcRenderer.on('download-progress-update', (e, p) => {
+  app.store.dispatch(doUpdateDownloadProgress(Math.round(p.percent * 100)));
+});
+
+ipcRenderer.on('download-update-complete', (e, c) => {
+  app.store.dispatch({
+    type: ACTIONS.UPGRADE_DOWNLOAD_COMPLETED,
+    data: {
+      path: c.path,
+    },
+  });
 });
 
 ipcRenderer.on('language-set', (event, language) => {

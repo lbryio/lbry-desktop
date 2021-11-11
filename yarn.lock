@@ -6005,13 +6005,14 @@ electron-devtools-installer@^3.1.1:
     semver "^7.2.1"
     unzip-crx-3 "^0.2.0"
 
-electron-dl@^1.11.0:
-  version "1.14.0"
-  resolved "https://registry.yarnpkg.com/electron-dl/-/electron-dl-1.14.0.tgz#1466f1b945664ca3d784268307c2b935728177bf"
+electron-dl@^3.2.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/electron-dl/-/electron-dl-3.3.0.tgz#4e422e276c627373ba61fcf3f92ffa088988db1a"
+  integrity sha512-Zwaz/OMGPIfBLV2SQH4sTsdDOs/U4y5AOHfremMBXEpjIxX+SiTx845DZAvJJwgb5hfowyWOBLiJhd/emBNLLQ==
   dependencies:
     ext-name "^5.0.0"
-    pupa "^1.0.0"
-    unused-filename "^1.0.0"
+    pupa "^2.0.1"
+    unused-filename "^2.1.0"
 
 electron-is-dev@^0.3.0:
   version "0.3.0"
@@ -6120,10 +6121,10 @@ electron-window-state@^4.1.1:
     jsonfile "^2.2.3"
     mkdirp "^0.5.1"
 
-electron@9.4.0:
-  version "9.4.0"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-9.4.0.tgz#c3c607e3598226ddbaaff8babcdffa8bb2210936"
-  integrity sha512-hOC4q0jkb+UDYZRy8vrZ1IANnq+jznZnbkD62OEo06nU+hIbp2IrwDRBNuSLmQ3cwZMVir0WSIA1qEVK0PkzGA==
+electron@11.5.0:
+  version "11.5.0"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-11.5.0.tgz#f1650543b9d8f2047d3807755bdb120153ed210f"
+  integrity sha512-WjNDd6lGpxyiNjE3LhnFCAk/D9GIj1rU3GSDealVShhkkkPR3Vh4q8ErXGDl1OAO/faomVa10KoFPUN/pLbNxg==
   dependencies:
     "@electron/get" "^1.0.1"
     "@types/node" "^12.0.12"
@@ -13134,10 +13135,6 @@ punycode@^2.1.0, punycode@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
 
-pupa@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/pupa/-/pupa-1.0.0.tgz#9a9568a5af7e657b8462a6e9d5328743560ceff6"
-
 pupa@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/pupa/-/pupa-2.0.1.tgz#dbdc9ff48ffbea4a26a069b6f9f7abb051008726"
@@ -16278,12 +16275,13 @@ untildify@^4.0.0:
   resolved "https://registry.yarnpkg.com/untildify/-/untildify-4.0.0.tgz#2bc947b953652487e4600949fb091e3ae8cd919b"
   integrity sha512-KK8xQ1mkzZeg9inewmFVDNkg3l5LUhoq9kN6iWYB/CC9YMG8HA+c1Q8HwDe6dEX7kErrEVNVBO3fWsVq5iDgtw==
 
-unused-filename@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/unused-filename/-/unused-filename-1.0.0.tgz#d340880f71ae2115ebaa1325bef05cc6684469c6"
+unused-filename@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/unused-filename/-/unused-filename-2.1.0.tgz#33719c4e8d9644f32d2dec1bc8525c6aaeb4ba51"
+  integrity sha512-BMiNwJbuWmqCpAM1FqxCTD7lXF97AvfQC8Kr/DIeA6VtvhJaMDupZ82+inbjl5yVP44PcxOuCSxye1QMS0wZyg==
   dependencies:
     modify-filename "^1.1.0"
-    path-exists "^3.0.0"
+    path-exists "^4.0.0"
 
 unzip-crx-3@^0.2.0:
   version "0.2.0"
