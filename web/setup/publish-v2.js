@@ -56,25 +56,36 @@ export function makeResumableUploadRequest(
         window.store.dispatch(doUpdateUploadProgress({ params, progress: percentage }));
       },
       onSuccess: () => {
-        // Notify lbrynet server
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', `${uploader.url}/notify`);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.setRequestHeader('Tus-Resumable', '1.0.0');
-        xhr.setRequestHeader(X_LBRY_AUTH_TOKEN, token);
-        xhr.responseType = 'json';
-        xhr.onload = () => {
-          window.store.dispatch(doUpdateUploadRemove(params));
-          resolve(xhr);
-        };
-        xhr.onerror = () => {
-          reject(new Error(__('There was a problem with your upload. Please try again.')));
-        };
-        xhr.onabort = () => {
-          window.store.dispatch(doUpdateUploadRemove(params));
-        };
+        let retries = 2;
 
-        xhr.send(jsonPayload);
+        function makeNotifyRequest() {
+          const xhr = new XMLHttpRequest();
+          xhr.open('POST', `${uploader.url}/notify`);
+          xhr.setRequestHeader('Content-Type', 'application/json');
+          xhr.setRequestHeader('Tus-Resumable', '1.0.0');
+          xhr.setRequestHeader(X_LBRY_AUTH_TOKEN, token);
+          xhr.responseType = 'json';
+          xhr.onload = () => {
+            window.store.dispatch(doUpdateUploadRemove(params));
+            resolve(xhr);
+          };
+          xhr.onerror = () => {
+            if (--retries > 0) {
+              // Auto-retry after 10s delay.
+              setTimeout(() => makeNotifyRequest(), 10000);
+            } else {
+              window.store.dispatch(doUpdateUploadProgress({ params, status: 'error' }));
+              reject(new Error(__('There was a problem in the processing. Please retry.')));
+            }
+          };
+          xhr.onabort = () => {
+            window.store.dispatch(doUpdateUploadRemove(params));
+          };
+
+          xhr.send(jsonPayload);
+        }
+
+        makeNotifyRequest();
       },
     });
 
