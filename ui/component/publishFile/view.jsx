@@ -106,10 +106,10 @@ function PublishFile(props: Props) {
   const [currentFileType, setCurrentFileType] = useState(null);
   const [optimizeAvail, setOptimizeAvail] = useState(false);
   const [userOptimize, setUserOptimize] = usePersistedState('publish-file-user-optimize', false);
-  const UPLOAD_SIZE_MESSAGE = __(
-    '%SITE_NAME% uploads are limited to %limit% GB. Download the app for unrestricted publishing.',
-    { SITE_NAME, limit: TV_PUBLISH_SIZE_LIMIT_GB_STR }
-  );
+  const UPLOAD_SIZE_MESSAGE = __('%SITE_NAME% uploads are limited to %limit% GB.', {
+    SITE_NAME,
+    limit: TV_PUBLISH_SIZE_LIMIT_GB_STR,
+  });
 
   const fileSelectorModes = [
     { label: __('Upload'), actionName: SOURCE_UPLOAD, icon: ICONS.PUBLISH },

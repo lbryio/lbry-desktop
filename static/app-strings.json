@@ -1109,7 +1109,7 @@
   "minute": "minute",
   "hours": "hours",
   "hour": "hour",
-  "%SITE_NAME% uploads are limited to %limit% GB. Download the app for unrestricted publishing.": "%SITE_NAME% uploads are limited to %limit% GB. Download the app for unrestricted publishing.",
+  "%SITE_NAME% uploads are limited to %limit% GB.": "%SITE_NAME% uploads are limited to %limit% GB.",
   "Connected": "Connected",
   "Not connected": "Not connected",
   "this link": "this link",
