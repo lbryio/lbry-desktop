@@ -56,7 +56,7 @@ export function makeResumableUploadRequest(
         window.store.dispatch(doUpdateUploadProgress({ params, progress: percentage }));
       },
       onSuccess: () => {
-        let retries = 2;
+        let retries = 0;
 
         function makeNotifyRequest() {
           const xhr = new XMLHttpRequest();
@@ -75,7 +75,7 @@ export function makeResumableUploadRequest(
               setTimeout(() => makeNotifyRequest(), 10000);
             } else {
               window.store.dispatch(doUpdateUploadProgress({ params, status: 'error' }));
-              reject(new Error(__('There was a problem in the processing. Please retry.')));
+              reject(new Error(`There was a problem in the processing. Please retry. (${xhr.status})`));
             }
           };
           xhr.onabort = () => {
