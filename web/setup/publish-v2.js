@@ -8,6 +8,20 @@ const RESUMABLE_ENDPOINT = LBRY_WEB_PUBLISH_API_V2;
 const RESUMABLE_ENDPOINT_METHOD = 'publish';
 const UPLOAD_CHUNK_SIZE_BYTE = 100000000;
 
+const STATUS_CONFLICT = 409;
+const STATUS_LOCKED = 423;
+
+/**
+ * Checks whether a given status is in the range of the expected category.
+ *
+ * @param status
+ * @param category
+ * @returns {boolean}
+ */
+function inStatusCategory(status, category) {
+  return status >= category && status < category + 100;
+}
+
 export function makeResumableUploadRequest(
   token: string,
   params: FileUploadSdkParams,
@@ -46,9 +60,8 @@ export function makeResumableUploadRequest(
       },
       onShouldRetry: (err, retryAttempt, options) => {
         window.store.dispatch(doUpdateUploadProgress({ params, status: 'retry' }));
-        const FORBIDDEN_ERROR = 403;
         const status = err.originalResponse ? err.originalResponse.getStatus() : 0;
-        return status !== FORBIDDEN_ERROR;
+        return !inStatusCategory(status, 400) || status === STATUS_CONFLICT || status === STATUS_LOCKED;
       },
       onError: (error) => {
         window.store.dispatch(doUpdateUploadProgress({ params, status: 'error' }));
