@@ -164,6 +164,12 @@ export const publishReducer = handleActions(
       if (progress) {
         currentUploads[key].progress = progress;
         delete currentUploads[key].status;
+
+        if (currentUploads[key].uploader.url && !currentUploads[key].params.uploadUrl) {
+          // TUS has finally obtained an upload url from the server. Stash that to check later when resuming.
+          // Ignoring immutable-update requirement (probably doesn't matter to the GUI).
+          currentUploads[key].params.uploadUrl = currentUploads[key].uploader.url;
+        }
       } else if (status) {
         currentUploads[key].status = status;
         if (status === 'error') {

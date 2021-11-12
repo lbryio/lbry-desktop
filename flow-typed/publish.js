@@ -62,6 +62,8 @@ declare type FileUploadSdkParams = {
   remote_url?: string,
   thumbnail_url?: string,
   title?: string,
+  // Temporary values
+  uploadUrl?: string,
 };
 
 declare type FileUploadItem = {

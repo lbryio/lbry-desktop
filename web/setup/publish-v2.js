@@ -23,10 +23,13 @@ export function makeResumableUploadRequest(
       reject(new Error('Publish: v2 does not support remote_url'));
     }
 
+    const payloadParams = Object.assign({}, params);
+    delete payloadParams.uploadUrl; // cleanup
+
     const jsonPayload = JSON.stringify({
       jsonrpc: '2.0',
       method: RESUMABLE_ENDPOINT_METHOD,
-      params,
+      params: payloadParams,
       id: new Date().getTime(),
     });
 
@@ -92,8 +95,9 @@ export function makeResumableUploadRequest(
     uploader
       .findPreviousUploads()
       .then((previousUploads) => {
-        if (previousUploads.length > 0) {
-          uploader.resumeFromPreviousUpload(previousUploads[0]);
+        const index = previousUploads.findIndex((prev) => prev.uploadUrl === params.uploadUrl);
+        if (index !== -1) {
+          uploader.resumeFromPreviousUpload(previousUploads[index]);
         }
 
         if (!isPreview) {
