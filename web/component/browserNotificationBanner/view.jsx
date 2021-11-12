@@ -8,10 +8,19 @@ import Button from 'component/button';
 import usePersistedState from 'effects/use-persisted-state';
 
 export const BrowserNotificationBanner = () => {
-  const { pushSupported, pushEnabled, pushPermission, pushToggle, pushErrorModal } = useBrowserNotifications();
+  const {
+    pushInitialized,
+    pushSupported,
+    pushEnabled,
+    pushPermission,
+    pushToggle,
+    pushErrorModal,
+  } = useBrowserNotifications();
   const [hasAcknowledgedPush, setHasAcknowledgedPush] = usePersistedState('push-nag', false);
 
-  if (!pushSupported || pushEnabled || pushPermission === 'denied' || hasAcknowledgedPush) return null;
+  if (!pushInitialized || !pushSupported || pushEnabled || pushPermission === 'denied' || hasAcknowledgedPush) {
+    return null;
+  }
 
   const handleClose = () => setHasAcknowledgedPush(true);
 

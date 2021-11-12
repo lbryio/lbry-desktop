@@ -13,13 +13,17 @@ export default () => {
   const [pushEnabled, setPushEnabled] = useState(false);
   const [pushSupported, setPushSupported] = useState(true);
   const [encounteredError, setEncounteredError] = useState(false);
+  const [pushInitialized, setPushInitialized] = useState(false);
 
   const [user] = useState(selectUser(store.getState()));
 
   useEffect(() => {
     setPushSupported(pushNotifications.supported);
     if (pushNotifications.supported) {
-      pushNotifications.subscribed(user.id).then((isSubscribed: boolean) => setSubscribed(isSubscribed));
+      pushNotifications.subscribed(user.id).then((isSubscribed: boolean) => {
+        setSubscribed(isSubscribed);
+        setPushInitialized(true);
+      });
     }
   }, [user]);
 
@@ -59,6 +63,7 @@ export default () => {
   };
 
   return {
+    pushInitialized,
     pushSupported,
     pushEnabled,
     pushPermission,
