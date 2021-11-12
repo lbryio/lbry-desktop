@@ -1,12 +1,15 @@
 import { SUGGESTED_FEATURED, SUGGESTED_TOP_SUBSCRIBED } from 'constants/subscriptions';
 import { createSelector } from 'reselect';
+import { createCachedSelector } from 're-reselect';
 import { parseURI, isURIEqual } from 'util/lbryURI';
 import {
   selectAllFetchingChannelClaims,
   makeSelectChannelForClaimUri,
   makeSelectClaimForUri,
+  selectClaimForUri,
 } from 'redux/selectors/claims';
 import { swapKeyAndValue } from 'util/swap-json';
+import { getChannelFromClaim } from 'util/claim';
 
 // Returns the entire subscriptions state
 const selectState = (state) => state.subscriptions || {};
@@ -105,34 +108,18 @@ export const selectSubscriptionsBeingFetched = createSelector(
 export const makeSelectChannelInSubscriptions = (uri) =>
   createSelector(selectSubscriptions, (subscriptions) => subscriptions.some((sub) => sub.uri === uri));
 
-export const makeSelectIsSubscribed = (uri) =>
-  createSelector(
-    selectSubscriptions,
-    makeSelectChannelForClaimUri(uri, true),
-    makeSelectClaimForUri(uri),
-    (subscriptions, channelUri, claim) => {
-      if (channelUri) {
-        return subscriptions.some((sub) => isURIEqual(sub.uri, channelUri));
-      }
-
-      // If we couldn't get a channel uri from the claim uri, the uri passed in might be a channel already
-      let isChannel;
-      try {
-        ({ isChannel } = parseURI(uri));
-      } catch (e) {}
-
-      if (isChannel && claim) {
-        const uri = claim.permanent_url;
-        return subscriptions.some((sub) => isURIEqual(sub.uri, uri));
-      }
-
-      if (isChannel && !claim) {
-        return subscriptions.some((sub) => isURIEqual(sub.uri, uri));
-      }
-
-      return false;
+export const selectIsSubscribedForUri = createCachedSelector(
+  selectClaimForUri,
+  selectSubscriptions,
+  (claim, subscriptions) => {
+    const channelClaim = getChannelFromClaim(claim);
+    if (channelClaim) {
+      const uri = channelClaim.permanent_url;
+      return subscriptions.some((sub) => isURIEqual(sub.uri, uri));
     }
-  );
+    return false;
+  }
+)((state, uri) => String(uri));
 
 export const makeSelectNotificationsDisabled = (uri) =>
   createSelector(

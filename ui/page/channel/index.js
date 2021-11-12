@@ -11,7 +11,7 @@ import {
 import { selectMyUnpublishedCollections } from 'redux/selectors/collections';
 import { selectBlackListedOutpoints, doFetchSubCount, selectSubCountForUri } from 'lbryinc'; // ban state
 import { selectYoutubeChannels } from 'redux/selectors/user';
-import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
+import { selectIsSubscribedForUri } from 'redux/selectors/subscriptions';
 import { selectModerationBlockList } from 'redux/selectors/comments';
 import { selectMutedChannels } from 'redux/selectors/blocked';
 import { doOpenModal } from 'redux/actions/app';
@@ -27,7 +27,7 @@ const select = (state, props) => {
     channelIsMine: selectClaimIsMine(state, claim),
     page: selectCurrentChannelPage(state),
     claim,
-    isSubscribed: makeSelectIsSubscribed(props.uri, true)(state),
+    isSubscribed: selectIsSubscribedForUri(state, props.uri),
     blackListedOutpoints: selectBlackListedOutpoints(state),
     subCount: selectSubCountForUri(state, props.uri),
     pending: makeSelectClaimIsPending(props.uri)(state),

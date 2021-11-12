@@ -23,7 +23,7 @@ import { doFileGet } from 'redux/actions/file';
 import { selectBanStateForUri } from 'lbryinc';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import { makeSelectHasVisitedUri } from 'redux/selectors/content';
-import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
+import { selectIsSubscribedForUri } from 'redux/selectors/subscriptions';
 import ClaimPreview from './view';
 import formatMediaDuration from 'util/formatMediaDuration';
 
@@ -46,7 +46,7 @@ const select = (state, props) => {
     nsfw: props.uri && makeSelectClaimIsNsfw(props.uri)(state),
     banState: selectBanStateForUri(state, props.uri),
     hasVisitedUri: props.uri && makeSelectHasVisitedUri(props.uri)(state),
-    isSubscribed: props.uri && makeSelectIsSubscribed(props.uri, true)(state),
+    isSubscribed: props.uri && selectIsSubscribedForUri(state, props.uri),
     streamingUrl: props.uri && makeSelectStreamingUrlForUri(props.uri)(state),
     wasPurchased: props.uri && makeSelectClaimWasPurchased(props.uri)(state),
     isCollectionMine: makeSelectCollectionIsMine(props.collectionId)(state),

@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { doChannelSubscribe, doChannelUnsubscribe } from 'redux/actions/subscriptions';
 import {
-  makeSelectIsSubscribed,
+  selectIsSubscribedForUri,
   selectFirstRunCompleted,
   makeSelectNotificationsDisabled,
 } from 'redux/selectors/subscriptions';
@@ -11,7 +11,7 @@ import { doToast } from 'redux/actions/notifications';
 import SubscribeButton from './view';
 
 const select = (state, props) => ({
-  isSubscribed: makeSelectIsSubscribed(props.uri, true)(state),
+  isSubscribed: selectIsSubscribedForUri(state, props.uri),
   firstRunCompleted: selectFirstRunCompleted(state),
   permanentUrl: makeSelectPermanentUrlForUri(props.uri)(state),
   notificationsDisabled: makeSelectNotificationsDisabled(props.uri)(state),
