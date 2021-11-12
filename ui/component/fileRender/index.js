@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { makeSelectDownloadPathForUri, makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
-import { makeSelectClaimForUri, makeSelectThumbnailForUri, makeSelectContentTypeForUri } from 'redux/selectors/claims';
+import { makeSelectClaimForUri, selectThumbnailForUri, makeSelectContentTypeForUri } from 'redux/selectors/claims';
 import * as SETTINGS from 'constants/settings';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { makeSelectFileRenderModeForUri, makeSelectFileExtensionForUri } from 'redux/selectors/content';
@@ -11,7 +11,7 @@ const select = (state, props) => {
   return {
     currentTheme: makeSelectClientSetting(SETTINGS.THEME)(state),
     claim: makeSelectClaimForUri(props.uri)(state),
-    thumbnail: makeSelectThumbnailForUri(props.uri)(state),
+    thumbnail: selectThumbnailForUri(state, props.uri),
     contentType: makeSelectContentTypeForUri(props.uri)(state),
     downloadPath: makeSelectDownloadPathForUri(props.uri)(state),
     fileExtension: makeSelectFileExtensionForUri(props.uri)(state),

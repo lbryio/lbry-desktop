@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectThumbnailForUri, makeSelectClaimForUri } from 'redux/selectors/claims';
+import { selectThumbnailForUri, makeSelectClaimForUri } from 'redux/selectors/claims';
 import { doResolveUri } from 'redux/actions/claims';
 import * as SETTINGS from 'constants/settings';
 import { doFetchCostInfoForUri, makeSelectCostInfoForUri } from 'lbryinc';
@@ -11,7 +11,7 @@ import { makeSelectFileRenderModeForUri } from 'redux/selectors/content';
 import ChannelThumbnail from './view';
 
 const select = (state, props) => ({
-  thumbnail: makeSelectThumbnailForUri(props.uri)(state),
+  thumbnail: selectThumbnailForUri(state, props.uri),
   claim: makeSelectClaimForUri(props.uri)(state),
   floatingPlayerEnabled: makeSelectClientSetting(SETTINGS.FLOATING_PLAYER)(state),
   costInfo: makeSelectCostInfoForUri(props.uri)(state),

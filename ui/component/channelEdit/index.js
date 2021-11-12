@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import {
   makeSelectTitleForUri,
-  makeSelectThumbnailForUri,
+  selectThumbnailForUri,
   makeSelectCoverForUri,
   makeSelectMetadataItemForUri,
   makeSelectAmountForUri,
@@ -22,7 +22,7 @@ import ChannelForm from './view';
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
   title: makeSelectTitleForUri(props.uri)(state),
-  thumbnailUrl: makeSelectThumbnailForUri(props.uri)(state),
+  thumbnailUrl: selectThumbnailForUri(state, props.uri),
   coverUrl: makeSelectCoverForUri(props.uri)(state),
   description: makeSelectMetadataItemForUri(props.uri, 'description')(state),
   website: makeSelectMetadataItemForUri(props.uri, 'website_url')(state),
