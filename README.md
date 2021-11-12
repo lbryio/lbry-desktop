@@ -79,7 +79,7 @@ nano .env
 1. add `CUSTOM_HOMEPAGE=true` to the '.env' file
 2. copy `/custom/homepage.example.js` to `/custom/homepage.js` and make desired changes to `homepage.js`
 
-- If you want up to two custom sidebar links
+- If you want up to two custom sidebar links:
 
 ```
 PINNED_URI_1=@someurl#2/someclaim#4
