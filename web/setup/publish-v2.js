@@ -1,5 +1,6 @@
 // @flow
 import * as tus from 'tus-js-client';
+import analytics from '../../ui/analytics';
 import { X_LBRY_AUTH_TOKEN } from '../../ui/constants/token';
 import { doUpdateUploadAdd, doUpdateUploadProgress, doUpdateUploadRemove } from '../../ui/redux/actions/publish';
 import { LBRY_WEB_PUBLISH_API_V2 } from 'config';
@@ -88,6 +89,7 @@ export function makeResumableUploadRequest(
           xhr.onerror = () => {
             if (retries > 0 && xhr.status === 0) {
               --retries;
+              analytics.error('notify: first attempt failed (status=0). Retrying after 10s...');
               setTimeout(() => makeNotifyRequest(), 10000); // Auto-retry after 10s delay.
             } else {
               window.store.dispatch(doUpdateUploadProgress({ params, status: 'error' }));
