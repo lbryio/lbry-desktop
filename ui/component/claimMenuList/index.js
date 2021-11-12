@@ -26,7 +26,7 @@ import {
 } from 'redux/selectors/comments';
 import { doToast } from 'redux/actions/notifications';
 import { doChannelSubscribe, doChannelUnsubscribe } from 'redux/actions/subscriptions';
-import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
+import { selectIsSubscribedForUri } from 'redux/selectors/subscriptions';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectListShuffle } from 'redux/selectors/content';
 import { doToggleLoopList, doToggleShuffleList } from 'redux/actions/content';
@@ -63,7 +63,7 @@ const select = (state, props) => {
     channelIsMuted: makeSelectChannelIsMuted(contentChannelUri)(state),
     channelIsBlocked: makeSelectChannelIsBlocked(contentChannelUri)(state),
     fileInfo: makeSelectFileInfoForUri(contentPermanentUri)(state),
-    isSubscribed: makeSelectIsSubscribed(contentChannelUri, true)(state),
+    isSubscribed: selectIsSubscribedForUri(state, contentChannelUri),
     channelIsAdminBlocked: makeSelectChannelIsAdminBlocked(props.uri)(state),
     isAdmin: selectHasAdminChannel(state),
     claimInCollection: makeSelectCollectionForIdHasClaimUrl(collectionId, contentPermanentUri)(state),
