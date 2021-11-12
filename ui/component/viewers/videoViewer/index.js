@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimForUri, makeSelectThumbnailForUri } from 'redux/selectors/claims';
+import { makeSelectClaimForUri, selectThumbnailForUri } from 'redux/selectors/claims';
 import {
   makeSelectNextUrlForCollectionAndUrl,
   makeSelectPreviousUrlForCollectionAndUrl,
@@ -56,7 +56,7 @@ const select = (state, props) => {
     volume: selectVolume(state),
     muted: selectMute(state),
     videoPlaybackRate: makeSelectClientSetting(SETTINGS.VIDEO_PLAYBACK_RATE)(state),
-    thumbnail: makeSelectThumbnailForUri(uri)(state),
+    thumbnail: selectThumbnailForUri(state, uri),
     claim: makeSelectClaimForUri(uri)(state),
     homepageData: selectHomepageData(state),
     shareTelemetry: selectDaemonSettings(state).share_usage_data,

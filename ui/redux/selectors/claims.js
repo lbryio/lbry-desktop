@@ -388,11 +388,14 @@ export const makeSelectContentTypeForUri = (uri: string) =>
     return source ? source.media_type : undefined;
   });
 
-export const makeSelectThumbnailForUri = (uri: string) =>
-  createSelector(makeSelectClaimForUri(uri), (claim) => {
-    const thumbnail = claim && claim.value && claim.value.thumbnail;
-    return thumbnail && thumbnail.url ? thumbnail.url.trim().replace(/^http:\/\//i, 'https://') : undefined;
-  });
+export const getThumbnailFromClaim = (claim: Claim) => {
+  const thumbnail = claim && claim.value && claim.value.thumbnail;
+  return thumbnail && thumbnail.url ? thumbnail.url.trim().replace(/^http:\/\//i, 'https://') : undefined;
+};
+
+export const selectThumbnailForUri = createCachedSelector(selectClaimForUri, (claim) => {
+  return getThumbnailFromClaim(claim);
+})((state, uri) => String(uri));
 
 export const makeSelectCoverForUri = (uri: string) =>
   createSelector(makeSelectClaimForUri(uri), (claim) => {

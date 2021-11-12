@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import {
   selectClaimIsMine,
   makeSelectTitleForUri,
-  makeSelectThumbnailForUri,
+  getThumbnailFromClaim,
   makeSelectCoverForUri,
   selectCurrentChannelPage,
   selectClaimForUri,
@@ -22,7 +22,7 @@ const select = (state, props) => {
 
   return {
     title: makeSelectTitleForUri(props.uri)(state),
-    thumbnail: makeSelectThumbnailForUri(props.uri)(state),
+    thumbnail: getThumbnailFromClaim(claim),
     cover: makeSelectCoverForUri(props.uri)(state),
     channelIsMine: selectClaimIsMine(state, claim),
     page: selectCurrentChannelPage(state),

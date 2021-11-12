@@ -2,7 +2,8 @@ import { connect } from 'react-redux';
 import {
   selectTotalStakedAmountForChannelUri,
   makeSelectClaimForUri,
-  makeSelectThumbnailForUri,
+  selectThumbnailForUri,
+  selectHasChannels,
   selectMyChannelClaims,
 } from 'redux/selectors/claims';
 import { doCommentUpdate, doCommentList } from 'redux/actions/comments';
@@ -25,11 +26,12 @@ const select = (state, props) => {
 
   return {
     claim: makeSelectClaimForUri(props.uri)(state),
-    thumbnail: props.authorUri && makeSelectThumbnailForUri(props.authorUri)(state),
+    thumbnail: props.authorUri && selectThumbnailForUri(state, props.authorUri),
     channelIsBlocked: props.authorUri && makeSelectChannelIsMuted(props.authorUri)(state),
     commentingEnabled: true,
     othersReacts: selectOthersReactsForComment(state, reactionKey),
     activeChannelClaim,
+    hasChannels: selectHasChannels(state), //
     myChannels: selectMyChannelClaims(state),
     playingUri: selectPlayingUri(state),
     stakedLevel: selectTotalStakedAmountForChannelUri(state, props.authorUri),

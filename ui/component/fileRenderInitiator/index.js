@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { doPlayUri, doSetPlayingUri, doSetPrimaryUri } from 'redux/actions/content';
-import { makeSelectThumbnailForUri, makeSelectClaimForUri, makeSelectClaimWasPurchased } from 'redux/selectors/claims';
+import { selectThumbnailForUri, makeSelectClaimForUri, makeSelectClaimWasPurchased } from 'redux/selectors/claims';
 import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
 import * as SETTINGS from 'constants/settings';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
@@ -22,7 +22,7 @@ const select = (state, props) => {
   const collectionId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID);
 
   return {
-    claimThumbnail: makeSelectThumbnailForUri(props.uri)(state),
+    claimThumbnail: selectThumbnailForUri(state, props.uri),
     fileInfo: makeSelectFileInfoForUri(props.uri)(state),
     obscurePreview: makeSelectShouldObscurePreview(props.uri)(state),
     isPlaying: makeSelectIsPlaying(props.uri)(state),
