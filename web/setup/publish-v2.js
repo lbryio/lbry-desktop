@@ -56,7 +56,7 @@ export function makeResumableUploadRequest(
         window.store.dispatch(doUpdateUploadProgress({ params, progress: percentage }));
       },
       onSuccess: () => {
-        let retries = 0;
+        let retries = 1;
 
         function makeNotifyRequest() {
           const xhr = new XMLHttpRequest();
@@ -70,9 +70,9 @@ export function makeResumableUploadRequest(
             resolve(xhr);
           };
           xhr.onerror = () => {
-            if (--retries > 0) {
-              // Auto-retry after 10s delay.
-              setTimeout(() => makeNotifyRequest(), 10000);
+            if (retries > 0 && xhr.status === 0) {
+              --retries;
+              setTimeout(() => makeNotifyRequest(), 10000); // Auto-retry after 10s delay.
             } else {
               window.store.dispatch(doUpdateUploadProgress({ params, status: 'error' }));
               reject(new Error(`There was a problem in the processing. Please retry. (${xhr.status})`));
