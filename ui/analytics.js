@@ -277,7 +277,6 @@ const analytics: Analytics = {
     videoType = passedPlayer.currentSource().type;
     videoPlayer = passedPlayer;
     bitrateAsBitsPerSecond = videoBitrate;
-
     sendPromMetric('time_to_start', timeToStartVideo);
   },
   error: (message) => {
@@ -481,7 +480,7 @@ function sendPromMetric(name: string, value?: number) {
     let url = new URL(SDK_API_PATH + '/metric/ui');
     const params = { name: name, value: value ? value.toString() : '' };
     url.search = new URLSearchParams(params).toString();
-    return fetch(url, { method: 'post' });
+    return fetch(url, { method: 'post' }).catch(function(error) {});
   }
 }
 
