@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { shell } from 'electron';
 import Button from 'component/button';
 import * as ICONS from 'constants/icons';
-import { buildURI } from 'lbry-redux';
+import { buildURI } from 'util/lbryURI';
 import { formatBytes } from 'util/format-bytes';
 import { areEqual, removeItem } from 'util/array';
 import loadingIcon from '../../../static/img/white_loading.gif';

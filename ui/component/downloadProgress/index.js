@@ -1,7 +1,8 @@
 import { connect } from 'react-redux';
 import DownloadProgress from './view';
 import { doSetPlayingUri, doStopDownload, doContinueDownloading, doPurchaseUriWrapper } from 'redux/actions/content';
-import { selectFileInfosByOutpoint, SETTINGS } from 'lbry-redux';
+import * as SETTINGS from 'constants/settings';
+import { selectFileInfosByOutpoint } from 'redux/selectors/file_info';
 import { selectPrimaryUri, selectPlayingUri } from 'redux/selectors/content';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 
