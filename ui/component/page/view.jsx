@@ -136,6 +136,7 @@ function Page(props: Props) {
         <StatusBar />
         {/* @endif */}
       </div>
+      <DownloadProgress />
     </Fragment>
   );
 }
