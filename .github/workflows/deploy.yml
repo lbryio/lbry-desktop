@@ -24,7 +24,7 @@ jobs:
         os:
           - ubuntu-latest
           - macos-latest
-          - windows-latest
+#          - windows-latest
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -103,14 +103,13 @@ jobs:
         with:
           name: Windows
           path: ./dist/electron/*.*
-      - name: Upload to s3
-        uses: jakejarvis/s3-sync-action@master
+      - uses: jakejarvis/s3-sync-action@master
         with:
-          args: --acl public-read --follow-symlinks
+          args: --acl public-read --follow-symlinks --exclude '*' --include '*.deb' --include '*.AppImage' --include '*.dmg'
         env:
           AWS_S3_BUCKET: ${{ secrets.ARTIFACTS_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.ARTIFACTS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.ARTIFACTS_SECRET }}
-          AWS_REGION: 'us-west-1'   # optional: defaults to us-east-1
-          SOURCE_DIR: './dist/electron'      # optional: defaults to entire repository
-          DEST_DIR: '/app/release/test' # ${{github.ref_name}}'
+          AWS_REGION: 'us-east-1'
+          SOURCE_DIR: 'dist/electron'
+          DEST_DIR: 'app/release'
