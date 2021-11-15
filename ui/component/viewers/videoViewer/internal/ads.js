@@ -51,7 +51,7 @@ const hitsAtFiftyPercentChance = hitsFiftyPercent();
  * @param allowPreRoll
  * @param player
  */
-function runAds(internalFeatureEnabled, allowPreRoll, player) {
+function runAds(internalFeatureEnabled, allowPreRoll, player, embedded) {
   // current timestamp for vpaid
   const timestamp = new Date().toISOString();
 
@@ -83,7 +83,7 @@ function runAds(internalFeatureEnabled, allowPreRoll, player) {
   // always have ads on if internal feature is on,
 // otherwise if not authed, roll for 20% to see an ad
 // allowPreRoll currently means unauthenticated (don't show to logged in users)
-  const shouldShowAnAd = internalFeatureEnabled || (allowPreRoll && hitsAtFiftyPercentChance);
+  const shouldShowAnAd = internalFeatureEnabled || (!embedded && allowPreRoll && hitsAtFiftyPercentChance);
 
   if (shouldShowAnAd && browserIsChrome && !IS_MOBILE) {
     // fire up ima integration via module

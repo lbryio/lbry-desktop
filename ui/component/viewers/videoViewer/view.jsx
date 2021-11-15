@@ -470,7 +470,7 @@ function VideoViewer(props: Props) {
         autoplaySetting={autoplayNext}
         claimId={claimId}
         userId={userId}
-        allowPreRoll={!authenticated} // used to not include embeds, removed for now
+        allowPreRoll={!authenticated} // TODO: pull this into ads functionality so it's self contained
         internalFeatureEnabled={internalFeature}
         shareTelemetry={shareTelemetry}
         replay={replay}
