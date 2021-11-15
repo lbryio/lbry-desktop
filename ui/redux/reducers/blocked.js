@@ -36,7 +36,7 @@ export default handleActions(
 
       return {
         ...state,
-        blockedChannels: sanitizedBlocked && sanitizedBlocked.length ? sanitizedBlocked : state.blockedChannels,
+        blockedChannels: sanitizedBlocked || state.blockedChannels,
       };
     },
   },
