@@ -55,10 +55,7 @@ export default function LivestreamPage(props: Props) {
   }, [livestreamChannelId, isLive]);
 
   React.useEffect(() => {
-    if (!hasLivestreamClaim || !livestreamChannelId) {
-      setIsLive(false);
-      return;
-    }
+    if (!hasLivestreamClaim || !livestreamChannelId) return;
     return watchLivestreamStatus(livestreamChannelId, (state) => setIsLive(state));
   }, [livestreamChannelId, setIsLive, hasLivestreamClaim]);
 
