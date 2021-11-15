@@ -9,7 +9,7 @@ import * as MODALS from 'constants/modal_types';
 import * as SETTINGS from 'constants/settings';
 import * as DAEMON_SETTINGS from 'constants/daemon_settings';
 import * as SHARED_PREFERENCES from 'constants/shared_preferences';
-import { DOMAIN, SIMPLE_SITE } from 'config';
+import { DOMAIN } from 'config';
 import Lbry from 'lbry';
 import { doFetchChannelListMine, doFetchCollectionListMine, doCheckPendingClaims } from 'redux/actions/claims';
 import { selectClaimForUri, selectClaimIsMineForUri, selectMyChannelClaims } from 'redux/selectors/claims';
@@ -543,20 +543,12 @@ export function doSignIn() {
       pushNotifications.validate(user.id);
     }
 
-    const notificationsEnabled = SIMPLE_SITE || user.experimental_ui;
-
-    dispatch(doNotificationSocketConnect(notificationsEnabled));
-
-    if (notificationsEnabled) {
-      dispatch(doNotificationList());
-    }
+    dispatch(doNotificationSocketConnect(true));
+    dispatch(doNotificationList());
     dispatch(doCheckPendingClaims());
-
-    // @if TARGET='web'
     dispatch(doBalanceSubscribe());
     dispatch(doFetchChannelListMine());
     dispatch(doFetchCollectionListMine());
-    // @endif
   };
 }
 
