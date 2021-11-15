@@ -44,7 +44,6 @@ type Props = {
   uri: string,
   autoplayNext: boolean,
   autoplayIfEmbedded: boolean,
-  desktopPlayStartTime?: number,
   doAnalyticsView: (string, number) => Promise<any>,
   doAnalyticsBuffer: (string, any) => void,
   claimRewards: () => void,
@@ -92,7 +91,6 @@ function VideoViewer(props: Props) {
     claimRewards,
     savePosition,
     clearPosition,
-    desktopPlayStartTime,
     toggleVideoTheaterMode,
     toggleAutoplayNext,
     setVideoPlaybackRate,
@@ -170,14 +168,6 @@ function VideoViewer(props: Props) {
   function doTrackingFirstPlay(e: Event, data: any) {
     // how long until the video starts
     let timeToStartVideo = data.secondsToLoad;
-
-    // TODO: what's happening here briefly?
-    if (!IS_WEB) {
-      if (desktopPlayStartTime !== undefined) {
-        const differenceToAdd = Date.now() - desktopPlayStartTime;
-        timeToStartVideo += differenceToAdd;
-      }
-    }
 
     analytics.playerVideoStartedEvent(embedded);
 
@@ -323,9 +313,6 @@ function VideoViewer(props: Props) {
   }
 
   const playerReadyDependencyList = [uri, adUrl, embedded, autoplayIfEmbedded];
-  if (!IS_WEB) {
-    playerReadyDependencyList.push(desktopPlayStartTime);
-  }
 
   const doPlayNext = () => {
     setPlayNextUrl(true);

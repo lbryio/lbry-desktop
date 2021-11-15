@@ -76,7 +76,6 @@ export default function FileRenderFloating(props: Props) {
   const mainFilePlaying = !isFloating && primaryUri && isURIEqual(uri, primaryUri);
 
   const [fileViewerRect, setFileViewerRect] = useState();
-  const [desktopPlayStartTime, setDesktopPlayStartTime] = useState();
   const [wasDragging, setWasDragging] = useState(false);
   const [doNavigate, setDoNavigate] = useState(false);
   const [playNextUrl, setPlayNextUrl] = useState(true);
@@ -235,18 +234,6 @@ export default function FileRenderFloating(props: Props) {
   }, [handleResize]);
 
   useEffect(() => {
-    // @if TARGET='app'
-    setDesktopPlayStartTime(Date.now());
-    // @endif
-
-    return () => {
-      // @if TARGET='app'
-      setDesktopPlayStartTime(undefined);
-      // @endif
-    };
-  }, [uri]);
-
-  useEffect(() => {
     if (isFloating) {
       doFetchRecommendedContent(uri, mature);
     }
@@ -366,13 +353,7 @@ export default function FileRenderFloating(props: Props) {
           )}
 
           {isReadyToPlay ? (
-            <FileRender
-              className="draggable"
-              uri={uri}
-              // @if TARGET='app'
-              desktopPlayStartTime={desktopPlayStartTime}
-              // @endif
-            />
+            <FileRender className="draggable" uri={uri} />
           ) : (
             <>
               {collectionId && !canViewFile ? (
