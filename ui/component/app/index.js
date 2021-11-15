@@ -22,15 +22,9 @@ import {
   selectIsReloadRequired,
 } from 'redux/selectors/app';
 import { selectUploadCount } from 'redux/selectors/publish';
-import { doGetWalletSyncPreference, doSetLanguage } from 'redux/actions/settings';
+import { doSetLanguage } from 'redux/actions/settings';
 import { doSyncLoop } from 'redux/actions/sync';
-import {
-  doDownloadUpgradeRequested,
-  doSignIn,
-  doGetAndPopulatePreferences,
-  doSetActiveChannel,
-  doSetIncognito,
-} from 'redux/actions/app';
+import { doDownloadUpgradeRequested, doSignIn, doSetActiveChannel, doSetIncognito } from 'redux/actions/app';
 import { doFetchModBlockedList, doFetchCommentModAmIList } from 'redux/actions/comments';
 import App from './view';
 
@@ -62,8 +56,6 @@ const perform = (dispatch) => ({
   setLanguage: (language) => dispatch(doSetLanguage(language)),
   signIn: () => dispatch(doSignIn()),
   requestDownloadUpgrade: () => dispatch(doDownloadUpgradeRequested()),
-  updatePreferences: () => dispatch(doGetAndPopulatePreferences()),
-  getWalletSyncPref: () => dispatch(doGetWalletSyncPreference()),
   syncLoop: (noInterval) => dispatch(doSyncLoop(noInterval)),
   setReferrer: (referrer, doClaim) => dispatch(doUserSetReferrer(referrer, doClaim)),
   setActiveChannelIfNotSet: () => dispatch(doSetActiveChannel()),

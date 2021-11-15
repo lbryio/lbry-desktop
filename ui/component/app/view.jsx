@@ -65,8 +65,6 @@ type Props = {
   isUpgradeAvailable: boolean,
   isReloadRequired: boolean,
   autoUpdateDownloaded: boolean,
-  updatePreferences: () => Promise<any>,
-  getWalletSyncPref: () => Promise<any>,
   uploadCount: number,
   balance: ?number,
   syncError: ?string,
@@ -106,8 +104,6 @@ function App(props: Props) {
     language,
     languages,
     setLanguage,
-    updatePreferences,
-    getWalletSyncPref,
     rewards,
     setReferrer,
     isAuthenticated,
@@ -127,8 +123,6 @@ function App(props: Props) {
   const appRef = useRef();
   const isEnhancedLayout = useKonamiListener();
   const [hasSignedIn, setHasSignedIn] = useState(false);
-  const [readyForSync, setReadyForSync] = useState(false);
-  const [readyForPrefs, setReadyForPrefs] = useState(false);
   const hasVerifiedEmail = user && Boolean(user.has_verified_email);
   const isRewardApproved = user && user.is_reward_approved;
   const previousHasVerifiedEmail = usePrevious(hasVerifiedEmail);
@@ -287,23 +281,11 @@ function App(props: Props) {
     };
   }, []);
 
-  // @if TARGET='app'
-  useEffect(() => {
-    if (updatePreferences && getWalletSyncPref && readyForPrefs) {
-      getWalletSyncPref()
-        .then(() => updatePreferences())
-        .then(() => {
-          setReadyForSync(true);
-        });
-    }
-  }, [updatePreferences, getWalletSyncPref, setReadyForSync, readyForPrefs, hasVerifiedEmail]);
-  // @endif
-
   // ready for sync syncs, however after signin when hasVerifiedEmail, that syncs too.
   useEffect(() => {
     // signInSyncPref is cleared after sharedState loop.
     const syncLoopWithoutInterval = () => syncLoop(true);
-    if (readyForSync && hasVerifiedEmail) {
+    if (hasSignedIn && hasVerifiedEmail) {
       // In case we are syncing.
       syncLoop();
       window.addEventListener('focus', syncLoopWithoutInterval);
@@ -311,16 +293,7 @@ function App(props: Props) {
     return () => {
       window.removeEventListener('focus', syncLoopWithoutInterval);
     };
-  }, [readyForSync, hasVerifiedEmail, syncLoop]);
-
-  // We know someone is logging in or not when we get their user object
-  // We'll use this to determine when it's time to pull preferences
-  // This will no longer work if desktop users no longer get a user object from lbryinc
-  useEffect(() => {
-    if (user) {
-      setReadyForPrefs(true);
-    }
-  }, [user, setReadyForPrefs]);
+  }, [hasSignedIn, hasVerifiedEmail, syncLoop]);
 
   useEffect(() => {
     if (syncError && isAuthenticated && !pathname.includes(PAGES.AUTH_WALLET_PASSWORD) && !currentModal) {
@@ -334,7 +307,6 @@ function App(props: Props) {
     if (!hasSignedIn && hasVerifiedEmail) {
       signIn();
       setHasSignedIn(true);
-      if (IS_WEB) setReadyForSync(true);
     }
   }, [hasVerifiedEmail, signIn, hasSignedIn]);
 

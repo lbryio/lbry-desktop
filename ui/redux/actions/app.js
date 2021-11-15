@@ -543,6 +543,7 @@ export function doSignIn() {
       pushNotifications.validate(user.id);
     }
 
+    dispatch(doGetAndPopulatePreferences());
     dispatch(doNotificationSocketConnect(true));
     dispatch(doNotificationList());
     dispatch(doCheckPendingClaims());
@@ -674,9 +675,8 @@ export function doGetAndPopulatePreferences() {
 export function doHandleSyncComplete(error, hasNewData) {
   return (dispatch) => {
     if (!error) {
-      dispatch(doGetAndPopulatePreferences());
-
       if (hasNewData) {
+        dispatch(doGetAndPopulatePreferences());
         // we just got sync data, better update our channels
         dispatch(doFetchChannelListMine());
       }
