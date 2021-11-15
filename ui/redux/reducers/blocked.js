@@ -26,14 +26,6 @@ export default handleActions(
     [ACTIONS.USER_STATE_POPULATE]: (state: BlocklistState, action: { data: { blocked: ?Array<string> } }) => {
       const { blocked } = action.data;
       const sanitizedBlocked = blocked && blocked.filter((e) => typeof e === 'string');
-
-      const next = sanitizedBlocked;
-      const prev = state.blockedChannels;
-
-      if (next && prev && prev.length === next.length && prev.every((value, index) => value === next[index])) {
-        return state;
-      }
-
       return {
         ...state,
         blockedChannels: sanitizedBlocked || state.blockedChannels,
