@@ -1,12 +1,12 @@
 import { connect } from 'react-redux';
 import { makeSelectClaimForUri } from 'redux/selectors/claims';
-import { doFetchViewCount, makeSelectViewCountForUri } from 'lbryinc';
+import { doFetchViewCount, selectViewCountForUri } from 'lbryinc';
 import { doAnalyticsView } from 'redux/actions/app';
 import FileViewCount from './view';
 
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
-  viewCount: makeSelectViewCountForUri(props.uri)(state),
+  viewCount: selectViewCountForUri(state, props.uri),
 });
 
 const perform = (dispatch) => ({

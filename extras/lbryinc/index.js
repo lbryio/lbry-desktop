@@ -53,7 +53,7 @@ export { selectFilteredOutpoints, selectFilteredOutpointMap } from './redux/sele
 //   selectTrendingUris,
 //   selectFetchingTrendingUris,
 // } from './redux/selectors/homepage';
-export { selectViewCount, makeSelectViewCountForUri, makeSelectSubCountForUri } from './redux/selectors/stats';
+export { selectViewCount, selectViewCountForUri, selectSubCountForUri } from './redux/selectors/stats';
 export { selectBanStateForUri } from './redux/selectors/ban';
 export {
   selectHasSyncedWallet,

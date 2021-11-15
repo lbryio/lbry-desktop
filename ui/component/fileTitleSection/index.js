@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { doFetchSubCount, makeSelectSubCountForUri } from 'lbryinc';
+import { doFetchSubCount, selectSubCountForUri } from 'lbryinc';
 import { makeSelectTitleForUri, makeSelectClaimForUri } from 'redux/selectors/claims';
 import { makeSelectInsufficientCreditsForUri } from 'redux/selectors/content';
 import { makeSelectViewersForId } from 'redux/selectors/livestream';
@@ -10,7 +10,7 @@ const select = (state, props) => {
   const viewers = claim && makeSelectViewersForId(claim.claim_id)(state);
   const channelClaimId = claim && claim.signing_channel ? claim.signing_channel.claim_id : undefined;
   const channelUri = claim && claim.signing_channel ? claim.signing_channel.canonical_url : undefined;
-  const subCount = channelUri && makeSelectSubCountForUri(channelUri)(state);
+  const subCount = channelUri && selectSubCountForUri(state, channelUri);
 
   return {
     viewers,

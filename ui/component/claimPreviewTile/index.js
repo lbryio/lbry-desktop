@@ -11,7 +11,7 @@ import {
 } from 'redux/selectors/claims';
 import { doFileGet } from 'redux/actions/file';
 import { doResolveUri } from 'redux/actions/claims';
-import { makeSelectViewCountForUri, selectBanStateForUri } from 'lbryinc';
+import { selectViewCountForUri, selectBanStateForUri } from 'lbryinc';
 import { makeSelectIsActiveLivestream } from 'redux/selectors/livestream';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import ClaimPreviewTile from './view';
@@ -35,7 +35,7 @@ const select = (state, props) => {
     isMature: makeSelectClaimIsNsfw(props.uri)(state),
     isLivestream: makeSelectClaimIsStreamPlaceholder(props.uri)(state),
     isLivestreamActive: makeSelectIsActiveLivestream(props.uri)(state),
-    viewCount: makeSelectViewCountForUri(props.uri)(state),
+    viewCount: selectViewCountForUri(state, props.uri),
   };
 };
 
