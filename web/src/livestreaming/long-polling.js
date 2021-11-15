@@ -10,7 +10,7 @@
 
 import { isLiveStreaming } from '$web/src/livestreaming';
 
-const POLL_INTERVAL = 10000;
+const POLL_INTERVAL = 30000; // 30 seconds.
 const pollers = {};
 
 const pollingMechanism = {
