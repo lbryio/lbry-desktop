@@ -10,7 +10,7 @@ import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { withRouter } from 'react-router';
 import {
   makeSelectIsPlaying,
-  makeSelectShouldObscurePreview,
+  selectShouldObscurePreviewForUri,
   makeSelectInsufficientCreditsForUri,
   makeSelectFileRenderModeForUri,
 } from 'redux/selectors/content';
@@ -25,7 +25,7 @@ const select = (state, props) => {
   return {
     claimThumbnail: selectThumbnailForUri(state, props.uri),
     fileInfo: makeSelectFileInfoForUri(props.uri)(state),
-    obscurePreview: makeSelectShouldObscurePreview(props.uri)(state),
+    obscurePreview: selectShouldObscurePreviewForUri(state, props.uri),
     isPlaying: makeSelectIsPlaying(props.uri)(state),
     insufficientCredits: makeSelectInsufficientCreditsForUri(props.uri)(state),
     autoplay: makeSelectClientSetting(SETTINGS.AUTOPLAY_MEDIA)(state),

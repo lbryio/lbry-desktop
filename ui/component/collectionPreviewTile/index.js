@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
 import {
-  makeSelectIsUriResolving,
+  selectIsUriResolving,
   getThumbnailFromClaim,
-  makeSelectTitleForUri,
+  selectTitleForUri,
   makeSelectChannelForClaimUri,
-  makeSelectClaimIsNsfw,
+  selectClaimIsNsfwForUri,
   selectClaimIdForUri,
   makeSelectClaimForClaimId,
 } from 'redux/selectors/claims';
@@ -39,14 +39,14 @@ const select = (state, props) => {
     claim,
     isResolvingCollectionClaims: makeSelectIsResolvingCollectionForId(collectionId)(state),
     channelClaim: collectionUri && makeSelectChannelForClaimUri(collectionUri)(state),
-    isResolvingUri: collectionUri && makeSelectIsUriResolving(collectionUri)(state),
+    isResolvingUri: collectionUri && selectIsUriResolving(state, collectionUri),
     thumbnail: getThumbnailFromClaim(claim),
-    title: collectionUri && makeSelectTitleForUri(collectionUri)(state),
+    title: collectionUri && selectTitleForUri(state, collectionUri),
     blackListedOutpoints: selectBlackListedOutpoints(state),
     filteredOutpoints: selectFilteredOutpoints(state),
     blockedChannelUris: selectMutedChannels(state),
     showMature: selectShowMatureContent(state),
-    isMature: makeSelectClaimIsNsfw(collectionUri)(state),
+    isMature: selectClaimIsNsfwForUri(state, collectionUri),
   };
 };
 

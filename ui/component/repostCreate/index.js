@@ -2,12 +2,12 @@ import { connect } from 'react-redux';
 import { doHideModal } from 'redux/actions/app';
 import {
   makeSelectClaimForUri,
-  makeSelectTitleForUri,
+  selectTitleForUri,
   selectRepostError,
   selectRepostLoading,
   selectMyClaimsWithoutChannels,
   makeSelectEffectiveAmountForUri,
-  makeSelectIsUriResolving,
+  selectIsUriResolving,
   selectFetchingMyChannels,
 } from 'redux/selectors/claims';
 
@@ -29,13 +29,13 @@ const select = (state, props) => ({
   enteredContentClaim: makeSelectClaimForUri(props.contentUri)(state),
   enteredRepostClaim: makeSelectClaimForUri(props.repostUri, false)(state),
   enteredRepostAmount: makeSelectEffectiveAmountForUri(props.repostUri)(state),
-  title: makeSelectTitleForUri(props.uri)(state),
+  title: selectTitleForUri(state, props.uri),
   balance: selectBalance(state),
   error: selectRepostError(state),
   reposting: selectRepostLoading(state),
   myClaims: selectMyClaimsWithoutChannels(state),
-  isResolvingPassedRepost: props.name && makeSelectIsUriResolving(`lbry://${props.name}`)(state),
-  isResolvingEnteredRepost: props.repostUri && makeSelectIsUriResolving(`lbry://${props.repostUri}`)(state),
+  isResolvingPassedRepost: props.name && selectIsUriResolving(state, `lbry://${props.name}`),
+  isResolvingEnteredRepost: props.repostUri && selectIsUriResolving(state, `lbry://${props.repostUri}`),
   activeChannelClaim: selectActiveChannelClaim(state),
   fetchingMyChannels: selectFetchingMyChannels(state),
   incognito: selectIncognito(state),

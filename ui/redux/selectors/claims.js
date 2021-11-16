@@ -332,10 +332,11 @@ export const makeSelectTotalPagesInChannelSearch = (uri: string) =>
     return byChannel['pageCount'];
   });
 
-export const selectMetadataForUri = createCachedSelector(selectClaimForUri, (claim, uri) => {
+export const selectMetadataForUri = (state: State, uri: string) => {
+  const claim = selectClaimForUri(state, uri);
   const metadata = claim && claim.value;
   return metadata || (claim === undefined ? undefined : null);
-})((state, uri) => String(uri));
+};
 
 export const makeSelectMetadataForUri = (uri: string) =>
   createSelector(makeSelectClaimForUri(uri), (claim) => {
@@ -348,8 +349,10 @@ export const makeSelectMetadataItemForUri = (uri: string, key: string) =>
     return metadata ? metadata[key] : undefined;
   });
 
-export const makeSelectTitleForUri = (uri: string) =>
-  createSelector(makeSelectMetadataForUri(uri), (metadata) => metadata && metadata.title);
+export const selectTitleForUri = (state: State, uri: string) => {
+  const metadata = selectMetadataForUri(state, uri);
+  return metadata && metadata.title;
+};
 
 export const selectDateForUri = createCachedSelector(
   selectClaimForUri, // input: (state, uri, ?returnRepost)
@@ -516,8 +519,10 @@ export const selectResolvingUris = createSelector(selectState, (state) => state.
 
 export const selectChannelImportPending = (state: State) => selectState(state).pendingChannelImport;
 
-export const makeSelectIsUriResolving = (uri: string) =>
-  createSelector(selectResolvingUris, (resolvingUris) => resolvingUris && resolvingUris.indexOf(uri) !== -1);
+export const selectIsUriResolving = (state: State, uri: string) => {
+  const resolvingUris = selectResolvingUris(state);
+  return resolvingUris && resolvingUris.includes(uri);
+};
 
 export const selectPlayingUri = (state: State) => selectState(state).playingUri;
 
@@ -570,21 +575,16 @@ export const makeSelectOmittedCountForChannel = (uri: string) =>
     }
   );
 
-export const makeSelectClaimIsNsfw = (uri: string) =>
-  createSelector(
-    makeSelectClaimForUri(uri),
-    // Eventually these will come from some list of tags that are considered adult
-    // Or possibly come from users settings of what tags they want to hide
-    // For now, there is just a hard coded list of tags inside `isClaimNsfw`
-    // selectNaughtyTags(),
-    (claim: Claim) => {
-      if (!claim) {
-        return false;
-      }
-
-      return isClaimNsfw(claim);
-    }
-  );
+export const selectClaimIsNsfwForUri = createCachedSelector(
+  selectClaimForUri,
+  // Eventually these will come from some list of tags that are considered adult
+  // Or possibly come from users settings of what tags they want to hide
+  // For now, there is just a hard coded list of tags inside `isClaimNsfw`
+  // selectNaughtyTags(),
+  (claim: Claim) => {
+    return claim ? isClaimNsfw(claim) : false;
+  }
+)((state, uri) => String(uri));
 
 // Returns the associated channel uri for a given claim uri
 // accepts a regular claim uri lbry://something
@@ -710,14 +710,14 @@ export const makeSelectClaimHasSource = (uri: string) =>
     return Boolean(claim.value.source);
   });
 
-export const makeSelectClaimIsStreamPlaceholder = (uri: string) =>
-  createSelector(makeSelectClaimForUri(uri), (claim) => {
-    if (!claim) {
-      return false;
-    }
+export const isStreamPlaceholderClaim = (claim: ?StreamClaim) => {
+  return claim ? Boolean(claim.value_type === 'stream' && !claim.value.source) : false;
+};
 
-    return Boolean(claim.value_type === 'stream' && !claim.value.source);
-  });
+export const selectIsStreamPlaceholderForUri = (state: State, uri: string) => {
+  const claim = selectClaimForUri(state, uri);
+  return isStreamPlaceholderClaim(claim);
+};
 
 export const selectTotalStakedAmountForChannelUri = createCachedSelector(selectClaimForUri, (claim) => {
   if (!claim || !claim.amount || !claim.meta || !claim.meta.support_amount) {

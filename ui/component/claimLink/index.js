@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimForUri, makeSelectIsUriResolving } from 'redux/selectors/claims';
+import { makeSelectClaimForUri, selectIsUriResolving } from 'redux/selectors/claims';
 import { doResolveUri } from 'redux/actions/claims';
 import { doSetPlayingUri } from 'redux/actions/content';
 import { punctuationMarks } from 'util/remark-lbry';
@@ -25,7 +25,7 @@ const select = (state, props) => {
     uri,
     claim,
     fullUri: props.uri,
-    isResolvingUri: makeSelectIsUriResolving(uri)(state),
+    isResolvingUri: selectIsUriResolving(state, uri),
     blackListedOutpoints: selectBlackListedOutpoints(state),
     playingUri: selectPlayingUri(state),
   };

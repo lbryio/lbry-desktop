@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { doDeleteFileAndMaybeGoBack } from 'redux/actions/file';
 import {
-  makeSelectTitleForUri,
+  selectTitleForUri,
   makeSelectClaimForUri,
   makeSelectIsAbandoningClaimForUri,
   selectClaimIsMineForUri,
@@ -12,7 +12,7 @@ import ModalRemoveFile from './view';
 
 const select = (state, props) => ({
   claimIsMine: selectClaimIsMineForUri(state, props.uri),
-  title: makeSelectTitleForUri(props.uri)(state),
+  title: selectTitleForUri(state, props.uri),
   claim: makeSelectClaimForUri(props.uri)(state),
   isAbandoning: makeSelectIsAbandoningClaimForUri(props.uri)(state),
 });

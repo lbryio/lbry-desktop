@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import EmbedWrapperPage from './view';
-import { makeSelectClaimForUri, makeSelectIsUriResolving } from 'redux/selectors/claims';
+import { makeSelectClaimForUri, selectIsUriResolving } from 'redux/selectors/claims';
 import { makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
 import { doResolveUri } from 'redux/actions/claims';
 import { buildURI } from 'util/lbryURI';
@@ -17,7 +17,7 @@ const select = (state, props) => {
     claim: makeSelectClaimForUri(uri)(state),
     costInfo: makeSelectCostInfoForUri(uri)(state),
     streamingUrl: makeSelectStreamingUrlForUri(uri)(state),
-    isResolvingUri: makeSelectIsUriResolving(uri)(state),
+    isResolvingUri: selectIsUriResolving(state, uri),
     blackListedOutpoints: selectBlackListedOutpoints(state),
   };
 };

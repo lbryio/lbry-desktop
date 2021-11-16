@@ -1,13 +1,13 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimForUri } from 'redux/selectors/claims';
-import { makeSelectViewCountForUri } from 'lbryinc';
+import { selectClaimForUri } from 'redux/selectors/claims';
+import { selectViewCountForUri } from 'lbryinc';
 import { selectLanguage } from 'redux/selectors/settings';
 import FileViewCountInline from './view';
 
 const select = (state, props) => {
   return {
-    claim: makeSelectClaimForUri(props.uri)(state),
-    viewCount: makeSelectViewCountForUri(props.uri)(state),
+    claim: selectClaimForUri(state, props.uri),
+    viewCount: selectViewCountForUri(state, props.uri),
     lang: selectLanguage(state),
   };
 };

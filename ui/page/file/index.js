@@ -2,9 +2,9 @@ import { connect } from 'react-redux';
 import { doSetContentHistoryItem, doSetPrimaryUri, clearPosition } from 'redux/actions/content';
 import { withRouter } from 'react-router-dom';
 import {
-  makeSelectClaimIsNsfw,
+  selectClaimIsNsfwForUri,
   makeSelectTagInClaimOrChannelForUri,
-  makeSelectClaimIsStreamPlaceholder,
+  selectIsStreamPlaceholderForUri,
 } from 'redux/selectors/claims';
 import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
 import { doFetchFileInfo } from 'redux/actions/file_info';
@@ -27,12 +27,12 @@ const select = (state, props) => {
     linkedCommentId: urlParams.get('lc'),
     costInfo: makeSelectCostInfoForUri(props.uri)(state),
     obscureNsfw: !selectShowMatureContent(state),
-    isMature: makeSelectClaimIsNsfw(props.uri)(state),
+    isMature: selectClaimIsNsfwForUri(state, props.uri),
     fileInfo: makeSelectFileInfoForUri(props.uri)(state),
     renderMode: makeSelectFileRenderModeForUri(props.uri)(state),
     videoTheaterMode: makeSelectClientSetting(SETTINGS.VIDEO_THEATER_MODE)(state),
     commentsDisabled: makeSelectTagInClaimOrChannelForUri(props.uri, DISABLE_COMMENTS_TAG)(state),
-    isLivestream: makeSelectClaimIsStreamPlaceholder(props.uri)(state),
+    isLivestream: selectIsStreamPlaceholderForUri(state, props.uri),
     collection: makeSelectCollectionForId(collectionId)(state),
     collectionId,
     position: makeSelectContentPositionForUri(props.uri)(state),

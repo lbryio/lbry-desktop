@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import {
   makeSelectClaimForUri,
-  makeSelectIsUriResolving,
+  selectIsUriResolving,
   makeSelectTagInClaimOrChannelForUri,
 } from 'redux/selectors/claims';
 import { doResolveUris } from 'redux/actions/claims';
@@ -23,7 +23,7 @@ const select = (state, props) => {
     }
   } catch (e) {}
 
-  const resolvingUris = uris.some((uri) => makeSelectIsUriResolving(uri)(state));
+  const resolvingUris = uris.some((uri) => selectIsUriResolving(state, uri));
   const winningUri = makeSelectWinningUriForQuery(props.query)(state);
   const winningClaim = winningUri ? makeSelectClaimForUri(winningUri)(state) : undefined;
   const preferEmbed = makeSelectTagInClaimOrChannelForUri(winningUri, PREFERENCE_EMBED)(state);

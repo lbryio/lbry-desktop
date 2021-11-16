@@ -1,20 +1,20 @@
-import { createSelector } from 'reselect';
-import { makeSelectClaimForUri } from 'redux/selectors/claims';
+// @flow
+import { selectClaimIdForUri } from 'redux/selectors/claims';
 
-const selectState = state => state.stats || {};
-export const selectViewCount = createSelector(selectState, state => state.viewCountById);
-export const selectSubCount = createSelector(selectState, state => state.subCountById);
+type State = { claims: any, stats: any };
 
-export const makeSelectViewCountForUri = uri =>
-  createSelector(
-    makeSelectClaimForUri(uri),
-    selectViewCount,
-    (claim, viewCountById) => (claim ? viewCountById[claim.claim_id] || 0 : 0)
-  );
+const selectState = (state: State) => state.stats || {};
+export const selectViewCount = (state: State) => selectState(state).viewCountById;
+export const selectSubCount = (state: State) => selectState(state).subCountById;
 
-export const makeSelectSubCountForUri = uri =>
-  createSelector(
-    makeSelectClaimForUri(uri),
-    selectSubCount,
-    (claim, subCountById) => (claim ? subCountById[claim.claim_id] || 0 : 0)
-  );
+export const selectViewCountForUri = (state: State, uri: string) => {
+  const claimId = selectClaimIdForUri(state, uri);
+  const viewCountById = selectViewCount(state);
+  return claimId ? viewCountById[claimId] || 0 : 0;
+};
+
+export const selectSubCountForUri = (state: State, uri: string) => {
+  const claimId = selectClaimIdForUri(state, uri);
+  const subCountById = selectSubCount(state);
+  return claimId ? subCountById[claimId] || 0 : 0;
+};

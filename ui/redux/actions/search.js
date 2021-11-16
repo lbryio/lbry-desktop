@@ -1,7 +1,7 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
 import { selectShowMatureContent } from 'redux/selectors/settings';
-import { makeSelectClaimForUri, makeSelectClaimIsNsfw } from 'redux/selectors/claims';
+import { selectClaimForUri, selectClaimIsNsfwForUri } from 'redux/selectors/claims';
 import { doResolveUris } from 'redux/actions/claims';
 import { buildURI, isURIValid } from 'util/lbryURI';
 import { batchActions } from 'util/batch-actions';
@@ -12,7 +12,7 @@ import { getRecommendationSearchOptions } from 'util/search';
 import { SEARCH_SERVER_API } from 'config';
 
 type Dispatch = (action: any) => any;
-type GetState = () => { search: SearchState };
+type GetState = () => { claims: any, search: SearchState };
 
 type SearchOptions = {
   size?: number,
@@ -131,9 +131,9 @@ export const doUpdateSearchOptions = (newOptions: SearchOptions, additionalOptio
 
 export const doFetchRecommendedContent = (uri: string) => (dispatch: Dispatch, getState: GetState) => {
   const state = getState();
-  const claim = makeSelectClaimForUri(uri)(state);
+  const claim = selectClaimForUri(state, uri);
   const matureEnabled = selectShowMatureContent(state);
-  const claimIsMature = makeSelectClaimIsNsfw(uri)(state);
+  const claimIsMature = selectClaimIsNsfwForUri(state, uri);
 
   if (claim && claim.value && claim.claim_id) {
     const options: SearchOptions = getRecommendationSearchOptions(matureEnabled, claimIsMature, claim.claim_id);

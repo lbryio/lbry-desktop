@@ -1,12 +1,12 @@
 import * as ACTIONS from 'constants/action_types';
 import { Lbryio } from 'lbryinc';
-import { selectClaimsByUri } from 'redux/selectors/claims';
+import { selectClaimForUri } from 'redux/selectors/claims';
 
 // eslint-disable-next-line import/prefer-default-export
 export function doFetchCostInfoForUri(uri) {
   return (dispatch, getState) => {
     const state = getState();
-    const claim = selectClaimsByUri(state)[uri];
+    const claim = selectClaimForUri(state, uri);
 
     if (!claim) return;
 

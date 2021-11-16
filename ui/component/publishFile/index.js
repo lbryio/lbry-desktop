@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { selectBalance } from 'redux/selectors/wallet';
 import { selectIsStillEditing, makeSelectPublishFormValue } from 'redux/selectors/publish';
 import { doUpdatePublishForm, doClearPublish } from 'redux/actions/publish';
-import { makeSelectClaimIsStreamPlaceholder } from 'redux/selectors/claims';
+import { selectIsStreamPlaceholderForUri } from 'redux/selectors/claims';
 import { doToast } from 'redux/actions/notifications';
 import { selectFfmpegStatus } from 'redux/selectors/settings';
 import PublishPage from './view';
@@ -20,7 +20,7 @@ const select = (state, props) => ({
   size: makeSelectPublishFormValue('fileSize')(state),
   duration: makeSelectPublishFormValue('fileDur')(state),
   isVid: makeSelectPublishFormValue('fileVid')(state),
-  isLivestreamClaim: makeSelectClaimIsStreamPlaceholder(props.uri)(state),
+  isLivestreamClaim: selectIsStreamPlaceholderForUri(state, props.uri),
 });
 
 const perform = (dispatch) => ({

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import {
-  makeSelectTitleForUri,
+  selectTitleForUri,
   selectThumbnailForUri,
   makeSelectMetadataItemForUri,
   makeSelectAmountForUri,
@@ -25,7 +25,7 @@ import { doSetActiveChannel, doSetIncognito } from 'redux/actions/app';
 
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
-  title: makeSelectTitleForUri(props.uri)(state),
+  title: selectTitleForUri(state, props.uri),
   thumbnailUrl: selectThumbnailForUri(state, props.uri),
   description: makeSelectMetadataItemForUri(props.uri, 'description')(state),
   tags: makeSelectMetadataItemForUri(props.uri, 'tags')(state),

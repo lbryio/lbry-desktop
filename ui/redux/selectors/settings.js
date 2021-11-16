@@ -15,13 +15,19 @@ export const selectFindingFFmpeg = (state) => selectState(state).findingFFmpeg |
 export const selectClientSettings = (state) => selectState(state).clientSettings || {};
 export const selectLoadedLanguages = (state) => selectState(state).loadedLanguages || {};
 
+export const selectClientSetting = (state, setting) => {
+  const clientSettings = selectClientSettings(state);
+  return clientSettings ? clientSettings[setting] : undefined;
+};
+
+// TODO - kill this
 export const makeSelectClientSetting = (setting) =>
   createSelector(selectClientSettings, (settings) => (settings ? settings[setting] : undefined));
 
 // refactor me
-export const selectShowMatureContent = !ENABLE_MATURE
-  ? createSelector(() => false)
-  : makeSelectClientSetting(SETTINGS.SHOW_MATURE);
+export const selectShowMatureContent = (state) => {
+  return !ENABLE_MATURE ? false : selectClientSetting(state, SETTINGS.SHOW_MATURE);
+};
 
 // and me
 export const selectShowRepostedContent = makeSelectClientSetting(SETTINGS.HIDE_REPOSTS);
