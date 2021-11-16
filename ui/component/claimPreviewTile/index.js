@@ -4,13 +4,13 @@ import {
   makeSelectIsUriResolving,
   getThumbnailFromClaim,
   makeSelectTitleForUri,
-  makeSelectClaimIsStreamPlaceholder,
+  isStreamPlaceholderClaim,
   selectDateForUri,
 } from 'redux/selectors/claims';
 import { doFileGet } from 'redux/actions/file';
 import { doResolveUri } from 'redux/actions/claims';
 import { selectViewCountForUri, selectBanStateForUri } from 'lbryinc';
-import { makeSelectIsActiveLivestream } from 'redux/selectors/livestream';
+import { selectIsActiveLivestreamForUri } from 'redux/selectors/livestream';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import { isClaimNsfw } from 'util/claim';
 import ClaimPreviewTile from './view';
@@ -20,6 +20,7 @@ const select = (state, props) => {
   const claim = props.uri && makeSelectClaimForUri(props.uri)(state);
   const media = claim && claim.value && (claim.value.video || claim.value.audio);
   const mediaDuration = media && media.duration && formatMediaDuration(media.duration, { screenReader: true });
+  const isLivestream = isStreamPlaceholderClaim(claim);
 
   return {
     claim,
@@ -31,8 +32,8 @@ const select = (state, props) => {
     banState: selectBanStateForUri(state, props.uri),
     showMature: selectShowMatureContent(state),
     isMature: claim ? isClaimNsfw(claim) : false,
-    isLivestream: makeSelectClaimIsStreamPlaceholder(props.uri)(state),
-    isLivestreamActive: makeSelectIsActiveLivestream(props.uri)(state),
+    isLivestream,
+    isLivestreamActive: isLivestream && selectIsActiveLivestreamForUri(state, props.uri),
     viewCount: selectViewCountForUri(state, props.uri),
   };
 };

@@ -705,14 +705,14 @@ export const makeSelectClaimHasSource = (uri: string) =>
     return Boolean(claim.value.source);
   });
 
-export const makeSelectClaimIsStreamPlaceholder = (uri: string) =>
-  createSelector(makeSelectClaimForUri(uri), (claim) => {
-    if (!claim) {
-      return false;
-    }
+export const isStreamPlaceholderClaim = (claim: ?StreamClaim) => {
+  return claim ? Boolean(claim.value_type === 'stream' && !claim.value.source) : false;
+};
 
-    return Boolean(claim.value_type === 'stream' && !claim.value.source);
-  });
+export const selectIsStreamPlaceholderForUri = (state: State, uri: string) => {
+  const claim = selectClaimForUri(state, uri);
+  return isStreamPlaceholderClaim(claim);
+};
 
 export const selectTotalStakedAmountForChannelUri = createCachedSelector(selectClaimForUri, (claim) => {
   if (!claim || !claim.amount || !claim.meta || !claim.meta.support_amount) {

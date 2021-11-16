@@ -6,7 +6,7 @@ import {
   makeSelectClaimIsPending,
   makeSelectReflectingClaimForUri,
   makeSelectClaimWasPurchased,
-  makeSelectClaimIsStreamPlaceholder,
+  isStreamPlaceholderClaim,
   makeSelectTitleForUri,
   selectDateForUri,
 } from 'redux/selectors/claims';
@@ -21,7 +21,7 @@ import { doResolveUri } from 'redux/actions/claims';
 import { doCollectionEdit } from 'redux/actions/collections';
 import { doFileGet } from 'redux/actions/file';
 import { selectBanStateForUri } from 'lbryinc';
-import { makeSelectIsActiveLivestream } from 'redux/selectors/livestream';
+import { selectIsActiveLivestreamForUri } from 'redux/selectors/livestream';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import { makeSelectHasVisitedUri } from 'redux/selectors/content';
 import { selectIsSubscribedForUri } from 'redux/selectors/subscriptions';
@@ -33,6 +33,7 @@ const select = (state, props) => {
   const claim = props.uri && selectClaimForUri(state, props.uri);
   const media = claim && claim.value && (claim.value.video || claim.value.audio);
   const mediaDuration = media && media.duration && formatMediaDuration(media.duration, { screenReader: true });
+  const isLivestream = isStreamPlaceholderClaim(claim);
 
   return {
     claim,
@@ -51,8 +52,8 @@ const select = (state, props) => {
     isSubscribed: props.uri && selectIsSubscribedForUri(state, props.uri),
     streamingUrl: props.uri && makeSelectStreamingUrlForUri(props.uri)(state),
     wasPurchased: props.uri && makeSelectClaimWasPurchased(props.uri)(state),
-    isLivestream: makeSelectClaimIsStreamPlaceholder(props.uri)(state),
-    isLivestreamActive: makeSelectIsActiveLivestream(props.uri)(state),
+    isLivestream,
+    isLivestreamActive: isLivestream && selectIsActiveLivestreamForUri(state, props.uri),
     isCollectionMine: makeSelectCollectionIsMine(props.collectionId)(state),
     collectionUris: makeSelectUrlsForCollectionId(props.collectionId)(state),
     collectionIndex: makeSelectIndexForUrlInCollection(props.uri, props.collectionId)(state),

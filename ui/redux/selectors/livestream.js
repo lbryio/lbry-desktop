@@ -1,5 +1,6 @@
 // @flow
 import { createSelector } from 'reselect';
+import { createCachedSelector } from 're-reselect';
 import { selectMyClaims, selectPendingClaims } from 'redux/selectors/claims';
 
 type State = { livestream: any };
@@ -45,20 +46,16 @@ export const makeSelectPendingLivestreamsForChannelId = (channelId: string) =>
 
 export const selectActiveLivestreams = (state: State) => selectState(state).activeLivestreams;
 
-export const makeSelectIsActiveLivestream = (uri: string) =>
-  createSelector(selectState, (state) => {
-    const activeLivestreamValues = (state.activeLivestreams && Object.values(state.activeLivestreams)) || [];
-    // $FlowFixMe
-    return Boolean(activeLivestreamValues.find((v) => v.latestClaimUri === uri));
-  });
+export const selectIsActiveLivestreamForUri = createCachedSelector(
+  (state, uri) => uri,
+  selectActiveLivestreams,
+  (uri, activeLivestreams) => {
+    if (!uri || !activeLivestreams) {
+      return false;
+    }
 
-export const makeSelectActiveLivestreamUris = (uri: string) =>
-  createSelector(selectState, (state) => {
-    const activeLivestreamValues = (state.activeLivestreams && Object.values(state.activeLivestreams)) || [];
-    const uris = [];
-    activeLivestreamValues.forEach((v) => {
-      // $FlowFixMe
-      if (v.latestClaimUri) uris.push(v.latestClaimUri);
-    });
-    return uris;
-  });
+    const activeLivestreamValues = Object.values(activeLivestreams);
+    // $FlowFixMe - unable to resolve latestClaimUri
+    return activeLivestreamValues.some((v) => v.latestClaimUri === uri);
+  }
+)((state, uri) => String(uri));

@@ -10,7 +10,7 @@ import {
   makeSelectTitleForUri,
   selectClaimIsMine,
   makeSelectClaimIsPending,
-  makeSelectClaimIsStreamPlaceholder,
+  selectIsStreamPlaceholderForUri,
 } from 'redux/selectors/claims';
 import {
   makeSelectCollectionForId,
@@ -79,7 +79,7 @@ const select = (state, props) => {
     title: makeSelectTitleForUri(uri)(state),
     claimIsMine: selectClaimIsMine(state, claim),
     claimIsPending: makeSelectClaimIsPending(uri)(state),
-    isLivestream: makeSelectClaimIsStreamPlaceholder(uri)(state),
+    isLivestream: selectIsStreamPlaceholderForUri(state, uri),
     collection: makeSelectCollectionForId(collectionId)(state),
     collectionId: collectionId,
     collectionUrls: makeSelectUrlsForCollectionId(collectionId)(state),

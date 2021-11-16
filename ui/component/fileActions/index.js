@@ -3,7 +3,7 @@ import {
   selectClaimIsMine,
   selectClaimForUri,
   selectHasChannels,
-  makeSelectClaimIsStreamPlaceholder,
+  selectIsStreamPlaceholderForUri,
   makeSelectTagInClaimOrChannelForUri,
 } from 'redux/selectors/claims';
 import { makeSelectStreamingUrlForUri, makeSelectFileInfoForUri } from 'redux/selectors/file_info';
@@ -27,7 +27,7 @@ const select = (state, props) => {
     renderMode: makeSelectFileRenderModeForUri(props.uri)(state),
     costInfo: makeSelectCostInfoForUri(props.uri)(state),
     hasChannels: selectHasChannels(state),
-    isLivestreamClaim: makeSelectClaimIsStreamPlaceholder(props.uri)(state),
+    isLivestreamClaim: selectIsStreamPlaceholderForUri(state, props.uri),
     reactionsDisabled: makeSelectTagInClaimOrChannelForUri(props.uri, DISABLE_COMMENTS_TAG)(state),
     streamingUrl: makeSelectStreamingUrlForUri(props.uri)(state),
   };
