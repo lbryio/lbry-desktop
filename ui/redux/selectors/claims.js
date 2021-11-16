@@ -137,10 +137,7 @@ export const selectMyActiveClaims = createSelector(
   selectMyClaimsRaw,
   selectAbandoningIds,
   (claims, abandoningIds) =>
-    new Set(
-      claims &&
-        claims.map((claim) => claim.claim_id).filter((claimId) => Object.keys(abandoningIds).indexOf(claimId) === -1)
-    )
+    new Set(claims && claims.map((claim) => claim.claim_id).filter((claimId) => !abandoningIds.includes(claimId)))
 );
 
 export const makeSelectClaimIsMine = (rawUri: string) => {
