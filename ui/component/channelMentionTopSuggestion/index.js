@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectIsUriResolving } from 'redux/selectors/claims';
+import { selectIsUriResolving } from 'redux/selectors/claims';
 import { doResolveUri } from 'redux/actions/claims';
 import { makeSelectWinningUriForQuery } from 'redux/selectors/search';
 import ChannelMentionTopSuggestion from './view';
@@ -8,7 +8,7 @@ const select = (state, props) => {
   const uriFromQuery = `lbry://${props.query}`;
   return {
     uriFromQuery,
-    isResolvingUri: makeSelectIsUriResolving(uriFromQuery)(state),
+    isResolvingUri: selectIsUriResolving(state, uriFromQuery),
     winningUri: makeSelectWinningUriForQuery(props.query)(state),
   };
 };

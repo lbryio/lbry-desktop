@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import {
   makeSelectClaimForUri,
-  makeSelectIsUriResolving,
+  selectIsUriResolving,
   getThumbnailFromClaim,
   selectTitleForUri,
   selectDateForUri,
@@ -23,7 +23,7 @@ const select = (state, props) => {
     claim,
     mediaDuration,
     date: props.uri && selectDateForUri(state, props.uri),
-    isResolvingUri: props.uri && makeSelectIsUriResolving(props.uri)(state),
+    isResolvingUri: props.uri && selectIsUriResolving(state, props.uri),
     thumbnail: getThumbnailFromClaim(claim),
     title: props.uri && selectTitleForUri(state, props.uri),
     banState: selectBanStateForUri(state, props.uri),

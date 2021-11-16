@@ -4,7 +4,7 @@ import {
   selectTitleForUri,
   getThumbnailFromClaim,
   selectClaimForUri,
-  makeSelectIsUriResolving,
+  selectIsUriResolving,
   makeSelectMetadataItemForUri,
 } from 'redux/selectors/claims';
 import { doResolveUri } from 'redux/actions/claims';
@@ -21,7 +21,7 @@ const select = (state, props) => {
     thumbnail: getThumbnailFromClaim(claim),
     description: makeSelectMetadataItemForUri(props.uri, 'description')(state),
     channelIsMine: selectClaimIsMine(state, claim),
-    isResolvingUri: makeSelectIsUriResolving(props.uri)(state),
+    isResolvingUri: selectIsUriResolving(state, props.uri),
     blackListedOutpoints: selectBlackListedOutpoints(state),
   };
 };
