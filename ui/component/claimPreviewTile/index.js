@@ -3,16 +3,14 @@ import {
   makeSelectClaimForUri,
   makeSelectIsUriResolving,
   getThumbnailFromClaim,
-  makeSelectTitleForUri,
-  makeSelectChannelForClaimUri,
-  makeSelectClaimIsNsfw,
+  selectTitleForUri,
   selectDateForUri,
 } from 'redux/selectors/claims';
 import { doFileGet } from 'redux/actions/file';
 import { doResolveUri } from 'redux/actions/claims';
-import { selectMutedChannels } from 'redux/selectors/blocked';
 import { selectViewCountForUri, selectBanStateForUri } from 'lbryinc';
 import { selectShowMatureContent } from 'redux/selectors/settings';
+import { isClaimNsfw } from 'util/claim';
 import ClaimPreviewTile from './view';
 import formatMediaDuration from 'util/formatMediaDuration';
 
@@ -25,14 +23,12 @@ const select = (state, props) => {
     claim,
     mediaDuration,
     date: props.uri && selectDateForUri(state, props.uri),
-    channel: props.uri && makeSelectChannelForClaimUri(props.uri)(state),
     isResolvingUri: props.uri && makeSelectIsUriResolving(props.uri)(state),
     thumbnail: getThumbnailFromClaim(claim),
-    title: props.uri && makeSelectTitleForUri(props.uri)(state),
+    title: props.uri && selectTitleForUri(state, props.uri),
     banState: selectBanStateForUri(state, props.uri),
-    blockedChannelUris: selectMutedChannels(state),
     showMature: selectShowMatureContent(state),
-    isMature: makeSelectClaimIsNsfw(props.uri)(state),
+    isMature: claim ? isClaimNsfw(claim) : false,
     viewCount: selectViewCountForUri(state, props.uri),
   };
 };

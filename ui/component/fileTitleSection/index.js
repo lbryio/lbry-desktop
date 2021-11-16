@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { doFetchSubCount, selectSubCountForUri } from 'lbryinc';
-import { makeSelectTitleForUri, makeSelectClaimForUri } from 'redux/selectors/claims';
+import { selectTitleForUri, makeSelectClaimForUri } from 'redux/selectors/claims';
 import { makeSelectInsufficientCreditsForUri } from 'redux/selectors/content';
 import FileTitleSection from './view';
 
@@ -12,7 +12,7 @@ const select = (state, props) => {
 
   return {
     isInsufficientCredits: makeSelectInsufficientCreditsForUri(props.uri)(state),
-    title: makeSelectTitleForUri(props.uri)(state),
+    title: selectTitleForUri(state, props.uri),
     channelClaimId,
     subCount,
   };

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectTitleForUri, makeSelectClaimIsNsfw, makeSelectClaimWasPurchased } from 'redux/selectors/claims';
+import { selectTitleForUri, makeSelectClaimIsNsfw, makeSelectClaimWasPurchased } from 'redux/selectors/claims';
 import { makeSelectFileInfoForUri, makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
 import {
   makeSelectNextUrlForCollectionAndUrl,
@@ -30,7 +30,7 @@ const select = (state, props) => {
     uri,
     primaryUri,
     playingUri,
-    title: makeSelectTitleForUri(uri)(state),
+    title: selectTitleForUri(state, uri),
     fileInfo: makeSelectFileInfoForUri(uri)(state),
     mature: makeSelectClaimIsNsfw(uri)(state),
     isFloating: makeSelectIsPlayerFloating(props.location)(state),

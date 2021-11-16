@@ -7,7 +7,7 @@ import {
   selectClaimForUri,
   makeSelectIsUriResolving,
   makeSelectTotalPagesForChannel,
-  makeSelectTitleForUri,
+  selectTitleForUri,
   selectClaimIsMine,
   makeSelectClaimIsPending,
 } from 'redux/selectors/claims';
@@ -75,7 +75,7 @@ const select = (state, props) => {
     blackListedOutpoints: selectBlackListedOutpoints(state),
     totalPages: makeSelectTotalPagesForChannel(uri, PAGE_SIZE)(state),
     isSubscribed: makeSelectChannelInSubscriptions(uri)(state),
-    title: makeSelectTitleForUri(uri)(state),
+    title: selectTitleForUri(state, uri),
     claimIsMine: selectClaimIsMine(state, claim),
     claimIsPending: makeSelectClaimIsPending(uri)(state),
     collection: makeSelectCollectionForId(collectionId)(state),

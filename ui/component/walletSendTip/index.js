@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import {
-  makeSelectTitleForUri,
+  selectTitleForUri,
   makeSelectClaimForUri,
   makeSelectClaimIsMine,
   selectFetchingMyChannels,
@@ -18,7 +18,7 @@ import { selectUserVerifiedEmail } from 'redux/selectors/user';
 
 const select = (state, props) => ({
   isPending: selectIsSendingSupport(state),
-  title: makeSelectTitleForUri(props.uri)(state),
+  title: selectTitleForUri(state, props.uri),
   claim: makeSelectClaimForUri(props.uri, false)(state),
   balance: selectBalance(state),
   instantTipEnabled: makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED)(state),

@@ -4,7 +4,7 @@ import { selectHasNavigated, selectScrollStartingPosition, selectWelcomeVersion 
 import { selectHomepageData } from 'redux/selectors/settings';
 import Router from './view';
 import { normalizeURI } from 'util/lbryURI';
-import { makeSelectTitleForUri } from 'redux/selectors/claims';
+import { selectTitleForUri } from 'redux/selectors/claims';
 import { doSetHasNavigated } from 'redux/actions/app';
 import { doUserSetReferrer } from 'redux/actions/user';
 import { selectHasUnclaimedRefereeReward } from 'redux/selectors/rewards';
@@ -28,7 +28,7 @@ const select = (state) => {
 
   return {
     uri,
-    title: makeSelectTitleForUri(uri)(state),
+    title: selectTitleForUri(state, uri),
     currentScroll: selectScrollStartingPosition(state),
     isAuthenticated: selectUserVerifiedEmail(state),
     welcomeVersion: selectWelcomeVersion(state),

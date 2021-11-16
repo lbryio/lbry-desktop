@@ -4,10 +4,9 @@ import {
   makeSelectIsUriResolving,
   selectClaimIsMine,
   makeSelectClaimIsPending,
-  makeSelectClaimIsNsfw,
   makeSelectReflectingClaimForUri,
   makeSelectClaimWasPurchased,
-  makeSelectTitleForUri,
+  selectTitleForUri,
   selectDateForUri,
 } from 'redux/selectors/claims';
 import { makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
@@ -24,6 +23,7 @@ import { selectBanStateForUri } from 'lbryinc';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import { makeSelectHasVisitedUri } from 'redux/selectors/content';
 import { selectIsSubscribedForUri } from 'redux/selectors/subscriptions';
+import { isClaimNsfw } from 'util/claim';
 import ClaimPreview from './view';
 import formatMediaDuration from 'util/formatMediaDuration';
 
@@ -36,14 +36,14 @@ const select = (state, props) => {
     claim,
     mediaDuration,
     date: props.uri && selectDateForUri(state, props.uri),
-    title: props.uri && makeSelectTitleForUri(props.uri)(state),
+    title: props.uri && selectTitleForUri(state, props.uri),
     pending: props.uri && makeSelectClaimIsPending(props.uri)(state),
     reflectingProgress: props.uri && makeSelectReflectingClaimForUri(props.uri)(state),
     obscureNsfw: selectShowMatureContent(state) === false,
     claimIsMine: props.uri && selectClaimIsMine(state, claim),
     isResolvingUri: props.uri && makeSelectIsUriResolving(props.uri)(state),
     isResolvingRepost: props.uri && makeSelectIsUriResolving(props.repostUrl)(state),
-    nsfw: props.uri && makeSelectClaimIsNsfw(props.uri)(state),
+    nsfw: claim ? isClaimNsfw(claim) : false,
     banState: selectBanStateForUri(state, props.uri),
     hasVisitedUri: props.uri && makeSelectHasVisitedUri(props.uri)(state),
     isSubscribed: props.uri && selectIsSubscribedForUri(state, props.uri),
