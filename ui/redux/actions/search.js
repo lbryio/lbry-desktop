@@ -12,7 +12,7 @@ import { getRecommendationSearchOptions } from 'util/search';
 import { SEARCH_SERVER_API } from 'config';
 
 type Dispatch = (action: any) => any;
-type GetState = () => { search: SearchState };
+type GetState = () => { claims: any, search: SearchState };
 
 type SearchOptions = {
   size?: number,

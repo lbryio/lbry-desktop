@@ -5,7 +5,7 @@ import { withRouter } from 'react-router';
 import { PAGE_SIZE } from 'constants/claim';
 import {
   makeSelectClaimForUri,
-  makeSelectIsUriResolving,
+  selectIsUriResolving,
   makeSelectTotalPagesForChannel,
   selectTitleForUri,
   selectClaimIsMine,
@@ -72,7 +72,7 @@ const select = (state, props) => {
   return {
     uri,
     claim,
-    isResolvingUri: makeSelectIsUriResolving(uri)(state),
+    isResolvingUri: selectIsUriResolving(state, uri),
     blackListedOutpoints: selectBlackListedOutpoints(state),
     totalPages: makeSelectTotalPagesForChannel(uri, PAGE_SIZE)(state),
     isSubscribed: makeSelectChannelInSubscriptions(uri)(state),

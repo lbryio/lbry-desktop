@@ -519,8 +519,10 @@ export const selectResolvingUris = createSelector(selectState, (state) => state.
 
 export const selectChannelImportPending = (state: State) => selectState(state).pendingChannelImport;
 
-export const makeSelectIsUriResolving = (uri: string) =>
-  createSelector(selectResolvingUris, (resolvingUris) => resolvingUris && resolvingUris.indexOf(uri) !== -1);
+export const selectIsUriResolving = (state: State, uri: string) => {
+  const resolvingUris = selectResolvingUris(state);
+  return resolvingUris && resolvingUris.includes(uri);
+};
 
 export const selectPlayingUri = (state: State) => selectState(state).playingUri;
 

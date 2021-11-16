@@ -7,7 +7,7 @@ import {
   selectRepostLoading,
   selectMyClaimsWithoutChannels,
   makeSelectEffectiveAmountForUri,
-  makeSelectIsUriResolving,
+  selectIsUriResolving,
   selectFetchingMyChannels,
 } from 'redux/selectors/claims';
 
@@ -34,8 +34,8 @@ const select = (state, props) => ({
   error: selectRepostError(state),
   reposting: selectRepostLoading(state),
   myClaims: selectMyClaimsWithoutChannels(state),
-  isResolvingPassedRepost: props.name && makeSelectIsUriResolving(`lbry://${props.name}`)(state),
-  isResolvingEnteredRepost: props.repostUri && makeSelectIsUriResolving(`lbry://${props.repostUri}`)(state),
+  isResolvingPassedRepost: props.name && selectIsUriResolving(state, `lbry://${props.name}`),
+  isResolvingEnteredRepost: props.repostUri && selectIsUriResolving(state, `lbry://${props.repostUri}`),
   activeChannelClaim: selectActiveChannelClaim(state),
   fetchingMyChannels: selectFetchingMyChannels(state),
   incognito: selectIncognito(state),

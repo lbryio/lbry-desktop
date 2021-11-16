@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { doClearPublish, doPrepareEdit } from 'redux/actions/publish';
 import { doResolveUris } from 'redux/actions/claims';
 import { selectPendingIds, makeSelectClaimForUri } from 'redux/selectors/claims';
-import { makeSelectWinningUriForQuery, makeSelectIsResolvingWinningUri } from 'redux/selectors/search';
+import { makeSelectWinningUriForQuery, selectIsResolvingWinningUri } from 'redux/selectors/search';
 import SearchTopClaim from './view';
 import { push } from 'connected-react-router';
 import * as PAGES from 'constants/pages';
@@ -13,7 +13,7 @@ const select = (state, props) => {
   return {
     winningUri,
     winningClaim: winningUri ? makeSelectClaimForUri(winningUri)(state) : undefined,
-    isResolvingWinningUri: props.query ? makeSelectIsResolvingWinningUri(props.query)(state) : false,
+    isResolvingWinningUri: props.query ? selectIsResolvingWinningUri(state, props.query) : false,
     pendingIds: selectPendingIds(state),
   };
 };

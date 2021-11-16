@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import {
   selectClaimForUri,
-  makeSelectIsUriResolving,
+  selectIsUriResolving,
   selectClaimIsMine,
   makeSelectClaimIsPending,
   makeSelectReflectingClaimForUri,
@@ -44,8 +44,8 @@ const select = (state, props) => {
     reflectingProgress: props.uri && makeSelectReflectingClaimForUri(props.uri)(state),
     obscureNsfw: selectShowMatureContent(state) === false,
     claimIsMine: props.uri && selectClaimIsMine(state, claim),
-    isResolvingUri: props.uri && makeSelectIsUriResolving(props.uri)(state),
-    isResolvingRepost: props.uri && makeSelectIsUriResolving(props.repostUrl)(state),
+    isResolvingUri: props.uri && selectIsUriResolving(state, props.uri),
+    isResolvingRepost: props.uri && selectIsUriResolving(state, props.repostUrl),
     nsfw: claim ? isClaimNsfw(claim) : false,
     banState: selectBanStateForUri(state, props.uri),
     hasVisitedUri: props.uri && makeSelectHasVisitedUri(props.uri)(state),

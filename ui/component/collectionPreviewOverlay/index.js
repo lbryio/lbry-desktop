@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectIsUriResolving, selectClaimIdForUri, makeSelectClaimForClaimId } from 'redux/selectors/claims';
+import { selectIsUriResolving, selectClaimIdForUri, makeSelectClaimForClaimId } from 'redux/selectors/claims';
 import {
   makeSelectUrlsForCollectionId,
   makeSelectNameForCollectionId,
@@ -22,7 +22,7 @@ const select = (state, props) => {
     collectionItemUrls: makeSelectUrlsForCollectionId(collectionId)(state), // ForId || ForUri
     pendingCollection: makeSelectPendingCollectionForId(collectionId)(state),
     claim,
-    isResolvingUri: collectionUri && makeSelectIsUriResolving(collectionUri)(state),
+    isResolvingUri: collectionUri && selectIsUriResolving(state, collectionUri),
   };
 };
 
