@@ -10,7 +10,7 @@ import { doFetchItemsInCollection } from 'redux/actions/collections';
 import CollectionPreviewOverlay from './view';
 
 const select = (state, props) => {
-  const collectionId = props.collectionId || (props.uri && makeSelectClaimIdForUri(props.uri));
+  const collectionId = props.collectionId || (props.uri && makeSelectClaimIdForUri(props.uri)(state));
   const claim = props.collectionId && makeSelectClaimForClaimId(props.collectionId)(state);
   const collectionUri = props.uri || (claim && (claim.canonical_url || claim.permanent_url)) || null;
 
