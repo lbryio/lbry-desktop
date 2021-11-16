@@ -3,7 +3,7 @@ import {
   makeSelectClaimForUri,
   makeSelectIsUriResolving,
   getThumbnailFromClaim,
-  makeSelectTitleForUri,
+  selectTitleForUri,
   isStreamPlaceholderClaim,
   selectDateForUri,
 } from 'redux/selectors/claims';
@@ -28,7 +28,7 @@ const select = (state, props) => {
     date: props.uri && selectDateForUri(state, props.uri),
     isResolvingUri: props.uri && makeSelectIsUriResolving(props.uri)(state),
     thumbnail: getThumbnailFromClaim(claim),
-    title: props.uri && makeSelectTitleForUri(props.uri)(state),
+    title: props.uri && selectTitleForUri(state, props.uri),
     banState: selectBanStateForUri(state, props.uri),
     showMature: selectShowMatureContent(state),
     isMature: claim ? isClaimNsfw(claim) : false,

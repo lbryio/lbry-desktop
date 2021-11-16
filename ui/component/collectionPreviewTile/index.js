@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import {
   makeSelectIsUriResolving,
   getThumbnailFromClaim,
-  makeSelectTitleForUri,
+  selectTitleForUri,
   makeSelectChannelForClaimUri,
   selectClaimIsNsfwForUri,
   selectClaimIdForUri,
@@ -41,7 +41,7 @@ const select = (state, props) => {
     channelClaim: collectionUri && makeSelectChannelForClaimUri(collectionUri)(state),
     isResolvingUri: collectionUri && makeSelectIsUriResolving(collectionUri)(state),
     thumbnail: getThumbnailFromClaim(claim),
-    title: collectionUri && makeSelectTitleForUri(collectionUri)(state),
+    title: collectionUri && selectTitleForUri(state, collectionUri),
     blackListedOutpoints: selectBlackListedOutpoints(state),
     filteredOutpoints: selectFilteredOutpoints(state),
     blockedChannelUris: selectMutedChannels(state),

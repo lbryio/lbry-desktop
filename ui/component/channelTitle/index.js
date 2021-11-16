@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimForUri, makeSelectTitleForUri } from 'redux/selectors/claims';
+import { makeSelectClaimForUri, selectTitleForUri } from 'redux/selectors/claims';
 import ChannelTitle from './view';
 
 const select = (state, props) => ({
-  title: makeSelectTitleForUri(props.uri)(state),
+  title: selectTitleForUri(state, props.uri),
   claim: makeSelectClaimForUri(props.uri)(state),
 });
 

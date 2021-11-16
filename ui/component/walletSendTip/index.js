@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import {
-  makeSelectTitleForUri,
+  selectTitleForUri,
   makeSelectClaimForUri,
   selectClaimIsMineForUri,
   selectFetchingMyChannels,
@@ -24,7 +24,7 @@ const select = (state, props) => ({
   instantTipEnabled: makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED)(state),
   instantTipMax: makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_MAX)(state),
   isPending: selectIsSendingSupport(state),
-  title: makeSelectTitleForUri(props.uri)(state),
+  title: selectTitleForUri(state, props.uri),
 });
 
 export default withRouter(connect(select, { doHideModal, doSendTip, doSendCashTip })(WalletSendTip));

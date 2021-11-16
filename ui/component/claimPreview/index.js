@@ -7,7 +7,7 @@ import {
   makeSelectReflectingClaimForUri,
   makeSelectClaimWasPurchased,
   isStreamPlaceholderClaim,
-  makeSelectTitleForUri,
+  selectTitleForUri,
   selectDateForUri,
 } from 'redux/selectors/claims';
 import { makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
@@ -39,7 +39,7 @@ const select = (state, props) => {
     claim,
     mediaDuration,
     date: props.uri && selectDateForUri(state, props.uri),
-    title: props.uri && makeSelectTitleForUri(props.uri)(state),
+    title: props.uri && selectTitleForUri(state, props.uri),
     pending: props.uri && makeSelectClaimIsPending(props.uri)(state),
     reflectingProgress: props.uri && makeSelectReflectingClaimForUri(props.uri)(state),
     obscureNsfw: selectShowMatureContent(state) === false,

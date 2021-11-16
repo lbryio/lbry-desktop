@@ -332,10 +332,11 @@ export const makeSelectTotalPagesInChannelSearch = (uri: string) =>
     return byChannel['pageCount'];
   });
 
-export const selectMetadataForUri = createCachedSelector(selectClaimForUri, (claim, uri) => {
+export const selectMetadataForUri = (state: State, uri: string) => {
+  const claim = selectClaimForUri(state, uri);
   const metadata = claim && claim.value;
   return metadata || (claim === undefined ? undefined : null);
-})((state, uri) => String(uri));
+};
 
 export const makeSelectMetadataForUri = (uri: string) =>
   createSelector(makeSelectClaimForUri(uri), (claim) => {
@@ -348,8 +349,10 @@ export const makeSelectMetadataItemForUri = (uri: string, key: string) =>
     return metadata ? metadata[key] : undefined;
   });
 
-export const makeSelectTitleForUri = (uri: string) =>
-  createSelector(makeSelectMetadataForUri(uri), (metadata) => metadata && metadata.title);
+export const selectTitleForUri = (state: State, uri: string) => {
+  const metadata = selectMetadataForUri(state, uri);
+  return metadata && metadata.title;
+};
 
 export const selectDateForUri = createCachedSelector(
   selectClaimForUri, // input: (state, uri, ?returnRepost)

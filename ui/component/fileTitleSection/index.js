@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { doFetchSubCount, selectSubCountForUri } from 'lbryinc';
-import { makeSelectTitleForUri, makeSelectClaimForUri } from 'redux/selectors/claims';
+import { selectTitleForUri, makeSelectClaimForUri } from 'redux/selectors/claims';
 import { makeSelectInsufficientCreditsForUri } from 'redux/selectors/content';
 import { makeSelectViewersForId } from 'redux/selectors/livestream';
 import FileTitleSection from './view';
@@ -15,7 +15,7 @@ const select = (state, props) => {
   return {
     viewers,
     isInsufficientCredits: makeSelectInsufficientCreditsForUri(props.uri)(state),
-    title: makeSelectTitleForUri(props.uri)(state),
+    title: selectTitleForUri(state, props.uri),
     channelClaimId,
     subCount,
   };
