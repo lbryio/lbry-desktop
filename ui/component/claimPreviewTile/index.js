@@ -4,7 +4,6 @@ import {
   makeSelectIsUriResolving,
   getThumbnailFromClaim,
   makeSelectTitleForUri,
-  makeSelectClaimIsNsfw,
   makeSelectClaimIsStreamPlaceholder,
   selectDateForUri,
 } from 'redux/selectors/claims';
@@ -13,6 +12,7 @@ import { doResolveUri } from 'redux/actions/claims';
 import { selectViewCountForUri, selectBanStateForUri } from 'lbryinc';
 import { makeSelectIsActiveLivestream } from 'redux/selectors/livestream';
 import { selectShowMatureContent } from 'redux/selectors/settings';
+import { isClaimNsfw } from 'util/claim';
 import ClaimPreviewTile from './view';
 import formatMediaDuration from 'util/formatMediaDuration';
 
@@ -30,7 +30,7 @@ const select = (state, props) => {
     title: props.uri && makeSelectTitleForUri(props.uri)(state),
     banState: selectBanStateForUri(state, props.uri),
     showMature: selectShowMatureContent(state),
-    isMature: makeSelectClaimIsNsfw(props.uri)(state),
+    isMature: claim ? isClaimNsfw(claim) : false,
     isLivestream: makeSelectClaimIsStreamPlaceholder(props.uri)(state),
     isLivestreamActive: makeSelectIsActiveLivestream(props.uri)(state),
     viewCount: selectViewCountForUri(state, props.uri),

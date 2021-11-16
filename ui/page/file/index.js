@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { doSetContentHistoryItem, doSetPrimaryUri, clearPosition } from 'redux/actions/content';
 import { withRouter } from 'react-router-dom';
 import {
-  makeSelectClaimIsNsfw,
+  selectClaimIsNsfwForUri,
   makeSelectTagInClaimOrChannelForUri,
   makeSelectClaimIsStreamPlaceholder,
 } from 'redux/selectors/claims';
@@ -27,7 +27,7 @@ const select = (state, props) => {
     linkedCommentId: urlParams.get('lc'),
     costInfo: makeSelectCostInfoForUri(props.uri)(state),
     obscureNsfw: !selectShowMatureContent(state),
-    isMature: makeSelectClaimIsNsfw(props.uri)(state),
+    isMature: selectClaimIsNsfwForUri(state, props.uri),
     fileInfo: makeSelectFileInfoForUri(props.uri)(state),
     renderMode: makeSelectFileRenderModeForUri(props.uri)(state),
     videoTheaterMode: makeSelectClientSetting(SETTINGS.VIDEO_THEATER_MODE)(state),

@@ -570,21 +570,16 @@ export const makeSelectOmittedCountForChannel = (uri: string) =>
     }
   );
 
-export const makeSelectClaimIsNsfw = (uri: string) =>
-  createSelector(
-    makeSelectClaimForUri(uri),
-    // Eventually these will come from some list of tags that are considered adult
-    // Or possibly come from users settings of what tags they want to hide
-    // For now, there is just a hard coded list of tags inside `isClaimNsfw`
-    // selectNaughtyTags(),
-    (claim: Claim) => {
-      if (!claim) {
-        return false;
-      }
-
-      return isClaimNsfw(claim);
-    }
-  );
+export const selectClaimIsNsfwForUri = createCachedSelector(
+  selectClaimForUri,
+  // Eventually these will come from some list of tags that are considered adult
+  // Or possibly come from users settings of what tags they want to hide
+  // For now, there is just a hard coded list of tags inside `isClaimNsfw`
+  // selectNaughtyTags(),
+  (claim: Claim) => {
+    return claim ? isClaimNsfw(claim) : false;
+  }
+)((state, uri) => String(uri));
 
 // Returns the associated channel uri for a given claim uri
 // accepts a regular claim uri lbry://something

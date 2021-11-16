@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 import {
   makeSelectClaimForUri,
   selectClaimsByUri,
-  makeSelectClaimIsNsfw,
+  selectClaimIsNsfwForUri,
   makeSelectClaimIsMine,
   makeSelectContentTypeForUri,
 } from 'redux/selectors/claims';
@@ -85,10 +85,11 @@ export const selectRecentHistory = createSelector(selectHistory, (history) => {
   return history.slice(0, RECENT_HISTORY_AMOUNT);
 });
 
-export const makeSelectShouldObscurePreview = (uri: string) =>
-  createSelector(selectShowMatureContent, makeSelectClaimIsNsfw(uri), (showMatureContent, isClaimMature) => {
-    return isClaimMature && !showMatureContent;
-  });
+export const selectShouldObscurePreviewForUri = (state: State, uri: string) => {
+  const showMatureContent = selectShowMatureContent(state);
+  const isClaimMature = selectClaimIsNsfwForUri(state, uri);
+  return isClaimMature && !showMatureContent;
+};
 
 // should probably be in lbry-redux, yarn link was fighting me
 export const makeSelectFileExtensionForUri = (uri: string) =>

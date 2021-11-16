@@ -16,7 +16,7 @@ import {
 import { selectVolume, selectMute } from 'redux/selectors/app';
 import { savePosition, clearPosition, doPlayUri, doSetPlayingUri } from 'redux/actions/content';
 import { makeSelectContentPositionForUri, makeSelectIsPlayerFloating, selectPlayingUri } from 'redux/selectors/content';
-import { makeSelectRecommendedContentForUri } from 'redux/selectors/search';
+import { selectRecommendedContentForUri } from 'redux/selectors/search';
 import VideoViewer from './view';
 import { withRouter } from 'react-router';
 import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
@@ -44,7 +44,7 @@ const select = (state, props) => {
     nextRecommendedUri = makeSelectNextUrlForCollectionAndUrl(collectionId, uri)(state);
     previousListUri = makeSelectPreviousUrlForCollectionAndUrl(collectionId, uri)(state);
   } else {
-    const recommendedContent = makeSelectRecommendedContentForUri(uri)(state);
+    const recommendedContent = selectRecommendedContentForUri(state, uri);
     nextRecommendedUri = recommendedContent && recommendedContent[0];
   }
 

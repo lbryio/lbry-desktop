@@ -4,7 +4,7 @@ import {
   getThumbnailFromClaim,
   makeSelectTitleForUri,
   makeSelectChannelForClaimUri,
-  makeSelectClaimIsNsfw,
+  selectClaimIsNsfwForUri,
   selectClaimIdForUri,
   makeSelectClaimForClaimId,
 } from 'redux/selectors/claims';
@@ -46,7 +46,7 @@ const select = (state, props) => {
     filteredOutpoints: selectFilteredOutpoints(state),
     blockedChannelUris: selectMutedChannels(state),
     showMature: selectShowMatureContent(state),
-    isMature: makeSelectClaimIsNsfw(collectionUri)(state),
+    isMature: selectClaimIsNsfwForUri(state, collectionUri),
   };
 };
 
