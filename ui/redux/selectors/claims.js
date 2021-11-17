@@ -647,14 +647,20 @@ export const selectClaimSearchByQueryLastPageReached = createSelector(
   (state) => state.claimSearchByQueryLastPageReached || {}
 );
 
-export const makeSelectShortUrlForUri = (uri: string) =>
-  createSelector(makeSelectClaimForUri(uri), (claim) => claim && claim.short_url);
+export const selectShortUrlForUri = (state: State, uri: string) => {
+  const claim = selectClaimForUri(state, uri);
+  return claim && claim.short_url;
+};
 
-export const makeSelectCanonicalUrlForUri = (uri: string) =>
-  createSelector(makeSelectClaimForUri(uri), (claim) => claim && claim.canonical_url);
+export const selectCanonicalUrlForUri = (state: State, uri: string) => {
+  const claim = selectClaimForUri(state, uri);
+  return claim && claim.canonical_url;
+};
 
-export const makeSelectPermanentUrlForUri = (uri: string) =>
-  createSelector(makeSelectClaimForUri(uri), (claim) => claim && claim.permanent_url);
+export const selectPermanentUrlForUri = (state: State, uri: string) => {
+  const claim = selectClaimForUri(state, uri);
+  return claim && claim.permanent_url;
+};
 
 export const makeSelectSupportsForUri = (uri: string) =>
   createSelector(selectSupportsByOutpoint, makeSelectClaimForUri(uri), (byOutpoint, claim: ?StreamClaim) => {

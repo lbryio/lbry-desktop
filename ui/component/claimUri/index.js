@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
-import { makeSelectCanonicalUrlForUri } from 'redux/selectors/claims';
+import { selectCanonicalUrlForUri } from 'redux/selectors/claims';
 import { doToast } from 'redux/actions/notifications';
 import ClaimUri from './view';
 
 const select = (state, props) => ({
-  shortUrl: makeSelectCanonicalUrlForUri(props.uri)(state),
+  shortUrl: selectCanonicalUrlForUri(state, props.uri),
 });
 
 export default connect(select, {

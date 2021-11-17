@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import InvitedPage from './view';
-import { makeSelectPermanentUrlForUri } from 'redux/selectors/claims';
+import { selectPermanentUrlForUri } from 'redux/selectors/claims';
 import { withRouter } from 'react-router';
 
 const select = (state, props) => {
@@ -10,7 +10,7 @@ const select = (state, props) => {
   const sanitizedReferrer = referrer ? referrer.replace(':', '#') : '';
   const uri = `lbry://${sanitizedReferrer}`;
   return {
-    fullUri: makeSelectPermanentUrlForUri(uri)(state),
+    fullUri: selectPermanentUrlForUri(state, uri),
     referrer: referrer,
   };
 };
