@@ -1,5 +1,6 @@
 const { getHtml } = require('./html');
 const { getRss } = require('./rss');
+const { getTempFile } = require('./tempfile');
 const { getHomepageJSON } = require('./getHomepageJSON');
 const { generateStreamUrl } = require('../../ui/util/web');
 const fetch = require('node-fetch');
@@ -24,6 +25,11 @@ const rssMiddleware = async (ctx) => {
     ctx.set('Content-Type', 'application/xml');
   }
   ctx.body = rss;
+};
+
+const tempfileMiddleware = async (ctx) => {
+  const temp = await getTempFile(ctx);
+  ctx.body = temp;
 };
 
 router.get(`/$/api/content/v1/get`, async (ctx) => {
@@ -64,6 +70,8 @@ router.get(`/$/stream/:claimName/:claimId`, async (ctx) => {
 router.get(`/$/activate`, async (ctx) => {
   ctx.redirect(`https://sso.odysee.com/auth/realms/Users/device`);
 });
+// to add a path for a temp file on the server, customize this path
+router.get('/.well-known/:filename', tempfileMiddleware);
 
 router.get(`/$/rss/:claimName/:claimId`, rssMiddleware);
 router.get(`/$/rss/:claimName::claimId`, rssMiddleware);
