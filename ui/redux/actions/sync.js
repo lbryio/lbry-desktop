@@ -124,7 +124,6 @@ export function doSyncLoop(noInterval?: boolean) {
     const syncLocked = selectSyncIsLocked(state);
     if (hasVerifiedEmail && syncEnabled && !syncLocked) {
       dispatch(doGetSyncDesktop((error, hasNewData) => dispatch(doHandleSyncComplete(error, hasNewData))));
-      dispatch(doAnalyticsTagSync());
       if (!noInterval) {
         syncTimer = setInterval(() => {
           const state = getState();
