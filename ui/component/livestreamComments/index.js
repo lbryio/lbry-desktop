@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { MAX_LIVESTREAM_COMMENTS } from 'constants/livestream';
 import { doResolveUris } from 'redux/actions/claims';
 import { selectClaimForUri, selectMyClaimIdsRaw } from 'redux/selectors/claims';
 import { doCommentSocketConnect, doCommentSocketDisconnect } from 'redux/actions/websocket';
@@ -10,9 +11,8 @@ import {
   selectSuperChatTotalAmountForUri,
   selectPinnedCommentsForUri,
 } from 'redux/selectors/comments';
-import LivestreamComments from './view';
 
-const MAX_LIVESTREAM_COMMENTS = 75;
+import LivestreamComments from './view';
 
 const select = (state, props) => ({
   claim: selectClaimForUri(state, props.uri),

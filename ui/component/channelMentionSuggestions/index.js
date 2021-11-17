@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { MAX_LIVESTREAM_COMMENTS } from 'constants/livestream';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import { withRouter } from 'react-router';
@@ -9,7 +10,11 @@ import ChannelMentionSuggestions from './view';
 
 const select = (state, props) => {
   const subscriptionUris = selectSubscriptions(state).map(({ uri }) => uri);
-  const topLevelComments = selectTopLevelCommentsForUri(state, props.uri);
+  const topLevelComments = selectTopLevelCommentsForUri(
+    state,
+    props.uri,
+    props.isLivestream ? MAX_LIVESTREAM_COMMENTS : -1
+  );
 
   const commentorUris = [];
   // Avoid repeated commentors
