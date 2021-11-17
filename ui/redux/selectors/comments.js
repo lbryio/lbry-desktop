@@ -51,12 +51,11 @@ export const selectCommentsByUri = createSelector(selectState, (state) => {
 
 export const selectPinnedCommentsById = (state: State) => selectState(state).pinnedCommentsById;
 export const selectPinnedCommentsForUri = createCachedSelector(
-  selectCommentsByUri,
+  selectClaimIdForUri,
   selectCommentsById,
   selectPinnedCommentsById,
   (state, uri) => uri,
-  (byUri, byId, pinnedCommentsById, uri) => {
-    const claimId = byUri[uri];
+  (claimId, byId, pinnedCommentsById, uri) => {
     const pinnedCommentIds = pinnedCommentsById && pinnedCommentsById[claimId];
     const pinnedComments = [];
 
@@ -199,10 +198,9 @@ export const selectFetchingBlockedWords = (state: State) => selectState(state).f
 export const selectCommentsForUri = createCachedSelector(
   (state, uri) => uri,
   selectCommentsByClaimId,
-  selectCommentsByUri,
+  selectClaimIdForUri,
   ...Object.values(filterCommentsDepOnList),
-  (uri, byClaimId, byUri, ...filterInputs) => {
-    const claimId = byUri[uri];
+  (uri, byClaimId, claimId, ...filterInputs) => {
     const comments = byClaimId && byClaimId[claimId];
     return filterComments(comments, claimId, filterInputs);
   }
@@ -212,21 +210,14 @@ export const selectTopLevelCommentsForUri = createCachedSelector(
   (state, uri) => uri,
   (state, uri, maxCount) => maxCount,
   selectTopLevelCommentsByClaimId,
-  selectCommentsByUri,
+  selectClaimIdForUri,
   ...Object.values(filterCommentsDepOnList),
-  (uri, maxCount = -1, byClaimId, byUri, ...filterInputs) => {
-    const claimId = byUri[uri];
+  (uri, maxCount = -1, byClaimId, claimId, ...filterInputs) => {
     const comments = byClaimId && byClaimId[claimId];
     const filtered = filterComments(comments, claimId, filterInputs);
     return maxCount > 0 ? filtered.slice(0, maxCount) : filtered;
   }
 )((state, uri, maxCount = -1) => `${String(uri)}:${maxCount}`);
-
-export const makeSelectTopLevelTotalCommentsForUri = (uri: string) =>
-  createSelector(selectState, selectCommentsByUri, (state, byUri) => {
-    const claimId = byUri[uri];
-    return state.topLevelTotalCommentsById[claimId] || 0;
-  });
 
 export const makeSelectTopLevelTotalPagesForUri = (uri: string) =>
   createSelector(selectState, selectCommentsByUri, (state, byUri) => {
