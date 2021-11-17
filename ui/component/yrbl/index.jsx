@@ -41,7 +41,7 @@ export default class extends React.PureComponent<Props> {
           {(title || subtitle) && (
             <div className="yrbl__content">
               <h2 className="section__title">{title}</h2>
-              <p className="section__subtitle">{subtitle}</p>
+              <div className="section__subtitle">{subtitle}</div>
             </div>
           )}
           {actions}
