@@ -20,6 +20,11 @@ export const selectSubscriptions = createSelector(
   (state) => state.subscriptions && state.subscriptions.sort((a, b) => a.channelName.localeCompare(b.channelName))
 );
 
+export const selectSubscriptionUris = createSelector(
+  selectSubscriptions,
+  (subscriptions) => subscriptions && subscriptions.map((sub) => sub.uri)
+);
+
 export const selectFollowing = createSelector(selectState, (state) => state.following && state.following);
 
 // Fetching list of users subscriptions
