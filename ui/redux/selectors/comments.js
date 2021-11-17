@@ -214,8 +214,11 @@ export const selectTopLevelCommentsForUri = createCachedSelector(
   ...Object.values(filterCommentsDepOnList),
   (uri, maxCount = -1, byClaimId, claimId, ...filterInputs) => {
     const comments = byClaimId && byClaimId[claimId];
-    const filtered = filterComments(comments, claimId, filterInputs);
-    return maxCount > 0 ? filtered.slice(0, maxCount) : filtered;
+    if (comments) {
+      return filterComments(maxCount > 0 ? comments.slice(0, maxCount) : comments, claimId, filterInputs);
+    } else {
+      return [];
+    }
   }
 )((state, uri, maxCount = -1) => `${String(uri)}:${maxCount}`);
 
