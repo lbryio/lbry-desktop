@@ -16,7 +16,6 @@ import { parseSticker } from 'util/comments';
 type Props = {
   uri: string,
   claim: ?StreamClaim,
-  activeViewers: number,
   embed?: boolean,
   doCommentSocketConnect: (string, string) => void,
   doCommentSocketDisconnect: (string) => void,

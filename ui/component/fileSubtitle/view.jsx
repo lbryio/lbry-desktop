@@ -8,12 +8,11 @@ import ClaimPreviewReset from 'component/claimPreviewReset';
 type Props = {
   uri: string,
   livestream?: boolean,
-  activeViewers?: number,
   isLive?: boolean,
 };
 
 function FileSubtitle(props: Props) {
-  const { uri, livestream = false, activeViewers, isLive = false } = props;
+  const { uri, livestream = false, isLive = false } = props;
 
   return (
     <>
@@ -21,7 +20,7 @@ function FileSubtitle(props: Props) {
         <div className="file__viewdate">
           {livestream ? <span>{__('Right now')}</span> : <DateTime uri={uri} show={DateTime.SHOW_DATE} />}
 
-          <FileViewCount uri={uri} livestream={livestream} activeViewers={activeViewers} isLive={isLive} />
+          <FileViewCount uri={uri} livestream={livestream} isLive={isLive} />
         </div>
 
         <FileActions uri={uri} hideRepost={livestream} livestream={livestream} />

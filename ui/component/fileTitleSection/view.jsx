@@ -21,7 +21,6 @@ type Props = {
   isNsfwBlocked: boolean,
   livestream?: boolean,
   isLive?: boolean,
-  viewers?: number,
   subCount: number,
   channelClaimId?: string,
   fetchSubCount: (string) => void,
@@ -35,7 +34,6 @@ function FileTitleSection(props: Props) {
     isNsfwBlocked,
     livestream = false,
     isLive = false,
-    viewers,
     subCount,
     channelClaimId,
     fetchSubCount,
@@ -66,7 +64,7 @@ function FileTitleSection(props: Props) {
         body={
           <React.Fragment>
             <ClaimInsufficientCredits uri={uri} />
-            <FileSubtitle uri={uri} isLive={isLive} livestream={livestream} activeViewers={viewers} />
+            <FileSubtitle uri={uri} isLive={isLive} livestream={livestream} />
           </React.Fragment>
         }
         actions={
