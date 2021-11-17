@@ -29,8 +29,10 @@ export const selectViewersById = (state: State) => selectState(state).viewersByI
 export const makeSelectIsFetchingLivestreams = (channelId: string) =>
   createSelector(selectFetchingLivestreams, (fetchingLivestreams) => Boolean(fetchingLivestreams[channelId]));
 
-export const makeSelectViewersForId = (channelId: string) =>
-  createSelector(selectViewersById, (viewers) => viewers[channelId]);
+export const selectViewersForId = (state: State, channelId: string) => {
+  const viewers = selectViewersById(state);
+  return viewers[channelId];
+};
 
 export const makeSelectPendingLivestreamsForChannelId = (channelId: string) =>
   createSelector(selectPendingClaims, (pendingClaims) => {
