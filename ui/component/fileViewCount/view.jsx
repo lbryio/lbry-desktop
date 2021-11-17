@@ -4,20 +4,19 @@ import React from 'react';
 import HelpLink from 'component/common/help-link';
 
 type Props = {
-  claim: ?StreamClaim,
+  livestream?: boolean,
+  isLive?: boolean,
+  // --- redux ---
+  claimId: ?string,
   fetchViewCount: (string) => void,
-  fetchingViewCount: boolean,
   uri: string,
   viewCount: string,
-  livestream?: boolean,
   activeViewers?: number,
-  isLive?: boolean,
   doAnalyticsView: (string) => void,
 };
 
 function FileViewCount(props: Props) {
-  const { claim, uri, fetchViewCount, viewCount, livestream, activeViewers, isLive = false, doAnalyticsView } = props;
-  const claimId = claim && claim.claim_id;
+  const { claimId, uri, fetchViewCount, viewCount, livestream, activeViewers, isLive = false, doAnalyticsView } = props;
 
   React.useEffect(() => {
     if (livestream) {
