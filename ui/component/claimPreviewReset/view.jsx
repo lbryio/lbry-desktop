@@ -20,8 +20,9 @@ const ClaimPreviewReset = (props: Props) => {
   const [isLivestreaming, setIsLivestreaming] = React.useState(false);
 
   React.useEffect(() => {
+    if (!claimIsMine) return;
     return watchLivestreamStatus(channelId, (state) => setIsLivestreaming(state));
-  }, [channelId, setIsLivestreaming]);
+  }, [channelId, setIsLivestreaming, claimIsMine]);
 
   if (!claimIsMine || !isLivestreaming) return null;
 

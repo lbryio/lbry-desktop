@@ -4,7 +4,6 @@ import { lazyImport } from 'util/lazyImport';
 import Page from 'component/page';
 import LivestreamLayout from 'component/livestreamLayout';
 import analytics from 'analytics';
-import Lbry from 'lbry';
 import watchLivestreamStatus from '$web/src/livestreaming/long-polling';
 
 const LivestreamComments = lazyImport(() => import('component/livestreamComments' /* webpackChunkName: "comments" */));
@@ -21,43 +20,16 @@ type Props = {
 
 export default function LivestreamPage(props: Props) {
   const { uri, claim, doSetPlayingUri, isAuthenticated, doUserSetReferrer, channelClaim, chatDisabled } = props;
-  const [isLive, setIsLive] = React.useState(true);
+  const [isLive, setIsLive] = React.useState('pending');
   const livestreamChannelId = channelClaim && channelClaim.signing_channel && channelClaim.signing_channel.claim_id;
-  const [hasLivestreamClaim, setHasLivestreamClaim] = React.useState(false);
-
-  const LIVESTREAM_CLAIM_POLL_IN_MS = 60000;
 
   React.useEffect(() => {
-    let checkClaimsInterval;
-    function checkHasLivestreamClaim() {
-      Lbry.claim_search({
-        channel_ids: [livestreamChannelId],
-        has_no_source: true,
-        claim_type: ['stream'],
-      })
-        .then((res) => {
-          if (res && res.items && res.items.length > 0) {
-            setHasLivestreamClaim(true);
-          }
-        })
-        .catch(() => {});
+    if (!livestreamChannelId) {
+      setIsLive(false);
+      return;
     }
-    if (livestreamChannelId && !isLive) {
-      if (!checkClaimsInterval) checkHasLivestreamClaim();
-      checkClaimsInterval = setInterval(checkHasLivestreamClaim, LIVESTREAM_CLAIM_POLL_IN_MS);
-
-      return () => {
-        if (checkClaimsInterval) {
-          clearInterval(checkClaimsInterval);
-        }
-      };
-    }
-  }, [livestreamChannelId, isLive]);
-
-  React.useEffect(() => {
-    if (!hasLivestreamClaim || !livestreamChannelId) return;
     return watchLivestreamStatus(livestreamChannelId, (state) => setIsLive(state));
-  }, [livestreamChannelId, setIsLive, hasLivestreamClaim]);
+  }, [livestreamChannelId, setIsLive]);
 
   const stringifiedClaim = JSON.stringify(claim);
   React.useEffect(() => {
@@ -87,20 +59,22 @@ export default function LivestreamPage(props: Props) {
   }, [doSetPlayingUri]);
 
   return (
-    <Page
-      className="file-page"
-      noFooter
-      livestream
-      chatDisabled={chatDisabled}
-      rightSide={
-        !chatDisabled && (
-          <React.Suspense fallback={null}>
-            <LivestreamComments uri={uri} />
-          </React.Suspense>
-        )
-      }
-    >
-      <LivestreamLayout uri={uri} isLive={isLive} />
-    </Page>
+    isLive !== 'pending' && (
+      <Page
+        className="file-page"
+        noFooter
+        livestream
+        chatDisabled={chatDisabled}
+        rightSide={
+          !chatDisabled && (
+            <React.Suspense fallback={null}>
+              <LivestreamComments uri={uri} />
+            </React.Suspense>
+          )
+        }
+      >
+        <LivestreamLayout uri={uri} isLive={isLive} />
+      </Page>
+    )
   );
 }
