@@ -10,7 +10,7 @@ const select = (state, props) => {
   return {
     claimId,
     viewCount: selectViewCountForUri(state, props.uri),
-    activeViewers: props.livestream && props.isLive && claimId ? selectViewersForId(state, claimId) : undefined,
+    activeViewers: props.livestream && claimId ? selectViewersForId(state, claimId) : undefined,
   };
 };
 
