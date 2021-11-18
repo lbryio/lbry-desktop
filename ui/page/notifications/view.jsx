@@ -74,13 +74,6 @@ export default function NotificationsPage(props: Props) {
   }, [doCommentReactList, list, activeChannel, fetching, initialFetchDone]);
 
   React.useEffect(() => {
-    if (unseenCount > 0 || unreadCount > 0) {
-      // If there are unread notifications when entering the page, reset to All.
-      setName(NOTIFICATIONS.NOTIFICATION_NAME_ALL);
-    }
-  }, []);
-
-  React.useEffect(() => {
     if (unseenCount > 0) {
       doSeeAllNotifications();
     }
@@ -120,13 +113,7 @@ export default function NotificationsPage(props: Props) {
             <Button icon={ICONS.EYE} onClick={doReadNotifications} button="secondary" label={__('Mark all as read')} />
           )}
           {notificationCategories && (
-            <FormField
-              className="notification__filter"
-              type="select"
-              name="filter"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            >
+            <FormField type="select" name="filter" value={name} onChange={(e) => setName(e.target.value)}>
               {notificationCategories.map((category) => {
                 return (
                   <option key={category.name} value={category.name}>
@@ -170,7 +157,7 @@ export default function NotificationsPage(props: Props) {
   );
 
   return (
-    <Page>
+    <Page className="notification-page">
       {initialFetchDone ? (
         notificationListElement
       ) : fetching ? (

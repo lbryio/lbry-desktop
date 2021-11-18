@@ -279,10 +279,23 @@ $contentMaxWidth: 60rem;
   }
 }
 
-.notification__filter {
-  display: none;
+.notification-page {
+  @media (max-width: $breakpoint-small) {
+    .claim-list__header {
+      display: block;
+    }
 
-  @media (min-width: $breakpoint-small) {
-    display: block;
+    .claim-list__alt-controls--wrap {
+      display: block;
+      text-align: right;
+
+      .button {
+        margin-bottom: var(--spacing-s);
+      }
+
+      fieldset-section {
+        margin-left: 0;
+      }
+    }
   }
 }
