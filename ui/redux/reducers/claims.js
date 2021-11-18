@@ -159,6 +159,20 @@ function claimObjHasNewData(original, fresh) {
   return originalStringified !== freshStringified;
 }
 
+/**
+ * Adds the new value to the delta if the value is different from the original.
+ *
+ * @param original The original object.
+ * @param delta The delta object containing a list of changes.
+ * @param key
+ * @param newValue
+ */
+function updateIfValueChanged(original, delta, key, newValue) {
+  if (original[key] !== newValue) {
+    delta[key] = newValue;
+  }
+}
+
 // ****************************************************************************
 // handleClaimAction
 // ****************************************************************************
@@ -166,7 +180,7 @@ function claimObjHasNewData(original, fresh) {
 function handleClaimAction(state: State, action: any): State {
   const { resolveInfo }: ClaimActionResolveInfo = action.data;
 
-  const byUri = Object.assign({}, state.claimsByUri);
+  const byUriDelta = {};
   const byIdDelta = {};
   const channelClaimCounts = Object.assign({}, state.channelClaimCounts);
   const pendingById = state.pendingById;
@@ -187,13 +201,13 @@ function handleClaimAction(state: State, action: any): State {
         }
       }
 
-      byUri[url] = stream.claim_id;
+      updateIfValueChanged(state.claimsByUri, byUriDelta, url, stream.claim_id);
 
       // If url isn't a canonical_url, make sure that is added too
-      byUri[stream.canonical_url] = stream.claim_id;
+      updateIfValueChanged(state.claimsByUri, byUriDelta, stream.canonical_url, stream.claim_id);
 
       // Also add the permanent_url here until lighthouse returns canonical_url for search results
-      byUri[stream.permanent_url] = stream.claim_id;
+      updateIfValueChanged(state.claimsByUri, byUriDelta, stream.permanent_url, stream.claim_id);
       newResolvingUrls.delete(stream.canonical_url);
       newResolvingUrls.delete(stream.permanent_url);
 
@@ -204,7 +218,7 @@ function handleClaimAction(state: State, action: any): State {
 
     if (channel && channel.claim_id) {
       if (!stream) {
-        byUri[url] = channel.claim_id;
+        updateIfValueChanged(state.claimsByUri, byUriDelta, url, channel.claim_id);
       }
 
       if (claimsInChannel) {
@@ -218,8 +232,8 @@ function handleClaimAction(state: State, action: any): State {
         byIdDelta[channel.claim_id] = channel;
       }
 
-      byUri[channel.permanent_url] = channel.claim_id;
-      byUri[channel.canonical_url] = channel.claim_id;
+      updateIfValueChanged(state.claimsByUri, byUriDelta, channel.permanent_url, channel.claim_id);
+      updateIfValueChanged(state.claimsByUri, byUriDelta, channel.canonical_url, channel.claim_id);
       newResolvingUrls.delete(channel.canonical_url);
       newResolvingUrls.delete(channel.permanent_url);
     }
@@ -231,9 +245,9 @@ function handleClaimAction(state: State, action: any): State {
         byIdDelta[collection.claim_id] = collection;
       }
 
-      byUri[url] = collection.claim_id;
-      byUri[collection.canonical_url] = collection.claim_id;
-      byUri[collection.permanent_url] = collection.claim_id;
+      updateIfValueChanged(state.claimsByUri, byUriDelta, url, collection.claim_id);
+      updateIfValueChanged(state.claimsByUri, byUriDelta, collection.canonical_url, collection.claim_id);
+      updateIfValueChanged(state.claimsByUri, byUriDelta, collection.permanent_url, collection.claim_id);
       newResolvingUrls.delete(collection.canonical_url);
       newResolvingUrls.delete(collection.permanent_url);
 
@@ -243,14 +257,14 @@ function handleClaimAction(state: State, action: any): State {
     }
 
     newResolvingUrls.delete(url);
-    if (!stream && !channel && !collection && !pendingById[byUri[url]]) {
-      byUri[url] = null;
+    if (!stream && !channel && !collection && !pendingById[state.claimsByUri[url]]) {
+      updateIfValueChanged(state.claimsByUri, byUriDelta, url, null);
     }
   });
 
   return Object.assign({}, state, {
     byId: resolveDelta(state.byId, byIdDelta),
-    claimsByUri: byUri,
+    claimsByUri: resolveDelta(state.claimsByUri, byUriDelta),
     channelClaimCounts,
     resolvingUris: Array.from(newResolvingUrls),
     ...(!state.myClaims || myClaimIds.size !== state.myClaims.length ? { myClaims: Array.from(myClaimIds) } : {}),
@@ -296,7 +310,7 @@ reducers[ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED] = (state: State, action: any):
   const totalItems = result.total_items;
 
   const byId = Object.assign({}, state.byId);
-  const byUri = Object.assign({}, state.claimsByUri);
+  const byUriDelta = {};
   const pendingByIdDelta = {};
 
   let myClaimIds = new Set(state.myClaims);
@@ -319,8 +333,8 @@ reducers[ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED] = (state: State, action: any):
         byId[claimId] = claim;
       }
 
-      byUri[permanentUri] = claimId;
-      byUri[canonicalUri] = claimId;
+      updateIfValueChanged(state.claimsByUri, byUriDelta, permanentUri, claimId);
+      updateIfValueChanged(state.claimsByUri, byUriDelta, canonicalUri, claimId);
       myClaimIds.add(claimId);
     }
   });
@@ -330,7 +344,7 @@ reducers[ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED] = (state: State, action: any):
     myClaims: Array.from(myClaimIds),
     byId,
     pendingById: resolveDelta(state.pendingById, pendingByIdDelta),
-    claimsByUri: byUri,
+    claimsByUri: resolveDelta(state.claimsByUri, byUriDelta),
     myClaimsPageResults: urlsForCurrentPage,
     myClaimsPageNumber: page,
     myClaimsPageTotalResults: totalItems,
@@ -346,7 +360,7 @@ reducers[ACTIONS.FETCH_CHANNEL_LIST_COMPLETED] = (state: State, action: any): St
   const pendingByIdDelta = {};
   let myChannelClaims;
   const byId = Object.assign({}, state.byId);
-  const byUri = Object.assign({}, state.claimsByUri);
+  const byUriDelta = {};
   const channelClaimCounts = Object.assign({}, state.channelClaimCounts);
 
   if (!claims.length) {
@@ -359,8 +373,8 @@ reducers[ACTIONS.FETCH_CHANNEL_LIST_COMPLETED] = (state: State, action: any): St
       const { claims_in_channel: claimsInChannel } = meta;
       const { canonical_url: canonicalUrl, permanent_url: permanentUrl, claim_id: claimId, confirmations } = claim;
 
-      byUri[canonicalUrl] = claimId;
-      byUri[permanentUrl] = claimId;
+      updateIfValueChanged(state.claimsByUri, byUriDelta, canonicalUrl, claimId);
+      updateIfValueChanged(state.claimsByUri, byUriDelta, permanentUrl, claimId);
       channelClaimCounts[canonicalUrl] = claimsInChannel;
       channelClaimCounts[permanentUrl] = claimsInChannel;
 
@@ -386,7 +400,7 @@ reducers[ACTIONS.FETCH_CHANNEL_LIST_COMPLETED] = (state: State, action: any): St
   return Object.assign({}, state, {
     byId,
     pendingById: resolveDelta(state.pendingById, pendingByIdDelta),
-    claimsByUri: byUri,
+    claimsByUri: resolveDelta(state.claimsByUri, byUriDelta),
     channelClaimCounts,
     fetchingMyChannels: false,
     myChannelClaims: myChannelClaims ? Array.from(myChannelClaims) : null,
@@ -412,15 +426,15 @@ reducers[ACTIONS.FETCH_COLLECTION_LIST_COMPLETED] = (state: State, action: any):
   const pendingByIdDelta = {};
   let myCollectionClaimsSet = new Set([]);
   const byId = Object.assign({}, state.byId);
-  const byUri = Object.assign({}, state.claimsByUri);
+  const byUriDelta = {};
 
   if (claims.length) {
     myCollectionClaimsSet = new Set(state.myCollectionClaims);
     claims.forEach((claim) => {
       const { canonical_url: canonicalUrl, permanent_url: permanentUrl, claim_id: claimId, confirmations } = claim;
 
-      byUri[canonicalUrl] = claimId;
-      byUri[permanentUrl] = claimId;
+      updateIfValueChanged(state.claimsByUri, byUriDelta, canonicalUrl, claimId);
+      updateIfValueChanged(state.claimsByUri, byUriDelta, permanentUrl, claimId);
 
       // $FlowFixMe
       myCollectionClaimsSet.add(claimId);
@@ -446,7 +460,7 @@ reducers[ACTIONS.FETCH_COLLECTION_LIST_COMPLETED] = (state: State, action: any):
     ...state,
     byId,
     pendingById: resolveDelta(state.pendingById, pendingByIdDelta),
-    claimsByUri: byUri,
+    claimsByUri: resolveDelta(state.claimsByUri, byUriDelta),
     fetchingMyCollections: false,
     myCollectionClaims: Array.from(myCollectionClaimsSet),
     myClaims: myClaimIds ? Array.from(myClaimIds) : null,
@@ -495,14 +509,14 @@ reducers[ACTIONS.FETCH_CHANNEL_CLAIMS_COMPLETED] = (state: State, action: any): 
   const currentPageClaimIds = [];
   const byId = Object.assign({}, state.byId);
   const fetchingChannelClaims = Object.assign({}, state.fetchingChannelClaims);
-  const claimsByUri = Object.assign({}, state.claimsByUri);
+  const claimsByUriDelta = {};
 
   if (claims !== undefined) {
     claims.forEach((claim) => {
       allClaimIds.add(claim.claim_id);
       currentPageClaimIds.push(claim.claim_id);
       byId[claim.claim_id] = claim;
-      claimsByUri[claim.canonical_url] = claim.claim_id;
+      updateIfValueChanged(state.claimsByUri, claimsByUriDelta, claim.canonical_url, claim.claim_id);
     });
   }
 
@@ -517,7 +531,7 @@ reducers[ACTIONS.FETCH_CHANNEL_CLAIMS_COMPLETED] = (state: State, action: any): 
     paginatedClaimsByChannel,
     byId,
     fetchingChannelClaims,
-    claimsByUri,
+    claimsByUri: resolveDelta(state.claimsByUri, claimsByUriDelta),
     channelClaimCounts,
     currentChannelPage: page,
   });
@@ -538,7 +552,7 @@ reducers[ACTIONS.UPDATE_PENDING_CLAIMS] = (state: State, action: any): State => 
   const { claims: pendingClaims }: { claims: Array<Claim> } = action.data;
   const byId = Object.assign({}, state.byId);
   const pendingById = Object.assign({}, state.pendingById);
-  const byUri = Object.assign({}, state.claimsByUri);
+  const byUriDelta = {};
   let myClaimIds = new Set(state.myClaims);
   const myChannelClaims = new Set(state.myChannelClaims);
 
@@ -559,7 +573,7 @@ reducers[ACTIONS.UPDATE_PENDING_CLAIMS] = (state: State, action: any): State => 
 
     if (type && type.match(/claim|update/)) {
       byId[claimId] = newClaim;
-      byUri[uri] = claimId;
+      updateIfValueChanged(state.claimsByUri, byUriDelta, uri, claimId);
     }
     myClaimIds.add(claimId);
   });
@@ -568,7 +582,7 @@ reducers[ACTIONS.UPDATE_PENDING_CLAIMS] = (state: State, action: any): State => 
     byId,
     pendingById,
     myChannelClaims: Array.from(myChannelClaims),
-    claimsByUri: byUri,
+    claimsByUri: resolveDelta(state.claimsByUri, byUriDelta),
   });
 };
 
@@ -578,8 +592,7 @@ reducers[ACTIONS.UPDATE_CONFIRMED_CLAIMS] = (state: State, action: any): State =
     pending: pendingClaims,
   }: { claims: Array<Claim>, pending: { [string]: Claim } } = action.data;
   const byId = Object.assign({}, state.byId);
-  const byUri = Object.assign({}, state.claimsByUri);
-  //
+
   confirmedClaims.forEach((claim: GenericClaim) => {
     const { claim_id: claimId, type } = claim;
     let newClaim = claim;
@@ -591,10 +604,10 @@ reducers[ACTIONS.UPDATE_CONFIRMED_CLAIMS] = (state: State, action: any): State =
       byId[claimId] = newClaim;
     }
   });
+
   return Object.assign({}, state, {
     pendingById: pendingClaims,
     byId,
-    claimsByUri: byUri,
   });
 };
 
@@ -888,7 +901,7 @@ reducers[ACTIONS.PURCHASE_LIST_COMPLETED] = (state: State, action: any): State =
   const totalItems = result.total_items;
 
   let byId = Object.assign({}, state.byId);
-  let byUri = Object.assign({}, state.claimsByUri);
+  let byUriDelta = {};
   let urlsForCurrentPage = [];
 
   result.items.forEach((item) => {
@@ -903,13 +916,13 @@ reducers[ACTIONS.PURCHASE_LIST_COMPLETED] = (state: State, action: any): State =
     const uri = claim.canonical_url;
 
     byId[claimId] = claim;
-    byUri[uri] = claimId;
+    updateIfValueChanged(state.claimsByUri, byUriDelta, uri, claimId);
     urlsForCurrentPage.push(uri);
   });
 
   return Object.assign({}, state, {
     byId,
-    claimsByUri: byUri,
+    claimsByUri: resolveDelta(state.claimsByUri, byUriDelta),
     myPurchases: urlsForCurrentPage,
     myPurchasesPageNumber: page,
     myPurchasesPageTotalResults: totalItems,
