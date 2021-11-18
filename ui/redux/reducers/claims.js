@@ -130,7 +130,7 @@ function resolveDelta(original: any, delta: any) {
   }
 }
 
-function claimObjHasNewData(original, fresh) {
+function claimHasNewData(original, fresh) {
   // Don't blow away 'is_my_output' just because the next query didn't ask for it.
   const ignoreIsMyOutput = original.is_my_output !== undefined && fresh.is_my_output === undefined;
 
@@ -139,10 +139,14 @@ function claimObjHasNewData(original, fresh) {
   // Just do a length comparison for now, which covers 99% of cases while we
   // figure out what's causing the order to change.
   const ignoreTags =
+    original &&
     original.value &&
-    fresh.value &&
     original.value.tags &&
+    original.value.tags.length &&
+    fresh &&
+    fresh.value &&
     fresh.value.tags &&
+    fresh.value.tags.length &&
     original.value.tags.length !== fresh.value.tags.length;
 
   const excludeKeys = (key, value) => {
@@ -162,14 +166,29 @@ function claimObjHasNewData(original, fresh) {
 /**
  * Adds the new value to the delta if the value is different from the original.
  *
- * @param original The original object.
- * @param delta The delta object containing a list of changes.
+ * @param original The original state object.
+ * @param delta The delta state object containing a list of changes.
  * @param key
  * @param newValue
  */
 function updateIfValueChanged(original, delta, key, newValue) {
   if (original[key] !== newValue) {
     delta[key] = newValue;
+  }
+}
+
+/**
+ * Adds the new claim to the delta if the claim contains changes that the GUI
+ * would care about.
+ *
+ * @param original The original state object.
+ * @param delta The delta state object containing a list of changes.
+ * @param key
+ * @param newClaim
+ */
+function updateIfClaimChanged(original, delta, key, newClaim) {
+  if (!original[key] || claimHasNewData(original[key], newClaim)) {
+    delta[key] = newClaim;
   }
 }
 
@@ -196,9 +215,7 @@ function handleClaimAction(state: State, action: any): State {
       if (pendingById[stream.claim_id]) {
         byIdDelta[stream.claim_id] = mergeClaim(stream, state.byId[stream.claim_id]);
       } else {
-        if (!state.byId[stream.claim_id] || claimObjHasNewData(state.byId[stream.claim_id], stream)) {
-          byIdDelta[stream.claim_id] = stream;
-        }
+        updateIfClaimChanged(state.byId, byIdDelta, stream.claim_id, stream);
       }
 
       updateIfValueChanged(state.claimsByUri, byUriDelta, url, stream.claim_id);
@@ -229,7 +246,7 @@ function handleClaimAction(state: State, action: any): State {
       if (pendingById[channel.claim_id]) {
         byIdDelta[channel.claim_id] = mergeClaim(channel, state.byId[channel.claim_id]);
       } else {
-        byIdDelta[channel.claim_id] = channel;
+        updateIfClaimChanged(state.byId, byIdDelta, channel.claim_id, channel);
       }
 
       updateIfValueChanged(state.claimsByUri, byUriDelta, channel.permanent_url, channel.claim_id);
@@ -242,7 +259,7 @@ function handleClaimAction(state: State, action: any): State {
       if (pendingById[collection.claim_id]) {
         byIdDelta[collection.claim_id] = mergeClaim(collection, state.byId[collection.claim_id]);
       } else {
-        byIdDelta[collection.claim_id] = collection;
+        updateIfClaimChanged(state.byId, byIdDelta, collection.claim_id, collection);
       }
 
       updateIfValueChanged(state.claimsByUri, byUriDelta, url, collection.claim_id);
@@ -309,7 +326,7 @@ reducers[ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED] = (state: State, action: any):
   const page = result.page;
   const totalItems = result.total_items;
 
-  const byId = Object.assign({}, state.byId);
+  const byIdDelta = {};
   const byUriDelta = {};
   const pendingByIdDelta = {};
 
@@ -324,13 +341,13 @@ reducers[ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED] = (state: State, action: any):
       if (claim.confirmations < 1) {
         pendingByIdDelta[claimId] = claim;
 
-        if (byId[claimId]) {
-          byId[claimId] = mergeClaim(claim, byId[claimId]);
+        if (state.byId[claimId]) {
+          byIdDelta[claimId] = mergeClaim(claim, state.byId[claimId]);
         } else {
-          byId[claimId] = claim;
+          byIdDelta[claimId] = claim;
         }
       } else {
-        byId[claimId] = claim;
+        updateIfClaimChanged(state.byId, byIdDelta, claimId, claim);
       }
 
       updateIfValueChanged(state.claimsByUri, byUriDelta, permanentUri, claimId);
@@ -342,7 +359,7 @@ reducers[ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED] = (state: State, action: any):
   return Object.assign({}, state, {
     isFetchingClaimListMine: false,
     myClaims: Array.from(myClaimIds),
-    byId,
+    byId: resolveDelta(state.byId, byIdDelta),
     pendingById: resolveDelta(state.pendingById, pendingByIdDelta),
     claimsByUri: resolveDelta(state.claimsByUri, byUriDelta),
     myClaimsPageResults: urlsForCurrentPage,
@@ -359,7 +376,7 @@ reducers[ACTIONS.FETCH_CHANNEL_LIST_COMPLETED] = (state: State, action: any): St
   let myClaimIds = new Set(state.myClaims);
   const pendingByIdDelta = {};
   let myChannelClaims;
-  const byId = Object.assign({}, state.byId);
+  const byIdDelta = {};
   const byUriDelta = {};
   const channelClaimCounts = Object.assign({}, state.channelClaimCounts);
 
@@ -384,13 +401,13 @@ reducers[ACTIONS.FETCH_CHANNEL_LIST_COMPLETED] = (state: State, action: any): St
       if (confirmations < 1) {
         pendingByIdDelta[claimId] = claim;
 
-        if (byId[claimId]) {
-          byId[claimId] = mergeClaim(claim, byId[claimId]);
+        if (state.byId[claimId]) {
+          byIdDelta[claimId] = mergeClaim(claim, state.byId[claimId]);
         } else {
-          byId[claimId] = claim;
+          byIdDelta[claimId] = claim;
         }
       } else {
-        byId[claimId] = claim;
+        updateIfClaimChanged(state.byId, byIdDelta, claimId, claim);
       }
 
       myClaimIds.add(claimId);
@@ -398,7 +415,7 @@ reducers[ACTIONS.FETCH_CHANNEL_LIST_COMPLETED] = (state: State, action: any): St
   }
 
   return Object.assign({}, state, {
-    byId,
+    byId: resolveDelta(state.byId, byIdDelta),
     pendingById: resolveDelta(state.pendingById, pendingByIdDelta),
     claimsByUri: resolveDelta(state.claimsByUri, byUriDelta),
     channelClaimCounts,
@@ -425,7 +442,7 @@ reducers[ACTIONS.FETCH_COLLECTION_LIST_COMPLETED] = (state: State, action: any):
   let myClaimIds = new Set(myClaims);
   const pendingByIdDelta = {};
   let myCollectionClaimsSet = new Set([]);
-  const byId = Object.assign({}, state.byId);
+  const byIdDelta = {};
   const byUriDelta = {};
 
   if (claims.length) {
@@ -443,13 +460,13 @@ reducers[ACTIONS.FETCH_COLLECTION_LIST_COMPLETED] = (state: State, action: any):
       if (confirmations < 1) {
         pendingByIdDelta[claimId] = claim;
 
-        if (byId[claimId]) {
-          byId[claimId] = mergeClaim(claim, byId[claimId]);
+        if (state.byId[claimId]) {
+          byIdDelta[claimId] = mergeClaim(claim, state.byId[claimId]);
         } else {
-          byId[claimId] = claim;
+          byIdDelta[claimId] = claim;
         }
       } else {
-        byId[claimId] = claim;
+        updateIfClaimChanged(state.byId, byIdDelta, claimId, claim);
       }
 
       myClaimIds.add(claimId);
@@ -458,7 +475,7 @@ reducers[ACTIONS.FETCH_COLLECTION_LIST_COMPLETED] = (state: State, action: any):
 
   return {
     ...state,
-    byId,
+    byId: resolveDelta(state.byId, byIdDelta),
     pendingById: resolveDelta(state.pendingById, pendingByIdDelta),
     claimsByUri: resolveDelta(state.claimsByUri, byUriDelta),
     fetchingMyCollections: false,
@@ -507,7 +524,7 @@ reducers[ACTIONS.FETCH_CHANNEL_CLAIMS_COMPLETED] = (state: State, action: any): 
   const byChannel = claimsInChannel === previousCount ? Object.assign({}, paginatedClaimsByChannel[uri]) : {};
   const allClaimIds = new Set(byChannel.all);
   const currentPageClaimIds = [];
-  const byId = Object.assign({}, state.byId);
+  const byIdDelta = {};
   const fetchingChannelClaims = Object.assign({}, state.fetchingChannelClaims);
   const claimsByUriDelta = {};
 
@@ -515,7 +532,7 @@ reducers[ACTIONS.FETCH_CHANNEL_CLAIMS_COMPLETED] = (state: State, action: any): 
     claims.forEach((claim) => {
       allClaimIds.add(claim.claim_id);
       currentPageClaimIds.push(claim.claim_id);
-      byId[claim.claim_id] = claim;
+      updateIfClaimChanged(state.byId, byIdDelta, claim.claim_id, claim);
       updateIfValueChanged(state.claimsByUri, claimsByUriDelta, claim.canonical_url, claim.claim_id);
     });
   }
@@ -529,7 +546,7 @@ reducers[ACTIONS.FETCH_CHANNEL_CLAIMS_COMPLETED] = (state: State, action: any): 
 
   return Object.assign({}, state, {
     paginatedClaimsByChannel,
-    byId,
+    byId: resolveDelta(state.byId, byIdDelta),
     fetchingChannelClaims,
     claimsByUri: resolveDelta(state.claimsByUri, claimsByUriDelta),
     channelClaimCounts,
@@ -550,7 +567,7 @@ reducers[ACTIONS.ABANDON_CLAIM_STARTED] = (state: State, action: any): State => 
 
 reducers[ACTIONS.UPDATE_PENDING_CLAIMS] = (state: State, action: any): State => {
   const { claims: pendingClaims }: { claims: Array<Claim> } = action.data;
-  const byId = Object.assign({}, state.byId);
+  const byIdDelta = {};
   const pendingById = Object.assign({}, state.pendingById);
   const byUriDelta = {};
   let myClaimIds = new Set(state.myClaims);
@@ -561,7 +578,7 @@ reducers[ACTIONS.UPDATE_PENDING_CLAIMS] = (state: State, action: any): State => 
     let newClaim;
     const { permanent_url: uri, claim_id: claimId, type, value_type: valueType } = claim;
     pendingById[claimId] = claim; // make sure we don't need to merge?
-    const oldClaim = byId[claimId];
+    const oldClaim = state.byId[claimId];
     if (oldClaim && oldClaim.canonical_url) {
       newClaim = mergeClaim(oldClaim, claim);
     } else {
@@ -572,14 +589,14 @@ reducers[ACTIONS.UPDATE_PENDING_CLAIMS] = (state: State, action: any): State => 
     }
 
     if (type && type.match(/claim|update/)) {
-      byId[claimId] = newClaim;
+      updateIfClaimChanged(state.byId, byIdDelta, claimId, newClaim);
       updateIfValueChanged(state.claimsByUri, byUriDelta, uri, claimId);
     }
     myClaimIds.add(claimId);
   });
   return Object.assign({}, state, {
     myClaims: Array.from(myClaimIds),
-    byId,
+    byId: resolveDelta(state.byId, byIdDelta),
     pendingById,
     myChannelClaims: Array.from(myChannelClaims),
     claimsByUri: resolveDelta(state.claimsByUri, byUriDelta),
@@ -591,23 +608,23 @@ reducers[ACTIONS.UPDATE_CONFIRMED_CLAIMS] = (state: State, action: any): State =
     claims: confirmedClaims,
     pending: pendingClaims,
   }: { claims: Array<Claim>, pending: { [string]: Claim } } = action.data;
-  const byId = Object.assign({}, state.byId);
+  const byIdDelta = {};
 
   confirmedClaims.forEach((claim: GenericClaim) => {
     const { claim_id: claimId, type } = claim;
     let newClaim = claim;
-    const oldClaim = byId[claimId];
+    const oldClaim = state.byId[claimId];
     if (oldClaim && oldClaim.canonical_url) {
       newClaim = mergeClaim(oldClaim, claim);
     }
     if (type && type.match(/claim|update|channel/)) {
-      byId[claimId] = newClaim;
+      updateIfClaimChanged(state.byId, byIdDelta, claimId, newClaim);
     }
   });
 
   return Object.assign({}, state, {
     pendingById: pendingClaims,
-    byId,
+    byId: resolveDelta(state.byId, byIdDelta),
   });
 };
 
@@ -900,7 +917,7 @@ reducers[ACTIONS.PURCHASE_LIST_COMPLETED] = (state: State, action: any): State =
   const page = result.page;
   const totalItems = result.total_items;
 
-  let byId = Object.assign({}, state.byId);
+  let byIdDelta = {};
   let byUriDelta = {};
   let urlsForCurrentPage = [];
 
@@ -915,13 +932,13 @@ reducers[ACTIONS.PURCHASE_LIST_COMPLETED] = (state: State, action: any): State =
     const claimId = claim.claim_id;
     const uri = claim.canonical_url;
 
-    byId[claimId] = claim;
+    updateIfClaimChanged(state.byId, byIdDelta, claimId, claim);
     updateIfValueChanged(state.claimsByUri, byUriDelta, uri, claimId);
     urlsForCurrentPage.push(uri);
   });
 
   return Object.assign({}, state, {
-    byId,
+    byId: resolveDelta(state.byId, byIdDelta),
     claimsByUri: resolveDelta(state.claimsByUri, byUriDelta),
     myPurchases: urlsForCurrentPage,
     myPurchasesPageNumber: page,
