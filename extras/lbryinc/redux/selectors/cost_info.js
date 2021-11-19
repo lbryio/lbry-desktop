@@ -1,13 +1,16 @@
-import { createSelector } from 'reselect';
+// @flow
+type State = { costInfo: any };
 
-export const selectState = state => state.costInfo || {};
+export const selectState = (state: State) => state.costInfo || {};
+export const selectAllCostInfoByUri = (state: State) => selectState(state).byUri;
+export const selectFetchingCostInfo = (state: State) => selectState(state).fetching;
 
-export const selectAllCostInfoByUri = createSelector(selectState, state => state.byUri || {});
+export const selectCostInfoForUri = (state: State, uri: string) => {
+  const costInfos = selectAllCostInfoByUri(state);
+  return costInfos && costInfos[uri];
+};
 
-export const makeSelectCostInfoForUri = uri =>
-  createSelector(selectAllCostInfoByUri, costInfos => costInfos && costInfos[uri]);
-
-export const selectFetchingCostInfo = createSelector(selectState, state => state.fetching || {});
-
-export const makeSelectFetchingCostInfoForUri = uri =>
-  createSelector(selectFetchingCostInfo, fetchingByUri => fetchingByUri && fetchingByUri[uri]);
+export const selectFetchingCostInfoForUri = (state: State, uri: string) => {
+  const fetchingByUri = selectFetchingCostInfo(state);
+  return fetchingByUri && fetchingByUri[uri];
+};

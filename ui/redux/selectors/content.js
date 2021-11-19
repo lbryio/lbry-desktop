@@ -4,12 +4,12 @@ import {
   makeSelectClaimForUri,
   selectClaimsByUri,
   selectClaimIsNsfwForUri,
-  makeSelectClaimIsMine,
+  selectClaimIsMineForUri,
   makeSelectContentTypeForUri,
 } from 'redux/selectors/claims';
 import { makeSelectMediaTypeForUri, makeSelectFileNameForUri } from 'redux/selectors/file_info';
 import { selectBalance } from 'redux/selectors/wallet';
-import { makeSelectCostInfoForUri } from 'lbryinc';
+import { selectCostInfoForUri } from 'lbryinc';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import * as RENDER_MODES from 'constants/file_render_modes';
 import path from 'path';
@@ -18,7 +18,7 @@ import { FORCE_CONTENT_TYPE_PLAYER, FORCE_CONTENT_TYPE_COMIC } from 'constants/c
 const RECENT_HISTORY_AMOUNT = 10;
 const HISTORY_ITEMS_PER_PAGE = 50;
 
-type State = { content: any };
+type State = { claims: any, content: any };
 
 export const selectState = (state: State) => state.content || {};
 
@@ -157,12 +157,9 @@ export const makeSelectFileRenderModeForUri = (uri: string) =>
     }
   );
 
-export const makeSelectInsufficientCreditsForUri = (uri: string) =>
-  createSelector(
-    makeSelectClaimIsMine(uri),
-    makeSelectCostInfoForUri(uri),
-    selectBalance,
-    (isMine, costInfo, balance) => {
-      return !isMine && costInfo && costInfo.cost > 0 && costInfo.cost > balance;
-    }
-  );
+export const selectInsufficientCreditsForUri = (state: State, uri: string) => {
+  const isMine = selectClaimIsMineForUri(state, uri);
+  const costInfo = selectCostInfoForUri(state, uri);
+  const balance = selectBalance(state);
+  return !isMine && costInfo && costInfo.cost > 0 && costInfo.cost > balance;
+};

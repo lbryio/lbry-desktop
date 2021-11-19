@@ -4,14 +4,14 @@ import { selectThumbnailForUri, makeSelectClaimForUri, makeSelectClaimWasPurchas
 import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
 import * as SETTINGS from 'constants/settings';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
-import { makeSelectCostInfoForUri } from 'lbryinc';
+import { selectCostInfoForUri } from 'lbryinc';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { withRouter } from 'react-router';
 import {
   makeSelectIsPlaying,
   selectShouldObscurePreviewForUri,
-  makeSelectInsufficientCreditsForUri,
+  selectInsufficientCreditsForUri,
   makeSelectFileRenderModeForUri,
 } from 'redux/selectors/content';
 import FileRenderInitiator from './view';
@@ -27,9 +27,9 @@ const select = (state, props) => {
     fileInfo: makeSelectFileInfoForUri(props.uri)(state),
     obscurePreview: selectShouldObscurePreviewForUri(state, props.uri),
     isPlaying: makeSelectIsPlaying(props.uri)(state),
-    insufficientCredits: makeSelectInsufficientCreditsForUri(props.uri)(state),
+    insufficientCredits: selectInsufficientCreditsForUri(state, props.uri),
     autoplay: makeSelectClientSetting(SETTINGS.AUTOPLAY_MEDIA)(state),
-    costInfo: makeSelectCostInfoForUri(props.uri)(state),
+    costInfo: selectCostInfoForUri(state, props.uri),
     renderMode: makeSelectFileRenderModeForUri(props.uri)(state),
     claim: makeSelectClaimForUri(props.uri)(state),
     claimWasPurchased: makeSelectClaimWasPurchased(props.uri)(state),
