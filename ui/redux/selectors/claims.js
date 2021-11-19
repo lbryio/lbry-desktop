@@ -575,6 +575,17 @@ export const makeSelectOmittedCountForChannel = (uri: string) =>
     }
   );
 
+export const selectClaimIsNsfwForUri = createCachedSelector(
+  selectClaimForUri,
+  // Eventually these will come from some list of tags that are considered adult
+  // Or possibly come from users settings of what tags they want to hide
+  // For now, there is just a hard coded list of tags inside `isClaimNsfw`
+  // selectNaughtyTags(),
+  (claim: Claim) => {
+    return claim ? isClaimNsfw(claim) : false;
+  }
+)((state, uri) => String(uri));
+
 export const makeSelectClaimIsNsfw = (uri: string) =>
   createSelector(
     makeSelectClaimForUri(uri),
@@ -590,7 +601,6 @@ export const makeSelectClaimIsNsfw = (uri: string) =>
       return isClaimNsfw(claim);
     }
   );
-
 // Returns the associated channel uri for a given claim uri
 // accepts a regular claim uri lbry://something
 // returns the channel uri that created this claim lbry://@channel
@@ -652,14 +662,30 @@ export const selectClaimSearchByQueryLastPageReached = createSelector(
   (state) => state.claimSearchByQueryLastPageReached || {}
 );
 
+// Deprecated
 export const makeSelectShortUrlForUri = (uri: string) =>
   createSelector(makeSelectClaimForUri(uri), (claim) => claim && claim.short_url);
-
+// Deprecated
 export const makeSelectCanonicalUrlForUri = (uri: string) =>
   createSelector(makeSelectClaimForUri(uri), (claim) => claim && claim.canonical_url);
-
+// Deprecated
 export const makeSelectPermanentUrlForUri = (uri: string) =>
   createSelector(makeSelectClaimForUri(uri), (claim) => claim && claim.permanent_url);
+
+export const selectShortUrlForUri = (state: State, uri: string) => {
+  const claim = selectClaimForUri(state, uri);
+  return claim && claim.short_url;
+};
+
+export const selectCanonicalUrlForUri = (state: State, uri: string) => {
+  const claim = selectClaimForUri(state, uri);
+  return claim && claim.canonical_url;
+};
+
+export const selectPermanentUrlForUri = (state: State, uri: string) => {
+  const claim = selectClaimForUri(state, uri);
+  return claim && claim.permanent_url;
+};
 
 export const makeSelectSupportsForUri = (uri: string) =>
   createSelector(selectSupportsByOutpoint, makeSelectClaimForUri(uri), (byOutpoint, claim: ?StreamClaim) => {

@@ -22,7 +22,7 @@ import { doToast } from 'redux/actions/notifications';
 import { doPurchaseUri } from 'redux/actions/file';
 import Lbry from 'lbry';
 import * as SETTINGS from 'constants/settings';
-import { makeSelectCostInfoForUri, Lbryio } from 'lbryinc';
+import { selectCostInfoForUri, Lbryio } from 'lbryinc';
 import { makeSelectClientSetting, selectosNotificationsEnabled, selectDaemonSettings } from 'redux/selectors/settings';
 
 const DOWNLOAD_POLL_INTERVAL = 1000;
@@ -169,7 +169,7 @@ export function doPlayUri(
     }
 
     const daemonSettings = selectDaemonSettings(state);
-    const costInfo = makeSelectCostInfoForUri(uri)(state);
+    const costInfo = selectCostInfoForUri(state, uri);
     const cost = (costInfo && Number(costInfo.cost)) || 0;
     const saveFile = !uriIsStreamable ? true : daemonSettings.save_files || saveFileOverride || cost > 0;
     const instantPurchaseEnabled = makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED)(state);
