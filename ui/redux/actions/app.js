@@ -545,7 +545,7 @@ export function doSignIn() {
 
     dispatch(doGetAndPopulatePreferences());
     dispatch(doNotificationSocketConnect(true));
-    dispatch(doNotificationList());
+    dispatch(doNotificationList(null, false));
     dispatch(doCheckPendingClaims());
     dispatch(doBalanceSubscribe());
     dispatch(doFetchChannelListMine());

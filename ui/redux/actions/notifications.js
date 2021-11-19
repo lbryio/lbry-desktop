@@ -45,7 +45,7 @@ export function doDismissError() {
   };
 }
 
-export function doNotificationList(types?: Array<string>) {
+export function doNotificationList(types?: Array<string>, resolve: boolean = true) {
   return async (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const notificationTypes = selectNotificationCategories(state);
@@ -72,27 +72,31 @@ export function doNotificationList(types?: Array<string>) {
 
       return Lbryio.call('notification', 'list', params).then((response) => {
         const notifications = response || [];
-        const channelsToResolve = notifications
-          .filter((notification: WebNotification) => {
-            if (
-              (notification.notification_parameters.dynamic &&
-                notification.notification_parameters.dynamic.comment_author) ||
-              notification.notification_rule === RULE.NEW_CONTENT
-            ) {
-              return true;
-            } else {
-              return false;
-            }
-          })
-          .map((notification) => {
-            if (notification.notification_rule === RULE.NEW_CONTENT) {
-              return notification.notification_parameters.device.target;
-            } else {
-              return notification.notification_parameters.dynamic.comment_author;
-            }
-          });
 
-        dispatch(doResolveUris(channelsToResolve));
+        if (resolve) {
+          const channelsToResolve = notifications
+            .filter((notification: WebNotification) => {
+              if (
+                (notification.notification_parameters.dynamic &&
+                  notification.notification_parameters.dynamic.comment_author) ||
+                notification.notification_rule === RULE.NEW_CONTENT
+              ) {
+                return true;
+              } else {
+                return false;
+              }
+            })
+            .map((notification) => {
+              if (notification.notification_rule === RULE.NEW_CONTENT) {
+                return notification.notification_parameters.device.target;
+              } else {
+                return notification.notification_parameters.dynamic.comment_author;
+              }
+            });
+
+          dispatch(doResolveUris(channelsToResolve, true));
+        }
+
         dispatch({
           type: ACTIONS.NOTIFICATION_LIST_COMPLETED,
           data: {
