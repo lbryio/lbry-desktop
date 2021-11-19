@@ -22,7 +22,7 @@ import {
 } from 'redux/selectors/file_info';
 
 type Dispatch = (action: any) => any;
-type GetState = () => { file: FileState, content: any };
+type GetState = () => { claims: any, file: FileState, content: any };
 export function doOpenFileInFolder(path: string) {
   return () => {
     shell.showItemInFolder(path);

@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
-import { makeSelectInsufficientCreditsForUri } from 'redux/selectors/content';
+import { selectInsufficientCreditsForUri } from 'redux/selectors/content';
 import { makeSelectClaimWasPurchased } from 'redux/selectors/claims';
 import ClaimInsufficientCredits from './view';
 
 const select = (state, props) => ({
-  isInsufficientCredits: makeSelectInsufficientCreditsForUri(props.uri)(state),
+  isInsufficientCredits: selectInsufficientCreditsForUri(state, props.uri),
   claimWasPurchased: makeSelectClaimWasPurchased(props.uri)(state),
 });
 

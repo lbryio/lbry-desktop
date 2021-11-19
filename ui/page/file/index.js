@@ -11,7 +11,7 @@ import { doFetchFileInfo } from 'redux/actions/file_info';
 import { makeSelectCollectionForId } from 'redux/selectors/collections';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
 import * as SETTINGS from 'constants/settings';
-import { makeSelectCostInfoForUri, doFetchCostInfoForUri } from 'lbryinc';
+import { selectCostInfoForUri, doFetchCostInfoForUri } from 'lbryinc';
 import { selectShowMatureContent, makeSelectClientSetting } from 'redux/selectors/settings';
 import { makeSelectFileRenderModeForUri, makeSelectContentPositionForUri } from 'redux/selectors/content';
 import { DISABLE_COMMENTS_TAG } from 'constants/tags';
@@ -25,7 +25,7 @@ const select = (state, props) => {
 
   return {
     linkedCommentId: urlParams.get('lc'),
-    costInfo: makeSelectCostInfoForUri(props.uri)(state),
+    costInfo: selectCostInfoForUri(state, props.uri),
     obscureNsfw: !selectShowMatureContent(state),
     isMature: selectClaimIsNsfwForUri(state, props.uri),
     fileInfo: makeSelectFileInfoForUri(props.uri)(state),

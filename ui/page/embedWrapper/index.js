@@ -5,7 +5,7 @@ import { makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
 import { doResolveUri } from 'redux/actions/claims';
 import { buildURI } from 'util/lbryURI';
 import { doPlayUri } from 'redux/actions/content';
-import { makeSelectCostInfoForUri, doFetchCostInfoForUri, selectBlackListedOutpoints } from 'lbryinc';
+import { selectCostInfoForUri, doFetchCostInfoForUri, selectBlackListedOutpoints } from 'lbryinc';
 
 const select = (state, props) => {
   const { match } = props;
@@ -15,7 +15,7 @@ const select = (state, props) => {
   return {
     uri,
     claim: makeSelectClaimForUri(uri)(state),
-    costInfo: makeSelectCostInfoForUri(uri)(state),
+    costInfo: selectCostInfoForUri(state, uri),
     streamingUrl: makeSelectStreamingUrlForUri(uri)(state),
     isResolvingUri: selectIsUriResolving(state, uri),
     blackListedOutpoints: selectBlackListedOutpoints(state),

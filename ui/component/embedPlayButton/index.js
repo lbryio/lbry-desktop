@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { selectThumbnailForUri, makeSelectClaimForUri } from 'redux/selectors/claims';
 import { doResolveUri } from 'redux/actions/claims';
 import * as SETTINGS from 'constants/settings';
-import { doFetchCostInfoForUri, makeSelectCostInfoForUri } from 'lbryinc';
+import { doFetchCostInfoForUri, selectCostInfoForUri } from 'lbryinc';
 import { doPlayUri, doSetPlayingUri } from 'redux/actions/content';
 import { doAnaltyicsPurchaseEvent } from 'redux/actions/app';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
@@ -14,7 +14,7 @@ const select = (state, props) => ({
   thumbnail: selectThumbnailForUri(state, props.uri),
   claim: makeSelectClaimForUri(props.uri)(state),
   floatingPlayerEnabled: makeSelectClientSetting(SETTINGS.FLOATING_PLAYER)(state),
-  costInfo: makeSelectCostInfoForUri(props.uri)(state),
+  costInfo: selectCostInfoForUri(state, props.uri),
   renderMode: makeSelectFileRenderModeForUri(props.uri)(state),
 });
 

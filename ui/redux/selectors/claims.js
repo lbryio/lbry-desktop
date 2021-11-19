@@ -247,26 +247,6 @@ export const selectClaimIsMineForUri = (state: State, rawUri: string) => {
   return selectClaimIsMine(state, claimsByUri && claimsByUri[uri]);
 };
 
-// DEPRECATED - use selectClaimIsMineForUri instead.
-export const makeSelectClaimIsMine = (rawUri: string) => {
-  let uri;
-  try {
-    uri = normalizeURI(rawUri);
-  } catch (e) {}
-
-  return createSelector(selectClaimsByUri, selectMyActiveClaims, (claims, myClaims) => {
-    if (!isURIValid(uri, false)) {
-      return false;
-    }
-
-    return (
-      claims &&
-      claims[uri] &&
-      (claims[uri].is_my_output || (claims[uri].claim_id && myClaims.has(claims[uri].claim_id)))
-    );
-  });
-};
-
 export const selectMyPurchases = (state: State) => selectState(state).myPurchases;
 export const selectPurchaseUriSuccess = (state: State) => selectState(state).purchaseUriSuccess;
 export const selectMyPurchasesCount = (state: State) => selectState(state).myPurchasesPageTotalResults;
