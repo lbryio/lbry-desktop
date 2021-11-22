@@ -48,8 +48,18 @@ export function makeResumableUploadRequest(
       id: new Date().getTime(),
     });
 
+    const urlOptions = {};
+    if (params.uploadUrl) {
+      // Resuming from previous upload. TUS clears the resume fingerprint on any
+      // 4xx error, so we need to use the fixed URL mode instead.
+      urlOptions.uploadUrl = params.uploadUrl;
+    } else {
+      // New upload, so use `endpoint`.
+      urlOptions.endpoint = RESUMABLE_ENDPOINT;
+    }
+
     const uploader = new tus.Upload(file, {
-      endpoint: RESUMABLE_ENDPOINT,
+      ...urlOptions,
       chunkSize: UPLOAD_CHUNK_SIZE_BYTE,
       retryDelays: [0, 5000, 10000, 15000],
       parallelUploads: 1,
@@ -62,11 +72,21 @@ export function makeResumableUploadRequest(
       onShouldRetry: (err, retryAttempt, options) => {
         window.store.dispatch(doUpdateUploadProgress({ params, status: 'retry' }));
         const status = err.originalResponse ? err.originalResponse.getStatus() : 0;
-        return !inStatusCategory(status, 400) || status === STATUS_CONFLICT || status === STATUS_LOCKED;
+        return !inStatusCategory(status, 400);
       },
-      onError: (error) => {
-        window.store.dispatch(doUpdateUploadProgress({ params, status: 'error' }));
-        reject(new Error(error));
+      onError: (err) => {
+        const status = err.originalResponse ? err.originalResponse.getStatus() : 0;
+        if (status === STATUS_CONFLICT || status === STATUS_LOCKED) {
+          window.store.dispatch(doUpdateUploadProgress({ params, status: 'conflict' }));
+          reject(
+            new Error(
+              `${status}: concurrent upload detected. Uploading the same file from multiple tabs or windows is not allowed.`
+            )
+          );
+        } else {
+          window.store.dispatch(doUpdateUploadProgress({ params, status: 'error' }));
+          reject(new Error(err));
+        }
       },
       onProgress: (bytesUploaded, bytesTotal) => {
         const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);

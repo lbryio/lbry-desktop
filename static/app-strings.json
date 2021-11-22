@@ -1303,6 +1303,7 @@
   "Retrying...": "Retrying...",
   "Uploading...": "Uploading...",
   "Creating...": "Creating...",
+  "Stopped. Duplicate session detected.": "Stopped. Duplicate session detected.",
   "Use a URL": "Use a URL",
   "Edit Cover Image": "Edit Cover Image",
   "Cover Image": "Cover Image",

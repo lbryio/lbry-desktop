@@ -375,6 +375,15 @@
 .claim-upload__progress--inner {
   background: var(--color-primary-alt);
   padding: var(--spacing-xxs);
+  height: 2.4rem;
+}
+
+.claim-upload__progress--inner-text {
+  position: absolute;
+  width: 80%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 //
