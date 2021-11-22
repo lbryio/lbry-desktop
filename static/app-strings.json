@@ -2221,5 +2221,8 @@
   "Enter the full channel name or URL to search.\n\nExamples:\n - @channel\n - @channel#3\n - https://odysee.com/@Odysee:8\n - lbry://@Odysee#8": "Enter the full channel name or URL to search.\n\nExamples:\n - @channel\n - @channel#3\n - https://odysee.com/@Odysee:8\n - lbry://@Odysee#8",
   "Choose %asset%": "Choose %asset%",
   "Showing %filtered% results of %total%": "Showing %filtered% results of %total%",
+  "Failed to synchronize settings. Wait a while before retrying.": "Failed to synchronize settings. Wait a while before retrying.",
+  "You are offline. Check your internet connection.": "You are offline. Check your internet connection.",
+  "A new version of Odysee is available.": "A new version of Odysee is available.",
   "--end--": "--end--"
 }

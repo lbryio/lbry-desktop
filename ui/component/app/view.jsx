@@ -134,6 +134,7 @@ function App(props: Props) {
   const { pathname, hash, search } = props.location;
   const [upgradeNagClosed, setUpgradeNagClosed] = useState(false);
   const [resolvedSubscriptions, setResolvedSubscriptions] = useState(false);
+  const [retryingSync, setRetryingSync] = useState(false);
   const [sidebarOpen] = usePersistedState('sidebar', true);
   const [seenSunsestMessage, setSeenSunsetMessage] = usePersistedState('lbrytv-sunset', false);
   const showUpgradeButton =
@@ -153,6 +154,7 @@ function App(props: Props) {
   const hasActiveChannelClaim = activeChannelClaim !== undefined;
   const isPersonalized = !IS_WEB || hasVerifiedEmail;
   const renderFiledrop = !IS_WEB || isAuthenticated;
+  const isOnline = navigator.onLine;
 
   let uri;
   try {
@@ -162,6 +164,50 @@ function App(props: Props) {
 
   function handleAnalyticsDismiss() {
     setShowAnalyticsNag(false);
+  }
+
+  function getStatusNag() {
+    // Handle "offline" first. Everything else is meaningless if it's offline.
+    if (!isOnline) {
+      return <Nag type="helpful" message={__('You are offline. Check your internet connection.')} />;
+    }
+
+    // Only 1 nag is possible, so show the most important:
+
+    if (user === null) {
+      return <NagNoUser />;
+    }
+
+    if (lbryTvApiStatus === STATUS_DEGRADED || lbryTvApiStatus === STATUS_FAILING) {
+      if (!shouldHideNag) {
+        return <NagDegradedPerformance onClose={() => setLbryTvApiStatus(STATUS_OK)} />;
+      }
+    }
+
+    if (syncFatalError) {
+      if (!retryingSync) {
+        return (
+          <Nag
+            type="error"
+            message={__('Failed to synchronize settings. Wait a while before retrying.')}
+            actionText={__('Retry')}
+            onClick={() => {
+              syncLoop(true);
+              setRetryingSync(true);
+              setTimeout(() => setRetryingSync(false), 4000);
+            }}
+          />
+        );
+      }
+    } else if (isReloadRequired) {
+      return (
+        <Nag
+          message={__('A new version of Odysee is available.')}
+          actionText={__('Refresh')}
+          onClick={() => window.location.reload()}
+        />
+      );
+    }
   }
 
   useEffect(() => {
@@ -333,7 +379,8 @@ function App(props: Props) {
     );
   }
 
-  if (syncFatalError) {
+  if (isOnline && lbryTvApiStatus === STATUS_DOWN) {
+    // TODO: Rename `SyncFatalError` since it has nothing to do with syncing.
     return (
       <React.Suspense fallback={null}>
         <SyncFatalError lbryTvApiStatus={lbryTvApiStatus} />
@@ -384,22 +431,11 @@ function App(props: Props) {
             {fromLbrytvParam && !seenSunsestMessage && !shouldHideNag && (
               <NagSunset email={hasVerifiedEmail} onClose={() => setSeenSunsetMessage(true)} />
             )}
-            {(lbryTvApiStatus === STATUS_DEGRADED || lbryTvApiStatus === STATUS_FAILING) && !shouldHideNag && (
-              <NagDegradedPerformance onClose={() => setLbryTvApiStatus(STATUS_OK)} />
-            )}
             {!SIMPLE_SITE && lbryTvApiStatus === STATUS_OK && showAnalyticsNag && !shouldHideNag && (
               <NagDataCollection onClose={handleAnalyticsDismiss} />
             )}
-            {user === null && <NagNoUser />}
+            {getStatusNag()}
           </React.Suspense>
-
-          {isReloadRequired && (
-            <Nag
-              message={__('A new version of Odysee is available.')}
-              actionText={__('Refresh')}
-              onClick={() => window.location.reload()}
-            />
-          )}
         </React.Fragment>
       )}
     </div>
