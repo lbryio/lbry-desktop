@@ -66,6 +66,8 @@ export default function WebUploadItem(props: Props) {
             return __('Retrying...');
           case 'error':
             return __('Failed.');
+          case 'conflict':
+            return __('Stopped. Duplicate session detected.');
           default:
             return status;
         }
@@ -130,7 +132,7 @@ export default function WebUploadItem(props: Props) {
         <div className="claim-upload__progress--label">lbry://{params.name}</div>
         <div className={'claim-upload__progress--outer card--inline'}>
           <div className={'claim-upload__progress--inner'} style={{ width: `${progress}%` }}>
-            {resolveProgressStr()}
+            <span className="claim-upload__progress--inner-text">{resolveProgressStr()}</span>
           </div>
         </div>
       </>

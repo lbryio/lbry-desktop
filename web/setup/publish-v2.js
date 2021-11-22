@@ -72,11 +72,21 @@ export function makeResumableUploadRequest(
       onShouldRetry: (err, retryAttempt, options) => {
         window.store.dispatch(doUpdateUploadProgress({ params, status: 'retry' }));
         const status = err.originalResponse ? err.originalResponse.getStatus() : 0;
-        return !inStatusCategory(status, 400) || status === STATUS_CONFLICT || status === STATUS_LOCKED;
+        return !inStatusCategory(status, 400);
       },
-      onError: (error) => {
-        window.store.dispatch(doUpdateUploadProgress({ params, status: 'error' }));
-        reject(new Error(error));
+      onError: (err) => {
+        const status = err.originalResponse ? err.originalResponse.getStatus() : 0;
+        if (status === STATUS_CONFLICT || status === STATUS_LOCKED) {
+          window.store.dispatch(doUpdateUploadProgress({ params, status: 'conflict' }));
+          reject(
+            new Error(
+              `${status}: concurrent upload detected. Uploading the same file from multiple tabs or windows is not allowed.`
+            )
+          );
+        } else {
+          window.store.dispatch(doUpdateUploadProgress({ params, status: 'error' }));
+          reject(new Error(err));
+        }
       },
       onProgress: (bytesUploaded, bytesTotal) => {
         const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
