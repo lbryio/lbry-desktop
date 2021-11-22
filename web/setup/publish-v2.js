@@ -48,8 +48,18 @@ export function makeResumableUploadRequest(
       id: new Date().getTime(),
     });
 
+    const urlOptions = {};
+    if (params.uploadUrl) {
+      // Resuming from previous upload. TUS clears the resume fingerprint on any
+      // 4xx error, so we need to use the fixed URL mode instead.
+      urlOptions.uploadUrl = params.uploadUrl;
+    } else {
+      // New upload, so use `endpoint`.
+      urlOptions.endpoint = RESUMABLE_ENDPOINT;
+    }
+
     const uploader = new tus.Upload(file, {
-      endpoint: RESUMABLE_ENDPOINT,
+      ...urlOptions,
       chunkSize: UPLOAD_CHUNK_SIZE_BYTE,
       retryDelays: [0, 5000, 10000, 15000],
       parallelUploads: 1,
