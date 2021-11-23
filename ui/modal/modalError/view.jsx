@@ -16,9 +16,11 @@ class ModalError extends React.PureComponent<Props> {
     // https://github.com/lbryio/lbry-sdk/issues/1118
     // The sdk logs failed downloads, they happen so often that it's mostly noise in the desktop logs
     const errorMessage = typeof error === 'string' ? error : error.message;
-    const failedToDownloadError = errorMessage.startsWith('Failed to download');
+    const skipLog =
+      errorMessage.startsWith('Failed to download') ||
+      errorMessage.endsWith('Uploading the same file from multiple tabs or windows is not allowed.');
 
-    if (process.env.NODE_ENV === 'production' && !failedToDownloadError) {
+    if (process.env.NODE_ENV === 'production' && !skipLog) {
       Lbryio.call('event', 'desktop_error', { error_message: JSON.stringify(error) });
     }
   }
