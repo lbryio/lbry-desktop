@@ -12,7 +12,7 @@ import { makeSelectCollectionForId } from 'redux/selectors/collections';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
 import * as SETTINGS from 'constants/settings';
 import { selectCostInfoForUri, doFetchCostInfoForUri } from 'lbryinc';
-import { selectShowMatureContent, makeSelectClientSetting } from 'redux/selectors/settings';
+import { selectShowMatureContent, selectClientSetting } from 'redux/selectors/settings';
 import { makeSelectFileRenderModeForUri, makeSelectContentPositionForUri } from 'redux/selectors/content';
 import { DISABLE_COMMENTS_TAG } from 'constants/tags';
 
@@ -30,7 +30,7 @@ const select = (state, props) => {
     isMature: selectClaimIsNsfwForUri(state, props.uri),
     fileInfo: makeSelectFileInfoForUri(props.uri)(state),
     renderMode: makeSelectFileRenderModeForUri(props.uri)(state),
-    videoTheaterMode: makeSelectClientSetting(SETTINGS.VIDEO_THEATER_MODE)(state),
+    videoTheaterMode: selectClientSetting(state, SETTINGS.VIDEO_THEATER_MODE),
     commentsDisabled: makeSelectTagInClaimOrChannelForUri(props.uri, DISABLE_COMMENTS_TAG)(state),
     isLivestream: selectIsStreamPlaceholderForUri(state, props.uri),
     collection: makeSelectCollectionForId(collectionId)(state),

@@ -20,20 +20,14 @@ export const selectClientSetting = (state, setting) => {
   return clientSettings ? clientSettings[setting] : undefined;
 };
 
-// TODO - kill this
-export const makeSelectClientSetting = (setting) =>
-  createSelector(selectClientSettings, (settings) => (settings ? settings[setting] : undefined));
-
 // refactor me
 export const selectShowMatureContent = (state) => {
   return !ENABLE_MATURE ? false : selectClientSetting(state, SETTINGS.SHOW_MATURE);
 };
 
-// and me
-export const selectShowRepostedContent = makeSelectClientSetting(SETTINGS.HIDE_REPOSTS);
-
-export const selectTheme = makeSelectClientSetting(SETTINGS.THEME);
-export const selectAutomaticDarkModeEnabled = makeSelectClientSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED);
+export const selectTheme = (state) => selectClientSetting(state, SETTINGS.THEME);
+export const selectAutomaticDarkModeEnabled = (state) =>
+  selectClientSetting(state, SETTINGS.AUTOMATIC_DARK_MODE_ENABLED);
 export const selectIsNight = (state) => selectState(state).isNight;
 export const selectSavedWalletServers = (state) => selectState(state).customWalletServers;
 export const selectSharedPreferences = (state) => selectState(state).sharedPreferences;
@@ -58,13 +52,15 @@ export const selectThemePath = createSelector(
   }
 );
 
-export const selectHomepageCode = createSelector(makeSelectClientSetting(SETTINGS.HOMEPAGE), (setting) => {
-  return homepages[setting] ? setting : getDefaultHomepageKey();
-});
+export const selectHomepageCode = (state) => {
+  const hp = selectClientSetting(state, SETTINGS.HOMEPAGE);
+  return homepages[hp] ? hp : getDefaultHomepageKey();
+};
 
-export const selectLanguage = createSelector(makeSelectClientSetting(SETTINGS.LANGUAGE), (setting) => {
-  return setting || getDefaultLanguage();
-});
+export const selectLanguage = (state) => {
+  const lang = selectClientSetting(state, SETTINGS.LANGUAGE);
+  return lang || getDefaultLanguage();
+};
 
 export const selectHomepageData = createSelector(
   // using homepage setting,
@@ -76,4 +72,4 @@ export const selectHomepageData = createSelector(
   }
 );
 
-export const selectosNotificationsEnabled = makeSelectClientSetting(SETTINGS.OS_NOTIFICATIONS_ENABLED);
+export const selectosNotificationsEnabled = (state) => selectClientSetting(state, SETTINGS.OS_NOTIFICATIONS_ENABLED);

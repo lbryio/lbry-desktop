@@ -15,7 +15,7 @@ import {
 import { selectMyChannelClaims, selectFetchingMyChannels, selectCreatingChannel } from 'redux/selectors/claims';
 import { selectBalance } from 'redux/selectors/wallet';
 import * as SETTINGS from 'constants/settings';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { selectClientSetting } from 'redux/selectors/settings';
 import { selectInterestedInYoutubeSync } from 'redux/selectors/app';
 import { doToggleInterestedInYoutubeSync } from 'redux/actions/app';
 import UserSignIn from './view';
@@ -33,10 +33,10 @@ const select = (state) => ({
   fetchingChannels: selectFetchingMyChannels(state),
   youtubeChannels: selectYoutubeChannels(state),
   userFetchPending: selectUserIsPending(state),
-  syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
-  followingAcknowledged: makeSelectClientSetting(SETTINGS.FOLLOWING_ACKNOWLEDGED)(state),
-  tagsAcknowledged: makeSelectClientSetting(SETTINGS.TAGS_ACKNOWLEDGED)(state),
-  rewardsAcknowledged: makeSelectClientSetting(SETTINGS.REWARDS_ACKNOWLEDGED)(state),
+  syncEnabled: selectClientSetting(state, SETTINGS.ENABLE_SYNC),
+  followingAcknowledged: selectClientSetting(state, SETTINGS.FOLLOWING_ACKNOWLEDGED),
+  tagsAcknowledged: selectClientSetting(state, SETTINGS.TAGS_ACKNOWLEDGED),
+  rewardsAcknowledged: selectClientSetting(state, SETTINGS.REWARDS_ACKNOWLEDGED),
   syncingWallet: selectGetSyncIsPending(state),
   hasSynced: Boolean(selectSyncHash(state)),
   creatingChannel: selectCreatingChannel(state),

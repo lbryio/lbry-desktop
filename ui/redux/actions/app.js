@@ -41,7 +41,7 @@ import {
   selectModal,
   selectAllowAnalytics,
 } from 'redux/selectors/app';
-import { selectDaemonSettings, makeSelectClientSetting } from 'redux/selectors/settings';
+import { selectDaemonSettings, selectClientSetting } from 'redux/selectors/settings';
 import { selectUser, selectUserVerifiedEmail } from 'redux/selectors/user';
 import { doSyncLoop, doSetPrefsReady, doPreferenceGet, doPopulateSharedUserState } from 'redux/actions/sync';
 import { doAuthenticate } from 'redux/actions/user';
@@ -613,7 +613,7 @@ export function doGetAndPopulatePreferences() {
 
   return (dispatch, getState) => {
     const state = getState();
-    const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
+    const syncEnabled = selectClientSetting(state, SETTINGS.ENABLE_SYNC);
     const hasVerifiedEmail = state.user && state.user.user && state.user.user.has_verified_email;
     let preferenceKey;
     // @if TARGET='app'

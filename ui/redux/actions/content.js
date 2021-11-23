@@ -18,7 +18,7 @@ import { doPurchaseUri } from 'redux/actions/file';
 import Lbry from 'lbry';
 import * as SETTINGS from 'constants/settings';
 import { selectCostInfoForUri, Lbryio } from 'lbryinc';
-import { makeSelectClientSetting, selectosNotificationsEnabled, selectDaemonSettings } from 'redux/selectors/settings';
+import { selectClientSetting, selectosNotificationsEnabled, selectDaemonSettings } from 'redux/selectors/settings';
 
 const DOWNLOAD_POLL_INTERVAL = 1000;
 
@@ -167,8 +167,8 @@ export function doPlayUri(
     const costInfo = selectCostInfoForUri(state, uri);
     const cost = (costInfo && Number(costInfo.cost)) || 0;
     const saveFile = !IS_WEB && (!uriIsStreamable ? true : daemonSettings.save_files || saveFileOverride || cost > 0);
-    const instantPurchaseEnabled = makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED)(state);
-    const instantPurchaseMax = makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_MAX)(state);
+    const instantPurchaseEnabled = selectClientSetting(state, SETTINGS.INSTANT_PURCHASE_ENABLED);
+    const instantPurchaseMax = selectClientSetting(state, SETTINGS.INSTANT_PURCHASE_MAX);
 
     function beginGetFile() {
       dispatch(doPurchaseUriWrapper(uri, cost, saveFile, cb));

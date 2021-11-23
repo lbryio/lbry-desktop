@@ -10,7 +10,7 @@ import * as SETTINGS from 'constants/settings';
 import { selectFollowedTags } from 'redux/selectors/tags';
 import { selectMutedChannels } from 'redux/selectors/blocked';
 import { doToggleTagFollowDesktop } from 'redux/actions/tags';
-import { makeSelectClientSetting, selectShowMatureContent, selectLanguage } from 'redux/selectors/settings';
+import { selectClientSetting, selectShowMatureContent, selectLanguage } from 'redux/selectors/settings';
 import { selectModerationBlockList } from 'redux/selectors/comments';
 import ClaimListDiscover from './view';
 import { doFetchViewCount } from 'lbryinc';
@@ -22,11 +22,11 @@ const select = (state) => ({
   claimsByUri: selectClaimsByUri(state),
   loading: selectFetchingClaimSearch(state),
   showNsfw: selectShowMatureContent(state),
-  hideReposts: makeSelectClientSetting(SETTINGS.HIDE_REPOSTS)(state),
+  hideReposts: selectClientSetting(state, SETTINGS.HIDE_REPOSTS),
   languageSetting: selectLanguage(state),
   mutedUris: selectMutedChannels(state),
   blockedUris: selectModerationBlockList(state),
-  searchInLanguage: makeSelectClientSetting(SETTINGS.SEARCH_IN_LANGUAGE)(state),
+  searchInLanguage: selectClientSetting(state, SETTINGS.SEARCH_IN_LANGUAGE),
 });
 
 const perform = {

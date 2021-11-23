@@ -8,7 +8,7 @@ import { doToast } from 'redux/actions/notifications';
 import analytics from 'analytics';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 import { launcher } from 'util/autoLaunch';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { selectClientSetting } from 'redux/selectors/settings';
 import { doSyncLoop, doSyncUnsubscribe, doSetSyncLock } from 'redux/actions/sync';
 import { doAlertWaitingForSync, doGetAndPopulatePreferences } from 'redux/actions/app';
 import { selectPrefsReady } from 'redux/selectors/sync';
@@ -243,7 +243,7 @@ export function doPushSettingsToPrefs() {
 export function doEnterSettingsPage() {
   return async (dispatch, getState) => {
     const state = getState();
-    const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
+    const syncEnabled = selectClientSetting(state, SETTINGS.ENABLE_SYNC);
     const hasVerifiedEmail = state.user && state.user.user && state.user.user.has_verified_email;
     if (IS_WEB && !hasVerifiedEmail) {
       return;
@@ -366,7 +366,7 @@ export function doSetLanguage(language) {
 export function doSetAutoLaunch(value) {
   return (dispatch, getState) => {
     const state = getState();
-    const autoLaunch = makeSelectClientSetting(SETTINGS.AUTO_LAUNCH)(state);
+    const autoLaunch = selectClientSetting(state, SETTINGS.AUTO_LAUNCH);
 
     if (IS_MAC || process.env.NODE_ENV !== 'production') {
       return;
@@ -423,7 +423,7 @@ export function doSetAppToTrayWhenClosed(value) {
 export function toggleVideoTheaterMode() {
   return (dispatch, getState) => {
     const state = getState();
-    const videoTheaterMode = makeSelectClientSetting(SETTINGS.VIDEO_THEATER_MODE)(state);
+    const videoTheaterMode = selectClientSetting(state, SETTINGS.VIDEO_THEATER_MODE);
 
     dispatch(doSetClientSetting(SETTINGS.VIDEO_THEATER_MODE, !videoTheaterMode));
   };
@@ -433,7 +433,7 @@ export function toggleAutoplayNext() {
   return (dispatch, getState) => {
     const state = getState();
     const ready = selectPrefsReady(state);
-    const autoplayNext = makeSelectClientSetting(SETTINGS.AUTOPLAY_NEXT)(state);
+    const autoplayNext = selectClientSetting(state, SETTINGS.AUTOPLAY_NEXT);
 
     dispatch(doSetClientSetting(SETTINGS.AUTOPLAY_NEXT, !autoplayNext, ready));
 

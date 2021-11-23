@@ -12,7 +12,7 @@ import * as SETTINGS from 'constants/settings';
 import { makeSelectChannelIsMuted } from 'redux/selectors/blocked';
 import { withRouter } from 'react-router';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
-import { makeSelectClientSetting, selectShowMatureContent } from 'redux/selectors/settings';
+import { selectClientSetting, selectShowMatureContent } from 'redux/selectors/settings';
 
 import ChannelContent from './view';
 
@@ -31,7 +31,7 @@ const select = (state, props) => {
     claim,
     isAuthenticated: selectUserVerifiedEmail(state),
     showMature: selectShowMatureContent(state),
-    tileLayout: makeSelectClientSetting(SETTINGS.TILE_LAYOUT)(state),
+    tileLayout: selectClientSetting(state, SETTINGS.TILE_LAYOUT),
   };
 };
 

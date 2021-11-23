@@ -8,12 +8,7 @@ import { doFetchChannelListMine, doFetchCollectionListMine, doResolveUris } from
 import { selectMyChannelUrls } from 'redux/selectors/claims';
 import * as SETTINGS from 'constants/settings';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
-import {
-  makeSelectClientSetting,
-  selectLanguage,
-  selectLoadedLanguages,
-  selectThemePath,
-} from 'redux/selectors/settings';
+import { selectClientSetting, selectLanguage, selectLoadedLanguages, selectThemePath } from 'redux/selectors/settings';
 import {
   selectIsUpgradeAvailable,
   selectAutoUpdateDownloaded,
@@ -33,7 +28,7 @@ const select = (state) => ({
   accessToken: selectAccessToken(state),
   theme: selectThemePath(state),
   language: selectLanguage(state),
-  syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
+  syncEnabled: selectClientSetting(state, SETTINGS.ENABLE_SYNC),
   languages: selectLoadedLanguages(state),
   autoUpdateDownloaded: selectAutoUpdateDownloaded(state),
   isUpgradeAvailable: selectIsUpgradeAvailable(state),

@@ -10,7 +10,7 @@ import {
   selectSetSyncIsPending,
   selectSyncIsLocked,
 } from 'redux/selectors/sync';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { selectClientSetting } from 'redux/selectors/settings';
 import { getSavedPassword, getAuthToken } from 'util/saved-passwords';
 import { doAnalyticsTagSync, doHandleSyncComplete } from 'redux/actions/app';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
@@ -101,7 +101,7 @@ export const doGetSyncDesktop = (cb?: (any, any) => void, password?: string) => 
   getState: GetState
 ) => {
   const state = getState();
-  const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
+  const syncEnabled = selectClientSetting(state, SETTINGS.ENABLE_SYNC);
   const getSyncPending = selectGetSyncIsPending(state);
   const setSyncPending = selectSetSyncIsPending(state);
   const syncLocked = selectSyncIsLocked(state);
@@ -120,14 +120,14 @@ export function doSyncLoop(noInterval?: boolean) {
     if (!noInterval && syncTimer) clearInterval(syncTimer);
     const state = getState();
     const hasVerifiedEmail = selectUserVerifiedEmail(state);
-    const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
+    const syncEnabled = selectClientSetting(state, SETTINGS.ENABLE_SYNC);
     const syncLocked = selectSyncIsLocked(state);
     if (hasVerifiedEmail && syncEnabled && !syncLocked) {
       dispatch(doGetSyncDesktop((error, hasNewData) => dispatch(doHandleSyncComplete(error, hasNewData))));
       if (!noInterval) {
         syncTimer = setInterval(() => {
           const state = getState();
-          const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
+          const syncEnabled = selectClientSetting(state, SETTINGS.ENABLE_SYNC);
           if (syncEnabled) {
             dispatch(doGetSyncDesktop((error, hasNewData) => dispatch(doHandleSyncComplete(error, hasNewData))));
             dispatch(doAnalyticsTagSync());

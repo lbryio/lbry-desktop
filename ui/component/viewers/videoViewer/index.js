@@ -20,7 +20,7 @@ import { selectRecommendedContentForUri } from 'redux/selectors/search';
 import VideoViewer from './view';
 import { withRouter } from 'react-router';
 import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
-import { selectDaemonSettings, makeSelectClientSetting, selectHomepageData } from 'redux/selectors/settings';
+import { selectDaemonSettings, selectClientSetting, selectHomepageData } from 'redux/selectors/settings';
 import { toggleVideoTheaterMode, toggleAutoplayNext, doSetClientSetting } from 'redux/actions/settings';
 import { selectUserVerifiedEmail, selectUser } from 'redux/selectors/user';
 
@@ -57,17 +57,17 @@ const select = (state, props) => {
     previousListUri,
     isMarkdownOrComment,
     autoplayIfEmbedded: Boolean(autoplay),
-    autoplayNext: makeSelectClientSetting(SETTINGS.AUTOPLAY_NEXT)(state),
+    autoplayNext: selectClientSetting(state, SETTINGS.AUTOPLAY_NEXT),
     volume: selectVolume(state),
     muted: selectMute(state),
-    videoPlaybackRate: makeSelectClientSetting(SETTINGS.VIDEO_PLAYBACK_RATE)(state),
+    videoPlaybackRate: selectClientSetting(state, SETTINGS.VIDEO_PLAYBACK_RATE),
     thumbnail: selectThumbnailForUri(state, uri),
     claim: makeSelectClaimForUri(uri)(state),
     homepageData: selectHomepageData(state),
     authenticated: selectUserVerifiedEmail(state),
     shareTelemetry: IS_WEB || selectDaemonSettings(state).share_usage_data,
     isFloating: makeSelectIsPlayerFloating(props.location)(state),
-    videoTheaterMode: makeSelectClientSetting(SETTINGS.VIDEO_THEATER_MODE)(state),
+    videoTheaterMode: selectClientSetting(state, SETTINGS.VIDEO_THEATER_MODE),
   };
 };
 

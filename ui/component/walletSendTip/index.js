@@ -7,7 +7,7 @@ import {
 } from 'redux/selectors/claims';
 import { doHideModal } from 'redux/actions/app';
 import { doSendTip, doSendCashTip } from 'redux/actions/wallet';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { selectClientSetting } from 'redux/selectors/settings';
 import { selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
 import { selectBalance, selectIsSendingSupport } from 'redux/selectors/wallet';
 import { withRouter } from 'react-router';
@@ -21,8 +21,8 @@ const select = (state, props) => ({
   claimIsMine: selectClaimIsMineForUri(state, props.uri),
   fetchingChannels: selectFetchingMyChannels(state),
   incognito: selectIncognito(state),
-  instantTipEnabled: makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED)(state),
-  instantTipMax: makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_MAX)(state),
+  instantTipEnabled: selectClientSetting(state, SETTINGS.INSTANT_PURCHASE_ENABLED),
+  instantTipMax: selectClientSetting(state, SETTINGS.INSTANT_PURCHASE_MAX),
   isPending: selectIsSendingSupport(state),
   title: selectTitleForUri(state, props.uri),
 });

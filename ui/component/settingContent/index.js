@@ -4,22 +4,22 @@ import * as SETTINGS from 'constants/settings';
 import { doOpenModal } from 'redux/actions/app';
 import { doSetPlayingUri } from 'redux/actions/content';
 import { doSetClientSetting } from 'redux/actions/settings';
-import { selectShowMatureContent, selectLanguage, makeSelectClientSetting } from 'redux/selectors/settings';
+import { selectShowMatureContent, selectLanguage, selectClientSetting } from 'redux/selectors/settings';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 
 import SettingContent from './view';
 
 const select = (state) => ({
   isAuthenticated: selectUserVerifiedEmail(state),
-  floatingPlayer: makeSelectClientSetting(SETTINGS.FLOATING_PLAYER)(state),
-  autoplayMedia: makeSelectClientSetting(SETTINGS.AUTOPLAY_MEDIA)(state),
-  autoplayNext: makeSelectClientSetting(SETTINGS.AUTOPLAY_NEXT)(state),
-  hideReposts: makeSelectClientSetting(SETTINGS.HIDE_REPOSTS)(state),
+  floatingPlayer: selectClientSetting(state, SETTINGS.FLOATING_PLAYER),
+  autoplayMedia: selectClientSetting(state, SETTINGS.AUTOPLAY_MEDIA),
+  autoplayNext: selectClientSetting(state, SETTINGS.AUTOPLAY_NEXT),
+  hideReposts: selectClientSetting(state, SETTINGS.HIDE_REPOSTS),
   showNsfw: selectShowMatureContent(state),
   myChannelUrls: selectMyChannelUrls(state),
-  instantPurchaseEnabled: makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED)(state),
-  instantPurchaseMax: makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_MAX)(state),
-  enablePublishPreview: makeSelectClientSetting(SETTINGS.ENABLE_PUBLISH_PREVIEW)(state),
+  instantPurchaseEnabled: selectClientSetting(state, SETTINGS.INSTANT_PURCHASE_ENABLED),
+  instantPurchaseMax: selectClientSetting(state, SETTINGS.INSTANT_PURCHASE_MAX),
+  enablePublishPreview: selectClientSetting(state, SETTINGS.ENABLE_PUBLISH_PREVIEW),
   language: selectLanguage(state),
 });
 

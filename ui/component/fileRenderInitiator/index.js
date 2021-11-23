@@ -6,7 +6,7 @@ import * as SETTINGS from 'constants/settings';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
 import { selectCostInfoForUri } from 'lbryinc';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { selectClientSetting } from 'redux/selectors/settings';
 import { withRouter } from 'react-router';
 import {
   makeSelectIsPlaying,
@@ -28,7 +28,7 @@ const select = (state, props) => {
     obscurePreview: selectShouldObscurePreviewForUri(state, props.uri),
     isPlaying: makeSelectIsPlaying(props.uri)(state),
     insufficientCredits: selectInsufficientCreditsForUri(state, props.uri),
-    autoplay: makeSelectClientSetting(SETTINGS.AUTOPLAY_MEDIA)(state),
+    autoplay: selectClientSetting(state, SETTINGS.AUTOPLAY_MEDIA),
     costInfo: selectCostInfoForUri(state, props.uri),
     renderMode: makeSelectFileRenderModeForUri(props.uri)(state),
     claim: makeSelectClaimForUri(props.uri)(state),

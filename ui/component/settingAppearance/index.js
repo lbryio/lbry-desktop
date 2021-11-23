@@ -1,15 +1,15 @@
 import { connect } from 'react-redux';
 import * as SETTINGS from 'constants/settings';
 import { doSetClientSetting } from 'redux/actions/settings';
-import { selectLanguage, makeSelectClientSetting } from 'redux/selectors/settings';
+import { selectLanguage, selectClientSetting } from 'redux/selectors/settings';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import SettingAppearance from './view';
 
 const select = (state) => ({
-  clock24h: makeSelectClientSetting(SETTINGS.CLOCK_24H)(state),
-  searchInLanguage: makeSelectClientSetting(SETTINGS.SEARCH_IN_LANGUAGE)(state),
+  clock24h: selectClientSetting(state, SETTINGS.CLOCK_24H),
+  searchInLanguage: selectClientSetting(state, SETTINGS.SEARCH_IN_LANGUAGE),
   isAuthenticated: selectUserVerifiedEmail(state),
-  hideBalance: makeSelectClientSetting(SETTINGS.HIDE_BALANCE)(state),
+  hideBalance: selectClientSetting(state, SETTINGS.HIDE_BALANCE),
   language: selectLanguage(state),
 });
 

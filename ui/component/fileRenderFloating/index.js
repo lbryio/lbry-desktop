@@ -12,7 +12,7 @@ import {
   selectPlayingUri,
   makeSelectFileRenderModeForUri,
 } from 'redux/selectors/content';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { selectClientSetting } from 'redux/selectors/settings';
 import { selectCostInfoForUri } from 'lbryinc';
 import { doPlayUri, doSetPlayingUri } from 'redux/actions/content';
 import { doFetchRecommendedContent } from 'redux/actions/search';
@@ -35,9 +35,9 @@ const select = (state, props) => {
     mature: selectClaimIsNsfwForUri(state, uri),
     isFloating: makeSelectIsPlayerFloating(props.location)(state),
     streamingUrl: makeSelectStreamingUrlForUri(uri)(state),
-    floatingPlayerEnabled: makeSelectClientSetting(SETTINGS.FLOATING_PLAYER)(state),
+    floatingPlayerEnabled: selectClientSetting(state, SETTINGS.FLOATING_PLAYER),
     renderMode: makeSelectFileRenderModeForUri(uri)(state),
-    videoTheaterMode: makeSelectClientSetting(SETTINGS.VIDEO_THEATER_MODE)(state),
+    videoTheaterMode: selectClientSetting(state, SETTINGS.VIDEO_THEATER_MODE),
     costInfo: selectCostInfoForUri(state, uri),
     claimWasPurchased: makeSelectClaimWasPurchased(uri)(state),
     nextListUri: collectionId && makeSelectNextUrlForCollectionAndUrl(collectionId, uri)(state),

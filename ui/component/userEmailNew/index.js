@@ -9,13 +9,13 @@ import {
 import * as SETTINGS from 'constants/settings';
 import * as DAEMON_SETTINGS from 'constants/daemon_settings';
 import { doSetWalletSyncPreference, doSetDaemonSetting } from 'redux/actions/settings';
-import { selectDaemonSettings, makeSelectClientSetting } from 'redux/selectors/settings';
+import { selectDaemonSettings, selectClientSetting } from 'redux/selectors/settings';
 import UserEmailNew from './view';
 
 const select = (state) => ({
   isPending: selectEmailNewIsPending(state),
   errorMessage: selectEmailNewErrorMessage(state),
-  syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
+  syncEnabled: selectClientSetting(state, SETTINGS.ENABLE_SYNC),
   daemonSettings: selectDaemonSettings(state),
   emailExists: selectEmailAlreadyExists(state),
   user: selectUser(state),

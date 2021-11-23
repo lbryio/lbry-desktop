@@ -30,7 +30,7 @@ import {
   selectIncognito,
   selectActiveChannelStakedLevel,
 } from 'redux/selectors/app';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { selectClientSetting } from 'redux/selectors/settings';
 import { makeSelectFileRenderModeForUri } from 'redux/selectors/content';
 import { selectUser } from 'redux/selectors/user';
 import PublishForm from './view';
@@ -59,7 +59,7 @@ const select = (state) => {
     isResolvingUri: selectIsResolvingPublishUris(state),
     totalRewardValue: selectUnclaimedRewardValue(state),
     modal: selectModal(state),
-    enablePublishPreview: makeSelectClientSetting(SETTINGS.ENABLE_PUBLISH_PREVIEW)(state),
+    enablePublishPreview: selectClientSetting(state, SETTINGS.ENABLE_PUBLISH_PREVIEW),
     activeChannelClaim: selectActiveChannelClaim(state),
     incognito: selectIncognito(state),
     activeChannelStakedLevel: selectActiveChannelStakedLevel(state),

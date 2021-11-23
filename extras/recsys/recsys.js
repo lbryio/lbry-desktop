@@ -5,7 +5,7 @@ import { parseURI } from 'util/lbryURI';
 import * as SETTINGS from 'constants/settings';
 import { makeSelectClaimForUri } from 'redux/selectors/claims';
 import { selectPlayingUri, selectPrimaryUri } from 'redux/selectors/content';
-import { makeSelectClientSetting, selectDaemonSettings } from 'redux/selectors/settings';
+import { selectClientSetting, selectDaemonSettings } from 'redux/selectors/settings';
 import { history } from 'ui/store';
 
 const recsysEndpoint = 'https://clickstream.odysee.com/log/video/view';
@@ -229,7 +229,7 @@ const recsys = {
       const claim = makeSelectClaimForUri(actualPlayingUri)(state);
       const playingClaimId = claim ? claim.claim_id : null;
       // const primaryUri = selectPrimaryUri(state);
-      const floatingPlayer = makeSelectClientSetting(SETTINGS.FLOATING_PLAYER)(state);
+      const floatingPlayer = selectClientSetting(state, SETTINGS.FLOATING_PLAYER);
       // When leaving page, if floating player is enabled, play will continue.
       Object.keys(recsys.entries).forEach((claimId) => {
         const shouldSkip = recsys.entries[claimId].parentUuid && !recsys.entries[claimId].recClaimIds;

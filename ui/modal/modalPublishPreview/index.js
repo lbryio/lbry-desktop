@@ -4,7 +4,7 @@ import ModalPublishPreview from './view';
 import { makeSelectPublishFormValue, selectPublishFormValues, selectIsStillEditing } from 'redux/selectors/publish';
 import { selectMyChannelClaims, selectIsStreamPlaceholderForUri } from 'redux/selectors/claims';
 import * as SETTINGS from 'constants/settings';
-import { selectFfmpegStatus, makeSelectClientSetting } from 'redux/selectors/settings';
+import { selectFfmpegStatus, selectClientSetting } from 'redux/selectors/settings';
 import { doPublishDesktop } from 'redux/actions/publish';
 import { doSetClientSetting } from 'redux/actions/settings';
 
@@ -20,7 +20,7 @@ const select = (state, props) => {
     remoteFile: makeSelectPublishFormValue('remoteFileUrl')(state),
     isStillEditing: selectIsStillEditing(state),
     ffmpegStatus: selectFfmpegStatus(state),
-    enablePublishPreview: makeSelectClientSetting(SETTINGS.ENABLE_PUBLISH_PREVIEW)(state),
+    enablePublishPreview: selectClientSetting(state, SETTINGS.ENABLE_PUBLISH_PREVIEW),
     isLivestreamClaim: selectIsStreamPlaceholderForUri(state, editingUri),
   };
 };

@@ -8,7 +8,7 @@ import { selectActiveLivestreams } from 'redux/selectors/livestream';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectFollowedTags } from 'redux/selectors/tags';
 import { doToggleTagFollowDesktop } from 'redux/actions/tags';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { selectClientSetting } from 'redux/selectors/settings';
 import Tags from './view';
 
 const select = (state, props) => {
@@ -21,7 +21,7 @@ const select = (state, props) => {
     repostedUri: repostedUri,
     repostedClaim: repostedUri ? makeSelectClaimForUri(repostedUri)(state) : null,
     isAuthenticated: selectUserVerifiedEmail(state),
-    tileLayout: makeSelectClientSetting(SETTINGS.TILE_LAYOUT)(state),
+    tileLayout: selectClientSetting(state, SETTINGS.TILE_LAYOUT),
     activeLivestreams: selectActiveLivestreams(state),
   };
 };
