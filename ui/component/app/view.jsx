@@ -47,6 +47,7 @@ export const MAIN_WRAPPER_CLASS = 'main-wrapper';
 export const IS_MAC = navigator.userAgent.indexOf('Mac OS X') !== -1;
 
 const imaLibraryPath = 'https://imasdk.googleapis.com/js/sdkloader/ima3.js';
+const securePrivacyScriptUrl = 'https://app.secureprivacy.ai/script/6194129b66262906dd4a5f43.js';
 
 type Props = {
   language: string,
@@ -324,6 +325,46 @@ function App(props: Props) {
     return () => {
       // $FlowFixMe
       document.body.removeChild(script);
+    };
+  }, []);
+
+  // add secure privacy script
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = securePrivacyScriptUrl;
+    script.async = true;
+    // might use this for future checking to prevent doubleloading
+    script.id = 'securePrivacy';
+
+    const getLocaleEndpoint = 'https://api.odysee.com/locale/get';
+    const gdprRequired = localStorage.getItem('gdprRequired');
+    // gdpr is known to be required, add script
+    if (gdprRequired === 'true') {
+      // $FlowFixMe
+      document.head.appendChild(script);
+    }
+
+    // haven't done a gdpr check, do it now
+    if (gdprRequired === null) {
+      (async function() {
+        const response = await fetch(getLocaleEndpoint);
+        const json = await response.json();
+        const gdprRequiredBasedOnLocation = json.data.gdpr_required;
+        // note we need gdpr and load script
+        if (gdprRequiredBasedOnLocation) {
+          localStorage.setItem('gdprRequired', 'true');
+          // $FlowFixMe
+          document.head.appendChild(script);
+        // note we don't need gdpr, save to session
+        } else if (gdprRequiredBasedOnLocation ===  false) {
+          localStorage.setItem('gdprRequired', 'false');
+        }
+      })();
+    }
+
+    return () => {
+      // $FlowFixMe
+      document.head.removeChild(script);
     };
   }, []);
 

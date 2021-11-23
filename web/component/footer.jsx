@@ -1,8 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from 'component/button';
 import { SIMPLE_SITE } from 'config';
 
 export default function Footer() {
+  useEffect(() => {
+    if (!window.sp) {
+      document.getElementById('gdprPrivacyFooter').style.display = 'none';
+    }
+  }, []);
+
   if (!SIMPLE_SITE) {
     return null;
   }
@@ -25,7 +31,10 @@ export default function Footer() {
           <Button label={__('Terms')} href="https://odysee.com/$/tos" />
         </li>
         <li className="footer__link">
-          <Button label={__('Privacy Policy')} href="https://odysee.com/$/privacypolicy" />
+          <Button label={__('Privacy Policy')}  href="https://odysee.com/$/privacypolicy" />
+        </li>
+        <li className="footer__link" id="gdprPrivacyFooter">
+          <Button label={__('Cookies')} onClick={() => window.sp && window.sp.showPrivacyBanner()} />
         </li>
       </ul>
     </footer>

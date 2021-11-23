@@ -3,7 +3,7 @@ import type { Node } from 'react';
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
 import * as KEYCODES from 'constants/keycodes';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from 'component/button';
 import classnames from 'classnames';
 import Icon from 'component/common/icon';
@@ -323,6 +323,15 @@ function SideNavigation(props: Props) {
     return () => window.removeEventListener('keydown', handleKeydown);
   }, [sidebarOpen, setSidebarOpen, isAbsolute]);
 
+  useEffect(() => {
+    if (!window.sp) {
+      const gdprDiv = document.getElementById('gdprPrivacyFooter');
+      if (gdprDiv) {
+        gdprDiv.style.display = 'none';
+      }
+    }
+  }, [sidebarOpen]);
+
   const unAuthNudge =
     DOMAIN === 'lbry.tv' ? null : (
       <div className="navigation__auth-nudge">
@@ -353,6 +362,9 @@ function SideNavigation(props: Props) {
       </li>
       <li className="navigation-link">
         <Button label={__('Privacy Policy')} href="https://odysee.com/$/privacypolicy" />
+      </li>
+      <li className="navigation-link" id="gdprPrivacyFooter">
+        <Button label={__('Cookies')} onClick={() => window.sp && window.sp.showPrivacyBanner()} />
       </li>
     </ul>
   );
