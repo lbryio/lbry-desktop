@@ -76,13 +76,12 @@ export function makeResumableUploadRequest(
       },
       onError: (err) => {
         const status = err.originalResponse ? err.originalResponse.getStatus() : 0;
-        if (status === STATUS_CONFLICT || status === STATUS_LOCKED) {
+        const errMsg = typeof err === 'string' ? err : err.message;
+
+        if (status === STATUS_CONFLICT || status === STATUS_LOCKED || errMsg === 'file currently locked') {
           window.store.dispatch(doUpdateUploadProgress({ params, status: 'conflict' }));
-          reject(
-            new Error(
-              `${status}: concurrent upload detected. Uploading the same file from multiple tabs or windows is not allowed.`
-            )
-          );
+          // prettier-ignore
+          reject(new Error(`${status}: concurrent upload detected. Uploading the same file from multiple tabs or windows is not allowed.`));
         } else {
           window.store.dispatch(doUpdateUploadProgress({ params, status: 'error' }));
           reject(new Error(err));
