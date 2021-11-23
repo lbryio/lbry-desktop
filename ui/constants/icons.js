@@ -182,3 +182,4 @@ export const TECHNOLOGY = 'Technology';
 export const EMOJI = 'Emoji';
 export const STICKER = 'Sticker';
 export const EDUCATION = 'Education';
+export const POP_CULTURE = 'Pop Culture';
