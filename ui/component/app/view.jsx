@@ -336,12 +336,18 @@ function App(props: Props) {
     // might use this for future checking to prevent doubleloading
     script.id = 'securePrivacy';
 
+    const cmpScript = document.createElement('script');
+    cmpScript.src = 'https://app.secureprivacy.ai/secureprivacy-plugin/web-plugin/cmp/cmp-v2.js';
+    cmpScript.async = true;
+
     const getLocaleEndpoint = 'https://api.odysee.com/locale/get';
     const gdprRequired = localStorage.getItem('gdprRequired');
     // gdpr is known to be required, add script
     if (gdprRequired === 'true') {
       // $FlowFixMe
       document.head.appendChild(script);
+      // $FlowFixMe
+      document.head.appendChild(cmpScript);
     }
 
     // haven't done a gdpr check, do it now
@@ -355,6 +361,8 @@ function App(props: Props) {
           localStorage.setItem('gdprRequired', 'true');
           // $FlowFixMe
           document.head.appendChild(script);
+          // $FlowFixMe
+          document.head.appendChild(cmpScript);
         // note we don't need gdpr, save to session
         } else if (gdprRequiredBasedOnLocation ===  false) {
           localStorage.setItem('gdprRequired', 'false');
@@ -365,6 +373,8 @@ function App(props: Props) {
     return () => {
       // $FlowFixMe
       document.head.removeChild(script);
+      // $FlowFixMe
+      document.head.appendChild(cmpScript);
     };
   }, []);
 
