@@ -2,7 +2,7 @@
 
 # LBRY App
 
-This repo contains the UI code that powers the official LBRY desktop app, as well as lbry.tv. The LBRY app is a graphical browser for the decentralized content marketplace provided by the
+This repo contains the UI code that powers the official LBRY desktop app. The LBRY app is a graphical browser for the decentralized content marketplace provided by the
 [LBRY](https://lbry.com) protocol. It is essentially the
 [lbry daemon](https://github.com/lbryio/lbry) bundled with a UI using
 [Electron](https://electron.atom.io/).
