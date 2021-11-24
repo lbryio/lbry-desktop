@@ -93,22 +93,23 @@ export default function SettingContent(props: Props) {
               />
             </SettingsRow>
 
+            <SettingsRow title={__('Hide reposts')} subtitle={__(HELP.HIDE_REPOSTS)}>
+              <FormField
+                type="checkbox"
+                name="hide_reposts"
+                checked={hideReposts}
+                onChange={(e) => {
+                  if (isAuthenticated) {
+                    let param = e.target.checked ? { add: 'noreposts' } : { remove: 'noreposts' };
+                    Lbryio.call('user_tag', 'edit', param);
+                  }
+                  setClientSetting(SETTINGS.HIDE_REPOSTS, !hideReposts);
+                }}
+              />
+            </SettingsRow>
+
             {!SIMPLE_SITE && (
               <>
-                <SettingsRow title={__('Hide reposts')} subtitle={__(HELP.HIDE_REPOSTS)}>
-                  <FormField
-                    type="checkbox"
-                    name="hide_reposts"
-                    onChange={(e) => {
-                      if (isAuthenticated) {
-                        let param = e.target.checked ? { add: 'noreposts' } : { remove: 'noreposts' };
-                        Lbryio.call('user_tag', 'edit', param);
-                      }
-                      setClientSetting(SETTINGS.HIDE_REPOSTS, !hideReposts);
-                    }}
-                  />
-                </SettingsRow>
-
                 {/*
               <SettingsRow title={__('Show anonymous content')} subtitle={__('Anonymous content is published without a channel.')} >
                 <FormField

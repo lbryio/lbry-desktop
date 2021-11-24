@@ -85,6 +85,7 @@ function resolveSearchOptions(props) {
     not_channel_ids: mutedAndBlockedChannelIds,
     order_by: orderBy || ['trending_group', 'trending_mixed'],
     stream_types: streamTypesParam,
+    remove_duplicates: true,
   };
 
   if (ENABLE_NO_SOURCE_CLAIMS && hasNoSource) {

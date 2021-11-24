@@ -4,7 +4,7 @@ import * as SHARED_PREFERENCES from 'constants/shared_preferences';
 import moment from 'moment';
 import { getSubsetFromKeysArray } from 'util/sync-settings';
 import { getDefaultLanguage } from 'util/default-languages';
-import { UNSYNCED_SETTINGS, SIMPLE_SITE } from 'config';
+import { UNSYNCED_SETTINGS } from 'config';
 import Comments from 'comments';
 
 const { CLIENT_SYNC_KEYS } = SHARED_PREFERENCES;
@@ -73,7 +73,7 @@ const defaultState = {
     [SETTINGS.AUTOPLAY_MEDIA]: true,
     [SETTINGS.FLOATING_PLAYER]: true,
     [SETTINGS.AUTO_DOWNLOAD]: true,
-    [SETTINGS.HIDE_REPOSTS]: SIMPLE_SITE,
+    [SETTINGS.HIDE_REPOSTS]: false,
 
     // OS
     [SETTINGS.AUTO_LAUNCH]: true,

@@ -248,6 +248,7 @@ function ClaimListDiscover(props: Props) {
     has_source?: boolean,
     has_no_source?: boolean,
     limit_claims_per_channel?: number,
+    remove_duplicates?: boolean,
   } = {
     page_size: dynamicPageSize,
     page,
@@ -259,6 +260,7 @@ function ClaimListDiscover(props: Props) {
     not_channel_ids: isChannel ? undefined : mutedAndBlockedChannelIds,
     not_tags: !showNsfw ? MATURE_TAGS : [],
     order_by: resolveOrderByOption(orderParam, sortByParam),
+    remove_duplicates: isChannel ? undefined : true,
   };
 
   if (ENABLE_NO_SOURCE_CLAIMS && hasNoSource) {

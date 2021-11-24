@@ -111,7 +111,7 @@ export const getHomepageRowForCat = (cat: HomepageCat) => {
     title: cat.label,
     pinnedUrls: cat.pinnedUrls,
     options: {
-      claimType: cat.claimType || 'stream',
+      claimType: cat.claimType || ['stream', 'repost'],
       channelIds: cat.channelIds,
       orderBy: orderValue,
       pageSize: cat.pageSize || undefined,
