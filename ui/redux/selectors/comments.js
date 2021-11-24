@@ -4,7 +4,12 @@ import { createCachedSelector } from 're-reselect';
 import { selectMutedChannels } from 'redux/selectors/blocked';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import { selectBlacklistedOutpointMap, selectFilteredOutpointMap } from 'lbryinc';
-import { selectClaimsById, selectMyClaimIdsRaw, selectClaimIdForUri } from 'redux/selectors/claims';
+import {
+  selectClaimsById,
+  selectMyClaimIdsRaw,
+  selectMyChannelClaimIds,
+  selectClaimIdForUri,
+} from 'redux/selectors/claims';
 import { isClaimNsfw } from 'util/claim';
 
 type State = { claims: any, comments: CommentsState };
@@ -181,6 +186,7 @@ export const selectCommentIdsForUri = (state: State, uri: string) => {
 const filterCommentsDepOnList = {
   claimsById: selectClaimsById,
   myClaimIds: selectMyClaimIdsRaw,
+  myChannelClaimIds: selectMyChannelClaimIds,
   mutedChannels: selectMutedChannels,
   personalBlockList: selectModerationBlockList,
   blacklistedMap: selectBlacklistedOutpointMap,
@@ -264,6 +270,7 @@ const filterComments = (comments: Array<Comment>, claimId?: string, filterInputs
   const {
     claimsById,
     myClaimIds,
+    myChannelClaimIds,
     mutedChannels,
     personalBlockList,
     blacklistedMap,
@@ -282,8 +289,12 @@ const filterComments = (comments: Array<Comment>, claimId?: string, filterInputs
 
         // Return comment if `channelClaim` doesn't exist so the component knows to resolve the author
         if (channelClaim) {
-          if (myClaimIds && myClaimIds.size > 0) {
-            const claimIsMine = channelClaim.is_my_output || myClaimIds.includes(channelClaim.claim_id);
+          if ((myClaimIds && myClaimIds.size > 0) || (myChannelClaimIds && myChannelClaimIds.length > 0)) {
+            const claimIsMine =
+              channelClaim.is_my_output ||
+              myChannelClaimIds.includes(channelClaim.claim_id) ||
+              myClaimIds.includes(channelClaim.claim_id);
+            // TODO: I believe 'myClaimIds' does not include channels, so it seems wasteful to include it here?   ^
             if (claimIsMine) {
               return true;
             }

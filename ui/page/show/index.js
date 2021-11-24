@@ -88,7 +88,8 @@ const select = (state, props) => {
 };
 
 const perform = (dispatch) => ({
-  resolveUri: (uri) => dispatch(doResolveUri(uri)),
+  resolveUri: (uri, returnCached, resolveRepost, options) =>
+    dispatch(doResolveUri(uri, returnCached, resolveRepost, options)),
   beginPublish: (name) => {
     dispatch(doClearPublish());
     dispatch(doPrepareEdit({ name }));

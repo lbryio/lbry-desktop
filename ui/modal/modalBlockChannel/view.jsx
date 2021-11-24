@@ -31,6 +31,7 @@ type Props = {
   // --- redux ---
   activeChannelClaim: ?ChannelClaim,
   contentClaim: ?Claim,
+  contentClaimIsMine: ?boolean,
   moderationDelegatorsById: { [string]: { global: boolean, delegators: { name: string, claimId: string } } },
   doHideModal: () => void,
   doCommentModBlock: (commenterUri: string, offendingCommentId: ?string, timeoutSec: ?number) => void,
@@ -55,6 +56,7 @@ export default function ModalBlockChannel(props: Props) {
     offendingCommentId,
     activeChannelClaim,
     contentClaim,
+    contentClaimIsMine,
     moderationDelegatorsById,
     doHideModal,
     doCommentModBlock,
@@ -78,7 +80,7 @@ export default function ModalBlockChannel(props: Props) {
   const [timeoutSec, setTimeoutSec] = React.useState(-1);
 
   const isPersonalTheOnlyTab = !activeChannelIsModerator && !activeChannelIsAdmin;
-  const isTimeoutAvail = (contentClaim && contentClaim.is_my_output) || activeChannelIsModerator;
+  const isTimeoutAvail = contentClaimIsMine || activeChannelIsModerator;
   const blockButtonDisabled = blockType === BLOCK.TIMEOUT && timeoutSec < 1;
 
   // **************************************************************************

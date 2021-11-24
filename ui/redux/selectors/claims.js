@@ -3,7 +3,7 @@ import { normalizeURI, parseURI, isURIValid } from 'util/lbryURI';
 import { selectSupportsByOutpoint } from 'redux/selectors/wallet';
 import { createSelector } from 'reselect';
 import { createCachedSelector } from 're-reselect';
-import { isClaimNsfw, filterClaims } from 'util/claim';
+import { isClaimNsfw, filterClaims, getChannelIdFromClaim } from 'util/claim';
 import * as CLAIM from 'constants/claim';
 
 type State = { claims: any };
@@ -216,20 +216,26 @@ const selectNormalizedAndVerifiedUri = createCachedSelector(
 
 export const selectClaimIsMine = (state: State, claim: ?Claim) => {
   if (claim) {
-    // The original code seems to imply that 'is_my_output' could be false even
-    // when it is yours and there is a need to double-check with 'myActiveClaims'.
-    // I'm retaining that logic. Otherwise, we could have just return
-    // is_my_output directly when it is defined and skip the fallback.
     if (claim.is_my_output) {
       return true;
-    } else {
-      // 'is_my_output' is false or undefined.
-      const myActiveClaims = selectMyActiveClaims(state);
-      return claim.claim_id && myActiveClaims.has(claim.claim_id);
     }
-  } else {
-    return false;
+
+    const signingChannelId = getChannelIdFromClaim(claim);
+    const myChannelIds = selectMyChannelClaimIds(state);
+
+    if (signingChannelId && myChannelIds) {
+      if (myChannelIds.includes(signingChannelId)) {
+        return true;
+      }
+    } else {
+      const myActiveClaims = selectMyActiveClaims(state);
+      if (claim.claim_id && myActiveClaims.has(claim.claim_id)) {
+        return true;
+      }
+    }
   }
+
+  return false;
 };
 
 export const selectClaimIsMineForUri = (state: State, rawUri: string) => {

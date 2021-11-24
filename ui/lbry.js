@@ -1,4 +1,6 @@
 // @flow
+import { NO_AUTH, X_LBRY_AUTH_TOKEN } from 'constants/token';
+
 require('proxy-polyfill');
 
 const CHECK_DAEMON_STARTED_TRY_NUMBER = 200;
@@ -75,9 +77,9 @@ const Lbry = {
   version: () => daemonCallWithResult('version', {}),
 
   // Claim fetching and manipulation
-  resolve: (params) => daemonCallWithResult('resolve', params),
+  resolve: (params) => daemonCallWithResult('resolve', params, searchRequiresAuth),
   get: (params) => daemonCallWithResult('get', params),
-  claim_search: (params) => daemonCallWithResult('claim_search', params),
+  claim_search: (params) => daemonCallWithResult('claim_search', params, searchRequiresAuth),
   claim_list: (params) => daemonCallWithResult('claim_list', params),
   channel_create: (params) => daemonCallWithResult('channel_create', params),
   channel_update: (params) => daemonCallWithResult('channel_update', params),
@@ -192,10 +194,18 @@ function checkAndParse(response) {
 }
 
 export function apiCall(method: string, params: ?{}, resolve: Function, reject: Function) {
+  let apiRequestHeaders = Lbry.apiRequestHeaders;
+
+  if (params && params[NO_AUTH]) {
+    apiRequestHeaders = Object.assign({}, Lbry.apiRequestHeaders);
+    delete apiRequestHeaders[X_LBRY_AUTH_TOKEN];
+    delete params[NO_AUTH];
+  }
+
   const counter = new Date().getTime();
   const options = {
     method: 'POST',
-    headers: Lbry.apiRequestHeaders,
+    headers: apiRequestHeaders,
     body: JSON.stringify({
       jsonrpc: '2.0',
       method,
@@ -220,11 +230,17 @@ export function apiCall(method: string, params: ?{}, resolve: Function, reject: 
     .catch(reject);
 }
 
-function daemonCallWithResult(name: string, params: ?{} = {}): Promise<any> {
+function daemonCallWithResult(
+  name: string,
+  params: ?{} = {},
+  checkAuthNeededFn: ?(?{}) => boolean = undefined
+): Promise<any> {
   return new Promise((resolve, reject) => {
+    const skipAuth = checkAuthNeededFn ? !checkAuthNeededFn(params) : false;
+
     apiCall(
       name,
-      params,
+      skipAuth ? { ...params, [NO_AUTH]: true } : params,
       (result) => {
         resolve(result);
       },
@@ -247,5 +263,17 @@ const lbryProxy = new Proxy(Lbry, {
       });
   },
 });
+
+/**
+ * daemonCallWithResult hook that checks if the search option requires the
+ * auth-token. This hook works for 'resolve' and 'claim_search'.
+ *
+ * @param options
+ * @returns {boolean}
+ */
+function searchRequiresAuth(options: any) {
+  const KEYS_REQUIRE_AUTH = ['include_purchase_receipt', 'include_is_my_output'];
+  return options && KEYS_REQUIRE_AUTH.some((k) => options.hasOwnProperty(k));
+}
 
 export default lbryProxy;

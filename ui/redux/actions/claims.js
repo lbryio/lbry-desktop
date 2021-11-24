@@ -27,7 +27,8 @@ let checkPendingInterval;
 export function doResolveUris(
   uris: Array<string>,
   returnCachedClaims: boolean = false,
-  resolveReposts: boolean = true
+  resolveReposts: boolean = true,
+  additionalOptions: any = {}
 ) {
   return (dispatch: Dispatch, getState: GetState) => {
     const normalizedUris = uris.map(normalizeURI);
@@ -47,13 +48,6 @@ export function doResolveUris(
       return;
     }
 
-    const options: { include_is_my_output?: boolean, include_purchase_receipt: boolean } = {
-      include_purchase_receipt: true,
-    };
-
-    if (urisToResolve.length === 1) {
-      options.include_is_my_output = true;
-    }
     dispatch({
       type: ACTIONS.RESOLVE_URIS_STARTED,
       data: { uris: normalizedUris },
@@ -70,7 +64,7 @@ export function doResolveUris(
 
     const collectionIds: Array<string> = [];
 
-    return Lbry.resolve({ urls: urisToResolve, ...options }).then(async (result: ResolveResponse) => {
+    return Lbry.resolve({ urls: urisToResolve, ...additionalOptions }).then(async (result: ResolveResponse) => {
       let repostedResults = {};
       const repostsToResolve = [];
       const fallbackResolveInfo = {
@@ -127,7 +121,7 @@ export function doResolveUris(
           type: ACTIONS.RESOLVE_URIS_STARTED,
           data: { uris: repostsToResolve, debug: 'reposts' },
         });
-        repostedResults = await Lbry.resolve({ urls: repostsToResolve, ...options });
+        repostedResults = await Lbry.resolve({ urls: repostsToResolve, ...additionalOptions });
       }
       processResult(repostedResults, resolveInfo);
 
@@ -145,8 +139,13 @@ export function doResolveUris(
   };
 }
 
-export function doResolveUri(uri: string) {
-  return doResolveUris([uri]);
+export function doResolveUri(
+  uri: string,
+  returnCachedClaims: boolean = false,
+  resolveReposts: boolean = true,
+  additionalOptions: any = {}
+) {
+  return doResolveUris([uri], returnCachedClaims, resolveReposts, additionalOptions);
 }
 
 export function doFetchClaimListMine(
@@ -660,10 +659,7 @@ export function doClaimSearch(
       return false;
     };
 
-    return await Lbry.claim_search({
-      ...options,
-      include_purchase_receipt: true,
-    }).then(success, failure);
+    return await Lbry.claim_search(options).then(success, failure);
   };
 }
 

@@ -42,6 +42,7 @@ function CommentMenuList(props: Props) {
   const {
     uri,
     claim,
+    claimIsMine,
     authorUri,
     commentIsMine,
     commentId,
@@ -104,7 +105,7 @@ function CommentMenuList(props: Props) {
 
   function getBlockOptionElem() {
     const isPersonalBlockTheOnlyOption = !activeChannelIsModerator && !activeChannelIsAdmin;
-    const isTimeoutBlockAvailable = (claim && claim.is_my_output) || activeChannelIsModerator;
+    const isTimeoutBlockAvailable = claimIsMine || activeChannelIsModerator;
     const personalPermanentBlockOnly = isPersonalBlockTheOnlyOption && !isTimeoutBlockAvailable;
 
     function getSubtitle() {

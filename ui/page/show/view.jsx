@@ -23,7 +23,7 @@ const isDev = process.env.NODE_ENV !== 'production';
 
 type Props = {
   isResolvingUri: boolean,
-  resolveUri: (string) => void,
+  resolveUri: (string, boolean, boolean, any) => void,
   isSubscribed: boolean,
   uri: string,
   claim: StreamClaim,
@@ -107,7 +107,12 @@ function ShowPage(props: Props) {
       (resolveUri && !isResolvingUri && uri && haventFetchedYet) ||
       (claimExists && !claimIsPending && (!canonicalUrl || isMine === undefined))
     ) {
-      resolveUri(uri);
+      resolveUri(
+        uri,
+        false,
+        true,
+        isMine === undefined ? { include_is_my_output: true, include_purchase_receipt: true } : {}
+      );
     }
   }, [resolveUri, isResolvingUri, canonicalUrl, uri, claimExists, haventFetchedYet, isMine, claimIsPending, search]);
 
