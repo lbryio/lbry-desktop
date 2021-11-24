@@ -15,12 +15,12 @@ import { selectModerationBlockList } from 'redux/selectors/comments';
 import ClaimListDiscover from './view';
 import { doFetchViewCount } from 'lbryinc';
 
-const select = (state) => ({
+const select = (state, props) => ({
   followedTags: selectFollowedTags(state),
   claimSearchByQuery: selectClaimSearchByQuery(state),
   claimSearchByQueryLastPageReached: selectClaimSearchByQueryLastPageReached(state),
   claimsByUri: selectClaimsByUri(state),
-  loading: selectFetchingClaimSearch(state),
+  loading: props.loading !== undefined ? props.loading : selectFetchingClaimSearch(state),
   showNsfw: selectShowMatureContent(state),
   hideReposts: selectClientSetting(state, SETTINGS.HIDE_REPOSTS),
   languageSetting: selectLanguage(state),

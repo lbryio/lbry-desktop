@@ -175,6 +175,7 @@ function DiscoverPage(props: Props) {
             hideAdvancedFilter
             hideFilters
             infiniteScroll={false}
+            loading={false}
             showNoSourceClaims={ENABLE_NO_SOURCE_CLAIMS}
             meta={getElemMeta()}
           />
