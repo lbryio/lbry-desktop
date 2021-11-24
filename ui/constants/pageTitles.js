@@ -9,7 +9,8 @@ export const PAGE_TITLE = {
   // --- Categories ---
   [PAGES.BIG_HITS]: 'Big Hits',
   [PAGES.DISCOVER]: 'Wild West',
-  // [PAGES.ENLIGHTENMENT] = 'Enlightenment',
+  [PAGES.EDUCATION]: 'Education',
+  [PAGES.ENLIGHTENMENT]: 'Enlightenment',
   [PAGES.FINANCE]: 'Finance 2.0',
   [PAGES.GAMING]: 'Gaming',
   [PAGES.GENERAL]: 'Cheese',
@@ -17,6 +18,7 @@ export const PAGE_TITLE = {
   [PAGES.MOVIES]: 'Movies',
   [PAGES.MUSIC]: 'Music',
   [PAGES.NEWS]: 'News & Politics',
+  [PAGES.POP_CULTURE]: 'Pop Culture',
   // [PAGES.RABBIT_HOLE]: 'The Rabbit Hole';
   [PAGES.TECH]: 'Tech',
   [PAGES.UNIVERSE]: 'The Universe',
