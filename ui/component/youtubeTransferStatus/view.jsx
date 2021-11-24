@@ -112,7 +112,7 @@ export default function YoutubeTransferStatus(props: Props) {
               !hasPendingTransfers &&
               !isYoutubeTransferComplete &&
               !isNotElligible &&
-              __('Please check back later. This may take up to 1 week.')}
+              __('Please check back later, this may take a few hours.')}
 
             {isYoutubeTransferComplete && !isNotElligible && __('View your channel or choose a new channel to sync.')}
             {isNotElligible && (

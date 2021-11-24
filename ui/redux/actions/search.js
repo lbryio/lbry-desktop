@@ -9,7 +9,8 @@ import { makeSelectSearchUrisForQuery, selectSearchValue } from 'redux/selectors
 import handleFetchResponse from 'util/handle-fetch';
 import { getSearchQueryString } from 'util/query-params';
 import { getRecommendationSearchOptions } from 'util/search';
-import { SEARCH_SERVER_API } from 'config';
+import { SEARCH_SERVER_API, SEARCH_SERVER_API_ALT } from 'config';
+import { SEARCH_OPTIONS } from 'constants/search';
 
 type Dispatch = (action: any) => any;
 type GetState = () => { claims: any, search: SearchState };
@@ -24,11 +25,25 @@ type SearchOptions = {
 
 let lighthouse = {
   CONNECTION_STRING: SEARCH_SERVER_API,
+  user_id: '',
+
   search: (queryString: string) => fetch(`${lighthouse.CONNECTION_STRING}?${queryString}`).then(handleFetchResponse),
+
+  searchRecommendations: (queryString: string) => {
+    if (lighthouse.user_id) {
+      return fetch(`${SEARCH_SERVER_API_ALT}?${queryString}${lighthouse.user_id}`).then(handleFetchResponse);
+    } else {
+      return fetch(`${SEARCH_SERVER_API_ALT}?${queryString}`).then(handleFetchResponse);
+    }
+  },
 };
 
 export const setSearchApi = (endpoint: string) => {
   lighthouse.CONNECTION_STRING = endpoint.replace(/\/*$/, '/'); // exactly one slash at the end;
+};
+
+export const setSearchUserId = (userId: ?string) => {
+  lighthouse.user_id = userId ? `&user_id=${userId}` : '';
 };
 
 export const doSearch = (rawQuery: string, searchOptions: SearchOptions) => (
@@ -63,8 +78,11 @@ export const doSearch = (rawQuery: string, searchOptions: SearchOptions) => (
     type: ACTIONS.SEARCH_START,
   });
 
-  lighthouse
-    .search(queryWithOptions)
+  const cmd = searchOptions.hasOwnProperty(SEARCH_OPTIONS.RELATED_TO)
+    ? lighthouse.searchRecommendations
+    : lighthouse.search;
+
+  cmd(queryWithOptions)
     .then((data: { body: Array<{ name: string, claimId: string }>, poweredBy: string }) => {
       const { body: result, poweredBy } = data;
       const uris = [];
