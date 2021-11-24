@@ -24,6 +24,11 @@ export default function LivestreamPage(props: Props) {
   const livestreamChannelId = channelClaim && channelClaim.signing_channel && channelClaim.signing_channel.claim_id;
 
   React.useEffect(() => {
+    // TODO: This should not be needed one we unify the livestream player (?)
+    analytics.playerLoadedEvent('livestream', false);
+  }, []);
+
+  React.useEffect(() => {
     if (!livestreamChannelId) {
       setIsLive(false);
       return;

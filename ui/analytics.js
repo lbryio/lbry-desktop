@@ -383,6 +383,8 @@ const analytics: Analytics = {
           return 'loaded_markdown';
         case RENDER_MODES.IMAGE:
           return 'loaded_image';
+        case 'livestream':
+          return 'loaded_livestream';
         default:
           return 'loaded_misc';
       }
@@ -480,7 +482,7 @@ function sendPromMetric(name: string, value?: number) {
     let url = new URL(SDK_API_PATH + '/metric/ui');
     const params = { name: name, value: value ? value.toString() : '' };
     url.search = new URLSearchParams(params).toString();
-    return fetch(url, { method: 'post' }).catch(function(error) {});
+    return fetch(url, { method: 'post' }).catch(function (error) {});
   }
 }
 
