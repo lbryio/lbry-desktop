@@ -75,9 +75,10 @@ function DiscoverPage(props: Props) {
 
   const initialLivestreamTileLimit = getPageSize(DEFAULT_LIVESTREAM_TILE_LIMIT);
 
-  const [showViewMoreLivestreams, setShowViewMoreLivestreams] = React.useState(!dynamicRouteProps);
-  const livestreamUris = getLivestreamUris(activeLivestreams, channelIds);
-  const useDualList = showViewMoreLivestreams && livestreamUris.length > initialLivestreamTileLimit;
+  const showLivestreams = window.location.pathname === `/$/${PAGES.WILD_WEST}`;
+  const [showViewMoreLivestreams, setShowViewMoreLivestreams] = React.useState(showLivestreams);
+  const livestreamUris = showLivestreams && getLivestreamUris(activeLivestreams, channelIds);
+  const useDualList = showViewMoreLivestreams && livestreamUris && livestreamUris.length > initialLivestreamTileLimit;
 
   function getElemMeta() {
     return !dynamicRouteProps ? (
@@ -167,7 +168,7 @@ function DiscoverPage(props: Props) {
       {useDualList && (
         <>
           <ClaimListDiscover
-            uris={livestreamUris.slice(0, initialLivestreamTileLimit)}
+            uris={livestreamUris && livestreamUris.slice(0, initialLivestreamTileLimit)}
             headerLabel={headerLabel}
             header={repostedUri ? <span /> : undefined}
             tileLayout={repostedUri ? false : tileLayout}
