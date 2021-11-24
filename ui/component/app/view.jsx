@@ -341,7 +341,12 @@ function App(props: Props) {
     cmpScript.async = true;
 
     const getLocaleEndpoint = 'https://api.odysee.com/locale/get';
-    const gdprRequired = localStorage.getItem('gdprRequired');
+    let gdprRequired;
+    try {
+      gdprRequired = localStorage.getItem('gdprRequired');
+    } catch (err) {
+      if (err) return;
+    }
     // gdpr is known to be required, add script
     if (gdprRequired === 'true') {
       // $FlowFixMe
