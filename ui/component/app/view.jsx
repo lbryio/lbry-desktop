@@ -332,20 +332,6 @@ function App(props: Props) {
 
   // add secure privacy script
   useEffect(() => {
-    // check if loaded from iframe
-    function inIframe() {
-      try {
-        return window.self !== window.top;
-      } catch (e) {
-        return true;
-      }
-    }
-
-    const loadedFromIframe = inIframe();
-    if (loadedFromIframe) {
-      return;
-    }
-
     const script = document.createElement('script');
     script.src = securePrivacyScriptUrl;
     script.async = true;
