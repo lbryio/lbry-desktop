@@ -199,9 +199,7 @@ const MarkdownPreview = (props: MarkdownProps) => {
             src={imgProps.src}
             alt={imgProps.alt}
             title={imgProps.title}
-            helpText={
-              SIMPLE_SITE ? __("This channel isn't staking enough LBRY Credits for inline image previews.") : ''
-            }
+            helpText={SIMPLE_SITE ? __("This channel isn't staking enough Credits for inline image previews.") : ''}
           />
         ),
     },
