@@ -519,7 +519,7 @@ export function CommentCreate(props: Props) {
             label={
               <span className="commentCreate__labelWrapper">
                 {!livestream && (
-                  <div className="commentCreate__label">{isReply ? __('Replying as ') : __('Comment as ')}</div>
+                  <div className="commentCreate__label">{(isReply ? __('Replying as') : __('Comment as')) + ' '}</div>
                 )}
                 <SelectChannel tiny />
               </span>
