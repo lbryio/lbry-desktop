@@ -332,6 +332,18 @@ function App(props: Props) {
 
   // add secure privacy script
   useEffect(() => {
+    function inIframe() {
+      try {
+        return window.self !== window.top;
+      } catch (e) {
+        return true;
+      }
+    }
+
+    if (inIframe()) {
+      return;
+    }
+
     const script = document.createElement('script');
     script.src = securePrivacyScriptUrl;
     script.async = true;
@@ -359,7 +371,7 @@ function App(props: Props) {
 
     // haven't done a gdpr check, do it now
     if (gdprRequired === null) {
-      (async function() {
+      (async function () {
         const response = await fetch(getLocaleEndpoint);
         const json = await response.json();
         const gdprRequiredBasedOnLocation = json.data.gdpr_required;
@@ -370,8 +382,8 @@ function App(props: Props) {
           document.head.appendChild(script);
           // $FlowFixMe
           document.head.appendChild(cmpScript);
-        // note we don't need gdpr, save to session
-        } else if (gdprRequiredBasedOnLocation ===  false) {
+          // note we don't need gdpr, save to session
+        } else if (gdprRequiredBasedOnLocation === false) {
           localStorage.setItem('gdprRequired', 'false');
         }
       })();
