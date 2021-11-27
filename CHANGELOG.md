@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased for Desktop]
 ## [0.52.0] - [2021-10-24]
 
+### Compatibility
+- Mac <= 10.13 (High Sierra) and Ubuntu <= 16 (Xenial) are no longer supported. If you upgrade, you will need to manually build and install your own lbrynet SDK
 ### Added
 - Added direct replying to notifications _community pr!_ ([#6935](https://github.com/lbryio/lbry-desktop/pull/6935))
 - Added "Replay" option on autoplay countdown ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
