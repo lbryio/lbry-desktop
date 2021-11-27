@@ -53,7 +53,7 @@ if (isDev && process.platform === 'win32') {
   app.setAsDefaultProtocolClient(PROTOCOL, process.execPath, [
     path.resolve(process.argv[1]),
   ]);
-} else {
+} else if (process.platform !== 'linux') {
   app.setAsDefaultProtocolClient(PROTOCOL);
 }
 
