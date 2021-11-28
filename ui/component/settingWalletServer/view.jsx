@@ -114,7 +114,7 @@ function SettingWalletServer(props: Props) {
           type="radio"
           name="default_wallet_servers"
           checked={!advancedMode}
-          label={__('Use official lbry.tv wallet servers')}
+          label={__('Use official LBRY wallet servers')}
           onChange={(e) => {
             if (e.target.checked) {
               doClear();

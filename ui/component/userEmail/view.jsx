@@ -10,7 +10,7 @@ import Card from 'component/common/card';
 type Props = {
   cancelButton: Node,
   email: string,
-  resendVerificationEmail: string => void,
+  resendVerificationEmail: (string) => void,
   checkEmailVerified: () => void,
   user: {
     has_verified_email: boolean,
@@ -35,12 +35,12 @@ function UserEmail(props: Props) {
 
   return (
     <Card
-      title={__('lbry.tv Account')}
+      title={__('Cloud Account')}
       subtitle={
         isVerified
           ? undefined
           : __(
-              'Creating a lbry.tv account will allow you to earn rewards, receive content and security updates, and optionally backup your data.'
+              'Connecting with a cloud account will allow you to earn rewards, receive content and security updates, and optionally backup your data.'
             )
       }
       actions={

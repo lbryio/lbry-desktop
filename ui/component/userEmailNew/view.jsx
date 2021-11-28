@@ -38,8 +38,6 @@ function UserEmailNew(props: Props) {
     setShareDiagnosticData,
     clearEmailEntry,
     emailExists,
-    interestedInYoutubSync,
-    doToggleInterestedInYoutubeSync,
   } = props;
   const { share_usage_data: shareUsageData } = daemonSettings;
   const { push, location } = useHistory();
@@ -95,9 +93,7 @@ function UserEmailNew(props: Props) {
     <div className={classnames('main__sign-up')}>
       <Card
         title={__('Cloud Connect')}
-        // @if TARGET='app'
         subtitle={__('Connect your wallet to Odysee')}
-        // @endif
         actions={
           <div className={classnames({ 'card--disabled': DOMAIN === 'lbry.tv' && IS_WEB })}>
             <Form onSubmit={handleSubmit} className="section">
@@ -118,17 +114,6 @@ function UserEmailNew(props: Props) {
                 onChange={(e) => setPassword(e.target.value)}
               />
 
-              {/* @if TARGET='web' */}
-              <FormField
-                type="checkbox"
-                name="youtube_sync_checkbox"
-                label={__('Sync my YouTube channel')}
-                checked={interestedInYoutubSync}
-                onChange={() => doToggleInterestedInYoutubeSync()}
-              />
-              {/* @endif */}
-
-              {/* @if TARGET='app' */}
               <FormField
                 type="checkbox"
                 name="sync_checkbox"
@@ -141,7 +126,6 @@ function UserEmailNew(props: Props) {
                 checked={formSyncEnabled}
                 onChange={() => setFormSyncEnabled(!formSyncEnabled)}
               />
-              {/* @endif */}
 
               {!shareUsageData && !IS_WEB && (
                 <FormField

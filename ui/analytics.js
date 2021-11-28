@@ -310,27 +310,18 @@ const analytics: Analytics = {
   setUser: (userId) => {
     if (internalAnalyticsEnabled && userId) {
       window._paq.push(['setUserId', String(userId)]);
-      // @if TARGET='app'
       Native.getAppVersionInfo().then(({ localVersion }) => {
         sendMatomoEvent('Version', 'Desktop-Version', localVersion);
       });
-      // @endif
     }
   },
   toggleInternal: (enabled: boolean): void => {
-    // Always collect analytics on lbry.tv
-    // @if TARGET='app'
     internalAnalyticsEnabled = enabled;
     window.localStorage.setItem(SHARE_INTERNAL, enabled);
-    // @endif
   },
 
   toggleThirdParty: (enabled: boolean): void => {
-    // Always collect analytics on lbry.tv
-    // @if TARGET='app'
-    // thirdPartyAnalyticsEnabled = enabled;
     window.localStorage.setItem(SHARE_THIRD_PARTY, enabled);
-    // @endif
   },
 
   apiLogView: (uri, outpoint, claimId, timeToStart) => {
@@ -347,7 +338,6 @@ const analytics: Analytics = {
           claim_id: claimId,
         };
 
-        // lbry.tv streams from AWS so we don't care about the time to start
         if (timeToStart && !IS_WEB) {
           params.time_to_start = timeToStart;
         }

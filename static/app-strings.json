@@ -2219,5 +2219,6 @@
   "Showing %filtered% results of %total%": "Showing %filtered% results of %total%",
   "filtered": "filtered",
   "View All Playlists": "View All Playlists",
+  "Your wallet is not currently using a cloud sync service. You are in control of backing up your wallet.": "Your wallet is not currently using a cloud sync service. You are in control of backing up your wallet.",
   "--end--": "--end--"
 }
