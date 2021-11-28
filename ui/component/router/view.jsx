@@ -34,7 +34,6 @@ import ChannelsFollowingDiscoverPage from 'page/channelsFollowingDiscover';
 
 import ChannelsFollowingPage from 'page/channelsFollowing';
 import ChannelsPage from 'page/channels';
-import CheckoutPage from 'page/checkoutPage';
 import CreatorDashboard from 'page/creatorDashboard';
 import DiscoverPage from 'page/discover';
 import FileListPublished from 'page/fileListPublished';
@@ -224,9 +223,7 @@ function AppRouter(props: Props) {
 
   return (
     <Switch>
-      {/* @if TARGET='app' */}
       {welcomeVersion < WELCOME_VERSION && <Route path="/*" component={Welcome} />}
-      {/* @endif */}
       <Redirect
         from={`/$/${PAGES.DEPRECATED__CHANNELS_FOLLOWING_MANAGE}`}
         to={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`}
@@ -264,7 +261,6 @@ function AppRouter(props: Props) {
       <Route path={`/$/${PAGES.TOP}`} exact component={TopPage} />
       <Route path={`/$/${PAGES.SETTINGS}`} exact component={SettingsPage} />
       <Route path={`/$/${PAGES.INVITE}/:referrer`} exact component={InvitedPage} />
-      <Route path={`/$/${PAGES.CHECKOUT}`} exact component={CheckoutPage} />
       <Route path={`/$/${PAGES.REPORT_CONTENT}`} exact component={ReportContentPage} />
       <Route {...props} path={`/$/${PAGES.LIST}/:collectionId`} component={CollectionPage} />
 

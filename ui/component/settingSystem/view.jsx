@@ -267,7 +267,7 @@ export default function SettingSystem(props: Props) {
               subtitle={
                 <React.Fragment>
                   {__(
-                    `This is information like error logging, performance tracking, and usage statistics. It includes your IP address and basic system details, but no other identifying information (unless you sign in to lbry.tv)`
+                    `This is information like error logging, performance tracking, and usage statistics. It includes your IP address and basic system details, but no other identifying information (unless you connect to a cloud service)`
                   )}{' '}
                   <Button button="link" label={__('Learn more')} href="https://lbry.com/privacypolicy" />
                 </React.Fragment>

@@ -3,6 +3,7 @@ import React from 'react';
 import { useHistory } from 'react-router';
 import TxoList from 'component/txoList';
 import Page from 'component/page';
+import WalletBalance from 'component/walletBalance';
 import Spinner from 'component/spinner';
 import YrblWalletEmpty from 'component/yrblWalletEmpty';
 
@@ -34,6 +35,7 @@ const WalletPage = (props: Props) => {
             <YrblWalletEmpty includeWalletLink />
           ) : (
             <div className="card-stack">
+              <WalletBalance />
               <TxoList search={search} />
             </div>
           )}

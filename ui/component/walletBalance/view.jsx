@@ -138,19 +138,19 @@ const WalletBalance = (props: Props) => {
             </div>
           )}
 
-          {/* @if TARGET='app' */}
           {hasSynced ? (
             <p className="section help">
-              {__('A backup of your wallet is synced with lbry.tv.')}
+              {__('A backup of your wallet is synced with a cloud service.')}
               <HelpLink href="https://lbry.com/faq/account-sync" />
             </p>
           ) : (
-            <p className="help--warning">
-              {__('Your wallet is not currently synced with lbry.tv. You are in control of backing up your wallet.')}
+            <p className="help">
+              {__(
+                'Your wallet is not currently using a cloud sync service. You are in control of backing up your wallet.'
+              )}
               <HelpLink navigate={`/$/${PAGES.BACKUP}`} />
             </p>
           )}
-          {/* @endif */}
           <div className="section__actions">
             <Button button="primary" label={__('Buy')} icon={ICONS.BUY} navigate={`/$/${PAGES.BUY}`} />
             <Button button="secondary" label={__('Receive')} icon={ICONS.RECEIVE} navigate={`/$/${PAGES.RECEIVE}`} />
