@@ -1,15 +1,17 @@
 // @flow
+
 import 'scss/component/_comment-create.scss';
+
 import { buildValidSticker } from 'util/comments';
 import { FF_MAX_CHARS_IN_COMMENT } from 'constants/form-field';
 import { FormField, Form } from 'component/common/form';
 import { getChannelIdFromClaim } from 'util/claim';
+import { Lbryio } from 'lbryinc';
 import { useHistory } from 'react-router';
 import * as ICONS from 'constants/icons';
 import * as KEYCODES from 'constants/keycodes';
 import * as PAGES from 'constants/pages';
 import Button from 'component/button';
-import ChannelMentionSuggestions from 'component/channelMentionSuggestions';
 import ChannelThumbnail from 'component/channelThumbnail';
 import classnames from 'classnames';
 import CreditAmount from 'component/common/credit-amount';
@@ -26,14 +28,12 @@ import type { ElementRef } from 'react';
 import UriIndicator from 'component/uriIndicator';
 import usePersistedState from 'effects/use-persisted-state';
 import WalletTipAmountSelector from 'component/walletTipAmountSelector';
-import { Lbryio } from 'lbryinc';
 
 import { getStripeEnvironment } from 'util/stripe';
 const stripeEnvironment = getStripeEnvironment();
 
 const TAB_FIAT = 'TabFiat';
 const TAB_LBC = 'TabLBC';
-const MENTION_DEBOUNCE_MS = 100;
 
 // for sendCashTip REMOVE
 // type TipParams = { tipAmount: number, tipChannelName: string, channelClaimId: string };
@@ -43,7 +43,7 @@ type Props = {
   activeChannel: string,
   activeChannelClaim: ?ChannelClaim,
   bottom: boolean,
-  hasChannels: boolean, //
+  hasChannels: boolean,
   claim: StreamClaim,
   claimIsMine: boolean,
   isFetchingChannels: boolean,
@@ -79,7 +79,6 @@ export function CommentCreate(props: Props) {
     settingsByChannelId,
     shouldFetchComment,
     supportDisabled,
-    uri,
     createComment,
     doFetchCreatorSettings,
     doToast,
@@ -91,8 +90,6 @@ export function CommentCreate(props: Props) {
   } = props;
 
   const formFieldRef: ElementRef<any> = React.useRef();
-  const formFieldInputRef = formFieldRef && formFieldRef.current && formFieldRef.current.input;
-  const selectionIndex = formFieldInputRef && formFieldInputRef.current && formFieldInputRef.current.selectionStart;
   const buttonRef: ElementRef<any> = React.useRef();
 
   const {
@@ -115,33 +112,14 @@ export function CommentCreate(props: Props) {
   const [activeTab, setActiveTab] = React.useState();
   const [tipError, setTipError] = React.useState();
   const [deletedComment, setDeletedComment] = React.useState(false);
-  const [pauseQuickSend, setPauseQuickSend] = React.useState(false);
   const [showEmotes, setShowEmotes] = React.useState(false);
   const [disableReviewButton, setDisableReviewButton] = React.useState();
   const [exchangeRate, setExchangeRate] = React.useState();
   const [canReceiveFiatTip, setCanReceiveFiatTip] = React.useState(undefined);
 
-  const selectedMentionIndex =
-    commentValue.indexOf('@', selectionIndex) === selectionIndex
-      ? commentValue.indexOf('@', selectionIndex)
-      : commentValue.lastIndexOf('@', selectionIndex);
-  const modifierIndex = commentValue.indexOf(':', selectedMentionIndex);
-  const spaceIndex = commentValue.indexOf(' ', selectedMentionIndex);
-  const mentionLengthIndex =
-    modifierIndex >= 0 && (spaceIndex === -1 || modifierIndex < spaceIndex)
-      ? modifierIndex
-      : spaceIndex >= 0 && (modifierIndex === -1 || spaceIndex < modifierIndex)
-      ? spaceIndex
-      : commentValue.length;
-  const channelMention =
-    selectedMentionIndex >= 0 && selectionIndex <= mentionLengthIndex
-      ? commentValue.substring(selectedMentionIndex, mentionLengthIndex)
-      : '';
-
   const claimId = claim && claim.claim_id;
-  const channelUri = claim && (claim.signing_channel ? claim.signing_channel.permanent_url : claim.permanent_url);
   const charCount = commentValue ? commentValue.length : 0;
-  const disabled = deletedComment || isSubmitting || isFetchingChannels || !commentValue.length || pauseQuickSend;
+  const disabled = deletedComment || isSubmitting || isFetchingChannels || !commentValue.length;
   const channelId = getChannelIdFromClaim(claim);
   const channelSettings = channelId ? settingsByChannelId[channelId] : undefined;
   const minSuper = (channelSettings && channelSettings.min_tip_amount_super_chat) || 0;
@@ -179,19 +157,6 @@ export function CommentCreate(props: Props) {
     }
 
     setCommentValue(commentValue);
-  }
-
-  function handleSelectMention(mentionValue, key) {
-    let newMentionValue = mentionValue.replace('lbry://', '');
-    if (newMentionValue.includes('#')) newMentionValue = newMentionValue.replace('#', ':');
-
-    setCommentValue(
-      commentValue.substring(0, selectedMentionIndex) +
-        `${newMentionValue}` +
-        (commentValue.length > mentionLengthIndex + 1
-          ? commentValue.substring(mentionLengthIndex, commentValue.length)
-          : ' ')
-    );
   }
 
   function altEnterListener(e: SyntheticKeyboardEvent<*>) {
@@ -247,7 +212,9 @@ export function CommentCreate(props: Props) {
   }
 
   function doSubmitTip() {
-    if (!activeChannelClaim) return;
+    if (!activeChannelClaim || isSubmitting) return;
+
+    setSubmitting(true);
 
     const params = { amount: tipAmount, claim_id: claimId, channel_id: activeChannelClaim.claim_id };
     // FIAT ONLY - REMOVE
@@ -257,8 +224,6 @@ export function CommentCreate(props: Props) {
     // setup variables for tip API
     // const channelClaimId = claim.signing_channel ? claim.signing_channel.claim_id : claim.claim_id;
     const tipChannelName = claim.signing_channel ? claim.signing_channel.name : claim.name;
-
-    setSubmitting(true);
 
     if (activeTab === TAB_LBC) {
       // call sendTip and then run the callback from the response
@@ -273,13 +238,10 @@ export function CommentCreate(props: Props) {
           }, 1500);
 
           doToast({
-            message: __(
-              "You sent %tipAmount% LBRY Credits as a tip to %tipChannelName%, I'm sure they appreciate it!",
-              {
-                tipAmount: tipAmount, // force show decimal places
-                tipChannelName,
-              }
-            ),
+            message: __("You sent %tipAmount% Credits as a tip to %tipChannelName%, I'm sure they appreciate it!", {
+              tipAmount: tipAmount, // force show decimal places
+              tipChannelName,
+            }),
           });
 
           setSuccessTip({ txid, tipAmount });
@@ -314,8 +276,11 @@ export function CommentCreate(props: Props) {
    * @param {string} [environment] Optional environment for Stripe (test|live)
    */
   function handleCreateComment(txid, payment_intent_id, environment) {
+    if (isSubmitting) return;
+
     setShowEmotes(false);
     setSubmitting(true);
+
     const stickerValue = selectedSticker && buildValidSticker(selectedSticker.name);
 
     createComment(stickerValue || commentValue, claimId, parentId, txid, payment_intent_id, environment, !!stickerValue)
@@ -366,18 +331,6 @@ export function CommentCreate(props: Props) {
     }
   }, [fetchComment, shouldFetchComment, parentId]);
 
-  // Debounce for disabling the submit button when mentioning a user with Enter
-  // so that the comment isn't sent at the same time
-  React.useEffect(() => {
-    const timer = setTimeout(() => {
-      if (pauseQuickSend) {
-        setPauseQuickSend(false);
-      }
-    }, MENTION_DEBOUNCE_MS);
-
-    return () => clearTimeout(timer);
-  }, [pauseQuickSend]);
-
   // Stickers: Get LBC-USD exchange rate if hasn't yet and selected a paid sticker
   React.useEffect(() => {
     if (stickerPrice && !exchangeRate) Lbryio.getExchangeRates().then(({ LBC_USD }) => setExchangeRate(LBC_USD));
@@ -410,6 +363,30 @@ export function CommentCreate(props: Props) {
       })
       .catch(() => {});
   }, [canReceiveFiatTip, claim.claim_id, claim.name, claim.signing_channel, stickerSelector]);
+
+  // Handle keyboard shortcut comment creation
+  // React.useEffect(() => {
+  //   function altEnterListener(e: SyntheticKeyboardEvent<*>) {
+  //     const inputRef = formFieldRef && formFieldRef.current && formFieldRef.current.input;
+  //
+  //     if (inputRef && inputRef.current === document.activeElement) {
+  //       // $FlowFixMe
+  //       const isTyping = e.target.attributes['term'];
+  //
+  //       if (((isLivestream && !isTyping) || e.ctrlKey || e.metaKey) && e.keyCode === KEYCODES.ENTER) {
+  //         e.preventDefault();
+  //         buttonRef.current.click();
+  //       }
+  //     }
+  //   }
+  //
+  //   window.addEventListener('keydown', altEnterListener);
+  //
+  //   // removes the listener so it doesn't cause problems elsewhere in the app
+  //   return () => {
+  //     window.removeEventListener('keydown', altEnterListener);
+  //   };
+  // }, [isLivestream]);
 
   // **************************************************************************
   // Render
@@ -492,37 +469,29 @@ export function CommentCreate(props: Props) {
               closeSelector={() => setShowEmotes(false)}
             />
           )}
-          {!advancedEditor && (
-            <ChannelMentionSuggestions
-              uri={uri}
-              inputRef={formFieldInputRef}
-              mentionTerm={channelMention}
-              creatorUri={channelUri}
-              customSelectAction={handleSelectMention}
-            />
-          )}
+
           <FormField
-            disabled={isFetchingChannels}
-            type={advancedEditor ? 'markdown' : 'textarea'}
-            name={isReply ? 'content_reply' : 'content_description'}
-            ref={formFieldRef}
+            autoFocus={isReply}
+            charCount={charCount}
             className={isReply ? 'content_reply' : 'content_comment'}
+            disabled={isFetchingChannels}
             label={
-              <span className="commentCreate__labelWrapper">
-                <div className="commentCreate__label">{isReply ? __('Replying as') + ' ' : __('Comment as') + ' '}</div>
+              <div className="commentCreate__labelWrapper">
+                <span className="commentCreate__label">{(isReply ? __('Replying as') : __('Comment as')) + ' '}</span>
                 <SelectChannel tiny />
-              </span>
+              </div>
             }
+            name={isReply ? 'content_reply' : 'content_description'}
             quickActionLabel={isReply ? undefined : advancedEditor ? __('Simple Editor') : __('Advanced Editor')}
-            quickActionHandler={() => setAdvancedEditor(!advancedEditor)}
+            ref={formFieldRef}
+            onChange={handleCommentChange}
             openEmoteMenu={() => setShowEmotes(!showEmotes)}
+            quickActionHandler={() => setAdvancedEditor(!advancedEditor)}
             onFocus={onTextareaFocus}
             onBlur={onTextareaBlur}
             placeholder={__('Say something about this...')}
             value={commentValue}
-            charCount={charCount}
-            onChange={handleCommentChange}
-            autoFocus={isReply}
+            type={advancedEditor ? 'markdown' : 'textarea'}
             textAreaMaxLength={FF_MAX_CHARS_IN_COMMENT}
           />
         </>
@@ -587,7 +556,6 @@ export function CommentCreate(props: Props) {
             icon={activeTab === TAB_LBC ? ICONS.LBC : ICONS.FINANCE} // only LBC
             label={__('Review')}
             onClick={() => setReviewingSupportComment(true)}
-            requiresAuth
           />
         ) : (
           (!minTip || claimIsMine) && (
@@ -605,7 +573,6 @@ export function CommentCreate(props: Props) {
                   ? __('Commenting...')
                   : __('Comment --[button to submit something]--')
               }
-              requiresAuth
               onClick={() => activeChannelClaim && commentValue.length && handleCreateComment()}
             />
           )
@@ -628,10 +595,15 @@ export function CommentCreate(props: Props) {
             {!claimIsMine && (
               <>
                 {(!isSupportComment || activeTab !== TAB_LBC) &&
-                  getActionButton(__('LBC'), isSupportComment ? __('Switch to LBC') : undefined, ICONS.LBC, () => {
-                    setIsSupportComment(true);
-                    setActiveTab(TAB_LBC);
-                  })}
+                  getActionButton(
+                    __('Credits'),
+                    isSupportComment ? __('Switch to Credits') : undefined,
+                    ICONS.LBC,
+                    () => {
+                      setIsSupportComment(true);
+                      setActiveTab(TAB_LBC);
+                    }
+                  )}
 
                 {stripeEnvironment &&
                   (!isSupportComment || activeTab !== TAB_FIAT) &&

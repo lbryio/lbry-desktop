@@ -28,6 +28,27 @@ body {
   font-weight: 400;
   font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
     'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+
+  // The W3C future standard; currently supported by Firefox only.
+  // It'll hopefully auto fallback to this when 'webkit-scrollbar' below is deprecated in the future.
+  scrollbar-width: auto;
+  scrollbar-color: var(--color-scrollbar-thumb-bg) var(--color-scrollbar-track-bg);
+}
+
+body *::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+body *::-webkit-scrollbar-track {
+  background: var(--color-scrollbar-track-bg);
+}
+
+body *::-webkit-scrollbar-thumb {
+  // Don't set 'border-radius' because Firefox's 'scrollbar-xx'
+  // standard currently doesn't support it. Stick with square
+  // scrollbar for all browsers.
+  background-color: var(--color-scrollbar-thumb-bg);
 }
 
 hr {

@@ -29,8 +29,10 @@ declare type SearchOptions = {
 declare type SearchState = {
   options: SearchOptions,
   resultsByQuery: {},
+  results: Array<string>,
   hasReachedMaxResultsLength: {},
   searching: boolean,
+  mentionQuery: string,
 };
 
 declare type SearchSuccess = {
@@ -41,6 +43,7 @@ declare type SearchSuccess = {
     size: number,
     uris: Array<string>,
     recsys: string,
+    query: string,
   },
 };
 

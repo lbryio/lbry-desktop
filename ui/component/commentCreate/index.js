@@ -30,10 +30,10 @@ const select = (state, props) => {
 const perform = (dispatch, ownProps) => ({
   createComment: (comment, claimId, parentId, txid, payment_intent_id, environment, sticker) =>
     dispatch(doCommentCreate(comment, claimId, parentId, ownProps.uri, txid, payment_intent_id, environment, sticker)),
-  sendTip: (params, callback, errorCallback) => dispatch(doSendTip(params, false, callback, errorCallback, false)),
-  doToast: (options) => dispatch(doToast(options)),
   doFetchCreatorSettings: (channelClaimId) => dispatch(doFetchCreatorSettings(channelClaimId)),
+  doToast: (options) => dispatch(doToast(options)),
   fetchComment: (commentId) => dispatch(doCommentById(commentId, false)),
+  sendTip: (params, callback, errorCallback) => dispatch(doSendTip(params, false, callback, errorCallback, false)),
 });
 
 export default connect(select, perform)(CommentCreate);

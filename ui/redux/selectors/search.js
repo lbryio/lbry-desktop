@@ -6,13 +6,14 @@ import {
   selectClaimsByUri,
   makeSelectClaimForUri,
   makeSelectClaimForClaimId,
-  makeSelectClaimIsNsfw,
+  selectClaimIsNsfwForUri,
   makeSelectPendingClaimForUri,
   selectIsUriResolving,
 } from 'redux/selectors/claims';
 import { parseURI } from 'util/lbryURI';
 import { isClaimNsfw } from 'util/claim';
 import { createSelector } from 'reselect';
+import { createCachedSelector } from 're-reselect';
 import { createNormalizedSearchKey, getRecommendationSearchOptions } from 'util/search';
 import { selectMutedChannels } from 'redux/selectors/blocked';
 import { selectHistory } from 'redux/selectors/content';
@@ -22,24 +23,16 @@ type State = { claims: any, search: SearchState };
 
 export const selectState = (state: State): SearchState => state.search;
 
-export const selectSearchValue: (state: State) => string = createSelector(selectState, (state) => state.searchQuery);
-
-export const selectSearchOptions: (state: State) => SearchOptions = createSelector(
-  selectState,
-  (state) => state.options
-);
-
-export const selectIsSearching: (state: State) => boolean = createSelector(selectState, (state) => state.searching);
-
-export const selectSearchResultByQuery: (state: State) => { [string]: Array<string> } = createSelector(
-  selectState,
-  (state) => state.resultsByQuery
-);
-
-export const selectHasReachedMaxResultsLength: (state: State) => { [boolean]: Array<boolean> } = createSelector(
-  selectState,
-  (state) => state.hasReachedMaxResultsLength
-);
+// $FlowFixMe - 'searchQuery' is never populated. Something lost in a merge?
+export const selectSearchValue: (state: State) => string = (state) => selectState(state).searchQuery;
+export const selectSearchOptions: (state: State) => SearchOptions = (state) => selectState(state).options;
+export const selectIsSearching: (state: State) => boolean = (state) => selectState(state).searching;
+export const selectSearchResultByQuery: (state: State) => { [string]: Array<string> } = (state) =>
+  selectState(state).resultsByQuery;
+export const selectHasReachedMaxResultsLength: (state: State) => { [boolean]: Array<boolean> } = (state) =>
+  selectState(state).hasReachedMaxResultsLength;
+export const selectMentionSearchResults: (state: State) => Array<string> = (state) => selectState(state).results;
+export const selectMentionQuery: (state: State) => string = (state) => selectState(state).mentionQuery;
 
 export const makeSelectSearchUrisForQuery = (query: string): ((state: State) => Array<string>) =>
   createSelector(selectSearchResultByQuery, (byQuery) => {
@@ -60,93 +53,93 @@ export const makeSelectHasReachedMaxResultsLength = (query: string): ((state: St
     return hasReachedMaxResultsLength[query];
   });
 
-export const makeSelectRecommendedContentForUri = (uri: string) =>
-  createSelector(
-    selectHistory,
-    selectClaimsByUri,
-    selectShowMatureContent,
-    selectMutedChannels,
-    selectAllCostInfoByUri,
-    selectSearchResultByQuery,
-    makeSelectClaimIsNsfw(uri),
-    (history, claimsByUri, matureEnabled, blockedChannels, costInfoByUri, searchUrisByQuery, isMature) => {
-      const claim = claimsByUri[uri];
+export const selectRecommendedContentForUri = createCachedSelector(
+  (state, uri) => uri,
+  selectHistory,
+  selectClaimsByUri,
+  selectShowMatureContent,
+  selectMutedChannels,
+  selectAllCostInfoByUri,
+  selectSearchResultByQuery,
+  selectClaimIsNsfwForUri, // (state, uri)
+  (uri, history, claimsByUri, matureEnabled, blockedChannels, costInfoByUri, searchUrisByQuery, isMature) => {
+    const claim = claimsByUri[uri];
 
-      if (!claim) return;
+    if (!claim) return;
 
-      let recommendedContent;
-      // always grab the claimId - this value won't change for filtering
-      const currentClaimId = claim.claim_id;
+    let recommendedContent;
+    // always grab the claimId - this value won't change for filtering
+    const currentClaimId = claim.claim_id;
 
-      const { title } = claim.value;
+    const { title } = claim.value;
 
-      if (!title) return;
+    if (!title) return;
 
-      const options: {
-        size: number,
-        nsfw?: boolean,
-        isBackgroundSearch?: boolean,
-      } = { size: 20, nsfw: matureEnabled, isBackgroundSearch: true };
+    const options: {
+      size: number,
+      nsfw?: boolean,
+      isBackgroundSearch?: boolean,
+    } = { size: 20, nsfw: matureEnabled, isBackgroundSearch: true };
 
-      if (matureEnabled || (!matureEnabled && !isMature)) {
-        options[SEARCH_OPTIONS.RELATED_TO] = claim.claim_id;
-      }
-
-      const searchQuery = getSearchQueryString(title.replace(/\//, ' '), options);
-      const normalizedSearchQuery = createNormalizedSearchKey(searchQuery);
-
-      let searchResult = searchUrisByQuery[normalizedSearchQuery];
-
-      if (searchResult) {
-        // Filter from recommended: The same claim and blocked channels
-        recommendedContent = searchResult['uris'].filter((searchUri) => {
-          const searchClaim = claimsByUri[searchUri];
-
-          if (!searchClaim) return;
-
-          const signingChannel = searchClaim && searchClaim.signing_channel;
-          const channelUri = signingChannel && signingChannel.canonical_url;
-          const blockedMatch = blockedChannels.some((blockedUri) => blockedUri.includes(channelUri));
-
-          let isEqualUri;
-          try {
-            const { claimId: searchId } = parseURI(searchUri);
-            isEqualUri = searchId === currentClaimId;
-          } catch (e) {}
-
-          return !isEqualUri && !blockedMatch;
-        });
-
-        // Claim to play next: playable and free claims not played before in history
-        const nextUriToPlay = recommendedContent.filter((nextRecommendedUri) => {
-          const costInfo = costInfoByUri[nextRecommendedUri] && costInfoByUri[nextRecommendedUri].cost;
-          const recommendedClaim = claimsByUri[nextRecommendedUri];
-          const isVideo = recommendedClaim && recommendedClaim.value && recommendedClaim.value.stream_type === 'video';
-          const isAudio = recommendedClaim && recommendedClaim.value && recommendedClaim.value.stream_type === 'audio';
-
-          let historyMatch = false;
-          try {
-            const { claimId: nextRecommendedId } = parseURI(nextRecommendedUri);
-
-            historyMatch = history.some(
-              (historyItem) =>
-                (claimsByUri[historyItem.uri] && claimsByUri[historyItem.uri].claim_id) === nextRecommendedId
-            );
-          } catch (e) {}
-
-          return !historyMatch && costInfo === 0 && (isVideo || isAudio);
-        })[0];
-
-        const index = recommendedContent.indexOf(nextUriToPlay);
-        if (index > 0) {
-          const a = recommendedContent[0];
-          recommendedContent[0] = nextUriToPlay;
-          recommendedContent[index] = a;
-        }
-      }
-      return recommendedContent;
+    if (matureEnabled || (!matureEnabled && !isMature)) {
+      options[SEARCH_OPTIONS.RELATED_TO] = claim.claim_id;
     }
-  );
+
+    const searchQuery = getSearchQueryString(title.replace(/\//, ' '), options);
+    const normalizedSearchQuery = createNormalizedSearchKey(searchQuery);
+
+    let searchResult = searchUrisByQuery[normalizedSearchQuery];
+
+    if (searchResult) {
+      // Filter from recommended: The same claim and blocked channels
+      recommendedContent = searchResult['uris'].filter((searchUri) => {
+        const searchClaim = claimsByUri[searchUri];
+
+        if (!searchClaim) return;
+
+        const signingChannel = searchClaim && searchClaim.signing_channel;
+        const channelUri = signingChannel && signingChannel.canonical_url;
+        const blockedMatch = blockedChannels.some((blockedUri) => blockedUri.includes(channelUri));
+
+        let isEqualUri;
+        try {
+          const { claimId: searchId } = parseURI(searchUri);
+          isEqualUri = searchId === currentClaimId;
+        } catch (e) {}
+
+        return !isEqualUri && !blockedMatch;
+      });
+
+      // Claim to play next: playable and free claims not played before in history
+      const nextUriToPlay = recommendedContent.filter((nextRecommendedUri) => {
+        const costInfo = costInfoByUri[nextRecommendedUri] && costInfoByUri[nextRecommendedUri].cost;
+        const recommendedClaim = claimsByUri[nextRecommendedUri];
+        const isVideo = recommendedClaim && recommendedClaim.value && recommendedClaim.value.stream_type === 'video';
+        const isAudio = recommendedClaim && recommendedClaim.value && recommendedClaim.value.stream_type === 'audio';
+
+        let historyMatch = false;
+        try {
+          const { claimId: nextRecommendedId } = parseURI(nextRecommendedUri);
+
+          historyMatch = history.some(
+            (historyItem) =>
+              (claimsByUri[historyItem.uri] && claimsByUri[historyItem.uri].claim_id) === nextRecommendedId
+          );
+        } catch (e) {}
+
+        return !historyMatch && costInfo === 0 && (isVideo || isAudio);
+      })[0];
+
+      const index = recommendedContent.indexOf(nextUriToPlay);
+      if (index > 0) {
+        const a = recommendedContent[0];
+        recommendedContent[0] = nextUriToPlay;
+        recommendedContent[index] = a;
+      }
+    }
+    return recommendedContent;
+  }
+)((state, uri) => String(uri));
 
 export const makeSelectRecommendedRecsysIdForClaimId = (claimId: string) =>
   createSelector(
