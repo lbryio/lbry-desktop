@@ -13,7 +13,7 @@ import InvitePage from './view';
 const select = (state) => ({
   isFailed: selectUserInviteStatusFailed(state),
   isPending: selectUserInviteStatusIsPending(state),
-  inviteAcknowledged: makeSelectClientSetting(state)(SETTINGS.INVITE_ACKNOWLEDGED),
+  inviteAcknowledged: makeSelectClientSetting(SETTINGS.INVITE_ACKNOWLEDGED)(state),
   authenticated: selectUserVerifiedEmail(state),
 });
 
