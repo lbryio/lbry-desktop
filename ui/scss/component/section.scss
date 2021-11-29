@@ -216,6 +216,14 @@
   }
 }
 
+.card__main-actions.settings__row {
+  @media (max-width: $breakpoint-small) {
+    padding: var(--spacing-s);
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
 .settings__row--title {
   min-width: 100%;
   align-self: flex-start;

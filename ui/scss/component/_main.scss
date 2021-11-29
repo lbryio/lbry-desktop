@@ -278,6 +278,10 @@
   margin-top: var(--spacing-m);
   padding: 0 var(--spacing-m);
 
+  @media (max-width: $breakpoint-small) {
+    padding: 0 0;
+  }
+
   .card__subtitle {
     margin: 0 0 var(--spacing-s) 0;
     font-size: var(--font-small);
