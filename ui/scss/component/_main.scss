@@ -459,26 +459,3 @@
   margin-right: auto;
   max-width: 32rem;
 }
-
-.main-wrapper--scrollbar {
-  // The W3C future standard; currently supported by Firefox only.
-  // It'll hopefully auto fallback to this when 'webkit-scrollbar' below is deprecated in the future.
-  scrollbar-width: auto;
-  scrollbar-color: var(--color-scrollbar-thumb-bg) var(--color-scrollbar-track-bg);
-}
-
-.main-wrapper--scrollbar *::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
-}
-
-.main-wrapper--scrollbar *::-webkit-scrollbar-track {
-  background: var(--color-scrollbar-track-bg);
-}
-
-.main-wrapper--scrollbar *::-webkit-scrollbar-thumb {
-  // Don't set 'border-radius' because Firefox's 'scrollbar-xx'
-  // standard currently doesn't support it. Stick with square
-  // scrollbar for all browsers.
-  background-color: var(--color-scrollbar-thumb-bg);
-}

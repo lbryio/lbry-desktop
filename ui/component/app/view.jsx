@@ -149,7 +149,6 @@ function App(props: Props) {
   const sanitizedReferrerParam = rawReferrerParam && rawReferrerParam.replace(':', '#');
   const shouldHideNag = pathname.startsWith(`/$/${PAGES.EMBED}`) || pathname.startsWith(`/$/${PAGES.AUTH_VERIFY}`);
   const userId = user && user.id;
-  const useCustomScrollbar = !IS_MAC;
   const hasMyChannels = myChannelClaimIds && myChannelClaimIds.length > 0;
   const hasNoChannels = myChannelClaimIds && myChannelClaimIds.length === 0;
   const shouldMigrateLanguage = LANGUAGE_MIGRATIONS[language];
@@ -496,7 +495,6 @@ function App(props: Props) {
         // @if TARGET='app'
         [`${MAIN_WRAPPER_CLASS}--mac`]: IS_MAC,
         // @endif
-        [`${MAIN_WRAPPER_CLASS}--scrollbar`]: useCustomScrollbar,
       })}
       ref={appRef}
       onContextMenu={IS_WEB ? undefined : (e) => openContextMenu(e)}
