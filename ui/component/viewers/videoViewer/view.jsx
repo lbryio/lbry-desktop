@@ -25,6 +25,7 @@ import I18nMessage from 'component/i18nMessage';
 import { useHistory } from 'react-router';
 import { getAllIds } from 'util/buildHomepage';
 import type { HomepageCat } from 'util/buildHomepage';
+import debounce from 'util/debounce';
 import { formatLbryUrlForWeb, generateListSearchUrlParams } from 'util/url';
 
 const PLAY_TIMEOUT_ERROR = 'play_timeout_error';
@@ -134,6 +135,14 @@ function VideoViewer(props: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const [replay, setReplay] = useState(false);
   const [videoNode, setVideoNode] = useState();
+
+  const updateVolumeState = React.useCallback(
+    debounce((volume, muted) => {
+      changeVolume(volume);
+      changeMute(muted);
+    }, 500),
+    []
+  );
 
   // force everything to recent when URI changes, can cause weird corner cases otherwise (e.g. navigate while autoplay is true)
   useEffect(() => {
@@ -387,8 +396,7 @@ function VideoViewer(props: Props) {
     });
     player.on('volumechange', () => {
       if (player) {
-        changeVolume(player.volume());
-        changeMute(player.muted());
+        updateVolumeState(player.volume(), player.muted());
       }
     });
     player.on('ratechange', () => {
