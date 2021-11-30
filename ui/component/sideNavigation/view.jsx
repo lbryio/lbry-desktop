@@ -25,6 +25,12 @@ type SideNavLink = {
   hideForUnauth?: boolean,
 };
 
+const GO_LIVE = {
+  title: 'Go Live',
+  link: `/$/${PAGES.LIVESTREAM}`,
+  icon: ICONS.VIDEO,
+};
+
 const HOME = {
   title: 'Home',
   link: `/`,
@@ -38,6 +44,14 @@ const RECENT_FROM_FOLLOWING = {
   title: 'Following --[sidebar button]--',
   link: `/$/${PAGES.CHANNELS_FOLLOWING}`,
   icon: ICONS.SUBSCRIBE,
+};
+
+const NOTIFICATIONS = {
+  title: 'Notifications',
+  link: `/$/${PAGES.NOTIFICATIONS}`,
+  icon: ICONS.NOTIFICATION,
+  extra: <NotificationBubble inline />,
+  hideForUnauth: true,
 };
 
 const PLAYLISTS = {
@@ -69,6 +83,12 @@ const UNAUTH_LINKS: Array<SideNavLink> = [
     icon: ICONS.HELP,
   },
 ];
+
+const WILD_WEST = {
+  title: 'Wild West',
+  link: `/$/${PAGES.WILD_WEST}`,
+  icon: ICONS.WILD_WEST,
+};
 
 // ****************************************************************************
 // ****************************************************************************
@@ -112,13 +132,6 @@ function SideNavigation(props: Props) {
   const EXTRA_SIDEBAR_LINKS = GetLinksData(homepageData).map(({ pinnedUrls, ...theRest }) => theRest);
 
   const MOBILE_LINKS: Array<SideNavLink> = [
-    {
-      title: 'Notifications',
-      link: `/$/${PAGES.NOTIFICATIONS}`,
-      icon: ICONS.NOTIFICATION,
-      extra: <NotificationBubble inline />,
-      hideForUnauth: true,
-    },
     {
       title: 'Upload',
       link: `/$/${PAGES.UPLOAD}`,
@@ -190,26 +203,6 @@ function SideNavigation(props: Props) {
   const notificationsEnabled = ENABLE_UI_NOTIFICATIONS || (user && user.experimental_ui);
   const isAuthenticated = Boolean(email);
 
-  // SIDE LINKS: FOLLOWING, HOME, [FULL,] [EXTRA]
-  let SIDE_LINKS: Array<SideNavLink> = [];
-
-  SIDE_LINKS.push(HOME);
-  SIDE_LINKS.push(RECENT_FROM_FOLLOWING);
-  SIDE_LINKS.push(PLAYLISTS);
-
-  if (EXTRA_SIDEBAR_LINKS) {
-    // $FlowFixMe
-    SIDE_LINKS.push(...EXTRA_SIDEBAR_LINKS);
-
-    const WILD_WEST = {
-      title: 'Wild West',
-      link: `/$/${PAGES.WILD_WEST}`,
-      icon: ICONS.WILD_WEST,
-    };
-
-    SIDE_LINKS.push(WILD_WEST);
-  }
-
   const livestreamEnabled = Boolean(
     ENABLE_NO_SOURCE_CLAIMS &&
       user &&
@@ -224,15 +217,6 @@ function SideNavigation(props: Props) {
   const isPersonalized = !IS_WEB || isAuthenticated;
   const isAbsolute = isOnFilePage || isMediumScreen;
   const microNavigation = !sidebarOpen || isMediumScreen;
-  const subLinks = email
-    ? MOBILE_LINKS.filter((link) => {
-        if (!notificationsEnabled && link.icon === ICONS.NOTIFICATION) {
-          return false;
-        }
-
-        return true;
-      })
-    : UNAUTH_LINKS;
 
   const showSubscriptionSection = sidebarOpen && isPersonalized && subscriptions && subscriptions.length > 0;
   const showTagSection = sidebarOpen && isPersonalized && followedTags && followedTags.length;
@@ -247,6 +231,33 @@ function SideNavigation(props: Props) {
     displayedFollowedTags = followedTags.slice(0, FOLLOWED_ITEM_INITIAL_LIMIT);
   }
 
+  function getLink(props: SideNavLink) {
+    const { hideForUnauth, route, link, ...passedProps } = props;
+    const { title, icon, extra } = passedProps;
+
+    if (hideForUnauth && !email) {
+      return null;
+    }
+
+    return (
+      <li key={route || link || title}>
+        <Button
+          {...passedProps}
+          icon={icon}
+          navigate={route || link}
+          label={__(title)}
+          title={__(title)}
+          className={classnames('navigation-link', {
+            'navigation-link--pulse': icon === ICONS.LIBRARY && pulseLibrary,
+            'navigation-link--highlighted': icon === ICONS.NOTIFICATION && unseenCount > 0,
+          })}
+          activeClass="navigation-link--active"
+        />
+        {extra && extra}
+      </li>
+    );
+  }
+
   function getSubscriptionSection() {
     if (showSubscriptionSection) {
       return (
@@ -255,14 +266,15 @@ function SideNavigation(props: Props) {
             {displayedSubscriptions.map((subscription) => (
               <SubscriptionListItem key={subscription.uri} subscription={subscription} />
             ))}
+            {subscriptions.length > FOLLOWED_ITEM_INITIAL_LIMIT && (
+              <Button
+                key="showMore"
+                label={expandSubscriptions ? __('Show less') : __('Show more')}
+                className="navigation-link"
+                onClick={() => setExpandSubscriptions(!expandSubscriptions)}
+              />
+            )}
           </ul>
-          {subscriptions.length > FOLLOWED_ITEM_INITIAL_LIMIT && (
-            <Button
-              label={expandSubscriptions ? __('Show less') : __('Show more')}
-              className="navigation-link"
-              onClick={() => setExpandSubscriptions(!expandSubscriptions)}
-            />
-          )}
         </>
       );
     }
@@ -273,20 +285,21 @@ function SideNavigation(props: Props) {
     if (showTagSection) {
       return (
         <>
-          <ul className="navigation__secondary navigation-links navigation-links--small">
+          <ul className="navigation__secondary navigation-links">
             {displayedFollowedTags.map(({ name }, key) => (
               <li key={name} className="navigation-link__wrapper">
                 <Button navigate={`/$/discover?t=${name}`} label={`#${name}`} className="navigation-link" />
               </li>
             ))}
+            {followedTags.length > FOLLOWED_ITEM_INITIAL_LIMIT && (
+              <Button
+                key="showMore"
+                label={expandTags ? __('Show less') : __('Show more')}
+                className="navigation-link"
+                onClick={() => setExpandTags(!expandTags)}
+              />
+            )}
           </ul>
-          {followedTags.length > FOLLOWED_ITEM_INITIAL_LIMIT && (
-            <Button
-              label={expandTags ? __('Show less') : __('Show more')}
-              className="navigation-link"
-              onClick={() => setExpandTags(!expandTags)}
-            />
-          )}
         </>
       );
     }
@@ -385,29 +398,21 @@ function SideNavigation(props: Props) {
         >
           <div>
             <ul className={classnames('navigation-links', { 'navigation-links--micro': !sidebarOpen })}>
-              {SIDE_LINKS.map((linkProps) => {
-                //   $FlowFixMe
-                const { hideForUnauth, ...passedProps } = linkProps;
-                return !email && linkProps.hideForUnauth && IS_WEB ? null : (
-                  <li key={linkProps.route || linkProps.link}>
-                    <Button
-                      {...passedProps}
-                      label={__(linkProps.title)}
-                      title={__(linkProps.title)}
-                      //   $FlowFixMe
-                      navigate={linkProps.route || linkProps.link}
-                      icon={pulseLibrary && linkProps.icon === ICONS.LIBRARY ? ICONS.PURCHASED : linkProps.icon}
-                      className={classnames('navigation-link', {
-                        'navigation-link--pulse': linkProps.icon === ICONS.LIBRARY && pulseLibrary,
-                        'navigation-link--highlighted': linkProps.icon === ICONS.NOTIFICATION && unseenCount > 0,
-                      })}
-                      activeClass="navigation-link--active"
-                    />
-                    {linkProps.extra && linkProps.extra}
-                  </li>
-                );
-              })}
+              {getLink(HOME)}
+              {getLink(RECENT_FROM_FOLLOWING)}
+              {getLink(PLAYLISTS)}
             </ul>
+
+            <ul className={classnames('navigation-links', { 'navigation-links--micro': !sidebarOpen })}>
+              {EXTRA_SIDEBAR_LINKS && (
+                <>
+                  {/* $FlowFixMe -- GetLinksData should fix it's data type */}
+                  {EXTRA_SIDEBAR_LINKS.map((linkProps) => getLink(linkProps))}
+                  {getLink(WILD_WEST)}
+                </>
+              )}
+            </ul>
+
             {getSubscriptionSection()}
             {getFollowedTagsSection()}
             {!isAuthenticated && sidebarOpen && unAuthNudge}
@@ -422,61 +427,31 @@ function SideNavigation(props: Props) {
           <nav className="navigation--absolute">
             <div>
               <ul className="navigation-links--absolute mobile-only">
-                {email && livestreamEnabled && (
-                  <li key={'Go Live'} className="mobile-only">
-                    <Button
-                      icon={ICONS.VIDEO}
-                      navigate={`/$/${PAGES.LIVESTREAM}`}
-                      label={__('Go Live')}
-                      title={__('Go Live')}
-                      className="navigation-link"
-                      activeClass="navigation-link--active"
-                    />
-                  </li>
+                {notificationsEnabled && getLink(NOTIFICATIONS)}
+                {email && livestreamEnabled && getLink(GO_LIVE)}
+              </ul>
+
+              <ul className="navigation-links--absolute">
+                {getLink(HOME)}
+                {getLink(RECENT_FROM_FOLLOWING)}
+                {getLink(PLAYLISTS)}
+              </ul>
+
+              <ul className="navigation-links--absolute">
+                {EXTRA_SIDEBAR_LINKS && (
+                  <>
+                    {/* $FlowFixMe -- GetLinksData should fix it's data type */}
+                    {EXTRA_SIDEBAR_LINKS.map((linkProps) => getLink(linkProps))}
+                    {getLink(WILD_WEST)}
+                  </>
                 )}
               </ul>
-              <ul className="navigation-links--absolute">
-                {SIDE_LINKS.map((linkProps) => {
-                  //   $FlowFixMe
-                  const { hideForUnauth, link, route, ...passedProps } = linkProps;
-                  return !email && linkProps.hideForUnauth && IS_WEB ? null : (
-                    <li key={route || link}>
-                      <Button
-                        {...passedProps}
-                        navigate={route || link}
-                        label={__(linkProps.title)}
-                        title={__(linkProps.title)}
-                        icon={pulseLibrary && linkProps.icon === ICONS.LIBRARY ? ICONS.PURCHASED : linkProps.icon}
-                        className={classnames('navigation-link', {
-                          'navigation-link--pulse': linkProps.icon === ICONS.LIBRARY && pulseLibrary,
-                          'navigation-link--highlighted': linkProps.icon === ICONS.NOTIFICATION && unseenCount > 0,
-                        })}
-                        activeClass="navigation-link--active"
-                      />
-                      {linkProps.extra && linkProps.extra}
-                    </li>
-                  );
-                })}
-              </ul>
-              <ul className="navigation-links--absolute mobile-only">
-                {subLinks.map((linkProps) => {
-                  const { hideForUnauth, ...passedProps } = linkProps;
 
-                  return !email && hideForUnauth && IS_WEB ? null : (
-                    <li key={linkProps.title} className="mobile-only">
-                      <Button
-                        {...passedProps}
-                        navigate={linkProps.link}
-                        label={__(linkProps.title)}
-                        title={__(linkProps.title)}
-                        className="navigation-link"
-                        activeClass="navigation-link--active"
-                      />
-                      {linkProps.extra}
-                    </li>
-                  );
-                })}
+              <ul className="navigation-links--absolute mobile-only">
+                {email && MOBILE_LINKS.map((linkProps) => getLink(linkProps))}
+                {!email && UNAUTH_LINKS.map((linkProps) => getLink(linkProps))}
               </ul>
+
               {getSubscriptionSection()}
               {getFollowedTagsSection()}
               {!isAuthenticated && unAuthNudge}
