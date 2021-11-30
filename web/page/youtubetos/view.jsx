@@ -45,7 +45,7 @@ const YouTubeTOSPage = () => {
             </p>
 
             <p>
-              The Services provide an interface for you to interact with LBRY, including to publish, access, or host
+              The Services provide an interface for you to interact with Odysee, including to publish, access, or host
               Content through LBRY. The LBRY protocol is not owned, operated, or maintained by us. We have no
               responsibility or liability for LBRY, and the Company has no ability to control third parties’ use of
               LBRY. We are not able to delete or remove Content that has been published through LBRY and that may be

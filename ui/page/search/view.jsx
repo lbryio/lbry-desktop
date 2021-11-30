@@ -107,7 +107,7 @@ export default function SearchPage(props: Props) {
               }
             />
 
-            <div className="main--empty help">{__('These search results are provided by LBRY, Inc.')}</div>
+            <div className="main--empty help">{__('These search results are provided by Odysee.')}</div>
           </>
         )}
       </section>

@@ -129,7 +129,7 @@ function ChannelContent(props: Props) {
             )}
           </p>
           <div className="section__actions">
-            <Button button="link" href="https://odysee.com/@OdyseeHelp:b/copyright:f" label={__('Read More')} />
+            <Button button="link" href="odysee.com/@OdyseeHelp:b/copyright:f" label={__('Read More')} />
           </div>
         </section>
       )}

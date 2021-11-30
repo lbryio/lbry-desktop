@@ -92,7 +92,9 @@ function ChannelThumbnail(props: Props) {
       })}
     >
       {showDelayedMessage ? (
-        <div className="channel-thumbnail--waiting">{__('This will be visible in a few minutes.')}</div>
+        <div className="channel-thumbnail--waiting">
+          {__('This will be visible in a few minutes after you submit this form.')}
+        </div>
       ) : (
         <OptimizedImage
           alt={__('Channel profile picture')}

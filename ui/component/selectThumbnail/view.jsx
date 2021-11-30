@@ -99,7 +99,9 @@ function SelectThumbnail(props: Props) {
   */
   const thumbPreview = (
     <div className="column__item thumbnail-picker__preview" style={{ backgroundImage: `url(${String(thumbnailSrc)})` }}>
-      {thumbUploaded && thumbnailError !== false && __('This will be visible in a few minutes.')}
+      {thumbUploaded &&
+        thumbnailError !== false &&
+        __('This will be visible in a few minutes after you submit this form.')}
       <img
         style={{ display: 'none' }}
         src={thumbnail}
