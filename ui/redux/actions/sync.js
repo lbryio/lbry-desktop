@@ -4,7 +4,12 @@ import * as SETTINGS from 'constants/settings';
 import { Lbryio } from 'lbryinc';
 import Lbry from 'lbry';
 import { doWalletEncrypt, doWalletDecrypt } from 'redux/actions/wallet';
-import { selectGetSyncIsPending, selectSetSyncIsPending, selectSyncIsLocked } from 'redux/selectors/sync';
+import {
+  selectSyncHash,
+  selectGetSyncIsPending,
+  selectSetSyncIsPending,
+  selectSyncIsLocked,
+} from 'redux/selectors/sync';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { getSavedPassword } from 'util/saved-passwords';
 import { doAnalyticsTagSync, doHandleSyncComplete } from 'redux/actions/app';
@@ -154,7 +159,9 @@ export function doGetSync(passedPassword?: string, callback?: (any, ?boolean) =>
     }
   }
 
-  return (dispatch: Dispatch) => {
+  return (dispatch: Dispatch, getState: GetState) => {
+    const state = getState();
+    const localHash = selectSyncHash(state);
     dispatch({
       type: ACTIONS.GET_SYNC_STARTED,
     });
@@ -182,7 +189,7 @@ export function doGetSync(passedPassword?: string, callback?: (any, ?boolean) =>
         const syncHash = response.hash;
         data.syncHash = syncHash;
         data.syncData = response.data;
-        data.changed = response.changed;
+        data.changed = response.changed || syncHash !== localHash;
         data.hasSyncedWallet = true;
 
         if (response.changed) {
