@@ -21,17 +21,17 @@ module.exports.CATEGORY_METADATA = {
   [PAGES.FINANCE]: {
     title: 'Finance 2.0',
     description: 'Crypto, Money, Economics, Markets on Odysee ',
-    image: 'https://spee.ch/category-finance:c.jpg?quality=80&height=1200&width=630',
+    image: 'https://cdn.lbryplayer.xyz/speech/category-finance:c.jpg',
   },
   [PAGES.GAMING]: {
     title: 'Gaming',
     description: 'Pew pew bzzz gaming on Odysee',
-    image: 'https://spee.ch/category-gaming:5.jpg?quality=80&height=1200&width=630',
+    image: 'https://cdn.lbryplayer.xyz/speech/category-gaming:5.jpg',
   },
   [PAGES.GENERAL]: {
     title: 'Cheese',
     description: 'Cheese is the answer to life, the universe, and everything. We have primo cheese on Odysee',
-    image: 'https://spee.ch/category-primary1:5.jpg?quality=80&height=1200&width=630',
+    image: 'https://cdn.lbryplayer.xyz/speech/category-primary1:5.jpg',
   },
   [PAGES.LAB]: {
     title: 'Lab',
@@ -46,12 +46,12 @@ module.exports.CATEGORY_METADATA = {
   [PAGES.MOVIES]: {
     title: 'Movies',
     description: `Do you love B rated movies? We've got you covered on Odysee`,
-    image: 'https://spee.ch/category-movies:2.jpg?quality=80&height=1200&width=630',
+    image: 'https://cdn.lbryplayer.xyz/speech/category-movies:2.jpg',
   },
   [PAGES.MUSIC]: {
     title: 'Music',
     description: 'All the songs, reviews, covers, and how-tos you love on Odysee',
-    image: 'https://spee.ch/category-music:8.jpg?quality=80&height=1200&width=630',
+    image: 'https://cdn.lbryplayer.xyz/speech/category-music:8.jpg',
   },
   [PAGES.TECH]: {
     title: 'Tech',
@@ -66,6 +66,6 @@ module.exports.CATEGORY_METADATA = {
   [PAGES.WILD_WEST]: {
     title: 'Wild West',
     description: 'Boosted by user credits, this is what the community promotes on Odysee',
-    image: 'https://spee.ch/category-wildwest:1.jpg?quality=80&height=1200&width=630',
+    image: 'https://cdn.lbryplayer.xyz/speech/category-wildwest:1.jpg',
   },
 };
