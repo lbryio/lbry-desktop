@@ -1,8 +1,9 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
-import { SITE_NAME, SIMPLE_SITE, ENABLE_NO_SOURCE_CLAIMS } from 'config';
-import React from 'react';
+import { SHOW_ADS, SITE_NAME, SIMPLE_SITE, ENABLE_NO_SOURCE_CLAIMS } from 'config';
+import Ads from 'web/component/ads';
+import React  from 'react';
 import Page from 'component/page';
 import Button from 'component/button';
 import ClaimTilesDiscover from 'component/claimTilesDiscover';
@@ -74,6 +75,7 @@ function HomePage(props: Props) {
 
     return (
       <div key={title} className="claim-grid__wrapper">
+        {/* category header */}
         {index !== 0 && title && typeof title === 'string' && (
           <h1 className="claim-grid__header">
             <Button navigate={route || link} button="link">
@@ -91,6 +93,7 @@ function HomePage(props: Props) {
           </WaitUntilOnPage>
         )}
 
+        {/* view more button */}
         {(route || link) && (
           <Button
             className="claim-grid__title--secondary"
@@ -106,6 +109,135 @@ function HomePage(props: Props) {
 
   React.useEffect(() => {
     doFetchActiveLivestreams();
+  }, []);
+
+  // returns true if passed element is fully visible on screen
+  function isScrolledIntoView(el) {
+    const rect = el.getBoundingClientRect();
+    const elemTop = rect.top;
+    const elemBottom = rect.bottom;
+
+    // Only completely visible elements return true:
+    const isVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight);
+    return isVisible;
+  }
+
+  //
+  React.useEffect(() => {
+    if (authenticated || !SHOW_ADS) {
+      return;
+    }
+
+    (async function() {
+      // test if adblock is enabled
+      let adBlockEnabled = false;
+      const googleAdUrl = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
+      try {
+        await fetch(new Request(googleAdUrl)).catch(_ => { adBlockEnabled = true });
+      } catch (e) {
+        adBlockEnabled = true;
+      } finally {
+        if (!adBlockEnabled) {
+          // select the cards on page
+          let cards = document.getElementsByClassName('card claim-preview--tile');
+
+          // eslint-disable-next-line no-inner-declarations
+          function checkFlag() {
+            if (cards.length === 0) {
+              window.setTimeout(checkFlag, 100);
+            } else {
+              // find the last fully visible card
+              let lastCard;
+              for (const card of cards) {
+                const isFullyVisible = isScrolledIntoView(card);
+                if (!isFullyVisible) break;
+                lastCard = card;
+              }
+
+              // clone the last card
+              // $FlowFixMe
+              const clonedCard = lastCard.cloneNode(true);
+
+              // insert cloned card
+              // $FlowFixMe
+              lastCard.parentNode.insertBefore(clonedCard, lastCard);
+
+              // delete last card so that it doesn't mess up formatting
+              // $FlowFixMe
+              // lastCard.remove();
+
+              // change the appearance of the cloned card
+              // $FlowFixMe
+              clonedCard.querySelector('.claim__menu-button').remove();
+
+              // $FlowFixMe
+              clonedCard.querySelector('.truncated-text').innerHTML = 'Hate these? Login to Odysee for an ad free experience';
+
+              // $FlowFixMe
+              clonedCard.querySelector('.claim-tile__info').remove();
+
+              // $FlowFixMe
+              clonedCard.querySelector('[role="none"]').removeAttribute('href');
+
+              // $FlowFixMe
+              clonedCard.querySelector('.claim-tile__header').firstChild.href = '/$/signin';
+
+              // $FlowFixMe
+              clonedCard.querySelector('.claim-tile__title').firstChild.removeAttribute('aria-label');
+
+              // $FlowFixMe
+              clonedCard.querySelector('.claim-tile__title').firstChild.removeAttribute('title');
+
+              // $FlowFixMe
+              clonedCard.querySelector('.claim-tile__header').firstChild.removeAttribute('aria-label');
+
+              // $FlowFixMe
+              clonedCard.querySelector('.media__thumb').replaceWith(document.getElementsByClassName('homepageAdContainer')[0]);
+
+              // show the homepage ad which is not displayed at first
+              document.getElementsByClassName('homepageAdContainer')[0].style.display = 'block';
+
+              // $FlowFixMe
+              const imageHeight = window.getComputedStyle(lastCard.querySelector('.media__thumb')).height;
+              // $FlowFixMe
+              const imageWidth = window.getComputedStyle(lastCard.querySelector('.media__thumb')).width;
+
+              var styles = `#av-container, #AVcontent, #aniBox {
+                height: ${imageHeight} !important;
+                width: ${imageWidth} !important;
+              }`;
+
+              var styleSheet = document.createElement('style');
+              styleSheet.type = 'text/css';
+              styleSheet.innerText = styles;
+              // $FlowFixMe
+              document.head.appendChild(styleSheet);
+
+              clonedCard.style.display = 'none';
+
+              let timeoutCount = 0;
+              // eslint-disable-next-line no-inner-declarations
+              function checkForAniview() {
+                const aniBoxDiv = document.getElementsByClassName('homepageAdContainer')[0].querySelector('#aniBox');
+
+                if (!aniBoxDiv) {
+                  timeoutCount += 100;
+                  if (timeoutCount < 500) {
+                    window.setTimeout(checkForAniview, 100);
+                  } else {
+
+                  }
+                } else {
+                  clonedCard.style.display = 'block';
+                }
+              }
+              checkForAniview();
+            }
+          }
+          checkFlag();
+        }
+      }
+    })();
   }, []);
 
   return (
@@ -126,6 +258,7 @@ function HomePage(props: Props) {
       )}
       {/* @if TARGET='web' */}
       {SIMPLE_SITE && <Meme />}
+      <Ads type="homepage" />
       {/* @endif */}
       {rowData.map(({ title, route, link, icon, help, pinnedUrls: pinUrls, options = {} }, index) => {
         // add pins here
