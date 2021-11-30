@@ -8,7 +8,7 @@ import { selectPlayingUri, selectPrimaryUri } from 'redux/selectors/content';
 import { selectClientSetting, selectDaemonSettings } from 'redux/selectors/settings';
 import { history } from 'ui/store';
 
-const recsysEndpoint = 'https://clickstream.odysee.com/log/video/view';
+const recsysEndpoint = 'https://recsys.odysee.com/log/video/view';
 const recsysId = 'lighthouse-v0';
 
 const getClaimIdsFromUris = (uris) => {
