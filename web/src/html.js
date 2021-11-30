@@ -1,39 +1,42 @@
 const {
-  URL,
-  // DOMAIN,
-  SITE_TITLE,
-  SITE_CANONICAL_URL,
-  OG_HOMEPAGE_TITLE,
-  OG_TITLE_SUFFIX,
-  OG_IMAGE_URL,
-  SITE_DESCRIPTION,
-  SITE_NAME,
   FAVICON,
   LBRY_WEB_API,
+  OG_HOMEPAGE_TITLE,
+  OG_IMAGE_URL,
+  OG_TITLE_SUFFIX,
+  SITE_CANONICAL_URL,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_TITLE,
   THUMBNAIL_CARDS_CDN_URL,
+  URL,
 } = require('../../config.js');
 
-const { lbryProxy: Lbry } = require('../lbry');
-const { generateEmbedUrl, generateStreamUrl, generateDirectUrl } = require('../../ui/util/web');
-const PAGES = require('../../ui/constants/pages');
 const { CATEGORY_METADATA } = require('./category-metadata');
-const { parseURI, normalizeURI } = require('./lbryURI');
-const fs = require('fs');
-const path = require('path');
-const moment = require('moment');
-const removeMd = require('remove-markdown');
+const { generateEmbedUrl, generateStreamUrl, generateDirectUrl } = require('../../ui/util/web');
 const { getJsBundleId } = require('../bundle-id.js');
+const { lbryProxy: Lbry } = require('../lbry');
+const { parseURI, normalizeClaimUrl } = require('./lbryURI');
+const fs = require('fs');
+const moment = require('moment');
+const PAGES = require('../../ui/constants/pages');
+const path = require('path');
+const removeMd = require('remove-markdown');
+
 const jsBundleId = getJsBundleId();
 const SDK_API_PATH = `${LBRY_WEB_API}/api/v1`;
 const PROXY_URL = `${SDK_API_PATH}/proxy`;
 Lbry.setDaemonConnectionString(PROXY_URL);
 
-function getThumbnailCdnUrl(url) {
-  if (!THUMBNAIL_CARDS_CDN_URL || !url) {
-    return url;
-  }
+const BEGIN_STR = '<!-- VARIABLE_HEAD_BEGIN -->';
+const FINAL_STR = '<!-- VARIABLE_HEAD_END -->';
 
-  if (url && (url.includes('https://twitter-card') || url.includes('https://cards.odysee.com'))) {
+function getThumbnailCdnUrl(url) {
+  if (
+    !THUMBNAIL_CARDS_CDN_URL ||
+    !url ||
+    (url && (url.includes('https://twitter-card') || url.includes('https://cards.odysee.com')))
+  ) {
     return url;
   }
 
@@ -44,16 +47,13 @@ function getThumbnailCdnUrl(url) {
 }
 
 function insertToHead(fullHtml, htmlToInsert) {
-  const beginStr = '<!-- VARIABLE_HEAD_BEGIN -->';
-  const finalStr = '<!-- VARIABLE_HEAD_END -->';
-
-  const beginIndex = fullHtml.indexOf(beginStr);
-  const finalIndex = fullHtml.indexOf(finalStr);
+  const beginIndex = fullHtml.indexOf(BEGIN_STR);
+  const finalIndex = fullHtml.indexOf(FINAL_STR);
 
   if (beginIndex > -1 && finalIndex > -1 && finalIndex > beginIndex) {
     return `${fullHtml.slice(0, beginIndex)}${
       htmlToInsert || buildOgMetadata()
-    }<script src="/public/ui-${jsBundleId}.js" async></script>${fullHtml.slice(finalIndex + finalStr.length)}`;
+    }<script src="/public/ui-${jsBundleId}.js" async></script>${fullHtml.slice(finalIndex + FINAL_STR.length)}`;
   }
 }
 
@@ -64,10 +64,6 @@ function truncateDescription(description, maxChars = 200) {
   let truncated = chars.slice(0, maxChars).join('');
   // Format truncated string
   return chars.length > maxChars ? truncated + '...' : truncated;
-}
-
-function normalizeClaimUrl(url) {
-  return normalizeURI(url.replace(/:/g, '#'));
 }
 
 function escapeHtmlProperty(property) {
@@ -92,6 +88,7 @@ function getCategoryMeta(path) {
 function buildOgMetadata(overrideOptions = {}) {
   const { title, description, image, path } = overrideOptions;
   const cleanDescription = removeMd(description || SITE_DESCRIPTION);
+
   const head =
     `<title>${SITE_TITLE}</title>\n` +
     `<meta name="description" content="${cleanDescription}" />\n` +
@@ -138,13 +135,12 @@ function addFavicon() {
 }
 
 function buildHead() {
-  const head =
-    '<!-- VARIABLE_HEAD_BEGIN -->' + addFavicon() + addPWA() + buildOgMetadata() + '<!-- VARIABLE_HEAD_END -->';
+  const head = BEGIN_STR + addFavicon() + addPWA() + buildOgMetadata() + FINAL_STR;
   return head;
 }
 
 function buildBasicOgMetadata() {
-  const head = '<!-- VARIABLE_HEAD_BEGIN -->' + addFavicon() + buildOgMetadata() + '<!-- VARIABLE_HEAD_END -->';
+  const head = BEGIN_STR + addFavicon() + buildOgMetadata() + FINAL_STR;
   return head;
 }
 
@@ -187,7 +183,7 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
     getThumbnailCdnUrl(OG_IMAGE_URL) ||
     `${URL}/public/v2-og.png`;
 
-  // Allow for ovverriding default claim based og metadata
+  // Allow for overriding default claim based og metadata
   const title = overrideOptions.title || claimTitle;
   const description = overrideOptions.description || claimDescription;
   const cleanDescription = removeMd(description);
@@ -218,6 +214,12 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
   head += `<meta name="twitter:url" content="${URL}/${claim.name}:${claim.claim_id}"/>`;
   head += `<meta property="fb:app_id" content="1673146449633983" />`;
   head += `<link rel="canonical" content="${SITE_CANONICAL_URL || URL}/${claim.name}:${claim.claim_id}"/>`;
+  head += `<link rel="alternate" type="application/json+oembed" href="${URL}/$/oembed?url=${encodeURIComponent(
+    `${URL}/${claim.canonical_url}`
+  )}&format=json" title="${title}" />`;
+  head += `<link rel="alternate" type="text/xml+oembed" href="${URL}/$/oembed?url=${encodeURIComponent(
+    `${URL}/${claim.canonical_url}`
+  )}&format=xml" title="${title}" />`;
 
   if (mediaType && (mediaType.startsWith('video/') || mediaType.startsWith('audio/'))) {
     const videoUrl = generateEmbedUrl(claim.name, claim.claim_id);

@@ -330,10 +330,15 @@ function isURIEqual(uriA, uriB) {
   }
 }
 
+function normalizeClaimUrl(url) {
+  return normalizeURI(url.replace(/:/g, '#'));
+}
+
 module.exports = {
   parseURI,
   buildURI,
   normalizeURI,
+  normalizeClaimUrl,
   isURIValid,
   isURIEqual,
   isNameValid,

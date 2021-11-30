@@ -6,11 +6,11 @@ const config = {
   WEBPACK_WEB_PORT: process.env.WEBPACK_WEB_PORT,
   WEBPACK_ELECTRON_PORT: process.env.WEBPACK_ELECTRON_PORT,
   WEB_SERVER_PORT: process.env.WEB_SERVER_PORT,
-  LBRY_WEB_API: process.env.LBRY_WEB_API, //api.na-backend.odysee.com',
+  LBRY_WEB_API: process.env.LBRY_WEB_API, // api.na-backend.odysee.com',
   LBRY_WEB_PUBLISH_API: process.env.LBRY_WEB_PUBLISH_API,
   LBRY_WEB_PUBLISH_API_V2: process.env.LBRY_WEB_PUBLISH_API_V2,
-  LBRY_API_URL: process.env.LBRY_API_URL, //api.lbry.com',
-  LBRY_WEB_STREAMING_API: process.env.LBRY_WEB_STREAMING_API, //cdn.lbryplayer.xyz',
+  LBRY_API_URL: process.env.LBRY_API_URL, // api.lbry.com',
+  LBRY_WEB_STREAMING_API: process.env.LBRY_WEB_STREAMING_API, // cdn.lbryplayer.xyz',
   LBRY_WEB_BUFFER_API: process.env.LBRY_WEB_BUFFER_API,
   SEARCH_SERVER_API: process.env.SEARCH_SERVER_API,
   SEARCH_SERVER_API_ALT: process.env.SEARCH_SERVER_API_ALT,
@@ -34,7 +34,6 @@ const config = {
   TWITTER_ACCOUNT: process.env.TWITTER_ACCOUNT,
   // LOGO
   LOGO_TITLE: process.env.LOGO_TITLE,
-  FAVICON: process.env.FAVICON,
   LOGO: process.env.LOGO,
   LOGO_TEXT_LIGHT: process.env.LOGO_TEXT_LIGHT,
   LOGO_TEXT_DARK: process.env.LOGO_TEXT_DARK,
@@ -92,5 +91,6 @@ const config = {
 
 config.URL_DEV = `http://localhost:${config.WEBPACK_WEB_PORT}`;
 config.URL_LOCAL = `http://localhost:${config.WEB_SERVER_PORT}`;
+config.FAVICON = `/public/favicon-spaceman.png`;
 
 module.exports = config;

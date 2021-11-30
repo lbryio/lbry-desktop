@@ -1,8 +1,8 @@
 const { generateStreamUrl } = require('../../ui/util/web');
-const { URL, SITE_NAME, LBRY_WEB_API } = require('../../config.js');
 const { lbryProxy: Lbry } = require('../lbry');
-const Rss = require('rss');
+const { URL, SITE_NAME, LBRY_WEB_API } = require('../../config.js');
 const Mime = require('mime-types');
+const Rss = require('rss');
 
 const SDK_API_PATH = `${LBRY_WEB_API}/api/v1`;
 const proxyURL = `${SDK_API_PATH}/proxy`;
@@ -105,10 +105,11 @@ const generateEnclosureForClaimContent = (claim) => {
 };
 
 const getLanguageValue = (claim) => {
-  if (claim && claim.value && claim.value.languages && claim.value.languages.length > 0) {
-    return claim.value.languages[0];
-  }
-  return 'en';
+  const {
+    value: { languages },
+  } = claim;
+
+  return languages && languages.length > 0 ? languages[0] : 'en';
 };
 
 const replaceLineFeeds = (str) => str.replace(/(?:\r\n|\r|\n)/g, '<br />');
@@ -127,12 +128,11 @@ const isEmailRoughlyValid = (email) => /^\S+@\S+$/.test(email);
  */
 const generateItunesOwnerElement = (claim) => {
   let email = 'no-reply@odysee.com';
-  let name = claim && (claim.value && claim.value.title ? claim.value.title : claim.name);
+  const { value } = claim;
+  const name = (value && value.title) || claim.name;
 
-  if (claim && claim.value) {
-    if (isEmailRoughlyValid(claim.value.email)) {
-      email = claim.value.email;
-    }
+  if (isEmailRoughlyValid(value.email)) {
+    email = value.email;
   }
 
   return {
@@ -211,9 +211,7 @@ const generateItunesImageElement = (claim) => {
   }
 };
 
-const getFormattedDescription = (claim) => {
-  return replaceLineFeeds((claim && claim.value && claim.value.description) || '');
-};
+const getFormattedDescription = (claim) => replaceLineFeeds(claim.value.description || '');
 
 // ****************************************************************************
 // Generate

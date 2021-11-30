@@ -1,11 +1,13 @@
+const { CUSTOM_HOMEPAGE } = require('../../config.js');
+const { generateStreamUrl } = require('../../ui/util/web');
+const { getHomepageJSON } = require('./getHomepageJSON');
 const { getHtml } = require('./html');
+const { getOEmbed } = require('./oEmbed');
 const { getRss } = require('./rss');
 const { getTempFile } = require('./tempfile');
-const { getHomepageJSON } = require('./getHomepageJSON');
-const { generateStreamUrl } = require('../../ui/util/web');
+
 const fetch = require('node-fetch');
 const Router = require('@koa/router');
-const { CUSTOM_HOMEPAGE } = require('../../config.js');
 
 // So any code from 'lbry-redux'/'lbryinc' that uses `fetch` can be run on the server
 global.fetch = fetch;
@@ -25,6 +27,11 @@ const rssMiddleware = async (ctx) => {
     ctx.set('Content-Type', 'application/xml');
   }
   ctx.body = rss;
+};
+
+const oEmbedMiddleware = async (ctx) => {
+  const oEmbed = await getOEmbed(ctx);
+  ctx.body = oEmbed;
 };
 
 const tempfileMiddleware = async (ctx) => {
@@ -75,6 +82,8 @@ router.get('/.well-known/:filename', tempfileMiddleware);
 
 router.get(`/$/rss/:claimName/:claimId`, rssMiddleware);
 router.get(`/$/rss/:claimName::claimId`, rssMiddleware);
+
+router.get(`/$/oembed`, oEmbedMiddleware);
 
 router.get('*', async (ctx) => {
   const html = await getHtml(ctx);
