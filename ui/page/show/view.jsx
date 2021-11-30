@@ -201,11 +201,7 @@ function ShowPage(props: Props) {
             )}
             actions={
               <div className="section__actions">
-                <Button
-                  button="link"
-                  href="https://https://odysee.com/@OdyseeHelp:b/copyright:f"
-                  label={__('Read More')}
-                />
+                <Button button="link" href="https://odysee.com/@OdyseeHelp:b/copyright:f" label={__('Read More')} />
               </div>
             }
           />
