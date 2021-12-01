@@ -172,8 +172,9 @@ function HomePage(props: Props) {
               clonedCard.querySelector('.claim__menu-button').remove();
 
               // $FlowFixMe
-              clonedCard.querySelector('.truncated-text').innerHTML =
-                'Hate these? Login to Odysee for an ad free experience';
+              clonedCard.querySelector('.truncated-text').innerHTML = __(
+                'Hate these? Login to Odysee for an ad free experience'
+              );
 
               // $FlowFixMe
               clonedCard.querySelector('.claim-tile__info').remove();
@@ -206,12 +207,12 @@ function HomePage(props: Props) {
               // $FlowFixMe
               const imageWidth = window.getComputedStyle(lastCard.querySelector('.media__thumb')).width;
 
-              var styles = `#av-container, #AVcontent, #aniBox {
+              const styles = `#av-container, #AVcontent, #aniBox {
                 height: ${imageHeight} !important;
                 width: ${imageWidth} !important;
               }`;
 
-              var styleSheet = document.createElement('style');
+              const styleSheet = document.createElement('style');
               styleSheet.type = 'text/css';
               styleSheet.innerText = styles;
               // $FlowFixMe
