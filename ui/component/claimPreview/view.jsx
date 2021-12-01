@@ -6,6 +6,7 @@ import { isEmpty } from 'util/object';
 import classnames from 'classnames';
 import { isURIValid } from 'util/lbryURI';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
+import { isChannelClaim } from 'util/claim';
 import { formatLbryUrlForWeb } from 'util/url';
 import { formatClaimPreviewTitle } from 'util/formatAriaLabel';
 import FileThumbnail from 'component/fileThumbnail';
@@ -170,7 +171,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     claim.value.stream_type &&
     // $FlowFixMe
     (claim.value.stream_type === 'audio' || claim.value.stream_type === 'video');
-  const isChannelUri = claim ? claim.value_type === 'channel' : false;
+  const isChannelUri = isChannelClaim(claim, uri);
   const signingChannel = claim && claim.signing_channel;
   const repostedChannelUri =
     claim && claim.repost_channel_url && claim.value_type === 'channel'
