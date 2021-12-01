@@ -59,11 +59,10 @@ function Ads(props: Props) {
     if (SHOW_ADS) {
       let script;
       try {
-        let fjs = document.getElementsByTagName('script')[0];
         script = document.createElement('script');
         script.src = scriptUrlToUse;
         // $FlowFixMe
-        fjs.parentNode.insertBefore(script, fjs);
+        document.head.appendChild(script);
 
         return () => {
           // $FlowFixMe
@@ -73,7 +72,7 @@ function Ads(props: Props) {
     }
 
     // TODO: remove the script when it exists?
-  }, [type]);
+  }, []);
 
   // display to say "sign up to not see these"
   const adsSignInDriver = (
