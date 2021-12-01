@@ -74,7 +74,7 @@
 .menu__list {
   box-shadow: var(--card-box-shadow);
   animation: menu-animate-in var(--animation-duration) var(--animation-style);
-
+  transform-origin: top;
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius);
   padding: var(--spacing-xs) 0;
