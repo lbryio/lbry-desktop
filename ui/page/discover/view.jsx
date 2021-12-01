@@ -3,12 +3,13 @@ import { SHOW_ADS, DOMAIN, SIMPLE_SITE, ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import * as CS from 'constants/claim_search';
-import React, { useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import Page from 'component/page';
 import ClaimListDiscover from 'component/claimListDiscover';
 import Button from 'component/button';
 import useHover from 'effects/use-hover';
 import { useIsMobile, useIsLargeScreen } from 'effects/use-screensize';
+import usePersistedState from 'effects/use-persisted-state';
 import analytics from 'analytics';
 import HiddenNsfw from 'component/common/hidden-nsfw';
 import Icon from 'component/common/icon';
@@ -19,6 +20,12 @@ import moment from 'moment';
 import { getLivestreamUris } from 'util/livestream';
 
 const DEFAULT_LIVESTREAM_TILE_LIMIT = 8;
+
+const SECTION = {
+  HIDDEN: 0,
+  LESS: 1,
+  MORE: 2,
+};
 
 type Props = {
   location: { search: string },
@@ -48,6 +55,9 @@ function DiscoverPage(props: Props) {
     doFetchActiveLivestreams,
     dynamicRouteProps,
   } = props;
+
+  const [liveSectionStore, setLiveSectionStore] = usePersistedState('discover:liveSection', SECTION.LESS);
+
   const buttonRef = useRef();
   const isHovering = useHover(buttonRef);
   const isMobile = useIsMobile();
@@ -73,27 +83,33 @@ function DiscoverPage(props: Props) {
     label = __('Unfollow');
   }
 
-  const initialLivestreamTileLimit = getPageSize(DEFAULT_LIVESTREAM_TILE_LIMIT);
+  const initialLiveTileLimit = getPageSize(DEFAULT_LIVESTREAM_TILE_LIMIT);
 
-  const showLivestreams = window.location.pathname === `/$/${PAGES.WILD_WEST}`;
-  const [showViewMoreLivestreams, setShowViewMoreLivestreams] = React.useState(showLivestreams);
-  const livestreamUris = showLivestreams && getLivestreamUris(activeLivestreams, channelIds);
-  const useDualList = showViewMoreLivestreams && livestreamUris && livestreamUris.length > initialLivestreamTileLimit;
+  const includeLivestreams = window.location.pathname === `/$/${PAGES.WILD_WEST}`;
+  const [liveSection, setLiveSection] = useState(includeLivestreams ? liveSectionStore : SECTION.HIDDEN);
+  const livestreamUris = includeLivestreams && getLivestreamUris(activeLivestreams, channelIds);
+  const useDualList = liveSection === SECTION.LESS && livestreamUris && livestreamUris.length > initialLiveTileLimit;
 
-  function getElemMeta() {
+  function getMeta() {
+    if (liveSection === SECTION.MORE) {
+      return (
+        <Button
+          label={__('Show less livestreams')}
+          button="link"
+          iconRight={ICONS.UP}
+          className="claim-grid__title--secondary"
+          onClick={() => setLiveSection(SECTION.LESS)}
+        />
+      );
+    }
+
     return !dynamicRouteProps ? (
       <a
         className="help"
         href="https://odysee.com/@OdyseeHelp:b/trending:50"
         title={__('Learn more about Credits on %DOMAIN%', { DOMAIN })}
       >
-        <I18nMessage
-          tokens={{
-            lbc: <LbcSymbol />,
-          }}
-        >
-          Results boosted by %lbc%
-        </I18nMessage>
+        <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>Results boosted by %lbc%</I18nMessage>
       </a>
     ) : (
       tag && !isMobile && (
@@ -155,12 +171,22 @@ function DiscoverPage(props: Props) {
     );
   }
 
+  // Sync liveSection --> liveSectionStore
   React.useEffect(() => {
-    if (showViewMoreLivestreams) {
+    if (liveSection !== SECTION.HIDDEN && liveSection !== liveSectionStore) {
+      setLiveSectionStore(liveSection);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [liveSection]);
+
+  // Fetch active livestreams on mount
+  React.useEffect(() => {
+    if (liveSection === SECTION.LESS) {
       doFetchActiveLivestreams(CS.ORDER_BY_TRENDING_VALUE);
     } else {
       doFetchActiveLivestreams();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps, (on mount only)
   }, []);
 
   return (
@@ -168,7 +194,7 @@ function DiscoverPage(props: Props) {
       {useDualList && (
         <>
           <ClaimListDiscover
-            uris={livestreamUris && livestreamUris.slice(0, initialLivestreamTileLimit)}
+            uris={livestreamUris && livestreamUris.slice(0, initialLiveTileLimit)}
             headerLabel={headerLabel}
             header={repostedUri ? <span /> : undefined}
             tileLayout={repostedUri ? false : tileLayout}
@@ -177,17 +203,17 @@ function DiscoverPage(props: Props) {
             infiniteScroll={false}
             loading={false}
             showNoSourceClaims={ENABLE_NO_SOURCE_CLAIMS}
-            meta={getElemMeta()}
+            meta={getMeta()}
           />
           <div className="livestream-list--view-more">
             <Button
               label={__('Show more livestreams')}
               button="link"
-              iconRight={ICONS.ARROW_RIGHT}
+              iconRight={ICONS.DOWN}
               className="claim-grid__title--secondary"
               onClick={() => {
                 doFetchActiveLivestreams();
-                setShowViewMoreLivestreams(false);
+                setLiveSection(SECTION.MORE);
               }}
             />
           </div>
@@ -227,7 +253,7 @@ function DiscoverPage(props: Props) {
               undefined
             : 3
         }
-        meta={!useDualList && getElemMeta()}
+        meta={!useDualList && getMeta()}
         hasSource
         showNoSourceClaims={ENABLE_NO_SOURCE_CLAIMS}
       />
