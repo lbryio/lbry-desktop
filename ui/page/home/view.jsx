@@ -149,10 +149,20 @@ function HomePage(props: Props) {
             } else {
               // find the last fully visible card
               let lastCard;
-              for (const card of cards) {
-                const isFullyVisible = isScrolledIntoView(card);
-                if (!isFullyVisible) break;
-                lastCard = card;
+
+              // width of browser window
+              const windowWidth = window.innerWidth;
+
+              // on small screens, grab the second item
+              if (windowWidth <= 900) {
+                lastCard = cards[1];
+              } else {
+                // otherwise, get the last fully visible card
+                for (const card of cards) {
+                  const isFullyVisible = isScrolledIntoView(card);
+                  if (!isFullyVisible) break;
+                  lastCard = card;
+                }
               }
 
               // clone the last card

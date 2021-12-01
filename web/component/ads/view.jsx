@@ -29,6 +29,7 @@ type Props = {
   small: boolean,
   claim: Claim,
   isMature: boolean,
+  authenticated: boolean,
 };
 
 function Ads(props: Props) {
@@ -36,6 +37,7 @@ function Ads(props: Props) {
     location: { pathname },
     type = 'video',
     small,
+    authenticated,
   } = props;
 
   // load ad and tags here
@@ -56,7 +58,7 @@ function Ads(props: Props) {
 
   // add script to DOM
   useEffect(() => {
-    if (SHOW_ADS) {
+    if (SHOW_ADS && !authenticated) {
       let script;
       try {
         script = document.createElement('script');
@@ -70,8 +72,6 @@ function Ads(props: Props) {
         };
       } catch (e) {}
     }
-
-    // TODO: remove the script when it exists?
   }, []);
 
   // display to say "sign up to not see these"
