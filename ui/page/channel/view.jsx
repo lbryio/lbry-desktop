@@ -50,10 +50,7 @@ type Props = {
   channelIsMine: boolean,
   isSubscribed: boolean,
   channelIsBlocked: boolean,
-  blackListedOutpoints: Array<{
-    txid: string,
-    nout: number,
-  }>,
+  blackListedOutpointMap: { [string]: number },
   fetchSubCount: (string) => void,
   subCount: number,
   pending: boolean,
@@ -72,7 +69,7 @@ function ChannelPage(props: Props) {
     // page, ?page= may come back some day?
     channelIsMine,
     isSubscribed,
-    blackListedOutpoints,
+    blackListedOutpointMap,
     fetchSubCount,
     subCount,
     pending,
@@ -137,10 +134,8 @@ function ChannelPage(props: Props) {
 
   let channelIsBlackListed = false;
 
-  if (claim && blackListedOutpoints) {
-    channelIsBlackListed = blackListedOutpoints.some(
-      (outpoint) => outpoint.txid === claim.txid && outpoint.nout === claim.nout
-    );
+  if (claim && blackListedOutpointMap) {
+    channelIsBlackListed = blackListedOutpointMap[`${claim.txid}:${claim.nout}`];
   }
 
   // If a user changes tabs, update the url so it stays on the same page if they refresh.

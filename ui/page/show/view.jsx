@@ -28,10 +28,7 @@ type Props = {
   uri: string,
   claim: StreamClaim,
   location: UrlLocation,
-  blackListedOutpoints: Array<{
-    txid: string,
-    nout: number,
-  }>,
+  blackListedOutpointMap: { [string]: number },
   title: string,
   claimIsMine: boolean,
   claimIsPending: boolean,
@@ -50,7 +47,7 @@ function ShowPage(props: Props) {
     resolveUri,
     uri,
     claim,
-    blackListedOutpoints,
+    blackListedOutpointMap,
     location,
     claimIsMine,
     isSubscribed,
@@ -181,14 +178,11 @@ function ShowPage(props: Props) {
   } else if (claim.name.length && claim.name[0] === '@') {
     innerContent = <ChannelPage uri={uri} location={location} />;
   } else if (claim) {
-    let isClaimBlackListed = false;
-
-    isClaimBlackListed =
-      blackListedOutpoints &&
-      blackListedOutpoints.some(
-        (outpoint) =>
-          (signingChannel && outpoint.txid === signingChannel.txid && outpoint.nout === signingChannel.nout) ||
-          (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
+    const isClaimBlackListed =
+      blackListedOutpointMap &&
+      Boolean(
+        (signingChannel && blackListedOutpointMap[`${signingChannel.txid}:${signingChannel.nout}`]) ||
+          blackListedOutpointMap[`${claim.txid}:${claim.nout}`]
       );
 
     if (isClaimBlackListed && !claimIsMine) {

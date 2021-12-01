@@ -8,17 +8,17 @@ import { createCachedSelector } from 're-reselect';
 import { selectClaimForUri } from 'redux/selectors/claims';
 import { selectMutedChannels } from 'redux/selectors/blocked';
 import { selectModerationBlockList } from 'redux/selectors/comments';
-import { selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
+import { selectBlacklistedOutpointMap, selectFilteredOutpointMap } from 'lbryinc';
 import { getChannelFromClaim } from 'util/claim';
 import { isURIEqual } from 'util/lbryURI';
 
 export const selectBanStateForUri = createCachedSelector(
   selectClaimForUri,
-  selectBlackListedOutpoints,
-  selectFilteredOutpoints,
+  selectBlacklistedOutpointMap,
+  selectFilteredOutpointMap,
   selectMutedChannels,
   selectModerationBlockList,
-  (claim, blackListedOutpoints, filteredOutpoints, mutedChannelUris, personalBlocklist) => {
+  (claim, blackListedOutpointMap, filteredOutpointMap, mutedChannelUris, personalBlocklist) => {
     const banState = {};
 
     if (!claim) {
@@ -28,13 +28,10 @@ export const selectBanStateForUri = createCachedSelector(
     const channelClaim = getChannelFromClaim(claim);
 
     // This will be replaced once blocking is done at the wallet server level.
-    if (blackListedOutpoints) {
+    if (blackListedOutpointMap) {
       if (
-        blackListedOutpoints.some(
-          (outpoint) =>
-            (channelClaim && outpoint.txid === channelClaim.txid && outpoint.nout === channelClaim.nout) ||
-            (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
-        )
+        (channelClaim && blackListedOutpointMap[`${channelClaim.txid}:${channelClaim.nout}`]) ||
+        blackListedOutpointMap[`${claim.txid}:${claim.nout}`]
       ) {
         banState['blacklisted'] = true;
       }
@@ -42,13 +39,10 @@ export const selectBanStateForUri = createCachedSelector(
 
     // We're checking to see if the stream outpoint or signing channel outpoint
     // is in the filter list.
-    if (filteredOutpoints) {
+    if (filteredOutpointMap) {
       if (
-        filteredOutpoints.some(
-          (outpoint) =>
-            (channelClaim && outpoint.txid === channelClaim.txid && outpoint.nout === channelClaim.nout) ||
-            (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
-        )
+        (channelClaim && filteredOutpointMap[`${channelClaim.txid}:${channelClaim.nout}`]) ||
+        filteredOutpointMap[`${claim.txid}:${claim.nout}`]
       ) {
         banState['filtered'] = true;
       }
