@@ -35,7 +35,7 @@ import {
   doAuthTokenRefresh,
 } from 'util/saved-passwords';
 import { X_LBRY_AUTH_TOKEN } from 'constants/token';
-import { LBRY_WEB_API, DEFAULT_LANGUAGE, LBRY_API_URL } from 'config';
+import { PROXY_URL, DEFAULT_LANGUAGE, LBRY_API_URL } from 'config';
 
 // Import 3rd-party styles before ours for the current way we are code-splitting.
 import 'scss/third-party.scss';
@@ -64,13 +64,7 @@ if (process.env.SDK_API_URL) {
   console.warn('SDK_API_URL env var is deprecated. Use SDK_API_HOST instead'); // @eslint-disable-line
 }
 
-let sdkAPIHost = process.env.SDK_API_HOST || process.env.SDK_API_URL;
-sdkAPIHost = LBRY_WEB_API;
-
-export const SDK_API_PATH = `${sdkAPIHost}/api/v1`;
-const proxyURL = `${SDK_API_PATH}/proxy`;
-
-Lbry.setDaemonConnectionString(proxyURL);
+Lbry.setDaemonConnectionString(PROXY_URL);
 
 Lbry.setOverride(
   'publish',

@@ -1,19 +1,24 @@
 const {
   FAVICON,
-  LBRY_WEB_API,
   OG_HOMEPAGE_TITLE,
   OG_IMAGE_URL,
   OG_TITLE_SUFFIX,
+  PROXY_URL,
   SITE_CANONICAL_URL,
   SITE_DESCRIPTION,
   SITE_NAME,
   SITE_TITLE,
-  THUMBNAIL_CARDS_CDN_URL,
   URL,
 } = require('../../config.js');
 
 const { CATEGORY_METADATA } = require('./category-metadata');
-const { generateEmbedUrl, generateStreamUrl, generateDirectUrl } = require('../../ui/util/web');
+const {
+  generateDirectUrl,
+  generateEmbedUrl,
+  generateStreamUrl,
+  getParameterByName,
+  getThumbnailCdnUrl,
+} = require('../../ui/util/web');
 const { getJsBundleId } = require('../bundle-id.js');
 const { lbryProxy: Lbry } = require('../lbry');
 const { parseURI, normalizeClaimUrl } = require('./lbryURI');
@@ -24,27 +29,10 @@ const path = require('path');
 const removeMd = require('remove-markdown');
 
 const jsBundleId = getJsBundleId();
-const SDK_API_PATH = `${LBRY_WEB_API}/api/v1`;
-const PROXY_URL = `${SDK_API_PATH}/proxy`;
 Lbry.setDaemonConnectionString(PROXY_URL);
 
 const BEGIN_STR = '<!-- VARIABLE_HEAD_BEGIN -->';
 const FINAL_STR = '<!-- VARIABLE_HEAD_END -->';
-
-function getThumbnailCdnUrl(url) {
-  if (
-    !THUMBNAIL_CARDS_CDN_URL ||
-    !url ||
-    (url && (url.includes('https://twitter-card') || url.includes('https://cards.odysee.com')))
-  ) {
-    return url;
-  }
-
-  if (url) {
-    const encodedURL = Buffer.from(url).toString('base64');
-    return `${THUMBNAIL_CARDS_CDN_URL}${encodedURL}.jpg`;
-  }
-}
 
 function insertToHead(fullHtml, htmlToInsert) {
   const beginIndex = fullHtml.indexOf(BEGIN_STR);
@@ -148,7 +136,7 @@ function buildBasicOgMetadata() {
 // Metadata used for urls that need claim information
 // Also has option to override defaults
 //
-function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
+function buildClaimOgMetadata(uri, claim, overrideOptions = {}, referrerQuery) {
   // Initial setup for claim based og metadata
   const { claimName } = parseURI(uri);
   const { meta, value, signing_channel } = claim;
@@ -187,6 +175,7 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
   const title = overrideOptions.title || claimTitle;
   const description = overrideOptions.description || claimDescription;
   const cleanDescription = removeMd(description);
+  const claimPath = `${URL}/${claim.canonical_url.replace('lbry://', '').replace('#', ':')}`;
 
   let head = '';
 
@@ -209,17 +198,16 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
   head += `<meta property="og:type" content="website"/>`;
   head += `<meta property="og:title" content="${title}"/>`;
   head += `<meta name="twitter:title" content="${title}"/>`;
-  // below should be canonical_url, but not provided by chainquery yet
-  head += `<meta property="og:url" content="${URL}/${claim.name}:${claim.claim_id}"/>`;
-  head += `<meta name="twitter:url" content="${URL}/${claim.name}:${claim.claim_id}"/>`;
+  head += `<meta property="og:url" content="${claimPath}"/>`;
+  head += `<meta name="twitter:url" content="${claimPath}"/>`;
   head += `<meta property="fb:app_id" content="1673146449633983" />`;
-  head += `<link rel="canonical" content="${SITE_CANONICAL_URL || URL}/${claim.name}:${claim.claim_id}"/>`;
+  head += `<link rel="canonical" content="${claimPath}"/>`;
   head += `<link rel="alternate" type="application/json+oembed" href="${URL}/$/oembed?url=${encodeURIComponent(
-    `${URL}/${claim.canonical_url}`
-  )}&format=json" title="${title}" />`;
+    claimPath
+  )}&format=json${referrerQuery ? `&r=${referrerQuery}` : ''}" title="${title}" />`;
   head += `<link rel="alternate" type="text/xml+oembed" href="${URL}/$/oembed?url=${encodeURIComponent(
-    `${URL}/${claim.canonical_url}`
-  )}&format=xml" title="${title}" />`;
+    claimPath
+  )}&format=xml${referrerQuery ? `&r=${referrerQuery}` : ''}" title="${title}" />`;
 
   if (mediaType && (mediaType.startsWith('video/') || mediaType.startsWith('audio/'))) {
     const videoUrl = generateEmbedUrl(claim.name, claim.claim_id);
@@ -381,9 +369,10 @@ async function getHtml(ctx) {
   if (!requestPath.includes('$')) {
     const claimUri = normalizeClaimUrl(requestPath.slice(1));
     const claim = await resolveClaimOrRedirect(ctx, claimUri);
+    const referrerQuery = getParameterByName('r', ctx.request.url);
 
     if (claim) {
-      const ogMetadata = buildClaimOgMetadata(claimUri, claim);
+      const ogMetadata = buildClaimOgMetadata(claimUri, claim, {}, referrerQuery);
       const googleVideoMetadata = buildGoogleVideoMetadata(claimUri, claim);
       return insertToHead(html, ogMetadata.concat('\n', googleVideoMetadata));
     }

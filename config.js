@@ -89,6 +89,9 @@ const config = {
 
 };
 
+config.SDK_API_PATH = `${config.LBRY_WEB_API}/api/v1`;
+config.PROXY_URL = `${config.SDK_API_PATH}/proxy`;
+
 config.URL_DEV = `http://localhost:${config.WEBPACK_WEB_PORT}`;
 config.URL_LOCAL = `http://localhost:${config.WEB_SERVER_PORT}`;
 config.FAVICON = `/public/favicon-spaceman.png`;

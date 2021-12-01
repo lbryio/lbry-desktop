@@ -1,49 +1,26 @@
+const { URL, SITE_NAME, PROXY_URL, THUMBNAIL_HEIGHT, THUMBNAIL_WIDTH } = require('../../config.js');
+
 const {
-  URL,
-  SITE_NAME,
-  LBRY_WEB_API,
-  THUMBNAIL_CARDS_CDN_URL,
-  THUMBNAIL_HEIGHT,
-  THUMBNAIL_WIDTH,
-} = require('../../config.js');
-
-const { generateEmbedUrl } = require('../../ui/util/web');
+  generateEmbedIframeData,
+  generateEmbedUrl,
+  getParameterByName,
+  getThumbnailCdnUrl,
+} = require('../../ui/util/web');
 const { lbryProxy: Lbry } = require('../lbry');
-const { normalizeURI } = require('./lbryURI');
 
-const SDK_API_PATH = `${LBRY_WEB_API}/api/v1`;
-const proxyURL = `${SDK_API_PATH}/proxy`;
-Lbry.setDaemonConnectionString(proxyURL);
+Lbry.setDaemonConnectionString(PROXY_URL);
 
 // ****************************************************************************
 // Fetch claim info
 // ****************************************************************************
 
-function getThumbnailCdnUrl(url) {
-  if (
-    !THUMBNAIL_CARDS_CDN_URL ||
-    !url ||
-    (url && (url.includes('https://twitter-card') || url.includes('https://cards.odysee.com')))
-  ) {
-    return url;
-  }
-
-  if (url) {
-    const encodedURL = Buffer.from(url).toString('base64');
-    return `${THUMBNAIL_CARDS_CDN_URL}${encodedURL}.jpg`;
-  }
-}
-
 async function getClaim(requestUrl) {
-  const path = requestUrl.replace(URL, '').substring(1);
+  const uri = requestUrl.replace(`${URL}/`, 'lbry://');
 
-  let uri;
   let claim;
   let error;
 
   try {
-    uri = normalizeURI(path);
-
     const response = await Lbry.resolve({ urls: [uri] });
     if (response && response[uri] && !response[uri].error) {
       claim = response[uri];
@@ -67,17 +44,17 @@ async function getClaim(requestUrl) {
 // Generate
 // ****************************************************************************
 
-function generateOEmbedData(claim) {
+function generateOEmbedData(claim, referrerQuery) {
   const { value, signing_channel: authorClaim } = claim;
 
   const claimTitle = value.title;
   const authorName = authorClaim ? authorClaim.value.title || authorClaim.name : 'Anonymous';
-  const authorUrlPath = authorClaim && authorClaim.canonical_url.replace('lbry://', '');
+  const authorUrlPath = authorClaim && authorClaim.canonical_url.replace('lbry://', '').replace('#', ':');
   const authorUrl = authorClaim ? `${URL}/${authorUrlPath}` : null;
   const thumbnailUrl = value && value.thumbnail && value.thumbnail.url && getThumbnailCdnUrl(value.thumbnail.url);
-  const videoUrl = generateEmbedUrl(claim.name, claim.claim_id);
-  const videoWidth = value.video && value.video.width;
-  const videoHeight = value.video && value.video.height;
+  const videoUrl = generateEmbedUrl(claim.name, claim.claim_id) + (referrerQuery ? `r=${referrerQuery}` : '');
+
+  const { html, width, height } = generateEmbedIframeData(videoUrl);
 
   return {
     type: 'video',
@@ -90,40 +67,68 @@ function generateOEmbedData(claim) {
     thumbnail_url: thumbnailUrl,
     thumbnail_width: THUMBNAIL_WIDTH,
     thumbnail_height: THUMBNAIL_HEIGHT,
-    html: `<iframe id="lbry-iframe" width="560" height="315" src="${videoUrl}" allowfullscreen></iframe>`,
-    width: videoWidth,
-    height: videoHeight,
+    html: html,
+    width: width,
+    height: height,
   };
 }
 
+function generateXmlData(oEmbedData) {
+  const {
+    type,
+    version,
+    title,
+    author_name,
+    author_url,
+    provider_name,
+    provider_url,
+    thumbnail_url,
+    thumbnail_width,
+    thumbnail_height,
+    html,
+    width,
+    height,
+  } = oEmbedData;
+
+  return (
+    '<?xml version="1.0" encoding="utf-8"?>' +
+    '<oembed>' +
+    `<type>${type}</type>` +
+    `<version>${version}</version>` +
+    `<title>${title}</title>` +
+    `<author_name>${author_name}</author_name>` +
+    `<author_url>${author_url}</author_url>` +
+    `<provider_name>${provider_name}</provider_name>` +
+    `<provider_url>${provider_url}</provider_url>` +
+    `<thumbnail_url>${thumbnail_url}</thumbnail_url>` +
+    `<thumbnail_width>${thumbnail_width}</thumbnail_width>` +
+    `<thumbnail_height>${thumbnail_height}</thumbnail_height>` +
+    `<html>${html}</html>` +
+    `<width>${width}</width>` +
+    `<height>${height}</height>` +
+    '<oembed>'
+  );
+}
+
 async function getOEmbed(ctx) {
-  const path = ctx.request.url;
-  const urlQuery = '?url=';
-  const formatQuery = '&format=';
+  const requestUrl = ctx.request.url;
+  const urlQuery = getParameterByName('url', requestUrl);
 
-  const requestUrl = decodeURIComponent(
-    path.substring(
-      path.indexOf(urlQuery) + urlQuery.length,
-      path.indexOf('&') > path.indexOf(urlQuery) ? path.indexOf('&') : path.length
-    )
-  );
-  const requestFormat = path.substring(
-    path.indexOf(formatQuery) + formatQuery.length,
-    path.indexOf('&') > path.indexOf(formatQuery) ? path.indexOf('&') : path.length
-  );
-
-  const isXml = requestFormat === 'xml';
-
-  const { claim, error } = await getClaim(requestUrl);
+  const { claim, error } = await getClaim(urlQuery);
   if (error) return error;
 
-  const oEmbedData = generateOEmbedData(claim);
+  const referrerQuery = getParameterByName('r', requestUrl);
+  const oEmbedData = generateOEmbedData(claim, referrerQuery);
 
-  if (isXml) {
-    ctx.set('Content-Type', 'text/xml+oembed');
-    return oEmbedData.xml();
+  const formatQuery = getParameterByName('format', requestUrl);
+  if (formatQuery === 'xml') {
+    ctx.set('Content-Type', 'application/xml');
+    const xmlData = generateXmlData(oEmbedData);
+
+    return xmlData;
   }
-  ctx.set('Content-Type', 'application/json+oembed');
+
+  ctx.set('Content-Type', 'application/json');
   return oEmbedData;
 }
 

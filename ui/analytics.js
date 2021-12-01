@@ -2,7 +2,7 @@
 import { Lbryio } from 'lbryinc';
 import * as Sentry from '@sentry/browser';
 import * as RENDER_MODES from 'constants/file_render_modes';
-import { SDK_API_PATH } from './index';
+import { SDK_API_PATH } from 'config';
 
 // --- GA ---
 // - Events: 500 max (cannot be deleted).

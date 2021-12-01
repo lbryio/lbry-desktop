@@ -1,12 +1,10 @@
 const { generateStreamUrl } = require('../../ui/util/web');
 const { lbryProxy: Lbry } = require('../lbry');
-const { URL, SITE_NAME, LBRY_WEB_API } = require('../../config.js');
+const { URL, SITE_NAME, PROXY_URL } = require('../../config.js');
 const Mime = require('mime-types');
 const Rss = require('rss');
 
-const SDK_API_PATH = `${LBRY_WEB_API}/api/v1`;
-const proxyURL = `${SDK_API_PATH}/proxy`;
-Lbry.setDaemonConnectionString(proxyURL);
+Lbry.setDaemonConnectionString(PROXY_URL);
 
 const NUM_ENTRIES = 500;
 

@@ -3,7 +3,7 @@ import * as ICONS from 'constants/icons';
 import { FormField } from 'component/common/form';
 import Button from 'component/button';
 import React, { useRef } from 'react';
-import { generateEmbedUrl } from 'util/web';
+import { generateEmbedUrl, generateEmbedIframeData } from 'util/web';
 
 type Props = {
   copyable: string,
@@ -22,7 +22,7 @@ export default function EmbedTextArea(props: Props) {
   const input = useRef();
 
   const streamUrl = generateEmbedUrl(name, claimId, includeStartTime, startTime, referralCode);
-  let embedText = `<iframe id="lbry-iframe" width="560" height="315" src="${streamUrl}" allowfullscreen></iframe>`;
+  const { html: embedText } = generateEmbedIframeData(streamUrl);
 
   function copyToClipboard() {
     const topRef = input.current;

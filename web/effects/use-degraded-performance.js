@@ -1,4 +1,4 @@
-import { SDK_API_PATH } from 'ui';
+import { SDK_API_PATH } from 'config';
 import { useEffect } from 'react';
 import { getAuthToken } from 'util/saved-passwords';
 import { X_LBRY_AUTH_TOKEN } from 'constants/token';
