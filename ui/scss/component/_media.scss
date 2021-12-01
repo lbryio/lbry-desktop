@@ -75,7 +75,7 @@
 
 .media__info-text--contracted {
   margin-top: var(--spacing-m);
-  max-height: 3rem;
+  max-height: 5rem;
   overflow: hidden;
 }
 
@@ -90,7 +90,7 @@
 }
 
 .media__info-text--fade {
-  -webkit-mask-image: -webkit-gradient(linear, left 30%, left bottom, from(rgba(0, 0, 0, 1)), to(rgba(0, 0, 0, 0)));
+  -webkit-mask-image: -webkit-gradient(linear, left 55%, left bottom, from(rgba(0, 0, 0, 1)), to(rgba(0, 0, 0, 0)));
   overflow-wrap: anywhere;
 }
 
