@@ -3,7 +3,7 @@ import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import { SHOW_ADS, SITE_NAME, SIMPLE_SITE, ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import Ads from 'web/component/ads';
-import React  from 'react';
+import React from 'react';
 import Page from 'component/page';
 import Button from 'component/button';
 import ClaimTilesDiscover from 'component/claimTilesDiscover';
@@ -118,22 +118,23 @@ function HomePage(props: Props) {
     const elemBottom = rect.bottom;
 
     // Only completely visible elements return true:
-    const isVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight);
+    const isVisible = elemTop >= 0 && elemBottom <= window.innerHeight;
     return isVisible;
   }
 
-  //
   React.useEffect(() => {
     if (authenticated || !SHOW_ADS) {
       return;
     }
 
-    (async function() {
+    (async function () {
       // test if adblock is enabled
       let adBlockEnabled = false;
       const googleAdUrl = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
       try {
-        await fetch(new Request(googleAdUrl)).catch(_ => { adBlockEnabled = true });
+        await fetch(new Request(googleAdUrl)).catch((_) => {
+          adBlockEnabled = true;
+        });
       } catch (e) {
         adBlockEnabled = true;
       } finally {
@@ -171,7 +172,8 @@ function HomePage(props: Props) {
               clonedCard.querySelector('.claim__menu-button').remove();
 
               // $FlowFixMe
-              clonedCard.querySelector('.truncated-text').innerHTML = 'Hate these? Login to Odysee for an ad free experience';
+              clonedCard.querySelector('.truncated-text').innerHTML =
+                'Hate these? Login to Odysee for an ad free experience';
 
               // $FlowFixMe
               clonedCard.querySelector('.claim-tile__info').remove();
@@ -192,7 +194,9 @@ function HomePage(props: Props) {
               clonedCard.querySelector('.claim-tile__header').firstChild.removeAttribute('aria-label');
 
               // $FlowFixMe
-              clonedCard.querySelector('.media__thumb').replaceWith(document.getElementsByClassName('homepageAdContainer')[0]);
+              clonedCard
+                .querySelector('.media__thumb')
+                .replaceWith(document.getElementsByClassName('homepageAdContainer')[0]);
 
               // show the homepage ad which is not displayed at first
               document.getElementsByClassName('homepageAdContainer')[0].style.display = 'block';
@@ -224,8 +228,6 @@ function HomePage(props: Props) {
                   timeoutCount += 100;
                   if (timeoutCount < 500) {
                     window.setTimeout(checkForAniview, 100);
-                  } else {
-
                   }
                 } else {
                   clonedCard.style.display = 'block';

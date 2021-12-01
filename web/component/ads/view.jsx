@@ -7,13 +7,14 @@ import I18nMessage from 'component/i18nMessage';
 import Button from 'component/button';
 import classnames from 'classnames';
 
-const ADS_URL = 'https://cdn.vidcrunch.com/integrations/618bb4d28aac298191eec411/Lbry_Odysee.com_Responsive_Floating_DFP_Rev70_1011.js';
+const ADS_URL =
+  'https://cdn.vidcrunch.com/integrations/618bb4d28aac298191eec411/Lbry_Odysee.com_Responsive_Floating_DFP_Rev70_1011.js';
 const ADS_TAG = 'vidcrunchJS537102317';
-
-const IOS_ADS_URL = 'https://cdn.vidcrunch.com/integrations/618bb4d28aac298191eec411/Lbry_Odysee.com_Mobile_Floating_DFP_Rev70_1611.js';
+const IOS_ADS_URL =
+  'https://cdn.vidcrunch.com/integrations/618bb4d28aac298191eec411/Lbry_Odysee.com_Mobile_Floating_DFP_Rev70_1611.js';
 const IOS_ADS_TAG = 'vidcrunchJS199212779';
-
-const HOMEPAGE_ADS_URL = 'https://cdn.vidcrunch.com/integrations/618bb4d28aac298191eec411/Lbry_Odysee.com_Responsive_Floating_300x169_DFP_Rev70_1211.js';
+const HOMEPAGE_ADS_URL =
+  'https://cdn.vidcrunch.com/integrations/618bb4d28aac298191eec411/Lbry_Odysee.com_Responsive_Floating_300x169_DFP_Rev70_1211.js';
 const HOMEPAGE_ADS_TAG = 'vidcrunchJS330442776';
 
 const IS_IOS =
@@ -94,7 +95,7 @@ function Ads(props: Props) {
   // ad shown in the related videos area
   const videoAd = (
     <div className="ads__claim-item">
-      <div id={tagNameToUse} className="ads__injected-video" style={{display: 'none'}} />
+      <div id={tagNameToUse} className="ads__injected-video" style={{ display: 'none' }} />
       <div
         className={classnames('ads__claim-text', {
           'ads__claim-text--small': small,
@@ -108,8 +109,8 @@ function Ads(props: Props) {
 
   // homepage ad in a card
   const homepageCardAd = (
-    <div className="homepageAdContainer media__thumb" style={{display: 'none'}}>
-      <div id={tagNameToUse} className="homepageAdDiv media__thumb" style={{display: 'none'}} />
+    <div className="homepageAdContainer media__thumb" style={{ display: 'none' }}>
+      <div id={tagNameToUse} className="homepageAdDiv media__thumb" style={{ display: 'none' }} />
     </div>
   );
 
