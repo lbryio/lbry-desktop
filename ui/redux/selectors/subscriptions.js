@@ -9,7 +9,7 @@ import {
   selectClaimForUri,
 } from 'redux/selectors/claims';
 import { swapKeyAndValue } from 'util/swap-json';
-import { getChannelFromClaim } from 'util/claim';
+import { getChannelFromClaim, isChannelClaim } from 'util/claim';
 
 // Returns the entire subscriptions state
 const selectState = (state) => state.subscriptions || {};
@@ -114,14 +114,21 @@ export const makeSelectChannelInSubscriptions = (uri) =>
   createSelector(selectSubscriptions, (subscriptions) => subscriptions.some((sub) => sub.uri === uri));
 
 export const selectIsSubscribedForUri = createCachedSelector(
+  (state, uri) => uri,
   selectClaimForUri,
   selectSubscriptions,
-  (claim, subscriptions) => {
+  (uri, claim, subscriptions) => {
     const channelClaim = getChannelFromClaim(claim);
     if (channelClaim) {
-      const uri = channelClaim.permanent_url;
+      const permanentUrl = channelClaim.permanent_url;
+      return subscriptions.some((sub) => isURIEqual(sub.uri, permanentUrl));
+    }
+
+    // If it failed, it could be an abandoned channel. Try parseURI:
+    if (isChannelClaim(claim, uri)) {
       return subscriptions.some((sub) => isURIEqual(sub.uri, uri));
     }
+
     return false;
   }
 )((state, uri) => String(uri));
