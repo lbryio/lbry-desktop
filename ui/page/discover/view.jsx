@@ -28,6 +28,8 @@ const SECTION = {
 };
 
 type Props = {
+  dynamicRouteProps: RowDataItem,
+  // --- redux ---
   location: { search: string },
   followedTags: Array<Tag>,
   repostedUri: string,
@@ -35,7 +37,6 @@ type Props = {
   doToggleTagFollowDesktop: (string) => void,
   doResolveUri: (string) => void,
   isAuthenticated: boolean,
-  dynamicRouteProps: RowDataItem,
   tileLayout: boolean,
   activeLivestreams: ?LivestreamInfo,
   doFetchActiveLivestreams: (orderBy?: Array<string>, pageSize?: number, forceFetch?: boolean) => void,
@@ -130,6 +131,15 @@ function DiscoverPage(props: Props) {
     return isLargeScreen ? originalSize * (3 / 2) : originalSize;
   }
 
+  function getPins(routeProps) {
+    if (routeProps && routeProps.pinnedUrls) {
+      return {
+        urls: routeProps.pinnedUrls,
+        onlyPinForOrder: CS.ORDER_BY_TRENDING,
+      };
+    }
+  }
+
   React.useEffect(() => {
     if (repostedUri && !repostedClaimIsResolved) {
       doResolveUri(repostedUri);
@@ -222,6 +232,7 @@ function DiscoverPage(props: Props) {
 
       <ClaimListDiscover
         prefixUris={useDualList ? undefined : livestreamUris}
+        pins={useDualList ? undefined : getPins(dynamicRouteProps)}
         hideAdvancedFilter={SIMPLE_SITE}
         hideFilters={SIMPLE_SITE ? !dynamicRouteProps : undefined}
         header={useDualList ? <span /> : repostedUri ? <span /> : undefined}
