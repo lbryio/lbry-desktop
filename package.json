@@ -48,6 +48,9 @@
     "postinstall:warning": "echo '\n\nWARNING\n\nNot all node modules were installed because NODE_ENV is set to \"production\".\nThis should only be set after installing dependencies with \"yarn\". The app will not work.\n\n'"
   },
   "dependencies": {
+    "@emotion/react": "^11.6.0",
+    "@emotion/styled": "^11.6.0",
+    "@mui/material": "^5.2.1",
     "@ungap/from-entries": "^0.2.1",
     "auto-launch": "^5.0.5",
     "electron-dl": "^1.11.0",
