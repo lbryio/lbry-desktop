@@ -7,8 +7,8 @@ type Props = {
   label: string,
   myChannelClaims: ?Array<ChannelClaim>,
   injected: ?Array<string>,
-  activeChannelClaim: ?ChannelClaim,
-  setActiveChannel: string => void,
+  activeChannelId: ?string,
+  setActiveChannel: (string) => void,
   fetchingChannels: boolean,
 };
 
@@ -19,7 +19,7 @@ function SelectChannel(props: Props) {
     label,
     injected = [],
     tiny,
-    activeChannelClaim,
+    activeChannelId,
     setActiveChannel,
   } = props;
 
@@ -36,7 +36,7 @@ function SelectChannel(props: Props) {
         labelOnLeft={tiny}
         type={tiny ? 'select-tiny' : 'select'}
         onChange={handleChannelChange}
-        value={activeChannelClaim && activeChannelClaim.claim_id}
+        value={activeChannelId}
         disabled={fetchingChannels}
       >
         {fetchingChannels ? (
@@ -50,7 +50,7 @@ function SelectChannel(props: Props) {
                 </option>
               ))}
             {injected &&
-              injected.map(item => (
+              injected.map((item) => (
                 <option key={item} value={item}>
                   {item}
                 </option>
