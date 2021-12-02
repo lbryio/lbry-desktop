@@ -1,9 +1,8 @@
 // @flow
-
-import './plugins/videojs-mobile-ui/plugin';
 import 'videojs-contrib-ads'; // must be loaded in this order
 import 'videojs-ima'; // loads directly after contrib-ads
 import 'video.js/dist/alt/video-js-cdn.min.css';
+import './plugins/videojs-mobile-ui/plugin';
 
 import * as ICONS from 'constants/icons';
 import * as OVERLAY from './overlays';
