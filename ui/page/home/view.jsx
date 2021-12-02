@@ -228,7 +228,7 @@ function HomePage(props: Props) {
               // $FlowFixMe
               document.head.appendChild(styleSheet);
 
-              clonedCard.style.display = 'none';
+              // clonedCard.style.display = 'none';
 
               let timeoutCount = 0;
               // eslint-disable-next-line no-inner-declarations
