@@ -86,22 +86,27 @@
 }
 
 .collection-preview__edit-buttons {
-  display: flex;
-  flex-direction: row;
-  margin-top: var(--spacing-xs);
-  margin-bottom: var(--spacing-xs);
+  position: absolute;
+  left: 0;
+  top: calc(-1 * var(--spacing-m));
+  bottom: calc(-1 * var(--spacing-m));
+  padding-left: 0;
+  padding-top: var(--spacing-m);
+  padding-bottom: var(--spacing-m);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
 }
 
 .collection-preview__edit-group {
-  &:not(:last-of-type) {
-    margin-right: var(--spacing-s);
-  }
-  margin-right: var(--spacing-s);
-  button {
-    @media (max-width: $breakpoint-small) {
-      padding: var(--spacing-s) var(--spacing-s);
-    }
-  }
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 2rem;
+  align-items: center;
+  justify-content: center;
+  align-items: stretch;
+  flex-grow: 4;
 }
 
 .collection-edit__header {

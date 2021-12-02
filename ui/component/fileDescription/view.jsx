@@ -27,7 +27,7 @@ function FileDescription(props: Props) {
   const { uri, claim, metadata, pendingAmount, doOpenModal, claimIsMine, expandOverride } = props;
   const [expanded, setExpanded] = React.useState(false);
   const [showCreditDetails, setShowCreditDetails] = React.useState(false);
-  const amount = parseFloat(claim.amount) + parseFloat(pendingAmount || claim.meta.support_amount);
+  const amount = claim ? parseFloat(claim.amount) + parseFloat(pendingAmount || claim.meta.support_amount) : undefined;
   const formattedAmount = formatCredits(amount, 2, true);
   const hasSupport = claim && claim.meta && claim.meta.support_amount && Number(claim.meta.support_amount) > 0;
 
