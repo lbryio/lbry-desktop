@@ -49,7 +49,7 @@ function ChannelsFollowingDiscover(props: Props) {
     options: {
       pageSize: 12,
       claimType: 'channel',
-      orderBy: ['effective_amount'],
+      orderBy: CS.ORDER_BY_TOP_VALUE,
     },
   });
 
@@ -59,7 +59,7 @@ function ChannelsFollowingDiscover(props: Props) {
     options: {
       pageSize: 8,
       claimType: 'channel',
-      orderBy: ['trending_group', 'trending_mixed'],
+      orderBy: CS.ORDER_BY_TRENDING_VALUE,
     },
   });
 
