@@ -13,7 +13,6 @@ type Props = {
   errorMessage: ?string,
   inviteNew: (string) => void,
   isPending: boolean,
-  referralLink: string,
   referralCode: string,
   channels: ?Array<ChannelClaim>,
 };
