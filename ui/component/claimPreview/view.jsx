@@ -26,8 +26,6 @@ import ClaimPreviewLoading from './claim-preview-loading';
 import ClaimPreviewHidden from './claim-preview-no-mature';
 import ClaimPreviewNoContent from './claim-preview-no-content';
 import CollectionEditButtons from './collection-buttons';
-import Button from 'component/button';
-import * as ICONS from 'constants/icons';
 
 import AbandonedChannelPreview from 'component/abandonedChannelPreview';
 
@@ -161,7 +159,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   const shouldHideActions = hideActions || isMyCollection || type === 'small' || type === 'tooltip';
   const canonicalUrl = claim && claim.canonical_url;
   const lastCollectionIndex = collectionUris ? collectionUris.length - 1 : 0;
-  console.log('type', type);
   const channelSubscribers = React.useMemo(() => {
     if (channelSubCount === undefined) {
       return <span />;
@@ -408,87 +405,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                 {!pending && (
                   <>
                     {renderActions && claim && renderActions(claim)}
-                    {false && Boolean(isMyCollection && listId) && (
-                      <>
-                        <div className="collection-preview__edit-buttons">
-                          <div className="collection-preview__edit-group">
-                            <Button
-                              className={'button-collection-manage'}
-                              icon={ICONS.UP_TOP}
-                              disabled={collectionIndex === 0}
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                if (editCollection) {
-                                  // $FlowFixMe
-                                  editCollection(listId, {
-                                    order: { from: collectionIndex, to: 0 },
-                                  });
-                                }
-                              }}
-                            />
-                            <Button
-                              className={'button-collection-manage'}
-                              disabled={collectionIndex === 0}
-                              icon={ICONS.UP}
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                if (editCollection) {
-                                  // $FlowFixMe
-                                  editCollection(listId, {
-                                    order: { from: collectionIndex, to: Number(collectionIndex) - 1 },
-                                  });
-                                }
-                              }}
-                            />
-                            <Button
-                              className={'button-collection-manage'}
-                              icon={ICONS.DOWN}
-                              disabled={collectionIndex === lastCollectionIndex}
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                if (editCollection) {
-                                  // $FlowFixMe
-                                  editCollection(listId, {
-                                    order: { from: collectionIndex, to: Number(collectionIndex + 1) },
-                                  });
-                                }
-                              }}
-                            />
-                            <Button
-                              className={'button-collection-manage'}
-                              icon={ICONS.DOWN_BOTTOM}
-                              disabled={collectionIndex === lastCollectionIndex}
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                if (editCollection) {
-                                  // $FlowFixMe
-                                  editCollection(listId, {
-                                    order: { from: collectionIndex, to: lastCollectionIndex },
-                                  });
-                                }
-                              }}
-                            />
-                          </div>
-                          <div className="collection-preview__edit-group">
-                            <Button
-                              // button="alt"
-                              className={'button-collection-manage'}
-                              icon={ICONS.DELETE}
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                // $FlowFixMe
-                                if (editCollection) editCollection(listId, { claims: [claim], remove: true });
-                              }}
-                            />
-                          </div>
-                        </div>
-                      </>
-                    )}
                     {shouldHideActions || renderActions ? null : actions !== undefined ? (
                       actions
                     ) : (
