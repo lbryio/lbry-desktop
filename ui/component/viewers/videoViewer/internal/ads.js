@@ -57,6 +57,8 @@ function runAds(internalFeatureEnabled, allowPreRoll, player, embedded) {
 
   const videoElement = document.getElementsByClassName('vjs-tech')[0];
 
+  if (!videoElement) return;
+
   // height and width of player
   const height = videoElement.offsetHeight;
   const width = videoElement.offsetWidth;

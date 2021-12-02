@@ -32,6 +32,11 @@ type Props = {
   authenticated: boolean,
 };
 
+function removeIfExists(querySelector) {
+  const element = document.querySelector(querySelector);
+  if (element) element.remove();
+}
+
 function Ads(props: Props) {
   const {
     location: { pathname },
@@ -69,10 +74,19 @@ function Ads(props: Props) {
         return () => {
           // $FlowFixMe
           document.head.removeChild(script);
+
+          // clear aniview state to allow ad reload
           delete window.aniplayerPos;
           delete window.storageAni;
           delete window.__VIDCRUNCH_CONFIG_618bb4d28aac298191eec411__;
           delete window.__player_618bb4d28aac298191eec411__;
+
+          // clean DOM elements from ad related elements
+          removeIfExists('[src^="https://cdn.vidcrunch.com/618bb4d28aac298191eec411.js"]');
+          removeIfExists('[src^="https://player.aniview.com/script/6.1/aniview.js"]');
+          removeIfExists('[id^="AVLoaderaniplayer_vidcrunch"]');
+          removeIfExists('#av_css_id');
+          removeIfExists('#customAniviewStyling');
         };
       } catch (e) {}
     }

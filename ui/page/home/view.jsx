@@ -224,27 +224,10 @@ function HomePage(props: Props) {
 
               const styleSheet = document.createElement('style');
               styleSheet.type = 'text/css';
+              styleSheet.id = 'customAniviewStyling';
               styleSheet.innerText = styles;
               // $FlowFixMe
               document.head.appendChild(styleSheet);
-
-              // clonedCard.style.display = 'none';
-
-              let timeoutCount = 0;
-              // eslint-disable-next-line no-inner-declarations
-              function checkForAniview() {
-                const aniBoxDiv = document.getElementsByClassName('homepageAdContainer')[0].querySelector('#aniBox');
-
-                if (!aniBoxDiv) {
-                  timeoutCount += 100;
-                  if (timeoutCount < 500) {
-                    window.setTimeout(checkForAniview, 100);
-                  }
-                } else {
-                  clonedCard.style.display = 'block';
-                }
-              }
-              checkForAniview();
             }
           }
           checkFlag();
