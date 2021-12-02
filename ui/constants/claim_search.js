@@ -28,7 +28,7 @@ export const FRESH_DEFAULT = 'default';
 export const FRESH_TYPES = [FRESH_DEFAULT, FRESH_DAY, FRESH_WEEK, FRESH_MONTH, FRESH_YEAR, FRESH_ALL];
 
 export const ORDER_BY_TRENDING = 'trending';
-export const ORDER_BY_TRENDING_VALUE = ['trending_group', 'trending_mixed'];
+export const ORDER_BY_TRENDING_VALUE = ['trending_score']; // was ['trending_group', 'trending_mixed'] - deprecated
 export const ORDER_BY_TOP = 'top';
 export const ORDER_BY_TOP_VALUE = ['effective_amount'];
 export const ORDER_BY_NEW = 'new';
