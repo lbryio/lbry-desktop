@@ -188,7 +188,7 @@ export default function CollectionPage(props: Props) {
       <Page>
         <div className={classnames('section card-stack')}>
           {info}
-          <ClaimList uris={collectionUrls} collectionId={collectionId} />
+          <ClaimList uris={collectionUrls} collectionId={collectionId} type={'listview'} />
         </div>
       </Page>
     );

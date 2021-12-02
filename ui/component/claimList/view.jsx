@@ -78,8 +78,6 @@ export default function ClaimList(props: Props) {
     noEmpty,
   } = props;
 
-  console.log('noempty', noEmpty);
-
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
 
   // Exclude prefix uris in these results variables. We don't want to show

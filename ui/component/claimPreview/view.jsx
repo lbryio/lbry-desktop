@@ -25,6 +25,7 @@ import ClaimMenuList from 'component/claimMenuList';
 import ClaimPreviewLoading from './claim-preview-loading';
 import ClaimPreviewHidden from './claim-preview-no-mature';
 import ClaimPreviewNoContent from './claim-preview-no-content';
+import CollectionEditButtons from './collection-buttons';
 import Button from 'component/button';
 import * as ICONS from 'constants/icons';
 
@@ -151,7 +152,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   } = props;
   const isCollection = claim && claim.value_type === 'collection';
   const collectionClaimId = isCollection && claim && claim.claim_id;
-  const listId = collectionId || collectionClaimId;
+  const listId = collectionId || collectionClaimId || null;
   const WrapperElement = wrapperElement || 'li';
   const shouldFetch =
     claim === undefined || (claim !== null && claim.value_type === 'channel' && isEmpty(claim.meta) && !pending);
@@ -160,6 +161,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   const shouldHideActions = hideActions || isMyCollection || type === 'small' || type === 'tooltip';
   const canonicalUrl = claim && claim.canonical_url;
   const lastCollectionIndex = collectionUris ? collectionUris.length - 1 : 0;
+  console.log('type', type);
   const channelSubscribers = React.useMemo(() => {
     if (channelSubCount === undefined) {
       return <span />;
@@ -347,8 +349,18 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
             'claim-preview--channel': isChannelUri,
             'claim-preview--visited': !isChannelUri && !claimIsMine && hasVisitedUri,
             'claim-preview--pending': pending,
+            'claim-preview--collection-mine': isMyCollection && listId && type === 'listview',
           })}
         >
+          {isMyCollection && listId && type === 'listview' && (
+            <CollectionEditButtons
+              collectionIndex={collectionIndex}
+              editCollection={editCollection}
+              listId={listId}
+              lastCollectionIndex={lastCollectionIndex}
+              claim={claim}
+            />
+          )}
           {isChannelUri && claim ? (
             <UriIndicator focusable={false} uri={uri} link>
               <ChannelThumbnail uri={uri} small={type === 'inline'} />
@@ -396,13 +408,27 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                 {!pending && (
                   <>
                     {renderActions && claim && renderActions(claim)}
-                    {Boolean(isMyCollection && listId) && (
+                    {false && Boolean(isMyCollection && listId) && (
                       <>
                         <div className="collection-preview__edit-buttons">
                           <div className="collection-preview__edit-group">
                             <Button
-                              button="alt"
-                              className={'button-collection-order'}
+                              className={'button-collection-manage'}
+                              icon={ICONS.UP_TOP}
+                              disabled={collectionIndex === 0}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                if (editCollection) {
+                                  // $FlowFixMe
+                                  editCollection(listId, {
+                                    order: { from: collectionIndex, to: 0 },
+                                  });
+                                }
+                              }}
+                            />
+                            <Button
+                              className={'button-collection-manage'}
                               disabled={collectionIndex === 0}
                               icon={ICONS.UP}
                               onClick={(e) => {
@@ -417,8 +443,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                               }}
                             />
                             <Button
-                              button="alt"
-                              className={'button-collection-order'}
+                              className={'button-collection-manage'}
                               icon={ICONS.DOWN}
                               disabled={collectionIndex === lastCollectionIndex}
                               onClick={(e) => {
@@ -432,10 +457,26 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                                 }
                               }}
                             />
+                            <Button
+                              className={'button-collection-manage'}
+                              icon={ICONS.DOWN_BOTTOM}
+                              disabled={collectionIndex === lastCollectionIndex}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                if (editCollection) {
+                                  // $FlowFixMe
+                                  editCollection(listId, {
+                                    order: { from: collectionIndex, to: lastCollectionIndex },
+                                  });
+                                }
+                              }}
+                            />
                           </div>
                           <div className="collection-preview__edit-group">
                             <Button
-                              button="alt"
+                              // button="alt"
+                              className={'button-collection-manage'}
                               icon={ICONS.DELETE}
                               onClick={(e) => {
                                 e.preventDefault();
