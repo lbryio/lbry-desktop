@@ -82,7 +82,6 @@ function CollectionButtons(props: Props) {
       {!confirmDelete && (
         <div className="collection-preview__edit-group collection-preview__delete ">
           <Button
-            // button="alt"
             className={'button-collection-manage button-collection-delete top-right bottom-right'}
             icon={ICONS.DELETE}
             onClick={(e) => {
@@ -94,7 +93,6 @@ function CollectionButtons(props: Props) {
       {confirmDelete && (
         <div className="collection-preview__edit-group collection-preview__delete">
           <Button
-            // button="alt"
             className={'button-collection-manage button-collection-delete-cancel top-right'}
             icon={ICONS.REMOVE}
             onClick={(e) => {
@@ -102,7 +100,6 @@ function CollectionButtons(props: Props) {
             }}
           />
           <Button
-            // button="alt"
             className={'button-collection-manage button-collection-delete-confirm bottom-right'}
             icon={ICONS.DELETE}
             onClick={(e) => {
