@@ -358,7 +358,12 @@ function CollectionForm(props: Props) {
               </div>
             </TabPanel>
             <TabPanel>
-              <ClaimList uris={collectionUrls} collectionId={collectionId} empty={__('This list has no items.')} />
+              <ClaimList
+                uris={collectionUrls}
+                collectionId={collectionId}
+                empty={__('This list has no items.')}
+                type={'listview'}
+              />
             </TabPanel>
             <TabPanel>
               <Card
