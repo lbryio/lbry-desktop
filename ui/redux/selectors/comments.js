@@ -9,8 +9,10 @@ import {
   selectMyClaimIdsRaw,
   selectMyChannelClaimIds,
   selectClaimIdForUri,
+  selectClaimIdsByUri,
 } from 'redux/selectors/claims';
 import { isClaimNsfw } from 'util/claim';
+import { selectSubscriptionUris } from 'redux/selectors/subscriptions';
 
 type State = { claims: any, comments: CommentsState };
 
@@ -388,3 +390,47 @@ export const selectSuperChatTotalAmountForUri = (state: State, uri: string) => {
   const superChatData = selectSuperChatDataForUri(state, uri);
   return superChatData ? superChatData.totalAmount : 0;
 };
+
+export const selectChannelMentionData = createCachedSelector(
+  selectClaimIdsByUri,
+  selectClaimsById,
+  selectTopLevelCommentsForUri,
+  selectSubscriptionUris,
+  (claimIdsByUri, claimsById, topLevelComments, subscriptionUris) => {
+    const commentorUris = [];
+    const canonicalCommentors = [];
+    const canonicalSubscriptions = [];
+
+    topLevelComments.forEach((comment) => {
+      const uri = comment.channel_url;
+
+      if (!commentorUris.includes(uri)) {
+        // Update: commentorUris
+        commentorUris.push(uri);
+
+        // Update: canonicalCommentors
+        const claimId = claimIdsByUri[uri];
+        const claim = claimsById[claimId];
+        if (claim && claim.canonical_url) {
+          canonicalCommentors.push(claim.canonical_url);
+        }
+      }
+    });
+
+    subscriptionUris.forEach((uri) => {
+      // Update: canonicalSubscriptions
+      const claimId = claimIdsByUri[uri];
+      const claim = claimsById[claimId];
+      if (claim && claim.canonical_url) {
+        canonicalSubscriptions.push(claim.canonical_url);
+      }
+    });
+
+    return {
+      topLevelComments,
+      commentorUris,
+      canonicalCommentors,
+      canonicalSubscriptions,
+    };
+  }
+)((state, uri, maxCount) => `${String(uri)}:${maxCount}`);

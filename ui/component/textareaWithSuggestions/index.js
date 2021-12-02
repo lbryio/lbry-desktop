@@ -1,0 +1,30 @@
+import { connect } from 'react-redux';
+import { doResolveUris } from 'redux/actions/claims';
+import { getChannelFromClaim } from 'util/claim';
+import { makeSelectClaimForUri } from 'redux/selectors/claims';
+import { MAX_LIVESTREAM_COMMENTS } from 'constants/livestream';
+import { selectChannelMentionData } from 'redux/selectors/comments';
+import { selectShowMatureContent } from 'redux/selectors/settings';
+import { withRouter } from 'react-router';
+import TextareaWithSuggestions from './view';
+
+const select = (state, props) => {
+  const claim = makeSelectClaimForUri(props.uri)(state);
+  const maxComments = props.isLivestream ? MAX_LIVESTREAM_COMMENTS : -1;
+  const data = selectChannelMentionData(state, props.uri, maxComments);
+  const { canonicalCommentors, canonicalSubscriptions, commentorUris } = data;
+
+  return {
+    canonicalCommentors,
+    canonicalCreatorUri: getChannelFromClaim(claim) && getChannelFromClaim(claim).canonical_url,
+    canonicalSubscriptions,
+    commentorUris,
+    showMature: selectShowMatureContent(state),
+  };
+};
+
+const perform = (dispatch) => ({
+  doResolveUris: (uris) => dispatch(doResolveUris(uris, true)),
+});
+
+export default withRouter(connect(select, perform)(TextareaWithSuggestions));

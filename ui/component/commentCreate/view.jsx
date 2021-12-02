@@ -1,5 +1,7 @@
 // @flow
+
 import 'scss/component/_comment-create.scss';
+
 import { buildValidSticker } from 'util/comments';
 import { FF_MAX_CHARS_IN_COMMENT, FF_MAX_CHARS_IN_LIVESTREAM_COMMENT } from 'constants/form-field';
 import { FormField, Form } from 'component/common/form';
@@ -11,7 +13,6 @@ import * as ICONS from 'constants/icons';
 import * as KEYCODES from 'constants/keycodes';
 import * as PAGES from 'constants/pages';
 import Button from 'component/button';
-import ChannelMentionSuggestions from 'component/channelMentionSuggestions';
 import ChannelThumbnail from 'component/channelThumbnail';
 import classnames from 'classnames';
 import CreditAmount from 'component/common/credit-amount';
@@ -34,7 +35,6 @@ const stripeEnvironment = getStripeEnvironment();
 
 const TAB_FIAT = 'TabFiat';
 const TAB_LBC = 'TabLBC';
-const MENTION_DEBOUNCE_MS = 100;
 
 type TipParams = { tipAmount: number, tipChannelName: string, channelClaimId: string };
 type UserParams = { activeChannelName: ?string, activeChannelId: ?string };
@@ -50,7 +50,7 @@ type Props = {
   isFetchingChannels: boolean,
   isNested: boolean,
   isReply: boolean,
-  livestream?: boolean,
+  isLivestream?: boolean,
   parentId: string,
   settingsByChannelId: { [channelId: string]: PerChannelSettings },
   shouldFetchComment: boolean,
@@ -79,7 +79,7 @@ export function CommentCreate(props: Props) {
     isFetchingChannels,
     isNested,
     isReply,
-    livestream,
+    isLivestream,
     parentId,
     settingsByChannelId,
     shouldFetchComment,
@@ -97,8 +97,6 @@ export function CommentCreate(props: Props) {
   } = props;
 
   const formFieldRef: ElementRef<any> = React.useRef();
-  const formFieldInputRef = formFieldRef && formFieldRef.current && formFieldRef.current.input;
-  const selectionIndex = formFieldInputRef && formFieldInputRef.current && formFieldInputRef.current.selectionStart;
   const buttonRef: ElementRef<any> = React.useRef();
 
   const {
@@ -121,33 +119,14 @@ export function CommentCreate(props: Props) {
   const [activeTab, setActiveTab] = React.useState();
   const [tipError, setTipError] = React.useState();
   const [deletedComment, setDeletedComment] = React.useState(false);
-  const [pauseQuickSend, setPauseQuickSend] = React.useState(false);
   const [showEmotes, setShowEmotes] = React.useState(false);
   const [disableReviewButton, setDisableReviewButton] = React.useState();
   const [exchangeRate, setExchangeRate] = React.useState();
   const [canReceiveFiatTip, setCanReceiveFiatTip] = React.useState(undefined);
 
-  const selectedMentionIndex =
-    commentValue.indexOf('@', selectionIndex) === selectionIndex
-      ? commentValue.indexOf('@', selectionIndex)
-      : commentValue.lastIndexOf('@', selectionIndex);
-  const modifierIndex = commentValue.indexOf(':', selectedMentionIndex);
-  const spaceIndex = commentValue.indexOf(' ', selectedMentionIndex);
-  const mentionLengthIndex =
-    modifierIndex >= 0 && (spaceIndex === -1 || modifierIndex < spaceIndex)
-      ? modifierIndex
-      : spaceIndex >= 0 && (modifierIndex === -1 || spaceIndex < modifierIndex)
-      ? spaceIndex
-      : commentValue.length;
-  const channelMention =
-    selectedMentionIndex >= 0 && selectionIndex <= mentionLengthIndex
-      ? commentValue.substring(selectedMentionIndex, mentionLengthIndex)
-      : '';
-
   const claimId = claim && claim.claim_id;
-  const channelUri = claim && (claim.signing_channel ? claim.signing_channel.permanent_url : claim.permanent_url);
   const charCount = commentValue ? commentValue.length : 0;
-  const disabled = deletedComment || isSubmitting || isFetchingChannels || !commentValue.length || pauseQuickSend;
+  const disabled = deletedComment || isSubmitting || isFetchingChannels || !commentValue.length;
   const channelId = getChannelIdFromClaim(claim);
   const channelSettings = channelId ? settingsByChannelId[channelId] : undefined;
   const minSuper = (channelSettings && channelSettings.min_tip_amount_super_chat) || 0;
@@ -176,33 +155,8 @@ export function CommentCreate(props: Props) {
     }
   }
 
-  function handleCommentChange(event) {
-    let commentValue;
-    if (isReply) {
-      commentValue = event.target.value;
-    } else {
-      commentValue = !SIMPLE_SITE && advancedEditor ? event : event.target.value;
-    }
-
-    setCommentValue(commentValue);
-  }
-
-  function handleSelectMention(mentionValue, key) {
-    let newMentionValue = mentionValue.replace('lbry://', '');
-    if (newMentionValue.includes('#')) newMentionValue = newMentionValue.replace('#', ':');
-
-    if (livestream && key !== KEYCODES.TAB) setPauseQuickSend(true);
-    setCommentValue(
-      commentValue.substring(0, selectedMentionIndex) +
-        `${newMentionValue}` +
-        (commentValue.length > mentionLengthIndex + 1
-          ? commentValue.substring(mentionLengthIndex, commentValue.length)
-          : ' ')
-    );
-  }
-
   function altEnterListener(e: SyntheticKeyboardEvent<*>) {
-    if ((livestream || e.ctrlKey || e.metaKey) && e.keyCode === KEYCODES.ENTER) {
+    if ((isLivestream || e.ctrlKey || e.metaKey) && e.keyCode === KEYCODES.ENTER) {
       e.preventDefault();
       buttonRef.current.click();
     }
@@ -364,18 +318,6 @@ export function CommentCreate(props: Props) {
     }
   }, [fetchComment, shouldFetchComment, parentId]);
 
-  // Debounce for disabling the submit button when mentioning a user with Enter
-  // so that the comment isn't sent at the same time
-  React.useEffect(() => {
-    const timer = setTimeout(() => {
-      if (pauseQuickSend) {
-        setPauseQuickSend(false);
-      }
-    }, MENTION_DEBOUNCE_MS);
-
-    return () => clearTimeout(timer);
-  }, [pauseQuickSend]);
-
   // Stickers: Get LBC-USD exchange rate if hasn't yet and selected a paid sticker
   React.useEffect(() => {
     if (stickerPrice && !exchangeRate) Lbryio.getExchangeRates().then(({ LBC_USD }) => setExchangeRate(LBC_USD));
@@ -432,7 +374,7 @@ export function CommentCreate(props: Props) {
           }
 
           const pathPlusRedirect = `/$/${PAGES.CHANNEL_NEW}?redirect=${pathname}`;
-          if (livestream) {
+          if (isLivestream) {
             window.open(pathPlusRedirect);
           } else {
             push(pathPlusRedirect);
@@ -501,45 +443,35 @@ export function CommentCreate(props: Props) {
               closeSelector={() => setShowEmotes(false)}
             />
           )}
-
-          {!advancedEditor && (
-            <ChannelMentionSuggestions
-              uri={uri}
-              isLivestream={livestream}
-              inputRef={formFieldInputRef}
-              mentionTerm={channelMention}
-              creatorUri={channelUri}
-              customSelectAction={handleSelectMention}
-            />
-          )}
-
           <FormField
+            autoFocus={isReply}
+            charCount={charCount}
+            className={isReply ? 'create__reply' : 'create___comment'}
             disabled={isFetchingChannels}
-            type={SIMPLE_SITE ? 'textarea' : advancedEditor && !isReply ? 'markdown' : 'textarea'}
-            name={isReply ? 'content_reply' : 'content_description'}
-            ref={formFieldRef}
-            className={isReply ? 'content_reply' : 'content_comment'}
+            isLivestream={isLivestream}
             label={
-              <span className="commentCreate__labelWrapper">
-                {!livestream && (
-                  <div className="commentCreate__label">{(isReply ? __('Replying as') : __('Comment as')) + ' '}</div>
-                )}
+              <div className="commentCreate__labelWrapper">
+                <span className="commentCreate__label">
+                  {(isReply ? __('Replying as') : isLivestream ? __('Chat as') : __('Comment as')) + ' '}
+                </span>
                 <SelectChannel tiny />
-              </span>
+              </div>
             }
+            name={isReply ? 'create__reply' : 'create___comment'}
+            onBlur={() => window.removeEventListener('keydown', altEnterListener)}
+            onChange={(e) => setCommentValue(SIMPLE_SITE || !advancedEditor || isReply ? e.target.value : e)}
+            onFocus={() => window.addEventListener('keydown', altEnterListener)}
+            openEmoteMenu={() => setShowEmotes(!showEmotes)}
+            placeholder={__('Say something about this...')}
+            quickActionHandler={!SIMPLE_SITE ? () => setAdvancedEditor(!advancedEditor) : undefined}
             quickActionLabel={
               !SIMPLE_SITE && (isReply ? undefined : advancedEditor ? __('Simple Editor') : __('Advanced Editor'))
             }
-            quickActionHandler={() => !SIMPLE_SITE && setAdvancedEditor(!advancedEditor)}
-            openEmoteMenu={() => setShowEmotes(!showEmotes)}
-            onFocus={() => window.addEventListener('keydown', altEnterListener)}
-            onBlur={() => window.removeEventListener('keydown', altEnterListener)}
-            placeholder={__('Say something about this...')}
+            ref={formFieldRef}
+            textAreaMaxLength={isLivestream ? FF_MAX_CHARS_IN_LIVESTREAM_COMMENT : FF_MAX_CHARS_IN_COMMENT}
+            type={!SIMPLE_SITE && advancedEditor && !isReply ? 'markdown' : 'textarea'}
+            uri={uri}
             value={commentValue}
-            charCount={charCount}
-            onChange={handleCommentChange}
-            autoFocus={isReply}
-            textAreaMaxLength={livestream ? FF_MAX_CHARS_IN_LIVESTREAM_COMMENT : FF_MAX_CHARS_IN_COMMENT}
           />
         </>
       )}

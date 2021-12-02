@@ -390,7 +390,7 @@ export default function LivestreamComments(props: Props) {
           )}
 
           <div className="livestream__comment-create">
-            <CommentCreate livestream bottom embed={embed} uri={uri} onDoneReplying={restoreScrollPos} />
+            <CommentCreate isLivestream bottom embed={embed} uri={uri} onDoneReplying={restoreScrollPos} />
           </div>
         </div>
       </>
