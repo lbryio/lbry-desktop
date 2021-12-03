@@ -277,7 +277,7 @@ function ClaimListHeader(props: Props) {
         </div>
         {expanded && (
           <>
-            <div className={classnames(`card claim-search__menus`)}>
+            <div className={classnames(`claim-search__menus`)}>
               {/* FRESHNESS FIELD */}
               {orderParam === CS.ORDER_BY_TOP && (
                 <div className="claim-search__input-container">
