@@ -191,7 +191,6 @@ export default function CollectionPage(props: Props) {
       <Page>
         <div className={classnames('section card-stack')}>
           {info}
-          {showEdit && <div>Do the sort</div>}
           <ClaimList uris={collectionUrls} collectionId={collectionId} type={showEdit ? 'listview' : undefined} />
         </div>
       </Page>
