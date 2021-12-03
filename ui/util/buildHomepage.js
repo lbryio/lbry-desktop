@@ -248,7 +248,7 @@ export function GetLinksData(
     link: `/$/${PAGES.DISCOVER}?${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${CS.FRESH_DAY}`,
     options: {
       pageSize: getPageSize(showPersonalizedChannels || showPersonalizedTags ? 4 : 8),
-      orderBy: CS.ORDER_BY_TOP_VALUEs,
+      orderBy: CS.ORDER_BY_TOP_VALUE,
       claimType: ['stream'],
       limitClaimsPerChannel: 2,
       releaseTime: `>${Math.floor(moment().subtract(1, 'day').startOf('day').unix())}`,
