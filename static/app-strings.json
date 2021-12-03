@@ -2220,5 +2220,7 @@
   "filtered": "filtered",
   "View All Playlists": "View All Playlists",
   "Your wallet is not currently using a cloud sync service. You are in control of backing up your wallet.": "Your wallet is not currently using a cloud sync service. You are in control of backing up your wallet.",
+  "Sending": "Sending",
+  "You sent %lbc%": "You sent %lbc%",
   "--end--": "--end--"
 }
