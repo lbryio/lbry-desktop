@@ -45,6 +45,7 @@ declare type CommentsState = {
   isLoading: boolean,
   isLoadingById: boolean,
   isLoadingByParentId: { [string]: boolean },
+  isCommenting: boolean,
   myComments: ?Set<string>,
   isFetchingReacts: boolean,
   myReactsByCommentId: ?{ [string]: Array<string> }, // {"CommentId:MyChannelId": ["like", "dislike", ...]}
