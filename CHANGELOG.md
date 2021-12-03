@@ -10,13 +10,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Mac <= 10.13 (High Sierra) and Ubuntu <= 16 (Xenial) are no longer supported. If you upgrade, you will need to manually build and install your own lbrynet SDK
 
 ### Added
-- Added direct replying to notifications _community pr!_ ([#6935](https://github.com/lbryio/lbry-desktop/pull/6935))
+- Direct replying to notifications _community pr!_ ([#6935](https://github.com/lbryio/lbry-desktop/pull/6935))
 - Added "Replay" option on autoplay countdown ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
 - Added "Loop" option on Lists ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
 - Added "Shuffle" option on Lists ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
 - Added Play Next/Previous buttons (with shortcuts SHIFT+N/SHIFT+P) ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
-- Added separate control for autoplay next on video player ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
-- Added Channel Mention selection ability while creating a comment ([#7151](https://github.com/lbryio/lbry-desktop/pull/7151))
+- Separate control for autoplay next on video player ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
+- Channel Mention selection ability while creating a comment ([#7151](https://github.com/lbryio/lbry-desktop/pull/7151))
+- Disk space setting under Data Hosting ([#7266](https://github.com/lbryio/lbry-desktop/pull/7266))
+- Paginated 'All Playlists' page ([#7268](https://github.com/lbryio/lbry-desktop/pull/7268))
+- Expanded playlist ordering tools ([#7305](https://github.com/lbryio/lbry-desktop/pull/7305))
 
 ### Changed
 - Changing the supported language from Filipino to Tagalog _community pr!_ ([#6951](https://github.com/lbryio/lbry-desktop/pull/6951))
@@ -27,6 +30,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Change share url to odysee and allow custom share url in settings ([#7258](https://github.com/lbryio/lbry-desktop/pull/7258))
 - Change Sign in/up to Cloud Connect for Odysee ([#7260](https://github.com/lbryio/lbry-desktop/pull/7260))
 - Upgraded to lbrynet v0.103.0 ([#7265](https://github.com/lbryio/lbry-desktop/pull/7265))
+- Upgraded Electron to v11.5.0 ([#7276](https://github.com/lbryio/lbry-desktop/pull/7276))
+- Cleaner Discover page filters ([#7306](https://github.com/lbryio/lbry-desktop/pull/7306))
 
 ### Fixed
 - Clicking on the title of a floating player will take you back to the list ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
@@ -36,6 +41,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix playlist preview thumbnail ([#7178](https://github.com/lbryio/lbry-desktop/pull/7178)
 - Fixed “Your Account” popup on mobile ([#7172](https://github.com/lbryio/lbry-desktop/pull/7172))
 - Fix disable-support for comments ([#7245](https://github.com/lbryio/lbry-desktop/pull/7245))
+- Fix Electron taking over .html files on linux ([#7291](https://github.com/lbryio/lbry-desktop/pull/7291))
 
 ## [0.51.2] - [2021-08-20]
 
