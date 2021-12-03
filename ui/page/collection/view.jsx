@@ -62,6 +62,7 @@ export default function CollectionPage(props: Props) {
 
   const [didTryResolve, setDidTryResolve] = React.useState(false);
   const [showInfo, setShowInfo] = React.useState(false);
+  const [showEdit, setShowEdit] = React.useState(false);
   const { name, totalItems } = collection || {};
   const isBuiltin = COLLECTIONS_CONSTS.BUILTIN_LISTS.includes(collectionId);
 
@@ -133,6 +134,8 @@ export default function CollectionPage(props: Props) {
           showInfo={showInfo}
           isBuiltin={isBuiltin}
           collectionUrls={collectionUrls}
+          setShowEdit={setShowEdit}
+          showEdit={showEdit}
         />
       }
       actions={
@@ -188,7 +191,8 @@ export default function CollectionPage(props: Props) {
       <Page>
         <div className={classnames('section card-stack')}>
           {info}
-          <ClaimList uris={collectionUrls} collectionId={collectionId} type={'listview'} />
+          {showEdit && <div>Do the sort</div>}
+          <ClaimList uris={collectionUrls} collectionId={collectionId} type={showEdit ? 'listview' : undefined} />
         </div>
       </Page>
     );
