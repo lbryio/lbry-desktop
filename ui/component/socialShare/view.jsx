@@ -9,9 +9,9 @@ import { useIsMobile } from 'effects/use-screensize';
 import { FormField } from 'component/common/form';
 import { hmsToSeconds, secondsToHms } from 'util/time';
 import { generateLbryContentUrl, generateLbryWebUrl, generateEncodedLbryURL, generateShareUrl } from 'util/url';
-import { URL, TWITTER_ACCOUNT, SHARE_DOMAIN_URL } from 'config';
+import { TWITTER_ACCOUNT, SHARE_DOMAIN_URL } from 'config';
 
-const SHARE_DOMAIN = SHARE_DOMAIN_URL || URL;
+const SHARE_DOMAIN = SHARE_DOMAIN_URL;
 const IOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
 const SUPPORTS_SHARE_API = typeof navigator.share !== 'undefined';
 

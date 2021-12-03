@@ -1,5 +1,5 @@
 // @flow
-import { SHARE_DOMAIN_URL, URL } from 'config';
+import { SHARE_DOMAIN_URL } from 'config';
 import React from 'react';
 import { FormField } from 'component/common/form';
 
@@ -32,7 +32,7 @@ function SettingShareUrl(props: Props) {
         <FormField
           type="radio"
           name="use_default_share_url"
-          label={__('Default share url (%name%)', { name: SHARE_DOMAIN_URL || URL })}
+          label={__('Default share url (%name%)', { name: SHARE_DOMAIN_URL })}
           checked={!customShareUrlEnabled}
           onChange={(e) => {
             if (e.target.checked) {

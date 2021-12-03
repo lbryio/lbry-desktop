@@ -1,5 +1,4 @@
 // @flow
-import { DOMAIN } from 'config';
 import { INVALID_NAME_ERROR } from 'constants/claim';
 import React, { useState, useEffect } from 'react';
 import { isNameValid } from 'util/lbryURI';
@@ -32,7 +31,7 @@ function PublishName(props: Props) {
   const [nameError, setNameError] = useState(undefined);
   const [blurred, setBlurred] = React.useState(false);
   const activeChannelName = activeChannelClaim && activeChannelClaim.name;
-  let prefix = IS_WEB ? `${DOMAIN}/` : 'lbry://';
+  let prefix = 'lbry://';
   if (activeChannelName && !incognito) {
     prefix += `${activeChannelName}/`;
   }
