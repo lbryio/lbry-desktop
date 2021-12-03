@@ -104,6 +104,8 @@ jobs:
           name: Windows
           path: ./dist/electron/*.*
       - uses: jakejarvis/s3-sync-action@master
+        if: |
+          startsWith(runner.os, 'linux')
         with:
           args: --acl public-read --follow-symlinks --exclude '*' --include '*.deb' --include '*.AppImage' --include '*.dmg'
         env:
