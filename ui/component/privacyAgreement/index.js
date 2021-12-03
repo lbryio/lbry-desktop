@@ -1,4 +1,3 @@
-import { DOMAIN } from 'config';
 import { connect } from 'react-redux';
 import { doSetDaemonSetting } from 'redux/actions/settings';
 import { doSetWelcomeVersion, doToggle3PAnalytics, doSignOut } from 'redux/actions/app';
@@ -19,8 +18,7 @@ const perform = (dispatch) => ({
   setShareDataInternal: (share) => dispatch(doSetDaemonSetting(DAEMON_SETTINGS.SHARE_USAGE_DATA, share)),
   setShareDataThirdParty: (share) => dispatch(doToggle3PAnalytics(share)),
   signOut: () => dispatch(doSignOut()),
-  authenticateIfSharingData: () =>
-    dispatch(doAuthenticate(appVersion, undefined, undefined, true, undefined, undefined, DOMAIN)),
+  authenticateIfSharingData: () => dispatch(doAuthenticate(appVersion, undefined, undefined, true)),
 });
 
 export default connect(select, perform)(PrivacyAgreement);
