@@ -6,7 +6,6 @@ import * as MODALS from 'constants/modal_types';
 import * as SETTINGS from 'constants/settings';
 import * as DAEMON_SETTINGS from 'constants/daemon_settings';
 import * as SHARED_PREFERENCES from 'constants/shared_preferences';
-import { DOMAIN } from 'config';
 import Lbry from 'lbry';
 import { doFetchChannelListMine, doFetchCollectionListMine, doCheckPendingClaims } from 'redux/actions/claims';
 import { makeSelectClaimForUri, makeSelectClaimIsMine, selectMyChannelClaims } from 'redux/selectors/claims';
@@ -333,8 +332,7 @@ export function doDaemonReady() {
             analytics.trendingAlgorithmEvent(trendingAlgorithm);
           }
         },
-        undefined,
-        DOMAIN
+        undefined
       )
     );
     dispatch({ type: ACTIONS.DAEMON_READY });

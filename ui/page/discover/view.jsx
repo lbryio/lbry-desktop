@@ -1,5 +1,4 @@
 // @flow
-import { DOMAIN, ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import * as CS from 'constants/claim_search';
@@ -66,11 +65,7 @@ function DiscoverPage(props: Props) {
 
   function getElemMeta() {
     return !dynamicRouteProps ? (
-      <a
-        className="help"
-        href="https://lbry.com/faq/trending"
-        title={__('Learn more about LBRY Credits on %DOMAIN%', { DOMAIN })}
-      >
+      <a className="help" href="https://lbry.com/faq/trending" title={__('Learn more about LBRY Credits')}>
         <I18nMessage
           tokens={{
             lbc: <LbcSymbol />,
@@ -154,7 +149,6 @@ function DiscoverPage(props: Props) {
         limitClaimsPerChannel={LIMIT_CLAIMS_PER_CHANNEL}
         meta={getElemMeta()}
         hasSource
-        showNoSourceClaims={ENABLE_NO_SOURCE_CLAIMS}
       />
     </Page>
   );
