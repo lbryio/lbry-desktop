@@ -13,7 +13,8 @@
   justify-content: flex-start;
   align-items: center;
   padding: var(--spacing-m);
-  padding-bottom: var(--spacing-s);
+  padding-left: 0;
+  padding-bottom: 0;
   margin-top: var(--spacing-m);
   margin-bottom: var(--spacing-m);
   color: var(--color-text-subtitle);
@@ -41,17 +42,14 @@
   flex-direction: column;
   font-size: var(--font-body);
   width: 100%;
-
-  &:not(:first-of-type) {
-    margin-top: var(--spacing-s);
-  }
+  margin-bottom: var(--spacing-m);
 
   @media (min-width: $breakpoint-small) {
     width: auto;
+    margin-top: 0;
 
-    &:not(:first-of-type) {
-      margin-top: 0;
-      padding-left: var(--spacing-m);
+    &:not(:last-of-type) {
+      padding-right: var(--spacing-m);
     }
   }
 }
