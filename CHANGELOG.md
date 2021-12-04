@@ -32,6 +32,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Upgraded to lbrynet v0.103.0 ([#7265](https://github.com/lbryio/lbry-desktop/pull/7265))
 - Upgraded Electron to v11.5.0 ([#7276](https://github.com/lbryio/lbry-desktop/pull/7276))
 - Cleaner Discover page filters ([#7306](https://github.com/lbryio/lbry-desktop/pull/7306))
+- Scroll bar styling ([#7314](https://github.com/lbryio/lbry-desktop/pull/7314))
 
 ### Fixed
 - Clicking on the title of a floating player will take you back to the list ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
