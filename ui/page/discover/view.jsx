@@ -176,7 +176,7 @@ function DiscoverPage(props: Props) {
     headerLabel = (
       <span>
         <Icon icon={(dynamicRouteProps && dynamicRouteProps.icon) || discoverIcon} size={10} />
-        {(dynamicRouteProps && dynamicRouteProps.title) || discoverLabel}
+        {(dynamicRouteProps && __(`${dynamicRouteProps.title}`)) || discoverLabel}
       </span>
     );
   }
