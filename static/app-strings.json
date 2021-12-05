@@ -1661,6 +1661,7 @@
   "Short (< 4 minutes)": "Short (< 4 minutes)",
   "Long (> 20 min)": "Long (> 20 min)",
   "POWERED BY %lbry_link%": "POWERED BY %lbry_link%",
+  "Learn more about LBRY Credits on %DOMAIN%": "Learn more about LBRY Credits on %DOMAIN%",
   "Results boosted by %lbc%": "Results boosted by %lbc%",
   "This will be visible in a few minutes.": "This will be visible in a few minutes.",
   "Turn on notifications": "Turn on notifications",
@@ -2221,6 +2222,5 @@
   "Your wallet is not currently using a cloud sync service. You are in control of backing up your wallet.": "Your wallet is not currently using a cloud sync service. You are in control of backing up your wallet.",
   "Sending": "Sending",
   "You sent %lbc%": "You sent %lbc%",
-  "Learn more about LBRY Credits": "Learn more about LBRY Credits",
   "--end--": "--end--"
 }

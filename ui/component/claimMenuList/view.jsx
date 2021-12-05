@@ -1,5 +1,5 @@
 // @flow
-import { SHARE_DOMAIN_URL } from 'config';
+import { URL, SHARE_DOMAIN_URL } from 'config';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import * as MODALS from 'constants/modal_types';
@@ -18,7 +18,7 @@ import {
 import { useHistory } from 'react-router';
 import { buildURI, parseURI } from 'util/lbryURI';
 
-const SHARE_DOMAIN = SHARE_DOMAIN_URL;
+const SHARE_DOMAIN = SHARE_DOMAIN_URL || URL;
 const PAGE_VIEW_QUERY = 'view';
 const EDIT_PAGE = 'edit';
 

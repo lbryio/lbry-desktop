@@ -88,6 +88,7 @@ export default function TagsSearch(props: Props) {
     }
   });
 
+  // const countWithoutLbryFirst = selectedTagsSet.has('lbry-first') ? selectedTagsSet.size - 1 : selectedTagsSet.size;
   const maxed = Boolean(limitSelect && countWithoutSpecialTags >= limitSelect);
   const suggestedTags = Array.from(suggestedTagsSet).filter(doesTagMatch).slice(0, limitShow);
 

@@ -10,6 +10,7 @@ import ClaimRepostAuthor from 'component/claimRepostAuthor';
 import I18nMessage from 'component/i18nMessage';
 import { useHistory } from 'react-router';
 import LbcSymbol from 'component/common/lbc-symbol';
+import { DOMAIN } from 'config';
 
 type Props = {
   query: string,
@@ -81,7 +82,11 @@ export default function SearchTopClaim(props: Props) {
     <div className="search__header">
       {winningUri && (
         <div className="claim-preview__actions--header">
-          <a className="media__uri" href="https://lbry.com/faq/trending" title={__('Learn more about LBRY Credits.')}>
+          <a
+            className="media__uri"
+            href="https://lbry.com/faq/trending"
+            title={__('Learn more about LBRY Credits on %DOMAIN%', { DOMAIN })}
+          >
             <LbcSymbol prefix={__('Most supported')} />
           </a>
         </div>

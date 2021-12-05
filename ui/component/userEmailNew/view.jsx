@@ -1,5 +1,6 @@
 // @flow
 import * as PAGES from 'constants/pages';
+import { DOMAIN } from 'config';
 import React, { useState } from 'react';
 import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
@@ -94,7 +95,7 @@ function UserEmailNew(props: Props) {
         title={__('Cloud Connect')}
         subtitle={__('Connect your wallet to Odysee')}
         actions={
-          <div>
+          <div className={classnames({ 'card--disabled': DOMAIN === 'lbry.tv' && IS_WEB })}>
             <Form onSubmit={handleSubmit} className="section">
               <FormField
                 autoFocus

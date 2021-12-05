@@ -10,6 +10,7 @@ import { selectEmailToVerify, selectPhoneToVerify, selectUserCountryCode, select
 import { doToast } from 'redux/actions/notifications';
 import rewards from 'rewards';
 import { Lbryio } from 'lbryinc';
+import { DOMAIN } from 'config';
 import { getDefaultLanguage } from 'util/default-languages';
 const AUTH_IN_PROGRESS = 'authInProgress';
 export let sessionStorageAvailable = false;
@@ -54,7 +55,10 @@ export function doInstallNew(appVersion, os = null, firebaseToken = null, callba
   }
 
   Lbry.status().then((status) => {
-    payload.app_id = status.installation_id;
+    payload.app_id =
+      domain && domain !== 'lbry.tv'
+        ? (domain.replace(/[.]/gi, '') + status.installation_id).slice(0, 66)
+        : status.installation_id;
     payload.node_id = status.lbry_id;
     Lbry.version().then((version) => {
       payload.daemon_version = version.lbrynet_version;
@@ -140,7 +144,7 @@ export function doAuthenticate(
     });
     checkAuthBusy()
       .then(() => {
-        return Lbryio.authenticate(getDefaultLanguage());
+        return Lbryio.authenticate(DOMAIN, getDefaultLanguage());
       })
       .then((user) => {
         if (sessionStorageAvailable) window.sessionStorage.removeItem(AUTH_IN_PROGRESS);
