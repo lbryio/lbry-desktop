@@ -111,7 +111,7 @@ Lbryio.getAuthToken = () =>
 
 Lbryio.getCurrentUser = () => Lbryio.call('user', 'me');
 
-Lbryio.authenticate = (language) => {
+Lbryio.authenticate = (domain, language) => {
   if (!Lbryio.enabled) {
     const params = {
       id: 1,
@@ -155,7 +155,10 @@ Lbryio.authenticate = (language) => {
             .then(
               status =>
                 new Promise((res, rej) => {
-                  const appId = status.installation_id;
+                  const appId =
+                    domain && domain !== 'lbry.tv'
+                      ? (domain.replace(/[.]/gi, '') + status.installation_id).slice(0, 66)
+                      : status.installation_id;
                   Lbryio.call(
                     'user',
                     'new',

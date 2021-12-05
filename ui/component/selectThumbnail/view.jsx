@@ -2,6 +2,7 @@
 import * as MODALS from 'constants/modal_types';
 import * as THUMBNAIL_STATUSES from 'constants/thumbnail_upload_statuses';
 import Lbry from 'lbry';
+import { DOMAIN } from 'config';
 import * as React from 'react';
 import { FormField } from 'component/common/form';
 import FileSelector from 'component/common/file-selector';
@@ -183,7 +184,9 @@ function SelectThumbnail(props: Props) {
       {status === THUMBNAIL_STATUSES.IN_PROGRESS && <p>{__('Uploading thumbnail')}...</p>}
       {!thumbUploaded && (
         <p className="help">
-          {manualInput ? __('Enter a URL for your thumbnail.') : __('Upload your thumbnail. Recommended size is 16:9.')}
+          {manualInput
+            ? __('Enter a URL for your thumbnail.')
+            : __('Upload your thumbnail to %domain%. Recommended size is 16:9.', { domain: DOMAIN })}
         </p>
       )}
     </>

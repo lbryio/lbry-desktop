@@ -1,4 +1,5 @@
 // @flow
+import { DOMAIN } from 'config';
 import React from 'react';
 import classnames from 'classnames';
 import Button from 'component/button';
@@ -89,7 +90,7 @@ function CollectionForm(props: Props) {
     onDone,
   } = props;
   const activeChannelName = activeChannelClaim && activeChannelClaim.name;
-  let prefix = 'lbry://';
+  let prefix = IS_WEB ? `${DOMAIN}/` : 'lbry://';
   if (activeChannelName && !incognito) {
     prefix += `${activeChannelName}/`;
   }

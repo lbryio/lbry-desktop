@@ -7,6 +7,7 @@ import https from 'https';
 import { app, dialog, ipcMain, session, shell, BrowserWindow } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import Lbry from 'lbry';
+import LbryFirstInstance from './LbryFirstInstance';
 import Daemon from './Daemon';
 import isDev from 'electron-is-dev';
 import createTray from './createTray';
@@ -99,51 +100,51 @@ const startDaemon = async () => {
   }
 };
 
-// let isLbryFirstRunning = false;
-// const startLbryFirst = async () => {
-//   if (isLbryFirstRunning) {
-//     console.log('LbryFirst already running');
-//     handleLbryFirstLaunched();
-//     return;
-//   }
-//
-//   console.log('LbryFirst: Starting...');
-//
-//   try {
-//     lbryFirst = new LbryFirstInstance();
-//     lbryFirst.on('exit', e => {
-//       if (!isDev) {
-//         lbryFirst = null;
-//         isLbryFirstRunning = false;
-//         if (!appState.isQuitting) {
-//           dialog.showErrorBox(
-//             'LbryFirst has Exited',
-//             'The lbryFirst may have encountered an unexpected error, or another lbryFirst instance is already running. \n\n',
-//             e
-//           );
-//         }
-//         app.quit();
-//       }
-//     });
-//   } catch (e) {
-//     console.log('LbryFirst: Failed to create new instance\n\n', e);
-//   }
-//
-//   console.log('LbryFirst: Running...');
-//
-//   try {
-//     await lbryFirst.launch();
-//     handleLbryFirstLaunched();
-//   } catch (e) {
-//     isLbryFirstRunning = false;
-//     console.log('LbryFirst: Failed to start\n', e);
-//   }
-// };
-//
-// const handleLbryFirstLaunched = () => {
-//   isLbryFirstRunning = true;
-//   rendererWindow.webContents.send('lbry-first-launched');
-// };
+let isLbryFirstRunning = false;
+const startLbryFirst = async () => {
+  if (isLbryFirstRunning) {
+    console.log('LbryFirst already running');
+    handleLbryFirstLaunched();
+    return;
+  }
+
+  console.log('LbryFirst: Starting...');
+
+  try {
+    lbryFirst = new LbryFirstInstance();
+    lbryFirst.on('exit', e => {
+      if (!isDev) {
+        lbryFirst = null;
+        isLbryFirstRunning = false;
+        if (!appState.isQuitting) {
+          dialog.showErrorBox(
+            'LbryFirst has Exited',
+            'The lbryFirst may have encountered an unexpected error, or another lbryFirst instance is already running. \n\n',
+            e
+          );
+        }
+        app.quit();
+      }
+    });
+  } catch (e) {
+    console.log('LbryFirst: Failed to create new instance\n\n', e);
+  }
+
+  console.log('LbryFirst: Running...');
+
+  try {
+    await lbryFirst.launch();
+    handleLbryFirstLaunched();
+  } catch (e) {
+    isLbryFirstRunning = false;
+    console.log('LbryFirst: Failed to start\n', e);
+  }
+};
+
+const handleLbryFirstLaunched = () => {
+  isLbryFirstRunning = true;
+  rendererWindow.webContents.send('lbry-first-launched');
+};
 
 // When we are starting the app, ensure there are no other apps already running
 const gotSingleInstanceLock = app.requestSingleInstanceLock();
@@ -399,15 +400,15 @@ ipcMain.on('version-info-requested', () => {
 
   requestLatestRelease();
 });
-//
-// ipcMain.on('launch-lbry-first', async () => {
-//   try {
-//     await startLbryFirst();
-//   } catch (e) {
-//     console.log('Failed to start LbryFirst');
-//     console.log(e);
-//   }
-// });
+
+ipcMain.on('launch-lbry-first', async () => {
+  try {
+    await startLbryFirst();
+  } catch (e) {
+    console.log('Failed to start LbryFirst');
+    console.log(e);
+  }
+});
 
 process.on('uncaughtException', error => {
   console.log(error);
