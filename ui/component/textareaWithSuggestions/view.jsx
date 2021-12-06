@@ -4,6 +4,7 @@ import { matchSorter } from 'match-sorter';
 import { SEARCH_OPTIONS } from 'constants/search';
 import * as KEYCODES from 'constants/keycodes';
 import Autocomplete from '@mui/material/Autocomplete';
+import EMOJIS from 'emoji-dictionary';
 import React from 'react';
 import TextareaSuggestionsItem from 'component/textareaSuggestionsItem';
 import TextField from '@mui/material/TextField';
@@ -11,7 +12,7 @@ import useLighthouse from 'effects/use-lighthouse';
 import useThrottle from 'effects/use-throttle';
 
 const SUGGESTION_REGEX = new RegExp(
-  '(?<Mention>(?:^| |\n)@[^\\s=&#$@%?:;/\\"<>%{}|^~[]*(?::[\\w]+)?)|(?<Emote>(?:^| |\n):[\\w]*:?)',
+  '(?<Mention>(?:^| |\n)@[^\\s=&#$@%?:;/\\"<>%{}|^~[]*(?::[\\w]+)?)|(?<Emote>(?:^| |\n):[\\w+-]*:?)',
   'gm'
 );
 
@@ -29,6 +30,8 @@ const SUGGESTION_REGEX = new RegExp(
 const SEARCH_SIZE = 10;
 const LIGHTHOUSE_MIN_CHARACTERS = 3;
 const INPUT_DEBOUNCE_MS = 1000;
+
+const EMOJI_MIN_CHARACTERS = 2;
 
 type Props = {
   canonicalCommentors?: Array<string>,
@@ -106,10 +109,16 @@ export default function TextareaWithSuggestions(props: Props) {
     canonicalSearch &&
     canonicalSearch.filter((uri) => shouldFilter(uri, filteredSubs) && shouldFilter(uri, filteredCommentors));
 
+  let emoteNames;
+  let emojiNames;
   const allOptions = [];
   if (isEmote) {
-    const emoteNames = EMOTES.map(({ name }) => name.toLowerCase());
-    allOptions.push(...emoteNames);
+    emoteNames = EMOTES.map(({ name }) => name.toLowerCase());
+    const hasMinEmojiLength = suggestionTerm && suggestionTerm.length > EMOJI_MIN_CHARACTERS;
+    emojiNames = hasMinEmojiLength ? EMOJIS.names : [];
+    const emotesAndEmojis = [...emoteNames, ...emojiNames];
+
+    allOptions.push(...emotesAndEmojis);
   } else {
     if (canonicalCreatorUri) allOptions.push(canonicalCreatorUri);
     if (filteredSubs) allOptions.push(...filteredSubs);
@@ -121,14 +130,20 @@ export default function TextareaWithSuggestions(props: Props) {
     allOptions.length > 0
       ? allOptions.map((option) => {
           const groupName = isEmote
-            ? __('Emotes')
+            ? (emoteNames.includes(option) && __('Emotes')) || (emojiNames.includes(option) && __('Emojis'))
             : (canonicalCreatorUri === option && __('Creator')) ||
               (filteredSubs && filteredSubs.includes(option) && __('Following')) ||
               (filteredCommentors && filteredCommentors.includes(option) && __('From Comments')) ||
               (filteredSearch && filteredSearch.includes(option) && __('From Search'));
 
+          let emoteLabel;
+          if (isEmote) {
+            // $FlowFixMe
+            emoteLabel = `:${option.replaceAll(':', '')}:`;
+          }
+
           return {
-            label: isEmote ? option : option.replace('lbry://', '').replace('#', ':'),
+            label: emoteLabel || option.replace('lbry://', '').replace('#', ':'),
             group: groupName,
           };
         })
@@ -321,8 +336,10 @@ export default function TextareaWithSuggestions(props: Props) {
   const renderOption = (optionProps: any, label: string) => {
     const emoteFound = isEmote && EMOTES.find(({ name }) => name.toLowerCase() === label);
     const emoteValue = emoteFound ? { name: label, url: emoteFound.url } : undefined;
+    const emojiFound = isEmote && EMOJIS.getUnicode(label);
+    const emojiValue = emojiFound ? { name: label, unicode: emojiFound } : undefined;
 
-    return <TextareaSuggestionsItem uri={label} emote={emoteValue} {...optionProps} />;
+    return <TextareaSuggestionsItem uri={label} emote={emoteValue || emojiValue} {...optionProps} />;
   };
 
   return (

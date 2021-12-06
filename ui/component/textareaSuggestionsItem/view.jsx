@@ -12,11 +12,11 @@ export default function TextareaSuggestionsItem(props: Props) {
   const { claim, emote, uri, ...autocompleteProps } = props;
 
   if (emote) {
-    const { name: value, url } = emote;
+    const { name: value, url, unicode } = emote;
 
     return (
       <div {...autocompleteProps}>
-        <img className="emote" src={url} />
+        {unicode ? <div className="emote">{unicode}</div> : <img className="emote" src={url} />}
 
         <div className="textareaSuggestion__label">
           <span className="textareaSuggestion__title textareaSuggestion__value textareaSuggestion__value--emote">
