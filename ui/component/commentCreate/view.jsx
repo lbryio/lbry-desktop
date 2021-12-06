@@ -246,7 +246,9 @@ export function CommentCreate(props: Props) {
   }
 
   function doSubmitTip() {
-    if (!activeChannelClaim) return;
+    if (!activeChannelClaim || isSubmitting) return;
+
+    setSubmitting(true);
 
     const params = { amount: tipAmount, claim_id: claimId, channel_id: activeChannelClaim.claim_id };
     const activeChannelName = activeChannelClaim && activeChannelClaim.name;
@@ -255,8 +257,6 @@ export function CommentCreate(props: Props) {
     // setup variables for tip API
     const channelClaimId = claim.signing_channel ? claim.signing_channel.claim_id : claim.claim_id;
     const tipChannelName = claim.signing_channel ? claim.signing_channel.name : claim.name;
-
-    setSubmitting(true);
 
     if (activeTab === TAB_LBC) {
       // call sendTip and then run the callback from the response
@@ -309,8 +309,11 @@ export function CommentCreate(props: Props) {
    * @param {string} [environment] Optional environment for Stripe (test|live)
    */
   function handleCreateComment(txid, payment_intent_id, environment) {
+    if (isSubmitting) return;
+
     setShowEmotes(false);
     setSubmitting(true);
+
     const stickerValue = selectedSticker && buildValidSticker(selectedSticker.name);
 
     createComment(stickerValue || commentValue, claimId, parentId, txid, payment_intent_id, environment, !!stickerValue)
