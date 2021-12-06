@@ -62,24 +62,22 @@ type Props = {
   fetchCollectionListMine: () => void,
   signIn: () => void,
   requestDownloadUpgrade: () => void,
-  onSignedIn: () => void,
   setLanguage: (string) => void,
   isUpgradeAvailable: boolean,
   isReloadRequired: boolean,
   autoUpdateDownloaded: boolean,
   uploadCount: number,
   balance: ?number,
+  syncIsLocked: boolean,
   syncError: ?string,
-  syncEnabled: boolean,
   rewards: Array<Reward>,
   setReferrer: (string, boolean) => void,
   isAuthenticated: boolean,
-  socketConnect: () => void,
   syncLoop: (?boolean) => void,
   currentModal: any,
   syncFatalError: boolean,
-  activeChannelClaim: ?ChannelClaim,
-  myChannelUrls: ?Array<string>,
+  activeChannelId: ?string,
+  myChannelClaimIds: ?Array<string>,
   subscriptions: Array<Subscription>,
   setActiveChannelIfNotSet: () => void,
   setIncognito: (boolean) => void,
@@ -103,6 +101,7 @@ function App(props: Props) {
     uploadCount,
     history,
     syncError,
+    syncIsLocked,
     language,
     languages,
     setLanguage,
@@ -112,8 +111,8 @@ function App(props: Props) {
     syncLoop,
     currentModal,
     syncFatalError,
-    myChannelUrls,
-    activeChannelClaim,
+    myChannelClaimIds,
+    activeChannelId,
     setActiveChannelIfNotSet,
     setIncognito,
     fetchModBlockedList,
@@ -150,10 +149,10 @@ function App(props: Props) {
   const shouldHideNag = pathname.startsWith(`/$/${PAGES.EMBED}`) || pathname.startsWith(`/$/${PAGES.AUTH_VERIFY}`);
   const userId = user && user.id;
   const useCustomScrollbar = !IS_MAC;
-  const hasMyChannels = myChannelUrls && myChannelUrls.length > 0;
-  const hasNoChannels = myChannelUrls && myChannelUrls.length === 0;
+  const hasMyChannels = myChannelClaimIds && myChannelClaimIds.length > 0;
+  const hasNoChannels = myChannelClaimIds && myChannelClaimIds.length === 0;
   const shouldMigrateLanguage = LANGUAGE_MIGRATIONS[language];
-  const hasActiveChannelClaim = activeChannelClaim !== undefined;
+  const hasActiveChannelClaim = activeChannelId !== undefined;
   const isPersonalized = !IS_WEB || hasVerifiedEmail;
   const renderFiledrop = !IS_WEB || isAuthenticated;
   const isOnline = navigator.onLine;
@@ -218,6 +217,17 @@ function App(props: Props) {
       setSearchUserId(userId);
     }
   }, [userId]);
+
+  useEffect(() => {
+    if (syncIsLocked) {
+      const handleBeforeUnload = (event) => {
+        event.preventDefault();
+        event.returnValue = __('There are unsaved settings. Exit the Settings Page to finalize them.');
+      };
+      window.addEventListener('beforeunload', handleBeforeUnload);
+      return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+    }
+  }, [syncIsLocked]);
 
   useEffect(() => {
     if (!uploadCount) return;
