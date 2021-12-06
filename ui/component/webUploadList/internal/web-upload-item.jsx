@@ -5,11 +5,12 @@ import Button from 'component/button';
 import FileThumbnail from 'component/fileThumbnail';
 import * as MODALS from 'constants/modal_types';
 import { serializeFileObj } from 'util/file';
+import { tusIsSessionLocked } from 'util/tus';
 
 type Props = {
   uploadItem: FileUploadItem,
   doPublishResume: (any) => void,
-  doUpdateUploadRemove: (any) => void,
+  doUpdateUploadRemove: (string, any) => void,
   doOpenModal: (string, {}) => void,
 };
 
@@ -18,6 +19,7 @@ export default function WebUploadItem(props: Props) {
   const { params, file, fileFingerprint, progress, status, resumable, uploader } = uploadItem;
 
   const [showFileSelector, setShowFileSelector] = useState(false);
+  const locked = tusIsSessionLocked(params.guid);
 
   function handleFileChange(newFile: WebFile, clearName = true) {
     if (serializeFileObj(newFile) === fileFingerprint) {
@@ -25,7 +27,7 @@ export default function WebUploadItem(props: Props) {
       doPublishResume({ ...params, file_path: newFile });
       if (!params.guid) {
         // Can remove this if-block after January 2022.
-        doUpdateUploadRemove(params);
+        doUpdateUploadRemove('', params);
       }
     } else {
       doOpenModal(MODALS.CONFIRM, {
@@ -52,13 +54,19 @@ export default function WebUploadItem(props: Props) {
             uploader.abort(); // XHR
           }
         }
-        doUpdateUploadRemove(params);
+
+        // The second parameter (params) can be removed after January 2022.
+        doUpdateUploadRemove(params.guid, params);
         closeModal();
       },
     });
   }
 
   function resolveProgressStr() {
+    if (locked) {
+      return __('File being uploaded in another tab or window.');
+    }
+
     if (!uploader) {
       return __('Stopped.');
     }
@@ -85,7 +93,7 @@ export default function WebUploadItem(props: Props) {
   }
 
   function getRetryButton() {
-    if (!resumable) {
+    if (!resumable || locked) {
       return null;
     }
 
@@ -113,7 +121,9 @@ export default function WebUploadItem(props: Props) {
   }
 
   function getCancelButton() {
-    return <Button label={__('Cancel')} button="link" onClick={handleCancel} />;
+    if (!locked) {
+      return <Button label={__('Cancel')} button="link" onClick={handleCancel} />;
+    }
   }
 
   function getFileSelector() {

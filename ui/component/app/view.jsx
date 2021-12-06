@@ -2,6 +2,7 @@
 import * as PAGES from 'constants/pages';
 import React, { useEffect, useRef, useState, useLayoutEffect } from 'react';
 import { lazyImport } from 'util/lazyImport';
+import { tusUnlockAndNotify, tusHandleTabUpdates } from 'util/tus';
 import classnames from 'classnames';
 import analytics from 'analytics';
 import { setSearchUserId } from 'redux/actions/search';
@@ -231,12 +232,29 @@ function App(props: Props) {
 
   useEffect(() => {
     if (!uploadCount) return;
+
+    const handleUnload = (event) => tusUnlockAndNotify();
     const handleBeforeUnload = (event) => {
       event.preventDefault();
-      event.returnValue = 'magic'; // without setting this to something it doesn't work
+      event.returnValue = __('There are pending uploads.'); // without setting this to something it doesn't work
     };
+
+    window.addEventListener('unload', handleUnload);
     window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('unload', handleUnload);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [uploadCount]);
+
+  useEffect(() => {
+    if (!uploadCount) return;
+
+    const onStorageUpdate = (e) => tusHandleTabUpdates(e.key);
+    window.addEventListener('storage', onStorageUpdate);
+
+    return () => window.removeEventListener('storage', onStorageUpdate);
   }, [uploadCount]);
 
   // allows user to pause miniplayer using the spacebar without the page scrolling down
