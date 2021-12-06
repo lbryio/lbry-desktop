@@ -11,7 +11,7 @@ import {
   selectClaimIdForUri,
   selectClaimIdsByUri,
 } from 'redux/selectors/claims';
-import { isClaimNsfw } from 'util/claim';
+import { isClaimNsfw, getChannelFromClaim } from 'util/claim';
 import { selectSubscriptionUris } from 'redux/selectors/subscriptions';
 
 type State = { claims: any, comments: CommentsState };
@@ -264,7 +264,7 @@ export const selectRepliesForParentId = createCachedSelector(
  * @param filterInputs Values returned by filterCommentsDepOnList.
  */
 const filterComments = (comments: Array<Comment>, claimId?: string, filterInputs: any) => {
-  const filterProps = filterInputs.reduce(function (acc, cur, i) {
+  const filterProps = filterInputs.reduce((acc, cur, i) => {
     acc[filterCommentsPropKeys[i]] = cur;
     return acc;
   }, {});
@@ -392,30 +392,38 @@ export const selectSuperChatTotalAmountForUri = (state: State, uri: string) => {
 };
 
 export const selectChannelMentionData = createCachedSelector(
+  (state, uri) => uri,
   selectClaimIdsByUri,
   selectClaimsById,
   selectTopLevelCommentsForUri,
   selectSubscriptionUris,
-  (claimIdsByUri, claimsById, topLevelComments, subscriptionUris) => {
+  (uri, claimIdsByUri, claimsById, topLevelComments, subscriptionUris) => {
+    let canonicalCreatorUri;
     const commentorUris = [];
     const canonicalCommentors = [];
     const canonicalSubscriptions = [];
 
-    topLevelComments.forEach((comment) => {
-      const uri = comment.channel_url;
+    if (uri) {
+      const claimId = claimIdsByUri[uri];
+      const claim = claimsById[claimId];
+      const channelFromClaim = claim && getChannelFromClaim(claim);
+      canonicalCreatorUri = channelFromClaim && channelFromClaim.canonical_url;
 
-      if (!commentorUris.includes(uri)) {
-        // Update: commentorUris
-        commentorUris.push(uri);
+      topLevelComments.forEach(({ channel_url: uri }) => {
+        // Check: if there are duplicate commentors
+        if (!commentorUris.includes(uri)) {
+          // Update: commentorUris
+          commentorUris.push(uri);
 
-        // Update: canonicalCommentors
-        const claimId = claimIdsByUri[uri];
-        const claim = claimsById[claimId];
-        if (claim && claim.canonical_url) {
-          canonicalCommentors.push(claim.canonical_url);
+          // Update: canonicalCommentors
+          const claimId = claimIdsByUri[uri];
+          const claim = claimsById[claimId];
+          if (claim && claim.canonical_url) {
+            canonicalCommentors.push(claim.canonical_url);
+          }
         }
-      }
-    });
+      });
+    }
 
     subscriptionUris.forEach((uri) => {
       // Update: canonicalSubscriptions
@@ -426,11 +434,6 @@ export const selectChannelMentionData = createCachedSelector(
       }
     });
 
-    return {
-      topLevelComments,
-      commentorUris,
-      canonicalCommentors,
-      canonicalSubscriptions,
-    };
+    return { canonicalCommentors, canonicalCreatorUri, canonicalSubscriptions, commentorUris };
   }
 )((state, uri, maxCount) => `${String(uri)}:${maxCount}`);

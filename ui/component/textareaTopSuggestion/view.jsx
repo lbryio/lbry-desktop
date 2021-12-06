@@ -32,7 +32,7 @@ export default function TextareaTopSuggestion(props: Props) {
   }
 
   return filteredTop && filteredTop.length > 0 ? (
-    <div className="textareaSuggestions__row">
+    <div className="textareaSuggestions__group">
       <div className="textareaSuggestions__label">
         <LbcSymbol prefix={__('Most Supported')} />
       </div>

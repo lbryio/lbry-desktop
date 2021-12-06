@@ -39,7 +39,6 @@ type Props = {
   stretch?: boolean,
   textAreaMaxLength?: number,
   type?: string,
-  uri?: string,
   value?: string | number,
   onChange?: (any) => any,
   openEmoteMenu?: () => void,
@@ -86,7 +85,6 @@ export class FormField extends React.PureComponent<Props> {
       stretch,
       textAreaMaxLength,
       type,
-      uri,
       openEmoteMenu,
       quickActionHandler,
       render,
@@ -254,8 +252,6 @@ export class FormField extends React.PureComponent<Props> {
                   id={name}
                   maxLength={textAreaMaxLength || FF_MAX_CHARS_DEFAULT}
                   inputRef={this.input}
-                  hideSuggestions={hideSuggestions}
-                  uri={uri}
                   isLivestream={isLivestream}
                   {...inputProps}
                 />

@@ -1,108 +1,100 @@
 // @flow
-import { Combobox, ComboboxInput, ComboboxPopover, ComboboxList } from '@reach/combobox';
 import { matchSorter } from 'match-sorter';
-import { SEARCH_OPTIONS } from 'constants/search';
 import * as KEYCODES from 'constants/keycodes';
-import { regexInvalidURI } from 'util/lbryURI';
+import Autocomplete from '@mui/material/Autocomplete';
 import React from 'react';
-import Spinner from 'component/spinner';
 import TextareaSuggestionsItem from 'component/textareaSuggestionsItem';
-import TextareaTopSuggestion from 'component/textareaTopSuggestion';
-import type { ElementRef } from 'react';
-import useLighthouse from 'effects/use-lighthouse';
+import TextField from '@mui/material/TextField';
 import useThrottle from 'effects/use-throttle';
 
-const mentionRegex = /@[^\s"=?!@$%^&*;,{}<>/\\]*/gm;
-
-const INPUT_DEBOUNCE_MS = 1000;
-const LIGHTHOUSE_MIN_CHARACTERS = 4;
-const SEARCH_SIZE = 10;
+const mentionRegex = /@[^\s=&#:$@%?;/\\"<>%{}|^~[]*/gm;
 
 type Props = {
-  canonicalCommentors: Array<string>,
-  canonicalCreatorUri: string,
-  canonicalSubscriptions: Array<string>,
+  canonicalCommentors?: Array<string>,
+  canonicalCreatorUri?: string,
+  canonicalSubscriptions?: Array<string>,
   className?: string,
-  commentorUris: Array<string>,
-  doResolveUris: (Array<string>) => void,
-  hideSuggestions?: boolean,
+  commentorUris?: Array<string>,
+  disabled?: boolean,
+  id: string,
   inputRef: any,
   isLivestream?: boolean,
   maxLength?: number,
-  name: string,
-  noTopSuggestion?: boolean,
   placeholder?: string,
-  showMature: boolean,
   type?: string,
+  uri?: string,
   value: any,
+  doResolveUris: (Array<string>) => void,
+  onBlur: (any) => any,
   onChange: (any) => any,
+  onFocus: (any) => any,
 };
 
 export default function TextareaWithSuggestions(props: Props) {
   const {
     canonicalCommentors,
     canonicalCreatorUri,
-    canonicalSubscriptions,
+    canonicalSubscriptions: canonicalSubs,
     className,
     commentorUris,
-    doResolveUris,
-    hideSuggestions,
+    disabled,
+    id,
     inputRef,
     isLivestream,
     maxLength,
-    name,
-    noTopSuggestion,
     placeholder,
-    showMature,
     type,
     value: commentValue,
+    doResolveUris,
+    onBlur,
     onChange,
+    onFocus,
   } = props;
 
-  const inputProps = { className, placeholder };
-
-  const comboboxListRef: ElementRef<any> = React.useRef();
+  const inputDefaultProps = { className, placeholder, maxLength, type, disabled };
 
   const [suggestionValue, setSuggestionValue] = React.useState(undefined);
-  const [debouncedTerm, setDebouncedTerm] = React.useState('');
-  const [topSuggestion, setTopSuggestion] = React.useState('');
-  const [canonicalSearchUris, setCanonicalSearchUris] = React.useState([]);
+  const [selectedValue, setSelectedValue] = React.useState(undefined);
+  const [highlightedSuggestion, setHighlightedSuggestion] = React.useState('');
+  const [shouldClose, setClose] = React.useState();
 
   const suggestionTerm = suggestionValue && suggestionValue.term;
-  const isUriFromTermValid = suggestionTerm && !regexInvalidURI.test(suggestionTerm.substring(1));
 
-  const additionalOptions = { isBackgroundSearch: false, [SEARCH_OPTIONS.CLAIM_TYPE]: SEARCH_OPTIONS.INCLUDE_CHANNELS };
-  const { results, loading } = useLighthouse(debouncedTerm, showMature, SEARCH_SIZE, additionalOptions, 0);
-  const stringifiedResults = JSON.stringify(results);
+  const shouldFilter = (uri, previous) => uri !== canonicalCreatorUri && (!previous || !previous.includes(uri));
+  const filteredCommentors = canonicalCommentors && canonicalCommentors.filter((uri) => shouldFilter(uri));
+  const filteredSubs = canonicalSubs && canonicalSubs.filter((uri) => shouldFilter(uri, filteredCommentors));
 
-  const shouldFilter = (uri, previousLists) =>
-    uri !== canonicalCreatorUri && (!previousLists || !previousLists.includes(uri));
+  const allOptions = [];
+  if (canonicalCreatorUri) allOptions.push(canonicalCreatorUri);
+  if (filteredSubs) allOptions.push(...filteredSubs);
+  if (filteredCommentors) allOptions.push(...filteredCommentors);
 
-  const filteredCommentors = canonicalCommentors.filter((uri) => shouldFilter(uri));
-  const filteredSubs = canonicalSubscriptions.filter((uri) => shouldFilter(uri, filteredCommentors));
-  const filteredTop = shouldFilter(topSuggestion, [...filteredCommentors, ...filteredSubs]) && topSuggestion;
-  const filteredSearch =
-    canonicalSearchUris &&
-    canonicalSearchUris.filter((uri) => shouldFilter(uri, [...filteredCommentors, ...filteredSubs, filteredTop || '']));
+  const allOptionsGrouped =
+    allOptions.length > 0
+      ? allOptions.map((option) => {
+          const groupName =
+            (canonicalCreatorUri === option && __('Creator')) ||
+            (filteredSubs && filteredSubs.includes(option) && __('Following')) ||
+            (filteredCommentors && filteredCommentors.includes(option) && __('From comments'));
 
-  const creatorUriMatch = useSuggestionMatch(suggestionTerm || '', [canonicalCreatorUri]);
-  const subscriptionsMatch = useSuggestionMatch(suggestionTerm || '', filteredSubs);
-  const commentorsMatch = useSuggestionMatch(suggestionTerm || '', filteredCommentors);
+          return {
+            uri: option.replace('lbry://', '').replace('#', ':'),
+            group: groupName,
+          };
+        })
+      : [];
 
-  const hasMinSearchLength = suggestionTerm && suggestionTerm.length >= LIGHTHOUSE_MIN_CHARACTERS;
-  const isTyping = suggestionValue && debouncedTerm !== suggestionValue.term;
-  const showPlaceholder = hasMinSearchLength && (isTyping || loading);
+  const allMatches = useSuggestionMatch(
+    suggestionTerm || '',
+    allOptionsGrouped.map(({ uri }) => uri)
+  );
 
   /** --------- **/
   /** Functions **/
   /** --------- **/
 
-  function handleChange(e: SyntheticInputEvent<*>) {
-    onChange(e);
-
-    if (hideSuggestions) return;
-
-    const { value } = e.target;
+  function handleInputChange(value: string) {
+    onChange({ target: { value } });
 
     const cursorIndex = inputRef && inputRef.current && inputRef.current.selectionStart;
     const mentionMatches = value.match(mentionRegex);
@@ -139,17 +131,24 @@ export default function TextareaWithSuggestions(props: Props) {
 
   const handleSelect = React.useCallback(
     (selectedValue: string) => {
+      setSelectedValue(selectedValue);
+
       if (!suggestionValue) return;
+
+      const elem = inputRef && inputRef.current;
+      const newCursorPos = suggestionValue.index + selectedValue.length + 1;
 
       const newValue =
         commentValue.substring(0, suggestionValue.index) + //                          1) From start of comment value until term start
         `${selectedValue}` + //                                                        2) Add the selected value
         (commentValue.length > suggestionValue.lastIndex //                            3) If there is more content until the the end of the comment value:
-          ? commentValue.substring(suggestionValue.index + 1, commentValue.length) //   3.a) from term end, add the rest of comment value
+          ? commentValue.substring(suggestionValue.lastIndex, commentValue.length) //   3.a) from term end, add the rest of comment value
           : ' '); //                                                                    3.b) or else, add a space for new input after
 
       onChange({ target: { value: newValue } });
-      inputRef.current.focus();
+      setSuggestionValue(undefined);
+      elem.focus();
+      elem.setSelectionRange(newCursorPos, newCursorPos);
     },
     [commentValue, inputRef, onChange, suggestionValue]
   );
@@ -158,132 +157,89 @@ export default function TextareaWithSuggestions(props: Props) {
   /** Effects **/
   /** ------- **/
 
+  // For disabling sending on Enter on Livestream chat
   React.useEffect(() => {
-    const timer = setTimeout(() => {
-      if (isTyping && suggestionValue) setDebouncedTerm(!hasMinSearchLength ? '' : suggestionValue.term);
-    }, INPUT_DEBOUNCE_MS);
+    if (!isLivestream) return;
 
-    return () => clearTimeout(timer);
-  }, [hasMinSearchLength, isTyping, suggestionValue]);
-
-  React.useEffect(() => {
-    if (!stringifiedResults) return;
-
-    const arrayResults = JSON.parse(stringifiedResults);
-    if (doResolveUris && arrayResults && arrayResults.length > 0) {
-      // $FlowFixMe
-      doResolveUris(arrayResults)
-        .then((response) => {
-          try {
-            // $FlowFixMe
-            const canonical_urls = Object.values(response).map(({ canonical_url }) => canonical_url);
-            setCanonicalSearchUris(canonical_urls);
-          } catch (e) {}
-        })
-        .catch((e) => {});
+    if (suggestionTerm && inputRef) {
+      inputRef.current.setAttribute('term', suggestionTerm);
+    } else {
+      inputRef.current.removeAttribute('term');
     }
-  }, [doResolveUris, stringifiedResults]);
+  }, [inputRef, isLivestream, suggestionTerm]);
 
-  // Only resolve commentors on Livestreams when actually mentioning/looking for it
+  // Only resolve commentors on Livestreams when first trying to mention/looking for it
   React.useEffect(() => {
-    if (isLivestream && commentorUris && suggestionValue) doResolveUris(commentorUris);
-  }, [commentorUris, doResolveUris, isLivestream, suggestionValue]);
+    if (isLivestream && commentorUris && suggestionTerm) doResolveUris(commentorUris);
+  }, [commentorUris, doResolveUris, isLivestream, suggestionTerm]);
 
+  // Allow selecting with TAB key
   React.useEffect(() => {
-    if (!inputRef || !suggestionValue) return;
-
     function handleKeyDown(e: SyntheticKeyboardEvent<*>) {
       const { keyCode } = e;
 
-      const activeSelection = document.querySelector('[data-reach-combobox-option][data-highlighted]');
-      const firstValue = document.querySelectorAll('[data-reach-combobox-option] .textareaSuggestion__value')[0];
-
-      if (keyCode === KEYCODES.UP || keyCode === KEYCODES.DOWN) {
-        const selectedId = activeSelection && activeSelection.getAttribute('id');
-        const selectedItem = selectedId && document.querySelector(`li[id="${selectedId}"]`);
-
-        if (selectedItem) selectedItem.scrollIntoView({ block: 'nearest', inline: 'nearest' });
-      } else if (keyCode === KEYCODES.TAB) {
+      if (highlightedSuggestion && keyCode === KEYCODES.TAB) {
         e.preventDefault();
-
-        const activeValue = document.querySelector(
-          '[data-reach-combobox-option][data-highlighted] .textareaSuggestion__value'
-        );
-
-        if (activeValue && activeValue.innerText) {
-          handleSelect(activeValue.innerText);
-        } else if (firstValue && firstValue.innerText) {
-          handleSelect(firstValue.innerText);
-        }
+        handleSelect(highlightedSuggestion.uri);
       }
     }
 
     window.addEventListener('keydown', handleKeyDown);
 
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [handleSelect, inputRef, suggestionValue]);
+  }, [handleSelect, highlightedSuggestion]);
 
   /** ------ **/
   /** Render **/
   /** ------ **/
 
-  const suggestionsRow = (label: string, suggestions: any) => (
-    <div className="textareaSuggestions__row">
-      <div className="textareaSuggestions__label">{label}</div>
-
-      {suggestions.map((suggestion) => (
-        <TextareaSuggestionsItem key={suggestion} uri={suggestion} />
-      ))}
-
+  const renderGroup = (group: string, children: any) => (
+    <div className="textareaSuggestions__group">
+      <label className="textareaSuggestions__label">{group}</label>
+      {children}
       <hr className="textareaSuggestions__topSeparator" />
     </div>
   );
 
+  const renderInput = (params: any) => {
+    const { InputProps, disabled, fullWidth, id, inputProps: autocompleteInputProps } = params;
+    const inputProps = { ...autocompleteInputProps, ...inputDefaultProps };
+    const autocompleteProps = { InputProps, disabled, fullWidth, id, inputProps };
+
+    return <TextField inputRef={inputRef} multiline select={false} {...autocompleteProps} />;
+  };
+
   return (
-    <Combobox onSelect={handleSelect} aria-label={name}>
-      {/* Regular Textarea Field */}
-      <ComboboxInput
-        {...inputProps}
-        value={commentValue}
-        as="textarea"
-        id={name}
-        maxLength={maxLength}
-        onChange={(e) => handleChange(e)}
-        ref={inputRef}
-        selectOnClick
-        type={type}
-        autocomplete={false}
-      />
-
-      {/* Possible Suggestions Box */}
-      {suggestionValue && isUriFromTermValid && (
-        <ComboboxPopover persistSelection className="textarea__suggestions">
-          <ComboboxList ref={comboboxListRef}>
-            {creatorUriMatch && creatorUriMatch.length > 0 && suggestionsRow(__('Creator'), creatorUriMatch)}
-            {subscriptionsMatch && subscriptionsMatch.length > 0 && suggestionsRow(__('Following'), subscriptionsMatch)}
-            {commentorsMatch && commentorsMatch.length > 0 && suggestionsRow(__('From comments'), commentorsMatch)}
-
-            {hasMinSearchLength &&
-              (showPlaceholder ? (
-                <Spinner type="small" />
-              ) : (
-                results && (
-                  <>
-                    {!noTopSuggestion && (
-                      <TextareaTopSuggestion
-                        query={debouncedTerm}
-                        filteredTop={filteredTop}
-                        setTopSuggestion={setTopSuggestion}
-                      />
-                    )}
-                    {filteredSearch && filteredSearch.length > 0 && suggestionsRow(__('From search'), filteredSearch)}
-                  </>
-                )
-              ))}
-          </ComboboxList>
-        </ComboboxPopover>
-      )}
-    </Combobox>
+    <Autocomplete
+      autoHighlight
+      disableClearable
+      filterOptions={(options) => options.filter(({ uri }) => allMatches && allMatches.includes(uri))}
+      freeSolo
+      fullWidth
+      getOptionLabel={(option) => option.uri}
+      groupBy={(option) => option.group}
+      id={id}
+      inputValue={commentValue}
+      loading={!allMatches || allMatches.length === 0}
+      loadingText={__('Nothing found')}
+      onBlur={() => onBlur()}
+      /* Different from onInputChange, onChange is only used for the selected value,
+        so here it is acting simply as a selection handler (see it as onSelect) */
+      onChange={(event, value) => handleSelect(value.uri)}
+      onClose={(event, reason) => reason !== 'selectOption' && setClose(true)}
+      onFocus={() => onFocus()}
+      onHighlightChange={(event, option) => setHighlightedSuggestion(option)}
+      onInputChange={(event, value, reason) => reason === 'input' && handleInputChange(value)}
+      onOpen={() => suggestionTerm && setClose(false)}
+      /* 'open' is for the popper box component, set to check for a valid term
+        or else it will be displayed all the time as empty */
+      open={!!suggestionTerm && !shouldClose}
+      options={allOptionsGrouped}
+      renderGroup={({ group, children }) => renderGroup(group, children)}
+      renderInput={(params) => renderInput(params)}
+      renderOption={(optionProps, option) => <TextareaSuggestionsItem uri={option.uri} {...optionProps} />}
+      value={selectedValue}
+    />
   );
 }
 

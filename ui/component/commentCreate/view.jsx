@@ -84,7 +84,6 @@ export function CommentCreate(props: Props) {
     settingsByChannelId,
     shouldFetchComment,
     supportDisabled,
-    uri,
     createComment,
     doFetchCreatorSettings,
     doToast,
@@ -156,7 +155,10 @@ export function CommentCreate(props: Props) {
   }
 
   function altEnterListener(e: SyntheticKeyboardEvent<*>) {
-    if ((isLivestream || e.ctrlKey || e.metaKey) && e.keyCode === KEYCODES.ENTER) {
+    // $FlowFixMe
+    const isTyping = e.target.attributes['term'];
+
+    if (((isLivestream && !isTyping) || e.ctrlKey || e.metaKey) && e.keyCode === KEYCODES.ENTER) {
       e.preventDefault();
       buttonRef.current.click();
     }
@@ -443,10 +445,11 @@ export function CommentCreate(props: Props) {
               closeSelector={() => setShowEmotes(false)}
             />
           )}
+
           <FormField
             autoFocus={isReply}
             charCount={charCount}
-            className={isReply ? 'create__reply' : 'create___comment'}
+            className={isReply ? 'create__reply' : 'create__comment'}
             disabled={isFetchingChannels}
             isLivestream={isLivestream}
             label={
@@ -457,7 +460,7 @@ export function CommentCreate(props: Props) {
                 <SelectChannel tiny />
               </div>
             }
-            name={isReply ? 'create__reply' : 'create___comment'}
+            name={isReply ? 'create__reply' : 'create__comment'}
             onBlur={() => window.removeEventListener('keydown', altEnterListener)}
             onChange={(e) => setCommentValue(SIMPLE_SITE || !advancedEditor || isReply ? e.target.value : e)}
             onFocus={() => window.addEventListener('keydown', altEnterListener)}
@@ -470,7 +473,6 @@ export function CommentCreate(props: Props) {
             ref={formFieldRef}
             textAreaMaxLength={isLivestream ? FF_MAX_CHARS_IN_LIVESTREAM_COMMENT : FF_MAX_CHARS_IN_COMMENT}
             type={!SIMPLE_SITE && advancedEditor && !isReply ? 'markdown' : 'textarea'}
-            uri={uri}
             value={commentValue}
           />
         </>
