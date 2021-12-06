@@ -1,11 +1,13 @@
 // @flow
 import { EMOTES_48px as EMOTES } from 'constants/emotes';
 import { matchSorter } from 'match-sorter';
+import { SEARCH_OPTIONS } from 'constants/search';
 import * as KEYCODES from 'constants/keycodes';
 import Autocomplete from '@mui/material/Autocomplete';
 import React from 'react';
 import TextareaSuggestionsItem from 'component/textareaSuggestionsItem';
 import TextField from '@mui/material/TextField';
+import useLighthouse from 'effects/use-lighthouse';
 import useThrottle from 'effects/use-throttle';
 
 const SUGGESTION_REGEX = new RegExp(
@@ -24,9 +26,14 @@ const SUGGESTION_REGEX = new RegExp(
  *
  */
 
+const SEARCH_SIZE = 10;
+const LIGHTHOUSE_MIN_CHARACTERS = 3;
+const INPUT_DEBOUNCE_MS = 1000;
+
 type Props = {
   canonicalCommentors?: Array<string>,
   canonicalCreatorUri?: string,
+  canonicalSearch?: Array<string>,
   canonicalSubscriptions?: Array<string>,
   className?: string,
   commentorUris?: Array<string>,
@@ -36,10 +43,12 @@ type Props = {
   isLivestream?: boolean,
   maxLength?: number,
   placeholder?: string,
+  showMature: boolean,
   type?: string,
   uri?: string,
   value: any,
   doResolveUris: (Array<string>) => void,
+  doSetSearchResults: (Array<string>) => void,
   onBlur: (any) => any,
   onChange: (any) => any,
   onFocus: (any) => any,
@@ -49,6 +58,7 @@ export default function TextareaWithSuggestions(props: Props) {
   const {
     canonicalCommentors,
     canonicalCreatorUri,
+    canonicalSearch,
     canonicalSubscriptions: canonicalSubs,
     className,
     commentorUris,
@@ -58,9 +68,11 @@ export default function TextareaWithSuggestions(props: Props) {
     isLivestream,
     maxLength,
     placeholder,
+    showMature,
     type,
     value: messageValue,
     doResolveUris,
+    doSetSearchResults,
     onBlur,
     onChange,
     onFocus,
@@ -72,13 +84,27 @@ export default function TextareaWithSuggestions(props: Props) {
   const [selectedValue, setSelectedValue] = React.useState(undefined);
   const [highlightedSuggestion, setHighlightedSuggestion] = React.useState('');
   const [shouldClose, setClose] = React.useState();
+  const [debouncedTerm, setDebouncedTerm] = React.useState('');
+  // const [mostSupported, setMostSupported] = React.useState('');
 
   const suggestionTerm = suggestionValue && suggestionValue.term;
   const isEmote = suggestionValue && suggestionValue.isEmote;
+  const isMention = suggestionValue && !suggestionValue.isEmote;
+
+  const additionalOptions = { isBackgroundSearch: false, [SEARCH_OPTIONS.CLAIM_TYPE]: SEARCH_OPTIONS.INCLUDE_CHANNELS };
+  const { results, loading } = useLighthouse(debouncedTerm, showMature, SEARCH_SIZE, additionalOptions, 0);
+  const stringifiedResults = JSON.stringify(results);
+
+  const hasMinLength = suggestionTerm && isMention && suggestionTerm.length >= LIGHTHOUSE_MIN_CHARACTERS;
+  const isTyping = isMention && debouncedTerm !== suggestionTerm;
+  const showPlaceholder = isMention && (isTyping || loading);
 
   const shouldFilter = (uri, previous) => uri !== canonicalCreatorUri && (!previous || !previous.includes(uri));
   const filteredCommentors = canonicalCommentors && canonicalCommentors.filter((uri) => shouldFilter(uri));
   const filteredSubs = canonicalSubs && canonicalSubs.filter((uri) => shouldFilter(uri, filteredCommentors));
+  const filteredSearch =
+    canonicalSearch &&
+    canonicalSearch.filter((uri) => shouldFilter(uri, filteredSubs) && shouldFilter(uri, filteredCommentors));
 
   const allOptions = [];
   if (isEmote) {
@@ -88,6 +114,7 @@ export default function TextareaWithSuggestions(props: Props) {
     if (canonicalCreatorUri) allOptions.push(canonicalCreatorUri);
     if (filteredSubs) allOptions.push(...filteredSubs);
     if (filteredCommentors) allOptions.push(...filteredCommentors);
+    if (filteredSearch) allOptions.push(...filteredSearch);
   }
 
   const allOptionsGrouped =
@@ -97,7 +124,8 @@ export default function TextareaWithSuggestions(props: Props) {
             ? __('Emotes')
             : (canonicalCreatorUri === option && __('Creator')) ||
               (filteredSubs && filteredSubs.includes(option) && __('Following')) ||
-              (filteredCommentors && filteredCommentors.includes(option) && __('From comments'));
+              (filteredCommentors && filteredCommentors.includes(option) && __('From Comments')) ||
+              (filteredSearch && filteredSearch.includes(option) && __('From Search'));
 
           return {
             label: isEmote ? option : option.replace('lbry://', '').replace('#', ':'),
@@ -211,6 +239,26 @@ export default function TextareaWithSuggestions(props: Props) {
   /** Effects **/
   /** ------- **/
 
+  React.useEffect(() => {
+    if (!isMention) return;
+
+    const timer = setTimeout(() => {
+      if (isTyping && suggestionTerm) setDebouncedTerm(!hasMinLength ? '' : suggestionTerm);
+    }, INPUT_DEBOUNCE_MS);
+
+    return () => clearTimeout(timer);
+  }, [hasMinLength, isMention, isTyping, suggestionTerm]);
+
+  React.useEffect(() => {
+    if (!stringifiedResults) return;
+
+    const arrayResults = JSON.parse(stringifiedResults);
+    if (arrayResults && arrayResults.length > 0) {
+      doResolveUris(arrayResults);
+      doSetSearchResults(arrayResults);
+    }
+  }, [doResolveUris, doSetSearchResults, stringifiedResults]);
+
   // Disable sending on Enter on Livestream chat
   React.useEffect(() => {
     if (!isLivestream) return;
@@ -288,8 +336,8 @@ export default function TextareaWithSuggestions(props: Props) {
       groupBy={(option) => option.group}
       id={id}
       inputValue={messageValue}
-      loading={!allMatches || allMatches.length === 0}
-      loadingText={__('Nothing found')}
+      loading={!allMatches || allMatches.length === 0 || showPlaceholder}
+      loadingText={results || showPlaceholder ? __('Searching...') : __('Nothing found')}
       onBlur={() => onBlur && onBlur()}
       /* Different from onInputChange, onChange is only used for the selected value,
         so here it is acting simply as a selection handler (see it as onSelect) */

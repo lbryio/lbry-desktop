@@ -3,6 +3,7 @@ import { createSelector } from 'reselect';
 import { createCachedSelector } from 're-reselect';
 import { selectMutedChannels } from 'redux/selectors/blocked';
 import { selectShowMatureContent } from 'redux/selectors/settings';
+import { selectSearchResults } from 'redux/selectors/search';
 import { selectBlacklistedOutpointMap, selectFilteredOutpointMap } from 'lbryinc';
 import {
   selectClaimsById,
@@ -397,11 +398,13 @@ export const selectChannelMentionData = createCachedSelector(
   selectClaimsById,
   selectTopLevelCommentsForUri,
   selectSubscriptionUris,
-  (uri, claimIdsByUri, claimsById, topLevelComments, subscriptionUris) => {
+  selectSearchResults,
+  (uri, claimIdsByUri, claimsById, topLevelComments, subscriptionUris, searchUris) => {
     let canonicalCreatorUri;
     const commentorUris = [];
     const canonicalCommentors = [];
     const canonicalSubscriptions = [];
+    const canonicalSearch = [];
 
     if (uri) {
       const claimId = claimIdsByUri[uri];
@@ -434,6 +437,17 @@ export const selectChannelMentionData = createCachedSelector(
       }
     });
 
-    return { canonicalCommentors, canonicalCreatorUri, canonicalSubscriptions, commentorUris };
+    if (searchUris && searchUris.length > 0) {
+      searchUris.forEach((uri) => {
+        // Update: canonicalSubscriptions
+        const claimId = claimIdsByUri[uri];
+        const claim = claimsById[claimId];
+        if (claim && claim.canonical_url) {
+          canonicalSearch.push(claim.canonical_url);
+        }
+      });
+    }
+
+    return { canonicalCommentors, canonicalCreatorUri, canonicalSubscriptions, commentorUris, canonicalSearch };
   }
 )((state, uri, maxCount) => `${String(uri)}:${maxCount}`);

@@ -147,6 +147,13 @@ export const doUpdateSearchOptions = (newOptions: SearchOptions, additionalOptio
   }
 };
 
+export const doSetSearchResults = (uris: Array<string>) => (dispatch: Dispatch) => {
+  dispatch({
+    type: ACTIONS.SET_SEARCH_RESULTS,
+    data: { uris },
+  });
+};
+
 export const doFetchRecommendedContent = (uri: string) => (dispatch: Dispatch, getState: GetState) => {
   const state = getState();
   const claim = selectClaimForUri(state, uri);

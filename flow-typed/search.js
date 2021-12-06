@@ -29,6 +29,7 @@ declare type SearchOptions = {
 declare type SearchState = {
   options: SearchOptions,
   resultsByQuery: {},
+  results: Array<string>,
   hasReachedMaxResultsLength: {},
   searching: boolean,
 };

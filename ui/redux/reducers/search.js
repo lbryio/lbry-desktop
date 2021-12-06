@@ -20,6 +20,7 @@ const defaultState: SearchState = {
   resultsByQuery: {},
   hasReachedMaxResultsLength: {},
   searching: false,
+  results: [],
 };
 
 export default handleActions(
@@ -66,6 +67,11 @@ export default handleActions(
         options,
       };
     },
+
+    [ACTIONS.SET_SEARCH_RESULTS]: (state: SearchState, action: SearchSuccess): SearchState => ({
+      ...state,
+      results: action.data.uris,
+    }),
   },
   defaultState
 );
