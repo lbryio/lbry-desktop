@@ -38,13 +38,12 @@ export function makeResumableUploadRequest(
       reject(new Error('Publish: v2 does not support remote_url'));
     }
 
-    const payloadParams = Object.assign({}, params);
-    delete payloadParams.uploadUrl; // cleanup
+    const { uploadUrl, guid, ...sdkParams } = params;
 
     const jsonPayload = JSON.stringify({
       jsonrpc: '2.0',
       method: RESUMABLE_ENDPOINT_METHOD,
-      params: payloadParams,
+      params: sdkParams,
       id: new Date().getTime(),
     });
 

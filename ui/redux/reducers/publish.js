@@ -6,7 +6,9 @@ import * as ACTIONS from 'constants/action_types';
 import * as THUMBNAIL_STATUSES from 'constants/thumbnail_upload_statuses';
 import { CHANNEL_ANONYMOUS } from 'constants/claim';
 
-const getKeyFromParam = (params) => `${params.name}#${params.channel || 'anonymous'}`;
+// This is the old key formula. Retain it for now to allow users to delete
+// any pending uploads. Can be removed from January 2022 onwards.
+const getOldKeyFromParam = (params) => `${params.name}#${params.channel || 'anonymous'}`;
 
 type PublishState = {
   editingURI: ?string,
@@ -138,10 +140,9 @@ export const publishReducer = handleActions(
     },
     [ACTIONS.UPDATE_UPLOAD_ADD]: (state: PublishState, action) => {
       const { file, params, uploader } = action.data;
-      const key = getKeyFromParam(params);
       const currentUploads = Object.assign({}, state.currentUploads);
 
-      currentUploads[key] = {
+      currentUploads[params.guid] = {
         file,
         fileFingerprint: file ? serializeFileObj(file) : undefined, // TODO: get hash instead?
         progress: '0',
@@ -154,7 +155,7 @@ export const publishReducer = handleActions(
     },
     [ACTIONS.UPDATE_UPLOAD_PROGRESS]: (state: PublishState, action) => {
       const { params, progress, status } = action.data;
-      const key = getKeyFromParam(params);
+      const key = params.guid || getOldKeyFromParam(params);
       const currentUploads = Object.assign({}, state.currentUploads);
 
       if (!currentUploads[key]) {
@@ -181,11 +182,9 @@ export const publishReducer = handleActions(
     },
     [ACTIONS.UPDATE_UPLOAD_REMOVE]: (state: PublishState, action) => {
       const { params } = action.data;
-      const key = getKeyFromParam(params);
+      const key = params.guid || getOldKeyFromParam(params);
       const currentUploads = Object.assign({}, state.currentUploads);
-
       delete currentUploads[key];
-
       return { ...state, currentUploads };
     },
     [ACTIONS.REHYDRATE]: (state: PublishState, action) => {

@@ -23,6 +23,10 @@ export default function WebUploadItem(props: Props) {
     if (serializeFileObj(newFile) === fileFingerprint) {
       setShowFileSelector(false);
       doPublishResume({ ...params, file_path: newFile });
+      if (!params.guid) {
+        // Can remove this if-block after January 2022.
+        doUpdateUploadRemove(params);
+      }
     } else {
       doOpenModal(MODALS.CONFIRM, {
         title: __('Invalid file'),

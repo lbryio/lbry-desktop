@@ -30,10 +30,12 @@ export function makeUploadRequest(
     delete params['remote_url'];
   }
 
+  const { uploadUrl, guid, ...sdkParams } = params;
+
   const jsonPayload = JSON.stringify({
     jsonrpc: '2.0',
     method: ENDPOINT_METHOD,
-    params,
+    params: sdkParams,
     id: new Date().getTime(),
   });
 

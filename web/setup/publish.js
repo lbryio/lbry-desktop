@@ -1,5 +1,6 @@
 // @flow
 import * as tus from 'tus-js-client';
+import { v4 as uuid } from 'uuid';
 import { makeUploadRequest } from './publish-v1';
 import { makeResumableUploadRequest } from './publish-v2';
 
@@ -32,6 +33,12 @@ export default function apiPublishCallViaWeb(
   // and set the file_path itself
   if (fileField) {
     params.file_path = '__POST_FILE__';
+  }
+
+  // Add a random ID to serve as the redux key.
+  // If it already exists, then it is a resumed session.
+  if (!params.guid) {
+    params.guid = uuid();
   }
 
   const useV1 = remoteUrl || preview || !tus.isSupported;
