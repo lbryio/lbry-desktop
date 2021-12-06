@@ -48,16 +48,21 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
     title = title.toLowerCase();
   }
 
+  let claimNameToCheckAgainst;
+  if (claim) {
+    claimNameToCheckAgainst = claim.name && claim.name.toLowerCase();
+  }
+
   const checkDescriptionForBlacklistWords = AD_KEYWORD_BLOCKLIST_CHECK_DESCRIPTION === 'true';
 
   let triggerBlacklist = false;
   if (AD_KEYWORD_BLOCKLIST) {
-    const termsToCheck = AD_KEYWORD_BLOCKLIST.split(',');
+    const termsToCheck = AD_KEYWORD_BLOCKLIST.toLowerCase().split(',');
     // eslint-disable-next-line no-unused-vars
 
     if (title) {
       for (const term of termsToCheck) {
-        if (claim && claim.name && claim.name.includes(term)) {
+        if (claimNameToCheckAgainst.includes(term)) {
           triggerBlacklist = true;
         }
         if (title.includes(term)) {
