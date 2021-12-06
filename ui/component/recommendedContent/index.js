@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimForUri } from 'redux/selectors/claims';
+import { makeSelectClaimForUri, makeSelectMetadataForUri } from 'redux/selectors/claims';
 import { doFetchRecommendedContent } from 'redux/actions/search';
 import { selectRecommendedContentForUri, selectIsSearching } from 'redux/selectors/search';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
@@ -10,6 +10,7 @@ const select = (state, props) => {
   const { claim_id: claimId } = claim;
   const recommendedContentUris = selectRecommendedContentForUri(state, props.uri);
   const nextRecommendedUri = recommendedContentUris && recommendedContentUris[0];
+  const metadata =  makeSelectMetadataForUri(props.uri)(state);
 
   return {
     claim,
@@ -18,6 +19,7 @@ const select = (state, props) => {
     nextRecommendedUri,
     isSearching: selectIsSearching(state),
     isAuthenticated: selectUserVerifiedEmail(state),
+    metadata,
   };
 };
 
