@@ -112,6 +112,7 @@ function VideoViewer(props: Props) {
   const adApprovedChannelIds = homepageData ? getAllIds(homepageData) : [];
   const claimId = claim && claim.claim_id;
   const channelClaimId = claim && claim.signing_channel && claim.signing_channel.claim_id;
+  const channelName = claim && claim.signing_channel && claim.signing_channel.name;
   const isAudio = contentType.includes('audio');
   const forcePlayer = FORCE_CONTENT_TYPE_PLAYER.includes(contentType);
   const {
@@ -477,6 +478,8 @@ function VideoViewer(props: Props) {
         autoplay={!embedded || autoplayIfEmbedded}
         autoplaySetting={autoplayNext}
         claimId={claimId}
+        title={claim && ((claim.value && claim.value.title) || claim.name)}
+        channelName={channelName}
         userId={userId}
         allowPreRoll={!authenticated} // TODO: pull this into ads functionality so it's self contained
         internalFeatureEnabled={internalFeature}

@@ -56,6 +56,8 @@ type Props = {
   autoplay: boolean,
   autoplaySetting: boolean,
   claimId: ?string,
+  title: ?string,
+  channelName: ?string,
   embedded: boolean,
   internalFeatureEnabled: ?boolean,
   isAudio: boolean,
@@ -123,6 +125,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     autoplay,
     autoplaySetting,
     claimId,
+    title,
+    channelName,
     embedded,
     internalFeatureEnabled, // for people on the team to test new features internally
     isAudio,
@@ -163,7 +167,10 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     // the true fix here is to fix the m3u8 file, see: https://github.com/lbryio/lbry-desktop/pull/6315
     controlBar: { subsCapsButton: false },
     techOrder: ['chromecast', 'html5'],
-    chromecast: { requestTitleFn: (src) => '' },
+    chromecast: {
+      requestTitleFn: (src) => title || '',
+      requestSubtitleFn: (src) => channelName || '',
+    },
   };
 
   const { detectFileType, createVideoPlayerDOM } = functions({ source, sourceType, videoJsOptions, isAudio });
