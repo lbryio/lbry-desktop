@@ -8,6 +8,7 @@ import EMOJIS from 'emoji-dictionary';
 import React from 'react';
 import TextareaSuggestionsItem from 'component/textareaSuggestionsItem';
 import TextField from '@mui/material/TextField';
+import Popper from '@mui/material/Popper';
 import useLighthouse from 'effects/use-lighthouse';
 import useThrottle from 'effects/use-throttle';
 
@@ -343,6 +344,7 @@ export default function TextareaWithSuggestions(props: Props) {
 
   return (
     <Autocomplete
+      PopperComponent={AutocompletePopper}
       autoHighlight
       disableClearable
       filterOptions={(options) => options.filter(({ label }) => allMatches && allMatches.includes(label))}
@@ -373,6 +375,10 @@ export default function TextareaWithSuggestions(props: Props) {
       value={selectedValue}
     />
   );
+}
+
+function AutocompletePopper(props: any) {
+  return <Popper {...props} placement="top" />;
 }
 
 function useSuggestionMatch(term: string, list: Array<string>) {
