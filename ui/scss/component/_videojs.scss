@@ -187,3 +187,41 @@ $control-bar-icon-size: 0.8rem;
 .ima-ad-container {
   display: none;
 }
+
+.video-js-parent .vjs-tech-chromecast {
+  .vjs-tech-chromecast-poster {
+    &::after {
+      $chromecast-poster-width: 50px;
+      width: $chromecast-poster-width;
+      left: calc(50% - #{$chromecast-poster-width * 0.5});
+    }
+  }
+
+  .vjs-tech-chromecast-poster-img {
+    $chromecast-poster-max-height: 50px;
+    max-height: $chromecast-poster-max-height;
+    &.vjs-tech-chromecast-poster-img-empty {
+      width: 80px;
+      height: 90px;
+    }
+  }
+
+  .vjs-tech-chromecast-title-container {
+    margin-bottom: var(--spacing-main-padding);
+  }
+
+  .vjs-tech-chromecast-title {
+    font-size: var(--font-title);
+    @media (max-width: $breakpoint-small) {
+      font-size: var(--font-small);
+    }
+  }
+
+  .vjs-tech-chromecast-subtitle {
+    color: var(--color-text-subtitle);
+    font-size: var(--font-body);
+    @media (max-width: $breakpoint-small) {
+      font-size: var(--font-xsmall);
+    }
+  }
+}

@@ -477,6 +477,14 @@ $control-bar-icon-size: 0.8rem;
         left: -3em; // Center the popup on top of the button that invoked it.
       }
     }
+
+    .vjs-chromecast-button {
+      .vjs-icon-placeholder {
+        $chromecast-icon-size: 21px;
+        width: $chromecast-icon-size;
+        height: $chromecast-icon-size;
+      }
+    }
   }
 
   // control-bar: general padding

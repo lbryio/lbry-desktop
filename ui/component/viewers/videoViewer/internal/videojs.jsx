@@ -3,6 +3,7 @@ import 'videojs-contrib-ads'; // must be loaded in this order
 import 'videojs-ima'; // loads directly after contrib-ads
 import 'video.js/dist/alt/video-js-cdn.min.css';
 import './plugins/videojs-mobile-ui/plugin';
+import '@silvermine/videojs-chromecast/dist/silvermine-videojs-chromecast.css';
 
 import * as ICONS from 'constants/icons';
 import * as OVERLAY from './overlays';
@@ -14,6 +15,7 @@ import functions from './videojs-functions';
 import hlsQualitySelector from './plugins/videojs-hls-quality-selector/plugin';
 import keyboardShorcuts from './videojs-keyboard-shortcuts';
 import LbryVolumeBarClass from './lbry-volume-bar';
+import Chromecast from './chromecast';
 import playerjs from 'player.js';
 import qualityLevels from 'videojs-contrib-quality-levels';
 import React, { useEffect, useRef, useState } from 'react';
@@ -21,10 +23,13 @@ import recsys from './plugins/videojs-recsys/plugin';
 import runAds from './ads';
 import videojs from 'video.js';
 
+require('@silvermine/videojs-chromecast')(videojs);
+
 export type Player = {
   controlBar: { addChild: (string, any) => void },
   loadingSpinner: any,
   autoplay: (any) => boolean,
+  chromecast: (any) => void,
   currentTime: (?number) => number,
   dispose: () => void,
   ended: () => boolean,
@@ -157,6 +162,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     // fixes problem of errant CC button showing up on iOS
     // the true fix here is to fix the m3u8 file, see: https://github.com/lbryio/lbry-desktop/pull/6315
     controlBar: { subsCapsButton: false },
+    techOrder: ['chromecast', 'html5'],
+    chromecast: { requestTitleFn: (src) => '' },
   };
 
   const { detectFileType, createVideoPlayerDOM } = functions({ source, sourceType, videoJsOptions, isAudio });
@@ -192,8 +199,10 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       // Add reloadSourceOnError plugin
       player.reloadSourceOnError({ errorInterval: 10 });
 
-      // initialize mobile UI
-      player.mobileUi(); // Inits mobile version. No-op if Desktop.
+      // Initialize mobile UI.
+      player.mobileUi();
+
+      Chromecast.initialize(player);
 
       // Add quality selector to player
       player.hlsQualitySelector({

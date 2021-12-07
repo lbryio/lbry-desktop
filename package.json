@@ -51,6 +51,7 @@
     "@emotion/react": "^11.6.0",
     "@emotion/styled": "^11.6.0",
     "@mui/material": "^5.2.1",
+    "@silvermine/videojs-chromecast": "^1.3.3",
     "@ungap/from-entries": "^0.2.1",
     "auto-launch": "^5.0.5",
     "electron-dl": "^1.11.0",

@@ -1870,6 +1870,14 @@
   dependencies:
     "@sentry/cli" "^1.49.0"
 
+"@silvermine/videojs-chromecast@^1.3.3":
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/@silvermine/videojs-chromecast/-/videojs-chromecast-1.3.3.tgz#44d81a18f6812aace05c0c37bfd3abc07505d495"
+  integrity sha512-vbytdnqgUzOYIxA1CEWYe19PHea9JlFULJSqJ00Z0E8xHwOk8LP3gtpQ4MnqH0IViciBDQmyq9ta/5rbDvDWEw==
+  dependencies:
+    class.extend "0.9.1"
+    webcomponents.js "git+https://git@github.com/webcomponents/webcomponentsjs.git#v0.7.24"
+
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.14.0.tgz#9fb3a3cf3132328151f353de4632e01e52102bea"
@@ -4650,6 +4658,11 @@ class-utils@^0.3.5:
     define-property "^0.2.5"
     isobject "^3.0.0"
     static-extend "^0.1.1"
+
+class.extend@0.9.1:
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/class.extend/-/class.extend-0.9.1.tgz#b4ee417c693740a44a92a6d64f1c9540641b097a"
+  integrity sha1-tO5BfGk3QKRKkqbWTxyVQGQbCXo=
 
 classnames@^2.2.5:
   version "2.2.6"
@@ -17098,6 +17111,10 @@ web-namespaces@^1.0.0:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/web-namespaces/-/web-namespaces-1.1.4.tgz#bc98a3de60dadd7faefc403d1076d529f5e030ec"
   integrity sha512-wYxSGajtmoP4WxfejAPIr4l0fVh+jeMXZb08wNc0tMg6xsfZXj3cECqIK0G7ZAqUq0PP8WlMDtaOGVBTAWztNw==
+
+"webcomponents.js@git+https://git@github.com/webcomponents/webcomponentsjs.git#v0.7.24":
+  version "0.7.24"
+  resolved "git+https://git@github.com/webcomponents/webcomponentsjs.git#8a2e40557b177e2cca0def2553f84c8269c8f93e"
 
 webidl-conversions@^3.0.0:
   version "3.0.1"
