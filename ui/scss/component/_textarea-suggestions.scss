@@ -86,3 +86,7 @@
 .textareaSuggestions__topSeparator {
   @extend .wunderbar__top-separator;
 }
+
+.MuiAutocomplete-loading {
+  color: var(--color-text) !important;
+}

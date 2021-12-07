@@ -4,11 +4,12 @@ import { matchSorter } from 'match-sorter';
 import { SEARCH_OPTIONS } from 'constants/search';
 import * as KEYCODES from 'constants/keycodes';
 import Autocomplete from '@mui/material/Autocomplete';
+import BusyIndicator from 'component/common/busy-indicator';
 import EMOJIS from 'emoji-dictionary';
+import Popper from '@mui/material/Popper';
 import React from 'react';
 import TextareaSuggestionsItem from 'component/textareaSuggestionsItem';
 import TextField from '@mui/material/TextField';
-import Popper from '@mui/material/Popper';
 import useLighthouse from 'effects/use-lighthouse';
 import useThrottle from 'effects/use-throttle';
 
@@ -42,6 +43,7 @@ type Props = {
   className?: string,
   commentorUris?: Array<string>,
   disabled?: boolean,
+  hasNewResolvedResults?: boolean,
   id: string,
   inputRef: any,
   isLivestream?: boolean,
@@ -52,7 +54,7 @@ type Props = {
   uri?: string,
   value: any,
   doResolveUris: (Array<string>) => void,
-  doSetSearchResults: (Array<string>) => void,
+  doSetMentionSearchResults: (Array<string>) => void,
   onBlur: (any) => any,
   onChange: (any) => any,
   onFocus: (any) => any,
@@ -67,6 +69,7 @@ export default function TextareaWithSuggestions(props: Props) {
     className,
     commentorUris,
     disabled,
+    hasNewResolvedResults,
     id,
     inputRef,
     isLivestream,
@@ -76,7 +79,7 @@ export default function TextareaWithSuggestions(props: Props) {
     type,
     value: messageValue,
     doResolveUris,
-    doSetSearchResults,
+    doSetMentionSearchResults,
     onBlur,
     onChange,
     onFocus,
@@ -101,7 +104,8 @@ export default function TextareaWithSuggestions(props: Props) {
 
   const hasMinLength = suggestionTerm && isMention && suggestionTerm.length >= LIGHTHOUSE_MIN_CHARACTERS;
   const isTyping = isMention && debouncedTerm !== suggestionTerm;
-  const showPlaceholder = isMention && (isTyping || loading);
+  const showPlaceholder =
+    isMention && (isTyping || loading || (results && results.length > 0 && !hasNewResolvedResults));
 
   const shouldFilter = (uri, previous) => uri !== canonicalCreatorUri && (!previous || !previous.includes(uri));
   const filteredCommentors = canonicalCommentors && canonicalCommentors.filter((uri) => shouldFilter(uri));
@@ -271,9 +275,9 @@ export default function TextareaWithSuggestions(props: Props) {
     const arrayResults = JSON.parse(stringifiedResults);
     if (arrayResults && arrayResults.length > 0) {
       doResolveUris(arrayResults);
-      doSetSearchResults(arrayResults);
+      doSetMentionSearchResults(arrayResults);
     }
-  }, [doResolveUris, doSetSearchResults, stringifiedResults]);
+  }, [doResolveUris, doSetMentionSearchResults, stringifiedResults]);
 
   // Disable sending on Enter on Livestream chat
   React.useEffect(() => {
@@ -355,7 +359,7 @@ export default function TextareaWithSuggestions(props: Props) {
       id={id}
       inputValue={messageValue}
       loading={!allMatches || allMatches.length === 0 || showPlaceholder}
-      loadingText={results || showPlaceholder ? __('Searching...') : __('Nothing found')}
+      loadingText={showPlaceholder ? <BusyIndicator message={__('Searching...')} /> : __('Nothing found')}
       onBlur={() => onBlur && onBlur()}
       /* Different from onInputChange, onChange is only used for the selected value,
         so here it is acting simply as a selection handler (see it as onSelect) */
@@ -366,7 +370,7 @@ export default function TextareaWithSuggestions(props: Props) {
       onInputChange={(event, value, reason) => reason === 'input' && handleInputChange(value)}
       onOpen={() => suggestionTerm && setClose(false)}
       /* 'open' is for the popper box component, set to check for a valid term
-        or else it will be displayed all the time as empty */
+        or else it will be displayed all the time as empty (no options) */
       open={!!suggestionTerm && !shouldClose}
       options={allOptionsGrouped}
       renderGroup={({ group, children }) => renderGroup(group, children)}

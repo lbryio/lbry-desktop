@@ -68,7 +68,7 @@ export default handleActions(
       };
     },
 
-    [ACTIONS.SET_SEARCH_RESULTS]: (state: SearchState, action: SearchSuccess): SearchState => ({
+    [ACTIONS.SET_MENTION_SEARCH_RESULTS]: (state: SearchState, action: SearchSuccess): SearchState => ({
       ...state,
       results: action.data.uris,
     }),

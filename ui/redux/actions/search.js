@@ -147,9 +147,9 @@ export const doUpdateSearchOptions = (newOptions: SearchOptions, additionalOptio
   }
 };
 
-export const doSetSearchResults = (uris: Array<string>) => (dispatch: Dispatch) => {
+export const doSetMentionSearchResults = (uris: Array<string>) => (dispatch: Dispatch) => {
   dispatch({
-    type: ACTIONS.SET_SEARCH_RESULTS,
+    type: ACTIONS.SET_MENTION_SEARCH_RESULTS,
     data: { uris },
   });
 };

@@ -3,7 +3,7 @@ import { doResolveUris } from 'redux/actions/claims';
 import { MAX_LIVESTREAM_COMMENTS } from 'constants/livestream';
 import { selectChannelMentionData } from 'redux/selectors/comments';
 import { selectShowMatureContent } from 'redux/selectors/settings';
-import { doSetSearchResults } from 'redux/actions/search';
+import { doSetMentionSearchResults } from 'redux/actions/search';
 import { withRouter } from 'react-router';
 import TextareaWithSuggestions from './view';
 
@@ -13,7 +13,14 @@ const select = (state, props) => {
   const uri = `lbry:/${pathname.replaceAll(':', '#')}`;
 
   const data = selectChannelMentionData(state, uri, maxComments);
-  const { canonicalCommentors, canonicalCreatorUri, canonicalSubscriptions, commentorUris, canonicalSearch } = data;
+  const {
+    canonicalCommentors,
+    canonicalCreatorUri,
+    canonicalSearch,
+    canonicalSubscriptions,
+    commentorUris,
+    hasNewResolvedResults,
+  } = data;
 
   return {
     canonicalCommentors,
@@ -21,13 +28,14 @@ const select = (state, props) => {
     canonicalSearch,
     canonicalSubscriptions,
     commentorUris,
+    hasNewResolvedResults,
     showMature: selectShowMatureContent(state),
   };
 };
 
 const perform = (dispatch) => ({
   doResolveUris: (uris) => dispatch(doResolveUris(uris, true)),
-  doSetSearchResults: (uris) => dispatch(doSetSearchResults(uris)),
+  doSetMentionSearchResults: (uris) => dispatch(doSetMentionSearchResults(uris)),
 });
 
 export default withRouter(connect(select, perform)(TextareaWithSuggestions));
