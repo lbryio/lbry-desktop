@@ -313,7 +313,7 @@ export default function TextareaWithSuggestions(props: Props) {
   /** ------ **/
 
   const renderGroup = (groupName: string, children: any) => (
-    <div className="textareaSuggestions__group">
+    <div key={groupName} className="textareaSuggestions__group">
       <label className="textareaSuggestions__label">
         {suggestionTerm && suggestionTerm.length > 1
           ? __('%group_name% matching %matching_term%', { group_name: groupName, matching_term: suggestionTerm })
@@ -338,7 +338,7 @@ export default function TextareaWithSuggestions(props: Props) {
     const emojiFound = isEmote && EMOJIS.getUnicode(label);
     const emojiValue = emojiFound ? { name: label, unicode: emojiFound } : undefined;
 
-    return <TextareaSuggestionsItem uri={label} emote={emoteValue || emojiValue} {...optionProps} />;
+    return <TextareaSuggestionsItem key={label} uri={label} emote={emoteValue || emojiValue} {...optionProps} />;
   };
 
   return (
