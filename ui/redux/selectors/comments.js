@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 import { createCachedSelector } from 're-reselect';
 import { selectMutedChannels } from 'redux/selectors/blocked';
 import { selectShowMatureContent } from 'redux/selectors/settings';
-import { selectMentionSearchResults } from 'redux/selectors/search';
+import { selectMentionSearchResults, selectMentionQuery } from 'redux/selectors/search';
 import { selectBlacklistedOutpointMap, selectFilteredOutpointMap } from 'lbryinc';
 import {
   selectClaimsById,
@@ -399,7 +399,8 @@ export const selectChannelMentionData = createCachedSelector(
   selectTopLevelCommentsForUri,
   selectSubscriptionUris,
   selectMentionSearchResults,
-  (uri, claimIdsByUri, claimsById, topLevelComments, subscriptionUris, searchUris) => {
+  selectMentionQuery,
+  (uri, claimIdsByUri, claimsById, topLevelComments, subscriptionUris, searchUris, query) => {
     let canonicalCreatorUri;
     const commentorUris = [];
     const canonicalCommentors = [];
@@ -453,10 +454,11 @@ export const selectChannelMentionData = createCachedSelector(
     return {
       canonicalCommentors,
       canonicalCreatorUri,
+      canonicalSearch,
       canonicalSubscriptions,
       commentorUris,
       hasNewResolvedResults,
-      canonicalSearch,
+      query,
     };
   }
 )((state, uri, maxCount) => `${String(uri)}:${maxCount}`);

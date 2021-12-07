@@ -21,6 +21,7 @@ const defaultState: SearchState = {
   hasReachedMaxResultsLength: {},
   searching: false,
   results: [],
+  mentionQuery: '',
 };
 
 export default handleActions(
@@ -71,6 +72,7 @@ export default handleActions(
     [ACTIONS.SET_MENTION_SEARCH_RESULTS]: (state: SearchState, action: SearchSuccess): SearchState => ({
       ...state,
       results: action.data.uris,
+      mentionQuery: action.data.query,
     }),
   },
   defaultState

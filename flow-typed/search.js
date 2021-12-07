@@ -32,6 +32,7 @@ declare type SearchState = {
   results: Array<string>,
   hasReachedMaxResultsLength: {},
   searching: boolean,
+  mentionQuery: string,
 };
 
 declare type SearchSuccess = {
@@ -42,6 +43,7 @@ declare type SearchSuccess = {
     size: number,
     uris: Array<string>,
     recsys: string,
+    query: string,
   },
 };
 

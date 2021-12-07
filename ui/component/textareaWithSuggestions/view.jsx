@@ -6,6 +6,7 @@ import * as KEYCODES from 'constants/keycodes';
 import Autocomplete from '@mui/material/Autocomplete';
 import BusyIndicator from 'component/common/busy-indicator';
 import EMOJIS from 'emoji-dictionary';
+import LbcSymbol from 'component/common/lbc-symbol';
 import Popper from '@mui/material/Popper';
 import React from 'react';
 import TextareaSuggestionsItem from 'component/textareaSuggestionsItem';
@@ -40,6 +41,7 @@ type Props = {
   canonicalCreatorUri?: string,
   canonicalSearch?: Array<string>,
   canonicalSubscriptions?: Array<string>,
+  canonicalTop?: string,
   className?: string,
   commentorUris?: Array<string>,
   disabled?: boolean,
@@ -49,12 +51,13 @@ type Props = {
   isLivestream?: boolean,
   maxLength?: number,
   placeholder?: string,
+  searchQuery?: string,
   showMature: boolean,
   type?: string,
   uri?: string,
   value: any,
   doResolveUris: (Array<string>) => void,
-  doSetMentionSearchResults: (Array<string>) => void,
+  doSetMentionSearchResults: (string, Array<string>) => void,
   onBlur: (any) => any,
   onChange: (any) => any,
   onFocus: (any) => any,
@@ -66,6 +69,7 @@ export default function TextareaWithSuggestions(props: Props) {
     canonicalCreatorUri,
     canonicalSearch,
     canonicalSubscriptions: canonicalSubs,
+    canonicalTop,
     className,
     commentorUris,
     disabled,
@@ -75,6 +79,7 @@ export default function TextareaWithSuggestions(props: Props) {
     isLivestream,
     maxLength,
     placeholder,
+    searchQuery,
     showMature,
     type,
     value: messageValue,
@@ -88,7 +93,6 @@ export default function TextareaWithSuggestions(props: Props) {
   const inputDefaultProps = { className, placeholder, maxLength, type, disabled };
 
   const [suggestionValue, setSuggestionValue] = React.useState(undefined);
-  const [selectedValue, setSelectedValue] = React.useState(undefined);
   const [highlightedSuggestion, setHighlightedSuggestion] = React.useState('');
   const [shouldClose, setClose] = React.useState();
   const [debouncedTerm, setDebouncedTerm] = React.useState('');
@@ -110,9 +114,16 @@ export default function TextareaWithSuggestions(props: Props) {
   const shouldFilter = (uri, previous) => uri !== canonicalCreatorUri && (!previous || !previous.includes(uri));
   const filteredCommentors = canonicalCommentors && canonicalCommentors.filter((uri) => shouldFilter(uri));
   const filteredSubs = canonicalSubs && canonicalSubs.filter((uri) => shouldFilter(uri, filteredCommentors));
+  const filteredTop =
+    canonicalTop &&
+    shouldFilter(canonicalTop, filteredSubs) &&
+    shouldFilter(canonicalTop, filteredCommentors) &&
+    canonicalTop;
   const filteredSearch =
     canonicalSearch &&
-    canonicalSearch.filter((uri) => shouldFilter(uri, filteredSubs) && shouldFilter(uri, filteredCommentors));
+    canonicalSearch.filter(
+      (uri) => shouldFilter(uri, filteredSubs) && shouldFilter(uri, filteredCommentors) && uri !== filteredTop
+    );
 
   let emoteNames;
   let emojiNames;
@@ -128,6 +139,7 @@ export default function TextareaWithSuggestions(props: Props) {
     if (canonicalCreatorUri) allOptions.push(canonicalCreatorUri);
     if (filteredSubs) allOptions.push(...filteredSubs);
     if (filteredCommentors) allOptions.push(...filteredCommentors);
+    if (filteredTop) allOptions.push(filteredTop);
     if (filteredSearch) allOptions.push(...filteredSearch);
   }
 
@@ -139,6 +151,7 @@ export default function TextareaWithSuggestions(props: Props) {
             : (canonicalCreatorUri === option && __('Creator')) ||
               (filteredSubs && filteredSubs.includes(option) && __('Following')) ||
               (filteredCommentors && filteredCommentors.includes(option) && __('From Comments')) ||
+              (filteredTop && filteredTop === option && 'Top') ||
               (filteredSearch && filteredSearch.includes(option) && __('From Search'));
 
           let emoteLabel;
@@ -154,10 +167,11 @@ export default function TextareaWithSuggestions(props: Props) {
         })
       : [];
 
-  const allMatches = useSuggestionMatch(
-    suggestionTerm || '',
-    allOptionsGrouped.map(({ label }) => label)
-  );
+  const allMatches =
+    useSuggestionMatch(
+      suggestionTerm || '',
+      allOptionsGrouped.map(({ label }) => label)
+    ) || [];
 
   /** --------- **/
   /** Functions **/
@@ -171,7 +185,7 @@ export default function TextareaWithSuggestions(props: Props) {
     const suggestionMatches = value.match(SUGGESTION_REGEX);
 
     if (!suggestionMatches) {
-      if (suggestionValue) setSuggestionValue(undefined);
+      if (suggestionValue) setSuggestionValue(null);
       return; // Exit here and avoid unnecessary behavior
     }
 
@@ -226,13 +240,13 @@ export default function TextareaWithSuggestions(props: Props) {
         lastIndex: currentLastIndex,
         isEmote,
       });
+    } else if (suggestionValue) {
+      setSuggestionValue(null);
     }
   }
 
   const handleSelect = React.useCallback(
     (selectedValue: string) => {
-      setSelectedValue(selectedValue);
-
       if (!suggestionValue) return;
 
       const elem = inputRef && inputRef.current;
@@ -248,7 +262,7 @@ export default function TextareaWithSuggestions(props: Props) {
       const newValue = contentBegin + replaceValue + contentEnd;
 
       onChange({ target: { value: newValue } });
-      setSuggestionValue(undefined);
+      setSuggestionValue(null);
       elem.focus();
       elem.setSelectionRange(newCursorPos, newCursorPos);
     },
@@ -262,22 +276,24 @@ export default function TextareaWithSuggestions(props: Props) {
   React.useEffect(() => {
     if (!isMention) return;
 
-    const timer = setTimeout(() => {
-      if (isTyping && suggestionTerm) setDebouncedTerm(!hasMinLength ? '' : suggestionTerm);
-    }, INPUT_DEBOUNCE_MS);
+    if (isTyping && suggestionTerm) {
+      const timer = setTimeout(() => {
+        setDebouncedTerm(!hasMinLength ? '' : suggestionTerm);
+      }, INPUT_DEBOUNCE_MS);
 
-    return () => clearTimeout(timer);
+      return () => clearTimeout(timer);
+    }
   }, [hasMinLength, isMention, isTyping, suggestionTerm]);
 
   React.useEffect(() => {
     if (!stringifiedResults) return;
 
     const arrayResults = JSON.parse(stringifiedResults);
-    if (arrayResults && arrayResults.length > 0) {
-      doResolveUris(arrayResults);
-      doSetMentionSearchResults(arrayResults);
+    if (debouncedTerm && arrayResults && arrayResults.length > 0) {
+      doResolveUris([debouncedTerm, ...arrayResults]);
+      doSetMentionSearchResults(debouncedTerm, arrayResults);
     }
-  }, [doResolveUris, doSetMentionSearchResults, stringifiedResults]);
+  }, [debouncedTerm, doResolveUris, doSetMentionSearchResults, stringifiedResults, suggestionTerm]);
 
   // Disable sending on Enter on Livestream chat
   React.useEffect(() => {
@@ -320,9 +336,13 @@ export default function TextareaWithSuggestions(props: Props) {
   const renderGroup = (groupName: string, children: any) => (
     <div key={groupName} className="textareaSuggestions__group">
       <label className="textareaSuggestions__label">
-        {suggestionTerm && suggestionTerm.length > 1
-          ? __('%group_name% matching %matching_term%', { group_name: groupName, matching_term: suggestionTerm })
-          : groupName}
+        {groupName === 'Top' ? (
+          <LbcSymbol prefix={__('Winning Search for %matching_term%', { matching_term: searchQuery })} />
+        ) : suggestionTerm && suggestionTerm.length > 1 ? (
+          __('%group_name% matching %matching_term%', { group_name: groupName, matching_term: suggestionTerm })
+        ) : (
+          groupName
+        )}
       </label>
       {children}
       <hr className="textareaSuggestions__topSeparator" />
@@ -351,14 +371,14 @@ export default function TextareaWithSuggestions(props: Props) {
       PopperComponent={AutocompletePopper}
       autoHighlight
       disableClearable
-      filterOptions={(options) => options.filter(({ label }) => allMatches && allMatches.includes(label))}
+      filterOptions={(options) => options.filter(({ label }) => allMatches.includes(label))}
       freeSolo
       fullWidth
-      getOptionLabel={(option) => option.label}
+      getOptionLabel={(option) => option.label || ''}
       groupBy={(option) => option.group}
       id={id}
       inputValue={messageValue}
-      loading={!allMatches || allMatches.length === 0 || showPlaceholder}
+      loading={allMatches.length === 0 || showPlaceholder}
       loadingText={showPlaceholder ? <BusyIndicator message={__('Searching...')} /> : __('Nothing found')}
       onBlur={() => onBlur && onBlur()}
       /* Different from onInputChange, onChange is only used for the selected value,
@@ -376,7 +396,6 @@ export default function TextareaWithSuggestions(props: Props) {
       renderGroup={({ group, children }) => renderGroup(group, children)}
       renderInput={(params) => renderInput(params)}
       renderOption={(optionProps, option) => renderOption(optionProps, option.label)}
-      value={selectedValue}
     />
   );
 }
