@@ -46,17 +46,24 @@ export default function WebUploadItem(props: Props) {
       subtitle: __('Cancel and remove the selected upload?'),
       body: params.name ? <p className="empty">{`lbry://${params.name}`}</p> : undefined,
       onConfirm: (closeModal) => {
-        if (uploader) {
-          if (resumable) {
-            // $FlowFixMe - couldn't resolve to TusUploader manually.
-            uploader.abort(true); // TUS
-          } else {
-            uploader.abort(); // XHR
+        if (tusIsSessionLocked(params.guid)) {
+          // Corner-case: it's possible for the upload to resume in another tab
+          // after the modal has appeared. Make a final lock-check here.
+          // We can invoke a toast here, but just do nothing for now.
+          // The upload status should make things obvious.
+        } else {
+          if (uploader) {
+            if (resumable) {
+              // $FlowFixMe - couldn't resolve to TusUploader manually.
+              uploader.abort(true); // TUS
+            } else {
+              uploader.abort(); // XHR
+            }
           }
-        }
 
-        // The second parameter (params) can be removed after January 2022.
-        doUpdateUploadRemove(params.guid, params);
+          // The second parameter (params) can be removed after January 2022.
+          doUpdateUploadRemove(params.guid, params);
+        }
         closeModal();
       },
     });
