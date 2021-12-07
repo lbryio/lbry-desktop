@@ -131,7 +131,8 @@ export default function TextareaWithSuggestions(props: Props) {
   if (isEmote) {
     emoteNames = EMOTES.map(({ name }) => name.toLowerCase());
     const hasMinEmojiLength = suggestionTerm && suggestionTerm.length > EMOJI_MIN_CHARACTERS;
-    emojiNames = hasMinEmojiLength ? EMOJIS.names : [];
+    // Filter because our emotes are priority from default emojis, like :eggplant:
+    emojiNames = hasMinEmojiLength ? EMOJIS.names.filter((name) => !emoteNames.includes(`:${name}:`)) : [];
     const emotesAndEmojis = [...emoteNames, ...emojiNames];
 
     allOptions.push(...emotesAndEmojis);
