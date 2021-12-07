@@ -312,13 +312,12 @@ export default function TextareaWithSuggestions(props: Props) {
   /** Render **/
   /** ------ **/
 
-  const renderGroup = (group: string, children: any) => (
+  const renderGroup = (groupName: string, children: any) => (
     <div className="textareaSuggestions__group">
       <label className="textareaSuggestions__label">
-        {group}
         {suggestionTerm && suggestionTerm.length > 1
-          ? ' ' + __('matching %matching_term%', { matching_term: suggestionTerm })
-          : ''}
+          ? __('%group_name% matching %matching_term%', { group_name: groupName, matching_term: suggestionTerm })
+          : groupName}
       </label>
       {children}
       <hr className="textareaSuggestions__topSeparator" />
