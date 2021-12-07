@@ -7,7 +7,7 @@ type Props = {
   currentUploads: { [key: string]: FileUploadItem },
   uploadCount: number,
   doPublishResume: (any) => void,
-  doUpdateUploadRemove: (any) => void,
+  doUpdateUploadRemove: (string, any) => void,
   doOpenModal: (string, {}) => void,
 };
 

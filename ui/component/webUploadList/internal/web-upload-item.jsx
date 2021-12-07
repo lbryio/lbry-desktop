@@ -5,11 +5,12 @@ import Button from 'component/button';
 import FileThumbnail from 'component/fileThumbnail';
 import * as MODALS from 'constants/modal_types';
 import { serializeFileObj } from 'util/file';
+import { tusIsSessionLocked } from 'util/tus';
 
 type Props = {
   uploadItem: FileUploadItem,
   doPublishResume: (any) => void,
-  doUpdateUploadRemove: (any) => void,
+  doUpdateUploadRemove: (string, any) => void,
   doOpenModal: (string, {}) => void,
 };
 
@@ -18,11 +19,16 @@ export default function WebUploadItem(props: Props) {
   const { params, file, fileFingerprint, progress, status, resumable, uploader } = uploadItem;
 
   const [showFileSelector, setShowFileSelector] = useState(false);
+  const locked = tusIsSessionLocked(params.guid);
 
   function handleFileChange(newFile: WebFile, clearName = true) {
     if (serializeFileObj(newFile) === fileFingerprint) {
       setShowFileSelector(false);
       doPublishResume({ ...params, file_path: newFile });
+      if (!params.guid) {
+        // Can remove this if-block after January 2022.
+        doUpdateUploadRemove('', params);
+      }
     } else {
       doOpenModal(MODALS.CONFIRM, {
         title: __('Invalid file'),
@@ -40,21 +46,34 @@ export default function WebUploadItem(props: Props) {
       subtitle: __('Cancel and remove the selected upload?'),
       body: params.name ? <p className="empty">{`lbry://${params.name}`}</p> : undefined,
       onConfirm: (closeModal) => {
-        if (uploader) {
-          if (resumable) {
-            // $FlowFixMe - couldn't resolve to TusUploader manually.
-            uploader.abort(true); // TUS
-          } else {
-            uploader.abort(); // XHR
+        if (tusIsSessionLocked(params.guid)) {
+          // Corner-case: it's possible for the upload to resume in another tab
+          // after the modal has appeared. Make a final lock-check here.
+          // We can invoke a toast here, but just do nothing for now.
+          // The upload status should make things obvious.
+        } else {
+          if (uploader) {
+            if (resumable) {
+              // $FlowFixMe - couldn't resolve to TusUploader manually.
+              uploader.abort(true); // TUS
+            } else {
+              uploader.abort(); // XHR
+            }
           }
+
+          // The second parameter (params) can be removed after January 2022.
+          doUpdateUploadRemove(params.guid, params);
         }
-        doUpdateUploadRemove(params);
         closeModal();
       },
     });
   }
 
   function resolveProgressStr() {
+    if (locked) {
+      return __('File being uploaded in another tab or window.');
+    }
+
     if (!uploader) {
       return __('Stopped.');
     }
@@ -81,7 +100,7 @@ export default function WebUploadItem(props: Props) {
   }
 
   function getRetryButton() {
-    if (!resumable) {
+    if (!resumable || locked) {
       return null;
     }
 
@@ -109,7 +128,9 @@ export default function WebUploadItem(props: Props) {
   }
 
   function getCancelButton() {
-    return <Button label={__('Cancel')} button="link" onClick={handleCancel} />;
+    if (!locked) {
+      return <Button label={__('Cancel')} button="link" onClick={handleCancel} />;
+    }
   }
 
   function getFileSelector() {
