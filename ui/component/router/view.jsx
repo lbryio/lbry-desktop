@@ -23,7 +23,6 @@ import SignInVerifyPage from 'page/signInVerify';
 import BuyPage from 'page/buy';
 import ReceivePage from 'page/receive';
 import SendPage from 'page/send';
-import SwapPage from 'page/swap';
 import WalletPage from 'page/wallet';
 
 // Chunk: none
@@ -300,7 +299,6 @@ function AppRouter(props: Props) {
       <PrivateRoute {...props} path={`/$/${PAGES.BUY}`} component={BuyPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.RECEIVE}`} component={ReceivePage} />
       <PrivateRoute {...props} path={`/$/${PAGES.SEND}`} component={SendPage} />
-      <PrivateRoute {...props} path={`/$/${PAGES.SWAP}`} component={SwapPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.NOTIFICATIONS}`} component={NotificationsPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.AUTH_WALLET_PASSWORD}`} component={SignInWalletPasswordPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_OWN_COMMENTS}`} component={OwnComments} />

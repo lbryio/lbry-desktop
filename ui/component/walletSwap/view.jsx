@@ -1,4 +1,8 @@
 // @flow
+
+/*
+  This component is not used at this time.
+ */
 import React from 'react';
 import Button from 'component/button';
 import { FormField, Form } from 'component/common/form';
