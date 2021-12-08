@@ -412,10 +412,26 @@ $control-bar-icon-size: 0.7rem;
       display: none;
     }
 
-    .vjs-current-time,
-    .vjs-time-divider,
+    .vjs-time-control {
+      line-height: $control-bar-height;
+      font-size: $control-bar-font-size;
+    }
+
+    .vjs-current-time {
+      display: flex;
+      margin-right: 0.4rem;
+    }
+
+    .vjs-time-divider {
+      display: flex;
+      min-width: unset;
+      padding: 0;
+      z-index: 0; // solves the grayed-out divider
+    }
+
     .vjs-duration {
       display: flex;
+      margin-left: 0.4rem;
     }
 
     .vjs-menu-button {
