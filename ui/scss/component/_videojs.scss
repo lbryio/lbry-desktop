@@ -1,3 +1,5 @@
+$control-bar-height: 41px; // would '3.5em' be better than px?
+
 .video-js {
   font-size: 12px;
   overflow: hidden;
@@ -5,6 +7,8 @@
   // Control Bar (container)
   .vjs-control-bar {
     background: none;
+    color: #dbd8d8;
+    height: $control-bar-height;
 
     &::before {
       position: absolute;
@@ -163,11 +167,6 @@
   @media (max-width: 813px) {
     font-size: 12px;
   }
-}
-
-.vjs-control-bar {
-  height: 41px !important;
-  color: #dbd8d8;
 }
 
 .vjs-playback-rate {
