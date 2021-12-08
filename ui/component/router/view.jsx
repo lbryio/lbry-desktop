@@ -4,6 +4,7 @@ import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
 
 import * as PAGES from 'constants/pages';
 import { PAGE_TITLE } from 'constants/pageTitles';
+import { useIsLargeScreen } from 'effects/use-screensize';
 import { lazyImport } from 'util/lazyImport';
 import { LINKED_COMMENT_QUERY_PARAM } from 'constants/comment';
 import { parseURI, isURIValid } from 'util/lbryURI';
@@ -172,10 +173,13 @@ function AppRouter(props: Props) {
   const urlParams = new URLSearchParams(search);
   const resetScroll = urlParams.get('reset_scroll');
   const hasLinkedCommentInUrl = urlParams.get(LINKED_COMMENT_QUERY_PARAM);
+  const isLargeScreen = useIsLargeScreen();
 
-  const dynamicRoutes = GetLinksData(homepageData).filter(
-    (potentialRoute: any) => potentialRoute && potentialRoute.route
-  );
+  const dynamicRoutes = React.useMemo(() => {
+    return GetLinksData(homepageData, isLargeScreen).filter(
+      (potentialRoute: any) => potentialRoute && potentialRoute.route
+    );
+  }, [homepageData, isLargeScreen]);
 
   // For people arriving at settings page from deeplinks, know whether they can "go back"
   useEffect(() => {

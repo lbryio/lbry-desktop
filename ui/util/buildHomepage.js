@@ -5,7 +5,6 @@ import * as CS from 'constants/claim_search';
 import { parseURI } from 'util/lbryURI';
 import moment from 'moment';
 import { toCapitalCase } from 'util/string';
-import { useIsLargeScreen } from 'effects/use-screensize';
 import { CUSTOM_HOMEPAGE } from 'config';
 
 export type RowDataItem = {
@@ -128,6 +127,7 @@ export const getHomepageRowForCat = (cat: HomepageCat) => {
 
 export function GetLinksData(
   all: any, // HomepageData type?
+  isLargeScreen: boolean,
   isHomepage?: boolean = false,
   authenticated?: boolean,
   showPersonalizedChannels?: boolean,
@@ -137,8 +137,6 @@ export function GetLinksData(
   showIndividualTags?: boolean,
   showNsfw?: boolean
 ) {
-  const isLargeScreen = useIsLargeScreen();
-
   function getPageSize(originalSize) {
     return isLargeScreen ? originalSize * (3 / 2) : originalSize;
   }

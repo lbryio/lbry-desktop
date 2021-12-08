@@ -10,6 +10,7 @@ import ClaimTilesDiscover from 'component/claimTilesDiscover';
 import ClaimPreviewTile from 'component/claimPreviewTile';
 import Icon from 'component/common/icon';
 import WaitUntilOnPage from 'component/common/wait-until-on-page';
+import { useIsLargeScreen } from 'effects/use-screensize';
 import { GetLinksData } from 'util/buildHomepage';
 import { getLivestreamUris } from 'util/livestream';
 
@@ -41,9 +42,11 @@ function HomePage(props: Props) {
   const showPersonalizedChannels = (authenticated || !IS_WEB) && subscribedChannels && subscribedChannels.length > 0;
   const showPersonalizedTags = (authenticated || !IS_WEB) && followedTags && followedTags.length > 0;
   const showIndividualTags = showPersonalizedTags && followedTags.length < 5;
+  const isLargeScreen = useIsLargeScreen();
 
   const rowData: Array<RowDataItem> = GetLinksData(
     homepageData,
+    isLargeScreen,
     true,
     authenticated,
     showPersonalizedChannels,
