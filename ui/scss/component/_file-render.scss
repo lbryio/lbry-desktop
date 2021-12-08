@@ -444,9 +444,20 @@ $control-bar-icon-size: 0.7rem;
       line-height: $control-bar-height;
     }
 
+    .vjs-icon-placeholder::before {
+      line-height: $control-bar-height;
+    }
+
     .vjs-quality-selector {
       .vjs-icon-placeholder {
         font-size: $control-bar-font-size; // quality selector uses regular text font
+      }
+    }
+
+    .vjs-play-control {
+      .vjs-icon-placeholder {
+        // The play icon in font VideoJs is smaller than its peers. Compensate to match the height.
+        font-size: calc(#{$control-bar-icon-size} * 1.2);
       }
     }
   }
