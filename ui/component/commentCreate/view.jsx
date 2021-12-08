@@ -671,6 +671,7 @@ export function CommentCreate(props: Props) {
               } else if (stickerSelector || isReviewingStickerComment) {
                 setReviewingStickerComment(false);
                 setStickerSelector(false);
+                setSelectedSticker(null);
               } else if (isReply && !minTip && onCancelReplying) {
                 onCancelReplying();
               }
