@@ -378,6 +378,12 @@
 // Video
 // ****************************************************************************
 
+// DRY: we'll soon move vjs items to videojs.scss, so just duplicate these for now.
+$control-bar-height: 2.1rem;
+$control-bar-font-size: 0.8rem;
+$control-bar-popup-font-size: 0.8rem;
+$control-bar-icon-size: 0.7rem;
+
 .video-js-parent {
   height: 100%;
   width: 100%;
@@ -406,10 +412,42 @@
       display: none;
     }
 
-    .vjs-current-time,
-    .vjs-time-divider,
+    .vjs-time-control {
+      line-height: $control-bar-height;
+      font-size: $control-bar-font-size;
+    }
+
+    .vjs-current-time {
+      display: flex;
+      margin-right: 0.4rem;
+    }
+
+    .vjs-time-divider {
+      display: flex;
+      min-width: unset;
+      padding: 0;
+      z-index: 0; // solves the grayed-out divider
+    }
+
     .vjs-duration {
       display: flex;
+      margin-left: 0.4rem;
+    }
+
+    .vjs-menu-button {
+      font-size: $control-bar-font-size;
+      line-height: $control-bar-height;
+    }
+
+    .vjs-icon-placeholder {
+      font-size: $control-bar-icon-size; // videojs icon font
+      line-height: $control-bar-height;
+    }
+
+    .vjs-quality-selector {
+      .vjs-icon-placeholder {
+        font-size: $control-bar-font-size; // quality selector uses regular text font
+      }
     }
   }
 
@@ -526,6 +564,11 @@ video::-internal-media-controls-overlay-cast-button {
     }
   }
 
+  // Note: the '!important' above and below this line was added a quick hack
+  // to negate a change in vjs without having to increase specificity here.
+  // It won't be needed in an upcoming version of vjs, as they have updated
+  // their side https://github.com/videojs/video.js/pull/7098#issuecomment-908438543
+
   &.vjs-layout-small {
     .vjs-current-time,
     .vjs-time-divider,
@@ -542,18 +585,6 @@ video::-internal-media-controls-overlay-cast-button {
 
   .vjs-duration {
     padding-left: 0;
-  }
-
-  .vjs-playback-rate .vjs-playback-rate-value {
-    // Reduce the gigantic font a bit. Default was 1.5em.
-    font-size: 1.25em;
-    line-height: 2.5;
-  }
-
-  .vjs-playback-rate .vjs-menu {
-    // Extend the width to prevent a potential scrollbar from blocking the text.
-    width: 8em;
-    left: -2em;
   }
 }
 
