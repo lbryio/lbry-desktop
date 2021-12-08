@@ -92,6 +92,12 @@ function ChannelContent(props: Props) {
       return;
     }
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const viewType = urlParams.get('view');
+
+    // only insert ad if it's a content view
+    if (viewType !== 'content') return;
+
     (async function () {
       // test if adblock is enabled
       let adBlockEnabled = false;
