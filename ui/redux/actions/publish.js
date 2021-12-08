@@ -702,28 +702,21 @@ export function doUpdateUploadAdd(
   };
 }
 
-export const doUpdateUploadProgress = (props: { guid: string, progress?: string, status?: string }) => (
-  dispatch: Dispatch
-) =>
+export const doUpdateUploadProgress = (props: {
+  params: { [key: string]: any },
+  progress?: string,
+  status?: string,
+}) => (dispatch: Dispatch) =>
   dispatch({
     type: ACTIONS.UPDATE_UPLOAD_PROGRESS,
     data: props,
   });
 
-/**
- * doUpdateUploadRemove
- *
- * @param guid
- * @param params Optional. Retain to allow removal of old keys, which are
- *               derived from `name#channel` instead of using a guid.
- *               Can be removed after January 2022.
- * @returns {(function(Dispatch, GetState): void)|*}
- */
-export function doUpdateUploadRemove(guid: string, params?: { [key: string]: any }) {
+export function doUpdateUploadRemove(params: { [key: string]: any }) {
   return (dispatch: Dispatch, getState: GetState) => {
     dispatch({
       type: ACTIONS.UPDATE_UPLOAD_REMOVE,
-      data: { guid, params },
+      data: { params },
     });
   };
 }

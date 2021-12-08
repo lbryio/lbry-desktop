@@ -62,8 +62,7 @@ declare type FileUploadSdkParams = {
   remote_url?: string,
   thumbnail_url?: string,
   title?: string,
-  // Temporary values; remove when passing to SDK
-  guid: string,
+  // Temporary values
   uploadUrl?: string,
 };
 

@@ -2,14 +2,11 @@
 import { handleActions } from 'util/redux-utils';
 import { buildURI } from 'util/lbryURI';
 import { serializeFileObj } from 'util/file';
-import { tusLockAndNotify, tusUnlockAndNotify, tusRemoveAndNotify, tusClearRemovedUploads } from 'util/tus';
 import * as ACTIONS from 'constants/action_types';
 import * as THUMBNAIL_STATUSES from 'constants/thumbnail_upload_statuses';
 import { CHANNEL_ANONYMOUS } from 'constants/claim';
 
-// This is the old key formula. Retain it for now to allow users to delete
-// any pending uploads. Can be removed from January 2022 onwards.
-const getOldKeyFromParam = (params) => `${params.name}#${params.channel || 'anonymous'}`;
+const getKeyFromParam = (params) => `${params.name}#${params.channel || 'anonymous'}`;
 
 type PublishState = {
   editingURI: ?string,
@@ -141,9 +138,10 @@ export const publishReducer = handleActions(
     },
     [ACTIONS.UPDATE_UPLOAD_ADD]: (state: PublishState, action) => {
       const { file, params, uploader } = action.data;
+      const key = getKeyFromParam(params);
       const currentUploads = Object.assign({}, state.currentUploads);
 
-      currentUploads[params.guid] = {
+      currentUploads[key] = {
         file,
         fileFingerprint: file ? serializeFileObj(file) : undefined, // TODO: get hash instead?
         progress: '0',
@@ -155,13 +153,9 @@ export const publishReducer = handleActions(
       return { ...state, currentUploads };
     },
     [ACTIONS.UPDATE_UPLOAD_PROGRESS]: (state: PublishState, action) => {
-      const { guid, progress, status } = action.data;
-      const key = guid;
+      const { params, progress, status } = action.data;
+      const key = getKeyFromParam(params);
       const currentUploads = Object.assign({}, state.currentUploads);
-
-      if (guid === 'force--update') {
-        return { ...state, currentUploads };
-      }
 
       if (!currentUploads[key]) {
         return state;
@@ -171,16 +165,10 @@ export const publishReducer = handleActions(
         currentUploads[key].progress = progress;
         delete currentUploads[key].status;
 
-        if (currentUploads[key].uploader.url) {
-          // TUS has finally obtained an upload url from the server...
-          if (!currentUploads[key].params.uploadUrl) {
-            // ... Stash that to check later when resuming.
-            // Ignoring immutable-update requirement (probably doesn't matter to the GUI).
-            currentUploads[key].params.uploadUrl = currentUploads[key].uploader.url;
-          }
-
-          // ... lock this tab as the active uploader.
-          tusLockAndNotify(key);
+        if (currentUploads[key].uploader.url && !currentUploads[key].params.uploadUrl) {
+          // TUS has finally obtained an upload url from the server. Stash that to check later when resuming.
+          // Ignoring immutable-update requirement (probably doesn't matter to the GUI).
+          currentUploads[key].params.uploadUrl = currentUploads[key].uploader.url;
         }
       } else if (status) {
         currentUploads[key].status = status;
@@ -192,19 +180,13 @@ export const publishReducer = handleActions(
       return { ...state, currentUploads };
     },
     [ACTIONS.UPDATE_UPLOAD_REMOVE]: (state: PublishState, action) => {
-      const { guid, params } = action.data;
-      const key = guid || getOldKeyFromParam(params);
+      const { params } = action.data;
+      const key = getKeyFromParam(params);
+      const currentUploads = Object.assign({}, state.currentUploads);
 
-      if (state.currentUploads[key]) {
-        const currentUploads = Object.assign({}, state.currentUploads);
-        delete currentUploads[key];
-        tusUnlockAndNotify(key);
-        tusRemoveAndNotify(key);
+      delete currentUploads[key];
 
-        return { ...state, currentUploads };
-      }
-
-      return state;
+      return { ...state, currentUploads };
     },
     [ACTIONS.REHYDRATE]: (state: PublishState, action) => {
       if (action && action.payload && action.payload.publish) {
@@ -212,20 +194,14 @@ export const publishReducer = handleActions(
 
         // Cleanup for 'publish::currentUploads'
         if (newPublish.currentUploads) {
-          const uploadKeys = Object.keys(newPublish.currentUploads);
-          if (uploadKeys.length > 0) {
-            // Clear uploader and corrupted params
-            uploadKeys.forEach((key) => {
-              const params = newPublish.currentUploads[key].params;
-              if (!params || Object.keys(params).length === 0) {
-                delete newPublish.currentUploads[key];
-              } else {
-                delete newPublish.currentUploads[key].uploader;
-              }
-            });
-          } else {
-            tusClearRemovedUploads();
-          }
+          Object.keys(newPublish.currentUploads).forEach((key) => {
+            const params = newPublish.currentUploads[key].params;
+            if (!params || Object.keys(params).length === 0) {
+              delete newPublish.currentUploads[key];
+            } else {
+              delete newPublish.currentUploads[key].uploader;
+            }
+          });
         }
 
         return newPublish;

@@ -30,12 +30,10 @@ export function makeUploadRequest(
     delete params['remote_url'];
   }
 
-  const { uploadUrl, guid, ...sdkParams } = params;
-
   const jsonPayload = JSON.stringify({
     jsonrpc: '2.0',
     method: ENDPOINT_METHOD,
-    params: sdkParams,
+    params,
     id: new Date().getTime(),
   });
 
@@ -49,18 +47,18 @@ export function makeUploadRequest(
     xhr.responseType = 'json';
     xhr.upload.onprogress = (e) => {
       const percentage = ((e.loaded / e.total) * 100).toFixed(2);
-      window.store.dispatch(doUpdateUploadProgress({ guid, progress: percentage }));
+      window.store.dispatch(doUpdateUploadProgress({ params, progress: percentage }));
     };
     xhr.onload = () => {
-      window.store.dispatch(doUpdateUploadRemove(guid));
+      window.store.dispatch(doUpdateUploadRemove(params));
       resolve(xhr);
     };
     xhr.onerror = () => {
-      window.store.dispatch(doUpdateUploadProgress({ guid, status: 'error' }));
+      window.store.dispatch(doUpdateUploadProgress({ params, status: 'error' }));
       reject(new Error(__('There was a problem with your upload. Please try again.')));
     };
     xhr.onabort = () => {
-      window.store.dispatch(doUpdateUploadRemove(guid));
+      window.store.dispatch(doUpdateUploadRemove(params));
     };
 
     if (!isPreview) {
