@@ -299,7 +299,7 @@ function DiscoverPage(props: Props) {
               // $FlowFixMe
               document.head.appendChild(styleSheet);
 
-              window.dispatchEvent(new CustomEvent('scroll'))
+              window.dispatchEvent(new CustomEvent('scroll'));
             }
           }
           checkFlag();
@@ -307,7 +307,6 @@ function DiscoverPage(props: Props) {
       }
     })();
   }, []);
-
 
   // Sync liveSection --> liveSectionStore
   React.useEffect(() => {
