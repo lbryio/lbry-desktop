@@ -175,10 +175,18 @@ function AppRouter(props: Props) {
   const hasLinkedCommentInUrl = urlParams.get(LINKED_COMMENT_QUERY_PARAM);
   const isLargeScreen = useIsLargeScreen();
 
-  const dynamicRoutes = React.useMemo(() => {
-    return GetLinksData(homepageData, isLargeScreen).filter(
+  const homeCategoryPages = React.useMemo(() => {
+    const dynamicRoutes = GetLinksData(homepageData, isLargeScreen).filter(
       (potentialRoute: any) => potentialRoute && potentialRoute.route
     );
+
+    return dynamicRoutes.map((dynamicRouteProps: RowDataItem) => (
+      <Route
+        key={dynamicRouteProps.route}
+        path={dynamicRouteProps.route}
+        component={(routerProps) => <DiscoverPage {...routerProps} dynamicRouteProps={dynamicRouteProps} />}
+      />
+    ));
   }, [homepageData, isLargeScreen]);
 
   // For people arriving at settings page from deeplinks, know whether they can "go back"
@@ -269,14 +277,7 @@ function AppRouter(props: Props) {
         <Route path={`/`} exact component={HomePage} />
         <Route path={`/$/${PAGES.DISCOVER}`} exact component={DiscoverPage} />
         {SIMPLE_SITE && <Route path={`/$/${PAGES.WILD_WEST}`} exact component={DiscoverPage} />}
-        {/* $FlowFixMe */}
-        {dynamicRoutes.map((dynamicRouteProps: RowDataItem) => (
-          <Route
-            key={dynamicRouteProps.route}
-            path={dynamicRouteProps.route}
-            component={(routerProps) => <DiscoverPage {...routerProps} dynamicRouteProps={dynamicRouteProps} />}
-          />
-        ))}
+        {homeCategoryPages}
 
         <Route path={`/$/${PAGES.AUTH_SIGNIN}`} exact component={SignInPage} />
         <Route path={`/$/${PAGES.AUTH_PASSWORD_RESET}`} exact component={PasswordResetPage} />
