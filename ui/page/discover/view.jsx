@@ -298,6 +298,8 @@ function DiscoverPage(props: Props) {
               styleSheet.innerText = styles;
               // $FlowFixMe
               document.head.appendChild(styleSheet);
+
+              window.dispatchEvent(new CustomEvent('scroll'))
             }
           }
           checkFlag();
