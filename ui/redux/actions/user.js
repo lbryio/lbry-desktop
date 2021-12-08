@@ -7,7 +7,6 @@ import { batchActions } from 'util/batch-actions';
 import * as ACTIONS from 'constants/action_types';
 import { doClaimRewardType, doRewardList } from 'redux/actions/rewards';
 import { selectEmailToVerify, selectPhoneToVerify, selectUserCountryCode, selectUser } from 'redux/selectors/user';
-import { doToast } from 'redux/actions/notifications';
 import rewards from 'rewards';
 import { Lbryio } from 'lbryinc';
 import { DOMAIN } from 'config';
@@ -156,7 +155,6 @@ export function doAuthenticate(
 
           if (shareUsageData) {
             dispatch(doRewardList());
-            dispatch(doFetchInviteStatus(false));
             if (callInstall) {
               doInstallNew(appVersion, os, firebaseToken, callbackForUsersWhoAreSharingData, domain);
             }
@@ -642,36 +640,37 @@ export function doUserIdentityVerify(stripeToken) {
   };
 }
 
-export function doUserInviteNew(email) {
-  return (dispatch) => {
-    dispatch({
-      type: ACTIONS.USER_INVITE_NEW_STARTED,
-    });
-
-    return Lbryio.call('user', 'invite', { email }, 'post')
-      .then((success) => {
-        dispatch({
-          type: ACTIONS.USER_INVITE_NEW_SUCCESS,
-          data: { email },
-        });
-
-        dispatch(
-          doToast({
-            message: __('Invite sent to %email_address%', { email_address: email }),
-          })
-        );
-
-        dispatch(doFetchInviteStatus());
-        return success;
-      })
-      .catch((error) => {
-        dispatch({
-          type: ACTIONS.USER_INVITE_NEW_FAILURE,
-          data: { error },
-        });
-      });
-  };
-}
+// rid of this
+// export function doUserInviteNew(email) {
+//   return (dispatch) => {
+//     dispatch({
+//       type: ACTIONS.USER_INVITE_NEW_STARTED,
+//     });
+//
+//     return Lbryio.call('user', 'invite', { email }, 'post')
+//       .then((success) => {
+//         dispatch({
+//           type: ACTIONS.USER_INVITE_NEW_SUCCESS,
+//           data: { email },
+//         });
+//
+//         dispatch(
+//           doToast({
+//             message: __('Invite sent to %email_address%', { email_address: email }),
+//           })
+//         );
+//
+//         dispatch(doFetchInviteStatus());
+//         return success;
+//       })
+//       .catch((error) => {
+//         dispatch({
+//           type: ACTIONS.USER_INVITE_NEW_FAILURE,
+//           data: { error },
+//         });
+//       });
+//   };
+// }
 
 export function doUserSetReferrerReset() {
   return (dispatch) => {

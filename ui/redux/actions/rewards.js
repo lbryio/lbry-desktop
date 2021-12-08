@@ -4,7 +4,7 @@ import { doToast } from 'redux/actions/notifications';
 import * as ACTIONS from 'constants/action_types';
 import { selectUnclaimedRewards } from 'redux/selectors/rewards';
 import { selectUserIsRewardApproved } from 'redux/selectors/user';
-import { doFetchInviteStatus } from 'redux/actions/user';
+// import { doFetchInviteStatus } from 'redux/actions/user';
 import rewards from 'rewards';
 
 export function doRewardList() {
@@ -88,8 +88,6 @@ export function doClaimRewardType(rewardType, options = {}) {
           });
           if (successReward.reward_type === rewards.TYPE_NEW_USER && rewards.callbacks.claimFirstRewardSuccess) {
             rewards.callbacks.claimFirstRewardSuccess();
-          } else if (successReward.reward_type === rewards.TYPE_REFERRAL) {
-            dispatch(doFetchInviteStatus());
           }
 
           dispatch(doRewardList());
@@ -125,7 +123,6 @@ export function doClaimRewardType(rewardType, options = {}) {
 
 export function doClaimInitialRewards() {
   return (dispatch) => {
-    dispatch(doClaimRewardType(rewards.TYPE_NEW_USER));
     dispatch(doClaimRewardType(rewards.TYPE_CONFIRM_EMAIL));
   };
 }

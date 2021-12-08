@@ -5,7 +5,7 @@ import {
   selectUserInviteStatusIsPending,
   selectUserVerifiedEmail,
 } from 'redux/selectors/user';
-import { doFetchInviteStatus } from 'redux/actions/user';
+// import { doFetchInviteStatus } from 'redux/actions/user';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { doSetClientSetting } from 'redux/actions/settings';
 import InvitePage from './view';
@@ -18,7 +18,7 @@ const select = (state) => ({
 });
 
 const perform = (dispatch) => ({
-  fetchInviteStatus: () => dispatch(doFetchInviteStatus()),
+  // fetchInviteStatus: () => dispatch(doFetchInviteStatus()),
   acknowledgeInivte: () => dispatch(doSetClientSetting(SETTINGS.INVITE_ACKNOWLEDGED, true)),
 });
 

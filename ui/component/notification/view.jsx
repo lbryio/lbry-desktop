@@ -1,5 +1,4 @@
 // @flow
-import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
 import { RULE } from 'constants/notifications';
 import React from 'react';
@@ -49,14 +48,6 @@ export default function Notification(props: Props) {
 
   let notificationTarget;
   switch (notification_rule) {
-    case RULE.DAILY_WATCH_AVAILABLE:
-    case RULE.DAILY_WATCH_REMIND:
-      notificationTarget = `/$/${PAGES.CHANNELS_FOLLOWING}`;
-      break;
-    case RULE.MISSED_OUT:
-    case RULE.REWARDS_APPROVAL_PROMPT:
-      notificationTarget = `/$/${PAGES.REWARDS_VERIFY}?redirect=/$/${PAGES.REWARDS}`;
-      break;
     default:
       notificationTarget = notification_parameters.device.target;
   }
@@ -86,12 +77,6 @@ export default function Notification(props: Props) {
     case RULE.NEW_CONTENT:
       channelUrl = notification_parameters.dynamic.channel_url;
       icon = creatorIcon(channelUrl);
-      break;
-    case RULE.DAILY_WATCH_AVAILABLE:
-    case RULE.DAILY_WATCH_REMIND:
-    case RULE.MISSED_OUT:
-    case RULE.REWARDS_APPROVAL_PROMPT:
-      icon = <Icon icon={ICONS.LBC} sectionIcon />;
       break;
     case RULE.FIAT_TIP:
       icon = <Icon icon={ICONS.FINANCE} sectionIcon />;

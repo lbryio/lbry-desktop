@@ -1,7 +1,7 @@
 // @flow
 import * as PAGES from 'constants/pages';
 import React from 'react';
-import ChannelEdit from 'component/channelEdit';
+import ChannelForm from 'component/channelForm';
 import Page from 'component/page';
 import { useHistory } from 'react-router';
 import YrblWalletEmpty from 'component/yrblWalletEmpty';
@@ -29,7 +29,7 @@ function ChannelNew(props: Props) {
     <Page noSideNavigation noFooter backout={{ title: __('Create a channel'), backLabel: __('Cancel') }}>
       {emptyBalance && <YrblWalletEmpty />}
 
-      <ChannelEdit
+      <ChannelForm
         disabled={emptyBalance}
         onDone={() => {
           push(redirectUrl || `/$/${PAGES.CHANNELS}`);

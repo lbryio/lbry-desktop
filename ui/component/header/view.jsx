@@ -63,6 +63,7 @@ type Props = {
   isAbsoluteSideNavHidden: boolean,
   hideCancel: boolean,
   activeChannelClaim: ?ChannelClaim,
+  myChannels: ?Array<ChannelClaim>,
 };
 
 const Header = (props: Props) => {
@@ -91,6 +92,7 @@ const Header = (props: Props) => {
     hideCancel,
     user,
     activeChannelClaim,
+    myChannels,
   } = props;
   const isMobile = useIsMobile();
   // on the verify page don't let anyone escape other than by closing the tab to keep session data consistent
@@ -102,6 +104,7 @@ const Header = (props: Props) => {
   const { backLabel, backNavDefault, title: backTitle, simpleTitle: simpleBackTitle } = backout || {};
   const notificationsEnabled = ENABLE_UI_NOTIFICATIONS || (user && user.experimental_ui);
   const activeChannelUrl = activeChannelClaim && activeChannelClaim.permanent_url;
+  const hasChannels = myChannels && myChannels.length > 0;
 
   // Sign out if they click the "x" when they are on the password prompt
   const authHeaderAction = syncError ? { onClick: signOut } : { navigate: '/' };
@@ -323,19 +326,12 @@ const Header = (props: Props) => {
                         <Icon aria-hidden icon={ICONS.CHANNEL} />
                         {__('Channels')}
                       </MenuItem>
-                      <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.CREATOR_DASHBOARD}`)}>
-                        <Icon aria-hidden icon={ICONS.ANALYTICS} />
-                        {__('Creator Analytics')}
-                      </MenuItem>
-                      <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.REWARDS}`)}>
-                        <Icon aria-hidden icon={ICONS.REWARDS} />
-                        {__('Rewards')}
-                      </MenuItem>
-                      <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.INVITE}`)}>
-                        <Icon aria-hidden icon={ICONS.INVITE} />
-                        {__('Invites')}
-                      </MenuItem>
-
+                      {hasChannels && (
+                        <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.CREATOR_DASHBOARD}`)}>
+                          <Icon aria-hidden icon={ICONS.ANALYTICS} />
+                          {__('Creator Analytics')}
+                        </MenuItem>
+                      )}
                       {authenticated ? (
                         <MenuItem onSelect={IS_WEB ? signOut : openSignOutModal}>
                           <div className="menu__link">
