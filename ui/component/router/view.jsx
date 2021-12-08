@@ -6,7 +6,7 @@ import * as PAGES from 'constants/pages';
 import { PAGE_TITLE } from 'constants/pageTitles';
 import { LINKED_COMMENT_QUERY_PARAM } from 'constants/comment';
 import { parseURI, isURIValid } from 'util/lbryURI';
-import { SITE_TITLE, WELCOME_VERSION } from 'config';
+import { WELCOME_VERSION } from 'config';
 import { GetLinksData } from 'util/buildHomepage';
 
 import HomePage from 'page/home';
@@ -23,7 +23,6 @@ import SignInVerifyPage from 'page/signInVerify';
 import BuyPage from 'page/buy';
 import ReceivePage from 'page/receive';
 import SendPage from 'page/send';
-import SwapPage from 'page/swap';
 import WalletPage from 'page/wallet';
 
 // Chunk: none
@@ -39,8 +38,6 @@ import DiscoverPage from 'page/discover';
 import FileListPublished from 'page/fileListPublished';
 import FourOhFourPage from 'page/fourOhFour';
 import HelpPage from 'page/help';
-import InvitePage from 'page/invite';
-import InvitedPage from 'page/invited';
 import LibraryPage from 'page/library';
 import ListBlockedPage from 'page/listBlocked';
 import ListsPage from 'page/lists';
@@ -52,8 +49,6 @@ import PublishPage from 'page/publish';
 import ReportContentPage from 'page/reportContent';
 import ReportPage from 'page/report';
 import RepostNew from 'page/repost';
-import RewardsPage from 'page/rewards';
-import RewardsVerifyPage from 'page/rewardsVerify';
 import SearchPage from 'page/search';
 
 import SettingsCreatorPage from 'page/settingsCreator';
@@ -67,7 +62,6 @@ import TagsFollowingPage from 'page/tagsFollowing';
 import TopPage from 'page/top';
 import UpdatePasswordPage from 'page/passwordUpdate';
 import Welcome from 'page/welcome';
-import YoutubeSyncPage from 'page/youtubeSync';
 
 // Tell the browser we are handling scroll restoration
 if ('scrollRestoration' in history) {
@@ -175,7 +169,7 @@ function AppRouter(props: Props) {
       if (process.env.NODE_ENV !== 'production') {
         return uri || pathname || title;
       }
-      return __(title) || (IS_WEB ? SITE_TITLE : 'LBRY');
+      return __(title) || 'LBRY';
     };
 
     if (uri) {
@@ -260,11 +254,9 @@ function AppRouter(props: Props) {
       <Route path={`/$/${PAGES.SEARCH}`} exact component={SearchPage} />
       <Route path={`/$/${PAGES.TOP}`} exact component={TopPage} />
       <Route path={`/$/${PAGES.SETTINGS}`} exact component={SettingsPage} />
-      <Route path={`/$/${PAGES.INVITE}/:referrer`} exact component={InvitedPage} />
       <Route path={`/$/${PAGES.REPORT_CONTENT}`} exact component={ReportContentPage} />
       <Route {...props} path={`/$/${PAGES.LIST}/:collectionId`} component={CollectionPage} />
 
-      <PrivateRoute {...props} exact path={`/$/${PAGES.YOUTUBE_SYNC}`} component={YoutubeSyncPage} />
       <PrivateRoute {...props} exact path={`/$/${PAGES.TAGS_FOLLOWING}`} component={TagsFollowingPage} />
       <PrivateRoute
         {...props}
@@ -280,15 +272,12 @@ function AppRouter(props: Props) {
         path={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`}
         component={ChannelsFollowingDiscoverPage}
       />
-      <PrivateRoute {...props} path={`/$/${PAGES.INVITE}`} component={InvitePage} />
       <PrivateRoute {...props} path={`/$/${PAGES.CHANNEL_NEW}`} component={ChannelNew} />
       <PrivateRoute {...props} path={`/$/${PAGES.REPOST_NEW}`} component={RepostNew} />
       <PrivateRoute {...props} path={`/$/${PAGES.UPLOADS}`} component={FileListPublished} />
       <PrivateRoute {...props} path={`/$/${PAGES.CREATOR_DASHBOARD}`} component={CreatorDashboard} />
       <PrivateRoute {...props} path={`/$/${PAGES.UPLOAD}`} component={PublishPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.REPORT}`} component={ReportPage} />
-      <PrivateRoute {...props} path={`/$/${PAGES.REWARDS}`} exact component={RewardsPage} />
-      <PrivateRoute {...props} path={`/$/${PAGES.REWARDS_VERIFY}`} component={RewardsVerifyPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.LIBRARY}`} component={LibraryPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.LISTS}`} component={ListsPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.PLAYLISTS}`} component={PlaylistsPage} />
@@ -300,7 +289,6 @@ function AppRouter(props: Props) {
       <PrivateRoute {...props} path={`/$/${PAGES.BUY}`} component={BuyPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.RECEIVE}`} component={ReceivePage} />
       <PrivateRoute {...props} path={`/$/${PAGES.SEND}`} component={SendPage} />
-      <PrivateRoute {...props} path={`/$/${PAGES.SWAP}`} component={SwapPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.NOTIFICATIONS}`} component={NotificationsPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.AUTH_WALLET_PASSWORD}`} component={SignInWalletPasswordPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_OWN_COMMENTS}`} component={OwnComments} />

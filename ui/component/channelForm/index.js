@@ -15,7 +15,7 @@ import { selectBalance } from 'redux/selectors/wallet';
 import { doUpdateChannel, doCreateChannel, doClearChannelErrors } from 'redux/actions/claims';
 import { doOpenModal } from 'redux/actions/app';
 import { doUpdateBlockListForPublishedChannel } from 'redux/actions/comments';
-import { doClaimInitialRewards } from 'redux/actions/rewards';
+import { doClaimInitialRewards } from 'redux/actions/rewards'; // why
 import { selectIsClaimingInitialRewards, selectHasClaimedInitialRewards } from 'redux/selectors/rewards';
 import ChannelForm from './view';
 

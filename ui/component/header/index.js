@@ -11,6 +11,7 @@ import { doSignOut, doOpenModal } from 'redux/actions/app';
 import { makeSelectClientSetting, selectLanguage } from 'redux/selectors/settings';
 import { selectHasNavigated, selectActiveChannelClaim } from 'redux/selectors/app';
 import Header from './view';
+import { selectMyChannelClaims } from 'redux/selectors/claims';
 
 const select = (state) => ({
   language: selectLanguage(state),
@@ -27,6 +28,7 @@ const select = (state) => ({
   hasNavigated: selectHasNavigated(state),
   user: selectUser(state),
   activeChannelClaim: selectActiveChannelClaim(state),
+  myChannels: selectMyChannelClaims(state),
 });
 
 const perform = (dispatch) => ({

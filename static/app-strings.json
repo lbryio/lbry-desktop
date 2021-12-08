@@ -2222,5 +2222,8 @@
   "Your wallet is not currently using a cloud sync service. You are in control of backing up your wallet.": "Your wallet is not currently using a cloud sync service. You are in control of backing up your wallet.",
   "Sending": "Sending",
   "You sent %lbc%": "You sent %lbc%",
+  "Buy LBC": "Buy LBC",
+  "This is information like error logging, performance tracking, and usage statistics. It includes your IP address and basic system details, but no other identifying information (unless you connect to a cloud service)": "This is information like error logging, performance tracking, and usage statistics. It includes your IP address and basic system details, but no other identifying information (unless you connect to a cloud service)",
+  "Use official LBRY wallet servers": "Use official LBRY wallet servers",
   "--end--": "--end--"
 }
