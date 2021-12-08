@@ -526,6 +526,11 @@ video::-internal-media-controls-overlay-cast-button {
     }
   }
 
+  // Note: the '!important' above and below this line was added a quick hack
+  // to negate a change in vjs without having to increase specificity here.
+  // It won't be needed in an upcoming version of vjs, as they have updated
+  // their side https://github.com/videojs/video.js/pull/7098#issuecomment-908438543
+
   &.vjs-layout-small {
     .vjs-current-time,
     .vjs-time-divider,
