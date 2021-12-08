@@ -167,7 +167,16 @@
 }
 
 .vjs-button--autoplay-next.vjs-button {
-  margin: auto;
+  // TODO: the width and height of a vjs-button should probably retain
+  // its default "100%" value, so that each control-bar button have the same
+  // touch area size.  Anything inside (like this on/off switch, or icons)
+  // should be a child (e.g. vjs-icon-placeholder), so that inner margins will
+  // also be consistent.
+  //
+  // TEMP: for now, just hardcode the left-right margin so that it looks
+  // equally spaced compared to its siblings.
+  margin: auto 0.5rem auto 0.7rem;
+
   order: 1;
   width: 24px;
   height: 14px;
