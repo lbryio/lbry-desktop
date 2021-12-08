@@ -1,4 +1,7 @@
-$control-bar-height: 41px; // would '3.5em' be better than px?
+$control-bar-height: 2.1rem;
+$control-bar-font-size: 0.8rem;
+$control-bar-popup-font-size: 0.8rem;
+$control-bar-icon-size: 0.7rem;
 
 .video-js {
   font-size: 12px;
@@ -82,13 +85,16 @@ $control-bar-height: 41px; // would '3.5em' be better than px?
     position: absolute !important;
   }*/
 
-  // Menu size
-  .vjs-playback-rate .vjs-menu .vjs-menu-content {
-    width: 125%;
-    font-size: 12px;
+  // Playback Rate
+  .vjs-playback-rate {
+    .vjs-playback-rate-value {
+      font-size: $control-bar-font-size; // Reduce the gigantic font a bit. Default was 1.5em.
+      line-height: $control-bar-height; // Vertically center the text.
+    }
 
-    @media (max-width: 652px) {
-      font-size: 10px;
+    .vjs-menu {
+      width: 10em; // Extend the width to prevent a potential scrollbar from blocking the text.
+      left: -3em; // Center the popup on top of the button that invoked it.
     }
   }
 
@@ -161,71 +167,17 @@ $control-bar-height: 41px; // would '3.5em' be better than px?
   background-image: linear-gradient(to top, rgba(0, 0, 0, 0.4) 0%, transparent 72px);
 }
 
-[dir] .video-js .vjs-control {
-  font-size: 14px;
-
-  @media (max-width: 813px) {
-    font-size: 12px;
-  }
-}
-
-.vjs-playback-rate {
-  margin-top: 3px;
-  font-size: 12px !important;
-
-  @media (max-width: 813px) {
-    margin-top: 3px !important;
-    font-size: 10px !important;
-  }
-}
-
-.vjs-quality-selector > .vjs-menu > .vjs-menu-content {
-  margin-bottom: 3px;
-}
-
 .vjs-hover {
   opacity: 1;
 }
 
 [dir] .vjs-menu-button-popup .vjs-menu .vjs-menu-content {
   background-color: rgba(43, 51, 63);
-}
+  max-height: 20em;
 
-.vjs-quality-selector > .vjs-menu > .vjs-menu-content {
-  font-size: 12px;
-
-  @media (max-width: 652px) {
-    font-size: 10px;
+  li {
+    font-size: $control-bar-popup-font-size;
   }
-}
-
-.vjs-quality-selector > .vjs-menu {
-  height: 100%;
-}
-
-.vjs-layout-medium .vjs-menu-button-popup .vjs-menu .vjs-menu-content {
-  max-height: 19em;
-}
-
-.vjs-time-divider div span {
-  font-size: 18px;
-  color: #dbd8d8;
-  position: absolute;
-  top: 4px;
-
-  @media (max-width: 813px) {
-    top: 0px;
-  }
-}
-
-.vjs-play-control {
-  font-size: 17px !important;
-  margin-top: -6px !important;
-  margin-right: -14px !important;
-}
-
-.vjs-play-control .vjs-icon-placeholder {
-  margin-right: -5px;
 }
 
 .vjs-slider-horizontal {

@@ -378,6 +378,12 @@
 // Video
 // ****************************************************************************
 
+// DRY: we'll soon move vjs items to videojs.scss, so just duplicate these for now.
+$control-bar-height: 2.1rem;
+$control-bar-font-size: 0.8rem;
+$control-bar-popup-font-size: 0.8rem;
+$control-bar-icon-size: 0.7rem;
+
 .video-js-parent {
   height: 100%;
   width: 100%;
@@ -410,6 +416,22 @@
     .vjs-time-divider,
     .vjs-duration {
       display: flex;
+    }
+
+    .vjs-menu-button {
+      font-size: $control-bar-font-size;
+      line-height: $control-bar-height;
+    }
+
+    .vjs-icon-placeholder {
+      font-size: $control-bar-icon-size; // videojs icon font
+      line-height: $control-bar-height;
+    }
+
+    .vjs-quality-selector {
+      .vjs-icon-placeholder {
+        font-size: $control-bar-font-size; // quality selector uses regular text font
+      }
     }
   }
 
@@ -547,18 +569,6 @@ video::-internal-media-controls-overlay-cast-button {
 
   .vjs-duration {
     padding-left: 0;
-  }
-
-  .vjs-playback-rate .vjs-playback-rate-value {
-    // Reduce the gigantic font a bit. Default was 1.5em.
-    font-size: 1.25em;
-    line-height: 2.5;
-  }
-
-  .vjs-playback-rate .vjs-menu {
-    // Extend the width to prevent a potential scrollbar from blocking the text.
-    width: 8em;
-    left: -2em;
   }
 }
 
