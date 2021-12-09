@@ -86,7 +86,7 @@ function DiscoverPage(props: Props) {
 
   const initialLiveTileLimit = getPageSize(DEFAULT_LIVESTREAM_TILE_LIMIT);
 
-  const includeLivestreams = window.location.pathname === `/$/${PAGES.WILD_WEST}`;
+  const includeLivestreams = !tagsQuery;
   const [liveSection, setLiveSection] = useState(includeLivestreams ? liveSectionStore : SECTION.HIDDEN);
   const livestreamUris = includeLivestreams && getLivestreamUris(activeLivestreams, channelIds);
   const useDualList = liveSection === SECTION.LESS && livestreamUris && livestreamUris.length > initialLiveTileLimit;
