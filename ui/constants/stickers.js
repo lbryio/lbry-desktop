@@ -12,7 +12,6 @@ const CAT_BORDER = 'CAT/PNG/cat_with_border.png';
 const FAIL_BORDER = 'FAIL/PNG/fail_with_border.png';
 const HYPE_BORDER = 'HYPE/PNG/hype_with_border.png';
 const PANTS_1_WITH_FRAME = 'PANTS/PNG/PANTS_1_with_frame.png';
-const PANTS_2_WITH_FRAME = 'PANTS/PNG/PANTS_2_with_frame.png';
 const PISS = 'PISS/PNG/piss_with_frame.png';
 const PREGNANT_MAN_ASIA_WHITE_BORDER = 'pregnant%20man/png/Pregnant%20man_white%20border_asia.png';
 const PREGNANT_MAN_BLACK_HAIR_WHITE_BORDER = 'pregnant%20man/png/Pregnant%20man_white%20border_black%20hair.png';
@@ -52,6 +51,9 @@ const CHRIS_CHAN = 'MISC/PNG/chris_chan.png';
 const TAYLOR_SWIFT = 'MISC/PNG/taylor_swift.png';
 const EPSTEIN_ISLAND = 'MISC/PNG/epstein_island.png';
 const DONALD_TRUMP = 'MISC/PNG/donald_trump.png';
+const EGG_CARTON = 'MISC/PNG/egg_carton.png';
+const MOUNT_RUSHMORE = 'MISC/PNG/mount_rushmore.png';
+const MONEY_PRINTER = 'MISC/PNG/money_printer.png';
 const COMET_TIP = 'TIPS/png/$%20comet%20tip%20with%20border.png';
 const BIG_LBC_TIP = 'TIPS/png/big_LBC_TIPV.png';
 const BIG_TIP = 'TIPS/png/with%20borderbig$tip.png';
@@ -77,12 +79,14 @@ export const FREE_GLOBAL_STICKERS = [
   buildSticker('FAIL', FAIL_BORDER),
   buildSticker('HYPE', HYPE_BORDER),
   buildSticker('PANTS_1', PANTS_1_WITH_FRAME),
-  buildSticker('PANTS_2', PANTS_2_WITH_FRAME),
   buildSticker('XMAS', XMAS),
   buildSticker('PISS', PISS),
   buildSticker('BULL_RIDE', BULL_RIDE),
   buildSticker('ELIMINATED', ELIMINATED),
+  buildSticker('EGG_CARTON', EGG_CARTON),
   buildSticker('BAN', BAN),
+  buildSticker('MONEY_PRINTER', MONEY_PRINTER),
+  buildSticker('MOUNT_RUSHMORE', MOUNT_RUSHMORE),
   buildSticker('EGIRL', EGIRL),
   buildSticker('KANYE_WEST', KANYE_WEST),
   buildSticker('TAYLOR_SWIFT', TAYLOR_SWIFT),
