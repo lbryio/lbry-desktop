@@ -147,6 +147,7 @@ $recent-msg-button__height: 2rem;
 
   .livestream-comment__info--sticker {
     display: flex;
+    flex-direction: column;
     margin: var(--spacing-xxs) 0;
   }
 

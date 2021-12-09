@@ -47,35 +47,48 @@
   display: flex;
 
   .stickerSelector__listBody {
-    display: flex;
-    flex-wrap: wrap;
     overflow-y: scroll;
     overflow-x: hidden;
     max-height: 25vh;
     padding: var(--spacing-s);
 
-    .button--file-action {
-      width: 5rem;
-      height: 5.3rem;
-      overflow: hidden;
-      margin: unset;
-      padding: var(--spacing-s);
+    .stickerSelector__listBody-rowItems {
+      display: flex;
+      flex-wrap: wrap;
+      overflow-y: scroll;
+      overflow-x: hidden;
 
-      .button__content {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+      .button--file-action {
+        width: 5.5rem;
+        height: 6rem;
+        overflow: hidden;
+        margin: unset;
+        padding: var(--spacing-xxs);
 
-        .super-chat--light {
-          position: absolute;
-          display: inline;
-          bottom: 0;
+        .stickerItem--paid {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+
+          img {
+            margin-bottom: var(--spacing-s);
+          }
+
+          .super-chat--light {
+            position: absolute;
+            display: inline;
+            bottom: 0;
+          }
         }
-      }
 
-      @media (max-width: $breakpoint-xsmall) {
-        width: 4rem;
-        height: 4.3rem;
+        img {
+          margin: auto;
+        }
+
+        @media (max-width: $breakpoint-xsmall) {
+          width: 3.5rem;
+          height: 4rem;
+        }
       }
     }
   }
