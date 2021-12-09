@@ -101,6 +101,7 @@ export default function TextareaWithSuggestions(props: Props) {
   const suggestionTerm = suggestionValue && suggestionValue.term;
   const isEmote = suggestionValue && suggestionValue.isEmote;
   const isMention = suggestionValue && !suggestionValue.isEmote;
+  const invalidTerm = suggestionTerm && isMention && suggestionTerm.charAt(1) === ':';
 
   const additionalOptions = { isBackgroundSearch: false, [SEARCH_OPTIONS.CLAIM_TYPE]: SEARCH_OPTIONS.INCLUDE_CHANNELS };
   const { results, loading } = useLighthouse(debouncedTerm, showMature, SEARCH_SIZE, additionalOptions, 0);
@@ -109,7 +110,7 @@ export default function TextareaWithSuggestions(props: Props) {
   const hasMinLength = suggestionTerm && isMention && suggestionTerm.length >= LIGHTHOUSE_MIN_CHARACTERS;
   const isTyping = isMention && debouncedTerm !== suggestionTerm;
   const showPlaceholder =
-    isMention && (isTyping || loading || (results && results.length > 0 && !hasNewResolvedResults));
+    isMention && !invalidTerm && (isTyping || loading || (results && results.length > 0 && !hasNewResolvedResults));
 
   const shouldFilter = (uri, previous) => uri !== canonicalCreatorUri && (!previous || !previous.includes(uri));
   const filteredCommentors = canonicalCommentors && canonicalCommentors.filter((uri) => shouldFilter(uri));
@@ -277,14 +278,14 @@ export default function TextareaWithSuggestions(props: Props) {
   React.useEffect(() => {
     if (!isMention) return;
 
-    if (isTyping && suggestionTerm) {
+    if (isTyping && suggestionTerm && !invalidTerm) {
       const timer = setTimeout(() => {
         setDebouncedTerm(!hasMinLength ? '' : suggestionTerm);
       }, INPUT_DEBOUNCE_MS);
 
       return () => clearTimeout(timer);
     }
-  }, [hasMinLength, isMention, isTyping, suggestionTerm]);
+  }, [hasMinLength, invalidTerm, isMention, isTyping, suggestionTerm]);
 
   React.useEffect(() => {
     if (!stringifiedResults) return;
