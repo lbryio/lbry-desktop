@@ -14,14 +14,14 @@ type Props = {
   doSetPlayingUri: ({ uri: ?string }) => void,
   isAuthenticated: boolean,
   doUserSetReferrer: (string) => void,
-  channelClaim: ChannelClaim,
+  channelClaimId: ?string,
   chatDisabled: boolean,
 };
 
 export default function LivestreamPage(props: Props) {
-  const { uri, claim, doSetPlayingUri, isAuthenticated, doUserSetReferrer, channelClaim, chatDisabled } = props;
+  const { uri, claim, doSetPlayingUri, isAuthenticated, doUserSetReferrer, channelClaimId, chatDisabled } = props;
   const [isLive, setIsLive] = React.useState('pending');
-  const livestreamChannelId = channelClaim && channelClaim.signing_channel && channelClaim.signing_channel.claim_id;
+  const livestreamChannelId = channelClaimId;
 
   React.useEffect(() => {
     // TODO: This should not be needed one we unify the livestream player (?)
