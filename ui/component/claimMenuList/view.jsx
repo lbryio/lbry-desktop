@@ -268,6 +268,10 @@ function ClaimMenuList(props: Props) {
   // changes MenuButton behavior to show/hide MenuList not on press but on click event
   let isEventSimulated = false;
   const menuButtonHandler = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      e.type = 'click';
+    }
     if (!isEventSimulated && e.type === 'mousedown') {
       e.preventDefault();
     } else if (e.type === 'click') {
@@ -288,6 +292,7 @@ function ClaimMenuList(props: Props) {
           e.preventDefault();
           menuButtonHandler(e);
         }}
+        onKeyDown={menuButtonHandler}
       >
         <Icon size={20} icon={ICONS.MORE_VERTICAL} />
       </MenuButton>
