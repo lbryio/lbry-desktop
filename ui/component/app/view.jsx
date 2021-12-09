@@ -359,8 +359,9 @@ function App(props: Props) {
     }
   }, []);
 
-  // add secure privacy script
+  // add OneTrust script
   useEffect(() => {
+    // don't add script for embedded content
     function inIframe() {
       try {
         return window.self !== window.top;
@@ -378,6 +379,9 @@ function App(props: Props) {
     script.setAttribute('charset', 'UTF-8');
     script.setAttribute('data-domain-script', 'af95e703-a783-4d6d-af3d-94365fdb3cbd-test');
 
+    const secondScript = document.createElement('script');
+    // OneTrust asks to add this
+    secondScript.innerHTML = 'function OptanonWrapper() { }';
 
     const getLocaleEndpoint = 'https://api.odysee.com/locale/get';
     let gdprRequired;
@@ -390,9 +394,8 @@ function App(props: Props) {
     if (gdprRequired === 'true') {
       // $FlowFixMe
       document.head.appendChild(script);
-
-      // OneTrust asks us to add this
-      function OptanonWrapper() { }
+      // $FlowFixMe
+      document.head.appendChild(secondScript);
     }
 
     // haven't done a gdpr check, do it now
@@ -407,7 +410,7 @@ function App(props: Props) {
           // $FlowFixMe
           document.head.appendChild(script);
           // $FlowFixMe
-          document.head.appendChild(cmpScript);
+          document.head.appendChild(secondScript);
           // note we don't need gdpr, save to session
         } else if (gdprRequiredBasedOnLocation === false) {
           localStorage.setItem('gdprRequired', 'false');
@@ -420,7 +423,7 @@ function App(props: Props) {
         // $FlowFixMe
         document.head.removeChild(script);
         // $FlowFixMe
-        document.head.removeChild(cmpScript);
+        document.head.removeChild(secondScript);
       } catch (err) {
         console.log(err);
       }
