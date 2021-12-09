@@ -21,11 +21,6 @@
       "filter": ["**/*"]
     },
     {
-      "from": "./static/lbry-first/",
-      "to": "static/lbry-first/",
-      "filter": ["**/*"]
-    },
-    {
       "from": "./static/img",
       "to": "static/img",
       "filter": ["**/*"]
