@@ -379,10 +379,10 @@
 // ****************************************************************************
 
 // DRY: we'll soon move vjs items to videojs.scss, so just duplicate these for now.
-$control-bar-height: 2.1rem;
+$control-bar-height: 2.5rem;
 $control-bar-font-size: 0.8rem;
 $control-bar-popup-font-size: 0.8rem;
-$control-bar-icon-size: 0.7rem;
+$control-bar-icon-size: 0.8rem;
 
 .video-js-parent {
   height: 100%;
@@ -405,35 +405,39 @@ $control-bar-icon-size: 0.7rem;
     pointer-events: none;
   }
 
+  // control-bar: time
   .vjs-control-bar {
-    // background-color: rgba(0, 0, 0, 0.8);
-
-    .vjs-remaining-time {
-      display: none;
-    }
-
     .vjs-time-control {
       line-height: $control-bar-height;
       font-size: $control-bar-font-size;
+      display: flex;
     }
 
     .vjs-current-time {
-      display: flex;
+      padding-right: 0;
       margin-right: 0.4rem;
+      @media (max-width: $breakpoint-small) {
+        margin-right: 0.2rem;
+      }
     }
 
     .vjs-time-divider {
-      display: flex;
       min-width: unset;
       padding: 0;
       z-index: 0; // solves the grayed-out divider
     }
 
     .vjs-duration {
-      display: flex;
+      padding-left: 0;
       margin-left: 0.4rem;
+      @media (max-width: $breakpoint-small) {
+        margin-left: 0.2rem;
+      }
     }
+  }
 
+  // control-bar: menu, button and icon
+  .vjs-control-bar {
     .vjs-menu-button {
       font-size: $control-bar-font-size;
       line-height: $control-bar-height;
@@ -450,14 +454,53 @@ $control-bar-icon-size: 0.7rem;
 
     .vjs-quality-selector {
       .vjs-icon-placeholder {
-        font-size: $control-bar-font-size; // quality selector uses regular text font
+        font-size: $control-bar-font-size;
       }
     }
 
-    .vjs-play-control {
+    .vjs-play-control,
+    .vjs-fullscreen-control {
       .vjs-icon-placeholder {
-        // The play icon in font VideoJs is smaller than its peers. Compensate to match the height.
+        // Compensate: these icons in Font VideoJs are smaller than their peers.
         font-size: calc(#{$control-bar-icon-size} * 1.2);
+      }
+    }
+
+    .vjs-playback-rate {
+      .vjs-playback-rate-value {
+        font-size: $control-bar-font-size;
+        line-height: $control-bar-height;
+      }
+
+      .vjs-menu {
+        width: 10em; // Extend the width to prevent a potential scrollbar from blocking the text.
+        left: -3em; // Center the popup on top of the button that invoked it.
+      }
+    }
+  }
+
+  // control-bar: general padding
+  .vjs-control-bar {
+    .vjs-button--play-previous:first-child,
+    .vjs-play-control:first-child {
+      margin-left: var(--spacing-xs);
+      @media (max-width: $breakpoint-small) {
+        margin-left: 0;
+      }
+    }
+
+    .vjs-fullscreen-control {
+      margin-right: var(--spacing-xs);
+      @media (max-width: $breakpoint-small) {
+        margin-right: 0;
+      }
+    }
+
+    .vjs-button--play-previous,
+    .vjs-button--play-next,
+    .vjs-mute-control {
+      @media (max-width: $breakpoint-small) {
+        width: 2.25rem;
       }
     }
   }
@@ -589,13 +632,9 @@ video::-internal-media-controls-overlay-cast-button {
     }
   }
 
-  // --- Adjust spacing ---
-  .vjs-current-time {
-    padding-right: 0;
-  }
-
-  .vjs-duration {
-    padding-left: 0;
+  // --- Hide unwanted ---
+  .vjs-remaining-time {
+    display: none;
   }
 }
 

@@ -1,7 +1,7 @@
-$control-bar-height: 2.1rem;
+$control-bar-height: 2.5rem;
 $control-bar-font-size: 0.8rem;
 $control-bar-popup-font-size: 0.8rem;
-$control-bar-icon-size: 0.7rem;
+$control-bar-icon-size: 0.8rem;
 
 .video-js {
   font-size: 12px;
@@ -85,22 +85,10 @@ $control-bar-icon-size: 0.7rem;
     position: absolute !important;
   }*/
 
-  // Playback Rate
-  .vjs-playback-rate {
-    .vjs-playback-rate-value {
-      font-size: $control-bar-font-size; // Reduce the gigantic font a bit. Default was 1.5em.
-      line-height: $control-bar-height; // Vertically center the text.
-    }
-
-    .vjs-menu {
-      width: 10em; // Extend the width to prevent a potential scrollbar from blocking the text.
-      left: -3em; // Center the popup on top of the button that invoked it.
-    }
-  }
-
   // Volume slider
   .vjs-volume-panel {
-    margin-right: -8px;
+    margin-left: var(--spacing-xxs);
+    margin-right: calc(var(--spacing-xxs) * -1);
 
     &.vjs-control {
       transition: 0.2s;
