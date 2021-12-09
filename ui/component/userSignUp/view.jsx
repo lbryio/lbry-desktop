@@ -6,18 +6,11 @@ import classnames from 'classnames';
 import { useHistory } from 'react-router';
 import UserEmailNew from 'component/userEmailNew';
 import UserEmailVerify from 'component/userEmailVerify';
-import UserFirstChannel from 'component/userFirstChannel';
 import UserChannelFollowIntro from 'component/userChannelFollowIntro';
 import UserTagFollowIntro from 'component/userTagFollowIntro';
-import YoutubeSync from 'page/youtubeSync';
-import { DEFAULT_BID_FOR_FIRST_CHANNEL } from 'component/userFirstChannel/view';
-import { YOUTUBE_STATUSES } from 'lbryinc';
 import REWARDS from 'rewards';
-import UserVerify from 'component/userVerify';
 import Spinner from 'component/spinner';
-import YoutubeTransferStatus from 'component/youtubeTransferStatus';
 import useFetched from 'effects/use-fetched';
-import Confetti from 'react-confetti';
 import usePrevious from 'effects/use-previous';
 import { SHOW_TAGS_INTRO } from 'config';
 
@@ -56,12 +49,10 @@ function UserSignUp(props: Props) {
     user,
     claimingReward,
     claimedRewards,
-    channels,
     claimConfirmEmailReward,
     claimNewUserReward,
     balance,
     fetchUser,
-    youtubeChannels,
     syncEnabled,
     syncingWallet,
     hasSynced,
@@ -85,21 +76,10 @@ function UserSignUp(props: Props) {
   const shouldRedirectImmediately = urlParams.get(REDIRECT_IMMEDIATELY_PARAM);
   const [initialSignInStep, setInitialSignInStep] = React.useState();
   const hasVerifiedEmail = user && user.has_verified_email;
-  const rewardsApproved = user && user.is_reward_approved;
-  const isIdentityVerified = user && user.is_identity_verified;
   const passwordSet = user && user.password_set;
   const hasFetchedReward = useFetched(claimingReward);
   const previousHasVerifiedEmail = usePrevious(hasVerifiedEmail);
-  const channelCount = channels ? channels.length : 0;
   const hasClaimedEmailAward = claimedRewards.some((reward) => reward.reward_type === REWARDS.TYPE_CONFIRM_EMAIL);
-  const hasYoutubeChannels = youtubeChannels && Boolean(youtubeChannels.length);
-  const isYoutubeTransferComplete =
-    hasYoutubeChannels &&
-    youtubeChannels.every(
-      (channel) =>
-        channel.transfer_state === YOUTUBE_STATUSES.COMPLETED_TRANSFER ||
-        channel.sync_status === YOUTUBE_STATUSES.YOUTUBE_SYNC_ABANDONDED
-    );
   // Complexity warning
   // We can't just check if we are currently fetching something
   // We may want to keep a component rendered while something is being fetched, instead of replacing it with the large spinner
@@ -108,16 +88,6 @@ function UserSignUp(props: Props) {
   // The possible screens for the sign in flow
   const showEmail = !hasVerifiedEmail;
   const showEmailVerification = (emailToVerify && !hasVerifiedEmail) || (!hasVerifiedEmail && passwordSet);
-  const showUserVerification = hasVerifiedEmail && !rewardsApproved && !isIdentityVerified && !rewardsAcknowledged;
-  const showChannelCreation =
-    hasVerifiedEmail &&
-    ((balance !== undefined &&
-      balance !== null &&
-      balance > DEFAULT_BID_FOR_FIRST_CHANNEL &&
-      channelCount === 0 &&
-      !hasYoutubeChannels) ||
-      interestedInYoutubeSync);
-  const showYoutubeTransfer = hasVerifiedEmail && hasYoutubeChannels && !isYoutubeTransferComplete;
   const showFollowIntro = step === 'channels' || (hasVerifiedEmail && !followingAcknowledged);
   const showTagsIntro = SHOW_TAGS_INTRO && (step === 'tags' || (hasVerifiedEmail && !tagsAcknowledged));
   const canHijackSignInFlowWithSpinner = hasVerifiedEmail && !showFollowIntro && !showTagsIntro && !rewardsAcknowledged;
@@ -170,19 +140,6 @@ function UserSignUp(props: Props) {
       />
     ),
     showEmailVerification && <UserEmailVerify />,
-    showUserVerification && (
-      <UserVerify
-        onSkip={() => {
-          setSettingAndSync(SETTINGS.REWARDS_ACKNOWLEDGED, true);
-        }}
-      />
-    ),
-    showChannelCreation &&
-      (interestedInYoutubeSync ? (
-        <YoutubeSync inSignUpFlow doToggleInterestedInYoutubeSync={doToggleInterestedInYoutubeSync} />
-      ) : (
-        <UserFirstChannel doToggleInterestedInYoutubeSync={doToggleInterestedInYoutubeSync} />
-      )),
     showFollowIntro && (
       <UserChannelFollowIntro
         onContinue={() => {
@@ -222,11 +179,6 @@ function UserSignUp(props: Props) {
           setSettingAndSync(SETTINGS.TAGS_ACKNOWLEDGED, true);
         }}
       />
-    ),
-    showYoutubeTransfer && (
-      <div>
-        <YoutubeTransferStatus /> <Confetti recycle={false} style={{ position: 'fixed' }} />
-      </div>
     ),
     showLoadingSpinner && (
       <div className="main--empty">
