@@ -154,16 +154,6 @@ export function CommentCreate(props: Props) {
     }
   }
 
-  function altEnterListener(e: SyntheticKeyboardEvent<*>) {
-    // $FlowFixMe
-    const isTyping = e.target.attributes['term'];
-
-    if (((isLivestream && !isTyping) || e.ctrlKey || e.metaKey) && e.keyCode === KEYCODES.ENTER) {
-      e.preventDefault();
-      buttonRef.current.click();
-    }
-  }
-
   function handleSupportComment() {
     if (!activeChannelClaim) return;
 
@@ -353,6 +343,30 @@ export function CommentCreate(props: Props) {
       .catch(() => {});
   }, [canReceiveFiatTip, claim.claim_id, claim.name, claim.signing_channel, stickerSelector]);
 
+  // Handle keyboard shortcut comment creation
+  React.useEffect(() => {
+    function altEnterListener(e: SyntheticKeyboardEvent<*>) {
+      const inputRef = formFieldRef && formFieldRef.current && formFieldRef.current.input;
+
+      if (inputRef && inputRef.current === document.activeElement) {
+        // $FlowFixMe
+        const isTyping = e.target.attributes['term'];
+
+        if (((isLivestream && !isTyping) || e.ctrlKey || e.metaKey) && e.keyCode === KEYCODES.ENTER) {
+          e.preventDefault();
+          buttonRef.current.click();
+        }
+      }
+    }
+
+    window.addEventListener('keydown', altEnterListener);
+
+    // removes the listener so it doesn't cause problems elsewhere in the app
+    return () => {
+      window.removeEventListener('keydown', altEnterListener);
+    };
+  }, [isLivestream]);
+
   // **************************************************************************
   // Render
   // **************************************************************************
@@ -461,9 +475,7 @@ export function CommentCreate(props: Props) {
               </div>
             }
             name={isReply ? 'create__reply' : 'create__comment'}
-            onBlur={() => window.removeEventListener('keydown', altEnterListener)}
             onChange={(e) => setCommentValue(SIMPLE_SITE || !advancedEditor || isReply ? e.target.value : e)}
-            onFocus={() => window.addEventListener('keydown', altEnterListener)}
             openEmoteMenu={() => setShowEmotes(!showEmotes)}
             placeholder={__('Say something about this...')}
             quickActionHandler={!SIMPLE_SITE ? () => setAdvancedEditor(!advancedEditor) : undefined}
