@@ -24,7 +24,7 @@ jobs:
         os:
           - ubuntu-latest
           - macos-latest
-#          - windows-latest
+          - windows-latest
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -54,14 +54,14 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           NOTARIZATION_USERNAME: ${{ secrets.NOTARIZATION_USERNAME }}
           NOTARIZATION_PASSWORD: ${{ secrets.NOTARIZATION_PASSWORD }}
-          WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
+#          WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
           CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
           ARTIFACTS_BUCKET: ${{ secrets.ARTIFACTS_BUCKET }}
           ARTIFACTS_KEY: ${{ secrets.ARTIFACTS_KEY }}
           ARTIFACTS_SECRET: ${{ secrets.ARTIFACTS_SECRET }}
           ARTIFACTS_REGION: ${{ secrets.ARTIFACTS_REGION }}
 
-          WIN_CSC_LINK: https://raw.githubusercontent.com/lbryio/lbry-desktop/master/build/win-csc-2021-2022-08.p12
+#          WIN_CSC_LINK: https://raw.githubusercontent.com/lbryio/lbry-desktop/master/build/win-csc-2021-2022-08.p12
           CSC_LINK: https://s3.amazonaws.com/files.lbry.io/cert/osx-csc-2021-2022.p12
 
           # UI
