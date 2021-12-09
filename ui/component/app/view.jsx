@@ -49,7 +49,7 @@ export const MAIN_WRAPPER_CLASS = 'main-wrapper';
 export const IS_MAC = navigator.userAgent.indexOf('Mac OS X') !== -1;
 
 const imaLibraryPath = 'https://imasdk.googleapis.com/js/sdkloader/ima3.js';
-const securePrivacyScriptUrl = 'https://app.secureprivacy.ai/script/6194129b66262906dd4a5f43.js';
+const oneTrustScriptSrc = 'https://cdn.cookielaw.org/scripttemplates/otSDKStub.js';
 
 type Props = {
   language: string,
@@ -374,14 +374,10 @@ function App(props: Props) {
     }
 
     const script = document.createElement('script');
-    script.src = securePrivacyScriptUrl;
-    script.async = true;
-    // might use this for future checking to prevent doubleloading
-    script.id = 'securePrivacy';
+    script.src = oneTrustScriptSrc;
+    script.setAttribute('charset', 'UTF-8');
+    script.setAttribute('data-domain-script', 'af95e703-a783-4d6d-af3d-94365fdb3cbd-test');
 
-    const cmpScript = document.createElement('script');
-    cmpScript.src = 'https://app.secureprivacy.ai/secureprivacy-plugin/web-plugin/cmp/cmp-v2.js';
-    cmpScript.async = true;
 
     const getLocaleEndpoint = 'https://api.odysee.com/locale/get';
     let gdprRequired;
@@ -394,8 +390,9 @@ function App(props: Props) {
     if (gdprRequired === 'true') {
       // $FlowFixMe
       document.head.appendChild(script);
-      // $FlowFixMe
-      document.head.appendChild(cmpScript);
+
+      // OneTrust asks us to add this
+      function OptanonWrapper() { }
     }
 
     // haven't done a gdpr check, do it now
