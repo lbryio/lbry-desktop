@@ -640,38 +640,6 @@ export function doUserIdentityVerify(stripeToken) {
   };
 }
 
-// rid of this
-// export function doUserInviteNew(email) {
-//   return (dispatch) => {
-//     dispatch({
-//       type: ACTIONS.USER_INVITE_NEW_STARTED,
-//     });
-//
-//     return Lbryio.call('user', 'invite', { email }, 'post')
-//       .then((success) => {
-//         dispatch({
-//           type: ACTIONS.USER_INVITE_NEW_SUCCESS,
-//           data: { email },
-//         });
-//
-//         dispatch(
-//           doToast({
-//             message: __('Invite sent to %email_address%', { email_address: email }),
-//           })
-//         );
-//
-//         dispatch(doFetchInviteStatus());
-//         return success;
-//       })
-//       .catch((error) => {
-//         dispatch({
-//           type: ACTIONS.USER_INVITE_NEW_FAILURE,
-//           data: { error },
-//         });
-//       });
-//   };
-// }
-
 export function doUserSetReferrerReset() {
   return (dispatch) => {
     dispatch({
