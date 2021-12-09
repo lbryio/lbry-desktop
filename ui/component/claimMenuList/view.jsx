@@ -265,14 +265,28 @@ function ClaimMenuList(props: Props) {
     push(`/$/${PAGES.REPORT_CONTENT}?claimId=${contentClaim && contentClaim.claim_id}`);
   }
 
+  // changes MenuButton behavior to show/hide MenuList not on press but on click event
+  let isEventSimulated = false;
+  const menuButtonHandler = (e) => {
+    if (!isEventSimulated && e.type === 'mousedown') {
+      e.preventDefault();
+    } else if (e.type === 'click') {
+      isEventSimulated = true;
+      e.target.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+      isEventSimulated = false;
+    }
+  };
+
   const shouldShow = !IS_WEB || (IS_WEB && isAuthenticated);
   return (
     <Menu>
       <MenuButton
         className={classnames('menu__button', { 'claim__menu-button': !inline, 'claim__menu-button--inline': inline })}
+        onMouseDown={menuButtonHandler}
         onClick={(e) => {
           e.stopPropagation();
           e.preventDefault();
+          menuButtonHandler(e);
         }}
       >
         <Icon size={20} icon={ICONS.MORE_VERTICAL} />
