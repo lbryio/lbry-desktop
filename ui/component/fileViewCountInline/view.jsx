@@ -2,15 +2,6 @@
 import React from 'react';
 import 'scss/component/_view_count.scss';
 
-// 1. Limit the view-count visibility to Channel Pages for now. I believe we'll
-// eventually show it everywhere, so this band-aid would be the easiest to
-// clean up (only one place edit/remove).
-// 2. The page would need to call `useFetchViewCount` as well.
-const ALLOWED_PAGES = [
-  '/@',
-  // `/$/${PAGES.SEARCH}`,
-];
-
 type Props = {
   uri: string,
   isLivestream?: boolean,
@@ -33,12 +24,16 @@ export default function FileViewCountInline(props: Props) {
     formattedViewCount = Number(viewCount).toLocaleString();
   }
 
-  const isInAllowedPages = ALLOWED_PAGES.some((x) => window.location.pathname.startsWith(x));
+  // Limit the view-count visibility to Channel Pages for now. We'll eventually
+  // show it everywhere, so this band-aid would be the easiest to clean up
+  // (only one place edit/remove).
+  const pathname: string = window.location.pathname;
+  const isOnChannelPage = pathname && pathname.startsWith('/@') && pathname.indexOf('/', 1) === -1;
 
-  if (!viewCount || (claim && claim.repost_url) || isLivestream || !isInAllowedPages) {
-    // (1) Currently, makeSelectViewCountForUri doesn't differentiate between
-    // un-fetched view-count vs zero view-count. But since it's probably not
-    // ideal to highlight that a view has 0 count, let's just not show anything.
+  if (!viewCount || (claim && claim.repost_url) || isLivestream || !isOnChannelPage) {
+    // (1) Currently, selectViewCountForUri doesn't differentiate between
+    // un-fetched vs zero view-count. But since it's probably not ideal to
+    // highlight that a claim has 0 count, let's just not show anything.
     // (2) No idea how to get the repost source's claim ID from the repost claim,
     // so hiding it for now.
     return null;
