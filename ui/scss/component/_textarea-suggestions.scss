@@ -3,6 +3,7 @@
   font-family: inherit !important;
   font-weight: inherit !important;
   font-size: inherit !important;
+  color: var(--color-text) !important;
 
   .MuiOutlinedInput-notchedOutline {
     visibility: hidden;
@@ -11,7 +12,6 @@
   .create__comment {
     @extend textarea;
 
-    color: var(--color-text) !important;
     min-height: calc(var(--height-input) * 1.5) !important;
   }
 }
