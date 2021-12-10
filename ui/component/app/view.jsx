@@ -7,7 +7,7 @@ import classnames from 'classnames';
 import analytics from 'analytics';
 import { setSearchUserId } from 'redux/actions/search';
 import { buildURI, parseURI } from 'util/lbryURI';
-import { SIMPLE_SITE } from 'config';
+import { SIMPLE_SITE, SHOW_ADS } from 'config';
 import Router from 'component/router/index';
 import ModalRouter from 'modal/modalRouter';
 import ReactModal from 'react-modal';
@@ -346,15 +346,17 @@ function App(props: Props) {
 
   // Load IMA3 SDK for aniview
   useEffect(() => {
-    const script = document.createElement('script');
-    script.src = imaLibraryPath;
-    script.async = true;
-    // $FlowFixMe
-    document.body.appendChild(script);
-    return () => {
+    if (!isAuthenticated && SHOW_ADS) {
+      const script = document.createElement('script');
+      script.src = imaLibraryPath;
+      script.async = true;
       // $FlowFixMe
-      document.body.removeChild(script);
-    };
+      document.body.appendChild(script);
+      return () => {
+        // $FlowFixMe
+        document.body.removeChild(script);
+      };
+    }
   }, []);
 
   // add secure privacy script
