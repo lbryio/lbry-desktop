@@ -2,6 +2,7 @@
 import type { Node } from 'react';
 import React, { Fragment } from 'react';
 import classnames from 'classnames';
+import { MAIN_CLASS } from 'constants/classnames';
 import { lazyImport } from 'util/lazyImport';
 import SideNavigation from 'component/sideNavigation';
 import SettingsSideNavigation from 'component/settingsSideNavigation';
@@ -16,12 +17,9 @@ import { parseURI } from 'util/lbryURI';
 
 const Footer = lazyImport(() => import('web/component/footer' /* webpackChunkName: "footer" */));
 
-export const MAIN_CLASS = 'main';
 type Props = {
   children: Node | Array<Node>,
   className: ?string,
-  autoUpdateDownloaded: boolean,
-  isUpgradeAvailable: boolean,
   authPage: boolean,
   filePage: boolean,
   settingsPage?: boolean,
