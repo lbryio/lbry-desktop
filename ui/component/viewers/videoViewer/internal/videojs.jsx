@@ -267,6 +267,10 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
       const player = playerRef.current;
       if (player) {
+        try {
+          window.cast.framework.CastContext.getInstance().getCurrentSession().endSession(false);
+        } catch {}
+
         player.dispose();
         window.player = undefined;
       }
