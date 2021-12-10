@@ -15,13 +15,13 @@ import useLighthouse from 'effects/use-lighthouse';
 import useThrottle from 'effects/use-throttle';
 
 const SUGGESTION_REGEX = new RegExp(
-  '(?<Mention>(?:^| |\n)@[^\\s=&#$@%?:;/\\"<>%{}|^~[]*(?::[\\w]+)?)|(?<Emote>(?:^| |\n):[\\w+-]*:?)',
+  '((?:^| |\n)@[^\\s=&#$@%?:;/\\"<>%{}|^~[]*(?::[\\w]+)?)|((?:^| |\n):[\\w+-]*:?)',
   'gm'
 );
 
 /** Regex Explained step-by-step:
  *
- * 1) (?<Name>....) = naming a match into a possible group (either Mention or Emote)
+ * 1) ()|() = different capturing groups (either Mention or Emote)
  * 2) (?:^| |\n) = only allow for: sentence beginning, space or newline before the match (no words or symbols)
  * 3) [^\s=&#$@%?:;/\\"<>%{}|^~[]* = anything, except the characters inside
  * 4) (?::[\w]+)? = A mention can be matched with a ':' as a claim modifier with words or digits after as ID digits,
@@ -192,11 +192,9 @@ export default function TextareaWithSuggestions(props: Props) {
     }
 
     const exec = SUGGESTION_REGEX.exec(value);
-    const groups = exec && exec.groups;
-    const groupValue = groups && Object.keys(groups).find((group) => groups[group]);
 
     const previousLastIndexes = [];
-    let isEmote = groupValue && groupValue === 'Emote';
+    let isEmote = exec && exec[2];
     let currentSuggestionIndex = exec && exec.index;
     let currentLastIndex = exec && SUGGESTION_REGEX.lastIndex;
     let currentSuggestionValue =
@@ -212,11 +210,9 @@ export default function TextareaWithSuggestions(props: Props) {
 
         const tempRe = new RegExp(SUGGESTION_REGEX);
         const tempExec = tempRe.exec(valueWithoutPrevious);
-        const groups = tempExec && tempExec.groups;
-        const groupValue = groups && Object.keys(groups).find((group) => groups[group]);
 
         if (tempExec) {
-          isEmote = groupValue && groupValue === 'Emote';
+          isEmote = tempExec && tempExec[2];
           currentSuggestionIndex = previousLastIndex + tempExec.index;
           currentLastIndex = previousLastIndex + tempRe.lastIndex;
           previousLastIndexes.push(currentLastIndex);
