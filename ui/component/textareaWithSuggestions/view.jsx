@@ -9,6 +9,7 @@ import EMOJIS from 'emoji-dictionary';
 import LbcSymbol from 'component/common/lbc-symbol';
 import Popper from '@mui/material/Popper';
 import React from 'react';
+import replaceAll from 'core-js-pure/features/string/replace-all';
 import TextareaSuggestionsItem from 'component/textareaSuggestionsItem';
 import TextField from '@mui/material/TextField';
 import useLighthouse from 'effects/use-lighthouse';
@@ -159,7 +160,7 @@ export default function TextareaWithSuggestions(props: Props) {
           let emoteLabel;
           if (isEmote) {
             // $FlowFixMe
-            emoteLabel = `:${option.replaceAll(':', '')}:`;
+            emoteLabel = `:${replaceAll(option, ':', '')}:`;
           }
 
           return {
