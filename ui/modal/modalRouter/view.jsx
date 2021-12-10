@@ -53,6 +53,7 @@ import ModalRemoveFile from 'modal/modalRemoveFile';
 import ModalRevokeClaim from 'modal/modalRevokeClaim';
 import ModalRewardCode from 'modal/modalRewardCode';
 import ModalSendTip from 'modal/modalSendTip';
+import ModalRepost from 'modal/modalRepost';
 import ModalSetReferrer from 'modal/modalSetReferrer';
 import ModalSignOut from 'modal/modalSignOut';
 import ModalSocialShare from 'modal/modalSocialShare';
@@ -124,6 +125,8 @@ function ModalRouter(props: Props) {
         return ModalFirstSubscription;
       case MODALS.SEND_TIP:
         return ModalSendTip;
+      case MODALS.REPOST:
+        return ModalRepost;
       case MODALS.SOCIAL_SHARE:
         return ModalSocialShare;
       case MODALS.PUBLISH:
