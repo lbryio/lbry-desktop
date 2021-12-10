@@ -33,6 +33,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Upgraded Electron to v11.5.0 ([#7276](https://github.com/lbryio/lbry-desktop/pull/7276))
 - Cleaner Discover page filters ([#7306](https://github.com/lbryio/lbry-desktop/pull/7306))
 - Scroll bar styling ([#7314](https://github.com/lbryio/lbry-desktop/pull/7314))
+- Remove pages for obsolete features like invites, rewards, swap ([#7330](https://github.com/lbryio/lbry-desktop/pull/7330))
 
 ### Fixed
 - Clicking on the title of a floating player will take you back to the list ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
@@ -43,6 +44,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fixed “Your Account” popup on mobile ([#7172](https://github.com/lbryio/lbry-desktop/pull/7172))
 - Fix disable-support for comments ([#7245](https://github.com/lbryio/lbry-desktop/pull/7245))
 - Fix Electron taking over .html files on linux ([#7291](https://github.com/lbryio/lbry-desktop/pull/7291))
+- Fix floating player play/pause on drag _community pr!_ ([#7339](https://github.com/lbryio/lbry-desktop/pull/7339))
+- Fix card dropdown menus triggering menu actions _community pr!_ ([#7335](https://github.com/lbryio/lbry-desktop/pull/7335))
 
 ## [0.51.2] - [2021-08-20]
 
