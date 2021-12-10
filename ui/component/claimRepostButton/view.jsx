@@ -1,6 +1,5 @@
 // @flow
 import { SITE_NAME } from 'config';
-import * as PAGES from 'constants/pages';
 import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
 import React from 'react';
