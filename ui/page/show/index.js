@@ -23,7 +23,7 @@ import { doFetchItemsInCollection } from 'redux/actions/collections';
 import { normalizeURI } from 'util/lbryURI';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
 import { push } from 'connected-react-router';
-import { makeSelectChannelInSubscriptions } from 'redux/selectors/subscriptions';
+import { selectIsSubscribedForUri } from 'redux/selectors/subscriptions';
 import { selectBlacklistedOutpointMap } from 'lbryinc';
 import ShowPage from './view';
 
@@ -75,7 +75,7 @@ const select = (state, props) => {
     isResolvingUri: selectIsUriResolving(state, uri),
     blackListedOutpointMap: selectBlacklistedOutpointMap(state),
     totalPages: makeSelectTotalPagesForChannel(uri, PAGE_SIZE)(state),
-    isSubscribed: makeSelectChannelInSubscriptions(uri)(state),
+    isSubscribed: selectIsSubscribedForUri(state, uri),
     title: selectTitleForUri(state, uri),
     claimIsMine: selectClaimIsMine(state, claim),
     claimIsPending: makeSelectClaimIsPending(uri)(state),
