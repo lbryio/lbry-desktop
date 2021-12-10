@@ -48,7 +48,6 @@ import PasswordSetPage from 'page/passwordSet';
 import PublishPage from 'page/publish';
 import ReportContentPage from 'page/reportContent';
 import ReportPage from 'page/report';
-import RepostNew from 'page/repost';
 import SearchPage from 'page/search';
 
 import SettingsCreatorPage from 'page/settingsCreator';
@@ -273,7 +272,6 @@ function AppRouter(props: Props) {
         component={ChannelsFollowingDiscoverPage}
       />
       <PrivateRoute {...props} path={`/$/${PAGES.CHANNEL_NEW}`} component={ChannelNew} />
-      <PrivateRoute {...props} path={`/$/${PAGES.REPOST_NEW}`} component={RepostNew} />
       <PrivateRoute {...props} path={`/$/${PAGES.UPLOADS}`} component={FileListPublished} />
       <PrivateRoute {...props} path={`/$/${PAGES.CREATOR_DASHBOARD}`} component={CreatorDashboard} />
       <PrivateRoute {...props} path={`/$/${PAGES.UPLOAD}`} component={PublishPage} />
