@@ -5,6 +5,7 @@ import {
   selectIsStillEditing,
   selectMyClaimForUri,
   selectTakeOverAmount,
+  selectCurrentUploads,
 } from 'redux/selectors/publish';
 import { selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
 import { doSetActiveChannel } from 'redux/actions/app';
@@ -15,6 +16,7 @@ const select = (state) => ({
   uri: makeSelectPublishFormValue('uri')(state),
   isStillEditing: selectIsStillEditing(state),
   myClaimForUri: selectMyClaimForUri(state),
+  currentUploads: selectCurrentUploads(state),
   activeChannelClaim: selectActiveChannelClaim(state),
   incognito: selectIncognito(state),
   amountNeededForTakeover: selectTakeOverAmount(state),
