@@ -47,16 +47,11 @@ export const selectDaemonVersionMatched = (state) => selectState(state).daemonVe
 export const selectVolume = (state) => selectState(state).volume;
 export const selectMute = (state) => selectState(state).muted;
 export const selectUpgradeTimer = (state) => selectState(state).checkUpgradeTimer;
+const selectModalId = (state) => selectState(state).modal;
+const selectModalProps = (state) => selectState(state).modalProps;
 
-export const selectModal = createSelector(selectState, (state) => {
-  if (!state.modal) {
-    return null;
-  }
-
-  return {
-    id: state.modal,
-    modalProps: state.modalProps,
-  };
+export const selectModal = createSelector(selectModalId, selectModalProps, (id, modalProps) => {
+  return id ? { id, modalProps } : null;
 });
 
 export const selectSearchOptionsExpanded = (state) => selectState(state).searchOptionsExpanded;
