@@ -122,33 +122,41 @@ function Page(props: Props) {
       >
         {getSideNavElem()}
 
-        <main
-          id={'main-content'}
-          className={classnames(MAIN_CLASS, className, {
-            'main--full-width': fullWidthPage,
-            'main--auth-page': authPage,
-            'main--file-page': filePage,
-            'main--settings-page': settingsPage,
-            'main--markdown': isMarkdown,
-            'main--theater-mode': isOnFilePage && videoTheaterMode && !livestream,
-            'main--livestream': livestream && !chatDisabled,
+        <div
+          className={classnames({
+            'sidebar--pusher': fullWidthPage,
+            'sidebar--pusher--open': sidebarOpen && fullWidthPage,
+            'sidebar--pusher--filepage': !fullWidthPage,
           })}
         >
-          {children}
+          <main
+            id={'main-content'}
+            className={classnames(MAIN_CLASS, className, {
+              'main--full-width': fullWidthPage,
+              'main--auth-page': authPage,
+              'main--file-page': filePage,
+              'main--settings-page': settingsPage,
+              'main--markdown': isMarkdown,
+              'main--theater-mode': isOnFilePage && videoTheaterMode && !livestream,
+              'main--livestream': livestream && !chatDisabled,
+            })}
+          >
+            {children}
 
-          {!isMobile && rightSide && <div className="main__right-side">{rightSide}</div>}
-        </main>
+            {!isMobile && rightSide && <div className="main__right-side">{rightSide}</div>}
+          </main>
+          {/* @if TARGET='web' */}
+          {!noFooter && (
+            <React.Suspense fallback={null}>
+              <Footer />
+            </React.Suspense>
+          )}
+          {/* @endif */}
+        </div>
         {/* @if TARGET='app' */}
         <StatusBar />
         {/* @endif */}
       </div>
-      {/* @if TARGET='web' */}
-      {!noFooter && (
-        <React.Suspense fallback={null}>
-          <Footer />
-        </React.Suspense>
-      )}
-      {/* @endif */}
     </Fragment>
   );
 }

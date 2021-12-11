@@ -100,6 +100,10 @@ $breakpoint-large: 1600px;
   --tag-height: 1.5rem;
 
   --livestream-comments-width: 30rem;
+
+  // Animations
+  --resizing-animation-function: ease-in;
+  --resizing-animation-timing: 180ms;
 }
 
 @media (max-width: $breakpoint-small) {
