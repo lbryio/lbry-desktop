@@ -30,6 +30,7 @@
   padding-bottom: var(--spacing-l);
   display: flex;
   flex-direction: column;
+  box-shadow: var(--card-box-shadow);
 
   animation-timing-function: var(--resizing-animation-function);
   transition: transform var(--resizing-animation-timing);
