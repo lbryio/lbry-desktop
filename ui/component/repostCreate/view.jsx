@@ -3,7 +3,6 @@
 import * as ICONS from 'constants/icons';
 import { MINIMUM_PUBLISH_BID, INVALID_NAME_ERROR } from 'constants/claim';
 import React from 'react';
-import { useHistory } from 'react-router';
 import Card from 'component/common/card';
 import Button from 'component/button';
 import ChannelSelector from 'component/channelSelector';
@@ -80,7 +79,6 @@ function RepostCreate(props: Props) {
   const [repostUri, setRepostUri] = React.useState('');
   const [contentError, setContentError] = React.useState('');
 
-  const { replace, goBack } = useHistory();
   const resolvingRepost = isResolvingEnteredRepost || isResolvingPassedRepost;
   const repostUrlName = `lbry://${incognito || !activeChannelClaim ? '' : `${activeChannelClaim.name}/`}`;
 

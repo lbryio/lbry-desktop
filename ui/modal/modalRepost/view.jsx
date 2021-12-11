@@ -9,15 +9,15 @@ type Props = {
 }
 
 class ModalRepost extends React.PureComponent<Props> {
-    render() {
-        const { closeModal, uri } = this.props;
+  render() {
+    const { closeModal, uri } = this.props;
 
-        return (
-            <Modal onAborted={closeModal} isOpen type="card">
-                <RepostCreate uri={uri} name={null} onCancel={closeModal} />
-            </Modal>
-        );
-    }
+    return (
+      <Modal onAborted={closeModal} isOpen type="card">
+        <RepostCreate uri={uri} name={null} onCancel={closeModal} />
+      </Modal>
+    );
+  }
 }
 
 export default ModalRepost;

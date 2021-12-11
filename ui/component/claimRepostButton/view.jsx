@@ -13,30 +13,30 @@ type Props = {
     doToast: ({ message: string }) => void,
 };
 
-
 export default function ClaimRepostButton(props: Props) {
-    const { uri, claim, hasChannels, doOpenModal, doToast }  = props;
+  const { uri, claim, hasChannels, doOpenModal, doToast }  = props;
 
-    return (
-        <Button
-            button="alt"
-            className="button--file-action"
-            icon={ICONS.REPOST}
-            label={
-                claim.meta.reposted > 1 ? __(`%repost_total% Reposts`, { repost_total: claim.meta.reposted }) : __('Repost')
-            }
-            description={__('Repost')}
-            requiresAuth={IS_WEB}
-            onClick={() => {
-              if (!hasChannels) {
-                doToast({
-                  message: __('A channel is required to repost on %SITE_NAME%', { SITE_NAME }),
-                  linkText: __('Create Channel'),
-                  linkTarget: '/channel/new',
-                });
-              } else {
-                doOpenModal(MODALS.REPOST, { uri })
-              }}}
-        />
-   );
+  return (
+    <Button
+      button="alt"
+      className="button--file-action"
+      icon={ICONS.REPOST}
+      label={
+        claim.meta.reposted > 1 ? __(`%repost_total% Reposts`, { repost_total: claim.meta.reposted }) : __('Repost')
+      }
+      description={__('Repost')}
+      requiresAuth={IS_WEB}
+      onClick={() => {
+        if (!hasChannels) {
+          doToast({
+            message: __('A channel is required to repost on %SITE_NAME%', { SITE_NAME }),
+            linkText: __('Create Channel'),
+            linkTarget: '/channel/new',
+          });
+        } else {
+          doOpenModal(MODALS.REPOST, { uri });
+        }
+      }}
+    />
+  );
 }

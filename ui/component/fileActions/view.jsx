@@ -1,5 +1,5 @@
 // @flow
-import { SITE_NAME, ENABLE_FILE_REACTIONS } from 'config';
+import { ENABLE_FILE_REACTIONS } from 'config';
 import * as PAGES from 'constants/pages';
 import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
@@ -28,8 +28,6 @@ type Props = {
   costInfo: ?{ cost: number },
   renderMode: string,
   myChannels: ?Array<ChannelClaim>,
-  doToast: ({ message: string }) => void,
-  clearPlayingUri: () => void,
   hideRepost?: boolean,
   reactionsDisabled: boolean,
   download: (string) => void,
@@ -47,14 +45,12 @@ function FileActions(props: Props) {
     renderMode,
     prepareEdit,
     myChannels,
-    clearPlayingUri,
-    doToast,
     hideRepost,
     reactionsDisabled,
   } = props;
   const {
     push,
-    location: { pathname, search },
+    location: { search },
   } = useHistory();
   const isMobile = useIsMobile();
   const webShareable = costInfo && costInfo.cost === 0 && RENDER_MODES.WEB_SHAREABLE_MODES.includes(renderMode);
