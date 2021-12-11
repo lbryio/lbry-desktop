@@ -2,6 +2,7 @@
 import React from 'react';
 import { Modal } from 'modal/modal';
 import RepostCreate from 'component/repostCreate';
+import Card from 'component/common/card';
 
 type Props = {
   closeModal: () => void,
@@ -19,7 +20,10 @@ class ModalRepost extends React.PureComponent<Props> {
 
     return (
       <Modal onAborted={closeModal} isOpen type="card">
-        <RepostCreate uri={uri} name={name} onCancel={closeModal} contentUri={contentUri} setContentUri={setContentUri} repostUri={repostUri} setRepostUri={setRepostUri} />
+        <Card
+          title={__('Repost')}
+          actions={<RepostCreate isModal uri={uri} name={name} onCancel={closeModal} contentUri={contentUri} setContentUri={setContentUri} repostUri={repostUri} setRepostUri={setRepostUri} />}
+        />
       </Modal>
     );
   }
