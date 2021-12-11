@@ -48,7 +48,7 @@ import PasswordSetPage from 'page/passwordSet';
 import PublishPage from 'page/publish';
 import ReportContentPage from 'page/reportContent';
 import ReportPage from 'page/report';
-import RepostNew from 'page/repost'
+import RepostNew from 'page/repost';
 import SearchPage from 'page/search';
 
 import SettingsCreatorPage from 'page/settingsCreator';

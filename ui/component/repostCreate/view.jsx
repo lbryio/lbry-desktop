@@ -43,9 +43,9 @@ type Props = {
   fetchingMyChannels: boolean,
   incognito: boolean,
   contentUri: string,
-  setContentUri: () => void,
+  setContentUri: (string) => void,
   repostUri: string,
-  setRepostUri: () => void,
+  setRepostUri: (string) => void,
   isModal: boolean,
   redirectUri?: string,
 };
@@ -73,10 +73,9 @@ function RepostCreate(props: Props) {
     doHideModal,
     contentUri,
     setContentUri,
-    repostUri,
     setRepostUri,
     isModal,
-    redirectUri
+    redirectUri,
   } = props;
 
   const defaultName = name || (claim && claim.name) || '';
@@ -307,7 +306,6 @@ function RepostCreate(props: Props) {
       });
     }
   }
-
 
   function cancelIt() {
     doClearRepostError();
