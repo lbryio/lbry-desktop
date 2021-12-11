@@ -68,7 +68,8 @@
       "width": 500,
       "height": 300
     },
-    "background": "./build/background.png"
+    "background": "./build/background.png",
+    "filesystem": "APFS",
   },
   "protocols": [
     {
