@@ -15,6 +15,8 @@ type Props = {
 
 export default function ClaimRepostButton(props: Props) {
   const { uri, claim, hasChannels, doOpenModal, doToast }  = props;
+  const [contentUri, setContentUri] = React.useState('');
+  const [repostUri, setRepostUri] = React.useState('');
 
   return (
     <Button
@@ -34,7 +36,7 @@ export default function ClaimRepostButton(props: Props) {
             linkTarget: '/channel/new',
           });
         } else {
-          doOpenModal(MODALS.REPOST, { uri });
+          doOpenModal(MODALS.REPOST, { uri, contentUri, setContentUri, repostUri, setRepostUri, isModal: true });
         }
       }}
     />

@@ -3,6 +3,7 @@
 import * as ICONS from 'constants/icons';
 import { MINIMUM_PUBLISH_BID, INVALID_NAME_ERROR } from 'constants/claim';
 import React from 'react';
+import { useHistory } from 'react-router';
 import Card from 'component/common/card';
 import Button from 'component/button';
 import ChannelSelector from 'component/channelSelector';
@@ -41,6 +42,12 @@ type Props = {
   activeChannelClaim: ?ChannelClaim,
   fetchingMyChannels: boolean,
   incognito: boolean,
+  contentUri: string,
+  setContentUri: () => void,
+  repostUri: string,
+  setRepostUri: () => void,
+  isModal: boolean,
+  redirectUri?: string,
 };
 
 function RepostCreate(props: Props) {
@@ -64,6 +71,12 @@ function RepostCreate(props: Props) {
     fetchingMyChannels,
     incognito,
     doHideModal,
+    contentUri,
+    setContentUri,
+    repostUri,
+    setRepostUri,
+    isModal,
+    redirectUri
   } = props;
 
   const defaultName = name || (claim && claim.name) || '';
@@ -75,9 +88,8 @@ function RepostCreate(props: Props) {
   const [enteredRepostName, setEnteredRepostName] = React.useState(defaultName);
   const [available, setAvailable] = React.useState(true);
   const [enteredContent, setEnteredContentUri] = React.useState(undefined);
-  const [contentUri, setContentUri] = React.useState('');
-  const [repostUri, setRepostUri] = React.useState('');
   const [contentError, setContentError] = React.useState('');
+  const { replace, goBack } = useHistory();
 
   const resolvingRepost = isResolvingEnteredRepost || isResolvingPassedRepost;
   const repostUrlName = `lbry://${incognito || !activeChannelClaim ? '' : `${activeChannelClaim.name}/`}`;
@@ -250,6 +262,28 @@ function RepostCreate(props: Props) {
 
   const repostClaimId = contentClaimId || enteredClaimId;
 
+  const getRedirect = (entered, passed, redirect) => {
+    if (redirect) {
+      return redirect;
+    } else if (entered) {
+      try {
+        const { claimName } = parseURI(entered);
+        return claimName ? `/${claimName}` : '/';
+      } catch (e) {
+        return '/';
+      }
+    } else if (passed) {
+      try {
+        const { claimName } = parseURI(passed);
+        return claimName ? `/${claimName}` : '/';
+      } catch (e) {
+        return '/';
+      }
+    } else {
+      return '/';
+    }
+  };
+
   function handleSubmit() {
     if (enteredRepostName && repostBid && repostClaimId) {
       doRepost({
@@ -265,14 +299,23 @@ function RepostCreate(props: Props) {
           linkText: __('Uploads'),
           linkTarget: '/uploads',
         });
-        doHideModal();
+        if (isModal) {
+          doHideModal();
+        } else {
+          replace(getRedirect(contentUri, uri, redirectUri));
+        }
       });
     }
   }
 
+
   function cancelIt() {
     doClearRepostError();
-    doHideModal();
+    if (isModal) {
+      doHideModal();
+    } else {
+      goBack();
+    }
   }
 
   if (fetchingMyChannels) {
