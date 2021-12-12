@@ -326,11 +326,10 @@ function RepostCreate(props: Props) {
 
   return (
     <>
-      <ChannelSelector />
-
       <Card
         actions={
           <div>
+            <ChannelSelector />
             {uri && (
               <fieldset-section>
                 <ClaimPreview key={uri} uri={uri} actions={''} showNullPlaceholder />
