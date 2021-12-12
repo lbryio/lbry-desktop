@@ -19,6 +19,7 @@ export const AFFIRM_PURCHASE = 'affirm_purchase';
 export const CONFIRM_CLAIM_REVOKE = 'confirm_claim_revoke';
 export const FIRST_SUBSCRIPTION = 'firstSubscription';
 export const SEND_TIP = 'send_tip';
+export const REPOST = 'repost';
 export const CONFIRM_SEND_TIP = 'confirm_send_tip';
 export const SOCIAL_SHARE = 'social_share';
 export const PUBLISH = 'publish';

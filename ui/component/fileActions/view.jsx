@@ -1,5 +1,5 @@
 // @flow
-import { SITE_NAME, ENABLE_FILE_REACTIONS } from 'config';
+import { ENABLE_FILE_REACTIONS } from 'config';
 import * as PAGES from 'constants/pages';
 import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
@@ -16,6 +16,7 @@ import { useHistory } from 'react-router';
 import FileReactions from 'component/fileReactions';
 import { Menu, MenuButton, MenuList, MenuItem } from '@reach/menu-button';
 import Icon from 'component/common/icon';
+import ClaimRepostButton from 'component/claimRepostButton';
 
 type Props = {
   uri: string,
@@ -27,8 +28,6 @@ type Props = {
   costInfo: ?{ cost: number },
   renderMode: string,
   myChannels: ?Array<ChannelClaim>,
-  doToast: ({ message: string }) => void,
-  clearPlayingUri: () => void,
   hideRepost?: boolean,
   reactionsDisabled: boolean,
   download: (string) => void,
@@ -46,14 +45,12 @@ function FileActions(props: Props) {
     renderMode,
     prepareEdit,
     myChannels,
-    clearPlayingUri,
-    doToast,
     hideRepost,
     reactionsDisabled,
   } = props;
   const {
     push,
-    location: { pathname, search },
+    location: { search },
   } = useHistory();
   const isMobile = useIsMobile();
   const webShareable = costInfo && costInfo.cost === 0 && RENDER_MODES.WEB_SHAREABLE_MODES.includes(renderMode);
@@ -82,33 +79,13 @@ function FileActions(props: Props) {
   const urlParams = new URLSearchParams(search);
   const collectionId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID);
 
-  function handleRepostClick() {
-    if (!hasChannels) {
-      clearPlayingUri();
-      push(`/$/${PAGES.CHANNEL_NEW}?redirect=${pathname}`);
-      doToast({ message: __('A channel is required to repost on %SITE_NAME%', { SITE_NAME }) });
-    } else {
-      push(`/$/${PAGES.REPOST_NEW}?from=${encodeURIComponent(uri)}&redirect=${pathname}`);
-    }
-  }
-
   const lhsSection = (
     <>
       {ENABLE_FILE_REACTIONS && !reactionsDisabled && <FileReactions uri={uri} />}
       <ClaimSupportButton uri={uri} fileAction />
       <ClaimCollectionAddButton uri={uri} fileAction />
       {!hideRepost && (
-        <Button
-          button="alt"
-          className="button--file-action"
-          icon={ICONS.REPOST}
-          label={
-            claim.meta.reposted > 1 ? __(`%repost_total% Reposts`, { repost_total: claim.meta.reposted }) : __('Repost')
-          }
-          description={__('Repost')}
-          requiresAuth={IS_WEB}
-          onClick={handleRepostClick}
-        />
+        <ClaimRepostButton uri={uri} claim={claim} hasChannels={hasChannels} />
       )}
       <Button
         className="button--file-action"

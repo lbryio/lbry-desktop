@@ -23,6 +23,7 @@ type Props = {
   doToast: ({ message: string }) => void,
   doClearRepostError: () => void,
   doRepost: (StreamRepostOptions) => Promise<*>,
+  doHideModal: () => void,
   title: string,
   claim?: StreamClaim,
   enteredContentClaim?: StreamClaim,
@@ -33,11 +34,7 @@ type Props = {
   reposting: boolean,
   uri: string,
   name: string,
-  contentUri: string,
-  setRepostUri: (string) => void,
-  setContentUri: (string) => void,
   doCheckPendingClaims: () => void,
-  redirectUri?: string,
   passedRepostAmount: number,
   enteredRepostAmount: number,
   isResolvingPassedRepost: boolean,
@@ -45,11 +42,16 @@ type Props = {
   activeChannelClaim: ?ChannelClaim,
   fetchingMyChannels: boolean,
   incognito: boolean,
+  contentUri: string,
+  setContentUri: (string) => void,
+  repostUri: string,
+  setRepostUri: (string) => void,
+  isModal: boolean,
+  redirectUri?: string,
 };
 
 function RepostCreate(props: Props) {
   const {
-    redirectUri,
     doToast,
     doClearRepostError,
     doRepost,
@@ -60,9 +62,6 @@ function RepostCreate(props: Props) {
     doCheckPublishNameAvailability,
     uri, // ?from
     name, // ?to
-    contentUri,
-    setRepostUri,
-    setContentUri,
     doCheckPendingClaims,
     enteredRepostAmount,
     passedRepostAmount,
@@ -71,6 +70,12 @@ function RepostCreate(props: Props) {
     activeChannelClaim,
     fetchingMyChannels,
     incognito,
+    doHideModal,
+    contentUri,
+    setContentUri,
+    setRepostUri,
+    isModal,
+    redirectUri,
   } = props;
 
   const defaultName = name || (claim && claim.name) || '';
@@ -83,8 +88,8 @@ function RepostCreate(props: Props) {
   const [available, setAvailable] = React.useState(true);
   const [enteredContent, setEnteredContentUri] = React.useState(undefined);
   const [contentError, setContentError] = React.useState('');
-
   const { replace, goBack } = useHistory();
+
   const resolvingRepost = isResolvingEnteredRepost || isResolvingPassedRepost;
   const repostUrlName = `lbry://${incognito || !activeChannelClaim ? '' : `${activeChannelClaim.name}/`}`;
 
@@ -293,14 +298,22 @@ function RepostCreate(props: Props) {
           linkText: __('Uploads'),
           linkTarget: '/uploads',
         });
-        replace(getRedirect(contentUri, uri, redirectUri));
+        if (isModal) {
+          doHideModal();
+        } else {
+          replace(getRedirect(contentUri, uri, redirectUri));
+        }
       });
     }
   }
 
   function cancelIt() {
     doClearRepostError();
-    goBack();
+    if (isModal) {
+      doHideModal();
+    } else {
+      goBack();
+    }
   }
 
   if (fetchingMyChannels) {
