@@ -76,7 +76,7 @@ function SocialShare(props: Props) {
   const shareUrl: string = generateShareUrl(
     shareDomain,
     lbryUrl,
-    referralCode,
+    null,
     rewardsApproved,
     includeStartTime,
     startTimeSeconds,
