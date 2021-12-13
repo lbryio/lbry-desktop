@@ -35,7 +35,7 @@ export default function Footer() {
           <Button label={__('Privacy Policy')} href="https://odysee.com/$/privacypolicy" />
         </li>
         <li className="footer__link" id="gdprPrivacyFooter">
-          <Button label={__('Cookie Settings')} onClick={() => window.Optanon && window.Optanon.ToggleInfoDisplay()()} />
+          <Button label={__('Cookie Settings')} onClick={() => window.Optanon && window.Optanon.ToggleInfoDisplay()} />
         </li>
         {/*  /!* OneTrust Cookies Settings button start *!/*/}
         {/*  <button id="ot-sdk-btn" className="ot-sdk-show-settings">Cookie Settings</button>*/}
