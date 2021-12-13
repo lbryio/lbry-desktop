@@ -42,7 +42,7 @@ import {
 } from 'redux/selectors/app';
 import { selectDaemonSettings, selectClientSetting } from 'redux/selectors/settings';
 import { selectUser, selectUserVerifiedEmail } from 'redux/selectors/user';
-import { doSyncLoop, doSetPrefsReady, doPreferenceGet, doPopulateSharedUserState } from 'redux/actions/sync';
+import { doSetPrefsReady, doPreferenceGet, doPopulateSharedUserState } from 'redux/actions/sync';
 import { doAuthenticate } from 'redux/actions/user';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import analytics, { SHARE_INTERNAL } from 'analytics';
@@ -672,10 +672,6 @@ export function doHandleSyncComplete(error, hasNewData) {
       console.error('Error in doHandleSyncComplete', error);
     }
   };
-}
-
-export function doSyncWithPreferences() {
-  return (dispatch) => dispatch(doSyncLoop());
 }
 
 export function doToggleInterestedInYoutubeSync() {
