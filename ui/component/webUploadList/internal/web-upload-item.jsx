@@ -160,6 +160,12 @@ export default function WebUploadItem(props: Props) {
     );
   }
 
+  React.useEffect(() => {
+    if (locked && showFileSelector) {
+      setShowFileSelector(false);
+    }
+  }, [locked, showFileSelector]);
+
   return (
     <li className={'web-upload-item claim-preview claim-preview--padded claim-preview--inactive card--inline'}>
       <FileThumbnail thumbnail={params.thumbnail_url} />
