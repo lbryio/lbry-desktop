@@ -34,6 +34,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Cleaner Discover page filters ([#7306](https://github.com/lbryio/lbry-desktop/pull/7306))
 - Scroll bar styling ([#7314](https://github.com/lbryio/lbry-desktop/pull/7314))
 - Remove pages for obsolete features like invites, rewards, swap ([#7330](https://github.com/lbryio/lbry-desktop/pull/7330))
+- Change file repost to modal _community pr!_ ([#7341](https://github.com/lbryio/lbry-desktop/pull/7341))
 
 ### Fixed
 - Clicking on the title of a floating player will take you back to the list ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
