@@ -62,6 +62,7 @@ export function makeResumableUploadRequest(
       chunkSize: UPLOAD_CHUNK_SIZE_BYTE,
       retryDelays: [0, 5000, 10000, 15000],
       parallelUploads: 1,
+      storeFingerprintForResuming: false,
       removeFingerprintOnSuccess: true,
       headers: { [X_LBRY_AUTH_TOKEN]: token },
       metadata: {
@@ -128,11 +129,6 @@ export function makeResumableUploadRequest(
     uploader
       .findPreviousUploads()
       .then((previousUploads) => {
-        const index = previousUploads.findIndex((prev) => prev.uploadUrl === params.uploadUrl);
-        if (index !== -1) {
-          uploader.resumeFromPreviousUpload(previousUploads[index]);
-        }
-
         if (!isPreview) {
           window.store.dispatch(doUpdateUploadAdd(file, params, uploader));
         }
