@@ -139,15 +139,15 @@ function Ads(props: Props) {
     </div>
   );
 
+  // dont show if ads disabled on instance, blacklist word matched
   if (!SHOW_ADS || triggerBlacklist) {
     return false;
   }
-  // sidebar ad
+  // disable ads for firefox android because they don't work properly
+  if (isFirefoxAndroid) return false;
+
+  // sidebar ad (in recommended videos)
   if (type === 'video') {
-    // don't run sidebar ad on Android Firefox because it errors out
-    if (isFirefoxAndroid) {
-      return false;
-    }
     return videoAd;
   }
   if (type === 'homepage') {
