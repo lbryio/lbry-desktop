@@ -17,7 +17,6 @@ import { doFetchFileInfos } from 'redux/actions/file_info';
 import { doClearSupport, doBalanceSubscribe } from 'redux/actions/wallet';
 import { doClearPublish } from 'redux/actions/publish';
 import { Lbryio } from 'lbryinc';
-import { selectFollowedTagsList } from 'redux/selectors/tags';
 import { doToast, doError, doNotificationList } from 'redux/actions/notifications';
 import pushNotifications from '$web/src/push-notifications';
 
@@ -508,17 +507,6 @@ export function doAnalyticsBuffer(uri, bufferData) {
         playerPoweredBy: bufferData.playerPoweredBy,
         readyState: bufferData.readyState,
       });
-    }
-  };
-}
-
-export function doAnalyticsTagSync() {
-  return (dispatch, getState) => {
-    const state = getState();
-    const tags = selectFollowedTagsList(state);
-    const stringOfTags = tags.join(',');
-    if (stringOfTags) {
-      analytics.apiSyncTags({ content_tags: stringOfTags });
     }
   };
 }

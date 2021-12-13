@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import { selectFetchingClaimSearch } from 'redux/selectors/claims';
 import { selectFollowedTags } from 'redux/selectors/tags';
-import { doToggleTagFollowDesktop } from 'redux/actions/tags';
 import { selectClientSetting, selectShowMatureContent, selectLanguage } from 'redux/selectors/settings';
 import { doSetClientSetting } from 'redux/actions/settings';
 import * as SETTINGS from 'constants/settings';
@@ -16,7 +15,6 @@ const select = (state) => ({
 });
 
 const perform = {
-  doToggleTagFollowDesktop,
   doSetClientSetting,
 };
 

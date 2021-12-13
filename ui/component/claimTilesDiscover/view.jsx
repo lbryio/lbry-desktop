@@ -211,7 +211,6 @@ function areEqual(prev: Props, next: Props) {
     'match',
     'claimsByUri',
     'doClaimSearch',
-    'doToggleTagFollowDesktop',
   ];
 
   const propKeys = Object.keys(next);

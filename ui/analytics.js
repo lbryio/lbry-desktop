@@ -60,7 +60,6 @@ type Analytics = {
   toggleInternal: (boolean, ?boolean) => void,
   apiLogView: (string, string, string, ?number, ?() => void) => Promise<any>,
   apiLogPublish: (ChannelClaim | StreamClaim) => void,
-  apiSyncTags: ({}) => void,
   tagFollowEvent: (string, boolean, ?string) => void,
   playerLoadedEvent: (string, ?boolean) => void,
   playerVideoStartedEvent: (?boolean) => void,
@@ -361,12 +360,6 @@ const analytics: Analytics = {
       }
 
       Lbryio.call('event', 'publish', params);
-    }
-  },
-
-  apiSyncTags: (params) => {
-    if (internalAnalyticsEnabled && isProduction) {
-      Lbryio.call('content_tags', 'sync', params);
     }
   },
   adsFetchedEvent: () => {

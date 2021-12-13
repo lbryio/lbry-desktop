@@ -5,7 +5,6 @@ import { doClaimSearch } from 'redux/actions/claims';
 import * as SETTINGS from 'constants/settings';
 import { MATURE_TAGS } from 'constants/tags';
 import { doFetchViewCount } from 'lbryinc';
-import { doToggleTagFollowDesktop } from 'redux/actions/tags';
 import { selectClientSetting, selectShowMatureContent } from 'redux/selectors/settings';
 import { selectMutedAndBlockedChannelIds } from 'redux/selectors/blocked';
 import { ENABLE_NO_SOURCE_CLAIMS, SIMPLE_SITE } from 'config';
@@ -30,7 +29,6 @@ const select = (state, props) => {
 
 const perform = {
   doClaimSearch,
-  doToggleTagFollowDesktop,
   doFetchViewCount,
 };
 

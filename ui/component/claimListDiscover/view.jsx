@@ -93,7 +93,6 @@ type Props = {
 
   // --- perform ---
   doClaimSearch: ({}) => void,
-  doToggleTagFollowDesktop: (string) => void,
   doFetchViewCount: (claimIdCsv: string) => void,
 };
 
