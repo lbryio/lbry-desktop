@@ -221,7 +221,7 @@ function SideNavigation(props: Props) {
   const isAbsolute = isOnFilePage || isMediumScreen;
   const isMobile = useIsMobile();
 
-  const menuCanCloseCompletey = livestreamEnabled || isOnFilePage || isMobile;
+  const menuCanCloseCompletey = isOnFilePage || isMobile;
   const hideMenuFromView = menuCanCloseCompletey && !sidebarOpen;
 
   const [canDisposeMenu, setCanDisposeMenu] = React.useState(false);
