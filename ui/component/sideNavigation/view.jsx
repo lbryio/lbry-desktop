@@ -340,7 +340,7 @@ function SideNavigation(props: Props) {
   }, [sidebarOpen, setSidebarOpen, isAbsolute]);
 
   useEffect(() => {
-    if (!window.sp) {
+    if (!window.Optanon) {
       const gdprDiv = document.getElementById('gdprPrivacyFooter');
       if (gdprDiv) {
         gdprDiv.style.display = 'none';
@@ -380,7 +380,7 @@ function SideNavigation(props: Props) {
         <Button label={__('Privacy Policy')} href="https://odysee.com/$/privacypolicy" />
       </li>
       <li className="navigation-link" id="gdprPrivacyFooter">
-        <Button label={__('Cookies')} onClick={() => window.sp && window.sp.showPrivacyBanner()} />
+        <Button label={__('Cookie Settings')} onClick={() => window.Optanon && window.Optanon.ToggleInfoDisplay()} />
       </li>
     </ul>
   );

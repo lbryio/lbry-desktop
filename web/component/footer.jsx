@@ -4,7 +4,7 @@ import { SIMPLE_SITE } from 'config';
 
 export default function Footer() {
   useEffect(() => {
-    if (!window.sp) {
+    if (!window.Optanon) {
       const privacyFooterButton = document.getElementById('gdprPrivacyFooter');
       if (privacyFooterButton) privacyFooterButton.style.display = 'none';
     }
@@ -35,7 +35,7 @@ export default function Footer() {
           <Button label={__('Privacy Policy')} href="https://odysee.com/$/privacypolicy" />
         </li>
         <li className="footer__link" id="gdprPrivacyFooter">
-          <Button label={__('Cookies')} onClick={() => window.sp && window.sp.showPrivacyBanner()} />
+          <Button label={__('Cookie Settings')} onClick={() => window.Optanon && window.Optanon.ToggleInfoDisplay()()} />
         </li>
       </ul>
     </footer>
