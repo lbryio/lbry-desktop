@@ -23,6 +23,12 @@ const IS_IOS =
     (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) &&
   !window.MSStream;
 
+const IS_ANDROID = /Android/i.test(navigator.userAgent);
+
+const IS_FIREFOX = /Firefox/i.test(navigator.userAgent);
+
+const isFirefoxAndroid = IS_ANDROID && IS_FIREFOX;
+
 type Props = {
   location: { pathname: string },
   type: string,
@@ -136,7 +142,12 @@ function Ads(props: Props) {
   if (!SHOW_ADS || triggerBlacklist) {
     return false;
   }
+  // sidebar ad
   if (type === 'video') {
+    // don't run sidebar ad on Android Firefox because it errors out
+    if (isFirefoxAndroid) {
+      return false;
+    }
     return videoAd;
   }
   if (type === 'homepage') {
