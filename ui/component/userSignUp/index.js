@@ -4,7 +4,6 @@ import { selectGetSyncIsPending, selectSyncHash, selectPrefsReady } from 'redux/
 import { doClaimRewardType } from 'redux/actions/rewards';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { selectClaimedRewards, makeSelectIsRewardClaimPending } from 'redux/selectors/rewards';
-import { doUserFetch } from 'redux/actions/user';
 import {
   selectUserIsPending,
   selectYoutubeChannels,
@@ -45,7 +44,6 @@ const select = (state) => ({
 });
 
 const perform = (dispatch) => ({
-  fetchUser: () => dispatch(doUserFetch()),
   claimConfirmEmailReward: () =>
     dispatch(
       doClaimRewardType(REWARD_TYPES.TYPE_CONFIRM_EMAIL, {

@@ -34,7 +34,6 @@ type Props = {
   claimingReward: boolean,
   claimConfirmEmailReward: () => void,
   claimNewUserReward: () => void,
-  fetchUser: () => void,
   claimedRewards: Array<Reward>,
   youtubeChannels: Array<any>,
   syncEnabled: boolean,
@@ -60,7 +59,6 @@ function UserSignUp(props: Props) {
     claimConfirmEmailReward,
     claimNewUserReward,
     balance,
-    fetchUser,
     youtubeChannels,
     syncEnabled,
     syncingWallet,
@@ -131,10 +129,6 @@ function UserSignUp(props: Props) {
   function setSettingAndSync(setting, value) {
     setClientSetting(setting, value, true);
   }
-
-  React.useEffect(() => {
-    fetchUser();
-  }, [fetchUser]);
 
   React.useEffect(() => {
     if (previousHasVerifiedEmail === false && hasVerifiedEmail && prefsReady) {
