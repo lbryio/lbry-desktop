@@ -4,10 +4,23 @@ import { SIMPLE_SITE } from 'config';
 
 export default function Footer() {
   useEffect(() => {
-    if (!window.Optanon) {
-      const privacyFooterButton = document.getElementById('gdprPrivacyFooter');
-      if (privacyFooterButton) privacyFooterButton.style.display = 'none';
+    const maxTimeout = 2000;
+    let elapsedTime = 0;
+
+    function checkForOneTrust() {
+      elapsedTime = elapsedTime + 500;
+
+      if (elapsedTime > maxTimeout) return;
+
+      if (!window.Optanon) {
+        window.setTimeout(checkForOneTrust, 500);
+      } else {
+        const privacyFooterButton = document.getElementById('gdprPrivacyFooter');
+        if (privacyFooterButton) privacyFooterButton.style.display = 'block';
+      }
     }
+
+    checkForOneTrust();
   }, []);
 
   if (!SIMPLE_SITE) {
