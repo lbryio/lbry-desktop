@@ -42,6 +42,15 @@
   padding-top: 0;
 }
 
+.main-wrapper__inner--auth {
+  min-height: unset;
+  padding: 0;
+
+  .main--auth-page {
+    margin-top: 0;
+  }
+}
+
 .main {
   position: relative;
   width: calc(100% - var(--side-nav-width) - var(--spacing-l));
@@ -425,27 +434,28 @@
 .main__sign-up--graphic {
   max-width: 47rem;
 
+  .card__first-pane {
+    width: 50%;
+    @media (max-width: $breakpoint-small) {
+      width: 100%;
+    }
+  }
+
   .card__second-pane {
     width: 50%;
+    @media (max-width: $breakpoint-small) {
+      width: 100%;
+    }
+
     border: none;
     display: flex;
     align-items: center;
     justify-content: center;
     background: var(--color-login-graphic-background);
-
-    @media (max-width: $breakpoint-small) {
-      width: 100%;
-    }
-
-    .signup-image {
-      @media (max-width: $breakpoint-small) {
-        width: 50%;
-      }
-    }
   }
 
   .card__title {
-    font-size: var(--font-heading);
+    font-size: var(--font-title);
     font-weight: var(--font-weight-bold);
   }
 

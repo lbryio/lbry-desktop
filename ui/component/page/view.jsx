@@ -117,6 +117,7 @@ function Page(props: Props) {
         className={classnames('main-wrapper__inner', {
           'main-wrapper__inner--filepage': isOnFilePage,
           'main-wrapper__inner--theater-mode': isOnFilePage && videoTheaterMode,
+          'main-wrapper__inner--auth': authPage,
         })}
       >
         {getSideNavElem()}

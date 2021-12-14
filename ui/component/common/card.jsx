@@ -63,7 +63,7 @@ export default function Card(props: Props) {
         }
       }}
     >
-      <div>
+      <div className="card__first-pane">
         {(title || subtitle) && (
           <div
             className={classnames('card__header--between', {
