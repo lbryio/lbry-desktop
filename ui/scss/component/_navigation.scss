@@ -55,7 +55,7 @@
 }
 
 .navigation--push-back {
-  transform: translateX(calc(-1 * (var(--side-nav-width) - var(--side-nav-width--micro))));
+  transform: translateX(calc(var(--side-nav-width--micro) - var(--side-nav-width)));
 }
 
 .navigation--push {
@@ -72,7 +72,8 @@
 
 .navigation--micro {
   @extend .navigation;
-  transform: translateX(calc(-1 * (var(--side-nav-width) - var(--side-nav-width--micro))));
+
+  transform: translateX(calc(var(--side-nav-width--micro) - var(--side-nav-width)));
 
   @media (max-width: $breakpoint-small) {
     display: none;
