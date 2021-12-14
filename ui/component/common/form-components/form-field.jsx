@@ -2,14 +2,17 @@
 import 'easymde/dist/easymde.min.css';
 import { FF_MAX_CHARS_DEFAULT } from 'constants/form-field';
 import { openEditorMenu, stopContextMenu } from 'util/context-menu';
+import { lazyImport } from 'util/lazyImport';
 import * as ICONS from 'constants/icons';
 import Button from 'component/button';
 import MarkdownPreview from 'component/common/markdown-preview';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import SimpleMDE from 'react-simplemde-editor';
-import TextareaWithSuggestions from 'component/textareaWithSuggestions';
 import type { ElementRef, Node } from 'react';
+
+// prettier-ignore
+const TextareaWithSuggestions = lazyImport(() => import('component/textareaWithSuggestions' /* webpackChunkName: "suggestions" */));
 
 type Props = {
   affixClass?: string, // class applied to prefix/postfix label
@@ -247,14 +250,16 @@ export class FormField extends React.PureComponent<Props> {
                   {...inputProps}
                 />
               ) : (
-                <TextareaWithSuggestions
-                  type={type}
-                  id={name}
-                  maxLength={textAreaMaxLength || FF_MAX_CHARS_DEFAULT}
-                  inputRef={this.input}
-                  isLivestream={isLivestream}
-                  {...inputProps}
-                />
+                <React.Suspense fallback={null}>
+                  <TextareaWithSuggestions
+                    type={type}
+                    id={name}
+                    maxLength={textAreaMaxLength || FF_MAX_CHARS_DEFAULT}
+                    inputRef={this.input}
+                    isLivestream={isLivestream}
+                    {...inputProps}
+                  />
+                </React.Suspense>
               )}
 
               <div className="form-field__textarea-info">
