@@ -35,7 +35,8 @@
     flex-direction: row;
 
     .footer__link {
-      margin-left: var(--spacing-m);
+      margin-left: var(--spacing-s);
+      margin-right: var(--spacing-s);
     }
   }
 }

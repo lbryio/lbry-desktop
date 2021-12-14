@@ -12,7 +12,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  min-height: calc(100vh - var(--header-height));
+  min-height: 100vh;
   margin-left: auto;
   margin-right: auto;
   margin-top: var(--header-height);
@@ -82,6 +82,7 @@
   z-index: 0;
   margin-right: auto;
   margin-left: auto;
+  min-height: calc(100vh - var(--header-height));
 
   @media (max-width: $breakpoint-small) {
     width: 100%;
