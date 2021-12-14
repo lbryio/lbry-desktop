@@ -374,10 +374,17 @@ function App(props: Props) {
       return;
     }
 
+    // $FlowFixMe
+    const useProductionOneTrust = process.env.NODE_ENV === 'production' && location.hostname === 'odysee.com';
+
     const script = document.createElement('script');
     script.src = oneTrustScriptSrc;
     script.setAttribute('charset', 'UTF-8');
-    script.setAttribute('data-domain-script', 'af95e703-a783-4d6d-af3d-94365fdb3cbd-test');
+    if (useProductionOneTrust) {
+      script.setAttribute('data-domain-script', '8a792d84-50a5-4b69-b080-6954ad4d4606-test');
+    } else {
+      script.setAttribute('data-domain-script', '8a792d84-50a5-4b69-b080-6954ad4d4606-test');
+    }
 
     const secondScript = document.createElement('script');
     // OneTrust asks to add this

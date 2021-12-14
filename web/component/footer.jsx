@@ -37,9 +37,6 @@ export default function Footer() {
         <li className="footer__link" id="gdprPrivacyFooter">
           <Button label={__('Cookie Settings')} onClick={() => window.Optanon && window.Optanon.ToggleInfoDisplay()} />
         </li>
-        {/*  /!* OneTrust Cookies Settings button start *!/*/}
-        {/*  <button id="ot-sdk-btn" className="ot-sdk-show-settings">Cookie Settings</button>*/}
-        {/*  /!* OneTrust Cookies Settings button end *!/*/}
       </ul>
     </footer>
   );
