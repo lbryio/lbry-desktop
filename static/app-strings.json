@@ -2226,5 +2226,14 @@
   "This is information like error logging, performance tracking, and usage statistics. It includes your IP address and basic system details, but no other identifying information (unless you connect to a cloud service)": "This is information like error logging, performance tracking, and usage statistics. It includes your IP address and basic system details, but no other identifying information (unless you connect to a cloud service)",
   "Use official LBRY wallet servers": "Use official LBRY wallet servers",
   "Enable Prerelease Updates": "Enable Prerelease Updates",
+  "Enable Upgrade to Test Builds": "Enable Upgrade to Test Builds",
+  "Prereleases may break things and we may not be able to fix them for you.": "Prereleases may break things and we may not be able to fix them for you.",
+  "Limit (GB)": "Limit (GB)",
+  "Limit Hosting for Content you Use": "Limit Hosting for Content you Use",
+  "Allow (GB)": "Allow (GB)",
+  "Content Data Hosting helps to seed things that you watch and download.": "Content Data Hosting helps to seed things that you watch and download.",
+  "Network Data Hosting allows the p2p network to store blobs unrelated to your browsing.": "Network Data Hosting allows the p2p network to store blobs unrelated to your browsing.",
+  "Content: Limit (GB)": "Content: Limit (GB)",
+  "Network: Allow (GB)": "Network: Allow (GB)",
   "--end--": "--end--"
 }

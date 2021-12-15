@@ -38,3 +38,4 @@ export const USE_UPNP = 'use_upnp';
 export const WALLET_DIR = 'wallet_dir';
 export const WALLETS = 'wallets';
 export const BLOB_STORAGE_LIMIT_MB = 'blob_storage_limit';
+export const NETWORK_STORAGE_LIMIT_MB = 'network_storage_limit';
