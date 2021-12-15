@@ -194,7 +194,7 @@ function DiscoverPage(props: Props) {
   }
 
   React.useEffect(() => {
-    if (isAuthenticated || !SHOW_ADS) {
+    if (isAuthenticated || !SHOW_ADS || window.location.pathname === `/$/${PAGES.WILD_WEST}`) {
       return;
     }
 
