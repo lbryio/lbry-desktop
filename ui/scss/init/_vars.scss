@@ -75,7 +75,7 @@ $breakpoint-large: 1600px;
   --header-height: 80px;
 
   // Inline Player
-  --inline-player-max-height: calc(100vh - var(--header-height) - var(--spacing-l) * 2);
+  --inline-player-max-height: calc(100vh - var(--header-height) - var(--spacing-l) * 4);
 
   // Card
   --card-radius: var(--border-radius);
