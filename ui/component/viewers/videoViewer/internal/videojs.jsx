@@ -20,7 +20,7 @@ import playerjs from 'player.js';
 import qualityLevels from 'videojs-contrib-quality-levels';
 import React, { useEffect, useRef, useState } from 'react';
 import recsys from './plugins/videojs-recsys/plugin';
-import runAds from './ads';
+// import runAds from './ads';
 import videojs from 'video.js';
 
 require('@silvermine/videojs-chromecast')(videojs);
@@ -121,14 +121,14 @@ properties for this component should be kept to ONLY those that if changed shoul
 export default React.memo<Props>(function VideoJs(props: Props) {
   const {
     // adUrl, // TODO: this ad functionality isn't used, can be pulled out
-    allowPreRoll,
+    // allowPreRoll,
     autoplay,
     autoplaySetting,
     claimId,
     title,
     channelName,
     embedded,
-    internalFeatureEnabled, // for people on the team to test new features internally
+    // internalFeatureEnabled, // for people on the team to test new features internally
     isAudio,
     poster,
     replay,

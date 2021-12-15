@@ -48,7 +48,7 @@ const SyncFatalError = lazyImport(() => import('component/syncFatalError' /* web
 export const MAIN_WRAPPER_CLASS = 'main-wrapper';
 export const IS_MAC = navigator.userAgent.indexOf('Mac OS X') !== -1;
 
-const imaLibraryPath = 'https://imasdk.googleapis.com/js/sdkloader/ima3.js';
+// const imaLibraryPath = 'https://imasdk.googleapis.com/js/sdkloader/ima3.js';
 const oneTrustScriptSrc = 'https://cdn.cookielaw.org/scripttemplates/otSDKStub.js';
 
 type Props = {
