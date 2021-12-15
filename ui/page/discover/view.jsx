@@ -89,10 +89,11 @@ function DiscoverPage(props: Props) {
   const includeLivestreams = !tagsQuery;
   const [liveSection, setLiveSection] = useState(includeLivestreams ? liveSectionStore : SECTION.HIDDEN);
   const livestreamUris = includeLivestreams && getLivestreamUris(activeLivestreams, channelIds);
-  const useDualList = liveSection === SECTION.LESS && livestreamUris && livestreamUris.length > initialLiveTileLimit;
+  const liveTilesOverLimit = livestreamUris && livestreamUris.length > initialLiveTileLimit;
+  const useDualList = liveSection === SECTION.LESS && liveTilesOverLimit;
 
   function getMeta() {
-    if (liveSection === SECTION.MORE) {
+    if (liveSection === SECTION.MORE && liveTilesOverLimit) {
       return (
         <Button
           label={__('Show less livestreams')}
