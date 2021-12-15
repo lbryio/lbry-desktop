@@ -49,7 +49,7 @@ export const MAIN_WRAPPER_CLASS = 'main-wrapper';
 export const IS_MAC = navigator.userAgent.indexOf('Mac OS X') !== -1;
 
 const imaLibraryPath = 'https://imasdk.googleapis.com/js/sdkloader/ima3.js';
-const securePrivacyScriptUrl = 'https://app.secureprivacy.ai/script/6194129b66262906dd4a5f43.js';
+const oneTrustScriptSrc = 'https://cdn.cookielaw.org/scripttemplates/otSDKStub.js';
 
 type Props = {
   language: string,
@@ -359,8 +359,9 @@ function App(props: Props) {
     }
   }, []);
 
-  // add secure privacy script
+  // add OneTrust script
   useEffect(() => {
+    // don't add script for embedded content
     function inIframe() {
       try {
         return window.self !== window.top;
@@ -373,15 +374,21 @@ function App(props: Props) {
       return;
     }
 
-    const script = document.createElement('script');
-    script.src = securePrivacyScriptUrl;
-    script.async = true;
-    // might use this for future checking to prevent doubleloading
-    script.id = 'securePrivacy';
+    // $FlowFixMe
+    const useProductionOneTrust = process.env.NODE_ENV === 'production' && location.hostname === 'odysee.com';
 
-    const cmpScript = document.createElement('script');
-    cmpScript.src = 'https://app.secureprivacy.ai/secureprivacy-plugin/web-plugin/cmp/cmp-v2.js';
-    cmpScript.async = true;
+    const script = document.createElement('script');
+    script.src = oneTrustScriptSrc;
+    script.setAttribute('charset', 'UTF-8');
+    if (useProductionOneTrust) {
+      script.setAttribute('data-domain-script', '8a792d84-50a5-4b69-b080-6954ad4d4606-test');
+    } else {
+      script.setAttribute('data-domain-script', '8a792d84-50a5-4b69-b080-6954ad4d4606-test');
+    }
+
+    const secondScript = document.createElement('script');
+    // OneTrust asks to add this
+    secondScript.innerHTML = 'function OptanonWrapper() { }';
 
     const getLocaleEndpoint = 'https://api.odysee.com/locale/get';
     let gdprRequired;
@@ -395,7 +402,7 @@ function App(props: Props) {
       // $FlowFixMe
       document.head.appendChild(script);
       // $FlowFixMe
-      document.head.appendChild(cmpScript);
+      document.head.appendChild(secondScript);
     }
 
     // haven't done a gdpr check, do it now
@@ -410,7 +417,7 @@ function App(props: Props) {
           // $FlowFixMe
           document.head.appendChild(script);
           // $FlowFixMe
-          document.head.appendChild(cmpScript);
+          document.head.appendChild(secondScript);
           // note we don't need gdpr, save to session
         } else if (gdprRequiredBasedOnLocation === false) {
           localStorage.setItem('gdprRequired', 'false');
@@ -423,7 +430,7 @@ function App(props: Props) {
         // $FlowFixMe
         document.head.removeChild(script);
         // $FlowFixMe
-        document.head.removeChild(cmpScript);
+        document.head.removeChild(secondScript);
       } catch (err) {
         console.log(err);
       }

@@ -4,10 +4,23 @@ import { SIMPLE_SITE } from 'config';
 
 export default function Footer() {
   useEffect(() => {
-    if (!window.sp) {
-      const privacyFooterButton = document.getElementById('gdprPrivacyFooter');
-      if (privacyFooterButton) privacyFooterButton.style.display = 'none';
+    const maxTimeout = 2000;
+    let elapsedTime = 0;
+
+    function checkForOneTrust() {
+      elapsedTime = elapsedTime + 500;
+
+      if (elapsedTime > maxTimeout) return;
+
+      if (!window.Optanon) {
+        window.setTimeout(checkForOneTrust, 500);
+      } else {
+        const privacyFooterButton = document.getElementById('gdprPrivacyFooter');
+        if (privacyFooterButton) privacyFooterButton.style.display = 'block';
+      }
     }
+
+    checkForOneTrust();
   }, []);
 
   if (!SIMPLE_SITE) {
@@ -35,7 +48,7 @@ export default function Footer() {
           <Button label={__('Privacy Policy')} href="https://odysee.com/$/privacypolicy" />
         </li>
         <li className="footer__link" id="gdprPrivacyFooter">
-          <Button label={__('Cookies')} onClick={() => window.sp && window.sp.showPrivacyBanner()} />
+          <Button label={__('Cookie Settings')} onClick={() => window.Optanon && window.Optanon.ToggleInfoDisplay()} />
         </li>
       </ul>
     </footer>
