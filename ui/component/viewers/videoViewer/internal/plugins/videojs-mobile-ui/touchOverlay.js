@@ -34,7 +34,7 @@ class TouchOverlay extends Component {
     this.addChild('playToggle', {});
 
     // Clear overlay when playback starts or with control fade
-    player.on(['playing', 'userinactive'], e => {
+    player.on(['playing', 'userinactive'], (e) => {
       if (!this.player_.paused()) {
         this.removeClass('show-play-toggle');
       }
@@ -104,27 +104,6 @@ class TouchOverlay extends Component {
   handleSingleTap(event) {
     this.removeClass('skip');
     this.toggleClass('show-play-toggle');
-
-    // At the moment, we only have one <video> tag at a time, but just loops it
-    // all to somewhat future-proof it.
-    const videos = document.getElementsByTagName('video');
-    for (let video of videos) {
-      // The Android-Chrome cast button appears when you tap directly on the
-      // video. If anything exists above it, such as our mobile-ui overlay, the
-      // action will be absorbed, causing the button to not appear. So, I've
-      // tried to pass on the tap event by manually dispatching one, but it
-      // didn't work.
-      // Peeking at the Android-Chrome code, the cast button is refreshed when
-      // the 'controllist' is updated. Since we don't use this attribute as we
-      // are using the videojs controls, I'm "toggling" this attribute to force
-      // the cast button to be refreshed.
-      const attr = video.getAttribute('controlslist');
-      if (!attr || attr.indexOf('dummy') === -1) {
-        video.setAttribute('controlslist', 'dummy');
-      } else {
-        video.removeAttribute('controlslist');
-      }
-    }
   }
 
   /**
