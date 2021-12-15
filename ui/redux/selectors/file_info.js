@@ -37,7 +37,7 @@ export const makeSelectDownloadingForUri = (uri) =>
     return byOutpoint[fileInfo.outpoint];
   });
 
-export const selectUrisLoading = createSelector(selectState, (state) => state.urisLoading || {});
+export const selectUrisLoading = createSelector(selectState, (state) => state.fetching || {});
 
 export const makeSelectLoadingForUri = (uri) =>
   createSelector(selectUrisLoading, makeSelectClaimForUri(uri), (fetchingByOutpoint, claim) => {
