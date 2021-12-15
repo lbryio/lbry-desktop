@@ -2225,5 +2225,6 @@
   "Buy LBC": "Buy LBC",
   "This is information like error logging, performance tracking, and usage statistics. It includes your IP address and basic system details, but no other identifying information (unless you connect to a cloud service)": "This is information like error logging, performance tracking, and usage statistics. It includes your IP address and basic system details, but no other identifying information (unless you connect to a cloud service)",
   "Use official LBRY wallet servers": "Use official LBRY wallet servers",
+  "Enable Prerelease Updates": "Enable Prerelease Updates",
   "--end--": "--end--"
 }

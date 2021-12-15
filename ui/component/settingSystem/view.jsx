@@ -17,10 +17,9 @@ import Spinner from 'component/spinner';
 import { getPasswordFromCookie } from 'util/saved-passwords';
 import * as DAEMON_SETTINGS from 'constants/daemon_settings';
 import { formatBytes } from 'util/format-bytes';
+import SettingEnablePrereleases from 'component/settingEnablePrereleases';
 
-// @if TARGET='app'
 const IS_MAC = process.platform === 'darwin';
-// @endif
 const BYTES_PER_MB = 1048576;
 
 type Price = {
@@ -96,10 +95,7 @@ export default function SettingSystem(props: Props) {
   const [blobSpaceLimitGB, setBlobSpaceLimit] = React.useState(blobLimitSetting ? blobLimitSetting / 1024 : 0);
   // const debouncedBlobSpaceLimitGB = useDebounce(blobSpaceLimitGB || 0, 500);
   const [limitSpace, setLimitSpace] = React.useState(Boolean(blobLimitSetting));
-  console.log('spaceUsed', spaceUsed, 'blobLimit', blobLimitSetting);
-  // @if TARGET='app'
   const { available: ffmpegAvailable, which: ffmpegPath } = ffmpegStatus;
-  // @endif
 
   function onChangeEncryptWallet() {
     if (walletEncrypted) {
@@ -140,7 +136,6 @@ export default function SettingSystem(props: Props) {
 
   // Update ffmpeg variables
   React.useEffect(() => {
-    // @if TARGET='app'
     const { available } = ffmpegStatus;
     const { ffmpeg_path: ffmpegPath } = daemonSettings;
     if (!available) {
@@ -149,7 +144,6 @@ export default function SettingSystem(props: Props) {
       }
       findFFmpeg();
     }
-    // @endif
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Update storedPassword state
@@ -186,7 +180,6 @@ export default function SettingSystem(props: Props) {
             </SettingsRow>
             {/* @endif */}
 
-            {/* @if TARGET='app' */}
             <SettingsRow
               title={__('Save all viewed content to your downloads directory')}
               subtitle={__(
@@ -259,9 +252,6 @@ export default function SettingSystem(props: Props) {
                 />
               )}
             </SettingsRow>
-            {/* @endif */}
-
-            {/* @if TARGET='app' */}
             <SettingsRow
               title={__('Share usage and diagnostic data')}
               subtitle={
@@ -296,9 +286,6 @@ export default function SettingSystem(props: Props) {
                 helper={__('We use detailed analytics to improve all aspects of the LBRY experience.')}
               />
             </SettingsRow>
-            {/* @endif */}
-
-            {/* @if TARGET='app' */}
             {/* Auto launch in a hidden state doesn't work on mac https://github.com/Teamwork/node-auto-launch/issues/81 */}
             {!IS_MAC && (
               <SettingsRow
@@ -310,15 +297,15 @@ export default function SettingSystem(props: Props) {
                 <SettingAutoLaunch noLabels />
               </SettingsRow>
             )}
-            {/* @endif */}
-
-            {/* @if TARGET='app' */}
             <SettingsRow title={__('Leave app running in notification area when the window is closed')}>
               <SettingClosingBehavior noLabels />
             </SettingsRow>
-            {/* @endif */}
-
-            {/* @if TARGET='app' */}
+            <SettingsRow
+              title={__('Enable Upgrade to Test Builds')}
+              subtitle={__('Prereleases may break things and we may not be able to fix them for you.')}
+            >
+              <SettingEnablePrereleases />
+            </SettingsRow>
             <SettingsRow
               title={
                 <span>
@@ -379,9 +366,6 @@ export default function SettingSystem(props: Props) {
                 )}
               </p>
             </SettingsRow>
-            {/* @endif */}
-
-            {/* @if TARGET='app' */}
             <SettingsRow
               title={__('Encrypt my wallet with a custom password')}
               subtitle={
@@ -424,9 +408,6 @@ export default function SettingSystem(props: Props) {
                 />
               </SettingsRow>
             )}
-            {/* @endif */}
-
-            {/* @if TARGET='app' */}
             <SettingsRow
               title={__('Max connections')}
               subtitle={__(
@@ -475,8 +456,6 @@ export default function SettingSystem(props: Props) {
             <SettingsRow title={__('Share url')} multirow>
               <SettingShareUrl />
             </SettingsRow>
-            {/* @endif */}
-
             <SettingsRow
               title={__('Clear application cache')}
               subtitle={__('This might fix issues that you are having. Your wallet will not be affected.')}

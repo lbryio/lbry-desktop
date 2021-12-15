@@ -11,6 +11,7 @@ import * as MODALS from 'constants/modal_types';
 import React, { Fragment, useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import * as SETTINGS from 'constants/settings';
 import {
   doDaemonReady,
   doAutoUpdate,
@@ -33,6 +34,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import analytics from 'analytics';
 import { doToast } from 'redux/actions/notifications';
 import { getAuthToken, setAuthToken, doAuthTokenRefresh } from 'util/saved-passwords';
+import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { DEFAULT_LANGUAGE, LBRY_API_URL } from 'config';
 
 // Import 3rd-party styles before ours for the current way we are code-splitting.
@@ -184,6 +186,16 @@ function AppWrapper() {
   // Splash screen and sdk setup not needed on web
   const [readyToLaunch, setReadyToLaunch] = useState(IS_WEB);
   const [persistDone, setPersistDone] = useState(false);
+
+  useEffect(() => {
+    if (persistDone) {
+      const state = store.getState();
+      const enabled = makeSelectClientSetting(SETTINGS.ENABLE_PRERELEASE_UPDATES)(state);
+      if (enabled) {
+        autoUpdater.allowPrerelease = true;
+      }
+    }
+  }, [persistDone]);
 
   useEffect(() => {
     // @if TARGET='app'
