@@ -80,6 +80,7 @@ const defaultState = {
     // OS
     [SETTINGS.AUTO_LAUNCH]: true,
     [SETTINGS.TO_TRAY_WHEN_CLOSED]: true,
+    [SETTINGS.ENABLE_PRERELEASE_UPDATES]: false,
   },
 };
 defaultState.clientSettings[SETTINGS.AUTOPLAY_NEXT] = defaultState.clientSettings[SETTINGS.AUTOPLAY_MEDIA];
