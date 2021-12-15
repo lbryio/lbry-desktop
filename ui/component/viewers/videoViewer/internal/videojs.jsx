@@ -196,7 +196,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       // this seems like a weird thing to have to check for here
       if (!player) return;
 
-      runAds(internalFeatureEnabled, allowPreRoll, player, embedded);
+      // runAds(internalFeatureEnabled, allowPreRoll, player, embedded);
 
       initializeEvents();
 
