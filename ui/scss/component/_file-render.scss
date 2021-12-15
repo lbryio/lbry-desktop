@@ -474,42 +474,6 @@
     &.skip {
       background-color: rgba(0, 0, 0, 0.5);
     }
-
-    // Override the original's 'display: block' to avoid the big play button
-    // from being squished to the side:
-    position: absolute;
-  }
-}
-
-video::-internal-media-controls-overlay-cast-button {
-  // Push the cast button above vjs-touch-overlay:
-  z-index: 3;
-
-  // Move it to the upper-right since it will clash with "tap to unmute":
-  left: unset;
-  right: 8px;
-}
-
-.video-js.video-js.vjs-user-inactive {
-  video::-internal-media-controls-overlay-cast-button {
-    // (1) Android-Chrome's original Cast button behavior:
-    // - If video is playing, fade out the button.
-    // - If video is paused and video is tapped, display the button and stay on.
-    // (2) We then injected another behavior:
-    // - Display the button when '.vjs-touch-overlay' is displayed. However,
-    // the 'controlslist' attribute hack that was used to do this results in the
-    // button staying displayed without a fade-out timer.
-    // (3) Ideally, we should sync the '.vjs-touch-overlay' visibility with the
-    // cast button, similar to how to controlBar's visibility is synced above.
-    // But I have no idea how to grab the sibling '.show-play-toggle' into the
-    // css logic.
-    // (4) So, this is the best that I can come up with: Whenever user is idle,
-    // the button goes away. The only downside I know is the scenario of
-    // "overlay is up and video is paused, but button goes away due to idle".
-    // The user just needs to re-tap any empty space on the overlay to get the
-    // Cast button again.
-    opacity: 0;
-    transition: opacity 1s ease;
   }
 }
 
