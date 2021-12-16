@@ -381,7 +381,7 @@ function App(props: Props) {
     script.src = oneTrustScriptSrc;
     script.setAttribute('charset', 'UTF-8');
     if (useProductionOneTrust) {
-      script.setAttribute('data-domain-script', '8a792d84-50a5-4b69-b080-6954ad4d4606-test');
+      script.setAttribute('data-domain-script', '8a792d84-50a5-4b69-b080-6954ad4d4606');
     } else {
       script.setAttribute('data-domain-script', '8a792d84-50a5-4b69-b080-6954ad4d4606-test');
     }
