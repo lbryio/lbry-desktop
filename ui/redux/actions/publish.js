@@ -18,7 +18,7 @@ import { push } from 'connected-react-router';
 import analytics from 'analytics';
 import { doOpenModal } from 'redux/actions/app';
 import { CC_LICENSES, COPYRIGHT, OTHER, NONE, PUBLIC_DOMAIN } from 'constants/licenses';
-import { IMG_CDN_PUBLISH_URL, IMG_CDN_STATUS_URL } from 'constants/cdn_urls';
+import { SPEECH_STATUS, SPEECH_PUBLISH } from 'constants/speech_urls';
 import * as THUMBNAIL_STATUSES from 'constants/thumbnail_upload_statuses';
 import { creditsToString } from 'util/format-credits';
 import Lbry from 'lbry';
@@ -355,10 +355,10 @@ export const doResetThumbnailStatus = () => (dispatch: Dispatch) => {
     },
   });
 
-  return fetch(IMG_CDN_STATUS_URL)
+  return fetch(SPEECH_STATUS)
     .then((res) => res.json())
-    .then((json) => {
-      if (json.status !== 'online') {
+    .then((status) => {
+      if (status.disabled) {
         throw Error();
       }
 
@@ -400,7 +400,15 @@ export const doUploadThumbnail = (
   path?: any,
   cb?: (string) => void
 ) => (dispatch: Dispatch) => {
+  const downMessage = __('Thumbnail upload service may be down, try again later.');
   let thumbnail, fileExt, fileName, fileType;
+
+  const makeid = () => {
+    let text = '';
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < 24; i += 1) text += possible.charAt(Math.floor(Math.random() * 62));
+    return text;
+  };
 
   const uploadError = (error = '') => {
     dispatch(
@@ -420,32 +428,28 @@ export const doUploadThumbnail = (
 
   dispatch({
     type: ACTIONS.UPDATE_PUBLISH_FORM,
-    data: { thumbnailError: undefined },
+    data: {
+      thumbnailError: undefined,
+    },
   });
 
   const doUpload = (data) => {
-    return fetch(IMG_CDN_PUBLISH_URL, {
+    return fetch(SPEECH_PUBLISH, {
       method: 'POST',
       body: data,
     })
       .then((res) => res.text())
       .then((text) => (text.length ? JSON.parse(text) : {}))
       .then((json) => {
-        if (json.type !== 'success') {
-          return uploadError(
-            json.message || __('There was an error in the upload. The format or extension might not be supported.')
-          );
-        }
-
+        if (!json.success) return uploadError(json.message || downMessage);
         if (cb) {
-          cb(json.message);
+          cb(json.data.serveUrl);
         }
-
         return dispatch({
           type: ACTIONS.UPDATE_PUBLISH_FORM,
           data: {
             uploadThumbnailStatus: THUMBNAIL_STATUSES.COMPLETE,
-            thumbnail: json.message,
+            thumbnail: json.data.serveUrl,
           },
         });
       })
@@ -454,7 +458,7 @@ export const doUploadThumbnail = (
 
         // This sucks but ¯\_(ツ)_/¯
         if (message === 'Failed to fetch') {
-          message = __('Thumbnail upload service may be down, try again later.');
+          message = downMessage;
         }
 
         uploadError(message);
@@ -473,9 +477,10 @@ export const doUploadThumbnail = (
       fileType = 'image/png';
 
       const data = new FormData();
+      const name = makeid();
+      data.append('name', name);
       // $FlowFixMe
-      data.append('file-input', { uri: 'file://' + filePath, type: fileType, name: fileName });
-      data.append('upload', 'Upload');
+      data.append('file', { uri: 'file://' + filePath, type: fileType, name: fileName });
       return doUpload(data);
     });
   } else {
@@ -493,10 +498,11 @@ export const doUploadThumbnail = (
     }
 
     const data = new FormData();
+    const name = makeid();
     const file = thumbnailBlob || (thumbnail && new File([thumbnail], fileName, { type: fileType }));
+    data.append('name', name);
     // $FlowFixMe
-    data.append('file-input', file);
-    data.append('upload', 'Upload');
+    data.append('file', file);
     return doUpload(data);
   }
 };

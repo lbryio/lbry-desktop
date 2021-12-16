@@ -20,8 +20,10 @@ type Props = {
   claim: ?ChannelClaim,
   doResolveUri: (string) => void,
   isResolving: boolean,
+  showDelayedMessage?: boolean,
   noLazyLoad?: boolean,
   hideStakedIndicator?: boolean,
+  xsmall?: boolean,
   noOptimization?: boolean,
   setThumbUploadError: (boolean) => void,
   ThumbUploadError: boolean,
@@ -40,6 +42,7 @@ function ChannelThumbnail(props: Props) {
     claim,
     doResolveUri,
     isResolving,
+    showDelayedMessage = false,
     noLazyLoad,
     hideStakedIndicator = false,
     setThumbUploadError,
@@ -88,19 +91,25 @@ function ChannelThumbnail(props: Props) {
         'channel-thumbnail--resolving': isResolving,
       })}
     >
-      <OptimizedImage
-        alt={__('Channel profile picture')}
-        className={!channelThumbnail ? 'channel-thumbnail__default' : 'channel-thumbnail__custom'}
-        src={(!thumbLoadError && channelThumbnail) || defaultAvatar}
-        loading={noLazyLoad ? undefined : 'lazy'}
-        onError={() => {
-          if (setThumbUploadError) {
-            setThumbUploadError(true);
-          } else {
-            setThumbLoadError(true);
-          }
-        }}
-      />
+      {showDelayedMessage ? (
+        <div className="channel-thumbnail--waiting">
+          {__('This will be visible in a few minutes after you submit this form.')}
+        </div>
+      ) : (
+        <OptimizedImage
+          alt={__('Channel profile picture')}
+          className={!channelThumbnail ? 'channel-thumbnail__default' : 'channel-thumbnail__custom'}
+          src={(!thumbLoadError && channelThumbnail) || defaultAvatar}
+          loading={noLazyLoad ? undefined : 'lazy'}
+          onError={() => {
+            if (setThumbUploadError) {
+              setThumbUploadError(true);
+            } else {
+              setThumbLoadError(true);
+            }
+          }}
+        />
+      )}
       {!hideStakedIndicator && <ChannelStakedIndicator uri={uri} claim={claim} />}
     </div>
   );
