@@ -146,7 +146,7 @@ function PublishForm(props: Props) {
     } else if (_uploadType) {
       return mode === _uploadType;
     } else {
-      return false;
+      return true;
     }
   });
 
