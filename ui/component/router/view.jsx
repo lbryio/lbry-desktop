@@ -11,8 +11,9 @@ import { parseURI, isURIValid } from 'util/lbryURI';
 import { SITE_TITLE, WELCOME_VERSION, SIMPLE_SITE } from 'config';
 import LoadingBarOneOff from 'component/loadingBarOneOff';
 import { GetLinksData } from 'util/buildHomepage';
-
+import { useKeycloak } from '@react-keycloak/web';
 import HomePage from 'page/home';
+import Login from 'component/auth/login';
 
 // @if TARGET='app'
 const BackupPage = lazyImport(() => import('page/backup' /* webpackChunkName: "backup" */));
@@ -25,7 +26,8 @@ const TOSPage = lazyImport(() => import('web/page/tos' /* webpackChunkName: "tos
 const YouTubeTOSPage = lazyImport(() => import('web/page/youtubetos' /* webpackChunkName: "youtubetos" */));
 // @endif
 
-const SignInPage = lazyImport(() => import('page/signIn' /* webpackChunkName: "signIn" */));
+// remove signin page
+// const SignInPage = lazyImport(() => import('page/signIn' /* webpackChunkName: "signIn" */));
 const SignInWalletPasswordPage = lazyImport(() =>
   import('page/signInWalletPassword' /* webpackChunkName: "signInWalletPassword" */)
 );
@@ -139,14 +141,20 @@ function PrivateRoute(props: PrivateRouteProps) {
   const { component: Component, isAuthenticated, ...rest } = props;
   const urlSearchParams = new URLSearchParams(props.location.search);
   const redirectUrl = urlSearchParams.get('redirect');
+  const { keycloak } = useKeycloak();
   return (
     <Route
       {...rest}
       render={(props) =>
-        isAuthenticated || !IS_WEB ? (
+        (keycloak && keycloak.authenticated) || !IS_WEB ? (
           <Component {...props} />
         ) : (
-          <Redirect to={`/$/${PAGES.AUTH}?redirect=${redirectUrl || props.location.pathname}`} />
+          <Redirect
+            to={{
+              pathname: `/$/${PAGES.AUTH}?redirect=${redirectUrl || props.location.pathname}`,
+              state: { from: props.location },
+            }}
+          />
         )
       }
     />
@@ -279,10 +287,10 @@ function AppRouter(props: Props) {
         {SIMPLE_SITE && <Route path={`/$/${PAGES.WILD_WEST}`} exact component={DiscoverPage} />}
         {homeCategoryPages}
 
-        <Route path={`/$/${PAGES.AUTH_SIGNIN}`} exact component={SignInPage} />
+        <Route path={`/$/${PAGES.AUTH_SIGNIN}`} exact component={Login} />
         <Route path={`/$/${PAGES.AUTH_PASSWORD_RESET}`} exact component={PasswordResetPage} />
         <Route path={`/$/${PAGES.AUTH_PASSWORD_SET}`} exact component={PasswordSetPage} />
-        <Route path={`/$/${PAGES.AUTH}`} exact component={SignUpPage} />
+        <Route path={`/$/${PAGES.AUTH}`} exact component={Login} />
         <Route path={`/$/${PAGES.AUTH}/*`} exact component={SignUpPage} />
         <Route path={`/$/${PAGES.WELCOME}`} exact component={Welcome} />
 

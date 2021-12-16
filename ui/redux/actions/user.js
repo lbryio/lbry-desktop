@@ -48,11 +48,8 @@ export function doFetchInviteStatus(shouldCallRewardList = true) {
   };
 }
 
-export function doInstallNew(appVersion, os = null, firebaseToken = null, callbackForUsersWhoAreSharingData, domain) {
+export function doInstallNew(appVersion, callbackForUsersWhoAreSharingData, domain) {
   const payload = { app_version: appVersion, domain };
-  if (firebaseToken) {
-    payload.firebase_token = firebaseToken;
-  }
 
   Lbry.status().then((status) => {
     payload.app_id =
@@ -62,7 +59,7 @@ export function doInstallNew(appVersion, os = null, firebaseToken = null, callba
     payload.node_id = status.lbry_id;
     Lbry.version().then((version) => {
       payload.daemon_version = version.lbrynet_version;
-      payload.operating_system = os || version.os_system;
+      payload.operating_system = version.os_system;
       payload.platform = version.platform;
       Lbryio.call('install', 'new', payload);
 
@@ -71,30 +68,6 @@ export function doInstallNew(appVersion, os = null, firebaseToken = null, callba
       }
     });
   });
-}
-
-export function doInstallNewWithParams(
-  appVersion,
-  installationId,
-  nodeId,
-  lbrynetVersion,
-  os,
-  platform,
-  firebaseToken = null
-) {
-  return () => {
-    const payload = { app_version: appVersion };
-    if (firebaseToken) {
-      payload.firebase_token = firebaseToken;
-    }
-
-    payload.app_id = installationId;
-    payload.node_id = nodeId;
-    payload.daemon_version = lbrynetVersion;
-    payload.operating_system = os;
-    payload.platform = platform;
-    Lbryio.call('install', 'new', payload);
-  };
 }
 
 function checkAuthBusy() {
@@ -129,47 +102,54 @@ function checkAuthBusy() {
 }
 
 // TODO: Call doInstallNew separately so we don't have to pass appVersion and os_system params?
+/**
+ *
+ * @param appVersion
+ * @param shareUsageData
+ * @param callbackForUsersWhoAreSharingData
+ * @param callInstall
+ * @returns {Function}
+ *
+ * Does Lbryio.authenticate, i.e. call Authenticate() then update redux with auth token.
+ * Authenticate does getAuthToken then getCurrentUser, and if !user, call userNew and return the user
+ * telling redux the auth token is probably dumb. we will
+ * keycloak = useKeycloak(), keycloak.token whenever we want that
+ *
+ */
 export function doAuthenticate(
   appVersion,
-  os = null,
-  firebaseToken = null,
   shareUsageData = true,
   callbackForUsersWhoAreSharingData,
   callInstall = true,
-  domain = null
 ) {
-  return (dispatch) => {
+  return async (dispatch) => {
     dispatch({
       type: ACTIONS.AUTHENTICATION_STARTED,
     });
-    checkAuthBusy()
-      .then(() => {
-        return Lbryio.authenticate(DOMAIN, getDefaultLanguage());
-      })
-      .then((user) => {
-        if (sessionStorageAvailable) window.sessionStorage.removeItem(AUTH_IN_PROGRESS);
-        Lbryio.getAuthToken().then((token) => {
-          dispatch({
-            type: ACTIONS.AUTHENTICATION_SUCCESS,
-            data: { user, accessToken: token },
-          });
-
-          if (shareUsageData) {
-            dispatch(doRewardList());
-            dispatch(doFetchInviteStatus(false));
-            if (callInstall) {
-              doInstallNew(appVersion, os, firebaseToken, callbackForUsersWhoAreSharingData, domain);
-            }
-          }
-        });
-      })
-      .catch((error) => {
-        if (sessionStorageAvailable) window.sessionStorage.removeItem(AUTH_IN_PROGRESS);
-
+    try {
+      await checkAuthBusy();
+      const user = await Lbryio.authenticate(DOMAIN, getDefaultLanguage());
+      console.log('USER', user)
+      if (sessionStorageAvailable) window.sessionStorage.removeItem(AUTH_IN_PROGRESS);
+      Lbryio.getTokens().then((tokens) => {
         dispatch({
-          type: ACTIONS.AUTHENTICATION_FAILURE,
-          data: { error },
+          type: ACTIONS.AUTHENTICATION_SUCCESS,
+          data: { user, authToken: tokens.auth_token, accessToken: tokens.access_token },
         });
+        if (shareUsageData) {
+          dispatch(doRewardList());
+          dispatch(doFetchInviteStatus(false));
+          if (callInstall) {
+            doInstallNew(appVersion, callbackForUsersWhoAreSharingData, DOMAIN);
+          }
+        }
+      });
+    } catch (error) {
+      if (sessionStorageAvailable) window.sessionStorage.removeItem(AUTH_IN_PROGRESS);
+
+      dispatch({
+        type: ACTIONS.AUTHENTICATION_FAILURE,
+        data: { error },
       });
   };
 }
@@ -639,6 +619,7 @@ export function doUserIdentityVerify(stripeToken) {
           data: { error: error.toString() },
         });
       });
+    }
   };
 }
 

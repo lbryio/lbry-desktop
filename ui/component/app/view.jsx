@@ -30,6 +30,9 @@ import {
   STATUS_FAILING,
   STATUS_DOWN,
 } from 'web/effects/use-degraded-performance';
+import { useKeycloak } from '@react-keycloak/web';
+
+// @endif
 import LANGUAGE_MIGRATIONS from 'constants/language-migrations';
 
 const FileDrop = lazyImport(() => import('component/fileDrop' /* webpackChunkName: "fileDrop" */));
@@ -129,7 +132,7 @@ function App(props: Props) {
   const isRewardApproved = user && user.is_reward_approved;
   const previousHasVerifiedEmail = usePrevious(hasVerifiedEmail);
   const previousRewardApproved = usePrevious(isRewardApproved);
-
+  const { authenticated } = useKeycloak();
   const [showAnalyticsNag, setShowAnalyticsNag] = usePersistedState('analytics-nag', true);
   const [lbryTvApiStatus, setLbryTvApiStatus] = useState(STATUS_OK);
 
@@ -148,6 +151,7 @@ function App(props: Props) {
   const fromLbrytvParam = urlParams.get('sunset');
   const sanitizedReferrerParam = rawReferrerParam && rawReferrerParam.replace(':', '#');
   const shouldHideNag = pathname.startsWith(`/$/${PAGES.EMBED}`) || pathname.startsWith(`/$/${PAGES.AUTH_VERIFY}`);
+  // KC
   const userId = user && user.id;
   const hasMyChannels = myChannelClaimIds && myChannelClaimIds.length > 0;
   const hasNoChannels = myChannelClaimIds && myChannelClaimIds.length === 0;
@@ -211,6 +215,13 @@ function App(props: Props) {
     }
   }
 
+  useEffect(() => {
+    if (authenticated) {
+      console.log('IS KC AUTHED');
+    }
+  }, [authenticated]);
+  // @endif
+  // TODO KC HOWTO SETUSER
   useEffect(() => {
     if (userId) {
       analytics.setUser(userId);
@@ -451,6 +462,7 @@ function App(props: Props) {
     };
   }, [hasSignedIn, hasVerifiedEmail, syncLoop]);
 
+  // TODO KEYCLOAK ISAUTHENTICATED
   useEffect(() => {
     if (syncError && isAuthenticated && !pathname.includes(PAGES.AUTH_WALLET_PASSWORD) && !currentModal) {
       history.push(`/$/${PAGES.AUTH_WALLET_PASSWORD}?redirect=${pathname}`);

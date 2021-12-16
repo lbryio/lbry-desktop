@@ -13,7 +13,7 @@ import Lbry from 'lbry';
 import { createAnalyticsMiddleware } from 'redux/middleware/analytics';
 import { buildSharedStateMiddleware } from 'redux/middleware/shared-state';
 import { doSyncLoop } from 'redux/actions/sync';
-import { getAuthToken } from 'util/saved-passwords';
+import { getTokens } from 'util/saved-passwords';
 import { generateInitialUrl } from 'util/url';
 import { X_LBRY_AUTH_TOKEN } from 'constants/token';
 
@@ -192,11 +192,16 @@ const sharedStateCb = ({ dispatch, getState }) => {
 const populateAuthTokenHeader = () => {
   return (next) => (action) => {
     if (
-      (action.type === ACTIONS.USER_FETCH_SUCCESS || action.type === ACTIONS.AUTHENTICATION_SUCCESS) &&
-      action.data.user.has_verified_email === true
+      (action.type === ACTIONS.USER_FETCH_SUCCESS || action.type === ACTIONS.AUTHENTICATION_SUCCESS)
+
     ) {
-      const authToken = getAuthToken();
-      Lbry.setApiHeader(X_LBRY_AUTH_TOKEN, authToken);
+      if (action.data) {
+      }
+      const tokens = getTokens();
+      // if (tokens.access_token) {
+      //   Lbry.setApiHeader('Authorization', 'Bearer ' + tokens.access_token);
+      // }
+      Lbry.setApiHeader(X_LBRY_AUTH_TOKEN, tokens.auth_token);
     }
 
     return next(action);

@@ -13,7 +13,7 @@ import * as MODALS from 'constants/modal_types';
 import React, { Fragment, useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { doDaemonReady, doAutoUpdate, doOpenModal, doHideModal, doToggle3PAnalytics } from 'redux/actions/app';
+import { doLbryReady, doDaemonReady, doAutoUpdate, doOpenModal, doHideModal, doToggle3PAnalytics } from 'redux/actions/app';
 import Lbry, { apiCall } from 'lbry';
 import { isURIValid } from 'util/lbryURI';
 import { setSearchApi } from 'redux/actions/search';
@@ -28,11 +28,14 @@ import { formatLbryUrlForWeb, formatInAppUrl } from 'util/url';
 import { PersistGate } from 'redux-persist/integration/react';
 import analytics from 'analytics';
 import { doToast } from 'redux/actions/notifications';
+import { ReactKeycloakProvider } from '@react-keycloak/web';
+import keycloak from 'util/keycloak';
+
 import {
   getAuthToken,
   setAuthToken,
-  doDeprecatedPasswordMigrationMarch2020,
   doAuthTokenRefresh,
+  getTokens,
 } from 'util/saved-passwords';
 import { X_LBRY_AUTH_TOKEN } from 'constants/token';
 import { PROXY_URL, DEFAULT_LANGUAGE, LBRY_API_URL } from 'config';
@@ -99,28 +102,30 @@ if (process.env.SEARCH_API_URL) {
   setSearchApi(process.env.SEARCH_API_URL);
 }
 
-// Fix to make sure old users' cookies are set to the correct domain
-// This can be removed after March 11th, 2021
-// https://github.com/lbryio/lbry-desktop/pull/3830
-doDeprecatedPasswordMigrationMarch2020();
-doAuthTokenRefresh();
+// TODO KEYCLOAK
+// doAuthTokenRefresh();
 
 // We need to override Lbryio for getting/setting the authToken
 // We interact with ipcRenderer to get the auth key from a users keyring
 // We keep a local variable for authToken because `ipcRenderer.send` does not
 // contain a response, so there is no way to know when it's been set
-let authToken;
+// let authToken;
 Lbryio.setOverride('setAuthToken', (authToken) => {
-  setAuthToken(authToken);
+  setAuthToken(authToken); // set the cookie to auth_token=
   return authToken;
 });
+
+Lbryio.setOverride('getTokens', () =>
+  new Promise((resolve) => {
+    resolve(getTokens());
+  })
+);
 
 Lbryio.setOverride(
   'getAuthToken',
   () =>
     new Promise((resolve) => {
-      const authTokenToReturn = authToken || getAuthToken();
-      resolve(authTokenToReturn);
+      resolve(getAuthToken());
     })
 );
 
@@ -213,6 +218,7 @@ function AppWrapper() {
   // Splash screen and sdk setup not needed on web
   const [readyToLaunch, setReadyToLaunch] = useState(IS_WEB);
   const [persistDone, setPersistDone] = useState(false);
+  const [keycloakReady, setKeycloakReady] = useState(false);
 
   useEffect(() => {
     // @if TARGET='app'
@@ -244,8 +250,8 @@ function AppWrapper() {
   }, [persistDone]);
 
   useEffect(() => {
-    if (readyToLaunch && persistDone) {
-      app.store.dispatch(doDaemonReady());
+    if (readyToLaunch && persistDone && keycloakReady) {
+      app.store.dispatch(doLbryReady());
 
       setTimeout(() => {
         if (DEFAULT_LANGUAGE) {
@@ -258,7 +264,18 @@ function AppWrapper() {
 
       analytics.startupEvent(Date.now());
     }
-  }, [readyToLaunch, persistDone]);
+  }, [readyToLaunch, persistDone, keycloakReady]);
+
+  useEffect(() => {
+    console.log('keycl', keycloak.token);
+  }, [keycloak])
+
+  const eventLogger = (event, error) => {
+    // console.log('onKeycloakEvent', event, error, keycloak);
+    if (event === 'onReady') {
+      setKeycloakReady(true);
+    }
+  };
 
   return (
     <Provider store={store}>
@@ -269,12 +286,18 @@ function AppWrapper() {
       >
         <Fragment>
           {readyToLaunch ? (
-            <ConnectedRouter history={history}>
-              <ErrorBoundary>
-                <App />
-                <SnackBar />
-              </ErrorBoundary>
-            </ConnectedRouter>
+            <ReactKeycloakProvider
+              authClient={keycloak}
+              onEvent={eventLogger}
+              initOptions={{ onLoad: 'check-sso', silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html' }} // from npmjs docs for @react-keycloak/web
+            >
+              <ConnectedRouter history={history}>
+                <ErrorBoundary>
+                  <App />
+                  <SnackBar />
+                </ErrorBoundary>
+              </ConnectedRouter>
+            </ReactKeycloakProvider>
           ) : (
             <Fragment>
               <SplashScreen onReadyToLaunch={() => setReadyToLaunch(true)} />
