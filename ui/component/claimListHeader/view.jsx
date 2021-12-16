@@ -24,6 +24,7 @@ type Props = {
   orderBy?: Array<string>,
   defaultOrderBy?: string,
   hideAdvancedFilter: boolean,
+  hideLayoutButton: boolean,
   hasMatureTags: boolean,
   hiddenNsfwMessage?: Node,
   channelIds?: Array<string>,
@@ -49,6 +50,7 @@ function ClaimListHeader(props: Props) {
     orderBy,
     defaultOrderBy,
     hideAdvancedFilter,
+    hideLayoutButton,
     hasMatureTags,
     hiddenNsfwMessage,
     channelIds,
@@ -269,7 +271,7 @@ function ClaimListHeader(props: Props) {
               />
             )}
 
-            {tileLayout !== undefined && (
+            {tileLayout !== undefined && !hideLayoutButton && (
               <Button
                 onClick={() => {
                   doSetClientSetting(SETTINGS.TILE_LAYOUT, !tileLayout);

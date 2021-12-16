@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { doFetchActiveLivestreams } from 'redux/actions/livestream';
-import { selectActiveLivestreams } from 'redux/selectors/livestream';
+import { selectActiveLivestreams, selectFetchingActiveLivestreams } from 'redux/selectors/livestream';
 import { selectFollowedTags } from 'redux/selectors/tags';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
@@ -15,6 +15,7 @@ const select = (state) => ({
   showNsfw: selectShowMatureContent(state),
   homepageData: selectHomepageData(state),
   activeLivestreams: selectActiveLivestreams(state),
+  fetchingActiveLivestreams: selectFetchingActiveLivestreams(state),
 });
 
 const perform = (dispatch) => ({

@@ -19,18 +19,28 @@ type Props = {
   releaseTime: ?number,
   releaseTimeEdited: ?number,
   updatePublishForm: ({}) => void,
+  allowDefault: ?boolean,
+  showNowBtn: ?boolean,
+  useMaxDate: ?boolean,
 };
 
 const PublishReleaseDate = (props: Props) => {
-  const { releaseTime, releaseTimeEdited, updatePublishForm } = props;
-  const maxDate = new Date();
+  const {
+    releaseTime,
+    releaseTimeEdited,
+    updatePublishForm,
+    allowDefault = true,
+    showNowBtn = true,
+    useMaxDate = true,
+  } = props;
+  const maxDate = useMaxDate ? new Date() : undefined;
   const [date, setDate] = React.useState(releaseTime ? linuxTimestampToDate(releaseTime) : new Date());
 
   const isNew = releaseTime === undefined;
-  const isEdit = !isNew;
+  const isEdit = !isNew || allowDefault === false;
 
-  const showEditBtn = isNew && releaseTimeEdited === undefined;
-  const showDefaultBtn = isNew && releaseTimeEdited !== undefined;
+  const showEditBtn = isNew && releaseTimeEdited === undefined && allowDefault !== false;
+  const showDefaultBtn = isNew && releaseTimeEdited !== undefined && allowDefault !== false;
   const showDatePicker = isEdit || releaseTimeEdited !== undefined;
 
   const onDateTimePickerChanged = (value) => {
@@ -108,7 +118,7 @@ const PublishReleaseDate = (props: Props) => {
             onClick={() => newDate(RESET_TO_ORIGINAL)}
           />
         )}
-        {showDatePicker && (
+        {showDatePicker && showNowBtn && (
           <Button
             button="link"
             label={__('Now')}

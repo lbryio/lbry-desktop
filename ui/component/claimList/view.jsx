@@ -44,6 +44,9 @@ type Props = {
   collectionId?: string,
   showNoSourceClaims?: boolean,
   onClick?: (e: any, claim?: ?Claim, index?: number) => void,
+  maxClaimRender?: number,
+  excludeUris?: Array<string>,
+  loadedCallback?: (number) => void,
 };
 
 export default function ClaimList(props: Props) {
@@ -74,6 +77,9 @@ export default function ClaimList(props: Props) {
     collectionId,
     showNoSourceClaims,
     onClick,
+    maxClaimRender,
+    excludeUris = [],
+    loadedCallback,
   } = props;
 
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
@@ -83,8 +89,15 @@ export default function ClaimList(props: Props) {
   const timedOut = uris === null;
   const urisLength = (uris && uris.length) || 0;
 
-  const tileUris = (prefixUris || []).concat(uris);
-  const sortedUris = (urisLength > 0 && (currentSort === SORT_NEW ? tileUris : tileUris.slice().reverse())) || [];
+  let tileUris = (prefixUris || []).concat(uris || []);
+  tileUris = tileUris.filter((uri) => !excludeUris.includes(uri));
+  if (maxClaimRender) tileUris = tileUris.slice(0, maxClaimRender);
+
+  let sortedUris = (urisLength > 0 && (currentSort === SORT_NEW ? tileUris : tileUris.slice().reverse())) || [];
+
+  React.useEffect(() => {
+    if (typeof loadedCallback === 'function') loadedCallback(tileUris.length || 0);
+  }, [tileUris.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const noResultMsg = searchInLanguage
     ? __('No results. Contents may be hidden by the Language filter.')

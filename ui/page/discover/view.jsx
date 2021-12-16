@@ -39,7 +39,7 @@ type Props = {
   isAuthenticated: boolean,
   tileLayout: boolean,
   activeLivestreams: ?LivestreamInfo,
-  doFetchActiveLivestreams: (orderBy?: Array<string>, pageSize?: number, forceFetch?: boolean) => void,
+  doFetchActiveLivestreams: (orderBy?: Array<string>) => void,
 };
 
 function DiscoverPage(props: Props) {
@@ -307,7 +307,7 @@ function DiscoverPage(props: Props) {
         }
       }
     })();
-  }, []);
+  }, [isAuthenticated]);
 
   // Sync liveSection --> liveSectionStore
   React.useEffect(() => {

@@ -11,52 +11,71 @@ import Button from 'component/button';
 import Icon from 'component/common/icon';
 import { splitBySeparator } from 'util/lbryURI';
 import { getLivestreamUris } from 'util/livestream';
+import ScheduledStreams from 'component/scheduledStreams';
 
 type Props = {
   subscribedChannels: Array<Subscription>,
   tileLayout: boolean,
   activeLivestreams: ?LivestreamInfo,
   doFetchActiveLivestreams: () => void,
+  fetchingActiveLivestreams: boolean,
 };
 
 function ChannelsFollowingPage(props: Props) {
-  const { subscribedChannels, tileLayout, activeLivestreams, doFetchActiveLivestreams } = props;
+  const {
+    subscribedChannels,
+    tileLayout,
+    activeLivestreams,
+    doFetchActiveLivestreams,
+    fetchingActiveLivestreams,
+  } = props;
 
-  const hasSubsribedChannels = subscribedChannels.length > 0;
+  const hasSubscribedChannels = subscribedChannels.length > 0;
   const channelIds = subscribedChannels.map((sub) => splitBySeparator(sub.uri)[1]);
 
   React.useEffect(() => {
     doFetchActiveLivestreams();
   }, []);
 
-  return !hasSubsribedChannels ? (
+  return !hasSubscribedChannels ? (
     <ChannelsFollowingDiscoverPage />
   ) : (
     <Page noFooter fullWidthPage={tileLayout}>
-      <ClaimListDiscover
-        prefixUris={getLivestreamUris(activeLivestreams, channelIds)}
-        hideAdvancedFilter={SIMPLE_SITE}
-        streamType={SIMPLE_SITE ? CS.CONTENT_ALL : undefined}
-        tileLayout={tileLayout}
-        headerLabel={
-          <span>
-            <Icon icon={ICONS.SUBSCRIBE} size={10} />
-            {__('Following')}
-          </span>
-        }
-        defaultOrderBy={CS.ORDER_BY_NEW}
-        channelIds={channelIds}
-        meta={
-          <Button
-            icon={ICONS.SEARCH}
-            button="secondary"
-            label={__('Discover Channels')}
-            navigate={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`}
+      {!fetchingActiveLivestreams && (
+        <>
+          <ScheduledStreams
+            channelIds={channelIds}
+            tileLayout={tileLayout}
+            liveUris={getLivestreamUris(activeLivestreams, channelIds)}
+            limitClaimsPerChannel={2}
           />
-        }
-        showNoSourceClaims={ENABLE_NO_SOURCE_CLAIMS}
-        hasSource
-      />
+
+          <ClaimListDiscover
+            prefixUris={getLivestreamUris(activeLivestreams, channelIds)}
+            hideAdvancedFilter={SIMPLE_SITE}
+            streamType={SIMPLE_SITE ? CS.CONTENT_ALL : undefined}
+            tileLayout={tileLayout}
+            headerLabel={
+              <span>
+                <Icon icon={ICONS.SUBSCRIBE} size={10} />
+                {__('Following')}
+              </span>
+            }
+            defaultOrderBy={CS.ORDER_BY_NEW}
+            channelIds={channelIds}
+            meta={
+              <Button
+                icon={ICONS.SEARCH}
+                button="secondary"
+                label={__('Discover Channels')}
+                navigate={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`}
+              />
+            }
+            showNoSourceClaims={ENABLE_NO_SOURCE_CLAIMS}
+            hasSource
+          />
+        </>
+      )}
     </Page>
   );
 }

@@ -17,8 +17,6 @@ type Props = {
   uri: string,
   claim: ?StreamClaim,
   embed?: boolean,
-  doCommentSocketConnect: (string, string) => void,
-  doCommentSocketDisconnect: (string) => void,
   doCommentList: (string, string, number, number) => void,
   comments: Array<Comment>,
   pinnedComments: Array<Comment>,
@@ -39,8 +37,6 @@ export default function LivestreamComments(props: Props) {
     claim,
     uri,
     embed,
-    doCommentSocketConnect,
-    doCommentSocketDisconnect,
     comments: commentsByChronologicalOrder,
     pinnedComments,
     doCommentList,
@@ -99,15 +95,8 @@ export default function LivestreamComments(props: Props) {
     if (claimId) {
       doCommentList(uri, '', 1, 75);
       doSuperChatList(uri);
-      doCommentSocketConnect(uri, claimId);
     }
-
-    return () => {
-      if (claimId) {
-        doCommentSocketDisconnect(claimId);
-      }
-    };
-  }, [claimId, uri, doCommentList, doSuperChatList, doCommentSocketConnect, doCommentSocketDisconnect]);
+  }, [claimId, uri, doCommentList, doSuperChatList]);
 
   // Register scroll handler (TODO: Should throttle/debounce)
   React.useEffect(() => {

@@ -11215,6 +11215,11 @@ merge-descriptors@1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/merge-descriptors/-/merge-descriptors-1.0.1.tgz#b00aaa556dd8b44568150ec9d1b953f3f90cbb61"
 
+merge-refs@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/merge-refs/-/merge-refs-1.0.0.tgz#388348bce22e623782c6df9d3c4fc55888276120"
+  integrity sha512-WZ4S5wqD9FCR9hxkLgvcHJCBxzXzy3VVE6p8W2OzxRzB+hLRlcadGE2bW9xp2KSzk10rvp4y+pwwKO6JQVguMg==
+
 merge-stream@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/merge-stream/-/merge-stream-2.0.0.tgz#52823629a14dd00c9770fb6ad47dc6310f2c1f60"
@@ -13657,25 +13662,26 @@ react-confetti@^4.0.1:
   dependencies:
     tween-functions "^1.2.0"
 
-react-date-picker@^8.1.0:
-  version "8.1.1"
-  resolved "https://registry.yarnpkg.com/react-date-picker/-/react-date-picker-8.1.1.tgz#1959608cd042c9bfcf2faa6d63a56e9ef6b17e2b"
-  integrity sha512-kFhn+uSJML+EuROvR6qLYU5G3wsxrdB2K1ugh1t6HjJCjphE6ot85jb8THWebqWEcQi07pLseU7ZFpzKDD3A6A==
+react-date-picker@^8.3.3:
+  version "8.3.6"
+  resolved "https://registry.yarnpkg.com/react-date-picker/-/react-date-picker-8.3.6.tgz#446142bee5691aea66a2bac53313357aca561cd4"
+  integrity sha512-c1rThf0jSKROoSGLpUEPtcC8VE+XoVgqxh+ng9aLYQvjDMGWQBgoat6Qrj8nRVzvCPpdXV4jqiCB3z2vVVuseA==
   dependencies:
     "@types/react-calendar" "^3.0.0"
     "@wojtekmaj/date-utils" "^1.0.3"
     get-user-locale "^1.2.0"
     make-event-props "^1.1.0"
     merge-class-names "^1.1.1"
+    merge-refs "^1.0.0"
     prop-types "^15.6.0"
     react-calendar "^3.3.1"
     react-fit "^1.0.3"
-    update-input-width "^1.1.1"
+    update-input-width "^1.2.2"
 
-react-datetime-picker@^3.2.1:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/react-datetime-picker/-/react-datetime-picker-3.2.1.tgz#d3a9631bcba17bd0047e6424cff0dfe242d9cf0e"
-  integrity sha512-elybaAL7RJG7r0elYZze5/zQo1ds0v+v89tyZkzEShw+6I1EcveXwYPOMj3aq0k7D5kY/K+dC5dWYw0w4d9kmw==
+react-datetime-picker@^3.4.3:
+  version "3.4.3"
+  resolved "https://registry.yarnpkg.com/react-datetime-picker/-/react-datetime-picker-3.4.3.tgz#9163471f72b708185482b6b72cd259da03462f79"
+  integrity sha512-yuFmh3TJwDo3VnyQF6auRJoeYfFTUtyLsR292lWXieigp0ugKkQefUEzVybZQidiiUlCNK9UQgc37/igl7uBYA==
   dependencies:
     "@wojtekmaj/date-utils" "^1.0.3"
     get-user-locale "^1.2.0"
@@ -13684,9 +13690,9 @@ react-datetime-picker@^3.2.1:
     prop-types "^15.6.0"
     react-calendar "^3.3.1"
     react-clock "^3.0.0"
-    react-date-picker "^8.1.0"
+    react-date-picker "^8.3.3"
     react-fit "^1.0.3"
-    react-time-picker "^4.2.0"
+    react-time-picker "^4.4.2"
 
 react-dev-utils@^3.0.2, react-dev-utils@^3.1.0:
   version "3.1.3"
@@ -13914,19 +13920,20 @@ react-spring@^8.0.20, react-spring@^8.0.27:
     "@babel/runtime" "^7.3.1"
     prop-types "^15.5.8"
 
-react-time-picker@^4.2.0:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/react-time-picker/-/react-time-picker-4.2.1.tgz#b27f0bbc2e58534f20dbf10b14d0b8f3334fcb07"
-  integrity sha512-T0aEabJ3bz54l8LV3pdpB5lOZuO3pRIbry5STcUV58UndlrWLcHpdpvS1IC8JLNXhbLxzGs1MmpASb5k1ddlsg==
+react-time-picker@^4.4.2:
+  version "4.4.4"
+  resolved "https://registry.yarnpkg.com/react-time-picker/-/react-time-picker-4.4.4.tgz#a67ca5fd88f51eac0919df802e416d9a25ad726a"
+  integrity sha512-WMdrpGnegug0871Do+SU1Fe91uZGmS6JUo1Yw7eLfU3VHMXCFj9sL9FAT6BuXe7lfILBbXq4tQQOqa/rLDASQg==
   dependencies:
     "@wojtekmaj/date-utils" "^1.0.0"
     get-user-locale "^1.2.0"
     make-event-props "^1.1.0"
     merge-class-names "^1.1.1"
+    merge-refs "^1.0.0"
     prop-types "^15.6.0"
     react-clock "^3.0.0"
     react-fit "^1.0.3"
-    update-input-width "^1.1.1"
+    update-input-width "^1.2.2"
 
 react-top-loading-bar@^2.0.1:
   version "2.0.1"
@@ -16705,10 +16712,10 @@ upath@^1.1.1:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/upath/-/upath-1.2.0.tgz#8f66dbcd55a883acdae4408af8b035a5044c1894"
 
-update-input-width@^1.1.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/update-input-width/-/update-input-width-1.2.1.tgz#769d6182413590c3b50b52ffa9c65d79e2c17f95"
-  integrity sha512-zygDshqDb2C2/kgfoD423n5htv/3OBF7aTaz2u2zZy998EJki8njOHOeZjKEd8XSYeDziIX1JXfMsKaIRJeJ/Q==
+update-input-width@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/update-input-width/-/update-input-width-1.2.2.tgz#9a6a35858ae8e66fbfe0304437b23a4934fc7d37"
+  integrity sha512-6QwD9ZVSXb96PxOZ01DU0DJTPwQGY7qBYgdniZKJN02Xzom2m+9J6EPxMbefskqtj4x78qbe5psDSALq9iNEYg==
 
 update-notifier@^2.3.0, update-notifier@^2.5.0:
   version "2.5.0"

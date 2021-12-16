@@ -85,6 +85,12 @@
   }
 }
 
+.file-render--scheduledLivestream {
+  background-image: url('//spee.ch/odysee-streaming-png:2.png?quality=80&height=960&width=1920');
+  background-size: cover;
+  margin-top: var(--spacing-m);
+}
+
 @keyframes fadeInFromBlack {
   0% {
     opacity: 1;

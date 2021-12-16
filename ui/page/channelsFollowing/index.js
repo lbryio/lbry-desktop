@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import * as SETTINGS from 'constants/settings';
 import { doFetchActiveLivestreams } from 'redux/actions/livestream';
-import { selectActiveLivestreams } from 'redux/selectors/livestream';
+import { selectActiveLivestreams, selectFetchingActiveLivestreams } from 'redux/selectors/livestream';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import { selectClientSetting } from 'redux/selectors/settings';
 
@@ -11,6 +11,7 @@ const select = (state) => ({
   subscribedChannels: selectSubscriptions(state),
   tileLayout: selectClientSetting(state, SETTINGS.TILE_LAYOUT),
   activeLivestreams: selectActiveLivestreams(state),
+  fetchingActiveLivestreams: selectFetchingActiveLivestreams(state),
 });
 
 export default connect(select, {

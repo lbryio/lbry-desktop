@@ -142,6 +142,8 @@ const ModalPublishPreview = (props: Props) => {
     );
   }
 
+  const releasesInFuture = releaseTimeEdited && moment(releaseTimeEdited * 1000).isAfter();
+
   const txFee = previewResponse ? previewResponse['total_fee'] : null;
   //   $FlowFixMe add outputs[0] etc to PublishResponse type
   const isOptimizeAvail = filePath && filePath !== '' && isVid && ffmpegStatus.available;
@@ -153,7 +155,7 @@ const ModalPublishPreview = (props: Props) => {
       modalTitle = __('Confirm Edit');
     }
   } else if (livestream) {
-    modalTitle = __('Create Livestream');
+    modalTitle = releasesInFuture ? __('Schedule Livestream') : __('Create Livestream');
   } else {
     modalTitle = __('Confirm Upload');
   }
@@ -176,6 +178,8 @@ const ModalPublishPreview = (props: Props) => {
       confirmBtnText = __('Uploading');
     }
   }
+
+  const releaseDateText = releasesInFuture ? __('Scheduled for') : __('Release date');
 
   const descriptionValue = description ? (
     <div className="media__info-text-preview">
@@ -250,7 +254,7 @@ const ModalPublishPreview = (props: Props) => {
                     {createRow(__('Deposit'), depositValue)}
                     {createRow(__('Price'), priceValue)}
                     {createRow(__('Language'), language)}
-                    {releaseTimeEdited && createRow(__('Release date'), releaseTimeStr(releaseTimeEdited))}
+                    {releaseTimeEdited && createRow(releaseDateText, releaseTimeStr(releaseTimeEdited))}
                     {createRow(__('License'), licenseValue)}
                     {createRow(__('Tags'), tagsValue)}
                   </tbody>

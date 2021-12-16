@@ -1,14 +1,28 @@
 // @flow
+
 import * as ACTIONS from 'constants/action_types';
 import { handleActions } from 'util/redux-utils';
+
+const currentChannelStatus: LivestreamChannelStatus = {
+  channelId: null,
+  isBroadcasting: false,
+  liveClaim: {
+    claimId: null,
+    claimUri: null,
+  },
+};
 
 const defaultState: LivestreamState = {
   fetchingById: {},
   viewersById: {},
-  fetchingActiveLivestreams: false,
+  fetchingActiveLivestreams: 'pending',
   activeLivestreams: null,
   activeLivestreamsLastFetchedDate: 0,
   activeLivestreamsLastFetchedOptions: {},
+
+  currentChannelStatus: {
+    ...currentChannelStatus,
+  },
 };
 
 export default handleActions(
@@ -55,6 +69,25 @@ export default handleActions(
         activeLivestreamsLastFetchedDate,
         activeLivestreamsLastFetchedOptions,
       };
+    },
+
+    [ACTIONS.FETCH_ACTIVE_LIVESTREAM_COMPLETED]: (state: LivestreamState, action: any) => {
+      const currentChannelStatus = Object.assign({}, state.currentChannelStatus, {
+        isBroadcasting: true,
+        liveClaim: action.data.liveClaim,
+      });
+      return { ...state, currentChannelStatus };
+    },
+    [ACTIONS.FETCH_ACTIVE_LIVESTREAM_FAILED]: (state: LivestreamState) => {
+      const currentChannelStatus = Object.assign({}, state.currentChannelStatus, {
+        isBroadcasting: false,
+        liveClaim: { claimId: null, claimUri: null },
+      });
+      return { ...state, currentChannelStatus };
+    },
+    [ACTIONS.FETCH_ACTIVE_LIVESTREAM_FINISHED]: (state: LivestreamState, action: any) => {
+      const currentChannelStatus = Object.assign({}, state.currentChannelStatus, { channelId: action.data.channelId });
+      return { ...state, currentChannelStatus };
     },
   },
   defaultState

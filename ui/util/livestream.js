@@ -13,12 +13,12 @@ export function getLivestreamUris(activeLivestreams: ?LivestreamInfo, channelIds
 
   if (channelIds && channelIds.length > 0) {
     // $FlowFixMe
-    values = values.filter((v) => channelIds.includes(v.creatorId) && Boolean(v.latestClaimUri));
+    values = values.filter((v) => channelIds.includes(v.creatorId) && Boolean(v.claimUri));
   } else {
     // $FlowFixMe
-    values = values.filter((v) => Boolean(v.latestClaimUri));
+    values = values.filter((v) => Boolean(v.claimUri));
   }
 
   // $FlowFixMe
-  return values.map((v) => v.latestClaimUri);
+  return values.map((v) => v.claimUri);
 }

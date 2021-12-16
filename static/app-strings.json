@@ -1795,7 +1795,6 @@
   "Create A LiveStream": "Create A LiveStream",
   "%channel% has disabled chat for this stream. Enjoy the stream!": "%channel% has disabled chat for this stream. Enjoy the stream!",
   "This channel has disabled chat for this stream. Enjoy the stream!": "This channel has disabled chat for this stream. Enjoy the stream!",
-  "%channel% isn't live right now, but the chat is! Check back later to watch the stream.": "%channel% isn't live right now, but the chat is! Check back later to watch the stream.",
   "This channel isn't live right now, but the chat is! Check back later to watch the stream.": "This channel isn't live right now, but the chat is! Check back later to watch the stream.",
   "Right now": "Right now",
   "%viewer_count% currently watching": "%viewer_count% currently watching",
@@ -1805,7 +1804,7 @@
   "Livestream": "Livestream",
   "Your stream key": "Your stream key",
   "Stream server": "Stream server",
-  "Stream key": "Stream key",
+  "Stream key (can be reused)": "Stream key (can be reused)",
   "Your livestream uploads": "Your livestream uploads",
   "Your pending livestream uploads": "Your pending livestream uploads",
   "No livestream publishes found": "No livestream publishes found",
@@ -2207,5 +2206,10 @@
   "Cookies": "Cookies",
   "Did someone invite you to use Odysee? Tell us who and you both get a reward!": "Did someone invite you to use Odysee? Tell us who and you both get a reward!",
   "There are unsaved settings. Exit the Settings Page to finalize them.": "There are unsaved settings. Exit the Settings Page to finalize them.",
+  "For streaming from your mobile device, we recommend PRISM Live Studio from the app store.": "For streaming from your mobile device, we recommend PRISM Live Studio from the app store.",
+  "Scheduled livestreams will appear at the top of your channel page and for your followers. Regular livestreams will only appear once you are actually live.": "Scheduled livestreams will appear at the top of your channel page and for your followers. Regular livestreams will only appear once you are actually live.",
+  "Confirmation process takes a few minutes, but then you can go live anytime. The stream is not shown anywhere until you are broadcasting.": "Confirmation process takes a few minutes, but then you can go live anytime. The stream is not shown anywhere until you are broadcasting.",
+  "Your scheduled streams will appear on your channel page and for your followers. Chat will not be active until 5 minutes before the start time.": "Your scheduled streams will appear on your channel page and for your followers. Chat will not be active until 5 minutes before the start time.",
+  "Update or Publish Replay": "Update or Publish Replay",
   "--end--": "--end--"
 }

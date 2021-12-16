@@ -13,6 +13,8 @@ import WaitUntilOnPage from 'component/common/wait-until-on-page';
 import { useIsLargeScreen } from 'effects/use-screensize';
 import { GetLinksData } from 'util/buildHomepage';
 import { getLivestreamUris } from 'util/livestream';
+import ScheduledStreams from 'component/scheduledStreams';
+import { splitBySeparator } from 'util/lbryURI';
 
 // @if TARGET='web'
 import Pixel from 'web/component/pixel';
@@ -27,6 +29,7 @@ type Props = {
   homepageData: any,
   activeLivestreams: any,
   doFetchActiveLivestreams: () => void,
+  fetchingActiveLivestreams: boolean,
 };
 
 function HomePage(props: Props) {
@@ -38,11 +41,14 @@ function HomePage(props: Props) {
     homepageData,
     activeLivestreams,
     doFetchActiveLivestreams,
+    fetchingActiveLivestreams,
   } = props;
   const showPersonalizedChannels = (authenticated || !IS_WEB) && subscribedChannels && subscribedChannels.length > 0;
   const showPersonalizedTags = (authenticated || !IS_WEB) && followedTags && followedTags.length > 0;
   const showIndividualTags = showPersonalizedTags && followedTags.length < 5;
   const isLargeScreen = useIsLargeScreen();
+
+  const channelIds = subscribedChannels.map((sub) => splitBySeparator(sub.uri)[1]);
 
   const rowData: Array<RowDataItem> = GetLinksData(
     homepageData,
@@ -254,14 +260,28 @@ function HomePage(props: Props) {
           </p>
         </div>
       )}
+
       {/* @if TARGET='web' */}
       {SIMPLE_SITE && <Meme />}
       <Ads type="homepage" />
       {/* @endif */}
-      {rowData.map(({ title, route, link, icon, help, pinnedUrls: pinUrls, options = {} }, index) => {
-        // add pins here
-        return getRowElements(title, route, link, icon, help, options, index, pinUrls);
-      })}
+
+      {!fetchingActiveLivestreams && (
+        <>
+          {authenticated && channelIds.length > 0 && (
+            <ScheduledStreams
+              channelIds={channelIds}
+              tileLayout
+              liveUris={getLivestreamUris(activeLivestreams, channelIds)}
+              limitClaimsPerChannel={2}
+            />
+          )}
+          {rowData.map(({ title, route, link, icon, help, pinnedUrls: pinUrls, options = {} }, index) => {
+            // add pins here
+            return getRowElements(title, route, link, icon, help, options, index, pinUrls);
+          })}
+        </>
+      )}
       {/* @if TARGET='web' */}
       <Pixel type={'retargeting'} />
       {/* @endif */}

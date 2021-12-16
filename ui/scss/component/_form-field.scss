@@ -451,6 +451,11 @@ fieldset-group {
   font-size: var(--font-xsmall);
 }
 
+.form-field__hint {
+  font-size: var(--font-xsmall);
+  color: var(--color-input-label);
+}
+
 .form-field__textarea-info {
   display: flex;
   flex-wrap: wrap;
@@ -506,6 +511,7 @@ fieldset-section {
 
 .form-field-date-picker {
   margin-bottom: var(--spacing-l);
+  font-size: var(--font-base);
 
   label {
     display: block;

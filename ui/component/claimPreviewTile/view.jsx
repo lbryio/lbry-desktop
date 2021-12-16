@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, { useContext } from 'react';
 import classnames from 'classnames';
 import { NavLink, withRouter } from 'react-router-dom';
 import FileThumbnail from 'component/fileThumbnail';
@@ -19,6 +19,8 @@ import FileWatchLaterLink from 'component/fileWatchLaterLink';
 import ClaimRepostAuthor from 'component/claimRepostAuthor';
 import ClaimMenuList from 'component/claimMenuList';
 import CollectionPreviewOverlay from 'component/collectionPreviewOverlay';
+import ClaimListDiscoverContext from 'component/claimListDiscover/context';
+import moment from 'moment';
 // $FlowFixMe cannot resolve ...
 import PlaceholderTx from 'static/img/placeholderTx.gif';
 
@@ -108,6 +110,8 @@ function ClaimPreviewTile(props: Props) {
     }
   }
 
+  const { listingType } = useContext(ClaimListDiscoverContext) || {};
+
   const signingChannel = claim && claim.signing_channel;
   const isChannel = claim && claim.value_type === 'channel';
   const channelUri = !isChannel ? signingChannel && signingChannel.permanent_url : claim && claim.permanent_url;
@@ -167,9 +171,26 @@ function ClaimPreviewTile(props: Props) {
   }
 
   let liveProperty = null;
-  if (isLivestreamActive === true) {
+  if (isLivestream === true) {
     liveProperty = (claim) => <>LIVE</>;
   }
+
+  const LivestreamDateTimeLabel = () => {
+    // If showing in upcoming and in the past. (we allow x time in past to show here if not live yet)
+    if (listingType === 'UPCOMING') {
+      // $FlowFixMe
+      if (moment.unix(claim.value.release_time).isBefore()) {
+        return __('Starting Soon');
+      }
+    } else {
+      // If not in upcoming + live and in the future (started streaming a bit early)
+      // $FlowFixMe
+      if (isLivestreamActive && moment.unix(claim.value.release_time).isAfter()) {
+        return __('Streaming Now');
+      }
+    }
+    return <DateTime timeAgo uri={uri} />;
+  };
 
   return (
     <li
@@ -239,7 +260,8 @@ function ClaimPreviewTile(props: Props) {
                 <UriIndicator uri={uri} link />
                 <div className="claim-tile__about--counts">
                   <FileViewCountInline uri={uri} isLivestream={isLivestream} />
-                  <DateTime timeAgo uri={uri} />
+                  {isLivestream && <LivestreamDateTimeLabel />}
+                  {!isLivestream && <DateTime timeAgo uri={uri} />}
                 </div>
               </div>
             </React.Fragment>

@@ -57,7 +57,11 @@ export const selectIsActiveLivestreamForUri = createCachedSelector(
     }
 
     const activeLivestreamValues = Object.values(activeLivestreams);
-    // $FlowFixMe - unable to resolve latestClaimUri
-    return activeLivestreamValues.some((v) => v.latestClaimUri === uri);
+    // $FlowFixMe - unable to resolve claimUri
+    return activeLivestreamValues.some((v) => v.claimUri === uri);
   }
 )((state, uri) => String(uri));
+
+export const selectFetchingActiveLivestreams = (state: State) => selectState(state).fetchingActiveLivestreams;
+
+export const selectCurrentChannelStatus = (state: State) => selectState(state).currentChannelStatus;

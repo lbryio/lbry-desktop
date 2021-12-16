@@ -12,25 +12,17 @@ type Props = {
   uri: string,
   viewCount: string,
   activeViewers?: number,
-  doAnalyticsView: (string) => void,
 };
 
 function FileViewCount(props: Props) {
-  const { claimId, uri, fetchViewCount, viewCount, livestream, activeViewers, isLive = false, doAnalyticsView } = props;
+  const { claimId, fetchViewCount, viewCount, livestream, activeViewers, isLive = false } = props;
 
-  React.useEffect(() => {
-    if (livestream) {
-      // Regular claims will call the file/view event when a user actually watches the claim
-      // This can be removed when we get rid of the livestream iframe
-      doAnalyticsView(uri);
-    }
-  }, [livestream, doAnalyticsView, uri]);
-
+  // @Note: it's important this only runs once on initial render.
   React.useEffect(() => {
     if (claimId) {
       fetchViewCount(claimId);
     }
-  }, [fetchViewCount, uri, claimId]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const formattedViewCount = Number(viewCount).toLocaleString();
 

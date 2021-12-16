@@ -29,6 +29,7 @@ type Props = {
   needsYTAuth: boolean,
   fetchAccessToken: () => void,
   accessToken: string,
+  isLivestreamMode: boolean,
 };
 
 function PublishAdditionalOptions(props: Props) {
@@ -39,6 +40,7 @@ function PublishAdditionalOptions(props: Props) {
     otherLicenseDescription,
     licenseUrl,
     updatePublishForm,
+    isLivestreamMode,
     // user,
     // useLBRYUploader,
     // needsYTAuth,
@@ -154,7 +156,7 @@ function PublishAdditionalOptions(props: Props) {
               )} */}
               {/* @endif */}
               <div className="section">
-                <PublishReleaseDate />
+                {!isLivestreamMode && <PublishReleaseDate />}
 
                 <FormField
                   label={__('Language')}

@@ -25,7 +25,7 @@ type Props = {
   pendingClaims: Array<Claim>,
   doNewLivestream: (string) => void,
   fetchNoSourceClaims: (string) => void,
-  myLivestreamClaims: Array<Claim>,
+  myLivestreamClaims: Array<StreamClaim>,
   fetchingLivestreams: boolean,
   channelId: ?string,
   channelName: ?string,
@@ -67,7 +67,7 @@ export default function LivestreamSetupPage(props: Props) {
           `Create a Livestream by first submitting your livestream details and waiting for approval confirmation. This can be done well in advance and will take a few minutes.`
         )}{' '}
         {__(
-          `The livestream will not be visible on your channel page until you are live, but you can share the URL in advance.`
+          `Scheduled livestreams will appear at the top of your channel page and for your followers. Regular livestreams will only appear once you are actually live.`
         )}{' '}
         {__(
           `Once the your livestream is confirmed, configure your streaming software (OBS, Restream, etc) and input the server URL along with the stream key in it.`
@@ -85,6 +85,7 @@ export default function LivestreamSetupPage(props: Props) {
       <p>
         {__(`If using other streaming software, make sure the bitrate is below 4500 kbps or the stream will not work.`)}
       </p>
+      <p>{__(`For streaming from your mobile device, we recommend PRISM Live Studio from the app store.`)}</p>
       <p>
         {__(
           `After your stream:\nClick the Update button on the content page. This will allow you to select a replay or upload your own edited MP4. Replays are limited to 4 hours and may take a few minutes to show (use the Check For Replays button).`
@@ -130,6 +131,42 @@ export default function LivestreamSetupPage(props: Props) {
     };
   }, [channelId, pendingLength, fetchNoSourceClaims]);
 
+  const filterPending = (claims: Array<StreamClaim>) => {
+    return claims.filter((claim) => {
+      return !pendingClaims.some((pending) => pending.permanent_url === claim.permanent_url);
+    });
+  };
+
+  const upcomingStreams = filterPending(myLivestreamClaims).filter((claim) => {
+    return Number(claim.value.release_time) * 1000 > Date.now();
+  });
+
+  const pastStreams = filterPending(myLivestreamClaims).filter((claim) => {
+    return Number(claim.value.release_time) * 1000 <= Date.now();
+  });
+
+  type HeaderProps = {
+    title: string,
+    hideBtn?: boolean,
+  };
+
+  const ListHeader = (props: HeaderProps) => {
+    const { title, hideBtn = false } = props;
+    return (
+      <div className={'w-full flex items-center justify-between'}>
+        <span>{title}</span>
+        {!hideBtn && (
+          <Button
+            button="primary"
+            iconRight={ICONS.ADD}
+            onClick={() => doNewLivestream(`/$/${PAGES.UPLOAD}?type=${PUBLISH_MODES.LIVESTREAM.toLowerCase()}`)}
+            label={__('Create or Schedule a New Stream')}
+          />
+        )}
+      </div>
+    );
+  };
+
   return (
     <Page>
       {fetchingChannels && (
@@ -150,10 +187,11 @@ export default function LivestreamSetupPage(props: Props) {
         />
       )}
       {!fetchingChannels && (
-        <div className="section__actions--between">
-          <ChannelSelector hideAnon />
-          <Button button="link" onClick={() => setShowHelp(!showHelp)} label={__('How does this work?')} />
-        </div>
+        <>
+          <div className="section__actions--between">
+            <ChannelSelector hideAnon />
+          </div>
+        </>
       )}
 
       {fetchingLivestreams && !fetchingChannels && !hasLivestreamClaims && (
@@ -164,14 +202,14 @@ export default function LivestreamSetupPage(props: Props) {
       <div className="card-stack">
         {!fetchingChannels && channelId && (
           <>
-            {showHelp && (
-              <Card
-                titleActions={<Button button="close" icon={ICONS.REMOVE} onClick={() => setShowHelp(false)} />}
-                title={__('Go Live on Odysee')}
-                subtitle={__(`You're invited to try out our new livestreaming service while in beta!`)}
-                actions={helpText}
-              />
-            )}
+            <Card
+              titleActions={
+                <Button button="close" icon={showHelp ? ICONS.UP : ICONS.DOWN} onClick={() => setShowHelp(!showHelp)} />
+              }
+              title={__('Go Live on Odysee')}
+              subtitle={<>{__(`You're invited to try out our new livestreaming service while in beta!`)} </>}
+              actions={showHelp && helpText}
+            />
             {streamKey && totalLivestreamClaims.length > 0 && (
               <Card
                 className="section"
@@ -189,7 +227,7 @@ export default function LivestreamSetupPage(props: Props) {
                       primaryButton
                       enableInputMask
                       name="livestream-key"
-                      label={__('Stream key')}
+                      label={__('Stream key (can be reused)')}
                       copyable={streamKey}
                       snackMessage={__('Copied stream key.')}
                     />
@@ -203,37 +241,45 @@ export default function LivestreamSetupPage(props: Props) {
                 {Boolean(pendingClaims.length) && (
                   <div className="section">
                     <ClaimList
-                      header={__('Your pending livestream uploads')}
+                      header={__('Your pending livestreams uploads')}
                       uris={pendingClaims.map((claim) => claim.permanent_url)}
                     />
                   </div>
                 )}
                 {Boolean(myLivestreamClaims.length) && (
-                  <div className="section">
-                    <ClaimList
-                      header={__('Your livestream uploads')}
-                      empty={
-                        <I18nMessage
-                          tokens={{
-                            check_again: (
-                              <Button
-                                button="link"
-                                onClick={() => fetchNoSourceClaims(channelId)}
-                                label={__('Check again')}
-                              />
-                            ),
-                          }}
-                        >
-                          Nothing here yet. %check_again%
-                        </I18nMessage>
-                      }
-                      uris={myLivestreamClaims
-                        .filter(
-                          (claim) => !pendingClaims.some((pending) => pending.permanent_url === claim.permanent_url)
-                        )
-                        .map((claim) => claim.permanent_url)}
-                    />
-                  </div>
+                  <>
+                    {Boolean(upcomingStreams.length) && (
+                      <div className="section">
+                        <ClaimList
+                          header={<ListHeader title={__('Your Scheduled Livestreams')} />}
+                          uris={upcomingStreams.map((claim) => claim.permanent_url)}
+                        />
+                      </div>
+                    )}
+                    <div className="section">
+                      <ClaimList
+                        header={
+                          <ListHeader title={__('Your Past Livestreams')} hideBtn={Boolean(upcomingStreams.length)} />
+                        }
+                        empty={
+                          <I18nMessage
+                            tokens={{
+                              check_again: (
+                                <Button
+                                  button="link"
+                                  onClick={() => fetchNoSourceClaims(channelId)}
+                                  label={__('Check again')}
+                                />
+                              ),
+                            }}
+                          >
+                            Nothing here yet. %check_again%
+                          </I18nMessage>
+                        }
+                        uris={pastStreams.map((claim) => claim.permanent_url)}
+                      />
+                    </div>
+                  </>
                 )}
               </>
             ) : (

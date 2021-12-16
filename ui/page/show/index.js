@@ -25,6 +25,7 @@ import * as COLLECTIONS_CONSTS from 'constants/collections';
 import { push } from 'connected-react-router';
 import { selectIsSubscribedForUri } from 'redux/selectors/subscriptions';
 import { selectBlacklistedOutpointMap } from 'lbryinc';
+import { doAnalyticsView } from 'redux/actions/app';
 import ShowPage from './view';
 
 const select = (state, props) => {
@@ -96,6 +97,7 @@ const perform = (dispatch) => ({
     dispatch(push(`/$/${PAGES.UPLOAD}`));
   },
   fetchCollectionItems: (claimId) => dispatch(doFetchItemsInCollection({ collectionId: claimId })),
+  doAnalyticsView: (uri) => dispatch(doAnalyticsView(uri)),
 });
 
 export default withRouter(connect(select, perform)(ShowPage));

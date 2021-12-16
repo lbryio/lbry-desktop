@@ -13,6 +13,8 @@ import { makeSelectChannelIsMuted } from 'redux/selectors/blocked';
 import { withRouter } from 'react-router';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectClientSetting, selectShowMatureContent } from 'redux/selectors/settings';
+import { doFetchActiveLivestream } from 'redux/actions/livestream';
+import { selectCurrentChannelStatus } from 'redux/selectors/livestream';
 
 import ChannelContent from './view';
 
@@ -32,11 +34,13 @@ const select = (state, props) => {
     isAuthenticated: selectUserVerifiedEmail(state),
     showMature: selectShowMatureContent(state),
     tileLayout: selectClientSetting(state, SETTINGS.TILE_LAYOUT),
+    currentChannelStatus: selectCurrentChannelStatus(state),
   };
 };
 
 const perform = (dispatch) => ({
   doResolveUris: (uris, returnCachedUris) => dispatch(doResolveUris(uris, returnCachedUris)),
+  doFetchActiveLivestream: (channelID) => dispatch(doFetchActiveLivestream(channelID)),
 });
 
 export default withRouter(connect(select, perform)(ChannelContent));

@@ -2,7 +2,6 @@ import { connect } from 'react-redux';
 import { MAX_LIVESTREAM_COMMENTS } from 'constants/livestream';
 import { doResolveUris } from 'redux/actions/claims';
 import { selectClaimForUri, selectMyClaimIdsRaw } from 'redux/selectors/claims';
-import { doCommentSocketConnect, doCommentSocketDisconnect } from 'redux/actions/websocket';
 import { doCommentList, doSuperChatList } from 'redux/actions/comments';
 import {
   selectTopLevelCommentsForUri,
@@ -25,8 +24,6 @@ const select = (state, props) => ({
 });
 
 export default connect(select, {
-  doCommentSocketConnect,
-  doCommentSocketDisconnect,
   doCommentList,
   doSuperChatList,
   doResolveUris,

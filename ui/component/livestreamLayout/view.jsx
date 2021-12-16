@@ -3,19 +3,36 @@ import { LIVESTREAM_EMBED_URL } from 'constants/livestream';
 import React from 'react';
 import FileTitleSection from 'component/fileTitleSection';
 import { useIsMobile } from 'effects/use-screensize';
+import LivestreamScheduledInfo from 'component/livestreamScheduledInfo';
+import classnames from 'classnames';
 import { lazyImport } from 'util/lazyImport';
+import LivestreamLink from 'component/livestreamLink';
 
 const LivestreamComments = lazyImport(() => import('component/livestreamComments' /* webpackChunkName: "comments" */));
 
 type Props = {
   uri: string,
   claim: ?StreamClaim,
-  isLive: boolean,
-  chatDisabled: boolean,
+  hideComments: boolean,
+  release: any,
+  showLivestream: boolean,
+  showScheduledInfo: boolean,
+  isCurrentClaimLive: boolean,
+  activeStreamUri: boolean | string,
 };
 
 export default function LivestreamLayout(props: Props) {
-  const { claim, uri, isLive, chatDisabled } = props;
+  const {
+    claim,
+    uri,
+    hideComments,
+    release,
+    showLivestream,
+    showScheduledInfo,
+    isCurrentClaimLive,
+    activeStreamUri,
+  } = props;
+
   const isMobile = useIsMobile();
 
   if (!claim || !claim.signing_channel) {
@@ -28,17 +45,24 @@ export default function LivestreamLayout(props: Props) {
   return (
     <>
       <div className="section card-stack">
-        <div className="file-render file-render--video livestream">
+        <div
+          className={classnames('file-render file-render--video livestream', {
+            'file-render--scheduledLivestream': !showLivestream,
+          })}
+        >
           <div className="file-viewer">
-            <iframe
-              src={`${LIVESTREAM_EMBED_URL}/${channelClaimId}?skin=odysee&autoplay=1`}
-              scrolling="no"
-              allowFullScreen
-            />
+            {showLivestream && (
+              <iframe
+                src={`${LIVESTREAM_EMBED_URL}/${channelClaimId}?skin=odysee&autoplay=1`}
+                scrolling="no"
+                allowFullScreen
+              />
+            )}
+            {showScheduledInfo && <LivestreamScheduledInfo release={release} />}
           </div>
         </div>
 
-        {Boolean(chatDisabled) && (
+        {hideComments && !showScheduledInfo && (
           <div className="help--notice">
             {channelName
               ? __('%channel% has disabled chat for this stream. Enjoy the stream!', { channel: channelName })
@@ -46,7 +70,7 @@ export default function LivestreamLayout(props: Props) {
           </div>
         )}
 
-        {!isLive && (
+        {!activeStreamUri && !showScheduledInfo && !isCurrentClaimLive && (
           <div className="help--notice">
             {channelName
               ? __("%channelName% isn't live right now, but the chat is! Check back later to watch the stream.", {
@@ -56,9 +80,11 @@ export default function LivestreamLayout(props: Props) {
           </div>
         )}
 
-        <React.Suspense fallback={null}>{isMobile && <LivestreamComments uri={uri} />}</React.Suspense>
+        {activeStreamUri && <LivestreamLink claimUri={activeStreamUri} />}
 
-        <FileTitleSection uri={uri} livestream isLive={isLive} />
+        <React.Suspense fallback={null}>{isMobile && !hideComments && <LivestreamComments uri={uri} />}</React.Suspense>
+
+        <FileTitleSection uri={uri} livestream isLive={showLivestream} />
       </div>
     </>
   );
