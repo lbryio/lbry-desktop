@@ -513,7 +513,7 @@ export function CommentCreate(props: Props) {
       )}
       <FormField
         disabled={isFetchingChannels}
-        type={'textarea'}
+        type={advancedEditor ? 'markdown' : 'textarea'}
         name={isReply ? 'content_reply' : 'content_description'}
         ref={formFieldRef}
         className={isReply ? 'content_reply' : 'content_comment'}
