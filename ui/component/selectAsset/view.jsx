@@ -1,14 +1,16 @@
 // @flow
 import React from 'react';
 import FileSelector from 'component/common/file-selector';
-import { IMG_CDN_PUBLISH_URL } from 'constants/cdn_urls';
+import * as SPEECH_URLS from 'constants/speech_urls';
 import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
 import Card from 'component/common/card';
+import { generateThumbnailName } from 'util/generate-thumbnail-name';
 import usePersistedState from 'effects/use-persisted-state';
 
 const accept = '.png, .jpg, .jpeg, .gif';
-const STATUS = { READY: 'READY', UPLOADING: 'UPLOADING' };
+const SPEECH_READY = 'READY';
+const SPEECH_UPLOADING = 'UPLOADING';
 
 type Props = {
   assetName: string,
@@ -24,7 +26,7 @@ function SelectAsset(props: Props) {
   const { onUpdate, onDone, assetName, currentValue, recommended, title, inline } = props;
   const [pathSelected, setPathSelected] = React.useState('');
   const [fileSelected, setFileSelected] = React.useState<any>(null);
-  const [uploadStatus, setUploadStatus] = React.useState(STATUS.READY);
+  const [uploadStatus, setUploadStatus] = React.useState(SPEECH_READY);
   const [useUrl, setUseUrl] = usePersistedState('thumbnail-upload:mode', false);
   const [url, setUrl] = React.useState(currentValue);
   const [error, setError] = React.useState();
@@ -35,7 +37,7 @@ function SelectAsset(props: Props) {
     };
 
     const onSuccess = (thumbnailUrl) => {
-      setUploadStatus(STATUS.READY);
+      setUploadStatus(SPEECH_READY);
       onUpdate(thumbnailUrl, !useUrl);
 
       if (onDone) {
@@ -43,27 +45,22 @@ function SelectAsset(props: Props) {
       }
     };
 
-    setUploadStatus(STATUS.UPLOADING);
+    setUploadStatus(SPEECH_UPLOADING);
 
     const data = new FormData();
-    data.append('file-input', fileSelected);
-    data.append('upload', 'Upload');
+    const name = generateThumbnailName();
+    data.append('name', name);
+    data.append('file', fileSelected);
 
-    return fetch(IMG_CDN_PUBLISH_URL, {
+    return fetch(SPEECH_URLS.SPEECH_PUBLISH, {
       method: 'POST',
       body: data,
     })
       .then((response) => response.json())
-      .then((json) => {
-        return json.type === 'success'
-          ? onSuccess(`${json.message}`)
-          : uploadError(
-              json.message || __('There was an error in the upload. The format or extension might not be supported.')
-            );
-      })
+      .then((json) => (json.success ? onSuccess(`${json.data.serveUrl}`) : uploadError(json.message)))
       .catch((err) => {
         uploadError(err.message);
-        setUploadStatus(STATUS.READY);
+        setUploadStatus(SPEECH_READY);
       });
   }
 
@@ -73,7 +70,7 @@ function SelectAsset(props: Props) {
   const selectedLabel = pathSelected ? __('URL Selected') : __('File Selected');
 
   let fileSelectorLabel;
-  if (uploadStatus === STATUS.UPLOADING) {
+  if (uploadStatus === SPEECH_UPLOADING) {
     fileSelectorLabel = __('Uploading...');
   } else {
     // Include the same label/recommendation for both 'URL' and 'UPLOAD'.
@@ -99,7 +96,7 @@ function SelectAsset(props: Props) {
         ) : (
           <FileSelector
             autoFocus
-            disabled={uploadStatus === STATUS.UPLOADING}
+            disabled={uploadStatus === SPEECH_UPLOADING}
             label={fileSelectorLabel}
             name="assetSelector"
             currentPath={pathSelected}
@@ -122,7 +119,7 @@ function SelectAsset(props: Props) {
             button="primary"
             type="submit"
             label={useUrl ? __('Done') : __('Upload')}
-            disabled={!useUrl && (uploadStatus === STATUS.UPLOADING || !pathSelected || !fileSelected)}
+            disabled={!useUrl && (uploadStatus === SPEECH_UPLOADING || !pathSelected || !fileSelected)}
             onClick={() => doUploadAsset()}
           />
         )}
