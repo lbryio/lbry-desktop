@@ -186,7 +186,7 @@
 }
 
 @mixin placeholder {
-  animation: pulse 2s infinite ease-in-out;
+  // animation: pulse 2s infinite ease-in-out;
   background-color: var(--color-placeholder-background);
   border-radius: var(--card-radius);
   border-width: 0;
