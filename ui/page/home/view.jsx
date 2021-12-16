@@ -130,7 +130,7 @@ function HomePage(props: Props) {
       return;
     }
 
-    (async function () {
+    (async () => {
       // test if adblock is enabled
       let adBlockEnabled = false;
       const googleAdUrl = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
@@ -166,6 +166,7 @@ function HomePage(props: Props) {
                   if (!isFullyVisible) break;
                   lastCard = card;
                 }
+                if (!lastCard) return;
               }
 
               // clone the last card
@@ -175,10 +176,6 @@ function HomePage(props: Props) {
               // insert cloned card
               // $FlowFixMe
               lastCard.parentNode.insertBefore(clonedCard, lastCard);
-
-              // delete last card so that it doesn't mess up formatting
-              // $FlowFixMe
-              // lastCard.remove();
 
               // change the appearance of the cloned card
               // $FlowFixMe
@@ -215,14 +212,11 @@ function HomePage(props: Props) {
               // show the homepage ad which is not displayed at first
               document.getElementsByClassName('homepageAdContainer')[0].style.display = 'block';
 
-              // $FlowFixMe
-              const imageHeight = window.getComputedStyle(lastCard.querySelector('.media__thumb')).height;
-              // $FlowFixMe
-              const imageWidth = window.getComputedStyle(lastCard.querySelector('.media__thumb')).width;
+              const thumbnail = window.getComputedStyle(lastCard.querySelector('.media__thumb'));
 
               const styles = `#av-container, #AVcontent, #aniBox {
-                height: ${imageHeight} !important;
-                width: ${imageWidth} !important;
+                height: ${thumbnail.height} !important;
+                width: ${thumbnail.width} !important;
               }`;
 
               const styleSheet = document.createElement('style');
@@ -231,6 +225,9 @@ function HomePage(props: Props) {
               styleSheet.innerText = styles;
               // $FlowFixMe
               document.head.appendChild(styleSheet);
+
+              // delete last card to not introduce layout shifts
+              lastCard.remove();
             }
           }
           checkFlag();
