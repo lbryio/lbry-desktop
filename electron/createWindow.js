@@ -9,7 +9,7 @@ import { TO_TRAY_WHEN_CLOSED } from 'constants/settings';
 
 import setupBarMenu from './menu/setupBarMenu';
 import * as PAGES from 'constants/pages';
-
+const remote = require('@electron/remote/main');
 function GetAppLangCode() {
   // https://www.electronjs.org/docs/api/locales
   // 1. Gets the user locale.
@@ -54,6 +54,7 @@ export default appState => {
       webSecurity: !isDev,
       plugins: true,
       nodeIntegration: true,
+      contextIsolation: false,
       enableRemoteModule: true, // see about removing this
     },
   };
@@ -62,6 +63,7 @@ export default appState => {
   const rendererURL = isDev ? `http://localhost:${WEBPACK_ELECTRON_PORT}` : `file://${__dirname}/index.html`;
 
   let window = new BrowserWindow(windowConfiguration);
+  remote.enable(window.webContents);
 
   // Let us register listeners on the window, so we can update the state
   // automatically (the listeners will be removed when the window is closed)
@@ -187,9 +189,8 @@ export default appState => {
     window = null;
   });
 
-  window.webContents.on('new-window', (event, url) => {
-    event.preventDefault();
-    shell.openExternal(url);
+  window.webContents.setWindowOpenHandler((details) => {
+    return { action: 'deny' };
   });
 
   window.webContents.on('update-target-url', (event, url) => {

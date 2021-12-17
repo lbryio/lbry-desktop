@@ -44,6 +44,7 @@
     "postinstall:warning": "echo '\n\nWARNING\n\nNot all node modules were installed because NODE_ENV is set to \"production\".\nThis should only be set after installing dependencies with \"yarn\". The app will not work.\n\n'"
   },
   "dependencies": {
+    "@electron/remote": "^2.0.1",
     "@ungap/from-entries": "^0.2.1",
     "auto-launch": "^5.0.5",
     "electron-dl": "^3.2.0",
@@ -121,7 +122,7 @@
     "dom-scroll-into-view": "^1.2.1",
     "dotenv-defaults": "^2.0.1",
     "dotenv-webpack": "^1.8.0",
-    "electron": "11.5.0",
+    "electron": "15.3.2",
     "electron-builder": "^22.9.1",
     "electron-devtools-installer": "^3.1.1",
     "electron-is-dev": "^0.3.0",
