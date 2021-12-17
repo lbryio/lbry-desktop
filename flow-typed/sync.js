@@ -1,0 +1,16 @@
+declare type SyncState = {
+  hasSyncedWallet: boolean,
+  syncHash: ?string,
+  syncData: ?string,
+  setSyncErrorMessage: ?string,
+  getSyncErrorMessage: ?string,
+  syncApplyErrorMessage: string,
+  syncApplyIsPending: boolean,
+  syncApplyPasswordError: boolean,
+  getSyncIsPending: boolean,
+  setSyncIsPending: boolean,
+  prefsReady: boolean,
+  syncLocked: boolean,
+  hashChanged: boolean,
+  fatalError: boolean,
+};
