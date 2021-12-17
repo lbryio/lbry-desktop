@@ -1,5 +1,5 @@
 import { WEBPACK_ELECTRON_PORT } from 'config';
-import { app, BrowserWindow, dialog, shell, screen, nativeImage } from 'electron';
+import { app, BrowserWindow, dialog, screen, nativeImage } from 'electron';
 import isDev from 'electron-is-dev';
 import windowStateKeeper from 'electron-window-state';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
