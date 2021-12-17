@@ -73,30 +73,6 @@ export function doInstallNew(appVersion, os = null, firebaseToken = null, callba
   });
 }
 
-export function doInstallNewWithParams(
-  appVersion,
-  installationId,
-  nodeId,
-  lbrynetVersion,
-  os,
-  platform,
-  firebaseToken = null
-) {
-  return () => {
-    const payload = { app_version: appVersion };
-    if (firebaseToken) {
-      payload.firebase_token = firebaseToken;
-    }
-
-    payload.app_id = installationId;
-    payload.node_id = nodeId;
-    payload.daemon_version = lbrynetVersion;
-    payload.operating_system = os;
-    payload.platform = platform;
-    Lbryio.call('install', 'new', payload);
-  };
-}
-
 function checkAuthBusy() {
   let time = Date.now();
   return new Promise(function (resolve, reject) {
