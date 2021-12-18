@@ -48,6 +48,8 @@ const BILL_COSBY = 'MISC/PNG/bill_cosby.png';
 const KURT_COBAIN = 'MISC/PNG/kurt_cobain.png';
 const BILL_CLINTON = 'MISC/PNG/bill_clinton.png';
 const CHRIS_CHAN = 'MISC/PNG/chris_chan.png';
+const DAVE = 'MISC/PNG/dave.png';
+const NICK = 'MISC/PNG/nick.png';
 const TAYLOR_SWIFT = 'MISC/PNG/taylor_swift.png';
 const EPSTEIN_ISLAND = 'MISC/PNG/epstein_island.png';
 const DONALD_TRUMP = 'MISC/PNG/donald_trump.png';
@@ -75,6 +77,8 @@ const TIP_HAND_FLIP_COIN = 'TIPS/png/tip_hand_flip_coin_with_border.png';
 const TIP_HAND_FLIP_LBC = 'TIPS/png/tip_hand_flip_lbc_with_border.png';
 
 export const FREE_GLOBAL_STICKERS = [
+  buildSticker('DAVE', DAVE),
+  buildSticker('NICK', NICK),
   buildSticker('CAT', CAT_BORDER),
   buildSticker('FAIL', FAIL_BORDER),
   buildSticker('HYPE', HYPE_BORDER),
