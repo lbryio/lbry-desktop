@@ -86,7 +86,7 @@
 
 .menu__list--header {
   @extend .menu__list;
-  margin-top: 19px;
+  margin-top: var(--spacing-s);
 }
 
 .menu__list--comments {
