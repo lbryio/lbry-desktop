@@ -20,6 +20,11 @@ export const selectClientSettings = createSelector(selectState, (state) => state
 
 export const selectLoadedLanguages = createSelector(selectState, (state) => state.loadedLanguages || {});
 
+export const selectClientSetting = (state, setting) => {
+  const clientSettings = selectClientSettings(state);
+  return clientSettings ? clientSettings[setting] : undefined;
+};
+
 export const makeSelectClientSetting = (setting) =>
   createSelector(selectClientSettings, (settings) => (settings ? settings[setting] : undefined));
 
