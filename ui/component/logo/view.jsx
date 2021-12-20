@@ -28,11 +28,18 @@ export default function Logo(props: Props) {
   }
 
   if (type === 'small' || isMobile) {
-    return <img className="header__navigation-logo" src={LOGO} />;
+    return <img className="header__navigation-logo" src={LOGO} height={200} width={200} />;
   }
 
   if (LOGO_WHITE_TEXT && LOGO_DARK_TEXT) {
-    return <img className="header__navigation-logo" src={isLightTheme ? LOGO_DARK_TEXT : LOGO_WHITE_TEXT} />;
+    return (
+      <img
+        className="header__navigation-logo"
+        height={300}
+        width={1000}
+        src={isLightTheme ? LOGO_DARK_TEXT : LOGO_WHITE_TEXT}
+      />
+    );
   }
 
   return defaultWithLabel;
