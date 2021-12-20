@@ -48,11 +48,8 @@ export function doFetchInviteStatus(shouldCallRewardList = true) {
   };
 }
 
-export function doInstallNew(appVersion, os = null, firebaseToken = null, callbackForUsersWhoAreSharingData, domain) {
+export function doInstallNew(appVersion, callbackForUsersWhoAreSharingData, domain) {
   const payload = { app_version: appVersion, domain };
-  if (firebaseToken) {
-    payload.firebase_token = firebaseToken;
-  }
 
   Lbry.status().then((status) => {
     payload.app_id =
@@ -62,7 +59,7 @@ export function doInstallNew(appVersion, os = null, firebaseToken = null, callba
     payload.node_id = status.lbry_id;
     Lbry.version().then((version) => {
       payload.daemon_version = version.lbrynet_version;
-      payload.operating_system = os || version.os_system;
+      payload.operating_system = version.os_system;
       payload.platform = version.platform;
       Lbryio.call('install', 'new', payload);
 
@@ -107,12 +104,9 @@ function checkAuthBusy() {
 // TODO: Call doInstallNew separately so we don't have to pass appVersion and os_system params?
 export function doAuthenticate(
   appVersion,
-  os = null,
-  firebaseToken = null,
   shareUsageData = true,
   callbackForUsersWhoAreSharingData,
-  callInstall = true,
-  domain = null
+  callInstall = true
 ) {
   return (dispatch) => {
     dispatch({
@@ -134,7 +128,7 @@ export function doAuthenticate(
             dispatch(doRewardList());
             dispatch(doFetchInviteStatus(false));
             if (callInstall) {
-              doInstallNew(appVersion, os, firebaseToken, callbackForUsersWhoAreSharingData, domain);
+              doInstallNew(appVersion, callbackForUsersWhoAreSharingData, DOMAIN);
             }
           }
         });
