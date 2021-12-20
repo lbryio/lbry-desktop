@@ -241,7 +241,7 @@ function Comment(props: Props) {
           <div className="comment__meta">
             <div className="comment__meta-information">
               {isGlobalMod && (
-                <Tooltip label={__('Admin')}>
+                <Tooltip title={__('Admin')}>
                   <span className="comment__badge comment__badge--global-mod">
                     <Icon icon={ICONS.BADGE_MOD} size={20} />
                   </span>
@@ -249,7 +249,7 @@ function Comment(props: Props) {
               )}
 
               {isModerator && (
-                <Tooltip label={__('Moderator')}>
+                <Tooltip title={__('Moderator')}>
                   <span className="comment__badge comment__badge--mod">
                     <Icon icon={ICONS.BADGE_MOD} size={20} />
                   </span>
