@@ -5,7 +5,7 @@ import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import HeaderMenuLink from 'component/common/header-menu-link';
 import Icon from 'component/common/icon';
-import NotificationHeaderButton from 'component/notificationHeaderButton';
+import NotificationHeaderButton from 'component/headerNotificationButton';
 import React from 'react';
 
 type HeaderMenuButtonProps = {
