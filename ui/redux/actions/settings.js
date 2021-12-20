@@ -68,7 +68,7 @@ export function doClearDaemonSetting(key) {
     const state = getState();
     const ready = selectPrefsReady(state);
 
-    if (!ready) {
+    if (!ready && key !== DAEMON_SETTINGS.LBRYUM_SERVERS) {
       return dispatch(doAlertWaitingForSync());
     }
 
