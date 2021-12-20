@@ -1,40 +1,33 @@
-import * as SETTINGS from 'constants/settings';
 import { connect } from 'react-redux';
-import { selectTotalBalance, selectBalance } from 'redux/selectors/wallet';
-import { formatCredits } from 'util/format-credits';
-import { selectGetSyncErrorMessage } from 'redux/selectors/sync';
-import { selectUserVerifiedEmail, selectUserEmail, selectEmailToVerify, selectUser } from 'redux/selectors/user';
 import { doClearEmailEntry, doClearPasswordEntry } from 'redux/actions/user';
-import { doSetClientSetting } from 'redux/actions/settings';
 import { doSignOut, doOpenModal } from 'redux/actions/app';
-import { selectClientSetting, selectLanguage } from 'redux/selectors/settings';
-import { selectHasNavigated, selectActiveChannelClaim, selectActiveChannelStakedLevel } from 'redux/selectors/app';
+import { formatCredits } from 'util/format-credits';
+import { selectClientSetting } from 'redux/selectors/settings';
+import { selectGetSyncErrorMessage } from 'redux/selectors/sync';
+import { selectHasNavigated } from 'redux/selectors/app';
+import { selectTotalBalance, selectBalance } from 'redux/selectors/wallet';
+import { selectUserVerifiedEmail, selectEmailToVerify, selectUser } from 'redux/selectors/user';
+import * as MODALS from 'constants/modal_types';
+import * as SETTINGS from 'constants/settings';
 import Header from './view';
 
 const select = (state) => ({
-  language: selectLanguage(state),
-  balance: selectBalance(state),
-  roundedSpendableBalance: formatCredits(selectBalance(state), 2, true),
-  roundedBalance: formatCredits(selectTotalBalance(state), 2, true),
-  currentTheme: selectClientSetting(state, SETTINGS.THEME),
-  automaticDarkModeEnabled: selectClientSetting(state, SETTINGS.AUTOMATIC_DARK_MODE_ENABLED),
-  hideBalance: selectClientSetting(state, SETTINGS.HIDE_BALANCE),
   authenticated: selectUserVerifiedEmail(state),
-  email: selectUserEmail(state),
-  syncError: selectGetSyncErrorMessage(state),
+  balance: selectBalance(state),
   emailToVerify: selectEmailToVerify(state),
   hasNavigated: selectHasNavigated(state),
+  hideBalance: selectClientSetting(state, SETTINGS.HIDE_BALANCE),
+  roundedBalance: formatCredits(selectTotalBalance(state), 2, true),
+  roundedSpendableBalance: formatCredits(selectBalance(state), 2, true),
+  syncError: selectGetSyncErrorMessage(state),
   user: selectUser(state),
-  activeChannelClaim: selectActiveChannelClaim(state),
-  activeChannelStakedLevel: selectActiveChannelStakedLevel(state),
 });
 
 const perform = (dispatch) => ({
-  setClientSetting: (key, value, push) => dispatch(doSetClientSetting(key, value, push)),
-  signOut: () => dispatch(doSignOut()),
-  doOpenModal: (modal, props) => dispatch(doOpenModal(modal, props)),
   clearEmailEntry: () => dispatch(doClearEmailEntry()),
   clearPasswordEntry: () => dispatch(doClearPasswordEntry()),
+  signOut: () => dispatch(doSignOut()),
+  openChangelog: (modalProps) => dispatch(doOpenModal(MODALS.CONFIRM, modalProps)),
 });
 
 export default connect(select, perform)(Header);
