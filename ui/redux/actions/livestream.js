@@ -74,31 +74,41 @@ const filterUpcomingLiveStreamClaims = (upcomingClaims) => {
 };
 
 const fetchUpcomingLivestreamClaims = (channelIds: Array<string>) => {
-  return doClaimSearch({
-    page: 1,
-    page_size: 50,
-    has_no_source: true,
-    channel_ids: channelIds,
-    claim_type: ['stream'],
-    order_by: ['^release_time'],
-    release_time: `>${moment().subtract(5, 'minutes').unix()}`,
-    limit_claims_per_channel: 1,
-    no_totals: true,
-  });
+  return doClaimSearch(
+    {
+      page: 1,
+      page_size: 50,
+      has_no_source: true,
+      channel_ids: channelIds,
+      claim_type: ['stream'],
+      order_by: ['^release_time'],
+      release_time: `>${moment().subtract(5, 'minutes').unix()}`,
+      limit_claims_per_channel: 1,
+      no_totals: true,
+    },
+    {
+      useAutoPagination: true,
+    }
+  );
 };
 
 const fetchMostRecentLivestreamClaims = (channelIds: Array<string>, orderBy: Array<string> = ['release_time']) => {
-  return doClaimSearch({
-    page: 1,
-    page_size: 50,
-    has_no_source: true,
-    channel_ids: channelIds,
-    claim_type: ['stream'],
-    order_by: orderBy,
-    release_time: `<${moment().unix()}`,
-    limit_claims_per_channel: 2,
-    no_totals: true,
-  });
+  return doClaimSearch(
+    {
+      page: 1,
+      page_size: 50,
+      has_no_source: true,
+      channel_ids: channelIds,
+      claim_type: ['stream'],
+      order_by: orderBy,
+      release_time: `<${moment().unix()}`,
+      limit_claims_per_channel: 2,
+      no_totals: true,
+    },
+    {
+      useAutoPagination: true,
+    }
+  );
 };
 
 const distanceFromStreamStart = (claimA: any, claimB: any, channelStartedStreaming) => {

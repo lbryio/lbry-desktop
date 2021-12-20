@@ -101,8 +101,8 @@ declare type ClaimSearchResponse = {
   items: Array<Claim>,
   page: number,
   page_size: number,
-  total_items: number,
-  total_pages: number,
+  total_items?: number,
+  total_pages?: number,
 };
 
 declare type ClaimListResponse = {

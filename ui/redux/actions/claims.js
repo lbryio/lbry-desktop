@@ -615,11 +615,16 @@ export function doClaimSearch(
     order_by?: Array<string>,
     release_time?: string,
     has_source?: boolean,
-    has_no_souce?: boolean,
+    has_no_source?: boolean,
   } = {
     no_totals: true,
     page_size: 10,
     page: 1,
+  },
+  settings: {
+    useAutoPagination?: boolean,
+  } = {
+    useAutoPagination: false,
   }
 ) {
   const query = createNormalizedClaimSearchKey(options);
@@ -659,7 +664,39 @@ export function doClaimSearch(
       return false;
     };
 
-    return await Lbry.claim_search(options).then(success, failure);
+    const autoPaginate = () => {
+      let allClaims = [];
+
+      const next = async (data: ClaimSearchResponse) => {
+        allClaims = allClaims.concat(data.items);
+
+        const moreData = data.items.length === options.page_size;
+
+        options.page++;
+
+        if (options.page > 3 || !moreData) {
+          // Flow doesn't understand that page_size is an optional property with a guaranteed default value.
+          // $FlowFixMe
+          return success({
+            items: allClaims,
+            page: options.page,
+            page_size: options.page_size,
+          });
+        }
+
+        try {
+          const data = await Lbry.claim_search(options);
+          return next(data);
+        } catch (err) {
+          failure(err);
+        }
+      };
+
+      return next;
+    };
+
+    const successCallback = settings.useAutoPagination ? autoPaginate() : success;
+    return await Lbry.claim_search(options).then(successCallback, failure);
   };
 }
 
