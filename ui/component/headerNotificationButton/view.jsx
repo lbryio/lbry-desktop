@@ -7,6 +7,7 @@ import Button from 'component/button';
 import Icon from 'component/common/icon';
 import NotificationBubble from 'component/notificationBubble';
 import React from 'react';
+import Tooltip from 'component/common/tooltip';
 
 type Props = {
   unseenCount: number,
@@ -28,14 +29,14 @@ export default function NotificationHeaderButton(props: Props) {
   if (!notificationsEnabled) return null;
 
   return (
-    <Button
-      onClick={handleMenuClick}
-      aria-label={__('Notifications')}
-      title={__('Notifications')}
-      className="header__navigation-item menu__title header__navigation-item--icon mobile-hidden"
-    >
-      <Icon size={18} icon={ICONS.NOTIFICATION} aria-hidden />
-      <NotificationBubble />
-    </Button>
+    <Tooltip title={__('Notifications')}>
+      <Button
+        onClick={handleMenuClick}
+        className="header__navigation-item menu__title header__navigation-item--icon mobile-hidden"
+      >
+        <Icon size={18} icon={ICONS.NOTIFICATION} aria-hidden />
+        <NotificationBubble />
+      </Button>
+    </Tooltip>
   );
 }

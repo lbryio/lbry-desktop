@@ -11,6 +11,7 @@ import Logo from 'component/logo';
 import NotificationBubble from 'component/notificationBubble';
 import React from 'react';
 import SkipNavigationButton from 'component/skipNavigationButton';
+import Tooltip from 'component/common/tooltip';
 import WunderBar from 'component/wunderbar';
 
 type Props = {
@@ -124,17 +125,22 @@ const Header = (props: Props) => {
     <div className={classnames('header__menu', { 'header__menu--with-balance': authenticated })}>
       {authenticated ? (
         <>
-          <Button
+          <Tooltip
             title={
               balance > 0
                 ? __('Immediately spendable: %spendable_balance%', { spendable_balance: roundedSpendableBalance })
                 : __('Your Wallet')
             }
-            navigate={`/$/${PAGES.WALLET}`}
-            className={classnames(className, 'header__navigation-item--balance')}
-            label={hideBalance || Number(roundedBalance) === 0 ? __('Your Wallet') : roundedBalance}
-            icon={ICONS.LBC}
-          />
+          >
+            <div>
+              <Button
+                navigate={`/$/${PAGES.WALLET}`}
+                className={classnames(className, 'header__navigation-item--balance')}
+                label={hideBalance || Number(roundedBalance) === 0 ? __('Your Wallet') : roundedBalance}
+                icon={ICONS.LBC}
+              />
+            </div>
+          </Tooltip>
 
           <HeaderProfileMenuButton />
         </>

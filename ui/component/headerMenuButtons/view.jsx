@@ -7,6 +7,7 @@ import HeaderMenuLink from 'component/common/header-menu-link';
 import Icon from 'component/common/icon';
 import NotificationHeaderButton from 'component/headerNotificationButton';
 import React from 'react';
+import Tooltip from 'component/common/tooltip';
 
 type HeaderMenuButtonProps = {
   activeChannelStakedLevel: number,
@@ -39,13 +40,11 @@ export default function HeaderMenuButtons(props: HeaderMenuButtonProps) {
     <div className="header__buttons">
       {authenticated && (
         <Menu>
-          <MenuButton
-            aria-label={__('Publish a file, or create a channel')}
-            title={__('Publish a file, or create a channel')}
-            className="header__navigation-item menu__title header__navigation-item--icon mobile-hidden"
-          >
-            <Icon size={18} icon={ICONS.PUBLISH} aria-hidden />
-          </MenuButton>
+          <Tooltip title={__('Publish a file, or create a channel')}>
+            <MenuButton className="header__navigation-item menu__title header__navigation-item--icon mobile-hidden">
+              <Icon size={18} icon={ICONS.PUBLISH} aria-hidden />
+            </MenuButton>
+          </Tooltip>
 
           <MenuList className="menu__list--header">
             <HeaderMenuLink page={PAGES.UPLOAD} icon={ICONS.PUBLISH} name={__('Upload')} />
@@ -59,13 +58,11 @@ export default function HeaderMenuButtons(props: HeaderMenuButtonProps) {
       {notificationsEnabled && <NotificationHeaderButton />}
 
       <Menu>
-        <MenuButton
-          aria-label={__('Settings')}
-          title={__('Settings')}
-          className="header__navigation-item menu__title header__navigation-item--icon  mobile-hidden"
-        >
-          <Icon size={18} icon={ICONS.SETTINGS} aria-hidden />
-        </MenuButton>
+        <Tooltip title={__('Settings')}>
+          <MenuButton className="header__navigation-item menu__title header__navigation-item--icon  mobile-hidden">
+            <Icon size={18} icon={ICONS.SETTINGS} aria-hidden />
+          </MenuButton>
+        </Tooltip>
 
         <MenuList className="menu__list--header">
           <HeaderMenuLink page={PAGES.SETTINGS} icon={ICONS.SETTINGS} name={__('Settings')} />
