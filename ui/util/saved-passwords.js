@@ -59,7 +59,7 @@ function deleteCookie(name) {
 }
 
 function setSavedPassword(value, saveToDisk) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     const password = value === undefined || value === null ? '' : value;
     sessionPassword = password;
 
@@ -74,17 +74,17 @@ function setSavedPassword(value, saveToDisk) {
 }
 
 function getSavedPassword() {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     if (sessionPassword) {
       resolve(sessionPassword);
     }
 
-    return getPasswordFromCookie().then(p => resolve(p));
+    return getPasswordFromCookie().then((p) => resolve(p));
   });
 }
 
 function getPasswordFromCookie() {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     let password;
     password = getCookie(SAVED_PASSWORD);
     resolve(password);
@@ -92,7 +92,7 @@ function getPasswordFromCookie() {
 }
 
 function deleteSavedPassword() {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     deleteCookie(SAVED_PASSWORD);
     resolve();
   });
@@ -107,14 +107,14 @@ function setAuthToken(value) {
 }
 
 function deleteAuthToken() {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     deleteCookie(AUTH_TOKEN);
     resolve();
   });
 }
 
 function doSignOutCleanup() {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     deleteAuthToken();
     deleteSavedPassword();
     resolve();
