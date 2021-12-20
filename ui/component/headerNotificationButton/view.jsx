@@ -1,41 +1,31 @@
 // @flow
-import * as PAGES from 'constants/pages';
+import { ENABLE_UI_NOTIFICATIONS } from 'config';
+import { useHistory } from 'react-router';
 import * as ICONS from 'constants/icons';
-import React from 'react';
+import * as PAGES from 'constants/pages';
+import Button from 'component/button';
 import Icon from 'component/common/icon';
 import NotificationBubble from 'component/notificationBubble';
-import Button from 'component/button';
-import { useHistory } from 'react-router';
-import { ENABLE_UI_NOTIFICATIONS } from 'config';
+import React from 'react';
 
 type Props = {
   unseenCount: number,
-  doSeeAllNotifications: () => void,
   user: ?User,
+  doSeeAllNotifications: () => void,
 };
 
 export default function NotificationHeaderButton(props: Props) {
-  const {
-    unseenCount,
-    // notifications,
-    // fetching,
-    doSeeAllNotifications,
-    user,
-  } = props;
-  const notificationsEnabled = ENABLE_UI_NOTIFICATIONS || (user && user.experimental_ui);
+  const { unseenCount, user, doSeeAllNotifications } = props;
+
   const { push } = useHistory();
+  const notificationsEnabled = ENABLE_UI_NOTIFICATIONS || (user && user.experimental_ui);
 
   function handleMenuClick() {
-    if (unseenCount > 0) {
-      doSeeAllNotifications();
-    }
-
+    if (unseenCount > 0) doSeeAllNotifications();
     push(`/$/${PAGES.NOTIFICATIONS}`);
   }
 
-  if (!notificationsEnabled) {
-    return null;
-  }
+  if (!notificationsEnabled) return null;
 
   return (
     <Button
