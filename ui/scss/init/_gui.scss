@@ -228,7 +228,7 @@ textarea {
   display: flex;
 
   .column__item:not(:first-child) {
-    padding-left: $spacing-width * 2/3;
+    padding-left: calc(var(--spacing-width) * 2 / 3);
     flex: 1;
   }
 
@@ -361,11 +361,11 @@ textarea {
   border: 3px solid white;
 
   &.qr-code--right-padding {
-    margin-right: $spacing-vertical * 2/3;
+    margin-right: calc(var(--spacing-vertical) * 2 / 3);
   }
 
   &.qr-code--top-padding {
-    margin-top: $spacing-vertical * 2/3;
+    margin-top: calc(var(--spacing-vertical) * 2 / 3);
   }
 }
 

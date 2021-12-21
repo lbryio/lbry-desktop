@@ -5,7 +5,7 @@
   }
 
   100% {
-    margin-top: $spacing-vertical;
+    margin-top: var(--spacing-vertical);
     opacity: 1;
   }
 }

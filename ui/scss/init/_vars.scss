@@ -1,12 +1,4 @@
-// Both of these should probably die and become variables as well
-$spacing-vertical: 2rem;
-$spacing-width: 36px;
-
-$breakpoint-xxsmall: 450px;
-$breakpoint-xsmall: 600px;
-$breakpoint-small: 900px;
-$breakpoint-medium: 1150px;
-$breakpoint-large: 1600px;
+@import 'breakpoints';
 
 :root {
   --border-radius: 10px;
@@ -24,6 +16,8 @@ $breakpoint-large: 1600px;
   --spacing-l: 2rem;
   --spacing-xl: 3rem;
   --spacing-xxl: 4rem;
+  --spacing-vertical: 2rem;
+  --spacing-width: 36px;
 
   // Aspect ratio
   --aspect-ratio-bluray: 41.6666666667%; // 12:5
