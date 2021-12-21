@@ -1,5 +1,4 @@
 // @flow
-import { LOGO_TITLE, LOGO, LOGO_WHITE_TEXT, LOGO_DARK_TEXT } from 'config';
 import { useIsMobile } from 'effects/use-screensize';
 import * as ICONS from 'constants/icons';
 import Icon from 'component/common/icon';
@@ -16,31 +15,13 @@ export default function Logo(props: Props) {
   const isMobile = useIsMobile();
   const isLightTheme = currentTheme === 'light';
 
-  const defaultWithLabel = (
-    <>
-      <Icon icon={ICONS.LBRY} />
-      <div className="button__label">{LOGO_TITLE}</div>
-    </>
-  );
-
-  if (LOGO_WHITE_TEXT && (type === 'embed' || type === 'embed-ended')) {
-    return <img className="embed__overlay-logo" src={LOGO_WHITE_TEXT} />;
+  if (type === 'embed' || type === 'embed-ended') {
+    return <Icon className="embed__overlay-logo" icon={ICONS.ODYSEE_WHITE_TEXT} />;
   }
 
   if (type === 'small' || isMobile) {
-    return <img className="header__navigation-logo" src={LOGO} height={200} width={200} />;
+    return <Icon className="header__logo" icon={ICONS.ODYSEE_LOGO} />;
   }
 
-  if (LOGO_WHITE_TEXT && LOGO_DARK_TEXT) {
-    return (
-      <img
-        className="header__navigation-logo"
-        height={300}
-        width={1000}
-        src={isLightTheme ? LOGO_DARK_TEXT : LOGO_WHITE_TEXT}
-      />
-    );
-  }
-
-  return defaultWithLabel;
+  return <Icon className="header__logo" icon={isLightTheme ? ICONS.ODYSEE_DARK_TEXT : ICONS.ODYSEE_WHITE_TEXT} />;
 }

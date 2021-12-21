@@ -101,11 +101,15 @@
   display: flex;
 }
 
-.header__navigation-logo {
+.header__logo {
   height: var(--height-button);
   max-width: -webkit-fit-content;
   max-width: -moz-fit-content;
   max-width: fit-content;
+
+  @media (max-width: $breakpoint-small) {
+    height: var(--height-button-mobile);
+  }
 }
 
 .header__navigationItem {
@@ -225,14 +229,11 @@
   @extend .header__navigationItem;
   display: flex;
   align-items: center;
-  margin-left: var(--spacing-m);
-  margin-right: var(--spacing-m);
+  margin: 0 var(--spacing-s);
   color: var(--color-text);
 
-  // move to lbry theme?
-  .lbry-icon {
-    height: var(--height-button);
-    width: var(--height-button);
+  @media (min-width: $breakpoint-small) {
+    width: 150px;
   }
 
   @media (max-width: $breakpoint-small) {
