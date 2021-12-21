@@ -148,7 +148,13 @@ const Header = (props: Props) => {
                   <Button
                     navigate={`/$/${PAGES.WALLET}`}
                     className="button--file-action header__navigationItem--balance"
-                    label={hideBalance || Number(roundedTotalBalance) === 0 ? __('Your Wallet') : roundedTotalBalance}
+                    label={
+                      hideBalance || Number(roundedTotalBalance) === 0
+                        ? isMobile
+                          ? __('Wallet')
+                          : __('Your Wallet')
+                        : roundedTotalBalance
+                    }
                     icon={ICONS.LBC}
                   />
                 )}
