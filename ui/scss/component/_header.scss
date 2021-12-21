@@ -56,6 +56,7 @@
 
   @media (max-width: $breakpoint-small) {
     padding: var(--spacing-xs);
+    height: var(--header-height-mobile);
   }
 }
 
@@ -67,13 +68,10 @@
   height: var(--header-height);
   padding: var(--spacing-s) var(--spacing-m);
   flex-wrap: nowrap;
-}
 
-.card__actions--between {
-  .header__menu--left {
-    @media (max-width: $breakpoint-small) {
-      max-width: 3rem;
-    }
+  @media (max-width: $breakpoint-small) {
+    padding: var(--spacing-xs);
+    height: var(--header-height-mobile);
   }
 }
 
@@ -126,6 +124,10 @@
   &[aria-expanded='true'] {
     background-color: var(--color-header-button-active);
   }
+
+  @media (max-width: $breakpoint-small) {
+    height: var(--height-button-mobile);
+  }
 }
 
 .header__navigationItem--icon {
@@ -147,6 +149,7 @@
 
   @media (max-width: $breakpoint-small) {
     margin: 0;
+    width: var(--height-button-mobile);
   }
 
   span {
@@ -169,12 +172,26 @@
   &:hover {
     opacity: 0.7;
   }
+
+  @media (max-width: $breakpoint-small) {
+    margin: 0;
+
+    .channel-thumbnail {
+      height: var(--height-button-mobile);
+      width: var(--height-button-mobile);
+    }
+  }
 }
 
 .header__navigationItem--iconSkeleton {
   @extend .header__navigationItem--icon;
   height: var(--height-button) !important;
   width: var(--height-button) !important;
+
+  @media (max-width: $breakpoint-small) {
+    height: var(--height-button-mobile) !important;
+    width: var(--height-button-mobile) !important;
+  }
 }
 
 .header__navigationItem--balance {
@@ -185,12 +202,23 @@
   &:hover {
     color: var(--color-text);
   }
+
+  @media (max-width: $breakpoint-small) {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 5rem;
+  }
 }
 
 .header__navigationItem--balanceLoading {
   margin: 0 var(--spacing-s);
   width: 4rem;
   background-color: var(--color-header-button);
+
+  @media (max-width: $breakpoint-small) {
+    margin: 0 !important;
+    width: 5rem;
+  }
 }
 
 .header__navigationItem--logo {
@@ -254,6 +282,5 @@
 .ReactModal__Overlay {
   .button--close {
     margin: 0;
-    margin-top: var(--spacing-xxs);
   }
 }

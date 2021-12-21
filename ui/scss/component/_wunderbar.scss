@@ -10,7 +10,7 @@
 .wunderbar__wrapper--mobile {
   margin: 0;
   border-bottom: 1px solid var(--color-border);
-  height: var(--header-height);
+  height: var(--header-height-mobile);
   display: flex;
   align-items: center;
   width: 100%;
@@ -113,10 +113,14 @@
   border-top: none;
   padding-top: var(--spacing-xs);
   margin: 0 var(--spacing-s);
+
+  @media (max-width: $breakpoint-small) {
+    top: calc(var(--header-height-mobile) - (var(--height-input)) + 3px);
+  }
 }
 
 .wunderbar__suggestions--mobile {
-  top: calc(var(--header-height) - var(--spacing-xs));
+  top: calc(var(--header-height-mobile) - var(--spacing-xs));
   margin-top: var(--spacing-m);
   padding: 0;
   overflow: visible;

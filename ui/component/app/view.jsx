@@ -31,6 +31,7 @@ import {
   STATUS_DOWN,
 } from 'web/effects/use-degraded-performance';
 import LANGUAGE_MIGRATIONS from 'constants/language-migrations';
+import { useIsMobile } from 'effects/use-screensize';
 
 const FileDrop = lazyImport(() => import('component/fileDrop' /* webpackChunkName: "fileDrop" */));
 const NagContinueFirstRun = lazyImport(() => import('component/nagContinueFirstRun' /* webpackChunkName: "nagCFR" */));
@@ -122,6 +123,7 @@ function App(props: Props) {
     fetchModAmIList,
   } = props;
 
+  const isMobile = useIsMobile();
   const appRef = useRef();
   const isEnhancedLayout = useKonamiListener();
   const [hasSignedIn, setHasSignedIn] = useState(false);
@@ -154,7 +156,7 @@ function App(props: Props) {
   const shouldMigrateLanguage = LANGUAGE_MIGRATIONS[language];
   const hasActiveChannelClaim = activeChannelId !== undefined;
   const isPersonalized = !IS_WEB || hasVerifiedEmail;
-  const renderFiledrop = !IS_WEB || isAuthenticated;
+  const renderFiledrop = !isMobile && isAuthenticated;
   const isOnline = navigator.onLine;
 
   let uri;
