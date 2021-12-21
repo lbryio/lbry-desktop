@@ -184,7 +184,7 @@ export const publishReducer = handleActions(
         }
       } else if (status) {
         currentUploads[key].status = status;
-        if (status === 'error') {
+        if (status === 'error' || status === 'conflict') {
           delete currentUploads[key].uploader;
         }
       }
