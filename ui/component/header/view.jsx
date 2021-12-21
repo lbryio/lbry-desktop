@@ -85,6 +85,7 @@ const Header = (props: Props) => {
   const isSignUpPage = pathname.includes(PAGES.AUTH);
   const isSignInPage = pathname.includes(PAGES.AUTH_SIGNIN);
   const isPwdResetPage = pathname.includes(PAGES.AUTH_PASSWORD_RESET);
+  const iYTSyncPage = pathname.includes(PAGES.YOUTUBE_SYNC);
 
   // For pages that allow for "backing out", shows a backout option instead of the Home logo
   const canBackout = Boolean(backout);
@@ -255,12 +256,14 @@ const Header = (props: Props) => {
                       // className="button--header-close"
                       icon={ICONS.REMOVE}
                       onClick={() => {
-                        clearEmailEntry();
-                        clearPasswordEntry();
+                        if (!iYTSyncPage) {
+                          clearEmailEntry();
+                          clearPasswordEntry();
+                        }
 
                         if (syncError) signOut();
 
-                        if ((isSignInPage && !emailToVerify) || isSignUpPage || isPwdResetPage) {
+                        if ((isSignInPage && !emailToVerify) || isSignUpPage || isPwdResetPage || iYTSyncPage) {
                           goBack();
                         } else {
                           push('/');
