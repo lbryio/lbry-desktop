@@ -158,13 +158,13 @@ const Header = (props: Props) => {
 
           {!hideProfile && <HeaderProfileMenuButton />}
         </>
-      ) : (
+      ) : !isMobile ? (
         <div className="header__authButtons">
-          {!isMobile && (
-            <Button navigate={`/$/${PAGES.AUTH_SIGNIN}`} button="link" label={__('Log In')} disabled={user === null} />
-          )}
+          <Button navigate={`/$/${PAGES.AUTH_SIGNIN}`} button="link" label={__('Log In')} disabled={user === null} />
           <Button navigate={`/$/${PAGES.AUTH}`} button="primary" label={__('Sign Up')} disabled={user === null} />
         </div>
+      ) : (
+        <HeaderProfileMenuButton />
       )}
     </div>
   );

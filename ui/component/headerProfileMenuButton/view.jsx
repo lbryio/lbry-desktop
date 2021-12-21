@@ -45,19 +45,30 @@ export default function HeaderProfileMenuButton(props: HeaderMenuButtonProps) {
         )}
 
         <MenuList className="menu__list--header">
-          <HeaderMenuLink page={PAGES.UPLOADS} icon={ICONS.PUBLISH} name={__('Uploads')} />
-          <HeaderMenuLink page={PAGES.CHANNELS} icon={ICONS.CHANNEL} name={__('Channels')} />
-          <HeaderMenuLink page={PAGES.CREATOR_DASHBOARD} icon={ICONS.ANALYTICS} name={__('Creator Analytics')} />
-          <HeaderMenuLink page={PAGES.REWARDS} icon={ICONS.REWARDS} name={__('Rewards')} />
-          <HeaderMenuLink page={PAGES.INVITE} icon={ICONS.INVITE} name={__('Invites')} />
+          {email ? (
+            <>
+              <HeaderMenuLink page={PAGES.UPLOADS} icon={ICONS.PUBLISH} name={__('Uploads')} />
+              <HeaderMenuLink page={PAGES.CHANNELS} icon={ICONS.CHANNEL} name={__('Channels')} />
+              <HeaderMenuLink page={PAGES.CREATOR_DASHBOARD} icon={ICONS.ANALYTICS} name={__('Creator Analytics')} />
+              <HeaderMenuLink page={PAGES.REWARDS} icon={ICONS.REWARDS} name={__('Rewards')} />
+              <HeaderMenuLink page={PAGES.INVITE} icon={ICONS.INVITE} name={__('Invites')} />
 
-          <MenuItem onSelect={signOut}>
-            <div className="menu__link">
-              <Icon aria-hidden icon={ICONS.SIGN_OUT} />
-              {__('Sign Out')}
-            </div>
-            <span className="menu__link-help">{email}</span>
-          </MenuItem>
+              <MenuItem onSelect={signOut}>
+                <div className="menu__link">
+                  <Icon aria-hidden icon={ICONS.SIGN_OUT} />
+                  {__('Sign Out')}
+                </div>
+                <span className="menu__link-help">{email}</span>
+              </MenuItem>
+            </>
+          ) : (
+            <>
+              <HeaderMenuLink page={PAGES.AUTH_SIGNIN} icon={ICONS.SIGN_IN} name={__('Log In')} />
+              <HeaderMenuLink page={PAGES.AUTH} icon={ICONS.SIGN_UP} name={__('Sign Up')} />
+              <HeaderMenuLink page={PAGES.SETTINGS} icon={ICONS.SETTINGS} name={__('Settings')} />
+              <HeaderMenuLink page={PAGES.HELP} icon={ICONS.HELP} name={__('Help')} />
+            </>
+          )}
         </MenuList>
       </Menu>
     </div>
