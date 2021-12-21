@@ -90,9 +90,12 @@
 .header__menu--right {
   @extend .header__menu;
   justify-content: flex-end;
+  width: 10rem;
+  min-width: 10rem;
 
   @media (max-width: $breakpoint-small) {
-    max-width: 4rem;
+    width: unset;
+    min-width: unset;
   }
 }
 
@@ -155,6 +158,7 @@
 
 .header__navigationItem--profilePic {
   margin-right: var(--spacing-s);
+  background-color: var(--color-header-button);
 
   .channel-thumbnail {
     height: var(--height-button);
@@ -167,6 +171,12 @@
   }
 }
 
+.header__navigationItem--iconSkeleton {
+  @extend .header__navigationItem--icon;
+  height: var(--height-button) !important;
+  width: var(--height-button) !important;
+}
+
 .header__navigationItem--balance {
   @extend .header__navigationItem;
   margin: 0 var(--spacing-s);
@@ -177,22 +187,28 @@
   }
 }
 
+.header__navigationItem--balanceLoading {
+  margin: 0 var(--spacing-s);
+  width: 4rem;
+  background-color: var(--color-header-button);
+}
+
 .header__navigationItem--logo {
   @extend .header__navigationItem;
-  height: 4rem;
   display: flex;
   align-items: center;
   margin-left: var(--spacing-m);
   margin-right: var(--spacing-m);
   color: var(--color-text);
+
   // move to lbry theme?
   .lbry-icon {
     height: var(--height-button);
     width: var(--height-button);
   }
+
   @media (max-width: $breakpoint-small) {
     margin-right: var(--spacing-m);
-    height: 5rem;
 
     .button__label {
       display: none;

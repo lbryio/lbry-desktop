@@ -1,6 +1,7 @@
 // @flow
 import 'scss/component/_header.scss';
 
+import { formatCredits } from 'util/format-credits';
 import { useIsMobile } from 'effects/use-screensize';
 import { withRouter } from 'react-router';
 import * as ICONS from 'constants/icons';
@@ -12,6 +13,7 @@ import HeaderProfileMenuButton from 'component/headerProfileMenuButton';
 import Logo from 'component/logo';
 import NotificationBubble from 'component/notificationBubble';
 import React from 'react';
+import Skeleton from '@mui/material/Skeleton';
 import SkipNavigationButton from 'component/skipNavigationButton';
 import Tooltip from 'component/common/tooltip';
 import WunderBar from 'component/wunderbar';
@@ -37,10 +39,9 @@ type Props = {
     replace: (string) => void,
   },
   isAbsoluteSideNavHidden: boolean,
-  roundedBalance: string,
-  roundedSpendableBalance: string,
   sidebarOpen: boolean,
   syncError: ?string,
+  totalBalance?: number,
   user: ?User,
   clearEmailEntry: () => void,
   clearPasswordEntry: () => void,
@@ -60,10 +61,9 @@ const Header = (props: Props) => {
     hideCancel,
     history,
     isAbsoluteSideNavHidden,
-    roundedBalance,
-    roundedSpendableBalance,
     sidebarOpen,
     syncError,
+    totalBalance,
     user,
     clearEmailEntry,
     clearPasswordEntry,
@@ -89,6 +89,10 @@ const Header = (props: Props) => {
   // For pages that allow for "backing out", shows a backout option instead of the Home logo
   const canBackout = Boolean(backout);
   const { backLabel, backNavDefault, title: backTitle, simpleTitle: simpleBackTitle } = backout || {};
+
+  const balanceLoading = totalBalance === undefined;
+  const roundedSpendableBalance = formatCredits(balance, 2, true);
+  const roundedTotalBalance = formatCredits(totalBalance, 2, true);
 
   // Sign out if they click the "x" when they are on the password prompt
   const authHeaderAction = syncError && { onClick: signOut };
@@ -138,12 +142,16 @@ const Header = (props: Props) => {
               }
             >
               <div>
-                <Button
-                  navigate={`/$/${PAGES.WALLET}`}
-                  className="button--file-action header__navigationItem--balance"
-                  label={hideBalance || Number(roundedBalance) === 0 ? __('Your Wallet') : roundedBalance}
-                  icon={ICONS.LBC}
-                />
+                {balanceLoading ? (
+                  <Skeleton variant="text" animation="wave" className="header__navigationItem--balanceLoading" />
+                ) : (
+                  <Button
+                    navigate={`/$/${PAGES.WALLET}`}
+                    className="button--file-action header__navigationItem--balance"
+                    label={hideBalance || Number(roundedTotalBalance) === 0 ? __('Your Wallet') : roundedTotalBalance}
+                    icon={ICONS.LBC}
+                  />
+                )}
               </div>
             </Tooltip>
           )}
