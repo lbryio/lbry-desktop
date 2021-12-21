@@ -1,4 +1,6 @@
 // @flow
+import 'scss/component/_header.scss';
+
 import { useIsMobile } from 'effects/use-screensize';
 import { withRouter } from 'react-router';
 import * as ICONS from 'constants/icons';
@@ -121,38 +123,38 @@ const Header = (props: Props) => {
     }
   }, [canBackout, onBackout]);
 
-  const userButtons = (className: string) => (
-    <div className={classnames('header__menu', { 'header__menu--with-balance': authenticated })}>
+  const userButtons = (hideWallet?: boolean, hideProfile?: boolean) => (
+    <div className="header__menu--right">
+      {isMobile && !authHeader && !canBackout && <WunderBar />}
+
       {authenticated ? (
         <>
-          <Tooltip
-            title={
-              balance > 0
-                ? __('Immediately spendable: %spendable_balance%', { spendable_balance: roundedSpendableBalance })
-                : __('Your Wallet')
-            }
-          >
-            <div>
-              <Button
-                navigate={`/$/${PAGES.WALLET}`}
-                className={classnames(className, 'header__navigation-item--balance')}
-                label={hideBalance || Number(roundedBalance) === 0 ? __('Your Wallet') : roundedBalance}
-                icon={ICONS.LBC}
-              />
-            </div>
-          </Tooltip>
+          {!hideWallet && (
+            <Tooltip
+              title={
+                balance > 0
+                  ? __('Immediately spendable: %spendable_balance%', { spendable_balance: roundedSpendableBalance })
+                  : __('Your Wallet')
+              }
+            >
+              <div>
+                <Button
+                  navigate={`/$/${PAGES.WALLET}`}
+                  className="button--file-action header__navigationItem--balance"
+                  label={hideBalance || Number(roundedBalance) === 0 ? __('Your Wallet') : roundedBalance}
+                  icon={ICONS.LBC}
+                />
+              </div>
+            </Tooltip>
+          )}
 
-          <HeaderProfileMenuButton />
+          {!hideProfile && <HeaderProfileMenuButton />}
         </>
       ) : (
-        <div className="header__auth-buttons">
-          <Button
-            navigate={`/$/${PAGES.AUTH_SIGNIN}`}
-            button="link"
-            label={__('Log In')}
-            className="mobile-hidden"
-            disabled={user === null}
-          />
+        <div className="header__authButtons">
+          {!isMobile && (
+            <Button navigate={`/$/${PAGES.AUTH_SIGNIN}`} button="link" label={__('Log In')} disabled={user === null} />
+          )}
           <Button navigate={`/$/${PAGES.AUTH}`} button="primary" label={__('Sign Up')} disabled={user === null} />
         </div>
       )}
@@ -161,25 +163,27 @@ const Header = (props: Props) => {
 
   return (
     <header className={classnames('header', { 'header--minimal': authHeader })}>
-      <div className="header__contents">
-        {!authHeader && canBackout ? (
-          <div className="card__actions--between">
+      {!authHeader && canBackout ? (
+        <div className="card__actions--between header__contents">
+          <div className="header__menu--left">
             <Button onClick={onBackout} button="link" label={backLabel || __('Cancel')} icon={ICONS.ARROW_LEFT} />
-
-            {backTitle && <h1 className="header__auth-title">{(isMobile && simpleBackTitle) || backTitle}</h1>}
-
-            {userButtons('header__navigation-item menu__title')}
           </div>
-        ) : (
-          <>
-            <div className="header__navigation">
+
+          {backTitle && <h1 className="header__authTitle">{(isMobile && simpleBackTitle) || backTitle}</h1>}
+
+          {userButtons(false, isMobile)}
+        </div>
+      ) : (
+        <>
+          <div className="header__navigation">
+            <div className="header__menu--left">
               <SkipNavigationButton />
 
               {!authHeader && (
                 <span style={{ position: 'relative' }}>
                   <Button
                     aria-label={sidebarLabel}
-                    className="header__navigation-item menu__title header__navigation-item--icon"
+                    className="header__navigationItem--icon"
                     icon={ICONS.MENU}
                     aria-expanded={sidebarOpen}
                     onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -191,7 +195,7 @@ const Header = (props: Props) => {
 
               <Button
                 aria-label={__('Home')}
-                className="header__navigation-item header__navigation-item--lbry"
+                className="header__navigationItem--logo"
                 onClick={() => pathname === '/' && window.location.reload()}
                 {...homeButtonNavigationProps}
               >
@@ -217,24 +221,20 @@ const Header = (props: Props) => {
                 />
               )}
               {/* @endif */}
-
-              {!authHeader && (
-                <div className="header__center">
-                  <WunderBar />
-                  <HeaderMenuButtons />
-                </div>
-              )}
             </div>
 
+            {!authHeader && !isMobile && (
+              <div className="header__center">
+                <WunderBar />
+                <HeaderMenuButtons />
+              </div>
+            )}
+
             {!authHeader && !canBackout
-              ? userButtons('header__navigation-item menu__title mobile-hidden')
+              ? userButtons(isMobile)
               : !isVerifyPage &&
                 !hideCancel && (
-                  <div className="header__menu">
-                    {/* Add an empty span here so we can use the same style as above */}
-                    {/* This pushes the close button to the right side */}
-                    <span />
-
+                  <div className="header__menu--right">
                     <Button
                       title={__('Go Back')}
                       button="alt"
@@ -255,9 +255,9 @@ const Header = (props: Props) => {
                     />
                   </div>
                 )}
-          </>
-        )}
-      </div>
+          </div>
+        </>
+      )}
     </header>
   );
 };

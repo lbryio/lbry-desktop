@@ -1,4 +1,6 @@
 // @flow
+import 'scss/component/_header.scss';
+
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
@@ -25,9 +27,9 @@ export default function HeaderProfileMenuButton(props: HeaderMenuButtonProps) {
         <MenuButton
           aria-label={__('Your account')}
           title={__('Your account')}
-          className={classnames('header__navigation-item', {
-            'menu__title header__navigation-item--icon': !activeChannelUrl,
-            'header__navigation-item--profile-pic': activeChannelUrl,
+          className={classnames('header__navigationItem', {
+            'header__navigationItem--icon': !activeChannelUrl,
+            'header__navigationItem--profilePic': activeChannelUrl,
           })}
         >
           {activeChannelUrl ? (

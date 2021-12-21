@@ -1,4 +1,6 @@
 // @flow
+import 'scss/component/_header.scss';
+
 import { ENABLE_UI_NOTIFICATIONS, ENABLE_NO_SOURCE_CLAIMS, CHANNEL_STAKED_LEVEL_LIVESTREAM } from 'config';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import * as ICONS from 'constants/icons';
@@ -41,7 +43,7 @@ export default function HeaderMenuButtons(props: HeaderMenuButtonProps) {
       {authenticated && (
         <Menu>
           <Tooltip title={__('Publish a file, or create a channel')}>
-            <MenuButton className="header__navigation-item menu__title header__navigation-item--icon mobile-hidden">
+            <MenuButton className="header__navigationItem--icon">
               <Icon size={18} icon={ICONS.PUBLISH} aria-hidden />
             </MenuButton>
           </Tooltip>
@@ -59,7 +61,7 @@ export default function HeaderMenuButtons(props: HeaderMenuButtonProps) {
 
       <Menu>
         <Tooltip title={__('Settings')}>
-          <MenuButton className="header__navigation-item menu__title header__navigation-item--icon  mobile-hidden">
+          <MenuButton className="header__navigationItem--icon">
             <Icon size={18} icon={ICONS.SETTINGS} aria-hidden />
           </MenuButton>
         </Tooltip>
