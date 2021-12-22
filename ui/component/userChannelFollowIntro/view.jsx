@@ -95,10 +95,10 @@ function UserChannelFollowIntro(props: Props) {
               type="helpful"
               message={__(
                 followingCountIgnoringAutoFollows === 1
-                  ? 'Nice! You are currently following %following_count% creator'
-                  : 'Nice! You are currently following %following_count% creators',
+                  ? 'Nice! You are currently following %followingCount% creator'
+                  : 'Nice! You are currently following %followingCount% creators',
                 {
-                  following_count: followingCountIgnoringAutoFollows,
+                  followingCount: followingCountIgnoringAutoFollows,
                 }
               )}
               actionText={__('Continue')}
