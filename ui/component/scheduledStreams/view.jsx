@@ -8,7 +8,6 @@ import { useIsMediumScreen, useIsLargeScreen } from 'effects/use-screensize';
 import ClaimListDiscover from 'component/claimListDiscover';
 import Button from 'component/button';
 import { LIVESTREAM_UPCOMING_BUFFER } from 'constants/livestream';
-import ClaimListDiscoverContext from 'component/claimListDiscover/context';
 
 type Props = {
   channelIds: Array<string>,
@@ -39,56 +38,54 @@ const ScheduledStreams = (props: Props) => {
   };
 
   return (
-    <ClaimListDiscoverContext.Provider value={{ listingType: 'UPCOMING' }}>
-      <div className={'mb-xl'} style={{ display: showUpcomingLivestreams ? 'block' : 'none' }}>
-        <ClaimListDiscover
-          useSkeletonScreen={false}
-          channelIds={channelIds}
-          limitClaimsPerChannel={limitClaimsPerChannel}
-          pageSize={50}
-          streamType={'all'}
-          hasNoSource
-          orderBy={CS.ORDER_BY_NEW_ASC}
-          tileLayout={tileLayout}
-          releaseTime={`>${moment().subtract(LIVESTREAM_UPCOMING_BUFFER, 'minutes').startOf('minute').unix()}`}
-          hideAdvancedFilter
-          hideFilters
-          infiniteScroll={false}
-          showNoSourceClaims
-          hideLayoutButton
-          header={__('Upcoming Livestreams')}
-          maxClaimRender={upcomingMax}
-          excludeUris={liveUris}
-          loadedCallback={loadedCallback}
-        />
-        {totalUpcomingLivestreams > upcomingMax && !showAllUpcoming && (
-          <div className="livestream-list--view-more">
-            <Button
-              label={__('Show more upcoming livestreams')}
-              button="link"
-              iconRight={ICONS.ARROW_RIGHT}
-              className="claim-grid__title--secondary"
-              onClick={() => {
-                setShowAllUpcoming(true);
-              }}
-            />
-          </div>
-        )}
-        {showAllUpcoming && (
-          <div className="livestream-list--view-more">
-            <Button
-              label={__('Show less upcoming livestreams')}
-              button="link"
-              iconRight={ICONS.ARROW_RIGHT}
-              className="claim-grid__title--secondary"
-              onClick={() => {
-                setShowAllUpcoming(false);
-              }}
-            />
-          </div>
-        )}
-      </div>
-    </ClaimListDiscoverContext.Provider>
+    <div className={'mb-xl'} style={{ display: showUpcomingLivestreams ? 'block' : 'none' }}>
+      <ClaimListDiscover
+        useSkeletonScreen={false}
+        channelIds={channelIds}
+        limitClaimsPerChannel={limitClaimsPerChannel}
+        pageSize={50}
+        streamType={'all'}
+        hasNoSource
+        orderBy={CS.ORDER_BY_NEW_ASC}
+        tileLayout={tileLayout}
+        releaseTime={`>${moment().subtract(LIVESTREAM_UPCOMING_BUFFER, 'minutes').startOf('minute').unix()}`}
+        hideAdvancedFilter
+        hideFilters
+        infiniteScroll={false}
+        showNoSourceClaims
+        hideLayoutButton
+        header={__('Upcoming Livestreams')}
+        maxClaimRender={upcomingMax}
+        excludeUris={liveUris}
+        loadedCallback={loadedCallback}
+      />
+      {totalUpcomingLivestreams > upcomingMax && !showAllUpcoming && (
+        <div className="livestream-list--view-more">
+          <Button
+            label={__('Show more upcoming livestreams')}
+            button="link"
+            iconRight={ICONS.ARROW_RIGHT}
+            className="claim-grid__title--secondary"
+            onClick={() => {
+              setShowAllUpcoming(true);
+            }}
+          />
+        </div>
+      )}
+      {showAllUpcoming && (
+        <div className="livestream-list--view-more">
+          <Button
+            label={__('Show less upcoming livestreams')}
+            button="link"
+            iconRight={ICONS.ARROW_RIGHT}
+            className="claim-grid__title--secondary"
+            onClick={() => {
+              setShowAllUpcoming(false);
+            }}
+          />
+        </div>
+      )}
+    </div>
   );
 };
 

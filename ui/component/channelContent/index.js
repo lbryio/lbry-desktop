@@ -14,8 +14,8 @@ import { withRouter } from 'react-router';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectClientSetting, selectShowMatureContent } from 'redux/selectors/settings';
 import { doFetchActiveLivestream } from 'redux/actions/livestream';
-import { selectCurrentChannelStatus } from 'redux/selectors/livestream';
-
+import { selectActiveLivestreamForChannel, selectActiveLivestreamInitialized } from 'redux/selectors/livestream';
+import { getChannelIdFromClaim } from 'util/claim';
 import ChannelContent from './view';
 
 const select = (state, props) => {
@@ -23,6 +23,7 @@ const select = (state, props) => {
   const urlParams = new URLSearchParams(search);
   const page = urlParams.get('page') || 0;
   const claim = props.uri && selectClaimForUri(state, props.uri);
+  const channelClaimId = getChannelIdFromClaim(claim);
 
   return {
     pageOfClaimsInChannel: makeSelectClaimsInChannelForPage(props.uri, page)(state),
@@ -34,7 +35,8 @@ const select = (state, props) => {
     isAuthenticated: selectUserVerifiedEmail(state),
     showMature: selectShowMatureContent(state),
     tileLayout: selectClientSetting(state, SETTINGS.TILE_LAYOUT),
-    currentChannelStatus: selectCurrentChannelStatus(state),
+    activeLivestreamForChannel: selectActiveLivestreamForChannel(state, channelClaimId),
+    activeLivestreamInitialized: selectActiveLivestreamInitialized(state),
   };
 };
 

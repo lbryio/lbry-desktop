@@ -165,14 +165,18 @@ export const doFetchActiveLivestream = (channelId: string) => {
       const liveChannel = await fetchLiveChannel(channelId);
       const currentlyLiveClaims = await findActiveStreams([channelId], ['release_time'], liveChannel, dispatch);
       const liveClaim = currentlyLiveClaims[channelId];
+
+      liveChannel[channelId].claimId = liveClaim.stream.claim_id;
+      liveChannel[channelId].claimUri = liveClaim.stream.canonical_url;
+
       dispatch({
         type: ACTIONS.FETCH_ACTIVE_LIVESTREAM_COMPLETED,
-        data: { liveClaim: { claimId: liveClaim.stream.claim_id, claimUri: liveClaim.stream.canonical_url } },
+        data: {
+          ...liveChannel,
+        },
       });
     } catch (err) {
-      dispatch({ type: ACTIONS.FETCH_ACTIVE_LIVESTREAM_FAILED });
-    } finally {
-      dispatch({ type: ACTIONS.FETCH_ACTIVE_LIVESTREAM_FINISHED, data: { channelId } });
+      dispatch({ type: ACTIONS.FETCH_ACTIVE_LIVESTREAM_FAILED, data: { channelId } });
     }
   };
 };

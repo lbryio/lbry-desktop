@@ -3,15 +3,6 @@
 import * as ACTIONS from 'constants/action_types';
 import { handleActions } from 'util/redux-utils';
 
-const currentChannelStatus: LivestreamChannelStatus = {
-  channelId: null,
-  isBroadcasting: false,
-  liveClaim: {
-    claimId: null,
-    claimUri: null,
-  },
-};
-
 const defaultState: LivestreamState = {
   fetchingById: {},
   viewersById: {},
@@ -19,10 +10,7 @@ const defaultState: LivestreamState = {
   activeLivestreams: null,
   activeLivestreamsLastFetchedDate: 0,
   activeLivestreamsLastFetchedOptions: {},
-
-  currentChannelStatus: {
-    ...currentChannelStatus,
-  },
+  activeLivestreamInitialized: false,
 };
 
 export default handleActions(
@@ -70,24 +58,14 @@ export default handleActions(
         activeLivestreamsLastFetchedOptions,
       };
     },
-
     [ACTIONS.FETCH_ACTIVE_LIVESTREAM_COMPLETED]: (state: LivestreamState, action: any) => {
-      const currentChannelStatus = Object.assign({}, state.currentChannelStatus, {
-        isBroadcasting: true,
-        liveClaim: action.data.liveClaim,
-      });
-      return { ...state, currentChannelStatus };
+      const activeLivestreams = Object.assign({}, state.activeLivestreams || {}, action.data);
+      return { ...state, activeLivestreams, activeLivestreamInitialized: true };
     },
-    [ACTIONS.FETCH_ACTIVE_LIVESTREAM_FAILED]: (state: LivestreamState) => {
-      const currentChannelStatus = Object.assign({}, state.currentChannelStatus, {
-        isBroadcasting: false,
-        liveClaim: { claimId: null, claimUri: null },
-      });
-      return { ...state, currentChannelStatus };
-    },
-    [ACTIONS.FETCH_ACTIVE_LIVESTREAM_FINISHED]: (state: LivestreamState, action: any) => {
-      const currentChannelStatus = Object.assign({}, state.currentChannelStatus, { channelId: action.data.channelId });
-      return { ...state, currentChannelStatus };
+    [ACTIONS.FETCH_ACTIVE_LIVESTREAM_FAILED]: (state: LivestreamState, action: any) => {
+      const activeLivestreams = state.activeLivestreams;
+      if (activeLivestreams) delete activeLivestreams[action.data.channelId];
+      return { ...state, activeLivestreams: Object.assign({}, activeLivestreams), activeLivestreamInitialized: true };
     },
   },
   defaultState

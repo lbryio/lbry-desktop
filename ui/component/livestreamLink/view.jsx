@@ -7,17 +7,18 @@ import { useHistory } from 'react-router';
 import { formatLbryUrlForWeb } from 'util/url';
 
 type Props = {
+  title?: string,
   claimUri: string,
 };
 
 export default function LivestreamLink(props: Props) {
-  const { claimUri } = props;
+  const { claimUri, title = null } = props;
   const { push } = useHistory();
 
   const element = (props: { children: any }) => (
     <Card
       className="livestream__channel-link claim-preview__live"
-      title={__('Live stream in progress')}
+      title={title || __('Live stream in progress')}
       onClick={() => {
         push(formatLbryUrlForWeb(claimUri));
       }}

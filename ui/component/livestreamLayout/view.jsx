@@ -80,7 +80,12 @@ export default function LivestreamLayout(props: Props) {
           </div>
         )}
 
-        {activeStreamUri && <LivestreamLink claimUri={activeStreamUri} />}
+        {activeStreamUri && (
+          <LivestreamLink
+            title={__("Click here to access the stream that's currently active")}
+            claimUri={activeStreamUri}
+          />
+        )}
 
         <React.Suspense fallback={null}>{isMobile && !hideComments && <LivestreamComments uri={uri} />}</React.Suspense>
 

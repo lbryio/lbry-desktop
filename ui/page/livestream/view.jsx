@@ -20,7 +20,8 @@ type Props = {
   doCommentSocketConnect: (string, string) => void,
   doCommentSocketDisconnect: (string) => void,
   doFetchActiveLivestream: (string) => void,
-  currentChannelStatus: LivestreamChannelStatus,
+  activeLivestreamForChannel: any,
+  activeLivestreamInitialized: boolean,
 };
 
 export default function LivestreamPage(props: Props) {
@@ -35,7 +36,8 @@ export default function LivestreamPage(props: Props) {
     doCommentSocketConnect,
     doCommentSocketDisconnect,
     doFetchActiveLivestream,
-    currentChannelStatus,
+    activeLivestreamForChannel,
+    activeLivestreamInitialized,
   } = props;
 
   React.useEffect(() => {
@@ -58,10 +60,9 @@ export default function LivestreamPage(props: Props) {
     };
   }, [claimId, uri, doCommentSocketConnect, doCommentSocketDisconnect]);
 
-  const [isInitialized, setIsInitialized] = React.useState(false);
-  const [isChannelBroadcasting, setIsChannelBroadcasting] = React.useState(false);
-  const [isCurrentClaimLive, setIsCurrentClaimLive] = React.useState(false);
-
+  const isInitialized = Boolean(activeLivestreamForChannel) || activeLivestreamInitialized;
+  const isChannelBroadcasting = Boolean(activeLivestreamForChannel);
+  const isCurrentClaimLive = isChannelBroadcasting && activeLivestreamForChannel.claimId === claimId;
   const livestreamChannelId = channelClaimId || '';
 
   // Find out current channels status + active live claim.
@@ -71,19 +72,10 @@ export default function LivestreamPage(props: Props) {
     return () => clearInterval(intervalId);
   }, [livestreamChannelId, doFetchActiveLivestream]);
 
-  React.useEffect(() => {
-    const initialized = currentChannelStatus.channelId === livestreamChannelId;
-    setIsInitialized(initialized);
-    if (initialized) {
-      setIsChannelBroadcasting(currentChannelStatus.isBroadcasting);
-      setIsCurrentClaimLive(currentChannelStatus.liveClaim.claimId === claimId);
-    }
-  }, [currentChannelStatus, livestreamChannelId, claimId]);
-
   const [activeStreamUri, setActiveStreamUri] = React.useState(false);
 
   React.useEffect(() => {
-    setActiveStreamUri(!isCurrentClaimLive && isChannelBroadcasting ? currentChannelStatus.liveClaim.claimUri : false);
+    setActiveStreamUri(!isCurrentClaimLive && isChannelBroadcasting ? activeLivestreamForChannel.claimUri : false);
   }, [isCurrentClaimLive, isChannelBroadcasting]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // $FlowFixMe

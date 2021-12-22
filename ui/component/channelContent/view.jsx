@@ -38,7 +38,8 @@ type Props = {
   claimType: string,
   empty?: string,
   doFetchActiveLivestream: (string) => void,
-  currentChannelStatus: LivestreamChannelStatus,
+  activeLivestreamForChannel: any,
+  activeLivestreamInitialized: boolean,
 };
 
 function ChannelContent(props: Props) {
@@ -59,7 +60,8 @@ function ChannelContent(props: Props) {
     claimType,
     empty,
     doFetchActiveLivestream,
-    currentChannelStatus,
+    activeLivestreamForChannel,
+    activeLivestreamInitialized,
   } = props;
   // const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
   const claimsInChannel = 9999;
@@ -252,8 +254,8 @@ function ChannelContent(props: Props) {
     setSearchResults(null);
   }, [url]);
 
-  const [isInitialized, setIsInitialized] = React.useState(false);
-  const [isChannelBroadcasting, setIsChannelBroadcasting] = React.useState(false);
+  const isInitialized = Boolean(activeLivestreamForChannel) || activeLivestreamInitialized;
+  const isChannelBroadcasting = Boolean(activeLivestreamForChannel);
 
   // Find out current channels status + active live claim.
   React.useEffect(() => {
@@ -261,14 +263,6 @@ function ChannelContent(props: Props) {
     const intervalId = setInterval(() => doFetchActiveLivestream(claimId), 30000);
     return () => clearInterval(intervalId);
   }, [claimId, doFetchActiveLivestream]);
-
-  React.useEffect(() => {
-    const initialized = currentChannelStatus.channelId === claimId;
-    setIsInitialized(initialized);
-    if (initialized) {
-      setIsChannelBroadcasting(currentChannelStatus.isBroadcasting);
-    }
-  }, [currentChannelStatus, claimId]);
 
   const showScheduledLiveStreams = claimType !== 'collection'; // ie. not on the playlist page.
 
@@ -279,7 +273,7 @@ function ChannelContent(props: Props) {
       )}
 
       {!fetching && isInitialized && isChannelBroadcasting && !isChannelEmpty && (
-        <LivestreamLink claimUri={currentChannelStatus.liveClaim.claimUri} />
+        <LivestreamLink claimUri={activeLivestreamForChannel.claimUri} />
       )}
 
       {!fetching && showScheduledLiveStreams && (
@@ -287,7 +281,7 @@ function ChannelContent(props: Props) {
           channelIds={[claimId]}
           tileLayout={tileLayout}
           liveUris={
-            isChannelBroadcasting && currentChannelStatus.liveClaim ? [currentChannelStatus.liveClaim.claimUri] : []
+            isChannelBroadcasting && activeLivestreamForChannel.claimUri ? [activeLivestreamForChannel.claimUri] : []
           }
         />
       )}

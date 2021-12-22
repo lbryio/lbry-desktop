@@ -4,6 +4,7 @@ import DateTime from 'component/dateTime';
 import FileViewCount from 'component/fileViewCount';
 import FileActions from 'component/fileActions';
 import ClaimPreviewReset from 'component/claimPreviewReset';
+import LivestreamDateTime from 'component/livestreamDateTime';
 
 type Props = {
   uri: string,
@@ -13,13 +14,12 @@ type Props = {
 
 function FileSubtitle(props: Props) {
   const { uri, livestream = false, isLive = false } = props;
-  const showDateTime = !livestream || (livestream && !isLive);
   return (
     <>
       <div className="media__subtitle--between">
         <div className="file__viewdate">
-          {showDateTime && <DateTime uri={uri} show={DateTime.SHOW_DATE} />}
-
+          {livestream && isLive && <LivestreamDateTime uri={uri} />}
+          {!livestream && <DateTime uri={uri} show={DateTime.SHOW_DATE} />}
           <FileViewCount uri={uri} livestream={livestream} isLive={isLive} />
         </div>
 

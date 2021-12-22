@@ -62,6 +62,31 @@ export const selectIsActiveLivestreamForUri = createCachedSelector(
   }
 )((state, uri) => String(uri));
 
+export const selectActiveLivestreamForUri = createCachedSelector(
+  (state, uri) => uri,
+  selectActiveLivestreams,
+  (uri, activeLivestreams) => {
+    if (!uri || !activeLivestreams) {
+      return null;
+    }
+
+    const activeLivestreamValues = Object.values(activeLivestreams);
+    // $FlowFixMe - unable to resolve claimUri
+    return activeLivestreamValues.find((v) => v.claimUri === uri) || null;
+  }
+)((state, uri) => String(uri));
+
+export const selectActiveLivestreamForChannel = createCachedSelector(
+  (state, channelId) => channelId,
+  selectActiveLivestreams,
+  (channelId, activeLivestreams) => {
+    if (!channelId || !activeLivestreams) {
+      return null;
+    }
+    return activeLivestreams[channelId] || null;
+  }
+)((state, channelId) => String(channelId));
+
 export const selectFetchingActiveLivestreams = (state: State) => selectState(state).fetchingActiveLivestreams;
 
-export const selectCurrentChannelStatus = (state: State) => selectState(state).currentChannelStatus;
+export const selectActiveLivestreamInitialized = (state: State) => selectState(state).activeLivestreamInitialized;

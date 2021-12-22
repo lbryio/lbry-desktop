@@ -1,11 +1,12 @@
 // @flow
-import React, { useContext } from 'react';
+import React from 'react';
 import classnames from 'classnames';
 import { NavLink, withRouter } from 'react-router-dom';
 import FileThumbnail from 'component/fileThumbnail';
 import UriIndicator from 'component/uriIndicator';
 import TruncatedText from 'component/common/truncated-text';
 import DateTime from 'component/dateTime';
+import LivestreamDateTime from 'component/livestreamDateTime';
 import ChannelThumbnail from 'component/channelThumbnail';
 import FileViewCountInline from 'component/fileViewCountInline';
 import SubscribeButton from 'component/subscribeButton';
@@ -19,8 +20,6 @@ import FileWatchLaterLink from 'component/fileWatchLaterLink';
 import ClaimRepostAuthor from 'component/claimRepostAuthor';
 import ClaimMenuList from 'component/claimMenuList';
 import CollectionPreviewOverlay from 'component/collectionPreviewOverlay';
-import ClaimListDiscoverContext from 'component/claimListDiscover/context';
-import moment from 'moment';
 // $FlowFixMe cannot resolve ...
 import PlaceholderTx from 'static/img/placeholderTx.gif';
 
@@ -110,8 +109,6 @@ function ClaimPreviewTile(props: Props) {
     }
   }
 
-  const { listingType } = useContext(ClaimListDiscoverContext) || {};
-
   const signingChannel = claim && claim.signing_channel;
   const isChannel = claim && claim.value_type === 'channel';
   const channelUri = !isChannel ? signingChannel && signingChannel.permanent_url : claim && claim.permanent_url;
@@ -174,23 +171,6 @@ function ClaimPreviewTile(props: Props) {
   if (isLivestream === true) {
     liveProperty = (claim) => <>LIVE</>;
   }
-
-  const LivestreamDateTimeLabel = () => {
-    // If showing in upcoming and in the past. (we allow x time in past to show here if not live yet)
-    if (listingType === 'UPCOMING') {
-      // $FlowFixMe
-      if (moment.unix(claim.value.release_time).isBefore()) {
-        return __('Starting Soon');
-      }
-    } else {
-      // If not in upcoming + live and in the future (started streaming a bit early)
-      // $FlowFixMe
-      if (isLivestreamActive && moment.unix(claim.value.release_time).isAfter()) {
-        return __('Streaming Now');
-      }
-    }
-    return <DateTime timeAgo uri={uri} />;
-  };
 
   return (
     <li
@@ -260,7 +240,7 @@ function ClaimPreviewTile(props: Props) {
                 <UriIndicator uri={uri} link />
                 <div className="claim-tile__about--counts">
                   <FileViewCountInline uri={uri} isLivestream={isLivestream} />
-                  {isLivestream && <LivestreamDateTimeLabel />}
+                  {isLivestream && <LivestreamDateTime uri={uri} />}
                   {!isLivestream && <DateTime timeAgo uri={uri} />}
                 </div>
               </div>
