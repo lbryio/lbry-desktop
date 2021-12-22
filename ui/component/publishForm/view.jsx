@@ -173,7 +173,8 @@ function PublishForm(props: Props) {
     [PUBLISH_MODES.LIVESTREAM]: 'Livestream --[noun, livestream tab button]--',
   };
 
-  const [mode, setMode] = React.useState(_uploadType || PUBLISH_MODES.FILE);
+  const defaultPublishMode = isLivestreamClaim ? PUBLISH_MODES.LIVESTREAM : PUBLISH_MODES.FILE;
+  const [mode, setMode] = React.useState(_uploadType || defaultPublishMode);
   const [isCheckingLivestreams, setCheckingLivestreams] = React.useState(false);
 
   let customSubtitle;
@@ -422,9 +423,8 @@ function PublishForm(props: Props) {
 
   // set mode based on urlParams 'type'
   useEffect(() => {
-    // Default to standard file publish if none specified
     if (!_uploadType) {
-      setMode(PUBLISH_MODES.FILE);
+      setMode(defaultPublishMode);
       return;
     }
 
@@ -448,9 +448,8 @@ function PublishForm(props: Props) {
       return;
     }
 
-    // Default to standard file publish
-    setMode(PUBLISH_MODES.FILE);
-  }, [_uploadType, enableLivestream]);
+    setMode(defaultPublishMode);
+  }, [_uploadType, enableLivestream, defaultPublishMode]);
 
   // if we have a type urlparam, update it? necessary?
   useEffect(() => {

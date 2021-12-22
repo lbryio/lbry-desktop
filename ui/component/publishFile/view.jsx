@@ -114,7 +114,7 @@ function PublishFile(props: Props) {
   const fileSelectorModes = [
     { label: __('Upload'), actionName: SOURCE_UPLOAD, icon: ICONS.PUBLISH },
     { label: __('Choose Replay'), actionName: SOURCE_SELECT, icon: ICONS.MENU },
-    { label: __('None'), actionName: SOURCE_NONE },
+    { label: isLivestreamClaim ? __('Edit / Update') : __('None'), actionName: SOURCE_NONE },
   ];
 
   const livestreamDataStr = JSON.stringify(livestreamData);
@@ -144,10 +144,7 @@ function PublishFile(props: Props) {
 
   // set default file source to select if necessary
   useEffect(() => {
-    if (hasLivestreamData && isLivestreamClaim) {
-      setWaitForFile(true);
-      setFileSelectSource(SOURCE_SELECT);
-    } else if (isLivestreamClaim) {
+    if (isLivestreamClaim) {
       setFileSelectSource(SOURCE_NONE);
     }
   }, [hasLivestreamData, isLivestreamClaim, setFileSelectSource]);
@@ -437,7 +434,7 @@ function PublishFile(props: Props) {
     updatePublishForm(publishFormParams);
   }
 
-  const showFileUpload = mode === PUBLISH_MODES.FILE;
+  const showFileUpload = mode === PUBLISH_MODES.FILE || PUBLISH_MODES.LIVESTREAM;
   const isPublishPost = mode === PUBLISH_MODES.POST;
 
   return (

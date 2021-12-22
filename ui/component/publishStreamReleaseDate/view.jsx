@@ -59,8 +59,8 @@ const PublishStreamReleaseDate = (props: Props) => {
 
       <div className={'w-full flex flex-col mt-s md:mt-0 md:h-12 md:items-center md:flex-row'}>
         <FormField
-          type="checkbox"
-          name="rightNow"
+          type="radio"
+          name="anytime"
           disabled={false}
           onChange={handleToggle}
           checked={!publishLater}
@@ -69,8 +69,8 @@ const PublishStreamReleaseDate = (props: Props) => {
 
         <div className={'md:ml-m mt-s md:mt-0'}>
           <FormField
-            type="checkbox"
-            name="rightNow"
+            type="radio"
+            name="scheduled_time"
             disabled={false}
             onChange={handleToggle}
             checked={publishLater}
