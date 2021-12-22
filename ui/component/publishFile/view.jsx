@@ -142,12 +142,12 @@ function PublishFile(props: Props) {
     }
   }, [currentFileType, mode, isStillEditing, updatePublishForm]);
 
-  // set default file source to select if necessary
+  // set default file source to none if editing a livestream.
   useEffect(() => {
     if (isLivestreamClaim) {
       setFileSelectSource(SOURCE_NONE);
     }
-  }, [hasLivestreamData, isLivestreamClaim, setFileSelectSource]);
+  }, [isLivestreamClaim, setFileSelectSource]);
 
   const normalizeUrlForProtocol = (url) => {
     if (url.startsWith('https://')) {
@@ -511,7 +511,7 @@ function PublishFile(props: Props) {
               </fieldset-section>
             )}
 
-            {fileSelectSource === SOURCE_UPLOAD && showFileUpload && (
+            {showSourceSelector && fileSelectSource === SOURCE_UPLOAD && showFileUpload && (
               <>
                 <FileSelector
                   label={__('File')}
@@ -525,86 +525,97 @@ function PublishFile(props: Props) {
                 {getUploadMessage()}
               </>
             )}
-            {fileSelectSource === SOURCE_SELECT && showFileUpload && hasLivestreamData && !isCheckingLivestreams && (
-              <>
-                <fieldset-section>
-                  <label>{__('Select Replay')}</label>
-                  <div className="table__wrapper">
-                    <table className="table table--livestream-data">
-                      <tbody>
-                        {livestreamData.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE).map((item, i) => (
-                          <tr
-                            onClick={() => setSelectedFileIndex((currentPage - 1) * PAGE_SIZE + i)}
-                            key={item.id}
-                            className={classnames('livestream__data-row', {
-                              'livestream__data-row--selected': selectedFileIndex === (currentPage - 1) * PAGE_SIZE + i,
-                            })}
-                          >
-                            <td>
-                              <FormField
-                                type="radio"
-                                checked={selectedFileIndex === (currentPage - 1) * PAGE_SIZE + i}
-                                label={null}
-                                onClick={() => setSelectedFileIndex((currentPage - 1) * PAGE_SIZE + i)}
-                                className="livestream__data-row-radio"
-                              />
-                            </td>
-                            <td>
-                              <div className="livestream_thumb_container">
-                                {item.data.thumbnails.slice(0, 3).map((thumb) => (
-                                  <img key={thumb} className="livestream___thumb" src={thumb} />
-                                ))}
-                              </div>
-                            </td>
-                            <td>
-                              {`${Math.floor(item.data.fileDuration / 60)} ${
-                                Math.floor(item.data.fileDuration / 60) > 1 ? __('minutes') : __('minute')
-                              }`}
-                              <div className="table__item-label">
-                                {`${moment(item.data.uploadedAt).from(moment())}`}
-                              </div>
-                            </td>
-                            <td>
-                              <CopyableText
-                                primaryButton
-                                copyable={normalizeUrlForProtocol(item.data.fileLocation)}
-                                snackMessage={__('Url copied.')}
-                              />
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </fieldset-section>
-                <fieldset-group class="fieldset-group--smushed fieldgroup--paginate">
+            {showSourceSelector &&
+              fileSelectSource === SOURCE_SELECT &&
+              showFileUpload &&
+              hasLivestreamData &&
+              !isCheckingLivestreams && (
+                <>
                   <fieldset-section>
-                    <ReactPaginate
-                      pageCount={totalPages}
-                      pageRangeDisplayed={2}
-                      previousLabel="‹"
-                      nextLabel="›"
-                      activeClassName="pagination__item--selected"
-                      pageClassName="pagination__item"
-                      previousClassName="pagination__item pagination__item--previous"
-                      nextClassName="pagination__item pagination__item--next"
-                      breakClassName="pagination__item pagination__item--break"
-                      marginPagesDisplayed={2}
-                      onPageChange={(e) => handlePaginateReplays(e.selected + 1)}
-                      forcePage={currentPage - 1}
-                      initialPage={currentPage - 1}
-                      containerClassName="pagination"
-                    />
+                    <label>{__('Select Replay')}</label>
+                    <div className="table__wrapper">
+                      <table className="table table--livestream-data">
+                        <tbody>
+                          {livestreamData
+                            .slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
+                            .map((item, i) => (
+                              <tr
+                                onClick={() => setSelectedFileIndex((currentPage - 1) * PAGE_SIZE + i)}
+                                key={item.id}
+                                className={classnames('livestream__data-row', {
+                                  'livestream__data-row--selected':
+                                    selectedFileIndex === (currentPage - 1) * PAGE_SIZE + i,
+                                })}
+                              >
+                                <td>
+                                  <FormField
+                                    type="radio"
+                                    checked={selectedFileIndex === (currentPage - 1) * PAGE_SIZE + i}
+                                    label={null}
+                                    onClick={() => setSelectedFileIndex((currentPage - 1) * PAGE_SIZE + i)}
+                                    className="livestream__data-row-radio"
+                                  />
+                                </td>
+                                <td>
+                                  <div className="livestream_thumb_container">
+                                    {item.data.thumbnails.slice(0, 3).map((thumb) => (
+                                      <img key={thumb} className="livestream___thumb" src={thumb} />
+                                    ))}
+                                  </div>
+                                </td>
+                                <td>
+                                  {`${Math.floor(item.data.fileDuration / 60)} ${
+                                    Math.floor(item.data.fileDuration / 60) > 1 ? __('minutes') : __('minute')
+                                  }`}
+                                  <div className="table__item-label">
+                                    {`${moment(item.data.uploadedAt).from(moment())}`}
+                                  </div>
+                                </td>
+                                <td>
+                                  <CopyableText
+                                    primaryButton
+                                    copyable={normalizeUrlForProtocol(item.data.fileLocation)}
+                                    snackMessage={__('Url copied.')}
+                                  />
+                                </td>
+                              </tr>
+                            ))}
+                        </tbody>
+                      </table>
+                    </div>
                   </fieldset-section>
-                </fieldset-group>
-              </>
-            )}
-            {fileSelectSource === SOURCE_SELECT && showFileUpload && !hasLivestreamData && !isCheckingLivestreams && (
-              <div className="main--empty empty">
-                <Empty text={__('No replays found.')} />
-              </div>
-            )}
-            {fileSelectSource === SOURCE_SELECT && showFileUpload && isCheckingLivestreams && (
+                  <fieldset-group class="fieldset-group--smushed fieldgroup--paginate">
+                    <fieldset-section>
+                      <ReactPaginate
+                        pageCount={totalPages}
+                        pageRangeDisplayed={2}
+                        previousLabel="‹"
+                        nextLabel="›"
+                        activeClassName="pagination__item--selected"
+                        pageClassName="pagination__item"
+                        previousClassName="pagination__item pagination__item--previous"
+                        nextClassName="pagination__item pagination__item--next"
+                        breakClassName="pagination__item pagination__item--break"
+                        marginPagesDisplayed={2}
+                        onPageChange={(e) => handlePaginateReplays(e.selected + 1)}
+                        forcePage={currentPage - 1}
+                        initialPage={currentPage - 1}
+                        containerClassName="pagination"
+                      />
+                    </fieldset-section>
+                  </fieldset-group>
+                </>
+              )}
+            {showSourceSelector &&
+              fileSelectSource === SOURCE_SELECT &&
+              showFileUpload &&
+              !hasLivestreamData &&
+              !isCheckingLivestreams && (
+                <div className="main--empty empty">
+                  <Empty text={__('No replays found.')} />
+                </div>
+              )}
+            {showSourceSelector && fileSelectSource === SOURCE_SELECT && showFileUpload && isCheckingLivestreams && (
               <div className="main--empty empty">
                 <Spinner small />
               </div>
