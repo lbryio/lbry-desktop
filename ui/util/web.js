@@ -50,7 +50,7 @@ function getThumbnailCdnUrl(url) {
     return url;
   }
 
-  if (url) {
+  if (url && !url.startsWith('data:image')) {
     const encodedURL = Buffer.from(url).toString('base64');
     return `${THUMBNAIL_CARDS_CDN_URL}${encodedURL}.jpg`;
   }
