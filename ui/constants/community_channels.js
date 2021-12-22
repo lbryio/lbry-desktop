@@ -5,6 +5,11 @@ const PT_BR_CHANNELS =
   ' ' +
   'lbry://@ajuda#d3a0afbe782c5ad13c944bdf12c1387302868c73';
 
+const ES_CHANNELS =
+  'lbry://@odysee.es#a8d7dfef9937c18a32f4ddf962ceb94b6293c675' +
+  ' ' +
+  'lbry://@ayuda#7385d06a753744996461f5aa30daa570b85bd8d2';
+
 const DE_CHANNELS =
   'lbry://@OdyseeDE#1c44ca079e0e3a824881184fdffcf1864cb2649e' +
   ' ' +
@@ -13,7 +18,7 @@ const DE_CHANNELS =
 const COMMUNITY_CHANNELS = {
   en: AUTO_FOLLOW_CHANNELS,
   'pt-BR': PT_BR_CHANNELS,
-  es: 'lbry://@ayuda#7385d06a753744996461f5aa30daa570b85bd8d2',
+  es: ES_CHANNELS,
   de: DE_CHANNELS,
 };
 
