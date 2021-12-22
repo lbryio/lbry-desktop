@@ -2,7 +2,7 @@
 // https://github.com/carmelopullara/react-feather
 // Note: Icons should be named for their purpose, rather than the actual icon.
 //       The goal being to reduce multiple uses of the same icon for different purposes.
-//
+
 export const REWARDS = 'Award';
 export const LOCAL = 'Folder';
 export const ALERT = 'AlertCircle';
@@ -183,3 +183,6 @@ export const EMOJI = 'Emoji';
 export const STICKER = 'Sticker';
 export const EDUCATION = 'Education';
 export const POP_CULTURE = 'Pop Culture';
+export const ODYSEE_LOGO = 'OdyseeLogo';
+export const ODYSEE_WHITE_TEXT = 'OdyseeLogoWhiteText';
+export const ODYSEE_DARK_TEXT = 'OdyseeLogoDarkText';

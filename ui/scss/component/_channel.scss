@@ -366,17 +366,6 @@ $actions-z-index: 2;
   }
 }
 
-.channel-staked__tooltip {
-  display: flex;
-  align-items: center;
-  line-height: 1rem;
-}
-
-.channel-staked__tooltip-text {
-  margin-left: var(--spacing-xs);
-  font-size: var(--font-xsmall);
-}
-
 .channel-staked__wrapper {
   display: flex;
   position: absolute;

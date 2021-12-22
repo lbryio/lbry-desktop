@@ -71,7 +71,7 @@ function LivestreamComment(props: Props) {
           })}
         >
           {isGlobalMod && (
-            <Tooltip label={__('Admin')}>
+            <Tooltip title={__('Admin')}>
               <span className="comment__badge comment__badge--global-mod">
                 <Icon icon={ICONS.BADGE_MOD} size={16} />
               </span>
@@ -79,7 +79,7 @@ function LivestreamComment(props: Props) {
           )}
 
           {isModerator && (
-            <Tooltip label={__('Moderator')}>
+            <Tooltip title={__('Moderator')}>
               <span className="comment__badge comment__badge--mod">
                 <Icon icon={ICONS.BADGE_MOD} size={16} />
               </span>
@@ -87,7 +87,7 @@ function LivestreamComment(props: Props) {
           )}
 
           {commentByOwnerOfContent && (
-            <Tooltip label={__('Streamer')}>
+            <Tooltip title={__('Streamer')}>
               <span className="comment__badge">
                 <Icon icon={ICONS.BADGE_STREAMER} size={16} />
               </span>

@@ -245,7 +245,7 @@ export default function LivestreamComments(props: Props) {
                   const isSticker = stickerSuperChats && stickerSuperChats.includes(superChat);
 
                   const SuperChatWrapper = !isSticker
-                    ? ({ children }) => <Tooltip label={superChat.comment}>{children}</Tooltip>
+                    ? ({ children }) => <Tooltip title={superChat.comment}>{children}</Tooltip>
                     : ({ children }) => <>{children}</>;
 
                   return (

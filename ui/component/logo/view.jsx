@@ -1,64 +1,27 @@
 // @flow
-import React from 'react';
-import * as ICONS from 'constants/icons';
-import { LOGO_TITLE, LOGO, LOGO_TEXT_LIGHT, LOGO_TEXT_DARK } from 'config';
-import Icon from 'component/common/icon';
 import { useIsMobile } from 'effects/use-screensize';
+import * as ICONS from 'constants/icons';
+import Icon from 'component/common/icon';
+import React from 'react';
 
 type Props = {
-  type: string,
   currentTheme: string,
+  type: string,
 };
 
 export default function Logo(props: Props) {
-  const { type, currentTheme } = props;
-  const isMobile = useIsMobile();
-  const defaultWithLabel = (
-    <>
-      <Icon icon={ICONS.LBRY} />
-      {/* @if TARGET='app' */}
-      <div className={'button__label'}>{'LBRY'}</div>
-      {/* @endif */}
-      {/* @if TARGET='web' */}
-      <div className={'button__label'}>{LOGO_TITLE}</div>
-      {/* @endif */}
-    </>
-  );
+  const { currentTheme, type } = props;
 
-  if (type === 'small' || (isMobile && type !== 'embed')) {
-    return LOGO ? <img className={'header__navigation-logo'} src={LOGO} /> : <Icon icon={ICONS.LBRY} />;
-  } else if (type === 'embed') {
-    if (LOGO_TEXT_LIGHT) {
-      return (
-        <>
-          <img className={'embed__overlay-logo'} src={LOGO_TEXT_LIGHT} />
-        </>
-      );
-    } else {
-      return defaultWithLabel;
-    }
-  } else if (type === 'embed-ended') {
-    if (LOGO_TEXT_LIGHT) {
-      return (
-        <>
-          <img className={'embed__overlay-logo'} src={LOGO_TEXT_LIGHT} />
-        </>
-      );
-    } else {
-      return defaultWithLabel;
-    }
-  } else {
-    if (LOGO_TEXT_LIGHT && LOGO_TEXT_DARK) {
-      return (
-        <>
-          <img
-            className={'header__navigation-logo'}
-            src={currentTheme === 'light' ? LOGO_TEXT_DARK : LOGO_TEXT_LIGHT}
-          />
-        </>
-      );
-    } else {
-      return defaultWithLabel;
-    }
+  const isMobile = useIsMobile();
+  const isLightTheme = currentTheme === 'light';
+
+  if (type === 'embed' || type === 'embed-ended') {
+    return <Icon className="embed__overlay-logo" icon={ICONS.ODYSEE_WHITE_TEXT} />;
   }
+
+  if (type === 'small' || isMobile) {
+    return <Icon className="header__logo" icon={ICONS.ODYSEE_LOGO} />;
+  }
+
+  return <Icon className="header__logo" icon={isLightTheme ? ICONS.ODYSEE_DARK_TEXT : ICONS.ODYSEE_WHITE_TEXT} />;
 }

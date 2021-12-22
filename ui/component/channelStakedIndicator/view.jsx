@@ -41,7 +41,7 @@ function ChannelStakedIndicator(props: Props) {
   return (
     SIMPLE_SITE && (
       <Tooltip
-        label={
+        title={
           <div className="channel-staked__tooltip">
             <div className="channel-staked__tooltip-icons">
               <LevelIcon icon={icon} isControlling={isControlling} size={isControlling ? 14 : 10} />

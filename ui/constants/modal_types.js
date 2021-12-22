@@ -35,7 +35,6 @@ export const WALLET_PASSWORD_UNSAVE = 'wallet_password_unsave';
 export const CREATE_CHANNEL = 'create_channel';
 export const YOUTUBE_WELCOME = 'youtube_welcome';
 export const SET_REFERRER = 'set_referrer';
-export const SIGN_OUT = 'sign_out';
 export const LIQUIDATE_SUPPORTS = 'liquidate_supports';
 export const MASS_TIP_UNLOCK = 'mass_tip_unlock';
 export const CONFIRM_AGE = 'confirm_age';

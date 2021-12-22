@@ -1,18 +1,30 @@
 // @flow
-import type { Node } from 'react';
 import React from 'react';
-import ReachTooltip from '@reach/tooltip';
-// import '@reach/tooltip/styles.css'; --> 'scss/third-party.scss'
+import MUITooltip from '@mui/material/Tooltip';
+import type { Node } from 'react';
 
 type Props = {
-  label: string | Node,
+  arrow?: boolean,
   children: Node,
+  disableInteractive?: boolean,
+  enterDelay?: number,
+  title?: string | Node,
 };
 
 function Tooltip(props: Props) {
-  const { children, label } = props;
+  const { arrow = true, children, disableInteractive = true, enterDelay = 300, title } = props;
 
-  return <ReachTooltip label={label}>{children}</ReachTooltip>;
+  return (
+    <MUITooltip
+      arrow={arrow}
+      disableInteractive={disableInteractive}
+      enterDelay={enterDelay}
+      enterNextDelay={enterDelay}
+      title={title}
+    >
+      {children}
+    </MUITooltip>
+  );
 }
 
 export default Tooltip;

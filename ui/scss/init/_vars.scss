@@ -4,6 +4,7 @@
   --border-radius: 10px;
   --height-input: 2.5rem;
   --height-button: 2.5rem;
+  --height-button-mobile: 2rem;
   --height-checkbox: 24px;
   --height-radio: 24px;
   --height-badge: 24px;
@@ -66,7 +67,8 @@
   // Header
   // This is tied to the floating player so it knows where to attach to
   // ui/component/fileRenderFloating/view.jsx
-  --header-height: 80px;
+  --header-height: 64px;
+  --header-height-mobile: 56px;
 
   // Inline Player
   --inline-player-max-height: calc(100vh - var(--header-height) - var(--spacing-l) * 4);

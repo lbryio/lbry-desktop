@@ -73,7 +73,6 @@ const ModalRevokeClaim = lazyImport(() => import('modal/modalRevokeClaim' /* web
 const ModalRewardCode = lazyImport(() => import('modal/modalRewardCode' /* webpackChunkName: "modalRewardCode" */));
 const ModalSendTip = lazyImport(() => import('modal/modalSendTip' /* webpackChunkName: "modalSendTip" */));
 const ModalSetReferrer = lazyImport(() => import('modal/modalSetReferrer' /* webpackChunkName: "modalSetReferrer" */));
-const ModalSignOut = lazyImport(() => import('modal/modalSignOut' /* webpackChunkName: "modalSignOut" */));
 const ModalSocialShare = lazyImport(() => import('modal/modalSocialShare' /* webpackChunkName: "modalSocialShare" */));
 const ModalSupportsLiquidate = lazyImport(() =>
   import('modal/modalSupportsLiquidate' /* webpackChunkName: "modalSupportsLiquidate" */)
@@ -157,8 +156,6 @@ function getModal(id) {
       return ModalYoutubeWelcome;
     case MODALS.SET_REFERRER:
       return ModalSetReferrer;
-    case MODALS.SIGN_OUT:
-      return ModalSignOut;
     case MODALS.CONFIRM_AGE:
       return ModalConfirmAge;
     case MODALS.FILE_SELECTION:

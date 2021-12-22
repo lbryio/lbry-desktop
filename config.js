@@ -35,8 +35,8 @@ const config = {
   // LOGO
   LOGO_TITLE: process.env.LOGO_TITLE,
   LOGO: process.env.LOGO,
-  LOGO_TEXT_LIGHT: process.env.LOGO_TEXT_LIGHT,
-  LOGO_TEXT_DARK: process.env.LOGO_TEXT_DARK,
+  LOGO_WHITE_TEXT: process.env.LOGO_WHITE_TEXT,
+  LOGO_DARK_TEXT: process.env.LOGO_DARK_TEXT,
   AVATAR_DEFAULT: process.env.AVATAR_DEFAULT,
   MISSING_THUMB_DEFAULT: process.env.MISSING_THUMB_DEFAULT,
   // OG
