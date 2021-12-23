@@ -11,6 +11,7 @@ import WebUploadList from 'component/webUploadList';
 import Spinner from 'component/spinner';
 import Yrbl from 'component/yrbl';
 import classnames from 'classnames';
+import useFetchViewCount from 'effects/use-fetch-view-count';
 
 const FILTER_ALL = 'stream,repost';
 const FILTER_UPLOADS = 'stream';
@@ -18,6 +19,7 @@ const FILTER_REPOSTS = 'repost';
 
 type Props = {
   uploadCount: number,
+  claimsByUri: { [string]: any },
   checkPendingPublishes: () => void,
   clearPublish: () => void,
   fetchClaimListMine: (number, number, boolean, Array<string>) => void,
@@ -27,11 +29,13 @@ type Props = {
   history: { replace: (string) => void, push: (string) => void },
   page: number,
   pageSize: number,
+  doFetchViewCount: (claimIdCsv: string) => void,
 };
 
 function FileListPublished(props: Props) {
   const {
     uploadCount,
+    claimsByUri,
     checkPendingPublishes,
     clearPublish,
     fetchClaimListMine,
@@ -40,6 +44,7 @@ function FileListPublished(props: Props) {
     urlTotal,
     page,
     pageSize,
+    doFetchViewCount,
   } = props;
 
   const [filterBy, setFilterBy] = React.useState(FILTER_ALL);
@@ -60,6 +65,8 @@ function FileListPublished(props: Props) {
       fetchClaimListMine(params.page, params.page_size, true, filterBy.split(','));
     }
   }, [uploadCount, paramsString, filterBy, fetchClaimListMine]);
+
+  useFetchViewCount(!fetching, urls, claimsByUri, doFetchViewCount);
 
   return (
     <Page>

@@ -4,10 +4,12 @@ import {
   selectMyClaimsPage,
   selectMyClaimsPageItemCount,
   selectFetchingMyClaimsPageError,
+  selectClaimsByUri,
 } from 'redux/selectors/claims';
 import { selectUploadCount } from 'redux/selectors/publish';
 import { doFetchClaimListMine, doCheckPendingClaims } from 'redux/actions/claims';
 import { doClearPublish } from 'redux/actions/publish';
+import { doFetchViewCount } from 'lbryinc';
 import FileListPublished from './view';
 import { withRouter } from 'react-router';
 import { MY_CLAIMS_PAGE_SIZE, PAGE_PARAM, PAGE_SIZE_PARAM } from 'constants/claim';
@@ -26,6 +28,7 @@ const select = (state, props) => {
     urlTotal: selectMyClaimsPageItemCount(state),
     error: selectFetchingMyClaimsPageError(state),
     uploadCount: selectUploadCount(state),
+    claimsByUri: selectClaimsByUri(state),
   };
 };
 
@@ -34,6 +37,7 @@ const perform = (dispatch) => ({
   fetchClaimListMine: (page, pageSize, resolve, filterBy) =>
     dispatch(doFetchClaimListMine(page, pageSize, resolve, filterBy)),
   clearPublish: () => dispatch(doClearPublish()),
+  doFetchViewCount: (csv) => dispatch(doFetchViewCount(csv)),
 });
 
 export default withRouter(connect(select, perform)(FileListPublished));

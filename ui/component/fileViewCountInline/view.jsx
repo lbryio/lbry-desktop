@@ -1,11 +1,12 @@
 // @flow
 import React from 'react';
 import 'scss/component/_view_count.scss';
+import * as PAGES from 'constants/pages';
 
 type Props = {
   uri: string,
   isLivestream?: boolean,
-  // --- select ---
+  // --- redux ---
   claim: ?StreamClaim,
   viewCount: string,
   lang: ?string,
@@ -24,16 +25,18 @@ export default function FileViewCountInline(props: Props) {
     formattedViewCount = Number(viewCount).toLocaleString();
   }
 
-  // Limit the view-count visibility to Channel Pages for now. We'll eventually
+  // Limit the view-count visibility to specific pages for now. We'll eventually
   // show it everywhere, so this band-aid would be the easiest to clean up
   // (only one place edit/remove).
   const pathname: string = window.location.pathname;
-  const isOnChannelPage = pathname && pathname.startsWith('/@') && pathname.indexOf('/', 1) === -1;
+  const isOnAllowedPage =
+    (pathname && pathname.startsWith('/@') && pathname.indexOf('/', 1) === -1) || // Channel Page
+    pathname === `/$/${PAGES.UPLOADS}`;
 
-  if (!viewCount || (claim && claim.repost_url) || isLivestream || !isOnChannelPage) {
+  if (!viewCount || (claim && claim.repost_url) || isLivestream || !isOnAllowedPage) {
     // (1) Currently, selectViewCountForUri doesn't differentiate between
     // un-fetched vs zero view-count. But since it's probably not ideal to
-    // highlight that a claim has 0 count, let's just not show anything.
+    // highlight that a claim has 0 view count, let's just not show anything.
     // (2) No idea how to get the repost source's claim ID from the repost claim,
     // so hiding it for now.
     return null;
