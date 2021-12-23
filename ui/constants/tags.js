@@ -16,8 +16,16 @@ export const DEFAULT_FOLLOWED_TAGS = [
 export const DISABLE_COMMENTS_TAG = 'disable-comments';
 export const DISABLE_SUPPORT_TAG = 'disable-support';
 export const PREFERENCE_EMBED = 'preference-embed';
+export const SCHEDULED_LIVESTREAM_TAG = 'scheduled-livestream';
+export const LBRY_FIRST_TAG = 'lbry-first';
 
-export const UTILITY_TAGS = [DISABLE_COMMENTS_TAG, DISABLE_SUPPORT_TAG, PREFERENCE_EMBED];
+// Control tags are special tags that are available to the user in some situations.
+export const CONTROL_TAGS = [DISABLE_COMMENTS_TAG, DISABLE_SUPPORT_TAG, PREFERENCE_EMBED];
+
+// System tags are special tags that are not available to the user.
+export const SYSTEM_TAGS = [SCHEDULED_LIVESTREAM_TAG, LBRY_FIRST_TAG];
+
+export const INTERNAL_TAGS = [...CONTROL_TAGS, ...SYSTEM_TAGS];
 
 export const MATURE_TAGS = [
   'porn',

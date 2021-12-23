@@ -24,6 +24,7 @@ import { creditsToString } from 'util/format-credits';
 import Lbry from 'lbry';
 // import LbryFirst from 'extras/lbry-first/lbry-first';
 import { isClaimNsfw } from 'util/claim';
+import { LBRY_FIRST_TAG, SCHEDULED_LIVESTREAM_TAG } from 'constants/tags';
 
 function resolveClaimTypeForAnalytics(claim) {
   if (!claim) {
@@ -144,10 +145,17 @@ function resolvePublishPayload(publishData, myClaimForUri, myChannels, preview) 
   }
 
   if (useLBRYUploader) {
-    publishPayload.tags.push('lbry-first');
+    publishPayload.tags.push(LBRY_FIRST_TAG);
   }
 
-  // Set release time to curret date. On edits, keep original release/transaction time as release_time
+  const nowTimeStamp = Number(Math.round(Date.now() / 1000));
+
+  // Add internal tag if a livestream is being scheduled.
+  if (isLivestreamPublish && releaseTimeEdited && releaseTimeEdited > nowTimeStamp) {
+    publishPayload.tags.push(SCHEDULED_LIVESTREAM_TAG);
+  }
+
+  // Set release time to current date. On edits, keep original release/transaction time as release_time
   if (releaseTimeEdited) {
     publishPayload.release_time = releaseTimeEdited;
   } else if (myClaimForUriEditing && myClaimForUriEditing.value.release_time) {
@@ -155,7 +163,7 @@ function resolvePublishPayload(publishData, myClaimForUri, myChannels, preview) 
   } else if (myClaimForUriEditing && myClaimForUriEditing.timestamp) {
     publishPayload.release_time = Number(myClaimForUriEditing.timestamp);
   } else {
-    publishPayload.release_time = Number(Math.round(Date.now() / 1000));
+    publishPayload.release_time = nowTimeStamp;
   }
 
   if (channelId) {

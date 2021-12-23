@@ -5,6 +5,7 @@ import { createSelector } from 'reselect';
 import { createCachedSelector } from 're-reselect';
 import { isClaimNsfw, filterClaims, getChannelIdFromClaim } from 'util/claim';
 import * as CLAIM from 'constants/claim';
+import { INTERNAL_TAGS } from 'constants/tags';
 
 type State = { claims: any };
 
@@ -608,13 +609,8 @@ export const makeSelectMyChannelPermUrlForName = (name: string) =>
   });
 
 export const selectTagsForUri = createCachedSelector(selectMetadataForUri, (metadata: ?GenericMetadata) => {
-  return (metadata && metadata.tags) || [];
+  return metadata && metadata.tags ? metadata.tags.filter((tag) => !INTERNAL_TAGS.includes(tag)) : [];
 })((state, uri) => String(uri));
-
-export const makeSelectTagsForUri = (uri: string) =>
-  createSelector(makeSelectMetadataForUri(uri), (metadata: ?GenericMetadata) => {
-    return (metadata && metadata.tags) || [];
-  });
 
 export const selectFetchingClaimSearchByQuery = (state: State) => selectState(state).fetchingClaimSearchByQuery || {};
 

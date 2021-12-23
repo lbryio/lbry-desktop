@@ -45,6 +45,8 @@ type PublishState = {
   optimize: boolean,
   useLBRYUploader: boolean,
   currentUploads: { [key: string]: FileUploadItem },
+  isMarkdownPost: boolean,
+  isLivestreamPublish: boolean,
 };
 
 const defaultState: PublishState = {
@@ -86,6 +88,8 @@ const defaultState: PublishState = {
   optimize: false,
   useLBRYUploader: false,
   currentUploads: {},
+  isMarkdownPost: false,
+  isLivestreamPublish: false,
 };
 
 export const publishReducer = handleActions(
