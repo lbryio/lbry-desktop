@@ -44,7 +44,7 @@ class SettingsPage extends React.PureComponent<Props> {
         noFooter
         settingsPage
         noSideNavigation
-        backout={{ title: __('Settings'), backLabel: __('Back') }}
+        backout={{ title: __('Settings'), backLabel: __('Save') }}
         className="card-stack"
       >
         {!isAuthenticated && IS_WEB && (
