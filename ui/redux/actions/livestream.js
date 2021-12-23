@@ -57,13 +57,14 @@ const fetchLiveChannels = async () => {
 
 const fetchLiveChannel = async (channelId: string) => {
   const response = await fetch(`${LIVESTREAM_LIVE_API}/${channelId}`);
+  let json;
   try {
-    const json = await response.json();
-    if (!(json.data && json.data.live)) throw new Error();
-    return transformLivestreamData([json.data]);
+    json = await response.json();
   } catch {
     throw new Error('Error handling live API response');
   }
+  if (!(json.data && json.data.live)) throw new Error();
+  return transformLivestreamData([json.data]);
 };
 
 const filterUpcomingLiveStreamClaims = (upcomingClaims) => {
