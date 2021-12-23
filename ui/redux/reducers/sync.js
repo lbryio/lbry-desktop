@@ -16,6 +16,7 @@ const defaultState: SyncState = {
   setSyncIsPending: false,
   prefsReady: false,
   syncLocked: false,
+  sharedStateSyncId: -1,
   hashChanged: false,
   fatalError: false,
 };
@@ -113,6 +114,10 @@ reducers[ACTIONS.SYNC_FATAL_ERROR] = (state: SyncState) => {
 };
 
 reducers[ACTIONS.SYNC_RESET] = () => defaultState;
+
+reducers[ACTIONS.SHARED_STATE_SYNC_ID_CHANGED] = (state: SyncState, action: any) => {
+  return { ...state, sharedStateSyncId: action.data };
+};
 
 export default function syncReducer(state: SyncState = defaultState, action: any) {
   const handler = reducers[action.type];

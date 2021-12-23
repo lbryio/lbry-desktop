@@ -21,6 +21,19 @@ const SYNC_INTERVAL = 1000 * 60 * 5; // 5 minutes
 const NO_WALLET_ERROR = 'no wallet found for this user';
 const BAD_PASSWORD_ERROR_NAME = 'InvalidPasswordError';
 
+/**
+ * Checks if there is a newer sync session, indicating that fetched data from
+ * the current one can be dropped.
+ *
+ * @param getState
+ * @param syncId [Optional] The id of the current sync session. If not given, assume not invalidated.
+ * @returns {boolean}
+ */
+export function syncInvalidated(getState: GetState, syncId?: number) {
+  const state = getState();
+  return syncId && state.sync.sharedStateSyncId !== syncId;
+}
+
 export function doSetDefaultAccount(success: () => void, failure: (string) => void) {
   return (dispatch: Dispatch) => {
     dispatch({
@@ -115,7 +128,14 @@ export const doGetSyncDesktop = (cb?: (any, any) => void, password?: string) => 
   });
 };
 
-export function doSyncLoop(noInterval?: boolean) {
+/**
+ * doSyncLoop
+ *
+ * @param noInterval
+ * @param syncId Optional ID to identify a specific loop. Can be used to abort the loop, for example.
+ * @returns {(function(Dispatch, GetState): void)|*}
+ */
+export function doSyncLoop(noInterval?: boolean, syncId?: number) {
   return (dispatch: Dispatch, getState: GetState) => {
     if (!noInterval && syncTimer) clearInterval(syncTimer);
     const state = getState();
@@ -123,7 +143,7 @@ export function doSyncLoop(noInterval?: boolean) {
     const syncEnabled = selectClientSetting(state, SETTINGS.ENABLE_SYNC);
     const syncLocked = selectSyncIsLocked(state);
     if (hasVerifiedEmail && syncEnabled && !syncLocked) {
-      dispatch(doGetSyncDesktop((error, hasNewData) => dispatch(doHandleSyncComplete(error, hasNewData))));
+      dispatch(doGetSyncDesktop((error, hasNewData) => dispatch(doHandleSyncComplete(error, hasNewData, syncId))));
       if (!noInterval) {
         syncTimer = setInterval(() => {
           const state = getState();

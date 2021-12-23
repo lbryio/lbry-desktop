@@ -42,7 +42,7 @@ import {
 } from 'redux/selectors/app';
 import { selectDaemonSettings, selectClientSetting } from 'redux/selectors/settings';
 import { selectUser, selectUserVerifiedEmail } from 'redux/selectors/user';
-import { doSetPrefsReady, doPreferenceGet, doPopulateSharedUserState } from 'redux/actions/sync';
+import { doSetPrefsReady, doPreferenceGet, doPopulateSharedUserState, syncInvalidated } from 'redux/actions/sync';
 import { doAuthenticate } from 'redux/actions/user';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import analytics, { SHARE_INTERNAL } from 'analytics';
@@ -596,7 +596,7 @@ export function doToggle3PAnalytics(allowParam, doNotDispatch) {
   };
 }
 
-export function doGetAndPopulatePreferences() {
+export function doGetAndPopulatePreferences(syncId /* ?: number */) {
   const { SDK_SYNC_KEYS } = SHARED_PREFERENCES;
 
   return (dispatch, getState) => {
@@ -615,7 +615,10 @@ export function doGetAndPopulatePreferences() {
       const successState = getState();
       const daemonSettings = selectDaemonSettings(successState);
       if (savedPreferences !== null) {
-        dispatch(doPopulateSharedUserState(savedPreferences));
+        if (!syncInvalidated(getState, syncId)) {
+          dispatch(doPopulateSharedUserState(savedPreferences));
+        }
+
         // @if TARGET='app'
 
         const { settings } = savedPreferences.value;
@@ -660,11 +663,15 @@ export function doGetAndPopulatePreferences() {
   };
 }
 
-export function doHandleSyncComplete(error, hasNewData) {
-  return (dispatch) => {
+export function doHandleSyncComplete(error, hasNewData, syncId) {
+  return (dispatch, getState) => {
     if (!error) {
       if (hasNewData) {
-        dispatch(doGetAndPopulatePreferences());
+        if (syncInvalidated(getState, syncId)) {
+          return;
+        }
+
+        dispatch(doGetAndPopulatePreferences(syncId));
         // we just got sync data, better update our channels
         dispatch(doFetchChannelListMine());
       }

@@ -1,4 +1,5 @@
 // @flow
+import * as ACTIONS from 'constants/action_types';
 import isEqual from 'util/deep-equal';
 import { doPreferenceSet } from 'redux/actions/sync';
 
@@ -47,10 +48,12 @@ export const buildSharedStateMiddleware = (
 
     if (sharedStateCb) {
       // Pass dispatch to the callback to consumers can dispatch actions in response to preference set
-      sharedStateCb({ dispatch, getState });
+      sharedStateCb({ dispatch, getState, syncId: timeout });
     }
     clearTimeout(timeout);
     return actionResult;
   }
+
   timeout = setTimeout(runPreferences, RUN_PREFERENCES_DELAY_MS);
+  dispatch({ type: ACTIONS.SHARED_STATE_SYNC_ID_CHANGED, data: timeout });
 };
