@@ -164,7 +164,7 @@ export function CommentCreate(props: Props) {
   function handleCommentChange(event) {
     let commentValue;
     if (isReply) {
-      commentValue = event.target.value;
+      commentValue = advancedEditor ? event : event.target.value;
     } else {
       commentValue = advancedEditor ? event : event.target.value;
     }
@@ -596,20 +596,6 @@ export function CommentCreate(props: Props) {
                     setActiveTab(TAB_LBC);
                   }}
                 />
-                {/* @if TARGET='web' */}
-                {stripeEnvironment && (
-                  <Button
-                    disabled={disabled}
-                    button="alt"
-                    className="thisButton"
-                    icon={ICONS.FINANCE}
-                    onClick={() => {
-                      setIsSupportComment(true);
-                      setActiveTab(TAB_FIAT);
-                    }}
-                  />
-                )}
-                {/* @endif */}
               </>
             )}
             {isReply && !minTip && (
