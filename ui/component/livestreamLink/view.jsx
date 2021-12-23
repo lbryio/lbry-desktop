@@ -27,5 +27,5 @@ export default function LivestreamLink(props: Props) {
     </Card>
   );
 
-  return claimUri && <ClaimPreview uri={claimUri} wrapperElement={element} type="inline" />;
+  return claimUri ? <ClaimPreview uri={claimUri} wrapperElement={element} type="inline" /> : null;
 }
