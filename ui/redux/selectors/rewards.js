@@ -70,3 +70,24 @@ export const selectHasClaimedInitialRewards = createSelector(selectClaimedReward
   const confirmEmailClaimed = !!claims.find((claim) => claim && claim.reward_type === REWARDS.TYPE_CONFIRM_EMAIL);
   return newUserClaimed && confirmEmailClaimed;
 });
+
+export const selectWeeklyWatchClaimedThisWeek = createSelector(selectClaimedRewardsById, (claimedRewardsById) => {
+  const claimedRewards = Object.values(claimedRewardsById);
+
+  // The list could be huge, so:
+  // - don't use find() which will look from the top.
+  // - only search until LOOKUP_LIMIT from the back.
+  const LOOKUP_LIMIT = 15;
+  let i = claimedRewards.length;
+  const stopIndex = i > LOOKUP_LIMIT ? i - LOOKUP_LIMIT : 0;
+
+  while (--i >= stopIndex) {
+    if (claimedRewards[i].reward_type === REWARDS.TYPE_WEEKLY_WATCH) {
+      const last = new Date(claimedRewards[i].updated_at || claimedRewards[i].created_at);
+      const diff = new Date() - last;
+      const diffDays = Math.ceil(diff / (1000 * 60 * 60 * 24));
+      return diffDays < 6;
+    }
+  }
+  return false;
+});

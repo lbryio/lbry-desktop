@@ -16,7 +16,7 @@ rewards.TYPE_REFEREE = 'referee';
 rewards.TYPE_REWARD_CODE = 'reward_code';
 rewards.TYPE_SUBSCRIPTION = 'subscription';
 rewards.YOUTUBE_CREATOR = 'youtube_creator';
-rewards.TYPE_DAILY_VIEW = 'daily_view';
+rewards.TYPE_WEEKLY_WATCH = 'weekly_watch';
 rewards.TYPE_NEW_ANDROID = 'new_android';
 
 rewards.claimReward = (type, rewardParams) => {

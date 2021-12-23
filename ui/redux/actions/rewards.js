@@ -2,7 +2,7 @@ import { Lbryio } from 'lbryinc';
 import { doUpdateBalance } from 'redux/actions/wallet';
 import { doToast } from 'redux/actions/notifications';
 import * as ACTIONS from 'constants/action_types';
-import { selectUnclaimedRewards } from 'redux/selectors/rewards';
+import { selectUnclaimedRewards, selectWeeklyWatchClaimedThisWeek } from 'redux/selectors/rewards';
 import { selectUserIsRewardApproved } from 'redux/selectors/user';
 import { doFetchInviteStatus } from 'redux/actions/user';
 import rewards from 'rewards';
@@ -43,7 +43,7 @@ export function doClaimRewardType(rewardType, options = {}) {
     if (
       rewardType !== rewards.TYPE_REWARD_CODE &&
       rewardType !== rewards.TYPE_CONFIRM_EMAIL &&
-      rewardType !== rewards.TYPE_DAILY_VIEW &&
+      rewardType !== rewards.TYPE_WEEKLY_WATCH &&
       rewardType !== rewards.TYPE_NEW_ANDROID
     ) {
       if (!reward || reward.transaction_id) {
@@ -143,9 +143,11 @@ export function doClaimEligiblePurchaseRewards() {
     if (unclaimedRewards.find((ur) => ur.reward_type === rewards.TYPE_FIRST_STREAM)) {
       dispatch(doClaimRewardType(rewards.TYPE_FIRST_STREAM));
     } else {
-      [rewards.TYPE_MANY_DOWNLOADS, rewards.TYPE_DAILY_VIEW].forEach((type) => {
-        dispatch(doClaimRewardType(type, { failSilently: true }));
-      });
+      dispatch(doClaimRewardType(rewards.TYPE_MANY_DOWNLOADS, { failSilently: true }));
+
+      if (!selectWeeklyWatchClaimedThisWeek(state)) {
+        dispatch(doClaimRewardType(rewards.TYPE_WEEKLY_WATCH, { failSilently: true }));
+      }
     }
   };
 }
