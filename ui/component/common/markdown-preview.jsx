@@ -16,7 +16,7 @@ import ZoomableImage from 'component/zoomableImage';
 import { CHANNEL_STAKED_LEVEL_VIDEO_COMMENTS } from 'config';
 import Button from 'component/button';
 import * as ICONS from 'constants/icons';
-
+import { parse } from 'node-html-parser';
 type SimpleTextProps = {
   children?: React.Node,
 };
@@ -136,16 +136,16 @@ const MarkdownPreview = (props: MarkdownProps) => {
   const strippedContent = content
     ? content.replace(REPLACE_REGEX, (iframeHtml, y, iframeSrc) => {
         // Let the browser try to create an iframe to see if the markup is valid
-        const outer = document.createElement('div');
-        outer.innerHTML = iframeHtml;
-        const iframe = ((outer.querySelector('iframe'): any): ?HTMLIFrameElement);
+        let lbrySrc;
+        try {
+          let p = parse(iframeHtml);
+          const tag = p.getElementsByTagName('iframe');
+          const s = tag[0];
+          lbrySrc = s && s.getAttribute('src');
+        } catch (e) {}
 
-        if (iframe) {
-          const src = iframe.src;
-
-          if (src && src.startsWith('lbry://')) {
-            return src;
-          }
+        if (lbrySrc && lbrySrc.startsWith('lbry://')) {
+          return lbrySrc;
         }
 
         return iframeHtml;
