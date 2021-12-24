@@ -61,7 +61,7 @@ jobs:
           ARTIFACTS_SECRET: ${{ secrets.ARTIFACTS_SECRET }}
           ARTIFACTS_REGION: ${{ secrets.ARTIFACTS_REGION }}
 
-          WIN_CSC_LINK: https://raw.githubusercontent.com/lbryio/lbry-desktop/master/build/win-csc-2021-2022-08.p12
+          WIN_CSC_LINK: https://raw.githubusercontent.com/lbryio/lbry-desktop/master/build/cert-2021-2022.pfx
           CSC_LINK: https://s3.amazonaws.com/files.lbry.io/cert/osx-csc-2021-2022.p12
 
           # UI
