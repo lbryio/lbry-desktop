@@ -54,6 +54,7 @@
     "humanize-duration": "^3.27.0",
     "if-env": "^1.0.4",
     "match-sorter": "^6.3.0",
+    "node-html-parser": "^5.1.0",
     "parse-duration": "^1.0.0",
     "proxy-polyfill": "0.1.6",
     "re-reselect": "^4.0.0",
