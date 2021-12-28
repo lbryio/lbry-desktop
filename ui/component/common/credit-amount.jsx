@@ -9,6 +9,7 @@ type Props = {
   className?: string,
   customAmounts?: { amountFiat: number, amountLBC: number },
   fee?: boolean,
+  hideTitle?: boolean,
   isEstimate?: boolean,
   isFiat?: boolean,
   noFormat?: boolean,
@@ -38,6 +39,7 @@ class CreditAmount extends React.PureComponent<Props> {
       className,
       customAmounts,
       fee,
+      hideTitle,
       isEstimate,
       isFiat,
       noFormat,
@@ -94,7 +96,7 @@ class CreditAmount extends React.PureComponent<Props> {
 
     return (
       <span
-        title={amount ? formatFullPrice(amount, 2) : ''}
+        title={amount && !hideTitle ? formatFullPrice(amount, 2) : ''}
         className={classnames(className, {
           'super-chat': superChat,
           'super-chat--light': superChatLight,
