@@ -216,7 +216,7 @@ function PublishForm(props: Props) {
   const formDisabled = (fileFormDisabled && !editingURI) || emptyPostError || publishing;
   const isInProgress = filePath || editingURI || name || title;
   const activeChannelName = activeChannelClaim && activeChannelClaim.name;
-  const activeChannelClaimStr = JSON.stringify(activeChannelClaim);
+  const activeChannelClaimStr = activeChannelClaim && JSON.stringify(activeChannelClaim);
   // Editing content info
   const fileMimeType =
     myClaimForUri && myClaimForUri.value && myClaimForUri.value.source
