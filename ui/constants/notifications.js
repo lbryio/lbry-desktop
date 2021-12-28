@@ -7,6 +7,7 @@ export const RULE = {
   NEW_LIVESTREAM: 'new_livestream',
   DAILY_WATCH_AVAILABLE: 'daily_watch_available',
   DAILY_WATCH_REMIND: 'daily_watch_remind',
+  WEEKLY_WATCH_REMINDER: 'weekly_watch_reminder',
   MISSED_OUT: 'missed_out',
   REWARDS_APPROVAL_PROMPT: 'rewards_approval_prompt',
   CREATOR_SUBSCRIBER: 'creator_subscriber',
