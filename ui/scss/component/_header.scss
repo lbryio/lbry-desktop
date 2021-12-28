@@ -31,6 +31,16 @@
       height: unset;
     }
   }
+
+  @media (max-width: $breakpoint-small) {
+    .card__actions--between {
+      .header__menu--left,
+      .header__menu--right {
+        width: 5rem;
+        min-width: 5rem;
+      }
+    }
+  }
 }
 
 .header--minimal {
@@ -44,6 +54,12 @@
 
   .header__navigationItem--logo {
     height: 3rem;
+  }
+
+  .header__menu--left,
+  .header__menu--right {
+    width: unset;
+    min-width: unset;
   }
 }
 
@@ -78,6 +94,11 @@
 .header__menu {
   display: flex;
   align-items: center;
+
+  @media (min-width: $breakpoint-small) {
+    width: 15rem;
+    min-width: 15rem;
+  }
 }
 
 .header__menu--left {
@@ -88,13 +109,6 @@
 .header__menu--right {
   @extend .header__menu;
   justify-content: flex-end;
-  width: 10rem;
-  min-width: 10rem;
-
-  @media (max-width: $breakpoint-small) {
-    width: unset;
-    min-width: unset;
-  }
 }
 
 .header__buttons {
