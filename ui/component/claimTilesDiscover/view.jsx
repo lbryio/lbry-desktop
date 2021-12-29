@@ -3,7 +3,6 @@ import type { Node } from 'react';
 import React from 'react';
 import ClaimPreviewTile from 'component/claimPreviewTile';
 import useFetchViewCount from 'effects/use-fetch-view-count';
-import usePrevious from 'effects/use-previous';
 
 function urisEqual(prev: ?Array<string>, next: ?Array<string>) {
   if (!prev || !next) {
@@ -74,6 +73,8 @@ function ClaimTilesDiscover(props: Props) {
     optionsStringified,
   } = props;
 
+  const prevUris = React.useRef();
+
   const claimSearchUris = claimSearchResults || [];
   const isUnfetchedClaimSearch = claimSearchResults === undefined;
 
@@ -98,10 +99,9 @@ function ClaimTilesDiscover(props: Props) {
     uris.push(...Array(pageSize - uris.length).fill(''));
   }
 
-  const prevUris = usePrevious(uris);
-
   // Show previous results while we fetch to avoid blinkies and poor CLS.
-  const finalUris = isUnfetchedClaimSearch && prevUris ? prevUris : uris;
+  const finalUris = isUnfetchedClaimSearch && prevUris.current ? prevUris.current : uris;
+  prevUris.current = finalUris;
 
   // --------------------------------------------------------------------------
   // --------------------------------------------------------------------------
