@@ -15,6 +15,8 @@ type Props = {
   parentCommentId?: string,
   isMarkdownPost?: boolean,
   simpleLinks?: boolean,
+  myChannelUrls: ?Array<string>,
+  setUserMention?: (boolean) => void,
 };
 
 function MarkdownLink(props: Props) {
@@ -27,6 +29,8 @@ function MarkdownLink(props: Props) {
     parentCommentId,
     isMarkdownPost,
     simpleLinks = false,
+    myChannelUrls,
+    setUserMention,
   } = props;
 
   let decodedUri;
@@ -34,15 +38,20 @@ function MarkdownLink(props: Props) {
     decodedUri = decodeURI(href);
   } catch (e) {}
 
-  if (!href || !decodedUri) {
-    return children || null;
-  }
-
   let element = <span>{children}</span>;
 
   // Regex for url protocol
   const protocolRegex = new RegExp('^(https?|lbry|mailto)+:', 'i');
   const protocol = href ? protocolRegex.exec(href) : null;
+  const isMention = href.startsWith('lbry://@');
+  const mentionedMyChannel =
+    isMention && (myChannelUrls ? myChannelUrls.some((url) => url.replace('#', ':') === href) : false);
+
+  React.useEffect(() => {
+    if (mentionedMyChannel && setUserMention) setUserMention(true);
+  }, [mentionedMyChannel, setUserMention]);
+
+  if (!href || !decodedUri) return children || null;
 
   let linkUrlObject;
   try {

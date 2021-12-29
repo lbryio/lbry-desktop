@@ -45,6 +45,8 @@ function LivestreamComment(props: Props) {
     isPinned,
   } = props;
 
+  const [hasUserMention, setUserMention] = React.useState(false);
+
   const commentByOwnerOfContent = claim && claim.signing_channel && claim.signing_channel.permanent_url === authorUri;
   const { claimName } = parseURI(authorUri);
   const stickerFromMessage = parseSticker(message);
@@ -54,6 +56,7 @@ function LivestreamComment(props: Props) {
       className={classnames('livestream-comment', {
         'livestream-comment--superchat': supportAmount > 0,
         'livestream-comment--sticker': Boolean(stickerFromMessage),
+        'livestream-comment--mentioned': hasUserMention,
       })}
     >
       {supportAmount > 0 && (
@@ -117,7 +120,13 @@ function LivestreamComment(props: Props) {
             </div>
           ) : (
             <div className="livestream-comment__text">
-              <MarkdownPreview content={message} promptLinks stakedLevel={stakedLevel} disableTimestamps />
+              <MarkdownPreview
+                content={message}
+                promptLinks
+                stakedLevel={stakedLevel}
+                disableTimestamps
+                setUserMention={setUserMention}
+              />
             </div>
           )}
         </div>

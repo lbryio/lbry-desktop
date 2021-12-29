@@ -104,6 +104,10 @@ $recent-msg-button__height: 2rem;
   }
 }
 
+.livestream-comment--mentioned {
+  background-color: var(--color-card-background-highlighted);
+}
+
 .livestream-comment__info {
   overflow: hidden;
 }

@@ -56,6 +56,7 @@ type MarkdownProps = {
   isMarkdownPost?: boolean,
   disableTimestamps?: boolean,
   stakedLevel?: number,
+  setUserMention?: (boolean) => void,
 };
 
 // ****************************************************************************
@@ -153,6 +154,7 @@ const MarkdownPreview = (props: MarkdownProps) => {
     isMarkdownPost,
     disableTimestamps,
     stakedLevel,
+    setUserMention,
   } = props;
 
   const strippedContent = content
@@ -187,6 +189,7 @@ const MarkdownPreview = (props: MarkdownProps) => {
               isMarkdownPost={isMarkdownPost}
               simpleLinks={simpleLinks}
               allowPreview={isStakeEnoughForPreview(stakedLevel)}
+              setUserMention={setUserMention}
             />
           ),
       // Workaraund of remarkOptions.Fragment
