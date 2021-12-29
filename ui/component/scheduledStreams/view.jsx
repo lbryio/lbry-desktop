@@ -8,7 +8,7 @@ import { useIsMediumScreen, useIsLargeScreen } from 'effects/use-screensize';
 import ClaimListDiscover from 'component/claimListDiscover';
 import Button from 'component/button';
 import { LIVESTREAM_UPCOMING_BUFFER } from 'constants/livestream';
-import { SCHEDULED_LIVESTREAM_TAG } from 'constants/tags';
+// import { SCHEDULED_LIVESTREAM_TAG } from 'constants/tags';
 
 type Props = {
   channelIds: Array<string>,
@@ -41,7 +41,6 @@ const ScheduledStreams = (props: Props) => {
   return (
     <div className={'mb-xl'} style={{ display: showUpcomingLivestreams ? 'block' : 'none' }}>
       <ClaimListDiscover
-        tags={[SCHEDULED_LIVESTREAM_TAG]}
         useSkeletonScreen={false}
         channelIds={channelIds}
         limitClaimsPerChannel={limitClaimsPerChannel}
