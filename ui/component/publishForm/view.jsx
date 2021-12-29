@@ -32,6 +32,7 @@ import Spinner from 'component/spinner';
 import { toHex } from 'util/hex';
 import { LIVESTREAM_REPLAY_API } from 'constants/livestream';
 import PublishStreamReleaseDate from 'component/publishStreamReleaseDate';
+import { SOURCE_NONE } from 'constants/publish_sources';
 
 // @if TARGET='app'
 import fs from 'fs';
@@ -559,6 +560,15 @@ function PublishForm(props: Props) {
     }
   }, [mode, updatePublishForm]);
 
+  // Source Selector State.
+  const [fileSelectSource, setFileSelectSource] = useState();
+  const changeFileSelectSource = (state) => setFileSelectSource(state);
+
+  const [showSchedulingOptions, setShowSchedulingOptions] = useState(false);
+  useEffect(() => {
+    setShowSchedulingOptions(isLivestreamMode && fileSelectSource === SOURCE_NONE);
+  }, [isLivestreamMode, fileSelectSource]);
+
   if (publishing) {
     return (
       <div className="main--empty">
@@ -567,12 +577,15 @@ function PublishForm(props: Props) {
       </div>
     );
   }
+
   // Editing claim uri
   return (
     <div className="card-stack">
       <ChannelSelect hideAnon={isLivestreamMode} disabled={disabled} />
 
       <PublishFile
+        fileSelectSource={fileSelectSource}
+        changeFileSelectSource={changeFileSelectSource}
         uri={permanentUrl}
         mode={mode}
         fileMimeType={fileMimeType}
@@ -609,7 +622,7 @@ function PublishForm(props: Props) {
 
       {!publishing && (
         <div className={classnames({ 'card--disabled': formDisabled })}>
-          {isLivestreamMode && <Card className={'card--enable-overflow'} body={<PublishStreamReleaseDate />} />}
+          {showSchedulingOptions && <Card className={'card--enable-overflow'} body={<PublishStreamReleaseDate />} />}
 
           {mode !== PUBLISH_MODES.POST && <PublishDescription disabled={formDisabled} />}
 
@@ -645,7 +658,7 @@ function PublishForm(props: Props) {
           <PublishBid disabled={isStillEditing || formDisabled} />
           {!isLivestreamMode && <PublishPrice disabled={formDisabled} />}
 
-          <PublishAdditionalOptions disabled={formDisabled} isLivestreamMode={isLivestreamMode} />
+          <PublishAdditionalOptions disabled={formDisabled} showSchedulingOptions={showSchedulingOptions} />
         </div>
       )}
       <section>

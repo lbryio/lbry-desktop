@@ -19,6 +19,7 @@ import Empty from 'component/common/empty';
 import moment from 'moment';
 import classnames from 'classnames';
 import ReactPaginate from 'react-paginate';
+import { SOURCE_NONE, SOURCE_SELECT, SOURCE_UPLOAD } from 'constants/publish_sources';
 
 type Props = {
   uri: ?string,
@@ -51,6 +52,8 @@ type Props = {
   channelSignature: { signature?: string, signing_ts?: string },
   isCheckingLivestreams: boolean,
   setWaitForFile: (boolean) => void,
+  fileSelectSource: string,
+  changeFileSelectSource: (string) => void,
 };
 
 function PublishFile(props: Props) {
@@ -84,11 +87,9 @@ function PublishFile(props: Props) {
     channelSignature,
     isCheckingLivestreams,
     setWaitForFile,
+    fileSelectSource,
+    changeFileSelectSource,
   } = props;
-
-  const SOURCE_NONE = 'none';
-  const SOURCE_SELECT = 'select';
-  const SOURCE_UPLOAD = 'upload';
 
   const RECOMMENDED_BITRATE = 6000000;
   const TV_PUBLISH_SIZE_LIMIT_BYTES = WEB_PUBLISH_SIZE_LIMIT_GB * 1073741824;
@@ -121,9 +122,6 @@ function PublishFile(props: Props) {
   const hasLivestreamData = livestreamData && Boolean(livestreamData.length);
   const showSourceSelector = isLivestreamClaim || (hasLivestreamData && mode === PUBLISH_MODES.FILE);
 
-  const [fileSelectSource, setFileSelectSource] = useState(
-    IS_WEB && showSourceSelector && name ? SOURCE_SELECT : SOURCE_UPLOAD
-  );
   // const [showFileUpdate, setShowFileUpdate] = useState(false);
   const [selectedFileIndex, setSelectedFileIndex] = useState(null);
   const PAGE_SIZE = 4;
@@ -142,12 +140,16 @@ function PublishFile(props: Props) {
     }
   }, [currentFileType, mode, isStillEditing, updatePublishForm]);
 
-  // set default file source to none if editing a livestream.
+  // Initialize default file source state.
   useEffect(() => {
-    if (isLivestreamClaim) {
-      setFileSelectSource(SOURCE_NONE);
+    if (isLivestreamClaim || mode === PUBLISH_MODES.LIVESTREAM) {
+      changeFileSelectSource(SOURCE_NONE);
+    } else if (showSourceSelector && name) {
+      changeFileSelectSource(SOURCE_SELECT);
+    } else {
+      changeFileSelectSource(SOURCE_UPLOAD);
     }
-  }, [isLivestreamClaim, setFileSelectSource]);
+  }, [mode]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const normalizeUrlForProtocol = (url) => {
     if (url.startsWith('https://')) {
@@ -325,7 +327,7 @@ function PublishFile(props: Props) {
         updatePublishForm({ remoteFileUrl: livestreamData[selectedFileIndex].data.fileLocation });
       }
     }
-    setFileSelectSource(source);
+    changeFileSelectSource(source);
     setWaitForFile(source !== SOURCE_NONE);
   }
 
