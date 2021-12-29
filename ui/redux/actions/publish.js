@@ -150,11 +150,6 @@ function resolvePublishPayload(publishData, myClaimForUri, myChannels, preview) 
 
   const nowTimeStamp = Number(Math.round(Date.now() / 1000));
 
-  // Add internal tag if a livestream is being scheduled.
-  if (isLivestreamPublish && releaseTimeEdited && releaseTimeEdited > nowTimeStamp) {
-    publishPayload.tags.push(SCHEDULED_LIVESTREAM_TAG);
-  }
-
   // Set release time to current date. On edits, keep original release/transaction time as release_time
   if (releaseTimeEdited) {
     publishPayload.release_time = releaseTimeEdited;
@@ -164,6 +159,11 @@ function resolvePublishPayload(publishData, myClaimForUri, myChannels, preview) 
     publishPayload.release_time = Number(myClaimForUriEditing.timestamp);
   } else {
     publishPayload.release_time = nowTimeStamp;
+  }
+
+  // Add internal tag if a livestream is being scheduled.
+  if (isLivestreamPublish && publishPayload.release_time > nowTimeStamp) {
+    publishPayload.tags.push(SCHEDULED_LIVESTREAM_TAG);
   }
 
   if (channelId) {
