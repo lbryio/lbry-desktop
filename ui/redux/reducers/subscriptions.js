@@ -50,9 +50,7 @@ export default handleActions(
       const subscriptionToRemove: Subscription = action.data;
       const newSubscriptions = state.subscriptions
         .slice()
-        .filter(
-          (subscription) => subscription.channelName.toLowerCase() !== subscriptionToRemove.channelName.toLowerCase()
-        );
+        .filter((subscription) => subscription.uri !== subscriptionToRemove.uri);
       const newFollowing = state.following
         .slice()
         .filter((subscription) => subscription.uri !== subscriptionToRemove.uri);
