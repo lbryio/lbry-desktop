@@ -531,7 +531,6 @@ export function doSignIn() {
       pushNotifications.validate(user.id);
     }
 
-    dispatch(doGetAndPopulatePreferences());
     dispatch(doNotificationSocketConnect(true));
     dispatch(doNotificationList(null, false));
     dispatch(doCheckPendingClaims());
