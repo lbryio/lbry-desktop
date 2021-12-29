@@ -14,7 +14,7 @@ export const DEFAULT_FOLLOWED_TAGS = [
 ];
 
 export const DISABLE_COMMENTS_TAG = 'c:disable-comments';
-export const DISABLE_SUPPORT_TAG = 'c:disable-support';
+export const DISABLE_SUPPORT_TAG = 'disable-support';
 export const PREFERENCE_EMBED = 'c:preference-embed';
 export const SCHEDULED_LIVESTREAM_TAG = 'c:scheduled-livestream';
 export const LBRY_FIRST_TAG = 'c:lbry-first';
