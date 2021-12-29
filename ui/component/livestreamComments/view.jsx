@@ -45,7 +45,7 @@ export default function LivestreamComments(props: Props) {
     fetchingComments,
     doSuperChatList,
     myChannelIds,
-    superChats: superChatsByTipAmount,
+    superChats: superChatsByAmount,
     doResolveUris,
   } = props;
 
@@ -59,9 +59,8 @@ export default function LivestreamComments(props: Props) {
   const claimId = claim && claim.claim_id;
   const commentsLength = commentsByChronologicalOrder && commentsByChronologicalOrder.length;
 
-  const commentsToDisplay = viewMode === VIEW_MODES.CHAT ? commentsByChronologicalOrder : superChatsByTipAmount;
-  const stickerSuperChats =
-    superChatsByTipAmount && superChatsByTipAmount.filter(({ comment }) => Boolean(parseSticker(comment)));
+  const commentsToDisplay = viewMode === VIEW_MODES.CHAT ? commentsByChronologicalOrder : superChatsByAmount;
+  const stickerSuperChats = superChatsByAmount && superChatsByAmount.filter(({ comment }) => !!parseSticker(comment));
 
   const discussionElement = document.querySelector('.livestream__comments');
 
@@ -74,20 +73,20 @@ export default function LivestreamComments(props: Props) {
   }, [discussionElement]);
 
   const superChatTopTen = React.useMemo(() => {
-    return superChatsByTipAmount ? superChatsByTipAmount.slice(0, 10) : superChatsByTipAmount;
-  }, [superChatsByTipAmount]);
+    return superChatsByAmount ? superChatsByAmount.slice(0, 10) : superChatsByAmount;
+  }, [superChatsByAmount]);
 
   const showMoreSuperChatsButton =
-    superChatTopTen && superChatsByTipAmount && superChatTopTen.length < superChatsByTipAmount.length;
+    superChatTopTen && superChatsByAmount && superChatTopTen.length < superChatsByAmount.length;
 
   function resolveSuperChat() {
-    if (superChatsByTipAmount && superChatsByTipAmount.length > 0) {
+    if (superChatsByAmount && superChatsByAmount.length > 0) {
       doResolveUris(
-        superChatsByTipAmount.map((comment) => comment.channel_url || '0'),
+        superChatsByAmount.map((comment) => comment.channel_url || '0'),
         true
       );
 
-      if (superChatsByTipAmount.length > LARGE_SUPER_CHAT_LIST_THRESHOLD) {
+      if (superChatsByAmount.length > LARGE_SUPER_CHAT_LIST_THRESHOLD) {
         setResolvingSuperChat(true);
       }
     }
@@ -153,10 +152,10 @@ export default function LivestreamComments(props: Props) {
   }, [resolvingSuperChat]);
 
   // sum total amounts for fiat tips and lbc tips
-  if (superChatsByTipAmount) {
+  if (superChatsByAmount) {
     let fiatAmount = 0;
     let LBCAmount = 0;
-    for (const superChat of superChatsByTipAmount) {
+    for (const superChat of superChatsByAmount) {
       if (superChat.is_fiat) {
         fiatAmount = fiatAmount + superChat.support_amount;
       } else {
@@ -172,8 +171,8 @@ export default function LivestreamComments(props: Props) {
 
   let superChatsReversed;
   // array of superchats organized by fiat or not first, then support amount
-  if (superChatsByTipAmount) {
-    const clonedSuperchats = JSON.parse(JSON.stringify(superChatsByTipAmount));
+  if (superChatsByAmount) {
+    const clonedSuperchats = JSON.parse(JSON.stringify(superChatsByAmount));
 
     // for top to bottom display, oldest superchat on top most recent on bottom
     superChatsReversed = clonedSuperchats.sort((a, b) => {
@@ -236,7 +235,7 @@ export default function LivestreamComments(props: Props) {
           </div>
         )}
         <div ref={commentsRef} className="livestream__comments-wrapper">
-          {viewMode === VIEW_MODES.CHAT && superChatsByTipAmount && hasSuperChats && (
+          {viewMode === VIEW_MODES.CHAT && superChatsByAmount && hasSuperChats && (
             <div className="livestream-superchats__wrapper">
               <div className="livestream-superchats__inner">
                 {superChatTopTen.map((superChat: Comment) => {
