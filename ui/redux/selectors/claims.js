@@ -616,10 +616,7 @@ export const makeSelectTagsForUri = (uri: string) =>
     return (metadata && metadata.tags) || [];
   });
 
-export const selectFetchingClaimSearchByQuery = createSelector(
-  selectState,
-  (state) => state.fetchingClaimSearchByQuery || {}
-);
+export const selectFetchingClaimSearchByQuery = (state: State) => selectState(state).fetchingClaimSearchByQuery || {};
 
 export const selectFetchingClaimSearch = createSelector(
   selectFetchingClaimSearchByQuery,

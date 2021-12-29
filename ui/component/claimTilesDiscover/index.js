@@ -1,3 +1,4 @@
+// @flow
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { selectClaimSearchByQuery, selectFetchingClaimSearchByQuery, selectClaimsByUri } from 'redux/selectors/claims';
@@ -9,6 +10,7 @@ import { selectClientSetting, selectShowMatureContent } from 'redux/selectors/se
 import { selectMutedAndBlockedChannelIds } from 'redux/selectors/blocked';
 import { ENABLE_NO_SOURCE_CLAIMS, SIMPLE_SITE } from 'config';
 import * as CS from 'constants/claim_search';
+import { createNormalizedClaimSearchKey } from 'util/claim';
 
 import ClaimListDiscover from './view';
 
@@ -17,13 +19,18 @@ const select = (state, props) => {
   const hideReposts = selectClientSetting(state, SETTINGS.HIDE_REPOSTS);
   const mutedAndBlockedChannelIds = selectMutedAndBlockedChannelIds(state);
 
+  // TODO: memoize these 2 function calls. Lots of params, though; might not be feasible.
+  const options = resolveSearchOptions({ showNsfw, hideReposts, mutedAndBlockedChannelIds, pageSize: 8, ...props });
+  const searchKey = createNormalizedClaimSearchKey(options);
+
   return {
-    claimSearchByQuery: selectClaimSearchByQuery(state),
+    claimSearchResults: selectClaimSearchByQuery(state)[searchKey],
     claimsByUri: selectClaimsByUri(state),
-    fetchingClaimSearchByQuery: selectFetchingClaimSearchByQuery(state),
+    fetchingClaimSearch: selectFetchingClaimSearchByQuery(state)[searchKey],
     showNsfw,
     hideReposts,
-    options: resolveSearchOptions({ showNsfw, hideReposts, mutedAndBlockedChannelIds, pageSize: 8, ...props }),
+    // Don't use the query from 'createNormalizedClaimSearchKey(options)' since that doesn't include page & release_time
+    optionsStringified: JSON.stringify(options),
   };
 };
 
@@ -36,6 +43,27 @@ export default withRouter(connect(select, perform)(ClaimListDiscover));
 
 // ****************************************************************************
 // ****************************************************************************
+
+type SearchOptions = {
+  page_size: number,
+  page: number,
+  no_totals: boolean,
+  any_tags: Array<string>,
+  channel_ids: Array<string>,
+  claim_ids?: Array<string>,
+  not_channel_ids: Array<string>,
+  not_tags: Array<string>,
+  order_by: Array<string>,
+  languages?: Array<string>,
+  release_time?: string,
+  claim_type?: string | Array<string>,
+  timestamp?: string,
+  fee_amount?: string,
+  limit_claims_per_channel?: number,
+  stream_types?: Array<string>,
+  has_source?: boolean,
+  has_no_source?: boolean,
+};
 
 function resolveSearchOptions(props) {
   const {
@@ -70,7 +98,8 @@ function resolveSearchOptions(props) {
     streamTypesParam = [CS.FILE_VIDEO, CS.FILE_AUDIO];
   }
 
-  const options = {
+  const options: SearchOptions = {
+    page: 1,
     page_size: pageSize,
     claim_type: claimType || ['stream', 'repost', 'channel'],
     // no_totals makes it so the sdk doesn't have to calculate total number pages for pagination
