@@ -256,7 +256,7 @@ const Header = (props: Props) => {
                       // className="button--header-close"
                       icon={ICONS.REMOVE}
                       onClick={() => {
-                        if (!iYTSyncPage) {
+                        if (!iYTSyncPage && !isPwdResetPage) {
                           clearEmailEntry();
                           clearPasswordEntry();
                         }
