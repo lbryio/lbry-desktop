@@ -13,11 +13,11 @@ export const DEFAULT_FOLLOWED_TAGS = [
   'technology',
 ];
 
-export const DISABLE_COMMENTS_TAG = 'i:disable-comments';
-export const DISABLE_SUPPORT_TAG = 'i:disable-support';
-export const PREFERENCE_EMBED = 'i:preference-embed';
-export const SCHEDULED_LIVESTREAM_TAG = 'i:scheduled-livestream';
-export const LBRY_FIRST_TAG = 'i:lbry-first';
+export const DISABLE_COMMENTS_TAG = 'c:disable-comments';
+export const DISABLE_SUPPORT_TAG = 'c:disable-support';
+export const PREFERENCE_EMBED = 'c:preference-embed';
+export const SCHEDULED_LIVESTREAM_TAG = 'c:scheduled-livestream';
+export const LBRY_FIRST_TAG = 'c:lbry-first';
 
 // Control tags are special tags that are available to the user in some situations.
 export const CONTROL_TAGS = [DISABLE_COMMENTS_TAG, DISABLE_SUPPORT_TAG, PREFERENCE_EMBED];
