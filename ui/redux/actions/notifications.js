@@ -46,10 +46,7 @@ export function doDismissError() {
 }
 
 export function doNotificationList(types?: Array<string>, resolve: boolean = true) {
-  return async (dispatch: Dispatch, getState: GetState) => {
-    const state = getState();
-    const notificationTypes = selectNotificationCategories(state);
-
+  return async (dispatch: Dispatch) => {
     dispatch({ type: ACTIONS.NOTIFICATION_LIST_STARTED });
 
     let params: any = { is_app_readable: true };
@@ -58,18 +55,6 @@ export function doNotificationList(types?: Array<string>, resolve: boolean = tru
     }
 
     try {
-      if (!notificationTypes) {
-        const notificationCategories = await Lbryio.call('notification', 'categories');
-        if (notificationCategories) {
-          dispatch({
-            type: ACTIONS.NOTIFICATION_CATEGORIES_COMPLETED,
-            data: {
-              notificationCategories: notificationCategories.reverse(),
-            },
-          });
-        }
-      }
-
       return Lbryio.call('notification', 'list', params).then((response) => {
         const notifications = response || [];
 
@@ -107,6 +92,25 @@ export function doNotificationList(types?: Array<string>, resolve: boolean = tru
       });
     } catch (error) {
       dispatch({ type: ACTIONS.NOTIFICATION_LIST_FAILED, data: { error } });
+    }
+  };
+}
+
+export function doNotificationCategories() {
+  return async (dispatch: Dispatch, getState: GetState) => {
+    const state = getState();
+    const categoriesFetched = Boolean(selectNotificationCategories(state));
+
+    if (!categoriesFetched) {
+      const notificationCategories = await Lbryio.call('notification', 'categories');
+      if (notificationCategories) {
+        dispatch({
+          type: ACTIONS.NOTIFICATION_CATEGORIES_COMPLETED,
+          data: {
+            notificationCategories: notificationCategories.reverse(),
+          },
+        });
+      }
     }
   };
 }

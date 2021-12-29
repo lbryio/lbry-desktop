@@ -23,6 +23,7 @@ type Props = {
   doSeeAllNotifications: () => void,
   doReadNotifications: () => void,
   doNotificationList: (?Array<string>) => void,
+  doNotificationCategories: () => void,
   activeChannel: ?ChannelClaim,
   doCommentReactList: (Array<string>) => Promise<any>,
 };
@@ -37,6 +38,7 @@ export default function NotificationsPage(props: Props) {
     doSeeAllNotifications,
     doReadNotifications,
     doNotificationList,
+    doNotificationCategories,
     notificationCategories,
     activeChannel,
     doCommentReactList,
@@ -79,7 +81,7 @@ export default function NotificationsPage(props: Props) {
     }
   }, [unseenCount, doSeeAllNotifications]);
 
-  const stringifiedNotificationCategories = JSON.stringify(notificationCategories);
+  const stringifiedNotificationCategories = notificationCategories ? JSON.stringify(notificationCategories) : '';
   React.useEffect(() => {
     if (stringifiedNotificationCategories) {
       const arrayNotificationCategories = JSON.parse(stringifiedNotificationCategories);
@@ -99,6 +101,12 @@ export default function NotificationsPage(props: Props) {
       }
     }
   }, [name, notifications, stringifiedNotificationCategories]);
+
+  React.useEffect(() => {
+    if (!notificationCategories) {
+      doNotificationCategories();
+    }
+  }, []);
 
   const notificationListElement = (
     <>
