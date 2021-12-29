@@ -18,11 +18,17 @@ function PublishDescription(props: Props) {
     setAdvancedEditor(!advancedEditor);
   }
 
+  function handleCommentChange(event) {
+    let descriptionValue = advancedEditor ? event : event.target.value;
+
+    updatePublishForm({ description: descriptionValue });
+  }
+
   return (
     <Card
       actions={
         <FormField
-          type={'textarea'}
+          type={advancedEditor ? 'markdown' : 'textarea'}
           name="content_description"
           label={__('Description')}
           placeholder={__(
@@ -30,7 +36,7 @@ function PublishDescription(props: Props) {
           )}
           value={description}
           disabled={disabled}
-          onChange={(value) => updatePublishForm({ description: advancedEditor ? value : value.target.value })}
+          onChange={handleCommentChange}
           quickActionLabel={advancedEditor ? __('Simple Editor') : __('Advanced Editor')}
           quickActionHandler={toggleMarkdown}
           textAreaMaxLength={FF_MAX_CHARS_IN_DESCRIPTION}
