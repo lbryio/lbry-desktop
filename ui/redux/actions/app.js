@@ -526,7 +526,7 @@ export function doSignIn() {
     const state = getState();
     const user = selectUser(state);
 
-    if (pushNotifications.supported) {
+    if (pushNotifications.supported && user) {
       pushNotifications.reconnect(user.id);
       pushNotifications.validate(user.id);
     }
@@ -545,7 +545,7 @@ export function doSignOut() {
     const state = getState();
     const user = selectUser(state);
     try {
-      if (pushNotifications.supported) {
+      if (pushNotifications.supported && user) {
         await pushNotifications.disconnect(user.id);
       }
     } finally {
