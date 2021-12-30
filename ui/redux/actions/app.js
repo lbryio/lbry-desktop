@@ -671,8 +671,6 @@ export function doHandleSyncComplete(error, hasNewData, syncId) {
         }
 
         dispatch(doGetAndPopulatePreferences(syncId));
-        // we just got sync data, better update our channels
-        dispatch(doFetchChannelListMine());
       }
     } else {
       console.error('Error in doHandleSyncComplete', error);
