@@ -569,6 +569,13 @@ function PublishForm(props: Props) {
     setShowSchedulingOptions(isLivestreamMode && fileSelectSource === SOURCE_NONE);
   }, [isLivestreamMode, fileSelectSource]);
 
+  // Reset any set release time if switching to live stream mode.
+  useEffect(() => {
+    if (mode === PUBLISH_MODES.LIVESTREAM) {
+      updatePublishForm({ releaseTimeEdited: undefined });
+    }
+  }, [mode, updatePublishForm]);
+
   if (publishing) {
     return (
       <div className="main--empty">
