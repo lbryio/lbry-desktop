@@ -697,6 +697,18 @@ export default handleActions(
       };
     },
 
+    [ACTIONS.COMMENT_MARK_AS_REMOVED]: (state: CommentsState, action: any) => {
+      const { comment_id } = action.data;
+      const commentById = Object.assign({}, state.commentById);
+
+      if (!commentById[comment_id]) {
+        return state;
+      }
+
+      commentById[comment_id] = { ...commentById[comment_id], removed: true };
+      return { ...state, commentById };
+    },
+
     [ACTIONS.COMMENT_MODERATION_BLOCK_LIST_STARTED]: (state: CommentsState, action: any) => ({
       ...state,
       fetchingModerationBlockList: true,

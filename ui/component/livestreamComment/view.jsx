@@ -2,6 +2,7 @@
 import * as ICONS from 'constants/icons';
 import React from 'react';
 import { parseURI } from 'util/lbryURI';
+import Empty from 'component/common/empty';
 import MarkdownPreview from 'component/common/markdown-preview';
 import Tooltip from 'component/common/tooltip';
 import ChannelThumbnail from 'component/channelThumbnail';
@@ -107,7 +108,11 @@ function LivestreamComment(props: Props) {
             </span>
           )}
 
-          {stickerFromMessage ? (
+          {comment.removed ? (
+            <div className="livestream-comment__text">
+              <Empty text={__('[Removed]')} />
+            </div>
+          ) : stickerFromMessage ? (
             <div className="sticker__comment">
               <OptimizedImage src={stickerFromMessage.url} waitLoad loading="lazy" />
             </div>

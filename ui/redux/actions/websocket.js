@@ -121,6 +121,13 @@ export const doCommentSocketConnect = (uri, claimId) => (dispatch) => {
         },
       });
     }
+    if (response.type === 'removed') {
+      const { comment_id } = response.data.comment;
+      dispatch({
+        type: ACTIONS.COMMENT_MARK_AS_REMOVED,
+        data: { comment_id },
+      });
+    }
   });
 };
 

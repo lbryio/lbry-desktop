@@ -18,6 +18,7 @@ declare type Comment = {
   is_creator: boolean,
   is_global_mod: boolean,
   is_fiat?: boolean,
+  removed?: boolean,
 };
 
 declare type PerChannelSettings = {
