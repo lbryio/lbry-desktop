@@ -5,7 +5,7 @@ import Tag from 'component/tag';
 import { setUnion, setDifference } from 'util/set-operations';
 import I18nMessage from 'component/i18nMessage';
 import analytics from 'analytics';
-import { UTILITY_TAGS } from 'constants/tags';
+import { CONTROL_TAGS, INTERNAL_TAGS, INTERNAL_TAG_PREFIX } from 'constants/tags';
 
 type Props = {
   tagsPassedIn: Array<Tag>,
@@ -79,7 +79,7 @@ export default function TagsSearch(props: Props) {
   const remainingUnfollowedTagsSet = setDifference(unfollowedTagsSet, selectedTagsSet);
   const suggestedTagsSet = setUnion(remainingFollowedTagsSet, remainingUnfollowedTagsSet);
 
-  const SPECIAL_TAGS = [...UTILITY_TAGS, 'lbry-first', 'mature'];
+  const SPECIAL_TAGS = [...INTERNAL_TAGS, 'mature'];
   let countWithoutSpecialTags = selectedTagsSet.size;
 
   SPECIAL_TAGS.forEach((t) => {
@@ -179,7 +179,7 @@ export default function TagsSearch(props: Props) {
             {countWithoutSpecialTags === 0 && <Tag key={`placeholder-tag`} name={'example'} disabled type={'remove'} />}
             {Boolean(tagsPassedIn.length) &&
               tagsPassedIn
-                .filter((t) => !UTILITY_TAGS.includes(t.name))
+                .filter((t) => !INTERNAL_TAGS.includes(t.name))
                 .map((tag) => (
                   <Tag
                     key={`passed${tag.name}`}
@@ -234,7 +234,7 @@ export default function TagsSearch(props: Props) {
           onSelect && ( // onSelect ensures this does not appear on TagFollow
             <fieldset-section>
               <label>{__('Control Tags')}</label>
-              {UTILITY_TAGS.map((t) => (
+              {CONTROL_TAGS.map((t) => (
                 <FormField
                   key={t}
                   name={t}
@@ -242,6 +242,7 @@ export default function TagsSearch(props: Props) {
                   blockWrap={false}
                   label={__(
                     t
+                      .replace(INTERNAL_TAG_PREFIX, '')
                       .split('-')
                       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
                       .join(' ')
