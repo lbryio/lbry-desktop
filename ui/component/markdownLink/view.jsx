@@ -43,7 +43,7 @@ function MarkdownLink(props: Props) {
   // Regex for url protocol
   const protocolRegex = new RegExp('^(https?|lbry|mailto)+:', 'i');
   const protocol = href ? protocolRegex.exec(href) : null;
-  const isMention = href.startsWith('lbry://@');
+  const isMention = href && href.startsWith('lbry://@');
   const mentionedMyChannel =
     isMention && (myChannelUrls ? myChannelUrls.some((url) => url.replace('#', ':') === href) : false);
 
