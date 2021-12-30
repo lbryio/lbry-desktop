@@ -98,17 +98,18 @@
 .card__title-section {
   @extend .section__flex;
 
-  @media (min-width: $breakpoint-small) {
-    padding: var(--spacing-s) var(--spacing-m);
-  }
+  //@media (min-width: $breakpoint-small) {
+  //  padding: var(--spacing-s) var(--spacing-m);
+  //}
 }
 
 .card__title-section--body-list {
-  padding-left: var(--spacing-s);
-
-  @media (min-width: $breakpoint-small) {
-    padding: var(--spacing-m);
-  }
+  // this is superfluous
+  //padding-left: var(--spacing-s);
+  //
+  //@media (min-width: $breakpoint-small) {
+  //  padding: var(--spacing-m);
+  //}
 }
 
 .card__title-section--small {
@@ -278,9 +279,9 @@
   justify-content: space-between;
   align-items: flex-start;
   flex-wrap: wrap;
-
+  padding: var(--spacing-l) var(--spacing-l) var(--spacing-m) var(--spacing-l);
   @media (max-width: $breakpoint-small) {
-    padding: var(--spacing-s);
+    padding: var(--spacing-m);
     padding-bottom: 0;
     margin: 0;
     margin-bottom: var(--spacing-s);
@@ -322,9 +323,7 @@
 }
 
 .card__main-actions {
-  padding: var(--spacing-m);
-  padding-bottom: 0;
-  margin-bottom: var(--spacing-s);
+  //margin-bottom: var(--spacing-s);
   border-top: 1px solid var(--color-border);
   height: 100%;
 
@@ -337,7 +336,7 @@
   padding: var(--spacing-s);
 
   @media (min-width: $breakpoint-small) {
-    padding: var(--spacing-m);
+    padding: var(--spacing-l);
   }
 }
 
@@ -364,9 +363,12 @@
 .card__body,
 .card__main-actions {
   padding: var(--spacing-m);
+  @media (min-width: $breakpoint-small) {
+    padding: var(--spacing-l);
+  }
   padding-bottom: 0;
   margin: 0;
-  margin-bottom: var(--spacing-m);
+  //margin-bottom: var(--spacing-m);
 }
 
 .card__bottom-gutter {
