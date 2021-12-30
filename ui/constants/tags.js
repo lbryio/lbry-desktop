@@ -13,6 +13,8 @@ export const DEFAULT_FOLLOWED_TAGS = [
   'technology',
 ];
 
+export const INTERNAL_TAG_PREFIX = 'c:';
+
 export const DISABLE_COMMENTS_TAG = 'c:disable-comments';
 export const DISABLE_SUPPORT_TAG = 'disable-support';
 export const PREFERENCE_EMBED = 'c:preference-embed';

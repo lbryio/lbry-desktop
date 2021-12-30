@@ -5,7 +5,7 @@ import Tag from 'component/tag';
 import { setUnion, setDifference } from 'util/set-operations';
 import I18nMessage from 'component/i18nMessage';
 import analytics from 'analytics';
-import { CONTROL_TAGS, INTERNAL_TAGS } from 'constants/tags';
+import { CONTROL_TAGS, INTERNAL_TAGS, INTERNAL_TAG_PREFIX } from 'constants/tags';
 
 type Props = {
   tagsPassedIn: Array<Tag>,
@@ -242,6 +242,7 @@ export default function TagsSearch(props: Props) {
                   blockWrap={false}
                   label={__(
                     t
+                      .replace(INTERNAL_TAG_PREFIX, '')
                       .split('-')
                       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
                       .join(' ')
