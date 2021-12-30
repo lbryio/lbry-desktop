@@ -58,6 +58,7 @@ function resolvePublishPayload(publishData, myClaimForUri, myChannels, preview) 
     description,
     language,
     releaseTimeEdited,
+    releaseAnytime,
     // license,
     licenseUrl,
     useLBRYUploader,
@@ -93,6 +94,8 @@ function resolvePublishPayload(publishData, myClaimForUri, myChannels, preview) 
   const namedChannelClaim = myChannels ? myChannels.find((myChannel) => myChannel.name === channel) : null;
   const channelId = namedChannelClaim ? namedChannelClaim.claim_id : '';
 
+  const nowTimeStamp = Number(Math.round(Date.now() / 1000));
+
   const publishPayload: {
     name: ?string,
     bid: string,
@@ -102,7 +105,7 @@ function resolvePublishPayload(publishData, myClaimForUri, myChannels, preview) 
     license_url?: string,
     license?: string,
     thumbnail_url?: string,
-    release_time?: number,
+    release_time: number,
     fee_currency?: string,
     fee_amount?: string,
     languages?: Array<string>,
@@ -121,6 +124,7 @@ function resolvePublishPayload(publishData, myClaimForUri, myChannels, preview) 
     languages: [language],
     tags: tags && tags.map((tag) => tag.name),
     thumbnail_url: thumbnail,
+    release_time: nowTimeStamp,
     blocking: true,
     preview: false,
   };
@@ -148,20 +152,20 @@ function resolvePublishPayload(publishData, myClaimForUri, myChannels, preview) 
     publishPayload.tags.push(LBRY_FIRST_TAG);
   }
 
-  const nowTimeStamp = Number(Math.round(Date.now() / 1000));
-
-  // Set release time to current date. On edits, keep original release/transaction time as release_time
+  // Set release time to the newly edited time.
+  // On edits, if not explicitly set to anytime, keep the original release/transaction time as release_time
   if (releaseTimeEdited) {
     publishPayload.release_time = releaseTimeEdited;
-  } else if (myClaimForUriEditing && myClaimForUriEditing.value.release_time) {
+  } else if (!releaseAnytime && myClaimForUriEditing && myClaimForUriEditing.value.release_time) {
     publishPayload.release_time = Number(myClaimForUri.value.release_time);
-  } else if (myClaimForUriEditing && myClaimForUriEditing.timestamp) {
+  } else if (!releaseAnytime && myClaimForUriEditing && myClaimForUriEditing.timestamp) {
     publishPayload.release_time = Number(myClaimForUriEditing.timestamp);
-  } else {
-    publishPayload.release_time = nowTimeStamp;
   }
 
-  // Add internal tag if a livestream is being scheduled.
+  // Remove internal scheduled tag if it exists.
+  publishPayload.tags = publishPayload.tags.filter((tag) => tag !== SCHEDULED_LIVESTREAM_TAG);
+
+  // Add internal scheduled tag if claim is a livestream and is being scheduled in the future.
   if (isLivestreamPublish && publishPayload.release_time > nowTimeStamp) {
     publishPayload.tags.push(SCHEDULED_LIVESTREAM_TAG);
   }

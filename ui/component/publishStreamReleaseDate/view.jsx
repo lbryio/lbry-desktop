@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FormField } from 'component/common/form';
 import DateTimePicker from 'react-datetime-picker';
 import moment from 'moment';
@@ -33,12 +33,17 @@ const PublishStreamReleaseDate = (props: Props) => {
   const onDateTimePickerChanged = (value) => {
     if (value === 'DEFAULT') {
       setDate(undefined);
-      updatePublishForm({ releaseTimeEdited: undefined });
+      updatePublishForm({ releaseTimeEdited: undefined, releaseAnytime: true });
     } else {
       setDate(value);
-      updatePublishForm({ releaseTimeEdited: dateToLinuxTimestamp(value) });
+      updatePublishForm({ releaseTimeEdited: dateToLinuxTimestamp(value), releaseAnytime: false });
     }
   };
+
+  useEffect(() => {
+    if (!releaseTime) updatePublishForm({ releaseTimeEdited: undefined, releaseAnytime: true });
+    return () => updatePublishForm({ releaseTimeEdited: undefined, releaseAnytime: false });
+  }, []);
 
   const helpText = !publishLater
     ? __(
