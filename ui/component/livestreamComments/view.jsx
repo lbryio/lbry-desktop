@@ -23,7 +23,6 @@ type Props = {
   fetchingComments: boolean,
   doSuperChatList: (string) => void,
   superChats: Array<Comment>,
-  myChannelIds: ?Array<string>,
   doResolveUris: (Array<string>, boolean) => void,
 };
 
@@ -44,7 +43,6 @@ export default function LivestreamComments(props: Props) {
     doCommentList,
     fetchingComments,
     doSuperChatList,
-    myChannelIds,
     superChats: superChatsByAmount,
     doResolveUris,
   } = props;
@@ -180,11 +178,6 @@ export default function LivestreamComments(props: Props) {
     });
   }
 
-  // todo: implement comment_list --mine in SDK so redux can grab with selectCommentIsMine
-  function isMyComment(channelId: string) {
-    return myChannelIds ? myChannelIds.includes(channelId) : false;
-  }
-
   if (!claim) {
     return null;
   }
@@ -293,19 +286,7 @@ export default function LivestreamComments(props: Props) {
 
           {pinnedComment && showPinned && viewMode === VIEW_MODES.CHAT && (
             <div className="livestream-pinned__wrapper">
-              <LivestreamComment
-                key={pinnedComment.comment_id}
-                uri={uri}
-                authorUri={pinnedComment.channel_url}
-                commentId={pinnedComment.comment_id}
-                message={pinnedComment.comment}
-                supportAmount={pinnedComment.support_amount}
-                isModerator={pinnedComment.is_moderator}
-                isGlobalMod={pinnedComment.is_global_mod}
-                isFiat={pinnedComment.is_fiat}
-                isPinned={pinnedComment.is_pinned}
-                commentIsMine={pinnedComment.channel_id && isMyComment(pinnedComment.channel_id)}
-              />
+              <LivestreamComment comment={pinnedComment} key={pinnedComment.comment_id} uri={uri} />
               <Button
                 title={__('Dismiss pinned comment')}
                 button="inverse"
@@ -321,18 +302,7 @@ export default function LivestreamComments(props: Props) {
             <div className="livestream__comments">
               {viewMode === VIEW_MODES.CHAT &&
                 commentsToDisplay.map((comment) => (
-                  <LivestreamComment
-                    key={comment.comment_id}
-                    uri={uri}
-                    authorUri={comment.channel_url}
-                    commentId={comment.comment_id}
-                    message={comment.comment}
-                    supportAmount={comment.support_amount}
-                    isModerator={comment.is_moderator}
-                    isGlobalMod={comment.is_global_mod}
-                    isFiat={comment.is_fiat}
-                    commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}
-                  />
+                  <LivestreamComment comment={comment} key={comment.comment_id} uri={uri} />
                 ))}
 
               {viewMode === VIEW_MODES.SUPERCHAT && resolvingSuperChat && (
@@ -345,18 +315,7 @@ export default function LivestreamComments(props: Props) {
                 !resolvingSuperChat &&
                 superChatsReversed &&
                 superChatsReversed.map((comment) => (
-                  <LivestreamComment
-                    key={comment.comment_id}
-                    uri={uri}
-                    authorUri={comment.channel_url}
-                    commentId={comment.comment_id}
-                    message={comment.comment}
-                    supportAmount={comment.support_amount}
-                    isModerator={comment.is_moderator}
-                    isGlobalMod={comment.is_global_mod}
-                    isFiat={comment.is_fiat}
-                    commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}
-                  />
+                  <LivestreamComment comment={comment} key={comment.comment_id} uri={uri} />
                 ))}
             </div>
           ) : (

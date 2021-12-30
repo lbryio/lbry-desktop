@@ -15,41 +15,29 @@ import OptimizedImage from 'component/optimizedImage';
 import { parseSticker } from 'util/comments';
 
 type Props = {
+  comment: Comment,
   uri: string,
+  // --- redux:
   claim: StreamClaim,
-  authorUri: string,
-  commentId: string,
-  message: string,
-  commentIsMine: boolean,
   stakedLevel: number,
-  supportAmount: number,
-  isModerator: boolean,
-  isGlobalMod: boolean,
-  isFiat: boolean,
-  isPinned: boolean,
+  myChannelIds: ?Array<string>,
 };
 
 function LivestreamComment(props: Props) {
-  const {
-    claim,
-    uri,
-    authorUri,
-    message,
-    commentIsMine,
-    commentId,
-    stakedLevel,
-    supportAmount,
-    isModerator,
-    isGlobalMod,
-    isFiat,
-    isPinned,
-  } = props;
+  const { comment, claim, uri, stakedLevel, myChannelIds } = props;
+  const { channel_url: authorUri, comment: message, support_amount: supportAmount } = comment;
 
   const [hasUserMention, setUserMention] = React.useState(false);
+  const commentIsMine = comment.channel_id && isMyComment(comment.channel_id);
 
   const commentByOwnerOfContent = claim && claim.signing_channel && claim.signing_channel.permanent_url === authorUri;
-  const { claimName } = parseURI(authorUri);
+  const { claimName } = parseURI(authorUri || '');
   const stickerFromMessage = parseSticker(message);
+
+  // todo: implement comment_list --mine in SDK so redux can grab with selectCommentIsMine
+  function isMyComment(channelId: string) {
+    return myChannelIds ? myChannelIds.includes(channelId) : false;
+  }
 
   return (
     <li
@@ -62,7 +50,12 @@ function LivestreamComment(props: Props) {
       {supportAmount > 0 && (
         <div className="super-chat livestream-superchat__banner">
           <div className="livestream-superchat__banner-corner" />
-          <CreditAmount isFiat={isFiat} amount={supportAmount} superChat className="livestream-superchat__amount" />
+          <CreditAmount
+            isFiat={comment.is_fiat}
+            amount={supportAmount}
+            superChat
+            className="livestream-superchat__amount"
+          />
         </div>
       )}
 
@@ -73,7 +66,7 @@ function LivestreamComment(props: Props) {
             'livestream-comment__info--sticker': Boolean(stickerFromMessage),
           })}
         >
-          {isGlobalMod && (
+          {comment.is_global_mod && (
             <Tooltip title={__('Admin')}>
               <span className="comment__badge comment__badge--global-mod">
                 <Icon icon={ICONS.BADGE_MOD} size={16} />
@@ -81,7 +74,7 @@ function LivestreamComment(props: Props) {
             </Tooltip>
           )}
 
-          {isModerator && (
+          {comment.is_moderator && (
             <Tooltip title={__('Moderator')}>
               <span className="comment__badge comment__badge--mod">
                 <Icon icon={ICONS.BADGE_MOD} size={16} />
@@ -107,7 +100,7 @@ function LivestreamComment(props: Props) {
             {claimName}
           </Button>
 
-          {isPinned && (
+          {comment.is_pinned && (
             <span className="comment__pin">
               <Icon icon={ICONS.PIN} size={14} />
               {__('Pinned')}
@@ -139,10 +132,10 @@ function LivestreamComment(props: Props) {
           </MenuButton>
           <CommentMenuList
             uri={uri}
-            commentId={commentId}
+            commentId={comment.comment_id}
             authorUri={authorUri}
             commentIsMine={commentIsMine}
-            isPinned={isPinned}
+            isPinned={comment.is_pinned}
             disableRemove={supportAmount > 0}
             isTopLevel
             disableEdit
