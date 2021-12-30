@@ -333,6 +333,9 @@ export const makeSelectMetadataForUri = (uri: string) =>
 
 export const makeSelectMetadataItemForUri = (uri: string, key: string) =>
   createSelector(makeSelectMetadataForUri(uri), (metadata: ChannelMetadata | StreamMetadata) => {
+    if (key === 'tags') {
+      return metadata.tags ? metadata.tags.filter((tag) => !INTERNAL_TAGS.includes(tag)) : [];
+    }
     return metadata ? metadata[key] : undefined;
   });
 

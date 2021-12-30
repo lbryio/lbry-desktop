@@ -13,6 +13,7 @@ import ChannelThumbnail from 'component/channelThumbnail';
 import * as ICONS from 'constants/icons';
 import Icon from 'component/common/icon';
 import { NO_FILE } from 'redux/actions/publish';
+import { INTERNAL_TAGS } from 'constants/tags';
 
 type Props = {
   filePath: string | WebFile,
@@ -200,9 +201,11 @@ const ModalPublishPreview = (props: Props) => {
       <p>{licenseType}</p>
     );
 
+  const visibleTags = tags.filter((tag) => !INTERNAL_TAGS.includes(tag.name));
+
   const tagsValue =
     // Do nothing for onClick(). Setting to 'null' results in "View Tag" action -- we don't want to leave the modal.
-    tags.map((tag) => <Tag key={tag.name} title={tag.name} name={tag.name} type={'flow'} onClick={() => {}} />);
+    visibleTags.map((tag) => <Tag key={tag.name} title={tag.name} name={tag.name} type={'flow'} onClick={() => {}} />);
 
   const depositValue = bid ? <LbcSymbol postfix={`${bid}`} size={14} /> : <p>---</p>;
 
