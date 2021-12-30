@@ -188,12 +188,10 @@ function CollectionActions(props: Props) {
           {lhsSection}
           {rhsSection}
         </div>
-        {uri && (
-          <div className="section">
-            {infoButton}
-            {showEditButton}
-          </div>
-        )}
+        <div className="section">
+          {uri && infoButton}
+          {showEditButton}
+        </div>
       </div>
     );
   }
