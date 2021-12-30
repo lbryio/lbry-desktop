@@ -2197,6 +2197,7 @@
   "Failed to synchronize settings. Wait a while before retrying.": "Failed to synchronize settings. Wait a while before retrying.",
   "You are offline. Check your internet connection.": "You are offline. Check your internet connection.",
   "A new version of Odysee is available.": "A new version of Odysee is available.",
+  "Could not get a user ID. Account functions will be unavailable. Try again in a bit.": "Could not get a user ID. Account functions will be unavailable. Try again in a bit.",
   "Reset stream": "Reset stream",
   "Live stream successfully reset.": "Live stream successfully reset.",
   "There was an error resetting the live stream.": "There was an error resetting the live stream.",
