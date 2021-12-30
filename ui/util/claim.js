@@ -57,7 +57,7 @@ export function filterClaims(claims: Array<Claim>, query: ?string): Array<Claim>
 
       return (
         (value.title && value.title.match(queryMatchRegExp)) ||
-        (claim.signing_channel && claim.signing_channel.name.match(queryMatchRegExp)) ||
+        (claim.signing_channel && claim.signing_channel.name && claim.signing_channel.name.match(queryMatchRegExp)) ||
         (claim.name && claim.name.match(queryMatchRegExp))
       );
     });
