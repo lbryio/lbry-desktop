@@ -95,44 +95,36 @@ export default function CollectionsListMine(props: Props) {
       {builtin.map((list: Collection) => {
         const { items: itemUrls } = list;
         return (
-          <div className="claim-grid__wrapper" key={list.name}>
-            <>
-              {Boolean(itemUrls && itemUrls.length) && (
-                <>
-                  <h1 className="claim-grid__header">
-                    <Button
-                      className="claim-grid__title"
-                      button="link"
-                      navigate={`/$/${PAGES.LIST}/${list.id}`}
-                      label={
-                        <span className="claim-grid__title-span">
-                          {__(`${list.name}`)}
-                          <div className="claim-grid__title--empty">
-                            <Icon
-                              className="icon--margin-right"
-                              icon={
-                                (list.id === COLLECTIONS_CONSTS.WATCH_LATER_ID && ICONS.TIME) ||
-                                (list.id === COLLECTIONS_CONSTS.FAVORITES_ID && ICONS.STAR) ||
-                                ICONS.STACK
-                              }
-                            />
-                            {itemUrls.length}
-                          </div>
-                        </span>
-                      }
-                    />
-                  </h1>
-                  <ClaimList tileLayout key={list.name} uris={itemUrls.slice(0, 6)} collectionId={list.id} />
-                </>
-              )}
-              {!(itemUrls && itemUrls.length) && (
-                <h1 className="claim-grid__header claim-grid__title">
-                  {__(`${list.name}`)}
-                  <div className="claim-grid__title--empty">{__('(Empty) --[indicates empty playlist]--')}</div>
+          <>
+            {Boolean(itemUrls && itemUrls.length) && (
+              <div className="claim-grid__wrapper" key={list.name}>
+                <h1 className="claim-grid__header">
+                  <Button
+                    className="claim-grid__title"
+                    button="link"
+                    navigate={`/$/${PAGES.LIST}/${list.id}`}
+                    label={
+                      <span className="claim-grid__title-span">
+                        {__(`${list.name}`)}
+                        <div className="claim-grid__title--empty">
+                          <Icon
+                            className="icon--margin-right"
+                            icon={
+                              (list.id === COLLECTIONS_CONSTS.WATCH_LATER_ID && ICONS.TIME) ||
+                              (list.id === COLLECTIONS_CONSTS.FAVORITES_ID && ICONS.STAR) ||
+                              ICONS.STACK
+                            }
+                          />
+                          {itemUrls.length}
+                        </div>
+                      </span>
+                    }
+                  />
                 </h1>
-              )}
-            </>
-          </div>
+                <ClaimList tileLayout key={list.name} uris={itemUrls.slice(0, 6)} collectionId={list.id} />
+              </div>
+            )}
+          </>
         );
       })}
       <div className="claim-grid__wrapper">
