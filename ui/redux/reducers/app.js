@@ -1,7 +1,7 @@
 // @flow
 
 import * as ACTIONS from 'constants/action_types';
-import * as remote from '@electron/remote';
+import { remote } from 'electron';
 
 // @if TARGET='app'
 const win = remote.BrowserWindow.getFocusedWindow();

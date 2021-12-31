@@ -1,7 +1,6 @@
 // @flow
 import * as React from 'react';
-import { shell } from 'electron';
-import * as remote from '@electron/remote';
+import { shell, remote } from 'electron';
 import Button from 'component/button';
 import CopyableText from 'component/copyableText';
 import AdmZip from 'adm-zip';

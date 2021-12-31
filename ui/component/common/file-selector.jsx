@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import * as remote from '@electron/remote';
+import { remote } from 'electron';
 import Button from 'component/button';
 import { FormField } from 'component/common/form';
 
@@ -47,7 +47,7 @@ class FileSelector extends React.PureComponent<Props> {
   };
 
   handleDirectoryInputSelection = () => {
-    remote.dialog.showOpenDialog({ properties: ['openDirectory'] }).then((result) => {
+    remote.dialog.showOpenDialog({ properties: ['openDirectory'] }).then(result => {
       const path = result && result.filePaths[0];
       if (path) {
         // $FlowFixMe
