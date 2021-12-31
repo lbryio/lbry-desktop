@@ -143,7 +143,7 @@ const REPLACE_REGEX = /(<iframe\s+src=["'])(.*?(?=))(["']\s*><\/iframe>)/g;
 // ****************************************************************************
 // ****************************************************************************
 
-const MarkdownPreview = (props: MarkdownProps) => {
+export default React.memo<MarkdownProps>(function MarkdownPreview(props: MarkdownProps) {
   const {
     content,
     strip,
@@ -255,6 +255,4 @@ const MarkdownPreview = (props: MarkdownProps) => {
       }
     </div>
   );
-};
-
-export default MarkdownPreview;
+});
