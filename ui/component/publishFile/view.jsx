@@ -52,8 +52,9 @@ type Props = {
   channelSignature: { signature?: string, signing_ts?: string },
   isCheckingLivestreams: boolean,
   setWaitForFile: (boolean) => void,
-  fileSelectSource: string,
-  changeFileSelectSource: (string) => void,
+  fileSource: string,
+  changeFileSource: (string) => void,
+  inEditMode: boolean,
 };
 
 function PublishFile(props: Props) {
@@ -87,8 +88,9 @@ function PublishFile(props: Props) {
     channelSignature,
     isCheckingLivestreams,
     setWaitForFile,
-    fileSelectSource,
-    changeFileSelectSource,
+    fileSource,
+    changeFileSource,
+    inEditMode,
   } = props;
 
   const RECOMMENDED_BITRATE = 6000000;
@@ -120,8 +122,8 @@ function PublishFile(props: Props) {
 
   const livestreamDataStr = JSON.stringify(livestreamData);
   const hasLivestreamData = livestreamData && Boolean(livestreamData.length);
-  const showSourceSelector = isLivestreamClaim || (hasLivestreamData && mode === PUBLISH_MODES.FILE);
 
+  const [showSourceSelector, setShowSourceSelector] = useState(false);
   // const [showFileUpdate, setShowFileUpdate] = useState(false);
   const [selectedFileIndex, setSelectedFileIndex] = useState(null);
   const PAGE_SIZE = 4;
@@ -140,21 +142,29 @@ function PublishFile(props: Props) {
     }
   }, [currentFileType, mode, isStillEditing, updatePublishForm]);
 
-  // Initialize default file source state.
+  // Initialize default file source state for each mode.
   useEffect(() => {
-    // Editing a livestream
-    if (isLivestreamClaim) {
-      changeFileSelectSource(SOURCE_SELECT);
+    setShowSourceSelector(false);
+    switch (mode) {
+      case PUBLISH_MODES.LIVESTREAM:
+        if (inEditMode) {
+          changeFileSource(SOURCE_SELECT);
+          setShowSourceSelector(true);
+        } else {
+          changeFileSource(SOURCE_NONE);
+        }
+        break;
+      case PUBLISH_MODES.POST:
+        changeFileSource(SOURCE_NONE);
+        break;
+      case PUBLISH_MODES.FILE:
+        if (hasLivestreamData) setShowSourceSelector(true);
+        changeFileSource(SOURCE_UPLOAD);
+        break;
+      default:
+        changeFileSource(SOURCE_UPLOAD);
     }
-    // Publishing a livestream
-    else if (mode === PUBLISH_MODES.LIVESTREAM) {
-      changeFileSelectSource(SOURCE_NONE);
-    } else if (showSourceSelector && name) {
-      changeFileSelectSource(SOURCE_SELECT);
-    } else {
-      changeFileSelectSource(SOURCE_UPLOAD);
-    }
-  }, [mode]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [mode, hasLivestreamData]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const normalizeUrlForProtocol = (url) => {
     if (url.startsWith('https://')) {
@@ -332,7 +342,7 @@ function PublishFile(props: Props) {
         updatePublishForm({ remoteFileUrl: livestreamData[selectedFileIndex].data.fileLocation });
       }
     }
-    changeFileSelectSource(source);
+    changeFileSource(source);
     setWaitForFile(source !== SOURCE_NONE);
   }
 
@@ -497,13 +507,13 @@ function PublishFile(props: Props) {
                             handleFileSource(fmode.actionName);
                           }}
                           className={classnames('button-toggle', {
-                            'button-toggle--active': fileSelectSource === fmode.actionName,
+                            'button-toggle--active': fileSource === fmode.actionName,
                           })}
                         />
                       ))}
                     </div>
                   </div>
-                  {fileSelectSource === SOURCE_SELECT && (
+                  {fileSource === SOURCE_SELECT && (
                     <Button
                       button="secondary"
                       label={__('Check for Replays')}
@@ -518,7 +528,7 @@ function PublishFile(props: Props) {
               </fieldset-section>
             )}
 
-            {showSourceSelector && fileSelectSource === SOURCE_UPLOAD && showFileUpload && (
+            {fileSource === SOURCE_UPLOAD && showFileUpload && (
               <>
                 <FileSelector
                   label={__('File')}
@@ -532,97 +542,86 @@ function PublishFile(props: Props) {
                 {getUploadMessage()}
               </>
             )}
-            {showSourceSelector &&
-              fileSelectSource === SOURCE_SELECT &&
-              showFileUpload &&
-              hasLivestreamData &&
-              !isCheckingLivestreams && (
-                <>
-                  <fieldset-section>
-                    <label>{__('Select Replay')}</label>
-                    <div className="table__wrapper">
-                      <table className="table table--livestream-data">
-                        <tbody>
-                          {livestreamData
-                            .slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
-                            .map((item, i) => (
-                              <tr
+            {fileSource === SOURCE_SELECT && showFileUpload && hasLivestreamData && !isCheckingLivestreams && (
+              <>
+                <fieldset-section>
+                  <label>{__('Select Replay')}</label>
+                  <div className="table__wrapper">
+                    <table className="table table--livestream-data">
+                      <tbody>
+                        {livestreamData.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE).map((item, i) => (
+                          <tr
+                            onClick={() => setSelectedFileIndex((currentPage - 1) * PAGE_SIZE + i)}
+                            key={item.id}
+                            className={classnames('livestream__data-row', {
+                              'livestream__data-row--selected': selectedFileIndex === (currentPage - 1) * PAGE_SIZE + i,
+                            })}
+                          >
+                            <td>
+                              <FormField
+                                type="radio"
+                                checked={selectedFileIndex === (currentPage - 1) * PAGE_SIZE + i}
+                                label={null}
                                 onClick={() => setSelectedFileIndex((currentPage - 1) * PAGE_SIZE + i)}
-                                key={item.id}
-                                className={classnames('livestream__data-row', {
-                                  'livestream__data-row--selected':
-                                    selectedFileIndex === (currentPage - 1) * PAGE_SIZE + i,
-                                })}
-                              >
-                                <td>
-                                  <FormField
-                                    type="radio"
-                                    checked={selectedFileIndex === (currentPage - 1) * PAGE_SIZE + i}
-                                    label={null}
-                                    onClick={() => setSelectedFileIndex((currentPage - 1) * PAGE_SIZE + i)}
-                                    className="livestream__data-row-radio"
-                                  />
-                                </td>
-                                <td>
-                                  <div className="livestream_thumb_container">
-                                    {item.data.thumbnails.slice(0, 3).map((thumb) => (
-                                      <img key={thumb} className="livestream___thumb" src={thumb} />
-                                    ))}
-                                  </div>
-                                </td>
-                                <td>
-                                  {`${Math.floor(item.data.fileDuration / 60)} ${
-                                    Math.floor(item.data.fileDuration / 60) > 1 ? __('minutes') : __('minute')
-                                  }`}
-                                  <div className="table__item-label">
-                                    {`${moment(item.data.uploadedAt).from(moment())}`}
-                                  </div>
-                                </td>
-                                <td>
-                                  <CopyableText
-                                    primaryButton
-                                    copyable={normalizeUrlForProtocol(item.data.fileLocation)}
-                                    snackMessage={__('Url copied.')}
-                                  />
-                                </td>
-                              </tr>
-                            ))}
-                        </tbody>
-                      </table>
-                    </div>
+                                className="livestream__data-row-radio"
+                              />
+                            </td>
+                            <td>
+                              <div className="livestream_thumb_container">
+                                {item.data.thumbnails.slice(0, 3).map((thumb) => (
+                                  <img key={thumb} className="livestream___thumb" src={thumb} />
+                                ))}
+                              </div>
+                            </td>
+                            <td>
+                              {`${Math.floor(item.data.fileDuration / 60)} ${
+                                Math.floor(item.data.fileDuration / 60) > 1 ? __('minutes') : __('minute')
+                              }`}
+                              <div className="table__item-label">
+                                {`${moment(item.data.uploadedAt).from(moment())}`}
+                              </div>
+                            </td>
+                            <td>
+                              <CopyableText
+                                primaryButton
+                                copyable={normalizeUrlForProtocol(item.data.fileLocation)}
+                                snackMessage={__('Url copied.')}
+                              />
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </fieldset-section>
+                <fieldset-group class="fieldset-group--smushed fieldgroup--paginate">
+                  <fieldset-section>
+                    <ReactPaginate
+                      pageCount={totalPages}
+                      pageRangeDisplayed={2}
+                      previousLabel="‹"
+                      nextLabel="›"
+                      activeClassName="pagination__item--selected"
+                      pageClassName="pagination__item"
+                      previousClassName="pagination__item pagination__item--previous"
+                      nextClassName="pagination__item pagination__item--next"
+                      breakClassName="pagination__item pagination__item--break"
+                      marginPagesDisplayed={2}
+                      onPageChange={(e) => handlePaginateReplays(e.selected + 1)}
+                      forcePage={currentPage - 1}
+                      initialPage={currentPage - 1}
+                      containerClassName="pagination"
+                    />
                   </fieldset-section>
-                  <fieldset-group class="fieldset-group--smushed fieldgroup--paginate">
-                    <fieldset-section>
-                      <ReactPaginate
-                        pageCount={totalPages}
-                        pageRangeDisplayed={2}
-                        previousLabel="‹"
-                        nextLabel="›"
-                        activeClassName="pagination__item--selected"
-                        pageClassName="pagination__item"
-                        previousClassName="pagination__item pagination__item--previous"
-                        nextClassName="pagination__item pagination__item--next"
-                        breakClassName="pagination__item pagination__item--break"
-                        marginPagesDisplayed={2}
-                        onPageChange={(e) => handlePaginateReplays(e.selected + 1)}
-                        forcePage={currentPage - 1}
-                        initialPage={currentPage - 1}
-                        containerClassName="pagination"
-                      />
-                    </fieldset-section>
-                  </fieldset-group>
-                </>
-              )}
-            {showSourceSelector &&
-              fileSelectSource === SOURCE_SELECT &&
-              showFileUpload &&
-              !hasLivestreamData &&
-              !isCheckingLivestreams && (
-                <div className="main--empty empty">
-                  <Empty text={__('No replays found.')} />
-                </div>
-              )}
-            {showSourceSelector && fileSelectSource === SOURCE_SELECT && showFileUpload && isCheckingLivestreams && (
+                </fieldset-group>
+              </>
+            )}
+            {fileSource === SOURCE_SELECT && showFileUpload && !hasLivestreamData && !isCheckingLivestreams && (
+              <div className="main--empty empty">
+                <Empty text={__('No replays found.')} />
+              </div>
+            )}
+            {fileSource === SOURCE_SELECT && showFileUpload && isCheckingLivestreams && (
               <div className="main--empty empty">
                 <Spinner small />
               </div>

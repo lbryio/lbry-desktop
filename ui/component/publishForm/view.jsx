@@ -140,6 +140,7 @@ function PublishForm(props: Props) {
     hasClaimedInitialRewards,
   } = props;
 
+  const inEditMode = Boolean(editingURI);
   const { replace, location } = useHistory();
   const urlParams = new URLSearchParams(location.search);
   const TYPE_PARAM = 'type';
@@ -153,7 +154,7 @@ function PublishForm(props: Props) {
   // $FlowFixMe
   const AVAILABLE_MODES = Object.values(PUBLISH_MODES).filter((mode) => {
     // $FlowFixMe
-    if (editingURI) {
+    if (inEditMode) {
       if (isPostClaim) {
         return mode === PUBLISH_MODES.POST;
       } else if (isLivestreamClaim) {
@@ -560,14 +561,14 @@ function PublishForm(props: Props) {
     }
   }, [mode, updatePublishForm]);
 
-  // Source Selector State.
-  const [fileSelectSource, setFileSelectSource] = useState();
-  const changeFileSelectSource = (state) => setFileSelectSource(state);
+  // FIle Source Selector State.
+  const [fileSource, setFileSource] = useState();
+  const changeFileSource = (state) => setFileSource(state);
 
   const [showSchedulingOptions, setShowSchedulingOptions] = useState(false);
   useEffect(() => {
-    setShowSchedulingOptions(isLivestreamMode && fileSelectSource === SOURCE_NONE);
-  }, [isLivestreamMode, fileSelectSource]);
+    setShowSchedulingOptions(isLivestreamMode && fileSource === SOURCE_NONE);
+  }, [isLivestreamMode, fileSource]);
 
   if (publishing) {
     return (
@@ -584,8 +585,9 @@ function PublishForm(props: Props) {
       <ChannelSelect hideAnon={isLivestreamMode} disabled={disabled} />
 
       <PublishFile
-        fileSelectSource={fileSelectSource}
-        changeFileSelectSource={changeFileSelectSource}
+        inEditMode={inEditMode}
+        fileSource={fileSource}
+        changeFileSource={changeFileSource}
         uri={permanentUrl}
         mode={mode}
         fileMimeType={fileMimeType}
