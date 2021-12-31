@@ -126,6 +126,15 @@
     width: 35rem;
     margin-left: var(--spacing-m);
 
+    .card__header--between {
+      padding: var(--spacing-s) var(--spacing-s) var(--spacing-s) var(--spacing-s);
+      display: flex;
+      align-items: center;
+      .card__title-actions {
+        padding: 0 0 0 0;
+        align-items: center;
+      }
+    }
     @media (max-width: $breakpoint-medium) {
       width: 100%;
       margin-left: 0;
@@ -137,6 +146,10 @@
     @extend .file-page__recommended;
     flex-direction: column;
     overflow-wrap: break-word;
+
+    .card__header--between {
+      padding: var(--spacing-s) var(--spacing-s) var(--spacing-s) var(--spacing-s);
+    }
 
     .file-page__recommended-collection__row {
       display: block;
