@@ -161,12 +161,6 @@ $recent-msg-button__height: 2rem;
   margin-left: var(--spacing-s);
   overflow: hidden;
 
-  .livestream-comment__info--sticker {
-    display: flex;
-    flex-direction: column;
-    margin: var(--spacing-xxs) 0;
-  }
-
   .channel-thumbnail {
     @include handleChannelGif(2rem);
     margin-top: var(--spacing-xxs);

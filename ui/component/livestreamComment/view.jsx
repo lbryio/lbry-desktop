@@ -64,11 +64,7 @@ function LivestreamComment(props: Props) {
 
       <div className="livestream-comment__body">
         {supportAmount > 0 && <ChannelThumbnail uri={authorUri} xsmall />}
-        <div
-          className={classnames('livestream-comment__info', {
-            'livestream-comment__info--sticker': Boolean(stickerFromMessage),
-          })}
-        >
+        <div className="livestream-comment__info">
           {comment.is_global_mod && (
             <Tooltip title={__('Admin')}>
               <span className="comment__badge comment__badge--global-mod">
