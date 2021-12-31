@@ -4,7 +4,52 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased for Desktop]
-## [0.52.0] - [2021-10-24]
+## [0.52.1] - [2021-12-31]
+
+### Compatibility
+- Mac <= 10.13 (High Sierra) and Ubuntu <= 16 (Xenial) are no longer supported. If you upgrade, you will need to manually build and install your own lbrynet SDK
+
+### Added
+- Direct replying to notifications _community pr!_ ([#6935](https://github.com/lbryio/lbry-desktop/pull/6935))
+- Added "Replay" option on autoplay countdown ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
+- Added "Loop" option on Lists ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
+- Added "Shuffle" option on Lists ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
+- Added Play Next/Previous buttons (with shortcuts SHIFT+N/SHIFT+P) ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
+- Separate control for autoplay next on video player ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
+- Channel Mention selection ability while creating a comment ([#7151](https://github.com/lbryio/lbry-desktop/pull/7151))
+- Disk space setting under Data Hosting ([#7266](https://github.com/lbryio/lbry-desktop/pull/7266))
+- Paginated 'All Playlists' page ([#7268](https://github.com/lbryio/lbry-desktop/pull/7268))
+- Expanded playlist ordering tools ([#7305](https://github.com/lbryio/lbry-desktop/pull/7305))
+- Setting to upgrade to alpha prerelease builds ([#7353](https://github.com/lbryio/lbry-desktop/pull/7353))
+
+### Changed
+- Changing the supported language from Filipino to Tagalog _community pr!_ ([#6951](https://github.com/lbryio/lbry-desktop/pull/6951))
+- Don't show countdown to next item in list ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
+- Changed "View List" popup option to link, so can be opened on a new tab ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
+- App reorganized to remove lbry-redux and lbryinc repository dependencies ([#7240](https://github.com/lbryio/lbry-desktop/pull/7240))
+- Styling cleanup for file reactions ([#7251](https://github.com/lbryio/lbry-desktop/pull/7251))
+- Change share url to odysee and allow custom share url in settings ([#7258](https://github.com/lbryio/lbry-desktop/pull/7258))
+- Change Sign in/up to Cloud Connect for Odysee ([#7260](https://github.com/lbryio/lbry-desktop/pull/7260))
+- Upgraded to lbrynet v0.106.0 ([#7315](https://github.com/lbryio/lbry-desktop/pull/7315))
+- Upgraded Electron to v11.5.0 ([#7276](https://github.com/lbryio/lbry-desktop/pull/7276))
+- Cleaner Discover page filters ([#7306](https://github.com/lbryio/lbry-desktop/pull/7306))
+- Scroll bar styling ([#7314](https://github.com/lbryio/lbry-desktop/pull/7314))
+- Remove pages for obsolete features like invites, rewards, swap ([#7330](https://github.com/lbryio/lbry-desktop/pull/7330))
+- Change file repost to modal _community pr!_ ([#7341](https://github.com/lbryio/lbry-desktop/pull/7341))
+
+### Fixed
+- Clicking on the title of a floating player will take you back to the list ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
+- Fix floating player stopping on markdown or image files ([#7073](https://github.com/lbryio/lbry-desktop/pull/7073))
+- Fix list thumbnail upload ([#7074](https://github.com/lbryio/lbry-desktop/pull/7074))
+- Stream Key is now hidden _community pr!_ ([#7127](https://github.com/lbryio/lbry-desktop/pull/7127))
+- Fix playlist preview thumbnail ([#7178](https://github.com/lbryio/lbry-desktop/pull/7178)
+- Fixed “Your Account” popup on mobile ([#7172](https://github.com/lbryio/lbry-desktop/pull/7172))
+- Fix disable-support for comments ([#7245](https://github.com/lbryio/lbry-desktop/pull/7245))
+- Fix Electron taking over .html files on linux ([#7291](https://github.com/lbryio/lbry-desktop/pull/7291))
+- Fix floating player play/pause on drag _community pr!_ ([#7339](https://github.com/lbryio/lbry-desktop/pull/7339))
+- Fix card dropdown menus triggering menu actions _community pr!_ ([#7335](https://github.com/lbryio/lbry-desktop/pull/7335))
+
+## [0.52.0] - [2021-12-31]
 
 ### Compatibility
 - Mac <= 10.13 (High Sierra) and Ubuntu <= 16 (Xenial) are no longer supported. If you upgrade, you will need to manually build and install your own lbrynet SDK
