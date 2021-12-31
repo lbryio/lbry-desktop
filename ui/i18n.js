@@ -1,11 +1,9 @@
+// @flow
+import { isLocalStorageAvailable } from 'util/storage';
+
 const isProduction = process.env.NODE_ENV === 'production';
 let knownMessages = null;
-let localStorageAvailable;
-try {
-  localStorageAvailable = Boolean(window.localStorage);
-} catch (e) {
-  localStorageAvailable = false;
-}
+const localStorageAvailable = isLocalStorageAvailable();
 
 window.i18n_messages = window.i18n_messages || {};
 
@@ -45,7 +43,7 @@ function removeContextMetadata(message) {
   return message;
 }
 
-export function __(message, tokens) {
+export function __(message: string, tokens: { [string]: string }) {
   if (!message) {
     return '';
   }
@@ -53,6 +51,7 @@ export function __(message, tokens) {
   const language = localStorageAvailable
     ? window.localStorage.getItem('language') || 'en'
     : window.navigator.language.slice(0, 2) || 'en';
+
   if (!isProduction) {
     saveMessageWeb(message);
   }
