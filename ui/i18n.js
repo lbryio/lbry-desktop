@@ -2,20 +2,32 @@
 import { isLocalStorageAvailable } from 'util/storage';
 
 const isProduction = process.env.NODE_ENV === 'production';
-let knownMessages = null;
 const localStorageAvailable = isLocalStorageAvailable();
 
 window.i18n_messages = window.i18n_messages || {};
 
-/*
- I dislike the below code (and note that it ships all the way to the distributed app),
- but this seems better than silently having this limitation and future devs not knowing.
+/**
+ * Collects new i18n strings encountered during runtime.
+ * The output can be retrieved and pasted into app-strings.json.
+ *
+ * @param message
  */
 function saveMessageWeb(message) {
-  if (!isProduction && knownMessages === null) {
-    console.log('Note that i18n messages are not saved in web dev mode.'); // eslint-disable-line
-    knownMessages = {};
+  // @if process.env.NODE_ENV!='production'
+  if (!window.app_strings) {
+    return;
   }
+
+  if (!window.new_strings) {
+    console.log('Copy new i18n to clipboard:%c copy(window.new_strings)', 'color:yellow'); // eslint-disable-line
+  }
+
+  window.new_strings = window.new_strings || {};
+
+  if (!window.app_strings[message] && !window.new_strings[message]) {
+    window.new_strings[message] = removeContextMetadata(message);
+  }
+  // @endif
 }
 
 function removeContextMetadata(message) {

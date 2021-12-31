@@ -15,7 +15,7 @@ import { selectPrefsReady } from 'redux/selectors/sync';
 import { Lbryio } from 'lbryinc';
 import { getDefaultLanguage } from 'util/default-languages';
 
-const { DEFAULT_LANGUAGE } = require('config');
+const { DEFAULT_LANGUAGE, URL_DEV } = require('config');
 const { SDK_SYNC_KEYS } = SHARED_PREFERENCES;
 
 export const IS_MAC = process.platform === 'darwin';
@@ -294,6 +294,16 @@ export function doFetchLanguage(language) {
           });
         });
     }
+
+    // @if process.env.NODE_ENV!='production'
+    if (!window.app_strings) {
+      fetch(`${URL_DEV}/app-strings.json`)
+        .then((r) => r.json())
+        .then((j) => {
+          window.app_strings = j;
+        });
+    }
+    // @endif
   };
 }
 

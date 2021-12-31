@@ -100,6 +100,13 @@ if (fs.existsSync(ROBOTS_TXT_PATH)) {
   });
 }
 
+if (!isProduction) {
+  copyWebpackCommands.push({
+    from: `${STATIC_ROOT}/app-strings.json`,
+    to: `${DIST_ROOT}/app-strings.json`,
+  });
+}
+
 let plugins = [
   new WriteFilePlugin(),
   new CopyWebpackPlugin(copyWebpackCommands),
