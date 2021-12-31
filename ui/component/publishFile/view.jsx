@@ -142,7 +142,12 @@ function PublishFile(props: Props) {
 
   // Initialize default file source state.
   useEffect(() => {
-    if (isLivestreamClaim || mode === PUBLISH_MODES.LIVESTREAM) {
+    // Editing a livestream
+    if (isLivestreamClaim) {
+      changeFileSelectSource(SOURCE_SELECT);
+    }
+    // Publishing a livestream
+    else if (mode === PUBLISH_MODES.LIVESTREAM) {
       changeFileSelectSource(SOURCE_NONE);
     } else if (showSourceSelector && name) {
       changeFileSelectSource(SOURCE_SELECT);
