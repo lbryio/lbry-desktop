@@ -54,10 +54,25 @@ $recent-msg-button__height: 2rem;
   margin-bottom: 0;
   align-items: center;
 
+  .recommended-content__toggles {
+    button {
+      height: unset;
+      padding: 5px;
+    }
+
+    .button__label {
+      max-height: 18px;
+    }
+  }
+
   @media (min-width: $breakpoint-small) {
     height: $discussion-header__height;
     padding: 0 var(--spacing-s);
     padding-right: 0;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    padding: var(--spacing-xxs);
   }
 }
 
@@ -68,8 +83,10 @@ $recent-msg-button__height: 2rem;
   align-items: center;
   padding: 0;
 
-  .menu__button {
-    margin-left: var(--spacing-xs);
+  @media (min-width: $breakpoint-small) {
+    .menu__button {
+      margin-left: var(--spacing-xxs);
+    }
   }
 }
 

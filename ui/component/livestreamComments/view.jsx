@@ -202,7 +202,7 @@ export default function LivestreamComments(props: Props) {
     <div className="card livestream__discussion">
       <div className="card__header--between livestream-discussion__header">
         <div className="livestream-discussion__title">
-          {__('Live discussion')}
+          {__('Live Chat')}
 
           <Menu>
             <MenuButton className="menu__button">

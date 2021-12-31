@@ -128,13 +128,16 @@
 }
 
 .recommended-content__toggles {
-  margin-top: var(--spacing-xs);
-  margin-right: var(--spacing-xs);
+  display: flex;
 
   button {
     padding: 0 var(--spacing-xs);
     height: 2rem;
     max-width: 15rem;
+  }
+
+  @media (min-width: $breakpoint-small) {
+    margin-right: var(--spacing-xs);
   }
 }
 
