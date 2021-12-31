@@ -206,7 +206,7 @@ export default function LivestreamComments(props: Props) {
 
           <Menu>
             <MenuButton className="menu__button">
-              <Icon size={18} icon={ICONS.MORE_VERTICAL} />
+              <Icon size={18} icon={ICONS.SETTINGS} />
             </MenuButton>
 
             <MenuList className="menu__list">

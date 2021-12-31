@@ -65,7 +65,12 @@ $recent-msg-button__height: 2rem;
   @extend .card__title-section;
   @extend .card__title-section--small;
   display: flex;
+  align-items: center;
   padding: 0;
+
+  .menu__button {
+    margin-left: var(--spacing-xs);
+  }
 }
 
 .livestream__comments-wrapper {
