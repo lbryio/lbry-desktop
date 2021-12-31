@@ -279,7 +279,7 @@
   justify-content: space-between;
   align-items: flex-start;
   flex-wrap: wrap;
-  padding: var(--spacing-l) var(--spacing-l) var(--spacing-m) var(--spacing-l);
+  padding: var(--spacing-m) var(--spacing-m) var(--spacing-m) var(--spacing-m);
   @media (max-width: $breakpoint-small) {
     padding: var(--spacing-m);
     padding-bottom: 0;
@@ -336,7 +336,7 @@
   padding: var(--spacing-s);
 
   @media (min-width: $breakpoint-small) {
-    padding: var(--spacing-l);
+    padding: var(--spacing-m);
   }
 }
 
@@ -364,7 +364,7 @@
 .card__main-actions {
   padding: var(--spacing-m);
   @media (min-width: $breakpoint-small) {
-    padding: var(--spacing-l);
+    padding: var(--spacing-m);
   }
   padding-bottom: 0;
   margin: 0;
