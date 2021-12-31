@@ -5,7 +5,7 @@ import CollectionPage from './view';
 import {
   makeSelectTitleForUri,
   makeSelectThumbnailForUri,
-  makeSelectClaimIsMine,
+  selectClaimIsMine,
   makeSelectClaimIsPending,
   makeSelectClaimForClaimId,
   makeSelectChannelForClaimUri,
@@ -20,11 +20,7 @@ import {
   makeSelectEditedCollectionForId,
 } from 'redux/selectors/collections';
 
-import {
-  doFetchItemsInCollection,
-  doCollectionDelete,
-  doCollectionEdit,
-} from 'redux/actions/collections';
+import { doFetchItemsInCollection, doCollectionDelete, doCollectionEdit } from 'redux/actions/collections';
 import { selectUser } from 'redux/selectors/user';
 
 const select = (state, props) => {
@@ -44,7 +40,7 @@ const select = (state, props) => {
     isResolvingCollection: makeSelectIsResolvingCollectionForId(collectionId)(state),
     title: makeSelectTitleForUri(uri)(state),
     thumbnail: makeSelectThumbnailForUri(uri)(state),
-    isMyClaim: makeSelectClaimIsMine(uri)(state), // or collection is mine?
+    isMyClaim: selectClaimIsMine(state, claim), // or collection is mine?
     isMyCollection: makeSelectCollectionIsMine(collectionId)(state),
     claimIsPending: makeSelectClaimIsPending(uri)(state),
     collectionHasEdits: Boolean(makeSelectEditedCollectionForId(collectionId)(state)),

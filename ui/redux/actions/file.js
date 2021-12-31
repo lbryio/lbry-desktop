@@ -5,7 +5,7 @@ import * as ABANDON_STATES from 'constants/abandon_states';
 import { shell } from 'electron';
 // @endif
 import Lbry from 'lbry';
-import { makeSelectClaimForUri } from 'redux/selectors/claims';
+import { selectClaimForUri } from 'redux/selectors/claims';
 import { doAbandonClaim } from 'redux/actions/claims';
 import { batchActions } from 'util/batch-actions';
 
@@ -71,7 +71,7 @@ export function doDeleteFileAndMaybeGoBack(
     const state = getState();
     const playingUri = selectPlayingUri(state);
     const { outpoint } = makeSelectFileInfoForUri(uri)(state) || '';
-    const { nout, txid } = makeSelectClaimForUri(uri)(state);
+    const { nout, txid } = selectClaimForUri(state, uri);
     const claimOutpoint = `${txid}:${nout}`;
     const actions = [];
 
@@ -105,7 +105,7 @@ export function doDeleteFileAndMaybeGoBack(
 export function doFileGet(uri: string, saveFile: boolean = true, onSuccess?: (GetResponse) => any) {
   return (dispatch: Dispatch, getState: () => any) => {
     const state = getState();
-    const { nout, txid } = makeSelectClaimForUri(uri)(state);
+    const { nout, txid } = selectClaimForUri(state, uri);
     const outpoint = `${txid}:${nout}`;
 
     dispatch({

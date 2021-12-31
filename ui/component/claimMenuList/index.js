@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimForUri, makeSelectClaimIsMine } from 'redux/selectors/claims';
+import { selectClaimForUri, selectClaimIsMine } from 'redux/selectors/claims';
 import { doCollectionEdit, doFetchItemsInCollection } from 'redux/actions/collections';
 import { doPrepareEdit } from 'redux/actions/publish';
 import {
@@ -34,7 +34,7 @@ import ClaimPreview from './view';
 import fs from 'fs';
 
 const select = (state, props) => {
-  const claim = makeSelectClaimForUri(props.uri, false)(state);
+  const claim = selectClaimForUri(state, props.uri, false); // @KP test no repost!
   const collectionId = props.collectionId;
   const repostedClaim = claim && claim.reposted_claim;
   const contentClaim = repostedClaim || claim;
@@ -51,7 +51,7 @@ const select = (state, props) => {
     contentClaim,
     contentSigningChannel,
     contentChannelUri,
-    claimIsMine: makeSelectClaimIsMine(props.uri)(state),
+    claimIsMine: selectClaimIsMine(state, claim),
     hasClaimInWatchLater: makeSelectCollectionForIdHasClaimUrl(
       COLLECTIONS_CONSTS.WATCH_LATER_ID,
       contentPermanentUri
@@ -92,7 +92,7 @@ const perform = (dispatch) => ({
   doChannelUnmute: (channelUri) => dispatch(doChannelUnmute(channelUri)),
   doCommentModBlock: (channelUri) => dispatch(doCommentModBlock(channelUri)),
   doCommentModUnBlock: (channelUri) => dispatch(doCommentModUnBlock(channelUri)),
-  doCommentModBlockAsAdmin: (commenterUri, blockerId) => dispatch(doCommentModBlockAsAdmin(commenterUri, blockerId)),
+  doCommentModBlockAsAdmin: (a, b, c) => dispatch(doCommentModBlockAsAdmin(a, b, c)),
   doCommentModUnBlockAsAdmin: (commenterUri, blockerId) =>
     dispatch(doCommentModUnBlockAsAdmin(commenterUri, blockerId)),
   doChannelSubscribe: (subscription) => dispatch(doChannelSubscribe(subscription)),

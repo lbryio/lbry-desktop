@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { PAGE_SIZE } from 'constants/claim';
 import {
-  makeSelectClaimForUri,
+  selectClaimForUri,
   makeSelectIsUriResolving,
   makeSelectTotalPagesForChannel,
   makeSelectTitleForUri,
-  makeSelectClaimIsMine,
+  selectClaimIsMine,
   makeSelectClaimIsPending,
 } from 'redux/selectors/claims';
 import {
@@ -62,7 +62,7 @@ const select = (state, props) => {
       props.history.replace(`/${path.slice(0, match.index)}`);
     }
   }
-  const claim = makeSelectClaimForUri(uri)(state);
+  const claim = selectClaimForUri(state, uri);
   const collectionId =
     urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID) ||
     (claim && claim.value_type === 'collection' && claim.claim_id) ||
@@ -76,7 +76,7 @@ const select = (state, props) => {
     totalPages: makeSelectTotalPagesForChannel(uri, PAGE_SIZE)(state),
     isSubscribed: makeSelectChannelInSubscriptions(uri)(state),
     title: makeSelectTitleForUri(uri)(state),
-    claimIsMine: makeSelectClaimIsMine(uri)(state),
+    claimIsMine: selectClaimIsMine(state, claim),
     claimIsPending: makeSelectClaimIsPending(uri)(state),
     collection: makeSelectCollectionForId(collectionId)(state),
     collectionId: collectionId,

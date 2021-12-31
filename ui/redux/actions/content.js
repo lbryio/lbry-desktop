@@ -5,7 +5,12 @@ import * as MODALS from 'constants/modal_types';
 import { ipcRenderer } from 'electron';
 // @endif
 import { doOpenModal } from 'redux/actions/app';
-import { makeSelectClaimForUri, makeSelectClaimIsMine, makeSelectClaimWasPurchased } from 'redux/selectors/claims';
+import {
+  makeSelectClaimForUri,
+  selectClaimForUri,
+  makeSelectClaimIsMine,
+  makeSelectClaimWasPurchased,
+} from 'redux/selectors/claims';
 import {
   makeSelectFileInfoForUri,
   selectFileInfosByOutpoint,
@@ -216,7 +221,7 @@ export function doPlayUri(
 export function savePosition(uri: string, position: number) {
   return (dispatch: Dispatch, getState: () => any) => {
     const state = getState();
-    const claim = makeSelectClaimForUri(uri)(state);
+    const claim = selectClaimForUri(state, uri)(state);
     const { claim_id: claimId, txid, nout } = claim;
     const outpoint = `${txid}:${nout}`;
 

@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 import {
-  makeSelectClaimIsMine,
-  makeSelectClaimForUri,
-  selectMyChannelClaims,
+  selectClaimIsMine,
+  selectClaimForUri,
+  selectHasChannels,
   makeSelectTagInClaimOrChannelForUri,
 } from 'redux/selectors/claims';
 import { makeSelectStreamingUrlForUri, makeSelectFileInfoForUri } from 'redux/selectors/file_info';
@@ -16,16 +16,20 @@ import fs from 'fs';
 import FileActions from './view';
 import { makeSelectFileRenderModeForUri } from 'redux/selectors/content';
 
-const select = (state, props) => ({
-  claim: makeSelectClaimForUri(props.uri)(state),
-  claimIsMine: makeSelectClaimIsMine(props.uri)(state),
-  fileInfo: makeSelectFileInfoForUri(props.uri)(state),
-  renderMode: makeSelectFileRenderModeForUri(props.uri)(state),
-  costInfo: makeSelectCostInfoForUri(props.uri)(state),
-  myChannels: selectMyChannelClaims(state),
-  reactionsDisabled: makeSelectTagInClaimOrChannelForUri(props.uri, DISABLE_COMMENTS_TAG)(state),
-  streamingUrl: makeSelectStreamingUrlForUri(props.uri)(state),
-});
+const select = (state, props) => {
+  const claim = selectClaimForUri(state, props.uri);
+
+  return {
+    claim,
+    claimIsMine: selectClaimIsMine(state, claim),
+    fileInfo: makeSelectFileInfoForUri(props.uri)(state),
+    renderMode: makeSelectFileRenderModeForUri(props.uri)(state),
+    costInfo: makeSelectCostInfoForUri(props.uri)(state),
+    hasChannels: selectHasChannels(state),
+    reactionsDisabled: makeSelectTagInClaimOrChannelForUri(props.uri, DISABLE_COMMENTS_TAG)(state),
+    streamingUrl: makeSelectStreamingUrlForUri(props.uri)(state),
+  };
+};
 
 const perform = (dispatch) => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),

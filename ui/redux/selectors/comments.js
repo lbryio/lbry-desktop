@@ -4,14 +4,15 @@ import { createCachedSelector } from 're-reselect';
 import { selectMutedChannels } from 'redux/selectors/blocked';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import { selectBlacklistedOutpointMap, selectFilteredOutpointMap } from 'lbryinc';
-import { selectClaimsById, selectMyActiveClaims } from 'redux/selectors/claims';
+import { selectClaimsById, selectMyActiveClaims, selectClaimIdForUri } from 'redux/selectors/claims';
 import { isClaimNsfw } from 'util/claim';
 
-type State = { comments: CommentsState };
+type State = { comments: CommentsState, claims: any };
 
 const selectState = (state) => state.comments || {};
 
 export const selectCommentsById = (state: State) => selectState(state).commentById || {};
+export const selectCommentIdsByClaimId = (state: State) => selectState(state).byId;
 export const selectIsFetchingComments = (state: State) => selectState(state).isLoading;
 export const selectIsFetchingCommentsById = (state: State) => selectState(state).isLoadingById;
 export const selectIsFetchingCommentsByParentId = (state: State) => selectState(state).isLoadingByParentId;
@@ -172,6 +173,12 @@ export const selectRepliesByParentId = createSelector(selectState, selectComment
 });
 
 export const selectLinkedCommentAncestors = (state: State) => selectState(state).linkedCommentAncestors;
+
+export const selectCommentIdsForUri = (state: State, uri: string) => {
+  const claimId = selectClaimIdForUri(state, uri);
+  const commentIdsByClaimId = selectCommentIdsByClaimId(state);
+  return commentIdsByClaimId[claimId];
+};
 
 export const makeSelectCommentIdsForUri = (uri: string) =>
   createSelector(selectState, selectCommentsByUri, selectClaimsById, (state, byUri) => {

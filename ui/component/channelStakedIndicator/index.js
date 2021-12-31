@@ -1,15 +1,15 @@
 import { connect } from 'react-redux';
 import {
   makeSelectClaimForUri,
-  makeSelectStakedLevelForChannelUri,
-  makeSelectTotalStakedAmountForChannelUri,
+  selectTotalStakedAmountForChannelUri,
+  selectStakedLevelForChannelUri,
 } from 'redux/selectors/claims';
 import ChannelStakedIndicator from './view';
 
 const select = (state, props) => ({
   channelClaim: makeSelectClaimForUri(props.uri)(state),
-  amount: makeSelectTotalStakedAmountForChannelUri(props.uri)(state),
-  level: makeSelectStakedLevelForChannelUri(props.uri)(state),
+  amount: selectTotalStakedAmountForChannelUri(state, props.uri),
+  level: selectStakedLevelForChannelUri(state, props.uri),
 });
 
 export default connect(select)(ChannelStakedIndicator);

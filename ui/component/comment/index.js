@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import {
-  makeSelectStakedLevelForChannelUri,
+  selectTotalStakedAmountForChannelUri,
   makeSelectClaimForUri,
   makeSelectThumbnailForUri,
   selectMyChannelClaims,
@@ -33,7 +33,7 @@ const select = (state, props) => {
     activeChannelClaim,
     myChannels: selectMyChannelClaims(state),
     playingUri: selectPlayingUri(state),
-    stakedLevel: makeSelectStakedLevelForChannelUri(props.authorUri)(state),
+    stakedLevel: selectTotalStakedAmountForChannelUri(state, props.authorUri),
     linkedCommentAncestors: selectLinkedCommentAncestors(state),
     totalReplyPages: makeSelectTotalReplyPagesForParentId(props.commentId)(state),
   };

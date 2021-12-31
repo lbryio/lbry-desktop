@@ -1,5 +1,5 @@
 import Lbry from 'lbry';
-import { makeSelectClaimForUri } from 'redux/selectors/claims';
+import { selectClaimForUri } from 'redux/selectors/claims';
 import { doFetchChannelListMine } from 'redux/actions/claims';
 import { isURIValid, normalizeURI } from 'util/lbryURI';
 import { batchActions } from 'util/batch-actions';
@@ -657,7 +657,7 @@ export function doUserSetReferrer(referrer, shouldClaim) {
     const isValid = isURIValid(referrer);
     if (isValid) {
       const uri = normalizeURI(referrer);
-      claim = makeSelectClaimForUri(uri)(getState());
+      claim = selectClaimForUri(getState(), uri);
       if (!claim) {
         try {
           const response = await Lbry.resolve({ urls: [uri] });
