@@ -55,6 +55,20 @@ function CollectionActions(props: Props) {
   const claimId = claim && claim.claim_id;
   const webShareable = true; // collections have cost?
 
+  /*
+    A bit too much dependency with both ordering and shuffling depending on a single list item index selector
+    For now when they click edit, we'll toggle shuffle off for them.
+  */
+  const handleSetShowEdit = (setting) => {
+    doToggleShuffleList(collectionId, false);
+    setShowEdit(setting);
+  };
+
+  const handlePublishMode = () => {
+    doToggleShuffleList(collectionId, false);
+    push(`?${PAGE_VIEW_QUERY}=${EDIT_PAGE}`);
+  };
+
   const doPlay = React.useCallback(
     (playUri) => {
       const navigateUrl = formatLbryUrlForWeb(playUri);
@@ -124,7 +138,7 @@ function CollectionActions(props: Props) {
               title={uri ? __('Update') : __('Publish')}
               label={uri ? __('Update') : __('Publish')}
               className={classnames('button--file-action')}
-              onClick={() => push(`?${PAGE_VIEW_QUERY}=${EDIT_PAGE}`)}
+              onClick={() => handlePublishMode()}
               icon={ICONS.PUBLISH}
               iconColor={collectionHasEdits && 'red'}
               iconSize={18}
@@ -169,7 +183,7 @@ function CollectionActions(props: Props) {
         'button-toggle--active': showEdit,
       })}
       icon={ICONS.EDIT}
-      onClick={() => setShowEdit(!showEdit)}
+      onClick={() => handleSetShowEdit(!showEdit)}
     />
   );
 
