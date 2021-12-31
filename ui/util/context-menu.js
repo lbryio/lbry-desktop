@@ -1,4 +1,5 @@
-import { clipboard, remote, shell } from 'electron';
+import { clipboard, shell } from 'electron';
+import * as remote from '@electron/remote';
 import { convertToShareLink } from 'util/lbryURI';
 const isDev = process.env.NODE_ENV !== 'production';
 
