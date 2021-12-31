@@ -17,8 +17,10 @@ import NotificationHeaderButton from 'component/notificationHeaderButton';
 import ChannelThumbnail from 'component/channelThumbnail';
 import SkipNavigationButton from 'component/skipNavigationButton';
 import Logo from 'component/logo';
-import * as remote from '@electron/remote';
+// @if TARGET='app'
+import { remote } from 'electron';
 import { IS_MAC } from 'component/app/view';
+// @endif
 
 type Props = {
   user: ?User,

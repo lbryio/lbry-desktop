@@ -18,8 +18,6 @@ import installDevtools from './installDevtools';
 import fs from 'fs';
 import path from 'path';
 const { download } = require('electron-dl');
-const remote = require('@electron/remote/main');
-remote.initialize();
 const filePath = path.join(process.resourcesPath, 'static', 'upgradeDisabled');
 let upgradeDisabled;
 try {

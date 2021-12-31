@@ -1,5 +1,5 @@
 // @flow
-import * as remote from '@electron/remote';
+import { remote } from 'electron';
 import React from 'react';
 import classnames from 'classnames';
 import * as RENDER_MODES from 'constants/file_render_modes';

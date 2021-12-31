@@ -1,7 +1,6 @@
 import { execSync } from 'child_process';
 import isDev from 'electron-is-dev';
-import { ipcRenderer } from 'electron';
-import * as remote from '@electron/remote';
+import { ipcRenderer, remote } from 'electron';
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
 import * as SETTINGS from 'constants/settings';
