@@ -37,7 +37,16 @@
     }
   ],
   "mac": {
-    "category": "public.app-category.entertainment"
+    "category": "public.app-category.entertainment",
+    "target": [
+      {
+        "target": "default",
+        "arch": [
+          "x64",
+          "arm64"
+        ]
+      }
+    ],
   },
   "dmg": {
     "iconSize": 128,
@@ -59,7 +68,7 @@
       "width": 500,
       "height": 300
     },
-    "background": "./build/background.png"
+    "background": "./build/background.png",
   },
   "protocols": [
     {

@@ -66,6 +66,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Paginated 'All Playlists' page ([#7268](https://github.com/lbryio/lbry-desktop/pull/7268))
 - Expanded playlist ordering tools ([#7305](https://github.com/lbryio/lbry-desktop/pull/7305))
 - Setting to upgrade to alpha prerelease builds ([#7353](https://github.com/lbryio/lbry-desktop/pull/7353))
+- Support for macOS arm64
 
 ### Changed
 - Changing the supported language from Filipino to Tagalog _community pr!_ ([#6951](https://github.com/lbryio/lbry-desktop/pull/6951))
