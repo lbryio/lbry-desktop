@@ -6,7 +6,7 @@ import { history } from './store';
 import { SDK_API_PATH } from './index';
 // @if TARGET='app'
 import Native from 'native';
-import ElectronCookies from '@exponent/electron-cookies';
+import ElectronCookies from '@meetfranz/electron-cookies';
 import { generateInitialUrl } from 'util/url';
 // @endif
 import { MATOMO_ID, MATOMO_URL } from 'config';
