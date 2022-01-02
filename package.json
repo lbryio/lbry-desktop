@@ -1,6 +1,6 @@
 {
   "name": "lbry",
-  "version": "0.52.1-alpha.1",
+  "version": "0.52.1-alpha.2",
   "description": "A browser for the LBRY network, a digital marketplace controlled by its users.",
   "keywords": [
     "lbry"
@@ -82,8 +82,8 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.0.0",
     "@datapunt/matomo-tracker-js": "^0.1.4",
-    "@meetfranz/electron-cookies": "^3.0.2",
     "@hot-loader/react-dom": "^16.13",
+    "@meetfranz/electron-cookies": "^3.0.2",
     "@reach/auto-id": "^0.13.0",
     "@reach/combobox": "^0.12.1",
     "@reach/menu-button": "0.7.4",
