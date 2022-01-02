@@ -81,7 +81,7 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.0.0",
     "@datapunt/matomo-tracker-js": "^0.1.4",
-    "@exponent/electron-cookies": "^2.0.0",
+    "@meetfranz/electron-cookies": "^2.0.0",
     "@hot-loader/react-dom": "^16.13",
     "@reach/auto-id": "^0.13.0",
     "@reach/combobox": "^0.12.1",
