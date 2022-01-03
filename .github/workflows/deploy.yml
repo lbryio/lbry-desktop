@@ -49,7 +49,6 @@ jobs:
           yarn global add cross-env
           yarn
           yarn build
-          node ./build/afterSignHook.js
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           NOTARIZATION_USERNAME: ${{ secrets.NOTARIZATION_USERNAME }}
