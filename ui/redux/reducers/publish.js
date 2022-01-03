@@ -2,7 +2,13 @@
 import { handleActions } from 'util/redux-utils';
 import { buildURI } from 'util/lbryURI';
 import { serializeFileObj } from 'util/file';
-import { tusLockAndNotify, tusUnlockAndNotify, tusRemoveAndNotify, tusClearRemovedUploads } from 'util/tus';
+import {
+  tusLockAndNotify,
+  tusUnlockAndNotify,
+  tusRemoveAndNotify,
+  tusClearRemovedUploads,
+  tusClearLockedUploads,
+} from 'util/tus';
 import * as ACTIONS from 'constants/action_types';
 import * as THUMBNAIL_STATUSES from 'constants/thumbnail_upload_statuses';
 import { CHANNEL_ANONYMOUS } from 'constants/claim';
@@ -167,6 +173,14 @@ export const publishReducer = handleActions(
 
       if (guid === 'force--update') {
         return { ...state, currentUploads };
+      } else if (guid === 'refresh--lock') {
+        // Re-lock all uploads that are in progress under our tab.
+        const uploadKeys = Object.keys(currentUploads);
+        uploadKeys.forEach((k) => {
+          if (currentUploads[k].uploader) {
+            tusLockAndNotify(k);
+          }
+        });
       }
 
       if (!currentUploads[key]) {
@@ -232,6 +246,8 @@ export const publishReducer = handleActions(
           } else {
             tusClearRemovedUploads();
           }
+
+          tusClearLockedUploads();
         }
 
         return newPublish;

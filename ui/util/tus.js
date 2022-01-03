@@ -9,7 +9,7 @@
  */
 
 import { v4 as uuid } from 'uuid';
-import { TUS_LOCKED_UPLOADS, TUS_REMOVED_UPLOADS } from 'constants/storage';
+import { TUS_LOCKED_UPLOADS, TUS_REFRESH_LOCK, TUS_REMOVED_UPLOADS } from 'constants/storage';
 import { isLocalStorageAvailable } from 'util/storage';
 import { doUpdateUploadRemove, doUpdateUploadProgress } from 'redux/actions/publish';
 
@@ -105,6 +105,12 @@ export function tusClearRemovedUploads() {
   window.localStorage.removeItem(TUS_REMOVED_UPLOADS);
 }
 
+export function tusClearLockedUploads() {
+  if (!localStorageAvailable) return;
+  window.localStorage.removeItem(TUS_LOCKED_UPLOADS);
+  window.localStorage.setItem(TUS_REFRESH_LOCK, Math.random());
+}
+
 // ****************************************************************************
 // Respond to changes from other tabs.
 // ****************************************************************************
@@ -115,6 +121,10 @@ export function tusHandleTabUpdates(storageKey: string) {
       // The locked IDs are in localStorage, but related GUI is unaware.
       // Send a redux update to force an update.
       window.store.dispatch(doUpdateUploadProgress({ guid: 'force--update' }));
+      break;
+
+    case TUS_REFRESH_LOCK:
+      window.store.dispatch(doUpdateUploadProgress({ guid: 'refresh--lock' }));
       break;
 
     case TUS_REMOVED_UPLOADS:
