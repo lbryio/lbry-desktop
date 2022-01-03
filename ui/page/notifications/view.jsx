@@ -43,14 +43,18 @@ export default function NotificationsPage(props: Props) {
     activeChannel,
     doCommentReactList,
   } = props;
-  const initialFetchDone = useFetched(fetching);
   const [name, setName] = usePersistedState('notifications--rule', NOTIFICATIONS.NOTIFICATION_NAME_ALL);
   const isFiltered = name !== NOTIFICATIONS.NOTIFICATION_NAME_ALL;
   const list = isFiltered ? notificationsFiltered : notifications;
 
+  const fetchedOnce = useFetched(fetching);
+  const categoriesReady = notificationCategories;
+  const notificationsReady = !isFiltered || fetchedOnce;
+  const ready = categoriesReady && notificationsReady;
+
   // Fetch reacts
   React.useEffect(() => {
-    if ((!fetching || initialFetchDone) && activeChannel) {
+    if (ready && !fetching && activeChannel) {
       let idsForReactionFetch = [];
       list.map((notification) => {
         const { notification_rule, notification_parameters } = notification;
@@ -73,8 +77,9 @@ export default function NotificationsPage(props: Props) {
         doCommentReactList(idsForReactionFetch);
       }
     }
-  }, [doCommentReactList, list, activeChannel, fetching, initialFetchDone]);
+  }, [ready, doCommentReactList, list, activeChannel, fetching]);
 
+  // Mark all as seen
   React.useEffect(() => {
     if (unseenCount > 0) {
       doSeeAllNotifications();
@@ -82,59 +87,70 @@ export default function NotificationsPage(props: Props) {
   }, [unseenCount, doSeeAllNotifications]);
 
   const stringifiedNotificationCategories = notificationCategories ? JSON.stringify(notificationCategories) : '';
+
+  // Fetch filtered notifications
   React.useEffect(() => {
     if (stringifiedNotificationCategories) {
       const arrayNotificationCategories = JSON.parse(stringifiedNotificationCategories);
 
       if (name !== NOTIFICATIONS.NOTIFICATION_NAME_ALL) {
-        // Fetch filtered list when:
-        // (1) 'name' changed
-        // (2) new "all" notifications received (e.g. from websocket).
         try {
           const matchingCategory = arrayNotificationCategories.find((category) => category.name === name);
           if (matchingCategory) {
             doNotificationList(matchingCategory.types);
           }
         } catch (e) {
-          console.error(e);
+          console.error(e); // eslint-disable-line no-console
         }
       }
     }
-  }, [name, notifications, stringifiedNotificationCategories]);
+  }, [name, notifications, stringifiedNotificationCategories, doNotificationList]);
 
   React.useEffect(() => {
     if (!notificationCategories) {
       doNotificationCategories();
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const notificationListElement = (
-    <>
+  return (
+    <Page className="notification-page">
       <BrowserNotificationBanner />
 
-      <div className="claim-list__header">
-        <h1 className="card__title">{__('Notifications')}</h1>
-        <div className="claim-list__alt-controls--wrap">
-          {fetching && <Spinner type="small" />}
+      {ready && (
+        <div className="claim-list__header">
+          <h1 className="card__title">{__('Notifications')}</h1>
+          <div className="claim-list__alt-controls--wrap">
+            {fetching && <Spinner type="small" delayed />}
 
-          {unreadCount > 0 && (
-            <Button icon={ICONS.EYE} onClick={doReadNotifications} button="secondary" label={__('Mark all as read')} />
-          )}
-          {notificationCategories && (
-            <FormField type="select" name="filter" value={name} onChange={(e) => setName(e.target.value)}>
-              {notificationCategories.map((category) => {
-                return (
-                  <option key={category.name} value={category.name}>
-                    {__(category.name)}
-                  </option>
-                );
-              })}
-            </FormField>
-          )}
+            {unreadCount > 0 && (
+              <Button
+                icon={ICONS.EYE}
+                onClick={doReadNotifications}
+                button="secondary"
+                label={__('Mark all as read')}
+              />
+            )}
+
+            {notificationCategories && (
+              <FormField type="select" name="filter" value={name} onChange={(e) => setName(e.target.value)}>
+                {notificationCategories.map((category) => {
+                  return (
+                    <option key={category.name} value={category.name}>
+                      {__(category.name)}
+                    </option>
+                  );
+                })}
+              </FormField>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
-      {list && list.length > 0 && !(isFiltered && fetching) ? (
+      {!ready ? (
+        <div className="main--empty">
+          <Spinner />
+        </div>
+      ) : list && list.length > 0 && !(isFiltered && fetching) ? (
         <div className="card">
           <div className="notification_list">
             {list.map((notification) => {
@@ -160,20 +176,6 @@ export default function NotificationsPage(props: Props) {
             />
           )}
         </div>
-      )}
-    </>
-  );
-
-  return (
-    <Page className="notification-page">
-      {initialFetchDone ? (
-        notificationListElement
-      ) : fetching ? (
-        <div className="main--empty">
-          <Spinner delayed />
-        </div>
-      ) : (
-        notificationListElement
       )}
     </Page>
   );
