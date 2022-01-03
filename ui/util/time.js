@@ -47,7 +47,7 @@ export function getTimeAgoStr(date: any, showFutureDate?: boolean) {
     duration = Math.floor(moment().diff(date, s));
     suffix = s;
 
-    return duration > 0;
+    return duration > 0 || (showFutureDate && duration * -1 > 0);
   });
 
   // negative duration === it's a future date from now

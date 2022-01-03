@@ -13,8 +13,9 @@ type Props = {
   clock24h?: boolean,
   date?: any,
   minUpdateDeltaMs?: number,
-  type?: string,
+  showFutureDate?: boolean,
   timeAgo?: boolean,
+  type?: string,
 };
 
 class DateTime extends React.Component<Props, State> {
@@ -58,7 +59,7 @@ class DateTime extends React.Component<Props, State> {
   }
 
   render() {
-    const { clock24h, date, type, timeAgo } = this.props;
+    const { clock24h, date, showFutureDate, timeAgo, type } = this.props;
 
     const clockFormat = clock24h ? 'HH:mm' : 'hh:mm A';
 
@@ -69,7 +70,7 @@ class DateTime extends React.Component<Props, State> {
       >
         {date
           ? timeAgo
-            ? getTimeAgoStr(date)
+            ? getTimeAgoStr(date, showFutureDate)
             : moment(date).format(type === 'date' ? 'MMMM Do, YYYY' : clockFormat)
           : '...'}
       </span>

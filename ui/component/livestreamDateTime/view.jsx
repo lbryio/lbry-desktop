@@ -29,7 +29,7 @@ const LivestreamDateTime = (props: Props) => {
   }
   return (
     <span>
-      {__('Live')} <DateTime timeAgo uri={uri} />
+      {__('Live')} <DateTime timeAgo uri={uri} showFutureDate />
     </span>
   );
 };
