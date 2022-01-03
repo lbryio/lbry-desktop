@@ -1,8 +1,8 @@
-import DateTime from 'component/dateTime';
+import { getTimeAgoStr } from 'util/time';
 
 export function formatClaimPreviewTitle(title, channelTitle, date, mediaDuration) {
   // Aria-label value for claim preview
-  let ariaDate = date ? DateTime.getTimeAgoStr(date) : null;
+  let ariaDate = date ? getTimeAgoStr(date, true) : null;
   let ariaLabelData = title;
 
   if (mediaDuration) {

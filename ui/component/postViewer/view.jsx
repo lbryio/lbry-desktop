@@ -54,7 +54,7 @@ function PostViewer(props: Props) {
     <div className="post">
       <FileTitle uri={uri} className="post__title">
         <span className="post__date">
-          <DateTime uri={uri} show={DateTime.SHOW_DATE} />
+          <DateTime uri={uri} type="date" />
         </span>
       </FileTitle>
 

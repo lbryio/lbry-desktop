@@ -123,9 +123,9 @@ class TransactionListTableItem extends React.PureComponent<Props, State> {
         <td className="table__date">
           {timestamp ? (
             <div>
-              <DateTime date={date} show={DateTime.SHOW_DATE} formatOptions={dateFormat} />
+              <DateTime date={date} type="date" formatOptions={dateFormat} />
               <div className="table__item-label">
-                <DateTime date={date} show={DateTime.SHOW_TIME} />
+                <DateTime date={date} type="time" />
               </div>
             </div>
           ) : (
