@@ -94,7 +94,7 @@ jobs:
 
       - uses: actions/upload-artifact@v2
         if: |
-          github.event.pull_request.head.repo.full_name == github.repository
+          startsWith(runner.os, 'windows')
         with:
           name: Windows
           path: ./dist/electron/*.*
