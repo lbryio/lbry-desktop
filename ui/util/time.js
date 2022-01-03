@@ -51,13 +51,13 @@ export function getTimeAgoStr(date: any, showFutureDate?: boolean, genericSecond
     return duration > 0 || (showFutureDate && duration * -1 > 0);
   });
 
-  // negative duration === it's a future date from now
-  if (duration < 0 && showFutureDate) return __(moment(date).from(moment()));
-
   // Strip off the ending 's' for the singular suffix
   if (duration === 1) suffix = suffix.replace(/s$/g, '');
 
-  if (duration <= 0) {
+  // negative duration === it's a future date from now
+  if (duration < 0 && showFutureDate) {
+    str = suffix === 'seconds' ? 'in a few seconds' : 'in %duration% ' + suffix;
+  } else if (duration <= 0) {
     str = 'Just now';
   } else {
     str = suffix === 'seconds' && genericSecondsString ? 'A few seconds ago' : '%duration% ' + suffix + ' ago';
