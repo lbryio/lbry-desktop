@@ -3,6 +3,7 @@ import React from 'react';
 import DateTime from 'component/dateTime';
 import { LIVESTREAM_STARTED_RECENTLY_BUFFER } from 'constants/livestream';
 import moment from 'moment';
+import I18nMessage from 'component/i18nMessage';
 
 type Props = {
   uri: string,
@@ -16,7 +17,9 @@ const LivestreamDateTime = (props: Props) => {
   if (activeLivestream) {
     return (
       <span>
-        {__('Started')} <DateTime timeAgo date={activeLivestream.startedStreaming.toDate()} />
+        <I18nMessage tokens={{ time_date: <DateTime timeAgo date={activeLivestream.startedStreaming.toDate()} /> }}>
+          {__('Started %time_date%')}
+        </I18nMessage>
       </span>
     );
   }
@@ -29,7 +32,9 @@ const LivestreamDateTime = (props: Props) => {
   }
   return (
     <span>
-      {__('Live')} <DateTime timeAgo uri={uri} showFutureDate />
+      <I18nMessage tokens={{ time_date: <DateTime timeAgo uri={uri} showFutureDate /> }}>
+        {__('Live %time_date%')}
+      </I18nMessage>
     </span>
   );
 };

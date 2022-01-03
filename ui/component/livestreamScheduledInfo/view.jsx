@@ -36,7 +36,7 @@ export default function LivestreamScheduledInfo(props: Props) {
         <p className={'livestream-scheduled__time'}>
           {!inPast && (
             <span>
-              <span>Live {startDateFromNow}</span>
+              <span>{__('Live %time_date%', { time_date: startDateFromNow })}</span>
               <br />
               <span className={'livestream-scheduled__date'}>{startDate}</span>
             </span>
