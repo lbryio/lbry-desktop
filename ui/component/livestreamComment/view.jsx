@@ -141,7 +141,6 @@ function LivestreamComment(props: Props) {
             authorUri={authorUri}
             commentIsMine={commentIsMine}
             isPinned={comment.is_pinned}
-            disableRemove={supportAmount > 0}
             isTopLevel
             disableEdit
             isLiveComment
