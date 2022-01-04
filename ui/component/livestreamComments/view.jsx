@@ -15,6 +15,9 @@ import Icon from 'component/common/icon';
 import OptimizedImage from 'component/optimizedImage';
 import { parseSticker } from 'util/comments';
 
+// 30 sec timestamp refresh timer
+const UPDATE_TIMESTAMP_MS = 30 * 1000;
+
 type Props = {
   uri: string,
   claim: ?StreamClaim,
@@ -60,10 +63,12 @@ export default function LivestreamComments(props: Props) {
   let superChatsFiatAmount, superChatsLBCAmount, superChatsTotalAmount, hasSuperChats;
 
   const commentsRef = React.createRef();
+
   const [viewMode, setViewMode] = React.useState(VIEW_MODES.CHAT);
   const [scrollPos, setScrollPos] = React.useState(0);
   const [showPinned, setShowPinned] = React.useState(true);
   const [resolvingSuperChat, setResolvingSuperChat] = React.useState(false);
+  const [forceUpdate, setForceUpdate] = React.useState(0);
 
   const claimId = claim && claim.claim_id;
   const commentsLength = commentsByChronologicalOrder && commentsByChronologicalOrder.length;
@@ -74,6 +79,17 @@ export default function LivestreamComments(props: Props) {
   const discussionElement = document.querySelector('.livestream__comments');
 
   const pinnedComment = pinnedComments.length > 0 ? pinnedComments[0] : null;
+  const now = new Date();
+
+  const shouldRefreshTimestamp =
+    commentsByChronologicalOrder &&
+    commentsByChronologicalOrder.some((comment) => {
+      const { timestamp } = comment;
+      const timePosted = timestamp * 1000;
+
+      // 1000 * 60 seconds * 60 minutes === less than an hour old
+      return now - timePosted < 1000 * 60 * 60;
+    });
 
   const restoreScrollPos = React.useCallback(() => {
     if (discussionElement) {
@@ -100,6 +116,18 @@ export default function LivestreamComments(props: Props) {
       }
     }
   }
+
+  // Refresh timestamp on timer
+  React.useEffect(() => {
+    if (shouldRefreshTimestamp) {
+      const timer = setTimeout(() => {
+        setForceUpdate(Date.now());
+      }, UPDATE_TIMESTAMP_MS);
+
+      return () => clearTimeout(timer);
+    }
+    // forceUpdate will re-activate the timer or else it will only refresh once
+  }, [shouldRefreshTimestamp, forceUpdate]);
 
   React.useEffect(() => {
     if (claimId) {
@@ -315,7 +343,13 @@ export default function LivestreamComments(props: Props) {
 
           {pinnedComment && showPinned && viewMode === VIEW_MODES.CHAT && (
             <div className="livestream-pinned__wrapper">
-              <LivestreamComment comment={pinnedComment} key={pinnedComment.comment_id} uri={uri} />
+              <LivestreamComment
+                comment={pinnedComment}
+                key={pinnedComment.comment_id}
+                uri={uri}
+                forceUpdate={forceUpdate}
+              />
+
               <Button
                 title={__('Dismiss pinned comment')}
                 button="inverse"
@@ -331,7 +365,7 @@ export default function LivestreamComments(props: Props) {
             <div className="livestream__comments">
               {viewMode === VIEW_MODES.CHAT &&
                 commentsToDisplay.map((comment) => (
-                  <LivestreamComment comment={comment} key={comment.comment_id} uri={uri} />
+                  <LivestreamComment comment={comment} key={comment.comment_id} uri={uri} forceUpdate={forceUpdate} />
                 ))}
 
               {viewMode === VIEW_MODES.SUPERCHAT && resolvingSuperChat && (
@@ -344,7 +378,7 @@ export default function LivestreamComments(props: Props) {
                 !resolvingSuperChat &&
                 superChatsReversed &&
                 superChatsReversed.map((comment) => (
-                  <LivestreamComment comment={comment} key={comment.comment_id} uri={uri} />
+                  <LivestreamComment comment={comment} key={comment.comment_id} uri={uri} forceUpdate={forceUpdate} />
                 ))}
             </div>
           ) : (

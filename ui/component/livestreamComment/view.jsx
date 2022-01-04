@@ -18,6 +18,7 @@ import { parseSticker } from 'util/comments';
 
 type Props = {
   comment: Comment,
+  forceUpdate?: any,
   uri: string,
   // --- redux:
   claim: StreamClaim,
@@ -26,7 +27,7 @@ type Props = {
 };
 
 function LivestreamComment(props: Props) {
-  const { comment, claim, uri, stakedLevel, myChannelIds } = props;
+  const { comment, forceUpdate, uri, claim, stakedLevel, myChannelIds } = props;
   const { channel_url: authorUri, comment: message, support_amount: supportAmount, timestamp } = comment;
 
   const [hasUserMention, setUserMention] = React.useState(false);
@@ -106,7 +107,8 @@ function LivestreamComment(props: Props) {
             </span>
           )}
 
-          <DateTime date={timePosted} timeAgo />
+          {/* Use key to force timestamp update */}
+          <DateTime date={timePosted} timeAgo key={forceUpdate} />
 
           {comment.removed ? (
             <div className="livestream-comment__text">
