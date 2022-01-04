@@ -17,12 +17,11 @@ type Props = {
 function FileViewCount(props: Props) {
   const { claimId, fetchViewCount, viewCount, livestream, activeViewers, isLive = false } = props;
 
-  // @Note: it's important this only runs once on initial render.
   React.useEffect(() => {
     if (claimId) {
       fetchViewCount(claimId);
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [claimId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const formattedViewCount = Number(viewCount).toLocaleString();
 
