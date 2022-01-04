@@ -1,4 +1,5 @@
 // @flow
+import { Menu, MenuButton, MenuList, MenuItem } from '@reach/menu-button';
 import React from 'react';
 import classnames from 'classnames';
 import Spinner from 'component/spinner';
@@ -10,6 +11,7 @@ import CreditAmount from 'component/common/credit-amount';
 import ChannelThumbnail from 'component/channelThumbnail';
 import Tooltip from 'component/common/tooltip';
 import * as ICONS from 'constants/icons';
+import Icon from 'component/common/icon';
 import OptimizedImage from 'component/optimizedImage';
 import { parseSticker } from 'util/comments';
 
@@ -25,6 +27,14 @@ type Props = {
   superChats: Array<Comment>,
   doResolveUris: (Array<string>, boolean) => void,
 };
+
+const IS_TIMESTAMP_VISIBLE = () =>
+  // $FlowFixMe
+  document.documentElement.style.getPropertyValue('--live-timestamp-opacity') === '0.5';
+
+const TOGGLE_TIMESTAMP_OPACITY = () =>
+  // $FlowFixMe
+  document.documentElement.style.setProperty('--live-timestamp-opacity', IS_TIMESTAMP_VISIBLE() ? '0' : '0.5');
 
 const VIEW_MODES = {
   CHAT: 'chat',
@@ -54,6 +64,7 @@ export default function LivestreamComments(props: Props) {
   const [scrollPos, setScrollPos] = React.useState(0);
   const [showPinned, setShowPinned] = React.useState(true);
   const [resolvingSuperChat, setResolvingSuperChat] = React.useState(false);
+
   const claimId = claim && claim.claim_id;
   const commentsLength = commentsByChronologicalOrder && commentsByChronologicalOrder.length;
 
@@ -190,7 +201,25 @@ export default function LivestreamComments(props: Props) {
   return (
     <div className="card livestream__discussion">
       <div className="card__header--between livestream-discussion__header">
-        <div className="livestream-discussion__title">{__('Live discussion')}</div>
+        <div className="livestream-discussion__title">
+          {__('Live discussion')}
+
+          <Menu>
+            <MenuButton className="menu__button">
+              <Icon size={18} icon={ICONS.MORE_VERTICAL} />
+            </MenuButton>
+
+            <MenuList className="menu__list">
+              <MenuItem className="comment__menu-option" onSelect={TOGGLE_TIMESTAMP_OPACITY}>
+                <span className="menu__link">
+                  <Icon aria-hidden icon={ICONS.TIME} />
+                  {__('Toggle Timestamps')}
+                </span>
+              </MenuItem>
+            </MenuList>
+          </Menu>
+        </div>
+
         {hasSuperChats && (
           <div className="recommended-content__toggles">
             {/* the superchats in chronological order button */}

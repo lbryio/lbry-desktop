@@ -64,6 +64,7 @@ $recent-msg-button__height: 2rem;
 .livestream-discussion__title {
   @extend .card__title-section;
   @extend .card__title-section--small;
+  display: flex;
   padding: 0;
 }
 
@@ -89,12 +90,12 @@ $recent-msg-button__height: 2rem;
 
   .date_time {
     color: var(--color-text-subtitle);
-    opacity: 0.5;
+    opacity: var(--live-timestamp-opacity);
   }
 
-  &:not(:hover) {
-    .date_time:not(:focus) {
-      display: none;
+  &:hover {
+    .date_time {
+      opacity: 0.5;
     }
   }
 
