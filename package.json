@@ -1,6 +1,6 @@
 {
   "name": "lbry",
-  "version": "0.52.1-alpha.2",
+  "version": "0.52.1-alpha.3",
   "description": "A browser for the LBRY network, a digital marketplace controlled by its users.",
   "keywords": [
     "lbry"
@@ -160,8 +160,8 @@
     "moment": "^2.22.0",
     "node-abi": "^2.5.1",
     "node-fetch": "^2.6.1",
-    "node-libs-browser": "^2.1.0",
     "node-html-parser": "^5.1.0",
+    "node-libs-browser": "^2.1.0",
     "node-loader": "^0.6.0",
     "node-wget": "^0.4.3",
     "nodemon": "^1.19.1",
