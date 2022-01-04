@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import 'scss/component/_view_count.scss';
+import { useHistory } from 'react-router';
 
 type Props = {
   uri: string,
@@ -12,6 +13,9 @@ type Props = {
 
 export default function FileViewCountInline(props: Props) {
   const { claim, viewCount, lang } = props;
+  const {
+    location: { pathname },
+  } = useHistory();
   let formattedViewCount;
 
   try {
@@ -27,7 +31,7 @@ export default function FileViewCountInline(props: Props) {
   // Limit the view-count visibility to Channel Pages for now. I believe we'll
   // eventually show it everywhere, so this band-aid would be the easiest to
   // clean up (only one place edit/remove).
-  const isChannelPage = window.location.pathname.startsWith('/@');
+  const isChannelPage = pathname.startsWith('/@');
 
   // dont show if no view count, if it's a repost or isn't a channel page
   if (!viewCount || (claim && claim.repost_url) || !isChannelPage) {

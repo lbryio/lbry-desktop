@@ -29,13 +29,11 @@ const SHARE_THIRD_PARTY = 'shareThirdParty';
 const WATCHMAN_BACKEND_ENDPOINT = 'https://watchman.na-backend.odysee.com/reports/playback';
 const SEND_DATA_TO_WATCHMAN_INTERVAL = 10; // in seconds
 
-// @if TARGET='app'
 if (isProduction) {
   ElectronCookies.enable({
     origin: 'https://lbry.tv',
   });
 }
-// @endif
 
 type Analytics = {
   error: (string) => Promise<any>,
@@ -83,11 +81,7 @@ type LogPublishParams = {
 };
 
 let internalAnalyticsEnabled: boolean = IS_WEB || false;
-// let thirdPartyAnalyticsEnabled: boolean = IS_WEB || false;
-// @if TARGET='app'
 if (window.localStorage.getItem(SHARE_INTERNAL) === 'true') internalAnalyticsEnabled = true;
-// if (window.localStorage.getItem(SHARE_THIRD_PARTY) === 'true') thirdPartyAnalyticsEnabled = true;
-// @endif
 
 /**
  * Determine the mobile device type viewing the data
@@ -96,26 +90,7 @@ if (window.localStorage.getItem(SHARE_INTERNAL) === 'true') internalAnalyticsEna
  * @returns {String}
  */
 function getDeviceType() {
-  // We may not care what the device is if it's in a web browser. Commenting out for now.
-  // if (!IS_WEB) {
-  //   return 'elt';
-  // }
-  // const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-  //
-  // if (/android/i.test(userAgent)) {
-  //   return 'adr';
-  // }
-  //
-  // // iOS detection from: http://stackoverflow.com/a/9039885/177710
-  // if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-  //   return 'ios';
-  // }
-
-  // default as web, this can be optimized
-  if (!IS_WEB) {
-    return 'dsk';
-  }
-  return 'web';
+  return 'dsk';
 }
 // variables initialized for watchman
 let amountOfBufferEvents = 0;
@@ -449,17 +424,7 @@ const MatomoInstance = new MatomoTracker({
   // linkTracking: false // optional, default value: true
 });
 
-// Manually call the first page view
-// React Router doesn't include this on `history.listen`
-// @if TARGET='web'
-analytics.pageView(window.location.pathname + window.location.search, window.location.search);
-// @endif
-
-// @if TARGET='app'
-analytics.pageView(
-  window.location.pathname.split('.html')[1] + window.location.search || generateInitialUrl(window.location.hash)
-);
-// @endif;
+analytics.pageView(generateInitialUrl(window.location.hash));
 
 // Listen for url changes and report
 // This will include search queries
