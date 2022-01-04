@@ -18,6 +18,8 @@ import { SIMPLE_SITE } from 'config';
 // import classnames from 'classnames';
 // import WalletSwap from 'component/walletSwap';
 
+const MOONPAY_DOWN = true;
+
 const MOONPAY_KEY = process.env.MOONPAY_SECRET_KEY;
 const COUNTRIES = Array.from(
   new Set(
@@ -109,6 +111,22 @@ export default function BuyPage(props: Props) {
       LBRY, Inc. partners with Moonpay to provide the option to purchase LBRY Credits. %learn_more%.
     </I18nMessage>
   );
+
+  if (MOONPAY_DOWN) {
+    return (
+      <Page
+        noSideNavigation
+        className="main--swap"
+        backout={{ backoutLabel: __('Done'), title: <LbcSymbol prefix={__('Buy')} size={28} /> }}
+      >
+        <Card
+          title={title}
+          subtitle={subtitle}
+          nag={<Nag relative type="helpful" message={__('Sorry, the service is currently unavailable.')} />}
+        />
+      </Page>
+    );
+  }
 
   return (
     <Page
