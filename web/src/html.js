@@ -18,6 +18,7 @@ const {
   generateStreamUrl,
   getParameterByName,
   getThumbnailCdnUrl,
+  escapeHtmlProperty,
 } = require('../../ui/util/web');
 const { getJsBundleId } = require('../bundle-id.js');
 const { lbryProxy: Lbry } = require('../lbry');
@@ -52,17 +53,6 @@ function truncateDescription(description, maxChars = 200) {
   let truncated = chars.slice(0, maxChars).join('');
   // Format truncated string
   return chars.length > maxChars ? truncated + '...' : truncated;
-}
-
-function escapeHtmlProperty(property) {
-  return property
-    ? String(property)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;')
-    : '';
 }
 
 function getCategoryMeta(path) {

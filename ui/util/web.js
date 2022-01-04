@@ -61,6 +61,17 @@ function getParameterByName(name, url) {
   return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
 }
 
+function escapeHtmlProperty(property) {
+  return property
+    ? String(property)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;')
+    : '';
+}
+
 // module.exports needed since the web server imports this function
 module.exports = {
   CONTINENT_COOKIE,
@@ -71,4 +82,5 @@ module.exports = {
   generateStreamUrl,
   getParameterByName,
   getThumbnailCdnUrl,
+  escapeHtmlProperty,
 };
