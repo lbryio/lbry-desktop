@@ -1,7 +1,7 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
-import { SITE_NAME, SIMPLE_SITE, ENABLE_NO_SOURCE_CLAIMS } from 'config';
+import { SITE_NAME, SIMPLE_SITE, ENABLE_NO_SOURCE_CLAIMS, SHOW_ADS } from 'config';
 import Ads, { injectAd } from 'web/component/ads';
 import React from 'react';
 import Page from 'component/page';
@@ -120,19 +120,10 @@ function HomePage(props: Props) {
     doFetchActiveLivestreams();
   }, []);
 
-  // returns true if passed element is fully visible on screen
-  function isScrolledIntoView(el) {
-    const rect = el.getBoundingClientRect();
-    const elemTop = rect.top;
-    const elemBottom = rect.bottom;
-
-    // Only completely visible elements return true:
-    const isVisible = elemTop >= 0 && elemBottom <= window.innerHeight;
-    return isVisible;
-  }
-
   React.useEffect(() => {
-    injectAd()
+    const shouldShowAds = SHOW_ADS && !authenticated;
+    // inject ad into last visible card
+    injectAd(shouldShowAds);
   }, []);
 
   return (

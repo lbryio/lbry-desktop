@@ -174,7 +174,7 @@ function ChannelContent(props: Props) {
 
       {!channelIsMine && claimsInChannel > 0 && <HiddenNsfwClaims uri={uri} />}
 
-      {/*<Ads type="homepage" />*/}
+      {/* <Ads type="homepage" /> */}
 
       {!fetching && (
         <ClaimListDiscover

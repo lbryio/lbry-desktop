@@ -170,9 +170,9 @@ function isScrolledIntoView(el) {
   return isVisible;
 }
 
-async function injectAd() {
-  // don't inject on firefox android
-  if (isFirefoxAndroid) return;
+async function injectAd(shouldShowAds: boolean) {
+  // don't inject on firefox android or for authenticated users or no ads on instance
+  if (isFirefoxAndroid || !shouldShowAds) return;
   // test if adblock is enabled
   let adBlockEnabled = false;
   const googleAdUrl = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';

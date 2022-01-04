@@ -182,22 +182,12 @@ function DiscoverPage(props: Props) {
     );
   }
 
-  // returns true if passed element is fully visible on screen
-  function isScrolledIntoView(el) {
-    const rect = el.getBoundingClientRect();
-    const elemTop = rect.top;
-    const elemBottom = rect.bottom;
-
-    // Only completely visible elements return true:
-    const isVisible = elemTop >= 0 && elemBottom <= window.innerHeight;
-    return isVisible;
-  }
-
   React.useEffect(() => {
     if (isAuthenticated || !SHOW_ADS || window.location.pathname === `/$/${PAGES.WILD_WEST}`) {
       return;
     }
 
+    // inject ad into last visible card
     injectAd();
   }, [isAuthenticated]);
 
