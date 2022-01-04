@@ -12,6 +12,7 @@ import classnames from 'classnames';
 import CommentMenuList from 'component/commentMenuList';
 import Button from 'component/button';
 import CreditAmount from 'component/common/credit-amount';
+import DateTime from 'component/dateTime';
 import OptimizedImage from 'component/optimizedImage';
 import { parseSticker } from 'util/comments';
 
@@ -26,7 +27,7 @@ type Props = {
 
 function LivestreamComment(props: Props) {
   const { comment, claim, uri, stakedLevel, myChannelIds } = props;
-  const { channel_url: authorUri, comment: message, support_amount: supportAmount } = comment;
+  const { channel_url: authorUri, comment: message, support_amount: supportAmount, timestamp } = comment;
 
   const [hasUserMention, setUserMention] = React.useState(false);
   const commentIsMine = comment.channel_id && isMyComment(comment.channel_id);
@@ -34,6 +35,7 @@ function LivestreamComment(props: Props) {
   const commentByOwnerOfContent = claim && claim.signing_channel && claim.signing_channel.permanent_url === authorUri;
   const { claimName } = parseURI(authorUri || '');
   const stickerFromMessage = parseSticker(message);
+  const timePosted = timestamp * 1000;
 
   // todo: implement comment_list --mine in SDK so redux can grab with selectCommentIsMine
   function isMyComment(channelId: string) {
@@ -107,6 +109,8 @@ function LivestreamComment(props: Props) {
               {__('Pinned')}
             </span>
           )}
+
+          <DateTime date={timePosted} timeAgo />
 
           {comment.removed ? (
             <div className="livestream-comment__text">

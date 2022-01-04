@@ -87,6 +87,17 @@ $recent-msg-button__height: 2rem;
   list-style-type: none;
   position: relative;
 
+  .date_time {
+    color: var(--color-text-subtitle);
+    opacity: 0.5;
+  }
+
+  &:not(:hover) {
+    .date_time:not(:focus) {
+      display: none;
+    }
+  }
+
   @media (min-width: $breakpoint-small) {
     &:hover {
       background-color: var(--color-card-background-highlighted);

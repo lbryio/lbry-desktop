@@ -172,7 +172,7 @@ $thumbnailWidthSmall: 1rem;
 }
 
 .comment__pin {
-  margin-left: var(--spacing-s);
+  margin: 0 var(--spacing-s);
   font-size: var(--font-xsmall);
 
   .icon {
@@ -223,10 +223,14 @@ $thumbnailWidthSmall: 1rem;
 }
 
 .comment__author {
-  max-width: 10rem;
-  text-overflow: ellipsis;
   margin-right: var(--spacing-xs);
   height: 100%;
+
+  .button__content {
+    max-width: 10rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
 .comment__author--creator {
