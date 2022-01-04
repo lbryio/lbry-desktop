@@ -153,7 +153,7 @@ export default function SettingContent(props: Props) {
             <SettingsRow title={__('Publish confirmation')} subtitle={__(HELP.PUBLISH_PREVIEW)}>
               <FormField
                 type="checkbox"
-                name="sync_toggle"
+                name="publish_confirmation"
                 label={__('')}
                 checked={enablePublishPreview}
                 onChange={() => setClientSetting(SETTINGS.ENABLE_PUBLISH_PREVIEW, !enablePublishPreview)}
