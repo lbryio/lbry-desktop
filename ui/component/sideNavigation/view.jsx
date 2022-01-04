@@ -12,15 +12,7 @@ import I18nMessage from 'component/i18nMessage';
 import ChannelThumbnail from 'component/channelThumbnail';
 import { DOMAIN, ENABLE_UI_NOTIFICATIONS } from 'config';
 import { IS_MAC } from 'component/app/view';
-
-const HOME = {
-  title: 'Home',
-  link: `/`,
-  icon: ICONS.HOME,
-  onClick: () => {
-    if (window.location.pathname === '/') window.location.reload();
-  },
-};
+import { useHistory } from 'react-router';
 
 const RECENT_FROM_FOLLOWING = {
   title: 'Following --[sidebar button]--',
@@ -71,6 +63,18 @@ function SideNavigation(props: Props) {
     followedTags,
   } = props;
 
+  const {
+    location: { pathname },
+  } = useHistory();
+
+  const HOME = {
+    title: 'Home',
+    link: `/`,
+    icon: ICONS.HOME,
+    onClick: () => {
+      if (pathname === '/') window.location.reload();
+    },
+  };
   const FULL_LINKS: Array<SideNavLink> = [
     {
       title: 'Your Tags',

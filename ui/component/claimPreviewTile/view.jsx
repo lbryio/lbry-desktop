@@ -29,7 +29,7 @@ type Props = {
   mediaDuration?: string,
   resolveUri: (string) => void,
   isResolvingUri: boolean,
-  history: { push: (string) => void },
+  history: { push: (string) => void, location: { pathname: string } },
   thumbnail: string,
   title: string,
   placeholder: boolean,
@@ -91,6 +91,7 @@ function ClaimPreviewTile(props: Props) {
     to: navigateUrl,
     onClick: (e) => e.stopPropagation(),
   };
+  const { location } = history;
 
   let isValid = false;
   if (uri) {
@@ -138,7 +139,7 @@ function ClaimPreviewTile(props: Props) {
     return null;
   }
 
-  const isChannelPage = window.location.pathname.startsWith('/@');
+  const isChannelPage = location.pathname.startsWith('/@');
 
   const shouldShowViewCount = !(!viewCount || (claim && claim.repost_url) || !isChannelPage);
 

@@ -88,7 +88,7 @@ function ClaimTilesDiscover(props: Props) {
     fetchingClaimSearchByQuery,
     hasNoSource,
     renderProperties,
-    pinUrls,
+    // pinUrls,
     prefixUris,
     showNoSourceClaims,
     doFetchViewCount,
@@ -106,17 +106,17 @@ function ClaimTilesDiscover(props: Props) {
   const shouldPerformSearch = !fetchingClaimSearch && claimSearchUris.length === 0;
 
   const uris = (prefixUris || []).concat(claimSearchUris);
-
-  if (pinUrls && uris && uris.length > 2 && window.location.pathname === '/') {
-    pinUrls.forEach((pin) => {
-      if (uris.indexOf(pin) !== -1) {
-        uris.splice(uris.indexOf(pin), 1);
-      } else {
-        uris.pop();
-      }
-    });
-    uris.splice(2, 0, ...pinUrls);
-  }
+  // Not sure what to do with pinUrls
+  // if (pinUrls && uris && uris.length > 2 && window.location.pathname === '/') {
+  //   pinUrls.forEach((pin) => {
+  //     if (uris.indexOf(pin) !== -1) {
+  //       uris.splice(uris.indexOf(pin), 1);
+  //     } else {
+  //       uris.pop();
+  //     }
+  //   });
+  //   uris.splice(2, 0, ...pinUrls);
+  // }
 
   if (uris.length > 0 && uris.length < pageSize && shouldPerformSearch) {
     // prefixUri and pinUrls might already be present while waiting for the
