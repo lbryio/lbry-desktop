@@ -204,10 +204,10 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}, referrerQuery) {
   head += `<link rel="canonical" content="${claimPath}"/>`;
   head += `<link rel="alternate" type="application/json+oembed" href="${URL}/$/oembed?url=${encodeURIComponent(
     claimPath
-  )}&format=json${referrerQuery ? `&r=${referrerQuery}` : ''}" title="${title}" />`;
+  )}&format=json${referrerQuery ? `&r=${encodeURIComponent(referrerQuery)}` : ''}" title="${title}" />`;
   head += `<link rel="alternate" type="text/xml+oembed" href="${URL}/$/oembed?url=${encodeURIComponent(
     claimPath
-  )}&format=xml${referrerQuery ? `&r=${referrerQuery}` : ''}" title="${title}" />`;
+  )}&format=xml${referrerQuery ? `&r=${encodeURIComponent(referrerQuery)}` : ''}" title="${title}" />`;
 
   if (mediaType && (mediaType.startsWith('video/') || mediaType.startsWith('audio/'))) {
     const videoUrl = generateEmbedUrl(claim.name, claim.claim_id);
@@ -369,7 +369,7 @@ async function getHtml(ctx) {
   if (!requestPath.includes('$')) {
     const claimUri = normalizeClaimUrl(requestPath.slice(1));
     const claim = await resolveClaimOrRedirect(ctx, claimUri);
-    const referrerQuery = getParameterByName('r', ctx.request.url);
+    const referrerQuery = escapeHtmlProperty(getParameterByName('r', ctx.request.url));
 
     if (claim) {
       const ogMetadata = buildClaimOgMetadata(claimUri, claim, {}, referrerQuery);
