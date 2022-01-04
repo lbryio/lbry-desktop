@@ -236,6 +236,9 @@ function HomePage(props: Props) {
 
               // delete last card to not introduce layout shifts
               lastCard.remove();
+
+              // addresses bug where ad doesn't show up until a scroll event
+              document.dispatchEvent(new CustomEvent('scroll'));
             }
           }
           checkFlag();

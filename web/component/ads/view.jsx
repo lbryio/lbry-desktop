@@ -53,6 +53,8 @@ function Ads(props: Props) {
     triggerBlacklist,
   } = props;
 
+  const shouldShowAds = SHOW_ADS && !authenticated;
+
   // load ad and tags here
   let scriptUrlToUse;
   let tagNameToUse;
@@ -71,7 +73,9 @@ function Ads(props: Props) {
 
   // add script to DOM
   useEffect(() => {
-    if (SHOW_ADS && !authenticated) {
+    if (isFirefoxAndroid) return;
+
+    if (shouldShowAds) {
       let script;
       try {
         script = document.createElement('script');
