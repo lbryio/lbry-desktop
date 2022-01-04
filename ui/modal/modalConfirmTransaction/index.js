@@ -6,7 +6,7 @@ import ModalConfirmTransaction from './view';
 import { selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
 
 const select = (state, props) => ({
-  claim: selectClaimForUri(state, props.destination)(state),
+  claim: selectClaimForUri(state, props.destination),
   activeChannelClaim: selectActiveChannelClaim(state),
   incognito: selectIncognito(state),
 });

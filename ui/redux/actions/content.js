@@ -221,7 +221,7 @@ export function doPlayUri(
 export function savePosition(uri: string, position: number) {
   return (dispatch: Dispatch, getState: () => any) => {
     const state = getState();
-    const claim = selectClaimForUri(state, uri)(state);
+    const claim = selectClaimForUri(state, uri);
     const { claim_id: claimId, txid, nout } = claim;
     const outpoint = `${txid}:${nout}`;
 
