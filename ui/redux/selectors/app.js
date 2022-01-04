@@ -127,7 +127,7 @@ export const selectActiveChannelStakedLevel = createSelector(
     }
 
     const uri = activeChannelClaim.permanent_url;
-    const stakedLevel = selectTotalStakedAmountForChannelUri(state, uri)(state);
+    const stakedLevel = selectTotalStakedAmountForChannelUri(state, uri);
 
     return stakedLevel;
   }
