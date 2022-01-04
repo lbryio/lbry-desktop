@@ -251,6 +251,7 @@ const Header = (props: Props) => {
                 aria-label={__('Home')}
                 className="header__navigation-item header__navigation-item--lbry"
                 onClick={() => {
+                  // here use state.router.location.pathname
                   if (history.location.pathname === '/') window.location.reload();
                 }}
                 // @if TARGET='app'
