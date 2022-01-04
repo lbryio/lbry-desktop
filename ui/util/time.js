@@ -36,10 +36,11 @@ export function hmsToSeconds(str: string) {
 
 // Only intended use of future dates is for claims, in case of scheduled
 // publishes or livestreams, used in util/formatAriaLabel
-export function getTimeAgoStr(date: any, showFutureDate?: boolean) {
+export function getTimeAgoStr(date: any, showFutureDate?: boolean, genericSecondsString?: boolean) {
   const suffixList = ['years', 'months', 'days', 'hours', 'minutes', 'seconds'];
   let duration = 0;
   let suffix = '';
+  let str = '';
 
   suffixList.some((s) => {
     // moment() is very liberal with it's rounding.
@@ -56,7 +57,11 @@ export function getTimeAgoStr(date: any, showFutureDate?: boolean) {
   // Strip off the ending 's' for the singular suffix
   if (duration === 1) suffix = suffix.replace(/s$/g, '');
 
-  const str = duration <= 0 ? 'Just now' : '%duration% ' + suffix + ' ago';
+  if (duration <= 0) {
+    str = 'Just now';
+  } else {
+    str = suffix === 'seconds' && genericSecondsString ? 'A few seconds ago' : '%duration% ' + suffix + ' ago';
+  }
 
   return __(str, { duration });
 }

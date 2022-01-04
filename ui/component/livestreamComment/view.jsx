@@ -108,7 +108,7 @@ function LivestreamComment(props: Props) {
           )}
 
           {/* Use key to force timestamp update */}
-          <DateTime date={timePosted} timeAgo key={forceUpdate} />
+          <DateTime date={timePosted} timeAgo key={forceUpdate} genericSeconds />
 
           {comment.removed ? (
             <div className="livestream-comment__text">
