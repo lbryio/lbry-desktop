@@ -83,9 +83,13 @@ $recent-msg-button__height: 2rem;
   align-items: center;
   padding: 0;
 
-  @media (min-width: $breakpoint-small) {
     .menu__button {
       margin-left: var(--spacing-xxs);
+    }
+
+  @media (max-width: $breakpoint-small) {
+    .menu__button {
+      margin-left: 5px;
     }
   }
 }
