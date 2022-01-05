@@ -44,7 +44,7 @@ export default function EmoteSelector(props: Props) {
               />
             ))}
             {EMOTES.map((emote) => {
-              const emoteName = emote.name.toLowerCase();
+              const emoteName = emote.name;
 
               return (
                 <Button

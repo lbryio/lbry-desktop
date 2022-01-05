@@ -131,7 +131,7 @@ export default function TextareaWithSuggestions(props: Props) {
   let emojiNames;
   const allOptions = [];
   if (isEmote) {
-    emoteNames = EMOTES.map(({ name }) => name.toLowerCase());
+    emoteNames = EMOTES.map(({ name }) => name);
     const hasMinEmojiLength = suggestionTerm && suggestionTerm.length > EMOJI_MIN_CHARACTERS;
     // Filter because our emotes are priority from default emojis, like :eggplant:
     emojiNames = hasMinEmojiLength ? EMOJIS.names.filter((name) => !emoteNames.includes(`:${name}:`)) : [];
@@ -357,7 +357,7 @@ export default function TextareaWithSuggestions(props: Props) {
   };
 
   const renderOption = (optionProps: any, label: string) => {
-    const emoteFound = isEmote && EMOTES.find(({ name }) => name.toLowerCase() === label);
+    const emoteFound = isEmote && EMOTES.find(({ name }) => name === label);
     const emoteValue = emoteFound ? { name: label, url: emoteFound.url } : undefined;
     const emojiFound = isEmote && EMOJIS.getUnicode(label);
     const emojiValue = emojiFound ? { name: label, unicode: emojiFound } : undefined;
