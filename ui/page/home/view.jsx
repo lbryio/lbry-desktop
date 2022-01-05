@@ -30,6 +30,7 @@ type Props = {
   activeLivestreams: any,
   doFetchActiveLivestreams: () => void,
   fetchingActiveLivestreams: boolean,
+  hideScheduledLivestreams: boolean,
 };
 
 function HomePage(props: Props) {
@@ -42,6 +43,7 @@ function HomePage(props: Props) {
     activeLivestreams,
     doFetchActiveLivestreams,
     fetchingActiveLivestreams,
+    hideScheduledLivestreams,
   } = props;
   const showPersonalizedChannels = (authenticated || !IS_WEB) && subscribedChannels && subscribedChannels.length > 0;
   const showPersonalizedTags = (authenticated || !IS_WEB) && followedTags && followedTags.length > 0;
@@ -150,7 +152,7 @@ function HomePage(props: Props) {
 
       {!fetchingActiveLivestreams && (
         <>
-          {authenticated && channelIds.length > 0 && (
+          {authenticated && channelIds.length > 0 && !hideScheduledLivestreams && (
             <ScheduledStreams
               channelIds={channelIds}
               tileLayout

@@ -74,6 +74,7 @@ const defaultState = {
     [SETTINGS.FLOATING_PLAYER]: true,
     [SETTINGS.AUTO_DOWNLOAD]: true,
     [SETTINGS.HIDE_REPOSTS]: false,
+    [SETTINGS.HIDE_SCHEDULED_LIVESTREAMS]: false,
 
     // OS
     [SETTINGS.AUTO_LAUNCH]: true,

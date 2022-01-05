@@ -41,6 +41,10 @@
   margin-bottom: var(--spacing-xl);
 }
 
+.ml-s {
+  margin-left: var(--spacing-s);
+}
+
 .ml-m {
   margin-left: var(--spacing-m);
 }
@@ -51,6 +55,10 @@
 
 .mb-0 {
   margin-bottom: 0;
+}
+
+.text-s {
+  font-size: var(--font-small);
 }
 
 @media (min-width: $breakpoint-small) {

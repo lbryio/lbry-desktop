@@ -12,6 +12,7 @@ const select = (state) => ({
   tileLayout: selectClientSetting(state, SETTINGS.TILE_LAYOUT),
   activeLivestreams: selectActiveLivestreams(state),
   fetchingActiveLivestreams: selectFetchingActiveLivestreams(state),
+  hideScheduledLivestreams: selectClientSetting(state, SETTINGS.HIDE_SCHEDULED_LIVESTREAMS),
 });
 
 export default connect(select, {

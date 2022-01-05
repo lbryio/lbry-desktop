@@ -9,16 +9,20 @@ import ClaimListDiscover from 'component/claimListDiscover';
 import Button from 'component/button';
 import { LIVESTREAM_UPCOMING_BUFFER } from 'constants/livestream';
 // import { SCHEDULED_LIVESTREAM_TAG } from 'constants/tags';
+import * as SETTINGS from 'constants/settings';
 
 type Props = {
   channelIds: Array<string>,
   tileLayout: boolean,
   liveUris: Array<string>,
   limitClaimsPerChannel?: number,
+  // --- perform ---
+  setClientSetting: (string, boolean | string | number, boolean) => void,
+  doShowSnackBar: (string) => void,
 };
 
 const ScheduledStreams = (props: Props) => {
-  const { channelIds, tileLayout, liveUris = [], limitClaimsPerChannel } = props;
+  const { channelIds, tileLayout, liveUris = [], limitClaimsPerChannel, setClientSetting, doShowSnackBar } = props;
   const isMediumScreen = useIsMediumScreen();
   const isLargeScreen = useIsLargeScreen();
 
@@ -38,6 +42,20 @@ const ScheduledStreams = (props: Props) => {
     setTotalUpcomingLivestreams(total);
   };
 
+  const hideScheduledStreams = () => {
+    setClientSetting(SETTINGS.HIDE_SCHEDULED_LIVESTREAMS, true, true);
+    doShowSnackBar(__('Scheduled streams hidden, you can re-enable them in settings.'));
+  };
+
+  const Header = () => {
+    return (
+      <div>
+        {__('Upcoming Livestreams')}
+        <Button button="link" label={__('Hide')} onClick={hideScheduledStreams} className={'ml-s text-s'} />
+      </div>
+    );
+  };
+
   return (
     <div className={'mb-xl'} style={{ display: showUpcomingLivestreams ? 'block' : 'none' }}>
       <ClaimListDiscover
@@ -55,7 +73,7 @@ const ScheduledStreams = (props: Props) => {
         infiniteScroll={false}
         showNoSourceClaims
         hideLayoutButton
-        header={__('Upcoming Livestreams')}
+        header={<Header />}
         maxClaimRender={upcomingMax}
         excludeUris={liveUris}
         loadedCallback={loadedCallback}

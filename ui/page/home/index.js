@@ -1,10 +1,11 @@
 import { connect } from 'react-redux';
+import * as SETTINGS from 'constants/settings';
 import { doFetchActiveLivestreams } from 'redux/actions/livestream';
 import { selectActiveLivestreams, selectFetchingActiveLivestreams } from 'redux/selectors/livestream';
 import { selectFollowedTags } from 'redux/selectors/tags';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
-import { selectShowMatureContent, selectHomepageData } from 'redux/selectors/settings';
+import { selectShowMatureContent, selectHomepageData, selectClientSetting } from 'redux/selectors/settings';
 
 import DiscoverPage from './view';
 
@@ -16,6 +17,7 @@ const select = (state) => ({
   homepageData: selectHomepageData(state),
   activeLivestreams: selectActiveLivestreams(state),
   fetchingActiveLivestreams: selectFetchingActiveLivestreams(state),
+  hideScheduledLivestreams: selectClientSetting(state, SETTINGS.HIDE_SCHEDULED_LIVESTREAMS),
 });
 
 const perform = (dispatch) => ({

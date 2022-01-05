@@ -26,6 +26,7 @@ type Props = {
   autoplayNext: boolean,
   hideReposts: ?boolean,
   showNsfw: boolean,
+  hideScheduledLivestreams: boolean,
   myChannelUrls: ?Array<string>,
   instantPurchaseEnabled: boolean,
   instantPurchaseMax: Price,
@@ -44,6 +45,7 @@ export default function SettingContent(props: Props) {
     autoplayNext,
     hideReposts,
     showNsfw,
+    hideScheduledLivestreams,
     myChannelUrls,
     instantPurchaseEnabled,
     instantPurchaseMax,
@@ -105,6 +107,15 @@ export default function SettingContent(props: Props) {
                   }
                   setClientSetting(SETTINGS.HIDE_REPOSTS, !hideReposts);
                 }}
+              />
+            </SettingsRow>
+
+            <SettingsRow title={__('Hide Scheduled Livestreams')} subtitle={__(HELP.HIDE_SCHEDULED_LIVESTREAMS)}>
+              <FormField
+                type="checkbox"
+                name="hide_scheduled_livestreams"
+                onChange={() => setClientSetting(SETTINGS.HIDE_SCHEDULED_LIVESTREAMS, !hideScheduledLivestreams)}
+                checked={hideScheduledLivestreams}
               />
             </SettingsRow>
 
@@ -223,6 +234,7 @@ const HELP = {
   AUTOPLAY_MEDIA: 'Autoplay video and audio files when navigating to a file.',
   AUTOPLAY_NEXT: 'Autoplay the next related item when a file (video or audio) finishes playing.',
   HIDE_REPOSTS: 'You will not see reposts by people you follow or receive email notifying about them.',
+  HIDE_SCHEDULED_LIVESTREAMS: 'You will not see scheduled livestreams by people you follow on the home or following page.',
   SHOW_MATURE: 'Mature content may include nudity, intense sexuality, profanity, or other adult content. By displaying mature content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  ',
   MAX_PURCHASE_PRICE: 'This will prevent you from purchasing any content over a certain cost, as a safety measure.',
   ONLY_CONFIRM_OVER_AMOUNT: '', // [feel redundant. Disable for now] "When this option is chosen, LBRY won't ask you to confirm purchases or tips below your chosen amount.",
