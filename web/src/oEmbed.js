@@ -120,7 +120,7 @@ async function getOEmbed(ctx) {
   const { claim, error } = await getClaim(urlQuery);
   if (error) return error;
 
-  const referrerQuery = getParameterByName('r', requestUrl);
+  const referrerQuery = getParameterByName('referrer', requestUrl);
   const oEmbedData = generateOEmbedData(claim, referrerQuery);
 
   const formatQuery = getParameterByName('format', requestUrl);
