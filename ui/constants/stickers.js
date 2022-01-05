@@ -3,7 +3,7 @@
 const buildCDNUrl = (path: string) => `https://static.odycdn.com/stickers/${path}`;
 
 const buildSticker = (name: string, path: string, price?: number) => ({
-  name: __(`:${name}:`),
+  name: `:${name}:`,
   url: buildCDNUrl(path),
   price: price,
 });
