@@ -223,7 +223,7 @@ export function doGetSync(passedPassword?: string, callback?: (any, ?boolean) =>
         data.changed = response.changed || syncHash !== localHash;
         data.hasSyncedWallet = true;
 
-        if (response.changed) {
+        if (!response.error && response.changed) {
           return Lbry.sync_apply({ password, data: response.data, blocking: true });
         }
       })
@@ -290,7 +290,7 @@ export function doGetSync(passedPassword?: string, callback?: (any, ?boolean) =>
             Lbry.sync_apply({ password })
               .then(({ hash: walletHash, data: syncApplyData }) => {
                 dispatch(doSetSync('', walletHash, syncApplyData));
-                handleCallback();
+                handleCallback(false, true);
               })
               .catch((syncApplyError) => {
                 handleCallback(syncApplyError);
