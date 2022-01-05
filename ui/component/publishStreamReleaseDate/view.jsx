@@ -13,14 +13,15 @@ function dateToLinuxTimestamp(date: Date) {
 }
 
 type Props = {
+  isScheduled: boolean,
   releaseTime: ?number,
   updatePublishForm: ({}) => void,
 };
 const PublishStreamReleaseDate = (props: Props) => {
-  const { releaseTime, updatePublishForm } = props;
+  const { isScheduled, releaseTime, updatePublishForm } = props;
 
   const [date, setDate] = React.useState(releaseTime ? linuxTimestampToDate(releaseTime) : 'DEFAULT');
-  const [publishLater, setPublishLater] = React.useState(Boolean(releaseTime));
+  const [publishLater, setPublishLater] = React.useState(isScheduled);
 
   const handleToggle = () => {
     const shouldPublishLater = !publishLater;
@@ -41,7 +42,7 @@ const PublishStreamReleaseDate = (props: Props) => {
   };
 
   useEffect(() => {
-    if (!releaseTime) updatePublishForm({ releaseTimeEdited: undefined, releaseAnytime: true });
+    if (!isScheduled) updatePublishForm({ releaseTimeEdited: undefined, releaseAnytime: true });
     return () => updatePublishForm({ releaseTimeEdited: undefined, releaseAnytime: false });
   }, []);
 

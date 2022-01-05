@@ -6,6 +6,7 @@ import {
   selectResolvingUris,
   selectClaimsByUri,
 } from 'redux/selectors/claims';
+import { SCHEDULED_LIVESTREAM_TAG } from 'constants/tags';
 
 const selectState = (state) => state.publish || {};
 
@@ -126,3 +127,5 @@ export const selectUploadCount = createSelector(
   selectCurrentUploads,
   (currentUploads) => currentUploads && Object.keys(currentUploads).length
 );
+
+export const selectIsScheduled = (state) => selectState(state).tags.some((t) => t.name === SCHEDULED_LIVESTREAM_TAG);
