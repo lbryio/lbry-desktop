@@ -14,9 +14,10 @@ import { doAlertWaitingForSync, doGetAndPopulatePreferences } from 'redux/action
 import { selectPrefsReady } from 'redux/selectors/sync';
 import { Lbryio } from 'lbryinc';
 import { getDefaultLanguage } from 'util/default-languages';
+import { getSubsetFromKeysArray } from 'util/sync-settings';
 
 const { DEFAULT_LANGUAGE } = require('config');
-const { SDK_SYNC_KEYS } = SHARED_PREFERENCES;
+const { SDK_SYNC_KEYS, CLIENT_SYNC_KEYS } = SHARED_PREFERENCES;
 
 export const IS_MAC = process.platform === 'darwin';
 const UPDATE_IS_NIGHT_INTERVAL = 5 * 60 * 1000;
@@ -230,10 +231,17 @@ export function doSetWalletSyncPreference(pref) {
 }
 
 export function doPushSettingsToPrefs() {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const { clientSettings } = state;
+    const sharedPreferences = Object.assign({}, state.sharedPreferences);
+    const selectedClientSettings = getSubsetFromKeysArray(clientSettings, CLIENT_SYNC_KEYS);
+    const newSharedPreferences = { ...sharedPreferences, ...selectedClientSettings };
+
     return new Promise((resolve, reject) => {
       dispatch({
         type: ACTIONS.SYNC_CLIENT_SETTINGS,
+        data: newSharedPreferences,
       });
       resolve();
     });
