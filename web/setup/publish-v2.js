@@ -84,7 +84,18 @@ export function makeResumableUploadRequest(
           reject(new Error(`${status}: concurrent upload detected. Uploading the same file from multiple tabs or windows is not allowed.`));
         } else {
           window.store.dispatch(doUpdateUploadProgress({ guid, status: 'error' }));
-          reject(new Error(err));
+          reject(
+            // $FlowFixMe - flow's contructor for Error is incorrect.
+            new Error(err, {
+              cause: {
+                url: uploader.url,
+                ...(uploader._fingerprint ? { fingerprint: uploader._fingerprint } : {}),
+                ...(uploader._retryAttempt ? { retryAttempt: uploader._retryAttempt } : {}),
+                ...(uploader._retryTimeout ? { retryTimeout: uploader._retryTimeout } : {}),
+                ...(uploader._offsetBeforeRetry ? { offsetBeforeRetry: uploader._offsetBeforeRetry } : {}),
+              },
+            })
+          );
         }
       },
       onProgress: (bytesUploaded, bytesTotal) => {

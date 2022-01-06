@@ -281,7 +281,7 @@ export const doPublishDesktop = (filePath: string, preview?: boolean) => (dispat
     actions.push({
       type: ACTIONS.PUBLISH_FAIL,
     });
-    actions.push(doError(error.message));
+    actions.push(doError({ message: error.message, cause: error.cause }));
     dispatch(batchActions(...actions));
   };
 
@@ -351,7 +351,7 @@ export const doPublishResume = (publishPayload: any) => (dispatch: Dispatch, get
     actions.push({
       type: ACTIONS.PUBLISH_FAIL,
     });
-    actions.push(doError(error.message));
+    actions.push(doError({ message: error.message, cause: error.cause }));
     dispatch(batchActions(...actions));
   };
 
