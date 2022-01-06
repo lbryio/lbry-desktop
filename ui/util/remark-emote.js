@@ -38,7 +38,7 @@ function findNextEmote(value, fromIndex, strictlyFromIndex) {
 
     const str = match[0];
 
-    if (EMOTES.some(({ name }) => str.toUpperCase() === name)) {
+    if (EMOTES.some(({ name }) => str === name)) {
       // Profit!
       return { text: str, index: match.index };
     }
@@ -99,7 +99,7 @@ export function inlineEmote() {
 const transformer = (node, index, parent) => {
   if (node.type === EMOTE_NODE_TYPE && parent && parent.type === 'paragraph') {
     const emoteStr = node.value;
-    const emote = EMOTES.find(({ name }) => emoteStr.toUpperCase() === name);
+    const emote = EMOTES.find(({ name }) => emoteStr === name);
 
     node.type = 'image';
     node.url = emote.url;
