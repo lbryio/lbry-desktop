@@ -162,12 +162,9 @@ reducers[ACTIONS.SHARED_PREFERENCE_SET] = (state, action) => {
   });
 };
 
-reducers[ACTIONS.SYNC_CLIENT_SETTINGS] = (state) => {
-  const { clientSettings } = state;
-  const sharedPreferences = Object.assign({}, state.sharedPreferences);
-  const selectedClientSettings = getSubsetFromKeysArray(clientSettings, clientSyncKeys);
-  const newSharedPreferences = { ...sharedPreferences, ...selectedClientSettings };
-  return Object.assign({}, state, { sharedPreferences: newSharedPreferences });
+reducers[ACTIONS.SYNC_CLIENT_SETTINGS] = (state, action) => {
+  const { data } = action;
+  return Object.assign({}, state, { sharedPreferences: data });
 };
 
 reducers[ACTIONS.USER_STATE_POPULATE] = (state, action) => {
