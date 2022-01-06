@@ -294,7 +294,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   useEffect(() => {
     (async function() {
       // test if perms to play video are available
-      let canAutoplayVideo = await canAutoplay.video({ timeout: 2000 });
+      let canAutoplayVideo = await canAutoplay.video({ timeout: 2000, inline: true });
 
       canAutoplayVideo = canAutoplayVideo.result === true;
 
