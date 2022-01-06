@@ -100,6 +100,8 @@ type Props = {
   maxClaimRender?: number,
   useSkeletonScreen?: boolean,
   excludeUris?: Array<string>,
+
+  swipeLayout: boolean,
 };
 
 function ClaimListDiscover(props: Props) {
@@ -169,6 +171,7 @@ function ClaimListDiscover(props: Props) {
     maxClaimRender,
     useSkeletonScreen = true,
     excludeUris = [],
+    swipeLayout = false,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
   const { search } = location;
@@ -634,6 +637,7 @@ function ClaimListDiscover(props: Props) {
             maxClaimRender={maxClaimRender}
             excludeUris={excludeUris}
             loadedCallback={loadedCallback}
+            swipeLayout={swipeLayout}
           />
           {loading && useSkeletonScreen && (
             <div className="claim-grid">
@@ -670,6 +674,7 @@ function ClaimListDiscover(props: Props) {
             maxClaimRender={maxClaimRender}
             excludeUris={excludeUris}
             loadedCallback={loadedCallback}
+            swipeLayout={swipeLayout}
           />
           {loading &&
             useSkeletonScreen &&

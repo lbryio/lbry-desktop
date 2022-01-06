@@ -86,6 +86,7 @@ type Props = {
   date?: any,
   indexInContainer?: number, // The index order of this component within 'containerId'.
   channelSubCount?: number,
+  swipeLayout: boolean,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -146,6 +147,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     disableNavigation,
     indexInContainer,
     channelSubCount,
+    swipeLayout = false,
   } = props;
 
   const isCollection = claim && claim.value_type === 'collection';
@@ -341,6 +343,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
             'claim-preview--channel': isChannelUri,
             'claim-preview--visited': !isChannelUri && !claimIsMine && hasVisitedUri,
             'claim-preview--pending': pending,
+            'swipe-list__item': swipeLayout,
           })}
         >
           {isChannelUri && claim ? (

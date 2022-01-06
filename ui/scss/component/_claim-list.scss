@@ -552,6 +552,12 @@
   }
 }
 
+.claim-preview--horizontal-tile {
+  &:not(:first-child) {
+    margin-top: 0;
+  }
+}
+
 .claim-tile__title {
   position: relative;
   padding: var(--spacing-s);
@@ -562,7 +568,7 @@
   font-weight: 600;
   color: var(--color-text);
   font-size: var(--font-small);
-  min-height: 2rem;
+  min-height: 3.2rem;
 
   @media (min-width: $breakpoint-small) {
     min-height: 2.5rem;
