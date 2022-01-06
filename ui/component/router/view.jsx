@@ -8,6 +8,7 @@ import { LINKED_COMMENT_QUERY_PARAM } from 'constants/comment';
 import { parseURI, isURIValid } from 'util/lbryURI';
 import { WELCOME_VERSION } from 'config';
 import { GetLinksData } from 'util/buildHomepage';
+import { useIsLargeScreen } from 'effects/use-screensize';
 
 import HomePage from 'page/home';
 import BackupPage from 'page/backup';
@@ -125,8 +126,8 @@ function AppRouter(props: Props) {
   const urlParams = new URLSearchParams(search);
   const resetScroll = urlParams.get('reset_scroll');
   const hasLinkedCommentInUrl = urlParams.get(LINKED_COMMENT_QUERY_PARAM);
-
-  const dynamicRoutes = GetLinksData(homepageData).filter(
+  const isLargeScreen = useIsLargeScreen();
+  const dynamicRoutes = GetLinksData(homepageData, isLargeScreen).filter(
     (potentialRoute: any) => potentialRoute && potentialRoute.route
   );
 

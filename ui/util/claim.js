@@ -1,5 +1,6 @@
 // @flow
 import { MATURE_TAGS } from 'constants/tags';
+import { parseURI } from 'util/lbryURI';
 
 const matureTagMap = MATURE_TAGS.reduce((acc, tag) => ({ ...acc, [tag]: true }), {});
 
@@ -64,6 +65,28 @@ export function filterClaims(claims: Array<Claim>, query: ?string): Array<Claim>
   }
 
   return claims;
+}
+
+/**
+ * Determines if the claim is a channel.
+ *
+ * @param claim
+ * @param uri An abandoned claim will be null, so provide the `uri` as a fallback to parse.
+ */
+export function isChannelClaim(claim: ?Claim, uri?: string) {
+  // 1. parseURI can't resolve a repost's channel, so a `claim` will be needed.
+  // 2. parseURI is still needed to cover the case of abandoned claims.
+  if (claim) {
+    return claim.value_type === 'channel';
+  } else if (uri) {
+    try {
+      return Boolean(parseURI(uri).isChannel);
+    } catch (err) {
+      return false;
+    }
+  } else {
+    return false;
+  }
 }
 
 export function getChannelIdFromClaim(claim: ?Claim) {

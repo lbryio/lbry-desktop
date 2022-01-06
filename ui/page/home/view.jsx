@@ -1,7 +1,7 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
-import { SITE_NAME, ENABLE_NO_SOURCE_CLAIMS } from 'config';
+import { SITE_NAME } from 'config';
 import React from 'react';
 import Page from 'component/page';
 import Button from 'component/button';
@@ -9,6 +9,7 @@ import ClaimTilesDiscover from 'component/claimTilesDiscover';
 import ClaimPreviewTile from 'component/claimPreviewTile';
 import Icon from 'component/common/icon';
 import WaitUntilOnPage from 'component/common/wait-until-on-page';
+import { useIsLargeScreen } from 'effects/use-screensize'; // have this?
 import { GetLinksData } from 'util/buildHomepage';
 
 type Props = {
@@ -24,9 +25,11 @@ function HomePage(props: Props) {
   const showPersonalizedChannels = subscribedChannels && subscribedChannels.length > 0;
   const showPersonalizedTags = followedTags && followedTags.length > 0;
   const showIndividualTags = showPersonalizedTags && followedTags.length < 5;
+  const isLargeScreen = useIsLargeScreen();
 
   const rowData: Array<RowDataItem> = GetLinksData(
     homepageData,
+    isLargeScreen,
     true,
     authenticated,
     showPersonalizedChannels,
@@ -37,29 +40,40 @@ function HomePage(props: Props) {
     showNsfw
   );
 
+  type SectionHeaderProps = {
+    title: string,
+    navigate?: string,
+    icon?: string,
+    help?: string,
+  };
+  const SectionHeader = ({ title, navigate = '/', icon = '', help }: SectionHeaderProps) => {
+    return (
+      <h1 className="claim-grid__header">
+        <Button navigate={navigate} button="link">
+          <Icon className="claim-grid__header-icon" sectionIcon icon={icon} size={20} />
+          <span className="claim-grid__title">{title}</span>
+          {help}
+        </Button>
+      </h1>
+    );
+  };
+
   function getRowElements(title, route, link, icon, help, options, index, pinUrls) {
     const tilePlaceholder = (
       <ul className="claim-grid">
         {new Array(options.pageSize || 8).fill(1).map((x, i) => (
-          <ClaimPreviewTile showNoSourceClaims={ENABLE_NO_SOURCE_CLAIMS} key={i} placeholder />
+          <ClaimPreviewTile key={i} placeholder />
         ))}
       </ul>
     );
 
-    const claimTiles = (
-      <ClaimTilesDiscover {...options} showNoSourceClaims={ENABLE_NO_SOURCE_CLAIMS} hasSource pinUrls={pinUrls} />
-    );
+    const claimTiles = <ClaimTilesDiscover {...options} hasSource pinUrls={pinUrls} />;
 
     return (
       <div key={title} className="claim-grid__wrapper">
+        {/* category header */}
         {index !== 0 && title && typeof title === 'string' && (
-          <h1 className="claim-grid__header">
-            <Button navigate={route || link} button="link">
-              {icon && <Icon className="claim-grid__header-icon" sectionIcon icon={icon} size={20} />}
-              <span className="claim-grid__title">{title}</span>
-              {help}
-            </Button>
-          </h1>
+          <SectionHeader title={__(title)} navigate={route || link} icon={icon} help={help} />
         )}
 
         {index === 0 && <>{claimTiles}</>}
@@ -69,6 +83,7 @@ function HomePage(props: Props) {
           </WaitUntilOnPage>
         )}
 
+        {/* view more button */}
         {(route || link) && (
           <Button
             className="claim-grid__title--secondary"

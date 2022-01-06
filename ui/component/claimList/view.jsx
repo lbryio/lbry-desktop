@@ -44,7 +44,10 @@ type Props = {
   collectionId?: string,
   showNoSourceClaims?: boolean,
   onClick?: (e: any, claim?: ?Claim, index?: number) => void,
-  noEmpty: boolean,
+  maxClaimRender?: number,
+  excludeUris?: Array<string>,
+  loadedCallback?: (number) => void,
+  swipeLayout: boolean,
 };
 
 export default function ClaimList(props: Props) {
@@ -75,7 +78,10 @@ export default function ClaimList(props: Props) {
     collectionId,
     showNoSourceClaims,
     onClick,
-    noEmpty,
+    maxClaimRender,
+    excludeUris = [],
+    loadedCallback,
+    swipeLayout = false,
   } = props;
 
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
@@ -85,8 +91,18 @@ export default function ClaimList(props: Props) {
   const timedOut = uris === null;
   const urisLength = (uris && uris.length) || 0;
 
-  const tileUris = (prefixUris || []).concat(uris);
-  const sortedUris = (urisLength > 0 && (currentSort === SORT_NEW ? tileUris : tileUris.slice().reverse())) || [];
+  let tileUris = (prefixUris || []).concat(uris || []);
+  tileUris = tileUris.filter((uri) => !excludeUris.includes(uri));
+
+  const totalLength = tileUris.length;
+
+  if (maxClaimRender) tileUris = tileUris.slice(0, maxClaimRender);
+
+  let sortedUris = (urisLength > 0 && (currentSort === SORT_NEW ? tileUris : tileUris.slice().reverse())) || [];
+
+  React.useEffect(() => {
+    if (typeof loadedCallback === 'function') loadedCallback(totalLength);
+  }, [totalLength]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const noResultMsg = searchInLanguage
     ? __('No results. Contents may be hidden by the Language filter.')
@@ -96,11 +112,21 @@ export default function ClaimList(props: Props) {
     setCurrentSort(currentSort === SORT_NEW ? SORT_OLD : SORT_NEW);
   }
 
-  function handleClaimClicked(e, claim, index) {
-    if (onClick) {
-      onClick(e, claim, index);
-    }
-  }
+  const handleClaimClicked = React.useCallback(
+    (e, claim, index) => {
+      if (onClick) {
+        onClick(e, claim, index);
+      }
+    },
+    [onClick]
+  );
+
+  const customShouldHide = React.useCallback((claim: StreamClaim) => {
+    // Hack to hide spee.ch thumbnail publishes
+    // If it meets these requirements, it was probably uploaded here:
+    // https://github.com/lbryio/lbry-redux/blob/master/src/redux/actions/publish.js#L74-L79
+    return claim.name.length === 24 && !claim.name.includes(' ') && claim.value.author === 'Spee.ch';
+  }, []);
 
   useEffect(() => {
     const handleScroll = debounce((e) => {
@@ -124,7 +150,7 @@ export default function ClaimList(props: Props) {
   }, [loading, onScrollBottom, urisLength, pageSize, page]);
 
   return tileLayout && !header ? (
-    <section className="claim-grid">
+    <section className={classnames('claim-grid', { 'swipe-list': swipeLayout })}>
       {urisLength > 0 &&
         tileUris.map((uri) => (
           <ClaimPreviewTile
@@ -134,11 +160,10 @@ export default function ClaimList(props: Props) {
             properties={renderProperties}
             collectionId={collectionId}
             showNoSourceClaims={showNoSourceClaims}
+            swipeLayout={swipeLayout}
           />
         ))}
-      {!timedOut && urisLength === 0 && !loading && !noEmpty && (
-        <div className="empty main--empty">{empty || noResultMsg}</div>
-      )}
+      {!timedOut && urisLength === 0 && !loading && <div className="empty main--empty">{empty || noResultMsg}</div>}
       {timedOut && timedOutMessage && <div className="empty main--empty">{timedOutMessage}</div>}
     </section>
   ) : (
@@ -178,8 +203,9 @@ export default function ClaimList(props: Props) {
       {urisLength > 0 && (
         <ul
           className={classnames('ul--no-style', {
-            card: !(tileLayout || type === 'small'),
+            card: !(tileLayout || swipeLayout || type === 'small'),
             'claim-list--card-body': tileLayout,
+            'swipe-list': swipeLayout,
           })}
         >
           {sortedUris.map((uri, index) => (
@@ -199,22 +225,16 @@ export default function ClaimList(props: Props) {
                 showHiddenByUser={showHiddenByUser}
                 collectionId={collectionId}
                 showNoSourceClaims={showNoSourceClaims}
-                customShouldHide={(claim: StreamClaim) => {
-                  // Hack to hide spee.ch thumbnail publishes
-                  // If it meets these requirements, it was probably uploaded here:
-                  // https://github.com/lbryio/lbry-redux/blob/master/src/redux/actions/publish.js#L74-L79
-                  return claim.name.length === 24 && !claim.name.includes(' ') && claim.value.author === 'Spee.ch';
-                }}
-                onClick={(e, claim, index) => handleClaimClicked(e, claim, index)}
+                customShouldHide={customShouldHide}
+                onClick={handleClaimClicked}
+                swipeLayout={swipeLayout}
               />
             </React.Fragment>
           ))}
         </ul>
       )}
 
-      {!timedOut && urisLength === 0 && !loading && !noEmpty && (
-        <div className="empty empty--centered">{empty || noResultMsg}</div>
-      )}
+      {!timedOut && urisLength === 0 && !loading && <div className="empty empty--centered">{empty || noResultMsg}</div>}
       {!loading && timedOut && timedOutMessage && <div className="empty empty--centered">{timedOutMessage}</div>}
     </section>
   );

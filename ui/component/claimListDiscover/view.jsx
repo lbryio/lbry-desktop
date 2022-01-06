@@ -94,6 +94,13 @@ type Props = {
   doClaimSearch: ({}) => void,
   doToggleTagFollowDesktop: (string) => void,
   doFetchViewCount: (claimIdCsv: string) => void,
+
+  loadedCallback?: (number) => void,
+  maxClaimRender?: number,
+  useSkeletonScreen?: boolean,
+  excludeUris?: Array<string>,
+
+  swipeLayout: boolean,
 };
 
 function ClaimListDiscover(props: Props) {
@@ -157,6 +164,11 @@ function ClaimListDiscover(props: Props) {
     empty,
     claimsByUri,
     doFetchViewCount,
+    loadedCallback,
+    maxClaimRender,
+    useSkeletonScreen = true,
+    excludeUris = [],
+    swipeLayout = false,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
   const { search } = location;
@@ -493,6 +505,21 @@ function ClaimListDiscover(props: Props) {
   }
 
   function resolveOrderByOption(orderBy: string | Array<string>, sortBy: string | Array<string>) {
+    // let order_by; // peterson 038692cafc793616cceaf10b88909fecde07ad0b
+    //
+    // switch (orderBy) {
+    //   case CS.ORDER_BY_TRENDING:
+    //     order_by = CS.ORDER_BY_TRENDING_VALUE;
+    //     break;
+    //   case CS.ORDER_BY_NEW:
+    //     order_by = CS.ORDER_BY_NEW_VALUE;
+    //     break;
+    //   case CS.ORDER_BY_NEW_ASC:
+    //     order_by = CS.ORDER_BY_NEW_ASC_VALUE;
+    //     break;
+    //   default:
+    //     order_by = CS.ORDER_BY_TOP_VALUE;
+    // }
     const order_by =
       orderBy === CS.ORDER_BY_TRENDING
         ? CS.ORDER_BY_TRENDING_VALUE
@@ -569,8 +596,12 @@ function ClaimListDiscover(props: Props) {
             searchOptions={options}
             showNoSourceClaims={showNoSourceClaims}
             empty={empty}
+            maxClaimRender={maxClaimRender}
+            excludeUris={excludeUris}
+            loadedCallback={loadedCallback}
+            swipeLayout={swipeLayout}
           />
-          {loading && (
+          {loading && useSkeletonScreen && (
             <div className="claim-grid">
               {new Array(dynamicPageSize).fill(1).map((x, i) => (
                 <ClaimPreviewTile key={i} placeholder="loading" />
@@ -602,8 +633,13 @@ function ClaimListDiscover(props: Props) {
             searchOptions={options}
             showNoSourceClaims={hasNoSource || showNoSourceClaims}
             empty={empty}
+            maxClaimRender={maxClaimRender}
+            excludeUris={excludeUris}
+            loadedCallback={loadedCallback}
+            swipeLayout={swipeLayout}
           />
           {loading &&
+            useSkeletonScreen &&
             new Array(dynamicPageSize)
               .fill(1)
               .map((x, i) => (

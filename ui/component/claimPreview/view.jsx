@@ -6,6 +6,7 @@ import { isEmpty } from 'util/object';
 import classnames from 'classnames';
 import { isURIValid } from 'util/lbryURI';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
+import { isChannelClaim } from 'util/claim';
 import { formatLbryUrlForWeb } from 'util/url';
 import { formatClaimPreviewTitle } from 'util/formatAriaLabel';
 import FileThumbnail from 'component/fileThumbnail';
@@ -49,7 +50,7 @@ type Props = {
   type: string,
   banState: { blacklisted?: boolean, filtered?: boolean, muted?: boolean, blocked?: boolean },
   hasVisitedUri: boolean,
-  channelIsBlocked: boolean,
+  blockedUris: Array<string>,
   actions: boolean | Node | string | number,
   properties: boolean | Node | string | number | ((Claim) => Node),
   empty?: Node,
@@ -77,6 +78,7 @@ type Props = {
   date?: any,
   indexInContainer?: number, // The index order of this component within 'containerId'.
   channelSubCount?: number,
+  swipeLayout: boolean,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -97,7 +99,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     streamingUrl,
     mediaDuration,
     // user properties
-    channelIsBlocked,
     hasVisitedUri,
     // component
     history,
@@ -136,10 +137,11 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     disableNavigation,
     indexInContainer,
     channelSubCount,
+    swipeLayout = false,
   } = props;
   const isCollection = claim && claim.value_type === 'collection';
   const collectionClaimId = isCollection && claim && claim.claim_id;
-  const listId = collectionId || collectionClaimId || null;
+  const listId = collectionId || collectionClaimId;
   const WrapperElement = wrapperElement || 'li';
   const shouldFetch =
     claim === undefined || (claim !== null && claim.value_type === 'channel' && isEmpty(claim.meta) && !pending);
@@ -170,7 +172,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     claim.value.stream_type &&
     // $FlowFixMe
     (claim.value.stream_type === 'audio' || claim.value.stream_type === 'video');
-  const isChannelUri = claim ? claim.value_type === 'channel' : false;
+  const isChannelUri = isChannelClaim(claim, uri);
   const signingChannel = claim && claim.signing_channel;
   const repostedChannelUri =
     claim && claim.repost_channel_url && claim.value_type === 'channel'
@@ -321,6 +323,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
             'claim-preview--visited': !isChannelUri && !claimIsMine && hasVisitedUri,
             'claim-preview--pending': pending,
             'claim-preview--collection-mine': isMyCollection && listId && type === 'listview',
+            'swipe-list__item': swipeLayout,
           })}
         >
           {isMyCollection && listId && type === 'listview' && (
@@ -391,8 +394,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                             <ChannelThumbnail uri={signingChannel.permanent_url} xsmall />
                           </div>
                         )}
-
-                        {isChannelUri && !channelIsBlocked && !claimIsMine && (
+                        {isChannelUri && !banState.muted && !claimIsMine && (
                           <SubscribeButton
                             uri={repostedChannelUri || (uri.startsWith('lbry://') ? uri : `lbry://${uri}`)}
                           />
