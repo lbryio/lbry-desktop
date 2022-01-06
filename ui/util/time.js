@@ -52,7 +52,7 @@ export function getTimeAgoStr(date: any, showFutureDate?: boolean, genericSecond
   });
 
   // Strip off the ending 's' for the singular suffix
-  if (duration === 1) suffix = suffix.replace(/s$/g, '');
+  if (duration === 1 || (duration === -1 && showFutureDate)) suffix = suffix.replace(/s$/g, '');
 
   // negative duration === it's a future date from now
   if (duration < 0 && showFutureDate) {
