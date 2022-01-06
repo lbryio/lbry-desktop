@@ -441,7 +441,13 @@ export const doUploadThumbnail = (
       body: data,
     })
       .then((res) => res.text())
-      .then((text) => (text.length ? JSON.parse(text) : {}))
+      .then((text) => {
+        try {
+          return text.length ? JSON.parse(text) : {};
+        } catch {
+          throw new Error(text);
+        }
+      })
       .then((json) => {
         if (json.type !== 'success') {
           return uploadError(
@@ -470,7 +476,7 @@ export const doUploadThumbnail = (
         }
 
         const userInput = [fileName, fileExt, fileType, thumbnail];
-        uploadError(`${message}\nUser input:  ${userInput.join(', ')}`);
+        uploadError(`${message}\nUser input:  ${userInput.join(' | ')}`);
       });
   };
 
