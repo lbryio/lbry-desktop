@@ -20,10 +20,15 @@
   border-bottom: 1px solid var(--color-border);
   padding: var(--spacing-m);
   background-color: var(--color-ads-background);
-  display: flex;
+  //display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
+
+  .ad__container {
+    width: 358px;
+    height: 201px;
+  }
 
   > div,
   ins {
@@ -51,6 +56,7 @@
 }
 
 .ads__claim-text {
+  margin-top: 5px;
   display: flex;
   flex-direction: column;
   justify-content: center;

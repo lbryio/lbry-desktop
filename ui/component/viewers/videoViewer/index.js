@@ -9,9 +9,9 @@ import * as COLLECTIONS_CONSTS from 'constants/collections';
 import {
   doChangeVolume,
   doChangeMute,
-  doAnalyticsView,
   doAnalyticsBuffer,
   doAnaltyicsPurchaseEvent,
+  doAnalyticsView,
 } from 'redux/actions/app';
 import { selectVolume, selectMute } from 'redux/selectors/app';
 import { savePosition, clearPosition, doPlayUri, doSetPlayingUri } from 'redux/actions/content';
@@ -76,9 +76,7 @@ const perform = (dispatch) => ({
   savePosition: (uri, position) => dispatch(savePosition(uri, position)),
   clearPosition: (uri) => dispatch(clearPosition(uri)),
   changeMute: (muted) => dispatch(doChangeMute(muted)),
-  doAnalyticsView: (uri, timeToStart) => dispatch(doAnalyticsView(uri, timeToStart)),
   doAnalyticsBuffer: (uri, bufferData) => dispatch(doAnalyticsBuffer(uri, bufferData)),
-  claimRewards: () => dispatch(doClaimEligiblePurchaseRewards()),
   toggleVideoTheaterMode: () => dispatch(toggleVideoTheaterMode()),
   toggleAutoplayNext: () => dispatch(toggleAutoplayNext()),
   setVideoPlaybackRate: (rate) => dispatch(doSetClientSetting(SETTINGS.VIDEO_PLAYBACK_RATE, rate)),
@@ -95,6 +93,8 @@ const perform = (dispatch) => ({
       ),
       dispatch(doSetPlayingUri({ uri, collectionId }))
     ),
+  doAnalyticsView: (uri, timeToStart) => dispatch(doAnalyticsView(uri, timeToStart)),
+  claimRewards: () => dispatch(doClaimEligiblePurchaseRewards()),
 });
 
 export default withRouter(connect(select, perform)(VideoViewer));

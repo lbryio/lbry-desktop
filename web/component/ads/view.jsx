@@ -124,7 +124,9 @@ function Ads(props: Props) {
   // ad shown in the related videos area
   const videoAd = (
     <div className="ads__claim-item">
-      <div id={tagNameToUse} className="ads__injected-video" style={{ display: 'none' }} />
+      <div className="ad__container">
+        <div id={tagNameToUse} className="ads__injected-video" style={{ display: 'none' }} />
+      </div>
       <div
         className={classnames('ads__claim-text', {
           'ads__claim-text--small': small,

@@ -2,3 +2,5 @@ node_modules/*
 ./node_modules/**
 **/node_modules/**
 web/dist/**
+
+ui/component/viewers/videoViewer/internal/plugins/canAutoplay.js

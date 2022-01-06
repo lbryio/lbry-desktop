@@ -14,7 +14,6 @@ import AutoplayCountdown from 'component/autoplayCountdown';
 import usePrevious from 'effects/use-previous';
 import FileViewerEmbeddedEnded from 'web/component/fileViewerEmbeddedEnded';
 import FileViewerEmbeddedTitle from 'component/fileViewerEmbeddedTitle';
-import LoadingScreen from 'component/common/loading-screen';
 import { addTheaterModeButton } from './internal/theater-mode';
 import { addAutoplayNextButton } from './internal/autoplay-next';
 import { addPlayNextButton } from './internal/play-next';
@@ -28,8 +27,8 @@ import type { HomepageCat } from 'util/buildHomepage';
 import debounce from 'util/debounce';
 import { formatLbryUrlForWeb, generateListSearchUrlParams } from 'util/url';
 
-const PLAY_TIMEOUT_ERROR = 'play_timeout_error';
-const PLAY_TIMEOUT_LIMIT = 2000;
+// const PLAY_TIMEOUT_ERROR = 'play_timeout_error';
+// const PLAY_TIMEOUT_LIMIT = 2000;
 
 type Props = {
   position: number,
@@ -45,9 +44,7 @@ type Props = {
   uri: string,
   autoplayNext: boolean,
   autoplayIfEmbedded: boolean,
-  doAnalyticsView: (string, number) => Promise<any>,
   doAnalyticsBuffer: (string, any) => void,
-  claimRewards: () => void,
   savePosition: (string, number) => void,
   clearPosition: (string) => void,
   toggleVideoTheaterMode: () => void,
@@ -65,6 +62,8 @@ type Props = {
   previousListUri: string,
   videoTheaterMode: boolean,
   isMarkdownOrComment: boolean,
+  doAnalyticsView: (string, number) => void,
+  claimRewards: () => void,
 };
 
 /*
@@ -87,8 +86,8 @@ function VideoViewer(props: Props) {
     volume,
     autoplayNext,
     autoplayIfEmbedded,
-    doAnalyticsView,
     doAnalyticsBuffer,
+    doAnalyticsView,
     claimRewards,
     savePosition,
     clearPosition,
@@ -133,7 +132,6 @@ function VideoViewer(props: Props) {
   const [adUrl, setAdUrl, isFetchingAd] = useGetAds(approvedVideo, adsEnabled);
   /* isLoading was designed to show loading screen on first play press, rather than completely black screen, but
   breaks because some browsers (e.g. Firefox) block autoplay but leave the player.play Promise pending */
-  const [isLoading, setIsLoading] = useState(false);
   const [replay, setReplay] = useState(false);
   const [videoNode, setVideoNode] = useState();
 
@@ -150,7 +148,6 @@ function VideoViewer(props: Props) {
     if (uri && previousUri && uri !== previousUri) {
       setShowAutoplayCountdown(false);
       setIsEndedEmbed(false);
-      setIsLoading(false);
     }
   }, [uri, previousUri]);
 
@@ -167,47 +164,6 @@ function VideoViewer(props: Props) {
     fetch(source, { method: 'HEAD', cache: 'no-store' }).then((response) => {
       data.playerPoweredBy = response.headers.get('x-powered-by');
       doAnalyticsBuffer(uri, data);
-    });
-  }
-
-  /**
-   * Analytics functionality that is run on first video start
-   * @param e - event from videojs (from the plugin?)
-   * @param data - only has secondsToLoad property
-   */
-  function doTrackingFirstPlay(e: Event, data: any) {
-    // how long until the video starts
-    let timeToStartVideo = data.secondsToLoad;
-
-    analytics.playerVideoStartedEvent(embedded);
-
-    // convert bytes to bits, and then divide by seconds
-    const contentInBits = Number(claim.value.source.size) * 8;
-    const durationInSeconds = claim.value.video && claim.value.video.duration;
-    let bitrateAsBitsPerSecond;
-    if (durationInSeconds) {
-      bitrateAsBitsPerSecond = Math.round(contentInBits / durationInSeconds);
-    }
-
-    // figure out what server the video is served from and then run start analytic event
-    fetch(source, { method: 'HEAD', cache: 'no-store' }).then((response) => {
-      // server string such as 'eu-p6'
-      let playerPoweredBy = response.headers.get('x-powered-by') || '';
-      // populates data for watchman, sends prom and matomo event
-      analytics.videoStartEvent(
-        claimId,
-        timeToStartVideo,
-        playerPoweredBy,
-        userId,
-        claim.canonical_url,
-        this,
-        bitrateAsBitsPerSecond
-      );
-    });
-
-    // hit backend to mark a view
-    doAnalyticsView(uri, timeToStartVideo).then(() => {
-      claimRewards();
     });
   }
 
@@ -292,7 +248,6 @@ function VideoViewer(props: Props) {
   // MORE ON PLAY STUFF
   function onPlay(player) {
     setEnded(false);
-    setIsLoading(false);
     setIsPlaying(true);
     setShowAutoplayCountdown(false);
     setIsEndedEmbed(false);
@@ -334,6 +289,20 @@ function VideoViewer(props: Props) {
     setEnded(true);
   };
 
+  function centerPlayButton() {
+    // center play button
+    const playBT = document.getElementsByClassName('vjs-big-play-button')[0];
+    const videoDiv = window.player.children_[0];
+    const controlBar = document.getElementsByClassName('vjs-control-bar')[0];
+    const leftWidth = (videoDiv.offsetWidth - playBT.offsetWidth) / 2 + 'px';
+    const availableHeight = videoDiv.offsetHeight - controlBar.offsetHeight;
+    const topHeight = (availableHeight - playBT.offsetHeight) / 2 + 3 + 'px';
+
+    playBT.style.top = topHeight;
+    playBT.style.left = leftWidth;
+    playBT.style.margin = '0';
+  }
+
   const onPlayerReady = useCallback((player: Player, videoNode: any) => {
     if (!embedded) {
       setVideoNode(videoNode);
@@ -351,27 +320,40 @@ function VideoViewer(props: Props) {
       }
     }
 
-    const shouldPlay = !embedded || autoplayIfEmbedded;
-    // https://blog.videojs.com/autoplay-best-practices-with-video-js/#Programmatic-Autoplay-and-Success-Failure-Detection
-    if (shouldPlay) {
-      const playPromise = player.play();
-      const timeoutPromise = new Promise((resolve, reject) =>
-        setTimeout(() => reject(PLAY_TIMEOUT_ERROR), PLAY_TIMEOUT_LIMIT)
-      );
-
-      Promise.race([playPromise, timeoutPromise]).catch((error) => {
-        if (typeof error === 'object' && error.name && error.name === 'NotAllowedError') {
-          if (player.autoplay() && !player.muted()) {
-            // player.muted(true);
-            // another version had player.play()
-          }
-        }
-        setIsLoading(false);
-        setIsPlaying(false);
-      });
-    }
-
-    setIsLoading(shouldPlay); // if we are here outside of an embed, we're playing
+    // currently not being used, but leaving for time being
+    // const shouldPlay = !embedded || autoplayIfEmbedded;
+    // // https://blog.videojs.com/autoplay-best-practices-with-video-js/#Programmatic-Autoplay-and-Success-Failure-Detection
+    // if (shouldPlay) {
+    //   const playPromise = player.play();
+    //
+    //   const timeoutPromise = new Promise((resolve, reject) =>
+    //     setTimeout(() => reject(PLAY_TIMEOUT_ERROR), PLAY_TIMEOUT_LIMIT)
+    //   );
+    //
+    //   // if user hasn't interacted with document, mute video and play it
+    //   Promise.race([playPromise, timeoutPromise]).catch((error) => {
+    //     console.log(error);
+    //     console.log(playPromise);
+    //
+    //     const noPermissionError = typeof error === 'object' && error.name && error.name === 'NotAllowedError';
+    //     const isATimeoutError = error === PLAY_TIMEOUT_ERROR;
+    //
+    //     if (noPermissionError) {
+    //       // if (player.paused()) {
+    //       //   document.querySelector('.vjs-big-play-button').style.setProperty('display', 'block', 'important');
+    //       // }
+    //
+    //       centerPlayButton();
+    //
+    //       // to turn muted autoplay on
+    //       // if (player.autoplay() && !player.muted()) {
+    //         // player.muted(true);
+    //         // player.play();
+    //       // }
+    //     }
+    //     setIsPlaying(false);
+    //   });
+    // }
 
     // PR: #5535
     // Move the restoration to a later `loadedmetadata` phase to counter the
@@ -382,8 +364,6 @@ function VideoViewer(props: Props) {
     // used for tracking buffering for watchman
     player.on('tracking:buffered', doTrackingBuffered);
 
-    // first play tracking, used for initializing the watchman api
-    player.on('tracking:firstplay', doTrackingFirstPlay);
     player.on('ended', () => setEnded(true));
     player.on('play', onPlay);
     player.on('pause', (event) => onPause(event, player));
@@ -433,8 +413,6 @@ function VideoViewer(props: Props) {
       )}
       {isEndedEmbed && <FileViewerEmbeddedEnded uri={uri} />}
       {embedded && !isEndedEmbed && <FileViewerEmbeddedTitle uri={uri} />}
-      {/* disable this loading behavior because it breaks when player.play() promise hangs */}
-      {isLoading && <LoadingScreen status={__('Loading')} />}
 
       {!isFetchingAd && adUrl && (
         <>
@@ -489,6 +467,12 @@ function VideoViewer(props: Props) {
         playNext={doPlayNext}
         playPrevious={doPlayPrevious}
         embedded={embedded}
+        claimValues={claim.value}
+        doAnalyticsView={doAnalyticsView}
+        claimRewards={claimRewards}
+        uri={uri}
+        clearPosition={clearPosition}
+        centerPlayButton={centerPlayButton}
       />
     </div>
   );
