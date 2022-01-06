@@ -469,7 +469,8 @@ export const doUploadThumbnail = (
           message = __('Thumbnail upload service may be down, try again later.');
         }
 
-        uploadError(message);
+        const userInput = [fileName, fileExt, fileType, thumbnail];
+        uploadError(`${message}\nUser input:  ${userInput.join(', ')}`);
       });
   };
 
