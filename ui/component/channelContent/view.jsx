@@ -37,7 +37,7 @@ type Props = {
   doResolveUris: (Array<string>, boolean) => void,
   claimType: string,
   empty?: string,
-  doFetchActiveLivestream: (string) => void,
+  doFetchChannelLiveStatus: (string) => void,
   activeLivestreamForChannel: any,
   activeLivestreamInitialized: boolean,
 };
@@ -59,7 +59,7 @@ function ChannelContent(props: Props) {
     doResolveUris,
     claimType,
     empty,
-    doFetchActiveLivestream,
+    doFetchChannelLiveStatus,
     activeLivestreamForChannel,
     activeLivestreamInitialized,
   } = props;
@@ -126,10 +126,10 @@ function ChannelContent(props: Props) {
 
   // Find out current channels status + active live claim.
   React.useEffect(() => {
-    doFetchActiveLivestream(claimId);
-    const intervalId = setInterval(() => doFetchActiveLivestream(claimId), 30000);
+    doFetchChannelLiveStatus(claimId);
+    const intervalId = setInterval(() => doFetchChannelLiveStatus(claimId), 30000);
     return () => clearInterval(intervalId);
-  }, [claimId, doFetchActiveLivestream]);
+  }, [claimId, doFetchChannelLiveStatus]);
 
   const showScheduledLiveStreams = claimType !== 'collection'; // ie. not on the playlist page.
 

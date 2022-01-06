@@ -4,6 +4,16 @@ import { doClaimSearch } from 'redux/actions/claims';
 import { LIVESTREAM_LIVE_API, LIVESTREAM_STARTS_SOON_BUFFER } from 'constants/livestream';
 import moment from 'moment';
 
+const LiveStatus = Object.freeze({
+  LIVE: 'LIVE',
+  NOT_LIVE: 'NOT_LIVE',
+  UNKNOWN: 'UNKNOWN',
+});
+
+type LiveStatusType = $Keys<typeof LiveStatus>;
+
+type LiveChannelStatus = { channelStatus: LiveStatusType, channelData?: LivestreamInfo };
+
 export const doFetchNoSourceClaims = (channelId: string) => async (dispatch: Dispatch, getState: GetState) => {
   dispatch({
     type: ACTIONS.FETCH_NO_SOURCE_CLAIMS_STARTED,
@@ -48,23 +58,22 @@ const transformLivestreamData = (data: Array<any>): LivestreamInfo => {
   }, {});
 };
 
-const fetchLiveChannels = async () => {
+const fetchLiveChannels = async (): Promise<LivestreamInfo> => {
   const response = await fetch(LIVESTREAM_LIVE_API);
   const json = await response.json();
   if (!json.data) throw new Error();
   return transformLivestreamData(json.data);
 };
 
-const fetchLiveChannel = async (channelId: string) => {
-  const response = await fetch(`${LIVESTREAM_LIVE_API}/${channelId}`);
-  let json;
+const fetchLiveChannel = async (channelId: string): Promise<LiveChannelStatus> => {
   try {
-    json = await response.json();
+    const response = await fetch(`${LIVESTREAM_LIVE_API}/${channelId}`);
+    const json = await response.json();
+    if (json.data?.live === false) return { channelStatus: LiveStatus.NOT_LIVE };
+    return { channelStatus: LiveStatus.LIVE, channelData: transformLivestreamData([json.data]) };
   } catch {
-    throw new Error('Error handling live API response');
+    return { channelStatus: LiveStatus.UNKNOWN };
   }
-  if (!(json.data && json.data.live)) throw new Error();
-  return transformLivestreamData([json.data]);
 };
 
 const filterUpcomingLiveStreamClaims = (upcomingClaims) => {
@@ -164,25 +173,29 @@ const findActiveStreams = async (channelIDs: Array<string>, orderBy: Array<strin
   return determineLiveClaim(allClaims, liveChannels);
 };
 
-export const doFetchActiveLivestream = (channelId: string) => {
+export const doFetchChannelLiveStatus = (channelId: string) => {
   return async (dispatch: Dispatch) => {
     try {
-      const liveChannel = await fetchLiveChannel(channelId);
-      const currentlyLiveClaims = await findActiveStreams([channelId], ['release_time'], liveChannel, dispatch);
+      const { channelStatus, channelData } = await fetchLiveChannel(channelId);
+
+      if (channelStatus === LiveStatus.NOT_LIVE) {
+        dispatch({ type: ACTIONS.REMOVE_CHANNEL_FROM_ACTIVE_LIVESTREAMS, data: { channelId } });
+        return;
+      }
+      if (channelStatus === LiveStatus.UNKNOWN) {
+        return;
+      }
+
+      const currentlyLiveClaims = await findActiveStreams([channelId], ['release_time'], channelData, dispatch);
       const liveClaim = currentlyLiveClaims[channelId];
 
-      liveChannel[channelId].claimId = liveClaim.stream.claim_id;
-      liveChannel[channelId].claimUri = liveClaim.stream.canonical_url;
-
-      dispatch({
-        type: ACTIONS.FETCH_ACTIVE_LIVESTREAM_COMPLETED,
-        data: {
-          ...liveChannel,
-        },
-      });
+      if (channelData && liveClaim) {
+        channelData[channelId].claimId = liveClaim.stream.claim_id;
+        channelData[channelId].claimUri = liveClaim.stream.canonical_url;
+        dispatch({ type: ACTIONS.ADD_CHANNEL_TO_ACTIVE_LIVESTREAMS, data: { ...channelData } });
+      }
     } catch (err) {
-      if (err.message === 'Error handling live API response') return;
-      dispatch({ type: ACTIONS.FETCH_ACTIVE_LIVESTREAM_FAILED, data: { channelId } });
+      dispatch({ type: ACTIONS.REMOVE_CHANNEL_FROM_ACTIVE_LIVESTREAMS, data: { channelId } });
     }
   };
 };

@@ -19,7 +19,7 @@ type Props = {
   chatDisabled: boolean,
   doCommentSocketConnect: (string, string) => void,
   doCommentSocketDisconnect: (string) => void,
-  doFetchActiveLivestream: (string) => void,
+  doFetchChannelLiveStatus: (string) => void,
   activeLivestreamForChannel: any,
   activeLivestreamInitialized: boolean,
 };
@@ -35,7 +35,7 @@ export default function LivestreamPage(props: Props) {
     chatDisabled,
     doCommentSocketConnect,
     doCommentSocketDisconnect,
-    doFetchActiveLivestream,
+    doFetchChannelLiveStatus,
     activeLivestreamForChannel,
     activeLivestreamInitialized,
   } = props;
@@ -67,10 +67,10 @@ export default function LivestreamPage(props: Props) {
 
   // Find out current channels status + active live claim.
   React.useEffect(() => {
-    doFetchActiveLivestream(livestreamChannelId);
-    const intervalId = setInterval(() => doFetchActiveLivestream(livestreamChannelId), 30000);
+    doFetchChannelLiveStatus(livestreamChannelId);
+    const intervalId = setInterval(() => doFetchChannelLiveStatus(livestreamChannelId), 30000);
     return () => clearInterval(intervalId);
-  }, [livestreamChannelId, doFetchActiveLivestream]);
+  }, [livestreamChannelId, doFetchChannelLiveStatus]);
 
   const [activeStreamUri, setActiveStreamUri] = React.useState(false);
 

@@ -58,11 +58,11 @@ export default handleActions(
         activeLivestreamsLastFetchedOptions,
       };
     },
-    [ACTIONS.FETCH_ACTIVE_LIVESTREAM_COMPLETED]: (state: LivestreamState, action: any) => {
+    [ACTIONS.ADD_CHANNEL_TO_ACTIVE_LIVESTREAMS]: (state: LivestreamState, action: any) => {
       const activeLivestreams = Object.assign({}, state.activeLivestreams || {}, action.data);
       return { ...state, activeLivestreams, activeLivestreamInitialized: true };
     },
-    [ACTIONS.FETCH_ACTIVE_LIVESTREAM_FAILED]: (state: LivestreamState, action: any) => {
+    [ACTIONS.REMOVE_CHANNEL_FROM_ACTIVE_LIVESTREAMS]: (state: LivestreamState, action: any) => {
       const activeLivestreams = state.activeLivestreams;
       if (activeLivestreams) delete activeLivestreams[action.data.channelId];
       return { ...state, activeLivestreams: Object.assign({}, activeLivestreams), activeLivestreamInitialized: true };

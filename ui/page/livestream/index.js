@@ -7,7 +7,7 @@ import { DISABLE_COMMENTS_TAG } from 'constants/tags';
 import { doCommentSocketConnect, doCommentSocketDisconnect } from 'redux/actions/websocket';
 import { getChannelIdFromClaim } from 'util/claim';
 import { selectActiveLivestreamForChannel, selectActiveLivestreamInitialized } from 'redux/selectors/livestream';
-import { doFetchActiveLivestream } from 'redux/actions/livestream';
+import { doFetchChannelLiveStatus } from 'redux/actions/livestream';
 import LivestreamPage from './view';
 
 const select = (state, props) => {
@@ -26,7 +26,7 @@ const perform = {
   doUserSetReferrer,
   doCommentSocketConnect,
   doCommentSocketDisconnect,
-  doFetchActiveLivestream,
+  doFetchChannelLiveStatus,
 };
 
 export default connect(select, perform)(LivestreamPage);
