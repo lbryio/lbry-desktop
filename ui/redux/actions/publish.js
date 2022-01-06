@@ -476,7 +476,7 @@ export const doUploadThumbnail = (
         }
 
         const userInput = [fileName, fileExt, fileType, thumbnail];
-        uploadError(`${message}\nUser input:  ${userInput.join(' | ')}`);
+        uploadError({ message, cause: `${userInput.join(' | ')}` });
       });
   };
 
