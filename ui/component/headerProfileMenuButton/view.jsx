@@ -13,12 +13,13 @@ import Skeleton from '@mui/material/Skeleton';
 
 type HeaderMenuButtonProps = {
   activeChannelClaim: ?ChannelClaim,
+  authenticated: boolean,
   email: ?string,
   signOut: () => void,
 };
 
 export default function HeaderProfileMenuButton(props: HeaderMenuButtonProps) {
-  const { activeChannelClaim, email, signOut } = props;
+  const { activeChannelClaim, authenticated, email, signOut } = props;
 
   const activeChannelUrl = activeChannelClaim && activeChannelClaim.permanent_url;
 
@@ -45,7 +46,7 @@ export default function HeaderProfileMenuButton(props: HeaderMenuButtonProps) {
         )}
 
         <MenuList className="menu__list--header">
-          {email ? (
+          {authenticated ? (
             <>
               <HeaderMenuLink page={PAGES.UPLOADS} icon={ICONS.PUBLISH} name={__('Uploads')} />
               <HeaderMenuLink page={PAGES.CHANNELS} icon={ICONS.CHANNEL} name={__('Channels')} />
