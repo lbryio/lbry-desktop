@@ -18,7 +18,7 @@ const defaultState = {
   fatalError: false,
 };
 
-reducers[ACTIONS.USER_STATE_POPULATE] = (state) => {
+reducers[ACTIONS.SYNC_STATE_POPULATE] = (state) => {
   const { syncReady } = state;
   if (!syncReady) {
     return Object.assign({}, state, {

@@ -159,7 +159,7 @@ const collectionsReducer = handleActions(
         isResolvingCollectionById: newResolving,
       });
     },
-    [ACTIONS.USER_STATE_POPULATE]: (state, action) => {
+    [ACTIONS.SYNC_STATE_POPULATE]: (state, action) => {
       const { builtinCollections, savedCollections, unpublishedCollections, editedCollections } = action.data;
       return {
         ...state,

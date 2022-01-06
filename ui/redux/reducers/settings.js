@@ -5,7 +5,6 @@ import moment from 'moment';
 import { getSubsetFromKeysArray } from 'util/sync-settings';
 import { getDefaultLanguage } from 'util/default-languages';
 import { UNSYNCED_SETTINGS } from 'config';
-import Comments from 'comments';
 
 const { CLIENT_SYNC_KEYS } = SHARED_PREFERENCES;
 const settingsToIgnore = (UNSYNCED_SETTINGS && UNSYNCED_SETTINGS.trim().split(' ')) || [];
@@ -170,18 +169,9 @@ reducers[ACTIONS.SYNC_CLIENT_SETTINGS] = (state) => {
   return Object.assign({}, state, { sharedPreferences: newSharedPreferences });
 };
 
-reducers[ACTIONS.USER_STATE_POPULATE] = (state, action) => {
-  const { clientSettings: currentClientSettings } = state;
-  const { settings: sharedPreferences } = action.data;
-  const selectedSettings = sharedPreferences ? getSubsetFromKeysArray(sharedPreferences, clientSyncKeys) : {};
-  const mergedClientSettings = { ...currentClientSettings, ...selectedSettings };
-  const newSharedPreferences = sharedPreferences || {};
-
-  Comments.setServerUrl(
-    mergedClientSettings[SETTINGS.CUSTOM_COMMENTS_SERVER_ENABLED]
-      ? mergedClientSettings[SETTINGS.CUSTOM_COMMENTS_SERVER_URL]
-      : undefined
-  );
+reducers[ACTIONS.SYNC_STATE_POPULATE] = (state, action) => {
+  const { walletPrefSettings, mergedClientSettings } = action.data;
+  const newSharedPreferences = walletPrefSettings || {};
 
   return Object.assign({}, state, {
     sharedPreferences: newSharedPreferences,

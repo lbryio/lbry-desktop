@@ -575,19 +575,13 @@ export function doGetAndPopulatePreferences() {
     const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
     const hasVerifiedEmail = state.user && state.user.user && state.user.user.has_verified_email;
     let preferenceKey;
-    // @if TARGET='app'
     preferenceKey = syncEnabled && hasVerifiedEmail ? 'shared' : 'local';
-    // @endif
-    // @if TARGET='web'
-    preferenceKey = 'shared';
-    // @endif
 
     function successCb(savedPreferences) {
       const successState = getState();
       const daemonSettings = selectDaemonSettings(successState);
       if (savedPreferences !== null) {
         dispatch(doPopulateSharedUserState(savedPreferences));
-        // @if TARGET='app'
 
         const { settings } = savedPreferences.value;
         if (settings) {
@@ -602,9 +596,9 @@ export function doGetAndPopulatePreferences() {
                 }
               }
             }
+            // probably set commentServer here instead of in doPopulateSharedUserState()
           });
         }
-        // @endif
       } else {
         dispatch(doSetPrefsReady());
       }

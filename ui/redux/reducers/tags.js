@@ -62,7 +62,7 @@ export default handleActions(
         followedTags: newFollowedTags,
       };
     },
-    [ACTIONS.USER_STATE_POPULATE]: (state: TagState, action: { data: { tags: ?Array<string> } }) => {
+    [ACTIONS.SYNC_STATE_POPULATE]: (state: TagState, action: { data: { tags: ?Array<string> } }) => {
       const { tags } = action.data;
       if (Array.isArray(tags)) {
         const next = tags && tags.filter((tag) => typeof tag === 'string');

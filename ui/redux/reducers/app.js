@@ -317,7 +317,7 @@ reducers[ACTIONS.SET_INCOGNITO] = (state, action) => {
   };
 };
 
-reducers[ACTIONS.USER_STATE_POPULATE] = (state, action) => {
+reducers[ACTIONS.SYNC_STATE_POPULATE] = (state, action) => {
   const { welcomeVersion, allowAnalytics } = action.data;
   return {
     ...state,
