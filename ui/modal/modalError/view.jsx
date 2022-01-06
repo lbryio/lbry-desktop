@@ -3,8 +3,11 @@ import { Lbryio } from 'lbryinc';
 import React from 'react';
 import { Modal } from 'modal/modal';
 
+// Note: It accepts an object for 'error', but never pass Error itself as Error
+// cannot be stringified (unless the code below is updated to handle that).
+
 type Props = {
-  error: string | { message: string },
+  error: string | { message: string, cause?: any },
   closeModal: () => void,
 };
 
@@ -15,20 +18,28 @@ class ModalError extends React.PureComponent<Props> {
     // Yuck
     // https://github.com/lbryio/lbry-sdk/issues/1118
     // The sdk logs failed downloads, they happen so often that it's mostly noise in the desktop logs
-    const errorMessage = typeof error === 'string' ? error : error.message;
+    let errorMessage = typeof error === 'string' ? error : error.message;
     const skipLog =
       errorMessage.startsWith('Failed to download') ||
       errorMessage.endsWith('Uploading the same file from multiple tabs or windows is not allowed.');
 
+    if (error.cause) {
+      try {
+        errorMessage += ' => ' + (JSON.stringify(error.cause, null, '\t') || '');
+      } catch (e) {
+        console.error(e); // eslint-disable-line no-console
+      }
+    }
+
     if (process.env.NODE_ENV === 'production' && !skipLog) {
-      Lbryio.call('event', 'desktop_error', { error_message: JSON.stringify(error) });
+      Lbryio.call('event', 'desktop_error', { error_message: errorMessage });
     }
   }
 
   render() {
     const { closeModal, error } = this.props;
 
-    const errorObj = typeof error === 'string' ? { message: error } : error;
+    const errorObj = typeof error === 'string' ? { message: error, cause: undefined } : error;
 
     const errorKeyLabels = {
       connectionString: __('API connection string'),
@@ -37,17 +48,20 @@ class ModalError extends React.PureComponent<Props> {
       code: __('Error code'),
       message: __('Error message'),
       data: __('Error data'),
+      cause: 'skip',
     };
 
     const errorInfoList = [];
     for (const key of Object.keys(errorObj)) {
-      const val = typeof errorObj[key] === 'string' ? errorObj[key] : JSON.stringify(errorObj[key]);
       const label = errorKeyLabels[key];
-      errorInfoList.push(
-        <li key={key}>
-          <strong>{label}</strong>: {val}
-        </li>
-      );
+      if (label !== 'skip') {
+        const val = typeof errorObj[key] === 'string' ? errorObj[key] : JSON.stringify(errorObj[key]);
+        errorInfoList.push(
+          <li key={key}>
+            <strong>{label}</strong>: {val}
+          </li>
+        );
+      }
     }
 
     return (
