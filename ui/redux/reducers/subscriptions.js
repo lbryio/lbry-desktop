@@ -80,7 +80,7 @@ export default handleActions(
       ...state,
       viewMode: action.data,
     }),
-    [ACTIONS.USER_STATE_POPULATE]: (
+    [ACTIONS.SYNC_STATE_POPULATE]: (
       state: SubscriptionState,
       action: { data: { subscriptions: ?Array<string>, following: ?Array<Subscription> } }
     ) => {

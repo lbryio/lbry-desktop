@@ -117,7 +117,7 @@ export default handleActions(
         coinSwaps: newCoinSwaps,
       };
     },
-    [ACTIONS.USER_STATE_POPULATE]: (state: CoinSwapState, action: { data: { coinSwapCodes: ?Array<string> } }) => {
+    [ACTIONS.SYNC_STATE_POPULATE]: (state: CoinSwapState, action: { data: { coinSwapCodes: ?Array<string> } }) => {
       const { coinSwapCodes } = action.data;
       const newCoinSwaps = [];
 
