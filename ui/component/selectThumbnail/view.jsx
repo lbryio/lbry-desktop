@@ -166,7 +166,7 @@ function SelectThumbnail(props: Props) {
                     })
                   }
                 />
-                {status === THUMBNAIL_STATUSES.READY && isSupportedVideo && IS_WEB && (
+                {status === THUMBNAIL_STATUSES.READY && isSupportedVideo && (
                   // Disabled on desktop until this is resolved
                   // https://github.com/electron/electron/issues/20750#issuecomment-709505902
                   <Button
