@@ -185,7 +185,7 @@ document.addEventListener('drop', (event) => {
 
 function AppWrapper() {
   // Splash screen and sdk setup not needed on web
-  const [readyToLaunch, setReadyToLaunch] = useState(IS_WEB);
+  const [readyToLaunch, setReadyToLaunch] = useState(false);
   const [persistDone, setPersistDone] = useState(false);
 
   useEffect(() => {

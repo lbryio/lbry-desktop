@@ -31,7 +31,6 @@ type Props = {
   renderMode: string,
   claim: StreamClaim,
   claimWasPurchased: boolean,
-  authenticated: boolean,
   videoTheaterMode: boolean,
   collectionId: string,
 };
@@ -50,7 +49,6 @@ export default function FileRenderInitiator(props: Props) {
     renderMode,
     costInfo,
     claimWasPurchased,
-    authenticated,
     videoTheaterMode,
     collectionId,
   } = props;
@@ -90,10 +88,6 @@ export default function FileRenderInitiator(props: Props) {
       }, 200);
     }
   }, [claimThumbnail, thumbnail]);
-
-  function doAuthRedirect() {
-    history.push(`/$/${PAGES.AUTH}?redirect=${encodeURIComponent(location.pathname)}`);
-  }
 
   // Wrap this in useCallback because we need to use it to the keyboard effect
   // If we don't a new instance will be created for every render and react will think the dependencies have changed, which will add/remove the listener for every render
@@ -148,14 +142,12 @@ export default function FileRenderInitiator(props: Props) {
     }
   }
 
-  const showAppNag = IS_WEB && RENDER_MODES.UNSUPPORTED_IN_THIS_APP.includes(renderMode);
-  const disabled = showAppNag || (!fileInfo && insufficientCredits && !claimWasPurchased);
-  const shouldRedirect = IS_WEB && !authenticated && !isFree;
+  const disabled = !fileInfo && insufficientCredits && !claimWasPurchased;
 
   return (
     <div
       ref={containerRef}
-      onClick={disabled ? undefined : shouldRedirect ? doAuthRedirect : viewFile}
+      onClick={disabled ? undefined : viewFile}
       style={thumbnail && !obscurePreview ? { backgroundImage: `url("${thumbnail}")` } : {}}
       className={classnames('content__cover', {
         'content__cover--disabled': disabled,
@@ -164,16 +156,7 @@ export default function FileRenderInitiator(props: Props) {
         'card__media--nsfw': obscurePreview,
       })}
     >
-      {showAppNag && (
-        <Nag
-          type="helpful"
-          inline
-          message={__('This content requires LBRY Desktop to display.')}
-          actionText={__('Get the App')}
-          href="https://lbry.com/get"
-        />
-      )}
-      {!claimWasPurchased && insufficientCredits && !showAppNag && (
+      {!claimWasPurchased && insufficientCredits && (
         <Nag
           type="helpful"
           inline
@@ -184,7 +167,6 @@ export default function FileRenderInitiator(props: Props) {
       )}
       {!disabled && (
         <Button
-          requiresAuth={shouldRedirect}
           onClick={viewFile}
           iconSize={30}
           title={isPlayable ? __('Play') : __('View')}

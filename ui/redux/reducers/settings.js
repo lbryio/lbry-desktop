@@ -1,16 +1,7 @@
 import * as ACTIONS from 'constants/action_types';
 import * as SETTINGS from 'constants/settings';
-import * as SHARED_PREFERENCES from 'constants/shared_preferences';
 import moment from 'moment';
-import { getSubsetFromKeysArray } from 'util/sync-settings';
 import { getDefaultLanguage } from 'util/default-languages';
-import { UNSYNCED_SETTINGS } from 'config';
-
-const { CLIENT_SYNC_KEYS } = SHARED_PREFERENCES;
-const settingsToIgnore = (UNSYNCED_SETTINGS && UNSYNCED_SETTINGS.trim().split(' ')) || [];
-const clientSyncKeys = settingsToIgnore.length
-  ? CLIENT_SYNC_KEYS.filter((k) => !settingsToIgnore.includes(k))
-  : CLIENT_SYNC_KEYS;
 
 const reducers = {};
 let settingLanguage = [];
@@ -34,7 +25,7 @@ const defaultState = {
     [SETTINGS.EMAIL_COLLECTION_ACKNOWLEDGED]: false,
     [SETTINGS.FOLLOWING_ACKNOWLEDGED]: false,
     [SETTINGS.TAGS_ACKNOWLEDGED]: false,
-    [SETTINGS.ENABLE_SYNC]: IS_WEB,
+    [SETTINGS.ENABLE_SYNC]: false,
     [SETTINGS.ENABLE_PUBLISH_PREVIEW]: true,
 
     // UI

@@ -25,14 +25,12 @@ export default function SettingAccount(props: Props) {
 
   // Determine if password is stored.
   React.useEffect(() => {
-    if (isAuthenticated || !IS_WEB) {
-      doWalletStatus();
-      getPasswordFromCookie().then((p) => {
-        if (typeof p === 'string') {
-          setStoredPassword(true);
-        }
-      });
-    }
+    doWalletStatus();
+    getPasswordFromCookie().then((p) => {
+      if (typeof p === 'string') {
+        setStoredPassword(true);
+      }
+    });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (

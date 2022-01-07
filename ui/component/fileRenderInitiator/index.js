@@ -5,7 +5,6 @@ import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
 import * as SETTINGS from 'constants/settings';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
 import { makeSelectCostInfoForUri } from 'lbryinc';
-import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { withRouter } from 'react-router';
 import {
@@ -33,7 +32,6 @@ const select = (state, props) => {
     renderMode: makeSelectFileRenderModeForUri(props.uri)(state),
     claim: makeSelectClaimForUri(props.uri)(state),
     claimWasPurchased: makeSelectClaimWasPurchased(props.uri)(state),
-    authenticated: selectUserVerifiedEmail(state),
     collectionId,
   };
 };

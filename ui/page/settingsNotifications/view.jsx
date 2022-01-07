@@ -1,6 +1,5 @@
 // @flow
 import * as ICONS from 'constants/icons';
-import * as PAGES from 'constants/pages';
 import * as SETTINGS from 'constants/settings';
 import * as React from 'react';
 
@@ -10,7 +9,6 @@ import Card from 'component/common/card';
 import SettingsRow from 'component/settingsRow';
 import { Lbryio } from 'lbryinc';
 import { useHistory } from 'react-router';
-import { Redirect } from 'react-router-dom';
 import Yrbl from 'component/yrbl';
 import Button from 'component/button';
 
@@ -90,10 +88,6 @@ export default function NotificationSettingsPage(props: Props) {
       .catch((e) => {
         setError(true);
       });
-  }
-
-  if (IS_WEB && !isAuthenticated && !verificationToken) {
-    return <Redirect to={`/$/${PAGES.AUTH_SIGNIN}?redirect=${location.pathname}`} />;
   }
 
   return (

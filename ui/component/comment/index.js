@@ -9,7 +9,6 @@ import { doCommentUpdate, doCommentList } from 'redux/actions/comments';
 import { makeSelectChannelIsMuted } from 'redux/selectors/blocked';
 import { doToast } from 'redux/actions/notifications';
 import { doSetPlayingUri } from 'redux/actions/content';
-import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import {
   selectLinkedCommentAncestors,
   selectOthersReactsForComment,
@@ -28,7 +27,7 @@ const select = (state, props) => {
     claim: makeSelectClaimForUri(props.uri)(state),
     thumbnail: props.authorUri && makeSelectThumbnailForUri(props.authorUri)(state),
     channelIsBlocked: props.authorUri && makeSelectChannelIsMuted(props.authorUri)(state),
-    commentingEnabled: IS_WEB ? Boolean(selectUserVerifiedEmail(state)) : true,
+    commentingEnabled: true,
     othersReacts: selectOthersReactsForComment(state, reactionKey),
     activeChannelClaim,
     myChannels: selectMyChannelClaims(state),

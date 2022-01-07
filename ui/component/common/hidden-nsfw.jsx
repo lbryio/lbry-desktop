@@ -19,9 +19,7 @@ export default function HiddenNsfw(props: Props) {
       <I18nMessage
         tokens={{
           type,
-          settings: (
-            <Button button="link" label={__('settings')} navigate={`/$/${PAGES.SETTINGS}`} requiresAuth={IS_WEB} />
-          ),
+          settings: <Button button="link" label={__('settings')} navigate={`/$/${PAGES.SETTINGS}`} />,
         }}
       >
         Content may be hidden on this %type% because of your %settings%.

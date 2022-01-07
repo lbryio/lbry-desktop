@@ -102,20 +102,7 @@ type PrivateRouteProps = Props & {
 
 function PrivateRoute(props: PrivateRouteProps) {
   const { component: Component, isAuthenticated, ...rest } = props;
-  const urlSearchParams = new URLSearchParams(props.location.search);
-  const redirectUrl = urlSearchParams.get('redirect');
-  return (
-    <Route
-      {...rest}
-      render={(props) =>
-        isAuthenticated || !IS_WEB ? (
-          <Component {...props} />
-        ) : (
-          <Redirect to={`/$/${PAGES.AUTH}?redirect=${redirectUrl || props.location.pathname}`} />
-        )
-      }
-    />
-  );
+  return <Route {...rest} render={(props) => <Component {...props} />} />;
 }
 
 function AppRouter(props: Props) {
@@ -262,7 +249,7 @@ function AppRouter(props: Props) {
         {...props}
         exact
         path={`/$/${PAGES.CHANNELS_FOLLOWING}`}
-        component={isAuthenticated || !IS_WEB ? ChannelsFollowingPage : DiscoverPage}
+        component={isAuthenticated ? ChannelsFollowingPage : DiscoverPage}
       />
       <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_NOTIFICATIONS}`} component={SettingsNotificationsPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_UPDATE_PWD}`} component={UpdatePasswordPage} />

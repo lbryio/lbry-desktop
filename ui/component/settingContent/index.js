@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import { selectMyChannelUrls } from 'redux/selectors/claims';
 import * as SETTINGS from 'constants/settings';
-import { doOpenModal } from 'redux/actions/app';
 import { doSetPlayingUri } from 'redux/actions/content';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { selectShowMatureContent, selectLanguage, makeSelectClientSetting } from 'redux/selectors/settings';
@@ -26,7 +25,6 @@ const select = (state) => ({
 const perform = (dispatch) => ({
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
   clearPlayingUri: () => dispatch(doSetPlayingUri({ uri: null })),
-  openModal: (id, params) => dispatch(doOpenModal(id, params)),
 });
 
 export default connect(select, perform)(SettingContent);

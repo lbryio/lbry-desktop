@@ -10,7 +10,7 @@ type Props = {
 class PdfViewer extends React.PureComponent<Props> {
   render() {
     const { source } = this.props;
-    const src = IS_WEB ? source : `file://${source}`;
+    const src = `file://${source}`;
     return (
       <div className="file-viewer file-viewer--document" onContextMenu={stopContextMenu}>
         <div className="file-viewer file-viewer--iframe">

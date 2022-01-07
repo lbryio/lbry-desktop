@@ -14,14 +14,13 @@ import homepages from 'homepages';
 type Props = {
   clock24h: boolean,
   searchInLanguage: boolean,
-  isAuthenticated: boolean,
   hideBalance: boolean,
   setClientSetting: (string, boolean | string | number) => void,
   setSearchInLanguage: (boolean) => void,
 };
 
 export default function SettingAppearance(props: Props) {
-  const { clock24h, searchInLanguage, isAuthenticated, hideBalance, setClientSetting, setSearchInLanguage } = props;
+  const { clock24h, searchInLanguage, hideBalance, setClientSetting, setSearchInLanguage } = props;
 
   return (
     <>
@@ -64,17 +63,14 @@ export default function SettingAppearance(props: Props) {
                 checked={clock24h}
               />
             </SettingsRow>
-
-            {(isAuthenticated || !IS_WEB) && (
-              <SettingsRow title={__('Hide wallet balance in header')}>
-                <FormField
-                  type="checkbox"
-                  name="hide_balance"
-                  onChange={() => setClientSetting(SETTINGS.HIDE_BALANCE, !hideBalance)}
-                  checked={hideBalance}
-                />
-              </SettingsRow>
-            )}
+            <SettingsRow title={__('Hide wallet balance in header')}>
+              <FormField
+                type="checkbox"
+                name="hide_balance"
+                onChange={() => setClientSetting(SETTINGS.HIDE_BALANCE, !hideBalance)}
+                checked={hideBalance}
+              />
+            </SettingsRow>
           </>
         }
       />

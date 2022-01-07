@@ -8,13 +8,7 @@ import React from 'react';
 import classnames from 'classnames';
 import { Menu, MenuButton, MenuList, MenuItem } from '@reach/menu-button';
 import Icon from 'component/common/icon';
-import {
-  generateShareUrl,
-  generateRssUrl,
-  generateLbryContentUrl,
-  formatLbryUrlForWeb,
-  generateListSearchUrlParams,
-} from 'util/url';
+import { generateShareUrl, generateLbryContentUrl, formatLbryUrlForWeb, generateListSearchUrlParams } from 'util/url';
 import { useHistory } from 'react-router';
 import { buildURI, parseURI } from 'util/lbryURI';
 
@@ -62,7 +56,6 @@ type Props = {
   doChannelUnsubscribe: (SubscriptionArgs) => void,
   isChannelPage: boolean,
   editedCollection: Collection,
-  isAuthenticated: boolean,
   playNextUri: string,
   resolvedList: boolean,
   fetchCollectionItems: (string) => void,
@@ -103,7 +96,6 @@ function ClaimMenuList(props: Props) {
     doChannelUnsubscribe,
     isChannelPage = false,
     editedCollection,
-    isAuthenticated,
     playNextUri,
     resolvedList,
     fetchCollectionItems,
@@ -150,7 +142,6 @@ function ClaimMenuList(props: Props) {
 
   const lbryUrl: string = generateLbryContentUrl(claim.canonical_url, claim.permanent_url);
   const shareUrl: string = generateShareUrl(SHARE_DOMAIN, lbryUrl);
-  const rssUrl: string = isChannel ? generateRssUrl(SHARE_DOMAIN, claim) : '';
   const isCollectionClaim = claim && claim.value_type === 'collection';
   // $FlowFixMe
   const isPlayable =
@@ -252,10 +243,6 @@ function ClaimMenuList(props: Props) {
       });
   }
 
-  function handleCopyRssLink() {
-    copyToClipboard(rssUrl, 'RSS URL copied.', 'Failed to copy RSS URL.');
-  }
-
   function handleCopyLink() {
     copyToClipboard(shareUrl, 'Link copied.', 'Failed to copy link.');
   }
@@ -281,7 +268,6 @@ function ClaimMenuList(props: Props) {
     }
   };
 
-  const shouldShow = !IS_WEB || (IS_WEB && isAuthenticated);
   return (
     <Menu>
       <MenuButton
@@ -343,7 +329,6 @@ function ClaimMenuList(props: Props) {
               )}
             </>
           ) : (
-            shouldShow &&
             isPlayable && (
               <>
                 {/* WATCH LATER */}
@@ -381,105 +366,89 @@ function ClaimMenuList(props: Props) {
             )
           )}
         </>
-
-        {shouldShow && (
+        {!isChannelPage && (
           <>
-            {!isChannelPage && (
-              <>
-                <MenuItem className="comment__menu-option" onSelect={handleSupport}>
-                  <div className="menu__link">
-                    <Icon aria-hidden icon={ICONS.LBC} />
-                    {__('Support --[button to support a claim]--')}
-                  </div>
-                </MenuItem>
-              </>
-            )}
+            <MenuItem className="comment__menu-option" onSelect={handleSupport}>
+              <div className="menu__link">
+                <Icon aria-hidden icon={ICONS.LBC} />
+                {__('Support --[button to support a claim]--')}
+              </div>
+            </MenuItem>
+          </>
+        )}
 
-            {!incognitoClaim && !claimIsMine && !isChannelPage && (
-              <>
-                <hr className="menu__separator" />
-                <MenuItem className="comment__menu-option" onSelect={handleFollow}>
-                  <div className="menu__link">
-                    <Icon aria-hidden icon={ICONS.SUBSCRIBE} />
-                    {subscriptionLabel}
-                  </div>
-                </MenuItem>
-              </>
-            )}
+        {!incognitoClaim && !claimIsMine && !isChannelPage && (
+          <>
+            <hr className="menu__separator" />
+            <MenuItem className="comment__menu-option" onSelect={handleFollow}>
+              <div className="menu__link">
+                <Icon aria-hidden icon={ICONS.SUBSCRIBE} />
+                {subscriptionLabel}
+              </div>
+            </MenuItem>
+          </>
+        )}
 
-            {!isMyCollection && (
-              <>
-                {(!claimIsMine || channelIsBlocked) && contentChannelUri ? (
-                  !incognitoClaim && (
-                    <>
-                      <hr className="menu__separator" />
-                      <MenuItem className="comment__menu-option" onSelect={handleToggleBlock}>
-                        <div className="menu__link">
-                          <Icon aria-hidden icon={ICONS.BLOCK} />
-                          {channelIsBlocked ? __('Unblock Channel') : __('Block Channel')}
-                        </div>
-                      </MenuItem>
-
-                      {isAdmin && (
-                        <MenuItem className="comment__menu-option" onSelect={handleToggleAdminBlock}>
-                          <div className="menu__link">
-                            <Icon aria-hidden icon={ICONS.GLOBE} />
-                            {channelIsAdminBlocked ? __('Global Unblock Channel') : __('Global Block Channel')}
-                          </div>
-                        </MenuItem>
-                      )}
-
-                      <MenuItem className="comment__menu-option" onSelect={handleToggleMute}>
-                        <div className="menu__link">
-                          <Icon aria-hidden icon={ICONS.MUTE} />
-                          {channelIsMuted ? __('Unmute Channel') : __('Mute Channel')}
-                        </div>
-                      </MenuItem>
-                    </>
-                  )
-                ) : (
-                  <>
-                    {!isChannelPage && !repostedClaim && (
-                      <MenuItem className="comment__menu-option" onSelect={handleEdit}>
-                        <div className="menu__link">
-                          <Icon aria-hidden icon={ICONS.EDIT} />
-                          {__('Edit')}
-                        </div>
-                      </MenuItem>
-                    )}
-                  </>
-                )}
-
-                {showDelete && (
-                  <MenuItem className="comment__menu-option" onSelect={handleDelete}>
+        {!isMyCollection && (
+          <>
+            {(!claimIsMine || channelIsBlocked) && contentChannelUri ? (
+              !incognitoClaim && (
+                <>
+                  <hr className="menu__separator" />
+                  <MenuItem className="comment__menu-option" onSelect={handleToggleBlock}>
                     <div className="menu__link">
-                      <Icon aria-hidden icon={ICONS.DELETE} />
-                      {__('Delete')}
+                      <Icon aria-hidden icon={ICONS.BLOCK} />
+                      {channelIsBlocked ? __('Unblock Channel') : __('Block Channel')}
+                    </div>
+                  </MenuItem>
+
+                  {isAdmin && (
+                    <MenuItem className="comment__menu-option" onSelect={handleToggleAdminBlock}>
+                      <div className="menu__link">
+                        <Icon aria-hidden icon={ICONS.GLOBE} />
+                        {channelIsAdminBlocked ? __('Global Unblock Channel') : __('Global Block Channel')}
+                      </div>
+                    </MenuItem>
+                  )}
+
+                  <MenuItem className="comment__menu-option" onSelect={handleToggleMute}>
+                    <div className="menu__link">
+                      <Icon aria-hidden icon={ICONS.MUTE} />
+                      {channelIsMuted ? __('Unmute Channel') : __('Mute Channel')}
+                    </div>
+                  </MenuItem>
+                </>
+              )
+            ) : (
+              <>
+                {!isChannelPage && !repostedClaim && (
+                  <MenuItem className="comment__menu-option" onSelect={handleEdit}>
+                    <div className="menu__link">
+                      <Icon aria-hidden icon={ICONS.EDIT} />
+                      {__('Edit')}
                     </div>
                   </MenuItem>
                 )}
               </>
             )}
-            <hr className="menu__separator" />
+
+            {showDelete && (
+              <MenuItem className="comment__menu-option" onSelect={handleDelete}>
+                <div className="menu__link">
+                  <Icon aria-hidden icon={ICONS.DELETE} />
+                  {__('Delete')}
+                </div>
+              </MenuItem>
+            )}
           </>
         )}
-
+        <hr className="menu__separator" />
         <MenuItem className="comment__menu-option" onSelect={handleCopyLink}>
           <div className="menu__link">
             <Icon aria-hidden icon={ICONS.COPY_LINK} />
             {__('Copy Link')}
           </div>
         </MenuItem>
-
-        {isChannelPage && IS_WEB && rssUrl && (
-          <MenuItem className="comment__menu-option" onSelect={handleCopyRssLink}>
-            <div className="menu__link">
-              <Icon aria-hidden icon={ICONS.RSS} />
-              {__('Copy RSS URL')}
-            </div>
-          </MenuItem>
-        )}
-
         {!claimIsMine && !isMyCollection && (
           <MenuItem className="comment__menu-option" onSelect={handleReportContent}>
             <div className="menu__link">

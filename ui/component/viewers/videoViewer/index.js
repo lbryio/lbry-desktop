@@ -59,7 +59,7 @@ const select = (state, props) => {
     thumbnail: makeSelectThumbnailForUri(uri)(state),
     claim: makeSelectClaimForUri(uri)(state),
     homepageData: selectHomepageData(state),
-    shareTelemetry: IS_WEB || selectDaemonSettings(state).share_usage_data,
+    shareTelemetry: selectDaemonSettings(state).share_usage_data,
     isFloating: makeSelectIsPlayerFloating(props.location)(state),
     videoTheaterMode: makeSelectClientSetting(SETTINGS.VIDEO_THEATER_MODE)(state),
   };

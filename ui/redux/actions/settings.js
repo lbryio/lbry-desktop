@@ -255,9 +255,7 @@ export function doEnterSettingsPage() {
     const state = getState();
     const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
     const hasVerifiedEmail = state.user && state.user.user && state.user.user.has_verified_email;
-    if (IS_WEB && !hasVerifiedEmail) {
-      return;
-    }
+
     dispatch(doSyncUnsubscribe());
     if (syncEnabled && hasVerifiedEmail) {
       await dispatch(doSyncLoop(true));
@@ -269,12 +267,7 @@ export function doEnterSettingsPage() {
 }
 
 export function doExitSettingsPage() {
-  return (dispatch, getState) => {
-    const state = getState();
-    const hasVerifiedEmail = state.user && state.user.user && state.user.user.has_verified_email;
-    if (IS_WEB && !hasVerifiedEmail) {
-      return;
-    }
+  return (dispatch) => {
     dispatch(doSetSyncLock(false));
     dispatch(doPushSettingsToPrefs());
     // syncLoop is restarted in store.js sharedStateCB if necessary
@@ -324,7 +317,7 @@ export function doSetLanguage(language) {
     const { settings } = getState();
     const { daemonSettings } = settings;
     const { share_usage_data: shareSetting } = daemonSettings;
-    const isSharingData = shareSetting || IS_WEB;
+    const isSharingData = shareSetting;
     let languageSetting;
     if (language === getDefaultLanguage()) {
       languageSetting = null;

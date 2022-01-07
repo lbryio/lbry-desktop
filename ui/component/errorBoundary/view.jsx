@@ -61,9 +61,9 @@ class ErrorBoundary extends React.Component<Props, State> {
 
   render() {
     const { hasError } = this.state;
-    const { sentryEventId, desktopErrorReported } = this.state;
+    const { desktopErrorReported } = this.state;
 
-    const errorWasReported = IS_WEB ? sentryEventId !== null : desktopErrorReported;
+    const errorWasReported = desktopErrorReported;
 
     if (hasError) {
       return (

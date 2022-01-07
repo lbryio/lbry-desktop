@@ -99,7 +99,6 @@ export default function CommentReactions(props: Props) {
   return (
     <>
       <Button
-        requiresAuth={IS_WEB}
         title={__('Upvote')}
         icon={likeIcon}
         className={classnames('comment__action', {
@@ -109,7 +108,6 @@ export default function CommentReactions(props: Props) {
         label={<span className="comment__reaction-count">{getCountForReact(REACTION_TYPES.LIKE)}</span>}
       />
       <Button
-        requiresAuth={IS_WEB}
         title={__('Downvote')}
         icon={dislikeIcon}
         className={classnames('comment__action', {
@@ -122,7 +120,6 @@ export default function CommentReactions(props: Props) {
       {!shouldHide && ENABLE_CREATOR_REACTIONS && (canCreatorReact || creatorLiked) && (
         <Button
           disabled={!canCreatorReact || !claimIsMine}
-          requiresAuth={IS_WEB}
           title={claimIsMine ? __('You loved this') : __('Creator loved this')}
           icon={creatorLiked ? ICONS.CREATOR_LIKE : ICONS.SUBSCRIBE}
           className={classnames('comment__action comment__action--creator-like')}

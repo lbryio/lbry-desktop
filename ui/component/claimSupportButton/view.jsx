@@ -28,7 +28,6 @@ export default function ClaimSupportButton(props: Props) {
       icon={ICONS.LBC}
       iconSize={fileAction ? 22 : undefined}
       label={isRepost ? __('Support Repost') : __('Support --[button to support a claim]--')}
-      requiresAuth={IS_WEB}
       title={__('Support this claim')}
       onClick={() => doOpenModal(MODALS.SEND_TIP, { uri, isSupport: true })}
     />

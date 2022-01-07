@@ -3,22 +3,10 @@ import { Lbryio } from 'lbryinc';
 import * as Sentry from '@sentry/browser';
 import MatomoTracker from '@datapunt/matomo-tracker-js';
 import { history } from './store';
-import { SDK_API_PATH } from './index';
-// @if TARGET='app'
 import Native from 'native';
 import ElectronCookies from '@meetfranz/electron-cookies';
 import { generateInitialUrl } from 'util/url';
-// @endif
 import { MATOMO_ID, MATOMO_URL } from 'config';
-// import getConnectionSpeed from 'util/detect-user-bandwidth';
-
-// let userDownloadBandwidthInBitsPerSecond;
-// async function getUserBandwidth() {
-//   userDownloadBandwidthInBitsPerSecond = await getConnectionSpeed();
-// }
-
-// get user bandwidth every minute, starting after an initial one minute wait
-// setInterval(getUserBandwidth, 1000 * 60);
 
 const isProduction = process.env.NODE_ENV === 'production';
 const devInternalApis = process.env.LBRY_API_URL && process.env.LBRY_API_URL.includes('dev');
@@ -27,7 +15,7 @@ export const SHARE_INTERNAL = 'shareInternal';
 const SHARE_THIRD_PARTY = 'shareThirdParty';
 
 const WATCHMAN_BACKEND_ENDPOINT = 'https://watchman.na-backend.odysee.com/reports/playback';
-const SEND_DATA_TO_WATCHMAN_INTERVAL = 10; // in seconds
+// const SEND_DATA_TO_WATCHMAN_INTERVAL = 10; // in seconds
 
 if (isProduction) {
   ElectronCookies.enable({
@@ -80,7 +68,7 @@ type LogPublishParams = {
   channel_claim_id?: string,
 };
 
-let internalAnalyticsEnabled: boolean = IS_WEB || false;
+let internalAnalyticsEnabled: boolean = false;
 if (window.localStorage.getItem(SHARE_INTERNAL) === 'true') internalAnalyticsEnabled = true;
 
 /**
@@ -164,11 +152,6 @@ function startWatchmanIntervalIfNotRunning() {
   if (!watchmanInterval) {
     // instantiate the first time to calculate duration from
     lastSentTime = new Date();
-
-    // only set an interval if analytics are enabled and is prod
-    if (isProduction && IS_WEB) {
-      watchmanInterval = setInterval(sendAndResetWatchmanData, 1000 * SEND_DATA_TO_WATCHMAN_INTERVAL);
-    }
   }
 }
 
@@ -240,7 +223,7 @@ const analytics: Analytics = {
     videoPlayer = passedPlayer;
     bitrateAsBitsPerSecond = videoBitrate;
 
-    sendPromMetric('time_to_start', duration);
+    // sendPromMetric('time_to_start', duration);
     sendMatomoEvent('Media', 'TimeToStart', claimId, duration);
   },
   error: (message) => {
@@ -313,7 +296,7 @@ const analytics: Analytics = {
           claim_id: claimId,
         };
 
-        if (timeToStart && !IS_WEB) {
+        if (timeToStart) {
           params.time_to_start = timeToStart;
         }
 
@@ -405,14 +388,15 @@ function sendMatomoEvent(category, action, name, value) {
   }
 }
 
-function sendPromMetric(name: string, value?: number) {
-  if (IS_WEB) {
-    let url = new URL(SDK_API_PATH + '/metric/ui');
-    const params = { name: name, value: value ? value.toString() : '' };
-    url.search = new URLSearchParams(params).toString();
-    return fetch(url, { method: 'post' });
-  }
-}
+// Prometheus
+// function sendPromMetric(name: string, value?: number) {
+//   if (IS_WEB) {
+//     let url = new URL(SDK_API_PATH + '/metric/ui');
+//     const params = { name: name, value: value ? value.toString() : '' };
+//     url.search = new URLSearchParams(params).toString();
+//     return fetch(url, { method: 'post' });
+//   }
+// }
 
 const MatomoInstance = new MatomoTracker({
   urlBase: MATOMO_URL,

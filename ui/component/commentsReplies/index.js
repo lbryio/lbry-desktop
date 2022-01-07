@@ -2,7 +2,6 @@ import { connect } from 'react-redux';
 import { doResolveUris } from 'redux/actions/claims';
 import { makeSelectClaimIsMine, selectMyChannelClaims, makeSelectClaimForUri } from 'redux/selectors/claims';
 import { selectIsFetchingCommentsByParentId, selectRepliesForParentId } from 'redux/selectors/comments';
-import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import CommentsReplies from './view';
 
 const select = (state, props) => {
@@ -16,7 +15,7 @@ const select = (state, props) => {
     fetchedReplies,
     resolvedReplies,
     claimIsMine: makeSelectClaimIsMine(props.uri)(state),
-    userCanComment: IS_WEB ? Boolean(selectUserVerifiedEmail(state)) : true,
+    userCanComment: true,
     myChannels: selectMyChannelClaims(state),
     isFetchingByParentId: selectIsFetchingCommentsByParentId(state),
   };

@@ -13,8 +13,6 @@ import { DOMAIN } from 'config';
 import { getDefaultLanguage } from 'util/default-languages';
 const AUTH_IN_PROGRESS = 'authInProgress';
 export let sessionStorageAvailable = false;
-const CHECK_INTERVAL = 200;
-const AUTH_WAIT_TIMEOUT = 10000;
 
 export function doFetchInviteStatus(shouldCallRewardList = true) {
   return (dispatch) => {
@@ -96,37 +94,6 @@ export function doInstallNewWithParams(
   };
 }
 
-function checkAuthBusy() {
-  let time = Date.now();
-  return new Promise(function (resolve, reject) {
-    (function waitForAuth() {
-      try {
-        sessionStorage.setItem('test', 'available');
-        sessionStorage.removeItem('test');
-        sessionStorageAvailable = true;
-      } catch (e) {
-        if (e) {
-          // no session storage
-        }
-      }
-      if (!IS_WEB || !sessionStorageAvailable) {
-        return resolve();
-      }
-      const inProgress = window.sessionStorage.getItem(AUTH_IN_PROGRESS);
-      if (!inProgress) {
-        window.sessionStorage.setItem(AUTH_IN_PROGRESS, 'true');
-        return resolve();
-      } else {
-        if (Date.now() - time < AUTH_WAIT_TIMEOUT) {
-          setTimeout(waitForAuth, CHECK_INTERVAL);
-        } else {
-          return resolve();
-        }
-      }
-    })();
-  });
-}
-
 // TODO: Call doInstallNew separately so we don't have to pass appVersion and os_system params?
 export function doAuthenticate(
   appVersion,
@@ -141,10 +108,7 @@ export function doAuthenticate(
     dispatch({
       type: ACTIONS.AUTHENTICATION_STARTED,
     });
-    checkAuthBusy()
-      .then(() => {
-        return Lbryio.authenticate(DOMAIN, getDefaultLanguage());
-      })
+    return Lbryio.authenticate(DOMAIN, getDefaultLanguage())
       .then((user) => {
         if (sessionStorageAvailable) window.sessionStorage.removeItem(AUTH_IN_PROGRESS);
         Lbryio.getAuthToken().then((token) => {
