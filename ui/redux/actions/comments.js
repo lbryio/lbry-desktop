@@ -549,8 +549,8 @@ export function doCommentReact(commentId: string, type: string) {
 /**
  *
  * @param comment
- * @param claim_id - File claim id
- * @param parent_id - What is this?
+ * @param claim_id The ID of the claim to create the comment on. Can be a file, livestream, or channel page.
+ * @param parent_id
  * @param uri
  * @param livestream
  * @param sticker
@@ -572,8 +572,6 @@ export function doCommentCreate(
 ) {
   return async (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
-
-    // get active channel that will receive comment and optional tip
     const activeChannelClaim = selectActiveChannelClaim(state);
 
     if (!activeChannelClaim) {
@@ -593,7 +591,6 @@ export function doCommentCreate(
       } catch (e) {}
     }
 
-    // send a notification
     const notification = parent_id && makeSelectNotificationForCommentId(parent_id)(state);
     if (notification && !notification.is_seen) dispatch(doSeeNotifications([notification.id]));
 
@@ -601,8 +598,6 @@ export function doCommentCreate(
       return dispatch(doToast({ isError: true, message: __('Unable to verify your channel. Please try again.') }));
     }
 
-    // Comments is a function which helps make calls to the backend
-    // these params passed in POST call.
     return Comments.comment_create({
       comment: comment,
       claim_id: claim_id,
@@ -612,9 +607,9 @@ export function doCommentCreate(
       signature: signatureData.signature,
       signing_ts: signatureData.signing_ts,
       sticker: sticker,
-      ...(txid ? { support_tx_id: txid } : {}), // add transaction id if it exists
-      ...(payment_intent_id ? { payment_intent_id } : {}), // add payment_intent_id if it exists
-      ...(environment ? { environment } : {}), // add environment for stripe if it exists
+      ...(txid ? { support_tx_id: txid } : {}),
+      ...(payment_intent_id ? { payment_intent_id } : {}),
+      ...(environment ? { environment } : {}),
     })
       .then((result: CommentCreateResponse) => {
         dispatch({
