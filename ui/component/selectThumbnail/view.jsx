@@ -188,7 +188,7 @@ function SelectThumbnail(props: Props) {
         <p className="help">
           {manualInput
             ? __('Enter a URL for your thumbnail.')
-            : __('Upload your thumbnail to %domain%. Recommended size is 16:9.', { domain: DOMAIN })}
+            : __('Upload your thumbnail to %domain%. Recommended ratio is 16:9, 2MB max.', { domain: DOMAIN })}
         </p>
       )}
     </>

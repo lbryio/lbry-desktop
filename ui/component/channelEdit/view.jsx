@@ -282,7 +282,7 @@ function ChannelForm(props: Props) {
                 openModal(MODALS.IMAGE_UPLOAD, {
                   onUpdate: (coverUrl, isUpload) => handleCoverChange(coverUrl, isUpload),
                   title: __('Edit Cover Image'),
-                  helpText: __('(6.25:1)'),
+                  helpText: __('(6.25:1 ratio, 2MB max)'),
                   assetName: __('Cover Image'),
                   currentValue: params.coverUrl,
                 })
@@ -308,7 +308,7 @@ function ChannelForm(props: Props) {
                   openModal(MODALS.IMAGE_UPLOAD, {
                     onUpdate: (thumbnailUrl, isUpload) => handleThumbnailChange(thumbnailUrl, isUpload),
                     title: __('Edit Thumbnail Image'),
-                    helpText: __('(1:1)'),
+                    helpText: __('(1:1 ratio, 2MB max)'),
                     assetName: __('Thumbnail'),
                     currentValue: params.thumbnailUrl,
                   })

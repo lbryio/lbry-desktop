@@ -2246,5 +2246,7 @@
   "Streamer": "Streamer",
   "Pinned": "Pinned",
   "From Comments": "From Comments",
+  "Upload your thumbnail to %domain%. Recommended ratio is 16:9, 2MB max.": "Upload your thumbnail to %domain%. Recommended ratio is 16:9, 2MB max.",
+  "Thumbnail size over 2MB, please edit and reupload.": "Thumbnail size over 2MB, please edit and reupload.",
   "--end--": "--end--"
 }

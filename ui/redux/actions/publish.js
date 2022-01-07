@@ -412,7 +412,7 @@ export const doUploadThumbnail = (
   path?: any,
   cb?: (string) => void
 ) => (dispatch: Dispatch) => {
-  let thumbnail, fileExt, fileName, fileType;
+  let thumbnail, fileExt, fileName, fileType, stats, size;
 
   const uploadError = (error = '') => {
     dispatch(
@@ -475,7 +475,11 @@ export const doUploadThumbnail = (
           message = __('Thumbnail upload service may be down, try again later.');
         }
 
-        const userInput = [fileName, fileExt, fileType, thumbnail];
+        const userInput = [fileName, fileExt, fileType, thumbnail, size];
+        if (size >= 2097152) {
+          message = __('Thumbnail size over 2MB, please edit and reupload.');
+        }
+
         uploadError({ message, cause: `${userInput.join(' | ')}` });
       });
   };
@@ -502,11 +506,14 @@ export const doUploadThumbnail = (
       thumbnail = fs.readFileSync(filePath);
       fileExt = path.extname(filePath);
       fileName = path.basename(filePath);
+      stats = fs.statSync(filePath);
+      size = stats.size;
       fileType = `image/${fileExt.slice(1)}`;
     } else if (thumbnailBlob) {
       fileExt = `.${thumbnailBlob.type && thumbnailBlob.type.split('/')[1]}`;
       fileName = thumbnailBlob.name;
       fileType = thumbnailBlob.type;
+      size = thumbnailBlob.size;
     } else {
       return null;
     }
