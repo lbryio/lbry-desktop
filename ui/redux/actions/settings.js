@@ -233,7 +233,9 @@ export function doSetWalletSyncPreference(pref) {
 export function doPushSettingsToPrefs() {
   return (dispatch, getState) => {
     const state = getState();
-    const { clientSettings } = state;
+    const {
+      settings: { clientSettings },
+    } = state;
     const sharedPreferences = Object.assign({}, state.sharedPreferences);
     const selectedClientSettings = getSubsetFromKeysArray(clientSettings, CLIENT_SYNC_KEYS);
     const newSharedPreferences = { ...sharedPreferences, ...selectedClientSettings };
