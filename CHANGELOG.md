@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased for Desktop]
 ## [0.52.1-alpha.3] - [2021-12-31]
 
+### Added
+- Reenabled generating thumbs from video ([#7384](https://github.com/lbryio/lbry-desktop/pull/7409))
 ### Changed
 - Upgraded Electron to v15 ([#7384](https://github.com/lbryio/lbry-desktop/pull/7384))
 - Performance improvements in some selectors ([#7370](https://github.com/lbryio/lbry-desktop/pull/7370))
