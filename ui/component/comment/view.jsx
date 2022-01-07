@@ -314,13 +314,7 @@ function Comment(props: Props) {
                   textAreaMaxLength={FF_MAX_CHARS_IN_COMMENT}
                 />
                 <div className="section__actions section__actions--no-margin">
-                  <Button
-                    button="primary"
-                    type="submit"
-                    label={__('Done')}
-                    requiresAuth={IS_WEB}
-                    disabled={message === editedMessage}
-                  />
+                  <Button button="primary" type="submit" label={__('Done')} disabled={message === editedMessage} />
                   <Button button="link" label={__('Cancel')} onClick={() => setEditing(false)} />
                 </div>
               </Form>
@@ -354,7 +348,6 @@ function Comment(props: Props) {
                   <div className="comment__actions">
                     {threadDepth !== 0 && (
                       <Button
-                        requiresAuth={IS_WEB}
                         label={commentingEnabled ? __('Reply') : __('Log in to reply')}
                         className="comment__action"
                         onClick={handleCommentReply}

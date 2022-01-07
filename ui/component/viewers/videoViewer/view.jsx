@@ -280,9 +280,7 @@ function VideoViewer(props: Props) {
   }
 
   const playerReadyDependencyList = [uri];
-  if (!IS_WEB) {
-    playerReadyDependencyList.push(desktopPlayStartTime);
-  }
+  playerReadyDependencyList.push(desktopPlayStartTime);
 
   const doPlayNext = () => {
     setPlayNextUrl(true);

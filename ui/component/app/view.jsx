@@ -314,7 +314,6 @@ function App(props: Props) {
     if (!hasSignedIn && hasVerifiedEmail) {
       signIn();
       setHasSignedIn(true);
-      if (IS_WEB) setReadyForSync(true);
     }
   }, [hasVerifiedEmail, signIn, hasSignedIn]);
 
@@ -339,7 +338,7 @@ function App(props: Props) {
         [`${MAIN_WRAPPER_CLASS}--scrollbar`]: useCustomScrollbar,
       })}
       ref={appRef}
-      onContextMenu={IS_WEB ? undefined : (e) => openContextMenu(e)}
+      onContextMenu={(e) => openContextMenu(e)}
     >
       <Router />
       <ModalRouter />

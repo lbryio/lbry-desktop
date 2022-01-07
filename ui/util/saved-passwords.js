@@ -1,7 +1,6 @@
 const { DOMAIN } = require('../../config.js');
 const AUTH_TOKEN = 'auth_token';
 const SAVED_PASSWORD = 'saved_password';
-const DEPRECATED_SAVED_PASSWORD = 'saved-password';
 const domain =
   typeof window === 'object' && window.location.hostname.includes('localhost') ? window.location.hostname : DOMAIN;
 const isProduction = process.env.NODE_ENV === 'production';
@@ -14,7 +13,7 @@ function setCookie(name, value, expirationDaysOnWeb) {
     let date = new Date();
     date.setTime(date.getTime() + expirationDaysOnWeb * 24 * 60 * 60 * 1000);
     // If on PC, set to not expire (max)
-    expires = `expires=${IS_WEB ? date.toUTCString() : maxExpiration};`;
+    expires = `expires=${maxExpiration};`;
   }
 
   let cookie = `${name}=${value || ''}; ${expires} path=/;`;
@@ -59,7 +58,7 @@ function deleteCookie(name) {
 }
 
 function setSavedPassword(value, saveToDisk) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     const password = value === undefined || value === null ? '' : value;
     sessionPassword = password;
 
@@ -74,17 +73,17 @@ function setSavedPassword(value, saveToDisk) {
 }
 
 function getSavedPassword() {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     if (sessionPassword) {
       resolve(sessionPassword);
     }
 
-    return getPasswordFromCookie().then(p => resolve(p));
+    return getPasswordFromCookie().then((p) => resolve(p));
   });
 }
 
 function getPasswordFromCookie() {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     let password;
     password = getCookie(SAVED_PASSWORD);
     resolve(password);
@@ -92,7 +91,7 @@ function getPasswordFromCookie() {
 }
 
 function deleteSavedPassword() {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     deleteCookie(SAVED_PASSWORD);
     resolve();
   });
@@ -107,14 +106,14 @@ function setAuthToken(value) {
 }
 
 function deleteAuthToken() {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     deleteCookie(AUTH_TOKEN);
     resolve();
   });
 }
 
 function doSignOutCleanup() {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     deleteAuthToken();
     deleteSavedPassword();
     resolve();
@@ -129,18 +128,7 @@ function doAuthTokenRefresh() {
   }
 }
 
-function doDeprecatedPasswordMigrationMarch2020() {
-  const savedPassword = getCookie(DEPRECATED_SAVED_PASSWORD);
-  if (savedPassword) {
-    deleteCookie(DEPRECATED_SAVED_PASSWORD);
-    setSavedPassword(savedPassword, true);
-  }
-}
-
 module.exports = {
-  setCookie,
-  getCookie,
-  deleteCookie,
   setSavedPassword,
   getSavedPassword,
   getPasswordFromCookie,
@@ -150,5 +138,4 @@ module.exports = {
   deleteAuthToken,
   doSignOutCleanup,
   doAuthTokenRefresh,
-  doDeprecatedPasswordMigrationMarch2020,
 };

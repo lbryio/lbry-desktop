@@ -6,15 +6,15 @@ import React from 'react';
 import Button from 'component/button';
 
 type Props = {
-    uri: string,
-    claim: StreamClaim,
-    hasChannels: boolean,
-    doOpenModal: (string, {}) => void,
-    doToast: ({ message: string }) => void,
+  uri: string,
+  claim: StreamClaim,
+  hasChannels: boolean,
+  doOpenModal: (string, {}) => void,
+  doToast: ({ message: string }) => void,
 };
 
 export default function ClaimRepostButton(props: Props) {
-  const { uri, claim, hasChannels, doOpenModal, doToast }  = props;
+  const { uri, claim, hasChannels, doOpenModal, doToast } = props;
   const [contentUri, setContentUri] = React.useState('');
   const [repostUri, setRepostUri] = React.useState('');
 
@@ -27,7 +27,6 @@ export default function ClaimRepostButton(props: Props) {
         claim.meta.reposted > 1 ? __(`%repost_total% Reposts`, { repost_total: claim.meta.reposted }) : __('Repost')
       }
       description={__('Repost')}
-      requiresAuth={IS_WEB}
       onClick={() => {
         if (!hasChannels) {
           doToast({

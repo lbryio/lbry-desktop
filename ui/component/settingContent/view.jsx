@@ -4,7 +4,6 @@ import * as PAGES from 'constants/pages';
 import React from 'react';
 import * as SETTINGS from 'constants/settings';
 import { Lbryio } from 'lbryinc';
-import * as MODALS from 'constants/modal_types';
 import { SETTINGS_GRP } from 'constants/settings';
 import Button from 'component/button';
 import Card from 'component/common/card';
@@ -32,7 +31,6 @@ type Props = {
   // --- perform ---
   setClientSetting: (string, boolean | string | number) => void,
   clearPlayingUri: () => void,
-  openModal: (string) => void,
 };
 
 export default function SettingContent(props: Props) {
@@ -49,7 +47,6 @@ export default function SettingContent(props: Props) {
     enablePublishPreview,
     setClientSetting,
     clearPlayingUri,
-    openModal,
   } = props;
 
   return (
@@ -109,47 +106,37 @@ export default function SettingContent(props: Props) {
                 type="checkbox"
                 name="show_nsfw"
                 checked={showNsfw}
-                onChange={() =>
-                  !IS_WEB || showNsfw
-                    ? setClientSetting(SETTINGS.SHOW_MATURE, !showNsfw)
-                    : openModal(MODALS.CONFIRM_AGE)
-                }
+                onChange={() => setClientSetting(SETTINGS.SHOW_MATURE, !showNsfw)}
+              />
+            </SettingsRow>
+            <SettingsRow title={__('Notifications')}>
+              <Button
+                button="inverse"
+                label={__('Manage')}
+                icon={ICONS.ARROW_RIGHT}
+                navigate={`/$/${PAGES.SETTINGS_NOTIFICATIONS}`}
               />
             </SettingsRow>
 
-            {(isAuthenticated || !IS_WEB) && (
-              <>
-                <SettingsRow title={__('Notifications')}>
-                  <Button
-                    button="inverse"
-                    label={__('Manage')}
-                    icon={ICONS.ARROW_RIGHT}
-                    navigate={`/$/${PAGES.SETTINGS_NOTIFICATIONS}`}
-                  />
-                </SettingsRow>
+            <SettingsRow title={__('Blocked and muted channels')}>
+              <Button
+                button="inverse"
+                label={__('Manage')}
+                icon={ICONS.ARROW_RIGHT}
+                navigate={`/$/${PAGES.SETTINGS_BLOCKED_MUTED}`}
+              />
+            </SettingsRow>
 
-                <SettingsRow title={__('Blocked and muted channels')}>
-                  <Button
-                    button="inverse"
-                    label={__('Manage')}
-                    icon={ICONS.ARROW_RIGHT}
-                    navigate={`/$/${PAGES.SETTINGS_BLOCKED_MUTED}`}
-                  />
-                </SettingsRow>
-
-                {myChannelUrls && myChannelUrls.length > 0 && (
-                  <SettingsRow title={__('Creator settings')}>
-                    <Button
-                      button="inverse"
-                      label={__('Manage')}
-                      icon={ICONS.ARROW_RIGHT}
-                      navigate={`/$/${PAGES.SETTINGS_CREATOR}`}
-                    />
-                  </SettingsRow>
-                )}
-              </>
+            {myChannelUrls && myChannelUrls.length > 0 && (
+              <SettingsRow title={__('Creator settings')}>
+                <Button
+                  button="inverse"
+                  label={__('Manage')}
+                  icon={ICONS.ARROW_RIGHT}
+                  navigate={`/$/${PAGES.SETTINGS_CREATOR}`}
+                />
+              </SettingsRow>
             )}
-
             <SettingsRow title={__('Publish confirmation')} subtitle={__(HELP.PUBLISH_PREVIEW)}>
               <FormField
                 type="checkbox"
@@ -159,13 +146,9 @@ export default function SettingContent(props: Props) {
                 onChange={() => setClientSetting(SETTINGS.ENABLE_PUBLISH_PREVIEW, !enablePublishPreview)}
               />
             </SettingsRow>
-
-            {/* @if TARGET='app' */}
             <SettingsRow title={__('Max purchase price')} subtitle={__(HELP.MAX_PURCHASE_PRICE)} multirow>
               <MaxPurchasePrice />
             </SettingsRow>
-            {/* @endif */}
-
             <SettingsRow title={__('Purchase and tip confirmations')} multirow>
               <FormField
                 type="radio"

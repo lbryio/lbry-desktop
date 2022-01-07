@@ -76,7 +76,6 @@ export default function SubscribeButton(props: Props) {
           largestLabel={isMobile && shrinkOnMobile ? '' : subscriptionLabel}
           icon={ICONS.UNSUBSCRIBE}
           button={'alt'}
-          requiresAuth={IS_WEB}
           label={label}
           title={titlePrefix}
           onClick={(e) => {
@@ -104,7 +103,6 @@ export default function SubscribeButton(props: Props) {
         largestLabel={isMobile && shrinkOnMobile ? '' : subscriptionLabel}
         icon={unfollowOverride ? ICONS.UNSUBSCRIBE : isSubscribed ? ICONS.SUBSCRIBED : ICONS.SUBSCRIBE}
         button={'alt'}
-        requiresAuth={IS_WEB}
         label={label}
         title={titlePrefix}
         onClick={(e) => {

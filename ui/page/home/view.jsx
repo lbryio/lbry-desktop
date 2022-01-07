@@ -21,8 +21,8 @@ type Props = {
 
 function HomePage(props: Props) {
   const { followedTags, subscribedChannels, authenticated, showNsfw, homepageData } = props;
-  const showPersonalizedChannels = (authenticated || !IS_WEB) && subscribedChannels && subscribedChannels.length > 0;
-  const showPersonalizedTags = (authenticated || !IS_WEB) && followedTags && followedTags.length > 0;
+  const showPersonalizedChannels = subscribedChannels && subscribedChannels.length > 0;
+  const showPersonalizedTags = followedTags && followedTags.length > 0;
   const showIndividualTags = showPersonalizedTags && followedTags.length < 5;
 
   const rowData: Array<RowDataItem> = GetLinksData(
@@ -84,7 +84,7 @@ function HomePage(props: Props) {
 
   return (
     <Page fullWidthPage>
-      {(authenticated || !IS_WEB) && !subscribedChannels.length && (
+      {!subscribedChannels.length && (
         <div className="notice-message">
           <h1 className="section__title">
             {__("%SITE_NAME% is more fun if you're following channels", { SITE_NAME })}

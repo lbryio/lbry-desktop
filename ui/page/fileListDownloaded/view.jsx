@@ -11,7 +11,6 @@ import Icon from 'component/common/icon';
 import { FormField } from 'component/common/form-components/form-field';
 import { withRouter } from 'react-router';
 import classnames from 'classnames';
-import Yrbl from 'component/yrbl';
 import { PURCHASES_PAGE_SIZE } from 'page/library/view';
 import Spinner from 'component/spinner';
 
@@ -91,44 +90,28 @@ function FileListDownloaded(props: Props) {
           />
         </Form>
       </div>
-      {IS_WEB && viewMode === VIEW_DOWNLOADS ? (
-        <div className="main--empty">
-          <Yrbl
-            title={__('Try out the app!')}
-            subtitle={
-              <p className="section__subtitle">{__("Download the app to track files you've viewed and downloaded.")}</p>
-            }
-            actions={
-              <div className="section__actions">
-                <Button button="primary" label={__('Get The App')} href="https://lbry.com/get" />
-              </div>
-            }
+      <div>
+        <ClaimList
+          renderProperties={() => null}
+          empty={
+            viewMode === VIEW_PURCHASES && !query ? (
+              <div>{__('No purchases found.')}</div>
+            ) : (
+              __('No results for %query%', { query })
+            )
+          }
+          uris={viewMode === VIEW_PURCHASES ? myPurchases : myDownloads}
+          loading={loading}
+        />
+        {!query && (
+          <Paginate
+            totalPages={Math.ceil(
+              Number(viewMode === VIEW_PURCHASES ? myPurchasesCount : downloadedUrlsCount) /
+                Number(viewMode === VIEW_PURCHASES ? PURCHASES_PAGE_SIZE : PAGE_SIZE)
+            )}
           />
-        </div>
-      ) : (
-        <div>
-          <ClaimList
-            renderProperties={() => null}
-            empty={
-              viewMode === VIEW_PURCHASES && !query ? (
-                <div>{__('No purchases found.')}</div>
-              ) : (
-                __('No results for %query%', { query })
-              )
-            }
-            uris={viewMode === VIEW_PURCHASES ? myPurchases : myDownloads}
-            loading={loading}
-          />
-          {!query && (
-            <Paginate
-              totalPages={Math.ceil(
-                Number(viewMode === VIEW_PURCHASES ? myPurchasesCount : downloadedUrlsCount) /
-                  Number(viewMode === VIEW_PURCHASES ? PURCHASES_PAGE_SIZE : PAGE_SIZE)
-              )}
-            />
-          )}
-        </div>
-      )}
+        )}
+      </div>
     </>
   );
 }

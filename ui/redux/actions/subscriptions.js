@@ -29,7 +29,7 @@ export function doToggleSubscription(
     }
 
     const { share_usage_data: shareSetting } = daemonSettings;
-    const isSharingData = shareSetting || IS_WEB;
+    const isSharingData = shareSetting;
 
     if (!isSubscribed) {
       const subscriptionUri = subscription.uri;
@@ -44,7 +44,7 @@ export function doToggleSubscription(
     });
 
     // if the user isn't sharing data, keep the subscriptions entirely in the app
-    if (isSharingData || IS_WEB) {
+    if (isSharingData) {
       const { channelClaimId } = parseURI(subscription.uri);
 
       if (!isSubscribed) {

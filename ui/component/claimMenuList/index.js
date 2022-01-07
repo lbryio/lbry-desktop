@@ -27,7 +27,6 @@ import {
 import { doToast } from 'redux/actions/notifications';
 import { doChannelSubscribe, doChannelUnsubscribe } from 'redux/actions/subscriptions';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
-import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectListShuffle } from 'redux/selectors/content';
 import { doToggleLoopList, doToggleShuffleList } from 'redux/actions/content';
 import ClaimPreview from './view';
@@ -69,7 +68,6 @@ const select = (state, props) => {
     claimInCollection: makeSelectCollectionForIdHasClaimUrl(collectionId, contentPermanentUri)(state),
     isMyCollection: makeSelectCollectionIsMine(collectionId)(state),
     editedCollection: makeSelectEditedCollectionForId(collectionId)(state),
-    isAuthenticated: Boolean(selectUserVerifiedEmail(state)),
     resolvedList: makeSelectUrlsForCollectionId(collectionId)(state),
     playNextUri,
   };

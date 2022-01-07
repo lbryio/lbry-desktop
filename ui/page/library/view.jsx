@@ -41,9 +41,7 @@ function LibraryPage(props: Props) {
       {!loading && !hasDownloads && (
         <div className="main--empty">
           <Yrbl
-            title={
-              IS_WEB ? __("You haven't purchased anything yet") : __("You haven't downloaded anything from LBRY yet")
-            }
+            title={__("You haven't downloaded anything from LBRY yet")}
             actions={
               <div className="section__actions">
                 <Button button="primary" navigate="/" label={__('Explore New Content')} />

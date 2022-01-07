@@ -46,7 +46,6 @@ function FileWatchLaterLink(props: Props) {
   return (
     <Button
       ref={buttonRef}
-      requiresAuth={IS_WEB}
       title={title}
       label={label}
       className="button--file-action"

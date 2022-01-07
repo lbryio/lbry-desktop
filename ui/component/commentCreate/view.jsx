@@ -443,7 +443,7 @@ export function CommentCreate(props: Props) {
       >
         <FormField type="textarea" name={'comment_signup_prompt'} placeholder={__('Say something about this...')} />
         <div className="section__actions--no-margin">
-          <Button disabled button="primary" label={__('Post --[button to submit something]--')} requiresAuth={IS_WEB} />
+          <Button disabled button="primary" label={__('Post --[button to submit something]--')} />
         </div>
       </div>
     );
@@ -553,7 +553,6 @@ export function CommentCreate(props: Props) {
               icon={activeTab === TAB_LBC ? ICONS.LBC : ICONS.FINANCE}
               label={__('Review')}
               onClick={() => setIsReviewingSupportComment(true)}
-              requiresAuth={IS_WEB}
             />
 
             <Button
@@ -580,7 +579,6 @@ export function CommentCreate(props: Props) {
                     ? __('Commenting...')
                     : __('Comment --[button to submit something]--')
                 }
-                requiresAuth={IS_WEB}
               />
             )}
             {!supportDisabled && !claimIsMine && (

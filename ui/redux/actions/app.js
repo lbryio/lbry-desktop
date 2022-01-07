@@ -38,7 +38,7 @@ import {
   selectAllowAnalytics,
 } from 'redux/selectors/app';
 import { selectDaemonSettings, makeSelectClientSetting } from 'redux/selectors/settings';
-import { selectUser, selectUserVerifiedEmail } from 'redux/selectors/user';
+import { selectUser } from 'redux/selectors/user';
 import { doSyncLoop, doSetPrefsReady, doPreferenceGet, doPopulateSharedUserState } from 'redux/actions/sync';
 import { doAuthenticate } from 'redux/actions/user';
 import { lbrySettings as config, version as appVersion } from 'package.json';
@@ -294,16 +294,10 @@ export function doAlertError(errorList) {
 }
 
 export function doAlertWaitingForSync() {
-  return (dispatch, getState) => {
-    const state = getState();
-    const authenticated = selectUserVerifiedEmail(state);
-
+  return (dispatch) => {
     dispatch(
       doToast({
-        message:
-          !authenticated && IS_WEB
-            ? __('Sign in or create an account to change this setting.')
-            : __('Please wait a bit, we are still getting your account ready.'),
+        message: __('Please wait a bit, we are still getting your account ready.'),
         isError: false,
       })
     );
@@ -315,7 +309,7 @@ export function doDaemonReady() {
     const state = getState();
 
     // TODO: call doFetchDaemonSettings, then get usage data, and call doAuthenticate once they are loaded into the store
-    const shareUsageData = IS_WEB || window.localStorage.getItem(SHARE_INTERNAL) === 'true';
+    const shareUsageData = window.localStorage.getItem(SHARE_INTERNAL) === 'true';
 
     dispatch(
       doAuthenticate(

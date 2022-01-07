@@ -172,14 +172,12 @@ export default function SettingSystem(props: Props) {
 
   // Update storedPassword state
   React.useEffect(() => {
-    if (isAuthenticated || !IS_WEB) {
-      updateWalletStatus();
-      getPasswordFromCookie().then((p) => {
-        if (typeof p === 'string') {
-          setStoredPassword(true);
-        }
-      });
-    }
+    updateWalletStatus();
+    getPasswordFromCookie().then((p) => {
+      if (typeof p === 'string') {
+        setStoredPassword(true);
+      }
+    });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
