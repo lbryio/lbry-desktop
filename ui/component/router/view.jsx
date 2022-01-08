@@ -245,12 +245,7 @@ function AppRouter(props: Props) {
       <Route {...props} path={`/$/${PAGES.LIST}/:collectionId`} component={CollectionPage} />
 
       <PrivateRoute {...props} exact path={`/$/${PAGES.TAGS_FOLLOWING}`} component={TagsFollowingPage} />
-      <PrivateRoute
-        {...props}
-        exact
-        path={`/$/${PAGES.CHANNELS_FOLLOWING}`}
-        component={isAuthenticated ? ChannelsFollowingPage : DiscoverPage}
-      />
+      <PrivateRoute {...props} exact path={`/$/${PAGES.CHANNELS_FOLLOWING}`} component={ChannelsFollowingPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_NOTIFICATIONS}`} component={SettingsNotificationsPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_UPDATE_PWD}`} component={UpdatePasswordPage} />
       <PrivateRoute
