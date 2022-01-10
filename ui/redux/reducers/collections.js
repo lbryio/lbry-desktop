@@ -42,7 +42,7 @@ const collectionsReducer = handleActions(
         id: params.id,
         name: params.name,
         items: [],
-        updatedAt: getTimestamp(),
+        updatedAt: params.updatedAt,
         type: params.type,
       };
 
