@@ -337,6 +337,33 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       // load video once source setup
       // $FlowFixMe
       vjsPlayer.load();
+
+      // fix invisible vidcrunch overlay on IOS
+      if (IS_IOS) {
+        // ads video player
+        const adsClaimDiv = document.querySelector('.ads__claim-item');
+
+        if (adsClaimDiv) {
+          // hide ad video by default
+          adsClaimDiv.style.display = 'none';
+
+          // ad containing div, we can keep part on page
+          const adsClaimParentDiv = adsClaimDiv.parentNode;
+
+          // watch parent div for when it is on viewport
+          const observer = new IntersectionObserver(function(entries) {
+            // when ad div parent becomes visible by 1px, show the ad video
+            if (entries[0].isIntersecting === true) {
+              adsClaimDiv.style.display = 'block';
+            }
+
+            observer.disconnect();
+          });
+
+          // $FlowFixMe
+          observer.observe(adsClaimParentDiv);
+        }
+      }
     })();
 
     // Cleanup
