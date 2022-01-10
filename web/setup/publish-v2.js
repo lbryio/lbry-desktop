@@ -72,6 +72,7 @@ export function makeResumableUploadRequest(
       onShouldRetry: (err, retryAttempt, options) => {
         window.store.dispatch(doUpdateUploadProgress({ guid, status: 'retry' }));
         const status = err.originalResponse ? err.originalResponse.getStatus() : 0;
+        analytics.error(`tus: retry=${uploader._retryAttempt}, status=${status}`);
         return !inStatusCategory(status, 400);
       },
       onError: (err) => {
@@ -85,10 +86,11 @@ export function makeResumableUploadRequest(
         } else {
           window.store.dispatch(doUpdateUploadProgress({ guid, status: 'error' }));
           reject(
-            // $FlowFixMe - flow's contructor for Error is incorrect.
+            // $FlowFixMe - flow's constructor for Error is incorrect.
             new Error(err, {
               cause: {
                 url: uploader.url,
+                status,
                 ...(uploader._fingerprint ? { fingerprint: uploader._fingerprint } : {}),
                 ...(uploader._retryAttempt ? { retryAttempt: uploader._retryAttempt } : {}),
                 ...(uploader._offsetBeforeRetry ? { offsetBeforeRetry: uploader._offsetBeforeRetry } : {}),
