@@ -221,14 +221,17 @@ function SideNavigation(props: Props) {
   const isAbsolute = isOnFilePage || isMediumScreen;
   const isMobile = useIsMobile();
 
-  const menuCanCloseCompletely = isOnFilePage || isMobile;
+  const [menuInitialized, setMenuInitialized] = React.useState(false);
+
+  const menuCanCloseCompletely = (isOnFilePage && !isMobile) || (isMobile && menuInitialized);
   const hideMenuFromView = menuCanCloseCompletely && !sidebarOpen;
 
   const [canDisposeMenu, setCanDisposeMenu] = React.useState(false);
 
   React.useEffect(() => {
-    if (hideMenuFromView) {
+    if (hideMenuFromView || !menuInitialized) {
       const handler = setTimeout(() => {
+        setMenuInitialized(true);
         setCanDisposeMenu(true);
       }, 250);
       return () => {
@@ -237,7 +240,7 @@ function SideNavigation(props: Props) {
     } else {
       setCanDisposeMenu(false);
     }
-  }, [hideMenuFromView]);
+  }, [hideMenuFromView, menuInitialized]);
 
   const shouldRenderLargeMenu = menuCanCloseCompletely || sidebarOpen;
 
