@@ -2,6 +2,7 @@
 import React from 'react';
 import 'scss/component/_view_count.scss';
 import * as PAGES from 'constants/pages';
+import { toCompactNotation } from 'util/string';
 
 type Props = {
   uri: string,
@@ -14,16 +15,7 @@ type Props = {
 
 export default function FileViewCountInline(props: Props) {
   const { isLivestream, claim, viewCount, lang } = props;
-  let formattedViewCount;
-
-  try {
-    formattedViewCount = Number(viewCount).toLocaleString(lang || 'en', {
-      compactDisplay: 'short',
-      notation: 'compact',
-    });
-  } catch (err) {
-    formattedViewCount = Number(viewCount).toLocaleString();
-  }
+  const formattedViewCount = toCompactNotation(viewCount, lang);
 
   // Limit the view-count visibility to specific pages for now. We'll eventually
   // show it everywhere, so this band-aid would be the easiest to clean up
