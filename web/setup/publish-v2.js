@@ -91,7 +91,6 @@ export function makeResumableUploadRequest(
                 url: uploader.url,
                 ...(uploader._fingerprint ? { fingerprint: uploader._fingerprint } : {}),
                 ...(uploader._retryAttempt ? { retryAttempt: uploader._retryAttempt } : {}),
-                ...(uploader._retryTimeout ? { retryTimeout: uploader._retryTimeout } : {}),
                 ...(uploader._offsetBeforeRetry ? { offsetBeforeRetry: uploader._offsetBeforeRetry } : {}),
               },
             })
