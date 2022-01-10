@@ -2,6 +2,8 @@
 import { SIMPLE_SITE } from 'config';
 import React from 'react';
 import HelpLink from 'component/common/help-link';
+import Tooltip from 'component/common/tooltip';
+import { toCompactNotation } from 'util/string';
 
 type Props = {
   livestream?: boolean,
@@ -16,6 +18,9 @@ type Props = {
 
 function FileViewCount(props: Props) {
   const { claimId, fetchViewCount, viewCount, livestream, activeViewers, isLive = false } = props;
+  const count = livestream ? activeViewers || 0 : viewCount;
+  const countCompact = toCompactNotation(count);
+  const countFullResolution = Number(count).toLocaleString();
 
   React.useEffect(() => {
     if (claimId) {
@@ -23,20 +28,20 @@ function FileViewCount(props: Props) {
     }
   }, [claimId]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const formattedViewCount = Number(viewCount).toLocaleString();
-
   return (
-    <span className="media__subtitle--centered">
-      {livestream &&
-        __('%viewer_count% currently %viewer_state%', {
-          viewer_count: activeViewers === undefined ? '...' : activeViewers,
-          viewer_state: isLive ? __('watching') : __('waiting'),
-        })}
-      {!livestream &&
-        activeViewers === undefined &&
-        (viewCount !== 1 ? __('%view_count% views', { view_count: formattedViewCount }) : __('1 view'))}
-      {!SIMPLE_SITE && <HelpLink href="https://odysee.com/@OdyseeHelp:b/OdyseeBasics:c" />}
-    </span>
+    <Tooltip title={countFullResolution}>
+      <span className="media__subtitle--centered">
+        {livestream &&
+          __('%viewer_count% currently %viewer_state%', {
+            viewer_count: activeViewers === undefined ? '...' : countCompact,
+            viewer_state: isLive ? __('watching') : __('waiting'),
+          })}
+        {!livestream &&
+          activeViewers === undefined &&
+          (viewCount !== 1 ? __('%view_count% views', { view_count: countCompact }) : __('1 view'))}
+        {!SIMPLE_SITE && <HelpLink href="https://odysee.com/@OdyseeHelp:b/OdyseeBasics:c" />}
+      </span>
+    </Tooltip>
   );
 }
 

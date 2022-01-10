@@ -10,6 +10,7 @@ import * as COLLECTIONS_CONSTS from 'constants/collections';
 import { isChannelClaim } from 'util/claim';
 import { formatLbryUrlForWeb } from 'util/url';
 import { formatClaimPreviewTitle } from 'util/formatAriaLabel';
+import { toCompactNotation } from 'util/string';
 import FileThumbnail from 'component/fileThumbnail';
 import UriIndicator from 'component/uriIndicator';
 import PreviewOverlayProperties from 'component/previewOverlayProperties';
@@ -165,10 +166,12 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     if (channelSubCount === undefined) {
       return <span />;
     }
-    const formattedSubCount = Number(channelSubCount).toLocaleString();
+
     return (
       <span className="claim-preview__channel-sub-count">
-        {channelSubCount === 1 ? __('1 Follower') : __('%formattedSubCount% Followers', { formattedSubCount })}
+        {channelSubCount === 1
+          ? __('1 Follower')
+          : __('%formattedSubCount% Followers', { formattedSubCount: toCompactNotation(channelSubCount) })}
       </span>
     );
   }, [channelSubCount]);
