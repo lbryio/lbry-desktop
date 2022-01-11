@@ -132,10 +132,10 @@ export default function ClaimList(props: Props) {
     const handleScroll = debounce((e) => {
       if (page && pageSize && onScrollBottom) {
         const mainEl = document.querySelector(`.${MAIN_CLASS}`);
-
         if (mainEl && !loading && urisLength >= pageSize) {
-          const contentWrapperAtBottomOfPage = mainEl.getBoundingClientRect().bottom - 0.5 <= window.innerHeight;
-
+          const ROUGH_TILE_HEIGHT_PX = 200;
+          const mainBoundingRect = mainEl.getBoundingClientRect();
+          const contentWrapperAtBottomOfPage = mainBoundingRect.bottom - ROUGH_TILE_HEIGHT_PX <= window.innerHeight;
           if (contentWrapperAtBottomOfPage) {
             onScrollBottom();
           }
