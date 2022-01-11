@@ -150,6 +150,7 @@ function ChannelContent(props: Props) {
           liveUris={
             isChannelBroadcasting && activeLivestreamForChannel.claimUri ? [activeLivestreamForChannel.claimUri] : []
           }
+          showHideSetting={false}
         />
       )}
 

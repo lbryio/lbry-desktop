@@ -17,6 +17,7 @@ type Props = {
   liveUris: Array<string>,
   limitClaimsPerChannel?: number,
   onLoad: (number) => void,
+  showHideSetting: boolean,
   // --- perform ---
   setClientSetting: (string, boolean | string | number, boolean) => void,
   doShowSnackBar: (string) => void,
@@ -31,6 +32,7 @@ const ScheduledStreams = (props: Props) => {
     setClientSetting,
     doShowSnackBar,
     onLoad,
+    showHideSetting = true,
   } = props;
   const isMediumScreen = useIsMediumScreen();
   const isLargeScreen = useIsLargeScreen();
@@ -62,7 +64,9 @@ const ScheduledStreams = (props: Props) => {
     return (
       <div>
         {__('Upcoming Livestreams')}
-        <Button button="link" label={__('Hide')} onClick={hideScheduledStreams} className={'ml-s text-s'} />
+        {showHideSetting && (
+          <Button button="link" label={__('Hide')} onClick={hideScheduledStreams} className={'ml-s text-s'} />
+        )}
       </div>
     );
   };
