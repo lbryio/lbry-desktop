@@ -22,7 +22,7 @@ import { doCollectionEdit } from 'redux/actions/collections';
 import { doFileGet } from 'redux/actions/file';
 import { selectBanStateForUri } from 'lbryinc';
 import { selectIsActiveLivestreamForUri } from 'redux/selectors/livestream';
-import { selectShowMatureContent } from 'redux/selectors/settings';
+import { selectLanguage, selectShowMatureContent } from 'redux/selectors/settings';
 import { makeSelectHasVisitedUri } from 'redux/selectors/content';
 import { selectIsSubscribedForUri } from 'redux/selectors/subscriptions';
 import { isClaimNsfw } from 'util/claim';
@@ -57,6 +57,7 @@ const select = (state, props) => {
     isCollectionMine: makeSelectCollectionIsMine(props.collectionId)(state),
     collectionUris: makeSelectUrlsForCollectionId(props.collectionId)(state),
     collectionIndex: makeSelectIndexForUrlInCollection(props.uri, props.collectionId)(state),
+    lang: selectLanguage(state),
   };
 };
 

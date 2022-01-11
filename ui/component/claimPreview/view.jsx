@@ -11,6 +11,7 @@ import { isChannelClaim } from 'util/claim';
 import { formatLbryUrlForWeb } from 'util/url';
 import { formatClaimPreviewTitle } from 'util/formatAriaLabel';
 import { toCompactNotation } from 'util/string';
+import Tooltip from 'component/common/tooltip';
 import FileThumbnail from 'component/fileThumbnail';
 import UriIndicator from 'component/uriIndicator';
 import PreviewOverlayProperties from 'component/previewOverlayProperties';
@@ -88,6 +89,7 @@ type Props = {
   indexInContainer?: number, // The index order of this component within 'containerId'.
   channelSubCount?: number,
   swipeLayout: boolean,
+  lang: string,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -149,6 +151,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     indexInContainer,
     channelSubCount,
     swipeLayout = false,
+    lang,
   } = props;
 
   const isCollection = claim && claim.value_type === 'collection';
@@ -166,13 +169,13 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     if (channelSubCount === undefined) {
       return <span />;
     }
-
+    const formattedSubCount = toCompactNotation(channelSubCount, lang, 10000);
     return (
-      <span className="claim-preview__channel-sub-count">
-        {channelSubCount === 1
-          ? __('1 Follower')
-          : __('%formattedSubCount% Followers', { formattedSubCount: toCompactNotation(channelSubCount) })}
-      </span>
+      <Tooltip title={channelSubCount} followCursor placement="top">
+        <span className="claim-preview__channel-sub-count">
+          {channelSubCount === 1 ? __('1 Follower') : __('%formattedSubCount% Followers', { formattedSubCount })}
+        </span>
+      </Tooltip>
     );
   }, [channelSubCount]);
   const isValid = uri && isURIValid(uri, false);

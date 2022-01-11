@@ -14,12 +14,13 @@ type Props = {
   uri: string,
   viewCount: string,
   activeViewers?: number,
+  lang: string,
 };
 
 function FileViewCount(props: Props) {
-  const { claimId, fetchViewCount, viewCount, livestream, activeViewers, isLive = false } = props;
+  const { claimId, fetchViewCount, viewCount, livestream, activeViewers, isLive = false, lang } = props;
   const count = livestream ? activeViewers || 0 : viewCount;
-  const countCompact = toCompactNotation(count);
+  const countCompact = toCompactNotation(count, lang, 10000);
   const countFullResolution = Number(count).toLocaleString();
 
   React.useEffect(() => {
@@ -29,7 +30,7 @@ function FileViewCount(props: Props) {
   }, [claimId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <Tooltip title={countFullResolution}>
+    <Tooltip title={countFullResolution} followCursor placement="top">
       <span className="media__subtitle--centered">
         {livestream &&
           __('%viewer_count% currently %viewer_state%', {

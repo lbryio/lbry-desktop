@@ -9,10 +9,20 @@ type Props = {
   disableInteractive?: boolean,
   enterDelay?: number,
   title?: string | Node,
+  followCursor?: boolean,
+  placement?: string, // https://mui.com/api/tooltip/
 };
 
 function Tooltip(props: Props) {
-  const { arrow = true, children, disableInteractive = true, enterDelay = 300, title } = props;
+  const {
+    arrow = true,
+    children,
+    disableInteractive = true,
+    enterDelay = 300,
+    title,
+    followCursor = false,
+    placement = 'bottom',
+  } = props;
 
   return (
     <MUITooltip
@@ -21,6 +31,8 @@ function Tooltip(props: Props) {
       enterDelay={enterDelay}
       enterNextDelay={enterDelay}
       title={title}
+      followCursor={followCursor}
+      placement={placement}
     >
       {children}
     </MUITooltip>
