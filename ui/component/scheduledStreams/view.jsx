@@ -8,7 +8,7 @@ import { useIsMediumScreen, useIsLargeScreen } from 'effects/use-screensize';
 import ClaimListDiscover from 'component/claimListDiscover';
 import Button from 'component/button';
 import { LIVESTREAM_UPCOMING_BUFFER } from 'constants/livestream';
-// import { SCHEDULED_LIVESTREAM_TAG } from 'constants/tags';
+import { SCHEDULED_LIVESTREAM_TAG } from 'constants/tags';
 import * as SETTINGS from 'constants/settings';
 
 type Props = {
@@ -79,6 +79,7 @@ const ScheduledStreams = (props: Props) => {
         hasNoSource
         orderBy={CS.ORDER_BY_NEW_ASC}
         tileLayout={tileLayout}
+        tags={[SCHEDULED_LIVESTREAM_TAG]}
         releaseTime={`>${moment().subtract(LIVESTREAM_UPCOMING_BUFFER, 'minutes').startOf('minute').unix()}`}
         hideAdvancedFilter
         hideFilters
