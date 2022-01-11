@@ -84,6 +84,7 @@ const ScheduledStreams = (props: Props) => {
         orderBy={CS.ORDER_BY_NEW_ASC}
         tileLayout={tileLayout}
         tags={[SCHEDULED_LIVESTREAM_TAG]}
+        claimType={[CS.CLAIM_STREAM]}
         releaseTime={`>${moment().subtract(LIVESTREAM_UPCOMING_BUFFER, 'minutes').startOf('minute').unix()}`}
         hideAdvancedFilter
         hideFilters
