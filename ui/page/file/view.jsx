@@ -223,7 +223,7 @@ function FilePage(props: Props) {
       {isMarkdown && (
         <div className="file-page__post-comments">
           <React.Suspense fallback={null}>
-            <CommentsList uri={uri} linkedCommentId={linkedCommentId} commentsAreExpanded />
+            {!commentsDisabled && <CommentsList uri={uri} linkedCommentId={linkedCommentId} commentsAreExpanded />}
           </React.Suspense>
         </div>
       )}

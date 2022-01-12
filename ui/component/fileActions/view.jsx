@@ -32,7 +32,6 @@ type Props = {
   clearPlayingUri: () => void,
   hideRepost?: boolean,
   isLivestreamClaim: boolean,
-  reactionsDisabled: boolean,
   download: (string) => void,
   streamingUrl: ?string,
 };
@@ -52,7 +51,6 @@ function FileActions(props: Props) {
     doToast,
     hideRepost,
     isLivestreamClaim,
-    reactionsDisabled,
     download,
     streamingUrl,
   } = props;
@@ -116,7 +114,7 @@ function FileActions(props: Props) {
 
   const lhsSection = (
     <>
-      {ENABLE_FILE_REACTIONS && !reactionsDisabled && <FileReactions uri={uri} livestream={isLivestreamClaim} />}
+      {ENABLE_FILE_REACTIONS && <FileReactions uri={uri} livestream={isLivestreamClaim} />}
       <ClaimSupportButton uri={uri} fileAction />
       <ClaimCollectionAddButton uri={uri} fileAction />
       {!hideRepost && (
