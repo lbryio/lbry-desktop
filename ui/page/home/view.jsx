@@ -17,7 +17,6 @@ import ScheduledStreams from 'component/scheduledStreams';
 import { splitBySeparator } from 'util/lbryURI';
 
 // @if TARGET='web'
-import Pixel from 'web/component/pixel';
 import Meme from 'web/component/meme';
 // @endif
 
@@ -187,9 +186,6 @@ function HomePage(props: Props) {
           })}
         </>
       )}
-      {/* @if TARGET='web' */}
-      <Pixel type={'retargeting'} />
-      {/* @endif */}
     </Page>
   );
 }
