@@ -1,4 +1,8 @@
 // @flow
+
+// $FlowFixMe
+import { Draggable } from 'react-beautiful-dnd';
+
 import { MAIN_CLASS } from 'constants/classnames';
 import type { Node } from 'react';
 import React, { useEffect } from 'react';
@@ -48,6 +52,9 @@ type Props = {
   excludeUris?: Array<string>,
   loadedCallback?: (number) => void,
   swipeLayout: boolean,
+  showEdit?: boolean,
+  droppableProvided?: any,
+  unavailableUris?: Array<string>,
 };
 
 export default function ClaimList(props: Props) {
@@ -82,6 +89,9 @@ export default function ClaimList(props: Props) {
     excludeUris = [],
     loadedCallback,
     swipeLayout = false,
+    showEdit,
+    droppableProvided,
+    unavailableUris,
   } = props;
 
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
@@ -149,6 +159,30 @@ export default function ClaimList(props: Props) {
     }
   }, [loading, onScrollBottom, urisLength, pageSize, page]);
 
+  const getClaimPreview = (uri: string, index: number, draggableProvided?: any) => (
+    <ClaimPreview
+      uri={uri}
+      indexInContainer={index}
+      type={type}
+      active={activeUri && uri === activeUri}
+      hideMenu={hideMenu}
+      includeSupportAction={includeSupportAction}
+      showUnresolvedClaim={showUnresolvedClaims}
+      properties={renderProperties || (type !== 'small' ? undefined : false)}
+      renderActions={renderActions}
+      showUserBlocked={showHiddenByUser}
+      showHiddenByUser={showHiddenByUser}
+      collectionId={collectionId}
+      showNoSourceClaims={showNoSourceClaims}
+      customShouldHide={customShouldHide}
+      onClick={handleClaimClicked}
+      swipeLayout={swipeLayout}
+      showEdit={showEdit}
+      dragHandleProps={draggableProvided && draggableProvided.dragHandleProps}
+      unavailableUris={unavailableUris}
+    />
+  );
+
   return tileLayout && !header ? (
     <section className={classnames('claim-grid', { 'swipe-list': swipeLayout })}>
       {urisLength > 0 &&
@@ -207,30 +241,44 @@ export default function ClaimList(props: Props) {
             'claim-list--card-body': tileLayout,
             'swipe-list': swipeLayout,
           })}
+          {...(droppableProvided && droppableProvided.droppableProps)}
+          ref={droppableProvided && droppableProvided.innerRef}
         >
-          {sortedUris.map((uri, index) => (
-            <React.Fragment key={uri}>
-              {injectedItem && index === 4 && <li>{injectedItem}</li>}
-              <ClaimPreview
-                uri={uri}
-                indexInContainer={index}
-                type={type}
-                active={activeUri && uri === activeUri}
-                hideMenu={hideMenu}
-                includeSupportAction={includeSupportAction}
-                showUnresolvedClaim={showUnresolvedClaims}
-                properties={renderProperties || (type !== 'small' ? undefined : false)}
-                renderActions={renderActions}
-                showUserBlocked={showHiddenByUser}
-                showHiddenByUser={showHiddenByUser}
-                collectionId={collectionId}
-                showNoSourceClaims={showNoSourceClaims}
-                customShouldHide={customShouldHide}
-                onClick={handleClaimClicked}
-                swipeLayout={swipeLayout}
-              />
-            </React.Fragment>
-          ))}
+          {injectedItem && sortedUris.some((uri, index) => index === 4) && <li>{injectedItem}</li>}
+
+          {sortedUris.map((uri, index) =>
+            droppableProvided ? (
+              <Draggable key={uri} draggableId={uri} index={index}>
+                {(draggableProvided, draggableSnapshot) => {
+                  // Restrict dragging to vertical axis
+                  // https://github.com/atlassian/react-beautiful-dnd/issues/958#issuecomment-980548919
+                  let transform = draggableProvided.draggableProps.style.transform;
+
+                  if (draggableSnapshot.isDragging && transform) {
+                    transform = transform.replace(/\(.+,/, '(0,');
+                  }
+
+                  const style = {
+                    ...draggableProvided.draggableProps.style,
+                    transform,
+                  };
+
+                  return (
+                    <li ref={draggableProvided.innerRef} {...draggableProvided.draggableProps} style={style}>
+                      {/* https://github.com/atlassian/react-beautiful-dnd/issues/1756 */}
+                      <div style={{ display: 'none' }} {...draggableProvided.dragHandleProps} />
+
+                      {getClaimPreview(uri, index, draggableProvided)}
+                    </li>
+                  );
+                }}
+              </Draggable>
+            ) : (
+              getClaimPreview(uri, index)
+            )
+          )}
+
+          {droppableProvided && droppableProvided.placeholder}
         </ul>
       )}
 

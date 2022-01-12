@@ -173,6 +173,21 @@
     flex-direction: column;
     overflow-wrap: break-word;
 
+    .card__header--between {
+      align-items: flex-start !important;
+
+      .card__title-actions {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        padding: var(--spacing-s);
+
+        button {
+          margin-top: var(--spacing-xxs);
+        }
+      }
+    }
+
     .file-page__recommended-collection__row {
       display: block;
 
@@ -183,6 +198,15 @@
       @media (max-width: $breakpoint-medium) {
         max-width: 50rem;
       }
+    }
+
+    .collection-preview__edit-group {
+      width: 1.5rem;
+    }
+
+    .claim-preview--collection-mine {
+      padding-left: 6.5rem;
+      position: relative;
     }
   }
 

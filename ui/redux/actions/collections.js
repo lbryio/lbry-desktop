@@ -319,160 +319,49 @@ export const doCollectionEdit = (collectionId: string, params: CollectionEditPar
 ) => {
   const state = getState();
   const collection: Collection = makeSelectCollectionForId(collectionId)(state);
+
+  if (!collection) return dispatch({ type: ACTIONS.COLLECTION_ERROR, data: { message: 'collection does not exist' } });
+
   const editedCollection: Collection = makeSelectEditedCollectionForId(collectionId)(state);
   const unpublishedCollection: Collection = makeSelectUnpublishedCollectionForId(collectionId)(state);
   const publishedCollection: Collection = makeSelectPublishedCollectionForId(collectionId)(state); // needs to be published only
 
-  const generateCollectionItemsFromSearchResult = (results) => {
-    return (
-      Object.values(results)
-        // $FlowFixMe
-        .reduce(
-          (
-            acc,
-            cur: {
-              stream: ?StreamClaim,
-              channel: ?ChannelClaim,
-              claimsInChannel: ?number,
-              collection: ?CollectionClaim,
-            }
-          ) => {
-            let url;
-            if (cur.stream) {
-              url = cur.stream.permanent_url;
-            } else if (cur.channel) {
-              url = cur.channel.permanent_url;
-            } else if (cur.collection) {
-              url = cur.collection.permanent_url;
-            } else {
-              return acc;
-            }
-            acc.push(url);
-            return acc;
-          },
-          []
-        )
-    );
-  };
-
-  if (!collection) {
-    return dispatch({
-      type: ACTIONS.COLLECTION_ERROR,
-      data: {
-        message: 'collection does not exist',
-      },
-    });
-  }
-
-  let currentItems = collection.items ? collection.items.concat() : [];
-  const { claims: passedClaims, order, claimIds, replace, remove, type } = params;
+  const { uris, order, remove, type } = params;
 
   const collectionType = type || collection.type;
-  let newItems: Array<?string> = currentItems;
+  const currentUrls = collection.items ? collection.items.concat() : [];
+  let newItems = currentUrls;
 
-  if (passedClaims) {
+  // Passed uris to add/remove:
+  if (uris) {
     if (remove) {
-      const passedUrls = passedClaims.map((claim) => claim.permanent_url);
-      // $FlowFixMe // need this?
-      newItems = currentItems.filter((item: string) => !passedUrls.includes(item));
+      // Filters (removes) the passed uris from the current list items
+      newItems = currentUrls.filter((url) => url && !uris.includes(url));
     } else {
-      passedClaims.forEach((claim) => newItems.push(claim.permanent_url));
+      // Pushes (adds to the end) the passed uris to the current list items
+      uris.forEach((url) => newItems.push(url));
     }
   }
 
-  if (claimIds) {
-    const batches = [];
-    if (claimIds.length > 50) {
-      for (let i = 0; i < Math.ceil(claimIds.length / 50); i++) {
-        batches[i] = claimIds.slice(i * 50, (i + 1) * 50);
-      }
-    } else {
-      batches[0] = claimIds;
-    }
-    const resultArray = await Promise.all(
-      batches.map((batch) => {
-        let options = { claim_ids: batch, page: 1, page_size: 50 };
-        return dispatch(doClaimSearch(options));
-      })
-    );
-
-    const searchResults = Object.assign({}, ...resultArray);
-
-    if (replace) {
-      newItems = generateCollectionItemsFromSearchResult(searchResults);
-    } else {
-      newItems = currentItems.concat(generateCollectionItemsFromSearchResult(searchResults));
-    }
-  }
-
+  // Passed an ordering to change: (doesn't need the uris here since
+  // the items are already on the list)
   if (order) {
-    const [movedItem] = currentItems.splice(order.from, 1);
-    currentItems.splice(order.to, 0, movedItem);
+    const [movedItem] = currentUrls.splice(order.from, 1);
+    currentUrls.splice(order.to, 0, movedItem);
   }
 
-  // console.log('p&e', publishedCollection.items, newItems, publishedCollection.items.join(','), newItems.join(','))
-  if (editedCollection) {
-    // delete edited if newItems are the same as publishedItems
-    if (publishedCollection.items.join(',') === newItems.join(',')) {
-      dispatch({
-        type: ACTIONS.COLLECTION_DELETE,
-        data: {
-          id: collectionId,
-          collectionKey: 'edited',
-        },
-      });
-    } else {
-      dispatch({
-        type: ACTIONS.COLLECTION_EDIT,
-        data: {
-          id: collectionId,
-          collectionKey: 'edited',
-          collection: {
-            items: newItems,
-            id: collectionId,
-            name: params.name || collection.name,
-            updatedAt: getTimestamp(),
-            type: collectionType,
-          },
-        },
-      });
-    }
-  } else if (publishedCollection) {
+  // Delete 'edited' if newItems are the same as publishedItems
+  if (editedCollection && newItems && publishedCollection.items.join(',') === newItems.join(',')) {
+    dispatch({ type: ACTIONS.COLLECTION_DELETE, data: { id: collectionId, collectionKey: 'edited' } });
+  } else {
     dispatch({
       type: ACTIONS.COLLECTION_EDIT,
       data: {
         id: collectionId,
-        collectionKey: 'edited',
-        collection: {
-          items: newItems,
-          id: collectionId,
-          name: params.name || collection.name,
-          updatedAt: getTimestamp(),
-          type: collectionType,
-        },
-      },
-    });
-  } else if (COLS.BUILTIN_LISTS.includes(collectionId)) {
-    dispatch({
-      type: ACTIONS.COLLECTION_EDIT,
-      data: {
-        id: collectionId,
-        collectionKey: 'builtin',
-        collection: {
-          items: newItems,
-          id: collectionId,
-          name: params.name || collection.name,
-          updatedAt: getTimestamp(),
-          type: collectionType,
-        },
-      },
-    });
-  } else if (unpublishedCollection) {
-    dispatch({
-      type: ACTIONS.COLLECTION_EDIT,
-      data: {
-        id: collectionId,
-        collectionKey: 'unpublished',
+        collectionKey:
+          ((editedCollection || publishedCollection) && 'edited') ||
+          (COLS.BUILTIN_LISTS.includes(collectionId) && 'builtin') ||
+          (unpublishedCollection && 'unpublished'),
         collection: {
           items: newItems,
           id: collectionId,
@@ -483,5 +372,6 @@ export const doCollectionEdit = (collectionId: string, params: CollectionEditPar
       },
     });
   }
+
   return true;
 };

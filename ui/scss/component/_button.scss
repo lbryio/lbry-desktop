@@ -602,30 +602,65 @@ svg + .button__label {
   }
 }
 
-.button-collection-order {
-  height: 100%;
+.button-collection-manage {
   font-size: var(--font-base);
   border-left-width: 0;
-  border-radius: 0;
   margin: 0;
-  color: var(--color-text);
+  width: 100%;
   button {
-    padding: var(--spacing-xs);
+    padding: var(--spacing-xxs);
+  }
+
+  .button__content {
+    display: unset;
+  }
+  line-height: 1.2;
+  font-weight: var(--font-weight-bold);
+  height: 100%;
+  background-color: var(--color-button-alt-bg);
+  color: var(--color-button-alt-text);
+  text-align: center;
+
+  &:hover {
+    background-color: var(--color-button-alt-bg-hover);
   }
 
   @media (max-width: $breakpoint-small) {
-    padding: var(--spacing-s) var(--spacing-s);
+    font-size: var(--font-small);
+
+    &:focus {
+      background-color: var(--color-button-alt-bg);
+    }
   }
 
-  &:first-of-type {
-    border-left-width: 1px;
+  &.top-right {
+    border-top-right-radius: var(--border-radius);
+  }
+  &.top-left {
     border-top-left-radius: var(--border-radius);
+  }
+  &.bottom-right {
+    border-bottom-right-radius: var(--border-radius);
+  }
+  &.bottom-left {
     border-bottom-left-radius: var(--border-radius);
   }
 
-  &:last-of-type {
-    border-top-right-radius: var(--border-radius);
-    border-bottom-right-radius: var(--border-radius);
+  &.button-collection-delete-confirm {
+    background-color: green;
+  }
+
+  &.button-collection-delete-cancel {
+    background-color: red;
+  }
+
+  &.button-collection-drag {
+    cursor: grab;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: var(--spacing-xs);
   }
 }
 

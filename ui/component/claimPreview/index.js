@@ -11,14 +11,9 @@ import {
   selectDateForUri,
 } from 'redux/selectors/claims';
 import { makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
-import {
-  makeSelectCollectionIsMine,
-  makeSelectUrlsForCollectionId,
-  makeSelectIndexForUrlInCollection,
-} from 'redux/selectors/collections';
+import { makeSelectCollectionIsMine } from 'redux/selectors/collections';
 
 import { doResolveUri } from 'redux/actions/claims';
-import { doCollectionEdit } from 'redux/actions/collections';
 import { doFileGet } from 'redux/actions/file';
 import { selectBanStateForUri } from 'lbryinc';
 import { selectIsActiveLivestreamForUri } from 'redux/selectors/livestream';
@@ -55,8 +50,6 @@ const select = (state, props) => {
     isLivestream,
     isLivestreamActive: isLivestream && selectIsActiveLivestreamForUri(state, props.uri),
     isCollectionMine: makeSelectCollectionIsMine(props.collectionId)(state),
-    collectionUris: makeSelectUrlsForCollectionId(props.collectionId)(state),
-    collectionIndex: makeSelectIndexForUrlInCollection(props.uri, props.collectionId)(state),
     lang: selectLanguage(state),
   };
 };
@@ -64,7 +57,6 @@ const select = (state, props) => {
 const perform = (dispatch) => ({
   resolveUri: (uri) => dispatch(doResolveUri(uri)),
   getFile: (uri) => dispatch(doFileGet(uri, false)),
-  editCollection: (id, params) => dispatch(doCollectionEdit(id, params)),
 });
 
 export default connect(select, perform)(ClaimPreview);

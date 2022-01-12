@@ -5,10 +5,12 @@ import { doCollectionEdit } from 'redux/actions/collections';
 import CollectionSelectItem from './view';
 
 const select = (state, props) => {
+  const { collectionId, uri } = props;
+
   return {
-    collection: makeSelectCollectionForId(props.collectionId)(state),
-    hasClaim: makeSelectCollectionForIdHasClaimUrl(props.collectionId, props.uri)(state),
-    collectionPending: makeSelectClaimIsPending(props.collectionId)(state),
+    collection: makeSelectCollectionForId(collectionId)(state),
+    hasClaim: makeSelectCollectionForIdHasClaimUrl(collectionId, uri)(state),
+    collectionPending: makeSelectClaimIsPending(collectionId)(state),
   };
 };
 

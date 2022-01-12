@@ -215,6 +215,15 @@
   }
 }
 
+.claim-preview--collection-mine {
+  padding-left: 9rem;
+  position: relative;
+
+  @media (max-width: $breakpoint-small) {
+    padding-left: 6.5rem;
+  }
+}
+
 .claim-preview--pending {
   opacity: 0.6;
 }

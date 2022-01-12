@@ -79,15 +79,7 @@ const ClaimCollectionAdd = (props: Props) => {
                   .filter((list) => (isChannel ? list.type === 'collection' : list.type === 'playlist'))
                   .map((l) => {
                     const { id } = l;
-                    return (
-                      <CollectionSelectItem
-                        claim={claim}
-                        collectionId={id}
-                        uri={permanentUrl}
-                        key={id}
-                        category={'builtin'}
-                      />
-                    );
+                    return <CollectionSelectItem collectionId={id} uri={permanentUrl} key={id} category={'builtin'} />;
                   })}
                 {unpublished &&
                   (Object.values(unpublished): any)
@@ -96,13 +88,7 @@ const ClaimCollectionAdd = (props: Props) => {
                     .map((l) => {
                       const { id } = l;
                       return (
-                        <CollectionSelectItem
-                          claim={claim}
-                          collectionId={id}
-                          uri={permanentUrl}
-                          key={id}
-                          category={'unpublished'}
-                        />
+                        <CollectionSelectItem collectionId={id} uri={permanentUrl} key={id} category={'unpublished'} />
                       );
                     })}
                 {published &&
@@ -110,13 +96,7 @@ const ClaimCollectionAdd = (props: Props) => {
                     // $FlowFixMe
                     const { id } = l;
                     return (
-                      <CollectionSelectItem
-                        claim={claim}
-                        collectionId={id}
-                        uri={permanentUrl}
-                        key={id}
-                        category={'published'}
-                      />
+                      <CollectionSelectItem collectionId={id} uri={permanentUrl} key={id} category={'published'} />
                     );
                   })}
               </div>
