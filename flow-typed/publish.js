@@ -56,7 +56,7 @@ declare type PublishParams = {
 declare type TusUploader = any;
 
 declare type FileUploadSdkParams = {
-  file_path: string,
+  file_path: string | File,
   name: ?string,
   preview?: boolean,
   remote_url?: string,

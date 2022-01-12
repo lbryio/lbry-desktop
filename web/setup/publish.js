@@ -16,6 +16,7 @@ export default function apiPublishCallViaWeb(
   reject: Function
 ) {
   const { file_path: filePath, preview, remote_url: remoteUrl } = params;
+  const isMarkdown = filePath && typeof filePath === 'object' && filePath.type === 'text/markdown';
 
   if (!filePath && !remoteUrl) {
     return apiCall(method, params, resolve, reject);
@@ -41,7 +42,7 @@ export default function apiPublishCallViaWeb(
     params.guid = uuid();
   }
 
-  const useV1 = remoteUrl || preview || !tus.isSupported;
+  const useV1 = remoteUrl || isMarkdown || preview || !tus.isSupported;
 
   // Note: both function signature (params) should match.
   const makeRequest = useV1 ? makeUploadRequest : makeResumableUploadRequest;
