@@ -4,7 +4,21 @@ const DEFAULT_LANG = 'en';
 
 export const getDefaultLanguage = () => {
   const browserLanguage = window.navigator.language;
-  return SUPPORTED_BROWSER_LANGUAGES[browserLanguage] || DEFAULT_LANG;
+
+  if (SUPPORTED_BROWSER_LANGUAGES[browserLanguage]) {
+    return SUPPORTED_BROWSER_LANGUAGES[browserLanguage];
+  }
+
+  if (browserLanguage.includes('-')) {
+    // Perhaps it is a sub-lang that we are currently not supporting.
+    // See if we support the main one.
+    const mainLang = browserLanguage.substring(0, browserLanguage.indexOf('-'));
+    if (SUPPORTED_BROWSER_LANGUAGES[mainLang]) {
+      return SUPPORTED_BROWSER_LANGUAGES[mainLang];
+    }
+  }
+
+  return DEFAULT_LANG;
 };
 
 // If homepages has a key "zh-Hant" return that, otherwise return "zh", otherwise "en"
