@@ -1,13 +1,7 @@
 import { connect } from 'react-redux';
-import {
-  selectClaimIsMine,
-  selectClaimForUri,
-  selectHasChannels,
-  makeSelectTagInClaimOrChannelForUri,
-} from 'redux/selectors/claims';
+import { selectClaimIsMine, selectClaimForUri, selectHasChannels } from 'redux/selectors/claims';
 import { makeSelectStreamingUrlForUri, makeSelectFileInfoForUri } from 'redux/selectors/file_info';
 import { doPrepareEdit } from 'redux/actions/publish';
-import { DISABLE_COMMENTS_TAG } from 'constants/tags';
 import { selectCostInfoForUri } from 'lbryinc';
 import { doSetPlayingUri, doPlayUri } from 'redux/actions/content';
 import { doToast } from 'redux/actions/notifications';
@@ -26,7 +20,6 @@ const select = (state, props) => {
     renderMode: makeSelectFileRenderModeForUri(props.uri)(state),
     costInfo: selectCostInfoForUri(state, props.uri),
     hasChannels: selectHasChannels(state),
-    reactionsDisabled: makeSelectTagInClaimOrChannelForUri(props.uri, DISABLE_COMMENTS_TAG)(state),
     streamingUrl: makeSelectStreamingUrlForUri(props.uri)(state),
   };
 };
