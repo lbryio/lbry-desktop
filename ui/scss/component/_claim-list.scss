@@ -216,8 +216,12 @@
 }
 
 .claim-preview--collection-mine {
-  padding-left: 7rem;
+  padding-left: 9rem;
   position: relative;
+
+  @media (max-width: $breakpoint-small) {
+    padding-left: 6.5rem;
+  }
 }
 
 .claim-preview--pending {
@@ -240,7 +244,6 @@
   .claim-preview__actions {
     align-self: flex-end;
     margin-bottom: auto;
-    justify-content: flex-end;
     width: auto;
   }
 
@@ -250,10 +253,6 @@
     justify-content: space-between;
     flex-wrap: wrap;
     align-items: center;
-
-    .claim-preview__actions {
-      margin-left: var(--spacing-m);
-    }
   }
 
   @media (max-width: $breakpoint-xsmall) {
@@ -300,6 +299,14 @@
   display: flex;
   flex-direction: column;
   flex: 1;
+}
+
+// REMOVE ?
+.claim-preview-metadata-sub-upload {
+  position: relative;
+  //margin-left: 4px;
+  display: flex;
+  text-align: left;
 }
 
 .claim-preview-info {

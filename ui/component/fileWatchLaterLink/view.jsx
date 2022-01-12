@@ -7,7 +7,6 @@ import * as COLLECTIONS_CONSTS from 'constants/collections';
 
 type Props = {
   uri: string,
-  claim: StreamClaim,
   focusable: boolean,
   hasClaimInWatchLater: boolean,
   doToast: ({ message: string }) => void,
@@ -15,13 +14,9 @@ type Props = {
 };
 
 function FileWatchLaterLink(props: Props) {
-  const { claim, hasClaimInWatchLater, doToast, doCollectionEdit, focusable = true } = props;
+  const { uri, hasClaimInWatchLater, doToast, doCollectionEdit, focusable = true } = props;
   const buttonRef = useRef();
   let isHovering = useHover(buttonRef);
-
-  if (!claim) {
-    return null;
-  }
 
   function handleWatchLater(e) {
     e.preventDefault();
@@ -31,7 +26,7 @@ function FileWatchLaterLink(props: Props) {
       linkTarget: !hasClaimInWatchLater && '/list/watchlater',
     });
     doCollectionEdit(COLLECTIONS_CONSTS.WATCH_LATER_ID, {
-      claims: [claim],
+      uris: [uri],
       remove: hasClaimInWatchLater,
       type: 'playlist',
     });

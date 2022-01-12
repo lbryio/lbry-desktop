@@ -2249,5 +2249,11 @@
   "Amount of $%input_amount% LBC in USB is lower than price of $%price_amount%": "Amount of $%input_amount% LBC in USB is lower than price of $%price_amount%",
   "Hosting for content you have downloaded": "Hosting for content you have downloaded",
   "Hosting content selected by the network": "Hosting content selected by the network",
+  "Remove all unavailable claims": "Remove all unavailable claims",
+  "Drag": "Drag",
+  "Move Top": "Move Top",
+  "Move Bottom": "Move Bottom",
+  "Move Up": "Move Up",
+  "Move Down": "Move Down",
   "--end--": "--end--"
 }

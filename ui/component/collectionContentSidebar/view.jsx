@@ -1,5 +1,10 @@
 // @flow
+
+// $FlowFixMe
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+
 import React from 'react';
+import classnames from 'classnames';
 import ClaimList from 'component/claimList';
 import Card from 'component/common/card';
 import Button from 'component/button';
@@ -11,7 +16,7 @@ import * as ICONS from 'constants/icons';
 type Props = {
   id: string,
   url: string,
-  isMine: boolean,
+  isMyCollection: boolean,
   collectionUrls: Array<Claim>,
   collectionName: string,
   collection: any,
@@ -20,10 +25,35 @@ type Props = {
   doToggleLoopList: (string, boolean) => void,
   doToggleShuffleList: (string, string, boolean) => void,
   createUnpublishedCollection: (string, Array<any>, ?string) => void,
+  doCollectionEdit: (string, CollectionEditParams) => void,
 };
 
 export default function CollectionContent(props: Props) {
-  const { collectionUrls, collectionName, id, url, loop, shuffle, doToggleLoopList, doToggleShuffleList } = props;
+  const {
+    isMyCollection,
+    collectionUrls,
+    collectionName,
+    id,
+    url,
+    loop,
+    shuffle,
+    doToggleLoopList,
+    doToggleShuffleList,
+    doCollectionEdit,
+  } = props;
+
+  const [showEdit, setShowEdit] = React.useState(false);
+
+  function handleOnDragEnd(result) {
+    const { source, destination } = result;
+
+    if (!destination) return;
+
+    const { index: from } = source;
+    const { index: to } = destination;
+
+    doCollectionEdit(id, { order: { from, to } });
+  }
 
   return (
     <Card
@@ -63,20 +93,39 @@ export default function CollectionContent(props: Props) {
         </>
       }
       titleActions={
-        <div className="card__title-actions--link">
-          {/* TODO: BUTTON TO SAVE COLLECTION - Probably save/copy modal */}
-          <Button label={__('View List')} button="link" navigate={`/$/${PAGES.LIST}/${id}`} />
-        </div>
+        <>
+          <div className="card__title-actions--link">
+            {/* TODO: BUTTON TO SAVE COLLECTION - Probably save/copy modal */}
+            <Button label={__('View List')} button="link" navigate={`/$/${PAGES.LIST}/${id}`} />
+          </div>
+
+          {isMyCollection && (
+            <Button
+              title={__('Edit')}
+              className={classnames('button-toggle', { 'button-toggle--active': showEdit })}
+              icon={ICONS.EDIT}
+              onClick={() => setShowEdit(!showEdit)}
+            />
+          )}
+        </>
       }
       body={
-        <ClaimList
-          isCardBody
-          type="small"
-          activeUri={url}
-          uris={collectionUrls}
-          collectionId={id}
-          empty={__('List is Empty')}
-        />
+        <DragDropContext onDragEnd={handleOnDragEnd}>
+          <Droppable droppableId="list__ordering">
+            {(DroppableProvided) => (
+              <ClaimList
+                isCardBody
+                type="small"
+                activeUri={url}
+                uris={collectionUrls}
+                collectionId={id}
+                empty={__('List is Empty')}
+                showEdit={showEdit}
+                droppableProvided={DroppableProvided}
+              />
+            )}
+          </Droppable>
+        </DragDropContext>
       }
     />
   );

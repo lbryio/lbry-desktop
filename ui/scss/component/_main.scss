@@ -12,7 +12,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  min-height: calc(100vh - var(--header-height));
+  min-height: 100vh;
   margin-left: auto;
   margin-right: auto;
   margin-top: var(--header-height);
@@ -26,7 +26,7 @@
 
   @media (max-width: $breakpoint-small) {
     padding: var(--spacing-xs);
-    padding-top: var(--spacing-m);
+    margin-top: var(--header-height-mobile);
   }
 
   @media (min-width: $breakpoint-large) {
@@ -42,20 +42,52 @@
   padding-top: 0;
 }
 
+// REMOVE next 4?
+.main-wrapper__inner--auth {
+  min-height: unset;
+  padding: 0;
+}
+
+.sidebar--pusher {
+  animation-timing-function: var(--resizing-animation-function);
+  transition: transform var(--resizing-animation-timing);
+  transform-origin: left;
+  position: absolute;
+
+  @media (max-width: $breakpoint-small) {
+    transform: translateX(0);
+    width: calc(100% - var(--spacing-m));
+  }
+
+  @media (min-width: $breakpoint-small) {
+    transform: translateX(var(--side-nav-width--micro));
+    width: calc(100% - ((var(--side-nav-width--micro))));
+  }
+}
+
+.sidebar--pusher--filepage {
+  width: 100%;
+}
+
+.sidebar--pusher--open {
+  @media (min-width: $breakpoint-medium) {
+    transform: translateX(var(--side-nav-width));
+    width: calc(100% - var(--side-nav-width));
+  }
+}
+
 .main {
   position: relative;
-  width: calc(100% - var(--side-nav-width) - var(--spacing-l));
+  width: calc(100% - 2 * var(--spacing-l));
   max-width: var(--page-max-width);
   z-index: 0;
   margin-right: auto;
   margin-left: auto;
+  min-height: calc(100vh - var(--header-height));
 
-  @media (max-width: $breakpoint-medium) and (min-width: $breakpoint-small) {
-    margin: 0 var(--spacing-l);
-  }
-
-  @media (max-width: $breakpoint-medium) {
+  @media (max-width: $breakpoint-small) {
     width: 100%;
+    min-height: calc(100vh - var(--header-height-mobile));
   }
 }
 
@@ -127,13 +159,7 @@
     margin-left: var(--spacing-m);
 
     .card__header--between {
-      padding: var(--spacing-s) var(--spacing-s) var(--spacing-s) var(--spacing-s);
-      display: flex;
       align-items: center;
-      .card__title-actions {
-        padding: 0 0 0 0;
-        align-items: center;
-      }
     }
     @media (max-width: $breakpoint-medium) {
       width: 100%;
@@ -148,7 +174,18 @@
     overflow-wrap: break-word;
 
     .card__header--between {
-      padding: var(--spacing-s) var(--spacing-s) var(--spacing-s) var(--spacing-s);
+      align-items: flex-start !important;
+
+      .card__title-actions {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        padding: var(--spacing-s);
+
+        button {
+          margin-top: var(--spacing-xxs);
+        }
+      }
     }
 
     .file-page__recommended-collection__row {
@@ -161,6 +198,15 @@
       @media (max-width: $breakpoint-medium) {
         max-width: 50rem;
       }
+    }
+
+    .collection-preview__edit-group {
+      width: 1.5rem;
+    }
+
+    .claim-preview--collection-mine {
+      padding-left: 6.5rem;
+      position: relative;
     }
   }
 
@@ -221,12 +267,7 @@
 
 .main--full-width {
   @extend .main;
-
-  @media (min-width: $breakpoint-large) {
-    max-width: none;
-    width: 100%;
-    margin: 0 var(--spacing-l);
-  }
+  max-width: none;
 }
 
 .main--auth-page {
@@ -249,6 +290,10 @@
   margin-right: auto;
   margin-top: var(--spacing-m);
   padding: 0 var(--spacing-m);
+
+  @media (max-width: $breakpoint-small) {
+    padding: 0 0;
+  }
 
   .card__subtitle {
     margin: 0 0 var(--spacing-s) 0;
@@ -393,17 +438,24 @@
 .main__sign-up--graphic {
   max-width: 47rem;
 
+  .card__first-pane {
+    width: 50%;
+    @media (max-width: $breakpoint-small) {
+      width: 100%;
+    }
+  }
+
   .card__second-pane {
     width: 50%;
+    @media (max-width: $breakpoint-small) {
+      width: 100%;
+    }
+
     border: none;
     display: flex;
     align-items: center;
     justify-content: center;
     background: var(--color-login-graphic-background);
-
-    @media (max-width: $breakpoint-small) {
-      width: 100%;
-    }
 
     .signup-image {
       @media (max-width: $breakpoint-small) {
@@ -413,7 +465,7 @@
   }
 
   .card__title {
-    font-size: var(--font-heading);
+    font-size: var(--font-title);
     font-weight: var(--font-weight-bold);
   }
 

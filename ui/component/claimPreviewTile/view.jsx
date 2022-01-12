@@ -86,6 +86,7 @@ function ClaimPreviewTile(props: Props) {
   const thumbnailUrl = useGetThumbnail(uri, claim, streamingUrl, getFile, placeholder) || thumbnail;
   const canonicalUrl = claim && claim.canonical_url;
   const permanentUrl = claim && claim.permanent_url;
+  const repostedContentUri = claim && (claim.reposted_claim ? claim.reposted_claim.permanent_url : claim.permanent_url);
   const listId = collectionId || collectionClaimId;
   const navigateUrl =
     formatLbryUrlForWeb(canonicalUrl || uri || '/') + (listId ? generateListSearchUrlParams(listId) : '');
@@ -178,7 +179,7 @@ function ClaimPreviewTile(props: Props) {
           {!isChannel && (
             <React.Fragment>
               <div className="claim-preview__hover-actions">
-                {isPlayable && <FileWatchLaterLink focusable={false} uri={uri} />}
+                {isPlayable && <FileWatchLaterLink focusable={false} uri={repostedContentUri} />}
               </div>
               {/* @if TARGET='app' */}
               <div className="claim-preview__hover-actions">
