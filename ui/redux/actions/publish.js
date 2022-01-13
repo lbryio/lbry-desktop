@@ -3,6 +3,7 @@ import * as MODALS from 'constants/modal_types';
 import * as ACTIONS from 'constants/action_types';
 import * as PAGES from 'constants/pages';
 import { batchActions } from 'util/batch-actions';
+import { THUMBNAIL_CDN_SIZE_LIMIT_BYTES } from 'config';
 import { doCheckPendingClaims } from 'redux/actions/claims';
 import {
   makeSelectClaimForUri,
@@ -476,8 +477,10 @@ export const doUploadThumbnail = (
         }
 
         const userInput = [fileName, fileExt, fileType, thumbnail, size];
-        if (size >= 2097152) {
-          message = __('Thumbnail size over 2MB, please edit and reupload.');
+        if (size >= THUMBNAIL_CDN_SIZE_LIMIT_BYTES) {
+          message = __('Thumbnail size over %max_size%MB, please edit and reupload.', {
+            max_size: THUMBNAIL_CDN_SIZE_LIMIT_BYTES / (1024 * 1024),
+          });
         }
 
         uploadError({ message, cause: `${userInput.join(' | ')}` });

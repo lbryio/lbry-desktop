@@ -2,7 +2,7 @@
 import * as MODALS from 'constants/modal_types';
 import * as THUMBNAIL_STATUSES from 'constants/thumbnail_upload_statuses';
 import Lbry from 'lbry';
-import { DOMAIN } from 'config';
+import { DOMAIN, THUMBNAIL_CDN_SIZE_LIMIT_BYTES } from 'config';
 import * as React from 'react';
 import { FormField } from 'component/common/form';
 import FileSelector from 'component/common/file-selector';
@@ -188,7 +188,10 @@ function SelectThumbnail(props: Props) {
         <p className="help">
           {manualInput
             ? __('Enter a URL for your thumbnail.')
-            : __('Upload your thumbnail to %domain%. Recommended ratio is 16:9, 2MB max.', { domain: DOMAIN })}
+            : __('Upload your thumbnail to %domain%. Recommended ratio is 16:9, %max_size%MB max.', {
+                domain: DOMAIN,
+                max_size: THUMBNAIL_CDN_SIZE_LIMIT_BYTES / (1024 * 1024),
+              })}
         </p>
       )}
     </>

@@ -2,8 +2,7 @@
 import React, { useRef } from 'react';
 import { Modal } from 'modal/modal';
 import { formatFileSystemPath } from 'util/url';
-
-const VANWA_SIZE_LIMIT = 2 * 1024 * 1024;
+import { THUMBNAIL_CDN_SIZE_LIMIT_BYTES } from 'config';
 
 type Props = {
   upload: (WebFile) => void,
@@ -31,7 +30,7 @@ function ModalAutoGenerateThumbnail(props: Props) {
     };
 
     let img = generateImg(1.0);
-    if (img.file && img.file.size > VANWA_SIZE_LIMIT) {
+    if (img.file && img.file.size > THUMBNAIL_CDN_SIZE_LIMIT_BYTES) {
       img = generateImg(0.8);
     }
 

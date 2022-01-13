@@ -20,7 +20,7 @@ import analytics from 'analytics';
 import LbcSymbol from 'component/common/lbc-symbol';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 import WalletSpendableBalanceHelp from 'component/walletSpendableBalanceHelp';
-import { SIMPLE_SITE } from 'config';
+import { SIMPLE_SITE, THUMBNAIL_CDN_SIZE_LIMIT_BYTES } from 'config';
 import { sortLanguageMap } from 'util/default-languages';
 import ThumbnailBrokenImage from 'component/selectThumbnail/thumbnail-broken.png';
 import Gerbil from 'component/channelThumbnail/gerbil.png';
@@ -282,7 +282,9 @@ function ChannelForm(props: Props) {
                 openModal(MODALS.IMAGE_UPLOAD, {
                   onUpdate: (coverUrl, isUpload) => handleCoverChange(coverUrl, isUpload),
                   title: __('Edit Cover Image'),
-                  helpText: __('(6.25:1 ratio, 2MB max)'),
+                  helpText: __('(6.25:1 ratio, %max_size%MB max)', {
+                    max_size: THUMBNAIL_CDN_SIZE_LIMIT_BYTES / (1024 * 1024),
+                  }),
                   assetName: __('Cover Image'),
                   currentValue: params.coverUrl,
                 })
@@ -308,7 +310,9 @@ function ChannelForm(props: Props) {
                   openModal(MODALS.IMAGE_UPLOAD, {
                     onUpdate: (thumbnailUrl, isUpload) => handleThumbnailChange(thumbnailUrl, isUpload),
                     title: __('Edit Thumbnail Image'),
-                    helpText: __('(1:1 ratio, 2MB max)'),
+                    helpText: __('(1:1 ratio, %max_size%MB max)', {
+                      max_size: THUMBNAIL_CDN_SIZE_LIMIT_BYTES / (1024 * 1024),
+                    }),
                     assetName: __('Thumbnail'),
                     currentValue: params.thumbnailUrl,
                   })
