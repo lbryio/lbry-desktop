@@ -3,8 +3,10 @@ import React, { useRef } from 'react';
 import { Modal } from 'modal/modal';
 import { formatFileSystemPath } from 'util/url';
 
+const VANWA_SIZE_LIMIT = 2 * 1024 * 1024;
+
 type Props = {
-  upload: WebFile => void,
+  upload: (WebFile) => void,
   filePath: string,
   closeModal: () => void,
   showToast: ({}) => void,
@@ -21,20 +23,27 @@ function ModalAutoGenerateThumbnail(props: Props) {
   }
 
   function uploadImage() {
-    const imageBuffer = captureSnapshot();
-    // $FlowFixMe
-    const file = new File([imageBuffer], 'thumbnail.png', { type: 'image/png' });
-
-    if (imageBuffer) {
+    const generateImg = (quality: number) => {
+      const imageBuffer = captureSnapshot(quality);
       // $FlowFixMe
-      upload(file);
+      const file = new File([imageBuffer], 'thumbnail.jpeg', { type: 'image/jpeg' });
+      return { imageBuffer, file };
+    };
+
+    let img = generateImg(1.0);
+    if (img.file && img.file.size > VANWA_SIZE_LIMIT) {
+      img = generateImg(0.8);
+    }
+
+    if (img.imageBuffer) {
+      upload(img.file);
       closeModal();
     } else {
       onError();
     }
   }
 
-  function captureSnapshot(): ?Buffer {
+  function captureSnapshot(quality: number): ?Buffer {
     const player = playerRef.current;
     if (!player) {
       return;
@@ -45,7 +54,7 @@ function ModalAutoGenerateThumbnail(props: Props) {
     canvas.height = player.videoHeight;
     const context = canvas.getContext('2d');
     context.drawImage(player, 0, 0, canvas.width, canvas.height);
-    const dataURL = canvas.toDataURL();
+    const dataURL = canvas.toDataURL('image/jpeg', quality);
     const rawData = dataURL.replace(/data:image\/\w+;base64,/i, '');
     canvas.remove();
     return Buffer.from(rawData, 'base64');
