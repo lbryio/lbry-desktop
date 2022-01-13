@@ -60,7 +60,7 @@ export function makeResumableUploadRequest(
     const uploader = new tus.Upload(file, {
       ...urlOptions,
       chunkSize: UPLOAD_CHUNK_SIZE_BYTE,
-      retryDelays: [0, 5000, 10000, 15000, 30000],
+      retryDelays: [5000, 10000, 30000],
       parallelUploads: 1,
       storeFingerprintForResuming: false,
       removeFingerprintOnSuccess: true,
@@ -72,7 +72,6 @@ export function makeResumableUploadRequest(
       onShouldRetry: (err, retryAttempt, options) => {
         window.store.dispatch(doUpdateUploadProgress({ guid, status: 'retry' }));
         const status = err.originalResponse ? err.originalResponse.getStatus() : 0;
-        analytics.error(`tus: retry=${uploader._retryAttempt}, status=${status}`);
         return !inStatusCategory(status, 400) || status === STATUS_CONFLICT || status === STATUS_LOCKED;
       },
       onError: (err) => {
