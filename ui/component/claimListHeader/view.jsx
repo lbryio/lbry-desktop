@@ -323,8 +323,8 @@ function ClaimListHeader(props: Props) {
                 </div>
               )}
 
-              {/* CONTENT_TYPES FIELD */}
-              {!claimType && (
+              {/* CONTENT_TYPES FIELD - display using same logic as showDuration */}
+              {showDuration && (
                 <div
                   className={classnames('claim-search__input-container', {
                     'claim-search__input-container--selected': contentTypeParam,
@@ -368,8 +368,8 @@ function ClaimListHeader(props: Props) {
                 </div>
               )}
 
-              {/* LANGUAGE FIELD */}
-              {!claimType && (
+              {/* LANGUAGE FIELD - hidden for now */}
+              {false && !claimType && (
                 <div
                   className={classnames('claim-search__input-container', {
                     'claim-search__input-container--selected': shouldHighlight,
