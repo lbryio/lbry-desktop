@@ -350,11 +350,15 @@ export function CommentCreate(props: Props) {
 
       if (inputRef && inputRef.current === document.activeElement) {
         // $FlowFixMe
-        const isTyping = e.target.attributes['term'];
+        const isTyping = Boolean(e.target.attributes['typing-term']);
 
         if (((isLivestream && !isTyping) || e.ctrlKey || e.metaKey) && e.keyCode === KEYCODES.ENTER) {
           e.preventDefault();
           buttonRef.current.click();
+        }
+
+        if (isLivestream && isTyping && e.keyCode === KEYCODES.ENTER) {
+          inputRef.current.removeAttribute('typing-term');
         }
       }
     }

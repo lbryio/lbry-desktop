@@ -231,6 +231,7 @@ export default function TextareaWithSuggestions(props: Props) {
       const token = isEmote ? ':' : '@';
       const tokenIndex = currentSuggestionValue.indexOf(token);
 
+      if (inputRef && inputRef.current) inputRef.current.setAttribute('typing-term', '');
       // $FlowFixMe
       setSuggestionValue({
         beforeTerm: currentSuggestionValue.substring(0, tokenIndex), // in case of a space or newline
@@ -245,7 +246,7 @@ export default function TextareaWithSuggestions(props: Props) {
   }
 
   const handleSelect = React.useCallback(
-    (selectedValue: string) => {
+    (selectedValue: string, key?: number) => {
       if (!suggestionValue) return;
 
       const elem = inputRef && inputRef.current;
@@ -262,6 +263,11 @@ export default function TextareaWithSuggestions(props: Props) {
 
       onChange({ target: { value: newValue } });
       setSuggestionValue(null);
+
+      // no keycode === was selected with TAB (function was called by effect) or on click
+      // ENTER is handled on commentCreate after attempting to send on livestream
+      if (!key && inputRef && inputRef.current) inputRef.current.removeAttribute('typing-term');
+
       elem.focus();
       elem.setSelectionRange(newCursorPos, newCursorPos);
     },
@@ -293,17 +299,6 @@ export default function TextareaWithSuggestions(props: Props) {
       doSetMentionSearchResults(debouncedTerm, arrayResults);
     }
   }, [debouncedTerm, doResolveUris, doSetMentionSearchResults, stringifiedResults, suggestionTerm]);
-
-  // Disable sending on Enter on Livestream chat
-  React.useEffect(() => {
-    if (!isLivestream) return;
-
-    if (suggestionTerm && inputRef) {
-      inputRef.current.setAttribute('term', suggestionTerm);
-    } else {
-      inputRef.current.removeAttribute('term');
-    }
-  }, [inputRef, isLivestream, suggestionTerm]);
 
   // Only resolve commentors on Livestreams when first trying to mention/looking for it
   React.useEffect(() => {
@@ -382,7 +377,7 @@ export default function TextareaWithSuggestions(props: Props) {
       onBlur={() => onBlur && onBlur()}
       /* Different from onInputChange, onChange is only used for the selected value,
         so here it is acting simply as a selection handler (see it as onSelect) */
-      onChange={(event, value) => handleSelect(value.label)}
+      onChange={(event, value) => handleSelect(value.label, event.keyCode)}
       onClose={(event, reason) => reason !== 'selectOption' && setClose(true)}
       onFocus={() => onFocus && onFocus()}
       onHighlightChange={(event, option) => setHighlightedSuggestion(option)}
