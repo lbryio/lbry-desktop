@@ -60,7 +60,7 @@ export function makeResumableUploadRequest(
     const uploader = new tus.Upload(file, {
       ...urlOptions,
       chunkSize: UPLOAD_CHUNK_SIZE_BYTE,
-      retryDelays: [0, 5000, 10000, 15000, 30000],
+      retryDelays: [5000, 10000, 30000],
       parallelUploads: 1,
       storeFingerprintForResuming: false,
       removeFingerprintOnSuccess: true,
@@ -72,36 +72,31 @@ export function makeResumableUploadRequest(
       onShouldRetry: (err, retryAttempt, options) => {
         window.store.dispatch(doUpdateUploadProgress({ guid, status: 'retry' }));
         const status = err.originalResponse ? err.originalResponse.getStatus() : 0;
-        analytics.error(`tus: retry=${uploader._retryAttempt}, status=${status}`);
         return !inStatusCategory(status, 400) || status === STATUS_CONFLICT || status === STATUS_LOCKED;
       },
       onError: (err) => {
         const status = err.originalResponse ? err.originalResponse.getStatus() : 0;
         const errMsg = typeof err === 'string' ? err : err.message;
 
-        if (status === STATUS_CONFLICT) {
-          window.store.dispatch(doUpdateUploadProgress({ guid, status: 'conflict' }));
-          reject(new Error(`${status}: concurrent upload detected.`));
-        } else {
-          const errToLog =
-            status === STATUS_LOCKED || errMsg === 'file currently locked'
-              ? 'File is locked. Try resuming after waiting a few minutes'
-              : err;
-
-          window.store.dispatch(doUpdateUploadProgress({ guid, status: 'error' }));
-          reject(
-            // $FlowFixMe - flow's constructor for Error is incorrect.
-            new Error(errToLog, {
-              cause: {
-                url: uploader.url,
-                status,
-                ...(uploader._fingerprint ? { fingerprint: uploader._fingerprint } : {}),
-                ...(uploader._retryAttempt ? { retryAttempt: uploader._retryAttempt } : {}),
-                ...(uploader._offsetBeforeRetry ? { offsetBeforeRetry: uploader._offsetBeforeRetry } : {}),
-              },
-            })
-          );
+        let customErr;
+        if (status === STATUS_LOCKED || errMsg === 'file currently locked') {
+          customErr = 'File is locked. Try resuming after waiting a few minutes';
         }
+
+        window.store.dispatch(doUpdateUploadProgress({ guid, status: 'error' }));
+        reject(
+          // $FlowFixMe - flow's constructor for Error is incorrect.
+          new Error(customErr || err, {
+            cause: {
+              url: uploader.url,
+              status,
+              ...(uploader._fingerprint ? { fingerprint: uploader._fingerprint } : {}),
+              ...(uploader._retryAttempt ? { retryAttempt: uploader._retryAttempt } : {}),
+              ...(uploader._offsetBeforeRetry ? { offsetBeforeRetry: uploader._offsetBeforeRetry } : {}),
+              ...(customErr ? { original: errMsg } : {}),
+            },
+          })
+        );
       },
       onProgress: (bytesUploaded, bytesTotal) => {
         const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
