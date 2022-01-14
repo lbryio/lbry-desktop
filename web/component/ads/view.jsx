@@ -17,6 +17,9 @@ const HOMEPAGE_ADS_URL =
   'https://cdn.vidcrunch.com/integrations/618bb4d28aac298191eec411/Lbry_Odysee.com_Responsive_Floating_300x169_DFP_Rev70_1211.js';
 const HOMEPAGE_ADS_TAG = 'vidcrunchJS330442776';
 
+const EU_AD_URL = 'https://tg1.vidcrunch.com/api/adserver/spt?AV_TAGID=61dff05c599f1e20b01085d4&AV_PUBLISHERID=6182c8993c8ae776bd5635e9';
+const EU_AD_TAG = 'AV61dff05c599f1e20b01085d4';
+
 const IS_IOS =
   (/iPad|iPhone|iPod/.test(navigator.platform) ||
     // for iOS 13+ , platform is MacIntel, so use this to test
@@ -55,11 +58,19 @@ function Ads(props: Props) {
 
   const shouldShowAds = SHOW_ADS && !authenticated;
 
+  // this is populated from app based on location
+  let isInEu = localStorage.getItem('gdprRequired');
+  // cant store booleans so we store it as a string
+  isInEu = isInEu === 'true';
+
   // load ad and tags here
   let scriptUrlToUse;
   let tagNameToUse;
   if (type === 'video') {
-    if (IS_IOS) {
+    if (isInEu) {
+      tagNameToUse = EU_AD_TAG;
+      scriptUrlToUse = EU_AD_URL;
+    } else if (IS_IOS) {
       tagNameToUse = IOS_ADS_TAG;
       scriptUrlToUse = IOS_ADS_URL;
     } else {
@@ -67,8 +78,13 @@ function Ads(props: Props) {
       scriptUrlToUse = ADS_URL;
     }
   } else if (type === 'homepage') {
-    tagNameToUse = HOMEPAGE_ADS_TAG;
-    scriptUrlToUse = HOMEPAGE_ADS_URL;
+    if (isInEu) {
+      tagNameToUse = EU_AD_TAG;
+      scriptUrlToUse = EU_AD_URL;
+    } else {
+      tagNameToUse = HOMEPAGE_ADS_TAG;
+      scriptUrlToUse = HOMEPAGE_ADS_URL;
+    }
   }
 
   // add script to DOM
