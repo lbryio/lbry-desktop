@@ -241,6 +241,7 @@ export default function TextareaWithSuggestions(props: Props) {
         isEmote,
       });
     } else if (suggestionValue) {
+      inputRef.current.removeAttribute('typing-term');
       setSuggestionValue(null);
     }
   }
@@ -323,12 +324,14 @@ export default function TextareaWithSuggestions(props: Props) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleSelect, highlightedSuggestion, suggestionTerm]);
 
-  // Prevent keyboard keys like Up and Down being overriden by MUI listeners when not in use
+  // Prevent keyboard keys Up and Down being overriden by MUI listeners when not in use
   React.useEffect(() => {
     const inputElement = inputRef && inputRef.current;
 
     function overrideKeyHandling(event) {
-      if (!suggestionTerm) {
+      const { keyCode } = event;
+
+      if (!suggestionTerm && (keyCode === KEYCODES.UP || keyCode === KEYCODES.DOWN)) {
         event.stopPropagation();
       }
     }
