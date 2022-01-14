@@ -244,7 +244,7 @@ function DiscoverPage(props: Props) {
       <ClaimListDiscover
         prefixUris={useDualList ? undefined : livestreamUris}
         pins={useDualList ? undefined : getPins(dynamicRouteProps)}
-        hideFilters={SIMPLE_SITE ? !dynamicRouteProps : undefined}
+        hideFilters={SIMPLE_SITE ? !(dynamicRouteProps || tags) : undefined}
         header={useDualList ? <span /> : repostedUri ? <span /> : undefined}
         tileLayout={repostedUri ? false : tileLayout}
         defaultOrderBy={SIMPLE_SITE ? (dynamicRouteProps ? undefined : CS.ORDER_BY_TRENDING) : undefined}
