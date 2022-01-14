@@ -259,19 +259,19 @@ export default function LivestreamChatLayout(props: Props) {
                 </span>
               </MenuItem>
 
+              <MenuItem className="comment__menu-option" onSelect={() => setChatHidden(true)}>
+                <span className="menu__link">
+                  <Icon aria-hidden icon={ICONS.EYE} />
+                  {__('Hide Chat')}
+                </span>
+              </MenuItem>
+
               {!isPopoutWindow && !isMobile && (
                 <>
                   <MenuItem className="comment__menu-option" onSelect={handlePopout}>
                     <span className="menu__link">
                       <Icon aria-hidden icon={ICONS.EXTERNAL} />
                       {__('Popout Chat')}
-                    </span>
-                  </MenuItem>
-
-                  <MenuItem className="comment__menu-option" onSelect={() => setChatHidden(true)}>
-                    <span className="menu__link">
-                      <Icon aria-hidden icon={ICONS.EYE} />
-                      {__('Hide Chat')}
                     </span>
                   </MenuItem>
                 </>
