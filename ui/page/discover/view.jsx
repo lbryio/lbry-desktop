@@ -218,7 +218,6 @@ function DiscoverPage(props: Props) {
             headerLabel={headerLabel}
             header={repostedUri ? <span /> : undefined}
             tileLayout={repostedUri ? false : tileLayout}
-            hideAdvancedFilter
             hideFilters
             infiniteScroll={false}
             loading={false}
@@ -245,8 +244,7 @@ function DiscoverPage(props: Props) {
       <ClaimListDiscover
         prefixUris={useDualList ? undefined : livestreamUris}
         pins={useDualList ? undefined : getPins(dynamicRouteProps)}
-        hideAdvancedFilter={SIMPLE_SITE ? tags && dynamicRouteProps : undefined}
-        hideFilters={SIMPLE_SITE ? tags && dynamicRouteProps : undefined}
+        hideFilters={SIMPLE_SITE ? !dynamicRouteProps : undefined}
         header={useDualList ? <span /> : repostedUri ? <span /> : undefined}
         tileLayout={repostedUri ? false : tileLayout}
         defaultOrderBy={SIMPLE_SITE ? (dynamicRouteProps ? undefined : CS.ORDER_BY_TRENDING) : undefined}
