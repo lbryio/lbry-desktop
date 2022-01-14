@@ -5,8 +5,8 @@ import * as PAGES from 'constants/pages';
 import { SORT_BY, BLOCK_LEVEL } from 'constants/comment';
 import Lbry from 'lbry';
 import { parseURI, buildURI, isURIEqual } from 'util/lbryURI';
-import { selectClaimsByUri, selectMyChannelClaims } from 'redux/selectors/claims';
-import { doClaimSearch } from 'redux/actions/claims';
+import { selectClaimForUri, selectClaimsByUri, selectMyChannelClaims } from 'redux/selectors/claims';
+import { doResolveUri, doClaimSearch } from 'redux/actions/claims';
 import { doToast, doSeeNotifications } from 'redux/actions/notifications';
 import {
   selectMyReactsForComment,
@@ -25,6 +25,13 @@ import { doAlertWaitingForSync } from 'redux/actions/app';
 const isDev = process.env.NODE_ENV !== 'production';
 const FETCH_API_FAILED_TO_FETCH = 'Failed to fetch';
 const PROMISE_FULFILLED = 'fulfilled';
+
+const MENTION_REGEX = /(?:^| |\n)@[^\s=&#$@%?:;/"<>%{}|^~[]*(?::[\w]+)?/gm;
+
+declare type MentionedChannel = {
+  channelName: string,
+  channelID: string,
+};
 
 declare type CommentronErrorMap = {
   [string]: {
@@ -573,10 +580,33 @@ export function doCommentCreate(
   return async (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const activeChannelClaim = selectActiveChannelClaim(state);
+    let mentionedChannels: Array<MentionedChannel> = [];
 
     if (!activeChannelClaim) {
       console.error('Unable to create comment. No activeChannel is set.'); // eslint-disable-line
       return;
+    }
+
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/matchAll
+    // $FlowFixMe
+    const mentionMatches = [...comment.matchAll(MENTION_REGEX)];
+
+    if (mentionMatches.length > 0) {
+      mentionMatches.forEach((match) => {
+        const matchTerm = match[0];
+        const mention = matchTerm.substring(matchTerm.indexOf('@'));
+        const mentionUri = `lbry://${mention}`;
+
+        const claim = selectClaimForUri(state, mentionUri);
+
+        if (claim) {
+          mentionedChannels.push({ channelName: claim.name, channelID: claim.claim_id });
+        } else if (claim === undefined) {
+          dispatch(doResolveUri(mentionUri))
+            .then((response) => mentionedChannels.push({ channelName: response.name, channelID: response.claim_id }))
+            .catch((e) => {});
+        }
+      });
     }
 
     dispatch({ type: ACTIONS.COMMENT_CREATE_STARTED });
@@ -607,6 +637,7 @@ export function doCommentCreate(
       signature: signatureData.signature,
       signing_ts: signatureData.signing_ts,
       sticker: sticker,
+      mentioned_channels: mentionedChannels,
       ...(txid ? { support_tx_id: txid } : {}),
       ...(payment_intent_id ? { payment_intent_id } : {}),
       ...(environment ? { environment } : {}),
