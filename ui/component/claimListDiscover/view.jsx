@@ -205,11 +205,42 @@ function ClaimListDiscover(props: Props) {
     ? null
     : langParam.concat(langParam === 'en' ? ',none' : '');
 
+  let claimTypeParam = claimType || defaultClaimType || null;
+  let streamTypeParam = streamType || defaultStreamType || null;
+
   const contentTypeParam = urlParams.get(CS.CONTENT_KEY);
-  const claimTypeParam =
-    claimType || (CS.CLAIM_TYPES.includes(contentTypeParam) && contentTypeParam) || defaultClaimType || null;
-  const streamTypeParam =
-    streamType || (CS.FILE_TYPES.includes(contentTypeParam) && contentTypeParam) || defaultStreamType || null;
+  if (contentTypeParam) {
+    switch (contentTypeParam) {
+      case CS.CLAIM_COLLECTION:
+      case CS.CLAIM_REPOST:
+        claimTypeParam = contentTypeParam;
+        break;
+
+      case CS.CLAIM_CHANNEL:
+        claimTypeParam = CS.CLAIM_CHANNEL;
+        streamTypeParam = undefined;
+        break;
+
+      case CS.FILE_VIDEO:
+      case CS.FILE_AUDIO:
+      case CS.FILE_IMAGE:
+      case CS.FILE_MODEL:
+      case CS.FILE_BINARY:
+      case CS.FILE_DOCUMENT:
+        streamTypeParam = contentTypeParam;
+        break;
+
+      case CS.CONTENT_ALL:
+        claimTypeParam = undefined;
+        streamTypeParam = undefined;
+        break;
+
+      default:
+        console.log('Invalid or unhandled CONTENT_KEY:', contentTypeParam);
+        break;
+    }
+  }
+
   const durationParam = urlParams.get(CS.DURATION_KEY) || null;
   const channelIdsInUrl = urlParams.get(CS.CHANNEL_IDS_KEY);
   const channelIdsParam = channelIdsInUrl ? channelIdsInUrl.split(',') : channelIds;
@@ -317,9 +348,9 @@ function ClaimListDiscover(props: Props) {
     options.reposted_claim_id = repostedClaimId;
   }
   // IF release time, set it, else set fallback release times using the hack below.
-  if (releaseTime) {
+  if (releaseTime && claimTypeParam !== CS.CLAIM_CHANNEL) {
     options.release_time = releaseTime;
-  } else if (claimType !== CS.CLAIM_CHANNEL) {
+  } else if (claimTypeParam !== CS.CLAIM_CHANNEL) {
     if (orderParam === CS.ORDER_BY_TOP && freshnessParam !== CS.FRESH_ALL) {
       options.release_time = `>${Math.floor(moment().subtract(1, freshnessParam).startOf('hour').unix())}`;
     } else if (orderParam === CS.ORDER_BY_NEW || orderParam === CS.ORDER_BY_TRENDING) {
