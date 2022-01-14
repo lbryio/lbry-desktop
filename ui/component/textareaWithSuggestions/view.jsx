@@ -323,6 +323,27 @@ export default function TextareaWithSuggestions(props: Props) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleSelect, highlightedSuggestion, suggestionTerm]);
 
+  // Prevent keyboard keys like Up and Down being overriden by MUI listeners when not in use
+  React.useEffect(() => {
+    const inputElement = inputRef && inputRef.current;
+
+    function overrideKeyHandling(event) {
+      if (!suggestionTerm) {
+        event.stopPropagation();
+      }
+    }
+
+    if (inputElement) {
+      inputElement.addEventListener('keydown', overrideKeyHandling);
+    }
+
+    return () => {
+      if (inputElement) {
+        inputElement.removeEventListener('keydown', overrideKeyHandling);
+      }
+    };
+  }, [inputRef, suggestionTerm]);
+
   /** ------ **/
   /** Render **/
   /** ------ **/
