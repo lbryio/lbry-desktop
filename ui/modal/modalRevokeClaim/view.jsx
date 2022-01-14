@@ -11,9 +11,9 @@ import LbcSymbol from 'component/common/lbc-symbol';
 type Props = {
   closeModal: () => void,
   abandonTxo: (Txo, () => void) => void,
-  abandonClaim: (string, number, ?() => void) => void,
+  abandonClaim: (Claim, ?() => void) => void,
   tx: Txo,
-  claim: GenericClaim,
+  claim: Claim,
   cb: () => void,
   doResolveUri: (string) => void,
 };
@@ -94,7 +94,7 @@ export default function ModalRevokeClaim(props: Props) {
   }
 
   function revokeClaim() {
-    tx ? abandonTxo(tx, cb) : abandonClaim(claim.txid, claim.nout, cb);
+    tx ? abandonTxo(tx, cb) : abandonClaim(claim, cb);
     closeModal();
   }
 

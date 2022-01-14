@@ -38,11 +38,16 @@ export function doOpenFileInShell(path: string) {
   };
 }
 
-export function doDeleteFile(outpoint: string, deleteFromComputer?: boolean, abandonClaim?: boolean, cb: any) {
+export function doDeleteFile(
+  outpoint: string,
+  deleteFromComputer?: boolean,
+  abandonClaim?: boolean,
+  cb: any,
+  claim: Claim
+) {
   return (dispatch: Dispatch) => {
     if (abandonClaim) {
-      const [txid, nout] = outpoint.split(':');
-      dispatch(doAbandonClaim(txid, Number(nout), cb));
+      dispatch(doAbandonClaim(claim, cb));
     }
 
     // @if TARGET='app'
@@ -65,7 +70,8 @@ export function doDeleteFileAndMaybeGoBack(
   uri: string,
   deleteFromComputer?: boolean,
   abandonClaim?: boolean,
-  doGoBack: (any) => void
+  doGoBack: (any) => void,
+  claim: Claim
 ) {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
@@ -80,16 +86,22 @@ export function doDeleteFileAndMaybeGoBack(
     }
 
     actions.push(
-      doDeleteFile(outpoint || claimOutpoint, deleteFromComputer, abandonClaim, (abandonState) => {
-        if (abandonState === ABANDON_STATES.DONE) {
-          if (abandonClaim) {
-            if (doGoBack) {
-              dispatch(goBack());
+      doDeleteFile(
+        outpoint || claimOutpoint,
+        deleteFromComputer,
+        abandonClaim,
+        (abandonState) => {
+          if (abandonState === ABANDON_STATES.DONE) {
+            if (abandonClaim) {
+              if (doGoBack) {
+                dispatch(goBack());
+              }
+              dispatch(doHideModal());
             }
-            dispatch(doHideModal());
           }
-        }
-      })
+        },
+        claim
+      )
     );
 
     if (playingUri && playingUri.uri === uri) {

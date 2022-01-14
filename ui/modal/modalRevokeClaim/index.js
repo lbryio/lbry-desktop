@@ -13,7 +13,7 @@ const perform = (dispatch) => ({
   toast: (message, isError) => dispatch(doToast({ message, isError })),
   closeModal: () => dispatch(doHideModal()),
   abandonTxo: (txo, cb) => dispatch(doAbandonTxo(txo, cb)),
-  abandonClaim: (txid, nout, cb) => dispatch(doAbandonClaim(txid, nout, cb)),
+  abandonClaim: (claim, cb) => dispatch(doAbandonClaim(claim, cb)),
   doResolveUri: (uri) => dispatch(doResolveUri(uri)),
 });
 
