@@ -311,6 +311,14 @@
   max-width: none;
 }
 
+.main--popout-chat {
+  @extend .main;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+}
+
 .main--auth-page {
   width: 100%;
   max-width: 70rem;

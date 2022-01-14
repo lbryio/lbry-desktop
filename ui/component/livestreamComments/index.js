@@ -1,29 +1,9 @@
 import { connect } from 'react-redux';
-import { MAX_LIVESTREAM_COMMENTS } from 'constants/livestream';
-import { doResolveUris } from 'redux/actions/claims';
-import { selectClaimForUri } from 'redux/selectors/claims';
-import { doCommentList, doSuperChatList } from 'redux/actions/comments';
-import {
-  selectTopLevelCommentsForUri,
-  selectIsFetchingComments,
-  selectSuperChatsForUri,
-  selectSuperChatTotalAmountForUri,
-  selectPinnedCommentsForUri,
-} from 'redux/selectors/comments';
-
+import { selectIsFetchingComments } from 'redux/selectors/comments';
 import LivestreamComments from './view';
 
-const select = (state, props) => ({
-  claim: selectClaimForUri(state, props.uri),
-  comments: selectTopLevelCommentsForUri(state, props.uri, MAX_LIVESTREAM_COMMENTS),
-  pinnedComments: selectPinnedCommentsForUri(state, props.uri),
+const select = (state) => ({
   fetchingComments: selectIsFetchingComments(state),
-  superChats: selectSuperChatsForUri(state, props.uri),
-  superChatsTotalAmount: selectSuperChatTotalAmountForUri(state, props.uri),
 });
 
-export default connect(select, {
-  doCommentList,
-  doSuperChatList,
-  doResolveUris,
-})(LivestreamComments);
+export default connect(select)(LivestreamComments);

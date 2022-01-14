@@ -56,6 +56,7 @@ type Props = {
   shouldFetchComment: boolean,
   supportDisabled: boolean,
   uri: string,
+  disableInput?: boolean,
   createComment: (string, string, string, ?string, ?string, ?string, boolean) => Promise<any>,
   doFetchCreatorSettings: (channelId: string) => Promise<any>,
   doToast: ({ message: string }) => void,
@@ -84,6 +85,7 @@ export function CommentCreate(props: Props) {
     settingsByChannelId,
     shouldFetchComment,
     supportDisabled,
+    disableInput,
     createComment,
     doFetchCreatorSettings,
     doToast,
@@ -125,7 +127,7 @@ export function CommentCreate(props: Props) {
 
   const claimId = claim && claim.claim_id;
   const charCount = commentValue ? commentValue.length : 0;
-  const disabled = deletedComment || isSubmitting || isFetchingChannels || !commentValue.length;
+  const disabled = deletedComment || isSubmitting || isFetchingChannels || !commentValue.length || disableInput;
   const channelId = getChannelIdFromClaim(claim);
   const channelSettings = channelId ? settingsByChannelId[channelId] : undefined;
   const minSuper = (channelSettings && channelSettings.min_tip_amount_super_chat) || 0;
@@ -255,7 +257,7 @@ export function CommentCreate(props: Props) {
    * @param {string} [environment] Optional environment for Stripe (test|live)
    */
   function handleCreateComment(txid, payment_intent_id, environment) {
-    if (isSubmitting) return;
+    if (isSubmitting || disableInput) return;
 
     setShowEmotes(false);
     setSubmitting(true);
@@ -468,7 +470,7 @@ export function CommentCreate(props: Props) {
             autoFocus={isReply}
             charCount={charCount}
             className={isReply ? 'create__reply' : 'create__comment'}
-            disabled={isFetchingChannels}
+            disabled={isFetchingChannels || disableInput}
             isLivestream={isLivestream}
             label={
               <div className="commentCreate__labelWrapper">
@@ -532,7 +534,7 @@ export function CommentCreate(props: Props) {
           <Button
             button="primary"
             label={__('Send')}
-            disabled={isSupportComment && (tipError || disableReviewButton)}
+            disabled={(isSupportComment && (tipError || disableReviewButton)) || disableInput}
             onClick={() => {
               if (isSupportComment) {
                 handleSupportComment();

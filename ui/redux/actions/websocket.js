@@ -5,16 +5,24 @@ import { SOCKETY_SERVER_API } from 'config';
 
 const NOTIFICATION_WS_URL = `${SOCKETY_SERVER_API}/internal?id=`;
 const COMMENT_WS_URL = `${SOCKETY_SERVER_API}/commentron?id=`;
+const COMMENT_WS_SUBCATEGORIES = {
+  COMMENTER: 'commenter',
+  VIEWER: 'viewer',
+};
 
 let sockets = {};
 let closingSockets = {};
 let retryCount = 0;
 
-const getCommentSocketUrl = (claimId) => {
-  return `${COMMENT_WS_URL}${claimId}&category=${claimId}`;
+const getCommentSocketUrl = (claimId, channelName) => {
+  return `${COMMENT_WS_URL}${claimId}&category=${channelName}&sub_category=viewer`;
 };
 
-export const doSocketConnect = (url, cb) => {
+const getCommentSocketUrlForCommenter = (claimId, channelName) => {
+  return `${COMMENT_WS_URL}${claimId}&category=${channelName}&sub_category=commenter`;
+};
+
+export const doSocketConnect = (url, cb, type) => {
   function connectToSocket() {
     if (sockets[url] !== undefined && sockets[url] !== null) {
       sockets[url].close();
@@ -26,7 +34,7 @@ export const doSocketConnect = (url, cb) => {
       sockets[url] = new WebSocket(url);
       sockets[url].onopen = (e) => {
         retryCount = 0;
-        console.log('\nConnected to WS \n\n'); // eslint-disable-line
+        console.log(`\nConnected to ${type} WS \n\n`); // eslint-disable-line
       };
 
       sockets[url].onmessage = (e) => {
@@ -35,12 +43,12 @@ export const doSocketConnect = (url, cb) => {
       };
 
       sockets[url].onerror = (e) => {
-        console.error('websocket onerror', e); // eslint-disable-line
+        console.log(`${type} websocket onerror`, e); // eslint-disable-line
         // onerror and onclose will both fire, so nothing is needed here
       };
 
       sockets[url].onclose = () => {
-        console.log('\n Disconnected from WS\n\n'); // eslint-disable-line
+        console.log(`\n Disconnected from ${type} WS \n\n`); // eslint-disable-line
         if (!closingSockets[url]) {
           retryCount += 1;
           connectToSocket();
@@ -75,64 +83,85 @@ export const doNotificationSocketConnect = (enableNotifications) => (dispatch) =
 
   const url = `${NOTIFICATION_WS_URL}${authToken}`;
 
-  doSocketConnect(url, (data) => {
-    switch (data.type) {
-      case 'pending_notification':
-        if (enableNotifications) {
-          dispatch(doNotificationList());
-        }
-        break;
-      case 'swap-status':
+  doSocketConnect(
+    url,
+    (data) => {
+      switch (data.type) {
+        case 'pending_notification':
+          if (enableNotifications) {
+            dispatch(doNotificationList());
+          }
+          break;
+        case 'swap-status':
+          dispatch({
+            type: ACTIONS.COIN_SWAP_STATUS_RECEIVED,
+            data: data.data,
+          });
+          break;
+      }
+    },
+    'notification'
+  );
+};
+
+export const doCommentSocketConnect = (uri, channelName, claimId, subCategory) => (dispatch) => {
+  const url =
+    subCategory === COMMENT_WS_SUBCATEGORIES.COMMENTER
+      ? getCommentSocketUrlForCommenter(claimId, channelName)
+      : getCommentSocketUrl(claimId, channelName);
+
+  doSocketConnect(
+    url,
+    (response) => {
+      if (response.type === 'delta') {
+        const newComment = response.data.comment;
         dispatch({
-          type: ACTIONS.COIN_SWAP_STATUS_RECEIVED,
-          data: data.data,
+          type: ACTIONS.COMMENT_RECEIVED,
+          data: { comment: newComment, claimId, uri },
         });
-        break;
-    }
-  });
+      }
+      if (response.type === 'viewers') {
+        const connected = response.data.connected;
+        dispatch({
+          type: ACTIONS.VIEWERS_RECEIVED,
+          data: { connected, claimId },
+        });
+      }
+      if (response.type === 'pinned') {
+        const pinnedComment = response.data.comment;
+        dispatch({
+          type: ACTIONS.COMMENT_PIN_COMPLETED,
+          data: {
+            pinnedComment: pinnedComment,
+            claimId,
+            unpin: !pinnedComment.is_pinned,
+          },
+        });
+      }
+      if (response.type === 'removed') {
+        const { comment_id } = response.data.comment;
+        dispatch({
+          type: ACTIONS.COMMENT_MARK_AS_REMOVED,
+          data: { comment_id },
+        });
+      }
+    },
+    'comment'
+  );
 };
 
-export const doCommentSocketConnect = (uri, claimId) => (dispatch) => {
-  const url = getCommentSocketUrl(claimId);
+export const doCommentSocketDisconnect = (claimId, channelName) => (dispatch) => {
+  const url = getCommentSocketUrl(claimId, channelName);
 
-  doSocketConnect(url, (response) => {
-    if (response.type === 'delta') {
-      const newComment = response.data.comment;
-      dispatch({
-        type: ACTIONS.COMMENT_RECEIVED,
-        data: { comment: newComment, claimId, uri },
-      });
-    }
-    if (response.type === 'viewers') {
-      const connected = response.data.connected;
-      dispatch({
-        type: ACTIONS.VIEWERS_RECEIVED,
-        data: { connected, claimId },
-      });
-    }
-    if (response.type === 'pinned') {
-      const pinnedComment = response.data.comment;
-      dispatch({
-        type: ACTIONS.COMMENT_PIN_COMPLETED,
-        data: {
-          pinnedComment: pinnedComment,
-          claimId,
-          unpin: !pinnedComment.is_pinned,
-        },
-      });
-    }
-    if (response.type === 'removed') {
-      const { comment_id } = response.data.comment;
-      dispatch({
-        type: ACTIONS.COMMENT_MARK_AS_REMOVED,
-        data: { comment_id },
-      });
-    }
-  });
+  dispatch(doSocketDisconnect(url));
 };
 
-export const doCommentSocketDisconnect = (claimId) => (dispatch) => {
-  const url = getCommentSocketUrl(claimId);
+export const doCommentSocketConnectAsCommenter = (uri, channelName, claimId) => (dispatch) => {
+  dispatch(doCommentSocketConnect(uri, channelName, claimId, COMMENT_WS_SUBCATEGORIES.COMMENTER));
+};
+
+export const doCommentSocketDisconnectAsCommenter = (claimId, channelName) => (dispatch) => {
+  const url = getCommentSocketUrlForCommenter(claimId, channelName);
 
   dispatch(doSocketDisconnect(url));
 };

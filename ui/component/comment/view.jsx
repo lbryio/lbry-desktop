@@ -12,7 +12,7 @@ import DateTime from 'component/dateTime';
 import Button from 'component/button';
 import Expandable from 'component/expandable';
 import MarkdownPreview from 'component/common/markdown-preview';
-import Tooltip from 'component/common/tooltip';
+import CommentBadge from 'component/common/comment-badge';
 import ChannelThumbnail from 'component/channelThumbnail';
 import { Menu, MenuButton } from '@reach/menu-button';
 import Icon from 'component/common/icon';
@@ -249,21 +249,8 @@ function Comment(props: Props) {
         <div className="comment__body-container">
           <div className="comment__meta">
             <div className="comment__meta-information">
-              {isGlobalMod && (
-                <Tooltip title={__('Admin')}>
-                  <span className="comment__badge comment__badge--global-mod">
-                    <Icon icon={ICONS.BADGE_MOD} size={20} />
-                  </span>
-                </Tooltip>
-              )}
-
-              {isModerator && (
-                <Tooltip title={__('Moderator')}>
-                  <span className="comment__badge comment__badge--mod">
-                    <Icon icon={ICONS.BADGE_MOD} size={20} />
-                  </span>
-                </Tooltip>
-              )}
+              {isGlobalMod && <CommentBadge label={__('Admin')} icon={ICONS.BADGE_MOD} />}
+              {isModerator && <CommentBadge label={__('Moderator')} icon={ICONS.BADGE_MOD} />}
 
               {!author ? (
                 <span className="comment__author">{__('Anonymous')}</span>

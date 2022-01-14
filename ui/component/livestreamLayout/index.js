@@ -1,16 +1,16 @@
 import { connect } from 'react-redux';
-import {
-  makeSelectClaimForUri,
-  makeSelectTagInClaimOrChannelForUri,
-  selectThumbnailForUri,
-} from 'redux/selectors/claims';
+import { selectClaimForUri, makeSelectTagInClaimOrChannelForUri, selectThumbnailForUri } from 'redux/selectors/claims';
 import LivestreamLayout from './view';
 import { DISABLE_COMMENTS_TAG } from 'constants/tags';
 
-const select = (state, props) => ({
-  claim: makeSelectClaimForUri(props.uri)(state),
-  thumbnail: selectThumbnailForUri(state, props.uri),
-  chatDisabled: makeSelectTagInClaimOrChannelForUri(props.uri, DISABLE_COMMENTS_TAG)(state),
-});
+const select = (state, props) => {
+  const { uri } = props;
+
+  return {
+    claim: selectClaimForUri(state, uri),
+    thumbnail: selectThumbnailForUri(state, uri),
+    chatDisabled: makeSelectTagInClaimOrChannelForUri(uri, DISABLE_COMMENTS_TAG)(state),
+  };
+};
 
 export default connect(select)(LivestreamLayout);

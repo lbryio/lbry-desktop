@@ -1,46 +1,43 @@
 // @flow
-import { LIVESTREAM_EMBED_URL } from 'constants/livestream';
-import React from 'react';
-import FileTitleSection from 'component/fileTitleSection';
-import { useIsMobile } from 'effects/use-screensize';
-import LivestreamScheduledInfo from 'component/livestreamScheduledInfo';
-import classnames from 'classnames';
 import { lazyImport } from 'util/lazyImport';
+import { LIVESTREAM_EMBED_URL } from 'constants/livestream';
+import { useIsMobile } from 'effects/use-screensize';
+import classnames from 'classnames';
+import FileTitleSection from 'component/fileTitleSection';
 import LivestreamLink from 'component/livestreamLink';
+import LivestreamScheduledInfo from 'component/livestreamScheduledInfo';
+import React from 'react';
 
-const LivestreamComments = lazyImport(() => import('component/livestreamComments' /* webpackChunkName: "comments" */));
+const LivestreamChatLayout = lazyImport(() => import('component/livestreamChatLayout' /* webpackChunkName: "chat" */));
 
 type Props = {
-  uri: string,
+  activeStreamUri: boolean | string,
   claim: ?StreamClaim,
   hideComments: boolean,
+  isCurrentClaimLive: boolean,
   release: any,
   showLivestream: boolean,
   showScheduledInfo: boolean,
-  isCurrentClaimLive: boolean,
-  activeStreamUri: boolean | string,
+  uri: string,
 };
 
 export default function LivestreamLayout(props: Props) {
   const {
+    activeStreamUri,
     claim,
-    uri,
     hideComments,
+    isCurrentClaimLive,
     release,
     showLivestream,
     showScheduledInfo,
-    isCurrentClaimLive,
-    activeStreamUri,
+    uri,
   } = props;
 
   const isMobile = useIsMobile();
 
-  if (!claim || !claim.signing_channel) {
-    return null;
-  }
+  if (!claim || !claim.signing_channel) return null;
 
-  const channelName = claim.signing_channel.name;
-  const channelClaimId = claim.signing_channel.claim_id;
+  const { name: channelName, claim_id: channelClaimId } = claim.signing_channel;
 
   return (
     <>
@@ -58,6 +55,7 @@ export default function LivestreamLayout(props: Props) {
                 allowFullScreen
               />
             )}
+
             {showScheduledInfo && <LivestreamScheduledInfo release={release} />}
           </div>
         </div>
@@ -87,7 +85,11 @@ export default function LivestreamLayout(props: Props) {
           />
         )}
 
-        <React.Suspense fallback={null}>{isMobile && !hideComments && <LivestreamComments uri={uri} />}</React.Suspense>
+        {isMobile && !hideComments && (
+          <React.Suspense fallback={null}>
+            <LivestreamChatLayout uri={uri} />
+          </React.Suspense>
+        )}
 
         <FileTitleSection uri={uri} livestream isLive={showLivestream} />
       </div>

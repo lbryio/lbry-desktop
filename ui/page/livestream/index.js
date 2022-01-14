@@ -11,11 +11,13 @@ import { doFetchChannelLiveStatus } from 'redux/actions/livestream';
 import LivestreamPage from './view';
 
 const select = (state, props) => {
-  const channelClaimId = getChannelIdFromClaim(selectClaimForUri(state, props.uri));
+  const { uri } = props;
+  const channelClaimId = getChannelIdFromClaim(selectClaimForUri(state, uri));
+
   return {
     isAuthenticated: selectUserVerifiedEmail(state),
     channelClaimId,
-    chatDisabled: makeSelectTagInClaimOrChannelForUri(props.uri, DISABLE_COMMENTS_TAG)(state),
+    chatDisabled: makeSelectTagInClaimOrChannelForUri(uri, DISABLE_COMMENTS_TAG)(state),
     activeLivestreamForChannel: selectActiveLivestreamForChannel(state, channelClaimId),
     activeLivestreamInitialized: selectActiveLivestreamInitialized(state),
   };
