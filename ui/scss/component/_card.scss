@@ -99,7 +99,9 @@
   @extend .section__flex;
 
   @media (min-width: $breakpoint-small) {
-    padding: var(--spacing-m) var(--spacing-m);
+    padding-left: var(--spacing-l);
+    padding-top: var(--spacing-xs);
+    padding-bottom: var(--spacing-xs);
   }
 }
 
@@ -279,9 +281,10 @@
   justify-content: space-between;
   align-items: flex-start;
   flex-wrap: wrap;
-  padding: var(--spacing-m) var(--spacing-m) var(--spacing-m) var(--spacing-m);
+  padding-top: var(--spacing-xs);
   @media (max-width: $breakpoint-small) {
     padding: var(--spacing-m);
+    padding-left: var(--spacing-l);
     padding-bottom: 0;
     margin: 0;
     margin-bottom: var(--spacing-s);
@@ -300,7 +303,7 @@
 }
 
 .card__body {
-  padding: var(--spacing-m);
+  padding: var(--spacing-l);
 
   &:not(.card__body--no-title) {
     padding-top: 0;

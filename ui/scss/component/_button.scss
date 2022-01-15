@@ -236,7 +236,7 @@
 .button--close {
   z-index: 1;
   position: absolute;
-  top: var(--spacing-xs);
+  top: var(--spacing-m);
   right: var(--spacing-m);
   padding: 0.3rem;
   transition: all var(--transition-duration) var(--transition-style);
@@ -260,6 +260,7 @@
 
   @media (max-width: $breakpoint-small) {
     padding: 0.8rem 0.8rem;
+    top: var(--spacing-xs);
   }
 }
 
