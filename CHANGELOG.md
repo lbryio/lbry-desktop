@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Changing the supported language from Filipino to Tagalog _community pr!_ ([#6951](https://github.com/lbryio/lbry-desktop/pull/6951))
 - Don't show countdown to next item in list ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
 - Changed "View List" popup option to link, so can be opened on a new tab ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
+- Changed search page metadata to reflect the search term([713](https://github.com/OdyseeTeam/odysee-frontend/pull/713))
 
 ### Fixed
 - Clicking on the title of a floating player will take you back to the list ([#6921](https://github.com/lbryio/lbry-desktop/pull/6921))
