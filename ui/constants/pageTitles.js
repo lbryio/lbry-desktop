@@ -8,6 +8,7 @@ import * as PAGES from 'constants/pages';
 export const PAGE_TITLE = {
   // --- Categories ---
   [PAGES.BIG_HITS]: 'Big Hits',
+  [PAGES.CREATIVE_ARTS]: 'Creative Arts',
   [PAGES.DISCOVER]: 'Wild West',
   [PAGES.EDUCATION]: 'Education',
   [PAGES.ENLIGHTENMENT]: 'Enlightenment',

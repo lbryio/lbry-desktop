@@ -8,6 +8,11 @@ module.exports.CATEGORY_METADATA = {
     description: 'Animation, pop culture, comedy, and all the other weird on Odysee',
     image: '',
   },
+  // [PAGES.CREATIVE_ARTS]: {
+  //   title: 'Creative Arts',
+  //   description: '',   <----- FILL IN PLEASE
+  //   image: '',         <----- FILL IN PLEASE
+  // },
   [PAGES.COMMUNITY]: {
     title: 'The Universe',
     description: 'Podcasts, life, learning, and everything else on Odysee',
