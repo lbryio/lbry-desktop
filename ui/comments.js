@@ -1,6 +1,7 @@
 // @flow
 import { COMMENT_SERVER_API } from 'config';
 
+// prettier-ignore
 const Comments = {
   url: COMMENT_SERVER_API,
   enabled: Boolean(COMMENT_SERVER_API),
@@ -16,10 +17,8 @@ const Comments = {
   moderation_unblock: (params: ModerationBlockParams) => fetchCommentsApi('moderation.UnBlock', params),
   moderation_block_list: (params: BlockedListArgs) => fetchCommentsApi('moderation.BlockedList', params),
   moderation_add_delegate: (params: ModerationAddDelegateParams) => fetchCommentsApi('moderation.AddDelegate', params),
-  moderation_remove_delegate: (params: ModerationRemoveDelegateParams) =>
-    fetchCommentsApi('moderation.RemoveDelegate', params),
-  moderation_list_delegates: (params: ModerationListDelegatesParams) =>
-    fetchCommentsApi('moderation.ListDelegates', params),
+  moderation_remove_delegate: (params: ModerationRemoveDelegateParams) => fetchCommentsApi('moderation.RemoveDelegate', params),
+  moderation_list_delegates: (params: ModerationListDelegatesParams) => fetchCommentsApi('moderation.ListDelegates', params),
   moderation_am_i: (params: ModerationAmIParams) => fetchCommentsApi('moderation.AmI', params),
   comment_list: (params: CommentListParams) => fetchCommentsApi('comment.List', params),
   comment_abandon: (params: CommentAbandonParams) => fetchCommentsApi('comment.Abandon', params),
