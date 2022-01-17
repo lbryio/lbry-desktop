@@ -194,7 +194,7 @@ will earn you an extra 50 LBC on top of what we would otherwise tip you.
 | [Tom](https://github.com/tzarebczan)   | Community manager. He knows more than anyone about the app and all of its flaws. Reach out to him with any questions about how the app works, if a bug has been reported, or if a feature should be requested. | jiggytom | tom@lbry.com  |
 | [Sean](https://github.com/seanyesmunt) | The primary engineer working on the app. Feel free to ask any questions about the code.                                                                                                                        | sean     | sean@lbry.com |
 
-Join our Discord [here](https://chat.lbry.com/).
+Join our Discord [here](https://chat.odysee.com/).
 
 # More Information
 

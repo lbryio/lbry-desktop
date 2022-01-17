@@ -104,7 +104,7 @@ class UserEmailVerify extends React.PureComponent<Props, State> {
                 <I18nMessage
                   tokens={{
                     help_link: <Button button="link" href={`mailto:${SITE_HELP_EMAIL}`} label={`${SITE_HELP_EMAIL}`} />,
-                    chat_link: <Button button="link" href="https://chat.lbry.com" label={__('chat')} />,
+                    chat_link: <Button button="link" href="https://chat.odysee.com" label={__('chat')} />,
                   }}
                 >
                   Email %help_link% or join our %chat_link% if you encounter any trouble verifying.

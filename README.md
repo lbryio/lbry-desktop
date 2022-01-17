@@ -1,5 +1,4 @@
-
-# Odysee Frontend - Odysee.com         
+# Odysee Frontend - Odysee.com
 
 This repo contains the UI and front end code that powers Odysee.com.
 
@@ -12,7 +11,7 @@ This repo contains the UI and front end code that powers Odysee.com.
  <a href="https://travis-ci.org/lbryio/lbry-desktop">
    <img src="https://travis-ci.org/lbryio/lbry-desktop.svg?branch=master" alt="Build Status"  />
  </a>
- <a href="https://chat.lbry.com">
+ <a href="https://chat.odysee.com">
    <img alt="GitHub contributors" src="https://img.shields.io/discord/362322208485277697.svg?logo=discord" alt="chat on Discord">
  </a>
 
@@ -24,7 +23,6 @@ This repo contains the UI and front end code that powers Odysee.com.
     <img alt="forthebadge" src="https://forthebadge.com/images/badges/approved-by-veridian-dynamics.svg">
   </a>
 </h2>
-
 
 ## Table of Contents
 
@@ -121,4 +119,3 @@ This project is MIT licensed. For the full license, see [LICENSE](LICENSE).
 ## Security
 
 For security issues, please reach out to security@odysee.com
-

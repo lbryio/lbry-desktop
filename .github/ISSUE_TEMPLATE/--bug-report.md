@@ -4,7 +4,6 @@ about: "Something isn't working \U0001F915"
 title: ''
 labels: 'type: bug'
 assignees: ''
-
 ---
 
 <!--
@@ -16,7 +15,7 @@ Before reporting any issues, please make sure that you're using the latest versi
 - App releases: https://github.com/lbryio/lbry-desktop/releases
 - Standalone daemon: https://github.com/lbryio/lbry/releases
 
-We are also available on live chat at https://chat.lbry.com
+We are also available on live chat at https://chat.odysee.com
 -->
 
 **Bug**
@@ -24,6 +23,7 @@ A clear and concise description of what the bug is.
 
 **To Reproduce**
 Steps to reproduce the behavior:
+
 1. Go to '...'
 2. Click on '....'
 3. Scroll down to '....'
@@ -48,7 +48,6 @@ If applicable, add screenshots to help explain your problem.
 - LBRY App version:
 - LBRY Installation ID:
 - Operating system:
-
 
 **Additional context**
 Add any other context about the problem here.
