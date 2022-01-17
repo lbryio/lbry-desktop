@@ -100,7 +100,7 @@
     "@reach/auto-id": "^0.13.0",
     "@reach/combobox": "^0.12.1",
     "@reach/menu-button": "0.7.4",
-    "@reach/rect": "^0.13.0",
+    "@reach/rect": "^0.16.0",
     "@reach/tabs": "^0.1.5",
     "@reach/tooltip": "^0.12.1",
     "@reach/utils": "^0.12.1",
