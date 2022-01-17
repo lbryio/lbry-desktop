@@ -12,6 +12,7 @@ yarn-error.log
 package-lock.json
 .transifexrc
 .idea/
+.vscode/
 /build/daemon*
 /lbrytv/dist/
 /lbrytv/node_modules
