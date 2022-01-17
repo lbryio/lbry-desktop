@@ -176,6 +176,11 @@ declare type CommentAbandonParams = {
   mod_channel_name?: string,
 };
 
+declare type MentionedChannel = {
+  channel_name: string,
+  channel_id: string,
+};
+
 declare type CommentCreateParams = {
   comment: string,
   claim_id: string,
@@ -183,6 +188,7 @@ declare type CommentCreateParams = {
   signature: string,
   signing_ts: string,
   support_tx_id?: string,
+  mentioned_channels?: Array<MentionedChannel>,
 };
 
 declare type SuperListParams = {};

@@ -29,11 +29,6 @@ const PROMISE_FULFILLED = 'fulfilled';
 
 const MENTION_REGEX = /(?:^| |\n)@[^\s=&#$@%?:;/"<>%{}|^~[]*(?::[\w]+)?/gm;
 
-declare type MentionedChannel = {
-  channelName: string,
-  channelID: string,
-};
-
 function devToast(dispatch, msg) {
   if (isDev) {
     console.error(msg); // eslint-disable-line
@@ -521,10 +516,10 @@ export function doCommentCreate(
         const claim = selectClaimForUri(state, mentionUri);
 
         if (claim) {
-          mentionedChannels.push({ channelName: claim.name, channelID: claim.claim_id });
+          mentionedChannels.push({ channel_name: claim.name, channel_id: claim.claim_id });
         } else if (claim === undefined) {
           dispatch(doResolveUri(mentionUri))
-            .then((response) => mentionedChannels.push({ channelName: response.name, channelID: response.claim_id }))
+            .then((response) => mentionedChannels.push({ channel_name: response.name, channel_id: response.claim_id }))
             .catch((e) => {});
         }
       });
