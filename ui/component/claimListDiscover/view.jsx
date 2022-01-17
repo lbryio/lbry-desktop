@@ -212,6 +212,9 @@ function ClaimListDiscover(props: Props) {
   if (contentTypeParam) {
     switch (contentTypeParam) {
       case CS.CLAIM_COLLECTION:
+        claimTypeParam = contentTypeParam;
+        streamTypeParam = undefined;
+        break;
       case CS.CLAIM_REPOST:
         claimTypeParam = contentTypeParam;
         break;
