@@ -234,9 +234,8 @@ export function doPushSettingsToPrefs() {
   return (dispatch, getState) => {
     const state = getState();
     const {
-      settings: { clientSettings },
+      settings: { clientSettings, sharedPreferences },
     } = state;
-    const sharedPreferences = Object.assign({}, state.sharedPreferences);
     const selectedClientSettings = getSubsetFromKeysArray(clientSettings, CLIENT_SYNC_KEYS);
     const newSharedPreferences = { ...sharedPreferences, ...selectedClientSettings };
 
