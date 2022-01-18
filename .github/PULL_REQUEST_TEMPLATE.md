@@ -34,7 +34,6 @@ What kind of change does this PR introduce?
 Please check all that apply to this PR using "x":
 
 - [ ] I have checked that this PR is not a duplicate of an existing PR (open, closed or merged)
-- [ ] I added a line describing my change to CHANGELOG.md
 - [ ] I have checked that this PR does not introduce a breaking change
 - [ ] This PR introduces breaking changes and I have provided a detailed explanation below
 
