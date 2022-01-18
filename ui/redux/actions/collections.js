@@ -160,8 +160,8 @@ export const doFetchItemsInCollections = (
 
       for (let i = 0; i < Math.ceil(totalItems / batchSize); i++) {
         batches[i] = Lbry.claim_search({
-          claim_ids: claim.value.claims,
-          page: i + 1,
+          claim_ids: claim.value.claims.slice(i * batchSize, (i + 1) * batchSize),
+          page: 1,
           page_size: batchSize,
           no_totals: true,
         });
