@@ -1,5 +1,8 @@
 // Disabled flow in this copy. This copy is for uncompiled web server ES5 require()s.
 
+// Placeholder until i18n can be adapted for node usage
+const __ = (msg) => msg;
+
 const isProduction = process.env.NODE_ENV === 'production';
 const channelNameMinLength = 1;
 const claimIdMaxLength = 40;
@@ -60,12 +63,13 @@ function parseURI(url, requireProto = false) {
   const [
     streamNameOrChannelName,
     primaryModSeparator,
-    primaryModValue,
+    rawPrimaryModValue,
     pathSep, // eslint-disable-line no-unused-vars
     possibleStreamName,
     secondaryModSeparator,
     secondaryModValue,
   ] = rest;
+  const primaryModValue = rawPrimaryModValue && rawPrimaryModValue.replace(/[^\x00-\x7F]/g, '');
   const searchParams = new URLSearchParams(qs || '');
   const startTime = searchParams.get('t');
 
@@ -96,7 +100,7 @@ function parseURI(url, requireProto = false) {
 
     if (channelName.length < channelNameMinLength) {
       throw new Error(
-        __(`Channel names must be at least %channelNameMinLength% characters.`, {
+        __(`Channel names must be at least ${channelNameMinLength} characters.`, {
           channelNameMinLength,
         })
       );
@@ -145,7 +149,7 @@ function parseURIModifier(modSeperator, modValue) {
 
   if (modSeperator) {
     if (!modValue) {
-      throw new Error(__(`No modifier provided after separator %modSeperator%.`, { modSeperator }));
+      throw new Error(__(`No modifier provided after separator ${modSeperator}.`, { modSeperator }));
     }
 
     if (modSeperator === MOD_CLAIM_ID_SEPARATOR || MOD_CLAIM_ID_SEPARATOR_OLD) {
@@ -158,7 +162,7 @@ function parseURIModifier(modSeperator, modValue) {
   }
 
   if (claimId && (claimId.length > claimIdMaxLength || !claimId.match(/^[0-9a-f]+$/))) {
-    throw new Error(__(`Invalid claim ID %claimId%.`, { claimId }));
+    throw new Error(__(`Invalid claim ID ${claimId}.`, { claimId }));
   }
 
   if (claimSequence && !claimSequence.match(/^-?[1-9][0-9]*$/)) {
