@@ -1691,6 +1691,7 @@
   "Add as moderator": "Add as moderator",
   "Assign this user to moderate %channel%.": "Assign this user to moderate %channel%.",
   "Assign this user to moderate your channel.": "Assign this user to moderate your channel.",
+  "Added %user% as moderator for %myChannel%": "Added %user% as moderator for %myChannel%",
   "Mute (m)": "Mute (m)",
   "Playback Rate (<, >)": "Playback Rate (<, >)",
   "Fullscreen (f)": "Fullscreen (f)",

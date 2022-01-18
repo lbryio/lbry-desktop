@@ -1319,17 +1319,7 @@ export function doCommentModAddDelegate(
   showToast: boolean = false
 ) {
   return async (dispatch: Dispatch, getState: GetState) => {
-    let signature: ?{
-      signature: string,
-      signing_ts: string,
-    };
-    try {
-      signature = await Lbry.channel_sign({
-        channel_id: creatorChannelClaim.claim_id,
-        hexdata: toHex(creatorChannelClaim.name),
-      });
-    } catch (e) {}
-
+    const signature = await channelSignData(creatorChannelClaim.claim_id, creatorChannelClaim.name);
     if (!signature) {
       return;
     }
@@ -1337,10 +1327,9 @@ export function doCommentModAddDelegate(
     return Comments.moderation_add_delegate({
       mod_channel_id: modChannelId,
       mod_channel_name: modChannelName,
-      creator_channel_id: creatorChannelClaim.claim_id,
-      creator_channel_name: creatorChannelClaim.name,
-      signature: signature.signature,
-      signing_ts: signature.signing_ts,
+      channel_id: creatorChannelClaim.claim_id,
+      channel_name: creatorChannelClaim.name,
+      ...signature,
     })
       .then(() => {
         if (showToast) {
@@ -1357,12 +1346,7 @@ export function doCommentModAddDelegate(
         }
       })
       .catch((err) => {
-        dispatch(
-          doToast({
-            message: err.message,
-            isError: true,
-          })
-        );
+        dispatch(doToast({ message: err.message, isError: true }));
       });
   };
 }
@@ -1373,17 +1357,7 @@ export function doCommentModRemoveDelegate(
   creatorChannelClaim: ChannelClaim
 ) {
   return async (dispatch: Dispatch, getState: GetState) => {
-    let signature: ?{
-      signature: string,
-      signing_ts: string,
-    };
-    try {
-      signature = await Lbry.channel_sign({
-        channel_id: creatorChannelClaim.claim_id,
-        hexdata: toHex(creatorChannelClaim.name),
-      });
-    } catch (e) {}
-
+    const signature = await channelSignData(creatorChannelClaim.claim_id, creatorChannelClaim.name);
     if (!signature) {
       return;
     }
@@ -1391,50 +1365,29 @@ export function doCommentModRemoveDelegate(
     return Comments.moderation_remove_delegate({
       mod_channel_id: modChannelId,
       mod_channel_name: modChannelName,
-      creator_channel_id: creatorChannelClaim.claim_id,
-      creator_channel_name: creatorChannelClaim.name,
-      signature: signature.signature,
-      signing_ts: signature.signing_ts,
+      channel_id: creatorChannelClaim.claim_id,
+      channel_name: creatorChannelClaim.name,
+      ...signature,
     }).catch((err) => {
-      dispatch(
-        doToast({
-          message: err.message,
-          isError: true,
-        })
-      );
+      dispatch(doToast({ message: err.message, isError: true }));
     });
   };
 }
 
 export function doCommentModListDelegates(channelClaim: ChannelClaim) {
   return async (dispatch: Dispatch, getState: GetState) => {
-    dispatch({
-      type: ACTIONS.COMMENT_FETCH_MODERATION_DELEGATES_STARTED,
-    });
+    dispatch({ type: ACTIONS.COMMENT_FETCH_MODERATION_DELEGATES_STARTED });
 
-    let signature: ?{
-      signature: string,
-      signing_ts: string,
-    };
-    try {
-      signature = await Lbry.channel_sign({
-        channel_id: channelClaim.claim_id,
-        hexdata: toHex(channelClaim.name),
-      });
-    } catch (e) {}
-
+    const signature = await channelSignData(channelClaim.claim_id, channelClaim.name);
     if (!signature) {
-      dispatch({
-        type: ACTIONS.COMMENT_FETCH_MODERATION_DELEGATES_FAILED,
-      });
+      dispatch({ type: ACTIONS.COMMENT_FETCH_MODERATION_DELEGATES_FAILED });
       return;
     }
 
     return Comments.moderation_list_delegates({
-      creator_channel_id: channelClaim.claim_id,
-      creator_channel_name: channelClaim.name,
-      signature: signature.signature,
-      signing_ts: signature.signing_ts,
+      channel_id: channelClaim.claim_id,
+      channel_name: channelClaim.name,
+      ...signature,
     })
       .then((response) => {
         dispatch({
@@ -1446,9 +1399,7 @@ export function doCommentModListDelegates(channelClaim: ChannelClaim) {
         });
       })
       .catch((err) => {
-        dispatch({
-          type: ACTIONS.COMMENT_FETCH_MODERATION_DELEGATES_FAILED,
-        });
+        dispatch({ type: ACTIONS.COMMENT_FETCH_MODERATION_DELEGATES_FAILED });
       });
   };
 }

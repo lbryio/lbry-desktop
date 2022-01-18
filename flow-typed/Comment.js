@@ -72,6 +72,26 @@ declare type CommentsState = {
   fetchingBlockedWords: boolean,
 };
 
+// Authorization parameters for calls requiring user authentication
+declare type Authorization = {
+  channel_name: string,
+  channel_id: string,
+  signature: string,
+  signing_ts: string,
+};
+
+// ModAuthorization parameters for calls requiring creator/moderator authentication
+declare type ModAuthorization = {
+  // Publisher, Moderator or Commentron Admin
+  mod_channel_id: string,
+  mod_channel_name: string,
+  // Creator that Moderator is delegated from. Used for delegated moderation
+  creator_channel_id: string,
+  creator_channel_name: string,
+  signature: string,
+  signing_ts: string,
+};
+
 declare type CommentReactParams = {
   comment_ids: string,
   channel_name: string,
@@ -243,30 +263,17 @@ declare type BlockedListArgs = {
   signing_ts: string,
 };
 
-declare type ModerationAddDelegateParams = {
+declare type ModerationAddDelegateParams = Authorization & {
   mod_channel_id: string,
   mod_channel_name: string,
-  creator_channel_id: string,
-  creator_channel_name: string,
-  signature: string,
-  signing_ts: string,
 };
 
-declare type ModerationRemoveDelegateParams = {
+declare type ModerationRemoveDelegateParams = Authorization & {
   mod_channel_id: string,
   mod_channel_name: string,
-  creator_channel_id: string,
-  creator_channel_name: string,
-  signature: string,
-  signing_ts: string,
 };
 
-declare type ModerationListDelegatesParams = {
-  creator_channel_id: string,
-  creator_channel_name: string,
-  signature: string,
-  signing_ts: string,
-};
+declare type ModerationListDelegatesParams = Authorization;
 
 declare type ModerationAmIParams = {
   channel_name: string,
