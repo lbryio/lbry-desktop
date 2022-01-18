@@ -13,11 +13,8 @@ const ADS_TAG = 'vidcrunchJS537102317';
 const IOS_ADS_URL =
   'https://cdn.vidcrunch.com/integrations/618bb4d28aac298191eec411/Lbry_Odysee.com_Mobile_Floating_DFP_Rev70_1611.js';
 const IOS_ADS_TAG = 'vidcrunchJS199212779';
-const HOMEPAGE_ADS_URL =
-  'https://cdn.vidcrunch.com/integrations/618bb4d28aac298191eec411/Lbry_Odysee.com_Responsive_Floating_300x169_DFP_Rev70_1211.js';
-const HOMEPAGE_ADS_TAG = 'vidcrunchJS330442776';
-
-const EU_AD_URL = 'https://tg1.vidcrunch.com/api/adserver/spt?AV_TAGID=61dff05c599f1e20b01085d4&AV_PUBLISHERID=6182c8993c8ae776bd5635e9';
+const EU_AD_URL =
+  'https://tg1.vidcrunch.com/api/adserver/spt?AV_TAGID=61dff05c599f1e20b01085d4&AV_PUBLISHERID=6182c8993c8ae776bd5635e9';
 const EU_AD_TAG = 'AV61dff05c599f1e20b01085d4';
 
 const IS_IOS =
@@ -66,25 +63,15 @@ function Ads(props: Props) {
   // load ad and tags here
   let scriptUrlToUse;
   let tagNameToUse;
-  if (type === 'video') {
-    if (isInEu) {
-      tagNameToUse = EU_AD_TAG;
-      scriptUrlToUse = EU_AD_URL;
-    } else if (IS_IOS) {
-      tagNameToUse = IOS_ADS_TAG;
-      scriptUrlToUse = IOS_ADS_URL;
-    } else {
-      tagNameToUse = ADS_TAG;
-      scriptUrlToUse = ADS_URL;
-    }
-  } else if (type === 'homepage') {
-    if (isInEu) {
-      tagNameToUse = EU_AD_TAG;
-      scriptUrlToUse = EU_AD_URL;
-    } else {
-      tagNameToUse = HOMEPAGE_ADS_TAG;
-      scriptUrlToUse = HOMEPAGE_ADS_URL;
-    }
+  if (isInEu) {
+    tagNameToUse = EU_AD_TAG;
+    scriptUrlToUse = EU_AD_URL;
+  } else if (IS_IOS) {
+    tagNameToUse = IOS_ADS_TAG;
+    scriptUrlToUse = IOS_ADS_URL;
+  } else {
+    tagNameToUse = ADS_TAG;
+    scriptUrlToUse = ADS_URL;
   }
 
   // add script to DOM
