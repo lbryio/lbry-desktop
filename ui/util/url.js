@@ -20,7 +20,7 @@ export const formatLbryUrlForWeb = (uri) => {
   return newUrl;
 };
 
-export const formatLbryChannelName = (uri) => uri.replace('lbry://', '').replace(/#/g, ':');
+export const formatLbryChannelName = (uri) => uri && uri.replace('lbry://', '').replace(/#/g, ':');
 
 export const formatFileSystemPath = (path) => {
   if (!path) {
