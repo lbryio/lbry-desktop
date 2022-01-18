@@ -27,6 +27,8 @@ import I18nMessage from 'component/i18nMessage';
 import TruncatedText from 'component/common/truncated-text';
 // $FlowFixMe cannot resolve ...
 import PlaceholderTx from 'static/img/placeholderTx.gif';
+import Tooltip from 'component/common/tooltip';
+import { toCompactNotation } from 'util/string';
 
 export const PAGE_VIEW_QUERY = `view`;
 export const DISCUSSION_PAGE = `discussion`;
@@ -58,6 +60,7 @@ type Props = {
   blockedChannels: Array<string>,
   mutedChannels: Array<string>,
   unpublishedCollections: CollectionGroup,
+  lang: string,
 };
 
 function ChannelPage(props: Props) {
@@ -77,6 +80,7 @@ function ChannelPage(props: Props) {
     blockedChannels,
     mutedChannels,
     unpublishedCollections,
+    lang,
   } = props;
   const {
     push,
@@ -91,6 +95,7 @@ function ChannelPage(props: Props) {
   const { channelName } = parseURI(uri);
   const { permanent_url: permanentUrl } = claim;
   const claimId = claim.claim_id;
+  const compactSubCount = toCompactNotation(subCount, lang, 10000);
   const formattedSubCount = Number(subCount).toLocaleString();
   const isBlocked = claim && blockedChannels.includes(claim.permanent_url);
   const isMuted = claim && mutedChannels.includes(claim.permanent_url);
@@ -231,10 +236,12 @@ function ChannelPage(props: Props) {
             <ChannelStakedIndicator uri={uri} large />
           </h1>
           <div className="channel__meta">
-            <span>
-              {formattedSubCount} {subCount !== 1 ? __('Followers') : __('Follower')}
-              <HelpLink href="https://odysee.com/@OdyseeHelp:b/OdyseeBasics:c" />
-            </span>
+            <Tooltip title={formattedSubCount} followCursor placement="top">
+              <span>
+                {compactSubCount} {subCount !== 1 ? __('Followers') : __('Follower')}
+                <HelpLink href="https://odysee.com/@OdyseeHelp:b/OdyseeBasics:c" />
+              </span>
+            </Tooltip>
             {channelIsMine && (
               <>
                 {pending ? (

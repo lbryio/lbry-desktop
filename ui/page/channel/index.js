@@ -15,6 +15,7 @@ import { selectIsSubscribedForUri } from 'redux/selectors/subscriptions';
 import { selectModerationBlockList } from 'redux/selectors/comments';
 import { selectMutedChannels } from 'redux/selectors/blocked';
 import { doOpenModal } from 'redux/actions/app';
+import { selectLanguage } from 'redux/selectors/settings';
 import ChannelPage from './view';
 
 const select = (state, props) => {
@@ -35,6 +36,7 @@ const select = (state, props) => {
     blockedChannels: selectModerationBlockList(state),
     mutedChannels: selectMutedChannels(state),
     unpublishedCollections: selectMyUnpublishedCollections(state),
+    lang: selectLanguage(state),
   };
 };
 
