@@ -1395,6 +1395,7 @@
   "Unable to edit this comment, please try again later.": "Unable to edit this comment, please try again later.",
   "No active channel selected.": "No active channel selected.",
   "Unable to verify your channel. Please try again.": "Unable to verify your channel. Please try again.",
+  "Unable to verify signature for %channel%.": "Unable to verify signature for %channel%.",
   "Channel cannot be anonymous, please select a channel and try again.": "Channel cannot be anonymous, please select a channel and try again.",
   "Change to list layout": "Change to list layout",
   "Change to tile layout": "Change to tile layout",

@@ -5,7 +5,7 @@ import * as PAGES from 'constants/pages';
 import { SORT_BY, BLOCK_LEVEL } from 'constants/comment';
 import Lbry from 'lbry';
 import { parseURI, buildURI, isURIEqual } from 'util/lbryURI';
-import { resolveCommentronError } from 'util/commentron-error';
+import { devToast, doFailedSignatureToast, resolveCommentronError } from 'util/commentron-error';
 import { selectClaimForUri, selectClaimsByUri, selectMyChannelClaims } from 'redux/selectors/claims';
 import { doResolveUri, doClaimSearch } from 'redux/actions/claims';
 import { doToast, doSeeNotifications } from 'redux/actions/notifications';
@@ -23,18 +23,10 @@ import Comments from 'comments';
 import { selectPrefsReady } from 'redux/selectors/sync';
 import { doAlertWaitingForSync } from 'redux/actions/app';
 
-const isDev = process.env.NODE_ENV !== 'production';
 const FETCH_API_FAILED_TO_FETCH = 'Failed to fetch';
 const PROMISE_FULFILLED = 'fulfilled';
 
 const MENTION_REGEX = /(?:^| |\n)@[^\s=&#$@%?:;/"<>%{}|^~[]*(?::[\w]+)?/gm;
-
-function devToast(dispatch, msg) {
-  if (isDev) {
-    console.error(msg); // eslint-disable-line
-    dispatch(doToast({ isError: true, message: `DEV: ${msg}` }));
-  }
-}
 
 export function doCommentList(
   uri: string,
@@ -1321,6 +1313,7 @@ export function doCommentModAddDelegate(
   return async (dispatch: Dispatch, getState: GetState) => {
     const signature = await channelSignData(creatorChannelClaim.claim_id, creatorChannelClaim.name);
     if (!signature) {
+      doFailedSignatureToast(dispatch, creatorChannelClaim.name);
       return;
     }
 
@@ -1359,6 +1352,7 @@ export function doCommentModRemoveDelegate(
   return async (dispatch: Dispatch, getState: GetState) => {
     const signature = await channelSignData(creatorChannelClaim.claim_id, creatorChannelClaim.name);
     if (!signature) {
+      doFailedSignatureToast(dispatch, creatorChannelClaim.name);
       return;
     }
 
@@ -1380,6 +1374,7 @@ export function doCommentModListDelegates(channelClaim: ChannelClaim) {
 
     const signature = await channelSignData(channelClaim.claim_id, channelClaim.name);
     if (!signature) {
+      doFailedSignatureToast(dispatch, channelClaim.name);
       dispatch({ type: ACTIONS.COMMENT_FETCH_MODERATION_DELEGATES_FAILED });
       return;
     }
@@ -1399,6 +1394,7 @@ export function doCommentModListDelegates(channelClaim: ChannelClaim) {
         });
       })
       .catch((err) => {
+        dispatch(doToast({ message: err.message, isError: true }));
         dispatch({ type: ACTIONS.COMMENT_FETCH_MODERATION_DELEGATES_FAILED });
       });
   };
