@@ -27,8 +27,6 @@ type Props = {
   updatePublishForm: ({}) => void,
   useLBRYUploader: boolean,
   needsYTAuth: boolean,
-  fetchAccessToken: () => void,
-  accessToken: string,
   showSchedulingOptions: boolean,
 };
 

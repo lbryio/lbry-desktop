@@ -2,7 +2,7 @@ import { hot } from 'react-hot-loader/root';
 import { connect } from 'react-redux';
 import { selectGetSyncErrorMessage, selectSyncFatalError, selectSyncIsLocked } from 'redux/selectors/sync';
 import { doFetchAccessToken, doUserSetReferrer } from 'redux/actions/user';
-import { selectUser, selectAccessToken, selectUserVerifiedEmail } from 'redux/selectors/user';
+import { selectUser, selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectUnclaimedRewards } from 'redux/selectors/rewards';
 import { doFetchChannelListMine, doFetchCollectionListMine, doResolveUris } from 'redux/actions/claims';
 import { selectMyChannelClaimIds } from 'redux/selectors/claims';
@@ -24,7 +24,6 @@ import App from './view';
 
 const select = (state) => ({
   user: selectUser(state),
-  accessToken: selectAccessToken(state),
   theme: selectThemePath(state),
   language: selectLanguage(state),
   languages: selectLoadedLanguages(state),
