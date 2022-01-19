@@ -135,6 +135,7 @@ export default function LivestreamComment(props: Props) {
             isPinned={isPinned}
             isTopLevel
             disableEdit
+            disableRemove={comment.removed}
             isLiveComment
           />
         </Menu>
