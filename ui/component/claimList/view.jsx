@@ -162,6 +162,7 @@ export default function ClaimList(props: Props) {
   const getClaimPreview = (uri: string, index: number, draggableProvided?: any) => (
     <ClaimPreview
       uri={uri}
+      key={uri}
       indexInContainer={index}
       type={type}
       active={activeUri && uri === activeUri}
