@@ -176,9 +176,9 @@ class HelpPage extends React.PureComponent<Props, State> {
             <div className="section__actions">
               <Button
                 button="secondary"
-                label={__('Join the Foundation Chat')}
+                label={__('Join our Discord')}
                 icon={ICONS.CHAT}
-                href="https://chat.lbry.com"
+                href="https://chat.odysee.com"
               />
               <Button button="secondary" label={__('Email Us')} icon={ICONS.WEB} href={`mailto:${SITE_HELP_EMAIL}`} />
             </div>
