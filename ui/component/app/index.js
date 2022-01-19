@@ -1,7 +1,7 @@
 import { hot } from 'react-hot-loader/root';
 import { connect } from 'react-redux';
 import { selectGetSyncErrorMessage, selectSyncFatalError, selectSyncIsLocked } from 'redux/selectors/sync';
-import { doFetchAccessToken, doUserSetReferrer } from 'redux/actions/user';
+import { doUserSetReferrer } from 'redux/actions/user';
 import { selectUser, selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectUnclaimedRewards } from 'redux/selectors/rewards';
 import { doFetchChannelListMine, doFetchCollectionListMine, doResolveUris } from 'redux/actions/claims';
@@ -43,7 +43,6 @@ const select = (state) => ({
 });
 
 const perform = (dispatch) => ({
-  fetchAccessToken: () => dispatch(doFetchAccessToken()),
   fetchChannelListMine: () => dispatch(doFetchChannelListMine()),
   fetchCollectionListMine: () => dispatch(doFetchCollectionListMine()),
   setLanguage: (language) => dispatch(doSetLanguage(language)),

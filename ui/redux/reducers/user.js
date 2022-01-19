@@ -25,7 +25,6 @@ const defaultState = {
   referralLink: undefined,
   referralCode: undefined,
   user: undefined,
-  accessToken: undefined,
   youtubeChannelImportPending: false,
   youtubeChannelImportErrorMessage: '',
   referrerSetIsPending: false,
@@ -36,14 +35,12 @@ reducers[ACTIONS.AUTHENTICATION_STARTED] = (state) =>
   Object.assign({}, state, {
     authenticationIsPending: true,
     userIsPending: true,
-    accessToken: defaultState.accessToken,
   });
 
 reducers[ACTIONS.AUTHENTICATION_SUCCESS] = (state, action) =>
   Object.assign({}, state, {
     authenticationIsPending: false,
     userIsPending: false,
-    accessToken: action.data.accessToken,
     user: action.data.user,
   });
 
@@ -220,14 +217,6 @@ reducers[ACTIONS.USER_IDENTITY_VERIFY_FAILURE] = (state, action) =>
     identityVerifyIsPending: false,
     identityVerifyErrorMessage: action.data.error,
   });
-
-reducers[ACTIONS.FETCH_ACCESS_TOKEN_SUCCESS] = (state, action) => {
-  const { token } = action.data;
-
-  return Object.assign({}, state, {
-    accessToken: token,
-  });
-};
 
 reducers[ACTIONS.USER_INVITE_STATUS_FETCH_STARTED] = (state) =>
   Object.assign({}, state, {
