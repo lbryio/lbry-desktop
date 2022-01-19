@@ -10,9 +10,9 @@ import classnames from 'classnames';
 const ADS_URL =
   'https://cdn.vidcrunch.com/integrations/618bb4d28aac298191eec411/Lbry_Odysee.com_Responsive_Floating_DFP_Rev70_1011.js';
 const ADS_TAG = 'vidcrunchJS537102317';
-const IOS_ADS_URL =
+const MOBILE_ADS_URL =
   'https://cdn.vidcrunch.com/integrations/618bb4d28aac298191eec411/Lbry_Odysee.com_Mobile_Floating_DFP_Rev70_1611.js';
-const IOS_ADS_TAG = 'vidcrunchJS199212779';
+const MOBILE_ADS_TAG = 'vidcrunchJS199212779';
 const EU_AD_URL =
   'https://tg1.vidcrunch.com/api/adserver/spt?AV_TAGID=61dff05c599f1e20b01085d4&AV_PUBLISHERID=6182c8993c8ae776bd5635e9';
 const EU_AD_TAG = 'AV61dff05c599f1e20b01085d4';
@@ -54,6 +54,7 @@ function Ads(props: Props) {
   } = props;
 
   const shouldShowAds = SHOW_ADS && !authenticated;
+  const mobileAds = IS_ANDROID || IS_IOS;
 
   // this is populated from app based on location
   let isInEu = localStorage.getItem('gdprRequired');
@@ -66,9 +67,9 @@ function Ads(props: Props) {
   if (isInEu) {
     tagNameToUse = EU_AD_TAG;
     scriptUrlToUse = EU_AD_URL;
-  } else if (IS_IOS) {
-    tagNameToUse = IOS_ADS_TAG;
-    scriptUrlToUse = IOS_ADS_URL;
+  } else if (mobileAds) {
+    tagNameToUse = MOBILE_ADS_TAG;
+    scriptUrlToUse = MOBILE_ADS_URL;
   } else {
     tagNameToUse = ADS_TAG;
     scriptUrlToUse = ADS_URL;
