@@ -3,26 +3,16 @@ const PAGES = require('../../ui/constants/pages');
 // Uncomment as you add metadata
 
 module.exports.CATEGORY_METADATA = {
-  [PAGES.BIG_HITS]: () => ({
-    title: 'Big Hits',
-    description: 'Animation, pop culture, comedy, and all the other weird on Odysee',
-    image: '',
-  }),
-  [PAGES.COMMUNITY]: () => ({
-    title: 'The Universe',
-    description: 'Podcasts, life, learning, and everything else on Odysee',
-    image: '',
-  }),
   // [PAGES.CREATIVE_ARTS]: () => ({
   //   title: 'Creative Arts',
   //   description: '',   <----- FILL IN PLEASE
   //   image: '',         <----- FILL IN PLEASE
   // }),
-  //   [PAGES.ENLIGHTENMENT]: () => ({
-  //     title: '',
-  //     description: '',
-  //     image: '',
-  //   }),
+  // [PAGES.EDUCATION]: () => ({
+  //   title: 'Education',
+  //   description: '',   <----- FILL IN PLEASE
+  //   image: '',         <----- FILL IN PLEASE
+  // }),
   [PAGES.FINANCE]: () => ({
     title: 'Finance 2.0',
     description: 'Crypto, Money, Economics, Markets on Odysee ',
@@ -58,6 +48,11 @@ module.exports.CATEGORY_METADATA = {
     description: 'All the songs, reviews, covers, and how-tos you love on Odysee',
     image: 'https://cdn.lbryplayer.xyz/speech/category-music:8.jpg',
   }),
+  [PAGES.POP_CULTURE]: () => ({
+    title: 'Big Hits',
+    description: 'Animation, pop culture, comedy, and all the other weird on Odysee',
+    image: '',
+  }),
   [PAGES.SEARCH]: ({ q = '' }) => {
     if (!q) {
       return {};
@@ -74,9 +69,9 @@ module.exports.CATEGORY_METADATA = {
     description: 'Hardware, software, startups, photography on Odysee',
     image: '',
   }),
-  [PAGES.TECHNOLOGY]: () => ({
-    title: 'Tech',
-    description: 'Hardware, software, startups, photography on Odysee',
+  [PAGES.UNIVERSE]: () => ({
+    title: 'The Universe',
+    description: 'Podcasts, life, learning, and everything else on Odysee',
     image: '',
   }),
   [PAGES.WILD_WEST]: () => ({
