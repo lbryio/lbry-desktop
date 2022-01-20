@@ -505,6 +505,8 @@ export function doCommentCreate(
         const mention = matchTerm.substring(matchTerm.indexOf('@'));
         const mentionUri = `lbry://${mention}`;
 
+        if (mention.length === 1) return;
+
         const claim = selectClaimForUri(state, mentionUri);
 
         if (claim) {
