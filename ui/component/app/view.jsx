@@ -60,7 +60,6 @@ type Props = {
   user: ?{ id: string, has_verified_email: boolean, is_reward_approved: boolean },
   location: { pathname: string, hash: string, search: string },
   history: { push: (string) => void },
-  fetchAccessToken: () => void,
   fetchChannelListMine: () => void,
   fetchCollectionListMine: () => void,
   signIn: () => void,
@@ -93,7 +92,6 @@ function App(props: Props) {
   const {
     theme,
     user,
-    fetchAccessToken,
     fetchChannelListMine,
     fetchCollectionListMine,
     signIn,
@@ -285,13 +283,11 @@ function App(props: Props) {
       ReactModal.setAppElement(wrapperElement);
     }
 
-    fetchAccessToken();
-
     // @if TARGET='app'
     fetchChannelListMine(); // This is fetched after a user is signed in on web
     fetchCollectionListMine();
     // @endif
-  }, [appRef, fetchAccessToken, fetchChannelListMine, fetchCollectionListMine]);
+  }, [appRef, fetchChannelListMine, fetchCollectionListMine]);
 
   useEffect(() => {
     // $FlowFixMe

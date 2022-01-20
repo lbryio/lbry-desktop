@@ -73,7 +73,6 @@ export const selectUserIsVerificationCandidate = createSelector(
   (user) => user && (!user.has_verified_email || !user.is_identity_verified)
 );
 
-export const selectAccessToken = (state) => selectState(state).accessToken;
 export const selectUserInviteStatusIsPending = (state) => selectState(state).inviteStatusIsPending;
 export const selectUserInvitesRemaining = (state) => selectState(state).invitesRemaining;
 export const selectUserInvitees = (state) => selectState(state).invitees;

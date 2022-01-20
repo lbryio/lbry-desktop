@@ -41,9 +41,6 @@ const ModalFileSelection = lazyImport(() =>
 );
 const ModalFileTimeout = lazyImport(() => import('modal/modalFileTimeout' /* webpackChunkName: "modalFileTimeout" */));
 const ModalFirstReward = lazyImport(() => import('modal/modalFirstReward' /* webpackChunkName: "modalFirstReward" */));
-const ModalFirstSubscription = lazyImport(() =>
-  import('modal/modalFirstSubscription' /* webpackChunkName: "modalFirstSubscription" */)
-);
 const ModalImageUpload = lazyImport(() => import('modal/modalImageUpload' /* webpackChunkName: "modalImageUpload" */));
 const ModalMassTipsUnlock = lazyImport(() =>
   import('modal/modalMassTipUnlock' /* webpackChunkName: "modalMassTipUnlock" */)
@@ -124,8 +121,6 @@ function getModal(id) {
       return ModalRevokeClaim;
     case MODALS.PHONE_COLLECTION:
       return ModalPhoneCollection;
-    case MODALS.FIRST_SUBSCRIPTION:
-      return ModalFirstSubscription;
     case MODALS.SEND_TIP:
       return ModalSendTip;
     case MODALS.SOCIAL_SHARE:

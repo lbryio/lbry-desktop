@@ -573,17 +573,6 @@ export function doUserEmailVerify(verificationToken, recaptcha) {
   };
 }
 
-export function doFetchAccessToken() {
-  return (dispatch) => {
-    const success = (token) =>
-      dispatch({
-        type: ACTIONS.FETCH_ACCESS_TOKEN_SUCCESS,
-        data: { token },
-      });
-    Lbryio.getAuthToken().then(success);
-  };
-}
-
 export function doUserIdentityVerify(stripeToken) {
   return (dispatch) => {
     dispatch({
