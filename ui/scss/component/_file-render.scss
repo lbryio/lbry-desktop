@@ -411,6 +411,10 @@
     .vjs-duration {
       display: flex;
     }
+
+    .vjs-time-divider {
+      z-index: 0; // solves the grayed-out divider
+    }
   }
 
   .vjs-picture-in-picture-control {
