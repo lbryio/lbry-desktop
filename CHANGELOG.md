@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 
 - Several fallout bugs from recent changes
+- Added duration overlays to ClaimPreview component ([#7420](https://github.com/lbryio/lbry-desktop/pull/7420))
 
 ## [0.52.0] - [2021-12-31]
 
@@ -2007,7 +2008,3 @@ This release includes a breaking change that will reset many of your settings. T
 - Use local file for publishing
 - Use local file and html5 for video playback
 - Misc changes needed to make UI compatible with electron.
-
-### Fixed
-
-- Added duration overlays to ClaimPreview component
