@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { selectClaimIsMine, selectClaimForUri } from 'redux/selectors/claims';
 import { makeSelectFilePartlyDownloaded } from 'redux/selectors/file_info';
 import { makeSelectEditedCollectionForId } from 'redux/selectors/collections';
-import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
+import { selectIsSubscribedForUri } from 'redux/selectors/subscriptions';
 import PreviewOverlayProperties from './view';
 
 const select = (state, props) => {
@@ -13,7 +13,7 @@ const select = (state, props) => {
     claim,
     editedCollection: makeSelectEditedCollectionForId(claimId)(state),
     downloaded: makeSelectFilePartlyDownloaded(props.uri)(state),
-    isSubscribed: makeSelectIsSubscribed(props.uri)(state),
+    isSubscribed: selectIsSubscribedForUri(state, props.uri),
     claimIsMine: selectClaimIsMine(state, claim),
   };
 };

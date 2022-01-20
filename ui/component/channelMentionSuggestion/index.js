@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimForUri, makeSelectIsUriResolving } from 'redux/selectors/claims';
+import { selectClaimForUri, selectIsUriResolving } from 'redux/selectors/claims';
 import ChannelMentionSuggestion from './view';
 
 const select = (state, props) => ({
-  claim: makeSelectClaimForUri(props.uri)(state),
-  isResolvingUri: makeSelectIsUriResolving(props.uri)(state),
+  claim: selectClaimForUri(state, props.uri),
+  isResolvingUri: selectIsUriResolving(state, props.uri),
 });
 
 export default connect(select)(ChannelMentionSuggestion);

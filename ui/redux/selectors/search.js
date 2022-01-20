@@ -8,7 +8,7 @@ import {
   makeSelectClaimForClaimId,
   makeSelectClaimIsNsfw,
   makeSelectPendingClaimForUri,
-  makeSelectIsUriResolving,
+  selectIsUriResolving,
 } from 'redux/selectors/claims';
 import { parseURI } from 'util/lbryURI';
 import { isClaimNsfw } from 'util/claim';
@@ -18,7 +18,7 @@ import { selectMutedChannels } from 'redux/selectors/blocked';
 import { selectHistory } from 'redux/selectors/content';
 import { selectAllCostInfoByUri } from 'lbryinc';
 
-type State = { search: SearchState };
+type State = { claims: any, search: SearchState };
 
 export const selectState = (state: State): SearchState => state.search;
 
@@ -238,7 +238,7 @@ export const makeSelectWinningUriForQuery = (query: string) => {
   );
 };
 
-export const makeSelectIsResolvingWinningUri = (query: string = '') => {
+export const selectIsResolvingWinningUri = (state: State, query: string = '') => {
   const uriFromQuery = `lbry://${query}`;
   let channelUriFromQuery;
   try {
@@ -248,13 +248,9 @@ export const makeSelectIsResolvingWinningUri = (query: string = '') => {
     }
   } catch (e) {}
 
-  return createSelector(
-    makeSelectIsUriResolving(uriFromQuery),
-    channelUriFromQuery ? makeSelectIsUriResolving(channelUriFromQuery) : () => {},
-    (claim1IsResolving, claim2IsResolving) => {
-      return claim1IsResolving || claim2IsResolving;
-    }
-  );
+  const claim1IsResolving = selectIsUriResolving(state, uriFromQuery);
+  const claim2IsResolving = channelUriFromQuery ? selectIsUriResolving(state, channelUriFromQuery) : false;
+  return claim1IsResolving || claim2IsResolving;
 };
 
 export const makeSelectUrlForClaimId = (claimId: string) =>

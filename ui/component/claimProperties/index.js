@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { selectClaimIsMine, selectClaimForUri } from 'redux/selectors/claims';
-import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
+import { selectIsSubscribedForUri } from 'redux/selectors/subscriptions';
 import ClaimProperties from './view';
 
 const select = (state, props) => {
@@ -8,7 +8,7 @@ const select = (state, props) => {
 
   return {
     claim,
-    isSubscribed: makeSelectIsSubscribed(props.uri)(state),
+    isSubscribed: selectIsSubscribedForUri(state, props.uri),
     claimIsMine: selectClaimIsMine(state, claim),
   };
 };

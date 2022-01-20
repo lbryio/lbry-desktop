@@ -3,13 +3,14 @@ import { createSelector } from 'reselect';
 import {
   makeSelectClaimForUri,
   selectClaimsByUri,
+  selectClaimIsNsfwForUri,
+  selectClaimIsMineForUri,
   makeSelectClaimIsNsfw,
-  makeSelectClaimIsMine,
   makeSelectContentTypeForUri,
 } from 'redux/selectors/claims';
 import { makeSelectMediaTypeForUri, makeSelectFileNameForUri } from 'redux/selectors/file_info';
 import { selectBalance } from 'redux/selectors/wallet';
-import { makeSelectCostInfoForUri } from 'lbryinc';
+import { selectCostInfoForUri } from 'lbryinc';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import * as RENDER_MODES from 'constants/file_render_modes';
 import path from 'path';
@@ -18,13 +19,14 @@ import { FORCE_CONTENT_TYPE_PLAYER, FORCE_CONTENT_TYPE_COMIC } from 'constants/c
 const RECENT_HISTORY_AMOUNT = 10;
 const HISTORY_ITEMS_PER_PAGE = 50;
 
-export const selectState = (state: any) => state.content || {};
+type State = { claims: any, content: any };
 
-export const selectPlayingUri = createSelector(selectState, (state) => state.playingUri);
-export const selectPrimaryUri = createSelector(selectState, (state) => state.primaryUri);
+export const selectState = (state: State) => state.content || {};
 
-export const selectListLoop = createSelector(selectState, (state) => state.loopList);
-export const selectListShuffle = createSelector(selectState, (state) => state.shuffleList);
+export const selectPlayingUri = (state: State) => selectState(state).playingUri;
+export const selectPrimaryUri = (state: State) => selectState(state).primaryUri;
+export const selectListLoop = (state: State) => selectState(state).loopList;
+export const selectListShuffle = (state: State) => selectState(state).shuffleList;
 
 export const makeSelectIsPlaying = (uri: string) =>
   createSelector(selectPrimaryUri, (primaryUri) => primaryUri === uri);
@@ -84,6 +86,13 @@ export const selectRecentHistory = createSelector(selectHistory, (history) => {
   return history.slice(0, RECENT_HISTORY_AMOUNT);
 });
 
+export const selectShouldObscurePreviewForUri = (state: State, uri: string) => {
+  const showMatureContent = selectShowMatureContent(state);
+  const isClaimMature = selectClaimIsNsfwForUri(state, uri);
+  return isClaimMature && !showMatureContent;
+};
+
+// deprecated
 export const makeSelectShouldObscurePreview = (uri: string) =>
   createSelector(selectShowMatureContent, makeSelectClaimIsNsfw(uri), (showMatureContent, isClaimMature) => {
     return isClaimMature && !showMatureContent;
@@ -155,12 +164,9 @@ export const makeSelectFileRenderModeForUri = (uri: string) =>
     }
   );
 
-export const makeSelectInsufficientCreditsForUri = (uri: string) =>
-  createSelector(
-    makeSelectClaimIsMine(uri),
-    makeSelectCostInfoForUri(uri),
-    selectBalance,
-    (isMine, costInfo, balance) => {
-      return !isMine && costInfo && costInfo.cost > 0 && costInfo.cost > balance;
-    }
-  );
+export const selectInsufficientCreditsForUri = (state: State, uri: string) => {
+  const isMine = selectClaimIsMineForUri(state, uri);
+  const costInfo = selectCostInfoForUri(state, uri);
+  const balance = selectBalance(state);
+  return !isMine && costInfo && costInfo.cost > 0 && costInfo.cost > balance;
+};

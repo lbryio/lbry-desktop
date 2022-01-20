@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
-import { makeSelectTitleForUri } from 'redux/selectors/claims';
+import { selectTitleForUri } from 'redux/selectors/claims';
 import FileTitleSection from './view';
 
 const select = (state, props) => ({
-  title: makeSelectTitleForUri(props.uri)(state),
+  title: selectTitleForUri(state, props.uri),
 });
 
 export default connect(select)(FileTitleSection);

@@ -6,7 +6,7 @@ import {
   makeSelectLoadingForUri,
   makeSelectStreamingUrlForUri,
 } from 'redux/selectors/file_info';
-import { makeSelectCostInfoForUri } from 'lbryinc';
+import { selectCostInfoForUri } from 'lbryinc';
 import { doOpenModal, doAnalyticsView } from 'redux/actions/app';
 import { doSetPlayingUri, doPlayUri } from 'redux/actions/content';
 import FileDownloadLink from './view';
@@ -20,7 +20,7 @@ const select = (state, props) => {
     loading: makeSelectLoadingForUri(props.uri)(state),
     claimIsMine: selectClaimIsMine(state, claim),
     claim,
-    costInfo: makeSelectCostInfoForUri(props.uri)(state),
+    costInfo: selectCostInfoForUri(state, props.uri),
     claimWasPurchased: makeSelectClaimWasPurchased(props.uri)(state),
     streamingUrl: makeSelectStreamingUrlForUri(props.uri)(state),
   };

@@ -5,7 +5,7 @@ import { selectUser, selectSetReferrerPending, selectSetReferrerError } from 're
 import { doClaimRewardType } from 'redux/actions/rewards';
 import { selectUnclaimedRewards } from 'redux/selectors/rewards';
 import { doUserSetReferrer } from 'redux/actions/user';
-import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
+import { selectIsSubscribedForUri } from 'redux/selectors/subscriptions';
 import { doChannelSubscribe } from 'redux/actions/subscriptions';
 import Invited from './view';
 
@@ -15,16 +15,16 @@ const select = (state, props) => {
     referrerSetPending: selectSetReferrerPending(state),
     referrerSetError: selectSetReferrerError(state),
     rewards: selectUnclaimedRewards(state),
-    isSubscribed: makeSelectIsSubscribed(props.fullUri)(state),
+    isSubscribed: selectIsSubscribedForUri(state, props.fullUri),
     fullUri: props.fullUri,
     referrer: props.referrer,
   };
 };
 
-const perform = dispatch => ({
+const perform = (dispatch) => ({
   claimReward: () => dispatch(doClaimRewardType(REWARDS.TYPE_REFEREE)),
-  setReferrer: referrer => dispatch(doUserSetReferrer(referrer)),
-  channelSubscribe: uri => dispatch(doChannelSubscribe(uri)),
+  setReferrer: (referrer) => dispatch(doUserSetReferrer(referrer)),
+  channelSubscribe: (uri) => dispatch(doChannelSubscribe(uri)),
 });
 
 export default withRouter(connect(select, perform)(Invited));

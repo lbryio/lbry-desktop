@@ -144,6 +144,32 @@ export function GetLinksData(
   let rowData: Array<RowDataItem> = [];
   const individualTagDataItems: Array<RowDataItem> = [];
 
+  if (isHomepage && showPersonalizedChannels && subscribedChannels) {
+    const RECENT_FROM_FOLLOWING = {
+      title: __('Recent From Following'),
+      link: `/$/${PAGES.CHANNELS_FOLLOWING}`,
+      icon: ICONS.SUBSCRIBE,
+      options: {
+        orderBy: CS.ORDER_BY_NEW_VALUE,
+        releaseTime:
+          subscribedChannels.length > 20
+            ? `>${Math.floor(moment().subtract(9, 'months').startOf('week').unix())}`
+            : `>${Math.floor(moment().subtract(1, 'year').startOf('week').unix())}`,
+        pageSize: getPageSize(subscribedChannels.length > 3 ? (subscribedChannels.length > 6 ? 16 : 8) : 4),
+        streamTypes: null,
+        channelIds: subscribedChannels.map((subscription: Subscription) => {
+          const { channelClaimId } = parseURI(subscription.uri);
+          if (channelClaimId) return channelClaimId;
+        }),
+      },
+    };
+    // $FlowFixMe flow thinks this might not be Array<string>
+    rowData.push(RECENT_FROM_FOLLOWING);
+  }
+
+  // **************************************************************************
+  // @if CUSTOM_HOMEPAGE='false'
+
   const YOUTUBER_CHANNEL_IDS = [
     'fb364ef587872515f545a5b4b3182b58073f230f',
     '589276465a23c589801d874f484cc39f307d7ec7',
@@ -274,28 +300,6 @@ export function GetLinksData(
     },
   };
 
-  if (isHomepage && showPersonalizedChannels && subscribedChannels) {
-    const RECENT_FROM_FOLLOWING = {
-      title: __('Recent From Following'),
-      link: `/$/${PAGES.CHANNELS_FOLLOWING}`,
-      icon: ICONS.SUBSCRIBE,
-      options: {
-        orderBy: CS.ORDER_BY_NEW_VALUE,
-        releaseTime:
-          subscribedChannels.length > 20
-            ? `>${Math.floor(moment().subtract(9, 'months').startOf('week').unix())}`
-            : `>${Math.floor(moment().subtract(1, 'year').startOf('week').unix())}`,
-        pageSize: getPageSize(subscribedChannels.length > 3 ? (subscribedChannels.length > 6 ? 16 : 8) : 4),
-        streamTypes: null,
-        channelIds: subscribedChannels.map((subscription: Subscription) => {
-          const { channelClaimId } = parseURI(subscription.uri);
-          if (channelClaimId) return channelClaimId;
-        }),
-      },
-    };
-    // $FlowFixMe flow thinks this might not be Array<string>
-    rowData.push(RECENT_FROM_FOLLOWING);
-  }
   if (isHomepage && !CUSTOM_HOMEPAGE) {
     if (followedTags) {
       const TRENDING_FOR_TAGS = {
@@ -330,6 +334,7 @@ export function GetLinksData(
       }
     }
   }
+
   if (!CUSTOM_HOMEPAGE) {
     if (!authenticated) {
       rowData.push(YOUTUBE_CREATOR_ROW);
@@ -338,6 +343,10 @@ export function GetLinksData(
     rowData.push(LATEST_FROM_LBRY);
     if (!showPersonalizedChannels) rowData.push(TOP_CHANNELS);
   }
+
+  // @endif
+  // **************************************************************************
+
   // TODO: provide better method for exempting from homepage
   (Object.values(all): any)
     .filter((row) => !(isHomepage && row.name === 'news'))

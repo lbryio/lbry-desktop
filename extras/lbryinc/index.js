@@ -38,8 +38,8 @@ export { syncReducer } from './redux/reducers/sync';
 // selectors
 export { selectAuthToken, selectIsAuthenticating } from './redux/selectors/auth';
 export {
-  makeSelectFetchingCostInfoForUri,
-  makeSelectCostInfoForUri,
+  selectFetchingCostInfoForUri,
+  selectCostInfoForUri,
   selectAllCostInfoByUri,
   selectFetchingCostInfo,
 } from './redux/selectors/cost_info';

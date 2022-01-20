@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { PAGE_SIZE } from 'constants/claim';
 import {
+  selectIsUriResolving,
   selectClaimForUri,
-  makeSelectIsUriResolving,
   makeSelectTotalPagesForChannel,
-  makeSelectTitleForUri,
+  selectTitleForUri,
   selectClaimIsMine,
   makeSelectClaimIsPending,
 } from 'redux/selectors/claims';
@@ -71,11 +71,11 @@ const select = (state, props) => {
   return {
     uri,
     claim,
-    isResolvingUri: makeSelectIsUriResolving(uri)(state),
+    isResolvingUri: selectIsUriResolving(state, uri),
     blackListedOutpoints: selectBlackListedOutpoints(state),
     totalPages: makeSelectTotalPagesForChannel(uri, PAGE_SIZE)(state),
     isSubscribed: makeSelectChannelInSubscriptions(uri)(state),
-    title: makeSelectTitleForUri(uri)(state),
+    title: selectTitleForUri(state, uri),
     claimIsMine: selectClaimIsMine(state, claim),
     claimIsPending: makeSelectClaimIsPending(uri)(state),
     collection: makeSelectCollectionForId(collectionId)(state),

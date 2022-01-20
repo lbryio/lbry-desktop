@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectTitleForUri, makeSelectClaimIsNsfw, makeSelectClaimWasPurchased } from 'redux/selectors/claims';
+import { selectTitleForUri, makeSelectClaimIsNsfw, makeSelectClaimWasPurchased } from 'redux/selectors/claims';
 import { makeSelectFileInfoForUri, makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
 import {
   makeSelectNextUrlForCollectionAndUrl,
@@ -13,7 +13,7 @@ import {
   makeSelectFileRenderModeForUri,
 } from 'redux/selectors/content';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { makeSelectCostInfoForUri } from 'lbryinc';
+import { selectCostInfoForUri } from 'lbryinc';
 import { doPlayUri, doSetPlayingUri } from 'redux/actions/content';
 import { doFetchRecommendedContent } from 'redux/actions/search';
 import { doAnaltyicsPurchaseEvent } from 'redux/actions/app';
@@ -30,7 +30,7 @@ const select = (state, props) => {
     uri,
     primaryUri,
     playingUri,
-    title: makeSelectTitleForUri(uri)(state),
+    title: selectTitleForUri(state, uri),
     fileInfo: makeSelectFileInfoForUri(uri)(state),
     mature: makeSelectClaimIsNsfw(uri)(state),
     isFloating: makeSelectIsPlayerFloating(props.location)(state),
@@ -38,7 +38,7 @@ const select = (state, props) => {
     floatingPlayerEnabled: makeSelectClientSetting(SETTINGS.FLOATING_PLAYER)(state),
     renderMode: makeSelectFileRenderModeForUri(uri)(state),
     videoTheaterMode: makeSelectClientSetting(SETTINGS.VIDEO_THEATER_MODE)(state),
-    costInfo: makeSelectCostInfoForUri(uri)(state),
+    costInfo: selectCostInfoForUri(state, uri),
     claimWasPurchased: makeSelectClaimWasPurchased(uri)(state),
     nextListUri: collectionId && makeSelectNextUrlForCollectionAndUrl(collectionId, uri)(state),
     previousListUri: collectionId && makeSelectPreviousUrlForCollectionAndUrl(collectionId, uri)(state),

@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 import {
   selectClaimIsMine,
-  makeSelectTitleForUri,
-  makeSelectThumbnailForUri,
+  selectTitleForUri,
+  getThumbnailFromClaim,
   makeSelectCoverForUri,
   selectCurrentChannelPage,
   selectClaimForUri,
@@ -11,7 +11,7 @@ import {
 import { selectMyUnpublishedCollections } from 'redux/selectors/collections';
 import { selectBlackListedOutpoints, doFetchSubCount, selectSubCountForUri } from 'lbryinc'; // ban state
 import { selectYoutubeChannels } from 'redux/selectors/user';
-import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
+import { selectIsSubscribedForUri } from 'redux/selectors/subscriptions';
 import { selectModerationBlockList } from 'redux/selectors/comments';
 import { selectMutedChannels } from 'redux/selectors/blocked';
 import { doOpenModal } from 'redux/actions/app';
@@ -21,13 +21,13 @@ const select = (state, props) => {
   const claim = selectClaimForUri(state, props.uri);
 
   return {
-    title: makeSelectTitleForUri(props.uri)(state),
-    thumbnail: makeSelectThumbnailForUri(props.uri)(state),
+    title: selectTitleForUri(state, props.uri),
+    thumbnail: getThumbnailFromClaim(claim),
     cover: makeSelectCoverForUri(props.uri)(state),
     channelIsMine: selectClaimIsMine(state, claim),
     page: selectCurrentChannelPage(state),
     claim,
-    isSubscribed: makeSelectIsSubscribed(props.uri, true)(state),
+    isSubscribed: selectIsSubscribedForUri(state, props.uri),
     blackListedOutpoints: selectBlackListedOutpoints(state),
     subCount: selectSubCountForUri(state, props.uri),
     pending: makeSelectClaimIsPending(props.uri)(state),
