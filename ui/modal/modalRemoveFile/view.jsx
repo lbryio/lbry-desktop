@@ -14,7 +14,7 @@ type Props = {
   claimIsMine: boolean,
   doResolveUri: (string) => void,
   closeModal: () => void,
-  deleteFile: (string, boolean, boolean, boolean) => void,
+  deleteFile: (string, boolean, boolean, boolean, any) => void,
   doGoBack: boolean,
   title: string,
   fileInfo?: {
@@ -93,7 +93,7 @@ function ModalRemoveFile(props: Props) {
                 button="primary"
                 label={isAbandoning ? __('Removing...') : __('OK')}
                 disabled={isAbandoning || !(deleteChecked || abandonChecked)}
-                onClick={() => deleteFile(uri, deleteChecked, claimIsMine ? abandonChecked : false, doGoBack)}
+                onClick={() => deleteFile(uri, deleteChecked, claimIsMine ? abandonChecked : false, doGoBack, claim)}
               />
               <Button button="link" label={__('Cancel')} onClick={closeModal} />
             </div>
