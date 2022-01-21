@@ -3,7 +3,6 @@ import { makeSelectClaimForUri, selectIsUriResolving } from 'redux/selectors/cla
 import { doResolveUri } from 'redux/actions/claims';
 import { doSetPlayingUri } from 'redux/actions/content';
 import { punctuationMarks } from 'util/remark-lbry';
-import { selectBlackListedOutpoints } from 'lbryinc';
 import { selectPlayingUri } from 'redux/selectors/content';
 import ClaimLink from './view';
 
@@ -26,7 +25,6 @@ const select = (state, props) => {
     claim,
     fullUri: props.uri,
     isResolvingUri: selectIsUriResolving(state, uri),
-    blackListedOutpoints: selectBlackListedOutpoints(state),
     playingUri: selectPlayingUri(state),
   };
 };
