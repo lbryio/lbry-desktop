@@ -86,7 +86,7 @@ function ChannelContent(props: Props) {
 
   React.useEffect(() => {
     const timer = setTimeout(() => {
-      if (searchQuery === '' || !claimId) {
+      if (searchQuery.trim().length < 3 || !claimId) {
         // In order to display original search results, search results must be set to null. A query of '' should display original results.
         return setSearchResults(null);
       } else {
