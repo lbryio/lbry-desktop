@@ -13,7 +13,7 @@ import { useHistory } from 'react-router';
 import { useIsMobile, useIsMediumScreen } from 'effects/use-screensize';
 import { parseURI } from 'util/lbryURI';
 
-export const MAIN_CLASS = 'main';
+import { MAIN_CLASS } from 'constants/classnames';
 type Props = {
   children: Node | Array<Node>,
   className: ?string,

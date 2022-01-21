@@ -1,5 +1,5 @@
 // @flow
-import { MAIN_CLASS } from 'component/page/view';
+import { MAIN_CLASS } from 'constants/classnames';
 import type { Node } from 'react';
 import React, { useEffect } from 'react';
 import classnames from 'classnames';
