@@ -10,11 +10,13 @@ import Icon from 'component/common/icon';
 import NotificationBubble from 'component/notificationBubble';
 import I18nMessage from 'component/i18nMessage';
 import ChannelThumbnail from 'component/channelThumbnail';
+import useDebounce from 'effects/use-debounce';
 import { useIsMobile, useIsLargeScreen } from 'effects/use-screensize';
 import { GetLinksData } from 'util/buildHomepage';
 import { DOMAIN, ENABLE_UI_NOTIFICATIONS, ENABLE_NO_SOURCE_CLAIMS, CHANNEL_STAKED_LEVEL_LIVESTREAM } from 'config';
 
 const FOLLOWED_ITEM_INITIAL_LIMIT = 10;
+const FILTER_DEBOUNCE_MS = 300;
 
 type SideNavLink = {
   title: string,
@@ -250,8 +252,20 @@ function SideNavigation(props: Props) {
   const showSubscriptionSection = shouldRenderLargeMenu && isPersonalized && subscriptions && subscriptions.length > 0;
   const showTagSection = sidebarOpen && isPersonalized && followedTags && followedTags.length;
 
-  let displayedSubscriptions = subscriptions;
-  if (showSubscriptionSection && subscriptions.length > FOLLOWED_ITEM_INITIAL_LIMIT && !expandSubscriptions) {
+  const [rawSubscriptionFilter, setRawSubscriptionFilter] = React.useState('');
+  const subscriptionFilter: string = useDebounce(rawSubscriptionFilter, FILTER_DEBOUNCE_MS);
+
+  const filteredSubscriptions = subscriptions.filter(
+    (sub) => !subscriptionFilter || sub.channelName.toLowerCase().includes(subscriptionFilter)
+  );
+
+  let displayedSubscriptions = filteredSubscriptions;
+  if (
+    showSubscriptionSection &&
+    !subscriptionFilter &&
+    subscriptions.length > FOLLOWED_ITEM_INITIAL_LIMIT &&
+    !expandSubscriptions
+  ) {
     displayedSubscriptions = subscriptions.slice(0, FOLLOWED_ITEM_INITIAL_LIMIT);
   }
 
@@ -292,10 +306,29 @@ function SideNavigation(props: Props) {
       return (
         <>
           <ul className="navigation__secondary navigation-links">
+            <li className="navigation-link__wrapper">
+              <div className="wunderbar">
+                <Icon icon={ICONS.SEARCH} />
+                <input
+                  className="wunderbar__input"
+                  spellCheck={false}
+                  placeholder={__('Filter')}
+                  value={rawSubscriptionFilter}
+                  onChange={(e) => setRawSubscriptionFilter(e.target.value.trim())}
+                />
+              </div>
+            </li>
             {displayedSubscriptions.map((subscription) => (
               <SubscriptionListItem key={subscription.uri} subscription={subscription} />
             ))}
-            {subscriptions.length > FOLLOWED_ITEM_INITIAL_LIMIT && (
+            {!!subscriptionFilter && !displayedSubscriptions.length && (
+              <li className="navigation-link__wrapper ">
+                <div className="navigation-link">
+                  <div className="button__content">{__('No results')}</div>
+                </div>
+              </li>
+            )}
+            {!subscriptionFilter && subscriptions.length > FOLLOWED_ITEM_INITIAL_LIMIT && (
               <Button
                 key="showMore"
                 label={expandSubscriptions ? __('Show less') : __('Show more')}
