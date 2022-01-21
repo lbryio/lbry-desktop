@@ -14,10 +14,6 @@ type Props = {
   description: ?string,
   isResolvingUri: boolean,
   doResolveUri: (string) => void,
-  blackListedOutpoints: Array<{
-    txid: string,
-    nout: number,
-  }>,
   playingUri: ?PlayingUri,
   parentCommentId?: string,
   isMarkdownPost?: boolean,
@@ -42,21 +38,6 @@ class ClaimLink extends React.Component<Props> {
     this.resolve(this.props);
   }
 
-  isClaimBlackListed() {
-    const { claim, blackListedOutpoints } = this.props;
-    const signingChannel = claim && claim.signing_channel;
-    if (claim && blackListedOutpoints) {
-      let blackListed = false;
-
-      blackListed = blackListedOutpoints.some(
-        (outpoint) =>
-          (signingChannel && outpoint.txid === signingChannel.txid && outpoint.nout === signingChannel.nout) ||
-          (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
-      );
-      return blackListed;
-    }
-  }
-
   resolve = (props: Props) => {
     const { isResolvingUri, doResolveUri, claim, uri } = props;
 
@@ -78,14 +59,13 @@ class ClaimLink extends React.Component<Props> {
       allowPreview,
     } = this.props;
     const isUnresolved = (!isResolvingUri && !claim) || !claim;
-    const isBlacklisted = this.isClaimBlackListed();
     const isPlayingInline =
       playingUri &&
       playingUri.uri === uri &&
       ((playingUri.source === 'comment' && parentCommentId === playingUri.commentId) ||
         playingUri.source === 'markdown');
 
-    if (isBlacklisted || isUnresolved) {
+    if (isUnresolved) {
       return <span>{children}</span>;
     }
 
