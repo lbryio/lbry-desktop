@@ -28,6 +28,7 @@ import ClaimPreviewNoContent from './claim-preview-no-content';
 import CollectionEditButtons from './collection-buttons';
 
 import AbandonedChannelPreview from 'component/abandonedChannelPreview';
+import PreviewOverlayProperties from 'component/previewOverlayProperties';
 
 // preview images used on the landing page and on the channel page
 type Props = {
@@ -350,6 +351,9 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                       )}
                     </div>
                     {/* @endif */}
+                    <div className="claim-preview__file-property-overlay">
+                      <PreviewOverlayProperties uri={uri} properties={properties} />
+                    </div>
                   </FileThumbnail>
                 </NavLink>
               ) : (
