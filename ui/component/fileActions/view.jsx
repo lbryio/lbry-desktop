@@ -29,7 +29,6 @@ type Props = {
   renderMode: string,
   hasChannels: boolean,
   hideRepost?: boolean,
-  reactionsDisabled: boolean,
   download: (string) => void,
   streamingUrl: ?string,
 };
@@ -46,7 +45,6 @@ function FileActions(props: Props) {
     prepareEdit,
     hasChannels,
     hideRepost,
-    reactionsDisabled,
   } = props;
   const {
     push,
@@ -80,7 +78,7 @@ function FileActions(props: Props) {
 
   const lhsSection = (
     <>
-      {ENABLE_FILE_REACTIONS && !reactionsDisabled && <FileReactions uri={uri} />}
+      {ENABLE_FILE_REACTIONS && <FileReactions uri={uri} />}
       <ClaimSupportButton uri={uri} fileAction />
       <ClaimCollectionAddButton uri={uri} fileAction />
       {!hideRepost && <ClaimRepostButton uri={uri} claim={claim} hasChannels={hasChannels} />}
