@@ -206,8 +206,8 @@ export const doUploadThumbnail = (
         if (message === 'Failed to fetch') {
           message = downMessage;
         }
-
-        uploadError(message);
+        const userInput = [fileName, fileExt, fileType, thumbnail];
+        uploadError(`${message}\nUser input:  ${userInput.join(', ')}`);
       });
   };
 
