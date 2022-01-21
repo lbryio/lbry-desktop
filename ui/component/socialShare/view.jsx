@@ -4,6 +4,7 @@ import React from 'react';
 import Button from 'component/button';
 import CopyableText from 'component/copyableText';
 import EmbedTextArea from 'component/embedTextArea';
+import Spinner from 'component/spinner';
 import { generateDownloadUrl } from 'util/web';
 import { useIsMobile } from 'effects/use-screensize';
 import { FormField } from 'component/common/form';
@@ -22,14 +23,26 @@ type Props = {
   claim: StreamClaim,
   title: ?string,
   webShareable: boolean,
+  inviteStatusFetched: boolean,
   referralCode: string,
   user: any,
   position: number,
   collectionId?: number,
+  doFetchInviteStatus: (boolean) => void,
 };
 
 function SocialShare(props: Props) {
-  const { claim, title, referralCode, user, webShareable, position, collectionId } = props;
+  const {
+    claim,
+    title,
+    inviteStatusFetched,
+    referralCode,
+    user,
+    webShareable,
+    position,
+    collectionId,
+    doFetchInviteStatus,
+  } = props;
   const [showEmbed, setShowEmbed] = React.useState(false);
   const [includeCollectionId, setIncludeCollectionId] = React.useState(Boolean(collectionId)); // unless it *is* a collection?
   const [showClaimLinks, setShowClaimLinks] = React.useState(false);
@@ -38,8 +51,20 @@ function SocialShare(props: Props) {
   const startTimeSeconds: number = hmsToSeconds(startTime);
   const isMobile = useIsMobile();
 
+  React.useEffect(() => {
+    if (!inviteStatusFetched) {
+      doFetchInviteStatus(false);
+    }
+  }, [inviteStatusFetched, doFetchInviteStatus]);
+
   if (!claim) {
     return null;
+  } else if (!inviteStatusFetched) {
+    return (
+      <div className="main--empty">
+        <Spinner />
+      </div>
+    );
   }
 
   const { canonical_url: canonicalUrl, permanent_url: permanentUrl, name, claim_id: claimId } = claim;

@@ -18,7 +18,7 @@ const select = (state) => ({
 });
 
 const perform = (dispatch) => ({
-  fetchInviteStatus: () => dispatch(doFetchInviteStatus()),
+  fetchInviteStatus: (callRewardList) => dispatch(doFetchInviteStatus(callRewardList)),
   acknowledgeInivte: () => dispatch(doSetClientSetting(SETTINGS.INVITE_ACKNOWLEDGED, true)),
 });
 

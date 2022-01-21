@@ -126,7 +126,7 @@ export function doAuthenticate(
 
           if (shareUsageData) {
             dispatch(doRewardList());
-            dispatch(doFetchInviteStatus(false));
+
             if (callInstall && !user?.device_types?.includes('web')) {
               doInstallNew(appVersion, callbackForUsersWhoAreSharingData, DOMAIN);
             }

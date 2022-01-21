@@ -13,13 +13,13 @@ type Props = {
   inviteAcknowledged: boolean,
   authenticated: boolean,
   acknowledgeInivte: () => void,
-  fetchInviteStatus: () => void,
+  fetchInviteStatus: (boolean) => void,
 };
 
 class InvitePage extends React.PureComponent<Props> {
   componentDidMount() {
     const { fetchInviteStatus, inviteAcknowledged, acknowledgeInivte } = this.props;
-    fetchInviteStatus();
+    fetchInviteStatus(false);
 
     if (!inviteAcknowledged) {
       acknowledgeInivte();
