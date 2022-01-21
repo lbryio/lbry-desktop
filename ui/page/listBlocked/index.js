@@ -12,7 +12,7 @@ import {
   selectModeratorTimeoutMap,
   selectPersonalTimeoutMap,
 } from 'redux/selectors/comments';
-import { selectMyChannelClaims } from 'redux/selectors/claims';
+import { selectMyChannelClaimIds } from 'redux/selectors/claims';
 import ListBlocked from './view';
 
 const select = (state) => ({
@@ -25,7 +25,7 @@ const select = (state) => ({
   moderatorTimeoutMap: selectModeratorTimeoutMap(state),
   moderatorBlockListDelegatorsMap: selectModeratorBlockListDelegatorsMap(state),
   delegatorsById: selectModerationDelegatorsById(state),
-  myChannelClaims: selectMyChannelClaims(state),
+  myChannelClaimIds: selectMyChannelClaimIds(state),
   fetchingModerationBlockList: selectFetchingModerationBlockList(state),
 });
 

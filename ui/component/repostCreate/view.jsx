@@ -28,7 +28,6 @@ type Props = {
   claim?: StreamClaim,
   enteredContentClaim?: StreamClaim,
   balance: number,
-  channels: ?Array<ChannelClaim>,
   doCheckPublishNameAvailability: (string) => Promise<*>,
   error: ?string,
   reposting: boolean,

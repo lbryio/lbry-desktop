@@ -10,17 +10,15 @@ import SyncToggle from 'component/syncToggle';
 import { getPasswordFromCookie } from 'util/saved-passwords';
 
 type Props = {
-  // --- select ---
   isAuthenticated: boolean,
   walletEncrypted: boolean,
   user: User,
-  myChannels: ?Array<ChannelClaim>,
-  // --- perform ---
+  hasChannels: boolean,
   doWalletStatus: () => void,
 };
 
 export default function SettingAccount(props: Props) {
-  const { isAuthenticated, walletEncrypted, myChannels, doWalletStatus } = props;
+  const { isAuthenticated, walletEncrypted, hasChannels, doWalletStatus } = props;
   const [storedPassword, setStoredPassword] = React.useState(false);
 
   // Determine if password is stored.
@@ -59,7 +57,7 @@ export default function SettingAccount(props: Props) {
             <SyncToggle disabled={walletEncrypted && !storedPassword && storedPassword !== ''} />
             {/* @endif */}
 
-            {myChannels && (
+            {hasChannels && (
               <SettingsRow title={__('Comments')} subtitle={__('View your past comments.')}>
                 <Button
                   button="inverse"

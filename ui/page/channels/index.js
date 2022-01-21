@@ -1,10 +1,5 @@
 import { connect } from 'react-redux';
-import {
-  selectMyChannelClaims,
-  selectMyChannelUrls,
-  selectFetchingMyChannels,
-  makeSelectClaimIsPending,
-} from 'redux/selectors/claims';
+import { selectMyChannelUrls, selectFetchingMyChannels, makeSelectClaimIsPending } from 'redux/selectors/claims';
 import { doFetchChannelListMine } from 'redux/actions/claims';
 import { doSetActiveChannel } from 'redux/actions/app';
 import { selectYoutubeChannels } from 'redux/selectors/user';
@@ -22,7 +17,6 @@ const select = (state) => {
 
   return {
     channelUrls,
-    channels: selectMyChannelClaims(state),
     fetchingChannels: selectFetchingMyChannels(state),
     youtubeChannels: selectYoutubeChannels(state),
     pendingChannels,
