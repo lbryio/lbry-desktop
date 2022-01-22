@@ -108,7 +108,7 @@ function FileActions(props: Props) {
       push(`/$/${PAGES.CHANNEL_NEW}?redirect=${pathname}`);
       doToast({ message: __('A channel is required to repost on %SITE_NAME%', { SITE_NAME }) });
     } else {
-      push(`/$/${PAGES.REPOST_NEW}?from=${encodeURIComponent(uri)}&redirect=${pathname}`);
+      push(`/$/${PAGES.REPOST_NEW}?from=${encodeURIComponent(uri)}&redirect=${encodeURIComponent(pathname)}`);
     }
   }
 
