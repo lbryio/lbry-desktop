@@ -28,7 +28,7 @@ export default handleActions(
       const sanitizedBlocked = blocked && blocked.filter((e) => typeof e === 'string');
       return {
         ...state,
-        blockedChannels: sanitizedBlocked && sanitizedBlocked.length ? sanitizedBlocked : state.blockedChannels,
+        blockedChannels: sanitizedBlocked || state.blockedChannels,
       };
     },
   },
