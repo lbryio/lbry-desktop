@@ -2242,5 +2242,10 @@
   "LBC": "LBC",
   "Add a Card": "Add a Card",
   " To Tip Creators": " To Tip Creators",
+  "Nothing found": "Nothing found",
+  "From Comments": "From Comments",
+  "This support is priced in $USD.": "This support is priced in $USD.",
+  "The current exchange rate for the submitted LBC amount is ~ $%exchange_amount%.": "The current exchange rate for the submitted LBC amount is ~ $%exchange_amount%.",
+  "Amount of $%input_amount% LBC in USB is lower than price of $%price_amount%": "Amount of $%input_amount% LBC in USB is lower than price of $%price_amount%",
   "--end--": "--end--"
 }

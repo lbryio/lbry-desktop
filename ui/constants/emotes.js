@@ -3,7 +3,7 @@
 const buildCDNUrl = (path: string) => `https://static.odycdn.com/emoticons/${path}`;
 
 const buildEmote = (name: string, path: string) => ({
-  name: __(`:${name}:`),
+  name: `:${name}:`,
   url: buildCDNUrl(path),
 });
 

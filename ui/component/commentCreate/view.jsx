@@ -143,7 +143,7 @@ export function CommentCreate(props: Props) {
     setStickerSelector(false);
 
     if (sticker.price && sticker.price > 0) {
-      setActiveTab(TAB_FIAT);
+      setActiveTab(TAB_LBC);
       setIsSupportComment(true);
     }
   }
@@ -252,7 +252,7 @@ export function CommentCreate(props: Props) {
         }
       );
     } else {
-      // No cash tips
+      // No cash tips - REMOVE
       // const tipParams: TipParams = { tipAmount: Math.round(tipAmount * 100) / 100, tipChannelName, channelClaimId };
       // const userParams: UserParams = { activeChannelName, activeChannelId };
       // sendCashTip(tipParams, userParams, claim.claim_id, stripeEnvironment, (customerTipResponse) => {
@@ -364,6 +364,7 @@ export function CommentCreate(props: Props) {
       .catch(() => {});
   }, [canReceiveFiatTip, claim.claim_id, claim.name, claim.signing_channel, stickerSelector]);
 
+  // LIVESTREAM ONLY - REMOVE
   // Handle keyboard shortcut comment creation
   // React.useEffect(() => {
   //   function altEnterListener(e: SyntheticKeyboardEvent<*>) {
@@ -591,7 +592,7 @@ export function CommentCreate(props: Props) {
                 setStickerSelector(true);
               }
             )}
-
+            {/* below buttons are unnecessary - REMOVE */}
             {!claimIsMine && (
               <>
                 {(!isSupportComment || activeTab !== TAB_LBC) &&
