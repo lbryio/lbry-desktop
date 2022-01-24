@@ -1,5 +1,6 @@
 import * as ACTIONS from 'constants/action_types';
 import Lbry from 'lbry';
+import { Lbryio } from 'lbryinc';
 import { doToast } from 'redux/actions/notifications';
 import {
   selectBalance,
@@ -12,7 +13,6 @@ import {
 import { creditsToString } from 'util/format-credits';
 import { selectMyClaimsRaw, selectClaimsById } from 'redux/selectors/claims';
 import { doFetchChannelListMine, doFetchClaimListMine, doClaimSearch } from 'redux/actions/claims';
-
 const FIFTEEN_SECONDS = 15000;
 let walletBalancePromise = null;
 
@@ -699,4 +699,48 @@ export const doCheckPendingTxs = () => (dispatch, getState) => {
   txCheckInterval = setInterval(() => {
     checkTxList();
   }, 30000);
+};
+
+// don't need hthis
+export const doSendCashTip = (tipParams, anonymous, userParams, claimId, stripeEnvironment, successCallback) => (
+  dispatch
+) => {
+  Lbryio.call(
+    'customer',
+    'tip',
+    {
+      // round to fix issues with floating point numbers
+      amount: Math.round(100 * tipParams.tipAmount), // convert from dollars to cents
+      creator_channel_name: tipParams.tipChannelName, // creator_channel_name
+      creator_channel_claim_id: tipParams.channelClaimId,
+      tipper_channel_name: anonymous ? '' : userParams.activeChannelName,
+      tipper_channel_claim_id: anonymous ? '' : userParams.activeChannelId,
+      currency: 'USD',
+      anonymous: anonymous,
+      source_claim_id: claimId,
+      environment: stripeEnvironment,
+    },
+    'post'
+  )
+    .then((customerTipResponse) => {
+      dispatch(
+        doToast({
+          message: __("You sent $%tipAmount% as a tip to %tipChannelName%, I'm sure they appreciate it!", {
+            tipAmount: tipParams.tipAmount,
+            tipChannelName: tipParams.tipChannelName,
+          }),
+        })
+      );
+
+      if (successCallback) successCallback(customerTipResponse);
+    })
+    .catch((error) => {
+      // show error message from Stripe if one exists (being passed from backend by Beamer's API currently)
+      dispatch(
+        doToast({
+          message: error.message || __('Sorry, there was an error in processing your payment!'),
+          isError: true,
+        })
+      );
+    });
 };

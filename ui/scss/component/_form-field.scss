@@ -448,9 +448,7 @@ fieldset-group {
 }
 
 .form-field__quick-action {
-  float: right;
   font-size: var(--font-xsmall);
-  margin-top: 2.5%;
 }
 
 .form-field__textarea-info {
@@ -460,12 +458,6 @@ fieldset-group {
   justify-content: space-between;
   margin-top: var(--spacing-xxs);
   margin-bottom: var(--spacing-s);
-}
-
-.form-field__quick-emojis {
-  > *:not(:last-child) {
-    margin-right: var(--spacing-s);
-  }
 }
 
 fieldset-section {

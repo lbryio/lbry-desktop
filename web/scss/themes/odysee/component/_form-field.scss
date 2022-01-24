@@ -1,0 +1,711 @@
+@import '../init/mixins';
+
+input,
+textarea,
+select,
+.date-picker-input {
+  height: var(--height-input);
+  border-radius: var(--border-radius);
+  border: 1px solid;
+  color: var(--color-input);
+  border-color: var(--color-input-border);
+  background-color: var(--color-input-bg);
+  padding-right: var(--spacing-s);
+  padding-left: var(--spacing-s);
+
+  &:focus {
+    @include focus;
+  }
+
+  &::placeholder {
+    color: var(--color-input-placeholder);
+    opacity: 0.4;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+
+    & + label {
+      opacity: 0.4;
+    }
+  }
+
+  &[type='range'] {
+    height: auto;
+    height: 0.5rem;
+    background-color: var(--color-secondary);
+  }
+}
+
+checkbox-element,
+radio-element,
+select {
+  cursor: pointer;
+}
+
+select {
+  background-image: var(--select-toggle-background);
+  background-position: 99% center;
+  background-repeat: no-repeat;
+  background-size: 1rem;
+  padding-right: var(--spacing-l);
+  padding-left: var(--spacing-s);
+  font-weight: bold;
+}
+
+fieldset-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  &.fieldset-group--smushed {
+    fieldset-section + fieldset-section {
+      margin-top: 0;
+    }
+  }
+}
+
+fieldset-section,
+fieldset-group,
+form,
+.checkbox,
+.radio,
+.form-field--SimpleMDE,
+.form-field__help {
+  + fieldset-section,
+  + fieldset-group,
+  + form,
+  + .checkbox,
+  + .radio,
+  + .form-field--SimpleMDE {
+    margin-top: var(--spacing-l);
+  }
+
+  + .form-field__help {
+    margin-top: var(--spacing-s);
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  input,
+  select {
+    width: 100%;
+  }
+}
+
+fieldset-section,
+.checkbox,
+.radio {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-size: var(--font-small);
+  color: var(--color-input-label);
+  display: inline-block;
+  margin-bottom: 0.1rem;
+
+  .icon__lbc {
+    margin-bottom: 4px;
+  }
+}
+
+input-submit {
+  display: flex;
+
+  & > *:first-child,
+  & > *:nth-child(2) {
+    margin: 0;
+  }
+
+  & > *:first-child {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: none;
+  }
+
+  & > *:nth-child(2) {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border: 1px solid var(--color-border);
+  }
+}
+
+.checkbox,
+.radio {
+  position: relative;
+
+  input[type='checkbox'],
+  input[type='radio'] {
+    height: var(--height-checkbox);
+    width: var(--height-checkbox);
+    position: absolute;
+    border: none;
+    left: 0;
+    padding: 0;
+    background-color: transparent;
+
+    &:disabled + label {
+      cursor: default;
+      pointer-events: none;
+    }
+  }
+
+  label {
+    position: relative;
+    display: inline-block;
+    margin: 0;
+    font-size: var(--font-base);
+    padding-left: calc(var(--height-checkbox) + var(--spacing-s));
+    min-height: var(--height-checkbox);
+
+    &::before {
+      background-color: var(--color-input-toggle-bg);
+    }
+
+    &:hover {
+      &::before {
+        background-color: var(--color-input-toggle-bg-hover);
+      }
+    }
+  }
+
+  label::before,
+  label::after {
+    position: absolute;
+    content: '';
+  }
+
+  // Hide the checkmark by default
+  input[type='checkbox'] + label::after,
+  input[type='radio'] + label::after {
+    content: none;
+  }
+
+  // Unhide on the checked state
+  input[type='checkbox']:checked + label::after,
+  input[type='radio']:checked + label::after {
+    content: '';
+  }
+
+  input[type='checkbox']:focus + label::before,
+  input[type='radio']:focus + label::before {
+    @include focus;
+  }
+}
+
+.checkbox {
+  // Outer box of the fake checkbox
+  label::before {
+    height: var(--height-checkbox);
+    width: var(--height-checkbox);
+    border: 1px solid var(--color-input-border);
+    border-radius: var(--border-radius);
+    left: 0px;
+    top: -1px;
+  }
+
+  // Checkmark of the fake checkbox
+  label::after {
+    height: 6px;
+    width: 12px;
+    border-left: 2px solid;
+    border-bottom: 2px solid;
+    border-color: var(--color-input-toggle);
+    border-left-color: var(--color-input-toggle);
+    transform: rotate(-45deg);
+    left: 6px;
+    top: 6px;
+  }
+}
+
+.radio {
+  input[type='radio'] {
+    border-radius: 50%;
+  }
+
+  // Outer box of the fake radio
+  label::before {
+    height: var(--height-radio);
+    width: var(--height-radio);
+    border: 1px solid var(--color-input-border);
+    border-radius: calc(var(--height-radio) * 0.5);
+    left: 0px;
+    top: -1px;
+  }
+
+  // Checkmark of the fake radio
+  label::after {
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    background-color: var(--color-primary);
+    left: 6px;
+    top: 5px;
+  }
+}
+
+.range__label {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: var(--spacing-m);
+
+  > * {
+    width: 33%;
+    text-align: center;
+
+    &:first-of-type {
+      text-align: left;
+    }
+    &:last-of-type {
+      text-align: right;
+    }
+  }
+}
+
+.fieldset-group {
+  @extend fieldset-group;
+}
+
+.fieldset-section {
+  @extend fieldset-section;
+}
+
+.input-submit {
+  @extend input-submit;
+}
+
+input-submit {
+  align-items: center;
+
+  input {
+    z-index: 2;
+  }
+}
+
+input[type='number'] {
+  width: 8rem;
+}
+
+fieldset-group {
+  + fieldset-group {
+    margin-top: var(--spacing-s);
+  }
+
+  &.fieldset-group--smushed {
+    justify-content: flex-start;
+
+    fieldset-section {
+      width: auto;
+      margin: 0;
+
+      &:first-child {
+        input,
+        select {
+          border-right: none;
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+        }
+      }
+
+      &:nth-of-type(2) {
+        input,
+        select {
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+        }
+
+        label {
+          margin-left: var(--spacing-s);
+        }
+      }
+    }
+
+    &.fieldgroup--paginate {
+      padding-bottom: var(--spacing-l);
+      margin-top: var(--spacing-l);
+      align-items: flex-end;
+      justify-content: center;
+    }
+  }
+
+  // This is a special case where the prefix appears "inside" the input
+  // It would be way simpler to just use position: absolute and give it a width
+  // but the width can change when we use it for the name prefix
+  // lbry:// {input}, lbry://@short {input}, @lbry://longername {input}
+  // The spacing/alignment isn't very robust and will probably need to be changed
+  // if we use this in more places
+  &.fieldset-group--disabled-prefix {
+    align-items: flex-end;
+
+    label {
+      min-height: 18px;
+      white-space: nowrap;
+      // Set width 0 and overflow visible so the label can act as if it's the input label and not a random text node in a side by side div
+      overflow: visible;
+      width: 0;
+    }
+
+    fieldset-section:first-child {
+      max-width: 40%;
+
+      .form-field__prefix {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        padding: 0.5rem;
+        height: var(--height-input);
+        border: 1px solid;
+        border-top-left-radius: var(--border-radius);
+        border-bottom-left-radius: var(--border-radius);
+        border-color: var(--color-input-border);
+        border-right-color: var(--color-input-prefix-border);
+        color: var(--color-text);
+        background-color: var(--color-input-prefix-bg);
+      }
+    }
+
+    fieldset-section:last-child {
+      width: 100%;
+
+      label {
+        // Overwrite the input's label to wrap instead. This is usually
+        // an error message, which could be long in other languages.
+        width: 100%;
+        white-space: normal;
+      }
+
+      input {
+        border-left: 0;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        border-color: var(--color-input-border);
+        padding-left: var(--spacing-xs);
+      }
+    }
+  }
+}
+
+.form-field--copyable {
+  padding: 0.2rem 0.75rem;
+  text-overflow: ellipsis;
+  user-select: text;
+  cursor: default;
+}
+
+.form-field--short {
+  width: 100%;
+  @media (min-width: $breakpoint-small) {
+    width: 25em;
+  }
+}
+
+.form-field--price-amount {
+  max-width: 6em;
+}
+
+.form-field--price-amount--auto {
+  width: auto;
+  min-width: 100%;
+}
+
+.form-field--address {
+  min-width: 18em;
+  @media (max-width: $breakpoint-xxsmall) {
+    min-width: 10em;
+  }
+}
+
+.form-field__help {
+  @extend .help;
+}
+
+.form-field__help + .checkbox,
+.form-field__help + .radio {
+  margin-top: var(--spacing-l);
+}
+
+.form-field__conjuction {
+  padding-top: 1rem;
+}
+
+.form-field__two-column {
+  @media (min-width: $breakpoint-small) {
+    column-count: 2;
+  }
+}
+
+.form-field__quick-action {
+  font-size: var(--font-xsmall);
+}
+
+.form-field__textarea-info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--spacing-xxs);
+  margin-bottom: var(--spacing-s);
+}
+
+.form-field__quick-emojis {
+  > *:not(:last-child) {
+    margin-right: var(--spacing-s);
+  }
+}
+
+fieldset-section {
+  .form-field__internal-option {
+    margin-top: var(--spacing-s);
+    margin-left: 2.2rem;
+
+    &:first-of-type {
+      margin-top: var(--spacing-s); // Extra specificity needed here since _section.scss is applied after this file
+    }
+  }
+
+  .select--slim {
+    margin-bottom: var(--spacing-xxs);
+
+    @media (min-width: $breakpoint-small) {
+      max-width: none;
+    }
+
+    select {
+      max-height: 1.5rem !important;
+      padding: 0 var(--spacing-xs);
+      padding-right: var(--spacing-l);
+    }
+  }
+}
+
+#automatic_dark_mode_range_start,
+#automatic_dark_mode_range_end {
+  min-width: 6em;
+}
+
+.date-picker-input {
+  font-weight: bold;
+
+  .react-datetime-picker__wrapper {
+    border: 0;
+  }
+}
+
+.form-field-date-picker {
+  margin-bottom: var(--spacing-l);
+
+  label {
+    display: block;
+  }
+
+  .controls {
+    display: flex;
+
+    .date-picker-input,
+    .button--link {
+      margin-right: var(--spacing-m);
+    }
+  }
+
+  .react-datetime-picker__button {
+    svg {
+      stroke: var(--color-text);
+    }
+  }
+
+  .react-datetime-picker__button:enabled:hover .react-datetime-picker__button__icon,
+  .react-datetime-picker__button:enabled:focus .react-datetime-picker__button__icon {
+    stroke: var(--color-primary);
+  }
+
+  .react-date-picker__calendar {
+    z-index: 1000;
+  }
+
+  .react-calendar {
+    width: 350px;
+    max-width: 100%;
+    background: var(--color-card-background);
+    border: 1px solid #a0a096;
+    font-family: inherit;
+    line-height: 1;
+  }
+
+  .react-calendar--doubleView {
+    width: 700px;
+  }
+
+  .react-calendar--doubleView .react-calendar__viewContainer {
+    display: flex;
+    margin: -0.5em;
+  }
+
+  .react-calendar--doubleView .react-calendar__viewContainer > * {
+    width: 50%;
+    margin: 0.5em;
+  }
+
+  .react-calendar,
+  .react-calendar *,
+  .react-calendar *:before,
+  .react-calendar *:after {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 2px 1px;
+  }
+
+  .react-calendar button {
+    margin: 0;
+    border: 0;
+    outline: none;
+  }
+
+  .react-calendar button:enabled:hover {
+    cursor: pointer;
+  }
+
+  .react-calendar__navigation {
+    height: 44px;
+    margin-bottom: 1em;
+    color: var(--color-text);
+  }
+
+  .react-calendar__navigation__label {
+    color: var(--color-text);
+  }
+
+  .react-calendar__navigation button {
+    min-width: 44px;
+    background: none;
+    color: var(--color-text);
+  }
+
+  .react-calendar__navigation button:enabled:hover,
+  .react-calendar__navigation button:enabled:focus {
+    background: var(--color-button-alt-bg-hover);
+  }
+
+  .react-calendar__navigation button[disabled] {
+    color: var(--color-text);
+  }
+
+  .react-calendar__month-view__weekdays {
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 0.75em;
+    color: var(--color-text-alt);
+  }
+
+  .react-calendar__month-view__weekdays__weekday {
+    padding: 0.5em;
+  }
+
+  .react-calendar__month-view__weekNumbers {
+    font-weight: bold;
+  }
+
+  .react-calendar__month-view__weekNumbers .react-calendar__tile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75em;
+    padding: calc(0.75em / 0.75) calc(0.5em / 0.75);
+  }
+
+  .react-calendar__month-view__days__day,
+  .react-calendar__month-view__days__day--weekend {
+    color: var(--color-text);
+    font-weight: normal;
+  }
+
+  .react-calendar__month-view__days__day--neighboringMonth {
+    color: var(--color-gray-5);
+  }
+
+  .react-calendar__year-view .react-calendar__tile,
+  .react-calendar__decade-view .react-calendar__tile,
+  .react-calendar__century-view .react-calendar__tile {
+    padding: 2em 0.5em;
+  }
+
+  .react-calendar__tile {
+    max-width: 100%;
+    text-align: center;
+    padding: 0.75em 0.5em;
+    background: none;
+    border-radius: var(--border-radius);
+    color: var(--color-text);
+  }
+
+  .react-calendar__tile:enabled:hover,
+  .react-calendar__tile:enabled:focus {
+    background: var(--color-button-alt-bg-hover);
+  }
+
+  .react-calendar__tile--now {
+    background: var(--color-button-secondary-bg);
+  }
+
+  .react-calendar__tile--now:enabled:hover,
+  .react-calendar__tile--now:enabled:focus {
+    background: var(--color-button-secondary-bg-hover);
+  }
+
+  .react-calendar__tile--hasActive {
+    color: var(--color-button-primary-text);
+    background: var(--color-button-primary-bg);
+  }
+
+  .react-calendar__tile--hasActive:enabled:hover,
+  .react-calendar__tile--hasActive:enabled:focus {
+    background: var(--color-button-primary-bg-hover);
+  }
+
+  .react-calendar__tile--active {
+    color: var(--color-button-primary-text);
+    background: var(--color-button-primary-bg);
+  }
+
+  .react-calendar__tile--active:enabled:hover,
+  .react-calendar__tile--active:enabled:focus {
+    background: var(--color-button-primary-bg-hover);
+  }
+
+  .react-calendar--selectRange .react-calendar__tile--hover {
+    background-color: #e6e6e6;
+  }
+
+  .react-datetime-picker__inputGroup__amPm {
+    background: var(--color-input-bg);
+  }
+
+  .react-datetime-picker__inputGroup__leadingZero {
+    // Not perfect, but good enough for our standard zoom levels.
+    margin-bottom: 1px;
+  }
+
+  .react-datetime-picker__inputGroup__input--hasLeadingZero {
+    margin-left: -0.54em;
+    padding-left: calc(1px + 0.54em);
+  }
+
+  .react-calendar__month-view__days__day--neighboringMonth {
+    color: var(--color-gray-5);
+  }
+}
+
+.form-field-calendar {
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-border);
+  margin-left: calc(var(--spacing-xs) * -1);
+  margin-bottom: var(--spacing-xs);
+  animation: menu-animate-in var(--animation-duration) var(--animation-style);
+  box-shadow: 3px 3px rgba(0, 0, 0, 0.1);
+}

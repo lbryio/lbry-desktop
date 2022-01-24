@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 
-const useEffectOnce = effect => {
+const useEffectOnce = (effect) => {
   React.useEffect(effect, []);
 };
 
@@ -14,7 +14,7 @@ function useUnmount(fn: () => any): void {
   useEffectOnce(() => () => fnRef.current());
 }
 
-export function useThrottle(value: string, ms: number = 200) {
+export default function useThrottle(value: string, ms: number = 200) {
   const [state, setState] = React.useState(value);
   const timeout = React.useRef();
   const nextValue = React.useRef(null);
@@ -37,7 +37,7 @@ export function useThrottle(value: string, ms: number = 200) {
       nextValue.current = value;
       hasNextValue.current = true;
     }
-  }, [value]);
+  }, [ms, value]);
 
   useUnmount(() => {
     timeout.current && clearTimeout(timeout.current);
@@ -45,5 +45,3 @@ export function useThrottle(value: string, ms: number = 200) {
 
   return state;
 }
-
-export default useThrottle;

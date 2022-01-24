@@ -13,9 +13,15 @@ $contentMaxWidth: 60rem;
     &:first-of-type {
       border-top: none;
     }
+
+    @media (min-width: $breakpoint-small) {
+      &:hover {
+        background-color: var(--color-card-background-highlighted);
+      }
+    }
   }
 
-  .comment__create,
+  .commentCreate,
   .comment__content {
     margin: var(--spacing-m);
     margin-bottom: 0;
@@ -25,7 +31,7 @@ $contentMaxWidth: 60rem;
 .notification__icon {
   display: flex;
   align-items: flex-start;
-  margin: auto;
+  margin-top: var(--spacing-xxs);
 
   .icon__wrapper {
     width: 1rem;
@@ -94,7 +100,7 @@ $contentMaxWidth: 60rem;
   }
 }
 
-.notification__content-wrapper {
+.notificationContent__wrapper {
   flex: 1;
   display: flex;
   justify-content: space-between;
@@ -121,7 +127,7 @@ $contentMaxWidth: 60rem;
   }
 }
 
-.notification__content-thumbnail {
+.notificationContent__thumbnail {
   @include thumbnail;
   position: relative;
   margin-left: auto;
@@ -139,8 +145,13 @@ $contentMaxWidth: 60rem;
   }
 }
 
-.notification__text-wrapper {
+.notificationText__wrapper {
   max-width: calc(#{$contentMaxWidth} - (#{$thumbnailWidth} * 16 / 9) - var(--spacing-m));
+
+  .sticker__comment {
+    width: 4.5rem;
+    height: 4.5rem;
+  }
 }
 
 .notification__title {
@@ -247,7 +258,7 @@ $contentMaxWidth: 60rem;
   }
 }
 
-.notification__mark-seen {
+.notification__markSeen {
   height: 12px;
   width: 12px;
   border-radius: 50%;

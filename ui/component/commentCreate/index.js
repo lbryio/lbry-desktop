@@ -6,13 +6,13 @@ import {
   selectFetchingMyChannels,
   makeSelectTagInClaimOrChannelForUri,
 } from 'redux/selectors/claims';
-import { doSendTip } from 'redux/actions/wallet';
+import { CommentCreate } from './view';
+import { DISABLE_SUPPORT_TAG } from 'constants/tags';
 import { doCommentCreate, doFetchCreatorSettings, doCommentById } from 'redux/actions/comments';
+import { doSendTip } from 'redux/actions/wallet';
+import { doToast } from 'redux/actions/notifications';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { selectSettingsByChannelId } from 'redux/selectors/comments';
-import { CommentCreate } from './view';
-import { doToast } from 'redux/actions/notifications';
-import { DISABLE_SUPPORT_TAG } from 'constants/tags';
 
 const select = (state, props) => {
   const claim = selectClaimForUri(state, props.uri);
@@ -28,12 +28,12 @@ const select = (state, props) => {
 };
 
 const perform = (dispatch, ownProps) => ({
-  createComment: (comment, claimId, parentId, txid, payment_intent_id, environment) =>
-    dispatch(doCommentCreate(comment, claimId, parentId, ownProps.uri, txid, payment_intent_id, environment)),
-  sendTip: (params, callback, errorCallback) => dispatch(doSendTip(params, false, callback, errorCallback, false)),
-  doToast: (options) => dispatch(doToast(options)),
+  createComment: (comment, claimId, parentId, txid, payment_intent_id, environment, sticker) =>
+    dispatch(doCommentCreate(comment, claimId, parentId, ownProps.uri, txid, payment_intent_id, environment, sticker)),
   doFetchCreatorSettings: (channelClaimId) => dispatch(doFetchCreatorSettings(channelClaimId)),
+  doToast: (options) => dispatch(doToast(options)),
   fetchComment: (commentId) => dispatch(doCommentById(commentId, false)),
+  sendTip: (params, callback, errorCallback) => dispatch(doSendTip(params, false, callback, errorCallback, false)),
 });
 
 export default connect(select, perform)(CommentCreate);

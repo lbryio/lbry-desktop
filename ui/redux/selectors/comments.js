@@ -3,11 +3,19 @@ import { createSelector } from 'reselect';
 import { createCachedSelector } from 're-reselect';
 import { selectMutedChannels } from 'redux/selectors/blocked';
 import { selectShowMatureContent } from 'redux/selectors/settings';
+import { selectMentionSearchResults, selectMentionQuery } from 'redux/selectors/search';
 import { selectBlacklistedOutpointMap, selectFilteredOutpointMap } from 'lbryinc';
-import { selectClaimsById, selectMyActiveClaims, selectClaimIdForUri } from 'redux/selectors/claims';
-import { isClaimNsfw } from 'util/claim';
+import {
+  selectClaimsById,
+  selectMyClaimIdsRaw,
+  selectMyChannelClaimIds,
+  selectClaimIdForUri,
+  selectClaimIdsByUri,
+} from 'redux/selectors/claims';
+import { isClaimNsfw, getChannelFromClaim } from 'util/claim';
+import { selectSubscriptionUris } from 'redux/selectors/subscriptions';
 
-type State = { comments: CommentsState, claims: any };
+type State = { claims: any, comments: CommentsState };
 
 const selectState = (state) => state.comments || {};
 
@@ -51,12 +59,11 @@ export const selectCommentsByUri = createSelector(selectState, (state) => {
 
 export const selectPinnedCommentsById = (state: State) => selectState(state).pinnedCommentsById;
 export const selectPinnedCommentsForUri = createCachedSelector(
-  selectCommentsByUri,
+  selectClaimIdForUri,
   selectCommentsById,
   selectPinnedCommentsById,
   (state, uri) => uri,
-  (byUri, byId, pinnedCommentsById, uri) => {
-    const claimId = byUri[uri];
+  (claimId, byId, pinnedCommentsById, uri) => {
     const pinnedCommentIds = pinnedCommentsById && pinnedCommentsById[claimId];
     const pinnedComments = [];
 
@@ -68,7 +75,7 @@ export const selectPinnedCommentsForUri = createCachedSelector(
 
     return pinnedComments;
   }
-)((state, uri) => uri);
+)((state, uri) => String(uri));
 
 export const selectModerationBlockList = createSelector(
   (state) => selectState(state).moderationBlockList,
@@ -128,7 +135,7 @@ export const selectCommentsByClaimId = createSelector(selectState, selectComment
   return comments;
 });
 
-// no superchats?
+// no superchats
 export const selectSuperchatsByUri = (state: State) => selectState(state).superChatsByUri;
 
 export const selectTopLevelCommentsByClaimId = createSelector(
@@ -180,6 +187,7 @@ export const selectCommentIdsForUri = (state: State, uri: string) => {
   return commentIdsByClaimId[claimId];
 };
 
+// deprecated
 export const makeSelectCommentIdsForUri = (uri: string) =>
   createSelector(selectState, selectCommentsByUri, selectClaimsById, (state, byUri) => {
     const claimId = byUri[uri];
@@ -188,7 +196,8 @@ export const makeSelectCommentIdsForUri = (uri: string) =>
 
 const filterCommentsDepOnList = {
   claimsById: selectClaimsById,
-  myClaims: selectMyActiveClaims,
+  myClaimIds: selectMyClaimIdsRaw,
+  myChannelClaimIds: selectMyChannelClaimIds,
   mutedChannels: selectMutedChannels,
   personalBlockList: selectModerationBlockList,
   blacklistedMap: selectBlacklistedOutpointMap,
@@ -206,28 +215,29 @@ export const selectFetchingBlockedWords = (state: State) => selectState(state).f
 export const selectCommentsForUri = createCachedSelector(
   (state, uri) => uri,
   selectCommentsByClaimId,
-  selectCommentsByUri,
+  selectClaimIdForUri,
   ...Object.values(filterCommentsDepOnList),
-  (uri, byClaimId, byUri, ...filterInputs) => {
-    const claimId = byUri[uri];
+  (uri, byClaimId, claimId, ...filterInputs) => {
     const comments = byClaimId && byClaimId[claimId];
     return filterComments(comments, claimId, filterInputs);
   }
-)((state, uri) => uri);
+)((state, uri) => String(uri));
 
 export const selectTopLevelCommentsForUri = createCachedSelector(
   (state, uri) => uri,
   (state, uri, maxCount) => maxCount,
   selectTopLevelCommentsByClaimId,
-  selectCommentsByUri,
+  selectClaimIdForUri,
   ...Object.values(filterCommentsDepOnList),
-  (uri, maxCount = -1, byClaimId, byUri, ...filterInputs) => {
-    const claimId = byUri[uri];
+  (uri, maxCount = -1, byClaimId, claimId, ...filterInputs) => {
     const comments = byClaimId && byClaimId[claimId];
-    const filtered = filterComments(comments, claimId, filterInputs);
-    return maxCount > 0 ? filtered.slice(0, maxCount) : filtered;
+    if (comments) {
+      return filterComments(maxCount > 0 ? comments.slice(0, maxCount) : comments, claimId, filterInputs);
+    } else {
+      return [];
+    }
   }
-)((state, uri, maxCount = -1) => `${uri}:${maxCount}`);
+)((state, uri, maxCount = -1) => `${String(uri)}:${maxCount}`);
 
 export const makeSelectTopLevelTotalCommentsForUri = (uri: string) =>
   createSelector(selectState, selectCommentsByUri, (state, byUri) => {
@@ -259,24 +269,25 @@ export const selectRepliesForParentId = createCachedSelector(
 
     return filterComments(comments, undefined, filterInputs);
   }
-)((state, id: string) => id);
+)((state, id: string) => String(id));
 
 /**
  * filterComments
  *
  * @param comments List of comments to filter.
  * @param claimId The claim that `comments` reside in.
- * @oaram filterInputs Values returned by filterCommentsDepOnList.
+ * @param filterInputs Values returned by filterCommentsDepOnList.
  */
 const filterComments = (comments: Array<Comment>, claimId?: string, filterInputs: any) => {
-  const filterProps = filterInputs.reduce(function (acc, cur, i) {
+  const filterProps = filterInputs.reduce((acc, cur, i) => {
     acc[filterCommentsPropKeys[i]] = cur;
     return acc;
   }, {});
 
   const {
     claimsById,
-    myClaims,
+    myClaimIds,
+    myChannelClaimIds,
     mutedChannels,
     personalBlockList,
     blacklistedMap,
@@ -295,8 +306,12 @@ const filterComments = (comments: Array<Comment>, claimId?: string, filterInputs
 
         // Return comment if `channelClaim` doesn't exist so the component knows to resolve the author
         if (channelClaim) {
-          if (myClaims && myClaims.size > 0) {
-            const claimIsMine = channelClaim.is_my_output || myClaims.has(channelClaim.claim_id);
+          if ((myClaimIds && myClaimIds.size > 0) || (myChannelClaimIds && myChannelClaimIds.length > 0)) {
+            const claimIsMine =
+              channelClaim.is_my_output ||
+              myChannelClaimIds.includes(channelClaim.claim_id) ||
+              myClaimIds.includes(channelClaim.claim_id);
+            // TODO: I believe 'myClaimIds' does not include channels, so it seems wasteful to include it here?   ^
             if (claimIsMine) {
               return true;
             }
@@ -316,7 +331,7 @@ const filterComments = (comments: Array<Comment>, claimId?: string, filterInputs
         }
 
         if (claimId) {
-          const claimIdIsMine = myClaims && myClaims.size > 0 && myClaims.has(claimId);
+          const claimIdIsMine = myClaimIds && myClaimIds.size > 0 && myClaimIds.includes(claimId);
           if (!claimIdIsMine) {
             if (personalBlockList.includes(comment.channel_url)) {
               return false;
@@ -376,25 +391,88 @@ export const makeSelectUriIsBlockingOrUnBlocking = (uri: string) =>
     return blockingByUri[uri] || unBlockingByUri[uri];
   });
 
-export const makeSelectSuperChatDataForUri = (uri: string) =>
-  createSelector(selectSuperchatsByUri, (byUri) => {
-    return byUri[uri];
-  });
+export const selectSuperChatDataForUri = (state: State, uri: string) => {
+  const byUri = selectSuperchatsByUri(state);
+  return byUri[uri];
+};
 
-export const makeSelectSuperChatsForUri = (uri: string) =>
-  createSelector(makeSelectSuperChatDataForUri(uri), (superChatData) => {
-    if (!superChatData) {
-      return undefined;
+export const selectSuperChatsForUri = (state: State, uri: string) => {
+  const superChatData = selectSuperChatDataForUri(state, uri);
+  return superChatData ? superChatData.comments : undefined;
+};
+
+export const selectSuperChatTotalAmountForUri = (state: State, uri: string) => {
+  const superChatData = selectSuperChatDataForUri(state, uri);
+  return superChatData ? superChatData.totalAmount : 0;
+};
+
+export const selectChannelMentionData = createCachedSelector(
+  (state, uri) => uri,
+  selectClaimIdsByUri,
+  selectClaimsById,
+  selectTopLevelCommentsForUri,
+  selectSubscriptionUris,
+  selectMentionSearchResults,
+  selectMentionQuery,
+  (uri, claimIdsByUri, claimsById, topLevelComments, subscriptionUris, searchUris, query) => {
+    let canonicalCreatorUri;
+    const commentorUris = [];
+    const canonicalCommentors = [];
+    const canonicalSubscriptions = [];
+    const canonicalSearch = [];
+
+    if (uri) {
+      const claimId = claimIdsByUri[uri];
+      const claim = claimsById[claimId];
+      const channelFromClaim = claim && getChannelFromClaim(claim);
+      canonicalCreatorUri = channelFromClaim && channelFromClaim.canonical_url;
+
+      topLevelComments.forEach(({ channel_url: uri }) => {
+        // Check: if there are duplicate commentors
+        if (!commentorUris.includes(uri)) {
+          // Update: commentorUris
+          commentorUris.push(uri);
+
+          // Update: canonicalCommentors
+          const claimId = claimIdsByUri[uri];
+          const claim = claimsById[claimId];
+          if (claim && claim.canonical_url) {
+            canonicalCommentors.push(claim.canonical_url);
+          }
+        }
+      });
     }
 
-    return superChatData.comments;
-  });
+    subscriptionUris.forEach((uri) => {
+      // Update: canonicalSubscriptions
+      const claimId = claimIdsByUri[uri];
+      const claim = claimsById[claimId];
+      if (claim && claim.canonical_url) {
+        canonicalSubscriptions.push(claim.canonical_url);
+      }
+    });
 
-export const makeSelectSuperChatTotalAmountForUri = (uri: string) =>
-  createSelector(makeSelectSuperChatDataForUri(uri), (superChatData) => {
-    if (!superChatData) {
-      return 0;
+    let hasNewResolvedResults = false;
+    if (searchUris && searchUris.length > 0) {
+      searchUris.forEach((uri) => {
+        // Update: canonicalSubscriptions
+        const claimId = claimIdsByUri[uri];
+        const claim = claimsById[claimId];
+        if (claim && claim.canonical_url) {
+          canonicalSearch.push(claim.canonical_url);
+        }
+      });
+      hasNewResolvedResults = canonicalSearch.length > 0;
     }
 
-    return superChatData.totalAmount;
-  });
+    return {
+      canonicalCommentors,
+      canonicalCreatorUri,
+      canonicalSearch,
+      canonicalSubscriptions,
+      commentorUris,
+      hasNewResolvedResults,
+      query,
+    };
+  }
+)((state, uri, maxCount) => `${String(uri)}:${maxCount}`);
