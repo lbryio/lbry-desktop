@@ -84,6 +84,9 @@ export function makeResumableUploadRequest(
         }
 
         window.store.dispatch(doUpdateUploadProgress({ guid, status: 'error' }));
+
+        analytics.sentryError('tus-upload', err);
+
         reject(
           // $FlowFixMe - flow's constructor for Error is incorrect.
           new Error(customErr || err, {
