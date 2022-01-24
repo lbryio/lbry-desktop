@@ -162,7 +162,7 @@
     "mammoth": "^1.4.16",
     "moment": "^2.22.0",
     "node-abi": "^2.5.1",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^2.6.7",
     "node-html-parser": "^5.1.0",
     "node-libs-browser": "^2.1.0",
     "node-loader": "^0.6.0",
