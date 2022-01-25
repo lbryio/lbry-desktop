@@ -1,9 +1,11 @@
 // @flow
 import React from 'react';
 import HelpLink from 'component/common/help-link';
+import Tooltip from 'component/common/tooltip';
+import { toCompactNotation } from 'util/string';
 
 type Props = {
-  claim: ?StreamClaim,
+  claimId: ?string, // this
   fetchViewCount: (string) => void,
   fetchingViewCount: boolean,
   uri: string,
@@ -11,8 +13,9 @@ type Props = {
 };
 
 function FileViewCount(props: Props) {
-  const { claim, uri, fetchViewCount, viewCount } = props;
-  const claimId = claim && claim.claim_id;
+  const { claimId, uri, fetchViewCount, viewCount } = props; // claimId
+  const countCompact = toCompactNotation(viewCount);
+  const countFullResolution = Number(viewCount).toLocaleString();
 
   React.useEffect(() => {
     if (claimId) {
@@ -20,13 +23,13 @@ function FileViewCount(props: Props) {
     }
   }, [fetchViewCount, uri, claimId]);
 
-  const formattedViewCount = Number(viewCount).toLocaleString();
-
   return (
-    <span className="media__subtitle--centered">
-      {viewCount !== 1 ? __('%view_count% views', { view_count: formattedViewCount }) : __('1 view')}
-      {<HelpLink href="https://lbry.com/faq/views" />}
-    </span>
+    <Tooltip label={countFullResolution}>
+      <span className="media__subtitle--centered">
+        {viewCount !== 1 ? __('%view_count% views', { view_count: countCompact }) : __('1 view')}
+        {<HelpLink href="https://lbry.com/faq/views" />}
+      </span>
+    </Tooltip>
   );
 }
 
