@@ -12,7 +12,6 @@ import { PRIMARY_PLAYER_WRAPPER_CLASS } from 'page/file/view';
 import Draggable from 'react-draggable';
 import { onFullscreenChange } from 'util/full-screen';
 import { generateListSearchUrlParams, formatLbryUrlForWeb } from 'util/url';
-import { useIsMobile } from 'effects/use-screensize';
 import debounce from 'util/debounce';
 import { useHistory } from 'react-router';
 import { isURIEqual } from 'util/lbryURI';
@@ -127,7 +126,6 @@ export default function FileRenderFloating(props: Props) {
   const hideFloatingPlayer = location.state && location.state.hideFloatingPlayer;
   const playingUriSource = playingUri && playingUri.source;
   const isComment = playingUriSource === 'comment';
-  const isMobile = useIsMobile();
   const mainFilePlaying = !isFloating && primaryUri && isURIEqual(uri, primaryUri);
 
   const [fileViewerRect, setFileViewerRect] = useState();
@@ -291,7 +289,7 @@ export default function FileRenderFloating(props: Props) {
   if (
     !isPlayable ||
     !uri ||
-    (isFloating && (isMobile || !floatingPlayerEnabled || hideFloatingPlayer)) ||
+    (isFloating && (!floatingPlayerEnabled || hideFloatingPlayer)) ||
     (collectionId && !isFloating && ((!canViewFile && !nextListUri) || countdownCanceled))
   ) {
     return null;
