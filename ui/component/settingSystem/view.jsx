@@ -225,18 +225,6 @@ export default function SettingSystem(props: Props) {
                   {__("If disabled, LBRY will be very sad and you won't be helping improve the network.")}{' '}
                   {__('If you set a limit, playing videos may exceed your limit until cleanup runs every 30 minutes.')}{' '}
                   <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/host-content" />.
-                  <p className={'help'}>
-                    {`Content Hosting using ${formatBytes(contentSpaceUsed * BYTES_PER_MB)} of ${
-                      daemonSettings[DAEMON_SETTINGS.BLOB_STORAGE_LIMIT_MB]
-                        ? formatBytes(daemonSettings[DAEMON_SETTINGS.BLOB_STORAGE_LIMIT_MB] * BYTES_PER_MB)
-                        : 'Unlimited'
-                    }`}
-                  </p>
-                  <p className={'help'}>
-                    {`Network Hosting using ${formatBytes(networkSpaceUsed * BYTES_PER_MB)} of ${formatBytes(
-                      daemonSettings[DAEMON_SETTINGS.NETWORK_STORAGE_LIMIT_MB] * BYTES_PER_MB
-                    )}`}
-                  </p>
                 </React.Fragment>
               }
             >
@@ -249,6 +237,18 @@ export default function SettingSystem(props: Props) {
                   label={__('Enable Data Hosting')}
                 />
               </fieldset-section>
+              {daemonSettings.save_blobs && (
+                <fieldset-section>
+                  <div className={'settings__row-section-title'}>{__('Hosting for content you have downloaded')}</div>
+                  <p className={'help'}>
+                    {`Content Hosting using ${formatBytes(contentSpaceUsed * BYTES_PER_MB)} of ${
+                      daemonSettings[DAEMON_SETTINGS.BLOB_STORAGE_LIMIT_MB]
+                        ? formatBytes(daemonSettings[DAEMON_SETTINGS.BLOB_STORAGE_LIMIT_MB] * BYTES_PER_MB)
+                        : 'Unlimited'
+                    }`}
+                  </p>
+                </fieldset-section>
+              )}
               {daemonSettings.save_blobs && (
                 <fieldset-section>
                   <FormField
@@ -278,6 +278,16 @@ export default function SettingSystem(props: Props) {
                     />
                   }
                 />
+              )}
+              {daemonSettings.save_blobs && (
+                <fieldset-section>
+                  <div className={'settings__row-section-title'}>{__('Hosting content selected by the network')}</div>
+                  <p className={'help'}>
+                    {`Network Hosting using ${formatBytes(networkSpaceUsed * BYTES_PER_MB)} of ${formatBytes(
+                      daemonSettings[DAEMON_SETTINGS.NETWORK_STORAGE_LIMIT_MB] * BYTES_PER_MB
+                    )}`}
+                  </p>
+                </fieldset-section>
               )}
               {daemonSettings.save_blobs && (
                 <FormField

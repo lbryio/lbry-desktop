@@ -226,6 +226,16 @@
   }
 }
 
+.settings__row-section-title {
+  min-width: 100%;
+  align-self: flex-start;
+  font-size: var(--font-medium);
+  @media (min-width: $breakpoint-small) {
+    min-width: 60%;
+    max-width: 60%;
+  }
+}
+
 .settings__row--subtitle {
   @extend .section__subtitle;
   font-size: var(--font-small);
