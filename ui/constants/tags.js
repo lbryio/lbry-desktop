@@ -20,9 +20,10 @@ export const DISABLE_SUPPORT_TAG = 'disable-support';
 export const PREFERENCE_EMBED = 'c:preference-embed';
 export const SCHEDULED_LIVESTREAM_TAG = 'c:scheduled-livestream';
 export const LBRY_FIRST_TAG = 'c:lbry-first';
+export const DISABLE_DOWNLOAD_BUTTON_TAG = 'c:disable-download';
 
 // Control tags are special tags that are available to the user in some situations.
-export const CONTROL_TAGS = [DISABLE_COMMENTS_TAG, DISABLE_SUPPORT_TAG, PREFERENCE_EMBED];
+export const CONTROL_TAGS = [DISABLE_COMMENTS_TAG, DISABLE_SUPPORT_TAG, PREFERENCE_EMBED, DISABLE_DOWNLOAD_BUTTON_TAG];
 
 // System tags are special tags that are not available to the user.
 export const SYSTEM_TAGS = [SCHEDULED_LIVESTREAM_TAG, LBRY_FIRST_TAG];

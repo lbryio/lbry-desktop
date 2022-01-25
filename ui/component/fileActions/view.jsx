@@ -34,6 +34,7 @@ type Props = {
   isLivestreamClaim: boolean,
   download: (string) => void,
   streamingUrl: ?string,
+  disableDownloadButton: boolean,
 };
 
 function FileActions(props: Props) {
@@ -53,6 +54,7 @@ function FileActions(props: Props) {
     isLivestreamClaim,
     download,
     streamingUrl,
+    disableDownloadButton,
   } = props;
   const {
     push,
@@ -178,7 +180,7 @@ function FileActions(props: Props) {
           </MenuButton>
           <MenuList className="menu__list">
             {/* @if TARGET='web' */}
-            {!isLivestreamClaim && (
+            {!isLivestreamClaim && !disableDownloadButton && (
               <MenuItem className="comment__menu-option" onSelect={handleWebDownload}>
                 <div className="menu__link">
                   <Icon aria-hidden icon={ICONS.DOWNLOAD} />
