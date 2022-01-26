@@ -14,6 +14,7 @@ import TextareaSuggestionsItem from 'component/textareaSuggestionsItem';
 import TextField from '@mui/material/TextField';
 import useLighthouse from 'effects/use-lighthouse';
 import useThrottle from 'effects/use-throttle';
+import { parseURI } from 'util/lbryURI';
 
 const SUGGESTION_REGEX = new RegExp(
   '((?:^| |\n)@[^\\s=&#$@%?:;/\\"<>%{}|^~[]*(?::[\\w]+)?)|((?:^| |\n):[\\w+-]*:?)',
@@ -102,7 +103,15 @@ export default function TextareaWithSuggestions(props: Props) {
   const suggestionTerm = suggestionValue && suggestionValue.term;
   const isEmote = suggestionValue && suggestionValue.isEmote;
   const isMention = suggestionValue && !suggestionValue.isEmote;
-  const invalidTerm = suggestionTerm && isMention && suggestionTerm.charAt(1) === ':';
+
+  let invalidTerm = suggestionTerm && isMention && suggestionTerm.charAt(1) === ':';
+  if (isMention && suggestionTerm) {
+    try {
+      parseURI(suggestionTerm);
+    } catch (error) {
+      invalidTerm = true;
+    }
+  }
 
   const additionalOptions = { isBackgroundSearch: false, [SEARCH_OPTIONS.CLAIM_TYPE]: SEARCH_OPTIONS.INCLUDE_CHANNELS };
   const { results, loading } = useLighthouse(debouncedTerm, showMature, SEARCH_SIZE, additionalOptions, 0);
