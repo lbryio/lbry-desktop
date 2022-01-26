@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import { THUMBNAIL_CDN_SIZE_LIMIT_BYTES } from 'config';
 import FileSelector from 'component/common/file-selector';
 import { IMG_CDN_PUBLISH_URL } from 'constants/cdn_urls';
 import { FormField, Form } from 'component/common/form';
@@ -24,6 +25,7 @@ function SelectAsset(props: Props) {
   const { onUpdate, onDone, assetName, currentValue, recommended, title, inline } = props;
   const [pathSelected, setPathSelected] = React.useState('');
   const [fileSelected, setFileSelected] = React.useState<any>(null);
+  const [fileSize, setFileSize] = React.useState(0);
   const [uploadStatus, setUploadStatus] = React.useState(STATUS.READY);
   const [useUrl, setUseUrl] = usePersistedState('thumbnail-upload:mode', false);
   const [url, setUrl] = React.useState(currentValue);
@@ -53,7 +55,14 @@ function SelectAsset(props: Props) {
       method: 'POST',
       body: data,
     })
-      .then((response) => response.json())
+      .then((res) => res.text())
+      .then((text) => {
+        try {
+          return text.length ? JSON.parse(text) : {};
+        } catch {
+          throw new Error(text);
+        }
+      })
       .then((json) => {
         return json.type === 'success'
           ? onSuccess(`${json.message}`)
@@ -62,7 +71,15 @@ function SelectAsset(props: Props) {
             );
       })
       .catch((err) => {
-        uploadError(err.message);
+        if (fileSize >= THUMBNAIL_CDN_SIZE_LIMIT_BYTES) {
+          uploadError(
+            __('Thumbnail size over %max_size%MB, please edit and reupload.', {
+              max_size: THUMBNAIL_CDN_SIZE_LIMIT_BYTES / (1024 * 1024),
+            })
+          );
+        } else {
+          uploadError(err.message);
+        }
         setUploadStatus(STATUS.READY);
       });
   }
@@ -106,6 +123,7 @@ function SelectAsset(props: Props) {
             onFileChosen={(file) => {
               if (file.name) {
                 setFileSelected(file);
+                setFileSize(file.size);
                 // what why? why not target=WEB this?
                 // file.path is undefined in web but available in electron
                 setPathSelected(file.name || file.path);
