@@ -15,6 +15,7 @@ import type { ElementRef, Node } from 'react';
 const TextareaWithSuggestions = lazyImport(() => import('component/textareaWithSuggestions' /* webpackChunkName: "suggestions" */));
 
 type Props = {
+  uri?: string,
   affixClass?: string, // class applied to prefix/postfix label
   autoFocus?: boolean,
   blockWrap: boolean,
@@ -68,6 +69,7 @@ export class FormField extends React.PureComponent<Props> {
 
   render() {
     const {
+      uri,
       affixClass,
       autoFocus,
       blockWrap,
@@ -252,6 +254,7 @@ export class FormField extends React.PureComponent<Props> {
               ) : (
                 <React.Suspense fallback={null}>
                   <TextareaWithSuggestions
+                    uri={uri}
                     type={type}
                     id={name}
                     maxLength={textAreaMaxLength || FF_MAX_CHARS_DEFAULT}

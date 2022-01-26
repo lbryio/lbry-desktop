@@ -6,12 +6,10 @@ import { MAX_LIVESTREAM_COMMENTS } from 'constants/livestream';
 import { selectChannelMentionData } from 'redux/selectors/comments';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import { withRouter } from 'react-router';
-import replaceAll from 'core-js-pure/features/string/replace-all';
 import TextareaWithSuggestions from './view';
 
 const select = (state, props) => {
-  const { pathname } = props.location;
-  const uri = `lbry:/${replaceAll(pathname, ':', '#')}`;
+  const { uri } = props;
 
   const maxComments = props.isLivestream ? MAX_LIVESTREAM_COMMENTS : -1;
   const data = selectChannelMentionData(state, uri, maxComments);

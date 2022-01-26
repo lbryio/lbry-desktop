@@ -85,6 +85,7 @@ export function CommentCreate(props: Props) {
     settingsByChannelId,
     shouldFetchComment,
     supportDisabled,
+    uri,
     disableInput,
     createComment,
     doFetchCreatorSettings,
@@ -492,6 +493,7 @@ export function CommentCreate(props: Props) {
             textAreaMaxLength={isLivestream ? FF_MAX_CHARS_IN_LIVESTREAM_COMMENT : FF_MAX_CHARS_IN_COMMENT}
             type={!SIMPLE_SITE && advancedEditor && !isReply ? 'markdown' : 'textarea'}
             value={commentValue}
+            uri={uri}
           />
         </>
       )}
