@@ -72,29 +72,6 @@ import ModalWalletUnlock from 'modal/modalWalletUnlock';
 
 import ModalYoutubeWelcome from 'modal/modalYoutubeWelcome';
 
-// type Props = {
-//   modal: { id: string, modalProps: {} },
-//   error: { message: string },
-//   location: { pathname: string },
-//   hideModal: () => void,
-// };
-//
-// function ModalRouter(props: Props) {
-//   const { modal, error, location, hideModal } = props;
-//   const { pathname } = location;
-//
-//   React.useEffect(() => {
-//     hideModal();
-//   }, [pathname, hideModal]);
-//
-//   if (error) {
-//     return <ModalError {...error} />;
-//   }
-//
-//   if (!modal) {
-//     return null;
-//   }
-
 function getModal(id) {
   switch (id) {
     case MODALS.UPGRADE:
