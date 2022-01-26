@@ -17,29 +17,26 @@ type HeaderMenuButtonProps = {
 };
 
 export default function HeaderMenuButtons(props: HeaderMenuButtonProps) {
-  const { authenticated, automaticDarkModeEnabled, currentTheme, user, handleThemeToggle } = props;
+  const { automaticDarkModeEnabled, currentTheme, user, handleThemeToggle } = props;
 
   const notificationsEnabled = ENABLE_UI_NOTIFICATIONS || (user && user.experimental_ui);
 
   return (
     <div className="header__buttons">
-      {authenticated && (
-        <Menu>
-          <MenuButton
-            aria-label={__('Publish a file, or create a channel')}
-            title={__('Publish a file, or create a channel')}
-            className="header__navigation-item menu__title header__navigation-item--icon mobile-hidden"
-          >
-            <Icon size={18} icon={ICONS.PUBLISH} aria-hidden />
-          </MenuButton>
+      <Menu>
+        <MenuButton
+          aria-label={__('Publish a file, or create a channel')}
+          title={__('Publish a file, or create a channel')}
+          className="header__navigation-item menu__title header__navigation-item--icon mobile-hidden"
+        >
+          <Icon size={18} icon={ICONS.PUBLISH} aria-hidden />
+        </MenuButton>
 
-          <MenuList className="menu__list--header">
-            <HeaderMenuLink page={PAGES.UPLOAD} icon={ICONS.PUBLISH} name={__('Upload')} />
-            <HeaderMenuLink page={PAGES.CHANNEL_NEW} icon={ICONS.CHANNEL} name={__('New Channel')} />
-            <HeaderMenuLink page={PAGES.YOUTUBE_SYNC} icon={ICONS.YOUTUBE} name={__('Sync YouTube Channel')} />
-          </MenuList>
-        </Menu>
-      )}
+        <MenuList className="menu__list--header">
+          <HeaderMenuLink page={PAGES.UPLOAD} icon={ICONS.PUBLISH} name={__('Upload')} />
+          <HeaderMenuLink page={PAGES.CHANNEL_NEW} icon={ICONS.CHANNEL} name={__('New Channel')} />
+        </MenuList>
+      </Menu>
 
       {notificationsEnabled && <NotificationHeaderButton />}
 
