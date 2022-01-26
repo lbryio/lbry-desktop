@@ -108,7 +108,7 @@ export default function BuyPage(props: Props) {
         ),
       }}
     >
-      LBRY, Inc. partners with Moonpay to provide the option to purchase LBRY Credits. %learn_more%.
+      %learn_more%.
     </I18nMessage>
   );
 
