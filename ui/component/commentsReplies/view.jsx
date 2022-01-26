@@ -46,7 +46,7 @@ function CommentsReplies(props: Props) {
   const [commentsToDisplay, setCommentsToDisplay] = React.useState(fetchedReplies);
   const isResolvingReplies = fetchedReplies && resolvedReplies.length !== fetchedReplies.length;
   const alreadyResolved = !isResolvingReplies && resolvedReplies.length !== 0;
-  const canDisplayComments = commentsToDisplay && commentsToDisplay.length === fetchedReplies?.length;
+  const canDisplayComments = commentsToDisplay && commentsToDisplay.length === fetchedReplies.length;
 
   // Batch resolve comment channel urls
   React.useEffect(() => {

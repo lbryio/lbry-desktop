@@ -245,7 +245,7 @@ export const selectRepliesForParentId = createCachedSelector(
   (id, repliesByParentId, commentsById, ...filterInputs) => {
     // const claimId = byUri[uri]; // just parentId (id)
     const replyIdsForParent = repliesByParentId[id] || [];
-    if (!replyIdsForParent.length) return null;
+    if (!replyIdsForParent.length) return [];
 
     const comments = [];
     replyIdsForParent.forEach((cid) => {
