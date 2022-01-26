@@ -7,7 +7,7 @@ import Lbry from 'lbry';
 import { parseURI, buildURI, isURIEqual } from 'util/lbryURI';
 import { devToast, doFailedSignatureToast, resolveCommentronError } from 'util/commentron-error';
 import { selectClaimForUri, selectClaimsByUri, selectMyChannelClaims } from 'redux/selectors/claims';
-import { doResolveUri, doClaimSearch } from 'redux/actions/claims';
+import { doResolveUris, doClaimSearch } from 'redux/actions/claims';
 import { doToast, doSeeNotifications } from 'redux/actions/notifications';
 import {
   selectMyReactsForComment,
@@ -500,6 +500,8 @@ export function doCommentCreate(
     const mentionMatches = [...comment.matchAll(MENTION_REGEX)];
 
     if (mentionMatches.length > 0) {
+      const mentionUrls = [];
+
       mentionMatches.forEach((match) => {
         const matchTerm = match[0];
         const mention = matchTerm.substring(matchTerm.indexOf('@'));
@@ -512,11 +514,20 @@ export function doCommentCreate(
         if (claim) {
           mentionedChannels.push({ channel_name: claim.name, channel_id: claim.claim_id });
         } else if (claim === undefined) {
-          dispatch(doResolveUri(mentionUri))
-            .then((response) => mentionedChannels.push({ channel_name: response.name, channel_id: response.claim_id }))
-            .catch((e) => {});
+          mentionUrls.push(mentionUri);
         }
       });
+
+      if (mentionUrls.length > 0) {
+        await dispatch(doResolveUris(mentionUrls, true))
+          .then((response) => {
+            mentionedChannels = Object.values(response).map((claim) => {
+              // $FlowFixMe
+              return { channel_name: claim.name, channel_id: claim.claim_id };
+            });
+          })
+          .catch((e) => {});
+      }
     }
 
     dispatch({ type: ACTIONS.COMMENT_CREATE_STARTED });
