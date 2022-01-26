@@ -1,4 +1,6 @@
 // @flow
+// import 'scss/component/_header.scss'; // ody codesplits this; no. REMOVE THESE
+
 import { ENABLE_UI_NOTIFICATIONS } from 'config';
 import { useHistory } from 'react-router';
 import * as ICONS from 'constants/icons';
@@ -30,10 +32,7 @@ export default function NotificationHeaderButton(props: Props) {
 
   return (
     <Tooltip title={__('Notifications')}>
-      <Button
-        onClick={handleMenuClick}
-        className="header__navigation-item menu__title header__navigation-item--icon mobile-hidden"
-      >
+      <Button onClick={handleMenuClick} className="header__navigationItem--icon">
         <Icon size={18} icon={ICONS.NOTIFICATION} aria-hidden />
         <NotificationBubble />
       </Button>

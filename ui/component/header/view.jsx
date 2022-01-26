@@ -1,4 +1,6 @@
 // @flow
+// import 'scss/component/_header.scss'; // ody codesplits this. no.
+
 import { useIsMobile } from 'effects/use-screensize';
 import { withRouter } from 'react-router';
 import * as ICONS from 'constants/icons';
@@ -18,7 +20,6 @@ import { IS_MAC } from 'component/app/view';
 import NavigationButton from 'component/navigationButton';
 
 type Props = {
-  authenticated: boolean,
   authHeader: boolean,
   backout: {
     backLabel?: string,
@@ -50,7 +51,6 @@ type Props = {
 
 const Header = (props: Props) => {
   const {
-    authenticated,
     authHeader,
     backout,
     balance,
@@ -120,8 +120,9 @@ const Header = (props: Props) => {
     }
   }, [canBackout, onBackout]);
 
-  const userButtons = (className: string) => (
-    <div className={classnames('header__menu', { 'header__menu--with-balance': authenticated })}>
+  const userButtons = (hideWallet?: boolean, hideProfile?: boolean) => (
+    <div className="header__menu--right">
+      {isMobile && !authHeader && !canBackout && <WunderBar />}
       <Tooltip
         title={
           balance > 0
@@ -137,7 +138,7 @@ const Header = (props: Props) => {
             //     : __('Your Wallet')
             // }
             navigate={`/$/${PAGES.WALLET}`}
-            className={classnames(className, 'header__navigation-item--balance')}
+            className="button--file-action header__navigationItem--balance"
             label={hideBalance || Number(roundedBalance) === 0 ? __('Your Wallet') : roundedBalance}
             icon={ICONS.LBC}
             // @if TARGET='app'
@@ -165,50 +166,51 @@ const Header = (props: Props) => {
       }}
       // @endif
     >
-      <div className="header__contents">
+      <div className="card__actions--between header__contents">
         {!authHeader && canBackout ? (
-          <div className="card__actions--between">
-            <Button onClick={onBackout} button="link" label={backLabel || __('Cancel')} icon={ICONS.ARROW_LEFT} />
-
-            {backTitle && <h1 className="header__auth-title">{(isMobile && simpleBackTitle) || backTitle}</h1>}
-
-            {userButtons('header__navigation-item menu__title')}
-          </div>
+          <>
+            <div className="header__menu--left">
+              <Button onClick={onBackout} button="link" label={backLabel || __('Cancel')} icon={ICONS.ARROW_LEFT} />
+            </div>
+            {backTitle && <h1 className="header__authTitle">{(isMobile && simpleBackTitle) || backTitle}</h1>}
+            {userButtons(false, isMobile)}
+          </>
         ) : (
           <>
             <div className="header__navigation">
-              <SkipNavigationButton />
+              <div className="header__menu--left">
+                <SkipNavigationButton />
+                {!authHeader && (
+                  <span style={{ position: 'relative' }}>
+                    <Button
+                      aria-label={sidebarLabel}
+                      className="header__navigationItem--icon"
+                      icon={ICONS.MENU}
+                      aria-expanded={sidebarOpen}
+                      onClick={() => setSidebarOpen(!sidebarOpen)}
+                    >
+                      {isAbsoluteSideNavHidden && isMobile && <NotificationBubble />}
+                    </Button>
+                  </span>
+                )}
+                <Button
+                  aria-label={__('Home')}
+                  className="header__navigationItem--logo"
+                  onClick={() => {
+                    // here use state.router.location.pathname
+                    if (history.location.pathname === '/') window.location.reload();
+                  }}
+                  // @if TARGET='app'
+                  onDoubleClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                  // @endif
+                  {...homeButtonNavigationProps}
+                >
+                  <Logo />
+                </Button>
+              </div>
 
-              {!authHeader && (
-                <span style={{ position: 'relative' }}>
-                  <Button
-                    aria-label={sidebarLabel}
-                    className="header__navigation-item menu__title header__navigation-item--icon"
-                    icon={ICONS.MENU}
-                    aria-expanded={sidebarOpen}
-                    onClick={() => setSidebarOpen(!sidebarOpen)}
-                  >
-                    {isAbsoluteSideNavHidden && isMobile && <NotificationBubble />}
-                  </Button>
-                </span>
-              )}
-
-              <Button
-                aria-label={__('Home')}
-                className="header__navigation-item header__navigation-item--lbry"
-                onClick={() => {
-                  // here use state.router.location.pathname
-                  if (history.location.pathname === '/') window.location.reload();
-                }}
-                // @if TARGET='app'
-                onDoubleClick={(e) => {
-                  e.stopPropagation();
-                }}
-                // @endif
-                {...homeButtonNavigationProps}
-              >
-                <Logo />
-              </Button>
               {!authHeader && (
                 <div className="header__center">
                   {/* @if TARGET='app' */}
@@ -223,37 +225,33 @@ const Header = (props: Props) => {
                   <HeaderMenuButtons />
                 </div>
               )}
+
+              {!authHeader && !canBackout
+                ? userButtons(isMobile)
+                : !isVerifyPage &&
+                  !hideCancel && (
+                    <div className="header__menu--right">
+                      <Button
+                        title={__('Go Back')}
+                        button="alt"
+                        // className="button--header-close"
+                        icon={ICONS.REMOVE}
+                        onClick={() => {
+                          clearEmailEntry();
+                          clearPasswordEntry();
+
+                          if (syncError) signOut();
+
+                          if ((isSignInPage && !emailToVerify) || isSignUpPage || isPwdResetPage) {
+                            goBack();
+                          } else {
+                            push('/');
+                          }
+                        }}
+                      />
+                    </div>
+                  )}
             </div>
-
-            {!authHeader && !canBackout
-              ? userButtons('header__navigation-item menu__title mobile-hidden')
-              : !isVerifyPage &&
-                !hideCancel && (
-                  <div className="header__menu">
-                    {/* Add an empty span here so we can use the same style as above */}
-                    {/* This pushes the close button to the right side */}
-                    <span />
-
-                    <Button
-                      title={__('Go Back')}
-                      button="alt"
-                      // className="button--header-close"
-                      icon={ICONS.REMOVE}
-                      onClick={() => {
-                        clearEmailEntry();
-                        clearPasswordEntry();
-
-                        if (syncError) signOut();
-
-                        if ((isSignInPage && !emailToVerify) || isSignUpPage || isPwdResetPage) {
-                          goBack();
-                        } else {
-                          push('/');
-                        }
-                      }}
-                    />
-                  </div>
-                )}
           </>
         )}
       </div>

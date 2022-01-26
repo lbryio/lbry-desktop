@@ -480,12 +480,6 @@ textarea {
   }
 }
 
-.mobile-hidden {
-  @media (max-width: $breakpoint-small) {
-    display: none !important;
-  }
-}
-
 .ads-test {
   height: 50vh;
   position: relative;

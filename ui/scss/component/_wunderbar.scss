@@ -1,3 +1,5 @@
+@import './header';
+
 .wunderbar__wrapper {
   flex: 1;
   max-width: 30rem;
@@ -227,7 +229,7 @@
 
 .wunderbar__mobile-search {
   @extend .button--alt;
-  @extend .header__navigation-item--icon;
+  @extend .header__navigationItem--icon;
   padding: var(--spacing-xs);
   margin-right: var(--spacing-m);
 

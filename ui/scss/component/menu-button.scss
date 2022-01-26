@@ -65,12 +65,6 @@
   }
 }
 
-.menu__title {
-  &[aria-expanded='true'] {
-    background-color: var(--color-header-button-active);
-  }
-}
-
 .menu__list {
   box-shadow: var(--card-box-shadow);
   animation: menu-animate-in var(--animation-duration) var(--animation-style);
