@@ -1,3 +1,5 @@
+@import './header';
+
 .wunderbar__wrapper {
   flex: 1;
   max-width: 30rem;
@@ -103,7 +105,7 @@
   position: absolute;
   left: 0;
   right: 0;
-  top: calc(var(--header-height) - (var(--height-input)) + 3px);
+  top: calc(var(--header-height) - var(--spacing-m) - 3px);
   @extend .card;
   box-shadow: var(--card-box-shadow);
   border-top-right-radius: 0;
@@ -227,7 +229,7 @@
 
 .wunderbar__mobile-search {
   @extend .button--alt;
-  @extend .header__navigation-item--icon;
+  @extend .header__navigationItem--icon;
   padding: var(--spacing-xs);
   margin-right: var(--spacing-m);
 
