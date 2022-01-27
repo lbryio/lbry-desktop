@@ -12261,15 +12261,10 @@ three-full@^17.1.0:
   version "17.2.0"
   resolved "https://registry.yarnpkg.com/three-full/-/three-full-17.2.0.tgz#b6086360a9429e733e080093c25d02a3171ba1cc"
 
-three@*:
-  version "0.125.1"
-  resolved "https://registry.yarnpkg.com/three/-/three-0.125.1.tgz#6eedbc5003b843fd5b6c48b3e61bfbd86bd3e0b2"
-  integrity sha512-7CbiSHZOc18ChhVZU8wQ2g9F2KHJqiG7+ND56/XMrJC2XZMmu+dZFeLFl380c5JwKZGHTOkBQzioZVkI7Jumhg==
-
-three@^0.125.0:
-  version "0.125.0"
-  resolved "https://registry.yarnpkg.com/three/-/three-0.125.0.tgz#19e922b9dc51ad0b706893aeee888de68e99850a"
-  integrity sha512-qL36qUGsPQ/Ofo/RZdXwHwM7A8wzUSAIyawtjIebJSPvounUQeneSqxI0aBY2iwKpseGy+RUtj3C5f/z4poyXw==
+three@*, three@^0.137.0:
+  version "0.137.0"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.137.0.tgz#0ebd6ba66637a332c31f234bcdd35aeec071a6e3"
+  integrity sha512-rzSDhia6cU35UCy6y+zEEws6vSgytfHqFMSaBvUcySgzwvDO6vETyswtSNi/+aVqJw8WLMwyT1mlQQ1T/dxxOA==
 
 through2@^2.0.0, through2@^2.0.1:
   version "2.0.5"
