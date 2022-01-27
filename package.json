@@ -1,6 +1,6 @@
 {
   "name": "lbry",
-  "version": "0.52.1-alpha.5",
+  "version": "0.52.2-alpha.1",
   "description": "A browser for the LBRY network, a digital marketplace controlled by its users.",
   "keywords": [
     "lbry"
@@ -44,10 +44,10 @@
     "postinstall:warning": "echo '\n\nWARNING\n\nNot all node modules were installed because NODE_ENV is set to \"production\".\nThis should only be set after installing dependencies with \"yarn\". The app will not work.\n\n'"
   },
   "dependencies": {
+    "@electron/remote": "^2.0.1",
     "@emotion/react": "^11.6.0",
     "@emotion/styled": "^11.6.0",
     "@mui/material": "^5.2.1",
-    "@electron/remote": "^2.0.1",
     "@ungap/from-entries": "^0.2.1",
     "auto-launch": "^5.0.5",
     "electron-dl": "^3.2.0",
