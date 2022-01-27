@@ -24,9 +24,8 @@ declare type CollectionGroup = {
 }
 
 declare type CollectionEditParams = {
-  claims?: Array<Claim>,
+  uris?: Array<string>,
   remove?: boolean,
-  claimIds?: Array<string>,
   replace?: boolean,
   order?: { from: number, to: number },
   type?: string,

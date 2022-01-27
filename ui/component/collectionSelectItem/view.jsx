@@ -11,15 +11,15 @@ type Props = {
   category: string,
   edited: boolean,
   editCollection: (string, CollectionEditParams) => void,
-  claim: Claim,
+  uri: string,
   collectionPending: Collection,
 };
 
 function CollectionSelectItem(props: Props) {
-  const { collection, hasClaim, category, editCollection, claim, collectionPending } = props;
+  const { collection, hasClaim, category, editCollection, uri, collectionPending } = props;
   const { name, id } = collection;
   const handleChange = (e) => {
-    editCollection(id, { claims: [claim], remove: hasClaim });
+    editCollection(id, { uris: [uri], remove: hasClaim });
   };
 
   let icon;

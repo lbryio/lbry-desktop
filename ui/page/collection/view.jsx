@@ -1,4 +1,8 @@
 // @flow
+
+// $FlowFixMe
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+
 import React from 'react';
 import ClaimList from 'component/claimList';
 import Page from 'component/page';
@@ -51,6 +55,7 @@ export default function CollectionPage(props: Props) {
     collectionHasEdits,
     claimIsPending,
     isResolvingCollection,
+    editCollection,
     fetchCollectionItems,
     deleteCollection,
   } = props;
@@ -63,8 +68,21 @@ export default function CollectionPage(props: Props) {
   const [didTryResolve, setDidTryResolve] = React.useState(false);
   const [showInfo, setShowInfo] = React.useState(false);
   const [showEdit, setShowEdit] = React.useState(false);
+  const [unavailableUris, setUnavailable] = React.useState([]);
+
   const { name, totalItems } = collection || {};
   const isBuiltin = COLLECTIONS_CONSTS.BUILTIN_LISTS.includes(collectionId);
+
+  function handleOnDragEnd(result) {
+    const { source, destination } = result;
+
+    if (!destination) return;
+
+    const { index: from } = source;
+    const { index: to } = destination;
+
+    editCollection(collectionId, { order: { from, to } });
+  }
 
   const urlParams = new URLSearchParams(search);
   const editing = urlParams.get(PAGE_VIEW_QUERY) === EDIT_PAGE;
@@ -91,6 +109,18 @@ export default function CollectionPage(props: Props) {
       icon={ICONS.REFRESH}
       label={__('Clear Edits')}
       onClick={() => deleteCollection(collectionId, COLLECTIONS_CONSTS.COL_KEY_EDITED)}
+    />
+  );
+
+  const removeUnavailable = (
+    <Button
+      button="close"
+      icon={ICONS.DELETE}
+      label={__('Remove all unavailable claims')}
+      onClick={() => {
+        editCollection(collectionId, { uris: unavailableUris, remove: true });
+        setUnavailable([]);
+      }}
     />
   );
 
@@ -124,7 +154,7 @@ export default function CollectionPage(props: Props) {
           {claim ? claim.value.title || claim.name : collection && collection.name}
         </span>
       }
-      titleActions={titleActions}
+      titleActions={unavailableUris.length > 0 ? removeUnavailable : titleActions}
       subtitle={subTitle}
       body={
         <CollectionActions
@@ -191,7 +221,20 @@ export default function CollectionPage(props: Props) {
       <Page>
         <div className={classnames('section card-stack')}>
           {info}
-          <ClaimList uris={collectionUrls} collectionId={collectionId} type={showEdit ? 'listview' : undefined} />
+
+          <DragDropContext onDragEnd={handleOnDragEnd}>
+            <Droppable droppableId="list__ordering">
+              {(DroppableProvided) => (
+                <ClaimList
+                  uris={collectionUrls}
+                  collectionId={collectionId}
+                  showEdit={showEdit}
+                  droppableProvided={DroppableProvided}
+                  unavailableUris={unavailableUris}
+                />
+              )}
+            </Droppable>
+          </DragDropContext>
         </div>
       </Page>
     );

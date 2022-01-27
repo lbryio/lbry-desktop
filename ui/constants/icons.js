@@ -2,7 +2,7 @@
 // https://github.com/carmelopullara/react-feather
 // Note: Icons should be named for their purpose, rather than the actual icon.
 //       The goal being to reduce multiple uses of the same icon for different purposes.
-//
+
 export const REWARDS = 'Award';
 export const LOCAL = 'Folder';
 export const ALERT = 'AlertCircle';
@@ -68,6 +68,7 @@ export const UP = 'ChevronUp';
 export const UP_TOP = 'ChevronUpTop';
 export const DOWN = 'ChevronDown';
 export const DOWN_BOTTOM = 'ChevronDownBottom';
+export const DRAG = 'DragAndDrop';
 export const SECURE = 'Lock';
 export const MENU = 'Menu';
 export const BACKUP = 'Database';

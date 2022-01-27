@@ -94,7 +94,7 @@
   padding-top: var(--spacing-m);
   padding-bottom: var(--spacing-m);
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   align-items: center;
 }
 
@@ -107,6 +107,10 @@
   justify-content: center;
   align-items: stretch;
   flex-grow: 4;
+
+  @media (max-width: $breakpoint-small) {
+    width: 1.5rem;
+  }
 }
 
 .collection-edit__header {

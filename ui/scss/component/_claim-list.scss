@@ -216,8 +216,12 @@
 }
 
 .claim-preview--collection-mine {
-  padding-left: 7rem;
+  padding-left: 9rem;
   position: relative;
+
+  @media (max-width: $breakpoint-small) {
+    padding-left: 6.5rem;
+  }
 }
 
 .claim-preview--pending {
@@ -240,7 +244,6 @@
   .claim-preview__actions {
     align-self: flex-end;
     margin-bottom: auto;
-    justify-content: flex-end;
     width: auto;
   }
 
@@ -250,10 +253,6 @@
     justify-content: space-between;
     flex-wrap: wrap;
     align-items: center;
-
-    .claim-preview__actions {
-      margin-left: var(--spacing-m);
-    }
   }
 
   @media (max-width: $breakpoint-xsmall) {
@@ -541,6 +540,12 @@
   }
 }
 
+.claim-preview--horizontal-tile {
+  &:not(:first-child) {
+    margin-top: 0;
+  }
+}
+
 .claim-tile__title {
   position: relative;
   padding: var(--spacing-s);
@@ -551,7 +556,7 @@
   font-weight: 600;
   color: var(--color-text);
   font-size: var(--font-small);
-  min-height: 2rem;
+  min-height: 3.2rem;
 
   @media (min-width: $breakpoint-small) {
     min-height: 2.5rem;

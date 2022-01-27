@@ -55,20 +55,6 @@ function CollectionActions(props: Props) {
   const claimId = claim && claim.claim_id;
   const webShareable = true; // collections have cost?
 
-  /*
-    A bit too much dependency with both ordering and shuffling depending on a single list item index selector
-    For now when they click edit, we'll toggle shuffle off for them.
-  */
-  const handleSetShowEdit = (setting) => {
-    doToggleShuffleList(collectionId, false);
-    setShowEdit(setting);
-  };
-
-  const handlePublishMode = () => {
-    doToggleShuffleList(collectionId, false);
-    push(`?${PAGE_VIEW_QUERY}=${EDIT_PAGE}`);
-  };
-
   const doPlay = React.useCallback(
     (playUri) => {
       const navigateUrl = formatLbryUrlForWeb(playUri);
@@ -138,7 +124,7 @@ function CollectionActions(props: Props) {
               title={uri ? __('Update') : __('Publish')}
               label={uri ? __('Update') : __('Publish')}
               className={classnames('button--file-action')}
-              onClick={() => handlePublishMode()}
+              onClick={() => push(`?${PAGE_VIEW_QUERY}=${EDIT_PAGE}`)}
               icon={ICONS.PUBLISH}
               iconColor={collectionHasEdits && 'red'}
               iconSize={18}
@@ -165,26 +151,28 @@ function CollectionActions(props: Props) {
     </>
   );
 
-  const infoButton = (
-    <Button
-      title={__('Info')}
-      className={classnames('button-toggle', {
-        'button-toggle--active': showInfo,
-      })}
-      icon={ICONS.MORE}
-      onClick={() => setShowInfo(!showInfo)}
-    />
-  );
+  const infoButtons = (
+    <div className="section">
+      {uri && (
+        <Button
+          title={__('Info')}
+          className={classnames('button-toggle', {
+            'button-toggle--active': showInfo,
+          })}
+          icon={ICONS.MORE}
+          onClick={() => setShowInfo(!showInfo)}
+        />
+      )}
 
-  const showEditButton = (
-    <Button
-      title={__('Edit')}
-      className={classnames('button-toggle', {
-        'button-toggle--active': showEdit,
-      })}
-      icon={ICONS.EDIT}
-      onClick={() => handleSetShowEdit(!showEdit)}
-    />
+      {isMyCollection && (
+        <Button
+          title={__('Edit')}
+          className={classnames('button-toggle', { 'button-toggle--active': showEdit })}
+          icon={ICONS.EDIT}
+          onClick={() => setShowEdit(!showEdit)}
+        />
+      )}
+    </div>
   );
 
   if (isMobile) {
@@ -192,7 +180,7 @@ function CollectionActions(props: Props) {
       <div className="media__actions">
         {lhsSection}
         {rhsSection}
-        {uri && <span>{infoButton}</span>}
+        {infoButtons}
       </div>
     );
   } else {
@@ -202,10 +190,8 @@ function CollectionActions(props: Props) {
           {lhsSection}
           {rhsSection}
         </div>
-        <div className="section">
-          {uri && infoButton}
-          {showEditButton}
-        </div>
+
+        {infoButtons}
       </div>
     );
   }

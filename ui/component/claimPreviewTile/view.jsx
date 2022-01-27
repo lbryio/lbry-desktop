@@ -42,6 +42,7 @@ type Props = {
   properties?: (Claim) => void,
   collectionId?: string,
   viewCount: string,
+  swipeLayout: boolean,
 };
 
 // preview image cards used in related video functionality, channel overview page and homepage
@@ -66,6 +67,7 @@ function ClaimPreviewTile(props: Props) {
     collectionId,
     mediaDuration,
     viewCount,
+    swipeLayout = false,
   } = props;
   const isRepost = claim && claim.repost_channel_url;
   const isCollection = claim && claim.value_type === 'collection';
@@ -84,6 +86,7 @@ function ClaimPreviewTile(props: Props) {
   const thumbnailUrl = useGetThumbnail(uri, claim, streamingUrl, getFile, placeholder) || thumbnail;
   const canonicalUrl = claim && claim.canonical_url;
   const permanentUrl = claim && claim.permanent_url;
+  const repostedContentUri = claim && (claim.reposted_claim ? claim.reposted_claim.permanent_url : claim.permanent_url);
   const listId = collectionId || collectionClaimId;
   const navigateUrl =
     formatLbryUrlForWeb(canonicalUrl || uri || '/') + (listId ? generateListSearchUrlParams(listId) : '');
@@ -168,6 +171,7 @@ function ClaimPreviewTile(props: Props) {
       onClick={handleClick}
       className={classnames('card claim-preview--tile', {
         'claim-preview__wrapper--channel': isChannel,
+        'swipe-list__item claim-preview--horizontal-tile': swipeLayout,
       })}
     >
       <NavLink {...navLinkProps} role="none" tabIndex={-1} aria-hidden>
@@ -175,7 +179,7 @@ function ClaimPreviewTile(props: Props) {
           {!isChannel && (
             <React.Fragment>
               <div className="claim-preview__hover-actions">
-                {isPlayable && <FileWatchLaterLink focusable={false} uri={uri} />}
+                {isPlayable && <FileWatchLaterLink focusable={false} uri={repostedContentUri} />}
               </div>
               {/* @if TARGET='app' */}
               <div className="claim-preview__hover-actions">
