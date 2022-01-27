@@ -220,11 +220,14 @@ export default function SettingSystem(props: Props) {
               multirow
               subtitle={
                 <React.Fragment>
-                  {__('Content Data Hosting helps to seed things that you watch and download.')}{' '}
-                  {__('Network Data Hosting allows the p2p network to store blobs unrelated to your browsing.')}{' '}
-                  {__("If disabled, LBRY will be very sad and you won't be helping improve the network.")}{' '}
-                  {__('If you set a limit, playing videos may exceed your limit until cleanup runs every 30 minutes.')}{' '}
-                  <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/host-content" />.
+                  {__('Help improve the P2P data network (and make LBRY happy) by hosting data.')}{' '}
+                  {__("History Hosting lets you choose how much storage to use helping content you've consumed.")}{' '}
+                  {__(
+                    'Automatic Hosting lets you delegate some amount of storage for the network to automatically download and host.'
+                  )}{' '}
+                  {__('Playing videos may exceed your history hosting limit until cleanup runs every 30 minutes.')}
+                  <br />
+                  <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/host-content" />
                 </React.Fragment>
               }
             >
@@ -239,9 +242,9 @@ export default function SettingSystem(props: Props) {
               </fieldset-section>
               {daemonSettings.save_blobs && (
                 <fieldset-section>
-                  <div className={'settings__row-section-title'}>{__('Hosting for content you have downloaded')}</div>
+                  <div className={'settings__row-section-title'}>{__('History Hosting')}</div>
                   <p className={'help'}>
-                    {`Content Hosting using ${formatBytes(contentSpaceUsed * BYTES_PER_MB)} of ${
+                    {`History Hosting using ${formatBytes(contentSpaceUsed * BYTES_PER_MB)} of ${
                       daemonSettings[DAEMON_SETTINGS.BLOB_STORAGE_LIMIT_MB]
                         ? formatBytes(daemonSettings[DAEMON_SETTINGS.BLOB_STORAGE_LIMIT_MB] * BYTES_PER_MB)
                         : 'Unlimited'
@@ -256,7 +259,7 @@ export default function SettingSystem(props: Props) {
                     name="limit_space_used"
                     onChange={() => handleLimitSpace(!limitSpace)}
                     checked={limitSpace}
-                    label={__('Limit Hosting for Content you Use')}
+                    label={__('Limit Hosting of Content History')}
                   />
                 </fieldset-section>
               )}
@@ -265,7 +268,7 @@ export default function SettingSystem(props: Props) {
                 <FormField
                   name="content_blob_limit_gb"
                   type="text"
-                  label={__(`Content: Limit (GB)`)}
+                  label={__(`Limit (GB)`)}
                   disabled={!daemonSettings.save_blobs}
                   onChange={(e) => updateContentBlobLimitField(e.target.value)}
                   value={contentBlobSpaceLimitGB}
@@ -281,9 +284,9 @@ export default function SettingSystem(props: Props) {
               )}
               {daemonSettings.save_blobs && (
                 <fieldset-section>
-                  <div className={'settings__row-section-title'}>{__('Hosting content selected by the network')}</div>
+                  <div className={'settings__row-section-title'}>{__('Automatic Hosting')}</div>
                   <p className={'help'}>
-                    {`Network Hosting using ${formatBytes(networkSpaceUsed * BYTES_PER_MB)} of ${formatBytes(
+                    {`Automatic Hosting using ${formatBytes(networkSpaceUsed * BYTES_PER_MB)} of ${formatBytes(
                       daemonSettings[DAEMON_SETTINGS.NETWORK_STORAGE_LIMIT_MB] * BYTES_PER_MB
                     )}`}
                   </p>
@@ -293,7 +296,7 @@ export default function SettingSystem(props: Props) {
                 <FormField
                   name="network_blob_limit_gb"
                   type="text"
-                  label={__(`Network: Allow (GB)`)}
+                  label={__(`Allow (GB)`)}
                   disabled={!daemonSettings.save_blobs}
                   onChange={(e) => updateNetworkBlobLimitField(e.target.value)}
                   value={networkBlobSpaceLimitGB}
