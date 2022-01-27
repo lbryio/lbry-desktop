@@ -12305,9 +12305,9 @@ three-full@^28.0.1:
   integrity sha512-KJKj47qYcRbT6efPQ5kV5/uxiIq9lX0tf/eK2B6KarqRUY8JcF+vN9R5r+6wZMekBrO/sGD6gEQkKUcCN7G7tA==
 
 three@*:
-  version "0.125.1"
-  resolved "https://registry.yarnpkg.com/three/-/three-0.125.1.tgz#6eedbc5003b843fd5b6c48b3e61bfbd86bd3e0b2"
-  integrity sha512-7CbiSHZOc18ChhVZU8wQ2g9F2KHJqiG7+ND56/XMrJC2XZMmu+dZFeLFl380c5JwKZGHTOkBQzioZVkI7Jumhg==
+  version "0.137.2"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.137.2.tgz#e44cc92d491b2e73edec0a711041633d59fa2e6c"
+  integrity sha512-xpolba5gUR10WOH3Msi4hcfJoCuQsfGUTGhRmAuic4mgCAtfHFM8E/yk+jYWHlkG/Qjf5Xg+Qij6gGXIOwV8Tw==
 
 through2@^2.0.0, through2@^2.0.1:
   version "2.0.5"
