@@ -5,21 +5,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased for Desktop]
 
-## [0.52.1-alpha.3] - [2021-12-31]
+## [0.52.1-alpha.4] - [2021-12-31]
 
 ### Added
 
 - Reenabled generating thumbs from video ([#7384](https://github.com/lbryio/lbry-desktop/pull/7409))
+- Brought in playlist drag and drop playlist reordering _odysee team!_ ([#7442](https://github.com/lbryio/lbry-desktop/pull/7442))
+- Added duration overlays to ClaimPreview component ([#7420](https://github.com/lbryio/lbry-desktop/pull/7420))
+- Some Horizontal Scroll groundwork from _odysee team!_ 
+- Comment Emotes and Stickers and Mentions refactors from _odysee team!_ ([#7435](https://github.com/lbryio/lbry-desktop/pull/7435))
 
 ### Changed
 
 - Upgraded Electron to v15 ([#7384](https://github.com/lbryio/lbry-desktop/pull/7384))
 - Performance improvements in some selectors ([#7370](https://github.com/lbryio/lbry-desktop/pull/7370))
+- More Header refactoring from _odysee team!_ ([#7441](https://github.com/lbryio/lbry-desktop/pull/7441))
+- Header refactoring from _odysee team!_ ([#7440](https://github.com/lbryio/lbry-desktop/pull/7440))
+- Clearer data hosting ui _incomplete_ ([#7438](https://github.com/lbryio/lbry-desktop/pull/7438))
+- Updated c: control tags from _odysee team!_ ([#7433](https://github.com/lbryio/lbry-desktop/pull/7433))
 
 ### Fixed
 
 - Several fallout bugs from recent changes
-- Added duration overlays to ClaimPreview component ([#7420](https://github.com/lbryio/lbry-desktop/pull/7420))
 
 ## [0.52.0] - [2021-12-31]
 
