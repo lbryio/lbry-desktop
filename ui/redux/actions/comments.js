@@ -488,7 +488,7 @@ export function doCommentCreate(
   return async (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const activeChannelClaim = selectActiveChannelClaim(state);
-    let mentionedChannels: Array<MentionedChannel> = [];
+    const mentionedChannels: Array<MentionedChannel> = [];
 
     if (!activeChannelClaim) {
       console.error('Unable to create comment. No activeChannel is set.'); // eslint-disable-line
@@ -513,7 +513,7 @@ export function doCommentCreate(
 
         if (claim) {
           mentionedChannels.push({ channel_name: claim.name, channel_id: claim.claim_id });
-        } else if (claim === undefined) {
+        } else {
           mentionUrls.push(mentionUri);
         }
       });
@@ -521,9 +521,11 @@ export function doCommentCreate(
       if (mentionUrls.length > 0) {
         await dispatch(doResolveUris(mentionUrls, true))
           .then((response) => {
-            mentionedChannels = Object.values(response).map((claim) => {
-              // $FlowFixMe
-              return { channel_name: claim.name, channel_id: claim.claim_id };
+            Object.values(response).map((claim) => {
+              if (claim) {
+                // $FlowFixMe
+                mentionedChannels.push({ channel_name: claim.name, channel_id: claim.claim_id });
+              }
             });
           })
           .catch((e) => {});
