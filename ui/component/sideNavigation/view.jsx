@@ -322,9 +322,9 @@ function SideNavigation(props: Props) {
               <SubscriptionListItem key={subscription.uri} subscription={subscription} />
             ))}
             {!!subscriptionFilter && !displayedSubscriptions.length && (
-              <li className="navigation-link__wrapper ">
-                <div className="navigation-link">
-                  <div className="button__content">{__('No results')}</div>
+              <li>
+                <div className="navigation-item">
+                  <div className="empty empty--centered">{__('No results')}</div>
                 </div>
               </li>
             )}

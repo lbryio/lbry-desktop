@@ -287,6 +287,12 @@
   }
 }
 
+.navigation-item {
+  .empty {
+    padding: var(--spacing-s);
+  }
+}
+
 .navigation__overlay {
   position: fixed;
   width: 100vw;
