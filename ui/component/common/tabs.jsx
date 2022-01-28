@@ -8,6 +8,7 @@ import {
   TabPanel as ReachTabPanel,
 } from '@reach/tabs';
 import classnames from 'classnames';
+import { useOnResize } from '../../effects/use-on-resize';
 
 // Tabs are a compound component
 // The components are used individually, but they will still interact and share state
@@ -45,22 +46,14 @@ function Tabs(props: TabsProps) {
   const [tabsRect, setTabsRect] = React.useState();
 
   // Create a ref of the parent element so we can measure the relative "left" for the bar for the child Tab's
-  // Don't observe as its going to re-render when the window size changes anyway
   const tabsRef = useRef<Element | void | null>();
 
-  function changeWindowSize() {
+  // Recalculate "Rect" on window resize
+  useOnResize(() => {
     if (tabsRef.current) {
-      setTabsRect(tabsRef.current.getBoundingClientRect() || undefined);
+      setTabsRect(tabsRef.current.getBoundingClientRect());
     }
-  }
-
-  React.useEffect(() => {
-    window.addEventListener('resize', changeWindowSize);
-
-    return () => {
-      window.removeEventListener('resize', changeWindowSize);
-    };
-  }, []);
+  });
 
   const tabLabels = props.children[0];
   const tabContent = props.children[1];
@@ -107,22 +100,14 @@ function Tab(props: TabProps) {
   const { isSelected } = props;
   const [rect, setRect] = React.useState();
 
-  function changeWindowSize() {
+  // Recalculate "Rect" on window resize
+  useOnResize(() => {
     if (ref.current) {
-      setRect(ref.current.getBoundingClientRect() || undefined);
+      setRect(ref.current.getBoundingClientRect());
     }
-  }
-
-  React.useEffect(() => {
-    window.addEventListener('resize', changeWindowSize);
-
-    return () => {
-      window.removeEventListener('resize', changeWindowSize);
-    };
-  }, []);
+  });
 
   // Each tab measures itself
-  // Don't observe as its going to re-render when the window size changes anyway
   const ref = useRef<Element | void | null>();
 
   // and calls up to the parent when it becomes selected
