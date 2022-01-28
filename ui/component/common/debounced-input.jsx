@@ -6,15 +6,15 @@ import useDebounce from 'effects/use-debounce';
 const FILTER_DEBOUNCE_MS = 300;
 
 interface Props {
+  defaultValue?: string;
   icon?: string;
-  value?: string;
   placeholder?: string;
   onChange: (newValue: string) => any;
 }
 
 export default function DebouncedInput(props: Props) {
-  const { icon, value = '', placeholder = '', onChange } = props;
-  const [rawValue, setRawValue] = useState(value);
+  const { defaultValue = '', icon, placeholder = '', onChange } = props;
+  const [rawValue, setRawValue] = useState(defaultValue);
   const debouncedValue: string = useDebounce(rawValue, FILTER_DEBOUNCE_MS);
 
   useEffect(() => {

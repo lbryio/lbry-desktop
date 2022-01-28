@@ -304,9 +304,11 @@ function SideNavigation(props: Props) {
       return (
         <>
           <ul className="navigation__secondary navigation-links">
-            <li className="navigation-item">
-              <DebouncedInput icon={ICONS.SEARCH} placeholder={__('Filter')} onChange={setSubscriptionFilter} />
-            </li>
+            {subscriptions.length > FOLLOWED_ITEM_INITIAL_LIMIT && (
+              <li className="navigation-item">
+                <DebouncedInput icon={ICONS.SEARCH} placeholder={__('Filter')} onChange={setSubscriptionFilter} />
+              </li>
+            )}
             {displayedSubscriptions.map((subscription) => (
               <SubscriptionListItem key={subscription.uri} subscription={subscription} />
             ))}
