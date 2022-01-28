@@ -45,9 +45,16 @@ function AutoplayCountdown(props: Props) {
   const anyModalPresent = modal !== undefined && modal !== null;
   const isTimerPaused = timerPaused || anyModalPresent;
 
+  function isAnyInputFocused() {
+    const activeElement = document.activeElement;
+    const inputTypes = ['input', 'select', 'textarea'];
+    return activeElement && inputTypes.includes(activeElement.tagName.toLowerCase());
+  }
+
   function shouldPauseAutoplay() {
+    // TODO: use ref instead querySelector
     const elm = document.querySelector(`.${CLASSNAME_AUTOPLAY_COUNTDOWN}`);
-    return elm && elm.getBoundingClientRect().top < 0;
+    return isAnyInputFocused() || (elm && elm.getBoundingClientRect().top < 0);
   }
 
   function getMsgPlayingNext() {
@@ -75,7 +82,7 @@ function AutoplayCountdown(props: Props) {
   React.useEffect(() => {
     let interval;
     if (!timerCanceled && nextRecommendedUri) {
-      if (isTimerPaused) {
+      if (isTimerPaused || isAnyInputFocused()) {
         clearInterval(interval);
         setTimer(countdownTime);
       } else {
