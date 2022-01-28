@@ -8,15 +8,14 @@ import Button from 'component/button';
 import classnames from 'classnames';
 import Icon from 'component/common/icon';
 import NotificationBubble from 'component/notificationBubble';
+import DebouncedInput from 'component/common/debounced-input';
 import I18nMessage from 'component/i18nMessage';
 import ChannelThumbnail from 'component/channelThumbnail';
-import useDebounce from 'effects/use-debounce';
 import { useIsMobile, useIsLargeScreen } from 'effects/use-screensize';
 import { GetLinksData } from 'util/buildHomepage';
 import { DOMAIN, ENABLE_UI_NOTIFICATIONS, ENABLE_NO_SOURCE_CLAIMS, CHANNEL_STAKED_LEVEL_LIVESTREAM } from 'config';
 
 const FOLLOWED_ITEM_INITIAL_LIMIT = 10;
-const FILTER_DEBOUNCE_MS = 300;
 
 type SideNavLink = {
   title: string,
@@ -252,8 +251,7 @@ function SideNavigation(props: Props) {
   const showSubscriptionSection = shouldRenderLargeMenu && isPersonalized && subscriptions && subscriptions.length > 0;
   const showTagSection = sidebarOpen && isPersonalized && followedTags && followedTags.length;
 
-  const [rawSubscriptionFilter, setRawSubscriptionFilter] = React.useState('');
-  const subscriptionFilter: string = useDebounce(rawSubscriptionFilter, FILTER_DEBOUNCE_MS);
+  const [subscriptionFilter, setSubscriptionFilter] = React.useState('');
 
   const filteredSubscriptions = subscriptions.filter(
     (sub) => !subscriptionFilter || sub.channelName.toLowerCase().includes(subscriptionFilter)
@@ -307,16 +305,7 @@ function SideNavigation(props: Props) {
         <>
           <ul className="navigation__secondary navigation-links">
             <li className="navigation-item">
-              <div className="wunderbar">
-                <Icon icon={ICONS.SEARCH} />
-                <input
-                  className="wunderbar__input"
-                  spellCheck={false}
-                  placeholder={__('Filter')}
-                  value={rawSubscriptionFilter}
-                  onChange={(e) => setRawSubscriptionFilter(e.target.value.trim())}
-                />
-              </div>
+              <DebouncedInput icon={ICONS.SEARCH} placeholder={__('Filter')} onChange={setSubscriptionFilter} />
             </li>
             {displayedSubscriptions.map((subscription) => (
               <SubscriptionListItem key={subscription.uri} subscription={subscription} />
