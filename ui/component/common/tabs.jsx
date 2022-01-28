@@ -8,7 +8,6 @@ import {
   TabPanel as ReachTabPanel,
 } from '@reach/tabs';
 import classnames from 'classnames';
-import { useRect } from '@reach/rect';
 
 // Tabs are a compound component
 // The components are used individually, but they will still interact and share state
@@ -33,7 +32,7 @@ import { useRect } from '@reach/rect';
 
 type TabsProps = {
   index?: number,
-  onChange?: number => void,
+  onChange?: (number) => void,
   children: Array<React$Node>,
 };
 
@@ -43,10 +42,25 @@ const AnimatedContext = createContext<any>();
 function Tabs(props: TabsProps) {
   // Store the position of the selected Tab so we can animate the "active" bar to its position
   const [selectedRect, setSelectedRect] = useState(null);
+  const [tabsRect, setTabsRect] = React.useState();
 
   // Create a ref of the parent element so we can measure the relative "left" for the bar for the child Tab's
-  const tabsRef = useRef();
-  const tabsRect = useRect(tabsRef);
+  // Don't observe as its going to re-render when the window size changes anyway
+  const tabsRef = useRef<Element | void | null>();
+
+  function changeWindowSize() {
+    if (tabsRef.current) {
+      setTabsRect(tabsRef.current.getBoundingClientRect() || undefined);
+    }
+  }
+
+  React.useEffect(() => {
+    window.addEventListener('resize', changeWindowSize);
+
+    return () => {
+      window.removeEventListener('resize', changeWindowSize);
+    };
+  }, []);
 
   const tabLabels = props.children[0];
   const tabContent = props.children[1];
@@ -91,10 +105,25 @@ function Tab(props: TabProps) {
   // @reach/tabs provides an `isSelected` prop
   // We could also useContext to read it manually
   const { isSelected } = props;
+  const [rect, setRect] = React.useState();
+
+  function changeWindowSize() {
+    if (ref.current) {
+      setRect(ref.current.getBoundingClientRect() || undefined);
+    }
+  }
+
+  React.useEffect(() => {
+    window.addEventListener('resize', changeWindowSize);
+
+    return () => {
+      window.removeEventListener('resize', changeWindowSize);
+    };
+  }, []);
 
   // Each tab measures itself
-  const ref = useRef();
-  const rect = useRect(ref, isSelected);
+  // Don't observe as its going to re-render when the window size changes anyway
+  const ref = useRef<Element | void | null>();
 
   // and calls up to the parent when it becomes selected
   // we useLayoutEffect to avoid flicker
