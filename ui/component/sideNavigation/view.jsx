@@ -306,7 +306,7 @@ function SideNavigation(props: Props) {
       return (
         <>
           <ul className="navigation__secondary navigation-links">
-            <li>
+            <li className="navigation-item">
               <div className="wunderbar">
                 <Icon icon={ICONS.SEARCH} />
                 <input

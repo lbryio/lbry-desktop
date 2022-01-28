@@ -288,8 +288,10 @@
 }
 
 .navigation-item {
+  padding: var(--spacing-s);
+
   .empty {
-    padding: var(--spacing-s);
+    padding: 0;
   }
 }
 
