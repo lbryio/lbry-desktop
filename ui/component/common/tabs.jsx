@@ -8,7 +8,7 @@ import {
   TabPanel as ReachTabPanel,
 } from '@reach/tabs';
 import classnames from 'classnames';
-import { useOnResize } from '../../effects/use-on-resize';
+import { useOnResize } from 'effects/use-on-resize';
 
 // Tabs are a compound component
 // The components are used individually, but they will still interact and share state
