@@ -54,7 +54,7 @@ function generateOEmbedData(claim, referrerQuery) {
   const authorUrl = authorClaim ? `${URL}/${authorUrlPath}` : null;
   const thumbnailUrl = value && value.thumbnail && value.thumbnail.url && getThumbnailCdnUrl(value.thumbnail.url);
   const videoUrl =
-    generateEmbedUrl(claim.name, claim.claim_id) +
+    encodeURIComponent(generateEmbedUrl(claim.name, claim.claim_id)) +
     (referrerQuery ? `r=${encodeURIComponent(escapeHtmlProperty(referrerQuery))}` : '');
 
   const { html, width, height } = generateEmbedIframeData(videoUrl);
