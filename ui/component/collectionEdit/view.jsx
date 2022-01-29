@@ -273,12 +273,18 @@ function CollectionForm(props: Props) {
 
   // on mount, if we get a collectionChannel, set it.
   React.useEffect(() => {
-    if (hasClaim && !initialized) {
-      if (collectionChannel) {
-        setActiveChannel(collectionChannel);
-        setIncognito(false);
-      } else if (!collectionChannel && hasClaim) {
-        setIncognito(true);
+    if (!initialized) {
+      if (hasClaim) {
+        if (collectionChannel) {
+          setActiveChannel(collectionChannel);
+          setIncognito(false);
+        } else if (!collectionChannel && hasClaim) {
+          setIncognito(true);
+        }
+      } else {
+        if (incognito) {
+          setIncognito(true);
+        }
       }
       setInitialized(true);
     }
@@ -287,9 +293,10 @@ function CollectionForm(props: Props) {
   // every time activechannel or incognito changes, set it.
   React.useEffect(() => {
     if (initialized) {
-      if (activeChannelId) {
+      if (activeChannelId && !incognito) {
         setParam({ channel_id: activeChannelId });
-      } else if (incognito) {
+      }
+      if (incognito) {
         setParam({ channel_id: undefined });
       }
     }
