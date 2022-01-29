@@ -83,6 +83,7 @@
   margin-right: auto;
   margin-left: auto;
   min-height: calc(100vh - var(--header-height));
+  padding: 0 var(--spacing-m);
 
   @media (max-width: $breakpoint-small) {
     width: 100%;

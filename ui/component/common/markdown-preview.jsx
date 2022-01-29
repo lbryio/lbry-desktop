@@ -201,7 +201,7 @@ const MarkdownPreview = (props: MarkdownProps) => {
       div: React.Fragment,
       img: (imgProps) =>
         isStakeEnoughForPreview(stakedLevel) && !isEmote(imgProps.title, imgProps.src) ? (
-          ZoomableImage
+          <ZoomableImage {...imgProps} />
         ) : (
           <SimpleImageLink src={imgProps.src} alt={imgProps.alt} title={imgProps.title} />
         ),
