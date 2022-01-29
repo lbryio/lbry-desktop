@@ -2,7 +2,7 @@ const { URL, SITE_NAME, PROXY_URL, THUMBNAIL_HEIGHT, THUMBNAIL_WIDTH } = require
 
 const {
   generateEmbedIframeData,
-  generateEmbedUrl,
+  generateEmbedUrlEncoded,
   getParameterByName,
   getThumbnailCdnUrl,
   escapeHtmlProperty,
@@ -54,7 +54,7 @@ function generateOEmbedData(claim, referrerQuery) {
   const authorUrl = authorClaim ? `${URL}/${authorUrlPath}` : null;
   const thumbnailUrl = value && value.thumbnail && value.thumbnail.url && getThumbnailCdnUrl(value.thumbnail.url);
   const videoUrl =
-    encodeURIComponent(generateEmbedUrl(claim.name, claim.claim_id)) +
+    generateEmbedUrlEncoded(claim.name, claim.claim_id) +
     (referrerQuery ? `r=${encodeURIComponent(escapeHtmlProperty(referrerQuery))}` : '');
 
   const { html, width, height } = generateEmbedIframeData(videoUrl);

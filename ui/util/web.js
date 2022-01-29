@@ -25,6 +25,22 @@ function generateEmbedUrl(claimName, claimId, includeStartTime, startTime, refer
     .replace(/\)/g, '%29')}/${claimId}?${urlParams.toString()}`;
 }
 
+function generateEmbedUrlEncoded(claimName, claimId, includeStartTime, startTime, referralLink) {
+  let urlParams = new URLSearchParams();
+  if (includeStartTime && startTime) {
+    urlParams.append('t', startTime);
+  }
+
+  if (referralLink) {
+    urlParams.append('r', referralLink);
+  }
+
+  return `${URL}/%24/embed/${encodeURIComponent(claimName)
+    .replace(/'/g, '%27')
+    .replace(/\(/g, '%28')
+    .replace(/\)/g, '%29')}/${claimId}?${urlParams.toString()}`;
+}
+
 function generateEmbedIframeData(src) {
   const width = '560';
   const height = '315';
@@ -79,6 +95,7 @@ module.exports = {
   generateDownloadUrl,
   generateEmbedIframeData,
   generateEmbedUrl,
+  generateEmbedUrlEncoded,
   generateStreamUrl,
   getParameterByName,
   getThumbnailCdnUrl,
