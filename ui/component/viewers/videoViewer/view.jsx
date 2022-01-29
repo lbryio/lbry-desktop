@@ -292,7 +292,7 @@ function VideoViewer(props: Props) {
   function centerPlayButton() {
     // center play button
     const playBT = document.getElementsByClassName('vjs-big-play-button')[0];
-    const videoDiv = window.player.children_[0];
+    const videoDiv = window.player.children_[0].closest('video-js-parent');
     const controlBar = document.getElementsByClassName('vjs-control-bar')[0];
     const leftWidth = (videoDiv.offsetWidth - playBT.offsetWidth) / 2 + 'px';
     const availableHeight = videoDiv.offsetHeight - controlBar.offsetHeight;
