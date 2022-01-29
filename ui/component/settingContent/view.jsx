@@ -99,6 +99,7 @@ export default function SettingContent(props: Props) {
                   }
                   setClientSetting(SETTINGS.HIDE_REPOSTS, !hideReposts);
                 }}
+                checked={hideReposts}
               />
             </SettingsRow>
             <SettingsRow title={__('Show mature content')} subtitle={__(HELP.SHOW_MATURE)}>

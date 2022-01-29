@@ -39,7 +39,7 @@
   border-bottom: none;
 
   .header__navigation {
-    padding: var(--spacing-xs);
+    padding: var(--spacing-xs) 0;
   }
 
   .header__navigationItem--logo {
@@ -65,7 +65,7 @@
   justify-content: space-between;
   flex: 1;
   height: var(--header-height);
-  padding: var(--spacing-s) var(--spacing-m);
+  padding: var(--spacing-s) 0;
   flex-wrap: nowrap;
 }
 
@@ -156,8 +156,6 @@
 }
 
 .header__navigationItem--profilePic {
-  margin-right: var(--spacing-s);
-
   .channel-thumbnail {
     height: var(--height-button);
     width: var(--height-button);
