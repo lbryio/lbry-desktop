@@ -13,16 +13,16 @@ function generateEmbedUrl(claimName, claimId, startTime, referralLink) {
   let urlParams = new URLSearchParams();
 
   if (startTime) {
-    urlParams.append('t', startTime);
+    urlParams.append('t', escapeHtmlProperty(startTime));
   }
 
   if (referralLink) {
-    urlParams.append('r', referralLink);
+    urlParams.append('r', escapeHtmlProperty(referralLink));
   }
 
   const encodedUriName = encodeURIComponent(claimName).replace(/'/g, '%27').replace(/\(/g, '%28').replace(/\)/g, '%29');
 
-  const embedUrl = `${URL}/$/embed/${encodedUriName}/${claimId}`;
+  const embedUrl = `${URL}/$/embed/${escapeHtmlProperty(encodedUriName)}/${escapeHtmlProperty(claimId)}`;
   const embedUrlParams = urlParams.toString() ? `?${urlParams.toString()}` : '';
 
   return `${embedUrl}${embedUrlParams}`;
