@@ -263,7 +263,11 @@ function WalletSendTip(props: Props) {
             <div className="section__subtitle">
               {explainerText}
               {/* {activeTab === TAB_FIAT && !hasCardSaved && <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add A Card')} button="link" />} */}
-              <Button label={__('Learn more')} button="link" href="https://lbry.com/faq/tipping" />
+              <Button
+                label={__('Learn more')}
+                button="link"
+                href="https://odysee.com/@OdyseeHelp:b/Monetization-of-Content:3"
+              />
             </div>
           </>
         }

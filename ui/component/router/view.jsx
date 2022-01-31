@@ -213,7 +213,7 @@ function AppRouter(props: Props) {
   useEffect(() => {
     const getDefaultTitle = (pathname: string) => {
       const title = pathname.startsWith('/$/') ? PAGE_TITLE[pathname.substring(3)] : '';
-      return __(title) || (IS_WEB ? SITE_TITLE : 'LBRY');
+      return __(title) || (IS_WEB ? SITE_TITLE : 'Odysee');
     };
 
     if (uri) {

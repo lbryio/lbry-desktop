@@ -75,7 +75,13 @@ function SyncPassword(props: Props) {
             <p className="help">
               <I18nMessage
                 tokens={{
-                  help: <Button button="link" label={__('help guide')} href="https://lbry.com/faq/account-sync" />,
+                  help: (
+                    <Button
+                      button="link"
+                      label={__('help guide')}
+                      href="https://odysee.com/@OdyseeHelp:b/OdyseeBasics:c"
+                    />
+                  ),
                   email: <Button button="link" href={`mailto:${SITE_HELP_EMAIL}`} label={`${SITE_HELP_EMAIL}`} />,
                 }}
               >

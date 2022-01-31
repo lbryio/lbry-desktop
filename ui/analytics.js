@@ -329,7 +329,6 @@ const analytics: Analytics = {
           claim_id: claimId,
         };
 
-        // lbry.tv streams from AWS so we don't care about the time to start
         if (timeToStart && !IS_WEB) {
           params.time_to_start = timeToStart;
         }

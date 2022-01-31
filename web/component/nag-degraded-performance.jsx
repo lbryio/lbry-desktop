@@ -19,7 +19,9 @@ export default function NagDegradedPerformance(props: Props) {
         <I18nMessage
           tokens={{
             DOMAIN,
-            more_information: <Button button="link" label={__('more')} href="https://status.lbry.com/" />,
+            more_information: (
+              <Button button="link" label={__('more')} href="https://odysee.com/@OdyseeHelp:b?view=about" />
+            ),
           }}
         >
           %DOMAIN% performance may be degraded. You can try to use it, or wait 5 minutes and refresh. Please no crush

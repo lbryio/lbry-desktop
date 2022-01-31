@@ -27,14 +27,14 @@ class InviteList extends React.PureComponent<Props> {
     let rewardAmount = 0;
     let rewardHelp = __(
       "Woah, you have a lot of friends! You've claimed the maximum amount of invite rewards. Email %email% if you'd like to be whitelisted for more invites.",
-      { email: 'hello@lbry.com' }
+      { email: 'hello@odysee.com' }
     );
 
     if (referralReward) {
       rewardAmount = referralReward.reward_amount;
       rewardHelp = referralReward.reward_description;
     }
-    const showClaimable = invitees.some(invite => invite.invite_reward_claimable && !invite.invite_reward_claimed);
+    const showClaimable = invitees.some((invite) => invite.invite_reward_claimable && !invite.invite_reward_claimed);
 
     return (
       <Card
@@ -68,7 +68,7 @@ class InviteList extends React.PureComponent<Props> {
                 </tr>
               </thead>
               <tbody>
-                {invitees.map(invitee => (
+                {invitees.map((invitee) => (
                   <tr key={invitee.email}>
                     <td>{invitee.email}</td>
                     <td>

@@ -1,22 +1,22 @@
 {
-  "name": "lbry",
-  "version": "0.51.2",
-  "description": "A browser for the LBRY network, a digital marketplace controlled by its users.",
+  "name": "odysee.com",
+  "version": "0.0.0",
+  "description": "Explore a whole universe of videos on Odysee from regular people just like you!",
   "keywords": [
-    "lbry"
+    "odysee"
   ],
   "license": "MIT",
-  "homepage": "https://lbry.com/",
+  "homepage": "https://odysee.com",
   "bugs": {
-    "url": "https://github.com/lbryio/lbry-desktop/issues"
+    "url": "https://github.com/OdyseeTeam/odysee-frontend/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/lbryio/lbry-desktop"
+    "url": "https://github.com/OdyseeTeam/odysee-frontend"
   },
   "author": {
-    "name": "LBRY Inc.",
-    "email": "hello@lbry.com"
+    "name": "Odysee Inc.",
+    "email": "hello@odysee.com"
   },
   "main": "./dist/electron/main.js",
   "scripts": {
