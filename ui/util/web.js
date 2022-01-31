@@ -9,9 +9,10 @@ function generateStreamUrl(claimName, claimId) {
     .replace(/\)/g, '%29')}/${claimId}/stream`;
 }
 
-function generateEmbedUrl(claimName, claimId, includeStartTime, startTime, referralLink) {
+function generateEmbedUrl(claimName, claimId, startTime, referralLink) {
   let urlParams = new URLSearchParams();
-  if (includeStartTime && startTime) {
+
+  if (startTime) {
     urlParams.append('t', startTime);
   }
 
@@ -19,26 +20,16 @@ function generateEmbedUrl(claimName, claimId, includeStartTime, startTime, refer
     urlParams.append('r', referralLink);
   }
 
-  return `${URL}/$/embed/${encodeURIComponent(claimName)
-    .replace(/'/g, '%27')
-    .replace(/\(/g, '%28')
-    .replace(/\)/g, '%29')}/${claimId}?${urlParams.toString()}`;
+  const encodedUriName = encodeURIComponent(claimName).replace(/'/g, '%27').replace(/\(/g, '%28').replace(/\)/g, '%29');
+
+  const embedUrl = `${URL}/$/embed/${encodedUriName}/${claimId}`;
+  const embedUrlParams = urlParams.toString() ? `?${urlParams.toString()}` : '';
+
+  return `${embedUrl}${embedUrlParams}`;
 }
 
-function generateEmbedUrlEncoded(claimName, claimId, includeStartTime, startTime, referralLink) {
-  let urlParams = new URLSearchParams();
-  if (includeStartTime && startTime) {
-    urlParams.append('t', startTime);
-  }
-
-  if (referralLink) {
-    urlParams.append('r', referralLink);
-  }
-
-  return `${URL}/%24/embed/${encodeURIComponent(claimName)
-    .replace(/'/g, '%27')
-    .replace(/\(/g, '%28')
-    .replace(/\)/g, '%29')}/${claimId}?${urlParams.toString()}`;
+function generateEmbedUrlEncoded(claimName, claimId, startTime, referralLink) {
+  return generateEmbedUrl(claimName, claimId, startTime, referralLink).replace(/\$/g, '%24');
 }
 
 function generateEmbedIframeData(src) {
