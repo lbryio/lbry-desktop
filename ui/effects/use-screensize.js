@@ -1,17 +1,22 @@
 // Widths are taken from "ui/scss/init/vars.scss"
 import React from 'react';
 
-function useWindowSize() {
+export function useWindowSize(fn) {
   const isWindowClient = typeof window === 'object';
   const [windowSize, setWindowSize] = React.useState(isWindowClient ? window.innerWidth : undefined);
 
   React.useEffect(() => {
     function setSize() {
-      setWindowSize(window.innerWidth);
+      if (fn) {
+        const curr = fn(window.innerWidth);
+        if (windowSize !== curr) setWindowSize(curr);
+      } else setWindowSize(window.innerWidth);
     }
 
     if (isWindowClient) {
       window.addEventListener('resize', setSize);
+
+      setSize();
 
       return () => window.removeEventListener('resize', setSize);
     }
@@ -21,16 +26,13 @@ function useWindowSize() {
 }
 
 export function useIsMobile() {
-  const windowSize = useWindowSize();
-  return windowSize < 901;
+  return useWindowSize((windowSize) => windowSize < 901);
 }
 
 export function useIsMediumScreen() {
-  const windowSize = useWindowSize();
-  return windowSize < 1151;
+  return useWindowSize((windowSize) => windowSize < 1151);
 }
 
 export function useIsLargeScreen() {
-  const windowSize = useWindowSize();
-  return windowSize > 1600;
+  return useWindowSize((windowSize) => windowSize > 1600);
 }
