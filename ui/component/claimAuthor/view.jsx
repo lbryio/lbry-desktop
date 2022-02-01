@@ -3,12 +3,13 @@ import * as React from 'react';
 import ClaimPreview from 'component/claimPreview';
 
 type Props = {
-  channelUri: string,
   hideActions?: boolean,
   channelSubCount?: number,
+  // redux
+  channelUri: string,
 };
 
-function ClaimAuthor(props: Props) {
+export default function ClaimAuthor(props: Props) {
   const { channelUri, hideActions, channelSubCount } = props;
 
   return channelUri ? (
@@ -21,8 +22,6 @@ function ClaimAuthor(props: Props) {
       channelSubCount={channelSubCount}
     />
   ) : (
-    <div className="claim-preview--inline claim-preview__title">{__('Anonymous')}</div>
+    <span className="claim-preview--inline claim-preview__title">{__('Anonymous')}</span>
   );
 }
-
-export default ClaimAuthor;

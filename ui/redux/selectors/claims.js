@@ -576,6 +576,24 @@ export const selectClaimIsNsfwForUri = createCachedSelector(
   }
 )((state, uri) => String(uri));
 
+export const selectChannelForClaimUri = createCachedSelector(
+  (state, uri, includePrefix) => includePrefix,
+  selectClaimForUri,
+  (includePrefix?: boolean, claim: Claim) => {
+    if (!claim || !claim.signing_channel || !claim.is_channel_signature_valid) {
+      return null;
+    }
+
+    const { canonical_url: canonicalUrl, permanent_url: permanentUrl } = claim.signing_channel;
+
+    if (canonicalUrl) {
+      return includePrefix ? canonicalUrl : canonicalUrl.slice('lbry://'.length);
+    } else {
+      return includePrefix ? permanentUrl : permanentUrl.slice('lbry://'.length);
+    }
+  }
+)((state, uri) => String(uri));
+
 // Returns the associated channel uri for a given claim uri
 // accepts a regular claim uri lbry://something
 // returns the channel uri that created this claim lbry://@channel
