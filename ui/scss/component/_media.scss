@@ -90,8 +90,11 @@
 }
 
 .media__info-text--fade {
-  -webkit-mask-image: -webkit-gradient(linear, left 55%, left bottom, from(rgba(0, 0, 0, 1)), to(rgba(0, 0, 0, 0)));
   overflow-wrap: anywhere;
+
+  // both needed for compatibility
+  -webkit-mask-image: -webkit-gradient(linear, left 55%, left bottom, from(rgba(0, 0, 0, 1)), to(rgba(0, 0, 0, 0)));
+  mask-image: -webkit-gradient(linear, left 55%, left bottom, from(rgba(0, 0, 0, 1)), to(rgba(0, 0, 0, 0)));
 }
 
 .media__info-expand {

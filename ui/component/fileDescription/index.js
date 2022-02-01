@@ -1,22 +1,34 @@
 import { connect } from 'react-redux';
-import { selectClaimForUri, makeSelectMetadataForUri, selectClaimIsMine } from 'redux/selectors/claims';
+import { selectClaimForUri, selectClaimIsMine } from 'redux/selectors/claims';
 import { makeSelectPendingAmountByUri } from 'redux/selectors/wallet';
 import { doOpenModal } from 'redux/actions/app';
-import { selectUser } from 'redux/selectors/user';
 import FileDescription from './view';
+import { getClaimMetadata } from 'util/claim';
 
 const select = (state, props) => {
-  const claim = selectClaimForUri(state, props.uri);
+  const { uri } = props;
+
+  const pendingAmount = makeSelectPendingAmountByUri(uri)(state);
+
+  const claim = selectClaimForUri(state, uri);
+  const metadata = getClaimMetadata(claim);
+  const description = metadata && metadata.description;
+  const amount = claim ? parseFloat(claim.amount) + parseFloat(pendingAmount || claim.meta.support_amount) : 0;
+  const hasSupport = claim && claim.meta && claim.meta.support_amount && Number(claim.meta.support_amount) > 0;
+
+  const isEmpty = !claim || !metadata;
 
   return {
-    claim,
     claimIsMine: selectClaimIsMine(state, claim),
-    metadata: makeSelectMetadataForUri(props.uri)(state),
-    user: selectUser(state),
-    pendingAmount: makeSelectPendingAmountByUri(props.uri)(state),
+    description,
+    amount,
+    hasSupport,
+    isEmpty,
   };
 };
 
-export default connect(select, {
+const perform = {
   doOpenModal,
-})(FileDescription);
+};
+
+export default connect(select, perform)(FileDescription);
