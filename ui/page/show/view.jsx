@@ -63,7 +63,7 @@ function ShowPage(props: Props) {
     doAnalyticsView,
   } = props;
 
-  const { search } = location;
+  const { search, pathname } = location;
 
   const signingChannel = claim && claim.signing_channel;
   const canonicalUrl = claim && claim.canonical_url;
@@ -91,7 +91,8 @@ function ShowPage(props: Props) {
       // Only redirect if we are in lbry.tv land
       // replaceState will fail if on a different domain (like webcache.googleusercontent.com)
       const hostname = isDev ? 'localhost' : DOMAIN;
-      if (canonicalUrlPath !== window.location.pathname && hostname === window.location.hostname) {
+
+      if (canonicalUrlPath !== pathname && hostname === window.location.hostname) {
         const urlParams = new URLSearchParams(search);
         let replaceUrl = canonicalUrlPath;
         if (urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID)) {
@@ -100,6 +101,12 @@ function ShowPage(props: Props) {
           replaceUrl += `?${urlParams.toString()}`;
         }
         history.replaceState(history.state, '', replaceUrl);
+      }
+
+      const windowHref = window.location.href;
+      const noUrlParams = search.length === 0;
+      if (windowHref.includes('?') && noUrlParams) {
+        history.replaceState(history.state, '', windowHref.substring(0, windowHref.length - 1));
       }
     }
     // @endif
