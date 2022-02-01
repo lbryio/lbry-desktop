@@ -65,6 +65,26 @@
     h6 {
       font-size: 0.7em;
     }
+
+    @media (max-width: $breakpoint-small) {
+      font-size: var(--font-xsmall);
+
+      a {
+        .button__content {
+          display: block;
+        }
+
+        span {
+          font-size: var(--font-xsmall);
+          font-weight: var(--font-weight-bold);
+        }
+
+        svg {
+          margin-left: var(--spacing-xxs);
+          bottom: 2;
+        }
+      }
+    }
   }
 
   dl,

@@ -139,7 +139,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
       )}
 
       {children && children}
-      {iconRight && <Icon icon={iconRight} iconColor={iconColor} size={size} />}
+      {iconRight && <Icon icon={iconRight} iconColor={iconColor} size={iconSize || size} />}
     </span>
   );
 

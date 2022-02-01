@@ -218,6 +218,12 @@ td {
   td:nth-of-type(2) {
     text-align: right;
   }
+
+  @media (max-width: $breakpoint-small) {
+    td {
+      font-size: var(--font-xxsmall);
+    }
+  }
 }
 
 .table__item--actionable {

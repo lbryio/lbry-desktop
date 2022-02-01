@@ -5,6 +5,7 @@ import * as React from 'react';
 import { isURIValid } from 'util/lbryURI';
 import Button from 'component/button';
 import ClaimLink from 'component/claimLink';
+import { useIsMobile } from 'effects/use-screensize';
 
 type Props = {
   href: string,
@@ -32,6 +33,8 @@ function MarkdownLink(props: Props) {
     myChannelUrls,
     setUserMention,
   } = props;
+
+  const isMobile = useIsMobile();
 
   let decodedUri;
   try {
@@ -127,6 +130,7 @@ function MarkdownLink(props: Props) {
       <Button
         button="link"
         iconRight={isLbryLink ? undefined : ICONS.EXTERNAL}
+        iconSize={isMobile && 12}
         title={title || decodedUri}
         label={children}
         className="button--external-link"
