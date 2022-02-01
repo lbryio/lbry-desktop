@@ -5,11 +5,9 @@ import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
 import React from 'react';
 import Button from 'component/button';
-import FileDownloadLink from 'component/fileDownloadLink';
 import { buildURI } from 'util/lbryURI';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
 import * as RENDER_MODES from 'constants/file_render_modes';
-import { useIsMobile } from 'effects/use-screensize';
 import ClaimSupportButton from 'component/claimSupportButton';
 import ClaimCollectionAddButton from 'component/claimCollectionAddButton';
 import { useHistory } from 'react-router';
@@ -17,56 +15,60 @@ import FileReactions from 'component/fileReactions';
 import { Menu, MenuButton, MenuList, MenuItem } from '@reach/menu-button';
 import Icon from 'component/common/icon';
 import { webDownloadClaim } from 'util/downloadClaim';
+import Tooltip from 'component/common/tooltip';
 
 type Props = {
   uri: string,
-  claim: StreamClaim,
-  openModal: (id: string, { uri: string, claimIsMine?: boolean, isSupport?: boolean }) => void,
-  prepareEdit: ({}, string, {}) => void,
-  claimIsMine: boolean,
-  fileInfo: FileListItem,
-  costInfo: ?{ cost: number },
-  renderMode: string,
-  hasChannels: boolean,
-  doToast: ({ message: string }) => void,
-  clearPlayingUri: () => void,
   hideRepost?: boolean,
+  // redux
+  claim: StreamClaim,
+  claimIsMine: boolean,
+  renderMode: string,
+  costInfo: ?{ cost: number },
+  hasChannels: boolean,
   isLivestreamClaim: boolean,
-  download: (string) => void,
   streamingUrl: ?string,
   disableDownloadButton: boolean,
+  doOpenModal: (id: string, { uri: string, claimIsMine?: boolean, isSupport?: boolean }) => void,
+  doEditForChannel: (claim: Claim, uri: string) => void,
+  doClearPlayingUri: () => void,
+  doToast: (data: { message: string }) => void,
+  doDownloadUri: (uri: string) => void,
 };
 
-function FileActions(props: Props) {
+export default function FileActions(props: Props) {
   const {
-    fileInfo,
     uri,
-    openModal,
     claimIsMine,
     claim,
     costInfo,
     renderMode,
-    prepareEdit,
     hasChannels,
-    clearPlayingUri,
-    doToast,
     hideRepost,
     isLivestreamClaim,
-    download,
     streamingUrl,
     disableDownloadButton,
+    doOpenModal,
+    doEditForChannel,
+    doClearPlayingUri,
+    doToast,
+    doDownloadUri,
   } = props;
+
   const {
     push,
     location: { pathname, search },
   } = useHistory();
-  const isMobile = useIsMobile();
-  const webShareable = costInfo && costInfo.cost === 0 && RENDER_MODES.WEB_SHAREABLE_MODES.includes(renderMode);
-  const showDelete = claimIsMine || (fileInfo && (fileInfo.written_bytes > 0 || fileInfo.blobs_completed > 0));
-  const claimId = claim && claim.claim_id;
-  const { signing_channel: signingChannel } = claim;
+
+  const [downloadClicked, setDownloadClicked] = React.useState(false);
+
+  const { claim_id: claimId, signing_channel: signingChannel, value, meta: claimMeta } = claim;
   const channelName = signingChannel && signingChannel.name;
-  const fileName = claim && claim.value && claim.value.source && claim.value.source.name;
+  const fileName = value && value.source && value.source.name;
+
+  const webShareable = costInfo && costInfo.cost === 0 && RENDER_MODES.WEB_SHAREABLE_MODES.includes(renderMode);
+  const urlParams = new URLSearchParams(search);
+  const collectionId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID);
 
   // We want to use the short form uri for editing
   // This is what the user is used to seeing, they don't care about the claim id
@@ -84,15 +86,9 @@ function FileActions(props: Props) {
     editUri = buildURI(uriObject);
   }
 
-  const urlParams = new URLSearchParams(search);
-  const collectionId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID);
-
-  // @if TARGET='web'
-  const [downloadClicked, setDownloadClicked] = React.useState(false);
-
   function handleWebDownload() {
-    // download() causes 'streamingUrl' to be populated.
-    download(uri);
+    // doDownloadUri() causes 'streamingUrl' to be populated.
+    doDownloadUri(uri);
     setDownloadClicked(true);
   }
 
@@ -102,11 +98,10 @@ function FileActions(props: Props) {
       setDownloadClicked(false);
     }
   }, [downloadClicked, streamingUrl, fileName]);
-  // @endif
 
   function handleRepostClick() {
     if (!hasChannels) {
-      clearPlayingUri();
+      doClearPlayingUri();
       push(`/$/${PAGES.CHANNEL_NEW}?redirect=${pathname}`);
       doToast({ message: __('A channel is required to repost on %SITE_NAME%', { SITE_NAME }) });
     } else {
@@ -114,59 +109,63 @@ function FileActions(props: Props) {
     }
   }
 
-  const lhsSection = (
-    <>
-      {ENABLE_FILE_REACTIONS && <FileReactions uri={uri} livestream={isLivestreamClaim} />}
-      <ClaimSupportButton uri={uri} fileAction />
-      <ClaimCollectionAddButton uri={uri} fileAction />
-      {!hideRepost && (
-        <Button
-          button="alt"
-          className="button--file-action"
-          icon={ICONS.REPOST}
-          label={
-            claim.meta.reposted > 1 ? __(`%repost_total% Reposts`, { repost_total: claim.meta.reposted }) : __('Repost')
-          }
-          description={__('Repost')}
-          requiresAuth={IS_WEB}
-          onClick={handleRepostClick}
-        />
-      )}
-      <Button
-        className="button--file-action"
-        icon={ICONS.SHARE}
-        label={isMobile ? undefined : __('Share')}
-        title={__('Share')}
-        onClick={() => openModal(MODALS.SOCIAL_SHARE, { uri, webShareable, collectionId })}
-      />
-    </>
-  );
+  return (
+    <div className="media__actions section__actions--no-margin">
+      {ENABLE_FILE_REACTIONS && <FileReactions uri={uri} />}
 
-  const rhsSection = (
-    <>
-      {/* @if TARGET='app' */}
-      <FileDownloadLink uri={uri} />
-      {/* @endif */}
+      <ClaimSupportButton uri={uri} fileAction />
+
+      <ClaimCollectionAddButton uri={uri} fileAction />
+
+      {!hideRepost && (
+        <Tooltip title={__('Repost')} arrow={false}>
+          <Button
+            button="alt"
+            className="button--file-action"
+            icon={ICONS.REPOST}
+            label={
+              claimMeta.reposted > 1 ? __(`%repost_total% Reposts`, { repost_total: claimMeta.reposted }) : __('Repost')
+            }
+            requiresAuth
+            onClick={handleRepostClick}
+          />
+        </Tooltip>
+      )}
+
+      <Tooltip title={__('Share')} arrow={false}>
+        <Button
+          className="button--file-action"
+          icon={ICONS.SHARE}
+          label={__('Share')}
+          onClick={() => doOpenModal(MODALS.SOCIAL_SHARE, { uri, webShareable, collectionId })}
+        />
+      </Tooltip>
+
       {claimIsMine && (
-        <Button
-          className="button--file-action"
-          icon={ICONS.EDIT}
-          label={isLivestreamClaim ? __('Update or Publish Replay') : __('Edit')}
-          navigate={`/$/${PAGES.UPLOAD}`}
-          onClick={() => {
-            prepareEdit(claim, editUri, fileInfo);
-          }}
-        />
+        <>
+          <Tooltip title={isLivestreamClaim ? __('Update or Publish Replay') : __('Edit')} arrow={false}>
+            <div style={{ margin: '0px' }}>
+              <Button
+                className="button--file-action"
+                icon={ICONS.EDIT}
+                label={isLivestreamClaim ? __('Update or Publish Replay') : __('Edit')}
+                navigate={`/$/${PAGES.UPLOAD}`}
+                onClick={() => doEditForChannel(claim, editUri)}
+              />
+            </div>
+          </Tooltip>
+
+          <Tooltip title={__('Remove from your library')} arrow={false}>
+            <Button
+              className="button--file-action"
+              icon={ICONS.DELETE}
+              description={__('Delete')}
+              onClick={() => doOpenModal(MODALS.CONFIRM_FILE_REMOVE, { uri })}
+            />
+          </Tooltip>
+        </>
       )}
-      {showDelete && (
-        <Button
-          title={__('Remove from your library')}
-          className="button--file-action"
-          icon={ICONS.DELETE}
-          description={__('Delete')}
-          onClick={() => openModal(MODALS.CONFIRM_FILE_REMOVE, { uri })}
-        />
-      )}
+
       {(!isLivestreamClaim || !claimIsMine) && (
         <Menu>
           <MenuButton
@@ -178,8 +177,8 @@ function FileActions(props: Props) {
           >
             <Icon size={20} icon={ICONS.MORE} />
           </MenuButton>
+
           <MenuList className="menu__list">
-            {/* @if TARGET='web' */}
             {!isLivestreamClaim && !disableDownloadButton && (
               <MenuItem className="comment__menu-option" onSelect={handleWebDownload}>
                 <div className="menu__link">
@@ -188,7 +187,7 @@ function FileActions(props: Props) {
                 </div>
               </MenuItem>
             )}
-            {/* @endif */}
+
             {!claimIsMine && (
               <MenuItem
                 className="comment__menu-option"
@@ -203,26 +202,6 @@ function FileActions(props: Props) {
           </MenuList>
         </Menu>
       )}
-    </>
+    </div>
   );
-
-  if (isMobile) {
-    return (
-      <div className="media__actions">
-        {lhsSection}
-        {rhsSection}
-      </div>
-    );
-  } else {
-    return (
-      <div className="media__actions">
-        <div className="section__actions section__actions--no-margin">
-          {lhsSection}
-          {rhsSection}
-        </div>
-      </div>
-    );
-  }
 }
-
-export default FileActions;

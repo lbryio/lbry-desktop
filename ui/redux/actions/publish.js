@@ -17,7 +17,7 @@ import { makeSelectPublishFormValue, selectPublishFormValues, selectMyClaimForUr
 import { doError } from 'redux/actions/notifications';
 import { push } from 'connected-react-router';
 import analytics from 'analytics';
-import { doOpenModal } from 'redux/actions/app';
+import { doOpenModal, doSetIncognito, doSetActiveChannel } from 'redux/actions/app';
 import { CC_LICENSES, COPYRIGHT, OTHER, NONE, PUBLIC_DOMAIN } from 'constants/licenses';
 import { IMG_CDN_PUBLISH_URL, IMG_CDN_STATUS_URL } from 'constants/cdn_urls';
 import * as THUMBNAIL_STATUSES from 'constants/thumbnail_upload_statuses';
@@ -528,6 +528,19 @@ export const doUploadThumbnail = (
     data.append('upload', 'Upload');
     return doUpload(data);
   }
+};
+
+export const doEditForChannel = (publishData: any, uri: string, fileInfo: FileListItem, fs: any) => (
+  dispatch: Dispatch
+) => {
+  if (publishData.signing_channel) {
+    dispatch(doSetIncognito(false));
+    dispatch(doSetActiveChannel(publishData.signing_channel.claim_id));
+  } else {
+    dispatch(doSetIncognito(true));
+  }
+
+  dispatch(doPrepareEdit(publishData, uri, fileInfo, fs));
 };
 
 export const doPrepareEdit = (claim: StreamClaim, uri: string, fileInfo: FileListItem, fs: any) => (

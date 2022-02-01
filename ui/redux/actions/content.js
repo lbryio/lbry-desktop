@@ -4,7 +4,7 @@ import * as MODALS from 'constants/modal_types';
 // @if TARGET='app'
 import { ipcRenderer } from 'electron';
 // @endif
-import { doOpenModal } from 'redux/actions/app';
+import { doOpenModal, doAnalyticsView } from 'redux/actions/app';
 import { makeSelectClaimForUri, selectClaimIsMineForUri, makeSelectClaimWasPurchased } from 'redux/selectors/claims';
 import {
   makeSelectFileInfoForUri,
@@ -105,6 +105,8 @@ export function doSetPrimaryUri(uri: ?string) {
   };
 }
 
+export const doClearPlayingUri = () => (dispatch: Dispatch) => dispatch(doSetPlayingUri({ uri: null }));
+
 export function doSetPlayingUri({
   uri,
   source,
@@ -140,6 +142,10 @@ export function doPurchaseUriWrapper(uri: string, cost: number, saveFile: boolea
 
     dispatch(doPurchaseUri(uri, { cost }, saveFile, onSuccess));
   };
+}
+
+export function doDownloadUri(uri: string) {
+  return (dispatch: Dispatch) => dispatch(doPlayUri(uri, false, true, () => dispatch(doAnalyticsView(uri))));
 }
 
 export function doPlayUri(

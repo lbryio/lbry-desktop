@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { selectClaimForUri, selectClaimIsMine } from 'redux/selectors/claims';
 import { doCollectionEdit, doFetchItemsInCollection } from 'redux/actions/collections';
-import { doPrepareEdit } from 'redux/actions/publish';
+import { doEditForChannel } from 'redux/actions/publish';
 import {
   makeSelectCollectionForIdHasClaimUrl,
   makeSelectCollectionIsMine,
@@ -12,7 +12,7 @@ import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
 import { makeSelectChannelIsMuted } from 'redux/selectors/blocked';
 import { doChannelMute, doChannelUnmute } from 'redux/actions/blocked';
-import { doSetActiveChannel, doSetIncognito, doOpenModal } from 'redux/actions/app';
+import { doOpenModal } from 'redux/actions/app';
 import {
   doCommentModBlock,
   doCommentModUnBlock,
@@ -76,16 +76,7 @@ const select = (state, props) => {
 };
 
 const perform = (dispatch) => ({
-  prepareEdit: (publishData, uri, fileInfo) => {
-    if (publishData.signing_channel) {
-      dispatch(doSetIncognito(false));
-      dispatch(doSetActiveChannel(publishData.signing_channel.claim_id));
-    } else {
-      dispatch(doSetIncognito(true));
-    }
-
-    dispatch(doPrepareEdit(publishData, uri, fileInfo, fs));
-  },
+  prepareEdit: (publishData, uri, fileInfo) => doEditForChannel(publishData, uri, fileInfo, fs),
   doToast: (props) => dispatch(doToast(props)),
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
   doChannelMute: (channelUri) => dispatch(doChannelMute(channelUri)),
