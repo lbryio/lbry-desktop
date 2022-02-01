@@ -121,7 +121,7 @@ async function getOEmbed(ctx) {
 
   const decodedQueryUri = decodeURIComponent(urlQuery);
   const hasUrlParams = RegExp(/[?&]\w=/).test(decodedQueryUri);
-  const claimUrl = hasUrlParams ? decodedQueryUri.substring(0, decodedQueryUri.search(/[?&]\w=/)) : decodedQueryUri;
+  const claimUrl = hasUrlParams ? decodedQueryUri.substring(0, decodedQueryUri.search(/[?&](?:\w=)?/)) : decodedQueryUri;
 
   const { claim, error } = await getClaim(claimUrl);
 
