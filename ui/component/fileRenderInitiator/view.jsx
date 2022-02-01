@@ -3,20 +3,18 @@
 // The actual viewer for a file exists in TextViewer and FileRenderFloating
 // They can't exist in one component because we need to handle/listen for the start of a new file view
 // while a file is currently being viewed
-import React, { useEffect, useCallback } from 'react';
+import React from 'react';
 import classnames from 'classnames';
 import * as PAGES from 'constants/pages';
 import * as RENDER_MODES from 'constants/file_render_modes';
-import * as KEYCODES from 'constants/keycodes';
 import Button from 'component/button';
-import isUserTyping from 'util/detect-typing';
 import { getThumbnailCdnUrl } from 'util/thumbnail';
 import Nag from 'component/common/nag';
 // $FlowFixMe cannot resolve ...
 import FileRenderPlaceholder from 'static/img/fileRenderPlaceholder.png';
+import * as COLLECTIONS_CONSTS from 'constants/collections';
 
 type Props = {
-  play: (string, string, boolean) => void,
   isPlaying: boolean,
   fileInfo: FileListItem,
   uri: string,
@@ -29,16 +27,14 @@ type Props = {
   costInfo: any,
   inline: boolean,
   renderMode: string,
-  claim: StreamClaim,
   claimWasPurchased: boolean,
   authenticated: boolean,
   videoTheaterMode: boolean,
-  collectionId: string,
+  doUriInitiatePlay: (uri: string, collectionId: ?string, isPlayable: boolean) => void,
 };
 
 export default function FileRenderInitiator(props: Props) {
   const {
-    play,
     isPlaying,
     fileInfo,
     uri,
@@ -47,110 +43,87 @@ export default function FileRenderInitiator(props: Props) {
     history,
     location,
     claimThumbnail,
+    autoplay,
     renderMode,
     costInfo,
     claimWasPurchased,
     authenticated,
     videoTheaterMode,
-    collectionId,
+    doUriInitiatePlay,
   } = props;
 
+  const containerRef = React.useRef<any>();
+
+  const [thumbnail, setThumbnail] = React.useState(FileRenderPlaceholder);
+
+  const { search, href, state: locationState } = location;
+  const urlParams = search && new URLSearchParams(search);
+  const collectionId = urlParams && urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID);
+
   // check if there is a time or autoplay parameter, if so force autoplay
-  const urlTimeParam = location && location.href && location.href.indexOf('t=') > -1;
-  const forceAutoplayParam = location && location.state && location.state.forceAutoplay;
-  const autoplay = forceAutoplayParam || urlTimeParam || props.autoplay;
+  const urlTimeParam = href && href.indexOf('t=') > -1;
+  const forceAutoplayParam = locationState && locationState.forceAutoplay;
+  const shouldAutoplay = forceAutoplayParam || urlTimeParam || autoplay;
 
   const isFree = costInfo && costInfo.cost === 0;
   const canViewFile = isFree || claimWasPurchased;
-  const fileStatus = fileInfo && fileInfo.status;
   const isPlayable = RENDER_MODES.FLOATING_MODES.includes(renderMode);
   const isText = RENDER_MODES.TEXT_MODES.includes(renderMode);
-  const [thumbnail, setThumbnail] = React.useState(FileRenderPlaceholder);
-  const containerRef = React.useRef<any>();
 
-  useEffect(() => {
-    if (claimThumbnail) {
-      setTimeout(() => {
-        let newThumbnail = claimThumbnail;
-
-        // @if TARGET='web'
-        if (
-          containerRef.current &&
-          containerRef.current.parentElement &&
-          containerRef.current.parentElement.offsetWidth
-        ) {
-          const w = containerRef.current.parentElement.offsetWidth;
-          newThumbnail = getThumbnailCdnUrl({ thumbnail: newThumbnail, width: w, height: w });
-        }
-        // @endif
-
-        if (newThumbnail !== thumbnail) {
-          setThumbnail(newThumbnail);
-        }
-      }, 200);
-    }
-  }, [claimThumbnail, thumbnail]);
+  const renderUnsupported = RENDER_MODES.UNSUPPORTED_IN_THIS_APP.includes(renderMode);
+  const disabled = renderUnsupported || (!fileInfo && insufficientCredits && !claimWasPurchased);
+  const shouldRedirect = !authenticated && !isFree;
 
   function doAuthRedirect() {
     history.push(`/$/${PAGES.AUTH}?redirect=${encodeURIComponent(location.pathname)}`);
   }
 
-  // Wrap this in useCallback because we need to use it to the keyboard effect
+  React.useEffect(() => {
+    if (!claimThumbnail) return;
+
+    setTimeout(() => {
+      let newThumbnail = claimThumbnail;
+
+      if (
+        containerRef.current &&
+        containerRef.current.parentElement &&
+        containerRef.current.parentElement.offsetWidth
+      ) {
+        const w = containerRef.current.parentElement.offsetWidth;
+        newThumbnail = getThumbnailCdnUrl({ thumbnail: newThumbnail, width: w, height: w });
+      }
+
+      if (newThumbnail !== thumbnail) {
+        setThumbnail(newThumbnail);
+      }
+    }, 200);
+  }, [claimThumbnail, thumbnail]);
+
+  // Wrap this in useCallback because we need to use it to the view effect
   // If we don't a new instance will be created for every render and react will think the dependencies have changed, which will add/remove the listener for every render
-  const viewFile = useCallback(
-    (e?: SyntheticInputEvent<*> | KeyboardEvent) => {
-      if (e) {
-        e.stopPropagation();
-      }
+  const viewFile = React.useCallback(() => {
+    doUriInitiatePlay(uri, collectionId, isPlayable);
+  }, [collectionId, doUriInitiatePlay, isPlayable, uri]);
 
-      play(uri, collectionId, isPlayable);
-    },
-    [play, uri, isPlayable, collectionId]
-  );
-
-  useEffect(() => {
-    // This is just for beginning to download a file
-    // Play/Pause/Fullscreen will be handled by the respective viewers because not every file type should behave the same
-    function handleKeyDown(e: KeyboardEvent) {
-      if (!isUserTyping() && e.keyCode === KEYCODES.SPACEBAR) {
-        e.preventDefault();
-
-        if (!isPlaying || fileStatus === 'stopped') {
-          viewFile(e);
-        }
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [isPlaying, fileStatus, viewFile]);
-
-  useEffect(() => {
+  React.useEffect(() => {
     const videoOnPage = document.querySelector('video');
+
     if (
       (canViewFile || forceAutoplayParam) &&
-      ((autoplay && (!videoOnPage || forceAutoplayParam) && isPlayable) ||
+      ((shouldAutoplay && (!videoOnPage || forceAutoplayParam) && isPlayable) ||
         RENDER_MODES.AUTO_RENDER_MODES.includes(renderMode))
     ) {
       viewFile();
     }
-  }, [autoplay, canViewFile, forceAutoplayParam, isPlayable, renderMode, viewFile]);
+  }, [canViewFile, forceAutoplayParam, isPlayable, renderMode, shouldAutoplay, viewFile]);
 
   /*
   once content is playing, let the appropriate <FileRender> take care of it...
   but for playables, always render so area can be used to fill with floating player
    */
-  if (isPlaying && !isPlayable) {
-    if (canViewFile && !collectionId) {
-      return null;
-    }
+  if (isPlaying && !isPlayable && canViewFile && !collectionId) {
+    return null;
   }
-
-  const showAppNag = IS_WEB && RENDER_MODES.UNSUPPORTED_IN_THIS_APP.includes(renderMode);
-  const disabled = showAppNag || (!fileInfo && insufficientCredits && !claimWasPurchased);
-  const shouldRedirect = IS_WEB && !authenticated && !isFree;
 
   return (
     <div
@@ -164,7 +137,7 @@ export default function FileRenderInitiator(props: Props) {
         'card__media--nsfw': obscurePreview,
       })}
     >
-      {showAppNag && (
+      {renderUnsupported ? (
         <Nag
           type="helpful"
           inline
@@ -172,16 +145,19 @@ export default function FileRenderInitiator(props: Props) {
           actionText={__('Get the App')}
           href="https://lbry.com/get"
         />
+      ) : (
+        !claimWasPurchased &&
+        insufficientCredits && (
+          <Nag
+            type="helpful"
+            inline
+            message={__('You need more Credits to purchase this.')}
+            actionText={__('Open Rewards')}
+            onClick={() => history.push(`/$/${PAGES.REWARDS}`)}
+          />
+        )
       )}
-      {!claimWasPurchased && insufficientCredits && !showAppNag && (
-        <Nag
-          type="helpful"
-          inline
-          message={__('You need more Credits to purchase this.')}
-          actionText={__('Open Rewards')}
-          onClick={() => history.push(`/$/${PAGES.REWARDS}`)}
-        />
-      )}
+
       {!disabled && (
         <Button
           requiresAuth={shouldRedirect}

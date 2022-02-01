@@ -131,7 +131,12 @@ const VideoJsKeyboardShorcuts = ({
   // eslint-disable-next-line flowtype/no-types-missing-file-annotation
   function handleSingleKeyActions(e: KeyboardEvent, playerRef, containerRef) {
     if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
-    if (e.keyCode === KEYCODES.SPACEBAR || e.keyCode === KEYCODES.K) togglePlay(containerRef);
+
+    if (e.keyCode === KEYCODES.SPACEBAR || e.keyCode === KEYCODES.K) {
+      e.preventDefault();
+      togglePlay(containerRef);
+    }
+
     if (e.keyCode === KEYCODES.F) toggleFullscreen(playerRef);
     if (e.keyCode === KEYCODES.M) toggleMute(containerRef);
     if (e.keyCode === KEYCODES.UP) volumeUp(e, playerRef);
@@ -143,7 +148,7 @@ const VideoJsKeyboardShorcuts = ({
     if (e.keyCode === KEYCODES.LEFT) seekVideo(-SEEK_STEP_5, playerRef, containerRef);
   }
 
-  var curried_function = function(playerRef: any, containerRef: any) {
+  var curried_function = function (playerRef: any, containerRef: any) {
     return function curried_func(e: any) {
       handleKeyDown(e, playerRef, containerRef);
     };

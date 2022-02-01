@@ -4,7 +4,7 @@ import * as MODALS from 'constants/modal_types';
 // @if TARGET='app'
 import { ipcRenderer } from 'electron';
 // @endif
-import { doOpenModal, doAnalyticsView } from 'redux/actions/app';
+import { doOpenModal, doAnalyticsView, doAnaltyicsPurchaseEvent } from 'redux/actions/app';
 import { makeSelectClaimForUri, selectClaimIsMineForUri, makeSelectClaimWasPurchased } from 'redux/selectors/claims';
 import {
   makeSelectFileInfoForUri,
@@ -146,6 +146,18 @@ export function doPurchaseUriWrapper(uri: string, cost: number, saveFile: boolea
 
 export function doDownloadUri(uri: string) {
   return (dispatch: Dispatch) => dispatch(doPlayUri(uri, false, true, () => dispatch(doAnalyticsView(uri))));
+}
+
+export function doUriInitiatePlay(uri: string, collectionId?: string, isPlayable?: boolean) {
+  return (dispatch: Dispatch) => {
+    dispatch(doSetPrimaryUri(uri));
+
+    if (isPlayable) {
+      dispatch(doSetPlayingUri({ uri, collectionId }));
+    }
+
+    dispatch(doPlayUri(uri, false, true, (fileInfo) => dispatch(doAnaltyicsPurchaseEvent(fileInfo))));
+  };
 }
 
 export function doPlayUri(
