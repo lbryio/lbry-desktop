@@ -29,6 +29,7 @@ import CreditAmount from 'component/common/credit-amount';
 import OptimizedImage from 'component/optimizedImage';
 import { getChannelFromClaim } from 'util/claim';
 import { parseSticker } from 'util/comments';
+import { useIsMobile } from 'effects/use-screensize';
 
 const AUTO_EXPAND_ALL_REPLIES = false;
 
@@ -113,6 +114,8 @@ function Comment(props: Props) {
     setQuickReply,
     quickReply,
   } = props;
+
+  const isMobile = useIsMobile();
 
   const {
     push,
@@ -361,6 +364,7 @@ function Comment(props: Props) {
                         className="comment__action"
                         onClick={handleCommentReply}
                         icon={ICONS.REPLY}
+                        iconSize={isMobile && 12}
                       />
                     )}
                     {ENABLE_COMMENT_REACTIONS && <CommentReactions uri={uri} commentId={commentId} />}

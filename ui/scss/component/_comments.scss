@@ -1,10 +1,26 @@
 $thumbnailWidth: 1.5rem;
-$thumbnailWidthSmall: 1rem;
+$thumbnailWidthSmall: 1.8rem;
 
 .comments {
   list-style-type: none;
   font-size: var(--font-small);
   margin-top: var(--spacing-l);
+
+  @media (max-width: $breakpoint-small) {
+    margin-top: var(--spacing-s);
+
+    div {
+      font-size: var(--font-xsmall) !important;
+    }
+
+    .channel-name {
+      font-size: var(--font-xsmall);
+    }
+
+    span {
+      font-size: var(--font-xxsmall);
+    }
+  }
 }
 
 .comments--contracted {
@@ -42,6 +58,10 @@ $thumbnailWidthSmall: 1rem;
 
   &:not(:first-child) {
     margin-top: var(--spacing-l);
+
+    @media (max-width: $breakpoint-small) {
+      margin-top: var(--spacing-m) !important;
+    }
   }
 
   .comment__author-thumbnail {
@@ -79,15 +99,20 @@ $thumbnailWidthSmall: 1rem;
 
 .comment__replies-container {
   margin: 0;
+  overflow-x: hidden;
 }
 
 .comment__replies {
   display: flex;
   margin-top: var(--spacing-m);
-  margin-left: calc(#{$thumbnailWidthSmall} + var(--spacing-xs));
+  margin-left: #{$thumbnailWidthSmall};
 
   @media (min-width: $breakpoint-small) {
     margin-left: calc(#{$thumbnailWidth} + var(--spacing-m));
+  }
+
+  @media (max-width: $breakpoint-small) {
+    margin-top: var(--spacing-s);
   }
 }
 
@@ -197,6 +222,10 @@ $thumbnailWidthSmall: 1rem;
     & + p {
       margin-top: var(--spacing-xxs);
     }
+  }
+
+  @media (max-width: $breakpoint-small) {
+    padding-right: var(--spacing-l);
   }
 }
 
@@ -475,4 +504,9 @@ $thumbnailWidthSmall: 1rem;
 .emote {
   max-width: 1.5rem;
   max-height: 1.5rem;
+
+  @media (max-width: $breakpoint-small) {
+    max-width: 1.25rem;
+    max-height: 1.25rem;
+  }
 }
