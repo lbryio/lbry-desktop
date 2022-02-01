@@ -108,7 +108,7 @@
 
   .file-page__secondary-content {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
     width: 100%;
     margin-top: var(--spacing-m);
@@ -119,10 +119,6 @@
     > :first-child {
       flex: 1;
       max-width: 100%;
-    }
-
-    @media (min-width: $breakpoint-medium) {
-      flex-direction: row;
     }
   }
 
