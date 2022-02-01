@@ -314,6 +314,10 @@
   }
 }
 
+.button--file-action--menu {
+  @extend .button--file-action;
+}
+
 .button--fire {
   color: var(--color-fire);
   position: relative;

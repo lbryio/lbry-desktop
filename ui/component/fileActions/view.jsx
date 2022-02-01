@@ -171,7 +171,7 @@ export default function FileActions(props: Props) {
       {(!isLivestreamClaim || !claimIsMine || isMobile) && (
         <Menu>
           <MenuButton
-            className="button--file-action"
+            className="button--file-action--menu"
             onClick={(e) => {
               e.stopPropagation();
               e.preventDefault();

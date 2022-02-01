@@ -312,7 +312,7 @@
   }
 
   @media (max-width: $breakpoint-small) {
-    padding: var(--spacing-l);
+    padding: 0 !important;
   }
 }
 
