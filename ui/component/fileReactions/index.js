@@ -1,26 +1,37 @@
 import { connect } from 'react-redux';
 import {
-  makeSelectReactionsForUri,
   makeSelectMyReactionForUri,
   makeSelectLikeCountForUri,
   makeSelectDislikeCountForUri,
 } from 'redux/selectors/reactions';
 import { doFetchReactions, doReactionLike, doReactionDislike } from 'redux/actions/reactions';
-import { selectThemePath } from 'redux/selectors/settings';
 import FileViewCount from './view';
-import { makeSelectClaimForUri } from 'redux/selectors/claims';
+import { selectClaimForUri, selectIsStreamPlaceholderForUri } from 'redux/selectors/claims';
 
-const select = (state, props) => ({
-  claim: makeSelectClaimForUri(props.uri)(state),
-  reactions: makeSelectReactionsForUri(props.uri)(state),
-  myReaction: makeSelectMyReactionForUri(props.uri)(state),
-  likeCount: makeSelectLikeCountForUri(props.uri)(state),
-  dislikeCount: makeSelectDislikeCountForUri(props.uri)(state),
-  theme: selectThemePath(state),
-});
+const select = (state, props) => {
+  const { uri } = props;
 
-export default connect(select, {
+  const claim = selectClaimForUri(state, uri);
+  const { claim_id: claimId, signing_channel, value_type } = claim || {};
+
+  const channelName = signing_channel && signing_channel.name;
+  const isCollection = value_type && value_type === 'collection'; // hack because nudge gets cut off by card on cols.
+
+  return {
+    myReaction: makeSelectMyReactionForUri(uri)(state),
+    likeCount: makeSelectLikeCountForUri(uri)(state),
+    dislikeCount: makeSelectDislikeCountForUri(uri)(state),
+    isLivestreamClaim: selectIsStreamPlaceholderForUri(state, uri),
+    claimId,
+    channelName,
+    isCollection,
+  };
+};
+
+const perform = {
   doFetchReactions,
   doReactionLike,
   doReactionDislike,
-})(FileViewCount);
+};
+
+export default connect(select, perform)(FileViewCount);
