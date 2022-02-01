@@ -4,33 +4,31 @@ import * as ICONS from 'constants/icons';
 import React from 'react';
 import classnames from 'classnames';
 import Button from 'component/button';
+import Tooltip from 'component/common/tooltip';
 
 type Props = {
   uri: string,
-  doOpenModal: (string, {}) => void,
   fileAction?: boolean,
+  // redux
   disableSupport: boolean,
-  claim: GenericClaim,
+  isRepost?: boolean,
+  doOpenModal: (id: string, {}) => void,
 };
 
 export default function ClaimSupportButton(props: Props) {
-  const { doOpenModal, uri, fileAction, disableSupport, claim } = props;
-  const isRepost = claim && claim.repost_url;
+  const { uri, fileAction, isRepost, disableSupport, doOpenModal } = props;
 
-  if (disableSupport) {
-    return null;
-  }
-
-  return (
-    <Button
-      button={fileAction ? undefined : 'alt'}
-      className={classnames({ 'button--file-action': fileAction })}
-      icon={ICONS.LBC}
-      iconSize={fileAction ? 22 : undefined}
-      label={isRepost ? __('Support Repost') : __('Support --[button to support a claim]--')}
-      requiresAuth={IS_WEB}
-      title={__('Support this claim')}
-      onClick={() => doOpenModal(MODALS.SEND_TIP, { uri, isSupport: true })}
-    />
+  return disableSupport ? null : (
+    <Tooltip title={__('Support this claim')} arrow={false}>
+      <Button
+        button={!fileAction && 'alt'}
+        className={classnames({ 'button--file-action': fileAction })}
+        icon={ICONS.LBC}
+        iconSize={fileAction && 22}
+        label={isRepost ? __('Support Repost') : __('Support --[button to support a claim]--')}
+        requiresAuth
+        onClick={() => doOpenModal(MODALS.SEND_TIP, { uri, isSupport: true })}
+      />
+    </Tooltip>
   );
 }
