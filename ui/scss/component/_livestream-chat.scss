@@ -24,6 +24,10 @@ $recent-msg-button__height: 2rem;
       padding: 0;
     }
   }
+
+  @media (max-width: $breakpoint-small) {
+    margin: 0 !important;
+  }
 }
 
 .livestream__chat--popout {

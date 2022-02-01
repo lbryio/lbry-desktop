@@ -217,6 +217,19 @@
     padding: var(--spacing-xs);
     flex-direction: column;
     padding-top: 0;
+    margin: 0;
+    padding: 0;
+
+    .file-page__secondary-content {
+      margin: 0;
+      padding: 0;
+    }
+
+    .card {
+      border-radius: 0;
+      margin-bottom: var(--spacing-xxs) !important;
+      padding: 0;
+    }
   }
 }
 
@@ -297,7 +310,19 @@
     }
   }
 
-  @media (max-width: $breakpoint-medium) {
+  @media (max-width: $breakpoint-small) {
+    padding: 0;
+
+    .card {
+      margin: 0;
+    }
+
+    .card-stack {
+      margin: 0;
+    }
+  }
+
+  @media (min-width: $breakpoint-small) and (max-width: $breakpoint-medium) {
     padding: 0 var(--spacing-m);
   }
 }

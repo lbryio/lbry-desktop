@@ -72,6 +72,7 @@
 
   // Inline Player
   --inline-player-max-height: calc(100vh - var(--header-height) - var(--spacing-l) * 4);
+  --mobile-player-max-height: 50vh;
 
   // Card
   --card-radius: var(--border-radius);

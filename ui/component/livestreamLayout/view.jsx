@@ -1,12 +1,12 @@
 // @flow
 import { lazyImport } from 'util/lazyImport';
-import { LIVESTREAM_EMBED_URL } from 'constants/livestream';
 import { useIsMobile } from 'effects/use-screensize';
-import classnames from 'classnames';
 import FileTitleSection from 'component/fileTitleSection';
 import LivestreamLink from 'component/livestreamLink';
-import LivestreamScheduledInfo from 'component/livestreamScheduledInfo';
 import React from 'react';
+import { PRIMARY_PLAYER_WRAPPER_CLASS } from 'page/file/view';
+import FileRenderInitiator from 'component/fileRenderInitiator';
+import LivestreamIframeRender from './iframe-render';
 
 const LivestreamChatLayout = lazyImport(() => import('component/livestreamChatLayout' /* webpackChunkName: "chat" */));
 
@@ -42,23 +42,21 @@ export default function LivestreamLayout(props: Props) {
   return (
     <>
       <div className="section card-stack">
-        <div
-          className={classnames('file-render file-render--video livestream', {
-            'file-render--scheduledLivestream': !showLivestream,
-          })}
-        >
-          <div className="file-viewer">
-            {showLivestream && (
-              <iframe
-                src={`${LIVESTREAM_EMBED_URL}/${channelClaimId}?skin=odysee&autoplay=1`}
-                scrolling="no"
-                allowFullScreen
-              />
-            )}
-
-            {showScheduledInfo && <LivestreamScheduledInfo release={release} />}
-          </div>
-        </div>
+        <React.Suspense fallback={null}>
+          {isMobile && isCurrentClaimLive ? (
+            <div className={PRIMARY_PLAYER_WRAPPER_CLASS}>
+              {/* Mobile needs to handle the livestream player like any video player */}
+              <FileRenderInitiator uri={uri} />
+            </div>
+          ) : (
+            <LivestreamIframeRender
+              channelClaimId={channelClaimId}
+              release={release}
+              showLivestream={showLivestream}
+              showScheduledInfo={showScheduledInfo}
+            />
+          )}
+        </React.Suspense>
 
         {hideComments && !showScheduledInfo && (
           <div className="help--notice">

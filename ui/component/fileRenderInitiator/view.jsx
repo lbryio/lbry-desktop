@@ -3,6 +3,7 @@
 // The actual viewer for a file exists in TextViewer and FileRenderFloating
 // They can't exist in one component because we need to handle/listen for the start of a new file view
 // while a file is currently being viewed
+import { useIsMobile } from 'effects/use-screensize';
 import React from 'react';
 import classnames from 'classnames';
 import * as PAGES from 'constants/pages';
@@ -30,7 +31,10 @@ type Props = {
   claimWasPurchased: boolean,
   authenticated: boolean,
   videoTheaterMode: boolean,
+  activeLivestreamForChannel?: any,
+  claimId?: string,
   doUriInitiatePlay: (uri: string, collectionId: ?string, isPlayable: boolean) => void,
+  doSetPlayingUri: ({ uri: ?string }) => void,
 };
 
 export default function FileRenderInitiator(props: Props) {
@@ -49,10 +53,15 @@ export default function FileRenderInitiator(props: Props) {
     claimWasPurchased,
     authenticated,
     videoTheaterMode,
+    activeLivestreamForChannel,
+    claimId,
     doUriInitiatePlay,
+    doSetPlayingUri,
   } = props;
 
   const containerRef = React.useRef<any>();
+
+  const isMobile = useIsMobile();
 
   const [thumbnail, setThumbnail] = React.useState(FileRenderPlaceholder);
 
@@ -69,10 +78,26 @@ export default function FileRenderInitiator(props: Props) {
   const canViewFile = isFree || claimWasPurchased;
   const isPlayable = RENDER_MODES.FLOATING_MODES.includes(renderMode);
   const isText = RENDER_MODES.TEXT_MODES.includes(renderMode);
+  const isCurrentClaimLive = activeLivestreamForChannel && claimId && activeLivestreamForChannel.claimId === claimId;
+  const isMobileClaimLive = isMobile && isCurrentClaimLive;
+  const foundCover = thumbnail !== FileRenderPlaceholder;
 
   const renderUnsupported = RENDER_MODES.UNSUPPORTED_IN_THIS_APP.includes(renderMode);
   const disabled = renderUnsupported || (!fileInfo && insufficientCredits && !claimWasPurchased);
   const shouldRedirect = !authenticated && !isFree;
+
+  React.useEffect(() => {
+    // Set livestream as playing uri so it can be rendered by <FileRenderMobile />
+    // instead of showing an empty cover image. Needs cover to fill the space with the player.
+    if (isMobileClaimLive && foundCover) {
+      doSetPlayingUri({ uri });
+    }
+
+    // No floating player on mobile as of now, so clear the playing uri
+    if (isMobile && (isPlayable || isMobileClaimLive)) {
+      return () => doSetPlayingUri({ uri: null });
+    }
+  }, [doSetPlayingUri, foundCover, isMobile, isMobileClaimLive, isPlayable, uri]);
 
   function doAuthRedirect() {
     history.push(`/$/${PAGES.AUTH}?redirect=${encodeURIComponent(location.pathname)}`);
@@ -128,7 +153,7 @@ export default function FileRenderInitiator(props: Props) {
   return (
     <div
       ref={containerRef}
-      onClick={disabled ? undefined : shouldRedirect ? doAuthRedirect : viewFile}
+      onClick={disabled || isMobileClaimLive ? undefined : shouldRedirect ? doAuthRedirect : viewFile}
       style={thumbnail && !obscurePreview ? { backgroundImage: `url("${thumbnail}")` } : {}}
       className={classnames('content__cover', {
         'content__cover--disabled': disabled,
@@ -158,7 +183,7 @@ export default function FileRenderInitiator(props: Props) {
         )
       )}
 
-      {!disabled && (
+      {!disabled && !isMobileClaimLive && (
         <Button
           requiresAuth={shouldRedirect}
           onClick={viewFile}
