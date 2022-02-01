@@ -1,4 +1,5 @@
 // @flow
+import { useIsMobile } from 'effects/use-screensize';
 import { SITE_NAME, ENABLE_FILE_REACTIONS } from 'config';
 import * as PAGES from 'constants/pages';
 import * as MODALS from 'constants/modal_types';
@@ -60,6 +61,8 @@ export default function FileActions(props: Props) {
     location: { pathname, search },
   } = useHistory();
 
+  const isMobile = useIsMobile();
+
   const [downloadClicked, setDownloadClicked] = React.useState(false);
 
   const { claim_id: claimId, signing_channel: signingChannel, value, meta: claimMeta } = claim;
@@ -108,7 +111,6 @@ export default function FileActions(props: Props) {
       push(`/$/${PAGES.REPOST_NEW}?from=${encodeURIComponent(uri)}&redirect=${encodeURIComponent(pathname)}`);
     }
   }
-
   return (
     <div className="media__actions section__actions--no-margin">
       {ENABLE_FILE_REACTIONS && <FileReactions uri={uri} />}
@@ -117,7 +119,7 @@ export default function FileActions(props: Props) {
 
       <ClaimCollectionAddButton uri={uri} fileAction />
 
-      {!hideRepost && (
+      {!hideRepost && !isMobile && (
         <Tooltip title={__('Repost')} arrow={false}>
           <Button
             button="alt"
@@ -141,7 +143,7 @@ export default function FileActions(props: Props) {
         />
       </Tooltip>
 
-      {claimIsMine && (
+      {claimIsMine && !isMobile && (
         <>
           <Tooltip title={isLivestreamClaim ? __('Update or Publish Replay') : __('Edit')} arrow={false}>
             <div style={{ margin: '0px' }}>
@@ -166,7 +168,7 @@ export default function FileActions(props: Props) {
         </>
       )}
 
-      {(!isLivestreamClaim || !claimIsMine) && (
+      {(!isLivestreamClaim || !claimIsMine || isMobile) && (
         <Menu>
           <MenuButton
             className="button--file-action"
@@ -179,6 +181,42 @@ export default function FileActions(props: Props) {
           </MenuButton>
 
           <MenuList className="menu__list">
+            {isMobile && (
+              <>
+                {!hideRepost && (
+                  <MenuItem className="comment__menu-option" onSelect={handleRepostClick}>
+                    <div className="menu__link">
+                      <Icon aria-hidden icon={ICONS.REPOST} />
+                      {claimMeta.reposted > 1
+                        ? __(`%repost_total% Reposts`, { repost_total: claimMeta.reposted })
+                        : __('Repost')}
+                    </div>
+                  </MenuItem>
+                )}
+
+                {claimIsMine && (
+                  <>
+                    <MenuItem className="comment__menu-option" onSelect={() => doEditForChannel(claim, editUri)}>
+                      <div className="menu__link">
+                        <Icon aria-hidden icon={ICONS.EDIT} />
+                        {isLivestreamClaim ? __('Update or Publish Replay') : __('Edit')}
+                      </div>
+                    </MenuItem>
+
+                    <MenuItem
+                      className="comment__menu-option"
+                      onSelect={() => doOpenModal(MODALS.CONFIRM_FILE_REMOVE, { uri })}
+                    >
+                      <div className="menu__link">
+                        <Icon aria-hidden icon={ICONS.DELETE} />
+                        {__('Delete')}
+                      </div>
+                    </MenuItem>
+                  </>
+                )}
+              </>
+            )}
+
             {!isLivestreamClaim && !disableDownloadButton && (
               <MenuItem className="comment__menu-option" onSelect={handleWebDownload}>
                 <div className="menu__link">
