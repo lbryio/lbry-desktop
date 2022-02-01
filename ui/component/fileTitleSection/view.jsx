@@ -16,19 +16,19 @@ import { ENABLE_MATURE } from 'config';
 
 type Props = {
   uri: string,
-  title: string,
   nsfw: boolean,
   isNsfwBlocked: boolean,
   livestream?: boolean,
   isLive?: boolean,
-  subCount: number,
+  // redux
   channelClaimId?: string,
-  fetchSubCount: (string) => void,
+  title?: string,
+  subCount: number,
+  doFetchSubCount: (claimId: string) => void,
 };
 
-function FileTitleSection(props: Props) {
+export default function FileTitleSection(props: Props) {
   const {
-    title,
     uri,
     nsfw,
     isNsfwBlocked,
@@ -36,92 +36,74 @@ function FileTitleSection(props: Props) {
     isLive = false,
     subCount,
     channelClaimId,
-    fetchSubCount,
+    title,
+    doFetchSubCount,
   } = props;
 
   React.useEffect(() => {
-    if (channelClaimId) {
-      fetchSubCount(channelClaimId);
-    }
-  }, [channelClaimId, fetchSubCount]);
+    if (channelClaimId) doFetchSubCount(channelClaimId);
+  }, [channelClaimId, doFetchSubCount]);
 
   return (
-    <>
-      <Card
-        isPageTitle
-        noTitleWrap
-        title={
-          <React.Fragment>
-            {title}
-            {nsfw && (
-              <span className="media__title-badge">
-                <span className="badge badge--tag-mature">{__('Mature')}</span>
-              </span>
-            )}
-          </React.Fragment>
-        }
-        titleActions={<FilePrice uri={normalizeURI(uri)} type="filepage" />}
-        body={
-          <React.Fragment>
-            <ClaimInsufficientCredits uri={uri} />
-            <FileSubtitle uri={uri} isLive={isLive} livestream={livestream} />
-          </React.Fragment>
-        }
-        actions={
-          isNsfwBlocked ? (
-            <div className="main--empty">
-              <h2>
-                {!ENABLE_MATURE && (
-                  <>
-                    <Icon className="icon--hidden" icon={ICONS.EYE_OFF} />
-                    {__('Mature content is not supported.')}
-                  </>
-                )}
-                {ENABLE_MATURE && (
-                  <>
-                    <Icon className="icon--hidden" icon={ICONS.EYE_OFF} />
-                    {__('Mature content blocked.')}
-                  </>
-                )}
-              </h2>
-              <div>
-                {ENABLE_MATURE && (
-                  <>
-                    <I18nMessage
-                      tokens={{
-                        content_settings: (
-                          <Button button="link" label={__('content settings')} navigate={`/$/${PAGES.SETTINGS}`} />
-                        ),
-                      }}
-                    >
-                      Change this in your %content_settings%.
-                    </I18nMessage>
-                  </>
-                )}
-                {!ENABLE_MATURE && (
-                  <>
-                    <I18nMessage
-                      tokens={{
-                        download_url: <Button label={__('lbry.com')} button="link" href="https://lbry.com/get" />,
-                      }}
-                    >
-                      You can download the LBRY Desktop or Android app on %download_url% and enable mature content in
-                      Settings.
-                    </I18nMessage>
-                  </>
-                )}
-              </div>
+    <Card
+      isPageTitle
+      noTitleWrap
+      title={
+        <>
+          {title}
+          {nsfw && (
+            <span className="media__title-badge">
+              <span className="badge badge--tag-mature">{__('Mature')}</span>
+            </span>
+          )}
+        </>
+      }
+      titleActions={<FilePrice uri={normalizeURI(uri)} type="filepage" />}
+      body={
+        <>
+          <ClaimInsufficientCredits uri={uri} />
+          <FileSubtitle uri={uri} isLive={isLive} livestream={livestream} />
+        </>
+      }
+      actions={
+        isNsfwBlocked ? (
+          <div className="main--empty">
+            <h2>
+              <>
+                <Icon className="icon--hidden" icon={ICONS.EYE_OFF} />
+                {ENABLE_MATURE ? __('Mature content blocked.') : __('Mature content is not supported.')}
+              </>
+            </h2>
+            <div>
+              {ENABLE_MATURE ? (
+                <I18nMessage
+                  tokens={{
+                    content_settings: (
+                      <Button button="link" label={__('content settings')} navigate={`/$/${PAGES.SETTINGS}`} />
+                    ),
+                  }}
+                >
+                  Change this in your %content_settings%.
+                </I18nMessage>
+              ) : (
+                <I18nMessage
+                  tokens={{
+                    download_url: <Button label={__('lbry.com')} button="link" href="https://lbry.com/get" />,
+                  }}
+                >
+                  You can download the LBRY Desktop or Android app on %download_url% and enable mature content in
+                  Settings.
+                </I18nMessage>
+              )}
             </div>
-          ) : (
-            <div className="section">
-              <ClaimAuthor channelSubCount={subCount} uri={uri} />
-              <FileDescription uri={uri} />
-            </div>
-          )
-        }
-      />
-    </>
+          </div>
+        ) : (
+          <>
+            <ClaimAuthor channelSubCount={subCount} uri={uri} />
+            <FileDescription uri={uri} />
+          </>
+        )
+      }
+    />
   );
 }
-
-export default FileTitleSection;

@@ -1,25 +1,28 @@
 import { connect } from 'react-redux';
 import { doFetchSubCount, selectSubCountForUri } from 'lbryinc';
-import { selectTitleForUri, selectClaimForUri } from 'redux/selectors/claims';
-import { selectInsufficientCreditsForUri } from 'redux/selectors/content';
+import { selectClaimForUri } from 'redux/selectors/claims';
 import FileTitleSection from './view';
+import { getClaimTitle } from 'util/claim';
 
 const select = (state, props) => {
-  const claim = selectClaimForUri(state, props.uri);
-  const channelClaimId = claim && claim.signing_channel ? claim.signing_channel.claim_id : undefined;
-  const channelUri = claim && claim.signing_channel ? claim.signing_channel.canonical_url : undefined;
-  const subCount = channelUri && selectSubCountForUri(state, channelUri);
+  const { uri } = props;
+
+  const claim = selectClaimForUri(state, uri);
+
+  const { signing_channel: channel } = claim || {};
+  const channelUri = channel && channel.canonical_url;
+  const channelClaimId = channel && channel.claim_id;
+  const title = getClaimTitle(claim);
 
   return {
-    isInsufficientCredits: selectInsufficientCreditsForUri(state, props.uri),
-    title: selectTitleForUri(state, props.uri),
+    subCount: channelUri && selectSubCountForUri(state, channelUri),
     channelClaimId,
-    subCount,
+    title,
   };
 };
 
-const perform = (dispatch) => ({
-  fetchSubCount: (claimId) => dispatch(doFetchSubCount(claimId)),
-});
+const perform = {
+  doFetchSubCount,
+};
 
 export default connect(select, perform)(FileTitleSection);
