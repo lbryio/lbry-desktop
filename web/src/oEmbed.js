@@ -120,8 +120,10 @@ async function getOEmbed(ctx) {
   const embedlyReferrer = getParameterByName('referrer', requestUrl);
 
   const decodedQueryUri = decodeURIComponent(urlQuery);
-  const hasUrlParams = RegExp(/[?&]\w=/).test(decodedQueryUri);
-  const claimUrl = hasUrlParams ? decodedQueryUri.substring(0, decodedQueryUri.search(/[?&](?:\w=)?/)) : decodedQueryUri;
+
+  const paramsRegex = /[?&](?:\w=)?/g;
+  const hasUrlParams = RegExp(paramsRegex).test(decodedQueryUri);
+  const claimUrl = hasUrlParams ? decodedQueryUri.substring(0, decodedQueryUri.search(paramsRegex)) : decodedQueryUri;
 
   const { claim, error } = await getClaim(claimUrl);
 
