@@ -210,6 +210,7 @@ function PublishForm(props: Props) {
   const [prevFileText, setPrevFileText] = React.useState('');
 
   const [waitForFile, setWaitForFile] = useState(false);
+  const [overMaxBitrate, setOverMaxBitrate] = useState(false);
   const [livestreamData, setLivestreamData] = React.useState([]);
   const [signedMessage, setSignedMessage] = React.useState({ signature: undefined, signing_ts: undefined });
   const signedMessageStr = JSON.stringify(signedMessage);
@@ -238,6 +239,7 @@ function PublishForm(props: Props) {
     name &&
     isNameValid(name) &&
     title &&
+    !overMaxBitrate &&
     bid &&
     thumbnail &&
     !bidError &&
@@ -598,6 +600,7 @@ function PublishForm(props: Props) {
         livestreamData={livestreamData}
         subtitle={customSubtitle}
         setWaitForFile={setWaitForFile}
+        setOverMaxBitrate={setOverMaxBitrate}
         isCheckingLivestreams={isCheckingLivestreams}
         checkLivestreams={fetchLivestreams}
         channelId={claimChannelId}
@@ -682,7 +685,7 @@ function PublishForm(props: Props) {
         </div>
         <p className="help">
           {!formDisabled && !formValid ? (
-            <PublishFormErrors mode={mode} waitForFile={waitingForFile} />
+            <PublishFormErrors mode={mode} waitForFile={waitingForFile} overMaxBitrate={overMaxBitrate} />
           ) : (
             <I18nMessage
               tokens={{

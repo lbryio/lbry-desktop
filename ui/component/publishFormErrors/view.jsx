@@ -16,6 +16,7 @@ type Props = {
   thumbnail: string,
   thumbnailError: boolean,
   waitForFile: boolean,
+  overMaxBitrate: boolean,
 };
 
 function PublishFormErrors(props: Props) {
@@ -31,6 +32,7 @@ function PublishFormErrors(props: Props) {
     thumbnail,
     thumbnailError,
     waitForFile,
+    overMaxBitrate,
   } = props;
   // These are extra help
   // If there is an error it will be presented as an inline error as well
@@ -41,6 +43,7 @@ function PublishFormErrors(props: Props) {
   return (
     <div className="error__text">
       {waitForFile && <div>{__('Choose a replay file, or select None')}</div>}
+      {overMaxBitrate && <div>{__('Bitrate is over the max, please transcode or choose another file.')}</div>}
       {!title && <div>{__('A title is required')}</div>}
       {!name && <div>{__('A URL is required')}</div>}
       {name && !isNameValid(name) && INVALID_NAME_ERROR}
