@@ -74,8 +74,8 @@ function WalletTipAmountSelector(props: Props) {
   if (setDisableSubmitButton) setDisableSubmitButton(shouldDisableFiatSelectors);
 
   // setup variables for tip API
-  const channelClaimId = claim.signing_channel ? claim.signing_channel.claim_id : claim.claim_id;
-  const tipChannelName = claim.signing_channel ? claim.signing_channel.name : claim.name;
+  const channelClaimId = claim ? (claim.signing_channel ? claim.signing_channel.claim_id : claim.claim_id) : undefined;
+  const tipChannelName = claim ? (claim.signing_channel ? claim.signing_channel.name : claim.name) : undefined;
 
   /**
    * whether tip amount selection/review functionality should be disabled
@@ -219,6 +219,8 @@ function WalletTipAmountSelector(props: Props) {
       }
     }
   }, [activeTab, amount, balance, convertedAmount, customTipAmount, exchangeRate, setTipError]);
+
+  if (!claim) return null;
 
   const getHelpMessage = (helpMessage: any) => <div className="help">{helpMessage}</div>;
 

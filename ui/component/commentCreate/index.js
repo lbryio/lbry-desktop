@@ -13,6 +13,7 @@ import { doSendTip, doSendCashTip } from 'redux/actions/wallet';
 import { doToast } from 'redux/actions/notifications';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { selectSettingsByChannelId } from 'redux/selectors/comments';
+import { doOpenModal } from 'redux/actions/app';
 
 const select = (state, props) => {
   const claim = selectClaimForUri(state, props.uri);
@@ -48,6 +49,7 @@ const perform = (dispatch, ownProps) => ({
   sendCashTip: (tipParams, userParams, claimId, environment, successCallback) =>
     dispatch(doSendCashTip(tipParams, false, userParams, claimId, environment, successCallback)),
   sendTip: (params, callback, errorCallback) => dispatch(doSendTip(params, false, callback, errorCallback, false)),
+  doOpenModal: (id, params) => dispatch(doOpenModal(id, params)),
 });
 
 export default connect(select, perform)(CommentCreate);

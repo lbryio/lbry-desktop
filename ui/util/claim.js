@@ -99,6 +99,11 @@ export function getChannelIdFromClaim(claim: ?Claim) {
   }
 }
 
+export function getChannelNameFromClaim(claim: ?Claim) {
+  const channelFromClaim = getChannelFromClaim(claim);
+  return channelFromClaim && channelFromClaim.name;
+}
+
 export function getChannelFromClaim(claim: ?Claim) {
   return !claim
     ? null

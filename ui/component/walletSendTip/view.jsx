@@ -20,14 +20,19 @@ const stripeEnvironment = getStripeEnvironment();
 const TAB_BOOST = 'TabBoost';
 const TAB_FIAT = 'TabFiat';
 const TAB_LBC = 'TabLBC';
+
 type SupportParams = { amount: number, claim_id: string, channel_id?: string };
 type TipParams = { tipAmount: number, tipChannelName: string, channelClaimId: string };
 type UserParams = { activeChannelName: ?string, activeChannelId: ?string };
 
 type Props = {
-  activeChannelClaim: ?ChannelClaim,
+  activeChannelId?: string,
+  activeChannelName?: string,
   balance: number,
-  claim: StreamClaim,
+  claimId?: string,
+  claimType?: string,
+  channelClaimId?: string,
+  tipChannelName?: string,
   claimIsMine: boolean,
   fetchingChannels: boolean,
   incognito: boolean,
@@ -37,16 +42,23 @@ type Props = {
   isSupport: boolean,
   title: string,
   uri: string,
+  isTipOnly?: boolean,
+  hasSelectedTab?: string,
   doHideModal: () => void,
   doSendCashTip: (TipParams, boolean, UserParams, string, ?string) => string,
   doSendTip: (SupportParams, boolean) => void, // function that comes from lbry-redux
+  setAmount?: (number) => void,
 };
 
-function WalletSendTip(props: Props) {
+export default function WalletSendTip(props: Props) {
   const {
-    activeChannelClaim,
+    activeChannelId,
+    activeChannelName,
     balance,
-    claim = {},
+    claimId,
+    claimType,
+    channelClaimId,
+    tipChannelName,
     claimIsMine,
     fetchingChannels,
     incognito,
@@ -55,33 +67,22 @@ function WalletSendTip(props: Props) {
     isPending,
     title,
     uri,
+    isTipOnly,
+    hasSelectedTab,
     doHideModal,
     doSendCashTip,
     doSendTip,
+    setAmount,
   } = props;
 
   /** WHAT TAB TO SHOW **/
   // set default tab to for new users based on if it's their claim or not
-  let defaultTabToShow;
-  if (claimIsMine) {
-    defaultTabToShow = TAB_BOOST;
-  } else {
-    defaultTabToShow = TAB_LBC;
-  }
+  const defaultTabToShow = claimIsMine ? TAB_BOOST : TAB_LBC;
 
   // loads the default tab if nothing else is there yet
-  const [activeTab, setActiveTab] = usePersistedState(defaultTabToShow);
-
-  // if a broken default is set, set it to the proper default
-  if (activeTab !== TAB_BOOST && activeTab !== TAB_LBC && activeTab !== TAB_FIAT) {
-    // if the claim is the user's set it to boost
-    setActiveTab(defaultTabToShow);
-  }
-
-  // if the claim is yours but the active tab is not boost, change it to boost
-  if (claimIsMine && activeTab !== TAB_BOOST) {
-    setActiveTab(TAB_BOOST);
-  }
+  const [persistentTab, setPersistentTab] = usePersistedState('send-tip-modal', defaultTabToShow);
+  const [activeTab, setActiveTab] = React.useState(persistentTab);
+  const [hasSelected, setSelected] = React.useState(false);
 
   /** STATE **/
   const [tipAmount, setTipAmount] = usePersistedState('comment-support:customTip', 1.0);
@@ -92,20 +93,14 @@ function WalletSendTip(props: Props) {
   /** CONSTS **/
   const claimTypeText = getClaimTypeText();
   const isSupport = claimIsMine || activeTab === TAB_BOOST;
-  const titleText = claimIsMine
-    ? __('Boost Your %claimTypeText%', { claimTypeText })
-    : __('Boost This %claimTypeText%', { claimTypeText });
-  const { claim_id: claimId } = claim;
+  const titleText = isSupport
+    ? __(claimIsMine ? 'Boost Your %claimTypeText%' : 'Boost This %claimTypeText%', { claimTypeText })
+    : __('Tip This %claimTypeText%', { claimTypeText });
+
   let channelName;
   try {
     ({ channelName } = parseURI(uri));
   } catch (e) {}
-  const activeChannelName = activeChannelClaim && activeChannelClaim.name;
-  const activeChannelId = activeChannelClaim && activeChannelClaim.claim_id;
-
-  // setup variables for backend tip API
-  const channelClaimId = claim.signing_channel ? claim.signing_channel.claim_id : claim.claim_id;
-  const tipChannelName = claim.signing_channel ? claim.signing_channel.name : claim.name;
 
   // icon to use or explainer text to show per tab
   let explainerText = '',
@@ -131,7 +126,7 @@ function WalletSendTip(props: Props) {
   /** FUNCTIONS **/
 
   function getClaimTypeText() {
-    switch (claim.value_type) {
+    switch (claimType) {
       case 'stream':
         return __('Content');
       case 'channel':
@@ -152,8 +147,8 @@ function WalletSendTip(props: Props) {
     } else {
       const supportParams: SupportParams = {
         amount: tipAmount,
-        claim_id: claimId,
-        channel_id: activeChannelClaim && !incognito ? activeChannelClaim.claim_id : undefined,
+        claim_id: claimId || '',
+        channel_id: (!incognito && activeChannelId) || undefined,
       };
 
       // send tip/boost
@@ -165,6 +160,12 @@ function WalletSendTip(props: Props) {
   // when the form button is clicked
   function handleSubmit() {
     if (!tipAmount || !claimId) return;
+
+    if (setAmount) {
+      setAmount(tipAmount);
+      doHideModal();
+      return;
+    }
 
     // send an instant tip (no need to go to an exchange first)
     if (instantTipEnabled && activeTab !== TAB_FIAT) {
@@ -179,11 +180,15 @@ function WalletSendTip(props: Props) {
       if (!isOnConfirmationPage) {
         setConfirmationPage(true);
       } else {
-        const tipParams: TipParams = { tipAmount, tipChannelName, channelClaimId };
+        const tipParams: TipParams = {
+          tipAmount,
+          tipChannelName: tipChannelName || '',
+          channelClaimId: channelClaimId || '',
+        };
         const userParams: UserParams = { activeChannelName, activeChannelId };
 
         // hit backend to send tip
-        doSendCashTip(tipParams, !activeChannelClaim || incognito, userParams, claimId, stripeEnvironment);
+        doSendCashTip(tipParams, !activeChannelId || incognito, userParams, claimId, stripeEnvironment);
         doHideModal();
       }
       // if it's a boost (?)
@@ -221,22 +226,22 @@ function WalletSendTip(props: Props) {
     }
   }
 
+  React.useEffect(() => {
+    if (!hasSelected && hasSelectedTab && activeTab !== hasSelectedTab) {
+      setActiveTab(hasSelectedTab);
+      setSelected(true);
+    }
+  }, [activeTab, hasSelected, hasSelectedTab, setActiveTab]);
+
+  React.useEffect(() => {
+    if (!hasSelectedTab && activeTab !== hasSelectedTab) {
+      setPersistentTab(activeTab);
+    }
+  }, [activeTab, hasSelectedTab, setPersistentTab]);
+
   /** RENDER **/
 
-  const getTabButton = (tabIcon: string, tabLabel: string, tabName: string) => (
-    <Button
-      key={tabName}
-      icon={tabIcon}
-      label={tabLabel}
-      button="alt"
-      onClick={() => {
-        const tipInputElement = document.getElementById('tip-input');
-        if (tipInputElement) tipInputElement.focus();
-        if (!isOnConfirmationPage) setActiveTab(tabName);
-      }}
-      className={classnames('button-toggle', { 'button-toggle--active': activeTab === tabName })}
-    />
-  );
+  const tabButtonProps = { isOnConfirmationPage, activeTab, setActiveTab };
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -249,13 +254,17 @@ function WalletSendTip(props: Props) {
             {!claimIsMine && (
               <div className="section">
                 {/* tip LBC tab button */}
-                {getTabButton(ICONS.LBC, __('Tip'), TAB_LBC)}
+                <TabSwitchButton icon={ICONS.LBC} label={__('Tip')} name={TAB_LBC} {...tabButtonProps} />
 
                 {/* tip fiat tab button */}
-                {stripeEnvironment && getTabButton(ICONS.FINANCE, __('Tip'), TAB_FIAT)}
+                {stripeEnvironment && (
+                  <TabSwitchButton icon={ICONS.FINANCE} label={__('Tip')} name={TAB_FIAT} {...tabButtonProps} />
+                )}
 
                 {/* support LBC tab button */}
-                {getTabButton(ICONS.TRENDING, __('Boost'), TAB_BOOST)}
+                {!isTipOnly && (
+                  <TabSwitchButton icon={ICONS.TRENDING} label={__('Boost')} name={TAB_BOOST} {...tabButtonProps} />
+                )}
               </div>
             )}
 
@@ -280,9 +289,7 @@ function WalletSendTip(props: Props) {
                   <div className="confirm__label">{__('To --[the tip recipient]--')}</div>
                   <div className="confirm__value">{channelName || title}</div>
                   <div className="confirm__label">{__('From --[the tip sender]--')}</div>
-                  <div className="confirm__value">
-                    {activeChannelClaim && !incognito ? activeChannelClaim.name : __('Anonymous')}
-                  </div>
+                  <div className="confirm__value">{(!incognito && activeChannelName) || __('Anonymous')}</div>
                   <div className="confirm__label">{confirmLabel}</div>
                   <div className="confirm__value">
                     {activeTab === TAB_FIAT ? (
@@ -306,7 +313,7 @@ function WalletSendTip(props: Props) {
               <WalletTipAmountSelector
                 setTipError={setTipError}
                 tipError={tipError}
-                claim={claim}
+                uri={uri}
                 activeTab={activeTab === TAB_BOOST ? TAB_LBC : activeTab}
                 amount={tipAmount}
                 onChange={(amount) => setTipAmount(amount)}
@@ -366,4 +373,29 @@ function WalletSendTip(props: Props) {
   );
 }
 
-export default WalletSendTip;
+type TabButtonProps = {
+  icon: string,
+  label: string,
+  name: string,
+  isOnConfirmationPage: boolean,
+  activeTab: string,
+  setActiveTab: (string) => void,
+};
+
+const TabSwitchButton = (tabButtonProps: TabButtonProps) => {
+  const { icon, label, name, isOnConfirmationPage, activeTab, setActiveTab } = tabButtonProps;
+  return (
+    <Button
+      key={name}
+      icon={icon}
+      label={label}
+      button="alt"
+      onClick={() => {
+        const tipInputElement = document.getElementById('tip-input');
+        if (tipInputElement) tipInputElement.focus();
+        if (!isOnConfirmationPage) setActiveTab(name);
+      }}
+      className={classnames('button-toggle', { 'button-toggle--active': activeTab === name })}
+    />
+  );
+};

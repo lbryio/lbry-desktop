@@ -4,19 +4,29 @@ import { Modal } from 'modal/modal';
 import SendTip from 'component/walletSendTip';
 
 type Props = {
-  closeModal: () => void,
   uri: string,
   claimIsMine: boolean,
   isSupport: boolean,
+  isTipOnly?: boolean,
+  hasSelectedTab?: string,
+  doHideModal: () => void,
+  setAmount?: (number) => void,
 };
 
 class ModalSendTip extends React.PureComponent<Props> {
   render() {
-    const { closeModal, uri, claimIsMine } = this.props;
+    const { uri, claimIsMine, isTipOnly, hasSelectedTab, doHideModal, setAmount } = this.props;
 
     return (
-      <Modal onAborted={closeModal} isOpen type="card">
-        <SendTip uri={uri} claimIsMine={claimIsMine} onCancel={closeModal} />
+      <Modal onAborted={doHideModal} isOpen type="card">
+        <SendTip
+          uri={uri}
+          claimIsMine={claimIsMine}
+          onCancel={doHideModal}
+          isTipOnly={isTipOnly}
+          hasSelectedTab={hasSelectedTab}
+          setAmount={setAmount}
+        />
       </Modal>
     );
   }
