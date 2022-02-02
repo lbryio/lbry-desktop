@@ -272,8 +272,8 @@ export class FormField extends React.PureComponent<Props> {
                 </React.Suspense>
               )}
 
-              <div className="form-field__textarea-info">
-                {!noEmojis && openEmoteMenu && (
+              {!noEmojis && openEmoteMenu && (
+                <div className="form-field__textarea-info">
                   <Button
                     type="alt"
                     className="button--file-action"
@@ -282,8 +282,8 @@ export class FormField extends React.PureComponent<Props> {
                     icon={ICONS.EMOJI}
                     iconSize={20}
                   />
-                )}
-              </div>
+                </div>
+              )}
             </fieldset-section>
           );
         default:

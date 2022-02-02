@@ -253,7 +253,7 @@ function CommentMenuList(props: Props) {
         </MenuItem>
       )}
 
-      {isPinned && (
+      {isPinned && isLiveComment && (
         <MenuItem className="comment__menu-option menu__link" onSelect={handleDismissPin}>
           <Icon aria-hidden icon={ICONS.DISMISS_ALL} />
           {__('Dismiss Pin')}

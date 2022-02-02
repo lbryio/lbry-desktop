@@ -297,7 +297,6 @@ export default function LivestreamChatLayout(props: Props) {
                     key={pinnedComment.comment_id}
                     uri={uri}
                     pushMention={setMention}
-                    handleDismissPin={() => setShowPinned(false)}
                   />
 
                   <Button

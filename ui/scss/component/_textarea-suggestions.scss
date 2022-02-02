@@ -25,9 +25,19 @@
     font-size: var(--font-xsmall) !important;
     flex-wrap: nowrap !important;
     color: var(--color-text) !important;
+    padding: 0px 9px !important;
 
     textarea {
       border: none;
+      margin: 9px 0px;
+    }
+
+    button:not(:first-of-type):not(:last-of-type) {
+      margin: 0px var(--spacing-xxs);
+    }
+
+    button + div {
+      margin-left: var(--spacing-xxs);
     }
 
     .button--primary {
@@ -52,12 +62,12 @@
   box-shadow: var(--card-box-shadow);
   color: var(--color-text) !important;
 
-  .textareaSuggestions__group {
+  .textarea-suggestions__group {
     &:last-child hr {
       display: none;
     }
 
-    .textareaSuggestions__label {
+    .textarea-suggestions__group-label {
       @extend .wunderbar__label;
     }
 
@@ -97,23 +107,23 @@
     }
   }
 
-  .textareaSuggestion__label {
+  .textarea-suggestion__label {
     @extend .wunderbar__suggestion-label;
     margin-left: var(--spacing-m);
     display: block;
     position: relative;
 
-    .textareaSuggestion__title {
+    .textarea-suggestion__title {
       @extend .wunderbar__suggestion-title;
     }
 
-    .textareaSuggestion__value {
+    .textarea-suggestion__value {
       @extend .wunderbar__suggestion-name;
     }
   }
 }
 
-.textareaSuggestions__topSeparator {
+.textarea-suggestions__separator {
   @extend .wunderbar__top-separator;
 }
 

@@ -484,8 +484,8 @@ export function CommentCreate(props: Props) {
             disabled={isFetchingChannels || disableInput}
             isLivestream={isLivestream}
             label={
-              <div className="commentCreate__labelWrapper">
-                <span className="commentCreate__label">
+              <div className="comment-create__label-wrapper">
+                <span className="comment-create__label">
                   {(isReply ? __('Replying as') : isLivestream ? __('Chat as') : __('Comment as')) + ' '}
                 </span>
                 <SelectChannel tiny />

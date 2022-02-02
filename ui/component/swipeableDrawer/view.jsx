@@ -42,29 +42,18 @@ export default function SwipeableDrawer(props: Props) {
     }
   }, [coverHeight, mobilePlayerDimensions, open]);
 
-  const DrawerGlobalStyles = () => (
-    <Global
-      styles={{
-        '.main-wrapper__inner--filepage': {
-          overflow: open ? 'hidden' : 'unset',
-          maxHeight: open ? '100vh' : 'unset',
-        },
-        '.MuiDrawer-root': {
-          top: `calc(${HEADER_HEIGHT_MOBILE}px + ${videoHeight}px) !important`,
-        },
-        '.MuiDrawer-root > .MuiPaper-root': {
-          overflow: 'visible',
-          color: 'var(--color-text)',
-          position: 'absolute',
-          height: `calc(100% - ${DRAWER_PULLER_HEIGHT}px)`,
-        },
-      }}
-    />
-  );
+  // Reset scroll position when opening: avoid broken position where
+  // the drawer is lower than the video
+  React.useEffect(() => {
+    if (open) {
+      const htmlEl = document.querySelector('html');
+      if (htmlEl) htmlEl.scrollTop = 0;
+    }
+  }, [open]);
 
   return (
     <>
-      <DrawerGlobalStyles />
+      <DrawerGlobalStyles open={open} videoHeight={videoHeight} />
 
       <MUIDrawer
         anchor="bottom"
@@ -89,6 +78,35 @@ export default function SwipeableDrawer(props: Props) {
     </>
   );
 }
+
+type GlobalStylesProps = {
+  open?: boolean,
+  videoHeight: number,
+};
+
+const DrawerGlobalStyles = (globalStylesProps: GlobalStylesProps) => {
+  const { open, videoHeight } = globalStylesProps;
+
+  return (
+    <Global
+      styles={{
+        '.main-wrapper__inner--filepage': {
+          overflow: open ? 'hidden' : 'unset',
+          maxHeight: open ? '100vh' : 'unset',
+        },
+        '.main-wrapper .MuiDrawer-root': {
+          top: `calc(${HEADER_HEIGHT_MOBILE}px + ${videoHeight}px) !important`,
+        },
+        '.main-wrapper .MuiDrawer-root > .MuiPaper-root': {
+          overflow: 'visible',
+          color: 'var(--color-text)',
+          position: 'absolute',
+          height: `calc(100% - ${DRAWER_PULLER_HEIGHT}px)`,
+        },
+      }}
+    />
+  );
+};
 
 type PullerProps = {
   theme: string,

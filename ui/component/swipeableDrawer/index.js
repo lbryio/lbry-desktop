@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import LivestreamLayout from './view';
+import SwipeableDrawer from './view';
 import { selectTheme } from 'redux/selectors/settings';
 import { selectMobilePlayerDimensions } from 'redux/selectors/app';
 
@@ -8,4 +8,4 @@ const select = (state) => ({
   mobilePlayerDimensions: selectMobilePlayerDimensions(state),
 });
 
-export default connect(select)(LivestreamLayout);
+export default connect(select)(SwipeableDrawer);

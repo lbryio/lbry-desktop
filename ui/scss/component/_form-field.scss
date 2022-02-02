@@ -480,6 +480,12 @@ fieldset-group {
   @media (min-width: $breakpoint-small) {
     column-count: 2;
   }
+
+  @media (max-width: $breakpoint-small) {
+    span {
+      font-size: var(--font-xxsmall);
+    }
+  }
 }
 
 .form-field__quick-action {

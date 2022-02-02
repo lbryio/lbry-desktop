@@ -4,7 +4,6 @@ import { doSetMentionSearchResults } from 'redux/actions/search';
 import { makeSelectWinningUriForQuery } from 'redux/selectors/search';
 import { MAX_LIVESTREAM_COMMENTS } from 'constants/livestream';
 import { selectChannelMentionData } from 'redux/selectors/comments';
-import { selectShowMatureContent } from 'redux/selectors/settings';
 import { withRouter } from 'react-router';
 import TextareaWithSuggestions from './view';
 
@@ -32,13 +31,12 @@ const select = (state, props) => {
     commentorUris,
     hasNewResolvedResults,
     searchQuery: query,
-    showMature: selectShowMatureContent(state),
   };
 };
 
-const perform = (dispatch) => ({
-  doResolveUris: (uris) => dispatch(doResolveUris(uris, true)),
-  doSetMentionSearchResults: (query, uris) => dispatch(doSetMentionSearchResults(query, uris)),
-});
+const perform = {
+  doResolveUris,
+  doSetMentionSearchResults,
+};
 
 export default withRouter(connect(select, perform)(TextareaWithSuggestions));

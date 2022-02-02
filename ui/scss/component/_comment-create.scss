@@ -23,6 +23,15 @@ $thumbnailWidthSmall: 1rem;
   }
 }
 
+@media (max-width: $breakpoint-small) {
+  .commentCreate + .empty__wrap {
+    p {
+      font-size: var(--font-small);
+      text-align: center;
+    }
+  }
+}
+
 .commentCreate--reply {
   margin-top: var(--spacing-m);
   position: relative;
@@ -41,7 +50,7 @@ $thumbnailWidthSmall: 1rem;
   padding-bottom: 0;
 }
 
-.commentCreate__labelWrapper {
+.comment-create__label-wrapper {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -49,14 +58,18 @@ $thumbnailWidthSmall: 1rem;
   flex-wrap: wrap;
   width: 100%;
 
-  .commentCreate__label {
+  .comment-create__label {
     white-space: nowrap;
     margin-right: var(--spacing-xs);
   }
 
-  @media (min-width: $breakpoint-small) {
+  fieldset-section {
+    max-width: 10rem;
+  }
+
+  @media (max-width: $breakpoint-small) {
     fieldset-section {
-      max-width: 10rem;
+      font-size: var(--font-xxsmall);
     }
   }
 }
