@@ -15,6 +15,9 @@ import CollectionContent from 'component/collectionContentSidebar';
 import Button from 'component/button';
 import I18nMessage from 'component/i18nMessage';
 import Empty from 'component/common/empty';
+import SwipeableDrawer from 'component/swipeableDrawer';
+import * as ICONS from 'constants/icons';
+import { useIsMobile } from 'effects/use-screensize';
 
 const CommentsList = lazyImport(() => import('component/commentsList' /* webpackChunkName: "comments" */));
 const PostViewer = lazyImport(() => import('component/postViewer' /* webpackChunkName: "postViewer" */));
@@ -65,6 +68,12 @@ export default function FilePage(props: Props) {
     clearPosition,
   } = props;
 
+  const isMobile = useIsMobile();
+
+  const [showComments, setShowComments] = React.useState(undefined);
+  const [commentListTitle, setCommentListTitle] = React.useState();
+
+  const drawerWasToggled = showComments !== undefined;
   const cost = costInfo ? costInfo.cost : null;
   const hasFileInfo = fileInfo !== undefined;
   const isMarkdown = renderMode === RENDER_MODES.MARKDOWN;
@@ -177,6 +186,12 @@ export default function FilePage(props: Props) {
     );
   }
 
+  const commentsListElement = commentsDisabled ? (
+    <Empty text={__('The creator of this content has disabled comments.')} />
+  ) : (
+    <CommentsList uri={uri} linkedCommentId={linkedCommentId} setCommentListTitle={setCommentListTitle} />
+  );
+
   return (
     <Page className="file-page" filePage isMarkdown={isMarkdown}>
       <div className={classnames('section card-stack', `file-page__${renderMode}`)}>
@@ -200,14 +215,29 @@ export default function FilePage(props: Props) {
 
               {RENDER_MODES.FLOATING_MODES.includes(renderMode) && <FileTitleSection uri={uri} />}
 
-              {commentsDisabled ? (
-                <Empty text={__('The creator of this content has disabled comments.')} />
+              {isMobile ? (
+                <SwipeableDrawer
+                  open={Boolean(showComments)}
+                  toggleDrawer={() => setShowComments(!showComments)}
+                  title={commentListTitle}
+                  didInitialDisplay={drawerWasToggled}
+                >
+                  {commentsListElement}
+                </SwipeableDrawer>
               ) : (
-                <React.Suspense fallback={null}>
-                  <CommentsList uri={uri} linkedCommentId={linkedCommentId} />
-                </React.Suspense>
+                commentsListElement
               )}
             </>
+
+            {isMobile && (
+              <Button
+                className="swipeable-drawer__expand-button"
+                label={commentListTitle}
+                button="primary"
+                icon={ICONS.CHAT}
+                onClick={() => setShowComments(!showComments)}
+              />
+            )}
 
             {!isMarkdown && videoTheaterMode && <RightSideContent {...rightSideProps} />}
           </div>

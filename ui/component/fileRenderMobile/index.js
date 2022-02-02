@@ -8,10 +8,12 @@ import {
 import { selectPlayingUri, makeSelectFileRenderModeForUri } from 'redux/selectors/content';
 import { selectCostInfoForUri } from 'lbryinc';
 import { doPlayUri } from 'redux/actions/content';
+import { doSetMobilePlayerDimensions } from 'redux/actions/app';
 import { withRouter } from 'react-router';
 import { getChannelIdFromClaim } from 'util/claim';
 import { selectActiveLivestreamForChannel } from 'redux/selectors/livestream';
 import FileRenderMobile from './view';
+import { selectMobilePlayerDimensions } from 'redux/selectors/app';
 
 const select = (state, props) => {
   const playingUri = selectPlayingUri(state);
@@ -34,11 +36,14 @@ const select = (state, props) => {
     activeLivestreamForChannel: channelClaimId && selectActiveLivestreamForChannel(state, channelClaimId),
     claimId,
     channelClaimId,
+    mobilePlayerDimensions: selectMobilePlayerDimensions(state),
+    playingUri,
   };
 };
 
 const perform = {
   doPlayUri,
+  doSetMobilePlayerDimensions,
 };
 
 export default withRouter(connect(select, perform)(FileRenderMobile));

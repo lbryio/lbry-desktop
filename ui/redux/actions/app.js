@@ -736,3 +736,8 @@ export function doSetIncognito(incognitoEnabled) {
     },
   };
 }
+
+export const doSetMobilePlayerDimensions = (height, width) => ({
+  type: ACTIONS.SET_MOBILE_PLAYER_DIMENSIONS,
+  data: { heightWidth: { height, width } },
+});

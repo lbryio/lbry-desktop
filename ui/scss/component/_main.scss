@@ -36,6 +36,11 @@
 
 .main-wrapper__inner--filepage {
   padding: 0;
+
+  @media (max-width: $breakpoint-small) {
+    margin-top: 0px;
+    padding-top: var(--header-height-mobile);
+  }
 }
 
 .main-wrapper__inner--theater-mode {
@@ -227,8 +232,12 @@
 
     .card {
       border-radius: 0;
-      margin-bottom: var(--spacing-xxs) !important;
+      margin-bottom: 0px !important;
       padding: 0;
+    }
+
+    .file-page__recommended {
+      margin-top: var(--spacing-xxs) !important;
     }
   }
 }
@@ -284,13 +293,13 @@
     margin-top: var(--spacing-m);
     margin-bottom: var(--spacing-m);
 
-    @media (min-width: $breakpoint-large + 300px) {
+    @media (min-width: ($breakpoint-large + 300px)) {
       max-width: calc(var(--page-max-width--filepage) / 1.25);
       margin-left: auto;
       margin-right: auto;
     }
 
-    @media (min-width: $breakpoint-medium) and (max-width: $breakpoint-large + 300px) {
+    @media (min-width: $breakpoint-medium) and (max-width: ($breakpoint-large + 300px)) {
       max-width: calc(100vw - var(--livestream-comments-width) - var(--spacing-m) * 3);
       margin-left: var(--spacing-m);
       margin-right: var(--spacing-m);

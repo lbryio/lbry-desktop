@@ -14,6 +14,7 @@ import { selectCostInfoForUri, doFetchCostInfoForUri } from 'lbryinc';
 import { selectShowMatureContent, selectClientSetting } from 'redux/selectors/settings';
 import { makeSelectFileRenderModeForUri, makeSelectContentPositionForUri } from 'redux/selectors/content';
 import { DISABLE_COMMENTS_TAG } from 'constants/tags';
+import { doSetMobilePlayerDimensions } from 'redux/actions/app';
 
 import FilePage from './view';
 
@@ -45,6 +46,7 @@ const perform = {
   doSetContentHistoryItem,
   doSetPrimaryUri,
   clearPosition,
+  doSetMobilePlayerDimensions,
 };
 
 export default withRouter(connect(select, perform)(FilePage));

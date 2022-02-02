@@ -4,6 +4,7 @@
 .*/node_modules/react-plastic/.*
 .*/node_modules/raf-schd/.*
 .*/node_modules/react-beautiful-dnd/.*
+.*/node_modules/@emotion/.*
 
 [include]
 

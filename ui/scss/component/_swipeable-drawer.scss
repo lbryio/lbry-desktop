@@ -1,0 +1,40 @@
+.swipeable-drawer__header {
+  position: absolute;
+  visibility: visible;
+  right: 0;
+  left: 0;
+  background-color: var(--color-card-background);
+
+  .button--close {
+    top: 2px !important;
+    right: 2px !important;
+  }
+}
+
+.swipeable-drawer__puller {
+  width: 30px;
+  height: 6px;
+  border-radius: 3px;
+  position: absolute;
+  top: 8px;
+  left: calc(50% - 15px);
+}
+
+.swipeable-drawer__expand-button {
+  width: 100%;
+  margin: var(--spacing-xxs) 0;
+  border-radius: 0;
+}
+
+.swipeable-drawer__expand {
+  border-top: 1px solid var(--color-border);
+  position: fixed;
+  background-color: var(--color-card-background);
+  visibility: visible;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}

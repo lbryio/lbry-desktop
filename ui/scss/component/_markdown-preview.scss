@@ -68,6 +68,8 @@
 
     @media (max-width: $breakpoint-small) {
       font-size: var(--font-xsmall);
+      word-wrap: break-word;
+      overflow: hidden;
 
       a {
         .button__content {

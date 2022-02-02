@@ -13,6 +13,15 @@
 .card--enable-overflow {
   overflow: visible;
   margin-bottom: var(--spacing-m);
+
+  @media (max-width: $breakpoint-small) {
+    overflow-y: scroll;
+    height: 100%;
+
+    .card__main-actions {
+      margin-top: 0px !important;
+    }
+  }
 }
 
 .card--disabled {

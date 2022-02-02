@@ -11,6 +11,7 @@ import LivestreamIframeRender from 'component/livestreamLayout/iframe-render';
 
 const PRIMARY_PLAYER_WRAPPER_CLASS = 'file-page__video-container';
 export const INLINE_PLAYER_WRAPPER_CLASS = 'inline-player__wrapper';
+export const HEADER_HEIGHT_MOBILE = 56;
 
 // ****************************************************************************
 // ****************************************************************************
@@ -27,7 +28,10 @@ type Props = {
   previousListUri: string,
   activeLivestreamForChannel?: any,
   channelClaimId?: any,
+  playingUri?: PlayingUri,
+  mobilePlayerDimensions?: any,
   doPlayUri: (string) => void,
+  doSetMobilePlayerDimensions: (height: number, width: number) => void,
 };
 
 export default function FileRenderMobile(props: Props) {
@@ -43,7 +47,10 @@ export default function FileRenderMobile(props: Props) {
     previousListUri,
     activeLivestreamForChannel,
     channelClaimId,
+    playingUri,
+    mobilePlayerDimensions,
     doPlayUri,
+    doSetMobilePlayerDimensions,
   } = props;
 
   const { push } = useHistory();
@@ -58,6 +65,7 @@ export default function FileRenderMobile(props: Props) {
   const canViewFile = isFree || claimWasPurchased;
   const isPlayable = RENDER_MODES.FLOATING_MODES.includes(renderMode) || activeLivestreamForChannel;
   const isReadyToPlay = isPlayable && streamingUrl;
+  const isCurrentMediaPlaying = playingUri && playingUri.uri === uri;
 
   const handleResize = React.useCallback(() => {
     const element = document.querySelector(`.${PRIMARY_PLAYER_WRAPPER_CLASS}`);
@@ -80,7 +88,11 @@ export default function FileRenderMobile(props: Props) {
 
     // $FlowFixMe
     setFileViewerRect({ ...objectRect });
-  }, []);
+
+    if (doSetMobilePlayerDimensions && (!mobilePlayerDimensions || mobilePlayerDimensions.height !== rect.height)) {
+      doSetMobilePlayerDimensions(rect.height, rect.width);
+    }
+  }, [doSetMobilePlayerDimensions, mobilePlayerDimensions]);
 
   // Initial resize, will place the player correctly above the cover when starts playing
   // (remember the URI here is from playingUri). The cover then keeps on the page and kind of serves as a placeholder
@@ -128,7 +140,13 @@ export default function FileRenderMobile(props: Props) {
     setPlayNextUrl(true);
   }, [doNavigate, doPlay, nextListUri, playNextUrl, previousListUri]);
 
-  if (!isPlayable || !uri || countdownCanceled || (collectionId && !canViewFile && !nextListUri)) {
+  if (
+    !isCurrentMediaPlaying ||
+    !isPlayable ||
+    !uri ||
+    countdownCanceled ||
+    (collectionId && !canViewFile && !nextListUri)
+  ) {
     return null;
   }
 
@@ -146,32 +164,28 @@ export default function FileRenderMobile(props: Props) {
       }
     >
       <div className="content__wrapper">
-        <React.Suspense fallback={<Loading />}>
-          {isCurrentClaimLive && channelClaimId ? (
-            <LivestreamIframeRender channelClaimId={channelClaimId} showLivestream mobileVersion />
-          ) : isReadyToPlay ? (
-            <FileRender uri={uri} />
-          ) : !canViewFile ? (
-            <div className="content__loading">
-              <AutoplayCountdown
-                nextRecommendedUri={nextListUri}
-                doNavigate={() => setDoNavigate(true)}
-                doReplay={() => doPlayUri(uri)}
-                doPrevious={() => {
-                  setPlayNextUrl(false);
-                  setDoNavigate(true);
-                }}
-                onCanceled={() => setCountdownCanceled(true)}
-                skipPaid
-              />
-            </div>
-          ) : (
-            <Loading />
-          )}
-        </React.Suspense>
+        {isCurrentClaimLive && channelClaimId ? (
+          <LivestreamIframeRender channelClaimId={channelClaimId} showLivestream mobileVersion />
+        ) : isReadyToPlay ? (
+          <FileRender uri={uri} />
+        ) : !canViewFile ? (
+          <div className="content__loading">
+            <AutoplayCountdown
+              nextRecommendedUri={nextListUri}
+              doNavigate={() => setDoNavigate(true)}
+              doReplay={() => doPlayUri(uri)}
+              doPrevious={() => {
+                setPlayNextUrl(false);
+                setDoNavigate(true);
+              }}
+              onCanceled={() => setCountdownCanceled(true)}
+              skipPaid
+            />
+          </div>
+        ) : (
+          <LoadingScreen status={__('Loading')} />
+        )}
       </div>
     </div>
   );
 }
-
-const Loading = () => <LoadingScreen status={__('Loading')} />;

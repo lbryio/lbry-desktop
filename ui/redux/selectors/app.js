@@ -106,3 +106,5 @@ export const selectActiveChannelStakedLevel = (state) => {
 };
 
 export const selectIncognito = (state) => selectState(state).incognito;
+
+export const selectMobilePlayerDimensions = (state) => selectState(state).mobilePlayerDimensions;

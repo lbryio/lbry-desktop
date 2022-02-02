@@ -41,6 +41,7 @@ type Props = {
   pinnedComments: Array<Comment>,
   superChats: Array<Comment>,
   uri: string,
+  hideHeader?: boolean,
   doCommentList: (string, string, number, number) => void,
   doResolveUris: (Array<string>, boolean) => void,
   doSuperChatList: (string) => void,
@@ -55,6 +56,7 @@ export default function LivestreamChatLayout(props: Props) {
     pinnedComments,
     superChats: superChatsByAmount,
     uri,
+    hideHeader,
     doCommentList,
     doResolveUris,
     doSuperChatList,
@@ -242,60 +244,62 @@ export default function LivestreamChatLayout(props: Props) {
 
   return (
     <div className={classnames('card livestream__chat', { 'livestream__chat--popout': isPopoutWindow })}>
-      <div className="card__header--between livestreamDiscussion__header">
-        <div className="card__title-section--small livestreamDiscussion__title">
-          {__('Live Chat')}
+      {!hideHeader && (
+        <div className="card__header--between livestreamDiscussion__header">
+          <div className="card__title-section--small livestreamDiscussion__title">
+            {__('Live Chat')}
 
-          <Menu>
-            <MenuButton className="menu__button">
-              <Icon size={18} icon={ICONS.SETTINGS} />
-            </MenuButton>
+            <Menu>
+              <MenuButton className="menu__button">
+                <Icon size={18} icon={ICONS.SETTINGS} />
+              </MenuButton>
 
-            <MenuList className="menu__list">
-              <MenuItem className="comment__menu-option" onSelect={TOGGLE_TIMESTAMP_OPACITY}>
-                <span className="menu__link">
-                  <Icon aria-hidden icon={ICONS.TIME} />
-                  {__('Toggle Timestamps')}
-                </span>
-              </MenuItem>
+              <MenuList className="menu__list">
+                <MenuItem className="comment__menu-option" onSelect={TOGGLE_TIMESTAMP_OPACITY}>
+                  <span className="menu__link">
+                    <Icon aria-hidden icon={ICONS.TIME} />
+                    {__('Toggle Timestamps')}
+                  </span>
+                </MenuItem>
 
-              <MenuItem className="comment__menu-option" onSelect={() => setChatHidden(true)}>
-                <span className="menu__link">
-                  <Icon aria-hidden icon={ICONS.EYE} />
-                  {__('Hide Chat')}
-                </span>
-              </MenuItem>
+                <MenuItem className="comment__menu-option" onSelect={() => setChatHidden(true)}>
+                  <span className="menu__link">
+                    <Icon aria-hidden icon={ICONS.EYE} />
+                    {__('Hide Chat')}
+                  </span>
+                </MenuItem>
 
-              {!isPopoutWindow && !isMobile && (
+                {!isPopoutWindow && !isMobile && (
+                  <>
+                    <MenuItem className="comment__menu-option" onSelect={handlePopout}>
+                      <span className="menu__link">
+                        <Icon aria-hidden icon={ICONS.EXTERNAL} />
+                        {__('Popout Chat')}
+                      </span>
+                    </MenuItem>
+                  </>
+                )}
+              </MenuList>
+            </Menu>
+          </div>
+
+          {superChatsByAmount && (
+            <div className="recommended-content__toggles">
+              {/* the superchats in chronological order button */}
+              {chatContentToggle(VIEW_MODES.CHAT, __('Chat'))}
+
+              {/* the button to show superchats listed by most to least support amount */}
+              {chatContentToggle(
+                VIEW_MODES.SUPERCHAT,
                 <>
-                  <MenuItem className="comment__menu-option" onSelect={handlePopout}>
-                    <span className="menu__link">
-                      <Icon aria-hidden icon={ICONS.EXTERNAL} />
-                      {__('Popout Chat')}
-                    </span>
-                  </MenuItem>
+                  <CreditAmount amount={superChatsLBCAmount || 0} size={8} /> /
+                  <CreditAmount amount={superChatsFiatAmount || 0} size={8} isFiat /> {__('Tipped')}
                 </>
               )}
-            </MenuList>
-          </Menu>
+            </div>
+          )}
         </div>
-
-        {superChatsByAmount && (
-          <div className="recommended-content__toggles">
-            {/* the superchats in chronological order button */}
-            {chatContentToggle(VIEW_MODES.CHAT, __('Chat'))}
-
-            {/* the button to show superchats listed by most to least support amount */}
-            {chatContentToggle(
-              VIEW_MODES.SUPERCHAT,
-              <>
-                <CreditAmount amount={superChatsLBCAmount || 0} size={8} /> /
-                <CreditAmount amount={superChatsFiatAmount || 0} size={8} isFiat /> {__('Tipped')}
-              </>
-            )}
-          </div>
-        )}
-      </div>
+      )}
 
       <div ref={commentsRef} className="livestreamComments__wrapper">
         {viewMode === VIEW_MODES.CHAT && superChatsByAmount && (

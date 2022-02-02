@@ -7,6 +7,9 @@ import React from 'react';
 import { PRIMARY_PLAYER_WRAPPER_CLASS } from 'page/file/view';
 import FileRenderInitiator from 'component/fileRenderInitiator';
 import LivestreamIframeRender from './iframe-render';
+import Button from 'component/button';
+import * as ICONS from 'constants/icons';
+import SwipeableDrawer from 'component/swipeableDrawer';
 
 const LivestreamChatLayout = lazyImport(() => import('component/livestreamChatLayout' /* webpackChunkName: "chat" */));
 
@@ -34,6 +37,9 @@ export default function LivestreamLayout(props: Props) {
   } = props;
 
   const isMobile = useIsMobile();
+
+  const [showChat, setShowChat] = React.useState(undefined);
+  const drawerWasToggled = showChat !== undefined;
 
   if (!claim || !claim.signing_channel) return null;
 
@@ -85,8 +91,25 @@ export default function LivestreamLayout(props: Props) {
 
         {isMobile && !hideComments && (
           <React.Suspense fallback={null}>
-            <LivestreamChatLayout uri={uri} />
+            <SwipeableDrawer
+              open={Boolean(showChat)}
+              toggleDrawer={() => setShowChat(!showChat)}
+              title={__('Live Chat')}
+              didInitialDisplay={drawerWasToggled}
+            >
+              <LivestreamChatLayout uri={uri} hideHeader />
+            </SwipeableDrawer>
           </React.Suspense>
+        )}
+
+        {isMobile && (
+          <Button
+            className="swipeable-drawer__expand-button"
+            label="Open Live Chat"
+            button="primary"
+            icon={ICONS.CHAT}
+            onClick={() => setShowChat(!showChat)}
+          />
         )}
 
         <FileTitleSection uri={uri} livestream isLive={showLivestream} />

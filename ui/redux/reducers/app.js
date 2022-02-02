@@ -324,6 +324,13 @@ reducers[ACTIONS.SET_INCOGNITO] = (state, action) => {
   };
 };
 
+reducers[ACTIONS.SET_MOBILE_PLAYER_DIMENSIONS] = (state, action) => {
+  return {
+    ...state,
+    mobilePlayerDimensions: action.data.heightWidth,
+  };
+};
+
 reducers[ACTIONS.USER_STATE_POPULATE] = (state, action) => {
   const { welcomeVersion, allowAnalytics } = action.data;
   return {
