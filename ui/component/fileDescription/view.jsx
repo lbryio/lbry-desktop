@@ -10,8 +10,6 @@ import Button from 'component/button';
 import LbcSymbol from 'component/common/lbc-symbol';
 import FileDetails from 'component/fileDetails';
 import FileValues from 'component/fileValues';
-import { useIsMobile } from 'effects/use-screensize';
-
 type Props = {
   uri: string,
   expandOverride: boolean,
@@ -27,8 +25,6 @@ type Props = {
 
 export default function FileDescription(props: Props) {
   const { uri, description, amount, hasSupport, isEmpty, doOpenModal, claimIsMine, expandOverride } = props;
-
-  const isMobile = useIsMobile();
 
   const [expanded, setExpanded] = React.useState(false);
   const [showCreditDetails, setShowCreditDetails] = React.useState(false);
@@ -47,13 +43,11 @@ export default function FileDescription(props: Props) {
           'media__info-text--expanded': expanded,
         })}
       >
-        {isMobile && <ClaimTags uri={uri} type="large" />}
-
         <div className="mediaInfo__description">
           {description && (
             <MarkdownPreview className="markdown-preview--description" content={description} simpleLinks />
           )}
-          {!isMobile && <ClaimTags uri={uri} type="large" />}
+          <ClaimTags uri={uri} type="large" />
           <FileDetails uri={uri} />
         </div>
       </div>

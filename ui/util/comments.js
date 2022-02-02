@@ -108,3 +108,12 @@ export function getStickerUrl(comment: string) {
   const stickerFromComment = parseSticker(comment);
   return stickerFromComment && stickerFromComment.url;
 }
+
+export function getCommentsListTitle(totalComments: number) {
+  const title =
+    (totalComments === 0 && __('Leave a comment')) ||
+    (totalComments === 1 && __('1 comment')) ||
+    __('%total_comments% comments', { total_comments: totalComments });
+
+  return title;
+}

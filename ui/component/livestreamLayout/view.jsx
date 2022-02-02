@@ -1,6 +1,7 @@
 // @flow
 import { lazyImport } from 'util/lazyImport';
 import { useIsMobile } from 'effects/use-screensize';
+import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import FileTitleSection from 'component/fileTitleSection';
 import LivestreamLink from 'component/livestreamLink';
 import React from 'react';
@@ -10,8 +11,17 @@ import LivestreamIframeRender from './iframe-render';
 import Button from 'component/button';
 import * as ICONS from 'constants/icons';
 import SwipeableDrawer from 'component/swipeableDrawer';
+import LivestreamMenu from 'component/livestreamChatLayout/livestream-menu';
+import Icon from 'component/common/icon';
+import CreditAmount from 'component/common/credit-amount';
+import { getTipValues } from 'util/livestream';
 
 const LivestreamChatLayout = lazyImport(() => import('component/livestreamChatLayout' /* webpackChunkName: "chat" */));
+
+const VIEW_MODES = {
+  CHAT: 'chat',
+  SUPERCHAT: 'sc',
+};
 
 type Props = {
   activeStreamUri: boolean | string,
@@ -22,6 +32,7 @@ type Props = {
   showLivestream: boolean,
   showScheduledInfo: boolean,
   uri: string,
+  superChats: Array<Comment>,
 };
 
 export default function LivestreamLayout(props: Props) {
@@ -34,16 +45,43 @@ export default function LivestreamLayout(props: Props) {
     showLivestream,
     showScheduledInfo,
     uri,
+    superChats,
   } = props;
 
   const isMobile = useIsMobile();
 
   const [showChat, setShowChat] = React.useState(undefined);
-  const drawerWasToggled = showChat !== undefined;
+  const [superchatsHidden, setSuperchatsHidden] = React.useState(false);
+  const [chatViewMode, setChatViewMode] = React.useState(VIEW_MODES.CHAT);
 
   if (!claim || !claim.signing_channel) return null;
 
   const { name: channelName, claim_id: channelClaimId } = claim.signing_channel;
+  const { superChatsFiatAmount, superChatsLBCAmount } = getTipValues(superChats);
+
+  const ChatModeSelector = () => (
+    <Menu>
+      <MenuButton>
+        <span className="swipeable-drawer__title-menu">
+          {chatViewMode === VIEW_MODES.CHAT ? __('Live Chat') : __('Super Chats')}
+          <Icon icon={ICONS.DOWN} />
+        </span>
+      </MenuButton>
+
+      <MenuList className="menu__list--header">
+        <MenuItem className="menu__link" onSelect={() => setChatViewMode(VIEW_MODES.CHAT)}>
+          {__('Live Chat')}
+        </MenuItem>
+
+        <MenuItem className="menu__link" onSelect={() => setChatViewMode(VIEW_MODES.SUPERCHAT)}>
+          <div className="recommended-content__toggles">
+            <CreditAmount amount={superChatsLBCAmount || 0} size={8} /> /
+            <CreditAmount amount={superChatsFiatAmount || 0} size={8} isFiat /> {__('Tipped')}
+          </div>
+        </MenuItem>
+      </MenuList>
+    </Menu>
+  );
 
   return (
     <>
@@ -94,10 +132,21 @@ export default function LivestreamLayout(props: Props) {
             <SwipeableDrawer
               open={Boolean(showChat)}
               toggleDrawer={() => setShowChat(!showChat)}
-              title={__('Live Chat')}
-              didInitialDisplay={drawerWasToggled}
+              title={<ChatModeSelector />}
+              actions={
+                <LivestreamMenu
+                  noSuperchats={!superChats || superChats.length === 0}
+                  superchatsHidden={superchatsHidden}
+                  toggleSuperchats={() => setSuperchatsHidden(!superchatsHidden)}
+                />
+              }
             >
-              <LivestreamChatLayout uri={uri} hideHeader />
+              <LivestreamChatLayout
+                uri={uri}
+                hideHeader
+                superchatsHidden={superchatsHidden}
+                customViewMode={chatViewMode}
+              />
             </SwipeableDrawer>
           </React.Suspense>
         )}

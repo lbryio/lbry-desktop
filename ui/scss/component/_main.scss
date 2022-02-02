@@ -87,11 +87,13 @@
   z-index: 0;
   margin-right: auto;
   margin-left: auto;
-  min-height: calc(100vh - var(--header-height));
+
+  @media (min-width: $breakpoint-small) {
+    min-height: calc(100vh - var(--header-height));
+  }
 
   @media (max-width: $breakpoint-small) {
     width: 100%;
-    min-height: calc(100vh - var(--header-height-mobile));
   }
 }
 
@@ -237,7 +239,7 @@
     }
 
     .file-page__recommended {
-      margin-top: var(--spacing-xxs) !important;
+      margin-top: 0px !important;
     }
   }
 }

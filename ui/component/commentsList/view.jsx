@@ -3,6 +3,7 @@ import { COMMENT_PAGE_SIZE_TOP_LEVEL, SORT_BY } from 'constants/comment';
 import { ENABLE_COMMENT_REACTIONS } from 'config';
 import { getChannelIdFromClaim } from 'util/claim';
 import { useIsMobile, useIsMediumScreen } from 'effects/use-screensize';
+import { getCommentsListTitle } from 'util/comments';
 import * as ICONS from 'constants/icons';
 import * as REACTION_TYPES from 'constants/reactions';
 import Button from 'component/button';
@@ -49,7 +50,6 @@ type Props = {
   commentsAreExpanded?: boolean,
   fetchReacts: (Array<string>) => Promise<any>,
   doResolveUris: (Array<string>) => void,
-  setCommentListTitle?: (string) => void,
   fetchTopLevelComments: (string, number, number, number) => void,
   fetchComment: (string) => void,
   resetComments: (string) => void,
@@ -78,7 +78,6 @@ function CommentList(props: Props) {
     commentsAreExpanded,
     fetchReacts,
     doResolveUris,
-    setCommentListTitle,
     fetchTopLevelComments,
     fetchComment,
     resetComments,
@@ -101,11 +100,7 @@ function CommentList(props: Props) {
   const isResolvingComments = topLevelComments && resolvedComments.length !== topLevelComments.length;
   const alreadyResolved = !isResolvingComments && resolvedComments.length !== 0;
   const canDisplayComments = commentsToDisplay && commentsToDisplay.length === topLevelComments.length;
-  const title =
-    (totalComments === 0 && __('Leave a comment')) ||
-    (totalComments === 1 && __('1 comment')) ||
-    __('%total_comments% comments', { total_comments: totalComments });
-  if (setCommentListTitle) setCommentListTitle(title);
+  const title = getCommentsListTitle(totalComments);
 
   // Display comments immediately if not fetching reactions
   // If not, wait to show comments until reactions are fetched

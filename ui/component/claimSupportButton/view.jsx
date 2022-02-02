@@ -21,10 +21,10 @@ export default function ClaimSupportButton(props: Props) {
   return disableSupport ? null : (
     <Tooltip title={__('Support this claim')} arrow={false}>
       <Button
-        button={!fileAction && 'alt'}
+        button={!fileAction ? 'alt' : undefined}
         className={classnames({ 'button--file-action': fileAction })}
         icon={ICONS.LBC}
-        iconSize={fileAction && 22}
+        iconSize={fileAction ? 22 : undefined}
         label={isRepost ? __('Support Repost') : __('Support --[button to support a claim]--')}
         requiresAuth
         onClick={() => doOpenModal(MODALS.SEND_TIP, { uri, isSupport: true })}

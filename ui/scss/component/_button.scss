@@ -756,3 +756,7 @@ svg + .button__label {
 .button--hash-id {
   @include font-mono;
 }
+
+.file-reaction__tooltip-inner {
+  margin: 0px !important;
+}

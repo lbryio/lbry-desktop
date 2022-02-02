@@ -2,29 +2,20 @@
 import 'scss/component/_livestream-chat.scss';
 
 import { formatLbryUrlForWeb } from 'util/url';
-import { Menu, MenuButton, MenuList, MenuItem } from '@reach/menu-button';
-import { useHistory } from 'react-router-dom';
 import { useIsMobile } from 'effects/use-screensize';
 import * as ICONS from 'constants/icons';
 import Button from 'component/button';
 import classnames from 'classnames';
 import CommentCreate from 'component/commentCreate';
 import CreditAmount from 'component/common/credit-amount';
-import Icon from 'component/common/icon';
 import LivestreamComment from 'component/livestreamComment';
 import LivestreamComments from 'component/livestreamComments';
 import LivestreamSuperchats from './livestream-superchats';
+import LivestreamMenu from './livestream-menu';
 import React from 'react';
 import Spinner from 'component/spinner';
 import Yrbl from 'component/yrbl';
-
-const IS_TIMESTAMP_VISIBLE = () =>
-  // $FlowFixMe
-  document.documentElement.style.getPropertyValue('--live-timestamp-opacity') === '0.5';
-
-const TOGGLE_TIMESTAMP_OPACITY = () =>
-  // $FlowFixMe
-  document.documentElement.style.setProperty('--live-timestamp-opacity', IS_TIMESTAMP_VISIBLE() ? '0' : '0.5');
+import { getTipValues } from 'util/livestream';
 
 const VIEW_MODES = {
   CHAT: 'chat',
@@ -42,6 +33,8 @@ type Props = {
   superChats: Array<Comment>,
   uri: string,
   hideHeader?: boolean,
+  superchatsHidden?: boolean,
+  customViewMode?: string,
   doCommentList: (string, string, number, number) => void,
   doResolveUris: (Array<string>, boolean) => void,
   doSuperChatList: (string) => void,
@@ -57,14 +50,12 @@ export default function LivestreamChatLayout(props: Props) {
     superChats: superChatsByAmount,
     uri,
     hideHeader,
+    superchatsHidden,
+    customViewMode,
     doCommentList,
     doResolveUris,
     doSuperChatList,
   } = props;
-
-  const {
-    location: { pathname },
-  } = useHistory();
 
   const isMobile = useIsMobile();
 
@@ -90,22 +81,7 @@ export default function LivestreamChatLayout(props: Props) {
   const commentsToDisplay = viewMode === VIEW_MODES.CHAT ? commentsByChronologicalOrder : superChatsByAmount;
   const commentsLength = commentsToDisplay && commentsToDisplay.length;
   const pinnedComment = pinnedComments.length > 0 ? pinnedComments[0] : null;
-
-  let superChatsChannelUrls = [];
-  let superChatsFiatAmount = 0;
-  let superChatsLBCAmount = 0;
-  if (superChatsByAmount) {
-    superChatsByAmount.forEach((superChat) => {
-      const { is_fiat: isFiat, support_amount: tipAmount, channel_url: uri } = superChat;
-
-      if (isFiat) {
-        superChatsFiatAmount = superChatsFiatAmount + tipAmount;
-      } else {
-        superChatsLBCAmount = superChatsLBCAmount + tipAmount;
-      }
-      superChatsChannelUrls.push(uri || '0');
-    });
-  }
+  const { superChatsChannelUrls, superChatsFiatAmount, superChatsLBCAmount } = getTipValues(superChatsByAmount);
 
   function toggleSuperChat() {
     if (superChatsChannelUrls && superChatsChannelUrls.length > 0) {
@@ -118,15 +94,11 @@ export default function LivestreamChatLayout(props: Props) {
     setViewMode(VIEW_MODES.SUPERCHAT);
   }
 
-  function handlePopout() {
-    const newWindow = window.open('/$/popout' + pathname, 'Popout Chat', 'height=700,width=400');
-
-    // Add function to newWindow when closed (either manually or from button component)
-    newWindow.onbeforeunload = () => setPopoutWindow(undefined);
-
-    if (window.focus) newWindow.focus();
-    setPopoutWindow(newWindow);
-  }
+  React.useEffect(() => {
+    if (customViewMode && customViewMode !== viewMode) {
+      setViewMode(customViewMode);
+    }
+  }, [customViewMode, viewMode]);
 
   React.useEffect(() => {
     if (claimId) {
@@ -249,38 +221,11 @@ export default function LivestreamChatLayout(props: Props) {
           <div className="card__title-section--small livestreamDiscussion__title">
             {__('Live Chat')}
 
-            <Menu>
-              <MenuButton className="menu__button">
-                <Icon size={18} icon={ICONS.SETTINGS} />
-              </MenuButton>
-
-              <MenuList className="menu__list">
-                <MenuItem className="comment__menu-option" onSelect={TOGGLE_TIMESTAMP_OPACITY}>
-                  <span className="menu__link">
-                    <Icon aria-hidden icon={ICONS.TIME} />
-                    {__('Toggle Timestamps')}
-                  </span>
-                </MenuItem>
-
-                <MenuItem className="comment__menu-option" onSelect={() => setChatHidden(true)}>
-                  <span className="menu__link">
-                    <Icon aria-hidden icon={ICONS.EYE} />
-                    {__('Hide Chat')}
-                  </span>
-                </MenuItem>
-
-                {!isPopoutWindow && !isMobile && (
-                  <>
-                    <MenuItem className="comment__menu-option" onSelect={handlePopout}>
-                      <span className="menu__link">
-                        <Icon aria-hidden icon={ICONS.EXTERNAL} />
-                        {__('Popout Chat')}
-                      </span>
-                    </MenuItem>
-                  </>
-                )}
-              </MenuList>
-            </Menu>
+            <LivestreamMenu
+              isPopoutWindow={isPopoutWindow}
+              hideChat={() => setChatHidden(true)}
+              setPopoutWindow={(v) => setPopoutWindow(v)}
+            />
           </div>
 
           {superChatsByAmount && (
@@ -302,28 +247,33 @@ export default function LivestreamChatLayout(props: Props) {
       )}
 
       <div ref={commentsRef} className="livestreamComments__wrapper">
-        {viewMode === VIEW_MODES.CHAT && superChatsByAmount && (
-          <LivestreamSuperchats superChats={superChatsByAmount} toggleSuperChat={toggleSuperChat} />
-        )}
+        <div className="livestream-comments__top-actions">
+          {viewMode === VIEW_MODES.CHAT && superChatsByAmount && !superchatsHidden && (
+            <LivestreamSuperchats superChats={superChatsByAmount} toggleSuperChat={toggleSuperChat} />
+          )}
 
-        {pinnedComment && showPinned && viewMode === VIEW_MODES.CHAT && (
-          <div className="livestreamPinned__wrapper">
-            <LivestreamComment
-              comment={pinnedComment}
-              key={pinnedComment.comment_id}
-              uri={uri}
-              pushMention={setMention}
-            />
+          {pinnedComment && showPinned && viewMode === VIEW_MODES.CHAT && (
+            <div className="livestreamPinned__wrapper">
+              <LivestreamComment
+                comment={pinnedComment}
+                key={pinnedComment.comment_id}
+                uri={uri}
+                pushMention={setMention}
+                handleDismissPin={() => setShowPinned(false)}
+              />
 
-            <Button
-              title={__('Dismiss pinned comment')}
-              button="inverse"
-              className="close-button"
-              onClick={() => setShowPinned(false)}
-              icon={ICONS.REMOVE}
-            />
-          </div>
-        )}
+              {!isMobile && (
+                <Button
+                  title={__('Dismiss pinned comment')}
+                  button="inverse"
+                  className="close-button"
+                  onClick={() => setShowPinned(false)}
+                  icon={ICONS.REMOVE}
+                />
+              )}
+            </div>
+          )}
+        </div>
 
         {viewMode === VIEW_MODES.SUPERCHAT && resolvingSuperChats ? (
           <div className="main--empty">

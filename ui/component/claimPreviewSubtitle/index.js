@@ -1,10 +1,11 @@
 import * as PAGES from 'constants/pages';
 import { connect } from 'react-redux';
-import { selectClaimForUri, makeSelectClaimIsPending, isStreamPlaceholderClaim } from 'redux/selectors/claims';
+import { selectClaimForUri, makeSelectClaimIsPending } from 'redux/selectors/claims';
 import { doClearPublish, doPrepareEdit } from 'redux/actions/publish';
 import { push } from 'connected-react-router';
 import ClaimPreviewSubtitle from './view';
 import { doFetchSubCount, selectSubCountForUri } from 'lbryinc';
+import { isStreamPlaceholderClaim } from 'util/claim';
 
 const select = (state, props) => {
   const claim = selectClaimForUri(state, props.uri);

@@ -13,6 +13,7 @@ import * as SETTINGS from 'constants/settings';
 import { selectCostInfoForUri, doFetchCostInfoForUri } from 'lbryinc';
 import { selectShowMatureContent, selectClientSetting } from 'redux/selectors/settings';
 import { makeSelectFileRenderModeForUri, makeSelectContentPositionForUri } from 'redux/selectors/content';
+import { makeSelectCommentsListTitleForUri } from 'redux/selectors/comments';
 import { DISABLE_COMMENTS_TAG } from 'constants/tags';
 import { doSetMobilePlayerDimensions } from 'redux/actions/app';
 
@@ -38,6 +39,7 @@ const select = (state, props) => {
     hasCollectionById: Boolean(makeSelectCollectionForId(collectionId)(state)),
     collectionId,
     position: makeSelectContentPositionForUri(uri)(state),
+    commentsListTitle: makeSelectCommentsListTitleForUri(uri)(state),
   };
 };
 

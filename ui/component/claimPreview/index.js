@@ -6,7 +6,6 @@ import {
   makeSelectClaimIsPending,
   makeSelectReflectingClaimForUri,
   makeSelectClaimWasPurchased,
-  isStreamPlaceholderClaim,
   selectTitleForUri,
   selectDateForUri,
 } from 'redux/selectors/claims';
@@ -20,7 +19,7 @@ import { selectIsActiveLivestreamForUri } from 'redux/selectors/livestream';
 import { selectLanguage, selectShowMatureContent } from 'redux/selectors/settings';
 import { makeSelectHasVisitedUri } from 'redux/selectors/content';
 import { selectIsSubscribedForUri } from 'redux/selectors/subscriptions';
-import { isClaimNsfw } from 'util/claim';
+import { isClaimNsfw, isStreamPlaceholderClaim } from 'util/claim';
 import ClaimPreview from './view';
 import formatMediaDuration from 'util/formatMediaDuration';
 

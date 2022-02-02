@@ -20,6 +20,31 @@
   left: calc(50% - 15px);
 }
 
+.swipeable-drawer__header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-s) var(--spacing-xxs);
+  font-size: var(--font-small);
+}
+
+.swipeable-drawer__title-menu {
+  display: flex;
+  align-items: center;
+
+  svg {
+    margin-left: var(--spacing-xxs);
+  }
+}
+
+.swipeable-drawer__header-actions {
+  display: flex;
+
+  button:not(:last-child) {
+    margin-right: var(--spacing-xxs);
+  }
+}
+
 .swipeable-drawer__expand-button {
   width: 100%;
   margin: var(--spacing-xxs) 0;

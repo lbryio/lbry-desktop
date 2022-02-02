@@ -30,6 +30,22 @@
   .channel-name {
     font-size: var(--font-xsmall);
   }
+
+  @media (max-width: $breakpoint-small) {
+    display: flex;
+    justify-content: space-between;
+
+    .livestreamComment__menu {
+      position: relative;
+      right: 0;
+      top: 0;
+    }
+
+    span,
+    p {
+      font-size: var(--font-xxsmall) !important;
+    }
+  }
 }
 
 .livestream__comment--mentioned {
@@ -42,6 +58,7 @@
 
 .livestream__comment--superchat {
   background-color: var(--color-card-background-highlighted);
+  display: unset;
 
   + .livestream__comment--superchat {
     margin-bottom: var(--spacing-xxs);
@@ -56,6 +73,10 @@
 
   .livestreamComment__info {
     margin-top: calc(var(--spacing-xxs) / 2);
+  }
+
+  .livestreamComment__menu {
+    position: absolute;
   }
 
   &::before {

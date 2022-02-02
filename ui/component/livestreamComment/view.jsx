@@ -26,10 +26,11 @@ type Props = {
   claim: StreamClaim,
   myChannelIds: ?Array<string>,
   stakedLevel: number,
+  handleDismissPin?: () => void,
 };
 
 export default function LivestreamComment(props: Props) {
-  const { comment, forceUpdate, uri, claim, myChannelIds, stakedLevel } = props;
+  const { comment, forceUpdate, uri, claim, myChannelIds, stakedLevel, handleDismissPin } = props;
 
   const {
     channel_url: authorUri,
@@ -137,6 +138,7 @@ export default function LivestreamComment(props: Props) {
             disableEdit
             disableRemove={comment.removed}
             isLiveComment
+            handleDismissPin={handleDismissPin}
           />
         </Menu>
       </div>

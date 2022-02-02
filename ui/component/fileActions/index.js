@@ -3,7 +3,6 @@ import {
   selectClaimIsMine,
   selectClaimForUri,
   selectHasChannels,
-  selectIsStreamPlaceholderForUri,
   makeSelectTagInClaimOrChannelForUri,
 } from 'redux/selectors/claims';
 import { makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
@@ -15,6 +14,7 @@ import { doOpenModal } from 'redux/actions/app';
 import FileActions from './view';
 import { makeSelectFileRenderModeForUri } from 'redux/selectors/content';
 import { DISABLE_DOWNLOAD_BUTTON_TAG } from 'constants/tags';
+import { isStreamPlaceholderClaim } from 'util/claim';
 
 const select = (state, props) => {
   const { uri } = props;
@@ -27,7 +27,7 @@ const select = (state, props) => {
     renderMode: makeSelectFileRenderModeForUri(uri)(state),
     costInfo: selectCostInfoForUri(state, uri),
     hasChannels: selectHasChannels(state),
-    isLivestreamClaim: selectIsStreamPlaceholderForUri(state, uri),
+    isLivestreamClaim: isStreamPlaceholderClaim(claim),
     streamingUrl: makeSelectStreamingUrlForUri(uri)(state),
     disableDownloadButton: makeSelectTagInClaimOrChannelForUri(props.uri, DISABLE_DOWNLOAD_BUTTON_TAG)(state),
   };

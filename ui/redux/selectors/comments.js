@@ -14,6 +14,7 @@ import {
 } from 'redux/selectors/claims';
 import { isClaimNsfw, getChannelFromClaim } from 'util/claim';
 import { selectSubscriptionUris } from 'redux/selectors/subscriptions';
+import { getCommentsListTitle } from 'util/comments';
 
 type State = { claims: any, comments: CommentsState };
 
@@ -338,7 +339,13 @@ export const makeSelectTotalReplyPagesForParentId = (parentId: string) =>
 export const makeSelectTotalCommentsCountForUri = (uri: string) =>
   createSelector(selectState, selectCommentsByUri, (state, byUri) => {
     const claimId = byUri[uri];
+
     return state.totalCommentsById[claimId] || 0;
+  });
+
+export const makeSelectCommentsListTitleForUri = (uri: string) =>
+  createSelector(makeSelectTotalCommentsCountForUri(uri), (totalComments) => {
+    return getCommentsListTitle(totalComments);
   });
 
 // Personal list

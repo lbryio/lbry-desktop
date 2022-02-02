@@ -5,7 +5,7 @@ import {
   makeSelectDislikeCountForUri,
 } from 'redux/selectors/reactions';
 import { doFetchReactions, doReactionLike, doReactionDislike } from 'redux/actions/reactions';
-import FileViewCount from './view';
+import FileReactions from './view';
 import { selectClaimForUri, selectIsStreamPlaceholderForUri } from 'redux/selectors/claims';
 
 const select = (state, props) => {
@@ -34,4 +34,4 @@ const perform = {
   doReactionDislike,
 };
 
-export default connect(select, perform)(FileViewCount);
+export default connect(select, perform)(FileReactions);

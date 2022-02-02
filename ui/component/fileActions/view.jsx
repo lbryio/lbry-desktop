@@ -119,7 +119,7 @@ export default function FileActions(props: Props) {
 
       <ClaimCollectionAddButton uri={uri} fileAction />
 
-      {!hideRepost && !isMobile && (
+      {!hideRepost && !isMobile && !isLivestreamClaim && (
         <Tooltip title={__('Repost')} arrow={false}>
           <Button
             button="alt"
@@ -183,7 +183,7 @@ export default function FileActions(props: Props) {
           <MenuList className="menu__list">
             {isMobile && (
               <>
-                {!hideRepost && (
+                {!hideRepost && !isLivestreamClaim && (
                   <MenuItem className="comment__menu-option" onSelect={handleRepostClick}>
                     <div className="menu__link">
                       <Icon aria-hidden icon={ICONS.REPOST} />

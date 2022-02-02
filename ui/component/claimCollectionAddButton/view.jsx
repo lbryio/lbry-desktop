@@ -24,10 +24,10 @@ export default function CollectionAddButton(props: Props) {
   return !isPlayable ? null : (
     <Tooltip title={__('Add this claim to a list')} arrow={false}>
       <Button
-        button={!fileAction && 'alt'}
+        button={!fileAction ? 'alt' : undefined}
         className={classnames({ 'button--file-action': fileAction })}
         icon={fileAction ? (!isSaved ? ICONS.ADD : ICONS.STACK) : ICONS.LIBRARY}
-        iconSize={fileAction && 22}
+        iconSize={fileAction ? 22 : undefined}
         label={uri ? (!isSaved ? __('Save') : __('Saved')) : __('New List')}
         requiresAuth
         onClick={(e) => {

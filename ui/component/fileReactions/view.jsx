@@ -138,7 +138,7 @@ const FileReaction = (reactionProps: ReactionProps) => {
 
   return (
     <Tooltip title={title} arrow={false}>
-      <div style={{ margin: '0' }}>
+      <div className="file-reaction__tooltip-inner">
         <Button
           requiresAuth
           authSrc="filereaction_like"

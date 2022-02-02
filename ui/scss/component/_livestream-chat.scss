@@ -169,13 +169,10 @@ $recent-msg-button__height: 2rem;
   }
 
   @media (max-width: $breakpoint-small) {
-    position: absolute;
     z-index: 1300;
     width: 100%;
     background-color: transparent;
     padding: 0px;
-    padding-left: var(--spacing-xxs);
-    padding-top: var(--spacing-xxs);
     border-bottom: none;
     scrollbar-width: 0px;
 
@@ -186,10 +183,23 @@ $recent-msg-button__height: 2rem;
   }
 }
 
+.livestream-comments__top-actions {
+  @media (max-width: $breakpoint-small) {
+    position: absolute;
+    display: grid;
+    padding: var(--spacing-xxs);
+    padding-right: var(--spacing-m);
+
+    > div:not(:first-child) {
+      margin-top: var(--spacing-xxs);
+    }
+  }
+}
+
 .livestreamPinned__wrapper {
+  @extend .livestreamSuperchats__wrapper;
   display: flex;
   flex-shrink: 0;
-  position: relative;
   padding: var(--spacing-s) var(--spacing-xs);
   border-bottom: 1px solid var(--color-border);
   font-size: var(--font-small);
@@ -212,6 +222,46 @@ $recent-msg-button__height: 2rem;
   @media (min-width: $breakpoint-small) {
     padding: var(--spacing-xs);
     width: var(--livestream-comments-width);
+  }
+
+  @media (max-width: $breakpoint-small) {
+    max-width: 100%;
+    padding: 0;
+    padding-left: var(--spacing-xxs);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--color-border);
+
+    .livestream__comment {
+      overflow: unset;
+
+      .livestreamComment__body {
+        margin: 0px;
+        width: 100%;
+
+        .markdown-preview {
+          p,
+          .button__label {
+            white-space: nowrap !important;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-break: break-all;
+          }
+
+          a {
+            pointer-events: none;
+          }
+        }
+      }
+    }
+
+    span {
+      font-size: var(--font-xxsmall) !important;
+    }
+
+    .close-button {
+      padding: 0;
+      padding-left: var(--spacing-xxs);
+    }
   }
 }
 
@@ -266,6 +316,10 @@ $recent-msg-button__height: 2rem;
   }
   &:nth-of-type(3) {
     background-color: var(--color-superchat-3);
+
+    @media (max-width: $breakpoint-small) {
+      background-color: #fff;
+    }
   }
 
   &:nth-of-type(-n + 3) {
@@ -280,6 +334,7 @@ $recent-msg-button__height: 2rem;
   }
 
   @media (max-width: $breakpoint-small) {
+    background-color: #fff;
     padding: 5px;
     padding-bottom: 2px;
 

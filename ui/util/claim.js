@@ -123,3 +123,7 @@ export function getClaimTitle(claim: ?Claim) {
   const metadata = getClaimMetadata(claim);
   return metadata && metadata.title;
 }
+
+export const isStreamPlaceholderClaim = (claim: ?StreamClaim) => {
+  return claim ? Boolean(claim.value_type === 'stream' && !claim.value.source) : false;
+};
