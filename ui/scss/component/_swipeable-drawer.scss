@@ -9,6 +9,10 @@
     top: 2px !important;
     right: 2px !important;
   }
+
+  span {
+    color: var(--color-text);
+  }
 }
 
 .swipeable-drawer__puller {
@@ -40,6 +44,10 @@
 .swipeable-drawer__header-actions {
   display: flex;
 
+  button {
+    padding: 0.3rem;
+  }
+
   button:not(:last-child) {
     margin-right: var(--spacing-xxs);
   }
@@ -48,7 +56,7 @@
 .swipeable-drawer__expand-button {
   width: 100%;
   margin: var(--spacing-xxs) 0;
-  border-radius: 0;
+  border-radius: 0 !important;
 }
 
 .swipeable-drawer__expand {

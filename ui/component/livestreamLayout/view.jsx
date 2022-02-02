@@ -1,4 +1,6 @@
 // @flow
+import 'scss/component/_swipeable-drawer.scss';
+
 import { lazyImport } from 'util/lazyImport';
 import { useIsMobile } from 'effects/use-screensize';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
@@ -8,9 +10,9 @@ import React from 'react';
 import { PRIMARY_PLAYER_WRAPPER_CLASS } from 'page/file/view';
 import FileRenderInitiator from 'component/fileRenderInitiator';
 import LivestreamIframeRender from './iframe-render';
-import Button from 'component/button';
 import * as ICONS from 'constants/icons';
 import SwipeableDrawer from 'component/swipeableDrawer';
+import { DrawerExpandButton } from 'component/swipeableDrawer/view';
 import LivestreamMenu from 'component/livestreamChatLayout/livestream-menu';
 import Icon from 'component/common/icon';
 import CreditAmount from 'component/common/credit-amount';
@@ -57,31 +59,6 @@ export default function LivestreamLayout(props: Props) {
   if (!claim || !claim.signing_channel) return null;
 
   const { name: channelName, claim_id: channelClaimId } = claim.signing_channel;
-  const { superChatsFiatAmount, superChatsLBCAmount } = getTipValues(superChats);
-
-  const ChatModeSelector = () => (
-    <Menu>
-      <MenuButton>
-        <span className="swipeable-drawer__title-menu">
-          {chatViewMode === VIEW_MODES.CHAT ? __('Live Chat') : __('Super Chats')}
-          <Icon icon={ICONS.DOWN} />
-        </span>
-      </MenuButton>
-
-      <MenuList className="menu__list--header">
-        <MenuItem className="menu__link" onSelect={() => setChatViewMode(VIEW_MODES.CHAT)}>
-          {__('Live Chat')}
-        </MenuItem>
-
-        <MenuItem className="menu__link" onSelect={() => setChatViewMode(VIEW_MODES.SUPERCHAT)}>
-          <div className="recommended-content__toggles">
-            <CreditAmount amount={superChatsLBCAmount || 0} size={8} /> /
-            <CreditAmount amount={superChatsFiatAmount || 0} size={8} isFiat /> {__('Tipped')}
-          </div>
-        </MenuItem>
-      </MenuList>
-    </Menu>
-  );
 
   return (
     <>
@@ -132,12 +109,19 @@ export default function LivestreamLayout(props: Props) {
             <SwipeableDrawer
               open={Boolean(showChat)}
               toggleDrawer={() => setShowChat(!showChat)}
-              title={<ChatModeSelector />}
+              title={
+                <ChatModeSelector
+                  superChats={superChats}
+                  chatViewMode={chatViewMode}
+                  setChatViewMode={(mode) => setChatViewMode(mode)}
+                />
+              }
               actions={
                 <LivestreamMenu
                   noSuperchats={!superChats || superChats.length === 0}
                   superchatsHidden={superchatsHidden}
                   toggleSuperchats={() => setSuperchatsHidden(!superchatsHidden)}
+                  isMobile
                 />
               }
             >
@@ -148,17 +132,9 @@ export default function LivestreamLayout(props: Props) {
                 customViewMode={chatViewMode}
               />
             </SwipeableDrawer>
-          </React.Suspense>
-        )}
 
-        {isMobile && (
-          <Button
-            className="swipeable-drawer__expand-button"
-            label="Open Live Chat"
-            button="primary"
-            icon={ICONS.CHAT}
-            onClick={() => setShowChat(!showChat)}
-          />
+            <DrawerExpandButton label={__('Open Live Chat')} toggleDrawer={() => setShowChat(!showChat)} />
+          </React.Suspense>
         )}
 
         <FileTitleSection uri={uri} livestream isLive={showLivestream} />
@@ -166,3 +142,36 @@ export default function LivestreamLayout(props: Props) {
     </>
   );
 }
+
+const ChatModeSelector = (chatSelectorProps: any) => {
+  const { superChats, chatViewMode, setChatViewMode } = chatSelectorProps;
+  const { superChatsFiatAmount, superChatsLBCAmount } = getTipValues(superChats);
+
+  if (!superChats) {
+    return __('Live Chat');
+  }
+
+  return (
+    <Menu>
+      <MenuButton>
+        <span className="swipeable-drawer__title-menu">
+          {chatViewMode === VIEW_MODES.CHAT ? __('Live Chat') : __('Super Chats')}
+          <Icon icon={ICONS.DOWN} />
+        </span>
+      </MenuButton>
+
+      <MenuList className="menu__list--header">
+        <MenuItem className="menu__link" onSelect={() => setChatViewMode(VIEW_MODES.CHAT)}>
+          {__('Live Chat')}
+        </MenuItem>
+
+        <MenuItem className="menu__link" onSelect={() => setChatViewMode(VIEW_MODES.SUPERCHAT)}>
+          <div className="recommended-content__toggles">
+            <CreditAmount amount={superChatsLBCAmount || 0} size={8} /> /
+            <CreditAmount amount={superChatsFiatAmount || 0} size={8} isFiat /> {__('Tipped')}
+          </div>
+        </MenuItem>
+      </MenuList>
+    </Menu>
+  );
+};

@@ -9,6 +9,7 @@ import {
   selectSuperChatTotalAmountForUri,
   selectPinnedCommentsForUri,
 } from 'redux/selectors/comments';
+import { selectThemePath } from 'redux/selectors/settings';
 import LivestreamChatLayout from './view';
 
 const select = (state, props) => {
@@ -20,6 +21,7 @@ const select = (state, props) => {
     pinnedComments: selectPinnedCommentsForUri(state, uri),
     superChats: selectSuperChatsForUri(state, uri),
     superChatsTotalAmount: selectSuperChatTotalAmountForUri(state, uri),
+    theme: selectThemePath(state),
   };
 };
 

@@ -293,10 +293,35 @@
     padding-bottom: 0;
     margin: 0;
 
+    .card__title-section {
+      padding: 0px;
+    }
+
     h1 {
       font-size: 1.2rem;
       font-weight: var(--font-weight-bold);
       line-height: 1.25;
+    }
+
+    h2 {
+      font-size: 1.2rem;
+      line-height: 1.25;
+    }
+
+    .recommended-content__toggles {
+      button {
+        height: unset;
+        padding: 2px var(--spacing-xxs);
+
+        .button__content {
+          height: unset;
+
+          span {
+            font-size: var(--font-small);
+            line-height: 1.25;
+          }
+        }
+      }
     }
   }
 }

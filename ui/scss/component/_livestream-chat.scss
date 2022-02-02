@@ -43,11 +43,11 @@ $recent-msg-button__height: 2rem;
     height: 95vh !important;
   }
 
-  .livestreamSuperchats__wrapper {
+  .livestream-superchats__wrapper {
     width: 100%;
   }
 
-  .livestreamPinned__wrapper {
+  .livestream-pinned__wrapper {
     width: 100%;
   }
 }
@@ -168,7 +168,7 @@ $recent-msg-button__height: 2rem;
   }
 }
 
-.livestreamSuperchats__wrapper {
+.livestream-superchats__wrapper {
   flex-shrink: 0;
   position: relative;
   overflow-x: scroll;
@@ -181,36 +181,54 @@ $recent-msg-button__height: 2rem;
     padding: var(--spacing-xs);
     width: var(--livestream-comments-width);
   }
+}
 
-  @media (max-width: $breakpoint-small) {
-    z-index: 1300;
+.livestream-superchats__wrapper--mobile {
+  @extend .livestream-superchats__wrapper;
+
+  z-index: 1300;
+  width: 100%;
+  background-color: transparent;
+  padding: 0px;
+  border-bottom: none;
+  scrollbar-width: 0px;
+
+  &::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+  }
+}
+
+.livestream-comments__top-actions--mobile {
+  width: 100%;
+  position: absolute;
+  display: grid;
+  padding: var(--spacing-xxs);
+  padding-right: var(--spacing-m);
+
+  > div:not(:first-child) {
+    margin-top: var(--spacing-xxs);
+  }
+
+  .livestream__top-gradient {
     width: 100%;
-    background-color: transparent;
-    padding: 0px;
-    border-bottom: none;
-    scrollbar-width: 0px;
-
-    &::-webkit-scrollbar {
-      width: 0px;
-      height: 0px;
-    }
-  }
-}
-
-.livestream-comments__top-actions {
-  @media (max-width: $breakpoint-small) {
+    height: 100%;
     position: absolute;
-    display: grid;
-    padding: var(--spacing-xxs);
-    padding-right: var(--spacing-m);
 
-    > div:not(:first-child) {
-      margin-top: var(--spacing-xxs);
+    &:after {
+      position: absolute;
+      bottom: 0;
+      opacity: 1;
+      content: '';
+      height: 100%;
+      left: 0;
+      right: 0;
+      width: 100%;
     }
   }
 }
 
-.livestreamPinned__wrapper {
+.livestream-pinned__wrapper {
   display: flex;
   flex-shrink: 0;
   position: relative;
@@ -237,46 +255,48 @@ $recent-msg-button__height: 2rem;
     padding: var(--spacing-xs);
     width: var(--livestream-comments-width);
   }
+}
 
-  @media (max-width: $breakpoint-small) {
-    z-index: 1300;
-    max-width: 100%;
-    padding: 0;
-    padding-left: var(--spacing-xxs);
-    border-radius: var(--border-radius);
-    border: 1px solid var(--color-border);
+.livestream-pinned__wrapper--mobile {
+  @extend .livestream-pinned__wrapper;
 
-    .livestream__comment {
-      overflow: unset;
+  z-index: 1300;
+  max-width: 100%;
+  padding: 0;
+  padding-left: var(--spacing-xxs);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-border);
 
-      .livestreamComment__body {
-        margin: 0px;
-        width: 100%;
+  .livestream__comment {
+    overflow: unset;
 
-        .markdown-preview {
-          p,
-          .button__label {
-            white-space: nowrap !important;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            word-break: break-all;
-          }
+    .livestreamComment__body {
+      margin: 0px;
+      width: 100%;
 
-          a {
-            pointer-events: none;
-          }
+      .markdown-preview {
+        p,
+        .button__label {
+          white-space: nowrap !important;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          word-break: break-all;
+        }
+
+        a {
+          pointer-events: none;
         }
       }
     }
+  }
 
-    span {
-      font-size: var(--font-xxsmall) !important;
-    }
+  span {
+    font-size: var(--font-xxsmall) !important;
+  }
 
-    .close-button {
-      padding: 0;
-      padding-left: var(--spacing-xxs);
-    }
+  .close-button {
+    padding: 0;
+    padding-left: var(--spacing-xxs);
   }
 }
 
@@ -288,7 +308,7 @@ $recent-msg-button__height: 2rem;
   }
 }
 
-.livestreamSuperchats__inner {
+.livestream-superchats {
   display: flex;
 
   .close-button {
@@ -296,7 +316,7 @@ $recent-msg-button__height: 2rem;
   }
 }
 
-.livestream__superchat {
+.livestream-superchat {
   display: flex;
   margin-right: var(--spacing-xs);
   padding: var(--spacing-xxs);
@@ -347,15 +367,17 @@ $recent-msg-button__height: 2rem;
   .channel-name {
     max-width: 5rem;
   }
+}
 
-  @media (max-width: $breakpoint-small) {
-    background-color: #fff;
-    padding: 5px;
-    padding-bottom: 2px;
+.livestream-superchat--mobile {
+  @extend .livestream-superchat;
 
-    span {
-      font-size: var(--font-xxsmall);
-    }
+  background-color: #fff;
+  padding: 5px;
+  padding-bottom: 2px;
+
+  span {
+    font-size: var(--font-xxsmall);
   }
 }
 

@@ -1,6 +1,11 @@
 // @flow
 import 'scss/component/_livestream-chat.scss';
 
+// $FlowFixMe
+import { Global } from '@emotion/react';
+// $FlowFixMe
+import { grey } from '@mui/material/colors';
+
 import { formatLbryUrlForWeb } from 'util/url';
 import { useIsMobile } from 'effects/use-screensize';
 import * as ICONS from 'constants/icons';
@@ -16,6 +21,7 @@ import React from 'react';
 import Spinner from 'component/spinner';
 import Yrbl from 'component/yrbl';
 import { getTipValues } from 'util/livestream';
+import Slide from '@mui/material/Slide';
 
 const VIEW_MODES = {
   CHAT: 'chat',
@@ -35,6 +41,7 @@ type Props = {
   hideHeader?: boolean,
   superchatsHidden?: boolean,
   customViewMode?: string,
+  theme: string,
   doCommentList: (string, string, number, number) => void,
   doResolveUris: (Array<string>, boolean) => void,
   doSuperChatList: (string) => void,
@@ -52,12 +59,13 @@ export default function LivestreamChatLayout(props: Props) {
     hideHeader,
     superchatsHidden,
     customViewMode,
+    theme,
     doCommentList,
     doResolveUris,
     doSuperChatList,
   } = props;
 
-  const isMobile = useIsMobile();
+  const isMobile = useIsMobile() && !isPopoutWindow;
 
   const discussionElement = document.querySelector('.livestream__comments');
 
@@ -225,6 +233,7 @@ export default function LivestreamChatLayout(props: Props) {
               isPopoutWindow={isPopoutWindow}
               hideChat={() => setChatHidden(true)}
               setPopoutWindow={(v) => setPopoutWindow(v)}
+              isMobile={isMobile}
             />
           </div>
 
@@ -247,32 +256,60 @@ export default function LivestreamChatLayout(props: Props) {
       )}
 
       <div ref={commentsRef} className="livestreamComments__wrapper">
-        <div className="livestream-comments__top-actions">
-          {viewMode === VIEW_MODES.CHAT && superChatsByAmount && !superchatsHidden && (
-            <LivestreamSuperchats superChats={superChatsByAmount} toggleSuperChat={toggleSuperChat} />
+        <div
+          className={classnames('livestream-comments__top-actions', {
+            'livestream-comments__top-actions--mobile': isMobile,
+          })}
+        >
+          {isMobile && ((pinnedComment && showPinned) || (superChatsByAmount && !superchatsHidden)) && (
+            <MobileDrawerTopGradient theme={theme} />
           )}
 
-          {pinnedComment && showPinned && viewMode === VIEW_MODES.CHAT && (
-            <div className="livestreamPinned__wrapper">
-              <LivestreamComment
-                comment={pinnedComment}
-                key={pinnedComment.comment_id}
-                uri={uri}
-                pushMention={setMention}
-                handleDismissPin={() => setShowPinned(false)}
-              />
-
-              {!isMobile && (
-                <Button
-                  title={__('Dismiss pinned comment')}
-                  button="inverse"
-                  className="close-button"
-                  onClick={() => setShowPinned(false)}
-                  icon={ICONS.REMOVE}
-                />
-              )}
-            </div>
+          {viewMode === VIEW_MODES.CHAT && superChatsByAmount && (
+            <LivestreamSuperchats
+              superChats={superChatsByAmount}
+              toggleSuperChat={toggleSuperChat}
+              superchatsHidden={superchatsHidden}
+              isMobile={isMobile}
+            />
           )}
+
+          {pinnedComment &&
+            viewMode === VIEW_MODES.CHAT &&
+            (isMobile ? (
+              <Slide direction="left" in={showPinned} mountOnEnter unmountOnExit>
+                <div className="livestream-pinned__wrapper--mobile">
+                  <LivestreamComment
+                    comment={pinnedComment}
+                    key={pinnedComment.comment_id}
+                    uri={uri}
+                    pushMention={setMention}
+                    handleDismissPin={() => setShowPinned(false)}
+                    isMobile
+                  />
+                </div>
+              </Slide>
+            ) : (
+              showPinned && (
+                <div className="livestream-pinned__wrapper">
+                  <LivestreamComment
+                    comment={pinnedComment}
+                    key={pinnedComment.comment_id}
+                    uri={uri}
+                    pushMention={setMention}
+                    handleDismissPin={() => setShowPinned(false)}
+                  />
+
+                  <Button
+                    title={__('Dismiss pinned comment')}
+                    button="inverse"
+                    className="close-button"
+                    onClick={() => setShowPinned(false)}
+                    icon={ICONS.REMOVE}
+                  />
+                </div>
+              )
+            ))}
         </div>
 
         {viewMode === VIEW_MODES.SUPERCHAT && resolvingSuperChats ? (
@@ -280,7 +317,12 @@ export default function LivestreamChatLayout(props: Props) {
             <Spinner />
           </div>
         ) : (
-          <LivestreamComments uri={uri} commentsToDisplay={commentsToDisplay} pushMention={setMention} />
+          <LivestreamComments
+            uri={uri}
+            commentsToDisplay={commentsToDisplay}
+            pushMention={setMention}
+            isMobile={isMobile}
+          />
         )}
 
         {scrollPos < 0 && (
@@ -308,3 +350,28 @@ export default function LivestreamChatLayout(props: Props) {
     </div>
   );
 }
+
+type GradientProps = {
+  theme: string,
+};
+
+const MobileDrawerTopGradient = (gradientProps: GradientProps) => {
+  const { theme } = gradientProps;
+
+  const DrawerGlobalStyles = () => (
+    <Global
+      styles={{
+        '.livestream__top-gradient::after': {
+          background: `linear-gradient(180deg, ${theme === 'light' ? grey[300] : grey[900]} 0, transparent 65%)`,
+        },
+      }}
+    />
+  );
+
+  return (
+    <>
+      <DrawerGlobalStyles />
+      <div className="livestream__top-gradient" />
+    </>
+  );
+};

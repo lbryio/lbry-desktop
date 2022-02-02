@@ -308,8 +308,8 @@ function CommentList(props: Props) {
 
           <ul
             className={classnames({
-              comments: isMediumScreen || expandedComments,
-              'comments--contracted': !isMediumScreen && !expandedComments,
+              comments: !isMediumScreen || expandedComments,
+              'comments--contracted': isMediumScreen && !expandedComments,
             })}
           >
             {readyToDisplayComments && pinnedComments && getCommentElems(pinnedComments)}

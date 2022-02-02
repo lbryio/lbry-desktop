@@ -30,21 +30,23 @@
   .channel-name {
     font-size: var(--font-xsmall);
   }
+}
 
-  @media (max-width: $breakpoint-small) {
-    display: flex;
-    justify-content: space-between;
+.livestream__comment--mobile {
+  @extend .livestream__comment;
 
-    .livestreamComment__menu {
-      position: relative;
-      right: 0;
-      top: 0;
-    }
+  display: flex;
+  justify-content: space-between;
 
-    span,
-    p {
-      font-size: var(--font-xxsmall) !important;
-    }
+  .livestreamComment__menu {
+    position: relative;
+    right: 0;
+    top: 0;
+  }
+
+  span,
+  p {
+    font-size: var(--font-xxsmall) !important;
   }
 }
 

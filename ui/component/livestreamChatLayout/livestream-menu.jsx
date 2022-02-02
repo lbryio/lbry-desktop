@@ -4,7 +4,6 @@ import { Global } from '@emotion/react';
 
 import { Menu, MenuButton, MenuList, MenuItem } from '@reach/menu-button';
 import { useHistory } from 'react-router-dom';
-import { useIsMobile } from 'effects/use-screensize';
 import usePersistedState from 'effects/use-persisted-state';
 import * as ICONS from 'constants/icons';
 import Icon from 'component/common/icon';
@@ -14,19 +13,26 @@ type Props = {
   isPopoutWindow?: boolean,
   superchatsHidden?: boolean,
   noSuperchats?: boolean,
+  isMobile?: boolean,
   hideChat?: () => void,
   setPopoutWindow?: (any) => void,
   toggleSuperchats?: () => void,
 };
 
 export default function LivestreamMenu(props: Props) {
-  const { isPopoutWindow, superchatsHidden, noSuperchats, hideChat, setPopoutWindow, toggleSuperchats } = props;
+  const {
+    isPopoutWindow,
+    superchatsHidden,
+    noSuperchats,
+    isMobile,
+    hideChat,
+    setPopoutWindow,
+    toggleSuperchats,
+  } = props;
 
   const {
     location: { pathname },
   } = useHistory();
-
-  const isMobile = useIsMobile();
 
   const [showTimestamps, setShowTimestamps] = usePersistedState('live-timestamps', false);
 
@@ -42,19 +48,9 @@ export default function LivestreamMenu(props: Props) {
     }
   }
 
-  const MenuGlobalStyles = () => (
-    <Global
-      styles={{
-        ':root': {
-          '--live-timestamp-opacity': showTimestamps ? '0.5' : '0',
-        },
-      }}
-    />
-  );
-
   return (
     <>
-      <MenuGlobalStyles />
+      <MenuGlobalStyles showTimestamps={showTimestamps} />
 
       <Menu>
         <MenuButton className="menu__button">
@@ -103,3 +99,21 @@ export default function LivestreamMenu(props: Props) {
     </>
   );
 }
+
+type GlobalStylesProps = {
+  showTimestamps?: boolean,
+};
+
+const MenuGlobalStyles = (globalStylesProps: GlobalStylesProps) => {
+  const { showTimestamps } = globalStylesProps;
+
+  return (
+    <Global
+      styles={{
+        ':root': {
+          '--live-timestamp-opacity': showTimestamps ? '0.5' : '0',
+        },
+      }}
+    />
+  );
+};

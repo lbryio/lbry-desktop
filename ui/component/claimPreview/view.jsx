@@ -33,6 +33,7 @@ import ClaimPreviewHidden from './claim-preview-no-mature';
 import ClaimPreviewNoContent from './claim-preview-no-content';
 import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import CollectionEditButtons from 'component/collectionEditButtons';
+import { useIsMobile } from 'effects/use-screensize';
 
 const AbandonedChannelPreview = lazyImport(() =>
   import('component/abandonedChannelPreview' /* webpackChunkName: "abandonedChannelPreview" */)
@@ -152,6 +153,8 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     dragHandleProps,
     unavailableUris,
   } = props;
+
+  const isMobile = useIsMobile();
 
   const isCollection = claim && claim.value_type === 'collection';
   const collectionClaimId = isCollection && claim && claim.claim_id;
@@ -434,13 +437,11 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                 )}
                 {claim && (
                   <React.Fragment>
-                    {typeof properties === 'function' ? (
-                      properties(claim)
-                    ) : properties !== undefined ? (
-                      properties
-                    ) : (
-                      <ClaimTags uri={uri} type={type} />
-                    )}
+                    {typeof properties === 'function'
+                      ? properties(claim)
+                      : properties !== undefined
+                      ? properties
+                      : !isMobile && <ClaimTags uri={uri} type={type} />}
                   </React.Fragment>
                 )}
               </div>

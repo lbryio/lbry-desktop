@@ -24,6 +24,7 @@
   .MuiOutlinedInput-root {
     font-size: var(--font-xsmall) !important;
     flex-wrap: nowrap !important;
+    color: var(--color-text) !important;
 
     textarea {
       border: none;
@@ -37,6 +38,10 @@
       .button__content {
         height: unset;
       }
+    }
+
+    span {
+      color: var(--color-text) !important;
     }
   }
 }

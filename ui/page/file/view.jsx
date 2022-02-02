@@ -16,7 +16,7 @@ import Button from 'component/button';
 import I18nMessage from 'component/i18nMessage';
 import Empty from 'component/common/empty';
 import SwipeableDrawer from 'component/swipeableDrawer';
-import * as ICONS from 'constants/icons';
+import { DrawerExpandButton } from 'component/swipeableDrawer/view';
 import { useIsMobile } from 'effects/use-screensize';
 
 const CommentsList = lazyImport(() => import('component/commentsList' /* webpackChunkName: "comments" */));
@@ -199,7 +199,7 @@ export default function FilePage(props: Props) {
 
         {!isMarkdown && (
           <div className="file-page__secondary-content">
-            <>
+            <section className="file-page__media-actions">
               {claimIsMine && isLivestream && (
                 <div className="livestream__creator-message">
                   <h4>{__('Only visible to you')}</h4>
@@ -215,28 +215,24 @@ export default function FilePage(props: Props) {
 
               {RENDER_MODES.FLOATING_MODES.includes(renderMode) && <FileTitleSection uri={uri} />}
 
-              {isMobile ? (
-                <SwipeableDrawer
-                  open={Boolean(showComments)}
-                  toggleDrawer={() => setShowComments(!showComments)}
-                  title={commentsListTitle}
-                >
-                  {commentsListElement}
-                </SwipeableDrawer>
-              ) : (
-                commentsListElement
-              )}
-            </>
+              <React.Suspense fallback={null}>
+                {isMobile ? (
+                  <>
+                    <SwipeableDrawer
+                      open={Boolean(showComments)}
+                      toggleDrawer={() => setShowComments(!showComments)}
+                      title={commentsListTitle}
+                    >
+                      {commentsListElement}
+                    </SwipeableDrawer>
 
-            {isMobile && (
-              <Button
-                className="swipeable-drawer__expand-button"
-                label={commentsListTitle}
-                button="primary"
-                icon={ICONS.CHAT}
-                onClick={() => setShowComments(!showComments)}
-              />
-            )}
+                    <DrawerExpandButton label={commentsListTitle} toggleDrawer={() => setShowComments(!showComments)} />
+                  </>
+                ) : (
+                  commentsListElement
+                )}
+              </React.Suspense>
+            </section>
 
             {!isMarkdown && videoTheaterMode && <RightSideContent {...rightSideProps} />}
           </div>

@@ -169,6 +169,12 @@
       margin-left: 0;
       margin-top: var(--spacing-l);
     }
+
+    @media (max-width: $breakpoint-small) {
+      .card__header--between {
+        padding: var(--spacing-xxs);
+      }
+    }
   }
 
   .file-page__recommended-collection {
