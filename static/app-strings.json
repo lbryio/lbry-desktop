@@ -2269,5 +2269,11 @@
   "Automatic Hosting lets you delegate some amount of storage for the network to automatically download and host.": "Automatic Hosting lets you delegate some amount of storage for the network to automatically download and host.",
   "Help improve the P2P data network (and make LBRY happy) by hosting data.": "Help improve the P2P data network (and make LBRY happy) by hosting data.",
   "Limit Hosting of Content History": "Limit Hosting of Content History",
+  "Remove custom comment server": "Remove custom comment server",
+  "Use Https": "Use Https",
+  "Server URL": "Server URL",
+  "Use https": "Use https",
+  "Custom Servers": "Custom Servers",
+  "Add A Server": "Add A Server",
   "--end--": "--end--"
 }

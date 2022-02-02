@@ -7,11 +7,13 @@ import SettingCommentsServer from './view';
 const select = (state) => ({
   customServerEnabled: makeSelectClientSetting(SETTINGS.CUSTOM_COMMENTS_SERVER_ENABLED)(state),
   customServerUrl: makeSelectClientSetting(SETTINGS.CUSTOM_COMMENTS_SERVER_URL)(state),
+  customCommentServers: makeSelectClientSetting(SETTINGS.CUSTOM_COMMENTS_SERVERS)(state),
 });
 
 const perform = (dispatch) => ({
   setCustomServerEnabled: (val) => dispatch(doSetClientSetting(SETTINGS.CUSTOM_COMMENTS_SERVER_ENABLED, val, true)),
   setCustomServerUrl: (url) => dispatch(doSetClientSetting(SETTINGS.CUSTOM_COMMENTS_SERVER_URL, url, true)),
+  setCustomServers: (servers) => dispatch(doSetClientSetting(SETTINGS.CUSTOM_COMMENTS_SERVERS, servers, true)),
 });
 
 export default connect(select, perform)(SettingCommentsServer);
