@@ -43,11 +43,13 @@ $thumbnailWidthSmall: 1rem;
 
 .commentCreate__labelWrapper {
   display: flex;
+
   flex-direction: row;
   justify-content: flex-start;
   align-items: baseline;
   flex-wrap: wrap;
   width: 100%;
+  max-width: 50%;
 
   .commentCreate__label {
     white-space: nowrap;
