@@ -1,18 +1,43 @@
 .MuiAutocomplete-inputRoot {
-  padding: 0 !important;
-  font-family: inherit !important;
-  font-weight: inherit !important;
-  font-size: inherit !important;
-  color: var(--color-text) !important;
+  @media (min-width: $breakpoint-small) {
+    padding: 0 !important;
+    font-family: inherit !important;
+    font-weight: inherit !important;
+    font-size: inherit !important;
+    color: var(--color-text) !important;
 
-  .MuiOutlinedInput-notchedOutline {
-    visibility: hidden;
+    .MuiOutlinedInput-notchedOutline {
+      visibility: hidden;
+    }
+
+    .create__comment {
+      min-height: calc(var(--height-input) * 1.5) !important;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-small) {
+  .MuiOutlinedInput-input {
+    padding: 0px var(--spacing-xxs);
   }
 
-  .create__comment {
-    @extend textarea;
+  .MuiOutlinedInput-root {
+    font-size: var(--font-xsmall) !important;
+    flex-wrap: nowrap !important;
 
-    min-height: calc(var(--height-input) * 1.5) !important;
+    textarea {
+      border: none;
+    }
+
+    .button--primary {
+      border-radius: 100%;
+      height: unset;
+      padding: var(--spacing-xxs);
+
+      .button__content {
+        height: unset;
+      }
+    }
   }
 }
 

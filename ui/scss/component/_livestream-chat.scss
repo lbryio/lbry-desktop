@@ -112,7 +112,7 @@ $recent-msg-button__height: 2rem;
   }
 
   @media (min-width: $breakpoint-small) {
-    height: calc(100% - var(--header-height) - #{$discussion-header__height});
+    height: calc(100vh - var(--header-height) - #{$discussion-header__height});
   }
 
   @media (max-width: $breakpoint-small) {
@@ -144,13 +144,27 @@ $recent-msg-button__height: 2rem;
   }
 }
 
-.livestream__commentCreate {
+.livestream__comment-create {
   padding: var(--spacing-s);
   border-top: 1px solid var(--color-border);
   margin-top: auto;
 
   @media (max-width: $breakpoint-small) {
     padding: var(--spacing-xxs);
+
+    span,
+    select,
+    option {
+      font-size: var(--font-xxsmall);
+    }
+
+    select {
+      padding: 0px var(--spacing-xxs) !important;
+    }
+
+    .select--slim {
+      margin: 0px;
+    }
   }
 }
 
@@ -197,9 +211,9 @@ $recent-msg-button__height: 2rem;
 }
 
 .livestreamPinned__wrapper {
-  @extend .livestreamSuperchats__wrapper;
   display: flex;
   flex-shrink: 0;
+  position: relative;
   padding: var(--spacing-s) var(--spacing-xs);
   border-bottom: 1px solid var(--color-border);
   font-size: var(--font-small);
@@ -225,6 +239,7 @@ $recent-msg-button__height: 2rem;
   }
 
   @media (max-width: $breakpoint-small) {
+    z-index: 1300;
     max-width: 100%;
     padding: 0;
     padding-left: var(--spacing-xxs);

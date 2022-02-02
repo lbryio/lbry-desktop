@@ -178,8 +178,10 @@ img {
   text-indent: -9999px;
 }
 
-textarea {
-  min-height: calc(var(--height-input) * 2);
+@media (min-width: $breakpoint-small) {
+  textarea {
+    min-height: calc(var(--height-input) * 2);
+  }
 }
 
 .columns {

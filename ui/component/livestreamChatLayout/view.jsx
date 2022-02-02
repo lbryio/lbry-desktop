@@ -206,7 +206,7 @@ export default function LivestreamChatLayout(props: Props) {
             />
           </div>
 
-          <div className="livestream__commentCreate">
+          <div className="livestream__comment-create">
             <CommentCreate isLivestream bottom uri={uri} disableInput />
           </div>
         </div>
@@ -293,7 +293,7 @@ export default function LivestreamChatLayout(props: Props) {
           />
         )}
 
-        <div className="livestream__commentCreate">
+        <div className="livestream__comment-create">
           <CommentCreate
             isLivestream
             bottom
