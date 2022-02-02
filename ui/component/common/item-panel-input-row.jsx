@@ -85,7 +85,7 @@ function ServerInputRow(props: Props) {
       </div>
       <div className="itemPanel--input">
         <FormField
-          label={'Use Https'}
+          label={'Use https'}
           name="use_https"
           type="checkbox"
           checked={useHttps}

@@ -38,5 +38,15 @@
 }
 
 .itemPanel--input {
+  min-height: var(--spacing-l);
   padding: 0 0 var(--spacing-s) 0;
+  fieldset-section,
+  .fieldset-group {
+    margin-top: var(--spacing-m);
+  }
+  &.checkbox,
+  .checkbox:only-child {
+    height: var(--spacing-l);
+    float: left;
+  }
 }

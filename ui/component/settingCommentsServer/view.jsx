@@ -34,25 +34,12 @@ function SettingCommentsServer(props: Props) {
     // if customServerUrl is not in servers, make sure it is.
   }, [customServerUrl, customServersString, setCustomServers]);
 
-  // React.useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     Comments.setServerUrl(customServerEnabled ? url : undefined);
-  //     if (url !== customServerUrl) {
-  //       setCustomServerUrl(url);
-  //     }
-  //   }, DEBOUNCE_TEXT_INPUT_MS);
-  //
-  //   return () => clearTimeout(timer);
-  // }, [url, customServerUrl, customServerEnabled, setCustomServerUrl]);
-
   const handleSelectServer = (serverItem: CommentServerDetails) => {
     if (serverItem.url !== COMMENT_SERVER_API) {
-      alert(`set ${serverItem.url}`);
       Comments.setServerUrl(serverItem.url);
       setCustomServerUrl(serverItem.url);
       setCustomServerEnabled(true);
     } else {
-      alert('reset');
       Comments.setServerUrl(undefined);
       setCustomServerEnabled(false);
     }
@@ -63,6 +50,7 @@ function SettingCommentsServer(props: Props) {
     newCustomServers.push(serverItem);
     setCustomServers(newCustomServers);
     handleSelectServer(serverItem);
+    setAddServer(false);
   };
 
   const handleRemoveServer = (serverItem) => {
