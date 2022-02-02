@@ -250,7 +250,9 @@
   }
 
   fieldset-group {
-    margin-top: var(--spacing-m);
+    &:not(.fieldset-group--row) {
+      margin-top: var(--spacing-m);
+    }
   }
 
   .tags__input-wrapper {

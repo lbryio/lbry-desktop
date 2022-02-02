@@ -293,7 +293,9 @@ input[type='number'] {
 
 fieldset-group {
   + fieldset-group {
-    margin-top: var(--spacing-s);
+    &:not(.fieldset-group--row) {
+      margin-top: var(--spacing-s);
+    }
   }
 
   &.fieldset-group--smushed {
@@ -338,6 +340,9 @@ fieldset-group {
       padding-bottom: var(--spacing-m);
       align-items: flex-end;
       justify-content: center;
+    }
+
+    &:not(.fieldset-group--row) {
     }
   }
 

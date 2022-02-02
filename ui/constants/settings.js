@@ -41,6 +41,7 @@ export const VIDEO_THEATER_MODE = 'video_theater_mode';
 export const VIDEO_PLAYBACK_RATE = 'video_playback_rate';
 export const CUSTOM_COMMENTS_SERVER_ENABLED = 'custom_comments_server_enabled';
 export const CUSTOM_COMMENTS_SERVER_URL = 'custom_comments_server_url';
+export const CUSTOM_COMMENTS_SERVERS = 'custom_comments_servers';
 export const CUSTOM_SHARE_URL_ENABLED = 'custom_share_url_enabled';
 export const CUSTOM_SHARE_URL = 'custom_share_url';
 export const ENABLE_PRERELEASE_UPDATES = 'enable_prerelease_updates';
