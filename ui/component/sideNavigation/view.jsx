@@ -254,7 +254,7 @@ function SideNavigation(props: Props) {
   const [subscriptionFilter, setSubscriptionFilter] = React.useState('');
 
   const filteredSubscriptions = subscriptions.filter(
-    (sub) => !subscriptionFilter || sub.channelName.toLowerCase().includes(subscriptionFilter)
+    (sub) => !subscriptionFilter || sub.channelName.toLowerCase().includes(subscriptionFilter.toLowerCase())
   );
 
   let displayedSubscriptions = filteredSubscriptions;
