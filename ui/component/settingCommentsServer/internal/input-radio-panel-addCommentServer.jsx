@@ -2,20 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import Button from 'component/button';
 import { Form, FormField } from 'component/common/form';
+import { VALID_IPADDRESS_REGEX, VALID_HOSTNAME_REGEX, VALID_ENDPOINT_REGEX } from 'constants/protocol_regex';
 
 type Props = {
   update: (CommentServerDetails) => void,
   onCancel: (boolean) => void,
 };
-
-const VALID_IPADDRESS_REGEX = new RegExp(
-  '^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\.)){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$'
-);
-const VALID_HOSTNAME_REGEX = new RegExp(
-  '^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9])(\\.))+([A-Za-z]|[A-Za-z][A-Za-z]*[A-Za-z])$'
-);
-
-const VALID_ENDPOINT_REGEX = new RegExp('^((\\/)([a-zA-Z0-9]+))+$');
 
 const isValidServerString = (serverString) => {
   const si = serverString.indexOf('/');
