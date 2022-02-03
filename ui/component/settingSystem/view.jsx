@@ -9,7 +9,6 @@ import FileSelector from 'component/common/file-selector';
 import I18nMessage from 'component/i18nMessage';
 import SettingAutoLaunch from 'component/settingAutoLaunch';
 import SettingClosingBehavior from 'component/settingClosingBehavior';
-import SettingCommentsServer from 'component/settingCommentsServer';
 import SettingsRow from 'component/settingsRow';
 import SettingWalletServer from 'component/settingWalletServer';
 import Spinner from 'component/spinner';
@@ -382,9 +381,6 @@ export default function SettingSystem(props: Props) {
               <SettingWalletServer />
             </SettingsRow>
 
-            <SettingsRow title={__('Comments server')} multirow>
-              <SettingCommentsServer />
-            </SettingsRow>
             {/* @endif */}
 
             <SettingsRow

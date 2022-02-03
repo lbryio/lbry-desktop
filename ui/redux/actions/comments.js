@@ -102,9 +102,7 @@ export function doCommentList(
             dispatch(
               doToast({
                 isError: true,
-                message: Comments.isCustomServer
-                  ? __('Failed to fetch comments. Verify custom server settings.')
-                  : __('Failed to fetch comments.'),
+                message: __('Failed to fetch comments.'),
               })
             );
             dispatch({ type: ACTIONS.COMMENT_LIST_FAILED, data: error });
@@ -198,9 +196,7 @@ export function doCommentListOwn(
             dispatch(
               doToast({
                 isError: true,
-                message: Comments.isCustomServer
-                  ? __('Failed to fetch comments. Verify custom server settings.')
-                  : __('Failed to fetch comments.'),
+                message: __('Failed to fetch comments.'),
               })
             );
             dispatch(doToast({ isError: true, message: `${error.message}` }));

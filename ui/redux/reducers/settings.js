@@ -5,7 +5,6 @@ import moment from 'moment';
 import { getSubsetFromKeysArray } from 'util/sync-settings';
 import { getDefaultLanguage } from 'util/default-languages';
 import { UNSYNCED_SETTINGS } from 'config';
-import Comments from 'comments';
 
 const { CLIENT_SYNC_KEYS } = SHARED_PREFERENCES;
 const settingsToIgnore = (UNSYNCED_SETTINGS && UNSYNCED_SETTINGS.trim().split(' ')) || [];
@@ -53,8 +52,6 @@ const defaultState = {
     [SETTINGS.VIDEO_THEATER_MODE]: false,
     [SETTINGS.VIDEO_PLAYBACK_RATE]: 1,
     [SETTINGS.DESKTOP_WINDOW_ZOOM]: 1,
-    [SETTINGS.CUSTOM_COMMENTS_SERVER_ENABLED]: false,
-    [SETTINGS.CUSTOM_COMMENTS_SERVER_URL]: '',
 
     [SETTINGS.DARK_MODE_TIMES]: {
       from: { hour: '21', min: '00', formattedTime: '21:00' },
@@ -174,12 +171,6 @@ reducers[ACTIONS.USER_STATE_POPULATE] = (state, action) => {
   const selectedSettings = sharedPreferences ? getSubsetFromKeysArray(sharedPreferences, clientSyncKeys) : {};
   const mergedClientSettings = { ...currentClientSettings, ...selectedSettings };
   const newSharedPreferences = sharedPreferences || {};
-
-  Comments.setServerUrl(
-    mergedClientSettings[SETTINGS.CUSTOM_COMMENTS_SERVER_ENABLED]
-      ? mergedClientSettings[SETTINGS.CUSTOM_COMMENTS_SERVER_URL]
-      : undefined
-  );
 
   return Object.assign({}, state, {
     sharedPreferences: newSharedPreferences,

@@ -1994,8 +1994,6 @@
   "Clear Edits": "Clear Edits",
   "Something not quite right..": "Something not quite right..",
   "Failed to fetch comments.": "Failed to fetch comments.",
-  "Failed to fetch comments. Verify custom server settings.": "Failed to fetch comments. Verify custom server settings.",
-  "Commenting server is not set.": "Commenting server is not set.",
   "Comments are not currently enabled.": "Comments are not currently enabled.",
   "See All": "See All",
   "System": "System",
