@@ -14,6 +14,7 @@ exports.MUSIC = 'music';
 exports.COMMUNITY = 'community';
 exports.EDUCATION = 'education';
 exports.ENLIGHTENMENT = 'enlightenment';
+exports.FEATURED = 'featured';
 exports.FINANCE = 'finance';
 exports.GAMING = 'gaming';
 exports.GENERAL = 'general';

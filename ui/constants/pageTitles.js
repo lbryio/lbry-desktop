@@ -11,6 +11,7 @@ export const PAGE_TITLE = {
   [PAGES.DISCOVER]: 'Wild West',
   [PAGES.EDUCATION]: 'Education',
   [PAGES.ENLIGHTENMENT]: 'Enlightenment',
+  [PAGES.FEATURED]: 'Featured',
   [PAGES.FINANCE]: 'Finance 2.0',
   [PAGES.GAMING]: 'Gaming',
   [PAGES.GENERAL]: 'Cheese',

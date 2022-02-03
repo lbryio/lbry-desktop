@@ -13,6 +13,11 @@ module.exports.CATEGORY_METADATA = {
   //   description: '',   <----- FILL IN PLEASE
   //   image: '',         <----- FILL IN PLEASE
   // }),
+  // [PAGES.FEATURED]: () => ({
+  //   title: 'Featured',
+  //   description: '',   <----- FILL IN PLEASE
+  //   image: '',         <----- FILL IN PLEASE
+  // }),
   [PAGES.FINANCE]: () => ({
     title: 'Finance 2.0',
     description: 'Crypto, Money, Economics, Markets on Odysee ',
