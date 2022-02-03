@@ -2,8 +2,8 @@
 import { COMMENT_SERVER_API } from 'config'; // COMMENT_SERVER_NAME,
 import React from 'react';
 import Comments from 'comments';
-import ItemPanel from 'component/common/item-panel';
-import ItemInputRow from 'component/common/item-panel-input-row';
+import InputTogglePanel from 'component/common/input-radio-panel';
+import ItemInputRow from './internal/input-radio-panel-addCommentServer';
 import Button from 'component/button';
 
 type Props = {
@@ -64,10 +64,10 @@ function SettingCommentsServer(props: Props) {
   return (
     <React.Fragment>
       <div className={'fieldset-section'}>
-        <ItemPanel onClick={handleSelectServer} active={!customServerEnabled} serverDetails={defaultServer} />
+        <InputTogglePanel onClick={handleSelectServer} active={!customServerEnabled} serverDetails={defaultServer} />
         {!!customCommentServers.length && <label>{__('Custom Servers')}</label>}
         {customCommentServers.map((server) => (
-          <ItemPanel
+          <InputTogglePanel
             key={server.url}
             active={customServerEnabled && customServerUrl === server.url}
             onClick={handleSelectServer}

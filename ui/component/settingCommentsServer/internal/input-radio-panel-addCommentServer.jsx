@@ -21,11 +21,9 @@ const isValidServerString = (serverString) => {
   const si = serverString.indexOf('/');
   const pi = serverString.indexOf(':');
   const path = si === -1 ? '' : serverString.slice(si);
-  console.log('path', path);
   const hostMaybePort = si === -1 ? serverString : serverString.slice(0, si);
   const host = pi === -1 ? hostMaybePort : hostMaybePort.slice(0, pi);
   const port = pi === -1 ? '' : hostMaybePort.slice(pi + 1);
-  console.log('port', port);
   const portInt = parseInt(port);
 
   return (
@@ -61,7 +59,7 @@ function ServerInputRow(props: Props) {
 
   return (
     <Form onSubmit={onSubmit}>
-      <div className="itemPanel--input">
+      <div className="input-toggle-panel--input">
         <FormField
           type="text"
           label={__('Name')}
@@ -83,7 +81,7 @@ function ServerInputRow(props: Props) {
           />
         </div>
       </div>
-      <div className="itemPanel--input">
+      <div className="input-toggle-panel--input">
         <FormField
           label={'Use https'}
           name="use_https"
