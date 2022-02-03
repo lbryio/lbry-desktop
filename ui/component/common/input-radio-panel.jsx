@@ -11,13 +11,6 @@ type Props = {
   serverDetails: CommentServerDetails,
 };
 
-/*
-  [ https://myserver.com x ]
-  [ https://myserver.com x (selected)]
-
-  [ https://myserver.com:50001 x (selected)]
- */
-
 const InputTogglePanel = (props: Props) => {
   const { onClick, active, serverDetails, onRemove } = props;
 
