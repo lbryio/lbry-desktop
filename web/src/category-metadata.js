@@ -3,24 +3,24 @@ const PAGES = require('../../ui/constants/pages');
 // Uncomment as you add metadata
 
 module.exports.CATEGORY_METADATA = {
-  // [PAGES.CREATIVE_ARTS]: () => ({
-  //   title: 'Creative Arts',
-  //   description: '',   <----- FILL IN PLEASE
-  //   image: '',         <----- FILL IN PLEASE
-  // }),
-  // [PAGES.EDUCATION]: () => ({
-  //   title: 'Education',
-  //   description: '',   <----- FILL IN PLEASE
-  //   image: '',         <----- FILL IN PLEASE
-  // }),
-  // [PAGES.FEATURED]: () => ({
-  //   title: 'Featured',
-  //   description: '',   <----- FILL IN PLEASE
-  //   image: '',         <----- FILL IN PLEASE
-  // }),
+  [PAGES.CREATIVE_ARTS]: () => ({
+    title: 'Creative Arts',
+    description: `Odysee's home for art, animation, comedy, and everything inbetween`,
+    image: '',
+  }),
+  [PAGES.EDUCATION]: () => ({
+    title: 'Education',
+    description: `Who needs school when there's Odysee?`,
+    image: '',
+  }),
+  [PAGES.FEATURED]: () => ({
+    title: 'Featured',
+    description: 'Showcasing some of the best content Odysee has to offer',
+    image: '',
+  }),
   [PAGES.FINANCE]: () => ({
     title: 'Finance 2.0',
-    description: 'Crypto, Money, Economics, Markets on Odysee ',
+    description: 'Crypto, Money, Economics, Markets on Odysee',
     image: 'https://cdn.lbryplayer.xyz/speech/category-finance:c.jpg',
   }),
   [PAGES.GAMING]: () => ({
@@ -50,7 +50,7 @@ module.exports.CATEGORY_METADATA = {
   }),
   [PAGES.MUSIC]: () => ({
     title: 'Music',
-    description: 'All the songs, reviews, covers, and how-tos you love on Odysee',
+    description: 'Get your groove on with Odysee',
     image: 'https://cdn.lbryplayer.xyz/speech/category-music:8.jpg',
   }),
   [PAGES.POP_CULTURE]: () => ({
