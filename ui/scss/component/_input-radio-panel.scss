@@ -1,4 +1,4 @@
-.itemPanel {
+.input-toggle-panel {
   padding: var(--spacing-m);
   margin-bottom: var(--spacing-m);
   width: 100%;
@@ -16,7 +16,7 @@
   }
 }
 
-.itemPanel__details {
+.input-toggle-panel__details {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -24,20 +24,20 @@
     flex-direction: column;
   }
 }
-.itemPanel__name {
+.input-toggle-panel__name {
   min-width: 100px;
   width: 100px;
 }
-.itemPanel__url {
+.input-toggle-panel__url {
   text-overflow: ellipsis;
 }
 
-.itemPanel--active {
+.input-toggle-panel--active {
   color: var(--color-button-toggle-text);
   background-color: var(--color-button-toggle-bg);
 }
 
-.itemPanel--input {
+.input-toggle-panel--input {
   min-height: var(--spacing-l);
   padding: 0 0 var(--spacing-s) 0;
   fieldset-section,
