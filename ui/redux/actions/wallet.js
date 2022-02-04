@@ -525,7 +525,7 @@ export function doSupportAbandonForClaim(claimId, claimType, keep, preview) {
 }
 
 export function doWalletReconnect() {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     dispatch({
       type: ACTIONS.WALLET_RESTART,
     });
@@ -533,16 +533,23 @@ export function doWalletReconnect() {
     // this basically returns null when it's done. :(
     // might be good to  dispatch ACTIONS.WALLET_RESTARTED
     const walletTimeout = setTimeout(() => {
-      failed = true;
-      dispatch({
-        type: ACTIONS.WALLET_RESTART_COMPLETED,
-      });
-      dispatch(
-        doToast({
-          message: __('Your servers were not available. Check your url and port, or switch back to defaults.'),
-          isError: true,
-        })
-      );
+      const state = getState();
+      const { settings } = state;
+      const { daemonStatus } = settings || {};
+      const { wallet } = daemonStatus || {};
+      const availableServers = wallet.available_servers;
+      if (!availableServers) {
+        failed = true;
+        dispatch({
+          type: ACTIONS.WALLET_RESTART_COMPLETED,
+        });
+        dispatch(
+          doToast({
+            message: __('Your servers were not available. Check your url and port, or switch back to defaults.'),
+            isError: true,
+          })
+        );
+      }
     }, FIFTEEN_SECONDS);
     Lbry.wallet_reconnect().then(() => {
       clearTimeout(walletTimeout);
