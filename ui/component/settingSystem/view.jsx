@@ -504,7 +504,22 @@ export default function SettingSystem(props: Props) {
               </fieldset-section>
             </SettingsRow>
 
-            <SettingsRow title={__('Wallet server')} multirow>
+            <SettingsRow
+              title={__('Wallet server')}
+              subtitle={
+                <I18nMessage
+                  tokens={{
+                    learn_more: (
+                      <Button button="link" href="http://lbry.com/faq/wallet-servers" label={__('Learn More')} />
+                    ),
+                  }}
+                >
+                  Wallet servers are used to relay data to and from the LBRY blockchain. They also determine what
+                  content shows in trending or is blocked. %learn_more%
+                </I18nMessage>
+              }
+              multirow
+            >
               <SettingWalletServer />
             </SettingsRow>
 
