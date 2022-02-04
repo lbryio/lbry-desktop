@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FormField } from 'component/common/form';
 import Button from 'component/button';
-import I18nMessage from 'component/i18nMessage';
 import * as ICONS from 'constants/icons';
 import ServerInputRow from './internal/inputRow';
 import { stringifyServerParam } from 'util/sync-settings';
@@ -133,16 +132,6 @@ function SettingWalletServer(props: Props) {
           }}
           label={__('Use custom wallet servers')}
         />
-        <p className="help">
-          <I18nMessage
-            tokens={{
-              learn_more: <Button button="link" href="http://lbry.com/faq/wallet-servers" label={__('Learn More')} />,
-            }}
-          >
-            Wallet servers are used to relay data to and from the LBRY blockchain. They also determine what content
-            shows in trending or is blocked. %learn_more%
-          </I18nMessage>
-        </p>
 
         {advancedMode && (
           <div>
