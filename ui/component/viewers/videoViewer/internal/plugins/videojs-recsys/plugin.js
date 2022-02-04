@@ -11,6 +11,7 @@ const PlayerEvent = {
     stop: 1,
     scrub: 2,
     speed: 3,
+    ended: 4,
   },
 };
 
@@ -86,7 +87,7 @@ class RecsysPlugin extends Component {
   }
 
   onEnded(event) {
-    const recsysEvent = newRecsysPlayerEvent(PlayerEvent.event.stop, this.player.currentTime());
+    const recsysEvent = newRecsysPlayerEvent(PlayerEvent.event.ended, this.player.currentTime());
     this.log('onEnded', recsysEvent);
     RecSys.onRecsysPlayerEvent(this.options_.videoId, recsysEvent);
   }
