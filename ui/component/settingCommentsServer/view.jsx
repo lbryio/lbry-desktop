@@ -1,10 +1,10 @@
 // @flow
-import { COMMENT_SERVER_API } from 'config'; // COMMENT_SERVER_NAME,
+import { COMMENT_SERVER_API, COMMENT_SERVER_NAME } from 'config';
 import React from 'react';
 import Comments from 'comments';
-import InputTogglePanel from 'component/common/input-radio-panel';
 import ItemInputRow from './internal/input-radio-panel-addCommentServer';
 import Button from 'component/button';
+import { FormField } from 'component/common/form-components/form-field';
 
 type Props = {
   customServerEnabled: boolean,
@@ -14,7 +14,7 @@ type Props = {
   setCustomServers: (Array<CommentServerDetails>) => void,
   customCommentServers: Array<CommentServerDetails>,
 };
-const defaultServer = { name: 'Default', url: COMMENT_SERVER_API };
+const defaultServer = { name: COMMENT_SERVER_NAME, url: COMMENT_SERVER_API };
 function SettingCommentsServer(props: Props) {
   const {
     customServerEnabled,
@@ -53,7 +53,7 @@ function SettingCommentsServer(props: Props) {
     setAddServer(false);
   };
 
-  const handleRemoveServer = (serverItem) => {
+  const handleRemoveServer = (serverItem: CommentServerDetails) => {
     handleSelectServer(defaultServer);
     const newCustomServers = customCommentServers.slice().filter((server) => {
       return server.url !== serverItem.url;
@@ -61,25 +61,36 @@ function SettingCommentsServer(props: Props) {
     setCustomServers(newCustomServers);
   };
 
+  const commentServerLabel = (serverDetails, onRemove) => (
+    <span className={'compound-label'}>
+      <span>{serverDetails.name}</span>
+      <span className="compound-label__details">{serverDetails.url}</span>
+      {onRemove && <Button button={'inverse'} label={__('Remove')} onClick={() => onRemove(serverDetails)} />}
+    </span>
+  );
+  const commentServerRadio = (customServerEnabled, customServerUrl, onClick, onRemove, serverDetails) => (
+    <FormField
+      type="radio"
+      checked={(!customServerEnabled && !onRemove) || (customServerEnabled && customServerUrl === serverDetails.url)}
+      onClick={() => onClick(serverDetails)}
+      label={commentServerLabel(serverDetails, onRemove)}
+      name={`${serverDetails.name}${serverDetails.url}`}
+      key={`${serverDetails.name}${serverDetails.url}`}
+    />
+  );
+
   return (
     <React.Fragment>
       <div className={'fieldset-section'}>
-        <InputTogglePanel onClick={handleSelectServer} active={!customServerEnabled} serverDetails={defaultServer} />
-        {!!customCommentServers.length && <label>{__('Custom Servers')}</label>}
-        {customCommentServers.map((server) => (
-          <InputTogglePanel
-            key={server.url}
-            active={customServerEnabled && customServerUrl === server.url}
-            onClick={handleSelectServer}
-            serverDetails={server}
-            onRemove={handleRemoveServer}
-          />
-        ))}
+        {commentServerRadio(customServerEnabled, customServerUrl, handleSelectServer, null, defaultServer)}
+        {customCommentServers.map((server) =>
+          commentServerRadio(customServerEnabled, customServerUrl, handleSelectServer, handleRemoveServer, server)
+        )}
       </div>
       <div className={'fieldset-section'}>
         {!addServer && (
           <div className="section__actions">
-            <Button type="button" button="link" onClick={() => setAddServer(true)} label={__('Add A Server')} />
+            <Button type="button" button="inverse" onClick={() => setAddServer(true)} label={__('Add A Server')} />
           </div>
         )}
         {addServer && <ItemInputRow update={handleAddServer} onCancel={setAddServer} />}

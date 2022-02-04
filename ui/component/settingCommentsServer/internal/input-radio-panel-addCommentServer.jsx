@@ -51,7 +51,7 @@ function ServerInputRow(props: Props) {
 
   return (
     <Form onSubmit={onSubmit}>
-      <div className="input-toggle-panel--input">
+      <div className="setting-item-input">
         <FormField
           type="text"
           label={__('Name')}
@@ -73,7 +73,7 @@ function ServerInputRow(props: Props) {
           />
         </div>
       </div>
-      <div className="input-toggle-panel--input">
+      <div className="setting-item-input">
         <FormField
           label={'Use https'}
           name="use_https"
@@ -83,9 +83,9 @@ function ServerInputRow(props: Props) {
         />
       </div>
 
-      <div className="section__actions">
+      <div className="section__actions setting-item-input">
         <Button type="submit" button="primary" label={__('Add')} disabled={!validServerString || !nameString} />
-        <Button type="button" button="link" onClick={() => onCancel(false)} label={__('Cancel')} />
+        <Button type="button" button="inverse" onClick={() => onCancel(false)} label={__('Cancel')} />
       </div>
     </Form>
   );
