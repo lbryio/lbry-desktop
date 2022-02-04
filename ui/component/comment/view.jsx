@@ -219,13 +219,18 @@ function Comment(props: Props) {
         const ROUGH_HEADER_HEIGHT = 125; // @see: --header-height
         delete window.pendingLinkedCommentScroll;
 
-        const elem = isMobile ? document.querySelector('.MuiPaper-root .card--enable-overflow') : window;
+        const mobileChatElem = document.querySelector('.MuiPaper-root .card--enable-overflow');
+        const drawerElem = document.querySelector('.MuiDrawer-root');
+        const elem = (isMobile && mobileChatElem) || window;
 
         if (elem) {
           // $FlowFixMe
           elem.scrollTo({
-            // $FlowFixMe
-            top: node.getBoundingClientRect().top + elem.scrollY - (isMobile ? 0 : ROUGH_HEADER_HEIGHT),
+            top:
+              node.getBoundingClientRect().top +
+              // $FlowFixMe
+              (mobileChatElem && drawerElem ? drawerElem.getBoundingClientRect().top * -1 : elem.scrollY) -
+              ROUGH_HEADER_HEIGHT,
             left: 0,
             behavior: 'smooth',
           });
