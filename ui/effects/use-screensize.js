@@ -3,7 +3,8 @@ import React from 'react';
 
 export function useWindowSize(fn) {
   const isWindowClient = typeof window === 'object';
-  const [windowSize, setWindowSize] = React.useState(isWindowClient ? window.innerWidth : undefined);
+  const initialState = fn ? fn(window.innerWidth) : window.innerWidth;
+  const [windowSize, setWindowSize] = React.useState(isWindowClient ? initialState : undefined);
 
   React.useEffect(() => {
     function setSize() {
