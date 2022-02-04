@@ -269,37 +269,17 @@ function CommentList(props: Props) {
       />
     ));
 
-  const sortButton = (label, icon, sortOption) => (
-    <Button
-      button="alt"
-      label={label}
-      icon={icon}
-      iconSize={18}
-      onClick={() => changeSort(sortOption)}
-      className={classnames(`button-toggle`, {
-        'button-toggle--active': sort === sortOption,
-      })}
-    />
-  );
+  const actionButtonsProps = { totalComments, sort, changeSort, setPage };
 
   return (
     <Card
       className="card--enable-overflow"
       title={!isMobile && title}
-      titleActions={
-        <>
-          {totalComments > 1 && ENABLE_COMMENT_REACTIONS && (
-            <span className="comment__sort">
-              {sortButton(__('Best'), ICONS.BEST, SORT_BY.POPULARITY)}
-              {sortButton(__('Controversial'), ICONS.CONTROVERSIAL, SORT_BY.CONTROVERSY)}
-              {sortButton(__('New'), ICONS.NEW, SORT_BY.NEWEST)}
-            </span>
-          )}
-          <Button button="alt" icon={ICONS.REFRESH} title={__('Refresh')} onClick={() => setPage(0)} />
-        </>
-      }
+      titleActions={<CommentActionButtons {...actionButtonsProps} />}
       actions={
         <>
+          {isMobile && <CommentActionButtons {...actionButtonsProps} />}
+
           <CommentCreate uri={uri} />
 
           {channelSettings && channelSettings.comments_enabled && !isFetchingComments && !totalComments && (
@@ -349,3 +329,55 @@ function CommentList(props: Props) {
 }
 
 export default CommentList;
+
+type ActionButtonsProps = {
+  totalComments: number,
+  sort: string,
+  changeSort: (string) => void,
+  setPage: (number) => void,
+};
+
+const CommentActionButtons = (actionButtonsProps: ActionButtonsProps) => {
+  const { totalComments, sort, changeSort, setPage } = actionButtonsProps;
+
+  const sortButtonProps = { activeSort: sort, changeSort };
+
+  return (
+    <>
+      {totalComments > 1 && ENABLE_COMMENT_REACTIONS && (
+        <span className="comment__sort">
+          <SortButton {...sortButtonProps} label={__('Best')} icon={ICONS.BEST} sortOption={SORT_BY.POPULARITY} />
+          <SortButton
+            {...sortButtonProps}
+            label={__('Controversial')}
+            icon={ICONS.CONTROVERSIAL}
+            sortOption={SORT_BY.CONTROVERSY}
+          />
+          <SortButton {...sortButtonProps} label={__('New')} icon={ICONS.NEW} sortOption={SORT_BY.NEWEST} />
+        </span>
+      )}
+
+      <Button button="alt" icon={ICONS.REFRESH} title={__('Refresh')} onClick={() => setPage(0)} />
+    </>
+  );
+};
+
+type SortButtonProps = {
+  activeSort: string,
+  sortOption: string,
+  changeSort: (string) => void,
+};
+
+const SortButton = (sortButtonProps: SortButtonProps) => {
+  const { activeSort, sortOption, changeSort, ...buttonProps } = sortButtonProps;
+
+  return (
+    <Button
+      {...buttonProps}
+      className={classnames(`button-toggle`, { 'button-toggle--active': activeSort === sortOption })}
+      button="alt"
+      iconSize={18}
+      onClick={() => changeSort(sortOption)}
+    />
+  );
+};

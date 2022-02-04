@@ -130,6 +130,7 @@ export default function LivestreamLayout(props: Props) {
                 hideHeader
                 superchatsHidden={superchatsHidden}
                 customViewMode={chatViewMode}
+                setCustomViewMode={(mode) => setChatViewMode(mode)}
               />
             </SwipeableDrawer>
 
@@ -155,7 +156,7 @@ const ChatModeSelector = (chatSelectorProps: any) => {
     <Menu>
       <MenuButton>
         <span className="swipeable-drawer__title-menu">
-          {chatViewMode === VIEW_MODES.CHAT ? __('Live Chat') : __('Super Chats')}
+          {chatViewMode === VIEW_MODES.CHAT ? __('Live Chat') : __('HyperChats')}
           <Icon icon={ICONS.DOWN} />
         </span>
       </MenuButton>

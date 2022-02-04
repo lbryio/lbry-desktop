@@ -21,13 +21,29 @@ $thumbnailWidthSmall: 1rem;
     justify-content: space-between;
     align-items: flex-end;
   }
+
+  @media (min-width: $breakpoint-small) {
+    fieldset-section + .section {
+      margin-top: var(--spacing-m);
+    }
+  }
 }
 
 @media (max-width: $breakpoint-small) {
-  .commentCreate + .empty__wrap {
+  .empty__wrap {
     p {
       font-size: var(--font-small);
       text-align: center;
+    }
+  }
+}
+
+.comment-create--drawer {
+  .MuiPaper-root {
+    background-color: var(--color-background) !important;
+
+    span {
+      color: var(--color-text);
     }
   }
 }
@@ -71,6 +87,15 @@ $thumbnailWidthSmall: 1rem;
     fieldset-section {
       font-size: var(--font-xxsmall);
     }
+
+    span {
+      font-size: var(--font-xxsmall);
+    }
+
+    select {
+      height: 1rem;
+      margin: var(--spacing-xxs) 0px;
+    }
   }
 }
 
@@ -86,11 +111,24 @@ $thumbnailWidthSmall: 1rem;
     margin-right: var(--spacing-m);
     font-size: var(--font-large);
   }
+
+  @media (max-width: $breakpoint-small) {
+    padding: var(--spacing-xs);
+
+    span {
+      font-size: var(--font-xsmall);
+    }
+  }
 }
 
-.commentCreate__minAmountNotice {
+.comment-create__min-amount-notice {
   .icon {
     margin-bottom: -3px; // TODO fix few instances of these (find "-2px")
+  }
+
+  @media (max-width: $breakpoint-small) {
+    margin: 0px;
+    font-size: var(--font-xsmall);
   }
 }
 
@@ -129,6 +167,15 @@ $thumbnailWidthSmall: 1rem;
 
     .credit-amount:not(:first-child) {
       margin-left: var(--spacing-xxs);
+    }
+  }
+
+  @media (max-width: $breakpoint-small) {
+    padding: var(--spacing-xs);
+    height: 7rem;
+
+    span {
+      font-size: var(--font-xsmall);
     }
   }
 }

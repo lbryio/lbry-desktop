@@ -6,7 +6,6 @@ import { Global } from '@emotion/react';
 // $FlowFixMe
 import { grey } from '@mui/material/colors';
 
-import { formatLbryUrlForWeb } from 'util/url';
 import { useIsMobile } from 'effects/use-screensize';
 import * as ICONS from 'constants/icons';
 import Button from 'component/button';
@@ -42,6 +41,7 @@ type Props = {
   superchatsHidden?: boolean,
   customViewMode?: string,
   theme: string,
+  setCustomViewMode?: (any) => void,
   doCommentList: (string, string, number, number) => void,
   doResolveUris: (Array<string>, boolean) => void,
   doSuperChatList: (string) => void,
@@ -60,6 +60,7 @@ export default function LivestreamChatLayout(props: Props) {
     superchatsHidden,
     customViewMode,
     theme,
+    setCustomViewMode,
     doCommentList,
     doResolveUris,
     doSuperChatList,
@@ -67,11 +68,18 @@ export default function LivestreamChatLayout(props: Props) {
 
   const isMobile = useIsMobile() && !isPopoutWindow;
 
-  const discussionElement = document.querySelector('.livestream__comments');
+  const webElement = document.querySelector('.livestream__comments');
+  const mobileElement = document.querySelector('.livestream__comments--mobile');
+  const discussionElement = isMobile ? mobileElement : webElement;
+  const allCommentsElem = document.querySelectorAll('.livestream__comment');
+  const lastCommentElem = allCommentsElem && allCommentsElem[allCommentsElem.length - 1];
+  const minScrollPos =
+    discussionElement && lastCommentElem && discussionElement.scrollHeight - lastCommentElem.offsetHeight;
+  const minOffset = discussionElement && minScrollPos && discussionElement.scrollHeight - minScrollPos;
 
   const restoreScrollPos = React.useCallback(() => {
-    if (discussionElement) discussionElement.scrollTop = 0;
-  }, [discussionElement]);
+    if (discussionElement) discussionElement.scrollTop = !isMobile ? 0 : discussionElement.scrollHeight;
+  }, [discussionElement, isMobile]);
 
   const commentsRef = React.createRef();
 
@@ -79,12 +87,12 @@ export default function LivestreamChatLayout(props: Props) {
   const [scrollPos, setScrollPos] = React.useState(0);
   const [showPinned, setShowPinned] = React.useState(true);
   const [resolvingSuperChats, setResolvingSuperChats] = React.useState(false);
-  const [mention, setMention] = React.useState();
   const [openedPopoutWindow, setPopoutWindow] = React.useState(undefined);
   const [chatHidden, setChatHidden] = React.useState(false);
+  const [didInitialScroll, setDidInitialScroll] = React.useState(false);
+  const [bottomScrollTop, setBottomScrollTop] = React.useState(0);
 
-  const quickMention =
-    mention && formatLbryUrlForWeb(mention).substring(1, formatLbryUrlForWeb(mention).indexOf(':') + 3);
+  const recentScrollPos = isMobile ? (bottomScrollTop > 0 && minOffset ? bottomScrollTop - minOffset : 0) : 0;
   const claimId = claim && claim.claim_id;
   const commentsToDisplay = viewMode === VIEW_MODES.CHAT ? commentsByChronologicalOrder : superChatsByAmount;
   const commentsLength = commentsToDisplay && commentsToDisplay.length;
@@ -100,6 +108,7 @@ export default function LivestreamChatLayout(props: Props) {
       }
     }
     setViewMode(VIEW_MODES.SUPERCHAT);
+    if (setCustomViewMode) setCustomViewMode(VIEW_MODES.SUPERCHAT);
   }
 
   React.useEffect(() => {
@@ -115,12 +124,26 @@ export default function LivestreamChatLayout(props: Props) {
     }
   }, [claimId, uri, doCommentList, doSuperChatList]);
 
+  React.useEffect(() => {
+    if (
+      isMobile &&
+      discussionElement &&
+      viewMode === VIEW_MODES.CHAT &&
+      !didInitialScroll &&
+      discussionElement.scrollTop < discussionElement.scrollHeight
+    ) {
+      discussionElement.scrollTop = discussionElement.scrollHeight;
+      setDidInitialScroll(true);
+      setBottomScrollTop(discussionElement.scrollTop);
+    }
+  }, [didInitialScroll, discussionElement, isMobile, viewMode]);
+
   // Register scroll handler (TODO: Should throttle/debounce)
   React.useEffect(() => {
     function handleScroll() {
       if (discussionElement) {
         const scrollTop = discussionElement.scrollTop;
-        if (scrollTop !== scrollPos) {
+        if (!scrollPos || scrollTop !== scrollPos) {
           setScrollPos(scrollTop);
         }
       }
@@ -136,12 +159,13 @@ export default function LivestreamChatLayout(props: Props) {
   React.useEffect(() => {
     if (discussionElement && commentsLength > 0) {
       // Only update comment scroll if the user hasn't scrolled up to view old comments
-      if (scrollPos >= 0) {
+      // $FlowFixMe
+      if (scrollPos && (!isMobile || recentScrollPos) && scrollPos >= recentScrollPos) {
         // +ve scrollPos: not scrolled (Usually, there'll be a few pixels beyond 0).
         // -ve scrollPos: user scrolled.
         const timer = setTimeout(() => {
           // Use a timer here to ensure we reset after the new comment has been rendered.
-          discussionElement.scrollTop = 0;
+          discussionElement.scrollTop = !isMobile ? 0 : discussionElement.scrollHeight + 999;
         }, COMMENT_SCROLL_TIMEOUT);
         return () => clearTimeout(timer);
       }
@@ -283,7 +307,6 @@ export default function LivestreamChatLayout(props: Props) {
                     comment={pinnedComment}
                     key={pinnedComment.comment_id}
                     uri={uri}
-                    pushMention={setMention}
                     handleDismissPin={() => setShowPinned(false)}
                     isMobile
                   />
@@ -292,12 +315,7 @@ export default function LivestreamChatLayout(props: Props) {
             ) : (
               showPinned && (
                 <div className="livestream-pinned__wrapper">
-                  <LivestreamComment
-                    comment={pinnedComment}
-                    key={pinnedComment.comment_id}
-                    uri={uri}
-                    pushMention={setMention}
-                  />
+                  <LivestreamComment comment={pinnedComment} key={pinnedComment.comment_id} uri={uri} />
 
                   <Button
                     title={__('Dismiss pinned comment')}
@@ -316,23 +334,18 @@ export default function LivestreamChatLayout(props: Props) {
             <Spinner />
           </div>
         ) : (
-          <LivestreamComments
-            uri={uri}
-            commentsToDisplay={commentsToDisplay}
-            pushMention={setMention}
-            isMobile={isMobile}
-          />
+          <LivestreamComments uri={uri} commentsToDisplay={commentsToDisplay} isMobile={isMobile} />
         )}
 
-        {scrollPos < 0 && (
+        {scrollPos && (!isMobile || recentScrollPos) && scrollPos < recentScrollPos && viewMode === VIEW_MODES.CHAT ? (
           <Button
             button="secondary"
-            className="livestreamComments__scrollToRecent"
+            className="livestream-comments__scroll-to-recent"
             label={viewMode === VIEW_MODES.CHAT ? __('Recent Comments') : __('Recent Tips')}
             onClick={restoreScrollPos}
             iconRight={ICONS.DOWN}
           />
-        )}
+        ) : null}
 
         <div className="livestream__comment-create">
           <CommentCreate
@@ -341,8 +354,13 @@ export default function LivestreamChatLayout(props: Props) {
             embed={embed}
             uri={uri}
             onDoneReplying={restoreScrollPos}
-            pushedMention={quickMention}
-            setPushedMention={setMention}
+            onSlimInputClick={
+              scrollPos &&
+              recentScrollPos &&
+              scrollPos >= recentScrollPos &&
+              viewMode === VIEW_MODES.CHAT &&
+              restoreScrollPos
+            }
           />
         </div>
       </div>

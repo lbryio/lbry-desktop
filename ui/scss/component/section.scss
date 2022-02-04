@@ -167,6 +167,23 @@
     padding: var(--spacing-s) var(--spacing-m);
     height: var(--button-height);
   }
+
+  @media (max-width: $breakpoint-small) {
+    margin-top: var(--spacing-xxs);
+
+    button {
+      height: 2rem;
+      padding: 0px var(--spacing-s);
+
+      .button__content {
+        height: unset;
+
+        span {
+          font-size: var(--font-xxsmall);
+        }
+      }
+    }
+  }
 }
 
 .section__actions--centered {

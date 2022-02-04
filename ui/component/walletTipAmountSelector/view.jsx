@@ -71,7 +71,6 @@ function WalletTipAmountSelector(props: Props) {
 
   // if it's fiat but there's no card saved OR the creator can't receive fiat tips
   const shouldDisableFiatSelectors = activeTab === TAB_FIAT && (!hasCardSaved || !canReceiveFiatTip);
-  if (setDisableSubmitButton) setDisableSubmitButton(shouldDisableFiatSelectors);
 
   // setup variables for tip API
   const channelClaimId = claim ? (claim.signing_channel ? claim.signing_channel.claim_id : claim.claim_id) : undefined;
@@ -102,6 +101,10 @@ function WalletTipAmountSelector(props: Props) {
       setConvertedAmount(tipAmountValue * exchangeRate);
     }
   }
+
+  React.useEffect(() => {
+    if (setDisableSubmitButton) setDisableSubmitButton(shouldDisableFiatSelectors);
+  }, [setDisableSubmitButton, shouldDisableFiatSelectors]);
 
   React.useEffect(() => {
     if (setConvertedAmount && exchangeRate && (!convertedAmount || convertedAmount !== amount * exchangeRate)) {

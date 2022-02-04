@@ -44,8 +44,8 @@ export default function LivestreamComments(props: Props) {
 
   /* top to bottom comment display */
   if (!fetchingComments && commentsToDisplay && commentsToDisplay.length > 0) {
-    return (
-      <div className="livestream__comments">
+    return isMobile ? (
+      <div className="livestream__comments--mobile">
         {commentsToDisplay
           .slice(0)
           .reverse()
@@ -55,9 +55,15 @@ export default function LivestreamComments(props: Props) {
               key={comment.comment_id}
               uri={uri}
               forceUpdate={forceUpdate}
-              isMobile={isMobile}
+              isMobile
             />
           ))}
+      </div>
+    ) : (
+      <div className="livestream__comments">
+        {commentsToDisplay.map((comment) => (
+          <LivestreamComment comment={comment} key={comment.comment_id} uri={uri} forceUpdate={forceUpdate} />
+        ))}
       </div>
     );
   }

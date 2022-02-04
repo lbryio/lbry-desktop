@@ -9,6 +9,7 @@ import * as MODALS from 'constants/modal_types';
 import ChannelThumbnail from 'component/channelThumbnail';
 import Icon from 'component/common/icon';
 import React from 'react';
+import { useIsMobile } from 'effects/use-screensize';
 
 type Props = {
   uri: ?string,
@@ -66,6 +67,8 @@ function CommentMenuList(props: Props) {
     setQuickReply,
     handleDismissPin,
   } = props;
+
+  const isMobile = useIsMobile();
 
   const {
     location: { pathname, search },
@@ -253,7 +256,7 @@ function CommentMenuList(props: Props) {
         </MenuItem>
       )}
 
-      {isPinned && isLiveComment && (
+      {isPinned && isLiveComment && isMobile && (
         <MenuItem className="comment__menu-option menu__link" onSelect={handleDismissPin}>
           <Icon aria-hidden icon={ICONS.DISMISS_ALL} />
           {__('Dismiss Pin')}

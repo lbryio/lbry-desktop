@@ -3,13 +3,14 @@ import 'easymde/dist/easymde.min.css';
 import { FF_MAX_CHARS_DEFAULT } from 'constants/form-field';
 import { openEditorMenu, stopContextMenu } from 'util/context-menu';
 import { lazyImport } from 'util/lazyImport';
-import * as ICONS from 'constants/icons';
 import Button from 'component/button';
 import MarkdownPreview from 'component/common/markdown-preview';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import SimpleMDE from 'react-simplemde-editor';
 import type { ElementRef, Node } from 'react';
+import Drawer from '@mui/material/Drawer';
+import CommentSelectors from 'component/commentCreate/comment-selectors';
 
 // prettier-ignore
 const TextareaWithSuggestions = lazyImport(() => import('component/textareaWithSuggestions' /* webpackChunkName: "suggestions" */));
@@ -33,7 +34,6 @@ type Props = {
   max?: number,
   min?: number,
   name: string,
-  noEmojis?: boolean,
   placeholder?: string | number,
   postfix?: string,
   prefix?: string,
@@ -44,15 +44,25 @@ type Props = {
   textAreaMaxLength?: number,
   type?: string,
   value?: string | number,
+  slimInput?: boolean,
+  commentSelectorsProps?: any,
+  showSelectors?: boolean,
+  submitButtonRef?: any,
+  tipModalOpen?: boolean,
+  onSlimInputClick?: () => void,
   onChange?: (any) => any,
-  openEmoteMenu?: () => void,
+  setShowSelectors?: (boolean) => void,
   quickActionHandler?: (any) => any,
   render?: () => React$Node,
   handleTip?: (isLBC: boolean) => any,
   handleSubmit?: () => any,
 };
 
-export class FormField extends React.PureComponent<Props> {
+type State = {
+  drawerOpen: boolean,
+};
+
+export class FormField extends React.PureComponent<Props, State> {
   static defaultProps = { labelOnLeft: false, blockWrap: true };
 
   input: { current: ElementRef<any> };
@@ -60,6 +70,10 @@ export class FormField extends React.PureComponent<Props> {
   constructor(props: Props) {
     super(props);
     this.input = React.createRef();
+
+    this.state = {
+      drawerOpen: false,
+    };
   }
 
   componentDidMount() {
@@ -67,6 +81,14 @@ export class FormField extends React.PureComponent<Props> {
     const input = this.input.current;
 
     if (input && autoFocus) input.focus();
+  }
+
+  componentDidUpdate() {
+    const { showSelectors, slimInput } = this.props;
+    const input = this.input.current;
+
+    // Opened selectors (emoji/sticker) -> blur input and hide keyboard
+    if (slimInput && showSelectors && input) input.blur();
   }
 
   render() {
@@ -85,15 +107,20 @@ export class FormField extends React.PureComponent<Props> {
       label,
       labelOnLeft,
       name,
-      noEmojis,
       postfix,
       prefix,
       quickActionLabel,
       stretch,
       textAreaMaxLength,
       type,
-      openEmoteMenu,
+      slimInput,
+      commentSelectorsProps,
+      showSelectors,
+      submitButtonRef,
+      tipModalOpen,
+      onSlimInputClick,
       quickActionHandler,
+      setShowSelectors,
       render,
       handleTip,
       handleSubmit,
@@ -240,50 +267,58 @@ export class FormField extends React.PureComponent<Props> {
         case 'textarea':
           return (
             <fieldset-section>
-              {(label || quickAction) && (
-                <div className="form-field__two-column">
-                  <label htmlFor={name}>{label}</label>
-                  {countInfo}
-                </div>
-              )}
+              <TextareaWrapper
+                isDrawerOpen={Boolean(this.state.drawerOpen)}
+                toggleDrawer={() => this.setState({ drawerOpen: !this.state.drawerOpen })}
+                closeSelector={setShowSelectors ? () => setShowSelectors(false) : () => {}}
+                commentSelectorsProps={commentSelectorsProps}
+                showSelectors={Boolean(showSelectors)}
+                slimInput={slimInput}
+                tipModalOpen={tipModalOpen}
+                onSlimInputClick={onSlimInputClick}
+              >
+                {(!slimInput || this.state.drawerOpen) && (label || quickAction) && (
+                  <div className="form-field__two-column">
+                    <label htmlFor={name}>{label}</label>
+                    {quickAction}
+                    {countInfo}
+                  </div>
+                )}
 
-              {hideSuggestions ? (
-                <textarea
-                  type={type}
-                  id={name}
-                  maxLength={textAreaMaxLength || FF_MAX_CHARS_DEFAULT}
-                  ref={this.input}
-                  {...inputProps}
-                />
-              ) : (
-                <React.Suspense fallback={null}>
-                  <TextareaWithSuggestions
-                    uri={uri}
+                {hideSuggestions ? (
+                  <textarea
                     type={type}
                     id={name}
                     maxLength={textAreaMaxLength || FF_MAX_CHARS_DEFAULT}
-                    inputRef={this.input}
-                    isLivestream={isLivestream}
-                    handleEmojis={openEmoteMenu}
-                    handleTip={handleTip}
-                    handleSubmit={handleSubmit}
+                    ref={this.input}
                     {...inputProps}
                   />
-                </React.Suspense>
-              )}
-
-              {!noEmojis && openEmoteMenu && (
-                <div className="form-field__textarea-info">
-                  <Button
-                    type="alt"
-                    className="button--file-action"
-                    title="Emotes"
-                    onClick={openEmoteMenu}
-                    icon={ICONS.EMOJI}
-                    iconSize={20}
-                  />
-                </div>
-              )}
+                ) : (
+                  <React.Suspense fallback={null}>
+                    <TextareaWithSuggestions
+                      uri={uri}
+                      type={type}
+                      id={name}
+                      maxLength={textAreaMaxLength || FF_MAX_CHARS_DEFAULT}
+                      inputRef={this.input}
+                      isLivestream={isLivestream}
+                      toggleSelectors={setShowSelectors ? () => setShowSelectors(!showSelectors) : undefined}
+                      handleTip={handleTip}
+                      handleSubmit={() => {
+                        if (handleSubmit) handleSubmit();
+                        if (slimInput) this.setState({ drawerOpen: false });
+                      }}
+                      claimIsMine={commentSelectorsProps && commentSelectorsProps.claimIsMine}
+                      {...inputProps}
+                      handlePreventClick={
+                        !this.state.drawerOpen ? () => this.setState({ drawerOpen: true }) : undefined
+                      }
+                      autoFocus={this.state.drawerOpen}
+                      submitButtonRef={submitButtonRef}
+                    />
+                  </React.Suspense>
+                )}
+              </TextareaWrapper>
             </fieldset-section>
           );
         default:
@@ -321,3 +356,65 @@ export class FormField extends React.PureComponent<Props> {
 }
 
 export default FormField;
+
+type TextareaWrapperProps = {
+  slimInput?: boolean,
+  children: Node,
+  isDrawerOpen: boolean,
+  showSelectors?: boolean,
+  commentSelectorsProps?: any,
+  tipModalOpen?: boolean,
+  onSlimInputClick?: () => void,
+  toggleDrawer: () => void,
+  closeSelector?: () => void,
+};
+
+function TextareaWrapper(wrapperProps: TextareaWrapperProps) {
+  const {
+    children,
+    slimInput,
+    isDrawerOpen,
+    commentSelectorsProps,
+    showSelectors,
+    tipModalOpen,
+    onSlimInputClick,
+    toggleDrawer,
+    closeSelector,
+  } = wrapperProps;
+
+  function handleCloseAll() {
+    toggleDrawer();
+    if (closeSelector) closeSelector();
+    if (onSlimInputClick) onSlimInputClick();
+  }
+
+  return slimInput ? (
+    !isDrawerOpen ? (
+      <div
+        role="button"
+        onClick={() => {
+          toggleDrawer();
+          if (onSlimInputClick) onSlimInputClick();
+        }}
+      >
+        {children}
+      </div>
+    ) : (
+      <Drawer
+        className="comment-create--drawer"
+        anchor="bottom"
+        open
+        onClose={handleCloseAll}
+        // The Modal tries to enforce focus when open and doesn't allow clicking or changing any
+        // other input boxes, so in this case it is disabled when trying to type in a custom tip
+        ModalProps={{ disableEnforceFocus: tipModalOpen }}
+      >
+        {children}
+
+        {showSelectors && <CommentSelectors closeSelector={closeSelector} {...commentSelectorsProps} />}
+      </Drawer>
+    )
+  ) : (
+    <>{children}</>
+  );
+}

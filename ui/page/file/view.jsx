@@ -72,7 +72,8 @@ export default function FilePage(props: Props) {
 
   const isMobile = useIsMobile();
 
-  const [showComments, setShowComments] = React.useState(undefined);
+  // Auto-open the drawer on Mobile view if there is a linked comment
+  const [showComments, setShowComments] = React.useState(linkedCommentId);
 
   const cost = costInfo ? costInfo.cost : null;
   const hasFileInfo = fileInfo !== undefined;
@@ -186,11 +187,7 @@ export default function FilePage(props: Props) {
     );
   }
 
-  const commentsListElement = commentsDisabled ? (
-    <Empty text={__('The creator of this content has disabled comments.')} />
-  ) : (
-    <CommentsList uri={uri} linkedCommentId={linkedCommentId} />
-  );
+  const commentsListProps = { uri, linkedCommentId };
 
   return (
     <Page className="file-page" filePage isMarkdown={isMarkdown}>
@@ -216,20 +213,22 @@ export default function FilePage(props: Props) {
               {RENDER_MODES.FLOATING_MODES.includes(renderMode) && <FileTitleSection uri={uri} />}
 
               <React.Suspense fallback={null}>
-                {isMobile ? (
+                {commentsDisabled ? (
+                  <Empty text={__('The creator of this content has disabled comments.')} />
+                ) : isMobile ? (
                   <>
                     <SwipeableDrawer
                       open={Boolean(showComments)}
                       toggleDrawer={() => setShowComments(!showComments)}
                       title={commentsListTitle}
                     >
-                      {commentsListElement}
+                      <CommentsList {...commentsListProps} />
                     </SwipeableDrawer>
 
                     <DrawerExpandButton label={commentsListTitle} toggleDrawer={() => setShowComments(!showComments)} />
                   </>
                 ) : (
-                  commentsListElement
+                  <CommentsList {...commentsListProps} />
                 )}
               </React.Suspense>
             </section>

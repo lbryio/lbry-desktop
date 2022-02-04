@@ -14,6 +14,45 @@
   }
 }
 
+.commentCreate {
+  .tabs {
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    margin-bottom: var(--spacing-m);
+
+    .selector-menu {
+      border: 0 !important;
+
+      button {
+        margin: var(--spacing-xxs);
+      }
+    }
+  }
+}
+
+.tabs__list--comment-selector {
+  @extend .tabs__list--channel-page;
+  padding-left: var(--spacing-m) !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--color-border) !important;
+  border-radius: 0 !important;
+  margin-bottom: 0px !important;
+
+  + .tab__divider {
+    display: none;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    position: sticky;
+    padding: 0px;
+    height: 3rem !important;
+
+    button {
+      font-size: var(--font-xxsmall);
+    }
+  }
+}
+
 .tabs__list--channel-page {
   padding-left: calc(var(--channel-thumbnail-width) + var(--spacing-xl));
   padding-right: var(--spacing-m);

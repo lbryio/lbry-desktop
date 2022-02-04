@@ -213,17 +213,27 @@ function Comment(props: Props) {
     replace(`${pathname}?${urlParams.toString()}`);
   }
 
-  const linkedCommentRef = React.useCallback((node) => {
-    if (node !== null && window.pendingLinkedCommentScroll) {
-      const ROUGH_HEADER_HEIGHT = 125; // @see: --header-height
-      delete window.pendingLinkedCommentScroll;
-      window.scrollTo({
-        top: node.getBoundingClientRect().top + window.scrollY - ROUGH_HEADER_HEIGHT,
-        left: 0,
-        behavior: 'smooth',
-      });
-    }
-  }, []);
+  const linkedCommentRef = React.useCallback(
+    (node) => {
+      if (node !== null && window.pendingLinkedCommentScroll) {
+        const ROUGH_HEADER_HEIGHT = 125; // @see: --header-height
+        delete window.pendingLinkedCommentScroll;
+
+        const elem = isMobile ? document.querySelector('.MuiPaper-root .card--enable-overflow') : window;
+
+        if (elem) {
+          // $FlowFixMe
+          elem.scrollTo({
+            // $FlowFixMe
+            top: node.getBoundingClientRect().top + elem.scrollY - (isMobile ? 0 : ROUGH_HEADER_HEIGHT),
+            left: 0,
+            behavior: 'smooth',
+          });
+        }
+      }
+    },
+    [isMobile]
+  );
 
   return (
     <li
@@ -313,6 +323,7 @@ function Comment(props: Props) {
                   charCount={charCount}
                   onChange={handleEditMessageChanged}
                   textAreaMaxLength={FF_MAX_CHARS_IN_COMMENT}
+                  handleSubmit={handleSubmit}
                 />
                 <div className="section__actions section__actions--no-margin">
                   <Button

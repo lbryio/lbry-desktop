@@ -123,6 +123,16 @@ $recent-msg-button__height: 2rem;
 
 .livestream__comments {
   display: flex;
+  flex-direction: column-reverse;
+  font-size: var(--font-small);
+  overflow-y: scroll;
+  overflow-x: visible;
+  padding-top: var(--spacing-s);
+  width: 100%;
+}
+
+.livestream__comments--mobile {
+  display: flex;
   flex-direction: column;
   font-size: var(--font-small);
   overflow-y: scroll;
@@ -131,16 +141,23 @@ $recent-msg-button__height: 2rem;
   width: 100%;
 }
 
-.livestreamComments__scrollToRecent {
+.livestream-comments__scroll-to-recent {
   margin-top: -$recent-msg-button__height;
   align-self: center;
-  margin-bottom: var(--spacing-xs);
   font-size: var(--font-xsmall);
   padding: var(--spacing-xxs) var(--spacing-s);
   opacity: 0.9;
 
   &:hover {
     opacity: 1;
+  }
+
+  @media (min-width: $breakpoint-small) {
+    margin-bottom: var(--spacing-xs);
+  }
+
+  @media (max-width: $breakpoint-small) {
+    bottom: var(--spacing-xxs);
   }
 }
 
@@ -150,7 +167,7 @@ $recent-msg-button__height: 2rem;
   margin-top: auto;
 
   @media (max-width: $breakpoint-small) {
-    padding: var(--spacing-xxs);
+    padding: 0px;
 
     span,
     select,
@@ -186,7 +203,7 @@ $recent-msg-button__height: 2rem;
 .livestream-superchats__wrapper--mobile {
   @extend .livestream-superchats__wrapper;
 
-  z-index: 1300;
+  z-index: 9999999;
   width: 100%;
   background-color: transparent;
   padding: 0px;
@@ -224,6 +241,7 @@ $recent-msg-button__height: 2rem;
       left: 0;
       right: 0;
       width: 100%;
+      z-index: 1;
     }
   }
 }
@@ -268,24 +286,15 @@ $recent-msg-button__height: 2rem;
   border: 1px solid var(--color-border);
 
   .livestream__comment {
-    overflow: unset;
+    overflow: hidden;
 
     .livestreamComment__body {
       margin: 0px;
       width: 100%;
+      overflow: scroll;
 
-      .markdown-preview {
-        p,
-        .button__label {
-          white-space: nowrap !important;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          word-break: break-all;
-        }
-
-        a {
-          pointer-events: none;
-        }
+      &::-webkit-scrollbar {
+        width: 0 !important;
       }
     }
   }
@@ -378,6 +387,7 @@ $recent-msg-button__height: 2rem;
 
   span {
     font-size: var(--font-xxsmall);
+    color: var(--color-text-subtitle);
   }
 }
 

@@ -20,6 +20,44 @@
 
     .card__main-actions {
       margin-top: 0px !important;
+
+      .comment__sort {
+        margin: 0px !important;
+        display: inline;
+
+        button {
+          padding: var(--spacing-xxs);
+
+          span {
+            font-size: var(--font-xxsmall);
+          }
+        }
+      }
+
+      > .button--alt {
+        padding: var(--spacing-xxs) var(--spacing-s);
+      }
+
+      .comment__sort + button {
+        margin: 0px var(--spacing-xxs);
+      }
+
+      .button + .commentCreate {
+        margin-top: var(--spacing-xxs);
+      }
+    }
+  }
+}
+
+.card--comments-list {
+  @extend .card--enable-overflow;
+
+  @media (max-width: $breakpoint-small) {
+    overflow-y: scroll;
+    height: 100%;
+
+    .card__main-actions {
+      margin-top: 0px !important;
     }
   }
 }
@@ -362,7 +400,7 @@
         margin: 0;
       }
 
-      .media__subtitle--centered::before {
+      span + .media__subtitle--centered::before {
         content: '•';
         margin: 0 5px;
       }
@@ -489,5 +527,12 @@
       border-top: 1px solid var(--color-border);
       max-width: 100%;
     }
+  }
+}
+
+.ReactModalPortal {
+  .button--close {
+    top: 0;
+    right: 0;
   }
 }

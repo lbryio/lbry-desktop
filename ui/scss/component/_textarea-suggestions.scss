@@ -6,14 +6,45 @@
     font-size: inherit !important;
     color: var(--color-text) !important;
 
-    .MuiOutlinedInput-notchedOutline {
-      visibility: hidden;
-    }
-
     .create__comment {
       min-height: calc(var(--height-input) * 1.5) !important;
     }
   }
+}
+
+.comment-create__auth {
+  .MuiAutocomplete-root {
+    margin-bottom: var(--spacing-m);
+  }
+}
+
+.comment-create--drawer {
+  .MuiPaper-root {
+    .form-field__two-column,
+    .MuiOutlinedInput-root {
+      padding: 0px var(--spacing-xxs) !important;
+    }
+  }
+}
+
+.livestream__comment-create {
+  .MuiOutlinedInput-root {
+    padding: 0px var(--spacing-xxs) !important;
+  }
+}
+
+.MuiOutlinedInput-notchedOutline {
+  visibility: none;
+}
+
+.comment-create--drawer .MuiOutlinedInput-notchedOutline {
+  border: 1px solid var(--color-border) !important;
+  border-radius: 0 !important;
+}
+
+.card__main-actions .commentCreate .MuiOutlinedInput-notchedOutline {
+  border: 1px solid var(--color-border) !important;
+  border-radius: var(--border-radius) !important;
 }
 
 @media (max-width: $breakpoint-small) {
@@ -25,19 +56,15 @@
     font-size: var(--font-xsmall) !important;
     flex-wrap: nowrap !important;
     color: var(--color-text) !important;
-    padding: 0px 9px !important;
+    padding: 0px !important;
 
     textarea {
       border: none;
       margin: 9px 0px;
     }
 
-    button:not(:first-of-type):not(:last-of-type) {
-      margin: 0px var(--spacing-xxs);
-    }
-
-    button + div {
-      margin-left: var(--spacing-xxs);
+    button {
+      padding: var(--spacing-xxs);
     }
 
     .button--primary {
@@ -129,4 +156,12 @@
 
 .MuiAutocomplete-loading {
   color: var(--color-text) !important;
+}
+
+.MuiPaper-root {
+  .form-field__two-column {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
 }

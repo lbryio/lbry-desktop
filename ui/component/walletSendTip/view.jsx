@@ -44,6 +44,7 @@ type Props = {
   uri: string,
   isTipOnly?: boolean,
   hasSelectedTab?: string,
+  customText?: string,
   doHideModal: () => void,
   doSendCashTip: (TipParams, boolean, UserParams, string, ?string) => string,
   doSendTip: (SupportParams, boolean) => void, // function that comes from lbry-redux
@@ -69,6 +70,7 @@ export default function WalletSendTip(props: Props) {
     uri,
     isTipOnly,
     hasSelectedTab,
+    customText,
     doHideModal,
     doSendCashTip,
     doSendTip,
@@ -328,7 +330,7 @@ export default function WalletSendTip(props: Props) {
                   button="primary"
                   type="submit"
                   disabled={fetchingChannels || isPending || tipError || !tipAmount || disableSubmitButton}
-                  label={buildButtonText()}
+                  label={customText || buildButtonText()}
                 />
                 {fetchingChannels && <span className="help">{__('Loading your channels...')}</span>}
               </div>
