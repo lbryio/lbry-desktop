@@ -111,6 +111,21 @@ label {
   .icon__lbc {
     margin-bottom: 4px;
   }
+
+  .compound-label {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: baseline;
+    *:not(:first-child) {
+      margin-left: var(--spacing-s);
+    }
+    .compount-label__strong {
+    }
+    .compound-label__details {
+      color: var(--color-text-subtitle);
+    }
+  }
 }
 
 input-submit {
