@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
-
+import { useActiveElement } from './use-active-element';
 export default function useHistoryNav(history) {
+  const el = useActiveElement(); // disable if we're in a textarea.
   useEffect(() => {
-    const handleKeyPress = e => {
+    const handleKeyPress = (e) => {
       if ((e.metaKey || e.altKey) && !e.ctrlKey && !e.shiftKey) {
         switch (e.code) {
           case 'ArrowLeft':
@@ -19,7 +20,9 @@ export default function useHistoryNav(history) {
         }
       }
     };
-    window.addEventListener('keydown', handleKeyPress);
+    if (!el.type || (el.type && !el.type.startsWith('text'))) {
+      window.addEventListener('keydown', handleKeyPress);
+    }
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, []);
+  }, [el]);
 }
