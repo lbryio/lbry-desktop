@@ -1,21 +1,15 @@
+// @flow
 // Widths are taken from "ui/scss/init/vars.scss"
 import React, { useRef } from 'react';
+const DEFAULT_SCREEN_SIZE = 1080;
 
-export function useWindowSize(fn) {
+export function useWindowSize() {
   const isWindowClient = typeof window === 'object';
-  const initialState = fn ? fn(window.innerWidth) : window.innerWidth;
-  const [windowSize, setWindowSize] = React.useState(isWindowClient ? initialState : undefined);
-  const prev = useRef();
+  const [windowSize, setWindowSize] = React.useState(isWindowClient ? window.innerWidth : DEFAULT_SCREEN_SIZE);
 
   React.useEffect(() => {
     function setSize() {
-      if (fn) {
-        const curr = fn(window.innerWidth);
-        if (prev !== curr) {
-          setWindowSize(curr);
-          prev.current = curr;
-        }
-      } else setWindowSize(window.innerWidth);
+      setWindowSize(window.innerWidth);
     }
 
     if (isWindowClient) {
@@ -23,19 +17,44 @@ export function useWindowSize(fn) {
 
       return () => window.removeEventListener('resize', setSize);
     }
-  }, [fn, isWindowClient, setWindowSize, windowSize]);
+  }, [isWindowClient]);
+
+  return windowSize;
+}
+
+function useHasWindowWidthChangedEnough(comparisonFn: (windowSize: number) => boolean) {
+  const isWindowClient = typeof window === 'object';
+  const initialState = isWindowClient ? comparisonFn(window.innerWidth) : comparisonFn(DEFAULT_SCREEN_SIZE);
+  const [windowSize, setWindowSize] = React.useState(initialState);
+  const prev = useRef(window.innerWidth);
+
+  React.useEffect(() => {
+    function setSize() {
+      const curr = comparisonFn(window.innerWidth);
+      if (prev !== curr) {
+        setWindowSize(curr);
+        prev.current = curr;
+      }
+    }
+
+    if (isWindowClient) {
+      window.addEventListener('resize', setSize);
+
+      return () => window.removeEventListener('resize', setSize);
+    }
+  }, [isWindowClient]);
 
   return windowSize;
 }
 
 export function useIsMobile() {
-  return useWindowSize((windowSize) => windowSize < 901);
+  return useHasWindowWidthChangedEnough((windowSize) => windowSize < 901);
 }
 
 export function useIsMediumScreen() {
-  return useWindowSize((windowSize) => windowSize < 1151);
+  return useHasWindowWidthChangedEnough((windowSize) => windowSize < 1151);
 }
 
 export function useIsLargeScreen() {
-  return useWindowSize((windowSize) => windowSize > 1600);
+  return useHasWindowWidthChangedEnough((windowSize) => windowSize > 1600);
 }
