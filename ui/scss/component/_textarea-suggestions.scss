@@ -33,8 +33,10 @@
   }
 }
 
-.MuiOutlinedInput-notchedOutline {
-  visibility: none;
+@media (min-width: $breakpoint-small) {
+  .MuiOutlinedInput-notchedOutline {
+    display: none;
+  }
 }
 
 .comment-create--drawer .MuiOutlinedInput-notchedOutline {
