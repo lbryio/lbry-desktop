@@ -16,7 +16,6 @@ import * as MODALS from 'constants/modal_types';
 import Button from 'component/button';
 import classnames from 'classnames';
 import CommentSelectors from './comment-selectors';
-import Empty from 'component/common/empty';
 import React from 'react';
 import type { ElementRef } from 'react';
 import usePersistedState from 'effects/use-persisted-state';
@@ -429,10 +428,6 @@ export function CommentCreate(props: Props) {
   // **************************************************************************
   // Render
   // **************************************************************************
-
-  if (channelSettings && !channelSettings.comments_enabled) {
-    return <Empty padded text={__('This channel has disabled comments on their page.')} />;
-  }
 
   if (!isFetchingChannels && !hasChannels) {
     return (

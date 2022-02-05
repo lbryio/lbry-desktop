@@ -28,6 +28,7 @@ type Props = {
   costInfo: ?{ includesData: boolean, cost: number },
   fileInfo: FileListItem,
   uri: string,
+  channelId?: string,
   renderMode: string,
   obscureNsfw: boolean,
   isMature: boolean,
@@ -36,10 +37,11 @@ type Props = {
   collectionId: string,
   videoTheaterMode: boolean,
   claimIsMine: boolean,
-  commentsDisabled: boolean,
+  contentCommentsDisabled: boolean,
   isLivestream: boolean,
   position: number,
   commentsListTitle: string,
+  settingsByChannelId: { [channelId: string]: PerChannelSettings },
   doFetchCostInfoForUri: (uri: string) => void,
   doSetContentHistoryItem: (uri: string) => void,
   doSetPrimaryUri: (uri: ?string) => void,
@@ -49,6 +51,7 @@ type Props = {
 export default function FilePage(props: Props) {
   const {
     uri,
+    channelId,
     renderMode,
     fileInfo,
     obscureNsfw,
@@ -58,12 +61,13 @@ export default function FilePage(props: Props) {
     videoTheaterMode,
 
     claimIsMine,
-    commentsDisabled,
+    contentCommentsDisabled,
     hasCollectionById,
     collectionId,
     isLivestream,
     position,
     commentsListTitle,
+    settingsByChannelId,
     doFetchCostInfoForUri,
     doSetContentHistoryItem,
     doSetPrimaryUri,
@@ -75,6 +79,8 @@ export default function FilePage(props: Props) {
   // Auto-open the drawer on Mobile view if there is a linked comment
   const [showComments, setShowComments] = React.useState(linkedCommentId);
 
+  const channelSettings = channelId ? settingsByChannelId[channelId] : undefined;
+  const commentSettingDisabled = channelSettings && !channelSettings.comments_enabled;
   const cost = costInfo ? costInfo.cost : null;
   const hasFileInfo = fileInfo !== undefined;
   const isMarkdown = renderMode === RENDER_MODES.MARKDOWN;
@@ -188,6 +194,7 @@ export default function FilePage(props: Props) {
   }
 
   const commentsListProps = { uri, linkedCommentId };
+  const emptyMsgProps = { padded: !isMobile };
 
   return (
     <Page className="file-page" filePage isMarkdown={isMarkdown}>
@@ -213,8 +220,10 @@ export default function FilePage(props: Props) {
               {RENDER_MODES.FLOATING_MODES.includes(renderMode) && <FileTitleSection uri={uri} />}
 
               <React.Suspense fallback={null}>
-                {commentsDisabled ? (
-                  <Empty text={__('The creator of this content has disabled comments.')} />
+                {contentCommentsDisabled ? (
+                  <Empty {...emptyMsgProps} text={__('The creator of this content has disabled comments.')} />
+                ) : commentSettingDisabled ? (
+                  <Empty {...emptyMsgProps} text={__('This channel has disabled comments on their page.')} />
                 ) : isMobile ? (
                   <>
                     <SwipeableDrawer
@@ -240,7 +249,7 @@ export default function FilePage(props: Props) {
 
       {!isMarkdown
         ? !videoTheaterMode && <RightSideContent {...rightSideProps} />
-        : !commentsDisabled && (
+        : !contentCommentsDisabled && (
             <div className="file-page__post-comments">
               <React.Suspense fallback={null}>
                 <CommentsList uri={uri} linkedCommentId={linkedCommentId} commentsAreExpanded />

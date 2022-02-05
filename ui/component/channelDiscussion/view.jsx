@@ -9,14 +9,20 @@ type Props = {
   uri: string,
   linkedCommentId?: string,
   commentsDisabled: boolean,
+  commentSettingDisabled?: boolean,
 };
 
 function ChannelDiscussion(props: Props) {
-  const { uri, linkedCommentId, commentsDisabled } = props;
+  const { uri, linkedCommentId, commentsDisabled, commentSettingDisabled } = props;
 
   if (commentsDisabled) {
+    return <Empty text={__('The creator of this content has disabled comments.')} />;
+  }
+
+  if (commentSettingDisabled) {
     return <Empty text={__('This channel has disabled comments on their page.')} />;
   }
+
   return (
     <section className="section">
       <React.Suspense fallback={null}>
