@@ -74,14 +74,8 @@ export default function LivestreamChatLayout(props: Props) {
   const allCommentsElem = document.querySelectorAll('.livestream__comment');
   const lastCommentElem = allCommentsElem && allCommentsElem[allCommentsElem.length - 1];
   const minScrollPos =
-    discussionElement && lastCommentElem && discussionElement.scrollHeight - lastCommentElem.offsetHeight;
+    discussionElement && lastCommentElem && discussionElement.scrollHeight - lastCommentElem.offsetHeight * 2;
   const minOffset = discussionElement && minScrollPos && discussionElement.scrollHeight - minScrollPos;
-
-  const restoreScrollPos = React.useCallback(() => {
-    if (discussionElement) discussionElement.scrollTop = !isMobile ? 0 : discussionElement.scrollHeight;
-  }, [discussionElement, isMobile]);
-
-  const commentsRef = React.createRef();
 
   const [viewMode, setViewMode] = React.useState(VIEW_MODES.CHAT);
   const [scrollPos, setScrollPos] = React.useState(0);
@@ -91,6 +85,7 @@ export default function LivestreamChatLayout(props: Props) {
   const [chatHidden, setChatHidden] = React.useState(false);
   const [didInitialScroll, setDidInitialScroll] = React.useState(false);
   const [bottomScrollTop, setBottomScrollTop] = React.useState(0);
+  const [inputDrawerOpen, setInputDrawerOpen] = React.useState(false);
 
   const recentScrollPos = isMobile ? (bottomScrollTop > 0 && minOffset ? bottomScrollTop - minOffset : 0) : 0;
   const claimId = claim && claim.claim_id;
@@ -98,6 +93,18 @@ export default function LivestreamChatLayout(props: Props) {
   const commentsLength = commentsToDisplay && commentsToDisplay.length;
   const pinnedComment = pinnedComments.length > 0 ? pinnedComments[0] : null;
   const { superChatsChannelUrls, superChatsFiatAmount, superChatsLBCAmount } = getTipValues(superChatsByAmount);
+  const hasRecentComments = Boolean(
+    scrollPos && (!isMobile || recentScrollPos) && scrollPos < recentScrollPos && viewMode === VIEW_MODES.CHAT
+  );
+
+  const restoreScrollPos = React.useCallback(() => {
+    if (discussionElement) {
+      discussionElement.scrollTop = !isMobile ? 0 : discussionElement.scrollHeight;
+      setBottomScrollTop(discussionElement.scrollTop);
+    }
+  }, [discussionElement, isMobile]);
+
+  const commentsRef = React.createRef();
 
   function toggleSuperChat() {
     if (superChatsChannelUrls && superChatsChannelUrls.length > 0) {
@@ -129,14 +136,14 @@ export default function LivestreamChatLayout(props: Props) {
       isMobile &&
       discussionElement &&
       viewMode === VIEW_MODES.CHAT &&
-      !didInitialScroll &&
+      (!didInitialScroll || bottomScrollTop === 0) &&
       discussionElement.scrollTop < discussionElement.scrollHeight
     ) {
       discussionElement.scrollTop = discussionElement.scrollHeight;
       setDidInitialScroll(true);
       setBottomScrollTop(discussionElement.scrollTop);
     }
-  }, [didInitialScroll, discussionElement, isMobile, viewMode]);
+  }, [bottomScrollTop, didInitialScroll, discussionElement, isMobile, viewMode]);
 
   // Register scroll handler (TODO: Should throttle/debounce)
   React.useEffect(() => {
@@ -334,10 +341,15 @@ export default function LivestreamChatLayout(props: Props) {
             <Spinner />
           </div>
         ) : (
-          <LivestreamComments uri={uri} commentsToDisplay={commentsToDisplay} isMobile={isMobile} />
+          <LivestreamComments
+            uri={uri}
+            commentsToDisplay={commentsToDisplay}
+            isMobile={isMobile}
+            restoreScrollPos={!hasRecentComments && !inputDrawerOpen && restoreScrollPos}
+          />
         )}
 
-        {scrollPos && (!isMobile || recentScrollPos) && scrollPos < recentScrollPos && viewMode === VIEW_MODES.CHAT ? (
+        {hasRecentComments ? (
           <Button
             button="secondary"
             className="livestream-comments__scroll-to-recent"
@@ -354,13 +366,10 @@ export default function LivestreamChatLayout(props: Props) {
             embed={embed}
             uri={uri}
             onDoneReplying={restoreScrollPos}
-            onSlimInputClick={
-              scrollPos &&
-              recentScrollPos &&
-              scrollPos >= recentScrollPos &&
-              viewMode === VIEW_MODES.CHAT &&
-              restoreScrollPos
-            }
+            onSlimInputClick={() => {
+              restoreScrollPos();
+              setInputDrawerOpen(!inputDrawerOpen);
+            }}
           />
         </div>
       </div>

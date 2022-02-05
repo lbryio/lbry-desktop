@@ -12,10 +12,11 @@ type Props = {
   fetchingComments: boolean,
   uri: string,
   isMobile?: boolean,
+  restoreScrollPos?: () => void,
 };
 
 export default function LivestreamComments(props: Props) {
-  const { commentsToDisplay, fetchingComments, uri, isMobile } = props;
+  const { commentsToDisplay, fetchingComments, uri, isMobile, restoreScrollPos } = props;
 
   const [forceUpdate, setForceUpdate] = React.useState(0);
 
@@ -56,6 +57,7 @@ export default function LivestreamComments(props: Props) {
               uri={uri}
               forceUpdate={forceUpdate}
               isMobile
+              restoreScrollPos={restoreScrollPos}
             />
           ))}
       </div>

@@ -28,10 +28,21 @@ type Props = {
   stakedLevel: number,
   isMobile?: boolean,
   handleDismissPin?: () => void,
+  restoreScrollPos?: () => void,
 };
 
 export default function LivestreamComment(props: Props) {
-  const { comment, forceUpdate, uri, claim, myChannelIds, stakedLevel, isMobile, handleDismissPin } = props;
+  const {
+    comment,
+    forceUpdate,
+    uri,
+    claim,
+    myChannelIds,
+    stakedLevel,
+    isMobile,
+    handleDismissPin,
+    restoreScrollPos,
+  } = props;
 
   const {
     channel_url: authorUri,
@@ -46,8 +57,6 @@ export default function LivestreamComment(props: Props) {
     timestamp,
   } = comment;
 
-  const commentRef = React.useRef();
-
   const [hasUserMention, setUserMention] = React.useState(false);
 
   const isStreamer = claim && claim.signing_channel && claim.signing_channel.permanent_url === authorUri;
@@ -56,10 +65,6 @@ export default function LivestreamComment(props: Props) {
   const isSticker = Boolean(stickerUrlFromMessage);
   const timePosted = timestamp * 1000;
   const commentIsMine = comment.channel_id && isMyComment(comment.channel_id);
-  const discussionElement = document.querySelector('.livestream__comments--mobile');
-  const currentComment = commentRef && commentRef.current;
-  const minScrollPos =
-    discussionElement && currentComment && discussionElement.scrollHeight - currentComment.offsetHeight;
 
   // todo: implement comment_list --mine in SDK so redux can grab with selectCommentIsMine
   function isMyComment(channelId: string) {
@@ -69,10 +74,10 @@ export default function LivestreamComment(props: Props) {
   // For every new <LivestreamComment /> component that is rendered on mobile view,
   // keep the scroll at the bottom (newest)
   React.useEffect(() => {
-    if (isMobile && discussionElement && minScrollPos && discussionElement.scrollTop >= minScrollPos) {
-      discussionElement.scrollTop = discussionElement.scrollHeight;
+    if (isMobile && restoreScrollPos) {
+      restoreScrollPos();
     }
-  }, [discussionElement, isMobile, minScrollPos]);
+  }, [isMobile, restoreScrollPos]);
 
   return (
     <li
@@ -82,7 +87,6 @@ export default function LivestreamComment(props: Props) {
         'livestream__comment--mentioned': hasUserMention,
         'livestream__comment--mobile': isMobile,
       })}
-      ref={commentRef}
     >
       {supportAmount > 0 && (
         <div className="livestreamComment__superchatBanner">
