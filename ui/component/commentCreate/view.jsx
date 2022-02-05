@@ -463,7 +463,7 @@ export function CommentCreate(props: Props) {
 
   const commentSelectorsProps = { claimIsMine, addEmoteToComment, handleSelectSticker };
   const submitButtonProps = { button: 'primary', type: 'submit', requiresAuth: true };
-  const actionButtonProps = { button: 'alt', isReviewingStickerComment };
+  const actionButtonProps = { button: 'alt' };
   const tipButtonProps = {
     ...actionButtonProps,
     disabled: !commentValue.length && !selectedSticker,
@@ -617,7 +617,12 @@ export function CommentCreate(props: Props) {
 
           {!isMobile && (
             <>
-              <StickerActionButton {...actionButtonProps} icon={ICONS.STICKER} onClick={handleStickerComment} />
+              <StickerActionButton
+                {...actionButtonProps}
+                isReviewingStickerComment={isReviewingStickerComment}
+                icon={ICONS.STICKER}
+                onClick={handleStickerComment}
+              />
 
               {!supportDisabled && (
                 <>
