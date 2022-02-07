@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added duration overlays to ClaimPreview component ([#7420](https://github.com/lbryio/lbry-desktop/pull/7420))
 - Some Horizontal Scroll groundwork from _odysee team!_ 
 - Comment Emotes and Stickers and Mentions refactors from _odysee team!_ ([#7435](https://github.com/lbryio/lbry-desktop/pull/7435))
+- Seek forward and back from _odysee team!_ () ([#7460](https://github.com/lbryio/lbry-desktop/pull/7460))
 
 ### Changed
 
@@ -23,6 +24,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Header refactoring from _odysee team!_ ([#7440](https://github.com/lbryio/lbry-desktop/pull/7440))
 - Clearer data hosting ui _incomplete_ ([#7438](https://github.com/lbryio/lbry-desktop/pull/7438))
 - Updated c: control tags from _odysee team!_ ([#7433](https://github.com/lbryio/lbry-desktop/pull/7433))
+- Nav keycodes (alt+left) no longer navigate while textarea is focused ([#7458](https://github.com/lbryio/lbry-desktop/pull/7458))
+- Improved comment-server selection ui/ux ([#7455](https://github.com/lbryio/lbry-desktop/pull/7455))
 
 ### Fixed
 
