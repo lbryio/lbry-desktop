@@ -2276,5 +2276,9 @@
   "Custom Servers": "Custom Servers",
   "Add A Server": "Add A Server",
   "Autoplay Next is off.": "Autoplay Next is off.",
+  "Shuffle is on.": "Shuffle is on.",
+  "Shuffle is off.": "Shuffle is off.",
+  "Loop is on.": "Loop is on.",
+  "Loop is off.": "Loop is off.",
   "--end--": "--end--"
 }

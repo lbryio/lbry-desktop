@@ -291,7 +291,9 @@
   padding: 0 var(--spacing-xxs);
 
   .icon {
-    stroke: var(--color-text-subtitle);
+    &:not(.color-override) {
+      stroke: var(--color-text-subtitle);
+    }
   }
 
   .button__label {
