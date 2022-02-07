@@ -135,6 +135,16 @@ function VideoViewer(props: Props) {
   breaks because some browsers (e.g. Firefox) block autoplay but leave the player.play Promise pending */
   const [replay, setReplay] = useState(false);
   const [videoNode, setVideoNode] = useState();
+  const [localAutoplayNext, setLocalAutoplayNext] = useState(autoplayNext);
+  const isFirstRender = React.useRef(true);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    toggleAutoplayNext();
+  }, [localAutoplayNext]);
 
   const updateVolumeState = React.useCallback(
     debounce((volume, muted) => {
@@ -325,7 +335,13 @@ function VideoViewer(props: Props) {
           addPlayNextButton(player, doPlayNext);
           addPlayPreviousButton(player, doPlayPrevious);
         } else {
-          addAutoplayNextButton(player, toggleAutoplayNext, autoplayNext);
+          addAutoplayNextButton(
+            player,
+            () => {
+              setLocalAutoplayNext((e) => !e);
+            },
+            autoplayNext
+          );
         }
       }
     }
@@ -464,7 +480,7 @@ function VideoViewer(props: Props) {
         startMuted={autoplayIfEmbedded}
         toggleVideoTheaterMode={toggleVideoTheaterMode}
         autoplay={!embedded || autoplayIfEmbedded}
-        autoplaySetting={autoplayNext}
+        autoplaySetting={localAutoplayNext}
         claimId={claimId}
         title={claim && ((claim.value && claim.value.title) || claim.name)}
         channelName={channelName}
