@@ -156,7 +156,22 @@ export function CommentCreate(props: Props) {
 
   function handleSelectTipComment(tab: string) {
     setActiveTab(tab);
-    setTipSelector(true);
+
+    if (isMobile) {
+      setTipModalOpen(true);
+      doOpenModal(MODALS.SEND_TIP, {
+        uri,
+        isTipOnly: true,
+        hasSelectedTab: tab,
+        customText: __('Preview Comment Tip'),
+        setAmount: (amount) => {
+          setTipAmount(amount);
+          setReviewingSupportComment(true);
+        },
+      });
+    } else {
+      setTipSelector(true);
+    }
   }
 
   function handleStickerComment() {
@@ -520,20 +535,7 @@ export function CommentCreate(props: Props) {
             label={<FormChannelSelector isReply={Boolean(isReply)} isLivestream={Boolean(isLivestream)} />}
             name={isReply ? 'create__reply' : 'create__comment'}
             onChange={(e) => setCommentValue(SIMPLE_SITE || !advancedEditor || isReply ? e.target.value : e)}
-            handleTip={(isLBC) => {
-              setActiveTab(isLBC ? TAB_LBC : TAB_FIAT);
-              setTipModalOpen(true);
-              doOpenModal(MODALS.SEND_TIP, {
-                uri,
-                isTipOnly: true,
-                hasSelectedTab: isLBC ? TAB_LBC : TAB_FIAT,
-                customText: __('Preview Comment Tip'),
-                setAmount: (amount) => {
-                  setTipAmount(amount);
-                  setReviewingSupportComment(true);
-                },
-              });
-            }}
+            handleTip={(isLBC) => handleSelectTipComment(isLBC ? TAB_LBC : TAB_FIAT)}
             handleSubmit={handleCreateComment}
             slimInput={isMobile}
             commentSelectorsProps={commentSelectorsProps}
@@ -619,22 +621,20 @@ export function CommentCreate(props: Props) {
           )}
 
           {!isMobile && (
+            <StickerActionButton
+              {...actionButtonProps}
+              isReviewingStickerComment={isReviewingStickerComment}
+              icon={ICONS.STICKER}
+              onClick={handleStickerComment}
+            />
+          )}
+
+          {(!isMobile || isReviewingStickerComment) && !supportDisabled && (
             <>
-              <StickerActionButton
-                {...actionButtonProps}
-                isReviewingStickerComment={isReviewingStickerComment}
-                icon={ICONS.STICKER}
-                onClick={handleStickerComment}
-              />
+              <TipActionButton {...tipButtonProps} name={__('Credits')} icon={ICONS.LBC} tab={TAB_LBC} />
 
-              {!supportDisabled && (
-                <>
-                  <TipActionButton {...tipButtonProps} name={__('Credits')} icon={ICONS.LBC} tab={TAB_LBC} />
-
-                  {stripeEnvironment && (
-                    <TipActionButton {...tipButtonProps} name={__('Cash')} icon={ICONS.FINANCE} tab={TAB_FIAT} />
-                  )}
-                </>
+              {stripeEnvironment && (
+                <TipActionButton {...tipButtonProps} name={__('Cash')} icon={ICONS.FINANCE} tab={TAB_FIAT} />
               )}
             </>
           )}
