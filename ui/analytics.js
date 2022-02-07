@@ -24,6 +24,8 @@ if (isProduction) {
 }
 
 type Analytics = {
+  appStartTime: number, // needed?
+  eventStartTime: any, // needed?
   error: (string) => Promise<any>,
   sentryError: ({} | string, {}) => Promise<any>,
   pageView: (string, ?string) => void,
@@ -49,9 +51,6 @@ type Analytics = {
       readyState: number,
     }
   ) => Promise<any>,
-  adsFetchedEvent: () => void,
-  adsReceivedEvent: (any) => void,
-  adsErrorEvent: (any) => void,
   emailProvidedEvent: () => void,
   emailVerifiedEvent: () => void,
   rewardEligibleEvent: () => void,
@@ -168,13 +167,13 @@ async function sendWatchmanData(body) {
     });
 
     return response;
-  } catch (err) {
-    console.log('ERROR FROM WATCHMAN BACKEND');
-    console.log(err);
-  }
+  } catch (err) {}
 }
 
 const analytics: Analytics = {
+  appStartTime: 0, // ?
+  eventStartTime: {}, // ?
+
   // receive buffer events from tracking plugin and save buffer amounts and times for backend call
   videoBufferEvent: async (claim, data) => {
     amountOfBufferEvents = amountOfBufferEvents + 1;
@@ -213,7 +212,7 @@ const analytics: Analytics = {
       startWatchmanIntervalIfNotRunning();
     }
   },
-  videoStartEvent: (claimId, duration, poweredBy, passedUserId, canonicalUrl, passedPlayer, videoBitrate) => {
+  videoStartEvent: (claimId, timeToStartVideo, poweredBy, passedUserId, canonicalUrl, passedPlayer, videoBitrate) => {
     // populate values for watchman when video starts
     userId = passedUserId;
     claimUrl = canonicalUrl;
@@ -224,7 +223,7 @@ const analytics: Analytics = {
     bitrateAsBitsPerSecond = videoBitrate;
 
     // sendPromMetric('time_to_start', duration);
-    sendMatomoEvent('Media', 'TimeToStart', claimId, duration);
+    sendMatomoEvent('Media', 'TimeToStart', claimId, timeToStartVideo);
   },
   error: (message) => {
     return new Promise((resolve) => {
