@@ -78,17 +78,10 @@ export class FormField extends React.PureComponent<Props, State> {
   }
 
   componentDidMount() {
-    const { autoFocus } = this.props;
+    const { autoFocus, showSelectors, slimInput } = this.props;
     const input = this.input.current;
 
     if (input && autoFocus) input.focus();
-  }
-
-  componentDidUpdate() {
-    const { showSelectors, slimInput } = this.props;
-    const input = this.input.current;
-
-    // Opened selectors (emoji/sticker) -> blur input and hide keyboard
     if (slimInput && showSelectors && showSelectors.open && input) input.blur();
   }
 
@@ -267,16 +260,17 @@ export class FormField extends React.PureComponent<Props, State> {
             </div>
           );
         case 'textarea':
+          const closeSelector =
+            setShowSelectors && showSelectors
+              ? () => setShowSelectors({ tab: showSelectors.tab || undefined, open: false })
+              : () => {};
+
           return (
             <fieldset-section>
               <TextareaWrapper
                 isDrawerOpen={Boolean(this.state.drawerOpen)}
                 toggleDrawer={() => this.setState({ drawerOpen: !this.state.drawerOpen })}
-                closeSelector={
-                  setShowSelectors && showSelectors
-                    ? () => setShowSelectors({ tab: showSelectors.tab || undefined, open: false })
-                    : () => {}
-                }
+                closeSelector={closeSelector}
                 commentSelectorsProps={commentSelectorsProps}
                 showSelectors={Boolean(showSelectors && showSelectors.open)}
                 slimInput={slimInput}
@@ -319,6 +313,7 @@ export class FormField extends React.PureComponent<Props, State> {
                       handleSubmit={() => {
                         if (handleSubmit) handleSubmit();
                         if (slimInput) this.setState({ drawerOpen: false });
+                        closeSelector();
                       }}
                       claimIsMine={commentSelectorsProps && commentSelectorsProps.claimIsMine}
                       {...inputProps}

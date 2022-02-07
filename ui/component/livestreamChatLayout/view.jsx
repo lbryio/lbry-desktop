@@ -73,6 +73,7 @@ export default function LivestreamChatLayout(props: Props) {
   const discussionElement = isMobile ? mobileElement : webElement;
   const allCommentsElem = document.querySelectorAll('.livestream__comment');
   const lastCommentElem = allCommentsElem && allCommentsElem[allCommentsElem.length - 1];
+  const secondLastCommentElem = allCommentsElem && allCommentsElem[allCommentsElem.length - 2];
 
   const [viewMode, setViewMode] = React.useState(VIEW_MODES.CHAT);
   const [scrollPos, setScrollPos] = React.useState(0);
@@ -155,7 +156,12 @@ export default function LivestreamChatLayout(props: Props) {
         }
 
         if (isMobile) {
-          const pos = lastCommentElem && bottomScrollTop - lastCommentElem.getBoundingClientRect().height;
+          const pos =
+            lastCommentElem &&
+            secondLastCommentElem &&
+            bottomScrollTop -
+              lastCommentElem.getBoundingClientRect().height -
+              secondLastCommentElem.getBoundingClientRect().height;
 
           if (!minScrollHeight || minScrollHeight !== pos) {
             setMinScrollHeight(pos);
@@ -168,7 +174,15 @@ export default function LivestreamChatLayout(props: Props) {
       discussionElement.addEventListener('scroll', handleScroll);
       return () => discussionElement.removeEventListener('scroll', handleScroll);
     }
-  }, [bottomScrollTop, discussionElement, isMobile, lastCommentElem, minScrollHeight, scrollPos]);
+  }, [
+    bottomScrollTop,
+    discussionElement,
+    isMobile,
+    lastCommentElem,
+    secondLastCommentElem,
+    minScrollHeight,
+    scrollPos,
+  ]);
 
   // Retain scrollPos=0 when receiving new messages.
   React.useEffect(() => {
@@ -260,7 +274,7 @@ export default function LivestreamChatLayout(props: Props) {
       </div>
     );
   }
-  console.log(hasRecentComments);
+
   return (
     <div className={classnames('card livestream__chat', { 'livestream__chat--popout': isPopoutWindow })}>
       {!hideHeader && (
@@ -353,7 +367,7 @@ export default function LivestreamChatLayout(props: Props) {
             uri={uri}
             commentsToDisplay={commentsToDisplay}
             isMobile={isMobile}
-            restoreScrollPos={!hasRecentComments && restoreScrollPos}
+            restoreScrollPos={!hasRecentComments && isMobile && restoreScrollPos}
           />
         )}
 
