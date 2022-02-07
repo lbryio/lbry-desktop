@@ -45,13 +45,14 @@ type Props = {
   type?: string,
   value?: string | number,
   slimInput?: boolean,
+  slimInputButtonRef?: any,
   commentSelectorsProps?: any,
-  showSelectors?: boolean,
+  showSelectors?: any,
   submitButtonRef?: any,
   tipModalOpen?: boolean,
   noticeLabel?: any,
   onChange?: (any) => any,
-  setShowSelectors?: (boolean) => void,
+  setShowSelectors?: ({ tab?: string, open: boolean }) => void,
   quickActionHandler?: (any) => any,
   render?: () => React$Node,
   handleTip?: (isLBC: boolean) => any,
@@ -88,7 +89,7 @@ export class FormField extends React.PureComponent<Props, State> {
     const input = this.input.current;
 
     // Opened selectors (emoji/sticker) -> blur input and hide keyboard
-    if (slimInput && showSelectors && input) input.blur();
+    if (slimInput && showSelectors && showSelectors.open && input) input.blur();
   }
 
   render() {
@@ -114,6 +115,7 @@ export class FormField extends React.PureComponent<Props, State> {
       textAreaMaxLength,
       type,
       slimInput,
+      slimInputButtonRef,
       commentSelectorsProps,
       showSelectors,
       submitButtonRef,
@@ -270,10 +272,15 @@ export class FormField extends React.PureComponent<Props, State> {
               <TextareaWrapper
                 isDrawerOpen={Boolean(this.state.drawerOpen)}
                 toggleDrawer={() => this.setState({ drawerOpen: !this.state.drawerOpen })}
-                closeSelector={setShowSelectors ? () => setShowSelectors(false) : () => {}}
+                closeSelector={
+                  setShowSelectors && showSelectors
+                    ? () => setShowSelectors({ tab: showSelectors.tab || undefined, open: false })
+                    : () => {}
+                }
                 commentSelectorsProps={commentSelectorsProps}
-                showSelectors={Boolean(showSelectors)}
+                showSelectors={Boolean(showSelectors && showSelectors.open)}
                 slimInput={slimInput}
+                slimInputButtonRef={slimInputButtonRef}
                 tipModalOpen={tipModalOpen}
               >
                 {(!slimInput || this.state.drawerOpen) && (label || quickAction) && (
@@ -303,7 +310,11 @@ export class FormField extends React.PureComponent<Props, State> {
                       maxLength={textAreaMaxLength || FF_MAX_CHARS_DEFAULT}
                       inputRef={this.input}
                       isLivestream={isLivestream}
-                      toggleSelectors={setShowSelectors ? () => setShowSelectors(!showSelectors) : undefined}
+                      toggleSelectors={
+                        setShowSelectors && showSelectors
+                          ? () => setShowSelectors({ tab: showSelectors.tab || undefined, open: !showSelectors.open })
+                          : undefined
+                      }
                       handleTip={handleTip}
                       handleSubmit={() => {
                         if (handleSubmit) handleSubmit();
@@ -311,6 +322,7 @@ export class FormField extends React.PureComponent<Props, State> {
                       }}
                       claimIsMine={commentSelectorsProps && commentSelectorsProps.claimIsMine}
                       {...inputProps}
+                      slimInput={slimInput}
                       handlePreventClick={
                         !this.state.drawerOpen ? () => this.setState({ drawerOpen: true }) : undefined
                       }
@@ -360,6 +372,7 @@ export default FormField;
 
 type TextareaWrapperProps = {
   slimInput?: boolean,
+  slimInputButtonRef?: any,
   children: Node,
   isDrawerOpen: boolean,
   showSelectors?: boolean,
@@ -373,6 +386,7 @@ function TextareaWrapper(wrapperProps: TextareaWrapperProps) {
   const {
     children,
     slimInput,
+    slimInputButtonRef,
     isDrawerOpen,
     commentSelectorsProps,
     showSelectors,
@@ -388,7 +402,7 @@ function TextareaWrapper(wrapperProps: TextareaWrapperProps) {
 
   return slimInput ? (
     !isDrawerOpen ? (
-      <div role="button" onClick={toggleDrawer}>
+      <div ref={slimInputButtonRef} role="button" onClick={toggleDrawer}>
         {children}
       </div>
     ) : (

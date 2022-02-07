@@ -1,5 +1,4 @@
 // @flow
-import { useIsMobile } from 'effects/use-screensize';
 import * as ICONS from 'constants/icons';
 import React from 'react';
 import TextField from '@mui/material/TextField';
@@ -13,6 +12,7 @@ type Props = {
   inputRef: any,
   submitButtonRef?: any,
   claimIsMine?: boolean,
+  slimInput?: boolean,
   toggleSelectors: () => any,
   handleTip: (isLBC: boolean) => void,
   handleSubmit: () => any,
@@ -27,19 +27,18 @@ const TextareaSuggestionsInput = (props: Props) => {
     inputDefaultProps,
     submitButtonRef,
     claimIsMine,
+    slimInput,
     toggleSelectors,
     handleTip,
     handleSubmit,
     handlePreventClick,
   } = props;
 
-  const isMobile = useIsMobile();
-
   const { InputProps, disabled, fullWidth, id, inputProps: autocompleteInputProps } = params;
   const inputProps = { ...autocompleteInputProps, ...inputDefaultProps };
   const autocompleteProps = { InputProps, disabled, fullWidth, id, inputProps };
 
-  if (isMobile) {
+  if (slimInput) {
     InputProps.startAdornment = (
       <Button
         icon={ICONS.STICKER}

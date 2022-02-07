@@ -9,20 +9,26 @@ import React from 'react';
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
 import { FREE_GLOBAL_STICKERS, PAID_GLOBAL_STICKERS } from 'constants/stickers';
 
+export const SELECTOR_TABS = {
+  EMOJI: 0,
+  STICKER: 1,
+};
+
 type Props = {
   claimIsMine?: boolean,
+  openTab?: number,
   addEmoteToComment: (string) => void,
   handleSelectSticker: (any) => void,
   closeSelector?: () => void,
 };
 
 export default function CommentSelectors(props: Props) {
-  const { claimIsMine, addEmoteToComment, handleSelectSticker, closeSelector } = props;
+  const { claimIsMine, openTab, addEmoteToComment, handleSelectSticker, closeSelector } = props;
 
   const tabProps = { closeSelector };
 
   return (
-    <Tabs>
+    <Tabs index={openTab}>
       <TabList className="tabs__list--comment-selector">
         <Tab>{__('Emojis')}</Tab>
         <Tab>{__('Stickers')}</Tab>

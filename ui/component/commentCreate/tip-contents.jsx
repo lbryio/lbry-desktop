@@ -15,10 +15,12 @@ type Props = {
   tipAmount: number,
   activeTab: string,
   message: string,
+  isReviewingStickerComment?: boolean,
+  stickerPreviewComponent?: any,
 };
 
 export const TipReviewBox = (props: Props) => {
-  const { activeChannelUrl, tipAmount, activeTab, message } = props;
+  const { activeChannelUrl, tipAmount, activeTab, message, isReviewingStickerComment, stickerPreviewComponent } = props;
 
   return (
     <div className="commentCreate__supportCommentPreview">
@@ -29,11 +31,18 @@ export const TipReviewBox = (props: Props) => {
         size={activeTab === TAB_LBC ? 18 : 2}
       />
 
-      <ChannelThumbnail xsmall uri={activeChannelUrl} />
-      <div className="commentCreate__supportCommentBody">
-        <UriIndicator uri={activeChannelUrl} link />
-        <div>{message}</div>
-      </div>
+      {isReviewingStickerComment ? (
+        stickerPreviewComponent
+      ) : (
+        <>
+          <ChannelThumbnail xsmall uri={activeChannelUrl} />
+
+          <div className="commentCreate__supportCommentBody">
+            <UriIndicator uri={activeChannelUrl} link />
+            <div>{message}</div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

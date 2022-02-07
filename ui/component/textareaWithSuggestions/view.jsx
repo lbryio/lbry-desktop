@@ -59,6 +59,7 @@ type Props = {
   autoFocus?: boolean,
   submitButtonRef?: any,
   claimIsMine?: boolean,
+  slimInput?: boolean,
   doResolveUris: (uris: Array<string>, cache: boolean) => void,
   doSetMentionSearchResults: (query: string, uris: Array<string>) => void,
   onBlur: (any) => any,
@@ -92,6 +93,7 @@ export default function TextareaWithSuggestions(props: Props) {
     autoFocus,
     submitButtonRef,
     claimIsMine,
+    slimInput,
     doResolveUris,
     doSetMentionSearchResults,
     onBlur,
@@ -421,6 +423,7 @@ export default function TextareaWithSuggestions(props: Props) {
           handlePreventClick={handlePreventClick}
           submitButtonRef={submitButtonRef}
           claimIsMine={claimIsMine}
+          slimInput={slimInput}
         />
       )}
       renderOption={(optionProps, option) => (

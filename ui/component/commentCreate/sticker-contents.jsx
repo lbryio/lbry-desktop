@@ -50,10 +50,6 @@ export const StickerActionButton = (stickerButtonProps: StickerButtonProps) => {
   const { isReviewingStickerComment, ...buttonProps } = stickerButtonProps;
 
   return (
-    <Button
-      {...buttonProps}
-      title={__('Stickers')}
-      label={isReviewingStickerComment ? __('Different Sticker') : undefined}
-    />
+    <Button {...buttonProps} title={__('Stickers')} label={isReviewingStickerComment ? __('Change') : undefined} />
   );
 };

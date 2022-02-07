@@ -171,6 +171,10 @@
   @media (max-width: $breakpoint-small) {
     margin-top: var(--spacing-xxs);
 
+    > *:not(:last-child) {
+      margin-right: var(--spacing-xxs);
+    }
+
     button {
       height: 2rem;
       padding: 0px var(--spacing-s);
@@ -182,6 +186,10 @@
           font-size: var(--font-xxsmall);
         }
       }
+    }
+
+    .button--link {
+      padding: 0px !important;
     }
   }
 }
