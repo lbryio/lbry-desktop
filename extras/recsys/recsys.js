@@ -1,3 +1,4 @@
+import { RECSYS_ENDPOINT } from 'config';
 import { selectUser } from 'redux/selectors/user';
 import { makeSelectRecommendedRecsysIdForClaimId } from 'redux/selectors/search';
 import { v4 as Uuidv4 } from 'uuid';
@@ -8,7 +9,7 @@ import { selectPlayingUri, selectPrimaryUri } from 'redux/selectors/content';
 import { selectClientSetting, selectDaemonSettings } from 'redux/selectors/settings';
 import { history } from 'ui/store';
 
-const recsysEndpoint = 'https://recsys.odysee.com/log/video/view';
+const recsysEndpoint = RECSYS_ENDPOINT;
 const recsysId = 'lighthouse-v0';
 
 const getClaimIdsFromUris = (uris) => {

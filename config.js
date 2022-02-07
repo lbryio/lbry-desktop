@@ -20,6 +20,7 @@ const config = {
   DOMAIN: process.env.DOMAIN,
   SHARE_DOMAIN_URL: process.env.SHARE_DOMAIN_URL,
   URL: process.env.URL,
+  RECSYS_ENDPOINT: process.env.RECSYS_ENDPOINT,
   THUMBNAIL_CDN_URL: process.env.THUMBNAIL_CDN_URL,
   THUMBNAIL_CARDS_CDN_URL: process.env.THUMBNAIL_CARDS_CDN_URL,
   THUMBNAIL_HEIGHT: process.env.THUMBNAIL_HEIGHT,
