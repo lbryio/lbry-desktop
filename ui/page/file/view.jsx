@@ -46,6 +46,7 @@ type Props = {
   doSetContentHistoryItem: (uri: string) => void,
   doSetPrimaryUri: (uri: ?string) => void,
   clearPosition: (uri: string) => void,
+  doClearPlayingUri: () => void,
 };
 
 export default function FilePage(props: Props) {
@@ -72,6 +73,7 @@ export default function FilePage(props: Props) {
     doSetContentHistoryItem,
     doSetPrimaryUri,
     clearPosition,
+    doClearPlayingUri,
   } = props;
 
   const isMobile = useIsMobile();
@@ -121,6 +123,15 @@ export default function FilePage(props: Props) {
     doSetContentHistoryItem,
     doSetPrimaryUri,
   ]);
+
+  React.useEffect(() => {
+    // No floating player on mobile as of now, so clear the playing uri
+    return () => {
+      if (isMobile && RENDER_MODES.FLOATING_MODES.includes(renderMode)) {
+        doClearPlayingUri();
+      }
+    };
+  }, [doClearPlayingUri, isMobile, renderMode]);
 
   function renderFilePageLayout() {
     if (RENDER_MODES.FLOATING_MODES.includes(renderMode)) {

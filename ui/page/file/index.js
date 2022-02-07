@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { doSetContentHistoryItem, doSetPrimaryUri, clearPosition } from 'redux/actions/content';
+import { doSetContentHistoryItem, doSetPrimaryUri, clearPosition, doClearPlayingUri } from 'redux/actions/content';
 import { withRouter } from 'react-router-dom';
 import {
   selectClaimIsNsfwForUri,
@@ -54,6 +54,7 @@ const perform = {
   doSetPrimaryUri,
   clearPosition,
   doSetMobilePlayerDimensions,
+  doClearPlayingUri,
 };
 
 export default withRouter(connect(select, perform)(FilePage));

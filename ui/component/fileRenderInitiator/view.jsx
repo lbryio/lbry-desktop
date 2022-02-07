@@ -92,12 +92,7 @@ export default function FileRenderInitiator(props: Props) {
     if (isMobileClaimLive && foundCover) {
       doSetPlayingUri({ uri });
     }
-
-    // No floating player on mobile as of now, so clear the playing uri
-    if (isMobile && (isPlayable || isMobileClaimLive)) {
-      return () => doSetPlayingUri({ uri: null });
-    }
-  }, [doSetPlayingUri, foundCover, isMobile, isMobileClaimLive, isPlayable, uri]);
+  }, [doSetPlayingUri, foundCover, isMobileClaimLive, uri]);
 
   function doAuthRedirect() {
     history.push(`/$/${PAGES.AUTH}?redirect=${encodeURIComponent(location.pathname)}`);
