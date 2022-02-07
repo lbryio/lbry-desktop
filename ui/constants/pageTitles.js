@@ -51,7 +51,7 @@ export const PAGE_TITLE = {
   [PAGES.SEARCH]: 'Search',
   [PAGES.SEND]: 'Send Credits',
   [PAGES.SETTINGS]: 'Settings',
-  [PAGES.SETTINGS_BLOCKED_MUTED]: 'Block and muted channels',
+  [PAGES.SETTINGS_BLOCKED_MUTED]: 'Blocked and muted channels',
   [PAGES.SETTINGS_CREATOR]: 'Creator settings',
   [PAGES.SETTINGS_NOTIFICATIONS]: 'Manage notifications',
   [PAGES.SETTINGS_STRIPE_ACCOUNT]: 'Bank Accounts',

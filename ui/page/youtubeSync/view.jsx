@@ -124,7 +124,7 @@ export default function YoutubeSync(props: Props) {
                       {nameError ? (
                         <span className="error__text">{nameError}</span>
                       ) : (
-                        __('Your %site_name% desired channel name', { site_name: IS_WEB ? SITE_NAME : 'LBRY' })
+                        __('Your desired %site_name% channel name', { site_name: IS_WEB ? SITE_NAME : 'LBRY' })
                       )}
                     </label>
                     <div className="form-field__prefix">@</div>

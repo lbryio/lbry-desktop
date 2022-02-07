@@ -65,7 +65,7 @@ class FileExporter extends React.PureComponent<Props> {
           )}
           {progressMsg && (
             <>
-              {__(progressMsg)}
+              {progressMsg}
               <Spinner type="small" />
             </>
           )}

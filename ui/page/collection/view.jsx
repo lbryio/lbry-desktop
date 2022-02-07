@@ -139,6 +139,9 @@ export default function CollectionPage(props: Props) {
       {uri && <ClaimAuthor uri={uri} />}
     </div>
   );
+
+  const listName = claim ? claim.value.title || claim.name : collection && collection.name;
+
   const info = (
     <Card
       title={
@@ -151,7 +154,7 @@ export default function CollectionPage(props: Props) {
             }
             className="icon--margin-right"
           />
-          {claim ? claim.value.title || claim.name : collection && collection.name}
+          {isBuiltin ? __(listName) : listName}
         </span>
       }
       titleActions={unavailableUris.length > 0 ? removeUnavailable : titleActions}
