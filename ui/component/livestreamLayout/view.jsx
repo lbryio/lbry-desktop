@@ -35,6 +35,7 @@ type Props = {
   showScheduledInfo: boolean,
   uri: string,
   superChats: Array<Comment>,
+  activeViewers?: number,
 };
 
 export default function LivestreamLayout(props: Props) {
@@ -48,6 +49,7 @@ export default function LivestreamLayout(props: Props) {
     showScheduledInfo,
     uri,
     superChats,
+    activeViewers,
   } = props;
 
   const isMobile = useIsMobile();
@@ -114,8 +116,10 @@ export default function LivestreamLayout(props: Props) {
                   superChats={superChats}
                   chatViewMode={chatViewMode}
                   setChatViewMode={(mode) => setChatViewMode(mode)}
+                  activeViewers={activeViewers}
                 />
               }
+              hasSubtitle={activeViewers}
               actions={
                 <LivestreamMenu
                   noSuperchats={!superChats || superChats.length === 0}
@@ -145,20 +149,23 @@ export default function LivestreamLayout(props: Props) {
 }
 
 const ChatModeSelector = (chatSelectorProps: any) => {
-  const { superChats, chatViewMode, setChatViewMode } = chatSelectorProps;
+  const { superChats, chatViewMode, setChatViewMode, activeViewers } = chatSelectorProps;
   const { superChatsFiatAmount, superChatsLBCAmount } = getTipValues(superChats);
 
+  const titleProps = { chatViewMode, activeViewers };
+
   if (!superChats) {
-    return __('Live Chat');
+    return <ChatDrawerTitle {...titleProps} />;
   }
 
   return (
     <Menu>
       <MenuButton>
-        <span className="swipeable-drawer__title-menu">
-          {chatViewMode === VIEW_MODES.CHAT ? __('Live Chat') : __('HyperChats')}
+        <div className="swipeable-drawer__menu">
+          <ChatDrawerTitle {...titleProps} />
+
           <Icon icon={ICONS.DOWN} />
-        </span>
+        </div>
       </MenuButton>
 
       <MenuList className="menu__list--header">
@@ -174,5 +181,21 @@ const ChatModeSelector = (chatSelectorProps: any) => {
         </MenuItem>
       </MenuList>
     </Menu>
+  );
+};
+
+const ChatDrawerTitle = (titleProps: any) => {
+  const { chatViewMode, activeViewers } = titleProps;
+
+  return (
+    <div className="swipeable-drawer__title-menu">
+      <span className="swipeable-drawer__title">
+        {chatViewMode === VIEW_MODES.CHAT ? __('Live Chat') : __('HyperChats')}
+      </span>
+
+      {activeViewers && (
+        <span className="swipeable-drawer__subtitle">{__('%view_count% viewers', { view_count: activeViewers })}</span>
+      )}
+    </div>
   );
 };

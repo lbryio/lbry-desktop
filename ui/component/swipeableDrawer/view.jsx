@@ -11,6 +11,7 @@ import { SwipeableDrawer as MUIDrawer } from '@mui/material';
 import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import Button from 'component/button';
+import classnames from 'classnames';
 
 const DRAWER_PULLER_HEIGHT = 42;
 
@@ -20,12 +21,13 @@ type Props = {
   theme: string,
   mobilePlayerDimensions?: { height: number },
   title: any,
+  hasSubtitle?: boolean,
   actions?: any,
   toggleDrawer: () => void,
 };
 
 export default function SwipeableDrawer(props: Props) {
-  const { mobilePlayerDimensions, title, children, open, theme, actions, toggleDrawer } = props;
+  const { mobilePlayerDimensions, title, hasSubtitle, children, open, theme, actions, toggleDrawer } = props;
 
   const [coverHeight, setCoverHeight] = React.useState();
 
@@ -69,7 +71,7 @@ export default function SwipeableDrawer(props: Props) {
         {open && (
           <div className="swipeable-drawer__header" style={{ top: -DRAWER_PULLER_HEIGHT }}>
             <Puller theme={theme} />
-            <HeaderContents title={title} actions={actions} toggleDrawer={toggleDrawer} />
+            <HeaderContents title={title} hasSubtitle={hasSubtitle} actions={actions} toggleDrawer={toggleDrawer} />
           </div>
         )}
 
@@ -122,15 +124,20 @@ const Puller = (pullerProps: PullerProps) => {
 
 type HeaderProps = {
   title: any,
+  hasSubtitle?: boolean,
   actions?: any,
   toggleDrawer: () => void,
 };
 
 const HeaderContents = (headerProps: HeaderProps) => {
-  const { title, actions, toggleDrawer } = headerProps;
+  const { title, hasSubtitle, actions, toggleDrawer } = headerProps;
 
   return (
-    <div className="swipeable-drawer__header-content">
+    <div
+      className={classnames('swipeable-drawer__header-content', {
+        'swipeable-drawer__header--with-subtitle': hasSubtitle,
+      })}
+    >
       {title}
 
       <div className="swipeable-drawer__header-actions">
