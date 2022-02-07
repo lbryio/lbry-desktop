@@ -61,9 +61,9 @@ type Props = {
   doCommentCreate: (uri: string, isLivestream?: boolean, params: CommentSubmitParams) => Promise<any>,
   doFetchCreatorSettings: (channelId: string) => Promise<any>,
   doToast: ({ message: string }) => void,
-  doCommentById: (commentId: string) => Promise<any>,
-  doSendCashTip: (TipParams, UserParams, string, ?string, (any) => void) => string,
-  doSendTip: ({}, (any) => void, (any) => void) => void,
+  doCommentById: (commentId: string, toastIfNotFound: boolean) => Promise<any>,
+  doSendCashTip: (TipParams, anonymous: boolean, UserParams, claimId: string, stripe: ?string, (any) => void) => string,
+  doSendTip: (params: {}, isSupport: boolean, successCb: (any) => void, errorCb: (any) => void, boolean) => void,
   doOpenModal: (id: string, any) => void,
 };
 
@@ -271,6 +271,7 @@ export function CommentCreate(props: Props) {
       // second parameter is callback
       doSendTip(
         params,
+        false,
         (response) => {
           const { txid } = response;
           // todo: why the setTimeout?
@@ -290,13 +291,14 @@ export function CommentCreate(props: Props) {
         () => {
           // reset the frontend so people can send a new comment
           setSubmitting(false);
-        }
+        },
+        false
       );
     } else {
       const tipParams: TipParams = { tipAmount: Math.round(tipAmount * 100) / 100, tipChannelName, channelClaimId };
       const userParams: UserParams = { activeChannelName, activeChannelId: activeChannelClaimId };
 
-      doSendCashTip(tipParams, userParams, claimId, stripeEnvironment, (customerTipResponse) => {
+      doSendCashTip(tipParams, false, userParams, claimId, stripeEnvironment, (customerTipResponse) => {
         const { payment_intent_id } = customerTipResponse;
 
         handleCreateComment(null, payment_intent_id, stripeEnvironment);
@@ -393,7 +395,7 @@ export function CommentCreate(props: Props) {
   // Notifications: Fetch top-level comments to identify if it has been deleted and can reply to it
   React.useEffect(() => {
     if (shouldFetchComment && doCommentById) {
-      doCommentById(parentId).then((result) => {
+      doCommentById(parentId, false).then((result) => {
         setDeletedComment(String(result).includes('Error'));
       });
     }
