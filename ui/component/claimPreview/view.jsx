@@ -317,6 +317,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
         'claim-preview__wrapper--small': type === 'small',
         'claim-preview__active': active,
       })}
+      key={uri}
     >
       <>
         {!hideRepostLabel && <ClaimRepostAuthor uri={uri} />}
