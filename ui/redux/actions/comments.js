@@ -470,18 +470,10 @@ export function doCommentReact(commentId: string, type: string) {
  * @param {string} [environment] Optional environment for Stripe (test|live)
  * @returns {(function(Dispatch, GetState): Promise<undefined|void|*>)|*}
  */
-export function doCommentCreate(
-  comment: string = '',
-  claim_id: string = '',
-  parent_id?: string,
-  uri: string,
-  livestream?: boolean = false,
-  txid?: string,
-  payment_intent_id?: string,
-  environment?: string,
-  sticker: boolean
-) {
+export function doCommentCreate(uri: string, livestream: boolean, params: CommentSubmitParams) {
   return async (dispatch: Dispatch, getState: GetState) => {
+    const { comment, claim_id, parent_id, txid, payment_intent_id, environment, sticker } = params;
+
     const state = getState();
     const activeChannelClaim = selectActiveChannelClaim(state);
     const mentionedChannels: Array<MentionedChannel> = [];

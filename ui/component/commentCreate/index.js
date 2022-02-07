@@ -13,43 +13,46 @@ import { doSendTip, doSendCashTip } from 'redux/actions/wallet';
 import { doToast } from 'redux/actions/notifications';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { selectSettingsByChannelId } from 'redux/selectors/comments';
+import { getChannelIdFromClaim } from 'util/claim';
 import { doOpenModal } from 'redux/actions/app';
 
 const select = (state, props) => {
-  const claim = selectClaimForUri(state, props.uri);
+  const { uri } = props;
+
+  const claim = selectClaimForUri(state, uri);
+  const { claim_id: claimId, name, signing_channel: channel } = claim || {};
+
+  // setup variables for tip API
+  const channelClaimId = getChannelIdFromClaim(claim);
+  const tipChannelName = channel ? channel.name : name;
+
+  const activeChannelClaim = selectActiveChannelClaim(state);
+  const { claim_id: activeChannelClaimId, name: activeChannelName, canonical_url: activeChannelUrl } =
+    activeChannelClaim || {};
+
   return {
-    activeChannelClaim: selectActiveChannelClaim(state),
+    activeChannelClaimId,
+    activeChannelName,
+    activeChannelUrl,
     hasChannels: selectHasChannels(state),
-    claim,
+    claimId,
+    channelClaimId,
+    tipChannelName,
     claimIsMine: selectClaimIsMine(state, claim),
     isFetchingChannels: selectFetchingMyChannels(state),
     settingsByChannelId: selectSettingsByChannelId(state),
-    supportDisabled: makeSelectTagInClaimOrChannelForUri(props.uri, DISABLE_SUPPORT_TAG)(state),
+    supportDisabled: makeSelectTagInClaimOrChannelForUri(uri, DISABLE_SUPPORT_TAG)(state),
   };
 };
 
-const perform = (dispatch, ownProps) => ({
-  createComment: (comment, claimId, parentId, txid, payment_intent_id, environment, sticker) =>
-    dispatch(
-      doCommentCreate(
-        comment,
-        claimId,
-        parentId,
-        ownProps.uri,
-        ownProps.isLivestream,
-        txid,
-        payment_intent_id,
-        environment,
-        sticker
-      )
-    ),
-  doFetchCreatorSettings: (channelClaimId) => dispatch(doFetchCreatorSettings(channelClaimId)),
-  doToast: (options) => dispatch(doToast(options)),
-  fetchComment: (commentId) => dispatch(doCommentById(commentId, false)),
-  sendCashTip: (tipParams, userParams, claimId, environment, successCallback) =>
-    dispatch(doSendCashTip(tipParams, false, userParams, claimId, environment, successCallback)),
-  sendTip: (params, callback, errorCallback) => dispatch(doSendTip(params, false, callback, errorCallback, false)),
-  doOpenModal: (id, params) => dispatch(doOpenModal(id, params)),
-});
+const perform = {
+  doCommentCreate,
+  doFetchCreatorSettings,
+  doToast,
+  doCommentById,
+  doSendCashTip,
+  doSendTip,
+  doOpenModal,
+};
 
 export default connect(select, perform)(CommentCreate);

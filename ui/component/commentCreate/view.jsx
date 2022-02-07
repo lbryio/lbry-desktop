@@ -5,7 +5,6 @@ import 'scss/component/_comment-create.scss';
 import { buildValidSticker } from 'util/comments';
 import { FF_MAX_CHARS_IN_COMMENT, FF_MAX_CHARS_IN_LIVESTREAM_COMMENT } from 'constants/form-field';
 import { FormField, Form } from 'component/common/form';
-import { getChannelIdFromClaim } from 'util/claim';
 import { Lbryio } from 'lbryinc';
 import { SIMPLE_SITE } from 'config';
 import { useHistory } from 'react-router';
@@ -36,10 +35,14 @@ type UserParams = { activeChannelName: ?string, activeChannelId: ?string };
 
 type Props = {
   activeChannel: string,
-  activeChannelClaim: ?ChannelClaim,
+  activeChannelClaimId?: string,
+  activeChannelName?: string,
+  activeChannelUrl?: string,
   bottom: boolean,
   hasChannels: boolean,
-  claim: StreamClaim,
+  claimId?: string,
+  channelClaimId?: string,
+  tipChannelName?: string,
   claimIsMine: boolean,
   embed?: boolean,
   isFetchingChannels: boolean,
@@ -52,25 +55,29 @@ type Props = {
   supportDisabled: boolean,
   uri: string,
   disableInput?: boolean,
-  createComment: (string, string, string, ?string, ?string, ?string, boolean) => Promise<any>,
-  doFetchCreatorSettings: (channelId: string) => Promise<any>,
-  doToast: ({ message: string }) => void,
-  fetchComment: (commentId: string) => Promise<any>,
+  setQuickReply: (any) => void,
   onCancelReplying?: () => void,
   onDoneReplying?: () => void,
-  sendCashTip: (TipParams, UserParams, string, ?string, (any) => void) => string,
-  sendTip: ({}, (any) => void, (any) => void) => void,
-  setQuickReply: (any) => void,
-  toast: (string) => void,
+  // redux
+  doCommentCreate: (uri: string, isLivestream?: boolean, params: CommentSubmitParams) => Promise<any>,
+  doFetchCreatorSettings: (channelId: string) => Promise<any>,
+  doToast: ({ message: string }) => void,
+  doCommentById: (commentId: string) => Promise<any>,
+  doSendCashTip: (TipParams, UserParams, string, ?string, (any) => void) => string,
+  doSendTip: ({}, (any) => void, (any) => void) => void,
   doOpenModal: (id: string, any) => void,
 };
 
 export function CommentCreate(props: Props) {
   const {
-    activeChannelClaim,
+    activeChannelClaimId,
+    activeChannelName,
+    activeChannelUrl,
     bottom,
     hasChannels,
-    claim,
+    claimId,
+    channelClaimId,
+    tipChannelName,
     claimIsMine,
     embed,
     isFetchingChannels,
@@ -83,14 +90,14 @@ export function CommentCreate(props: Props) {
     supportDisabled,
     uri,
     disableInput,
-    createComment,
+    doCommentCreate,
     doFetchCreatorSettings,
     doToast,
-    fetchComment,
+    doCommentById,
     onCancelReplying,
     onDoneReplying,
-    sendCashTip,
-    sendTip,
+    doSendCashTip,
+    doSendTip,
     setQuickReply,
     doOpenModal,
   } = props;
@@ -125,12 +132,10 @@ export function CommentCreate(props: Props) {
   const [canReceiveFiatTip, setCanReceiveFiatTip] = React.useState(undefined);
   const [tipModalOpen, setTipModalOpen] = React.useState(undefined);
 
-  const claimId = claim && claim.claim_id;
   const charCount = commentValue ? commentValue.length : 0;
   const hasNothingToSumbit = !commentValue.length && !selectedSticker;
   const disabled = deletedComment || isSubmitting || isFetchingChannels || hasNothingToSumbit || disableInput;
-  const channelId = getChannelIdFromClaim(claim);
-  const channelSettings = channelId ? settingsByChannelId[channelId] : undefined;
+  const channelSettings = channelClaimId ? settingsByChannelId[channelClaimId] : undefined;
   const minSuper = (channelSettings && channelSettings.min_tip_amount_super_chat) || 0;
   const minTip = (channelSettings && channelSettings.min_tip_amount_comment) || 0;
   const minAmount = minTip || minSuper || 0;
@@ -210,9 +215,9 @@ export function CommentCreate(props: Props) {
   }
 
   function handleSupportComment() {
-    if (!activeChannelClaim) return;
+    if (!activeChannelClaimId) return;
 
-    if (!channelId) {
+    if (!channelClaimId) {
       doToast({
         message: __('Unable to verify channel settings. Try refreshing the page.'),
         isError: true,
@@ -229,7 +234,7 @@ export function CommentCreate(props: Props) {
     }
 
     // !! Beware of stale closure when editing the then-block, including doSubmitTip().
-    doFetchCreatorSettings(channelId).then(() => {
+    doFetchCreatorSettings(channelClaimId).then(() => {
       const lockedMinAmount = minAmount; // value during closure.
       const currentMinAmount = minAmountRef.current; // value from latest doFetchCreatorSettings().
 
@@ -247,22 +252,18 @@ export function CommentCreate(props: Props) {
   }
 
   function doSubmitTip() {
-    if (!activeChannelClaim || isSubmitting) return;
+    if (!claimId || !channelClaimId || !activeChannelName || !activeChannelClaimId || isSubmitting || !tipChannelName) {
+      return;
+    }
 
     setSubmitting(true);
 
-    const params = { amount: tipAmount, claim_id: claimId, channel_id: activeChannelClaim.claim_id };
-    const activeChannelName = activeChannelClaim && activeChannelClaim.name;
-    const activeChannelId = activeChannelClaim && activeChannelClaim.claim_id;
-
-    // setup variables for tip API
-    const channelClaimId = claim.signing_channel ? claim.signing_channel.claim_id : claim.claim_id;
-    const tipChannelName = claim.signing_channel ? claim.signing_channel.name : claim.name;
+    const params = { amount: tipAmount, claim_id: claimId, channel_id: activeChannelClaimId };
 
     if (activeTab === TAB_LBC) {
-      // call sendTip and then run the callback from the response
+      // call doSendTip and then run the callback from the response
       // second parameter is callback
-      sendTip(
+      doSendTip(
         params,
         (response) => {
           const { txid } = response;
@@ -287,9 +288,9 @@ export function CommentCreate(props: Props) {
       );
     } else {
       const tipParams: TipParams = { tipAmount: Math.round(tipAmount * 100) / 100, tipChannelName, channelClaimId };
-      const userParams: UserParams = { activeChannelName, activeChannelId };
+      const userParams: UserParams = { activeChannelName, activeChannelId: activeChannelClaimId };
 
-      sendCashTip(tipParams, userParams, claim.claim_id, stripeEnvironment, (customerTipResponse) => {
+      doSendCashTip(tipParams, userParams, claimId, stripeEnvironment, (customerTipResponse) => {
         const { payment_intent_id } = customerTipResponse;
 
         handleCreateComment(null, payment_intent_id, stripeEnvironment);
@@ -310,13 +311,21 @@ export function CommentCreate(props: Props) {
    * @param {string} [environment] Optional environment for Stripe (test|live)
    */
   function handleCreateComment(txid, payment_intent_id, environment) {
-    if (isSubmitting || disableInput) return;
+    if (isSubmitting || disableInput || !claimId) return;
 
     setSubmitting(true);
 
     const stickerValue = selectedSticker && buildValidSticker(selectedSticker.name);
 
-    createComment(stickerValue || commentValue, claimId, parentId, txid, payment_intent_id, environment, !!stickerValue)
+    doCommentCreate(uri, isLivestream, {
+      comment: stickerValue || commentValue,
+      claim_id: claimId,
+      parent_id: parentId,
+      txid,
+      payment_intent_id,
+      environment,
+      sticker: !!stickerValue,
+    })
       .then((res) => {
         setSubmitting(false);
         if (setQuickReply) setQuickReply(res);
@@ -336,10 +345,10 @@ export function CommentCreate(props: Props) {
         setSubmitting(false);
         setCommentFailure(true);
 
-        if (channelId) {
+        if (channelClaimId) {
           // It could be that the creator added a minimum tip setting.
           // Manually update for now until a websocket msg is available.
-          doFetchCreatorSettings(channelId);
+          doFetchCreatorSettings(channelClaimId);
         }
       });
   }
@@ -363,19 +372,19 @@ export function CommentCreate(props: Props) {
 
   // Fetch channel constraints if not already.
   React.useEffect(() => {
-    if (!channelSettings && channelId) {
-      doFetchCreatorSettings(channelId);
+    if (!channelSettings && channelClaimId) {
+      doFetchCreatorSettings(channelClaimId);
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Notifications: Fetch top-level comments to identify if it has been deleted and can reply to it
   React.useEffect(() => {
-    if (shouldFetchComment && fetchComment) {
-      fetchComment(parentId).then((result) => {
+    if (shouldFetchComment && doCommentById) {
+      doCommentById(parentId).then((result) => {
         setDeletedComment(String(result).includes('Error'));
       });
     }
-  }, [fetchComment, shouldFetchComment, parentId]);
+  }, [doCommentById, shouldFetchComment, parentId]);
 
   // Stickers: Get LBC-USD exchange rate if hasn't yet and selected a paid sticker
   React.useEffect(() => {
@@ -385,10 +394,7 @@ export function CommentCreate(props: Props) {
   // Stickers: Check if creator has a tip account saved (on selector so that if a paid sticker is selected,
   // it defaults to LBC tip instead of USD)
   React.useEffect(() => {
-    if (!stripeEnvironment || !showSelectors || canReceiveFiatTip !== undefined) return;
-
-    const channelClaimId = claim.signing_channel ? claim.signing_channel.claim_id : claim.claim_id;
-    const tipChannelName = claim.signing_channel ? claim.signing_channel.name : claim.name;
+    if (!stripeEnvironment || !showSelectors || canReceiveFiatTip !== undefined || !tipChannelName) return;
 
     Lbryio.call(
       'account',
@@ -408,7 +414,7 @@ export function CommentCreate(props: Props) {
         }
       })
       .catch(() => {});
-  }, [canReceiveFiatTip, claim.claim_id, claim.name, claim.signing_channel, showSelectors]);
+  }, [canReceiveFiatTip, channelClaimId, showSelectors, tipChannelName]);
 
   // Handle keyboard shortcut comment creation
   React.useEffect(() => {
@@ -502,19 +508,19 @@ export function CommentCreate(props: Props) {
       })}
     >
       {selectedSticker ? (
-        activeChannelClaim && (
+        activeChannelUrl && (
           <StickerReviewBox
-            activeChannelUrl={activeChannelClaim.canonical_url}
+            activeChannelUrl={activeChannelUrl}
             src={selectedSticker.url}
             price={selectedSticker.price || 0}
             exchangeRate={exchangeRate}
           />
         )
       ) : isReviewingSupportComment ? (
-        activeChannelClaim &&
+        activeChannelUrl &&
         activeTab && (
           <TipReviewBox
-            activeChannelUrl={activeChannelClaim.canonical_url}
+            activeChannelUrl={activeChannelUrl}
             tipAmount={tipAmount}
             activeTab={activeTab}
             message={commentValue}
