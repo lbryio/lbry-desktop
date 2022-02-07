@@ -533,6 +533,11 @@ export function CommentCreate(props: Props) {
             disabled={isFetchingChannels || disableInput}
             isLivestream={isLivestream}
             label={<FormChannelSelector isReply={Boolean(isReply)} isLivestream={Boolean(isLivestream)} />}
+            noticeLabel={
+              isMobile && (
+                <HelpText deletedComment={deletedComment} minAmount={minAmount} minSuper={minSuper} minTip={minTip} />
+              )
+            }
             name={isReply ? 'create__reply' : 'create__comment'}
             onChange={(e) => setCommentValue(SIMPLE_SITE || !advancedEditor || isReply ? e.target.value : e)}
             handleTip={(isLBC) => handleSelectTipComment(isLBC ? TAB_LBC : TAB_FIAT)}
@@ -574,7 +579,7 @@ export function CommentCreate(props: Props) {
         />
       )}
 
-      {(!isMobile || !isLivestream || isReviewingStickerComment || isReviewingSupportComment) && (
+      {(!isMobile || isReviewingStickerComment || isReviewingSupportComment) && (
         <div className="section__actions">
           {/* Submit Button */}
           {isReviewingSupportComment ? (

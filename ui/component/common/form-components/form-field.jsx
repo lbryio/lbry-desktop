@@ -49,6 +49,7 @@ type Props = {
   showSelectors?: boolean,
   submitButtonRef?: any,
   tipModalOpen?: boolean,
+  noticeLabel?: any,
   onChange?: (any) => any,
   setShowSelectors?: (boolean) => void,
   quickActionHandler?: (any) => any,
@@ -117,6 +118,7 @@ export class FormField extends React.PureComponent<Props, State> {
       showSelectors,
       submitButtonRef,
       tipModalOpen,
+      noticeLabel,
       quickActionHandler,
       setShowSelectors,
       render,
@@ -281,6 +283,8 @@ export class FormField extends React.PureComponent<Props, State> {
                     {countInfo}
                   </div>
                 )}
+
+                {noticeLabel}
 
                 {hideSuggestions ? (
                   <textarea

@@ -45,11 +45,30 @@
   .MuiOutlinedInput-root {
     padding: 0px var(--spacing-xxs) !important;
   }
+
+  @media (max-width: $breakpoint-small) {
+    .MuiOutlinedInput-notchedOutline {
+      display: none;
+    }
+  }
 }
 
 @media (min-width: $breakpoint-small) {
   .MuiOutlinedInput-notchedOutline {
     display: none;
+  }
+}
+
+.MuiDrawer-root {
+  .comment-create__min-amount-notice {
+    margin: 0px;
+    padding: var(--spacing-xxs);
+  }
+}
+
+.card--enable-overflow {
+  .comment-create__min-amount-notice {
+    margin-bottom: var(--spacing-xxs);
   }
 }
 

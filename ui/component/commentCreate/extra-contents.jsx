@@ -42,7 +42,7 @@ export const HelpText = (helpTextProps: HelpTextProps) => {
       {deletedComment && <div className="error__text">{__('This comment has been deleted.')}</div>}
 
       {!!minAmount && (
-        <div className="help--notice commentCreate__minAmountNotice">
+        <div className="help--notice comment-create__min-amount-notice">
           <I18nMessage tokens={{ lbc: <CreditAmount noFormat amount={minAmount} /> }}>
             {minTip ? 'Comment min: %lbc%' : minSuper ? 'HyperChat min: %lbc%' : ''}
           </I18nMessage>
