@@ -24,8 +24,6 @@ if (isProduction) {
 }
 
 type Analytics = {
-  appStartTime: number, // needed?
-  eventStartTime: any, // needed?
   error: (string) => Promise<any>,
   sentryError: ({} | string, {}) => Promise<any>,
   pageView: (string, ?string) => void,
@@ -171,9 +169,6 @@ async function sendWatchmanData(body) {
 }
 
 const analytics: Analytics = {
-  appStartTime: 0, // ?
-  eventStartTime: {}, // ?
-
   // receive buffer events from tracking plugin and save buffer amounts and times for backend call
   videoBufferEvent: async (claim, data) => {
     amountOfBufferEvents = amountOfBufferEvents + 1;
