@@ -34,7 +34,7 @@ export default function SwipeableDrawer(props: Props) {
   const videoHeight = coverHeight || (mobilePlayerDimensions ? mobilePlayerDimensions.height : 0);
 
   React.useEffect(() => {
-    if (open && !mobilePlayerDimensions && !coverHeight) {
+    if (open && !mobilePlayerDimensions) {
       const element = document.querySelector(`.file-page__video-container`);
 
       if (element) {
