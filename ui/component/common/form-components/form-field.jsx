@@ -49,7 +49,6 @@ type Props = {
   showSelectors?: boolean,
   submitButtonRef?: any,
   tipModalOpen?: boolean,
-  onSlimInputClick?: () => void,
   onChange?: (any) => any,
   setShowSelectors?: (boolean) => void,
   quickActionHandler?: (any) => any,
@@ -118,7 +117,6 @@ export class FormField extends React.PureComponent<Props, State> {
       showSelectors,
       submitButtonRef,
       tipModalOpen,
-      onSlimInputClick,
       quickActionHandler,
       setShowSelectors,
       render,
@@ -275,7 +273,6 @@ export class FormField extends React.PureComponent<Props, State> {
                 showSelectors={Boolean(showSelectors)}
                 slimInput={slimInput}
                 tipModalOpen={tipModalOpen}
-                onSlimInputClick={onSlimInputClick}
               >
                 {(!slimInput || this.state.drawerOpen) && (label || quickAction) && (
                   <div className="form-field__two-column">
@@ -364,7 +361,6 @@ type TextareaWrapperProps = {
   showSelectors?: boolean,
   commentSelectorsProps?: any,
   tipModalOpen?: boolean,
-  onSlimInputClick?: () => void,
   toggleDrawer: () => void,
   closeSelector?: () => void,
 };
@@ -377,7 +373,6 @@ function TextareaWrapper(wrapperProps: TextareaWrapperProps) {
     commentSelectorsProps,
     showSelectors,
     tipModalOpen,
-    onSlimInputClick,
     toggleDrawer,
     closeSelector,
   } = wrapperProps;
@@ -385,18 +380,11 @@ function TextareaWrapper(wrapperProps: TextareaWrapperProps) {
   function handleCloseAll() {
     toggleDrawer();
     if (closeSelector) closeSelector();
-    if (onSlimInputClick) onSlimInputClick();
   }
 
   return slimInput ? (
     !isDrawerOpen ? (
-      <div
-        role="button"
-        onClick={() => {
-          toggleDrawer();
-          if (onSlimInputClick) onSlimInputClick();
-        }}
-      >
+      <div role="button" onClick={toggleDrawer}>
         {children}
       </div>
     ) : (

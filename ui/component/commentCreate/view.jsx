@@ -52,7 +52,6 @@ type Props = {
   supportDisabled: boolean,
   uri: string,
   disableInput?: boolean,
-  onSlimInputClick?: () => void,
   createComment: (string, string, string, ?string, ?string, ?string, boolean) => Promise<any>,
   doFetchCreatorSettings: (channelId: string) => Promise<any>,
   doToast: ({ message: string }) => void,
@@ -84,7 +83,6 @@ export function CommentCreate(props: Props) {
     supportDisabled,
     uri,
     disableInput,
-    onSlimInputClick,
     createComment,
     doFetchCreatorSettings,
     doToast,
@@ -527,7 +525,6 @@ export function CommentCreate(props: Props) {
             }}
             handleSubmit={handleCreateComment}
             slimInput={isMobile}
-            onSlimInputClick={onSlimInputClick}
             commentSelectorsProps={commentSelectorsProps}
             submitButtonRef={buttonRef}
             setShowSelectors={setShowSelectors}

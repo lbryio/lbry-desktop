@@ -147,17 +147,10 @@ $recent-msg-button__height: 2rem;
   font-size: var(--font-xsmall);
   padding: var(--spacing-xxs) var(--spacing-s);
   opacity: 0.9;
+  bottom: var(--spacing-xxs);
 
   &:hover {
     opacity: 1;
-  }
-
-  @media (min-width: $breakpoint-small) {
-    margin-bottom: var(--spacing-xs);
-  }
-
-  @media (max-width: $breakpoint-small) {
-    bottom: var(--spacing-xxs);
   }
 }
 
