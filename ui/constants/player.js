@@ -1,0 +1,1 @@
+export const VIDEO_ALMOST_FINISHED_THRESHOLD = 0.8;

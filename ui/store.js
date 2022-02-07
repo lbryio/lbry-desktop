@@ -230,4 +230,13 @@ const store = createStore(
 const persistor = persistStore(store);
 window.persistor = persistor;
 
+window.addEventListener('storage', (e) => {
+  if (e.key === ACTIONS.SET_CONTENT_POSITION) {
+    store.dispatch({
+      type: ACTIONS.SET_CONTENT_POSITION,
+      data: JSON.parse(e.newValue),
+    });
+  }
+});
+
 export { store, persistor, history, whiteListedReducers };

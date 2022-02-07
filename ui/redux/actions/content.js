@@ -220,6 +220,19 @@ export function savePosition(uri: string, position: number) {
     const { claim_id: claimId, txid, nout } = claim;
     const outpoint = `${txid}:${nout}`;
 
+    try {
+      localStorage.setItem(
+        ACTIONS.SET_CONTENT_POSITION,
+        JSON.stringify({
+          claimId,
+          outpoint,
+          position,
+        })
+      );
+    } catch (e) {
+      console.error('localStorage not available');
+    }
+
     dispatch({
       type: ACTIONS.SET_CONTENT_POSITION,
       data: { claimId, outpoint, position },
