@@ -28,7 +28,7 @@ export default function HelpPage() {
       <Card
         title={__('Find assistance')}
         subtitle={
-          <I18nMessage tokens={{ channel: <strong>#help</strong>, help_email: SITE_HELP_EMAIL }}>
+          <I18nMessage tokens={{ channel: <strong>#support</strong>, help_email: SITE_HELP_EMAIL }}>
             Live help is available most hours in the %channel% channel of our Discord chat room. Or you can always email
             us at %help_email%.
           </I18nMessage>
