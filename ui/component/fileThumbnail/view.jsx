@@ -30,10 +30,10 @@ function FileThumbnail(props: Props) {
   const isGif = thumbnail && thumbnail.endsWith('gif');
 
   React.useEffect(() => {
-    if (!hasResolvedClaim && uri) {
+    if (!hasResolvedClaim && uri && !passedThumbnail) {
       doResolveUri(uri);
     }
-  }, [hasResolvedClaim, uri, doResolveUri]);
+  }, [hasResolvedClaim, uri, doResolveUri, passedThumbnail]);
 
   if (!allowGifs && isGif) {
     return (

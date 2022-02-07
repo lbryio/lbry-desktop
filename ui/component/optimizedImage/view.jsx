@@ -94,7 +94,7 @@ function OptimizedImage(props: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [src]);
 
-  if (!src) {
+  if (!src || !optimizedSrc) {
     return null;
   }
 

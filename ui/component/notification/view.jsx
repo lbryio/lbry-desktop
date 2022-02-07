@@ -50,11 +50,12 @@ export default function Notification(props: Props) {
   const stickerFromComment = isCommentNotification && commentText && parseSticker(commentText);
   const notificationTarget = getNotificationTarget();
 
-  const creatorIcon = (channelUrl) => (
-    <UriIndicator uri={channelUrl} link>
-      <ChannelThumbnail small uri={channelUrl} />
+  const creatorIcon = (channelUrl, channelThumbnail) => (
+    <UriIndicator uri={channelUrl} link channelInfo={{ uri: channelUrl, name: '' }}>
+      <ChannelThumbnail small thumbnailPreview={channelThumbnail} uri={channelThumbnail ? undefined : channelUrl} />
     </UriIndicator>
   );
+
   let channelUrl;
   let icon;
   switch (notification_rule) {
@@ -64,19 +65,19 @@ export default function Notification(props: Props) {
     case RULE.COMMENT:
     case RULE.CREATOR_COMMENT:
       channelUrl = notification_parameters.dynamic.comment_author;
-      icon = creatorIcon(channelUrl);
+      icon = creatorIcon(channelUrl, notification_parameters?.dynamic?.comment_author_thumbnail);
       break;
     case RULE.COMMENT_REPLY:
       channelUrl = notification_parameters.dynamic.reply_author;
-      icon = creatorIcon(channelUrl);
+      icon = creatorIcon(channelUrl, notification_parameters?.dynamic?.comment_author_thumbnail);
       break;
     case RULE.NEW_CONTENT:
       channelUrl = notification_parameters.dynamic.channel_url;
-      icon = creatorIcon(channelUrl);
+      icon = creatorIcon(channelUrl, notification_parameters?.dynamic?.channel_thumbnail);
       break;
     case RULE.NEW_LIVESTREAM:
       channelUrl = notification_parameters.dynamic.channel_url;
-      icon = creatorIcon(channelUrl);
+      icon = creatorIcon(channelUrl, notification_parameters?.dynamic?.channel_thumbnail);
       break;
     case RULE.DAILY_WATCH_AVAILABLE:
     case RULE.DAILY_WATCH_REMIND:
@@ -111,7 +112,7 @@ export default function Notification(props: Props) {
   let uriIndicator;
   const title = titleSplit.map((message, index) => {
     if (channelName === message) {
-      uriIndicator = <UriIndicator uri={channelUrl} link />;
+      uriIndicator = <UriIndicator uri={channelUrl} link channelInfo={{ uri: channelUrl, name: channelName }} />;
       fullTitle.push(' ');
       const resultTitle = fullTitle;
       fullTitle = [' '];
@@ -204,7 +205,11 @@ export default function Notification(props: Props) {
             </div>
 
             {notification_rule === RULE.NEW_CONTENT && (
-              <FileThumbnail uri={notification_parameters.device.target} className="notificationContent__thumbnail" />
+              <FileThumbnail
+                uri={notification_parameters.device.target}
+                thumbnail={notification_parameters?.dynamic?.claim_thumbnail}
+                className="notificationContent__thumbnail"
+              />
             )}
             {notification_rule === RULE.NEW_LIVESTREAM && (
               <FileThumbnail

@@ -22,7 +22,7 @@ type Props = {
   unseenCount: number,
   doSeeAllNotifications: () => void,
   doReadNotifications: () => void,
-  doNotificationList: (?Array<string>) => void,
+  doNotificationList: (?Array<string>, ?boolean) => void,
   doNotificationCategories: () => void,
   activeChannel: ?ChannelClaim,
   doCommentReactList: (Array<string>) => Promise<any>,
@@ -97,7 +97,7 @@ export default function NotificationsPage(props: Props) {
         try {
           const matchingCategory = arrayNotificationCategories.find((category) => category.name === name);
           if (matchingCategory) {
-            doNotificationList(matchingCategory.types);
+            doNotificationList(matchingCategory.types, false);
           }
         } catch (e) {
           console.error(e); // eslint-disable-line no-console
