@@ -14,7 +14,21 @@
 
 .comment-create__auth {
   .MuiAutocomplete-root {
-    margin-bottom: var(--spacing-m);
+    @media (min-width: $breakpoint-small) {
+      margin-top: var(--spacing-xxs);
+    }
+
+    @media (min-width: $breakpoint-small) {
+      margin-bottom: var(--spacing-m);
+    }
+  }
+}
+
+.livestream__comment-create {
+  .comment-create__auth {
+    .MuiAutocomplete-root {
+      margin-top: 0px;
+    }
   }
 }
 

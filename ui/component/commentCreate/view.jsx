@@ -432,7 +432,10 @@ export function CommentCreate(props: Props) {
       <div
         role="button"
         className="comment-create__auth"
-        onClick={() => {
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+
           if (embed) {
             window.open(`https://odysee.com/$/${PAGES.AUTH}?redirect=/$/${PAGES.LIVESTREAM}`);
             return;
@@ -446,10 +449,18 @@ export function CommentCreate(props: Props) {
           }
         }}
       >
-        <FormField type="textarea" name={'comment_signup_prompt'} placeholder={__('Say something about this...')} />
-        <div className="section__actions--no-margin">
-          <Button disabled button="primary" label={__('Post --[button to submit something]--')} requiresAuth />
-        </div>
+        <FormField
+          type="textarea"
+          name="comment__signup-prompt"
+          placeholder={__('Say something about this...')}
+          disabled={isMobile}
+        />
+
+        {!isMobile && (
+          <div className="section__actions--no-margin">
+            <Button disabled button="primary" label={__('Post --[button to submit something]--')} requiresAuth />
+          </div>
+        )}
       </div>
     );
   }
