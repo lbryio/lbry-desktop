@@ -54,6 +54,7 @@ type Props = {
   supportDisabled: boolean,
   uri: string,
   disableInput?: boolean,
+  onSlimInputClose?: () => void,
   setQuickReply: (any) => void,
   onCancelReplying?: () => void,
   onDoneReplying?: () => void,
@@ -89,6 +90,7 @@ export function CommentCreate(props: Props) {
     supportDisabled,
     uri,
     disableInput,
+    onSlimInputClose,
     doCommentCreate,
     doFetchCreatorSettings,
     doToast,
@@ -177,6 +179,8 @@ export function CommentCreate(props: Props) {
     } else {
       setTipSelector(true);
     }
+
+    if (onSlimInputClose) onSlimInputClose();
   }
 
   function handleStickerComment() {
@@ -198,6 +202,9 @@ export function CommentCreate(props: Props) {
     setTipAmount(sticker.price || 0);
     setShowSelectors({ tab: showSelectors.tab || undefined, open: false });
 
+    // added this here since selecting a sticker can cause scroll issues
+    if (onSlimInputClose) onSlimInputClose();
+
     if (sticker.price && sticker.price > 0) {
       setActiveTab(canReceiveFiatTip ? TAB_FIAT : TAB_LBC);
       setTipSelector(true);
@@ -207,6 +214,8 @@ export function CommentCreate(props: Props) {
   function handleCancelSticker() {
     setReviewingStickerComment(false);
     setSelectedSticker(null);
+
+    if (onSlimInputClose) onSlimInputClose();
   }
 
   function handleCancelSupport() {
@@ -218,6 +227,8 @@ export function CommentCreate(props: Props) {
       setShowSelectors({ tab: showSelectors.tab || undefined, open: false });
       setSelectedSticker(null);
     }
+
+    if (onSlimInputClose) onSlimInputClose();
   }
 
   function handleSupportComment() {
@@ -574,6 +585,7 @@ export function CommentCreate(props: Props) {
             handleSubmit={handleCreateComment}
             slimInput={isMobile && uri} // "uri": make sure it's on a file page
             slimInputButtonRef={slimInputButtonRef}
+            onSlimInputClose={onSlimInputClose}
             commentSelectorsProps={commentSelectorsProps}
             submitButtonRef={buttonRef}
             setShowSelectors={setShowSelectors}
@@ -633,7 +645,10 @@ export function CommentCreate(props: Props) {
               disabled={disabled || tipSelectorError || !minAmountMet}
               icon={activeTab === TAB_LBC ? ICONS.LBC : ICONS.FINANCE}
               label={__('Review')}
-              onClick={() => setReviewingSupportComment(true)}
+              onClick={() => {
+                setReviewingSupportComment(true);
+                if (onSlimInputClose) onSlimInputClose();
+              }}
             />
           ) : (
             (!isMobile || selectedSticker) &&

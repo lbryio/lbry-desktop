@@ -53,6 +53,7 @@ type Props = {
   submitButtonRef?: any,
   tipModalOpen?: boolean,
   noticeLabel?: any,
+  onSlimInputClose?: () => void,
   onChange?: (any) => any,
   setShowSelectors?: ({ tab?: string, open: boolean }) => void,
   quickActionHandler?: (any) => any,
@@ -116,6 +117,7 @@ export class FormField extends React.PureComponent<Props, State> {
       submitButtonRef,
       tipModalOpen,
       noticeLabel,
+      onSlimInputClose,
       quickActionHandler,
       setShowSelectors,
       render,
@@ -277,6 +279,7 @@ export class FormField extends React.PureComponent<Props, State> {
                 showSelectors={Boolean(showSelectors && showSelectors.open)}
                 slimInput={slimInput}
                 slimInputButtonRef={slimInputButtonRef}
+                onSlimInputClose={onSlimInputClose}
                 tipModalOpen={tipModalOpen}
               >
                 {(!slimInput || this.state.drawerOpen) && label && (

@@ -11,6 +11,7 @@ type TextareaWrapperProps = {
   showSelectors?: boolean,
   commentSelectorsProps?: any,
   tipModalOpen?: boolean,
+  onSlimInputClose?: () => void,
   toggleDrawer: () => void,
   closeSelector?: () => void,
 };
@@ -24,6 +25,7 @@ export const TextareaWrapper = (wrapperProps: TextareaWrapperProps) => {
     commentSelectorsProps,
     showSelectors,
     tipModalOpen,
+    onSlimInputClose,
     toggleDrawer,
     closeSelector,
   } = wrapperProps;
@@ -31,6 +33,7 @@ export const TextareaWrapper = (wrapperProps: TextareaWrapperProps) => {
   function handleCloseAll() {
     toggleDrawer();
     if (closeSelector) closeSelector();
+    if (onSlimInputClose) onSlimInputClose();
   }
 
   return slimInput ? (

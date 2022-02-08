@@ -82,6 +82,7 @@ export default function LivestreamChatLayout(props: Props) {
   const [chatHidden, setChatHidden] = React.useState(false);
   const [didInitialScroll, setDidInitialScroll] = React.useState(false);
   const [minScrollHeight, setMinScrollHeight] = React.useState(0);
+  const [keyboardOpened, setKeyboardOpened] = React.useState(false);
 
   const claimId = claim && claim.claim_id;
   const commentsToDisplay = viewMode === VIEW_MODES.CHAT ? commentsByChronologicalOrder : superChatsByAmount;
@@ -89,10 +90,7 @@ export default function LivestreamChatLayout(props: Props) {
   const pinnedComment = pinnedComments.length > 0 ? pinnedComments[0] : null;
   const { superChatsChannelUrls, superChatsFiatAmount, superChatsLBCAmount } = getTipValues(superChatsByAmount);
   const scrolledPastRecent = Boolean(
-    (scrollPos || scrollPos === 0) &&
-      (!isMobile || minScrollHeight) &&
-      scrollPos < minScrollHeight &&
-      viewMode === VIEW_MODES.CHAT
+    viewMode === VIEW_MODES.CHAT && !isMobile ? scrollPos < 0 : scrollPos < minScrollHeight
   );
 
   const restoreScrollPos = React.useCallback(() => {
@@ -149,7 +147,7 @@ export default function LivestreamChatLayout(props: Props) {
       if (discussionElement) {
         const scrollTop = discussionElement.scrollTop;
 
-        if (!scrollPos || scrollTop !== scrollPos) {
+        if (scrollTop !== scrollPos) {
           setScrollPos(scrollTop);
         }
       }
@@ -171,13 +169,29 @@ export default function LivestreamChatLayout(props: Props) {
         // -ve scrollPos: user scrolled.
         const timer = setTimeout(() => {
           // Use a timer here to ensure we reset after the new comment has been rendered.
-          restoreScrollPos();
+          if (!isMobile) {
+            discussionElement.scrollTop = 0;
+          } else {
+            restoreScrollPos();
+          }
         }, COMMENT_SCROLL_TIMEOUT);
         return () => clearTimeout(timer);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [commentsLength]); // (Just respond to 'commentsLength' updates and nothing else)
+
+  // Restore Scroll Pos after mobile input opens keyboard and avoid scroll height conflicts
+  React.useEffect(() => {
+    if (keyboardOpened) {
+      const timer = setTimeout(() => {
+        restoreScrollPos();
+        setKeyboardOpened(false);
+      }, 300);
+
+      return () => clearTimeout(timer);
+    }
+  }, [keyboardOpened, restoreScrollPos]);
 
   // Stop spinner for resolving superchats
   React.useEffect(() => {
@@ -359,7 +373,14 @@ export default function LivestreamChatLayout(props: Props) {
         ) : null}
 
         <div className="livestream__comment-create">
-          <CommentCreate isLivestream bottom embed={embed} uri={uri} onDoneReplying={restoreScrollPos} />
+          <CommentCreate
+            isLivestream
+            bottom
+            embed={embed}
+            uri={uri}
+            onDoneReplying={restoreScrollPos}
+            onSlimInputClose={!scrolledPastRecent && isMobile ? () => setKeyboardOpened(true) : undefined}
+          />
         </div>
       </div>
     </div>
