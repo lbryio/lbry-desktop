@@ -19,6 +19,7 @@ const {
   getParameterByName,
   getThumbnailCdnUrl,
   escapeHtmlProperty,
+  unscapeHtmlProperty,
 } = require('../../ui/util/web');
 const { getJsBundleId } = require('../bundle-id.js');
 const { lbryProxy: Lbry } = require('../lbry');
@@ -307,7 +308,7 @@ async function getHtml(ctx) {
     ctx.request.url = encodeURIComponent(escapeHtmlProperty(decodeURIComponent(ctx.request.url)));
   }
 
-  const requestPath = decodeURIComponent(ctx.path);
+  const requestPath = unscapeHtmlProperty(decodeURIComponent(ctx.path));
   if (requestPath.length === 0) {
     const ogMetadata = buildBasicOgMetadata();
     return insertToHead(html, ogMetadata);

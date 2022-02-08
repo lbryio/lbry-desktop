@@ -79,6 +79,17 @@ function escapeHtmlProperty(property) {
     : '';
 }
 
+function unscapeHtmlProperty(property) {
+  return property
+    ? String(property)
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&#039;/g, "'")
+    : '';
+}
+
 // module.exports needed since the web server imports this function
 module.exports = {
   CONTINENT_COOKIE,
@@ -91,4 +102,5 @@ module.exports = {
   getParameterByName,
   getThumbnailCdnUrl,
   escapeHtmlProperty,
+  unscapeHtmlProperty,
 };
