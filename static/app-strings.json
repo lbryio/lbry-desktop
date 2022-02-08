@@ -2280,5 +2280,10 @@
   "Shuffle is off.": "Shuffle is off.",
   "Loop is on.": "Loop is on.",
   "Loop is off.": "Loop is off.",
+  "View History Hosting lets you choose how much storage to use helping content you've consumed.": "View History Hosting lets you choose how much storage to use helping content you've consumed.",
+  "Clean Now": "Clean Now",
+  "Enable Automatic Hosting": "Enable Automatic Hosting",
+  "Download and serve arbitrary data on the network.": "Download and serve arbitrary data on the network.",
+  "View History Hosting": "View History Hosting",
   "--end--": "--end--"
 }

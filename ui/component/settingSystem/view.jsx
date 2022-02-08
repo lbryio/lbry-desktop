@@ -10,17 +10,16 @@ import I18nMessage from 'component/i18nMessage';
 import SettingAutoLaunch from 'component/settingAutoLaunch';
 import SettingClosingBehavior from 'component/settingClosingBehavior';
 import SettingCommentsServer from 'component/settingCommentsServer';
+import SettingDataHosting from 'component/settingDataHosting';
 import SettingShareUrl from 'component/settingShareUrl';
 import SettingsRow from 'component/settingsRow';
 import SettingWalletServer from 'component/settingWalletServer';
 import Spinner from 'component/spinner';
 import { getPasswordFromCookie } from 'util/saved-passwords';
 import * as DAEMON_SETTINGS from 'constants/daemon_settings';
-import { formatBytes } from 'util/format-bytes';
 import SettingEnablePrereleases from 'component/settingEnablePrereleases';
 
 const IS_MAC = process.platform === 'darwin';
-const BYTES_PER_MB = 1048576;
 
 type Price = {
   currency: string,
@@ -37,16 +36,6 @@ type DaemonSettings = {
   save_files: boolean,
   save_blobs: boolean,
   ffmpeg_path: string,
-};
-
-type DaemonStatus = {
-  disk_space: {
-    content_blobs_storage_used_mb: string,
-    published_blobs_storage_used_mb: string,
-    running: true,
-    seed_blobs_storage_used_mb: string,
-    total_used_mb: string,
-  },
 };
 
 type Props = {
@@ -67,7 +56,6 @@ type Props = {
   updateWalletStatus: () => void,
   confirmForgetPassword: ({}) => void,
   toggle3PAnalytics: (boolean) => void,
-  daemonStatus: DaemonStatus,
 };
 
 export default function SettingSystem(props: Props) {
@@ -87,23 +75,10 @@ export default function SettingSystem(props: Props) {
     updateWalletStatus,
     confirmForgetPassword,
     toggle3PAnalytics,
-    daemonStatus,
   } = props;
 
   const [clearingCache, setClearingCache] = React.useState(false);
   const [storedPassword, setStoredPassword] = React.useState(false);
-  const { disk_space } = daemonStatus;
-  const contentSpaceUsed = Number(disk_space.content_blobs_storage_used_mb);
-  const networkSpaceUsed = Number(disk_space.seed_blobs_storage_used_mb);
-  const blobLimitSetting = daemonSettings[DAEMON_SETTINGS.BLOB_STORAGE_LIMIT_MB];
-  const networkLimitSetting = daemonSettings[DAEMON_SETTINGS.NETWORK_STORAGE_LIMIT_MB];
-  const [contentBlobSpaceLimitGB, setContentBlobSpaceLimit] = React.useState(
-    blobLimitSetting ? blobLimitSetting / 1024 : 0
-  );
-  const [networkBlobSpaceLimitGB, setNetworkBlobSpaceLimit] = React.useState(
-    networkLimitSetting ? networkLimitSetting / 1024 : 0
-  );
-  const [limitSpace, setLimitSpace] = React.useState(Boolean(blobLimitSetting));
   const { available: ffmpegAvailable, which: ffmpegPath } = ffmpegStatus;
 
   function onChangeEncryptWallet() {
@@ -116,46 +91,6 @@ export default function SettingSystem(props: Props) {
 
   function onConfirmForgetPassword() {
     confirmForgetPassword({ callback: () => setStoredPassword(false) });
-  }
-
-  function updateContentBlobLimitField(gb) {
-    if (gb === 0) {
-      setContentBlobSpaceLimit(0);
-    } else if (!gb || !isNaN(gb)) {
-      setContentBlobSpaceLimit(gb);
-    }
-  }
-
-  function updateNetworkBlobLimitField(gb) {
-    if (gb === 0) {
-      setNetworkBlobSpaceLimit(0);
-    } else if (!gb || !isNaN(gb)) {
-      setNetworkBlobSpaceLimit(gb);
-    }
-  }
-
-  function handleLimitSpace(value) {
-    setLimitSpace(value);
-    if (!value) {
-      setDaemonSetting(DAEMON_SETTINGS.BLOB_STORAGE_LIMIT_MB, String(0));
-    } else {
-      const spaceLimitMB = contentBlobSpaceLimitGB * 1024;
-      setDaemonSetting(DAEMON_SETTINGS.BLOB_STORAGE_LIMIT_MB, String(spaceLimitMB));
-    }
-  }
-
-  function handleSetContentBlobSpaceLimit() {
-    const spaceLimitMB = contentBlobSpaceLimitGB * 1024;
-    if (!isNaN(spaceLimitMB) && blobLimitSetting !== spaceLimitMB * 1024) {
-      setDaemonSetting(DAEMON_SETTINGS.BLOB_STORAGE_LIMIT_MB, String(spaceLimitMB));
-    }
-  }
-
-  function handleSetNetworkBlobSpaceLimit() {
-    const spaceLimitMB = networkBlobSpaceLimitGB * 1024;
-    if (!isNaN(spaceLimitMB) && blobLimitSetting !== spaceLimitMB * 1024) {
-      setDaemonSetting(DAEMON_SETTINGS.NETWORK_STORAGE_LIMIT_MB, String(spaceLimitMB));
-    }
   }
 
   // Update ffmpeg variables
@@ -221,95 +156,17 @@ export default function SettingSystem(props: Props) {
               subtitle={
                 <React.Fragment>
                   {__('Help improve the P2P data network (and make LBRY happy) by hosting data.')}{' '}
-                  {__("History Hosting lets you choose how much storage to use helping content you've consumed.")}{' '}
-                  {__(
-                    'Automatic Hosting lets you delegate some amount of storage for the network to automatically download and host.'
-                  )}{' '}
+                  {__("View History Hosting lets you choose how much storage to use helping content you've consumed.")}{' '}
+                  {/* {__( */}
+                  {/*  'Automatic Hosting lets you delegate some amount of storage for the network to automatically download and host.' */}
+                  {/* )}{' '} */}
                   {__('Playing videos may exceed your history hosting limit until cleanup runs every 30 minutes.')}
                   <br />
                   <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/host-content" />
                 </React.Fragment>
               }
             >
-              <fieldset-section>
-                <FormField
-                  type="checkbox"
-                  name="save_blobs"
-                  onChange={() => setDaemonSetting('save_blobs', !daemonSettings.save_blobs)}
-                  checked={daemonSettings.save_blobs}
-                  label={__('Enable Data Hosting')}
-                />
-              </fieldset-section>
-              {daemonSettings.save_blobs && (
-                <fieldset-section>
-                  <div className={'settings__row-section-title'}>{__('History Hosting')}</div>
-                  <p className={'help'}>
-                    {`History Hosting using ${formatBytes(contentSpaceUsed * BYTES_PER_MB)} of ${
-                      daemonSettings[DAEMON_SETTINGS.BLOB_STORAGE_LIMIT_MB]
-                        ? formatBytes(daemonSettings[DAEMON_SETTINGS.BLOB_STORAGE_LIMIT_MB] * BYTES_PER_MB)
-                        : 'Unlimited'
-                    }`}
-                  </p>
-                </fieldset-section>
-              )}
-              {daemonSettings.save_blobs && (
-                <fieldset-section>
-                  <FormField
-                    type="checkbox"
-                    name="limit_space_used"
-                    onChange={() => handleLimitSpace(!limitSpace)}
-                    checked={limitSpace}
-                    label={__('Limit Hosting of Content History')}
-                  />
-                </fieldset-section>
-              )}
-
-              {daemonSettings.save_blobs && limitSpace && (
-                <FormField
-                  name="content_blob_limit_gb"
-                  type="text"
-                  label={__(`Limit (GB)`)}
-                  disabled={!daemonSettings.save_blobs}
-                  onChange={(e) => updateContentBlobLimitField(e.target.value)}
-                  value={contentBlobSpaceLimitGB}
-                  inputButton={
-                    <Button
-                      disabled={isNaN(contentBlobSpaceLimitGB)}
-                      button="primary"
-                      label={__('Apply')}
-                      onClick={handleSetContentBlobSpaceLimit}
-                    />
-                  }
-                />
-              )}
-              {daemonSettings.save_blobs && (
-                <fieldset-section>
-                  <div className={'settings__row-section-title'}>{__('Automatic Hosting')}</div>
-                  <p className={'help'}>
-                    {`Automatic Hosting using ${formatBytes(networkSpaceUsed * BYTES_PER_MB)} of ${formatBytes(
-                      daemonSettings[DAEMON_SETTINGS.NETWORK_STORAGE_LIMIT_MB] * BYTES_PER_MB
-                    )}`}
-                  </p>
-                </fieldset-section>
-              )}
-              {daemonSettings.save_blobs && (
-                <FormField
-                  name="network_blob_limit_gb"
-                  type="text"
-                  label={__(`Allow (GB)`)}
-                  disabled={!daemonSettings.save_blobs}
-                  onChange={(e) => updateNetworkBlobLimitField(e.target.value)}
-                  value={networkBlobSpaceLimitGB}
-                  inputButton={
-                    <Button
-                      disabled={isNaN(networkBlobSpaceLimitGB)}
-                      button="primary"
-                      label={__('Apply')}
-                      onClick={handleSetNetworkBlobSpaceLimit}
-                    />
-                  }
-                />
-              )}
+              <SettingDataHosting />
             </SettingsRow>
             <SettingsRow
               title={__('Share usage and diagnostic data')}
