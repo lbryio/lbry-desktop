@@ -304,8 +304,11 @@ export default function TextareaWithSuggestions(props: Props) {
     if (!autoFocus) return;
 
     const inputElement = inputRef && inputRef.current;
-    if (inputElement) inputElement.focus();
-  }, [autoFocus, inputRef]);
+    if (inputElement) {
+      inputElement.focus();
+      if (messageValue) inputElement.setSelectionRange(messageValue.length, messageValue.length);
+    }
+  }, [autoFocus, inputRef, messageValue]);
 
   React.useEffect(() => {
     if (!isMention) return;
