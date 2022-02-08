@@ -303,6 +303,10 @@ async function getHtml(ctx) {
     html = fs.readFileSync(path.join(__dirname, '/../dist/index.html'), 'utf8');
   }
 
+  if (ctx?.request?.url) {
+    ctx.request.url = encodeURIComponent(escapeHtmlProperty(decodeURIComponent(ctx.request.url)));
+  }
+
   const requestPath = decodeURIComponent(ctx.path);
   if (requestPath.length === 0) {
     const ogMetadata = buildBasicOgMetadata();
