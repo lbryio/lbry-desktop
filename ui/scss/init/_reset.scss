@@ -1,3 +1,5 @@
+@import 'init/breakpoints';
+
 html {
   box-sizing: border-box;
   text-rendering: optimizeLegibility;
@@ -156,7 +158,7 @@ select {
   outline: none;
 }
 
-@media (min-width: 900px) {
+@media (min-width: $breakpoint-small) {
   textarea {
     width: 100%;
     min-height: var(--spacing-xxl);

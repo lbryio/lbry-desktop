@@ -30,6 +30,9 @@ export const selectListShuffle = (state: State) => selectState(state).shuffleLis
 export const makeSelectIsPlaying = (uri: string) =>
   createSelector(selectPrimaryUri, (primaryUri) => primaryUri === uri);
 
+export const makeSelectIsUriCurrentlyPlaying = (uri: string) =>
+  createSelector(selectPlayingUri, (playingUri) => playingUri && playingUri.uri === uri);
+
 export const makeSelectIsPlayerFloating = (location: UrlLocation) =>
   createSelector(selectPrimaryUri, selectPlayingUri, (primaryUri, playingUri) => {
     if (!playingUri) return false;
