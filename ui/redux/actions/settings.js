@@ -126,15 +126,13 @@ export function doSetDaemonSetting(key, value, doNotDispatch = false) {
         // todo: add sdk reloadsettings() (or it happens automagically?)
       }
     });
-    Lbry.settings_get().then((settings) => {
-      analytics.toggleInternal(settings.share_usage_data);
-      dispatch({
-        type: ACTIONS.DAEMON_SETTINGS_RECEIVED,
-        data: {
-          settings,
-        },
-      });
-    });
+    dispatch(doFetchDaemonSettings());
+  };
+}
+
+export function doCleanBlobs() {
+  return (dispatch) => {
+    Lbry.blob_clean().then(dispatch(doFetchDaemonSettings()));
   };
 }
 

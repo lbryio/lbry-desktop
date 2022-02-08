@@ -12,7 +12,6 @@ import { doSetDaemonSetting, doClearDaemonSetting, doFindFFmpeg } from 'redux/ac
 import { selectAllowAnalytics } from 'redux/selectors/app';
 import {
   selectDaemonSettings,
-  selectDaemonStatus,
   selectFfmpegStatus,
   selectFindingFFmpeg,
   selectLanguage,
@@ -29,7 +28,6 @@ const select = (state) => ({
   isAuthenticated: selectUserVerifiedEmail(state),
   allowAnalytics: selectAllowAnalytics(state),
   language: selectLanguage(state),
-  daemonStatus: selectDaemonStatus(state),
 });
 
 const perform = (dispatch) => ({
