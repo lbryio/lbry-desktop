@@ -13,6 +13,7 @@ import I18nMessage from 'component/i18nMessage';
 import Button from 'component/button';
 import FileDescription from 'component/fileDescription';
 import { ENABLE_MATURE } from 'config';
+import { useIsMobile } from 'effects/use-screensize';
 
 type Props = {
   uri: string,
@@ -39,6 +40,8 @@ export default function FileTitleSection(props: Props) {
     title,
     doFetchSubCount,
   } = props;
+
+  const isMobile = useIsMobile();
 
   React.useEffect(() => {
     if (channelClaimId) doFetchSubCount(channelClaimId);
@@ -100,7 +103,7 @@ export default function FileTitleSection(props: Props) {
         ) : (
           <>
             <ClaimAuthor channelSubCount={subCount} uri={uri} />
-            <FileDescription uri={uri} />
+            <FileDescription expandOverride={isMobile && livestream} uri={uri} />
           </>
         )
       }
