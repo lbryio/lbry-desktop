@@ -34,17 +34,13 @@ import { useIsMobile } from 'effects/use-screensize';
 const AUTO_EXPAND_ALL_REPLIES = false;
 
 type Props = {
+  comment: Comment,
+  myChannelIds: ?Array<string>,
   clearPlayingUri: () => void,
   uri: string,
   claim: StreamClaim,
-  author: ?string, // LBRY Channel Name, e.g. @channel
-  authorUri: string, // full LBRY Channel URI: lbry://@channel#123...
-  commentId: string, // sha256 digest identifying the comment
-  message: string, // comment body
-  timePosted: number, // Comment timestamp
   channelIsBlocked: boolean, // if the channel is blacklisted in the app
   claimIsMine: boolean, // if you control the claim which this comment was posted on
-  commentIsMine: boolean, // if this comment was signed by an owned channel
   updateComment: (string, string) => void,
   fetchReplies: (string, string, number, number, number) => void,
   totalReplyPages: number,
@@ -57,7 +53,6 @@ type Props = {
   isTopLevel?: boolean,
   threadDepth: number,
   hideActions?: boolean,
-  isPinned: boolean,
   othersReacts: ?{
     like: number,
     dislike: number,
@@ -66,11 +61,6 @@ type Props = {
   activeChannelClaim: ?ChannelClaim,
   playingUri: ?PlayingUri,
   stakedLevel: number,
-  supportAmount: number,
-  numDirectReplies: number,
-  isModerator: boolean,
-  isGlobalMod: boolean,
-  isFiat: boolean,
   supportDisabled: boolean,
   setQuickReply: (any) => void,
   quickReply: any,
@@ -78,18 +68,14 @@ type Props = {
 
 const LENGTH_TO_COLLAPSE = 300;
 
-function Comment(props: Props) {
+function CommentView(props: Props) {
   const {
+    comment,
+    myChannelIds,
     clearPlayingUri,
     claim,
     uri,
-    author,
-    authorUri,
-    timePosted,
-    message,
     channelIsBlocked,
-    commentIsMine,
-    commentId,
     updateComment,
     fetchReplies,
     totalReplyPages,
@@ -101,19 +87,31 @@ function Comment(props: Props) {
     isTopLevel,
     threadDepth,
     hideActions,
-    isPinned,
     othersReacts,
     playingUri,
     stakedLevel,
-    supportAmount,
-    numDirectReplies,
-    isModerator,
-    isGlobalMod,
-    isFiat,
     supportDisabled,
     setQuickReply,
     quickReply,
   } = props;
+
+  const {
+    channel_url: authorUri,
+    channel_name: author,
+    channel_id: channelId,
+    comment_id: commentId,
+    comment: message,
+    is_fiat: isFiat,
+    is_global_mod: isGlobalMod,
+    is_moderator: isModerator,
+    is_pinned: isPinned,
+    support_amount: supportAmount,
+    replies: numDirectReplies,
+    timestamp,
+  } = comment;
+
+  const timePosted = timestamp * 1000;
+  const commentIsMine = channelId && myChannelIds && myChannelIds.includes(channelId);
 
   const isMobile = useIsMobile();
 
@@ -454,4 +452,4 @@ function Comment(props: Props) {
   );
 }
 
-export default Comment;
+export default CommentView;

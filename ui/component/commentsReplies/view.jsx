@@ -11,7 +11,6 @@ type Props = {
   uri: string,
   parentId: string,
   claimIsMine: boolean,
-  myChannelIds: ?Array<string>,
   linkedCommentId?: string,
   userCanComment: boolean,
   threadDepth: number,
@@ -30,7 +29,6 @@ function CommentsReplies(props: Props) {
     fetchedReplies,
     resolvedReplies,
     claimIsMine,
-    myChannelIds,
     linkedCommentId,
     userCanComment,
     threadDepth,
@@ -85,23 +83,13 @@ function CommentsReplies(props: Props) {
               commentsToDisplay.length > 0 &&
               commentsToDisplay.map((comment) => (
                 <Comment
+                  key={comment.comment_id}
                   threadDepth={threadDepth}
                   uri={uri}
-                  authorUri={comment.channel_url}
-                  author={comment.channel_name}
-                  claimId={comment.claim_id}
-                  commentId={comment.comment_id}
-                  key={comment.comment_id}
-                  message={comment.comment}
-                  timePosted={comment.timestamp * 1000}
+                  comment={comment}
                   claimIsMine={claimIsMine}
-                  commentIsMine={comment.channel_id && myChannelIds && myChannelIds.includes(comment.channel_id)}
                   linkedCommentId={linkedCommentId}
                   commentingEnabled={userCanComment}
-                  supportAmount={comment.support_amount}
-                  numDirectReplies={comment.replies}
-                  isModerator={comment.is_moderator}
-                  isGlobalMod={comment.is_global_mod}
                   supportDisabled={supportDisabled}
                 />
               ))}

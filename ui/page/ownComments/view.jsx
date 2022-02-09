@@ -83,17 +83,9 @@ export default function OwnComments(props: Props) {
               <Comment
                 isTopLevel
                 hideActions
-                authorUri={comment.channel_url}
-                author={comment.channel_name}
-                commentId={comment.comment_id}
-                message={comment.comment}
-                timePosted={comment.timestamp * 1000}
+                comment={comment}
                 commentIsMine
-                supportAmount={comment.support_amount}
                 numDirectReplies={0} // Don't show replies here
-                isModerator={comment.is_moderator}
-                isGlobalMod={comment.is_global_mod}
-                isFiat={comment.is_fiat}
               />
             </React.Suspense>
           </div>
