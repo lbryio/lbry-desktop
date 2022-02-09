@@ -9,7 +9,6 @@ import { doToggleTagFollowDesktop } from 'redux/actions/tags';
 import { makeSelectClientSetting, selectShowMatureContent } from 'redux/selectors/settings';
 import { selectMutedAndBlockedChannelIds } from 'redux/selectors/blocked';
 import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
-import * as CS from 'constants/claim_search';
 
 import ClaimListDiscover from './view';
 
@@ -68,8 +67,6 @@ function resolveSearchOptions(props) {
   let streamTypesParam;
   if (streamTypes) {
     streamTypesParam = streamTypes;
-  } else if (!hasNoSource && streamTypes !== null) {
-    streamTypesParam = [CS.FILE_VIDEO, CS.FILE_AUDIO];
   }
 
   const options = {
