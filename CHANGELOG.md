@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased for Desktop]
 
-## [0.52.1-alpha.4] - [2021-12-31]
+## [0.52.2-alpha.5] - [2021-12-31]
 
 ### Added
 
@@ -26,6 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Updated c: control tags from _odysee team!_ ([#7433](https://github.com/lbryio/lbry-desktop/pull/7433))
 - Nav keycodes (alt+left) no longer navigate while textarea is focused ([#7458](https://github.com/lbryio/lbry-desktop/pull/7458))
 - Improved comment-server selection ui/ux ([#7455](https://github.com/lbryio/lbry-desktop/pull/7455))
+- Improved Data Hosting settings ([#7563](https://github.com/lbryio/lbry-desktop/pull/7563))
 
 ### Fixed
 
