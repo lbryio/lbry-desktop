@@ -477,12 +477,6 @@ export const doUploadThumbnail = (
         }
 
         const userInput = [fileName, fileExt, fileType, thumbnail, size];
-        if (size >= THUMBNAIL_CDN_SIZE_LIMIT_BYTES) {
-          message = __('Thumbnail size over %max_size%MB, please edit and reupload.', {
-            max_size: THUMBNAIL_CDN_SIZE_LIMIT_BYTES / (1024 * 1024),
-          });
-        }
-
         uploadError({ message, cause: `${userInput.join(' | ')}` });
       });
   };
@@ -519,6 +513,12 @@ export const doUploadThumbnail = (
       size = thumbnailBlob.size;
     } else {
       return null;
+    }
+
+    if (size && size >= THUMBNAIL_CDN_SIZE_LIMIT_BYTES) {
+      const maxSizeMB = THUMBNAIL_CDN_SIZE_LIMIT_BYTES / (1024 * 1024);
+      uploadError(__('Thumbnail size over %max_size%MB, please edit and reupload.', { max_size: maxSizeMB }));
+      return;
     }
 
     const data = new FormData();

@@ -25,15 +25,22 @@ function SelectAsset(props: Props) {
   const { onUpdate, onDone, assetName, currentValue, recommended, title, inline } = props;
   const [pathSelected, setPathSelected] = React.useState('');
   const [fileSelected, setFileSelected] = React.useState<any>(null);
-  const [fileSize, setFileSize] = React.useState(0);
   const [uploadStatus, setUploadStatus] = React.useState(STATUS.READY);
   const [useUrl, setUseUrl] = usePersistedState('thumbnail-upload:mode', false);
   const [url, setUrl] = React.useState(currentValue);
-  const [error, setError] = React.useState();
+  const [uploadErrorMsg, setUploadErrorMsg] = React.useState();
+
+  React.useEffect(() => {
+    if (useUrl) {
+      setUploadErrorMsg('');
+      setFileSelected(null);
+      setPathSelected('');
+    }
+  }, [useUrl]);
 
   function doUploadAsset() {
     const uploadError = (error = '') => {
-      setError(error);
+      setUploadErrorMsg(error);
     };
 
     const onSuccess = (thumbnailUrl) => {
@@ -71,15 +78,7 @@ function SelectAsset(props: Props) {
             );
       })
       .catch((err) => {
-        if (fileSize >= THUMBNAIL_CDN_SIZE_LIMIT_BYTES) {
-          uploadError(
-            __('Thumbnail size over %max_size%MB, please edit and reupload.', {
-              max_size: THUMBNAIL_CDN_SIZE_LIMIT_BYTES / (1024 * 1024),
-            })
-          );
-        } else {
-          uploadError(err.message);
-        }
+        uploadError(err.message);
         setUploadStatus(STATUS.READY);
       });
   }
@@ -99,7 +98,7 @@ function SelectAsset(props: Props) {
   const formBody = (
     <>
       <fieldset-section>
-        {error && <div className="error__text">{error}</div>}
+        {uploadErrorMsg && <div className="error__text">{uploadErrorMsg}</div>}
         {useUrl ? (
           <FormField
             autoFocus
@@ -123,10 +122,17 @@ function SelectAsset(props: Props) {
             onFileChosen={(file) => {
               if (file.name) {
                 setFileSelected(file);
-                setFileSize(file.size);
                 // what why? why not target=WEB this?
                 // file.path is undefined in web but available in electron
                 setPathSelected(file.name || file.path);
+                setUploadErrorMsg('');
+
+                if (file.size >= THUMBNAIL_CDN_SIZE_LIMIT_BYTES) {
+                  const maxSizeMB = THUMBNAIL_CDN_SIZE_LIMIT_BYTES / (1024 * 1024);
+                  setUploadErrorMsg(
+                    __('Thumbnail size over %max_size%MB, please edit and reupload.', { max_size: maxSizeMB })
+                  );
+                }
               }
             }}
             accept={accept}
@@ -140,7 +146,9 @@ function SelectAsset(props: Props) {
             button="primary"
             type="submit"
             label={useUrl ? __('Done') : __('Upload')}
-            disabled={!useUrl && (uploadStatus === STATUS.UPLOADING || !pathSelected || !fileSelected)}
+            disabled={
+              !useUrl && (uploadStatus === STATUS.UPLOADING || !pathSelected || !fileSelected || uploadErrorMsg)
+            }
             onClick={() => {
               if (!useUrl) {
                 doUploadAsset();
