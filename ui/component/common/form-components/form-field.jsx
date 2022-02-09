@@ -313,7 +313,11 @@ export class FormField extends React.PureComponent<Props, State> {
                       isLivestream={isLivestream}
                       toggleSelectors={
                         setShowSelectors && showSelectors
-                          ? () => setShowSelectors({ tab: showSelectors.tab || undefined, open: !showSelectors.open })
+                          ? () => {
+                              const input = this.input.current;
+                              if (!showSelectors.open && input) input.blur();
+                              setShowSelectors({ tab: showSelectors.tab || undefined, open: !showSelectors.open });
+                            }
                           : undefined
                       }
                       handleTip={handleTip}
@@ -328,7 +332,7 @@ export class FormField extends React.PureComponent<Props, State> {
                       handlePreventClick={
                         !this.state.drawerOpen ? () => this.setState({ drawerOpen: true }) : undefined
                       }
-                      autoFocus={this.state.drawerOpen}
+                      autoFocus={this.state.drawerOpen && (!showSelectors || !showSelectors.open)}
                       submitButtonRef={submitButtonRef}
                     />
                   </React.Suspense>

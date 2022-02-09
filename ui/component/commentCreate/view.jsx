@@ -156,9 +156,6 @@ export function CommentCreate(props: Props) {
     setCommentValue(
       commentValue + (commentValue && commentValue.charAt(commentValue.length - 1) !== ' ' ? ` ${emote} ` : `${emote} `)
     );
-
-    const inputRef = formFieldRef && formFieldRef.current && formFieldRef.current.input && formFieldRef.current.input;
-    if (inputRef && inputRef.current) inputRef.current.focus();
   }
 
   function handleSelectTipComment(tab: string) {
