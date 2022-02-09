@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { doResolveUris } from 'redux/actions/claims';
-import { makeSelectClaimIsMine, selectMyChannelClaims, makeSelectClaimForUri } from 'redux/selectors/claims';
+import { selectClaimIsMineForUri, makeSelectClaimForUri } from 'redux/selectors/claims';
 import { selectIsFetchingCommentsByParentId, selectRepliesForParentId } from 'redux/selectors/comments';
 import CommentsReplies from './view';
 
@@ -14,9 +14,8 @@ const select = (state, props) => {
   return {
     fetchedReplies,
     resolvedReplies,
-    claimIsMine: makeSelectClaimIsMine(props.uri)(state),
+    claimIsMine: selectClaimIsMineForUri(state, props.uri),
     userCanComment: true,
-    myChannels: selectMyChannelClaims(state),
     isFetchingByParentId: selectIsFetchingCommentsByParentId(state),
   };
 };

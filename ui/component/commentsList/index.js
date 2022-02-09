@@ -5,7 +5,6 @@ import {
   makeSelectClaimForUri,
   selectClaimIsMine,
   selectFetchingMyChannels,
-  selectMyClaimIdsRaw,
 } from 'redux/selectors/claims';
 import {
   selectTopLevelCommentsForUri,
@@ -22,12 +21,17 @@ import {
 } from 'redux/selectors/comments';
 import { doCommentReset, doCommentList, doCommentById, doCommentReactList } from 'redux/actions/comments';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
+import { getChannelIdFromClaim } from 'util/claim';
 import CommentsList from './view';
 
 const select = (state, props) => {
-  const claim = selectClaimForUri(state, props.uri);
+  const { uri } = props;
+
+  const claim = selectClaimForUri(state, uri);
+  const channelId = getChannelIdFromClaim(claim);
+
   const activeChannelClaim = selectActiveChannelClaim(state);
-  const topLevelComments = selectTopLevelCommentsForUri(state, props.uri);
+  const topLevelComments = selectTopLevelCommentsForUri(state, uri);
 
   const resolvedComments =
     topLevelComments && topLevelComments.length > 0
@@ -37,12 +41,12 @@ const select = (state, props) => {
   return {
     topLevelComments,
     resolvedComments,
-    myChannelIds: selectMyClaimIdsRaw(state),
-    allCommentIds: selectCommentIdsForUri(state, props.uri),
-    pinnedComments: selectPinnedCommentsForUri(state, props.uri),
-    topLevelTotalPages: makeSelectTopLevelTotalPagesForUri(props.uri)(state),
-    totalComments: makeSelectTotalCommentsCountForUri(props.uri)(state),
-    claim,
+    allCommentIds: selectCommentIdsForUri(state, uri),
+    pinnedComments: selectPinnedCommentsForUri(state, uri),
+    topLevelTotalPages: makeSelectTopLevelTotalPagesForUri(uri)(state),
+    totalComments: makeSelectTotalCommentsCountForUri(uri)(state),
+    claimId: claim && claim.claim_id,
+    channelId,
     claimIsMine: selectClaimIsMine(state, claim),
     isFetchingComments: selectIsFetchingComments(state),
     isFetchingCommentsById: selectIsFetchingCommentsById(state),
@@ -55,12 +59,12 @@ const select = (state, props) => {
   };
 };
 
-const perform = (dispatch) => ({
-  fetchTopLevelComments: (uri, page, pageSize, sortBy) => dispatch(doCommentList(uri, '', page, pageSize, sortBy)),
-  fetchComment: (commentId) => dispatch(doCommentById(commentId)),
-  fetchReacts: (commentIds) => dispatch(doCommentReactList(commentIds)),
-  resetComments: (claimId) => dispatch(doCommentReset(claimId)),
-  doResolveUris: (uris) => dispatch(doResolveUris(uris, true)),
-});
+const perform = {
+  fetchTopLevelComments: doCommentList,
+  fetchComment: doCommentById,
+  fetchReacts: doCommentReactList,
+  resetComments: doCommentReset,
+  doResolveUris,
+};
 
 export default connect(select, perform)(CommentsList);
