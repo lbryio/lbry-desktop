@@ -141,7 +141,11 @@ function SelectAsset(props: Props) {
             type="submit"
             label={useUrl ? __('Done') : __('Upload')}
             disabled={!useUrl && (uploadStatus === STATUS.UPLOADING || !pathSelected || !fileSelected)}
-            onClick={() => doUploadAsset()}
+            onClick={() => {
+              if (!useUrl) {
+                doUploadAsset();
+              }
+            }}
           />
         )}
         <FormField
