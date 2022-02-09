@@ -196,7 +196,13 @@ export default function FileActions(props: Props) {
 
                 {claimIsMine && (
                   <>
-                    <MenuItem className="comment__menu-option" onSelect={() => doEditForChannel(claim, editUri)}>
+                    <MenuItem
+                      className="comment__menu-option"
+                      onSelect={() => {
+                        doEditForChannel(claim, editUri);
+                        push(`/$/${PAGES.UPLOAD}`);
+                      }}
+                    >
                       <div className="menu__link">
                         <Icon aria-hidden icon={ICONS.EDIT} />
                         {isLivestreamClaim ? __('Update or Publish Replay') : __('Edit')}
