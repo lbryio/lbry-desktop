@@ -75,21 +75,15 @@ export default function OwnComments(props: Props) {
               )}
               {!contentClaim && <Empty text={__('Content or channel was deleted.')} />}
             </div>
-            <Comment
-              isTopLevel
-              hideActions
-              authorUri={comment.channel_url}
-              author={comment.channel_name}
-              commentId={comment.comment_id}
-              message={comment.comment}
-              timePosted={comment.timestamp * 1000}
-              commentIsMine
-              supportAmount={comment.support_amount}
-              numDirectReplies={0} // Don't show replies here
-              isModerator={comment.is_moderator}
-              isGlobalMod={comment.is_global_mod}
-              isFiat={comment.is_fiat}
-            />
+            <React.Suspense fallback={null}>
+              <Comment
+                isTopLevel
+                hideActions
+                comment={comment}
+                commentIsMine
+                numDirectReplies={0} // Don't show replies here
+              />
+            </React.Suspense>
           </div>
         </div>
       );

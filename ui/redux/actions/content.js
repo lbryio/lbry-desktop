@@ -110,6 +110,8 @@ export function doSetPrimaryUri(uri: ?string) {
   };
 }
 
+export const doClearPlayingUri = () => (dispatch: Dispatch) => dispatch(doSetPlayingUri({ uri: null }));
+
 export function doSetPlayingUri({
   uri,
   source,
