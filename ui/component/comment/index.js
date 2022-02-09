@@ -46,7 +46,7 @@ const select = (state, props) => {
 
 const perform = {
   doClearPlayingUri,
-  doCommentUpdate,
+  updateComment: doCommentUpdate,
   fetchReplies: doCommentList,
   doToast,
 };
