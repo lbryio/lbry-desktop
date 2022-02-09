@@ -12,13 +12,13 @@ export const doReportContent = (category: string, params: string) => (dispatch: 
   let REPORT_URL;
   switch (category) {
     case COPYRIGHT_ISSUES:
-      REPORT_URL = 'https://reports.lbry.com/copyright_issue/new';
+      REPORT_URL = 'https://reports.odysee.tv/copyright_issue/new';
       break;
     case OTHER_LEGAL_ISSUES:
-      REPORT_URL = 'https://reports.lbry.com/other_legal_issue/new';
+      REPORT_URL = 'https://reports.odysee.tv/other_legal_issue/new';
       break;
     default:
-      REPORT_URL = 'https://reports.lbry.com/common/new';
+      REPORT_URL = 'https://reports.odysee.tv/common/new';
       break;
   }
 

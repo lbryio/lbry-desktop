@@ -1,5 +1,5 @@
 // Sample query:
-//   https://reports.lbry.com/common/new?primary_email=e4drcf@gmail.com
+//   https://reports.odysee.tv/common/new?primary_email=e4drcf@gmail.com
 //     &channel_name=e4drcf
 //     &channel_claim_id=43a7e08b0d83cfb8bc31e59bc48334a90ccfd8cb
 //     &type=Sexual%20content
