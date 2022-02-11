@@ -753,6 +753,18 @@ img {
       right: var(--spacing-xxs) !important;
     }
   }
+
+  .claim-preview__wrapper {
+    .claim-tile__info {
+      padding-bottom: 0;
+    }
+    .claim-preview__primary-actions {
+      .button--alt {
+        color: var(--color-text);
+        background-color: var(--color-header-button);
+      }
+    }
+  }
 }
 
 .playlistPage-wrapper {
