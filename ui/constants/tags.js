@@ -15,6 +15,7 @@ export const DEFAULT_FOLLOWED_TAGS = [
 
 export const INTERNAL_TAG_PREFIX = 'c:';
 
+// export const CHANNEL_COLOR_TAG = 'c:color';
 export const DISABLE_COMMENTS_TAG = 'c:disable-comments';
 export const DISABLE_SUPPORT_TAG = 'disable-support';
 export const PREFERENCE_EMBED = 'c:preference-embed';

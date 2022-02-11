@@ -1461,6 +1461,11 @@
     prop-types "^15.6.2"
     scheduler "^0.19.0"
 
+"@icons/material@^0.2.4":
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/@icons/material/-/material-0.2.4.tgz#e90c9f71768b3736e76d7dd6783fc6c2afa88bc8"
+  integrity sha512-QPcGmICAPbGLGb6F/yNf/KzKqvFx8z5qx3D1yFqVAjoFmXK35EgyW+cJ57Te3CNsmzblwtzakLGFqHPqrfb4Tw==
+
 "@mapbox/hast-util-table-cell-style@^0.1.3":
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/@mapbox/hast-util-table-cell-style/-/hast-util-table-cell-style-0.1.3.tgz#5b7166ae01297d72216932b245e4b2f0b642dca6"
@@ -1654,9 +1659,13 @@
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/@reach/auto-id/-/auto-id-0.2.0.tgz#97f9e48fe736aa5c6f4f32cf73c1f19d005f8550"
 
-"@reach/auto-id@^0.7.4":
-  version "0.7.4"
-  resolved "https://registry.yarnpkg.com/@reach/auto-id/-/auto-id-0.7.4.tgz#c20bf6db87ef2f34b1bfb4bf450d675524a368c1"
+"@reach/auto-id@^0.8.6":
+  version "0.8.6"
+  resolved "https://registry.yarnpkg.com/@reach/auto-id/-/auto-id-0.8.6.tgz#34ecd120186960e3980dbc34cdace8e65405ea4e"
+  integrity sha512-lohwxy1uqj74p05WJDxMpo5paAQoM0r6MQYuVxR4U6piuGG67ggEPNVG7X4lQhi2jbeB6wvaPJiBVgikZJ/DIA==
+  dependencies:
+    "@reach/utils" "^0.8.6"
+    tslib "^1.10.0"
 
 "@reach/combobox@^0.12.1":
   version "0.12.1"
@@ -1680,14 +1689,25 @@
     "@reach/utils" "0.12.1"
     tslib "^2.0.0"
 
-"@reach/menu-button@0.7.4":
-  version "0.7.4"
-  resolved "https://registry.yarnpkg.com/@reach/menu-button/-/menu-button-0.7.4.tgz#6b2cb91e5471dfc67aa10380c2779eb3d21d98bf"
+"@reach/descendants@^0.8.6":
+  version "0.8.6"
+  resolved "https://registry.yarnpkg.com/@reach/descendants/-/descendants-0.8.6.tgz#1c6ffac63fb1e116691e47efe20bcb5e8372c106"
+  integrity sha512-sQmeEKjlfcFt7Tso7EnWfCecBDNHAV8tTn99KYtd13WRMRb86JFxEx6FfOIVHkA1Ht1aEaVxxibDW6/y/FHqLQ==
   dependencies:
-    "@reach/auto-id" "^0.7.4"
-    "@reach/popover" "^0.7.4"
-    "@reach/utils" "^0.7.4"
+    "@reach/utils" "^0.8.6"
+    tslib "^1.10.0"
+
+"@reach/menu-button@0.8.6":
+  version "0.8.6"
+  resolved "https://registry.yarnpkg.com/@reach/menu-button/-/menu-button-0.8.6.tgz#b7fcb41da973336f18fc354e3b0275d4dff0adca"
+  integrity sha512-hXDJfjUc8kHRpNpNJXLbk2c3NrpFpePY/cPyKN3uvYtasWDEwL/U8yhJUbVr/GuOBGrSi8LCpT+6kCkDQ63KbQ==
+  dependencies:
+    "@reach/auto-id" "^0.8.6"
+    "@reach/descendants" "^0.8.6"
+    "@reach/popover" "^0.8.6"
+    "@reach/utils" "^0.8.6"
     prop-types "^15.7.2"
+    tslib "^1.10.0"
     warning "^4.0.3"
 
 "@reach/observe-rect@1.2.0", "@reach/observe-rect@^1.0.5":
@@ -1706,14 +1726,16 @@
     tabbable "^4.0.0"
     tslib "^2.0.0"
 
-"@reach/popover@^0.7.4":
-  version "0.7.4"
-  resolved "https://registry.yarnpkg.com/@reach/popover/-/popover-0.7.4.tgz#def055c588a76ef4a48ac81f0b4e7373e2781b28"
+"@reach/popover@^0.8.6":
+  version "0.8.6"
+  resolved "https://registry.yarnpkg.com/@reach/popover/-/popover-0.8.6.tgz#21f1be83016ed0adf5b2f6b0caa2e5c846bea188"
+  integrity sha512-gW6JjlmjYDO9wDzsxThNihixpfUaaJ70BzqarhM/Nb8fS2hyZo5W2Zbu7yML7HKOej9HpwgLzAE01rWiTuu9yw==
   dependencies:
-    "@reach/portal" "^0.7.4"
-    "@reach/rect" "^0.7.4"
-    "@reach/utils" "^0.7.4"
+    "@reach/portal" "^0.8.6"
+    "@reach/rect" "^0.8.6"
+    "@reach/utils" "^0.8.6"
     tabbable "^4.0.0"
+    tslib "^1.10.0"
 
 "@reach/portal@0.12.1":
   version "0.12.1"
@@ -1723,9 +1745,13 @@
     "@reach/utils" "0.12.1"
     tslib "^2.0.0"
 
-"@reach/portal@^0.7.4":
-  version "0.7.4"
-  resolved "https://registry.yarnpkg.com/@reach/portal/-/portal-0.7.4.tgz#6e182f9061ba52dc6a5e460516b4aedf8623103f"
+"@reach/portal@^0.8.6":
+  version "0.8.6"
+  resolved "https://registry.yarnpkg.com/@reach/portal/-/portal-0.8.6.tgz#b96b92dca36955f7b3ef20617d2c35cf58b58c48"
+  integrity sha512-tmBpHe/3juLsXtsMUUQrHOz3rv5reILPZpt5ISQj5ucdRQ1cgSeWaGM2uDme5vKNXWz3/xTakkEExZyOhsM6zQ==
+  dependencies:
+    "@reach/utils" "^0.8.6"
+    tslib "^1.10.0"
 
 "@reach/rect@0.12.1":
   version "0.12.1"
@@ -1748,12 +1774,15 @@
     tiny-warning "^1.0.3"
     tslib "^2.3.0"
 
-"@reach/rect@^0.7.4":
-  version "0.7.4"
-  resolved "https://registry.yarnpkg.com/@reach/rect/-/rect-0.7.4.tgz#98fa7a42e7ff7e74ba501d38a1b8797fa87b6bb3"
+"@reach/rect@^0.8.6":
+  version "0.8.6"
+  resolved "https://registry.yarnpkg.com/@reach/rect/-/rect-0.8.6.tgz#8f5b6c7fd2cf13a03cfda001fef0a5beb21fe1a2"
+  integrity sha512-1CriCEshJ1VUOw05bG9u1leHBydP+Z9Vk5adPw5v+bLHz1QW1HB/0UmZAbHluY6a5XLN2KqULKc9Fk7NT1jZKQ==
   dependencies:
     "@reach/observe-rect" "^1.0.5"
+    "@reach/utils" "^0.8.6"
     prop-types "^15.7.2"
+    tslib "^1.10.0"
 
 "@reach/tabs@^0.1.5":
   version "0.1.6"
@@ -1806,9 +1835,13 @@
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/@reach/utils/-/utils-0.2.3.tgz#820f6a6af4301b4c5065cfc04bb89e6a3d1d723f"
 
-"@reach/utils@^0.7.4":
-  version "0.7.4"
-  resolved "https://registry.yarnpkg.com/@reach/utils/-/utils-0.7.4.tgz#cdd0cff8c57445ce9c2b11204e6a62868f1093a1"
+"@reach/utils@^0.8.6":
+  version "0.8.6"
+  resolved "https://registry.yarnpkg.com/@reach/utils/-/utils-0.8.6.tgz#41c7ac8b7699d0e663bda773398ae1c459679ee3"
+  integrity sha512-ec9Ea99LQhlBoMKsJ7n2GYD3u3a0IHDLcfbA50C6aDKnSFvVYSPkF2Iav3fQ07VGfe+FuNGi0iYi1qkE8uSmDw==
+  dependencies:
+    tslib "^1.10.0"
+    warning "^4.0.3"
 
 "@reach/visually-hidden@0.12.0":
   version "0.12.0"
@@ -10809,6 +10842,11 @@ lodash-es@^4.17.14, lodash-es@^4.2.1:
   version "4.17.15"
   resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.15.tgz#21bd96839354412f23d7a10340e5eac6ee455d78"
 
+lodash-es@^4.17.15:
+  version "4.17.21"
+  resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.21.tgz#43e626c46e6591b7750beb2b50117390c609e3ee"
+  integrity sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==
+
 lodash._baseiteratee@~4.7.0:
   version "4.7.0"
   resolved "https://registry.yarnpkg.com/lodash._baseiteratee/-/lodash._baseiteratee-4.7.0.tgz#34a9b5543572727c3db2e78edae3c0e9e66bd102"
@@ -10945,7 +10983,7 @@ lodash.unset@^4.5.2:
   version "4.5.2"
   resolved "https://registry.yarnpkg.com/lodash.unset/-/lodash.unset-4.5.2.tgz#370d1d3e85b72a7e1b0cdf2d272121306f23e4ed"
 
-"lodash@>=3.5 <5", lodash@>=4.17.19, lodash@^4.0.0, lodash@^4.15.0, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.2, lodash@^4.17.20, lodash@^4.17.21, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.6.1:
+"lodash@>=3.5 <5", lodash@>=4.17.19, lodash@^4.0.0, lodash@^4.0.1, lodash@^4.15.0, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.2, lodash@^4.17.20, lodash@^4.17.21, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.6.1:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
@@ -11188,6 +11226,11 @@ matcher@^3.0.0:
   integrity sha512-OkeDaAZ/bQCxeFAozM55PKcKU0yJMPGifLwV4Qgjitu+5MoAfSQN4lsLJeXZ1b8w0x+/Emda6MZgXS1jvsapng==
   dependencies:
     escape-string-regexp "^4.0.0"
+
+material-colors@^1.2.1:
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/material-colors/-/material-colors-1.2.6.tgz#6d1958871126992ceecc72f4bcc4d8f010865f46"
+  integrity sha512-6qE4B9deFBIa9YSpOc9O0Sgc43zTeVYbgDT5veRKSlB2+ZuHNoVVxA1L/ckMUayV9Ay9y7Z/SZCLcGteW9i7bg==
 
 math-expression-evaluator@^1.2.14:
   version "1.3.8"
@@ -13773,6 +13816,19 @@ react-clock@^3.0.0:
     merge-class-names "^1.1.1"
     prop-types "^15.6.0"
 
+react-color@^2.19.3:
+  version "2.19.3"
+  resolved "https://registry.yarnpkg.com/react-color/-/react-color-2.19.3.tgz#ec6c6b4568312a3c6a18420ab0472e146aa5683d"
+  integrity sha512-LEeGE/ZzNLIsFWa1TMe8y5VYqr7bibneWmvJwm1pCn/eNmrabWDh659JSPn9BuaMpEfU83WTOJfnCcjDZwNQTA==
+  dependencies:
+    "@icons/material" "^0.2.4"
+    lodash "^4.17.15"
+    lodash-es "^4.17.15"
+    material-colors "^1.2.1"
+    prop-types "^15.5.10"
+    reactcss "^1.2.0"
+    tinycolor2 "^1.4.1"
+
 react-compound-slider@^2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/react-compound-slider/-/react-compound-slider-2.5.0.tgz#99771a3397f4ab00aa2a37f8410da87e6ca2449b"
@@ -14108,6 +14164,13 @@ react@^16.8.2:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     prop-types "^15.6.2"
+
+reactcss@^1.2.0:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/reactcss/-/reactcss-1.2.3.tgz#c00013875e557b1cf0dfd9a368a1c3dab3b548dd"
+  integrity sha512-KiwVUcFu1RErkI97ywr8nvx8dNOpT03rbnma0SSalTYjkrPYaEajR4a/MRt6DZ46K6arDRbWMNHF+xH7G7n/8A==
+  dependencies:
+    lodash "^4.0.1"
 
 read-cache@^1.0.0:
   version "1.0.0"
@@ -16326,6 +16389,12 @@ tiny-relative-date@^1.3.0:
 tiny-warning@^1.0.0, tiny-warning@^1.0.2, tiny-warning@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/tiny-warning/-/tiny-warning-1.0.3.tgz#94a30db453df4c643d0fd566060d60a875d84754"
+  integrity sha512-lBN9zLN/oAf68o3zNXYrdCt1kP8WsiGW8Oo2ka41b2IM5JL/S1CTyX1rW0mb/zSuJun0ZUrDxx4sqvYS2FWzPA==
+
+tinycolor2@^1.4.1:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/tinycolor2/-/tinycolor2-1.4.2.tgz#3f6a4d1071ad07676d7fa472e1fac40a719d8803"
+  integrity sha512-vJhccZPs965sV/L2sU4oRQVAos0pQXwsvTLkWYdqJ+a8Q5kPFzJTuOFwy7UniPli44NKQGAglksjvOcpo95aZA==
 
 tmp@^0.0.33:
   version "0.0.33"

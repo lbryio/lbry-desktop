@@ -22,6 +22,11 @@
   justify-content: center;
   position: fixed;
   z-index: 9999;
+  z-index: 9999;
+
+  @media (max-width: $breakpoint-small) {
+    background-color: rgba(var(--color-header-background-base), 0.95);
+  }
 }
 
 .modal {
@@ -33,9 +38,36 @@
   overflow: auto;
   padding: var(--spacing-l);
   word-break: break-word;
+  background-color: var(--color-modal-background) !important;
+  border-radius: var(--border-radius);
+  border: 2px solid #000;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
 
-  &:focus {
-    box-shadow: none;
+  .card {
+    .card__main-actions {
+      border-top: unset;
+    }
+
+    input {
+      background: var(--color-header-button) !important;
+      &:focus {
+        border: 1px solid var(--color-primary);
+        box-shadow: unset;
+      }
+    }
+  }
+
+  &:focus,
+  &:focus-visible {
+    box-shadow: none !important;
+    background-color: var(--color-modal-background) !important;
+  }
+
+  .claim-preview__wrapper {
+    &:hover {
+      background-color: unset;
+    }
   }
 
   @media (max-width: $breakpoint-small) {
@@ -65,6 +97,56 @@
   .card {
     margin: 0;
     border: none;
+
+    padding: var(--spacing-l);
+    border: 2px solid black;
+    border-radius: var(--border-radius);
+
+    .form-field--copyable {
+      background: rgba(var(--color-primary-dynamic), 0.1);
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+      border-left: 1px solid var(--color-border);
+    }
+
+    .button-toggle {
+      background-color: rgba(var(--color-header-button-base), 0.4) !important;
+      &:hover {
+        background-color: rgba(var(--color-header-button-base), 0.9) !important;
+      }
+    }
+
+    .button-toggle--active,
+    .channel__list-item,
+    .button--secondary,
+    input {
+      background-color: rgba(var(--color-header-button-base), 0.9) !important;
+    }
+    .channel__list-item {
+      &:hover {
+        background-color: var(--color-primary);
+        color: var(--color-primary-contrast);
+      }
+    }
+
+    label {
+      color: var(--color-text);
+      font-size: var(--font-medium);
+    }
+
+    [data-reach-menu-button] {
+      &:hover {
+        .channel__list-item--selected {
+          background-color: var(--color-primary) !important;
+        }
+      }
+    }
+
+    @media (max-width: $breakpoint-small) {
+      .card__main-actions {
+        border-top: unset !important;
+      }
+    }
   }
 }
 

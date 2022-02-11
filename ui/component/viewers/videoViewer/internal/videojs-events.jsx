@@ -50,7 +50,7 @@ const VideoJsEvents = ({
   uri: string,
   doAnalyticsView: (string, number) => any,
   claimRewards: () => void,
-  playerServerRef: any
+  playerServerRef: any,
 }) => {
   /**
    * Analytics functionality that is run on first video start
@@ -288,14 +288,14 @@ const VideoJsEvents = ({
     // custom tracking plugin, event used for watchman data, and marking view/getting rewards
     player.on('tracking:firstplay', doTrackingFirstPlay);
     // hide forcing control bar show
-    player.on('canplaythrough', function() {
-      setTimeout(function() {
+    player.on('canplaythrough', function () {
+      setTimeout(function () {
         // $FlowFixMe
         const vjsControlBar = document.querySelector('.vjs-control-bar');
         if (vjsControlBar) vjsControlBar.style.removeProperty('opacity');
       }, 1000 * 3); // wait 3 seconds to hit control bar
     });
-    player.on('playing', function() {
+    player.on('playing', function () {
       // $FlowFixMe
       document.querySelector('.vjs-big-play-button').style.setProperty('display', 'none', 'important');
     });

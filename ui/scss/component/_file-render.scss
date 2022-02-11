@@ -1,4 +1,29 @@
 .file-page {
+  .card-stack {
+    .claim-preview {
+      &:hover {
+        .claim-preview__title {
+          color: var(--color-text);
+        }
+      }
+      .claim-preview__title {
+        &:hover {
+          color: var(--color-link);
+        }
+      }
+    }
+  }
+
+  .file-page__recommended {
+    .claim-preview__wrapper {
+      &:hover {
+        .claim-preview__title {
+          color: var(--color-link);
+        }
+      }
+    }
+  }
+
   .file-page__video-container + .card,
   .file-render + .card,
   .content__cover + .card,
@@ -15,10 +40,6 @@
   .file-page__md {
     .file-viewer--document {
       margin-top: var(--spacing-l);
-
-      @media (min-width: $breakpoint-small) {
-        margin-top: var(--spacing-xl);
-      }
 
       .button {
         display: inline;
@@ -50,6 +71,24 @@
     }
   }
 
+  // Temporary fix
+  .card__main-actions {
+    .claim-tile__info {
+      display: unset;
+      margin-top: -2px;
+      padding-bottom: 0;
+      .media__subtitle {
+        padding-bottom: 3px;
+        .claim-preview__channel-sub-count {
+          font-size: var(--font-xsmall) !important;
+          @media (max-width: $breakpoint-small) {
+            font-size: var(--font-xxsmall) !important;
+          }
+        }
+      }
+    }
+  }
+
   > * {
     width: 100%;
   }
@@ -60,7 +99,7 @@
 
   @media (max-width: $breakpoint-small) {
     .card__main-actions {
-      padding: var(--spacing-s) var(--spacing-xxs) !important;
+      // padding: var(--spacing-s) var(--spacing-xxs) !important;
     }
 
     .claim-preview--inline {
@@ -114,7 +153,7 @@
 
       .claim-preview__actions {
         margin: 0;
-        align-self: center;
+        align-self: flex-start;
 
         .button-group {
           margin: 0;
@@ -148,6 +187,7 @@
 
 .file-render--video {
   background-color: black;
+  border-radius: var(--border-radius);
 
   &:after {
     content: '';
@@ -161,6 +201,18 @@
     animation: fadeInFromBlack 2s ease;
     opacity: 0;
     pointer-events: none;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    border-radius: unset;
+    .autoplay-countdown {
+      .file-viewer__overlay-secondary {
+        margin-bottom: 0 !important;
+      }
+      .autoplay-countdown__counter {
+        margin-top: var(--spacing-xxs) !important;
+      }
+    }
   }
 }
 
@@ -716,10 +768,12 @@ $control-bar-icon-size: 0.8rem;
   background: black;
   border: 1px solid var(--color-gray-4);
   opacity: 0.9;
+  border-radius: var(--border-radius);
 
   &:hover {
     opacity: 1;
-    color: var(--color-white);
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
   }
 }
 
@@ -822,6 +876,7 @@ $control-bar-icon-size: 0.8rem;
 }
 .autoplay-countdown__counter {
   margin-top: var(--spacing-m);
+  color: #fff !important;
 }
 
 .autoplay-countdown__button {
@@ -865,22 +920,13 @@ $control-bar-icon-size: 0.8rem;
 
 .file__viewdate {
   display: flex;
-  justify-content: space-between;
-  flex-direction: column;
+  justify-content: start;
+  flex-direction: row;
   margin-bottom: var(--spacing-s);
 
   > :first-child {
-    margin-bottom: var(--spacing-s);
-  }
-
-  @media (max-width: $breakpoint-medium) {
-    flex-direction: row;
-    justify-content: start;
-
-    > :first-child {
-      margin-bottom: 0;
-      margin-right: 1rem;
-    }
+    margin-bottom: 0;
+    margin-right: var(--spacing-s);
   }
 }
 

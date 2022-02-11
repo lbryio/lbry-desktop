@@ -36,7 +36,7 @@ $control-bar-icon-size: 0.8rem;
     // Circle play head
     .vjs-play-progress::before {
       transform: scale(0);
-      transition: transform 0.3s;
+      transition: transform 0.1s;
     }
 
     &:hover {
@@ -54,7 +54,8 @@ $control-bar-icon-size: 0.8rem;
   // Load progress color
   .vjs-load-progress,
   .vjs-load-progress div {
-    background-color: rgba(160, 160, 160, 0.5);
+    //background-color: rgba(160, 160, 160, 0.5);
+    background-color: rgba(var(--color-secondary), 0.5);
   }
 
   // Progress Bar Background
@@ -87,15 +88,16 @@ $control-bar-icon-size: 0.8rem;
 
   // Volume slider
   .vjs-volume-panel {
-    margin-left: var(--spacing-xxs);
+    // margin-left: var(--spacing-xxs);
     margin-right: calc(var(--spacing-xxs) * -1);
 
     &.vjs-control {
-      transition: 0.2s;
+      // transition: 0.2s;
     }
 
     .vjs-volume-control.vjs-volume-horizontal {
-      transition: 0.2s;
+      transition: 0.1s;
+      margin-top: 2px;
     }
   }
 }
@@ -126,7 +128,7 @@ $control-bar-icon-size: 0.8rem;
   &.vjs-user-inactive.vjs-playing {
     .vjs-control-bar {
       opacity: 0;
-      transition: 0.3s;
+      transition: 0.1s;
     }
   }
 
@@ -188,6 +190,13 @@ $control-bar-icon-size: 0.8rem;
   display: none;
 }
 
+.vjs-chromecast-button {
+  .vjs-icon-placeholder {
+    width: 19px;
+    height: 19px;
+  }
+}
+
 .video-js-parent .vjs-tech-chromecast {
   .vjs-tech-chromecast-poster {
     &::after {
@@ -227,7 +236,7 @@ $control-bar-icon-size: 0.8rem;
 }
 
 // larger than default spinner for all but smallest devices
-@media (min-width:680px) {
+@media (min-width: 680px) {
   .vjs-loading-spinner {
     border-radius: 100px;
     height: 75px;
@@ -239,4 +248,44 @@ $control-bar-icon-size: 0.8rem;
 // TODO: make sure there's no bad side effects of this
 button.vjs-big-play-button {
   display: none !important;
+}
+
+// Rearrange icons
+.vjs-play-control {
+  order: 1 !important;
+}
+.vjs-volume-panel {
+  order: 2 !important;
+}
+.vjs-current-time {
+  order: 3 !important;
+}
+.vjs-time-divider {
+  order: 4 !important;
+}
+.vjs-duration {
+  order: 5 !important;
+}
+
+.vjs-custom-control-spacer {
+  order: 6 !important;
+}
+
+.vjs-button--autoplay-next {
+  order: 7 !important;
+}
+.vjs-playback-rate {
+  order: 8 !important;
+}
+.vjs-chromecast-button {
+  order: 9 !important;
+}
+.vjs-quality-selector {
+  order: 10 !important;
+}
+.vjs-button--theater-mode {
+  order: 11 !important;
+}
+.vjs-fullscreen-control {
+  order: 12 !important;
 }

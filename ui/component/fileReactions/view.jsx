@@ -4,9 +4,10 @@ import * as ICONS from 'constants/icons';
 import React from 'react';
 import classnames from 'classnames';
 import Button from 'component/button';
+import RatioBar from 'component/ratioBar';
 import { formatNumberWithCommas } from 'util/number';
 import NudgeFloating from 'component/nudgeFloating';
-import Tooltip from 'component/common/tooltip';
+// import Tooltip from 'component/common/tooltip';
 
 const LIVE_REACTION_FETCH_MS = 1000 * 45;
 
@@ -103,27 +104,38 @@ export default function FileReactions(props: Props) {
         />
       )}
 
-      <FileReaction
-        title={__('I like this')}
-        label={likeLabel}
-        icon={likeIcon}
-        isActive={myReaction === REACTION_TYPES.LIKE}
-        activeClassName="button--fire"
-        onClick={() => doReactionLike(uri)}
-      />
-
-      <FileReaction
-        title={__('I dislike this')}
-        label={dislikeLabel}
-        icon={dislikeIcon}
-        isActive={myReaction === REACTION_TYPES.DISLIKE}
-        activeClassName="button--slime"
-        onClick={() => doReactionDislike(uri)}
-      />
+      <div className={'ratio-wrapper'}>
+        <Button
+          title={__('I like this')}
+          requiresAuth={IS_WEB}
+          authSrc="filereaction_like"
+          className={classnames('button--file-action button-like', {
+            'button--fire': myReaction === REACTION_TYPES.LIKE,
+          })}
+          label={likeLabel}
+          iconSize={18}
+          icon={likeIcon}
+          onClick={() => doReactionLike(uri)}
+        />
+        <Button
+          requiresAuth={IS_WEB}
+          authSrc={'filereaction_dislike'}
+          title={__('I dislike this')}
+          className={classnames('button--file-action button-dislike', {
+            'button--slime': myReaction === REACTION_TYPES.DISLIKE,
+          })}
+          label={dislikeLabel}
+          iconSize={18}
+          icon={dislikeIcon}
+          onClick={() => doReactionDislike(uri)}
+        />
+        <RatioBar likeCount={likeCount} dislikeCount={dislikeCount} />
+      </div>
     </>
   );
 }
 
+/*
 type ReactionProps = {
   title: string,
   label: any,
@@ -152,3 +164,4 @@ const FileReaction = (reactionProps: ReactionProps) => {
     </Tooltip>
   );
 };
+*/

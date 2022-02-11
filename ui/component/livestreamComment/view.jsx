@@ -90,7 +90,6 @@ export default function LivestreamComment(props: Props) {
     >
       {supportAmount > 0 && (
         <div className="livestreamComment__superchatBanner">
-          <div className="livestreamComment__superchatBanner--corner" />
           <CreditAmount isFiat={isFiat} amount={supportAmount} superChat />
         </div>
       )}

@@ -27,6 +27,10 @@
   margin-bottom: var(--spacing-xl);
   box-shadow: 0 0 0 rgba(246, 72, 83, 0.4);
   animation: livePulse 2s infinite;
+  padding: var(--spacing-m);
+
+  background: rgba(var(--color-primary-dynamic), 0.1);
+  border-radius: var(--border-radius);
 
   &:hover {
     cursor: pointer;
@@ -160,7 +164,7 @@
 
     input {
       cursor: pointer;
-      background-color: var(--color-input-bg-selected);
+      background-color: var(--color-header-bg-selected);
     }
   }
 }

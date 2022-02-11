@@ -8,6 +8,15 @@
     margin-left: 0;
     margin-bottom: var(--spacing-s);
     margin-right: var(--spacing-s);
+    //color:var(--color-primary-contrast);
+    //background-color:var(--color-primary);
+    color: var(--color-text);
+    background-color: var(--color-header-background);
+
+    &:hover {
+      color: var(--color-primary-contrast);
+      background-color: var(--color-primary);
+    }
   }
 }
 
@@ -80,8 +89,12 @@
     background-color: var(--color-tag-words-bg);
 
     &:hover {
-      color: var(--color-tag-words-hover);
-      background-color: var(--color-tag-words-bg-hover);
+      background-color: var(--color-primary);
+      .button__content {
+        .button__label {
+          color: var(--color-primary-contrast);
+        }
+      }
     }
   }
 

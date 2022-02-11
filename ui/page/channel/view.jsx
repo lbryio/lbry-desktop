@@ -19,7 +19,6 @@ import ChannelEdit from 'component/channelEdit';
 import classnames from 'classnames';
 import HelpLink from 'component/common/help-link';
 import ClaimSupportButton from 'component/claimSupportButton';
-import ChannelStakedIndicator from 'component/channelStakedIndicator';
 import ClaimMenuList from 'component/claimMenuList';
 import OptimizedImage from 'component/optimizedImage';
 import Yrbl from 'component/yrbl';
@@ -208,7 +207,7 @@ function ChannelPage(props: Props) {
   }
 
   return (
-    <Page noFooter>
+    <Page className="channelPage-wrapper" noFooter>
       <header className="channel-cover">
         <div className="channel__quick-actions">
           {isMyYouTubeChannel && (
@@ -228,12 +227,11 @@ function ChannelPage(props: Props) {
         {cover && <img className={classnames('channel-cover__custom')} src={PlaceholderTx} />}
         {cover && <OptimizedImage className={classnames('channel-cover__custom')} src={cover} objectFit="cover" />}
         <div className="channel__primary-info">
-          <ChannelThumbnail className="channel__thumbnail--channel-page" uri={uri} allowGifs hideStakedIndicator />
+          <ChannelThumbnail className="channel__thumbnail--channel-page" uri={uri} allowGifs />
           <h1 className="channel__title">
             <TruncatedText lines={2} showTooltip>
               {title || (channelName && '@' + channelName)}
             </TruncatedText>
-            <ChannelStakedIndicator uri={uri} large />
           </h1>
           <div className="channel__meta">
             <Tooltip title={formattedSubCount} followCursor placement="top">

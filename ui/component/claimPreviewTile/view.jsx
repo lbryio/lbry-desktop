@@ -9,7 +9,7 @@ import DateTime from 'component/dateTime';
 import LivestreamDateTime from 'component/livestreamDateTime';
 import ChannelThumbnail from 'component/channelThumbnail';
 import FileViewCountInline from 'component/fileViewCountInline';
-import SubscribeButton from 'component/subscribeButton';
+// import SubscribeButton from 'component/subscribeButton';
 import useGetThumbnail from 'effects/use-get-thumbnail';
 import { formatLbryUrlForWeb, generateListSearchUrlParams } from 'util/url';
 import { formatClaimPreviewTitle } from 'util/formatAriaLabel';
@@ -92,7 +92,6 @@ function ClaimPreviewTile(props: Props) {
   const shouldFetch = claim === undefined;
   const thumbnailUrl = useGetThumbnail(uri, claim, streamingUrl, getFile, placeholder) || thumbnail;
   const canonicalUrl = claim && claim.canonical_url;
-  const permanentUrl = claim && claim.permanent_url;
   const repostedContentUri = claim && (claim.reposted_claim ? claim.reposted_claim.permanent_url : claim.permanent_url);
   const listId = collectionId || collectionClaimId;
   const navigateUrl =
@@ -116,7 +115,6 @@ function ClaimPreviewTile(props: Props) {
   const isChannel = claim && claim.value_type === 'channel';
   const channelUri = !isChannel ? signingChannel && signingChannel.permanent_url : claim && claim.permanent_url;
   const channelTitle = signingChannel && ((signingChannel.value && signingChannel.value.title) || signingChannel.name);
-  const repostedChannelUri = isRepost && isChannel ? permanentUrl || canonicalUrl : undefined;
 
   // Aria-label value for claim preview
   let ariaLabelData = isChannel ? title : formatClaimPreviewTitle(title, channelTitle, date, mediaDuration);
@@ -154,17 +152,24 @@ function ClaimPreviewTile(props: Props) {
 
   if (placeholder || (!claim && isResolvingUri)) {
     return (
-      <li className={classnames('claim-preview--tile', {})}>
-        <div className="placeholder media__thumb">
+      <li className={classnames('placeholder claim-preview--tile', {})}>
+        <div className="media__thumb">
           <img src={PlaceholderTx} alt="Placeholder" />
         </div>
         <div className="placeholder__wrapper">
-          <div className="placeholder claim-tile__title" />
+          <div className="claim-tile__title" />
+          <div className="claim-tile__title_b" />
           <div
-            className={classnames('claim-tile__info placeholder', {
+            className={classnames('claim-tile__info', {
               contains_view_count: shouldShowViewCount,
             })}
-          />
+          >
+            <div className="channel-thumbnail" />
+            <div className="claim-tile__about">
+              <div className="button__content" />
+              <div className="claim-tile__about--counts" />
+            </div>
+          </div>
         </div>
       </li>
     );
@@ -231,9 +236,10 @@ function ClaimPreviewTile(props: Props) {
           })}
         >
           {isChannel ? (
-            <div className="claim-tile__about--channel">
-              <SubscribeButton uri={repostedChannelUri || uri} />
-            </div>
+            //  <div className="claim-tile__about--channel">
+            //    <SubscribeButton uri={repostedChannelUri || uri} />
+            //  </div>
+            <></>
           ) : (
             <React.Fragment>
               <UriIndicator focusable={false} uri={uri} link hideAnonymous>

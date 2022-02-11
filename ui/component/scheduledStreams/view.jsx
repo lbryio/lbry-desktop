@@ -91,6 +91,7 @@ const ScheduledStreams = (props: Props) => {
         infiniteScroll={false}
         showNoSourceClaims
         hideLayoutButton
+        // header={__('🔴 Upcoming Livestreams')}
         header={<Header />}
         maxClaimRender={upcomingMax}
         excludeUris={liveUris}

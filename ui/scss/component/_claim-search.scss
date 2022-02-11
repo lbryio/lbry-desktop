@@ -13,6 +13,7 @@
   justify-content: flex-start;
   align-items: center;
   padding: var(--spacing-m);
+  padding-left: 0px;
   padding-bottom: var(--spacing-s);
   margin-top: var(--spacing-m);
   margin-bottom: var(--spacing-m);
@@ -21,6 +22,9 @@
 
   @media (min-width: $breakpoint-small) {
     flex-direction: row;
+  }
+  @media (max-width: $breakpoint-small) {
+    padding: unset;
   }
 }
 
@@ -33,7 +37,8 @@
 }
 
 .claim-search__dropdown--selected {
-  background-color: var(--color-input-bg-selected);
+  // color: var(--color-primary-contrast);
+  // background-color: var(--color-input-bg-selected);
 }
 
 .claim-search__input-container {
@@ -53,6 +58,15 @@
       margin-top: 0;
       padding-left: var(--spacing-m);
     }
+  }
+}
+
+.claim-search__dropdown,
+.claim-search__input-container {
+  padding-left: 0;
+  padding-right: var(--spacing-m);
+  @media (max-width: $breakpoint-small) {
+    padding-right: 0;
   }
 }
 
@@ -80,6 +94,10 @@
   @media (min-width: $breakpoint-small) {
     justify-content: flex-start;
   }
+
+  .claim-search__menu-group:last-of-type {
+    margin-right: unset;
+  }
 }
 
 .claim-search__top > div {
@@ -92,6 +110,17 @@
   display: flex;
   flex-wrap: nowrap;
   margin-right: var(--spacing-s);
+
+  .button:nth-child(2):not(:last-child) {
+    // margin-left: 2px;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    margin-right: 0;
+    .button-toggle {
+      padding: 0 var(--spacing-s) 0 var(--spacing-xs);
+    }
+  }
 }
 
 .claim-search__menu-group--between {

@@ -12,6 +12,22 @@
     // If there is anything after the tabs, render it on the opposite side of the page
     margin-left: auto;
   }
+
+  .tab {
+    &:hover {
+      color: var(--color-link);
+    }
+  }
+}
+
+.tabs__list.isSticky {
+  z-index: 4;
+}
+
+.channel__thumbnail--channel-page.isSticky {
+  position: fixed;
+  background-color: #b95e5e;
+  margin-top: 100px;
 }
 
 .commentCreate {
@@ -58,25 +74,30 @@
   padding-right: var(--spacing-m);
   margin-bottom: var(--spacing-l);
   height: 4rem;
-  border-bottom-left-radius: var(--card-radius);
-  border-bottom-right-radius: var(--card-radius);
-  border: 1px solid var(--color-border);
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
   border-top: none;
 
   @media (max-width: $breakpoint-small) {
     padding-left: var(--spacing-m);
+    .tab {
+      flex: auto;
+    }
   }
+}
+
+.tabs__list--channel-page--absolute {
+  position: fixed;
+  top: var(--header-height);
+  z-index: 10;
+  width: var(--page-max-width);
 }
 
 .tabs__list--collection-edit-page {
   padding-right: var(--spacing-m);
   margin-bottom: var(--spacing-l);
   height: 4rem;
-  border-bottom-left-radius: var(--card-radius);
-  border-bottom-right-radius: var(--card-radius);
-  border-top-left-radius: var(--card-radius);
-  border-top-right-radius: var(--card-radius);
-  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
 
   @media (max-width: $breakpoint-small) {
     padding-left: var(--spacing-m);
@@ -93,7 +114,7 @@
 
   &::after {
     position: absolute;
-    bottom: calc(var(--tab-indicator-size) * -2);
+    bottom: calc(var(--tab-indicator-size) * -2 + 6px);
     height: 0;
     width: 100%;
     content: '';
@@ -122,5 +143,5 @@
 .tab:hover::after,
 .tab__divider {
   height: var(--tab-indicator-size);
-  background-color: var(--color-tab-divider);
+  background-color: var(--color-link);
 }

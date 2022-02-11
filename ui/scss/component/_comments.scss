@@ -1,5 +1,5 @@
-$thumbnailWidth: 1.5rem;
-$thumbnailWidthSmall: 1.8rem;
+$thumbnailWidth: 2.5rem;
+$thumbnailWidthSmall: 1rem;
 
 .comments {
   list-style-type: none;
@@ -38,13 +38,15 @@ $thumbnailWidthSmall: 1.8rem;
 }
 
 .comment__sort {
-  margin: var(--spacing-s) 0;
   margin-right: var(--spacing-s);
-  display: block;
+  display: inline-block;
 
   @media (min-width: $breakpoint-small) {
     margin-top: 0;
     display: inline;
+  }
+  @media (max-width: $breakpoint-small) {
+    margin-right: 0;
   }
 }
 
@@ -72,13 +74,6 @@ $thumbnailWidthSmall: 1.8rem;
       @include handleChannelGif($thumbnailWidth);
     }
 
-    .channel-staked__wrapper {
-      padding: 0;
-      left: calc(#{$thumbnailWidthSmall} / 4);
-      bottom: -1rem;
-      padding: -1rem;
-      margin-left: 0;
-    }
     .channel-staked__indicator {
       @media (max-width: $breakpoint-small) {
         margin-left: 0.1rem;
@@ -95,6 +90,16 @@ $thumbnailWidthSmall: 1.8rem;
 .comment__content {
   display: flex;
   flex-direction: row;
+
+  &:hover {
+    .ff-canvas {
+      opacity: 0 !important;
+      transition: opacity 1s !important;
+    }
+    .ff-image {
+      opacity: 1 !important;
+    }
+  }
 }
 
 .comment__replies-container {
@@ -147,7 +152,6 @@ $thumbnailWidthSmall: 1.8rem;
   background-color: var(--color-comment-threadline);
 
   &:hover {
-    box-shadow: 0 0 0 1px var(--color-comment-threadline-hover);
     background-color: var(--color-comment-threadline-hover);
     border-color: var(--color-comment-threadline-hover);
   }
@@ -160,7 +164,7 @@ $thumbnailWidthSmall: 1.8rem;
 .comment--highlighted {
   background: var(--color-comment-highlighted);
   box-shadow: 0 0 0 5px var(--color-comment-highlighted);
-  border-radius: 4px;
+  border-radius: 2px;
 }
 
 .comment__body-container {
@@ -172,6 +176,21 @@ $thumbnailWidthSmall: 1.8rem;
 
   @media (min-width: $breakpoint-small) {
     margin-left: var(--spacing-s);
+  }
+
+  &:hover {
+    .menu__button {
+      opacity: 1;
+    }
+  }
+
+  [aria-expanded='true'].menu__button {
+    opacity: 1;
+    background: var(--color-header-background);
+    border-radius: var(--border-radius);
+    .icon {
+      stroke: var(--color-primary);
+    }
   }
 }
 
@@ -194,20 +213,38 @@ $thumbnailWidthSmall: 1.8rem;
   justify-content: flex-start;
   align-items: center;
   height: 100%;
+  width: calc(100% - var(--spacing-m) - var(--spacing-s));
+
+  .channel-name {
+    color: var(--color-link);
+
+    &:hover {
+      color: rgba(var(--color-secondary-dynamic), 1);
+    }
+  }
 }
 
 .comment__pin {
+  display: inline-block;
   margin: 0 var(--spacing-s);
+  margin-right: 0;
   font-size: var(--font-xsmall);
 
   .icon {
     padding-top: 1px;
   }
+
+  @media (max-width: $breakpoint-small) {
+    width: 90%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
 .comment__message {
   word-break: break-word;
-  max-width: 35rem;
+  padding-right: var(--spacing-xl);
   color: var(--color-text);
 
   ul li {
@@ -242,17 +279,24 @@ $thumbnailWidthSmall: 1.8rem;
 
 .comment__author--creator {
   padding: 0 3px;
-  background-color: var(--color-primary-alt);
+  background-color: var(--color-primary);
   border-radius: var(--border-radius);
 
+  .button__content {
+    color: var(--color-primary-contrast);
+  }
+  .channel-name {
+    color: var(--color-primary-contrast);
+  }
+
   &.button--uri-indicator {
-    color: var(--color-link);
+    color: var(--color-primary-contrast);
   }
 }
 
 .comment__time {
   @extend .button--uri-indicator;
-  opacity: 0.5;
+  opacity: 0.6;
   white-space: nowrap;
   height: 100%;
   margin-right: var(--spacing-xs);
@@ -265,6 +309,12 @@ $thumbnailWidthSmall: 1.8rem;
 .comment__menu {
   align-self: flex-end;
   line-height: 1;
+
+  @media (max-width: $breakpoint-small) {
+    .menu__button {
+      opacity: 1;
+    }
+  }
 }
 
 .comment__char-count {
@@ -286,8 +336,21 @@ $thumbnailWidthSmall: 1.8rem;
   font-size: var(--font-xsmall);
 
   .menu__link {
-    color: var(--color-text);
     padding: 0;
+    color: var(--color-text);
+  }
+
+  .comment__menu-help {
+    color: var(--color-text);
+    .icon--ExternalLink {
+      margin-top: unset;
+    }
+  }
+
+  &:hover {
+    .comment__menu-help {
+      color: var(--color-primary-contrast);
+    }
   }
 }
 
@@ -362,18 +425,23 @@ $thumbnailWidthSmall: 1.8rem;
   &:disabled {
     opacity: 1;
   }
-}
-
-.comment__action,
-.comment__author {
-  &:focus {
-    @include linkFocus;
+  .button__content {
+    .icon {
+      stroke: var(--color-text);
+      fill: transparent;
+    }
+  }
+  &:hover {
+    .button__content {
+      .icon {
+        fill: var(--color-primary);
+      }
+    }
   }
 }
 
 .comment__action--active {
   .icon {
-    fill: var(--color-primary-alt);
     stroke: var(--color-primary);
   }
 }
@@ -427,6 +495,7 @@ $thumbnailWidthSmall: 1.8rem;
   max-width: 10rem;
   white-space: pre-line;
   margin-right: var(--spacing-s);
+  color: var(--color-text);
 }
 
 .comment--blocked {
@@ -450,11 +519,17 @@ $thumbnailWidthSmall: 1.8rem;
     .media__thumb {
       flex-shrink: 0;
       overflow: hidden;
-      $width: 5rem;
+      $width: 6rem;
       @include handleClaimListGifThumbnail($width);
-      width: $width;
+      width: $width !important;
       height: calc(#{$width} * (9 / 16));
       margin-right: var(--spacing-s);
+
+      @media (max-width: $breakpoint-small) {
+        $width: 10rem;
+        width: $width !important;
+        height: calc(#{$width} * (9 / 16));
+      }
     }
 
     .channel-thumbnail {
@@ -472,8 +547,18 @@ $thumbnailWidthSmall: 1.8rem;
     margin: 0 0;
     padding: 0;
 
+    &:hover {
+      .claim-preview__hover-actions {
+        display: none;
+      }
+    }
+
     @media (min-width: $breakpoint-medium) {
       margin: 0 var(--spacing-xs);
+    }
+
+    @media (max-width: $breakpoint-medium) {
+      padding-bottom: 0 !important;
     }
   }
 
@@ -487,12 +572,19 @@ $thumbnailWidthSmall: 1.8rem;
       margin-top: 0;
       margin-left: var(--spacing-s);
     }
+    @media (max-width: $breakpoint-medium) {
+      margin-left: var(--spacing-s);
+    }
+  }
+
+  @media (max-width: $breakpoint-small) {
+    border-bottom: 1px solid var(--color-border);
   }
 }
 
 .sticker__comment {
   margin-left: var(--spacing-m);
-  height: 7rem;
+  height: 6rem;
   overflow: hidden;
 
   img {

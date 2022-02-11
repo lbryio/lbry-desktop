@@ -1,8 +1,10 @@
 @import 'breakpoints';
 
 :root {
-  --border-radius: 10px;
+  --border-radius: 6px;
+  --border-radius-thumbnail: 6px;
   --height-input: 2.5rem;
+  --height-input-slim: 1.8rem;
   --height-button: 2.5rem;
   --height-button-mobile: 2rem;
   --height-checkbox: 24px;
@@ -10,6 +12,7 @@
   --height-badge: 24px;
 
   // Spacing
+  --spacing-xxxs: calc(2rem / 6);
   --spacing-xxs: calc(2rem / 5);
   --spacing-xs: calc(2rem / 4);
   --spacing-s: calc(2rem / 3);
@@ -35,9 +38,10 @@
   --font-weight-bold: 700;
   --font-base: 14px;
   --font-body: 1rem;
+  --font-xxxsmall: 0.5rem;
   --font-xxsmall: 0.65rem;
-  --font-xsmall: 0.7344rem;
-  --font-small: 0.8571rem;
+  --font-xsmall: 0.7777rem;
+  --font-small: 0.8333rem;
   --font-large: 1.3rem;
   --font-title: 1.71rem;
   --font-heading: 2.94rem;
@@ -48,12 +52,12 @@
   --mac-titlebar-height: 24px;
   --mobile: 600px;
   --side-nav-width: 230px;
-  --side-nav-width--micro: 125px;
+  --side-nav-width--micro: 93px;
 
   --spacing-main-padding: var(--spacing-xl);
   --floating-viewer-width: 32rem;
   --floating-viewer-height: 18rem; // 32 * 9/16
-  --floating-viewer-info-height: 5rem;
+  --floating-viewer-info-height: 4rem;
   --floating-viewer-container-height: calc(var(--floating-viewer-height) + var(--floating-viewer-info-height));
   --option-select-width: 8rem;
 
@@ -67,10 +71,11 @@
   // Header
   // This is tied to the floating player so it knows where to attach to
   // ui/component/fileRenderFloating/view.jsx
-  --header-height: 64px;
+  --header-height: 60px;
   --header-height-mobile: 56px;
 
   // Inline Player
+  // --inline-player-max-height: calc(100vh - var(--header-height) - var(--spacing-l) * 2);
   --inline-player-max-height: calc(100vh - var(--header-height) - var(--spacing-l) * 4);
   --mobile-player-max-height: 50vh;
 
@@ -92,7 +97,7 @@
   --cover-photo-height: 210px;
   --channel-thumbnail-width: 10rem;
   --channel-thumbnail-width--small: 4rem;
-  --file-list-thumbnail-width: 10rem;
+  --file-list-thumbnail-width: 12rem;
 
   --tag-height: 1.5rem;
 

@@ -22,7 +22,7 @@ function TopPage(props: Props) {
   // if the query was actually '@name', still offer repost for 'name'
   const queryName = name[0] === '@' ? name.slice(1) : name;
   return (
-    <Page>
+    <Page className="topPage-wrapper">
       <SearchTopClaim query={name} hideLink setChannelActive={setChannelActive} />
       <ClaimListDiscover
         name={channelActive ? `@${queryName}` : queryName}

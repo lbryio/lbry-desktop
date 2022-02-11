@@ -5,16 +5,11 @@ select,
 .date-picker-input {
   height: var(--height-input);
   border-radius: var(--border-radius);
-  border: 1px solid;
   color: var(--color-input);
   border-color: var(--color-input-border);
   background-color: var(--color-input-bg);
   padding-right: var(--spacing-s);
   padding-left: var(--spacing-s);
-
-  &:focus {
-    @include focus;
-  }
 
   &::placeholder {
     color: var(--color-input-placeholder);
@@ -40,16 +35,18 @@ select,
   textarea {
     height: var(--height-input);
     border-radius: var(--border-radius);
-    border: 1px solid;
+    // border: 1px solid;
     color: var(--color-input);
-    border-color: var(--color-input-border);
+    // border-color: var(--color-input-border);
     background-color: var(--color-input-bg);
     padding-right: var(--spacing-s);
     padding-left: var(--spacing-s);
 
+    /*
     &:focus {
       @include focus;
     }
+    */
 
     &::placeholder {
       color: var(--color-input-placeholder);
@@ -130,6 +127,16 @@ form,
   }
 }
 
+fieldset-section {
+  background-color: unset !important;
+  select:focus-visible {
+    background-color: var(--color-header-background) !important;
+  }
+
+  option {
+    background-color: var(--color-header-background);
+  }
+}
 fieldset-section,
 .checkbox,
 .radio {
@@ -194,7 +201,7 @@ input-submit {
     display: inline-block;
     margin: 0;
     font-size: var(--font-base);
-    padding-left: calc(var(--height-checkbox) + var(--spacing-s));
+    padding-left: calc(var(--height-checkbox) + 10px);
     min-height: var(--height-checkbox);
 
     &::before {
@@ -225,11 +232,6 @@ input-submit {
   input[type='radio']:checked + label::after {
     content: '';
   }
-
-  input[type='checkbox']:focus + label::before,
-  input[type='radio']:focus + label::before {
-    @include focus;
-  }
 }
 
 .checkbox {
@@ -249,8 +251,8 @@ input-submit {
     width: 12px;
     border-left: 2px solid;
     border-bottom: 2px solid;
-    border-color: var(--color-input-toggle);
-    border-left-color: var(--color-input-toggle);
+    border-color: var(--color-primary);
+    border-left-color: var(--color-primary);
     transform: rotate(-45deg);
     left: 6px;
     top: 6px;
@@ -367,6 +369,13 @@ fieldset-group {
       margin-top: var(--spacing-l);
       align-items: flex-end;
       justify-content: center;
+
+      fieldset-section {
+        input {
+          margin-bottom: 5px !important;
+          margin-left: var(--spacing-s);
+        }
+      }
     }
 
     &.fieldgroup--paginate-top {
@@ -402,13 +411,14 @@ fieldset-group {
         overflow: hidden;
         padding: 0.5rem;
         height: var(--height-input);
-        border: 1px solid;
         border-top-left-radius: var(--border-radius);
         border-bottom-left-radius: var(--border-radius);
         border-color: var(--color-input-border);
         border-right-color: var(--color-input-prefix-border);
+        //color: white;
+        background-color: var(--color-header-button);
         color: var(--color-text);
-        background-color: var(--color-input-prefix-bg);
+        box-shadow: 0px 0px 0px 2px rgba(var(--color-text-base), 0.1) inset;
       }
     }
 
@@ -465,6 +475,7 @@ fieldset-group {
 
 .form-field__help {
   @extend .help;
+  color: var(--color-text);
 }
 
 .form-field__help + .checkbox,
@@ -498,12 +509,18 @@ fieldset-group {
 }
 
 .form-field__textarea-info {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  //display: flex;
+  //flex-wrap: wrap;
+  //align-items: right;
   justify-content: space-between;
   margin-top: var(--spacing-xxs);
   margin-bottom: var(--spacing-s);
+  text-align: right;
+
+  span {
+    display: inline-block;
+    padding-right: 0px;
+  }
 }
 
 fieldset-section {
@@ -527,6 +544,12 @@ fieldset-section {
         padding: 0 var(--spacing-xs);
         padding-right: var(--spacing-l);
       }
+    }
+
+    select {
+      max-height: var(--height-input-slim) !important;
+      padding: 0 var(--spacing-xs);
+      padding-right: var(--spacing-l);
     }
 
     @media (max-width: $breakpoint-small) {
@@ -631,6 +654,10 @@ fieldset-section {
     cursor: pointer;
   }
 
+  .react-calendar button:disabled {
+    background-color: rgba(var(--color-header-background-base), 1);
+  }
+
   .react-calendar__navigation {
     height: 44px;
     margin-bottom: 1em;
@@ -710,6 +737,10 @@ fieldset-section {
     background: var(--color-button-alt-bg-hover);
   }
 
+  .react-calendar__tile:disabled {
+    background-color: rgba(var(--color-primary-dynamic), 0.4);
+  }
+
   .react-calendar__tile--now {
     background: var(--color-button-secondary-bg);
   }
@@ -769,4 +800,8 @@ fieldset-section {
   margin-bottom: var(--spacing-xs);
   animation: menu-animate-in var(--animation-duration) var(--animation-style);
   box-shadow: 3px 3px rgba(0, 0, 0, 0.1);
+}
+
+#yt_sync_channel {
+  width: unset;
 }

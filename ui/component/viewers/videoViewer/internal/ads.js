@@ -83,8 +83,8 @@ function runAds(internalFeatureEnabled, allowPreRoll, player, embedded) {
     `&hidecontrols=false`;
 
   // always have ads on if internal feature is on,
-// otherwise if not authed, roll for 20% to see an ad
-// allowPreRoll currently means unauthenticated (don't show to logged in users)
+  // otherwise if not authed, roll for 20% to see an ad
+  // allowPreRoll currently means unauthenticated (don't show to logged in users)
   const shouldShowAnAd = internalFeatureEnabled || (!embedded && allowPreRoll && hitsAtFiftyPercentChance);
 
   if (shouldShowAnAd && browserIsChrome && !IS_MOBILE) {

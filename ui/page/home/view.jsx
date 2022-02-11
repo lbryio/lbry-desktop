@@ -143,7 +143,7 @@ function HomePage(props: Props) {
   const scheduledStreamsLoaded = (total) => setHasScheduledStreams(total > 0);
 
   return (
-    <Page fullWidthPage>
+    <Page className="homePage-wrapper" fullWidthPage>
       {!SIMPLE_SITE && (authenticated || !IS_WEB) && !subscribedChannels.length && (
         <div className="notice-message">
           <h1 className="section__title">

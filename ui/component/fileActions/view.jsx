@@ -112,7 +112,7 @@ export default function FileActions(props: Props) {
     }
   }
   return (
-    <div className="media__actions section__actions--no-margin">
+    <div className="media__actions">
       {ENABLE_FILE_REACTIONS && <FileReactions uri={uri} />}
 
       <ClaimSupportButton uri={uri} fileAction />

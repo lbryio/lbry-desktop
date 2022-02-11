@@ -1,6 +1,18 @@
+.block-list {
+  .claim-preview__wrapper--channel {
+    .button--no-style {
+      .button__content {
+        align-items: unset;
+      }
+    }
+  }
+}
+
 .block-list--moderator {
-  .button__content {
-    align-items: flex-start;
+  .button--no-style {
+    .button__content {
+      align-items: flex-start;
+    }
   }
 
   .section__actions {
@@ -10,6 +22,9 @@
 
 .block-list--delegator {
   padding: var(--spacing-s);
+  background-color: rgba(var(--color-background-base), 0.6);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-border);
 
   .button--alt,
   .button--secondary {
@@ -36,7 +51,7 @@
   }
 
   .section {
-    margin-left: var(--spacing-m);
+    // margin-left: var(--spacing-m);
   }
 
   label {

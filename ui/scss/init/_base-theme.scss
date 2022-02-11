@@ -6,7 +6,6 @@
 :root {
   // Generic colors
   --color-primary: #047857;
-  --color-primary-alt: #e4f4ef;
   --color-primary-alt-2: #065f46;
   --color-primary-alt-3: #10b981;
   --color-secondary: #1e3a8a;
@@ -33,6 +32,9 @@
   --color-gray-10: #18181b;
   --color-amber: #f26522;
   --color-orange: #fb923c;
+  --color-fire: #ff653e;
+  --color-slime: #a6ff00;
+  --color-transparent: rgba(0, 0, 0, 0);
 
   // Structure
   --color-text: var(--color-black);
@@ -45,15 +47,12 @@
   --color-card-background-highlighted: #f1f7fe;
 
   // Text
-  --color-text-selection-bg: var(--color-secondary-alt);
-  --color-text-selection: var(--color-secondary);
+  --color-text-selection-bg: var(--color-primary);
+  --color-text-selection: white;
   --color-text-empty: #999999;
   --color-text-help: #999999;
   --color-text-subtitle: #767676;
   --color-text-warning: #212529;
-  --color-help-warning-bg: #fef3c7;
-  --color-help-warning-text: #555555;
-  --color-text-warning--background: var(--lbry-yellow-1);
   --color-blockquote: var(--color-gray-3);
   --color-text-error: var(--color-danger);
   --color-error: var(--color-danger-alt);
@@ -63,14 +62,14 @@
   // Header
   --color-header-background: #ffffff;
   --color-header-button: var(--color-button-alt-bg);
-  --color-header-button-active: var(--color-primary-alt);
-  --color-header-button-hover: var(--color-primary-alt);
+  --color-header-button-active: var(--color-primary);
+  //--color-header-button-hover: var(--color-primary);
+  --color-header-button-hover: rgba(var(--color-primary-static), 1);
 
   // Button
   --color-button-primary-bg: var(--color-primary);
   --color-button-primary-text: var(--color-primary-alt);
   --color-button-primary-bg-hover: var(--color-primary-alt-2);
-  --color-button-primary-hover-text: var(--color-primary-alt);
   --color-button-secondary-bg: var(--color-secondary-alt);
   --color-button-secondary-border: var(--color-secondary-alt);
   --color-button-secondary-text: var(--color-secondary);
@@ -79,7 +78,7 @@
   --color-button-alt-text: var(--color-text);
   --color-button-alt-bg-hover: var(--color-gray-2);
   --color-button-toggle-text: var(--color-primary);
-  --color-button-toggle-bg: var(--color-primary-alt);
+  --color-button-toggle-bg: var(--color-secondary);
   --color-button-border: var(--color-gray-3);
   --color-link: var(--color-primary);
   --color-link-hover: var(--color-black);
@@ -91,19 +90,18 @@
   --color-input-placeholder: var(--color-gray-8);
   --color-input-bg: var(--color-gray-1);
   --color-input-border: var(--color-border);
-  --color-input-border-active: var(--color-secondary);
   --color-input-toggle: var(--color-secondary);
   --color-input-toggle-bg: var(--color-gray-1);
   --color-input-toggle-bg-hover: var(--color-secondary-alt);
   --color-input-prefix-bg: var(--color-gray-2);
   --color-input-prefix-border: var(--color-gray-5);
-  --color-input-bg-selected: var(--color-primary-alt);
+  --color-input-bg-selected: var(--color-secondary);
   --select-toggle-background: url("data:image/svg+xml,%3Csvg viewBox='0 0 96 96' xmlns='http://www.w3.org/2000/svg' fill='%23212529'%3E%3Cpath d='M17.172, 31.172c1.562, -1.562 4.095, -1.562 5.656, 0l25.172, 25.171l25.172, -25.171c1.562, -1.562 4.095, -1.562 5.656, 0c1.562, 1.562 1.562, 4.095 0, 5.656l-28, 28c-1.562, 1.562 -4.095, 1.562 -5.656, 0l-28, -28c-0.781, -0.781 -1.172, -1.805 -1.172, -2.828c0, -1.023 0.391, -2.047 1.172, -2.828Z'/%3E%3C/svg%3E%0A");
 
   // Navigation
   --color-navigation-icon: var(--color-gray-5);
   --color-navigation-link: var(--color-gray-5);
-  --color-navigation-active: var(--color-primary-alt);
+  --color-navigation-active: var(--color-secondary);
   --color-navigation-active-text: var(--color-primary);
   --color-navigation-hover: var(--color-gray-1);
   --color-navigation-hover-text: var(--color-primary);
@@ -111,12 +109,12 @@
   // Tags
   --color-tag: var(--color-gray-5);
   --color-tag-bg: var(--color-button-alt-bg);
-  --color-tag-hover: var(--color-primary-alt);
+  --color-tag-hover: var(--color-secondary);
   --color-tag-bg-hover: var(--color-button-primary-bg);
 
   // Tags (words)
   --color-tag-words: var(--color-primary);
-  --color-tag-words-bg: var(--color-primary-alt);
+  --color-tag-words-bg: var(--color-secondary);
   --color-tag-words-hover: var(--color-primary);
   --color-tag-words-bg-hover: var(--color-primary-alt-3);
 
@@ -134,14 +132,14 @@
   --color-comment-threadline-hover: var(--color-gray-4);
 
   // Icons
-  --color-follow-bg: #ffd4da;
+  --color-follow-bg: var(--color-header-background);
   --color-follow-icon: #e2495e;
-  --color-view-bg: var(--color-secondary-alt);
-  --color-view-icon: var(--color-secondary);
+  --color-view-bg: var(--color-header-background);
+  --color-view-icon: #0f9f11;
 
   // Snack
   --color-snack-bg: var(--color-primary);
-  --color-snack: var(--color-white);
+  --color-snack: var(--color-primary-contrast);
   --color-snack-bg-error: var(--color-danger);
   --color-snack-upgrade: var(--color-tertiary);
 
@@ -188,7 +186,7 @@
   --color-tabs-background: var(--color-card-background);
   --color-tab-divider: var(--color-primary);
   --color-modal-background: var(--color-card-background);
-  --color-login-graphic-background: var(--color-primary-alt);
+  --color-login-graphic-background: var(--color-secondary);
 
   // Ads
   --color-ads-background: #fae5ff;

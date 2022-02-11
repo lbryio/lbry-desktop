@@ -2,8 +2,8 @@
 // component specific styling should go in the component scss file
 
 *::selection {
-  background-color: var(--color-text-selection-bg);
-  color: var(--color-text-selection);
+  background-color: var(--color-primary);
+  color: var(--color-primary-contrast);
 }
 
 *:focus {
@@ -14,7 +14,6 @@ html {
   @include font-sans;
   height: 100%;
   min-height: 100%;
-  overflow-x: hidden;
 
   color: var(--color-text);
   background-color: var(--color-background);
@@ -31,13 +30,13 @@ body {
 
   // The W3C future standard; currently supported by Firefox only.
   // It'll hopefully auto fallback to this when 'webkit-scrollbar' below is deprecated in the future.
-  scrollbar-width: auto;
+  scrollbar-width: 6px;
   scrollbar-color: var(--color-scrollbar-thumb-bg) var(--color-scrollbar-track-bg);
 }
 
 body *::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
+  width: 6px;
+  height: 6px;
 }
 
 body *::-webkit-scrollbar-track {
@@ -49,11 +48,11 @@ body *::-webkit-scrollbar-thumb {
   // standard currently doesn't support it. Stick with square
   // scrollbar for all browsers.
   background-color: var(--color-scrollbar-thumb-bg);
+  border-radius: 4px;
 }
 
 hr {
   height: 1px;
-  background-color: var(--color-gray-2);
 }
 
 h1,
@@ -71,7 +70,7 @@ ul {
   & + p,
   & + ul,
   & + ol {
-    margin-top: var(--spacing-s);
+    margin-top: var(--spacing-xxs);
   }
 }
 
@@ -89,9 +88,21 @@ ol {
 .ul--no-style {
   list-style: none;
   margin-bottom: 0;
+  overflow: visible !important;
 
   li {
     margin: 0;
+    margin-bottom: var(--spacing-xxs);
+  }
+
+  .claim-preview__wrapper {
+    padding: 0px;
+    padding-top: var(--spacing-m);
+    padding-bottom: var(--spacing-m);
+
+    .claim__menu-button {
+      right: -8px;
+    }
   }
 }
 
@@ -180,7 +191,7 @@ img {
 
 @media (min-width: $breakpoint-small) {
   textarea {
-    min-height: calc(var(--height-input) * 2);
+    // min-height: calc(var(--height-input) * 2);
   }
 }
 
@@ -306,15 +317,23 @@ img {
   @extend .help;
   padding: var(--spacing-s);
   border-radius: var(--border-radius);
-  background-color: var(--color-help-warning-bg);
-  color: var(--color-help-warning-text);
+  background-color: rgba(var(--color-primary-dynamic), 0.1);
+  color: var(--color-text);
   margin-bottom: var(--spacing-s);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-primary);
 }
 
 .help--notice {
   @extend .help--warning;
-  background-color: var(--color-card-background-highlighted);
+  background-color: rgba(var(--color-primary-dynamic), 0.03);
+  color: var(--color-text);
+
+  @media (max-width: $breakpoint-small) {
+    margin-top: -1.5px;
+    border: unset;
+    box-shadow: 0px 0px 0px 1px var(--color-primary) inset;
+    padding-bottom: 10px;
+  }
 }
 
 .help--inline {
@@ -428,7 +447,7 @@ img {
   position: relative;
   border-radius: var(--border-radius);
   padding: var(--spacing-l);
-  background-color: var(--color-primary-alt);
+  background-color: var(--color-header-background);
 
   ~ .card {
     margin-top: var(--spacing-m);
@@ -475,6 +494,13 @@ img {
 
 .mobile-only {
   display: none;
+
+  .notification__bubble--inline {
+    top: var(--spacing-xs);
+    .notification__count {
+      margin-bottom: -2px;
+    }
+  }
 
   @media (max-width: $breakpoint-small) {
     display: block;
@@ -523,12 +549,418 @@ img {
   font-size: 1rem;
   margin-bottom: var(--spacing-m);
 
+  > .button {
+    white-space: initial;
+  }
+
   @media (min-width: $breakpoint-small) {
     font-size: 1.2rem;
     margin-bottom: var(--spacing-l);
   }
 
-  > .button {
-    white-space: initial;
+  @media (max-width: $breakpoint-small) {
+    margin-top: var(--spacing-s);
+    margin-bottom: var(--spacing-m);
   }
+}
+
+.confirming-change {
+  padding-top: var(--spacing-s);
+}
+
+.background-image {
+  position: fixed;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+
+  background-color: var(--color-background);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  filter: blur(23px);
+  -webkit-filter: blur(23px);
+}
+
+.theme {
+  position: fixed;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+  background-image: var(--background-shade);
+}
+
+.homePage-wrapper {
+  .mb-xl {
+    margin-bottom: 0px;
+  }
+  .icon__wrapper--Heart {
+    .icon {
+      fill: var(--color-header-background);
+    }
+  }
+}
+
+// The following wrapper classes are temporary to fix page specific issues
+.discoverPage-wrapper {
+  .claim-preview__wrapper {
+    .claim-tile__info {
+      margin-top: 0;
+      padding-bottom: var(--spacing-xxxs);
+      .claim-preview-metadata-sub-upload {
+        margin-top: 3px;
+      }
+    }
+  }
+  .claim-preview__wrapper--channel {
+    position: relative;
+    border-radius: var(--border-radius);
+    background: rgba(var(--color-header-background-base), 0.6);
+    padding: var(--spacing-m) !important;
+
+    .claim__menu-button {
+      right: calc(var(--spacing-m) - 8px) !important;
+      margin-top: var(--spacing-xxs);
+
+      .icon {
+        stroke: var(--color-text);
+      }
+
+      &:hover {
+        .icon {
+          stroke: var(--color-primary);
+        }
+      }
+    }
+  }
+}
+
+.uploadPage-wraper {
+  .card__main-actions {
+    padding-top: var(--spacing-l);
+  }
+
+  label {
+    font-size: var(--font-medium);
+  }
+
+  .button--close {
+    &:hover {
+      color: var(--color-primary);
+      background-color: unset;
+    }
+  }
+
+  .icon__wrapper--Tag {
+    margin-right: var(--spacing-s) !important;
+    width: 1rem !important;
+    height: 1rem !important;
+  }
+
+  .card:not(:first-of-type) {
+    .card__main-actions:not(:first-of-type) {
+      border-top: unset;
+    }
+    .card__subtitle {
+      margin-top: 0 !important;
+    }
+  }
+
+  .card:nth-last-child(2) {
+    .card__main-actions {
+      padding-top: var(--spacing-xxxs);
+      fieldset-section:not(:first-child) {
+        margin-top: var(--spacing-s);
+      }
+      .fieldset-group--smushed {
+        fieldset-section {
+          margin-top: 0;
+          label {
+            margin-left: 0;
+          }
+          .input--currency-select {
+            margin-left: 2px !important;
+          }
+        }
+      }
+    }
+  }
+
+  .help {
+    color: var(--color-text);
+  }
+
+  .form-field__two-column {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .comment__char-count-mde {
+    min-width: 40px;
+    text-align: center;
+    margin-bottom: var(--spacing-xxxs);
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 5px;
+    border-radius: var(--border-radius);
+    height: var(--height-input-slim);
+  }
+}
+
+.transactionsPage-wrapper {
+  .card__header--between {
+    align-items: unset;
+    .card__title-section {
+      width: 100%;
+      div {
+        width: 100%;
+        .card__title {
+          width: 100%;
+          .txo__table_header {
+            width: auto !important;
+          }
+        }
+        .card__subtitle {
+          min-height: 3rem;
+        }
+      }
+    }
+  }
+
+  .card__actions {
+    @media (max-width: $breakpoint-small) {
+      > * {
+        padding-bottom: var(--spacing-m);
+      }
+    }
+  }
+}
+
+.topPage-wrapper {
+  .search__header {
+    .claim-preview__wrapper {
+      background-color: rgba(var(--color-header-background-base), 0.6);
+      &:hover {
+        background-color: rgba(var(--color-header-background-base), 0.9);
+      }
+    }
+  }
+
+  .claim-preview__wrapper--channel {
+    .claim__menu-button {
+      right: var(--spacing-xxs) !important;
+    }
+  }
+}
+
+.playlistPage-wrapper {
+  .button--file-action {
+    &:hover {
+      background-color: unset;
+    }
+  }
+
+  .card-stack:first-of-type {
+    .card {
+      margin-bottom: var(--spacing-l);
+    }
+  }
+
+  .card__main-actions {
+    border-top: unset;
+  }
+
+  .claim-grid__wrapper:last-of-type {
+    .section__header--actions {
+      margin-top: 0;
+      padding-top: 0;
+    }
+
+    .section__header--actions {
+      @media (max-width: $breakpoint-small) {
+        .claim-search__menu-group {
+          .button-toggle {
+            flex: auto;
+            .button__content {
+              display: flex;
+              justify-content: center !important;
+              align-items: center;
+            }
+          }
+        }
+        .wunderbar--inline {
+          width: 100%;
+          flex: unset;
+        }
+      }
+    }
+  }
+
+  .card__header--between {
+    width: 100%;
+    flex-wrap: wrap;
+    .card__title-section {
+      width: 100%;
+      flex-wrap: wrap;
+      div:first-child {
+        width: 100%;
+        .card__subtitle {
+          background-color: var(--color-header-background);
+          padding: var(--spacing-m);
+          border-radius: var(--border-radius);
+
+          .claim-preview__wrapper {
+            display: flex;
+            align-items: flex-start;
+
+            .claim-preview-metadata {
+              flex-wrap: unset;
+              .claim-preview-info {
+                width: 100%;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media (min-width: $breakpoint-small) {
+    .claim-preview--collection-mine {
+      height: unset;
+      padding-left: 9rem;
+      position: relative;
+
+      .media__thumb {
+        position: relative;
+        right: unset;
+
+        .claim-preview__hover-actions {
+          display: visible;
+        }
+      }
+
+      .claim-preview__text {
+        position: unset;
+        right: unset;
+        width: 100%;
+        background-color: unset;
+        padding: 0;
+        border-radius: unset;
+
+        .claim-preview-info {
+          .claim-preview__title {
+            font-size: var(--font-small);
+          }
+        }
+        .media__subtitle {
+          .button__content {
+            .channel-name {
+              font-size: var(--font-xsmall);
+            }
+          }
+        }
+      }
+    }
+    .button-dislike {
+      margin-right: 0;
+    }
+  }
+
+  @media (max-width: $breakpoint-small) {
+    .media__actions.stretch {
+      .button:nth-of-type(2) {
+        margin-right: 0 !important;
+      }
+      .ratio-wrapper {
+        .button {
+          background-color: unset;
+          margin-bottom: 0;
+        }
+      }
+      a {
+        margin-left: var(--spacing-xxs);
+      }
+    }
+  }
+}
+
+.repost-wrapper {
+  .claim-preview__wrapper {
+    background-color: rgba(var(--color-header-background-base), 0.6);
+    &:hover {
+      background-color: rgba(var(--color-header-background-base), 0.9);
+    }
+    .claim-tile__info {
+      padding-bottom: 0;
+    }
+    .claim-preview__actions {
+      .claim__tags {
+        margin-left: auto;
+      }
+    }
+  }
+}
+
+.scheduledLivestream-wrapper {
+  @media (max-width: $breakpoint-small) {
+    padding: var(--spacing-s);
+    padding-top: 0;
+
+    .card__main-actions {
+      .claim-preview__wrapper {
+        a {
+          .button__content {
+            align-items: unset;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Temporary master classes
+.date_time {
+  font-size: var(--font-xsmall);
+}
+.icon--ExternalLink {
+  margin-top: -5px;
+}
+
+// Fix Lightbox (Image viewer) modal backdrop bug
+// Context: transform, filter and perspective break "position: fixed" in child element
+.lb-open-lightbox {
+  .modal {
+    -webkit-backdrop-filter: unset;
+    backdrop-filter: unset;
+  }
+}
+
+// Remove tap focus on mobile devices
+input,
+textarea,
+button,
+select,
+a {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+// Temporary fix for focus-visible
+*:focus-visible:not(.modal):not(.card):not(.wunderbar__input):not(.menu__list):not(.menu__list--header):not(.button--secondary):not(.button-like):not(.button-dislike):not(select):not(input):not(textarea):not(video):not([data-reach-tab-panels]):not([data-reach-tabs]):not([data-reach-tab-panel]):not(.CodeMirror-code):not(.MuiModal-root):not(.MuiPaper-root):not(.card) {
+  background-color: rgba(var(--color-primary-dynamic), 0.2) !important;
+  color: var(--color-text) !important;
+  // outline: 2px solid var(--color-primary);
+  box-shadow: 0px 0px 0px 2px var(--color-primary) inset;
+
+  .icon {
+    stroke: var(--color-text) !important;
+  }
+}
+
+select:focus-visible,
+input:focus-visible:not(.wunderbar__input),
+textarea:focus-visible {
+  box-shadow: 0px 0px 0px 2px var(--color-primary) inset;
 }

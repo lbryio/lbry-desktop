@@ -6,6 +6,7 @@ import classnames from 'classnames';
 import { FormField } from 'component/common/form';
 import Button from 'component/button';
 import TagsSearch from 'component/tagsSearch';
+import ColorPicker from 'component/colorPicker';
 import { FF_MAX_CHARS_IN_DESCRIPTION } from 'constants/form-field';
 import ErrorText from 'component/common/error-text';
 import ChannelThumbnail from 'component/channelThumbnail';
@@ -24,6 +25,8 @@ import { SIMPLE_SITE, THUMBNAIL_CDN_SIZE_LIMIT_BYTES } from 'config';
 import { sortLanguageMap } from 'util/default-languages';
 import ThumbnailBrokenImage from 'component/selectThumbnail/thumbnail-broken.png';
 import Gerbil from 'component/channelThumbnail/gerbil.png';
+
+const NEKODEV = false; // Temporary flag to hide unfinished progress
 
 const LANG_NONE = 'none';
 
@@ -121,6 +124,9 @@ function ChannelForm(props: Props) {
     );
   }, [isClaimingInitialRewards, creatingChannel, updatingChannel, nameError, bidError, isNewChannel, params.name]);
 
+  // const channelColor = 'ff0000';
+  const [overrideColor, toggleColorOverride] = React.useState(false);
+
   function getChannelParams() {
     // fill this in with sdk data
     const channelParams: {
@@ -213,6 +219,7 @@ function ChannelForm(props: Props) {
 
   function handleSubmit() {
     if (uri) {
+      console.log('Params A: ', params);
       updateChannel(params).then((success) => {
         if (success) {
           onDone();
@@ -270,9 +277,10 @@ function ChannelForm(props: Props) {
   }
 
   // TODO clear and bail after submit
+  // <div className={classnames('main--contained', { 'card--disabled': disabled })}></div>
   return (
     <>
-      <div className={classnames('main--contained', { 'card--disabled': disabled })}>
+      <div className={classnames({ 'card--disabled': disabled })}>
         <header className="channel-cover">
           <div className="channel__quick-actions">
             <Button
@@ -336,7 +344,7 @@ function ChannelForm(props: Props) {
           <div className="channel-cover__gradient" />
         </header>
 
-        <Tabs>
+        <Tabs className="channelPage-wrapper">
           <TabList className="tabs__list--channel-page">
             <Tab>{__('General')}</Tab>
             <Tab>{__('Credit Details')}</Tab>
@@ -445,6 +453,19 @@ function ChannelForm(props: Props) {
               <Card
                 body={
                   <>
+                    {NEKODEV && (
+                      <fieldset-section class>
+                        <label htmlFor="channel-color">{__('Channel color')}</label>
+                        <FormField
+                          name="manual-channel-color"
+                          type="checkbox"
+                          label="Pick color manually"
+                          checked={overrideColor}
+                          onChange={() => toggleColorOverride(!overrideColor)}
+                        />
+                        <ColorPicker disabled={!overrideColor} />
+                      </fieldset-section>
+                    )}
                     <FormField
                       type="text"
                       name="channel_website2"

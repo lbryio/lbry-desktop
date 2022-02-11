@@ -12,10 +12,31 @@
   }
 
   &:hover {
-    background-color: var(--color-card-background-highlighted);
+    background-color: rgba(var(--color-primary-dynamic), 0.06);
 
     .date_time {
       opacity: 0.5;
+    }
+  }
+
+  .comment__author {
+    color: rgba(var(--color-text-base), 0.5);
+    margin-top: var(--spacing-xxs);
+    max-width: unset;
+
+    .button__content {
+      max-width: unset;
+    }
+
+    &:hover {
+      color: var(--color-primary) !important;
+    }
+  }
+
+  .channel-name {
+    color: var(--color-secondary);
+    &:hover {
+      color: var(--color-primary);
     }
   }
 
@@ -37,11 +58,20 @@
 
   display: flex;
   justify-content: space-between;
+  padding: 0;
+  padding-left: var(--spacing-xxxs);
 
   .livestreamComment__menu {
     position: relative;
     right: 0;
-    top: 0;
+    top: var(--spacing-xxs);
+    .menu__button {
+      opacity: 1;
+    }
+  }
+
+  .comment__author {
+    color: var(--color-primary);
   }
 
   span,
@@ -59,8 +89,11 @@
 }
 
 .livestream__comment--superchat {
-  background-color: var(--color-card-background-highlighted);
+  background-color: rgba(var(--color-primary-dynamic), 0.05);
+  //background-color: var(--color-card-background-highlighted);
+  box-shadow: 2px 0px 0px 0px var(--color-primary) inset;
   display: unset;
+  padding-left: 0;
 
   + .livestream__comment--superchat {
     margin-bottom: var(--spacing-xxs);
@@ -71,17 +104,31 @@
     align-items: flex-start;
     flex-direction: unset;
     flex: unset;
+    margin-left: 3px;
+
+    .freezeframe-wrapper,
+    .channel-thumbnail--xsmall {
+      margin-left: var(--spacing-xs);
+    }
   }
 
   .livestreamComment__info {
     margin-top: calc(var(--spacing-xxs) / 2);
   }
 
+  .button__content {
+    color: var(--color-primary);
+  }
+
+  .date_time {
+    opacity: 1;
+  }
   .livestreamComment__menu {
     position: absolute;
   }
 
   &::before {
+    display: none;
     position: absolute;
     left: 0;
     height: 100%;
@@ -102,25 +149,51 @@
 
   .channel-thumbnail {
     @include handleChannelGif(2rem);
-    margin-top: var(--spacing-xxs);
+    margin-top: var(--spacing-s);
     flex-shrink: 0;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    margin-left: 0;
   }
 }
 
 .livestreamComment__menu {
   position: absolute;
-  right: var(--spacing-xs);
-  top: var(--spacing-xs);
+  right: 2px;
+  top: 2px;
+
+  [aria-expanded='true'].menu__button {
+    opacity: 1;
+    background-color: var(--color-header-background);
+    border-radius: var(--border-radius);
+    .icon {
+      stroke: var(--color-primary);
+    }
+  }
 }
 
 .livestreamComment__superchatBanner {
   @extend .superChat;
 
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-  padding: 0.25rem var(--spacing-s);
+  border-radius: 0;
   display: inline-block;
   position: relative;
+  width: 90%;
+  background-image: linear-gradient(to right, var(--color-primary), rgba(var(--color-primary-dynamic), 0));
+  padding: 4px 2px 2px 4px;
+
+  .superChat {
+    background-color: var(--color-header-background);
+    padding-top: 5px !important;
+  }
+
+  .credit-amount {
+    color: var(--color-text);
+    svg {
+      margin-bottom: -2px;
+    }
+  }
 }
 
 // This is just a two small circles that overlap to make it look like
@@ -149,7 +222,7 @@
 }
 
 .livestreamComment__text {
-  padding-right: var(--spacing-xl);
+  padding-right: var(--spacing-s);
   padding-bottom: var(--spacing-xxs);
 
   .markdown-preview {

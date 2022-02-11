@@ -66,6 +66,8 @@
   line-height: 1.5;
   position: relative;
   padding-top: var(--spacing-s);
+  background-color: var(--color-header-background);
+  margin-bottom: 0px !important;
 }
 
 .pagination__item--selected {

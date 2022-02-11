@@ -114,7 +114,7 @@ export default function CommentReactions(props: Props) {
         title={__('Upvote')}
         icon={likeIcon}
         iconSize={isMobile && 12}
-        className={classnames('comment__action', {
+        className={classnames('comment__action button-like', {
           'comment__action--active': myReacts && myReacts.includes(REACTION_TYPES.LIKE),
         })}
         onClick={handleCommentLike}
@@ -125,7 +125,7 @@ export default function CommentReactions(props: Props) {
         title={__('Downvote')}
         icon={dislikeIcon}
         iconSize={isMobile && 12}
-        className={classnames('comment__action', {
+        className={classnames('comment__action button-dislike', {
           'comment__action--active': myReacts && myReacts.includes(REACTION_TYPES.DISLIKE),
         })}
         onClick={handleCommentDislike}

@@ -23,17 +23,12 @@
   max-width: unset;
   min-width: unset;
 
-  .channel-staked__wrapper {
-    background-color: var(--color-background);
-  }
-
   .channel-thumbnail {
     @include handleChannelGif(2.5rem);
   }
 
   @media (max-width: $breakpoint-small) {
     width: 100%;
-    padding: var(--spacing-s);
   }
 }
 
@@ -41,7 +36,7 @@
   font-size: 2rem;
   line-height: 1.2;
   margin-top: 0;
-  margin-bottom: var(--spacing-m);
+  margin-bottom: var(--spacing-s);
   font-weight: var(--font-weight-bold);
 
   :first-child {
@@ -75,8 +70,12 @@
 }
 
 .post__info--grouped {
+  display: flex;
   .button--link {
     margin-right: var(--spacing-s);
+  }
+  .button--link:last-of-type {
+    margin-right: 0;
   }
 
   .dim {
@@ -89,7 +88,7 @@
   @include font-sans;
   margin-top: var(--spacing-l);
   margin-bottom: var(--spacing-l);
-  width: 75%;
+  // width: 75%;
 
   .tag {
     margin-top: 0;
@@ -97,10 +96,17 @@
 }
 
 .post__date {
-  display: block;
-  margin-top: var(--spacing-s);
+  // display: block;
+  display: flex;
+  // margin-top: var(--spacing-s);
   font-size: var(--font-small);
   color: var(--color-help);
+
+  .date_time {
+    color: var(--color-text-subtitle);
+    margin-right: var(--spacing-m);
+    font-size: var(--font-small);
+  }
 }
 
 .file-render--document {

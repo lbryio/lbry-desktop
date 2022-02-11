@@ -74,7 +74,7 @@ const WalletPage = (props: Props) => {
   return (
     <>
       {/* @if TARGET='web' */}
-      <Page>
+      <Page className="transactionsPage-wrapper">
         <Tabs onChange={onTabChange} index={tabIndex}>
           <TabList className="tabs__list--collection-edit-page">
             <Tab>{__('Balance')}</Tab>

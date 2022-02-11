@@ -198,13 +198,12 @@ const Header = (props: Props) => {
                 <span style={{ position: 'relative' }}>
                   <Button
                     aria-label={sidebarLabel}
-                    className="header__navigationItem--icon"
+                    className="header__navigationItem--icon button-rotate"
                     icon={ICONS.MENU}
                     aria-expanded={sidebarOpen}
                     onClick={() => setSidebarOpen(!sidebarOpen)}
-                  >
-                    {isAbsoluteSideNavHidden && isMobile && <NotificationBubble />}
-                  </Button>
+                  />
+                  {isAbsoluteSideNavHidden && isMobile && <NotificationBubble />}
                 </span>
               )}
 

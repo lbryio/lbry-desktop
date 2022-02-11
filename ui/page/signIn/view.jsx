@@ -5,7 +5,7 @@ import Page from 'component/page';
 
 export default function SignInPage() {
   return (
-    <Page authPage>
+    <Page authPage noFooter>
       <UserSignIn />
     </Page>
   );

@@ -11,6 +11,7 @@
   @media (max-width: $breakpoint-small) {
     max-width: 100%;
     padding: var(--spacing-m);
+    padding-left: var(--spacing-s);
     align-items: flex-start;
   }
 }
@@ -29,6 +30,17 @@
 
   .footer__link {
     margin-left: 0;
+    margin-bottom: 0;
+    .button {
+      .button__label {
+        color: rgba(var(--color-text-base), 0.8);
+      }
+      &:hover {
+        .button__label {
+          color: rgba(var(--color-text-base), 1);
+        }
+      }
+    }
   }
 
   @media (min-width: $breakpoint-small) {

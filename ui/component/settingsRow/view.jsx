@@ -17,7 +17,7 @@ export default function SettingsRow(props: Props) {
     <div
       className={classnames('card__main-actions settings__row', {
         'section__actions--between': !multirow,
-        'opacity-40': disabled,
+        'opacity-30': disabled,
       })}
     >
       <div className="settings__row--title">

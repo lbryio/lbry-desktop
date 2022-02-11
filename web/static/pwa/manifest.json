@@ -1,8 +1,8 @@
 {
   "name": "Odysee",
   "short_name": "Odysee",
-  "theme_color": "#fa6164",
-  "background_color": "#FAFAFA",
+  "theme_color": "#de0050",
+  "background_color": "#202020",
   "display": "standalone",
   "description": "Explore a whole universe of videos on Odysee from regular people just like you!",
   "scope": "/",

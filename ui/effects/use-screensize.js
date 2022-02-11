@@ -58,3 +58,7 @@ export function useIsMediumScreen() {
 export function useIsLargeScreen() {
   return useHasWindowWidthChangedEnough((windowSize) => windowSize > 1600);
 }
+
+export function isTouch() {
+  return 'ontouchstart' in window || 'onmsgesturechange' in window;
+}

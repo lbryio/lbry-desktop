@@ -391,7 +391,6 @@ function ClaimMenuList(props: Props) {
                 {(!claimIsMine || channelIsBlocked) && contentChannelUri ? (
                   !incognitoClaim && (
                     <>
-                      <hr className="menu__separator" />
                       <MenuItem className="comment__menu-option" onSelect={handleToggleBlock}>
                         <div className="menu__link">
                           <Icon aria-hidden icon={ICONS.BLOCK} />

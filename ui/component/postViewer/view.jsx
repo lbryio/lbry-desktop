@@ -52,17 +52,16 @@ function PostViewer(props: Props) {
 
   return (
     <div className="post">
-      <FileTitle uri={uri} className="post__title">
-        <span className="post__date">
-          <DateTime uri={uri} type="date" />
-        </span>
-      </FileTitle>
-
+      <FileTitle uri={uri} className="post__title" />
       <div
         className={classnames('post__info', {
           'post__info--expanded': expand !== EXPAND.NONE,
         })}
       >
+        <span className="post__date">
+          <DateTime uri={uri} type="date" />
+          <FileViewCount uri={uri} />
+        </span>
         <div className="post__info--grouped">
           <Button
             button="link"
@@ -86,7 +85,6 @@ function PostViewer(props: Props) {
             />
           )}
         </div>
-        <FileViewCount uri={uri} />
       </div>
 
       {expand === EXPAND.CREDIT_DETAILS && (

@@ -2,15 +2,19 @@
   bottom: 2rem;
   right: 2rem;
   max-width: 20rem;
-  background-color: var(--color-snack-bg);
-  color: var(--color-snack);
-  border-radius: 0.5rem;
+  background-color: var(--color-primary);
+  color: var(--color-primary-contrast);
+  border-radius: var(--border-radius);
   padding: var(--spacing-s) var(--spacing-l) var(--spacing-s) var(--spacing-m);
   position: fixed;
   transition: all var(--transition-duration) var(--transition-type);
   z-index: 10000; // hack to get it over react modal
   display: flex;
   flex-direction: column;
+
+  .button__label {
+    color: var(--color-primary-contrast);
+  }
 }
 
 .snack-bar--upgrade {

@@ -7,6 +7,7 @@ import { useIsMobile, useIsMediumScreen } from 'effects/use-screensize';
 import classnames from 'classnames';
 import Header from 'component/header';
 import React from 'react';
+import Wallpaper from 'component/wallpaper';
 import SettingsSideNavigation from 'component/settingsSideNavigation';
 import SideNavigation from 'component/sideNavigation';
 import type { Node } from 'react';
@@ -66,6 +67,7 @@ function Page(props: Props) {
   const isMobile = useIsMobile();
   const [sidebarOpen, setSidebarOpen] = usePersistedState('sidebar', false);
 
+  const url = pathname.slice(1).replace(/:/g, '#');
   let isOnFilePage = false;
   try {
     const url = pathname.slice(1).replace(/:/g, '#');
@@ -85,6 +87,7 @@ function Page(props: Props) {
 
   return (
     <>
+      <Wallpaper uri={url} />
       {!noHeader && (
         <Header
           authHeader={authPage}
@@ -132,7 +135,7 @@ function Page(props: Props) {
               'main--file-page': filePage,
               'main--settings-page': settingsPage,
               'main--markdown': isMarkdown,
-              'main--theater-mode': isOnFilePage && videoTheaterMode && !livestream,
+              'main--theater-mode': isOnFilePage && videoTheaterMode && !livestream && !isMarkdown,
               'main--livestream': livestream && !chatDisabled,
               'main--popout-chat': isPopoutWindow,
             })}

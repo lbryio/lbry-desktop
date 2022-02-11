@@ -73,7 +73,7 @@ export default function SubscribeButton(props: Props) {
 
   if (isSubscribed && !permanentUrl && rawChannelName) {
     return (
-      <div className="button-group">
+      <div className="button-group button-group-subscribed">
         <Button
           ref={buttonRef}
           iconColor="red"
@@ -105,6 +105,7 @@ export default function SubscribeButton(props: Props) {
       <Button
         ref={buttonRef}
         iconColor="red"
+        className={isSubscribed ? 'button-following' : ''}
         largestLabel={isMobile && shrinkOnMobile ? '' : subscriptionLabel}
         icon={unfollowOverride ? ICONS.UNSUBSCRIBE : isSubscribed ? ICONS.SUBSCRIBED : ICONS.SUBSCRIBE}
         button={'alt'}
@@ -129,6 +130,7 @@ export default function SubscribeButton(props: Props) {
           <Button
             button="alt"
             icon={notificationsDisabled ? ICONS.BELL : ICONS.BELL_ON}
+            className={isSubscribed ? 'button-following' : ''}
             aria-label={notificationsDisabled ? __('Turn on notifications') : __('Turn off notifications')}
             onClick={() => {
               const newNotificationsDisabled = !notificationsDisabled;

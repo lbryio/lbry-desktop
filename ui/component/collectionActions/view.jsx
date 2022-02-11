@@ -177,7 +177,7 @@ function CollectionActions(props: Props) {
 
   if (isMobile) {
     return (
-      <div className="media__actions">
+      <div className="media__actions stretch">
         {lhsSection}
         {rhsSection}
         {infoButtons}

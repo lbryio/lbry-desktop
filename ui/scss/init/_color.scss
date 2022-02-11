@@ -7,7 +7,7 @@
   --color-secondary-alt: #d9eaff;
   --color-tertiary: #552470;
   --color-tertiary-alt: #f7e8ff;
-  --color-danger: #9b2023;
+  --color-danger: #da0004;
   --color-danger-alt: #fccdce;
   --color-warning: #fff58c;
   --color-cost: #ffd580;
@@ -33,9 +33,8 @@
 
   // Button
   --color-button-primary-bg: var(--color-primary);
-  --color-button-primary-text: var(--color-primary-alt);
+  --color-button-primary-text: var(--color-secondary);
   --color-button-primary-bg-hover: var(--color-primary-alt-2);
-  --color-button-primary-hover-text: var(--color-primary-alt);
   --color-button-secondary-bg: var(--color-secondary-alt);
   --color-button-secondary-border: var(--color-secondary-alt);
   --color-button-secondary-text: var(--color-secondary);

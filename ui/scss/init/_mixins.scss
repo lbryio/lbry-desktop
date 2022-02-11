@@ -154,13 +154,8 @@
   }
 }
 
-@mixin focus {
-  box-shadow: 0 0 0 3px var(--color-focus);
-}
-
 @mixin linkFocus {
   background-color: var(--color-link-focus-bg);
-  box-shadow: 0 0 0 5px var(--color-link-focus-bg);
 }
 
 @mixin underline($text-color: var(--lbry-black), $whitespace-color: var(--lbry-white)) {
@@ -186,7 +181,8 @@
 }
 
 @mixin placeholder {
-  // animation: pulse 2s infinite ease-in-out;
+  // Temporary fix for lags in Chromium based browsers
+  //animation: pulse 2s infinite ease-in-out;
   background-color: var(--color-placeholder-background);
   border-radius: var(--card-radius);
   border-width: 0;
@@ -230,7 +226,7 @@
 
   .ff-canvas,
   .freezeframe-img {
-    border-radius: var(--border-radius);
+    border-radius: 50%;
     height: $size !important;
     width: $size !important;
   }

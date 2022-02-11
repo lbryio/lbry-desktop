@@ -8,15 +8,75 @@ $contentMaxWidth: 60rem;
 
 .notification_list {
   .notification__wrapper {
-    border-top: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    margin-bottom: var(--spacing-xxs);
+    background-color: rgba(var(--color-header-background-base), 0.6);
 
     &:first-of-type {
       border-top: none;
     }
 
-    @media (min-width: $breakpoint-small) {
-      &:hover {
-        background-color: var(--color-card-background-highlighted);
+    .notification__menu {
+      margin-right: var(--spacing-s);
+      .icon {
+        stroke: var(--color-text);
+      }
+
+      [aria-expanded='true'].menu__button {
+        opacity: 1;
+        background-color: var(--color-header-background);
+        border-radius: var(--border-radius);
+        .icon {
+          stroke: var(--color-primary);
+        }
+      }
+    }
+
+    .commentCreate {
+      border-top: 1px solid var(--color-border);
+      padding-top: var(--spacing-s);
+
+      .commentCreate__label {
+        color: var(--color-text);
+      }
+      textarea,
+      select,
+      .button:not(.button--file-action) {
+        background-color: var(--color-background);
+      }
+      .button {
+        border-radius: var(--border-radius);
+      }
+      .comment__char-count-mde {
+        padding-right: 0px;
+      }
+
+      .button--file-action {
+        .button__content {
+          .icon {
+            background: var(--color-header-button);
+          }
+        }
+      }
+    }
+
+    &:hover {
+      cursor: pointer;
+      background-color: rgba(var(--color-header-background-base), 0.9);
+      .menu__button {
+        opacity: 1;
+      }
+      .notification__text {
+        color: var(--color-primary);
+      }
+    }
+
+    @media (max-width: $breakpoint-small) {
+      .notification__menu {
+        margin-right: calc(var(--spacing-xs) * -1);
+        .menu__button {
+          opacity: 1;
+        }
       }
     }
   }
@@ -66,6 +126,20 @@ $contentMaxWidth: 60rem;
     @include handleChannelGif(3rem);
   }
 
+  .date_time {
+    font-size: var(--font-small);
+  }
+
+  .icon__wrapper {
+    background-color: rgba(var(--color-primary-dynamic), 0.1);
+  }
+
+  &:hover {
+    .icon__wrapper {
+      background-color: rgba(var(--color-primary-dynamic), 0.2);
+    }
+  }
+
   @media (max-width: $breakpoint-small) {
     .channel-thumbnail {
       @include handleChannelGif(2rem);
@@ -88,15 +162,15 @@ $contentMaxWidth: 60rem;
 }
 
 .notification__wrapper--unread {
-  background-color: var(--color-card-background-highlighted);
+  box-shadow: 2px 0px 0px 0px rgba(var(--color-primary-dynamic), 0.7) inset;
   justify-content: space-between;
-
-  &:hover {
-    background-color: var(--color-button-secondary-bg);
-  }
 
   @media (max-width: $breakpoint-small) {
     padding: var(--spacing-s);
+  }
+
+  &:hover {
+    box-shadow: 2px 0px 0px 0px rgba(var(--color-primary-dynamic), 1) inset;
   }
 }
 
@@ -185,7 +259,7 @@ $contentMaxWidth: 60rem;
 
 .notification__time {
   font-size: var(--font-small);
-  color: var(--color-text-help);
+  color: var(--color-text);
   flex-shrink: 0;
   margin-top: var(--spacing-s);
 
@@ -218,20 +292,28 @@ $contentMaxWidth: 60rem;
 }
 
 .notification__bubble {
-  height: 1.5rem;
-  width: 1.5rem;
+  height: 1.4rem;
+  width: 1.4rem;
   border-radius: 50%;
   background-color: var(--color-notification);
   position: absolute;
-  top: -0.5rem;
-  right: -0.5rem;
+  top: -0.4rem;
+  right: -0.4rem;
   color: white;
   font-size: var(--font-small);
   font-weight: bold;
-  line-height: 1;
+  line-height: 1.4rem;
   display: flex;
   align-items: center;
   justify-content: center;
+
+  .notification__count {
+    margin-bottom: -2px;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    right: 0rem;
+  }
 }
 
 .notification__bubble--small {

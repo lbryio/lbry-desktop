@@ -7,7 +7,7 @@ import Icon from 'component/common/icon';
 
 function ListsPage() {
   return (
-    <Page>
+    <Page className="playlistPage-wrapper">
       <label className="claim-list__header-label">
         <span>
           <Icon icon={ICONS.STACK} size={10} />

@@ -315,6 +315,7 @@ function RepostCreate(props: Props) {
       <ChannelSelector />
 
       <Card
+        className="repost-wrapper"
         actions={
           <div>
             {uri && (

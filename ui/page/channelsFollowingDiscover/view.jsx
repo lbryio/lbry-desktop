@@ -98,7 +98,7 @@ function ChannelsFollowingDiscover(props: Props) {
   });
 
   return (
-    <Page>
+    <Page className="discoverPage-wrapper">
       {!SIMPLE_SITE &&
         rowDataWithGenericOptions.map(({ title, link, help, options = {} }) => (
           <div key={title} className="claim-grid__wrapper">

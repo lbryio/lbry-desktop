@@ -155,7 +155,7 @@ export default function LivestreamPage(props: Props) {
 
   return (
     <Page
-      className="file-page"
+      className="file-page scheduledLivestream-wrapper"
       noFooter
       livestream
       chatDisabled={hideComments}

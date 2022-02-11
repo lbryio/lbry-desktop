@@ -392,8 +392,29 @@ export const selectThumbnailForUri = createCachedSelector(selectClaimForUri, (cl
 
 export const makeSelectCoverForUri = (uri: string) =>
   createSelector(makeSelectClaimForUri(uri), (claim) => {
-    const cover = claim && claim.value && claim.value.cover;
-    return cover && cover.url ? cover.url.trim().replace(/^http:\/\//i, 'https://') : undefined;
+    if (claim && claim.value.cover) {
+      const cover = claim && claim.value && claim.value.cover;
+      return cover && cover.url ? cover.url.trim().replace(/^http:\/\//i, 'https://') : undefined;
+    } else {
+      const cover = claim && claim.signing_channel && claim.signing_channel.value && claim.signing_channel.value.cover;
+      return cover && cover.url ? cover.url.trim().replace(/^http:\/\//i, 'https://') : undefined;
+    }
+  });
+
+export const makeSelectAvatarForUri = (uri: string) =>
+  createSelector(makeSelectClaimForUri(uri), (claim) => {
+    if (claim && claim.value.cover) {
+      const avatar = claim && claim.value && claim.value.thumbnail && claim.value.thumbnail;
+      return avatar && avatar.url ? avatar.url.trim().replace(/^http:\/\//i, 'https://') : undefined;
+    } else {
+      const avatar =
+        claim &&
+        claim.signing_channel &&
+        claim.signing_channel.value &&
+        claim.signing_channel.value.thumbnail &&
+        claim.signing_channel.value.thumbnail;
+      return avatar && avatar.url ? avatar.url.trim().replace(/^http:\/\//i, 'https://') : false;
+    }
   });
 
 export const selectIsFetchingClaimListMine = (state: State) => selectState(state).isFetchingClaimListMine;

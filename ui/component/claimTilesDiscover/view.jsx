@@ -81,6 +81,7 @@ function ClaimTilesDiscover(props: Props) {
   const shouldPerformSearch = !fetchingClaimSearch && claimSearchUris.length === 0;
 
   const uris = (prefixUris || []).concat(claimSearchUris);
+  if (prefixUris && prefixUris.length) uris.splice(prefixUris.length * -1, prefixUris.length);
 
   if (pinUrls && uris && uris.length > 2 && window.location.pathname === '/') {
     pinUrls.forEach((pin) => {

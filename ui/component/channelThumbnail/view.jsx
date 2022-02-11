@@ -22,6 +22,7 @@ type Props = {
   isResolving: boolean,
   noLazyLoad?: boolean,
   hideStakedIndicator?: boolean,
+  hideTooltip?: boolean,
   noOptimization?: boolean,
   setThumbUploadError: (boolean) => void,
   ThumbUploadError: boolean,
@@ -42,6 +43,7 @@ function ChannelThumbnail(props: Props) {
     isResolving,
     noLazyLoad,
     hideStakedIndicator = false,
+    hideTooltip,
     setThumbUploadError,
     ThumbUploadError,
   } = props;
@@ -74,7 +76,7 @@ function ChannelThumbnail(props: Props) {
   if (isGif && !allowGifs) {
     return (
       <FreezeframeWrapper src={channelThumbnail} className={classnames('channel-thumbnail', className)}>
-        {!hideStakedIndicator && <ChannelStakedIndicator uri={uri} claim={claim} />}
+        {!hideStakedIndicator && <ChannelStakedIndicator uri={uri} claim={claim} hideTooltip={hideTooltip} />}
       </FreezeframeWrapper>
     );
   }
@@ -101,7 +103,7 @@ function ChannelThumbnail(props: Props) {
           }
         }}
       />
-      {!hideStakedIndicator && <ChannelStakedIndicator uri={uri} claim={claim} />}
+      {!hideStakedIndicator && <ChannelStakedIndicator uri={uri} claim={claim} hideTooltip={hideTooltip} />}
     </div>
   );
 }

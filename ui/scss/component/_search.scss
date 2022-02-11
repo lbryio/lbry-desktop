@@ -2,6 +2,9 @@
   width: 100%;
   margin-bottom: var(--spacing-l);
 
+  .card {
+    color: var(--color-text);
+  }
   .placeholder {
     background-color: var(--color-placeholder-background);
   }
@@ -128,6 +131,7 @@
 }
 
 .recommended-content__toggles {
+  margin-top: var(--spacing-xs);
   display: flex;
 
   button {
@@ -136,8 +140,11 @@
     max-width: 15rem;
   }
 
-  @media (min-width: $breakpoint-small) {
-    margin-right: var(--spacing-xs);
+  .button-toggle:nth-child(2) {
+    // margin-left: 2px;
+    @media (min-width: $breakpoint-small) {
+      margin-right: var(--spacing-xs);
+    }
   }
 }
 
@@ -161,19 +168,68 @@
   top: 100%;
   left: 0;
   right: 0;
-  background: #21252980;
-  color: white;
+  // background: #21252980;
+  background: rgba(var(--color-header-background-base), 0.9);
+  color: var(--color-text);
 
   .claim-preview__title {
-    color: #eff1f4;
+    color: var(--color-text);
   }
 
   .button--uri-indicator,
   .media__subtitle {
-    color: #d8dde1;
+    color: rgba(var(--color-text-base), 0.6);
   }
 
   .icon--help {
     vertical-align: middle;
+  }
+}
+
+.searchPage-wrapper {
+  .search__header {
+    .claim-preview__wrapper--channel {
+      .claim-preview__repost-author {
+        top: calc(var(--spacing-m) * -1);
+        left: calc(var(--spacing-m) * -1);
+      }
+    }
+  }
+
+  .claim-preview__wrapper {
+    background-color: rgba(var(--color-header-background-base), 0.6);
+    .claim-tile__info {
+      margin-top: 0;
+      padding-bottom: var(--spacing-xxxs);
+      .claim-preview-metadata-sub-upload {
+        margin-top: 3px;
+      }
+    }
+  }
+
+  .claim-preview__wrapper--channel {
+    position: relative;
+    border-radius: var(--border-radius);
+    background: rgba(var(--color-header-background-base), 0.6);
+    padding: var(--spacing-m) !important;
+
+    .claim__menu-button {
+      right: calc(var(--spacing-m) - 8px) !important;
+      margin-top: var(--spacing-xxs);
+
+      .icon {
+        stroke: var(--color-text);
+      }
+
+      &:hover {
+        .icon {
+          stroke: var(--color-primary);
+        }
+      }
+    }
+  }
+
+  .help {
+    color: var(--color-text);
   }
 }

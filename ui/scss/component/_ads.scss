@@ -18,15 +18,16 @@
 // Inline Video Ads
 .ads__claim-item {
   border-bottom: 1px solid var(--color-border);
+  margin-top: var(--spacing-m);
   padding: var(--spacing-m);
   background-color: var(--color-ads-background);
-  //display: flex;
+  border-radius: var(--border-radius);
   flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
 
   .ad__container {
-    width: 358px;
+    width: 314px;
     height: 201px;
   }
 

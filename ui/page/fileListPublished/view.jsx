@@ -117,7 +117,7 @@ function FileListPublished(props: Props) {
                   )}
                   <Button
                     icon={ICONS.PUBLISH}
-                    button="secondary"
+                    button="primary"
                     label={__('Upload')}
                     navigate={`/$/${PAGES.UPLOAD}`}
                     onClick={() => clearPublish()}

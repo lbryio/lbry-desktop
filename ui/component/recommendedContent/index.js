@@ -10,7 +10,7 @@ const select = (state, props) => {
   const { claim_id: claimId } = claim;
   const recommendedContentUris = selectRecommendedContentForUri(state, props.uri);
   const nextRecommendedUri = recommendedContentUris && recommendedContentUris[0];
-  const metadata =  makeSelectMetadataForUri(props.uri)(state);
+  const metadata = makeSelectMetadataForUri(props.uri)(state);
 
   return {
     claim,

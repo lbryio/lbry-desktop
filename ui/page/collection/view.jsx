@@ -221,7 +221,8 @@ export default function CollectionPage(props: Props) {
 
   if (urlsReady) {
     return (
-      <Page>
+      <Page className="playlistPage-wrapper">
+        {editing}
         <div className={classnames('section card-stack')}>
           {info}
 

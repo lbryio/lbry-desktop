@@ -4,12 +4,13 @@
 .media__thumb {
   @include thumbnail;
   position: relative;
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius-thumbnail);
   object-fit: cover;
   background-color: var(--color-placeholder-background);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  box-shadow: 0px 0px 0px 1px rgba(var(--color-primary-dynamic), 0.3) inset;
 }
 
 //  M E D I A
@@ -46,6 +47,11 @@
   align-self: auto;
   align-items: center;
   display: flex;
+
+  .media__subtitle--centered::before {
+    content: '•';
+    margin-right: var(--spacing-s);
+  }
 }
 
 .media__subtitle--between {
@@ -70,9 +76,24 @@
 
   &.media__info-text--constrained {
     max-width: 50rem;
+    font-size: var(--font-small);
   }
 }
 
+.media__info-text--contracted {
+  margin-top: var(--spacing-m);
+  max-height: 5rem;
+  overflow: hidden;
+  font-size: var(--font-small);
+}
+
+.media__info-text--expanded {
+  margin-top: var(--spacing-m);
+  max-height: auto;
+  font-size: var(--font-small);
+}
+
+.media__info-text--contracted,
 .media__info-text--expanded {
   margin-top: var(--spacing-m);
   max-width: 50rem;
@@ -99,6 +120,7 @@
 }
 
 .media__info-text--fade {
+  // -webkit-mask-image: -webkit-gradient(linear, left 30%, left bottom, from(rgba(0, 0, 0, 1)), to(rgba(0, 0, 0, 0)));
   overflow-wrap: anywhere;
 
   // both needed for compatibility
@@ -122,47 +144,171 @@
   @include font-sans;
   position: relative;
   display: flex;
-  flex-wrap: wrap;
+  // flex-wrap: wrap;
   margin-top: 0;
 
   > *:not(:last-child) {
     margin-right: var(--spacing-m);
   }
 
+  .button--file-action {
+    background-color: unset;
+  }
+
+  .button {
+    &:hover {
+      color: var(--color-link);
+
+      .icon {
+        stroke: var(--color-link);
+      }
+    }
+  }
+
+  .button-like {
+    &:hover {
+      .button__label {
+        color: var(--color-fire) !important;
+      }
+      svg {
+        stroke: var(--color-fire);
+      }
+    }
+  }
+
+  .button-dislike {
+    &:hover {
+      .button__label {
+        color: var(--color-slime) !important;
+      }
+      svg {
+        stroke: var(--color-slime);
+      }
+    }
+  }
+
+  .ratio-wrapper {
+    position: relative;
+    width: 100%;
+    margin-right: var(--spacing-m);
+
+    .ratio-bar {
+      position: absolute;
+      display: flex;
+      left: 0px;
+      bottom: -2px;
+      width: 100%;
+      height: 3px;
+      background-color: var(--color-text);
+      z-index: 2;
+      border-radius: 2px;
+      overflow: hidden;
+
+      .ratio-bar-like {
+        height: 100%;
+        background-color: var(--color-fire);
+      }
+
+      .ratio-bar-dislike {
+        height: 100%;
+        background-color: var(--color-slime);
+      }
+    }
+
+    .button-dislike {
+      margin-right: 0px;
+      float: right;
+    }
+
+    @media (max-width: $breakpoint-small) {
+      margin-right: 0px;
+      .ratio-bar {
+        height: 1px;
+        bottom: -1px;
+      }
+    }
+  }
+
   @media (max-width: $breakpoint-small) {
+    flex-wrap: wrap;
     justify-content: space-around !important;
     margin: 0;
     padding: 0;
 
-    div {
-      margin: 0 !important;
+    > * {
+      margin-right: var(--spacing-s);
+      margin-bottom: var(--spacing-s);
     }
 
     .button--file-action {
-      margin: 0 !important;
-      padding: var(--spacing-xxs);
-      width: 3.1rem;
-      height: 3.5rem;
+      padding: 0 !important;
 
       .button__content {
-        flex-direction: column;
         justify-content: space-between;
 
         .button__label {
           margin: 0;
-          margin-top: var(--spacing-xxs);
-          font-size: var(--font-xxsmall);
+          margin-top: 2px;
+          margin-left: var(--spacing-xxxs);
+          font-size: var(--font-small);
         }
       }
     }
 
     .button--file-action--menu {
       width: unset;
-      height: 2rem;
+      // height: 2rem;
     }
 
     .icon--Plus {
       top: -2px;
+    }
+
+    .button--file-action:last-child {
+      margin-right: 0;
+    }
+
+    .button--file-action {
+      display: flex;
+      background-color: rgba(var(--color-header-background-base), 1);
+      margin-right: var(--spacing-xxxs);
+      justify-content: center;
+      align-items: center;
+
+      margin-bottom: var(--spacing-xxs);
+      .button__label {
+        margin-left: var(--spacing-xxxs);
+      }
+    }
+
+    .ratio-wrapper {
+      .button {
+        display: inline-block;
+        background-color: unset;
+        margin-bottom: 0;
+      }
+    }
+    .ratio-wrapper ~ .button--file-action {
+      flex: auto;
+    }
+
+    &.stretch {
+      margin-top: var(--spacing-xxxs);
+      .button {
+        flex: auto;
+        background-color: var(--color-header-background);
+        margin-right: var(--spacing-xxs);
+        .button__content {
+          justify-content: center;
+        }
+      }
+      .section {
+        margin-right: unset;
+        margin-left: var(--spacing-xxs);
+        .button {
+          margin-right: 0;
+        }
+      }
     }
   }
 }
@@ -173,6 +319,7 @@
   display: flex;
   flex-direction: column;
   margin-bottom: var(--spacing-s);
+  color: var(--color-text);
 
   &:not(:last-child) {
     margin-bottom: var(--spacing-s);

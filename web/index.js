@@ -29,9 +29,11 @@ app.use(redirectMiddleware);
 app.use(iframeDestroyerMiddleware);
 
 // Check if the request url matches any assets inside of /dist
-app.use(serve(DIST_ROOT, {
-  maxage: 3600000, // set a cache time of one hour, helpful for mobile dev
-}));
+app.use(
+  serve(DIST_ROOT, {
+    maxage: 3600000, // set a cache time of one hour, helpful for mobile dev
+  })
+);
 
 app.use(router.routes());
 app.listen(config.WEB_SERVER_PORT, () => `Server up at localhost:${config.WEB_SERVER_PORT}`);

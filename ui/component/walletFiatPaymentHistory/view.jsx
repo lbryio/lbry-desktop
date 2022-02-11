@@ -51,11 +51,11 @@ const WalletBalance = (props: Props) => {
             <thead>
               <tr>
                 <th className="date-header">{__('Date')}</th>
-                <th>{<>{__('Receiving Channel Name')}</>}</th>
-                <th>{__('Tip Location')}</th>
-                <th>{__('Amount (USD)')} </th>
-                <th>{__('Card Last 4')}</th>
-                <th>{__('Anonymous')}</th>
+                <th className="channelName-header">{<>{__('Receiving Channel Name')}</>}</th>
+                <th className="location-header">{__('Tip Location')}</th>
+                <th className="amount-header">{__('Amount (USD)')} </th>
+                <th className="card-header">{__('Card Last 4')}</th>
+                <th className="anonymous-header">{__('Anonymous')}</th>
               </tr>
             </thead>
             {/* list data for transactions */}

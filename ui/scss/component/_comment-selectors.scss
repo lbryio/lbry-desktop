@@ -91,6 +91,9 @@ $sticker-item-size: 5rem;
         position: absolute;
         display: inline;
         bottom: 0;
+        .credit-amount {
+          color: var(--color-primary-contrast) !important;
+        }
       }
     }
 
@@ -104,9 +107,12 @@ $sticker-item-size: 5rem;
   font-size: var(--font-small);
   padding-left: var(--spacing-xxs);
   width: 100%;
+  text-align: center;
   position: sticky;
   top: 0px;
   background-color: var(--color-tabs-background);
+  border-radius: var(--border-radius);
+  font-weight: 900;
   z-index: 1;
 
   @media (min-width: $breakpoint-small) {

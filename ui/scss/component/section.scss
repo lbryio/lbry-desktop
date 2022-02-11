@@ -33,7 +33,7 @@
 
 .section--help {
   border-radius: var(--border-radius);
-  background-color: var(--color-primary-alt);
+  background-color: var(--color-secondary);
 }
 
 .section__header {
@@ -41,11 +41,36 @@
 }
 
 .section__header--actions {
+  padding-top: var(--spacing-m);
+  margin-top: var(--spacing-m);
   margin-bottom: var(--spacing-m);
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   flex-wrap: wrap;
+
+  .button--secondary {
+    background-color: var(--color-secondary);
+
+    .button__label {
+      color: var(--color-menu-icon-active);
+    }
+
+    .icon {
+      stroke: var(--color-menu-icon-active);
+    }
+  }
+
+  .section__actions--no-margin {
+    .help {
+      color: var(--color-text);
+    }
+  }
+
+  @media (max-width: $breakpoint-small) {
+    padding-top: 0;
+    margin-bottom: var(--spacing-s);
+  }
 }
 
 .section__header-action-stack {
@@ -130,7 +155,7 @@
   position: relative;
   display: flex;
   align-items: center;
-  margin-top: var(--spacing-m);
+  margin-top: var(--spacing-s);
 
   ~ .section {
     margin-top: var(--spacing-m);
@@ -153,13 +178,8 @@
     }
   }
 
-  .button--primary,
-  .button ~ .button--link {
-    @media (min-width: $breakpoint-small) {
-      &:focus {
-        @include focus;
-      }
-    }
+  [aria-expanded='true'].button--file-action:last-of-type {
+    background-color: var(--color-header-background);
   }
 
   .button--primary ~ .button--link,
@@ -219,6 +239,32 @@
 .section__actions--no-margin {
   @extend .section__actions;
   margin-top: 0;
+
+  @media (max-width: $breakpoint-small) {
+    width: 100%;
+    display: unset;
+    text-align: right;
+    .button--link {
+      margin-bottom: 0;
+    }
+    .wunderbar--inline {
+      width: 100%;
+      flex: unset;
+      fieldset-section {
+        width: 100%;
+        .wunderbar__input--inline {
+          width: 100%;
+          &:focus-visible {
+            outline: unset !important;
+            box-shadow: 0 0 0 2px var(--color-primary) inset;
+          }
+        }
+      }
+    }
+    .button--secondary {
+      width: 100%;
+    }
+  }
 }
 
 .section__checkbox {
@@ -243,7 +289,8 @@
 
 .card__main-actions.settings__row {
   @media (max-width: $breakpoint-small) {
-    padding: var(--spacing-s);
+    //padding: var(--spacing-s);
+    padding: 0;
     margin-top: 0;
     margin-bottom: 0;
   }
@@ -289,8 +336,8 @@
 
   @media (min-width: $breakpoint-medium) {
     width: 40%;
-    margin-left: var(--spacing-m);
-    padding-left: var(--spacing-m);
+    //margin-left: var(--spacing-m);
+    //padding-left: var(--spacing-m);
 
     .button,
     .checkbox {
@@ -313,6 +360,9 @@
     input {
       align-self: flex-start;
     }
+  }
+  @media (max-width: $breakpoint-small) {
+    margin-top: var(--spacing-m);
   }
 }
 

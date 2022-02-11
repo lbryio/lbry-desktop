@@ -73,7 +73,7 @@ export default function Card(props: Props) {
             <div
               className={classnames('card__title-section', {
                 'card__title-section--body-list': isBodyList,
-                'card__title-section--small': smallTitle,
+                'card__title-section--smallx': smallTitle,
               })}
             >
               {icon && <Icon sectionIcon icon={icon} />}

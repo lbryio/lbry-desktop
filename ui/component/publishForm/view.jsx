@@ -583,7 +583,7 @@ function PublishForm(props: Props) {
 
   // Editing claim uri
   return (
-    <div className="card-stack">
+    <div className="card-stack uploadPage-wraper">
       <ChannelSelect hideAnon={isLivestreamMode} disabled={disabled} />
 
       <PublishFile
@@ -633,6 +633,7 @@ function PublishForm(props: Props) {
 
           <Card actions={<SelectThumbnail livestreamdData={livestreamData} />} />
 
+          <label>{__('Tags')}</label>
           <TagsSelect
             suggestMature={!SIMPLE_SITE}
             disableAutoFocus

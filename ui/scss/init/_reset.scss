@@ -158,19 +158,25 @@ select {
   outline: none;
 }
 
+textarea {
+  width: 100%;
+  // min-height: var(--spacing-xxl);
+  padding: var(--spacing-s);
+  &:not([disabled]) {
+    resize: vertical;
+  }
+}
+
 @media (min-width: $breakpoint-small) {
   textarea {
     width: 100%;
     min-height: var(--spacing-xxl);
     padding: var(--spacing-s);
     // border-color should be added in apps for blur/focus
-    border: 1px solid;
-
-    &:not([disabled]) {
-      resize: vertical;
-    }
+    // border: 1px solid;
   }
 }
+
 @media print {
   // sass-lint:disable-block no-important
   // Intelligent print styles

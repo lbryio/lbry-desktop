@@ -7,7 +7,7 @@ function getSetAllValues(key, setValue) {
     // If no key just return the normal setValue function
     return setValue;
   }
-  return value => listeners[key].forEach(fn => fn(value));
+  return (value) => listeners[key].forEach((fn) => fn(value));
 }
 
 export default function usePersistedState(key, firstTimeDefault) {
@@ -58,7 +58,7 @@ export default function usePersistedState(key, firstTimeDefault) {
     return () => {
       if (key) {
         // remove hook on unmount
-        listeners[key] = listeners[key].filter(listener => listener !== setValue);
+        listeners[key] = listeners[key].filter((listener) => listener !== setValue);
       }
     };
   }, [key, value, localStorageAvailable]);

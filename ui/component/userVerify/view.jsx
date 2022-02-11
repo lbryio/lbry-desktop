@@ -151,7 +151,13 @@ class UserVerify extends React.PureComponent<Props> {
                 <p>{__('You will be asked to provide proof of identity.')}</p>
               </>
             }
-            actions={<Button href="https://verification.odysee.com" button="primary" label={__('Join the Odysee Rewards Discord')} />}
+            actions={
+              <Button
+                href="https://verification.odysee.com"
+                button="primary"
+                label={__('Join the Odysee Rewards Discord')}
+              />
+            }
           />
 
           <div className="section__divider">

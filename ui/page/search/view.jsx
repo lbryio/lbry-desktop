@@ -82,7 +82,7 @@ export default function SearchPage(props: Props) {
   }
 
   return (
-    <Page>
+    <Page className="searchPage-wrapper">
       <section className="search">
         {urlQuery && (
           <>
