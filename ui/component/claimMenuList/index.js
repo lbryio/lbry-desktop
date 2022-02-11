@@ -76,7 +76,7 @@ const select = (state, props) => {
 };
 
 const perform = (dispatch) => ({
-  prepareEdit: (publishData, uri, fileInfo) => doEditForChannel(publishData, uri, fileInfo, fs),
+  prepareEdit: (publishData, uri, fileInfo) => dispatch(doEditForChannel(publishData, uri, fileInfo, fs)),
   doToast: (props) => dispatch(doToast(props)),
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
   doChannelMute: (channelUri) => dispatch(doChannelMute(channelUri)),
