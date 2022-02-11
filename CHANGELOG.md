@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased for Desktop]
 
-## [0.52.2-alpha.5] - [2021-12-31]
+## [0.52.2] - [2022-02-11]
 
 ### Added
 
@@ -22,7 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Performance improvements in some selectors ([#7370](https://github.com/lbryio/lbry-desktop/pull/7370))
 - More Header refactoring from _odysee team!_ ([#7441](https://github.com/lbryio/lbry-desktop/pull/7441))
 - Header refactoring from _odysee team!_ ([#7440](https://github.com/lbryio/lbry-desktop/pull/7440))
-- Clearer data hosting ui _incomplete_ ([#7438](https://github.com/lbryio/lbry-desktop/pull/7438))
+- Data hosting ui _incomplete_ ([#7438](https://github.com/lbryio/lbry-desktop/pull/7438))
 - Updated c: control tags from _odysee team!_ ([#7433](https://github.com/lbryio/lbry-desktop/pull/7433))
 - Nav keycodes (alt+left) no longer navigate while textarea is focused ([#7458](https://github.com/lbryio/lbry-desktop/pull/7458))
 - Improved comment-server selection ui/ux ([#7455](https://github.com/lbryio/lbry-desktop/pull/7455))
@@ -31,6 +31,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 
 - Several fallout bugs from recent changes
+
+## [0.52.1]
+
+### Skipped patch version
 
 ## [0.52.0] - [2021-12-31]
 
