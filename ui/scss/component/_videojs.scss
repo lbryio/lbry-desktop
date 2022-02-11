@@ -254,38 +254,42 @@ button.vjs-big-play-button {
 .vjs-play-control {
   order: 1 !important;
 }
-.vjs-volume-panel {
+.vjs-button--play-previous {
   order: 2 !important;
 }
-.vjs-current-time {
+.vjs-button--play-next {
   order: 3 !important;
 }
-.vjs-time-divider {
+.vjs-volume-panel {
   order: 4 !important;
 }
-.vjs-duration {
+.vjs-current-time {
   order: 5 !important;
 }
-
-.vjs-custom-control-spacer {
+.vjs-time-divider {
   order: 6 !important;
 }
-
-.vjs-button--autoplay-next {
+.vjs-duration {
   order: 7 !important;
 }
-.vjs-playback-rate {
+.vjs-custom-control-spacer {
   order: 8 !important;
 }
-.vjs-chromecast-button {
+.vjs-button--autoplay-next {
   order: 9 !important;
 }
-.vjs-quality-selector {
+.vjs-playback-rate {
   order: 10 !important;
 }
-.vjs-button--theater-mode {
+.vjs-chromecast-button {
   order: 11 !important;
 }
-.vjs-fullscreen-control {
+.vjs-quality-selector {
   order: 12 !important;
+}
+.vjs-button--theater-mode {
+  order: 13 !important;
+}
+.vjs-fullscreen-control {
+  order: 14 !important;
 }
