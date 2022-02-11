@@ -290,6 +290,13 @@
   margin-right: var(--spacing-m);
   padding: 0 var(--spacing-xxs);
 
+  &.button--file-action-active {
+    .icon {
+      fill: var(--color-primary-alt);
+      stroke: var(--color-primary) !important; //fixme
+      color: var(--color-primary);
+    }
+  }
   .icon {
     &:not(.color-override) {
       stroke: var(--color-text-subtitle);
