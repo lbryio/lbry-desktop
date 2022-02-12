@@ -130,7 +130,7 @@ function Page(props: Props) {
           <main
             id={'main-content'}
             className={classnames(MAIN_CLASS, className, {
-              'main--full-width': fullWidthPage,
+              'main--full-width hide-ribbon': fullWidthPage,
               'main--auth-page': authPage,
               'main--file-page': filePage,
               'main--settings-page': settingsPage,

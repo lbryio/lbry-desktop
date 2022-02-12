@@ -601,6 +601,9 @@ img {
       fill: var(--color-header-background);
     }
   }
+  .show-ribbon {
+    background-color: #ff0000 !important;
+  }
 }
 
 // The following wrapper classes are temporary to fix page specific issues
@@ -948,6 +951,16 @@ img {
 }
 .icon--ExternalLink {
   margin-top: -5px;
+}
+.hide-ribbon {
+  .claim-tile__repost-author {
+    display: none;
+  }
+}
+.show-ribbon {
+  .claim-tile__repost-author {
+    display: block;
+  }
 }
 
 // Fix Lightbox (Image viewer) modal backdrop bug

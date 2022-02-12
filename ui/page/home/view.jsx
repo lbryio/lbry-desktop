@@ -15,6 +15,7 @@ import { GetLinksData } from 'util/buildHomepage';
 import { getLivestreamUris } from 'util/livestream';
 import ScheduledStreams from 'component/scheduledStreams';
 import { splitBySeparator } from 'util/lbryURI';
+import classnames from 'classnames';
 
 // @if TARGET='web'
 import Meme from 'web/component/meme';
@@ -102,7 +103,12 @@ function HomePage(props: Props) {
     );
 
     return (
-      <div key={title} className="claim-grid__wrapper">
+      <div
+        key={title}
+        className={classnames('claim-grid__wrapper', {
+          'show-ribbon': index === 0,
+        })}
+      >
         {/* category header */}
         {index !== 0 && title && typeof title === 'string' && (
           <SectionHeader title={__(title)} navigate={route || link} icon={icon} help={help} />
