@@ -74,8 +74,10 @@ $thumbnailWidthSmall: 1rem;
       @include handleChannelGif($thumbnailWidth);
     }
 
-    .channel-staked__indicator {
-      @media (max-width: $breakpoint-small) {
+    @media (max-width: $breakpoint-small) {
+      width: 2rem;
+      height: 2rem;
+      .channel-staked__indicator {
         margin-left: 0.1rem;
       }
     }
