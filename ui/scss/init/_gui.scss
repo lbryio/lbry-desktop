@@ -763,6 +763,12 @@ img {
         color: var(--color-text);
         background-color: var(--color-header-button);
       }
+      .button-group {
+        .button--alt {
+          color: var(--color-primary-contrast);
+          background-color: var(--color-primary);
+        }
+      }
     }
   }
 }
