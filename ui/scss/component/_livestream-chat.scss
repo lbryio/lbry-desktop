@@ -485,7 +485,11 @@ $recent-msg-button__height: 2rem;
   z-index: 9999999;
   width: 100%;
   background-color: transparent;
-  padding: 0px;
+  padding: 0px !important;
+  margin-top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  border-right: unset;
   border-bottom: none;
   scrollbar-width: 0px;
 
