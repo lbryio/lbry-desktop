@@ -767,6 +767,9 @@ img {
         .button--alt {
           color: var(--color-primary-contrast);
           background-color: var(--color-primary);
+          .icon {
+            stroke: var(--color-primary-contrast);
+          }
         }
       }
     }
