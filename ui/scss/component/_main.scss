@@ -854,13 +854,15 @@ body {
     }
   }
   .markdown-preview {
-    p {
-      .button__content {
-        .channel-name {
-          font-size: var(--font-large);
-          color: var(--color-primary);
-          @media (max-width: $breakpoint-small) {
-            font-size: var(--font-base);
+    .file-page__md {
+      p {
+        .button__content {
+          .channel-name {
+            font-size: var(--font-large);
+            color: var(--color-primary);
+            @media (max-width: $breakpoint-small) {
+              font-size: var(--font-base);
+            }
           }
         }
       }
