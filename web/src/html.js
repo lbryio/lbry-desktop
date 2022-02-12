@@ -304,14 +304,14 @@ async function getHtml(ctx) {
     html = fs.readFileSync(path.join(__dirname, '/../dist/index.html'), 'utf8');
   }
 
-  if (ctx?.request?.url) {
-    ctx.request.url = encodeURIComponent(escapeHtmlProperty(decodeURIComponent(ctx.request.url)));
-  }
-
   const requestPath = unscapeHtmlProperty(decodeURIComponent(ctx.path));
   if (requestPath.length === 0) {
     const ogMetadata = buildBasicOgMetadata();
     return insertToHead(html, ogMetadata);
+  }
+
+  if (ctx?.request?.url) {
+    ctx.request.url = encodeURIComponent(escapeHtmlProperty(decodeURIComponent(ctx.request.url)));
   }
 
   const invitePath = `/$/${PAGES.INVITE}/`;
