@@ -777,7 +777,7 @@ $control-bar-icon-size: 0.8rem;
   }
 
   @media (max-width: $breakpoint-small) {
-    display: hidden;
+    display: none !important;
   }
 }
 
