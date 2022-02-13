@@ -218,11 +218,12 @@ const getFormattedDescription = (claim) => replaceLineFeeds(claim.value.descript
 function generateFeed(feedLink, channelClaim, claimsInChannel) {
   // --- Channel ---
   let channelTitle = (channelClaim.value && channelClaim.value.title) || channelClaim.name;
+  let channelURL = URL + '/' + channelClaim.canonical_url.replace('lbry://', '').replace(/#/g, ':');
   const feed = new Rss({
     title: channelTitle + ' on ' + SITE_NAME,
     description: getFormattedDescription(channelClaim),
     feed_url: feedLink,
-    site_url: (channelClaim.value && channelClaim.value.website_url) || URL,
+    site_url: (channelClaim.value && channelClaim.value.website_url) || channelURL,
     image_url: (channelClaim.value && channelClaim.value.thumbnail && channelClaim.value.thumbnail.url) || undefined,
     language: getLanguageValue(channelClaim),
     custom_namespaces: { itunes: 'http://www.itunes.com/dtds/podcast-1.0.dtd' },
@@ -253,7 +254,8 @@ function generateFeed(feedLink, channelClaim, claimsInChannel) {
     const description = thumbnailHtml + getFormattedDescription(c);
 
     const url = `${URL}/${encodeWithSpecialCharEncode(c.name)}:${c.claim_id}`;
-    const date = c.release_time ? c.release_time * 1000 : c.meta && c.meta.creation_timestamp * 1000;
+    const date =
+      c.value && c.value.release_time ? c.value.release_time * 1000 : c.meta && c.meta.creation_timestamp * 1000;
 
     feed.item({
       title: title,

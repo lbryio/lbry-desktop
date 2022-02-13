@@ -6,7 +6,7 @@ function generateStreamUrl(claimName, claimId) {
   return `${LBRY_WEB_STREAMING_API}/content/claims/${encodeURIComponent(claimName)
     .replace(/'/g, '%27')
     .replace(/\(/g, '%28')
-    .replace(/\)/g, '%29')}/${claimId}/stream`;
+    .replace(/\)/g, '%29')}/${claimId}/${encodeURIComponent(claimName)}`;
 }
 
 function generateEmbedUrl(claimName, claimId, startTime, referralLink) {
