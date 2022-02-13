@@ -775,6 +775,10 @@ $control-bar-icon-size: 0.8rem;
     color: var(--color-primary);
     border: 1px solid var(--color-primary);
   }
+
+  @media (max-width: $breakpoint-small) {
+    display: hidden;
+  }
 }
 
 // ****************************************************************************
