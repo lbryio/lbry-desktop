@@ -1277,6 +1277,11 @@
     font-size: 5rem;
     color: #fff;
     text-shadow: 0 0 3px var(--color-primary), 0 0 5px var(--color-primary);
+
+    @media (max-width: $breakpoint-small) {
+      top: -18px;
+      left: 42px;
+    }
   }
 }
 
