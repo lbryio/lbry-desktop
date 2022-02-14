@@ -857,16 +857,27 @@ body {
       }
     }
   }
+
   .markdown-preview {
-    .file-page__md {
-      p {
-        .button__content {
-          .channel-name {
-            font-size: var(--font-large);
-            color: var(--color-primary);
-            @media (max-width: $breakpoint-small) {
-              font-size: var(--font-base);
-            }
+    p {
+      .button--uri-indicator {
+        .channel-name {
+          font-size: var(--font-large);
+          @media (max-width: $breakpoint-small) {
+            font-size: var(--font-base);
+          }
+        }
+      }
+    }
+  }
+
+  .file-page__post-comments {
+    p {
+      .button--uri-indicator {
+        .channel-name {
+          font-size: var(--font-small);
+          @media (max-width: $breakpoint-small) {
+            font-size: var(--font-xsmall);
           }
         }
       }
