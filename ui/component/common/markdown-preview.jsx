@@ -146,7 +146,7 @@ function isStakeEnoughForPreview(stakedLevel) {
 // ****************************************************************************
 // ****************************************************************************
 
-const MarkdownPreview = (props: MarkdownProps) => {
+export default React.memo<MarkdownProps>(function MarkdownPreview(props: MarkdownProps) {
   const {
     content,
     strip,
@@ -171,16 +171,8 @@ const MarkdownPreview = (props: MarkdownProps) => {
         } catch (e) {}
 
         if (lbrySrc && lbrySrc.startsWith('lbry://')) {
-          console.log('lbrysrc', lbrySrc);
           return lbrySrc;
         }
-        //
-        // if (lbrySrc && lbrySrc.startsWith('https://odysee.com')) {
-        //   console.log('lbrysrc', lbrySrc)
-        //   return lbrySrc;
-        // }
-        // console.log('iframeh', iframeHtml)
-
         return iframeHtml;
       })
     : '';
@@ -258,6 +250,4 @@ const MarkdownPreview = (props: MarkdownProps) => {
       }
     </div>
   );
-};
-
-export default MarkdownPreview;
+});
