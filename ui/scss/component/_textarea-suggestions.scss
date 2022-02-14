@@ -339,6 +339,10 @@
     top: 0;
   }
 
+  .channel-staked__wrapper {
+    left: -16%;
+  }
+
   @media (max-width: $breakpoint-small) {
     .commentCreate {
       .section__actions {
