@@ -270,6 +270,21 @@
     }
   }
 
+  .card__main-actions {
+    .button--alt:last-of-type {
+      top: -1px;
+      float: right;
+      margin-right: 0;
+    }
+    .comment__sort {
+      .button--alt:last-of-type {
+        top: unset;
+        float: unset;
+        margin-right: unset;
+      }
+    }
+  }
+
   .comment-create__label-wrapper {
     select {
       margin: 2px 0 1px 0;
