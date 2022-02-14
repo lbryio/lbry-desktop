@@ -862,9 +862,13 @@ body {
     p {
       .button--uri-indicator {
         .channel-name {
+          color: var(--color-primary);
           font-size: var(--font-large);
           @media (max-width: $breakpoint-small) {
             font-size: var(--font-base);
+          }
+          &:hover {
+            color: var(--color-secondary);
           }
         }
       }
