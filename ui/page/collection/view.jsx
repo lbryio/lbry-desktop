@@ -1,8 +1,4 @@
 // @flow
-
-// $FlowFixMe
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
-
 import React from 'react';
 import ClaimList from 'component/claimList';
 import Page from 'component/page';
@@ -19,6 +15,14 @@ import * as COLLECTIONS_CONSTS from 'constants/collections';
 import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
 import Spinner from 'component/spinner';
+
+// prettier-ignore
+const Lazy = {
+  // $FlowFixMe
+  DragDropContext: React.lazy(() => import('react-beautiful-dnd' /* webpackChunkName: "dnd" */).then((module) => ({ default: module.DragDropContext }))),
+  // $FlowFixMe
+  Droppable: React.lazy(() => import('react-beautiful-dnd' /* webpackChunkName: "dnd" */).then((module) => ({ default: module.Droppable }))),
+};
 
 export const PAGE_VIEW_QUERY = 'view';
 export const EDIT_PAGE = 'edit';
@@ -225,20 +229,21 @@ export default function CollectionPage(props: Props) {
         {editing}
         <div className={classnames('section card-stack')}>
           {info}
-
-          <DragDropContext onDragEnd={handleOnDragEnd}>
-            <Droppable droppableId="list__ordering">
-              {(DroppableProvided) => (
-                <ClaimList
-                  uris={collectionUrls}
-                  collectionId={collectionId}
-                  showEdit={showEdit}
-                  droppableProvided={DroppableProvided}
-                  unavailableUris={unavailableUris}
-                />
-              )}
-            </Droppable>
-          </DragDropContext>
+          <React.Suspense fallback={null}>
+            <Lazy.DragDropContext onDragEnd={handleOnDragEnd}>
+              <Lazy.Droppable droppableId="list__ordering">
+                {(DroppableProvided) => (
+                  <ClaimList
+                    uris={collectionUrls}
+                    collectionId={collectionId}
+                    showEdit={showEdit}
+                    droppableProvided={DroppableProvided}
+                    unavailableUris={unavailableUris}
+                  />
+                )}
+              </Lazy.Droppable>
+            </Lazy.DragDropContext>
+          </React.Suspense>
         </div>
       </Page>
     );

@@ -1,8 +1,4 @@
 // @flow
-
-// $FlowFixMe
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
-
 import React from 'react';
 import classnames from 'classnames';
 import ClaimList from 'component/claimList';
@@ -12,6 +8,14 @@ import * as PAGES from 'constants/pages';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
 import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
+
+// prettier-ignore
+const Lazy = {
+  // $FlowFixMe
+  DragDropContext: React.lazy(() => import('react-beautiful-dnd' /* webpackChunkName: "dnd" */).then((module) => ({ default: module.DragDropContext }))),
+  // $FlowFixMe
+  Droppable: React.lazy(() => import('react-beautiful-dnd' /* webpackChunkName: "dnd" */).then((module) => ({ default: module.Droppable }))),
+};
 
 type Props = {
   id: string,
@@ -105,22 +109,24 @@ export default function CollectionContent(props: Props) {
         )
       }
       body={
-        <DragDropContext onDragEnd={handleOnDragEnd}>
-          <Droppable droppableId="list__ordering">
-            {(DroppableProvided) => (
-              <ClaimList
-                isCardBody
-                type="small"
-                activeUri={url}
-                uris={collectionUrls}
-                collectionId={id}
-                empty={__('List is Empty')}
-                showEdit={showEdit}
-                droppableProvided={DroppableProvided}
-              />
-            )}
-          </Droppable>
-        </DragDropContext>
+        <React.Suspense fallback={null}>
+          <Lazy.DragDropContext onDragEnd={handleOnDragEnd}>
+            <Lazy.Droppable droppableId="list__ordering">
+              {(DroppableProvided) => (
+                <ClaimList
+                  isCardBody
+                  type="small"
+                  activeUri={url}
+                  uris={collectionUrls}
+                  collectionId={id}
+                  empty={__('List is Empty')}
+                  showEdit={showEdit}
+                  droppableProvided={DroppableProvided}
+                />
+              )}
+            </Lazy.Droppable>
+          </Lazy.DragDropContext>
+        </React.Suspense>
       }
     />
   );

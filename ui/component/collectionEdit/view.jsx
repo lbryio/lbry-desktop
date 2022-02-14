@@ -1,8 +1,4 @@
 // @flow
-
-// $FlowFixMe
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
-
 import { DOMAIN } from 'config';
 import React from 'react';
 import classnames from 'classnames';
@@ -26,6 +22,14 @@ import { INVALID_NAME_ERROR } from 'constants/claim';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 import * as PAGES from 'constants/pages';
 import analytics from 'analytics';
+
+// prettier-ignore
+const Lazy = {
+  // $FlowFixMe
+  DragDropContext: React.lazy(() => import('react-beautiful-dnd' /* webpackChunkName: "dnd" */).then((module) => ({ default: module.DragDropContext }))),
+  // $FlowFixMe
+  Droppable: React.lazy(() => import('react-beautiful-dnd' /* webpackChunkName: "dnd" */).then((module) => ({ default: module.Droppable }))),
+};
 
 const LANG_NONE = 'none';
 const MAX_TAG_SELECT = 5;
@@ -374,19 +378,21 @@ function CollectionForm(props: Props) {
               </div>
             </TabPanel>
             <TabPanel>
-              <DragDropContext onDragEnd={handleOnDragEnd}>
-                <Droppable droppableId="list__ordering">
-                  {(DroppableProvided) => (
-                    <ClaimList
-                      uris={collectionUrls}
-                      collectionId={collectionId}
-                      empty={__('This list has no items.')}
-                      showEdit
-                      droppableProvided={DroppableProvided}
-                    />
-                  )}
-                </Droppable>
-              </DragDropContext>
+              <React.Suspense fallback={null}>
+                <Lazy.DragDropContext onDragEnd={handleOnDragEnd}>
+                  <Lazy.Droppable droppableId="list__ordering">
+                    {(DroppableProvided) => (
+                      <ClaimList
+                        uris={collectionUrls}
+                        collectionId={collectionId}
+                        empty={__('This list has no items.')}
+                        showEdit
+                        droppableProvided={DroppableProvided}
+                      />
+                    )}
+                  </Lazy.Droppable>
+                </Lazy.DragDropContext>
+              </React.Suspense>
             </TabPanel>
             <TabPanel>
               <Card

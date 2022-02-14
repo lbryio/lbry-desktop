@@ -1,8 +1,4 @@
 // @flow
-
-// $FlowFixMe
-import { Draggable } from 'react-beautiful-dnd';
-
 import { MAIN_CLASS } from 'constants/classnames';
 import type { Node } from 'react';
 import React, { useEffect } from 'react';
@@ -13,6 +9,11 @@ import { FormField } from 'component/common/form';
 import usePersistedState from 'effects/use-persisted-state';
 import debounce from 'util/debounce';
 import ClaimPreviewTile from 'component/claimPreviewTile';
+
+const Draggable = React.lazy(() =>
+  // $FlowFixMe
+  import('react-beautiful-dnd' /* webpackChunkName: "dnd" */).then((module) => ({ default: module.Draggable }))
+);
 
 const DEBOUNCE_SCROLL_HANDLER_MS = 150;
 const SORT_NEW = 'new';
@@ -250,31 +251,33 @@ export default function ClaimList(props: Props) {
 
           {sortedUris.map((uri, index) =>
             droppableProvided ? (
-              <Draggable key={uri} draggableId={uri} index={index}>
-                {(draggableProvided, draggableSnapshot) => {
-                  // Restrict dragging to vertical axis
-                  // https://github.com/atlassian/react-beautiful-dnd/issues/958#issuecomment-980548919
-                  let transform = draggableProvided.draggableProps.style.transform;
+              <React.Suspense fallback={null}>
+                <Draggable key={uri} draggableId={uri} index={index}>
+                  {(draggableProvided, draggableSnapshot) => {
+                    // Restrict dragging to vertical axis
+                    // https://github.com/atlassian/react-beautiful-dnd/issues/958#issuecomment-980548919
+                    let transform = draggableProvided.draggableProps.style.transform;
 
-                  if (draggableSnapshot.isDragging && transform) {
-                    transform = transform.replace(/\(.+,/, '(0,');
-                  }
+                    if (draggableSnapshot.isDragging && transform) {
+                      transform = transform.replace(/\(.+,/, '(0,');
+                    }
 
-                  const style = {
-                    ...draggableProvided.draggableProps.style,
-                    transform,
-                  };
+                    const style = {
+                      ...draggableProvided.draggableProps.style,
+                      transform,
+                    };
 
-                  return (
-                    <li ref={draggableProvided.innerRef} {...draggableProvided.draggableProps} style={style}>
-                      {/* https://github.com/atlassian/react-beautiful-dnd/issues/1756 */}
-                      <div style={{ display: 'none' }} {...draggableProvided.dragHandleProps} />
+                    return (
+                      <li ref={draggableProvided.innerRef} {...draggableProvided.draggableProps} style={style}>
+                        {/* https://github.com/atlassian/react-beautiful-dnd/issues/1756 */}
+                        <div style={{ display: 'none' }} {...draggableProvided.dragHandleProps} />
 
-                      {getClaimPreview(uri, index, draggableProvided)}
-                    </li>
-                  );
-                }}
-              </Draggable>
+                        {getClaimPreview(uri, index, draggableProvided)}
+                      </li>
+                    );
+                  }}
+                </Draggable>
+              </React.Suspense>
             ) : (
               getClaimPreview(uri, index)
             )
