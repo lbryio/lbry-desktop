@@ -638,6 +638,12 @@ img {
 }
 
 .uploadPage-wraper {
+  &.card-stack {
+    .card:not(:last-of-type) {
+      margin-bottom: var(--spacing-l) !important;
+    }
+  }
+
   .card__main-actions {
     padding-top: var(--spacing-l);
   }

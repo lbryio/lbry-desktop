@@ -633,7 +633,7 @@ function PublishForm(props: Props) {
 
           <Card actions={<SelectThumbnail livestreamdData={livestreamData} />} />
 
-          <label>{__('Tags')}</label>
+          <label style={{ marginTop: 'var(--spacing-l)' }}>{__('Tags')}</label>
           <TagsSelect
             suggestMature={!SIMPLE_SITE}
             disableAutoFocus
