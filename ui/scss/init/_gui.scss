@@ -691,6 +691,9 @@ img {
           }
         }
       }
+      @media (max-width: $breakpoint-small) {
+        margin-top: var(--spacing-xxxs);
+      }
     }
   }
 
