@@ -6,7 +6,6 @@ import { doCommentList, doSuperChatList } from 'redux/actions/comments';
 import {
   selectTopLevelCommentsForUri,
   selectSuperChatsForUri,
-  selectSuperChatTotalAmountForUri,
   selectPinnedCommentsForUri,
 } from 'redux/selectors/comments';
 import { selectThemePath } from 'redux/selectors/settings';
@@ -14,19 +13,21 @@ import LivestreamChatLayout from './view';
 
 const select = (state, props) => {
   const { uri } = props;
+  const claim = selectClaimForUri(state, uri);
 
   return {
-    claim: selectClaimForUri(state, uri),
+    claimId: claim && claim.claim_id,
     comments: selectTopLevelCommentsForUri(state, uri, MAX_LIVESTREAM_COMMENTS),
     pinnedComments: selectPinnedCommentsForUri(state, uri),
     superChats: selectSuperChatsForUri(state, uri),
-    superChatsTotalAmount: selectSuperChatTotalAmountForUri(state, uri),
     theme: selectThemePath(state),
   };
 };
 
-export default connect(select, {
+const perform = {
   doCommentList,
   doSuperChatList,
   doResolveUris,
-})(LivestreamChatLayout);
+};
+
+export default connect(select, perform)(LivestreamChatLayout);

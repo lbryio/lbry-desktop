@@ -14,7 +14,7 @@ type Props = {
   children: React.Node,
   description: ?string,
   isResolvingUri: boolean,
-  doResolveUri: (string) => void,
+  doResolveUri: (string, boolean) => void,
   playingUri: ?PlayingUri,
   parentCommentId?: string,
   isMarkdownPost?: boolean,
@@ -43,7 +43,7 @@ class ClaimLink extends React.Component<Props> {
     const { isResolvingUri, doResolveUri, claim, uri } = props;
 
     if (!isResolvingUri && claim === undefined && uri) {
-      doResolveUri(uri);
+      doResolveUri(uri, true);
     }
   };
 
