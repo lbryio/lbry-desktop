@@ -232,20 +232,28 @@ $contentMaxWidth: 60rem;
   position: relative;
   font-size: var(--font-small);
   color: var(--color-text);
-  margin-bottom: var(--spacing-s);
+  margin-bottom: var(--spacing-xxs);
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
+
+  .channel-name {
+    font-size: unset;
+  }
 
   @media (max-width: $breakpoint-small) {
     margin-bottom: 0;
   }
 }
 
+.notification__claim-title {
+  font-weight: var(--font-weight-bold);
+}
+
 .notification__text {
-  font-size: var(--font-body);
-  color: var(--color-text);
+  font-size: var(--font-xsmall);
+  color: var(--color-text-subtitle);
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
@@ -255,6 +263,15 @@ $contentMaxWidth: 60rem;
 .notification__text,
 .notification__title {
   flex-shrink: 1;
+}
+
+.notification__text--replies {
+  font-style: italic;
+
+  blockquote {
+    padding-left: var(--spacing-xs);
+    border-left: 2px solid;
+  }
 }
 
 .notification__time {
