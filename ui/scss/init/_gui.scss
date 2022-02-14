@@ -713,6 +713,19 @@ img {
     border-radius: var(--border-radius);
     height: var(--height-input-slim);
   }
+
+  @media (max-width: $breakpoint-small) {
+    .MuiTextField-root {
+      background-color: var(--color-header-background);
+    }
+    .css-3i94e7-MuiInputBase-root-MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+      border: unset;
+      border: 2px solid var(--color-primary);
+    }
+    textarea#content_description:focus-visible {
+      box-shadow: unset;
+    }
+  }
 }
 
 .transactionsPage-wrapper {
