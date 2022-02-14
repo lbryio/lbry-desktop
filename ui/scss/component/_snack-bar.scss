@@ -15,6 +15,11 @@
   .button__label {
     color: var(--color-primary-contrast);
   }
+
+  @media (max-width: $breakpoint-small) {
+    bottom: var(--spacing-xxs);
+    right: var(--spacing-xxs);
+  }
 }
 
 .snack-bar--upgrade {
