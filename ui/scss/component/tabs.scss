@@ -114,10 +114,14 @@
 
   &::after {
     position: absolute;
-    bottom: calc(var(--tab-indicator-size) * -2 + 6px);
+    bottom: calc(var(--tab-indicator-size) * -2 + 1px);
     height: 0;
     width: 100%;
     content: '';
+
+    @media (max-width: $breakpoint-small) {
+      bottom: calc(var(--tab-indicator-size) * -2 - 1px);
+    }
   }
 
   &:focus {
