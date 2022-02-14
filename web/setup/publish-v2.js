@@ -83,6 +83,17 @@ export function makeResumableUploadRequest(
           customErr = 'File is locked. Try resuming after waiting a few minutes';
         }
 
+        let localStorageInfo;
+        if (errMsg.includes('QuotaExceededError')) {
+          try {
+            localStorageInfo = `${window.localStorage.length} items; ${
+              JSON.stringify(window.localStorage).length
+            } bytes`;
+          } catch (e) {
+            localStorageInfo = 'inaccessible';
+          }
+        }
+
         window.store.dispatch(doUpdateUploadProgress({ guid, status: 'error' }));
 
         analytics.sentryError('tus-upload', err);
@@ -97,6 +108,7 @@ export function makeResumableUploadRequest(
               ...(uploader._retryAttempt ? { retryAttempt: uploader._retryAttempt } : {}),
               ...(uploader._offsetBeforeRetry ? { offsetBeforeRetry: uploader._offsetBeforeRetry } : {}),
               ...(customErr ? { original: errMsg } : {}),
+              ...(localStorageInfo ? { localStorageInfo } : {}),
             },
           })
         );
