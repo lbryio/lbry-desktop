@@ -573,9 +573,10 @@ $actions-z-index: 2;
   display: flex;
   position: absolute;
   text-align: center;
-  width: 116%;
-  left: -8%;
-  bottom: -14%;
+  //width: 116%;
+  width: 128%;
+  left: -14%;
+  bottom: -16%;
 
   svg {
     overflow: visible;
