@@ -191,6 +191,7 @@
     position: relative;
     width: 100%;
     max-width: 124px;
+    min-width: 124px;
     margin-right: var(--spacing-m);
 
     .ratio-bar {
@@ -223,6 +224,7 @@
 
     @media (max-width: $breakpoint-small) {
       max-width: unset;
+      min-width: unset;
       margin-right: 0px;
       .ratio-bar {
         height: 1px;
