@@ -24,6 +24,15 @@ $control-bar-icon-size: 0.8rem;
     }
   }
 
+  @media (min-width: $breakpoint-small) {
+    .vjs-control {
+      opacity: 0.9;
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+
   // Progress Bar
   .vjs-progress-control.vjs-control {
     position: absolute;
