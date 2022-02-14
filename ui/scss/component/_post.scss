@@ -27,6 +27,9 @@
     @include handleChannelGif(2.5rem);
   }
 
+  @media (min-width: $breakpoint-large) {
+    width: 52rem;
+  }
   @media (max-width: $breakpoint-small) {
     width: 100%;
   }
