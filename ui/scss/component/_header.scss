@@ -47,6 +47,10 @@
   }
 }
 
+.header--mac {
+  padding-top: var(--mac-titlebar-height);
+}
+
 .header__contents {
   display: flex;
   align-items: center;
