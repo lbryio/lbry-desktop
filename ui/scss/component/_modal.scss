@@ -82,6 +82,27 @@
       box-shadow: none;
       border: none;
     }
+
+    .card__main-actions {
+      .section__actions {
+        .button {
+          margin-right: var(--spacing-m);
+          .button__content {
+            .button__label {
+              font-size: var(--font-small);
+            }
+          }
+        }
+      }
+      .help {
+        font-size: var(--font-small);
+      }
+      .checkbox {
+        .sync_toggle {
+          font-size: var(--font-xsmall);
+        }
+      }
+    }
   }
 
   .button--close {
