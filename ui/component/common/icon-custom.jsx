@@ -1639,8 +1639,8 @@ export const icons = {
       width={props.size || '500'}
       height={props.size || '500'}
       fill="currentColor"
-      stroke="currentColor"
-      strokeWidth="0"
+      stroke="black"
+      strokeWidth="3"
       strokeLinecap="round"
       strokeLinejoin="round"
     >

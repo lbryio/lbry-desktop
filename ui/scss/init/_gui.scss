@@ -728,6 +728,16 @@ img {
     textarea#content_description:focus-visible {
       box-shadow: unset;
     }
+
+    .section__actions {
+      .button {
+        .button__content {
+          .button__label {
+            font-size: var(--font-s);
+          }
+        }
+      }
+    }
   }
 }
 
