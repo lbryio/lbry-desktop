@@ -809,13 +809,6 @@ img {
 }
 
 .playlistPage-wrapper {
-  /*
-  .button--file-action {
-    &:hover {
-      background-color: unset;
-    }
-  }*/
-
   .card-stack:first-of-type {
     .card {
       margin-bottom: var(--spacing-l);
@@ -937,6 +930,50 @@ img {
       a {
         margin-left: var(--spacing-xxs);
       }
+    }
+  }
+}
+
+.publishList-wrapper {
+  @media (min-width: $breakpoint-small) {
+    .claim-preview--collection-mine {
+      height: unset;
+      padding-left: 9rem;
+      position: relative;
+
+      .media__thumb {
+        position: relative;
+        right: unset;
+
+        .claim-preview__hover-actions {
+          display: visible;
+        }
+      }
+
+      .claim-preview__text {
+        position: unset;
+        right: unset;
+        width: 100%;
+        background-color: unset;
+        padding: 0;
+        border-radius: unset;
+
+        .claim-preview-info {
+          .claim-preview__title {
+            font-size: var(--font-small);
+          }
+        }
+        .media__subtitle {
+          .button__content {
+            .channel-name {
+              font-size: var(--font-xsmall);
+            }
+          }
+        }
+      }
+    }
+    .button-dislike {
+      margin-right: 0;
     }
   }
 }

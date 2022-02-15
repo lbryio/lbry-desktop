@@ -310,7 +310,7 @@ function CollectionForm(props: Props) {
 
   return (
     <>
-      <div className={classnames('main--contained', { 'card--disabled': disabled })}>
+      <div className={classnames('main--contained publishList-wrapper', { 'card--disabled': disabled })}>
         <Tabs>
           <TabList className="tabs__list--collection-edit-page">
             <Tab>{__('General')}</Tab>
