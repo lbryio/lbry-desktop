@@ -98,8 +98,8 @@
         font-size: var(--font-small);
       }
       .checkbox {
-        .sync_toggle {
-          font-size: var(--font-xsmall);
+        label {
+          font-size: var(--font-xsmall) !important;
         }
       }
     }
