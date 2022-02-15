@@ -21,7 +21,6 @@ type Props = {
   // --- select ---
   claim: ?Claim,
   claimIsMine: boolean,
-  contentChannelPermanentUrl: any,
   activeChannelClaim: ?ChannelClaim,
   playingUri: ?PlayingUri,
   moderationDelegatorsById: { [string]: { global: boolean, delegators: { name: string, claimId: string } } },
@@ -44,7 +43,6 @@ function CommentMenuList(props: Props) {
     commentIsMine,
     commentId,
     activeChannelClaim,
-    contentChannelPermanentUrl,
     isTopLevel,
     isPinned,
     playingUri,
@@ -62,6 +60,7 @@ function CommentMenuList(props: Props) {
   } = props;
 
   const contentChannelClaim = getChannelFromClaim(claim);
+  const contentChannelPermanentUrl = contentChannelClaim && contentChannelClaim.permanent_url;
   const activeModeratorInfo = activeChannelClaim && moderationDelegatorsById[activeChannelClaim.claim_id];
   const activeChannelIsCreator = activeChannelClaim && activeChannelClaim.permanent_url === contentChannelPermanentUrl;
   const activeChannelIsAdmin = activeChannelClaim && activeModeratorInfo && activeModeratorInfo.global;
