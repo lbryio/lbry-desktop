@@ -335,6 +335,12 @@
     display: none;
   }
 
+  .channel-staked__wrapper {
+    .icon {
+      stroke: #131213 !important;
+    }
+  }
+
   &:hover {
     .ff-canvas {
       opacity: 0 !important;
