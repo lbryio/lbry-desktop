@@ -217,7 +217,7 @@ export class FormField extends React.PureComponent<Props> {
                   getMdeInstance={getInstance}
                   options={{
                     spellChecker: true,
-                    hideIcons: ['heading', 'image', 'fullscreen', 'side-by-side'],
+                    hideIcons: ['heading', 'image', 'fullscreen', 'side-by-side', 'guide'], // guide hidden until fixed
                     previewRender(plainText) {
                       const preview = <MarkdownPreview content={plainText} noDataStore />;
                       return ReactDOMServer.renderToString(preview);
