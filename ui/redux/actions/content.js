@@ -165,6 +165,7 @@ export function doPlayUri(
     const alreadyDownloading = fileInfo && !!downloadingByOutpoint[fileInfo.outpoint];
 
     if (alreadyDownloading || alreadyDownloaded) {
+      attemptPlay();
       return;
     }
 
