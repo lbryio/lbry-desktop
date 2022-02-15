@@ -731,6 +731,8 @@ img {
 
     .section__actions {
       .button {
+        height: var(--height-button);
+        margin-right: var(--spacing-m);
         .button__content {
           .button__label {
             margin-top: 0;
