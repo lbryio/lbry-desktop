@@ -717,6 +717,16 @@ img {
     height: var(--height-input-slim);
   }
 
+  .section__actions {
+    .button {
+      .button__content {
+        .button__label {
+          margin-top: 0;
+        }
+      }
+    }
+  }
+
   @media (max-width: $breakpoint-small) {
     .MuiTextField-root {
       background-color: var(--color-header-background);
@@ -735,7 +745,6 @@ img {
         margin-right: var(--spacing-m);
         .button__content {
           .button__label {
-            margin-top: 0;
             font-size: var(--font-s);
           }
         }
