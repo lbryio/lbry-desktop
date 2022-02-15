@@ -83,8 +83,12 @@ export default function LivestreamChatLayout(props: Props) {
   const [superchatsAmount, setSuperchatsAmount] = React.useState(false);
   const [chatElement, setChatElement] = React.useState();
 
-  const superChatsByChronologicalOrder =
-    superChatsByAmount && superChatsByAmount.sort((a, b) => b.timestamp - a.timestamp);
+  let superChatsByChronologicalOrder = [];
+  if (superChatsByAmount) superChatsByAmount.forEach((chat) => superChatsByChronologicalOrder.push(chat));
+  if (superChatsByChronologicalOrder.length > 0) {
+    superChatsByChronologicalOrder.sort((a, b) => b.timestamp - a.timestamp);
+  }
+
   const commentsToDisplay =
     viewMode === VIEW_MODES.CHAT ? commentsByChronologicalOrder : superChatsByChronologicalOrder;
   const commentsLength = commentsToDisplay && commentsToDisplay.length;
@@ -291,13 +295,13 @@ export default function LivestreamChatLayout(props: Props) {
             'livestream-comments__top-actions--mobile': isMobile,
           })}
         >
-          {isMobile && ((pinnedComment && showPinned) || (superChatsByChronologicalOrder && !superchatsHidden)) && (
+          {isMobile && ((pinnedComment && showPinned) || (superChatsByAmount && !superchatsHidden)) && (
             <MobileDrawerTopGradient theme={theme} />
           )}
 
-          {viewMode === VIEW_MODES.CHAT && superChatsByChronologicalOrder && (
+          {viewMode === VIEW_MODES.CHAT && superChatsByAmount && (
             <LivestreamSuperchats
-              superChats={superChatsByChronologicalOrder}
+              superChats={superChatsByAmount}
               toggleSuperChat={toggleSuperChat}
               superchatsHidden={superchatsHidden}
               isMobile={isMobile}

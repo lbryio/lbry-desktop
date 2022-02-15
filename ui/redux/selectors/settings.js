@@ -1,5 +1,6 @@
 import * as SETTINGS from 'constants/settings';
 import * as DAEMON_SETTINGS from 'constants/daemon_settings';
+import SUPPORTED_BROWSER_LANGUAGES from 'constants/supported_browser_languages';
 
 import { createSelector } from 'reselect';
 import { ENABLE_MATURE } from 'config';
@@ -71,5 +72,18 @@ export const selectHomepageData = createSelector(
     return homepages[homepageCode] || homepages['en'] || {};
   }
 );
+
+export const selectInRegionByCode = (state, code) => {
+  const hp = selectClientSetting(state, SETTINGS.HOMEPAGE);
+  const lang = selectLanguage(state);
+
+  return hp === code || lang === code;
+};
+
+export const selectWildWestDisabled = (state) => {
+  const deRegion = selectInRegionByCode(state, SUPPORTED_BROWSER_LANGUAGES.de);
+
+  return deRegion;
+};
 
 export const selectosNotificationsEnabled = (state) => selectClientSetting(state, SETTINGS.OS_NOTIFICATIONS_ENABLED);
