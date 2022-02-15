@@ -1511,7 +1511,7 @@ export const icons = {
       height={props.size || '18'}
       fill="currentColor"
       stroke="black"
-      strokeWidth="3"
+      strokeWidth="10"
       strokeLinecap="round"
       strokeLinejoin="round"
     >
@@ -1543,7 +1543,7 @@ export const icons = {
       height={props.size || '18'}
       fill="currentColor"
       stroke="black"
-      strokeWidth="3"
+      strokeWidth="10"
       strokeLinecap="round"
       strokeLinejoin="round"
     >
@@ -1575,7 +1575,7 @@ export const icons = {
       height={props.size || '18'}
       fill="currentColor"
       stroke="black"
-      strokeWidth="3"
+      strokeWidth="10"
       strokeLinecap="round"
       strokeLinejoin="round"
     >
@@ -1608,7 +1608,7 @@ export const icons = {
       height={props.size || '18'}
       fill="currentColor"
       stroke="black"
-      strokeWidth="3"
+      strokeWidth="10"
       strokeLinecap="round"
       strokeLinejoin="round"
     >
@@ -1640,7 +1640,7 @@ export const icons = {
       height={props.size || '500'}
       fill="currentColor"
       stroke="black"
-      strokeWidth="3"
+      strokeWidth="10"
       strokeLinecap="round"
       strokeLinejoin="round"
     >
