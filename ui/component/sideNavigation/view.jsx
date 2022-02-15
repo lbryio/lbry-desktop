@@ -112,6 +112,7 @@ type Props = {
   user: ?User,
   homepageData: any,
   activeChannelStakedLevel: number,
+  wildWestDisabled: boolean,
 };
 
 function SideNavigation(props: Props) {
@@ -130,6 +131,7 @@ function SideNavigation(props: Props) {
     user,
     followedTags,
     activeChannelStakedLevel,
+    wildWestDisabled,
   } = props;
 
   const isLargeScreen = useIsLargeScreen();
@@ -480,7 +482,7 @@ function SideNavigation(props: Props) {
                 <>
                   {/* $FlowFixMe -- GetLinksData should fix it's data type */}
                   {EXTRA_SIDEBAR_LINKS.map((linkProps) => getLink(linkProps))}
-                  {getLink(WILD_WEST)}
+                  {!wildWestDisabled && getLink(WILD_WEST)}
                 </>
               )}
             </ul>
