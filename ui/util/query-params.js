@@ -80,10 +80,12 @@ export const getSearchQueryString = (query: string, options: any = {}) => {
   const { related_to } = options;
   const { nsfw } = options;
   const { free_only } = options;
+  const { channel_id } = options;
 
   if (related_to) additionalOptions[SEARCH_OPTIONS.RELATED_TO] = related_to;
   if (free_only) additionalOptions[SEARCH_OPTIONS.PRICE_FILTER_FREE] = true;
   if (nsfw === false) additionalOptions[SEARCH_OPTIONS.INCLUDE_MATURE] = false;
+  if (channel_id) additionalOptions[SEARCH_OPTIONS.CHANNEL_ID] = channel_id;
 
   if (additionalOptions) {
     Object.keys(additionalOptions).forEach((key) => {

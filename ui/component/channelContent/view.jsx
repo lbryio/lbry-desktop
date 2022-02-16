@@ -7,13 +7,14 @@ import HiddenNsfwClaims from 'component/hiddenNsfwClaims';
 import { useHistory } from 'react-router-dom';
 import Button from 'component/button';
 import ClaimListDiscover from 'component/claimListDiscover';
+import ClaimListSearch from 'component/claimListSearch';
 import Ads from 'web/component/ads';
 import Icon from 'component/common/icon';
 import LivestreamLink from 'component/livestreamLink';
 import { Form, FormField } from 'component/common/form';
 import { DEBOUNCE_WAIT_DURATION_MS } from 'constants/search';
-import { lighthouse } from 'redux/actions/search';
 import ScheduledStreams from 'component/scheduledStreams';
+import { useIsLargeScreen } from 'effects/use-screensize';
 
 const TYPES_TO_ALLOW_FILTER = ['stream', 'repost'];
 
@@ -34,7 +35,6 @@ type Props = {
   showMature: boolean,
   tileLayout: boolean,
   viewHiddenChannels: boolean,
-  doResolveUris: (Array<string>, boolean) => void,
   claimType: string,
   empty?: string,
   doFetchChannelLiveStatus: (string) => void,
@@ -56,7 +56,6 @@ function ChannelContent(props: Props) {
     showMature,
     tileLayout,
     viewHiddenChannels,
-    doResolveUris,
     claimType,
     empty,
     doFetchChannelLiveStatus,
@@ -66,7 +65,8 @@ function ChannelContent(props: Props) {
   // const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
   const claimsInChannel = 9999;
   const [searchQuery, setSearchQuery] = React.useState('');
-  const [searchResults, setSearchResults] = React.useState(undefined);
+  const [isSearch, setIsSearch] = React.useState(false);
+  const isLargeScreen = useIsLargeScreen();
   const {
     location: { pathname, search },
   } = useHistory();
@@ -78,6 +78,7 @@ function ChannelContent(props: Props) {
     (Array.isArray(claimType)
       ? claimType.every((ct) => TYPES_TO_ALLOW_FILTER.includes(ct))
       : TYPES_TO_ALLOW_FILTER.includes(claimType));
+  const dynamicPageSize = isLargeScreen ? Math.ceil(defaultPageSize * (3 / 2)) : defaultPageSize;
 
   function handleInputChange(e) {
     const { value } = e.target;
@@ -87,38 +88,17 @@ function ChannelContent(props: Props) {
   React.useEffect(() => {
     const timer = setTimeout(() => {
       if (searchQuery.trim().length < 3 || !claimId) {
-        // In order to display original search results, search results must be set to null. A query of '' should display original results.
-        return setSearchResults(null);
+        setIsSearch(false);
       } else {
-        lighthouse
-          .search(
-            `s=${encodeURIComponent(searchQuery)}&channel_id=${encodeURIComponent(claimId)}${
-              !showMature ? '&nsfw=false&size=50&from=0' : ''
-            }`
-          )
-          .then(({ body: results }) => {
-            const urls = results.map(({ name, claimId }) => {
-              return `lbry://${name}#${claimId}`;
-            });
-
-            // Batch-resolve the urls before calling 'setSearchResults', as the
-            // latter will immediately cause the tiles to resolve, ending up
-            // calling doResolveUri one by one before the batched one.
-            doResolveUris(urls, true);
-
-            setSearchResults(urls);
-          })
-          .catch(() => {
-            setSearchResults(null);
-          });
+        setIsSearch(true);
       }
     }, DEBOUNCE_WAIT_DURATION_MS);
     return () => clearTimeout(timer);
-  }, [claimId, searchQuery, showMature, doResolveUris]);
+  }, [claimId, searchQuery]);
 
   React.useEffect(() => {
     setSearchQuery('');
-    setSearchResults(null);
+    setIsSearch(false);
   }, [url]);
 
   const isInitialized = Boolean(activeLivestreamForChannel) || activeLivestreamInitialized;
@@ -177,44 +157,80 @@ function ChannelContent(props: Props) {
 
       {/* <Ads type="homepage" /> */}
 
-      {!fetching && (
-        <ClaimListDiscover
-          hasSource
-          defaultFreshness={CS.FRESH_ALL}
-          showHiddenByUser={viewHiddenChannels}
-          forceShowReposts
-          fetchViewCount
-          hideFilters={!showFilters}
-          hideAdvancedFilter={!showFilters}
-          tileLayout={tileLayout}
-          uris={searchResults}
-          streamType={SIMPLE_SITE ? CS.CONTENT_ALL : undefined}
-          channelIds={[claimId]}
-          claimType={claimType}
-          feeAmount={CS.FEE_AMOUNT_ANY}
-          defaultOrderBy={CS.ORDER_BY_NEW}
-          pageSize={defaultPageSize}
-          infiniteScroll={defaultInfiniteScroll}
-          injectedItem={SHOW_ADS && !isAuthenticated && IS_WEB && <Ads type="video" />}
-          meta={
-            showFilters && (
-              <Form onSubmit={() => {}} className="wunderbar--inline">
-                <Icon icon={ICONS.SEARCH} />
-                <FormField
-                  className="wunderbar__input--inline"
-                  value={searchQuery}
-                  onChange={handleInputChange}
-                  type="text"
-                  placeholder={__('Search')}
-                />
-              </Form>
-            )
-          }
-          isChannel
-          channelIsMine={channelIsMine}
-          empty={empty}
-        />
-      )}
+      {!fetching &&
+        (isSearch ? (
+          <ClaimListSearch
+            defaultFreshness={CS.FRESH_ALL}
+            showHiddenByUser={viewHiddenChannels}
+            fetchViewCount
+            hideFilters={!showFilters}
+            hideAdvancedFilter={!showFilters}
+            tileLayout={tileLayout}
+            streamType={SIMPLE_SITE ? CS.CONTENT_ALL : undefined}
+            channelIds={[claimId]}
+            claimId={claimId}
+            claimType={claimType}
+            feeAmount={CS.FEE_AMOUNT_ANY}
+            defaultOrderBy={CS.ORDER_BY_NEW}
+            pageSize={dynamicPageSize}
+            infiniteScroll={defaultInfiniteScroll}
+            injectedItem={SHOW_ADS && !isAuthenticated && IS_WEB && <Ads type="video" />}
+            meta={
+              showFilters && (
+                <Form onSubmit={() => {}} className="wunderbar--inline">
+                  <Icon icon={ICONS.SEARCH} />
+                  <FormField
+                    className="wunderbar__input--inline"
+                    value={searchQuery}
+                    onChange={handleInputChange}
+                    type="text"
+                    placeholder={__('Search')}
+                  />
+                </Form>
+              )
+            }
+            channelIsMine={channelIsMine}
+            empty={empty}
+            showMature={showMature}
+            searchKeyword={searchQuery}
+          />
+        ) : (
+          <ClaimListDiscover
+            hasSource
+            defaultFreshness={CS.FRESH_ALL}
+            showHiddenByUser={viewHiddenChannels}
+            forceShowReposts
+            fetchViewCount
+            hideFilters={!showFilters}
+            hideAdvancedFilter={!showFilters}
+            tileLayout={tileLayout}
+            streamType={SIMPLE_SITE ? CS.CONTENT_ALL : undefined}
+            channelIds={[claimId]}
+            claimType={claimType}
+            feeAmount={CS.FEE_AMOUNT_ANY}
+            defaultOrderBy={CS.ORDER_BY_NEW}
+            pageSize={defaultPageSize}
+            infiniteScroll={defaultInfiniteScroll}
+            injectedItem={SHOW_ADS && !isAuthenticated && IS_WEB && <Ads type="video" />}
+            meta={
+              showFilters && (
+                <Form onSubmit={() => {}} className="wunderbar--inline">
+                  <Icon icon={ICONS.SEARCH} />
+                  <FormField
+                    className="wunderbar__input--inline"
+                    value={searchQuery}
+                    onChange={handleInputChange}
+                    type="text"
+                    placeholder={__('Search')}
+                  />
+                </Form>
+              )
+            }
+            isChannel
+            channelIsMine={channelIsMine}
+            empty={empty}
+          />
+        ))}
     </Fragment>
   );
 }
