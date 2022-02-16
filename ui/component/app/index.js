@@ -5,7 +5,7 @@ import { doFetchAccessToken, doUserSetReferrer } from 'redux/actions/user';
 import { selectUser, selectAccessToken, selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectUnclaimedRewards } from 'redux/selectors/rewards';
 import { doFetchChannelListMine, doFetchCollectionListMine, doResolveUris } from 'redux/actions/claims';
-import { selectMyChannelUrls } from 'redux/selectors/claims';
+import { selectMyChannelUrls, selectMyChannelClaimIds } from 'redux/selectors/claims';
 import * as SETTINGS from 'constants/settings';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import {
@@ -48,6 +48,7 @@ const select = (state) => ({
   syncFatalError: selectSyncFatalError(state),
   activeChannelClaim: selectActiveChannelClaim(state),
   myChannelUrls: selectMyChannelUrls(state),
+  myChannelClaimIds: selectMyChannelClaimIds(state),
   subscriptions: selectSubscriptions(state),
 });
 
