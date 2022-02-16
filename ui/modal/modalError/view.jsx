@@ -18,10 +18,11 @@ class ModalError extends React.PureComponent<Props> {
     // Yuck
     // https://github.com/lbryio/lbry-sdk/issues/1118
     // The sdk logs failed downloads, they happen so often that it's mostly noise in the desktop logs
+    // The thumbnail error shouldn't be routed here, but it's troublesome to create a different path.
     let errorMessage = typeof error === 'string' ? error : error.message;
     const skipLog =
       errorMessage.startsWith('Failed to download') ||
-      errorMessage.endsWith('Uploading the same file from multiple tabs or windows is not allowed.');
+      /^Thumbnail size over (.*)MB, please edit and reupload.$/.test(errorMessage);
 
     if (error.cause) {
       try {
