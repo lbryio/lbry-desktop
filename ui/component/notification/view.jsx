@@ -112,7 +112,9 @@ export default function Notification(props: Props) {
   let uriIndicator;
   const title = titleSplit.map((message, index) => {
     if (channelName === message) {
-      uriIndicator = <UriIndicator uri={channelUrl} link channelInfo={{ uri: channelUrl, name: channelName }} />;
+      uriIndicator = (
+        <UriIndicator key={channelUrl} uri={channelUrl} link channelInfo={{ uri: channelUrl, name: channelName }} />
+      );
       fullTitle.push(' ');
       const resultTitle = fullTitle;
       fullTitle = [' '];
