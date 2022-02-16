@@ -251,8 +251,8 @@ export default function ClaimList(props: Props) {
 
           {sortedUris.map((uri, index) =>
             droppableProvided ? (
-              <React.Suspense fallback={null}>
-                <Draggable key={uri} draggableId={uri} index={index}>
+              <React.Suspense fallback={null} key={uri}>
+                <Draggable draggableId={uri} index={index}>
                   {(draggableProvided, draggableSnapshot) => {
                     // Restrict dragging to vertical axis
                     // https://github.com/atlassian/react-beautiful-dnd/issues/958#issuecomment-980548919
