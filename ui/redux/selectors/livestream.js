@@ -62,19 +62,19 @@ export const selectIsActiveLivestreamForUri = createCachedSelector(
   }
 )((state, uri) => String(uri));
 
-export const selectActiveLivestreamForUri = createCachedSelector(
-  (state, uri) => uri,
+export const selectActiveLivestreamForClaimId = createCachedSelector(
+  (state, claimId) => claimId,
   selectActiveLivestreams,
-  (uri, activeLivestreams) => {
-    if (!uri || !activeLivestreams) {
+  (claimId, activeLivestreams) => {
+    if (!claimId || !activeLivestreams) {
       return null;
     }
 
     const activeLivestreamValues = Object.values(activeLivestreams);
-    // $FlowFixMe - unable to resolve claimUri
-    return activeLivestreamValues.find((v) => v.claimUri === uri) || null;
+    // $FlowFixMe - https://github.com/facebook/flow/issues/2221
+    return activeLivestreamValues.find((v) => v.claimId === claimId) || null;
   }
-)((state, uri) => String(uri));
+)((state, claimId) => String(claimId));
 
 export const selectActiveLivestreamForChannel = createCachedSelector(
   (state, channelId) => channelId,
