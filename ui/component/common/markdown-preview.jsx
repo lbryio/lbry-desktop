@@ -178,10 +178,6 @@ const MarkdownPreview = (props: MarkdownProps) => {
       })
     : '';
 
-  const initialQuote = strippedContent.split(' ').find((word) => word.length > 0 || word.charAt(0) === '>');
-  let stripQuote;
-  if (initialQuote && initialQuote.charAt(0) === '>') stripQuote = true;
-
   const remarkOptions: Object = {
     sanitize: schema,
     fragment: React.Fragment,
@@ -216,22 +212,10 @@ const MarkdownPreview = (props: MarkdownProps) => {
   };
 
   // Strip all content and just render text
-  if (strip || stripQuote) {
+  if (strip) {
     // Remove new lines and extra space
     remarkOptions.remarkReactComponents.p = SimpleText;
-    return stripQuote ? (
-      <span dir="auto" className="markdown-preview">
-        <blockquote>
-          {
-            remark()
-              .use(remarkStrip)
-              .use(remarkFrontMatter, ['yaml'])
-              .use(reactRenderer, remarkOptions)
-              .processSync(content).contents
-          }
-        </blockquote>
-      </span>
-    ) : (
+    return (
       <span dir="auto" className="markdown-preview">
         {
           remark()
