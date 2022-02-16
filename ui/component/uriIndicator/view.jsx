@@ -4,27 +4,22 @@ import React from 'react';
 import classnames from 'classnames';
 import Button from 'component/button';
 
-type ChannelInfo = {
-  uri: string,
-  name: string,
-};
+type ChannelInfo = { uri: string, name: string };
 
 type Props = {
-  isResolvingUri: boolean,
-  link: ?boolean,
-  claim: ?Claim,
-  hideAnonymous: boolean,
-  // Lint thinks we aren't using these, even though we are.
-  // Possibly because the resolve function is an arrow function that is passed in props?
-  resolveUri: (string) => void,
   uri: string,
   channelInfo: ?ChannelInfo, // Direct channel info to use, bypassing the need to resolve 'uri'.
-  // to allow for other elements to be nested within the UriIndicator
-  children: ?Node,
-  inline: boolean,
+  link: ?boolean,
   external?: boolean,
+  focusable?: boolean, // Defaults to 'true' if not provided.
+  hideAnonymous?: boolean,
+  inline?: boolean,
   className?: string,
-  focusable: boolean,
+  children: ?Node, // to allow for other elements to be nested within the UriIndicator (commit: 1e82586f).
+  // --- redux ---
+  claim: ?Claim,
+  isResolvingUri: boolean,
+  resolveUri: (string) => void,
 };
 
 class UriIndicator extends React.PureComponent<Props> {
