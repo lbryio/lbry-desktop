@@ -10,6 +10,7 @@ import { TO_TRAY_WHEN_CLOSED } from 'constants/settings';
 import setupBarMenu from './menu/setupBarMenu';
 import * as PAGES from 'constants/pages';
 const remote = require('@electron/remote/main');
+const shell = require('electron').shell;
 function GetAppLangCode() {
   // https://www.electronjs.org/docs/api/locales
   // 1. Gets the user locale.
@@ -190,6 +191,8 @@ export default appState => {
   });
 
   window.webContents.setWindowOpenHandler((details) => {
+    // Open the link in a browser tab.
+    shell.openExternal(details.url);
     return { action: 'deny' };
   });
 
