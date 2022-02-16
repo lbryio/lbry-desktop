@@ -1,6 +1,9 @@
 // @flow
 import 'scss/component/_swipeable-drawer.scss';
 
+// $FlowFixMe
+import { Global } from '@emotion/react';
+
 import { lazyImport } from 'util/lazyImport';
 import { useIsMobile } from 'effects/use-screensize';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
@@ -64,6 +67,8 @@ export default function LivestreamLayout(props: Props) {
 
   return (
     <>
+      {!isMobile && <GlobalStyles />}
+
       <div className="section card-stack">
         <React.Suspense fallback={null}>
           {isMobile && isCurrentClaimLive ? (
@@ -199,3 +204,18 @@ const ChatDrawerTitle = (titleProps: any) => {
     </div>
   );
 };
+
+const GlobalStyles = () => (
+  <Global
+    styles={{
+      body: {
+        'scrollbar-width': '0px',
+
+        '&::-webkit-scrollbar': {
+          width: '0px',
+          height: '0px',
+        },
+      },
+    }}
+  />
+);

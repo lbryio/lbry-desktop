@@ -16,7 +16,6 @@ body {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  min-height: 100vh;
   margin-left: auto;
   margin-right: auto;
   margin-top: var(--header-height);
@@ -79,7 +78,6 @@ body {
 }
 
 .main-wrapper__inner--auth {
-  min-height: calc(100vh - var(--header-height));
   padding: 0;
 
   .main--auth-page {
@@ -94,10 +92,6 @@ body {
   z-index: 0;
   margin-right: auto;
   margin-left: auto;
-
-  @media (min-width: $breakpoint-small) {
-    min-height: calc(100vh - var(--header-height));
-  }
 
   @media (max-width: $breakpoint-small) {
     width: 100%;
