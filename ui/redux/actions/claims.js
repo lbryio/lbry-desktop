@@ -11,6 +11,7 @@ import {
   selectMyChannelClaims,
   selectPendingClaimsById,
   selectClaimIsMine,
+  selectIsMyChannelCountOverLimit,
 } from 'redux/selectors/claims';
 
 import { doFetchTxoPage } from 'redux/actions/wallet';
@@ -390,10 +391,21 @@ export function doClearChannelErrors() {
 }
 
 export function doCreateChannel(name: string, amount: number, optionalParams: any, onConfirm: any) {
-  return (dispatch: Dispatch) => {
+  return (dispatch: Dispatch, getState: GetState) => {
+    const state = getState();
+    const channelCountOverLimit = selectIsMyChannelCountOverLimit(state);
+
     dispatch({
       type: ACTIONS.CREATE_CHANNEL_STARTED,
     });
+
+    if (channelCountOverLimit) {
+      dispatch({
+        type: ACTIONS.CREATE_CHANNEL_FAILED,
+        data: 'Channel limit exceeded',
+      });
+      return;
+    }
 
     const createParams: {
       name: string,

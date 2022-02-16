@@ -1,5 +1,7 @@
 // @flow
+import { CHANNEL_CREATION_LIMIT } from 'config';
 import { normalizeURI, parseURI, isURIValid } from 'util/lbryURI';
+import { selectYoutubeChannels } from 'redux/selectors/user';
 import { selectSupportsByOutpoint } from 'redux/selectors/wallet';
 import { createSelector } from 'reselect';
 import { createCachedSelector } from 're-reselect';
@@ -773,3 +775,19 @@ export const selectUpdatingCollection = (state: State) => selectState(state).upd
 export const selectUpdateCollectionError = (state: State) => selectState(state).updateCollectionError;
 export const selectCreatingCollection = (state: State) => selectState(state).creatingCollection;
 export const selectCreateCollectionError = (state: State) => selectState(state).createCollectionError;
+
+export const selectIsMyChannelCountOverLimit = createSelector(
+  selectMyChannelClaimIds,
+  selectYoutubeChannels,
+  (myClaimIds, ytChannels: ?Array<{ channel_claim_id: string }>) => {
+    if (myClaimIds) {
+      if (ytChannels && ytChannels.length > 0) {
+        // $FlowFixMe - null 'ytChannels' already excluded
+        const ids = myClaimIds.filter((id) => !ytChannels.some((yt) => yt.channel_claim_id === id));
+        return ids.length > CHANNEL_CREATION_LIMIT;
+      }
+      return myClaimIds.length > CHANNEL_CREATION_LIMIT;
+    }
+    return false;
+  }
+);
