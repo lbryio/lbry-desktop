@@ -122,7 +122,6 @@ const Header = (props: Props) => {
 
   const userButtons = (hideWallet?: boolean, hideProfile?: boolean) => (
     <div className="header__menu--right">
-      {isMobile && !authHeader && !canBackout && <WunderBar />}
       <Tooltip
         title={
           balance > 0
@@ -141,11 +140,9 @@ const Header = (props: Props) => {
             className="button--file-action header__navigationItem--balance"
             label={hideBalance || Number(roundedBalance) === 0 ? __('Your Wallet') : roundedBalance}
             icon={ICONS.LBC}
-            // @if TARGET='app'
             onDoubleClick={(e) => {
               e.stopPropagation();
             }}
-            // @endif
           />
         </div>
       </Tooltip>
@@ -200,11 +197,9 @@ const Header = (props: Props) => {
                     // here use state.router.location.pathname
                     if (history.location.pathname === '/') window.location.reload();
                   }}
-                  // @if TARGET='app'
                   onDoubleClick={(e) => {
                     e.stopPropagation();
                   }}
-                  // @endif
                   {...homeButtonNavigationProps}
                 >
                   <Logo />
@@ -213,14 +208,12 @@ const Header = (props: Props) => {
 
               {!authHeader && (
                 <div className="header__center">
-                  {/* @if TARGET='app' */}
                   {!authHeader && (
                     <div className="header__buttons">
                       <NavigationButton isBackward history={history} />
                       <NavigationButton isBackward={false} history={history} />
                     </div>
                   )}
-                  {/* @endif */}
                   <WunderBar />
                   <HeaderMenuButtons />
                 </div>
