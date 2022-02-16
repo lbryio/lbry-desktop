@@ -191,8 +191,11 @@ export default appState => {
   });
 
   window.webContents.setWindowOpenHandler((details) => {
-    // Open the link in a browser tab.
-    shell.openExternal(details.url);
+    // Only open http and https links to prevent
+    // security issues.
+    if (['https:', 'http:'].includes(new URL(details.url).protocol)) {
+      shell.openExternal(details.url);
+    }
     return { action: 'deny' };
   });
 
