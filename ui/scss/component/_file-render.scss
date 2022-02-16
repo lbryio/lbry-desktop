@@ -861,6 +861,11 @@ $control-bar-icon-size: 0.8rem;
   display: none !important; // yes this is dumb, but this was broken and the above CSS was overriding
 }
 
+.video-thumbnail-generator {
+  width: 100%;
+  max-height: 30vh;
+}
+
 // ****************************************************************************
 // Autoplay Countdown
 // ****************************************************************************

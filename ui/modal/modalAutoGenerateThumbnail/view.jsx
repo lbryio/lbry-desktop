@@ -87,7 +87,14 @@ function ModalAutoGenerateThumbnail(props: Props) {
       onAborted={closeModal}
     >
       <p className="section__subtitle">{__('Pause at any time to select a thumbnail from your video')}.</p>
-      <video ref={playerRef} src={videoSrc} onLoadedMetadata={resize} onError={onError} controls />
+      <video
+        className="video-thumbnail-generator"
+        ref={playerRef}
+        src={videoSrc}
+        onLoadedMetadata={resize}
+        onError={onError}
+        controls
+      />
     </Modal>
   );
 }
