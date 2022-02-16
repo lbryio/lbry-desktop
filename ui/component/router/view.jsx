@@ -11,6 +11,7 @@ import { parseURI, isURIValid } from 'util/lbryURI';
 import { SITE_TITLE, WELCOME_VERSION } from 'config';
 import LoadingBarOneOff from 'component/loadingBarOneOff';
 import { GetLinksData } from 'util/buildHomepage';
+import * as CS from 'constants/claim_search';
 
 import HomePage from 'page/home';
 
@@ -177,6 +178,7 @@ function AppRouter(props: Props) {
   const urlParams = new URLSearchParams(search);
   const resetScroll = urlParams.get('reset_scroll');
   const hasLinkedCommentInUrl = urlParams.get(LINKED_COMMENT_QUERY_PARAM);
+  const tagParams = urlParams.get(CS.TAGS_KEY);
   const isLargeScreen = useIsLargeScreen();
 
   const homeCategoryPages = React.useMemo(() => {
@@ -279,7 +281,8 @@ function AppRouter(props: Props) {
         <Redirect from={`/$/${PAGES.DEPRECATED__PUBLISHED}`} to={`/$/${PAGES.UPLOADS}`} />
 
         <Route path={`/`} exact component={HomePage} />
-        <Route path={`/$/${PAGES.DISCOVER}`} exact component={DiscoverPage} />
+
+        {(!wildWestDisabled || tagParams) && <Route path={`/$/${PAGES.DISCOVER}`} exact component={DiscoverPage} />}
         {!wildWestDisabled && <Route path={`/$/${PAGES.WILD_WEST}`} exact component={DiscoverPage} />}
         {homeCategoryPages}
 
