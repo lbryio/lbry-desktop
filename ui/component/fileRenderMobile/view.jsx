@@ -29,6 +29,7 @@ type Props = {
   activeLivestreamForChannel?: any,
   channelClaimId?: any,
   playingUri?: PlayingUri,
+  primaryUri: ?string,
   mobilePlayerDimensions?: any,
   doPlayUri: (string) => void,
   doSetMobilePlayerDimensions: (height: number, width: number) => void,
@@ -48,6 +49,7 @@ export default function FileRenderMobile(props: Props) {
     activeLivestreamForChannel,
     channelClaimId,
     playingUri,
+    primaryUri,
     mobilePlayerDimensions,
     doPlayUri,
     doSetMobilePlayerDimensions,
@@ -145,6 +147,7 @@ export default function FileRenderMobile(props: Props) {
     !isPlayable ||
     !uri ||
     countdownCanceled ||
+    (!isCurrentClaimLive && primaryUri !== playingUri?.uri) || // No floating player on mobile as of now
     (collectionId && !canViewFile && !nextListUri)
   ) {
     return null;

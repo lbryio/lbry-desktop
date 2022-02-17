@@ -5,7 +5,7 @@ import {
   makeSelectNextUrlForCollectionAndUrl,
   makeSelectPreviousUrlForCollectionAndUrl,
 } from 'redux/selectors/collections';
-import { selectPlayingUri, makeSelectFileRenderModeForUri } from 'redux/selectors/content';
+import { selectPlayingUri, makeSelectFileRenderModeForUri, selectPrimaryUri } from 'redux/selectors/content';
 import { selectCostInfoForUri } from 'lbryinc';
 import { doPlayUri } from 'redux/actions/content';
 import { doSetMobilePlayerDimensions } from 'redux/actions/app';
@@ -17,6 +17,7 @@ import { selectMobilePlayerDimensions } from 'redux/selectors/app';
 
 const select = (state, props) => {
   const playingUri = selectPlayingUri(state);
+  const primaryUri = selectPrimaryUri(state);
   const uri = playingUri && playingUri.uri;
   const collectionId = playingUri && playingUri.collectionId;
 
@@ -37,6 +38,7 @@ const select = (state, props) => {
     claimId,
     channelClaimId,
     mobilePlayerDimensions: selectMobilePlayerDimensions(state),
+    primaryUri,
     playingUri,
   };
 };

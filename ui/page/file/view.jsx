@@ -70,12 +70,10 @@ export default function FilePage(props: Props) {
     position,
     commentsListTitle,
     settingsByChannelId,
-    isPlaying,
     doFetchCostInfoForUri,
     doSetContentHistoryItem,
     doSetPrimaryUri,
     clearPosition,
-    doClearPlayingUri,
   } = props;
 
   const isMobile = useIsMobile();
@@ -125,15 +123,6 @@ export default function FilePage(props: Props) {
     doSetContentHistoryItem,
     doSetPrimaryUri,
   ]);
-
-  React.useEffect(() => {
-    // No floating player on mobile as of now, so clear the playing uri
-    return () => {
-      if (isMobile && isPlaying && RENDER_MODES.FLOATING_MODES.includes(renderMode)) {
-        doClearPlayingUri();
-      }
-    };
-  }, [doClearPlayingUri, isMobile, isPlaying, renderMode]);
 
   function renderFilePageLayout() {
     if (RENDER_MODES.FLOATING_MODES.includes(renderMode)) {

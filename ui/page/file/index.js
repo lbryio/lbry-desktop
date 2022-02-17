@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { doSetContentHistoryItem, doSetPrimaryUri, clearPosition, doClearPlayingUri } from 'redux/actions/content';
+import { doSetContentHistoryItem, doSetPrimaryUri, clearPosition } from 'redux/actions/content';
 import { withRouter } from 'react-router-dom';
 import {
   selectClaimIsNsfwForUri,
@@ -13,11 +13,7 @@ import * as COLLECTIONS_CONSTS from 'constants/collections';
 import * as SETTINGS from 'constants/settings';
 import { selectCostInfoForUri, doFetchCostInfoForUri } from 'lbryinc';
 import { selectShowMatureContent, selectClientSetting } from 'redux/selectors/settings';
-import {
-  makeSelectFileRenderModeForUri,
-  makeSelectContentPositionForUri,
-  makeSelectIsUriCurrentlyPlaying,
-} from 'redux/selectors/content';
+import { makeSelectFileRenderModeForUri, makeSelectContentPositionForUri } from 'redux/selectors/content';
 import { makeSelectCommentsListTitleForUri, selectSettingsByChannelId } from 'redux/selectors/comments';
 import { DISABLE_COMMENTS_TAG } from 'constants/tags';
 import { doSetMobilePlayerDimensions } from 'redux/actions/app';
@@ -49,7 +45,6 @@ const select = (state, props) => {
     collectionId,
     position: makeSelectContentPositionForUri(uri)(state),
     commentsListTitle: makeSelectCommentsListTitleForUri(uri)(state),
-    isPlaying: makeSelectIsUriCurrentlyPlaying(uri)(state),
   };
 };
 
@@ -59,7 +54,6 @@ const perform = {
   doSetPrimaryUri,
   clearPosition,
   doSetMobilePlayerDimensions,
-  doClearPlayingUri,
 };
 
 export default withRouter(connect(select, perform)(FilePage));
