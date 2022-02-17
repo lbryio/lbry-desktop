@@ -83,7 +83,8 @@ export function doSkipUpgrade() {
 export function doStartUpgrade() {
   return (dispatch, getState) => {
     const state = getState();
-    const upgradeDownloadPath = selectUpgradeDownloadPath(state);
+    const upgradeDownloadPath = selectUpgradeDownloadPath(state); // downloadPath
+    // make sure downloadPath is updated as soon as download starts
 
     ipcRenderer.send('upgrade', upgradeDownloadPath);
   };
@@ -92,7 +93,7 @@ export function doStartUpgrade() {
 export function doDownloadUpgrade() {
   return (dispatch, getState) => {
     const state = getState();
-    const url = selectUpdateUrl(state);
+    const url = selectUpdateUrl(state); // updateUrl
     ipcRenderer.send('download-upgrade', { url, options: {} });
     dispatch({
       type: ACTIONS.UPGRADE_DOWNLOAD_STARTED,

@@ -118,6 +118,7 @@ ipcRenderer.on('open-uri-requested', (event, url, newSession) => {
 });
 
 ipcRenderer.on('download-progress-update', (e, p) => {
+  console.log('e', e, 'p', p);
   app.store.dispatch(doUpdateDownloadProgress(Math.round(p.percent * 100)));
 });
 
@@ -146,10 +147,19 @@ ipcRenderer.on('zoom-window', (event, action) => {
 
 const { dock } = remote.app;
 
+ipcRenderer.on('log-this', (e, log) => {
+  console.log('electron log:', log);
+});
+
 ipcRenderer.on('window-is-focused', () => {
   if (!dock) return;
   app.store.dispatch({ type: ACTIONS.WINDOW_FOCUSED });
   dock.setBadge('');
+});
+
+ipcRenderer.on('update-download-path', (dir) => {
+  console.log('dir');
+  // doLogWarningConsoleMessage();
 });
 
 ipcRenderer.on('devtools-is-opened', () => {
@@ -191,8 +201,9 @@ function AppWrapper() {
   useEffect(() => {
     if (persistDone) {
       const state = store.getState();
-      const enabled = makeSelectClientSetting(SETTINGS.ENABLE_PRERELEASE_UPDATES)(state);
-      if (enabled) {
+      const prereleaseEnabled = makeSelectClientSetting(SETTINGS.ENABLE_PRERELEASE_UPDATES)(state);
+      // const autoUpdateEnabled = makeSelectClientSetting(SETTINGS.ENABLE_PRERELEASE_UPDATES)(state);
+      if (prereleaseEnabled) {
         autoUpdater.allowPrerelease = true;
       }
     }

@@ -289,6 +289,8 @@ app.on('before-quit', () => {
 ipcMain.on('download-upgrade', async (event, params) => {
   const { url, options } = params;
   const dir = fs.mkdtempSync(app.getPath('temp') + path.sep);
+  // tell app of new tempdir
+  rendererWindow.webContents.send('update-download-path', dir);
   options.onProgress = function(p) {
     rendererWindow.webContents.send('download-progress-update', p);
   };
@@ -318,7 +320,8 @@ ipcMain.on('check-for-updates', () => {
   autoUpdater.checkForUpdates();
 });
 
-autoUpdater.on('update-downloaded', () => {
+autoUpdater.on('update-downloaded', (e, releaseNotes, releaseName) => {
+  rendererWindow.webContents.send('log-this', {e, releaseNotes, releaseName});
   autoUpdateDownloaded = true;
 });
 
