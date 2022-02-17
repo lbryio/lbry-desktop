@@ -185,13 +185,13 @@ function HomePage(props: Props) {
           {authenticated && hasScheduledStreams && !hideScheduledLivestreams && (
             <SectionHeader title={__('Following')} navigate={`/$/${PAGES.CHANNELS_FOLLOWING}`} icon={ICONS.SUBSCRIBE} />
           )}
-
-          {rowData.map(({ title, route, link, icon, help, pinnedUrls: pinUrls, options = {} }, index) => {
-            // add pins here
-            return getRowElements(title, route, link, icon, help, options, index, pinUrls);
-          })}
         </>
       )}
+
+      {rowData.map(({ title, route, link, icon, help, pinnedUrls: pinUrls, options = {} }, index) => {
+        // add pins here
+        return getRowElements(title, route, link, icon, help, options, index, pinUrls);
+      })}
     </Page>
   );
 }
