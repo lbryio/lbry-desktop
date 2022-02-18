@@ -119,3 +119,10 @@
   overflow: auto;
   margin-bottom: var(--spacing-l);
 }
+
+@media (min-width: 1600px) {
+  .file-page__post-comments .card__first-pane {
+    width: 52rem;
+    margin: 0 auto;
+  }
+}
