@@ -21,8 +21,11 @@ type HeaderMenuButtonProps = {
 
 export default function HeaderProfileMenuButton(props: HeaderMenuButtonProps) {
   const { myChannelClaimIds, activeChannelClaim, authenticated, email, signOut } = props;
-  const pendingChannelFetch = myChannelClaimIds === undefined;
+
   const activeChannelUrl = activeChannelClaim && activeChannelClaim.permanent_url;
+  // activeChannel will be: undefined = fetching, null = nothing, or { channel claim }
+  const noActiveChannel = activeChannelUrl === null;
+  const pendingChannelFetch = !noActiveChannel && myChannelClaimIds === undefined;
 
   return (
     <div className="header__buttons">
