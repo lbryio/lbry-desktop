@@ -18,6 +18,7 @@ import Spinner from 'component/spinner';
 import { getPasswordFromCookie } from 'util/saved-passwords';
 import * as DAEMON_SETTINGS from 'constants/daemon_settings';
 import SettingEnablePrereleases from 'component/settingEnablePrereleases';
+import SettingDisableAutoUpdates from 'component/settingDisableAutoUpdates';
 
 const IS_MAC = process.platform === 'darwin';
 
@@ -221,6 +222,14 @@ export default function SettingSystem(props: Props) {
               subtitle={__('Prereleases may break things and we may not be able to fix them for you.')}
             >
               <SettingEnablePrereleases />
+            </SettingsRow>
+            <SettingsRow
+              title={__('Disable automatic updates')}
+              subtitle={__(
+                "Preven't new updates to be downloaded automatically in the background (we will keep notifying you if there is an update)"
+              )}
+            >
+              <SettingDisableAutoUpdates />
             </SettingsRow>
             <SettingsRow
               title={

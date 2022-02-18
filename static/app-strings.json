@@ -2285,5 +2285,7 @@
   "Enable Automatic Hosting": "Enable Automatic Hosting",
   "Download and serve arbitrary data on the network.": "Download and serve arbitrary data on the network.",
   "View History Hosting": "View History Hosting",
+  "Disable automatic updates": "Disable automatic updates",
+  "Preven't new updates to be downloaded automatically in the background (we will keep notifying you if there is an update)": "Preven't new updates to be downloaded automatically in the background (we will keep notifying you if there is an update)",
   "--end--": "--end--"
 }

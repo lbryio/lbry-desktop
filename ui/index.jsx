@@ -200,6 +200,12 @@ function AppWrapper() {
 
   useEffect(() => {
     // @if TARGET='app'
+
+    // Enable/disable automatic updates download based on user's settings.
+    const state = store.getState();
+    const autoUpdatesDisabled = makeSelectClientSetting(SETTINGS.DISABLE_AUTO_UPDATES)(state);
+    autoUpdater.autoDownload = !autoUpdatesDisabled;
+
     moment.locale(remote.app.getLocale());
 
     autoUpdater.on('error', (error) => {

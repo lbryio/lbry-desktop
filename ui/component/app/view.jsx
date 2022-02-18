@@ -76,6 +76,7 @@ type Props = {
   fetchModBlockedList: () => void,
   resolveUris: (Array<string>) => void,
   fetchModAmIList: () => void,
+  isUpdateModalDisplayed: boolean,
 };
 
 function App(props: Props) {
@@ -111,6 +112,7 @@ function App(props: Props) {
     resolveUris,
     subscriptions,
     fetchModAmIList,
+    isUpdateModalDisplayed,
   } = props;
 
   const appRef = useRef();
@@ -345,7 +347,7 @@ function App(props: Props) {
       <FileRenderFloating />
       {isEnhancedLayout && <Yrbl className="yrbl--enhanced" />}
 
-      {showUpgradeButton && (
+      {showUpgradeButton && !isUpdateModalDisplayed && (
         <Nag
           message={__('An upgrade is available.')}
           actionText={__('Install Now')}
