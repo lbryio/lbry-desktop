@@ -1045,6 +1045,23 @@ img {
   }
 }
 
+.channelsToFollow-wrapper {
+  margin-top: var(--spacing-l);
+
+  .claim-preview__wrapper--channel {
+    .claim-preview--channel {
+      a {
+        .button__content {
+          align-items: unset;
+        }
+      }
+    }
+    .menu__button {
+      right: var(--spacing-xs);
+    }
+  }
+}
+
 // Temporary master classes
 .date_time {
   font-size: var(--font-xsmall);
