@@ -18,6 +18,13 @@ $actions-z-index: 2;
       &:hover {
         color: var(--color-primary) !important;
       }
+      @media (max-width: $breakpoint-small) {
+        .button__label {
+          div:first-of-type {
+            top: 50% !important;
+          }
+        }
+      }
     }
     .button-following:last-of-type {
       margin-left: 2px;
