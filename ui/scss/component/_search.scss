@@ -190,8 +190,34 @@
   .search__header {
     .claim-preview__wrapper--channel {
       .claim-preview__repost-author {
-        top: calc(var(--spacing-m) * -1);
-        left: calc(var(--spacing-m) * -1);
+        top: calc(var(--spacing-m) * -1) !important;
+        left: calc(var(--spacing-m) * -1) !important;
+      }
+    }
+    .claim-preview__wrapper {
+      .claim-preview__repost-author {
+        top: 0 !important;
+        left: 0 !important;
+        span {
+          display: inline-block;
+          margin-left: 12px;
+          margin-top: -4px;
+          width: 92px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        @media (max-width: $breakpoint-small) {
+          .icon {
+            margin-top: 3px;
+          }
+          span {
+            font-size: var(--font-xxxsmall);
+            width: 78px;
+            margin-top: 1px;
+            margin-left: 10px;
+          }
+        }
       }
     }
   }
