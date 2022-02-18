@@ -627,7 +627,7 @@ function PublishForm(props: Props) {
 
       {!publishing && (
         <div className={classnames({ 'card--disabled': formDisabled })}>
-          {showSchedulingOptions && <Card className={'card--enable-overflow'} body={<PublishStreamReleaseDate />} />}
+          {showSchedulingOptions && <Card body={<PublishStreamReleaseDate />} />}
 
           {mode !== PUBLISH_MODES.POST && <PublishDescription disabled={formDisabled} />}
 
