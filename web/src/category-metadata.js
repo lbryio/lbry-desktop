@@ -4,7 +4,7 @@ const PAGES = require('../../ui/constants/pages');
 
 module.exports.CATEGORY_METADATA = {
   [PAGES.CREATIVE_ARTS]: () => ({
-    title: 'Creative Arts',
+    title: 'The Arts',
     description: `Odysee's home for art, animation, comedy, and everything inbetween`,
     image: '',
   }),
@@ -75,7 +75,7 @@ module.exports.CATEGORY_METADATA = {
     image: '',
   }),
   [PAGES.UNIVERSE]: () => ({
-    title: 'The Universe',
+    title: 'Universe',
     description: 'Podcasts, life, learning, and everything else on Odysee',
     image: '',
   }),

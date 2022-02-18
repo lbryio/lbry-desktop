@@ -7,7 +7,7 @@ import * as PAGES from 'constants/pages';
 
 export const PAGE_TITLE = {
   // --- Categories ---
-  [PAGES.CREATIVE_ARTS]: 'Creative Arts',
+  [PAGES.CREATIVE_ARTS]: 'The Arts',
   [PAGES.DISCOVER]: 'Wild West',
   [PAGES.EDUCATION]: 'Education',
   [PAGES.ENLIGHTENMENT]: 'Enlightenment',
@@ -21,7 +21,7 @@ export const PAGE_TITLE = {
   [PAGES.NEWS]: 'News & Politics',
   [PAGES.POP_CULTURE]: 'Pop Culture',
   [PAGES.TECH]: 'Tech',
-  [PAGES.UNIVERSE]: 'The Universe',
+  [PAGES.UNIVERSE]: 'Universe',
   [PAGES.WILD_WEST]: 'Wild West',
 
   // --- Everything else in alphabetical order ---
