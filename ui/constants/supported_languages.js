@@ -14,6 +14,7 @@ const SUPPORTED_LANGUAGES = {
   de: LANGUAGES.de[1],
   gu: LANGUAGES.gu[1],
   hi: LANGUAGES.hi[1],
+  hu: LANGUAGES.hu[1],
   id: LANGUAGES.id[1],
   ja: LANGUAGES.ja[1],
   jv: LANGUAGES.jv[1],

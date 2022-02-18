@@ -15,6 +15,7 @@ const SUPPORTED_BROWSER_LANGUAGES = {
   de: 'de',
   gu: 'gu',
   hi: 'hi',
+  hu: 'hu',
   id: 'id',
   ja: 'ja',
   jv: 'jv',
