@@ -89,7 +89,7 @@ export default function LivestreamMenu(props: Props) {
               <MenuItem className="comment__menu-option" onSelect={toggleSuperchats}>
                 <span className="menu__link">
                   <Icon aria-hidden icon={superchatsHidden ? ICONS.EYE : ICONS.DISMISS_ALL} size={18} />
-                  {superchatsHidden ? __('Display Superchats') : __('Dismiss Superchats')}
+                  {superchatsHidden ? __('Display HyperChats') : __('Dismiss HyperChats')}
                 </span>
               </MenuItem>
             )
