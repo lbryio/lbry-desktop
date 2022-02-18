@@ -1025,6 +1025,26 @@ img {
   }
 }
 
+.custom-wrapper {
+  @media (max-width: $breakpoint-small) {
+    .card {
+      padding: var(--spacing-xxxs);
+      .card__title-section {
+        width: 100%;
+        div:first-of-type {
+          width: 100%;
+          .card__title {
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        }
+      }
+    }
+  }
+}
+
 // Temporary master classes
 .date_time {
   font-size: var(--font-xsmall);

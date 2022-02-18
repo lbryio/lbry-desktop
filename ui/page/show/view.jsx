@@ -208,7 +208,7 @@ function ShowPage(props: Props) {
 
     if (isClaimBlackListed && !claimIsMine) {
       innerContent = (
-        <Page>
+        <Page className="custom-wrapper">
           <Card
             title={uri}
             subtitle={__(
