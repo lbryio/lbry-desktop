@@ -12,7 +12,6 @@ import { SUPPORTED_MOONPAY_COUNTRIES } from 'constants/moonpay';
 import { useHistory } from 'react-router';
 import Button from 'component/button';
 import Nag from 'component/common/nag';
-import I18nMessage from 'component/i18nMessage';
 import LbcSymbol from 'component/common/lbc-symbol';
 import { SIMPLE_SITE } from 'config';
 // import classnames from 'classnames';
@@ -97,19 +96,7 @@ export default function BuyPage(props: Props) {
 
   const title = __('Buy Credits');
   const subtitle = (
-    <I18nMessage
-      tokens={{
-        learn_more: (
-          <Button
-            button="link"
-            label={__('Learn more')}
-            href="https://odysee.com/@OdyseeHelp:b/BuyingSellingLBRYCredits:b"
-          />
-        ),
-      }}
-    >
-      %learn_more%.
-    </I18nMessage>
+    <Button button="link" label={__('Learn more')} href="https://odysee.com/@OdyseeHelp:b/BuyingSellingLBRYCredits:b" />
   );
 
   if (MOONPAY_DOWN) {
