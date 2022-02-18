@@ -39,6 +39,12 @@ let autoUpdateDownloaded = false;
 // that we show on Windows after you decline an upgrade and close the app later.
 let showingAutoUpdateCloseAlert = false;
 
+// This is used to prevent downloading updates multiple times.
+// As read in the documentation:
+// "Calling autoUpdater.checkForUpdates() twice will download the update two times."
+// https://www.electronjs.org/docs/latest/api/auto-updater#autoupdatercheckforupdates
+let keepCheckingForUpdates = true;
+
 // Keep a global reference, if you don't, they will be closed automatically when the JavaScript
 // object is garbage collected.
 let rendererWindow;
@@ -315,16 +321,49 @@ ipcMain.on('upgrade', (event, installerPath) => {
 });
 
 ipcMain.on('check-for-updates', () => {
+  // Prevent downloading the same update multiple times.
+  if (!keepCheckingForUpdates) {
+    return;
+  }
+
+  keepCheckingForUpdates = false;
   autoUpdater.checkForUpdates();
 });
 
 autoUpdater.on('update-downloaded', () => {
   autoUpdateDownloaded = true;
+
+  // If this download was trigger by
+  // autoUpdateAccepted it means, the user
+  // wants to install the new update but
+  // needed to downloaded the files first.
+  if (appState.autoUpdateAccepted) {
+    autoUpdater.quitAndInstall();
+  }
+});
+
+autoUpdater.on('update-not-available', () => {
+  keepCheckingForUpdates = true;
 });
 
 ipcMain.on('autoUpdateAccepted', () => {
   appState.autoUpdateAccepted = true;
-  autoUpdater.quitAndInstall();
+
+  // quitAndInstall can only be called if the 
+  // update has been downloaded. Since the user
+  // can disable auto updates, we have to make
+  // sure it has been downloaded first.
+  if (autoUpdateDownloaded) {
+    autoUpdater.quitAndInstall();
+    return;
+  }
+
+  // If the update hasn't been downloaded,
+  // start downloading it. After it's done, the
+  // event 'update-downloaded' will be triggered,
+  // where we will be able to resume the 
+  // update installation.
+  autoUpdater.downloadUpdate();
 });
 
 ipcMain.on('version-info-requested', () => {
