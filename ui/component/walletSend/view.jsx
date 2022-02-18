@@ -6,8 +6,6 @@ import { Form, FormField } from 'component/common/form';
 import { Formik } from 'formik';
 import validateSendTx from 'util/form-validation';
 import Card from 'component/common/card';
-import I18nMessage from 'component/i18nMessage';
-import LbcSymbol from 'component/common/lbc-symbol';
 import WalletSpendableBalanceHelp from 'component/walletSpendableBalanceHelp';
 import classnames from 'classnames';
 import ChannelSelector from 'component/channelSelector';
@@ -88,9 +86,7 @@ class WalletSend extends React.PureComponent<Props> {
     return (
       <Card
         title={__('Send Credits')}
-        subtitle={
-          <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>Send Credits to your friends or favorite creators.</I18nMessage>
-        }
+        subtitle={__('Send Credits to your friends or favorite creators.')}
         actions={
           <Formik
             initialValues={{

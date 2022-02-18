@@ -7,7 +7,6 @@ import ClaimEffectiveAmount from 'component/claimEffectiveAmount';
 import SearchTopClaim from 'component/searchTopClaim';
 import * as CS from 'constants/claim_search';
 import Button from 'component/button';
-import I18nMessage from 'component/i18nMessage';
 import * as PAGES from 'constants/pages';
 import { SIMPLE_SITE } from 'config';
 
@@ -31,22 +30,8 @@ function TopPage(props: Props) {
         streamType={SIMPLE_SITE ? CS.CONTENT_ALL : undefined}
         meta={
           <div className="search__top-links">
-            <I18nMessage
-              tokens={{
-                repost: (
-                  <Button
-                    button="secondary"
-                    navigate={`/$/${PAGES.REPOST_NEW}?to=${queryName}`}
-                    label={__('Repost Here')}
-                  />
-                ),
-                publish: (
-                  <Button button="secondary" onClick={() => beginPublish(queryName)} label={__('Publish Here')} />
-                ),
-              }}
-            >
-              %repost% %publish%
-            </I18nMessage>
+            <Button button="secondary" navigate={`/$/${PAGES.REPOST_NEW}?to=${queryName}`} label={__('Repost Here')} />
+            <Button button="secondary" onClick={() => beginPublish(queryName)} label={__('Publish Here')} />
           </div>
         }
         includeSupportAction
