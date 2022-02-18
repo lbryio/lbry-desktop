@@ -1,7 +1,6 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import React from 'react';
-import I18nMessage from 'component/i18nMessage';
 import UriIndicator from 'component/uriIndicator';
 import Icon from 'component/common/icon';
 
@@ -31,16 +30,11 @@ function ClaimRepostAuthor(props: Props) {
   if (repostUrl && !repostChannelUrl) {
     return (
       <div className="claim-preview__repost-author">
-        <Icon icon={ICONS.REPOST} size={10} />
-        <span>
-          <I18nMessage
-            tokens={{
-              anonymous: <strong>{__('Anonymous --[used in <%anonymous% Reposted>]--')}</strong>,
-            }}
-          >
-            %anonymous% Reposted
-          </I18nMessage>
-        </span>
+        <div className="claim-preview__repost-ribbon">
+          <Icon icon={ICONS.REPOST} size={10} className="claim-preview__repost-icon" />
+          <br />
+          {__('Anonymous')}
+        </div>
       </div>
     );
   }

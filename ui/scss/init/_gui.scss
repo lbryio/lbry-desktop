@@ -1,4 +1,3 @@
-// Generic html styles used across the App
 // component specific styling should go in the component scss file
 
 *::selection {
@@ -790,6 +789,47 @@ img {
       &:hover {
         background-color: rgba(var(--color-header-background-base), 0.9);
       }
+      .claim-preview__repost-author {
+        left: 0;
+        top: 0;
+        .claim-preview__repost-ribbon {
+          span {
+            display: inline-block;
+            margin-left: 12px;
+            margin-top: -4px;
+            width: 92px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+          @media (max-width: $breakpoint-small) {
+            font-size: var(--font-xxxsmall);
+            .icon {
+              margin-top: 3px;
+            }
+            span {
+              width: 78px;
+              margin-top: 1px;
+              margin-left: 10px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .search__top-links {
+    @media (max-width: $breakpoint-small) {
+      .button {
+        padding: 0 var(--spacing-m);
+        height: var(--height-button);
+        margin-bottom: var(--spacing-xxxs);
+        .button__content {
+          .button__label {
+            font-size: var(--font-base);
+          }
+        }
+      }
     }
   }
 
@@ -815,6 +855,23 @@ img {
           .icon {
             stroke: var(--color-primary-contrast);
           }
+        }
+      }
+    }
+    .claim-preview__actions {
+      .claim-preview__primary-actions {
+        margin-top: var(--spacing-xxxs);
+      }
+    }
+    .claim-preview__repost-author {
+      top: var(--spacing-m);
+      left: var(--spacing-m);
+      .claim-preview__repost-ribbon {
+        @media (max-width: $breakpoint-small) {
+          .icon {
+            margin-top: 3px;
+          }
+          font-size: var(--font-xxxsmall);
         }
       }
     }
