@@ -190,6 +190,20 @@ body {
             align-items: unset;
           }
         }
+        .claim-preview-info {
+          margin-top: 2px;
+          margin-bottom: -2px;
+          .claim-preview__title {
+            span {
+              font-size: var(--font-small);
+            }
+          }
+        }
+        .claim-tile__info {
+          .media__subtitle {
+            margin-bottom: 1px;
+          }
+        }
       }
     }
   }
