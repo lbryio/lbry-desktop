@@ -1052,6 +1052,11 @@ img {
   }
 }
 
+// Remove resize icon in textareas
+::-webkit-resizer {
+  display: none;
+}
+
 // Remove tap focus on mobile devices
 input,
 textarea,
