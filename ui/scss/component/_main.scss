@@ -130,8 +130,13 @@ body {
     }
 
     .claim-preview__wrapper--inline {
+      .claim-preview-metadata {
+        .claim-tile__info {
+          margin-top: 0;
+        }
+      }
       .media__subtitle {
-        padding-bottom: 0;
+        padding-bottom: 1;
         a.button {
           display: inline-block !important;
         }
