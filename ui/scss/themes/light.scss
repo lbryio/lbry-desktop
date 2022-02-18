@@ -180,6 +180,7 @@
   // Scrollbar
   --color-scrollbar-thumb-bg: rgba(0, 0, 0, 0.2);
   --color-scrollbar-track-bg: transparent;
+  --color-body-scrollbar-track-bg: var(--color-header-button);
 
   --background-shade: linear-gradient(-180deg, rgba(var(--color-background-base), 0.6) 2%, #f1f1f1),
     radial-gradient(circle at 50% 217%, rgba(var(--color-background-base), 0.6) 0, #f8f8f8 100%);

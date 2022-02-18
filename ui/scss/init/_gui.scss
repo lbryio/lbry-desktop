@@ -20,6 +20,8 @@ html {
 }
 
 body {
+  width: calc(100vw - var(--body-scrollbar-width));
+
   font-size: 1em;
   cursor: default;
   line-height: 1.5;
@@ -33,9 +35,18 @@ body {
   scrollbar-color: var(--color-scrollbar-thumb-bg) var(--color-scrollbar-track-bg);
 }
 
-body *::-webkit-scrollbar {
-  width: 6px;
+body::-webkit-scrollbar {
+  width: var(--body-scrollbar-width);
   height: 6px;
+}
+
+body *::-webkit-scrollbar {
+  width: var(--scrollbar-width);
+  height: 6px;
+}
+
+body::-webkit-scrollbar-track {
+  background: var(--color-body-scrollbar-track-bg);
 }
 
 body *::-webkit-scrollbar-track {
@@ -47,7 +58,12 @@ body *::-webkit-scrollbar-thumb {
   // standard currently doesn't support it. Stick with square
   // scrollbar for all browsers.
   background-color: var(--color-scrollbar-thumb-bg);
-  border-radius: 4px;
+  border-radius: var(--scrollbar-radius);
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: var(--color-scrollbar-thumb-bg);
+  border-radius: var(--scrollbar-radius);
 }
 
 hr {

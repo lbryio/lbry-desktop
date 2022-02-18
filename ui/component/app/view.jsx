@@ -296,6 +296,11 @@ function App(props: Props) {
   }, [theme]);
 
   useEffect(() => {
+    // $FlowFixMe
+    document.body.style.overflowY = currentModal ? 'hidden' : '';
+  }, [currentModal]);
+
+  useEffect(() => {
     if (hasMyChannels && !hasActiveChannelClaim) {
       setActiveChannelIfNotSet();
     } else if (hasNoChannels) {

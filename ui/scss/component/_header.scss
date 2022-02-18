@@ -5,7 +5,7 @@
   z-index: 3; // Main content uses z-index: 1, other content uses z-index: 2, this ensures it always scrolls under the header
   position: fixed;
   top: 0;
-  width: 100%;
+  width: 100vw;
   background-color: var(--color-header-background);
   font-size: var(--font-body);
   user-select: none;
@@ -137,6 +137,7 @@
   height: var(--header-height);
   padding: var(--spacing-s) var(--spacing-m);
   flex-wrap: nowrap;
+  margin-right: var(--body-scrollbar-width);
 
   .wunderbar__wrapper {
     .wunderbar__input {

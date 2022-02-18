@@ -107,10 +107,16 @@
   // Animations
   --resizing-animation-function: ease-in;
   --resizing-animation-timing: 180ms;
+
+  //Scrollbars
+  --body-scrollbar-width: 12px;
+  --scrollbar-width: 6px;
+  --scrollbar-radius: 0.5rem;
 }
 
 @media (max-width: $breakpoint-small) {
   :root {
     --font-body: 0.8rem;
+    --body-scrollbar-width: 0px;
   }
 }
