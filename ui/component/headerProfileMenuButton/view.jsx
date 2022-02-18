@@ -12,6 +12,7 @@ import React from 'react';
 import Skeleton from '@mui/material/Skeleton';
 
 type HeaderMenuButtonProps = {
+  myChannelClaimIds: ?Array<string>,
   activeChannelClaim: ?ChannelClaim,
   authenticated: boolean,
   email: ?string,
@@ -19,14 +20,14 @@ type HeaderMenuButtonProps = {
 };
 
 export default function HeaderProfileMenuButton(props: HeaderMenuButtonProps) {
-  const { activeChannelClaim, authenticated, email, signOut } = props;
-
+  const { myChannelClaimIds, activeChannelClaim, authenticated, email, signOut } = props;
+  const pendingChannelFetch = myChannelClaimIds === undefined;
   const activeChannelUrl = activeChannelClaim && activeChannelClaim.permanent_url;
 
   return (
     <div className="header__buttons">
       <Menu>
-        {activeChannelUrl === undefined ? (
+        {pendingChannelFetch ? (
           <Skeleton variant="circular" animation="wave" className="header__navigationItem--iconSkeleton" />
         ) : (
           <MenuButton

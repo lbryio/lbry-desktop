@@ -12,7 +12,7 @@ import {
   selectIsUpgradeAvailable,
   selectAutoUpdateDownloaded,
   selectModal,
-  selectActiveChannelId,
+  selectActiveChannelClaim,
   selectIsReloadRequired,
 } from 'redux/selectors/app';
 import { selectUploadCount } from 'redux/selectors/publish';
@@ -37,7 +37,7 @@ const select = (state) => ({
   isAuthenticated: selectUserVerifiedEmail(state),
   currentModal: selectModal(state),
   syncFatalError: selectSyncFatalError(state),
-  activeChannelId: selectActiveChannelId(state),
+  activeChannelClaim: selectActiveChannelClaim(state),
   myChannelClaimIds: selectMyChannelClaimIds(state),
   subscriptions: selectSubscriptions(state),
 });
