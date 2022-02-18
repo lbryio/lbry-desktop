@@ -130,13 +130,8 @@ body {
     }
 
     .claim-preview__wrapper--inline {
-      .claim-preview-metadata {
-        .claim-tile__info {
-          margin-top: 0;
-        }
-      }
       .media__subtitle {
-        padding-bottom: 1;
+        padding-bottom: 0;
         a.button {
           display: inline-block !important;
         }
@@ -164,6 +159,26 @@ body {
     @media (max-width: $breakpoint-medium) {
       section + .empty__wrap {
         margin: var(--spacing-m);
+      }
+      .claim-preview__wrapper--inline {
+        .claim-preview-metadata {
+          .claim-tile__info {
+            margin-top: 0;
+          }
+        }
+        .media__subtitle {
+          padding-bottom: 1;
+          a.button {
+            display: inline-block !important;
+          }
+        }
+        .button--alt {
+          padding: var(--spacing-s);
+        }
+        .button-following {
+          padding-left: var(--spacing-m);
+          padding-right: var(--spacing-m);
+        }
       }
     }
     @media (max-width: $breakpoint-small) {
