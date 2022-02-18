@@ -208,11 +208,11 @@
           text-overflow: ellipsis;
         }
         @media (max-width: $breakpoint-small) {
-          font-size: var(--font-xxxsmall);
           .icon {
             margin-top: 3px;
           }
           span {
+            font-size: var(--font-xxxsmall);
             width: 78px;
             margin-top: 1px;
             margin-left: 10px;
