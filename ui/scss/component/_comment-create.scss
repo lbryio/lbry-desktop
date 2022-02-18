@@ -112,6 +112,24 @@ $thumbnailWidthSmall: 1rem;
     }
   }
 
+  @media (max-width: $breakpoint-small) {
+    .MuiTextField-root {
+      .button--primary {
+        .button__content {
+          .icon {
+            stroke: var(--color-primary-contrast);
+            margin-left: 1px;
+            margin-right: -1px;
+          }
+        }
+      }
+      textarea#create__comment,
+      textarea#create__reply {
+        box-shadow: unset;
+      }
+    }
+  }
+
   @media (min-width: $breakpoint-small) {
     fieldset-section + .section {
       margin-top: var(--spacing-m);

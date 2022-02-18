@@ -199,6 +199,29 @@ body {
     @media (min-width: $breakpoint-small) {
       padding: var(--spacing-m);
     }
+
+    @media (max-width: $breakpoint-small) {
+      margin-top: 0;
+      .card {
+        padding: 0;
+        .card__first-pane {
+          .card__main-actions {
+            .button--alt:last-of-type {
+              top: -1px;
+              float: right;
+              margin-right: 0;
+            }
+            .comment__sort {
+              .button--alt:last-of-type {
+                top: unset;
+                float: unset;
+                margin-right: unset;
+              }
+            }
+          }
+        }
+      }
+    }
   }
 
   .file-page__info {

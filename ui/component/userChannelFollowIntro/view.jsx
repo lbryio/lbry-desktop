@@ -65,6 +65,7 @@ function UserChannelFollowIntro(props: Props) {
 
   return (
     <Card
+      className="channelsToFollow-wrapper"
       title={__('Find channels to follow')}
       subtitle={__(
         '%SITE_NAME% works better if you find and follow a couple creators you like. You can also block channels you never want to see.',
