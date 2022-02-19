@@ -37,7 +37,7 @@ import {
   selectModal,
   selectAllowAnalytics,
 } from 'redux/selectors/app';
-import { selectDaemonSettings, makeSelectClientSetting } from 'redux/selectors/settings';
+import { selectDaemonSettings, makeSelectClientSetting, selectDisableAutoUpdates } from 'redux/selectors/settings';
 import { selectUser } from 'redux/selectors/user';
 import { doSyncLoop, doSetPrefsReady, doPreferenceGet, doPopulateSharedUserState } from 'redux/actions/sync';
 import { doAuthenticate } from 'redux/actions/user';
@@ -187,10 +187,13 @@ export function doCheckUpgradeAvailable() {
       // On Windows, Mac, and AppImage, updates happen silently through
       // electron-updater.
       const autoUpdateDeclined = selectAutoUpdateDeclined(state);
+      const disableAutoUpdate = selectDisableAutoUpdates(state);
 
-      if (!autoUpdateDeclined && !isDev) {
-        ipcRenderer.send('check-for-updates');
+      if (autoUpdateDeclined || isDev) {
+        return;
       }
+
+      ipcRenderer.send('check-for-updates', !disableAutoUpdate);
       return;
     }
 

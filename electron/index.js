@@ -320,13 +320,14 @@ ipcMain.on('upgrade', (event, installerPath) => {
   app.quit();
 });
 
-ipcMain.on('check-for-updates', () => {
+ipcMain.on('check-for-updates', (event, autoDownload) => {
   // Prevent downloading the same update multiple times.
   if (!keepCheckingForUpdates) {
     return;
   }
 
   keepCheckingForUpdates = false;
+  autoUpdater.autoDownload = autoDownload;
   autoUpdater.checkForUpdates();
 });
 

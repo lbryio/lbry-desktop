@@ -1,9 +1,6 @@
 // @flow
 import React from 'react';
-import * as remote from '@electron/remote';
 import { FormField } from 'component/common/form';
-
-const { autoUpdater } = remote.require('electron-updater');
 
 type Props = {
   setClientSetting: (boolean) => void,
@@ -18,7 +15,6 @@ function SettingDisableAutoUpdates(props: Props) {
         name="autoupdates"
         onChange={() => {
           const newDisableAutoUpdates = !disableAutoUpdates;
-          autoUpdater.autoDownload = !newDisableAutoUpdates;
           setClientSetting(newDisableAutoUpdates);
         }}
         checked={disableAutoUpdates}

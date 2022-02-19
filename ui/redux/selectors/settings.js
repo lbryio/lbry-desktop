@@ -83,3 +83,5 @@ export const selectHomepageData = createSelector(
 );
 
 export const selectosNotificationsEnabled = makeSelectClientSetting(SETTINGS.OS_NOTIFICATIONS_ENABLED);
+
+export const selectDisableAutoUpdates = makeSelectClientSetting(SETTINGS.DISABLE_AUTO_UPDATES);

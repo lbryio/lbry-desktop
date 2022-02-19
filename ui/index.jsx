@@ -117,6 +117,16 @@ ipcRenderer.on('open-uri-requested', (event, url, newSession) => {
   handleError();
 });
 
+autoUpdater.on('update-available', ({ version }) => {
+  app.store.dispatch({
+    type: ACTIONS.CHECK_UPGRADE_SUCCESS,
+    data: {
+      upgradeAvailable: true,
+      remoteVersion: version,
+    },
+  });
+});
+
 ipcRenderer.on('download-progress-update', (e, p) => {
   app.store.dispatch(doUpdateDownloadProgress(Math.round(p.percent * 100)));
 });
@@ -200,12 +210,6 @@ function AppWrapper() {
 
   useEffect(() => {
     // @if TARGET='app'
-
-    // Enable/disable automatic updates download based on user's settings.
-    const state = store.getState();
-    const autoUpdatesDisabled = makeSelectClientSetting(SETTINGS.DISABLE_AUTO_UPDATES)(state);
-    autoUpdater.autoDownload = !autoUpdatesDisabled;
-
     moment.locale(remote.app.getLocale());
 
     autoUpdater.on('error', (error) => {

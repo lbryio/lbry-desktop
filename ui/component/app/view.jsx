@@ -129,8 +129,7 @@ function App(props: Props) {
   const [resolvedSubscriptions, setResolvedSubscriptions] = useState(false);
   // const [retryingSync, setRetryingSync] = useState(false);
   const [sidebarOpen] = usePersistedState('sidebar', true);
-  const showUpgradeButton =
-    (autoUpdateDownloaded || (process.platform === 'linux' && isUpgradeAvailable)) && !upgradeNagClosed;
+  const showUpgradeButton = (autoUpdateDownloaded || isUpgradeAvailable) && !upgradeNagClosed;
   // referral claiming
   const referredRewardAvailable = rewards && rewards.some((reward) => reward.reward_type === REWARDS.TYPE_REFEREE);
   const urlParams = new URLSearchParams(search);
