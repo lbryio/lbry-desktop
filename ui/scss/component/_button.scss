@@ -27,7 +27,8 @@
 
   .button__label {
     // height:1em;
-    margin-top: 2px;
+    margin-top: 1px;
+    padding-top: 2px;
   }
 
   @media (max-width: $breakpoint-small) {
