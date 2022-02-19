@@ -350,7 +350,7 @@ autoUpdater.on('update-not-available', () => {
 ipcMain.on('autoUpdateAccepted', () => {
   appState.autoUpdateAccepted = true;
 
-  // quitAndInstall can only be called if the 
+  // quitAndInstall can only be called if the
   // update has been downloaded. Since the user
   // can disable auto updates, we have to make
   // sure it has been downloaded first.
@@ -362,7 +362,7 @@ ipcMain.on('autoUpdateAccepted', () => {
   // If the update hasn't been downloaded,
   // start downloading it. After it's done, the
   // event 'update-downloaded' will be triggered,
-  // where we will be able to resume the 
+  // where we will be able to resume the
   // update installation.
   autoUpdater.downloadUpdate();
 });
