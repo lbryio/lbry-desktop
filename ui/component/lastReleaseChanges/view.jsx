@@ -1,23 +1,21 @@
 // @flow
-import React, { useState, useEffect } from 'react';
-import MarkdownPreview from 'component/common/markdown-preview';
+import React from 'react';
 import Button from 'component/button';
 import I18nMessage from 'component/i18nMessage';
 
 type Props = {
   hideReleaseVersion?: boolean,
+  releaseVersion: string,
+  releaseNotes: string,
 };
 
 const LastReleaseChanges = (props: Props) => {
-  const { hideReleaseVersion } = props;
-  const [releaseTag, setReleaseTag] = useState('');
-  const [releaseChanges, setReleaseChanges] = useState('');
-  const [fetchingReleaseChanges, setFetchingReleaseChanges] = useState(false);
-  const [fetchReleaseFailed, setFetchReleaseFailed] = useState(false);
+  const { hideReleaseVersion, releaseVersion, releaseNotes } = props;
 
   const releaseVersionTitle = (
     <p>
-      {!hideReleaseVersion && __('A new version %release_tag% of LBRY is ready for you.', { release_tag: releaseTag })}
+      {!hideReleaseVersion &&
+        __('A new version %release_tag% of LBRY is ready for you.', { release_tag: releaseVersion })}
     </p>
   );
   const seeReleaseNotes = (
@@ -34,47 +32,10 @@ const LastReleaseChanges = (props: Props) => {
     </p>
   );
 
-  useEffect(() => {
-    const lastReleaseUrl = 'https://api.github.com/repos/lbryio/lbry-desktop/releases/latest';
-    const options = {
-      method: 'GET',
-      headers: { Accept: 'application/vnd.github.v3+json' },
-    };
-
-    setFetchingReleaseChanges(true);
-    fetch(lastReleaseUrl, options)
-      .then((response) => response.json())
-      .then((response) => {
-        setReleaseTag(response.tag_name);
-        setReleaseChanges(response.body);
-        setFetchingReleaseChanges(false);
-        setFetchReleaseFailed(false);
-      })
-      .catch(() => {
-        setFetchingReleaseChanges(false);
-        setFetchReleaseFailed(true);
-      });
-  }, []);
-
-  if (fetchingReleaseChanges) {
-    return <p>{__('Loading...')}</p>;
-  }
-
-  if (fetchReleaseFailed) {
-    return (
-      <div>
-        {releaseVersionTitle}
-        {seeReleaseNotes}
-      </div>
-    );
-  }
-
   return (
     <div className="release__notes">
       {releaseVersionTitle}
-      <p>
-        <MarkdownPreview content={releaseChanges} />
-      </p>
+      <p className="last-release-changes" dangerouslySetInnerHTML={{ __html: releaseNotes }} />
       {seeReleaseNotes}
     </div>
   );

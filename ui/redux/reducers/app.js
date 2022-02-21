@@ -201,6 +201,7 @@ reducers[ACTIONS.CHECK_UPGRADE_SUCCESS] = (state, action) =>
   Object.assign({}, state, {
     isUpgradeAvailable: action.data.upgradeAvailable,
     remoteVersion: action.data.remoteVersion,
+    releaseNotes: action.data.releaseNotes,
   });
 
 reducers[ACTIONS.CHECK_UPGRADE_SUBSCRIBE] = (state, action) =>
