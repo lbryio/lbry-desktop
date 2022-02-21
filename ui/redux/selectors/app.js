@@ -52,7 +52,7 @@ export const selectAutoUpdateDownloaded = createSelector(selectState, (state) =>
 
 export const selectAutoUpdateDeclined = createSelector(selectState, (state) => state.autoUpdateDeclined);
 
-export const selectIsUpdateModelDisplayed = createSelector(selectState, (state) => {
+export const selectIsUpdateModalDisplayed = createSelector(selectState, (state) => {
   return state.modal === AUTO_UPDATE_DOWNLOADED;
 });
 
