@@ -96,7 +96,7 @@ export function makeResumableUploadRequest(
 
         window.store.dispatch(doUpdateUploadProgress({ guid, status: 'error' }));
 
-        analytics.sentryError('tus-upload', err);
+        analytics.sentryError(err, uploader);
 
         reject(
           // $FlowFixMe - flow's constructor for Error is incorrect.
