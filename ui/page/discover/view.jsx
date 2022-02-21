@@ -20,12 +20,7 @@ import moment from 'moment';
 import { getLivestreamUris } from 'util/livestream';
 
 const DEFAULT_LIVESTREAM_TILE_LIMIT = 8;
-
-const SECTION = {
-  HIDDEN: 0,
-  LESS: 1,
-  MORE: 2,
-};
+const SECTION = Object.freeze({ HIDDEN: 0, LESS: 1, MORE: 2 });
 
 type Props = {
   dynamicRouteProps: RowDataItem,
@@ -58,6 +53,7 @@ function DiscoverPage(props: Props) {
   } = props;
 
   const [liveSectionStore, setLiveSectionStore] = usePersistedState('discover:liveSection', SECTION.LESS);
+  const [expandedYPos, setExpandedYPos] = useState(null);
 
   const buttonRef = useRef();
   const isHovering = useHover(buttonRef);
@@ -209,6 +205,14 @@ function DiscoverPage(props: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps, (on mount only)
   }, []);
 
+  // Maintain y-position when expanding livestreams section:
+  React.useEffect(() => {
+    if (liveSection === SECTION.MORE && expandedYPos !== null) {
+      window.scrollTo(0, expandedYPos);
+      setExpandedYPos(null);
+    }
+  }, [liveSection, expandedYPos]);
+
   return (
     <Page noFooter fullWidthPage={tileLayout}>
       {useDualList && (
@@ -232,6 +236,7 @@ function DiscoverPage(props: Props) {
               className="claim-grid__title--secondary"
               onClick={() => {
                 doFetchActiveLivestreams();
+                setExpandedYPos(window.scrollY);
                 setLiveSection(SECTION.MORE);
               }}
             />
