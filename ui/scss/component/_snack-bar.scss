@@ -1,0 +1,69 @@
+.snack-bar {
+  bottom: 2rem;
+  right: 2rem;
+  max-width: 20rem;
+  background-color: var(--color-snack-bg);
+  color: var(--color-snack);
+  border-radius: 0.5rem;
+  padding: var(--spacing-s) var(--spacing-l) var(--spacing-s) var(--spacing-m);
+  position: fixed;
+  transition: all var(--transition-duration) var(--transition-type);
+  z-index: 10000; // hack to get it over react modal
+  display: flex;
+  flex-direction: column;
+}
+
+.snack-bar--upgrade {
+  @extend .snack-bar;
+  left: auto;
+  right: 2rem;
+  background-color: var(--color-snack-bg-upgrade);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.snack-bar--error {
+  background-color: var(--color-snack-bg-error);
+}
+
+.snack-bar--notification {
+  @extend .card;
+  background-color: var(--color-card-background);
+  color: var(--color-text);
+}
+
+.snack-bar__action {
+  display: inline-block;
+  margin: var(--spacing-s) 0;
+  margin-left: auto;
+  min-width: min-content;
+  color: var(--color-white);
+
+  span:hover {
+    text-decoration: underline;
+  }
+}
+
+.snack-bar__message {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  font-size: var(--font-body);
+
+  .credit-amount {
+    color: inherit;
+  }
+
+  .icon--CheckCircle,
+  .icon--AlertCircle {
+    margin-right: var(--spacing-m);
+    min-width: 1rem;
+  }
+}
+.snack-bar__messageText {
+  min-width: 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
