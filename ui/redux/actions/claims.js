@@ -617,6 +617,12 @@ export function doFetchCollectionListMine(page: number = 1, pageSize: number = 9
   };
 }
 
+export function doClearClaimSearch() {
+  return (dispatch: Dispatch) => {
+    dispatch({ type: ACTIONS.CLEAR_CLAIM_SEARCH_HISTORY });
+  };
+}
+
 export function doClaimSearch(
   options: {
     page_size?: number,

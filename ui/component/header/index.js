@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { doClearEmailEntry, doClearPasswordEntry } from 'redux/actions/user';
 import { doSignOut, doOpenModal } from 'redux/actions/app';
+import { doClearClaimSearch } from 'redux/actions/claims';
 import { selectClientSetting } from 'redux/selectors/settings';
 import { selectGetSyncErrorMessage } from 'redux/selectors/sync';
 import { selectHasNavigated } from 'redux/selectors/app';
@@ -22,6 +23,7 @@ const select = (state) => ({
 });
 
 const perform = (dispatch) => ({
+  doClearClaimSearch: () => dispatch(doClearClaimSearch()),
   clearEmailEntry: () => dispatch(doClearEmailEntry()),
   clearPasswordEntry: () => dispatch(doClearPasswordEntry()),
   signOut: () => dispatch(doSignOut()),

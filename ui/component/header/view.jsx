@@ -43,6 +43,7 @@ type Props = {
   syncError: ?string,
   totalBalance?: number,
   user: ?User,
+  doClearClaimSearch: () => void,
   clearEmailEntry: () => void,
   clearPasswordEntry: () => void,
   openChangelog: ({}) => void,
@@ -65,6 +66,7 @@ const Header = (props: Props) => {
     syncError,
     totalBalance,
     user,
+    doClearClaimSearch,
     clearEmailEntry,
     clearPasswordEntry,
     openChangelog,
@@ -210,7 +212,12 @@ const Header = (props: Props) => {
               <Button
                 aria-label={__('Home')}
                 className="header__navigationItem--logo"
-                onClick={() => pathname === '/' && window.location.reload()}
+                onClick={() => {
+                  if (pathname === '/') {
+                    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+                    doClearClaimSearch();
+                  }
+                }}
                 {...homeButtonNavigationProps}
               >
                 <Logo />

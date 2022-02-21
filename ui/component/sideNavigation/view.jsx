@@ -34,14 +34,19 @@ const GO_LIVE = {
   icon: ICONS.VIDEO,
 };
 
-const HOME = {
+const getHomeButton = (additionalAction) => ({
   title: 'Home',
   link: `/`,
   icon: ICONS.HOME,
   onClick: () => {
-    if (window.location.pathname === '/') window.location.reload();
+    if (window.location.pathname === '/') {
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+      if (additionalAction) {
+        additionalAction();
+      }
+    }
   },
-};
+});
 
 const RECENT_FROM_FOLLOWING = {
   title: 'Following --[sidebar button]--',
@@ -113,6 +118,7 @@ type Props = {
   homepageData: any,
   activeChannelStakedLevel: number,
   wildWestDisabled: boolean,
+  doClearClaimSearch: () => void,
 };
 
 function SideNavigation(props: Props) {
@@ -132,6 +138,7 @@ function SideNavigation(props: Props) {
     followedTags,
     activeChannelStakedLevel,
     wildWestDisabled,
+    doClearClaimSearch,
   } = props;
 
   const isLargeScreen = useIsLargeScreen();
@@ -473,7 +480,7 @@ function SideNavigation(props: Props) {
                 'navigation-links--absolute': shouldRenderLargeMenu,
               })}
             >
-              {getLink(HOME)}
+              {getLink(getHomeButton(doClearClaimSearch))}
               {getLink(RECENT_FROM_FOLLOWING)}
               {getLink(PLAYLISTS)}
             </ul>

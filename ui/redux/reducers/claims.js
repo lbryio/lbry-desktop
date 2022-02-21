@@ -770,6 +770,14 @@ reducers[ACTIONS.IMPORT_CHANNEL_STARTED] = (state: State): State =>
 reducers[ACTIONS.IMPORT_CHANNEL_COMPLETED] = (state: State): State =>
   Object.assign({}, state, { pendingChannelImports: false });
 
+reducers[ACTIONS.CLEAR_CLAIM_SEARCH_HISTORY] = (state: State): State => {
+  return {
+    ...state,
+    claimSearchByQuery: {},
+    claimSearchByQueryLastPageReached: {},
+  };
+};
+
 reducers[ACTIONS.CLAIM_SEARCH_STARTED] = (state: State, action: any): State => {
   const fetchingClaimSearchByQuery = Object.assign({}, state.fetchingClaimSearchByQuery);
   fetchingClaimSearchByQuery[action.data.query] = true;
