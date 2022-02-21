@@ -19,7 +19,7 @@ import {
   selectAutoUpdateDownloaded,
   selectModal,
   selectActiveChannelClaim,
-  selectIsUpdateModelDisplayed,
+  selectIsUpdateModalDisplayed,
 } from 'redux/selectors/app';
 import { doGetWalletSyncPreference, doSetLanguage } from 'redux/actions/settings';
 import { doSyncLoop } from 'redux/actions/sync';
@@ -51,7 +51,7 @@ const select = (state) => ({
   myChannelUrls: selectMyChannelUrls(state),
   myChannelClaimIds: selectMyChannelClaimIds(state),
   subscriptions: selectSubscriptions(state),
-  isUpdateModalDisplayed: selectIsUpdateModelDisplayed(state),
+  isUpdateModalDisplayed: selectIsUpdateModalDisplayed(state),
 });
 
 const perform = (dispatch) => ({
