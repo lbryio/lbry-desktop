@@ -26,6 +26,7 @@ const defaultState: CollectionState = {
   },
   resolved: {},
   unpublished: {}, // sync
+  lastUsedCollection: undefined,
   edited: {},
   pending: {},
   saved: [],
@@ -53,14 +54,17 @@ const collectionsReducer = handleActions(
       return {
         ...state,
         unpublished: newLists,
+        lastUsedCollection: newList,
       };
     },
 
     [ACTIONS.COLLECTION_DELETE]: (state, action) => {
+      const { lastUsedCollection } = state;
       const { id, collectionKey } = action.data;
       const { edited: editList, unpublished: unpublishedList, pending: pendingList } = state;
       const newEditList = Object.assign({}, editList);
       const newUnpublishedList = Object.assign({}, unpublishedList);
+      const isDeletingLastUsedCollection = lastUsedCollection && lastUsedCollection.id === id;
 
       const newPendingList = Object.assign({}, pendingList);
 
@@ -85,6 +89,7 @@ const collectionsReducer = handleActions(
         edited: newEditList,
         unpublished: newUnpublishedList,
         pending: newPendingList,
+        lastUsedCollection: isDeletingLastUsedCollection ? undefined : lastUsedCollection,
       };
     },
 
@@ -137,6 +142,7 @@ const collectionsReducer = handleActions(
       return {
         ...state,
         unpublished: { ...lists, [id]: collection },
+        lastUsedCollection: collection,
       };
     },
 
