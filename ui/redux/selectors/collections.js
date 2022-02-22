@@ -17,6 +17,8 @@ export const selectMyEditedCollections = createSelector(selectState, (state) => 
 
 export const selectPendingCollections = createSelector(selectState, (state) => state.pending);
 
+export const selectLastUsedCollection = createSelector(selectState, (state) => state.lastUsedCollection);
+
 export const makeSelectEditedCollectionForId = (id: string) =>
   createSelector(selectMyEditedCollections, (eLists) => eLists[id]);
 

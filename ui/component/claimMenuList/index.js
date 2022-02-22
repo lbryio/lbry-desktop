@@ -7,6 +7,7 @@ import {
   makeSelectCollectionIsMine,
   makeSelectEditedCollectionForId,
   makeSelectUrlsForCollectionId,
+  selectLastUsedCollection,
 } from 'redux/selectors/collections';
 import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
@@ -43,6 +44,7 @@ const select = (state, props) => {
   const shuffleList = selectListShuffle(state);
   const shuffle = shuffleList && shuffleList.collectionId === collectionId && shuffleList.newUrls;
   const playNextUri = shuffle && shuffle[0];
+  const lastUsedCollection = selectLastUsedCollection(state);
 
   return {
     claim,
@@ -70,6 +72,9 @@ const select = (state, props) => {
     editedCollection: makeSelectEditedCollectionForId(collectionId)(state),
     resolvedList: makeSelectUrlsForCollectionId(collectionId)(state),
     playNextUri,
+    lastUsedCollection,
+    hasClaimInLastUsedCollection:
+      lastUsedCollection && makeSelectCollectionForIdHasClaimUrl(lastUsedCollection.id, contentPermanentUri)(state),
   };
 };
 
