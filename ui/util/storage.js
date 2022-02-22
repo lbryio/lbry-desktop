@@ -13,3 +13,13 @@ export function isSessionStorageAvailable() {
     return false;
   }
 }
+
+export function getLocalStorageSummary() {
+  try {
+    const count = window.localStorage.length;
+    const estimatedSize = JSON.stringify(window.localStorage).length;
+    return `${count} items; ${estimatedSize} bytes`;
+  } catch (e) {
+    return 'inaccessible';
+  }
+}

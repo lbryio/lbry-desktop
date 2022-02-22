@@ -1,8 +1,10 @@
 // @flow
 import * as tus from 'tus-js-client';
+import NoopUrlStorage from 'tus-js-client/lib/noopUrlStorage';
 import analytics from '../../ui/analytics';
 import { X_LBRY_AUTH_TOKEN } from '../../ui/constants/token';
 import { doUpdateUploadAdd, doUpdateUploadProgress, doUpdateUploadRemove } from '../../ui/redux/actions/publish';
+import { getLocalStorageSummary } from '../../ui/util/storage';
 import { LBRY_WEB_PUBLISH_API_V2 } from 'config';
 
 const RESUMABLE_ENDPOINT = LBRY_WEB_PUBLISH_API_V2;
@@ -63,6 +65,7 @@ export function makeResumableUploadRequest(
       retryDelays: [5000, 10000, 30000],
       parallelUploads: 1,
       storeFingerprintForResuming: false,
+      urlStorage: new NoopUrlStorage(),
       removeFingerprintOnSuccess: true,
       headers: { [X_LBRY_AUTH_TOKEN]: token },
       metadata: {
@@ -83,19 +86,7 @@ export function makeResumableUploadRequest(
           customErr = 'File is locked. Try resuming after waiting a few minutes';
         }
 
-        let localStorageInfo;
-        if (errMsg.includes('QuotaExceededError')) {
-          try {
-            localStorageInfo = `${window.localStorage.length} items; ${
-              JSON.stringify(window.localStorage).length
-            } bytes`;
-          } catch (e) {
-            localStorageInfo = 'inaccessible';
-          }
-        }
-
         window.store.dispatch(doUpdateUploadProgress({ guid, status: 'error' }));
-
         analytics.sentryError('tus-upload', err);
 
         reject(
@@ -108,7 +99,7 @@ export function makeResumableUploadRequest(
               ...(uploader._retryAttempt ? { retryAttempt: uploader._retryAttempt } : {}),
               ...(uploader._offsetBeforeRetry ? { offsetBeforeRetry: uploader._offsetBeforeRetry } : {}),
               ...(customErr ? { original: errMsg } : {}),
-              ...(localStorageInfo ? { localStorageInfo } : {}),
+              localStorage: getLocalStorageSummary(),
             },
           })
         );
@@ -152,17 +143,7 @@ export function makeResumableUploadRequest(
       },
     });
 
-    uploader
-      .findPreviousUploads()
-      .then((previousUploads) => {
-        if (!isPreview) {
-          window.store.dispatch(doUpdateUploadAdd(file, params, uploader));
-        }
-
-        uploader.start();
-      })
-      .catch((err) => {
-        reject(new Error(__('Failed to initiate upload (%err%)', { err })));
-      });
+    window.store.dispatch(doUpdateUploadAdd(file, params, uploader));
+    uploader.start();
   });
 }
