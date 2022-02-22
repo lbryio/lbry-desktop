@@ -158,6 +158,12 @@ function SideNavigation(props: Props) {
       hideForUnauth: true,
     },
     {
+      title: 'Sync YouTube Channel',
+      link: `/$/${PAGES.YOUTUBE_SYNC}`,
+      icon: ICONS.YOUTUBE,
+      hideForUnauth: true,
+    },
+    {
       title: 'Uploads',
       link: `/$/${PAGES.UPLOADS}`,
       icon: ICONS.PUBLISH,
