@@ -23,8 +23,6 @@ export const selectHasClickedComment = createSelector(selectState, (state) => st
 
 export const selectRemoteVersion = createSelector(selectState, (state) => state.remoteVersion);
 
-export const selectReleaseNotes = createSelector(selectState, (state) => state.releaseNotes);
-
 export const selectIsUpgradeAvailable = createSelector(selectState, (state) => state.isUpgradeAvailable);
 
 export const selectUpgradeFilename = createSelector(selectPlatform, selectRemoteVersion, (platform, version) => {

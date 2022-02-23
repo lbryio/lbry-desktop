@@ -117,13 +117,12 @@ ipcRenderer.on('open-uri-requested', (event, url, newSession) => {
   handleError();
 });
 
-autoUpdater.on('update-available', (e) => {
+autoUpdater.on('update-available', ({ version }) => {
   app.store.dispatch({
     type: ACTIONS.CHECK_UPGRADE_SUCCESS,
     data: {
       upgradeAvailable: true,
-      remoteVersion: e.releaseName || e.version,
-      releaseNotes: e.releaseNotes,
+      remoteVersion: version,
     },
   });
 });
