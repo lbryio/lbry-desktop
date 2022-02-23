@@ -5,24 +5,9 @@ This repo contains the UI and front end code that powers Odysee.com.
  <a href="https://github.com/lbryio/lbry-desktop/blob/master/LICENSE" title="MIT licensed">
    <img alt="npm" src="https://img.shields.io/dub/l/vibe-d.svg?style=flat">
  </a>
- <a href="https://GitHub.com/lbryio/lbry-desktop/releases/" title="GitHub release">
-   <img src="https://img.shields.io/github/release/lbryio/lbry-desktop.svg"/>
- </a>
- <a href="https://travis-ci.org/lbryio/lbry-desktop">
-   <img src="https://travis-ci.org/lbryio/lbry-desktop.svg?branch=master" alt="Build Status"  />
- </a>
  <a href="https://chat.odysee.com">
-   <img alt="GitHub contributors" src="https://img.shields.io/discord/362322208485277697.svg?logo=discord" alt="chat on Discord">
+   <img src="https://img.shields.io/discord/362322208485277697.svg?logo=discord" alt="chat on Discord">
  </a>
-
-<h2>
-  <a href="https://forthebadge.com" title="forthebadge">
-    <img alt="forthebadge" src="https://forthebadge.com/images/badges/60-percent-of-the-time-works-every-time.svg">
-  </a>
-  <a href="https://forthebadge.com" title="forthebadge">
-    <img alt="forthebadge" src="https://forthebadge.com/images/badges/approved-by-veridian-dynamics.svg">
-  </a>
-</h2>
 
 ## Table of Contents
 
