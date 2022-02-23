@@ -186,6 +186,10 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}, referrerQuery) {
   head += `<meta name="twitter:site" content="@OdyseeTeam"/>`;
   head += `<meta property="og:description" content="${cleanDescription}"/>`;
   head += `<meta property="og:image" content="${claimThumbnail}"/>`;
+  head += `<meta property="og:image:secure_url" content="${claimThumbnail}"/>`;
+  head += `<meta property="og:image:type" content="image/jpeg"/>`;
+  head += `<meta property="og:image:width" content="390"/>`;
+  head += `<meta property="og:image:height" content="219/">`;
   head += `<meta property="og:locale" content="${claimLanguage}"/>`;
   head += `<meta property="og:site_name" content="${SITE_NAME}"/>`;
   head += `<meta property="og:type" content="website"/>`;
