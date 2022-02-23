@@ -2201,7 +2201,7 @@
   "Minimum channel age for comments": "Minimum channel age for comments",
   "Channels with a lifespan lower than the specified duration will not be able to comment on your content.": "Channels with a lifespan lower than the specified duration will not be able to comment on your content.",
   "Set minimum channel age": "Set minimum channel age",
-  "Note that the restriction can only be applied to channels created after Feb 8th, 2022.": "Note that the restriction can only be applied to channels created after Feb 8th, 2022.",
+  "The minimum duration must not exceed Feb 8th, 2022.": "The minimum duration must not exceed Feb 8th, 2022.",
   "No limit": "No limit",
   "--end--": "--end--"
 }

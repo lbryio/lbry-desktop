@@ -8,7 +8,7 @@ import FormFieldDuration from 'component/formFieldDuration';
 import { Modal } from 'modal/modal';
 
 const CHANNEL_AGE_LIMIT_MIN_DATE = new Date('February 8, 2022 00:00:00');
-const LIMITATION_WARNING = 'Note that the restriction can only be applied to channels created after Feb 8th, 2022.';
+const LIMITATION_WARNING = 'The minimum duration must not exceed Feb 8th, 2022.';
 
 type Props = {
   onConfirm: (limitInMinutes: number, closeModal: () => void) => void,
@@ -22,7 +22,7 @@ export default function ModalMinChannelAge(props: Props) {
   const [limitDisabled, setLimitDisabled] = React.useState(false);
   const [minChannelAgeInput, setMinChannelAgeInput] = React.useState('');
   const [minChannelAgeMinutes, setMinChannelAgeMinutes] = React.useState(-1);
-  const inputOk = limitDisabled || minChannelAgeMinutes > 0;
+  const inputOk = limitDisabled || (minChannelAgeMinutes > 0 && !showLimitationWarning);
 
   function handleOnClick() {
     if (onConfirm) {
