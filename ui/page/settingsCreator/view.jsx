@@ -1,5 +1,9 @@
 // @flow
 import * as React from 'react';
+import humanizeDuration from 'humanize-duration';
+import * as ICONS from 'constants/icons';
+import * as MODALS from 'constants/modal_types';
+import Button from 'component/button';
 import Card from 'component/common/card';
 import TagsSearch from 'component/tagsSearch';
 import Page from 'component/page';
@@ -36,6 +40,7 @@ type Props = {
   fetchCreatorSettings: (channelId: string) => void,
   updateCreatorSettings: (ChannelClaim, PerChannelSettings) => void,
   doToast: ({ message: string }) => void,
+  doOpenModal: (id: string, {}) => void,
 };
 
 export default function SettingsCreatorPage(props: Props) {
@@ -50,6 +55,7 @@ export default function SettingsCreatorPage(props: Props) {
     commentModListDelegates,
     fetchCreatorSettings,
     updateCreatorSettings,
+    doOpenModal,
   } = props;
 
   const [commentsEnabled, setCommentsEnabled] = React.useState(true);
@@ -58,6 +64,7 @@ export default function SettingsCreatorPage(props: Props) {
   const [minTip, setMinTip] = React.useState(0);
   const [minSuper, setMinSuper] = React.useState(0);
   const [slowModeMin, setSlowModeMin] = React.useState(0);
+  const [minChannelAgeMinutes, setMinChannelAgeMinutes] = React.useState(0);
   const [lastUpdated, setLastUpdated] = React.useState(1);
 
   const pushSlowModeMinDebounced = React.useMemo(() => debounce(pushSlowModeMin, 1000), []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -91,6 +98,7 @@ export default function SettingsCreatorPage(props: Props) {
       setMinTip(settings.min_tip_amount_comment || 0);
       setMinSuper(settings.min_tip_amount_super_chat || 0);
       setSlowModeMin(settings.slow_mode_min_gap || 0);
+      setMinChannelAgeMinutes(settings.time_since_first_comment || 0);
       doSetMutedWordTags(settings.words || []);
     } else {
       if (settings.comments_enabled !== undefined) {
@@ -104,6 +112,9 @@ export default function SettingsCreatorPage(props: Props) {
       }
       if (settings.slow_mode_min_gap !== undefined) {
         setSlowModeMin(settings.slow_mode_min_gap);
+      }
+      if (settings.time_since_first_comment) {
+        setMinChannelAgeMinutes(settings.time_since_first_comment);
       }
       if (settings.words) {
         doSetMutedWordTags(settings.words);
@@ -285,6 +296,41 @@ export default function SettingsCreatorPage(props: Props) {
                     />
                   </SettingsRow>
 
+                  <SettingsRow title={__('Minimum channel age for comments')} subtitle={__(HELP.CHANNEL_AGE)}>
+                    <div className="section__actions">
+                      <FormField
+                        name="time_since_first_comment"
+                        className="form-field--copyable"
+                        disabled={minChannelAgeMinutes <= 0}
+                        type="text"
+                        readOnly
+                        value={
+                          minChannelAgeMinutes > 0
+                            ? humanizeDuration(minChannelAgeMinutes * 60 * 1000, { round: true })
+                            : __('No limit')
+                        }
+                        inputButton={
+                          <Button
+                            button="secondary"
+                            icon={ICONS.EDIT}
+                            title={__('Change')}
+                            onClick={() => {
+                              doOpenModal(MODALS.MIN_CHANNEL_AGE, {
+                                onConfirm: (limitInMinutes: number, closeModal: () => void) => {
+                                  setMinChannelAgeMinutes(limitInMinutes);
+                                  updateCreatorSettings(activeChannelClaim, {
+                                    time_since_first_comment: limitInMinutes,
+                                  });
+                                  closeModal();
+                                },
+                              });
+                            }}
+                          />
+                        }
+                      />
+                    </div>
+                  </SettingsRow>
+
                   <SettingsRow
                     title={
                       <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>Minimum %lbc% tip amount for comments</I18nMessage>
@@ -386,6 +432,7 @@ export default function SettingsCreatorPage(props: Props) {
 // prettier-ignore
 const HELP = {
   SLOW_MODE: 'Minimum time gap in seconds between comments (affects livestream chat as well).',
+  CHANNEL_AGE: 'Channels with a lifespan lower than the specified duration will not be able to comment on your content.',
   MIN_TIP: 'Enabling a minimum amount to comment will force all comments, including livestreams, to have tips associated with them. This can help prevent spam.',
   MIN_SUPER: 'Enabling a minimum amount to hyperchat will force all TIPPED comments to have this value in order to be shown. This still allows regular comments to be posted.',
   MIN_SUPER_OFF: '(This settings is not applicable if all comments require a tip.)',

@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import SettingsCreatorPage from './view';
+import { doOpenModal } from 'redux/actions/app';
 import {
   doCommentBlockWords,
   doCommentUnblockWords,
@@ -35,6 +36,7 @@ const perform = (dispatch) => ({
   commentModRemoveDelegate: (modChanId, modChanName, creatorChannelClaim) =>
     dispatch(doCommentModRemoveDelegate(modChanId, modChanName, creatorChannelClaim)),
   commentModListDelegates: (creatorChannelClaim) => dispatch(doCommentModListDelegates(creatorChannelClaim)),
+  doOpenModal: (modal, props) => dispatch(doOpenModal(modal, props)),
 });
 
 export default connect(select, perform)(SettingsCreatorPage);
