@@ -45,6 +45,9 @@ const ModalImageUpload = lazyImport(() => import('modal/modalImageUpload' /* web
 const ModalMassTipsUnlock = lazyImport(() =>
   import('modal/modalMassTipUnlock' /* webpackChunkName: "modalMassTipUnlock" */)
 );
+const ModalMinChannelAge = lazyImport(() =>
+  import('modal/modalMinChannelAge' /* webpackChunkName: "modalMinChannelAge" */)
+);
 const ModalMobileSearch = lazyImport(() =>
   import('modal/modalMobileSearch' /* webpackChunkName: "modalMobileSearch" */)
 );
@@ -169,6 +172,8 @@ function getModal(id) {
       return ModalMassTipsUnlock;
     case MODALS.BLOCK_CHANNEL:
       return ModalBlockChannel;
+    case MODALS.MIN_CHANNEL_AGE:
+      return ModalMinChannelAge;
     case MODALS.COLLECTION_ADD:
       return ModalClaimCollectionAdd;
     case MODALS.COLLECTION_DELETE:

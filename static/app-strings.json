@@ -2197,5 +2197,8 @@
   "When do you want to go live?": "When do you want to go live?",
   "Anytime": "Anytime",
   "Scheduled Time": "Scheduled Time",
+  "Set minimum channel age": "Set minimum channel age",
+  "Note that the restriction can only be applied to channels created after Feb 8th, 2022.": "Note that the restriction can only be applied to channels created after Feb 8th, 2022.",
+  "No limit": "No limit",
   "--end--": "--end--"
 }
