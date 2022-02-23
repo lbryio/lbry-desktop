@@ -6,6 +6,6 @@ export const LIVESTREAM_KILL = 'https://api.stream.odysee.com/stream/kill';
 
 export const MAX_LIVESTREAM_COMMENTS = 50;
 
-export const LIVESTREAM_STARTS_SOON_BUFFER = 5;
+export const LIVESTREAM_STARTS_SOON_BUFFER = 15;
 export const LIVESTREAM_STARTED_RECENTLY_BUFFER = 15;
 export const LIVESTREAM_UPCOMING_BUFFER = 35;
