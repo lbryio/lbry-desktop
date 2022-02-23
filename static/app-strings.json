@@ -1401,6 +1401,7 @@
   "Unable to comment. Your channel has been blocked by an admin.": "Unable to comment. Your channel has been blocked by an admin.",
   "Unable to comment. The content owner has disabled comments.": "Unable to comment. The content owner has disabled comments.",
   "Please do not spam.": "Please do not spam.",
+  "Your channel does not meet the creator's minimum channel-age limit.": "Your channel does not meet the creator's minimum channel-age limit.",
   "Slow mode is on. Please wait up to %1% seconds before commenting again.": "Slow mode is on. Please wait up to %1% seconds before commenting again.",
   "The comment contains contents that are blocked by %1%.": "The comment contains contents that are blocked by %1%.",
   "Your user name \"%1%\" is too close to the creator's user name \"%2%\" and may cause confusion. Please use another identity.": "Your user name \"%1%\" is too close to the creator's user name \"%2%\" and may cause confusion. Please use another identity.",
@@ -2197,5 +2198,10 @@
   "When do you want to go live?": "When do you want to go live?",
   "Anytime": "Anytime",
   "Scheduled Time": "Scheduled Time",
+  "Minimum channel age for comments": "Minimum channel age for comments",
+  "Channels with a lifespan lower than the specified duration will not be able to comment on your content.": "Channels with a lifespan lower than the specified duration will not be able to comment on your content.",
+  "Set minimum channel age": "Set minimum channel age",
+  "The minimum duration must not exceed Feb 8th, 2022.": "The minimum duration must not exceed Feb 8th, 2022.",
+  "No limit": "No limit",
   "--end--": "--end--"
 }

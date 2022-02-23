@@ -37,6 +37,7 @@ declare type PerChannelSettings = {
   min_tip_amount_comment?: number,
   min_tip_amount_super_chat?: number,
   slow_mode_min_gap?: number,
+  time_since_first_comment?: number,
 };
 
 // todo: relate individual comments to their commentId
@@ -318,6 +319,7 @@ declare type UpdateSettingsParams = {
   min_tip_amount_comment?: number,
   min_tip_amount_super_chat?: number,
   slow_mode_min_gap?: number,
+  time_since_first_comment?: number,
 };
 
 declare type BlockWordParams = {

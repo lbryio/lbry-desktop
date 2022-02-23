@@ -340,7 +340,8 @@
     //padding-left: var(--spacing-m);
 
     .button,
-    .checkbox {
+    .checkbox,
+    .section__actions {
       &:only-child {
         float: right;
       }
