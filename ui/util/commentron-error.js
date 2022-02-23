@@ -64,6 +64,10 @@ const ERR_MAP: CommentronErrorMap = {
     commentron: 'duplicate comment!',
     replacement: 'Please do not spam.',
   },
+  CHANNEL_AGE: {
+    commentron: 'this creator has set minimum account age requirements that are not currently met',
+    replacement: "Your channel does not meet the creator's minimum channel-age limit.",
+  },
 };
 
 export function resolveCommentronError(commentronMsg: string) {
