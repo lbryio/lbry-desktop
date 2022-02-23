@@ -3,6 +3,7 @@ import type { Node } from 'react';
 import React from 'react';
 import classnames from 'classnames';
 import Button from 'component/button';
+import { stripLeadingAtSign } from 'util/string';
 
 type ChannelInfo = { uri: string, name: string };
 
@@ -14,6 +15,7 @@ type Props = {
   focusable?: boolean, // Defaults to 'true' if not provided.
   hideAnonymous?: boolean,
   inline?: boolean,
+  stripAtSign?: boolean,
   className?: string,
   children: ?Node, // to allow for other elements to be nested within the UriIndicator (commit: 1e82586f).
   // --- redux ---
@@ -79,6 +81,7 @@ class UriIndicator extends React.PureComponent<Props> {
       focusable = true,
       external = false,
       hideAnonymous = false,
+      stripAtSign,
       className,
     } = this.props;
 
@@ -109,7 +112,7 @@ class UriIndicator extends React.PureComponent<Props> {
 
       const inner = (
         <span dir="auto" className={classnames('channel-name', { 'channel-name--inline': inline })}>
-          {channelName}
+          {stripAtSign ? stripLeadingAtSign(channelName) : channelName}
         </span>
       );
 

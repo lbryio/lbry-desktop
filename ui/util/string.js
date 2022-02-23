@@ -21,3 +21,7 @@ export function toCompactNotation(number: string | number, lang: ?string, minThr
     return Number(number).toLocaleString(locale);
   }
 }
+
+export function stripLeadingAtSign(str: ?string) {
+  return str && str.charAt(0) === '@' ? str.slice(1) : str;
+}

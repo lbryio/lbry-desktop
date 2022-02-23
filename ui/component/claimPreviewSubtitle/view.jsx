@@ -43,7 +43,7 @@ function ClaimPreviewSubtitle(props: Props) {
     <div className="media__subtitle">
       {claim ? (
         <React.Fragment>
-          <UriIndicator uri={uri} link />{' '}
+          <UriIndicator uri={uri} link stripAtSign />{' '}
           {!pending && claim && (
             <>
               {isChannel && type !== 'inline' && (

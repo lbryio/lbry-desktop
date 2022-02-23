@@ -13,6 +13,7 @@ import I18nMessage from 'component/i18nMessage';
 import ChannelThumbnail from 'component/channelThumbnail';
 import { useIsMobile, useIsLargeScreen, isTouch } from 'effects/use-screensize';
 import { GetLinksData } from 'util/buildHomepage';
+import { stripLeadingAtSign } from 'util/string';
 import { DOMAIN, ENABLE_UI_NOTIFICATIONS, ENABLE_NO_SOURCE_CLAIMS, CHANNEL_STAKED_LEVEL_LIVESTREAM } from 'config';
 
 const FOLLOWED_ITEM_INITIAL_LIMIT = 10;
@@ -539,7 +540,7 @@ function SubscriptionListItem({ subscription }: { subscription: Subscription }) 
       >
         <ChannelThumbnail xsmall uri={uri} hideStakedIndicator />
         <span dir="auto" className="button__label">
-          {channelName}
+          {stripLeadingAtSign(channelName)}
         </span>
       </Button>
     </li>
