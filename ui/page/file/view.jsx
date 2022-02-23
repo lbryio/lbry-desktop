@@ -23,6 +23,7 @@ const CommentsList = lazyImport(() => import('component/commentsList' /* webpack
 const PostViewer = lazyImport(() => import('component/postViewer' /* webpackChunkName: "postViewer" */));
 
 export const PRIMARY_PLAYER_WRAPPER_CLASS = 'file-page__video-container';
+export const PRIMARY_IMAGE_WRAPPER_CLASS = 'file-render__img-container';
 
 type Props = {
   costInfo: ?{ includesData: boolean, cost: number },
@@ -164,7 +165,7 @@ export default function FilePage(props: Props) {
     if (renderMode === RENDER_MODES.IMAGE) {
       return (
         <>
-          <div className="file-render--img-container">
+          <div className={PRIMARY_IMAGE_WRAPPER_CLASS}>
             <FileRenderInitiator uri={uri} />
             <FileRenderInline uri={uri} />
           </div>

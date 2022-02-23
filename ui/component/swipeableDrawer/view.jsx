@@ -6,7 +6,8 @@ import { Global } from '@emotion/react';
 // $FlowFixMe
 import { grey } from '@mui/material/colors';
 
-import { HEADER_HEIGHT_MOBILE } from 'component/fileRenderMobile/view';
+import { HEADER_HEIGHT_MOBILE } from 'component/fileRenderFloating/view';
+import { PRIMARY_PLAYER_WRAPPER_CLASS, PRIMARY_IMAGE_WRAPPER_CLASS } from 'page/file/view';
 import { SwipeableDrawer as MUIDrawer } from '@mui/material';
 import * as ICONS from 'constants/icons';
 import * as React from 'react';
@@ -31,18 +32,29 @@ export default function SwipeableDrawer(props: Props) {
 
   const [coverHeight, setCoverHeight] = React.useState();
 
-  const videoHeight = coverHeight || (mobilePlayerDimensions ? mobilePlayerDimensions.height : 0);
+  const videoHeight = (mobilePlayerDimensions && mobilePlayerDimensions.height) || coverHeight || 0;
+
+  const handleResize = React.useCallback(() => {
+    const element =
+      document.querySelector(`.${PRIMARY_IMAGE_WRAPPER_CLASS}`) ||
+      document.querySelector(`.${PRIMARY_PLAYER_WRAPPER_CLASS}`);
+
+    if (!element) return;
+
+    const rect = element.getBoundingClientRect();
+    setCoverHeight(rect.height);
+  }, []);
 
   React.useEffect(() => {
-    if (open && !mobilePlayerDimensions) {
-      const element = document.querySelector(`.file-page__video-container`);
+    // Drawer will follow the cover image on resize, so it's always visible
+    if (open && (!mobilePlayerDimensions || !mobilePlayerDimensions.height)) {
+      handleResize();
 
-      if (element) {
-        const rect = element.getBoundingClientRect();
-        setCoverHeight(rect.height);
-      }
+      window.addEventListener('resize', handleResize);
+
+      return () => window.removeEventListener('resize', handleResize);
     }
-  }, [coverHeight, mobilePlayerDimensions, open]);
+  }, [handleResize, mobilePlayerDimensions, open]);
 
   // Reset scroll position when opening: avoid broken position where
   // the drawer is lower than the video

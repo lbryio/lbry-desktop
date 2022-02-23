@@ -31,10 +31,10 @@ type Props = {
   claimWasPurchased: boolean,
   authenticated: boolean,
   videoTheaterMode: boolean,
-  activeLivestreamForChannel?: any,
-  claimId?: string,
+  isCurrentClaimLive?: boolean,
   doUriInitiatePlay: (uri: string, collectionId: ?string, isPlayable: boolean) => void,
   doSetPlayingUri: ({ uri: ?string }) => void,
+  doSetPrimaryUri: (uri: ?string) => void,
 };
 
 export default function FileRenderInitiator(props: Props) {
@@ -53,10 +53,10 @@ export default function FileRenderInitiator(props: Props) {
     claimWasPurchased,
     authenticated,
     videoTheaterMode,
-    activeLivestreamForChannel,
-    claimId,
+    isCurrentClaimLive,
     doUriInitiatePlay,
     doSetPlayingUri,
+    doSetPrimaryUri,
   } = props;
 
   const containerRef = React.useRef<any>();
@@ -76,9 +76,8 @@ export default function FileRenderInitiator(props: Props) {
 
   const isFree = costInfo && costInfo.cost === 0;
   const canViewFile = isFree || claimWasPurchased;
-  const isPlayable = RENDER_MODES.FLOATING_MODES.includes(renderMode);
+  const isPlayable = RENDER_MODES.FLOATING_MODES.includes(renderMode) || isCurrentClaimLive;
   const isText = RENDER_MODES.TEXT_MODES.includes(renderMode);
-  const isCurrentClaimLive = activeLivestreamForChannel && claimId && activeLivestreamForChannel.claimId === claimId;
   const isMobileClaimLive = isMobile && isCurrentClaimLive;
   const foundCover = thumbnail !== FileRenderPlaceholder;
 
@@ -87,12 +86,13 @@ export default function FileRenderInitiator(props: Props) {
   const shouldRedirect = !authenticated && !isFree;
 
   React.useEffect(() => {
-    // Set livestream as playing uri so it can be rendered by <FileRenderMobile />
+    // Set livestream as playing uri so it can be rendered by <FileRenderFloating /> on mobile
     // instead of showing an empty cover image. Needs cover to fill the space with the player.
     if (isMobileClaimLive && foundCover) {
       doSetPlayingUri({ uri });
+      doSetPrimaryUri(uri);
     }
-  }, [doSetPlayingUri, foundCover, isMobileClaimLive, uri]);
+  }, [doSetPlayingUri, doSetPrimaryUri, foundCover, isMobileClaimLive, uri]);
 
   function doAuthRedirect() {
     history.push(`/$/${PAGES.AUTH}?redirect=${encodeURIComponent(location.pathname)}`);

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
-import { doUriInitiatePlay, doSetPlayingUri } from 'redux/actions/content';
-import { selectThumbnailForUri, selectClaimForUri, makeSelectClaimWasPurchased } from 'redux/selectors/claims';
+import { doUriInitiatePlay, doSetPlayingUri, doSetPrimaryUri } from 'redux/actions/content';
+import { selectThumbnailForUri, makeSelectClaimWasPurchased } from 'redux/selectors/claims';
 import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
 import * as SETTINGS from 'constants/settings';
 import { selectCostInfoForUri } from 'lbryinc';
@@ -14,15 +14,10 @@ import {
   makeSelectFileRenderModeForUri,
 } from 'redux/selectors/content';
 import FileRenderInitiator from './view';
-import { getChannelIdFromClaim } from 'util/claim';
-import { selectActiveLivestreamForChannel } from 'redux/selectors/livestream';
+import { selectIsActiveLivestreamForUri } from 'redux/selectors/livestream';
 
 const select = (state, props) => {
   const { uri } = props;
-
-  const claim = selectClaimForUri(state, uri);
-  const claimId = claim && claim.claim_id;
-  const channelClaimId = claim && getChannelIdFromClaim(claim);
 
   return {
     claimThumbnail: selectThumbnailForUri(state, uri),
@@ -35,14 +30,14 @@ const select = (state, props) => {
     renderMode: makeSelectFileRenderModeForUri(uri)(state),
     claimWasPurchased: makeSelectClaimWasPurchased(uri)(state),
     authenticated: selectUserVerifiedEmail(state),
-    activeLivestreamForChannel: channelClaimId && selectActiveLivestreamForChannel(state, channelClaimId),
-    claimId,
+    isCurrentClaimLive: selectIsActiveLivestreamForUri(state, uri),
   };
 };
 
 const perform = {
   doUriInitiatePlay,
   doSetPlayingUri,
+  doSetPrimaryUri,
 };
 
 export default withRouter(connect(select, perform)(FileRenderInitiator));

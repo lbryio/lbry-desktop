@@ -16,7 +16,6 @@ import { selectShowMatureContent, selectClientSetting } from 'redux/selectors/se
 import { makeSelectFileRenderModeForUri, makeSelectContentPositionForUri } from 'redux/selectors/content';
 import { makeSelectCommentsListTitleForUri, selectSettingsByChannelId } from 'redux/selectors/comments';
 import { DISABLE_COMMENTS_TAG } from 'constants/tags';
-import { doSetMobilePlayerDimensions } from 'redux/actions/app';
 import { getChannelIdFromClaim } from 'util/claim';
 
 import FilePage from './view';
@@ -53,7 +52,6 @@ const perform = {
   doSetContentHistoryItem,
   doSetPrimaryUri,
   clearPosition,
-  doSetMobilePlayerDimensions,
 };
 
 export default withRouter(connect(select, perform)(FilePage));

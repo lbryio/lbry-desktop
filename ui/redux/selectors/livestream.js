@@ -7,6 +7,12 @@ type State = { livestream: any };
 
 const selectState = (state: State) => state.livestream || {};
 
+export const selectFetchingLivestreams = (state: State) => selectState(state).fetchingById;
+export const selectViewersById = (state: State) => selectState(state).viewersById;
+export const selectActiveLivestreams = (state: State) => selectState(state).activeLivestreams;
+export const selectFetchingActiveLivestreams = (state: State) => selectState(state).fetchingActiveLivestreams;
+export const selectActiveLivestreamInitialized = (state: State) => selectState(state).activeLivestreamInitialized;
+
 // select non-pending claims without sources for given channel
 export const makeSelectLivestreamsForChannelId = (channelId: string) =>
   createSelector(selectState, selectMyClaims, (livestreamState, myClaims = []) => {
@@ -22,9 +28,6 @@ export const makeSelectLivestreamsForChannelId = (channelId: string) =>
       )
       .sort((a, b) => b.timestamp - a.timestamp); // newest first
   });
-
-export const selectFetchingLivestreams = (state: State) => selectState(state).fetchingById;
-export const selectViewersById = (state: State) => selectState(state).viewersById;
 
 export const makeSelectIsFetchingLivestreams = (channelId: string) =>
   createSelector(selectFetchingLivestreams, (fetchingLivestreams) => Boolean(fetchingLivestreams[channelId]));
@@ -45,8 +48,6 @@ export const makeSelectPendingLivestreamsForChannelId = (channelId: string) =>
         claim.signing_channel.claim_id === channelId
     );
   });
-
-export const selectActiveLivestreams = (state: State) => selectState(state).activeLivestreams;
 
 export const selectIsActiveLivestreamForUri = createCachedSelector(
   (state, uri) => uri,
@@ -86,7 +87,3 @@ export const selectActiveLivestreamForChannel = createCachedSelector(
     return activeLivestreams[channelId] || null;
   }
 )((state, channelId) => String(channelId));
-
-export const selectFetchingActiveLivestreams = (state: State) => selectState(state).fetchingActiveLivestreams;
-
-export const selectActiveLivestreamInitialized = (state: State) => selectState(state).activeLivestreamInitialized;

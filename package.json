@@ -192,7 +192,7 @@
     "react-awesome-lightbox": "^1.7.3",
     "react-confetti": "^4.0.1",
     "react-dom": "^16.8.2",
-    "react-draggable": "^3.3.0",
+    "react-draggable": "^4.4.4",
     "react-google-recaptcha": "^2.0.1",
     "react-hot-loader": "^4.11.1",
     "react-modal": "^3.1.7",

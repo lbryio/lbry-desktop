@@ -39,7 +39,7 @@
   margin-bottom: 0;
   height: calc(var(--floating-viewer-height) + var(--floating-viewer-info-height));
   overflow: hidden;
-  left: calc(var(--spacing-l) + var(--spacing-s));
+  top: 0;
   z-index: 9999;
 
   border: 2px solid black;
@@ -53,6 +53,7 @@
     .video-js--tap-to-unmute {
       max-width: calc(var(--floating-viewer-width) - (var(--spacing-xs) * 3) - 42px);
     }
+
     .content__floating-close {
       visibility: visible;
       z-index: 9999;

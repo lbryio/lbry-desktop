@@ -15,7 +15,6 @@ import { openContextMenu } from 'util/context-menu';
 import useKonamiListener from 'util/enhanced-layout';
 import Yrbl from 'component/yrbl';
 import FileRenderFloating from 'component/fileRenderFloating';
-import FileRenderMobile from 'component/fileRenderMobile';
 import { withRouter } from 'react-router';
 import usePrevious from 'effects/use-previous';
 import Nag from 'component/common/nag';
@@ -524,7 +523,7 @@ function App(props: Props) {
           <Router />
           <ModalRouter />
           <React.Suspense fallback={null}>{renderFiledrop && <FileDrop />}</React.Suspense>
-          {isMobile ? <FileRenderMobile /> : <FileRenderFloating />}
+          <FileRenderFloating />
           <React.Suspense fallback={null}>
             {isEnhancedLayout && <Yrbl className="yrbl--enhanced" />}
 
