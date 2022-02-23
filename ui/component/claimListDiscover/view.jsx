@@ -40,6 +40,7 @@ type Props = {
   showHiddenByUser?: boolean,
   showNoSourceClaims?: boolean,
   tileLayout: boolean,
+  ignoreSearchInLanguage?: boolean,
 
   orderBy?: Array<string>, // Trending, New, Top
   defaultOrderBy?: string,
@@ -155,6 +156,7 @@ function ClaimListDiscover(props: Props) {
     forceShowReposts = false,
     languageSetting,
     searchInLanguage,
+    ignoreSearchInLanguage,
     limitClaimsPerChannel,
     releaseTime,
     scrollAnchor,
@@ -193,17 +195,18 @@ function ClaimListDiscover(props: Props) {
   );
 
   const langParam = urlParams.get(CS.LANGUAGE_KEY) || null;
-  const languageParams = searchInLanguage
-    ? langParam === null
-      ? languageSetting.concat(languageSetting === 'en' ? ',none' : '')
+  const languageParams =
+    searchInLanguage && !ignoreSearchInLanguage
+      ? langParam === null
+        ? languageSetting.concat(languageSetting === 'en' ? ',none' : '')
+        : langParam === 'any'
+        ? null
+        : langParam.concat(langParam === 'en' ? ',none' : '')
+      : langParam === null
+      ? null
       : langParam === 'any'
       ? null
-      : langParam.concat(langParam === 'en' ? ',none' : '')
-    : langParam === null
-    ? null
-    : langParam === 'any'
-    ? null
-    : langParam.concat(langParam === 'en' ? ',none' : '');
+      : langParam.concat(langParam === 'en' ? ',none' : '');
 
   let claimTypeParam = claimType || defaultClaimType || null;
   let streamTypeParam = streamType || defaultStreamType || null;

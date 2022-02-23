@@ -179,6 +179,7 @@ function ChannelContent(props: Props) {
 
       {!fetching && (
         <ClaimListDiscover
+          ignoreSearchInLanguage
           hasSource
           defaultFreshness={CS.FRESH_ALL}
           showHiddenByUser={viewHiddenChannels}
@@ -201,6 +202,7 @@ function ChannelContent(props: Props) {
               <Form onSubmit={() => {}} className="wunderbar--inline">
                 <Icon icon={ICONS.SEARCH} />
                 <FormField
+                  name="channel_search"
                   className="wunderbar__input--inline"
                   value={searchQuery}
                   onChange={handleInputChange}
