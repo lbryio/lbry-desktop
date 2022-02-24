@@ -181,7 +181,7 @@ const collectionsReducer = handleActions(
     },
     [ACTIONS.COLLECTION_ITEMS_RESOLVE_COMPLETED]: (state, action) => {
       const { resolvedCollections, failedCollectionIds } = action.data;
-      const { pending, edited, isResolvingCollectionById, resolved } = state;
+      const { pending, edited, isResolvingCollectionById, resolved, lastUsedCollection } = state;
       const newPending = Object.assign({}, pending);
       const newEdited = Object.assign({}, edited);
       const newResolved = Object.assign({}, resolved, resolvedCollections);
@@ -208,12 +208,31 @@ const collectionsReducer = handleActions(
         });
       }
 
+      const newAllCollections = [
+        ...Object.values(newPending),
+        ...Object.values(newResolved),
+        ...Object.values(newEdited),
+      ];
+
+      let newLastUsedCollection = lastUsedCollection;
+
+      // If a collection is being published or got published,
+      // its id will get updated which means, we have to sync
+      // the last used collection.
+      if (lastUsedCollection) {
+        newLastUsedCollection = newAllCollections.find((collection) => {
+          // $FlowFixMe
+          return collection.name === lastUsedCollection.name;
+        });
+      }
+
       return Object.assign({}, state, {
         ...state,
         pending: newPending,
         resolved: newResolved,
         edited: newEdited,
         isResolvingCollectionById: newResolving,
+        lastUsedCollection: newLastUsedCollection,
       });
     },
     [ACTIONS.COLLECTION_ITEMS_RESOLVE_FAILED]: (state, action) => {

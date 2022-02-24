@@ -62,6 +62,7 @@ type Props = {
   doToggleShuffleList: (string) => void,
   lastUsedCollection: ?Collection,
   hasClaimInLastUsedCollection: boolean,
+  lastUsedCollectionIsNotBuiltin: boolean,
 };
 
 function ClaimMenuList(props: Props) {
@@ -104,6 +105,7 @@ function ClaimMenuList(props: Props) {
     doToggleShuffleList,
     lastUsedCollection,
     hasClaimInLastUsedCollection,
+    lastUsedCollectionIsNotBuiltin,
   } = props;
   const [doShuffle, setDoShuffle] = React.useState(false);
   const incognitoClaim = contentChannelUri && !contentChannelUri.includes('@');
@@ -363,7 +365,7 @@ function ClaimMenuList(props: Props) {
                     {__('Add to Lists')}
                   </div>
                 </MenuItem>
-                {lastUsedCollection && (
+                {lastUsedCollection && lastUsedCollectionIsNotBuiltin && (
                   <MenuItem
                     className="comment__menu-option"
                     onSelect={() =>
