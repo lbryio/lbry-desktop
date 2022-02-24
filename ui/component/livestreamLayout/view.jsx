@@ -74,7 +74,7 @@ export default function LivestreamLayout(props: Props) {
           {isMobile && isCurrentClaimLive ? (
             <div className={PRIMARY_PLAYER_WRAPPER_CLASS}>
               {/* Mobile needs to handle the livestream player like any video player */}
-              <FileRenderInitiator uri={uri} />
+              <FileRenderInitiator uri={claim.canonical_url} />
             </div>
           ) : (
             <LivestreamIframeRender

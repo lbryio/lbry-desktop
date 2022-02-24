@@ -1,10 +1,9 @@
-import * as PAGES from 'constants/pages';
 import { DOMAIN } from 'config';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { PAGE_SIZE } from 'constants/claim';
 import {
-  makeSelectClaimForUri,
+  selectClaimForUri,
   selectIsUriResolving,
   makeSelectTotalPagesForChannel,
   selectTitleForUri,
@@ -18,18 +17,19 @@ import {
   makeSelectIsResolvingCollectionForId,
 } from 'redux/selectors/collections';
 import { doResolveUri } from 'redux/actions/claims';
-import { doClearPublish, doPrepareEdit } from 'redux/actions/publish';
+import { doBeginPublish } from 'redux/actions/publish';
 import { doFetchItemsInCollection } from 'redux/actions/collections';
 import { normalizeURI } from 'util/lbryURI';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
-import { push } from 'connected-react-router';
 import { selectIsSubscribedForUri } from 'redux/selectors/subscriptions';
 import { selectBlacklistedOutpointMap } from 'lbryinc';
 import { doAnalyticsView } from 'redux/actions/app';
 import ShowPage from './view';
 
 const select = (state, props) => {
-  const { pathname, hash, search } = props.location;
+  const { location, history } = props;
+  const { pathname, hash, search } = location;
+
   const urlPath = pathname + hash;
   const urlParams = new URLSearchParams(search);
 
@@ -58,13 +58,14 @@ const select = (state, props) => {
     const match = path.match(/[#/:]/);
 
     if (path === '$/') {
-      props.history.replace(`/`);
+      history.replace(`/`);
     } else if (!path.startsWith('$/') && match && match.index) {
       uri = `lbry://${path.slice(0, match.index)}`;
-      props.history.replace(`/${path.slice(0, match.index)}`);
+      history.replace(`/${path.slice(0, match.index)}`);
     }
   }
-  const claim = makeSelectClaimForUri(uri)(state);
+
+  const claim = selectClaimForUri(state, uri);
   const collectionId =
     urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID) ||
     (claim && claim.value_type === 'collection' && claim.claim_id) ||
@@ -82,22 +83,17 @@ const select = (state, props) => {
     claimIsPending: makeSelectClaimIsPending(uri)(state),
     isLivestream: selectIsStreamPlaceholderForUri(state, uri),
     collection: makeSelectCollectionForId(collectionId)(state),
-    collectionId: collectionId,
+    collectionId,
     collectionUrls: makeSelectUrlsForCollectionId(collectionId)(state),
     isResolvingCollection: makeSelectIsResolvingCollectionForId(collectionId)(state),
   };
 };
 
-const perform = (dispatch) => ({
-  resolveUri: (uri, returnCached, resolveRepost, options) =>
-    dispatch(doResolveUri(uri, returnCached, resolveRepost, options)),
-  beginPublish: (name) => {
-    dispatch(doClearPublish());
-    dispatch(doPrepareEdit({ name }));
-    dispatch(push(`/$/${PAGES.UPLOAD}`));
-  },
-  fetchCollectionItems: (claimId) => dispatch(doFetchItemsInCollection({ collectionId: claimId })),
-  doAnalyticsView: (uri) => dispatch(doAnalyticsView(uri)),
-});
+const perform = {
+  doResolveUri,
+  doBeginPublish,
+  doFetchItemsInCollection,
+  doAnalyticsView,
+};
 
 export default withRouter(connect(select, perform)(ShowPage));

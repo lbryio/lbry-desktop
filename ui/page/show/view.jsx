@@ -23,7 +23,6 @@ const isDev = process.env.NODE_ENV !== 'production';
 
 type Props = {
   isResolvingUri: boolean,
-  resolveUri: (string, boolean, boolean, any) => void,
   isSubscribed: boolean,
   uri: string,
   claim: StreamClaim,
@@ -33,19 +32,19 @@ type Props = {
   claimIsMine: boolean,
   claimIsPending: boolean,
   isLivestream: boolean,
-  beginPublish: (?string) => void,
   collectionId: string,
   collection: Collection,
   collectionUrls: Array<string>,
   isResolvingCollection: boolean,
-  fetchCollectionItems: (string) => void,
-  doAnalyticsView: (string) => void,
+  doResolveUri: (uri: string, returnCached: boolean, resolveReposts: boolean, options: any) => void,
+  doBeginPublish: (name: ?string) => void,
+  doFetchItemsInCollection: ({ collectionId: string }) => void,
+  doAnalyticsView: (uri: string) => void,
 };
 
-function ShowPage(props: Props) {
+export default function ShowPage(props: Props) {
   const {
     isResolvingUri,
-    resolveUri,
     uri,
     claim,
     blackListedOutpointMap,
@@ -54,41 +53,53 @@ function ShowPage(props: Props) {
     isSubscribed,
     claimIsPending,
     isLivestream,
-    beginPublish,
-    fetchCollectionItems,
     collectionId,
     collection,
     collectionUrls,
     isResolvingCollection,
+    doResolveUri,
+    doBeginPublish,
+    doFetchItemsInCollection,
     doAnalyticsView,
   } = props;
 
-  const { search, pathname } = location;
+  const { push } = useHistory();
+  const { search, pathname, hash } = location;
+  const urlParams = new URLSearchParams(search);
+  const linkedCommentId = urlParams.get('lc');
 
   const signingChannel = claim && claim.signing_channel;
   const canonicalUrl = claim && claim.canonical_url;
   const claimExists = claim !== null && claim !== undefined;
   const haventFetchedYet = claim === undefined;
   const isMine = claim && claim.is_my_output;
+
   const { contentName, isChannel } = parseURI(uri); // deprecated contentName - use streamName and channelName
-  const { push } = useHistory();
   const isCollection = claim && claim.value_type === 'collection';
   const resolvedCollection = collection && collection.id; // not null
-
   const showLiveStream = isLivestream && ENABLE_NO_SOURCE_CLAIMS;
+  const isClaimBlackListed =
+    claim &&
+    blackListedOutpointMap &&
+    Boolean(
+      (signingChannel && blackListedOutpointMap[`${signingChannel.txid}:${signingChannel.nout}`]) ||
+        blackListedOutpointMap[`${claim.txid}:${claim.nout}`]
+    );
 
   // changed this from 'isCollection' to resolve strangers' collections.
   React.useEffect(() => {
     if (collectionId && !resolvedCollection) {
-      fetchCollectionItems(collectionId);
+      doFetchItemsInCollection({ collectionId });
     }
-  }, [isCollection, resolvedCollection, collectionId, fetchCollectionItems]);
+  }, [isCollection, resolvedCollection, collectionId, doFetchItemsInCollection]);
 
   useEffect(() => {
-    // @if TARGET='web'
     if (canonicalUrl) {
-      const canonicalUrlPath = '/' + canonicalUrl.replace(/^lbry:\/\//, '').replace(/#/g, ':');
-      // Only redirect if we are in lbry.tv land
+      const urlPath = pathname + hash;
+      const fullParams =
+        urlPath.indexOf('?') > 0 ? urlPath.substring(urlPath.indexOf('?')) : search.length > 0 ? search : '';
+      const canonicalUrlPath = '/' + canonicalUrl.replace(/^lbry:\/\//, '').replace(/#/g, ':') + fullParams;
+
       // replaceState will fail if on a different domain (like webcache.googleusercontent.com)
       const hostname = isDev ? 'localhost' : DOMAIN;
 
@@ -109,20 +120,19 @@ function ShowPage(props: Props) {
         history.replaceState(history.state, '', windowHref.substring(0, windowHref.length - 1));
       }
     }
-    // @endif
 
     if (
-      (resolveUri && !isResolvingUri && uri && haventFetchedYet) ||
+      (doResolveUri && !isResolvingUri && uri && haventFetchedYet) ||
       (claimExists && !claimIsPending && (!canonicalUrl || isMine === undefined))
     ) {
-      resolveUri(
+      doResolveUri(
         uri,
         false,
         true,
         isMine === undefined ? { include_is_my_output: true, include_purchase_receipt: true } : {}
       );
     }
-  }, [resolveUri, isResolvingUri, canonicalUrl, uri, claimExists, haventFetchedYet, isMine, claimIsPending, search]);
+  }, [doResolveUri, isResolvingUri, canonicalUrl, uri, claimExists, haventFetchedYet, isMine, claimIsPending, search]);
 
   // Regular claims will call the file/view event when a user actually watches the claim
   // This can be removed when we get rid of the livestream iframe
@@ -136,34 +146,32 @@ function ShowPage(props: Props) {
 
   // Don't navigate directly to repost urls
   // Always redirect to the actual content
-  // Also need to add repost_url to the Claim type for flow
-  // $FlowFixMe
   if (claim && claim.repost_url === uri) {
-    const newUrl = formatLbryUrlForWeb(claim.canonical_url);
+    const newUrl = formatLbryUrlForWeb(canonicalUrl);
     return <Redirect to={newUrl} />;
   }
+
   let urlForCollectionZero;
-  if (claim && claim.value_type === 'collection' && collectionUrls && collectionUrls.length) {
+  if (claim && isCollection && collectionUrls && collectionUrls.length) {
     urlForCollectionZero = collectionUrls && collectionUrls[0];
     const claimId = claim.claim_id;
-    const urlParams = new URLSearchParams(search);
     urlParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, claimId);
     const newUrl = formatLbryUrlForWeb(`${urlForCollectionZero}?${urlParams.toString()}`);
     return <Redirect to={newUrl} />;
   }
 
-  let innerContent = '';
-  if (!claim || (claim && !claim.name)) {
-    innerContent = (
+  if (!claim || !claim.name) {
+    return (
       <Page>
-        {(claim === undefined ||
+        {(haventFetchedYet ||
           isResolvingUri ||
           isResolvingCollection || // added for collection
-          (claim && claim.value_type === 'collection' && !urlForCollectionZero)) && ( // added for collection - make sure we accept urls = []
+          (isCollection && !urlForCollectionZero)) && ( // added for collection - make sure we accept urls = []
           <div className="main--empty">
             <Spinner delayed />
           </div>
         )}
+
         {!isResolvingUri && !isSubscribed && (
           <div className="main--empty">
             <Yrbl
@@ -176,7 +184,7 @@ function ShowPage(props: Props) {
                     <Button
                       button="primary"
                       label={__('Publish Something')}
-                      onClick={() => beginPublish(contentName)}
+                      onClick={() => doBeginPublish(contentName)}
                     />
                     <Button
                       button="secondary"
@@ -189,47 +197,49 @@ function ShowPage(props: Props) {
             />
           </div>
         )}
+
         {!isResolvingUri && isSubscribed && claim === null && (
           <React.Suspense fallback={null}>
-            <AbandonedChannelPreview uri={uri} type={'large'} />
+            <AbandonedChannelPreview uri={uri} type="large" />
           </React.Suspense>
         )}
       </Page>
     );
-  } else if (claim.name.length && claim.name[0] === '@') {
-    innerContent = <ChannelPage uri={uri} location={location} />;
-  } else if (claim) {
-    const isClaimBlackListed =
-      blackListedOutpointMap &&
-      Boolean(
-        (signingChannel && blackListedOutpointMap[`${signingChannel.txid}:${signingChannel.nout}`]) ||
-          blackListedOutpointMap[`${claim.txid}:${claim.nout}`]
-      );
-
-    if (isClaimBlackListed && !claimIsMine) {
-      innerContent = (
-        <Page className="custom-wrapper">
-          <Card
-            title={uri}
-            subtitle={__(
-              'In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications.'
-            )}
-            actions={
-              <div className="section__actions">
-                <Button button="link" href="https://odysee.com/@OdyseeHelp:b/copyright:f" label={__('Read More')} />
-              </div>
-            }
-          />
-        </Page>
-      );
-    } else if (showLiveStream) {
-      innerContent = <LivestreamPage uri={uri} claim={claim} />;
-    } else {
-      innerContent = <FilePage uri={uri} location={location} />;
-    }
   }
 
-  return <React.Suspense fallback={null}>{innerContent}</React.Suspense>;
-}
+  if (claim.name.length && claim.name[0] === '@') {
+    return <ChannelPage uri={uri} location={location} />;
+  }
 
-export default ShowPage;
+  if (isClaimBlackListed && !claimIsMine) {
+    return (
+      <Page className="custom-wrapper">
+        <Card
+          title={uri}
+          subtitle={__(
+            'In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications.'
+          )}
+          actions={
+            <div className="section__actions">
+              <Button button="link" href="https://odysee.com/@OdyseeHelp:b/copyright:f" label={__('Read More')} />
+            </div>
+          }
+        />
+      </Page>
+    );
+  }
+
+  if (showLiveStream) {
+    return (
+      <React.Suspense fallback={null}>
+        <LivestreamPage uri={uri} claim={claim} />
+      </React.Suspense>
+    );
+  }
+
+  return (
+    <React.Suspense fallback={null}>
+      <FilePage uri={uri} collectionId={collectionId} linkedCommentId={linkedCommentId} />
+    </React.Suspense>
+  );
+}

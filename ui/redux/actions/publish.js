@@ -394,6 +394,13 @@ export const doResetThumbnailStatus = () => (dispatch: Dispatch) => {
     );
 };
 
+export const doBeginPublish = (name: string) => (dispatch: Dispatch) => {
+  dispatch(doClearPublish());
+  // $FlowFixMe
+  dispatch(doPrepareEdit({ name }));
+  dispatch(push(`/$/${PAGES.UPLOAD}`));
+};
+
 export const doClearPublish = () => (dispatch: Dispatch) => {
   dispatch({ type: ACTIONS.CLEAR_PUBLISH });
   return dispatch(doResetThumbnailStatus());
