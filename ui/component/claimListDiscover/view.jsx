@@ -6,6 +6,7 @@ import React from 'react';
 import usePersistedState from 'effects/use-persisted-state';
 import { withRouter } from 'react-router';
 import { MATURE_TAGS } from 'constants/tags';
+import { resolveLangForClaimSearch } from 'util/default-languages';
 import { createNormalizedClaimSearchKey } from 'util/claim';
 import { splitBySeparator } from 'util/lbryURI';
 import Button from 'component/button';
@@ -195,18 +196,8 @@ function ClaimListDiscover(props: Props) {
   );
 
   const langParam = urlParams.get(CS.LANGUAGE_KEY) || null;
-  const languageParams =
-    searchInLanguage && !ignoreSearchInLanguage
-      ? langParam === null
-        ? languageSetting.concat(languageSetting === 'en' ? ',none' : '')
-        : langParam === 'any'
-        ? null
-        : langParam.concat(langParam === 'en' ? ',none' : '')
-      : langParam === null
-      ? null
-      : langParam === 'any'
-      ? null
-      : langParam.concat(langParam === 'en' ? ',none' : '');
+  const searchInSelectedLangOnly = searchInLanguage && !ignoreSearchInLanguage;
+  const languageParams = resolveLangForClaimSearch(languageSetting, searchInSelectedLangOnly, langParam);
 
   let claimTypeParam = claimType || defaultClaimType || null;
   let streamTypeParam = streamType || defaultStreamType || null;
