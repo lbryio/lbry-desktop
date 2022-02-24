@@ -380,6 +380,10 @@ function SideNavigation(props: Props) {
   React.useEffect(() => {
     // $FlowFixMe
     document.body.style.overflowY = showOverlay ? 'hidden' : '';
+    return () => {
+      // $FlowFixMe
+      document.body.style.overflowY = '';
+    };
   }, [showOverlay]);
 
   React.useEffect(() => {
