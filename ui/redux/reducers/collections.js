@@ -74,6 +74,7 @@ const collectionsReducer = handleActions(
         return {
           ...state,
           [collectionKey]: newList,
+          lastUsedCollection: isDeletingLastUsedCollection ? undefined : lastUsedCollection,
         };
       } else {
         if (newEditList[id]) {
@@ -117,6 +118,7 @@ const collectionsReducer = handleActions(
         edited: newEditList,
         unpublished: newUnpublishedList,
         pending: newPendingList,
+        lastUsedCollection: newPendingList[claimId],
       };
     },
 
@@ -128,6 +130,7 @@ const collectionsReducer = handleActions(
         return {
           ...state,
           [collectionKey]: { ...lists, [id]: collection },
+          lastUsedCollection: collection,
         };
       }
 
@@ -136,6 +139,7 @@ const collectionsReducer = handleActions(
         return {
           ...state,
           edited: { ...lists, [id]: collection },
+          lastUsedCollection: collection,
         };
       }
       const { unpublished: lists } = state;
