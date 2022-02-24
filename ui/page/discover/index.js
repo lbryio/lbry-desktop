@@ -8,7 +8,7 @@ import { selectActiveLivestreams } from 'redux/selectors/livestream';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectFollowedTags } from 'redux/selectors/tags';
 import { doToggleTagFollowDesktop } from 'redux/actions/tags';
-import { selectClientSetting } from 'redux/selectors/settings';
+import { selectClientSetting, selectLanguage } from 'redux/selectors/settings';
 import Tags from './view';
 
 const select = (state, props) => {
@@ -23,6 +23,8 @@ const select = (state, props) => {
     isAuthenticated: selectUserVerifiedEmail(state),
     tileLayout: selectClientSetting(state, SETTINGS.TILE_LAYOUT),
     activeLivestreams: selectActiveLivestreams(state),
+    languageSetting: selectLanguage(state),
+    searchInLanguage: selectClientSetting(state, SETTINGS.SEARCH_IN_LANGUAGE),
   };
 };
 

@@ -17,6 +17,7 @@ import Ads, { injectAd } from 'web/component/ads';
 import LbcSymbol from 'component/common/lbc-symbol';
 import I18nMessage from 'component/i18nMessage';
 import moment from 'moment';
+import { resolveLangForClaimSearch } from 'util/default-languages';
 import { getLivestreamUris } from 'util/livestream';
 
 const DEFAULT_LIVESTREAM_TILE_LIMIT = 8;
@@ -29,12 +30,14 @@ type Props = {
   followedTags: Array<Tag>,
   repostedUri: string,
   repostedClaim: ?GenericClaim,
+  languageSetting: string,
+  searchInLanguage: boolean,
   doToggleTagFollowDesktop: (string) => void,
   doResolveUri: (string) => void,
   isAuthenticated: boolean,
   tileLayout: boolean,
   activeLivestreams: ?LivestreamInfo,
-  doFetchActiveLivestreams: (orderBy?: Array<string>) => void,
+  doFetchActiveLivestreams: (orderBy: ?Array<string>, lang: ?Array<string>) => void,
 };
 
 function DiscoverPage(props: Props) {
@@ -43,6 +46,8 @@ function DiscoverPage(props: Props) {
     followedTags,
     repostedClaim,
     repostedUri,
+    languageSetting,
+    searchInLanguage,
     doToggleTagFollowDesktop,
     doResolveUri,
     isAuthenticated,
@@ -61,6 +66,7 @@ function DiscoverPage(props: Props) {
   const isLargeScreen = useIsLargeScreen();
 
   const urlParams = new URLSearchParams(search);
+  const langParam = urlParams.get(CS.LANGUAGE_KEY) || null;
   const claimType = urlParams.get('claim_type');
   const tagsQuery = urlParams.get('t') || null;
   const tags = tagsQuery ? tagsQuery.split(',') : null;
@@ -202,11 +208,9 @@ function DiscoverPage(props: Props) {
 
   // Fetch active livestreams on mount
   React.useEffect(() => {
-    if (liveSection === SECTION.LESS) {
-      doFetchActiveLivestreams(CS.ORDER_BY_TRENDING_VALUE);
-    } else {
-      doFetchActiveLivestreams();
-    }
+    const langCsv = resolveLangForClaimSearch(languageSetting, searchInLanguage, langParam);
+    const lang = langCsv ? langCsv.split(',') : null;
+    doFetchActiveLivestreams(CS.ORDER_BY_NEW_VALUE, lang);
     // eslint-disable-next-line react-hooks/exhaustive-deps, (on mount only)
   }, []);
 
