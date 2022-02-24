@@ -87,7 +87,7 @@ const filterUpcomingLiveStreamClaims = (upcomingClaims) => {
   return startingSoonClaims;
 };
 
-const fetchUpcomingLivestreamClaims = (channelIds: Array<string>) => {
+const fetchUpcomingLivestreamClaims = (channelIds: Array<string>, lang: ?Array<string> = null) => {
   return doClaimSearch(
     {
       page: 1,
@@ -99,6 +99,7 @@ const fetchUpcomingLivestreamClaims = (channelIds: Array<string>) => {
       release_time: `>${moment().subtract(5, 'minutes').unix()}`,
       limit_claims_per_channel: 1,
       no_totals: true,
+      ...(lang ? { any_languages: lang } : {}),
     },
     {
       useAutoPagination: true,
@@ -106,7 +107,11 @@ const fetchUpcomingLivestreamClaims = (channelIds: Array<string>) => {
   );
 };
 
-const fetchMostRecentLivestreamClaims = (channelIds: Array<string>, orderBy: Array<string> = ['release_time']) => {
+const fetchMostRecentLivestreamClaims = (
+  channelIds: Array<string>,
+  orderBy: Array<string> = ['release_time'],
+  lang: ?Array<string> = null
+) => {
   return doClaimSearch(
     {
       page: 1,
@@ -118,6 +123,7 @@ const fetchMostRecentLivestreamClaims = (channelIds: Array<string>, orderBy: Arr
       release_time: `<${moment().unix()}`,
       limit_claims_per_channel: 2,
       no_totals: true,
+      ...(lang ? { any_languages: lang } : {}),
     },
     {
       useAutoPagination: true,
@@ -154,14 +160,20 @@ const determineLiveClaim = (claims: any, activeLivestreams: any) => {
   return activeClaims;
 };
 
-const findActiveStreams = async (channelIDs: Array<string>, orderBy: Array<string>, liveChannels: any, dispatch) => {
+const findActiveStreams = async (
+  channelIDs: Array<string>,
+  orderBy: Array<string>,
+  liveChannels: any,
+  dispatch,
+  lang: ?Array<string> = null
+) => {
   // @Note: This can likely be simplified down to one query, but first we'll need to address the query limit / pagination issue.
 
   // Find the two most recent claims for the channels that are actively broadcasting a stream.
-  const mostRecentClaims = await dispatch(fetchMostRecentLivestreamClaims(channelIDs, orderBy));
+  const mostRecentClaims = await dispatch(fetchMostRecentLivestreamClaims(channelIDs, orderBy, lang));
 
   // Find the first upcoming claim (if one exists) for each channel that's actively broadcasting a stream.
-  const upcomingClaims = await dispatch(fetchUpcomingLivestreamClaims(channelIDs));
+  const upcomingClaims = await dispatch(fetchUpcomingLivestreamClaims(channelIDs, lang));
 
   // Filter out any of those claims that aren't scheduled to start within the configured "soon" buffer time (ex. next 5 min).
   const startingSoonClaims = filterUpcomingLiveStreamClaims(upcomingClaims);
@@ -200,14 +212,14 @@ export const doFetchChannelLiveStatus = (channelId: string) => {
   };
 };
 
-export const doFetchActiveLivestreams = (orderBy: Array<string> = ['release_time']) => {
+export const doFetchActiveLivestreams = (orderBy: Array<string> = ['release_time'], lang: ?Array<string> = null) => {
   return async (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const now = Date.now();
     const timeDelta = now - state.livestream.activeLivestreamsLastFetchedDate;
 
     const prevOptions = state.livestream.activeLivestreamsLastFetchedOptions;
-    const nextOptions = { order_by: orderBy };
+    const nextOptions = { order_by: orderBy, ...(lang ? { any_languages: lang } : {}) };
     const sameOptions = JSON.stringify(prevOptions) === JSON.stringify(nextOptions);
 
     if (sameOptions && timeDelta < FETCH_ACTIVE_LIVESTREAMS_MIN_INTERVAL_MS) {
@@ -221,7 +233,13 @@ export const doFetchActiveLivestreams = (orderBy: Array<string> = ['release_time
       const liveChannels = await fetchLiveChannels();
       const liveChannelIds = Object.keys(liveChannels);
 
-      const currentlyLiveClaims = await findActiveStreams(liveChannelIds, nextOptions.order_by, liveChannels, dispatch);
+      const currentlyLiveClaims = await findActiveStreams(
+        liveChannelIds,
+        nextOptions.order_by,
+        liveChannels,
+        dispatch,
+        nextOptions.any_languages
+      );
       Object.values(currentlyLiveClaims).forEach((claim: any) => {
         const channelId = claim.stream.signing_channel.claim_id;
 
