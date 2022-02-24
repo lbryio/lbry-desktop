@@ -103,7 +103,7 @@ export default function ShowPage(props: Props) {
       // replaceState will fail if on a different domain (like webcache.googleusercontent.com)
       const hostname = isDev ? 'localhost' : DOMAIN;
 
-      if (canonicalUrlPath !== pathname && hostname === window.location.hostname) {
+      if (canonicalUrlPath !== pathname && hostname === window.location.hostname && fullParams !== search) {
         const urlParams = new URLSearchParams(search);
         let replaceUrl = canonicalUrlPath;
         if (urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID)) {
