@@ -75,6 +75,10 @@ const select = (state, props) => {
     lastUsedCollection,
     hasClaimInLastUsedCollection:
       lastUsedCollection && makeSelectCollectionForIdHasClaimUrl(lastUsedCollection.id, contentPermanentUri)(state),
+    lastUsedCollectionIsNotBuiltin:
+      lastUsedCollection &&
+      lastUsedCollection.id !== COLLECTIONS_CONSTS.WATCH_LATER_ID &&
+      lastUsedCollection.id !== COLLECTIONS_CONSTS.FAVORITES_ID,
   };
 };
 
