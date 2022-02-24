@@ -89,38 +89,43 @@ function DiscoverPage(props: Props) {
   const useDualList = liveSection === SECTION.LESS && liveTilesOverLimit;
 
   function getMeta() {
-    if (liveSection === SECTION.MORE && liveTilesOverLimit) {
-      return (
-        <Button
-          label={__('Show less livestreams')}
-          button="link"
-          iconRight={ICONS.UP}
-          className="claim-grid__title--secondary"
-          onClick={() => setLiveSection(SECTION.LESS)}
-        />
-      );
-    }
+    return (
+      <>
+        {!dynamicRouteProps ? (
+          <a
+            className="help"
+            href="https://odysee.com/@OdyseeHelp:b/trending:50"
+            title={__('Learn more about Credits on %DOMAIN%', { DOMAIN })}
+          >
+            <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>Results boosted by %lbc%</I18nMessage>
+          </a>
+        ) : (
+          tag &&
+          !isMobile && (
+            <Button
+              ref={buttonRef}
+              button="alt"
+              icon={ICONS.SUBSCRIBE}
+              iconColor="red"
+              onClick={handleFollowClick}
+              requiresAuth={IS_WEB}
+              label={label}
+            />
+          )
+        )}
 
-    return !dynamicRouteProps ? (
-      <a
-        className="help"
-        href="https://odysee.com/@OdyseeHelp:b/trending:50"
-        title={__('Learn more about Credits on %DOMAIN%', { DOMAIN })}
-      >
-        <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>Results boosted by %lbc%</I18nMessage>
-      </a>
-    ) : (
-      tag && !isMobile && (
-        <Button
-          ref={buttonRef}
-          button="alt"
-          icon={ICONS.SUBSCRIBE}
-          iconColor="red"
-          onClick={handleFollowClick}
-          requiresAuth={IS_WEB}
-          label={label}
-        />
-      )
+        {liveSection === SECTION.MORE && liveTilesOverLimit && (
+          <div className="livestream-list--view-more">
+            <Button
+              label={__('Show less livestreams')}
+              button="link"
+              iconRight={ICONS.UP}
+              className="claim-grid__title--secondary"
+              onClick={() => setLiveSection(SECTION.LESS)}
+            />
+          </div>
+        )}
+      </>
     );
   }
 

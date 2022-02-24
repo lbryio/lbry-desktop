@@ -171,6 +171,21 @@
 
 .livestream-list--view-more {
   display: flex;
-  align-items: flex-end;
-  margin-bottom: var(--spacing-m);
+  margin-left: var(--spacing-s);
+  margin-bottom: var(--spacing-xxxs);
+
+  @media (max-width: $breakpoint-small) {
+    button {
+      .button__content {
+        span {
+          // This is being set in '.section__actions' to '--font-xxsmall',
+          // causing the button to shrink in mobile.
+          // I think it is only needed for the mobile comments and shouldn't
+          // be applied globally?
+          // Anyway, reverting for this use-case only for now to reduce testing.
+          font-size: unset;
+        }
+      }
+    }
+  }
 }
