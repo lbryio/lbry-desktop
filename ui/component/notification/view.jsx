@@ -51,7 +51,7 @@ export default function Notification(props: Props) {
   const notificationTarget = getNotificationTarget();
 
   const creatorIcon = (channelUrl, channelThumbnail) => (
-    <UriIndicator uri={channelUrl} link channelInfo={{ uri: channelUrl, name: '' }}>
+    <UriIndicator uri={channelUrl} link showAtSign channelInfo={{ uri: channelUrl, name: '' }}>
       <ChannelThumbnail small thumbnailPreview={channelThumbnail} uri={channelThumbnail ? undefined : channelUrl} />
     </UriIndicator>
   );
@@ -113,7 +113,13 @@ export default function Notification(props: Props) {
   const title = titleSplit.map((message, index) => {
     if (channelName === message) {
       uriIndicator = (
-        <UriIndicator key={channelUrl} uri={channelUrl} link channelInfo={{ uri: channelUrl, name: channelName }} />
+        <UriIndicator
+          key={channelUrl}
+          uri={channelUrl}
+          link
+          showAtSign
+          channelInfo={{ uri: channelUrl, name: channelName }}
+        />
       );
       fullTitle.push(' ');
       const resultTitle = fullTitle;
