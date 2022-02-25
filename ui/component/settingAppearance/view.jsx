@@ -1,4 +1,6 @@
 // @flow
+import { useHistory } from 'react-router-dom';
+import { SEARCH_IN_LANGUAGE } from 'constants/hashes';
 import { SETTINGS_GRP } from 'constants/settings';
 import React from 'react';
 import * as SETTINGS from 'constants/settings';
@@ -22,6 +24,10 @@ type Props = {
 
 export default function SettingAppearance(props: Props) {
   const { clock24h, searchInLanguage, isAuthenticated, hideBalance, setClientSetting, setSearchInLanguage } = props;
+  const {
+    location: { hash },
+  } = useHistory();
+  const highlightSearchInLanguage = hash === `#${SEARCH_IN_LANGUAGE}`;
 
   return (
     <>
@@ -43,7 +49,10 @@ export default function SettingAppearance(props: Props) {
               <SettingLanguage />
             </SettingsRow>
 
-            <SettingsRow title={__('Search only in the selected language by default')}>
+            <SettingsRow
+              title={__('Search only in the selected language by default')}
+              highlighted={highlightSearchInLanguage}
+            >
               <FormField
                 name="search-in-language"
                 type="checkbox"
