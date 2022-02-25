@@ -465,14 +465,15 @@ function ClaimListDiscover(props: Props) {
   }
 
   const shouldPerformSearch =
-    claimSearchResult === undefined ||
-    didNavigateForward ||
-    (!loading &&
-      !claimSearchResultLastPageReached &&
-      claimSearchResult &&
-      claimSearchResult.length &&
-      claimSearchResult.length < dynamicPageSize * options.page &&
-      claimSearchResult.length % dynamicPageSize === 0);
+    !uris &&
+    (claimSearchResult === undefined ||
+      didNavigateForward ||
+      (!loading &&
+        !claimSearchResultLastPageReached &&
+        claimSearchResult &&
+        claimSearchResult.length &&
+        claimSearchResult.length < dynamicPageSize * options.page &&
+        claimSearchResult.length % dynamicPageSize === 0));
 
   // Don't use the query from createNormalizedClaimSearchKey for the effect since that doesn't include page & release_time
   const optionsStringForEffect = JSON.stringify(options);
