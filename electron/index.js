@@ -307,7 +307,6 @@ ipcMain.on('get-disk-space', async (event) => {
       const total_and_available = { total: dfResult[1], free: dfResult[3]};
       rendererWindow.webContents.send('send-disk-space', { diskSpace: total_and_available });
     }
-    // const space = await nodeDiskInfo.getDiskInfo();
   } catch (e) {
     rendererWindow.webContents.send('send-disk-space', { error: e.message || e });
     console.log('Failed to start LbryFirst', e);
