@@ -15,6 +15,7 @@ import ClaimList from 'component/claimList';
 import ClaimPreview from 'component/claimPreview';
 import ClaimPreviewTile from 'component/claimPreviewTile';
 import I18nMessage from 'component/i18nMessage';
+import LangFilterIndicator from 'component/langFilterIndicator';
 import ClaimListHeader from 'component/claimListHeader';
 import useFetchViewCount from 'effects/use-fetch-view-count';
 import { useIsLargeScreen } from 'effects/use-screensize';
@@ -233,7 +234,7 @@ function ClaimListDiscover(props: Props) {
         break;
 
       default:
-        console.log('Invalid or unhandled CONTENT_KEY:', contentTypeParam);
+        console.log('Invalid or unhandled CONTENT_KEY:', contentTypeParam); // eslint-disable-line no-console
         break;
     }
   }
@@ -641,9 +642,12 @@ function ClaimListDiscover(props: Props) {
       {headerLabel && <label className="claim-list__header-label">{headerLabel}</label>}
       {tileLayout ? (
         <div>
-          {!repostedClaimId && (
+          {!repostedClaimId && showHeader && (
             <div className="section__header--actions">
-              {headerToUse}
+              <div className="section__actions">
+                {headerToUse}
+                {searchInSelectedLangOnly && <LangFilterIndicator />}
+              </div>
               {meta && <div className="section__actions--no-margin">{meta}</div>}
             </div>
           )}
@@ -680,7 +684,10 @@ function ClaimListDiscover(props: Props) {
         <div>
           {showHeader && (
             <div className="section__header--actions">
-              {headerToUse}
+              <div className="section__actions">
+                {headerToUse}
+                {searchInSelectedLangOnly && <LangFilterIndicator />}
+              </div>
               {meta && <div className="section__actions--no-margin">{meta}</div>}
             </div>
           )}

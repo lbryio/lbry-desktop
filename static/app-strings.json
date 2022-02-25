@@ -2203,5 +2203,6 @@
   "Set minimum channel age": "Set minimum channel age",
   "The minimum duration must not exceed Feb 8th, 2022.": "The minimum duration must not exceed Feb 8th, 2022.",
   "No limit": "No limit",
+  "Search results are being filtered by language. Click here to change the setting.": "Search results are being filtered by language. Click here to change the setting.",
   "--end--": "--end--"
 }

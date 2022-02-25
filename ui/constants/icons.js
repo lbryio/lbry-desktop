@@ -197,3 +197,4 @@ export const ODYSEE_DARK_TEXT = 'OdyseeLogoDarkText';
 export const FEATURED = 'Featured';
 export const DISMISS_ALL = 'DismissAll';
 export const SUBMIT = 'Submit';
+export const FILTERED_BY_LANG = 'FilteredByLang';

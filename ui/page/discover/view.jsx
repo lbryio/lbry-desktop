@@ -259,6 +259,7 @@ function DiscoverPage(props: Props) {
         prefixUris={useDualList ? undefined : livestreamUris}
         pins={useDualList ? undefined : getPins(dynamicRouteProps)}
         hideFilters={SIMPLE_SITE ? !(dynamicRouteProps || tags) : undefined}
+        showHeader={!useDualList}
         header={useDualList ? <span /> : repostedUri ? <span /> : undefined}
         tileLayout={repostedUri ? false : tileLayout}
         defaultOrderBy={SIMPLE_SITE ? (dynamicRouteProps ? undefined : CS.ORDER_BY_TRENDING) : undefined}
