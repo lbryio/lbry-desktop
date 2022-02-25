@@ -132,7 +132,10 @@ export function doSetDaemonSetting(key, value, doNotDispatch = false) {
 
 export function doCleanBlobs() {
   return (dispatch) => {
-    Lbry.blob_clean().then(dispatch(doFetchDaemonSettings()));
+    Lbry.blob_clean().then(() => {
+      dispatch(doFetchDaemonSettings());
+      return 'done';
+    });
   };
 }
 

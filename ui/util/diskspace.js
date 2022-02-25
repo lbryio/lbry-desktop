@@ -15,6 +15,7 @@ export const diskSpaceLinux = (path) => {
   });
 };
 
+// to implement
 // export diskSpaceWindows = (path) => {
 //   new Promise((resolve, reject) => {
 //

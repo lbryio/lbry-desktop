@@ -2287,5 +2287,9 @@
   "View History Hosting": "View History Hosting",
   "Disable automatic updates": "Disable automatic updates",
   "Preven't new updates to be downloaded automatically in the background (we will keep notifying you if there is an update)": "Preven't new updates to be downloaded automatically in the background (we will keep notifying you if there is an update)",
+  "Unlimited View Hosting": "Unlimited View Hosting",
+  "Choose View Hosting Limit": "Choose View Hosting Limit",
+  "View Hosting Limit (GB)": "View Hosting Limit (GB)",
+  "%free% of %total% available": "%free% of %total% available",
   "--end--": "--end--"
 }
