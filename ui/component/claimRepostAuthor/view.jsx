@@ -47,7 +47,7 @@ function ClaimRepostAuthor(props: Props) {
       <div className="claim-preview__repost-ribbon">
         <Icon icon={ICONS.REPOST} size={10} className="claim-preview__repost-icon" />
         <br />
-        <UriIndicator link uri={repostChannelUrl} />
+        <UriIndicator link uri={repostChannelUrl} showAtSign />
       </div>
     </div>
   );

@@ -222,7 +222,7 @@ function ClaimPreviewTile(props: Props) {
             <TruncatedText text={title || (claim && claim.name)} lines={isChannel ? 1 : 2} />
             {isChannel && (
               <div className="claim-tile__about">
-                <UriIndicator uri={uri} stripAtSign />
+                <UriIndicator uri={uri} />
               </div>
             )}
           </h2>
@@ -247,7 +247,7 @@ function ClaimPreviewTile(props: Props) {
               </UriIndicator>
 
               <div className="claim-tile__about">
-                <UriIndicator uri={uri} link stripAtSign />
+                <UriIndicator uri={uri} link />
                 <div className="claim-tile__about--counts">
                   <FileViewCountInline uri={uri} isLivestream={isLivestream} />
                   {isLivestream && <LivestreamDateTime uri={uri} />}

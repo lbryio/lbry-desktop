@@ -5,6 +5,7 @@ import * as ICONS from 'constants/icons';
 import * as KEYCODES from 'constants/keycodes';
 import React, { useEffect } from 'react';
 import Button from 'component/button';
+import ClaimPreviewTitle from 'component/claimPreviewTitle';
 import classnames from 'classnames';
 import Icon from 'component/common/icon';
 import NotificationBubble from 'component/notificationBubble';
@@ -13,7 +14,6 @@ import I18nMessage from 'component/i18nMessage';
 import ChannelThumbnail from 'component/channelThumbnail';
 import { useIsMobile, useIsLargeScreen, isTouch } from 'effects/use-screensize';
 import { GetLinksData } from 'util/buildHomepage';
-import { stripLeadingAtSign } from 'util/string';
 import { DOMAIN, ENABLE_UI_NOTIFICATIONS, ENABLE_NO_SOURCE_CLAIMS, CHANNEL_STAKED_LEVEL_LIVESTREAM } from 'config';
 
 const FOLLOWED_ITEM_INITIAL_LIMIT = 10;
@@ -536,16 +536,19 @@ function SideNavigation(props: Props) {
 function SubscriptionListItem({ subscription }: { subscription: Subscription }) {
   const { uri, channelName } = subscription;
   return (
-    <li className="navigation-link__wrapper">
+    <li className="navigation-link__wrapper navigation__subscription">
       <Button
         navigate={uri}
         className="navigation-link navigation-link--with-thumbnail"
         activeClass="navigation-link--active"
       >
         <ChannelThumbnail xsmall uri={uri} hideStakedIndicator />
-        <span dir="auto" className="button__label">
-          {stripLeadingAtSign(channelName)}
-        </span>
+        <div className="navigation__subscription-title">
+          <ClaimPreviewTitle uri={uri} />
+          <span dir="auto" className="channel-name">
+            {channelName}
+          </span>
+        </div>
       </Button>
     </li>
   );

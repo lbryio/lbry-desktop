@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import TruncatedText from 'component/common/truncated-text';
+import { stripLeadingAtSign } from 'util/string';
 
 type Props = {
   uri: string,
@@ -13,7 +14,11 @@ function ClaimPreviewTitle(props: Props) {
 
   return (
     <div className="claim-preview__title">
-      {claim ? <TruncatedText text={title || claim.name} lines={2} /> : <span>{__('Nothing here')}</span>}
+      {claim ? (
+        <TruncatedText text={title || stripLeadingAtSign(claim.name)} lines={2} />
+      ) : (
+        <span>{__('Nothing here')}</span>
+      )}
     </div>
   );
 }
