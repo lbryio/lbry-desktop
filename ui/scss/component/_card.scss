@@ -107,6 +107,10 @@
   background-color: var(--color-card-background-highlighted);
 }
 
+.card--highlightedActive {
+  background-color: var(--color-fire-outside);
+}
+
 .card--claim-preview-wrap {
   @extend .card;
   margin: var(--spacing-xl) 0;
