@@ -299,6 +299,8 @@ app.on('before-quit', () => {
 ipcMain.on('get-disk-space', async (event) => {
   try {
     const { data_dir } = await Lbry.settings_get();
+    // mac error for this is 'df /Users/username/Library/Application no such..'
+    // due to not escaping the ' ' in /`Application Support`
     if (os.platform() === 'linux') {
       const stdout = await diskSpaceLinux(data_dir);
       const dfResult = stdout.split('\n')[1].split(/\s+/);
