@@ -91,6 +91,18 @@ rewards.setCallback('claimRewardSuccess', (reward) => {
   }
 });
 
+ipcRenderer.on('send-disk-space', (event, result) => {
+  if (result.error) {
+    console.log(`disk space error: ${result.error}`);
+  } else {
+    app.store.dispatch({
+      type: ACTIONS.DISK_SPACE,
+      data: result.diskSpace,
+    });
+  }
+});
+
+ipcRenderer.send('get-disk-space');
 // @if TARGET='app'
 ipcRenderer.on('open-uri-requested', (event, url, newSession) => {
   function handleError() {

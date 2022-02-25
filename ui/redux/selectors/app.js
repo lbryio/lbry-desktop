@@ -139,3 +139,5 @@ export const selectActiveChannelStakedLevel = createSelector(
 );
 
 export const selectIncognito = createSelector(selectState, (state) => state.incognito);
+
+export const selectDiskSpace = createSelector(selectState, (state) => state.diskSpace);

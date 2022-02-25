@@ -17,8 +17,12 @@ import startSandbox from './startSandbox';
 import installDevtools from './installDevtools';
 import fs from 'fs';
 import path from 'path';
+import { diskSpaceLinux } from '../ui/util/diskspace';
+
 const { download } = require('electron-dl');
 const remote = require('@electron/remote/main');
+const os = require('os');
+
 remote.initialize();
 const filePath = path.join(process.resourcesPath, 'static', 'upgradeDisabled');
 let upgradeDisabled;
@@ -290,6 +294,22 @@ app.on('will-finish-launching', () => {
 
 app.on('before-quit', () => {
   appState.isQuitting = true;
+});
+
+ipcMain.on('get-disk-space', async (event) => {
+  try {
+    const { data_dir } = await Lbry.settings_get();
+    if (os.platform() === 'linux') {
+      const stdout = await diskSpaceLinux(data_dir);
+      const dfResult = stdout.split('\n')[1].split(/\s+/);
+      const total_and_available = { total: dfResult[1], free: dfResult[3]};
+      rendererWindow.webContents.send('send-disk-space', { diskSpace: total_and_available });
+    }
+    // const space = await nodeDiskInfo.getDiskInfo();
+  } catch (e) {
+    rendererWindow.webContents.send('send-disk-space', { error: e.message || e });
+    console.log('Failed to start LbryFirst', e);
+  }
 });
 
 ipcMain.on('download-upgrade', async (event, params) => {

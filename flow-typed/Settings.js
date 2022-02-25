@@ -6,3 +6,8 @@ declare type CommentServerDetails = {
 declare type WalletServerDetails = {
 
 };
+
+declare type DiskSpace = {
+  total: string,
+  free: string,
+};
