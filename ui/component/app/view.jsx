@@ -138,6 +138,7 @@ function App(props: Props) {
   const [upgradeNagClosed, setUpgradeNagClosed] = useState(false);
   const [resolvedSubscriptions, setResolvedSubscriptions] = useState(false);
   const [retryingSync, setRetryingSync] = useState(false);
+  const [langRenderKey, setLangRenderKey] = useState(0);
   const [sidebarOpen] = usePersistedState('sidebar', true);
   const [seenSunsestMessage, setSeenSunsetMessage] = usePersistedState('lbrytv-sunset', false);
   const showUpgradeButton =
@@ -482,6 +483,11 @@ function App(props: Props) {
 
   useDegradedPerformance(setLbryTvApiStatus, user);
 
+  useEffect(() => {
+    // When language is changed or translations are fetched, we render.
+    setLangRenderKey(Date.now());
+  }, [language, languages]);
+
   // Require an internal-api user on lbry.tv
   // This also prevents the site from loading in the un-authed state while we wait for internal-apis to return for the first time
   // It's not needed on desktop since there is no un-authed state
@@ -510,6 +516,7 @@ function App(props: Props) {
         // @endif
       })}
       ref={appRef}
+      key={langRenderKey}
       onContextMenu={IS_WEB ? undefined : (e) => openContextMenu(e)}
     >
       {IS_WEB && lbryTvApiStatus === STATUS_DOWN ? (

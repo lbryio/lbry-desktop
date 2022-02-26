@@ -8,7 +8,7 @@ import {
   selectHashChanged,
 } from 'redux/selectors/sync';
 import { doCheckSync, doGetSync } from 'redux/actions/sync';
-import { selectClientSetting, selectLanguage } from 'redux/selectors/settings';
+import { selectClientSetting } from 'redux/selectors/settings';
 import { doSetWalletSyncPreference } from 'redux/actions/settings';
 import SyncToggle from './view';
 import { doGetAndPopulatePreferences } from 'redux/actions/app';
@@ -20,7 +20,6 @@ const select = (state) => ({
   verifiedEmail: selectUserVerifiedEmail(state),
   getSyncError: selectGetSyncErrorMessage(state),
   getSyncPending: selectGetSyncIsPending(state),
-  language: selectLanguage(state),
 });
 
 const perform = (dispatch) => ({

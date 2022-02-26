@@ -1,6 +1,6 @@
 import * as MODALS from 'constants/modal_types';
 import { connect } from 'react-redux';
-import { selectLanguage, selectShowMatureContent } from 'redux/selectors/settings';
+import { selectShowMatureContent } from 'redux/selectors/settings';
 import { doToast } from 'redux/actions/notifications';
 import { doOpenModal, doHideModal } from 'redux/actions/app';
 import { withRouter } from 'react-router';
@@ -9,7 +9,6 @@ import analytics from 'analytics';
 import Wunderbar from './view';
 
 const select = (state, props) => ({
-  language: selectLanguage(state),
   showMature: selectShowMatureContent(state),
 });
 

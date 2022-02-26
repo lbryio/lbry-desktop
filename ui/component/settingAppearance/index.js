@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import * as SETTINGS from 'constants/settings';
 import { doSetClientSetting } from 'redux/actions/settings';
-import { selectLanguage, selectClientSetting } from 'redux/selectors/settings';
+import { selectClientSetting } from 'redux/selectors/settings';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import SettingAppearance from './view';
 
@@ -10,7 +10,6 @@ const select = (state) => ({
   searchInLanguage: selectClientSetting(state, SETTINGS.SEARCH_IN_LANGUAGE),
   isAuthenticated: selectUserVerifiedEmail(state),
   hideBalance: selectClientSetting(state, SETTINGS.HIDE_BALANCE),
-  language: selectLanguage(state),
 });
 
 const perform = (dispatch) => ({

@@ -4,7 +4,7 @@ import * as SETTINGS from 'constants/settings';
 import { doOpenModal } from 'redux/actions/app';
 import { doSetPlayingUri } from 'redux/actions/content';
 import { doSetClientSetting } from 'redux/actions/settings';
-import { selectShowMatureContent, selectLanguage, selectClientSetting } from 'redux/selectors/settings';
+import { selectShowMatureContent, selectClientSetting } from 'redux/selectors/settings';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 
 import SettingContent from './view';
@@ -21,7 +21,6 @@ const select = (state) => ({
   instantPurchaseEnabled: selectClientSetting(state, SETTINGS.INSTANT_PURCHASE_ENABLED),
   instantPurchaseMax: selectClientSetting(state, SETTINGS.INSTANT_PURCHASE_MAX),
   enablePublishPreview: selectClientSetting(state, SETTINGS.ENABLE_PUBLISH_PREVIEW),
-  language: selectLanguage(state),
 });
 
 const perform = (dispatch) => ({
