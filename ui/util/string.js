@@ -4,10 +4,11 @@ export function toCapitalCase(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export function toCompactNotation(number: string | number, lang: ?string, minThresholdToApply?: string | number) {
+export function toCompactNotation(number: string | number, lang: ?string, minThresholdToApply?: number) {
   const locale = lang || 'en';
+  const useCompactNotation = !minThresholdToApply || Number(number) >= minThresholdToApply;
 
-  if (minThresholdToApply && Number(number) >= Number(minThresholdToApply)) {
+  if (useCompactNotation) {
     try {
       return Number(number).toLocaleString(locale, {
         compactDisplay: 'short',

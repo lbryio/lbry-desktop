@@ -6,28 +6,31 @@ import DateTime from 'component/dateTime';
 import LivestreamDateTime from 'component/livestreamDateTime';
 import Button from 'component/button';
 import FileViewCountInline from 'component/fileViewCountInline';
+import { toCompactNotation } from 'util/string';
 import { parseURI } from 'util/lbryURI';
 
 type Props = {
   uri: string,
+  type?: string,
+  showAtSign?: boolean,
+  // --- redux ---
   claim: ?StreamClaim,
   pending?: boolean,
-  type: string,
   beginPublish: (?string) => void,
   isLivestream: boolean,
+  lang: string,
   fetchSubCount: (string) => void,
   subCount: number,
-  showAtSign?: boolean,
 };
 
 // previews used in channel overview and homepage (and other places?)
 function ClaimPreviewSubtitle(props: Props) {
-  const { pending, uri, claim, type, beginPublish, isLivestream, fetchSubCount, subCount, showAtSign } = props;
+  const { pending, uri, claim, type, beginPublish, isLivestream, fetchSubCount, subCount, showAtSign, lang } = props;
   const isChannel = claim && claim.value_type === 'channel';
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
 
   const claimId = (claim && claim.claim_id) || '0';
-  const formattedSubCount = Number(subCount).toLocaleString();
+  const formattedSubCount = toCompactNotation(subCount, lang, 10000);
 
   React.useEffect(() => {
     if (isChannel) {

@@ -1,6 +1,7 @@
 import * as PAGES from 'constants/pages';
 import { connect } from 'react-redux';
 import { selectClaimForUri, makeSelectClaimIsPending } from 'redux/selectors/claims';
+import { selectLanguage } from 'redux/selectors/settings';
 import { doClearPublish, doPrepareEdit } from 'redux/actions/publish';
 import { push } from 'connected-react-router';
 import ClaimPreviewSubtitle from './view';
@@ -16,6 +17,7 @@ const select = (state, props) => {
     pending: makeSelectClaimIsPending(props.uri)(state),
     isLivestream,
     subCount: isChannel ? selectSubCountForUri(state, claim.repost_url ? claim.canonical_url : props.uri) : 0,
+    lang: selectLanguage(state),
   };
 };
 
