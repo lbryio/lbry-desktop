@@ -1691,6 +1691,8 @@
   "Enter the timeout duration. Examples: %examples%": "Enter the timeout duration. Examples: %examples%",
   "Wow, banned for more than 100 years?": "Wow, banned for more than 100 years?",
   "Invalid duration.": "Invalid duration.",
+  "Value exceeded maximum.": "Value exceeded maximum.",
+  "Units:\n • s:  seconds\n • m:  minutes \n • h:  hours\n • d:  days\n • b:  months\n • month:  months\n • y:  years": "Units:\n • s:  seconds\n • m:  minutes \n • h:  hours\n • d:  days\n • b:  months\n • month:  months\n • y:  years",
   "Permanent": "Permanent",
   "Timeout --[time-based ban instead of permanent]--": "Timeout",
   "(Remaining: %duration%) --[timeout ban duration]--": "(Remaining: %duration%)",

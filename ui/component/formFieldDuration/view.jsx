@@ -6,7 +6,8 @@ import { FormField } from 'component/common/form';
 import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
 
-const INPUT_EXAMPLES = '\n- 30s\n- 10m\n- 1h\n- 2d\n- 3mo\n- 1y';
+// prettier-ignore
+const TOOLTIP = 'Units:\n • s:  seconds\n • m:  minutes \n • h:  hours\n • d:  days\n • b:  months\n • month:  months\n • y:  years';
 const ONE_HUNDRED_YEARS_IN_SECONDS = 3154000000;
 
 type Props = {
@@ -72,16 +73,10 @@ export default function FormFieldDuration(props: Props) {
       label={
         <>
           {label || __('Duration')}
-          <Icon
-            customTooltipText={__('Examples: %examples%', { examples: INPUT_EXAMPLES })}
-            className="icon--help"
-            icon={ICONS.HELP}
-            tooltip
-            size={16}
-          />
+          <Icon customTooltipText={__(TOOLTIP)} className="icon--help" icon={ICONS.HELP} tooltip size={16} />
         </>
       }
-      placeholder={placeholder || '30s, 10m, 1h, 2d, 3mo, 1y'}
+      placeholder={placeholder || '30s, 10m, 1h, 2d, 3month, 1y'}
       value={value}
       onChange={onChange}
       error={valueErr}
