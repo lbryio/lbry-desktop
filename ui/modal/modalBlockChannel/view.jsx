@@ -236,7 +236,7 @@ export default function ModalBlockChannel(props: Props) {
             )}
 
             <div className="section section--vertical-compact">
-              <label>{__('Duration')}</label>
+              <label>{__('Duration --[period e.g. ban duration]--')}</label>
               <div className="block-modal--values">
                 <fieldset>
                   {getBlockTypeElem(BLOCK.PERMANENT, 'Permanent')}

@@ -72,7 +72,7 @@ export default function FormFieldDuration(props: Props) {
       disabled={disabled}
       label={
         <>
-          {label || __('Duration')}
+          {label || __('Duration --[period e.g. ban duration]--')}
           <Icon customTooltipText={__(TOOLTIP)} className="icon--help" icon={ICONS.HELP} tooltip size={16} />
         </>
       }

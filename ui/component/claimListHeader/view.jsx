@@ -412,7 +412,7 @@ function ClaimListHeader(props: Props) {
                     className={classnames('claim-search__dropdown', {
                       'claim-search__dropdown--selected': durationParam,
                     })}
-                    label={__('Duration')}
+                    label={__('Duration --[length of audio or video]--')}
                     type="select"
                     name="duration"
                     disabled={
