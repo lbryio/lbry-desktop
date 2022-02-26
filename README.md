@@ -2,7 +2,7 @@
 
 This repo contains the UI and front end code that powers Odysee.com.
 
- <a href="https://github.com/lbryio/lbry-desktop/blob/master/LICENSE" title="MIT licensed">
+ <a href="https://github.com/OdyseeTeam/odysee-frontend/blob/master/LICENSE" title="MIT licensed">
    <img alt="npm" src="https://img.shields.io/dub/l/vibe-d.svg?style=flat">
  </a>
  <a href="https://chat.odysee.com">
@@ -24,8 +24,6 @@ Go to the website to interact on this frontend.
 
 ## Running from Source
 
-You can run the web version (odysee.com), via running onto your host machine, or go to the website itself.
-
 #### Prerequisites
 
 - [Git](https://git-scm.com/downloads)
@@ -40,40 +38,24 @@ You can run the web version (odysee.com), via running onto your host machine, or
 
 `yarn dev:web`
 
-- This uses webpack-dev-server and includes hot-reloading. If you want to debug the [web server we use in production](https://github.com/OdyseeTeam/odysee-frontend/blob/master/web/index.js) you can run `yarn dev:web-server`. This starts a server at `localhost:1337` and does not include hot reloading.
+- This uses `webpack-dev-server` and includes hot-reloading. If you want to debug the [web server we use in production](https://github.com/OdyseeTeam/odysee-frontend/blob/master/web/index.js) you can run `yarn dev:web-server`. This starts a server at `localhost:1337` and does not include hot reloading.
 
 #### Customize the web app
 
-- In root directory, duplicate the .env.default file and rename it to .env then copy the code below and paste it anywhere in the .env file.
-
-```
-cp .env.defaults .env
-nano .env
-```
-
-- To specify your own OG-IMAGE
-  You can either place a png named v2-og.png in the /custom folder or specify the OG_IMAGE_URL in .env
-
-- To specify your own channels to be followed on first run
-  `AUTO_FOLLOW_URLS=lbry://@chan#123...a lbry://@chan2#456...a`
-
-- If you want to customize the homepage content
-
-1. add `CUSTOM_HOMEPAGE=true` to the '.env' file
-2. copy `/custom/homepage.example.js` to `/custom/homepage.js` and make desired changes to `homepage.js`
-
-- If you want up to two custom sidebar links:
-
-```
-PINNED_URI_1=@someurl#2/someclaim#4
-PINNED_LABEL_1=Linktext
-
-PINNED_URI_2=$/discover?t=tag&[queryparams]
-PINNED_LABEL_2=OtherLinkText
-```
-
-- Finally `NODE_ENV=production yarn compile:web` to rebuild
-  _Note: You don't need to edit the .env file in the /web folder - that is copied during compile._
+- In root directory, duplicate the `.env.default` file as `.env` and make customizations there.
+    ```
+    cp .env.defaults .env
+    nano .env
+    ```
+- To specify your own OG-IMAGE:
+    - Either place a png named `v2-og.png` in the `/custom` folder or specify the `OG_IMAGE_URL` in .env file.
+- To specify your own channels to be followed on first run:
+    - `AUTO_FOLLOW_URLS=lbry://@chan#123...a lbry://@chan2#456...a`
+- To customize the homepage content:
+    1. Add `CUSTOM_HOMEPAGE=true` to the .env file.
+    2. Copy `/custom/homepage.example.js` to `/custom/homepage.js` and make desired changes to `homepage.js`.
+- Finally, run `NODE_ENV=production yarn compile:web` to rebuild.
+    - _Note: You do not need to edit the `.env` file in the `/web` folder - that is copied during compilation._
 
 #### Deploy the web app (_experimental_)
 
