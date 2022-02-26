@@ -277,6 +277,7 @@ function CommentView(props: Props) {
                   })}
                   link
                   uri={authorUri}
+                  showAtSign
                 />
               )}
               <Button

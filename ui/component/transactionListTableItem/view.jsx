@@ -147,7 +147,7 @@ class TransactionListTableItem extends React.PureComponent<Props, State> {
           {isLbryViewReward && <div className="table__item-label">{__('%SITE_NAME% view reward', { SITE_NAME })}</div>}
           {isTip && signingChannel && !isLbryViewReward && (
             <div className="table__item-label">
-              <UriIndicator uri={signingChannel && signingChannel.permanent_url} link />
+              <UriIndicator uri={signingChannel && signingChannel.permanent_url} link showAtSign />
             </div>
           )}
           {isTip && !signingChannel && !isLbryViewReward && <div className="table__item-label">Anonymous</div>}

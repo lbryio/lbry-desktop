@@ -11,7 +11,7 @@ const select = (state, props) => {
 
   return {
     claimLabel: claim && formatLbryChannelName(claim.canonical_url),
-    claimTitle: claim && getClaimTitle(claim.canonical_url),
+    claimTitle: claim && getClaimTitle(claim),
   };
 };
 

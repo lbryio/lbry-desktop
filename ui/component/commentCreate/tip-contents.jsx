@@ -38,7 +38,7 @@ export const TipReviewBox = (props: Props) => {
           <ChannelThumbnail xsmall uri={activeChannelUrl} />
 
           <div className="commentCreate__supportCommentBody">
-            <UriIndicator uri={activeChannelUrl} link />
+            <UriIndicator uri={activeChannelUrl} link showAtSign />
             <div>{message}</div>
           </div>
         </>

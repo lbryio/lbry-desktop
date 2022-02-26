@@ -60,7 +60,7 @@ export default function LivestreamSuperchats(props: Props) {
                     })}
                   >
                     <div className="livestreamSuperchat__info--user">
-                      <UriIndicator uri={channel_url} link />
+                      <UriIndicator uri={channel_url} link showAtSign />
 
                       <CreditAmount
                         hideTitle

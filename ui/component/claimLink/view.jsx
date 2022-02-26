@@ -75,7 +75,7 @@ class ClaimLink extends React.Component<Props> {
 
     return isChannel ? (
       <>
-        <UriIndicator uri={uri} link />
+        <UriIndicator uri={uri} link showAtSign />
         <span>{fullUri.length > uri.length ? fullUri.substring(uri.length, fullUri.length) : ''}</span>
       </>
     ) : allowPreview ? (

@@ -22,7 +22,7 @@ export const StickerReviewBox = (props: Props) => {
     <div className="commentCreate__stickerPreview">
       <div className="commentCreate__stickerPreviewInfo">
         <ChannelThumbnail xsmall uri={activeChannelUrl} />
-        <UriIndicator uri={activeChannelUrl} link />
+        <UriIndicator uri={activeChannelUrl} link showAtSign />
       </div>
 
       <div className="commentCreate__stickerPreviewImage">
