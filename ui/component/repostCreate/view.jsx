@@ -252,28 +252,6 @@ function RepostCreate(props: Props) {
 
   const repostClaimId = contentClaimId || enteredClaimId;
 
-  // const getRedirect = (entered, passed, redirect) => {
-  //   if (redirect) {
-  //     return redirect;
-  //   } else if (entered) {
-  //     try {
-  //       const { claimName } = parseURI(entered);
-  //       return claimName ? `/${claimName}` : '/';
-  //     } catch (e) {
-  //       return '/';
-  //     }
-  //   } else if (passed) {
-  //     try {
-  //       const { claimName } = parseURI(passed);
-  //       return claimName ? `/${claimName}` : '/';
-  //     } catch (e) {
-  //       return '/';
-  //     }
-  //   } else {
-  //     return '/';
-  //   }
-  // };
-
   function handleSubmit() {
     if (enteredRepostName && repostBid && repostClaimId) {
       doRepost({

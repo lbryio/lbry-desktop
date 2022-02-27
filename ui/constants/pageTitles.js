@@ -48,7 +48,6 @@ export const PAGE_TITLE = {
   [PAGES.RECEIVE]: 'Your address',
   [PAGES.REPORT]: 'Report an issue or request a feature',
   [PAGES.REPORT_CONTENT]: 'Report content',
-  [PAGES.REPOST_NEW]: 'Repost',
   [PAGES.REWARDS]: 'Rewards',
   [PAGES.REWARDS_VERIFY]: 'Verify to earn Credits',
   [PAGES.SEARCH]: 'Search',

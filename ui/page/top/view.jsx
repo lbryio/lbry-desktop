@@ -31,7 +31,6 @@ function TopPage(props: Props) {
         streamType={SIMPLE_SITE ? CS.CONTENT_ALL : undefined}
         meta={
           <div className="search__top-links">
-            {/* <Button button="secondary" navigate={`/$/${PAGES.REPOST_NEW}?to=${queryName}`} label={__('Repost Here')} /> */}
             <Button button="secondary" onClick={() => doOpenModal(MODALS.REPOST, {})} label={__('Repost Here')} />
             <Button button="secondary" onClick={() => beginPublish(queryName)} label={__('Publish Here')} />
           </div>
