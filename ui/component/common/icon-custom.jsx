@@ -2766,6 +2766,7 @@ export const icons = {
       </svg>
     );
   },
+  [ICONS.SUBMIT]: buildIcon(<path d="M2.01 21 23 12 2.01 3 2 10l15 2-15 2z" />),
   [ICONS.FILTERED_BY_LANG]: buildIcon(
     <svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg" strokeWidth="1.5">
       <g transform="matrix(5.833333333333333,0,0,5.833333333333333,0,0)">
