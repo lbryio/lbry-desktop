@@ -39,6 +39,7 @@ const MAP = Object.freeze({
   [MODALS.PHONE_COLLECTION]: lazyImport(() => import('modal/modalPhoneCollection' /* webpackChunkName: "modalPhoneCollection" */)),
   [MODALS.PUBLISH]: lazyImport(() => import('modal/modalPublish' /* webpackChunkName: "modalPublish" */)),
   [MODALS.PUBLISH_PREVIEW]: lazyImport(() => import('modal/modalPublishPreview' /* webpackChunkName: "modalPublishPreview" */)),
+  [MODALS.REPOST]: lazyImport(() => import('modal/modalRepost' /* webpackChunkName: "modalRepost" */)),
   [MODALS.REWARD_GENERATED_CODE]: lazyImport(() => import('modal/modalRewardCode' /* webpackChunkName: "modalRewardCode" */)),
   [MODALS.SEND_TIP]: lazyImport(() => import('modal/modalSendTip' /* webpackChunkName: "modalSendTip" */)),
   [MODALS.SET_REFERRER]: lazyImport(() => import('modal/modalSetReferrer' /* webpackChunkName: "modalSetReferrer" */)),

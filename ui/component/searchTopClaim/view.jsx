@@ -1,6 +1,7 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
+import * as MODALS from 'constants/modal_types';
 import React from 'react';
 import { parseURI } from 'util/lbryURI';
 import ClaimPreview from 'component/claimPreview';
@@ -8,11 +9,11 @@ import Button from 'component/button';
 import ClaimEffectiveAmount from 'component/claimEffectiveAmount';
 import ClaimRepostAuthor from 'component/claimRepostAuthor';
 import I18nMessage from 'component/i18nMessage';
-import { useHistory } from 'react-router';
 import LbcSymbol from 'component/common/lbc-symbol';
 import { DOMAIN } from 'config';
 
 type Props = {
+  doOpenModal: (string, {}) => void,
   query: string,
   winningUri: ?string,
   doResolveUris: (Array<string>) => void,
@@ -28,6 +29,7 @@ type Props = {
 export default function SearchTopClaim(props: Props) {
   const {
     doResolveUris,
+    doOpenModal,
     query = '',
     winningUri,
     winningClaim,
@@ -38,7 +40,6 @@ export default function SearchTopClaim(props: Props) {
     isSearching,
   } = props;
   const uriFromQuery = `lbry://${query}`;
-  const { push } = useHistory();
   let name;
   let channelUriFromQuery;
   let winningUriIsChannel;
@@ -115,13 +116,7 @@ export default function SearchTopClaim(props: Props) {
         <div className="card card--section help--inline">
           <I18nMessage
             tokens={{
-              repost: (
-                <Button
-                  button="link"
-                  onClick={() => push(`/$/${PAGES.REPOST_NEW}${name ? `?to=${name}` : ''}`)}
-                  label={__('Repost')}
-                />
-              ),
+              repost: <Button button="link" onClick={() => doOpenModal(MODALS.REPOST, {})} label={__('Repost')} />,
               publish: (
                 <span>
                   <Button button="link" onClick={() => beginPublish(name)} label={__('publish')} />

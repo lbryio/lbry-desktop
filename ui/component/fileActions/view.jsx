@@ -11,6 +11,7 @@ import * as COLLECTIONS_CONSTS from 'constants/collections';
 import * as RENDER_MODES from 'constants/file_render_modes';
 import ClaimSupportButton from 'component/claimSupportButton';
 import ClaimCollectionAddButton from 'component/claimCollectionAddButton';
+import ClaimRepostButton from 'component/claimRepostButton';
 import { useHistory } from 'react-router';
 import FileReactions from 'component/fileReactions';
 import { Menu, MenuButton, MenuList, MenuItem } from '@reach/menu-button';
@@ -102,6 +103,7 @@ export default function FileActions(props: Props) {
     }
   }, [downloadClicked, streamingUrl, fileName]);
 
+  // TODO: don't want to redirect. need to instead show modal
   function handleRepostClick() {
     if (!hasChannels) {
       doClearPlayingUri();
@@ -119,7 +121,9 @@ export default function FileActions(props: Props) {
 
       <ClaimCollectionAddButton uri={uri} fileAction />
 
-      {!hideRepost && !isMobile && !isLivestreamClaim && (
+      <ClaimRepostButton uri={uri} pathname={pathname} fileAction />
+
+      {/* {!hideRepost && !isMobile && !isLivestreamClaim && (
         <Tooltip title={__('Repost')} arrow={false}>
           <Button
             button="alt"
@@ -132,7 +136,7 @@ export default function FileActions(props: Props) {
             onClick={handleRepostClick}
           />
         </Tooltip>
-      )}
+      )} */}
 
       <Tooltip title={__('Share')} arrow={false}>
         <Button
