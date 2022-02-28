@@ -76,6 +76,7 @@ type Props = {
   hiddenNsfwMessage?: Node,
   injectedItem: ?Node,
   meta?: Node,
+  subSection?: Node, // Additional section below [Header|Meta]
   renderProperties?: (Claim) => Node,
 
   history: { action: string, push: (string) => void, replace: (string) => void },
@@ -118,6 +119,7 @@ function ClaimListDiscover(props: Props) {
     defaultTags,
     loading,
     meta,
+    subSection,
     channelIds,
     showNsfw,
     hideReposts,
@@ -651,6 +653,7 @@ function ClaimListDiscover(props: Props) {
               {meta && <div className="section__actions--no-margin">{meta}</div>}
             </div>
           )}
+          {subSection && <div>{subSection}</div>}
           <ClaimList
             tileLayout
             loading={loading}
@@ -691,6 +694,7 @@ function ClaimListDiscover(props: Props) {
               {meta && <div className="section__actions--no-margin">{meta}</div>}
             </div>
           )}
+          {subSection && <div>{subSection}</div>}
           <ClaimList
             type={type}
             loading={loading}
