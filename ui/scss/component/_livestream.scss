@@ -169,23 +169,17 @@
   }
 }
 
+.livestream-list {
+  margin-bottom: var(--spacing-l);
+  border-bottom: 1px solid var(--color-border);
+
+  .claim-list__header-label {
+    margin-top: 0;
+  }
+}
+
 .livestream-list--view-more {
   display: flex;
-  margin-left: var(--spacing-s);
-  margin-bottom: var(--spacing-xxxs);
-
-  @media (max-width: $breakpoint-small) {
-    button {
-      .button__content {
-        span {
-          // This is being set in '.section__actions' to '--font-xxsmall',
-          // causing the button to shrink in mobile.
-          // I think it is only needed for the mobile comments and shouldn't
-          // be applied globally?
-          // Anyway, reverting for this use-case only for now to reduce testing.
-          font-size: unset;
-        }
-      }
-    }
-  }
+  align-items: flex-end;
+  margin-bottom: var(--spacing-s);
 }
