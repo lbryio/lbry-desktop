@@ -82,6 +82,10 @@ body {
 
   .main--auth-page {
     min-height: unset;
+
+    @media (min-width: $breakpoint-small) {
+      min-height: calc(100vh - var(--header-height) - var(--spacing-main-padding));
+    }
   }
 }
 
