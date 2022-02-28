@@ -573,6 +573,9 @@ function ClaimListDiscover(props: Props) {
       case CS.ORDER_BY_NEW_ASC:
         order_by = CS.ORDER_BY_NEW_ASC_VALUE;
         break;
+      case CS.ORDER_BY_NAME_ASC:
+        order_by = CS.ORDER_BY_NAME_ASC_VALUE;
+        break;
       default:
         order_by = CS.ORDER_BY_TOP_VALUE;
     }

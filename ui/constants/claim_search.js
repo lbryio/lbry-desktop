@@ -39,6 +39,9 @@ export const ORDER_BY_NEW_VALUE = ['release_time'];
 export const ORDER_BY_NEW_ASC = 'new_asc';
 export const ORDER_BY_NEW_ASC_VALUE = ['^release_time'];
 
+export const ORDER_BY_NAME_ASC = 'name_asc';
+export const ORDER_BY_NAME_ASC_VALUE = ['^name'];
+
 // @note: These are used to build the default controls available on claim listings.
 export const ORDER_BY_TYPES = [ORDER_BY_NEW, ORDER_BY_TRENDING, ORDER_BY_TOP];
 
