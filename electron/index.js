@@ -43,11 +43,18 @@ let autoUpdateDownloaded = false;
 // that we show on Windows after you decline an upgrade and close the app later.
 let showingAutoUpdateCloseAlert = false;
 
-// This is used to prevent downloading updates multiple times.
+// This is used to prevent downloading updates multiple times when
+// using the auto updater API.
 // As read in the documentation:
 // "Calling autoUpdater.checkForUpdates() twice will download the update two times."
 // https://www.electronjs.org/docs/latest/api/auto-updater#autoupdatercheckforupdates
 let keepCheckingForUpdates = true;
+
+// Auto updater doesn't support Linux installations (only trough AppImages)
+// this is why, for that case, we download a full executable (.deb package)
+// as a fallback support. This variable will be used to prevent
+// multiple downloads when auto updater isn't supported.
+let downloadUpgradeInProgress = false;
 
 // Keep a global reference, if you don't, they will be closed automatically when the JavaScript
 // object is garbage collected.
@@ -321,6 +328,10 @@ ipcMain.on('get-disk-space', async (event) => {
 });
 
 ipcMain.on('download-upgrade', async (event, params) => {
+  if (downloadUpgradeInProgress) {
+    return;
+  }
+
   const { url, options } = params;
   const dir = fs.mkdtempSync(app.getPath('temp') + path.sep);
   options.onProgress = function(p) {
@@ -328,9 +339,11 @@ ipcMain.on('download-upgrade', async (event, params) => {
   };
   options.directory = dir;
   options.onCompleted = function(c) {
+    downloadUpgradeInProgress = false;
     rendererWindow.webContents.send('download-update-complete', c);
   };
   const win = BrowserWindow.getFocusedWindow();
+  downloadUpgradeInProgress = true;
   await download(win, url, options).catch(e => console.log('e', e));
 });
 
