@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import { selectClaimsById, selectMyChannelClaims, selectTotalStakedAmountForChannelUri } from 'redux/selectors/claims';
-import { AUTO_UPDATE_DOWNLOADED } from 'constants/modal_types';
+import * as MODALS from 'constants/modal_types';
 
 export const selectState = (state) => state.app || {};
 
@@ -53,7 +53,7 @@ export const selectAutoUpdateDownloaded = createSelector(selectState, (state) =>
 export const selectAutoUpdateDeclined = createSelector(selectState, (state) => state.autoUpdateDeclined);
 
 export const selectIsUpdateModalDisplayed = createSelector(selectState, (state) => {
-  return state.modal === AUTO_UPDATE_DOWNLOADED;
+  return [MODALS.AUTO_UPDATE_DOWNLOADED, MODALS.UPGRADE, MODALS.DOWNLOADING].includes(state.modal);
 });
 
 export const selectDaemonVersionMatched = createSelector(selectState, (state) => state.daemonVersionMatched);
