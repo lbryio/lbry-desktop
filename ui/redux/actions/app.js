@@ -18,7 +18,6 @@ import { Lbryio } from 'lbryinc';
 import { selectFollowedTagsList } from 'redux/selectors/tags';
 import { doToast, doError, doNotificationList } from 'redux/actions/notifications';
 
-import Native from 'native';
 import {
   doFetchDaemonSettings,
   doSetAutoLaunch,
@@ -183,45 +182,50 @@ export function doCheckUpgradeAvailable() {
       type: ACTIONS.CHECK_UPGRADE_START,
     });
 
-    if (['win32', 'darwin'].includes(process.platform) || !!process.env.APPIMAGE) {
-      // On Windows, Mac, and AppImage, updates happen silently through
-      // electron-updater.
-      const autoUpdateDeclined = selectAutoUpdateDeclined(state);
-      const disableAutoUpdate = selectDisableAutoUpdates(state);
+    const autoUpdateSupported = ['win32', 'darwin'].includes(process.platform) || !!process.env.APPIMAGE;
 
-      if (autoUpdateDeclined || isDev) {
-        return;
-      }
+    const autoUpdateDeclined = selectAutoUpdateDeclined(state);
 
-      ipcRenderer.send('check-for-updates', !disableAutoUpdate);
+    // If auto update isn't supported (Linux using .deb packages)
+    // don't perform any download, just get the upgrade info
+    // (release notes and version)
+    const disableAutoUpdate = !autoUpdateSupported || selectDisableAutoUpdates(state);
+
+    if (autoUpdateDeclined || isDev) {
       return;
     }
 
-    const success = ({ remoteVersion, upgradeAvailable }) => {
-      dispatch({
-        type: ACTIONS.CHECK_UPGRADE_SUCCESS,
-        data: {
-          upgradeAvailable,
-          remoteVersion,
-        },
-      });
+    ipcRenderer.send('check-for-updates', !disableAutoUpdate);
+  };
+}
 
-      if (
-        upgradeAvailable &&
-        !selectModal(state) &&
-        (!selectIsUpgradeSkipped(state) || remoteVersion !== selectRemoteVersion(state))
-      ) {
-        dispatch(doOpenModal(MODALS.UPGRADE));
-      }
-    };
+export function doNotifyUpdateAvailable(e) {
+  return (dispatch, getState) => {
+    const remoteVersion = e.releaseName || e.version;
 
-    const fail = () => {
-      dispatch({
-        type: ACTIONS.CHECK_UPGRADE_FAIL,
-      });
-    };
+    const state = getState();
+    const noModalBeingDisplayed = !selectModal(state);
+    const isUpgradeSkipped = selectIsUpgradeSkipped(state);
+    const isRemoveVersionDiff = remoteVersion !== selectRemoteVersion(state);
 
-    Native.getAppVersionInfo().then(success, fail);
+    dispatch({
+      type: ACTIONS.CHECK_UPGRADE_SUCCESS,
+      data: {
+        upgradeAvailable: true,
+        remoteVersion,
+        releaseNotes: e.releaseNotes,
+      },
+    });
+
+    const autoUpdateSupported = ['win32', 'darwin'].includes(process.platform) || !!process.env.APPIMAGE;
+
+    if (autoUpdateSupported) {
+      return;
+    }
+
+    if (noModalBeingDisplayed && !isUpgradeSkipped && isRemoveVersionDiff) {
+      dispatch(doOpenModal(MODALS.UPGRADE));
+    }
   };
 }
 

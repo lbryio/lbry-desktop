@@ -8,11 +8,12 @@ const IS_MAC = navigator.userAgent.indexOf('Mac OS X') !== -1;
 type Props = {
   downloadUpgrade: () => void,
   skipUpgrade: () => void,
+  releaseVersion: string,
 };
 
 class ModalUpgrade extends React.PureComponent<Props> {
   render() {
-    const { downloadUpgrade, skipUpgrade } = this.props;
+    const { downloadUpgrade, skipUpgrade, releaseVersion } = this.props;
 
     return (
       <Modal
@@ -26,10 +27,7 @@ class ModalUpgrade extends React.PureComponent<Props> {
         onConfirmed={downloadUpgrade}
         onAborted={skipUpgrade}
       >
-        <p>
-          {__('An updated version of LBRY is now available.')}{' '}
-          {__('Your version is out of date and may be unreliable or insecure.')}
-        </p>
+        {__('A new version %release_tag% of LBRY is ready for you.', { release_tag: releaseVersion })}
         <LastReleaseChanges hideReleaseVersion />
       </Modal>
     );
