@@ -20,6 +20,7 @@ import {
   doHideModal,
   doToggle3PAnalytics,
   doUpdateDownloadProgress,
+  doNotifyUpdateAvailable,
 } from 'redux/actions/app';
 import { isURIValid } from 'util/lbryURI';
 import { setSearchApi } from 'redux/actions/search';
@@ -129,14 +130,8 @@ ipcRenderer.on('open-uri-requested', (event, url, newSession) => {
   handleError();
 });
 
-autoUpdater.on('update-available', ({ version }) => {
-  app.store.dispatch({
-    type: ACTIONS.CHECK_UPGRADE_SUCCESS,
-    data: {
-      upgradeAvailable: true,
-      remoteVersion: version,
-    },
-  });
+autoUpdater.on('update-available', (e) => {
+  app.store.dispatch(doNotifyUpdateAvailable(e));
 });
 
 ipcRenderer.on('download-progress-update', (e, p) => {
