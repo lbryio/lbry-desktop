@@ -63,6 +63,7 @@ exports.DEPRECATED__CHANNELS_FOLLOWING = 'following/channels';
 exports.CHANNELS_FOLLOWING = 'following';
 exports.DEPRECATED__CHANNELS_FOLLOWING_MANAGE = 'following/channels/manage';
 exports.CHANNELS_FOLLOWING_DISCOVER = 'following/discover';
+exports.CHANNELS_FOLLOWING_MANAGE = 'following/manage';
 exports.WALLET = 'wallet';
 exports.CHANNELS = 'channels';
 exports.EMBED = 'embed';

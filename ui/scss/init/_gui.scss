@@ -653,6 +653,13 @@ img {
   }
 }
 
+.followManage-wrapper {
+  @extend .discoverPage-wrapper;
+  .claim-list {
+    margin-top: var(--spacing-m);
+  }
+}
+
 .uploadPage-wraper {
   &.card-stack {
     .card:not(:last-of-type) {

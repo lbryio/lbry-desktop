@@ -48,6 +48,9 @@ const ChannelsFollowingDiscoverPage = lazyImport(() =>
 const ChannelsFollowingPage = lazyImport(() =>
   import('page/channelsFollowing' /* webpackChunkName: "channelsFollowing" */)
 );
+const ChannelsFollowingManage = lazyImport(() =>
+  import('page/channelsFollowingManage' /* webpackChunkName: "channelsFollowing" */)
+);
 const ChannelsPage = lazyImport(() => import('page/channels' /* webpackChunkName: "channels" */));
 const CheckoutPage = lazyImport(() => import('page/checkoutPage' /* webpackChunkName: "checkoutPage" */));
 const CreatorDashboard = lazyImport(() => import('page/creatorDashboard' /* webpackChunkName: "creatorDashboard" */));
@@ -329,6 +332,12 @@ function AppRouter(props: Props) {
           exact
           path={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`}
           component={ChannelsFollowingDiscoverPage}
+        />
+        <PrivateRoute
+          {...props}
+          exact
+          path={`/$/${PAGES.CHANNELS_FOLLOWING_MANAGE}`}
+          component={ChannelsFollowingManage}
         />
         <PrivateRoute {...props} path={`/$/${PAGES.INVITE}`} component={InvitePage} />
         <PrivateRoute {...props} path={`/$/${PAGES.CHANNEL_NEW}`} component={ChannelNew} />

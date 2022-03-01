@@ -232,7 +232,6 @@ function SideNavigation(props: Props) {
   );
 
   const [pulseLibrary, setPulseLibrary] = React.useState(false);
-  const [expandSubscriptions, setExpandSubscriptions] = React.useState(false);
   const [expandTags, setExpandTags] = React.useState(false);
 
   const isPersonalized = !IS_WEB || isAuthenticated;
@@ -276,12 +275,7 @@ function SideNavigation(props: Props) {
   );
 
   let displayedSubscriptions = filteredSubscriptions;
-  if (
-    showSubscriptionSection &&
-    !subscriptionFilter &&
-    subscriptions.length > FOLLOWED_ITEM_INITIAL_LIMIT &&
-    !expandSubscriptions
-  ) {
+  if (showSubscriptionSection && !subscriptionFilter && subscriptions.length > FOLLOWED_ITEM_INITIAL_LIMIT) {
     displayedSubscriptions = subscriptions.slice(0, FOLLOWED_ITEM_INITIAL_LIMIT);
   }
 
@@ -337,12 +331,12 @@ function SideNavigation(props: Props) {
                 </div>
               </li>
             )}
-            {!subscriptionFilter && subscriptions.length > FOLLOWED_ITEM_INITIAL_LIMIT && (
+            {!subscriptionFilter && (
               <Button
                 key="showMore"
-                label={expandSubscriptions ? __('Show less') : __('Show more')}
+                label={__('Manage')}
                 className="navigation-link"
-                onClick={() => setExpandSubscriptions(!expandSubscriptions)}
+                navigate={`/$/${PAGES.CHANNELS_FOLLOWING_MANAGE}`}
               />
             )}
           </ul>

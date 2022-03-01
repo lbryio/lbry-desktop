@@ -69,12 +69,20 @@ function ChannelsFollowingPage(props: Props) {
             defaultOrderBy={CS.ORDER_BY_NEW}
             channelIds={channelIds}
             meta={
-              <Button
-                icon={ICONS.SEARCH}
-                button="secondary"
-                label={__('Discover Channels')}
-                navigate={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`}
-              />
+              <>
+                <Button
+                  icon={ICONS.SEARCH}
+                  button="secondary"
+                  label={__('Discover Channels')}
+                  navigate={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`}
+                />
+                <Button
+                  icon={ICONS.SETTINGS}
+                  button="secondary"
+                  label={__('Manage')}
+                  navigate={`/$/${PAGES.CHANNELS_FOLLOWING_MANAGE}`}
+                />
+              </>
             }
             subSection={
               <LivestreamSection
