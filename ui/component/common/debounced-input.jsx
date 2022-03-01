@@ -1,7 +1,9 @@
 // @flow
 import React, { useEffect, useState } from 'react';
+import { FormField } from 'component/common/form';
 import Icon from 'component/common/icon';
 import useDebounce from 'effects/use-debounce';
+import classnames from 'classnames';
 
 const FILTER_DEBOUNCE_MS = 300;
 
@@ -9,11 +11,12 @@ interface Props {
   defaultValue?: string;
   icon?: string;
   placeholder?: string;
+  inline?: boolean;
   onChange: (newValue: string) => any;
 }
 
 export default function DebouncedInput(props: Props) {
-  const { defaultValue = '', icon, placeholder = '', onChange } = props;
+  const { defaultValue = '', icon, placeholder = '', inline, onChange } = props;
   const [rawValue, setRawValue] = useState(defaultValue);
   const debouncedValue: string = useDebounce(rawValue, FILTER_DEBOUNCE_MS);
 
@@ -22,10 +25,12 @@ export default function DebouncedInput(props: Props) {
   }, [onChange, debouncedValue]);
 
   return (
-    <div className="wunderbar">
+    <div className={classnames({ wunderbar: !inline, 'wunderbar--inline': inline })}>
       {icon && <Icon icon={icon} />}
-      <input
-        className="wunderbar__input"
+      <FormField
+        className={classnames({ wunderbar__input: !inline, 'wunderbar__input--inline': inline })}
+        type="text"
+        name="debounced_search"
         spellCheck={false}
         placeholder={placeholder}
         value={rawValue}
