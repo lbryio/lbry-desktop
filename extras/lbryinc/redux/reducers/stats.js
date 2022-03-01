@@ -47,11 +47,10 @@ export const statsReducer = handleActions(
     }),
 
     [ACTIONS.FETCH_SUB_COUNT_COMPLETED]: (state, action) => {
-      const { claimIdCsv, subCounts, fetchDate } = action.data;
+      const { claimIds, subCounts, fetchDate } = action.data;
 
       const subCountById = Object.assign({}, state.subCountById);
       const subCountLastFetchedById = Object.assign({}, state.subCountLastFetchedById);
-      const claimIds = claimIdCsv.split(',');
       let dataChanged = false;
 
       if (claimIds.length === subCounts.length) {

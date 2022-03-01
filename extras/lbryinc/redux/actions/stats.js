@@ -39,7 +39,7 @@ const executeFetchSubCount = (claimIdCsv: string) => (dispatch: Dispatch, getSta
       const subCounts = result;
       dispatch({
         type: ACTIONS.FETCH_SUB_COUNT_COMPLETED,
-        data: { claimIdCsv, subCounts, fetchDate: now },
+        data: { claimIds, subCounts, fetchDate: now },
       });
     })
     .catch((error) => {
