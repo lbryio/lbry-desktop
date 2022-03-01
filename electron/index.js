@@ -299,7 +299,7 @@ app.on('before-quit', () => {
 ipcMain.on('get-disk-space', async (event) => {
   try {
     const { data_dir } = await Lbry.settings_get();
-    let diskSpace = undefined;
+    let diskSpace;
     switch (os.platform()) {
       case 'linux':
         diskSpace = await diskSpaceLinux(data_dir);
