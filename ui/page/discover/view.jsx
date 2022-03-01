@@ -183,7 +183,7 @@ function DiscoverPage(props: Props) {
   }, [isAuthenticated]);
 
   return (
-    <Page noFooter fullWidthPage={tileLayout}>
+    <Page noFooter fullWidthPage={tileLayout} className="main__discover">
       <Ads type="homepage" />
       <ClaimListDiscover
         pins={getPins(dynamicRouteProps)}

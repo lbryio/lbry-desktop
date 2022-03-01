@@ -1134,6 +1134,14 @@ body {
   max-width: 32rem;
 }
 
+.main__discover {
+  .section__actions--no-margin {
+    @media (max-width: $breakpoint-small) {
+      width: unset; // It was being set to '100%' globally. Not sure why.
+    }
+  }
+}
+
 .main-wrapper--scrollbar {
   // The W3C future standard; currently supported by Firefox only.
   // It'll hopefully auto fallback to this when 'webkit-scrollbar' below is deprecated in the future.
