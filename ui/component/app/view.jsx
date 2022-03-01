@@ -23,6 +23,7 @@ import usePersistedState from 'effects/use-persisted-state';
 import useConnectionStatus from 'effects/use-connection-status';
 import Spinner from 'component/spinner';
 import LANGUAGES from 'constants/languages';
+import { SIDEBAR_SUBS_DISPLAYED } from 'constants/subscriptions';
 import YoutubeWelcome from 'web/component/youtubeReferralWelcome';
 import {
   useDegradedPerformance,
@@ -477,7 +478,7 @@ function App(props: Props) {
   useLayoutEffect(() => {
     if (sidebarOpen && isPersonalized && subscriptions && !resolvedSubscriptions) {
       setResolvedSubscriptions(true);
-      resolveUris(subscriptions.map((sub) => sub.uri));
+      resolveUris(subscriptions.slice(0, SIDEBAR_SUBS_DISPLAYED).map((sub) => sub.uri));
     }
   }, [sidebarOpen, isPersonalized, resolvedSubscriptions, subscriptions, resolveUris, setResolvedSubscriptions]);
 
