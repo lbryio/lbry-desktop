@@ -17,7 +17,7 @@ import startSandbox from './startSandbox';
 import installDevtools from './installDevtools';
 import fs from 'fs';
 import path from 'path';
-import { diskSpaceLinux } from '../ui/util/diskspace';
+import { diskSpaceLinux, diskSpaceWindows, diskSpaceMac } from '../ui/util/diskspace';
 
 const { download } = require('electron-dl');
 const remote = require('@electron/remote/main');
@@ -299,14 +299,21 @@ app.on('before-quit', () => {
 ipcMain.on('get-disk-space', async (event) => {
   try {
     const { data_dir } = await Lbry.settings_get();
-    // mac error for this is 'df /Users/username/Library/Application no such..'
-    // due to not escaping the ' ' in /`Application Support`
-    if (os.platform() === 'linux') {
-      const stdout = await diskSpaceLinux(data_dir);
-      const dfResult = stdout.split('\n')[1].split(/\s+/);
-      const total_and_available = { total: dfResult[1], free: dfResult[3]};
-      rendererWindow.webContents.send('send-disk-space', { diskSpace: total_and_available });
+    let diskSpace = undefined;
+    switch (os.platform()) {
+      case 'linux':
+        diskSpace = await diskSpaceLinux(data_dir);
+        break;
+      case 'darwin':
+        diskSpace = await diskSpaceMac(data_dir);
+        break;
+      case 'win32':
+        diskSpace = await diskSpaceWindows(data_dir);
+        break;
+      default:
+        throw new Error('unknown platform');
     }
+    rendererWindow.webContents.send('send-disk-space', { diskSpace });
   } catch (e) {
     rendererWindow.webContents.send('send-disk-space', { error: e.message || e });
     console.log('Failed to start LbryFirst', e);
