@@ -17,26 +17,40 @@ type Props = {
   localeLangs: Array<string>,
   noLanguageSet: boolean,
   // redux
+  homepageCode: string,
   doSetLanguage: (string) => void,
   doSetHomepage: (string) => void,
   doOpenModal: (string, {}) => void,
 };
 
 export default function NagLocaleSwitch(props: Props) {
-  const { localeLangs, noLanguageSet, doSetLanguage, doSetHomepage, doOpenModal } = props;
+  const { localeLangs, noLanguageSet, homepageCode, doSetLanguage, doSetHomepage, doOpenModal } = props;
 
-  const [switchOption, setSwitchOption] = React.useState(LOCALE_OPTIONS.BOTH);
   const [localeSwitchDismissed, setLocaleSwitchDismissed] = usePersistedState('locale-switch-dismissed', false);
 
   const hasHomepageForLang = localeLangs.some((lang) => getHomepageLanguage(lang));
+  const hasHomepageSet = homepageCode !== 'en';
+  const optionToSwitch =
+    (!hasHomepageForLang || hasHomepageSet) && !noLanguageSet
+      ? undefined
+      : !hasHomepageForLang || hasHomepageSet
+      ? LOCALE_OPTIONS.LANG
+      : !noLanguageSet
+      ? LOCALE_OPTIONS.HOME
+      : LOCALE_OPTIONS.BOTH;
+
+  const [switchOption, setSwitchOption] = React.useState(optionToSwitch);
+
+  if (localeSwitchDismissed || !optionToSwitch) return null;
+
   const message = __(
     // If no homepage, only suggest language switch
-    !hasHomepageForLang
+    optionToSwitch === LOCALE_OPTIONS.LANG
       ? 'There are language translations available for your location! Do you want to switch from English?'
-      : 'A homepage and language translations are available for your location! Do you want to switch?'
+      : optionToSwitch === LOCALE_OPTIONS.BOTH
+      ? 'A homepage and language translations are available for your location! Do you want to switch?'
+      : 'A homepage is available for your location! Do you want to switch?'
   );
-
-  if (localeSwitchDismissed || (!noLanguageSet && !hasHomepageForLang)) return null;
 
   function dismissNag() {
     setLocaleSwitchDismissed(true);
@@ -110,7 +124,7 @@ export default function NagLocaleSwitch(props: Props) {
       action={
         // Menu field only needed if there is a homepage + language to choose, otherwise
         // there is only 1 option to switch, so use the nag button
-        hasHomepageForLang && (
+        optionToSwitch === LOCALE_OPTIONS.BOTH && (
           <FormField
             className="nag__select"
             type="select"

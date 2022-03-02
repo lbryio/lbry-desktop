@@ -1,7 +1,12 @@
 import { connect } from 'react-redux';
 import { doSetLanguage, doSetHomepage } from 'redux/actions/settings';
+import { selectHomepageCode } from 'redux/selectors/settings';
 import { doOpenModal } from 'redux/actions/app';
 import NagLocaleSwitch from './view';
+
+const select = (state) => ({
+  homepageCode: selectHomepageCode(state),
+});
 
 const perform = {
   doSetLanguage,
@@ -9,4 +14,4 @@ const perform = {
   doOpenModal,
 };
 
-export default connect(null, perform)(NagLocaleSwitch);
+export default connect(select, perform)(NagLocaleSwitch);
