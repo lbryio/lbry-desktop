@@ -90,6 +90,7 @@ export default function SearchPage(props: Props) {
             <ClaimList
               uris={uris}
               loading={isSearching}
+              useLoadingSpinner
               onScrollBottom={loadMore}
               // 'page' is 1-indexed; It's not the same as 'from', but it just
               // needs to be unique to indicate when a fetch is needed.

@@ -39,6 +39,7 @@ export default function ChannelsFollowingManage(props: Props) {
   // Infinite-scroll handling. 'page' is 0-indexed.
   const [page, setPage] = React.useState(-1);
   const lastPage = Math.max(0, Math.ceil(uris.length / FOLLOW_PAGE_SIZE) - 1);
+  const [loadingPage, setLoadingPage] = React.useState(false);
 
   async function resolveUris(uris) {
     return doResolveUris(uris, true, false);
@@ -52,7 +53,11 @@ export default function ChannelsFollowingManage(props: Props) {
 
   function bumpPage() {
     if (page < lastPage) {
-      resolveNextPage(uris, page).finally(() => setPage(page + 1));
+      setLoadingPage(true);
+      resolveNextPage(uris, page).finally(() => {
+        setLoadingPage(false);
+        setPage(page + 1);
+      });
     }
   }
 
@@ -96,6 +101,8 @@ export default function ChannelsFollowingManage(props: Props) {
               onScrollBottom={bumpPage}
               page={page + 1}
               pageSize={FOLLOW_PAGE_SIZE}
+              loading={loadingPage}
+              useLoadingSpinner
             />
           )}
         </>
