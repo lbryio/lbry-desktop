@@ -2209,5 +2209,12 @@
   "The minimum duration must not exceed Feb 8th, 2022.": "The minimum duration must not exceed Feb 8th, 2022.",
   "No limit": "No limit",
   "Search results are being filtered by language. Click here to change the setting.": "Search results are being filtered by language. Click here to change the setting.",
+  "There are language translations available for your location! Do you want to switch from English?": "There are language translations available for your location! Do you want to switch from English?",
+  "A homepage and language translations are available for your location! Do you want to switch?": "A homepage and language translations are available for your location! Do you want to switch?",
+  "Switch Now": "Switch Now",
+  "Both": "Both",
+  "Only Language": "Only Language",
+  "Only Homepage": "Only Homepage",
+  "Choose Your Preference": "Choose Your Preference",
   "--end--": "--end--"
 }

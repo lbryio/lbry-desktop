@@ -1,18 +1,18 @@
-import LANGUAGES from './languages';
+import { getLanguageName } from './languages';
 
 const SEARCHABLE_LANGUAGES = {
-  en: LANGUAGES.en[1],
-  hr: LANGUAGES.hr[1],
-  nl: LANGUAGES.nl[1],
-  fr: LANGUAGES.fr[1],
-  de: LANGUAGES.de[1],
-  it: LANGUAGES.it[1],
-  pl: LANGUAGES.pl[1],
-  pt: LANGUAGES.pt[1],
-  ru: LANGUAGES.ru[1],
-  es: LANGUAGES.es[1],
-  tr: LANGUAGES.tr[1],
-  cs: LANGUAGES.cs[1],
+  en: getLanguageName('en'),
+  hr: getLanguageName('hr'),
+  nl: getLanguageName('nl'),
+  fr: getLanguageName('fr'),
+  de: getLanguageName('de'),
+  it: getLanguageName('it'),
+  pl: getLanguageName('pl'),
+  pt: getLanguageName('pt'),
+  ru: getLanguageName('ru'),
+  es: getLanguageName('es'),
+  tr: getLanguageName('tr'),
+  cs: getLanguageName('cs'),
 };
 
 // Properties: language code (e.g. 'ja')

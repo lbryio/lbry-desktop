@@ -109,6 +109,11 @@
     z-index: 10000;
     margin-top: var(--spacing-s);
   }
+
+  .radio,
+  .radio + h1 {
+    margin-top: var(--spacing-s);
+  }
 }
 
 .modal--card-internal {

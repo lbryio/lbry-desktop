@@ -112,3 +112,16 @@ $nag-error-z-index: 999;
     stroke-width: 4px;
   }
 }
+
+.nag__select {
+  display: inline;
+  color: var(--color-text);
+
+  select {
+    width: unset;
+    min-width: 10rem;
+    padding-right: unset;
+    margin: 0px var(--spacing-s);
+    height: var(--height-button-mobile);
+  }
+}

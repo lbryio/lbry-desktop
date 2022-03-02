@@ -7,6 +7,8 @@ import Button from 'component/button';
 
 type Props = {
   message: string | Node,
+  action?: Node,
+  closeTitle?: string,
   actionText?: string,
   href?: string,
   type?: string,
@@ -17,9 +19,20 @@ type Props = {
 };
 
 export default function Nag(props: Props) {
-  const { message, actionText, href, onClick, onClose, type, inline, relative } = props;
+  const {
+    message,
+    action: customAction,
+    closeTitle,
+    actionText,
+    href,
+    onClick,
+    onClose,
+    type,
+    inline,
+    relative,
+  } = props;
 
-  const buttonProps = onClick ? { onClick } : { href };
+  const buttonProps = onClick ? { onClick } : href ? { href } : null;
 
   return (
     <div
@@ -31,7 +44,10 @@ export default function Nag(props: Props) {
       })}
     >
       <div className="nag__message">{message}</div>
-      {(href || onClick) && (
+
+      {customAction}
+
+      {buttonProps && (
         <Button
           className={classnames('nag__button', {
             'nag__button--helpful': type === 'helpful',
@@ -42,12 +58,14 @@ export default function Nag(props: Props) {
           {actionText}
         </Button>
       )}
+
       {onClose && (
         <Button
           className={classnames('nag__button nag__close', {
             'nag__button--helpful': type === 'helpful',
             'nag__button--error': type === 'error',
           })}
+          title={closeTitle}
           icon={ICONS.REMOVE}
           onClick={onClose}
         />

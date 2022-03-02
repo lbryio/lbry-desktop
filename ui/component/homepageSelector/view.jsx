@@ -2,7 +2,7 @@
 import React from 'react';
 // $FlowFixMe
 import homepages from 'homepages';
-import LANGUAGES from 'constants/languages';
+import { getLanguageEngName } from 'constants/languages';
 import { FormField } from 'component/common/form';
 import { getDefaultHomepageKey } from 'util/default-languages';
 
@@ -31,7 +31,7 @@ function SelectHomepage(props: Props) {
       >
         {Object.keys(homepages).map((hp) => (
           <option key={'hp' + hp} value={hp}>
-            {`${LANGUAGES[hp][1]}`}
+            {`${getLanguageEngName(hp)}`}
           </option>
         ))}
       </FormField>

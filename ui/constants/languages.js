@@ -187,4 +187,12 @@ const LANGUAGES = {
   zu: ['Zulu', 'isiZulu'],
 };
 
+export function getLanguageEngName(code) {
+  return LANGUAGES[code][0];
+}
+
+export function getLanguageName(code) {
+  return LANGUAGES[code][1];
+}
+
 export default LANGUAGES;

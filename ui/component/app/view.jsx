@@ -34,9 +34,13 @@ import {
 } from 'web/effects/use-degraded-performance';
 import LANGUAGE_MIGRATIONS from 'constants/language-migrations';
 import { useIsMobile } from 'effects/use-screensize';
+import { fetchLocaleApi } from 'locale';
+import getLanguagesForCountry from 'constants/country_languages';
+import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 
 const FileDrop = lazyImport(() => import('component/fileDrop' /* webpackChunkName: "fileDrop" */));
 const NagContinueFirstRun = lazyImport(() => import('component/nagContinueFirstRun' /* webpackChunkName: "nagCFR" */));
+const NagLocaleSwitch = lazyImport(() => import('component/nagLocaleSwitch' /* webpackChunkName: "nagLocaleSwitch" */));
 const OpenInAppLink = lazyImport(() => import('web/component/openInAppLink' /* webpackChunkName: "openInAppLink" */));
 const NagDataCollection = lazyImport(() => import('web/component/nag-data-collection' /* webpackChunkName: "nagDC" */));
 const NagDegradedPerformance = lazyImport(() =>
@@ -132,6 +136,10 @@ function App(props: Props) {
   const previousHasVerifiedEmail = usePrevious(hasVerifiedEmail);
   const previousRewardApproved = usePrevious(isRewardApproved);
 
+  const [gdprRequired, setGdprRequired] = usePersistedState('gdprRequired');
+  const [localeLangs, setLocaleLangs] = React.useState();
+  const [localeSwitchDismissed] = usePersistedState('locale-switch-dismissed', false);
+
   const [showAnalyticsNag, setShowAnalyticsNag] = usePersistedState('analytics-nag', true);
   const [lbryTvApiStatus, setLbryTvApiStatus] = useState(STATUS_OK);
 
@@ -211,6 +219,11 @@ function App(props: Props) {
           onClick={() => window.location.reload()}
         />
       );
+    }
+
+    if (localeLangs) {
+      const noLanguageSet = language === 'en' && languages.length === 1;
+      return <NagLocaleSwitch localeLangs={localeLangs} noLanguageSet={noLanguageSet} />;
     }
   }
 
@@ -312,6 +325,7 @@ function App(props: Props) {
       fetchModBlockedList();
       fetchModAmIList();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasMyChannels, hasNoChannels, hasActiveChannelClaim, setActiveChannelIfNotSet, setIncognito]);
 
   useEffect(() => {
@@ -396,40 +410,42 @@ function App(props: Props) {
     // OneTrust asks to add this
     secondScript.innerHTML = 'function OptanonWrapper() { }';
 
-    const getLocaleEndpoint = 'https://api.odysee.com/locale/get';
-    let gdprRequired;
-    try {
-      gdprRequired = localStorage.getItem('gdprRequired');
-    } catch (err) {
-      if (err) return;
-    }
     // gdpr is known to be required, add script
-    if (gdprRequired === 'true') {
+    if (gdprRequired) {
       // $FlowFixMe
       document.head.appendChild(script);
       // $FlowFixMe
       document.head.appendChild(secondScript);
     }
 
-    // haven't done a gdpr check, do it now
-    if (gdprRequired === null) {
-      (async function () {
-        const response = await fetch(getLocaleEndpoint);
-        const json = await response.json();
-        const gdprRequiredBasedOnLocation = json.data.gdpr_required;
+    fetchLocaleApi().then((response) => {
+      if (!localeLangs && !localeSwitchDismissed) {
+        const countryCode = response?.data?.country;
+        const langs = getLanguagesForCountry(countryCode);
+
+        const supportedLangs = [];
+        langs.forEach((lang) => lang !== 'en' && SUPPORTED_LANGUAGES[lang] && supportedLangs.push(lang));
+
+        if (supportedLangs.length > 0) setLocaleLangs(supportedLangs);
+      }
+
+      // haven't done a gdpr check, do it now
+      if (gdprRequired === null || gdprRequired === undefined) {
+        const gdprRequiredBasedOnLocation = response?.data?.gdpr_required;
+
         // note we need gdpr and load script
         if (gdprRequiredBasedOnLocation) {
-          localStorage.setItem('gdprRequired', 'true');
+          setGdprRequired(true);
           // $FlowFixMe
           document.head.appendChild(script);
           // $FlowFixMe
           document.head.appendChild(secondScript);
           // note we don't need gdpr, save to session
         } else if (gdprRequiredBasedOnLocation === false) {
-          localStorage.setItem('gdprRequired', 'false');
+          setGdprRequired(false);
         }
-      })();
-    }
+      }
+    });
 
     return () => {
       try {
@@ -438,9 +454,11 @@ function App(props: Props) {
         // $FlowFixMe
         document.head.removeChild(secondScript);
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.log(err);
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // ready for sync syncs, however after signin when hasVerifiedEmail, that syncs too.
