@@ -219,7 +219,8 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}, referrerQuery) {
     const videoUrl = generateEmbedUrl(claim.name, claim.claim_id);
     head += `<meta property="og:video" content="${videoUrl}" />`;
     head += `<meta property="og:video:secure_url" content="${videoUrl}" />`;
-    head += `<meta property="og:video:type" content="${mediaType}" />`;
+    // type text/html since we use embeds
+    head += `<meta property="og:video:type" content="text/html" />`;
     if (channel) {
       head += `<meta name="og:video:series" content="${channel}"/>`;
     }

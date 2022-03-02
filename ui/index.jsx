@@ -55,7 +55,7 @@ import apiPublishCallViaWeb from 'web/setup/publish';
 // If it's caught by componentDidCatch in component/errorBoundary, it will not bubble up to this error reporter
 if (process.env.NODE_ENV === 'production') {
   Sentry.init({
-    dsn: 'https://1f3c88e2e4b341328a638e138a60fb73@sentry.lbry.tech/2',
+    dsn: 'https://1f3c88e2e4b341328a638e138a60fb73@sentry.odysee.tv/2',
     whitelistUrls: [/\/public\/ui.js/],
   });
 }
