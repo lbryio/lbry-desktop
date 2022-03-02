@@ -31,7 +31,7 @@ import useInterval from 'effects/use-interval';
 
 // const PLAY_TIMEOUT_ERROR = 'play_timeout_error';
 // const PLAY_TIMEOUT_LIMIT = 2000;
-const PLAY_POSITION_SAVE_INTERVAL = 1500;
+const PLAY_POSITION_SAVE_INTERVAL = 15000;
 
 type Props = {
   position: number,
