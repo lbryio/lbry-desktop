@@ -10,9 +10,12 @@ import { useIsMobile, useIsMediumScreen } from 'effects/use-screensize';
 import Button from 'component/button';
 import classnames from 'classnames';
 import RecSys from 'recsys';
+import { getClaimMetadata } from 'util/claim';
 
 const VIEW_ALL_RELATED = 'view_all_related';
 const VIEW_MORE_FROM = 'view_more_from';
+const BLOCKED_WORDS: ?Array<string> = AD_KEYWORD_BLOCKLIST && AD_KEYWORD_BLOCKLIST.toLowerCase().split(',');
+const CHECK_DESCRIPTION: boolean = AD_KEYWORD_BLOCKLIST_CHECK_DESCRIPTION === 'true';
 
 type Props = {
   uri: string,
@@ -22,8 +25,6 @@ type Props = {
   doFetchRecommendedContent: (string) => void,
   isAuthenticated: boolean,
   claim: ?StreamClaim,
-  claimId: string,
-  metadata: any,
 };
 
 export default React.memo<Props>(function RecommendedContent(props: Props) {
@@ -35,46 +36,32 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
     isSearching,
     isAuthenticated,
     claim,
-    claimId,
-    metadata,
   } = props;
 
-  let { description, title } = metadata;
+  const claimId: ?string = claim && claim.claim_id;
+  const injectAds = SHOW_ADS && IS_WEB && !isAuthenticated;
 
-  if (description) {
-    description = description.toLowerCase();
-  }
+  function claimContainsBlockedWords(claim: ?StreamClaim) {
+    if (BLOCKED_WORDS) {
+      const hasBlockedWords = (str) => BLOCKED_WORDS.some((bw) => str.includes(bw));
+      const metadata = getClaimMetadata(claim);
+      // $FlowFixMe - flow does not support chaining yet, but we know for sure these fields are '?string'.
+      const title = metadata?.title?.toLowerCase();
+      // $FlowFixMe
+      const description = metadata?.description?.toLowerCase();
+      // $FlowFixMe
+      const name = claim?.name?.toLowerCase();
 
-  if (title) {
-    title = title.toLowerCase();
-  }
-
-  let claimNameToCheckAgainst;
-  if (claim) {
-    claimNameToCheckAgainst = claim.name && claim.name.toLowerCase();
-  }
-
-  const checkDescriptionForBlacklistWords = AD_KEYWORD_BLOCKLIST_CHECK_DESCRIPTION === 'true';
-
-  let triggerBlacklist = false;
-  if (AD_KEYWORD_BLOCKLIST) {
-    const termsToCheck = AD_KEYWORD_BLOCKLIST.toLowerCase().split(',');
-    // eslint-disable-next-line no-unused-vars
-
-    if (title) {
-      for (const term of termsToCheck) {
-        if (claimNameToCheckAgainst && claimNameToCheckAgainst.includes(term)) {
-          triggerBlacklist = true;
-        }
-        if (title.includes(term)) {
-          triggerBlacklist = true;
-        }
-        if (description && checkDescriptionForBlacklistWords && description.includes(term)) {
-          triggerBlacklist = true;
-        }
-      }
+      return Boolean(
+        (title && hasBlockedWords(title)) ||
+          (name && hasBlockedWords(name)) ||
+          (CHECK_DESCRIPTION && description && hasBlockedWords(description))
+      );
     }
+    return false;
   }
+
+  const triggerBlacklist = React.useMemo(() => injectAds && claimContainsBlockedWords(claim), [injectAds, claim]);
 
   const [viewMode, setViewMode] = React.useState(VIEW_ALL_RELATED);
   const signingChannel = claim && claim.signing_channel;
@@ -90,6 +77,7 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
   React.useEffect(() => {
     // Right now we only want to record the recs if they actually saw them.
     if (
+      claimId &&
       recommendedContentUris &&
       recommendedContentUris.length &&
       nextRecommendedUri &&
@@ -145,11 +133,9 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
               loading={isSearching}
               uris={recommendedContentUris}
               hideMenu={isMobile}
-              injectedItem={
-                SHOW_ADS &&
-                IS_WEB &&
-                !isAuthenticated && <Ads small type={'video'} triggerBlacklist={triggerBlacklist} />
-              }
+              // TODO: Since 'triggerBlacklist' is handled by clients of <Ads> instead of internally by <Ads>, we don't
+              // need that parameter and can just not mount it when 'true', instead of mount-then-hide.
+              injectedItem={injectAds && <Ads small type={'video'} triggerBlacklist={triggerBlacklist} />}
               empty={__('No related content found')}
               onClick={handleRecommendationClicked}
             />
