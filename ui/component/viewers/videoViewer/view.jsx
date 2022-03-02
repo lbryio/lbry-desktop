@@ -27,9 +27,11 @@ import { getAllIds } from 'util/buildHomepage';
 import type { HomepageCat } from 'util/buildHomepage';
 import debounce from 'util/debounce';
 import { formatLbryUrlForWeb, generateListSearchUrlParams } from 'util/url';
+import useInterval from 'effects/use-interval';
 
 // const PLAY_TIMEOUT_ERROR = 'play_timeout_error';
 // const PLAY_TIMEOUT_LIMIT = 2000;
+const PLAY_POSITION_SAVE_INTERVAL = 1500;
 
 type Props = {
   position: number,
@@ -137,6 +139,7 @@ function VideoViewer(props: Props) {
   const [videoNode, setVideoNode] = useState();
   const [localAutoplayNext, setLocalAutoplayNext] = useState(autoplayNext);
   const isFirstRender = React.useRef(true);
+  const playerRef = React.useRef(null);
 
   useEffect(() => {
     if (isFirstRender.current) {
@@ -145,6 +148,12 @@ function VideoViewer(props: Props) {
     }
     toggleAutoplayNext();
   }, [localAutoplayNext]);
+
+  useInterval(() => {
+    if (playerRef.current && isPlaying) {
+      handlePosition(playerRef.current);
+    }
+  }, PLAY_POSITION_SAVE_INTERVAL);
 
   const updateVolumeState = React.useCallback(
     debounce((volume, muted) => {
@@ -420,6 +429,8 @@ function VideoViewer(props: Props) {
     if (position) {
       player.currentTime(position);
     }
+
+    playerRef.current = player;
   }, playerReadyDependencyList); // eslint-disable-line
 
   return (
