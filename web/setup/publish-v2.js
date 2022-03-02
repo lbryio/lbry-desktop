@@ -70,7 +70,7 @@ export function makeResumableUploadRequest(
     const uploader = new tus.Upload(file, {
       ...urlOptions,
       chunkSize: UPLOAD_CHUNK_SIZE_BYTE,
-      retryDelays: [5000, 10000, 30000],
+      retryDelays: [40000, 60000],
       parallelUploads: 1,
       storeFingerprintForResuming: false,
       urlStorage: new NoopUrlStorage(),
