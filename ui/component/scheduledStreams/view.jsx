@@ -4,7 +4,7 @@ import React from 'react';
 import * as CS from 'constants/claim_search';
 import moment from 'moment';
 import * as ICONS from 'constants/icons';
-import { useIsMediumScreen, useIsLargeScreen } from 'effects/use-screensize';
+import { useIsLargeScreen, useIsMobile } from 'effects/use-screensize';
 import ClaimListDiscover from 'component/claimListDiscover';
 import Button from 'component/button';
 import { LIVESTREAM_UPCOMING_BUFFER } from 'constants/livestream';
@@ -34,21 +34,21 @@ const ScheduledStreams = (props: Props) => {
     onLoad,
     showHideSetting = true,
   } = props;
-  const isMediumScreen = useIsMediumScreen();
+  const isMobileScreen = useIsMobile();
   const isLargeScreen = useIsLargeScreen();
 
   const [totalUpcomingLivestreams, setTotalUpcomingLivestreams] = React.useState(0);
   const [showAllUpcoming, setShowAllUpcoming] = React.useState(false);
 
   const showUpcomingLivestreams = totalUpcomingLivestreams > 0;
-  const useSwipeLayout = totalUpcomingLivestreams > 1 && isMediumScreen;
+  const useSwipeLayout = totalUpcomingLivestreams > 1 && isMobileScreen;
 
   const upcomingMax = React.useMemo(() => {
     if (showAllUpcoming || useSwipeLayout) return 50;
     if (isLargeScreen) return 6;
-    if (isMediumScreen) return 3;
+    if (isMobileScreen) return 3;
     return 4;
-  }, [showAllUpcoming, isMediumScreen, isLargeScreen, useSwipeLayout]);
+  }, [showAllUpcoming, isMobileScreen, isLargeScreen, useSwipeLayout]);
 
   const loadedCallback = (total) => {
     setTotalUpcomingLivestreams(total);
