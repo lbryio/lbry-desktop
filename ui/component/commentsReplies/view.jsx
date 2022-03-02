@@ -6,61 +6,34 @@ import React from 'react';
 import Spinner from 'component/spinner';
 
 type Props = {
-  fetchedReplies: Array<Comment>,
-  resolvedReplies: Array<Comment>,
   uri: string,
-  parentId: string,
-  claimIsMine: boolean,
   linkedCommentId?: string,
-  userCanComment: boolean,
   threadDepth: number,
   numDirectReplies: number, // Total replies for parentId as reported by 'comment[replies]'. Includes blocked items.
-  isFetchingByParentId: { [string]: boolean },
   hasMore: boolean,
   supportDisabled: boolean,
-  doResolveUris: (Array<string>) => void,
   onShowMore?: () => void,
+  // redux
+  fetchedReplies: Array<Comment>,
+  claimIsMine: boolean,
+  isFetching: boolean,
 };
 
-function CommentsReplies(props: Props) {
+export default function CommentsReplies(props: Props) {
   const {
     uri,
-    parentId,
     fetchedReplies,
-    resolvedReplies,
     claimIsMine,
     linkedCommentId,
-    userCanComment,
     threadDepth,
     numDirectReplies,
-    isFetchingByParentId,
+    isFetching,
     hasMore,
     supportDisabled,
-    doResolveUris,
     onShowMore,
   } = props;
 
   const [isExpanded, setExpanded] = React.useState(true);
-  const [commentsToDisplay, setCommentsToDisplay] = React.useState(fetchedReplies);
-  const isResolvingReplies = fetchedReplies && resolvedReplies.length !== fetchedReplies.length;
-  const alreadyResolved = !isResolvingReplies && resolvedReplies.length !== 0;
-  const canDisplayComments = commentsToDisplay && commentsToDisplay.length === fetchedReplies.length;
-
-  // Batch resolve comment channel urls
-  React.useEffect(() => {
-    if (!fetchedReplies || alreadyResolved) return;
-
-    const urisToResolve = [];
-    fetchedReplies.map(({ channel_url }) => channel_url !== undefined && urisToResolve.push(channel_url));
-
-    if (urisToResolve.length > 0) doResolveUris(urisToResolve);
-  }, [alreadyResolved, doResolveUris, fetchedReplies]);
-
-  // Wait to only display topLevelComments after resolved or else
-  // other components will try to resolve again, like channelThumbnail
-  React.useEffect(() => {
-    if (!isResolvingReplies) setCommentsToDisplay(fetchedReplies);
-  }, [isResolvingReplies, fetchedReplies]);
 
   return !numDirectReplies ? null : (
     <div className="comment__replies-container">
@@ -78,24 +51,21 @@ function CommentsReplies(props: Props) {
           <Button className="comment__threadline" aria-label="Hide Replies" onClick={() => setExpanded(false)} />
 
           <ul className="comments--replies">
-            {!isResolvingReplies &&
-              commentsToDisplay &&
-              commentsToDisplay.length > 0 &&
-              commentsToDisplay.map((comment) => (
-                <Comment
-                  key={comment.comment_id}
-                  threadDepth={threadDepth}
-                  uri={uri}
-                  comment={comment}
-                  claimIsMine={claimIsMine}
-                  linkedCommentId={linkedCommentId}
-                  commentingEnabled={userCanComment}
-                  supportDisabled={supportDisabled}
-                />
-              ))}
+            {fetchedReplies.map((comment) => (
+              <Comment
+                key={comment.comment_id}
+                threadDepth={threadDepth}
+                uri={uri}
+                comment={comment}
+                claimIsMine={claimIsMine}
+                linkedCommentId={linkedCommentId}
+                supportDisabled={supportDisabled}
+              />
+            ))}
           </ul>
         </div>
       )}
+
       {isExpanded && fetchedReplies && hasMore && (
         <div className="comment__actions--nested">
           <Button
@@ -106,7 +76,8 @@ function CommentsReplies(props: Props) {
           />
         </div>
       )}
-      {(isFetchingByParentId[parentId] || isResolvingReplies || !canDisplayComments) && (
+
+      {isFetching && (
         <div className="comment__replies-container">
           <div className="comment__actions--nested">
             <Spinner type="small" />
@@ -116,5 +87,3 @@ function CommentsReplies(props: Props) {
     </div>
   );
 }
-
-export default CommentsReplies;

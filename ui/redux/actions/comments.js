@@ -19,6 +19,7 @@ import {
 import { makeSelectNotificationForCommentId } from 'redux/selectors/notifications';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { toHex } from 'util/hex';
+import { getChannelFromClaim } from 'util/claim';
 import Comments from 'comments';
 import { selectPrefsReady } from 'redux/selectors/sync';
 import { doAlertWaitingForSync } from 'redux/actions/app';
@@ -30,47 +31,41 @@ const MENTION_REGEX = /(?:^| |\n)@[^\s=&#$@%?:;/"<>%{}|^~[]*(?::[\w]+)?/gm;
 
 export function doCommentList(
   uri: string,
-  parentId: string,
+  parentId: ?string,
   page: number = 1,
   pageSize: number = 99999,
   sortBy: number = SORT_BY.NEWEST
 ) {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
-    const claim = selectClaimsByUri(state)[uri];
-    const claimId = claim ? claim.claim_id : null;
+    const claim = selectClaimForUri(state, uri);
+    const { claim_id: claimId } = claim || {};
 
     if (!claimId) {
-      dispatch({
-        type: ACTIONS.COMMENT_LIST_FAILED,
-        data: 'unable to find claim for uri',
-      });
-      return;
+      return dispatch({ type: ACTIONS.COMMENT_LIST_FAILED, data: 'unable to find claim for uri' });
     }
 
-    dispatch({
-      type: ACTIONS.COMMENT_LIST_STARTED,
-      data: {
-        parentId,
-      },
-    });
+    dispatch({ type: ACTIONS.COMMENT_LIST_STARTED, data: { parentId } });
 
     // Adding 'channel_id' and 'channel_name' enables "CreatorSettings > commentsEnabled".
-    const creatorChannelClaim = claim.value_type === 'channel' ? claim : claim.signing_channel;
+    const creatorChannelClaim = getChannelFromClaim(claim);
+    const { claim_id: creatorClaimId, name: channelName } = creatorChannelClaim || {};
 
     return Comments.comment_list({
       page,
       claim_id: claimId,
       page_size: pageSize,
-      parent_id: parentId || undefined,
+      parent_id: parentId,
       top_level: !parentId,
-      channel_id: creatorChannelClaim ? creatorChannelClaim.claim_id : undefined,
-      channel_name: creatorChannelClaim ? creatorChannelClaim.name : undefined,
+      channel_id: creatorClaimId,
+      channel_name: channelName,
       sort_by: sortBy,
     })
       .then((result: CommentListResponse) => {
         const { items: comments, total_items, total_filtered_items, total_pages } = result;
-        dispatch({
+
+        const commentChannelUrls = comments && comments.map((comment) => comment.channel_url || '');
+        const dispatchData = {
           type: ACTIONS.COMMENT_LIST_COMPLETED,
           data: {
             comments,
@@ -78,38 +73,36 @@ export function doCommentList(
             totalItems: total_items,
             totalFilteredItems: total_filtered_items,
             totalPages: total_pages,
-            claimId: claimId,
-            creatorClaimId: creatorChannelClaim ? creatorChannelClaim.claim_id : undefined,
-            uri: uri,
+            claimId,
+            creatorClaimId,
+            uri,
           },
-        });
+        };
 
-        return result;
+        // Batch resolve comment channel urls
+        if (commentChannelUrls) {
+          return dispatch(async () => await doResolveUris(commentChannelUrls, true)).then(() => {
+            dispatch({ ...dispatchData });
+
+            return result;
+          });
+        } else {
+          dispatch({ ...dispatchData });
+
+          return result;
+        }
       })
       .catch((error) => {
-        switch (error.message) {
+        const { message } = error;
+
+        switch (message) {
           case 'comments are disabled by the creator':
-            dispatch({
-              type: ACTIONS.COMMENT_LIST_COMPLETED,
-              data: {
-                creatorClaimId: creatorChannelClaim ? creatorChannelClaim.claim_id : undefined,
-                disabled: true,
-              },
-            });
-            break;
-
+            return dispatch({ type: ACTIONS.COMMENT_LIST_COMPLETED, data: { creatorClaimId, disabled: true } });
           case FETCH_API_FAILED_TO_FETCH:
-            dispatch(
-              doToast({
-                isError: true,
-                message: __('Failed to fetch comments.'),
-              })
-            );
-            dispatch({ type: ACTIONS.COMMENT_LIST_FAILED, data: error });
-            break;
-
+            dispatch(doToast({ isError: true, message: __('Failed to fetch comments.') }));
+            return dispatch({ type: ACTIONS.COMMENT_LIST_FAILED, data: error });
           default:
-            dispatch(doToast({ isError: true, message: `${error.message}` }));
+            dispatch(doToast({ isError: true, message: `${message}` }));
             dispatch({ type: ACTIONS.COMMENT_LIST_FAILED, data: error });
         }
       });
