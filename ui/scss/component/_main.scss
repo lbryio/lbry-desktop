@@ -1134,10 +1134,23 @@ body {
   max-width: 32rem;
 }
 
+// Temp hacks until 'section__actions--no-margin' is generic again.
 .main__discover {
   .section__actions--no-margin {
     @media (max-width: $breakpoint-small) {
-      width: unset; // It was being set to '100%' globally. Not sure why.
+      width: unset; // It was being set to '100%' at the base level.
+    }
+  }
+}
+
+// Temp hacks until 'section__actions--no-margin' is generic again.
+.main__channelsFollowing {
+  .section__actions--no-margin {
+    @media (max-width: $breakpoint-small) {
+      text-align: left; // It was forced to 'right' at the base level.
+      .button--secondary {
+        width: unset; // It was being set to '100%' at the base level.
+      }
     }
   }
 }

@@ -43,7 +43,7 @@ function ChannelsFollowingPage(props: Props) {
   return !hasSubscribedChannels ? (
     <ChannelsFollowingDiscoverPage />
   ) : (
-    <Page noFooter fullWidthPage={tileLayout}>
+    <Page noFooter fullWidthPage={tileLayout} className="main__channelsFollowing">
       {!fetchingActiveLivestreams && (
         <>
           {!hideScheduledLivestreams && (
