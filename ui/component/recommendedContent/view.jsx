@@ -3,6 +3,7 @@ import { SHOW_ADS, AD_KEYWORD_BLOCKLIST, AD_KEYWORD_BLOCKLIST_CHECK_DESCRIPTION 
 import React from 'react';
 import ClaimList from 'component/claimList';
 import ClaimListDiscover from 'component/claimListDiscover';
+import Spinner from 'component/spinner';
 import Ads from 'web/component/ads';
 import Card from 'component/common/card';
 import { useIsMobile, useIsMediumScreen } from 'effects/use-screensize';
@@ -133,6 +134,11 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
       }
       body={
         <div>
+          {isSearching && (
+            <div className="empty empty--centered-tight">
+              <Spinner type="small" />
+            </div>
+          )}
           {viewMode === VIEW_ALL_RELATED && (
             <ClaimList
               type="small"

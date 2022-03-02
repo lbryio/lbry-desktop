@@ -391,6 +391,10 @@ img {
   text-align: center;
   padding: calc(var(--spacing-l) * 3) 0;
 }
+.empty--centered-tight {
+  text-align: center;
+  padding: var(--spacing-l) 0;
+}
 
 .qr-code {
   width: 134px;
