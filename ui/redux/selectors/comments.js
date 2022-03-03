@@ -31,7 +31,7 @@ export const selectMyReactsForComment = (state: State, commentIdChannelId: strin
   // @commentIdChannelId: Format = 'commentId:MyChannelId'
   return state.comments.myReactsByCommentId && state.comments.myReactsByCommentId[commentIdChannelId];
 };
-export const selectIsFetchingCommentsByParentId = (state: State, parentId: string) => {
+export const selectIsFetchingCommentsForParentId = (state: State, parentId: string) => {
   return selectState(state).isLoadingByParentId[parentId];
 };
 
