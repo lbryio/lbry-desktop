@@ -65,32 +65,34 @@ export function doCommentList(
         const { items: comments, total_items, total_filtered_items, total_pages } = result;
 
         const commentChannelUrls = comments && comments.map((comment) => comment.channel_url || '');
-        const dispatchData = {
-          type: ACTIONS.COMMENT_LIST_COMPLETED,
-          data: {
-            comments,
-            parentId,
-            totalItems: total_items,
-            totalFilteredItems: total_filtered_items,
-            totalPages: total_pages,
-            claimId,
-            creatorClaimId,
-            uri,
-          },
+
+        const returnResult = () => {
+          dispatch({
+            type: ACTIONS.COMMENT_LIST_COMPLETED,
+            data: {
+              comments,
+              parentId,
+              totalItems: total_items,
+              totalFilteredItems: total_filtered_items,
+              totalPages: total_pages,
+              claimId,
+              creatorClaimId,
+              uri,
+            },
+          });
+          return result;
         };
 
         // Batch resolve comment channel urls
         if (commentChannelUrls) {
-          return dispatch(async () => await doResolveUris(commentChannelUrls, true)).then(() => {
-            dispatch({ ...dispatchData });
+          const resolve = async () => await doResolveUris(commentChannelUrls, true);
 
-            return result;
-          });
-        } else {
-          dispatch({ ...dispatchData });
-
-          return result;
+          return resolve()
+            .then(() => dispatch(doResolveUris(commentChannelUrls, true)).then(() => returnResult()))
+            .catch(() => returnResult());
         }
+
+        returnResult();
       })
       .catch((error) => {
         const { message } = error;
