@@ -28,12 +28,7 @@ import { formatLbryUrlForWeb, formatInAppUrl } from 'util/url';
 import { PersistGate } from 'redux-persist/integration/react';
 import analytics from 'analytics';
 import { doToast } from 'redux/actions/notifications';
-import {
-  getAuthToken,
-  setAuthToken,
-  doDeprecatedPasswordMigrationMarch2020,
-  doAuthTokenRefresh,
-} from 'util/saved-passwords';
+import { getAuthToken, setAuthToken, doAuthTokenRefresh } from 'util/saved-passwords';
 import { X_LBRY_AUTH_TOKEN } from 'constants/token';
 import { PROXY_URL, DEFAULT_LANGUAGE, LBRY_API_URL } from 'config';
 
@@ -99,10 +94,6 @@ if (process.env.SEARCH_API_URL) {
   setSearchApi(process.env.SEARCH_API_URL);
 }
 
-// Fix to make sure old users' cookies are set to the correct domain
-// This can be removed after March 11th, 2021
-// https://github.com/lbryio/lbry-desktop/pull/3830
-doDeprecatedPasswordMigrationMarch2020();
 doAuthTokenRefresh();
 
 // We need to override Lbryio for getting/setting the authToken

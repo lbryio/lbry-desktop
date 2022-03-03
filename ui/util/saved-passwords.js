@@ -1,7 +1,6 @@
 const { DOMAIN } = require('../../config.js');
 const AUTH_TOKEN = 'auth_token';
 const SAVED_PASSWORD = 'saved_password';
-const DEPRECATED_SAVED_PASSWORD = 'saved-password';
 const domain =
   typeof window === 'object' && window.location.hostname.includes('localhost') ? window.location.hostname : DOMAIN;
 const isProduction = process.env.NODE_ENV === 'production';
@@ -129,14 +128,6 @@ function doAuthTokenRefresh() {
   }
 }
 
-function doDeprecatedPasswordMigrationMarch2020() {
-  const savedPassword = getCookie(DEPRECATED_SAVED_PASSWORD);
-  if (savedPassword) {
-    deleteCookie(DEPRECATED_SAVED_PASSWORD);
-    setSavedPassword(savedPassword, true);
-  }
-}
-
 module.exports = {
   setCookie,
   getCookie,
@@ -150,5 +141,4 @@ module.exports = {
   deleteAuthToken,
   doSignOutCleanup,
   doAuthTokenRefresh,
-  doDeprecatedPasswordMigrationMarch2020,
 };
