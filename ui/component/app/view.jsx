@@ -418,34 +418,39 @@ function App(props: Props) {
       document.head.appendChild(secondScript);
     }
 
-    fetchLocaleApi().then((response) => {
-      if (!localeLangs && !localeSwitchDismissed) {
-        const countryCode = response?.data?.country;
-        const langs = getLanguagesForCountry(countryCode);
+    const shouldFetchLanguage = !localeLangs && !localeSwitchDismissed;
+    const shouldFetchGdpr = gdprRequired === null || gdprRequired === undefined;
 
-        const supportedLangs = [];
-        langs.forEach((lang) => lang !== 'en' && SUPPORTED_LANGUAGES[lang] && supportedLangs.push(lang));
+    if (shouldFetchLanguage || shouldFetchGdpr) {
+      fetchLocaleApi().then((response) => {
+        if (shouldFetchLanguage) {
+          const countryCode = response?.data?.country;
+          const langs = getLanguagesForCountry(countryCode);
 
-        if (supportedLangs.length > 0) setLocaleLangs(supportedLangs);
-      }
+          const supportedLangs = [];
+          langs.forEach((lang) => lang !== 'en' && SUPPORTED_LANGUAGES[lang] && supportedLangs.push(lang));
 
-      // haven't done a gdpr check, do it now
-      if (gdprRequired === null || gdprRequired === undefined) {
-        const gdprRequiredBasedOnLocation = response?.data?.gdpr_required;
-
-        // note we need gdpr and load script
-        if (gdprRequiredBasedOnLocation) {
-          setGdprRequired(true);
-          // $FlowFixMe
-          document.head.appendChild(script);
-          // $FlowFixMe
-          document.head.appendChild(secondScript);
-          // note we don't need gdpr, save to session
-        } else if (gdprRequiredBasedOnLocation === false) {
-          setGdprRequired(false);
+          if (supportedLangs.length > 0) setLocaleLangs(supportedLangs);
         }
-      }
-    });
+
+        // haven't done a gdpr check, do it now
+        if (shouldFetchGdpr) {
+          const gdprRequiredBasedOnLocation = response?.data?.gdpr_required;
+
+          // note we need gdpr and load script
+          if (gdprRequiredBasedOnLocation) {
+            setGdprRequired(true);
+            // $FlowFixMe
+            document.head.appendChild(script);
+            // $FlowFixMe
+            document.head.appendChild(secondScript);
+            // note we don't need gdpr, save to session
+          } else if (gdprRequiredBasedOnLocation === false) {
+            setGdprRequired(false);
+          }
+        }
+      });
+    }
 
     return () => {
       try {
