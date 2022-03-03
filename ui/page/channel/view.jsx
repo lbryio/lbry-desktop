@@ -110,6 +110,16 @@ function ChannelPage(props: Props) {
         return true;
       }
     });
+  const showDiscussion = React.useMemo(() => {
+    if (discussionWasMounted && currentView !== PAGE.DISCUSSION) {
+      setDiscussionWasMounted(false);
+    }
+
+    return discussionWasMounted && currentView === PAGE.DISCUSSION;
+
+    // only re-calculate on discussionWasMounted or uri change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [discussionWasMounted, uri]);
 
   const hasUnpublishedCollections = unpublishedCollections && Object.keys(unpublishedCollections).length;
 
@@ -316,7 +326,7 @@ function ChannelPage(props: Props) {
               <ChannelAbout uri={uri} />
             </TabPanel>
             <TabPanel>
-              {(discussionWasMounted || currentView === PAGE.DISCUSSION) && <ChannelDiscussion uri={uri} />}
+              {(showDiscussion || currentView === PAGE.DISCUSSION) && <ChannelDiscussion uri={uri} />}
             </TabPanel>
           </TabPanels>
         </Tabs>
