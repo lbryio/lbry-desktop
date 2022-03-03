@@ -5,7 +5,6 @@ import SUPPORTED_BROWSER_LANGUAGES from 'constants/supported_browser_languages';
 import { createSelector } from 'reselect';
 import { ENABLE_MATURE } from 'config';
 import { getDefaultHomepageKey, getDefaultLanguage } from 'util/default-languages';
-const homepages = require('homepages');
 
 const selectState = (state) => state.settings || {};
 
@@ -55,6 +54,7 @@ export const selectThemePath = createSelector(
 
 export const selectHomepageCode = (state) => {
   const hp = selectClientSetting(state, SETTINGS.HOMEPAGE);
+  const homepages = window.homepages || {};
   return homepages[hp] ? hp : getDefaultHomepageKey();
 };
 
@@ -63,15 +63,11 @@ export const selectLanguage = (state) => {
   return lang || getDefaultLanguage();
 };
 
-export const selectHomepageData = createSelector(
-  // using homepage setting,
-  selectHomepageCode,
-  (homepageCode) => {
-    // homepages = { 'en': homepageFile, ... }
-    // mixin Homepages here
-    return homepages[homepageCode] || homepages['en'] || {};
-  }
-);
+export const selectHomepageData = (state) => {
+  const homepageCode = selectHomepageCode(state);
+  const homepages = window.homepages;
+  return homepages ? homepages[homepageCode] || homepages['en'] || {} : {};
+};
 
 export const selectInRegionByCode = (state, code) => {
   const hp = selectClientSetting(state, SETTINGS.HOMEPAGE);
@@ -81,9 +77,7 @@ export const selectInRegionByCode = (state, code) => {
 };
 
 export const selectWildWestDisabled = (state) => {
-  const deRegion = selectInRegionByCode(state, SUPPORTED_BROWSER_LANGUAGES.de);
-
-  return deRegion;
+  return selectInRegionByCode(state, SUPPORTED_BROWSER_LANGUAGES.de);
 };
 
 export const selectosNotificationsEnabled = (state) => selectClientSetting(state, SETTINGS.OS_NOTIFICATIONS_ENABLED);

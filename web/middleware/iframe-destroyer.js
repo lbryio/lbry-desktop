@@ -6,7 +6,7 @@ async function iframeDestroyerMiddleware(ctx, next) {
   } = ctx;
   const decodedPath = decodeURIComponent(path);
 
-  if (!decodedPath.startsWith(`/$/${PAGES.EMBED}`)) {
+  if (!decodedPath.startsWith(`/$/${PAGES.EMBED}`) || !decodedPath.startsWith(`/$/api/content/v1/get`)) {
     ctx.set('X-Frame-Options', 'DENY');
   }
 

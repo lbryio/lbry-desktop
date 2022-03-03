@@ -307,6 +307,34 @@ export function doFetchLanguage(language) {
   };
 }
 
+export function doFetchHomepages() {
+  return (dispatch) => {
+    // -- Use this env flag to use local homepage data. Otherwise, it will grab from odysee.com.
+    // @if USE_LOCAL_HOMEPAGE_DATA='true'
+    const homepages = require('homepages');
+    if (homepages) {
+      console.log('doing homepages');
+      window.homepages = homepages;
+      return;
+    }
+    // @endif
+
+    fetch('https://odysee.com/$/api/content/v1/get')
+      .then((response) => response.json())
+      .then((json) => {
+        if (json?.status === 'success' && json?.data) {
+          window.homepages = json.data;
+          dispatch({ type: ACTIONS.FETCH_HOMEPAGES_DONE });
+        } else {
+          dispatch({ type: ACTIONS.FETCH_HOMEPAGES_FAILED });
+        }
+      })
+      .catch(() => {
+        dispatch({ type: ACTIONS.FETCH_HOMEPAGES_FAILED });
+      });
+  };
+}
+
 export function doSetHomepage(code) {
   return (dispatch, getState) => {
     let languageCode;

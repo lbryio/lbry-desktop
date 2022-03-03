@@ -17,7 +17,7 @@ import { doDaemonReady, doAutoUpdate, doOpenModal, doHideModal, doToggle3PAnalyt
 import Lbry, { apiCall } from 'lbry';
 import { isURIValid } from 'util/lbryURI';
 import { setSearchApi } from 'redux/actions/search';
-import { doSetLanguage, doFetchLanguage, doUpdateIsNightAsync } from 'redux/actions/settings';
+import { doSetLanguage, doFetchLanguage, doUpdateIsNightAsync, doFetchHomepages } from 'redux/actions/settings';
 import { Lbryio, doBlackListedOutpointsSubscribe, doFilteredOutpointsSubscribe } from 'lbryinc';
 import rewards from 'rewards';
 import { store, persistor, history } from 'store';
@@ -242,6 +242,7 @@ function AppWrapper() {
         if (DEFAULT_LANGUAGE) {
           app.store.dispatch(doFetchLanguage(DEFAULT_LANGUAGE));
         }
+        app.store.dispatch(doFetchHomepages());
         app.store.dispatch(doUpdateIsNightAsync());
         app.store.dispatch(doBlackListedOutpointsSubscribe());
         app.store.dispatch(doFilteredOutpointsSubscribe());
