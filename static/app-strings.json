@@ -2312,5 +2312,7 @@
   "Free --[legend, unused disk space]--": "Free",
   "Top content in %language%": "Top content in %language%",
   "Apply": "Apply",
+  "Installing, please wait...": "Installing, please wait...",
+  "There was an error during installation. Please, try again.": "There was an error during installation. Please, try again.",
   "--end--": "--end--"
 }

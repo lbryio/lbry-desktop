@@ -67,6 +67,7 @@
     "remove-markdown": "^0.3.0",
     "rss": "^1.2.2",
     "source-map-explorer": "^2.5.2",
+    "sudo-prompt": "^9.2.1",
     "tempy": "^0.6.0",
     "videojs-logo": "^2.1.4"
   },

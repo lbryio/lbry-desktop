@@ -85,6 +85,15 @@ export function doStartUpgrade() {
     const upgradeDownloadPath = selectUpgradeDownloadPath(state);
 
     ipcRenderer.send('upgrade', upgradeDownloadPath);
+    dispatch({
+      type: ACTIONS.UPGRADE_INIT_INSTALL,
+    });
+  };
+}
+
+export function doShowUpgradeInstallationError() {
+  return {
+    type: ACTIONS.UPGRADE_INSTALL_ERROR,
   };
 }
 

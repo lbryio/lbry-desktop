@@ -22,6 +22,7 @@ import { diskSpaceLinux, diskSpaceWindows, diskSpaceMac } from '../ui/util/disks
 const { download } = require('electron-dl');
 const remote = require('@electron/remote/main');
 const os = require('os');
+const sudo = require('sudo-prompt');
 
 remote.initialize();
 const filePath = path.join(process.resourcesPath, 'static', 'upgradeDisabled');
@@ -348,16 +349,33 @@ ipcMain.on('download-upgrade', async (event, params) => {
 });
 
 ipcMain.on('upgrade', (event, installerPath) => {
+  // what to do if no shutdown in a long time?
+  console.log('Update downloaded to', installerPath);
+  console.log('The app will close and you will be prompted to install the latest version of LBRY.');
+  console.log('After the install is complete, please reopen the app.');
+
+  // Prevent .deb package from opening with archive manager (Ubuntu >= 20)
+  if (process.platform === 'linux' && !process.env.APPIMAGE) {
+    sudo.exec(`dpkg -i ${installerPath}`, { name: app.name }, (err, stdout, stderr) => {
+      if (err || stderr) {
+        rendererWindow.webContents.send('upgrade-installing-error');
+        return;
+      }
+
+      // Re-launch the application when the installation finishes.
+      app.relaunch();
+      app.quit();
+    });
+
+    return;
+  }
+
   app.on('quit', () => {
     console.log('Launching upgrade installer at', installerPath);
     // This gets triggered called after *all* other quit-related events, so
     // we'll only get here if we're fully prepared and quitting for real.
     shell.openPath(installerPath);
   });
-  // what to do if no shutdown in a long time?
-  console.log('Update downloaded to', installerPath);
-  console.log('The app will close and you will be prompted to install the latest version of LBRY.');
-  console.log('After the install is complete, please reopen the app.');
   app.quit();
 });
 

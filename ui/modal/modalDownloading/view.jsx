@@ -10,11 +10,21 @@ type Props = {
   downloadItem: string,
   startUpgrade: () => void,
   cancelUpgrade: () => void,
+  upgradeInitialized: boolean,
+  failedInstallation: boolean,
 };
 
 class ModalDownloading extends React.PureComponent<Props> {
   render() {
-    const { downloadProgress, downloadComplete, downloadItem, startUpgrade, cancelUpgrade } = this.props;
+    const {
+      downloadProgress,
+      downloadComplete,
+      downloadItem,
+      startUpgrade,
+      cancelUpgrade,
+      upgradeInitialized,
+      failedInstallation,
+    } = this.props;
 
     return (
       <Modal title={__('Downloading update')} isOpen contentLabel={__('Downloading update')} type="custom">
@@ -40,9 +50,18 @@ class ModalDownloading extends React.PureComponent<Props> {
           </React.Fragment>
         ) : null}
 
+        {failedInstallation && <p>{__('There was an error during installation. Please, try again.')}</p>}
+
         <div className="card__actions">
-          {downloadComplete ? <Button button="primary" label={__('Begin Upgrade')} onClick={startUpgrade} /> : null}
-          <Button button="link" label={__('Cancel')} onClick={cancelUpgrade} />
+          {downloadComplete ? (
+            <Button
+              disabled={upgradeInitialized}
+              button="primary"
+              label={__(upgradeInitialized ? 'Installing, please wait...' : 'Begin Upgrade')}
+              onClick={startUpgrade}
+            />
+          ) : null}
+          <Button disabled={upgradeInitialized} button="link" label={__('Cancel')} onClick={cancelUpgrade} />
         </div>
       </Modal>
     );
