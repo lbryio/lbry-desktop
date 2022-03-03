@@ -127,7 +127,6 @@ function VideoViewer(props: Props) {
   const [ended, setEnded] = useState(false);
   const [showAutoplayCountdown, setShowAutoplayCountdown] = useState(false);
   const [isEndedEmbed, setIsEndedEmbed] = useState(false);
-  const [playerObj, setPlayerObj] = useState(null);
   const vjsCallbackDataRef: any = React.useRef();
   const previousUri = usePrevious(uri);
   const embedded = useContext(EmbedContext);
@@ -140,7 +139,7 @@ function VideoViewer(props: Props) {
   const [videoNode, setVideoNode] = useState();
   const [localAutoplayNext, setLocalAutoplayNext] = useState(autoplayNext);
   const isFirstRender = React.useRef(true);
-  const savePositionInterval = isPlaying ? PLAY_POSITION_SAVE_INTERVAL_MS : null;
+  const playerRef = React.useRef(null);
 
   useEffect(() => {
     if (isFirstRender.current) {
@@ -151,10 +150,10 @@ function VideoViewer(props: Props) {
   }, [localAutoplayNext]);
 
   useInterval(() => {
-    if (playerObj) {
-      handlePosition(playerObj);
+    if (playerRef.current && isPlaying) {
+      handlePosition(playerRef.current);
     }
-  }, savePositionInterval);
+  }, PLAY_POSITION_SAVE_INTERVAL_MS);
 
   const updateVolumeState = React.useCallback(
     debounce((volume, muted) => {
@@ -431,7 +430,7 @@ function VideoViewer(props: Props) {
       player.currentTime(position);
     }
 
-    setPlayerObj(player);
+    playerRef.current = player;
   }, playerReadyDependencyList); // eslint-disable-line
 
   return (
