@@ -25,6 +25,10 @@ export const selectRemoteVersion = createSelector(selectState, (state) => state.
 
 export const selectIsUpgradeAvailable = createSelector(selectState, (state) => state.isUpgradeAvailable);
 
+export const selectUpgradeInitialized = createSelector(selectState, (state) => state.upgradeInitialized);
+
+export const selectUpgradeFailedInstallation = createSelector(selectState, (state) => state.upgradeFailedInstallation);
+
 export const selectUpgradeFilename = createSelector(selectPlatform, selectRemoteVersion, (platform, version) => {
   switch (platform) {
     case 'darwin':

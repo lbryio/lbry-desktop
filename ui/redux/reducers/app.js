@@ -67,6 +67,8 @@ const defaultState: AppState = {
   modalsAllowed: true,
   hasClickedComment: false,
   downloadProgress: undefined,
+  upgradeInitialized: false,
+  upgradeFailedInstallation: false,
   upgradeDownloading: undefined,
   upgradeDownloadComplete: undefined,
   checkUpgradeTimer: undefined,
@@ -160,6 +162,18 @@ reducers[ACTIONS.UPGRADE_DOWNLOAD_COMPLETED] = (state, action) =>
 reducers[ACTIONS.UPGRADE_DOWNLOAD_STARTED] = (state) =>
   Object.assign({}, state, {
     upgradeDownloading: true,
+  });
+
+reducers[ACTIONS.UPGRADE_INIT_INSTALL] = (state) =>
+  Object.assign({}, state, {
+    upgradeInitialized: true,
+    upgradeFailedInstallation: false,
+  });
+
+reducers[ACTIONS.UPGRADE_INSTALL_ERROR] = (state) =>
+  Object.assign({}, state, {
+    upgradeInitialized: false,
+    upgradeFailedInstallation: true,
   });
 
 reducers[ACTIONS.CHANGE_MODALS_ALLOWED] = (state, action) =>
