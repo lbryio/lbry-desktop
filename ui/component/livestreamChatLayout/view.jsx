@@ -39,7 +39,14 @@ type Props = {
   pinnedComments: Array<Comment>,
   superChats: Array<Comment>,
   theme: string,
-  doCommentList: (uri: string, parentId: string, page: number, pageSize: number) => void,
+  doCommentList: (
+    uri: string,
+    parentId: ?string,
+    page: number,
+    pageSize: number,
+    sortBy: ?number,
+    isLivestream: boolean
+  ) => void,
   doResolveUris: (uris: Array<string>, cache: boolean) => void,
   doSuperChatList: (uri: string) => void,
 };
@@ -147,7 +154,7 @@ export default function LivestreamChatLayout(props: Props) {
 
   React.useEffect(() => {
     if (claimId) {
-      doCommentList(uri, '', 1, 75);
+      doCommentList(uri, undefined, 1, 75, undefined, true);
       doSuperChatList(uri);
     }
   }, [claimId, uri, doCommentList, doSuperChatList]);

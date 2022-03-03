@@ -34,7 +34,8 @@ export function doCommentList(
   parentId: ?string,
   page: number = 1,
   pageSize: number = 99999,
-  sortBy: number = SORT_BY.NEWEST
+  sortBy: ?number = SORT_BY.NEWEST,
+  isLivestream?: boolean
 ) {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
@@ -84,7 +85,7 @@ export function doCommentList(
         };
 
         // Batch resolve comment channel urls
-        if (commentChannelUrls) {
+        if (commentChannelUrls && !isLivestream) {
           const resolve = async () => await doResolveUris(commentChannelUrls, true);
 
           return resolve()
