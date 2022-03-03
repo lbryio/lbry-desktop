@@ -31,7 +31,7 @@ import useInterval from 'effects/use-interval';
 
 // const PLAY_TIMEOUT_ERROR = 'play_timeout_error';
 // const PLAY_TIMEOUT_LIMIT = 2000;
-const PLAY_POSITION_SAVE_INTERVAL = 15000;
+const PLAY_POSITION_SAVE_INTERVAL_MS = 15000;
 
 type Props = {
   position: number,
@@ -153,7 +153,7 @@ function VideoViewer(props: Props) {
     if (playerRef.current && isPlaying) {
       handlePosition(playerRef.current);
     }
-  }, PLAY_POSITION_SAVE_INTERVAL);
+  }, PLAY_POSITION_SAVE_INTERVAL_MS);
 
   const updateVolumeState = React.useCallback(
     debounce((volume, muted) => {
