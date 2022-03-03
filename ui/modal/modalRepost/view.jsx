@@ -6,20 +6,22 @@ import RepostCreate from 'component/repostCreate';
 import useThrottle from 'effects/use-throttle';
 
 type Props = {
-  uri: string,
+  uri?: string,
+  contentName?: string,
+  // --- redux ---
   closeModal: () => void,
   resolveUri: (string) => void,
 };
 
 function ModalRepost(props: Props) {
-  const { uri, closeModal, resolveUri } = props;
+  const { uri, contentName, closeModal, resolveUri } = props;
 
   const {
     location: { search },
   } = useHistory();
 
   const urlParams = new URLSearchParams(search);
-  const param = urlParams.get('name') || urlParams.get('q');
+  const param = urlParams.get('name') || urlParams.get('q') || contentName;
   const repostTo = param && param[0] === '@' ? param.slice(1) : param;
 
   const [contentUri, setContentUri] = React.useState('');

@@ -192,7 +192,7 @@ export default function ShowPage(props: Props) {
                     <Button
                       button="secondary"
                       label={__('Repost Something')}
-                      onClick={() => doOpenModal(MODALS.REPOST, {})}
+                      onClick={() => doOpenModal(MODALS.REPOST, { contentName })}
                     />
                   </div>
                 )
