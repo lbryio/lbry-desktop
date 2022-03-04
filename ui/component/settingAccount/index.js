@@ -3,7 +3,6 @@ import { selectHasChannels } from 'redux/selectors/claims';
 import { selectWalletIsEncrypted } from 'redux/selectors/wallet';
 import { doWalletStatus } from 'redux/actions/wallet';
 import { selectUser, selectUserVerifiedEmail } from 'redux/selectors/user';
-import { selectLanguage } from 'redux/selectors/settings';
 
 import SettingAccount from './view';
 
@@ -12,7 +11,6 @@ const select = (state) => ({
   walletEncrypted: selectWalletIsEncrypted(state),
   user: selectUser(state),
   hasChannels: selectHasChannels(state),
-  language: selectLanguage(state),
 });
 
 const perform = (dispatch) => ({
