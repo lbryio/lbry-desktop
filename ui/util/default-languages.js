@@ -1,4 +1,3 @@
-import homepages from 'homepages';
 import SUPPORTED_BROWSER_LANGUAGES from 'constants/supported_browser_languages';
 const DEFAULT_LANG = 'en';
 
@@ -24,6 +23,7 @@ export const getDefaultLanguage = () => {
 // If homepages has a key "zh-Hant" return that, otherwise return "zh", otherwise "en"
 export const getDefaultHomepageKey = () => {
   const language = getDefaultLanguage();
+  const homepages = window.homepages || {};
   return (homepages[language] && language) || (homepages[language.slice(0, 2)] && language.slice(0, 2)) || DEFAULT_LANG;
 };
 

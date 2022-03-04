@@ -313,7 +313,6 @@ export function doFetchHomepages() {
     // @if USE_LOCAL_HOMEPAGE_DATA='true'
     const homepages = require('homepages');
     if (homepages) {
-      console.log('doing homepages');
       window.homepages = homepages;
       return;
     }
