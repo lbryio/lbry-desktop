@@ -1,8 +1,6 @@
 // @flow
 import React from 'react';
-// $FlowFixMe
-import homepages from 'homepages';
-import { getLanguageEngName } from 'constants/languages';
+import { getLanguageName } from 'constants/languages';
 import { FormField } from 'component/common/form';
 import { getDefaultHomepageKey } from 'util/default-languages';
 
@@ -13,14 +11,18 @@ type Props = {
 
 function SelectHomepage(props: Props) {
   const { homepage, setHomepage } = props;
+  const homepages = window.homepages || {};
+  const homepageKeys = Object.keys(homepages);
 
   function handleSetHomepage(e) {
     const { value } = e.target;
     setHomepage(value);
   }
-  if (Object.keys(homepages).length <= 1) {
+
+  if (homepageKeys.length <= 1) {
     return null;
   }
+
   return (
     <React.Fragment>
       <FormField
@@ -29,9 +31,9 @@ function SelectHomepage(props: Props) {
         onChange={handleSetHomepage}
         value={homepage || getDefaultHomepageKey()}
       >
-        {Object.keys(homepages).map((hp) => (
+        {homepageKeys.map((hp) => (
           <option key={'hp' + hp} value={hp}>
-            {`${getLanguageEngName(hp)}`}
+            {getLanguageName(hp)}
           </option>
         ))}
       </FormField>
