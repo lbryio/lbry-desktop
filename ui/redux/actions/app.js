@@ -28,7 +28,6 @@ import {
 import {
   selectIsUpgradeSkipped,
   selectUpdateUrl,
-  selectUpgradeDownloadItem,
   selectUpgradeDownloadPath,
   selectAutoUpdateDeclined,
   selectRemoteVersion,
@@ -163,25 +162,8 @@ export function doAutoUpdateDeclined() {
 }
 
 export function doCancelUpgrade() {
-  return (dispatch, getState) => {
-    const state = getState();
-    const upgradeDownloadItem = selectUpgradeDownloadItem(state);
-
-    if (upgradeDownloadItem) {
-      /*
-       * Right now the remote reference to the download item gets garbage collected as soon as the
-       * the download is over (maybe even earlier), so trying to cancel a finished download may
-       * throw an error.
-       */
-      try {
-        upgradeDownloadItem.cancel();
-      } catch (err) {
-        console.error(err); // eslint-disable-line no-console
-      }
-    }
-
-    dispatch({ type: ACTIONS.UPGRADE_CANCELLED });
-  };
+  ipcRenderer.send('cancel-download-upgrade');
+  return { type: ACTIONS.UPGRADE_CANCELLED };
 }
 
 export function doCheckUpgradeAvailable() {

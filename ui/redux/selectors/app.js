@@ -50,8 +50,6 @@ export const selectIsUpgradeSkipped = createSelector(selectState, (state) => sta
 
 export const selectUpgradeDownloadPath = createSelector(selectState, (state) => state.downloadPath);
 
-export const selectUpgradeDownloadItem = createSelector(selectState, (state) => state.downloadItem);
-
 export const selectAutoUpdateDownloaded = createSelector(selectState, (state) => state.autoUpdateDownloaded);
 
 export const selectAutoUpdateDeclined = createSelector(selectState, (state) => state.autoUpdateDeclined);

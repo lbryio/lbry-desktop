@@ -51,11 +51,9 @@ let showingAutoUpdateCloseAlert = false;
 // https://www.electronjs.org/docs/latest/api/auto-updater#autoupdatercheckforupdates
 let keepCheckingForUpdates = true;
 
-// Auto updater doesn't support Linux installations (only trough AppImages)
-// this is why, for that case, we download a full executable (.deb package)
-// as a fallback support. This variable will be used to prevent
-// multiple downloads when auto updater isn't supported.
-let downloadUpgradeInProgress = false;
+let downloadUpgradeInitiated = false;
+
+let downloadUpgradeItem;
 
 // Keep a global reference, if you don't, they will be closed automatically when the JavaScript
 // object is garbage collected.
@@ -328,23 +326,43 @@ ipcMain.on('get-disk-space', async (event) => {
   }
 });
 
+ipcMain.on('cancel-download-upgrade', () => {
+  if (downloadUpgradeItem) {
+    // Cancel the download and execute the onCancel
+    // callback set in the options.
+    downloadUpgradeItem.cancel();
+  }
+});
+
 ipcMain.on('download-upgrade', async (event, params) => {
-  if (downloadUpgradeInProgress) {
+  // Prevent downloading multiple times.
+  if (downloadUpgradeInitiated || downloadUpgradeItem) {
     return;
   }
-
   const { url, options } = params;
   const dir = fs.mkdtempSync(app.getPath('temp') + path.sep);
+
+  downloadUpgradeInitiated = true;
+
+  // Grab the download item's handler to allow
+  // cancelling the operation if required.
+  options.onStarted = function(downloadItem) {
+    downloadUpgradeItem = downloadItem;
+  };
+  options.onCancel = function() {
+    downloadUpgradeItem = undefined;
+    downloadUpgradeInitiated = false;
+  };
   options.onProgress = function(p) {
     rendererWindow.webContents.send('download-progress-update', p);
   };
   options.directory = dir;
   options.onCompleted = function(c) {
-    downloadUpgradeInProgress = false;
+    downloadUpgradeInitiated = false;
+    downloadUpgradeItem = undefined;
     rendererWindow.webContents.send('download-update-complete', c);
   };
   const win = BrowserWindow.getFocusedWindow();
-  downloadUpgradeInProgress = true;
   await download(win, url, options).catch(e => console.log('e', e));
 });
 
