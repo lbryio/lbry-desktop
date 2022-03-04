@@ -119,7 +119,8 @@ function UserSignUp(props: Props) {
   const showFollowIntro = step === 'channels' || (hasVerifiedEmail && !followingAcknowledged);
   const showTagsIntro = SHOW_TAGS_INTRO && (step === 'tags' || (hasVerifiedEmail && !tagsAcknowledged));
   const canHijackSignInFlowWithSpinner = hasVerifiedEmail && !showFollowIntro && !showTagsIntro && !rewardsAcknowledged;
-  const isCurrentlyFetchingSomething = fetchingChannels || claimingReward || syncingWallet || creatingChannel;
+  const showSpinnerForSync = syncingWallet && !hasSynced && balance === undefined;
+  const isCurrentlyFetchingSomething = fetchingChannels || claimingReward || showSpinnerForSync || creatingChannel;
   const isWaitingForSomethingToFinish =
     // If the user has claimed the email award, we need to wait until the balance updates sometime in the future
     (!hasFetchedReward && !hasClaimedEmailAward) || (syncEnabled && !hasSynced);
