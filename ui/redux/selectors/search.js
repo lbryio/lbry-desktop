@@ -117,7 +117,8 @@ export const selectRecommendedContentForUri = createCachedSelector(
       });
 
       // Claim to play next: playable and free claims not played before in history
-      const nextUriToPlay = recommendedContent.filter((nextRecommendedUri) => {
+      for (let i = 0; i < recommendedContent.length; ++i) {
+        const nextRecommendedUri = recommendedContent[i];
         const costInfo = costInfoByUri[nextRecommendedUri] && costInfoByUri[nextRecommendedUri].cost;
         const recommendedClaim = claimsByUri[nextRecommendedUri];
         const isVideo = recommendedClaim && recommendedClaim.value && recommendedClaim.value.stream_type === 'video';
@@ -133,16 +134,18 @@ export const selectRecommendedContentForUri = createCachedSelector(
           );
         } catch (e) {}
 
-        return !historyMatch && costInfo === 0 && (isVideo || isAudio);
-      })[0];
-
-      const index = recommendedContent.indexOf(nextUriToPlay);
-      if (index > 0) {
-        const a = recommendedContent[0];
-        recommendedContent[0] = nextUriToPlay;
-        recommendedContent[index] = a;
+        if (!historyMatch && costInfo === 0 && (isVideo || isAudio)) {
+          // Better next-uri found, swap with top entry:
+          if (i > 0) {
+            const a = recommendedContent[0];
+            recommendedContent[0] = nextRecommendedUri;
+            recommendedContent[i] = a;
+          }
+          break;
+        }
       }
     }
+
     return recommendedContent;
   }
 )((state, uri) => String(uri));
