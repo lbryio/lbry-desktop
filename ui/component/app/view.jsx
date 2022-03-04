@@ -128,6 +128,7 @@ function App(props: Props) {
   const [upgradeNagClosed, setUpgradeNagClosed] = useState(false);
   const [resolvedSubscriptions, setResolvedSubscriptions] = useState(false);
   // const [retryingSync, setRetryingSync] = useState(false);
+  const [langRenderKey, setLangRenderKey] = useState(0);
   const [sidebarOpen] = usePersistedState('sidebar', true);
   const showUpgradeButton = (autoUpdateDownloaded || isUpgradeAvailable) && !upgradeNagClosed;
   // referral claiming
@@ -327,6 +328,11 @@ function App(props: Props) {
     }
   }, [sidebarOpen, isPersonalized, resolvedSubscriptions, subscriptions, resolveUris, setResolvedSubscriptions]);
 
+  useEffect(() => {
+    // When language is changed or translations are fetched, we render.
+    setLangRenderKey(Date.now());
+  }, [language, languages]);
+
   if (syncFatalError) {
     return <SyncFatalError />;
   }
@@ -338,6 +344,7 @@ function App(props: Props) {
         [`${MAIN_WRAPPER_CLASS}--scrollbar`]: useCustomScrollbar,
       })}
       ref={appRef}
+      key={langRenderKey}
       onContextMenu={(e) => openContextMenu(e)}
     >
       <Router />

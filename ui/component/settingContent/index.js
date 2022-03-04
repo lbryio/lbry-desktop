@@ -3,7 +3,7 @@ import { selectMyChannelUrls } from 'redux/selectors/claims';
 import * as SETTINGS from 'constants/settings';
 import { doSetPlayingUri } from 'redux/actions/content';
 import { doSetClientSetting } from 'redux/actions/settings';
-import { selectShowMatureContent, selectLanguage, makeSelectClientSetting } from 'redux/selectors/settings';
+import { selectShowMatureContent, makeSelectClientSetting } from 'redux/selectors/settings';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 
 import SettingContent from './view';
@@ -19,7 +19,6 @@ const select = (state) => ({
   instantPurchaseEnabled: makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED)(state),
   instantPurchaseMax: makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_MAX)(state),
   enablePublishPreview: makeSelectClientSetting(SETTINGS.ENABLE_PUBLISH_PREVIEW)(state),
-  language: selectLanguage(state),
 });
 
 const perform = (dispatch) => ({
