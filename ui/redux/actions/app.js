@@ -206,7 +206,7 @@ export function doNotifyUpdateAvailable(e) {
     const state = getState();
     const noModalBeingDisplayed = !selectModal(state);
     const isUpgradeSkipped = selectIsUpgradeSkipped(state);
-    const isRemoveVersionDiff = remoteVersion !== selectRemoteVersion(state);
+    const isRemoteVersionDiff = remoteVersion !== selectRemoteVersion(state);
 
     dispatch({
       type: ACTIONS.CHECK_UPGRADE_SUCCESS,
@@ -223,7 +223,7 @@ export function doNotifyUpdateAvailable(e) {
       return;
     }
 
-    if (noModalBeingDisplayed && !isUpgradeSkipped && isRemoveVersionDiff) {
+    if (noModalBeingDisplayed && !isUpgradeSkipped && isRemoteVersionDiff) {
       dispatch(doOpenModal(MODALS.UPGRADE));
     }
   };
