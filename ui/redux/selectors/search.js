@@ -101,7 +101,9 @@ export const selectRecommendedContentForUri = createCachedSelector(
       recommendedContent = searchResult['uris'].filter((searchUri) => {
         const searchClaim = claimsByUri[searchUri];
 
-        if (!searchClaim) return;
+        if (!searchClaim) {
+          return true;
+        }
 
         const signingChannel = searchClaim && searchClaim.signing_channel;
         const channelUri = signingChannel && signingChannel.canonical_url;
