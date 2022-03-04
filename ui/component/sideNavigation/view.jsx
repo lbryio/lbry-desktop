@@ -104,6 +104,7 @@ const WILD_WEST = {
 
 type Props = {
   subscriptions: Array<Subscription>,
+  lastActiveSubs: ?Array<Subscription>,
   followedTags: Array<Tag>,
   email: ?string,
   uploadCount: number,
@@ -120,11 +121,13 @@ type Props = {
   activeChannelStakedLevel: number,
   wildWestDisabled: boolean,
   doClearClaimSearch: () => void,
+  doFetchLastActiveSubs: (count?: number) => void,
 };
 
 function SideNavigation(props: Props) {
   const {
     subscriptions,
+    lastActiveSubs,
     doSignOut,
     email,
     purchaseSuccess,
@@ -140,6 +143,7 @@ function SideNavigation(props: Props) {
     activeChannelStakedLevel,
     wildWestDisabled,
     doClearClaimSearch,
+    doFetchLastActiveSubs,
   } = props;
 
   const isLargeScreen = useIsLargeScreen();
@@ -309,37 +313,35 @@ function SideNavigation(props: Props) {
         const filter = subscriptionFilter.toLowerCase();
         displayedSubscriptions = subscriptions.filter((sub) => sub.channelName.toLowerCase().includes(filter));
       } else {
-        displayedSubscriptions = subscriptions.slice(0, SIDEBAR_SUBS_DISPLAYED);
+        displayedSubscriptions = lastActiveSubs || subscriptions.slice(0, SIDEBAR_SUBS_DISPLAYED);
       }
 
       return (
-        <>
-          <ul className="navigation__secondary navigation-links">
-            {subscriptions.length > SIDEBAR_SUBS_DISPLAYED && (
-              <li className="navigation-item">
-                <DebouncedInput icon={ICONS.SEARCH} placeholder={__('Filter')} onChange={setSubscriptionFilter} />
-              </li>
-            )}
-            {displayedSubscriptions.map((subscription) => (
-              <SubscriptionListItem key={subscription.uri} subscription={subscription} />
-            ))}
-            {!!subscriptionFilter && !displayedSubscriptions.length && (
-              <li>
-                <div className="navigation-item">
-                  <div className="empty empty--centered">{__('No results')}</div>
-                </div>
-              </li>
-            )}
-            {!subscriptionFilter && (
-              <Button
-                key="showMore"
-                label={__('Manage')}
-                className="navigation-link"
-                navigate={`/$/${PAGES.CHANNELS_FOLLOWING_MANAGE}`}
-              />
-            )}
-          </ul>
-        </>
+        <ul className="navigation__secondary navigation-links">
+          {subscriptions.length > SIDEBAR_SUBS_DISPLAYED && (
+            <li className="navigation-item">
+              <DebouncedInput icon={ICONS.SEARCH} placeholder={__('Filter')} onChange={setSubscriptionFilter} />
+            </li>
+          )}
+          {displayedSubscriptions.map((subscription) => (
+            <SubscriptionListItem key={subscription.uri} subscription={subscription} />
+          ))}
+          {!!subscriptionFilter && !displayedSubscriptions.length && (
+            <li>
+              <div className="navigation-item">
+                <div className="empty empty--centered">{__('No results')}</div>
+              </div>
+            </li>
+          )}
+          {!subscriptionFilter && (
+            <Button
+              key="showMore"
+              label={__('Manage')}
+              className="navigation-link"
+              navigate={`/$/${PAGES.CHANNELS_FOLLOWING_MANAGE}`}
+            />
+          )}
+        </ul>
       );
     }
     return null;
@@ -417,6 +419,10 @@ function SideNavigation(props: Props) {
       }
     }
   }, [sidebarOpen]);
+
+  React.useEffect(() => {
+    doFetchLastActiveSubs();
+  }, []);
 
   const unAuthNudge =
     DOMAIN === 'lbry.tv' ? null : (

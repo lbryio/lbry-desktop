@@ -1,11 +1,15 @@
 // @flow
 import React from 'react';
+import Button from 'component/button';
+import ChannelThumbnail from 'component/channelThumbnail';
 import ClaimList from 'component/claimList';
+import ClaimPreviewTitle from 'component/claimPreviewTitle';
 import DebouncedInput from 'component/common/debounced-input';
 import Empty from 'component/common/empty';
 import Page from 'component/page';
 import Spinner from 'component/spinner';
 import * as ICONS from 'constants/icons';
+import { SIDEBAR_SUBS_DISPLAYED } from 'constants/subscriptions';
 
 function getFilteredUris(uris, filterQuery) {
   if (filterQuery) {
@@ -23,11 +27,12 @@ const FOLLOW_PAGE_SIZE = 30;
 
 type Props = {
   subscribedChannelUris: Array<string>,
+  lastActiveSubs: ?Array<Subscription>,
   doResolveUris: (uris: Array<string>, returnCachedClaims: boolean, resolveReposts: boolean) => void,
 };
 
 export default function ChannelsFollowingManage(props: Props) {
-  const { subscribedChannelUris, doResolveUris } = props;
+  const { subscribedChannelUris, lastActiveSubs, doResolveUris } = props;
 
   // The locked-on-mount full set of subscribed uris.
   const [uris, setUris] = React.useState([]);
@@ -95,15 +100,49 @@ export default function ChannelsFollowingManage(props: Props) {
 
           {filteredUris && <ClaimList uris={filteredUris} />}
 
+          {!filteredUris && lastActiveSubs && lastActiveSubs.length === SIDEBAR_SUBS_DISPLAYED && (
+            <>
+              <div className="card__title-section">
+                <div className="card__subtitle"> {__('Recently Active')}</div>
+              </div>
+              <div className="followManage-wrapper__activeSubs">
+                {lastActiveSubs.map((sub) => {
+                  return (
+                    <div key={sub.uri} className="navigation-link__wrapper navigation__subscription">
+                      <Button
+                        navigate={sub.uri}
+                        className="navigation-link navigation-link--with-thumbnail"
+                        activeClass="navigation-link--active"
+                      >
+                        <ChannelThumbnail xsmall uri={sub.uri} hideStakedIndicator />
+                        <div className="navigation__subscription-title">
+                          <ClaimPreviewTitle uri={sub.uri} />
+                          <span dir="auto" className="channel-name">
+                            {sub.channelName}
+                          </span>
+                        </div>
+                      </Button>
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          )}
+
           {!filteredUris && uris.length > 0 && (
-            <ClaimList
-              uris={uris.slice(0, (page + 1) * FOLLOW_PAGE_SIZE)}
-              onScrollBottom={bumpPage}
-              page={page + 1}
-              pageSize={FOLLOW_PAGE_SIZE}
-              loading={loadingPage}
-              useLoadingSpinner
-            />
+            <>
+              <div className="card__title-section">
+                <div className="card__subtitle"> {__('All Channels')}</div>
+              </div>
+              <ClaimList
+                uris={uris.slice(0, (page + 1) * FOLLOW_PAGE_SIZE)}
+                onScrollBottom={bumpPage}
+                page={page + 1}
+                pageSize={FOLLOW_PAGE_SIZE}
+                loading={loadingPage}
+                useLoadingSpinner
+              />
+            </>
           )}
         </>
       )}

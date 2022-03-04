@@ -664,6 +664,15 @@ img {
   }
 }
 
+.followManage-wrapper__activeSubs {
+  -moz-column-count: 2;
+  -moz-column-gap: var(--spacing-m);
+  -webkit-column-count: 2;
+  -webkit-column-gap: var(--spacing-m);
+  column-count: 2;
+  column-gap: var(--spacing-m);
+}
+
 .uploadPage-wraper {
   &.card-stack {
     .card:not(:last-of-type) {

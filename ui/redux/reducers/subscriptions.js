@@ -5,6 +5,7 @@ import { handleActions } from 'util/redux-utils';
 
 const defaultState: SubscriptionState = {
   subscriptions: [], // Deprecated
+  lastActiveSubscriptions: undefined, // undefined = un-fetched, null = no results;
   following: [],
   loading: false,
   firstRunCompleted: false,
@@ -49,13 +50,13 @@ export default handleActions(
     [ACTIONS.CHANNEL_UNSUBSCRIBE]: (state: SubscriptionState, action): SubscriptionState => {
       const subscriptionToRemove: Subscription = action.data;
 
-      const newSubscriptions = state.subscriptions
-        .slice()
-        .filter((subscription) => !isURIEqual(subscription.uri, subscriptionToRemove.uri));
+      const newSubscriptions = state.subscriptions.filter(
+        (subscription) => !isURIEqual(subscription.uri, subscriptionToRemove.uri)
+      );
 
-      const newFollowing = state.following
-        .slice()
-        .filter((subscription) => !isURIEqual(subscription.uri, subscriptionToRemove.uri));
+      const newFollowing = state.following.filter(
+        (subscription) => !isURIEqual(subscription.uri, subscriptionToRemove.uri)
+      );
 
       return {
         ...state,
@@ -75,6 +76,25 @@ export default handleActions(
       ...state,
       loading: false,
       subscriptions: action.data,
+    }),
+    [ACTIONS.FETCH_LAST_ACTIVE_SUBS_DONE]: (state: SubscriptionState, action): SubscriptionState => {
+      const activeChannelClaims = action.data;
+      if (activeChannelClaims && activeChannelClaims.length > 0) {
+        const subs = [];
+        activeChannelClaims.forEach((claim) => {
+          const index = state.subscriptions.findIndex((sub) => isURIEqual(sub.uri, claim.permanent_url));
+          if (index !== -1) {
+            subs.push(state.subscriptions[index]);
+          }
+        });
+
+        return { ...state, lastActiveSubscriptions: subs };
+      }
+      return { ...state, lastActiveSubscriptions: null };
+    },
+    [ACTIONS.FETCH_LAST_ACTIVE_SUBS_FAIL]: (state: SubscriptionState, action): SubscriptionState => ({
+      ...state,
+      lastActiveSubscriptions: null,
     }),
     [ACTIONS.SET_VIEW_MODE]: (state: SubscriptionState, action): SubscriptionState => ({
       ...state,

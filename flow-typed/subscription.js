@@ -13,6 +13,7 @@ declare type Following = {
 
 declare type SubscriptionState = {
   subscriptions: Array<Subscription>,
+  lastActiveSubscriptions: ?Array<Subscription>,
   following: Array<Following>,
   loading: boolean,
   firstRunCompleted: boolean,
