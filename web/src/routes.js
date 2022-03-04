@@ -50,6 +50,7 @@ router.get(`/$/api/content/v1/get`, async (ctx) => {
     try {
       content = getHomepageJSON();
       ctx.set('Content-Type', 'application/json');
+      ctx.set('Access-Control-Allow-Origin', '*');
       ctx.body = {
         status: 'success',
         data: content,
