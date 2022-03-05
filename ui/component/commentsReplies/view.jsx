@@ -48,7 +48,9 @@ export default function CommentsReplies(props: Props) {
         </div>
       ) : (
         <div className="comment__replies">
-          <Button className="comment__threadline" aria-label="Hide Replies" onClick={() => setExpanded(false)} />
+          {fetchedReplies.length > 0 && (
+            <Button className="comment__threadline" aria-label="Hide Replies" onClick={() => setExpanded(false)} />
+          )}
 
           <ul className="comments--replies">
             {fetchedReplies.map((comment) => (
