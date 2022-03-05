@@ -671,6 +671,28 @@ img {
   -webkit-column-gap: var(--spacing-m);
   column-count: 2;
   column-gap: var(--spacing-m);
+
+  @media (min-width: $breakpoint-small) {
+    .navigation-link {
+      &.navigation-link--with-thumbnail .button__content {
+        .channel-thumbnail {
+          @include handleChannelGif(2.25rem);
+        }
+      }
+    }
+
+    .navigation__subscription {
+      .claim-preview__title {
+        span {
+          font-size: var(--font-body);
+        }
+      }
+
+      .channel-name {
+        font-size: var(--font-small);
+      }
+    }
+  }
 }
 
 .uploadPage-wraper {
