@@ -29,10 +29,11 @@ type Props = {
   subscribedChannelUris: Array<string>,
   lastActiveSubs: ?Array<Subscription>,
   doResolveUris: (uris: Array<string>, returnCachedClaims: boolean, resolveReposts: boolean) => void,
+  doFetchLastActiveSubs: (force?: boolean, count?: number) => void,
 };
 
 export default function ChannelsFollowingManage(props: Props) {
-  const { subscribedChannelUris, lastActiveSubs, doResolveUris } = props;
+  const { subscribedChannelUris, lastActiveSubs, doResolveUris, doFetchLastActiveSubs } = props;
 
   // The locked-on-mount full set of subscribed uris.
   const [uris, setUris] = React.useState([]);
@@ -81,6 +82,10 @@ export default function ChannelsFollowingManage(props: Props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps, (only need to respond to 'filterQuery')
   }, [filterQuery]);
+
+  React.useEffect(() => {
+    doFetchLastActiveSubs(true);
+  }, []);
 
   return (
     <Page className="followManage-wrapper" noFooter>
