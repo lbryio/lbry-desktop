@@ -3,6 +3,7 @@ import type { Node } from 'react';
 import React from 'react';
 import ClaimPreviewTile from 'component/claimPreviewTile';
 import useFetchViewCount from 'effects/use-fetch-view-count';
+import useLastVisibleItem from 'effects/use-last-visible-item';
 
 function urisEqual(prev: ?Array<string>, next: ?Array<string>) {
   if (!prev || !next) {
@@ -25,6 +26,7 @@ type Props = {
   prefixUris?: Array<string>,
   pinUrls?: Array<string>,
   uris: Array<string>,
+  injectedItem?: { node: Node, index?: number, replace?: boolean },
   showNoSourceClaims?: boolean,
   renderProperties?: (Claim) => ?Node,
   fetchViewCount?: boolean,
@@ -67,14 +69,17 @@ function ClaimTilesDiscover(props: Props) {
     renderProperties,
     pinUrls,
     prefixUris,
+    injectedItem,
     showNoSourceClaims,
     doFetchViewCount,
     pageSize = 8,
     optionsStringified,
   } = props;
 
-  const prevUris = React.useRef();
+  const sectionRef = React.useRef();
+  const injectedIndex = useLastVisibleItem(injectedItem, sectionRef);
 
+  const prevUris = React.useRef();
   const claimSearchUris = claimSearchResults || [];
   const isUnfetchedClaimSearch = claimSearchResults === undefined;
 
@@ -118,17 +123,23 @@ function ClaimTilesDiscover(props: Props) {
   }, [doClaimSearch, shouldPerformSearch, optionsStringified]);
 
   return (
-    <ul className="claim-grid">
+    <ul ref={sectionRef} className="claim-grid">
       {finalUris && finalUris.length
         ? finalUris.map((uri, i) => {
             if (uri) {
+              if (injectedIndex === i && injectedItem && injectedItem.replace) {
+                return <React.Fragment key={uri}>{injectedItem.node}</React.Fragment>;
+              }
+
               return (
-                <ClaimPreviewTile
-                  showNoSourceClaims={hasNoSource || showNoSourceClaims}
-                  key={uri}
-                  uri={uri}
-                  properties={renderProperties}
-                />
+                <React.Fragment key={uri}>
+                  {injectedIndex === i && injectedItem && injectedItem.node}
+                  <ClaimPreviewTile
+                    showNoSourceClaims={hasNoSource || showNoSourceClaims}
+                    uri={uri}
+                    properties={renderProperties}
+                  />
+                </React.Fragment>
               );
             } else {
               return <ClaimPreviewTile showNoSourceClaims={hasNoSource || showNoSourceClaims} key={i} placeholder />;

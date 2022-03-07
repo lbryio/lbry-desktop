@@ -70,6 +70,14 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
   const isMedium = useIsMediumScreen();
   const { onRecsLoaded: onRecommendationsLoaded, onClickedRecommended: onRecommendationClicked } = RecSys;
 
+  const InjectedAd =
+    injectAds && !blacklistTriggered
+      ? {
+          node: <Ads small type="video" className="ads__claim-item--recommended" />,
+          index: isMobile ? 0 : 3,
+        }
+      : null;
+
   React.useEffect(() => {
     doFetchRecommendedContent(uri);
   }, [uri, doFetchRecommendedContent]);
@@ -133,7 +141,7 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
               loading={isSearching}
               uris={recommendedContentUris}
               hideMenu={isMobile}
-              injectedItem={injectAds && !blacklistTriggered && <Ads small type={'video'} />}
+              injectedItem={InjectedAd}
               empty={__('No related content found')}
               onClick={handleRecommendationClicked}
             />
@@ -152,7 +160,7 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
               channelIds={[signingChannel.claim_id]}
               loading={isSearching}
               hideMenu={isMobile}
-              injectedItem={SHOW_ADS && IS_WEB && !isAuthenticated && <Ads small type={'video'} />}
+              injectedItem={InjectedAd}
               empty={__('No related content found')}
             />
           )}

@@ -104,7 +104,11 @@ export default function SearchPage(props: Props) {
                 />
               }
               injectedItem={
-                SHOW_ADS && IS_WEB ? (SIMPLE_SITE ? false : !isAuthenticated && <Ads small type={'video'} />) : false
+                SHOW_ADS &&
+                !isAuthenticated && {
+                  node: <Ads small type="video" />,
+                  index: 3,
+                }
               }
             />
 

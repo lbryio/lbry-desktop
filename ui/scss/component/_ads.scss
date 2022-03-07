@@ -16,43 +16,145 @@
 }
 
 // Inline Video Ads
+// The default is coded for list-layout;
+// --tile and other modifiers adjust accordingly.
 .ads__claim-item {
   border-bottom: 1px solid var(--color-border);
   margin-top: var(--spacing-m);
+  margin-bottom: var(--spacing-m);
   padding: var(--spacing-m);
   background-color: var(--color-ads-background);
   border-radius: var(--border-radius);
+  display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
   width: 100%;
-
-  > div,
-  ins {
-    width: 100%;
-    position: relative !important;
-    max-width: 30rem;
-    min-width: 15rem;
-  }
 
   .ad__container {
     aspect-ratio: 16 / 9;
-  }
+    $minWidth: calc(var(--file-list-thumbnail-width) * 0.8);
+    min-width: $minWidth;
 
-  .avp-p-gui {
-    z-index: 1 !important;
-  }
+    video {
+      width: 100% !important;
+      height: 100% !important;
+    }
 
-  @media (max-width: $breakpoint-small) {
-    flex-direction: column;
+    @media (max-width: $breakpoint-small) {
+      $width: calc(var(--file-list-thumbnail-width) * 0.8);
+      width: $width;
 
-    > div {
-      width: 100%;
+      #aniBox,
+      #av-container {
+        // Only needed on actual mobile. Their mobile script does something
+        // different that makes it 100%, so have to counter that here.
+        width: unset !important;
+      }
+    }
+
+    @media (min-width: $breakpoint-small) and (max-width: $breakpoint-large) {
+      $width: calc(var(--file-list-thumbnail-width) * 1.2);
+      width: $width;
+    }
+
+    @media (min-width: $breakpoint-large) {
+      $width: calc(var(--file-list-thumbnail-width) * 1.2);
+      width: $width;
+    }
+
+    //div[style*='position: fixed; transform: scale(1);'] {
+    //  // This is the floating ad (when tile goes off screen).
+    //  // The sidebar is covering it, so move to the right a bit:
+    //  left: unset !important;
+    //
+    //  // It's a bit jarring at times on a busy page, so add border:
+    //  background-color: var(--color-ads-background);
+    //  border-radius: var(--border-radius);
+    //  padding: var(--spacing-s);
+    //}
+
+    div[style*='position: fixed; transform: scale(1);'] {
+      // [Floating ad]
+      // Hide it in entirely. Couldn't reconcile with the changes needed to make
+      // tile layout fit on browser-resize and also with their mobile script
+      // changes. Else, the block above can be used.
+      transform: none !important;
+      transform-origin: unset !important;
+      position: unset !important;
+
+      div:first-child {
+        // [Floating ad close button]
+        display: none !important;
+      }
+    }
+
+    #aniBox,
+    #av-container {
+      // Handle the scenario of ads not resizing when switching from small to
+      // medium/large layout:
+      height: unset !important;
+      aspect-ratio: 16 / 9 !important;
     }
   }
 }
 
+.ads__claim-item--tile {
+  @extend .card;
+  @extend .claim-preview--tile;
+  flex-direction: column;
+  padding: var(--spacing-s);
+
+  .ads__claim-text {
+    margin: var(--spacing-s) 0 0 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .ad__container {
+    width: 100% !important;
+    max-width: 100 !important;
+    min-width: unset !important;
+    box-sizing: border-box !important;
+
+    div:not(#sound):not(.off):not(#timeline) {
+      width: 100% !important;
+      max-width: unset !important;
+      min-width: unset !important;
+      box-sizing: border-box !important;
+    }
+
+    video {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    #timeline,
+    #buttons {
+      width: calc(100% - (var(--spacing-s) * 2)) !important;
+    }
+  }
+
+  p {
+    width: calc(100% - (var(--spacing-m) * 3)) !important;
+  }
+
+  .ads__claim-text {
+    max-width: 100%;
+  }
+}
+
+.ads__claim-item--recommended {
+  padding: var(--spacing-s);
+
+  @media (min-width: $breakpoint-medium) {
+    margin-bottom: 0;
+  }
+}
+
 .ads__claim-text {
-  margin-top: var(--spacing-m);
+  overflow: hidden;
+  max-width: 50%;
+  margin: var(--spacing-m) 0 var(--spacing-m) var(--spacing-s);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -60,6 +162,10 @@
 
 .ads__claim-text--small {
   font-size: var(--font-small);
+
+  @media (max-width: $breakpoint-small) {
+    font-size: var(--font-xsmall);
+  }
 }
 
 // Pre-roll ads
