@@ -120,7 +120,7 @@ function Ads(props: Props) {
   const videoAd = (
     <div className="ads__claim-item">
       <div className="ad__container">
-        <div id={adConfig.tag} className="ads__injected-video" style={{ display: 'none' }} />
+        <div id={adConfig.tag} style={{ display: 'none' }} />
       </div>
       <div
         className={classnames('ads__claim-text', {

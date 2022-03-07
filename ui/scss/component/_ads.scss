@@ -26,11 +26,6 @@
   flex-wrap: wrap;
   width: 100%;
 
-  .ad__container {
-    width: 314px;
-    height: 201px;
-  }
-
   > div,
   ins {
     width: 100%;
@@ -39,7 +34,7 @@
     min-width: 15rem;
   }
 
-  .ads__injected-video {
+  .ad__container {
     aspect-ratio: 16 / 9;
   }
 
@@ -57,7 +52,7 @@
 }
 
 .ads__claim-text {
-  margin-top: 5px;
+  margin-top: var(--spacing-m);
   display: flex;
   flex-direction: column;
   justify-content: center;
