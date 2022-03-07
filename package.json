@@ -149,7 +149,7 @@
     "eslint-plugin-standard": "^4.0.1",
     "file-loader": "^4.2.0",
     "flow-bin": "^0.97.0",
-    "flow-typed": "^2.3.0",
+    "flow-typed": "^3.7.0",
     "formik": "^0.10.4",
     "hast-util-sanitize": "^3.0.2",
     "history": "^4.9.0",
