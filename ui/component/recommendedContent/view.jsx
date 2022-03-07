@@ -61,7 +61,7 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
     return false;
   }
 
-  const triggerBlacklist = React.useMemo(() => injectAds && claimContainsBlockedWords(claim), [injectAds, claim]);
+  const blacklistTriggered = React.useMemo(() => injectAds && claimContainsBlockedWords(claim), [injectAds, claim]);
 
   const [viewMode, setViewMode] = React.useState(VIEW_ALL_RELATED);
   const signingChannel = claim && claim.signing_channel;
@@ -133,9 +133,7 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
               loading={isSearching}
               uris={recommendedContentUris}
               hideMenu={isMobile}
-              // TODO: Since 'triggerBlacklist' is handled by clients of <Ads> instead of internally by <Ads>, we don't
-              // need that parameter and can just not mount it when 'true', instead of mount-then-hide.
-              injectedItem={injectAds && <Ads small type={'video'} triggerBlacklist={triggerBlacklist} />}
+              injectedItem={injectAds && !blacklistTriggered && <Ads small type={'video'} />}
               empty={__('No related content found')}
               onClick={handleRecommendationClicked}
             />

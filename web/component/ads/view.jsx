@@ -42,7 +42,6 @@ type Props = {
   claim: Claim,
   isMature: boolean,
   authenticated: boolean,
-  triggerBlacklist: boolean,
 };
 
 function removeIfExists(querySelector) {
@@ -56,7 +55,6 @@ function Ads(props: Props) {
     type = 'video',
     small,
     authenticated,
-    triggerBlacklist,
   } = props;
 
   const shouldShowAds = SHOW_ADS && !authenticated;
@@ -140,8 +138,7 @@ function Ads(props: Props) {
     </div>
   );
 
-  // dont show if ads disabled on instance, blacklist word matched
-  if (!SHOW_ADS || triggerBlacklist) {
+  if (!SHOW_ADS) {
     return false;
   }
   // disable ads for firefox android because they don't work properly
