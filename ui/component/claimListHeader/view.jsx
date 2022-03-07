@@ -424,7 +424,8 @@ function ClaimListHeader(props: Props) {
                     {CS.DURATION_TYPES.map((dur) => (
                       <option key={dur} value={dur}>
                         {/* i18fixme */}
-                        {dur === CS.DURATION_SHORT && __('Short (< 4 minutes)')}
+                        {dur === CS.DURATION_SHORT && __('Short (< 4 min)')}
+                        {dur === CS.DURATION_MEDIUM && __('Medium (4 - 20 min)')}
                         {dur === CS.DURATION_LONG && __('Long (> 20 min)')}
                         {dur === CS.DURATION_ALL && __('Any')}
                       </option>

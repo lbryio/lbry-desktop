@@ -253,7 +253,7 @@ function ClaimListDiscover(props: Props) {
     release_time?: string,
     claim_type?: string | Array<string>,
     name?: string,
-    duration?: string,
+    duration?: string | Array<string>,
     reposted_claim_id?: string,
     stream_types?: any,
     fee_amount?: string,
@@ -345,6 +345,8 @@ function ClaimListDiscover(props: Props) {
       options.duration = '<=240';
     } else if (durationParam === CS.DURATION_LONG) {
       options.duration = '>=1200';
+    } else if (durationParam === CS.DURATION_MEDIUM) {
+      options.duration = ['<=1200', '>=240'];
     }
   }
 
