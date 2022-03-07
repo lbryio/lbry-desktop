@@ -250,43 +250,46 @@ export default function ClaimList(props: Props) {
           {...(droppableProvided && droppableProvided.droppableProps)}
           ref={droppableProvided && droppableProvided.innerRef}
         >
-          {injectedItem && sortedUris.some((uri, index) => index === 4) && <li>{injectedItem}</li>}
+          {droppableProvided ? (
+            <>
+              {injectedItem && <li>{injectedItem}</li>}
+              {sortedUris.map((uri, index) => (
+                <React.Suspense fallback={null} key={uri}>
+                  <Draggable draggableId={uri} index={index}>
+                    {(draggableProvided, draggableSnapshot) => {
+                      // Restrict dragging to vertical axis
+                      // https://github.com/atlassian/react-beautiful-dnd/issues/958#issuecomment-980548919
+                      let transform = draggableProvided.draggableProps.style.transform;
+                      if (draggableSnapshot.isDragging && transform) {
+                        transform = transform.replace(/\(.+,/, '(0,');
+                      }
 
-          {sortedUris.map((uri, index) =>
-            droppableProvided ? (
-              <React.Suspense fallback={null} key={uri}>
-                <Draggable draggableId={uri} index={index}>
-                  {(draggableProvided, draggableSnapshot) => {
-                    // Restrict dragging to vertical axis
-                    // https://github.com/atlassian/react-beautiful-dnd/issues/958#issuecomment-980548919
-                    let transform = draggableProvided.draggableProps.style.transform;
+                      const style = {
+                        ...draggableProvided.draggableProps.style,
+                        transform,
+                      };
 
-                    if (draggableSnapshot.isDragging && transform) {
-                      transform = transform.replace(/\(.+,/, '(0,');
-                    }
-
-                    const style = {
-                      ...draggableProvided.draggableProps.style,
-                      transform,
-                    };
-
-                    return (
-                      <li ref={draggableProvided.innerRef} {...draggableProvided.draggableProps} style={style}>
-                        {/* https://github.com/atlassian/react-beautiful-dnd/issues/1756 */}
-                        <div style={{ display: 'none' }} {...draggableProvided.dragHandleProps} />
-
-                        {getClaimPreview(uri, index, draggableProvided)}
-                      </li>
-                    );
-                  }}
-                </Draggable>
-              </React.Suspense>
-            ) : (
-              getClaimPreview(uri, index)
-            )
+                      return (
+                        <li ref={draggableProvided.innerRef} {...draggableProvided.draggableProps} style={style}>
+                          {/* https://github.com/atlassian/react-beautiful-dnd/issues/1756 */}
+                          <div style={{ display: 'none' }} {...draggableProvided.dragHandleProps} />
+                          {getClaimPreview(uri, index, draggableProvided)}
+                        </li>
+                      );
+                    }}
+                  </Draggable>
+                </React.Suspense>
+              ))}
+              {droppableProvided.placeholder}
+            </>
+          ) : (
+            sortedUris.map((uri, index) => (
+              <React.Fragment key={uri}>
+                {injectedItem && index === 4 && <li>{injectedItem}</li>}
+                {getClaimPreview(uri, index)}
+              </React.Fragment>
+            ))
           )}
-
-          {droppableProvided && droppableProvided.placeholder}
         </ul>
       )}
 
