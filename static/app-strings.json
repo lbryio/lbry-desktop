@@ -2291,5 +2291,7 @@
   "Choose View Hosting Limit": "Choose View Hosting Limit",
   "View Hosting Limit (GB)": "View Hosting Limit (GB)",
   "%free% of %total% available": "%free% of %total% available",
+  "Short (< 4 min)": "Short (< 4 min)",
+  "Medium (4 - 20 min)": "Medium (4 - 20 min)",
   "--end--": "--end--"
 }

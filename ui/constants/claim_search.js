@@ -36,9 +36,10 @@ export const ORDER_BY_NEW_VALUE = ['release_time'];
 export const ORDER_BY_TYPES = [ORDER_BY_TRENDING, ORDER_BY_NEW, ORDER_BY_TOP];
 
 export const DURATION_SHORT = 'short';
+export const DURATION_MEDIUM = 'medium';
 export const DURATION_LONG = 'long';
 export const DURATION_ALL = 'all';
-export const DURATION_TYPES = [DURATION_ALL, DURATION_SHORT, DURATION_LONG];
+export const DURATION_TYPES = [DURATION_ALL, DURATION_SHORT, DURATION_MEDIUM, DURATION_LONG];
 
 export const SORT_BY = {
   // key: Enumeration; can be anything as long as unique. Also used as URLParam.
