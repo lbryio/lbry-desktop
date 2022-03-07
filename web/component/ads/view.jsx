@@ -7,15 +7,21 @@ import I18nMessage from 'component/i18nMessage';
 import Button from 'component/button';
 import classnames from 'classnames';
 
-const ADS_URL =
-  'https://cdn.vidcrunch.com/integrations/618bb4d28aac298191eec411/Lbry_Odysee.com_Responsive_Floating_DFP_Rev70_1011.js';
-const ADS_TAG = 'vidcrunchJS537102317';
-const MOBILE_ADS_URL =
-  'https://cdn.vidcrunch.com/integrations/618bb4d28aac298191eec411/Lbry_Odysee.com_Mobile_Floating_DFP_Rev70_1611.js';
-const MOBILE_ADS_TAG = 'vidcrunchJS199212779';
-const EU_AD_URL =
-  'https://tg1.vidcrunch.com/api/adserver/spt?AV_TAGID=61dff05c599f1e20b01085d4&AV_PUBLISHERID=6182c8993c8ae776bd5635e9';
-const EU_AD_TAG = 'AV61dff05c599f1e20b01085d4';
+// prettier-ignore
+const AD_CONFIGS = Object.freeze({
+  DEFAULT: {
+    url: 'https://cdn.vidcrunch.com/integrations/618bb4d28aac298191eec411/Lbry_Odysee.com_Responsive_Floating_DFP_Rev70_1011.js',
+    tag: 'vidcrunchJS537102317',
+  },
+  MOBILE: {
+    url: 'https://cdn.vidcrunch.com/integrations/618bb4d28aac298191eec411/Lbry_Odysee.com_Mobile_Floating_DFP_Rev70_1611.js',
+    tag: 'vidcrunchJS199212779',
+  },
+  EU: {
+    url: 'https://tg1.vidcrunch.com/api/adserver/spt?AV_TAGID=61dff05c599f1e20b01085d4&AV_PUBLISHERID=6182c8993c8ae776bd5635e9',
+    tag: 'AV61dff05c599f1e20b01085d4',
+  },
+});
 
 const IS_IOS =
   (/iPad|iPhone|iPod/.test(navigator.platform) ||
@@ -57,23 +63,8 @@ function Ads(props: Props) {
   const mobileAds = IS_ANDROID || IS_IOS;
 
   // this is populated from app based on location
-  let isInEu = localStorage.getItem('gdprRequired');
-  // cant store booleans so we store it as a string
-  isInEu = isInEu === 'true';
-
-  // load ad and tags here
-  let scriptUrlToUse;
-  let tagNameToUse;
-  if (isInEu) {
-    tagNameToUse = EU_AD_TAG;
-    scriptUrlToUse = EU_AD_URL;
-  } else if (mobileAds) {
-    tagNameToUse = MOBILE_ADS_TAG;
-    scriptUrlToUse = MOBILE_ADS_URL;
-  } else {
-    tagNameToUse = ADS_TAG;
-    scriptUrlToUse = ADS_URL;
-  }
+  const isInEu = localStorage.getItem('gdprRequired') === 'true';
+  const adConfig = isInEu ? AD_CONFIGS.EU : mobileAds ? AD_CONFIGS.MOBILE : AD_CONFIGS.DEFAULT;
 
   // add script to DOM
   useEffect(() => {
@@ -83,7 +74,7 @@ function Ads(props: Props) {
       let script;
       try {
         script = document.createElement('script');
-        script.src = scriptUrlToUse;
+        script.src = adConfig.url;
         // $FlowFixMe
         document.head.appendChild(script);
 
@@ -129,7 +120,7 @@ function Ads(props: Props) {
   const videoAd = (
     <div className="ads__claim-item">
       <div className="ad__container">
-        <div id={tagNameToUse} className="ads__injected-video" style={{ display: 'none' }} />
+        <div id={adConfig.tag} className="ads__injected-video" style={{ display: 'none' }} />
       </div>
       <div
         className={classnames('ads__claim-text', {
@@ -145,7 +136,7 @@ function Ads(props: Props) {
   // homepage ad in a card
   const homepageCardAd = (
     <div className="homepageAdContainer media__thumb" style={{ display: 'none' }}>
-      <div id={tagNameToUse} className="homepageAdDiv media__thumb" style={{ display: 'none' }} />
+      <div id={adConfig.tag} className="homepageAdDiv media__thumb" style={{ display: 'none' }} />
     </div>
   );
 
