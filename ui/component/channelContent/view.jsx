@@ -11,9 +11,8 @@ import Ads from 'web/component/ads';
 import Icon from 'component/common/icon';
 import LivestreamLink from 'component/livestreamLink';
 import { Form, FormField } from 'component/common/form';
-import { DEBOUNCE_WAIT_DURATION_MS } from 'constants/search';
-import { lighthouse } from 'redux/actions/search';
 import ScheduledStreams from 'component/scheduledStreams';
+import { SearchResults } from './internal/searchResults';
 
 const TYPES_TO_ALLOW_FILTER = ['stream', 'repost'];
 
@@ -66,7 +65,7 @@ function ChannelContent(props: Props) {
   // const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
   const claimsInChannel = 9999;
   const [searchQuery, setSearchQuery] = React.useState('');
-  const [searchResults, setSearchResults] = React.useState(undefined);
+  const [isSearching, setIsSearching] = React.useState(false);
   const {
     location: { pathname, search },
   } = useHistory();
@@ -85,40 +84,7 @@ function ChannelContent(props: Props) {
   }
 
   React.useEffect(() => {
-    const timer = setTimeout(() => {
-      if (searchQuery.trim().length < 3 || !claimId) {
-        // In order to display original search results, search results must be set to null. A query of '' should display original results.
-        return setSearchResults(null);
-      } else {
-        lighthouse
-          .search(
-            `s=${encodeURIComponent(searchQuery)}&channel_id=${encodeURIComponent(claimId)}${
-              !showMature ? '&nsfw=false&size=50&from=0' : ''
-            }`
-          )
-          .then(({ body: results }) => {
-            const urls = results.map(({ name, claimId }) => {
-              return `lbry://${name}#${claimId}`;
-            });
-
-            // Batch-resolve the urls before calling 'setSearchResults', as the
-            // latter will immediately cause the tiles to resolve, ending up
-            // calling doResolveUri one by one before the batched one.
-            doResolveUris(urls, true);
-
-            setSearchResults(urls);
-          })
-          .catch(() => {
-            setSearchResults(null);
-          });
-      }
-    }, DEBOUNCE_WAIT_DURATION_MS);
-    return () => clearTimeout(timer);
-  }, [claimId, searchQuery, showMature, doResolveUris]);
-
-  React.useEffect(() => {
     setSearchQuery('');
-    setSearchResults(null);
   }, [url]);
 
   const isInitialized = Boolean(activeLivestreamForChannel) || activeLivestreamInitialized;
@@ -186,7 +152,7 @@ function ChannelContent(props: Props) {
           hideFilters={!showFilters}
           hideAdvancedFilter={!showFilters}
           tileLayout={tileLayout}
-          uris={searchResults}
+          uris={isSearching ? [] : null}
           streamType={SIMPLE_SITE ? CS.CONTENT_ALL : undefined}
           channelIds={[claimId]}
           claimType={claimType}
@@ -210,9 +176,19 @@ function ChannelContent(props: Props) {
               </Form>
             )
           }
+          subSection={
+            <SearchResults
+              searchQuery={searchQuery}
+              claimId={claimId}
+              showMature={showMature}
+              tileLayout={tileLayout}
+              onResults={(results) => setIsSearching(results !== null)}
+              doResolveUris={doResolveUris}
+            />
+          }
           isChannel
           channelIsMine={channelIsMine}
-          empty={empty}
+          empty={isSearching ? ' ' : empty}
         />
       )}
     </Fragment>
