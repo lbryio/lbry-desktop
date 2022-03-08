@@ -54,7 +54,7 @@ const collectionsReducer = handleActions(
       return {
         ...state,
         unpublished: newLists,
-        lastUsedCollection: newList,
+        lastUsedCollection: params.id,
       };
     },
 
@@ -64,7 +64,7 @@ const collectionsReducer = handleActions(
       const { edited: editList, unpublished: unpublishedList, pending: pendingList } = state;
       const newEditList = Object.assign({}, editList);
       const newUnpublishedList = Object.assign({}, unpublishedList);
-      const isDeletingLastUsedCollection = lastUsedCollection && lastUsedCollection.id === id;
+      const isDeletingLastUsedCollection = lastUsedCollection === id;
 
       const newPendingList = Object.assign({}, pendingList);
 
@@ -118,7 +118,7 @@ const collectionsReducer = handleActions(
         edited: newEditList,
         unpublished: newUnpublishedList,
         pending: newPendingList,
-        lastUsedCollection: newPendingList[claimId],
+        lastUsedCollection: claimId,
       };
     },
 
@@ -130,7 +130,7 @@ const collectionsReducer = handleActions(
         return {
           ...state,
           [collectionKey]: { ...lists, [id]: collection },
-          lastUsedCollection: collection,
+          lastUsedCollection: id,
         };
       }
 
@@ -139,14 +139,14 @@ const collectionsReducer = handleActions(
         return {
           ...state,
           edited: { ...lists, [id]: collection },
-          lastUsedCollection: collection,
+          lastUsedCollection: id,
         };
       }
       const { unpublished: lists } = state;
       return {
         ...state,
         unpublished: { ...lists, [id]: collection },
-        lastUsedCollection: collection,
+        lastUsedCollection: id,
       };
     },
 
@@ -181,7 +181,7 @@ const collectionsReducer = handleActions(
     },
     [ACTIONS.COLLECTION_ITEMS_RESOLVE_COMPLETED]: (state, action) => {
       const { resolvedCollections, failedCollectionIds } = action.data;
-      const { pending, edited, isResolvingCollectionById, resolved, lastUsedCollection } = state;
+      const { pending, edited, isResolvingCollectionById, resolved } = state;
       const newPending = Object.assign({}, pending);
       const newEdited = Object.assign({}, edited);
       const newResolved = Object.assign({}, resolved, resolvedCollections);
@@ -208,31 +208,12 @@ const collectionsReducer = handleActions(
         });
       }
 
-      const newAllCollections = [
-        ...Object.values(newPending),
-        ...Object.values(newResolved),
-        ...Object.values(newEdited),
-      ];
-
-      let newLastUsedCollection = lastUsedCollection;
-
-      // If a collection is being published or got published,
-      // its id will get updated which means, we have to sync
-      // the last used collection.
-      if (lastUsedCollection) {
-        newLastUsedCollection = newAllCollections.find((collection) => {
-          // $FlowFixMe
-          return collection.name === lastUsedCollection.name;
-        });
-      }
-
       return Object.assign({}, state, {
         ...state,
         pending: newPending,
         resolved: newResolved,
         edited: newEdited,
         isResolvingCollectionById: newResolving,
-        lastUsedCollection: newLastUsedCollection,
       });
     },
     [ACTIONS.COLLECTION_ITEMS_RESOLVE_FAILED]: (state, action) => {
