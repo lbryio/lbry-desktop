@@ -100,7 +100,9 @@ export default function ClaimList(props: Props) {
 
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
 
+  // reference to the claim-grid
   const listRef = React.useRef();
+  // determine the index where the ad should be injected
   const injectedIndex = useLastVisibleItem(injectedItem, listRef);
 
   // Exclude prefix uris in these results variables. We don't want to show
@@ -147,6 +149,7 @@ export default function ClaimList(props: Props) {
   }, []);
 
   // @if process.env.NODE_ENV!='production'
+  // code to enable replacing of a claim tile isn't available here yet
   if (injectedItem && injectedItem.replace) {
     throw new Error('claimList: "injectedItem.replace" is not implemented yet');
   }
@@ -198,6 +201,7 @@ export default function ClaimList(props: Props) {
     />
   );
 
+  // returns injected ad DOM when indexes match
   const getInjectedItem = (index) => {
     if (injectedItem && injectedItem.node && injectedIndex === index) {
       return injectedItem.node;
@@ -211,6 +215,7 @@ export default function ClaimList(props: Props) {
         tileUris.map((uri, index) => (
           <React.Fragment key={uri}>
             {getInjectedItem(index)}
+            {/* inject ad node */}
             <ClaimPreviewTile
               uri={uri}
               showHiddenByUser={showHiddenByUser}

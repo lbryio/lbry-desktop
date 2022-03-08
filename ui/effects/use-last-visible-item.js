@@ -4,6 +4,12 @@ import type { Node } from 'react';
 
 type InjectedItem = { node: Node, index?: number, replace?: boolean };
 
+/**
+ * Returns the index indicating where in the claim-grid to inject the ad element
+ * @param injectedItem
+ * @param listRef - A reference to the claim-grid
+ * @returns {number}
+ */
 export default function useLastVisibleItem(injectedItem: ?InjectedItem, listRef: any) {
   const [injectedIndex, setInjectedIndex] = React.useState(injectedItem?.index);
 
@@ -18,8 +24,11 @@ export default function useLastVisibleItem(injectedItem: ?InjectedItem, listRef:
       const timer = setTimeout(() => {
         if (listRef.current) {
           const screenBottom = window.innerHeight;
+
+          // claim preview tiles
           const items = listRef.current.children;
 
+          // algo to return index of item, where ad will be injected before it
           if (items.length) {
             let i = 2; // Start from 2, so that the min possible is index-1
             for (; i < items.length; ++i) {

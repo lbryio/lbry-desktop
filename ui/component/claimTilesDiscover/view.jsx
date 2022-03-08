@@ -76,7 +76,9 @@ function ClaimTilesDiscover(props: Props) {
     optionsStringified,
   } = props;
 
+  // reference to the claim-grid
   const sectionRef = React.useRef();
+  // determine the index where the ad should be injected
   const injectedIndex = useLastVisibleItem(injectedItem, sectionRef);
 
   const prevUris = React.useRef();
@@ -112,6 +114,7 @@ function ClaimTilesDiscover(props: Props) {
   // --------------------------------------------------------------------------
   // --------------------------------------------------------------------------
 
+  // populate the view counts for the current claim uris
   useFetchViewCount(fetchViewCount, uris, claimsByUri, doFetchViewCount);
 
   // Run `doClaimSearch`
@@ -127,6 +130,7 @@ function ClaimTilesDiscover(props: Props) {
       {finalUris && finalUris.length
         ? finalUris.map((uri, i) => {
             if (uri) {
+              // if indexes match, inject ad in place of tile (aka replace it)
               if (injectedIndex === i && injectedItem && injectedItem.replace) {
                 return <React.Fragment key={uri}>{injectedItem.node}</React.Fragment>;
               }
@@ -134,6 +138,7 @@ function ClaimTilesDiscover(props: Props) {
               return (
                 <React.Fragment key={uri}>
                   {injectedIndex === i && injectedItem && injectedItem.node}
+                  {/* inject ad */}
                   <ClaimPreviewTile
                     showNoSourceClaims={hasNoSource || showNoSourceClaims}
                     uri={uri}

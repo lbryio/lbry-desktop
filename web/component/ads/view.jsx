@@ -121,7 +121,7 @@ function Ads(props: Props) {
     return (
       <div
         className={classnames('ads ads__claim-item', className, {
-          'ads__claim-item--tile': tileLayout,
+          'ads__claim-item--tile': tileLayout, // with no tileLayout it indicates sidebar ad
         })}
       >
         <div className="ad__container">
