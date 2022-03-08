@@ -29,9 +29,9 @@ const IS_IOS =
     (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) &&
   !window.MSStream;
 const IS_ANDROID = /Android/i.test(navigator.userAgent);
-const IS_FIREFOX = /Firefox/i.test(navigator.userAgent);
+// const IS_FIREFOX = /Firefox/i.test(navigator.userAgent);
 
-const isFirefoxAndroid = IS_ANDROID && IS_FIREFOX;
+// const isFirefoxAndroid = IS_ANDROID && IS_FIREFOX;
 
 type Props = {
   location: { pathname: string },
@@ -59,7 +59,7 @@ function Ads(props: Props) {
     className,
   } = props;
 
-  const shouldShowAds = SHOW_ADS && !authenticated && !isFirefoxAndroid;
+  const shouldShowAds = SHOW_ADS && !authenticated;
   const mobileAds = IS_ANDROID || IS_IOS;
 
   // this is populated from app based on location
