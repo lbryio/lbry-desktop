@@ -93,6 +93,7 @@
       // medium/large layout:
       height: unset !important;
       aspect-ratio: 16 / 9 !important;
+      border-radius: var(--border-radius);
     }
   }
 }
@@ -101,7 +102,10 @@
   @extend .card;
   @extend .claim-preview--tile;
   flex-direction: column;
-  padding: var(--spacing-s);
+
+  padding: 0;
+  background-color: unset;
+  border-bottom: unset;
 
   .ads__claim-text {
     margin: var(--spacing-s) 0 0 0;
