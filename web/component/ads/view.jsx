@@ -64,7 +64,11 @@ function Ads(props: Props) {
 
   // this is populated from app based on location
   const isInEu = localStorage.getItem('gdprRequired') === 'true';
-  const adConfig = isInEu ? AD_CONFIGS.EU : mobileAds ? AD_CONFIGS.MOBILE : AD_CONFIGS.DEFAULT;
+
+  // const adConfig = isInEu ? AD_CONFIGS.EU : mobileAds ? AD_CONFIGS.MOBILE : AD_CONFIGS.DEFAULT;
+  // -- The logic above is what we are asked to do, but the EU script breaks our
+  // -- app's CSS when ran on mobile.
+  const adConfig = mobileAds ? AD_CONFIGS.MOBILE : isInEu ? AD_CONFIGS.EU : AD_CONFIGS.DEFAULT;
 
   // add script to DOM
   useEffect(() => {
