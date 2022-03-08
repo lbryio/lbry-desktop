@@ -100,9 +100,8 @@ export default function ClaimList(props: Props) {
 
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
 
-  // reference to the claim-grid
+  // Resolve the index for injectedItem, if provided; else injectedIndex will be 'undefined'.
   const listRef = React.useRef();
-  // determine the index where the ad should be injected
   const injectedIndex = useLastVisibleItem(injectedItem, listRef);
 
   // Exclude prefix uris in these results variables. We don't want to show
@@ -149,7 +148,6 @@ export default function ClaimList(props: Props) {
   }, []);
 
   // @if process.env.NODE_ENV!='production'
-  // code to enable replacing of a claim tile isn't available here yet
   if (injectedItem && injectedItem.replace) {
     throw new Error('claimList: "injectedItem.replace" is not implemented yet');
   }
@@ -201,7 +199,6 @@ export default function ClaimList(props: Props) {
     />
   );
 
-  // returns injected ad DOM when indexes match
   const getInjectedItem = (index) => {
     if (injectedItem && injectedItem.node && injectedIndex === index) {
       return injectedItem.node;
@@ -210,26 +207,31 @@ export default function ClaimList(props: Props) {
   };
 
   return tileLayout && !header ? (
-    <section ref={listRef} className={classnames('claim-grid', { 'swipe-list': swipeLayout })}>
-      {urisLength > 0 &&
-        tileUris.map((uri, index) => (
-          <React.Fragment key={uri}>
-            {getInjectedItem(index)}
-            {/* inject ad node */}
-            <ClaimPreviewTile
-              uri={uri}
-              showHiddenByUser={showHiddenByUser}
-              properties={renderProperties}
-              collectionId={collectionId}
-              showNoSourceClaims={showNoSourceClaims}
-              swipeLayout={swipeLayout}
-            />
-          </React.Fragment>
-        ))}
-      {loading && useLoadingSpinner && <ClaimPreviewTile placeholder="loading" swipeLayout={swipeLayout} />}
-      {!timedOut && urisLength === 0 && !loading && <div className="empty main--empty">{empty || noResultMsg}</div>}
-      {timedOut && timedOutMessage && <div className="empty main--empty">{timedOutMessage}</div>}
-    </section>
+    <>
+      <section ref={listRef} className={classnames('claim-grid', { 'swipe-list': swipeLayout })}>
+        {urisLength > 0 &&
+          tileUris.map((uri, index) => (
+            <React.Fragment key={uri}>
+              {getInjectedItem(index)}
+              <ClaimPreviewTile
+                uri={uri}
+                showHiddenByUser={showHiddenByUser}
+                properties={renderProperties}
+                collectionId={collectionId}
+                showNoSourceClaims={showNoSourceClaims}
+                swipeLayout={swipeLayout}
+              />
+            </React.Fragment>
+          ))}
+        {!timedOut && urisLength === 0 && !loading && <div className="empty main--empty">{empty || noResultMsg}</div>}
+        {timedOut && timedOutMessage && <div className="empty main--empty">{timedOutMessage}</div>}
+      </section>
+      {loading && useLoadingSpinner && (
+        <div className="spinnerArea--centered">
+          <Spinner type="small" />
+        </div>
+      )}
+    </>
   ) : (
     <section
       className={classnames('claim-list', {
