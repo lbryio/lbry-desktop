@@ -126,7 +126,7 @@
     "dom-scroll-into-view": "^1.2.1",
     "dotenv-defaults": "^2.0.1",
     "dotenv-webpack": "^1.8.0",
-    "electron": "15.3.2",
+    "electron": "15.3.7",
     "electron-builder": "^22.10.5",
     "electron-devtools-installer": "^3.1.1",
     "electron-is-dev": "^0.3.0",
