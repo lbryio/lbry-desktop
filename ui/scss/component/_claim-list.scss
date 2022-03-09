@@ -1269,9 +1269,9 @@
 
   .claim-preview:not(.claim-preview--collection-mine):before {
     position: absolute;
-    top: -4px;
-    left: 72px;
-    content: '▶';
+    top: -5px;
+    left: 78px;
+    content: '▸';
     z-index: 1;
     font-size: 4.6rem;
     color: #fff;
@@ -1279,7 +1279,7 @@
 
     @media (max-width: $breakpoint-small) {
       top: -2px;
-      left: 60px;
+      left: 66px;
       font-size: 3.4rem;
     }
   }
