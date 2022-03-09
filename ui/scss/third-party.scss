@@ -1,4 +1,9 @@
 @charset "utf-8";
 
+//@import '@reach/combobox/styles.css';
+//@import '@reach/tooltip/styles.css';
+
+// this broke when upgrading postcss, postcss-loader, postcss-import
+// https://github.com/vuejs-templates/webpack/issues/1066
 @import '~@reach/combobox/styles.css';
 @import '~@reach/tooltip/styles.css';

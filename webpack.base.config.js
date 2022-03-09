@@ -43,8 +43,14 @@ let baseConfig = {
           { loader: 'css-loader' },
           { loader: 'postcss-loader',
             options: {
-              plugins: function () {
-                return [ require('postcss-rtl')() ];
+              postcssOptions: {
+                plugins: [
+                  'postcss-import',
+                  function () {
+                    return [ require('postcss-rtlcss')() ];
+                  },
+                  require('postcss-omit-import-tilde'), // postcss doesn't understand ~@reach in third-party.scss
+                ],
               },
             },
           },
