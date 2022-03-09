@@ -42,13 +42,6 @@
     @media (max-width: $breakpoint-small) {
       $width: calc(var(--file-list-thumbnail-width) * 0.8);
       width: $width;
-
-      #aniBox,
-      #av-container {
-        // Only needed on actual mobile. Their mobile script does something
-        // different that makes it 100%, so have to counter that here.
-        width: unset !important;
-      }
     }
 
     @media (min-width: $breakpoint-small) and (max-width: $breakpoint-large) {
@@ -61,39 +54,28 @@
       width: $width;
     }
 
-    //div[style*='position: fixed; transform: scale(1);'] {
-    //  // This is the floating ad (when tile goes off screen).
-    //  // The sidebar is covering it, so move to the right a bit:
-    //  left: unset !important;
-    //
-    //  // It's a bit jarring at times on a busy page, so add border:
-    //  background-color: var(--color-ads-background);
-    //  border-radius: var(--border-radius);
-    //  padding: var(--spacing-s);
-    //}
-
-    div[style*='position: fixed; transform: scale(1);'] {
+    div[style*='transform-origin: left bottom;'] {
       // [Floating ad]
-      // Hide it in entirely. Couldn't reconcile with the changes needed to make
-      // tile layout fit on browser-resize and also with their mobile script
-      // changes. Else, the block above can be used.
-      transform: none !important;
-      transform-origin: unset !important;
-      position: unset !important;
+      // Hide for now since can't get it to work in a consistent manner between:
+      //   - EU and non-EU version
+      //   - issues in Firefox
+      display: none !important;
+    }
 
-      div:first-child {
-        // [Floating ad close button]
-        display: none !important;
-      }
+    #aniBox {
+      transition: unset !important;
     }
 
     #aniBox,
     #av-container {
-      // Handle the scenario of ads not resizing when switching from small to
-      // medium/large layout:
+      width: 100% !important;
       height: unset !important;
       aspect-ratio: 16 / 9 !important;
       border-radius: var(--border-radius);
+    }
+
+    .avp-p-wrapper > div {
+      border-radius: var(--border-radius) !important; // Needed for EU only
     }
   }
 }
@@ -115,31 +97,7 @@
   }
 
   .ad__container {
-    width: 100% !important;
-    max-width: 100 !important;
-    min-width: unset !important;
-    box-sizing: border-box !important;
-
-    div:not(#sound):not(.off):not(#timeline) {
-      width: 100% !important;
-      max-width: unset !important;
-      min-width: unset !important;
-      box-sizing: border-box !important;
-    }
-
-    video {
-      width: 100% !important;
-      height: 100% !important;
-    }
-
-    #timeline,
-    #buttons {
-      width: calc(100% - (var(--spacing-s) * 2)) !important;
-    }
-  }
-
-  p {
-    width: calc(100% - (var(--spacing-m) * 3)) !important;
+    width: 100%;
   }
 
   .ads__claim-text {
@@ -162,6 +120,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  color: var(--color-text-subtitle);
 }
 
 .ads__claim-text--small {
