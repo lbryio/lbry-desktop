@@ -1269,11 +1269,11 @@
 
   .claim-preview:not(.claim-preview--collection-mine):before {
     position: absolute;
-    top: -8px;
-    left: 62px;
-    content: '►';
+    top: -4px;
+    left: 72px;
+    content: '▶';
     z-index: 1;
-    font-size: 5rem;
+    font-size: 4.6rem;
     color: #fff;
     text-shadow: 0 0 3px var(--color-primary), 0 0 5px var(--color-primary);
 
