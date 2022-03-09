@@ -95,7 +95,6 @@ function Ads(props: Props) {
           removeIfExists('[src^="https://player.aniview.com/script/6.1/aniview.js"]');
           removeIfExists('[id^="AVLoaderaniplayer_vidcrunch"]');
           removeIfExists('#av_css_id');
-          removeIfExists('#customAniviewStyling');
         };
       } catch (e) {}
     }
@@ -121,7 +120,7 @@ function Ads(props: Props) {
     return (
       <div
         className={classnames('ads ads__claim-item', className, {
-          'ads__claim-item--tile': tileLayout, // with no tileLayout it indicates sidebar ad
+          'ads__claim-item--tile': tileLayout,
         })}
       >
         <div className="ad__container">
