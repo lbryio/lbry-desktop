@@ -20,13 +20,19 @@ export default () => {
 
   useEffect(() => {
     if (!user) return;
+    let mounted = true;
     setPushSupported(pushNotifications.supported);
     if (pushNotifications.supported) {
       pushNotifications.subscribed(user.id).then((isSubscribed: boolean) => {
-        setSubscribed(isSubscribed);
-        setPushInitialized(true);
+        if (mounted) {
+          setSubscribed(isSubscribed);
+          setPushInitialized(true);
+        }
       });
     }
+    return () => {
+      mounted = false;
+    };
   }, [user]);
 
   useMemo(() => setPushEnabled(pushPermission === 'granted' && subscribed), [pushPermission, subscribed]);
