@@ -258,6 +258,7 @@
     .icon {
       width: 2rem;
       margin-right: var(--spacing-xs);
+      flex-shrink: 0;
     }
     @media (max-width: $breakpoint-medium) {
       font-size: 1.3vw;
