@@ -57,6 +57,15 @@
     color: var(--color-odysee-contrast) !important;
   }
 
+  .comment__badge {
+    padding-right: var(--spacing-xxs);
+
+    .icon {
+      margin-bottom: -4px;
+      width: 18px;
+    }
+  }
+
   @media (max-width: $breakpoint-small) {
     .card__actions--between {
       .header__menu--left,
